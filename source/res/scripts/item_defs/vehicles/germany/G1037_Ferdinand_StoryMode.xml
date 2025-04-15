@@ -1406,9 +1406,9 @@
     </camouflage>
   </hull>
   <chassis>
-    <Ferdinandvetstaerktketten_StoryMode>
-      <userString>	#germany_vehicles:Ferdinandvetstaerktketten	</userString>
-      <shortUserString>	#germany_vehicles:Ferdinandvetstaerktketten_short	</shortUserString>
+    <Chassis_G1037_Ferdinand_StoryMode>
+      <userString>	#germany_vehicles:Chassis_G37_Ferdinand_2	</userString>
+      <shortUserString>	#germany_vehicles:Chassis_G37_Ferdinand_2_short	</shortUserString>
       <tags></tags>
       <level>	8	</level>
       <price>	32234	</price>
@@ -2353,11 +2353,11 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Ferdinandvetstaerktketten_StoryMode>
+    </Chassis_G1037_Ferdinand_StoryMode>
   </chassis>
   <turrets0>
-    <Ferdinandturm_StoryMode>
-      <userString>	#germany_vehicles:Ferdinandturm	</userString>
+    <Turret_1_G1037_Ferdinand_StoryMode>
+      <userString>	#germany_vehicles:Turret_1_G37_Ferdinand	</userString>
       <tags>	cannotDetach	</tags>
       <level>	8	</level>
       <price>	100	</price>
@@ -2513,10 +2513,10 @@
         <density>	185.066 178.83	</density>
         <aoTextureSize>	1024 1024	</aoTextureSize>
       </camouflage>
-    </Ferdinandturm_StoryMode>
+    </Turret_1_G1037_Ferdinand_StoryMode>
   </turrets0>
   <engines>
-    <Porsche_Deutz_Typ180_2_StoryMode>	shared	</Porsche_Deutz_Typ180_2_StoryMode>
+    <_2x_Porsche_Typ_100_3_F_StoryMode>	shared	</_2x_Porsche_Typ_100_3_F_StoryMode>
   </engines>
   <fuelTanks>
     <Large_StoryMode__2>	shared	</Large_StoryMode__2>
@@ -2527,13 +2527,13 @@
   <physics>
     <detailed>
       <engines>
-        <Porsche_Deutz_Typ180_2_StoryMode>
-          <smplEnginePower>	888.1161	</smplEnginePower>
+        <_2x_Porsche_Typ_100_3_F_StoryMode>
+          <smplEnginePower>	900	</smplEnginePower>
           <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
-        </Porsche_Deutz_Typ180_2_StoryMode>
+        </_2x_Porsche_Typ_100_3_F_StoryMode>
       </engines>
       <chassis>
-        <Ferdinandvetstaerktketten_StoryMode>
+        <Chassis_G1037_Ferdinand_StoryMode>
           <grounds>
             <soft>
               <rollingFriction>	0.23345	</rollingFriction>
@@ -2545,7 +2545,7 @@
               <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
-        </Ferdinandvetstaerktketten_StoryMode>
+        </Chassis_G1037_Ferdinand_StoryMode>
       </chassis>
     </detailed>
   </physics>

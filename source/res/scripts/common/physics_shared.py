@@ -92,6 +92,7 @@ ARENA_BOUNDS_FRICTION_HOR = 0.2
 ARENA_BOUNDS_FRICTION_VERT = 1.0
 _ALLOWER_RPM_EXCESS_UNBOUNDED = 1.4
 _ABSOLUTE_SPEED_LIMIT = 25
+ENGINE_RADIUS = 0.020000000000000004
 g_confUpdaters = []
 
 def _cosDeg(angle):
@@ -636,7 +637,7 @@ def configurePhysicsMode(cfg, typeDesc, gravityFactor):
     cfg['gravity'] = cfg['gravity'] * gravityFactor
     cfg['engine']['engineTorque'] = tuple(((arg, val * gravityFactor) for arg, val in cfg['engine']['engineTorque']))
     cfg['pushHB'] = cfg.get('gimletPushOnSpotFinal', 0.0)
-    cfg['engine']['smplEngJoinRatio'] = 0.020000000000000004 / cfg['chassis']['wheelRadius']
+    cfg['engine']['smplEngJoinRatio'] = ENGINE_RADIUS / cfg['chassis']['wheelRadius']
     applyRotationAndPowerFactors(cfg)
     cfg['siegeModeAvailable'] = typeDesc.hasSiegeMode
     cfg['isWheeledVehicle'] = typeDesc.isWheeledVehicle

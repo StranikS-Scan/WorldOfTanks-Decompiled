@@ -277,5 +277,19 @@ class SetGlobalSoundSwitch(Block, SoundMeta):
         self._switchValue = self._makeDataInputSlot('switchValue', SLOT_TYPE.STR)
 
     def _setValue(self):
-        SoundGroups.g_instance.setState(self._switchName.getValue(), self._switchValue.getValue())
+        SoundGroups.g_instance.setSwitch(self._switchName.getValue(), self._switchValue.getValue())
+        self._out.call()
+
+
+class SetGlobalSoundState(Block, SoundMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(SetGlobalSoundState, self).__init__(*args, **kwargs)
+        self._in = self._makeEventInputSlot('in', self._setValue)
+        self._out = self._makeEventOutputSlot('out')
+        self._stateGroupName = self._makeDataInputSlot('stateGroupName', SLOT_TYPE.STR)
+        self._stateName = self._makeDataInputSlot('stateName', SLOT_TYPE.STR)
+
+    def _setValue(self):
+        SoundGroups.g_instance.setState(self._stateGroupName.getValue(), self._stateName.getValue())
         self._out.call()

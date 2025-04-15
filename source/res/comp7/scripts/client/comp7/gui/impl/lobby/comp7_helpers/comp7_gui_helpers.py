@@ -11,7 +11,7 @@ from skeletons.gui.game_control import IComp7Controller
 from skeletons.gui.shared import IItemsCache
 
 @dependency.replace_none_kwargs(comp7Controller=IComp7Controller)
-def isSeasonStasticsShouldBeShown(comp7Controller=None):
+def isSeasonStatisticsShouldBeShown(comp7Controller=None):
     currentSeason = comp7Controller.getCurrentSeason()
     if currentSeason:
         return False

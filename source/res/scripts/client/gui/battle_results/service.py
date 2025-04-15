@@ -12,6 +12,7 @@ from gui import SystemMessages
 from gui.battle_results import context, emblems, reusable, stored_sorting
 from gui.battle_results.pbs_helpers.common import pushNoBattleResultsDataMessage
 from gui.battle_results.composer import RegularStatsComposer
+from gui.battle_results.presenters.base_presenter import BaseStatsPresenter
 from gui.battle_results.settings import PREMIUM_STATE
 from gui.shared import event_dispatcher, events, g_eventBus
 from gui.shared.gui_items.processors.common import BattleResultsGetter, PremiumBonusApplier
@@ -123,6 +124,9 @@ class BattleResultsService(IBattleResultsService):
             if playerSatisfactionRating != PlayerSatisfactionRating.NONE:
                 self.__playerSatisfactionRatings[arenaUniqueID] = playerSatisfactionRating
             statsCtrl = createStatsCtrl(reusableInfo)
+            if statsCtrl is None:
+                pushNoBattleResultsDataMessage()
+                return False
             statsCtrl.setResults(result, reusableInfo)
             self.__statsCtrls[arenaUniqueID] = statsCtrl
             resultsWindow = self.__notifyBattleResultsPosted(arenaUniqueID, needToShowUI=needToShowUI)
@@ -270,7 +274,9 @@ class BattleResultsService(IBattleResultsService):
                 callback(False)
             self.__updateReusableInfo(reusableInfo, xpBonusData)
             arenaUniqueID = reusableInfo.arenaUniqueID
-            statsCtrl = createStatsCtrl(reusableInfo)
+            statsCtrl = self.__statsCtrls.get(arenaUniqueID)
+            if statsCtrl is None or not isinstance(statsCtrl, BaseStatsPresenter):
+                statsCtrl = createStatsCtrl(reusableInfo)
             statsCtrl.setResults(result, reusableInfo)
             self.__statsCtrls[arenaUniqueID] = statsCtrl
         callback(True)

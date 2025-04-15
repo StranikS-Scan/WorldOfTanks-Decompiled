@@ -153,10 +153,12 @@ class _ServiceDescriptor(object):
         self.__class = class_
 
     def __set__(self, _, value):
-        raise DependencyError('Service {} can not be rewritten'.format(self.__class))
+        raise AttributeError('Service {} can not be rewritten'.format(self.__class))
 
     def __get__(self, inst, owner=None):
-        return instance(self.__class)
+        if _g_manager is None:
+            raise AttributeError('Manager of dependencies is not created and configured')
+        return _g_manager.getService(self.__class)
 
 
 class _DependencyItem(object):

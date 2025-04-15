@@ -17,8 +17,7 @@ from battle_royale.gui.Scaleform.daapi.view.battle.spawned_bot_msg import Spawne
 from battle_royale.gui.Scaleform.daapi.view.battle.minefield_player_messenger import MinefieldPlayerMessenger
 from gui.Scaleform.daapi.view.meta.BattleRoyalePageMeta import BattleRoyalePageMeta
 from gui.Scaleform.daapi.view.battle.classic.page import DynamicAliases
-from gui.Scaleform.daapi.view.battle.epic import drone_music_player
-from gui.Scaleform.daapi.view.battle.shared import crosshair
+from gui.Scaleform.daapi.view.battle.shared import crosshair, drone_music_player
 from gui.Scaleform.daapi.view.battle.shared.page import ComponentsConfig
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID, VEHICLE_VIEW_STATE

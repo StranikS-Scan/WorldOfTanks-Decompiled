@@ -941,7 +941,8 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'BPReserveAchievement_7',
  'BPReserveAchievement_8',
  'BPReserveAchievement_9',
- 'BPReserveAchievement_10']
+ 'BPReserveAchievement_10',
+ 'vDayHero']
 _singleAchievementsPopUps = ['titleSniper',
  'invincible',
  'diehard',
@@ -1160,7 +1161,8 @@ _singleAchievementsPopUps = ['titleSniper',
  'NY24_AtmsphrLevel',
  'comp7_3_2',
  'BattlePassCommonPr_NY24',
- 'BattlePassCommonPr_13comp7_3_3',
+ 'BattlePassCommonPr_13',
+ 'comp7_3_3',
  'comp7_3_yearly_iron',
  'comp7_3_yearly_bronze',
  'comp7_3_yearly_silver',
@@ -1198,7 +1200,8 @@ _singleAchievementsPopUps = ['titleSniper',
  'BPReserveAchievement_7',
  'BPReserveAchievement_8',
  'BPReserveAchievement_9',
- 'BPReserveAchievement_10']
+ 'BPReserveAchievement_10',
+ 'vDayHero']
 _singleAchievementsBlockBuilder = BinarySetDossierBlockBuilder('singleAchievements', _SINGLE_ACHIEVEMENTS_VALUES, SINGLE_ACHIEVEMENTS_DEPENDENCIES, _singleAchievementsPopUps)
 FORT_ACHIEVEMENTS_BLOCK_LAYOUT = ['conqueror',
  'fireAndSword',
@@ -1285,6 +1288,7 @@ _battleRoyaleSeasonsBlockBuilder = DictBlockBuilder('battleRoyaleSeasons', 'II',
 _prestigeSystemBlockBuilder = DictBlockBuilder(VEHICLE_STATS.PRESTIGE_SYSTEM, 'I', 'II', {})
 _vehicleAchievementsBlockBuilder = DictBlockBuilder(VEHICLE_STATS.VEHICLE_ACHIEVEMENTS, 'H', 'HHI', VEHICLE_ACHIEVEMENTS_DEPENDENCIES, VEHICLE_ACHIEVEMENTS_POP_UPS, set())
 _customizationAchievementsBlockBuilder = DictBlockBuilder(VEHICLE_STATS.CUSTOMIZATION_ACHIEVEMENTS, 'H', 'HHI', CUSTOMIZATION_ACHIEVEMENTS_DEPENDENCIES, CUSTOMIZATION_ACHIEVEMENTS_POP_UPS, set())
+_commendationsBlockBuilder = DictBlockBuilder('commendations', 'I', 'II', {})
 accountDossierLayout = (_a15x15BlockBuilder,
  _a15x15_2BlockBuilder,
  _clanBlockBuilder,
@@ -1382,7 +1386,8 @@ accountDossierLayout = (_a15x15BlockBuilder,
  _customizationAchievementsBlockBuilder,
  _comp7ArchivePegasusBlockBuilder,
  _maxComp7ArchivePegasusBlockBuilder,
- _comp7CutArchivePegasusBlockBuilder)
+ _comp7CutArchivePegasusBlockBuilder,
+ _commendationsBlockBuilder)
 ACCOUNT_DOSSIER_BLOCKS = {b.name:b for b in accountDossierLayout}
 ACCOUNT_DOSSIER_STATIC_BLOCKS = frozenset((b.name for b in accountDossierLayout if type(b) == StaticSizeBlockBuilder))
 ACCOUNT_DOSSIER_BINARY_SET_BLOCKS = [ b.name for b in accountDossierLayout if type(b) == BinarySetDossierBlockBuilder ]

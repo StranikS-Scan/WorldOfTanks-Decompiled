@@ -844,10 +844,6 @@ class IBattleRoyaleRequester(IRequester):
     def topCount(self):
         raise NotImplementedError
 
-    @property
-    def brMultipliedSTPCoinsVehs(self):
-        raise NotImplementedError
-
     def getStats(self, arenaBonusType, playerDatabaseID=None):
         raise NotImplementedError
 
@@ -1007,6 +1003,9 @@ class ITokensRequester(IRequester):
         raise NotImplementedError
 
     def onDisconnected(self):
+        raise NotImplementedError
+
+    def getTokensByPrefixAndPostfix(self, prefix='', postfix=''):
         raise NotImplementedError
 
 
@@ -1187,21 +1186,6 @@ class IGameRestrictionsRequester(IRequester):
 
     @property
     def privateChat(self):
-        raise NotImplementedError
-
-
-class IResourceWellRequester(IRequester):
-
-    def getCurrentPoints(self):
-        raise NotImplementedError
-
-    def getBalance(self):
-        raise NotImplementedError
-
-    def getReward(self):
-        raise NotImplementedError
-
-    def getInitialNumberAmounts(self):
         raise NotImplementedError
 
 

@@ -11,8 +11,9 @@ from comp7_common import injectConsts, injectSquadConsts
 from comp7_common.comp7_battle_mode import Comp7BattleMode
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
+from gui.game_control.wotlda.constants import SupportedWotldaLoadoutType
 from gui.override_scaleform_views_manager import g_overrideScaleFormViewsConfig
-from gui.prb_control.prb_utils import initGuiTypes, initRequestType
+from gui.prb_control.prb_utils import initGuiTypes, initRequestType, initBattleCtrlIDs
 _LOBBY_EXT_PACKAGES = ['comp7.gui.Scaleform.daapi.view.lobby.profile', 'comp7.gui.Scaleform.daapi.view.lobby.header', 'comp7.gui.Scaleform.daapi.view.lobby.missions.regular']
 _BATTLE_EXT_PACKAGES = ['comp7.gui.Scaleform.daapi.view.battle.shared']
 
@@ -158,9 +159,8 @@ class ClientComp7BattleMode(Comp7BattleMode):
     @property
     def _client_messengerServerFormatters(self):
         from chat_shared import SYS_MESSAGE_TYPE
-        from comp7.messenger.formatters.service_channel import Comp7BattleResultsFormatter, Comp7AchievementFormatter
-        return {SYS_MESSAGE_TYPE.battleResults.index(): Comp7BattleResultsFormatter(),
-         SYS_MESSAGE_TYPE.achievementReceived.index(): Comp7AchievementFormatter()}
+        from comp7.messenger.formatters.service_channel import Comp7BattleResultsFormatter
+        return {SYS_MESSAGE_TYPE.comp7BattleResults.index(): Comp7BattleResultsFormatter()}
 
     @property
     def _client_LobbyContextMenuOptions(self):
@@ -244,6 +244,7 @@ def preInit():
     injectSquadConsts(__name__)
     initGuiTypes(comp7_constants, __name__)
     initRequestType(comp7_constants, __name__)
+    initBattleCtrlIDs(comp7_constants, __name__)
     comp7_constants.initComp7LimitedUIIds()
     battleMode = ClientComp7BattleMode(__name__)
     battleMode.registerCommon()
@@ -258,6 +259,9 @@ def preInit():
     battleMode.registerClientPlatoon()
     battleMode.registerClientSquadSelector()
     battleMode.registerClientReplay()
+    battleMode.registerSystemMessagesTypes()
+    battleMode.registerBattleResultSysMsgType()
+    battleMode.registerAdditionalBattleResultSysMsgType()
     battleMode.registerBattleResultsConfig()
     battleMode.registerAdditionalBattleResultsConfig()
     battleMode.registerClientBattleResultsCtrl()
@@ -278,6 +282,7 @@ def preInit():
     battleMode.registerLobbyContextMenuOptions()
     battleMode.registerClientSeasonType(comp7_common_constants)
     battleMode.registerTrainingRoomHandler()
+    battleMode.registerPrbTypeForWotPlusAssistant(SupportedWotldaLoadoutType.ONSLAUGHT)
     registerComp7Scaleform()
     registerComp7OthersPrbParams()
     registerComp7Lobby()

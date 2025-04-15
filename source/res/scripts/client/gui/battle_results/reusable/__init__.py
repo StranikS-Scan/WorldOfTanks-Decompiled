@@ -20,8 +20,11 @@ from gui.battle_results.reusable.personal import PersonalInfo, SquadBonusInfo
 from gui.battle_results.reusable.players import PlayersInfo, PlayerInfo
 from gui.battle_results.reusable.shared import TeamBasesInfo, VehicleDetailedInfo, VehicleSummarizeInfo, FairplayViolationsInfo
 from gui.battle_results.reusable.vehicles import VehiclesInfo
+from gui.shared.system_factory import collectPostbattleSquadFinder
 if typing.TYPE_CHECKING:
     from typing import Dict, Iterator, Optional, Tuple
+    from gui.battle_control import arena_visitor
+    from gui.battle_control.arena_info.squad_finder import ISquadFinder
 
 def _fetchRecord(results, recordName):
     if recordName in results:
@@ -33,6 +36,13 @@ def _fetchRecord(results, recordName):
         LOG_WARNING('Record is not found in the results', recordName, results.keys())
         return
         return
+
+
+def _createPostbattleSquadFinder(arenaVisitor):
+    arenaGuiType = arenaVisitor.gui.guiType
+    teams = arenaVisitor.type.getTeamsOnArenaRange()
+    pbsSquadFinder = collectPostbattleSquadFinder(arenaGuiType)
+    return pbsSquadFinder(teams) if pbsSquadFinder is not None else squad_finder.createSquadFinder(arenaVisitor)
 
 
 def createReusableInfo(results):
@@ -99,7 +109,7 @@ class _ReusableInfo(object):
         self.__players = players
         self.__vehicles = vehicles
         self.__avatars = avatars
-        self.__squadFinder = squad_finder.createSquadFinder(self.__common.arenaVisitor)
+        self.__squadFinder = _createPostbattleSquadFinder(self.__common.arenaVisitor)
         self.__findSquads()
         self.__battlePassProgress = BattlePassProgress(self.__common.arenaBonusType, **self.__personal.avatar.extensionInfo)
 

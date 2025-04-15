@@ -133,7 +133,7 @@ def addDamageResistanceReasonsFromExtension(extDmgResistReasonType, personality)
 
 
 def addDamageInfoCodes(infoCodesPerAttackReason, personality):
-    for attackReason, damageInfoCode in infoCodesPerAttackReason.iteritems():
+    for attackReason, damageInfoCode in sorted(infoCodesPerAttackReason.iteritems()):
         if damageInfoCode in DAMAGE_INFO_INDICES:
             continue
         DAMAGE_INFO_INDICES[damageInfoCode] = len(DAMAGE_INFO_CODES)
@@ -447,6 +447,10 @@ class AbstractBattleMode(object):
         return []
 
     @property
+    def _client_guiItemsCacheInvalidators(self):
+        return []
+
+    @property
     def _server_canCreateUnitMgr(self):
         return lambda *args, **kwargs: (UNIT_ERROR.OK, '')
 
@@ -480,6 +484,10 @@ class AbstractBattleMode(object):
         return []
 
     @property
+    def _client_ammunitionSetupViews(self):
+        return []
+
+    @property
     def _client_vehicleViewStates(self):
         return []
 
@@ -498,6 +506,14 @@ class AbstractBattleMode(object):
     @property
     def _client_controlModes(self):
         return {}
+
+    @property
+    def _client_arenaInfoKeys(self):
+        return None
+
+    @property
+    def _client_equipmentItems(self):
+        return tuple()
 
     def registerSquadTypes(self):
         addQueueTypeByUnitMgrRoster(self._QUEUE_TYPE, self._ROSTER_TYPE, self._personality)
@@ -592,12 +608,20 @@ class AbstractBattleMode(object):
         prb_utils.addSupportedUnitEntryByType(self._PREBATTLE_TYPE, self._client_prbSquadEntryPointClass, self._personality)
         prb_utils.addSupportedUnitByType(self._PREBATTLE_TYPE, self._client_prbSquadEntityClass, self._personality)
         prb_utils.addBattleSelectorSquadItem(self._CLIENT_PRB_ACTION_NAME_SQUAD, self._client_selectorSquadItemsCreator, self._personality)
-        prb_utils.addSquadFinder(self._ARENA_GUI_TYPE, self._client_squadFinderClass, self._rosterClass, self._personality)
         prb_utils.addPrbClientCombinedIds(self._PREBATTLE_TYPE, PREBATTLE_TYPE.UNIT, self._personality)
+        self.registerClientSquadFinder()
+
+    def registerClientSquadFinder(self):
+        from gui.prb_control import prb_utils
+        prb_utils.addSquadFinder(self._ARENA_GUI_TYPE, self._client_squadFinderClass, self._rosterClass, self._personality)
 
     def registerClientReplay(self):
         from gui.shared.system_factory import registerReplayModeTag
         registerReplayModeTag(self._ARENA_GUI_TYPE, self._CLIENT_REPLAY_MODE_TAG)
+
+    def registerClientArenaInfoKeys(self):
+        from gui.shared.system_factory import registerGameModeArenaInfoKeys
+        registerGameModeArenaInfoKeys(self._ARENA_GUI_TYPE, self._client_arenaInfoKeys)
 
     def registerGameControllers(self):
         from gui.shared.system_factory import registerGameControllers
@@ -739,6 +763,11 @@ class AbstractBattleMode(object):
         for viewCls in self._client_ammunitionPanelViews:
             registerAmmunitionPanelView(viewCls)
 
+    def registerAmmunitionSetupViews(self):
+        from gui.shared.system_factory import registerAmmunitionSetupView
+        for viewCls in self._client_ammunitionSetupViews:
+            registerAmmunitionSetupView(viewCls)
+
     def registerVehicleViewStates(self):
         from gui.shared.system_factory import registerVehicleViewState
         for viewState in self._client_vehicleViewStates:
@@ -776,9 +805,25 @@ class AbstractBattleMode(object):
         ARENA_BONUS_TYPE.REPLAY_DISABLE_RANGE.append(self._ARENA_BONUS_TYPE)
 
     def registerControlModes(self):
-        from AvatarInputHandler import OVERWRITE_CTRLS_DESC_MAP
+        from AvatarInputHandler import OVERWRITE_CTRLS_DESC_MAP, addEmptyIfNotExits
+        for name in self._client_controlModes.iterkeys():
+            addEmptyIfNotExits(name)
+
         OVERWRITE_CTRLS_DESC_MAP[self._ARENA_BONUS_TYPE] = self._client_controlModes
 
     def registerLowPriorityWulfWindows(self):
         from gui.shared.system_factory import registerLowPriorityWulfWindows
         registerLowPriorityWulfWindows(self._client_lowPriorityWulfWindows)
+
+    def registerGuiItemsCacheInvalidators(self):
+        from gui.shared.system_factory import registerGuiItemsCacheInvalidators
+        registerGuiItemsCacheInvalidators(self._client_guiItemsCacheInvalidators)
+
+    def registerPrbTypeForWotPlusAssistant(self, loadoutType):
+        from gui.game_control.wot_plus_assistant import registerAllowedPrebattleType
+        registerAllowedPrebattleType(self._PREBATTLE_TYPE, loadoutType)
+
+    def registerClientEquipmentItems(self):
+        from gui.shared.system_factory import registerEquipmentItem
+        for name, _class, replayClass in self._client_equipmentItems:
+            registerEquipmentItem(name, _class, replayClass)

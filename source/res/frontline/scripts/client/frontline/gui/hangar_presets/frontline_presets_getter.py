@@ -4,6 +4,7 @@ from constants import QUEUE_TYPE, ARENA_BONUS_TYPE
 from frontline.gui.Scaleform.daapi.view.lobby.hangar.hangar_quest_flags import EpicQuestFlagsGetter
 from frontline.gui.Scaleform.daapi.view.lobby.header.helpers.controls_helpers import FrontlineLobbyHeaderHelper
 from gui.hangar_presets.hangar_presets_getters import DefaultPresetsGetter
+from gui.impl.lobby.tank_setup.frontline.ammunition_setup import FrontlineAmmunitionSetupView
 from helpers import dependency
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 
@@ -17,3 +18,6 @@ class FrontlinePresetsGetter(DefaultPresetsGetter):
 
     def getHangarAlertBlock(self):
         return self.__epicController.getAlertBlock()
+
+    def getAmmoSetupViewAlias(self):
+        return FrontlineAmmunitionSetupView.__name__

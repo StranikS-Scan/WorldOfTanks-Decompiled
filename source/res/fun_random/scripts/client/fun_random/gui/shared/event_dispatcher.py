@@ -40,6 +40,12 @@ def showFunRandomSubSelector(parent=None):
         return
 
 
+def showFunRandomBattleResults(arenaUniqueID):
+    from fun_random.gui.impl.lobby.feature.fun_random_battle_results_view import FunRandomBattleResultsView
+    layoutID = R.views.fun_random.lobby.feature.FunRandomBattleResultsView()
+    showFunRandomBattleResultsWindow(arenaUniqueID, FunRandomBattleResultsView, layoutID)
+
+
 @dependency.replace_none_kwargs(uiLoader=IGuiLoader)
 def showFunRandomProgressionWindow(uiLoader=None):
     contentResId = R.views.fun_random.lobby.feature.FunRandomProgression()
@@ -71,17 +77,18 @@ def showFunRandomModeSubSelectorWindow(uiLoader=None):
 
 
 @dependency.replace_none_kwargs(uiLoader=IGuiLoader)
-def showFunRandomBattleResultsWindow(arenaUniqueID, uiLoader=None):
+def showFunRandomBattleResultsWindow(arenaUniqueID, viewCls, layoutID, uiLoader=None):
+    from fun_random.gui.impl.lobby.feature.fun_random_battle_results_view import FunRandomBattleResultsView as BaseView
     lockNotificationManager(True, source=FUN_RANDOM_LOCK_SOURCE_NAME)
-    from fun_random.gui.impl.lobby.feature.fun_random_battle_results_view import FunRandomBattleResultsView
-    layoutID = R.views.fun_random.lobby.feature.FunRandomBattleResultsView()
-    views = uiLoader.windowsManager.getViewsByLayout(layoutID)
+    views = uiLoader.windowsManager.findViews(lambda v: isinstance(v, BaseView))
     if views:
         if all([ view.arenaUniqueID == arenaUniqueID for view in views ]):
             return
-        g_eventBus.handleEvent(events.DestroyGuiImplViewEvent(layoutID=layoutID))
-    params = GuiImplViewLoadParams(layoutID, FunRandomBattleResultsView, ScopeTemplates.LOBBY_SUB_SCOPE)
-    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(params, arenaUniqueID=arenaUniqueID), scope=EVENT_BUS_SCOPE.LOBBY)
+        for view in views:
+            g_eventBus.handleEvent(events.DestroyGuiImplViewEvent(layoutID=view.layoutID))
+
+    params = GuiImplViewLoadParams(layoutID, viewCls, ScopeTemplates.LOBBY_SUB_SCOPE)
+    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(params, layoutID, arenaUniqueID=arenaUniqueID), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 @dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)

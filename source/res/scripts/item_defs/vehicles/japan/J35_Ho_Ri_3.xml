@@ -13,7 +13,7 @@
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
     <forward>	35	</forward>
-    <backward>	18	</backward>
+    <backward>	15	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.128	</moving>
@@ -54,14 +54,11 @@
       <armor_6>	120	</armor_6>
       <armor_7>	50	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	300	</armor_9>
       <armor_10>	20	</armor_10>
       <armor_11>	110	</armor_11>
       <armor_12>	35	</armor_12>
       <armor_13>	35	</armor_13>
-      <armor_14>	30	</armor_14>
-      <armor_15>	35	</armor_15>
-      <armor_16>	35	</armor_16>
+      <armor_14>	20	</armor_14>
       <armor_17>	35	</armor_17>
       <armor_18>	35	</armor_18>
     </armor>
@@ -1658,8 +1655,8 @@
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	250	</maxHealth>
-      <maxRegenHealth>	190	</maxRegenHealth>
-      <repairCost>	5.0	</repairCost>
+      <maxRegenHealth>	188	</maxRegenHealth>
+      <repairCost>	7.5	</repairCost>
       <models>
         <undamaged>	vehicles/japan/J35_Ho_Ri_3/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/japan/J35_Ho_Ri_3/crash/lod0/Chassis.model	</destroyed>
@@ -2450,7 +2447,7 @@
           <trackPairIdx>	0	</trackPairIdx>
         </right>
       </physicalTracks>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	6.71999979	</repairTime>
     </Chassis_J35_Ho_Ri_3>
   </chassis>
   <turrets0>
@@ -2474,7 +2471,7 @@
         <maxRegenHealth>	85	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	400	</circularVisionRadius>
+      <circularVisionRadius>	380	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	120	</maxHealth>
         <maxRegenHealth>	60	</maxRegenHealth>
@@ -2485,7 +2482,7 @@
           <armor>
             <armor_1>	350	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_2>	255	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
             <armor_3>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
@@ -2493,6 +2490,8 @@
             </armor_4>
             <armor_5>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_5>
+            <armor_6>	250	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_6>
             <gun>	60	</gun>
           </armor>
           <turretYawLimits>	-10 10	</turretYawLimits>
@@ -2500,7 +2499,7 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 7 1 7	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.34	</shotDispersionRadius>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	15.3	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.10	</turretRotation>

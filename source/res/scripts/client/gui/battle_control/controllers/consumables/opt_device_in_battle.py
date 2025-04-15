@@ -44,6 +44,10 @@ class DevicesSound(object):
     __enabled = False
 
     @classmethod
+    def setEnabled(cls, enabled):
+        cls.__enabled = enabled
+
+    @classmethod
     def arenaPeriodChange(cls, period):
         cls.__enabled = period == ARENA_PERIOD.BATTLE
 

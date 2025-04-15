@@ -35,15 +35,21 @@ class PveMinimapGlobalSettingsPlugin(GlobalSettingsPlugin):
 
 
 class PveScaleCenteredPersonalEntriesPlugin(PersonalEntriesPlugin):
-    __slots__ = ()
+    __slots__ = ('_isInBordersMode',)
+
+    def __init__(self, parentObj):
+        super(PveScaleCenteredPersonalEntriesPlugin, self).__init__(parentObj)
+        self._isInBordersMode = False
 
     def initControlMode(self, mode, available):
         super(PveScaleCenteredPersonalEntriesPlugin, self).initControlMode(mode, available)
-        self._centerMapBasedOnMode()
+        if not self._isInBordersMode:
+            self._centerMapBasedOnMode()
 
     def updateControlMode(self, mode, vehicleID):
         super(PveScaleCenteredPersonalEntriesPlugin, self).updateControlMode(mode, vehicleID)
-        self._centerMapBasedOnMode()
+        if not self._isInBordersMode:
+            self._centerMapBasedOnMode()
 
     def start(self):
         super(PveScaleCenteredPersonalEntriesPlugin, self).start()
@@ -56,7 +62,9 @@ class PveScaleCenteredPersonalEntriesPlugin(PersonalEntriesPlugin):
         g_eventBus.removeListener(ScalableBattleMinimapEvent.ZOOM_UPDATED, self._onZoomLevelUpdated, EVENT_BUS_SCOPE.BATTLE)
 
     def _onMinimapBordersUpdated(self, event):
-        self._parentObj.setVisibleRect(*event.ctx.get('minimapBorders', PVE_MINIMAP_DEFAULT_BORDERS))
+        borders = event.ctx.get('minimapBorders', PVE_MINIMAP_DEFAULT_BORDERS)
+        self._isInBordersMode = borders != PVE_MINIMAP_DEFAULT_BORDERS
+        self._parentObj.setVisibleRect(*borders)
 
     def _onZoomLevelUpdated(self, event):
         zoomLevel = event.ctx.get('zoomLevel', 0)
@@ -64,6 +72,7 @@ class PveScaleCenteredPersonalEntriesPlugin(PersonalEntriesPlugin):
             _logger.warn('zoomLevel is out of scope: %f', zoomLevel)
         self._centerMapBasedOnMode()
         self._parentObj.setZoom(max(PVE_MINIMAP_DEFAULT_ZOOM, zoomLevel))
+        self._isInBordersMode = False
 
     def _getPostmortemCenterEntry(self):
         iah = avatar_getter.getInputHandler()

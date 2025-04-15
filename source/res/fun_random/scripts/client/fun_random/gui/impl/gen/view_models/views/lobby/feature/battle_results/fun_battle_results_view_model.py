@@ -7,9 +7,9 @@ from gui.impl.gen.view_models.common.user_name_model import UserNameModel
 from fun_random.gui.impl.gen.view_models.views.lobby.feature.battle_results.fun_random_battle_info_model import FunRandomBattleInfoModel
 from fun_random.gui.impl.gen.view_models.views.lobby.feature.battle_results.fun_random_progress_model import FunRandomProgressModel
 from fun_random.gui.impl.gen.view_models.views.lobby.feature.battle_results.fun_random_reward_item_model import FunRandomRewardItemModel
+from fun_random.gui.impl.gen.view_models.views.lobby.feature.battle_results.fun_team_stats_model import FunTeamStatsModel
 from gui.impl.gen.view_models.views.lobby.battle_results.personal_efficiency_model import PersonalEfficiencyModel
 from gui.impl.gen.view_models.views.lobby.battle_results.premium_plus_model import PremiumPlusModel
-from gui.impl.gen.view_models.views.lobby.battle_results.team_stats_model import TeamStatsModel
 from gui.impl.gen.view_models.views.lobby.battle_results.user_status_model import UserStatusModel
 
 class Tab(IntEnum):
@@ -61,7 +61,7 @@ class FunBattleResultsViewModel(ViewModel):
 
     @staticmethod
     def getTeamStatsType():
-        return TeamStatsModel
+        return FunTeamStatsModel
 
     @property
     def progress(self):
@@ -97,7 +97,7 @@ class FunBattleResultsViewModel(ViewModel):
         self._addViewModelProperty('userStatus', UserStatusModel())
         self._addViewModelProperty('battleInfo', FunRandomBattleInfoModel())
         self._addViewModelProperty('premiumPlus', PremiumPlusModel())
-        self._addViewModelProperty('teamStats', TeamStatsModel())
+        self._addViewModelProperty('teamStats', FunTeamStatsModel())
         self._addViewModelProperty('progress', FunRandomProgressModel())
         self._addArrayProperty('efficiency', Array())
         self._addArrayProperty('rewards', Array())

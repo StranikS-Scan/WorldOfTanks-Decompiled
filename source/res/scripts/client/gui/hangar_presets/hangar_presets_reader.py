@@ -21,7 +21,7 @@ class DefaultPresetReader(IPresetReader):
 
     @classmethod
     def readConfig(cls, fullConfig):
-        return cls.__readGuiHangarConfig(cls._CONFIG_PATH, fullConfig)
+        return cls._readGuiHangarConfig(cls._CONFIG_PATH, fullConfig)
 
     @staticmethod
     def isDefault():
@@ -30,6 +30,19 @@ class DefaultPresetReader(IPresetReader):
     @classmethod
     def _getPreset(cls, presetName, config):
         return presetName
+
+    @classmethod
+    def _readGuiHangarConfig(cls, configPath, fullConfig):
+        config = ResMgr.openSection(configPath)
+        if config is None:
+            raise SoftException('[HangarGUI] Cannot open or read config {}'.format(configPath))
+        presets = {}
+        if config.has_key('presets'):
+            presets = cls.__readPresets(config['presets'], fullConfig)
+        if not config.has_key('queueTypePresets'):
+            raise SoftException('[HangarGUI] Missing queueTypePresets section in the config'.format(configPath))
+        queueTypePresets = cls.__readPresetsForQueueTypes(config['queueTypePresets'])
+        return HangarGuiSettings(presets, queueTypePresets)
 
     @classmethod
     def _updateItems(cls, items, queueType, preset):
@@ -55,19 +68,6 @@ class DefaultPresetReader(IPresetReader):
             targetComponents[name] = PresetSettings(componentType, layout, isChangeable)
 
         return HangarGuiPreset(shownComponents, hiddenComponents)
-
-    @classmethod
-    def __readGuiHangarConfig(cls, configPath, fullConfig):
-        config = ResMgr.openSection(configPath)
-        if config is None:
-            raise SoftException('[HangarGUI] Cannot open or read config {}'.format(configPath))
-        presets = {}
-        if config.has_key('presets'):
-            presets = cls.__readPresets(config['presets'], fullConfig)
-        if not config.has_key('queueTypePresets'):
-            raise SoftException('[HangarGUI] Missing queueTypePresets section in the config'.format(configPath))
-        queueTypePresets = cls.__readPresetsForQueueTypes(config['queueTypePresets'])
-        return HangarGuiSettings(presets, queueTypePresets)
 
     @classmethod
     def __readPresets(cls, config, fullConfig):

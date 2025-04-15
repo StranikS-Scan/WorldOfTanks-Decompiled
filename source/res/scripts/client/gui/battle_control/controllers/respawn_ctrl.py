@@ -115,6 +115,9 @@ class RespawnsController(ViewComponentsController):
         self.__updateRespawnInfoExt(intCD)
         BigWorld.player().base.respawnController_chooseVehicleForRespawn(intCD)
 
+    def sendSwitchVehSetupsLayout(self, vehCD, groupID, layoutIdx):
+        BigWorld.player().base.respawnController_switchSetup(vehCD, groupID, layoutIdx)
+
     def switchVehSetupsLayout(self, vehCD, groupID, layoutIdx):
         if self.__battleSession.isReplayPlaying:
             return
@@ -123,7 +126,7 @@ class RespawnsController(ViewComponentsController):
         self.__setupsIndexes[vehCD][groupID] = layoutIdx
         self.__updateRespawnInfoExt(vehCD)
         self.__cooldownsManager.process(_SWITCH_SETUPS_ACTION, REQUEST_COOLDOWN.POST_PROGRESSION_CELL)
-        BigWorld.player().base.respawnController_switchSetup(vehCD, groupID, layoutIdx)
+        self.sendSwitchVehSetupsLayout(vehCD, groupID, layoutIdx)
 
     def movingToRespawn(self):
         self.__respawnInfo = None

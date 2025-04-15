@@ -8,7 +8,7 @@ from gui.impl.gen.view_models.views.lobby.lootbox_system.submodels.statistics_mo
 class NoBoxesViewModel(ViewModel):
     __slots__ = ('onInfoOpen', 'onBuyBoxes', 'onClose')
 
-    def __init__(self, properties=6, commands=3):
+    def __init__(self, properties=5, commands=3):
         super(NoBoxesViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -35,30 +35,23 @@ class NoBoxesViewModel(ViewModel):
     def getBoxesInfoType():
         return BoxInfoModel
 
-    def getUseExternal(self):
+    def getUseStats(self):
         return self._getBool(3)
 
-    def setUseExternal(self, value):
+    def setUseStats(self, value):
         self._setBool(3, value)
 
-    def getUseStats(self):
+    def getIsShopVisible(self):
         return self._getBool(4)
 
-    def setUseStats(self, value):
-        self._setBool(4, value)
-
-    def getIsShopVisible(self):
-        return self._getBool(5)
-
     def setIsShopVisible(self, value):
-        self._setBool(5, value)
+        self._setBool(4, value)
 
     def _initialize(self):
         super(NoBoxesViewModel, self)._initialize()
         self._addViewModelProperty('statistics', StatisticsModel())
         self._addStringProperty('eventName', '')
         self._addArrayProperty('boxesInfo', Array())
-        self._addBoolProperty('useExternal', False)
         self._addBoolProperty('useStats', True)
         self._addBoolProperty('isShopVisible', False)
         self.onInfoOpen = self._addCommand('onInfoOpen')

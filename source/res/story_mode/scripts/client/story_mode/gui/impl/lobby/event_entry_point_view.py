@@ -25,7 +25,6 @@ class EventEntryPointView(ViewImpl):
         settings.model = EventEntryPointViewModel()
         super(EventEntryPointView, self).__init__(settings)
         self.__state = EntryPointStates.UNKNOWN
-        self.__newRemoved = False
         self.__uiLogger = EntryPointLogger()
 
     @staticmethod
@@ -40,10 +39,7 @@ class EventEntryPointView(ViewImpl):
                 setEventEntryPointShownState(state)
 
     def _getEvents(self):
-        return [(self.getViewModel().onClick, self.__onClick),
-         (self.getViewModel().onHoverForSetTime, self.__onHover),
-         (self.getViewModel().onLeaveAfterSetTime, self.__onUnhover),
-         (g_playerEvents.onConfigModelUpdated, self.__configChangeHandler)]
+        return [(self.getViewModel().onClick, self.__onClick), (self.getViewModel().onHoverForSetTime, self.__onHover), (g_playerEvents.onConfigModelUpdated, self.__configChangeHandler)]
 
     def _onLoading(self, *args, **kwargs):
         super(EventEntryPointView, self)._onLoading(*args, **kwargs)
@@ -59,7 +55,6 @@ class EventEntryPointView(ViewImpl):
             self.__fillViewModel(vm)
 
     def __fillViewModel(self, vm):
-        self.__newRemoved = False
         self.__state = self.__getState()
         settings = settingsSchema.getModel()
         if settings:
@@ -71,13 +66,11 @@ class EventEntryPointView(ViewImpl):
 
     def __onClick(self):
         self.__uiLogger.logClick(self.__state)
-        self.__newRemoved = False
         self.__controller.switchPrb()
 
     def __onHover(self):
         view = self.getViewModel()
         if view.getIsNew():
-            self.__newRemoved = True
             view.setIsNew(False)
             setEventEntryPointShownState(self.__state)
 
@@ -85,13 +78,11 @@ class EventEntryPointView(ViewImpl):
     def __getState():
         missionsModel = missionsSchema.getModel()
         missions = missionsModel.missions if missionsModel else []
-        return EntryPointStates.TASKS_UNLOCKED if any((EventEntryPointView.__isAdditionalTasksUnlocked(mission) for mission in missions if mission.isEvent)) else EntryPointStates.NEW_EVENT
+        return EntryPointStates.TASKS_UNLOCKED if any((EventEntryPointView.__isAdditionalTasksUnlocked(mission) for mission in missions if mission.isEvent and mission.enabled)) else EntryPointStates.NEW_EVENT
 
     @staticmethod
     def __isAdditionalTasksUnlocked(mission):
-        return False if len(mission.tasks) <= 1 else any((not task.isLocked() for task in mission.tasks[1:]))
-
-    def __onUnhover(self):
-        if self.__newRemoved:
-            self.__uiLogger.logUnhover(self.__state)
-            self.__newRemoved = False
+        if len(mission.tasks) <= 1:
+            return False
+        secondaryTasks = mission.tasks[1:]
+        return False if all((task.unlockDate is None for task in secondaryTasks)) else any((not task.isLocked() for task in secondaryTasks))

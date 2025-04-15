@@ -27,5 +27,5 @@ class IVoiceoverManager(IGameController):
     def stopVoiceover(self):
         raise NotImplementedError
 
-    def playVoiceover(self, voiceoverId, ctx=None):
+    def playVoiceover(self, voiceoverId, ctx=None, delay=None):
         raise NotImplementedError

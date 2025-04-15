@@ -11,7 +11,7 @@ from adisp import adisp_process
 from battle_pass_common import BATTLE_PASS_OFFER_TOKEN_PREFIX, BATTLE_PASS_Q_CHAIN_BONUS_NAME, BATTLE_PASS_Q_CHAIN_TOKEN_PREFIX, BATTLE_PASS_RANDOM_QUEST_BONUS_NAME, BATTLE_PASS_RANDOM_QUEST_TOKEN_PREFIX, BATTLE_PASS_SELECT_BONUS_NAME, BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME, BATTLE_PASS_TOKEN_3D_STYLE, BATTLE_PASS_TOKEN_PREFIX
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
-from constants import CURRENCY_TOKEN_PREFIX, DOSSIER_TYPE, EVENT_TYPE as _ET, LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, RESOURCE_TOKEN_PREFIX, RentType, CUSTOMIZATION_PROGRESS_PREFIX, WoTPlusBonusType, MODERNIZED_DEVICES_TOKEN_PREFIX, STYLE_3D_PROGRESS_PREFIX
+from constants import CURRENCY_TOKEN_PREFIX, DOSSIER_TYPE, EVENT_TYPE as _ET, LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, RESOURCE_TOKEN_PREFIX, RentType, CUSTOMIZATION_PROGRESS_PREFIX, WoTPlusBonusType, STYLE_3D_PROGRESS_PREFIX
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from dog_tags_common.components_config import componentConfigAdapter as dogTagComponentConfig
 from dog_tags_common.config.common import ComponentPurpose, ComponentViewType
@@ -39,7 +39,7 @@ from gui.game_control.links import URLMacros
 from gui.impl import backport
 from gui.impl.backport import TooltipData
 from gui.impl.gen import R
-from gui.lootbox_system.base.common import LOOTBOX_RANDOM_NATIONAL_BLUEPRINT, LOOTBOX_RANDOM_NATIONAL_BROCHURE, LOOTBOX_RANDOM_NATIONAL_GUIDE, LOOTBOX_RANDOM_NATIONAL_CREW_BOOK
+from gui.lootbox_system.base.common import LOOTBOX_RANDOM_NATIONAL_BLUEPRINT, LOOTBOX_RANDOM_NATIONAL_BROCHURE, LOOTBOX_RANDOM_NATIONAL_GUIDE, LOOTBOX_RANDOM_NATIONAL_CREW_BOOK, LOOTBOX_COMPENSATION_TOKEN_PREFIX, LOOTBOX_COMPENSATION_BONUS
 from gui.selectable_reward.constants import FEATURE_TO_PREFIX, SELECTABLE_BONUS_NAME
 from gui.server_events.awards_formatters import AWARDS_SIZES, BATTLE_BONUS_X5_TOKEN, CREW_BONUS_X3_TOKEN
 from gui.server_events.events_helpers import parseC11nProgressToken
@@ -1216,10 +1216,10 @@ def tokensFactory(name, value, isCompensation=False, ctx=None):
             accumulatedRewards[EXCHANGE_RATE_GOLD_NAME][tID] = tValue
         if tID.startswith(EXCHANGE_RATE_FREE_XP_NAME):
             accumulatedRewards[EXCHANGE_RATE_FREE_XP_NAME][tID] = tValue
-        if tID.startswith(MODERNIZED_DEVICES_TOKEN_PREFIX):
-            result.append(ModernizedDeviceRewardBonus(name, {tID: tValue}, isCompensation, ctx))
         if tID.startswith(STYLE_3D_PROGRESS_PREFIX):
             result.append(Style3DProgressRewardBonus(name, {tID: tValue}, isCompensation, ctx))
+        if tID.startswith(LOOTBOX_COMPENSATION_TOKEN_PREFIX):
+            result.append(LootboxCompensationTokenBonus(name, {tID: tValue}, isCompensation, ctx))
         result.append(BattleTokensBonus(name, {tID: tValue}, isCompensation, ctx))
 
     for tId, data in accumulatedRewards.items():
@@ -2843,29 +2843,6 @@ class EpicAbilityPtsBonus(IntegralBonus):
     pass
 
 
-class ModernizedDeviceRewardBonus(TokensBonus):
-    BONUS_NAME = 'modernizedDevice'
-
-    def __init__(self, name, value, isCompensation=False, ctx=None):
-        super(ModernizedDeviceRewardBonus, self).__init__(name, value, isCompensation, ctx)
-        self._name = self.BONUS_NAME
-
-    def isShowInGUI(self):
-        return True
-
-    def getTierLevel(self):
-        tID = self._value.keys()[0]
-        tier = tID.split('_')[2]
-        tierLevel = tier[1]
-        return int(tierLevel)
-
-    def getTooltip(self):
-        data = getSimpleTooltipData(self._name)
-        header = i18n.makeString(data[0])
-        body = i18n.makeString(data[1]).format(level=self.getTierLevel())
-        return makeTooltip(header or None, body or None) if header or body else ''
-
-
 class Style3DProgressRewardBonus(TokensBonus):
     BONUS_NAME = 'style3DProgression'
 
@@ -2885,6 +2862,32 @@ class Style3DProgressRewardBonus(TokensBonus):
         tID = self._value.keys()[0]
         level = tID.split(':')[2]
         return int(level)
+
+
+class LootboxCompensationTokenBonus(TokensBonus):
+    __lootBoxSystem = dependency.descriptor(ILootBoxSystemController)
+
+    def __init__(self, name, value, isCompensation=False, ctx=None):
+        super(LootboxCompensationTokenBonus, self).__init__(LOOTBOX_COMPENSATION_BONUS, value, isCompensation, ctx)
+        tokenID = self._value.keys()[0]
+        _, eventName, category = tokenID.split(':')
+        self.__type = eventName
+        self.__category = category
+
+    def isCompensation(self):
+        return True
+
+    def isShowInGUI(self):
+        return True
+
+    def getType(self):
+        return self.__type
+
+    def getCategory(self):
+        return self.__category
+
+    def getBox(self):
+        return first(self.__lootBoxSystem.getBoxes(self.__type, lambda b: b.getCategory() == self.__category))
 
 
 class ItemsBonusFactory(object):

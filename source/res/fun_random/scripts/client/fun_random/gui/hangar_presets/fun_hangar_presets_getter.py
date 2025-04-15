@@ -18,6 +18,10 @@ class FunRandomPresetsGetter(BasePresetsGetter, FunSubModesWatcher):
         super(FunRandomPresetsGetter, self).__init__(config)
         self.__subModesPresets = config.modes[self._QUEUE_TYPE]
 
+    @hasDesiredSubMode(abortAction='getDefaultAmmoSetupViewAlias')
+    def getAmmoSetupViewAlias(self):
+        return self.getDesiredSubMode().getAmmoSetupViewAlias()
+
     @hasDesiredSubMode(abortAction='getDefaultBattleModifiers')
     def getBattleModifiers(self):
         return self.getDesiredSubMode().getModifiersDataProvider().getModifiers()

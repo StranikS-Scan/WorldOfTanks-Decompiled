@@ -13,7 +13,7 @@ if typing.TYPE_CHECKING:
     from gui.battle_control.controllers.vse_hud_settings_ctrl.settings.battle_communication import BattleCommunicationModel
 
 class BattleCommunicationSettings(IBattleCommunicationsSettings):
-    __slots__ = ('onChanged', '_isEnabled', '_showStickyMarkers', '_showInPlayerList', '_showCalloutMessages', '_showLocationMarkers', '_showBaseMarkers')
+    __slots__ = ('onChanged', '_isEnabled', '_showStickyMarkers', '_showInPlayerList', '_showCalloutMessages', '_showLocationMarkers', '_showBaseMarkers', '_enableCommendationsFeedback')
     _settingsCore = dependency.descriptor(ISettingsCore)
     _settingsCache = dependency.descriptor(ISettingsCache)
     _sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -27,6 +27,7 @@ class BattleCommunicationSettings(IBattleCommunicationsSettings):
         self._showCalloutMessages = None
         self._showLocationMarkers = None
         self._showBaseMarkers = None
+        self._enableCommendationsFeedback = None
         return
 
     @property
@@ -52,6 +53,10 @@ class BattleCommunicationSettings(IBattleCommunicationsSettings):
     @property
     def showBaseMarkers(self):
         return self._showBaseMarkers
+
+    @property
+    def showCommendationsFeedbackOnReceive(self):
+        return self._enableCommendationsFeedback
 
     def init(self):
         self._settingsCore.onSettingsChanged += self._coreSettingsChangeHandler
@@ -111,11 +116,13 @@ class BattleCommunicationSettings(IBattleCommunicationsSettings):
         showCalloutMessages = self._coreEnabled(BattleCommStorageKeys.SHOW_CALLOUT_MESSAGES) and vseEnabled
         showLocationMarkers = self._coreEnabled(BattleCommStorageKeys.SHOW_LOCATION_MARKERS) and vseEnabled
         showBaseMarkers = self._coreEnabled(BattleCommStorageKeys.SHOW_BASE_MARKERS) and vseEnabled
-        if self._isEnabled != isEnabled or self._showStickyMarkers != showStickyMarkers or self._showInPlayerList != showInPlayerList or self._showCalloutMessages != showCalloutMessages or self._showLocationMarkers != showLocationMarkers or self._showBaseMarkers != showBaseMarkers:
+        enableCommendations = self._coreEnabled(BattleCommStorageKeys.ENABLE_COMMENDATIONS_FEEDBACK) and vseEnabled
+        if self._isEnabled != isEnabled or self._showStickyMarkers != showStickyMarkers or self._showInPlayerList != showInPlayerList or self._showCalloutMessages != showCalloutMessages or self._showLocationMarkers != showLocationMarkers or self._showBaseMarkers != showBaseMarkers or self._enableCommendationsFeedback != enableCommendations:
             self._isEnabled = isEnabled
             self._showStickyMarkers = showStickyMarkers
             self._showInPlayerList = showInPlayerList
             self._showCalloutMessages = showCalloutMessages
             self._showLocationMarkers = showLocationMarkers
             self._showBaseMarkers = showBaseMarkers
+            self._enableCommendationsFeedback = enableCommendations
             self.onChanged()

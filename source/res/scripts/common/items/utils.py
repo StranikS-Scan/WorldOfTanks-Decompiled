@@ -273,16 +273,16 @@ if IS_CLIENT:
         return (moving, still)
 
 
-    def updateAttrFactorsWithSplit(vehicleDescr, crewCompactDescrs, eqs, factors, additionalCrewLevelIncrease=0):
+    def updateAttrFactorsWithSplit(vehicleDescr, crewCompactDescrs, eqs, factors, additionalCrewLevelIncrease=0, isModifySkillProcessors=False):
         extras = {}
         extraAspects = {VEHICLE_TTC_ASPECTS.WHEN_STILL: ('invisibility',)}
         for aspect in extraAspects.iterkeys():
             currFactors = copy.deepcopy(factors)
-            updateVehicleAttrFactors(vehicleDescr, crewCompactDescrs, eqs, currFactors, aspect, additionalCrewLevelIncrease)
+            updateVehicleAttrFactors(vehicleDescr, crewCompactDescrs, eqs, currFactors, aspect, additionalCrewLevelIncrease, isModifySkillProcessors)
             for coefficient in extraAspects[aspect]:
                 extras.setdefault(coefficient, {})[aspect] = currFactors[coefficient]
 
-        updateVehicleAttrFactors(vehicleDescr, crewCompactDescrs, eqs, factors, VEHICLE_TTC_ASPECTS.DEFAULT, additionalCrewLevelIncrease)
+        updateVehicleAttrFactors(vehicleDescr, crewCompactDescrs, eqs, factors, VEHICLE_TTC_ASPECTS.DEFAULT, additionalCrewLevelIncrease, isModifySkillProcessors)
         for coefficientName, coefficientValue in extras.iteritems():
             coefficientValue[VEHICLE_TTC_ASPECTS.DEFAULT] = factors[coefficientName]
             factors[coefficientName] = coefficientValue
@@ -310,7 +310,7 @@ if IS_CLIENT:
         return sum(filter(None, [ getattr(eq, 'crewLevelIncrease', None) for eq in eqs ]))
 
 
-    def updateVehicleAttrFactors(vehicleDescr, crewCompactDescrs, eqs, factors, aspect, additionalCrewLevelIncrease=0):
+    def updateVehicleAttrFactors(vehicleDescr, crewCompactDescrs, eqs, factors, aspect, additionalCrewLevelIncrease=0, isModifySkillProcessors=False):
         from VehicleDescrCrew import VehicleDescrCrew
         factors['crewLevelIncrease'] = _sumCrewLevelIncrease(eqs)
         for eq in eqs:
@@ -320,6 +320,8 @@ if IS_CLIENT:
         vehicleDescr.applyOptDevFactorsForAspect(factors, aspect)
         factors['crewLevelIncrease'] += additionalCrewLevelIncrease
         vehicleDescrCrew = VehicleDescrCrew(vehicleDescr, crewCompactDescrs)
+        if isModifySkillProcessors:
+            vehicleDescrCrew.modifySkillProcessors()
         for eq in eqs:
             if eq is not None and 'crewSkillBattleBooster' in eq.tags:
                 vehicleDescrCrew.boostSkillBy(eq)

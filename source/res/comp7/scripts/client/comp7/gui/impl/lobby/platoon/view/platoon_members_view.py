@@ -17,7 +17,7 @@ from comp7_common.comp7_constants import CLIENT_UNIT_CMD
 from gui.impl import backport
 from gui.impl.gen import R
 from comp7.gui.impl.gen.view_models.views.lobby.enums import Division, Rank
-from comp7.gui.impl.gen.view_models.views.lobby.meta_view.progression_item_base_model import ProgressionItemBaseModel
+from comp7.gui.impl.gen.view_models.views.lobby.progression_item_base_model import ProgressionItemBaseModel
 from comp7.gui.impl.gen.view_models.views.lobby.platoon.comp7_slot_model import Comp7SlotModel
 from comp7.gui.impl.gen.view_models.views.lobby.platoon.comp7_window_model import Comp7WindowModel
 from gui.impl.gen.view_models.views.lobby.platoon.dropdown_item import DropdownItem

@@ -314,7 +314,6 @@ class GuiSettingsBehavior(CONST_CONTAINER):
     DISPLAY_PLATOON_MEMBER_CLICKED = 'isDisplayPlatoonMembersClicked'
     VEH_POST_PROGRESSION_UNLOCK_MSG_NEED_SHOW = 'vehPostProgressionUnlockMsgNeedShow'
     BIRTHDAY_CALENDAR_INTRO_SHOWED = 'birthdayCalendarIntroShowed'
-    RESOURCE_WELL_INTRO_SHOWN = 'resourceWellIntroShown'
     COMP7_YEARLY_ANIMATION_SEEN = 'isComp7YearlyAnimationSeen'
     COMP7_SEASON_STATISTICS_SHOWN = 'isComp7SeasonStatisticsShown'
     CREW_22_WELCOME_SHOWN = 'crew22WelcomeShown'
@@ -362,6 +361,9 @@ class OnceOnlyHints(CONST_CONTAINER):
     MODERNIZED_SETUP_TAB_HINT = 'ModernizedSetupTabHint'
     OPT_DEV_DRAG_AND_DROP_HINT = 'OptDevDragAndDropHint'
     WOTPLUS_OPT_DEV_HINT = 'WotPlusOptDevHint'
+    WOTPLUS_CREW_WIDGET_TANKMAN_ASSIST_HINT = 'WotPlusCrewWidgetTankmanAssistHint'
+    WOTPLUS_CREW_SKILL_TRAINING_DROPDOWN_ASSIST_HINT = 'WotPlusCrewSkillTrainingDropDownAssistHint'
+    WOTPLUS_CREW_CONTAINER_TANKMAN_SKILL_ASSIST_HINT = 'WotPlusCrewContainerTankmanSkillAssistHint'
     HANGAR_MANUAL_HINT = 'HangarManualHint'
     DOGTAG_HANGAR_HINT = 'DogTagHangarHint'
     DOGTAG_PROFILE_HINT = 'DogTagProfileHint'
@@ -398,6 +400,7 @@ class OnceOnlyHints(CONST_CONTAINER):
     NEW_C11N_SECTION_HINT = 'NewC11nSectionHint'
     C11N_VEHICLE_LIST_HINT = 'C11nVehicleListHint'
     VEHICLE_C11N_FILTER_HINT = 'VehicleC11nFilterHint'
+    VDAY_DIFFICULTY_HINT = 'VDayDifficultyHint'
 
 
 class SESSION_STATS(CONST_CONTAINER):
@@ -489,6 +492,7 @@ class BattlePassStorageKeys(CONST_CONTAINER):
     INTRO_VIDEO_SHOWN = 'introVideoShown'
     BUY_ANIMATION_WAS_SHOWN = 'buyAnimationWasShown'
     FLAGS_VERSION = 'flagsVersion'
+    DAILY_QUESTS_INTRO_SHOWN = 'dailyQuestsIntroShown'
     EXTRA_CHAPTER_INTRO_SHOWN = 'extraChapterIntroShown'
     EXTRA_CHAPTER_VIDEO_SHOWN = 'extraChapterVideoShown'
     FLAGS_VERSION_HOLIDAY = 'flagsVersionHoliday'
@@ -501,6 +505,7 @@ class BattleCommStorageKeys(CONST_CONTAINER):
     SHOW_CALLOUT_MESSAGES = 'showCalloutMessages'
     SHOW_LOCATION_MARKERS = 'showLocationMarkers'
     SHOW_BASE_MARKERS = 'showMarkers'
+    ENABLE_COMMENDATIONS_FEEDBACK = 'enableCommendations'
 
 
 class ScorePanelStorageKeys(CONST_CONTAINER):

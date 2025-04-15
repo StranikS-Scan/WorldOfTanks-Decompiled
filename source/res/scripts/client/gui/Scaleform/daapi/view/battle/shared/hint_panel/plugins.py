@@ -1070,16 +1070,19 @@ class MapsTrainingHelpHintPlugin(PreBattleHintPlugin):
         return True
 
 
-class HelpPlugin(HintPanelPlugin):
-    __slots__ = ('__isActive', '__settings', '__isShown', '__isInDisplayPeriod', '__callbackDelayer', '__isVisible', '__settingKey', '__settingSectionName', '_localeRes', '__hintPriority', '__hintContext')
+class ButtonPlugin(HintPanelPlugin):
+    __slots__ = ('__commandKey', '_isActive', '__settings', '__isShown', '__isInDisplayPeriod', '__callbackDelayer', '_isVisible', '__settingKey', '__settingSectionName', '_localeRes', '__hintPriority', '__hintContext')
     _sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    _HINTS_AMOUNT = 3
     _HINT_TIMEOUT = 6
+    _PERIODS = BEFORE_START_BATTLE_PERIODS
 
-    def __init__(self, settingSectionName, settingKey, localeRes, hintPriority, hintContext, parentObj):
-        self.__isActive = False
+    def __init__(self, commandKey, settingSectionName, settingKey, localeRes, hintPriority, hintContext, parentObj):
+        self.__commandKey = commandKey
+        self._isActive = False
         self.__settings = None
         self.__isShown = False
-        self.__isVisible = False
+        self._isVisible = False
         self.__isInDisplayPeriod = False
         self.__callbackDelayer = None
         self.__settingKey = settingKey
@@ -1087,73 +1090,90 @@ class HelpPlugin(HintPanelPlugin):
         self._localeRes = localeRes
         self.__hintPriority = hintPriority
         self.__hintContext = hintContext
-        super(HelpPlugin, self).__init__(parentObj)
+        super(ButtonPlugin, self).__init__(parentObj)
         return
 
     def start(self):
-        self.__isActive = True
+        self._isActive = True
         self.__callbackDelayer = CallbackDelayer()
         self.__settings = AccountSettings.getSettings(self.__settingSectionName)
-        self.__settings[self.__settingKey] = self.__settings.get(self.__settingKey, {HINTS_LEFT: 3})
-        g_eventBus.addListener(ViewEventType.LOAD_VIEW, self.__handleLoadView, scope=EVENT_BUS_SCOPE.BATTLE)
+        self.__settings[self.__settingKey] = self.__settings.get(self.__settingKey, {HINTS_LEFT: self._HINTS_AMOUNT})
         g_eventBus.addListener(GameEvent.BATTLE_LOADING, self.__onBattleLoading, scope=EVENT_BUS_SCOPE.BATTLE)
         g_eventBus.addListener(GameEvent.SHOW_BTN_HINT, self.__onHintShown, scope=EVENT_BUS_SCOPE.GLOBAL)
 
     def stop(self):
-        if self.__isActive:
-            self.__hide()
+        if self._isActive:
+            self._hide()
             self.__callbackDelayer.destroy()
             self.__callbackDelayer = None
-            g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self.__handleLoadView, scope=EVENT_BUS_SCOPE.BATTLE)
             g_eventBus.removeListener(GameEvent.BATTLE_LOADING, self.__onBattleLoading, scope=EVENT_BUS_SCOPE.BATTLE)
             g_eventBus.removeListener(GameEvent.SHOW_BTN_HINT, self.__onHintShown, scope=EVENT_BUS_SCOPE.GLOBAL)
             if self.__isShown:
                 AccountSettings.setSettings(self.__settingSectionName, self.__settings)
-        self.__isActive = False
+        self._isActive = False
         self.__settingKey = None
         self.__settingSectionName = None
         self._localeRes = None
         self.__hintPriority = None
         self.__hintContext = None
+        self.__commandKey = None
         return
 
     def setPeriod(self, period):
-        if not self.__isActive:
+        if not self._isActive:
             return
-        self.__isInDisplayPeriod = period in BEFORE_START_BATTLE_PERIODS
-        if self.__isVisible and not self.__isInDisplayPeriod:
-            self.__hide()
+        self.__isInDisplayPeriod = period in self._PERIODS
+        if self._isVisible and not self.__isInDisplayPeriod:
+            self._hide()
+
+    def _getDefaultKeyMessage(self):
+        return backport.text(R.strings.ingame_gui.hint.noBindingKey())
 
     def _getHint(self):
-        keyName = getReadableKey(CommandMapping.CMD_SHOW_HELP)
-        key = getVirtualKey(CommandMapping.CMD_SHOW_HELP)
-        return HintData(key, keyName, backport.text(self._localeRes.press()), backport.text(self._localeRes.description()), 0, 0, self.__hintPriority, False, self.__hintContext, False)
+        key = getReadableKey(self.__commandKey)
+        messageRight = backport.text(self._localeRes.description()) if key else self._getDefaultKeyMessage()
+        return HintData(getVirtualKey(self.__commandKey), key, backport.text(self._localeRes.press()), messageRight, 0, 0, self.__hintPriority, False, self.__hintContext, False)
 
-    def __showHint(self):
-        self._parentObj.setBtnHint(CommandMapping.CMD_SHOW_HELP, self._getHint())
+    def _hide(self):
+        if self._isVisible:
+            self.__callbackDelayer.stopCallback(self._hide)
+            self._isVisible = False
+            hint = self._parentObj.removeBtnHint(self.__commandKey)
+            if hint and hint.hintCtx == self.__hintContext:
+                self._updateBattleCounterOnUsed(self.__settings[self.__settingKey])
+
+    def _showHint(self):
+        self._parentObj.setBtnHint(self.__commandKey, self._getHint())
 
     def __onHintShown(self, event):
         if event.ctx.get('hintCtx') == self.__hintContext and not self.__isShown:
-            self.__isVisible = True
+            self._isVisible = True
             self.__isShown = True
-            self.__callbackDelayer.delayCallback(self._HINT_TIMEOUT, self.__hide)
-
-    def __handleLoadView(self, event):
-        if event.alias == VIEW_ALIAS.INGAME_DETAILS_HELP:
-            self.__hide()
+            self.__callbackDelayer.delayCallback(self._HINT_TIMEOUT, self._hide)
 
     def __onBattleLoading(self, event):
         battleLoadingShown = event.ctx.get('isShown')
         if not battleLoadingShown and self.__isInDisplayPeriod and self.__settings[self.__settingKey][HINTS_LEFT] > 0 and not self._sessionProvider.isReplayPlaying:
-            self.__showHint()
+            self._showHint()
 
-    def __hide(self):
-        if self.__isVisible:
-            self.__callbackDelayer.stopCallback(self.__hide)
-            self.__isVisible = False
-            hint = self._parentObj.removeBtnHint(CommandMapping.CMD_SHOW_HELP)
-            if hint and hint.hintCtx == self.__hintContext:
-                self._updateBattleCounterOnUsed(self.__settings[self.__settingKey])
+
+class HelpPlugin(ButtonPlugin):
+
+    def __init__(self, settingSectionName, settingKey, localeRes, hintPriority, hintContext, parentObj):
+        super(HelpPlugin, self).__init__(CommandMapping.CMD_SHOW_HELP, settingSectionName, settingKey, localeRes, hintPriority, hintContext, parentObj)
+
+    def start(self):
+        super(HelpPlugin, self).start()
+        g_eventBus.addListener(ViewEventType.LOAD_VIEW, self.__handleLoadView, scope=EVENT_BUS_SCOPE.BATTLE)
+
+    def stop(self):
+        if self._isActive:
+            g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self.__handleLoadView, scope=EVENT_BUS_SCOPE.BATTLE)
+        super(HelpPlugin, self).stop()
+
+    def __handleLoadView(self, event):
+        if event.alias == VIEW_ALIAS.INGAME_DETAILS_HELP:
+            self._hide()
 
 
 class MapboxHelpPlugin(HelpPlugin):

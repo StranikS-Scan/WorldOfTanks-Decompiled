@@ -3,7 +3,7 @@
 import logging
 import typing
 from comp7.gui.impl.gen.view_models.views.lobby.enums import Division, Rank
-from comp7.gui.impl.gen.view_models.views.lobby.meta_view.progression_division import ProgressionDivision, State
+from comp7.gui.impl.gen.view_models.views.lobby.progression_division import ProgressionDivision, State
 from comp7.gui.impl.lobby.comp7_helpers import comp7_shared
 from helpers import dependency
 from intervals import Interval
@@ -11,7 +11,7 @@ from skeletons.gui.game_control import IComp7Controller
 if typing.TYPE_CHECKING:
     from comp7_ranks_common import Comp7Division
     from comp7.gui.impl.gen.view_models.views.lobby.meta_view.progression_base_model import ProgressionBaseModel
-    from comp7.gui.impl.gen.view_models.views.lobby.meta_view.progression_item_base_model import ProgressionItemBaseModel
+    from comp7.gui.impl.gen.view_models.views.lobby.progression_item_base_model import ProgressionItemBaseModel
     from comp7.helpers.comp7_server_settings import Comp7RanksConfig
 _logger = logging.getLogger(__name__)
 

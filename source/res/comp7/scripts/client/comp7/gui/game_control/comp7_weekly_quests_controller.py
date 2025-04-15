@@ -5,9 +5,9 @@ import typing
 from functools import partial
 from Event import Event, EventManager
 from PlayerEvents import g_playerEvents
-from comp7_common_const import Comp7QuestType, offerWeeklyQuestsRewardGiftTokenBySeasonNumber, offerWeeklyQuestsRewardTokenBySeasonNumber
+from comp7_common_const import Comp7QuestType
 from comp7.gui.impl.gen.view_models.views.lobby.missions.comp7_widget_quest_model import State
-from comp7.gui.impl.lobby.comp7_helpers.comp7_quest_helpers import Comp7ParsedQuestID
+from comp7.gui.impl.lobby.comp7_helpers.comp7_quest_helpers import Comp7ParsedQuestID, isWeeklyRewardClaimed
 from comp7.skeletons.gui.game_control import IComp7WeeklyQuestsController
 from gui.prb_control.entities.listener import IGlobalListener
 from helpers import dependency, time_utils
@@ -97,7 +97,7 @@ class Comp7WeeklyQuestsController(IComp7WeeklyQuestsController, IGlobalListener)
         self.__updateQuests()
 
     def __onOffersUpdated(self):
-        if self.__isFinalRewardChosen():
+        if isWeeklyRewardClaimed():
             quests = self.__quests
             quests.newQuestState = State.HIDE
             self.onWeeklyQuestsUpdated(quests)
@@ -133,7 +133,7 @@ class Comp7WeeklyQuestsController(IComp7WeeklyQuestsController, IGlobalListener)
 
             numBattleQuests = len(battleQuests)
             if numBattleQuests == completedCnt:
-                newQuestState = State.HIDE if cls.__isFinalRewardChosen() else State.REWARD
+                newQuestState = State.HIDE if isWeeklyRewardClaimed() else State.REWARD
             return _Comp7WeeklyQuests(battleQuests, tokenQuests, oldQuest, newQuest, newQuestState, numBattleQuests, completedCnt, timeOfNewQuests)
 
     def __setNewQuestsCallback(self):
@@ -141,17 +141,6 @@ class Comp7WeeklyQuestsController(IComp7WeeklyQuestsController, IGlobalListener)
         timeToNewQuests = self.__quests.getTimeToNewQuests()
         if timeToNewQuests != -1:
             self.__timer.delayCallback(timeToNewQuests, self.__updateQuests)
-
-    @classmethod
-    def __isFinalRewardChosen(cls):
-        season = cls.__comp7Controller.getActualSeasonNumber()
-        if season is None:
-            return True
-        else:
-            tokens = cls.__itemsCache.items.tokens.getTokens()
-            rewardToken = offerWeeklyQuestsRewardTokenBySeasonNumber(season)
-            giftToken = offerWeeklyQuestsRewardGiftTokenBySeasonNumber(season)
-            return rewardToken in tokens and giftToken not in tokens
 
 
 class _Comp7WeeklyQuests(object):

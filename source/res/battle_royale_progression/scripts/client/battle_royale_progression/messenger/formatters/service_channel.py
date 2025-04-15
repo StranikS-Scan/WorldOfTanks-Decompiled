@@ -1,18 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale_progression/scripts/client/battle_royale_progression/messenger/formatters/service_channel.py
 from constants import LOOTBOX_TOKEN_PREFIX
-from helpers import dependency
 from battle_royale_progression.notification.decorators import BRProgressionLockButtonDecorator
 from gui.impl import backport
 from gui.impl.gen import R
 from messenger import g_settings
 from messenger.formatters.service_channel import ServiceChannelFormatter, QuestAchievesFormatter
 from messenger.formatters.service_channel_helpers import MessageData
-from skeletons.gui.shared import IItemsCache
 from gui.shared.formatters import text_styles
 
 class BRProgressionAchievesFormatter(QuestAchievesFormatter):
-    __itemsCache = dependency.descriptor(IItemsCache)
     _BULLET = u'\u2022 '
     _SEPARATOR = '<br/>' + _BULLET
     __LOOTBOX_TEMPLATE = 'SHPLootBoxReceived'
@@ -36,17 +33,6 @@ class BRProgressionAchievesFormatter(QuestAchievesFormatter):
         if battlePassPoints > 0:
             result.append(g_settings.htmlTemplates.format(cls.__BATTLE_PASS_TEMPLATE, ctx={'battlePassProgression': backport.text(R.strings.messenger.serviceChannelMessages.BRbattleResults.battlePass(), pointsDiff=text_styles.neutral(battlePassPoints))}))
         return result
-
-    @classmethod
-    def _processTokens(cls, data):
-        boxes = []
-        for token, tokenData in data.get('tokens', {}).items():
-            if token.startswith(LOOTBOX_TOKEN_PREFIX):
-                lootBox = cls.__itemsCache.items.tokens.getLootBoxByTokenID(token)
-                if lootBox is not None:
-                    boxes.append(backport.text(R.strings.battle_royale_progression.serviceChannelMessages.lootBoxesReceived(), boxName=lootBox.getUserName(), count=tokenData.get('count', 0)))
-
-        return g_settings.htmlTemplates.format(cls.__LOOTBOX_TEMPLATE, {'boxes': ', '.join(boxes)}) if boxes else ''
 
 
 class BRProgressionSystemMessageFormatter(ServiceChannelFormatter):

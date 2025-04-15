@@ -33,4 +33,23 @@
       </plan>
     </client>
   </visualScript>
+  <visualScript>
+    <battleTypes>
+      <arenaBonusType>	REGULAR	</arenaBonusType>
+    </battleTypes>
+    <battleTypes>
+      <arenaBonusType>	EPIC_RANDOM	</arenaBonusType>
+    </battleTypes>
+    <battleTypes>
+      <arenaBonusType>	WINBACK	</arenaBonusType>
+    </battleTypes>
+    <battleTypes>
+      <arenaBonusType>	RANDOM_NP2	</arenaBonusType>
+    </battleTypes>
+    <server>
+      <plan>
+        <name>	commendations/live_tags_server	</name>
+      </plan>
+    </server>
+  </visualScript>
 </arena_vscripts.xml>

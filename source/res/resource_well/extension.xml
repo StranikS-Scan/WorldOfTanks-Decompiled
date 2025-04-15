@@ -1,0 +1,11 @@
+<extension.xml>
+  <FeatureName>	resource_well	</FeatureName>
+  <IsEnabled>	true	</IsEnabled>
+  <Personality>	resource_well_personality	</Personality>
+  <Components>
+    <StaticComponents>
+      <ResourceWellAccountComponent></ResourceWellAccountComponent>
+    </StaticComponents>
+    <DynamicComponents></DynamicComponents>
+  </Components>
+</extension.xml>

@@ -56,12 +56,13 @@ class ClientHintVisualModel(models.Model):
 
 
 class ClientHintSoundModel(models.Model):
-    __slots__ = ('fx', 'notify')
+    __slots__ = ('fx', 'notify', 'aliveOnly')
 
-    def __init__(self, fx, notify):
+    def __init__(self, fx, notify, aliveOnly):
         super(ClientHintSoundModel, self).__init__()
         self.fx = fx
         self.notify = notify
+        self.aliveOnly = aliveOnly
 
     def createFx(self):
         try:
@@ -77,11 +78,21 @@ class ClientHintSoundModel(models.Model):
             _logger.error('Sound notify creation error: %s.', error)
             return ''
 
+    def createAliveOnly(self):
+        try:
+            return self._createAliveOnly()
+        except Exception as error:
+            _logger.error('Sound aliveOnly creation error: %s.', error)
+            return False
+
     def _createFx(self):
         return self.fx
 
     def _createNotify(self):
         return self.notify
+
+    def _createAliveOnly(self):
+        return self.aliveOnly
 
     def _reprArgs(self):
         return 'fx={}, notify={}'.format(self.fx, self.notify)
@@ -236,7 +247,8 @@ class ClientHintSoundSchema(schemas.Schema[CHMSoundType]):
 
     def __init__(self, modelClass=ClientHintSoundModel, checkUnknown=True, serializedValidators=None, deserializedValidators=None):
         super(ClientHintSoundSchema, self).__init__(fields={'fx': fields.String(required=False, default='', deserializedValidators=validate.Length(minValue=1, maxValue=100)),
-         'notify': fields.String(required=False, default='', deserializedValidators=validate.Length(minValue=1, maxValue=100))}, checkUnknown=checkUnknown, serializedValidators=serializedValidators, deserializedValidators=deserializedValidators, modelClass=modelClass)
+         'notify': fields.String(required=False, default='', deserializedValidators=validate.Length(minValue=1, maxValue=100)),
+         'aliveOnly': fields.Boolean(default=False, required=False)}, checkUnknown=checkUnknown, serializedValidators=serializedValidators, deserializedValidators=deserializedValidators, modelClass=modelClass)
 
 
 class ClientHintHistorySchema(schemas.Schema[CHMHistoryType]):

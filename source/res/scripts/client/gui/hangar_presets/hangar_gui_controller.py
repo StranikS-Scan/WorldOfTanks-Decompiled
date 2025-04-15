@@ -58,6 +58,9 @@ class HangarGuiController(IHangarGuiController, IPrbListener):
     def getAmmoInjectViewAlias(self):
         return self.__getCurrentPresetGetter(defaultQueueType=QUEUE_TYPE.RANDOMS).getAmmoInjectViewAlias()
 
+    def getAmmoSetupViewAlias(self):
+        return self.__getCurrentPresetGetter(defaultQueueType=QUEUE_TYPE.RANDOMS).getAmmoSetupViewAlias()
+
     def getHangarAlertBlock(self):
         return self.__getCurrentPresetGetter(defaultQueueType=QUEUE_TYPE.RANDOMS).getHangarAlertBlock()
 

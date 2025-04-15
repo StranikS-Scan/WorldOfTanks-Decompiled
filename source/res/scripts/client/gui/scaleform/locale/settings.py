@@ -415,6 +415,7 @@ class SETTINGS(object):
     BATTLECOMM_SHOWCALLOUTMESSAGES = '#settings:battlecomm/showCalloutMessages'
     BATTLECOMM_SHOWLOCATIONMARKERS = '#settings:battlecomm/showLocationMarkers'
     BATTLECOMM_SHOWMARKERS = '#settings:battlecomm/showMarkers'
+    BATTLECOMM_ENABLECOMMENDATIONS = '#settings:battlecomm/enableCommendations'
     CURSOR_ARCADETITLE = '#settings:cursor/ArcadeTitle'
     CURSOR_SNIPPERTITLE = '#settings:cursor/SnipperTitle'
     CURSOR_ARTYTITLE = '#settings:cursor/ArtyTitle'

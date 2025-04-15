@@ -192,7 +192,8 @@ class _SummaryPostmortemPanel(_BasePostmortemPanel):
             else:
                 msgCode = _ATTACK_REASON_CODE_TO_MSG[deathReasonCode]
                 msgCode += self.__getPostfixByKiller(vehID)
-                self._prepareMessage(msgCode, killerVehID=vehID)
+                if msgCode in self._messages:
+                    self._prepareMessage(msgCode, killerVehID=vehID)
             return
 
     def __getPostfixByKiller(self, killerVehID):

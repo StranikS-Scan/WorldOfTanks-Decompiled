@@ -15,7 +15,7 @@ from helpers.time_utils import getServerUTCTime
 from skeletons.gui.game_control import ILootBoxSystemController
 from skeletons.gui.hangar import ICarouselEventEntry
 _logger = logging.getLogger(__name__)
-_ENABLED_PRE_QUEUES = (QUEUE_TYPE.RANDOMS, QUEUE_TYPE.WINBACK, QUEUE_TYPE.BATTLE_ROYALE)
+_ENABLED_PRE_QUEUES = (QUEUE_TYPE.RANDOMS, QUEUE_TYPE.WINBACK)
 
 class LootBoxSystemEntryPoint(ViewImpl, ICarouselEventEntry):
     __lootBoxes = dependency.descriptor(ILootBoxSystemController)

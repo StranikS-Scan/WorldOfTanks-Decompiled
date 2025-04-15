@@ -49,6 +49,9 @@ class StoryModeEntity(PreQueueEntity):
     def storage(self):
         return None
 
+    def canDoActionWithoutVehicle(self):
+        return True
+
     def init(self, ctx=None):
         self.storage.queueType = self.getQueueType()
         self._modeFlags |= FUNCTIONAL_FLAG.LOAD_PAGE

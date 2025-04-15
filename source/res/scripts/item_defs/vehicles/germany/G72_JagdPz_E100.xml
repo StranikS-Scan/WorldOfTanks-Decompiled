@@ -64,7 +64,6 @@
       <armor_12>	300	</armor_12>
       <armor_13>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_13>
-      <armor_14>	160	</armor_14>
       <armor_15>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_15>
       <armor_16>	40	</armor_16>
@@ -74,6 +73,8 @@
       </armor_19>
       <armor_20>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_20>
+      <armor_21>	65	</armor_21>
+      <armor_22>	160	</armor_22>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	95000	</weight>
@@ -1476,8 +1477,8 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_JagdPz_E100>
-      <userString>	#germany_vehicles:Chassis_JagdPz_E100	</userString>
+    <Chassis_G72_JagdPz_E100>
+      <userString>	#germany_vehicles:Chassis_G72_JagdPz_E100	</userString>
       <tags></tags>
       <level>	10	</level>
       <price>	82500	</price>
@@ -2489,11 +2490,11 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_JagdPz_E100>
+    </Chassis_G72_JagdPz_E100>
   </chassis>
   <turrets0>
-    <Turret_1_JagdPz_E100>
-      <userString>	#germany_vehicles:Turret_1_JagdPz_E100	</userString>
+    <Turret_1_G72_JagdPz_E100>
+      <userString>	#germany_vehicles:Turret_1_G72_JagdPz_E100	</userString>
       <tags>	cannotDetach	</tags>
       <level>	10	</level>
       <price>	100	</price>
@@ -2526,6 +2527,8 @@
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
+            <armor_5>	250	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_5>
             <gun>	70	</gun>
           </armor>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
@@ -2644,10 +2647,10 @@
         <density>	10400.5 10012.7	</density>
         <aoTextureSize>	1024 1024	</aoTextureSize>
       </camouflage>
-    </Turret_1_JagdPz_E100>
+    </Turret_1_G72_JagdPz_E100>
   </turrets0>
   <engines>
-    <Maybach_HL_234P60>	shared	</Maybach_HL_234P60>
+    <Maybach_Neues_Projekt_J>	shared	</Maybach_Neues_Projekt_J>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
@@ -2658,13 +2661,13 @@
   <physics>
     <detailed>
       <engines>
-        <Maybach_HL_234P60>
+        <Maybach_Neues_Projekt_J>
           <smplEnginePower>	1268.737	</smplEnginePower>
           <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
-        </Maybach_HL_234P60>
+        </Maybach_Neues_Projekt_J>
       </engines>
       <chassis>
-        <Chassis_JagdPz_E100>
+        <Chassis_G72_JagdPz_E100>
           <grounds>
             <soft>
               <rollingFriction>	0.18515	</rollingFriction>
@@ -2676,7 +2679,8 @@
               <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_JagdPz_E100>
+          <axleCount>	5	</axleCount>
+        </Chassis_G72_JagdPz_E100>
       </chassis>
     </detailed>
   </physics>

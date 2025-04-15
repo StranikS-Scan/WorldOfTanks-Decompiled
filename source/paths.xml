@@ -1,7 +1,7 @@
 <root>
   <Paths>
-    <Path cacheSubdirs="true">./res_mods/1.28.0.1</Path>
-    <Path mask="*.wotmod" mode="recursive" root="res">./mods/1.28.0.1</Path>
+    <Path cacheSubdirs="true">./res_mods/1.28.1.0 Common Test</Path>
+    <Path mask="*.wotmod" mode="recursive" root="res">./mods/1.28.1.0 Common Test</Path>
     <Packages>
       <Package type="sd,hd">./res/packages/shared_content-part3.pkg</Package>
       <Package type="sd,hd">./res/packages/shared_content-part2.pkg</Package>
@@ -24,7 +24,7 @@
       <Package type="sandbox,sd,hd">./res/packages/05_prohorovka.pkg</Package>
       <Package type="hd">./res/packages/05_prohorovka_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/06_ensk.pkg</Package>
-      <Package type="hd">./res/packages/06_ensk_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/06_ensk_big.pkg</Package>
       <Package type="sd,hd">./res/packages/07_lakeville.pkg</Package>
       <Package type="hd">./res/packages/07_lakeville_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/08_ruinberg.pkg</Package>
@@ -59,6 +59,8 @@
       <Package type="hd">./res/packages/128_last_frontier_v_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/13_erlenberg.pkg</Package>
       <Package type="hd">./res/packages/13_erlenberg_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/140_fall_tanks.pkg</Package>
+      <Package type="hd">./res/packages/140_fall_tanks_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/14_siegfried_line.pkg</Package>
       <Package type="hd">./res/packages/14_siegfried_line_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/14_siegfried_line_nom.pkg</Package>
@@ -77,6 +79,8 @@
       <Package type="hd">./res/packages/210_bf_epic_desert_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/212_epic_random_valley.pkg</Package>
       <Package type="hd">./res/packages/212_epic_random_valley_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/212_epic_random_valley_sm25.pkg</Package>
+      <Package type="hd">./res/packages/212_epic_random_valley_sm25_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/217_er_alaska.pkg</Package>
       <Package type="hd">./res/packages/217_er_alaska_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/222_er_clime.pkg</Package>
@@ -131,11 +135,8 @@
       <Package type="hd">./res/packages/h33_battle_royale_2021_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/h33_comp7.pkg</Package>
       <Package type="hd">./res/packages/h33_comp7_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/h34_sh_arcade_2023.pkg</Package>
-      <Package type="hd">./res/packages/h34_sh_arcade_2023_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/hangar_v3.pkg</Package>
       <Package type="hd">./res/packages/hangar_v3_hd.pkg</Package>
-      <Package type="sandbox,sd,hd">./res/packages/advent_calendar.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/audioww-part3.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/audioww-part2.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/audioww-part1.pkg</Package>
@@ -145,6 +146,7 @@
       <Package type="sandbox,sd,hd">./res/packages/comp7.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/content_exclude.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/event_platform.pkg</Package>
+      <Package type="sandbox,sd,hd">./res/packages/fall_tanks.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/frontline.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/fun_random.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/gui-part3.pkg</Package>
@@ -156,6 +158,7 @@
       <Package type="sandbox,sd,hd">./res/packages/particles.pkg</Package>
       <Package type="hd">./res/packages/particles_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/prime_gaming_content.pkg</Package>
+      <Package type="sandbox,sd,hd">./res/packages/resource_well.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/scripts.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/server_side_replay.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/story_mode.pkg</Package>

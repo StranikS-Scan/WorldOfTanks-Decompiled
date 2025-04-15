@@ -7,7 +7,8 @@ from gui.battle_results.presenters.packers.interfaces import IBattleResultsPacke
 from gui.battle_results.presenters.packers.team.statistics_packer import Statistics
 from gui.battle_results.presenters.packers.user_info import PlayerInfo
 from gui.impl.gen.view_models.views.lobby.battle_results.player_model import PlayerModel
-from gui.impl.gen.view_models.views.lobby.battle_results.team_stats_model import ColumnType, SortingOrder
+from gui.impl.gen.view_models.views.lobby.battle_results.team_stats_column_types import TeamStatsColumnTypes
+from gui.impl.gen.view_models.views.lobby.battle_results.team_stats_model import TeamStatsModel, SortingOrder
 from gui.impl.lobby.common.vehicle_model_helpers import fillVehicleModel
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
 from gui.shared.system_factory import collectBattleResultsStatsSorting
@@ -17,13 +18,13 @@ if typing.TYPE_CHECKING:
     from gui.battle_results.reusable import _ReusableInfo
     from gui.battle_results.reusable.shared import VehicleSummarizeInfo
     from gui.impl.gen.view_models.views.lobby.battle_results.stats_efficiency_model import StatsEfficiencyModel
-    from gui.impl.gen.view_models.views.lobby.battle_results.team_stats_model import TeamStatsModel
 _VehicleTags = (VEHICLE_TAGS.PREMIUM_IGR,)
 
 class TeamStats(IBattleResultsPacker):
-    _STATS_VALUES_COLUMNS = {ColumnType.DAMAGE.value: None,
-     ColumnType.FRAG.value: None,
-     ColumnType.XP.value: lambda reusable: reusable.common.checkBonusCaps(_CAPS.XP)}
+    _PLAYER_MODEL_CLS = PlayerModel
+    _STATS_VALUES_COLUMNS = {TeamStatsColumnTypes.DAMAGE: None,
+     TeamStatsColumnTypes.FRAG: None,
+     TeamStatsColumnTypes.XP: lambda reusable: reusable.common.checkBonusCaps(_CAPS.XP)}
     _SORTING_PRIORITIES = ()
 
     @classmethod
@@ -32,7 +33,7 @@ class TeamStats(IBattleResultsPacker):
         cls._packTeam(model.getAllies(), allies, battleResults)
         cls._packTeam(model.getEnemies(), enemies, battleResults)
         cls._packShownColumns(model.getShownValueColumns(), battleResults)
-        cls.__packSortingParams(model, battleResults)
+        cls._packSortingParams(model, battleResults)
 
     @classmethod
     def _getAlternativeSortingParams(cls, reusable):
@@ -41,7 +42,7 @@ class TeamStats(IBattleResultsPacker):
             if condition is None or condition(reusable):
                 return (column, sortingOrder)
 
-        return (ColumnType.VEHICLE.value, SortingOrder.DESC.value)
+        return (TeamStatsColumnTypes.VEHICLE, SortingOrder.DESC.value)
 
     @classmethod
     def _packEfficiency(cls, efficiencyModel, summarizeInfo):
@@ -55,6 +56,19 @@ class TeamStats(IBattleResultsPacker):
         Statistics.packModel(playerModel.getDetailedStatistics(), summarizeInfo, battleResults)
         cls._packEfficiency(playerModel.efficiencyValues, summarizeInfo)
         fillVehicleModel(playerModel.vehicle, summarizeInfo.vehicle, _VehicleTags)
+
+    @classmethod
+    def _packSortingParams(cls, model, battleResults):
+        reusable = battleResults.reusable
+        bonusType = reusable.common.arenaBonusType
+        sortingKey = collectBattleResultsStatsSorting().get(bonusType)
+        column, sortingOrder = stored_sorting.readStatsSorting(sortingKey)
+        condition = cls._STATS_VALUES_COLUMNS.get(column)
+        if condition is not None and not condition(reusable):
+            column, sortingOrder = cls._getAlternativeSortingParams(reusable)
+        model.setSortingColumn(column)
+        model.setSortingOrder(SortingOrder(sortingOrder))
+        return
 
     @classmethod
     def _packShownColumns(cls, columnsModel, battleResults):
@@ -71,22 +85,9 @@ class TeamStats(IBattleResultsPacker):
     def _packTeam(cls, teamModel, teamData, battleResults):
         teamModel.clear()
         for idx, summarizeInfo in enumerate(teamData):
-            playerModel = PlayerModel()
+            playerModel = cls._PLAYER_MODEL_CLS()
             playerModel.setPlayerIndex(idx)
             cls._packPlayer(playerModel, summarizeInfo, battleResults)
             teamModel.addViewModel(playerModel)
 
         teamModel.invalidate()
-
-    @classmethod
-    def __packSortingParams(cls, model, battleResults):
-        reusable = battleResults.reusable
-        bonusType = reusable.common.arenaBonusType
-        sortingKey = collectBattleResultsStatsSorting().get(bonusType)
-        column, sortingOrder = stored_sorting.readStatsSorting(sortingKey)
-        condition = cls._STATS_VALUES_COLUMNS.get(column)
-        if condition is not None and not condition(reusable):
-            column, sortingOrder = cls._getAlternativeSortingParams(reusable)
-        model.setSortingColumn(ColumnType(column))
-        model.setSortingOrder(SortingOrder(sortingOrder))
-        return

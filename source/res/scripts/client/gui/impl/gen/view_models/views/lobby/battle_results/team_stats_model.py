@@ -5,15 +5,6 @@ from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.views.lobby.battle_results.player_model import PlayerModel
 
-class ColumnType(Enum):
-    SQUAD = 'squad'
-    PLAYER = 'player'
-    DAMAGE = 'damage'
-    FRAG = 'frag'
-    XP = 'xp'
-    VEHICLE = 'tank'
-
-
 class SortingOrder(Enum):
     ASC = 'ascending'
     DESC = 'descending'
@@ -53,13 +44,13 @@ class TeamStatsModel(ViewModel):
 
     @staticmethod
     def getShownValueColumnsType():
-        return ColumnType
+        return unicode
 
     def getSortingColumn(self):
-        return ColumnType(self._getString(3))
+        return self._getString(3)
 
     def setSortingColumn(self, value):
-        self._setString(3, value.value)
+        self._setString(3, value)
 
     def getSortingOrder(self):
         return SortingOrder(self._getString(4))
@@ -72,6 +63,6 @@ class TeamStatsModel(ViewModel):
         self._addArrayProperty('allies', Array())
         self._addArrayProperty('enemies', Array())
         self._addArrayProperty('shownValueColumns', Array())
-        self._addStringProperty('sortingColumn', ColumnType.XP.value)
+        self._addStringProperty('sortingColumn', 'xp')
         self._addStringProperty('sortingOrder', SortingOrder.DESC.value)
         self.onStatsSorted = self._addCommand('onStatsSorted')

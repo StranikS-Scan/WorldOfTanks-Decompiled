@@ -32,7 +32,7 @@ class RenewableSubWebApiMixin(object):
 
     def getEnabledBonuses(self, serverSettings):
         enabledBonuses = []
-        if serverSettings.isOptionalDevicesAssistantEnabled():
+        if serverSettings.isOptionalDevicesAssistantEnabled() or serverSettings.isCrewAssistantEnabled():
             enabledBonuses.append(WoTPlusBonusType.OPTIONAL_DEVICES_ASSISTANT)
         if serverSettings.isRenewableSubGoldReserveEnabled():
             enabledBonuses.append(WoTPlusBonusType.GOLD_BANK)

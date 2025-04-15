@@ -1,5 +1,10 @@
 <A174_T57_58_Rush_Ep1.xml>
   <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <visualScript>
+    <server>
+      <plan>	plans/vehicles/A174_T57_58_Rush_Ep1	</plan>
+    </server>
+  </visualScript>
   <crew>
     <commander>	radioman	</commander>
     <gunner></gunner>
@@ -70,9 +75,31 @@
       <repairCost>	1.0	</repairCost>
     </ammoBayHealth>
     <models>
-      <undamaged>	vehicles/american/A67_T57_58/normal/lod0/Hull.model	</undamaged>
-      <destroyed>	vehicles/american/A67_T57_58/crash/lod0/Hull.model	</destroyed>
-      <exploded>	vehicles/american/A67_T57_58/crash/lod0/Hull.model	</exploded>
+      <undamaged>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_base/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_base/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_base/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <A174_T57_58_Rush_Ep1_1>
+          <undamaged>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_1/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_1/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_1/crash/lod0/Hull.model	</exploded>
+        </A174_T57_58_Rush_Ep1_1>
+        <A174_T57_58_Rush_Ep1_2>
+          <undamaged>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_2/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_2/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_2/crash/lod0/Hull.model	</exploded>
+        </A174_T57_58_Rush_Ep1_2>
+        <A174_T57_58_Rush_Ep1_3>
+          <undamaged>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_3/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_3/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_3/crash/lod0/Hull.model	</exploded>
+        </A174_T57_58_Rush_Ep1_3>
+        <A174_T57_58_Rush_Ep1_4>
+          <undamaged>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_4/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_4/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_4/crash/lod0/Hull.model	</exploded>
+        </A174_T57_58_Rush_Ep1_4>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -168,9 +195,31 @@
       <maxRegenHealth>	190	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
-        <undamaged>	vehicles/american/A67_T57_58/normal/lod0/Chassis.model	</undamaged>
-        <destroyed>	vehicles/american/A67_T57_58/crash/lod0/Chassis.model	</destroyed>
-        <exploded>	vehicles/american/A67_T57_58/crash/lod0/Chassis.model	</exploded>
+        <undamaged>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_base/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_base/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_base/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <A174_T57_58_Rush_Ep1_1>
+            <undamaged>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_1/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_1/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_1/crash/lod0/Chassis.model	</exploded>
+          </A174_T57_58_Rush_Ep1_1>
+          <A174_T57_58_Rush_Ep1_2>
+            <undamaged>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_2/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_2/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_2/crash/lod0/Chassis.model	</exploded>
+          </A174_T57_58_Rush_Ep1_2>
+          <A174_T57_58_Rush_Ep1_3>
+            <undamaged>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_3/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_3/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_3/crash/lod0/Chassis.model	</exploded>
+          </A174_T57_58_Rush_Ep1_3>
+          <A174_T57_58_Rush_Ep1_4>
+            <undamaged>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_4/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_4/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_4/crash/lod0/Chassis.model	</exploded>
+          </A174_T57_58_Rush_Ep1_4>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1238,9 +1287,31 @@
           <effects>	shot_large	</effects>
           <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
           <models>
-            <undamaged>	vehicles/american/A67_T57_58/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/american/A67_T57_58/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/american/A67_T57_58/crash/lod0/Gun_01.model	</exploded>
+            <undamaged>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_base/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_base/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_base/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <A174_T57_58_Rush_Ep1_1>
+                <undamaged>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_1/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_1/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_1/crash/lod0/Gun_01.model	</exploded>
+              </A174_T57_58_Rush_Ep1_1>
+              <A174_T57_58_Rush_Ep1_2>
+                <undamaged>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_2/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_2/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_2/crash/lod0/Gun_01.model	</exploded>
+              </A174_T57_58_Rush_Ep1_2>
+              <A174_T57_58_Rush_Ep1_3>
+                <undamaged>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_3/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_3/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_3/crash/lod0/Gun_01.model	</exploded>
+              </A174_T57_58_Rush_Ep1_3>
+              <A174_T57_58_Rush_Ep1_4>
+                <undamaged>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_4/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_4/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_4/crash/lod0/Gun_01.model	</exploded>
+              </A174_T57_58_Rush_Ep1_4>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A67_T57_58/collision/Gun_01.model	</collisionModelServer>
@@ -1293,9 +1364,31 @@
         </_120mm_Gun_T179_Rush_Ep1>
       </guns>
       <models>
-        <undamaged>	vehicles/american/A67_T57_58/normal/lod0/Turret_01.model	</undamaged>
-        <destroyed>	vehicles/american/A67_T57_58/crash/lod0/Turret_01.model	</destroyed>
-        <exploded>	vehicles/american/A67_T57_58/crash/lod0/Turret_01.model	</exploded>
+        <undamaged>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_base/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_base/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_base/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <A174_T57_58_Rush_Ep1_1>
+            <undamaged>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_1/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_1/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_1/crash/lod0/Turret_01.model	</exploded>
+          </A174_T57_58_Rush_Ep1_1>
+          <A174_T57_58_Rush_Ep1_2>
+            <undamaged>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_2/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_2/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_2/crash/lod0/Turret_01.model	</exploded>
+          </A174_T57_58_Rush_Ep1_2>
+          <A174_T57_58_Rush_Ep1_3>
+            <undamaged>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_3/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_3/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_3/crash/lod0/Turret_01.model	</exploded>
+          </A174_T57_58_Rush_Ep1_3>
+          <A174_T57_58_Rush_Ep1_4>
+            <undamaged>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_4/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_4/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/american/A67_T57_58/_skins/A174_T57_58_Rush_Ep1_4/crash/lod0/Turret_01.model	</exploded>
+          </A174_T57_58_Rush_Ep1_4>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/american/A67_T57_58/collision/Turret_01.model	</collisionModelServer>

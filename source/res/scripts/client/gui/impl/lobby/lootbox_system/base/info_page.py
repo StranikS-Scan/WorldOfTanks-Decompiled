@@ -6,8 +6,8 @@ from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.Waiting import Waiting
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.lootbox_system.info_page_model import InfoPageModel
 from gui.impl.gen.view_models.views.lobby.lootbox_system.box_model import BoxModel
+from gui.impl.gen.view_models.views.lobby.lootbox_system.info_page_model import InfoPageModel
 from gui.impl.gen.view_models.views.lobby.lootbox_system.slot_model import SlotModel
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.impl.pub import ViewImpl, WindowImpl
@@ -16,7 +16,7 @@ from gui.lootbox_system.base.bonuses_packers import packBonusModelAndTooltipData
 from gui.lootbox_system.base.common import ViewID, Views
 from gui.lootbox_system.base.decorators import createTooltipContentDecorator
 from gui.lootbox_system.base.sound import playInfopageEnterSound, playInfopageExitSound
-from gui.lootbox_system.base.utils import areUsedExternalTransitions, getInfoPageSettings, isCountryForShowingExternalLootList, openExternalLootList, isShopVisible
+from gui.lootbox_system.base.utils import getInfoPageSettings, isCountryForShowingExternalLootList, isShopVisible, openExternalLootList
 from gui.lootbox_system.base.views_loaders import hideItemPreview, showItemPreview
 from gui.shared import events
 from gui.shared.event_dispatcher import showShop
@@ -70,7 +70,6 @@ class InfoPage(ViewImpl):
         playInfopageEnterSound(self.__eventName)
         with self.viewModel.transaction() as model:
             model.setHasLootListLink(isCountryForShowingExternalLootList())
-            model.setUseExternal(areUsedExternalTransitions(self.__eventName))
             model.setHasVideoButton(getInfoPageSettings(self.__eventName, _InfoPageSetting.VIDEO))
             model.setHasShopButton(isShopVisible(self.__eventName))
             self.__updateState(model=model)
@@ -101,7 +100,7 @@ class InfoPage(ViewImpl):
         self.destroyWindow()
 
     def __handleBrowserCreated(self, event):
-        if event.ctx['browserID'] == VIEW_ALIAS.OVERLAY_WEB_STORE and not areUsedExternalTransitions(self.__eventName):
+        if event.ctx['browserID'] == VIEW_ALIAS.OVERLAY_WEB_STORE:
             self.destroyWindow()
 
     def __sortedSlotsIDs(self, slotsInfo):

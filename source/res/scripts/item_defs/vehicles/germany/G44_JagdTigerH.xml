@@ -95,8 +95,8 @@
       <turret>	0.000000 1.03995 1.19585	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModelServer>	vehicles/german/G44_JagdTiger/collision/Hull.model	</collisionModelServer>
-      <collisionModelClient>	vehicles/german/G44_JagdTiger/collision_client/Hull.model	</collisionModelClient>
+      <collisionModelServer>	vehicles/german/G44_JagdTigerH/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G44_JagdTigerH/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <hangarShadowTexture>	vehicles/german/G44_JagdTiger/JagdTiger_HangarShadowMap.dds	</hangarShadowTexture>
     <customizationSlots>
@@ -1348,6 +1348,42 @@
         <clipAngle>	0.734805	</clipAngle>
         <anchorShift>	0.189818	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	-0.000001 0.017909 -4.083289	</position>
+        <rotation>	-0 -1.569051 1.44234	</rotation>
+        <scale>	0.999999 0.999998 0.999999	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	-1.862712 -0.013873 -0.973742	</position>
+        <rotation>	-0 0 1.516517	</rotation>
+        <scale>	0.999999 0.999998 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	1.841239 -0.013873 -0.973742	</position>
+        <rotation>	-0.000524 3.139847 1.516517	</rotation>
+        <scale>	0.999999 0.999998 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18003	</slotId>
+        <position>	0.000024 1.832 -1.26832	</position>
+        <rotation>	-0 -0 0	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	turret	</applyType>
+        <size>	medium	</size>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1597,8 +1633,8 @@
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.10965 0.000000	</hullPosition>
       <hitTester>
-        <collisionModelServer>	vehicles/german/G44_JagdTiger/collision/Chassis.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/german/G44_JagdTiger/collision_client/Chassis.model	</collisionModelClient>
+        <collisionModelServer>	vehicles/german/G44_JagdTigerH/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G44_JagdTigerH/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.40304 2.23187	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -1865,7 +1901,6 @@
             <length>	0.143033	</length>
           </secSegment>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.53026	</xStart>
@@ -2072,7 +2107,6 @@
             <length>	0.143262	</length>
           </secSegment>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.52844	</xStart>
@@ -2329,8 +2363,8 @@
             <exploded>	vehicles/german/G44_JagdTiger/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/german/G44_JagdTiger/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G44_JagdTiger/collision_client/Gun_01.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/german/G44_JagdTigerH/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G44_JagdTigerH/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_largeext	</effects>
           <reloadEffect>	reload115_152	</reloadEffect>
@@ -2355,6 +2389,15 @@
               <anchorPosition>	0.00251 -0.058986 2.44171	</anchorPosition>
               <anchorDirection>	-0 0 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	attachment	</slotType>
+              <slotId>	48000	</slotId>
+              <position>	-0.000019 0.243 0.74681	</position>
+              <rotation>	-0 -0 0	</rotation>
+              <scale>	1 1 1	</scale>
+              <applyType>	gunMantlet	</applyType>
+              <size>	medium	</size>
             </slot>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
@@ -2384,8 +2427,8 @@
         <exploded>	vehicles/german/G44_JagdTiger/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModelServer>	vehicles/german/G44_JagdTiger/collision/Turret_01.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/german/G44_JagdTiger/collision_client/Turret_01.model	</collisionModelClient>
+        <collisionModelServer>	vehicles/german/G44_JagdTigerH/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G44_JagdTigerH/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.139772 0.233882	</gunPosition>
       <physicsShape>	1 0 1 0 1 0 0.5 0.1 0.5 0.5 0.5 0.5 0.6 0.1 0.5	</physicsShape>

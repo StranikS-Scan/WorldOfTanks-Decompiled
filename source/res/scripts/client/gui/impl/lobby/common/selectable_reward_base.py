@@ -65,7 +65,7 @@ class SelectableRewardBase(ViewImpl):
         super(SelectableRewardBase, self)._onLoading()
         self.__fillTabs()
         if self.__tabs:
-            self.__selectTab(self.viewModel.selectableRewardModel.getTabs()[0].getType(), initial=True)
+            self.__selectTab(self._getDefaultTab().getType(), initial=True)
             self.__updateTotalCount()
 
     def _initialize(self, *args, **kwargs):
@@ -168,6 +168,12 @@ class SelectableRewardBase(ViewImpl):
             return cmp(first[0], second[0])
 
         return _defaultCompare
+
+    def _getRewardType(self, reward):
+        return reward.getType()
+
+    def _getDefaultTab(self):
+        return self.viewModel.selectableRewardModel.getTabs()[0]
 
     @classmethod
     def __addItemToOrder(cls, order, item):
@@ -283,7 +289,7 @@ class SelectableRewardBase(ViewImpl):
 
     def __processTabs(self):
         for reward in self.__selectableRewards:
-            tabType = reward.getType()
+            tabType = self._getRewardType(reward)
             if self.__tabs.get(tabType) is None:
                 self.__tabs[tabType] = {}
             tabContent = self.__tabs[tabType]
@@ -298,7 +304,7 @@ class SelectableRewardBase(ViewImpl):
     def __processRewards(self):
         for selectableReward in self.__selectableRewards:
             offer = self._helper.getBonusOptions(selectableReward)
-            currentTab = self.__tabs[selectableReward.getType()]
+            currentTab = self.__tabs[self._getRewardType(selectableReward)]
             for giftID, gift in offer.iteritems():
                 if currentTab.get('rewards') is None:
                     currentTab['rewards'] = {}

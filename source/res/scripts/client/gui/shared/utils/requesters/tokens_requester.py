@@ -3,6 +3,7 @@
 import functools
 import logging
 import time
+import typing
 import BigWorld
 from account_helpers.AccountSettings import QUEST_DELTAS_TOKENS_PROGRESS
 from adisp import adisp_async, adisp_process
@@ -15,6 +16,8 @@ from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from skeletons.gui.shared.utils.requesters import ITokensRequester
+if typing.TYPE_CHECKING:
+    from typing import Dict, Tuple
 _logger = logging.getLogger(__name__)
 TOTAL_KEY = 'total'
 
@@ -130,6 +133,10 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
 
     def hasTokenCountChanged(self, tokenId):
         return self.__tokensProgressDelta.hasDiff(tokenId)
+
+    def getTokensByPrefixAndPostfix(self, prefix='', postfix=''):
+        tokens = self.getTokens()
+        return {k:v for k, v in tokens.iteritems() if k.startswith(prefix) and k.endswith(postfix)}
 
     def _preprocessValidData(self, data):
         self.__tokensProgressDelta.update(data)

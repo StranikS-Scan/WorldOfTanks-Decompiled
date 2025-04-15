@@ -260,11 +260,15 @@ class AlwaysValidObject(object):
 
 
 def updateDict(sourceDict, diffDict):
-    for k, v in diffDict.iteritems():
-        if isinstance(v, collections.Mapping):
-            r = updateDict(sourceDict.get(k, {}), v)
-            sourceDict[k] = r
-        sourceDict[k] = diffDict[k]
+    if isinstance(diffDict, dict):
+        for key, value in diffDict.iteritems():
+            if value is None:
+                sourceDict.pop(key, None)
+                continue
+            if isinstance(value, dict):
+                sourceDict.setdefault(key, {})
+                sourceDict[key].update(value)
+            sourceDict[key] = value
 
     return sourceDict
 

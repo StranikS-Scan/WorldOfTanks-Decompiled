@@ -78,6 +78,8 @@ class JwtRequestor(object):
             return
 
 
+_g_jwtRequestor = JwtRequestor()
+
 class BaseProvider(IBaseProvider):
     __metaclass__ = ABCMeta
 
@@ -93,7 +95,6 @@ class BaseProvider(IBaseProvider):
         self.__webRequester = WebRequester.create_requester(_webUrlFetcher, settings, client_lang=getClientLanguage())
         self.__requester = ServerSideReplayRequester(self.__webRequester)
         self.__serverSideRequestsController = ServerSideReplayRequestsController(self.__requester)
-        self.__jwtRequestor = JwtRequestor()
 
     def start(self):
         self.__isStarted = True
@@ -151,7 +152,7 @@ class BaseProvider(IBaseProvider):
                 return
             ctx = settings.contextClazz(*args, **kwargs)
             dataObj.isWaitingResponse = True
-            jwtData = yield self.__jwtRequestor.requestJwt()
+            jwtData = yield _g_jwtRequestor.requestJwt()
             if jwtData:
                 ctx.jwtToken = jwtData['token']
             if not useFake:

@@ -1,0 +1,17 @@
+<FLRespawnComponent.def>
+  <CellMethods>
+    <onUpdateVehicleInfo>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </onUpdateVehicleInfo>
+  </CellMethods>
+  <BaseMethods>
+    <arenaFinish>
+      <Arg>	UINT8	</Arg>
+    </arenaFinish>
+  </BaseMethods>
+  <ofEntity>
+    <Arena></Arena>
+  </ofEntity>
+  <DefaultKeyName>	FLRespawnComponent	</DefaultKeyName>
+</FLRespawnComponent.def>

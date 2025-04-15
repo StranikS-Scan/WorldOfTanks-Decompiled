@@ -7,7 +7,6 @@ import BigWorld
 from CurrentVehicle import g_currentVehicle
 from account_helpers.AccountSettings import LOOT_BOXES_OPEN_ANIMATION_ENABLED
 from adisp import adisp_process
-from constants import IS_CHINA
 from gui import GUI_SETTINGS, SystemMessages
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getShopURL
 from gui.impl import backport
@@ -28,10 +27,6 @@ if TYPE_CHECKING:
     from gui.server_events.bonuses import SimpleBonus
     from gui.shared.gui_items.Vehicle import Vehicle
 _logger = logging.getLogger(__name__)
-
-def areUsedExternalTransitions(eventName):
-    return IS_CHINA and isOpenExternalLinksForCN(eventName)
-
 
 @adisp_process
 @dependency.replace_none_kwargs(lootBoxes=ILootBoxSystemController)
@@ -89,13 +84,6 @@ def getShopOverlayUrl(eventName):
     if urlPart is None:
         urlPart = GUI_SETTINGS.lootboxSystem.get('shop').get('overlayUrl').get('default', '')
     return getShopURL() + urlPart
-
-
-def isOpenExternalLinksForCN(eventName):
-    openExternalForCN = GUI_SETTINGS.lootboxSystem.get('shop').get('openExternalForCN').get(eventName)
-    if openExternalForCN is None:
-        openExternalForCN = GUI_SETTINGS.lootboxSystem.get('shop').get('openExternalForCN').get('default')
-    return openExternalForCN
 
 
 def isShopVisible(eventName):

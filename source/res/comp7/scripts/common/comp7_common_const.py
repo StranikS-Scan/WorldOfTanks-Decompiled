@@ -6,15 +6,13 @@ import typing
 if typing.TYPE_CHECKING:
     from typing import Tuple, Optional
 ROLE_EQUIPMENT_TAG = 'roleEquipment'
-__COMP7_QUEST_PREFIX = 'comp7'
-__COMP7_MASKOT_ID = '4'
+COMP7_MASKOT_ID = '4'
 SEASONS_IN_YEAR = 3
 __COMP7_QUALIFICATION_TOKEN_TEMPLATE = 'comp7_{maskot}_{season}:qualification'
 __COMP7_QUALIFICATION_QUEST_ID_TEMPLATE = 'comp7_{maskot}_{season}_ranks_65'
 __COMP7_RENT_VEHICLES_QUEST_ID_TEMPLATE = 'comp7_{maskot}_{season}_rent_vehicles'
 __COMP7_TOKEN_PREFIX_TEMPLATE = 'comp7_{maskot}_{season}'
 __COMP7_SEASON_POINT_ASSET_TEMPLATE = 'comp7_season_points:{maskot}:{season}'
-__COMP7_YEARLY_REWARD_TEMPLATE = 'comp7_{maskot}_yearly_reward'
 __COMP7_SEASON_NAME_TEMPLATE = 'comp7_{maskot}_{season}'
 __COMP7_WEEKLY_QUESTS_COMPLETE_TOKEN_TEMPLATE = 'comp7_{maskot}_{season}_weekly_quests_complete'
 COMP7_WEEKLY_QUESTS_COMPLETE_TOKEN_REGEXP = re.compile(__COMP7_WEEKLY_QUESTS_COMPLETE_TOKEN_TEMPLATE.format(maskot='\\d', season='\\d'))
@@ -24,73 +22,78 @@ __COMP7_RATING_ENTITLEMENT_TEMPLATE = __COMP7_RATING_ENTITLEMENT_PREFIX + ':{mas
 __COMP7_ELITE_ENTITLEMENT_TEMPLATE = 'comp7_elite_rank:{maskot}:{season}'
 __COMP7_ACTIVITY_ENTITLEMENT_TEMPLATE = 'comp7_activity_points:{maskot}:{season}'
 __COMP7_MAX_RANK_ENTITLEMENT_TEMPLATE = 'comp7_max_achieved_rank:{maskot}:{season}'
-COMP7_OFFER_PREFIX = 'offer:comp7_{}'.format(__COMP7_MASKOT_ID)
-COMP7_OFFER_WEEKLY_QUESTS_REWARD_TOKEN_TEMPLATE = 'offer:{}:comp7_weekly_quests_reward'.format(__COMP7_TOKEN_PREFIX_TEMPLATE)
-COMP7_OFFER_WEEKLY_QUESTS_REWARD_GIFT_TOKEN_TEMPLATE = '{}_gift'.format(COMP7_OFFER_WEEKLY_QUESTS_REWARD_TOKEN_TEMPLATE)
-COMP7_OFFER_YEARLY_REWARD_TOKEN_PREFIX = '{}:comp7_yearly_reward'.format(COMP7_OFFER_PREFIX)
-COMP7_OFFER_YEARLY_REWARD_GIFT_TOKEN_PREFIX = '{}_gift'.format(COMP7_OFFER_YEARLY_REWARD_TOKEN_PREFIX)
+COMP7_OFFER_GIFT_TEMPLATE = '{token}_gift'
+COMP7_OFFER_PREFIX = 'offer:comp7_{}'.format(COMP7_MASKOT_ID)
+COMP7_OFFER_WEEKLY_QUESTS_REWARD_TOKEN_TEMPLATE = 'offer:{}_weekly'.format(__COMP7_TOKEN_PREFIX_TEMPLATE)
+COMP7_OFFER_WEEKLY_QUESTS_REWARD_GIFT_TOKEN_TEMPLATE = COMP7_OFFER_GIFT_TEMPLATE.format(token=COMP7_OFFER_WEEKLY_QUESTS_REWARD_TOKEN_TEMPLATE)
+COMP7_OFFER_YEARLY_REWARD_TOKEN_PREFIX = '{}_yearly'.format(COMP7_OFFER_PREFIX)
+COMP7_OFFER_REWARD_CATEGORY_TOKEN_TEMPLATE = '{token}:{category}'
 COMP7_ENTITLEMENT_EXPIRES = None
-COMP7_YEARLY_REWARD_TOKEN = __COMP7_YEARLY_REWARD_TEMPLATE.format(maskot=__COMP7_MASKOT_ID)
-COMP7_YEARLY_ACHIEVEMENT_PREFIX = 'comp7_{}_yearly'.format(__COMP7_MASKOT_ID)
+COMP7_YEARLY_ACHIEVEMENT_PREFIX = 'comp7_{}_yearly'.format(COMP7_MASKOT_ID)
+COMP7_YEARLY_REWARD_TOKEN = 'comp7_{}_yearly_reward'.format(COMP7_MASKOT_ID)
 
 def isComp7YearlyAchievement(achievementName):
     return achievementName.startswith(COMP7_YEARLY_ACHIEVEMENT_PREFIX)
 
 
 def seasonPointsCodeBySeasonNumber(seasonNumber):
-    return __COMP7_SEASON_POINTS_ENTITLEMENT_TEMPLATE.format(maskot=__COMP7_MASKOT_ID, season=seasonNumber)
+    return __COMP7_SEASON_POINTS_ENTITLEMENT_TEMPLATE.format(maskot=COMP7_MASKOT_ID, season=seasonNumber)
 
 
 def qualificationTokenBySeasonNumber(seasonNumber):
-    return __COMP7_QUALIFICATION_TOKEN_TEMPLATE.format(maskot=__COMP7_MASKOT_ID, season=seasonNumber)
+    return __COMP7_QUALIFICATION_TOKEN_TEMPLATE.format(maskot=COMP7_MASKOT_ID, season=seasonNumber)
 
 
 def seasonPointsAssetBySeasonNumber(seasonNumber):
-    return __COMP7_SEASON_POINT_ASSET_TEMPLATE.format(maskot=__COMP7_MASKOT_ID, season=seasonNumber)
+    return __COMP7_SEASON_POINT_ASSET_TEMPLATE.format(maskot=COMP7_MASKOT_ID, season=seasonNumber)
 
 
 def qualificationQuestIDBySeasonNumber(seasonNumber):
-    return __COMP7_QUALIFICATION_QUEST_ID_TEMPLATE.format(maskot=__COMP7_MASKOT_ID, season=seasonNumber)
+    return __COMP7_QUALIFICATION_QUEST_ID_TEMPLATE.format(maskot=COMP7_MASKOT_ID, season=seasonNumber)
 
 
 def rentVehiclesQuestIDBySeasonNumber(seasonNumber):
-    return __COMP7_RENT_VEHICLES_QUEST_ID_TEMPLATE.format(maskot=__COMP7_MASKOT_ID, season=seasonNumber)
+    return __COMP7_RENT_VEHICLES_QUEST_ID_TEMPLATE.format(maskot=COMP7_MASKOT_ID, season=seasonNumber)
 
 
 def tokenPrefixBySeasonNumber(seasonNumber):
-    return __COMP7_TOKEN_PREFIX_TEMPLATE.format(maskot=__COMP7_MASKOT_ID, season=seasonNumber)
+    return __COMP7_TOKEN_PREFIX_TEMPLATE.format(maskot=COMP7_MASKOT_ID, season=seasonNumber)
 
 
 def ratingEntNameBySeasonNumber(seasonNumber):
-    return __COMP7_RATING_ENTITLEMENT_TEMPLATE.format(maskot=__COMP7_MASKOT_ID, season=seasonNumber)
+    return __COMP7_RATING_ENTITLEMENT_TEMPLATE.format(maskot=COMP7_MASKOT_ID, season=seasonNumber)
 
 
 def eliteRankEntNameBySeasonNumber(seasonNumber):
-    return __COMP7_ELITE_ENTITLEMENT_TEMPLATE.format(maskot=__COMP7_MASKOT_ID, season=seasonNumber)
+    return __COMP7_ELITE_ENTITLEMENT_TEMPLATE.format(maskot=COMP7_MASKOT_ID, season=seasonNumber)
 
 
 def activityPointsEntNameBySeasonNumber(seasonNumber):
-    return __COMP7_ACTIVITY_ENTITLEMENT_TEMPLATE.format(maskot=__COMP7_MASKOT_ID, season=seasonNumber)
+    return __COMP7_ACTIVITY_ENTITLEMENT_TEMPLATE.format(maskot=COMP7_MASKOT_ID, season=seasonNumber)
 
 
 def maxRankEntNameBySeasonNumber(seasonNumber):
-    return __COMP7_MAX_RANK_ENTITLEMENT_TEMPLATE.format(maskot=__COMP7_MASKOT_ID, season=seasonNumber)
+    return __COMP7_MAX_RANK_ENTITLEMENT_TEMPLATE.format(maskot=COMP7_MASKOT_ID, season=seasonNumber)
 
 
 def seasonNameBySeasonNumber(seasonNumber):
-    return __COMP7_SEASON_NAME_TEMPLATE.format(maskot=__COMP7_MASKOT_ID, season=seasonNumber)
+    return __COMP7_SEASON_NAME_TEMPLATE.format(maskot=COMP7_MASKOT_ID, season=seasonNumber)
 
 
 def weeklyQuestsCompleteTokenName(seasonNumber):
-    return __COMP7_WEEKLY_QUESTS_COMPLETE_TOKEN_TEMPLATE.format(maskot=__COMP7_MASKOT_ID, season=seasonNumber)
+    return __COMP7_WEEKLY_QUESTS_COMPLETE_TOKEN_TEMPLATE.format(maskot=COMP7_MASKOT_ID, season=seasonNumber)
 
 
-def offerWeeklyQuestsRewardGiftTokenBySeasonNumber(seasonNumber):
-    return COMP7_OFFER_WEEKLY_QUESTS_REWARD_GIFT_TOKEN_TEMPLATE.format(maskot=__COMP7_MASKOT_ID, season=seasonNumber)
+def offerWeeklyQuestsRewardTokenPrefixBySeasonNumber(seasonNumber):
+    return COMP7_OFFER_WEEKLY_QUESTS_REWARD_TOKEN_TEMPLATE.format(maskot=COMP7_MASKOT_ID, season=seasonNumber)
 
 
-def offerWeeklyQuestsRewardTokenBySeasonNumber(seasonNumber):
-    return COMP7_OFFER_WEEKLY_QUESTS_REWARD_TOKEN_TEMPLATE.format(maskot=__COMP7_MASKOT_ID, season=seasonNumber)
+def offerRewardCategoryToken(token, category):
+    return COMP7_OFFER_REWARD_CATEGORY_TOKEN_TEMPLATE.format(token=token, category=category)
+
+
+def offerRewardGiftToken(token):
+    return COMP7_OFFER_GIFT_TEMPLATE.format(token=token)
 
 
 SEASON_POINTS_ENTITLEMENTS = [ seasonPointsCodeBySeasonNumber(n + 1) for n in range(SEASONS_IN_YEAR) ]

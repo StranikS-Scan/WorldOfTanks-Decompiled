@@ -4,6 +4,7 @@ import typing
 from fun_random.gui.feature.fun_constants import FunSubModesState, STATE_TO_SINGLE
 from fun_random.gui.feature.util.fun_helpers import mergeIntervals
 from fun_random.gui.feature.models.common import FunSubModesStatus
+from fun_random.gui.feature.sub_systems.fun_performance_analyzers import PerformanceGroup
 from helpers import time_utils
 from shared_utils import first
 from skeletons.gui.game_control import IFunRandomController
@@ -41,6 +42,11 @@ class FunSubModesInfo(IFunRandomController.IFunSubModesInfo):
         subModes = self.__subModes.getSubModes()
         allPrimeTimes = [ sm.getPrimeTimesForDay(selectedTime, groupIdentical) for sm in subModes ]
         return first(allPrimeTimes) if len(subModes) == 1 else mergeIntervals(allPrimeTimes)
+
+    def getPerformanceAlertGroup(self, subModesIDs=None):
+        subModes = self.__subModes.getSubModes(subModesIDs)
+        allPerfGroups = [ sm.getPerformanceAlertGroup() for sm in subModes ]
+        return min(allPerfGroups)
 
     def getSubModesStatus(self, subModesIDs=None):
         subModes = self.__subModes.getSubModes(subModesIDs)

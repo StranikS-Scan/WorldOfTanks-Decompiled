@@ -18,7 +18,9 @@ from fun_random.gui.impl.lobby.tooltips.fun_random_domain_tooltip_view import Fu
 from fun_random.gui.impl.lobby.tooltips.fun_random_loot_box_tooltip_view import FunRandomLootBoxTooltipView
 from fun_random.gui.impl.lobby.tooltips.fun_random_progression_tooltip_view import FunRandomProgressionTooltipView
 from fun_random.gui.impl.lobby.tooltips.fun_random_reward_box_tooltip_views import NearestAdditionalRewardsTooltip
+from fun_random.gui.impl.lobby.common.fun_view_helpers import packPerformanceAlertInfo
 from gui.impl import backport
+from gui.impl.auxiliary.tooltips.simple_tooltip import createSimpleIconTooltip
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mode_selector.tooltips.mode_selector_tooltips_constants import ModeSelectorTooltipsConstants
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
@@ -96,7 +98,7 @@ class FunModeSubSelectorView(ViewImpl, FunAssetPacksMixin, FunSubModesWatcher, F
                 return FunRandomLootBoxTooltipView(lootboxID)
             return
         else:
-            return super(FunModeSubSelectorView, self).createToolTipContent(event, contentID)
+            return createSimpleIconTooltip(event) if contentID == R.views.lobby.common.tooltips.SimpleIconTooltip() else super(FunModeSubSelectorView, self).createToolTipContent(event, contentID)
 
     def abortSelection(self):
         self.__onAbortSelection()
@@ -171,6 +173,7 @@ class FunModeSubSelectorView(ViewImpl, FunAssetPacksMixin, FunSubModesWatcher, F
             modifiersDomains.addString(domain)
 
         modifiersDomains.invalidate()
+        packPerformanceAlertInfo(card.performance, subMode.getPerformanceAlertGroup())
         return card
 
     @adisp_process

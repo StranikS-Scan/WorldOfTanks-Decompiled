@@ -11,7 +11,6 @@ _CURRENCY_TO_BW_FORMATTER = {Currency.CREDITS: backport.getIntegralFormat,
  Currency.EVENT_COIN: backport.getIntegralFormat,
  Currency.BPCOIN: backport.getIntegralFormat,
  Currency.BRCOIN: backport.getIntegralFormat,
- Currency.STPCOIN: backport.getIntegralFormat,
  Currency.FREE_XP: backport.getIntegralFormat,
  Currency.EQUIP_COIN: backport.getIntegralFormat}
 _CURRENCY_TO_TEXT_STYLE = {Currency.CREDITS: text_styles.credits,
@@ -20,7 +19,6 @@ _CURRENCY_TO_TEXT_STYLE = {Currency.CREDITS: text_styles.credits,
  Currency.EVENT_COIN: text_styles.eventCoin,
  Currency.BPCOIN: text_styles.bpcoin,
  Currency.BRCOIN: text_styles.brcoin,
- Currency.STPCOIN: text_styles.stpcoin,
  Currency.FREE_XP: text_styles.expText,
  Currency.EQUIP_COIN: text_styles.equipCoin}
 

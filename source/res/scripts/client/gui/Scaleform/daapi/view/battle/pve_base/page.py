@@ -61,6 +61,10 @@ class PveBaseBattlePage(ClassicPage):
         self.__isChatHidden = False
         return
 
+    @property
+    def isFullMapVisible(self):
+        return self.__isFullMapVisible
+
     def _populate(self):
         super(PveBaseBattlePage, self)._populate()
         g_eventBus.addListener(ViewEventType.LOAD_VIEW, self._loadViewHandler, EVENT_BUS_SCOPE.BATTLE)

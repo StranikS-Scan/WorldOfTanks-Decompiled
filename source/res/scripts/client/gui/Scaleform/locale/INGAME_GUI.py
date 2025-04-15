@@ -949,6 +949,7 @@ class INGAME_GUI(object):
     QUICKREPLY_HINT_TOHELP = '#ingame_gui:quickReply/hint/toHelp'
     QUICKREPLY_HINT_TOACKNOWLEDGE = '#ingame_gui:quickReply/hint/toAcknowledge'
     QUICKREPLY_HINT_TOTHANK = '#ingame_gui:quickReply/hint/toThank'
+    QUICKREPLY_HINT_TOCOMMEND = '#ingame_gui:quickReply/hint/toCommend'
     REWARDWINDOW_PIGGYBANK_WINHEADERTEXT = '#ingame_gui:rewardWindow/piggyBank/winHeaderText'
     REWARDWINDOW_PIGGYBANK_HEADERTEXT = '#ingame_gui:rewardWindow/piggyBank/headerText'
     REWARDWINDOW_PIGGYBANK_SUBHEADERTEXT = '#ingame_gui:rewardWindow/piggyBank/subHeaderText'
@@ -1039,10 +1040,6 @@ class INGAME_GUI(object):
     PENETRATION_LOW = '#ingame_gui:penetration/low'
     BOT_ELITE = '#ingame_gui:bot/elite'
     BOT_BOSS = '#ingame_gui:bot/boss'
-    STEAMUNLOCKAWARDS_TITLE = '#ingame_gui:steamUnlockAwards/title'
-    STEAMUNLOCKAWARDS_UNDERTITLE = '#ingame_gui:steamUnlockAwards/underTitle'
-    STEAMUNLOCKAWARDS_BUTTON_REDIRECT = '#ingame_gui:steamUnlockAwards/button/redirect'
-    STEAMUNLOCKAWARDS_BUTTON_SUBMIT = '#ingame_gui:steamUnlockAwards/button/submit'
     CHAT_SHORTCUTS_ENUM = (CHAT_SHORTCUTS_ATTENTION_TO_POSITION_GRIDINFO,
      CHAT_SHORTCUTS_ATTENTION_TO_POSITION,
      CHAT_SHORTCUTS_GOING_THERE_GRIDINFO,

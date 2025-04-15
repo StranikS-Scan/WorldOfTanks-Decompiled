@@ -646,13 +646,16 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
 
     def setSettings(self):
         value = self.settingsCore.getSetting(settings_constants.GAME.SHOW_VEH_MODELS_ON_MAP)
-        self.__flags = settings.convertSettingToFeatures(value, self.__flags, settingsType=SettingsTypes.MinimapVehicles)
+        self.__flags = self._convertSettingToFeatures(value, self.__flags, settingsType=SettingsTypes.MinimapVehicles)
         vehicleHpSetting = self.settingsCore.getSetting(settings_constants.GAME.SHOW_VEHICLE_HP_IN_MINIMAP)
-        self.__flagHpMinimap = settings.convertSettingToFeatures(vehicleHpSetting, self.__flagHpMinimap, settingsType=SettingsTypes.MinimapHitPoint)
+        self.__flagHpMinimap = self._convertSettingToFeatures(vehicleHpSetting, self.__flagHpMinimap, settingsType=SettingsTypes.MinimapHitPoint)
         if _FEATURES.isOn(self.__flags):
             self.__showFeatures(True)
         if _FEATURES.isOn(self.__flagHpMinimap):
             self.__showMinimapHP(True)
+
+    def setShowMinimapHP(self, value):
+        self.__showMinimapHP(value)
 
     def updateSettings(self, diff):
         hasModelSetting = settings_constants.GAME.SHOW_VEH_MODELS_ON_MAP in diff
@@ -661,10 +664,10 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             return
         if hasHpSetting:
             vehicleHpSetting = diff[settings_constants.GAME.SHOW_VEHICLE_HP_IN_MINIMAP]
-            self.__flagHpMinimap = settings.convertSettingToFeatures(vehicleHpSetting, self.__flagHpMinimap, settingsType=SettingsTypes.MinimapHitPoint)
+            self.__flagHpMinimap = self._convertSettingToFeatures(vehicleHpSetting, self.__flagHpMinimap, settingsType=SettingsTypes.MinimapHitPoint)
         if hasModelSetting:
             value = diff[settings_constants.GAME.SHOW_VEH_MODELS_ON_MAP]
-            self.__flags = settings.convertSettingToFeatures(value, self.__flags, settingsType=SettingsTypes.MinimapVehicles)
+            self.__flags = self._convertSettingToFeatures(value, self.__flags, settingsType=SettingsTypes.MinimapVehicles)
         self.__showFeatures(_FEATURES.isOn(self.__flags))
         self.__showMinimapHP(_FEATURES.isOn(self.__flagHpMinimap))
 
@@ -739,7 +742,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
         vehicleID = vInfo.vehicleID
         if vehicleID in self._entries:
             entry = self._entries[vehicleID]
-            guiLabel = arenaDP.getPlayerGuiProps(vehicleID, vInfo.team).name()
+            guiLabel = self._getGuiPropsName(arenaDP.getPlayerGuiProps(vehicleID, vInfo.team))
             self.__setGUILabel(entry, guiLabel)
 
     def getVehiclePosition(self, vehicleID):
@@ -794,19 +797,28 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
     def _getDisplayedName(self, vInfo):
         return vInfo.getDisplayedName()
 
+    def _getGuiPropsName(self, guiProps):
+        return guiProps.name()
+
+    def _getSymbolName(self):
+        return _S_NAME.VEHICLE
+
+    def _convertSettingToFeatures(self, value, previous, settingsType):
+        return settings.convertSettingToFeatures(value, previous, settingsType)
+
     def _skipMarker(self, vInfo, vProxy=None):
         isAlive = vProxy.isAlive() if vProxy is not None else vInfo.isAlive()
         return vInfo.vehicleID == self.__playerVehicleID or vInfo.isObserver() or not isAlive or VEHICLE_BUNKER_TURRET_TAG in vInfo.vehicleType.tags
 
     def _setVehicleInfo(self, vehicleID, entry, vInfo, guiProps, isSpotted=False):
         classTag = vInfo.vehicleType.classTag
-        name = self._getDisplayedName(vInfo)
         if classTag is not None:
-            entry.setVehicleInfo(not guiProps.isFriend, guiProps.name(), classTag, vInfo.isAlive())
+            guiPropsName = self._getGuiPropsName(guiProps)
+            entry.setVehicleInfo(not guiProps.isFriend, guiPropsName, classTag, vInfo.isAlive())
             animation = self.__getSpottedAnimation(entry, isSpotted)
             if animation:
                 self.__playSpottedSound(entry)
-            self._invoke(entry.getID(), 'setVehicleInfo', vehicleID, self._getDisplayedVehicleClassTag(vInfo), name, guiProps.name(), animation)
+            self._invoke(entry.getID(), 'setVehicleInfo', vehicleID, self._getDisplayedVehicleClassTag(vInfo), self._getDisplayedName(vInfo), guiPropsName, animation)
         return
 
     def _onVehicleHealthChanged(self, vehicleID, currH, maxH):
@@ -831,7 +843,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
         else:
             matrix, location = matrix_factory.getVehicleMPAndLocation(vehicleID, positions or {})
         active = location != VEHICLE_LOCATION.UNDEFINED
-        model = self._addEntryEx(vehicleID, _S_NAME.VEHICLE, _C_NAME.ALIVE_VEHICLES, matrix=matrix, active=active)
+        model = self._addEntryEx(vehicleID, self._getSymbolName(), _C_NAME.ALIVE_VEHICLES, matrix=matrix, active=active)
         if model is not None:
             model.setLocation(location)
         return model

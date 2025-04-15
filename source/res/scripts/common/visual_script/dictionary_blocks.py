@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/dictionary_blocks.py
+import typing
 import base64
 import cPickle
 import weakref
@@ -125,7 +126,7 @@ class IsInDictionary(Block, DictionaryMeta):
 
     def __init__(self, *args, **kwargs):
         super(IsInDictionary, self).__init__(*args, **kwargs)
-        self._valueType = self._getInitParams()
+        self._valueType, self._isArray = self._getInitParams()
         self._dict = self._makeDataInputSlot('dict', SLOT_TYPE.DICTIONARY)
         self._key = self._makeDataInputSlot('key', SLOT_TYPE.STR)
         self._res = self._makeDataOutputSlot('res', SLOT_TYPE.BOOL, self._checkKey)
@@ -134,7 +135,17 @@ class IsInDictionary(Block, DictionaryMeta):
         keyValueStorage = self._dict.getValue()
         key = self._key.getValue()
         if key in keyValueStorage:
-            valueType = type(keyValueStorage[key])
+            value = keyValueStorage[key]
+            valueType = type(value)
+            if self._isArray:
+                if valueType not in (list, tuple):
+                    errorVScript(self, 'Value type mismatch for key {} in the Dictionary.Expected {}, received {}'.format(key, 'list or tuple', valueType))
+                    return
+                if value and type(value[0]) not in ALLOWED_DATA_TYPES[self._valueType]:
+                    errorVScript(self, 'List value type mismatch for key {} in the Dictionary.Expected {}, received {}'.format(key, self._valueType, type(value[0])))
+                    return
+                self._res.setValue(True)
+                return
             if valueType in ALLOWED_DATA_TYPES[self._valueType]:
                 self._res.setValue(True)
                 return
@@ -142,10 +153,10 @@ class IsInDictionary(Block, DictionaryMeta):
 
     @classmethod
     def initParams(cls):
-        return [InitParam('Value type', SLOT_TYPE.STR, buildStrKeysValue(*ALLOWED_DATA_TYPES.iterkeys()), EDITOR_TYPE.STR_KEY_SELECTOR)]
+        return [InitParam('Value type', SLOT_TYPE.STR, buildStrKeysValue(*ALLOWED_DATA_TYPES.iterkeys()), EDITOR_TYPE.STR_KEY_SELECTOR), InitParam('Is Array', SLOT_TYPE.BOOL, False)]
 
     def captionText(self):
-        return 'Is In Dictionary: {}'.format(self._valueType)
+        return 'Is In Dictionary: {}'.format(arrayOf(self._valueType) if self._isArray else self._valueType)
 
     @classmethod
     def blockAspects(cls):
@@ -202,6 +213,90 @@ class GetFromDictionary(Block, DictionaryMeta):
 
     def captionText(self):
         return 'Get From Dictionary: {}'.format(arrayOf(self._valueType) if self._isArray else self._valueType)
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT, ASPECT.SERVER]
+
+
+class RemoveFromDictionary(Block, DictionaryMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(RemoveFromDictionary, self).__init__(*args, **kwargs)
+        self._valueType, self._isArray = self._getInitParams()
+        self._in = self._makeEventInputSlot('in', self._executeArray if self._isArray else self._executeValue)
+        self._dict = self._makeDataInputSlot('dict', SLOT_TYPE.DICTIONARY)
+        self._key = self._makeDataInputSlot('key', SLOT_TYPE.STR)
+        self._out = self._makeEventOutputSlot('out')
+        self._res = self._makeDataOutputSlot('res', SLOT_TYPE.DICTIONARY, None)
+        self._value = self._makeDataOutputSlot('value', arrayOf(self._valueType), None) if self._isArray else self._makeDataOutputSlot('value', self._valueType, None)
+        return
+
+    def _executeArray(self):
+        keyValueStorage = self._dict.getValue()
+        key = self._key.getValue()
+        if key not in keyValueStorage:
+            errorVScript(self, 'Key {} is missing in the Dictionary'.format(key))
+            return
+        value = keyValueStorage[key]
+        valueType = type(value)
+        if valueType not in (list, tuple):
+            errorVScript(self, 'Value type mismatch for key {} in the Dictionary.Expected {}, received {}'.format(key, 'list or tuple', valueType))
+            return
+        if value and type(value[0]) not in ALLOWED_DATA_TYPES[self._valueType]:
+            errorVScript(self, 'List value type mismatch for key {} in the Dictionary.Expected {}, received {}'.format(key, self._valueType, type(value[0])))
+            return
+        self._value.setValue(value)
+        newDict = Dictionary(keyValueStorage)
+        newDict.pop(key)
+        self._res.setValue(newDict)
+        self._out.call()
+
+    def _executeValue(self):
+        keyValueStorage = self._dict.getValue()
+        key = self._key.getValue()
+        if key in keyValueStorage:
+            value = keyValueStorage[key]
+            valueType = type(value)
+            if valueType in ALLOWED_DATA_TYPES[self._valueType]:
+                if valueType is dict:
+                    self._value.setValue(Dictionary(value))
+                else:
+                    (self._value.setValue(value),)
+                newDict = Dictionary(keyValueStorage)
+                newDict.pop(key)
+                self._res.setValue(newDict)
+                self._out.call()
+            else:
+                errorVScript(self, 'Value type mismatch for key {} in the Dictionary. Expected {}, received {}'.format(key, self._valueType, valueType))
+        else:
+            errorVScript(self, 'Key {} is missing in the Dictionary'.format(key))
+
+    @classmethod
+    def initParams(cls):
+        return [InitParam('Value type', SLOT_TYPE.STR, buildStrKeysValue(*ALLOWED_DATA_TYPES.iterkeys()), EDITOR_TYPE.STR_KEY_SELECTOR), InitParam('Is Array', SLOT_TYPE.BOOL, False)]
+
+    def captionText(self):
+        return 'Remove From Dictionary: {}'.format(arrayOf(self._valueType) if self._isArray else self._valueType)
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT, ASPECT.SERVER]
+
+
+class GetKeysFromDictionary(Block, DictionaryMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(GetKeysFromDictionary, self).__init__(*args, **kwargs)
+        self._dict = self._makeDataInputSlot('dict', SLOT_TYPE.DICTIONARY)
+        self._keys = self._makeDataOutputSlot('value', arrayOf(SLOT_TYPE.STR), self._getKeys)
+
+    def _getKeys(self):
+        keyValueStorage = self._dict.getValue()
+        self._keys.setValue(keyValueStorage.keys())
+
+    def captionText(self):
+        pass
 
     @classmethod
     def blockAspects(cls):

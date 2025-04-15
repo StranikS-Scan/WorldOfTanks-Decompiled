@@ -824,8 +824,7 @@ def _migrateTo91(core, data, initialized):
 
 
 def _migrateTo92(core, data, initialized):
-    from account_helpers.settings_core.ServerSettingsManager import GUI_START_BEHAVIOR
-    data[GUI_START_BEHAVIOR][GuiSettingsBehavior.RESOURCE_WELL_INTRO_SHOWN] = False
+    pass
 
 
 def _migrateTo93(_, data, __):
@@ -1325,6 +1324,29 @@ def _migrateTo136(core, data, initialized):
 
 def _migrateTo137(core, data, initialized):
     data['clear']['battlePassStorage'] = data['clear'].get('battlePassStorage', 0) | 134217728
+
+
+def _migrateTo138(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import GUI_START_BEHAVIOR
+    from account_helpers.AccountSettings import AccountSettings, COMP7_UI_SECTION, COMP7_LAST_SEASON
+    settings = AccountSettings.getUIFlag(COMP7_UI_SECTION)
+    settings[COMP7_LAST_SEASON] = None
+    data[GUI_START_BEHAVIOR][GuiSettingsBehavior.COMP7_SEASON_STATISTICS_SHOWN] = False
+    return
+
+
+def _migrateTo139(core, data, initialized):
+    from account_helpers.AccountSettings import AccountSettings
+    newSettingsCounter = AccountSettings.getSettings(NEW_SETTINGS_COUNTER)
+    newSettingsCounter['GameSettings'].update({BattleCommStorageKeys.ENABLE_COMMENDATIONS_FEEDBACK: True})
+    AccountSettings.setSettings(NEW_SETTINGS_COUNTER, newSettingsCounter)
+    gameData = data['battleComm']
+    gameData[BattleCommStorageKeys.ENABLE_COMMENDATIONS_FEEDBACK] = True
+
+
+def _migrateTo140(core, data, initialized):
+    from gui.server_events import recruit_helper
+    recruit_helper.updateNegative()
 
 
 _versions = ((1,
@@ -1869,6 +1891,18 @@ _versions = ((1,
   False),
  (137,
   _migrateTo137,
+  False,
+  False),
+ (138,
+  _migrateTo138,
+  False,
+  False),
+ (139,
+  _migrateTo139,
+  False,
+  False),
+ (140,
+  _migrateTo140,
   False,
   False))
 

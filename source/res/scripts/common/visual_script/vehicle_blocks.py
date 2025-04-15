@@ -50,3 +50,29 @@ class GetVehicleId(Block, VehicleMeta):
         except (AttributeError, ReferenceError):
             errorVScript(self, 'Dead weakref')
             self._res.setValue(NULL_ENTITY_ID)
+
+
+class GetVehicleOutfitId(Block, VehicleMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(GetVehicleOutfitId, self).__init__(*args, **kwargs)
+        self._vehicle = self._makeDataInputSlot('vehicle', SLOT_TYPE.VEHICLE)
+        self._id = self._makeDataOutputSlot('id', SLOT_TYPE.INT, self._getData)
+
+    def _getData(self, *args, **kwargs):
+        vehicle = self._vehicle.getValue()
+        outfit = vehicle.cp['outfit']
+        self._id.setValue(outfit.styleId)
+
+
+class GetVehicleOutfitLevel(Block, VehicleMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(GetVehicleOutfitLevel, self).__init__(*args, **kwargs)
+        self._vehicle = self._makeDataInputSlot('vehicle', SLOT_TYPE.VEHICLE)
+        self._level = self._makeDataOutputSlot('level', SLOT_TYPE.INT, self._getLevel)
+
+    def _getLevel(self):
+        vehicle = self._vehicle.getValue()
+        level = vehicle.publicInfo['outfitLevel']
+        self._level.setValue(level)

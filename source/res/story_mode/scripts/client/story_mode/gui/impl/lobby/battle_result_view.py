@@ -6,33 +6,31 @@ import BigWorld
 import SoundGroups
 from constants import DEATH_REASON_ALIVE
 from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
+from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import DISPLAY_ALL_AWARDS
 from gui.battle_results.settings import PLAYER_TEAM_RESULT
 from gui.clans.clan_cache import g_clanCache
 from gui.impl import backport
 from gui.impl.backport import BackportTooltipWindow, createTooltipData
 from gui.impl.gen import R
 from gui.impl.pub import ViewImpl, WindowImpl
-from gui.server_events.awards_formatters import AwardsPacker, AWARDS_SIZES
 from helpers import dependency
 from ids_generators import SequenceIDGenerator
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.lobby_context import ILobbyContext
 from story_mode.gui.impl.gen.view_models.views.lobby.battle_result_stat_tooltip_model import StatEnum
-from story_mode.gui.impl.gen.view_models.views.lobby.battle_result_view_model import BattleResultViewModel, RewardModel
+from story_mode.gui.impl.gen.view_models.views.lobby.battle_result_view_model import BattleResultViewModel
 from story_mode.gui.impl.gen.view_models.views.lobby.progress_level_model import ProgressLevelModel
 from story_mode.gui.impl.lobby.battle_result_stat_tooltip import BattleResultStatTooltip
 from story_mode.gui.impl.mixins import DestroyWindowOnDisconnectMixin
-from story_mode.gui.shared.bonuses_formatters import StoryModeBonusesAwardsComposer, getImgPath
 from story_mode.gui.shared.event_dispatcher import showCongratulationsWindow
-from story_mode.gui.shared.packers.bonus import getSMFormattersMap
-from story_mode.gui.shared.utils import getTasksCount
-from story_mode.gui.story_mode_gui_constants import POST_BATTLE_MUSIC_WIN, POST_BATTLE_MUSIC_LOSE
+from story_mode.gui.shared.utils import getTasksCount, formatAndFillRewards
+from story_mode.gui.sound_constants import POST_BATTLE_MUSIC_WIN, POST_BATTLE_MUSIC_LOSE
 from story_mode.skeletons.story_mode_controller import IStoryModeController
 from story_mode.skeletons.story_mode_fading_controller import IStoryModeFadingController
 from story_mode.uilogging.story_mode.consts import LogButtons
 from story_mode.uilogging.story_mode.loggers import PostBattleWindowLogger
-from story_mode_common.story_mode_constants import LOGGER_NAME, MissionsDifficulty, MissionType
+from story_mode_common.story_mode_constants import LOGGER_NAME, MissionType
 from wg_async import wg_async
 _logger = getLogger(LOGGER_NAME)
 
@@ -45,6 +43,7 @@ class BattleResultView(ViewImpl):
     _ICON_DAMAGE = 'icon_battle_condition_damage'
     _ICON_ASSIST = 'icon_battle_condition_assist'
     _ICON_DAMAGE_BLOCKED = 'icon_battle_condition_damage_block'
+    _MAIN_REWARDS = ('freeXP', 'credits')
     _battleResultsService = dependency.descriptor(IBattleResultsService)
     _storyModeCtrl = dependency.descriptor(IStoryModeController)
     _lobbyContext = dependency.descriptor(ILobbyContext)
@@ -124,7 +123,12 @@ class BattleResultView(ViewImpl):
             if mission is None:
                 _logger.error('Mission ID=%s not exists', missionId)
                 return
-            model.setIsDifficult(mission.difficulty == MissionsDifficulty.HARD)
+            for task in mission.tasks:
+                for completeTask in task.autoCompleteTasks:
+                    completeMission = self._storyModeCtrl.missions.getMission(completeTask.missionId)
+                    if completeMission is not None and completeMission.isEvent:
+                        model.setHasAutoCompleteTasks(True)
+
             model.setIsVictory(finishResult == PLAYER_TEAM_RESULT.WIN)
             model.setIsOnboarding(mission.missionType == MissionType.ONBOARDING)
             model.setTitle(rBattleResult.dyn(PLAYER_TEAM_RESULT.DEFEAT if finishResult == PLAYER_TEAM_RESULT.DRAW else finishResult).title())
@@ -134,7 +138,7 @@ class BattleResultView(ViewImpl):
             model.setVehicleName(backport.text(rBattleResult.vehicleName(), playerName=self._lobbyContext.getPlayerFullName(BigWorld.player().name, clanInfo=g_clanCache.clanInfo), vehicleName=battleResults['vehicleName']))
             model.setPlayerStatus(backport.text(rBattleResult.vehicleState.alive() if battleResults['vehicle']['deathReason'] == DEATH_REASON_ALIVE else rBattleResult.vehicleState.dead()))
             self.__fillProgressLevels(model.missionProgress, model.getProgressLevels(), battleResults)
-            self.__fillRewards(model.getRewards())
+            self.__fillRewards(model.getMainRewards(), model.getOtherRewards())
         return
 
     def __fillProgressLevels(self, missionProgressModel, progressLevelsModels, battleResults):
@@ -160,26 +164,12 @@ class BattleResultView(ViewImpl):
         progress.setStat(stat)
         return progress
 
-    def __fillRewards(self, rewardsModel):
+    def __fillRewards(self, mainRewardsModel, otherRewardsModel):
         battleResults = self._battleResultsService.getResultsVO(self.__arenaUniqueId)
-        with rewardsModel.transaction() as model:
-            formatter = StoryModeBonusesAwardsComposer(self._MAX_BONUSES_IN_VIEW, AwardsPacker(getSMFormattersMap()))
-            bonusRewards = formatter.getFormattedBonuses(battleResults['rewards'], AWARDS_SIZES.BIG)
-            for bonus in bonusRewards:
-                tooltipId = '{}'.format(self.__idGen.next())
-                self.__bonusCache[tooltipId] = bonus
-                rewardItem = RewardModel()
-                rewardItem.setName(bonus.bonusName)
-                rewardItem.setValue(str(bonus.label if bonus.label is not None else ''))
-                rewardItem.setTooltipId(tooltipId)
-                if isinstance(bonus.tooltip, int):
-                    rewardItem.setTooltipContentId(str(bonus.tooltip))
-                iconModel = rewardItem.icon
-                iconModel.setSmall(getImgPath(bonus.images.get('small')))
-                iconModel.setBig(getImgPath(bonus.images.get('big')))
-                model.addViewModel(rewardItem)
-
-        return
+        mainRewards = [ r for r in battleResults['rewards'] if r.getName() in self._MAIN_REWARDS ]
+        otherRewards = [ r for r in battleResults['rewards'] if r.getName() not in self._MAIN_REWARDS ]
+        formatAndFillRewards(mainRewards, mainRewardsModel, self.__idGen, self.__bonusCache, DISPLAY_ALL_AWARDS)
+        formatAndFillRewards(otherRewards, otherRewardsModel, self.__idGen, self.__bonusCache, self._MAX_BONUSES_IN_VIEW)
 
     @wg_async
     def __onClose(self):

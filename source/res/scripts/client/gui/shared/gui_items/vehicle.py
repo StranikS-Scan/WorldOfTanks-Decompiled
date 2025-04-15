@@ -182,7 +182,7 @@ EliteStatusProgress = typing.NamedTuple('EliteStatusProgress', (('unlocked', typ
 NO_VEHICLE_ID = -1
 
 class Vehicle(FittingItem):
-    __slots__ = ('__customState', '_inventoryID', '_xp', '_dailyXPFactor', '_isElite', '_isFullyElite', '_clanLock', '_isUnique', '_rentPackages', '_rentPackagesInfo', '_isDisabledForBuy', '_isSelected', '_restorePrice', '_tradeInAvailable', '_tradeOffAvailable', '_tradeOffPriceFactor', '_tradeOffPrice', '_searchableUserName', '_personalDiscountPrice', '_rotationGroupNum', '_rotationBattlesLeft', '_isRotationGroupLocked', '_isInfiniteRotationGroup', '_settings', '_lock', '_repairCost', '_health', '_gun', '_turret', '_engine', '_chassis', '_radio', '_fuelTank', '_equipment', '_bonuses', '_crewIndices', '_slotsIds', '_crew', '_lastCrew', '_hasModulesToSelect', '_outfitComponents', '_slotsAnchors', '_unlockedBy', '_maxRentDuration', '_minRentDuration', '_slotsAnchorsById', '_hasNationGroup', '_extraSettings', '_groupIDs', '_postProgression', '_invData', '_proxy')
+    __slots__ = ('__customState', '__weakref__', '_inventoryID', '_xp', '_dailyXPFactor', '_isElite', '_isFullyElite', '_clanLock', '_isUnique', '_rentPackages', '_rentPackagesInfo', '_isDisabledForBuy', '_isSelected', '_restorePrice', '_tradeInAvailable', '_tradeOffAvailable', '_tradeOffPriceFactor', '_tradeOffPrice', '_searchableUserName', '_personalDiscountPrice', '_rotationGroupNum', '_rotationBattlesLeft', '_isRotationGroupLocked', '_isInfiniteRotationGroup', '_settings', '_lock', '_repairCost', '_health', '_gun', '_turret', '_engine', '_chassis', '_radio', '_fuelTank', '_equipment', '_bonuses', '_crewIndices', '_slotsIds', '_crew', '_lastCrew', '_hasModulesToSelect', '_outfitComponents', '_slotsAnchors', '_unlockedBy', '_maxRentDuration', '_minRentDuration', '_slotsAnchorsById', '_hasNationGroup', '_extraSettings', '_groupIDs', '_postProgression', '_invData', '_proxy')
 
     class VEHICLE_STATE(object):
         DAMAGED = 'damaged'
@@ -1017,9 +1017,16 @@ class Vehicle(FittingItem):
     def isAmmoNotFullInSetups(self):
         return self.shells.setupLayouts.isAmmoNotFull(self.ammoMinSize)
 
+    def isAmmoFullInSetups(self, setupIdx=None):
+        return self.shells.setupLayouts.isAmmoFull(setupIdx, self.ammoMinSize)
+
     @property
     def isAmmoCanSwitch(self):
         return self.isSetupSwitchActive(TankSetupGroupsId.EQUIPMENT_AND_SHELLS)
+
+    @property
+    def hasShells(self):
+        return self.shells.setupLayouts.isAmmoFull(minAmmo=1)
 
     @property
     def isTooHeavy(self):
@@ -1028,10 +1035,6 @@ class Vehicle(FittingItem):
     @property
     def hasCrew(self):
         return findFirst(lambda x: x[1] is not None, self.crew) is not None
-
-    @property
-    def hasShells(self):
-        return self.shells.setupLayouts.isAmmoFull(minAmmo=1)
 
     @property
     def hasConsumables(self):
@@ -1071,9 +1074,6 @@ class Vehicle(FittingItem):
     @property
     def isNationChangeAvailable(self):
         return self.hasNationGroup and not self.isLocked and not self.isBroken and (self.isPurchased or self.isRented)
-
-    def isAmmoFullInSetups(self, setupIdx=None):
-        return self.shells.setupLayouts.isAmmoFull(setupIdx, self.ammoMinSize)
 
     def getAllNationGroupVehs(self, proxy):
         nationGroupVehs = [ proxy.getItemByCD(cd) for cd in iterVehTypeCDsInNationGroup(self.intCD) ]
@@ -1786,7 +1786,7 @@ class Vehicle(FittingItem):
                 continue
             tmanDescr = tman.descriptor
             skills = tmanDescr.skills[:]
-            if tmanDescr.skillLevel(skillName) < tankmen.MAX_SKILL_LEVEL:
+            if skillName in skills and tmanDescr.skillLevel(skillName) < tankmen.MAX_SKILL_LEVEL:
                 lastSkillLevel = tankmen.MAX_SKILL_LEVEL
             else:
                 lastSkillLevel = tmanDescr.lastSkillLevel

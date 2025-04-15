@@ -50,8 +50,8 @@ class MTClientHintTextModel(ClientHintTextModel):
 class MTClientHintSoundModel(ClientHintSoundModel):
     __slots__ = ('notifyNewbie',)
 
-    def __init__(self, fx, notify, notifyNewbie):
-        super(MTClientHintSoundModel, self).__init__(fx=fx, notify=notify)
+    def __init__(self, fx, notify, aliveOnly, notifyNewbie):
+        super(MTClientHintSoundModel, self).__init__(fx=fx, notify=notify, aliveOnly=aliveOnly)
         self.notifyNewbie = notifyNewbie
 
     def _createNotify(self):

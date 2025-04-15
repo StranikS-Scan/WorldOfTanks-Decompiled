@@ -6,9 +6,9 @@ from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.Scaleform.daapi.view.battle.shared import SharedPage, finish_sound_player, drone_music_player
 from gui.Scaleform.daapi.view.battle.shared.page import ComponentsConfig
 from gui.Scaleform.daapi.view.battle.shared.start_countdown_sound_player import StartCountdownSoundPlayer
-from gui.Scaleform.daapi.view.battle.shared.tabbed_full_stats import TabsAliases
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
+from gui.battle_control.battle_constants import TabsAliases
 from shared_utils import CONST_CONTAINER
 
 class DynamicAliases(CONST_CONTAINER):

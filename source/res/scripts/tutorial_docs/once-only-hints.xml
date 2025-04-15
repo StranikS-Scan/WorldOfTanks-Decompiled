@@ -2,7 +2,7 @@
   <gui>	gui/tutorial-lobby-gui.xml	</gui>
   <hints>
     <hint>	WotPlusOptDevHint	  <item-id>	HangarOptionalDeviceSlots	</item-id>
-      <text>	_(#tutorial:wotPlus/newFeature)	</text>
+      <text>	_(#tutorial:wotPlus/newFeature/optDeviceAssist)	</text>
       <arrow>
         <direction>	T	</direction>
         <loop>	True	</loop>
@@ -10,8 +10,64 @@
       <ignore-outside-click>	True	</ignore-outside-click>
       <hide-immediately>	True	</hide-immediately>
       <condition>
-        <class-condition>	WotPlusHintChecker	  <path>	gui.game_control.wot_plus_controller	</path>
-          <arguments>	WotPlusOptDevHint	</arguments>
+        <condition-and>
+          <condition-hint-showed>
+            <hint-id>	WotPlusCrewWidgetTankmanAssistHint	</hint-id>
+            <value>	True	</value>
+          </condition-hint-showed>
+          <condition-hint-showed>
+            <hint-id>	WotPlusCrewContainerTankmanSkillAssistHint	</hint-id>
+            <value>	True	</value>
+          </condition-hint-showed>
+          <condition-hint-showed>
+            <hint-id>	WotPlusCrewSkillTrainingDropDownAssistHint	</hint-id>
+            <value>	True	</value>
+          </condition-hint-showed>
+          <class-condition>	WotPlusHintChecker	  <path>	gui.game_control.wot_plus_controller	</path>
+            <arguments>	WotPlusOptDevHint	</arguments>
+          </class-condition>
+        </condition-and>
+      </condition>
+    </hint>
+    <hint>	WotPlusCrewWidgetTankmanAssistHint	  <item-id>	CrewWidgetTankmanWotPlusAssist	</item-id>
+      <text>	_(#tutorial:wotPlus/newFeature/crewAssist/crewWidget)	</text>
+      <arrow>
+        <direction>	R	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <ignore-outside-click>	True	</ignore-outside-click>
+      <hide-immediately>	True	</hide-immediately>
+      <condition>
+        <class-condition>	WotPlusCrewWidgetTankmanAssistChecker	  <path>	gui.impl.lobby.crew.crew_hints	</path>
+          <arguments>	WotPlusCrewWidgetTankmanAssistHint	</arguments>
+        </class-condition>
+      </condition>
+    </hint>
+    <hint>	WotPlusCrewSkillTrainingDropDownAssistHint	  <item-id>	CrewSkillTrainingDropDownWotPlusAssist	</item-id>
+      <text>	_(#tutorial:wotPlus/newFeature/crewAssist/skillListDropDown)	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <ignore-outside-click>	True	</ignore-outside-click>
+      <hide-immediately>	True	</hide-immediately>
+      <condition>
+        <class-condition>	WotPlusCrewSkillTrainingDropDownAssistChecker	  <path>	gui.impl.lobby.crew.crew_hints	</path>
+          <arguments>	WotPlusCrewSkillTrainingDropDownAssistHint	</arguments>
+        </class-condition>
+      </condition>
+    </hint>
+    <hint>	WotPlusCrewContainerTankmanSkillAssistHint	  <item-id>	ContainerTankmanSkillWotPlusAssist	</item-id>
+      <text>	_(#tutorial:wotPlus/newFeature/crewAssist/crewContainerSkill)	</text>
+      <arrow>
+        <direction>	R	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <ignore-outside-click>	True	</ignore-outside-click>
+      <hide-immediately>	True	</hide-immediately>
+      <condition>
+        <class-condition>	WotPlusCrewContainerTankmanSkillAssistChecker	  <path>	gui.impl.lobby.crew.crew_hints	</path>
+          <arguments>	WotPlusCrewContainerTankmanSkillAssistHint	</arguments>
         </class-condition>
       </condition>
     </hint>

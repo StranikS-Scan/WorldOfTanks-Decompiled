@@ -16,7 +16,6 @@ class Sounds(CONST_CONTAINER):
     VEHILCE_INFO_STATE = 'STATE_hangar_filtered'
     VEHILCE_INFO_STATE_ON = 'STATE_hangar_filtered_on'
     VEHILCE_INFO_STATE_OFF = 'STATE_hangar_filtered_off'
-    MUTE_EVENT = 'ue_master_mute'
 
 
 BATTLE_ROYALE_PAGE_SOUND_SPACE = CommonSoundSpaceSettings(name=Sounds.MAIN_PAGE_SPACE_NAME, entranceStates={Sounds.MAIN_PAGE_STATE: Sounds.MAIN_PAGE_STATE_ON}, exitStates={Sounds.MAIN_PAGE_STATE: Sounds.MAIN_PAGE_STATE_OFF,

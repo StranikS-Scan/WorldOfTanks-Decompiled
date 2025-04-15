@@ -45,7 +45,6 @@ from messenger.storage import storage_getter
 from messenger.formatters.service_channel_helpers import parseTokenBonusCount
 from gui.impl.gen.view_models.views.battle_royale.battle_results.player_battle_type_status_model import BattleType
 from gui.prb_control.entities.base.listener import IPrbListener
-from gui.shared.money import Currency
 if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.views.battle_royale.battle_results.player_battle_type_status_model import PlayerBattleTypeStatusModel
     from battle_royale.gui.impl.gen.view_models.views.lobby.views.battle_result_view.leaderboard_model import LeaderboardModel
@@ -56,14 +55,13 @@ _BATTLE_REWARD_TYPES = [BattleRewardItemModel.XP,
  BattleRewardItemModel.BATTLE_PASS_POINTS,
  BattleRewardItemModel.CRYSTALS,
  BattleRewardItemModel.BATTLE_ROYALE_COIN,
- BattleRewardItemModel.ST_PATRICK_COIN,
  BattleRewardItemModel.BR_PROGRESSION_TOKEN]
 _HIDDEN_BONUSES_WITH_ZERO_VALUES = frozenset([BattleRewardItemModel.CRYSTALS, BattleRewardItemModel.BATTLE_PASS_POINTS])
 _TOURNAMENT_ARENA_BONUS_TYPES = (ARENA_BONUS_TYPE.BATTLE_ROYALE_TRN_SOLO, ARENA_BONUS_TYPE.BATTLE_ROYALE_TRN_SQUAD)
 _INVALID_PREBATTLE_ID = 0
 
 class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility, IPrbListener):
-    __slots__ = ('__arenaUniqueID', '__tooltipsData', '__tooltipParametersCreator', '__data', '__isObserverResult', '__arenaBonusType', '__ally', '__squadCreatedByInvite', '__hasStpBonus')
+    __slots__ = ('__arenaUniqueID', '__tooltipsData', '__tooltipParametersCreator', '__data', '__isObserverResult', '__arenaBonusType', '__ally', '__squadCreatedByInvite')
     __battleResults = dependency.descriptor(IBattleResultsService)
     __brController = dependency.descriptor(IBattleRoyaleController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
@@ -95,7 +93,6 @@ class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility, IPrbListener):
         self.__tooltipParametersCreator = self.__getTooltipParametersCreator()
         self.__ally = {}
         self.__squadCreatedByInvite = False
-        self.__hasStpBonus = False
         return
 
     @property
@@ -109,8 +106,6 @@ class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility, IPrbListener):
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.battle_royale.lobby.tooltips.RewardCurrencyTooltipView():
             currencyType = event.getArgument('currencyType')
-            if currencyType == Currency.STPCOIN:
-                return RewardCurrencyTooltipView(currencyType, self.__hasStpBonus)
             return RewardCurrencyTooltipView(currencyType)
         return super(BrBattleResultsViewInLobby, self).createToolTipContent(event, contentID)
 
@@ -146,8 +141,6 @@ class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility, IPrbListener):
 
     def _initialize(self, *args, **kwargs):
         super(BrBattleResultsViewInLobby, self)._initialize(*args, **kwargs)
-        self.viewModel.personalResults.battlePassProgress.onSubmitClick += self.__onBattlePassClick
-        self.__brController.onUpdated += self.__updateBattlePass
         BREvents.playSound(BREvents.BATTLE_SUMMARY_SHOW)
         self.suspendLobbyHeader(self.uniqueID)
         event_dispatcher.hideSquadWindow()
@@ -161,8 +154,6 @@ class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility, IPrbListener):
         self.__data = None
         self.__ally = None
         self.__squadCreatedByInvite = False
-        self.__brController.onUpdated -= self.__updateBattlePass
-        self.viewModel.personalResults.battlePassProgress.onSubmitClick -= self.__onBattlePassClick
         self.resumeLobbyHeader(self.uniqueID)
         super(BrBattleResultsViewInLobby, self)._finalize()
         return
@@ -237,7 +228,6 @@ class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility, IPrbListener):
     def __setPersonalResult(self, personalModel):
         self.__setMapName()
         self.__setCommonInfo()
-        self.__hasStpBonus = self._getBonusStrCoin()
         if not self.__isObserverResult:
             self.__setFinishResult(personalModel)
             self.__setStats(personalModel)
@@ -245,9 +235,6 @@ class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility, IPrbListener):
             self.__setBattleRewardsWithPremium(personalModel)
             self.__setCompletedQuests(personalModel)
         personalModel.battlePassProgress.setBattlePassState(BattlePassProgress.BP_STATE_DISABLED)
-
-    def _getBonusStrCoin(self):
-        return bool(self.__data.get(BRSections.PERSONAL, {}).get('bonusStpCoinFactor', 0))
 
     def __setLeaderboard(self, leaderboardModel):
         leaderboard = self.__data.get(BRSections.LEADERBOARD)

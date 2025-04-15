@@ -1,5 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/classic/player_menu_handler.py
+import logging
+from commendations_common import CommendationHelpers
+from commendations_common.CommendationHelpers import CommendationsSource
 from gui.Scaleform.daapi.view.lobby.lobby_constants import USER
 from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler
 from gui.Scaleform.locale.MENU import MENU
@@ -13,14 +16,24 @@ from messenger.m_constants import PROTO_TYPE, UserEntityScope
 from messenger.proto import proto_getter
 from messenger.storage import storage_getter
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.game_control import ICommendationsController
 from uilogging.player_satisfaction_rating.loggers import InBattleContextMenuLogger
 from uilogging.player_satisfaction_rating.logging_constants import PlayerSatisfactionRatingCMActions
+from constants import CommendationsState
+_logger = logging.getLogger(__name__)
 
 class DYN_SQUAD_OPTION_ID(object):
     SENT_INVITATION = 'sendInvitationToSquad'
     ACCEPT_INVITATION = 'acceptInvitationToSquad'
     REJECT_INVITATION = 'rejectInvitationToSquad'
     IN_SQUAD = 'inSquad'
+
+
+class COMMENDATIONS_OPTION_ID(object):
+    COMMEND_FIRST = 'commendFirst'
+    COMMEND_BACK = 'commendBack'
+    OUTGOING_COMMENDATION = 'outgoingCommendation'
+    MUTUAL_COMMENDATION = 'mutualCommendation'
 
 
 class BATTLE_CHAT_OPTION_ID(object):
@@ -40,7 +53,11 @@ _OPTIONS_HANDLERS = {USER.ADD_TO_FRIENDS: 'addFriend',
  DENUNCIATIONS.BOT: 'appealBot',
  DYN_SQUAD_OPTION_ID.SENT_INVITATION: 'sendInvitation',
  DYN_SQUAD_OPTION_ID.ACCEPT_INVITATION: 'acceptInvitation',
- DYN_SQUAD_OPTION_ID.REJECT_INVITATION: 'rejectInvitation'}
+ DYN_SQUAD_OPTION_ID.REJECT_INVITATION: 'rejectInvitation',
+ COMMENDATIONS_OPTION_ID.COMMEND_FIRST: 'commend',
+ COMMENDATIONS_OPTION_ID.COMMEND_BACK: 'commend',
+ COMMENDATIONS_OPTION_ID.OUTGOING_COMMENDATION: 'commend',
+ COMMENDATIONS_OPTION_ID.MUTUAL_COMMENDATION: 'commend'}
 if not IS_CHINA:
     _OPTIONS_HANDLERS.update({USER.SET_MUTED: 'setMuted',
      USER.UNSET_MUTED: 'unsetMuted'})
@@ -53,7 +70,11 @@ _OPTION_ICONS = {USER.ADD_TO_FRIENDS: 'addToFriends',
  DYN_SQUAD_OPTION_ID.SENT_INVITATION: 'addToSquad',
  DYN_SQUAD_OPTION_ID.IN_SQUAD: 'inSquad',
  DYN_SQUAD_OPTION_ID.ACCEPT_INVITATION: 'acceptInvitation',
- DYN_SQUAD_OPTION_ID.REJECT_INVITATION: 'rejectInvitation'}
+ DYN_SQUAD_OPTION_ID.REJECT_INVITATION: 'rejectInvitation',
+ COMMENDATIONS_OPTION_ID.COMMEND_FIRST: 'commendFirst',
+ COMMENDATIONS_OPTION_ID.COMMEND_BACK: 'commendBack',
+ COMMENDATIONS_OPTION_ID.OUTGOING_COMMENDATION: 'outgoingCommendation',
+ COMMENDATIONS_OPTION_ID.MUTUAL_COMMENDATION: 'mutualCommendation'}
 if not IS_CHINA:
     _OPTION_ICONS.update({USER.SET_MUTED: 'disableVoice',
      USER.UNSET_MUTED: 'enableVoice'})
@@ -88,6 +109,7 @@ class PlayerContextMenuInfo(object):
 
 class PlayerMenuHandler(AbstractContextMenuHandler):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    commendationsCtrl = dependency.descriptor(ICommendationsController)
 
     def __init__(self, cmProxy, ctx=None):
         self.__denunciator = BattleDenunciator()
@@ -140,6 +162,13 @@ class PlayerMenuHandler(AbstractContextMenuHandler):
         self._uiPlayerSatisfactionRatingLogger.setContextMenuAction(PlayerSatisfactionRatingCMActions.VOICE_MESSAGES)
         self.sessionProvider.shared.anonymizerFakesCtrl.mute(self.__userInfo.avatarSessionID, self.__userInfo.userName)
 
+    def commend(self):
+        if not self.commendationsCtrl.isCommendationsEnabled:
+            return
+        self._uiPlayerSatisfactionRatingLogger.setContextMenuAction(PlayerSatisfactionRatingCMActions.COMMENDATION)
+        commsCtrl = self.sessionProvider.dynamic.commendationsMessagesController
+        commsCtrl.sendCommendations(self.__vInfo.vehicleID, CommendationsSource.EARS)
+
     def unsetMuted(self):
         self._uiPlayerSatisfactionRatingLogger.setContextMenuAction(PlayerSatisfactionRatingCMActions.VOICE_MESSAGES)
         self.sessionProvider.shared.anonymizerFakesCtrl.unmute(self.__userInfo.avatarSessionID)
@@ -187,6 +216,7 @@ class PlayerMenuHandler(AbstractContextMenuHandler):
         if self.sessionProvider.isReplayPlaying:
             return options
         if not self.__userInfo.isBot:
+            options = self.__addCommendationInfo(options)
             options = self.__addDynSquadInfo(options)
             options = self.__addFriendshipInfo(options)
             options = self.__addIgnoreInfo(options)
@@ -210,9 +240,7 @@ class PlayerMenuHandler(AbstractContextMenuHandler):
     def __addDynSquadInfo(self, options):
         make = self._makeItem
         ctx = self.sessionProvider.getCtx()
-        if not self.arenaVisitor.hasDynSquads():
-            return options
-        elif not ctx.isInvitationEnabled() or ctx.hasSquadRestrictions():
+        if not ctx.isInvitationEnabled() or ctx.hasSquadRestrictions():
             return options
         elif not self.__userInfo.isAlly:
             return options
@@ -268,6 +296,26 @@ class PlayerMenuHandler(AbstractContextMenuHandler):
                 optionID = BATTLE_CHAT_OPTION_ID.DISABLE_COMMUNICATIONS
                 isEnabled = False
             options.append(self._makeItem(optionID, MENU.contextmenu(optionID), optInitData=self._getOptionInitData(optionID, isEnabled)))
+        return options
+
+    def __addCommendationInfo(self, options):
+        if not self.commendationsCtrl.isCommendationsEnabled:
+            return options
+        if not (self.arenaVisitor.hasCommendationsMessages() and self.__userInfo.isAlly and not self.__userInfo.isBot):
+            return options
+        vehicleID = self.__vInfo.vehicleID
+        messageState = CommendationHelpers.getCommendationState(vehicleID)
+        if messageState == CommendationsState.UNSENT:
+            optionID = COMMENDATIONS_OPTION_ID.COMMEND_FIRST
+        elif messageState == CommendationsState.RECEIVED:
+            optionID = COMMENDATIONS_OPTION_ID.COMMEND_BACK
+        elif messageState == CommendationsState.SENT:
+            optionID = COMMENDATIONS_OPTION_ID.OUTGOING_COMMENDATION
+        elif messageState == CommendationsState.MUTUAL:
+            optionID = COMMENDATIONS_OPTION_ID.MUTUAL_COMMENDATION
+        else:
+            _logger.error('Received unknown state for commendation')
+        options.append(self._makeItem(optionID, MENU.contextmenu(optionID), optInitData=self._getOptionInitData(optionID, messageState.canSend())))
         return options
 
     def __addMutedInfo(self, options):

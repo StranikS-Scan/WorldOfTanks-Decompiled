@@ -26,10 +26,11 @@ class CustomizationRarityRewardScreen(ViewImpl):
     __hangarSpace = dependency.descriptor(IHangarSpace)
     __slots__ = ('__element', '__isFirstEntry', '__uiLogger', '__sound')
     _REWARD_SOUND_ID = 'elements_cust_reward'
+    _LAYOUT_ID = R.views.lobby.customization.CustomizationRarityRewardScreen()
 
     def __init__(self, element, isFirstEntry):
-        settings = ViewSettings(R.views.lobby.customization.CustomizationRarityRewardScreen())
-        settings.layoutID = R.views.lobby.customization.CustomizationRarityRewardScreen()
+        settings = ViewSettings(self._LAYOUT_ID)
+        settings.layoutID = self._LAYOUT_ID
         settings.flags = ViewFlags.VIEW
         settings.model = CustomizationRarityRewardScreenModel()
         super(CustomizationRarityRewardScreen, self).__init__(settings)

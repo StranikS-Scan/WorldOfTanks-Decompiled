@@ -1641,8 +1641,8 @@
     </camouflage>
   </hull>
   <chassis>
-    <JgPzV_Vetstaerktketten_NewOnBoarding>
-      <userString>	#germany_vehicles:JgPzV_Vetstaerktketten	</userString>
+    <Chassis_G1018_JagdPanther_NewOnBoarding>
+      <userString>	#germany_vehicles:Chassis_G18_JagdPanther_2	</userString>
       <notInShop>	true	</notInShop>
       <tags></tags>
       <level>	8	</level>
@@ -2503,11 +2503,11 @@
         </slot>
       </customizationSlots>
       <repairTime>	5.33333349	</repairTime>
-    </JgPzV_Vetstaerktketten_NewOnBoarding>
+    </Chassis_G1018_JagdPanther_NewOnBoarding>
   </chassis>
   <turrets0>
-    <JgPzPanther_NewOnBoarding>
-      <userString>	#germany_vehicles:JgPzPanther	</userString>
+    <Turret_1_G1018_JagdPanther_NewOnBoarding>
+      <userString>	#germany_vehicles:Turret_1_G18_JagdPanther	</userString>
       <notInShop>	true	</notInShop>
       <tags>	cannotDetach	</tags>
       <level>	7	</level>
@@ -2669,10 +2669,10 @@
         <density>	1826 1088.53	</density>
         <aoTextureSize>	1024 1024	</aoTextureSize>
       </camouflage>
-    </JgPzPanther_NewOnBoarding>
+    </Turret_1_G1018_JagdPanther_NewOnBoarding>
   </turrets0>
   <engines>
-    <Maybach_HL_230_TRM_P30_NewOnBoarding>	shared	</Maybach_HL_230_TRM_P30_NewOnBoarding>
+    <Maybach_HL_230_TRM_P30_JP_NewOnBoarding>	shared	</Maybach_HL_230_TRM_P30_JP_NewOnBoarding>
   </engines>
   <fuelTanks>
     <Heavy_NewOnBoarding>	shared	</Heavy_NewOnBoarding>
@@ -2683,13 +2683,13 @@
   <physics>
     <detailed>
       <engines>
-        <Maybach_HL_230_TRM_P30_NewOnBoarding>
+        <Maybach_HL_230_TRM_P30_JP_NewOnBoarding>
           <smplEnginePower>	740.0968	</smplEnginePower>
           <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
-        </Maybach_HL_230_TRM_P30_NewOnBoarding>
+        </Maybach_HL_230_TRM_P30_JP_NewOnBoarding>
       </engines>
       <chassis>
-        <JgPzV_Vetstaerktketten_NewOnBoarding>
+        <Chassis_G1018_JagdPanther_NewOnBoarding>
           <grounds>
             <soft>
               <rollingFriction>	0.1932	</rollingFriction>
@@ -2701,7 +2701,7 @@
               <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
-        </JgPzV_Vetstaerktketten_NewOnBoarding>
+        </Chassis_G1018_JagdPanther_NewOnBoarding>
       </chassis>
     </detailed>
   </physics>

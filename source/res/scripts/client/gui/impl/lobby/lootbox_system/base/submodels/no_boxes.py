@@ -8,7 +8,7 @@ from gui.impl.lobby.lootbox_system.base.submodels.statistics import Statistics
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.lootbox_system.base.common import ViewID, Views
 from gui.lootbox_system.base.decorators import createTooltipContentDecorator
-from gui.lootbox_system.base.utils import areUsedExternalTransitions, getPreferredBox, isShopVisible
+from gui.lootbox_system.base.utils import getPreferredBox, isShopVisible
 from gui.shared import EVENT_BUS_SCOPE, events
 from helpers import dependency
 from shared_utils import findFirst
@@ -61,7 +61,6 @@ class NoBoxes(SubViewImpl):
     @replaceNoneKwargsModel
     def __updateData(self, model=None):
         model.setEventName(self.__eventName)
-        model.setUseExternal(areUsedExternalTransitions(self.__eventName))
         model.setIsShopVisible(isShopVisible(self.__eventName))
         updateBoxesInfoModel(self.__eventName, model.getBoxesInfo())
 

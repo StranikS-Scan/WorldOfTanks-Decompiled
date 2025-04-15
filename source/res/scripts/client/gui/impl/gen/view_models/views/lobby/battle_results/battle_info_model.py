@@ -1,14 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/battle_results/battle_info_model.py
-from enum import Enum
 from gui.impl.gen import R
 from frameworks.wulf import ViewModel
-
-class WinStatus(Enum):
-    DRAW = 'tie'
-    WIN = 'win'
-    LOSE = 'lose'
-
 
 class BattleInfoModel(ViewModel):
     __slots__ = ()
@@ -41,10 +34,10 @@ class BattleInfoModel(ViewModel):
         self._setNumber(3, value)
 
     def getWinStatus(self):
-        return WinStatus(self._getString(4))
+        return self._getString(4)
 
     def setWinStatus(self, value):
-        self._setString(4, value.value)
+        self._setString(4, value)
 
     def getFinishReason(self):
         return self._getResource(5)
@@ -58,5 +51,5 @@ class BattleInfoModel(ViewModel):
         self._addStringProperty('arenaName', '')
         self._addNumberProperty('battleStartTime', 0)
         self._addNumberProperty('battleDuration', 0)
-        self._addStringProperty('winStatus')
+        self._addStringProperty('winStatus', '')
         self._addResourceProperty('finishReason', R.invalid())

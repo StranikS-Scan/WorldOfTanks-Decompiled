@@ -3,7 +3,7 @@
 import typing
 from adisp import adisp_process
 from comp7.gui.impl.gen.view_models.views.lobby.enums import Division, MetaRootViews, Rank
-from comp7.gui.impl.gen.view_models.views.lobby.meta_view.pages.progression_item_model import ProgressionItemModel
+from comp7.gui.impl.gen.view_models.views.lobby.progression_item_model import ProgressionItemModel
 from comp7.gui.impl.gen.view_models.views.lobby.meta_view.pages.progression_model import ProgressionModel
 from comp7.gui.impl.lobby.comp7_helpers import comp7_model_helpers, comp7_shared, comp7_qualification_helpers
 from comp7.gui.impl.lobby.meta_view import meta_view_helper

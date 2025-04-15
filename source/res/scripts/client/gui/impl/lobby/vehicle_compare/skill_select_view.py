@@ -205,6 +205,8 @@ class SkillSelectView(ViewImpl):
     def _onRestore(self):
         self.__selectedSkills = self.__cmpConf.getCurrentCrewSkills()
         self._fillModel()
+        self.__skillsManager.updateSkills(self.__selectedSkills)
+        self.__paramsView.update()
 
     def _onClick(self, event):
         self.__updateSkills(int(event.get('rowIndex')), int(event.get('skillIndex')), event.get('skillType'))

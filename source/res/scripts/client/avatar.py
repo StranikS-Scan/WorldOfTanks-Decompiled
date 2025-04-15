@@ -1215,6 +1215,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         if self.playerVehicleID != vehID:
             return
         self.__disableRespawnMode = True
+        self.setVehicleOverturned(False)
         vehicle = BigWorld.entities.get(vehID)
         self.guiSessionProvider.movingToRespawnBase(vehicle)
         if not self.isObserver():
@@ -2556,7 +2557,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         if not g_offlineMapCreator.Active():
             self.inputHandler = AvatarInputHandler.AvatarInputHandler(self.spaceID)
             prereqs += self.inputHandler.prerequisites()
-        self.soundNotifications = IngameSoundNotifications.IngameSoundNotifications()
+        self.soundNotifications = IngameSoundNotifications.IngameSoundNotifications(self.arena.arenaType)
         self.complexSoundNotifications = IngameSoundNotifications.ComplexSoundNotifications()
         arena = BigWorld.player().arena
         notificationsRemapping = arena.arenaType.notificationsRemapping or {}
@@ -2634,8 +2635,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def showVehicleError(self, msgName, args=None):
         self.guiSessionProvider.shared.messages.showVehicleError(msgName, args)
 
-    def startWaitingForShot(self, shootingCooldown):
-        self.__startWaitingForShot(True, shotArgs=(0, False))
+    def startWaitingForShot(self, shootingCooldown, predictShooting=True):
+        self.__startWaitingForShot(predictShooting, shotArgs=(0, False))
         self.__gunReloadCommandWaitEndTime = BigWorld.time() + shootingCooldown
 
     def __showDamageIconAndPlaySound(self, damageCode, extra, vehicleID, ignoreMessages=False):

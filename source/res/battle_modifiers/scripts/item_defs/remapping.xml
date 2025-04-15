@@ -1,1 +1,138 @@
-<remapping.xml></remapping.xml>
+<remapping.xml>
+  <fep_fall_tanks>
+    <conditions>
+      <condition>
+        <conditionName>	nation	</conditionName>
+      </condition>
+      <condition>
+        <conditionName>	outfit	</conditionName>
+      </condition>
+      <condition>
+        <conditionName>	gunName	</conditionName>
+      </condition>
+      <condition>
+        <conditionName>	gunCaliber	</conditionName>
+        <remappings>
+          <remapping>
+            <source>	auto small	</source>
+            <target>	small	</target>
+          </remapping>
+          <remapping>
+            <source>	medium main	</source>
+            <target>	med	</target>
+          </remapping>
+          <remapping>
+            <source>	large huge	</source>
+            <target>	big	</target>
+          </remapping>
+        </remappings>
+      </condition>
+      <condition>
+        <conditionName>	shellShotsCount	</conditionName>
+        <remappings>
+          <remapping>
+            <source>	1 3 6	</source>
+            <target>	1	</target>
+          </remapping>
+        </remappings>
+      </condition>
+      <condition>
+        <conditionName>	shellCaliber	</conditionName>
+        <remappings>
+          <remapping>
+            <source>	auto small	</source>
+            <target>	small	</target>
+          </remapping>
+          <remapping>
+            <source>	medium main	</source>
+            <target>	med	</target>
+          </remapping>
+          <remapping>
+            <source>	large huge	</source>
+            <target>	big	</target>
+          </remapping>
+        </remappings>
+      </condition>
+    </conditions>
+    <composers>
+      <gunEffects>
+        <conditions>	gunCaliber	</conditions>
+        <targetTemplate>	fep_fall_impulse_gunshot_{gunCaliber}	</targetTemplate>
+        <specialRules>
+          <rule>
+            <source>	shot_dualgun1_main_L shot_dualgun1_main_mb_L shot_dualgun1_mainext_L shot_dualgun1_mainext_mb_L	</source>
+            <target>	fep_fall_impulse_gunshot_dualgun1_main_L	</target>
+          </rule>
+          <rule>
+            <source>	shot_dualgun1_main_R shot_dualgun1_main_mb_R shot_dualgun1_mainext_R shot_dualgun1_mainext_mb_R	</source>
+            <target>	fep_fall_impulse_gunshot_dualgun1_main_R	</target>
+          </rule>
+          <rule>
+            <source>	shot_dualgun_main_L shot_dualgun_main_mb_L shot_dualgun_mainext_L shot_dualgun_mainext_mb_L	</source>
+            <target>	fep_fall_impulse_gunshot_dualgun_main_L	</target>
+          </rule>
+          <rule>
+            <source>	shot_dualgun_main_R shot_dualgun_main_mb_R shot_dualgun_mainext_R shot_dualgun_mainext_mb_R	</source>
+            <target>	fep_fall_impulse_gunshot_dualgun_main_R	</target>
+          </rule>
+          <rule>
+            <source>	shot_dualgun1_large_L shot_dualgun1_large_mb_L	</source>
+            <target>	fep_fall_impulse_gunshot_dualgun1_main_L	</target>
+          </rule>
+          <rule>
+            <source>	shot_dualgun1_large_R shot_dualgun1_large_mb_R	</source>
+            <target>	fep_fall_impulse_gunshot_dualgun1_main_R	</target>
+          </rule>
+          <rule>
+            <source>	shot_dualgun_large_L shot_dualgun_large_mb_L	</source>
+            <target>	fep_fall_impulse_gunshot_dualgun_main_L	</target>
+          </rule>
+          <rule>
+            <source>	shot_dualgun_large_R shot_dualgun_large_mb_R	</source>
+            <target>	fep_fall_impulse_gunshot_dualgun_main_R	</target>
+          </rule>
+          <rule>
+            <source>	shot_env_artillery	</source>
+            <target>	shot_env_artillery	</target>
+          </rule>
+        </specialRules>
+      </gunEffects>
+      <gunMainPrefab>
+        <conditions>	nation gunName outfit	</conditions>
+        <targetTemplate>	fall_tanks/content/CGFPrefabs/Vehicle/fall_tanks_guns/{nation}/gun{gunName}{outfit}.prefab	</targetTemplate>
+        <specialRules>
+          <rule>
+            <source>	content/CGFPrefabs/Vehicle/guns/uk/gun_01_Twin_20pdr_Gun_MBC_MkII.prefab	</source>
+            <target>	fall_tanks/content/CGFPrefabs/Vehicle/fall_tanks_guns/uk/gun_01_Twin_20pdr_Gun_MBC_MkII.prefab	</target>
+          </rule>
+          <rule>
+            <source>	content/CGFPrefabs/Vehicle/guns/uk/gun_02_Twin_32pdr_Gun_MBC.prefab	</source>
+            <target>	fall_tanks/content/CGFPrefabs/Vehicle/fall_tanks_guns/uk/gun_02_Twin_32pdr_Gun_MBC.prefab	</target>
+          </rule>
+          <rule>
+            <source>	content/CGFPrefabs/Vehicle/guns/uk/gun_03_Twin_20pdr_Gun_MBC_MkII.prefab	</source>
+            <target>	fall_tanks/content/CGFPrefabs/Vehicle/fall_tanks_guns/uk/gun_03_Twin_20pdr_Gun_MBC_MkII.prefab	</target>
+          </rule>
+          <rule>
+            <source>	content/CGFPrefabs/Vehicle/guns/uk/gun_04_Twin_32pdr_Gun_MBC.prefab	</source>
+            <target>	fall_tanks/content/CGFPrefabs/Vehicle/fall_tanks_guns/uk/gun_04_Twin_32pdr_Gun_MBC.prefab	</target>
+          </rule>
+        </specialRules>
+      </gunMainPrefab>
+      <shotEffects>
+        <conditions>	shellCaliber shellShotsCount	</conditions>
+        <targetTemplate>	fep_fall_imp_{shellCaliber}{shellShotsCount}	</targetTemplate>
+      </shotEffects>
+      <exhaustEffects>
+        <conditions></conditions>
+        <targetTemplate>	fall_tanks	</targetTemplate>
+        <specialRules>
+          <rule>
+            <source>	null	</source>
+            <target>	null	</target>
+          </rule>
+        </specialRules>
+      </exhaustEffects>
+    </composers>
+  </fep_fall_tanks>
+</remapping.xml>

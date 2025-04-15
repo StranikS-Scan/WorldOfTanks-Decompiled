@@ -12,6 +12,8 @@ from gui.shared.gui_items.tankman_skill import getTankmanSkill
 from gui.shared.tooltips.advanced import SKILL_MOVIES
 from helpers import dependency
 from items.components import perks_constants
+from items.components.skills_constants import SKILLS_BY_ROLES_ORDERED
+from skeletons.gui.game_control import IWotPlusController
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Tankman import Tankman
@@ -20,9 +22,10 @@ if typing.TYPE_CHECKING:
 
 class CrewPerksAdditionalTooltip(ViewImpl):
     _itemsCache = dependency.descriptor(IItemsCache)
-    __slots__ = ('_skillName', '_tankman', '_tankmanVehicle', '_skill', '_skillBooster', '_skillIdx')
+    _wotPlusCtrl = dependency.descriptor(IWotPlusController)
+    __slots__ = ('_skillName', '_tankman', '_tankmanVehicle', '_skill', '_skillBooster', '_skillIdx', '_showCrewAssist')
 
-    def __init__(self, skillName, skillRole, tankmanId=None, skillIdx=-1):
+    def __init__(self, skillName, skillRole, tankmanId=None, skillIdx=-1, showCrewAssist=False):
         settings = ViewSettings(R.views.lobby.crew.tooltips.CrewPerksAdditionalTooltip())
         settings.model = CrewPerksAdditionalTooltipModel()
         self._skillName = skillName
@@ -31,6 +34,7 @@ class CrewPerksAdditionalTooltip(ViewImpl):
         self._skill = getTankmanSkill(self._skillName, skillRole, tankman=self._tankman)
         self._skillIdx = skillIdx
         self._skillBooster = getBattleBooster(self._tankmanVehicle, self._skillName)
+        self._showCrewAssist = showCrewAssist
         super(CrewPerksAdditionalTooltip, self).__init__(settings)
         return
 
@@ -60,6 +64,25 @@ class CrewPerksAdditionalTooltip(ViewImpl):
                 if self._skill.skillRole == self._tankman.role and not isZero:
                     vm.setShowSkillProgression(True)
                     setSkillProgressionModel(vm=vm.skillProgression, tankman=self._tankman, skillIndex=self._skillIdx, isZero=isZero)
+            if self._showCrewAssist:
+                popularityListVM = vm.getPopularityList()
+                popularityListVM.clear()
+                if self._wotPlusCtrl.isCrewAssistEnabled():
+                    tmanRoleForSkill = ''
+                    if self._skillName in SKILLS_BY_ROLES_ORDERED[self._tankman.role]:
+                        tmanRoleForSkill = self._tankman.role
+                    else:
+                        for bonusRole in self._tankman.bonusRoles():
+                            if self._skillName in SKILLS_BY_ROLES_ORDERED[bonusRole]:
+                                tmanRoleForSkill = bonusRole
+                                break
+
+                    hasCommonSet, hasLegendarySet = self._wotPlusCtrl.hasCrewAssistOrderSets(self._tankmanVehicle, tmanRoleForSkill)
+                    hideDataGuiIndicator = -1
+                    commonSkillPopularity, legendSkillPopularity = self._wotPlusCtrl.getCrewAssistOrderSets(self._tankmanVehicle, tmanRoleForSkill).get(self._skillName, (hideDataGuiIndicator, hideDataGuiIndicator))
+                    popularityListVM.addReal(commonSkillPopularity if hasCommonSet else hideDataGuiIndicator)
+                    popularityListVM.addReal(legendSkillPopularity if hasLegendarySet else hideDataGuiIndicator)
+                popularityListVM.invalidate()
         return
 
     def _getVehicle(self):

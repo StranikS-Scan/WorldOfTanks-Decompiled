@@ -23,6 +23,7 @@ class INGAME_HELP(object):
     BATTLECONTROLS_TOGGLESNIPERMODE = '#ingame_help:battleControls/toggleSniperMode'
     BATTLECONTROLS_TOGGLESNIPERMODE_EXT = '#ingame_help:battleControls/toggleSniperMode/ext'
     BATTLECONTROLS_TOGGLEPLAYERPANELMODES = '#ingame_help:battleControls/togglePlayerPanelModes'
+    BATTLECONTROLS_TOGGLEPLAYERPANELMODES_EXT = '#ingame_help:battleControls/togglePlayerPanelModes/ext'
     BATTLECONTROLS_SHOWEXPLAYERINFO = '#ingame_help:battleControls/showExPlayerInfo'
     BATTLECONTROLS_MAKESCREENSHORT = '#ingame_help:battleControls/makeScreenshort'
     BATTLECONTROLS_CASSETERELOAD = '#ingame_help:battleControls/casseteReload'

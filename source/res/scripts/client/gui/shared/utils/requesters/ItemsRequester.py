@@ -33,6 +33,7 @@ from shared_utils.account_helpers.diff_utils import synchronizeDicts
 from skeletons.gui.game_control import IVehiclePostProgressionController
 from skeletons.gui.shared import IItemsCache, IItemsRequester
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
+from gui.shared.system_factory import collectGuiItemsCacheInvalidators, GuiItemsCacheInvalidatorParams
 if TYPE_CHECKING:
     from typing import Optional, Dict, List
     import skeletons.gui.shared.utils.requesters as requesters
@@ -455,7 +456,7 @@ class ItemsRequester(IItemsRequester):
      'layout',
      'layoutState'])
 
-    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, battleRoyale, badges, epicMetaGame, tokens, festivityRequester, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None, battlePassRequester=None, giftSystemRequester=None, gameRestrictionsRequester=None, resourceWellRequester=None, achievements20Requester=None):
+    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, battleRoyale, badges, epicMetaGame, tokens, festivityRequester, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None, battlePassRequester=None, giftSystemRequester=None, gameRestrictionsRequester=None, achievements20Requester=None):
         self.__inventory = inventory
         self.__stats = stats
         self.__dossiers = dossiers
@@ -475,7 +476,6 @@ class ItemsRequester(IItemsRequester):
         self.__battlePass = battlePassRequester
         self.__giftSystem = giftSystemRequester
         self.__gameRestrictions = gameRestrictionsRequester
-        self.__resourceWell = resourceWellRequester
         self.__achievements20 = achievements20Requester
         self.__itemsCache = defaultdict(dict)
         self.__brokenSyncAlreadyLoggedTypes = set()
@@ -566,10 +566,6 @@ class ItemsRequester(IItemsRequester):
         return self.__gameRestrictions
 
     @property
-    def resourceWell(self):
-        return self.__resourceWell
-
-    @property
     def achievements20(self):
         return self.__achievements20
 
@@ -638,9 +634,6 @@ class ItemsRequester(IItemsRequester):
         Waiting.show('download/gameRestrictions')
         yield self.__gameRestrictions.request()
         Waiting.hide('download/gameRestrictions')
-        Waiting.show('download/resourceWell')
-        yield self.__resourceWell.request()
-        Waiting.hide('download/resourceWell')
         Waiting.show('download/achievements20')
         yield self.__achievements20.request()
         Waiting.hide('download/achievements20')
@@ -725,22 +718,25 @@ class ItemsRequester(IItemsRequester):
 
             self.inventory.initC11nItemsNoveltyData()
         else:
-            for statName, data in diff.get('stats', {}).iteritems():
-                if statName in ('unlocks', ('unlocks', '_r')):
-                    self._invalidateUnlocks(data, invalidate)
-                if statName == 'eliteVehicles':
-                    invalidate[GUI_ITEM_TYPE.VEHICLE].update(data)
-                if statName in ('vehTypeXP', 'vehTypeLocks'):
-                    invalidate[GUI_ITEM_TYPE.VEHICLE].update(iterVehiclesWithNationGroupInOrder(data.keys()))
-                if statName in (('multipliedXPVehs', '_r'), ('multipliedRankedBattlesVehs', '_r')):
-                    getter = vehicles.getVehicleTypeCompactDescr
-                    vehiclesDict = self.__inventory.getItems(GUI_ITEM_TYPE.VEHICLE)
-                    inventoryVehiclesCDs = []
-                    if vehiclesDict:
-                        inventoryVehiclesCDs = [ getter(v['compDescr']) for v in vehiclesDict.itervalues() ]
-                    invalidate[GUI_ITEM_TYPE.VEHICLE].update(inventoryVehiclesCDs)
-                if statName in ('oldVehInvIDs',):
-                    invalidate[GUI_ITEM_TYPE.VEHICLE].update(data)
+            for invalidator in collectGuiItemsCacheInvalidators():
+                invalidator(GuiItemsCacheInvalidatorParams(self.__inventory, invalidate, diff))
+
+        for statName, data in diff.get('stats', {}).iteritems():
+            if statName in ('unlocks', ('unlocks', '_r')):
+                self._invalidateUnlocks(data, invalidate)
+            if statName == 'eliteVehicles':
+                invalidate[GUI_ITEM_TYPE.VEHICLE].update(data)
+            if statName in ('vehTypeXP', 'vehTypeLocks'):
+                invalidate[GUI_ITEM_TYPE.VEHICLE].update(iterVehiclesWithNationGroupInOrder(data.keys()))
+            if statName in (('multipliedXPVehs', '_r'), ('multipliedRankedBattlesVehs', '_r')):
+                getter = vehicles.getVehicleTypeCompactDescr
+                vehiclesDict = self.__inventory.getItems(GUI_ITEM_TYPE.VEHICLE)
+                inventoryVehiclesCDs = []
+                if vehiclesDict:
+                    inventoryVehiclesCDs = [ getter(v['compDescr']) for v in vehiclesDict.itervalues() ]
+                invalidate[GUI_ITEM_TYPE.VEHICLE].update(inventoryVehiclesCDs)
+            if statName in ('oldVehInvIDs',):
+                invalidate[GUI_ITEM_TYPE.VEHICLE].update(data)
 
         for cacheType, data in diff.get('cache', {}).iteritems():
             if cacheType == 'vehsLock':

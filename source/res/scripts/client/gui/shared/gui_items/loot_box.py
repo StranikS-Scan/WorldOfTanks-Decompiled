@@ -82,7 +82,7 @@ class LootBox(GUIItem):
         return self.__id
 
     def getUserName(self):
-        if self.__type in self.__lootBoxSystem.eventNames and self.__lootBoxSystem.isEnabled(self.__type):
+        if self.__type in self.__lootBoxSystem.eventNames:
             name = getTextResource('common/boxCategory/lowerCase'.split('/') + [self.__category], self.__type)
             return backport.text(name() if name.exists() else R.strings.lootbox_system.common.boxCategory.lowerCase.default())
         return backport.text(R.strings.lootboxes.type.dyn(self.__type)())

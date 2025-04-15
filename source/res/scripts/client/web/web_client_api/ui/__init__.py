@@ -26,7 +26,6 @@ from web.web_client_api.ui.premium import PremiumViewsWebApiMixin
 from web.web_client_api.ui.profile import ProfileTabWebApiMixin, ProfileWindowWebApiMixin
 from web.web_client_api.ui.ranked import OpenRankedPagesMixin
 from web.web_client_api.ui.referral import ReferralProgramPagesMixin
-from web.web_client_api.ui.resource_well import ResourceWellWebApiMixin
 from web.web_client_api.ui.shop import ShopWebApiMixin
 from web.web_client_api.ui.squad import SquadWebApiMixin
 from web.web_client_api.ui.storage import StorageWebApiMixin
@@ -56,7 +55,7 @@ class CloseViewWebApi(CloseBrowserViewWebApiMixin):
 
 
 @w2capi(name='open_tab', key='tab_id')
-class OpenTabWebApi(hangar.HangarTabWebApiMixin, ProfileTabWebApiMixin, VehiclePreviewWebApiMixin, TechTreeTabWebApiMixin, VehicleComparisonBasketWebApiMixin, MissionsWebApiMixin, BarracksWebApiMixin, ShopWebApiMixin, StorageWebApiMixin, StrongholdsWebApiMixin, PersonalMissionsWebApiMixin, BadgesWebApiMixin, OpenFrontLinePagesMixin, ReferralProgramPagesMixin, OpenMapsTrainingMixin, ResourceWellWebApiMixin, OpenBattleRoyaleHangarMixin):
+class OpenTabWebApi(hangar.HangarTabWebApiMixin, ProfileTabWebApiMixin, VehiclePreviewWebApiMixin, TechTreeTabWebApiMixin, VehicleComparisonBasketWebApiMixin, MissionsWebApiMixin, BarracksWebApiMixin, ShopWebApiMixin, StorageWebApiMixin, StrongholdsWebApiMixin, PersonalMissionsWebApiMixin, BadgesWebApiMixin, OpenFrontLinePagesMixin, ReferralProgramPagesMixin, OpenMapsTrainingMixin, OpenBattleRoyaleHangarMixin):
 
     @classmethod
     def addTabIdCallback(cls, tabId, callback):

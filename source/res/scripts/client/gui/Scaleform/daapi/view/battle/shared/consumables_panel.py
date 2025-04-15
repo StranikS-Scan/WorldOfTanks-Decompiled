@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/consumables_panel.py
 import logging
 import math
+import weakref
 from functools import partial
 import BigWorld
 from typing import TYPE_CHECKING
@@ -42,6 +43,7 @@ R_AMMO_ICON = R.images.gui.maps.icons.ammopanel.battle_ammo
 NO_AMMO_ICON = 'NO_{}'
 COMMAND_AMMO_CHOICE_MASK = 'CMD_AMMO_CHOICE_{0:d}'
 PERMANENT_GLOW_TAG = 'permanentGlow'
+HAS_NO_BACK_TAG = 'hasNoBack'
 TOOLTIP_FORMAT = '{{HEADER}}{0:>s}{{/HEADER}}\n/{{BODY}}{1:>s}{{/BODY}}'
 TOOLTIP_NO_BODY_FORMAT = '{{HEADER}}{0:>s}{{/HEADER}}'
 EMPTY_EQUIPMENT_TOOLTIP = backport.text(R.strings.ingame_gui.consumables_panel.equipment.tooltip.empty())
@@ -114,7 +116,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
         self.__currentActivatedSlotIdx = -1
         self._equipmentsGlowCallbacks = {}
         if self.sessionProvider.isReplayPlaying:
-            self.__reloadTicker = _PythonReloadTicker(self)
+            self.__reloadTicker = _PythonReloadTicker(weakref.proxy(self))
         else:
             self.__reloadTicker = None
         self.delayedReload = None
@@ -150,6 +152,8 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
         self._removeListeners()
         self._keys.clear()
         self._extraKeys.clear()
+        if self.sessionProvider.isReplayPlaying:
+            self.__reloadTicker.clear()
         super(ConsumablesPanel, self)._dispose()
 
     def _getPanelSettings(self):
@@ -208,10 +212,10 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
         self._cds[idx] = intCD
         bwKey, sfKeyCode = self._genKey(idx)
         self._extraKeys[idx] = self._keys[bwKey] = partial(self.__handleAmmoPressed, intCD)
-        tooltipText = self.__makeShellTooltip(descriptor, int(round(gunSettings.getPiercingPower(intCD))), gunSettings.getShotSpeed(intCD))
+        tooltipText = self._makeShellTooltip(descriptor, int(round(gunSettings.getPiercingPower(intCD))), gunSettings.getShotSpeed(intCD))
         icon = descriptor.icon[0]
         iconName = icon.split('.png')[0]
-        shellIconPath = backport.image(R_AMMO_ICON.dyn(iconName)())
+        shellIconPath = self._getAmmoIcon(iconName)
         noShellIconPath = backport.image(R_AMMO_ICON.dyn(NO_AMMO_ICON.format(iconName))())
         self.as_addShellSlotS(idx, bwKey, sfKeyCode, quantity, gunSettings.clip.size, shellIconPath, noShellIconPath, tooltipText, isInfinite)
 
@@ -274,6 +278,9 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
     def _getEquipmentIcon(self, idx, item, icon):
         return backport.image(self._getEquipmentIconPath(item).dyn(icon)())
 
+    def _getAmmoIcon(self, icon):
+        return backport.image(R_AMMO_ICON.dyn(icon)())
+
     def _isIdxInKeysRange(self, idx):
         return idx in self.__equipmentRange or idx in self.__ordersRange
 
@@ -292,26 +299,47 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
         self._updateEquipmentSlotTooltipText(idx, item)
 
     def _updateEquipmentGlow(self, idx, item):
-        if item.isReusable or item.isAvatar() and item.getStage() != EQUIPMENT_STAGES.PREPARING:
-            glowType = CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN_SPECIAL if item.isAvatar() else CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN
+        if item.isReusable or item.isAvatar():
             isPermanentGlow = PERMANENT_GLOW_TAG in item.getTags()
-            if self.__canApplyingGlowEquipment(item):
-                self._showEquipmentGlow(idx)
-            elif item.becomeReady:
-                self._showEquipmentGlow(idx, glowType, isPermanentGlow)
-            elif isPermanentGlow and item.getStage() == EQUIPMENT_STAGES.COOLDOWN:
+            if item.getStage() != EQUIPMENT_STAGES.PREPARING:
+                if self._canApplyingGlowEquipment(item):
+                    self._showEquipmentGlow(idx)
+                elif item.wasPreparationCanceled and isPermanentGlow:
+                    glowType = CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN_ESPECIAL_NO_ANIM
+                    self._showEquipmentGlow(idx, glowType, isPermanentGlow)
+                elif item.becomeReady or isPermanentGlow and item.alreadyReady:
+                    glowType = self._getActiveItemGlowType(item)
+                    self._showEquipmentGlow(idx, glowType, isPermanentGlow)
+                elif isPermanentGlow and item.getStage() == EQUIPMENT_STAGES.ACTIVE:
+                    self._showEquipmentGlow(idx, CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN_USAGE, isPermanentGlow)
+                elif isPermanentGlow and item.isInCooldown():
+                    self.as_hideGlowS(idx)
+                elif idx in self._equipmentsGlowCallbacks:
+                    self.__clearEquipmentGlow(idx)
+            elif isPermanentGlow:
                 self.as_hideGlowS(idx)
-            elif idx in self._equipmentsGlowCallbacks:
-                self.__clearEquipmentGlow(idx)
+
+    @staticmethod
+    def _getActiveItemGlowType(item):
+        isPermanentGlow = PERMANENT_GLOW_TAG in item.getTags()
+        if item.isAvatar():
+            if isPermanentGlow:
+                glowType = CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN_ESPECIAL
+            else:
+                glowType = CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN_SPECIAL
+        else:
+            glowType = CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN
+        return glowType
 
     def _updateActivatedSlot(self, idx, item):
+        hasNoBack = HAS_NO_BACK_TAG in item.getTags()
         if item.getStage() == EQUIPMENT_STAGES.PREPARING:
             self.__currentActivatedSlotIdx = idx
-            self.as_setEquipmentActivatedS(idx, True)
+            self.as_setEquipmentActivatedS(idx, True, isNoBack=hasNoBack)
         elif item.getStage() != EQUIPMENT_STAGES.PREPARING and self.__currentActivatedSlotIdx == idx:
             self.__currentActivatedSlotIdx = -1
         elif item.getStage() != EQUIPMENT_STAGES.PREPARING:
-            self.as_setEquipmentActivatedS(idx, False)
+            self.as_setEquipmentActivatedS(idx, False, isNoBack=hasNoBack)
 
     def _setEquipmentKeyHandler(self, item, bwKey, idx):
         if item.getQuantity() > 0 and bwKey not in self._keys:
@@ -341,11 +369,9 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
             BigWorld.cancelCallback(self._equipmentsGlowCallbacks[equipmentIndex])
             del self._equipmentsGlowCallbacks[equipmentIndex]
         else:
-            if isPermanentGlow:
-                self.as_setIdleEnabledGlowS(equipmentIndex, True)
             self.as_setGlowS(equipmentIndex, glowID=glowType)
         if not isPermanentGlow:
-            self._equipmentsGlowCallbacks[equipmentIndex] = BigWorld.callback(self._EQUIPMENT_GLOW_TIME, partial(self.__hideEquipmentGlowCallback, equipmentIndex))
+            self._equipmentsGlowCallbacks[equipmentIndex] = BigWorld.callback(self._EQUIPMENT_GLOW_TIME, partial(self._hideEquipmentGlowCallback, equipmentIndex))
 
     def _onShellsAdded(self, intCD, descriptor, quantity, _, gunSettings, isInfinite):
         idx = self.__genNextIdx(self.__ammoFullMask, self._AMMO_START_IDX)
@@ -436,9 +462,9 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
 
     def __onVehicleFeedbackReceived(self, eventID, _, value):
         if eventID == FEEDBACK_EVENT_ID.VEHICLE_ATTRS_CHANGED:
-            for idx, payload in enumerate(self.sessionProvider.shared.ammo.getOrderedShellsLayout()):
+            for payload in self.sessionProvider.shared.ammo.getOrderedShellsLayout():
                 intCD, descriptor, _, _, gunSettings = payload[:5]
-                self.as_updateTooltipS(idx=idx, tooltipStr=self.__makeShellTooltip(descriptor, int(round(gunSettings.getPiercingPower(intCD))), gunSettings.getShotSpeed(intCD)))
+                self.as_updateTooltipS(idx=self._cds.index(intCD), tooltipStr=self._makeShellTooltip(descriptor, int(round(gunSettings.getPiercingPower(intCD))), gunSettings.getShotSpeed(intCD)))
 
     def _addListeners(self):
         vehicleCtrl = self.sessionProvider.shared.vehicleState
@@ -469,8 +495,8 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
         optDevicesCtrl = self.sessionProvider.shared.optionalDevices
         if optDevicesCtrl is not None:
             self.__fillOptionalDevices(optDevicesCtrl)
-            optDevicesCtrl.onOptionalDeviceAdded += self.__onOptionalDeviceAdded
-            optDevicesCtrl.onOptionalDeviceUpdated += self.__onOptionalDeviceUpdated
+            optDevicesCtrl.onOptionalDeviceAdded += self._onOptionalDeviceAdded
+            optDevicesCtrl.onOptionalDeviceUpdated += self._onOptionalDeviceUpdated
             optDevicesCtrl.onOptionalDevicesCleared += self.__onOptionalDevicesCleared
         crosshairCtrl = self.sessionProvider.shared.crosshair
         if crosshairCtrl is not None:
@@ -524,8 +550,8 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
             eqCtrl.onEquipmentsCleared -= self._onEquipmentsCleared
         optDevicesCtrl = self.sessionProvider.shared.optionalDevices
         if optDevicesCtrl is not None:
-            optDevicesCtrl.onOptionalDeviceAdded -= self.__onOptionalDeviceAdded
-            optDevicesCtrl.onOptionalDeviceUpdated -= self.__onOptionalDeviceUpdated
+            optDevicesCtrl.onOptionalDeviceAdded -= self._onOptionalDeviceAdded
+            optDevicesCtrl.onOptionalDeviceUpdated -= self._onOptionalDeviceUpdated
             optDevicesCtrl.onOptionalDevicesCleared -= self.__onOptionalDevicesCleared
         feedbackCtrl = self.sessionProvider.shared.feedback
         if feedbackCtrl is not None:
@@ -552,7 +578,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
             sfKey = getScaleformKey(bwKey)
         return (bwKey, sfKey)
 
-    def __makeShellTooltip(self, descriptor, piercingPower, shotSpeed):
+    def _makeShellTooltip(self, descriptor, piercingPower, shotSpeed):
         kind = descriptor.kind
         projSpeedFactor = vehicles.g_cache.commonConfig['miscParams']['projectileSpeedFactor']
         vehAttrs = self.sessionProvider.shared.feedback.getVehicleAttrs()
@@ -676,11 +702,15 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
             return
         else:
             result, error = ctrl.changeSetting(intCD, entityName=entityName, avatar=BigWorld.player(), idx=idx)
-            if not result and error:
-                ctrl = self.sessionProvider.shared.messages
-                if ctrl is not None:
-                    ctrl.showVehicleError(error.key, error.ctx)
+            self._handleEquipmentPressedResult(result, error)
             return
+
+    def _handleEquipmentPressedResult(self, result, error):
+        if not result and error:
+            ctrl = self.sessionProvider.shared.messages
+            if ctrl is not None:
+                ctrl.showVehicleError(error.key, error.ctx)
+        return
 
     def _getEquipmentIdxByKey(self, key):
         return self._cds.index(key) if key in self._cds else None
@@ -689,18 +719,21 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
         self.delayedReload = debuffTime
 
     def __startReloadDelayed(self, shellIndex, state):
-        leftTimeDelayed = state.getActualValue() - self.delayedReload
-        baseTimeDelayed = state.getBaseValue() - self.delayedReload
-        if leftTimeDelayed > 0 and baseTimeDelayed > 0:
-            shellReload = shellIndex
-            if self.__delayedNextShellID is not None:
-                shellReload = self._cds.index(self.__delayedNextShellID)
-                self.__delayedNextShellID = None
-            self.as_setCoolDownTimeS(shellReload, leftTimeDelayed, baseTimeDelayed, 0)
+        if self.delayedReload is None:
+            return
         else:
-            _logger.error('Incorrect delayed reload timings: %f, %f', leftTimeDelayed, baseTimeDelayed)
-        self.delayedReload = None
-        return
+            leftTimeDelayed = state.getActualValue() - self.delayedReload
+            baseTimeDelayed = state.getBaseValue() - self.delayedReload
+            if leftTimeDelayed > 0 and baseTimeDelayed > 0:
+                shellReload = shellIndex
+                if self.__delayedNextShellID is not None:
+                    shellReload = self._cds.index(self.__delayedNextShellID)
+                    self.__delayedNextShellID = None
+                self.as_setCoolDownTimeS(shellReload, leftTimeDelayed, baseTimeDelayed, 0)
+            else:
+                _logger.error('Incorrect delayed reload timings: %f, %f', leftTimeDelayed, baseTimeDelayed)
+            self.delayedReload = None
+            return
 
     def __startReload(self, shellIndex, state):
         if self.__reloadTicker:
@@ -712,12 +745,12 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
                 self.ammoReloadingStatus[shellIndex] = reloadingFinished
                 self.as_setCoolDownTimeS(shellIndex, actualValue, state.getBaseValue(), state.getTimePassed())
 
-    def __onOptionalDeviceAdded(self, optDeviceInBattle):
+    def _onOptionalDeviceAdded(self, optDeviceInBattle):
         if optDeviceInBattle.getIntCD() not in self._cds:
             idx = self.__genNextIdx(self.__optDeviceFullMask, self._OPT_DEVICE_START_IDX)
             self._addOptionalDeviceSlot(idx, optDeviceInBattle)
 
-    def __onOptionalDeviceUpdated(self, optDeviceInBattle):
+    def _onOptionalDeviceUpdated(self, optDeviceInBattle):
         intCD = optDeviceInBattle.getIntCD()
         if intCD in self._cds:
             self._updateOptionalDeviceSlot(self._cds.index(intCD), optDeviceInBattle)
@@ -753,7 +786,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
 
                 elif deviceState != DEVICE_STATE_DESTROYED:
                     for intCD, equipment in ctrl.iterEquipmentsByTag(equipmentTag):
-                        if not self.__canApplyingGlowEquipment(equipment):
+                        if not self._canApplyingGlowEquipment(equipment):
                             self.__clearEquipmentGlow(self._cds.index(intCD))
 
             elif state == VEHICLE_VIEW_STATE.STUN:
@@ -763,7 +796,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
 
                 else:
                     for intCD, equipment in ctrl.iterEquipmentsByTag('medkit'):
-                        if not self.__canApplyingGlowEquipment(equipment):
+                        if not self._canApplyingGlowEquipment(equipment):
                             self.__clearEquipmentGlow(self._cds.index(intCD))
 
             elif state == VEHICLE_VIEW_STATE.FIRE:
@@ -788,7 +821,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
 
             return
 
-    def __canApplyingGlowEquipment(self, equipment):
+    def _canApplyingGlowEquipment(self, equipment):
         equipmentTags = equipment.getTags()
         if 'extinguisher' in equipmentTags or 'regenerationKit' in equipmentTags:
             correction = True
@@ -804,7 +837,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
         infoType = type(info)
         return correction and (canActivate or infoType == NeedEntitySelection) or infoType == IgnoreEntitySelection
 
-    def __hideEquipmentGlowCallback(self, equipmentIndex):
+    def _hideEquipmentGlowCallback(self, equipmentIndex):
         return self.__clearEquipmentGlow(equipmentIndex, cancelCallback=False)
 
     def __clearEquipmentGlow(self, equipmentIndex, cancelCallback=True):
@@ -834,7 +867,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
         forEach(lambda args: self._onEquipmentAdded(*args), ctrl.getOrderedEquipmentsLayout())
 
     def __fillOptionalDevices(self, ctrl):
-        forEach(lambda args: self.__onOptionalDeviceAdded(*args), ctrl.getOrderedOptionalDevicesLayout())
+        forEach(lambda args: self._onOptionalDeviceAdded(*args), ctrl.getOrderedOptionalDevicesLayout())
 
     def __onSPGShotsIndicatorStateChanged(self, shotStates):
         vehicle = self.sessionProvider.shared.vehicleState.getControllingVehicle()

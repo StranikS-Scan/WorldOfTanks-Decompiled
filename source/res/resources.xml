@@ -216,6 +216,8 @@
       <module>	client.cgf_components.visual_effect_component_manager	</module>
       <module>	cell.cgf_cell.partial_visibility_group	</module>
       <module>	cell.cgf_cell.damage_zone	</module>
+      <module>	client.cgf_components.color_blind_component	</module>
+      <module>	client.cgf_components.vehicle_as_polyline_target_rule	</module>
     </script>
     <testScript>
       <module>	client.cgf_demo_client.test_client_component	</module>
@@ -254,6 +256,8 @@
       <path>	content/CGFPrefabs/Onboarding/14_plane_crash.prefab	</path>
       <path>	content/CGFPrefabs/Onboarding/14_09a_Planes_out_crash.prefab	</path>
       <path>	content/CGFPrefabs/Onboarding/108_walls_ruins.prefab	</path>
+      <path>	content/CGFPrefabs/Storymode/loot.prefab	</path>
+      <path>	content/CGFPrefabs/Storymode/tank_rectangle.prefab	</path>
       <path>	content/CGFPrefabs/steel_hunter/thunder_strike_zone_ally.prefab	</path>
       <path>	content/CGFPrefabs/steel_hunter/thunder_strike_zone_enemy.prefab	</path>
       <path>	content/CGFPrefabs/steel_hunter/lightning_ally.prefab	</path>
@@ -298,6 +302,27 @@
       <path>	particles/Tank/customization/Cz17_Vz_55_NY2025_3Dst/Cz17_Vz_55_NY2025_3Dst.prefab	</path>
       <path>	particles/Tank/customization/Cz17_Vz_55_NY2025_3Dst/Cz17_Vz_55_NY2025_3Dst_Gun_01.prefab	</path>
       <path>	particles/Tank/customization/Cz17_Vz_55_NY2025_3Dst/Cz17_Vz_55_NY2025_3Dst_Gun_02.prefab	</path>
+      <path>	content/CGFPrefabs/fep_ft/abilities/140_shield_ability.prefab	</path>
+      <path>	content/CGFPrefabs/fep_ft/abilities/140_dash_ability.prefab	</path>
+      <path>	content/CGFPrefabs/fep_ft/effects/140_fall_tanks_checkpoint.prefab	</path>
+      <path>	content/CGFPrefabs/fep_ft/effects/140_fall_tanks_checkpoint_trail.prefab	</path>
+      <path>	content/CGFPrefabs/fep_ft/effects/140_fall_tanks_finishpoint.prefab	</path>
+      <path>	content/CGFPrefabs/fep_ft/effects/140_fall_tanks_finishpoint_trail.prefab	</path>
+      <path>	fall_tanks/content/CGFPrefabs/Vehicle/fall_tanks_guns/czech/gun_30_mm_protiletadlovy_dvojkanon_vz_53.prefab	</path>
+      <path>	fall_tanks/content/CGFPrefabs/Vehicle/fall_tanks_guns/czech/gun_37_mm_automaticky_dvojkanon.prefab	</path>
+      <path>	fall_tanks/content/CGFPrefabs/Vehicle/fall_tanks_guns/czech/gun_50_mm_protiletadlovy_dvojkanon_ZK_500.prefab	</path>
+      <path>	fall_tanks/content/CGFPrefabs/Vehicle/fall_tanks_guns/czech/gun_50_mm_protiletadlovy_dvojkanon_ZK_500S.prefab	</path>
+      <path>	fall_tanks/content/CGFPrefabs/Vehicle/fall_tanks_guns/czech/gun_57_mm_automaticky_dvojkanon_535S.prefab	</path>
+      <path>	fall_tanks/content/CGFPrefabs/Vehicle/fall_tanks_guns/czech/gun_57_mm_automaticky_dvojkanon_535T.prefab	</path>
+      <path>	fall_tanks/content/CGFPrefabs/Vehicle/fall_tanks_guns/uk/gun_01_Twin_20pdr_Gun_MBC_MkII.prefab	</path>
+      <path>	fall_tanks/content/CGFPrefabs/Vehicle/fall_tanks_guns/uk/gun_02_Twin_32pdr_Gun_MBC.prefab	</path>
+      <path>	fall_tanks/content/CGFPrefabs/Vehicle/fall_tanks_guns/uk/gun_03_Twin_20pdr_Gun_MBC_MkII.prefab	</path>
+      <path>	fall_tanks/content/CGFPrefabs/Vehicle/fall_tanks_guns/uk/gun_04_Twin_32pdr_Gun_MBC.prefab	</path>
+      <path>	fall_tanks/content/CGFPrefabs/Vehicle/fall_tanks_guns/uk/gunTwin_20pdr_Gun_MBC.prefab	</path>
+      <path>	fall_tanks/content/CGFPrefabs/Vehicle/fall_tanks_guns/uk/gunTwin_32pdr_Gun_MBC_Mk2.prefab	</path>
+      <path>	fall_tanks/content/CGFPrefabs/Vehicle/fall_tanks_guns/uk/gunTwin_105_mm_Gun_L7_MBC.prefab	</path>
+      <path>	fall_tanks/content/CGFPrefabs/Vehicle/fall_tanks_guns/uk/gunTwin_105_mm_Gun_T8_MBC.prefab	</path>
+      <path>	fall_tanks/content/CGFPrefabs/Vehicle/fall_tanks_guns/uk/gunTwin_120_mm_Gun_L1_MBC.prefab	</path>
     </prefabs>
   </cgf>
 </resources.xml>

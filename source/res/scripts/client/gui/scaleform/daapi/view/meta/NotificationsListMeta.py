@@ -16,6 +16,9 @@ class NotificationsListMeta(SmartPopOverView):
     def onCheckNewsClick(self):
         self._printOverrideError('onCheckNewsClick')
 
+    def registerGFNotification(self, component, alias, gfViewName, isPopUp, linkageData):
+        self._printOverrideError('registerGFNotification')
+
     def as_setInitDataS(self, value):
         return self.flashObject.as_setInitData(value) if self._isDAAPIInited() else None
 

@@ -77,8 +77,8 @@ class PendingFriendsCandidatesFindCriteria(UserTagsFindCriteria):
 
 class IgnoredFindCriteria(UserTagsFindCriteria):
 
-    def __init__(self):
-        super(IgnoredFindCriteria, self).__init__({USER_TAG.IGNORED}, onlineMode=None)
+    def __init__(self, includeTmpIgnore=False):
+        super(IgnoredFindCriteria, self).__init__({USER_TAG.IGNORED, USER_TAG.IGNORED_TMP} if includeTmpIgnore else {USER_TAG.IGNORED}, onlineMode=None)
         return
 
     def setOnlineMode(self, onlineMode):

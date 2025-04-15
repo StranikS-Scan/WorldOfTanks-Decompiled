@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/system_factory.py
-from collections import defaultdict
+from collections import defaultdict, namedtuple
 BATTLE_REPO = 1
 EQUIPMENT_ITEMS = 2
 SCALEFORM_COMMON_PACKAGES = 3
@@ -63,8 +63,16 @@ EQUIPMENT_TRIGGERS = 59
 LOW_PRIORITY_WULF_WINDOWS = 60
 TRAINING_ROOM_EXTERNAL_HANDLERS = 61
 LOBBY_HEADER_TAB = 62
+GAMEFACE_NOTIFICATIONS = 63
+GAME_MODE_ARENA_INFO_KEYS = 64
+AMMUNITION_SETUP_VIEW = 65
+GUI_ITEMS_CACHE_INVALIDATOR = 66
+IGNORED_MODE_FOR_AUTO_SELECTED_VEHICLE = 67
+INGAME_HELP_PAGES_FILTERS = 68
+POSTBATTLE_SQUAD_FINDER = 69
+POSTMORTEM_INFO_VIEW = 70
 
-class _CollectEventsManager(object):
+class CollectEventsManager(object):
 
     def __init__(self):
         self.__handlers = defaultdict(list)
@@ -83,7 +91,7 @@ class _CollectEventsManager(object):
         return self.__handlers
 
 
-__collectEM = _CollectEventsManager()
+__collectEM = CollectEventsManager()
 
 def registerScaleformBattlePackages(guiType, packages):
 
@@ -628,6 +636,18 @@ def collectIngameHelpPagesBuilders():
     return __collectEM.handleEvent(INGAME_HELP_PAGES_BUILDERS, {'builders': []})['builders']
 
 
+def registerIngameHelpPagesFilters(guiType, filterCls):
+
+    def onCollect(ctx):
+        ctx['helpPageFilter'].append(filterCls)
+
+    __collectEM.addListener((INGAME_HELP_PAGES_FILTERS, guiType), onCollect)
+
+
+def collectIngameHelpPagesFilters(guiType):
+    return __collectEM.handleEvent((INGAME_HELP_PAGES_FILTERS, guiType), ctx={'helpPageFilter': []})['helpPageFilter']
+
+
 def registerQuestBuilder(questBuilder):
 
     def onCollect(ctx):
@@ -759,6 +779,18 @@ def registerAmmunitionPanelView(viewCls):
 
 def collectAmmunitionPanelView(viewAlias):
     return __collectEM.handleEvent((AMMUNITION_PANEL_VIEW, viewAlias), ctx={}).get(viewAlias, None)
+
+
+def registerAmmunitionSetupView(viewCls):
+
+    def onCollect(ctx):
+        ctx[viewCls.__name__] = viewCls
+
+    __collectEM.addListener((AMMUNITION_SETUP_VIEW, viewCls.__name__), onCollect)
+
+
+def collectAmmunitionSetupView(viewAlias):
+    return __collectEM.handleEvent((AMMUNITION_SETUP_VIEW, viewAlias), ctx={}).get(viewAlias, None)
 
 
 def registerVehicleViewState(viewState):
@@ -940,3 +972,77 @@ def registerLobbyHeaderTab(alias, tabInfo):
 
 def collectLobbyHeaderTabs():
     return __collectEM.handleEvent(LOBBY_HEADER_TAB, {'tabs': {}})['tabs']
+
+
+def registerGamefaceNotifications(gamefaceNotifications):
+
+    def onCollect(ctx):
+        ctx['gamefaceNotifications'].update(gamefaceNotifications)
+
+    __collectEM.addListener(GAMEFACE_NOTIFICATIONS, onCollect)
+
+
+def collectGamefaceNotifications():
+    return __collectEM.handleEvent(GAMEFACE_NOTIFICATIONS, ctx={'gamefaceNotifications': {}})['gamefaceNotifications']
+
+
+def registerGameModeArenaInfoKeys(guiType, gameModeSpecificKeys):
+
+    def onCollect(ctx):
+        ctx['game_mode_specific_keys'] = gameModeSpecificKeys
+
+    __collectEM.addListener((GAME_MODE_ARENA_INFO_KEYS, guiType), onCollect)
+
+
+def collectGameModeArenaInfoKeys(guiType):
+    return __collectEM.handleEvent((GAME_MODE_ARENA_INFO_KEYS, guiType), ctx={}).get('game_mode_specific_keys')
+
+
+GuiItemsCacheInvalidatorParams = namedtuple('GuiItemsCacheInvalidatorParams', ('inventory', 'invalidate', 'diff'))
+
+def registerGuiItemsCacheInvalidators(invalidatorsList):
+
+    def onCollect(ctx):
+        ctx.extend(invalidatorsList)
+
+    __collectEM.addListener(GUI_ITEMS_CACHE_INVALIDATOR, onCollect)
+
+
+def collectGuiItemsCacheInvalidators():
+    return __collectEM.handleEvent(GUI_ITEMS_CACHE_INVALIDATOR, ctx=[])
+
+
+def registerIgnoredModeForAutoSelectVehicle(modeFlags):
+
+    def onCollect(ctx):
+        ctx.extend(modeFlags)
+
+    __collectEM.addListener(IGNORED_MODE_FOR_AUTO_SELECTED_VEHICLE, onCollect)
+
+
+def collectIgnoredModeForAutoSelectVehicle():
+    return __collectEM.handleEvent(IGNORED_MODE_FOR_AUTO_SELECTED_VEHICLE, ctx=[])
+
+
+def registerPostbattleSquadFinder(guiType, squadFinderClass):
+
+    def onCollect(ctx):
+        ctx['pbs_squad_finder_data'] = squadFinderClass
+
+    __collectEM.addListener((POSTBATTLE_SQUAD_FINDER, guiType), onCollect)
+
+
+def collectPostbattleSquadFinder(guiType):
+    return __collectEM.handleEvent((POSTBATTLE_SQUAD_FINDER, guiType), ctx={}).get('pbs_squad_finder_data', None)
+
+
+def registerPostmortemInfoView(guiType, viewCls):
+
+    def onCollect(ctx):
+        ctx['postmortem_info_view'] = viewCls
+
+    __collectEM.addListener((POSTMORTEM_INFO_VIEW, guiType), onCollect)
+
+
+def collectPostmortemInfoView(guiType):
+    return __collectEM.handleEvent((POSTMORTEM_INFO_VIEW, guiType), ctx={}).get('postmortem_info_view', None)

@@ -181,8 +181,8 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
     def __highlightEasyTankEquip(self, vehicle):
         isHighlight = False
         if g_currentVehicle.isPresent():
-            isAmmoNotFull, _ = vehicle.isAmmoNotFullInSetups
-            isHighlight = not vehicle.isCrewFull or isAmmoNotFull or not vehicle.hasConsumables
+            isAmmoFull = vehicle.isAmmoFullInSetups(vehicle.shells.setupLayouts.layoutIndex)
+            isHighlight = not (vehicle.isCrewFull and isAmmoFull and vehicle.consumables.installed.getItems())
         self.as_highlightEasyTankEquipS(isHighlight)
 
     @adisp_async

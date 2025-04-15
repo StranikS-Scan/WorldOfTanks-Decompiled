@@ -580,7 +580,7 @@ class Font(object):
         return items.makeIntCompactDescrByID('customizationItem', self.itemType, self.id)
 
 if IS_EDITOR:
-    CUSTOMIZATION_TYPES = {CustomizationType.STYLE: StyleItem, CustomizationType.PAINT: PaintItem, CustomizationType.SEQUENCE: SequenceItem, CustomizationType.PERSONAL_NUMBER: PersonalNumberItem, CustomizationType.ATTACHMENT: AttachmentItem, CustomizationType.CAMOUFLAGE: CamouflageItem, CustomizationType.DECAL: DecalItem, CustomizationType.FONT: Font, CustomizationType.INSIGNIA: InsigniaItem, CustomizationType.MODIFICATION: ModificationItem, CustomizationType.PROJECTION_DECAL: ProjectionDecalItem}
+    CUSTOMIZATION_TYPES = {CustomizationType.CAMOUFLAGE: CamouflageItem, CustomizationType.PAINT: PaintItem, CustomizationType.MODIFICATION: ModificationItem, CustomizationType.SEQUENCE: SequenceItem, CustomizationType.INSIGNIA: InsigniaItem, CustomizationType.STYLE: StyleItem, CustomizationType.DECAL: DecalItem, CustomizationType.FONT: Font, CustomizationType.PERSONAL_NUMBER: PersonalNumberItem, CustomizationType.ATTACHMENT: AttachmentItem, CustomizationType.PROJECTION_DECAL: ProjectionDecalItem}
     CUSTOMIZATION_CLASSES = {v : k for k, v in CUSTOMIZATION_TYPES.items()}
 class _Filter(object):
     __slots__ = ('include', 'exclude')
@@ -785,7 +785,7 @@ class QuestProgressForCustomization(object):
 
 class CustomizationCache(object):
     __metaclass__ = ReflectionMetaclass
-    __slots__ = ('paints', 'camouflages', 'decals', 'projection_decals', 'modifications', 'levels', 'itemToPriceGroup', 'priceGroups', 'priceGroupNames', 'insignias', 'styles', 'defaultColors', 'defaultInsignias', 'defaultPlayerEmblems', 'itemTypes', 'priceGroupTags', '__victimStyles', 'personal_numbers', 'fonts', 'sequences', 'attachments', 'customizationWithProgression', 'itemToQuestProgressionStyle', '__questStyles', 'itemGroupByProgressionBonusType', '__vehicleCanMayIncludeCustomization', 'topVehiclesByNation')
+    __slots__ = ('paints', 'camouflages', 'decals', 'projection_decals', 'modifications', 'levels', 'itemToPriceGroup', 'priceGroups', 'priceGroupNames', 'insignias', 'styles', 'defaultColors', 'defaultInsignias', 'defaultPlayerEmblems', 'itemTypes', 'priceGroupTags', '__victimStyles', 'personal_numbers', 'fonts', 'sequences', 'attachments', 'customizationWithProgression', 'itemToQuestProgressionStyle', '__questStyles', 'itemGroupByProgressionBonusType', 'topVehiclesByNation')
     def __init__(self):
         self.priceGroupTags = {}
         self.paints = {}
@@ -810,28 +810,14 @@ class CustomizationCache(object):
         self.itemToQuestProgressionStyle = {}
         self._CustomizationCache__questStyles = None
         self.itemGroupByProgressionBonusType = {arenaTypeID : list() for arenaTypeID in ARENA_BONUS_TYPE_NAMES.values() if ARENA_BONUS_TYPE_CAPS.checkAny(arenaTypeID, ARENA_BONUS_TYPE_CAPS.CUSTOMIZATION_PROGRESSION)}
-        self._CustomizationCache__vehicleCanMayIncludeCustomization = {}
         self.topVehiclesByNation = {}
-        self.itemTypes = {CustomizationType.STYLE: self.styles, CustomizationType.CAMOUFLAGE: self.camouflages, CustomizationType.PROJECTION_DECAL: self.projection_decals, CustomizationType.PERSONAL_NUMBER: self.personal_numbers, CustomizationType.INSIGNIA: self.insignias, CustomizationType.SEQUENCE: self.sequences, CustomizationType.MODIFICATION: self.modifications, CustomizationType.PAINT: self.paints, CustomizationType.ATTACHMENT: self.attachments, CustomizationType.DECAL: self.decals}
+        self.itemTypes = {CustomizationType.PAINT: self.paints, CustomizationType.DECAL: self.decals, CustomizationType.CAMOUFLAGE: self.camouflages, CustomizationType.PROJECTION_DECAL: self.projection_decals, CustomizationType.PERSONAL_NUMBER: self.personal_numbers, CustomizationType.STYLE: self.styles, CustomizationType.SEQUENCE: self.sequences, CustomizationType.MODIFICATION: self.modifications, CustomizationType.ATTACHMENT: self.attachments, CustomizationType.INSIGNIA: self.insignias}
         super(CustomizationCache, self).__init__()
 
     def getQuestProgressionStyles(self):
         if self._CustomizationCache__questStyles is None:
             self._CustomizationCache__questStyles = {id : style for id, style in self.styles.iteritems() if style.isQuestsProgression}
         return self._CustomizationCache__questStyles
-
-    def getVehiclesCanMayInclude(self, item):
-        vehsCanUseItem = self._CustomizationCache__vehicleCanMayIncludeCustomization.get(item.compactDescr)
-        if vehsCanUseItem is None:
-            vehsCanUseItem = []
-            for nationID in nations.INDICES.itervalues():
-                for descr in iv.g_list.getList(nationID).itervalues():
-                    vehCD = descr.compactDescr
-                    if item.matchVehicleType(iv.getVehicleType(vehCD)):
-                        vehsCanUseItem.append(vehCD)
-                        continue
-            self._CustomizationCache__vehicleCanMayIncludeCustomization[item.compactDescr] = vehsCanUseItem
-        return vehsCanUseItem
 
     def isVehicleBound(self, itemId):
         if isinstance(itemId, int):

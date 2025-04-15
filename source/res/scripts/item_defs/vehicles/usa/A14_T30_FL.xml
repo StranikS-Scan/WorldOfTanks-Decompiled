@@ -11,7 +11,7 @@
   <supplySlots>	4 1 1 6 6 6 7 8 8 8	</supplySlots>
   <speedLimits>
     <forward>	35	</forward>
-    <backward>	10	</backward>
+    <backward>	12	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.097	</moving>
@@ -845,8 +845,8 @@
     </camouflage>
   </hull>
   <chassis>
-    <T84E38_FL>
-      <userString>	#usa_vehicles:T84E38	</userString>
+    <Chassis_A14_T30_FL>
+      <userString>	#usa_vehicles:Chassis_A14_T30_2	</userString>
       <tags></tags>
       <level>	9	</level>
       <price>	60000	</price>
@@ -860,14 +860,14 @@
       <terrainResistance>	1.4 1.6 3.2	</terrainResistance>
       <brakeForce>	39500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	22	</rotationSpeed>
+      <rotationSpeed>	25	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.22	</vehicleMovement>
         <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	230	</maxHealth>
-      <maxRegenHealth>	175	</maxRegenHealth>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/american/A14_T30/normal/lod0/Chassis.model	</undamaged>
@@ -2045,12 +2045,12 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	6.85714293	</repairTime>
-    </T84E38_FL>
+      <repairTime>	6.66666651	</repairTime>
+    </Chassis_A14_T30_FL>
   </chassis>
   <turrets0>
-    <T30D1_FL>
-      <userString>	#usa_vehicles:T30D1	</userString>
+    <Turret_1_A14_T30_FL>
+      <userString>	#usa_vehicles:Turret_1_A14_T30	</userString>
       <tags></tags>
       <level>	9	</level>
       <price>	66000	</price>
@@ -2101,7 +2101,7 @@
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <reloadTime>	21	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.24	</turretRotation>
+            <turretRotation>	0.22	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2922,7 +2922,7 @@
         <density>	81.5681 81.5203	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </T30D1_FL>
+    </Turret_1_A14_T30_FL>
   </turrets0>
   <engines>
     <Continental_AV-1790-5_FL>	shared	</Continental_AV-1790-5_FL>
@@ -2937,12 +2937,12 @@
     <detailed>
       <engines>
         <Continental_AV-1790-5_FL>
-          <smplEnginePower>	909.2618	</smplEnginePower>
+          <smplEnginePower>	930	</smplEnginePower>
           <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
         </Continental_AV-1790-5_FL>
       </engines>
       <chassis>
-        <T84E38_FL>
+        <Chassis_A14_T30_FL>
           <grounds>
             <soft>
               <rollingFriction>	0.2576	</rollingFriction>
@@ -2954,7 +2954,8 @@
               <rollingFriction>	0.1127	</rollingFriction>
             </firm>
           </grounds>
-        </T84E38_FL>
+          <axleCount>	5	</axleCount>
+        </Chassis_A14_T30_FL>
       </chassis>
     </detailed>
   </physics>

@@ -4854,7 +4854,7 @@
       <health>	1	</health>
       <physicParams>	200 3.2 0.03 150000 10000 0 0.05	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
-      <fractureEffect>	none	</fractureEffect>
+      <fractureEffect>	hd_env_101_RoadPoles_01_fall	</fractureEffect>
       <touchdownEffect>	hd_env_101_RoadPoles_01_touchdown	</touchdownEffect>
       <touchdownBreakEffect>	none	</touchdownBreakEffect>
       <effectScale>	1.000000	</effectScale>
@@ -4864,7 +4864,7 @@
       <health>	1	</health>
       <physicParams>	200 3.2 0.03 150000 10000 0 0.05	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
-      <fractureEffect>	none	</fractureEffect>
+      <fractureEffect>	hd_env_101_RoadPoles_01_fall	</fractureEffect>
       <touchdownEffect>	hd_env_101_RoadPoles_01_touchdown	</touchdownEffect>
       <touchdownBreakEffect>	none	</touchdownBreakEffect>
       <effectScale>	1.000000	</effectScale>
@@ -8711,6 +8711,16 @@
       <health>	1	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_gaf006_GerWoodFenceTile1_01	</effect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1	</effectScale>
+      <matName>	n_wood0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/GatesAndFences/hd_gaf_UNI_006_GerWoodFence/normal/lod0/hd_gaf_UNI_006_GerWoodFence_Corner_02.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	inf_gaf006_GerWoodFenceCorner1_01	</effect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_wood0	</matName>
@@ -14955,8 +14965,8 @@
       <filename>	content/Environment/hd_env_SU_070_RoadSigns/normal/lod0/hd_env_SU_070_RoadSigns_01.model	</filename>
       <health>	1	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_UNI_055_GardenBench	</effect>
-      <hitEffect>	hd_env_UNI_055_GardenBench	</hitEffect>
+      <effect>	hd_env_SU_070_RoadSigns_mixed	</effect>
+      <hitEffect>	hd_env_SU_070_RoadSigns_mixed	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_wood0	</matName>
@@ -14977,8 +14987,8 @@
       <filename>	content/Environment/hd_env_SU_070_RoadSigns/normal/lod0/hd_env_SU_070_RoadSigns_03.model	</filename>
       <health>	1	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_UNI_055_GardenBench	</effect>
-      <hitEffect>	hd_env_UNI_055_GardenBench	</hitEffect>
+      <effect>	hd_env_SU_070_RoadSigns_mixed	</effect>
+      <hitEffect>	hd_env_SU_070_RoadSigns_mixed	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_wood0	</matName>
@@ -15131,8 +15141,8 @@
       <filename>	content/Environment/hd_env_SU_070_RoadSigns/normal/lod0/hd_env_SU_070_RoadSigns_20.model	</filename>
       <health>	1	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_UNI_055_GardenBench	</effect>
-      <hitEffect>	hd_env_UNI_055_GardenBench	</hitEffect>
+      <effect>	hd_env_SU_070_RoadSigns_wooden	</effect>
+      <hitEffect>	hd_env_SU_070_RoadSigns_wooden	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_wood0	</matName>
@@ -15142,8 +15152,8 @@
       <filename>	content/Environment/hd_env_SU_070_RoadSigns/normal/lod0/hd_env_SU_070_RoadSigns_21.model	</filename>
       <health>	1	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_UNI_055_GardenBench	</effect>
-      <hitEffect>	hd_env_UNI_055_GardenBench	</hitEffect>
+      <effect>	hd_env_SU_070_RoadSigns_wooden	</effect>
+      <hitEffect>	hd_env_SU_070_RoadSigns_wooden	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_wood0	</matName>

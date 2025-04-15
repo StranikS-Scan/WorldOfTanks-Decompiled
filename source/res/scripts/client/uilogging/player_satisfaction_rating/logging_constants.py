@@ -24,6 +24,7 @@ class PlayerSatisfactionRatingCMActions(Enum):
     COMPLAIN = 'complain'
     BLACKLIST = 'blacklist'
     VOICE_MESSAGES = 'voice_messages'
+    COMMENDATION = 'commendation'
 
 
 class PlayerSatisfactionRatingKeys(Enum):

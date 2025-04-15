@@ -1,0 +1,19 @@
+<once-only-hints.xml>
+  <hints>
+    <hint>	VDayDifficultyHint	  <item-id>	VDayDifficulty	</item-id>
+      <text>	_(#story_mode.sm_tutorial:vday/difficulty)	</text>
+      <arrow>
+        <direction>	B	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <update-runtime>	True	</update-runtime>
+      <hide-immediately>	True	</hide-immediately>
+      <ignore-outside-click>	True	</ignore-outside-click>
+      <condition>
+        <class-condition>	DifficultyHintChecker	  <path>	story_mode.gui.impl.lobby.difficulty_hint_checker	</path>
+          <arguments>	VDayDifficultyHint	</arguments>
+        </class-condition>
+      </condition>
+    </hint>
+  </hints>
+</once-only-hints.xml>

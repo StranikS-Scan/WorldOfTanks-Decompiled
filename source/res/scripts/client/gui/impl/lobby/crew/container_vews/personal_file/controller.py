@@ -22,6 +22,16 @@ class PersonalFileInteractionController(BasePersonalCaseController):
     __guiLoader = dependency.descriptor(IGuiLoader)
     __isPerksResetDialogLoading = False
 
+    def __init__(self, view=None):
+        super(PersonalFileInteractionController, self).__init__(view)
+        self.__crewAssistSortSelection = 0
+
+    def setCrewAssistSortSelection(self, value):
+        self.__crewAssistSortSelection = value
+
+    def getCrewAssistSortSelection(self):
+        return self.__crewAssistSortSelection
+
     def _getEventsProvider(self):
         return PersonalFileComponentViewEvents()
 

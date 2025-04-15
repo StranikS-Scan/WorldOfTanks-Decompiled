@@ -20,6 +20,7 @@ def getViewSettings():
     from commander_cmp import CommanderComponent
     from tech_parameters_cmp import TechParametersComponent
     from battle_royale.gui.impl.lobby.views.tank_setup_panel_view import TankSetupPanelComponent
+    from proxy_currency_panel import ProxyCurrencyComponentInject
     from hangar_vehicle_info_view import HangarVehicleModulesConfigurator
     from hangar_vehicle_info_view import HangarVehicleInfo
     from level_up_view import BattleRoyaleLevelUpView
@@ -36,6 +37,7 @@ def getViewSettings():
      ComponentSettings(BATTLEROYALE_ALIASES.COMMANDER_COMPONENT, CommanderComponent, ScopeTemplates.LOBBY_SUB_SCOPE),
      ComponentSettings(BATTLEROYALE_ALIASES.TECH_PARAMETERS_COMPONENT, TechParametersComponent, ScopeTemplates.LOBBY_SUB_SCOPE),
      ComponentSettings(BATTLEROYALE_ALIASES.BOTTOM_PANEL_COMPONENT, TankSetupPanelComponent, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLEROYALE_ALIASES.PROXY_CURRENCY_PANEL_COMPONENT, ProxyCurrencyComponentInject, ScopeTemplates.LOBBY_SUB_SCOPE),
      ComponentSettings(BATTLEROYALE_ALIASES.BATTLE_TYPE_SELECTOR, BattleTypeSelectorInject, ScopeTemplates.LOBBY_SUB_SCOPE),
      ComponentSettings(HANGAR_ALIASES.ROYALE_TANK_CAROUSEL, RoyaleTankCarousel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.BR_ENTRY_POINT, BattleRoyaleEntryPointInject, ScopeTemplates.DEFAULT_SCOPE),

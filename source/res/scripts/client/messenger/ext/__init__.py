@@ -3,6 +3,7 @@
 import types
 import BigWorld
 import BattleReplay
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from helpers import i18n
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from external_strings_utils import isAccountNameValid
@@ -45,7 +46,7 @@ def isBattleChatEnabled(common=False):
         if guiType in constants.ARENA_GUI_TYPE.BATTLE_CHAT_SETTING_SUPPORTED:
             result = not (g_settings.userPrefs.disableBattleChat or avatar.battleChatRestriction['isBattleChatDisabled'] and not BattleReplay.isPlaying())
         if result and common:
-            result = arena.bonusType in (constants.ARENA_BONUS_TYPE.TRAINING, constants.ARENA_BONUS_TYPE.EPIC_RANDOM_TRAINING)
+            result = arena.hasBonusCap(ARENA_BONUS_TYPE_CAPS.COMMON_CHAT)
         return result
 
 

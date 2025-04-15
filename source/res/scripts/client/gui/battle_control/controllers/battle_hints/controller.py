@@ -108,6 +108,19 @@ class BattleHintsController(ViewComponentsController):
             _logger.debug('Adding component %s by alias <%s> to cache.', component, alias)
         return component
 
+    def checkHintInQueue(self, hintName):
+        model = self._getModel(hintName)
+        if not model:
+            return False
+        else:
+            alias = model.props.component
+            component = self.getComponent(alias)
+            if not component:
+                return False
+            queueParams = component.getBattleHintsQueueParams()
+            queue = self._queuesMgr.get(queueParams)
+            return [ hint for hint in queue._queue if hint.uniqueName == hintName ] or queue._displayed is not None and queue._displayed.uniqueName == hintName
+
     def _onRoundFinished(self, *_, **__):
         self._stop()
 

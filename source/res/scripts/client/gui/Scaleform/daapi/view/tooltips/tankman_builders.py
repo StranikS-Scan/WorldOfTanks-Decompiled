@@ -81,9 +81,9 @@ class CrewPerkTooltipData(ToolTipBaseData):
 
 class CrewPerkTooltipDataAdditional(CrewPerkTooltipData):
 
-    def getDisplayableData(self, skillName, skillRole, tankmanId, skillLevel=None, isCommonExtraAvailable=False, showAdditionalInfo=True, isBonus=None, skillIdx=-1, *args, **kwargs):
+    def getDisplayableData(self, skillName, skillRole, tankmanId, skillLevel=None, isCommonExtraAvailable=False, showAdditionalInfo=True, isBonus=None, skillIdx=-1, showCrewAssist=False, *args, **kwargs):
         parent = kwargs.pop('parent', None)
-        return DecoratedTooltipWindow(CrewPerksAdditionalTooltip(skillName, skillRole, tankmanId, skillIdx), parent, False)
+        return DecoratedTooltipWindow(CrewPerksAdditionalTooltip(skillName, skillRole, tankmanId, skillIdx, showCrewAssist), parent, False)
 
 
 class SkillUntrainedTooltipData(ToolTipBaseData):

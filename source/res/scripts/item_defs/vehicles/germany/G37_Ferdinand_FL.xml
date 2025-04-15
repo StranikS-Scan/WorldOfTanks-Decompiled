@@ -48,11 +48,11 @@
       <battle>	0	</battle>
     </fakeTurrets>
     <armor>
-      <armor_1>	300	</armor_1>
-      <armor_2>	200	</armor_2>
+      <armor_1>	215	</armor_1>
+      <armor_2>	220	</armor_2>
       <armor_3>	80	</armor_3>
       <armor_4>	80	</armor_4>
-      <armor_5>	200	</armor_5>
+      <armor_5>	230	</armor_5>
       <armor_6>	80	</armor_6>
       <armor_7>	80	</armor_7>
       <armor_8>	20	</armor_8>
@@ -63,6 +63,14 @@
       <armor_13>	30	</armor_13>
       <armor_14>	40	</armor_14>
       <armor_15>	25	</armor_15>
+      <armor_16>	200	</armor_16>
+      <armor_17>	50	</armor_17>
+      <armor_18>	85	</armor_18>
+      <armor_19>	50	</armor_19>
+      <armor_20>	150	</armor_20>
+      <armor_21>	125	</armor_21>
+      <armor_22>	160	</armor_22>
+      <armor_23>	45	</armor_23>
     </armor>
     <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
     <weight>	41500	</weight>
@@ -1402,9 +1410,9 @@
     </camouflage>
   </hull>
   <chassis>
-    <Ferdinandvetstaerktketten_FL>
-      <userString>	#germany_vehicles:Ferdinandvetstaerktketten	</userString>
-      <shortUserString>	#germany_vehicles:Ferdinandvetstaerktketten_short	</shortUserString>
+    <Chassis_G37_Ferdinand_FL>
+      <userString>	#germany_vehicles:Chassis_G37_Ferdinand_2	</userString>
+      <shortUserString>	#germany_vehicles:Chassis_G37_Ferdinand_2_short	</shortUserString>
       <tags></tags>
       <level>	8	</level>
       <price>	32234	</price>
@@ -1418,7 +1426,7 @@
       <terrainResistance>	1.1 1.7 2.9	</terrainResistance>
       <brakeForce>	34000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	21	</rotationSpeed>
+      <rotationSpeed>	33	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.2	</vehicleMovement>
         <vehicleRotation>	0.2	</vehicleRotation>
@@ -2348,12 +2356,12 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	6.85714293	</repairTime>
-    </Ferdinandvetstaerktketten_FL>
+      <repairTime>	6.66666651	</repairTime>
+    </Chassis_G37_Ferdinand_FL>
   </chassis>
   <turrets0>
-    <Ferdinandturm_FL>
-      <userString>	#germany_vehicles:Ferdinandturm	</userString>
+    <Turret_1_G37_Ferdinand_FL>
+      <userString>	#germany_vehicles:Turret_1_G37_Ferdinand	</userString>
       <tags>	cannotDetach	</tags>
       <level>	8	</level>
       <price>	100	</price>
@@ -2376,20 +2384,20 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_128mm_PaK44_L55_FL>	shared	  <pitchLimits>
+        <_12_8_cm_Pak_44_L_55_F_FL>	shared	  <pitchLimits>
             <minPitch>	0 -14 1 -14	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
           <maxAmmo>	30	</maxAmmo>
           <reloadTime>	11.7	</reloadTime>
           <armor>
-            <armor_1>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_2>	130	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	110	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_3>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
-            <armor_9>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_9>	230	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_9>
             <gun>	60	</gun>
           </armor>
@@ -2484,7 +2492,7 @@
             <density>	91.2199 88.6278	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_128mm_PaK44_L55_FL>
+        </_12_8_cm_Pak_44_L_55_F_FL>
       </guns>
       <models>
         <undamaged>	vehicles/german/G37_Ferdinand/normal/lod0/Turret_01.model	</undamaged>
@@ -2508,10 +2516,10 @@
         <density>	185.066 178.83	</density>
         <aoTextureSize>	1024 1024	</aoTextureSize>
       </camouflage>
-    </Ferdinandturm_FL>
+    </Turret_1_G37_Ferdinand_FL>
   </turrets0>
   <engines>
-    <Porsche_Deutz_Typ180_2_FL>	shared	</Porsche_Deutz_Typ180_2_FL>
+    <_2x_Porsche_Typ_100_3_F_FL>	shared	</_2x_Porsche_Typ_100_3_F_FL>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
@@ -2522,13 +2530,13 @@
   <physics>
     <detailed>
       <engines>
-        <Porsche_Deutz_Typ180_2_FL>
-          <smplEnginePower>	888.1161	</smplEnginePower>
+        <_2x_Porsche_Typ_100_3_F_FL>
+          <smplEnginePower>	900	</smplEnginePower>
           <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
-        </Porsche_Deutz_Typ180_2_FL>
+        </_2x_Porsche_Typ_100_3_F_FL>
       </engines>
       <chassis>
-        <Ferdinandvetstaerktketten_FL>
+        <Chassis_G37_Ferdinand_FL>
           <grounds>
             <soft>
               <rollingFriction>	0.23345	</rollingFriction>
@@ -2540,7 +2548,8 @@
               <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
-        </Ferdinandvetstaerktketten_FL>
+          <axleCount>	5	</axleCount>
+        </Chassis_G37_Ferdinand_FL>
       </chassis>
     </detailed>
   </physics>

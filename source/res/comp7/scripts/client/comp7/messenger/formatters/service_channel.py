@@ -3,10 +3,9 @@
 import logging
 from itertools import chain
 import BigWorld
-from adisp import adisp_async
 from comp7.gui.impl.lobby.comp7_helpers.comp7_quest_helpers import getComp7QuestType, isComp7Quest
 from comp7_common.comp7_constants import ARENA_GUI_TYPE
-from comp7_common_const import Comp7QuestType, isComp7YearlyAchievement
+from comp7_common_const import Comp7QuestType
 from constants import FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA, SCENARIO_RESULT
 from dossiers2.custom.records import RECORD_DB_IDS
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
@@ -15,7 +14,7 @@ from gui.impl.gen import R
 from helpers import dependency, time_utils
 from messenger import g_settings
 from messenger.formatters import TimeFormatter
-from messenger.formatters.service_channel import QuestAchievesFormatter, BattleResultsFormatter, AchievementFormatter, ALLOWED_ACHIEVEMENT_TYPES, BADGES_BLOCK
+from messenger.formatters.service_channel import QuestAchievesFormatter, BattleResultsFormatter
 from messenger.formatters.service_channel_helpers import MessageData
 from skeletons.gui.game_control import IComp7Controller
 _logger = logging.getLogger(__name__)
@@ -135,23 +134,6 @@ class Comp7BattleResultsFormatter(BattleResultsFormatter):
     def __makeTournamentComp7SeasonMsgCtx(self, battleResults, ctx):
         ctx['ratingPointsStr'] = g_settings.htmlTemplates.format('battleResultRatingPoints', {'ratingPoints': str(battleResults['comp7RatingDelta'])})
         return ctx
-
-
-class Comp7AchievementFormatter(AchievementFormatter):
-
-    @adisp_async
-    def format(self, message, callback):
-        achieves = message.data.get('popUpRecords')
-        if achieves is not None:
-            modifiedRecords = {}
-            for (block, name), value in achieves.iteritems():
-                if block not in ALLOWED_ACHIEVEMENT_TYPES and block != BADGES_BLOCK:
-                    if not isComp7YearlyAchievement(name):
-                        modifiedRecords[block, name] = value
-
-            message.data['popUpRecords'] = modifiedRecords
-        super(Comp7AchievementFormatter, self).format(message, callback)
-        return
 
 
 class Comp7QualificationRewardsFormatter(QuestAchievesFormatter):

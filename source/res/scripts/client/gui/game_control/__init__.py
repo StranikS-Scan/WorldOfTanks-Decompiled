@@ -3,6 +3,7 @@
 from shared_utils import CONST_CONTAINER
 from typing import TYPE_CHECKING
 import constants
+import skeletons.gui.resource_well
 from gui.graphics_optimization_controller.optimization_controller import GraphicsOptimizationController
 from gui.shared.system_factory import collectGameControllers
 from skeletons.festivity_factory import IFestivityFactory
@@ -68,13 +69,12 @@ def getGameControllersConfig(manager):
     from gui.game_control.account_completion import SteamCompletionController as _SteamCompletionController, DemoAccCompletionController as _DemoAccCompletionController
     from gui.game_control.veh_post_progression_controller import VehiclePostProgressionController
     from gui.game_control.wot_plus_controller import WotPlusController
-    from gui.game_control.optional_devices_assistant_controller import OptionalDevicesAssistantController
     from gui.game_control.telecom_rentals_controller import TelecomRentalsNotificationController
     from gui.game_control.event_battles_controller import EventBattlesController
     from gui.game_control.gift_system_controller import GiftSystemController
     from gui.game_control.seniority_awards_controller import SeniorityAwardsController as _SeniorityAwardsController
     from gui.game_control.rts_battles_controller import RTSBattlesController
-    from gui.game_control.resource_well_controller import ResourceWellController
+    from gui.game_control.extension_stubs.resource_well_controller import ResourceWellController
     from gui.game_control.extension_stubs.fun_random_controller import FunRandomController
     from gui.game_control.extension_stubs.comp7_controller import Comp7Controller
     from gui.game_control.hangar_switch_controller import HangarSpaceSwitchController
@@ -92,6 +92,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.exchange_rates_with_discounts import ExchangeRatesWithDiscountsProvider
     from gui.game_control.fading_controller import FadingController
     from gui.game_control.easy_tank_equip_controller import EasyTankEquipController as _EasyTankEquipController
+    from gui.game_control.commendations_controller import CommendationsController
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -161,11 +162,10 @@ def getGameControllersConfig(manager):
     _config(_interface.IDemoAccCompletionController, _DemoAccCompletionController())
     _config(_interface.IVehiclePostProgressionController, VehiclePostProgressionController())
     _config(_interface.IWotPlusController, WotPlusController())
-    _config(_interface.IOptionalDevicesAssistantController, OptionalDevicesAssistantController())
     _config(_interface.ITelecomRentalsNotificationController, TelecomRentalsNotificationController())
     _config(_interface.IGiftSystemController, GiftSystemController())
     _config(_interface.IRTSBattlesController, RTSBattlesController())
-    _config(_interface.IResourceWellController, ResourceWellController())
+    _config(skeletons.gui.resource_well.IResourceWellController, ResourceWellController())
     _config(_interface.ILootBoxSystemController, LootBoxSystemController())
     _config(_interface.IEntitlementsController, EntitlementsController())
     _config(_interface.ICollectionsSystemController, CollectionsSystemController())
@@ -180,4 +180,5 @@ def getGameControllersConfig(manager):
     _config(_interface.IAchievements20EarningController, Achievements20EarningController())
     _config(_interface.IExchangeRatesWithDiscountsProvider, ExchangeRatesWithDiscountsProvider())
     _config(_interface.IFadingController, FadingController())
+    _config(_interface.ICommendationsController, CommendationsController())
     collectGameControllers(_config)

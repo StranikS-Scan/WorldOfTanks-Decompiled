@@ -1,0 +1,19 @@
+<ArenaCommendationsMasterComponent.def>
+  <CellMethods>
+    <setupArena>
+      <Args>
+        <config>	PYTHON	</config>
+      </Args>
+    </setupArena>
+    <clearMessageState></clearMessageState>
+  </CellMethods>
+  <BaseMethods>
+    <receiveBattleStatistics>
+      <Arg>	COMMENDATIONS_BATTLE_STATISTICS_LIST	</Arg>
+    </receiveBattleStatistics>
+  </BaseMethods>
+  <ofEntity>
+    <Arena></Arena>
+  </ofEntity>
+  <DefaultKeyName>	commendationsComponent	</DefaultKeyName>
+</ArenaCommendationsMasterComponent.def>

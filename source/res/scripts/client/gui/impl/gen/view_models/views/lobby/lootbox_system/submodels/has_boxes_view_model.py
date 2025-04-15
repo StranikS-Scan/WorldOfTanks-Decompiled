@@ -8,7 +8,7 @@ from gui.impl.gen.view_models.views.lobby.lootbox_system.submodels.statistics_mo
 class HasBoxesViewModel(ViewModel):
     __slots__ = ('onInfoOpen', 'onBoxesOpen', 'onBuyBoxes', 'onAnimationStateChanged', 'onOpeningOptionChanged', 'onBoxOptionChanged', 'onClose', 'onResetError')
 
-    def __init__(self, properties=12, commands=8):
+    def __init__(self, properties=10, commands=8):
         super(HasBoxesViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -63,35 +63,23 @@ class HasBoxesViewModel(ViewModel):
     def setIsAnimationActive(self, value):
         self._setBool(6, value)
 
-    def getIsAwaitingResponse(self):
+    def getIsError(self):
         return self._getBool(7)
 
-    def setIsAwaitingResponse(self, value):
+    def setIsError(self, value):
         self._setBool(7, value)
 
-    def getIsError(self):
+    def getUseStats(self):
         return self._getBool(8)
 
-    def setIsError(self, value):
+    def setUseStats(self, value):
         self._setBool(8, value)
 
-    def getUseExternal(self):
+    def getIsShopVisible(self):
         return self._getBool(9)
 
-    def setUseExternal(self, value):
-        self._setBool(9, value)
-
-    def getUseStats(self):
-        return self._getBool(10)
-
-    def setUseStats(self, value):
-        self._setBool(10, value)
-
-    def getIsShopVisible(self):
-        return self._getBool(11)
-
     def setIsShopVisible(self, value):
-        self._setBool(11, value)
+        self._setBool(9, value)
 
     def _initialize(self):
         super(HasBoxesViewModel, self)._initialize()
@@ -102,9 +90,7 @@ class HasBoxesViewModel(ViewModel):
         self._addStringProperty('selectedBoxOption', '')
         self._addNumberProperty('selectedOpeningOption', 0)
         self._addBoolProperty('isAnimationActive', False)
-        self._addBoolProperty('isAwaitingResponse', False)
         self._addBoolProperty('isError', False)
-        self._addBoolProperty('useExternal', False)
         self._addBoolProperty('useStats', True)
         self._addBoolProperty('isShopVisible', False)
         self.onInfoOpen = self._addCommand('onInfoOpen')

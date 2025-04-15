@@ -106,6 +106,9 @@ class IArenaVehiclesController(IArenaLoadController, IContactsController):
     def updateTriggeredChatCommands(self, chatCommands, arenaDP):
         pass
 
+    def updatePriorityChatCommand(self, vehicleID, chatCommand, durationMS):
+        pass
+
 
 class ITeamsBasesController(IArenaController):
     __slots__ = ()

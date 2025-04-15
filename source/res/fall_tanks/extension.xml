@@ -1,0 +1,15 @@
+<extension.xml>
+  <FeatureName>	fall_tanks	</FeatureName>
+  <IsEnabled>	True	</IsEnabled>
+  <Personality>	FallTanksPersonality	</Personality>
+  <EditorPersonality></EditorPersonality>
+  <Components>
+    <StaticComponents></StaticComponents>
+    <DynamicComponents>
+      <FallTanksController></FallTanksController>
+      <FallTanksArenaInfo></FallTanksArenaInfo>
+    </DynamicComponents>
+  </Components>
+  <Entities></Entities>
+  <ExternalComponents></ExternalComponents>
+</extension.xml>

@@ -44,7 +44,6 @@ _LOBBY_TOOLTIPS_BUILDERS_PATHS = [('gui.Scaleform.daapi.view.tooltips.achievemen
  ('gui.Scaleform.daapi.view.tooltips.mapbox_lobby_builders', _TOOLTIPS.MAPBOX_LOBBY_SET),
  ('gui.Scaleform.daapi.view.tooltips.account_completion_builders', _TOOLTIPS.ACCOUNT_COMPLETION_SET),
  ('gui.Scaleform.daapi.view.tooltips.referral_program_builder', _TOOLTIPS.REFERRAL_PROGRAM_SET),
- ('gui.Scaleform.daapi.view.tooltips.resource_well_builders', _TOOLTIPS.RESOURCE_WELL_SET),
  ('gui.Scaleform.daapi.view.tooltips.wot_plus_builders', _TOOLTIPS.WOT_PLUS_SET)]
 _LOBBY_DEBUG_TOOLTIPS_BUILDERS_PATHS = (('gui.development.ui.tooltips.development_builders', _TOOLTIPS.DEVELOPMENT_SET),)
 _BATTLE_TOOLTIPS_BUILDERS_PATHS = (('gui.Scaleform.daapi.view.tooltips.settings_builders', _TOOLTIPS.SETTINGS_SET), ('gui.Scaleform.daapi.view.tooltips.battle_opt_devices_builder', _TOOLTIPS.BATTLE_BLOCK_TOOLTIPS), ('gui.Scaleform.daapi.view.tooltips.epic_in_battle_builders', _TOOLTIPS.EPIC_IN_BATTE_SET))
@@ -78,8 +77,6 @@ registerScaleformBattlePackages(ARENA_GUI_TYPE.EVENT_BATTLES, BATTLE_PACKAGES + 
 registerScaleformBattlePackages(ARENA_GUI_TYPE.RANKED, BATTLE_PACKAGES + ('gui.Scaleform.daapi.view.battle.ranked',))
 registerScaleformBattlePackages(ARENA_GUI_TYPE.EPIC_RANDOM, BATTLE_PACKAGES + ('gui.Scaleform.daapi.view.battle.epic_random',))
 registerScaleformBattlePackages(ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING, BATTLE_PACKAGES + ('gui.Scaleform.daapi.view.battle.epic_random',))
-registerScaleformBattlePackages(ARENA_GUI_TYPE.EPIC_BATTLE, BATTLE_PACKAGES + ('gui.Scaleform.daapi.view.battle.epic',))
-registerScaleformBattlePackages(ARENA_GUI_TYPE.EPIC_TRAINING, BATTLE_PACKAGES + ('gui.Scaleform.daapi.view.battle.epic',))
 registerScaleformBattlePackages(ARENA_GUI_TYPE.SORTIE_2, BATTLE_PACKAGES + ('gui.Scaleform.daapi.view.battle.stronghold',))
 registerScaleformBattlePackages(ARENA_GUI_TYPE.FORT_BATTLE_2, BATTLE_PACKAGES + ('gui.Scaleform.daapi.view.battle.stronghold',))
 registerScaleformBattlePackages(ARENA_GUI_TYPE.MAPS_TRAINING, ('messenger.gui.Scaleform.view.battle', 'gui.Scaleform.daapi.view.battle.maps_training') + (_BATTLE_DEBUG_PACKAGES if HAS_DEV_RESOURCES else ()))

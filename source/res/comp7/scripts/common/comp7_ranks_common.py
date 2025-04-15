@@ -10,7 +10,7 @@ COMP7_UNDEFINED_DIVISION_ID = 0
 COMP7_UNDEFINED_DIVISION_SERIAL_IDX = 0
 
 class Comp7Division(object):
-    __slots__ = ('range', 'tags', 'rank', 'dvsnID', 'index', 'activityPointsPerBattle', 'hasRankInactivity', 'seasonPoints', 'serialIdx')
+    __slots__ = ('range', 'tags', 'rank', 'dvsnID', 'index', 'activityPointsPerBattle', 'hasRankInactivity', 'seasonPoints', 'serialIdx', 'ratingPointsPenalty')
 
     def __init__(self, serialIdx, divisionInfo):
         pointsRange = divisionInfo['range']
@@ -20,6 +20,7 @@ class Comp7Division(object):
         self.index = divisionInfo['index']
         self.tags = frozenset(divisionInfo.get('tags', ()))
         self.activityPointsPerBattle = divisionInfo.get('rankInactivity', {}).get('activityPointsPerBattle', 0)
+        self.ratingPointsPenalty = divisionInfo.get('rankInactivity', {}).get('ratingPointsPenalty', 0)
         self.hasRankInactivity = divisionInfo.get('hasRankInactivity', False)
         self.seasonPoints = divisionInfo.get('seasonPoints', 0)
         self.serialIdx = serialIdx

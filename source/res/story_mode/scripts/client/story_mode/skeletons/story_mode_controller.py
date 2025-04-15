@@ -11,6 +11,7 @@ if typing.TYPE_CHECKING:
 class IStoryModeController(IGameController):
     onSyncDataUpdated = None
     onMissionsConfigUpdated = None
+    onSettingsUpdated = None
 
     @property
     def isOnboarding(self):
@@ -26,6 +27,10 @@ class IStoryModeController(IGameController):
 
     @property
     def isSelectedMissionOnboarding(self):
+        raise NotImplementedError
+
+    @property
+    def storyModeInfoPageKey(self):
         raise NotImplementedError
 
     @selectedMissionId.setter
@@ -98,6 +103,9 @@ class IStoryModeController(IGameController):
     def goToHangar(self, guiCtx=None):
         raise NotImplementedError
 
+    def onOutroVideoComplete(self, arenaUniqueID):
+        raise NotImplementedError
+
     def quitBattle(self):
         raise NotImplementedError
 
@@ -110,7 +118,13 @@ class IStoryModeController(IGameController):
     def startMusic(self):
         raise NotImplementedError
 
-    def stopMusic(self):
+    def stopMusic(self, forceStop=False):
+        raise NotImplementedError
+
+    def startBattleMusic(self):
+        raise NotImplementedError
+
+    def stopBattleMusic(self):
         raise NotImplementedError
 
     def isMissionTaskCompleted(self, missionId, taskId):

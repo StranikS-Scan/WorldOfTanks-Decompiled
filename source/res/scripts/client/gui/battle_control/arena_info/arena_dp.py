@@ -360,6 +360,9 @@ class ArenaDataProvider(IArenaDataProvider):
     def getReservesModifier(self):
         return self.__description.getReservesModifier()
 
+    def getWinStatus(self, team):
+        return self.__description.getTeamWinStatus(team, self.isAllyTeam(team))
+
     def __findSquads(self, exclude=None):
         result = []
         prebattleID = self.getVehicleInfo().prebattleID

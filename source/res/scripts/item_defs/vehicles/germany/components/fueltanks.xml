@@ -20,6 +20,10 @@
     <Large_StoryMode__1>	36	</Large_StoryMode__1>
     <Large_StoryMode__2>	37	</Large_StoryMode__2>
     <Medium_StoryMode>	40	</Medium_StoryMode>
+    <Medium_StoryModeStealth>	41	</Medium_StoryModeStealth>
+    <Large_StoryModeStealth>	42	</Large_StoryModeStealth>
+    <Average_StoryModeStealth>	43	</Average_StoryModeStealth>
+    <Heavy_StoryModeStealth>	44	</Heavy_StoryModeStealth>
   </ids>
   <shared>
     <Small>
@@ -198,5 +202,41 @@
       <repairCost>	1.0	</repairCost>
       <notInShop>	True	</notInShop>
     </Medium_StoryMode>
+    <Medium_StoryModeStealth>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	250	</weight>
+      <maxHealth>	125	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Medium_StoryModeStealth>
+    <Large_StoryModeStealth>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	300	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Large_StoryModeStealth>
+    <Average_StoryModeStealth>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	250	</weight>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Average_StoryModeStealth>
+    <Heavy_StoryModeStealth>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	275	</weight>
+      <maxHealth>	175	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Heavy_StoryModeStealth>
   </shared>
 </fuelTanks.xml>

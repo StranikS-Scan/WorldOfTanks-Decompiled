@@ -732,5 +732,11 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         url = '/api/v1/replays/signed_link'
         return self._request_data(callback, url, get_data={'replay_name': replay_name}, method='GET', headers=self.__prepare_jwt_header(jwt_token))
 
+    def get_loadouts(self, callback, client_cache_updated_at, loadout_types):
+        url = 'wotlda/api/get_loadouts'
+        get_params = {'client_cache_updated_at': client_cache_updated_at,
+         'loadout_types': loadout_types}
+        return self._request_data(callback, url, get_data=get_params, method='GET')
+
     def _get_formatted_language_code(self):
         return self.client_lang.replace('_', '-')

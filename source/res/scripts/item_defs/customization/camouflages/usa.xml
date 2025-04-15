@@ -1,15 +1,15 @@
 <usa.xml>
-  <usa:A01_T1_Cunningham31>	ussr	</usa:A01_T1_Cunningham31>
-  <usa:A01_T1_Cunningham24>	germany	</usa:A01_T1_Cunningham24>
-  <usa:A01_T1_Cunningham30>	usa	</usa:A01_T1_Cunningham30>
-  <usa:A01_T1_Cunningham21>	china	</usa:A01_T1_Cunningham21>
-  <usa:A01_T1_Cunningham23>	france	</usa:A01_T1_Cunningham23>
-  <usa:A01_T1_Cunningham29>	uk	</usa:A01_T1_Cunningham29>
-  <usa:A01_T1_Cunningham26>	japan	</usa:A01_T1_Cunningham26>
-  <usa:A01_T1_Cunningham22>	czech	</usa:A01_T1_Cunningham22>
-  <usa:A01_T1_Cunningham28>	sweden	</usa:A01_T1_Cunningham28>
-  <usa:A01_T1_Cunningham27>	poland	</usa:A01_T1_Cunningham27>
-  <usa:A01_T1_Cunningham25>	italy	</usa:A01_T1_Cunningham25>
+  <usa:A01_T1_Cunningham32>	ussr	</usa:A01_T1_Cunningham32>
+  <usa:A01_T1_Cunningham25>	germany	</usa:A01_T1_Cunningham25>
+  <usa:A01_T1_Cunningham31>	usa	</usa:A01_T1_Cunningham31>
+  <usa:A01_T1_Cunningham22>	china	</usa:A01_T1_Cunningham22>
+  <usa:A01_T1_Cunningham24>	france	</usa:A01_T1_Cunningham24>
+  <usa:A01_T1_Cunningham30>	uk	</usa:A01_T1_Cunningham30>
+  <usa:A01_T1_Cunningham27>	japan	</usa:A01_T1_Cunningham27>
+  <usa:A01_T1_Cunningham23>	czech	</usa:A01_T1_Cunningham23>
+  <usa:A01_T1_Cunningham29>	sweden	</usa:A01_T1_Cunningham29>
+  <usa:A01_T1_Cunningham28>	poland	</usa:A01_T1_Cunningham28>
+  <usa:A01_T1_Cunningham26>	italy	</usa:A01_T1_Cunningham26>
   <itemGroup>
     <userString>	#vehicle_customization:camouflage/transparent	</userString>
     <season>	summer	</season>
@@ -20,7 +20,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -102,6 +102,7 @@
         <A32_M12>	4 4 7 3.8	</A32_M12>
         <A33_MTLS-1G14>	2.3 2.3 6.1 3.3	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	4.6 4.7 0.58 0.6	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	4.6 4.7 0.58 0.6	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	3 3 0.38 0.53	</A35_Pershing>
         <A35_Pershing_IGR>	3 3 0.38 0.53	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	4.9 5.1 0.44 0.35	</A36_Sherman_Jumbo>
@@ -185,7 +186,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -268,6 +269,7 @@
         <A32_M12>	6 6 0.6 0.000000	</A32_M12>
         <A33_MTLS-1G14>	2.5 2.5 4 3.3	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	6 6 0.68 0.5	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	6 6 0.68 0.5	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	7 7 0.1 0.000000	</A35_Pershing>
         <A35_Pershing_IGR>	7 7 0.1 0.000000	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	6.6 7.3 0.4 0.44	</A36_Sherman_Jumbo>
@@ -351,7 +353,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -445,6 +447,7 @@
         <A32_M12>	4 4 1.3 0.000000	</A32_M12>
         <A33_MTLS-1G14>	2.2 2.2 0.1 1.8	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	5.6 5.7 0.71 0.71	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	5.6 5.7 0.71 0.71	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	5 5.1 0.53 0.22	</A35_Pershing>
         <A35_Pershing_IGR>	5 5.1 0.53 0.22	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	6.8 7.9 0.17 0.43	</A36_Sherman_Jumbo>
@@ -528,7 +531,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -611,6 +614,7 @@
         <A32_M12>	6 6 0.000000 3.7	</A32_M12>
         <A33_MTLS-1G14>	3.6 3.6 0.000000 0.000000	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	7.4 7.3 0.58 0.08	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	7.4 7.3 0.58 0.08	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	6.5 6.3 0.000000 0.2	</A35_Pershing>
         <A35_Pershing_IGR>	6.5 6.3 0.000000 0.2	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	5.3 5.3 0.000000 0.000000	</A36_Sherman_Jumbo>
@@ -694,7 +698,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -777,6 +781,7 @@
         <A32_M12>	7 7 0.000000 0.4	</A32_M12>
         <A33_MTLS-1G14>	3.5 3.5 6.8 6.3	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	7.4 7.2 0.000000 0.000000	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	7.4 7.2 0.000000 0.000000	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	6.7 6.9 0.000000 0.000000	</A35_Pershing>
         <A35_Pershing_IGR>	6.7 6.9 0.000000 0.000000	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	5.3 5.3 0.000000 0.000000	</A36_Sherman_Jumbo>
@@ -860,7 +865,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -937,6 +942,7 @@
         <A32_M12>	2.5 2.5 0.44 0.14	</A32_M12>
         <A33_MTLS-1G14>	1.3 1.3 5.2 3.7	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	2 2 0.17 0.24	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	2 2 0.17 0.24	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	1.5 1.5 0.18 0.000000	</A35_Pershing>
         <A35_Pershing_IGR>	1.5 1.5 0.18 0.000000	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	2.2 2.2 0.14 0.000000	</A36_Sherman_Jumbo>
@@ -1020,7 +1026,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -1103,6 +1109,7 @@
         <A32_M12>	4 4 0.72 0.000000	</A32_M12>
         <A33_MTLS-1G14>	2 2 6.8 8.2	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	6.1 3.7 0.28 0.65	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	6.1 3.7 0.28 0.65	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	4.9 4.8 0.08 0.000000	</A35_Pershing>
         <A35_Pershing_IGR>	4.9 4.8 0.08 0.000000	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	4.5 4.5 0.54 0.55	</A36_Sherman_Jumbo>
@@ -1186,7 +1193,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -1281,6 +1288,7 @@
         <A32_M12>	7 8.1 0.48 0.51	</A32_M12>
         <A33_MTLS-1G14>	2 2 0.37 0.7	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	7.3 7.3 0.8 0.86	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	7.3 7.3 0.8 0.86	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	7 7 0.4 0.2	</A35_Pershing>
         <A35_Pershing_IGR>	7 7 0.4 0.2	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	6.4 6.4 0.05 0.06	</A36_Sherman_Jumbo>
@@ -1364,7 +1372,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -1447,6 +1455,7 @@
         <A32_M12>	6.5 6.5 0.58 0.31	</A32_M12>
         <A33_MTLS-1G14>	2.5 2.5 3 2.5	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	5.7 5.6 0.37 1	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	5.7 5.6 0.37 1	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	4.5 3.6 0.79 0.06	</A35_Pershing>
         <A35_Pershing_IGR>	4.5 3.6 0.79 0.06	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	7 6.6 0.34 0.38	</A36_Sherman_Jumbo>
@@ -1530,7 +1539,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -1613,6 +1622,7 @@
         <A32_M12>	4 4 5.3 2.2	</A32_M12>
         <A33_MTLS-1G14>	2 2 4.1 5.3	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	4.3 4.1 0.66 0.46	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	4.3 4.1 0.66 0.46	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	2.7 2.7 0.12 0.06	</A35_Pershing>
         <A35_Pershing_IGR>	2.7 2.7 0.12 0.06	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	4.8 4.8 0.42 0.64	</A36_Sherman_Jumbo>
@@ -1696,7 +1706,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -1791,6 +1801,7 @@
         <A32_M12>	7 7 0.21 0.24	</A32_M12>
         <A33_MTLS-1G14>	2.7 2.7 3.6 5.8	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	5.6 5.5 0.32 0.22	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	5.6 5.5 0.32 0.22	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	6 6 0.23 0.17	</A35_Pershing>
         <A35_Pershing_IGR>	6 6 0.23 0.17	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	4.9 4.9 0.4 0.000000	</A36_Sherman_Jumbo>
@@ -1874,7 +1885,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -1948,6 +1959,7 @@
         <A32_M12>	3.1 3.1 0.27 0.21	</A32_M12>
         <A33_MTLS-1G14>	3.3 3.3 0.24 0.19	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	5.4 7.5 0.25 0.08	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	5.4 7.5 0.25 0.08	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	4.1 4.1 0.16 0.17	</A35_Pershing>
         <A35_Pershing_IGR>	4.1 4.1 0.16 0.17	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	3.2 3.2 0.17 0.000000	</A36_Sherman_Jumbo>
@@ -2027,7 +2039,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -2110,6 +2122,7 @@
         <A32_M12>	3 2.6 0.000000 0.000000	</A32_M12>
         <A33_MTLS-1G14>	2.6 2.6 5 7.8	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	5.1 4.8 0.000000 0.000000	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	5.1 4.8 0.000000 0.000000	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	3 3 0.000000 0.000000	</A35_Pershing>
         <A35_Pershing_IGR>	3 3 0.000000 0.000000	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	4.9 4.6 0.000000 0.18	</A36_Sherman_Jumbo>
@@ -2193,7 +2206,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -2275,6 +2288,7 @@
         <A32_M12>	2.6 2.7 0.000000 0.000000	</A32_M12>
         <A33_MTLS-1G14>	2.6 2.6 5 7.8	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	4.9 5 0.000000 0.000000	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	4.9 5 0.000000 0.000000	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	3 3 0.000000 0.000000	</A35_Pershing>
         <A35_Pershing_IGR>	3 3 0.000000 0.000000	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	4.6 4.6 0.000000 0.000000	</A36_Sherman_Jumbo>
@@ -2358,7 +2372,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -2440,6 +2454,7 @@
         <A32_M12>	2.6 2.7 0.000000 0.000000	</A32_M12>
         <A33_MTLS-1G14>	2.6 2.6 5 7.8	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	4.8 4.9 0.000000 0.000000	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	4.8 4.9 0.000000 0.000000	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	3 3 0.000000 0.000000	</A35_Pershing>
         <A35_Pershing_IGR>	3 3 0.000000 0.000000	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	4.5 4.5 0.000000 0.000000	</A36_Sherman_Jumbo>
@@ -2523,7 +2538,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -2605,6 +2620,7 @@
         <A32_M12>	3.1 3.1 0.17 0.000000	</A32_M12>
         <A33_MTLS-1G14>	2.6 2.6 5 7.8	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	5.5 5.4 0.1 0.3	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	5.5 5.4 0.1 0.3	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	3.3 3.3 0.34 0.000000	</A35_Pershing>
         <A35_Pershing_IGR>	3.3 3.3 0.34 0.000000	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	4.4 4.4 0.000000 0.000000	</A36_Sherman_Jumbo>
@@ -2688,6 +2704,9 @@
         <nations>	usa	</nations>
         <vehicles>	usa:A92_M60	</vehicles>
       </include>
+      <exclude>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
     </vehicleFilter>
     <camouflage>
       <id>	15231	</id>
@@ -2726,6 +2745,9 @@
         <nations>	usa	</nations>
         <vehicles>	usa:A95_T95_E6	</vehicles>
       </include>
+      <exclude>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
     </vehicleFilter>
     <camouflage>
       <id>	15232	</id>
@@ -2764,6 +2786,9 @@
         <nations>	usa	</nations>
         <vehicles>	usa:A102_T28_concept	</vehicles>
       </include>
+      <exclude>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
     </vehicleFilter>
     <camouflage>
       <id>	15240	</id>
@@ -2802,7 +2827,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -2883,6 +2908,7 @@
         <A32_M12>	2.8 2.8 0.000000 0.000000	</A32_M12>
         <A33_MTLS-1G14>	1.5 1.5 0.8 0.000000	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	3.3 3.2 0.29 0.56	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	3.3 3.2 0.29 0.56	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	2.3 2.3 0.06 0.02	</A35_Pershing>
         <A35_Pershing_IGR>	2.3 2.3 0.06 0.02	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	3.2 3.2 0.000000 0.06	</A36_Sherman_Jumbo>
@@ -2964,7 +2990,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -3048,6 +3074,7 @@
         <A32_M12>	3 3 2 0.38	</A32_M12>
         <A33_MTLS-1G14>	1.5 1.5 0.26 2.9	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	3.8 3.8 0.24 0.2	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	3.8 3.8 0.24 0.2	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	3.6 3.6 0.95 0.22	</A35_Pershing>
         <A35_Pershing_IGR>	3.6 3.6 0.95 0.22	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	4.6 4.6 0.69 0.08	</A36_Sherman_Jumbo>
@@ -3131,7 +3158,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -3211,6 +3238,7 @@
         <A32_M12>	2.7 2.7 0.000000 0.000000	</A32_M12>
         <A33_MTLS-1G14>	1.8 1.8 0.65 0.000000	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	3 3 0.43 0.31	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	3 3 0.43 0.31	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	2.8 2.8 0.000000 0.000000	</A35_Pershing>
         <A35_Pershing_IGR>	2.8 2.8 0.000000 0.000000	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	4.1 4.1 0.000000 0.000000	</A36_Sherman_Jumbo>
@@ -3294,7 +3322,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -3378,6 +3406,7 @@
         <A32_M12>	3 3 0.000000 0.000000	</A32_M12>
         <A33_MTLS-1G14>	1.7 1.7 0.000000 4.3	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	3 3 0.000000 0.000000	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	3 3 0.000000 0.000000	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	2.2 2.2 0.03 0.000000	</A35_Pershing>
         <A35_Pershing_IGR>	2.2 2.2 0.03 0.000000	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	3 3 0.000000 0.000000	</A36_Sherman_Jumbo>
@@ -3461,7 +3490,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -3540,6 +3569,7 @@
         <A32_M12>	3 3 0.000000 0.000000	</A32_M12>
         <A33_MTLS-1G14>	1.8 1.8 0.000000 0.000000	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	3 3 0.2 0.48	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	3 3 0.2 0.48	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	3 3 0.000000 0.000000	</A35_Pershing>
         <A35_Pershing_IGR>	3 3 0.000000 0.000000	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	3 3 0.000000 0.000000	</A36_Sherman_Jumbo>
@@ -3623,7 +3653,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -3707,6 +3737,7 @@
         <A32_M12>	5 5 0.000000 0.000000	</A32_M12>
         <A33_MTLS-1G14>	2.5 2.5 0.000000 0.000000	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	5 5 0.000000 0.000000	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	5 5 0.000000 0.000000	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	2.1 2.1 0.000000 0.000000	</A35_Pershing>
         <A35_Pershing_IGR>	2.1 2.1 0.000000 0.000000	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	5 5 0.000000 0.000000	</A36_Sherman_Jumbo>
@@ -3790,7 +3821,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -3872,6 +3903,7 @@
         <A32_M12>	5 5 0.2 0.000000	</A32_M12>
         <A33_MTLS-1G14>	3 3 2 3.1	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	5.6 5.5 0.26 0.000000	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	5.6 5.5 0.26 0.000000	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	3.8 3.8 0.59 0.000000	</A35_Pershing>
         <A36_Sherman_Jumbo>	5.9 5.8 0.25 0.000000	</A36_Sherman_Jumbo>
         <A36_Sherman_Jumbo_IGR>	5.9 5.8 0.25 0.000000	</A36_Sherman_Jumbo_IGR>
@@ -3954,7 +3986,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -4033,6 +4065,7 @@
         <A32_M12>	2 2 0.000000 0.000000	</A32_M12>
         <A33_MTLS-1G14>	1 1 4 1	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	2.2 2.1 0.000000 0.000000	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	2.2 2.1 0.000000 0.000000	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	1.6 1.6 0.01 0.05	</A35_Pershing>
         <A35_Pershing_IGR>	1.6 1.6 0.01 0.05	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	2.5 2.4 0.17 0.000000	</A36_Sherman_Jumbo>
@@ -4116,7 +4149,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -4196,6 +4229,7 @@
         <A32_M12>	2.7 2.7 0.000000 0.000000	</A32_M12>
         <A33_MTLS-1G14>	1.8 1.8 0.65 0.000000	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	3 3 0.43 0.31	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	3 3 0.43 0.31	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	2.8 2.8 0.000000 0.000000	</A35_Pershing>
         <A35_Pershing_IGR>	2.8 2.8 0.000000 0.000000	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	4.1 4.1 0.000000 0.000000	</A36_Sherman_Jumbo>
@@ -4279,7 +4313,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -4361,6 +4395,7 @@
         <A32_M12>	2.7 2.7 0.46 0.000000	</A32_M12>
         <A33_MTLS-1G14>	1.6 1.6 0.000000 2.3	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	3.3 3.3 0.86 0.44	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	3.3 3.3 0.86 0.44	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	2.2 2.2 0.2 0.000000	</A35_Pershing>
         <A35_Pershing_IGR>	2.2 2.2 0.2 0.000000	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	3.6 3.6 0.000000 0.000000	</A36_Sherman_Jumbo>
@@ -4443,6 +4478,9 @@
         <nations>	usa	</nations>
         <vehicles>	usa:A92_M60	</vehicles>
       </include>
+      <exclude>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
     </vehicleFilter>
     <camouflage>
       <id>	15233	</id>
@@ -4481,6 +4519,9 @@
         <nations>	usa	</nations>
         <vehicles>	usa:A95_T95_E6	</vehicles>
       </include>
+      <exclude>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
     </vehicleFilter>
     <camouflage>
       <id>	15234	</id>
@@ -4519,6 +4560,9 @@
         <nations>	usa	</nations>
         <vehicles>	usa:A102_T28_concept	</vehicles>
       </include>
+      <exclude>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
     </vehicleFilter>
     <camouflage>
       <id>	15241	</id>
@@ -4557,7 +4601,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -4641,6 +4685,7 @@
         <A32_M12>	7 7 0.44 0.67	</A32_M12>
         <A33_MTLS-1G14>	2.5 2.5 0.78 0.4	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	7.4 7.4 0.04 0.04	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	7.4 7.4 0.04 0.04	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	5.4 5.4 0.48 0.28	</A35_Pershing>
         <A35_Pershing_IGR>	5.4 5.4 0.48 0.28	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	8 8 0.36 0.44	</A36_Sherman_Jumbo>
@@ -4724,6 +4769,9 @@
         <nations>	usa	</nations>
         <vehicles>	usa:A92_M60	</vehicles>
       </include>
+      <exclude>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
     </vehicleFilter>
     <camouflage>
       <id>	15235	</id>
@@ -4762,6 +4810,9 @@
         <nations>	usa	</nations>
         <vehicles>	usa:A95_T95_E6	</vehicles>
       </include>
+      <exclude>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
     </vehicleFilter>
     <camouflage>
       <id>	15236	</id>
@@ -4800,6 +4851,9 @@
         <nations>	usa	</nations>
         <vehicles>	usa:A102_T28_concept	</vehicles>
       </include>
+      <exclude>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
     </vehicleFilter>
     <camouflage>
       <id>	15242	</id>
@@ -4837,7 +4891,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -4917,6 +4971,7 @@
         <A32_M12>	2.7 2.7 0.000000 0.000000	</A32_M12>
         <A33_MTLS-1G14>	1.8 1.8 0.65 0.000000	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	3 3 0.43 0.31	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	3 3 0.43 0.31	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	2.8 2.8 0.000000 0.000000	</A35_Pershing>
         <A35_Pershing_IGR>	2.8 2.8 0.000000 0.000000	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	4.1 4.1 0.000000 0.000000	</A36_Sherman_Jumbo>
@@ -5000,7 +5055,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF usa:A102_T28_concept	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A102_T28_concept usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -5074,6 +5129,7 @@
         <A32_M12>	2 2 1 1	</A32_M12>
         <A33_MTLS-1G14>	1 1 0.1 0.8	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	1.7 1.7 0.000000 0.3	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	1.7 1.7 0.000000 0.3	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	1.4 1.4 0.000000 0.8	</A35_Pershing>
         <A36_Sherman_Jumbo>	2 2 0.000000 0.8	</A36_Sherman_Jumbo>
         <A36_Sherman_Jumbo_IGR>	2 2 0.000000 0.8	</A36_Sherman_Jumbo_IGR>
@@ -5145,7 +5201,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF usa:A102_T28_concept	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A102_T28_concept usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -5220,6 +5276,7 @@
         <A32_M12>	2.2 2.2 0.000000 0.000000	</A32_M12>
         <A33_MTLS-1G14>	1 1 0.1 0.8	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	1.7 1.7 0.000000 0.3	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	1.7 1.7 0.000000 0.3	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	1.4 1.4 0.000000 0.8	</A35_Pershing>
         <A36_Sherman_Jumbo>	2 2 0.000000 0.8	</A36_Sherman_Jumbo>
         <A36_Sherman_Jumbo_IGR>	2 2 0.000000 0.8	</A36_Sherman_Jumbo_IGR>
@@ -5291,7 +5348,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF usa:A102_T28_concept	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A102_T28_concept usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -5366,6 +5423,7 @@
         <A32_M12>	3 3 1.6 4.4	</A32_M12>
         <A33_MTLS-1G14>	1 1 0.1 0.8	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	1.7 1.7 0.000000 0.3	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	1.7 1.7 0.000000 0.3	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	1.4 1.4 0.000000 0.8	</A35_Pershing>
         <A36_Sherman_Jumbo>	2 2 0.000000 0.8	</A36_Sherman_Jumbo>
         <A36_Sherman_Jumbo_IGR>	2 2 0.000000 0.8	</A36_Sherman_Jumbo_IGR>
@@ -5436,6 +5494,9 @@
         <nations>	usa	</nations>
         <vehicles>	usa:A45_M6A2E1	</vehicles>
       </include>
+      <exclude>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
     </vehicleFilter>
     <camouflage>
       <id>	15245	</id>
@@ -5473,6 +5534,9 @@
         <nations>	usa	</nations>
         <vehicles>	usa:A45_M6A2E1	</vehicles>
       </include>
+      <exclude>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
     </vehicleFilter>
     <camouflage>
       <id>	15246	</id>
@@ -5510,6 +5574,9 @@
         <nations>	usa	</nations>
         <vehicles>	usa:A45_M6A2E1	</vehicles>
       </include>
+      <exclude>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
     </vehicleFilter>
     <camouflage>
       <id>	15247	</id>
@@ -5546,7 +5613,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -5639,55 +5706,56 @@
         <usa:A07_T200>	2.5 2.5 1.31 2.93	</usa:A07_T200>
         <usa:A07_T201>	1.5 1.5 2.12 0.68	</usa:A07_T201>
         <usa:A07_T202>	3.17 3.17 4.92 4.77	</usa:A07_T202>
-        <usa:A07_T203>	2.15 2.15 7.73 5.95	</usa:A07_T203>
-        <usa:A07_T204>	3.5 3.5 2.56 1.06	</usa:A07_T204>
-        <usa:A07_T205>	1.08 1.08 3.92 7.2	</usa:A07_T205>
-        <usa:A07_T206>	1.7 1.7 5.96 6.53	</usa:A07_T206>
-        <usa:A07_T207>	1.3 1.3 0.62 2.35	</usa:A07_T207>
-        <usa:A07_T208>	3.45 3.45 2.44 2.79	</usa:A07_T208>
-        <usa:A07_T209>	2 2 6.08 5.48	</usa:A07_T209>
-        <usa:A09_T1_hvy0>	1.52 1.52 4.19 2.19	</usa:A09_T1_hvy0>
-        <usa:A09_T1_hvy1>	3.3 3.3 2.61 0.44	</usa:A09_T1_hvy1>
-        <usa:A09_T1_hvy2>	3.4 3.4 3.73 2.71	</usa:A09_T1_hvy2>
-        <usa:A09_T1_hvy3>	2.6 2.6 3.87 6.48	</usa:A09_T1_hvy3>
-        <usa:A09_T1_hvy4>	3.74 3.74 2.96 1.15	</usa:A09_T1_hvy4>
-        <usa:A09_T1_hvy5>	2.6 2.6 6.35 6.16	</usa:A09_T1_hvy5>
-        <usa:A09_T1_hvy6>	3.1 3.1 1.06 3.52	</usa:A09_T1_hvy6>
-        <usa:A09_T1_hvy7>	1.46 1.46 5.68 0.5	</usa:A09_T1_hvy7>
+        <usa:A07_T203>	3.17 3.17 4.92 4.77	</usa:A07_T203>
+        <usa:A07_T204>	2.15 2.15 7.73 5.95	</usa:A07_T204>
+        <usa:A07_T205>	3.5 3.5 2.56 1.06	</usa:A07_T205>
+        <usa:A07_T206>	1.08 1.08 3.92 7.2	</usa:A07_T206>
+        <usa:A07_T207>	1.7 1.7 5.96 6.53	</usa:A07_T207>
+        <usa:A07_T208>	1.3 1.3 0.62 2.35	</usa:A07_T208>
+        <usa:A07_T209>	3.45 3.45 2.44 2.79	</usa:A07_T209>
+        <usa:A09_T1_hvy0>	2 2 6.08 5.48	</usa:A09_T1_hvy0>
+        <usa:A09_T1_hvy1>	1.52 1.52 4.19 2.19	</usa:A09_T1_hvy1>
+        <usa:A09_T1_hvy2>	3.3 3.3 2.61 0.44	</usa:A09_T1_hvy2>
+        <usa:A09_T1_hvy3>	3.4 3.4 3.73 2.71	</usa:A09_T1_hvy3>
+        <usa:A09_T1_hvy4>	2.6 2.6 3.87 6.48	</usa:A09_T1_hvy4>
+        <usa:A09_T1_hvy5>	3.74 3.74 2.96 1.15	</usa:A09_T1_hvy5>
+        <usa:A09_T1_hvy6>	2.6 2.6 6.35 6.16	</usa:A09_T1_hvy6>
+        <usa:A09_T1_hvy7>	3.1 3.1 1.06 3.52	</usa:A09_T1_hvy7>
         <usa:A09_T1_hvy8>	1.46 1.46 5.68 0.5	</usa:A09_T1_hvy8>
         <usa:A09_T1_hvy9>	1.46 1.46 5.68 0.5	</usa:A09_T1_hvy9>
-        <usa:A100_T490>	3.25 3.25 3.05 2.49	</usa:A100_T490>
-        <usa:A100_T491>	3.1 3.1 0.91 1.21	</usa:A100_T491>
+        <usa:A100_T490>	1.46 1.46 5.68 0.5	</usa:A100_T490>
+        <usa:A100_T491>	3.25 3.25 3.05 2.49	</usa:A100_T491>
+        <usa:A100_T492>	3.1 3.1 0.91 1.21	</usa:A100_T492>
         <usa:A05_M4_Sherman6>	3.1 3.1 0.91 1.21	</usa:A05_M4_Sherman6>
         <usa:A05_M4_Sherman7>	3.1 3.1 0.91 1.21	</usa:A05_M4_Sherman7>
-        <usa:A100_T492>	3 3 3.5 3.55	</usa:A100_T492>
+        <usa:A100_T493>	3 3 3.5 3.55	</usa:A100_T493>
         <usa:A05_M4_Sherman5>	3 3 3.5 3.55	</usa:A05_M4_Sherman5>
-        <usa:A100_T493>	5.7 5.7 0.42 3.22	</usa:A100_T493>
-        <usa:A100_T494>	4.5 4.5 1.29 3.67	</usa:A100_T494>
+        <usa:A100_T494>	5.7 5.7 0.42 3.22	</usa:A100_T494>
         <usa:A100_T495>	4.5 4.5 1.29 3.67	</usa:A100_T495>
         <usa:A100_T496>	4.5 4.5 1.29 3.67	</usa:A100_T496>
-        <usa:A100_T497>	1.5 1.5 4.47 3.01	</usa:A100_T497>
-        <usa:A100_T498>	1.26 1.26 2.75 3.04	</usa:A100_T498>
-        <usa:A100_T499>	0.96 0.96 5.81 3.58	</usa:A100_T499>
-        <usa:A01_T1_Cunningham00>	2.6 2.6 5.7 0.48	</usa:A01_T1_Cunningham00>
-        <usa:A01_T1_Cunningham01>	3 3 2.01 8.3	</usa:A01_T1_Cunningham01>
+        <usa:A100_T497>	4.5 4.5 1.29 3.67	</usa:A100_T497>
+        <usa:A100_T498>	1.5 1.5 4.47 3.01	</usa:A100_T498>
+        <usa:A100_T499>	1.26 1.26 2.75 3.04	</usa:A100_T499>
+        <usa:A01_T1_Cunningham00>	0.96 0.96 5.81 3.58	</usa:A01_T1_Cunningham00>
+        <usa:A01_T1_Cunningham01>	2.6 2.6 5.7 0.48	</usa:A01_T1_Cunningham01>
         <usa:A01_T1_Cunningham02>	3 3 2.01 8.3	</usa:A01_T1_Cunningham02>
-        <usa:A01_T1_Cunningham03>	2.4 2.4 0.4 2.31	</usa:A01_T1_Cunningham03>
-        <usa:A01_T1_Cunningham04>	1.7 1.7 1.63 1.74	</usa:A01_T1_Cunningham04>
+        <usa:A01_T1_Cunningham03>	3 3 2.01 8.3	</usa:A01_T1_Cunningham03>
+        <usa:A01_T1_Cunningham04>	2.4 2.4 0.4 2.31	</usa:A01_T1_Cunningham04>
         <usa:A01_T1_Cunningham05>	1.7 1.7 1.63 1.74	</usa:A01_T1_Cunningham05>
-        <usa:A01_T1_Cunningham06>	3.45 3.45 1.6 0.77	</usa:A01_T1_Cunningham06>
-        <usa:A01_T1_Cunningham07>	2 2 10.59 2.74	</usa:A01_T1_Cunningham07>
-        <usa:A01_T1_Cunningham08>	3.5 3.5 1.36 6.52	</usa:A01_T1_Cunningham08>
-        <usa:A01_T1_Cunningham09>	3.4 3.4 1.15 1.84	</usa:A01_T1_Cunningham09>
-        <usa:A01_T1_Cunningham10>	4 4 2.13 1.36	</usa:A01_T1_Cunningham10>
-        <usa:A01_T1_Cunningham11>	3.3 3.3 5.93 1.71	</usa:A01_T1_Cunningham11>
-        <usa:A01_T1_Cunningham12>	2.6 2.6 1.19 0.34	</usa:A01_T1_Cunningham12>
-        <usa:A01_T1_Cunningham13>	2 2 1.97 0.99	</usa:A01_T1_Cunningham13>
-        <usa:A01_T1_Cunningham14>	3.2 3.2 0.67 0.67	</usa:A01_T1_Cunningham14>
-        <usa:A01_T1_Cunningham15>	2 2 2.68 0.6	</usa:A01_T1_Cunningham15>
-        <usa:A01_T1_Cunningham16>	3 3 0.38 0.68	</usa:A01_T1_Cunningham16>
+        <usa:A01_T1_Cunningham06>	1.7 1.7 1.63 1.74	</usa:A01_T1_Cunningham06>
+        <usa:A01_T1_Cunningham07>	3.45 3.45 1.6 0.77	</usa:A01_T1_Cunningham07>
+        <usa:A01_T1_Cunningham08>	2 2 10.59 2.74	</usa:A01_T1_Cunningham08>
+        <usa:A01_T1_Cunningham09>	3.5 3.5 1.36 6.52	</usa:A01_T1_Cunningham09>
+        <usa:A01_T1_Cunningham10>	3.4 3.4 1.15 1.84	</usa:A01_T1_Cunningham10>
+        <usa:A01_T1_Cunningham11>	4 4 2.13 1.36	</usa:A01_T1_Cunningham11>
+        <usa:A01_T1_Cunningham12>	3.3 3.3 5.93 1.71	</usa:A01_T1_Cunningham12>
+        <usa:A01_T1_Cunningham13>	2.6 2.6 1.19 0.34	</usa:A01_T1_Cunningham13>
+        <usa:A01_T1_Cunningham14>	2 2 1.97 0.99	</usa:A01_T1_Cunningham14>
+        <usa:A01_T1_Cunningham15>	3.2 3.2 0.67 0.67	</usa:A01_T1_Cunningham15>
+        <usa:A01_T1_Cunningham16>	2 2 2.68 0.6	</usa:A01_T1_Cunningham16>
         <usa:A01_T1_Cunningham17>	3 3 0.38 0.68	</usa:A01_T1_Cunningham17>
-        <usa:A01_T1_Cunningham18>	1.6 1.6 2.76 0.37	</usa:A01_T1_Cunningham18>
+        <usa:A01_T1_Cunningham18>	3 3 0.38 0.68	</usa:A01_T1_Cunningham18>
+        <usa:A01_T1_Cunningham19>	1.6 1.6 2.76 0.37	</usa:A01_T1_Cunningham19>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -5706,7 +5774,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -5799,54 +5867,55 @@
         <usa:A07_T200>	2.83 2.83 0.000000 0.000000	</usa:A07_T200>
         <usa:A07_T201>	1.4 1.4 0.36 0.000000	</usa:A07_T201>
         <usa:A07_T202>	3.15 3.15 1.86 1.79	</usa:A07_T202>
-        <usa:A07_T203>	2.31 2.31 7.79 3.77	</usa:A07_T203>
-        <usa:A07_T204>	3.87 3.87 0.000000 0.000000	</usa:A07_T204>
-        <usa:A07_T205>	0.94 0.94 1.37 0.39	</usa:A07_T205>
-        <usa:A07_T206>	1.24 1.24 2.57 3.86	</usa:A07_T206>
-        <usa:A07_T207>	1.22 1.22 0.21 1	</usa:A07_T207>
-        <usa:A07_T208>	3.37 3.37 0.31 0.07	</usa:A07_T208>
-        <usa:A07_T209>	2.44 2.44 1.51 0.35	</usa:A07_T209>
-        <usa:A09_T1_hvy0>	1.94 1.94 2.88 1.38	</usa:A09_T1_hvy0>
-        <usa:A09_T1_hvy1>	3.64 3.64 0.51 -0.01	</usa:A09_T1_hvy1>
-        <usa:A09_T1_hvy2>	3.31 3.31 3.54 2.95	</usa:A09_T1_hvy2>
-        <usa:A09_T1_hvy3>	3.35 3.35 1.79 -0.07	</usa:A09_T1_hvy3>
-        <usa:A09_T1_hvy4>	4.29 4.29 1.75 0.13	</usa:A09_T1_hvy4>
-        <usa:A09_T1_hvy5>	3.07 3.07 6.36 6.54	</usa:A09_T1_hvy5>
-        <usa:A09_T1_hvy6>	3.53 3.53 1.16 -0.26	</usa:A09_T1_hvy6>
-        <usa:A09_T1_hvy7>	1.52 1.52 5.72 0.51	</usa:A09_T1_hvy7>
+        <usa:A07_T203>	3.15 3.15 1.86 1.79	</usa:A07_T203>
+        <usa:A07_T204>	2.31 2.31 7.79 3.77	</usa:A07_T204>
+        <usa:A07_T205>	3.87 3.87 0.000000 0.000000	</usa:A07_T205>
+        <usa:A07_T206>	0.94 0.94 1.37 0.39	</usa:A07_T206>
+        <usa:A07_T207>	1.24 1.24 2.57 3.86	</usa:A07_T207>
+        <usa:A07_T208>	1.22 1.22 0.21 1	</usa:A07_T208>
+        <usa:A07_T209>	3.37 3.37 0.31 0.07	</usa:A07_T209>
+        <usa:A09_T1_hvy0>	2.44 2.44 1.51 0.35	</usa:A09_T1_hvy0>
+        <usa:A09_T1_hvy1>	1.94 1.94 2.88 1.38	</usa:A09_T1_hvy1>
+        <usa:A09_T1_hvy2>	3.64 3.64 0.51 -0.01	</usa:A09_T1_hvy2>
+        <usa:A09_T1_hvy3>	3.31 3.31 3.54 2.95	</usa:A09_T1_hvy3>
+        <usa:A09_T1_hvy4>	3.35 3.35 1.79 -0.07	</usa:A09_T1_hvy4>
+        <usa:A09_T1_hvy5>	4.29 4.29 1.75 0.13	</usa:A09_T1_hvy5>
+        <usa:A09_T1_hvy6>	3.07 3.07 6.36 6.54	</usa:A09_T1_hvy6>
+        <usa:A09_T1_hvy7>	3.53 3.53 1.16 -0.26	</usa:A09_T1_hvy7>
         <usa:A09_T1_hvy8>	1.52 1.52 5.72 0.51	</usa:A09_T1_hvy8>
-        <usa:A09_T1_hvy9>	2.31 2.31 0.93 0.79	</usa:A09_T1_hvy9>
-        <usa:A100_T490>	3.59 3.59 4.48 0.55	</usa:A100_T490>
-        <usa:A100_T491>	3.19 3.19 0.29 0.12	</usa:A100_T491>
+        <usa:A09_T1_hvy9>	1.52 1.52 5.72 0.51	</usa:A09_T1_hvy9>
+        <usa:A100_T490>	2.31 2.31 0.93 0.79	</usa:A100_T490>
+        <usa:A100_T491>	3.59 3.59 4.48 0.55	</usa:A100_T491>
+        <usa:A100_T492>	3.19 3.19 0.29 0.12	</usa:A100_T492>
         <usa:A05_M4_Sherman6>	3.19 3.19 0.29 0.12	</usa:A05_M4_Sherman6>
         <usa:A05_M4_Sherman7>	3.19 3.19 0.29 0.12	</usa:A05_M4_Sherman7>
-        <usa:A100_T492>	2.64 2.64 3.92 -0.16	</usa:A100_T492>
-        <usa:A100_T493>	5.63 5.63 1.61 1.02	</usa:A100_T493>
-        <usa:A100_T494>	4.39 4.39 0.87 0.75	</usa:A100_T494>
+        <usa:A100_T493>	2.64 2.64 3.92 -0.16	</usa:A100_T493>
+        <usa:A100_T494>	5.63 5.63 1.61 1.02	</usa:A100_T494>
         <usa:A100_T495>	4.39 4.39 0.87 0.75	</usa:A100_T495>
         <usa:A100_T496>	4.39 4.39 0.87 0.75	</usa:A100_T496>
-        <usa:A100_T497>	1.45 1.45 0.000000 0.000000	</usa:A100_T497>
-        <usa:A100_T498>	1.36 1.36 1.85 1.3	</usa:A100_T498>
-        <usa:A100_T499>	1.12 1.12 2.33 3.73	</usa:A100_T499>
-        <usa:A01_T1_Cunningham00>	2.73 2.73 6.5 0.5	</usa:A01_T1_Cunningham00>
-        <usa:A01_T1_Cunningham01>	2.8 2.8 2.97 0.49	</usa:A01_T1_Cunningham01>
+        <usa:A100_T497>	4.39 4.39 0.87 0.75	</usa:A100_T497>
+        <usa:A100_T498>	1.45 1.45 0.000000 0.000000	</usa:A100_T498>
+        <usa:A100_T499>	1.36 1.36 1.85 1.3	</usa:A100_T499>
+        <usa:A01_T1_Cunningham00>	1.12 1.12 2.33 3.73	</usa:A01_T1_Cunningham00>
+        <usa:A01_T1_Cunningham01>	2.73 2.73 6.5 0.5	</usa:A01_T1_Cunningham01>
         <usa:A01_T1_Cunningham02>	2.8 2.8 2.97 0.49	</usa:A01_T1_Cunningham02>
-        <usa:A01_T1_Cunningham03>	2.37 2.37 0.000000 1.83	</usa:A01_T1_Cunningham03>
-        <usa:A01_T1_Cunningham04>	1.65 1.65 0.000000 0.34	</usa:A01_T1_Cunningham04>
+        <usa:A01_T1_Cunningham03>	2.8 2.8 2.97 0.49	</usa:A01_T1_Cunningham03>
+        <usa:A01_T1_Cunningham04>	2.37 2.37 0.000000 1.83	</usa:A01_T1_Cunningham04>
         <usa:A01_T1_Cunningham05>	1.65 1.65 0.000000 0.34	</usa:A01_T1_Cunningham05>
-        <usa:A01_T1_Cunningham06>	3.42 3.42 0.83 0.92	</usa:A01_T1_Cunningham06>
-        <usa:A01_T1_Cunningham07>	2.22 2.22 9.45 0.63	</usa:A01_T1_Cunningham07>
-        <usa:A01_T1_Cunningham08>	3.88 3.88 0.97 6.6	</usa:A01_T1_Cunningham08>
-        <usa:A01_T1_Cunningham09>	2.97 2.97 0.000000 0.38	</usa:A01_T1_Cunningham09>
-        <usa:A01_T1_Cunningham10>	3.82 3.82 0.19 0.000000	</usa:A01_T1_Cunningham10>
-        <usa:A01_T1_Cunningham11>	3.38 3.38 0.000000 0.000000	</usa:A01_T1_Cunningham11>
-        <usa:A01_T1_Cunningham12>	2.9 2.9 0.26 0.000000	</usa:A01_T1_Cunningham12>
-        <usa:A01_T1_Cunningham13>	2.25 2.25 0.000000 0.33	</usa:A01_T1_Cunningham13>
-        <usa:A01_T1_Cunningham14>	3.54 3.54 4.25 0.08	</usa:A01_T1_Cunningham14>
-        <usa:A01_T1_Cunningham15>	1.99 1.99 1.33 0.000000	</usa:A01_T1_Cunningham15>
-        <usa:A01_T1_Cunningham16>	3.26 3.26 0.000000 0.000000	</usa:A01_T1_Cunningham16>
+        <usa:A01_T1_Cunningham06>	1.65 1.65 0.000000 0.34	</usa:A01_T1_Cunningham06>
+        <usa:A01_T1_Cunningham07>	3.42 3.42 0.83 0.92	</usa:A01_T1_Cunningham07>
+        <usa:A01_T1_Cunningham08>	2.22 2.22 9.45 0.63	</usa:A01_T1_Cunningham08>
+        <usa:A01_T1_Cunningham09>	3.88 3.88 0.97 6.6	</usa:A01_T1_Cunningham09>
+        <usa:A01_T1_Cunningham10>	2.97 2.97 0.000000 0.38	</usa:A01_T1_Cunningham10>
+        <usa:A01_T1_Cunningham11>	3.82 3.82 0.19 0.000000	</usa:A01_T1_Cunningham11>
+        <usa:A01_T1_Cunningham12>	3.38 3.38 0.000000 0.000000	</usa:A01_T1_Cunningham12>
+        <usa:A01_T1_Cunningham13>	2.9 2.9 0.26 0.000000	</usa:A01_T1_Cunningham13>
+        <usa:A01_T1_Cunningham14>	2.25 2.25 0.000000 0.33	</usa:A01_T1_Cunningham14>
+        <usa:A01_T1_Cunningham15>	3.54 3.54 4.25 0.08	</usa:A01_T1_Cunningham15>
+        <usa:A01_T1_Cunningham16>	1.99 1.99 1.33 0.000000	</usa:A01_T1_Cunningham16>
         <usa:A01_T1_Cunningham17>	3.26 3.26 0.000000 0.000000	</usa:A01_T1_Cunningham17>
-        <usa:A01_T1_Cunningham18>	1.87 1.87 0.000000 0.62	</usa:A01_T1_Cunningham18>
+        <usa:A01_T1_Cunningham18>	3.26 3.26 0.000000 0.000000	</usa:A01_T1_Cunningham18>
+        <usa:A01_T1_Cunningham19>	1.87 1.87 0.000000 0.62	</usa:A01_T1_Cunningham19>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -5865,7 +5934,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -5958,57 +6027,58 @@
         <usa:A07_T200>	1.5 1.5 2.08 2.15	</usa:A07_T200>
         <usa:A07_T201>	0.9 0.9 2.89 5.27	</usa:A07_T201>
         <usa:A07_T202>	1.9 1.9 2.28 4.97	</usa:A07_T202>
-        <usa:A07_T203>	1.3 1.3 7.94 4.17	</usa:A07_T203>
-        <usa:A07_T204>	2.02 2.02 0.19 1.43	</usa:A07_T204>
-        <usa:A07_T205>	0.61 0.61 0.95 2.08	</usa:A07_T205>
-        <usa:A07_T206>	1.02 1.02 2.61 5.89	</usa:A07_T206>
-        <usa:A07_T207>	0.74 0.74 1.61 2.74	</usa:A07_T207>
-        <usa:A07_T208>	2.05 2.05 0.19 0.09	</usa:A07_T208>
-        <usa:A07_T209>	1.15 1.15 5.14 3.56	</usa:A07_T209>
-        <usa:A09_T1_hvy0>	0.94 0.94 5.62 4.18	</usa:A09_T1_hvy0>
-        <usa:A09_T1_hvy1>	2 2 0.7 4.23	</usa:A09_T1_hvy1>
-        <usa:A09_T1_hvy2>	2.04 2.04 3.54 4.3	</usa:A09_T1_hvy2>
-        <usa:A09_T1_hvy3>	1.9 1.9 3.45 0.34	</usa:A09_T1_hvy3>
-        <usa:A09_T1_hvy4>	2.22 2.22 0.86 2.06	</usa:A09_T1_hvy4>
-        <usa:A09_T1_hvy5>	1.5 1.5 8.64 8.98	</usa:A09_T1_hvy5>
-        <usa:A09_T1_hvy6>	1.8 1.8 2.79 5.29	</usa:A09_T1_hvy6>
-        <usa:A09_T1_hvy7>	0.89 0.89 6.58 1.77	</usa:A09_T1_hvy7>
+        <usa:A07_T203>	1.9 1.9 2.28 4.97	</usa:A07_T203>
+        <usa:A07_T204>	1.3 1.3 7.94 4.17	</usa:A07_T204>
+        <usa:A07_T205>	2.02 2.02 0.19 1.43	</usa:A07_T205>
+        <usa:A07_T206>	0.61 0.61 0.95 2.08	</usa:A07_T206>
+        <usa:A07_T207>	1.02 1.02 2.61 5.89	</usa:A07_T207>
+        <usa:A07_T208>	0.74 0.74 1.61 2.74	</usa:A07_T208>
+        <usa:A07_T209>	2.05 2.05 0.19 0.09	</usa:A07_T209>
+        <usa:A09_T1_hvy0>	1.15 1.15 5.14 3.56	</usa:A09_T1_hvy0>
+        <usa:A09_T1_hvy1>	0.94 0.94 5.62 4.18	</usa:A09_T1_hvy1>
+        <usa:A09_T1_hvy2>	2 2 0.7 4.23	</usa:A09_T1_hvy2>
+        <usa:A09_T1_hvy3>	2.04 2.04 3.54 4.3	</usa:A09_T1_hvy3>
+        <usa:A09_T1_hvy4>	1.9 1.9 3.45 0.34	</usa:A09_T1_hvy4>
+        <usa:A09_T1_hvy5>	2.22 2.22 0.86 2.06	</usa:A09_T1_hvy5>
+        <usa:A09_T1_hvy6>	1.5 1.5 8.64 8.98	</usa:A09_T1_hvy6>
+        <usa:A09_T1_hvy7>	1.8 1.8 2.79 5.29	</usa:A09_T1_hvy7>
         <usa:A09_T1_hvy8>	0.89 0.89 6.58 1.77	</usa:A09_T1_hvy8>
-        <usa:A09_T1_hvy9>	1.21 1.21 0.93 0.79	</usa:A09_T1_hvy9>
-        <usa:A100_T490>	1.89 1.89 4.99 4.66	</usa:A100_T490>
-        <usa:A100_T491>	1.85 1.85 0.32 0.2	</usa:A100_T491>
+        <usa:A09_T1_hvy9>	0.89 0.89 6.58 1.77	</usa:A09_T1_hvy9>
+        <usa:A100_T490>	1.21 1.21 0.93 0.79	</usa:A100_T490>
+        <usa:A100_T491>	1.89 1.89 4.99 4.66	</usa:A100_T491>
+        <usa:A100_T492>	1.85 1.85 0.32 0.2	</usa:A100_T492>
         <usa:A05_M4_Sherman6>	1.85 1.85 0.32 0.2	</usa:A05_M4_Sherman6>
         <usa:A05_M4_Sherman7>	1.85 1.85 0.32 0.2	</usa:A05_M4_Sherman7>
-        <usa:A100_T492>	1.7 1.7 3.63 1.25	</usa:A100_T492>
+        <usa:A100_T493>	1.7 1.7 3.63 1.25	</usa:A100_T493>
         <usa:A05_M4_Sherman5>	1.7 1.7 3.63 1.25	</usa:A05_M4_Sherman5>
-        <usa:A100_T493>	3.34 3.34 4.38 2.58	</usa:A100_T493>
-        <usa:A100_T494>	2.6 2.6 1.43 3.95	</usa:A100_T494>
+        <usa:A100_T494>	3.34 3.34 4.38 2.58	</usa:A100_T494>
         <usa:A100_T495>	2.6 2.6 1.43 3.95	</usa:A100_T495>
         <usa:A100_T496>	2.6 2.6 1.43 3.95	</usa:A100_T496>
-        <usa:A100_T497>	0.9 0.9 2.46 3.2	</usa:A100_T497>
-        <usa:A100_T498>	0.78 0.78 3.42 4.77	</usa:A100_T498>
-        <usa:A100_T499>	0.57 0.57 2.81 4.36	</usa:A100_T499>
-        <usa:A01_T1_Cunningham00>	1.5 1.5 6.51 6.7	</usa:A01_T1_Cunningham00>
-        <usa:A01_T1_Cunningham01>	1.73 1.73 3.95 5.02	</usa:A01_T1_Cunningham01>
-        <usa:A01_T1_Cunningham02>	1.72 1.72 3.03 0.49	</usa:A01_T1_Cunningham02>
-        <usa:A01_T1_Cunningham03>	1.22 1.22 3.69 6.86	</usa:A01_T1_Cunningham03>
-        <usa:A01_T1_Cunningham04>	1.05 1.05 3.59 1.83	</usa:A01_T1_Cunningham04>
+        <usa:A100_T497>	2.6 2.6 1.43 3.95	</usa:A100_T497>
+        <usa:A100_T498>	0.9 0.9 2.46 3.2	</usa:A100_T498>
+        <usa:A100_T499>	0.78 0.78 3.42 4.77	</usa:A100_T499>
+        <usa:A01_T1_Cunningham00>	0.57 0.57 2.81 4.36	</usa:A01_T1_Cunningham00>
+        <usa:A01_T1_Cunningham01>	1.5 1.5 6.51 6.7	</usa:A01_T1_Cunningham01>
+        <usa:A01_T1_Cunningham02>	1.73 1.73 3.95 5.02	</usa:A01_T1_Cunningham02>
+        <usa:A01_T1_Cunningham03>	1.72 1.72 3.03 0.49	</usa:A01_T1_Cunningham03>
+        <usa:A01_T1_Cunningham04>	1.22 1.22 3.69 6.86	</usa:A01_T1_Cunningham04>
         <usa:A01_T1_Cunningham05>	1.05 1.05 3.59 1.83	</usa:A01_T1_Cunningham05>
-        <usa:A01_T1_Cunningham06>	1.95 1.95 2.38 1.84	</usa:A01_T1_Cunningham06>
-        <usa:A01_T1_Cunningham07>	1.17 1.17 5.39 6.34	</usa:A01_T1_Cunningham07>
-        <usa:A01_T1_Cunningham08>	2.03 2.03 1.99 6.62	</usa:A01_T1_Cunningham08>
-        <usa:A01_T1_Cunningham09>	2 2 0.46 3.81	</usa:A01_T1_Cunningham09>
-        <usa:A01_T1_Cunningham10>	2.11 2.11 3.27 3.47	</usa:A01_T1_Cunningham10>
-        <usa:A01_T1_Cunningham11>	2 2 6.45 5.47	</usa:A01_T1_Cunningham11>
-        <usa:A01_T1_Cunningham12>	1.52 1.52 0.74 1.2	</usa:A01_T1_Cunningham12>
-        <usa:A01_T1_Cunningham13>	1.2 1.2 4.91 1.84	</usa:A01_T1_Cunningham13>
-        <usa:A01_T1_Cunningham14>	1.85 1.85 0.97 1.21	</usa:A01_T1_Cunningham14>
-        <usa:A01_T1_Cunningham15>	1.14 1.14 5.1 1.98	</usa:A01_T1_Cunningham15>
-        <usa:A01_T1_Cunningham16>	1.7 1.7 7.38 2.41	</usa:A01_T1_Cunningham16>
+        <usa:A01_T1_Cunningham06>	1.05 1.05 3.59 1.83	</usa:A01_T1_Cunningham06>
+        <usa:A01_T1_Cunningham07>	1.95 1.95 2.38 1.84	</usa:A01_T1_Cunningham07>
+        <usa:A01_T1_Cunningham08>	1.17 1.17 5.39 6.34	</usa:A01_T1_Cunningham08>
+        <usa:A01_T1_Cunningham09>	2.03 2.03 1.99 6.62	</usa:A01_T1_Cunningham09>
+        <usa:A01_T1_Cunningham10>	2 2 0.46 3.81	</usa:A01_T1_Cunningham10>
+        <usa:A01_T1_Cunningham11>	2.11 2.11 3.27 3.47	</usa:A01_T1_Cunningham11>
+        <usa:A01_T1_Cunningham12>	2 2 6.45 5.47	</usa:A01_T1_Cunningham12>
+        <usa:A01_T1_Cunningham13>	1.52 1.52 0.74 1.2	</usa:A01_T1_Cunningham13>
+        <usa:A01_T1_Cunningham14>	1.2 1.2 4.91 1.84	</usa:A01_T1_Cunningham14>
+        <usa:A01_T1_Cunningham15>	1.85 1.85 0.97 1.21	</usa:A01_T1_Cunningham15>
+        <usa:A01_T1_Cunningham16>	1.14 1.14 5.1 1.98	</usa:A01_T1_Cunningham16>
         <usa:A01_T1_Cunningham17>	1.7 1.7 7.38 2.41	</usa:A01_T1_Cunningham17>
-        <usa:A01_T1_Cunningham18>	0.89 0.89 3.44 0.43	</usa:A01_T1_Cunningham18>
-        <usa:A01_T1_Cunningham19>	1.47 1.47 0.21 0.000000	</usa:A01_T1_Cunningham19>
-        <usa:A01_T1_Cunningham20>	1.24 1.24 0.2 0.07	</usa:A01_T1_Cunningham20>
+        <usa:A01_T1_Cunningham18>	1.7 1.7 7.38 2.41	</usa:A01_T1_Cunningham18>
+        <usa:A01_T1_Cunningham19>	0.89 0.89 3.44 0.43	</usa:A01_T1_Cunningham19>
+        <usa:A01_T1_Cunningham20>	1.47 1.47 0.21 0.000000	</usa:A01_T1_Cunningham20>
+        <usa:A01_T1_Cunningham21>	1.24 1.24 0.2 0.07	</usa:A01_T1_Cunningham21>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -6027,7 +6097,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -6119,54 +6189,54 @@
         <usa:A07_T200>	4.29 4.29 1.47 -0.66	</usa:A07_T200>
         <usa:A07_T201>	2.74 2.74 2.86 0.000000	</usa:A07_T201>
         <usa:A07_T202>	5.66 5.66 -0.34 4.64	</usa:A07_T202>
-        <usa:A07_T203>	3.85 3.85 7.79 4.04	</usa:A07_T203>
-        <usa:A07_T204>	6.15 6.15 0.15 -0.44	</usa:A07_T204>
-        <usa:A07_T205>	1.34 1.34 0.66 0.39	</usa:A07_T205>
-        <usa:A07_T206>	1.99 1.99 -0.45 6.01	</usa:A07_T206>
-        <usa:A07_T207>	2.08 2.08 0.21 0.000000	</usa:A07_T207>
-        <usa:A07_T208>	4 4 0.28 0.08	</usa:A07_T208>
-        <usa:A07_T209>	3.21 3.21 5.08 0.35	</usa:A07_T209>
-        <usa:A09_T1_hvy0>	3.03 3.03 4.12 1.38	</usa:A09_T1_hvy0>
-        <usa:A09_T1_hvy1>	6.33 6.33 0.72 0.000000	</usa:A09_T1_hvy1>
-        <usa:A09_T1_hvy2>	5.27 5.27 3.54 2.95	</usa:A09_T1_hvy2>
-        <usa:A09_T1_hvy3>	5.12 5.12 3.46 -0.07	</usa:A09_T1_hvy3>
-        <usa:A09_T1_hvy4>	7.09 7.09 0.86 0.000000	</usa:A09_T1_hvy4>
-        <usa:A09_T1_hvy5>	4.81 4.81 6.36 6.1	</usa:A09_T1_hvy5>
-        <usa:A09_T1_hvy6>	5.89 5.89 1.39 0.000000	</usa:A09_T1_hvy6>
-        <usa:A09_T1_hvy7>	2.36 2.36 5.72 0.000000	</usa:A09_T1_hvy7>
+        <usa:A07_T204>	3.85 3.85 7.79 4.04	</usa:A07_T204>
+        <usa:A07_T205>	6.15 6.15 0.15 -0.44	</usa:A07_T205>
+        <usa:A07_T206>	1.34 1.34 0.66 0.39	</usa:A07_T206>
+        <usa:A07_T207>	1.99 1.99 -0.45 6.01	</usa:A07_T207>
+        <usa:A07_T208>	2.08 2.08 0.21 0.000000	</usa:A07_T208>
+        <usa:A07_T209>	4 4 0.28 0.08	</usa:A07_T209>
+        <usa:A09_T1_hvy0>	3.21 3.21 5.08 0.35	</usa:A09_T1_hvy0>
+        <usa:A09_T1_hvy1>	3.03 3.03 4.12 1.38	</usa:A09_T1_hvy1>
+        <usa:A09_T1_hvy2>	6.33 6.33 0.72 0.000000	</usa:A09_T1_hvy2>
+        <usa:A09_T1_hvy3>	5.27 5.27 3.54 2.95	</usa:A09_T1_hvy3>
+        <usa:A09_T1_hvy4>	5.12 5.12 3.46 -0.07	</usa:A09_T1_hvy4>
+        <usa:A09_T1_hvy5>	7.09 7.09 0.86 0.000000	</usa:A09_T1_hvy5>
+        <usa:A09_T1_hvy6>	4.81 4.81 6.36 6.1	</usa:A09_T1_hvy6>
+        <usa:A09_T1_hvy7>	5.89 5.89 1.39 0.000000	</usa:A09_T1_hvy7>
         <usa:A09_T1_hvy8>	2.36 2.36 5.72 0.000000	</usa:A09_T1_hvy8>
-        <usa:A09_T1_hvy9>	3.9 3.9 0.93 0.79	</usa:A09_T1_hvy9>
-        <usa:A100_T490>	6.11 6.11 4.38 0.000000	</usa:A100_T490>
-        <usa:A100_T491>	4.71 4.71 0.15 0.12	</usa:A100_T491>
+        <usa:A09_T1_hvy9>	2.36 2.36 5.72 0.000000	</usa:A09_T1_hvy9>
+        <usa:A100_T490>	3.9 3.9 0.93 0.79	</usa:A100_T490>
+        <usa:A100_T491>	6.11 6.11 4.38 0.000000	</usa:A100_T491>
+        <usa:A100_T492>	4.71 4.71 0.15 0.12	</usa:A100_T492>
         <usa:A05_M4_Sherman6>	4.71 4.71 0.15 0.12	</usa:A05_M4_Sherman6>
         <usa:A05_M4_Sherman7>	4.71 4.71 0.15 0.12	</usa:A05_M4_Sherman7>
-        <usa:A100_T492>	4.14 4.14 3.65 -0.16	</usa:A100_T492>
-        <usa:A100_T493>	8.7 8.7 1.61 1.02	</usa:A100_T493>
-        <usa:A100_T494>	6.41 6.41 1.42 0.000000	</usa:A100_T494>
+        <usa:A100_T493>	4.14 4.14 3.65 -0.16	</usa:A100_T493>
+        <usa:A100_T494>	8.7 8.7 1.61 1.02	</usa:A100_T494>
         <usa:A100_T495>	6.41 6.41 1.42 0.000000	</usa:A100_T495>
         <usa:A100_T496>	6.41 6.41 1.42 0.000000	</usa:A100_T496>
-        <usa:A100_T497>	2.34 2.34 -1.07 -1.21	</usa:A100_T497>
-        <usa:A100_T498>	2.23 2.23 4.66 3.34	</usa:A100_T498>
-        <usa:A100_T499>	1.67 1.67 1.59 3.71	</usa:A100_T499>
-        <usa:A01_T1_Cunningham00>	4.87 4.87 6.5 0.5	</usa:A01_T1_Cunningham00>
-        <usa:A01_T1_Cunningham01>	5.79 5.79 3.04 0.49	</usa:A01_T1_Cunningham01>
+        <usa:A100_T497>	6.41 6.41 1.42 0.000000	</usa:A100_T497>
+        <usa:A100_T498>	2.34 2.34 -1.07 -1.21	</usa:A100_T498>
+        <usa:A100_T499>	2.23 2.23 4.66 3.34	</usa:A100_T499>
+        <usa:A01_T1_Cunningham00>	1.67 1.67 1.59 3.71	</usa:A01_T1_Cunningham00>
+        <usa:A01_T1_Cunningham01>	4.87 4.87 6.5 0.5	</usa:A01_T1_Cunningham01>
         <usa:A01_T1_Cunningham02>	5.79 5.79 3.04 0.49	</usa:A01_T1_Cunningham02>
-        <usa:A01_T1_Cunningham03>	3.95 3.95 0.000000 1.83	</usa:A01_T1_Cunningham03>
-        <usa:A01_T1_Cunningham04>	2.87 2.87 1.46 0.56	</usa:A01_T1_Cunningham04>
+        <usa:A01_T1_Cunningham03>	5.79 5.79 3.04 0.49	</usa:A01_T1_Cunningham03>
+        <usa:A01_T1_Cunningham04>	3.95 3.95 0.000000 1.83	</usa:A01_T1_Cunningham04>
         <usa:A01_T1_Cunningham05>	2.87 2.87 1.46 0.56	</usa:A01_T1_Cunningham05>
-        <usa:A01_T1_Cunningham06>	5.85 5.85 0.91 0.92	</usa:A01_T1_Cunningham06>
-        <usa:A01_T1_Cunningham07>	3.37 3.37 9.45 0.63	</usa:A01_T1_Cunningham07>
-        <usa:A01_T1_Cunningham08>	5.82 5.82 0.97 6.6	</usa:A01_T1_Cunningham08>
-        <usa:A01_T1_Cunningham09>	4.56 4.56 0.05 0.38	</usa:A01_T1_Cunningham09>
-        <usa:A01_T1_Cunningham10>	5.89 5.89 1.83 0.94	</usa:A01_T1_Cunningham10>
-        <usa:A01_T1_Cunningham11>	5.52 5.52 6.09 4.21	</usa:A01_T1_Cunningham11>
-        <usa:A01_T1_Cunningham12>	4.9 4.9 0.35 0.66	</usa:A01_T1_Cunningham12>
-        <usa:A01_T1_Cunningham13>	3.4 3.4 1.73 1.84	</usa:A01_T1_Cunningham13>
-        <usa:A01_T1_Cunningham14>	5.99 5.99 0.67 0.41	</usa:A01_T1_Cunningham14>
-        <usa:A01_T1_Cunningham15>	3.1 3.1 2.63 0.000000	</usa:A01_T1_Cunningham15>
-        <usa:A01_T1_Cunningham16>	5.45 5.45 0.92 1.42	</usa:A01_T1_Cunningham16>
+        <usa:A01_T1_Cunningham06>	2.87 2.87 1.46 0.56	</usa:A01_T1_Cunningham06>
+        <usa:A01_T1_Cunningham07>	5.85 5.85 0.91 0.92	</usa:A01_T1_Cunningham07>
+        <usa:A01_T1_Cunningham08>	3.37 3.37 9.45 0.63	</usa:A01_T1_Cunningham08>
+        <usa:A01_T1_Cunningham09>	5.82 5.82 0.97 6.6	</usa:A01_T1_Cunningham09>
+        <usa:A01_T1_Cunningham10>	4.56 4.56 0.05 0.38	</usa:A01_T1_Cunningham10>
+        <usa:A01_T1_Cunningham11>	5.89 5.89 1.83 0.94	</usa:A01_T1_Cunningham11>
+        <usa:A01_T1_Cunningham12>	5.52 5.52 6.09 4.21	</usa:A01_T1_Cunningham12>
+        <usa:A01_T1_Cunningham13>	4.9 4.9 0.35 0.66	</usa:A01_T1_Cunningham13>
+        <usa:A01_T1_Cunningham14>	3.4 3.4 1.73 1.84	</usa:A01_T1_Cunningham14>
+        <usa:A01_T1_Cunningham15>	5.99 5.99 0.67 0.41	</usa:A01_T1_Cunningham15>
+        <usa:A01_T1_Cunningham16>	3.1 3.1 2.63 0.000000	</usa:A01_T1_Cunningham16>
         <usa:A01_T1_Cunningham17>	5.45 5.45 0.92 1.42	</usa:A01_T1_Cunningham17>
-        <usa:A01_T1_Cunningham18>	2.87 2.87 2.51 1.26	</usa:A01_T1_Cunningham18>
+        <usa:A01_T1_Cunningham18>	5.45 5.45 0.92 1.42	</usa:A01_T1_Cunningham18>
+        <usa:A01_T1_Cunningham19>	2.87 2.87 2.51 1.26	</usa:A01_T1_Cunningham19>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -6185,7 +6255,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -6273,6 +6343,7 @@
         <A32_M12>	2.49 2.49 0.000000 0.4	</A32_M12>
         <A33_MTLS-1G14>	1.24 1.24 6.8 6.3	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	2.64 2.57 0.000000 0.000000	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	2.64 2.57 0.000000 0.000000	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	1.7 1.7 0.000000 0.000000	</A35_Pershing>
         <A35_Pershing_IGR>	2.39 2.46 0.000000 0.000000	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	3 3 0.000000 0.000000	</A36_Sherman_Jumbo>
@@ -6356,7 +6427,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -6444,6 +6515,7 @@
         <A32_M12>	4.16 4.16 5.3 2.2	</A32_M12>
         <A33_MTLS-1G14>	2.5 2.5 4.1 5.3	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	5 5 1.18 0.46	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	5 5 1.18 0.46	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	4 4 0.12 0.06	</A35_Pershing>
         <A35_Pershing_IGR>	2.81 2.81 0.12 0.06	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	6 6 0.42 0.64	</A36_Sherman_Jumbo>
@@ -6526,7 +6598,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -6614,6 +6686,7 @@
         <A32_M12>	10 11.5 0.48 0.51	</A32_M12>
         <A33_MTLS-1G14>	3.3 3.3 0.37 0.7	</A33_MTLS-1G14>
         <A34_M24_Chaffee>	10.4 10.4 0.8 0.86	</A34_M24_Chaffee>
+        <A34_M24_Chaffee_CFE_V>	10.4 10.4 0.8 0.86	</A34_M24_Chaffee_CFE_V>
         <A35_Pershing>	10 10 0.4 0.2	</A35_Pershing>
         <A35_Pershing_IGR>	10 10 0.4 0.2	</A35_Pershing_IGR>
         <A36_Sherman_Jumbo>	9.14 9.14 0.05 0.06	</A36_Sherman_Jumbo>
@@ -6697,7 +6770,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -6789,53 +6862,54 @@
         <usa:A07_T200>	2 2 0.74 2.42	</usa:A07_T200>
         <usa:A07_T201>	1.02 1.02 9.27 6.94	</usa:A07_T201>
         <usa:A07_T202>	2.1 2.1 6.79 8.66	</usa:A07_T202>
-        <usa:A07_T203>	1.45 1.45 5.26 4.35	</usa:A07_T203>
-        <usa:A07_T204>	2.4 2.4 6.9 9.98	</usa:A07_T204>
-        <usa:A07_T205>	1 1 1.44 2.38	</usa:A07_T205>
-        <usa:A07_T206>	1.5 1.5 -0.35 1.79	</usa:A07_T206>
-        <usa:A07_T207>	1.05 1.05 4.58 4.47	</usa:A07_T207>
-        <usa:A07_T208>	2.43 2.43 4.09 3.97	</usa:A07_T208>
-        <usa:A07_T209>	1.52 1.52 1.43 1.36	</usa:A07_T209>
-        <usa:A09_T1_hvy0>	1.32 1.32 4.19 10.83	</usa:A09_T1_hvy0>
-        <usa:A09_T1_hvy1>	2.27 2.27 0.4 2.13	</usa:A09_T1_hvy1>
-        <usa:A09_T1_hvy2>	2.36 2.36 6.57 6.49	</usa:A09_T1_hvy2>
-        <usa:A09_T1_hvy3>	2.1 2.1 2.83 2.69	</usa:A09_T1_hvy3>
-        <usa:A09_T1_hvy4>	2.55 2.55 4.59 1.1	</usa:A09_T1_hvy4>
-        <usa:A09_T1_hvy5>	1.7 1.7 2.14 2.49	</usa:A09_T1_hvy5>
-        <usa:A09_T1_hvy6>	2.19 2.19 2.68 2.45	</usa:A09_T1_hvy6>
-        <usa:A09_T1_hvy7>	1.13 1.13 2.79 0.62	</usa:A09_T1_hvy7>
+        <usa:A07_T203>	2.1 2.1 6.79 8.66	</usa:A07_T203>
+        <usa:A07_T204>	1.45 1.45 5.26 4.35	</usa:A07_T204>
+        <usa:A07_T205>	2.4 2.4 6.9 9.98	</usa:A07_T205>
+        <usa:A07_T206>	1 1 1.44 2.38	</usa:A07_T206>
+        <usa:A07_T207>	1.5 1.5 -0.35 1.79	</usa:A07_T207>
+        <usa:A07_T208>	1.05 1.05 4.58 4.47	</usa:A07_T208>
+        <usa:A07_T209>	2.43 2.43 4.09 3.97	</usa:A07_T209>
+        <usa:A09_T1_hvy0>	1.52 1.52 1.43 1.36	</usa:A09_T1_hvy0>
+        <usa:A09_T1_hvy1>	1.32 1.32 4.19 10.83	</usa:A09_T1_hvy1>
+        <usa:A09_T1_hvy2>	2.27 2.27 0.4 2.13	</usa:A09_T1_hvy2>
+        <usa:A09_T1_hvy3>	2.36 2.36 6.57 6.49	</usa:A09_T1_hvy3>
+        <usa:A09_T1_hvy4>	2.1 2.1 2.83 2.69	</usa:A09_T1_hvy4>
+        <usa:A09_T1_hvy5>	2.55 2.55 4.59 1.1	</usa:A09_T1_hvy5>
+        <usa:A09_T1_hvy6>	1.7 1.7 2.14 2.49	</usa:A09_T1_hvy6>
+        <usa:A09_T1_hvy7>	2.19 2.19 2.68 2.45	</usa:A09_T1_hvy7>
         <usa:A09_T1_hvy8>	1.13 1.13 2.79 0.62	</usa:A09_T1_hvy8>
-        <usa:A100_T490>	3.13 3.13 4.64 3.58	</usa:A100_T490>
-        <usa:A100_T491>	2.3 2.3 2.85 0.57	</usa:A100_T491>
+        <usa:A09_T1_hvy9>	1.13 1.13 2.79 0.62	</usa:A09_T1_hvy9>
+        <usa:A100_T491>	3.13 3.13 4.64 3.58	</usa:A100_T491>
+        <usa:A100_T492>	2.3 2.3 2.85 0.57	</usa:A100_T492>
         <usa:A05_M4_Sherman6>	2.3 2.3 2.85 0.57	</usa:A05_M4_Sherman6>
         <usa:A05_M4_Sherman7>	2.3 2.3 2.85 0.57	</usa:A05_M4_Sherman7>
-        <usa:A100_T492>	2.3 2.3 0.1 -0.41	</usa:A100_T492>
-        <usa:A100_T493>	3.4 3.4 4.97 6.02	</usa:A100_T493>
-        <usa:A100_T494>	2.7 2.7 2.36 3.04	</usa:A100_T494>
+        <usa:A100_T493>	2.3 2.3 0.1 -0.41	</usa:A100_T493>
+        <usa:A100_T494>	3.4 3.4 4.97 6.02	</usa:A100_T494>
         <usa:A100_T495>	2.7 2.7 2.36 3.04	</usa:A100_T495>
         <usa:A100_T496>	2.7 2.7 2.36 3.04	</usa:A100_T496>
-        <usa:A100_T497>	1.15 1.15 6.57 2.2	</usa:A100_T497>
-        <usa:A100_T498>	0.9 0.9 3.96 3.57	</usa:A100_T498>
-        <usa:A100_T499>	0.6 0.6 5.09 3.4	</usa:A100_T499>
-        <usa:A01_T1_Cunningham00>	2.12 2.12 1.99 2.11	</usa:A01_T1_Cunningham00>
-        <usa:A01_T1_Cunningham01>	2.75 2.75 4.11 2.04	</usa:A01_T1_Cunningham01>
+        <usa:A100_T497>	2.7 2.7 2.36 3.04	</usa:A100_T497>
+        <usa:A100_T498>	1.15 1.15 6.57 2.2	</usa:A100_T498>
+        <usa:A100_T499>	0.9 0.9 3.96 3.57	</usa:A100_T499>
+        <usa:A01_T1_Cunningham00>	0.6 0.6 5.09 3.4	</usa:A01_T1_Cunningham00>
+        <usa:A01_T1_Cunningham01>	2.12 2.12 1.99 2.11	</usa:A01_T1_Cunningham01>
         <usa:A01_T1_Cunningham02>	2.75 2.75 4.11 2.04	</usa:A01_T1_Cunningham02>
-        <usa:A01_T1_Cunningham03>	1.4 1.4 3.61 3.56	</usa:A01_T1_Cunningham03>
-        <usa:A01_T1_Cunningham04>	1.4 1.4 -0.62 0.000000	</usa:A01_T1_Cunningham04>
+        <usa:A01_T1_Cunningham03>	2.75 2.75 4.11 2.04	</usa:A01_T1_Cunningham03>
+        <usa:A01_T1_Cunningham04>	1.4 1.4 3.61 3.56	</usa:A01_T1_Cunningham04>
         <usa:A01_T1_Cunningham05>	1.4 1.4 -0.62 0.000000	</usa:A01_T1_Cunningham05>
-        <usa:A01_T1_Cunningham06>	2.8 2.8 2.04 1.78	</usa:A01_T1_Cunningham06>
-        <usa:A01_T1_Cunningham07>	1.4 1.4 6.48 1.93	</usa:A01_T1_Cunningham07>
-        <usa:A01_T1_Cunningham08>	2.5 2.5 1.28 1.51	</usa:A01_T1_Cunningham08>
-        <usa:A01_T1_Cunningham09>	2.7 2.7 -0.91 -0.92	</usa:A01_T1_Cunningham09>
-        <usa:A01_T1_Cunningham10>	2.6 2.6 2.67 2.2	</usa:A01_T1_Cunningham10>
-        <usa:A01_T1_Cunningham11>	2.45 2.45 3.69 0.7	</usa:A01_T1_Cunningham11>
-        <usa:A01_T1_Cunningham12>	1.94 1.94 2.83 3.45	</usa:A01_T1_Cunningham12>
-        <usa:A01_T1_Cunningham13>	1.3 1.3 4.65 3	</usa:A01_T1_Cunningham13>
-        <usa:A01_T1_Cunningham14>	2.2 2.2 1.97 4.9	</usa:A01_T1_Cunningham14>
-        <usa:A01_T1_Cunningham15>	1.8 1.8 0.16 -0.93	</usa:A01_T1_Cunningham15>
-        <usa:A01_T1_Cunningham16>	2.5 2.5 -0.25 0.000000	</usa:A01_T1_Cunningham16>
+        <usa:A01_T1_Cunningham06>	1.4 1.4 -0.62 0.000000	</usa:A01_T1_Cunningham06>
+        <usa:A01_T1_Cunningham07>	2.8 2.8 2.04 1.78	</usa:A01_T1_Cunningham07>
+        <usa:A01_T1_Cunningham08>	1.4 1.4 6.48 1.93	</usa:A01_T1_Cunningham08>
+        <usa:A01_T1_Cunningham09>	2.5 2.5 1.28 1.51	</usa:A01_T1_Cunningham09>
+        <usa:A01_T1_Cunningham10>	2.7 2.7 -0.91 -0.92	</usa:A01_T1_Cunningham10>
+        <usa:A01_T1_Cunningham11>	2.6 2.6 2.67 2.2	</usa:A01_T1_Cunningham11>
+        <usa:A01_T1_Cunningham12>	2.45 2.45 3.69 0.7	</usa:A01_T1_Cunningham12>
+        <usa:A01_T1_Cunningham13>	1.94 1.94 2.83 3.45	</usa:A01_T1_Cunningham13>
+        <usa:A01_T1_Cunningham14>	1.3 1.3 4.65 3	</usa:A01_T1_Cunningham14>
+        <usa:A01_T1_Cunningham15>	2.2 2.2 1.97 4.9	</usa:A01_T1_Cunningham15>
+        <usa:A01_T1_Cunningham16>	1.8 1.8 0.16 -0.93	</usa:A01_T1_Cunningham16>
         <usa:A01_T1_Cunningham17>	2.5 2.5 -0.25 0.000000	</usa:A01_T1_Cunningham17>
-        <usa:A01_T1_Cunningham18>	1.2 1.2 1.56 0.01	</usa:A01_T1_Cunningham18>
+        <usa:A01_T1_Cunningham18>	2.5 2.5 -0.25 0.000000	</usa:A01_T1_Cunningham18>
+        <usa:A01_T1_Cunningham19>	1.2 1.2 1.56 0.01	</usa:A01_T1_Cunningham19>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -6854,7 +6928,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -6885,9 +6959,9 @@
         <usa:A04_M3_Grant7>	2.6 2.6 -7.02 3.91	</usa:A04_M3_Grant7>
         <usa:A04_M3_Grant9>	2.6 2.6 -7.02 3.91	</usa:A04_M3_Grant9>
         <usa:A07_T202>	3.05 3.05 7.35 -6.07	</usa:A07_T202>
-        <usa:A01_T1_Cunningham04>	1.46 1.46 0.45 -1.16	</usa:A01_T1_Cunningham04>
         <usa:A01_T1_Cunningham05>	1.46 1.46 0.45 -1.16	</usa:A01_T1_Cunningham05>
-        <usa:A01_T1_Cunningham11>	3.11 3.11 3.85 -6.84	</usa:A01_T1_Cunningham11>
+        <usa:A01_T1_Cunningham06>	1.46 1.46 0.45 -1.16	</usa:A01_T1_Cunningham06>
+        <usa:A01_T1_Cunningham12>	3.11 3.11 3.85 -6.84	</usa:A01_T1_Cunningham12>
       </tiling>
       <tilingSettings>
         <type>	absolute	</type>
@@ -6928,7 +7002,7 @@
         <GUN>	1.16588	</GUN>
       </rotation>
       <tiling>
-        <usa:A09_T1_hvy2>	3.92 3.92 -6.59 -2.93	</usa:A09_T1_hvy2>
+        <usa:A09_T1_hvy3>	3.92 3.92 -6.59 -2.93	</usa:A09_T1_hvy3>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -6969,7 +7043,7 @@
         <GUN>	-0.289725	</GUN>
       </rotation>
       <tiling>
-        <usa:A01_T1_Cunningham01>	6.13 6.13 6.25 -1.64	</usa:A01_T1_Cunningham01>
+        <usa:A01_T1_Cunningham02>	6.13 6.13 6.25 -1.64	</usa:A01_T1_Cunningham02>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -7051,7 +7125,7 @@
         <GUN>	0.387289	</GUN>
       </rotation>
       <tiling>
-        <usa:A01_T1_Cunningham06>	3.0 3.0 0.04 3.01	</usa:A01_T1_Cunningham06>
+        <usa:A01_T1_Cunningham07>	3.0 3.0 0.04 3.01	</usa:A01_T1_Cunningham07>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -7092,7 +7166,7 @@
         <GUN>	1	</GUN>
       </rotation>
       <tiling>
-        <usa:A01_T1_Cunningham04>	1 1 1 1	</usa:A01_T1_Cunningham04>
+        <usa:A01_T1_Cunningham05>	1 1 1 1	</usa:A01_T1_Cunningham05>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -7307,6 +7381,160 @@
         <type>	relativewithfactor	</type>
         <factor>	2 2	</factor>
         <offset>	1.53 0.77	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A1034_M24_Chaffee_StoryModeStealth usa:A34_M24_Chaffee_CFE_V	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	1101	</id>
+      <texture>	vehicles/american/Camouflage/Cusa_1_10Tropical_tricolor.dds	</texture>
+      <description>	#vehicle_customization:camouflage/usa/tricolor/generic_custom_2_usa_summer/description	</description>
+      <scales>	1.3 1 0.8	</scales>
+      <userString>	#vehicle_customization:camouflage/usa/tricolor/generic_custom_2_usa_summer/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	73 61 53 255	</c0>
+          <c1>	49 51 53 255	</c1>
+          <c2>	96 101 83 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.797965	</HULL>
+        <TURRET>	0.797965	</TURRET>
+        <GUN>	0.797965	</GUN>
+      </rotation>
+      <tiling>
+        <usa:A01_T1_Cunningham>	3.58 3.58 0.000000 0.000000	</usa:A01_T1_Cunningham>
+        <usa:A02_M2_lt>	3.74 3.74 0.000000 0.000000	</usa:A02_M2_lt>
+        <usa:A03_M3_Stuart>	3.7 3.7 0.000000 0.000000	</usa:A03_M3_Stuart>
+        <usa:A04_M3_Grant>	3.38 3.38 0.39 0.000000	</usa:A04_M3_Grant>
+        <usa:A05_M4_Sherman>	4.05 4.05 0.51 0.06	</usa:A05_M4_Sherman>
+        <usa:A06_M4A3E8_Sherman>	4.85 4.85 2.59 4.82	</usa:A06_M4A3E8_Sherman>
+        <usa:A05_M4_Sherman4>	4.85 4.85 2.59 4.82	</usa:A05_M4_Sherman4>
+        <usa:A07_T20>	4.05 4.05 0.51 0.06	</usa:A07_T20>
+        <usa:A09_T1_hvy>	3.6 3.6 0.000000 0.000000	</usa:A09_T1_hvy>
+        <usa:A100_T49>	1.72 1.72 1 1.31	</usa:A100_T49>
+        <usa:A01_T1_Cunningham0>	3.1 3.1 0.000000 0.51	</usa:A01_T1_Cunningham0>
+        <usa:A01_T1_Cunningham1>	1.99 1.99 0.000000 0.01	</usa:A01_T1_Cunningham1>
+        <usa:A01_T1_Cunningham2>	3.17 3.17 0.000000 -0.06	</usa:A01_T1_Cunningham2>
+        <usa:A01_T1_Cunningham3>	3.06 3.06 0.43 -0.5	</usa:A01_T1_Cunningham3>
+        <usa:A01_T1_Cunningham4>	3.66 3.66 0.56 -0.97	</usa:A01_T1_Cunningham4>
+        <usa:A05_M4_Sherman2>	3.87 3.87 0.000000 0.01	</usa:A05_M4_Sherman2>
+        <usa:A01_T1_Cunningham5>	3.87 3.87 0.000000 0.01	</usa:A01_T1_Cunningham5>
+        <usa:A01_T1_Cunningham6>	3.84 3.84 1.62 1.92	</usa:A01_T1_Cunningham6>
+        <usa:A01_T1_Cunningham7>	2.12 2.12 0.86 0.01	</usa:A01_T1_Cunningham7>
+        <usa:A01_T1_Cunningham8>	3.11 3.11 0.76 0.2	</usa:A01_T1_Cunningham8>
+        <usa:A01_T1_Cunningham9>	2.3 2.3 0.000000 0.000000	</usa:A01_T1_Cunningham9>
+        <usa:A02_M2_lt0>	3.6 3.6 0.000000 1.07	</usa:A02_M2_lt0>
+        <usa:A02_M2_lt1>	1 1 3.43 2.11	</usa:A02_M2_lt1>
+        <usa:A02_M2_lt2>	1 1 3.43 2.11	</usa:A02_M2_lt2>
+        <usa:A02_M2_lt3>	1.48 1.48 0.89 0.87	</usa:A02_M2_lt3>
+        <usa:A02_M2_lt4>	1.69 1.69 0.2 0.92	</usa:A02_M2_lt4>
+        <usa:A02_M2_lt5>	1.51 1.51 1.07 0.11	</usa:A02_M2_lt5>
+        <usa:A02_M2_lt6>	1.03 1.03 0.000000 5.93	</usa:A02_M2_lt6>
+        <usa:A02_M2_lt7>	2.81 2.81 -0.6 0.28	</usa:A02_M2_lt7>
+        <usa:A02_M2_lt8>	1.12 1.12 5.76 1.49	</usa:A02_M2_lt8>
+        <usa:A02_M2_lt9>	3.64 3.64 1.97 3.44	</usa:A02_M2_lt9>
+        <usa:A03_M3_Stuart0>	1.68 1.68 0.29 0.37	</usa:A03_M3_Stuart0>
+        <usa:A03_M3_Stuart1>	1.68 1.68 0.29 0.37	</usa:A03_M3_Stuart1>
+        <usa:A03_M3_Stuart2>	1.05 1.05 0.57 0.37	</usa:A03_M3_Stuart2>
+        <usa:A03_M3_Stuart3>	3.17 3.17 0.89 0.75	</usa:A03_M3_Stuart3>
+        <usa:A03_M3_Stuart4>	2.06 2.06 1.07 0.000000	</usa:A03_M3_Stuart4>
+        <usa:A03_M3_Stuart5>	3.82 3.82 0.19 0.000000	</usa:A03_M3_Stuart5>
+        <usa:A03_M3_Stuart6>	1.68 1.68 0.29 0.37	</usa:A03_M3_Stuart6>
+        <usa:A03_M3_Stuart7>	2.31 2.31 0.59 0.33	</usa:A03_M3_Stuart7>
+        <usa:A03_M3_Stuart8>	2.37 2.37 0.000000 1.83	</usa:A03_M3_Stuart8>
+        <usa:A03_M3_Stuart9>	1.42 1.42 0.2 0.000000	</usa:A03_M3_Stuart9>
+        <usa:A04_M3_Grant0>	4 4 0.86 0.01	</usa:A04_M3_Grant0>
+        <usa:A04_M3_Grant1>	2.69 2.69 0.000000 0.000000	</usa:A04_M3_Grant1>
+        <usa:A04_M3_Grant2>	2.69 2.69 0.000000 0.000000	</usa:A04_M3_Grant2>
+        <usa:A04_M3_Grant3>	2.44 2.44 1.51 0.35	</usa:A04_M3_Grant3>
+        <usa:A04_M3_Grant4>	1.95 1.95 1.07 0.36	</usa:A04_M3_Grant4>
+        <usa:A04_M3_Grant5>	2.06 2.06 1.07 0.000000	</usa:A04_M3_Grant5>
+        <usa:A04_M3_Grant6>	3.38 3.38 0.000000 0.000000	</usa:A04_M3_Grant6>
+        <usa:A04_M3_Grant7>	2.74 2.74 0.28 0.36	</usa:A04_M3_Grant7>
+        <usa:A04_M3_Grant8>	3.38 3.38 0.28 0.36	</usa:A04_M3_Grant8>
+        <usa:A04_M3_Grant9>	2.74 2.74 0.28 0.36	</usa:A04_M3_Grant9>
+        <usa:A05_M4_Sherman0>	1.95 1.95 1.07 0.36	</usa:A05_M4_Sherman0>
+        <usa:A05_M4_Sherman1>	1.95 1.95 1.07 0.36	</usa:A05_M4_Sherman1>
+        <usa:A05_M4_Sherman3>	3.72 3.72 4.86 3.78	</usa:A05_M4_Sherman3>
+        <usa:A05_M4_Sherman8>	1.87 1.87 1.64 1.43	</usa:A05_M4_Sherman8>
+        <usa:A05_M4_Sherman9>	3.89 3.89 2.47 0.01	</usa:A05_M4_Sherman9>
+        <usa:A06_M4A3E8_Sherman0>	3.42 3.42 2.19 -0.69	</usa:A06_M4A3E8_Sherman0>
+        <usa:A06_M4A3E8_Sherman1>	2.78 2.78 1.71 1.01	</usa:A06_M4A3E8_Sherman1>
+        <usa:A06_M4A3E8_Sherman2>	3.52 3.52 2.56 1.49	</usa:A06_M4A3E8_Sherman2>
+        <usa:A06_M4A3E8_Sherman3>	2.67 2.67 3 5.37	</usa:A06_M4A3E8_Sherman3>
+        <usa:A06_M4A3E8_Sherman4>	2.79 2.79 6.33 4.48	</usa:A06_M4A3E8_Sherman4>
+        <usa:A06_M4A3E8_Sherman5>	3.65 3.65 2.42 2.25	</usa:A06_M4A3E8_Sherman5>
+        <usa:A06_M4A3E8_Sherman6>	2.65 2.65 6.22 2.82	</usa:A06_M4A3E8_Sherman6>
+        <usa:A06_M4A3E8_Sherman7>	3.44 3.44 6.21 1.77	</usa:A06_M4A3E8_Sherman7>
+        <usa:A06_M4A3E8_Sherman8>	3.51 3.51 1 0.54	</usa:A06_M4A3E8_Sherman8>
+        <usa:A06_M4A3E8_Sherman9>	2.4 2.4 0.000000 0.000000	</usa:A06_M4A3E8_Sherman9>
+        <usa:A07_T200>	2.83 2.83 0.000000 0.000000	</usa:A07_T200>
+        <usa:A07_T201>	1.4 1.4 0.36 0.000000	</usa:A07_T201>
+        <usa:A07_T202>	3.15 3.15 1.86 1.79	</usa:A07_T202>
+        <usa:A07_T204>	2.31 2.31 7.79 3.77	</usa:A07_T204>
+        <usa:A07_T205>	3.87 3.87 0.000000 0.000000	</usa:A07_T205>
+        <usa:A07_T206>	0.94 0.94 1.37 0.39	</usa:A07_T206>
+        <usa:A07_T207>	1.24 1.24 2.57 3.86	</usa:A07_T207>
+        <usa:A07_T208>	1.22 1.22 0.21 1	</usa:A07_T208>
+        <usa:A07_T209>	3.37 3.37 0.31 0.07	</usa:A07_T209>
+        <usa:A09_T1_hvy0>	2.44 2.44 1.51 0.35	</usa:A09_T1_hvy0>
+        <usa:A09_T1_hvy1>	1.94 1.94 2.88 1.38	</usa:A09_T1_hvy1>
+        <usa:A09_T1_hvy2>	3.64 3.64 0.51 -0.01	</usa:A09_T1_hvy2>
+        <usa:A09_T1_hvy3>	3.31 3.31 3.54 2.95	</usa:A09_T1_hvy3>
+        <usa:A09_T1_hvy4>	3.35 3.35 1.79 -0.07	</usa:A09_T1_hvy4>
+        <usa:A09_T1_hvy5>	4.29 4.29 1.75 0.13	</usa:A09_T1_hvy5>
+        <usa:A09_T1_hvy6>	3.07 3.07 6.36 6.54	</usa:A09_T1_hvy6>
+        <usa:A09_T1_hvy7>	3.53 3.53 1.16 -0.26	</usa:A09_T1_hvy7>
+        <usa:A09_T1_hvy8>	1.52 1.52 5.72 0.51	</usa:A09_T1_hvy8>
+        <usa:A09_T1_hvy9>	1.52 1.52 5.72 0.51	</usa:A09_T1_hvy9>
+        <usa:A100_T490>	2.31 2.31 0.93 0.79	</usa:A100_T490>
+        <usa:A100_T491>	3.59 3.59 4.48 0.55	</usa:A100_T491>
+        <usa:A100_T492>	3.19 3.19 0.29 0.12	</usa:A100_T492>
+        <usa:A05_M4_Sherman6>	3.19 3.19 0.29 0.12	</usa:A05_M4_Sherman6>
+        <usa:A100_T493>	2.64 2.64 3.92 -0.16	</usa:A100_T493>
+        <usa:A100_T494>	5.63 5.63 1.61 1.02	</usa:A100_T494>
+        <usa:A100_T495>	4.39 4.39 0.87 0.75	</usa:A100_T495>
+        <usa:A100_T497>	4.39 4.39 0.87 0.75	</usa:A100_T497>
+        <usa:A100_T498>	1.45 1.45 0.000000 0.000000	</usa:A100_T498>
+        <usa:A100_T499>	1.36 1.36 1.85 1.3	</usa:A100_T499>
+        <usa:A01_T1_Cunningham00>	1.12 1.12 2.33 3.73	</usa:A01_T1_Cunningham00>
+        <usa:A01_T1_Cunningham01>	2.73 2.73 6.5 0.5	</usa:A01_T1_Cunningham01>
+        <usa:A01_T1_Cunningham02>	2.8 2.8 2.97 0.49	</usa:A01_T1_Cunningham02>
+        <usa:A01_T1_Cunningham03>	2.8 2.8 2.97 0.49	</usa:A01_T1_Cunningham03>
+        <usa:A01_T1_Cunningham04>	2.37 2.37 0.000000 1.83	</usa:A01_T1_Cunningham04>
+        <usa:A01_T1_Cunningham05>	1.65 1.65 0.000000 0.34	</usa:A01_T1_Cunningham05>
+        <usa:A01_T1_Cunningham06>	1.65 1.65 0.000000 0.34	</usa:A01_T1_Cunningham06>
+        <usa:A01_T1_Cunningham07>	3.42 3.42 0.83 0.92	</usa:A01_T1_Cunningham07>
+        <usa:A01_T1_Cunningham08>	2.22 2.22 9.45 0.63	</usa:A01_T1_Cunningham08>
+        <usa:A01_T1_Cunningham09>	3.88 3.88 0.97 6.6	</usa:A01_T1_Cunningham09>
+        <usa:A01_T1_Cunningham10>	2.97 2.97 0.000000 0.38	</usa:A01_T1_Cunningham10>
+        <usa:A01_T1_Cunningham11>	3.82 3.82 0.19 0.000000	</usa:A01_T1_Cunningham11>
+        <usa:A01_T1_Cunningham12>	3.38 3.38 0.000000 0.000000	</usa:A01_T1_Cunningham12>
+        <usa:A01_T1_Cunningham13>	2.9 2.9 0.26 0.000000	</usa:A01_T1_Cunningham13>
+        <usa:A01_T1_Cunningham14>	2.25 2.25 0.000000 0.33	</usa:A01_T1_Cunningham14>
+        <usa:A01_T1_Cunningham15>	3.54 3.54 4.25 0.08	</usa:A01_T1_Cunningham15>
+        <usa:A01_T1_Cunningham16>	1.99 1.99 1.33 0.000000	</usa:A01_T1_Cunningham16>
+        <usa:A01_T1_Cunningham17>	3.26 3.26 0.000000 0.000000	</usa:A01_T1_Cunningham17>
+        <usa:A01_T1_Cunningham18>	3.26 3.26 0.000000 0.000000	</usa:A01_T1_Cunningham18>
+        <usa:A01_T1_Cunningham19>	1.87 1.87 0.000000 0.62	</usa:A01_T1_Cunningham19>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.054469  2.056357	</factor>
+        <offset>	0.000000 0.000000	</offset>
       </tilingSettings>
     </camouflage>
   </itemGroup>

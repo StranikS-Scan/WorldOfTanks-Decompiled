@@ -1,48 +1,56 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/lobby/rewards_screen.py
+import logging
 from collections import namedtuple
 from copy import copy
+import Windowing
 import typing
+from gui.shared import event_dispatcher as shared_events
 from shared_utils import first, findFirst
+import SoundGroups
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import COMP7_LAST_SEASON_WITH_SEEN_REWARD
+from account_helpers.AccountSettings import COMP7_LAST_SEASON_WITH_SEEN_REWARD, COMP7_LAST_MASKOT_WITH_SEEN_REWARD
 from comp7.gui.game_control.comp7_shop_controller import ShopControllerStatus
 from comp7.gui.impl.gen.view_models.views.lobby.enums import MetaRootViews, Rank
-from comp7.gui.impl.gen.view_models.views.lobby.rewards_screen_model import Type, RewardsScreenModel, ShopInfoType
+from comp7.gui.impl.gen.view_models.views.lobby.rewards_screen_model import Type, RewardsScreenModel, ShopInfoType, VideoState
 from comp7.gui.impl.gen.view_models.views.lobby.season_result import SeasonResult
 from comp7.gui.impl.lobby.comp7_helpers import comp7_shared, comp7_qualification_helpers
-from comp7.gui.impl.lobby.comp7_helpers.comp7_bonus_packer import packRanksRewardsQuestBonuses, packTokensRewardsQuestBonuses, packQualificationRewardsQuestBonuses, packYearlyRewardsBonuses, packYearlyRewardCrew, packSelectedRewardsBonuses
-from comp7.gui.impl.lobby.comp7_helpers.comp7_model_helpers import getSeasonNameEnum
-from comp7.gui.impl.lobby.comp7_helpers.comp7_quest_helpers import hasAvailableWeeklyQuestsOfferGiftTokens, parseComp7RanksQuestID, parseComp7PeriodicQuestID
+from comp7.gui.impl.lobby.comp7_helpers.comp7_bonus_packer import packRanksRewardsQuestBonuses, packTokensRewardsQuestBonuses, packQualificationRewardsQuestBonuses, packYearlyRewardsBonuses, packYearlyRewardVehicleBonuses, packSelectedRewardsBonuses
+from comp7.gui.impl.lobby.comp7_helpers.comp7_model_helpers import getSeasonNameEnum, getYearlyRewardsRank
+from comp7.gui.impl.lobby.comp7_helpers.comp7_quest_helpers import parseComp7RanksQuestID, getPeriodicQuestsByDivision
 from comp7.gui.prb_control.entities import comp7_prb_helpers
 from comp7.gui.selectable_reward.common import Comp7SelectableRewardManager
 from comp7.gui.shared import event_dispatcher
+from comp7.gui.impl.lobby.comp7_helpers.comp7_lobby_sounds import VehicleVideoSounds
 from comp7.skeletons.gui.game_control import IComp7ShopController
-from comp7_common_const import seasonPointsCodeBySeasonNumber
+from comp7_common_const import seasonPointsCodeBySeasonNumber, COMP7_MASKOT_ID
 from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
 from frameworks.wulf.view.array import fillIntsArray, fillViewModelsArray
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.backport import BackportTooltipWindow
 from gui.impl.backport.backport_tooltip import TooltipData
 from gui.impl.gen import R
+from gui.impl.gui_decorators import args2params
 from gui.impl.lobby.common.vehicle_model_helpers import fillVehicleModel
 from gui.impl.lobby.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
+from gui.selectable_reward.constants import SELECTABLE_BONUS_NAME
 from gui.server_events.bonuses import VehiclesBonus
+from gui.sounds.filters import switchVideoOverlaySoundFilter
 from helpers import dependency
 from skeletons.gui.game_control import IComp7Controller, IHangarSpaceSwitchController
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
-    from typing import List, Tuple, Callable
+    from typing import Tuple, Callable
     from comp7_ranks_common import Comp7Division
     from frameworks.wulf import Command
     from frameworks.wulf.view.view_event import ViewEvent
     from gui.server_events.event_items import TokenQuest
+_logger = logging.getLogger(__name__)
 _MAX_MAIN_REWARDS_COUNT = 4
 _MAIN_REWARDS = ('styleProgress', 'dossier_badge', 'dogTagComponents')
-_YEARLY_MAIN_REWARDS = ('dossier_badge', 'dossier_achievement', 'styleProgress', 'deluxe_gift', 'crystal')
 _BonusData = namedtuple('_BonusData', ('bonus', 'tooltip'))
 
 class _BaseRewardsView(ViewImpl):
@@ -131,9 +139,7 @@ class _QuestRewardsView(_BaseRewardsView):
         raise NotImplementedError
 
     def _getEvents(self):
-        eventList = list(super(_QuestRewardsView, self)._getEvents())
-        eventList.extend(((self.viewModel.onOpenShop, self.__onOpenShop), (self._comp7ShopController.onDataUpdated, self.__onShopStatusUpdated)))
-        return eventList
+        return super(_QuestRewardsView, self)._getEvents() + ((self.viewModel.onOpenShop, self.__onOpenShop), (self._comp7ShopController.onDataUpdated, self.__onShopStatusUpdated))
 
     def __onShopStatusUpdated(self, status):
         if status == ShopControllerStatus.DATA_READY:
@@ -178,7 +184,8 @@ class RanksRewardsView(_QuestRewardsView):
             vm.setHasRankInactivity(comp7_shared.hasRankInactivity(self.__division.rank))
 
     def _packBonuses(self, *args, **kwargs):
-        periodicQuest = findFirst(lambda q: parseComp7PeriodicQuestID(q.getID()) == self.__division, kwargs.get('periodicQuests', []))
+        periodicQuestsByDivision = getPeriodicQuestsByDivision()
+        periodicQuest = periodicQuestsByDivision.get(self.__division.dvsnID)
         return packRanksRewardsQuestBonuses(quest=first(kwargs['quests']), periodicQuest=periodicQuest)
 
     def _setProductsData(self):
@@ -207,12 +214,11 @@ class RanksRewardsView(_QuestRewardsView):
 class TokensRewardsView(_QuestRewardsView):
 
     def __init__(self, *args, **kwargs):
-        self.__onCloseCallback = None
         super(TokensRewardsView, self).__init__(*args, **kwargs)
-        return
+        self.__willOpenRewardsSelection = False
 
-    def setNoNotifyViewClosedCallback(self, callback):
-        self.__onCloseCallback = callback
+    def willOpenRewardsSelection(self):
+        return self.__willOpenRewardsSelection
 
     def _onLoading(self, *args, **kwargs):
         super(TokensRewardsView, self)._onLoading(self, *args, **kwargs)
@@ -221,9 +227,9 @@ class TokensRewardsView(_QuestRewardsView):
             vm.setType(Type.TOKENSREWARDS)
             quest = first(kwargs['quests'])
             vm.setTokensCount(sum((token.getNeededCount() for token in quest.accountReqs.getTokens())))
-            isRewardChoosable = hasAvailableWeeklyQuestsOfferGiftTokens()
-            vm.setHasNextScreen(isRewardChoosable)
-        if isRewardChoosable:
+            isSelectableReward = self.__isSelectableReward(quest)
+            vm.setHasNextScreen(isSelectableReward)
+        if isSelectableReward:
             AccountSettings.setNotifications(COMP7_LAST_SEASON_WITH_SEEN_REWARD, self._comp7Controller.getActualSeasonNumber())
 
     def _packBonuses(self, *args, **kwargs):
@@ -236,22 +242,25 @@ class TokensRewardsView(_QuestRewardsView):
         return _MAX_MAIN_REWARDS_COUNT
 
     def _getEvents(self):
-        eventsList = super(TokensRewardsView, self)._getEvents()
-        eventsList.append((self.getViewModel().onOpenNextScreen, self.__onOpenNextScreen))
-        return eventsList
+        return super(TokensRewardsView, self)._getEvents() + ((self.getViewModel().onOpenNextScreen, self.__onOpenNextScreen),)
 
     def _onClose(self):
+        self.__willOpenRewardsSelection = False
         self.destroyWindow()
-        if self.__onCloseCallback:
-            self.__onCloseCallback()
-            self.__onCloseCallback = None
-        return
 
     def __onOpenNextScreen(self):
-        self.__onCloseCallback = None
+        self.__willOpenRewardsSelection = True
         self.destroyWindow()
         event_dispatcher.showComp7WeeklyQuestsRewardsSelectionWindow()
-        return
+
+    def __isSelectableReward(self, quest):
+        for bonus in quest.getBonuses():
+            if bonus.getName() == SELECTABLE_BONUS_NAME:
+                tokens = bonus.getTokens()
+                if findFirst(Comp7SelectableRewardManager.isFeatureReward, tokens.iterkeys()) is not None:
+                    return True
+
+        return False
 
 
 class QualificationRewardsView(_QuestRewardsView):
@@ -308,18 +317,21 @@ class QualificationRewardsView(_QuestRewardsView):
 
 
 class YearlyRewardsView(_BaseRewardsView):
-    __slots__ = ('__hasOfferReward', '__hasYearlyVehicle', '__bonuses')
+    __slots__ = ('__hasOfferReward', '__hasYearlyVehicle', '__bonuses', '__willOpenRewardsSelection')
     __comp7Controller = dependency.descriptor(IComp7Controller)
     __offersDataProvider = dependency.descriptor(IOffersDataProvider)
     __itemsCache = dependency.descriptor(IItemsCache)
-    _selectableRewardManager = Comp7SelectableRewardManager
 
     def __init__(self, *args, **kwargs):
         super(YearlyRewardsView, self).__init__(*args, **kwargs)
         self.__bonuses = kwargs['bonuses']
         tokenBonus = self.__bonuses.get('tokens', {}).keys()
-        self.__hasOfferReward = bool(findFirst(self._selectableRewardManager.isFeatureReward, tokenBonus))
+        self.__hasOfferReward = bool(findFirst(Comp7SelectableRewardManager.isFeatureReward, tokenBonus))
         self.__hasYearlyVehicle = VehiclesBonus.VEHICLES_BONUS in self.__bonuses
+        self.__willOpenRewardsSelection = False
+
+    def willOpenRewardsSelection(self):
+        return self.__willOpenRewardsSelection
 
     def createToolTip(self, event):
         if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
@@ -338,12 +350,16 @@ class YearlyRewardsView(_BaseRewardsView):
         super(YearlyRewardsView, self)._onLoading(self, *args, **kwargs)
         with self.viewModel.transaction() as vm:
             showSeasonResults = kwargs['showSeasonResults']
-            vm.setType(Type.YEARLYVEHICLE if self.__hasYearlyVehicle else Type.YEARLYREWARDS)
+            vm.setType(Type.YEARLYREWARDS)
             vm.setHasYearlyVehicle(self.__hasYearlyVehicle)
             vm.setShowSeasonResults(showSeasonResults)
             if showSeasonResults:
                 self.__updateSeasonsResults(vm)
             self.__updateYearlyVehicle(vm, self.__bonuses)
+            vm.setHasNextScreen(self.__hasOfferReward)
+            vm.setVideoState(VideoState.NOTSTARTED)
+        if self.__hasOfferReward:
+            AccountSettings.setNotifications(COMP7_LAST_MASKOT_WITH_SEEN_REWARD, COMP7_MASKOT_ID)
 
     def _finalize(self):
         self.__bonuses = None
@@ -351,30 +367,21 @@ class YearlyRewardsView(_BaseRewardsView):
         return
 
     def _getEvents(self):
-        eventList = list(super(YearlyRewardsView, self)._getEvents())
-        eventList.append((self.__offersDataProvider.onOffersUpdated, self.__onOffersUpdated))
-        return eventList
+        return super(YearlyRewardsView, self)._getEvents() + ((self.getViewModel().onOpenNextScreen, self.__onOpenNextScreen),
+         (self.getViewModel().onChangeType, self.__onChangeType),
+         (self.getViewModel().onVideoStateChange, self.__onVideoStateChange),
+         (self.__offersDataProvider.onOffersUpdated, self.__onOffersUpdated))
 
     def _packBonuses(self, *args, **kwargs):
         bonuses = copy(kwargs['bonuses'])
-        vehicleBonus = bonuses.pop('vehicles', None)
-        return packYearlyRewardCrew(bonus=vehicleBonus) if self.__hasYearlyVehicle else packYearlyRewardsBonuses(bonuses=bonuses)
+        if self.viewModel.getType() == Type.YEARLYVEHICLE:
+            return packYearlyRewardVehicleBonuses(bonuses=bonuses)
+        else:
+            bonuses.pop('vehicles', None)
+            return packYearlyRewardsBonuses(bonuses=bonuses)
 
     def _getMainRewardsCount(self):
-        bonuses = [ d.bonus for d in self._bonusData ]
-        mainRewards = [ bonusModel for bonusModel in bonuses if bonusModel.getName() in _YEARLY_MAIN_REWARDS ]
-        return min(len(mainRewards), _MAX_MAIN_REWARDS_COUNT)
-
-    def _onClose(self):
-        if self.viewModel.getType() == Type.YEARLYVEHICLE:
-            self.__hasYearlyVehicle = False
-            self.viewModel.setType(Type.YEARLYREWARDS)
-            self._packBonusData(bonuses=self.__bonuses)
-            self._setRewards()
-            return
-        super(YearlyRewardsView, self)._onClose()
-        if self.__hasOfferReward:
-            event_dispatcher.showComp7YearlyRewardsSelectionWindow()
+        return 0 if self.viewModel.getType() == Type.YEARLYVEHICLE else _MAX_MAIN_REWARDS_COUNT
 
     def __updateSeasonsResults(self, model):
         results = []
@@ -392,6 +399,10 @@ class YearlyRewardsView(_BaseRewardsView):
 
         fillViewModelsArray(results, model.getSeasonsResults())
 
+    def __onWindowAccessibilityChanged(self, _):
+        newVideoState = VideoState.RESUMED if Windowing.isWindowAccessible() else VideoState.PAUSED
+        self.__onVideoStateChange({'state': newVideoState})
+
     def __updateYearlyVehicle(self, model, bonuses):
         if not self.__hasYearlyVehicle:
             return
@@ -399,12 +410,50 @@ class YearlyRewardsView(_BaseRewardsView):
         vehicleCD = first(vehicles.keys())
         vehicleItem = self.__itemsCache.items.getItemByCD(vehicleCD)
         fillVehicleModel(model.vehicle, vehicleItem)
+        if vehicleItem and vehicleItem.isInInventory:
+            shared_events.selectVehicleInHangar(vehicleCD)
 
     def __onOffersUpdated(self):
         if not self.__hasOfferReward:
             return
         self._packBonusData(bonuses=self.__bonuses)
         self._setRewards()
+
+    def __onOpenNextScreen(self):
+        self.__willOpenRewardsSelection = self.__hasOfferReward
+        self.destroyWindow()
+        if self.__hasOfferReward:
+            event_dispatcher.showComp7YearlyRewardsSelectionWindow()
+
+    _onClose = __onOpenNextScreen
+
+    @args2params(Type)
+    def __onChangeType(self, newType):
+        self.viewModel.setType(newType)
+        if newType != Type.YEARLYVEHICLE:
+            return
+        else:
+            rank = getYearlyRewardsRank()
+            if rank is not None:
+                self.viewModel.setRank(rank)
+            self._packBonusData(bonuses=self.__bonuses)
+            self._setRewards()
+            return
+
+    @args2params(VideoState)
+    def __onVideoStateChange(self, state):
+        self.viewModel.setVideoState(state)
+        if state == VideoState.STARTED:
+            Windowing.addWindowAccessibilitynHandler(self.__onWindowAccessibilityChanged)
+            switchVideoOverlaySoundFilter(on=True)
+            SoundGroups.g_instance.playSound2D(VehicleVideoSounds.START)
+        elif state == VideoState.PAUSED or state == VideoState.RESUMED:
+            soundName = VehicleVideoSounds.RESUME if Windowing.isWindowAccessible() else VehicleVideoSounds.PAUSE
+            SoundGroups.g_instance.playSound2D(soundName)
+        elif state == VideoState.ENDED:
+            Windowing.removeWindowAccessibilityHandler(self.__onWindowAccessibilityChanged)
+            SoundGroups.g_instance.playSound2D(VehicleVideoSounds.END)
+            switchVideoOverlaySoundFilter(on=False)
 
 
 class SelectedRewardsView(_BaseRewardsView):
@@ -424,8 +473,8 @@ class SelectedRewardsView(_BaseRewardsView):
 class RanksRewardsWindow(LobbyNotificationWindow):
     __slots__ = ()
 
-    def __init__(self, quest, periodicQuests, parent=None):
-        super(RanksRewardsWindow, self).__init__(wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=RanksRewardsView(quests=(quest,), periodicQuests=periodicQuests), layer=WindowLayer.TOP_WINDOW, parent=parent)
+    def __init__(self, quest, parent=None):
+        super(RanksRewardsWindow, self).__init__(wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=RanksRewardsView(quests=(quest,)), layer=WindowLayer.TOP_WINDOW, parent=parent)
 
 
 class TokensRewardsWindow(LobbyNotificationWindow):

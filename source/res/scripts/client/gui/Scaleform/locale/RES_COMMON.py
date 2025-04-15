@@ -34,7 +34,6 @@ class RES_COMMON(object):
     MAPS_ICONS_PERSONALEXCHANGERATES_ALLPERSONALEXCHANGES_BG = '../maps/icons/personalExchangeRates/allPersonalExchanges/bg.png'
     MAPS_ICONS_PRESTIGE_VEHICLESTATISTICSVIEW_BG = '../maps/icons/prestige/vehicleStatisticsView/bg.png'
     MAPS_ICONS_RANKEDBATTLES_AWARDS_BG = '../maps/icons/rankedBattles/awards/bg.png'
-    MAPS_ICONS_RESOURCEWELL_INTRO_BG = '../maps/icons/resourceWell/intro/bg.png'
     MAPS_ICONS_TANKMEN_ROLES_BIG_DOG = '../maps/icons/tankmen/roles/big/dog.png'
     MAPS_ICONS_TANKMEN_SKILLS_BIG_NEW_SKILL = '../maps/icons/tankmen/skills/big/new_skill.png'
     MAPS_UIKIT_DIALOG_TEMPLATES_SELECT_OPTION_BG = '../maps/uiKit/dialog_templates/select_option/bg.png'

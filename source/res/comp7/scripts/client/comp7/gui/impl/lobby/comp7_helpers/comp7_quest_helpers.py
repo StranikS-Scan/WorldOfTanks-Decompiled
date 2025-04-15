@@ -3,14 +3,16 @@
 import logging
 import re
 import typing
-from comp7_common_const import COMP7_OFFER_YEARLY_REWARD_GIFT_TOKEN_PREFIX, COMP7_OFFER_YEARLY_REWARD_TOKEN_PREFIX, Comp7QuestType, offerWeeklyQuestsRewardTokenBySeasonNumber, offerWeeklyQuestsRewardGiftTokenBySeasonNumber, weeklyQuestsCompleteTokenName
+from comp7_common_const import COMP7_OFFER_YEARLY_REWARD_TOKEN_PREFIX, Comp7QuestType, offerWeeklyQuestsRewardTokenPrefixBySeasonNumber, weeklyQuestsCompleteTokenName, COMP7_YEARLY_REWARD_TOKEN, COMP7_OFFER_PREFIX
+from gui.server_events.event_items import Quest
 from gui.shared.items_cache import ItemsCache
 from helpers import dependency
 from shared_utils import findFirst
 from skeletons.gui.game_control import IComp7Controller
+from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
-    from typing import Optional, Type
+    from typing import Optional, Type, Dict, Tuple, Iterable, Callable
     from comp7_ranks_common import Comp7Division
     from comp7.helpers.comp7_server_settings import Comp7RanksConfig
     from comp7.gui.game_control.comp7_controller import Comp7Controller
@@ -57,9 +59,9 @@ def getComp7WeeklyQuestsCompleteToken(ctrl=None):
 
 
 @dependency.replace_none_kwargs(ctrl=IComp7Controller)
-def getComp7OfferWeeklyQuestsRewardToken(ctrl=None):
+def getComp7OfferWeeklyQuestsRewardTokenPrefix(ctrl=None):
     actualSeasonNumber = ctrl.getActualSeasonNumber()
-    return offerWeeklyQuestsRewardTokenBySeasonNumber(actualSeasonNumber) if actualSeasonNumber else None
+    return offerWeeklyQuestsRewardTokenPrefixBySeasonNumber(actualSeasonNumber) if actualSeasonNumber else None
 
 
 def isComp7OfferYearlyRewardToken(token):
@@ -67,7 +69,7 @@ def isComp7OfferYearlyRewardToken(token):
 
 
 def isComp7OfferYearlyRewardGiftToken(token):
-    return token.startswith(COMP7_OFFER_YEARLY_REWARD_GIFT_TOKEN_PREFIX)
+    return isComp7OfferYearlyRewardToken(token) and token.endswith('_gift')
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
@@ -76,10 +78,58 @@ def hasAvailableOfferYearlyRewardGiftTokens(itemsCache=None):
     return any((amount[1] > 0 and isComp7OfferYearlyRewardGiftToken(name) for name, amount in tokens))
 
 
-@dependency.replace_none_kwargs(itemsCache=IItemsCache, comp7Controller=IComp7Controller)
-def hasAvailableWeeklyQuestsOfferGiftTokens(itemsCache=None, comp7Controller=None):
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def hasAvailableOfferTokens(itemsCache=None):
+    for name, (_, count) in itemsCache.items.tokens.getTokens().iteritems():
+        if name.startswith(COMP7_OFFER_PREFIX) and name.endswith('_gift') and count > 0:
+            return True
+
+    return False
+
+
+@dependency.replace_none_kwargs(comp7Controller=IComp7Controller, itemsCache=IItemsCache)
+def getOwnedWeeklyRewardTokens(comp7Controller=None, itemsCache=None):
     season = comp7Controller.getActualSeasonNumber()
-    return False if season is None else offerWeeklyQuestsRewardGiftTokenBySeasonNumber(season) in itemsCache.items.tokens.getTokens()
+    if season is None:
+        return {}
+    else:
+        rewardTokenPrefix = offerWeeklyQuestsRewardTokenPrefixBySeasonNumber(season)
+        ownedWeeklyTokens = itemsCache.items.tokens.getTokensByPrefixAndPostfix(prefix=rewardTokenPrefix)
+        return ownedWeeklyTokens
+
+
+def isWeeklyRewardClaimed():
+    hasTokenAndNoGiftToken = len(getOwnedWeeklyRewardTokens()) == 1
+    return hasTokenAndNoGiftToken
+
+
+def isWeeklyRewardClaimable():
+    hasBothTokenAndGiftToken = len(getOwnedWeeklyRewardTokens()) == 2
+    return hasBothTokenAndGiftToken
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def hasYearlyRewardToken(itemsCache=None):
+    return itemsCache.items.tokens.getTokenCount(COMP7_YEARLY_REWARD_TOKEN) > 0
+
+
+@dependency.replace_none_kwargs(eventsCache=IEventsCache)
+def getPeriodicQuestsByDivision(eventsCache=None):
+    comp7Quests = eventsCache.getAllQuests(lambda q: isComp7VisibleQuest(q.getID())).values()
+    return parseQuestsByDivision(comp7Quests, parseComp7PeriodicQuestID, Comp7QuestType.PERIODIC)
+
+
+def parseQuestsByDivision(quests, parser, questType):
+    questsByDivision = {}
+    for quest in quests:
+        if getComp7QuestType(quest.getID()) != questType:
+            continue
+        division = parser(quest.getID())
+        if division is not None:
+            questsByDivision[division.dvsnID] = quest
+        _logger.error('Division number could not be parsed - %s', quest.getID())
+
+    return questsByDivision
 
 
 class Comp7ParsedQuestID(object):

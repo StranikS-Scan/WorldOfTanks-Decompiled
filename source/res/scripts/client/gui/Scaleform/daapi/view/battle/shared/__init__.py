@@ -31,6 +31,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.shared import callout_panel
     from gui.Scaleform.daapi.view.battle.shared import battle_notifier
     from gui.Scaleform.daapi.view.battle.shared import personal_reserves_tab
+    from gui.Scaleform.daapi.view.battle.shared import tab_content
     from gui.Scaleform.daapi.view.battle.shared import death_cam_ui
     from gui.Scaleform.daapi.view.battle.shared import postmortem_info_panel
     from gui.Scaleform.daapi.view.battle.shared import spectator_view
@@ -53,6 +54,7 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.POSTMORTEM_INFO_PAGE, postmortem_info_panel.PostmortemInfoPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.ROCKET_ACCELERATOR_INDICATOR, indicators.RocketAcceleratorIndicator, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.PERSONAL_RESERVES_TAB, personal_reserves_tab.PersonalReservesTab, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.TAB_CONTENT, tab_content.TabContent, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.SPECTATOR_VIEW, spectator_view.SpectatorView, ScopeTemplates.DEFAULT_SCOPE))
 
 

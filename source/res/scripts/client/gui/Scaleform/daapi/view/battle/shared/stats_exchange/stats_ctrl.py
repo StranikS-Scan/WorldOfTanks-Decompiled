@@ -233,6 +233,12 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
         updateList = {'chatCommands': data}
         self.as_updateTriggeredChatCommandsS(updateList)
 
+    def updatePriorityChatCommand(self, vehicleID, chatCommand, durationMS):
+        data = {'vehicleID': vehicleID,
+         'chatCommand': chatCommand,
+         'chatCommandDurationMS': durationMS}
+        self.as_updatePriorityChatCommandS(data)
+
     def invalidatePlayerStatus(self, flags, vo, arenaDP):
         isEnemy, overrides = self.__getTeamOverrides(vo, arenaDP)
         exchange = self._exchangeBroker.getPlayerStatusExchange(isEnemy)

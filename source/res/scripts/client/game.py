@@ -320,6 +320,8 @@ def handleKeyEvent(event):
     if constants.HAS_DEV_RESOURCES:
         from development.dev_input_handler import g_devInputHandlerInstance
         g_devInputHandlerInstance.handleKeyEvent(event)
+        from helpers import DevHotkeysController
+        DevHotkeysController.handleKeyEvent(event)
     if OfflineMode.handleKeyEvent(event):
         return True
     elif LightingGenerationMode.handleKeyEvent(event):

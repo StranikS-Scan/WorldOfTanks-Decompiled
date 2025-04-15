@@ -1,0 +1,50 @@
+<equipments.xml>
+  <fall_tanks_ability_dash>
+    <id>	9701	</id>
+    <userString>	#fall_tanks.artefacts.extend:fall_tanks_ability_dash/name	</userString>
+    <description>	#fall_tanks.artefacts.extend:fall_tanks_ability_dash/descr	</description>
+    <icon>	fall_tanks_ability_dash	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale public stopOutsideBattle	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	fall_tanks_ability_ready	</soundNotification>
+    <script>	fall_tanks_common.items.artefacts.FallTanksAbilityDashEquipment	  <visualScript>
+        <server>
+          <plan>	plans/fall_tanks/140_vse_fall_ability_dash_server	</plan>
+        </server>
+        <client>
+          <plan>	plans/fall_tanks/140_vse_fall_ability_dash_client	</plan>
+        </client>
+      </visualScript>
+      <cooldownSeconds>	10	  <exports>	vse	</exports>
+      </cooldownSeconds>
+      <duration>	1	  <exports>	vse tooltip	</exports>
+      </duration>
+    </script>
+  </fall_tanks_ability_dash>
+  <fall_tanks_ability_shield>
+    <id>	9702	</id>
+    <userString>	#fall_tanks.artefacts.extend:fall_tanks_ability_shield/name	</userString>
+    <description>	#fall_tanks.artefacts.extend:fall_tanks_ability_shield/descr	</description>
+    <icon>	fall_tanks_ability_shield	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale public stopOutsideBattle	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	fall_tanks_ability_ready	</soundNotification>
+    <script>	fall_tanks_common.items.artefacts.FallTanksAbilityShieldEquipment	  <visualScript>
+        <server>
+          <plan>	plans/fall_tanks/140_vse_fall_ability_shield_server	</plan>
+        </server>
+        <client>
+          <plan>	plans/fall_tanks/140_vse_fall_ability_shield_client	</plan>
+        </client>
+      </visualScript>
+      <cooldownSeconds>	10	  <exports>	vse	</exports>
+      </cooldownSeconds>
+      <duration>	5	  <exports>	vse tooltip	</exports>
+      </duration>
+    </script>
+  </fall_tanks_ability_shield>
+</equipments.xml>

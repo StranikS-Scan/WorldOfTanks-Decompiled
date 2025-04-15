@@ -77,7 +77,8 @@ class MessageTemplates(templates.XMLCollection):
          'filters': [],
          'buttonsLayout': [],
          'buttonsAlign': source.readString('buttonsAlign', 'left'),
-         'lifeTime': source.readInt('lifeTime')}
+         'lifeTime': source.readInt('lifeTime'),
+         'gfViewName': source.readString('gfViewName')}
         priority = source.readString('priority', NotificationPriorityLevel.MEDIUM)
         if priority not in NotificationPriorityLevel.RANGE:
             LOG_WARNING('Priority is invalid', sourceID, priority)

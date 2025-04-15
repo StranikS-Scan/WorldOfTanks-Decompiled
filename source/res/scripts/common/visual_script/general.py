@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/general.py
 from block import Block, makeResEditorData, InitParam
-from slot_types import SLOT_TYPE
+from slot_types import SLOT_TYPE, arrayOf
 from uuid_utils import genUUID
 
 class ResourceSelector(Block):

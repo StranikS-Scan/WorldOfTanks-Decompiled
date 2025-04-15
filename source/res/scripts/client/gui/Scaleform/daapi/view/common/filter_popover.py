@@ -379,29 +379,6 @@ class TankCarouselFilterPopover(VehiclesFilterPopover):
         self._carousel.updateHotFilters()
 
 
-class BattleTankCarouselFilterPopover(TankCarouselFilterPopover):
-    _BASE_SPECIALS_LIST = [FILTER_KEYS.FAVORITE, FILTER_KEYS.PREMIUM]
-
-    def _getInitialVO(self, filters, xpRateMultiplier):
-        dataVO = super(BattleTankCarouselFilterPopover, self)._getInitialVO(filters, xpRateMultiplier)
-        dataVO['specialSectionVisible'] = True
-        dataVO['searchSectionVisible'] = True
-        dataVO['progressionsSectionVisible'] = False
-        vehicleLevels = self._carousel.getCustomParams().get('vehicleLevelsFilter', list())
-        if self._carousel is not None and not len(vehicleLevels) > 1:
-            dataVO['tankTierSectionVisible'] = False
-        return dataVO
-
-    def _generateMapping(self, hasRented, hasEvent, hasRoles, hasCustomization, **kwargs):
-        mapping = super(BattleTankCarouselFilterPopover, self)._generateMapping(hasRented, hasEvent, hasRoles, hasCustomization, **kwargs)
-        vehicleLevels = kwargs.get('vehicleLevelsFilter', list())
-        if len(vehicleLevels) > 1:
-            mapping[FILTER_POPOVER_SECTION.LEVELS] = [ 'level_{}'.format(lvl) for lvl in vehicleLevels ]
-        else:
-            mapping[FILTER_POPOVER_SECTION.LEVELS] = []
-        return mapping
-
-
 class HangarTankCarouselFilterPopover(TankCarouselFilterPopover):
     __hangarGuiCtrl = dependency.descriptor(IHangarGuiController)
     __settingsCore = dependency.descriptor(ISettingsCore)

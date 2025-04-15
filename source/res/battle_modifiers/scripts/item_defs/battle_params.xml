@@ -668,11 +668,11 @@
     <dataType>	string	</dataType>
     <domain>	engine	</domain>
   </engineSounds>
-  <exhaustEffect>
+  <exhaustEffects>
     <scope>	client	</scope>
     <dataType>	string	</dataType>
     <domain>	hull	</domain>
-  </exhaustEffect>
+  </exhaustEffects>
   <armorSpallsArmorDamageFirst>
     <scope>	base cell client	</scope>
     <dataType>	float	</dataType>
@@ -727,6 +727,19 @@
     <dataType>	string	</dataType>
     <domain>	shellType	</domain>
   </armorSpallsDamageAbsorption>
+  <changeShellType>
+    <scope>	client cell	</scope>
+    <dataType>	string	</dataType>
+    <domain>	shellType	</domain>
+  </changeShellType>
+  <caliberToExplosionRadius>
+    <scope>	client cell	</scope>
+    <dataType>	float	</dataType>
+    <domain>	shellType	</domain>
+    <restrictions>
+      <min>	0.01	</min>
+    </restrictions>
+  </caliberToExplosionRadius>
   <modeCreditsFactor>
     <scope>	cell	</scope>
     <dataType>	float	</dataType>
@@ -891,4 +904,9 @@
       <min>	0.0	</min>
     </restrictions>
   </visionMaxRadius>
+  <destructionEffect>
+    <scope>	client	</scope>
+    <dataType>	string	</dataType>
+    <domain>	vehicle	</domain>
+  </destructionEffect>
 </battle_params.xml>

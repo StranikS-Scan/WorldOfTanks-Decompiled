@@ -37,3 +37,24 @@ class GetEntityGameObject(Block, CGFMeta):
         gameObject = entity.entityGameObject
         goWrapper = GameObjectWrapper(gameObject)
         self._gameObject.setValue(weakref.proxy(goWrapper))
+
+
+class TransferOwnershipToWorld(Block, CGFMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(TransferOwnershipToWorld, self).__init__(*args, **kwargs)
+        self._in = self._makeEventInputSlot('in', self._exec)
+        self._go = self._makeDataInputSlot('GO', SLOT_TYPE.GAME_OBJECT)
+        self._out = self._makeEventOutputSlot('out')
+
+    def _exec(self):
+        if self._go.hasValue():
+            go = self._go.getValue()
+            if go is not None:
+                go.transferOwnershipToWorld()
+        self._out.call()
+        return
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT, ASPECT.SERVER]

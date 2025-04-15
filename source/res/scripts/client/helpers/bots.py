@@ -11,7 +11,7 @@ _NAME_FORMAT_CREW = ':{0} {1}:'
 _DEV_PREFIX_FORMAT_CREW = '{0}_{1}_{2} '
 _DEV_PREFIX_FORMAT_VEHICLE = '[{0}] '
 _DEV_PREFIX_FORMAT_CUSTOM = '[{0}] '
-_WINBACK_ENGLISH_CREW_CODES = ('ru', 'be', 'uk', 'kk')
+_WINBACK_ENGLISH_CREW_CODES = ('ru', 'be', 'uk')
 
 def preprocessBotName(name, arenaBonusType=ARENA_BONUS_TYPE.REGULAR):
     namingType, args = LocalizableBotName.parse(name)

@@ -13,7 +13,7 @@ from gui.lootbox_system.base.bonuses_packers import packBonusModelAndTooltipData
 from gui.lootbox_system.base.common import ViewID, Views
 from gui.lootbox_system.base.decorators import createTooltipContentDecorator
 from gui.lootbox_system.base.sound import enterLootBoxesMultipleRewardState, exitLootBoxesMultipleRewardState, playVideoPauseSound, playVideoResumeSound
-from gui.lootbox_system.base.utils import areUsedExternalTransitions, openBoxes, isShopVisible
+from gui.lootbox_system.base.utils import isShopVisible, openBoxes
 from gui.lootbox_system.base.views_loaders import hideItemPreview, showItemPreview
 from gui.shared import EVENT_BUS_SCOPE, events
 from helpers import dependency
@@ -112,7 +112,6 @@ class MultipleBoxesRewards(SubViewImpl):
         model.setEventName(self.__eventName)
         model.setBoxCategory(self.__category)
         model.setIsReopen(self.__isReopen)
-        model.setUseExternal(areUsedExternalTransitions(self.__eventName))
         model.setIsShopVisible(isShopVisible(self.__eventName))
 
     @replaceNoneKwargsModel
@@ -127,7 +126,7 @@ class MultipleBoxesRewards(SubViewImpl):
         bonuses.clear()
         for boxRewards in self.__bonuses:
             boxModel = Array()
-            packBonusModelAndTooltipData(boxRewards, boxModel, tooltipData=self.__tooltipItems, merge=False, eventName=self.__eventName)
+            packBonusModelAndTooltipData(boxRewards, boxModel, tooltipData=self.__tooltipItems, merge=False, eventName=self.__eventName, showLootboxCompensation=True)
             bonuses.addArray(boxModel)
 
         bonuses.invalidate()

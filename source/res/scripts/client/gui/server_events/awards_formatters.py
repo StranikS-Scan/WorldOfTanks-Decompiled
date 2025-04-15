@@ -16,6 +16,7 @@ from gui.Scaleform.settings import ICONS_SIZES
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen_utils import INVALID_RES_ID
+from gui.lootbox_system.base.common import getTextResource
 from gui.ranked_battles.constants import YEAR_POINTS_TOKEN
 from gui.server_events.formatters import parseComplexToken, TOKEN_SIZES
 from gui.server_events.recruit_helper import getRecruitInfo
@@ -28,6 +29,7 @@ from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.utils.role_presenter_helper import getRoleUserName
+from gui.shared.gui_items.gui_item import GUIItem
 from helpers import time_utils, i18n, dependency
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from personal_missions import PM_BRANCH
@@ -137,7 +139,6 @@ TEXT_FORMATTERS = {Currency.CREDITS: text_styles.credits,
  Currency.EVENT_COIN: text_styles.eventCoin,
  Currency.BPCOIN: text_styles.bpcoin,
  Currency.EQUIP_COIN: text_styles.equipCoin,
- Currency.STPCOIN: text_styles.stpcoin,
  'creditsFactor': _getMultiplierFormatter(text_styles.credits),
  'freeXP': text_styles.expText,
  'freeXPFactor': _getMultiplierFormatter(text_styles.expText),
@@ -399,7 +400,7 @@ def formatTimeLabel(hours):
     return str(int(time)) + ' ' + timeMetric
 
 
-_PreformattedBonus = namedtuple('_PreformattedBonus', 'bonusName label userName images tooltip labelFormatter areTokensPawned specialArgs specialAlias isSpecial isCompensation align highlightType overlayType highlightIcon overlayIcon compensationReason postProcessTags isWulfTooltip')
+_PreformattedBonus = namedtuple('_PreformattedBonus', 'bonusName label userName images tooltip labelFormatter areTokensPawned specialArgs specialAlias isSpecial isCompensation align highlightType overlayType highlightIcon overlayIcon compensationReason postProcessTags isWulfTooltip itemTypeName')
 
 class PostProcessTags(CONST_CONTAINER):
     IS_SUFFIX_BADGE = 'isSuffixBadge'
@@ -454,7 +455,8 @@ PreformattedBonus.__new__.__defaults__ = (None,
  None,
  None,
  tuple(),
- False)
+ False,
+ None)
 
 class QuestsBonusComposer(object):
 
@@ -831,7 +833,8 @@ class TokenBonusFormatter(SimpleBonusFormatter):
             for size in AWARDS_SIZES.ALL():
                 images[size] = self._getLootboxIcon(lootBox, size)
 
-            return PreformattedBonus(label=self._formatBonusLabel(token.count), userName=self._getLootboxUserName(lootBox), labelFormatter=self._getLabelFormatter(bonus), images=images, tooltip=makeTooltip(header=self._getLootboxUserName(lootBox), body=''), align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus))
+            tooltipBodyRes = getTextResource('boxTooltip/description/text'.split('/') + [lootBox.getCategory()], lootBox.getType())
+            return PreformattedBonus(label=self._formatBonusLabel(token.count), userName=self._getLootboxUserName(lootBox), bonusName=bonus.TOKENS, labelFormatter=self._getLabelFormatter(bonus), images=images, tooltip=makeTooltip(header=self._getLootboxUserName(lootBox), body=backport.text(tooltipBodyRes()) if tooltipBodyRes.exists() else ''), align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus), itemTypeName=bonus.getName())
 
     def _formatExchangeRateToken(self, token, bonus):
         if token.count <= 0:
@@ -1320,7 +1323,7 @@ class CustomizationsBonusFormatter(SimpleBonusFormatter):
 
     def _createCustomizationBonus(self, bonus, item, data):
         c11nItem = bonus.getC11nItem(item)
-        return PreformattedBonus(bonusName=bonus.getName(), images=self._getImages(c11nItem), userName=self._getUserName(c11nItem), label=self._formatBonusLabel(item.get('value')), labelFormatter=self._getLabelFormatter(bonus), isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_AWARD, specialArgs=CustomizationTooltipContext(itemCD=data.get('intCD')), isCompensation=self._isCompensation(bonus), align=LABEL_ALIGN.RIGHT)
+        return PreformattedBonus(bonusName=bonus.getName(), images=self._getImages(c11nItem), userName=self._getUserName(c11nItem), label=self._formatBonusLabel(item.get('value')), labelFormatter=self._getLabelFormatter(bonus), isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_AWARD, specialArgs=CustomizationTooltipContext(itemCD=data.get('intCD')), isCompensation=self._isCompensation(bonus), align=LABEL_ALIGN.RIGHT, itemTypeName=self._getItemTypeName(c11nItem))
 
     @classmethod
     def _getImages(cls, c11nItem):
@@ -1336,6 +1339,10 @@ class CustomizationsBonusFormatter(SimpleBonusFormatter):
     @classmethod
     def _getUserName(cls, c11nItem):
         return i18n.makeString(QUESTS.getBonusName(c11nItem.itemTypeName))
+
+    @classmethod
+    def _getItemTypeName(cls, c11nItem):
+        return 'style_3d' if c11nItem.itemTypeName == 'style' and c11nItem.is3D else c11nItem.itemTypeName
 
 
 class RankedCustomizationsBonusFormatter(CustomizationsBonusFormatter):
@@ -1522,7 +1529,7 @@ class ItemsBonusFormatter(SimpleBonusFormatter):
         result = []
         for item, count in self._getItems(bonus):
             if item is not None and count:
-                result.append(PreformattedBonus(bonusName=bonus.getName(), images=self._getImages(item), isSpecial=True, label=self._formatBonusLabel(count), labelFormatter=self._getLabelFormatter(bonus), userName=self._getUserName(item), specialAlias=self.getTooltip(item), specialArgs=[item.intCD], align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus), highlightType=self._getHighlightType(item), overlayType=self._getOverlayType(item), highlightIcon=self._getHighlightIcon(item), overlayIcon=self._getOverlayIcon(item)))
+                result.append(PreformattedBonus(bonusName=bonus.getName(), images=self._getImages(item), isSpecial=True, label=self._formatBonusLabel(count), labelFormatter=self._getLabelFormatter(bonus), userName=self._getUserName(item), specialAlias=self.getTooltip(item), specialArgs=[item.intCD], align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus), highlightType=self._getHighlightType(item), overlayType=self._getOverlayType(item), highlightIcon=self._getHighlightIcon(item), overlayIcon=self._getOverlayIcon(item), itemTypeName=item.itemTypeName if isinstance(item, GUIItem) else None))
 
         return result
 
@@ -1841,10 +1848,6 @@ class BattlePassEpicBonusFormatter(BattlePassBonusFormatter):
 
 
 class CurrenciesBonusFormatter(SimpleBonusFormatter):
-
-    @classmethod
-    def _getLabelFormatter(cls, bonus):
-        return TEXT_FORMATTERS.get(bonus.getCode(), text_styles.stats)
 
     @classmethod
     def _getUserName(cls, bonus):

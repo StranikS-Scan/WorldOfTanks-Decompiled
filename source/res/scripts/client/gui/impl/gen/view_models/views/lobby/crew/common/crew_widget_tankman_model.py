@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.views.lobby.crew.common.crew_skill_list_model impo
 class CrewWidgetTankmanModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=20, commands=0):
+    def __init__(self, properties=21, commands=0):
         super(CrewWidgetTankmanModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -138,6 +138,12 @@ class CrewWidgetTankmanModel(ViewModel):
     def setPossibleSkillsEfficiency(self, value):
         self._setReal(19, value)
 
+    def getWotPlusAssistHintCandidate(self):
+        return self._getBool(20)
+
+    def setWotPlusAssistHintCandidate(self, value):
+        self._setBool(20, value)
+
     def _initialize(self):
         super(CrewWidgetTankmanModel, self)._initialize()
         self._addViewModelProperty('skills', CrewSkillListModel())
@@ -160,3 +166,4 @@ class CrewWidgetTankmanModel(ViewModel):
         self._addBoolProperty('hasPostProgression', False)
         self._addRealProperty('skillsEfficiency', 0.0)
         self._addRealProperty('possibleSkillsEfficiency', -1)
+        self._addBoolProperty('wotPlusAssistHintCandidate', False)

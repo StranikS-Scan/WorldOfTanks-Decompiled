@@ -1128,6 +1128,7 @@ class RibbonsAggregator(object):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     FEEDBACK_EVENT_TO_RIBBON_CLS_FACTORY = _FEEDBACK_EVENT_TO_RIBBON_CLS_FACTORY
     FEEDBACK_EVENTS_TO_IGNORE = _FEEDBACK_EVENTS_TO_IGNORE
+    KILL_RIBBON_BATTLE_EFFICIENCY_TYPE = BATTLE_EFFICIENCY_TYPES.DESTRUCTION
     RIBBON_TYPES_AGGREGATED_WITH_KILL_RIBBON = _RIBBON_TYPES_AGGREGATED_WITH_KILL_RIBBON
 
     def __init__(self):
@@ -1281,8 +1282,8 @@ class RibbonsAggregator(object):
                 if isValid:
                     del ribbons[rType]
 
-        if BATTLE_EFFICIENCY_TYPES.DESTRUCTION in ribbons:
-            killRibbons = dict(((r.getVehicleID(), r) for r in ribbons[BATTLE_EFFICIENCY_TYPES.DESTRUCTION]))
+        if self.KILL_RIBBON_BATTLE_EFFICIENCY_TYPE in ribbons:
+            killRibbons = dict(((r.getVehicleID(), r) for r in ribbons[self.KILL_RIBBON_BATTLE_EFFICIENCY_TYPE]))
             damageRibbons = dict(((t, ribbons[t]) for t in self.RIBBON_TYPES_AGGREGATED_WITH_KILL_RIBBON if t in ribbons))
             for rType, tmpRibbons in damageRibbons.iteritems():
                 filteredRibbons = []
@@ -1309,7 +1310,7 @@ class RibbonsAggregator(object):
 
         sortedRibons = []
         if ribbons:
-            killRibbons = ribbons.pop(BATTLE_EFFICIENCY_TYPES.DESTRUCTION, None)
+            killRibbons = ribbons.pop(self.KILL_RIBBON_BATTLE_EFFICIENCY_TYPE, None)
             detectionRibbons = ribbons.pop(BATTLE_EFFICIENCY_TYPES.DETECTION, None)
             if detectionRibbons is not None:
                 sortedRibons.extend(sorted(detectionRibbons, key=_sortKey))

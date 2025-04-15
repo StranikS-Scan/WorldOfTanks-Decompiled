@@ -7,7 +7,7 @@ from debug_utils import LOG_WARNING
 from messenger.storage import SimpleCachedStorage
 
 class PlayerCtxStorage(SimpleCachedStorage):
-    __slots__ = ('__accAttrs', '__clanInfo', '__banInfo', '__cachedItems', '__eManager', '__denunciations', 'onAccountAttrsChanged', 'onClanInfoChanged')
+    __slots__ = ('__accAttrs', '__clanInfo', '__banInfo', '__cachedItems', '__eManager', '__denunciations', 'onAccountAttrsChanged', 'onClanInfoChanged', 'onDenunciationsChanged')
 
     def __init__(self):
         super(PlayerCtxStorage, self).__init__()
@@ -18,6 +18,7 @@ class PlayerCtxStorage(SimpleCachedStorage):
         self.__denunciations = set()
         self.__eManager = Event.EventManager()
         self.onAccountAttrsChanged = Event.Event(self.__eManager)
+        self.onDenunciationsChanged = Event.Event(self.__eManager)
         self.onClanInfoChanged = Event.Event(self.__eManager)
         return
 
@@ -74,8 +75,12 @@ class PlayerCtxStorage(SimpleCachedStorage):
     def hasDenunciationFor(self, violatorID, topicID, arenaUniqueID):
         return (violatorID, topicID, arenaUniqueID) in self.__denunciations
 
+    def hasAnyDenunciationSubmitted(self, violatorID):
+        return violatorID in [ violationInfo[0] for violationInfo in self.__denunciations ]
+
     def addDenunciationFor(self, violatorID, topicID, arenaUniqueID):
         self.__denunciations.add((violatorID, topicID, arenaUniqueID))
+        self.onDenunciationsChanged((violatorID, topicID, arenaUniqueID))
 
     def setCachedItem(self, key, value):
         if not isinstance(key, types.StringType):

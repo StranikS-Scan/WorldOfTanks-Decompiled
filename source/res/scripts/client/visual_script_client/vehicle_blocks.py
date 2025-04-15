@@ -12,7 +12,7 @@ from visual_script.tunable_event_block import TunableEventBlock
 from visual_script.vehicle_blocks import VehicleMeta
 from visual_script.vehicle_blocks_bases import NoCrewCriticalBase, OptionalDevicesBase, VehicleClassBase, GunTypeInfoBase, VehicleForwardSpeedBase, VehicleCooldownEquipmentBase, VehicleClipFullAndReadyBase, GetTankOptDevicesHPModBase, IsInHangarBase, VehicleRadioDistanceBase, NoInnerDeviceDamagedBase
 if not IS_VS_EDITOR:
-    from helpers import dependency, isPlayerAccount
+    from helpers import dependency, isPlayerAccount, isPlayerAvatar
     from skeletons.gui.shared import IItemsCache
     from VehicleRespawnComponent import VehicleRespawnComponent
 
@@ -450,11 +450,13 @@ class OnVehicleCollided(Block, VehicleMeta):
         return
 
     def onStartScript(self):
-        if BigWorld.player():
+        if isPlayerAvatar():
             BigWorld.player().inputHandler.OnVehicleCollided += self._onVehicleCollided
+        else:
+            errorVScript(self, 'can not subscribe on event')
 
     def onFinishScript(self):
-        if BigWorld.player():
+        if isPlayerAvatar():
             BigWorld.player().inputHandler.OnVehicleCollided -= self._onVehicleCollided
 
     def _onVehicleCollided(self, vehicleId, velocity):
@@ -477,11 +479,13 @@ class OnVehicleShaked(Block, VehicleMeta):
         return
 
     def onStartScript(self):
-        if BigWorld.player():
+        if isPlayerAvatar():
             BigWorld.player().inputHandler.OnVehicleShaked += self._onVehicleShaked
+        else:
+            errorVScript(self, 'can not subscribe on event')
 
     def onFinishScript(self):
-        if BigWorld.player():
+        if isPlayerAvatar():
             BigWorld.player().inputHandler.OnVehicleShaked -= self._onVehicleShaked
 
     def _onVehicleShaked(self, vehicleId, shakeReason):

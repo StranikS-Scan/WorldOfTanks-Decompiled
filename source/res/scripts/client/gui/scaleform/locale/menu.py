@@ -154,7 +154,6 @@ class MENU(object):
     LOADING_BATTLETYPES_DESC_22 = '#menu:loading/battleTypes/desc/22'
     LOADING_BATTLETYPES_23 = '#menu:loading/battleTypes/23'
     LOADING_BATTLETYPES_DESC_23 = '#menu:loading/battleTypes/desc/23'
-    LOADING_BATTLETYPES_SUBTITLE_23 = '#menu:loading/battleTypes/subTitle/23'
     LOADING_BATTLETYPES_24 = '#menu:loading/battleTypes/24'
     LOADING_BATTLETYPES_DESC_24 = '#menu:loading/battleTypes/desc/24'
     LOADING_BATTLETYPES_25 = '#menu:loading/battleTypes/25'
@@ -1655,6 +1654,10 @@ class MENU(object):
     CONTEXTMENU_ACCEPTINVITATIONTOSQUAD = '#menu:contextMenu/acceptInvitationToSquad'
     CONTEXTMENU_REJECTINVITATIONTOSQUAD = '#menu:contextMenu/rejectInvitationToSquad'
     CONTEXTMENU_GOTOBLUEPRINT = '#menu:contextMenu/goToBlueprint'
+    CONTEXTMENU_COMMENDFIRST = '#menu:contextMenu/commendFirst'
+    CONTEXTMENU_COMMENDBACK = '#menu:contextMenu/commendBack'
+    CONTEXTMENU_OUTGOINGCOMMENDATION = '#menu:contextMenu/outgoingCommendation'
+    CONTEXTMENU_MUTUALCOMMENDATION = '#menu:contextMenu/mutualCommendation'
     DENUNCIATION_1 = '#menu:denunciation/1'
     DENUNCIATION_2 = '#menu:denunciation/2'
     DENUNCIATION_3 = '#menu:denunciation/3'
@@ -2368,6 +2371,10 @@ class MENU(object):
      CONTEXTMENU_ACCEPTINVITATIONTOSQUAD,
      CONTEXTMENU_REJECTINVITATIONTOSQUAD,
      CONTEXTMENU_GOTOBLUEPRINT,
+     CONTEXTMENU_COMMENDFIRST,
+     CONTEXTMENU_COMMENDBACK,
+     CONTEXTMENU_OUTGOINGCOMMENDATION,
+     CONTEXTMENU_MUTUALCOMMENDATION,
      CONTEXTMENU_VIEWCLANPROFILE,
      CONTEXTMENU_COPYCLANNAME,
      CONTEXTMENU_TELECOMRENT,
@@ -2826,7 +2833,6 @@ class MENU(object):
      LOADING_BATTLETYPES_DESC_22,
      LOADING_BATTLETYPES_23,
      LOADING_BATTLETYPES_DESC_23,
-     LOADING_BATTLETYPES_SUBTITLE_23,
      LOADING_BATTLETYPES_24,
      LOADING_BATTLETYPES_DESC_24,
      LOADING_BATTLETYPES_25,

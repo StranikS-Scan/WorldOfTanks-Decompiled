@@ -11,8 +11,8 @@
   <postProgressionTree>	role_ATSPG_universal	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	37	</forward>
-    <backward>	13	</backward>
+    <forward>	40	</forward>
+    <backward>	14	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.185	</moving>
@@ -1512,6 +1512,42 @@
         <clipAngle>	0.647283	</clipAngle>
         <anchorShift>	0.266711	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	-1.615824 0.48026 0.245967	</position>
+        <rotation>	-0.000001 -0.03686 1.495039	</rotation>
+        <scale>	0.999998 0.999999 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	1.621253 0.475047 0.245967	</position>
+        <rotation>	3.139848 0.027542 -1.49505	</rotation>
+        <scale>	0.999999 0.999999 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	-0.726743 0.538999 -3.318	</position>
+        <rotation>	-0 -1.570796 1.570796	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18003	</slotId>
+        <position>	-0.983 1.324 0.777679	</position>
+        <rotation>	-0 -0 0	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	turret	</applyType>
+        <size>	medium	</size>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1525,13 +1561,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_Object_704>
-      <userString>	#ussr_vehicles:Chassis_Object_704	</userString>
+    <Chassis_R53_Object_704>
+      <userString>	#ussr_vehicles:Chassis_R53_Object_704	</userString>
       <tags></tags>
       <level>	8	</level>
       <price>	28150	</price>
       <unlocks>
-        <chassis>	Chassis_Object_704_2	  <cost>	23340	</cost>
+        <chassis>	Chassis_R53_Object_704_2	  <cost>	23340	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1543,14 +1579,14 @@
       <terrainResistance>	1.3 1.8 2.9	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	19	</rotationSpeed>
+      <rotationSpeed>	26	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.21	</vehicleMovement>
         <vehicleRotation>	0.21	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	180	</maxHealth>
-      <maxRegenHealth>	135	</maxRegenHealth>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	165	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R53_Object_704/normal/lod0/Chassis.model	</undamaged>
@@ -1993,7 +2029,6 @@
             <length>	0.149015	</length>
           </mainSegment>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.16781	</xStart>
@@ -2197,7 +2232,6 @@
             <length>	0.148612	</length>
           </mainSegment>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.17607	</xStart>
@@ -2399,10 +2433,10 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	6.85714293	</repairTime>
-    </Chassis_Object_704>
-    <Chassis_Object_704_2>
-      <userString>	#ussr_vehicles:Chassis_Object_704_2	</userString>
+      <repairTime>	6.66666651	</repairTime>
+    </Chassis_R53_Object_704>
+    <Chassis_R53_Object_704_2>
+      <userString>	#ussr_vehicles:Chassis_R53_Object_704_2	</userString>
       <tags></tags>
       <level>	9	</level>
       <price>	62000	</price>
@@ -2415,14 +2449,14 @@
       <terrainResistance>	1.1 1.4 2.3	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	22	</rotationSpeed>
+      <rotationSpeed>	28	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.19	</vehicleMovement>
         <vehicleRotation>	0.19	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	230	</maxHealth>
-      <maxRegenHealth>	175	</maxRegenHealth>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R53_Object_704/normal/lod0/Chassis.model	</undamaged>
@@ -2865,7 +2899,6 @@
             <length>	0.149015	</length>
           </mainSegment>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.16781	</xStart>
@@ -3069,7 +3102,6 @@
             <length>	0.148612	</length>
           </mainSegment>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.17607	</xStart>
@@ -3271,12 +3303,12 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	6.85714293	</repairTime>
-    </Chassis_Object_704_2>
+      <repairTime>	6.66666651	</repairTime>
+    </Chassis_R53_Object_704_2>
   </chassis>
   <turrets0>
-    <Turret_1_Object_704>
-      <userString>	#ussr_vehicles:Turret_1_Object_704	</userString>
+    <Turret_1_R53_Object_704>
+      <userString>	#ussr_vehicles:Turret_1_R53_Object_704	</userString>
       <tags>	cannotDetach	</tags>
       <level>	9	</level>
       <price>	100	</price>
@@ -3299,111 +3331,10 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_152mm_ML-20CM_obr1944>	shared	  <maxAmmo>	34	</maxAmmo>
-          <unlocks>
-            <gun>	_152mm_D_4S	  <cost>	62000	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	130	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	70	</gun>
-          </armor>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
-          <reloadTime>	17.1	</reloadTime>
-          <aimingTime>	2.7	</aimingTime>
-          <invisibilityFactorAtShot>	0.15	</invisibilityFactorAtShot>
-          <turretYawLimits>	-11 11	</turretYawLimits>
-          <pitchLimits>
-            <minPitch>	0 -18 1 -18	</minPitch>
-            <maxPitch>	0 6 1 6	</maxPitch>
-          </pitchLimits>
-          <models>
-            <undamaged>	vehicles/russian/R53_Object_704/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/russian/R53_Object_704/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/russian/R53_Object_704/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/russian/R53_Object_704/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R53_Object_704/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_huge	</effects>
-          <reloadEffect>	reload115_152	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.000625 -0.00827 1.87726	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.007706 0.37487 0.570149	</anchorPosition>
-              <anchorDirection>	-0.054456 0.805084 0.590656	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.000625 -0.00827 1.87726	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	0.159711 1.6582 2.43207	</position>
-              <rotation>	0.764127 -0.000832 3.14039	</rotation>
-              <scale>	2.23521 1 2.23521	</scale>
-              <showOn>	4112	</showOn>
-              <clipAngle>	0.647283	</clipAngle>
-              <anchorShift>	0.550089	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.159492 1.40521 2.65688	</position>
-              <rotation>	0.880126 -0.001051 3.14023	</rotation>
-              <scale>	2.23522 1 2.23521	</scale>
-              <showOn>	4112	</showOn>
-              <clipAngle>	0.474311	</clipAngle>
-              <anchorShift>	0.709014	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.00125 -0.016539 1.36	</rayStart>
-              <rayEnd>	0.00125 -0.016539 2.093	</rayEnd>
-              <rayUp>	0.159 0 0	</rayUp>
-              <size>	0.733	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.385 0.385 0.000000 0.000000	</tiling>
-            <density>	121.825 126.491	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_152mm_ML-20CM_obr1944>
-        <_152mm_D_4S>	shared	  <maxAmmo>	30	</maxAmmo>
+        <_152mm_D_4S_704>	shared	  <maxAmmo>	30	</maxAmmo>
           <reloadTime>	17.4	</reloadTime>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <aimingTime>	3	</aimingTime>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <aimingTime>	2.9	</aimingTime>
           <unlocks>
             <gun>	_152mm_BL-10	  <cost>	63500	</cost>
             </gun>
@@ -3481,6 +3412,15 @@
               <anchorShift>	0.709014	</anchorShift>
             </slot>
             <slot>
+              <slotType>	attachment	</slotType>
+              <slotId>	48000	</slotId>
+              <position>	-0 0.445 0.555	</position>
+              <rotation>	-0 0 0	</rotation>
+              <scale>	1 1 1	</scale>
+              <applyType>	gunMantlet	</applyType>
+              <size>	medium	</size>
+            </slot>
+            <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
               <rayStart>	-0.000893 -0.01445 1.34991	</rayStart>
@@ -3500,11 +3440,11 @@
             <density>	84.2703 90.0655	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_152mm_D_4S>
+        </_152mm_D_4S_704>
         <_152mm_BL-10>	shared	  <maxAmmo>	30	</maxAmmo>
           <reloadTime>	17.1	</reloadTime>
-          <shotDispersionRadius>	0.39	</shotDispersionRadius>
-          <aimingTime>	2.9	</aimingTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <aimingTime>	2.7	</aimingTime>
           <unlocks>
             <vehicle>	R88_Object268	  <cost>	239000	</cost>
             </vehicle>
@@ -3582,6 +3522,15 @@
               <anchorShift>	0.709014	</anchorShift>
             </slot>
             <slot>
+              <slotType>	attachment	</slotType>
+              <slotId>	48000	</slotId>
+              <position>	-0 0.445 0.555	</position>
+              <rotation>	-0 0 0	</rotation>
+              <scale>	1 1 1	</scale>
+              <applyType>	gunMantlet	</applyType>
+              <size>	medium	</size>
+            </slot>
+            <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
               <rayStart>	0.000124 -0.016543 1.34991	</rayStart>
@@ -3621,46 +3570,36 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-    </Turret_1_Object_704>
+    </Turret_1_R53_Object_704>
   </turrets0>
   <engines>
-    <V-11>	shared	  <unlocks>
-        <engine>	V-2-54IS	  <cost>	26000	</cost>
+    <V_11_704>	shared	  <unlocks>
+        <engine>	V-2-54IS_704	  <cost>	26000	</cost>
         </engine>
       </unlocks>
-    </V-11>
-    <V-2-54IS>	shared	</V-2-54IS>
+    </V_11_704>
+    <V-2-54IS_704>	shared	</V-2-54IS_704>
   </engines>
   <fuelTanks>
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <_10RK>	shared	  <unlocks>
-        <radio>	_12RT	  <cost>	5600	</cost>
-        </radio>
-      </unlocks>
-    </_10RK>
-    <_12RT>	shared	  <unlocks>
-        <radio>	R113	  <cost>	8700	</cost>
-        </radio>
-      </unlocks>
-    </_12RT>
     <R113>	shared	</R113>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <V-11>
-          <smplEnginePower>	687.2327	</smplEnginePower>
-          <smplFwMaxSpeed>	37	</smplFwMaxSpeed>
-        </V-11>
-        <V-2-54IS>
-          <smplEnginePower>	740.0968	</smplEnginePower>
-          <smplFwMaxSpeed>	37	</smplFwMaxSpeed>
-        </V-2-54IS>
+        <V_11_704>
+          <smplEnginePower>	750	</smplEnginePower>
+          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
+        </V_11_704>
+        <V-2-54IS_704>
+          <smplEnginePower>	800	</smplEnginePower>
+          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
+        </V-2-54IS_704>
       </engines>
       <chassis>
-        <Chassis_Object_704>
+        <Chassis_R53_Object_704>
           <grounds>
             <soft>
               <rollingFriction>	0.23345	</rollingFriction>
@@ -3672,8 +3611,9 @@
               <rollingFriction>	0.10465	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_Object_704>
-        <Chassis_Object_704_2>
+          <axleCount>	5	</axleCount>
+        </Chassis_R53_Object_704>
+        <Chassis_R53_Object_704_2>
           <grounds>
             <soft>
               <rollingFriction>	0.18515	</rollingFriction>
@@ -3685,7 +3625,8 @@
               <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_Object_704_2>
+          <axleCount>	5	</axleCount>
+        </Chassis_R53_Object_704_2>
       </chassis>
     </detailed>
   </physics>

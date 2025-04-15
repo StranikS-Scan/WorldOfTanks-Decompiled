@@ -818,7 +818,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mediumArmorPiercing	</effects>
     <damage>
-      <armor>	130	</armor>
+      <armor>	150	</armor>
       <devices>	100	</devices>
     </damage>
     <normalizationAngle>	5	</normalizationAngle>
@@ -835,7 +835,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mediumArmorPiercing	</effects>
     <damage>
-      <armor>	130	</armor>
+      <armor>	150	</armor>
       <devices>	100	</devices>
     </damage>
     <normalizationAngle>	5	</normalizationAngle>
@@ -853,14 +853,14 @@
     <isTracer>	true	</isTracer>
     <effects>	mediumHighExplosive	</effects>
     <damage>
-      <armor>	175	</armor>
+      <armor>	190	</armor>
       <devices>	100	</devices>
     </damage>
     <armorSpalls>
       <impactRadius>	1.06	</impactRadius>
       <coneAngle>	90	</coneAngle>
       <damage>
-        <armor>	90	</armor>
+        <armor>	95	</armor>
         <devices>	50	</devices>
       </damage>
     </armorSpalls>
@@ -875,7 +875,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mediumArmorPiercing	</effects>
     <damage>
-      <armor>	135	</armor>
+      <armor>	150	</armor>
       <devices>	100	</devices>
     </damage>
     <normalizationAngle>	5	</normalizationAngle>
@@ -892,7 +892,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mediumArmorPiercing	</effects>
     <damage>
-      <armor>	135	</armor>
+      <armor>	150	</armor>
       <devices>	100	</devices>
     </damage>
     <normalizationAngle>	5	</normalizationAngle>
@@ -910,14 +910,14 @@
     <isTracer>	true	</isTracer>
     <effects>	mediumHighExplosive	</effects>
     <damage>
-      <armor>	175	</armor>
+      <armor>	190	</armor>
       <devices>	100	</devices>
     </damage>
     <armorSpalls>
       <impactRadius>	1.06	</impactRadius>
       <coneAngle>	90	</coneAngle>
       <damage>
-        <armor>	90	</armor>
+        <armor>	95	</armor>
         <devices>	50	</devices>
       </damage>
     </armorSpalls>
@@ -927,6 +927,7 @@
     <userString>	#japan_vehicles:_75mm_AP_Type_1_604R	</userString>
     <icon>	ap	</icon>
     <price>	170	</price>
+    <notInShop>	true	</notInShop>
     <kind>	ARMOR_PIERCING	</kind>
     <caliber>	75	</caliber>
     <isTracer>	true	</isTracer>
@@ -943,6 +944,7 @@
     <userString>	#japan_vehicles:_75mm_APHE_Type_1_604R	</userString>
     <icon>	ap_premium	</icon>
     <price>	2800	</price>
+    <notInShop>	true	</notInShop>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING	</kind>
     <caliber>	75	</caliber>
@@ -960,6 +962,7 @@
     <userString>	#japan_vehicles:_75mm_HE_Type_1_604R	</userString>
     <icon>	he_modern	</icon>
     <price>	110	</price>
+    <notInShop>	true	</notInShop>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <mechanics>	MODERN	</mechanics>
     <caliber>	75	</caliber>
@@ -974,7 +977,7 @@
       <impactRadius>	1.4	</impactRadius>
       <coneAngle>	90	</coneAngle>
       <damage>
-        <armor>	150	</armor>
+        <armor>	90	</armor>
         <devices>	60	</devices>
       </damage>
     </armorSpalls>
@@ -1264,6 +1267,63 @@
       </damage>
     </armorSpalls>
   </_105mm_HE_Type_92>
+  <_105mm_AP_Type_95_SP>
+    <id>	190	</id>
+    <userString>	#japan_vehicles:_105mm_AP_Type_95_SP	</userString>
+    <icon>	ap	</icon>
+    <price>	560	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_AP_Type_95_SP>
+  <_105mm_AP_Type_95_SP_Toku_Kou>
+    <id>	191	</id>
+    <userString>	#japan_vehicles:_105mm_AP_Type_95_SP_Toku_Kou	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	4400	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_AP_Type_95_SP_Toku_Kou>
+  <_105mm_HE_Type_92_SP>
+    <id>	192	</id>
+    <userString>	#japan_vehicles:_105mm_HE_Type_92_SP	</userString>
+    <icon>	he_modern	</icon>
+    <price>	425	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	210	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_HE_Type_92_SP>
   <_105mm_Type_01_AP>
     <id>	103	</id>
     <userString>	#japan_vehicles:_105mm_Type_01_AP	</userString>
@@ -1274,7 +1334,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainArmorPiercing	</effects>
     <damage>
-      <armor>	320	</armor>
+      <armor>	360	</armor>
       <devices>	150	</devices>
     </damage>
     <normalizationAngle>	5	</normalizationAngle>
@@ -1291,7 +1351,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainArmorPiercing	</effects>
     <damage>
-      <armor>	320	</armor>
+      <armor>	360	</armor>
       <devices>	150	</devices>
     </damage>
     <normalizationAngle>	5	</normalizationAngle>
@@ -1309,14 +1369,14 @@
     <isTracer>	true	</isTracer>
     <effects>	mainHighExplosive	</effects>
     <damage>
-      <armor>	420	</armor>
+      <armor>	450	</armor>
       <devices>	150	</devices>
     </damage>
     <armorSpalls>
       <impactRadius>	1.91	</impactRadius>
       <coneAngle>	90	</coneAngle>
       <damage>
-        <armor>	210	</armor>
+        <armor>	225	</armor>
         <devices>	75	</devices>
       </damage>
     </armorSpalls>
@@ -1373,7 +1433,7 @@
       <impactRadius>	1.91	</impactRadius>
       <coneAngle>	90	</coneAngle>
       <damage>
-        <armor>	210	</armor>
+        <armor>	200	</armor>
         <devices>	75	</devices>
       </damage>
     </armorSpalls>
@@ -1445,7 +1505,7 @@
     <isTracer>	true	</isTracer>
     <effects>	largeArmorPiercing	</effects>
     <damage>
-      <armor>	400	</armor>
+      <armor>	420	</armor>
       <devices>	165	</devices>
     </damage>
     <normalizationAngle>	5	</normalizationAngle>
@@ -1462,7 +1522,7 @@
     <isTracer>	true	</isTracer>
     <effects>	largeArmorPiercing	</effects>
     <damage>
-      <armor>	400	</armor>
+      <armor>	420	</armor>
       <devices>	165	</devices>
     </damage>
     <normalizationAngle>	5	</normalizationAngle>
@@ -1480,14 +1540,14 @@
     <isTracer>	true	</isTracer>
     <effects>	largeHighExplosive	</effects>
     <damage>
-      <armor>	515	</armor>
+      <armor>	530	</armor>
       <devices>	165	</devices>
     </damage>
     <armorSpalls>
       <impactRadius>	1.91	</impactRadius>
       <coneAngle>	90	</coneAngle>
       <damage>
-        <armor>	260	</armor>
+        <armor>	265	</armor>
         <devices>	85	</devices>
       </damage>
     </armorSpalls>

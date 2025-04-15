@@ -38,9 +38,9 @@
   </G07_Pz35t>
   <G05_StuG_40_AusfG>
     <id>	04	</id>
-    <userString>	#germany_vehicles:StuG_40_AusfG	</userString>
-    <shortUserString>	#germany_vehicles:StuG_40_AusfG_short	</shortUserString>
-    <description>	#germany_vehicles:StuG_40_AusfG_descr	</description>
+    <userString>	#germany_vehicles:G05_StuG_40_AusfG	</userString>
+    <shortUserString>	#germany_vehicles:G05_StuG_40_AusfG_short	</shortUserString>
+    <description>	#germany_vehicles:G05_StuG_40_AusfG_descr	</description>
     <price>	422000	</price>
     <tags>	AT-SPG HD mediumAT-SPG improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	5	</level>
@@ -56,9 +56,9 @@
   </G03_PzV_Panther>
   <G17_JagdPzIV>
     <id>	06	</id>
-    <userString>	#germany_vehicles:JagdPzIV	</userString>
-    <shortUserString>	#germany_vehicles:JagdPzIV_short	</shortUserString>
-    <description>	#germany_vehicles:JagdPzIV_descr	</description>
+    <userString>	#germany_vehicles:G17_JagdPzIV	</userString>
+    <shortUserString>	#germany_vehicles:G17_JagdPzIV_short	</shortUserString>
+    <description>	#germany_vehicles:G17_JagdPzIV_descr	</description>
     <price>	910500	</price>
     <tags>	AT-SPG role_ATSPG_universal HD mediumAT-SPG improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	6	</level>
@@ -137,9 +137,9 @@
   </G21_PanzerJager_I>
   <G18_JagdPanther>
     <id>	15	</id>
-    <userString>	#germany_vehicles:JagdPanther	</userString>
-    <shortUserString>	#germany_vehicles:JagdPanther_short	</shortUserString>
-    <description>	#germany_vehicles:JagdPanther_descr	</description>
+    <userString>	#germany_vehicles:G18_JagdPanther	</userString>
+    <shortUserString>	#germany_vehicles:G18_JagdPanther_short	</shortUserString>
+    <description>	#germany_vehicles:G18_JagdPanther_descr	</description>
     <price>	1345000	</price>
     <tags>	AT-SPG role_ATSPG_universal HD beast mediumAT-SPG improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	7	</level>
@@ -272,16 +272,16 @@
   </G58_VK4502P>
   <G37_Ferdinand>
     <id>	30	</id>
-    <userString>	#germany_vehicles:Ferdinand	</userString>
-    <description>	#germany_vehicles:Ferdinand_descr	</description>
+    <userString>	#germany_vehicles:G37_Ferdinand	</userString>
+    <description>	#germany_vehicles:G37_Ferdinand_descr	</description>
     <price>	2570000	</price>
     <tags>	AT-SPG role_ATSPG_universal HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </G37_Ferdinand>
   <G44_JagdTiger>
     <id>	31	</id>
-    <userString>	#germany_vehicles:JagdTiger	</userString>
-    <description>	#germany_vehicles:JagdTiger_descr	</description>
+    <userString>	#germany_vehicles:G44_JagdTiger	</userString>
+    <description>	#germany_vehicles:G44_JagdTiger_descr	</description>
     <price>	3450000	</price>
     <tags>	AT-SPG role_ATSPG_assault HD beast heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user	</tags>
     <level>	9	</level>
@@ -423,9 +423,9 @@
   </G40_Nashorn>
   <G72_JagdPz_E100>
     <id>	47	</id>
-    <userString>	#germany_vehicles:JagdPz_E100	</userString>
-    <description>	#germany_vehicles:JagdPz_E100_descr	</description>
-    <shortUserString>	#germany_vehicles:JagdPz_E100_short	</shortUserString>
+    <userString>	#germany_vehicles:G72_JagdPz_E100	</userString>
+    <description>	#germany_vehicles:G72_JagdPz_E100_descr	</description>
+    <shortUserString>	#germany_vehicles:G72_JagdPz_E100_short	</shortUserString>
     <price>	6100000	</price>
     <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG AT-SPG2 improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals	</tags>
     <level>	10	</level>
@@ -967,16 +967,6 @@
     <tags>	heavyTank role_HT_assault private HD secret premiumIGR improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals role_HT_assault	</tags>
     <level>	10	</level>
   </G42_Maus_IGR>
-  <G25_PzII_Luchs_SHXXI_L>
-    <id>	167	</id>
-    <userString>	#germany_vehicles:G25_PzII_Luchs_SHXXI_L	</userString>
-    <shortUserString>	#germany_vehicles:G25_PzII_Luchs_SHXXI_L_short	</shortUserString>
-    <price>	1	</price>
-    <notInShop>	true	</notInShop>
-    <cannotBeBought>	true	</cannotBeBought>
-    <tags>	lightTank private event_battles secret HD battle_royale unobservable bot_hunter cannot_be_sold	</tags>
-    <level>	1	</level>
-  </G25_PzII_Luchs_SHXXI_L>
   <G89_Leopard1_bob>
     <id>	168	</id>
     <userString>	#germany_vehicles:Leopard1_bob	</userString>
@@ -1563,8 +1553,8 @@
   </G48_E-25>
   <G37_Ferdinand_FL>
     <id>	218	</id>
-    <userString>	#germany_vehicles:Ferdinand_FL	</userString>
-    <description>	#germany_vehicles:Ferdinand_descr	</description>
+    <userString>	#germany_vehicles:G37_Ferdinand_FL	</userString>
+    <description>	#germany_vehicles:G37_Ferdinand_descr	</description>
     <price>	1	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
@@ -1587,8 +1577,8 @@
   </G141_VK7501K>
   <G44_JagdTiger_FL>
     <id>	220	</id>
-    <userString>	#germany_vehicles:JagdTiger_FL	</userString>
-    <description>	#germany_vehicles:JagdTiger_descr	</description>
+    <userString>	#germany_vehicles:G44_JagdTiger_FL	</userString>
+    <description>	#germany_vehicles:G44_JagdTiger_descr	</description>
     <price>	1	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
@@ -2087,9 +2077,9 @@
   </G1057_PzVI_Tiger_P_NewOnBoarding>
   <G1018_JagdPanther_NewOnBoarding>
     <id>	407	</id>
-    <userString>	#germany_vehicles:JagdPanther	</userString>
-    <shortUserString>	#germany_vehicles:JagdPanther_short	</shortUserString>
-    <description>	#germany_vehicles:JagdPanther_descr	</description>
+    <userString>	#germany_vehicles:G18_JagdPanther	</userString>
+    <shortUserString>	#germany_vehicles:G18_JagdPanther_short	</shortUserString>
+    <description>	#germany_vehicles:G18_JagdPanther_descr	</description>
     <price>	1345000	</price>
     <tags>	AT-SPG role_ATSPG_universal HD mediumAT-SPG improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user cannot_be_sold lockOutfit lockCrew secret private	</tags>
     <level>	7	</level>
@@ -2156,8 +2146,8 @@
   </G1004_PzVI_Tiger_I_StoryMode>
   <G1044_JagdTiger_StoryMode>
     <id>	410	</id>
-    <userString>	#germany_vehicles:JagdTiger	</userString>
-    <description>	#germany_vehicles:JagdTiger_descr	</description>
+    <userString>	#germany_vehicles:G44_JagdTiger	</userString>
+    <description>	#germany_vehicles:G44_JagdTiger_descr	</description>
     <price>	3450000	</price>
     <tags>	AT-SPG role_ATSPG_assault HD beast heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user cannot_be_sold lockOutfit lockCrew secret private	</tags>
     <level>	9	</level>
@@ -2175,8 +2165,8 @@
   </G1042_Maus_StoryMode>
   <G1037_Ferdinand_StoryMode>
     <id>	412	</id>
-    <userString>	#germany_vehicles:Ferdinand	</userString>
-    <description>	#germany_vehicles:Ferdinand_descr	</description>
+    <userString>	#germany_vehicles:G37_Ferdinand	</userString>
+    <description>	#germany_vehicles:G37_Ferdinand_descr	</description>
     <price>	2570000	</price>
     <tags>	AT-SPG role_ATSPG_universal HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user cannot_be_sold lockOutfit lockCrew secret private	</tags>
     <level>	8	</level>
@@ -2237,4 +2227,83 @@
     <level>	4	</level>
     <notInShop>	True	</notInShop>
   </G1025_PzII_Luchs_StoryMode>
+  <G1010_PzIII_AusfJ_StoryModeStealth>
+    <id>	419	</id>
+    <userString>	#germany_vehicles:PzIII_AusfJ	</userString>
+    <shortUserString>	#germany_vehicles:PzIII_AusfJ_short	</shortUserString>
+    <description>	#germany_vehicles:PzIII_AusfJ_descr	</description>
+    <price>	138000	</price>
+    <tags>	mediumTank HD improvedVentilation_class3_user extraHealthReserve_class3_user cannot_be_sold lockOutfit lockCrew secret private	</tags>
+    <level>	4	</level>
+    <notInShop>	True	</notInShop>
+  </G1010_PzIII_AusfJ_StoryModeStealth>
+  <G1004_PzVI_Tiger_I_StoryModeStealth>
+    <id>	420	</id>
+    <userString>	#germany_vehicles:PzVI	</userString>
+    <shortUserString>	#germany_vehicles:Tiger_short	</shortUserString>
+    <description>	#germany_vehicles:PzVI_descr	</description>
+    <price>	1390000	</price>
+    <tags>	heavyTank role_HT_universal HD beast improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user cannot_be_sold lockOutfit lockCrew secret private	</tags>
+    <level>	7	</level>
+    <notInShop>	True	</notInShop>
+  </G1004_PzVI_Tiger_I_StoryModeStealth>
+  <G1023_Grille_StoryModeStealth>
+    <id>	421	</id>
+    <userString>	#germany_vehicles:Grille	</userString>
+    <shortUserString>	#germany_vehicles:Grille_short	</shortUserString>
+    <description>	#germany_vehicles:Grille_descr	</description>
+    <price>	400000	</price>
+    <tags>	SPG HD lightSPG tankRammer_class2_user antifragmentationLining_light_user cannot_be_sold lockOutfit lockCrew secret private	</tags>
+    <level>	5	</level>
+    <notInShop>	True	</notInShop>
+  </G1023_Grille_StoryModeStealth>
+  <G1025_PzII_Luchs_StoryModeStealth>
+    <id>	422	</id>
+    <userString>	#germany_vehicles:PzII_Luchs	</userString>
+    <shortUserString>	#germany_vehicles:PzII_Luchs_short	</shortUserString>
+    <description>	#germany_vehicles:PzII_Luchs_descr	</description>
+    <price>	155000	</price>
+    <tags>	lightTank HD improvedVentilation_class3_user extraHealthReserve_class3_user cannot_be_sold lockOutfit lockCrew secret private	</tags>
+    <level>	4	</level>
+    <notInShop>	True	</notInShop>
+  </G1025_PzII_Luchs_StoryModeStealth>
+  <G1081_Pz_IV_AusfH_StoryModeStealth>
+    <id>	423	</id>
+    <userString>	#germany_vehicles:Pz_IV_AusfH	</userString>
+    <shortUserString>	#germany_vehicles:Pz_IV_AusfH_short	</shortUserString>
+    <description>	#germany_vehicles:Pz_IV_AusfH_descr	</description>
+    <price>	373000	</price>
+    <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user cannot_be_sold lockOutfit lockCrew secret private	</tags>
+    <level>	5	</level>
+    <notInShop>	True	</notInShop>
+  </G1081_Pz_IV_AusfH_StoryModeStealth>
+  <G1018_JagdPanther_StoryModeStealth>
+    <id>	424	</id>
+    <userString>	#germany_vehicles:JagdPanther	</userString>
+    <shortUserString>	#germany_vehicles:JagdPanther_short	</shortUserString>
+    <description>	#germany_vehicles:JagdPanther_descr	</description>
+    <price>	1345000	</price>
+    <tags>	AT-SPG role_ATSPG_universal HD beast mediumAT-SPG improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user cannot_be_sold lockOutfit lockCrew secret private	</tags>
+    <level>	7	</level>
+    <notInShop>	True	</notInShop>
+  </G1018_JagdPanther_StoryModeStealth>
+  <G1037_Ferdinand_StoryModeStealth>
+    <id>	425	</id>
+    <userString>	#germany_vehicles:Ferdinand	</userString>
+    <description>	#germany_vehicles:Ferdinand_descr	</description>
+    <price>	2570000	</price>
+    <tags>	AT-SPG role_ATSPG_universal HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user cannot_be_sold lockOutfit lockCrew secret private	</tags>
+    <level>	8	</level>
+    <notInShop>	True	</notInShop>
+  </G1037_Ferdinand_StoryModeStealth>
+  <G1003_PzV_Panther_StoryModeStealth>
+    <id>	426	</id>
+    <userString>	#germany_vehicles:PzV	</userString>
+    <shortUserString>	#germany_vehicles:PzV_short	</shortUserString>
+    <description>	#germany_vehicles:PzV_descr	</description>
+    <price>	1380000	</price>
+    <tags>	mediumTank role_MT_universal HD beast improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user cannot_be_sold lockOutfit lockCrew secret private	</tags>
+    <level>	7	</level>
+    <notInShop>	True	</notInShop>
+  </G1003_PzV_Panther_StoryModeStealth>
 </list.xml>

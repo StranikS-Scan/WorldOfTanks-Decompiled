@@ -3,6 +3,7 @@
 from enum import IntEnum
 from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
+from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_performance_model import ModeSelectorPerformanceModel
 
 class CardState(IntEnum):
     NOT_STARTED = 0
@@ -14,56 +15,64 @@ class CardState(IntEnum):
 class FunRandomSubSelectorCardModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=8, commands=0):
+    def __init__(self, properties=9, commands=0):
         super(FunRandomSubSelectorCardModel, self).__init__(properties=properties, commands=commands)
 
+    @property
+    def performance(self):
+        return self._getViewModel(0)
+
+    @staticmethod
+    def getPerformanceType():
+        return ModeSelectorPerformanceModel
+
     def getAssetsPointer(self):
-        return self._getString(0)
+        return self._getString(1)
 
     def setAssetsPointer(self, value):
-        self._setString(0, value)
+        self._setString(1, value)
 
     def getSubModeId(self):
-        return self._getNumber(1)
+        return self._getNumber(2)
 
     def setSubModeId(self, value):
-        self._setNumber(1, value)
+        self._setNumber(2, value)
 
     def getConditions(self):
-        return self._getString(2)
+        return self._getString(3)
 
     def setConditions(self, value):
-        self._setString(2, value)
+        self._setString(3, value)
 
     def getState(self):
-        return CardState(self._getNumber(3))
+        return CardState(self._getNumber(4))
 
     def setState(self, value):
-        self._setNumber(3, value.value)
+        self._setNumber(4, value.value)
 
     def getIsSelected(self):
-        return self._getBool(4)
+        return self._getBool(5)
 
     def setIsSelected(self, value):
-        self._setBool(4, value)
+        self._setBool(5, value)
 
     def getTimeLeft(self):
-        return self._getString(5)
+        return self._getString(6)
 
     def setTimeLeft(self, value):
-        self._setString(5, value)
+        self._setString(6, value)
 
     def getTimeToStart(self):
-        return self._getNumber(6)
+        return self._getNumber(7)
 
     def setTimeToStart(self, value):
-        self._setNumber(6, value)
+        self._setNumber(7, value)
 
     def getModifiersDomains(self):
-        return self._getArray(7)
+        return self._getArray(8)
 
     def setModifiersDomains(self, value):
-        self._setArray(7, value)
+        self._setArray(8, value)
 
     @staticmethod
     def getModifiersDomainsType():
@@ -71,6 +80,7 @@ class FunRandomSubSelectorCardModel(ViewModel):
 
     def _initialize(self):
         super(FunRandomSubSelectorCardModel, self)._initialize()
+        self._addViewModelProperty('performance', ModeSelectorPerformanceModel())
         self._addStringProperty('assetsPointer', '')
         self._addNumberProperty('subModeId', 0)
         self._addStringProperty('conditions', '')

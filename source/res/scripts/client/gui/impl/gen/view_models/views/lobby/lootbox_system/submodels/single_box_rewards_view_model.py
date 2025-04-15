@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.views.lobby.lootbox_system.bonus_model import Bonu
 class SingleBoxRewardsViewModel(ViewModel):
     __slots__ = ('onOpen', 'onGoBack', 'onPreview', 'onBuyBoxes', 'onAnimationStateChanged', 'onVideoPlaying', 'onClose')
 
-    def __init__(self, properties=12, commands=7):
+    def __init__(self, properties=11, commands=7):
         super(SingleBoxRewardsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -44,47 +44,41 @@ class SingleBoxRewardsViewModel(ViewModel):
     def setIsReopen(self, value):
         self._setBool(4, value)
 
-    def getUseExternal(self):
-        return self._getBool(5)
-
-    def setUseExternal(self, value):
-        self._setBool(5, value)
-
     def getBoxesCount(self):
-        return self._getNumber(6)
+        return self._getNumber(5)
 
     def setBoxesCount(self, value):
-        self._setNumber(6, value)
+        self._setNumber(5, value)
 
     def getBoxesCountToGuaranteed(self):
-        return self._getNumber(7)
+        return self._getNumber(6)
 
     def setBoxesCountToGuaranteed(self, value):
-        self._setNumber(7, value)
+        self._setNumber(6, value)
 
     def getIsAnimationActive(self):
-        return self._getBool(8)
+        return self._getBool(7)
 
     def setIsAnimationActive(self, value):
-        self._setBool(8, value)
+        self._setBool(7, value)
 
     def getIsAwaitingResponse(self):
-        return self._getBool(9)
+        return self._getBool(8)
 
     def setIsAwaitingResponse(self, value):
-        self._setBool(9, value)
+        self._setBool(8, value)
 
     def getIsWindowAccessible(self):
-        return self._getBool(10)
+        return self._getBool(9)
 
     def setIsWindowAccessible(self, value):
-        self._setBool(10, value)
+        self._setBool(9, value)
 
     def getIsShopVisible(self):
-        return self._getBool(11)
+        return self._getBool(10)
 
     def setIsShopVisible(self, value):
-        self._setBool(11, value)
+        self._setBool(10, value)
 
     def _initialize(self):
         super(SingleBoxRewardsViewModel, self)._initialize()
@@ -93,7 +87,6 @@ class SingleBoxRewardsViewModel(ViewModel):
         self._addStringProperty('eventName', '')
         self._addStringProperty('boxCategory', '')
         self._addBoolProperty('isReopen', False)
-        self._addBoolProperty('useExternal', False)
         self._addNumberProperty('boxesCount', 0)
         self._addNumberProperty('boxesCountToGuaranteed', 0)
         self._addBoolProperty('isAnimationActive', False)

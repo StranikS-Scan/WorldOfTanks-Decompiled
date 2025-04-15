@@ -7,10 +7,12 @@ from fun_random.gui.impl.gen.view_models.views.lobby.common.fun_random_progressi
 from fun_random.gui.impl.gen.view_models.views.lobby.common.fun_random_progression_state import FunRandomProgressionStatus
 from fun_random.gui.impl.gen.view_models.views.lobby.common.fun_random_quest_card_model import FunRandomQuestCardModel, CardState
 from fun_random.gui.impl.lobby.common.lootboxes import FunRandomLootBoxTokenBonusPacker, FunRandomRewardLootBoxTokenBonusPacker, FunRandomLootBoxVehiclesBonusUIPacker, FEP_CATEGORY
+from fun_random.gui.feature.sub_systems.fun_performance_analyzers import PerformanceGroup
 from gui.impl import backport
 from gui.impl.auxiliary.collections_helper import TmanTemplateBonusPacker
 from gui.impl.auxiliary.rewards_helper import BlueprintBonusTypes
 from gui.impl.gen import R
+from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_performance_model import PerformanceRiskEnum
 from gui.impl.lobby.common.view_helpers import packBonusModelAndTooltipData
 from gui.server_events.bonuses import LootBoxTokensBonus, mergeBonuses
 from gui.shared.formatters import time_formatters
@@ -29,6 +31,7 @@ if TYPE_CHECKING:
     from fun_random.gui.impl.gen.view_models.views.lobby.common.fun_random_progression_condition import FunRandomProgressionCondition
     from fun_random.gui.impl.gen.view_models.views.lobby.common.fun_random_infinite_progression_condition import FunRandomInfiniteProgressionCondition
     from fun_random.gui.server_events.event_items import FunProgressionTriggerQuest
+    from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_performance_model import ModeSelectorPerformanceModel
 _PROGRESSION_STATUS_MAP = {(False, False, False): FunRandomProgressionStatus.ACTIVE_RESETTABLE,
  (False, False, True): FunRandomProgressionStatus.ACTIVE_RESETTABLE,
  (True, False, False): FunRandomProgressionStatus.COMPLETED_RESETTABLE,
@@ -37,6 +40,9 @@ _PROGRESSION_STATUS_MAP = {(False, False, False): FunRandomProgressionStatus.ACT
  (True, True, False): FunRandomProgressionStatus.COMPLETED_FINAL,
  (True, False, True): FunRandomProgressionStatus.ACTIVE_INFINITE_RESETTABLE,
  (True, True, True): FunRandomProgressionStatus.ACTIVE_INFINITE_FINAL}
+_PERFORMANCE_GROUP_TO_RISK_ENUM = {PerformanceGroup.LOW_RISK: PerformanceRiskEnum.LOWRISK,
+ PerformanceGroup.MEDIUM_RISK: PerformanceRiskEnum.MEDIUMRISK,
+ PerformanceGroup.HIGH_RISK: PerformanceRiskEnum.HIGHRISK}
 FUN_RANDOM_MAPPING = {'tokens': FunRandomLootBoxTokenBonusPacker,
  'lootBox': FunRandomLootBoxTokenBonusPacker,
  'tmanToken': TmanTemplateBonusPacker,
@@ -52,7 +58,6 @@ RARITY_ORDER = (Rarity.ORDINARY,
  Rarity.LEGENDARY)
 LOOTBOX_TYPE = 'fep_{0}'
 RARITY_VALUES = tuple((LOOTBOX_TYPE.format(v.value) for v in RARITY_ORDER))
-WIN_ICON_KEY = 'win'
 
 def getFormattedTimeLeft(seconds):
     return time_formatters.getTillTimeByResource(seconds, R.strings.fun_random.modeSelector.status.timeLeft, removeLeadingZeros=True)
@@ -113,12 +118,12 @@ def packBonuses(bonuses, showCount, isSpecial):
 
 def packProgressionActiveStage(progression, stageModel, isSpecial=False, tooltips=None):
     maximumPoints = progression.conditions.maximumCounter
-    _packStage(progression.activeStage.bonuses, math_utils.clamp(0, maximumPoints, progression.conditions.counter), maximumPoints, progression.conditions.counter >= progression.conditions.maximumCounter, stageModel, isSpecial, tooltips)
+    _packStage(progression.activeStage.bonuses, math_utils.clamp(0, maximumPoints, progression.conditions.counter), progression.activeStage.requiredCounter, maximumPoints, progression.conditions.counter >= progression.conditions.maximumCounter, stageModel, isSpecial, tooltips)
 
 
 def packInfiniteProgressionStage(progression, stageModel, isSpecial=False, tooltips=None):
-    maximumPoints = progression.unlimitedProgression.maximumCounter
-    _packStage(progression.unlimitedProgression.bonuses, math_utils.clamp(0, maximumPoints, progression.unlimitedProgression.counter), maximumPoints, progression.unlimitedProgression.unlimitedExecutor.isCompleted(), stageModel, isSpecial, tooltips)
+    maximumPoints = requiredPoints = progression.unlimitedProgression.maximumCounter
+    _packStage(progression.unlimitedProgression.bonuses, math_utils.clamp(0, maximumPoints, progression.unlimitedProgression.counter), requiredPoints, maximumPoints, progression.unlimitedProgression.unlimitedExecutor.isCompleted(), stageModel, isSpecial, tooltips)
 
 
 def packFullProgressionConditions(modeUserName, progression, conditionModel):
@@ -164,9 +169,10 @@ def packInfiniteProgressionConditions(progression, conditionModel):
 
 def packProgressionStages(progression, stagesModel, tooltips=None):
     stagesModel.clear()
+    maximumPoints = progression.conditions.maximumCounter
     for stage in progression.stages:
         stageModel = FunRandomProgressionStage()
-        _packStage(stage.bonuses, progression.conditions.counter, stage.requiredCounter, progression.conditions.counter >= stage.requiredCounter, stageModel, tooltips=tooltips)
+        _packStage(stage.bonuses, progression.conditions.counter, stage.requiredCounter, maximumPoints, progression.conditions.counter >= stage.requiredCounter, stageModel, tooltips=tooltips)
         stagesModel.addViewModel(stageModel)
 
     stagesModel.invalidate()
@@ -194,6 +200,11 @@ def packStageRewards(bonuses, rewardsModel, isSpecial=False, tooltips=None):
     rewardsModel.invalidate()
 
 
+def packPerformanceAlertInfo(performanceModel, performanceGroup, default=PerformanceGroup.LOW_RISK):
+    performanceModel.setPerformanceRisk(_PERFORMANCE_GROUP_TO_RISK_ENUM.get(performanceGroup, default))
+    performanceModel.setShowPerfRisk(performanceGroup != default)
+
+
 def sortFunProgressionBonuses(bonuses):
     lootboxes, other = [], []
     for bonus in bonuses:
@@ -208,8 +219,6 @@ def _packConditions(conditionModel, statusTimer, text, triggers):
     conditionModel.setText(text)
     conditionModel.setStatusTimer(statusTimer)
     _packTriggers(triggers, conditionModel.getConditions())
-    conditionsList = conditionModel.getConditions()
-    conditionModel.setConditionIcon(conditionsList[0].getIconKey() if len(conditionsList) == 1 else WIN_ICON_KEY)
 
 
 def _packTriggers(triggers, cardsModel):
@@ -225,7 +234,7 @@ def _packTriggers(triggers, cardsModel):
 def _packTrigger(cardModel, trigger):
     cardModel.setState(CardState.COMPLETED if trigger.isCompleted() else CardState.ACTIVE)
     cardModel.setDescription(trigger.getDescription())
-    cardModel.setIconKey(trigger.getIconKey())
+    cardModel.setQuestCondition(trigger.getQuestCondition())
     cardModel.setCurrentProgress(trigger.getCurrentProgress())
     cardModel.setTotalProgress(trigger.getTotalProgress())
     cardModel.setTotalPoints(trigger.getEarnedPoints())
@@ -234,8 +243,9 @@ def _packTrigger(cardModel, trigger):
     cardModel.setAltBonusCount(altQuest.getBonusCounterNumber() if altQuest else 0)
 
 
-def _packStage(bonuses, currentPoints, maximumPoints, isCompleted, stageModel, isSpecial=False, tooltips=None):
+def _packStage(bonuses, currentPoints, requiredPoints, maximumPoints, isCompleted, stageModel, isSpecial=False, tooltips=None):
     stageModel.setCurrentPoints(currentPoints)
+    stageModel.setRequiredPoints(requiredPoints)
     stageModel.setMaximumPoints(maximumPoints)
     stageModel.setRarity(_getStageRarity(bonuses))
     stageModel.setIsCompleted(isCompleted)

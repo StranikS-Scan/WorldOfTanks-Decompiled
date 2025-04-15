@@ -17,4 +17,8 @@ class PersonalReservesTab(PersonalReservesTabMeta):
 
     def _makeInjectView(self):
         _logger.debug('[Personal Reserves Tab] makeInjectView')
-        return PersonalReservesTabView()
+        self.__view = PersonalReservesTabView()
+        return self.__view
+
+    def onTabChanged(self, tabAlias):
+        self.__view.handleTabChange(tabAlias)

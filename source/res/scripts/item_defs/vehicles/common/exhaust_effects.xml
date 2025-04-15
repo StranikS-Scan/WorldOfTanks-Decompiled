@@ -1576,6 +1576,21 @@
               <name>	particles/Tank/exhaust/strv_engine_crit.eff	</name>
             </selector>
           </selector>
+          <selector>
+            <key>	2	</key>
+            <type>	range	</type>
+            <variable>	engineLoad	</variable>
+            <selector>
+              <key>	1	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/exhaust/forsage_gas/forsage_idle.eff	</name>
+            </selector>
+            <selector>
+              <key>	2	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/exhaust/forsage_gas/forsage_work_load.eff	</name>
+            </selector>
+          </selector>
         </selector>
         <selector>
           <type>	discrete	</type>

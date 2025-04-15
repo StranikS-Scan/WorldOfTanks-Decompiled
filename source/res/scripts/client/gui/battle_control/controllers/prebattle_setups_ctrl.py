@@ -228,7 +228,7 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
     def setVehicleAttrs(self, vehicleID, attrs):
         if not self.isSelectionStarted() or self.__playerVehicleID != vehicleID:
             return
-        newFactors = getVehicleFactors(self.__vehicle)
+        newFactors = getVehicleFactors(self.__vehicle, isModifySkillProcessors=True)
         newFactors[_EXT_RESPAWN_BOOST] = self.__extData[_EXT_RESPAWN_BOOST]
         newAttrs = dict(attrs)
         newAttrs['circularVisionRadius'] = getCircularVisionRadius(self.__vehicle.descriptor, newFactors)
@@ -356,7 +356,7 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
         vehicle.descriptor.installModifications(self.__extData[_EXT_PROGRESSION_MODS], rebuildAttrs=False)
         vehicle.descriptor.installEnhancements(self.__extData[_EXT_ENHANCEMENTS_KEY], rebuildAttrs=False)
         vehicle.descriptor.installOptDevsSequence(vehicle.optDevices.installed.getIntCDs())
-        newFactors = getVehicleFactors(vehicle)
+        newFactors = getVehicleFactors(vehicle, isModifySkillProcessors=True)
         newFactors[_EXT_RESPAWN_BOOST] = self.__extData[_EXT_RESPAWN_BOOST]
         return newFactors
 

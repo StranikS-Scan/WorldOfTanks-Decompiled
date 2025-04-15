@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/lootbox_system/base/submodels/single_box_rewards.py
 import logging
-import Windowing
 from typing import TYPE_CHECKING
+import Windowing
 from gui.impl.gen.view_models.views.lobby.lootbox_system.main_view_model import SubViewID
 from gui.impl.gen.view_models.views.lobby.lootbox_system.submodels.single_box_rewards_view_model import SingleBoxRewardsViewModel
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
@@ -13,7 +13,7 @@ from gui.lootbox_system.base.bonuses_packers import packBonusModelAndTooltipData
 from gui.lootbox_system.base.common import ViewID, Views
 from gui.lootbox_system.base.decorators import createTooltipContentDecorator
 from gui.lootbox_system.base.sound import playVideoPauseSound, playVideoResumeSound
-from gui.lootbox_system.base.utils import areUsedExternalTransitions, openBoxes, isShopVisible
+from gui.lootbox_system.base.utils import isShopVisible, openBoxes
 from gui.lootbox_system.base.views_loaders import hideItemPreview, showItemPreview
 from gui.server_events.bonuses import SimpleBonus
 from gui.shared import EVENT_BUS_SCOPE, events
@@ -114,7 +114,6 @@ class SingleBoxRewards(SubViewImpl):
         model.setEventName(self.__eventName)
         model.setBoxCategory(self.__category)
         model.setIsReopen(self.__isReopen)
-        model.setUseExternal(areUsedExternalTransitions(self.__eventName))
         model.setIsShopVisible(isShopVisible(self.__eventName))
 
     @replaceNoneKwargsModel
@@ -126,7 +125,7 @@ class SingleBoxRewards(SubViewImpl):
     def __updateBonuses(self, model=None):
         model.bonuses.clearItems()
         model.extraBonuses.clearItems()
-        packBonusModelAndTooltipData(self.__bonuses, model.bonuses, tooltipData=self.__tooltipItems, merge=False, eventName=self.__eventName)
+        packBonusModelAndTooltipData(self.__bonuses, model.bonuses, tooltipData=self.__tooltipItems, merge=False, eventName=self.__eventName, showLootboxCompensation=True)
         packBonusModelAndTooltipData(self.__extraBonuses, model.extraBonuses, tooltipData=self.__tooltipItems, merge=False, eventName=self.__eventName)
         model.bonuses.invalidate()
         model.extraBonuses.invalidate()

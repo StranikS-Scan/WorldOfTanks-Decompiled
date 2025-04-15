@@ -1470,14 +1470,14 @@
     </camouflage>
   </hull>
   <chassis>
-    <SU-85_mod_1942>
-      <userString>	#ussr_vehicles:SU-85_mod_1942	</userString>
-      <shortUserString>	#ussr_vehicles:SU-85_mod_1942_short	</shortUserString>
+    <Chassis_R02_SU-85>
+      <userString>	#ussr_vehicles:Chassis_R02_SU-85	</userString>
+      <shortUserString>	#ussr_vehicles:Chassis_R02_SU-85_short	</shortUserString>
       <tags></tags>
       <level>	4	</level>
       <price>	3800	</price>
       <unlocks>
-        <chassis>	SU-85_mod_1943	  <cost>	2105	</cost>
+        <chassis>	Chassis_R02_SU-85_2	  <cost>	2105	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1489,15 +1489,15 @@
       <terrainResistance>	1.2 1.6 2.3	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	33	</rotationSpeed>
+      <rotationSpeed>	36	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.28	</vehicleMovement>
-        <vehicleRotation>	0.28	</vehicleRotation>
+        <vehicleMovement>	0.25	</vehicleMovement>
+        <vehicleRotation>	0.25	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	90	</maxHealth>
-      <maxRegenHealth>	70	</maxRegenHealth>
-      <repairCost>	5.0	</repairCost>
+      <maxHealth>	95	</maxHealth>
+      <maxRegenHealth>	71	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R02_SU-85/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/russian/R02_SU-85/crash/lod0/Chassis.model	</destroyed>
@@ -2323,11 +2323,11 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	6.85714293	</repairTime>
-    </SU-85_mod_1942>
-    <SU-85_mod_1943>
-      <userString>	#ussr_vehicles:SU-85_mod_1943	</userString>
-      <shortUserString>	#ussr_vehicles:SU-85_mod_1943_short	</shortUserString>
+      <repairTime>	6.73684216	</repairTime>
+    </Chassis_R02_SU-85>
+    <Chassis_R02_SU-85_2>
+      <userString>	#ussr_vehicles:Chassis_R02_SU-85_2	</userString>
+      <shortUserString>	#ussr_vehicles:Chassis_R02_SU-85_2_short	</shortUserString>
       <tags></tags>
       <level>	5	</level>
       <price>	8640	</price>
@@ -2340,15 +2340,15 @@
       <terrainResistance>	1.1 1.4 2.1	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	35	</rotationSpeed>
+      <rotationSpeed>	38	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.25	</vehicleMovement>
-        <vehicleRotation>	0.25	</vehicleRotation>
+        <vehicleMovement>	0.23	</vehicleMovement>
+        <vehicleRotation>	0.23	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	5.0	</repairCost>
+      <maxHealth>	115	</maxHealth>
+      <maxRegenHealth>	86	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R02_SU-85/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/russian/R02_SU-85/crash/lod0/Chassis.model	</destroyed>
@@ -3174,12 +3174,12 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	6.85714293	</repairTime>
-    </SU-85_mod_1943>
+      <repairTime>	6.72463751	</repairTime>
+    </Chassis_R02_SU-85_2>
   </chassis>
   <turrets0>
-    <SU-85_01>
-      <userString>	#ussr_vehicles:SU-85_01	</userString>
+    <Turret_1_R02_SU-85>
+      <userString>	#ussr_vehicles:Turret_1_R02_SU-85	</userString>
       <tags>	cannotDetach	</tags>
       <level>	4	</level>
       <price>	100	</price>
@@ -3202,115 +3202,10 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_76mm_S-54_S>	shared	  <maxAmmo>	60	</maxAmmo>
-          <unlocks>
-            <gun>	_85mm_D-5S	  <cost>	4600	</cost>
-            </gun>
-            <gun>	_122mm_cannon_M-30S	  <cost>	3720	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	45	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	45	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	20	</gun>
-          </armor>
-          <shotDispersionRadius>	0.39	</shotDispersionRadius>
-          <reloadTime>	4.1	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
-          <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 6 1 6	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
-          <turretYawLimits>	-15 15	</turretYawLimits>
-          <models>
-            <undamaged>	vehicles/russian/R02_SU-85/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/russian/R02_SU-85/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/russian/R02_SU-85/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/russian/R02_SU-85/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R02_SU-85/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.004515 -0.011192 1.67687	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.339809 0.339808	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.004515 -0.011192 1.67687	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	0.207976 1.47334 1.99097	</position>
-              <rotation>	0.904473 -0.000132 3.14143	</rotation>
-              <scale>	1.96011 1.32649 1.96012	</scale>
-              <showOn>	4112	</showOn>
-              <clipAngle>	0.663541	</clipAngle>
-              <anchorShift>	0.499503	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.200004 1.36427 2.35392	</position>
-              <rotation>	1.24728 -0.000324 3.14126	</rotation>
-              <scale>	1.61098 1.09023 1.61099	</scale>
-              <showOn>	4112	</showOn>
-              <clipAngle>	0.129862	</clipAngle>
-              <anchorShift>	0.887627	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.009029 -0.022383 0.99834	</rayStart>
-              <rayEnd>	-0.009029 -0.022383 1.42834	</rayEnd>
-              <rayUp>	0.073 0 0	</rayUp>
-              <size>	0.43	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.805 0.805 0.000000 0.000000	</tiling>
-            <density>	145.67 151.05	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_76mm_S-54_S>
         <_85mm_D-5S>	shared	  <maxAmmo>	60	</maxAmmo>
           <unlocks>
             <gun>	_85mm_D5S-85BM	  <cost>	15500	</cost>
             </gun>
-            <vehicle>	R17_SU-100	  <cost>	26500	</cost>
-            </vehicle>
           </unlocks>
           <armor>
             <armor_1>	45	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -3323,7 +3218,7 @@
             </armor_4>
             <gun>	30	</gun>
           </armor>
-          <shotDispersionRadius>	0.43	</shotDispersionRadius>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	4.5	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <pitchLimits>
@@ -3408,146 +3303,11 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_85mm_D-5S>
-        <_122mm_cannon_M-30S>	shared	  <maxAmmo>	39	</maxAmmo>
-          <armor>
-            <armor_1>	45	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	45	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	45	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	50	</gun>
-          </armor>
-          <shotDispersionRadius>	0.55	</shotDispersionRadius>
-          <reloadTime>	11.4	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
-          <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 6 1 6	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.2	</invisibilityFactorAtShot>
-          <turretYawLimits>	-15 15	</turretYawLimits>
-          <models>
-            <undamaged>	vehicles/russian/R02_SU-85/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/russian/R02_SU-85/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/russian/R02_SU-85/crash/lod0/Gun_02.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/russian/R02_SU-85/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R02_SU-85/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_large	</effects>
-          <reloadEffect>	reload115_152	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.003567 0.003198 0.975067	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.354614 0.354613	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.003567 0.003198 0.975067	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	0.207976 1.47339 1.99097	</position>
-              <rotation>	0.904473 -0.000132 3.14143	</rotation>
-              <scale>	1.96011 1.32649 1.96012	</scale>
-              <showOn>	4112	</showOn>
-              <clipAngle>	0.663541	</clipAngle>
-              <anchorShift>	0.698419	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_square direction_right_to_left	</tags>
-              <position>	0.124751 1.56151 2.58655	</position>
-              <rotation>	1.55854 1.1106 -0.460091	</rotation>
-              <scale>	0.567191 0.221954 0.567191	</scale>
-              <showOn>	4096	</showOn>
-              <anchorShift>	0.133812	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45002	</slotId>
-              <tags>	formfactor_square direction_left_to_right	</tags>
-              <position>	0.304839 1.55679 2.58656	</position>
-              <rotation>	1.55855 -1.11095 0.459841	</rotation>
-              <scale>	0.567191 0.221954 0.567191	</scale>
-              <showOn>	4096	</showOn>
-              <anchorShift>	0.133812	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45003	</slotId>
-              <tags>	formfactor_rect1x2 direction_right_to_left	</tags>
-              <position>	-0.036112 1.5583 2.32197	</position>
-              <rotation>	1.55854 1.11065 -0.706675	</rotation>
-              <scale>	1.1048 0.432333 1.1048	</scale>
-              <showOn>	4112	</showOn>
-              <clipAngle>	0.693623	</clipAngle>
-              <anchorShift>	-0.03839	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45004	</slotId>
-              <tags>	formfactor_rect1x2 direction_left_to_right	</tags>
-              <position>	0.436233 1.5583 2.32197	</position>
-              <rotation>	1.55855 -1.11097 0.706298	</rotation>
-              <scale>	1.1048 0.432333 1.1048	</scale>
-              <showOn>	4112	</showOn>
-              <clipAngle>	0.703284	</clipAngle>
-              <anchorShift>	-0.008389	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45005	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.199997 1.2924 2.13943	</position>
-              <rotation>	1.24728 -0.000324 3.14126	</rotation>
-              <scale>	1.61098 1.09023 1.61099	</scale>
-              <showOn>	4112	</showOn>
-              <clipAngle>	0.775183	</clipAngle>
-              <anchorShift>	1.219727	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.003333 -0.003603 1.48	</rayStart>
-              <rayEnd>	-0.003333 -0.003603 2.03	</rayEnd>
-              <rayUp>	0.08 0 0	</rayUp>
-              <size>	0.55	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.52 0.52 0.000000 0.000000	</tiling>
-            <density>	128.734 127.593	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_122mm_cannon_M-30S>
         <_85mm_D5S-85BM>	shared	  <maxAmmo>	46	</maxAmmo>
+          <unlocks>
+            <vehicle>	R17_SU-100	  <cost>	26500	</cost>
+            </vehicle>
+          </unlocks>
           <armor>
             <armor_1>	45	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3560,7 +3320,7 @@
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <reloadTime>	6	</reloadTime>
+          <reloadTime>	5.5	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
@@ -3663,15 +3423,15 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-    </SU-85_01>
+    </Turret_1_R02_SU-85>
   </turrets0>
   <engines>
-    <V-2>	shared	  <unlocks>
-        <engine>	V-2-34	  <cost>	5000	</cost>
+    <V_2_SU_85>	shared	  <unlocks>
+        <engine>	V_2_34_SU_85	  <cost>	5000	</cost>
         </engine>
       </unlocks>
-    </V-2>
-    <V-2-34>	shared	</V-2-34>
+    </V_2_SU_85>
+    <V_2_34_SU_85>	shared	</V_2_34_SU_85>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
@@ -3687,17 +3447,17 @@
   <physics>
     <detailed>
       <engines>
-        <V-2>
-          <smplEnginePower>	507.4949	</smplEnginePower>
+        <V_2_SU_85>
+          <smplEnginePower>	520	</smplEnginePower>
           <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
-        </V-2>
-        <V-2-34>
-          <smplEnginePower>	528.6406	</smplEnginePower>
+        </V_2_SU_85>
+        <V_2_34_SU_85>
+          <smplEnginePower>	540	</smplEnginePower>
           <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
-        </V-2-34>
+        </V_2_34_SU_85>
       </engines>
       <chassis>
-        <SU-85_mod_1942>
+        <Chassis_R02_SU-85>
           <grounds>
             <soft>
               <rollingFriction>	0.18515	</rollingFriction>
@@ -3709,8 +3469,9 @@
               <rollingFriction>	0.0966	</rollingFriction>
             </firm>
           </grounds>
-        </SU-85_mod_1942>
-        <SU-85_mod_1943>
+          <axleCount>	5	</axleCount>
+        </Chassis_R02_SU-85>
+        <Chassis_R02_SU-85_2>
           <grounds>
             <soft>
               <rollingFriction>	0.16905	</rollingFriction>
@@ -3722,7 +3483,8 @@
               <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
-        </SU-85_mod_1943>
+          <axleCount>	5	</axleCount>
+        </Chassis_R02_SU-85_2>
       </chassis>
     </detailed>
   </physics>

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/classic/battle_end_warning_panel.py
 import WWISE
+from constants import ARENA_PERIOD
 from gui.Scaleform.daapi.view.meta.BattleEndWarningPanelMeta import BattleEndWarningPanelMeta
 from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
 from helpers import dependency
@@ -27,30 +28,38 @@ class BattleEndWarningPanel(BattleEndWarningPanelMeta, IAbstractPeriodView):
         self.__roundLength = arenaVisitor.getRoundLength()
         self.__isShown = False
         self.__warningIsValid = self.__validateWarningTime()
+        self.__currPeriod = None
+        return
 
     def isLoaded(self):
-        return True
+        return self.__currPeriod == ARENA_PERIOD.BATTLE
+
+    def setPeriod(self, period):
+        self.__currPeriod = period
 
     def setTotalTime(self, totalTime):
-        if not self.isLoaded():
+        if not self.isLoaded() or not self._isDAAPIInited():
             return
         minutes, seconds = divmod(int(totalTime), ONE_MINUTE)
         minutesStr = '{:02d}'.format(minutes)
         secondsStr = '{:02d}'.format(seconds)
         if self.__isShown:
             self.as_setTotalTimeS(minutesStr, secondsStr)
-        if totalTime == self.__appearTime and self.__warningIsValid:
+        if self.__isAlertTimerInterval(totalTime) and not self.__isShown and self.__warningIsValid:
             self._callWWISE(_WWISE_EVENTS.APPEAR)
             self.as_setTotalTimeS(minutesStr, secondsStr)
             self.as_setTextInfoS(_ms(_WARNING_TEXT_KEY))
             self.as_setStateS(True)
             self.__isShown = True
-        if (totalTime <= self.__appearTime - self.__duration or totalTime > self.__appearTime) and self.__isShown:
+        if not self.__isAlertTimerInterval(totalTime) and self.__isShown:
             self.as_setStateS(False)
             self.__isShown = False
 
     def _callWWISE(self, wwiseEventName):
         WWISE.WW_eventGlobal(wwiseEventName)
+
+    def __isAlertTimerInterval(self, totalTime):
+        return self.__appearTime - self.__duration < totalTime <= self.__appearTime
 
     def __validateWarningTime(self):
         return False if self.__appearTime < self.__duration or self.__appearTime <= 0 or self.__duration <= 0 or self.__appearTime > self.__roundLength or self.__duration > self.__roundLength and self.sessionProvider.arenaVisitor.isBattleEndWarningEnabled() else True

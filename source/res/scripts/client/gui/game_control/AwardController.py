@@ -69,7 +69,7 @@ from gui.server_events.events_helpers import isACEmailConfirmationQuest, isDaily
 from gui.server_events.finders import CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID, PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared.account_settings_helper import AccountSettingsHelper
-from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showResourceWellAwardWindow, showSeniorityRewardAwardWindow, showSteamEmailConfirmRewardsView, showSeniorityRewardVehiclesWindow, showCustomizationRarityAwardScreen, showSteamUnlockAwardsWindow
+from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showSeniorityRewardAwardWindow, showSteamEmailConfirmRewardsView, showSeniorityRewardVehiclesWindow, showCustomizationRarityAwardScreen
 from gui.shared.events import CustomizationEvent, PersonalMissionsEvent
 from gui.shared.formatters.time_formatters import getTillTimeByResource
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
@@ -741,9 +741,10 @@ class CustomizationRewardHandler(MultiTypeServiceChannelHandler):
     __service = dependency.descriptor(ICustomizationService)
     __settingsCore = dependency.descriptor(ISettingsCore)
     _hangarSpace = dependency.descriptor(IHangarSpace)
+    _SYS_MESSAGE_TYPES = (SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index(), SYS_MESSAGE_TYPE.invoiceReceived.index())
 
     def __init__(self, awardCtrl):
-        super(CustomizationRewardHandler, self).__init__((SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index(), SYS_MESSAGE_TYPE.invoiceReceived.index()), awardCtrl)
+        super(CustomizationRewardHandler, self).__init__(self._SYS_MESSAGE_TYPES, awardCtrl)
         self._delayedElements = deque()
         self._rewardScreenInProgress = False
 
@@ -796,8 +797,11 @@ class CustomizationRewardHandler(MultiTypeServiceChannelHandler):
             return
         element = self._delayedElements.popleft()
         newC11nSectionHintClicked = self.__settingsCore.serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.NEW_C11N_SECTION_HINT)
-        showCustomizationRarityAwardScreen(element, not newC11nSectionHintClicked)
+        self._show(element, not newC11nSectionHintClicked)
         self._rewardScreenInProgress = True
+
+    def _show(self, element, isFirstEntry):
+        showCustomizationRarityAwardScreen(element, isFirstEntry)
 
     def _onRewardScreenClosed(self, _):
         self._rewardScreenInProgress = False
@@ -1704,16 +1708,6 @@ class BattleMattersQuestsHandler(MultiTypeServiceChannelHandler):
         return [ qID for qID in data.get('completedQuestIDs', set()) if self.__battleMattersCtrl.isBattleMattersQuestID(qID) ]
 
 
-class ResourceWellRewardHandler(ServiceChannelHandler):
-
-    def __init__(self, awardCtrl):
-        super(ResourceWellRewardHandler, self).__init__(SYS_MESSAGE_TYPE.resourceWellReward.index(), awardCtrl)
-
-    def _showAward(self, ctx):
-        _, message = ctx
-        showResourceWellAwardWindow(serialNumber=message.data.get('serialNumber', ''))
-
-
 class DailyQuestHandlerBase(MultiTypeServiceChannelHandler):
     notificationMgr = dependency.descriptor(INotificationWindowController)
     winbackController = dependency.descriptor(IWinbackController)
@@ -1940,33 +1934,6 @@ class EmailConfirmationQuestHandler(ServiceChannelHandler):
         return
 
 
-class SteamUnlockQuestHandler(ServiceChannelHandler):
-    QUEST_PREFIX = 'steamUnlock:'
-
-    def __init__(self, awardCtrl):
-        super(SteamUnlockQuestHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
-        self.__completedQuests = []
-
-    def fini(self):
-        self.__completedQuests = []
-        super(SteamUnlockQuestHandler, self).fini()
-
-    def _needToShowAward(self, ctx):
-        _, message = ctx
-        if not super(SteamUnlockQuestHandler, self)._needToShowAward(ctx):
-            return False
-        self.__completedQuests = [ qID for qID in message.data.get('completedQuestIDs', set()) if qID.startswith(self.QUEST_PREFIX) ]
-        return self.__completedQuests
-
-    def _showAward(self, ctx):
-        _, message = ctx
-        data = message.data
-        for questID in self.__completedQuests:
-            showSteamUnlockAwardsWindow(rewards=data.get('detailedRewards', {}).get(questID, {}))
-
-        self.__completedQuests = []
-
-
 registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,
  PunishWindowHandler,
  TokenQuestsWindowHandler,
@@ -2003,11 +1970,9 @@ registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,
  PurchaseHandler,
  RenewableSubscriptionHandler,
  BattleMattersQuestsHandler,
- ResourceWellRewardHandler,
  DailyQuestHandler,
  WinbackQuestHandler,
  PrestigeAwardWindowHandler,
  EmailConfirmationQuestHandler,
  ClanSupplyPurchaseHandler,
- CustomizationRewardHandler,
- SteamUnlockQuestHandler))
+ CustomizationRewardHandler))

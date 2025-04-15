@@ -413,6 +413,7 @@ class BATTLE_RESULTS(object):
     TEAM_STATS_PARAMETER_CAPTUREPOINTSVAL = '#battle_results:team/stats/parameter/capturePointsVal'
     TEAM_STATS_PARAMETER_MILEAGE = '#battle_results:team/stats/parameter/mileage'
     TOOLTIPS_STATS_FOOTER_TEXT = '#battle_results:tooltips/stats/footer/text'
+    COMMS_LIKES_PBS_TEXT_01 = '#battle_results:comms/likes/pbs/text/01'
     DETAILS_TIME_LBL_ENUM = (DETAILS_TIME_LBL_OBJECTIVESREACHED,
      DETAILS_TIME_LBL_OBJECTIVESDESTROYED,
      DETAILS_TIME_LBL_BASESCAPTURED,

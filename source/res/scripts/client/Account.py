@@ -29,7 +29,6 @@ from account_helpers.game_restrictions import GameRestrictions
 from account_helpers.gift_system import GiftSystem
 from account_helpers.maps_training import MapsTraining
 from account_helpers.offers.sync_data import OffersSyncData
-from account_helpers.resource_well import ResourceWell
 from account_helpers.session_statistics import SessionStatistics
 from account_helpers.settings_core import IntUserSettings
 from account_helpers.spa_flags import SPAFlags
@@ -180,11 +179,11 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.tradeIn = g_accountRepository.tradeIn
         self.giftSystem = g_accountRepository.giftSystem
         self.gameRestrictions = g_accountRepository.gameRestrictions
-        self.resourceWell = g_accountRepository.resourceWell
         self.winback = g_accountRepository.winback
         self.achievements20 = g_accountRepository.achievements20
         self.crewAccountController = g_accountRepository.crewAccountController
         self.customFilesCache = g_accountRepository.customFilesCache
+        self.renewableSubscription = g_accountRepository.renewableSubscription
         self.syncData.setAccount(self)
         self.inventory.setAccount(self)
         self.stats.setAccount(self)
@@ -270,7 +269,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.offers.onAccountBecomePlayer()
         self.giftSystem.onAccountBecomePlayer()
         self.gameRestrictions.onAccountBecomePlayer()
-        self.resourceWell.onAccountBecomePlayer()
         self.achievements20.onAccountBecomePlayer()
         chatManager.switchPlayerProxy(self)
         events.onAccountBecomePlayer()
@@ -315,7 +313,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.telecomRentals.onAccountBecomeNonPlayer()
         self.giftSystem.onAccountBecomeNonPlayer()
         self.gameRestrictions.onAccountBecomeNonPlayer()
-        self.resourceWell.onAccountBecomeNonPlayer()
         self.achievements20.onAccountBecomeNonPlayer()
         self.__cancelCommands()
         self.syncData.setAccount(None)
@@ -1154,7 +1151,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.telecomRentals.synchronize(isFullSync, diff)
             self.giftSystem.synchronize(isFullSync, diff)
             self.gameRestrictions.synchronize(isFullSync, diff)
-            self.resourceWell.synchronize(isFullSync, diff)
             self.achievements20.synchronize(isFullSync, diff)
             self._synchronizeServerSettings(diff)
             self._synchronizeDisabledPersonalMissions(diff)
@@ -1167,8 +1163,10 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self._synchronizeCacheDict(self.dailyQuests, diff, 'dailyQuests', 'replace', events.onDailyQuestsInfoChange)
             self._synchronizeCacheSimpleValue('globalRating', diff.get('account', None), 'globalRating', events.onAccountGlobalRatingChanged)
             self._synchronizeCacheDict(self.platformBlueprintsConvertSaleLimits, diff, 'platformBlueprintsConvertSaleLimits', 'replace', events.onPlatformBlueprintsConvertSaleLimits)
+            self._synchronizeCacheDict(self.renewableSubscription, diff, 'renewableSub', 'replace', events.onRenewableSubscriptionStatusChanged)
             if ENABLE_FREE_PREMIUM_CREW:
                 synchronizeDicts(diff.get('freePremiumCrew', {}), self.freePremiumCrew)
+            events.onClientSynchronize(isFullSync, diff)
             events.onClientUpdated(diff, not triggerEvents)
             if triggerEvents and not isFullSync:
                 for vehTypeCompDescr in diff.get('stats', {}).get('eliteVehicles', ()):
@@ -1405,7 +1403,6 @@ class _AccountRepository(object):
         self.dogTags = DogTags(self.syncData)
         self.mapsTraining = MapsTraining(self.syncData)
         self.telecomRentals = TelecomRentals(self.syncData)
-        self.resourceWell = ResourceWell(self.syncData, self.commandProxy)
         self.winback = Winback(self.commandProxy)
         self.achievements20 = Achievements20(self.syncData, self.commandProxy)
         self.tradeIn = TradeIn()
@@ -1414,6 +1411,7 @@ class _AccountRepository(object):
         self.platformBlueprintsConvertSaleLimits = {}
         self.freePremiumCrew = {}
         self.crewAccountController = CrewAccountController.CrewAccountController(self.inventory)
+        self.renewableSubscription = {}
         self.gMap = ClientGlobalMap()
         self.onTokenReceived = Event.Event()
         self.requestID = AccountCommands.REQUEST_ID_UNRESERVED_MIN

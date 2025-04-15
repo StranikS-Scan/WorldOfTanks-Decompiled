@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/tabbed_full_stats.py
 import logging
-from enum import Enum
 import BigWorld
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from gui.Scaleform.daapi.view.meta.TabbedFullStatsMeta import TabbedFullStatsMeta
@@ -9,13 +8,8 @@ from gui.impl import backport
 from gui.impl.gen import R
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
+from gui.battle_control.battle_constants import TabsAliases
 _logger = logging.getLogger(__name__)
-
-class TabsAliases(Enum):
-    STATS = 'stats'
-    QUESTS_PROGRESS = 'quests_progress'
-    BOOSTERS = 'boosters'
-
 
 class TabbedFullStatsComponent(TabbedFullStatsMeta):
 

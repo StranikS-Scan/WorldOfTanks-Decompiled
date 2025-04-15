@@ -17,7 +17,8 @@ from gui.prb_control.entities.listener import IGlobalListener
 from helpers import dependency
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.event_boards_controllers import IEventBoardController
-from skeletons.gui.game_control import IBattlePassController, IResourceWellController, IHangarGuiController, IMarathonEventsController, IFestivityController, IRankedBattlesController, IBattleRoyaleController, IMapboxController, ILimitedUIController, ILiveOpsWebEventsController
+from skeletons.gui.game_control import IBattlePassController, IHangarGuiController, IMarathonEventsController, IFestivityController, IRankedBattlesController, IBattleRoyaleController, IMapboxController, ILimitedUIController, ILiveOpsWebEventsController
+from skeletons.gui.resource_well import IResourceWellController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 if typing.TYPE_CHECKING:
@@ -102,6 +103,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self.__mapboxCtrl.onPrimeTimeStatusUpdated += self.update
         self.__mapboxCtrl.addProgressionListener(self.update)
         self.__resourceWell.onEventUpdated += self.update
+        self.__resourceWell.onSettingsChanged += self.update
         self.__liveOpsWebEventsController.onSettingsChanged += self.__updateRightWidget
         self.__liveOpsWebEventsController.onEventStateChanged += self.__updateRightWidget
         self.__battleMattersController.onStateChanged += self.__onBattleMattersStateChanged
@@ -132,6 +134,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self.__battleRoyaleController.onPrimeTimeStatusUpdated -= self.update
         self.__rankedController.onGameModeStatusUpdated -= self.update
         self.__resourceWell.onEventUpdated -= self.update
+        self.__resourceWell.onSettingsChanged -= self.update
         self.__liveOpsWebEventsController.onEventStateChanged -= self.__updateRightWidget
         self.__liveOpsWebEventsController.onSettingsChanged -= self.__updateRightWidget
         self.__battleMattersController.onStateChanged -= self.__onBattleMattersStateChanged

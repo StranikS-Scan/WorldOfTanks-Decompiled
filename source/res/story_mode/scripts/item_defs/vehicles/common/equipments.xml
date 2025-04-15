@@ -8,7 +8,7 @@
     <icon>	smokeSignal	</icon>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <tags>	notForSale avatar trigger permanentGlow	</tags>
+    <tags>	notForSale avatar trigger permanentGlow hasNoBack	</tags>
     <script>	AreaOfEffectEquipment	  <clientSelector>	story_mode.avatar_input_handler.map_case_mode.StrikeSelector	</clientSelector>
       <shortDescription>	#story_mode.artefacts.extend:battleship/shortDescr	</shortDescription>
       <longDescription>	#story_mode.artefacts.extend:battleship/shortDescr	</longDescription>
@@ -91,7 +91,7 @@
     <icon>	smokeSignal	</icon>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <tags>	notForSale avatar trigger permanentGlow	</tags>
+    <tags>	notForSale avatar trigger permanentGlow hasNoBack	</tags>
     <script>	AreaOfEffectEquipment	  <clientSelector>	story_mode.avatar_input_handler.map_case_mode.StrikeSelector	</clientSelector>
       <shortDescription>	#story_mode.artefacts.extend:battleship/shortDescr	</shortDescription>
       <longDescription>	#story_mode.artefacts.extend:battleship/shortDescr	</longDescription>
@@ -174,7 +174,7 @@
     <icon>	smokeSignal	</icon>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <tags>	notForSale avatar trigger permanentGlow	</tags>
+    <tags>	notForSale avatar trigger permanentGlow hasNoBack	</tags>
     <script>	AreaOfEffectEquipment	  <clientSelector>	story_mode.avatar_input_handler.map_case_mode.StrikeSelector	</clientSelector>
       <shortDescription>	#story_mode.artefacts.extend:battleship/shortDescr	</shortDescription>
       <longDescription>	#story_mode.artefacts.extend:battleship/shortDescr	</longDescription>
@@ -257,7 +257,7 @@
     <icon>	smokeSignal	</icon>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <tags>	notForSale avatar trigger permanentGlow	</tags>
+    <tags>	notForSale avatar trigger permanentGlow hasNoBack	</tags>
     <script>	AreaOfEffectEquipment	  <clientSelector>	story_mode.avatar_input_handler.map_case_mode.StrikeSelector	</clientSelector>
       <shortDescription>	#story_mode.artefacts.extend:battleship/shortDescr	</shortDescription>
       <longDescription>	#story_mode.artefacts.extend:battleship/longDescr	</longDescription>
@@ -340,7 +340,7 @@
     <icon>	smokeSignal	</icon>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <tags>	notForSale avatar trigger permanentGlow	</tags>
+    <tags>	notForSale avatar trigger permanentGlow hasNoBack	</tags>
     <script>	AreaOfEffectEquipment	  <clientSelector>	story_mode.avatar_input_handler.map_case_mode.StrikeSelector	</clientSelector>
       <shortDescription>	#story_mode.artefacts.extend:battleship/shortDescr	</shortDescription>
       <longDescription>	#story_mode.artefacts.extend:battleship/longDescr	</longDescription>
@@ -424,7 +424,7 @@
     <icon>	smokeSignal	</icon>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <tags>	notForSale avatar trigger permanentGlow	</tags>
+    <tags>	notForSale avatar trigger permanentGlow hasNoBack	</tags>
     <script>	AreaOfEffectEquipment	  <clientSelector>	story_mode.avatar_input_handler.map_case_mode.StrikeSelector	</clientSelector>
       <shortDescription>	#story_mode.artefacts.extend:battleship/shortDescr	</shortDescription>
       <longDescription>	#story_mode.artefacts.extend:battleship/longDescr	</longDescription>
@@ -1015,4 +1015,148 @@
       </actions>
     </script>
   </artillery_spgzone_smn_aoe_hard>
+  <artillery_spgzone_smn_aoe_minefield>
+    <id>	14033	</id>
+    <userString>	#artefacts:artillery/name	</userString>
+    <description>	#artefacts:artillery/descr	</description>
+    <icon>	artillery	</icon>
+    <price>	0	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	story_mode_common.items.sm_artefacts.SPGZoneEquipment	  <shortDescription>	#artefacts:artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <cooldownTime>	5	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <delay>	2	</delay>
+      <duration>	2.0	</duration>
+      <shotsNumber>	3	</shotsNumber>
+      <explodeDestructible>	false	</explodeDestructible>
+      <areaRadius>	13	</areaRadius>
+      <yawHitPrediction>	270	</yawHitPrediction>
+      <hitPredictionDuration>	2	</hitPredictionDuration>
+      <areaVisual>	content/Interface/TargetPoint/circle_fire_ring_outer.visual	</areaVisual>
+      <areaColor>	0xFFAA0000	</areaColor>
+      <areaColorBlind>	0xFF887EFF	</areaColorBlind>
+      <areaShow>	before	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <effects>
+        <action>
+          <shotEffects>	storyModeArtilleryStrike	</shotEffects>
+          <offsetDeviation>	0	</offsetDeviation>
+          <repeatCount>	1	</repeatCount>
+          <repeatDelay>	0.3	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	all	</applyTo>
+          <args>
+            <damage>	120	</damage>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_spgzone_smn_aoe_minefield>
+  <smn_recon_ability>
+    <id>	14041	</id>
+    <type>	battleAbilities	</type>
+    <playerMessagesKey>	RECON_ABILITY	</playerMessagesKey>
+    <userString>	#story_mode.artefacts.extend:recon_ability/name	</userString>
+    <description>	#story_mode.artefacts.extend:recon_ability/shortDescr	</description>
+    <icon>	recon_ability	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger permanentGlow hasNoBack	</tags>
+    <script>	story_mode_common.items.sm_artefacts.ReconAbilityEquipment	  <clientSelector>	story_mode.avatar_input_handler.map_case_mode.ReconAbilitySelector	</clientSelector>
+      <shortDescription>	#story_mode.artefacts.extend:recon_ability/shortDescr	</shortDescription>
+      <longDescription>	#story_mode.artefacts.extend:recon_ability/shortDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <reuseCount>	-1	</reuseCount>
+      <areaVisual>	content/Interface/TargetPoint/ability_recon_cross.visual	</areaVisual>
+      <areaColor>	0xFF00FF00	</areaColor>
+      <areaShow>	before	</areaShow>
+      <areaRadius>	2	</areaRadius>
+      <minApplyRadius>	10	</minApplyRadius>
+      <maxApplyRadius>	65	</maxApplyRadius>
+      <applyRadiusVisible>	true	</applyRadiusVisible>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <navmeshGirth>	Onboarding_ability	</navmeshGirth>
+      <cooldownTime>	20	</cooldownTime>
+      <unspotDelay>	10	</unspotDelay>
+      <directVisionRadius>	220	</directVisionRadius>
+      <visionMinRadius>	50	</visionMinRadius>
+      <detectFromVehicle>	false	</detectFromVehicle>
+      <observationPoints>
+        <point>	5 5 0	</point>
+        <point>	0 3 5	</point>
+        <point>	0 0 0	</point>
+        <point>	0 3 -5	</point>
+        <point>	-5 5 0	</point>
+      </observationPoints>
+      <activatingTime>	2	</activatingTime>
+      <deactivatingTime>	2	</deactivatingTime>
+    </script>
+  </smn_recon_ability>
+  <smn_distraction_ability>
+    <id>	14042	</id>
+    <type>	battleAbilities	</type>
+    <playerMessagesKey>	DISTRACTION_ABILITY	</playerMessagesKey>
+    <userString>	#story_mode.artefacts.extend:distraction_ability/name	</userString>
+    <description>	#story_mode.artefacts.extend:distraction_ability/shortDescr	</description>
+    <icon>	distraction_ability	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger permanentGlow hasNoBack	</tags>
+    <script>	story_mode_common.items.sm_artefacts.DistractionAbilityEquipment	  <clientSelector>	story_mode.avatar_input_handler.map_case_mode.DistractionAbilitySelector	</clientSelector>
+      <shortDescription>	#story_mode.artefacts.extend:distraction_ability/shortDescr	</shortDescription>
+      <longDescription>	#story_mode.artefacts.extend:distraction_ability/shortDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <reuseCount>	-1	</reuseCount>
+      <areaVisual>	content/Interface/TargetPoint/ability_recon_cross.visual	</areaVisual>
+      <areaColor>	0xff13bfff	</areaColor>
+      <areaShow>	before	</areaShow>
+      <areaRadius>	2	</areaRadius>
+      <minApplyRadius>	10	</minApplyRadius>
+      <maxApplyRadius>	220	</maxApplyRadius>
+      <applyRadiusVisible>	true	</applyRadiusVisible>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <navmeshGirth>	Onboarding_ability	</navmeshGirth>
+      <cooldownTime>	25	</cooldownTime>
+      <unspotDelay>	20	</unspotDelay>
+      <directVisionRadius>	200	</directVisionRadius>
+      <visionMinRadius>	200	</visionMinRadius>
+      <detectFromVehicle>	true	</detectFromVehicle>
+      <observationPoints>
+        <point>	5 5 0	</point>
+        <point>	0 3 5	</point>
+        <point>	0 0 0	</point>
+        <point>	0 3 -5	</point>
+        <point>	-5 5 0	</point>
+      </observationPoints>
+      <pointRadius>	30	</pointRadius>
+      <detectTime>	0.5	</detectTime>
+      <changeBrainDelay>	3	</changeBrainDelay>
+      <autoDestroyTime>	7.0	</autoDestroyTime>
+      <investigateTime>	15.0	</investigateTime>
+      <showXrayMarker>	false	</showXrayMarker>
+      <detectSequence>	particles/eff_sequence/vdsm25/ability_false_target.seq	</detectSequence>
+    </script>
+  </smn_distraction_ability>
 </equipments.xml>

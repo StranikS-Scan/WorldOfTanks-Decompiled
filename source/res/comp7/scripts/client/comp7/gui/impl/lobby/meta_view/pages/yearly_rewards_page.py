@@ -9,13 +9,13 @@ from account_helpers.settings_core.settings_constants import GuiSettingsBehavior
 from comp7.gui.impl.gen.view_models.views.lobby.enums import MetaRootViews, Rank, SeasonPointState, SeasonName
 from comp7.gui.impl.gen.view_models.views.lobby.meta_view.pages.yearly_rewards_card_model import YearlyRewardsCardModel, RewardsState
 from comp7.gui.impl.gen.view_models.views.lobby.meta_view.pages.yearly_rewards_model import YearlyRewardsModel, BannerState
-from comp7.gui.impl.gen.view_models.views.lobby.meta_view.progression_item_base_model import ProgressionItemBaseModel
+from comp7.gui.impl.gen.view_models.views.lobby.progression_item_base_model import ProgressionItemBaseModel
 from comp7.gui.impl.gen.view_models.views.lobby.season_point_model import SeasonPointModel
 from comp7.gui.impl.gen.view_models.views.lobby.year_model import YearState
 from comp7.gui.impl.lobby.comp7_helpers.comp7_bonus_packer import packYearlyRewardMetaView
 from comp7.gui.impl.lobby.comp7_helpers.comp7_c11n_helpers import getStylePreviewVehicle
 from comp7.gui.impl.lobby.comp7_helpers.comp7_model_helpers import SEASONS_NUMBERS_BY_NAME, getSeasonNameEnum, setElitePercentage
-from comp7.gui.impl.lobby.comp7_helpers.comp7_quest_helpers import hasAvailableOfferYearlyRewardGiftTokens
+from comp7.gui.impl.lobby.comp7_helpers.comp7_quest_helpers import hasAvailableOfferYearlyRewardGiftTokens, hasYearlyRewardToken
 from comp7.gui.impl.lobby.comp7_helpers.comp7_shared import getPlayerDivisionByRating, getRankEnumValue, getPlayerDivision, getProgressionYearState
 from comp7.gui.impl.lobby.meta_view.meta_view_helper import getRankDivisions, setDivisionData, setRankData
 from comp7.gui.impl.lobby.meta_view.pages import PageSubModelPresenter
@@ -33,7 +33,7 @@ from gui.impl.gen import R
 from gui.impl.gui_decorators import args2params
 from gui.impl.lobby.common.vehicle_model_helpers import fillVehicleModel
 from gui.impl.lobby.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
-from gui.shared.event_dispatcher import showStylePreview, showConfigurableVehiclePreview
+from gui.shared.event_dispatcher import showStylePreview
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from helpers import dependency
@@ -167,28 +167,24 @@ class YearlyRewardsPage(PageSubModelPresenter):
     def __onStylePreviewOpen(self, cardIndex):
         bonuses = self.__bonusData[cardIndex]
         styleBonus = findFirst(lambda bonus: bonus.getName() == 'customizations', bonuses)
-        style = self.__c11nService.getItemByID(GUI_ITEM_TYPE.STYLE, styleBonus.getStyleID())
-        vehicleCD = getStylePreviewVehicle(style, makeVehicleTypeCompDescrByName(_DEFAULT_PREVIEW_VEHICLE))
-        backBtnDescrLabel = backport.text(R.strings.comp7_ext.yearlyRewards.preview.backButton())
-        showStylePreview(vehicleCD, style, backCallback=partial(showComp7MetaRootView, self.pageId, cardIndex), backBtnDescrLabel=backBtnDescrLabel)
+        self.__showStylePreview(styleBonus, cardIndex)
 
     @args2params(int, int)
     def __onVehiclePreviewOpen(self, cd, cardIndex):
         bonuses = self.__bonusData[cardIndex]
         styleBonus = findFirst(lambda bonus: bonus.getName() == 'styleProgressToken', bonuses)
-        outfit = None
+        self.__showStylePreview(styleBonus, cardIndex, vehicleCD=cd)
+
+    def __showStylePreview(self, styleBonus, cardIndex, vehicleCD=None):
         styleId = styleBonus.getStyleID() if styleBonus else None
-        if styleId is not None:
-            style = self.__c11nService.getItemByID(GUI_ITEM_TYPE.STYLE, styleId)
-            vehicleItem = self.__itemsCache.items.getItemByCD(cd)
-            vehicleCD = vehicleItem.descriptor.makeCompactDescr()
-            outfit = style.getOutfit(first(style.seasons), vehicleCD)
-            outfit.setProgressionLevel(styleBonus.getProgressLevel())
-        showConfigurableVehiclePreview(cd, backBtnLabel='', previewBackCb=partial(showComp7MetaRootView, self.pageId, cardIndex), heroInteractive=False, hiddenBlocks=('closeBtn',), outfit=outfit, crewText='', skipInventoryUpdate=True)
+        style = self.__c11nService.getItemByID(GUI_ITEM_TYPE.STYLE, styleId)
+        vehicleCD = getStylePreviewVehicle(style, makeVehicleTypeCompDescrByName(_DEFAULT_PREVIEW_VEHICLE)) if not vehicleCD else vehicleCD
+        showStylePreview(vehicleCD, style, backBtnDescrLabel=backport.text(R.strings.comp7_ext.yearlyRewards.preview.backButton()), backCallback=partial(showComp7MetaRootView, self.pageId, cardIndex))
         return
 
-    def __onGoToRewardsSelection(self):
-        showComp7YearlyRewardsSelectionWindow()
+    @args2params(str, int)
+    def __onGoToRewardsSelection(self, name, cardIndex):
+        showComp7YearlyRewardsSelectionWindow(category=name)
 
     def __setInitialAnimationViewed(self):
         with self.viewModel.transaction() as tx:
@@ -211,13 +207,13 @@ class YearlyRewardsPage(PageSubModelPresenter):
         self.__setSeasonData(model)
         self.__setLegendData(model)
 
-    def __areLastSeasonPointsReceived(self):
-        lastSeason = self.__comp7Controller.getActualSeasonNumber()
-        if lastSeason is None:
+    def __areActualSeasonPointsReceived(self):
+        actualSeason = self.__comp7Controller.getActualSeasonNumber()
+        if actualSeason is None:
             return False
         else:
-            lastSeasonPointsEntitlement = seasonPointsCodeBySeasonNumber(lastSeason)
-            return self.__comp7Controller.getReceivedSeasonPoints().get(lastSeasonPointsEntitlement, 0) > 0
+            actualSeasonPointsEntitlement = seasonPointsCodeBySeasonNumber(actualSeason)
+            return self.__comp7Controller.getReceivedSeasonPoints().get(actualSeasonPointsEntitlement, 0) > 0
 
     def __setSeasonData(self, model):
         actualSeason = self.__comp7Controller.getActualSeasonNumber()
@@ -237,8 +233,7 @@ class YearlyRewardsPage(PageSubModelPresenter):
             canBeRewarded = any((self.__comp7Controller.isQualificationPassedInSeason(s.getNumber()) for s in seasons))
             yearState = getProgressionYearState()
             if yearState == YearState.FINISHED and canBeRewarded:
-                isReceivedRewards = self.__comp7Controller.isYearlyRewardReceived()
-                if not isReceivedRewards:
+                if not hasYearlyRewardToken():
                     model.setBannerState(BannerState.NOTACCRUEDREWARDS)
                 elif hasAvailableOfferYearlyRewardGiftTokens():
                     model.setBannerState(BannerState.REWARDSSELECTIONAVAILABLE)
@@ -266,7 +261,7 @@ class YearlyRewardsPage(PageSubModelPresenter):
         self.__tooltips = []
         self.__bonusData = {}
         prevRewardsCost = 0
-        seasonPointsGenerator = _SeasonPointsGenerator(self.__areLastSeasonPointsReceived())
+        seasonPointsGenerator = _SeasonPointsGenerator(self.__areActualSeasonPointsReceived())
         sortedRewards = sorted(self.__comp7Controller.getYearlyRewards().main, key=lambda data: data['cost'])
         for idx, rewardsData in enumerate(sortedRewards):
             cardSeasonPoints = seasonPointsGenerator.getNext(rewardsData['cost'] - prevRewardsCost)
@@ -281,7 +276,7 @@ class YearlyRewardsPage(PageSubModelPresenter):
 
     def __getRewardStateForCard(self, cardSeasonPoints):
         if all((pointState == SeasonPointState.ACHIEVED for pointState, _ in cardSeasonPoints)):
-            if self.__comp7Controller.isYearlyRewardReceived():
+            if hasYearlyRewardToken():
                 return RewardsState.CLAIMED
             return RewardsState.GUARANTEED
         return RewardsState.POSSIBLE if not any((pointState == SeasonPointState.NOTACHIEVED for pointState, _ in cardSeasonPoints)) else RewardsState.NOTAVAILABLE
@@ -334,8 +329,8 @@ class YearlyRewardsPage(PageSubModelPresenter):
 class _SeasonPointsGenerator(object):
     __comp7Controller = dependency.descriptor(IComp7Controller)
 
-    def __init__(self, areLastSeasonPointsReceived):
-        self.__allPointsStates = self.__composePointsStates(areLastSeasonPointsReceived)
+    def __init__(self, areActualSeasonPointsReceived):
+        self.__allPointsStates = self.__composePointsStates(areActualSeasonPointsReceived)
 
     def getNext(self, rewardsCount):
         result, self.__allPointsStates = self.__allPointsStates[:rewardsCount], self.__allPointsStates[rewardsCount:]
@@ -343,7 +338,7 @@ class _SeasonPointsGenerator(object):
             result += [(SeasonPointState.NOTACHIEVED, None)] * (rewardsCount - len(result))
         return result
 
-    def __composePointsStates(self, areLastSeasonPointsReceived):
+    def __composePointsStates(self, areActualSeasonPointsReceived):
         result = []
         achievedPoints = self.__getAchievedPoints()
         for seasonName, count in achievedPoints:
@@ -352,7 +347,7 @@ class _SeasonPointsGenerator(object):
         if self.__comp7Controller.getActualSeasonNumber() is None:
             return result
         else:
-            if not self.__comp7Controller.isQualificationActive() and not areLastSeasonPointsReceived:
+            if not self.__comp7Controller.isQualificationActive() and not areActualSeasonPointsReceived:
                 possiblePointsCount = getPlayerDivision().seasonPoints
                 result += [(SeasonPointState.POSSIBLE, getSeasonNameEnum())] * possiblePointsCount
             return result

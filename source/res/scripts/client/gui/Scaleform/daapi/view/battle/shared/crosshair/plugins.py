@@ -90,11 +90,10 @@ def chooseSetting(viewID):
     return viewID if viewID in _SETTINGS_VIEWS else _SETTINGS_KEY_TO_VIEW_ID[AIM.ARCADE]
 
 
-def _makeSettingsVO(settingsCore):
-    getter = settingsCore.getSetting
+def _makeSettingsVO(settingGetter):
     data = {}
     for mode in _SETTINGS_KEYS:
-        settings = getter(mode)
+        settings = settingGetter(mode)
         if settings is not None:
             data[_SETTINGS_KEY_TO_VIEW_ID[mode]] = {'centerAlphaValue': settings['centralTag'] / 100.0,
              'centerType': settings['centralTagType'],
@@ -115,8 +114,8 @@ def _makeSettingsVO(settingsCore):
         if commonSettings is None:
             commonSettings = {}
             data[view] = commonSettings
-        commonSettings.update({'spgScaleWidgetEnabled': getter(SPGAim.SPG_SCALE_WIDGET),
-         'isColorBlind': settingsCore.getSetting(GRAPHICS.COLOR_BLIND)})
+        commonSettings.update({'spgScaleWidgetEnabled': settingGetter(SPGAim.SPG_SCALE_WIDGET),
+         'isColorBlind': settingGetter(GRAPHICS.COLOR_BLIND)})
 
     return data
 
@@ -243,16 +242,19 @@ class SettingsPlugin(CrosshairPlugin):
     __slots__ = ()
 
     def start(self):
-        self._parentObj.setSettings(_makeSettingsVO(self.settingsCore))
+        self._parentObj.setSettings(_makeSettingsVO(self._getSettings))
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
 
     def stop(self):
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
 
+    def _getSettings(self, key):
+        return self.settingsCore.getSetting(key)
+
     def __onSettingsChanged(self, diff):
         changed = set(diff.keys()) & _SETTINGS_KEYS.union(_LISTENING_SETTINGS)
         if changed:
-            self._parentObj.setSettings(_makeSettingsVO(self.settingsCore))
+            self._parentObj.setSettings(_makeSettingsVO(self._getSettings))
 
 
 class EventBusPlugin(CrosshairPlugin):
@@ -953,6 +955,9 @@ class ShotResultIndicatorPlugin(CrosshairPlugin):
         self.__colors = None
         return
 
+    def _getSettings(self, key):
+        return self.settingsCore.getSetting(key)
+
     def __setColors(self, isColorBlind):
         if isColorBlind:
             self.__colors = SHOT_RESULT_TO_ALT_COLOR
@@ -960,9 +965,8 @@ class ShotResultIndicatorPlugin(CrosshairPlugin):
             self.__colors = SHOT_RESULT_TO_DEFAULT_COLOR
 
     def __setMapping(self, keys):
-        getter = self.settingsCore.getSetting
         for key in keys:
-            settings = getter(key)
+            settings = self._getSettings(key)
             if 'gunTagType' in settings:
                 value = settings['gunTagType'] in _VIEW_CONSTANTS.GUN_TAG_SHOT_RESULT_TYPES
                 self.__mapping[_SETTINGS_KEY_TO_VIEW_ID[key]] = value

@@ -2,7 +2,7 @@
 # Embedded file name: fun_random/scripts/client/fun_random/gui/impl/lobby/feature/fun_random_battle_results_view.py
 import logging
 from collections import namedtuple
-from constants import ARENA_BONUS_TYPE, PremiumConfigs
+from constants import PremiumConfigs
 from frameworks.wulf import ViewFlags, ViewSettings
 from fun_random.gui.feature.fun_sounds import FUN_BATTLE_RESULTS_SOUND_SPACE
 from fun_random.gui.impl.lobby.common.fun_view_helpers import packBonuses
@@ -11,6 +11,7 @@ from fun_random.gui.impl.lobby.feature import FUN_RANDOM_LOCK_SOURCE_NAME
 from fun_random.gui.impl.lobby.tooltips.fun_random_efficiency_parameter_tooltip_view import BattleResultsStatsTooltipView
 from fun_random.gui.impl.lobby.tooltips.fun_random_battle_results_economic_tooltip_view import FunRandomBattleResultsEconomicTooltipView
 from fun_random.gui.impl.lobby.tooltips.fun_random_loot_box_tooltip_view import FunRandomLootBoxTooltipView
+from fun_random.gui.sounds.ambients import FunRandomBattleResultsEnv
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.battle_results.presenters.base_constants import PresenterUpdateTypes
 from gui.battle_results.presenters.wrappers import ifPresenterAvailable
@@ -33,14 +34,15 @@ _RewardsData = namedtuple('_RewardsData', ('tooltips', 'bonuses'))
 class FunRandomBattleResultsView(ViewImpl, LobbyHeaderVisibility):
     __slots__ = ('__arenaUniqueID', '__presenter', '__rewardsData')
     _COMMON_SOUND_SPACE = FUN_BATTLE_RESULTS_SOUND_SPACE
+    __sound_env__ = FunRandomBattleResultsEnv
     __battleResults = dependency.descriptor(IBattleResultsService)
     __connectionMgr = dependency.descriptor(IConnectionManager)
     __gameSession = dependency.descriptor(IGameSessionController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __wotPlusController = dependency.descriptor(IWotPlusController)
 
-    def __init__(self, *args, **kwargs):
-        settings = ViewSettings(R.views.fun_random.lobby.feature.FunRandomBattleResultsView(), flags=ViewFlags.LOBBY_TOP_SUB_VIEW, model=FunBattleResultsViewModel())
+    def __init__(self, layoutID, *args, **kwargs):
+        settings = ViewSettings(layoutID, flags=ViewFlags.LOBBY_TOP_SUB_VIEW, model=FunBattleResultsViewModel())
         super(FunRandomBattleResultsView, self).__init__(settings)
         arenaUniqueID = kwargs.get('arenaUniqueID', None)
         if not arenaUniqueID:
@@ -146,7 +148,7 @@ class FunRandomBattleResultsView(ViewImpl, LobbyHeaderVisibility):
     def __onTeamStatsSorted(self, event):
         column = event.get('column')
         sortDirection = event.get('sortDirection')
-        self.__battleResults.saveStatsSorting(ARENA_BONUS_TYPE.FUN_RANDOM, column, sortDirection)
+        self.__presenter.saveStatsSorting(column, sortDirection)
 
     def __onTabChanged(self, event):
         tabID = event.get('tabId')

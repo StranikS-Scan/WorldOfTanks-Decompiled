@@ -58,6 +58,7 @@
     <Kawasaki_Ha_9_IIF>	57	</Kawasaki_Ha_9_IIF>
     <_Type_100_Suirei_V12Ni>	60	</_Type_100_Suirei_V12Ni>
     <_Mitsubishi_10ZF21WT_7x7>	502	</_Mitsubishi_10ZF21WT_7x7>
+    <Mitsubishi_MT_1100_7x7>	503	</Mitsubishi_MT_1100_7x7>
     <_Mitsubishi_12HM20WT_IGR>	60001	</_Mitsubishi_12HM20WT_IGR>
     <_Type98_V12_IGR>	60002	</_Type98_V12_IGR>
     <_Mitsubishi_10ZF21WT_IGR>	60003	</_Mitsubishi_10ZF21WT_IGR>
@@ -251,11 +252,11 @@
       <price>	15000	</price>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	270	</power>
+      <power>	400	</power>
       <weight>	280	</weight>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	49	</maxRegenHealth>
-      <repairCost>	2	</repairCost>
+      <maxHealth>	170	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
       <rpm_min>	456	</rpm_min>
       <rpm_max>	2340	</rpm_max>
@@ -267,10 +268,10 @@
       <price>	27300	</price>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	290	</power>
+      <power>	450	</power>
       <weight>	290	</weight>
-      <maxHealth>	145	</maxHealth>
-      <maxRegenHealth>	72	</maxRegenHealth>
+      <maxHealth>	205	</maxHealth>
+      <maxRegenHealth>	103	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
       <rpm_min>	443	</rpm_min>
@@ -348,11 +349,11 @@
       <price>	9500	</price>
       <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
-      <power>	220	</power>
+      <power>	240	</power>
       <weight>	630	</weight>
-      <maxHealth>	104	</maxHealth>
-      <maxRegenHealth>	52	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
+      <maxHealth>	135	</maxHealth>
+      <maxRegenHealth>	68	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
       <rpm_min>	302	</rpm_min>
       <rpm_max>	2095	</rpm_max>
@@ -366,9 +367,9 @@
       <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
       <power>	270	</power>
       <weight>	630	</weight>
-      <maxHealth>	104	</maxHealth>
-      <maxRegenHealth>	52	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
+      <maxHealth>	170	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
       <rpm_min>	279	</rpm_min>
       <rpm_max>	2140	</rpm_max>
@@ -762,9 +763,9 @@
       <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
       <power>	1000	</power>
       <weight>	1250	</weight>
-      <maxHealth>	360	</maxHealth>
-      <maxRegenHealth>	170	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
+      <maxHealth>	345	</maxHealth>
+      <maxRegenHealth>	173	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
       <rpm_min>	460	</rpm_min>
       <rpm_max>	2125	</rpm_max>
@@ -776,10 +777,10 @@
       <price>	28000	</price>
       <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
-      <power>	400	</power>
+      <power>	500	</power>
       <weight>	1000	</weight>
-      <maxHealth>	145	</maxHealth>
-      <maxRegenHealth>	72	</maxRegenHealth>
+      <maxHealth>	205	</maxHealth>
+      <maxRegenHealth>	103	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
       <rpm_min>	221	</rpm_min>
@@ -794,9 +795,9 @@
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	550	</power>
       <weight>	510	</weight>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	100	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	120	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
       <rpm_min>	280	</rpm_min>
       <rpm_max>	2901	</rpm_max>
@@ -804,15 +805,15 @@
     <_Kawasaki_Type_98B>
       <userString>	#japan_vehicles:_Kawasaki_Type_98B	</userString>
       <tags>	gasoline	</tags>
-      <level>	8	</level>
+      <level>	7	</level>
       <price>	55000	</price>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	550	</power>
       <weight>	510	</weight>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	100	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	120	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
       <rpm_min>	280	</rpm_min>
       <rpm_max>	2901	</rpm_max>
@@ -866,33 +867,50 @@
       <rpm_min>	240	</rpm_min>
       <rpm_max>	2480	</rpm_max>
     </Mitsubishi_MT_1100>
+    <Mitsubishi_MT_1100_7x7>
+      <userString>	#japan_vehicles:Mitsubishi_MT_1100_7x7	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	120000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	1050	</power>
+      <weight>	2000	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	240	</rpm_min>
+      <rpm_max>	2480	</rpm_max>
+    </Mitsubishi_MT_1100_7x7>
     <_Daimler_Benz_MB_507>
       <userString>	#japan_vehicles:_Daimler_Benz_MB_507	</userString>
       <tags>	gasoline	</tags>
-      <level>	9	</level>
+      <level>	8	</level>
       <price>	82500	</price>
       <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	650	</power>
       <weight>	750	</weight>
-      <maxHealth>	360	</maxHealth>
-      <maxRegenHealth>	160	</maxRegenHealth>
-      <repairCost>	10	</repairCost>
-      <fireStartingChance>	0.12	</fireStartingChance>
+      <maxHealth>	275	</maxHealth>
+      <maxRegenHealth>	138	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
       <rpm_min>	632	</rpm_min>
       <rpm_max>	2354	</rpm_max>
     </_Daimler_Benz_MB_507>
     <_Kawasaki_Type98_V12_R1>
       <userString>	#japan_vehicles:_Kawasaki_Type98_V12_R1	</userString>
       <tags>	gasoline	</tags>
-      <level>	9	</level>
+      <level>	8	</level>
       <price>	84000	</price>
       <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	850	</power>
       <weight>	1020	</weight>
-      <maxHealth>	320	</maxHealth>
-      <maxRegenHealth>	160	</maxRegenHealth>
+      <maxHealth>	275	</maxHealth>
+      <maxRegenHealth>	138	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
       <rpm_min>	362	</rpm_min>
@@ -901,15 +919,15 @@
     <_Daimler_Benz_DB_601_AA>
       <userString>	#japan_vehicles:_Daimler_Benz_DB_601_AA	</userString>
       <tags>	gasoline	</tags>
-      <level>	10	</level>
+      <level>	9	</level>
       <price>	110000	</price>
       <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
       <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
       <power>	900	</power>
       <weight>	1020	</weight>
-      <maxHealth>	360	</maxHealth>
-      <maxRegenHealth>	180	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
+      <maxHealth>	310	</maxHealth>
+      <maxRegenHealth>	155	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
       <rpm_min>	488	</rpm_min>
       <rpm_max>	2035	</rpm_max>

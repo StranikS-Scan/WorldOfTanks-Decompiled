@@ -9,9 +9,10 @@ from gui.impl.pub import WindowImpl, ViewImpl
 from helpers import dependency
 from story_mode.gui.impl.gen.view_models.views.common.congratulations_window_view_model import CongratulationsWindowViewModel
 from story_mode.gui.impl.gen.view_models.views.common.medal_tooltip_view_model import MedalTooltipViewModel
+from story_mode.gui.impl.common.badge_tooltip import BadgeTooltip
 from story_mode.gui.impl.mixins import DestroyWindowOnDisconnectMixin
 from story_mode.gui.shared.event_dispatcher import sendViewLoadedEvent
-from story_mode.gui.story_mode_gui_constants import CONGRATULATION_MUSIC
+from story_mode.gui.sound_constants import CONGRATULATION_MUSIC
 from story_mode.skeletons.story_mode_controller import IStoryModeController
 from story_mode.uilogging.story_mode.consts import LogWindows, LogButtons
 from story_mode.uilogging.story_mode.loggers import WindowLogger
@@ -45,13 +46,18 @@ class CongratulationsView(ViewImpl):
             model.setName(R.strings.achievements.dyn(awardName)())
             model.setImage(R.images.gui.maps.icons.achievement.big.dyn(awardName)())
             return View(ViewSettings(contentID, model=model))
-        return super(CongratulationsView, self).createToolTipContent(event, contentID)
+        return BadgeTooltip(badgeId=int(event.getArgument('badgeId'))) if contentID == R.views.story_mode.common.BadgeTooltip() else super(CongratulationsView, self).createToolTipContent(event, contentID)
 
     def _onLoading(self, *args, **kwargs):
         super(CongratulationsView, self)._onLoading(*args, **kwargs)
         self.viewModel.setIsCloseVisible(self._isCloseVisible)
         self.viewModel.setIsOnboarding(self._storyModeCtrl.isOnboarding)
-        self.viewModel.setMedalName(self._awardData.get('medalName'))
+        medalName = self._awardData.get('medalName')
+        if medalName:
+            self.viewModel.setMedalName(medalName)
+        badgeId = self._awardData.get('badgeId')
+        if badgeId:
+            self.viewModel.setBadgeId(badgeId)
         self.viewModel.setMissionId(self._missionId)
 
     def _onLoaded(self, *args, **kwargs):

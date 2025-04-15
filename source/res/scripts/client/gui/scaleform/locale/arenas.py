@@ -161,8 +161,17 @@ class ARENAS(object):
     TYPE_WINBACK_DESCRIPTION = '#arenas:type/winback/description'
     C_210_BF_EPIC_DESERT_NAME = '#arenas:210_bf_epic_desert/name'
     C_210_BF_EPIC_DESERT_DESCRIPTION = '#arenas:210_bf_epic_desert/description'
+    C_140_FALL_TANKS_NAME = '#arenas:140_fall_tanks/name'
+    C_140_FALL_TANKS_DESCRIPTION = '#arenas:140_fall_tanks/description'
     C_08_RUINBERG_SM24_NAME = '#arenas:08_ruinberg_sm24/name'
     C_08_RUINBERG_SM24_DESCRIPTION = '#arenas:08_ruinberg_sm24/description'
+    C_14_SIEGFRIED_LINE_WT_NAME = '#arenas:14_siegfried_line_wt/name'
+    C_34_REDSHIRE_WT_NAME = '#arenas:34_redshire_wt/name'
+    C_35_STEPPES_WT_NAME = '#arenas:35_steppes_wt/name'
+    C_06_ENSK_BIG_NAME = '#arenas:06_ensk_big/name'
+    C_06_ENSK_BIG_DESCRIPTION = '#arenas:06_ensk_big/description'
+    C_212_EPIC_RANDOM_VALLEY_SM25_NAME = '#arenas:212_epic_random_valley_sm25/name'
+    C_212_EPIC_RANDOM_VALLEY_SM25_DESCRIPTION = '#arenas:212_epic_random_valley_sm25/description'
     ALL_ENUM = (TYPE_CTF_NAME,
      TYPE_CTF_DESCRIPTION,
      TYPE_DOMINATION_NAME,
@@ -321,8 +330,17 @@ class ARENAS(object):
      TYPE_WINBACK_DESCRIPTION,
      C_210_BF_EPIC_DESERT_NAME,
      C_210_BF_EPIC_DESERT_DESCRIPTION,
+     C_140_FALL_TANKS_NAME,
+     C_140_FALL_TANKS_DESCRIPTION,
      C_08_RUINBERG_SM24_NAME,
-     C_08_RUINBERG_SM24_DESCRIPTION)
+     C_08_RUINBERG_SM24_DESCRIPTION,
+     C_14_SIEGFRIED_LINE_WT_NAME,
+     C_34_REDSHIRE_WT_NAME,
+     C_35_STEPPES_WT_NAME,
+     C_06_ENSK_BIG_NAME,
+     C_06_ENSK_BIG_DESCRIPTION,
+     C_212_EPIC_RANDOM_VALLEY_SM25_NAME,
+     C_212_EPIC_RANDOM_VALLEY_SM25_DESCRIPTION)
 
     @classmethod
     def all(cls, key0):

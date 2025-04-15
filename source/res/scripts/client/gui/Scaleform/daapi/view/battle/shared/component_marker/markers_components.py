@@ -627,6 +627,8 @@ class TerrainMarkerComponent(_IMarkerComponentBase):
         direction = Math.Matrix(self._matrixProduct.a).applyToAxis(2) if self.__objDirection else self.__direction
         self.__area.setup(self.position, direction, size, path, color, None)
         self.__area.setGUIVisible(self._isVisible)
+        self.__area.enableWaterCollision(self._config['enableWaterCollision'])
+        self.__area.enableAccurateCollision(self._config['enableAccurateCollision'])
         self.__prevPosition = self.position
         return
 
@@ -636,7 +638,9 @@ class TerrainMarkerComponent(_IMarkerComponentBase):
          'size': section.readVector2('size', cls.DEF_SIZE),
          'direction': section.readVector3('direction', cls.DEF_DIRECTION),
          'objDirection': section.readBool('objDirection', True),
-         'color': int(section.readString('color', '0'), 16) or cls.DEF_COLOR}
+         'color': int(section.readString('color', '0'), 16) or cls.DEF_COLOR,
+         'enableWaterCollision': section.readBool('enableWaterCollision', False),
+         'enableAccurateCollision': section.readBool('enableAccurateCollision', True)}
         return config
 
     @property

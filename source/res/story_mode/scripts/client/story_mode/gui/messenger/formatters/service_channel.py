@@ -5,7 +5,9 @@ from constants import SCENARIO_RESULT
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.gui_items import getItemTypeID
+from gui.shared.gui_items.Vehicle import getUserName
 from helpers import time_utils, dependency
+from items import vehicles as vehicles_core
 from messenger import g_settings
 from messenger.formatters import TimeFormatter
 from messenger.formatters.service_channel import BattleResultsFormatter, ServiceChannelFormatter
@@ -55,15 +57,9 @@ class StoryModeResultsFormatter(BattleResultsFormatter):
         ctx['bpPointsStr'] = ''
         ctx['crystalStr'] = ''
         ctx['creditsStr'] = ''
-        ctx['customizationStr'] = ''
-        ctx['premiumStr'] = ''
-        ctx['itemsStr'] = ''
-        premiumRewardStr = ''
-        itemRewardsStr = ''
-        customizationRewardsStr = ''
+        ctx['rewardsStr'] = ''
         progressionInfo = message.data.get('progressionInfo', {})
         rewardList = getRewardList(progressionInfo, self._battlePass.isActive())
-        rewardStr = backport.text(R.strings.sm_messenger.result.reward()) + '<br/>'
         completedTasksCount, tasksToCompleteCount = getTasksCount(progressionInfo)
         if tasksToCompleteCount:
             ctx['missionsStr'] = g_settings.htmlTemplates.format('missionCompleted', {'completedTasksCount': completedTasksCount,
@@ -75,6 +71,8 @@ class StoryModeResultsFormatter(BattleResultsFormatter):
         customizations = []
         premium = 0
         items = {}
+        vehicles = []
+        slots = 0
         for reward in rewardList:
             credits += reward.get('credits', 0)
             freeXP += reward.get('freeXP', 0)
@@ -82,9 +80,12 @@ class StoryModeResultsFormatter(BattleResultsFormatter):
             crystal += reward.get('crystal', 0)
             customizations += reward.get('customizations', [])
             premium += reward.get('premium_plus', 0)
+            slots += reward.get('slots', 0)
             if 'items' in reward:
                 for itemKey, amount in reward['items'].iteritems():
                     items[itemKey] = items.get(itemKey, 0) + amount
+
+            vehicles += reward.get('vehicles', [])
 
         if freeXP:
             ctx['xpStr'] = g_settings.htmlTemplates.format('xpEarned', {'freeXP': freeXP})
@@ -94,32 +95,33 @@ class StoryModeResultsFormatter(BattleResultsFormatter):
             ctx['crystalStr'] = g_settings.htmlTemplates.format('crystalEarned', {'crystal': crystal})
         if credits:
             ctx['creditsStr'] = g_settings.htmlTemplates.format('creditEarned', {'credits': credits})
-        if premium:
-            premiumRewardStr = rewardStr
-            ctx['premiumStr'] = g_settings.htmlTemplates.format('premiumEarned', {'premium_plus': premium,
-             'premiumRewardStr': premiumRewardStr})
-        if items:
-            if not premiumRewardStr:
-                itemRewardsStr = rewardStr
-            itemsList = []
-            for itemKey in sorted(items.iterkeys(), reverse=True):
-                item = self._itemsCache.items.getItemByCD(itemKey)
-                itemsList.append(item.userName + ' (x' + str(items[itemKey]) + ')')
+        haveRewardsStr = bool(premium or vehicles or items or customizations)
+        if haveRewardsStr:
+            rewardsStr = g_settings.htmlTemplates.format('rewardsStr', {'rewardsStr': backport.text(R.strings.sm_messenger.result.reward()) + '<br/>'})
+            if premium:
+                rewardsStr += g_settings.htmlTemplates.format('premiumEarned', {'premium_plus': premium})
+            commaItems = []
+            if vehicles:
+                commaItems += [ getUserName(vehicles_core.getVehicleType(vehicle)) for vehicle in vehicles ]
+            if slots:
+                commaItems.append(backport.text(R.strings.sm_messenger.result.slots()) + '&nbsp;(x' + str(slots) + ')')
+            if items:
+                for itemKey in sorted(items.iterkeys(), reverse=True):
+                    item = self._itemsCache.items.getItemByCD(itemKey)
+                    commaItems.append(item.userName + '&nbsp;(x' + str(items[itemKey]) + ')')
 
-            ctx['itemsStr'] = g_settings.htmlTemplates.format('itemsEarned', {'items': '<br/>'.join(itemsList),
-             'itemRewardsStr': itemRewardsStr})
-        if customizations:
-            if not itemRewardsStr:
-                customizationRewardsStr = rewardStr
-            customizationsList = []
-            for customization in customizations:
-                itemTypeID = getItemTypeID(customization['custType'])
-                if itemTypeID:
-                    style = self._customizationService.getItemByID(itemTypeID, customization['id'])
-                    customizationsList.append(style.userName + ' (x' + str(customization['value']) + ')')
+            if customizations:
+                for customization in customizations:
+                    itemTypeID = getItemTypeID(customization['custType'])
+                    if itemTypeID:
+                        style = self._customizationService.getItemByID(itemTypeID, customization['id'])
+                        commaItems.append(style.userName + '&nbsp;(x' + str(customization['value']) + ')')
 
-            ctx['customizationStr'] = g_settings.htmlTemplates.format('customizatioEarned', {'customization': '<br/>'.join(customizationsList),
-             'customizationRewardsStr': customizationRewardsStr})
+            if commaItems:
+                if premium:
+                    rewardsStr += '<br/>'
+                rewardsStr += g_settings.htmlTemplates.format('commaItems', {'items': ', '.join(commaItems)})
+            ctx['rewardsStr'] = rewardsStr
         return (templateName, ctx)
 
 
@@ -128,6 +130,15 @@ class StoryModeAwardFormatter(ServiceChannelFormatter):
 
     def format(self, message, *args):
         medal = message.data.get('medalName')
+        badge = message.data.get('badgeId')
+        medalAward = backport.text(R.strings.sm_messenger.medal.medalName(), medal_name=backport.text(R.strings.achievements.dyn(medal)())) if medal else None
+        badgeAward = backport.text(R.strings.sm_messenger.medal.badgeName(), badge_name=backport.text(R.strings.badge.dyn('badge_' + str(badge))())) if badge else None
+        if medalAward and badgeAward:
+            award = backport.text(R.strings.sm_messenger.medal.badgeAndMedal(), medal=medalAward, badge=badgeAward)
+        elif medalAward:
+            award = medalAward
+        else:
+            award = badgeAward
         formatted = g_settings.msgTemplates.format(self.__TEMPLATE, {'at': TimeFormatter.getLongDatetimeFormat(time_utils.makeLocalServerTime(message.sentTime)),
-         'medal_name': backport.text(R.strings.achievements.dyn(medal)())})
+         'award': award})
         return [MessageData(formatted, self._getGuiSettings(message, self.__TEMPLATE))]

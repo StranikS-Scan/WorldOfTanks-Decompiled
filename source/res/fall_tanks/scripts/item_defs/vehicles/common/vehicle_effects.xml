@@ -1,0 +1,22 @@
+<vehicle_effects.xml>
+  <fallTanksFullDestruction>
+    <variant1>
+      <timeline>
+        <effectEnd>	10.0	</effectEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Environment/fall_tanks/140_fall_tanks_death.eff	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	ev_fep_fall_destroyed	</wwsoundPC>
+          <wwsoundNPC>	ev_fep_fall_destroyed	</wwsoundNPC>
+        </sound>
+      </effects>
+    </variant1>
+  </fallTanksFullDestruction>
+</vehicle_effects.xml>

@@ -6,6 +6,8 @@ from fun_random.gui.battle_results.packers.fun_progression_helpers import FunPbs
 from fun_random.gui.battle_results.pbs_helpers import getTotalTMenXPToShow, getTotalGoldToShow, getEventID, isCreditsShown, isGoldShown, isXpShown, isFreeXpShown, isTmenXpShown, isCrystalShown, isFunAddXpBonusStatusAcceptable
 from fun_random.gui.feature.util.fun_helpers import isFunProgressionUnlimitedTrigger
 from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin, FunSubModesWatcher, FunProgressionWatcher
+from fun_random.gui.impl.gen.view_models.views.lobby.feature.battle_results.fun_battle_type import FunBattleType
+from fun_random.gui.impl.gen.view_models.views.lobby.feature.battle_results.fun_player_model import FunPlayerModel
 from fun_random.gui.impl.gen.view_models.views.lobby.feature.battle_results.fun_random_reward_item_model import FunRandomRewardItemModel, FunRewardTypes
 from fun_random.gui.impl.lobby.common.fun_view_helpers import packStageRewards, sortFunProgressionBonuses
 from gui.battle_results.pbs_helpers.additional_bonuses import isAdditionalXpBonusAvailable, getLeftAdditionalBonus
@@ -15,44 +17,50 @@ from gui.battle_results.presenters.packers.personal_efficiency import PersonalEf
 from gui.battle_results.presenters.packers.personal_rewards import PersonalRewards
 from gui.battle_results.presenters.packers.premium_plus import PremiumPlus
 from gui.battle_results.presenters.packers.team.team_stats_packer import TeamStats
-from gui.impl.gen.view_models.views.lobby.battle_results.personal_efficiency_model import EfficiencyParameter
-from gui.impl.gen.view_models.views.lobby.battle_results.team_stats_model import ColumnType, SortingOrder
+from gui.impl.gen.view_models.views.lobby.battle_results.efficiency_param_constants import EfficiencyParamConstants
+from gui.impl.gen.view_models.views.lobby.battle_results.team_stats_model import SortingOrder
+from gui.impl.gen.view_models.views.lobby.battle_results.team_stats_column_types import TeamStatsColumnTypes
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from helpers import time_utils
 
-class FunRandomBattleInfo(BattleInfo, FunAssetPacksMixin):
+class FunRandomBattleInfo(BattleInfo, FunAssetPacksMixin, FunSubModesWatcher):
     __slots__ = ()
+    _BATTLE_TYPE = FunBattleType.STANDARD
 
     @classmethod
     def packModel(cls, model, battleResults):
         super(FunRandomBattleInfo, cls).packModel(model, battleResults)
         model.setModeName(cls.getModeUserName())
-        model.setAssetsPointer(FunAssetPacksMixin.getModeAssetsPointer())
+        model.setAssetsPointer(cls.getModeAssetsPointer())
+        subMode = cls.getSubMode(getEventID(battleResults.reusable))
+        model.setSubModeAssetsPointer(subMode.getAssetsPointer())
+        model.setBattleType(cls._BATTLE_TYPE)
 
 
 class FunRandomPersonalEfficiency(PersonalEfficiency, FunSubModesWatcher):
     __slots__ = ()
-    _PARAMETERS = {VEHICLE_CLASS_NAME.SPG: (EfficiencyParameter.KILLS,
-                              EfficiencyParameter.DAMAGEDEALT,
-                              EfficiencyParameter.DAMAGEASSISTED,
-                              EfficiencyParameter.STUN)}
-    _DEFAULT_PARAMS = (EfficiencyParameter.KILLS,
-     EfficiencyParameter.DAMAGEDEALT,
-     EfficiencyParameter.DAMAGEASSISTED,
-     EfficiencyParameter.DAMAGEBLOCKEDBYARMOR)
+    _PARAMETERS = {VEHICLE_CLASS_NAME.SPG: (EfficiencyParamConstants.KILLS,
+                              EfficiencyParamConstants.DAMAGE_DEALT,
+                              EfficiencyParamConstants.DAMAGE_ASSISTED,
+                              EfficiencyParamConstants.STUN)}
+    _DEFAULT_PARAMS = (EfficiencyParamConstants.KILLS,
+     EfficiencyParamConstants.DAMAGE_DEALT,
+     EfficiencyParamConstants.DAMAGE_ASSISTED,
+     EfficiencyParamConstants.DAMAGE_BLOCKED_BY_ARMOR)
 
     @classmethod
     def _getParameterList(cls, vehicle, battleResults):
         subMode = cls.getSubMode(getEventID(battleResults.reusable))
         allParameters = subMode.getEfficiencyParameters() if subMode is not None else {}
-        params = [ EfficiencyParameter(param) for param in allParameters.get(vehicle.type, ()) ]
+        params = [ param for param in allParameters.get(vehicle.type, ()) ]
         params = params or super(FunRandomPersonalEfficiency, cls)._getParameterList(vehicle, battleResults)
         return params[:FunEfficiencyParameterCount.MAX]
 
 
 class FunRandomTeamStats(TeamStats):
     __slots__ = ()
-    _SORTING_PRIORITIES = ((ColumnType.XP.value, SortingOrder.DESC), (ColumnType.DAMAGE.value, SortingOrder.DESC), (ColumnType.PLAYER.value, SortingOrder.ASC))
+    _PLAYER_MODEL_CLS = FunPlayerModel
+    _SORTING_PRIORITIES = ((TeamStatsColumnTypes.XP, SortingOrder.DESC), (TeamStatsColumnTypes.DAMAGE, SortingOrder.DESC), (TeamStatsColumnTypes.PLAYER, SortingOrder.ASC))
 
 
 class FunRandomPersonalRewards(PersonalRewards):
@@ -114,7 +122,7 @@ class FunRandomProgress(FunProgressionWatcher, FunAssetPacksMixin):
                 model.setHasProgress(False)
                 return
             model.setHasProgress(True)
-            model.setAssetsPointer(FunAssetPacksMixin.getModeAssetsPointer())
+            model.setAssetsPointer(cls.getModeAssetsPointer())
             model.setIsInUnlimitedProgression(progressionData.isUnlimitedProgression)
             model.setDescription(progressionData.description)
             model.setPreviousPoints(progressionData.previousPoints)

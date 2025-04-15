@@ -11,7 +11,7 @@ from comp7.gui.impl.gen.view_models.views.lobby.meta_view.pages.rank_rewards_mod
 from comp7.gui.impl.lobby.comp7_helpers import comp7_model_helpers, comp7_shared
 from comp7.gui.impl.lobby.comp7_helpers.comp7_bonus_packer import packRanksRewardsQuestBonuses
 from comp7.gui.impl.lobby.comp7_helpers.comp7_c11n_helpers import getStylePreviewVehicle, getPreviewOutfit
-from comp7.gui.impl.lobby.comp7_helpers.comp7_quest_helpers import parseComp7RanksQuestID, parseComp7PeriodicQuestID, isComp7VisibleQuest, getComp7QuestType
+from comp7.gui.impl.lobby.comp7_helpers.comp7_quest_helpers import parseComp7RanksQuestID, parseComp7PeriodicQuestID, isComp7VisibleQuest, parseQuestsByDivision
 from comp7.gui.impl.lobby.meta_view.meta_view_helper import setProgressionItemData, getRankDivisions
 from comp7.gui.impl.lobby.meta_view.pages import PageSubModelPresenter
 from comp7.gui.impl.lobby.tooltips.fifth_rank_tooltip import FifthRankTooltip
@@ -122,8 +122,8 @@ class RankRewardsPage(PageSubModelPresenter):
 
     def __updateQuests(self):
         comp7Quests = self.__eventsCache.getAllQuests(lambda q: isComp7VisibleQuest(q.getID())).values()
-        self.__rankQuests = self.__parseQuestsByDivision(comp7Quests, parseComp7RanksQuestID, Comp7QuestType.RANKS)
-        self.__periodicQuests = self.__parseQuestsByDivision(comp7Quests, parseComp7PeriodicQuestID, Comp7QuestType.PERIODIC)
+        self.__rankQuests = parseQuestsByDivision(comp7Quests, parseComp7RanksQuestID, Comp7QuestType.RANKS)
+        self.__periodicQuests = parseQuestsByDivision(comp7Quests, parseComp7PeriodicQuestID, Comp7QuestType.PERIODIC)
 
     def __setRanksData(self, model):
         itemsArray = model.getItems()
@@ -195,16 +195,3 @@ class RankRewardsPage(PageSubModelPresenter):
 
         rewards.invalidate()
         return packedBonusData
-
-    @staticmethod
-    def __parseQuestsByDivision(quests, parser, questType):
-        result = {}
-        for q in quests:
-            if getComp7QuestType(q.getID()) != questType:
-                continue
-            division = parser(q.getID())
-            if division is not None:
-                result[division.dvsnID] = q
-            _logger.error('Division number could not be parsed - %s', q.getID())
-
-        return result

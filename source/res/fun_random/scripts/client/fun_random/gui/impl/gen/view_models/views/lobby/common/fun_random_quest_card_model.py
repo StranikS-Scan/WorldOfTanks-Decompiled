@@ -38,10 +38,10 @@ class FunRandomQuestCardModel(ViewModel):
     def setDescription(self, value):
         self._setString(3, value)
 
-    def getIconKey(self):
+    def getQuestCondition(self):
         return self._getString(4)
 
-    def setIconKey(self, value):
+    def setQuestCondition(self, value):
         self._setString(4, value)
 
     def getTotalPoints(self):
@@ -68,7 +68,7 @@ class FunRandomQuestCardModel(ViewModel):
         self._addNumberProperty('currentProgress', 0)
         self._addNumberProperty('totalProgress', 0)
         self._addStringProperty('description', '')
-        self._addStringProperty('iconKey', '')
+        self._addStringProperty('questCondition', '')
         self._addNumberProperty('totalPoints', 0)
         self._addNumberProperty('mainBonusCount', 0)
         self._addNumberProperty('altBonusCount', 0)

@@ -147,7 +147,7 @@ def getRocketAccelerationKpiFactors(vehDescr):
     return rocketKPI
 
 
-def getVehicleFactors(vehicle, situationalBonuses=None):
+def getVehicleFactors(vehicle, situationalBonuses=None, isModifySkillProcessors=False):
     factors = utils.makeDefaultVehicleAttributeFactors()
     vehicleDescr = vehicle.descriptor
     eqs = [ eq.descriptor for eq in vehicle.consumables.installed.getItems() ]
@@ -157,7 +157,7 @@ def getVehicleFactors(vehicle, situationalBonuses=None):
 
     crewCompactDescrs = extractCrewDescrs(vehicle)
     additionalCrewLevelIncrease = calculateAdditionalCrewLevelIncrease(vehicle, situationalBonuses)
-    utils.updateAttrFactorsWithSplit(vehicleDescr, crewCompactDescrs, eqs, factors, additionalCrewLevelIncrease)
+    utils.updateAttrFactorsWithSplit(vehicleDescr, crewCompactDescrs, eqs, factors, additionalCrewLevelIncrease, isModifySkillProcessors)
     return factors
 
 

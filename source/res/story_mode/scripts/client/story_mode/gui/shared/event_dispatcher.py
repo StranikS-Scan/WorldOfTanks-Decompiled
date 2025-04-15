@@ -13,7 +13,7 @@ from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.impl import IGuiLoader
 from story_mode.gui.fade_in_out import UseStoryModeFading, UseHeaderNavigationImpossible
-from story_mode.gui.scaleform.daapi.view.model.intro_video_settings_model import getSettings
+from story_mode.gui.scaleform.daapi.view.model.video_settings_model import getIntroVideoSettings
 from story_mode.gui.shared.utils import waitForLobby
 from story_mode.gui.story_mode_gui_constants import VIEW_ALIAS
 from story_mode.skeletons.story_mode_controller import IStoryModeController
@@ -58,7 +58,7 @@ def isViewLoaded(layoutID):
 @ifNotArenaLoaded
 def showIntro(missionId):
     missionId = missionId or FIRST_MISSION_ID
-    videoData = getSettings()
+    videoData = getIntroVideoSettings()
     isMissionHasVideo = next((mission for mission in videoData.missions if mission.id == missionId), None)
     if isMissionHasVideo:
         showIntroVideo(missionId)
@@ -71,6 +71,12 @@ def showIntro(missionId):
 def showIntroVideo(missionId):
     _logger.debug('showIntroVideo for mission with id: %s', missionId)
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.STORY_MODE_INTRO_VIDEO_WINDOW), ctx={'missionId': missionId}), EVENT_BUS_SCOPE.BATTLE)
+
+
+def showOutroVideo(missionId, arenaUniqueID):
+    _logger.debug('showOutroVideo for mission with id: %s', missionId)
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.STORY_MODE_OUTRO_VIDEO_WINDOW), ctx={'missionId': missionId,
+     'arenaUniqueID': arenaUniqueID}), EVENT_BUS_SCOPE.LOBBY)
 
 
 @ifNotArenaLoaded

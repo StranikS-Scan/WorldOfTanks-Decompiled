@@ -73,3 +73,25 @@ def readVisualScriptPlans(section, commonParams={}):
             plans.append(readVisualScriptPlan(subsection, commonParams))
 
     return plans
+
+
+def readVisualScriptSection(section, aspects=None):
+    if aspects is None:
+        aspects = ASPECT.ALL
+    if not aspects:
+        return {}
+    elif section.has_key(VisualScriptTag):
+        vseSection = section[VisualScriptTag]
+        commonParams = {}
+        if vseSection.has_key('common'):
+            commonParams = readVisualScriptPlanParams(vseSection['common'])
+        return {aspect:_readVisualScriptAspect(vseSection, aspect.lower(), commonParams) for aspect in aspects}
+    else:
+        return {aspect:[] for aspect in aspects}
+
+
+def _readVisualScriptAspect(section, aspect, commonParams):
+    plans = []
+    if section.has_key(aspect):
+        plans = readVisualScriptPlans(section[aspect], commonParams)
+    return plans

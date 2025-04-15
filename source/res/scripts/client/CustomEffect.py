@@ -448,6 +448,10 @@ class ExhaustEffectDescriptor(EffectDescriptorBase):
     def descriptors(self):
         return self.__descriptors
 
+    @descriptors.setter
+    def descriptors(self, value):
+        self.__descriptors = value
+
     def create(self, args):
         effectDescriptor = self.__descriptors['default']
         if len(self.__descriptors) > 1:

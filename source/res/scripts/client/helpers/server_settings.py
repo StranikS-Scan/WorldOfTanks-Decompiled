@@ -574,15 +574,12 @@ class BattleRoyaleConfig(namedtuple('BattleRoyaleConfig', ('isEnabled',
  'url',
  'respawns',
  'progressionTokenAward',
- 'tournamentsWidget',
- 'stpCoinAward',
- 'dailyBonusSTP'))):
+ 'tournamentsWidget'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, peripheryIDs={}, eventProgression={}, unburnableTitles=(), primeTimes={}, seasons={}, cycleTimes={}, maps=(), battleXP={}, coneVisibility={}, loot={}, defaultAmmo={}, vehiclesSlotsConfig={}, economics={}, url='', respawns={}, progressionTokenAward={}, tournamentsWidget={}, stpCoinAward={}, dailyBonusSTP={})
+        defaults = dict(isEnabled=False, peripheryIDs={}, eventProgression={}, unburnableTitles=(), primeTimes={}, seasons={}, cycleTimes={}, maps=(), battleXP={}, coneVisibility={}, loot={}, defaultAmmo={}, vehiclesSlotsConfig={}, economics={}, url='', respawns={}, progressionTokenAward={}, tournamentsWidget={})
         defaults.update(kwargs)
-        cls.__packStpCoinAwardConfig(defaults)
         return super(BattleRoyaleConfig, cls).__new__(cls, **defaults)
 
     def asDict(self):
@@ -596,10 +593,6 @@ class BattleRoyaleConfig(namedtuple('BattleRoyaleConfig', ('isEnabled',
     @classmethod
     def defaults(cls):
         return cls()
-
-    @classmethod
-    def __packStpCoinAwardConfig(cls, data):
-        data['stpCoinAward'] = {int(bonusType):value for bonusType, value in data['stpCoinAward'].iteritems()}
 
 
 class _TelecomConfig(object):
@@ -953,77 +946,6 @@ class GiftSystemConfig(namedtuple('_GiftSystemConfig', ('events',))):
     @classmethod
     def __packEventConfigs(cls, data):
         data['events'] = {eID:makeTupleByDict(GiftEventConfig, eData) for eID, eData in data['events'].iteritems()}
-
-
-class _WellRewardConfig(namedtuple('_WellRewardConfig', ('bonus',
- 'limit',
- 'isSerial',
- 'sequence',
- 'rewardId'))):
-    __slots__ = ()
-
-    def __new__(cls, **kwargs):
-        defaults = dict(bonus={}, limit=0, isSerial=False, sequence='', rewardId='')
-        defaults.update(kwargs)
-        return super(_WellRewardConfig, cls).__new__(cls, **defaults)
-
-    @classmethod
-    def defaults(cls):
-        return cls()
-
-
-class _ResourceConfig(namedtuple('_ResourceConfig', ('name', 'rate', 'limit'))):
-    __slots__ = ()
-
-    def __new__(cls, **kwargs):
-        defaults = dict(name='', rate=0, limit=0)
-        defaults.update(kwargs)
-        return super(_ResourceConfig, cls).__new__(cls, **defaults)
-
-    @classmethod
-    def defaults(cls):
-        return cls()
-
-
-class ResourceWellConfig(namedtuple('_ResourceWellConfig', ('isEnabled',
- 'season',
- 'finishTime',
- 'remindTime',
- 'rewards',
- 'points',
- 'resources',
- 'startTime'))):
-    __slots__ = ()
-
-    def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, season=0, finishTime=0, remindTime=0, rewards={}, points=0, resources={}, startTime=0)
-        defaults.update(kwargs)
-        cls.__packResourceConfigs(defaults)
-        cls.__packRewardsConfigs(defaults)
-        return super(ResourceWellConfig, cls).__new__(cls, **defaults)
-
-    @classmethod
-    def defaults(cls):
-        return cls()
-
-    def replace(self, data):
-        allowedFields = self._fields
-        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
-        self.__packResourceConfigs(dataToUpdate)
-        self.__packRewardsConfigs(dataToUpdate)
-        return self._replace(**dataToUpdate)
-
-    @classmethod
-    def __packResourceConfigs(cls, data):
-        resources = {}
-        for resourceType, resourceConfig in data['resources'].iteritems():
-            resources[resourceType] = {name:_ResourceConfig(name=name, rate=resourceData.get('rate'), limit=resourceData.get('limit')) for name, resourceData in resourceConfig.iteritems()}
-
-        data['resources'] = resources
-
-    @classmethod
-    def __packRewardsConfigs(cls, data):
-        data['rewards'] = {rewardId:makeTupleByDict(_WellRewardConfig, reward) for rewardId, reward in data['rewards'].iteritems()}
 
 
 class PlayLimitsConfig(namedtuple('PlayLimitsConfig', ('lockTimeBeforeBattle',))):
@@ -1415,7 +1337,6 @@ class ServerSettings(object):
         self.__vehiclePostProgressionConfig = VehiclePostProgressionConfig()
         self.__eventBattlesConfig = _EventBattlesConfig()
         self.__giftSystemConfig = GiftSystemConfig()
-        self.__resourceWellConfig = ResourceWellConfig()
         self.__battleMattersConfig = _BattleMattersConfig()
         self.__peripheryRoutingConfig = PeripheryRoutingConfig()
         self.__personalReservesConfig = PersonalReservesConfig()
@@ -1539,8 +1460,6 @@ class ServerSettings(object):
             self.__eventBattlesConfig = _EventBattlesConfig.defaults()
         if Configs.GIFTS_CONFIG.value in self.__serverSettings:
             self.__giftSystemConfig = makeTupleByDict(GiftSystemConfig, {'events': self.__serverSettings[Configs.GIFTS_CONFIG.value]})
-        if Configs.RESOURCE_WELL.value in self.__serverSettings:
-            self.__resourceWellConfig = makeTupleByDict(ResourceWellConfig, self.__serverSettings[Configs.RESOURCE_WELL.value])
         if Configs.BATTLE_MATTERS_CONFIG.value in self.__serverSettings:
             self.__battleMattersConfig = makeTupleByDict(_BattleMattersConfig, self.__serverSettings[Configs.BATTLE_MATTERS_CONFIG.value])
         if Configs.PERIPHERY_ROUTING_CONFIG.value in self.__serverSettings:
@@ -1674,8 +1593,6 @@ class ServerSettings(object):
             self.__updateBattleMatters(serverSettingsDiff)
         if TRADE_IN_CONFIG_NAME in serverSettingsDiff:
             self.__serverSettings[TRADE_IN_CONFIG_NAME] = serverSettingsDiff[TRADE_IN_CONFIG_NAME]
-        if Configs.RESOURCE_WELL.value in serverSettingsDiff:
-            self.__updateResourceWellConfig(serverSettingsDiff)
         if Configs.PERIPHERY_ROUTING_CONFIG.value in serverSettingsDiff:
             self.__updatePeripheryRoutingConfig(serverSettingsDiff)
         if Configs.PLAY_LIMITS_CONFIG.value in serverSettingsDiff:
@@ -1835,10 +1752,6 @@ class ServerSettings(object):
     @property
     def giftSystemConfig(self):
         return self.__giftSystemConfig
-
-    @property
-    def resourceWellConfig(self):
-        return self.__resourceWellConfig
 
     @property
     def playLimitsConfig(self):
@@ -2050,6 +1963,9 @@ class ServerSettings(object):
 
     def isOptionalDevicesAssistantEnabled(self):
         return self.isRenewableSubEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('enableOptionalDevicesAssistant', False)
+
+    def isCrewAssistantEnabled(self):
+        return self.isRenewableSubEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('enableCrewAssistant', False)
 
     def isFreeDeluxeEquipmentDemountingEnabled(self):
         return self.isFreeEquipmentDemountingEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('enableFreeDeluxeEquipmentDemounting', False)
@@ -2355,9 +2271,6 @@ class ServerSettings(object):
 
     def __updateGiftSystemConfig(self, serverSettingsDiff):
         self.__giftSystemConfig = self.__giftSystemConfig.replace({'events': serverSettingsDiff[Configs.GIFTS_CONFIG.value]})
-
-    def __updateResourceWellConfig(self, diff):
-        self.__resourceWellConfig = self.__resourceWellConfig.replace(diff[Configs.RESOURCE_WELL.value])
 
     def __updatePlayLimitsConfig(self, serverSettingsDiff):
         self.__playLimitsConfig = self.__playLimitsConfig.replace(serverSettingsDiff[Configs.PLAY_LIMITS_CONFIG.value])

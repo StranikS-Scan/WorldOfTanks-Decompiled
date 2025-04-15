@@ -34,41 +34,20 @@
       </teamBasePositions>
     </ctf>
     <domination>
-      <teamSpawnPoints>
-        <team1>
-          <position>	-146.582993 -367.165009	</position>
-        </team1>
-        <team2>
-          <position>	-436.242004 187.123001	</position>
-        </team2>
-      </teamSpawnPoints>
       <controlPoint>	386.097382 213.927444	</controlPoint>
     </domination>
     <assault>
       <winnerIfTimeout>	1	</winnerIfTimeout>
-      <teamSpawnPoints>
-        <team1></team1>
-        <team2>
-          <position>	243.66 322.173	</position>
-        </team2>
-      </teamSpawnPoints>
       <teamBasePositions>
         <team1>
-          <position1>	-246.673 -362.041	</position1>
+          <position1>	-246.673187 -362.041077	</position1>
         </team1>
+        <team2></team2>
       </teamBasePositions>
     </assault>
     <assault2>
       <winnerIfTimeout>	1	</winnerIfTimeout>
       <winnerIfExtermination>	1	</winnerIfExtermination>
-      <teamSpawnPoints>
-        <team1>
-          <position>	120.676003 445.208008	</position>
-        </team1>
-        <team2>
-          <position>	-123.873001 -350.678009	</position>
-        </team2>
-      </teamSpawnPoints>
       <teamBasePositions>
         <team1>
           <position1>	-244.550827 245.040649	</position1>
@@ -87,6 +66,57 @@
         </team2>
       </teamBasePositions>
     </maps_training>
+    <comp7>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <minimap>	spaces/35_steppes/mmap_comp7.dds	</minimap>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	120.982117 51.918697	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	-95.153587 -65.160599	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	120.910164 -214.951065	</position>
+          <type>	2	</type>
+        </point>
+        <point>
+          <position>	-471.478241 -189.403259	</position>
+          <type>	2	</type>
+        </point>
+        <point>
+          <position>	-52.697201 214.084000	</position>
+          <type>	2	</type>
+        </point>
+      </pointsOfInterestUDO>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-88.950798 -358.050140	</position>
+        </team1>
+        <team2>
+          <position>	-302.127533 171.602859	</position>
+        </team2>
+      </teamSpawnPoints>
+      <controlPoint>	-230.286316 -105.254074	</controlPoint>
+    </comp7>
   </gameplayTypes>
   <mapActivities>
     <scenario>

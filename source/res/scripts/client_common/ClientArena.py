@@ -132,6 +132,7 @@ class ClientArena(object):
         self.onTeamHealthPercentUpdate = Event.Event(em)
         self.onChatCommandTargetUpdate = Event.Event(em)
         self.onChatCommandTriggered = Event.Event(em)
+        self.onUpdatePriorityChatCommand = Event.Event(em)
         self.onRadarInfoReceived = Event.Event(em)
         self.onTeamInfoRegistered = Event.Event(em)
         self.onTeamInfoUnregistered = Event.Event(em)

@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode_personality.py
-from AvatarInputHandler import OVERWRITE_CTRLS_DESC_MAP
 from aih_constants import CTRL_TYPE, CTRL_MODE_NAME
 from chat_shared import SYS_MESSAGE_TYPE
 from constants import HAS_DEV_RESOURCES, ARENA_GUI_TYPE, ARENA_BONUS_TYPE
@@ -12,10 +11,10 @@ from gui.prb_control.prb_utils import initGuiTypes, initScaleformGuiTypes
 from gui.shared.system_factory import registerScaleformBattlePackages
 from schema_manager import getSchemaManager
 from story_mode import account_settings
-from story_mode.control_modes import OnboardingArcadeControlMode, OnboardingSniperControlMode, StoryModeArcadeControlMode, StoryModeSniperControlMode
+from story_mode.avatar_input_handler.control_modes import OnboardingArcadeControlMode, OnboardingSniperControlMode, StoryModeArcadeControlMode, StoryModeSniperControlMode, StoryModeArcadeMinefieldControlMode, SMStrategicMapCaseControlMode, SMEntityViewMode
 from story_mode.gui import story_mode_gui_constants
 from story_mode.gui.app_loader import observers
-from story_mode.gui.battle_control.controllers import equipments_items
+from story_mode.gui.battle_control.controllers import equipments_items, equipment_ctrl
 from story_mode.gui.battle_control.controllers.repository import OnboardingRepository, StoryModeRepository, StoryModeSharedRepository
 from story_mode.gui.game_control.story_mode_controller import eventEntryPointValidator, newbieEntryPointValidator
 from story_mode.gui.game_control.story_mode_fading_controller import StoryModeFadingController
@@ -107,6 +106,14 @@ class ClientStoryModeBattleMode(battle_mode.StoryModeBattleMode):
         from story_mode.dyn_objects import StoryModeDynObjects
         return StoryModeDynObjects
 
+    @property
+    def _client_controlModes(self):
+        return {CTRL_MODE_NAME.ARCADE: (StoryModeArcadeControlMode, 'arcadeMode', CTRL_TYPE.USUAL),
+         CTRL_MODE_NAME.SNIPER: (StoryModeSniperControlMode, 'sniperMode', CTRL_TYPE.USUAL),
+         CTRL_MODE_NAME.MAP_CASE_ARCADE_EPIC_MINEFIELD: (StoryModeArcadeMinefieldControlMode, 'arcadeEpicMinefieldMode', CTRL_TYPE.USUAL),
+         CTRL_MODE_NAME.SM_STRATEGIC: (SMStrategicMapCaseControlMode, 'strategicMode', CTRL_TYPE.USUAL),
+         CTRL_MODE_NAME.SM_ENTITY_VIEW: (SMEntityViewMode, 'postMortemMode', CTRL_TYPE.USUAL)}
+
 
 class ClientOnboardingBattleMode(ClientStoryModeBattleMode):
     _ARENA_BONUS_TYPE = ARENA_BONUS_TYPE.STORY_MODE_ONBOARDING
@@ -120,6 +127,11 @@ class ClientOnboardingBattleMode(ClientStoryModeBattleMode):
     @property
     def _client_lobbyRequiredLibraries(self):
         return []
+
+    @property
+    def _client_controlModes(self):
+        return {CTRL_MODE_NAME.ARCADE: (OnboardingArcadeControlMode, 'arcadeMode', CTRL_TYPE.USUAL),
+         CTRL_MODE_NAME.SNIPER: (OnboardingSniperControlMode, 'sniperMode', CTRL_TYPE.USUAL)}
 
 
 class ClientEventBattleMode(ClientStoryModeBattleMode):
@@ -139,11 +151,8 @@ def preInit():
     injectConsts(__name__)
     initGuiTypes(story_mode_gui_constants, __name__)
     initScaleformGuiTypes(story_mode_gui_constants, __name__)
-    OVERWRITE_CTRLS_DESC_MAP[ARENA_BONUS_TYPE.STORY_MODE_ONBOARDING] = {CTRL_MODE_NAME.ARCADE: (OnboardingArcadeControlMode, 'arcadeMode', CTRL_TYPE.USUAL),
-     CTRL_MODE_NAME.SNIPER: (OnboardingSniperControlMode, 'sniperMode', CTRL_TYPE.USUAL)}
-    OVERWRITE_CTRLS_DESC_MAP[ARENA_BONUS_TYPE.STORY_MODE_REGULAR] = {CTRL_MODE_NAME.ARCADE: (StoryModeArcadeControlMode, 'arcadeMode', CTRL_TYPE.USUAL),
-     CTRL_MODE_NAME.SNIPER: (StoryModeSniperControlMode, 'sniperMode', CTRL_TYPE.USUAL)}
     battle_hints_overlap_controller.addSettings(ARENA_BONUS_TYPE.STORY_MODE_ONBOARDING, HintScope.STORY_MODE.value, {STORY_MODE_BATTLE_VIEW_ALIASES.STORY_MODE_TIMER})
+    equipment_ctrl.register()
     equipments_items.register()
     battleMode = ClientStoryModeBattleMode(__name__)
     battleMode.registerClient()
@@ -159,6 +168,7 @@ def preInit():
     battleMode.registerBattleControllersRepository()
     battleMode.registerSharedControllersRepository()
     battleMode.registerBannerEntryPointValidatorMethod()
+    battleMode.registerControlModes()
     onboardingBattleMode = ClientOnboardingBattleMode(__name__)
     onboardingBattleMode.registerGuiType()
     onboardingBattleMode.registerScaleformRequiredLibraries()
@@ -166,6 +176,7 @@ def preInit():
     onboardingBattleMode.registerClientBattleResultsCtrl()
     onboardingBattleMode.registerBattleResultSysMsgType()
     onboardingBattleMode.registerBattleControllersRepository()
+    onboardingBattleMode.registerControlModes()
     eventBattleMode = ClientEventBattleMode(__name__)
     eventBattleMode.registerBannerEntryPointValidatorMethod()
     observers.preInit()

@@ -11,6 +11,7 @@ class PlayVoiceover(Block, SoundMeta):
         self._in = self._makeEventInputSlot('in', self._execute)
         self._vehicle = self._makeDataInputSlot('vehicle', SLOT_TYPE.VEHICLE)
         self._voiceover = self._makeDataInputSlot('voiceover', SLOT_TYPE.STR)
+        self._delay = self._makeDataInputSlot('delay', SLOT_TYPE.FLOAT)
         self._out = self._makeEventOutputSlot('out')
         self._finished = self._makeEventOutputSlot('finished')
 
@@ -25,8 +26,13 @@ class PlayVoiceover(Block, SoundMeta):
             ctx = {'onEnd': self._finished.call}
             if self._vehicle.hasValue():
                 ctx['vehicleId'] = self._vehicle.getValue().id
-            manager.playVoiceover(voiceoverId=self._voiceover.getValue(), ctx=ctx)
+            if not self._delay.hasValue() or self._delay.getValue() <= 0.0:
+                delay = None
+            else:
+                delay = self._delay.getValue()
+            manager.playVoiceover(voiceoverId=self._voiceover.getValue(), ctx=ctx, delay=delay)
         self._out.call()
+        return
 
 
 class StopVoiceover(Block, SoundMeta):

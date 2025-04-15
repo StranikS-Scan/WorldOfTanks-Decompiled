@@ -22,7 +22,7 @@ class OptionalDevicesController(IBattleController):
         self.onOptionalDevicesCleared = Event.Event(self.__eManager)
         self.onDescriptorDevicesChanged = Event.Event(self.__eManager)
         self.__optionalDevices = {}
-        self.__soundManager = OptDeviceSoundController()
+        self.__soundManager = self._createSoundManager()
         self.__sessionProvider = setup.sessionProvider
         self.__order = []
         self.__optionalDevicesInDescriptor = []
@@ -34,7 +34,7 @@ class OptionalDevicesController(IBattleController):
         return BATTLE_CTRL_ID.OPTIONAL_DEVICES
 
     def startControl(self, *args):
-        g_playerEvents.onArenaPeriodChange += self.__onArenaPeriodChange
+        g_playerEvents.onArenaPeriodChange += self._onArenaPeriodChange
         self.__sessionProvider.onBattleSessionStart += self.__onBattleSessionStart
         self.__sessionProvider.onBattleSessionStop += self.__onBattleSessionStop
 
@@ -52,7 +52,7 @@ class OptionalDevicesController(IBattleController):
                 self.__sessionProvider.onBattleSessionStop -= self.__onBattleSessionStop
             self.__sessionProvider = None
             self.__eManager.clear()
-            g_playerEvents.onArenaPeriodChange -= self.__onArenaPeriodChange
+            g_playerEvents.onArenaPeriodChange -= self._onArenaPeriodChange
         self.__soundManager.clear()
         self.__optionalDevices.clear()
         self.__order = []
@@ -100,7 +100,10 @@ class OptionalDevicesController(IBattleController):
     def startVehicleVisual(self, vProxy, isImmediate):
         self.soundManager.startVehicleVisual(vProxy, isImmediate)
 
-    def __onArenaPeriodChange(self, period, *_):
+    def _createSoundManager(self):
+        return OptDeviceSoundController()
+
+    def _onArenaPeriodChange(self, period, *_):
         if period == ARENA_PERIOD.AFTERBATTLE:
             self.clear()
         DevicesSound.arenaPeriodChange(period)

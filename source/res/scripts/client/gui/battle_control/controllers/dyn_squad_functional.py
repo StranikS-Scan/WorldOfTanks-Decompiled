@@ -190,7 +190,7 @@ class DYN_SQUAD_TYPE(object):
 class _DynSquadActionMessage(ClientActionMessage):
 
     def __init__(self, message, squadType, squadNum):
-        ClientActionMessage.__init__(self, msg=message, type_=ACTION_MESSAGE_TYPE.WARNING)
+        ClientActionMessage.__init__(self, msg=message, type_=ACTION_MESSAGE_TYPE.DYN_SQUAD)
         self.__squadType = squadType
         self.__squadNum = squadNum
 
@@ -236,7 +236,7 @@ class DynSquadMessagesController(DynSquadArenaController):
         self.__sendMessage(_R_DYN_SQUAD.inviteAccepted.user, squadNum=squadNum, receiver=receiver)
 
     def __sendMessage(self, resource, **kwargs):
-        g_messengerEvents.onWarningReceived(_DynSquadActionMessage(backport.text(resource(), **kwargs), kwargs.get('squadType', DYN_SQUAD_TYPE.OWN), kwargs.get('squadNum')))
+        g_messengerEvents.onCustomMessage(_DynSquadActionMessage(backport.text(resource(), **kwargs), kwargs.get('squadType', DYN_SQUAD_TYPE.OWN), kwargs.get('squadNum')))
 
     def __getState(self, command):
         return _getVIOPState(getKey(command))

@@ -10,7 +10,7 @@ from gui.impl.lobby.lootbox_system.base.submodels.statistics import Statistics
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.lootbox_system.base.common import ViewID, Views
 from gui.lootbox_system.base.decorators import createTooltipContentDecorator
-from gui.lootbox_system.base.utils import areUsedExternalTransitions, getOpeningOptions, getPreferredBox, openBoxes, isShopVisible
+from gui.lootbox_system.base.utils import getOpeningOptions, getPreferredBox, openBoxes, isShopVisible
 from gui.shared import EVENT_BUS_SCOPE, events
 from helpers import dependency
 from shared_utils import findFirst
@@ -86,7 +86,6 @@ class HasBoxes(SubViewImpl):
     @replaceNoneKwargsModel
     def __updateData(self, model=None):
         model.setEventName(self.__eventName)
-        model.setUseExternal(areUsedExternalTransitions(self.__eventName))
         model.setIsShopVisible(isShopVisible(self.__eventName))
         updateBoxesInfoModel(self.__eventName, model.getBoxesInfo())
         self.__updateSelectedBoxOption(model=model)
@@ -164,17 +163,14 @@ class HasBoxes(SubViewImpl):
         count = int(ctx.get('count'))
 
         def processResult(bonuses):
-            model.setIsAwaitingResponse(False)
             self.parentView.switchToSubView(isBackground=True, eventName=self.__eventName)
             self.parentView.switchToSubView(SubViewID.MULTIPLE_BOXES_REWARDS if count > 1 else SubViewID.SINGLE_BOX_REWARDS, category=self.boxCategory, count=count, bonuses=bonuses, eventName=self.__eventName, backCallback=self.__backCallback)
 
         model.setIsError(False)
-        model.setIsAwaitingResponse(True)
         openBoxes(self.__eventName, self.boxCategory, count, processResult)
 
     @replaceNoneKwargsModel
     def __onErrorBack(self, _, model=None):
-        model.setIsAwaitingResponse(False)
         model.setIsError(True)
 
     def __buyBoxes(self):

@@ -346,6 +346,8 @@ class TOOLTIPS(object):
     SETTINGS_SHOWLOCATIONMARKERS_BODYFOOTER = '#tooltips:settings/showLocationMarkers/bodyFooter'
     SHOWBASEMARKERS_HEADER = '#tooltips:showBaseMarkers/header'
     SHOWBASEMARKERS_BODY = '#tooltips:showBaseMarkers/body'
+    ENABLECOMMENDATIONS_HEADER = '#tooltips:enableCommendations/header'
+    ENABLECOMMENDATIONS_BODY = '#tooltips:enableCommendations/body'
     ENABLETIERGROUPING_HEADER = '#tooltips:enableTierGrouping/header'
     ENABLETIERGROUPING_BODY = '#tooltips:enableTierGrouping/body'
     TURNOFFCOMBATCHAT_HEADER = '#tooltips:turnOffCombatChat/header'
@@ -1879,8 +1881,6 @@ class TOOLTIPS(object):
     AWARDITEM_BPCOIN_BODY = '#tooltips:awardItem/bpcoin/body'
     AWARDITEM_BPTALER_HEADER = '#tooltips:awardItem/bptaler/header'
     AWARDITEM_BPTALER_BODY = '#tooltips:awardItem/bptaler/body'
-    AWARDITEM_STPCOIN_HEADER = '#tooltips:awardItem/stpcoin/header'
-    AWARDITEM_STPCOIN_BODY = '#tooltips:awardItem/stpcoin/body'
     AWARDITEM_EQUIPCOIN_HEADER = '#tooltips:awardItem/equipCoin/header'
     AWARDITEM_EQUIPCOIN_BODY = '#tooltips:awardItem/equipCoin/body'
     AWARDITEM_STEELHUNTERPOINT_HEADER = '#tooltips:awardItem/steelHunterPoint/header'
@@ -3302,7 +3302,6 @@ class TOOLTIPS(object):
     BATTLE_ROYALE_HANGAR_VEHICLE_DESCRIPTION_CHINA = '#tooltips:battle_royale/hangar/vehicle/description/china'
     BATTLE_ROYALE_HANGAR_VEHICLE_DESCRIPTION_POLAND = '#tooltips:battle_royale/hangar/vehicle/description/poland'
     BATTLE_ROYALE_HANGAR_VEHICLE_DESCRIPTION_SWEDEN = '#tooltips:battle_royale/hangar/vehicle/description/sweden'
-    BATTLE_ROYALE_HANGAR_VEHICLE_SHAMROCK = '#tooltips:battle_royale/hangar/vehicle/shamrock'
     BATTLE_ROYALE_ARTEFACT_LIMIT = '#tooltips:battle_royale/artefact/limit'
     BATTLE_ROYALE_ARTEFACT_SOURCE = '#tooltips:battle_royale/artefact/source'
     BATTLE_ROYALE_HANGAR_PERF_HIGH_RISK_HEADER = '#tooltips:battle_royale/hangar/perf/high_risk/header'
@@ -4066,6 +4065,51 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_TANKMEN_BP16_9_LABEL = '#tooltips:notrecruitedtankman/tankmen_bp16_9/label'
     NOTRECRUITEDTANKMAN_TANKMEN_BP16_9_DESC = '#tooltips:notrecruitedtankman/tankmen_bp16_9/desc'
     NOTRECRUITEDTANKMAN_TANKMEN_BP16_9_HOWTOGETINFO = '#tooltips:notrecruitedtankman/tankmen_bp16_9/howToGetInfo'
+    NOTRECRUITEDTANKMAN_ONSLAUGHT_P4_1_LABEL = '#tooltips:notrecruitedtankman/onslaught_p4_1/label'
+    NOTRECRUITEDTANKMAN_ONSLAUGHT_P4_1_DESC = '#tooltips:notrecruitedtankman/onslaught_p4_1/desc'
+    NOTRECRUITEDTANKMAN_ONSLAUGHT_P4_1_HOWTOGETINFO = '#tooltips:notrecruitedtankman/onslaught_p4_1/howToGetInfo'
+    NOTRECRUITEDTANKMAN_ONSLAUGHT_P4_2_LABEL = '#tooltips:notrecruitedtankman/onslaught_p4_2/label'
+    NOTRECRUITEDTANKMAN_ONSLAUGHT_P4_2_DESC = '#tooltips:notrecruitedtankman/onslaught_p4_2/desc'
+    NOTRECRUITEDTANKMAN_ONSLAUGHT_P4_2_HOWTOGETINFO = '#tooltips:notrecruitedtankman/onslaught_p4_2/howToGetInfo'
+    NOTRECRUITEDTANKMAN_ONSLAUGHT_P4_3_LABEL = '#tooltips:notrecruitedtankman/onslaught_p4_3/label'
+    NOTRECRUITEDTANKMAN_ONSLAUGHT_P4_3_DESC = '#tooltips:notrecruitedtankman/onslaught_p4_3/desc'
+    NOTRECRUITEDTANKMAN_ONSLAUGHT_P4_3_HOWTOGETINFO = '#tooltips:notrecruitedtankman/onslaught_p4_3/howToGetInfo'
+    NOTRECRUITEDTANKMAN_ONSLAUGHT_P4_4_LABEL = '#tooltips:notrecruitedtankman/onslaught_p4_4/label'
+    NOTRECRUITEDTANKMAN_ONSLAUGHT_P4_4_DESC = '#tooltips:notrecruitedtankman/onslaught_p4_4/desc'
+    NOTRECRUITEDTANKMAN_ONSLAUGHT_P4_4_HOWTOGETINFO = '#tooltips:notrecruitedtankman/onslaught_p4_4/howToGetInfo'
+    COMMENDATIONS_COMMS_LIKES_SCT_TXT_H_01 = '#tooltips:commendations/comms_likes_sct_txt_h_01'
+    COMMENDATIONS_COMMS_LIKES_SCT_TXT_T_01 = '#tooltips:commendations/comms_likes_sct_txt_t_01'
+    COMMENDATIONS_COMMS_LIKES_SCT_TXT_H_02 = '#tooltips:commendations/comms_likes_sct_txt_h_02'
+    COMMENDATIONS_COMMS_LIKES_SCT_TXT_T_02 = '#tooltips:commendations/comms_likes_sct_txt_t_02'
+    COMMENDATIONS_COMMS_LIKES_SCT_TXT_H_03 = '#tooltips:commendations/comms_likes_sct_txt_h_03'
+    COMMENDATIONS_COMMS_LIKES_SCT_TXT_T_03 = '#tooltips:commendations/comms_likes_sct_txt_t_03'
+    COMMENDATIONS_COMMS_LIKES_SCT_TXT_H_04 = '#tooltips:commendations/comms_likes_sct_txt_h_04'
+    COMMENDATIONS_COMMS_LIKES_SCT_TXT_T_04 = '#tooltips:commendations/comms_likes_sct_txt_t_04'
+    COMMENDATIONS_COMMS_LIKES_SCT_TXT_H_05 = '#tooltips:commendations/comms_likes_sct_txt_h_05'
+    COMMENDATIONS_COMMS_LIKES_SCT_TXT_T_05 = '#tooltips:commendations/comms_likes_sct_txt_t_05'
+    LIVETAGS_BODY_ALLY_DAMAGE = '#tooltips:liveTags/body/ally/damage'
+    LIVETAGS_BODY_ALLY_ASSIST = '#tooltips:liveTags/body/ally/assist'
+    LIVETAGS_BODY_ALLY_DAMAGE_BLOCK = '#tooltips:liveTags/body/ally/damage/block'
+    LIVETAGS_BODY_ALLY_DAMAGE_ASSIST = '#tooltips:liveTags/body/ally/damage/assist'
+    LIVETAGS_BODY_ALLY_BLOCK_ASSIST = '#tooltips:liveTags/body/ally/block/assist'
+    LIVETAGS_BODY_ALLY_DAMAGE_BLOCK_ASSIST = '#tooltips:liveTags/body/ally/damage/block/assist'
+    LIVETAGS_BODY_CURRENTPLAYER_DAMAGE = '#tooltips:liveTags/body/currentPlayer/damage'
+    LIVETAGS_BODY_CURRENTPLAYER_BLOCK = '#tooltips:liveTags/body/currentPlayer/block'
+    LIVETAGS_BODY_CURRENTPLAYER_ASSIST = '#tooltips:liveTags/body/currentPlayer/assist'
+    LIVETAGS_BODY_CURRENTPLAYER_DAMAGE_BLOCK = '#tooltips:liveTags/body/currentPlayer/damage/block'
+    LIVETAGS_BODY_CURRENTPLAYER_DAMAGE_ASSIST = '#tooltips:liveTags/body/currentPlayer/damage/assist'
+    LIVETAGS_BODY_CURRENTPLAYER_BLOCK_ASSIST = '#tooltips:liveTags/body/currentPlayer/block/assist'
+    LIVETAGS_BODY_CURRENTPLAYER_DAMAGE_BLOCK_ASSIST = '#tooltips:liveTags/body/currentPlayer/damage/block/assist'
+    LIVETAGS_TITLE_DAMAGE = '#tooltips:liveTags/title/damage'
+    LIVETAGS_TITLE_ASSIST = '#tooltips:liveTags/title/assist'
+    LIVETAGS_TITLE_BLOCK = '#tooltips:liveTags/title/block'
+    LIVETAGS_TITLE_DAMAGE_ASSIST = '#tooltips:liveTags/title/damage/assist'
+    LIVETAGS_TITLE_DAMAGE_BLOCK = '#tooltips:liveTags/title/damage/block'
+    LIVETAGS_TITLE_BLOCK_ASSIST = '#tooltips:liveTags/title/block/assist'
+    LIVETAGS_TITLE_DAMAGE_BLOCK_ASSIST = '#tooltips:liveTags/title/damage/block/assist'
+    NOTRECRUITEDTANKMAN_BOOSTEROID_FENCER_LABEL = '#tooltips:notrecruitedtankman/boosteroid_fencer/label'
+    NOTRECRUITEDTANKMAN_BOOSTEROID_FENCER_DESC = '#tooltips:notrecruitedtankman/boosteroid_fencer/desc'
+    NOTRECRUITEDTANKMAN_BOOSTEROID_FENCER_HOWTOGETINFO = '#tooltips:notrecruitedtankman/boosteroid_fencer/howToGetInfo'
     ELEN_SUMMARY_RANK_ENUM = (ELEN_SUMMARY_RANK_1,
      ELEN_SUMMARY_RANK_2,
      ELEN_SUMMARY_RANK_3,
@@ -4232,7 +4276,6 @@ class TOOLTIPS(object):
      AWARDITEM_EVENTCOIN_HEADER,
      AWARDITEM_BPCOIN_HEADER,
      AWARDITEM_BPTALER_HEADER,
-     AWARDITEM_STPCOIN_HEADER,
      AWARDITEM_EQUIPCOIN_HEADER,
      AWARDITEM_STEELHUNTERPOINT_HEADER,
      AWARDITEM_FREEXP_HEADER,
@@ -4322,7 +4365,6 @@ class TOOLTIPS(object):
      AWARDITEM_EVENTCOIN_BODY,
      AWARDITEM_BPCOIN_BODY,
      AWARDITEM_BPTALER_BODY,
-     AWARDITEM_STPCOIN_BODY,
      AWARDITEM_EQUIPCOIN_BODY,
      AWARDITEM_STEELHUNTERPOINT_BODY,
      AWARDITEM_FREEXP_BODY,
@@ -4945,7 +4987,12 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TANKMEN_BP16_6_LABEL,
      NOTRECRUITEDTANKMAN_TANKMEN_BP16_7_LABEL,
      NOTRECRUITEDTANKMAN_TANKMEN_BP16_8_LABEL,
-     NOTRECRUITEDTANKMAN_TANKMEN_BP16_9_LABEL)
+     NOTRECRUITEDTANKMAN_TANKMEN_BP16_9_LABEL,
+     NOTRECRUITEDTANKMAN_ONSLAUGHT_P4_1_LABEL,
+     NOTRECRUITEDTANKMAN_ONSLAUGHT_P4_2_LABEL,
+     NOTRECRUITEDTANKMAN_ONSLAUGHT_P4_3_LABEL,
+     NOTRECRUITEDTANKMAN_ONSLAUGHT_P4_4_LABEL,
+     NOTRECRUITEDTANKMAN_BOOSTEROID_FENCER_LABEL)
     NOTRECRUITEDTANKMAN_ALL_DESC_ENUM = (NOTRECRUITEDTANKMAN_BASE_DESC,
      NOTRECRUITEDTANKMAN_BUFFON_DESC,
      NOTRECRUITEDTANKMAN_TANKWOMAN_DESC,
@@ -5219,7 +5266,12 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TANKMEN_BP16_6_DESC,
      NOTRECRUITEDTANKMAN_TANKMEN_BP16_7_DESC,
      NOTRECRUITEDTANKMAN_TANKMEN_BP16_8_DESC,
-     NOTRECRUITEDTANKMAN_TANKMEN_BP16_9_DESC)
+     NOTRECRUITEDTANKMAN_TANKMEN_BP16_9_DESC,
+     NOTRECRUITEDTANKMAN_ONSLAUGHT_P4_1_DESC,
+     NOTRECRUITEDTANKMAN_ONSLAUGHT_P4_2_DESC,
+     NOTRECRUITEDTANKMAN_ONSLAUGHT_P4_3_DESC,
+     NOTRECRUITEDTANKMAN_ONSLAUGHT_P4_4_DESC,
+     NOTRECRUITEDTANKMAN_BOOSTEROID_FENCER_DESC)
     NOTRECRUITEDTANKMAN_ALL_HOWTOGETINFO_ENUM = (NOTRECRUITEDTANKMAN_TANKMAN_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_TANKMEN_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_RACE19_COMMANDERA_HOWTOGETINFO,
@@ -5355,7 +5407,12 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TANKMEN_BP16_6_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_TANKMEN_BP16_7_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_TANKMEN_BP16_8_HOWTOGETINFO,
-     NOTRECRUITEDTANKMAN_TANKMEN_BP16_9_HOWTOGETINFO)
+     NOTRECRUITEDTANKMAN_TANKMEN_BP16_9_HOWTOGETINFO,
+     NOTRECRUITEDTANKMAN_ONSLAUGHT_P4_1_HOWTOGETINFO,
+     NOTRECRUITEDTANKMAN_ONSLAUGHT_P4_2_HOWTOGETINFO,
+     NOTRECRUITEDTANKMAN_ONSLAUGHT_P4_3_HOWTOGETINFO,
+     NOTRECRUITEDTANKMAN_ONSLAUGHT_P4_4_HOWTOGETINFO,
+     NOTRECRUITEDTANKMAN_BOOSTEROID_FENCER_HOWTOGETINFO)
     QUESTS_AWARDS_VEHICLERENT_RENTLEFT_ENUM = (QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTDAYS, QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTBATTLES, QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTWINS)
     NOTRECRUITEDTANKMAN_ALL_HOWTOGETINFO_ENUM = (NOTRECRUITEDTANKMAN_TANKMAN_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_TANKMEN_HOWTOGETINFO,
@@ -5492,7 +5549,12 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TANKMEN_BP16_6_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_TANKMEN_BP16_7_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_TANKMEN_BP16_8_HOWTOGETINFO,
-     NOTRECRUITEDTANKMAN_TANKMEN_BP16_9_HOWTOGETINFO)
+     NOTRECRUITEDTANKMAN_TANKMEN_BP16_9_HOWTOGETINFO,
+     NOTRECRUITEDTANKMAN_ONSLAUGHT_P4_1_HOWTOGETINFO,
+     NOTRECRUITEDTANKMAN_ONSLAUGHT_P4_2_HOWTOGETINFO,
+     NOTRECRUITEDTANKMAN_ONSLAUGHT_P4_3_HOWTOGETINFO,
+     NOTRECRUITEDTANKMAN_ONSLAUGHT_P4_4_HOWTOGETINFO,
+     NOTRECRUITEDTANKMAN_BOOSTEROID_FENCER_HOWTOGETINFO)
 
     @classmethod
     def elen_summary_rank(cls, key0):

@@ -8,12 +8,9 @@ from gui.impl.gen import R
 from gui.shared.gui_items.Vehicle import Vehicle, VEHICLE_TYPES_ORDER_INDICES
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
-from helpers import dependency
-from skeletons.gui.game_control import IBattleRoyaleController
 _UNDEFINED_VEHICLE_TYPE = 'undefined'
 
 class RoyaleCarouselDataProvider(HangarCarouselDataProvider):
-    __brController = dependency.descriptor(IBattleRoyaleController)
 
     def getVehiclesIntCDs(self):
         vehicledIntCDs = []
@@ -54,7 +51,6 @@ class RoyaleCarouselDataProvider(HangarCarouselDataProvider):
              'level': 0,
              'tankType': vehicle.type,
              'xpImgSource': '',
-             'hasShamrockFactor': self.__brController.hasSTPDailyFactor(vehicle),
              'isUseRightBtn': True})
             if vState not in (Vehicle.VEHICLE_STATE.IN_PREBATTLE,
              Vehicle.VEHICLE_STATE.DAMAGED,

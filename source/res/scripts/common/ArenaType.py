@@ -19,7 +19,7 @@ from items.vehicles import CAMOUFLAGE_KINDS
 from persistent_data_cache_common.serializers import WGPickleSerializer
 from realm_utils import ResMgr
 from soft_exception import SoftException
-from visual_script.misc import ASPECT, VisualScriptTag, readVisualScriptPlanParams, readVisualScriptPlans
+from visual_script.misc import ASPECT, VisualScriptTag, readVisualScriptSection as _readVisualScriptSection
 if IS_CLIENT:
     from helpers import i18n
     import WWISE
@@ -491,6 +491,10 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
             cfg['mapActivitiesSection'] = section['mapActivities']
         if section.has_key('soundRemapping'):
             cfg['soundRemapping'] = section['soundRemapping']
+        if raiseIfMissing or __hasKey('soundNotificationsPlan', section, defaultXml):
+            cfg['soundNotificationsPlan'] = _readString('soundNotificationsPlan', section, defaultXml)
+        if raiseIfMissing or __hasKey('soundNotificationsContext', section, defaultXml):
+            cfg['soundNotificationsContext'] = _readString('soundNotificationsContext', section, defaultXml)
     if IS_CLIENT or IS_BOT:
         cfg['controlPoints'] = __readControlPoints(section)
         cfg['teamLowLevelSpawnPoints'] = __readTeamSpawnPoints(section, maxTeamsInArena, nodeNameTemplate='team%d_low', required=False)
@@ -630,23 +634,8 @@ def _readFloatArray(key, tag, xml, defaultXml, defaultValue=None):
         return
 
 
-def _readVisualScriptAspect(section, aspect, commonParams):
-    plans = []
-    if section.has_key(aspect):
-        plans = readVisualScriptPlans(section[aspect], commonParams)
-    return plans
-
-
 def _readVisualScript(section):
-    if section.has_key(VisualScriptTag):
-        vseSection = section[VisualScriptTag]
-        commonParams = {}
-        if vseSection.has_key('common'):
-            commonParams = readVisualScriptPlanParams(vseSection['common'])
-        return {ASPECT.CLIENT: _readVisualScriptAspect(vseSection, ASPECT.CLIENT.lower(), commonParams),
-         ASPECT.SERVER: _readVisualScriptAspect(vseSection, ASPECT.SERVER.lower(), commonParams)}
-    return {ASPECT.CLIENT: [],
-     ASPECT.SERVER: []}
+    return _readVisualScriptSection(section, [ASPECT.CLIENT, ASPECT.SERVER])
 
 
 def _readBoundingBox(section):

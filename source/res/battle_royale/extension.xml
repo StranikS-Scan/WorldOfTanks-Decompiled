@@ -39,7 +39,6 @@
       <VehicleBRRespawnComponent></VehicleBRRespawnComponent>
       <VehicleBRRespawnEffectComponent></VehicleBRRespawnEffectComponent>
       <BattleRoyaleObserverInfoComponent></BattleRoyaleObserverInfoComponent>
-      <VehicleBRStPatrickComponent></VehicleBRStPatrickComponent>
     </DynamicComponents>
   </Components>
   <IsEnabled>	True	</IsEnabled>
@@ -70,6 +69,7 @@
       <module>	client.battle_royale.abilities.corroding_shot_preparing	</module>
       <module>	client.battle_royale.abilities.adaptation_restore_health	</module>
       <module>	client.battle_royale.cgf_components.loot_transparency	</module>
+      <module>	client.battle_royale.cgf_components.vehicle_highlight	</module>
     </script>
   </cgf>
 </extension.xml>

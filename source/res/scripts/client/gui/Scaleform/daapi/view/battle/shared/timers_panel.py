@@ -163,6 +163,7 @@ class _TimersCollection(_BaseTimersCollection):
 
 class _StackTimersCollection(_BaseTimersCollection):
     __slots__ = ('_currentTimer', '_currentSecondaryTimers', '_priorityMap', '_prioritySecondaryMap', '_maxDisplayedSecondaryTimers')
+    _TIMERS_PRIORITY = _TIMERS_PRIORITY
 
     def __init__(self, panel, clazz):
         super(_StackTimersCollection, self).__init__(panel, clazz)
@@ -195,7 +196,7 @@ class _StackTimersCollection(_BaseTimersCollection):
         timer = self._clazz(self._panel, typeID, viewID, totalTime, finishTime, startTime)
         _logger.debug('Adds destroy timer %s', timer)
         self._timers[typeID] = timer
-        timerPriority = _TIMERS_PRIORITY[timer.typeID, timer.viewID]
+        timerPriority = self._TIMERS_PRIORITY[timer.typeID, timer.viewID]
         self._priorityMap[timerPriority].add(timer.typeID)
         if timerPriority == 0:
             timer.show()
@@ -204,7 +205,7 @@ class _StackTimersCollection(_BaseTimersCollection):
             if self._currentTimer is not None:
                 self._currentTimer.show(self._currentTimer.typeID == timer.typeID)
         else:
-            cmpResult = cmp(timerPriority, _TIMERS_PRIORITY[self._currentTimer.typeID, self._currentTimer.viewID])
+            cmpResult = cmp(timerPriority, self._TIMERS_PRIORITY[self._currentTimer.typeID, self._currentTimer.viewID])
             if cmpResult == -1 or cmpResult == 0 and self._currentTimer.finishTime >= timer.finishTime:
                 self._currentTimer.hide()
                 self._currentTimer = timer
@@ -217,7 +218,7 @@ class _StackTimersCollection(_BaseTimersCollection):
         timer = self._clazz(self._panel, typeID, viewID, totalTime, finishTime, startTime, secondInRow=secondInRow)
         _logger.debug('Adds secondary timer %s', timer)
         self._timers[typeID] = timer
-        timerPriority = _TIMERS_PRIORITY[timer.typeID, timer.viewID]
+        timerPriority = self._TIMERS_PRIORITY[timer.typeID, timer.viewID]
         self._prioritySecondaryMap[timerPriority].add(timer.typeID)
         if not self._currentSecondaryTimers:
             self._currentSecondaryTimers.append(timer)
@@ -240,7 +241,7 @@ class _StackTimersCollection(_BaseTimersCollection):
     def removeTimer(self, typeID):
         if typeID in self._timers:
             timer = self._timers.pop(typeID)
-            self._priorityMap[_TIMERS_PRIORITY[typeID, timer.viewID]].discard(typeID)
+            self._priorityMap[self._TIMERS_PRIORITY[typeID, timer.viewID]].discard(typeID)
             if self._currentTimer and self._currentTimer.typeID == typeID:
                 timer.hide()
                 self._currentTimer = None
@@ -252,7 +253,7 @@ class _StackTimersCollection(_BaseTimersCollection):
     def removeSecondaryTimer(self, typeID):
         if typeID in self._timers and typeID in _SECONDARY_TIMERS:
             timer = self._timers.pop(typeID)
-            self._prioritySecondaryMap[_TIMERS_PRIORITY[typeID, timer.viewID]].discard(typeID)
+            self._prioritySecondaryMap[self._TIMERS_PRIORITY[typeID, timer.viewID]].discard(typeID)
             if timer in self._currentSecondaryTimers:
                 timer.hide()
                 self._currentSecondaryTimers.remove(timer)
@@ -362,17 +363,6 @@ class _RegularTimersCollection(_ActionScriptTimerMixin, _TimersCollection):
     pass
 
 
-def _createTimersCollection(panel):
-    sessionProvider = dependency.instance(IBattleSessionProvider)
-    lobbyContext = dependency.instance(ILobbyContext)
-    isReplayPlaying = sessionProvider.isReplayPlaying
-    if lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():
-        TimersCollection = _ReplayStackTimersCollection if isReplayPlaying else _RegularStackTimersCollection
-    else:
-        TimersCollection = _ReplayTimersCollection if isReplayPlaying else _RegularTimersCollection
-    return TimersCollection(weakref.proxy(panel))
-
-
 class TimersPanel(TimersPanelMeta, MethodsRules):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -384,7 +374,7 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
             self._mapping = mapping
         else:
             self._mapping = _mapping.FrontendMapping()
-        self._timers = _createTimersCollection(self)
+        self._timers = self._getTimersCollectionCls()(weakref.proxy(self))
         self.__sound = None
         self.__stunSoundPlaying = None
         self.__vehicleID = None
@@ -472,6 +462,15 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
         self.__equipmentCtrl = None
         super(TimersPanel, self)._dispose()
         return
+
+    @classmethod
+    def _getTimersCollectionCls(cls):
+        isReplayPlaying = cls.sessionProvider.isReplayPlaying
+        if cls.lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():
+            if isReplayPlaying:
+                return _ReplayStackTimersCollection
+            return _RegularStackTimersCollection
+        return _ReplayTimersCollection if isReplayPlaying else _RegularTimersCollection
 
     def __hideAll(self):
         self._timers.removeTimers()

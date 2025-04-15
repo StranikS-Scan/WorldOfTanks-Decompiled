@@ -5,7 +5,7 @@ from gui.game_loading import loading as gameLoading
 from helpers import dependency
 from story_mode.skeletons.story_mode_controller import IStoryModeController
 from story_mode.uilogging.story_mode.consts import Features, LogActions, LogWindows, LogButtons, LogBattleResultStats
-from story_mode_common.story_mode_constants import EVENT_NAME, EXTENSION_NAME
+from story_mode_common.story_mode_constants import EXTENSION_NAME
 from uilogging.base.logger import MetricsLogger
 from wotdecorators import noexcept
 if typing.TYPE_CHECKING:
@@ -94,6 +94,14 @@ class SelectMissionWindow(MissionWindowLogger):
         if self._isOpened:
             self.log(LogActions.AUTO_SELECT, item=self._item, itemState=str(missionId))
 
+    @noexcept
+    def logTooltipShown(self, missionId):
+        self.log(LogActions.TOOLTIP_SHOWN, item=self._item, itemState=str(missionId))
+
+    @noexcept
+    def logTabChanged(self, missionId):
+        self.logClick(LogButtons.TAB_SECTION, state=str(missionId))
+
 
 class SelectorCardLogger(BaseMetricsLogger):
     __slots__ = ()
@@ -108,28 +116,36 @@ class SelectorCardLogger(BaseMetricsLogger):
         self.log(action=LogActions.CLICK, item=LogButtons.INFO, parentScreen=self._item)
 
 
-class IntroVideoLogger(WindowLogger):
+class BaseVideoLogger(WindowLogger):
     __slots__ = ()
-
-    def __init__(self):
-        super(IntroVideoLogger, self).__init__(LogWindows.INTRO_VIDEO)
 
     def logVideoStarted(self, missionId):
         if self._isOpened:
             self.log(LogActions.PLAY, item=self._item, itemState=str(missionId))
 
 
+class IntroVideoLogger(BaseVideoLogger):
+    __slots__ = ()
+
+    def __init__(self):
+        super(IntroVideoLogger, self).__init__(LogWindows.INTRO_VIDEO)
+
+
+class OutroVideoLogger(BaseVideoLogger):
+    __slots__ = ()
+
+    def __init__(self):
+        super(OutroVideoLogger, self).__init__(LogWindows.OUTRO_VIDEO)
+
+
 class EntryPointLogger(MetricsLogger):
     __slots__ = ()
 
     def __init__(self):
-        super(EntryPointLogger, self).__init__(EVENT_NAME)
+        super(EntryPointLogger, self).__init__(EXTENSION_NAME)
 
     def logClick(self, state):
-        self.log(LogActions.CLICK, LogWindows.ENTRY_POINT, itemState=state.name.lower())
-
-    def logUnhover(self, state):
-        self.log(LogActions.UNHOVER, LogWindows.ENTRY_POINT, itemState=state.name.lower())
+        self.log(LogActions.CLICK, LogWindows.ENTRY_POINT_EVENT, itemState=state.name.lower())
 
 
 class NewbieEntryPointLogger(MetricsLogger):
@@ -141,5 +157,23 @@ class NewbieEntryPointLogger(MetricsLogger):
     def logClick(self, state):
         self.log(LogActions.CLICK, LogWindows.ENTRY_POINT, itemState=state.name.lower())
 
-    def logUnhover(self, state):
-        self.log(LogActions.UNHOVER, LogWindows.ENTRY_POINT, itemState=state.name.lower())
+
+class NewbieAdvertisingViewLogger(WindowLogger):
+    __slots__ = ()
+
+    def __init__(self):
+        super(NewbieAdvertisingViewLogger, self).__init__(LogWindows.NEWBIE_ADVERTISING)
+
+
+class EventWelcomeViewLogger(WindowLogger):
+    __slots__ = ()
+
+    def __init__(self):
+        super(EventWelcomeViewLogger, self).__init__(LogWindows.EVENT_WELCOME)
+
+
+class TasksCompletedWarningLogger(WindowLogger):
+    __slots__ = ()
+
+    def __init__(self):
+        super(TasksCompletedWarningLogger, self).__init__(LogWindows.COMPLETED_TASKS_WARNING)

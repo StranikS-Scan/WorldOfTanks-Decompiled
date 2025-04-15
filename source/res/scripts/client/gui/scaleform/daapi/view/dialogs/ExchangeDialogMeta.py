@@ -711,9 +711,13 @@ class _WebProductCreditsExchangeSubmitter(_ExchangeCreditsSubmitter):
 class ExchangeCreditsWebProductMeta(_ExchangeDialogMeta, _ExchangeCreditsSubscriber):
     itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, name, count, price, key='confirmExchangeDialog/exchangeCredits'):
+    def __init__(self, name, count, price, key='confirmExchangeDialog/exchangeCredits', isModal=False):
         infoItem = _WebProductInfoItem(name)
         super(ExchangeCreditsWebProductMeta, self).__init__(_WebProductExchangeItem(price, count, infoItem), key)
+        self.__isModal = isModal
+
+    def getEventType(self):
+        return events.ShowDialogEvent.SHOW_EXCHANGE_DIALOG_MODAL if self.__isModal else super(ExchangeCreditsWebProductMeta, self).getEventType()
 
     def _getItemIconType(self, item):
         return CONFIRM_EXCHANGE_DIALOG_TYPES.PLATFORM_PACK_ICON

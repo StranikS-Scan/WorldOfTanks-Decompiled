@@ -37,16 +37,14 @@ from gui.game_control.links import URLMacros
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.dialogs.template_settings.default_dialog_template_settings import DisplayFlags
-from gui.impl.gen.view_models.views.lobby.vehicle_preview.top_panel.top_panel_tabs_model import TabID
 from gui.impl.lobby.account_completion.utils.decorators import waitShowOverlay
 from gui.impl.lobby.common.congrats.common_congrats_view import CongratsWindow
 from gui.impl.lobby.tank_setup.dialogs.confirm_dialog import TankSetupConfirmDialog, TankSetupExitConfirmDialog
 from gui.impl.lobby.tank_setup.dialogs.refill_shells import ExitFromShellsConfirm, RefillShells
 from gui.impl.pub.lobby_window import LobbyNotificationWindow, LobbyWindow
 from gui.impl.pub.notification_commands import WindowNotificationCommand, NotificationEvent, EventNotificationCommand
-from gui.prb_control.settings import CTRL_ENTITY_TYPE
-from gui.resource_well.resource import Resource
-from gui.resource_well.resource_well_helpers import isResourceWellRewardVehicle
+from gui.prb_control.settings import CTRL_ENTITY_TYPE, PREBATTLE_ACTION_NAME
+from gui.prb_control.entities.base.ctx import PrbAction
 from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
@@ -63,7 +61,7 @@ from helpers.aop import pointcutable
 from items import ITEM_TYPES, parseIntCompactDescr, vehicles as vehicles_core
 from nations import NAMES
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IBrowserController, IClanNotificationController, ICollectionsSystemController, IHeroTankController, IMarathonEventsController, IReferralProgramController, IResourceWellController, IBoostersController
+from skeletons.gui.game_control import IBrowserController, IClanNotificationController, ICollectionsSystemController, IHeroTankController, IMarathonEventsController, IReferralProgramController, IBoostersController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -71,7 +69,7 @@ from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 from wg_async import wg_async, wg_await
 if typing.TYPE_CHECKING:
-    from typing import Callable, Dict, Generator, Iterable, List, Union, Tuple, Optional
+    from typing import Callable, Dict, Generator, Iterable, List, Union, Optional
     from gui.marathon.marathon_event import MarathonEvent
     from uilogging.wot_plus.logging_constants import WotPlusInfoPageSource
     from gui.impl.lobby.crew.widget.crew_widget import BuildedMessage
@@ -437,11 +435,6 @@ def showJunkTankmen():
     JunkTankmenWindow().load()
 
 
-def showMentoringLicenseAwards(numItems):
-    from gui.impl.lobby.crew.mentoring_license_awards_view import MentoringLicenseAwardsWindow
-    MentoringLicenseAwardsWindow(numItems=numItems).load()
-
-
 def showBadges(backViewName=''):
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.BADGES_PAGE), ctx={'backViewName': backViewName} if backViewName else None), scope=EVENT_BUS_SCOPE.LOBBY)
     return
@@ -638,8 +631,6 @@ def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, 
                 if activeMarathon:
                     title = backport.text(R.strings.marathon.vehiclePreview.buyingPanel.title())
                     showMarathonVehiclePreview(descriptor.type.compactDescr, activeMarathon.remainingPackedRewards, title, activeMarathon.prefix, True)
-                elif isResourceWellRewardVehicle(descriptor.type.compactDescr):
-                    showResourceWellHeroPreview(descriptor.type.compactDescr, previewAlias=previewAlias, previousBackAlias=previousBackAlias)
                 else:
                     showHeroTankPreview(vehTypeCompDescr, previewAlias=previewAlias, previewBackCb=previewBackCb, previousBackAlias=previousBackAlias, hangarVehicleCD=hangarVehicleCD)
             ClientSelectableCameraObject.switchCamera(entity, 'HeroTank', instantly)
@@ -1904,91 +1895,6 @@ def showSubscriptionsPage():
     g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.lobby.player_subscriptions.PlayerSubscriptions(), PlayerSubscriptionsView, ScopeTemplates.LOBBY_SUB_SCOPE)), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-@dependency.replace_none_kwargs(resourceWell=IResourceWellController)
-def showResourceWellProgressionWindow(resourceWell=None, backCallback=showHangar):
-    from gui.impl.lobby.resource_well.completed_progression_view import CompletedProgressionView
-    from gui.impl.lobby.resource_well.progression_view import ProgressionView
-    if resourceWell.isCompleted():
-        view = CompletedProgressionView
-        viewRes = R.views.lobby.resource_well.CompletedProgressionView()
-    else:
-        view = ProgressionView
-        viewRes = R.views.lobby.resource_well.ProgressionView()
-    guiLoader = dependency.instance(IGuiLoader)
-    if guiLoader.windowsManager.getViewByLayoutID(viewRes) is None:
-        g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(viewRes, view, ScopeTemplates.DEFAULT_SCOPE), backCallback=backCallback), scope=EVENT_BUS_SCOPE.LOBBY)
-    return
-
-
-def showResourcesLoadingWindow():
-    from gui.impl.lobby.resource_well.resources_loading_view import ResourcesLoadingWindow
-    ResourcesLoadingWindow().load()
-
-
-@wg_async
-def showResourcesLoadingConfirm(resources, isReturnOperation, callback):
-    from gui.impl.dialogs.dialogs import showSingleDialogWithResultData
-    from gui.impl.lobby.resource_well.resources_loading_confirm import ResourcesLoadingConfirm
-    result = yield wg_await(showSingleDialogWithResultData(layoutID=R.views.lobby.resource_well.ResourcesLoadingConfirm(), wrappedViewClass=ResourcesLoadingConfirm, resources=resources, isReturnOperation=isReturnOperation))
-    if result.busy:
-        callback((False, {}))
-    else:
-        isOK, data = result.result
-        callback((isOK, data))
-
-
-@wg_async
-def showResourceWellNoSerialVehiclesConfirm(callback):
-    from gui.impl.dialogs.dialogs import showSingleDialogWithResultData
-    from gui.impl.lobby.resource_well.no_serial_vehicles_confirm import NoSerialVehiclesConfirm
-    result = yield wg_await(showSingleDialogWithResultData(layoutID=R.views.lobby.resource_well.NoSerialVehiclesConfirm(), wrappedViewClass=NoSerialVehiclesConfirm))
-    if result.busy:
-        callback((False, {}))
-    else:
-        isOK, data = result.result
-        callback((isOK, data))
-
-
-def showResourceWellNoVehiclesConfirm():
-    from gui.impl.lobby.resource_well.no_vehicles_confirm import NoVehiclesConfirmWindow
-    NoVehiclesConfirmWindow().load()
-
-
-@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
-def showResourceWellAwardWindow(serialNumber='', notificationMgr=None):
-    from gui.impl.lobby.resource_well.award_view import AwardWindow
-    guiLoader = dependency.instance(IGuiLoader)
-    if guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.resource_well.AwardView()) is None:
-        window = AwardWindow(serialNumber=serialNumber)
-        _killOldView(R.views.lobby.resource_well.ProgressionView())
-        _killOldView(R.views.lobby.resource_well.ResourcesLoadingView())
-        notificationMgr.append(WindowNotificationCommand(window))
-    return
-
-
-def showResourceWellVehiclePreview(vehicleCD, style=None, backCallback=None, topPanelData=None):
-    if topPanelData is not None and topPanelData.get('currentTabID') == TabID.PERSONAL_NUMBER_VEHICLE:
-        previewStyle = style
-    else:
-        previewStyle = None
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.RESOURCE_WELL_VEHICLE_PREVIEW), ctx={'itemCD': vehicleCD,
-     'previewBackCb': backCallback,
-     'numberStyle': style,
-     'style': previewStyle,
-     'topPanelData': topPanelData,
-     'previewAlias': VIEW_ALIAS.RESOURCE_WELL_VEHICLE_PREVIEW}), EVENT_BUS_SCOPE.LOBBY)
-    return
-
-
-def showResourceWellHeroPreview(vehicleCD, backCallback=None, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previousBackAlias=None):
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.RESOURCE_WELL_HERO_VEHICLE_PREVIEW), ctx={'itemCD': vehicleCD,
-     'previewBackCb': backCallback,
-     'previewAlias': previewAlias,
-     'previewAppearance': HeroTankPreviewAppearance(),
-     'isHeroTank': True,
-     'previousBackAlias': previousBackAlias}), EVENT_BUS_SCOPE.LOBBY)
-
-
 @dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
 def showBattleMattersReward(ctx=None, notificationMgr=None):
     from gui.impl.lobby.battle_matters.battle_matters_rewards_view import BattleMattersRewardsViewWindow
@@ -2014,13 +1920,20 @@ def showPersonalReservesIntro():
         PersonalReservesIntroWindow().load()
 
 
+@adisp.adisp_process
 def showBoostersActivation():
     uiLoader = dependency.instance(IGuiLoader)
     controller = dependency.instance(IBoostersController)
     contentResId = R.views.lobby.personal_reserves.ReservesActivationView()
     if uiLoader.windowsManager.getViewByLayoutID(contentResId) is None:
         if not controller.isGameModeSupported():
-            controller.selectRandomBattle()
+            dispatcher = controller.prbDispatcher
+            if dispatcher is not None:
+                result = yield dispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.RANDOM))
+                if not result:
+                    _logger.error('Could not switch to random battle.')
+            else:
+                _logger.error('Prebattle dispatcher is not defined.')
         from gui.impl.lobby.personal_reserves.reserves_activation_view import ReservesActivationView
         g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(contentResId, ReservesActivationView, ScopeTemplates.LOBBY_SUB_SCOPE)), scope=EVENT_BUS_SCOPE.LOBBY)
     else:
@@ -2234,10 +2147,3 @@ def showCustomizationRarityAwardScreen(element, isFirstEntry):
     from gui.impl.lobby.customization.customization_rarity_reward_screen.customization_rarity_reward_screen import CustomizationRarityRewardWindow
     window = CustomizationRarityRewardWindow(element, isFirstEntry)
     window.load()
-
-
-@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
-def showSteamUnlockAwardsWindow(rewards, notificationMgr=None):
-    from gui.impl.lobby.steam_unlock.steam_unlock_awards_view import SteamUnlockAwardsWindow
-    window = SteamUnlockAwardsWindow(rewards=rewards)
-    notificationMgr.append(WindowNotificationCommand(window))

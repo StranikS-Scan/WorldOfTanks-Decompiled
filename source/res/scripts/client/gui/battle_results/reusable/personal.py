@@ -53,9 +53,9 @@ class SquadBonusInfo(object):
 
 
 class PersonalAvatarInfo(object):
-    __slots__ = ('__accountDBID', '__clanDBID', '__team', '__isPrematureLeave', '__fairplayViolations', '__squadBonusInfo', '__winnerIfDraw', '__eligibleForCrystalRewards', '__extInfo', '__playerSatisfactionRating')
+    __slots__ = ('__accountDBID', '__clanDBID', '__team', '__isPrematureLeave', '__fairplayViolations', '__squadBonusInfo', '__winnerIfDraw', '__eligibleForCrystalRewards', '__extInfo', '__playerSatisfactionRating', '__commendationsReceived')
 
-    def __init__(self, bonusType, accountDBID=0, clanDBID=0, team=0, isPrematureLeave=False, fairplayViolations=None, squadBonusInfo=None, winnerIfDraw=0, eligibleForCrystalRewards=False, avatarPlayerSatisfactionRating=(), **kwargs):
+    def __init__(self, bonusType, accountDBID=0, clanDBID=0, team=0, isPrematureLeave=False, fairplayViolations=None, squadBonusInfo=None, winnerIfDraw=0, eligibleForCrystalRewards=False, avatarPlayerSatisfactionRating=(), commendationsReceived=0, **kwargs):
         super(PersonalAvatarInfo, self).__init__()
         self.__accountDBID = accountDBID
         self.__clanDBID = clanDBID
@@ -63,6 +63,7 @@ class PersonalAvatarInfo(object):
         self.__isPrematureLeave = isPrematureLeave
         self.__eligibleForCrystalRewards = eligibleForCrystalRewards
         self.__playerSatisfactionRating = avatarPlayerSatisfactionRating
+        self.__commendationsReceived = commendationsReceived
         fairplayViolationsCls = ReusableInfoFactory.fairplayViolationForBonusType(bonusType)
         self.__fairplayViolations = fairplayViolationsCls(*(fairplayViolations or ()))
         squadBonusInfoCls = ReusableInfoFactory.squadBonusInfoForBonusType(bonusType)
@@ -100,6 +101,10 @@ class PersonalAvatarInfo(object):
             return PlayerSatisfactionRating.NONE
         rating, _ = self.__playerSatisfactionRating
         return rating
+
+    @property
+    def commendationsReceived(self):
+        return self.__commendationsReceived
 
     @property
     def extensionInfo(self):

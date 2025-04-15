@@ -3,7 +3,6 @@
 from constants_utils import ConstInjector
 from gui.Scaleform.daapi.settings import views
 from gui.prb_control import settings
-from sound_gui_manager import CommonSoundSpaceSettings
 
 class PREBATTLE_ACTION_NAME(settings.PREBATTLE_ACTION_NAME, ConstInjector):
     _const_type = str
@@ -28,24 +27,17 @@ class VIEW_ALIAS(views.VIEW_ALIAS, ConstInjector):
     STORY_MODE_EVENT_ENTRY_POINT = 'StoryModeEventEntryPoint'
     STORY_MODE_NEWBIE_ENTRY_POINT = 'StoryModeNewbieEntryPoint'
     STORY_MODE_WEB_VIEW_TRANSPARENT = 'StoryModeWebViewTransparent'
+    STORY_MODE_OUTRO_VIDEO_WINDOW = 'storyModeOutroVideoWindow'
 
 
 IS_ONBOARDING_SEAMLESS_MISSION_CHANGING_ON = True
 IS_STORY_MODE_FADE_IN_OUT_ON = True
 STORY_MODE_FADE_IN_DURATION = 0.4
 STORY_MODE_FADE_OUT_DURATION = 0.4
-SOUND_REMAPPING = 'story_mode'
-COMMON_SOUND_SPACE = 'Lobby_music_garage_story_mode'
-GAMEMODE_GROUP = 'STATE_gamemode'
-GAMEMODE_STATE = 'STATE_gamemode_story_mode'
-GAMEMODE_DEFAULT = 'STATE_gamemode_default'
-HANGAR_GROUP = 'STATE_hangar_place'
-HANGAR_STATE = 'STATE_hangar_place_garage'
-POST_BATTLE_MUSIC_WIN = 'gui_reward_v1_special'
-POST_BATTLE_MUSIC_LOSE = 'reward_tank_marathon_A122_TS_5'
-CONGRATULATION_MUSIC = 'gui_reward_v1_special'
-STORY_MODE_SOUND_SPACE = CommonSoundSpaceSettings(name=COMMON_SOUND_SPACE, entranceStates={HANGAR_GROUP: HANGAR_STATE}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')
-BONUS_ORDER = ['bpcoin',
+BONUS_ORDER = ['dossier',
+ 'vehicles',
+ 'slots',
+ 'bpcoin',
  'battlePassPoints',
  'crystal',
  'freeXP',
@@ -53,3 +45,6 @@ BONUS_ORDER = ['bpcoin',
  'premium_plus',
  'items',
  'customizations']
+INFO_PAGE_STORY_MODE = 'infoPageStoryMode'
+INFO_PAGE_STORY_MODE_EVENT = 'infoPageStoryMode_event'
+ABILITY_ON_COOLDOWN_ACTIVATION_ERROR_KEY = 'ability_on_cooldown'

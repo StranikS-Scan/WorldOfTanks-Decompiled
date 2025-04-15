@@ -45,7 +45,8 @@ class AvatarChatKeyHandling(object):
         self.__arePrivateVoiceOverBlocked = False
         self.__customSoundHandler = {BATTLE_CHAT_COMMAND_NAMES.CANCEL_REPLY: self.__onCommandReceivedCancelReply,
          BATTLE_CHAT_COMMAND_NAMES.REPLY: self.__onCommandReceivedReply,
-         BATTLE_CHAT_COMMAND_NAMES.SUPPORTING_ALLY: self.__onCommandReceivedSupportingAlly}
+         BATTLE_CHAT_COMMAND_NAMES.SUPPORTING_ALLY: self.__onCommandReceivedSupportingAlly,
+         BATTLE_CHAT_COMMAND_NAMES.COMMENDATION: self.__onCommandReceivedCommendation}
         self.__customSoundHandlerReply = {BATTLE_CHAT_COMMAND_NAMES.ATTENTION_TO_POSITION: self.__onCommandReceivedAttentionToPositionReply}
         self.__customMatrixProviderGetter = {MarkerType.VEHICLE_MARKER_TYPE: self.__getVehicleMatrixProvider,
          MarkerType.BASE_MARKER_TYPE: self.__getBaseMatrixProvider,
@@ -287,6 +288,18 @@ class AvatarChatKeyHandling(object):
         markerType = _COMMAND_NAME_TRANSFORM_MARKER_TYPE.get(commandName, MarkerType.VEHICLE_MARKER_TYPE)
         self.__playSoundNotificationOnCommandReceived(cmd, markerType, True, None, enableVoice)
         return
+
+    def __onCommandReceivedCommendation(self, commandName, cmd):
+        if not (cmd.isSender() or self.battleCommunications.showCommendationsFeedbackOnReceive):
+            return
+        if commandName != BATTLE_CHAT_COMMAND_NAMES.COMMENDATION:
+            return
+        action = BATTLE_CHAT_COMMANDS_BY_NAMES[BATTLE_CHAT_COMMAND_NAMES.COMMENDATION]
+        if cmd.getRepliedToChatCommand:
+            notification = action.soundNotificationReply
+        else:
+            notification = action.soundNotification
+        self.__playSoundNotification(notification)
 
     def __onCommandReceivedAttentionToPositionReply(self, replyToActionName, cmd):
         repliedToActionID = BATTLE_CHAT_COMMANDS_BY_NAMES[replyToActionName].id

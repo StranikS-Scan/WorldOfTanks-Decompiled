@@ -78,6 +78,8 @@
     <FuG12_StoryMode__1>	64013	</FuG12_StoryMode__1>
     <FuG12_StoryMode_2>	64014	</FuG12_StoryMode_2>
     <FuG5_StoryMode>	64040	</FuG5_StoryMode>
+    <FuG12_StoryModeStealth>	64041	</FuG12_StoryModeStealth>
+    <FuG5_StoryModeStealth>	64042	</FuG5_StoryModeStealth>
   </ids>
   <shared>
     <FuG2>
@@ -1011,5 +1013,29 @@
       <repairCost>	0.5	</repairCost>
       <notInShop>	True	</notInShop>
     </FuG5_StoryMode>
+    <FuG12_StoryModeStealth>
+      <userString>	#germany_vehicles:FuG12	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	43200	</price>
+      <weight>	150	</weight>
+      <distance>	40	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <notInShop>	True	</notInShop>
+    </FuG12_StoryModeStealth>
+    <FuG5_StoryModeStealth>
+      <userString>	#germany_vehicles:FuG5	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	630	</price>
+      <weight>	50	</weight>
+      <distance>	40	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+      <notInShop>	True	</notInShop>
+    </FuG5_StoryModeStealth>
   </shared>
 </radios.xml>

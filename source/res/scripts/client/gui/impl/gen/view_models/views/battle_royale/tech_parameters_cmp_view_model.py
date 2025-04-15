@@ -3,9 +3,9 @@
 from frameworks.wulf import ViewModel
 
 class TechParametersCmpViewModel(ViewModel):
-    __slots__ = ('onClick', 'onResized', 'onOpenShop')
+    __slots__ = ('onClick', 'onResized')
 
-    def __init__(self, properties=6, commands=3):
+    def __init__(self, properties=5, commands=2):
         super(TechParametersCmpViewModel, self).__init__(properties=properties, commands=commands)
 
     def getDifficulty(self):
@@ -38,12 +38,6 @@ class TechParametersCmpViewModel(ViewModel):
     def setDamage(self, value):
         self._setNumber(4, value)
 
-    def getBalance(self):
-        return self._getNumber(5)
-
-    def setBalance(self, value):
-        self._setNumber(5, value)
-
     def _initialize(self):
         super(TechParametersCmpViewModel, self)._initialize()
         self._addNumberProperty('difficulty', 0)
@@ -51,7 +45,5 @@ class TechParametersCmpViewModel(ViewModel):
         self._addNumberProperty('mobility', 0)
         self._addNumberProperty('survivability', 0)
         self._addNumberProperty('damage', 0)
-        self._addNumberProperty('balance', 0)
         self.onClick = self._addCommand('onClick')
         self.onResized = self._addCommand('onResized')
-        self.onOpenShop = self._addCommand('onOpenShop')

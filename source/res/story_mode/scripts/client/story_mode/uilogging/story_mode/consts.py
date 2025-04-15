@@ -11,6 +11,7 @@ class LogWindows(str, Enum):
     HELP = 'help_window'
     QUEUE = 'queue_window'
     INTRO_VIDEO = 'intro_video'
+    OUTRO_VIDEO = 'outro_video'
     PRE_BATTLE = 'pre_battle_window'
     POST_BATTLE = 'post_battle_window'
     EPILOGUE = 'epilogue_window'
@@ -21,6 +22,10 @@ class LogWindows(str, Enum):
     SETTINGS_MENU = 'settings_menu'
     INFO_PAGE = 'info_page'
     ENTRY_POINT = 'entry_point'
+    ENTRY_POINT_EVENT = 'entry_point_vday'
+    NEWBIE_ADVERTISING = 'newbie_advertising_view'
+    EVENT_WELCOME = 'event_welcome_view'
+    COMPLETED_TASKS_WARNING = 'completed_tasks_warning_window'
 
 
 class LogButtons(str, Enum):
@@ -38,6 +43,9 @@ class LogButtons(str, Enum):
     SETTINGS = 'settings_button'
     HELP = 'help_button'
     TAB = 'tab'
+    SUBMIT = 'submit_button'
+    ABOUT = 'about_button'
+    TAB_SECTION = 'tab_section'
 
 
 class LogActions(str, Enum):
@@ -49,7 +57,7 @@ class LogActions(str, Enum):
     PLAY = 'play'
     WATCHED = 'watched'
     GAME_LOADING_CLOSE = 'game_loading_close'
-    UNHOVER = 'unhover'
+    TOOLTIP_SHOWN = 'tooltip_shown'
 
 
 class LogBattleResultStats(str, Enum):

@@ -67,7 +67,7 @@ from skeletons.gui.battle_hints.newbie_battle_hints_controller import INewbieBat
 from skeletons.gui.prebattle_hints.newbie_controller import INewbiePrebattleHintsController
 from skeletons.gui.sounds import ISoundsController
 from gui import makeHtmlString
-from skeletons.gui.game_control import ISpecialSoundCtrl, IAnonymizerController, IVehiclePostProgressionController
+from skeletons.gui.game_control import ICommendationsController, ISpecialSoundCtrl, IAnonymizerController, IVehiclePostProgressionController
 if TYPE_CHECKING:
     from typing import Tuple as TTuple
 _logger = logging.getLogger(__name__)
@@ -484,6 +484,18 @@ class SettingTrueByDefault(StorageDumpSetting):
 
     def getDefaultValue(self):
         return True
+
+
+class CommendationsSettings(EnablingSettingMixin, StorageDumpSetting):
+
+    def getDefaultValue(self):
+        return True
+
+    def _get(self):
+        return super(CommendationsSettings, self)._get() if self._isEnabled() else False
+
+    def _isEnabled(self):
+        return dependency.instance(ICommendationsController).isCommendationsEnabled
 
 
 class UserPrefsSetting(SettingAbstract):

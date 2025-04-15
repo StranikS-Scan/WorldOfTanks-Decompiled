@@ -2,11 +2,12 @@
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/lobby/comp7_helpers/comp7_bonus_packer.py
 import logging
 import typing
+from comp7_common_const import offerRewardGiftToken
 from shared_utils import findFirst, first
 from comp7.gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS as COMP7_TOOLTIPS
 from comp7.gui.impl.gen.view_models.views.lobby.comp7_bonus_model import Comp7BonusModel, DogTagType
 from comp7.gui.impl.gen.view_models.views.lobby.comp7_style_bonus_model import Comp7StyleBonusModel
-from comp7.gui.impl.lobby.comp7_helpers.comp7_bonus_helpers import BonusTypes, getBonusType, splitDossierBonuses
+from comp7.gui.impl.lobby.comp7_helpers.comp7_bonus_helpers import BonusTypes, getBonusType, splitDossierBonuses, CustomizationsBonusHelper
 from comp7.gui.impl.lobby.comp7_helpers.comp7_c11n_helpers import getComp7ProgressionStyleCamouflage
 from comp7.gui.impl.lobby.comp7_helpers.comp7_quest_helpers import isComp7OfferYearlyRewardToken
 from comp7.gui.selectable_reward.common import Comp7SelectableRewardManager
@@ -18,7 +19,6 @@ from gui.impl import backport
 from gui.impl.backport import TooltipData, createTooltipData
 from gui.impl.gen import R
 from gui.impl.gen.view_models.common.bonus_model import BonusModel
-from gui.impl.gen.view_models.common.missions.bonuses.token_bonus_model import TokenBonusModel
 from gui.selectable_reward.constants import SELECTABLE_BONUS_NAME
 from gui.server_events.bonuses import getNonQuestBonuses, mergeBonuses, splitBonuses, C11nProgressTokenBonus, getVehicleCrewReward, CountableIntegralBonus, CustomizationsBonus, VehiclesBonus, _BONUSES, TankmenBonus
 from gui.shared.gui_items.Tankman import getFullUserName
@@ -30,9 +30,12 @@ from helpers import dependency
 from items import tankmen
 from items.tankmen import getNationConfig
 from skeletons.gui.customization import ICustomizationService
+from skeletons.gui.game_control import IComp7Controller
 from skeletons.gui.offers import IOffersDataProvider
+from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from gui.server_events.bonuses import SimpleBonus
+    from gui.server_events.bonuses import SelectableBonus
 _logger = logging.getLogger(__name__)
 _DOG_TAG_VIEW_TYPE_TO_DOG_TAG_TYPE_ENUM = {ComponentViewType.ENGRAVING: DogTagType.ENGRAVING,
  ComponentViewType.BACKGROUND: DogTagType.BACKGROUND}
@@ -65,18 +68,21 @@ _QUALIFICATION_REWARDS_BONUSES_ORDER = (BonusTypes.STYLE_PROGRESS,
 _YEARLY_REWARDS_BONUSES_ORDER = (BonusTypes.BADGE_SUFFIX,
  BonusTypes.BADGE,
  BonusTypes.ACHIEVEMENT,
+ BonusTypes.STYLE,
+ BonusTypes.STYLE_3D,
  BonusTypes.STYLE_PROGRESS,
+ BonusTypes.DELUXE_DEVICE,
  BonusTypes.OFFER,
- BonusTypes.CRYSTAL,
- BonusTypes.STYLE)
-_YEARLY_REWARD_META_BONUSES_ORDER = (BonusTypes.RENT_VEHICLE,
+ BonusTypes.CRYSTAL)
+_YEARLY_REWARD_META_BONUSES_ORDER = (BonusTypes.OFFER,
+ BonusTypes.RENT_VEHICLE,
  BonusTypes.STYLE_3D_PROGRESS,
  BonusTypes.TOKEN,
+ BonusTypes.STYLE_3D,
  BonusTypes.BADGE_SUFFIX,
  BonusTypes.BADGE,
  BonusTypes.CREW,
  BonusTypes.ACHIEVEMENT,
- BonusTypes.OFFER,
  BonusTypes.CRYSTAL,
  BonusTypes.STYLE)
 
@@ -108,17 +114,15 @@ def getComp7YearlyBonusPacker():
 def getComp7YearlyMetaBonusPacker():
     mapping = _getComp7BonusPackersMap()
     mapping.update({SELECTABLE_BONUS_NAME: Comp7YearlyMetaOfferPacker(),
-     'customizations': Comp7YearlyCustomizationBonusUIPacker(),
-     'modernizedDevice': Comp7YearlyModernizedDeviceBonusUIPacker(),
-     'tankmen': Comp7YearlyCrewBonusUIPacker(),
-     'battleToken': Comp7YearlyTokensUIPacker()})
+     'customizations': Comp7CustomizationBonusUIPacker(),
+     'tankmen': Comp7YearlyCrewBonusUIPacker()})
     return BonusUIPacker(mapping)
 
 
-def _getComp7YearlyBonuses():
+def _getComp7YearlyBonuses(specificCustomization=None):
     bonuses = _BONUSES.copy()
     bonuses.update({'slots': Comp7YearlySlotsBonus,
-     'customizations': Comp7YearlyCustomizationsBonus})
+     'customizations': specificCustomization or Comp7YearlyCustomizationsBonus})
     return bonuses
 
 
@@ -226,41 +230,9 @@ class Comp7YearlyStylePacker(Comp7StyleProgressBonusUIPacker):
         return [ cls._packTooltip(bonus, level) for level in range(bonus.getProgressLevel(), 0, -1) ]
 
 
-class Comp7YearlyCustomizationBonusUIPacker(CustomizationBonusUIPacker):
-    _ICON_NAME = 'style'
-
-    @classmethod
-    def _packSingleBonus(cls, bonus, item, label):
-        model = super(Comp7YearlyCustomizationBonusUIPacker, cls)._packSingleBonus(bonus, item, label)
-        item = bonus.getC11nItem(item)
-        styleID = item.id
-        model.setStyleID(styleID)
-        model.setIcon(cls._ICON_NAME)
-        model.setLabel(item.userName)
-        return model
-
-    @classmethod
-    def _getBonusModel(cls):
-        return Comp7StyleBonusModel()
-
-
-class Comp7YearlyModernizedDeviceBonusUIPacker(TokenBonusUIPacker):
-    BONUS_NAME = 'modernized_devices_t{}_gift'
-
-    @classmethod
-    def _pack(cls, bonus):
-        model = Comp7BonusModel()
-        name = cls.BONUS_NAME.format(bonus.getTierLevel())
-        model.setName(name)
-        return [model]
-
-    @classmethod
-    def _getToolTip(cls, bonus):
-        return [createTooltipData(bonus.getTooltip())]
-
-
 class Comp7CustomizationBonusUIPacker(CustomizationBonusUIPacker):
-    _ICON_NAME = 'progressionStyle'
+    _ICON_NAME = 'style'
+    _ICON_NAME_PROGRESSION = 'progressionStyle'
 
     @classmethod
     def _packSingleBonus(cls, bonus, item, label):
@@ -268,7 +240,10 @@ class Comp7CustomizationBonusUIPacker(CustomizationBonusUIPacker):
         item = bonus.getC11nItem(item)
         styleID = item.id
         model.setStyleID(styleID)
-        model.setIcon(cls._ICON_NAME)
+        if item.is3D:
+            model.setName('styleProgressToken')
+            model.setValue('')
+        model.setIcon(cls._ICON_NAME_PROGRESSION if item.isQuestsProgression else cls._ICON_NAME)
         model.setLabel(item.userName)
         return model
 
@@ -345,52 +320,6 @@ class Comp7YearlyCrewBonusUIPacker(TankmenBonusUIPacker):
         return Comp7BonusModel()
 
 
-class Comp7YearlyTokensUIPacker(TokenBonusUIPacker):
-    _COMP7_STYLE_TOKEN = 'comp7_4_style_token'
-    _BONUS_NAME = 'styleProgressToken'
-    _VEHICLE = 'A174_T57_58_Rush_Ep1'
-
-    @classmethod
-    def _getTokenBonusType(cls, tokenID, complexToken):
-        return cls._COMP7_STYLE_TOKEN if tokenID.startswith(cls._COMP7_STYLE_TOKEN) else super(Comp7YearlyTokensUIPacker, cls)._getTokenBonusType(tokenID, complexToken)
-
-    @classmethod
-    def _getTokenBonusPackers(cls):
-        packers = super(Comp7YearlyTokensUIPacker, cls)._getTokenBonusPackers()
-        packers.update({cls._COMP7_STYLE_TOKEN: cls.__packStyleToken})
-        return packers
-
-    @classmethod
-    def _getTooltipsPackers(cls):
-        packers = super(Comp7YearlyTokensUIPacker, cls)._getTooltipsPackers()
-        packers.update({cls._COMP7_STYLE_TOKEN: cls.__packStyleTooltip})
-        return packers
-
-    @classmethod
-    def _packToken(cls, bonusPacker, bonus, *args):
-        model = Comp7StyleBonusModel()
-        return bonusPacker(model, bonus, *args)
-
-    @classmethod
-    def __packStyleToken(cls, model, _, __, token):
-        styleId = cls.__getStyleId(token)
-        model.setName(cls._BONUS_NAME)
-        model.setStyleID(styleId)
-        model.setLabel(backport.text(R.strings.comp7_ext.style3dTooltip.num(styleId)()))
-        tooltipId = R.views.comp7.lobby.tooltips.Style3dTooltip()
-        model.setTooltipContentId(str(tooltipId))
-        return model
-
-    @classmethod
-    def __packStyleTooltip(cls, _, token):
-        return TooltipData(tooltip=None, isSpecial=True, specialAlias=None, specialArgs=[cls.__getStyleId(token), backport.text(R.strings.usa_vehicles.dyn(cls._VEHICLE)())], isWulfTooltip=False)
-
-    @classmethod
-    def __getStyleId(cls, token):
-        _, styleId = token.id.split(':')
-        return int(styleId)
-
-
 class Comp7TokenWeeklyRewardUIPacker(TokenBonusUIPacker):
 
     @classmethod
@@ -412,32 +341,36 @@ class Comp7TokenWeeklyRewardUIPacker(TokenBonusUIPacker):
 class Comp7OfferBonusUIPacker(BaseBonusUIPacker):
     _selectableRewardManager = Comp7SelectableRewardManager
     _offersDataProvider = dependency.descriptor(IOffersDataProvider)
+    _comp7Controller = dependency.descriptor(IComp7Controller)
+    _itemsCache = dependency.descriptor(IItemsCache)
 
     @classmethod
     def _pack(cls, bonus):
-        giftCount = cls._getGiftCount(bonus)
-        if giftCount <= 0:
-            return []
-        model = TokenBonusModel()
-        model.setName('deluxe_gift')
-        model.setLabel(backport.text(R.strings.comp7_ext.rewards.bonus.deluxe_gift()))
-        model.setValue(str(giftCount))
-        return [model]
+        giftCountPerToken = cls._selectableRewardManager.getGiftCountPerToken(bonus)
+        models = []
+        for offerToken in bonus.getValue().iterkeys():
+            giftCount = giftCountPerToken.get(offerToken)
+            if giftCount <= 0:
+                continue
+            offerTokenCategory = offerToken.split(':')[2]
+            offerTokenCategoryGift = offerRewardGiftToken(offerTokenCategory)
+            model = Comp7BonusModel()
+            ownedTokens = cls._itemsCache.items.tokens.getTokensByPrefixAndPostfix(prefix=offerToken)
+            hasTokenAndNoGiftToken = len(ownedTokens) == 1
+            if hasTokenAndNoGiftToken:
+                model.setClaimed(True)
+            model.setName(offerTokenCategoryGift)
+            model.setLabel(backport.text(R.strings.selectable_reward.tabs.items.dyn(offerTokenCategory)()))
+            model.setValue(str(giftCount))
+            models.append(model)
+
+        return models
 
     @classmethod
     def _getToolTip(cls, bonus):
-        return [createTooltipData(isSpecial=True, specialAlias=COMP7_TOOLTIPS.COMP7_SELECTABLE_REWARD)] if cls._getGiftCount(bonus) > 0 else []
-
-    @classmethod
-    def _getGiftCount(cls, bonus):
-        isComp7OfferToken = cls._selectableRewardManager.isFeatureReward
-        tokens = ((token, v.get('count', 0)) for token, v in bonus.getValue().iteritems() if isComp7OfferToken(token))
-        offers = ((cls._offersDataProvider.getOfferByToken(token), count) for token, count in tokens)
-        return sum((cls.__getOfferGiftCount(offer, count) for offer, count in offers))
-
-    @classmethod
-    def __getOfferGiftCount(cls, offer, count):
-        return offer.giftTokenCount * count if offer is not None else count
+        if cls._selectableRewardManager.getGiftCount(bonus) > 0:
+            return [ createTooltipData(isSpecial=True, specialAlias=COMP7_TOOLTIPS.COMP7_SELECTABLE_REWARD, specialArgs=(offerToken,)) for offerToken in bonus.getValue().iterkeys() ]
+        return []
 
 
 class Comp7YearlyMetaOfferPacker(Comp7OfferBonusUIPacker):
@@ -509,15 +442,19 @@ def packQualificationRewardsQuestBonuses(quests):
 def packYearlyRewardsBonuses(bonuses):
     bonusData = []
     for key, value in bonuses.iteritems():
-        bonusData.extend(getNonQuestBonuses(key, value, bonusesDict=_getComp7YearlyBonuses()))
+        bonusData.extend(getNonQuestBonuses(key, value, bonusesDict=_getComp7YearlyBonuses(specificCustomization=Comp7YearlyCustomizationsBonus2D)))
 
     return packQuestBonuses(bonusData, bonusPacker=getComp7YearlyBonusPacker(), order=_YEARLY_REWARDS_BONUSES_ORDER)
 
 
-def packYearlyRewardCrew(bonus):
-    bonusData = getNonQuestBonuses('vehicles', bonus)
-    crewReward = getVehicleCrewReward(first(bonusData))
-    return packQuestBonuses([crewReward], bonusPacker=getComp7YearlyBonusPacker(), order=_YEARLY_REWARDS_BONUSES_ORDER)
+def packYearlyRewardVehicleBonuses(bonuses):
+    bonusData = []
+    vehicleBonus = first(getNonQuestBonuses('vehicles', bonuses.get('vehicles')))
+    bonusData.append(getVehicleCrewReward(vehicleBonus))
+    customizations = bonuses.get('customizations') or []
+    customizations.sort(key=lambda c: c.get('id'), reverse=True)
+    bonusData.extend(getNonQuestBonuses('customizations', customizations, bonusesDict=_getComp7YearlyBonuses(specificCustomization=Comp7YearlyCustomizationsBonus3D)))
+    return packQuestBonuses(bonusData, bonusPacker=getComp7YearlyBonusPacker(), order=_YEARLY_REWARDS_BONUSES_ORDER)
 
 
 def packYearlyRewardMetaView(bonuses):
@@ -561,5 +498,18 @@ class Comp7YearlySlotsBonus(CountableIntegralBonus):
 class Comp7YearlyCustomizationsBonus(CustomizationsBonus):
 
     def isShowInGUI(self):
-        item = self.getCustomizations()[0]
-        return False if not item else not self.getC11nItem(item).is3D
+        return bool(CustomizationsBonusHelper.getBonusC11Item(self))
+
+
+class Comp7YearlyCustomizationsBonus3D(CustomizationsBonus):
+
+    def isShowInGUI(self):
+        c11nItem = CustomizationsBonusHelper.getBonusC11Item(self)
+        return c11nItem and c11nItem.is3D
+
+
+class Comp7YearlyCustomizationsBonus2D(CustomizationsBonus):
+
+    def isShowInGUI(self):
+        c11nItem = CustomizationsBonusHelper.getBonusC11Item(self)
+        return c11nItem and not c11nItem.is3D

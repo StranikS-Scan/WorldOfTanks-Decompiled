@@ -36,7 +36,6 @@ from gui.impl.gen import R
 from gui.impl.lobby.hangar.buy_vehicle_view import BuyVehicleWindow
 from gui.impl.lobby.common.view_mixins import LobbyHeaderVisibilityAction, LobbyHeaderState
 from gui.prb_control.dispatcher import g_prbLoader
-from gui.resource_well.resource_well_helpers import isResourceWellRewardVehicle
 from gui.shared import EVENT_BUS_SCOPE, event_bus_handlers, event_dispatcher, events, g_eventBus
 from gui.shared.event_dispatcher import showShop, showVehPostProgressionView
 from gui.shared.formatters import getRoleTextWithIcon, text_styles
@@ -63,8 +62,7 @@ VEHICLE_PREVIEW_ALIASES = {VIEW_ALIAS.VEHICLE_PREVIEW,
  VIEW_ALIAS.MARATHON_VEHICLE_PREVIEW,
  VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW,
  VIEW_ALIAS.RENTAL_VEHICLE_PREVIEW,
- VIEW_ALIAS.RESOURCE_WELL_VEHICLE_PREVIEW,
- VIEW_ALIAS.RESOURCE_WELL_HERO_VEHICLE_PREVIEW}
+ VIEW_ALIAS.RESOURCE_WELL_VEHICLE_PREVIEW}
 _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.LOBBY_STORE: 'shop',
  VIEW_ALIAS.LOBBY_STORAGE: 'storage',
@@ -174,8 +172,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         notInteractive = (VIEW_ALIAS.LOBBY_STORE,
          VIEW_ALIAS.RANKED_BATTLE_PAGE,
          VIEW_ALIAS.VEH_POST_PROGRESSION,
-         VIEW_ALIAS.RESOURCE_WELL_VEHICLE_PREVIEW,
-         VIEW_ALIAS.RESOURCE_WELL_HERO_VEHICLE_PREVIEW)
+         VIEW_ALIAS.RESOURCE_WELL_VEHICLE_PREVIEW)
         self._heroInteractive = not (self._itemsPack or self.__offers or ctx.get('offerID', 0) or self.__topPanelData or self._backAlias in notInteractive) and ctx.get('heroInteractive', True)
         self.__haveCustomCrew = any((item.type == ItemPackType.CREW_CUSTOM for item in self._itemsPack)) if self._itemsPack else False
         self.__obtainingMethod = ctx.get('obtainingMethod')
@@ -311,10 +308,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
                 descriptor = entity.typeDescriptor
                 if descriptor:
                     vehicleCD = descriptor.type.compactDescr
-                    if isResourceWellRewardVehicle(vehicleCD=vehicleCD):
-                        event_dispatcher.showResourceWellHeroPreview(vehicleCD=vehicleCD, previewAlias=VIEW_ALIAS.VEHICLE_PREVIEW, previousBackAlias=self._backAlias, backCallback=self._previewBackCb)
-                    else:
-                        event_dispatcher.showHeroTankPreview(vehicleCD, previewAlias=VIEW_ALIAS.VEHICLE_PREVIEW, previousBackAlias=self._backAlias, backOutfit=self.__outfit)
+                    event_dispatcher.showHeroTankPreview(vehicleCD, previewAlias=VIEW_ALIAS.VEHICLE_PREVIEW, previousBackAlias=self._backAlias, backOutfit=self.__outfit)
             elif entity.id == self._hangarSpace.space.vehicleEntityId:
                 self._processBackClick({'entity': entity})
         return

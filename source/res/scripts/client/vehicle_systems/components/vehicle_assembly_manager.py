@@ -63,13 +63,16 @@ class TurretGunRotationAssembler(Assembler):
         return slotMarker.slotName in self._SLOTS
 
     def assemble(self, gameObject, slotMarker):
-        appearance = veh_comp.findParentVehicleAppearance(gameObject)
-        if appearance is not None:
-            matrixProvider = self.__getMatrixProvider(slotMarker.slotName, appearance)
-            if matrixProvider is not None:
-                self._replaceWithNodeDriver(gameObject, appearance)
-                gameObject.createComponent(GenericComponents.MatrixProviderFollowerComponent, matrixProvider)
-        return
+        if gameObject.findComponentByType(GenericComponents.MatrixProviderFollowerComponent):
+            return
+        else:
+            appearance = veh_comp.findParentVehicleAppearance(gameObject)
+            if appearance is not None:
+                matrixProvider = self.__getMatrixProvider(slotMarker.slotName, appearance)
+                if matrixProvider is not None:
+                    self._replaceWithNodeDriver(gameObject, appearance)
+                    gameObject.createComponent(GenericComponents.MatrixProviderFollowerComponent, matrixProvider)
+            return
 
     def __getMatrixProvider(self, slotName, appearance):
         if slotName == veh_comp.VehicleSlots.TURRET.value:
@@ -98,11 +101,14 @@ class RecoilAssembler(Assembler):
         return slotMarker.slotName in self._SLOTS
 
     def assemble(self, gameObject, _):
-        appearance = veh_comp.findParentVehicleAppearance(gameObject)
-        if appearance is not None:
-            if self._createComponent(gameObject, appearance) is not None:
-                appearance.setGunRecoil(gameObject)
-        return
+        if gameObject.findComponentByType(Vehicular.GunRecoilComponent):
+            return
+        else:
+            appearance = veh_comp.findParentVehicleAppearance(gameObject)
+            if appearance is not None:
+                if self._createComponent(gameObject, appearance) is not None:
+                    appearance.setGunRecoil(gameObject)
+            return
 
     def _createComponent(self, gameObject, appearance):
         vehicleDesc = appearance.typeDescriptor
@@ -122,7 +128,7 @@ class MultiGunRecoilAssembler(RecoilAssembler):
 
     def assemble(self, gameObject, slotMarker):
         appearance = veh_comp.findParentVehicleAppearance(gameObject)
-        if appearance is not None:
+        if appearance is not None and not appearance.damageState.isCurrentModelDamaged:
             if self._createComponent(gameObject, appearance) is not None:
                 multiGun = appearance.typeDescriptor.turret.multiGun
                 gunIndex = 0
@@ -141,10 +147,13 @@ class SwingingAnimationManager(Assembler):
         return slotMarker.slotName == veh_comp.VehicleSlots.HULL.value
 
     def assemble(self, gameObject, slotMarker):
-        appearance = veh_comp.findParentVehicleAppearance(gameObject)
-        if appearance is not None:
-            self.__assembleSwinging(gameObject, appearance)
-        return
+        if gameObject.findComponentByType(Vehicular.SwingingAnimator):
+            return
+        else:
+            appearance = veh_comp.findParentVehicleAppearance(gameObject)
+            if appearance is not None:
+                self.__assembleSwinging(gameObject, appearance)
+            return
 
     def __assembleSwinging(self, gameObject, appearance):
         hullNode = appearance.compoundModel.node(TankPartNames.HULL)

@@ -8,7 +8,6 @@ import BattleReplay
 from PlayerEvents import g_playerEvents
 from adisp import adisp_async
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
-from constants import ARENA_BONUS_TYPE
 from debug_utils import LOG_DEBUG
 from gui import g_tankActiveCamouflage
 from gui.battle_control import arena_visitor
@@ -177,7 +176,7 @@ class BattleSessionProvider(IBattleSessionProvider):
         return
 
     def getExitResult(self):
-        if self.__isReplayPlaying or self.__arenaVisitor.gui.isTrainingBattle() or self.__arenaVisitor.gui.isMapsTraining() or self.__arenaVisitor.getArenaBonusType() == ARENA_BONUS_TYPE.TRAINING_COMP7:
+        if self.__isReplayPlaying or self.__arenaVisitor.gui.isNonDesertionArena():
             return BattleExitResult(False, None)
         else:
             vInfo = self.__arenaDP.getVehicleInfo()

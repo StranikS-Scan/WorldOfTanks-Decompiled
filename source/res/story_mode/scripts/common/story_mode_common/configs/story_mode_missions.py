@@ -1,16 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/common/story_mode_common/configs/story_mode_missions.py
 import datetime
-from functools import partial
 import typing
-import bonus_readers
 from base_schema_manager import GameParamsSchema
 from constants import ARENA_BONUS_TYPE_NAMES
 from dict2model import models, schemas, fields, validate, exceptions
+from story_mode_common.configs.task_conditions import TaskConditionType
 from story_mode_common.story_mode_constants import FIRST_MISSION_ID, STORY_MODE_BONUS_TYPES, FIRST_MISSION_TASK_ID, UNDEFINED_MISSION_ID, MissionsDifficulty, MissionType
-from sounds_schema import soundSchema
+from sounds_schema import SoundSchema
 if typing.TYPE_CHECKING:
     from dict2model.types import ValidatorsType
+    from dict2model.schemas import SchemaModelType
     from sounds_schema import SoundModel
 EVENT_MISSION_MIN_ID = 1000
 
@@ -40,17 +40,21 @@ class AutoCompleteTaskModel(models.Model):
 
 
 class MissionTaskModel(models.Model):
-    __slots__ = ('id', 'reward', 'autoCompleteTasks', 'unlockDate')
+    __slots__ = ('id', 'reward', 'autoCompleteTasks', 'unlockDate', 'conditions')
 
-    def __init__(self, id, reward, autoCompleteTasks, unlockDate):
+    def __init__(self, id, reward, autoCompleteTasks, unlockDate, conditions):
         super(MissionTaskModel, self).__init__()
         self.id = id
         self.reward = reward
         self.autoCompleteTasks = autoCompleteTasks
         self.unlockDate = unlockDate
+        self.conditions = conditions
 
     def __repr__(self):
-        return '<MissionTaskModel(id={}, reward={}, autoCompleteTasks={}, unlockDate={})>'.format(self.id, self.reward, self.autoCompleteTasks, self.unlockDate)
+        return '<MissionTaskModel(id={}, reward={}, autoCompleteTasks={}, unlockDate={}, conditions={})>'.format(self.id, self.reward, self.autoCompleteTasks, self.unlockDate, self.conditions)
+
+    def getCondition(self, name):
+        return next((condition for condition in self.conditions if condition.name == name), None)
 
     def isLocked(self):
         return self.unlockDate and self.unlockDate > datetime.datetime.utcnow()
@@ -69,21 +73,22 @@ class MissionDisabledTimerModel(models.Model):
 
 
 class SoundsModel(models.Model):
-    __slots__ = ('music', 'ambience')
+    __slots__ = ('music', 'ambience', 'battleMusic')
 
-    def __init__(self, music, ambience):
+    def __init__(self, music, ambience, battleMusic):
         super(SoundsModel, self).__init__()
         self.music = music
         self.ambience = ambience
+        self.battleMusic = battleMusic
 
     def __repr__(self):
-        return '<SoundsModel(music={}, ambience={})>'.format(self.music, self.ambience)
+        return '<SoundsModel(music={}, ambience={}, battleMusic={})>'.format(self.music, self.ambience, self.battleMusic)
 
 
 class MissionModel(models.Model):
-    __slots__ = ('missionId', 'vehicle', 'geometry', 'bonusType', 'displayName', 'missionType', 'difficulty', 'sounds', 'tasks', 'enabled', 'disabledTimer', 'reward', 'showRewardInBattleResults', 'unlockBattlesCount', 'newbieBattlesMin', 'newbieBattlesMax')
+    __slots__ = ('missionId', 'vehicle', 'geometry', 'bonusType', 'displayName', 'missionType', 'difficulty', 'sounds', 'tasks', 'enabled', 'disabledTimer', 'reward', 'showRewardInBattleResults', 'unlockBattlesCount', 'newbieBattlesMin', 'newbieBattlesMax', 'spawnGroup', 'unlockMission', 'hasOutroVideo')
 
-    def __init__(self, missionId, vehicle, geometry, bonusType, displayName, missionType, difficulty, sounds, tasks, enabled, disabledTimer, reward, showRewardInBattleResults, unlockBattlesCount, newbieBattlesMin, newbieBattlesMax):
+    def __init__(self, missionId, vehicle, geometry, bonusType, displayName, missionType, difficulty, sounds, tasks, enabled, disabledTimer, reward, showRewardInBattleResults, unlockBattlesCount, newbieBattlesMin, newbieBattlesMax, spawnGroup, unlockMission, hasOutroVideo):
         super(MissionModel, self).__init__()
         self.missionId = missionId
         self.vehicle = vehicle
@@ -101,6 +106,9 @@ class MissionModel(models.Model):
         self.unlockBattlesCount = unlockBattlesCount
         self.newbieBattlesMin = newbieBattlesMin
         self.newbieBattlesMax = newbieBattlesMax
+        self.spawnGroup = spawnGroup
+        self.unlockMission = unlockMission
+        self.hasOutroVideo = hasOutroVideo
 
     def getTask(self, taskId):
         return next((task for task in self.tasks if task.id == taskId), None)
@@ -135,8 +143,11 @@ class MissionModel(models.Model):
     def isMissionLocked(self, battlesCount):
         return battlesCount < self.unlockBattlesCount
 
+    def getTaskConditionValues(self):
+        return {task.id:{c.name:c.value for c in task.conditions} for task in self.tasks}
+
     def __repr__(self):
-        return '<MissionModel(id={}, vehicle={}, geometry={}, bonusType={}, displayName={}, missionType={}, difficulty={}, sounds={}, tasks={}, enabled={}, disabledTimer={}, bonus={}, showRewardInBattleResults={}, unlockBattlesCount={}, newbieBattlesMin={}, newbieBattlesMax={}>'.format(self.missionId, self.vehicle, self.geometry, self.bonusType, self.displayName, self.missionType, self.difficulty, self.sounds, self.tasks, self.enabled, self.disabledTimer, self.reward, self.showRewardInBattleResults, self.unlockBattlesCount, self.newbieBattlesMin, self.newbieBattlesMax)
+        return '<MissionModel(id={}, vehicle={}, geometry={}, bonusType={}, displayName={}, missionType={}, difficulty={}, sounds={}, tasks={}, enabled={}, disabledTimer={}, bonus={}, showRewardInBattleResults={}, unlockBattlesCount={}, newbieBattlesMin={}, newbieBattlesMax={}, spawnGroup={}, unlockMission={}>, hasOutroVideo={}'.format(self.missionId, self.vehicle, self.geometry, self.bonusType, self.displayName, self.missionType, self.difficulty, self.sounds, self.tasks, self.enabled, self.disabledTimer, self.reward, self.showRewardInBattleResults, self.unlockBattlesCount, self.newbieBattlesMin, self.newbieBattlesMax, self.spawnGroup, self.unlockMission, self.hasOutroVideo)
 
 
 class OnboardingModel(models.Model):
@@ -291,20 +302,65 @@ class _RewardField(fields.Field):
         return super(_RewardField, self)._deserialize(incoming, **kwargs)
 
 
+class ConditionModel(models.Model):
+    __slots__ = ('name', 'value', 'type')
+
+    def __init__(self, name, value, type):
+        super(ConditionModel, self).__init__()
+        self.name = name
+        self.value = value
+        self.type = type
+
+    def __repr__(self):
+        return '<ConditionModel(name={}, value={}, type={})>'.format(self.name, self.value, self.type)
+
+
+class TaskConditionSchema(schemas.Schema):
+
+    def __init__(self):
+        super(TaskConditionSchema, self).__init__(fields={'name': fields.String(required=True),
+         'value': fields.Field(required=True),
+         'type': fields.StrEnum(enumClass=TaskConditionType, required=True)}, modelClass=ConditionModel, checkUnknown=True, serializedValidators=None, deserializedValidators=None)
+        return
+
+    def _deserialize(self, incoming, onlyPublic=False):
+        self._fields['value'] = TaskConditionType(incoming['type']).getSchemaFieldType()
+        return super(TaskConditionSchema, self)._deserialize(incoming, onlyPublic=onlyPublic)
+
+    def serialize(self, incoming, onlyPublic=False, silent=False, logError=True):
+        self._fields['value'] = incoming.type.getSchemaFieldType()
+        return super(TaskConditionSchema, self).serialize(incoming, onlyPublic, silent, logError)
+
+
+def validateTaskConditionNames(taskModel):
+    names, duplicates = set(), set()
+    for condition in taskModel.conditions:
+        if condition.name not in names:
+            names.add(condition.name)
+        duplicates.add(condition.name)
+
+    if duplicates:
+        raise exceptions.ValidationError('Condition names {} have duplicates inside task id={}.'.format(duplicates, taskModel.id))
+
+
 _missionTaskSchema = schemas.Schema(fields={'id': fields.Integer(deserializedValidators=validate.Range(minValue=1)),
  'reward': _RewardField(required=False),
  'autoCompleteTasks': fields.UniCapList(fieldOrSchema=_autoCompleteTaskSchema, required=False, default=list),
- 'unlockDate': fields.DateTime(required=False)}, checkUnknown=True, modelClass=MissionTaskModel)
+ 'unlockDate': fields.DateTime(required=False),
+ 'conditions': fields.UniCapList(fieldOrSchema=TaskConditionSchema(), required=False, default=list)}, checkUnknown=True, modelClass=MissionTaskModel, deserializedValidators=validateTaskConditionNames)
 _missionDisabledTimerSchema = schemas.Schema[MissionDisabledTimerModel](fields={'showAt': fields.DateTime(),
  'endAt': fields.DateTime()}, modelClass=MissionDisabledTimerModel, deserializedValidators=_validateMissionDisabledTimer)
-_soundsSchema = schemas.Schema(fields={'music': fields.Nested(schema=soundSchema, required=True),
- 'ambience': fields.Nested(schema=soundSchema, required=True)}, modelClass=SoundsModel, checkUnknown=True)
+missionSoundSchema = SoundSchema(fields={'start': fields.String(required=True),
+ 'stop': fields.String(required=True)})
+_soundsSchema = schemas.Schema(fields={'music': fields.Nested(schema=missionSoundSchema, required=True),
+ 'ambience': fields.Nested(schema=missionSoundSchema, required=True),
+ 'battleMusic': fields.Nested(schema=missionSoundSchema, required=False)}, modelClass=SoundsModel, checkUnknown=True)
 missionSchema = schemas.Schema[MissionModel](fields={'missionId': fields.Integer(required=True, deserializedValidators=validate.Range(minValue=1)),
  'vehicle': fields.Nested(schema=vehicleSchema, required=True),
  'geometry': fields.String(required=True, public=False, deserializedValidators=validate.Length(minValue=1)),
  'bonusType': fields.String(required=True, public=False, deserializedValidators=[validate.Length(minValue=1), validateBonusType]),
  'displayName': fields.String(required=False, default=''),
- 'missionType': fields.String(required=False, default=MissionType.REGULAR),
+ 'missionType': fields.String(required=False, default=MissionType.REGULAR.value),
  'difficulty': fields.StrEnum(enumClass=MissionsDifficulty, required=False, default=MissionsDifficulty.UNDEFINED),
  'sounds': fields.Nested(schema=_soundsSchema, required=True),
  'tasks': fields.UniCapList(fieldOrSchema=_missionTaskSchema, required=True),
@@ -314,7 +370,16 @@ missionSchema = schemas.Schema[MissionModel](fields={'missionId': fields.Integer
  'showRewardInBattleResults': fields.Boolean(required=False, default=False),
  'unlockBattlesCount': fields.Integer(required=False, deserializedValidators=validate.Range(minValue=1), default=0),
  'newbieBattlesMin': fields.Integer(required=False, deserializedValidators=validate.Range(minValue=1), default=0),
- 'newbieBattlesMax': fields.Integer(required=False, deserializedValidators=validate.Range(minValue=1), default=0)}, modelClass=MissionModel, checkUnknown=True, deserializedValidators=[_validateMissionTasksIds, _validateShowRewardHasReward])
+ 'newbieBattlesMax': fields.Integer(required=False, deserializedValidators=validate.Range(minValue=1), default=0),
+ 'spawnGroup': fields.Integer(required=False, deserializedValidators=validate.Range(minValue=0), default=0),
+ 'unlockMission': fields.Integer(required=False, deserializedValidators=validate.Range(minValue=0), default=0),
+ 'hasOutroVideo': fields.Boolean(required=False, default=False)}, modelClass=MissionModel, checkUnknown=True, deserializedValidators=[_validateMissionTasksIds, _validateShowRewardHasReward])
 onboardingSchema = schemas.Schema[OnboardingModel](fields={'reward': _RewardField(required=False)}, modelClass=OnboardingModel)
+
+def _getRewardReaders(*args, **kwargs):
+    import bonus_readers
+    return bonus_readers.readBonusSection(bonus_readers.SUPPORTED_BONUSES, *args, **kwargs)
+
+
 missionsSchema = GameParamsSchema[MissionsModel](gameParamsKey='story_mode_missions', fields={'missions': fields.UniCapList(fieldOrSchema=missionSchema, required=True, deserializedValidators=validate.Length(minValue=1)),
- 'onboarding': fields.Nested(schema=onboardingSchema, required=True)}, modelClass=MissionsModel, checkUnknown=True, deserializedValidators=[validateMissionIds, _validateAutoCompleteMissionTasks, _validateMissionsEnabled], readers={'reward': partial(bonus_readers.readBonusSection, bonus_readers.SUPPORTED_BONUSES)})
+ 'onboarding': fields.Nested(schema=onboardingSchema, required=True)}, modelClass=MissionsModel, checkUnknown=True, deserializedValidators=[validateMissionIds, _validateAutoCompleteMissionTasks, _validateMissionsEnabled], readers={'reward': _getRewardReaders})

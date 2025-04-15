@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/easy_tank_equip/data_providers/opt_devices_data_provider.py
+import logging
 from collections import OrderedDict
 from enum import Enum
 from typing import TYPE_CHECKING
+from gui.game_control.wotlda.loadout_model import BaseOptDeviceLoadoutModel
 from gui.goodies.demount_kit import isDemountKitApplicableTo, getDemountKitForOptDevice
 from gui.impl.gen.view_models.views.lobby.easy_tank_equip.common.preset_model import PresetDisableReason
 from gui.impl.gen.view_models.views.lobby.easy_tank_equip.common.proposal_model import ProposalDisableReason
@@ -13,7 +15,7 @@ from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_ZERO
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from shared_utils import first
-from skeletons.gui.game_control import IOptionalDevicesAssistantController, IWotPlusController
+from skeletons.gui.game_control import IWotPlusController, IEasyTankEquipController
 from skeletons.gui.shared import IItemsCache
 if TYPE_CHECKING:
     from typing import List, Optional, Dict
@@ -23,6 +25,7 @@ if TYPE_CHECKING:
     from gui.shared.gui_items.vehicle_equipment import OptDeviceSlotData
     from gui.shared.gui_items.Vehicle import Vehicle
     from gui.shared.money import Money
+_logger = logging.getLogger(__name__)
 
 class OptionalDevicesPresetInfo(PresetInfo):
 
@@ -87,8 +90,7 @@ class OptDevicesDemountInfo(object):
 
 class OptDevicesDataProvider(BaseDataProvider):
     __itemsCache = dependency.descriptor(IItemsCache)
-    __optDevicesAssistantCtrl = dependency.descriptor(IOptionalDevicesAssistantController)
-    __wotPlusController = dependency.descriptor(IWotPlusController)
+    __easyTankEquipController = dependency.descriptor(IEasyTankEquipController)
 
     def __init__(self, vehicle, balance):
         super(OptDevicesDataProvider, self).__init__(vehicle, balance)
@@ -139,7 +141,7 @@ class OptDevicesDataProvider(BaseDataProvider):
 
     def isCurrentPresetDisableReasonChanged(self):
         presets = self.__getPresetsInfo()
-        if self.presets[self.currentPresetIndex].disableReason != presets[self.currentPresetIndex].disableReason:
+        if presets and self.presets[self.currentPresetIndex].disableReason != presets[self.currentPresetIndex].disableReason:
             self.presets = presets
             return True
         return False
@@ -177,9 +179,16 @@ class OptDevicesDataProvider(BaseDataProvider):
         return len(optDevices) == self.__optDevicesCapacity and all(optDevices)
 
     def __setOptDevicesPresets(self):
-        optDevicesTags = self.__optDevicesAssistantCtrl.getTheMostPopularOptDevicesTagsList(self.vehicle)
-        standardOptDevices = self.__getStandardOptDevices(optDevicesTags)
-        advancedOptDevices = self.__getAdvancedOptDevices(optDevicesTags, standardOptDevices)
+        loadout = self.__easyTankEquipController.getLoadoutByVehicleID(self.vehicle.intCD)
+        if not loadout:
+            _logger.warning('No easy tank loadouts were found for vehicle %d.', self.vehicle.intCD)
+            return
+        standardLoadoutDevices = loadout.getDevices()
+        modernizedLoadoutDevices = loadout.getDevices(getModernized=True)
+        standardOptDevices = self.__getStandardOptDevices(standardLoadoutDevices)
+        upgradedOptDevices = self.__getAdvancedOptDevices(standardLoadoutDevices, standardOptDevices)
+        modernizedOptDevices = self.__getAdvancedOptDevices(modernizedLoadoutDevices, standardOptDevices)
+        advancedOptDevices = [ (device1 if self.__getOptDeviceIndex(device1) < self.__getOptDeviceIndex(device2) else device2) for device1, device2 in zip(modernizedOptDevices, upgradedOptDevices) ]
         if self.__isStandardPresetNeeded(standardOptDevices):
             self.__optDevicesPresets[OptDevicesPresetType.STANDARD] = standardOptDevices
             self.__optDevicesForDemount[OptDevicesPresetType.STANDARD] = self.__getOptDevicesForDemount(standardOptDevices)
@@ -219,7 +228,7 @@ class OptDevicesDataProvider(BaseDataProvider):
         advancedOptDevices = []
         numberOfStandardOptDevices = len(standardOptDevices)
         for deviceIndex, deviceTag in enumerate(optDevicesTags):
-            criteria = REQ_CRITERIA.OPTIONAL_DEVICE.HAS_ANY_FROM_TAGS({deviceTag}) | REQ_CRITERIA.OPTIONAL_DEVICE.IS_COMPATIBLE_WITH_VEHICLE(self.vehicle)
+            criteria = REQ_CRITERIA.OPTIONAL_DEVICE.HAS_ANY_BY_ARCHETYPE(deviceTag) | REQ_CRITERIA.OPTIONAL_DEVICE.IS_COMPATIBLE_WITH_VEHICLE(self.vehicle)
             criteria |= REQ_CRITERIA.CUSTOM(lambda device: device.inventoryCount > 0 or self.vehicle.optDevices.setupLayouts.containsIntCD(device.intCD))
             optDevices = self.__getOptDevices(criteria)
             highestPriorityDevice = None
@@ -238,7 +247,7 @@ class OptDevicesDataProvider(BaseDataProvider):
     def __getStandardOptDevices(self, optDevicesTags):
         standardOptDevices = []
         for deviceTag in optDevicesTags:
-            criteria = REQ_CRITERIA.OPTIONAL_DEVICE.SIMPLE | REQ_CRITERIA.OPTIONAL_DEVICE.HAS_ANY_FROM_TAGS({deviceTag}) | REQ_CRITERIA.OPTIONAL_DEVICE.IS_COMPATIBLE_WITH_VEHICLE(self.vehicle)
+            criteria = REQ_CRITERIA.OPTIONAL_DEVICE.SIMPLE | REQ_CRITERIA.OPTIONAL_DEVICE.HAS_ANY_BY_ARCHETYPE(deviceTag) | REQ_CRITERIA.OPTIONAL_DEVICE.IS_COMPATIBLE_WITH_VEHICLE(self.vehicle)
             standardOptDevices.append(first(self.__getOptDevices(criteria)))
 
         return standardOptDevices

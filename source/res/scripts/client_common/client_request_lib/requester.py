@@ -439,6 +439,12 @@ class ServerReplaysAccessor(BaseAccessor):
         return self._data_source.post_find_replay(callback, *args, **kwargs)
 
 
+class LoadoutsAssistantAccessor(BaseAccessor):
+
+    def get_loadouts(self, callback, client_cache_updated_at, loadout_types):
+        return self._data_source.get_loadouts(callback, client_cache_updated_at, loadout_types)
+
+
 class Requester(object):
     available_data_sources = {'stagings': StagingDataAccessor,
      'fake': FakeDataAccessor,
@@ -463,6 +469,7 @@ class Requester(object):
     wot_shop = RequestDescriptor(WotShopAccessor)
     clan_supply = RequestDescriptor(ClanSupplyAccessor)
     server_replays = RequestDescriptor(ServerReplaysAccessor)
+    loadouts_assistant = RequestDescriptor(LoadoutsAssistantAccessor)
 
     @classmethod
     def create_requester(cls, url_fetcher, config, client_lang=None, user_agent=None):

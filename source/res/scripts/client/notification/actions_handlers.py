@@ -31,7 +31,7 @@ from gui.prestige.prestige_helpers import showPrestigeOnboardingWindow, showPres
 from gui.ranked_battles import ranked_helpers
 from gui.server_events.events_dispatcher import showMissionsBattlePass, showMissionsMapboxProgression, showPersonalMission, showBanWindow, showPenaltyWindow, showWarningWindow
 from gui.shared import EVENT_BUS_SCOPE, actions, event_dispatcher as shared_events, events, g_eventBus
-from gui.shared.event_dispatcher import hideWebBrowserOverlay, showBlueprintsSalePage, showCollectionAwardsWindow, showCollectionWindow, showCollectionsMainPage, showDelayedReward, showEpicBattlesAfterBattleWindow, showProgressiveRewardWindow, showRankedYearAwardWindow, showResourceWellProgressionWindow, showShop, showSteamConfirmEmailOverlay, showWinbackSelectRewardView, showWotPlusIntroView, showBarracks, showSeniorityRewardVehiclesWindow, showAdvancedAchievementsView, showTrophiesView, showAdvancedAchievementsCatalogView, showExchangeGoldWindow, showExchangeFreeXPWindow, showCrewPostProgressionView
+from gui.shared.event_dispatcher import hideWebBrowserOverlay, showBlueprintsSalePage, showCollectionAwardsWindow, showCollectionWindow, showCollectionsMainPage, showDelayedReward, showEpicBattlesAfterBattleWindow, showProgressiveRewardWindow, showRankedYearAwardWindow, showShop, showSteamConfirmEmailOverlay, showWinbackSelectRewardView, showWotPlusIntroView, showBarracks, showSeniorityRewardVehiclesWindow, showAdvancedAchievementsView, showTrophiesView, showAdvancedAchievementsCatalogView, showExchangeGoldWindow, showExchangeFreeXPWindow, showCrewPostProgressionView
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors.common import ClaimRewardForPostProgression
 from gui.shared.notifications import NotificationPriorityLevel
@@ -1090,34 +1090,6 @@ class _OpenEpicBattlesAfterBattleWindow(NavigationDisabledActionHandler):
         self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLICK.value, EpicBattleLogButtons.LEVELUP_NOTIFICATION.value, EpicBattleLogKeys.HANGAR.value)
 
 
-class _OpenResourceWellProgressionStartWindow(NavigationDisabledActionHandler):
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.RESOURCE_WELL_START
-
-    @classmethod
-    def getActions(cls):
-        pass
-
-    def doAction(self, model, entityID, action):
-        showResourceWellProgressionWindow()
-
-
-class _OpenResourceWellProgressionNoVehiclesWindow(NavigationDisabledActionHandler):
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.MESSAGE
-
-    @classmethod
-    def getActions(cls):
-        pass
-
-    def doAction(self, model, entityID, action):
-        showResourceWellProgressionWindow()
-
-
 class _OpenCustomizationStylesSection(NavigationDisabledActionHandler):
     __customizationService = dependency.descriptor(ICustomizationService)
     __hangarSpace = dependency.descriptor(IHangarSpace)
@@ -1568,8 +1540,6 @@ _AVAILABLE_HANDLERS = [ShowBattleResultsHandler,
  _OpenDelayedReward,
  _OpenChapterChoiceView,
  _OpenEpicBattlesAfterBattleWindow,
- _OpenResourceWellProgressionStartWindow,
- _OpenResourceWellProgressionNoVehiclesWindow,
  _OpenCustomizationStylesSection,
  _OpenIntegratedAuction,
  _OpenIntegratedAuctionStart,

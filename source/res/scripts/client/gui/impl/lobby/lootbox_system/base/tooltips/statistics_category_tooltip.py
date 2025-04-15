@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/lootbox_system/base/tooltips/statistics_category_tooltip.py
 import logging
 from typing import TYPE_CHECKING
-from frameworks.wulf import ViewSettings
+from frameworks.wulf import Array, ViewSettings
 from gui.goodies.goodie_items import Booster, DemountKit, RecertificationForm
 from gui.impl import backport
 from gui.impl.gen import R
@@ -133,12 +133,17 @@ def _pack2DStyles(rewards, model):
 
 def _packCrewMembers(rewards, model):
     for recruit, count in _iterRecruits(rewards):
-        name = 'tank{}man'.format('wo' if recruit.isFemale() else '')
         bonusModel = StatisticsCategoryTooltipBonusModel()
-        bonusModel.setName(name)
-        bonusModel.setIcon(name)
+        bonusModel.setName('tmanToken')
+        bonusModel.setValue(recruit.getGroupName())
+        bonusModel.setIcon('tank{}man'.format('wo' if recruit.isFemale() else ''))
         bonusModel.setCount(count)
         bonusModel.setLabel(recruit.getFullUserName())
+        skillsModel = Array()
+        for skillName in recruit.getAllKnownSkills(True):
+            skillsModel.addString(skillName)
+
+        bonusModel.tankman.setSkills(skillsModel)
         model.bonuses.addViewModel(bonusModel)
 
 

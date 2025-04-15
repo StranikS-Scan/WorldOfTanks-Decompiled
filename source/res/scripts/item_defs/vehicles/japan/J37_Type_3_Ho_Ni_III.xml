@@ -58,7 +58,6 @@
       <armor_5>	16	</armor_5>
       <armor_6>	8	</armor_6>
       <armor_7>	25	</armor_7>
-      <armor_8>	0	</armor_8>
       <armor_9>	25	</armor_9>
       <armor_10>	16	</armor_10>
       <armor_11>	25	</armor_11>
@@ -81,8 +80,7 @@
       <armor_28>	25	</armor_28>
       <armor_29>	25	</armor_29>
       <armor_30>	25	</armor_30>
-      <armor_31>	5	</armor_31>
-      <armor_32>	5	</armor_32>
+      <armor_32>	25	</armor_32>
     </armor>
     <fakeTurrets>
       <lobby>	0	</lobby>
@@ -1313,15 +1311,15 @@
       <terrainResistance>	0.9 1.1 2.1	</terrainResistance>
       <brakeForce>	18800	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	30	</rotationSpeed>
+      <rotationSpeed>	32	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.22	</vehicleMovement>
         <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	90	</maxHealth>
-      <maxRegenHealth>	70	</maxRegenHealth>
-      <repairCost>	0.5	</repairCost>
+      <maxHealth>	95	</maxHealth>
+      <maxRegenHealth>	71	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
       <armor>
         <leftTrack>	20	</leftTrack>
         <rightTrack>	20	</rightTrack>
@@ -2342,7 +2340,7 @@
           <trackPairIdx>	0	</trackPairIdx>
         </right>
       </physicalTracks>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	6.73684216	</repairTime>
     </Chassis_J37_Type_3_Ho_Ni_III>
     <Chassis_J37_Type_3_Ho_Ni_III_2>
       <userString>	#japan_vehicles:Chassis_J37_Type_3_Ho_Ni_III_2	</userString>
@@ -2360,9 +2358,9 @@
         <vehicleRotation>	0.20	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	0.5	</repairCost>
+      <maxHealth>	115	</maxHealth>
+      <maxRegenHealth>	86	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
       <armor>
         <leftTrack>	20	</leftTrack>
         <rightTrack>	20	</rightTrack>
@@ -3383,7 +3381,7 @@
           <trackPairIdx>	0	</trackPairIdx>
         </right>
       </physicalTracks>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	6.72463751	</repairTime>
     </Chassis_J37_Type_3_Ho_Ni_III_2>
   </chassis>
   <turrets0>
@@ -3401,7 +3399,7 @@
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	310	</circularVisionRadius>
+      <circularVisionRadius>	320	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	70	</maxHealth>
         <maxRegenHealth>	35	</maxRegenHealth>
@@ -3422,7 +3420,7 @@
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
-          <reloadTime>	4.4	</reloadTime>
+          <reloadTime>	4	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	3.0	</afterShot>
@@ -3433,29 +3431,10 @@
           <armor>
             <armor_1>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	25	</armor_2>
-            <armor_3>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
+            <armor_2>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_2>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_7>
-            <armor_8>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_8>
-            <armor_9>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_9>
-            <armor_10>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_10>
-            <armor_11>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_11>
-            <armor_12>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_12>
-            <armor_13>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_13>
             <gun>	10	</gun>
           </armor>
           <customizationSlots>
@@ -3523,7 +3502,7 @@
           </pitchLimits>
           <turretYawLimits>	-10 10	</turretYawLimits>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <reloadTime>	4.1	</reloadTime>
+          <reloadTime>	4.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	3.0	</afterShot>
@@ -3534,33 +3513,10 @@
           <armor>
             <armor_1>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	25	</armor_2>
-            <armor_3>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
+            <armor_2>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_2>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_7>
-            <armor_8>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_8>
-            <armor_9>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_9>
-            <armor_10>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_10>
-            <armor_11>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_11>
-            <armor_12>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_12>
-            <armor_13>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_13>
-            <armor_14>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_14>
-            <armor_15>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_15>
             <gun>	10	</gun>
           </armor>
           <customizationSlots>
@@ -3680,7 +3636,7 @@
     <detailed>
       <engines>
         <_Type_100_Suirei_V12>
-          <smplEnginePower>	220	</smplEnginePower>
+          <smplEnginePower>	240	</smplEnginePower>
           <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
         </_Type_100_Suirei_V12>
         <_Type_100_Kuurei_V12>

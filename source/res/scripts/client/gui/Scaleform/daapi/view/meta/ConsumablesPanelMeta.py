@@ -55,17 +55,14 @@ class ConsumablesPanelMeta(BaseDAAPIComponent):
     def as_setOptionalDeviceUsedS(self, idx, isUsed):
         return self.flashObject.as_setOptionalDeviceUsed(idx, isUsed) if self._isDAAPIInited() else None
 
-    def as_setIdleEnabledGlowS(self, idx, isIdleEnabled):
-        return self.flashObject.as_setIdleEnabledGlow(idx, isIdleEnabled) if self._isDAAPIInited() else None
-
     def as_setGlowS(self, idx, glowID):
         return self.flashObject.as_setGlow(idx, glowID) if self._isDAAPIInited() else None
 
     def as_hideGlowS(self, idx):
         return self.flashObject.as_hideGlow(idx) if self._isDAAPIInited() else None
 
-    def as_setEquipmentActivatedS(self, idx, isActivated):
-        return self.flashObject.as_setEquipmentActivated(idx, isActivated) if self._isDAAPIInited() else None
+    def as_setEquipmentActivatedS(self, idx, isActivated, isNoBack=False):
+        return self.flashObject.as_setEquipmentActivated(idx, isActivated, isNoBack) if self._isDAAPIInited() else None
 
     def as_handleAsReplayS(self):
         return self.flashObject.as_handleAsReplay() if self._isDAAPIInited() else None

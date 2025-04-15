@@ -10,7 +10,7 @@ from story_mode.gui.impl.gen.view_models.views.lobby.reward_model import RewardM
 class BattleResultViewModel(ViewModel):
     __slots__ = ('onQuit', 'onContinue')
 
-    def __init__(self, properties=13, commands=2):
+    def __init__(self, properties=14, commands=2):
         super(BattleResultViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -69,10 +69,10 @@ class BattleResultViewModel(ViewModel):
     def setPlayerStatus(self, value):
         self._setString(8, value)
 
-    def getIsDifficult(self):
+    def getHasAutoCompleteTasks(self):
         return self._getBool(9)
 
-    def setIsDifficult(self, value):
+    def setHasAutoCompleteTasks(self, value):
         self._setBool(9, value)
 
     def getIsOnboarding(self):
@@ -91,14 +91,24 @@ class BattleResultViewModel(ViewModel):
     def getProgressLevelsType():
         return ProgressLevelModel
 
-    def getRewards(self):
+    def getMainRewards(self):
         return self._getArray(12)
 
-    def setRewards(self, value):
+    def setMainRewards(self, value):
         self._setArray(12, value)
 
     @staticmethod
-    def getRewardsType():
+    def getMainRewardsType():
+        return RewardModel
+
+    def getOtherRewards(self):
+        return self._getArray(13)
+
+    def setOtherRewards(self, value):
+        self._setArray(13, value)
+
+    @staticmethod
+    def getOtherRewardsType():
         return RewardModel
 
     def _initialize(self):
@@ -112,9 +122,10 @@ class BattleResultViewModel(ViewModel):
         self._addStringProperty('infoDescription', '')
         self._addStringProperty('vehicleName', '')
         self._addStringProperty('playerStatus', '')
-        self._addBoolProperty('isDifficult', False)
+        self._addBoolProperty('hasAutoCompleteTasks', False)
         self._addBoolProperty('isOnboarding', False)
         self._addArrayProperty('progressLevels', Array())
-        self._addArrayProperty('rewards', Array())
+        self._addArrayProperty('mainRewards', Array())
+        self._addArrayProperty('otherRewards', Array())
         self.onQuit = self._addCommand('onQuit')
         self.onContinue = self._addCommand('onContinue')

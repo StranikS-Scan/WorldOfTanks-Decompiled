@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/notification/decorators.py
-from comp7.gui.impl.lobby.comp7_helpers.comp7_quest_helpers import hasAvailableWeeklyQuestsOfferGiftTokens
+from comp7.gui.impl.lobby.comp7_helpers.comp7_quest_helpers import hasAvailableOfferTokens
 from gui.shared.notifications import NotificationGroup, NotificationGuiSettings
 from helpers import dependency
 from messenger import g_settings
@@ -63,6 +63,6 @@ class Comp7BondEquipmentDecorator(MessageDecorator):
 
     def __getButtonState(self):
         state = NOTIFICATION_BUTTON_STATE.VISIBLE
-        if hasAvailableWeeklyQuestsOfferGiftTokens():
+        if hasAvailableOfferTokens():
             state |= NOTIFICATION_BUTTON_STATE.ENABLED
         return state

@@ -1816,7 +1816,7 @@
     <id>	40	</id>
     <userString>	#gb_vehicles:_17pdr_AP_Mk3T	</userString>
     <icon>	ap	</icon>
-    <price>	200	</price>
+    <price>	175	</price>
     <kind>	ARMOR_PIERCING	</kind>
     <caliber>	76.2	</caliber>
     <isTracer>	true	</isTracer>
@@ -1931,7 +1931,7 @@
     <id>	42	</id>
     <userString>	#gb_vehicles:_17pdr_HE_Mk1T	</userString>
     <icon>	he_modern	</icon>
-    <price>	112	</price>
+    <price>	75	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <mechanics>	MODERN	</mechanics>
     <caliber>	76.2	</caliber>
@@ -3677,6 +3677,63 @@
       </damage>
     </armorSpalls>
   </_105mm_MV_HE>
+  <_120mm_AP-T_L11B>
+    <id>	259	</id>
+    <userString>	#gb_vehicles:_120mm_AP-T_L11B	</userString>
+    <icon>	ap	</icon>
+    <price>	1147	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	119.38	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_120mm_AP-T_L11B>
+  <_120mm_APDS_L15A2>
+    <id>	260	</id>
+    <userString>	#gb_vehicles:_120mm_APDS_L15A2	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	119.38	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_120mm_APDS_L15A2>
+  <_120mm_HE_L31A2>
+    <id>	261	</id>
+    <userString>	#gb_vehicles:_120mm_HE_L31A2	</userString>
+    <icon>	he_modern	</icon>
+    <price>	636	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	119.38	</caliber>
+    <explosionRadius>	2.42	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	530	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.42	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	265	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
+  </_120mm_HE_L31A2>
   <_55pdr_APCBC>
     <id>	162	</id>
     <userString>	#gb_vehicles:_55pdr_APCBC	</userString>

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/server_events/settings.py
 import time
 from contextlib import contextmanager
-from account_helpers.AccountSettings import DOG_TAGS, WOT_PLUS, TELECOM_RENTALS, PERSONAL_RESERVES
+from account_helpers.AccountSettings import DOG_TAGS, WOT_PLUS, TELECOM_RENTALS, PERSONAL_RESERVES, COMMENDATIONS
 from gui.shared import utils
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
@@ -61,8 +61,8 @@ class _DogTagsRootSettings(utils.SettingRootRecord):
 
 class _WotPlusSettings(utils.SettingRootRecord):
 
-    def __init__(self, isFirstTime=True, isWotPlusEnabled=False, isGoldReserveEnabled=False, isPassiveXpEnabled=False, isFreeDemountingEnabled=False, isExcludedMapEnabled=False, isDailyAttendancesEnabled=False, amountOfDailyAttendance=0, isBattleBonusesEnabled=False, isBadgesEnabled=False, isAdditionalXPEnabled=False, isOnboardingShown=False, isOptionalDevicesAssistantEnabled=False, **_):
-        super(_WotPlusSettings, self).__init__(isFirstTime=isFirstTime, isWotPlusEnabled=isWotPlusEnabled, isGoldReserveEnabled=isGoldReserveEnabled, isPassiveXpEnabled=isPassiveXpEnabled, isFreeDemountingEnabled=isFreeDemountingEnabled, isExcludedMapEnabled=isExcludedMapEnabled, isDailyAttendancesEnabled=isDailyAttendancesEnabled, amountOfDailyAttendance=amountOfDailyAttendance, isBattleBonusesEnabled=isBattleBonusesEnabled, isBadgesEnabled=isBadgesEnabled, isAdditionalXPEnabled=isAdditionalXPEnabled, isOnboardingShown=isOnboardingShown, isOptionalDevicesAssistantEnabled=isOptionalDevicesAssistantEnabled)
+    def __init__(self, isFirstTime=True, isWotPlusEnabled=False, isGoldReserveEnabled=False, isPassiveXpEnabled=False, isFreeDemountingEnabled=False, isExcludedMapEnabled=False, isDailyAttendancesEnabled=False, amountOfDailyAttendance=0, isBattleBonusesEnabled=False, isBadgesEnabled=False, isAdditionalXPEnabled=False, isOnboardingShown=False, isOptionalDevicesAssistantEnabled=False, isCrewAssistantEnabled=False, **_):
+        super(_WotPlusSettings, self).__init__(isFirstTime=isFirstTime, isWotPlusEnabled=isWotPlusEnabled, isGoldReserveEnabled=isGoldReserveEnabled, isPassiveXpEnabled=isPassiveXpEnabled, isFreeDemountingEnabled=isFreeDemountingEnabled, isExcludedMapEnabled=isExcludedMapEnabled, isDailyAttendancesEnabled=isDailyAttendancesEnabled, amountOfDailyAttendance=amountOfDailyAttendance, isBattleBonusesEnabled=isBattleBonusesEnabled, isBadgesEnabled=isBadgesEnabled, isAdditionalXPEnabled=isAdditionalXPEnabled, isOnboardingShown=isOnboardingShown, isOptionalDevicesAssistantEnabled=isOptionalDevicesAssistantEnabled, isCrewAssistantEnabled=isCrewAssistantEnabled)
 
     def setIsFirstTime(self, isFirstTime):
         self.update(isFirstTime=isFirstTime)
@@ -105,6 +105,9 @@ class _WotPlusSettings(utils.SettingRootRecord):
 
     def setOptionalDevicesAssistantEnabled(self, isEnabled):
         self.update(isOptionalDevicesAssistantEnabled=isEnabled)
+
+    def setCrewAssistantEnabled(self, isEnabled):
+        self.update(isCrewAssistantEnabled=isEnabled)
 
     @classmethod
     def _getSettingName(cls):
@@ -154,6 +157,22 @@ class _TelecomRentalsSettings(utils.SettingRootRecord):
     @classmethod
     def _getSettingName(cls):
         return TELECOM_RENTALS
+
+
+class _CommendationsSettings(utils.SettingRootRecord):
+
+    def __init__(self, isMessagesEnable=True, isLiveTagsEnable=True):
+        super(_CommendationsSettings, self).__init__(isMessagesEnable=isMessagesEnable, isLiveTagsEnable=isLiveTagsEnable)
+
+    def setMessageEnable(self, isEnable):
+        self.update(isMessagesEnable=isEnable)
+
+    def setLiveTagsEnable(self, isEnable):
+        self.update(isLiveTagsEnable=isEnable)
+
+    @classmethod
+    def _getSettingName(cls):
+        return COMMENDATIONS
 
 
 class _QuestSettings(utils.SettingRootRecord):
@@ -331,5 +350,16 @@ def getPersonalReservesSettings():
 @contextmanager
 def personalReservesSettings():
     s = getPersonalReservesSettings()
+    yield s
+    s.save()
+
+
+def getCommendationsSettings():
+    return _CommendationsSettings.load()
+
+
+@contextmanager
+def commendationsSettings():
+    s = getCommendationsSettings()
     yield s
     s.save()

@@ -27,10 +27,18 @@ class ShopInfoType(Enum):
     DISCOUNT = 'discount'
 
 
-class RewardsScreenModel(ViewModel):
-    __slots__ = ('onClose', 'onOpenShop', 'onOpenNextScreen')
+class VideoState(IntEnum):
+    NOTSTARTED = 0
+    STARTED = 1
+    PAUSED = 2
+    RESUMED = 3
+    ENDED = 4
 
-    def __init__(self, properties=16, commands=3):
+
+class RewardsScreenModel(ViewModel):
+    __slots__ = ('onClose', 'onOpenShop', 'onChangeType', 'onOpenNextScreen', 'onVideoStateChange')
+
+    def __init__(self, properties=17, commands=5):
         super(RewardsScreenModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -129,27 +137,33 @@ class RewardsScreenModel(ViewModel):
     def setHasYearlyVehicle(self, value):
         self._setBool(12, value)
 
+    def getVideoState(self):
+        return VideoState(self._getNumber(13))
+
+    def setVideoState(self, value):
+        self._setNumber(13, value.value)
+
     def getSeasonsResults(self):
-        return self._getArray(13)
+        return self._getArray(14)
 
     def setSeasonsResults(self, value):
-        self._setArray(13, value)
+        self._setArray(14, value)
 
     @staticmethod
     def getSeasonsResultsType():
         return SeasonResult
 
     def getShowSeasonResults(self):
-        return self._getBool(14)
-
-    def setShowSeasonResults(self, value):
-        self._setBool(14, value)
-
-    def getHasNextScreen(self):
         return self._getBool(15)
 
-    def setHasNextScreen(self, value):
+    def setShowSeasonResults(self, value):
         self._setBool(15, value)
+
+    def getHasNextScreen(self):
+        return self._getBool(16)
+
+    def setHasNextScreen(self, value):
+        self._setBool(16, value)
 
     def _initialize(self):
         super(RewardsScreenModel, self)._initialize()
@@ -166,9 +180,12 @@ class RewardsScreenModel(ViewModel):
         self._addArrayProperty('mainRewards', Array())
         self._addArrayProperty('additionalRewards', Array())
         self._addBoolProperty('hasYearlyVehicle', False)
+        self._addNumberProperty('videoState')
         self._addArrayProperty('seasonsResults', Array())
         self._addBoolProperty('showSeasonResults', False)
         self._addBoolProperty('hasNextScreen', False)
         self.onClose = self._addCommand('onClose')
         self.onOpenShop = self._addCommand('onOpenShop')
+        self.onChangeType = self._addCommand('onChangeType')
         self.onOpenNextScreen = self._addCommand('onOpenNextScreen')
+        self.onVideoStateChange = self._addCommand('onVideoStateChange')

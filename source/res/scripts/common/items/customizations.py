@@ -211,7 +211,9 @@ def createNationalEmblemComponents(vehDescr):
     decals = []
     nationalEmblemId = vehDescr.type.defaultPlayerEmblemID
     emblemRegions, _ = cn.getAvailableDecalRegions(vehDescr)
-    if emblemRegions:
+    nationalEmblem = vehicles.g_cache.customization20().decals.get(nationalEmblemId)
+    emblemCompatible = nationalEmblem.matchVehicleType(vehDescr.type) if nationalEmblem else True
+    if emblemRegions and emblemCompatible:
         decals.append(DecalComponent(id=nationalEmblemId, appliedTo=emblemRegions))
     return decals
 

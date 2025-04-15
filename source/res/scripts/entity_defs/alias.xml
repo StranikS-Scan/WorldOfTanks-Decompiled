@@ -307,6 +307,9 @@
       <strArg2>
         <Type>	STRING	</Type>
       </strArg2>
+      <int8Arg1>
+        <Type>	INT8	</Type>
+      </int8Arg1>
     </Properties>
   </GENERIC_MESSENGER_ARGS_chat2>
   <DISCLOSE_EVENT>	FIXED_DICT	  <Properties>
@@ -380,6 +383,9 @@
       <outfit>
         <Type>	STRING	</Type>
       </outfit>
+      <outfitLevel>
+        <Type>	UINT8	</Type>
+      </outfitLevel>
       <index>
         <Type>	UINT8	</Type>
       </index>
@@ -527,6 +533,9 @@
       <postmortemMode>
         <Type>	UINT8	</Type>
       </postmortemMode>
+      <commendationsFeedbackEnabled>
+        <Type>	BOOL	</Type>
+      </commendationsFeedbackEnabled>
     </Properties>
   </USER_EXTRA_SETTINGS>
   <ARENA_ADDPLAYER_INFO>	FIXED_DICT	  <Properties>
@@ -2323,6 +2332,9 @@
       <stage>
         <Type>	UINT8	</Type>
       </stage>
+      <locked>
+        <Type>	BOOL	</Type>
+      </locked>
     </Properties>
   </VISUAL_SCRIPT_EQUIPMENT_STATE>
   <VISUAL_SCRIPT_EQUIPMENT_PUBLIC_STATE>	FIXED_DICT	  <Properties>
@@ -2821,4 +2833,70 @@
       </invaderCapturePoints>
     </Properties>
   </COMP7_BASE_INFO>
+  <HEALTH_INFO>	FIXED_DICT	  <Properties>
+      <vehicleID>
+        <Type>	OBJECT_ID	</Type>
+      </vehicleID>
+      <health>
+        <Type>	UINT16	</Type>
+      </health>
+    </Properties>
+  </HEALTH_INFO>
+  <HEALTH_INFO_LIST>	ARRAY	  <of>	HEALTH_INFO	</of>
+  </HEALTH_INFO_LIST>
+  <IMPACT_AREA_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <timeBeforeDamage>
+        <Type>	FLOAT	</Type>
+      </timeBeforeDamage>
+      <isVisible>
+        <Type>	BOOL	</Type>
+      </isVisible>
+    </Properties>
+  </IMPACT_AREA_INFO>
+  <LIVE_TAG_INFO>	FIXED_DICT	  <Properties>
+      <tag>
+        <Type>	UINT8	</Type>
+      </tag>
+      <vehicles>
+        <Type>	ARRAY	  <of>	OBJECT_ID	</of>
+        </Type>
+      </vehicles>
+    </Properties>
+  </LIVE_TAG_INFO>
+  <COMMENDATIONS_STATE>	FIXED_DICT	  <Properties>
+      <vehID>
+        <Type>	OBJECT_ID	</Type>
+      </vehID>
+      <messageState>
+        <Type>	INT8	</Type>
+      </messageState>
+    </Properties>
+  </COMMENDATIONS_STATE>
+  <COMMENDATIONS_STATE_LIST>	ARRAY	  <of>	COMMENDATIONS_STATE	</of>
+  </COMMENDATIONS_STATE_LIST>
+  <COMMENDATIONS_BATTLE_STATISTICS>	FIXED_DICT	  <Properties>
+      <vehID>
+        <Type>	OBJECT_ID	</Type>
+      </vehID>
+      <commendationsReceived>
+        <Type>	INT8	</Type>
+      </commendationsReceived>
+      <commendationsSent>
+        <Type>	INT8	</Type>
+      </commendationsSent>
+    </Properties>
+  </COMMENDATIONS_BATTLE_STATISTICS>
+  <COMMENDATIONS_BATTLE_STATISTICS_LIST>	ARRAY	  <of>	COMMENDATIONS_BATTLE_STATISTICS	</of>
+  </COMMENDATIONS_BATTLE_STATISTICS_LIST>
+  <FALL_TANKS_EVACUATION_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <endTime>
+        <Type>	FLOAT32	</Type>
+      </endTime>
+      <baseTime>
+        <Type>	FLOAT32	</Type>
+      </baseTime>
+    </Properties>
+  </FALL_TANKS_EVACUATION_INFO>
 </alias.xml>

@@ -87,10 +87,6 @@ class IItemsRequester(requesters.IRequester):
         raise NotImplementedError
 
     @property
-    def resourceWell(self):
-        raise NotImplementedError
-
-    @property
     def achievements20(self):
         raise NotImplementedError
 

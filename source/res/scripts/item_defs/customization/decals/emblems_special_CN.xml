@@ -29,6 +29,11 @@
       <userString>	#vehicle_customization_cn:emblem/group0/chinese_36	</userString>
       <mirror>	false	</mirror>
     </decal>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
+    </vehicleFilter>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:emblem/special	</userString>
@@ -43,6 +48,11 @@
     </decal>
     <name>	WG League	</name>
     <type>	EMBLEM	</type>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
+    </vehicleFilter>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:emblem/special	</userString>
@@ -57,5 +67,10 @@
     </decal>
     <name>	Seniority Emblems	</name>
     <type>	EMBLEM	</type>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
+    </vehicleFilter>
   </itemGroup>
 </emblems_special_CN.xml>

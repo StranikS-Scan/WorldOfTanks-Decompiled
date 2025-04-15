@@ -9,7 +9,7 @@
   <supplySlots>	1 1 1 6 6 6 7 8 8 8	</supplySlots>
   <speedLimits>
     <forward>	40	</forward>
-    <backward>	10	</backward>
+    <backward>	14	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.23	</moving>
@@ -1301,13 +1301,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <StuGIII_Ausf_1940>
-      <userString>	#germany_vehicles:StuGIII_Ausf_1940	</userString>
+    <Chassis_G05_StuG_40_AusfG>
+      <userString>	#germany_vehicles:Chassis_G05_StuG_40_AusfG	</userString>
       <tags></tags>
-      <level>	3	</level>
+      <level>	4	</level>
       <price>	1660	</price>
       <unlocks>
-        <chassis>	StuGIII_Ausf_1943	  <cost>	1115	</cost>
+        <chassis>	Chassis_G05_StuG_40_AusfG_2	  <cost>	1115	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1321,13 +1321,13 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	39	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.23	</vehicleMovement>
-        <vehicleRotation>	0.23	</vehicleRotation>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	90	</maxHealth>
-      <maxRegenHealth>	70	</maxRegenHealth>
-      <repairCost>	0.5	</repairCost>
+      <maxHealth>	95	</maxHealth>
+      <maxRegenHealth>	71	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
       <models>
         <undamaged>	vehicles/german/G05_StuG_40_AusfG/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/german/G05_StuG_40_AusfG/crash/lod0/Chassis.model	</destroyed>
@@ -2353,12 +2353,12 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	6.85714293	</repairTime>
-    </StuGIII_Ausf_1940>
-    <StuGIII_Ausf_1943>
-      <userString>	#germany_vehicles:StuGIII_Ausf_1943	</userString>
+      <repairTime>	6.73684216	</repairTime>
+    </Chassis_G05_StuG_40_AusfG>
+    <Chassis_G05_StuG_40_AusfG_2>
+      <userString>	#germany_vehicles:Chassis_G05_StuG_40_AusfG_2	</userString>
       <tags></tags>
-      <level>	4	</level>
+      <level>	5	</level>
       <price>	4740	</price>
       <armor>
         <leftTrack>	15	</leftTrack>
@@ -2371,13 +2371,13 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	47	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.21	</vehicleMovement>
-        <vehicleRotation>	0.21	</vehicleRotation>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	0.5	</repairCost>
+      <maxHealth>	115	</maxHealth>
+      <maxRegenHealth>	86	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
       <models>
         <undamaged>	vehicles/german/G05_StuG_40_AusfG/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/german/G05_StuG_40_AusfG/crash/lod0/Chassis.model	</destroyed>
@@ -3401,12 +3401,12 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	6.85714293	</repairTime>
-    </StuGIII_Ausf_1943>
+      <repairTime>	6.72463751	</repairTime>
+    </Chassis_G05_StuG_40_AusfG_2>
   </chassis>
   <turrets0>
-    <StuGIII_0>
-      <userString>	#germany_vehicles:StuGIII_0	</userString>
+    <Turret_1_G05_StuG_40_AusfG>
+      <userString>	#germany_vehicles:Turret_1_G05_StuG_40_AusfG	</userString>
       <tags>	cannotDetach	</tags>
       <level>	4	</level>
       <price>	100	</price>
@@ -3429,102 +3429,9 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_StuK_40_L43>	shared	  <unlocks>
-            <gun>	_75mm_PaK_39_L48	  <cost>	3400	</cost>
+        <_7_5_cm_Pak_39_L_48_G>	shared	  <unlocks>
+            <gun>	_7_5_cm_Pak_42_L_70_G	  <cost>	4600	</cost>
             </gun>
-            <gun>	_105mm_StuH42_L28	  <cost>	3800	</cost>
-            </gun>
-          </unlocks>
-          <reloadTime>	3.9	</reloadTime>
-          <armor>
-            <armor_1>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_4>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <gun>	20	</gun>
-          </armor>
-          <maxAmmo>	65	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -23 1 -23	</minPitch>
-            <maxPitch>	0 8 1 8	</maxPitch>
-          </pitchLimits>
-          <aimingTime>	1.7	</aimingTime>
-          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
-          <turretYawLimits>	-10 10	</turretYawLimits>
-          <models>
-            <undamaged>	vehicles/german/G05_StuG_40_AusfG/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/german/G05_StuG_40_AusfG/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/german/G05_StuG_40_AusfG/crash/lod0/Gun_03.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G05_StuG_40_AusfG/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G05_StuG_40_AusfG/collision_client/Gun_03.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium_mb	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.005801 -0.000757 1.34559	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.363091 0.363091	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.005801 -0.000757 1.34559	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	0.129972 1.8889 1.27832	</position>
-              <rotation>	0 0.00001 3.14158	</rotation>
-              <scale>	0.559989 0.116728 0.55999	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.792262	</clipAngle>
-              <anchorShift>	0.090124	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.011601 -0.001514 2.022	</rayStart>
-              <rayEnd>	0.011601 -0.001514 2.272	</rayEnd>
-              <rayUp>	0.067 0 0	</rayUp>
-              <size>	0.25	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.58 0.58 0.000000 0.000000	</tiling>
-            <density>	108.56 97.4327	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_75mm_StuK_40_L43>
-        <_75mm_PaK_39_L48>	shared	  <unlocks>
-            <gun>	_75mm_StuK42_L70	  <cost>	4600	</cost>
-            </gun>
-            <vehicle>	G17_JagdPzIV	  <cost>	31100	</cost>
-            </vehicle>
           </unlocks>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <reloadTime>	3.9	</reloadTime>
@@ -3546,6 +3453,12 @@
           </pitchLimits>
           <aimingTime>	1.7	</aimingTime>
           <turretYawLimits>	-10 10	</turretYawLimits>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <afterShot>	3.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+            <turretRotation>	0.08	</turretRotation>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/german/G05_StuG_40_AusfG/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/german/G05_StuG_40_AusfG/crash/lod0/Gun_04.model	</destroyed>
@@ -3611,95 +3524,11 @@
             <density>	95.4441 98.9832	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_75mm_PaK_39_L48>
-        <_105mm_StuH42_L28>	shared	  <armor>
-            <armor_1>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_3>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <gun>	40	</gun>
-          </armor>
-          <maxAmmo>	42	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 7 1 7	</maxPitch>
-          </pitchLimits>
-          <shotDispersionRadius>	0.53	</shotDispersionRadius>
-          <aimingTime>	1.7	</aimingTime>
-          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
-          <turretYawLimits>	-15 15	</turretYawLimits>
-          <models>
-            <undamaged>	vehicles/german/G05_StuG_40_AusfG/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/german/G05_StuG_40_AusfG/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/german/G05_StuG_40_AusfG/crash/lod0/Gun_05.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G05_StuG_40_AusfG/collision/Gun_05.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G05_StuG_40_AusfG/collision_client/Gun_05.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_large_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.006029 0.007984 1.2338	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.363611 0.363611	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.006029 0.007984 1.2338	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	0.129972 1.92573 1.21276	</position>
-              <rotation>	-0 0.00001 3.14158	</rotation>
-              <scale>	0.435468 0.192782 0.435469	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	1.11583	</clipAngle>
-              <verticalMirror>	true	</verticalMirror>
-              <anchorShift>	0.065157	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.012058 0.014015 1.72254	</rayStart>
-              <rayEnd>	0.012058 0.014015 2.05154	</rayEnd>
-              <rayUp>	0.094 0 0	</rayUp>
-              <size>	0.329	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.625 0.625 0.000000 0.000000	</tiling>
-            <density>	94.1634 94.6412	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_105mm_StuH42_L28>
-        <_75mm_StuK42_L70>	shared	  <reloadTime>	4.5	</reloadTime>
+        </_7_5_cm_Pak_39_L_48_G>
+        <_7_5_cm_Pak_42_L_70_G>	shared	  <reloadTime>	4.5	</reloadTime>
           <unlocks>
+            <vehicle>	G17_JagdPzIV	  <cost>	31100	</cost>
+            </vehicle>
             <vehicle>	G40_Nashorn	  <cost>	26500	</cost>
             </vehicle>
           </unlocks>
@@ -3788,7 +3617,7 @@
             <density>	92.3425 98.3155	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_75mm_StuK42_L70>
+        </_7_5_cm_Pak_42_L_70_G>
       </guns>
       <models>
         <undamaged>	vehicles/german/G05_StuG_40_AusfG/normal/lod0/turret_01.model	</undamaged>
@@ -3808,20 +3637,15 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-    </StuGIII_0>
+    </Turret_1_G05_StuG_40_AusfG>
   </turrets0>
   <engines>
-    <Maybach_HL_108TR>	shared	  <unlocks>
-        <engine>	Maybach_HL_120_TR	  <cost>	710	</cost>
+    <Maybach_HL_120_TRM_IV_F>	shared	  <unlocks>
+        <engine>	Maybach_HL_120_TRM_IV_G	  <cost>	1500	</cost>
         </engine>
       </unlocks>
-    </Maybach_HL_108TR>
-    <Maybach_HL_120_TR>	shared	  <unlocks>
-        <engine>	Maybach_HL_120_TRM	  <cost>	1500	</cost>
-        </engine>
-      </unlocks>
-    </Maybach_HL_120_TR>
-    <Maybach_HL_120_TRM>	shared	</Maybach_HL_120_TRM>
+    </Maybach_HL_120_TRM_IV_F>
+    <Maybach_HL_120_TRM_IV_G>	shared	</Maybach_HL_120_TRM_IV_G>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
@@ -3837,21 +3661,17 @@
   <physics>
     <detailed>
       <engines>
-        <Maybach_HL_108TR>
-          <smplEnginePower>	338.33	</smplEnginePower>
+        <Maybach_HL_120_TRM_IV_F>
+          <smplEnginePower>	420	</smplEnginePower>
           <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
-        </Maybach_HL_108TR>
-        <Maybach_HL_120_TR>
-          <smplEnginePower>	370.0484	</smplEnginePower>
+        </Maybach_HL_120_TRM_IV_F>
+        <Maybach_HL_120_TRM_IV_G>
+          <smplEnginePower>	480	</smplEnginePower>
           <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
-        </Maybach_HL_120_TR>
-        <Maybach_HL_120_TRM>
-          <smplEnginePower>	465.2037	</smplEnginePower>
-          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
-        </Maybach_HL_120_TRM>
+        </Maybach_HL_120_TRM_IV_G>
       </engines>
       <chassis>
-        <StuGIII_Ausf_1940>
+        <Chassis_G05_StuG_40_AusfG>
           <grounds>
             <soft>
               <rollingFriction>	0.23345	</rollingFriction>
@@ -3863,8 +3683,9 @@
               <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
-        </StuGIII_Ausf_1940>
-        <StuGIII_Ausf_1943>
+          <axleCount>	5	</axleCount>
+        </Chassis_G05_StuG_40_AusfG>
+        <Chassis_G05_StuG_40_AusfG_2>
           <grounds>
             <soft>
               <rollingFriction>	0.18515	</rollingFriction>
@@ -3876,7 +3697,8 @@
               <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
-        </StuGIII_Ausf_1943>
+          <axleCount>	5	</axleCount>
+        </Chassis_G05_StuG_40_AusfG_2>
       </chassis>
     </detailed>
   </physics>

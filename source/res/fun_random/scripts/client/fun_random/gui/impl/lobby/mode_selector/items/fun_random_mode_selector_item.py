@@ -9,6 +9,7 @@ from fun_random.gui.impl.gen.view_models.views.lobby.common.fun_random_progressi
 from fun_random.gui.impl.lobby.common.fun_view_helpers import defineProgressionStatus
 from fun_random.gui.impl.lobby.common.fun_view_helpers import getFormattedTimeLeft
 from fun_random.gui.impl.lobby.mode_selector.items.fun_random_mode_selector_helpers import createSelectorHelper
+from fun_random.gui.impl.lobby.common.fun_view_helpers import packPerformanceAlertInfo
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.impl import backport
 from gui.impl.gen import R
@@ -139,6 +140,7 @@ class FunRandomSelectorItem(ModeSelectorLegacyItem, FunAssetPacksMixin, FunSubMo
         model.setConditions(self.__subModesHelper.getConditionText())
         model.setStatusNotActive(self.__getStatusText(status))
         model.setTimeLeft(self.__getTimeLeftText(status))
+        packPerformanceAlertInfo(model.performance, self._funRandomCtrl.subModesInfo.getPerformanceAlertGroup())
         self.__invalidateRewards(model.getRewardList())
 
     @hasActiveProgression(abortAction='setDisabledProgression')

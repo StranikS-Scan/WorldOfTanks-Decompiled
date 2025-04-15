@@ -21,9 +21,13 @@ class FunSubModeImpl(object):
 
 class FunProgressionCondition(object):
     BATTLES = 'battles'
+    DAMAGE = 'damage'
     TOP = 'top'
     WIN = 'win'
-    ALL = (BATTLES, TOP, WIN)
+    ALL = (BATTLES,
+     DAMAGE,
+     TOP,
+     WIN)
 
 
 class FunEfficiencyParameter(object):
@@ -45,6 +49,17 @@ class FunEfficiencyParameter(object):
      DROPPED_CAPTURE_POINTS)
 
 
+class FunPerformanceParameter(object):
+    RECOMMENDED_GRAPHICS_PRESET = 'recommendedGraphicsPreset'
+    RENDER_PIPELINE = 'renderPipeline'
+    MEDIUM_RISK = 'mediumRisk'
+    HIGH_RISK = 'highRisk'
+    ALL = (RECOMMENDED_GRAPHICS_PRESET,
+     RENDER_PIPELINE,
+     MEDIUM_RISK,
+     HIGH_RISK)
+
+
 class FunEfficiencyParameterCount(object):
     MIN = 3
     MAX = 5
@@ -52,6 +67,7 @@ class FunEfficiencyParameterCount(object):
 
 class ARENA_GUI_TYPE(constants.ARENA_GUI_TYPE, ConstInjector):
     FUN_RANDOM = 29
+    FUN_RANDOM_RANGE = (FUN_RANDOM,)
 
 
 class UNIT_MGR_FLAGS(UnitBase.UNIT_MGR_FLAGS, ConstInjector):

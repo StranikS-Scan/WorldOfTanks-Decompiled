@@ -574,7 +574,7 @@ class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandF
             cmd.setSilentMode(silentMode)
         if cmd.isIgnored():
             g_mutedMessages[cmd.getFirstTargetID()] = cmd
-            _logger.debug("Chat command '%s' is ignored", cmd.getCommandText())
+            _logger.debug("Chat command id: %s, text: '%s' is ignored", cmd.getID(), cmd.getCommandText())
             return
         elif cmd.isPrivate() and not (cmd.isReceiver() or cmd.isSender()):
             return

@@ -1,0 +1,51 @@
+<06_ensk_big.xml>
+  <name>	#arenas:06_ensk_big/name	</name>
+  <description>	#arenas:06_ensk_big/description	</description>
+  <geometry>	spaces/06_ensk_big	</geometry>
+  <estimatedLoad>	0.3	</estimatedLoad>
+  <boundingBox>
+    <bottomLeft>	-500.000000 -500.000000	</bottomLeft>
+    <upperRight>	500.000000 500.000000	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/06_ensk_big/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <defaultGroundEffect>	None	</defaultGroundEffect>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_ensk_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_ensk_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_ensk_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_ensk_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_ensk_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_ensk_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	-82.004974 236.391052	</position1>
+        </team1>
+        <team2>
+          <position1>	-84.674301 -252.599548	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+    <domination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-54.488983 462.329407	</position>
+        </team1>
+        <team2>
+          <position>	-7.622543 -461.018890	</position>
+        </team2>
+      </teamSpawnPoints>
+      <controlPoint>	-182.768738 0.675796	</controlPoint>
+    </domination>
+  </gameplayTypes>
+  <mapActivities></mapActivities>
+</06_ensk_big.xml>

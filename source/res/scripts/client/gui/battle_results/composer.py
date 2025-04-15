@@ -27,6 +27,7 @@ class StatsComposer(IBattleResultStatsCtrl):
         self._block.addNextComponent(templates.QUESTS_PROGRESS_STATS_BLOCK.clone())
         self._block.addNextComponent(templates.DOG_TAGS_PROGRESS_STATS_BLOCK.clone())
         self._block.addNextComponent(templates.PRESTIGE_PROGRESS_VO.clone())
+        self._block.addNextComponent(templates.COMMENDATIONS_RECEIVED_VO.clone())
         self._block.addNextComponent(common)
         self._block.addNextComponent(personal)
         self._block.addNextComponent(teams)

@@ -7,12 +7,13 @@ from frameworks.wulf import ViewFlags, ViewSettings
 from gui.impl.common.personal_reserves.personal_reserves_shared_constants import PERSONAL_RESOURCE_ORDER
 from gui.impl.common.personal_reserves.personal_reserves_shared_model_utils import getPersonalBoosterModelDataByResourceType, addPersonalBoostersGroup, addEventGroup
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.battle.battle_page.personal_reserves_tab_view_model import PersonalReservesTabViewModel
+from gui.impl.gen.view_models.views.battle.battle_page.personal_reserves_tab_view_model import PersonalReservesTabViewModel, TabAlias
 from gui.impl.gui_decorators import args2params
 from gui.impl.lobby.personal_reserves.personal_reserves_utils import generatePersonalReserveTick
 from gui.impl.pub import ViewImpl
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
+from gui.battle_control.battle_constants import TabsAliases
 from helpers import dependency
 from skeletons.gui.goodies import IBoostersStateProvider
 from frameworks.wulf import ViewModel
@@ -51,6 +52,13 @@ class PersonalReservesTabView(ViewImpl):
 
     def _getEvents(self):
         return ((self.viewModel.onBoosterActivate, self.onBoosterActivate), (self._boostersStateProvider.onStateUpdated, self._update))
+
+    def handleTabChange(self, tabAlias):
+        _logger.debug('_handleFullStatsSelected: alias[%s]', tabAlias)
+        if tabAlias == TabsAliases.STATS.value:
+            self.viewModel.setTabSelection(TabAlias.STATS)
+        elif tabAlias == TabsAliases.BOOSTERS.value:
+            self.viewModel.setTabSelection(TabAlias.RESERVES)
 
     def _onLoading(self, *args, **kwargs):
         super(PersonalReservesTabView, self)._onLoading(*args, **kwargs)

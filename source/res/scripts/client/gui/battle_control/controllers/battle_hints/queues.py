@@ -122,6 +122,8 @@ class BattleHint(object):
     def _playSound(self):
         if not self._model.sound:
             return
+        elif self._model.sound.createAliveOnly() and not BigWorld.player().isVehicleAlive:
+            return
         else:
             soundFx = self._model.sound.createFx()
             if soundFx:

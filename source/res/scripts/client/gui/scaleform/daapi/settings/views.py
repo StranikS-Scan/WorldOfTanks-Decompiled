@@ -114,7 +114,6 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     CONFIGURABLE_VEHICLE_PREVIEW = 'configurableVehiclePreview'
     OFFER_GIFT_VEHICLE_PREVIEW = 'offerGiftVehiclePreview'
     RESOURCE_WELL_VEHICLE_PREVIEW = 'resourceWellVehiclePreview'
-    RESOURCE_WELL_HERO_VEHICLE_PREVIEW = 'resourceWellHeroVehiclePreview'
     VEHICLE_COMPARE = 'vehicleCompare'
     VEHICLE_COMPARE_MAIN_CONFIGURATOR = 'vehicleCompareConfigurator'
     LOBBY_STRONGHOLD = 'StrongholdView'

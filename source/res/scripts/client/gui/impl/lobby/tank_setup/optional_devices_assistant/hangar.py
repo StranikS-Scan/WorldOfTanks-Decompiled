@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/optional_devices_assistant/hangar.py
-from enum import IntEnum
-from functools import partial
 import typing
 from CurrentVehicle import g_currentVehicle
 from account_helpers.AccountSettings import AccountSettings, OptionalDevicesAssistant
 from constants import QUEUE_TYPE
+from gui.game_control.wot_plus_opt_device_assist import OptionalDevicesAssistantCtrl
+from gui.game_control.wotlda.constants import OptDeviceAssistType
 from gui.impl.common.base_sub_model_view import BaseSubModelView
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.optional_devices_assistant_item import OptionalDevicesAssistantItem as ODAItem
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.optional_devices_assistant_model import OptionalDevicesAssistantStateEnum, OptionalDevicesAssistantItemType
@@ -13,15 +13,15 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.optional_devices_
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.optional_devices_assistant_preset import OptionalDevicesAssistantTypeEnum as OdaUItype
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.optional_devices_assistant_preset_model_type import OptionalDevicesAssistantPresetTypeEnum as PresetType
 from gui.impl.gui_decorators import args2params
-from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.gui_items.Vehicle import Vehicle
-from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from renewable_subscription_common.optional_devices_usage_config import GenericOptionalDevice
-from skeletons.gui.game_control import IOptionalDevicesAssistantController, IComp7Controller
+from skeletons.gui.game_control import IWotPlusController, IComp7Controller
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
-    from typing import List, Set
+    from gui.shared.event_bus import SharedEvent
+    from typing import List
     from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.optional_devices_assistant_model import OptionalDevicesAssistantModel
     from renewable_subscription_common.optional_devices_usage_config import VehicleLoadout
 _GENERIC_INT_TYPE_TO_UI_ENUM = {GenericOptionalDevice.STEREOSCOPE: OptionalDevicesAssistantItemType.STEREOSCOPE,
@@ -45,50 +45,10 @@ _GENERIC_INT_TYPE_TO_UI_ENUM = {GenericOptionalDevice.STEREOSCOPE: OptionalDevic
  GenericOptionalDevice.MODERNIZED_TURBOCHARGER_ROTATION_MECHANISM: OptionalDevicesAssistantItemType.MODERNIZEDTURBOCHARGERROTATIONMECHANISM,
  GenericOptionalDevice.MODERNIZED_AIM_DRIVES_AIMING_STABILIZER: OptionalDevicesAssistantItemType.MODERNIZEDAIMDRIVESAIMINGSTABILIZER,
  GenericOptionalDevice.MODERNIZED_IMPROVED_SIGHTS_ENHANCED_AIM_DRIVES: OptionalDevicesAssistantItemType.MODERNIZEDIMPROVEDSIGHTSENHANCEDAIMDRIVES}
-_ARCHETYPE_TO_TAG_ENUM = {GenericOptionalDevice.MODERNIZED_EXTRA_HEALTH_RESERVE_ANTIFRAGMENTATION_LINING: OptionalDevicesAssistantItemType.HEALTHRESERVE,
- GenericOptionalDevice.MODERNIZED_TURBOCHARGER_ROTATION_MECHANISM: OptionalDevicesAssistantItemType.TURBOCHARGER,
- GenericOptionalDevice.MODERNIZED_AIM_DRIVES_AIMING_STABILIZER: OptionalDevicesAssistantItemType.ENHANCEDAIMDRIVES,
- GenericOptionalDevice.MODERNIZED_IMPROVED_SIGHTS_ENHANCED_AIM_DRIVES: OptionalDevicesAssistantItemType.IMPROVEDSIGHTS}
-_LAST_ORDER_VALUE = 1000
-_LAST_MODERNIZED_ORDER_VALUE = 1001
-
-class OptDeviceAssistType(IntEnum):
-    NODATA = 0
-    NORMAL = 1
-    LINKED = 2
-    COMBINED = 3
-
-
-@dependency.replace_none_kwargs(itemsCache=IItemsCache)
-def _sortComparator(categories, device, itemsCache=None):
-    deviceKey = _GENERIC_INT_TYPE_TO_UI_ENUM[device].value
-    criteria = REQ_CRITERIA.OPTIONAL_DEVICE.MODERNIZED | REQ_CRITERIA.OPTIONAL_DEVICE.HAS_ANY_BY_ARCHETYPE(deviceKey)
-    modernizedDevices = itemsCache.items.getItems(GUI_ITEM_TYPE.OPTIONALDEVICE, criteria=criteria).values()
-    if modernizedDevices:
-        return _LAST_MODERNIZED_ORDER_VALUE
-    if categories:
-        criteria = REQ_CRITERIA.OPTIONAL_DEVICE.SIMPLE | REQ_CRITERIA.OPTIONAL_DEVICE.HAS_ANY_FROM_TAGS({deviceKey}) | REQ_CRITERIA.OPTIONAL_DEVICE.HAS_ANY_FROM_CATEGORIES(categories)
-        optDevices = itemsCache.items.getItems(GUI_ITEM_TYPE.OPTIONALDEVICE, criteria=criteria).values()
-        if not optDevices:
-            return _LAST_ORDER_VALUE
-        categoriesSet = set().union(*(optDevice.descriptor.categories for optDevice in optDevices))
-        return len(categoriesSet)
-
-
-def _sortDevices(vehicle, loadout):
-    if len(vehicle.optDevices.slots) != 3:
-        return loadout.devices
-    slotCategories = vehicle.optDevices.getSlot(1).item.categories
-    loadoutDevicesCopy = list(loadout.devices)
-    sortedDevices = [loadoutDevicesCopy.pop(0)]
-    loadoutDevicesCopy.sort(key=partial(_sortComparator, slotCategories))
-    sortedDevices.extend(loadoutDevicesCopy)
-    return sortedDevices
-
 
 class OptionalDevicesAssistantView(BaseSubModelView):
     __slots__ = ('_queueType',)
-    _optionalDevicesAssistantCtrl = dependency.descriptor(IOptionalDevicesAssistantController)
+    _wotPlusCtrl = dependency.descriptor(IWotPlusController)
     _comp7onslaughtCtrl = dependency.descriptor(IComp7Controller)
     _itemsCache = dependency.descriptor(IItemsCache)
 
@@ -123,14 +83,15 @@ class OptionalDevicesAssistantView(BaseSubModelView):
             self.viewModel.setState(OptionalDevicesAssistantStateEnum.NOTSUITABLEVEHICLE)
             return
         if not self.__isVehicleDataAvailable(currentVehicle):
-            self.viewModel.setState(OptionalDevicesAssistantStateEnum.NODATAATALL)
+            self.showNoDataState()
             return
-        qt = self._queueType
-        if self._queueType == QUEUE_TYPE.COMP7:
-            qt = QUEUE_TYPE.RANDOMS
-        commonData, legendaryData = self._optionalDevicesAssistantCtrl.getPopularOptDevicesPresets(currentVehicle, qt)
+        presets = self._wotPlusCtrl.getOptDeviceAssistPresets(currentVehicle)
+        if not presets:
+            self.showNoDataState()
+            return
+        commonData, legendaryData = presets
         if commonData[0] == OptDeviceAssistType.NODATA and legendaryData[0] == OptDeviceAssistType.NODATA:
-            self.viewModel.setState(OptionalDevicesAssistantStateEnum.NODATAATALL)
+            self.showNoDataState()
             return
         with self.viewModel.transaction() as tx:
             tx.setState(OptionalDevicesAssistantStateEnum.VISIBLE)
@@ -139,37 +100,42 @@ class OptionalDevicesAssistantView(BaseSubModelView):
             items = tx.getOptionalDevicesAssistantPresets()
             items.clear()
             items.reserve(2)
-            items.addViewModel(self.__createPreset(currentVehicle, PresetType.COMMON, *commonData))
-            items.addViewModel(self.__createPreset(currentVehicle, PresetType.LEGENDARY, *legendaryData))
+            items.addViewModel(self.__createPreset(PresetType.COMMON, *commonData))
+            items.addViewModel(self.__createPreset(PresetType.LEGENDARY, *legendaryData))
             items.invalidate()
+
+    def showNoDataState(self):
+        self.viewModel.setState(OptionalDevicesAssistantStateEnum.NODATAATALL)
 
     def _addListeners(self):
         super(OptionalDevicesAssistantView, self)._addListeners()
-        self._optionalDevicesAssistantCtrl.onConfigChanged += self.__onDataChanged
         self.viewModel.onHintShown += self.__onHintShown
         self.viewModel.onPresetSelected += self.__onPresetSelected
+        g_eventBus.addListener(OptionalDevicesAssistantCtrl.OPT_DEVICE_ASSIST_DATA_CHANGED, self.__onDataChanged, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _removeListeners(self):
         super(OptionalDevicesAssistantView, self)._removeListeners()
-        self._optionalDevicesAssistantCtrl.onConfigChanged -= self.__onDataChanged
+        self.viewModel.onHintShown -= self.__onHintShown
         self.viewModel.onPresetSelected -= self.__onPresetSelected
+        g_eventBus.removeListener(OptionalDevicesAssistantCtrl.OPT_DEVICE_ASSIST_DATA_CHANGED, self.__onDataChanged, scope=EVENT_BUS_SCOPE.LOBBY)
 
-    def _fillVehicleLoadoutsData(self, vehicle, loadouts):
+    def _fillVehicleLoadoutsData(self, loadouts):
         popularItemsData = []
         for loadout in loadouts:
-            sortedDevices = _sortDevices(vehicle, loadout)
             popularItem = ODAItem()
             popularItem.setPopularity(loadout.percentage)
             loadoutItems = popularItem.getItems()
-            loadoutItems.reserve(len(sortedDevices))
-            for device in sortedDevices:
-                loadoutItems.addString(_GENERIC_INT_TYPE_TO_UI_ENUM[device].value)
+            loadoutItems.reserve(len(loadout))
+            for device in loadout.devices:
+                if isinstance(device, GenericOptionalDevice):
+                    loadoutItems.addString(_GENERIC_INT_TYPE_TO_UI_ENUM[device].value)
+                loadoutItems.addString(device)
 
             popularItemsData.append(popularItem)
 
         return popularItemsData
 
-    def __onDataChanged(self):
+    def __onDataChanged(self, _):
         self._fillModel()
 
     def __isSuitableVehicle(self, vehicle):
@@ -186,12 +152,12 @@ class OptionalDevicesAssistantView(BaseSubModelView):
             return not vehicle.isSecret
         return not vehicle.isSecret or vehicle.isOnlyForComp7Battles if self._queueType == QUEUE_TYPE.COMP7 else True
 
-    def __createPreset(self, vehicle, presetType, resultType, resultVehicle, loadouts):
+    def __createPreset(self, presetType, resultType, resultVehicle, loadouts):
         preset = OptDeviceAssistPresetUI()
         preset.presetType.setMType(presetType)
-        preset.setOptionalDevicesResultType(OdaUItype(resultType))
+        preset.setOptionalDevicesResultType(OdaUItype(resultType.value))
         preset.setSourceVehicleCompDescr(resultVehicle)
-        uiLoadouts = self._fillVehicleLoadoutsData(vehicle, loadouts)
+        uiLoadouts = self._fillVehicleLoadoutsData(loadouts)
         items = preset.getOptionalDevicesAssistantItems()
         items.reserve(len(uiLoadouts))
         for item in uiLoadouts:

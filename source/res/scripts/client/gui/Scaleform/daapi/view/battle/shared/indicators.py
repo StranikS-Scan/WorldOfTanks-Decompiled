@@ -280,8 +280,6 @@ class _StandardMarkerVOBuilderFactory(_AbstractMarkerVOBuilderFactory):
         return _StandardMarkerVOBuilder()
 
 
-_DEFAULT_DAMAGE_INDICATOR_TYPE = DAMAGE_INDICATOR_TYPE.EXTENDED
-
 class DamageIndicatorMeta(Flash):
 
     def __init__(self, swf, className, args):
@@ -329,6 +327,7 @@ class DamageIndicatorMeta(Flash):
 
 
 class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
+    _DEFAULT_DAMAGE_INDICATOR_TYPE = DAMAGE_INDICATOR_TYPE.EXTENDED
     _DAMAGE_INDICATOR_SWF = 'battleDamageIndicatorApp.swf'
     _DAMAGE_INDICATOR_COMPONENT = 'WGHitIndicatorFlash'
     _DAMAGE_INDICATOR_MC_NAME = '_root.dmgIndicator.hit_{0}'
@@ -356,7 +355,7 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
         self.movie.scaleMode = SCALEFORM.eMovieScaleMode.NO_SCALE
         self.component.useInvertCameraView = False
         self.__isBlind = bool(self.settingsCore.getSetting(GRAPHICS.COLOR_BLIND))
-        self.__setUpVOBuilderFactoryAndUpdateMethod(_DEFAULT_DAMAGE_INDICATOR_TYPE)
+        self.__setUpVOBuilderFactoryAndUpdateMethod(self._DEFAULT_DAMAGE_INDICATOR_TYPE)
         self.settingsCore.interfaceScale.onScaleChanged += self.__setMarkersScale
         ctrl = self.sessionProvider.shared.crosshair
         if ctrl is not None:
@@ -395,7 +394,7 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
     def invalidateSettings(self, diff=None):
         getter = self.settingsCore.getSetting
         self.__isBlind = bool(getter(GRAPHICS.COLOR_BLIND))
-        indicatorType = getter(DAMAGE_INDICATOR.TYPE)
+        indicatorType = self._getIndicatorType()
         self.__setUpVOBuilderFactoryAndUpdateMethod(indicatorType)
         self.as_updateSettingsS(isStandard=indicatorType == DAMAGE_INDICATOR_TYPE.STANDARD, isWithTankInfo=bool(getter(DAMAGE_INDICATOR.VEHICLE_INFO)), isWithAnimation=bool(getter(DAMAGE_INDICATOR.ANIMATION)), isWithValue=bool(getter(DAMAGE_INDICATOR.DAMAGE_VALUE)))
 
@@ -408,6 +407,9 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
 
     def hideHitDirection(self, idx):
         self.as_hideS(idx)
+
+    def _getIndicatorType(self):
+        return self.settingsCore.getSetting(DAMAGE_INDICATOR.TYPE)
 
     def __onCrosshairPositionChanged(self, posX, posY):
         self.as_setPosition(posX, posY)

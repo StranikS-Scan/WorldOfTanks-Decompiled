@@ -688,6 +688,33 @@
         <showOn>	16	</showOn>
         <anchorShift>	0.04	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0.489774 0.261103 -3.406306	</position>
+        <rotation>	-0 -1.569051 1.570273	</rotation>
+        <scale>	1 1 0.999999	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	-1.504001 0.180057 -0.778539	</position>
+        <rotation>	-0 -0 1.569051	</rotation>
+        <scale>	0.999999 0.999999 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	1.504 0.180057 -0.778539	</position>
+        <rotation>	3.141593 0 -1.569052	</rotation>
+        <scale>	0.999999 1 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -970,7 +997,7 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <mud>	medium6WheelsMud	</mud>
+        <mud>	medium6WheelsMudSoft	</mud>
       </effects>
       <wwsoundPC>	wheels_suspension_pc	</wwsoundPC>
       <wwsoundNPC>	wheels_suspension_npc	</wwsoundNPC>
@@ -1158,6 +1185,15 @@
               <anchorPosition>	-0.000005 0.273726 -0.001655	</anchorPosition>
               <anchorDirection>	0 1 0	</anchorDirection>
               <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	attachment	</slotType>
+              <slotId>	48000	</slotId>
+              <position>	-0 0.259 0.196	</position>
+              <rotation>	0.001158 0 0	</rotation>
+              <scale>	1 1 1	</scale>
+              <applyType>	gunMantlet	</applyType>
+              <size>	medium	</size>
             </slot>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
@@ -1538,6 +1574,15 @@
           <showOn>	4368	</showOn>
           <clipAngle>	0.216116	</clipAngle>
           <anchorShift>	0.355571	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38001	</slotId>
+          <position>	0 0.974 -0.930257	</position>
+          <rotation>	-0 0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	turret	</applyType>
+          <size>	medium	</size>
         </slot>
       </customizationSlots>
       <customization>

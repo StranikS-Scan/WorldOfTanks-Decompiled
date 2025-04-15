@@ -11,7 +11,7 @@ import Event
 import season_common
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import ROYALE_VEHICLE, CURRENT_VEHICLE, ROYALE_INTRO_VIDEO_SHOWN
+from account_helpers.AccountSettings import ROYALE_VEHICLE, CURRENT_VEHICLE, ROYALE_INTRO_VIDEO_SHOWN_FOR_SEASON
 from account_helpers.settings_core.settings_constants import GRAPHICS
 from adisp import adisp_process
 from battle_royale.gui.constants import AmmoTypes, BattleRoyalePerfProblems, BattleRoyaleSubMode
@@ -60,7 +60,7 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from stats_params import BATTLE_ROYALE_STATS_ENABLED
 from gui.shared.money import DynamicMoney
-from battle_royale.gui.constants import BR_COIN, STP_COIN
+from battle_royale.gui.constants import BR_COIN
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Window
     from helpers.server_settings import BattleRoyaleConfig
@@ -188,9 +188,6 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
     def getBRCoinBalance(self, default=None):
         return self.__balance.get(BR_COIN, default)
 
-    def getSTPCoinBalance(self, default=None):
-        return self.__balance.get(STP_COIN, default)
-
     def __initBalanceCurrencies(self):
         self.__updateBalanceCurrencies()
         self.onBalanceUpdated()
@@ -199,10 +196,10 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         self.__balance = self.__itemsCache.items.stats.getDynamicMoney()
 
     def __updateDynamicCurrencies(self, currencies):
-        if STP_COIN not in currencies:
+        if BR_COIN not in currencies:
             return False
-        stpCoin = currencies.get(STP_COIN, 0)
-        if self.getSTPCoinBalance(0) != stpCoin:
+        brCoin = currencies.get(BR_COIN, 0)
+        if self.getBRCoinBalance(0) != brCoin:
             self.__updateBalanceCurrencies()
         self.onBalanceUpdated()
 
@@ -456,16 +453,6 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
             self.__isTournamentBannerEnabled = self.__getTournamentBannerAvailability()
         return self.__isTournamentBannerEnabled
 
-    def hasSTPDailyFactor(self, vehicle):
-        return vehicle.compactDescr not in self.__itemsCache.items.battleRoyale.brMultipliedSTPCoinsVehs
-
-    def getStpCoinsPerPlace(self, place):
-        stpCoinAward = self.getModeSettings().stpCoinAward
-        bonusType = BigWorld.player().arenaBonusType
-        for placeInBattle, coins in stpCoinAward.get(bonusType, []):
-            if place == placeInBattle:
-                return coins
-
     def __progressionPointsConfig(self):
         return self.__battleRoyaleSettings.progressionTokenAward
 
@@ -485,14 +472,17 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
     def __modeEntered(self):
         if not self.isBattleRoyaleMode():
             return
-        if not SelectorBattleTypesUtils.isKnownBattleType(SELECTOR_BATTLE_TYPES.BATTLE_ROYALE):
-            SelectorBattleTypesUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.BATTLE_ROYALE)
-        introVideoUrl = self.getIntroVideoURL()
-        if AccountSettings.getSettings(ROYALE_INTRO_VIDEO_SHOWN) or not introVideoUrl:
+        else:
+            if not SelectorBattleTypesUtils.isKnownBattleType(SELECTOR_BATTLE_TYPES.BATTLE_ROYALE):
+                SelectorBattleTypesUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.BATTLE_ROYALE)
+            introVideoUrl = self.getIntroVideoURL()
+            season = self.getCurrentSeason()
+            storedSeasonID = AccountSettings.getSettings(ROYALE_INTRO_VIDEO_SHOWN_FOR_SEASON)
+            if season is None or season.getSeasonID() == storedSeasonID or not introVideoUrl:
+                return
+            AccountSettings.setSettings(ROYALE_INTRO_VIDEO_SHOWN_FOR_SEASON, season.getSeasonID())
+            showBrowserOverlayView(introVideoUrl, VIEW_ALIAS.BROWSER_OVERLAY, forcedSkipEscape=True)
             return
-        AccountSettings.setSettings(ROYALE_INTRO_VIDEO_SHOWN, True)
-        self.showIntroWindow()
-        showBrowserOverlayView(introVideoUrl, VIEW_ALIAS.BROWSER_OVERLAY, forcedSkipEscape=True)
 
     def __selectRoyaleBattle(self, extData=None, **kwargs):
         dispatcher = g_prbLoader.getDispatcher()

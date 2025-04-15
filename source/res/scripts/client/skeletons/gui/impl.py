@@ -5,8 +5,11 @@ from skeletons.gui.game_control import IGameController
 if typing.TYPE_CHECKING:
     from Event import Event
     from frameworks.wulf import ViewModel
+    from frameworks.wulf.resource_manager import ResourceManager
+    from frameworks.wulf.system_locale import SystemLocale
     from frameworks.wulf.tutorial import Tutorial
     from frameworks.wulf.ui_logger import UILogger
+    from frameworks.wulf.windows_system.windows_manager import WindowsManager
 
 class IGuiLoader(object):
     __slots__ = ()

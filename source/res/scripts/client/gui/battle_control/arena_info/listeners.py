@@ -9,7 +9,6 @@ from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.battle_control.arena_info.invitations import SquadInvitationsFilter
 from gui.battle_control.arena_info.settings import ARENA_LISTENER_SCOPE as _SCOPE
 from gui.battle_control.arena_info.settings import INVALIDATE_OP
-from gui.battle_control.battle_constants import WinStatus
 from gui.prb_control import prbInvitesProperty
 from messenger.m_constants import USER_ACTION_ID, USER_TAG
 from messenger.proto.events import g_messengerEvents
@@ -29,7 +28,7 @@ class _PeriodAdditionalInfo(namedtuple('_PeriodAdditionalInfo', ['winStatus', 'w
 def _getPeriodAdditionalInfo(arenaDP, period, additionalInfo):
     if period == ARENA_PERIOD.AFTERBATTLE:
         winnerTeam, finishReason = additionalInfo
-        return _PeriodAdditionalInfo(WinStatus.fromWinnerTeam(winnerTeam, arenaDP.isAllyTeam(winnerTeam)), winnerTeam, finishReason)
+        return _PeriodAdditionalInfo(arenaDP.getWinStatus(winnerTeam), winnerTeam, finishReason)
     else:
         return None
 
@@ -119,6 +118,7 @@ class ArenaVehiclesListener(_Listener):
             arena.onFogOfWarEnabled += self.__arena_onFogOfWarEnabled
             arena.onChatCommandTargetUpdate += self.__arena_onChatCommandTargetUpdate
             arena.onChatCommandTriggered += self.__arena_onChatCommandTriggered
+            arena.onUpdatePriorityChatCommand += self.__arena_onUpdatePriorityChatCommand
         return
 
     def stop(self):
@@ -139,6 +139,7 @@ class ArenaVehiclesListener(_Listener):
             arena.onFogOfWarEnabled -= self.__arena_onFogOfWarEnabled
             arena.onChatCommandTargetUpdate -= self.__arena_onChatCommandTargetUpdate
             arena.onChatCommandTriggered -= self.__arena_onChatCommandTriggered
+            arena.onUpdatePriorityChatCommand -= self.__arena_onUpdatePriorityChatCommand
         super(ArenaVehiclesListener, self).stop()
         return
 
@@ -232,6 +233,9 @@ class ArenaVehiclesListener(_Listener):
 
     def __arena_onChatCommandTriggered(self, chatCommands):
         self._invokeListenersMethod('updateTriggeredChatCommands', chatCommands, self._arenaDP)
+
+    def __arena_onUpdatePriorityChatCommand(self, vehicleID, chatCommand, duration):
+        self._invokeListenersMethod('updatePriorityChatCommand', vehicleID, chatCommand, duration)
 
     def __arena_onFogOfWarHiddenVehiclesSet(self, flag):
         pass

@@ -132,6 +132,7 @@ class CommonTankAppearance(ScriptGameObject):
     weaponEnergy = property(lambda self: self.__weaponEnergy)
     filter = AutoProperty()
     areaTriggerTarget = ComponentDescriptor()
+    vehicleSoundTriggerTarget = ComponentDescriptor()
     burnoutProcessor = ComponentDescriptor()
     c11nComponent = ComponentDescriptor()
     collisionObstaclesCollector = ComponentDescriptor()
@@ -300,6 +301,7 @@ class CommonTankAppearance(ScriptGameObject):
                     shouldStopEngineOnSiegeSwitch = self.typeDescriptor.type.shouldStopEngineOnSiegeSwitch
                     self.siegeEffects = SiegeEffectsController(self, isPlayer, shouldStopEngineOnSiegeSwitch)
                 model_assembler.assembleVehicleAudition(isPlayer, self)
+                self.vehicleSoundTriggerTarget = self.createComponent(Vehicular.VehicleSoundTriggerTarget)
                 if self.__useEngStartControlIdle:
                     engineSoundObject = self.engineAudition.getSoundObject(TankSoundObjectsIndexes.ENGINE)
                     engineSoundObject.setSwitch('SWITCH_ext_eng_start_control', 'SWITCH_ext_eng_start_control_idle')

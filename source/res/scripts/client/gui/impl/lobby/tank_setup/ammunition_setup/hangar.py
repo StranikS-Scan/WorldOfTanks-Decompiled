@@ -55,5 +55,6 @@ class HangarAmmunitionSetupView(BaseHangarAmmunitionSetupView, IGlobalListener):
                 else:
                     _logger.warning('Optional device assistant widget has already been created!')
             elif self._optionalDevicesAssistant:
+                self._optionalDevicesAssistant.showNoDataState()
                 self._removeOptionalDevicesAssistantPanel()
         return

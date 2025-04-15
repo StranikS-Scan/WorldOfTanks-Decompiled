@@ -26,6 +26,7 @@ from messenger.proto import proto_getter
 from messenger.proto.bw_chat2.battle_chat_cmd import EPIC_GLOBAL_CMD_NAMES, LOCATION_CMD_NAMES, TARGET_CMD_NAMES
 from skeletons.account_helpers.settings_core import IBattleCommunicationsSettings
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.game_control import ICommendationsController
 from uilogging.player_satisfaction_rating.loggers import KeyboardShortcutLogger
 _logger = logging.getLogger(__name__)
 CONTEXTCOMMAND = 'CONTEXTCOMMAND'
@@ -117,6 +118,7 @@ class ChatCommandsController(IBattleController):
     __slots__ = ('__isEnabled', '__arenaDP', '__feedback', '__ammo', '__markersManager', '_uiPlayerSatisfactionRatingLogger')
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     battleCommunications = dependency.descriptor(IBattleCommunicationsSettings)
+    commendationsCtrl = dependency.descriptor(ICommendationsController)
     _aimOffset = aih_global_binding.bindRW(aih_global_binding.BINDING_ID.AIM_OFFSET)
 
     def __init__(self, setup, feedback, ammo):

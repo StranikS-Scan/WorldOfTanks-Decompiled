@@ -4,17 +4,17 @@ from collections import namedtuple
 from fun_random_common.fun_constants import DEFAULT_ASSETS_PACK, DEFAULT_SETTINGS_KEY, DEFAULT_PRIORITY, UNKNOWN_WWISE_REMAPPING, UNKNOWN_EVENT_ID, FunSubModeImpl
 from shared_utils import makeTupleByDict
 
-class FunSubModeClientConfig(namedtuple('_FunSubModeClientConfig', ('subModeImpl', 'assetsPointer', 'settingsKey', 'priority', 'wwiseRemapping', 'battleModifiersDescr', 'postbattle', 'infoPageUrl'))):
+class FunSubModeClientConfig(namedtuple('_FunSubModeClientConfig', ('subModeImpl', 'assetsPointer', 'settingsKey', 'priority', 'wwiseRemapping', 'battleModifiersDescr', 'postbattle', 'infoPageUrl', 'performanceAnalyzerType'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(subModeImpl=FunSubModeImpl.DEFAULT, assetsPointer=DEFAULT_ASSETS_PACK, settingsKey=DEFAULT_SETTINGS_KEY, priority=DEFAULT_PRIORITY, wwiseRemapping=UNKNOWN_WWISE_REMAPPING, battleModifiersDescr=(), postbattle={}, infoPageUrl='')
+        defaults = dict(subModeImpl=FunSubModeImpl.DEFAULT, assetsPointer=DEFAULT_ASSETS_PACK, settingsKey=DEFAULT_SETTINGS_KEY, priority=DEFAULT_PRIORITY, wwiseRemapping=UNKNOWN_WWISE_REMAPPING, battleModifiersDescr=(), postbattle={}, infoPageUrl='', performanceAnalyzerType='')
         defaults.update(kwargs)
         return super(FunSubModeClientConfig, cls).__new__(cls, **defaults)
 
     @classmethod
     def defaults(cls):
-        return cls(FunSubModeImpl.DEFAULT, DEFAULT_ASSETS_PACK, DEFAULT_SETTINGS_KEY, DEFAULT_PRIORITY, UNKNOWN_WWISE_REMAPPING, (), {}, '')
+        return cls(FunSubModeImpl.DEFAULT, DEFAULT_ASSETS_PACK, DEFAULT_SETTINGS_KEY, DEFAULT_PRIORITY, UNKNOWN_WWISE_REMAPPING, (), {}, '', '')
 
 
 class FunSubModeFiltrationConfig(namedtuple('FunSubModeFiltrationConfig', ('levels', 'forbiddenClassTags', 'forbiddenVehTypes', 'allowedVehTypes', 'squadRestrictions'))):

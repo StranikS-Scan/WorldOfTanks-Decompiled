@@ -186,9 +186,6 @@ class BattleContext(IBattleContext):
     def setLastArenaWinStatus(self, winStatus):
         self.__lastArenaWinStatus = winStatus
 
-    def getLastArenaWinStatus(self):
-        return self.__lastArenaWinStatus
-
     def extractLastArenaWinStatus(self):
         value = self.__lastArenaWinStatus
         self.__lastArenaWinStatus = None

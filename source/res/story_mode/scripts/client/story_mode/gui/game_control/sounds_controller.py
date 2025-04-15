@@ -4,7 +4,7 @@ import enum
 import typing
 import SoundGroups
 import WWISE
-from story_mode.gui.story_mode_gui_constants import GAMEMODE_GROUP, GAMEMODE_STATE
+from story_mode.gui.sound_constants import GAMEMODE_GROUP, GAMEMODE_STATE
 if typing.TYPE_CHECKING:
     from story_mode_common.configs.story_mode_missions import SoundsModel
     from story_mode_common.configs.sounds_schema import SoundModel
@@ -38,10 +38,19 @@ class SoundsController(object):
         self.__ambienceStarted = None
         return
 
+    def startBattleMusic(self, soundSchema):
+        SoundGroups.g_instance.playSound2D(soundSchema.start)
+        self.setStateIfProvided(soundSchema.group, soundSchema.state)
+
+    def stopBattleMusic(self, soundSchema):
+        SoundGroups.g_instance.playSound2D(soundSchema.stop)
+        self.setStateIfProvided(soundSchema.group, soundSchema.state)
+
     def __startSound(self, currentSound, newSound):
+        self.setStateIfProvided(newSound.group, newSound.state)
         if currentSound is None or currentSound.start != newSound.start:
             self.stopSound(currentSound)
-            self.setStateAndPlaySound(newSound.start, getattr(newSound, 'group', None), getattr(newSound, 'state', None))
+            SoundGroups.g_instance.playSound2D(newSound.start)
             return newSound
         else:
             return currentSound
@@ -59,8 +68,6 @@ class SoundsController(object):
         return
 
     @staticmethod
-    def setStateAndPlaySound(sound, group=None, state=None):
-        if state is not None and group is not None:
+    def setStateIfProvided(group='', state=''):
+        if state and group:
             WWISE.WW_setState(group, state)
-        SoundGroups.g_instance.playSound2D(sound)
-        return

@@ -59,9 +59,9 @@ def showComp7WhatsNewScreen(notificationMgr=None):
 
 
 @dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
-def showComp7RanksRewardsScreen(quest, periodicQuests, notificationMgr=None):
+def showComp7RanksRewardsScreen(quest, notificationMgr=None):
     from comp7.gui.impl.lobby.rewards_screen import RanksRewardsWindow
-    window = RanksRewardsWindow(quest=quest, periodicQuests=periodicQuests)
+    window = RanksRewardsWindow(quest=quest)
     notificationMgr.append(WindowNotificationCommand(window))
 
 
@@ -79,22 +79,23 @@ def showComp7QualificationRewardsScreen(quests, notificationMgr=None):
     notificationMgr.append(WindowNotificationCommand(window))
 
 
-@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
-def showComp7YearlyRewardsScreen(bonuses, showSeasonResults=True, notificationMgr=None):
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController, comp7Ctrl=IComp7Controller)
+def showComp7YearlyRewardsScreen(bonuses, showSeasonResults=True, notificationMgr=None, comp7Ctrl=None):
     from comp7.gui.impl.lobby.rewards_screen import YearlyRewardsWindow
+    comp7Ctrl.tryToShowSeasonStatistics()
     window = YearlyRewardsWindow(bonuses=bonuses, showSeasonResults=showSeasonResults)
     notificationMgr.append(WindowNotificationCommand(window))
 
 
-def showComp7YearlyRewardsSelectionWindow():
+def showComp7YearlyRewardsSelectionWindow(category=None):
     from comp7.gui.impl.lobby.rewards_selection_screen import Comp7RewardsSelectionWindow, Comp7SelectableRewardType
-    window = Comp7RewardsSelectionWindow(Comp7SelectableRewardType.YEARLY)
+    window = Comp7RewardsSelectionWindow(Comp7SelectableRewardType.YEARLY, category)
     window.load()
 
 
-def showComp7WeeklyQuestsRewardsSelectionWindow():
+def showComp7WeeklyQuestsRewardsSelectionWindow(category=None):
     from comp7.gui.impl.lobby.rewards_selection_screen import Comp7RewardsSelectionWindow, Comp7SelectableRewardType
-    window = Comp7RewardsSelectionWindow(Comp7SelectableRewardType.WEEKLY_QUESTS)
+    window = Comp7RewardsSelectionWindow(Comp7SelectableRewardType.WEEKLY_QUESTS, category)
     window.load()
 
 

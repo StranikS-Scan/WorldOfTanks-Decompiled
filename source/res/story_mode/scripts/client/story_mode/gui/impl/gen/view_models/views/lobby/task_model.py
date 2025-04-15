@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/impl/gen/view_models/views/lobby/task_model.py
 from enum import IntEnum
+from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
+from story_mode.gui.impl.gen.view_models.views.lobby.reward_model import RewardModel
 
 class TaskStateEnum(IntEnum):
     UNCOMPLETED = 0
@@ -12,7 +14,7 @@ class TaskStateEnum(IntEnum):
 class TaskModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=6, commands=0):
+    def __init__(self, properties=8, commands=0):
         super(TaskModel, self).__init__(properties=properties, commands=commands)
 
     def getTaskId(self):
@@ -51,6 +53,22 @@ class TaskModel(ViewModel):
     def setAnimationCounter(self, value):
         self._setNumber(5, value)
 
+    def getRewards(self):
+        return self._getArray(6)
+
+    def setRewards(self, value):
+        self._setArray(6, value)
+
+    @staticmethod
+    def getRewardsType():
+        return RewardModel
+
+    def getDescription(self):
+        return self._getString(7)
+
+    def setDescription(self, value):
+        self._setString(7, value)
+
     def _initialize(self):
         super(TaskModel, self)._initialize()
         self._addNumberProperty('taskId', 0)
@@ -59,3 +77,5 @@ class TaskModel(ViewModel):
         self._addNumberProperty('secondsBeforeUnlock', 0)
         self._addBoolProperty('isUnlockedFirstTime', False)
         self._addNumberProperty('animationCounter', 0)
+        self._addArrayProperty('rewards', Array())
+        self._addStringProperty('description', '')

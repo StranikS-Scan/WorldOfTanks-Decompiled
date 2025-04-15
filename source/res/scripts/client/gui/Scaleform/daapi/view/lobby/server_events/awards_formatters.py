@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/awards_formatters.py
-from gui import makeHtmlString
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import NewStyleBonusComposer
 from gui.impl import backport
 from gui.impl.gen import R
@@ -10,7 +9,6 @@ from gui.server_events.awards_formatters import AWARDS_SIZES, AwardsPacker, Ques
 from gui.server_events.bonuses import BlueprintsBonusSubtypes, formatBlueprint
 from gui.battle_pass.battle_pass_bonuses_helper import BonusesHelper
 from gui.shared.gui_items.crew_skin import localizedFullName as localizeSkinName
-from gui.shared.money import Currency
 from nations import NAMES
 SIMPLE_BONUSES_MAX_ITEMS = 5
 _DISPLAYED_AWARDS_COUNT = 2
@@ -182,40 +180,6 @@ class SimpleBonusFormatter(OldStyleBonusFormatter):
         return result
 
 
-class CurrenciesFormatter(SimpleBonusFormatter):
-
-    def __init__(self):
-        super(CurrenciesFormatter, self).__init__()
-        self.__hasSTPCoinBonus = False
-
-    def accumulateBonuses(self, bonus, event=None):
-        if bonus.getCode() == Currency.STPCOIN:
-            self.__hasSTPCoinBonus = True
-            self._result.append({'formattedValue': self._formatCurrencyBonus(bonus),
-             'tooltip': bonus.getTooltip()})
-        else:
-            super(CurrenciesFormatter, self).accumulateBonuses(bonus, event)
-
-    def extractFormattedBonuses(self, addLineSeparator=False):
-        if self.__hasSTPCoinBonus:
-            result = []
-            for formattedBonus in self._result:
-                result.append(formatters.packSimpleBonusesBlock([formattedBonus['formattedValue']], endlineSymbol=_END_LINE_SEPARATOR if addLineSeparator else _EMPTY_STRING, complexTooltip=formattedBonus['tooltip']))
-
-            return result
-        return super(CurrenciesFormatter, self).extractFormattedBonuses(addLineSeparator)
-
-    @staticmethod
-    def _formatCurrencyBonus(bonus):
-        formattedValue = bonus.formatValue()
-        code = bonus.getCode()
-        if code is not None and formattedValue is not None:
-            text = makeHtmlString('html_templates:lobby/quests/bonuses', code, {'value': formattedValue})
-            if text != code:
-                return text
-        return formattedValue
-
-
 class TextBonusFormatter(OldStyleBonusFormatter):
 
     def accumulateBonuses(self, bonus, event=None):
@@ -265,8 +229,7 @@ def getFormattersMap(event):
      'crewBooks': CrewBookFormatter(),
      'blueprints': BlueprintsFormatter(),
      'crewSkins': CrewSkinFormatter(),
-     'battlePassPoints': BattlePassPointsFormatter(),
-     'currencies': CurrenciesFormatter()}
+     'battlePassPoints': BattlePassPointsFormatter()}
 
 
 class OldStyleAwardsPacker(AwardsPacker):

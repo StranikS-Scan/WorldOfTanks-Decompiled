@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/battle_chat_cmd.py
+from typing import TYPE_CHECKING
 import struct
 import Math
 from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES
+from constants import CommendationsState
 from debug_utils import LOG_ERROR
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI as I18N_INGAME_GUI
 from helpers import dependency
@@ -16,6 +18,8 @@ from messenger_common_chat2 import BATTLE_CHAT_COMMANDS_BY_NAMES
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
 from messenger_common_chat2 import messageArgs, BATTLE_CHAT_COMMANDS
 from skeletons.gui.battle_session import IBattleSessionProvider
+if TYPE_CHECKING:
+    from commendations_common.CommendationHelpers import CommendationStateType
 AUTOCOMMIT_COMMAND_NAMES = (BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY,
  BATTLE_CHAT_COMMAND_NAMES.SUPPORTING_ALLY,
  BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY_WITH_SPG,
@@ -59,7 +63,8 @@ TARGETED_VEHICLE_CMD_NAMES = (BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY_WITH_SPG
  BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_4_EX,
  BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_5_EX,
  BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_6_EX,
- BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_7_EX)
+ BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_7_EX,
+ BATTLE_CHAT_COMMAND_NAMES.COMMENDATION)
 TARGET_POINT_CMD_NAMES = (BATTLE_CHAT_COMMAND_NAMES.MOVING_TO_TARGET_POINT, BATTLE_CHAT_COMMAND_NAMES.MOVE_TO_TARGET_POINT)
 TARGET_CMD_NAMES = TARGETED_VEHICLE_CMD_NAMES + TARGET_POINT_CMD_NAMES
 BASE_CMD_NAMES = (BATTLE_CHAT_COMMAND_NAMES.DEFENDING_BASE,
@@ -105,7 +110,8 @@ _PRIVATE_CMD_NAMES = (BATTLE_CHAT_COMMAND_NAMES.TURNBACK,
  BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_4_EX,
  BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_5_EX,
  BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_6_EX,
- BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_7_EX)
+ BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_7_EX,
+ BATTLE_CHAT_COMMAND_NAMES.COMMENDATION)
 _SHOW_MARKER_CMD_NAMES = (BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY_WITH_SPG,
  BATTLE_CHAT_COMMAND_NAMES.ATTACK_ENEMY,
  BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY,
@@ -261,56 +267,28 @@ class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
         if not command:
             LOG_ERROR('Command is not found', self._commandID)
             return u''
-        else:
-            i18nKey = I18N_INGAME_GUI.chat_shortcuts(command.msgText)
-            i18nArguments = {}
-            if i18nKey is not None:
-                if self.isOnMinimap():
-                    if self.isSPGAimCommand():
-                        reloadTime = self._protoData['floatArg1']
-                        if reloadTime > 0:
-                            i18nArguments['reloadTime'] = reloadTime
-                            i18nKey += '_reloading'
-                elif self.hasTarget():
-                    i18nArguments['target'] = self._getTarget()
-                    if self.isSPGAimCommand():
-                        reloadTime = self._protoData['floatArg1']
-                        if reloadTime > 0:
-                            i18nArguments['reloadTime'] = reloadTime
-                            i18nKey += '_reloading'
-                        elif reloadTime < 0:
-                            i18nKey += '_empty'
-                elif self.isBaseRelatedCommand():
-                    strArg = self._protoData['strArg1']
-                    if strArg != '':
-                        i18nArguments['strArg1'] = strArg
-                        i18nKey += '_numbered'
-                elif self.isLocationRelatedCommand():
-                    if self.isSPGAimCommand():
-                        reloadTime = self._protoData['floatArg1']
-                        if reloadTime > 0:
-                            i18nArguments['reloadTime'] = reloadTime
-                            i18nKey += '_reloading'
-                        elif reloadTime < 0:
-                            i18nKey += '_empty'
-                    mapsCtrl = self.sessionProvider.dynamic.maps
-                    if mapsCtrl and mapsCtrl.hasMinimapGrid():
-                        cellId = mapsCtrl.getMinimapCellIdByPosition(self.getMarkedPosition())
-                        if cellId is None:
-                            cellId = self.getFirstTargetID()
-                        i18nKey += '_gridInfo'
-                        i18nArguments['gridId'] = mapsCtrl.getMinimapCellNameById(cellId)
-                else:
-                    i18nArguments = self._protoData
-                text = i18n.makeString(i18nKey, **i18nArguments)
-            else:
-                text = command.msgText
-                if isinstance(text, str):
-                    text = unicode(text, 'utf-8', errors='ignore')
+        elif not command.msgText:
+            return None
+        i18nKey = I18N_INGAME_GUI.chat_shortcuts(command.msgText)
+        if not i18nKey:
+            text = command.msgText
+            if isinstance(text, str):
+                text = unicode(text, 'utf-8', errors='ignore')
             return text
+        elif self.isOnMinimap():
+            return self._handleOnMinimap(i18nKey)
+        elif self.hasTarget():
+            return self._handleHasTarget(i18nKey)
+        elif self.isBaseRelatedCommand():
+            return self._handleBaseRelatedCommand(i18nKey)
+        else:
+            return self._handleLocationRelatedCommand(i18nKey) if self.isLocationRelatedCommand() else i18n.makeString(i18nKey, **self._protoData)
 
     def getSenderID(self):
         return self.sessionProvider.getArenaDP().getSessionIDByVehID(self._protoData['int64Arg1'])
+
+    def getSenderVehID(self):
+        return self._protoData['int64Arg1']
 
     def getFirstTargetID(self):
         return self._protoData['int32Arg1']
@@ -426,6 +404,9 @@ class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
     def isInSilentMode(self):
         return self.__isSilentMode
 
+    def getCommendationState(self):
+        return CommendationsState(self._protoData['int8Arg1'])
+
     def _getTarget(self):
         target = self.sessionProvider.getCtx().getPlayerFullName(vID=self.getFirstTargetID())
         if self.isReceiver():
@@ -456,6 +437,52 @@ class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
             LOG_ERROR('Command is not found', self._commandID)
             return ''
         return command.soundNotification
+
+    def _handleOnMinimap(self, i18nKey):
+        i18nArguments = {}
+        if self.isSPGAimCommand():
+            reloadTime = self._protoData['floatArg1']
+            if reloadTime > 0:
+                i18nArguments['reloadTime'] = reloadTime
+                i18nKey += '_reloading'
+        return i18n.makeString(i18nKey, **i18nArguments)
+
+    def _handleHasTarget(self, i18nKey):
+        i18nArguments = {'target': self._getTarget()}
+        if self.isSPGAimCommand():
+            reloadTime = self._protoData['floatArg1']
+            if reloadTime > 0:
+                i18nArguments['reloadTime'] = reloadTime
+                i18nKey += '_reloading'
+            elif reloadTime < 0:
+                i18nKey += '_empty'
+        return i18n.makeString(i18nKey, **i18nArguments)
+
+    def _handleBaseRelatedCommand(self, i18nKey):
+        i18nArguments = {}
+        strArg = self._protoData['strArg1']
+        if strArg != '':
+            i18nArguments['strArg1'] = strArg
+            i18nKey += '_numbered'
+        return i18n.makeString(i18nKey, **i18nArguments)
+
+    def _handleLocationRelatedCommand(self, i18nKey):
+        i18nArguments = {}
+        if self.isSPGAimCommand():
+            reloadTime = self._protoData['floatArg1']
+            if reloadTime > 0:
+                i18nArguments['reloadTime'] = reloadTime
+                i18nKey += '_reloading'
+            elif reloadTime < 0:
+                i18nKey += '_empty'
+        mapsCtrl = self.sessionProvider.dynamic.maps
+        if mapsCtrl and mapsCtrl.hasMinimapGrid():
+            cellId = mapsCtrl.getMinimapCellIdByPosition(self.getMarkedPosition())
+            if cellId is None:
+                cellId = self.getFirstTargetID()
+            i18nKey += '_gridInfo'
+            i18nArguments['gridId'] = mapsCtrl.getMinimapCellNameById(cellId)
+        return i18n.makeString(i18nKey, **i18nArguments)
 
 
 class BattleCommandFactory(IBattleCommandFactory):

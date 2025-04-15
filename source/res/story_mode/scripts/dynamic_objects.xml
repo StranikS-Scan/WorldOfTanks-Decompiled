@@ -1,0 +1,20 @@
+<dynamic_objects.xml>
+  <ReconAimingCircleVisual>
+    <ally>
+      <visual>	content/Interface/TargetPoint/inspire_enemy.model	</visual>
+      <color>	0xff00ff00	</color>
+      <enableAccurateCollision>	False	</enableAccurateCollision>
+      <maxUpdateInterval>	0.04	</maxUpdateInterval>
+      <overTerrainHeight>	0.5	</overTerrainHeight>
+    </ally>
+  </ReconAimingCircleVisual>
+  <DistractionAimingCircleVisual>
+    <ally>
+      <visual>	content/Interface/TargetPoint/inspire_enemy.model	</visual>
+      <color>	0xff13bfff	</color>
+      <enableAccurateCollision>	True	</enableAccurateCollision>
+      <maxUpdateInterval>	0.04	</maxUpdateInterval>
+      <overTerrainHeight>	0.5	</overTerrainHeight>
+    </ally>
+  </DistractionAimingCircleVisual>
+</dynamic_objects.xml>

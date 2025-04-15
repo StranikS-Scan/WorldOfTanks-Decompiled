@@ -4,6 +4,9 @@ from gui.Scaleform.daapi.view.battle.shared.postmortem_panel import PostmortemPa
 
 class PvePostmortemPanelMeta(PostmortemPanel):
 
+    def updateTime(self, value):
+        self._printOverrideError('updateTime')
+
     def as_setHintTitleS(self, value):
         return self.flashObject.as_setHintTitle(value) if self._isDAAPIInited() else None
 

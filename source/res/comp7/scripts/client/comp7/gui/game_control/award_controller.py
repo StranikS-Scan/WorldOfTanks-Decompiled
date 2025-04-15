@@ -26,7 +26,8 @@ class Comp7QuestRewardHandler(MultiTypeServiceChannelHandler):
     __comp7Ctrl = dependency.descriptor(IComp7Controller)
 
     def __init__(self, awardCtrl):
-        super(Comp7QuestRewardHandler, self).__init__((SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index()), awardCtrl)
+        handledTypes = (SYS_MESSAGE_TYPE.comp7BattleResults.index(), SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index())
+        super(Comp7QuestRewardHandler, self).__init__(handledTypes, awardCtrl)
         self.__completedQuestIDs = set()
 
     def fini(self):
@@ -46,13 +47,13 @@ class Comp7QuestRewardHandler(MultiTypeServiceChannelHandler):
             self.__showAward()
 
     def __showAward(self):
-        ranksQuests, tokensQuests, periodicQuests, isQualification = self.__getComp7CompletedQuests()
+        ranksQuests, tokensQuests, _, isQualification = self.__getComp7CompletedQuests()
         self.__completedQuestIDs.clear()
         if isQualification:
             comp7_events.showComp7QualificationRewardsScreen(quests=ranksQuests)
         else:
             for quest in ranksQuests:
-                comp7_events.showComp7RanksRewardsScreen(quest=quest, periodicQuests=periodicQuests)
+                comp7_events.showComp7RanksRewardsScreen(quest=quest)
 
         for quest in tokensQuests:
             comp7_events.showComp7TokensRewardsScreen(quest=quest)
@@ -165,3 +166,7 @@ class Comp7PunishWindowHandler(PunishWindowHandler):
                 else:
                     self._showWarningWindow(arenaTypeID, arenaTimeStr, punishmentReason, isAFKPenalty)
             return
+
+    @property
+    def channelType(self):
+        return SYS_MESSAGE_TYPE.comp7BattleResults.index()

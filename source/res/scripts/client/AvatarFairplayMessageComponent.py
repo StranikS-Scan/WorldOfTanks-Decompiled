@@ -14,6 +14,6 @@ class AvatarFairplayMessageComponent(DynamicScriptComponent):
     def showWarningMessage(self, templateKey):
         _logger.debug('AvatarFairplayMessageComponent.showMessage: %s', templateKey)
         message = ClientActionTemplateMessage(templateKey, ACTION_MESSAGE_TYPE.FAIRPLAY_WARNING)
-        g_messengerEvents.onWarningReceived(message)
+        g_messengerEvents.onCustomMessage(message)
         showAFKWarningInWindowsBar()
         SoundGroups.g_instance.playSound2D(AFK_WARNING_MESSAGE_SOUND)

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/game_params_configs.py
 import typing
+from commendations_schema import commendationsConfigSchema
 from player_satisfaction_schema import playerSatisfactionSchema
 from schema_manager import getSchemaManager
 import hints_common.prebattle.newbie.schemas
@@ -19,3 +20,4 @@ def _registerSchemas(schemaManager):
     schemaManager.registerClientServerSchema(hints_common.prebattle.schemas.configSchema)
     schemaManager.registerClientServerSchema(hints_common.battle.schemas.newbie.configSchema)
     schemaManager.registerClientServerSchema(playerSatisfactionSchema)
+    schemaManager.registerClientServerSchema(commendationsConfigSchema)

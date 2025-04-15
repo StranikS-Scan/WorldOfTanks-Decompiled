@@ -43,9 +43,7 @@ class ContainerBase(object):
         with self.viewModel.transaction() as vm:
             self._fillViewModel(vm)
             for component in self.components.values():
-                cvm = component._getViewModel(vm)
-                cvm.setComponentKey(component.key)
-                component._fillViewModel(cvm)
+                component.refreshView(vm)
 
     def createToolTip(self, event):
         window = self.__callComponentMethod('createToolTip', event)
@@ -218,6 +216,17 @@ class ComponentBase(object):
 
     def setData(self, data):
         pass
+
+    def refreshView(self, translatedViewModel=None):
+        if translatedViewModel:
+            cmpViewModel = self._getViewModel(translatedViewModel)
+            cmpViewModel.setComponentKey(self.key)
+            self._fillViewModel(cmpViewModel)
+            return
+        with self.parent.viewModel.transaction() as vm:
+            cmpViewModel = self._getViewModel(vm)
+            cmpViewModel.setComponentKey(self.key)
+            self._fillViewModel(cmpViewModel)
 
     def _getEvents(self):
         return tuple()

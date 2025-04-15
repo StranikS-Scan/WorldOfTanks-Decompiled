@@ -51,6 +51,7 @@
     <AN-ARC-27M>	91	</AN-ARC-27M>
     <AN_VRC-3I>	92	</AN_VRC-3I>
     <AN_VRC_3B>	93	</AN_VRC_3B>
+    <SCR_528V>	94	</SCR_528V>
     <AN-ARC-27_IGR>	60001	</AN-ARC-27_IGR>
     <SCR_619_IGR>	60002	</SCR_619_IGR>
     <SCR_528A1_IGR>	60003	</SCR_528A1_IGR>
@@ -74,6 +75,7 @@
     <SCR_506_StoryMode__0>	64009	</SCR_506_StoryMode__0>
     <SCR_506_StoryModeHard>	64010	</SCR_506_StoryModeHard>
     <SCR_528_StoryMode>	64011	</SCR_528_StoryMode>
+    <SCR_528_StoryModeStealth>	64012	</SCR_528_StoryModeStealth>
   </ids>
   <shared>
     <SCR_200>
@@ -226,6 +228,18 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </SCR_528>
+    <SCR_528V>
+      <userString>	#usa_vehicles:SCR_528V	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	55000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	80	</weight>
+      <distance>	745	</distance>
+      <maxHealth>	230	</maxHealth>
+      <maxRegenHealth>	115	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </SCR_528V>
     <SCR_528_FL>
       <userString>	#usa_vehicles:SCR_528	</userString>
       <tags></tags>
@@ -961,5 +975,17 @@
       <repairCost>	3	</repairCost>
       <notInShop>	True	</notInShop>
     </SCR_528_StoryMode>
+    <SCR_528_StoryModeStealth>
+      <userString>	#usa_vehicles:SCR_528	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <weight>	80	</weight>
+      <distance>	745	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <notInShop>	True	</notInShop>
+    </SCR_528_StoryModeStealth>
   </shared>
 </radios.xml>

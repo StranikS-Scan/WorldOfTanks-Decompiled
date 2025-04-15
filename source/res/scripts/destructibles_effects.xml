@@ -16345,6 +16345,29 @@
         </effects>
       </variant1>
     </inf_gaf003_RabitzFence_01>
+    <inf_gaf006_GerWoodFenceCorner1_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_gaf006_GerWoodFenceCorner1.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	55	</wood_1>
+              <debrisAmount>	80	</debrisAmount>
+              <weight>	2600	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_gaf006_GerWoodFenceCorner1_01>
     <inf_gaf006_GerWoodFenceTile1_01>
       <variant1>
         <stages>

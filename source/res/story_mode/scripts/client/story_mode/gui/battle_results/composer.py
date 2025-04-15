@@ -6,14 +6,16 @@ import BigWorld
 from gui.battle_results.stats_ctrl import IBattleResultStatsCtrl
 from gui.battle_results.settings import PLAYER_TEAM_RESULT
 from helpers import dependency
+from skeletons.gui.lobby_context import ILobbyContext
 from story_mode.gui.battle_results.templates import STORY_MODE_RESULTS_BLOCK
-from story_mode.gui.shared.event_dispatcher import showEpilogueWindow, showOnboardingBattleResultWindow, showPrebattleAndGoToQueue, showBattleResultWindow
+from story_mode.gui.shared.event_dispatcher import showEpilogueWindow, showOnboardingBattleResultWindow, showPrebattleAndGoToQueue, showBattleResultWindow, showOutroVideo
 from story_mode.skeletons.story_mode_controller import IStoryModeController
 from story_mode_common.story_mode_constants import LOGGER_NAME
 _logger = getLogger(LOGGER_NAME)
 
 class StoryModeStatsComposer(IBattleResultStatsCtrl):
     _storyModeCtrl = dependency.descriptor(IStoryModeController)
+    _lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, _):
         super(StoryModeStatsComposer, self).__init__()
@@ -40,7 +42,11 @@ class StoryModeStatsComposer(IBattleResultStatsCtrl):
                 return
             BigWorld.callback(0, partial(self._processOnboardingResults, resultVO))
         else:
-            showBattleResultWindow(arenaUniqueID)
+            ctx = self._lobbyContext.getGuiCtx()
+            if ctx.get('skipHangar', False) and ctx.get('showOutroVideo', False):
+                showOutroVideo(resultVO['missionId'], arenaUniqueID)
+            else:
+                showBattleResultWindow(arenaUniqueID)
 
     def _processOnboardingResults(self, resultVO):
         missionId = resultVO['missionId']

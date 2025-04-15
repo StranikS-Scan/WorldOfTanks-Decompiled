@@ -68,7 +68,7 @@ class BattleEntry(IGUIEntry):
         g_messengerEvents.channels.onCommandReceived += self.__me_onCommandReceived
         g_messengerEvents.users.onBattleUserActionReceived += self.__me_onBattleUserActionReceived
         g_messengerEvents.onErrorReceived += self.__me_onErrorReceived
-        g_messengerEvents.onWarningReceived += self.__me_onWarningReceived
+        g_messengerEvents.onCustomMessage += self.__me_onCustomMessage
         g_settings.onUserPreferencesUpdated += self.__ms_onUserPreferencesUpdated
         g_settings.onColorsSchemesUpdated += self.__ms_onColorsSchemesUpdated
         self.__initialized = 0
@@ -84,7 +84,7 @@ class BattleEntry(IGUIEntry):
         g_messengerEvents.channels.onCommandReceived -= self.__me_onCommandReceived
         g_messengerEvents.users.onBattleUserActionReceived -= self.__me_onBattleUserActionReceived
         g_messengerEvents.onErrorReceived -= self.__me_onErrorReceived
-        g_messengerEvents.onWarningReceived -= self.__me_onWarningReceived
+        g_messengerEvents.onCustomMessage -= self.__me_onCustomMessage
         g_settings.onUserPreferencesUpdated -= self.__ms_onUserPreferencesUpdated
         g_settings.onColorsSchemesUpdated -= self.__ms_onColorsSchemesUpdated
         g_settings.resetBattleReceiverIfNeed()
@@ -184,7 +184,7 @@ class BattleEntry(IGUIEntry):
             view.addMessage(formatted, fillColor=FILL_COLORS.BLACK)
         return
 
-    def __showWarningMessage(self, actionMessage):
+    def __showCustomMessage(self, actionMessage):
         formatter = getMessageFormatter(actionMessage)
         formatted = formatter.getFormattedMessage()
         fillColor = formatter.getFillColor()
@@ -232,8 +232,8 @@ class BattleEntry(IGUIEntry):
     def __me_onErrorReceived(self, error):
         self.__showErrorMessage(error.getMessage())
 
-    def __me_onWarningReceived(self, message):
-        self.__showWarningMessage(message)
+    def __me_onCustomMessage(self, message):
+        self.__showCustomMessage(message)
 
     def __ms_onUserPreferencesUpdated(self):
         view = self.__view()

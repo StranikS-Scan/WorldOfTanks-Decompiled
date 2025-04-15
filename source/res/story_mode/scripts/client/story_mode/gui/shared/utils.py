@@ -4,9 +4,13 @@ import typing
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.framework.entities.DisposableEntity import EntityState
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.server_events.awards_formatters import AwardsPacker, AWARDS_SIZES
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
 from story_mode.gui.story_mode_gui_constants import VIEW_ALIAS
+from story_mode.gui.shared.bonuses_formatters import StoryModeBonusesAwardsComposer, getImgPath
+from story_mode.gui.shared.packers.bonus import getSMFormattersMap
+from story_mode.gui.impl.gen.view_models.views.lobby.reward_model import RewardModel
 from story_mode_common.configs.story_mode_missions import missionsSchema
 from wg_async import wg_async, AsyncEvent, wg_await
 if typing.TYPE_CHECKING:
@@ -58,3 +62,24 @@ def getTasksCount(progressInfo):
                 completedTasksCount += 1
 
     return (completedTasksCount, tasksToCompleteCount)
+
+
+def formatAndFillRewards(rewards, rewardsModel, idGenerator, bonusCache, maxBonusesInView):
+    rewardsModel.clear()
+    formatter = StoryModeBonusesAwardsComposer(maxBonusesInView, AwardsPacker(getSMFormattersMap()))
+    bonusRewards = formatter.getFormattedBonuses(rewards, AWARDS_SIZES.BIG)
+    for bonus in bonusRewards:
+        tooltipId = '{}'.format(idGenerator.next())
+        bonusCache[tooltipId] = bonus
+        rewardItem = RewardModel()
+        rewardItem.setName(bonus.bonusName)
+        rewardItem.setValue(str(bonus.label if bonus.label is not None else ''))
+        rewardItem.setTooltipId(tooltipId)
+        if isinstance(bonus.tooltip, int):
+            rewardItem.setTooltipContentId(str(bonus.tooltip))
+        iconModel = rewardItem.icon
+        iconModel.setSmall(getImgPath(bonus.images.get('small')))
+        iconModel.setBig(getImgPath(bonus.images.get('big')))
+        rewardsModel.addViewModel(rewardItem)
+
+    return

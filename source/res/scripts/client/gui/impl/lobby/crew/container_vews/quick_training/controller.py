@@ -73,6 +73,7 @@ class QuickTrainingInteractionController(InteractionController):
         if GUI_ITEM_TYPE.TANKMAN in invDiff:
             if not updatedCrew:
                 self.context.updateOnGlobalSync()
+            self.__clearAllSelection()
             self.__updatePossibleCrewXp()
         if GUI_ITEM_TYPE.CREW_BOOKS in invDiff:
             self.context.updateBooks()

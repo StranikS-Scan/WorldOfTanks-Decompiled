@@ -24,7 +24,7 @@ class AdditionalRewardsTooltip(ViewImpl):
         super(AdditionalRewardsTooltip, self)._onLoading(*args, **kwargs)
         with self.viewModel.transaction() as model:
             model.setHeaderText(self._getHeader())
-            model.setHeaderCount(0)
+            model.setHeaderCount(self._getHeaderCount())
             model.setDescription(R.invalid())
             model.setDescriptionCount(0)
             fillViewModelsArray(packedBonuses, model.getBonus())
@@ -32,3 +32,7 @@ class AdditionalRewardsTooltip(ViewImpl):
     @classmethod
     def _getHeader(cls):
         return R.strings.tooltips.quests.awards.additional.header()
+
+    @classmethod
+    def _getHeaderCount(cls):
+        pass

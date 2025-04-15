@@ -19,6 +19,7 @@ from gui.shared.utils import SHOT_DISPERSION_ANGLE, AUTO_SHOOT_CLIP_FIRE_RATE
 from helpers import dependency
 from post_progression_common import VehicleState
 from skeletons.gui.game_control import IVehicleComparisonBasket
+from items import tankmen
 CMP_HIDDEN_PARAMETERS = frozenset([AUTO_SHOOT_CLIP_FIRE_RATE])
 _HEADER_PARAM_COLOR_SCHEME = (text_styles.middleTitle, text_styles.middleBonusTitle, text_styles.middleTitle)
 _HEADER_PARAM_NO_COLOR_SCHEME = (text_styles.middleTitle, text_styles.middleTitle, text_styles.middleTitle)
@@ -181,7 +182,17 @@ class _VehCompareParametersData(object):
         if self.__crewLvl != crewLvl or self.__skillsByTankman != skillsByTankman:
             self.__crewLvl = crewLvl
             self.__skillsByTankman = skillsByTankman
-            skillsDict = {idx:list(skills) for idx, (_, skills) in self.__skillsByTankman.items()}
+            bonusSkillsDict = {}
+            majorSkillsDict = {}
+            for idx, (role, skills) in self.__skillsByTankman.items():
+                for skill in skills:
+                    skillRole = tankmen.getSkillRoleType(skill)
+                    if skillRole != role:
+                        bonusRoleSkills = bonusSkillsDict.setdefault(idx, {}).setdefault(skillRole, [])
+                        bonusRoleSkills.append(skill)
+                    majorSkills = majorSkillsDict.setdefault(idx, [])
+                    majorSkills.append(skill)
+
             if crewLvl == CrewTypes.CURRENT:
                 levelsByIndexes, nativeVehiclesByIndexes = cmp_helpers.getVehCrewInfo(self.__vehicle.intCD)
                 defRoleLevel = None
@@ -189,7 +200,7 @@ class _VehCompareParametersData(object):
                 levelsByIndexes = {}
                 defRoleLevel = self.__crewLvl
                 nativeVehiclesByIndexes = None
-            self.__vehicle.crew = self.__vehicle.getCrewBySkillLevels(defRoleLevel, skillsDict, levelsByIndexes, nativeVehiclesByIndexes, activateBrotherhood=True)
+            self.__vehicle.crew = self.__vehicle.getCrewBySkillLevels(defRoleLevel, majorSkillsDict, levelsByIndexes, nativeVehiclesByIndexes, activateBrotherhood=True, rolesBonusSkills=bonusSkillsDict)
             updateCrewBonus(self.__vehicle)
             self.__isCrewInvalid = True
             self.__isCurrVehParamsInvalid = True

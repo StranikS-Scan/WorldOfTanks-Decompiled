@@ -1,15 +1,22 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/gen/view_models/views/lobby/meta_view/pages/weekly_quests_model.py
+from enum import IntEnum
 from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
 from comp7.gui.impl.gen.view_models.views.lobby.meta_view.pages.progress_points_model import ProgressPointsModel
 from comp7.gui.impl.gen.view_models.views.lobby.meta_view.pages.quest_card_model import QuestCardModel
 
+class ChoiceRewardState(IntEnum):
+    DEFAULT = 0
+    ACTIVE = 1
+    CLAIMED = 2
+
+
 class WeeklyQuestsModel(ViewModel):
-    __slots__ = ('onAnimationStart', 'onAnimationEnd')
+    __slots__ = ('onAnimationStart', 'onAnimationEnd', 'onGoToRewardsSelection')
     QUESTS_PER_WEEK = 5
 
-    def __init__(self, properties=5, commands=2):
+    def __init__(self, properties=6, commands=3):
         super(WeeklyQuestsModel, self).__init__(properties=properties, commands=commands)
 
     def getTimeToNewQuests(self):
@@ -50,6 +57,12 @@ class WeeklyQuestsModel(ViewModel):
     def getProgressPointsType():
         return ProgressPointsModel
 
+    def getChoiceRewardState(self):
+        return ChoiceRewardState(self._getNumber(5))
+
+    def setChoiceRewardState(self, value):
+        self._setNumber(5, value.value)
+
     def _initialize(self):
         super(WeeklyQuestsModel, self)._initialize()
         self._addNumberProperty('timeToNewQuests', 0)
@@ -57,5 +70,7 @@ class WeeklyQuestsModel(ViewModel):
         self._addNumberProperty('questsPassed', 0)
         self._addNumberProperty('previousQuestsPassed', 0)
         self._addArrayProperty('progressPoints', Array())
+        self._addNumberProperty('choiceRewardState')
         self.onAnimationStart = self._addCommand('onAnimationStart')
         self.onAnimationEnd = self._addCommand('onAnimationEnd')
+        self.onGoToRewardsSelection = self._addCommand('onGoToRewardsSelection')

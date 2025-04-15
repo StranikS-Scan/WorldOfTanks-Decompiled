@@ -2,18 +2,18 @@
 # Embedded file name: scripts/client/web/web_client_api/ui/hangar.py
 import logging
 import adisp
-from wg_async import wg_async, wg_await
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsWebProductMeta
 from gui.impl.dialogs.dialogs import showExchangeToBuyItemsDialog
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.event_dispatcher import showCrystalWindow
-from gui.shared.gui_items.items_actions import factory as ActionsFactory
-from skeletons.gui.game_control import IBrowserController
-from web.web_client_api import W2CSchema, w2c, Field
-from helpers import dependency
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.items_actions import factory as ActionsFactory
+from helpers import dependency
+from skeletons.gui.game_control import IBrowserController
 from skeletons.gui.shared import IItemsCache
+from web.web_client_api import Field, W2CSchema, w2c
+from wg_async import wg_async, wg_await
 _logger = logging.getLogger(__name__)
 
 class _OpenHangarTabSchema(W2CSchema):
@@ -30,6 +30,7 @@ class _ExchangeWindowSchema(W2CSchema):
     price = Field(required=False, type=int, default=0)
     name = Field(required=False, type=basestring, default='')
     type = Field(required=False, type=basestring, default=_EXCHANGE_WINDOW_SIMPLE)
+    windowLayerTop = Field(required=False, type=bool, default=False)
 
 
 class HangarTabWebApiMixin(object):
@@ -55,7 +56,7 @@ class HangarWindowsWebApiMixin(object):
             if not result.busy:
                 yield {'completed': result.result}
         elif cmd.type == _EXCHANGE_WINDOW_PLATFORM:
-            isOk, _ = yield DialogsInterface.showDialog(ExchangeCreditsWebProductMeta(name=cmd.name, count=cmd.amount, price=cmd.price))
+            isOk, _ = yield DialogsInterface.showDialog(ExchangeCreditsWebProductMeta(name=cmd.name, count=cmd.amount, price=cmd.price, isModal=cmd.windowLayerTop))
             yield {'completed': isOk}
         else:
             shared_events.showExchangeCurrencyWindow()

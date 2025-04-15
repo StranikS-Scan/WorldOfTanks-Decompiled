@@ -83,7 +83,7 @@ class UserNameModel(ViewModel):
         self._addStringProperty('userName', '')
         self._addStringProperty('hiddenUserName', '')
         self._addStringProperty('clanAbbrev', '')
-        self._addBoolProperty('isFakeNameVisible', True)
+        self._addBoolProperty('isFakeNameVisible', False)
         self._addNumberProperty('igrType', 0)
         self._addBoolProperty('isTeamKiller', False)
         self._addBoolProperty('isKilled', False)

@@ -131,7 +131,7 @@ class Comp7VOIPController(IComp7VOIPController):
             if arenaPeriod <= ARENA_PERIOD.PREBATTLE:
                 message = self.__getMessage()
                 if message is not None:
-                    g_messengerEvents.onWarningReceived(message)
+                    g_messengerEvents.onCustomMessage(message)
                     self.__messageShown = True
             return
 

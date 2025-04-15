@@ -13,7 +13,7 @@
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
     <forward>	32	</forward>
-    <backward>	16	</backward>
+    <backward>	14	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.159	</moving>
@@ -50,25 +50,22 @@
       <armor_2>	120	</armor_2>
       <armor_3>	50	</armor_3>
       <armor_4>	50	</armor_4>
-      <armor_5>	30	</armor_5>
+      <armor_5>	20	</armor_5>
       <armor_6>	20	</armor_6>
-      <armor_7>	45	</armor_7>
+      <armor_7>	50	</armor_7>
       <armor_8>	0	</armor_8>
       <armor_9>	170	</armor_9>
-      <armor_10>	45	</armor_10>
-      <armor_11>	45	</armor_11>
+      <armor_10>	50	</armor_10>
+      <armor_11>	20	</armor_11>
       <armor_12>	300	</armor_12>
       <armor_13>	270	</armor_13>
-      <armor_14>	270	</armor_14>
-      <armor_15>	300	</armor_15>
       <armor_16>	350	</armor_16>
-      <armor_17>	250	</armor_17>
-      <armor_18>	250	</armor_18>
-      <armor_19>	250	</armor_19>
-      <armor_20>	165	</armor_20>
-      <armor_21>	45	</armor_21>
+      <armor_17>	50	</armor_17>
+      <armor_18>	50	</armor_18>
+      <armor_19>	50	</armor_19>
+      <armor_21>	20	</armor_21>
       <armor_22>	50	</armor_22>
-      <armor_23>	35	</armor_23>
+      <armor_23>	50	</armor_23>
       <armor_24>	35	</armor_24>
       <armor_25>	35	</armor_25>
       <armor_26>	50	</armor_26>
@@ -1201,8 +1198,8 @@
         </chassis>
       </unlocks>
       <armor>
-        <leftTrack>	25	</leftTrack>
-        <rightTrack>	25	</rightTrack>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	12500	</weight>
       <maxLoad>	61000	</maxLoad>
@@ -2028,7 +2025,7 @@
           <trackPairIdx>	0	</trackPairIdx>
         </right>
       </physicalTracks>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	6.66666651	</repairTime>
     </Chassis_J34_Ho_Ri_1>
     <Chassis_J34_Ho_Ri_1_2>
       <userString>	#japan_vehicles:Chassis_J34_Ho_Ri_1_2	</userString>
@@ -2036,8 +2033,8 @@
       <level>	9	</level>
       <price>	64100	</price>
       <armor>
-        <leftTrack>	25	</leftTrack>
-        <rightTrack>	25	</rightTrack>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	15500	</weight>
       <maxLoad>	67000	</maxLoad>
@@ -2050,8 +2047,8 @@
         <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	220	</maxHealth>
-      <maxRegenHealth>	165	</maxRegenHealth>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/japan/J34_Ho_Ri_1/normal/lod0/Chassis.model	</undamaged>
@@ -2863,7 +2860,7 @@
           <trackPairIdx>	0	</trackPairIdx>
         </right>
       </physicalTracks>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	6.66666651	</repairTime>
     </Chassis_J34_Ho_Ri_1_2>
   </chassis>
   <turrets0>
@@ -2887,7 +2884,7 @@
         <maxRegenHealth>	85	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	390	</circularVisionRadius>
+      <circularVisionRadius>	370	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	120	</maxHealth>
         <maxRegenHealth>	60	</maxRegenHealth>
@@ -2903,7 +2900,7 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 7 1 7	</maxPitch>
           </pitchLimits>
-          <reloadTime>	13.5	</reloadTime>
+          <reloadTime>	12.5	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <armor>
             <armor_1>	350	</armor_1>
@@ -2997,7 +2994,7 @@
             <armor_6>	100	</armor_6>
             <gun>	60	</gun>
           </armor>
-          <shotDispersionRadius>	0.34	</shotDispersionRadius>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <invisibilityFactorAtShot>	0.150	</invisibilityFactorAtShot>
           <turretYawLimits>	-10 10	</turretYawLimits>
           <customizationSlots>
@@ -3115,11 +3112,6 @@
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <_Type3_Otsu>	shared	  <unlocks>
-        <radio>	_Type3_Ko	  <cost>	9300	</cost>
-        </radio>
-      </unlocks>
-    </_Type3_Otsu>
     <_Type3_Ko>	shared	</_Type3_Ko>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>

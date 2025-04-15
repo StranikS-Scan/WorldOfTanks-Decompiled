@@ -106,7 +106,7 @@ class EquipmentSound(object):
 
 @ReprInjector.simple(('_tags', 'tags'), ('_quantity', 'quantity'), ('_stage', 'stage'), ('_prevStage', 'prevStage'), ('_timeRemaining', 'timeRemaining'), ('_totalTime', 'totalTime'), ('_animationType', 'animationType'))
 class _EquipmentItem(object):
-    __slots__ = ('_tags', '_descriptor', '_quantity', '_stage', '_prevStage', '_timeRemaining', '_prevQuantity', '_totalTime', '_animationType', '_serverPrevStage', '_index')
+    __slots__ = ('_tags', '_descriptor', '_quantity', '_stage', '_prevStage', '_timeRemaining', '_prevQuantity', '_totalTime', '_animationType', '_serverPrevStage', '_index', '_isLocked')
 
     def __init__(self, descriptor, quantity, stage, timeRemaining, totalTime, tags):
         super(_EquipmentItem, self).__init__()
@@ -120,6 +120,7 @@ class _EquipmentItem(object):
         self._timeRemaining = 0
         self._index = 0
         self._totalTime = totalTime
+        self._isLocked = False
         self._animationType = ANIMATION_TYPES.MOVE_ORANGE_BAR_UP | ANIMATION_TYPES.SHOW_COUNTER_ORANGE | ANIMATION_TYPES.DARK_COLOR_TRANSFORM
         self.update(quantity, stage, timeRemaining, totalTime)
         return
@@ -141,7 +142,10 @@ class _EquipmentItem(object):
         return self.getQuantity() > 0 and self.isReady
 
     def canActivate(self, entityName=None, avatar=None):
-        if self._timeRemaining > 0 and self._stage and self._stage not in (EQUIPMENT_STAGES.DEPLOYING, EQUIPMENT_STAGES.COOLDOWN, EQUIPMENT_STAGES.SHARED_COOLDOWN):
+        if self._isLocked or self._stage and self._stage == EQUIPMENT_STAGES.INTERRUPTED:
+            result = False
+            error = InCooldownError(self._descriptor.userString)
+        elif self._timeRemaining > 0 and self._stage and self._stage not in (EQUIPMENT_STAGES.DEPLOYING, EQUIPMENT_STAGES.COOLDOWN, EQUIPMENT_STAGES.SHARED_COOLDOWN):
             result = False
             error = _ActivationError('equipmentAlreadyActivated', {'name': self._descriptor.userString})
         elif self._stage and self._stage not in (EQUIPMENT_STAGES.READY, EQUIPMENT_STAGES.PREPARING):
@@ -221,20 +225,37 @@ class _EquipmentItem(object):
          EQUIPMENT_STAGES.NOT_RUNNING)
 
     @property
+    def alreadyReady(self):
+        return self.isReady and self._serverPrevStage == EQUIPMENT_STAGES.READY
+
+    @property
+    def wasPreparationCanceled(self):
+        return self.isReady and self._serverPrevStage == EQUIPMENT_STAGES.PREPARING
+
+    @property
     def becomeAvailable(self):
         return self.getPrevQuantity() <= 0 and self.getQuantity() > 0
 
     def getDescriptor(self):
         return self._descriptor
 
+    def setQuantity(self, quantity):
+        self._quantity = quantity
+
     def getQuantity(self):
-        return self._quantity
+        return self._quantity if not self._isLocked else 0
 
     def getPrevQuantity(self):
         return self._prevQuantity
 
     def isQuantityUsed(self):
         return 'showQuantity' in self._descriptor.tags
+
+    def isInCooldown(self):
+        return self.getStage() == EQUIPMENT_STAGES.COOLDOWN
+
+    def isInPreparing(self):
+        return self.getStage() == EQUIPMENT_STAGES.PREPARING
 
     def getStage(self):
         return self._stage
@@ -243,7 +264,7 @@ class _EquipmentItem(object):
         return self._prevStage
 
     def getTimeRemaining(self):
-        return self._timeRemaining
+        return self._timeRemaining if not self._isLocked else 0
 
     def isValid(self):
         return self._descriptor is not None
@@ -256,7 +277,7 @@ class _EquipmentItem(object):
         self._index = index
 
     def getTotalTime(self):
-        return self._totalTime
+        return self._totalTime if not self._isLocked else 0
 
     def getMarker(self):
         return self._getMarkerConfigName(enemy=False) or self._descriptor.name.split('_')[0]
@@ -303,6 +324,12 @@ class _EquipmentItem(object):
     def _getMarkerConfigTextColor(self, enemy=False):
         marker = self._getMarkerConfig(enemy=enemy)
         return marker and marker.textColor
+
+    def setLocked(self, isLocked):
+        self._isLocked = isLocked
+
+    def isLocked(self):
+        return self._isLocked
 
 
 class _RefillEquipmentItem(object):
@@ -1126,7 +1153,7 @@ class EquipmentsController(MethodsRules, IBattleController):
             self.onEquipmentsCleared()
 
     def cancel(self):
-        item = findFirst(lambda item: item.getStage() == EQUIPMENT_STAGES.PREPARING and item.canDeactivate(), self._equipments.itervalues())
+        item = findFirst(lambda item: item.isInPreparing() and item.canDeactivate(), self._equipments.itervalues())
         if item is not None:
             item.deactivate()
             return True
@@ -1151,6 +1178,13 @@ class EquipmentsController(MethodsRules, IBattleController):
             item = None
 
         return item
+
+    def getEquipmentByName(self, equipmentName):
+        for eqItem in self._equipments.itervalues():
+            if eqItem.getDescriptor().name == equipmentName:
+                return eqItem
+
+        return None
 
     def getEquipmentByIDx(self, idx):
         item = self._equipmentsIdxSlot.get(idx)
@@ -1261,7 +1295,7 @@ class EquipmentsController(MethodsRules, IBattleController):
             else:
                 item = self.getEquipment(intCD)
             if item:
-                result, error = self.__doChangeSetting(item, entityName, avatar)
+                result, error = self._doChangeSetting(item, entityName, avatar)
             return (result, error)
 
     def changeSettingByTag(self, tag, entityName=None, avatar=None):
@@ -1271,7 +1305,7 @@ class EquipmentsController(MethodsRules, IBattleController):
             result, error = True, None
             for _, item in self._equipments.iteritems():
                 if tag in item.getTags() and _DAMAGE_PANEL_EQUIPMENT.hasValue(tag):
-                    result, error = self.__doChangeSetting(item, entityName, avatar)
+                    result, error = self._doChangeSetting(item, entityName, avatar)
                     break
 
             return (result, error)
@@ -1291,10 +1325,10 @@ class EquipmentsController(MethodsRules, IBattleController):
         self.__preferredPosition = None
         return value
 
-    def __doChangeSetting(self, item, entityName=None, avatar=None):
+    def _doChangeSetting(self, item, entityName=None, avatar=None):
         result, error = item.canActivate(entityName, avatar)
         if result and avatar_getter.isPlayerOnArena(avatar):
-            if item.getStage() == EQUIPMENT_STAGES.PREPARING:
+            if item.isInPreparing():
                 item.deactivate()
             else:
                 avatar = BigWorld.player()

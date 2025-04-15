@@ -2,13 +2,13 @@
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/lobby/comp7_helpers/comp7_weekly_quests_widget.py
 import logging
 import typing
+from comp7.gui.impl.lobby.comp7_helpers.comp7_quest_helpers import isWeeklyRewardClaimable
 from shared_utils import findFirst
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import COMP7_UI_SECTION, COMP7_WEEKLY_QUEST_IN_WIDGET_ID, COMP7_WEEKLY_QUEST_IN_WIDGET_STATE, COMP7_WEEKLY_QUEST_WIDGET_PROGRESS
 from comp7.gui.impl.gen.view_models.views.lobby.enums import MetaRootViews
 from comp7.gui.impl.gen.view_models.views.lobby.missions.comp7_daily_quests_widget_view_model import Comp7DailyQuestsWidgetViewModel
 from comp7.gui.impl.gen.view_models.views.lobby.missions.comp7_widget_quest_model import State
-from comp7.gui.impl.lobby.comp7_helpers.comp7_quest_helpers import hasAvailableWeeklyQuestsOfferGiftTokens
 from comp7.gui.impl.lobby.tooltips.weekly_quest_tooltip import WeeklyQuestTooltip
 from comp7.gui.shared.event_dispatcher import showComp7MetaRootView, showComp7WeeklyQuestsRewardsSelectionWindow
 from comp7.gui.shared.missions.packers.events import Comp7WeeklyQuestPacker
@@ -101,6 +101,7 @@ class Comp7WeeklyQuestsWidgetView(DailyQuestsWidgetView):
             quests = self.__comp7WeeklyQuestsCtrl.getQuests().sortedBattleQuests
             questData = findFirst(lambda qData: qData[1].getID() == questId, quests) if quests else None
             if not questData:
+                model.setState(State.HIDE)
                 _logger.warning('No quest for saved comp7 questID found')
                 return
             _, quest = questData
@@ -132,7 +133,7 @@ class Comp7WeeklyQuestsWidgetView(DailyQuestsWidgetView):
 
     @staticmethod
     def __onComp7QuestClicked():
-        if hasAvailableWeeklyQuestsOfferGiftTokens():
+        if isWeeklyRewardClaimable():
             showComp7WeeklyQuestsRewardsSelectionWindow()
         else:
             showComp7MetaRootView(MetaRootViews.WEEKLYQUESTS)

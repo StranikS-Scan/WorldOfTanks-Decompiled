@@ -5,9 +5,10 @@ import BigWorld
 import CGF
 import Math
 from BunkerLogicComponent import BunkerLogicComponent
+from aih_constants import CTRL_MODE_NAME
 from constants import IS_DEVELOPMENT
 from gui.Scaleform.daapi.view.battle.classic.minimap import ClassicTeleportPlugin, ClassicMinimapPingPlugin
-from gui.Scaleform.daapi.view.battle.pve_base.minimap import PveMinimapComponent, PveMinimapGlobalSettingsPlugin
+from gui.Scaleform.daapi.view.battle.pve_base.minimap import PveMinimapComponent, PveMinimapGlobalSettingsPlugin, PveScaleCenteredPersonalEntriesPlugin
 from gui.Scaleform.daapi.view.battle.shared.minimap.common import SimplePlugin
 from gui.Scaleform.daapi.view.battle.shared.minimap.entries import VehicleEntry
 from gui.Scaleform.daapi.view.battle.shared.minimap.plugins import ArenaVehiclesPlugin
@@ -24,10 +25,10 @@ class StoryModeVehicleEntry(VehicleEntry):
     __slots__ = ()
 
     def getSpottedAnimation(self, pool):
-        if self._isEnemy and self._isActive and self._isInAoI and self.getActualSpottedCount() == 1:
-            if self._classTag == 'SPG':
-                return _ANIMATION_SPG
-            else:
+        if self._isEnemy and self._isActive and self._isInAoI:
+            if self.getActualSpottedCount() == 1:
+                if self._classTag == 'SPG':
+                    return _ANIMATION_SPG
                 return _ANIMATION_ENEMY
 
 
@@ -135,10 +136,18 @@ class StoryModeMinimapPingPlugin(ClassicMinimapPingPlugin):
         return minimap_utils.makePointMatrixByLocal(x, y, *adjustBoundingBox(*self._boundingBox)).translation
 
 
+class StoryModePersonalEntriesPlugin(PveScaleCenteredPersonalEntriesPlugin):
+
+    def _isInStrategicMode(self):
+        isStrategic = super(StoryModePersonalEntriesPlugin, self)._isInStrategicMode()
+        return isStrategic or self._ctrlMode == CTRL_MODE_NAME.SM_STRATEGIC
+
+
 class StoryModeMinimapComponent(PveMinimapComponent):
 
     def _setupPlugins(self, arenaVisitor):
         setup = super(StoryModeMinimapComponent, self)._setupPlugins(arenaVisitor)
+        setup['personal'] = StoryModePersonalEntriesPlugin
         setup['settings'] = PveMinimapGlobalSettingsPlugin
         setup['vehicles'] = StoryModeArenaVehiclesPlugin
         setup['bunkers'] = BunkersPlugin

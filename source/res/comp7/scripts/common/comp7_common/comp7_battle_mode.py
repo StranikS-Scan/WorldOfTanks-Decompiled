@@ -18,6 +18,15 @@ class Comp7BattleMode(AbstractBattleMode):
     _SEASON_TYPE_BY_NAME = 'comp7'
     _SEASON_TYPE = comp7_constants.GameSeasonType.COMP7
     _SEASON_MANAGER_TYPE = (comp7_constants.GameSeasonType.COMP7, 'comp7_config')
+    _SM_TYPE_BATTLE_RESULT = 'comp7BattleResults'
+    _SM_TYPES = [_SM_TYPE_BATTLE_RESULT]
+
+    def registerAdditionalBattleResultSysMsgType(self):
+        from battle_results import ARENA_BONUS_TYPE_TO_SM_TYPE_BATTLE_RESULT
+        from chat_shared import SYS_MESSAGE_TYPE
+        msgTypeIndex = SYS_MESSAGE_TYPE.__getattr__(self._SM_TYPE_BATTLE_RESULT).index()
+        for arenaBonusType in (ARENA_BONUS_TYPE.TOURNAMENT_COMP7, ARENA_BONUS_TYPE.TRAINING_COMP7):
+            ARENA_BONUS_TYPE_TO_SM_TYPE_BATTLE_RESULT.update({arenaBonusType: msgTypeIndex})
 
     def registerAdditionalBattleResultsConfig(self):
         if self._BATTLE_RESULTS_CONFIG is not None:

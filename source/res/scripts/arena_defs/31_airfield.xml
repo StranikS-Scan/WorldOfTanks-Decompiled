@@ -5,8 +5,8 @@
   <estimatedLoad>	0.3	</estimatedLoad>
   <roundLength>	900	</roundLength>
   <boundingBox>
-    <bottomLeft>	-500.0 -500.0	</bottomLeft>
-    <upperRight>	500.0 500.0	</upperRight>
+    <bottomLeft>	-500.000000 -600.000000	</bottomLeft>
+    <upperRight>	500.000000 400.000000	</upperRight>
   </boundingBox>
   <minimap>	spaces/31_airfield/mmap.dds	</minimap>
   <vehicleCamouflageKind>	desert	</vehicleCamouflageKind>
@@ -38,10 +38,10 @@
     <ctf>
       <teamBasePositions>
         <team1>
-          <position1>	360.647827 -154.436874	</position1>
+          <position1>	438.516815 27.826841	</position1>
         </team1>
         <team2>
-          <position1>	-324.047791 -176.181946	</position1>
+          <position1>	-383.740051 7.167184	</position1>
         </team2>
       </teamBasePositions>
     </ctf>
@@ -90,21 +90,35 @@
     </comp7>
   </gameplayTypes>
   <mapActivities>
-    <warplane>
-      <arenaPeriod>	3	</arenaPeriod>
-      <preset>	airfield_curve	</preset>
-      <position>	0.000000 0.000000 0.000000	</position>
-      <yaw>	0.000000	</yaw>
-      <possibility>	1.000000	</possibility>
+    <scenario>
+      <name>	warplane1_sc	</name>
       <startTime>	100.000000 200.000000	</startTime>
-    </warplane>
-    <warplane>
-      <arenaPeriod>	3	</arenaPeriod>
-      <preset>	airfield_curve1	</preset>
-      <position>	0.000000 0.000000 0.000000	</position>
-      <yaw>	90.000000	</yaw>
-      <possibility>	1.000000	</possibility>
+      <possibility>	70.000000	</possibility>
+      <interval>	600.000000	</interval>
+      <trajectories>
+        <warplane>
+          <preset>	airfield_curve	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+    <scenario>
+      <name>	warplane2	</name>
       <startTime>	300.000000 400.000000	</startTime>
-    </warplane>
+      <possibility>	70.000000	</possibility>
+      <interval>	600.000000	</interval>
+      <trajectories>
+        <warplane>
+          <preset>	airfield_curve1	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
   </mapActivities>
 </31_airfield.xml>

@@ -5,7 +5,7 @@ from frameworks.wulf import Array
 from comp7.gui.impl.gen.view_models.views.lobby.enums import Rank
 from frameworks.wulf import ViewModel
 from comp7.gui.impl.gen.view_models.views.lobby.meta_view.pages.yearly_rewards_card_model import YearlyRewardsCardModel
-from comp7.gui.impl.gen.view_models.views.lobby.meta_view.progression_item_base_model import ProgressionItemBaseModel
+from comp7.gui.impl.gen.view_models.views.lobby.progression_item_base_model import ProgressionItemBaseModel
 
 class BannerState(Enum):
     DEFAULT = 'default'
@@ -17,7 +17,7 @@ class BannerState(Enum):
 class YearlyRewardsModel(ViewModel):
     __slots__ = ('onGoToStylePreview', 'onGoToVehiclePreview', 'onGoToRewardsSelection', 'onIntroViewed')
 
-    def __init__(self, properties=9, commands=4):
+    def __init__(self, properties=8, commands=4):
         super(YearlyRewardsModel, self).__init__(properties=properties, commands=commands)
 
     def getCards(self):
@@ -60,27 +60,21 @@ class YearlyRewardsModel(ViewModel):
     def setWithIntro(self, value):
         self._setBool(5, value)
 
-    def getStyle3dAvailable(self):
-        return self._getBool(6)
-
-    def setStyle3dAvailable(self, value):
-        self._setBool(6, value)
-
     def getRanks(self):
-        return self._getArray(7)
+        return self._getArray(6)
 
     def setRanks(self, value):
-        self._setArray(7, value)
+        self._setArray(6, value)
 
     @staticmethod
     def getRanksType():
         return ProgressionItemBaseModel
 
     def getTopPercentage(self):
-        return self._getNumber(8)
+        return self._getNumber(7)
 
     def setTopPercentage(self, value):
-        self._setNumber(8, value)
+        self._setNumber(7, value)
 
     def _initialize(self):
         super(YearlyRewardsModel, self)._initialize()
@@ -90,7 +84,6 @@ class YearlyRewardsModel(ViewModel):
         self._addBoolProperty('isQualificationActive', False)
         self._addBoolProperty('hasDataError', False)
         self._addBoolProperty('withIntro', True)
-        self._addBoolProperty('style3dAvailable', False)
         self._addArrayProperty('ranks', Array())
         self._addNumberProperty('topPercentage', 0)
         self.onGoToStylePreview = self._addCommand('onGoToStylePreview')

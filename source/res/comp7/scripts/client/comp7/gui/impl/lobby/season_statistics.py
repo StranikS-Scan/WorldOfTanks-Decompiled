@@ -32,20 +32,21 @@ if typing.TYPE_CHECKING:
 SOUND_NAME = 'comp_7_season_statistics_screen_appear'
 _logger = logging.getLogger(__name__)
 
-class SeasonStatistics(ViewImpl):
-    __slots__ = ('__summaryStatistics', '__seasonNumber', '__saveViewing')
+class _SeasonStatistics(ViewImpl):
+    __slots__ = ('__summaryStatistics', '__seasonNumber')
     __comp7Controller = dependency.descriptor(IComp7Controller)
     __itemsCache = dependency.descriptor(IItemsCache)
     __webCtrl = dependency.descriptor(IWebController)
     __settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, layoutID, seasonNumber, saveViewing):
+        if saveViewing:
+            self.__setComp7SeasonStasisticsShown()
         settings = ViewSettings(layoutID)
         settings.flags = ViewFlags.VIEW
         settings.model = SeasonStatisticsModel()
-        super(SeasonStatistics, self).__init__(settings)
+        super(_SeasonStatistics, self).__init__(settings)
         self.__seasonNumber = seasonNumber
-        self.__saveViewing = saveViewing
         self.__summaryStatistics = [BattlesStat,
          DamageStat,
          PrestigePointsStat,
@@ -54,10 +55,9 @@ class SeasonStatistics(ViewImpl):
 
     @property
     def viewModel(self):
-        return super(SeasonStatistics, self).getViewModel()
+        return super(_SeasonStatistics, self).getViewModel()
 
     def _onLoading(self, *_, **__):
-        self.__setComp7SeasonStasisticsShown()
         self.__addListeners()
         self.__updateData()
         self.__playSound()
@@ -82,8 +82,6 @@ class SeasonStatistics(ViewImpl):
         self.__comp7Controller.onEntitlementsUpdated -= self.__updateData
 
     def __setComp7SeasonStasisticsShown(self):
-        if not self.__saveViewing:
-            return
         defaults = AccountSettings.getFilterDefault(GUI_START_BEHAVIOR)
         stateFlags = self.__settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
         stateFlags[GuiSettingsBehavior.COMP7_SEASON_STATISTICS_SHOWN] = True
@@ -243,4 +241,4 @@ class SeasonStatisticsWindow(LobbyNotificationWindow):
     __slots__ = ()
 
     def __init__(self, seasonNumber, saveViewing, parent=None):
-        super(SeasonStatisticsWindow, self).__init__(wndFlags=WindowFlags.WINDOW_FULLSCREEN | WindowFlags.WINDOW, content=SeasonStatistics(layoutID=R.views.comp7.lobby.SeasonStatistics(), seasonNumber=seasonNumber, saveViewing=saveViewing), parent=parent)
+        super(SeasonStatisticsWindow, self).__init__(wndFlags=WindowFlags.WINDOW_FULLSCREEN | WindowFlags.WINDOW, content=_SeasonStatistics(layoutID=R.views.comp7.lobby.SeasonStatistics(), seasonNumber=seasonNumber, saveViewing=saveViewing), parent=parent)

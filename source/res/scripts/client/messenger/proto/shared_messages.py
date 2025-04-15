@@ -7,6 +7,8 @@ class ACTION_MESSAGE_TYPE(object):
     WARNING = 1
     ERROR = 2
     FAIRPLAY_WARNING = 3
+    DYN_SQUAD = 4
+    COMMENDATIONS = 5
 
 
 class ClientActionMessage(IChatMessage):

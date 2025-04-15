@@ -120,8 +120,10 @@ class BattleTimer(BattleTimerMeta, IAbstractPeriodView):
     def arenaVisitor(self):
         return self.sessionProvider.arenaVisitor
 
+    def getRoundLength(self):
+        return self.__roundLength
+
     def setTotalTime(self, totalTime):
-        minutes, seconds = divmod(int(totalTime), 60)
         if self.__endWarningIsEnabled and self.__state == COUNTDOWN_STATE.STOP:
             if _BATTLE_END_TIME < totalTime <= self.__endingSoonTime:
                 if not self.__isTicking:
@@ -130,7 +132,7 @@ class BattleTimer(BattleTimerMeta, IAbstractPeriodView):
                     self._callWWISE(_WWISE_EVENTS.BATTLE_ENDING_SOON)
             elif self.__isTicking:
                 self.__stopTicking()
-        self._sendTime(minutes, seconds)
+        self._sendTime(totalTime)
 
     def setState(self, state):
         self.__state = state
@@ -159,7 +161,8 @@ class BattleTimer(BattleTimerMeta, IAbstractPeriodView):
         super(BattleTimer, self)._dispose()
         return
 
-    def _sendTime(self, minutes, seconds):
+    def _sendTime(self, totalTime):
+        minutes, seconds = divmod(int(totalTime), 60)
         self.as_setTotalTimeS('{:02d}'.format(minutes), '{:02d}'.format(seconds))
 
     def _callWWISE(self, wwiseEventName):

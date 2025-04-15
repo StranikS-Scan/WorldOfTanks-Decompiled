@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale_progression/scripts/client/battle_royale_progression/gui/impl/lobby/views/battle_quest_awards_view.py
-from battle_royale.gui.impl.lobby.tooltips.proxy_currency_tooltip_view import ProxyCurrencyTooltipView
 from battle_royale_progression.gui.impl.gen.view_models.views.lobby.views.battle_quest_awards_model import BattleQuestAwardsModel, BattleStatus
 from battle_royale_progression.gui.impl.lobby.views.bonus_packer import getBonusPacker
 from battle_royale_progression.gui.sounds_constants import GENERAL_SOUND_SPACE
@@ -34,9 +33,6 @@ class BattleQuestAwardsView(ViewImpl):
     @property
     def viewModel(self):
         return super(BattleQuestAwardsView, self).getViewModel()
-
-    def createToolTipContent(self, event, contentID):
-        return ProxyCurrencyTooltipView() if contentID == R.views.battle_royale.lobby.tooltips.ProxyCurrencyTooltipView() else super(BattleQuestAwardsView, self).createToolTipContent(event, contentID)
 
     @createBackportTooltipDecorator()
     def createToolTip(self, event):

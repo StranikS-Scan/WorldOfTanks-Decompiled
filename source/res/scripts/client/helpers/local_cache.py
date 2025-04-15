@@ -13,6 +13,7 @@ import BigWorld
 import Event
 from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_ERROR
 from soft_exception import SoftException
+from typing import Tuple
 from external_strings_utils import unicode_from_utf8
 
 class CacheIO(object):
@@ -276,7 +277,7 @@ class FileLocalCache(object):
 
     def __init__(self, space, tags, io=None, async=False):
         super(FileLocalCache, self).__init__()
-        filePath = makeFileLocalCachePath(space, tags)
+        filePath = self._buildLocalCachePath(space, tags)
         self._ioEnabled = True
         if io:
             self._io = _FileIO(filePath, io)
@@ -300,6 +301,9 @@ class FileLocalCache(object):
     def write(self):
         if self._ioEnabled:
             self._io.write(self._getCache())
+
+    def _buildLocalCachePath(self, space, tags):
+        return makeFileLocalCachePath(space, tags)
 
     def _onRead(self, src):
         if src:

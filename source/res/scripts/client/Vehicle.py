@@ -815,8 +815,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             elif attackReasonID == ATTACK_REASON_INDICES[ATTACK_REASON.DAMAGE_ZONE] and attackReasonExtID == int(DamageZoneType.FIRE_DAMAGE_ZONE) and attachedVehicle:
                 soundObject = self.appearance.engineAudition.getSoundObject(TankSoundObjectsIndexes.ENGINE)
                 if soundObject is not None:
-                    soundEvent = 'fire_damage_PC' if self.id == attachedVehicle.id else 'fire_damage_NPC'
-                    soundObject.play(soundEvent, verbose=False)
+                    soundObject.play('fire_damage_PC' if self.id == attachedVehicle.id else 'fire_damage_NPC')
             self.__prevHealth = newHealth
             return
 

@@ -18,6 +18,7 @@ from gui.battle_results.templates.regular import REGULAR_PERSONAL_STATS_BLOCK
 from gui.battle_results.templates.regular import REGULAR_TEAMS_STATS_BLOCK
 from gui.battle_results.templates.regular import REGULAR_TEXT_STATS_BLOCK
 from gui.battle_results.templates.regular import CLAN_TEXT_STATS_BLOCK
+from gui.battle_results.templates.regular import COMMENDATIONS_RECEIVED_VO
 from gui.battle_results.templates.ranked_battles import RANKED_COMMON_STATS_BLOCK
 from gui.battle_results.templates.ranked_battles import RANKED_TEAMS_STATS_BLOCK
 from gui.battle_results.templates.ranked_battles import RANKED_RESULTS_BLOCK
@@ -48,6 +49,7 @@ TOTAL_VO_META = base.DictMeta({'personal': {},
  'isFreeForAll': False,
  'closingTeamMemberStatsEnabled': True,
  'selectedTeamMemberId': -1,
+ 'receivedCommendations': -1,
  'progressiveReward': None,
  'dog_tags': {},
  'prestige': None,

@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/battle_results/presenter.py
 import typing
+from constants import ARENA_BONUS_TYPE
 from fun_random.gui.battle_results.pbs_helpers import getEventID
 from fun_random.gui.battle_results.packers.fun_packers import FunRandomPersonalEfficiency, FunRandomTeamStats, FunRandomBattleInfo, FunRandomPersonalRewards, FunRandomPremiumPlus, FunRandomProgress
 from fun_random.gui.battle_results.tooltips.earned_currency_tooltips import FunEarnedCurrencyTooltipsPacker
 from fun_random.gui.battle_results.tooltips.total_efficiency_tooltips import FunEfficiencyTooltipsPacker
 from fun_random.gui.feature.util.fun_mixins import FunSubModesWatcher
-from fun_random.gui.shared.event_dispatcher import showFunRandomBattleResultsWindow
+from fun_random.gui.shared.event_dispatcher import showFunRandomBattleResults
 from fun_random.gui.shared.tooltips import TooltipType
 from gui.battle_results.pbs_helpers.common import pushNoBattleResultsDataMessage
 from gui.battle_results.presenters.base_presenter import BaseStatsPresenter
@@ -18,6 +19,7 @@ if typing.TYPE_CHECKING:
 
 class FunRandomBattleResultsPresenter(BaseStatsPresenter, FunSubModesWatcher):
     __slots__ = ()
+    _ARENA_BONUS_TYPE = ARENA_BONUS_TYPE.FUN_RANDOM
     _TOOLTIPS_PACKERS = {TooltipType.FUN_EFFICIENCY_PARAMETER: FunEfficiencyTooltipsPacker,
      TooltipType.FUN_EARNED_CURRENCY: FunEarnedCurrencyTooltipsPacker}
     _CONTEXT_MENU_TYPE = CONTEXT_MENU_HANDLER_TYPE.BATTLE_RESULTS_USER
@@ -49,7 +51,10 @@ class FunRandomBattleResultsPresenter(BaseStatsPresenter, FunSubModesWatcher):
         if self._battleResults and self._funRandomCtrl.isEnabled():
             subMode = self.getSubMode(getEventID(self._battleResults.reusable))
             if subMode is not None and subMode.isAvailable():
-                showFunRandomBattleResultsWindow(arenaUniqueID)
+                self._showBattleResults(arenaUniqueID)
                 return
         pushNoBattleResultsDataMessage()
         return
+
+    def _showBattleResults(self, arenaUniqueID):
+        showFunRandomBattleResults(arenaUniqueID)

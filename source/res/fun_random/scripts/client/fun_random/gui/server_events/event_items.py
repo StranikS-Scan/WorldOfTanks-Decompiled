@@ -66,7 +66,7 @@ class FunProgressionTriggerQuest(Quest, FunProgressionWatcher):
                 if tID == self.__counterName:
                     return data.count
 
-    def getIconKey(self):
+    def getQuestCondition(self):
         if self.isForActiveProgression():
             for trigger in self.getActiveProgression().config.triggers:
                 if trigger['id'] == self.__triggerId:
@@ -81,7 +81,7 @@ class FunProgressionUnlimitedTriggerQuest(FunProgressionTriggerQuest):
     MAIN_TRIGGER_QUEST_ID = FEP_PROGRESSION_UNLIMITED_TRIGGER_QUEST_ID
     ALT_TRIGGER_QUEST_ID = FEP_PROGRESSION_UNLIMITED_ALT_TRIGGER_QUEST_ID
 
-    def getIconKey(self):
+    def getQuestCondition(self):
         return self.getActiveProgression().config.unlimitedTrigger['condition'] if self.isForActiveProgression() else ''
 
 

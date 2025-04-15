@@ -1,3 +1,50 @@
 <FLAvatarComponent.def>
+  <CellMethods>
+    <chooseVehicleForRespawn>
+      <Arg>	UINT32	</Arg>
+      <Exposed>	OWN_CLIENT	</Exposed>
+    </chooseVehicleForRespawn>
+    <chooseRespawnZone>
+      <Arg>	VECTOR3	</Arg>
+      <Exposed>	OWN_CLIENT	</Exposed>
+    </chooseRespawnZone>
+    <switchSetup>
+      <Arg>	UINT32	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Exposed>	OWN_CLIENT	</Exposed>
+    </switchSetup>
+    <performRespawn>
+      <Exposed>	OWN_CLIENT	</Exposed>
+    </performRespawn>
+  </CellMethods>
+  <ClientMethods>
+    <updateRespawnVehicles>
+      <Arg>	ARRAY	  <of>	RESPAWN_AVAILABLE_VEHICLE	</of>
+      </Arg>
+    </updateRespawnVehicles>
+    <updateRespawnCooldowns>
+      <Arg>	ARRAY	  <of>	RESPAWN_COOLDOWN_ITEM	</of>
+      </Arg>
+    </updateRespawnCooldowns>
+    <updateRespawnInfo>
+      <Arg>	RESPAWN_INFO	</Arg>
+    </updateRespawnInfo>
+    <updateVehicleLimits>
+      <Arg>	ARRAY	  <of>	RESPAWN_LIMITED_VEHICLES	</of>
+      </Arg>
+    </updateVehicleLimits>
+    <onTeamLivesRestored>
+      <Arg>	ARRAY	  <of>	UINT8	</of>
+      </Arg>
+    </onTeamLivesRestored>
+    <updatePlayerLives>
+      <Arg>	UINT8	</Arg>
+    </updatePlayerLives>
+  </ClientMethods>
+  <Properties></Properties>
+  <ofEntity>
+    <Avatar></Avatar>
+  </ofEntity>
   <DefaultKeyName>	FLAvatarComponent	</DefaultKeyName>
 </FLAvatarComponent.def>

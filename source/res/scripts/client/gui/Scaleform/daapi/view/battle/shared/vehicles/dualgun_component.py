@@ -241,6 +241,7 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
             self.__onDualGunChargeStateUpdated(value)
         elif stateID == VEHICLE_VIEW_STATE.DESTROYED:
             self.__isEnabled = False
+            self.as_cancelChargeS()
             self.as_setVisibleS(False)
         elif stateID in self.__deviceStateHandlers:
             self.__deviceStateHandlers[stateID](value)

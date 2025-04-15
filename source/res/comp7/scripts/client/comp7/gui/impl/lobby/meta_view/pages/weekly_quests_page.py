@@ -8,7 +8,9 @@ from account_helpers.AccountSettings import COMP7_UI_SECTION, COMP7_WEEKLY_QUEST
 from comp7.gui.impl.gen.view_models.views.lobby.enums import MetaRootViews
 from comp7.gui.impl.gen.view_models.views.lobby.meta_view.pages.progress_points_model import ProgressPointsModel
 from comp7.gui.impl.lobby.comp7_helpers.comp7_bonus_packer import getComp7BonusPacker, packTokensRewardsQuestBonuses, packQuestBonuses
+from comp7.gui.impl.lobby.comp7_helpers.comp7_quest_helpers import isWeeklyRewardClaimable, isWeeklyRewardClaimed
 from comp7.gui.impl.lobby.meta_view.pages import PageSubModelPresenter
+from comp7.gui.shared.event_dispatcher import showComp7WeeklyQuestsRewardsSelectionWindow
 from comp7.gui.shared.missions.packers.events import Comp7WeeklyQuestPacker
 from comp7.skeletons.gui.game_control import IComp7WeeklyQuestsController
 from frameworks.wulf.view.array import fillViewModelsArray
@@ -17,6 +19,7 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusModel
 from helpers import dependency
 from skeletons.gui.game_control import IComp7Controller
+from comp7.gui.impl.gen.view_models.views.lobby.meta_view.pages.weekly_quests_model import ChoiceRewardState
 if typing.TYPE_CHECKING:
     from typing import Dict, Iterator, List, Optional, Tuple, Union
     from comp7.gui.game_control.comp7_controller import Comp7Controller
@@ -63,10 +66,14 @@ class WeeklyQuestsPage(PageSubModelPresenter):
             return
 
     def _getEvents(self):
-        return ((self.__comp7WeeklyQuestsCtrl.onWeeklyQuestsUpdated, self.__onWeeklyQuestsUpdated), (self.getViewModel().onAnimationEnd, self.__onAnimationEnd))
+        return ((self.__comp7WeeklyQuestsCtrl.onWeeklyQuestsUpdated, self.__onWeeklyQuestsUpdated), (self.viewModel.onGoToRewardsSelection, self.__onGoToRewardsSelection), (self.getViewModel().onAnimationEnd, self.__onAnimationEnd))
 
     def __onWeeklyQuestsUpdated(self, quests):
         self.__updateData(quests)
+
+    @staticmethod
+    def __onGoToRewardsSelection():
+        showComp7WeeklyQuestsRewardsSelectionWindow()
 
     def __updateData(self, quests):
         with self.getViewModel().transaction() as model:
@@ -74,6 +81,13 @@ class WeeklyQuestsPage(PageSubModelPresenter):
             self.__setProgressAnimationToBeShown(model, quests.numCompletedBattleQuests)
             fillViewModelsArray(self.__updateQuestCardModels(self.__sliceOffCompletedWeeksExceptLast(quests, model.QUESTS_PER_WEEK)), model.getQuestCards())
             fillViewModelsArray(self.__updateProgressPointModels(quests.sortedTokenQuests, quests.numBattleQuestsToCompleteByTokenQuestIdx), model.getProgressPoints())
+            model.setChoiceRewardState(self.__getClaimWeeklyRewardButtonState())
+
+    @staticmethod
+    def __getClaimWeeklyRewardButtonState():
+        if isWeeklyRewardClaimed():
+            return ChoiceRewardState.CLAIMED
+        return ChoiceRewardState.ACTIVE if isWeeklyRewardClaimable() else ChoiceRewardState.DEFAULT
 
     def __updateQuestCardModels(self, sortedBattleQuests):
         bonusPacker = getComp7BonusPacker()

@@ -26,6 +26,8 @@
   <explicitRequestOnly>	false	</explicitRequestOnly>
   <defaultGroundEffect>	None	</defaultGroundEffect>
   <wwbattleCountdownTimerSound>	timer_oneshot	</wwbattleCountdownTimerSound>
+  <soundNotificationsPlan>	soundNotifications	</soundNotificationsPlan>
+  <soundNotificationsContext>	visual_script_client.contexts.sound_notifications_context.SoundNotificationsContext	</soundNotificationsContext>
   <wwmusicDroneSetup>
     <timeRemained>
       <value>	180	</value>
@@ -322,6 +324,20 @@
     </comp7>
   </gameplayTypes>
   <extraSoundRemapping>
+    <white_tiger>
+      <soundRemapping>
+        <loadBanks>
+          <bank>
+            <name>	ev_white_tiger_2021_hangar.bnk	</name>
+            <extension>	white_tiger	</extension>
+          </bank>
+          <bank>
+            <name>	ev_white_tiger_2021_hangar.pck	</name>
+            <extension>	white_tiger	</extension>
+          </bank>
+        </loadBanks>
+      </soundRemapping>
+    </white_tiger>
     <story_mode>
       <soundRemapping>
         <loadBanks>

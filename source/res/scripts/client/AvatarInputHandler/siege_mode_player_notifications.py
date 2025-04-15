@@ -276,12 +276,13 @@ class SiegeModeCameraShaker(object):
             vehicle = BigWorld.player().getVehicleAttached()
             if vehicle is None:
                 return
+            nodeGunJoint = vehicle.model.node(TankNodeNames.GUN_JOINT)
             typeDescriptor = vehicle.typeDescriptor
-            if typeDescriptor.hasAutoSiegeMode or typeDescriptor.isTwinGunVehicle:
+            if typeDescriptor.hasAutoSiegeMode or typeDescriptor.isTwinGunVehicle or nodeGunJoint is None:
                 return
-            inputHandler = BigWorld.player().inputHandler
+            handler = BigWorld.player().inputHandler
             matrix = Math.Matrix(vehicle.model.matrix)
             impulseDir = -matrix.applyToAxis(2)
-            impulsePosition = Math.Matrix(vehicle.model.node(TankNodeNames.GUN_JOINT)).translation
-            inputHandler.onSpecificImpulse(impulsePosition, impulseDir * SiegeModeCameraShaker.SIEGE_CAMERA_IMPULSE, 'sniper')
+            impulsePosition = Math.Matrix(nodeGunJoint).translation
+            handler.onSpecificImpulse(impulsePosition, impulseDir * SiegeModeCameraShaker.SIEGE_CAMERA_IMPULSE, 'sniper')
             return

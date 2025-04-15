@@ -238,6 +238,11 @@
     </decal>
     <name>	Animals	</name>
     <type>	EMBLEM	</type>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
+    </vehicleFilter>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:emblem/animals	</userString>
@@ -307,6 +312,11 @@
     </decal>
     <name>	Collapsible style animals	</name>
     <type>	EMBLEM	</type>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
+    </vehicleFilter>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:emblem/animals	</userString>
@@ -321,5 +331,10 @@
     </decal>
     <name>	ASIA Red Desert	</name>
     <type>	EMBLEM	</type>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
+    </vehicleFilter>
   </itemGroup>
 </emblems_animals.xml>

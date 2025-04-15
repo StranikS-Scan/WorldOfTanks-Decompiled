@@ -63,6 +63,10 @@
       <type>	merge	</type>
     </rule>
     <rule>
+      <pattern>	gui/gui_colors\.xml$	</pattern>
+      <type>	merge	</type>
+    </rule>
+    <rule>
       <pattern>	gui/gui_settings\.xml$	</pattern>
       <type>	include	</type>
     </rule>
@@ -137,6 +141,10 @@
       <type>	include	</type>
     </rule>
     <rule>
+      <pattern>	gui/gui_sounds\.xml$	</pattern>
+      <type>	merge	</type>
+    </rule>
+    <rule>
       <pattern>	.*/server_xml/fairplay\.xml$	</pattern>
       <type>	includeByPath	</type>
       <params>	newbieBattles/arenaBonusTypes violations	</params>
@@ -152,6 +160,25 @@
     <rule>
       <pattern>	.*/server_xml/event_notifications\.xml$	</pattern>
       <type>	include	</type>
+    </rule>
+    <rule>
+      <pattern>	gui/gui_colors\.xml$	</pattern>
+      <type>	include	</type>
+    </rule>
+    <rule>
+      <pattern>	gui/tutorial-lobby-gui\.xml$	</pattern>
+      <type>	includeByPath	</type>
+      <params>	gui-items	</params>
+    </rule>
+    <rule>
+      <pattern>	scripts/tutorial_docs/once-only-hints\.xml$	</pattern>
+      <type>	includeByPath	</type>
+      <params>	hints	</params>
+    </rule>
+    <rule>
+      <pattern>	.*/server_xml/system_channels\.xml$	</pattern>
+      <type>	includeByPath	</type>
+      <params>	systemChannels	</params>
     </rule>
   </xml_whitelist>
 </extension_rules.xml>

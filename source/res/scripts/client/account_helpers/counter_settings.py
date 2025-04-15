@@ -4,14 +4,15 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import NEW_SETTINGS_COUNTER
 from account_helpers.settings_core import settings_constants
 from helpers import dependency
-from skeletons.gui.game_control import IAnonymizerController, IVehiclePostProgressionController, ILimitedUIController
+from skeletons.gui.game_control import IAnonymizerController, IVehiclePostProgressionController, ILimitedUIController, ICommendationsController
 from skeletons.gui.lobby_context import ILobbyContext
 _NEW_SETTING_COUNTER_VISIBILITY_VALIDATORS = {settings_constants.GAME.ANONYMIZER: lambda : dependency.instance(IAnonymizerController).isEnabled,
  'showQuestProgress': lambda : dependency.instance(ILobbyContext).getServerSettings().isPersonalMissionsEnabled(),
  settings_constants.GAME.GAMEPLAY_ONLY_10_MODE: lambda : dependency.instance(ILobbyContext).getServerSettings().isOnly10ModeEnabled(),
  settings_constants.GAME.GAMEPLAY_DEV_MAPS: lambda : dependency.instance(ILobbyContext).getServerSettings().isMapsInDevelopmentEnabled(),
  settings_constants.GAME.SWITCH_SETUPS_IN_LOADING: lambda : dependency.instance(IVehiclePostProgressionController).isSwitchSetupFeatureEnabled(),
- settings_constants.GAME.LIMITED_UI_ACTIVE: lambda : dependency.instance(ILimitedUIController).isUserSettingsMayShow}
+ settings_constants.GAME.LIMITED_UI_ACTIVE: lambda : dependency.instance(ILimitedUIController).isUserSettingsMayShow,
+ settings_constants.BattleCommStorageKeys.ENABLE_COMMENDATIONS_FEEDBACK: lambda : dependency.instance(ICommendationsController).isCommendationsEnabled}
 
 def isNewSettingCounterVisible(settingKey):
     return _NEW_SETTING_COUNTER_VISIBILITY_VALIDATORS.get(settingKey, lambda : True)()

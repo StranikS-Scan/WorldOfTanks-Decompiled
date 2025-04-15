@@ -64,8 +64,8 @@ class CommanderView(ViewImpl):
                 return TOOLTIPS_CONSTANTS.CREW_PERK_GF
         return super(CommanderView, self).createToolTip(event)
 
-    def _onLoading(self, *args, **kwargs):
-        super(CommanderView, self)._onLoading(args, kwargs)
+    def _initialize(self):
+        super(CommanderView, self)._initialize()
         self.__addListeners()
         self.__updateModel()
 

@@ -11,8 +11,8 @@
   <supplySlots>	4 1 1 6 6 6 7 8 8 8	</supplySlots>
   <postProgressionTree>	role_ATSPG_universal	</postProgressionTree>
   <speedLimits>
-    <forward>	40	</forward>
-    <backward>	15	</backward>
+    <forward>	30	</forward>
+    <backward>	12	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.175	</moving>
@@ -48,47 +48,44 @@
       <lobby>	0	</lobby>
       <battle>	0	</battle>
     </fakeTurrets>
-    <primaryArmor>	armor_1 armor_24 armor_29	</primaryArmor>
-    <weight>	13155	</weight>
-    <maxHealth>	800	</maxHealth>
-    <ammoBayHealth>
-      <maxHealth>	190	</maxHealth>
-      <maxRegenHealth>	130	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
-    </ammoBayHealth>
     <armor>
-      <armor_1>	250	</armor_1>
-      <armor_3>	37	</armor_3>
+      <armor_1>	215	</armor_1>
+      <armor_2>	185	</armor_2>
+      <armor_3>	40	</armor_3>
       <armor_4>	40	</armor_4>
       <armor_5>	30	</armor_5>
       <armor_6>	20	</armor_6>
       <armor_7>	80	</armor_7>
       <armor_8>	0	</armor_8>
       <armor_9>	35	</armor_9>
-      <armor_10>	195	</armor_10>
-      <armor_11>	230	</armor_11>
-      <armor_12>	200	</armor_12>
+      <armor_11>	145	</armor_11>
+      <armor_12>	160	</armor_12>
       <armor_13>	50	</armor_13>
-      <armor_14>	125	</armor_14>
-      <armor_15>	195	</armor_15>
-      <armor_16>	125	</armor_16>
+      <armor_15>	175	</armor_15>
+      <armor_16>	50	</armor_16>
       <armor_17>	165	</armor_17>
-      <armor_18>	160	</armor_18>
-      <armor_19>	200	</armor_19>
-      <armor_20>	165	</armor_20>
+      <armor_18>	145	</armor_18>
+      <armor_19>	110	</armor_19>
       <armor_21>	50	</armor_21>
       <armor_22>	50	</armor_22>
       <armor_23>	50	</armor_23>
       <armor_24>	45	</armor_24>
-      <armor_25>	50	</armor_25>
-      <armor_26>	35	</armor_26>
-      <armor_27>	40	</armor_27>
+      <armor_25>	20	</armor_25>
+      <armor_26>	30	</armor_26>
+      <armor_27>	30	</armor_27>
       <armor_28>	30	</armor_28>
-      <armor_29>	30	</armor_29>
-      <armor_30>	90	</armor_30>
+      <armor_29>	40	</armor_29>
       <armor_31>	100	</armor_31>
       <armor_32>	90	</armor_32>
     </armor>
+    <primaryArmor>	armor_1 armor_24 armor_29	</primaryArmor>
+    <weight>	13155	</weight>
+    <maxHealth>	720	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
     <models>
       <undamaged>	vehicles/japan/J32_Chi_To_SPG/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/japan/J32_Chi_To_SPG/crash/lod0/Hull.model	</destroyed>
@@ -1181,12 +1178,12 @@
         <vehicleRotation>	0.20	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	160	</maxHealth>
-      <maxRegenHealth>	120	</maxRegenHealth>
+      <maxHealth>	145	</maxHealth>
+      <maxRegenHealth>	109	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <armor>
-        <leftTrack>	25	</leftTrack>
-        <rightTrack>	25	</rightTrack>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
       </armor>
       <models>
         <undamaged>	vehicles/japan/J32_Chi_To_SPG/normal/lod0/Chassis.model	</undamaged>
@@ -2182,7 +2179,7 @@
           <trackPairIdx>	0	</trackPairIdx>
         </right>
       </physicalTracks>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	6.62068987	</repairTime>
     </Chassis_J32_Chi_To_SPG>
     <Chassis_J32_Chi_To_SPG_2>
       <userString>	#japan_vehicles:Chassis_J32_Chi_To_SPG_2	</userString>
@@ -2204,8 +2201,8 @@
       <maxRegenHealth>	135	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <armor>
-        <leftTrack>	25	</leftTrack>
-        <rightTrack>	25	</rightTrack>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
       </armor>
       <models>
         <undamaged>	vehicles/japan/J32_Chi_To_SPG/normal/lod0/Chassis.model	</undamaged>
@@ -3201,7 +3198,7 @@
           <trackPairIdx>	0	</trackPairIdx>
         </right>
       </physicalTracks>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	6.66666651	</repairTime>
     </Chassis_J32_Chi_To_SPG_2>
   </chassis>
   <turrets0>
@@ -3211,30 +3208,30 @@
       <level>	7	</level>
       <price>	100	</price>
       <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	220	</armor_1>
+        <armor_2>	185	</armor_2>
+        <armor_3>	35	</armor_3>
+        <armor_4>	150	</armor_4>
+        <armor_5>	60	</armor_5>
+        <armor_6>	20	</armor_6>
+      </armor>
       <weight>	9000	</weight>
-      <maxHealth>	200	</maxHealth>
+      <maxHealth>	180	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	370	</circularVisionRadius>
-      <armor>
-        <armor_1>	250	</armor_1>
-        <armor_2>	170	</armor_2>
-        <armor_3>	37	</armor_3>
-        <armor_4>	170	</armor_4>
-        <armor_5>	60	</armor_5>
-        <armor_6>	20	</armor_6>
-      </armor>
+      <circularVisionRadius>	350	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	90	</maxHealth>
         <maxRegenHealth>	45	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_Gun_Type88>	shared	  <maxAmmo>	60	</maxAmmo>
+        <_105mm_Cannon_Type_92_SP>	shared	  <maxAmmo>	40	</maxAmmo>
           <unlocks>
             <gun>	_105mm_Cannon_Type92_A	  <cost>	21000	</cost>
             </gun>
@@ -3244,10 +3241,10 @@
             <maxPitch>	0 7 1 7	</maxPitch>
           </pitchLimits>
           <turretYawLimits>	-10 10	</turretYawLimits>
-          <aimingTime>	1.7	</aimingTime>
-          <reloadTime>	3.9	</reloadTime>
+          <reloadTime>	9.9	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
           <armor>
-            <armor_1>	250	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	220	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
             <armor_3>	170	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
@@ -3255,36 +3252,43 @@
             </armor_5>
             <armor_6>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_6>
-            <gun>	35	</gun>
+            <gun>	45	</gun>
           </armor>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
               <slotId>	41000	</slotId>
-              <anchorPosition>	-0 0 0.979813	</anchorPosition>
+              <anchorPosition>	0 0.057629 1.70596	</anchorPosition>
               <anchorDirection>	0 1 0	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
               <slotType>	paint	</slotType>
               <slotId>	41001	</slotId>
-              <anchorPosition>	0.000002 0.120186 0.310508	</anchorPosition>
+              <anchorPosition>	0.000004 0.227301 0.309374	</anchorPosition>
               <anchorDirection>	0 1 0	</anchorDirection>
               <applyTo>	16384	</applyTo>
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
               <slotId>	42000	</slotId>
-              <anchorPosition>	-0 0 0.979813	</anchorPosition>
+              <anchorPosition>	0 0.057629 1.70596	</anchorPosition>
               <anchorDirection>	-0 1.000074 0	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	0 0.005 1.1	</rayStart>
-              <rayEnd>	0 0.005 1.6	</rayEnd>
-              <rayUp>	0.08 0 0	</rayUp>
+              <rayStart>	0 0.05 1.41	</rayStart>
+              <rayEnd>	0 0.05 1.91	</rayEnd>
+              <rayUp>	0.14 0 0	</rayUp>
               <applyToFabric>	false	</applyToFabric>
               <size>	0.5	</size>
               <isUVProportional>	false	</isUVProportional>
@@ -3297,22 +3301,22 @@
             </customizableVehicleAreas>
           </customization>
           <models>
-            <undamaged>	vehicles/japan/J32_Chi_To_SPG/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/japan/J32_Chi_To_SPG/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/japan/J32_Chi_To_SPG/crash/lod0/Gun_01.model	</exploded>
+            <undamaged>	vehicles/japan/J32_Chi_To_SPG/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/japan/J32_Chi_To_SPG/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/japan/J32_Chi_To_SPG/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/japan/J32_Chi_To_SPG/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/japan/J32_Chi_To_SPG/collision_client/Gun_01.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/japan/J32_Chi_To_SPG/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/japan/J32_Chi_To_SPG/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <edgeByVisualModel>	false	</edgeByVisualModel>
-          <shotOffset>	0 0.006837 0	</shotOffset>
+          <shotOffset>	0.000001 0.060878 0	</shotOffset>
           <camouflage>
-            <tiling>	1 0.7 0.000000 0.1	</tiling>
-            <density>	90.5568 94.6121	</density>
+            <tiling>	0.7 0.7 0.000000 0.1	</tiling>
+            <density>	87.6494 94.4728	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_75mm_Gun_Type88>
+        </_105mm_Cannon_Type_92_SP>
         <_105mm_Cannon_Type92_A>	shared	  <maxAmmo>	40	</maxAmmo>
           <unlocks>
             <vehicle>	J33_Ho_Ri_2	  <cost>	97300	</cost>
@@ -3323,10 +3327,10 @@
             <maxPitch>	0 7 1 7	</maxPitch>
           </pitchLimits>
           <turretYawLimits>	-10 10	</turretYawLimits>
-          <reloadTime>	8.2	</reloadTime>
-          <aimingTime>	2	</aimingTime>
+          <reloadTime>	9.6	</reloadTime>
+          <aimingTime>	2.1	</aimingTime>
           <armor>
-            <armor_1>	250	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	220	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
             <armor_3>	170	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
@@ -3336,6 +3340,13 @@
             </armor_6>
             <gun>	45	</gun>
           </armor>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -3443,11 +3454,6 @@
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <_Type96_Bo>	shared	  <unlocks>
-        <radio>	_Type3_Otsu	  <cost>	4000	</cost>
-        </radio>
-      </unlocks>
-    </_Type96_Bo>
     <_Type3_Otsu>	shared	</_Type3_Otsu>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
@@ -3455,12 +3461,12 @@
     <detailed>
       <engines>
         <_Mitsubishi_Al_Type_4A>
-          <smplEnginePower>	400	</smplEnginePower>
-          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
+          <smplEnginePower>	500	</smplEnginePower>
+          <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
         </_Mitsubishi_Al_Type_4A>
         <_Kawasaki_Type_98A>
           <smplEnginePower>	550	</smplEnginePower>
-          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
         </_Kawasaki_Type_98A>
       </engines>
       <chassis>

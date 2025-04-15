@@ -3,7 +3,7 @@
 from comp7.gui.impl.gen.view_models.views.lobby.enums import MetaRootViews
 from comp7.gui.prb_control.entities import comp7_prb_helpers
 from comp7.gui.shared.event_dispatcher import showComp7BanWindow
-from comp7.gui.shared.event_dispatcher import showComp7MetaRootView, showComp7WeeklyQuestsRewardsSelectionWindow
+from comp7.gui.shared.event_dispatcher import showComp7MetaRootView, showComp7AllRewardsSelectionWindow
 from constants import PENALTY_TYPES, FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA, ARENA_BONUS_TYPE
 from gui.shared import event_dispatcher as shared_events
 from helpers import dependency
@@ -64,7 +64,7 @@ class OpenBondEquipmentSelection(NavigationDisabledActionHandler):
         pass
 
     def doAction(self, model, entityID, action):
-        showComp7WeeklyQuestsRewardsSelectionWindow()
+        showComp7AllRewardsSelectionWindow()
 
 
 class Comp7OpenPunishmentWindowHandler(_OpenPunishmentWindowHandler):

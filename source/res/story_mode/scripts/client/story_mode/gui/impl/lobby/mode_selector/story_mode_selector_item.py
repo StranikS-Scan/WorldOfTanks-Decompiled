@@ -5,7 +5,7 @@ from gui import GUI_SETTINGS
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_columns import ModeSelectorColumns
-from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorLegacyItem, getInfoPageKey
+from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorLegacyItem
 from gui.shared.event_dispatcher import showBrowserOverlayView
 from helpers import dependency
 from story_mode.account_settings import isWelcomeScreenSeen
@@ -60,8 +60,11 @@ class StoryModeSelectorItem(ModeSelectorLegacyItem):
 
     def handleInfoPageClick(self):
         self._uiLogger.logInfoClick()
-        url = self._urlProcessing(GUI_SETTINGS.lookup(getInfoPageKey(self.modeName)))
+        url = self._urlProcessing(GUI_SETTINGS.lookup(self._storyModeCtrl.storyModeInfoPageKey))
         showBrowserOverlayView(url, VIEW_ALIAS.STORY_MODE_WEB_VIEW_TRANSPARENT, hiddenLayers=(WindowLayer.MARKER, WindowLayer.VIEW, WindowLayer.WINDOW))
+
+    def _isInfoIconVisible(self):
+        return GUI_SETTINGS.lookup(self._storyModeCtrl.storyModeInfoPageKey) is not None
 
     def _isNewLabelVisible(self):
         missionsSettings = missionsSchema.getModel()

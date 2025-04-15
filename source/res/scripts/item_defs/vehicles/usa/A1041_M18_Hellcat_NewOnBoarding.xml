@@ -1273,8 +1273,8 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_M18_Hellcat_2_NewOnBoarding>
-      <userString>	#usa_vehicles:Chassis_M18_Hellcat_2	</userString>
+    <Chassis_A1041_M18_Hellcat_NewOnBoarding>
+      <userString>	#usa_vehicles:Chassis_A41_M18_Hellcat_2	</userString>
       <invulnerable>	True	</invulnerable>
       <notInShop>	true	</notInShop>
       <tags></tags>
@@ -2099,12 +2099,12 @@
         </slot>
       </customizationSlots>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_M18_Hellcat_2_NewOnBoarding>
+    </Chassis_A1041_M18_Hellcat_NewOnBoarding>
   </chassis>
   <turrets0>
-    <Turret_2_M18_Hellcat_NewOnBoarding>
+    <Turret_1_A1041_M18_Hellcat_NewOnBoarding>
       <ceilless>	true	</ceilless>
-      <userString>	#usa_vehicles:Turret_2_M18_Hellcat	</userString>
+      <userString>	#usa_vehicles:Turret_2_A41_M18_Hellcat	</userString>
       <tags>	cannotDetach	</tags>
       <notInShop>	true	</notInShop>
       <level>	6	</level>
@@ -2565,10 +2565,10 @@
         <density>	127.622 128.099	</density>
         <aoTextureSize>	1024 512	</aoTextureSize>
       </camouflage>
-    </Turret_2_M18_Hellcat_NewOnBoarding>
+    </Turret_1_A1041_M18_Hellcat_NewOnBoarding>
   </turrets0>
   <engines>
-    <Wright_Continental_R-975C4_NewOnBoarding>	shared	</Wright_Continental_R-975C4_NewOnBoarding>
+    <Wright_Continental_R_975C4_18_NewOnBoarding>	shared	</Wright_Continental_R_975C4_18_NewOnBoarding>
   </engines>
   <fuelTanks>
     <Heavy_NewOnBoarding>	shared	</Heavy_NewOnBoarding>
@@ -2579,13 +2579,13 @@
   <physics>
     <detailed>
       <engines>
-        <Wright_Continental_R-975C4_NewOnBoarding>
+        <Wright_Continental_R_975C4_18_NewOnBoarding>
           <smplEnginePower>	486.3493	</smplEnginePower>
           <smplFwMaxSpeed>	72	</smplFwMaxSpeed>
-        </Wright_Continental_R-975C4_NewOnBoarding>
+        </Wright_Continental_R_975C4_18_NewOnBoarding>
       </engines>
       <chassis>
-        <Chassis_M18_Hellcat_2_NewOnBoarding>
+        <Chassis_A1041_M18_Hellcat_NewOnBoarding>
           <grounds>
             <soft>
               <rollingFriction>	0.18515	</rollingFriction>
@@ -2597,7 +2597,7 @@
               <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_M18_Hellcat_2_NewOnBoarding>
+        </Chassis_A1041_M18_Hellcat_NewOnBoarding>
       </chassis>
     </detailed>
   </physics>

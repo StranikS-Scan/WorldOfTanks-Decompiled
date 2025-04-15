@@ -4,23 +4,19 @@ import logging
 from typing import TYPE_CHECKING
 from ClientSelectableCameraObject import ClientSelectableCameraObject
 from CurrentVehicle import g_currentVehicle
-from adisp import adisp_process
-from gui import GUI_SETTINGS
-from gui.customization.constants import CustomizationModes
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.context.styled_mode import StyledMode
-from gui.game_control.links import URLMacros
+from gui.customization.constants import CustomizationModes
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.lootbox_system.base.common import ViewID, Views, getTextResource
-from gui.lootbox_system.base.utils import getIntroVideoUrl, getVehicleForStyle, getShopOverlayUrl, areUsedExternalTransitions
+from gui.lootbox_system.base.utils import getIntroVideoUrl, getShopOverlayUrl, getVehicleForStyle
 from gui.shared.event_dispatcher import hideVehiclePreview, selectVehicleInHangar, showBrowserOverlayView, showStylePreview, showVehiclePreviewWithoutBottomPanel
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from shared_utils import first
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IExternalLinksController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
@@ -118,18 +114,11 @@ def showVehicleStylePreview(style, previewBackCb=None, backBtnLabel=''):
     showStylePreview(vehicle.intCD, style, backCallback=previewBackCb, backBtnDescrLabel=backBtnLabel)
 
 
-@adisp_process
 def openShop(eventName, parent=None, executePreconditions=False):
-    if areUsedExternalTransitions(eventName):
-        urlParser = URLMacros(allowedMacroses=['DB_ID'])
-        path = GUI_SETTINGS.lootBoxes.get('categoryURL')
-        url = yield urlParser.parse(GUI_SETTINGS.checkAndReplaceWebShopMacros(path))
-        dependency.instance(IExternalLinksController).open(url)
-    else:
-        showBrowserOverlayView(getShopOverlayUrl(eventName), VIEW_ALIAS.OVERLAY_WEB_STORE)
-        if not executePreconditions:
-            from gui.impl.lobby.lootbox_system.base.info_page import InfoPage
-            InfoPage.cleanBaseWindow()
+    showBrowserOverlayView(getShopOverlayUrl(eventName), VIEW_ALIAS.OVERLAY_WEB_STORE)
+    if not executePreconditions:
+        from gui.impl.lobby.lootbox_system.base.info_page import InfoPage
+        InfoPage.cleanBaseWindow()
 
 
 @dependency.replace_none_kwargs(uiLoader=IGuiLoader)

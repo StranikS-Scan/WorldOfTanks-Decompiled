@@ -41,7 +41,6 @@ from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prestige.prestige_helpers import hasVehiclePrestige
 from gui.promo.hangar_teaser_widget import TeaserViewer
-from gui.resource_well.resource_well_helpers import isResourceWellRewardVehicle
 from gui.shared import EVENT_BUS_SCOPE, event_dispatcher as shared_events, events
 from gui.shared.events import AmmunitionPanelViewEvent, LobbySimpleEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -431,8 +430,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
                     if activeMarathon:
                         title = backport.text(R.strings.marathon.vehiclePreview.buyingPanel.title())
                         shared_events.showMarathonVehiclePreview(vehicleCD, activeMarathon.remainingPackedRewards, title, activeMarathon.prefix, True)
-                    elif isResourceWellRewardVehicle(vehicleCD=vehicleCD):
-                        shared_events.showResourceWellHeroPreview(vehicleCD)
                     else:
                         shared_events.showHeroTankPreview(vehicleCD)
         self.__checkVehicleCameraState()
@@ -578,6 +575,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateAlertMessage()
         self.__updateBattleRoyaleTournamentBanner()
         self.__updateIsComp7SpaceLoaded()
+        self.__updateCrew()
 
     def __onEntityUpdated(self, *_):
         self.__onEntityChanged()

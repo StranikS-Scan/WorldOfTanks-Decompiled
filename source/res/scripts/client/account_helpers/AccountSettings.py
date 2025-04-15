@@ -136,6 +136,7 @@ LIVE_OPS_WEB_EVENTS_COUNTERS = 'liveOpsWebEventsCounters'
 LIVE_OPS_WEB_EVENTS_UI_FLAGS = 'liveOpsWebEventsUIFlags'
 COMP7_BOND_EQUIPMENT_REMINDER_SHOWN_TIMESTAMP = 'comp7BondEquipmentReminderShown'
 COMP7_LAST_SEASON_WITH_SEEN_REWARD = 'comp7LastSeasonWithSeenReward'
+COMP7_LAST_MASKOT_WITH_SEEN_REWARD = 'comp7LastMaskotWithSeenReward'
 VEHICLE_CAROUSEL_COUNTERS_SEEN = 'vehicleCarouselCountersSeen'
 STORE_TAB = 'store_tab'
 STATS_REGULAR_SORTING = 'statsSorting'
@@ -234,6 +235,7 @@ DOG_TAGS_SELECTED_ANIMATED = 'selectedAnimated'
 DOG_TAGS_SELECTED_CUSTOMIZABLE = 'selectedCustomizable'
 WOT_PLUS = 'wotPlus'
 TELECOM_RENTALS = 'telecomRentals'
+COMMENDATIONS = 'commendations'
 PERSONAL_RESERVES = 'personalReserves'
 LAST_ARTY_CTRL_MODE = 'lastArtyCtrlMode'
 ACTIVE_TEST_PARTICIPATION_CONFIRMED = 'activeTestParticipateConfirmed'
@@ -797,7 +799,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                     'isEpicRandomCheckboxClicked': False,
                                     'isDisplayPlatoonMembersClicked': False,
                                     GuiSettingsBehavior.VEH_POST_PROGRESSION_UNLOCK_MSG_NEED_SHOW: True,
-                                    GuiSettingsBehavior.RESOURCE_WELL_INTRO_SHOWN: False,
                                     GuiSettingsBehavior.IS_PRESTIGE_ONBOARDING_VIEWED: False,
                                     GuiSettingsBehavior.PRESTIGE_FIRST_ENTRY_NOTIFICATION_SHOWN: False,
                                     'birthdayCalendarIntroShowed': False,
@@ -1033,9 +1034,12 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                            'isOnboardingShown': False,
                            'isBadgesEnabled': False,
                            'isAdditionalXPEnabled': False,
-                           'isOptionalDevicesAssistantEnabled': False},
+                           'isOptionalDevicesAssistantEnabled': False,
+                           'isCrewAssistantEnabled': False},
                 TELECOM_RENTALS: {'isTelecomRentalsEnabled': True,
                                   'isTelecomRentalsBlocked': True},
+                COMMENDATIONS: {'isMessagesEnable': True,
+                                'isLiveTagsEnable': True},
                 PERSONAL_RESERVES: {'isFirstTimeNotificationShown': False,
                                     'isIntroPageShown': False,
                                     'boosterCardHintsSeen': set()},
@@ -1075,6 +1079,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 FREE_CAM_USES_COUNT: 0,
                 NEW_SETTINGS_COUNTER: {'GameSettings': {'gameplay_epicStandard': True,
                                                         BattleCommStorageKeys.SHOW_LOCATION_MARKERS: True,
+                                                        BattleCommStorageKeys.ENABLE_COMMENDATIONS_FEEDBACK: True,
                                                         GAME.DISPLAY_PLATOON_MEMBERS: True,
                                                         'hangarCamParallaxEnabled': True,
                                                         'hangarCamPeriod': True,
@@ -1236,7 +1241,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                         BattleMatters.REMINDER_LAST_DISPLAY_TIME: 0},
                 BR_PROGRESSION_POINTS_SEEN: 0,
                 ROYALE_INTRO_VIDEO_SHOWN_FOR_SEASON: 0,
-                ROYALE_INTRO_VIDEO_SHOWN: False,
                 COMP7_LIGHT_PROGRESSION_POINTS_SEEN: 0,
                 COMP7_LIGHT_INTRO_SHOWN: False,
                 ROYALE_SQUAD_TIP_SHOWN_FOR_SEASON: 0,
@@ -1315,7 +1319,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                  COLLECTION_RENEW_SEEN: {},
                                                  COLLECTIONS_UPDATED_ENTRY_SEEN: False},
                      COMP7_BOND_EQUIPMENT_REMINDER_SHOWN_TIMESTAMP: None,
-                     COMP7_LAST_SEASON_WITH_SEEN_REWARD: None},
+                     COMP7_LAST_SEASON_WITH_SEEN_REWARD: None,
+                     COMP7_LAST_MASKOT_WITH_SEEN_REWARD: None},
  KEY_SESSION_SETTINGS: {STORAGE_VEHICLES_CAROUSEL_FILTER_1: {'ussr': False,
                                                              'germany': False,
                                                              'usa': False,
@@ -1487,7 +1492,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 85
+    version = 87
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -2245,12 +2250,28 @@ class AccountSettings(object):
                     if LOOTBOX_SYSTEM in keySettings.keys():
                         keySettings.write(LOOTBOX_SYSTEM, _pack({}))
 
+            if currVersion < 86:
+                for key, section in _filterAccountSection(ads):
+                    notifications = AccountSettings._readSection(section, KEY_NOTIFICATIONS)
+                    if 'story_mode_dday' in notifications.keys():
+                        notifications.deleteSection('story_mode_dday')
+
+            if currVersion < 87:
+                for key, section in _filterAccountSection(ads):
+                    notifications = AccountSettings._readSection(section, KEY_NOTIFICATIONS)
+                    if 'recruitNotifications' in notifications.keys():
+                        notifications.deleteSection('recruitNotifications')
+
             ads.writeInt('version', AccountSettings.version)
         return
 
     @staticmethod
     def getFilterDefault(name):
         return DEFAULT_VALUES[KEY_FILTERS].get(name, None)
+
+    @staticmethod
+    def getNotificationDefault(name):
+        return DEFAULT_VALUES[KEY_NOTIFICATIONS].get(name, None)
 
     @staticmethod
     def invalidateNewSettingsCounter():

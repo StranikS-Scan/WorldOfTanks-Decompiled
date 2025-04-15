@@ -48,13 +48,56 @@
     <ctf>
       <teamBasePositions>
         <team1>
-          <position1>	-367.279205 156.182083	</position1>
+          <position1>	-367.279236 156.182098	</position1>
         </team1>
         <team2>
-          <position1>	337.413422 152.013901	</position1>
+          <position1>	337.413452 152.013916	</position1>
         </team2>
       </teamBasePositions>
     </ctf>
+    <comp7>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <minimap>	spaces/127_japort/mmap_comp7.dds	</minimap>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	28.278803 82.847275	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	37.165329 -282.248108	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	38.335007 -445.018524	</position>
+          <type>	1	</type>
+        </point>
+      </pointsOfInterestUDO>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-284.022766 -319.192963	</position>
+        </team1>
+        <team2>
+          <position>	320.944946 -250.263641	</position>
+        </team2>
+      </teamSpawnPoints>
+      <controlPoint>	46.284744 -98.335007	</controlPoint>
+    </comp7>
   </gameplayTypes>
   <roadMap></roadMap>
   <mapActivities></mapActivities>

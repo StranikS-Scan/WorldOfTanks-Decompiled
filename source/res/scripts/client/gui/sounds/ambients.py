@@ -334,7 +334,7 @@ class BattleResultsEnv(SoundEnv):
 
     def start(self):
         super(BattleResultsEnv, self).start()
-        lastWinStatus = self.sessionProvider.getCtx().extractLastArenaWinStatus()
+        lastWinStatus = self._getLastWinStatus()
         if lastWinStatus is not None:
             SOUND_DEBUG('There is last arena win status need to be processed', lastWinStatus)
             self._music = self._sounds.get(lastWinStatus.getStatus(), EmptySound())
@@ -345,6 +345,9 @@ class BattleResultsEnv(SoundEnv):
         self._clearMusicEvent()
         _MC.g_musicController.reloadSounds()
         super(BattleResultsEnv, self).stop()
+
+    def _getLastWinStatus(self):
+        return self.sessionProvider.getCtx().extractLastArenaWinStatus()
 
     def _clearMusicEvent(self):
         self._music.onFinished -= self._onMusicFinished

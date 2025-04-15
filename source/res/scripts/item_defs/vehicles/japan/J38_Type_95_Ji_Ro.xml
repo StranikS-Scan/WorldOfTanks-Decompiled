@@ -58,10 +58,10 @@
       <armor_11>	50	</armor_11>
       <armor_12>	70	</armor_12>
       <armor_13>	70	</armor_13>
-      <armor_16>	70	</armor_16>
+      <armor_16>	50	</armor_16>
       <armor_17>	50	</armor_17>
       <armor_18>	40	</armor_18>
-      <armor_20>	20	</armor_20>
+      <armor_20>	10	</armor_20>
       <armor_22>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_22>
       <armor_23>	30	</armor_23>
@@ -930,8 +930,8 @@
         </chassis>
       </unlocks>
       <armor>
-        <leftTrack>	15	</leftTrack>
-        <rightTrack>	15	</rightTrack>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	5500	</weight>
       <maxLoad>	34000	</maxLoad>
@@ -944,9 +944,9 @@
         <vehicleRotation>	0.21	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	110	</maxHealth>
-      <maxRegenHealth>	85	</maxRegenHealth>
-      <repairCost>	0.5	</repairCost>
+      <maxHealth>	115	</maxHealth>
+      <maxRegenHealth>	86	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
       <models>
         <undamaged>	vehicles/japan/J38_Type_95_Ji_Ro/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/japan/J38_Type_95_Ji_Ro/crash/lod0/Chassis.model	</destroyed>
@@ -1989,7 +1989,7 @@
           <trackPairIdx>	0	</trackPairIdx>
         </right>
       </physicalTracks>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	6.72463751	</repairTime>
     </Chassis_J38_Type_95_Ji_Ro>
     <Chassis_J38_Type_95_Ji_Ro_2>
       <userString>	#japan_vehicles:Chassis_J38_Type_95_Ji_Ro_2	</userString>
@@ -1997,8 +1997,8 @@
       <level>	6	</level>
       <price>	13800	</price>
       <armor>
-        <leftTrack>	15	</leftTrack>
-        <rightTrack>	15	</rightTrack>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	6000	</weight>
       <maxLoad>	35000	</maxLoad>
@@ -2011,9 +2011,9 @@
         <vehicleRotation>	0.20	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	90	</maxRegenHealth>
-      <repairCost>	0.5	</repairCost>
+      <maxHealth>	145	</maxHealth>
+      <maxRegenHealth>	109	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
       <models>
         <undamaged>	vehicles/japan/J38_Type_95_Ji_Ro/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/japan/J38_Type_95_Ji_Ro/crash/lod0/Chassis.model	</destroyed>
@@ -3056,12 +3056,12 @@
           <trackPairIdx>	0	</trackPairIdx>
         </right>
       </physicalTracks>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	6.62068987	</repairTime>
     </Chassis_J38_Type_95_Ji_Ro_2>
   </chassis>
   <turrets0>
-    <Turret_J38_Type_95_Ji_Ro>
-      <userString>	#japan_vehicles:Turret_J38_Type_95_Ji_Ro	</userString>
+    <Turret_1_J38_Type_95_Ji_Ro>
+      <userString>	#japan_vehicles:Turret_1_J38_Type_95_Ji_Ro	</userString>
       <tags>	cannotDetach	</tags>
       <level>	6	</level>
       <price>	100	</price>
@@ -3080,7 +3080,7 @@
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	350	</circularVisionRadius>
+      <circularVisionRadius>	340	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	80	</maxHealth>
         <maxRegenHealth>	40	</maxRegenHealth>
@@ -3109,12 +3109,12 @@
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.33	</shotDispersionRadius>
-          <reloadTime>	4.5	</reloadTime>
+          <reloadTime>	4.1	</reloadTime>
           <aimingTime>	1.8	</aimingTime>
           <invisibilityFactorAtShot>	0.260	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <customizationSlots>
@@ -3294,7 +3294,7 @@
         <density>	90.1994 90.1942	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_J38_Type_95_Ji_Ro>
+    </Turret_1_J38_Type_95_Ji_Ro>
   </turrets0>
   <engines>
     <_BMW_IV_Kai_Ni_Ro>	shared	  <unlocks>
@@ -3308,11 +3308,6 @@
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <_Type96_Bo>	shared	  <unlocks>
-        <radio>	_Type3_Otsu	  <cost>	4000	</cost>
-        </radio>
-      </unlocks>
-    </_Type96_Bo>
     <_Type3_Otsu>	shared	</_Type3_Otsu>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
@@ -3320,11 +3315,11 @@
     <detailed>
       <engines>
         <_BMW_IV_Kai_Ni_Ro>
-          <smplEnginePower>	270	</smplEnginePower>
+          <smplEnginePower>	400	</smplEnginePower>
           <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
         </_BMW_IV_Kai_Ni_Ro>
         <_BMW_IV_Kai_San_Ro>
-          <smplEnginePower>	290	</smplEnginePower>
+          <smplEnginePower>	450	</smplEnginePower>
           <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
         </_BMW_IV_Kai_San_Ro>
       </engines>

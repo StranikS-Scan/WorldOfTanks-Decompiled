@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/battle/player_stats_in_battle.py
-import BigWorld
 import logging
 from constants import ARENA_BONUS_TYPE
 from gui.Scaleform.daapi.view.meta.BattleRoyalePlayerStatsMeta import BattleRoyalePlayerStatsMeta
@@ -47,11 +46,3 @@ class BattleRoyalePlayerStats(BattleRoyalePlayerStatsMeta):
 
     def __onShowDeathScreen(self):
         self.as_setDataS(IngameBattleRoyaleResultsViewDataFormatter(self.__sessionProvider, {}).getSummaryStats())
-        self.__setStpCoins()
-
-    def __setStpCoins(self):
-        vehicle = BigWorld.entity(BigWorld.player().playerVehicleID)
-        stPatrickComp = vehicle.dynamicComponents.get('vehicleBRStPatrickComponent')
-        if stPatrickComp:
-            brComponent = self.__sessionProvider.arenaVisitor.getComponentSystem().battleRoyaleComponent
-            self.as_setStpCoinsS(initial=stPatrickComp.totalCoins, factor=brComponent.stpDailyBonusFactor)

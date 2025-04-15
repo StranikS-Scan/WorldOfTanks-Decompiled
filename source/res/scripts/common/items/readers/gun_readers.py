@@ -7,7 +7,8 @@ from items.components import component_constants
 from items.components import gun_components
 from items.components.component_constants import ZERO_FLOAT
 from items.readers import shared_readers
-from constants import IS_EDITOR, IS_UE_EDITOR
+from constants import IS_EDITOR, IS_UE_EDITOR, IS_CLIENT, IS_WEB
+from math_common import ceilTo
 from shared_readers import readFloatPair
 from typing import TYPE_CHECKING, Tuple, Optional
 if TYPE_CHECKING:
@@ -41,7 +42,12 @@ def readShot(xmlCtx, section, nationID, projectileSpeedFactor, cache):
     if shellID is None:
         _xml.raiseWrongXml(xmlCtx, '', 'unknown shell type name')
     shellDescr = cache.shells(nationID)[shellID]
-    shot = gun_components.GunShot(shellDescr, ZERO_FLOAT if not section.has_key('defaultPortion') else _xml.readFraction(xmlCtx, section, 'defaultPortion'), readFloatPair(xmlCtx, section, 'piercingPower'), _xml.readPositiveFloat(xmlCtx, section, 'speed') * projectileSpeedFactor, _xml.readNonNegativeFloat(xmlCtx, section, 'gravity') * projectileSpeedFactor ** 2, _xml.readPositiveFloat(xmlCtx, section, 'maxDistance'), _xml.readFloat(xmlCtx, section, 'maxHeight', 1000000.0))
+    defaultPortion = ZERO_FLOAT
+    if section.has_key('defaultPortion'):
+        defaultPortion = _xml.readFraction(xmlCtx, section, 'defaultPortion')
+    if IS_CLIENT or IS_WEB:
+        defaultPortion = ceilTo(defaultPortion, decimals=-3, epsilon=1e-06)
+    shot = gun_components.GunShot(shellDescr, defaultPortion, readFloatPair(xmlCtx, section, 'piercingPower'), _xml.readPositiveFloat(xmlCtx, section, 'speed') * projectileSpeedFactor, _xml.readNonNegativeFloat(xmlCtx, section, 'gravity') * projectileSpeedFactor ** 2, _xml.readPositiveFloat(xmlCtx, section, 'maxDistance'), _xml.readFloat(xmlCtx, section, 'maxHeight', 1000000.0))
     if not IS_UE_EDITOR:
         from helpers_common import computeShotMaxDistance
         shot.maxDistance = computeShotMaxDistance(shot)

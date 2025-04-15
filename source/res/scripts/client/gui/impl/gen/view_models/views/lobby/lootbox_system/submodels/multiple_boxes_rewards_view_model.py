@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.views.lobby.lootbox_system.bonus_model import Bonu
 class MultipleBoxesRewardsViewModel(ViewModel):
     __slots__ = ('onOpen', 'onGoBack', 'onPreview', 'onBuyBoxes', 'onAnimationStateChanged', 'onVideoPlaying', 'onClose')
 
-    def __init__(self, properties=12, commands=7):
+    def __init__(self, properties=11, commands=7):
         super(MultipleBoxesRewardsViewModel, self).__init__(properties=properties, commands=commands)
 
     def getEventName(self):
@@ -28,59 +28,53 @@ class MultipleBoxesRewardsViewModel(ViewModel):
     def setIsReopen(self, value):
         self._setBool(2, value)
 
-    def getUseExternal(self):
-        return self._getBool(3)
-
-    def setUseExternal(self, value):
-        self._setBool(3, value)
-
     def getBoxesCount(self):
-        return self._getNumber(4)
+        return self._getNumber(3)
 
     def setBoxesCount(self, value):
-        self._setNumber(4, value)
+        self._setNumber(3, value)
 
     def getBoxesCountToGuaranteed(self):
-        return self._getNumber(5)
+        return self._getNumber(4)
 
     def setBoxesCountToGuaranteed(self, value):
-        self._setNumber(5, value)
+        self._setNumber(4, value)
 
     def getOpeningCount(self):
-        return self._getNumber(6)
+        return self._getNumber(5)
 
     def setOpeningCount(self, value):
-        self._setNumber(6, value)
+        self._setNumber(5, value)
 
     def getIsAnimationActive(self):
-        return self._getBool(7)
+        return self._getBool(6)
 
     def setIsAnimationActive(self, value):
-        self._setBool(7, value)
+        self._setBool(6, value)
 
     def getIsAwaitingResponse(self):
-        return self._getBool(8)
+        return self._getBool(7)
 
     def setIsAwaitingResponse(self, value):
-        self._setBool(8, value)
+        self._setBool(7, value)
 
     def getIsWindowAccessible(self):
-        return self._getBool(9)
+        return self._getBool(8)
 
     def setIsWindowAccessible(self, value):
-        self._setBool(9, value)
+        self._setBool(8, value)
 
     def getIsShopVisible(self):
-        return self._getBool(10)
+        return self._getBool(9)
 
     def setIsShopVisible(self, value):
-        self._setBool(10, value)
+        self._setBool(9, value)
 
     def getBonuses(self):
-        return self._getArray(11)
+        return self._getArray(10)
 
     def setBonuses(self, value):
-        self._setArray(11, value)
+        self._setArray(10, value)
 
     @staticmethod
     def getBonusesType():
@@ -91,7 +85,6 @@ class MultipleBoxesRewardsViewModel(ViewModel):
         self._addStringProperty('eventName', '')
         self._addStringProperty('boxCategory', '')
         self._addBoolProperty('isReopen', False)
-        self._addBoolProperty('useExternal', False)
         self._addNumberProperty('boxesCount', 0)
         self._addNumberProperty('boxesCountToGuaranteed', 0)
         self._addNumberProperty('openingCount', 0)

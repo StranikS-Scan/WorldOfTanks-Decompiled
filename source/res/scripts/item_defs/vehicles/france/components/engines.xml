@@ -102,15 +102,20 @@
     <Maybach_Mb_IV_Zeppelin_x2>	119	</Maybach_Mb_IV_Zeppelin_x2>
     <Moteur_EPC_version_S5>	120	</Moteur_EPC_version_S5>
     <Hispano_ERAC>	122	</Hispano_ERAC>
+    <SOFAM_Type_4_GSr>	124	</SOFAM_Type_4_GSr>
     <Maybach_HL_230P45_BPXIV>	125	</Maybach_HL_230P45_BPXIV>
     <Moteur_moderne_3M_27_oie>	126	</Moteur_moderne_3M_27_oie>
     <Citroen_105>	127	</Citroen_105>
+    <Maybach_HL_295S>	128	</Maybach_HL_295S>
+    <Turmo_III_V>	129	</Turmo_III_V>
     <Renault_MIDS>	130	</Renault_MIDS>
+    <HS_110_2>	131	</HS_110_2>
     <Maybach_HL_295_a_injection_d_essence_FL>	501	</Maybach_HL_295_a_injection_d_essence_FL>
     <Maybach_HL_295_FL>	502	</Maybach_HL_295_FL>
     <SOFAM_8Gxb_B_7x7>	503	</SOFAM_8Gxb_B_7x7>
     <Saurer_1000_7x7>	504	</Saurer_1000_7x7>
     <Maybach_HL_295_F_7x7>	505	</Maybach_HL_295_F_7x7>
+    <Hispano-Suiza_HS110_7x7>	506	</Hispano-Suiza_HS110_7x7>
     <Maybach_HL_295_IGR>	60001	</Maybach_HL_295_IGR>
     <Detroit_Diesel_6V53T-S_IGR>	60002	</Detroit_Diesel_6V53T-S_IGR>
     <Renault_A_IGR>	60003	</Renault_A_IGR>
@@ -470,6 +475,40 @@
       <rpm_min>	328	</rpm_min>
       <rpm_max>	2216	</rpm_max>
     </Hispano-Suiza_HS110>
+    <Hispano-Suiza_HS110_7x7>
+      <userString>	#france_vehicles:Hispano-Suiza_HS110_7x7	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	94250	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	720	</power>
+      <weight>	1426	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	328	</rpm_min>
+      <rpm_max>	2216	</rpm_max>
+    </Hispano-Suiza_HS110_7x7>
+    <HS_110_2>
+      <userString>	#france_vehicles:HS_110_2	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	60000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	1170	</power>
+      <weight>	1426	</weight>
+      <maxHealth>	275	</maxHealth>
+      <maxRegenHealth>	138	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	280	</rpm_min>
+      <rpm_max>	2360	</rpm_max>
+    </HS_110_2>
     <Hispano-Suiza_HS110_A>
       <userString>	#france_vehicles:Hispano-Suiza_HS110_A	</userString>
       <tags>	diesel	</tags>
@@ -1147,6 +1186,23 @@
       <rpm_min>	362	</rpm_min>
       <rpm_max>	2972	</rpm_max>
     </Maybach_HL_295>
+    <Maybach_HL_295S>
+      <userString>	#france_vehicles:Maybach_HL_295S	</userString>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	90000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1000	</power>
+      <weight>	750	</weight>
+      <maxHealth>	310	</maxHealth>
+      <maxRegenHealth>	155	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	446	</rpm_min>
+      <rpm_max>	2170	</rpm_max>
+    </Maybach_HL_295S>
     <Maybach_HL_295_FL>
       <userString>	#france_vehicles:Maybach_HL_295	</userString>
       <tags>	gasoline	</tags>
@@ -1295,6 +1351,23 @@
       <rpm_min>	418	</rpm_min>
       <rpm_max>	2460	</rpm_max>
     </AMX_B_272>
+    <SOFAM_Type_4_GSr>
+      <userString>	#france_vehicles:SOFAM_Type_4_GSr	</userString>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	30000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	220	</power>
+      <weight>	210	</weight>
+      <maxHealth>	205	</maxHealth>
+      <maxRegenHealth>	103	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	487	</rpm_min>
+      <rpm_max>	2240	</rpm_max>
+    </SOFAM_Type_4_GSr>
     <MATHIS>
       <userString>	#france_vehicles:MATHIS	</userString>
       <tags>	gasoline	</tags>
@@ -1560,6 +1633,23 @@
       <rpm_min>	362	</rpm_min>
       <rpm_max>	2972	</rpm_max>
     </Maybach_850CV>
+    <Turmo_III_V>
+      <userString>	#france_vehicles:Turmo_III_V	</userString>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	90000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	900	</power>
+      <weight>	1200	</weight>
+      <maxHealth>	310	</maxHealth>
+      <maxRegenHealth>	155	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	362	</rpm_min>
+      <rpm_max>	2972	</rpm_max>
+    </Turmo_III_V>
     <Ford_GAC_R>
       <userString>	#france_vehicles:Ford_GAC_R	</userString>
       <tags>	gasoline	</tags>

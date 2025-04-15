@@ -1,7 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale_progression/scripts/client/battle_royale_progression/gui/impl/lobby/views/progression_view.py
-from gui.impl.gen.resources import R
-from battle_royale.gui.impl.lobby.tooltips.proxy_currency_tooltip_view import ProxyCurrencyTooltipView
 from battle_royale_progression.gui.impl.gen.view_models.views.lobby.views.progression.progress_level_model import ProgressLevelModel
 from battle_royale_progression.gui.impl.gen.view_models.views.lobby.views.progression.progression_view_model import ProgressionViewModel
 from battle_royale_progression.gui.impl.lobby.views.bonus_packer import getBonusPacker
@@ -41,9 +39,6 @@ class ProgressionView(SubModelPresenter):
 
     def getParentWindow(self):
         return self.parentView.getParentWindow()
-
-    def createToolTipContent(self, event, contentID):
-        return ProxyCurrencyTooltipView() if contentID == R.views.battle_royale.lobby.tooltips.ProxyCurrencyTooltipView() else super(ProgressionView, self).createToolTipContent(event, contentID)
 
     @createBackportTooltipDecorator()
     def createToolTip(self, event):
@@ -136,12 +131,11 @@ class ProgressionView(SubModelPresenter):
         model.setPointsForLevel(data['pointsForLevel'])
         progressionLevels = model.getProgressLevels()
         progressionLevels.clear()
-        packer = getBonusPacker()
         for levelData in data['progressionLevels']:
             level = ProgressLevelModel()
             rewards = level.getRewards()
             bonuses = levelData['rewards']
-            packBonusModelAndTooltipData(bonuses, rewards, self.__tooltipData, packer)
+            packBonusModelAndTooltipData(bonuses, rewards, self.__tooltipData, getBonusPacker())
             progressionLevels.addViewModel(level)
 
         progressionLevels.invalidate()

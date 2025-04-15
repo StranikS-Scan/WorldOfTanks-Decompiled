@@ -19,6 +19,9 @@
       <include>
         <nations>	usa	</nations>
       </include>
+      <exclude>
+        <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
     </vehicleFilter>
     <decal>
       <id>	14701	</id>
@@ -386,6 +389,9 @@
       <include>
         <nations>	usa	</nations>
       </include>
+      <exclude>
+        <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
     </vehicleFilter>
     <decal>
       <id>	14755	</id>
@@ -409,18 +415,6 @@
       <id>	14771	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/usa/inscription_1009.dds	</texture>
       <userString>	#vehicle_customization:inscription/usa/inscription_09	</userString>
-      <mirror>	false	</mirror>
-    </decal>
-    <decal>
-      <id>	14772	</id>
-      <texture>	gui/maps/vehicles/decals/inscriptions/usa/inscription_1010.dds	</texture>
-      <userString>	#vehicle_customization:inscription/usa/inscription_10	</userString>
-      <mirror>	false	</mirror>
-    </decal>
-    <decal>
-      <id>	14773	</id>
-      <texture>	gui/maps/vehicles/decals/inscriptions/usa/inscription_1011.dds	</texture>
-      <userString>	#vehicle_customization:inscription/usa/inscription_11	</userString>
       <mirror>	false	</mirror>
     </decal>
     <decal>
@@ -460,6 +454,34 @@
       <mirror>	false	</mirror>
     </decal>
     <name>	USA nonCN	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/historical	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	inscriptions usa 50g nonASIA	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	usa	</nations>
+      </include>
+      <exclude>
+        <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <decal>
+      <id>	14772	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/usa/inscription_1010.dds	</texture>
+      <userString>	#vehicle_customization:inscription/usa/inscription_10	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	14773	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/usa/inscription_1011.dds	</texture>
+      <userString>	#vehicle_customization:inscription/usa/inscription_11	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	USA nonCN nonASIA	</name>
     <type>	INSCRIPTION	</type>
   </itemGroup>
 </inscriptions_usa_nonCN.xml>

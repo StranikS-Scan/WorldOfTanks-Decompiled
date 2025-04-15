@@ -1,5 +1,4 @@
 <list.xml>
-  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <A21_T14>
     <id>	0	</id>
     <userString>	#usa_vehicles:T14	</userString>
@@ -91,8 +90,8 @@
   </A08_T23>
   <A14_T30>
     <id>	10	</id>
-    <userString>	#usa_vehicles:T30	</userString>
-    <description>	#usa_vehicles:T30_descr	</description>
+    <userString>	#usa_vehicles:A14_T30	</userString>
+    <description>	#usa_vehicles:A14_T30_descr	</description>
     <price>	3550000	</price>
     <tags>	AT-SPG role_ATSPG_universal HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	9	</level>
@@ -355,6 +354,19 @@
     <tags>	lightTank HD scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
     <level>	5	</level>
   </A34_M24_Chaffee>
+  <A34_M24_Chaffee_CFE_V>
+    <id>	262	</id>
+    <userString>	#usa_vehicles:A34_M24_Chaffee_CFE_V	</userString>
+    <description>	#usa_vehicles:A34_M24_Chaffee_CFE_V_descr	</description>
+    <shortUserString>	#usa_vehicles:A34_M24_Chaffee_CFE_V_short	</shortUserString>
+    <shortDescriptionSpecial>	#usa_vehicles:A34_M24_Chaffee_CFE_V_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:A34_M24_Chaffee_CFE_V_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank HD scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_light_user lockOutfit restoreWithStyle	</tags>
+    <level>	5	</level>
+  </A34_M24_Chaffee_CFE_V>
   <A36_Sherman_Jumbo>
     <id>	39	</id>
     <userString>	#usa_vehicles:Sherman_Jumbo	</userString>
@@ -403,27 +415,27 @@
   </A69_T110E5_7x7>
   <A72_T25_2>
     <id>	43	</id>
-    <userString>	#usa_vehicles:T25_2	</userString>
-    <description>	#usa_vehicles:T25_2_descr	</description>
-    <shortUserString>	#usa_vehicles:T25_2_short	</shortUserString>
+    <userString>	#usa_vehicles:A72_T25_2	</userString>
+    <description>	#usa_vehicles:A72_T25_2_descr	</description>
+    <shortUserString>	#usa_vehicles:A72_T25_2_short	</shortUserString>
     <price>	1364000	</price>
     <tags>	AT-SPG role_ATSPG_sniper HD mediumAT-SPG tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	7	</level>
   </A72_T25_2>
   <A68_T28_Prototype>
     <id>	44	</id>
-    <userString>	#usa_vehicles:T28_Prototype	</userString>
-    <description>	#usa_vehicles:T28_Prototype_descr	</description>
-    <shortUserString>	#usa_vehicles:T28_Prototype_short	</shortUserString>
+    <userString>	#usa_vehicles:A68_T28_Prototype	</userString>
+    <description>	#usa_vehicles:A68_T28_Prototype_descr	</description>
+    <shortUserString>	#usa_vehicles:A68_T28_Prototype_short	</shortUserString>
     <price>	2650000	</price>
     <tags>	AT-SPG role_ATSPG_universal HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </A68_T28_Prototype>
   <A41_M18_Hellcat>
     <id>	45	</id>
-    <userString>	#usa_vehicles:M18_Hellcat	</userString>
-    <description>	#usa_vehicles:M18_Hellcat_descr	</description>
-    <shortUserString>	#usa_vehicles:M18_Hellcat_short	</shortUserString>
+    <userString>	#usa_vehicles:A41_M18_Hellcat	</userString>
+    <description>	#usa_vehicles:A41_M18_Hellcat_descr	</description>
+    <shortUserString>	#usa_vehicles:A41_M18_Hellcat_short	</shortUserString>
     <price>	950000	</price>
     <tags>	AT-SPG role_ATSPG_sniper HD mediumAT-SPG AT-SPG1 tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	6	</level>
@@ -455,9 +467,9 @@
   </A78_M4_Improved>
   <A83_T110E4>
     <id>	51	</id>
-    <userString>	#usa_vehicles:T110E4	</userString>
-    <shortUserString>	#usa_vehicles:T110E4_short	</shortUserString>
-    <description>	#usa_vehicles:T110E4_descr	</description>
+    <userString>	#usa_vehicles:A83_T110E4	</userString>
+    <shortUserString>	#usa_vehicles:A83_T110E4_short	</shortUserString>
+    <description>	#usa_vehicles:A83_T110E4_descr	</description>
     <price>	6100000	</price>
     <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
     <level>	10	</level>
@@ -1182,7 +1194,6 @@
     </price>
     <tags>	mediumTank HD disabledInRoaming improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	5	</level>
-    <notInShop>	true	</notInShop>
   </A44_M4A2E4>
   <A45_M6A2E1>
     <id>	205	</id>
@@ -1401,8 +1412,8 @@
   </A99_T92_LT>
   <A14_T30_FL>
     <id>	227	</id>
-    <userString>	#usa_vehicles:T30_FL	</userString>
-    <description>	#usa_vehicles:T30_descr	</description>
+    <userString>	#usa_vehicles:A14_T30_FL	</userString>
+    <description>	#usa_vehicles:A14_T30_descr	</description>
     <price>	1	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
@@ -1724,17 +1735,19 @@
     <userString>	#usa_vehicles:A174_T57_58_Rush_Ep1	</userString>
     <description>	#usa_vehicles:A174_T57_58_Rush_Ep1_descr	</description>
     <shortUserString>	#usa_vehicles:A174_T57_58_Rush_Ep1_short	</shortUserString>
+    <shortDescriptionSpecial>	#usa_vehicles:A174_T57_58_Rush_Ep1_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:A174_T57_58_Rush_Ep1_long_special	</longDescriptionSpecial>
     <price>	22500	  <gold></gold>
     </price>
-    <tags>	heavyTank special role_HT_support HD heavyTank2 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals lockOutfit restoreWithStyle	</tags>
+    <tags>	heavyTank special role_HT_support HD heavyTank2 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
     <level>	10	</level>
     <notInShop>	True	</notInShop>
   </A174_T57_58_Rush_Ep1>
   <A1041_M18_Hellcat_NewOnBoarding>
     <id>	400	</id>
-    <userString>	#usa_vehicles:M18_Hellcat	</userString>
-    <description>	#usa_vehicles:M18_Hellcat_descr	</description>
-    <shortUserString>	#usa_vehicles:M18_Hellcat_short	</shortUserString>
+    <userString>	#usa_vehicles:A41_M18_Hellcat	</userString>
+    <description>	#usa_vehicles:A41_M18_Hellcat_descr	</description>
+    <shortUserString>	#usa_vehicles:A41_M18_Hellcat_short	</shortUserString>
     <price>	950000	</price>
     <tags>	AT-SPG role_ATSPG_sniper HD mediumAT-SPG AT-SPG1 tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user cannot_be_sold lockOutfit lockCrew secret private	</tags>
     <level>	6	</level>
@@ -1835,4 +1848,14 @@
     <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank	</tags>
     <level>	8	</level>
   </A171_IMT>
+  <A1034_M24_Chaffee_StoryModeStealth>
+    <id>	408	</id>
+    <userString>	#usa_vehicles:A34_M24_Chaffee_CFE_V	</userString>
+    <description>	#usa_vehicles:A34_M24_Chaffee_CFE_V_descr	</description>
+    <shortUserString>	#usa_vehicles:A34_M24_Chaffee_CFE_V_short	</shortUserString>
+    <price>	405000	</price>
+    <tags>	lightTank HD scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_light_user cannot_be_sold lockOutfit lockCrew secret private	</tags>
+    <level>	5	</level>
+    <notInShop>	True	</notInShop>
+  </A1034_M24_Chaffee_StoryModeStealth>
 </list.xml>

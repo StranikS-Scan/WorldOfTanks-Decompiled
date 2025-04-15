@@ -95,15 +95,20 @@
     <_75mm_APX_1897>	115	</_75mm_APX_1897>
     <Canon_de_105_mm_modele_F1_M>	116	</Canon_de_105_mm_modele_F1_M>
     <_105_mm_D_1090>	118	</_105_mm_D_1090>
+    <_90mm_D_914>	120	</_90mm_D_914>
     <_90mm_canon_DCA_45_BPXIV>	121	</_90mm_canon_DCA_45_BPXIV>
     <Canon_bitube_de_105_mm_D_1507>	122	</Canon_bitube_de_105_mm_D_1507>
     <_25mm_Canon_Raccourci_Mle_1934_A>	123	</_25mm_Canon_Raccourci_Mle_1934_A>
+    <_105mm_Canon_76S>	124	</_105mm_Canon_76S>
+    <_120mm_DEFA_120_F>	125	</_120mm_DEFA_120_F>
     <_90mm_T90_22_Mle_F3>	126	</_90mm_T90_22_Mle_F3>
+    <_105mm_SK_L_70>	127	</_105mm_SK_L_70>
     <_120mm_D_1203_A_FL>	501	</_120mm_D_1203_A_FL>
     <_120mm_SA_46_AC_FL>	502	</_120mm_SA_46_AC_FL>
     <_105mm_D1504_7x7>	503	</_105mm_D1504_7x7>
     <_120mm_SA_46_AC_7x7>	504	</_120mm_SA_46_AC_7x7>
     <_130mm_45_Model_1935_7x7>	505	</_130mm_45_Model_1935_7x7>
+    <_105mm_CN_105_57_7x7>	506	</_105mm_CN_105_57_7x7>
     <Canon_de_105_court_mle_1934S_SH>	10000	</Canon_de_105_court_mle_1934S_SH>
     <Canon_de_75mm_Vo_920_m_s_dualgun_SH>	10001	</Canon_de_75mm_Vo_920_m_s_dualgun_SH>
     <_90mm_F3M_SH>	10002	</_90mm_F3M_SH>
@@ -2731,27 +2736,27 @@
         <rate>	90	</rate>
       </clip>
       <shots>
-        <_90mm_OFL_F1>
+        <_90mm_OFL_F1_VCS>
           <defaultPortion>	0.95	</defaultPortion>
           <speed>	980	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
           <piercingPower>	202 188	</piercingPower>
-        </_90mm_OFL_F1>
-        <_90mm_OFL_F3>
+        </_90mm_OFL_F1_VCS>
+        <_90mm_OFL_F3_VCS>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	1220	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
           <piercingPower>	235 212	</piercingPower>
-        </_90mm_OFL_F3>
-        <_90mm_OE_F2>
+        </_90mm_OFL_F3_VCS>
+        <_90mm_OE_F2_VCS>
           <defaultPortion>	0.05	</defaultPortion>
           <speed>	980	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
           <piercingPower>	45 45	</piercingPower>
-        </_90mm_OE_F2>
+        </_90mm_OE_F2_VCS>
       </shots>
     </_90mm_T90_22_Mle_F3>
     <_90mm_CN_90_F3>
@@ -3040,6 +3045,64 @@
         </_90mm_OE_90>
       </shots>
     </_90mm_D_921>
+    <_90mm_D_914>
+      <userString>	#france_vehicles:_90mm_D_914	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	60000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.46	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.38	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_main	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -13.0 1.0 -13.0	</minPitch>
+        <maxPitch>	0.0 5.0 1.0 5.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-15 15	</turretYawLimits>
+      <rotationSpeed>	25.0	</rotationSpeed>
+      <reloadTime>	11	</reloadTime>
+      <maxAmmo>	44	</maxAmmo>
+      <aimingTime>	2.7	</aimingTime>
+      <weight>	1560	</weight>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.12	</turretRotation>
+        <afterShot>	4	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_90mm_OFL_90_D_914>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	950	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	120 98	</piercingPower>
+        </_90mm_OFL_90_D_914>
+        <_90mm_OCC_90_D_914>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	800	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	160 160	</piercingPower>
+        </_90mm_OCC_90_D_914>
+        <_90mm_OE_90_D_914>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	800	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	45 45	</piercingPower>
+        </_90mm_OE_90_D_914>
+      </shots>
+    </_90mm_D_914>
     <_90mm_canon_DCA_45>
       <userString>	#france_vehicles:_90mm_canon_DCA_45	</userString>
       <tags></tags>
@@ -3731,6 +3794,64 @@
         </_105mm_HE_OE_F1>
       </shots>
     </_105mm_CN_105_57>
+    <_105mm_CN_105_57_7x7>
+      <userString>	#france_vehicles:_105mm_CN_105_57_7x7	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	325000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.46	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.2	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <pitchLimits>
+        <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
+        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
+      </pitchLimits>
+      <rotationSpeed>	21.875	</rotationSpeed>
+      <reloadTime>	10.28571428571430	</reloadTime>
+      <maxAmmo>	50	</maxAmmo>
+      <aimingTime>	2.28571428571429	</aimingTime>
+      <weight>	3000	</weight>
+      <maxHealth>	208	</maxHealth>
+      <maxRegenHealth>	104	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.342857142857143	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_APCR_OFL_E1>
+          <defaultPortion>	1	</defaultPortion>
+          <speed>	1460	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	259 249	</piercingPower>
+        </_105mm_APCR_OFL_E1>
+        <_105mm_HEAT_OCC_F1>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	800	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	330 330	</piercingPower>
+        </_105mm_HEAT_OCC_F1>
+        <_105mm_HE_OE_F1>
+          <defaultPortion>	0	</defaultPortion>
+          <speed>	800	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	53 53	</piercingPower>
+        </_105mm_HE_OE_F1>
+      </shots>
+    </_105mm_CN_105_57_7x7>
     <Canon_bitube_de_105_mm_D_1507>
       <userString>	#france_vehicles:Canon_bitube_de_105_mm_D_1507	</userString>
       <shortUserString>	#france_vehicles:Canon_bitube_de_105_mm_D_1507_short	</shortUserString>
@@ -4483,6 +4604,64 @@
         </_105mm_OE_mle_1924>
       </shots>
     </_105mm_canon_13TR>
+    <_105mm_Canon_76S>
+      <userString>	#france_vehicles:_105mm_Canon_76S	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	200000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	7.5	</reloadTime>
+      <maxAmmo>	50	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	2021	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_OFL_M181S>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1040	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	258 248	</piercingPower>
+        </_105mm_OFL_M181S>
+        <_105mm_OFL_M279S>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1270	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	303 287	</piercingPower>
+        </_105mm_OFL_M279S>
+        <_105mm_OE_M393S>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	1040	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	53 53	</piercingPower>
+        </_105mm_OE_M393S>
+      </shots>
+    </_105mm_Canon_76S>
     <Canon_de_105_mle_1930_Schneider_AC>
       <userString>	#france_vehicles:Canon_de_105_mle_1930_Schneider_AC	</userString>
       <shortUserString>	#france_vehicles:Canon_de_105_mle_1930_Schneider_AC_short	</shortUserString>
@@ -5231,6 +5410,64 @@
         </_120mm_OE_mle_1951>
       </shots>
     </_120mm_D_1203>
+    <_120mm_DEFA_120_F>
+      <userString>	#france_vehicles:_120mm_DEFA_120_F	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	200000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.64	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.66	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -24.0 1.0 -24.0	</minPitch>
+        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	10	</reloadTime>
+      <maxAmmo>	40	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	3580	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.33	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_120mm_Prf_mle_1952>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1020	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	248 230	</piercingPower>
+        </_120mm_Prf_mle_1952>
+        <_120mm_Frt_Prf_mle_1952>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1240	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	297 270	</piercingPower>
+        </_120mm_Frt_Prf_mle_1952>
+        <_120mm_OE_mle_1952>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	1020	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	60 60	</piercingPower>
+        </_120mm_OE_mle_1952>
+      </shots>
+    </_120mm_DEFA_120_F>
     <_120mm_D_1203_A>
       <userString>	#france_vehicles:_120mm_D_1203_A	</userString>
       <tags></tags>
@@ -5461,6 +5698,64 @@
         </_120mm_OE_mle_1951>
       </shots>
     </_120mm_D_1203_P>
+    <_105mm_SK_L_70>
+      <userString>	#france_vehicles:_105mm_SK_L_70	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	100000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.56	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.46	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0 -30 1 -30	</minPitch>
+        <maxPitch>	0 8 1 8	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	15	</reloadTime>
+      <maxAmmo>	62	</maxAmmo>
+      <aimingTime>	2.7	</aimingTime>
+      <weight>	3600	</weight>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.37	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_SK_P_70>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	1080	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	234 200	</piercingPower>
+        </_105mm_SK_P_70>
+        <_105mm_SK_FP_70>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1280	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	280 250	</piercingPower>
+        </_105mm_SK_FP_70>
+        <_105mm_SK_OE_70>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	1080	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	65 65	</piercingPower>
+        </_105mm_SK_OE_70>
+      </shots>
+    </_105mm_SK_L_70>
     <_127mm_54_Model_1948>
       <userString>	#france_vehicles:_127mm_54_Model_1948	</userString>
       <tags></tags>

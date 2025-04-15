@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class VehicleTooltipViewModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=5, commands=0):
+    def __init__(self, properties=4, commands=0):
         super(VehicleTooltipViewModel, self).__init__(properties=properties, commands=commands)
 
     def getVehicleName(self):
@@ -32,16 +32,9 @@ class VehicleTooltipViewModel(ViewModel):
     def setStatusText(self, value):
         self._setString(3, value)
 
-    def getHasSTPDailyFactor(self):
-        return self._getBool(4)
-
-    def setHasSTPDailyFactor(self, value):
-        self._setBool(4, value)
-
     def _initialize(self):
         super(VehicleTooltipViewModel, self)._initialize()
         self._addStringProperty('vehicleName', '')
         self._addStringProperty('vehicleNation', '')
         self._addStringProperty('statusLevel', '')
         self._addStringProperty('statusText', '')
-        self._addBoolProperty('hasSTPDailyFactor', False)

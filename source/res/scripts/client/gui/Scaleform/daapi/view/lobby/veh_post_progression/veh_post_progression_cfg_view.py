@@ -20,7 +20,7 @@ from helpers import dependency
 from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup
 from skeletons.gui.game_control import IVehicleComparisonBasket, IHeroTankController
 from skeletons.gui.shared import IItemsCache
-_HERO_PREVIEW_ALIASES = (VIEW_ALIAS.HERO_VEHICLE_PREVIEW, VIEW_ALIAS.RESOURCE_WELL_HERO_VEHICLE_PREVIEW)
+_HERO_PREVIEW_ALIASES = (VIEW_ALIAS.HERO_VEHICLE_PREVIEW,)
 
 def _defaultExitEvent():
     return events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR), name=VIEW_ALIAS.LOBBY_HANGAR)

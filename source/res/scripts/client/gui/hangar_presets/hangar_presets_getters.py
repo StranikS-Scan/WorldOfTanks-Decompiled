@@ -33,6 +33,9 @@ class IPresetsGetter(object):
     def getAmmoInjectViewAlias(self):
         raise NotImplementedError
 
+    def getAmmoSetupViewAlias(self):
+        raise NotImplementedError
+
     def getBattleModifiers(self):
         raise NotImplementedError
 
@@ -67,11 +70,16 @@ class IPresetsGetter(object):
 class EmptyPresetsGetter(IPresetsGetter):
     __slots__ = ()
     _DEFAULT_AMMO_INJECT_VIEW_ALIAS = None
+    _DEFAULT_AMMO_SETUP_VIEW_ALIAS = None
     _DEFAULT_BATTLE_MODIFIERS = BattleModifiers()
 
     @classmethod
     def getDefaultAmmoInjectViewAlias(cls):
         return cls._DEFAULT_AMMO_INJECT_VIEW_ALIAS
+
+    @classmethod
+    def getDefaultAmmoSetupViewAlias(cls):
+        return cls._DEFAULT_AMMO_SETUP_VIEW_ALIAS
 
     @classmethod
     def getDefaultBattleModifiers(cls):
@@ -121,6 +129,9 @@ class EmptyPresetsGetter(IPresetsGetter):
 
     def getAmmoInjectViewAlias(self):
         return self.getDefaultAmmoInjectViewAlias()
+
+    def getAmmoSetupViewAlias(self):
+        return self.getDefaultAmmoSetupViewAlias()
 
     def getBattleModifiers(self):
         return self.getDefaultBattleModifiers()

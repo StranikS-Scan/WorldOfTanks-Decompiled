@@ -8,7 +8,7 @@ from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
 from gui.lootbox_system.base.bonuses_helpers import REWARDS_GROUP_NAME_RES, RewardsGroup, getGoodiesFilter, getItemsFilter, getTankmenFilter, getVehiclesFilter, isBattleBooster, isCrewBook, noCompensation, isOptionalDevice, packBonusGroups
-from gui.lootbox_system.base.common import ViewID, Views
+from gui.lootbox_system.base.common import ViewID, Views, LOOTBOX_COMPENSATION_TOKEN_PREFIX
 from gui.lootbox_system.base.views_loaders import showItemPreview, hideItemPreview
 from gui.shared import event_dispatcher
 from helpers import dependency
@@ -72,7 +72,7 @@ class AutoOpenView(ViewImpl):
 
     def __filterRewards(self, rewards):
         for tokenName in rewards.get('tokens', {}).keys():
-            if tokenName.startswith(LOOTBOX_TOKEN_PREFIX):
+            if tokenName.startswith((LOOTBOX_TOKEN_PREFIX, LOOTBOX_COMPENSATION_TOKEN_PREFIX)):
                 rewards['tokens'].pop(tokenName, None)
 
         if not rewards.get('tokens'):

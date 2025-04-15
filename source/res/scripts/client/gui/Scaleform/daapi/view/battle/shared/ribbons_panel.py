@@ -258,6 +258,10 @@ class BattleRibbonsPanel(RibbonsPanelMeta, IArenaVehiclesController):
     def userPreferences(self):
         return self.__userPreferences
 
+    @classmethod
+    def getBattleEventsSettingsToBattleEfficiencyTypes(cls):
+        return _BATTLE_EVENTS_SETTINGS_TO_BATTLE_EFFICIENCY_TYPES
+
     def onShow(self, ribbonID):
         sound = _SHOW_RIBBON_SOUND_NAME
         ribbon = self._ribbonsAggregator.getRibbon(ribbonID)
@@ -291,7 +295,7 @@ class BattleRibbonsPanel(RibbonsPanelMeta, IArenaVehiclesController):
         self.__isWithRibbonName = bool(self.settingsCore.getSetting(BATTLE_EVENTS.EVENT_NAME))
         self.__isWithVehName = bool(self.settingsCore.getSetting(BATTLE_EVENTS.VEHICLE_INFO))
         self.__isExtendedAnim = self.settingsCore.getSetting(GRAPHICS.RENDER_PIPELINE) == _EXTENDED_RENDER_PIPELINE
-        for settingName in _BATTLE_EVENTS_SETTINGS_TO_BATTLE_EFFICIENCY_TYPES:
+        for settingName in self.getBattleEventsSettingsToBattleEfficiencyTypes():
             self.__setUserPrefference(settingName, bool(self.settingsCore.getSetting(settingName)))
 
         self.__setupView()
@@ -327,7 +331,7 @@ class BattleRibbonsPanel(RibbonsPanelMeta, IArenaVehiclesController):
     def _onSettingsChanged(self, diff):
         addSettings = {}
         for item in diff:
-            if item in _BATTLE_EVENTS_SETTINGS_TO_BATTLE_EFFICIENCY_TYPES:
+            if item in self.getBattleEventsSettingsToBattleEfficiencyTypes():
                 self.__setUserPrefference(item, bool(diff[item]))
             if item in _ADDITIONAL_USER_SETTINGS:
                 addSettings[item] = diff[item]
@@ -401,7 +405,7 @@ class BattleRibbonsPanel(RibbonsPanelMeta, IArenaVehiclesController):
         self.__isVisible = event.ctx['visible']
 
     def __setUserPrefference(self, settingName, value):
-        ribbonTypes = _BATTLE_EVENTS_SETTINGS_TO_BATTLE_EFFICIENCY_TYPES[settingName]
+        ribbonTypes = self.getBattleEventsSettingsToBattleEfficiencyTypes()[settingName]
         for rType in ribbonTypes:
             self.__userPreferences[rType] = value
 

@@ -139,7 +139,7 @@ class ModuleBlockTooltipData(BlocksTooltipData):
         priceBlock = PriceBlockConstructor(module, statsConfig, priceValueWidth, leftPadding, rightPadding).construct()
         if priceBlock:
             items.append(formatters.packBuildUpBlockData(priceBlock, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=-5, bottom=-8), gap=textGap))
-        inventoryBlock = InventoryBlockConstructor(module, statsConfig, leftPadding, rightPadding).construct()
+        inventoryBlock = self._getInventoryBlockConstructor()(module, statsConfig, leftPadding, rightPadding).construct()
         if inventoryBlock:
             items.append(formatters.packBuildUpBlockData(inventoryBlock, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=-5, bottom=-8), gap=textGap))
         showModuleCompatibles = statsConfig.showCompatibles and itemTypeID in GUI_ITEM_TYPE.VEHICLE_MODULES
@@ -174,6 +174,9 @@ class ModuleBlockTooltipData(BlocksTooltipData):
 
     def _getEffectsBlockConstructor(self):
         return EffectsBlockConstructor
+
+    def _getInventoryBlockConstructor(self):
+        return InventoryBlockConstructor
 
 
 class ModuleTooltipBlockConstructor(object):
@@ -582,7 +585,7 @@ class InventoryBlockConstructor(ModuleTooltipBlockConstructor):
                     block.append(self._getInventoryBlock(count, self._inInventoryBlockData, self._inventoryPadding))
             if vehiclesCount:
                 inventoryVehicles = items.getVehicles(REQ_CRITERIA.INVENTORY)
-                installedVehicles = module.getInstalledVehicles(inventoryVehicles.itervalues())
+                installedVehicles = self._getInstalledVehicles(module, inventoryVehicles)
                 count = len(installedVehicles)
                 if count > 0:
                     totalInstalledVehicles = [ x.shortUserName for x in installedVehicles ]
@@ -625,6 +628,9 @@ class InventoryBlockConstructor(ModuleTooltipBlockConstructor):
         if discountText:
             text += '\n' + discountText
         return text
+
+    def _getInstalledVehicles(self, module, inventoryVehicles):
+        return module.getInstalledVehicles(inventoryVehicles.itervalues())
 
 
 class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):

@@ -37,6 +37,7 @@ def registerComp7Lobby():
     from gui.shared.system_factory import registerAwardControllerHandlers, registerNotificationsListeners, registerOptimizedViews, registerQuestFlag
     from gui.impl.lobby.crew.widget.crew_widget import CrewWidget
     from gui.impl.gen.view_models.views.lobby.crew.common.crew_widget_model import SlotSizeMode
+    from messenger.formatters.service_channel import AchievementFormatter
     from notification.actions_handlers import _AVAILABLE_HANDLERS, _OpenPunishmentWindowHandler
     from web.web_client_api.ui import OpenWindowWebApi
     registerAwardControllerHandlers((Comp7QuestRewardHandler, Comp7InvoiceRewardHandler, Comp7PunishWindowHandler))
@@ -63,6 +64,12 @@ def registerComp7Lobby():
     CrewWidget.PREBATTLE_TYPE_TO_SLOT_MODE.update({QUEUE_TYPE.COMP7: SlotSizeMode.COMPACT})
     DailyQuestWidget.COMPONENT_TYPES.append(Comp7QuestWidgetComponent)
     CONFIG_KEYS_FOR_UPDATE.add(Configs.COMP7_CONFIG.value)
+    AchievementFormatter._HIDDEN_ACHIEVES.update({'comp7_4_yearly_iron',
+     'comp7_4_yearly_bronze',
+     'comp7_4_yearly_silver',
+     'comp7_4_yearly_gold',
+     'comp7_4_yearly_champion',
+     'comp7_4_yearly_legend'})
 
 
 def _fightButtonTooltipGetter(pValidation):

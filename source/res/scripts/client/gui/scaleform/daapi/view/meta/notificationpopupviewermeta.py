@@ -16,6 +16,9 @@ class NotificationPopUpViewerMeta(BaseDAAPIComponent):
     def getMessageActualTime(self, msTime):
         self._printOverrideError('getMessageActualTime')
 
+    def registerGFNotification(self, component, alias, gfViewName, isPopUp, linkageData):
+        self._printOverrideError('registerGFNotification')
+
     def as_hasPopUpIndexS(self, typeID, entityID):
         return self.flashObject.as_hasPopUpIndex(typeID, entityID) if self._isDAAPIInited() else None
 

@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/crew/tooltips/crew_perks_additional_tooltip_model.py
+from frameworks.wulf import Array
 from gui.impl.gen.view_models.views.lobby.crew.common.skill.skill_extended_model import SkillExtendedModel
 from gui.impl.gen.view_models.views.lobby.crew.common.skill.skill_progression_model import SkillProgressionModel
 
 class CrewPerksAdditionalTooltipModel(SkillExtendedModel):
     __slots__ = ()
 
-    def __init__(self, properties=15, commands=0):
+    def __init__(self, properties=16, commands=0):
         super(CrewPerksAdditionalTooltipModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -47,6 +48,16 @@ class CrewPerksAdditionalTooltipModel(SkillExtendedModel):
     def setShowSkillProgression(self, value):
         self._setBool(14, value)
 
+    def getPopularityList(self):
+        return self._getArray(15)
+
+    def setPopularityList(self, value):
+        self._setArray(15, value)
+
+    @staticmethod
+    def getPopularityListType():
+        return int
+
     def _initialize(self):
         super(CrewPerksAdditionalTooltipModel, self)._initialize()
         self._addViewModelProperty('skillProgression', SkillProgressionModel())
@@ -55,3 +66,4 @@ class CrewPerksAdditionalTooltipModel(SkillExtendedModel):
         self._addStringProperty('animationName', '')
         self._addBoolProperty('isDisabled', False)
         self._addBoolProperty('showSkillProgression', False)
+        self._addArrayProperty('popularityList', Array())

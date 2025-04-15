@@ -32,14 +32,14 @@ class FunRandomBattleSoundController(SoundPlayersBattleController, FunSubModesWa
         pass
 
     def _activateRemapping(self):
-        if self._remappingName != UNKNOWN_WWISE_REMAPPING:
+        if self._remappingName and self._remappingName != UNKNOWN_WWISE_REMAPPING:
             WWISE.activateRemapping(self._remappingName)
 
     def _deactivateRemapping(self):
-        if self._remappingName != UNKNOWN_WWISE_REMAPPING:
+        if self._remappingName and self._remappingName != UNKNOWN_WWISE_REMAPPING:
             nextTick(partial(WWISE.deactivateRemapping, self._remappingName))()
 
-    @hasBattleSubMode(defReturn=UNKNOWN_WWISE_REMAPPING)
+    @hasBattleSubMode()
     def _getRemappingName(self, arenaVisitor=None):
         return self.getBattleSubMode(arenaVisitor).getSettings().client.wwiseRemapping
 
@@ -62,9 +62,15 @@ class FunRandomBattleReplaySoundController(FunRandomBattleSoundController):
         if not BattleReplay.g_replayCtrl.isTimeWarpInProgress:
             super(FunRandomBattleReplaySoundController, self)._deactivateRemapping()
 
+    def _startPlayers(self):
+        if self._remappingName is not None:
+            super(FunRandomBattleReplaySoundController, self)._startPlayers()
+        return
+
     def __onSubModesLoaded(self, *_):
         self._remappingName = self._getRemappingName()
         self._activateRemapping()
+        self._startPlayers()
 
 
 def createFunRandomBattleSoundsController(setup):

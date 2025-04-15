@@ -7,11 +7,13 @@ from gui.impl.pub import ViewImpl
 
 class DifficultyTooltip(ViewImpl):
 
-    def __init__(self, difficulty, isSelected):
+    def __init__(self, difficulty, isSelected, isLocked=False, isAutoCompleteCondition=False):
         settings = ViewSettings(R.views.story_mode.lobby.DifficultyTooltip(), model=MissionDifficultyTooltipModel())
         super(DifficultyTooltip, self).__init__(settings)
         self._difficulty = difficulty
+        self._isAutoCompleteCondition = isAutoCompleteCondition
         self._isSelected = isSelected
+        self._isLocked = isLocked
 
     @property
     def viewModel(self):
@@ -20,4 +22,6 @@ class DifficultyTooltip(ViewImpl):
     def _onLoading(self, *args, **kwargs):
         super(DifficultyTooltip, self)._onLoading(*args, **kwargs)
         self.viewModel.setDifficulty(self._difficulty)
+        self.viewModel.setIsAutoCompleteCondition(self._isAutoCompleteCondition)
         self.viewModel.setIsSelected(self._isSelected)
+        self.viewModel.setIsLocked(self._isLocked)

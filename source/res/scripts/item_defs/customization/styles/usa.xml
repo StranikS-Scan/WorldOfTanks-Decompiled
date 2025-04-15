@@ -9,7 +9,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <style>
@@ -69,7 +69,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <style>
@@ -216,7 +216,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <style>
@@ -326,7 +326,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <style>
@@ -410,7 +410,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <style>
@@ -554,7 +554,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <style>
@@ -638,7 +638,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <style>
@@ -696,7 +696,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <style>
@@ -748,7 +748,7 @@
         <nations>	usa	</nations>
       </include>
       <exclude>
-        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+        <vehicles>	usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <style>
@@ -2749,6 +2749,185 @@
               <id>	133	</id>
             </item>
           </attachments>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	954	</id>
+      <texture>	gui/maps/vehicles/styles/A174_T57_58_Rush_Ep1_1.png	</texture>
+      <modelsSet>	A174_T57_58_Rush_Ep1_1	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/A174_T57_58_Rush_Ep1	</userString>
+      <description>	#vehicle_customization:special_style/A174_T57_58_Rush_Ep1_desc	</description>
+      <tags>	c11n3D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <slotId>	18000	</slotId>
+              <id>	117	</id>
+            </item>
+          </attachments>
+          <insignias>
+            <item>
+              <id>	59	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	955	</id>
+      <texture>	gui/maps/vehicles/styles/A174_T57_58_Rush_Ep1_2.png	</texture>
+      <modelsSet>	A174_T57_58_Rush_Ep1_2	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/A174_T57_58_Rush_Ep2	</userString>
+      <description>	#vehicle_customization:special_style/A174_T57_58_Rush_Ep1_desc	</description>
+      <tags>	c11n3D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <slotId>	18000	</slotId>
+              <id>	118	</id>
+            </item>
+          </attachments>
+          <insignias>
+            <item>
+              <id>	59	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	956	</id>
+      <texture>	gui/maps/vehicles/styles/A174_T57_58_Rush_Ep1_3.png	</texture>
+      <modelsSet>	A174_T57_58_Rush_Ep1_3	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/A174_T57_58_Rush_Ep3	</userString>
+      <description>	#vehicle_customization:special_style/A174_T57_58_Rush_Ep1_desc	</description>
+      <tags>	c11n3D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <slotId>	18000	</slotId>
+              <id>	119	</id>
+            </item>
+          </attachments>
+          <insignias>
+            <item>
+              <id>	59	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	957	</id>
+      <texture>	gui/maps/vehicles/styles/A174_T57_58_Rush_Ep1_4.png	</texture>
+      <modelsSet>	A174_T57_58_Rush_Ep1_4	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/A174_T57_58_Rush_Ep4	</userString>
+      <description>	#vehicle_customization:special_style/A174_T57_58_Rush_Ep1_desc	</description>
+      <tags>	c11n3D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <slotId>	18000	</slotId>
+              <id>	120	</id>
+            </item>
+          </attachments>
+          <insignias>
+            <item>
+              <id>	59	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A1034_M24_Chaffee_StoryModeStealth usa:A34_M24_Chaffee_CFE_V	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	1136	</id>
+      <texture>	gui/maps/vehicles/styles/usa.png	</texture>
+      <modelsSet>	A34_M24_Chaffee_SMV_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#usa_vehicles:M24_Chaffee	</userString>
+      <tags>	lockedOnVehicle c11n3D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1101	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
         </outfit>
       </outfits>
     </style>

@@ -158,7 +158,7 @@ class SelectorItem(object):
 
     def update(self, state):
         if self._selectorType is not None:
-            self._isNew = not selectorUtils.isKnownBattleType(self._selectorType)
+            self._isNew = not self._isKnownBattleType()
         if not self.isLocked():
             self._update(state)
         return
@@ -173,6 +173,9 @@ class SelectorItem(object):
 
     def _update(self, state):
         raise NotImplementedError
+
+    def _isKnownBattleType(self):
+        return selectorUtils.isKnownBattleType(self._selectorType)
 
     @adisp_process
     def _doSelect(self, dispatcher):

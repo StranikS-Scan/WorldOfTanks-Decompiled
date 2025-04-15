@@ -204,6 +204,11 @@ class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMet
     def _getPlugins(self):
         return plugins.createPlugins()
 
+    def _addPlugins(self, plugin):
+        if self.__plugins is not None:
+            self.__plugins.addPlugins(plugin)
+        return
+
     def __handleRoleHintToggled(self, event):
         self.__toggleFade(event.ctx.get('isShown', False))
 

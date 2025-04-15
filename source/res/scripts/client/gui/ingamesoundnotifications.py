@@ -3,7 +3,7 @@
 from random import randrange
 from functools import partial
 from collections import namedtuple
-from debug_utils import LOG_WARNING, LOG_DEBUG
+from debug_utils import LOG_WARNING, LOG_DEBUG, LOG_ERROR
 import Math
 import BigWorld
 import ResMgr
@@ -15,8 +15,8 @@ import WWISE
 from helpers import isPlayerAvatar
 from account_helpers import AccountSettings
 from account_helpers.settings_core.settings_constants import SOUND
-from visual_script_client.contexts.sound_notifications_context import SoundNotificationsContext
 from helpers.CallbackDelayer import CallbackDelayer, TimeDeltaMeter
+import importlib
 _ENABLE_VO_LOGS = False
 _SUBTITLE_PREFIX = '#'
 _SUBTITLES_END_MARKER = '#end'
@@ -34,7 +34,7 @@ class IngameSoundNotifications(CallbackDelayer, TimeDeltaMeter):
     QueueItem = namedtuple('QueueItem', ('eventName', 'priority', 'time', 'vehicleID', 'checkFn', 'position', 'boundVehicleID'))
     PlayingEvent = namedtuple('PlayingEvent', ('eventName', 'vehicle', 'position', 'boundVehicle', 'is2D'))
 
-    def __init__(self):
+    def __init__(self, arenaType):
         CallbackDelayer.__init__(self)
         TimeDeltaMeter.__init__(self)
         self.__isEnabled = False
@@ -54,16 +54,19 @@ class IngameSoundNotifications(CallbackDelayer, TimeDeltaMeter):
         self.onAddEvent = Event.Event()
         self.onSubtitleShow = Event.Event()
         self.onSubtitleHide = Event.Event()
+        planPath = arenaType.soundNotificationsPlan
+        planContextPath = arenaType.soundNotificationsContext
+        self.__vseContextClass = self.__importVSEContextClass(planContextPath)
         self.__readConfigs()
         self._vsePlan = VSE.Plan()
-        self._vsePlan.load('soundNotifications', 'CLIENT')
+        self._vsePlan.load(planPath, 'CLIENT')
         self.__soundNotificationsContext = None
         return
 
     def start(self):
         self.__enabledSoundCategories = set(('fx', 'voice'))
         self.__isEnabled = True
-        self.__soundNotificationsContext = SoundNotificationsContext()
+        self.__soundNotificationsContext = self.__vseContextClass()
         WWISE.WW_addMarkerListener(self._soundMarkerHandler)
         self._vsePlan.setContext(self.__soundNotificationsContext)
         self._vsePlan.start()
@@ -127,6 +130,19 @@ class IngameSoundNotifications(CallbackDelayer, TimeDeltaMeter):
             predelay = float(event['predelay']) if 'predelay' in event else 0
             BigWorld.callback(predelay, partial(self.__playDelayed, eventName, vehicleID, checkFn, position, boundVehicleID))
             return
+
+    @staticmethod
+    def __importVSEContextClass(contextPath):
+        classPathParts = contextPath.split('.')
+        class_name = classPathParts[-1]
+        python_module_path = '.'.join(classPathParts[:-1])
+        try:
+            python_module = importlib.import_module(python_module_path)
+        except ImportError:
+            LOG_ERROR('Failed to load Module ', contextPath)
+            raise
+
+        return getattr(python_module, class_name)
 
     def __playDelayed(self, eventName, vehicleID=None, checkFn=None, position=None, boundVehicleID=None):
         event = self.__events.get(eventName, None)

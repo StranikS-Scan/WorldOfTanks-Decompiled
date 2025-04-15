@@ -1,0 +1,25 @@
+<AvatarCommendations.def>
+  <CellMethods>
+    <updateMessageState>
+      <Arg>	COMMENDATIONS_STATE	</Arg>
+    </updateMessageState>
+    <setMessageStates>
+      <Arg>	COMMENDATIONS_STATE_LIST	</Arg>
+    </setMessageStates>
+    <sendCommendation>
+      <Exposed>	OWN_CLIENT	</Exposed>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	STRING	</Arg>
+    </sendCommendation>
+  </CellMethods>
+  <Properties>
+    <commendationsState>
+      <Type>	COMMENDATIONS_STATE_LIST	</Type>
+      <Flags>	OWN_CLIENT	</Flags>
+    </commendationsState>
+  </Properties>
+  <ofEntity>
+    <Avatar></Avatar>
+  </ofEntity>
+  <DefaultKeyName>	commendations	</DefaultKeyName>
+</AvatarCommendations.def>

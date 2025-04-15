@@ -7,7 +7,7 @@ from frameworks.wulf.view.array import fillResourcesArray
 from gui.battle_results.pbs_helpers.common import getEnemies
 from gui.battle_results.presenters.packers.interfaces import ITooltipPacker
 from gui.impl.gen.resources import R
-from gui.impl.gen.view_models.views.lobby.battle_results.personal_efficiency_model import EfficiencyParameter
+from gui.impl.gen.view_models.views.lobby.battle_results.efficiency_param_constants import EfficiencyParamConstants
 from gui.impl.gen.view_models.views.lobby.battle_results.tooltips.efficiency_item_model import Unit, EfficiencyItemModel
 if typing.TYPE_CHECKING:
     from gui.battle_results.stats_ctrl import BattleResults
@@ -171,14 +171,14 @@ class TotalDamageBlockedByArmorParameter(BaseParameter):
         return getArmorValues(playerResult, isZeroValuesVisible)
 
 
-PARAMETERS_TO_TOOLTIP_MAP = {EfficiencyParameter.STUN: TotalStunParameter,
- EfficiencyParameter.DAMAGEDEALT: TotalDamageDealtParameter,
- EfficiencyParameter.DAMAGEBLOCKEDBYARMOR: TotalDamageBlockedByArmorParameter,
- EfficiencyParameter.DAMAGEASSISTED: TotalDamageAssistedParameter,
- EfficiencyParameter.SPOTTED: TotalSpottedParameter,
- EfficiencyParameter.KILLS: TotalKillsParameter,
- EfficiencyParameter.CAPTUREPOINTS: TotalCapturePointsParameter,
- EfficiencyParameter.DROPPEDCAPTUREPOINTS: TotalDefencePointsParameter}
+PARAMETERS_TO_TOOLTIP_MAP = {EfficiencyParamConstants.STUN: TotalStunParameter,
+ EfficiencyParamConstants.DAMAGE_DEALT: TotalDamageDealtParameter,
+ EfficiencyParamConstants.DAMAGE_BLOCKED_BY_ARMOR: TotalDamageBlockedByArmorParameter,
+ EfficiencyParamConstants.DAMAGE_ASSISTED: TotalDamageAssistedParameter,
+ EfficiencyParamConstants.SPOTTED: TotalSpottedParameter,
+ EfficiencyParamConstants.KILLS: TotalKillsParameter,
+ EfficiencyParamConstants.CAPTURE_POINTS: TotalCapturePointsParameter,
+ EfficiencyParamConstants.DROPPED_CAPTURE_POINTS: TotalDefencePointsParameter}
 
 class EfficiencyTooltipsPacker(ITooltipPacker):
     __slots__ = ()
@@ -193,8 +193,7 @@ class EfficiencyTooltipsPacker(ITooltipPacker):
             paramType = ctx['paramType']
             reusable, results = battleResults.reusable, battleResults.results
             playerResults = reusable.getPersonalVehiclesInfo(results['personal'])
-            parameter = EfficiencyParameter(paramType)
-            tooltipHelper = cls._TOOLTIPS.get(parameter)
+            tooltipHelper = cls._TOOLTIPS.get(paramType)
             if tooltipHelper is not None:
                 model.setTitle(tooltipHelper.getTitle()())
                 model.setDescription(tooltipHelper.getDescription()())

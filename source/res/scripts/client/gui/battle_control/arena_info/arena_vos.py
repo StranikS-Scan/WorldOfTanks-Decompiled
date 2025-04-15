@@ -18,6 +18,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.gui_items import Vehicle
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS, VEHICLE_CLASS_NAME
+from gui.shared.system_factory import registerGameModeArenaInfoKeys, collectGameModeArenaInfoKeys
 from helpers import dependency, i18n
 from skeletons.gui.server_events import IEventsCache
 _INVALIDATE_OP = settings.INVALIDATE_OP
@@ -84,25 +85,26 @@ class EPIC_BATTLE_KEYS(object):
         return [EPIC_BATTLE_KEYS.RANK] if not static else []
 
 
-GAMEMODE_SPECIFIC_KEYS = {ARENA_GUI_TYPE.EPIC_RANDOM: EPIC_RANDOM_KEYS,
- ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING: EPIC_RANDOM_KEYS,
- ARENA_GUI_TYPE.EPIC_BATTLE: EPIC_BATTLE_KEYS,
- ARENA_GUI_TYPE.EPIC_TRAINING: EPIC_BATTLE_KEYS,
- ARENA_GUI_TYPE.BATTLE_ROYALE: BattleRoyaleKeys}
+registerGameModeArenaInfoKeys(ARENA_GUI_TYPE.EPIC_RANDOM, EPIC_RANDOM_KEYS)
+registerGameModeArenaInfoKeys(ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING, EPIC_RANDOM_KEYS)
+registerGameModeArenaInfoKeys(ARENA_GUI_TYPE.EPIC_BATTLE, EPIC_BATTLE_KEYS)
+registerGameModeArenaInfoKeys(ARENA_GUI_TYPE.EPIC_TRAINING, EPIC_BATTLE_KEYS)
+registerGameModeArenaInfoKeys(ARENA_GUI_TYPE.BATTLE_ROYALE, BattleRoyaleKeys)
 
 class GameModeDataVO(object):
     __slots__ = ('__internalData', '__sortingKeys')
 
     def __init__(self, gameMode, static=True):
         self.__internalData = {}
-        if gameMode in GAMEMODE_SPECIFIC_KEYS:
-            keys = GAMEMODE_SPECIFIC_KEYS[gameMode]
-            for key, defaultValue in keys.getKeys(static):
+        gameModeKeys = collectGameModeArenaInfoKeys(gameMode)
+        if gameModeKeys is not None:
+            for key, defaultValue in gameModeKeys.getKeys(static):
                 self.__internalData[key] = defaultValue
 
-            self.__sortingKeys = keys.getSortingKeys(static)
+            self.__sortingKeys = gameModeKeys.getSortingKeys(static)
         else:
             self.__sortingKeys = []
+        return
 
     def update(self, data):
         invalidate = _INVALIDATE_OP.NONE
@@ -117,6 +119,9 @@ class GameModeDataVO(object):
 
     def getValue(self, key, default=None):
         return self.__internalData[key] if key in self.__internalData else default
+
+    def getValues(self, keys):
+        return tuple((self.getValue(key) for key in keys))
 
 
 def isObserver(tags):

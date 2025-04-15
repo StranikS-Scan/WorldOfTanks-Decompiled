@@ -23,7 +23,7 @@ from story_mode.gui.impl.battle.lore_settings_model import getLoreSettings
 from story_mode.gui.impl.gen.view_models.views.battle.prebattle_window_view_model import PrebattleWindowViewModel
 from story_mode.gui.impl.mixins import DestroyWindowOnDisconnectMixin
 from story_mode.gui.shared.event_dispatcher import showQueueWindow, sendViewLoadedEvent
-from story_mode.gui.story_mode_gui_constants import GAMEMODE_GROUP, GAMEMODE_STATE
+from story_mode.gui.sound_constants import GAMEMODE_GROUP, GAMEMODE_STATE
 from story_mode.skeletons.story_mode_controller import IStoryModeController
 from story_mode.uilogging.story_mode.consts import LogWindows, LogButtons
 from story_mode.uilogging.story_mode.loggers import MissionWindowLogger
@@ -111,6 +111,7 @@ class PrebattleView(BaseWaitQueueView, IArenaLoadController):
         self.app.detachCursor()
         self.viewModel.setIsLoading(True)
         self._storyModeCtrl.goToBattle()
+        self._storyModeCtrl.startBattleMusic()
         avatar_getter.setForcedGuiControlMode(True, enableAiming=False, cursorVisible=False)
         return
 

@@ -26,6 +26,7 @@ from gui.wgcg.craftmachine.handlers import CraftmachineRequestHandlers
 from gui.wgcg.gift_system.handlers import GiftSystemRequestHandlers
 from gui.wgcg.uilogging.handlers import UILoggingRequestHandlers
 from gui.wgcg.wot_shop.handlers import WotShopRequestHandlers
+from gui.wgcg.loadouts_assistant.handlers import LoadoutsAssistantRequestHandlers
 
 class WgcgRequestResponse(Response):
 
@@ -115,6 +116,7 @@ class WgcgRequestsController(RequestsController):
         self.__handlers.update(AgateRequestHandlers(requester).get())
         self.__handlers.update(WotShopRequestHandlers(requester).get())
         self.__handlers.update(ClanSupplyRequestHandlers(requester).get())
+        self.__handlers.update(LoadoutsAssistantRequestHandlers(requester).get())
 
     def fini(self):
         super(WgcgRequestsController, self).fini()

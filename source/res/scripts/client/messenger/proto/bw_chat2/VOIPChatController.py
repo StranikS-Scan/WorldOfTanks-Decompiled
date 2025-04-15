@@ -191,4 +191,4 @@ class VOIPChatController(IVOIPChatController):
             else:
                 messageRId = R.strings.messenger.client.dynSquad.disableVOIP()
             msg = backport.text(messageRId, keyName=getReadableKey(CommandMapping.CMD_VOICECHAT_ENABLE))
-        g_messengerEvents.onWarningReceived(ClientActionMessage(msg=msg, type_=ACTION_MESSAGE_TYPE.ERROR))
+        g_messengerEvents.onCustomMessage(ClientActionMessage(msg=msg, type_=ACTION_MESSAGE_TYPE.ERROR))

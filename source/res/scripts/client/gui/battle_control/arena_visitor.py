@@ -275,10 +275,13 @@ class _ArenaGuiTypeVisitor(IArenaVisitor):
         self._guiType = _GUI_TYPE.UNKNOWN
 
     def isRandomBattle(self):
-        return self._guiType in (_GUI_TYPE.EPIC_RANDOM, _GUI_TYPE.RANDOM)
+        return self._guiType in _GUI_TYPE.RANDOM_RANGE
 
     def isBattleChatSupported(self):
         return self._guiType in _GUI_TYPE.BATTLE_CHAT_SETTING_SUPPORTED
+
+    def isNonDesertionArena(self):
+        return self._guiType in _GUI_TYPE.NON_DESERTION_ARENAS
 
     def isEventBattle(self):
         return self._guiType == _GUI_TYPE.EVENT_BATTLES
@@ -392,6 +395,12 @@ class _ArenaBonusTypeVisitor(IArenaVisitor):
 
     def hasSwitchSetups(self):
         return self.hasAnyBonusCap(_CAPS.SWITCH_SETUPS)
+
+    def hasCommendationsMessages(self):
+        return self.hasAnyBonusCap(_CAPS.COMMENDATIONS_MESSAGES)
+
+    def hasLiveTags(self):
+        return self.hasAnyBonusCap(_CAPS.COMMENDATIONS_LIVE_TAGS)
 
 
 class _ArenaExtraDataVisitor(IArenaVisitor):
@@ -549,7 +558,7 @@ class _ClientArenaVisitor(IClientArenaVisitor):
         return self._bonus.hasRage()
 
     def hasRespawns(self):
-        return self._bonus.hasRespawns()
+        return self._bonus.hasRespawns() or self.isEnableExternalRespawn()
 
     def isEnableExternalRespawn(self):
         ownVehicle = BigWorld.entities.get(BigWorld.player().playerVehicleID, None)
@@ -595,6 +604,12 @@ class _ClientArenaVisitor(IClientArenaVisitor):
 
     def hasPointsOfInterest(self):
         return self._bonus.hasPointsOfInterest()
+
+    def hasCommendationsMessages(self):
+        return self._bonus.hasCommendationsMessages()
+
+    def hasLiveTags(self):
+        return self._bonus.hasLiveTags()
 
     def getArenaIcon(self, subdir=''):
         return getArenaImage(self._type.getGeometryName(), subdir)

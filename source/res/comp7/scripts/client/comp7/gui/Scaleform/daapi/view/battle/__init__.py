@@ -3,7 +3,6 @@
 from comp7.gui.Scaleform.daapi.view.battle.page import Comp7BattlePage
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.battle.epic import SETTINGS_WINDOW_SCOPE
 from gui.Scaleform.daapi.view.battle.shared.page import BattlePageBusinessHandler
 from gui.Scaleform.framework import ViewSettings, ScopeTemplates, ComponentSettings, GroupedViewSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
@@ -44,6 +43,7 @@ def getViewSettings():
     from comp7.gui.Scaleform.daapi.view.battle.filter_popover import Comp7TankCarouselFilterPopover
     from comp7.gui.Scaleform.daapi.view.battle import indicators
     from gui.Scaleform.framework import getSwfExtensionUrl
+    SETTINGS_WINDOW_SCOPE = ScopeTemplates.SimpleScope(VIEW_ALIAS.SETTINGS_WINDOW, ScopeTemplates.DEFAULT_SCOPE)
     return (ViewSettings(VIEW_ALIAS.COMP7_BATTLE_PAGE, Comp7BattlePage, getSwfExtensionUrl('comp7', 'comp7BattlePage.swf'), WindowLayer.VIEW, None, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_LOADING, battle_loading.Comp7BattleLoading, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_STATISTIC_DATA_CONTROLLER, stats_exchange.Comp7StatisticsDataController, ScopeTemplates.DEFAULT_SCOPE),

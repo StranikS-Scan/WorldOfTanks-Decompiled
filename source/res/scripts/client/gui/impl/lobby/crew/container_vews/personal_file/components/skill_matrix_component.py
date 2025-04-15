@@ -3,6 +3,7 @@
 import BigWorld
 import typing
 from itertools import chain
+from account_helpers.settings_core.settings_constants import OnceOnlyHints
 from constants import NEW_PERK_SYSTEM as NPS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.backport.backport_tooltip import createAndLoadBackportTooltipWindow
@@ -14,12 +15,14 @@ from gui.impl.gen.view_models.views.lobby.crew.personal_case.tankman_skills_grou
 from gui.impl.lobby.container_views.base.components import ComponentBase
 from gui.impl.lobby.crew.crew_helpers.skill_model_setup import skillModelSetup
 from gui.impl.lobby.crew.crew_helpers.tankman_helpers import getPerksResetGracePeriod
+from gui.impl.lobby.crew.crew_hints import isTankmanWotPlusAssistCandidate, updateCrewWidgetWotPlusAssistCandidateHint
 from gui.impl.lobby.crew.tooltips.bonus_perks_tooltip import BonusPerksTooltip
 from gui.impl.lobby.crew.tooltips.empty_skill_tooltip import EmptySkillTooltip
 from gui.impl.lobby.crew.tooltips.qualification_tooltip import QualificationTooltip
 from gui.shared.gui_items.artefacts import TAG_CREW_BATTLE_BOOSTER
 from helpers import dependency
 from items.tankmen import SKILLS_BY_ROLES, COMMON_SKILLS
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
@@ -29,6 +32,11 @@ if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.views.lobby.crew.personal_case.skills_matrix_model import SkillsMatrixModel
     from typing import Any, Callable, Iterable, Optional, Tuple
 
+@dependency.replace_none_kwargs(settingsCore=ISettingsCore)
+def _isWotPlusCrewContainerSkillAssistHitShown(settingsCore=None):
+    return bool(settingsCore.serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.WOTPLUS_CREW_CONTAINER_TANKMAN_SKILL_ASSIST_HINT))
+
+
 class SkillMatrixComponent(ComponentBase):
     itemsCache = dependency.descriptor(IItemsCache)
     appLoader = dependency.descriptor(IAppLoader)
@@ -36,6 +44,7 @@ class SkillMatrixComponent(ComponentBase):
     def __init__(self, key, parent):
         self._toolTipMgr = self.appLoader.getApp().getToolTipMgr()
         self.__isOnFocus = True
+        updateCrewWidgetWotPlusAssistCandidateHint(parent.context.tankman.getVehicle())
         super(SkillMatrixComponent, self).__init__(key, parent)
 
     def createToolTip(self, event):
@@ -116,6 +125,21 @@ class SkillMatrixComponent(ComponentBase):
         emptyLevelsCount = max(0, NPS.MAX_MAJOR_PERKS - len(tman.skillsLevels))
         levels = list(chain(tman.skillsLevels, [None] * emptyLevelsCount))
         self._fillSkillsGroupModel(tman.role, skills, vm.mainSkills, levels)
+        hintShown = _isWotPlusCrewContainerSkillAssistHitShown()
+        if not hintShown and isTankmanWotPlusAssistCandidate(self.context.tankman, self.context.tankman.getVehicle()):
+            candidateFound = False
+            with vm.mainSkills.getSkills().transaction() as vmSkills:
+                for i in range(len(vmSkills) - 1, -1, -1):
+                    if not vmSkills[i].getIsLocked() and not candidateFound:
+                        candidateFound = True
+                        vmSkills[i].setWotPlusAssistHintCandidate(True)
+                    vmSkills[i].setWotPlusAssistHintCandidate(False)
+
+        else:
+            with vm.mainSkills.getSkills().transaction() as vmSkills:
+                for vmSkill in vmSkills:
+                    vmSkill.setWotPlusAssistHintCandidate(False)
+
         return
 
     def _fillBonusSkills(self, vm):
@@ -154,6 +178,7 @@ class SkillMatrixComponent(ComponentBase):
     def _getSkillModel(self, skill, level, role, index):
         sm = TankmanSkillModel()
         sm.setIsLocked(level is None)
+        sm.setWotPlusAssistHintCandidate(False)
         if skill:
             skillModelSetup(sm, skill=skill, tankman=self.context.tankman, role=role)
             sm.setUserName(skill.userName)

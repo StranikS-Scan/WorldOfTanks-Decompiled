@@ -754,6 +754,11 @@
     </decal>
     <name>	Signs	</name>
     <type>	EMBLEM	</type>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
+    </vehicleFilter>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:emblem/signs	</userString>
@@ -774,5 +779,10 @@
     </decal>
     <name>	NA 2020	</name>
     <type>	EMBLEM	</type>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
+    </vehicleFilter>
   </itemGroup>
 </emblems_signs_nonCN.xml>

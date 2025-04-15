@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class CongratulationsWindowViewModel(ViewModel):
     __slots__ = ('onClose', 'onLoaded')
 
-    def __init__(self, properties=4, commands=2):
+    def __init__(self, properties=5, commands=2):
         super(CongratulationsWindowViewModel, self).__init__(properties=properties, commands=commands)
 
     def getIsCloseVisible(self):
@@ -26,17 +26,24 @@ class CongratulationsWindowViewModel(ViewModel):
     def setMedalName(self, value):
         self._setString(2, value)
 
-    def getMissionId(self):
+    def getBadgeId(self):
         return self._getNumber(3)
 
-    def setMissionId(self, value):
+    def setBadgeId(self, value):
         self._setNumber(3, value)
+
+    def getMissionId(self):
+        return self._getNumber(4)
+
+    def setMissionId(self, value):
+        self._setNumber(4, value)
 
     def _initialize(self):
         super(CongratulationsWindowViewModel, self)._initialize()
         self._addBoolProperty('isCloseVisible', False)
         self._addBoolProperty('isOnboarding', False)
         self._addStringProperty('medalName', '')
+        self._addNumberProperty('badgeId', 0)
         self._addNumberProperty('missionId', 0)
         self.onClose = self._addCommand('onClose')
         self.onLoaded = self._addCommand('onLoaded')

@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/gen/view_models/views/lobby/meta_view/pages/progression_model.py
 from frameworks.wulf import Array
-from comp7.gui.impl.gen.view_models.views.lobby.meta_view.pages.progression_item_model import ProgressionItemModel
 from comp7.gui.impl.gen.view_models.views.lobby.meta_view.progression_base_model import ProgressionBaseModel
 from comp7.gui.impl.gen.view_models.views.lobby.meta_view.progression_qualification_model import ProgressionQualificationModel
+from comp7.gui.impl.gen.view_models.views.lobby.progression_item_model import ProgressionItemModel
 
 class ProgressionModel(ProgressionBaseModel):
     __slots__ = ()

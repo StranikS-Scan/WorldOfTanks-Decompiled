@@ -265,9 +265,6 @@ class Comp7Controller(IComp7Controller):
     def isQualificationPassedInSeason(self, seasonNumber):
         return False
 
-    def isYearlyRewardReceived(self):
-        return False
-
     def getRatingForSeason(self, seasonNumber):
         pass
 
@@ -290,4 +287,7 @@ class Comp7Controller(IComp7Controller):
         return None
 
     def getPlatoonRankRestriction(self, squadSize=None):
+        pass
+
+    def tryToShowSeasonStatistics(self):
         pass

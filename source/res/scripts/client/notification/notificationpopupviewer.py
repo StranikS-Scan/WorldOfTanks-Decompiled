@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/NotificationPopUpViewer.py
+import logging
 from typing import TYPE_CHECKING
 from PlayerEvents import g_playerEvents
 from gui.Scaleform.daapi.view.meta.NotificationPopUpViewerMeta import NotificationPopUpViewerMeta
@@ -12,8 +13,10 @@ from messenger.proto.events import g_messengerEvents
 from notification import NotificationMVC
 from notification.BaseNotificationView import BaseNotificationView
 from notification.settings import NOTIFICATION_STATE
+from notification.utils import dynamicNotificationRegister
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.shared.utils import IHangarSpace
+_logger = logging.getLogger(__name__)
 if TYPE_CHECKING:
     from typing import Dict, Optional, Set
 
@@ -47,12 +50,19 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
     def setListClear(self):
         self.__noDisplayingPopups = True
         if self._model is not None and self._model.getDisplayState() == NOTIFICATION_STATE.POPUPS:
-            if self.__pendingMessagesQueue:
-                self.__showAlertMessage(self.__pendingMessagesQueue.pop(0))
+            if not self.__pendingMessagesQueue:
+                return
+            if self.__lockedNotificationPriority:
+                _logger.info('Skip the attempt to show the alert notification. All notification is locked.')
+                return
+            self.__showAlertMessage(self.__pendingMessagesQueue.pop(0))
         return
 
     def getMessageActualTime(self, msTime):
         return TimeFormatter.getActualMsgTimeStr(msTime)
+
+    def registerGFNotification(self, component, alias, gfViewName, isPopUp, linkageData):
+        dynamicNotificationRegister(self, component, alias, gfViewName, isPopUp, linkageData, self._onRegisterFlashComponent)
 
     def _populate(self):
         super(NotificationPopUpViewer, self)._populate()

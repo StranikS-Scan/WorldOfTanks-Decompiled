@@ -16,6 +16,8 @@ LOOTBOX_RANDOM_NATIONAL_CREW_BOOK = 'randomNationalCrewBook'
 TEXT_RESOURCE_PREFIX = 'lootbox_'
 COUNTRY_CODES_FOR_EXTERNAL_LOOT_LIST = ('KR',)
 DEFAULT_EVENT_NAME = 'lootbox_system'
+LOOTBOX_COMPENSATION_TOKEN_PREFIX = 'lbs_compensation'
+LOOTBOX_COMPENSATION_BONUS = 'lootboxCompensation'
 
 class NotificationPathPart(str, Enum):
     MAIN = 'serviceChannelMessages'

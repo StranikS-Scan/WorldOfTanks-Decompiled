@@ -193,6 +193,12 @@ def playByName(soundName):
     SoundGroups.g_instance.playSound2D(soundName)
 
 
+def _isReplayWarping():
+    import BattleReplay
+    replayCtrl = BattleReplay.g_replayCtrl
+    return replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress
+
+
 class _GunReload(CallbackDelayer):
     __slots__ = ('_desc',)
 
@@ -632,73 +638,51 @@ class DualGunReload(_GunReload):
             return
 
 
-class AutoShootChangeShellReload(SimpleReload):
+class AutoShootChangeShellReload(_GunReload):
 
-    def __init__(self, effectDescr):
-        SimpleReload.__init__(self, effectDescr)
+    def __init__(self, effectDesc):
+        super(AutoShootChangeShellReload, self).__init__(effectDesc)
         self._startSound = None
+        self._finishSound = None
         return
 
     def __del__(self):
-        if self._startSound is not None:
-            self._startSound.stop()
-            self._startSound = None
-        super(AutoShootChangeShellReload, self).__del__()
-        return
+        self.stop()
+        CallbackDelayer.destroy(self)
 
     def start(self, shellReloadTime, alert, shellCount, reloadShellCount, shellID, reloadStart, clipCapacity):
         if gEffectsDisabled():
             return
-        else:
-            if self._sound is None:
-                self._sound = SoundGroups.g_instance.getSound2D(self._desc.soundEvent)
-            else:
-                self._sound.stop()
-            if self._startSound is None:
-                self._startSound = SoundGroups.g_instance.getSound2D(self._desc.startSoundEvent)
-            else:
-                self._startSound.stop()
-            self._checkAndPlayGunRammerEffect(shellReloadTime)
-            self._startSound.play()
-            time = shellReloadTime - self._desc.duration
-            if time < 0.0:
-                time = 0.0
-            self.delayCallback(time, self.__playFinishChangeShellSound)
-            return
+        self._finishSound = self._finishSound or SoundGroups.g_instance.getSound2D(self._desc.soundEvent)
+        self._startSound = self._startSound or SoundGroups.g_instance.getSound2D(self._desc.startSoundEvent)
+        self._checkAndPlayGunRammerEffect(shellReloadTime)
+        if reloadStart:
+            self.__playSoundObject(self._startSound)
+        self.delayCallback(max(0.0, shellReloadTime - self._desc.duration), self.__playSoundObject, self._finishSound)
 
     def stop(self):
         if self._startSound is not None:
             self._startSound.stop()
             self._startSound = None
-        if self._sound is not None:
-            self._sound.stop()
-            self._sound = None
-        self.stopCallback(self.__playFinishChangeShellSound)
+        if self._finishSound is not None:
+            self._finishSound.stop()
+            self._finishSound = None
+        self.stopCallback(self.__playSoundObject)
         self._stopGunRammerEffect()
         return
 
-    def __playFinishChangeShellSound(self):
-        if self._sound is None:
-            return
-        else:
-            self._sound.stop()
-            import BattleReplay
-            replayCtrl = BattleReplay.g_replayCtrl
-            if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
-                return
-            self._sound.play()
-            return
+    def reloadEnd(self):
+        self.stopCallback(self.__playSoundObject)
 
-    def __playStartChangeShellSound(self):
-        if self._startSound is None:
+    @staticmethod
+    def __playSoundObject(sound):
+        if sound is None:
             return
         else:
-            self._startSound.stop()
-            import BattleReplay
-            replayCtrl = BattleReplay.g_replayCtrl
-            if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
+            sound.stop()
+            if _isReplayWarping():
                 return
-            self._startSound.play()
+            sound.play()
             return
 
 

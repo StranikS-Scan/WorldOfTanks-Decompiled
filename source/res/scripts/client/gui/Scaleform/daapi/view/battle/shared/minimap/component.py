@@ -178,6 +178,13 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
     def _processMinimapSize(self, minSize, maxSize):
         pass
 
+    def _updateThermalSectorSize(self, mapSize, scaleType):
+        thermalSectorPlugin = self.getPlugin(ThermalSectorPlugin.NAME)
+        if thermalSectorPlugin is not None:
+            thermalSectorPlugin.updateMapSize(mapSize)
+            thermalSectorPlugin.updateScaleType(False, scaleType)
+        return
+
     def __createComponent(self, arenaVisitor):
         self.__component = self._createFlashComponent()
         if self.__component is None:

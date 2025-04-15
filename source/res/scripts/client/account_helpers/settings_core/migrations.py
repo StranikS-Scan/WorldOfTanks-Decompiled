@@ -1377,6 +1377,12 @@ def _migrateTo134(core, data, initialized):
     return
 
 
+def _migrateTo135(core, data, initialized):
+    data['gameExtData2'][GAME.ENABLE_THERMAL_VISION_EFFECT] = True
+    data['gameExtData2'][GAME.ENABLE_THERMAL_VISION_SECTOR_EFFECT] = True
+    data['gameExtData2'][GAME.SHOW_THERMAL_VISION_SECTOR_ON_MAP] = True
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -1907,6 +1913,10 @@ _versions = ((1,
   False),
  (134,
   _migrateTo134,
+  False,
+  False),
+ (135,
+  _migrateTo135,
   False,
   False))
 

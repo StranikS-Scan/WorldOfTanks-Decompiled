@@ -81,8 +81,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
 
     def onSelectionChanged(self, itemID, toInventory, currency):
         item = self.__items[itemID]
-        if item.itemType == FITTING_TYPES.OPTIONAL_DEVICE:
-            self.__updateItemData(item, toInventory, currency)
+        self.__updateItemData(item, toInventory, currency)
         self.__updateTotalCost()
         self.__updateSubmitButton()
 
@@ -436,8 +435,9 @@ class VehicleSellDialog(VehicleSellDialogMeta):
     def __updateItemData(self, item, toInventory, currency):
         item.toInventory = toInventory
         item.removeCurrency = currency
-        item.setAlertIconTooltip(toInventory=toInventory)
-        self.as_updateDeviceS(item.toFlashVO())
+        if item.itemType == FITTING_TYPES.OPTIONAL_DEVICE:
+            item.setAlertIconTooltip(toInventory=toInventory)
+            self.as_updateDeviceS(item.toFlashVO())
 
     def __updateTotalCost(self):
         optionalDevices = _VSDMoney()

@@ -10,3 +10,4 @@ SOUND_EVENT_ENEMY_IN_SECTOR = SoundEvent('un_pyrometer_NPC_in', 'un_pyrometer_NP
 SOUND_EVENT_RELOADING = SoundEvent('ability_recharging')
 RELOADING_DURATION = 3.0
 SOUND_EVENT_NPC_DETECTED = SoundEvent('un_pyrometer_NPC_detected')
+DISABLED_ERROR_MSG_KEY = 'thermalVisionOverturned'

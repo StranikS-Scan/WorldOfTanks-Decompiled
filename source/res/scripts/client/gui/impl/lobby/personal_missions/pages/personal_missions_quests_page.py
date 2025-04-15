@@ -131,7 +131,7 @@ class PersonalMissionQuestsPage(PageSubModelPresenter):
                 model.setPrevOperationName(ctrl.getPreviousOperationName(self.__currentOperationId))
                 tabs = Array()
                 questsChains = ctrl.getQuestsChainsByOperationId(self.__currentOperationId)
-                allQuests = ctrl.getAllQuests()
+                allQuests = ctrl.getAllQuestsPM3()
                 currVehLevel = MIN_VEHICLE_LEVEL if g_currentVehicle.item is None else g_currentVehicle.getLevel()
                 for chainId, chain in questsChains.iteritems():
                     isSelected = False

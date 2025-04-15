@@ -40,7 +40,7 @@ _MINI_MINIMAP_SIZE = 46
 _ZOOM_MODE_MIN = 1
 _ZOOM_MODE_STEP = 0.5
 _ZOOM_MULTIPLIER_TEXT = 'x'
-_METERS_IN_1X_ZOOM = 1000
+METERS_IN_1X_ZOOM = 1000
 EPIC_MINIMAP_HIT_AREA = 210
 _EPIC_BASE_PING_RANGE = 145
 _DOWN_SCALE = 0.45
@@ -82,6 +82,7 @@ class EpicMinimapComponent(EpicMinimapMeta):
             mode = self.__maxZoomMode
         self.updateZoomMode(mode)
         self.__rangeScale = self.__calculateRangeScale(_ZOOM_MODE_MIN, self.__maxZoomMode, mode)
+        self._updateThermalSectorSize(METERS_IN_1X_ZOOM, MINIMAP_SCALE_TYPES.REAL_SCALE)
 
     def setMinimapCenterEntry(self, entryID):
         component = self.getComponent()
@@ -172,7 +173,7 @@ class EpicMinimapComponent(EpicMinimapMeta):
         bottomLeftX, bottomLeftY = bl
         d1 = abs(topRightX - bottomLeftX)
         d2 = abs(topRightY - bottomLeftY)
-        return max(d1, d2) / _METERS_IN_1X_ZOOM
+        return max(d1, d2) / METERS_IN_1X_ZOOM
 
     def __zoomText(self):
         return str(round(self.__mode, 1)) + _ZOOM_MULTIPLIER_TEXT
@@ -213,7 +214,7 @@ class RespawningPersonalEntriesPlugin(PersonalEntriesPlugin):
 
     def __init__(self, parentObj):
         super(RespawningPersonalEntriesPlugin, self).__init__(parentObj)
-        self.setDefaultViewRangeCircleSize(1000.0)
+        self.setDefaultViewRangeCircleSize(METERS_IN_1X_ZOOM)
         self.__lastCtrlMode = None
         return
 
@@ -883,6 +884,6 @@ class EpicTeleportPlugin(EpicMinimapPingPlugin):
             player = BigWorld.player()
             if player is not None and player.isTeleport:
                 position = self._getClickPosition(x, y)
-                result = BigWorld.collide(player.spaceID, (position.x, 1000.0, position.z), (position.x, -1000.0, position.z))
+                result = BigWorld.collide(player.spaceID, (position.x, METERS_IN_1X_ZOOM, position.z), (position.x, -METERS_IN_1X_ZOOM, position.z))
                 player.base.vehicle_teleport((position[0], result[0][1], position[2]), 0)
             return

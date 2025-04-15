@@ -59,11 +59,26 @@ class BaseSectorPlugin(EntriesPlugin):
         self.show()
         self._invoke(self.__id, THERMAL_VISION_SECTOR_AS3_DESCR.AS_SET_SETTINGS, fov, distance)
 
+    def updateScaleType(self, doClip, scaleType):
+        if self.__id is None:
+            return
+        else:
+            self._parentObj.setEntryParameters(self.__id, doClip=doClip, scaleType=scaleType)
+            return
+
+    def updateMapSize(self, value):
+        if self.__id is None:
+            return
+        else:
+            self._invoke(self.__id, THERMAL_VISION_SECTOR_AS3_DESCR.AS_INIT_MAP_SIZE, value)
+            return
+
     def _toggleVisibility(self, state):
         if self.__id is None:
             return
         else:
             self._invoke(self.__id, THERMAL_VISION_SECTOR_AS3_DESCR.AS_UPDATE_VISIBILITY, state)
+            self._setActive(self.__id, state)
             return
 
     def _toggleActive(self, state):

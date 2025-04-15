@@ -103,17 +103,7 @@ AttachmentParams.__new__.__defaults__ = (math_utils.createIdentityMatrix(),
 _isDeferredRenderer = isRendererPipelineDeferred()
 
 def prepareFashions(isDamaged):
-    if isDamaged:
-        fashions = [None,
-         None,
-         None,
-         None]
-    else:
-        fashions = [BigWorld.WGVehicleFashion(),
-         BigWorld.WGBaseFashion(),
-         BigWorld.WGBaseFashion(),
-         BigWorld.WGBaseFashion()]
-    return VehiclePartsTuple(*fashions)
+    return VehiclePartsTuple(BigWorld.WGVehicleFashion(), BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion())
 
 
 def updateFashions(appearance):

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/battle_pass_awards_view.py
 import SoundGroups
 from battle_pass_common import BattlePassRewardReason, FinalReward
-from frameworks.wulf import ViewSettings, WindowFlags, ViewStatus
+from frameworks.wulf import ViewSettings, WindowFlags, ViewStatus, WindowLayer
 from gui.battle_pass.battle_pass_award import BattlePassAwardsManager
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData, useBigAwardInjection
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator
@@ -181,7 +181,7 @@ class BattlePassAwardWindow(LobbyNotificationWindow):
 
     def __init__(self, bonuses, data, packageRewards=None, needNotifyClosing=True):
         self.__params = dict(bonuses=bonuses, packageBonuses=packageRewards, data=data, needNotifyClosing=needNotifyClosing)
-        super(BattlePassAwardWindow, self).__init__(wndFlags=WindowFlags.SERVICE_WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=BattlePassAwardsView(**self.__params))
+        super(BattlePassAwardWindow, self).__init__(wndFlags=WindowFlags.SERVICE_WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=BattlePassAwardsView(**self.__params), layer=WindowLayer.OVERLAY)
 
     def isParamsEqual(self, *args, **kwargs):
         return all((pValue in args or kwargs.get(pName) == pValue for pName, pValue in self.__params.iteritems()))

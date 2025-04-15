@@ -918,6 +918,15 @@ class Comp7RewardsFormatter(SyncTokenQuestsSubFormatter):
         rewardsData = message.data.get('detailedRewards', {}).get(questID, {})
         dossierData = rewardsData.get('dossier', {})
         popUpRecords = message.data.get('popUpRecords', set())
+        if dossierData:
+            for dossierRecord in dossierData.values():
+                for record in dossierRecord:
+                    if record[0] in ACHIEVEMENT_BLOCK.ALL:
+                        achievementID = RECORD_DB_IDS.get(record, None)
+                        popUpRecords.add((achievementID, 1))
+
+        if popUpRecords:
+            message.data['popUpRecords'] = popUpRecords
         popUps = self._getDossierPopUps(dossierData, popUpRecords)
         if popUps:
             rewardsData.update({'popUpRecords': popUps})

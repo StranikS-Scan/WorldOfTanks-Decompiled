@@ -81,6 +81,11 @@ class DetachedTurret(BigWorld.Entity, ScriptGameObject):
         LOG_DEBUG('onEnterWorld', self.__vehDescr.name, self.spaceID)
         self.model = prereqs[self.__vehDescr.name]
         self.model.matrix = self.matrix
+        fashions = [BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion()]
+        for fashion in fashions:
+            fashion.addMaterialHandler(BigWorld.PyDeadTankHandler())
+
+        self.model.setupFashions(fashions)
         self.collisions = self.createComponent(BigWorld.CollisionComponent, prereqs['collisionAssembler'])
         self.__detachConfirmationTimer.onEnterWorld()
         self.__vehDescr.keepPrereqs(prereqs)

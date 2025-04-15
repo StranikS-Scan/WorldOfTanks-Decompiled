@@ -3,7 +3,7 @@
 import typing
 import ArenaType
 from account_helpers.AccountSettings import FunRandomMaps
-from fun_random.gui.feature.util.fun_mixins import FunSubModeHolder, FunSubModesWatcher
+from fun_random.gui.feature.util.fun_mixins import FunSubModeHolder, FunSubModesWatcher, FunAccountSettingsHelper
 from frameworks.wulf import ViewFlags, ViewSettings
 from fun_random.gui.impl.gen.view_models.views.lobby.feature.fun_random_maps_view_model import FunRandomMapsViewModel
 from fun_random_common.fun_constants import UNKNOWN_EVENT_ID
@@ -22,14 +22,13 @@ from fun_random.gui.impl.lobby.tooltips.fun_random_maps_domain_tooltip import Fu
 from skeletons.gui.game_control import IFunRandomController
 from skeletons.gui.lobby_context import ILobbyContext
 from battle_modifiers_ext.constants_ext import ClientDomain
-from account_helpers import AccountSettings
 from shared_utils import first
 SERVER_SETTINGS_KEYS = ('geometryIDs',)
 if typing.TYPE_CHECKING:
     from frameworks.wulf import View, Array
     from frameworks.wulf.view.view_event import ViewEvent
 
-class FunRandomMapsView(ViewImpl, LobbyHeaderVisibility, FunSubModeHolder, FunSubModesWatcher):
+class FunRandomMapsView(ViewImpl, LobbyHeaderVisibility, FunSubModeHolder, FunSubModesWatcher, FunAccountSettingsHelper):
     __slots__ = ('__selectedMap', '__mapsConfig', '__assetsPointer')
     _TACTICAL_MAPS_CONFIG_PATH = 'fun_random/scripts/fun_random_tactical_maps.xml'
     _EXCLUDED_MODIFIERS = {'stepRepairPoint'}
@@ -108,7 +107,7 @@ class FunRandomMapsView(ViewImpl, LobbyHeaderVisibility, FunSubModeHolder, FunSu
 
     def __setNewSelectedMap(self, selectedMap):
         self.__selectedMap = selectedMap
-        AccountSettings.setFunRandom(FunRandomMaps.FUN_RANDOM_LAST_SELECTED_MAP, selectedMap)
+        self.setAccSetting(FunRandomMaps.FUN_RANDOM_LAST_SELECTED_MAP, selectedMap)
 
     def __switchSelected(self, args):
         selectedMap = args.get('selectedMap')
@@ -131,7 +130,7 @@ class FunRandomMapsView(ViewImpl, LobbyHeaderVisibility, FunSubModeHolder, FunSu
             self.__fillSelectedMap(vm)
 
     def __checkUpdateSelectedMap(self):
-        self.__selectedMap = AccountSettings.getFunRandom(FunRandomMaps.FUN_RANDOM_LAST_SELECTED_MAP)
+        self.__selectedMap = self.getAccSetting(FunRandomMaps.FUN_RANDOM_LAST_SELECTED_MAP)
         availableMaps = [ geometryType.geometryName for geometryType in self.getAvailableMaps() ]
         if not self.__selectedMap or self.__selectedMap not in availableMaps:
             self.__setNewSelectedMap(first(availableMaps))

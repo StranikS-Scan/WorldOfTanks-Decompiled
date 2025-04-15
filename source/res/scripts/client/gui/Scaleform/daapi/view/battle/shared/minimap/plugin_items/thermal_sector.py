@@ -24,7 +24,7 @@ class ThermalSectorPlugin(BaseSectorPlugin):
     @property
     def isEnabled(self):
         player = BigWorld.player()
-        return player and player.vehicle and player.vehicle.typeDescriptor.hasThermalVision
+        return player and player.vehicleTypeDescriptor and player.vehicleTypeDescriptor.hasThermalVision
 
     @cached_property
     def __statesMapping(self):

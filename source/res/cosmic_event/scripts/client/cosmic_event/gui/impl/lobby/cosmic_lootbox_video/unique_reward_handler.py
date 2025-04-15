@@ -70,6 +70,12 @@ class CosmicVideoReward(LootboxVehicleVideoRewardView):
         videoDyn = R.videos.cosmic.reward_vehicle.dyn(videoRes)
         super(CosmicVideoReward, self).__init__(layoutID, vehicle, videoDyn(), rewards, isGuaranteed, VideoRewardsSoundControl())
 
+    def _getEvents(self):
+        return ((self.viewModel.onClose, self._onClose), (self.viewModel.onIntroVideoStarted, self._onIntroVideoStarted))
+
+    def _onIntroVideoStarted(self):
+        super(CosmicVideoReward, self)._onVideoStarted()
+
     def _onClose(self):
         try:
             self._vehicle, videoRes, self._isGuaranteedReward = next(self.__dataIter)

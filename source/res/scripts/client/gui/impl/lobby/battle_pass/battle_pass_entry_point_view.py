@@ -142,7 +142,7 @@ class BaseBattlePassEntryPointView(IGlobalListener, EventsHandler):
     @property
     def progress(self):
         points, limit = self.__battlePass.getLevelProgression(self.chapterID)
-        return FULL_PROGRESS / (limit or FULL_PROGRESS) * points
+        return int(float(FULL_PROGRESS / float(limit or FULL_PROGRESS)) * points)
 
     @property
     def notChosenRewardCount(self):

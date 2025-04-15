@@ -2,6 +2,7 @@
 # Embedded file name: fun_random/scripts/client/fun_random/gui/feature/util/fun_mixins.py
 import logging
 import typing
+from account_helpers import AccountSettings
 from adisp import adisp_async, adisp_process
 from fun_random_common.fun_constants import UNKNOWN_EVENT_ID
 from fun_random.gui.fun_gui_constants import SELECTOR_BATTLE_TYPES
@@ -184,3 +185,14 @@ class FunSubModeHolder(FunSubModesWatcher):
     def releaseSubMode(self):
         self.__subMode = None
         return
+
+
+class FunAccountSettingsHelper(object):
+
+    @classmethod
+    def setAccSetting(cls, settingName, value):
+        AccountSettings.setFunRandom(settingName, value)
+
+    @classmethod
+    def getAccSetting(cls, settingName):
+        return AccountSettings.getFunRandom(settingName)

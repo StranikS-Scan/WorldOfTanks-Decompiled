@@ -82,7 +82,7 @@ class QuestModelParser(object):
         comQuests = self.__getCumulativeQuests(questsDict)
         if comQuests:
             questModel.setIsPauseButtonEnabled(True)
-            isHasCumProgress = any((questName in comQuests and (questProgress.get('value', 0) != 0 or questProgress.get('goal', 0) > questProgress.get('battles', []).count(True) > 0) for questName, questProgress in questsProgress.iteritems()))
+            isHasCumProgress = any((questName in comQuests and (questProgress.get('value', 0) != 0 or questProgress.get('goal', 0) > 0 and questProgress.get('battles', [])) for questName, questProgress in questsProgress.iteritems()))
             questModel.setResetButtonStatus(ResetButtonState.ENABLED if isHasCumProgress else ResetButtonState.DISABLED)
             return
         questModel.setResetButtonStatus(ResetButtonState.INVISIBLE)

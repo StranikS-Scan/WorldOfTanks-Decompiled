@@ -211,7 +211,7 @@ class PostProgressionCfgComponentView(PostProgressionBaseComponentView):
         mainSelection = self._selectionProvider.getSelectedMainSteps()
         isCollectAll = completion == PostProgressionCompletion.EMPTY and not mainSelection
         pesistentKPIs = []
-        for step in postProgression.iterUnorderedSteps():
+        for step in postProgression.iterOrderedSteps():
             isValidStep = not step.isRestricted() and not step.action.isMultiAction()
             if isValidStep and (isCollectAll or step.isReceived() or step.stepID in mainSelection):
                 pesistentKPIs.extend(step.action.getKpi(self._vehicle))

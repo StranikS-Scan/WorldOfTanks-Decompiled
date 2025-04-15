@@ -900,8 +900,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	52	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.11	</vehicleMovement>
-        <vehicleRotation>	0.11	</vehicleRotation>
+        <vehicleMovement>	0.17	</vehicleMovement>
+        <vehicleRotation>	0.17	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	240	</maxHealth>
@@ -2046,10 +2046,10 @@
             <gun>	35	</gun>
           </armor>
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
-          <aimingTime>	2.2	</aimingTime>
+          <aimingTime>	2.3	</aimingTime>
           <reloadTime>	8.8	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.11	</turretRotation>
+            <turretRotation>	0.14	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2083,8 +2083,8 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	0 -0.03 1.15	</rayStart>
-              <rayEnd>	0 -0.03 1.73	</rayEnd>
+              <rayStart>	0 -0.03 1.62	</rayStart>
+              <rayEnd>	0 -0.03 2.2	</rayEnd>
               <rayUp>	0.15 0 0	</rayUp>
               <applyToFabric>	false	</applyToFabric>
               <size>	0.58	</size>
@@ -2594,13 +2594,13 @@
         <Chassis_R223_T_54B_1958>
           <grounds>
             <soft>
-              <rollingFriction>	0.0871	</rollingFriction>
+              <rollingFriction>	0.18515	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.04855	</rollingFriction>
+              <rollingFriction>	0.1127	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0205	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

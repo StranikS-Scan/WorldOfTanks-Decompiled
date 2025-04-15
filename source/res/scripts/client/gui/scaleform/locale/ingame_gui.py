@@ -1033,6 +1033,7 @@ class INGAME_GUI(object):
     PLAYER_ERRORS_THERMALVISION_DISABLED = '#ingame_gui:player_errors/thermalVision/disabled'
     PLAYER_ERRORS_THERMALVISION_COOLDOWN = '#ingame_gui:player_errors/thermalVision/cooldown'
     PLAYER_ERRORS_THERMALVISION_ALREADYACTIVATED = '#ingame_gui:player_errors/thermalVision/alreadyActivated'
+    PLAYER_ERRORS_THERMALVISION_OVERTURNED = '#ingame_gui:player_errors/thermalVision/overturned'
     CHAT_SHORTCUTS_ENUM = (CHAT_SHORTCUTS_ATTENTION_TO_POSITION_GRIDINFO,
      CHAT_SHORTCUTS_ATTENTION_TO_POSITION,
      CHAT_SHORTCUTS_GOING_THERE_GRIDINFO,

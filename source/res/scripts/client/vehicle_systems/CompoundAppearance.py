@@ -276,7 +276,10 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
             self.removeComponent(go)
             go.deactivate()
 
-        fashions = VehiclePartsTuple(BigWorld.WGVehicleFashion(), None, None, None)
+        fashions = VehiclePartsTuple(BigWorld.WGVehicleFashion(), BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion())
+        for f in fashions:
+            f.addMaterialHandler(BigWorld.PyDeadTankHandler())
+
         self._setFashions(fashions, isTurretDetached)
         model_assembler.setupTracksFashion(self.typeDescriptor, self.fashion)
         self.showStickers(False)

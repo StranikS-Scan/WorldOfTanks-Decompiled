@@ -3,10 +3,13 @@
 from typing import Union, Any, Dict, List
 from Event import Event, EventManager
 import personal_missions
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import PersonalMissions
 from constants import MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL, DOSSIER_TYPE
 from dossiers2.ui.achievements import BADGES_BLOCK
 from frameworks.wulf import Array
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.impl.lobby.personal_missions.personal_missions_window_events import showPersonalMissionsVideoRewardView
 from gui.server_events import finders
 from gui.server_events.bonuses import DossierBonus
 from gui.server_events.event_items import PMOperation, PersonalMission
@@ -55,8 +58,23 @@ class PersonalMissionsController(IPersonalMissionsController):
         self.__eventsCache.onProgressUpdated += self.__onProgressUpdated
         self.__itemsCache.onSyncCompleted += self.__onItemCacheUpdated
         g_clientUpdateManager.addCallbacks({'quests': self.__onQuestsUpdated})
+        settings = AccountSettings.getPersonalMissions(PersonalMissions.OPERATIONS_VIDEO_REWARDS_STATUS)
+        for operationId in BRANCH_TO_OPERATION_IDS[personal_missions.PM_BRANCH.PERSONAL_MISSION_3]:
+            operation = self.getOperationById(operationId)
+            if not operation or not operation.isCompleted():
+                continue
+            if settings.get(operationId, False):
+                continue
+            settings.setdefault(operationId, False)
+            settings[operationId] = True
+            showPersonalMissionsVideoRewardView(operationId)
+
+        AccountSettings.setPersonalMissions(PersonalMissions.OPERATIONS_VIDEO_REWARDS_STATUS, settings)
 
     def getAllQuests(self):
+        return self.__eventsCache.getPersonalMissions().getAllQuests()
+
+    def getAllQuestsPM3(self):
         quests = {}
         quests.update(self.__eventsCache.getPersonalMissions().getQuestsForBranch(PM_BRANCH.PERSONAL_MISSION_3))
         return quests

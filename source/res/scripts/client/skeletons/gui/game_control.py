@@ -4027,6 +4027,9 @@ class IPersonalMissionsController(IGameController):
     def getAllQuests(self):
         raise NotImplementedError
 
+    def getAllQuestsPM3(self):
+        raise NotImplementedError
+
     def getQuest(self, questId):
         raise NotImplementedError
 

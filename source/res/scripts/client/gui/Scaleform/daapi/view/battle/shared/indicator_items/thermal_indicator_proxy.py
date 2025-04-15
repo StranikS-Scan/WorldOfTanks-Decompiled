@@ -6,13 +6,17 @@ from constants import THERMAL_VISION_STATE
 from gui.Scaleform.daapi.view.battle.shared.indicator_items.base_proxy import BaseIndicatorProxy
 from gui.Scaleform.daapi.view.battle.shared.indicator_items.thermal_vision import ThermalVisionIndicator
 if typing.TYPE_CHECKING:
-    from Vehicle import Vehicle
+    from items.components.shared_components import ThermalVisionParams
 
 class ThermalVisionIndicatorProxy(BaseIndicatorProxy):
 
-    def __init__(self, vehicle):
+    def __init__(self):
         super(ThermalVisionIndicatorProxy, self).__init__()
-        self.__vehicle = vehicle
+        self.__params = None
+        return
+
+    def setParams(self, params):
+        self.__params = params
 
     @property
     def _stateHandlers(self):
@@ -25,20 +29,22 @@ class ThermalVisionIndicatorProxy(BaseIndicatorProxy):
     def componentName(self):
         return ThermalVisionIndicator.componentName()
 
+    def setUseCount(self, count):
+        self._indicator.as_setCountS(count)
+
     def setEntityInSector(self, state):
         if self._indicator is not None:
             self._indicator.as_setEnemyIndicatorS(state)
         return
 
     def _setBeforeBattleState(self):
-        if self._indicator is None:
+        if self._indicator is None or self.__params is None:
             return
         else:
-            params = self.__vehicle.typeDescriptor.turret.thermalVision
             self._indicator.setState(THERMAL_VISION_STATE.RELOADING)
             self._indicator.as_setProgressS(0)
-            self._indicator.as_setCountS(params.useCount)
-            self._indicator.as_setActiveTimeS(params.initialReloadTime)
+            self._indicator.as_setCountS(self.__params.useCount)
+            self._indicator.as_setActiveTimeS(self.__params.initialReloadTime)
             return
 
     def __onIdleReceived(self, stateStatus):
@@ -56,10 +62,12 @@ class ThermalVisionIndicatorProxy(BaseIndicatorProxy):
     def __onReloadingReceived(self, stateStatus):
         self._indicator.clearCallbacks()
         self._indicator.startReloadAnimation(stateStatus.startTime, stateStatus.duration)
+        self._indicator.as_setCountS(stateStatus.useCount)
         self.setEntityInSector(False)
 
     def __onDisabledReceived(self, _):
         self._indicator.clearCallbacks()
         self._indicator.as_setProgressS(0)
         self._indicator.as_setActiveTimeS(0)
+        self._indicator.as_setCountS(0)
         self.setEntityInSector(False)

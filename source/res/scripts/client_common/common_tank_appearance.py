@@ -316,10 +316,11 @@ class CommonTankAppearance(ScriptGameObject):
                     self.fashions[fashionIdx].addMaterialHandler(dirtHandlers[fashionIdx])
                     self.fashions[fashionIdx].addTrackMaterialHandler(dirtHandlers[fashionIdx])
 
-            aliveTankHandler = BigWorld.PyAliveTankHandler()
+        if self.damageState.isCurrentModelDamaged:
+            deadTankHandler = BigWorld.PyDeadTankHandler()
             for fashionIdx, _ in enumerate(TankPartNames.ALL):
-                self.fashions[fashionIdx].addMaterialHandler(aliveTankHandler)
-                self.fashions[fashionIdx].addTrackMaterialHandler(aliveTankHandler)
+                self.fashions[fashionIdx].addMaterialHandler(deadTankHandler)
+                self.fashions[fashionIdx].addTrackMaterialHandler(deadTankHandler)
 
         model_assembler.setupTurretRotations(self)
         self.waterSensor = model_assembler.assembleWaterSensor(self.typeDescriptor, self, lodStateLink, self.spaceID)

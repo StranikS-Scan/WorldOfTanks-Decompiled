@@ -187,7 +187,7 @@ class PersonalMissionQuestPage(PageSubModelPresenter):
                         lineId = index
 
                 for questId in range(linesIds[lineId][0], linesIds[lineId][1] + 1):
-                    self.__updatePersonalMissionsCard(cardsListModel, ctrl.getAllQuests(), questId)
+                    self.__updatePersonalMissionsCard(cardsListModel, ctrl.getAllQuestsPM3(), questId)
 
                 model.setCardsList(cardsListModel)
                 self.__questModelParser.updateQuestModelFromID(questID=self.__currentQuestId, questModel=model.questData, isShowAnimationRewards=isShowAnimationRewards)

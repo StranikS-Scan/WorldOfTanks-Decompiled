@@ -44,29 +44,29 @@
   <hull>
     <armor>
       <armor_1>	150	</armor_1>
-      <armor_2>	210	</armor_2>
-      <armor_3>	100	</armor_3>
-      <armor_4>	100	</armor_4>
+      <armor_2>	150	</armor_2>
+      <armor_3>	80	</armor_3>
+      <armor_4>	80	</armor_4>
       <armor_5>	40	</armor_5>
       <armor_6>	40	</armor_6>
       <armor_7>	100	</armor_7>
       <armor_8>	0	</armor_8>
       <armor_9>	255	</armor_9>
-      <armor_10>	100	</armor_10>
-      <armor_11>	100	</armor_11>
-      <armor_12>	100	</armor_12>
+      <armor_10>	80	</armor_10>
+      <armor_11>	80	</armor_11>
+      <armor_12>	80	</armor_12>
       <armor_13>	60	</armor_13>
       <armor_14>	40	</armor_14>
       <armor_15>	60	</armor_15>
       <armor_16>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_16>
-      <armor_17>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+      <armor_17>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_17>
       <armor_18>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_18>
       <armor_19>	45	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_19>
-      <armor_20>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+      <armor_20>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_20>
       <armor_21>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_21>
@@ -76,7 +76,7 @@
       </armor_23>
       <armor_24>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_24>
-      <armor_25>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+      <armor_25>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_25>
       <armor_26>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_26>
@@ -882,7 +882,7 @@
       <terrainResistance>	1.1 1.2 2	</terrainResistance>
       <brakeForce>	140000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	17	</rotationSpeed>
+      <rotationSpeed>	15	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.25	</vehicleMovement>
         <vehicleRotation>	0.25	</vehicleRotation>
@@ -2091,8 +2091,8 @@
       <price>	30000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	320	</armor_1>
-        <armor_2>	260	</armor_2>
+        <armor_1>	300	</armor_1>
+        <armor_2>	240	</armor_2>
         <armor_3>	140	</armor_3>
         <armor_4>	100	</armor_4>
         <armor_5>	40	</armor_5>
@@ -2103,7 +2103,7 @@
         <armor_10>	70	</armor_10>
         <armor_11>	65	</armor_11>
         <armor_12>	70	</armor_12>
-        <armor_13>	230	</armor_13>
+        <armor_13>	200	</armor_13>
         <armor_14>	140	</armor_14>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
@@ -2140,7 +2140,7 @@
             <maxPitch>	0 7 0.42 7 0.46 -10 0.54 -10 0.58 7 1 7	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.162	</invisibilityFactorAtShot>
-          <reloadTime>	18	</reloadTime>
+          <reloadTime>	19.7	</reloadTime>
           <aimingTime>	3	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>

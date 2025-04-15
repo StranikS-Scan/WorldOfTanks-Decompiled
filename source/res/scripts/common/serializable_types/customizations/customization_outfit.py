@@ -2,7 +2,7 @@
 # Embedded file name: scripts/common/serializable_types/customizations/customization_outfit.py
 from collections import OrderedDict, defaultdict
 from string import lower, upper
-from typing import List, Dict, Tuple, Any, Optional
+from typing import TYPE_CHECKING
 from debug_utils import LOG_ERROR
 from items.components import c11n_components as cn
 from items.components.c11n_constants import ApplyArea, CustomizationType, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID, EMPTY_ITEM_ID
@@ -22,6 +22,8 @@ from .personal_number import PersonalNumberComponent
 from .projection_decal import ProjectionDecalComponent
 from .sequence import SequenceComponent
 from ..types import C11nSerializationTypes
+if TYPE_CHECKING:
+    from typing import List, Dict, Tuple, Any, Optional, Iterator
 __all__ = ('CustomizationOutfit', 'getAllItemsFromOutfit')
 
 def _setComponentsRegion(component, region):
@@ -460,3 +462,6 @@ class CustomizationOutfit(SerializableComponent):
             outfitItems.pop(itemDescr)
 
         return outfitItems
+
+    def getGunInsignias(self):
+        return (insignia for insignia in self.insignias if insignia.isGunInsignia())

@@ -356,7 +356,10 @@ def getDefaultChaptersView(battlePass=None):
 def updateBuyAnimationFlag(chapterID, settingsCore=None, battlePass=None):
     settings = settingsCore.serverSettings
     shownChapters = settings.getBPStorage().get(BattlePassStorageKeys.BUY_ANIMATION_WAS_SHOWN)
-    chapter = 1 << battlePass.getChapterIndex(chapterID)
+    chapterIndex = battlePass.getChapterIndex(chapterID)
+    if not battlePass.isHoliday():
+        chapterIndex -= 1
+    chapter = 1 << chapterIndex
     if _isChapterShown(shownChapters, chapter):
         settings.saveInBPStorage({BattlePassStorageKeys.BUY_ANIMATION_WAS_SHOWN: shownChapters | chapter})
         return True

@@ -681,7 +681,7 @@ class ServerSettingsManager(object):
                                              BATTLE_PASS.EXTRA_CHAPTER_INTRO_SHOWN: 19,
                                              BATTLE_PASS.INTRO_VIDEO_SHOWN: 20}, offsets={BATTLE_PASS.BUY_ANIMATION_WAS_SHOWN: Offset(10, 15 << 10),
                                              BATTLE_PASS.FLAGS_VERSION: Offset(21, 63 << 21),
-                                             BATTLE_PASS.FLAGS_VERSION_HOLIDAY: Offset(28, 63 << 28)}),
+                                             BATTLE_PASS.FLAGS_VERSION_HOLIDAY: Offset(28, 31 << 28)}),
      SETTINGS_SECTIONS.BATTLE_COMM: Section(masks={BATTLE_COMM.ENABLE_BATTLE_COMMUNICATION: 0,
                                      BATTLE_COMM.SHOW_COM_IN_PLAYER_LIST: 1,
                                      BATTLE_COMM.SHOW_STICKY_MARKERS: 2,

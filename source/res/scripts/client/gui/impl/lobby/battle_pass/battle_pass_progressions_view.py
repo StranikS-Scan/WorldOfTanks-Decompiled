@@ -749,9 +749,8 @@ class BattlePassProgressionsView(ViewImpl):
             fillCollectionModel(model.collectionEntryPoint, self.__battlePass.getCurrentCollectionId())
 
     def __showTankmen(self):
-        callBack = partial(showMissionsBattlePass, R.views.lobby.battle_pass.BattlePassProgressionsView(), self.__chapterID)
-        showBattlePassTankmenVoiceover({'backCallback': callBack})
-        self.destroyWindow()
+        self.__stopVoiceovers()
+        showBattlePassTankmenVoiceover()
 
     def __stopSounds(self):
         self.__stopVoiceovers()

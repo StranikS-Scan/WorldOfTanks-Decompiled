@@ -1333,10 +1333,10 @@
     <shortUserString>	#gb_vehicles:GB149_Centurion_MkI_A_short	</shortUserString>
     <shortDescriptionSpecial>	#gb_vehicles:GB149_Centurion_MkI_A_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#gb_vehicles:GB149_Centurion_MkI_A_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
+    <price>	5550	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user secret testTank	</tags>
+    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user lockOutfit restoreWithStyle	</tags>
     <level>	7	</level>
   </GB149_Centurion_MkI_A>
   <GB145_Crusher_ASE_4>
@@ -1352,4 +1352,17 @@
     <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user lockOutfit restoreWithStyle	</tags>
     <level>	8	</level>
   </GB145_Crusher_ASE_4>
+  <GB150_Churchill_VII_A>
+    <id>	92	</id>
+    <userString>	#gb_vehicles:GB150_Churchill_VII_A	</userString>
+    <shortUserString>	#gb_vehicles:GB150_Churchill_VII_A_short	</shortUserString>
+    <description>	#gb_vehicles:GB150_Churchill_VII_A_descr	</description>
+    <shortDescriptionSpecial>	#gb_vehicles:GB150_Churchill_VII_A_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#gb_vehicles:GB150_Churchill_VII_A_long_special	</longDescriptionSpecial>
+    <price>	3550	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_assault HD heavyTank1 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user lockOutfit restoreWithStyle	</tags>
+    <level>	6	</level>
+  </GB150_Churchill_VII_A>
 </list.xml>

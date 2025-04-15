@@ -18,3 +18,6 @@ class InsigniaComponent(SerializableComponent):
         self.id = id
         self.appliedTo = appliedTo
         super(InsigniaComponent, self).__init__()
+
+    def isGunInsignia(self):
+        return self.appliedTo == ApplyArea.GUN

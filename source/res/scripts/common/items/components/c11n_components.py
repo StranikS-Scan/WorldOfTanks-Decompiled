@@ -33,16 +33,8 @@ from items.components.c11n_constants import EDITING_STYLE_REASONS
 from items.components.c11n_constants import CustomizationDisplayType
 from items.components.c11n_constants import AttachmentSize
 from items.components.c11n_constants import AttachmentTags
-from typing import List
-from typing import Dict
-from typing import Type
-from typing import Tuple
-from typing import Optional
-from typing import TypeVar
-from typing import FrozenSet
-from typing import Iterable
-from typing import Callable
 from typing import TYPE_CHECKING
+from typing import Union
 from string import lower
 from string import upper
 from copy import deepcopy
@@ -55,9 +47,18 @@ from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 if IS_EDITOR:
     from editor_copy import edCopy
 if TYPE_CHECKING:
+    from typing import List
+    from typing import Dict
+    from typing import Type
+    from typing import Tuple
+    from typing import Optional
+    from typing import FrozenSet
+    from typing import Iterable
+    from typing import Callable
+    from typing import Iterator
     from account_helpers import Tokens
     from serializable_types.customizations import CustomizationOutfit
-Item = TypeVar('TypeVar')
+    from serializable_types.customizations import CamouflageComponent
 class BaseCustomizationItem(object):
     __metaclass__ = ReflectionMetaclass
     __slots__ = ('id', 'tags', 'filter', 'parentGroup', 'season', 'customizationDisplayType', 'i18n', 'priceGroup', 'requiredToken', 'requiredTokenCount', 'priceGroupTags', 'maxNumber', 'texture', 'progression', 'rarity')
@@ -507,6 +508,17 @@ class StyleItem(BaseCustomizationItem):
     def removePartrsFromOutfit(self, season, outfitComponent, vehicleCD, intCDs = None):
         return self._opPartsOutfit(type(outfitComponent).getDiff, season, outfitComponent, vehicleCD, intCDs)
 
+    def changePartsOutfitExceptGunInsignia(self, season, outfitComponent, *intCDs):
+        if self.hasContaineOutfitPart:
+            for partOutfitComponent in self._iteratePartsOutfit(season, intCDs, True):
+                outfitGunInsignias = set(outfitComponent.getGunInsignias())
+                gunInsigniasInBoth = (insignia for insignia in partOutfitComponent.getGunInsignias() if insignia in outfitGunInsignias)
+                outfitComponent = outfitComponent.getDiff(partOutfitComponent)
+                outfitComponent.insignias.extend(gunInsigniasInBoth)
+            return outfitComponent
+        else:
+            return outfitComponent
+
 class InsigniaItem(BaseCustomizationItem):
     __metaclass__ = ReflectionMetaclass
     itemType = CustomizationType.INSIGNIA
@@ -568,7 +580,7 @@ class Font(object):
         return items.makeIntCompactDescrByID('customizationItem', self.itemType, self.id)
 
 if IS_EDITOR:
-    CUSTOMIZATION_TYPES = {CustomizationType.STYLE: StyleItem, CustomizationType.PERSONAL_NUMBER: PersonalNumberItem, CustomizationType.INSIGNIA: InsigniaItem, CustomizationType.PROJECTION_DECAL: ProjectionDecalItem, CustomizationType.MODIFICATION: ModificationItem, CustomizationType.ATTACHMENT: AttachmentItem, CustomizationType.FONT: Font, CustomizationType.CAMOUFLAGE: CamouflageItem, CustomizationType.PAINT: PaintItem, CustomizationType.DECAL: DecalItem, CustomizationType.SEQUENCE: SequenceItem}
+    CUSTOMIZATION_TYPES = {CustomizationType.STYLE: StyleItem, CustomizationType.PAINT: PaintItem, CustomizationType.SEQUENCE: SequenceItem, CustomizationType.PERSONAL_NUMBER: PersonalNumberItem, CustomizationType.ATTACHMENT: AttachmentItem, CustomizationType.CAMOUFLAGE: CamouflageItem, CustomizationType.DECAL: DecalItem, CustomizationType.FONT: Font, CustomizationType.INSIGNIA: InsigniaItem, CustomizationType.MODIFICATION: ModificationItem, CustomizationType.PROJECTION_DECAL: ProjectionDecalItem}
     CUSTOMIZATION_CLASSES = {v : k for k, v in CUSTOMIZATION_TYPES.items()}
 class _Filter(object):
     __slots__ = ('include', 'exclude')
@@ -800,7 +812,7 @@ class CustomizationCache(object):
         self.itemGroupByProgressionBonusType = {arenaTypeID : list() for arenaTypeID in ARENA_BONUS_TYPE_NAMES.values() if ARENA_BONUS_TYPE_CAPS.checkAny(arenaTypeID, ARENA_BONUS_TYPE_CAPS.CUSTOMIZATION_PROGRESSION)}
         self._CustomizationCache__vehicleCanMayIncludeCustomization = {}
         self.topVehiclesByNation = {}
-        self.itemTypes = {CustomizationType.STYLE: self.styles, CustomizationType.PERSONAL_NUMBER: self.personal_numbers, CustomizationType.PAINT: self.paints, CustomizationType.DECAL: self.decals, CustomizationType.PROJECTION_DECAL: self.projection_decals, CustomizationType.INSIGNIA: self.insignias, CustomizationType.CAMOUFLAGE: self.camouflages, CustomizationType.SEQUENCE: self.sequences, CustomizationType.MODIFICATION: self.modifications, CustomizationType.ATTACHMENT: self.attachments}
+        self.itemTypes = {CustomizationType.STYLE: self.styles, CustomizationType.CAMOUFLAGE: self.camouflages, CustomizationType.PROJECTION_DECAL: self.projection_decals, CustomizationType.PERSONAL_NUMBER: self.personal_numbers, CustomizationType.INSIGNIA: self.insignias, CustomizationType.SEQUENCE: self.sequences, CustomizationType.MODIFICATION: self.modifications, CustomizationType.PAINT: self.paints, CustomizationType.ATTACHMENT: self.attachments, CustomizationType.DECAL: self.decals}
         super(CustomizationCache, self).__init__()
 
     def getQuestProgressionStyles(self):
@@ -1226,7 +1238,7 @@ def _validateDependencies(outfit, usedStyle, vehDescr, season):
         emblemRegions, inscriptionRegions = getAvailableDecalRegions(vehDescr)
         decalRegions = emblemRegions | inscriptionRegions
         modifiedOutfit = baseSeasonOutfit.applyDiff(outfit)
-        outfitToCheckDependencies = {CustomizationType.MODIFICATION: set(modifiedOutfit.modifications), CustomizationType.PAINT: {paint.id for paint in modifiedOutfit.paints if paint.appliedTo & paintRegions}, CustomizationType.PERSONAL_NUMBER: {number.id for number in modifiedOutfit.personal_numbers if number.appliedTo & inscriptionRegions}, CustomizationType.DECAL: {decal.id for decal in modifiedOutfit.decals if decal.appliedTo & decalRegions}, CustomizationType.PROJECTION_DECAL: {projectionDecal.id for projectionDecal in modifiedOutfit.projection_decals}}
+        outfitToCheckDependencies = {CustomizationType.MODIFICATION: set(modifiedOutfit.modifications), CustomizationType.PAINT: {paint.id for paint in modifiedOutfit.paints if paint.appliedTo & paintRegions}, CustomizationType.PROJECTION_DECAL: {projectionDecal.id for projectionDecal in modifiedOutfit.projection_decals}, CustomizationType.DECAL: {decal.id for decal in modifiedOutfit.decals if decal.appliedTo & decalRegions}, CustomizationType.PERSONAL_NUMBER: {number.id for number in modifiedOutfit.personal_numbers if number.appliedTo & inscriptionRegions}}
         for itemType, itemIDs in outfitToCheckDependencies.iteritems():
             camouflageItemTypeDependencies = usedStyle.dependencies.get(camouflageID, {}).get(itemType, {})
             alternateItems = usedStyle.alternateItems.get(itemType, ())

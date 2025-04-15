@@ -5550,6 +5550,33 @@
         <cost>	1	</cost>
       </item>
     </usages>
+    <paint>
+      <id>	1035	</id>
+      <texture>	gui/maps/vehicles/repaints/germany_color_05.png	</texture>
+      <color>	44 53 35 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:special_style/girls_und_panzer_St_Gloriana	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	1036	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_13.png	</texture>
+      <color>	102 93 56 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:special_style/girls_und_panzer_St_Gloriana	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	1037	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_21.png	</texture>
+      <color>	67 82 97 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:special_style/girls_und_panzer_St_Gloriana	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
   </itemGroup>
   <itemGroup>
     <name>	Matchday 2024	</name>
@@ -6424,6 +6451,42 @@
       <gloss>	0.44	</gloss>
       <metallic>	0.2	</metallic>
       <userString>	#vehicle_customization:special_style/Cz40_DBV_152_RW6_3Dst	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	march_marathon_2025	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1 ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	525	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <color>	22 22 22 255	</color>
+      <gloss>	0.7	</gloss>
+      <metallic>	0.2	</metallic>
+      <userString>	#vehicle_customization:repaint/march_marathon_2025	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	526	</id>
+      <texture>	gui/maps/vehicles/repaints/uk_color_04.png	</texture>
+      <color>	94 94 62 255	</color>
+      <gloss>	0.48	</gloss>
+      <metallic>	0.46	</metallic>
+      <userString>	#vehicle_customization:repaint/march_marathon_2_2025	</userString>
       <tags>	hiddenInUI	</tags>
     </paint>
     <usages>

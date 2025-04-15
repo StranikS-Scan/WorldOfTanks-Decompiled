@@ -42,6 +42,8 @@ from skeletons.gui.shared.utils import IHangarSpace
 from vehicle_outfit.containers import SlotData
 from vehicle_outfit.outfit import Area, Outfit
 from vehicle_outfit.packers import ProjectionDecalPacker
+if typing.TYPE_CHECKING:
+    from items.components.c11n_components import StyleItem
 _logger = logging.getLogger(__name__)
 EMPTY_PERSONAL_NUMBER = ''
 
@@ -816,11 +818,13 @@ def __getInventoryCounts(modifiedOutfits, vehicleCD, itemsCache=None, c11nServic
 
 
 def changePartsOutfit(season, outfit, intCD, removeIntCD):
+    if removeIntCD == intCD:
+        return outfit
     style = outfit.style
-    if removeIntCD != intCD:
-        vehicleCD = outfit.vehicleCD
-        return Outfit(component=style.addPartsToOutfit(season, style.removePartrsFromOutfit(season, outfit.pack(), vehicleCD, intCDs=[removeIntCD]), vehicleCD, intCDs=[intCD]), vehicleCD=vehicleCD)
-    return outfit
+    changedOutfit = style.changePartsOutfitExceptGunInsignia(season, outfit.pack(), removeIntCD)
+    vehicleCD = outfit.vehicleCD
+    addedOutfit = style.addPartsToOutfit(season, changedOutfit, vehicleCD, intCDs=(intCD,))
+    return Outfit(component=addedOutfit, vehicleCD=vehicleCD)
 
 
 def addPartsToOutfit(season, outfit, intCDs=None):

@@ -5040,4 +5040,24 @@
     <priceGroup>	MT emblems 25g notInShop	</priceGroup>
     <tags>	styleOnly hiddenInUI	</tags>
   </itemGroup>
+  <itemGroup>
+    <name>	ClanReward_Emblem_2025	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:emblem/clan_content	</userString>
+    <decal>
+      <id>	31321	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/clan_content/ClanStore_Emblem_2024.dds	</texture>
+      <type>	emblem	</type>
+      <userString>	#vehicle_customization:ClanReward_Emblem_2025/name	</userString>
+      <description>	#vehicle_customization:ClanReward_Emblem_2025/description	</description>
+    </decal>
+    <vehicleFilter>
+      <include>
+        <levels>	8 9 10	</levels>
+      </include>
+    </vehicleFilter>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	MT emblems 25g notInShop	</priceGroup>
+  </itemGroup>
 </emblems_special.xml>

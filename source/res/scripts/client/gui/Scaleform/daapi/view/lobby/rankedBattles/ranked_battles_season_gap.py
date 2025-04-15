@@ -8,7 +8,6 @@ from gui.ranked_battles.ranked_helpers.web_season_provider import UNDEFINED_LEAG
 from gui.ranked_battles.constants import SeasonResultTokenPatterns, RankedDossierKeys, ZERO_RANK_ID, SeasonGapStates, NOT_IN_LEAGUES_QUEST, PLAYER_IN_LEAGUES_TOKEN
 from gui.Scaleform.daapi.view.meta.RankedBattlesSeasonGapViewMeta import RankedBattlesSeasonGapViewMeta
 from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_battles_page import IResetablePage
-from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from gui.shared.utils.scheduled_notifications import PeriodicNotifier
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.shared import IItemsCache
@@ -56,9 +55,6 @@ class RankedBattlesSeasonGapView(RankedBattlesSeasonGapViewMeta, IResetablePage)
 
     def reset(self):
         self.__update()
-
-    def onBtnClick(self):
-        self.__rankedController.showRankedBattlePage(ctx={'selectedItemID': RANKEDBATTLES_CONSTS.RANKED_BATTLES_RATING_ID})
 
     def _populate(self):
         super(RankedBattlesSeasonGapView, self)._populate()

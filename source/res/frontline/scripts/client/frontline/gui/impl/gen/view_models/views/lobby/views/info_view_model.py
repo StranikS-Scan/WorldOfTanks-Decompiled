@@ -8,7 +8,7 @@ from frontline.gui.impl.gen.view_models.views.lobby.views.skill_category_base_mo
 class InfoViewModel(ViewModel):
     __slots__ = ('onClose',)
 
-    def __init__(self, properties=12, commands=1):
+    def __init__(self, properties=14, commands=1):
         super(InfoViewModel, self).__init__(properties=properties, commands=commands)
 
     def getValidVehicleLevels(self):
@@ -95,6 +95,26 @@ class InfoViewModel(ViewModel):
     def getRanksWithPointsType():
         return RankItemModel
 
+    def getWinTablePoints(self):
+        return self._getArray(12)
+
+    def setWinTablePoints(self, value):
+        self._setArray(12, value)
+
+    @staticmethod
+    def getWinTablePointsType():
+        return int
+
+    def getLoseTablePoints(self):
+        return self._getArray(13)
+
+    def setLoseTablePoints(self, value):
+        self._setArray(13, value)
+
+    @staticmethod
+    def getLoseTablePointsType():
+        return int
+
     def _initialize(self):
         super(InfoViewModel, self)._initialize()
         self._addArrayProperty('validVehicleLevels', Array())
@@ -109,4 +129,6 @@ class InfoViewModel(ViewModel):
         self._addNumberProperty('ventilationDestructiblesArmor', 0)
         self._addArrayProperty('skillsCategories', Array())
         self._addArrayProperty('ranksWithPoints', Array())
+        self._addArrayProperty('winTablePoints', Array())
+        self._addArrayProperty('loseTablePoints', Array())
         self.onClose = self._addCommand('onClose')

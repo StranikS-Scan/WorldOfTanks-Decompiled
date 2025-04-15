@@ -17,7 +17,7 @@ from debug_utils import LOG_DEBUG
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.server_events import caches as quests_caches
 from gui.server_events.event_items import MotiveQuest, Quest, ServerEventAbstract, createAction, createQuest
-from gui.server_events.events_helpers import getEventsData, getRerollTimeout, isBattleRoyale, isDailyEpic, isBattleMattersQuestID, isMarathon, isPremium, isRankedDaily, isRankedPlatform, isFunRandomQuest, isVersusAIQuest
+from gui.server_events.events_helpers import getEventsData, getRerollTimeout, isBattleMattersQuestID, isMarathon, getRerollTimeoutPrem, isPremium, isAdvisableQuest
 from gui.server_events.formatters import getLinkedActionID
 from gui.server_events.modifiers import ACTION_MODIFIER_TYPE, ACTION_SECTION_TYPE, clearModifiersCache
 from gui.server_events.personal_missions_cache import PersonalMissionsCache
@@ -45,19 +45,29 @@ PM_TOKEN_PREFIXES = frozenset(['pm2_',
 _ProgressiveReward = namedtuple('_ProgressiveReward', ('currentStep', 'probability', 'maxSteps'))
 
 class _DailyQuestsData(object):
-    __slots__ = ('_lastReroll',)
+    __slots__ = ('_lastReroll', '_lastRerollPrem')
 
-    def __init__(self, last_reroll=sys.maxint, **kwargs):
+    def __init__(self, last_reroll=sys.maxint, last_rerol_prem=sys.maxint, **kwargs):
         self._lastReroll = last_reroll
+        self._lastRerollPrem = last_rerol_prem
 
     def getLastRerollTimestamp(self):
         return self._lastReroll
 
+    def getLastRerollTimestampPrem(self):
+        return self._lastRerollPrem
+
     def getNextAvailableRerollTimestamp(self):
         return self.getLastRerollTimestamp() + getRerollTimeout()
 
+    def getNextAvailableRerollTimestampPrem(self):
+        return self.getLastRerollTimestampPrem() + getRerollTimeoutPrem()
+
     def isRerollInCooldown(self):
         return self.getNextAvailableRerollTimestamp() > time_utils.getCurrentLocalServerTimestamp()
+
+    def isRerollInCooldownPrem(self):
+        return self.getNextAvailableRerollTimestampPrem() > time_utils.getCurrentLocalServerTimestamp()
 
 
 def _motiveQuestMaker(qID, qData, progress):
@@ -214,7 +224,8 @@ class EventsCache(IEventsCache):
                 self.__personalMissions.update(self, diff)
 
             if diff is not None:
-                isQPUpdated = 'quests' in diff or 'potapovQuests' in diff or 'pm_progress' in diff
+                isQPUpdated = 'quests' in diff or 'potapovQuests' in diff
+                isQPUpdated |= 'pm_progress' in diff or 'pqStates' in diff.get('cache', {})
                 if not isQPUpdated and 'tokens' in diff:
                     for tokenID in diff['tokens'].iterkeys():
                         if any((tokenID.startswith(t) for t in PM_TOKEN_PREFIXES)):
@@ -266,36 +277,11 @@ class EventsCache(IEventsCache):
         filterFunc = filterFunc or (lambda a: True)
         isRankedSeasonOff = self.rankedController.getCurrentSeason() is None
         isFunRandomOff = not self.__funRandomController.subModesInfo.isAvailable()
-        isEpicBattleEnabled = self.__epicController.isEnabled()
+        isEpicBattleDisabled = not self.__epicController.isEnabled()
+        battleRoyaleQuestsGetter = self.__battleRoyaleController.getQuests
 
         def userFilterFunc(q):
-            qGroup = q.getGroupID()
-            qIsValid = None
-            qID = q.getID()
-            if q.getType() == EVENT_TYPE.MOTIVE_QUEST:
-                if qIsValid is None:
-                    qIsValid = q.isAvailable().isValid
-                if not qIsValid:
-                    return False
-            if q.getType() == EVENT_TYPE.TOKEN_QUEST and isMarathon(qID):
-                return False
-            if isBattleMattersQuestID(qID) or isPremium(qGroup):
-                if qIsValid is None:
-                    qIsValid = q.isAvailable().isValid
-                if not qIsValid:
-                    return False
-            if not isEpicBattleEnabled and isDailyEpic(qGroup):
-                return False
-            if isBattleRoyale(qGroup):
-                quests = self.__battleRoyaleController.getQuests()
-                if qID not in quests:
-                    return False
-            if isVersusAIQuest(qGroup):
-                return q.isAvailable().isValid
-            elif isRankedSeasonOff and (isRankedDaily(qGroup) or isRankedPlatform(qGroup)):
-                return False
-            else:
-                return False if isFunRandomOff and isFunRandomQuest(qID) else filterFunc(q)
+            return False if not isAdvisableQuest(q, filterRanked=isRankedSeasonOff, filterFunRandom=isFunRandomOff, filterEpic=isEpicBattleDisabled, battleRoalQuestsGetter=battleRoyaleQuestsGetter) else filterFunc(q)
 
         return self.getActiveQuests(userFilterFunc)
 
@@ -307,34 +293,24 @@ class EventsCache(IEventsCache):
 
         return self.getQuests(userFilterFunc)
 
-    def getPremiumQuests(self, filterFunc=None):
+    def getDailyQuests(self, filterFunc=None, filterLevels=DailyQuestsLevels.DAILY):
         filterFunc = filterFunc or (lambda a: True)
 
         def userFilterFunc(q):
-            return isPremium(q.getGroupID()) and filterFunc(q)
-
-        return self.getQuests(userFilterFunc)
-
-    def getDailyQuests(self, filterFunc=None, includeEpic=False):
-        filterFunc = filterFunc or (lambda a: True)
-
-        def userFilterFunc(q):
-            return False if not includeEpic and q.getLevel() == DailyQuestsLevels.EPIC or q.getLevel() not in DailyQuestsLevels.DAILY else filterFunc(q)
+            return False if q.getLevel() not in filterLevels else filterFunc(q)
 
         return self._getDailyQuests(userFilterFunc)
+
+    def getDailyPremiumQuests(self, filterFunc=None):
+        return self.getDailyQuests(filterFunc, filterLevels=DailyQuestsLevels.DAILY_PREMIUM)
 
     def getDailyQuestsSub(self, filterFunc=None):
-        filterFunc = filterFunc or (lambda a: True)
-
-        def userFilterFunc(q):
-            return False if q.getLevel() not in DailyQuestsLevels.SUBS else filterFunc(q)
-
-        return self._getDailyQuests(userFilterFunc)
+        return self.getDailyQuests(filterFunc, filterLevels=DailyQuestsLevels.SUBS)
 
     def getDailyEpicQuest(self):
         dailyQuests = self._getDailyQuests()
         for q in dailyQuests.values():
-            if q.getLevel() == DailyQuestsLevels.EPIC and not q.isCompleted():
+            if q.getLevel() == DailyQuestsLevels.EPIC:
                 return q
 
     def getBattleQuests(self, filterFunc=None):

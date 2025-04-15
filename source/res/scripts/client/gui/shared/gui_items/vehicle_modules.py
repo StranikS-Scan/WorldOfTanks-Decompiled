@@ -241,6 +241,8 @@ class VehicleGun(VehicleModule):
     @property
     def userType(self):
         userType = super(VehicleGun, self).userType
+        if self.isAutoShootFlameGun():
+            return backport.text(R.strings.item_types.autoShootFlameGun.name())
         if self.isFlameGun():
             return backport.text(R.strings.item_types.flameGun.name())
         return backport.text(R.strings.item_types.dualGun.name()) if self.isDualGun() else userType
@@ -376,6 +378,10 @@ class Shell(FittingItem):
     @property
     def level(self):
         pass
+
+    @property
+    def hasStun(self):
+        return self.descriptor.stun is not None
 
     @property
     def isModernMechanics(self):

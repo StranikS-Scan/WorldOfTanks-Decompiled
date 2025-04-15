@@ -49,6 +49,8 @@ VEHICLE_VIEW_STATE = 45
 DYN_OBJ_CACHE = 46
 SHARED_REPO = 47
 CONVERTERS_EXT_DATA_FORMATTERS = 48
+BONUS_MERGERS = 49
+SERVICE_CHANNEL_SUBFORMATTERS = 50
 
 class _CollectEventsManager(object):
 
@@ -743,3 +745,27 @@ def registerDynObjCache(queueType, dynCache):
 
 def collectDynObjCache(queueType):
     return __collectEM.handleEvent((DYN_OBJ_CACHE, queueType), ctx={}).get('dynCache')
+
+
+def registerClientBonusMergers(predicate, mergeFunction):
+
+    def onCollect(ctx):
+        ctx['mergers'].append((predicate, mergeFunction))
+
+    __collectEM.addListener(BONUS_MERGERS, onCollect)
+
+
+def collectClientBonusMergers():
+    return __collectEM.handleEvent(BONUS_MERGERS, ctx={'mergers': []})['mergers']
+
+
+def registerServiceChannelSubformatter(callContext, subformatter):
+
+    def onCollect(ctx):
+        ctx['formatters'].append(subformatter)
+
+    __collectEM.addListener((SERVICE_CHANNEL_SUBFORMATTERS, callContext), onCollect)
+
+
+def collectServiceChannelSubformatter(callContext):
+    return __collectEM.handleEvent((SERVICE_CHANNEL_SUBFORMATTERS, callContext), ctx={'formatters': []}).get('formatters', [])

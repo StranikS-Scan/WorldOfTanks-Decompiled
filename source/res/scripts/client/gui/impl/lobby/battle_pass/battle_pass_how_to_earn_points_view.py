@@ -13,7 +13,7 @@ from gui.impl.gen.view_models.views.lobby.battle_pass.game_mode_cell_model impor
 from gui.impl.gen.view_models.views.lobby.battle_pass.game_mode_model import GameModeModel, ArenaBonusType
 from gui.impl.gen.view_models.views.lobby.battle_pass.game_mode_rows_model import GameModeRowsModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.vehicle_item_model import VehicleItemModel
-from gui.impl.lobby.missions.daily_quests_view import DailyTabs
+from gui.impl.lobby.daily import DailyTabs
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
 from gui.server_events.events_dispatcher import showDailyQuests

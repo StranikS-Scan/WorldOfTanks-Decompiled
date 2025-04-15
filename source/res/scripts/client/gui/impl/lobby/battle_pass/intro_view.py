@@ -3,7 +3,7 @@
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
 from frameworks.wulf import ViewSettings
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.battle_pass.battle_pass_helpers import getIntroSlidesNames, getIntroVideoURL, isIntroVideoExist
+from gui.battle_pass.battle_pass_helpers import getIntroSlidesNames, getMarathonIntroSlidesNames, getIntroVideoURL, isIntroVideoExist
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_intro_view_model import BattlePassIntroViewModel
@@ -57,16 +57,17 @@ class IntroView(ViewImpl):
     def __updateViewModel(self):
         with self.viewModel.transaction() as tx:
             placeholders = self.__genResCommPlaceholders()
+            hasMarathon = self.__battlePass.hasMarathon()
+            if hasMarathon:
+                slidesNames = getMarathonIntroSlidesNames()
+            else:
+                slidesNames = getIntroSlidesNames()
             slides = tx.getSlides()
-            for slideName in getIntroSlidesNames():
+            for slideName in slidesNames:
                 slides.addViewModel(self.__createSlideModel(slideName, **placeholders))
 
-            tx.setTitle(_TEXTS.title())
-            tx.setSubTitle(_TEXTS.subTitle())
-            tx.setAbout(_TEXTS.aboutButton())
-            tx.setButtonLabel(_TEXTS.button())
-            tx.setBackground(_BG.common())
             tx.setIsVideoExist(isIntroVideoExist())
+            tx.setHasMarathon(hasMarathon)
 
     @staticmethod
     def __createSlideModel(slideName, **kwargs):
@@ -78,6 +79,8 @@ class IntroView(ViewImpl):
 
     def __close(self):
         self.__settingsCore.serverSettings.saveInBPStorage({BattlePassStorageKeys.INTRO_SHOWN: True})
+        if self.__battlePass.hasMarathon():
+            self.__settingsCore.serverSettings.saveInBPStorage({BattlePassStorageKeys.EXTRA_CHAPTER_INTRO_SHOWN: True})
         self.destroyWindow()
 
     @staticmethod

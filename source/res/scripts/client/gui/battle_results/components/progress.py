@@ -9,12 +9,12 @@ import BigWorld
 import personal_missions
 from account_helpers.AccountSettings import AccountSettings, LAST_SELECTED_PM_BRANCH
 from battle_pass_common import BattlePassConsts
-from constants import EVENT_TYPE
+from constants import EVENT_TYPE, DailyQuestsLevels
 from dog_tags_common.components_config import componentConfigAdapter as cca
 from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsBattleRoyale
 from gui.Scaleform.daapi.view.lobby.customization.progression_helpers import getC11nProgressionLinkBtnParams, getProgressionPostBattleInfo, parseEventID, getC11n2dProgressionLinkBtnParams
 from gui.Scaleform.daapi.view.lobby.server_events.awards_formatters import BattlePassTextBonusesPacker
-from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import getEventPostBattleInfo, get2dProgressionStylePostBattleInfo, DebutBoxesQuestPostBattleInfo, EarlyAccessQuestPostBattleInfo
+from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import getEventPostBattleInfo, get2dProgressionStylePostBattleInfo, DebutBoxesQuestPostBattleInfo, EarlyAccessQuestPostBattleInfo, getEpicDailyQuestProgressInfo
 from gui.impl.lobby.paragons.paragons_helpers.paragons_helpers import calculateReceivedLevel
 from gui.paragons.paragons_bonuses_packers import packBonusesForPostBattle
 from gui.paragons.paragons_constants import PARAGONS_POST_BATTLE_FAKE_QUEST_ID
@@ -35,7 +35,7 @@ from gui.impl.lobby.crew.crew_helpers.skill_helpers import getLastSkillSequenceN
 from gui.server_events import formatters
 from gui.server_events.awards_formatters import QuestsBonusComposer
 from gui.server_events.events_constants import BATTLE_MATTERS_QUEST_ID
-from gui.server_events.events_helpers import isC11nQuest, getDataByC11nQuest
+from gui.server_events.events_helpers import isC11nQuest, getDataByC11nQuest, isDailyQuest
 from gui.shared.formatters import getItemPricesVO, getItemUnlockPricesVO, text_styles, icons
 from gui.shared.gui_items import GUI_ITEM_TYPE, Tankman, getVehicleComponentsByType
 from gui.shared.gui_items.Tankman import getCrewSkinIconSmall
@@ -485,6 +485,7 @@ class QuestsProgressBlock(base.StatsBlock):
         questsProgress = reusable.personal.getQuestsProgress()
         debutBoxesQuestsIDs = self.__debutBoxesController.getQuestsIDs()
         vehicleCDs = list((vehCD for vehCD, _ in reusable.personal.getVehicleCDsIterator(result)))
+        dqCounter = 0
         if questsProgress:
             for qID, qProgress in questsProgress.iteritems():
                 pGroupBy, pPrev, pCur = qProgress
@@ -512,6 +513,10 @@ class QuestsProgressBlock(base.StatsBlock):
                     data = self.__packQuestProgressData(qID, allCommonQuests, qProgress, isCompleted)
                     if data:
                         commonQuests.append(data)
+                    if isCompleted and isDailyQuest(qID):
+                        quest = allCommonQuests.get(qID)
+                        if quest.getLevel() in DailyQuestsLevels.DAILY_QUESTS_WITHOUT_EPIC:
+                            dqCounter += 1
                 if personal_missions.g_cache.isPersonalMission(qID):
                     pqID = personal_missions.g_cache.getPersonalMissionIDByUniqueID(qID)
                     questsCache = self.eventsCache.getPersonalMissions()
@@ -578,6 +583,10 @@ class QuestsProgressBlock(base.StatsBlock):
             if info is not None:
                 self.addComponent(self.getNextComponentIndex(), QuestProgressiveCustomizationVO('', info))
 
+        if dqCounter > 0:
+            info = getEpicDailyQuestProgressInfo(dqCounter, eventsCache=self.eventsCache)
+            if info is not None:
+                self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem('', info))
         for e, pCur, pPrev, reset, complete in sorted(commonQuests, cmp=self.__sortCommonQuestsFunc):
             info = getEventPostBattleInfo(e, allCommonQuests, pCur, pPrev, reset, complete)
             if info is not None:

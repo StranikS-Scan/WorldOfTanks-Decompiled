@@ -4,10 +4,10 @@ from Event import Event
 from constants import PremiumConfigs, PREMIUM_TYPE
 from gui.impl.gen.view_models.views.lobby.account_dashboard.premium_quests_model import PremiumQuestsModel
 from gui.impl.lobby.account_dashboard.features.base import FeatureItem
-from gui.impl.lobby.missions.daily_quests_view import DailyTabs
+from gui.impl.lobby.daily import DailyTabs
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.server_events.events_dispatcher import showDailyQuests
-from gui.server_events.events_helpers import isPremiumQuestsEnable, premMissionsSortFunc
+from gui.server_events.events_helpers import isPremiumQuestsEnable, dailyQuestsSortFunc
 from helpers import dependency
 from skeletons.gui.game_control import IGameSessionController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -36,9 +36,9 @@ class PremQuestsController(object):
         self.gameSession.onPremiumNotify -= self.update
 
     def update(self, *args):
-        quests = self.eventsCache.getPremiumQuests().values()
+        quests = self.eventsCache.getDailyPremiumQuests().values()
         newCompletedQuestsCount = 0
-        for quest in sorted(quests, cmp=premMissionsSortFunc):
+        for quest in sorted(quests, key=dailyQuestsSortFunc):
             if quest.isCompleted():
                 newCompletedQuestsCount += 1
 
@@ -100,4 +100,4 @@ class PremiumQuestsFeature(FeatureItem):
     @staticmethod
     def onClick():
         if isPremiumQuestsEnable():
-            showDailyQuests(subTab=DailyTabs.PREMIUM_MISSIONS)
+            showDailyQuests(subTab=DailyTabs.PREMIUM)

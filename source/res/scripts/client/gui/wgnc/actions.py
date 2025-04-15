@@ -11,9 +11,8 @@ from gui.wgnc.custom_actions_keeper import CustomActionsKeeper
 from gui.wgnc.events import g_wgncEvents
 from gui.wgnc.settings import WGNC_GUI_TYPE
 from gui.wgnc.common import WebHandlersContainer
-from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from helpers import dependency
-from skeletons.gui.game_control import IBrowserController, IPromoController, IRankedBattlesController
+from skeletons.gui.game_control import IBrowserController, IPromoController
 from web.web_client_api.sound import HangarSoundWebApi
 from web.web_client_api import webApiCollection
 
@@ -120,15 +119,6 @@ class OpenStrongholdBrowser(OpenInternalBrowser):
 
     def _doInvoke(self, _):
         showStrongholds(self._url)
-
-
-@ReprInjector.withParent()
-class OpenRankedBrowser(OpenInternalBrowser):
-    __slots__ = ()
-    __rankedController = dependency.descriptor(IRankedBattlesController)
-
-    def _doInvoke(self, _):
-        self.__rankedController.showRankedBattlePage(ctx={'selectedItemID': RANKEDBATTLES_CONSTS.RANKED_BATTLES_YEAR_RATING_ID})
 
 
 @ReprInjector.withParent()

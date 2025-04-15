@@ -4,7 +4,7 @@ import typing
 import operator
 import time
 import BigWorld
-from constants import EVENT_TYPE, EMAIL_CONFIRMATION_QUEST_ID
+from constants import EVENT_TYPE, EMAIL_CONFIRMATION_QUEST_ID, PREMIUM_TYPE
 from customization_quests_common import deserializeToken, validateToken
 from gui import makeHtmlString
 from gui.Scaleform.genConsts.MISSIONS_STATES import MISSIONS_STATES
@@ -23,7 +23,7 @@ from skeletons.gui.game_control import IMarathonEventsController, IArmoryYardCon
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from gui.server_events.events_constants import BATTLE_MATTERS_QUEST_ID, MARATHON_GROUP_PREFIX, PREMIUM_GROUP_PREFIX, DAILY_QUEST_ID_PREFIX, RANKED_DAILY_GROUP_ID, RANKED_PLATFORM_GROUP_ID, BATTLE_ROYALE_GROUPS_ID, EPIC_BATTLE_GROUPS_ID, FUN_RANDOM_GROUP_ID, COSMIC_EVENT_PREFIX, VERSUS_AI_QUEST_GROUP_PREFIX
+from gui.server_events.events_constants import BATTLE_MATTERS_QUEST_ID, MARATHON_GROUP_PREFIX, PREMIUM_GROUP_PREFIX, DAILY_QUEST_ID_PREFIX, RANKED_DAILY_GROUP_ID, RANKED_PLATFORM_GROUP_ID, BATTLE_ROYALE_GROUPS_ID, EPIC_BATTLE_GROUPS_ID, FUN_RANDOM_GROUP_ID, COSMIC_EVENT_PREFIX, VERSUS_AI_QUEST_GROUP_PREFIX, DAILY_SUBS_LEVEL_SUFFIX, DAILY_PREMIUM_LEVEL_SUFFIX
 from helpers.i18n import makeString as _ms
 if typing.TYPE_CHECKING:
     from gui.server_events.event_items import Quest
@@ -98,6 +98,18 @@ class EventInfoModel(object):
         if untilRest < 0:
             untilRest += time_utils.ONE_DAY
         return untilRest
+
+    @classmethod
+    def getWeeklyProgressResetTimeDelta(cls):
+        curTime = time_utils.getTimeStructInUTC(time_utils.getCurrentTimestamp())
+        resetDay, resetSeconds = cls._getWeeklyProgressResetTimeUTC()
+        dayDelta = (resetDay - curTime.tm_wday) % 7
+        if dayDelta == 0:
+            dayDelta = 7
+        timeDelta = dayDelta * time_utils.ONE_DAY + resetSeconds - (curTime.tm_hour * time_utils.ONE_HOUR + curTime.tm_min * time_utils.ONE_MINUTE + curTime.tm_sec)
+        if timeDelta > time_utils.ONE_WEEK:
+            timeDelta -= time_utils.ONE_WEEK
+        return timeDelta
 
     def _getActiveDateTimeString(self):
         i18nKey, args = None, {}
@@ -211,14 +223,6 @@ def missionsSortFunc(q):
      q.getUserName())
 
 
-def premMissionsSortFunc(a, b):
-
-    def isChild(a, b):
-        return 0 if not b.getParents() else a.getID() in b.getParents().values()[0]
-
-    return isChild(a, b) - isChild(b, a)
-
-
 def dailyQuestsSortFunc(q):
     return q.getSortKey()
 
@@ -316,6 +320,14 @@ def isDailyQuest(eventID):
     return eventID.startswith(DAILY_QUEST_ID_PREFIX) if eventID else False
 
 
+def isDailySubsQuest(eventID):
+    return eventID.startswith(DAILY_QUEST_ID_PREFIX) and DAILY_SUBS_LEVEL_SUFFIX in eventID if eventID else False
+
+
+def isDailyPremiumQuest(eventID):
+    return eventID.startswith(DAILY_QUEST_ID_PREFIX) and DAILY_PREMIUM_LEVEL_SUFFIX in eventID if eventID else False
+
+
 def isACEmailConfirmationQuest(eventID):
     return eventID == EMAIL_CONFIRMATION_QUEST_ID if eventID else False
 
@@ -327,6 +339,44 @@ def isCosmicQuest(eventID):
 def isRegularQuest(eventID):
     idGameModeEvent = isDailyEpic(eventID) or isRankedDaily(eventID) or isRankedPlatform(eventID)
     return not (isMarathon(eventID) or isBattleMattersQuestID(eventID) or isPremium(eventID) or idGameModeEvent)
+
+
+def filterEventAvailableQuest(quest):
+    return quest.isAvailable()[0]
+
+
+def isAdvisableQuest(quest, filterRanked=False, filterFunRandom=False, filterEpic=False, battleRoalQuestsGetter=None):
+    qGroup = quest.getGroupID()
+    qIsValid = None
+    qID = quest.getID()
+    if quest.getType() == EVENT_TYPE.MOTIVE_QUEST:
+        if qIsValid is None:
+            qIsValid = quest.isAvailable().isValid
+        if not qIsValid:
+            return False
+    if quest.getType() == EVENT_TYPE.TOKEN_QUEST and isMarathon(qID):
+        return False
+    elif isDailySubsQuest(qID):
+        return False
+    elif isPremium(qID):
+        return False
+    elif isDailyQuest(qID) and quest.isEpic():
+        return False
+    if isBattleMattersQuestID(qID):
+        if qIsValid is None:
+            qIsValid = quest.isAvailable().isValid
+        if not qIsValid:
+            return False
+    if filterEpic and isDailyEpic(qGroup):
+        return False
+    if isBattleRoyale(qGroup) and (battleRoalQuestsGetter is None or qID not in battleRoalQuestsGetter()):
+        return False
+    if isVersusAIQuest(qGroup):
+        return quest.isAvailable().isValid
+    elif filterRanked and (isRankedDaily(qGroup) or isRankedPlatform(qGroup)):
+        return False
+    else:
+        return False if filterFunRandom and isFunRandomQuest(qID) else True
 
 
 @dependency.replace_none_kwargs(c11nService=ICustomizationService)
@@ -466,12 +516,22 @@ def getFunRandomDailyGroup(eventsCache=None):
 
 @dependency.replace_none_kwargs(eventsCache=IEventsCache, lobbyContext=ILobbyContext)
 def isPremiumQuestsEnable(lobbyContext=None, eventsCache=None):
-    return lobbyContext.getServerSettings().getPremQuestsConfig().get('enabled', False) and len(eventsCache.getPremiumQuests()) > 0
+    return lobbyContext.getServerSettings().getPremQuestsConfig().get('enabled', False) and len(eventsCache.getDailyPremiumQuests()) > 0 and lobbyContext.getServerSettings().getDailyQuestConfig().get('enabled', False)
 
 
 @dependency.replace_none_kwargs(eventsCache=IEventsCache, lobbyContext=ILobbyContext)
 def isDailyQuestsEnable(lobbyContext=None, eventsCache=None):
     return lobbyContext.getServerSettings().getDailyQuestConfig().get('enabled', False)
+
+
+@dependency.replace_none_kwargs(eventsCache=IEventsCache, lobbyContext=ILobbyContext)
+def isDailyRegularQuestsEnabled(lobbyContext=None, eventsCache=None):
+    return lobbyContext.getServerSettings().getDailyQuestConfig().get('regularQuestsEnabled', False) and lobbyContext.getServerSettings().getDailyQuestConfig().get('enabled', False)
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def isPremiumPlusAccount(itemsCache=None):
+    return itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS)
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
@@ -480,13 +540,18 @@ def getRerollTimeout(lobbyContext=None):
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def getRerollTimeoutPrem(lobbyContext=None):
+    return lobbyContext.getServerSettings().getDailyQuestConfig().get('rerollTimeoutPrem', 0)
+
+
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def isRerollEnabled(lobbyContext=None):
-    return lobbyContext.getServerSettings().getDailyQuestConfig().get('rerollEnabled', False)
+    return lobbyContext.getServerSettings().getDailyQuestConfig().get('rerollEnabled', False) and lobbyContext.getServerSettings().getDailyQuestConfig().get('enabled', False)
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def isEpicQuestEnabled(lobbyContext=None):
-    return lobbyContext.getServerSettings().getDailyQuestConfig().get('epicRewardEnabled', False)
+    return lobbyContext.getServerSettings().getDailyQuestConfig().get('epicRewardEnabled', False) and lobbyContext.getServerSettings().getDailyQuestConfig().get('enabled', False)
 
 
 def getEventsData(eventsTypeName):
@@ -506,3 +571,24 @@ def isArmoryYardQuest(eventID, armoryYardCtrl=None):
 @dependency.replace_none_kwargs(earlyAccessCtrl=IEarlyAccessController)
 def isActiveEarlyAccessQuest(eventID, earlyAccessCtrl=None):
     return earlyAccessCtrl.isQuestActive() and (earlyAccessCtrl.isProgressionQuest(eventID) or earlyAccessCtrl.isPostProgressionQuest(eventID))
+
+
+def getPreviousBattleQuest(quest):
+    eventsCache = dependency.instance(IEventsCache)
+    group = eventsCache.getGroups().get(quest.getGroupID())
+    if group is not None:
+        questID = quest.getID()
+        quests = eventsCache.getQuests()
+        groupContent = group.getGroupContent(quests)
+        sortedQuests = sorted(groupContent, key=operator.methodcaller('getPriority'), reverse=True)
+        for idx, quest_ in enumerate(sortedQuests):
+            if quest_.getID() == questID:
+                if idx != 0:
+                    return sortedQuests[idx - 1]
+
+    return
+
+
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def isPlayStreakEnable(lobbyContext=None):
+    return lobbyContext.getServerSettings().getPlayStreakConfig().get('isEnabled', False)

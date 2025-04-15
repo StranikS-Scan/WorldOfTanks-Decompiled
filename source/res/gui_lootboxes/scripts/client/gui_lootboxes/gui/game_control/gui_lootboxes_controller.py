@@ -132,8 +132,8 @@ class GuiLootBoxesController(IGuiLootBoxesController):
     def openShop(self, lootboxID=None):
         if self.isBuyAvailable():
             lootBox = self.__itemsCache.items.tokens.getLootBoxByID(int(lootboxID)) if lootboxID else None
-            handler = self.__shopWindowHandler.get(lootBox.getCategory(), None) if lootBox else None
-            if handler:
+            handler = self.__shopWindowHandler.get(lootBox.getType(), None) if lootBox else None
+            if callable(handler):
                 handler()
             else:
                 showShop(getShopURL() + self.__getConfig().getShopCategoryUrl())

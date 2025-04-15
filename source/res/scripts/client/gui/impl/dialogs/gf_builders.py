@@ -81,12 +81,13 @@ class BaseDialogBuilder(object):
     def setDescription(self, text):
         self.__description = toString(text)
 
-    def setIcon(self, mainIcon, backgrounds=None, overlays=None, layoutID=None, iconPositionLogic=IconPositionLogicEnum.CENTREDANDTHROUGHCONTENT.value):
+    def setIcon(self, mainIcon, backgrounds=None, overlays=None, layoutID=None, iconPositionLogic=IconPositionLogicEnum.CENTREDANDTHROUGHCONTENT.value, pushingDown=True):
         self.__icon = {'iconResID': mainIcon,
          'backgroundResIDList': backgrounds,
          'overlayResIDList': overlays,
          'layoutID': layoutID,
-         'iconPositionLogic': iconPositionLogic}
+         'iconPositionLogic': iconPositionLogic,
+         'isBottomPushingDown': pushingDown}
 
     def addButton(self, buttonSettings):
         self.__buttons.append(buttonSettings)
@@ -183,6 +184,22 @@ class ConfirmCancelWarningDialogBuilder(ConfirmCancelDialogBuilder):
         super(ConfirmCancelWarningDialogBuilder, self)._extendTemplate(template)
         if self.__descriptionMsg and self.__warningMsg:
             template.setSubView(DefaultDialogPlaceHolders.CONTENT, TextWithWarning(self.__descriptionMsg, self.__warningMsg))
+
+
+class ConfirmCancelDescriptionDialogBuilder(ConfirmCancelDialogBuilder):
+    __slots__ = ('__descriptionMsg',)
+
+    def __init__(self, uniqueID=None):
+        super(ConfirmCancelDescriptionDialogBuilder, self).__init__(uniqueID)
+        self.__descriptionMsg = None
+        return
+
+    def setDescriptionMsg(self, text):
+        self.__descriptionMsg = toString(text)
+
+    def _extendTemplate(self, template):
+        if self.__descriptionMsg:
+            template.setSubView(DefaultDialogPlaceHolders.CONTENT, TextWithWarning(self.__descriptionMsg, ''))
 
 
 class AlertBuilder(BaseDialogBuilder):

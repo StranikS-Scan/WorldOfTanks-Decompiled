@@ -3,6 +3,7 @@
 import cPickle
 import zlib
 from collections import namedtuple, defaultdict
+from typing import Dict
 import ArenaType
 import BigWorld
 import CGF
@@ -111,7 +112,11 @@ class ClientArena(object):
         return
 
     settings = property(lambda self: self.__settings)
-    vehicles = property(lambda self: self.__vehicles)
+
+    @property
+    def vehicles(self):
+        return self.__vehicles
+
     positions = property(lambda self: self.__positions)
     statistics = property(lambda self: self.__statistics)
     period = property(lambda self: self.__periodInfo[0])
@@ -384,7 +389,8 @@ class ClientArena(object):
          'maxHealth': info[24],
          'vehPostProgression': info[25],
          'customRoleSlotTypeId': info[26],
-         'botDisplayStatus': info[27]}
+         'botDisplayStatus': info[27],
+         'isClientConnected': info[28]}
         return (info[0], infoAsDict)
 
     def __getVehicleType(self, compactDescr, extData):

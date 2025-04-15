@@ -10,7 +10,7 @@ from gui.impl.lobby.common.selectable_reward_base import SelectableRewardBase
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.selectable_reward.common import RankedSelectableRewardManager
 from gui.server_events.bonuses import getMergedBonusesFromDicts
-from gui.shared.event_dispatcher import showRankedYearAwardWindow
+from gui.shared.event_dispatcher import showRankedSelectedRewardWindow
 from helpers import dependency
 from skeletons.gui.game_control import IRankedBattlesController
 if typing.TYPE_CHECKING:
@@ -44,17 +44,16 @@ class RankedSelectableRewardView(SelectableRewardBase):
 
     def _processReceivedRewards(self, result):
         receivedRewards = result.auxData[RES_SUCCESS]
-        isFirstShow = bool(self.__allRewards)
         self.__allRewards = getMergedBonusesFromDicts([self.__allRewards, receivedRewards])
-        self.__tryToShowRewardsWindow(not isFirstShow)
+        self.__tryToShowRewardsWindow()
         self.destroyWindow()
 
     def _getItemsComparator(self, _):
         return self.__rewardsComparator
 
-    def __tryToShowRewardsWindow(self, showRemainedSelection=False):
+    def __tryToShowRewardsWindow(self):
         if self.__allRewards:
-            showRankedYearAwardWindow(self.__allRewards, self.__points, True, showRemainedSelection=showRemainedSelection)
+            showRankedSelectedRewardWindow([self.__allRewards], True)
 
     def __rewardsComparator(self, reward1, reward2):
         defaultKey = len(self.__REWARDS_ORDER)

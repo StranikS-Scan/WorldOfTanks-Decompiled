@@ -742,6 +742,11 @@ class _EquipmentSetupLayout(object):
 
         return equipments
 
+    def getLayoutIdxByItemAndSlotIdx(self, item, slotIdx):
+        for idx, setup in self.__setups.iteritems():
+            if item == setup[slotIdx]:
+                return idx
+
     def _getIntCD(self, item):
         return item.intCD
 

@@ -16,4 +16,4 @@ class FunRandomPresetsGetter(BasePresetsGetter, FunSubModesWatcher):
     @hasDesiredSubMode()
     def getPreset(self):
         desiredSubModeImpl = self.getDesiredSubMode().getSubModeImpl()
-        return self._presets.get(self.__subModesPresets.get(desiredSubModeImpl))
+        return self._config.presets.get(self.__subModesPresets.get(desiredSubModeImpl))

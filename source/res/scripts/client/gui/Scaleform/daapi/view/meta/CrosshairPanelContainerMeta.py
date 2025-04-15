@@ -157,14 +157,20 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
     def as_setDualAccActiveS(self, value):
         return self.flashObject.as_setDualAccActive(value) if self._isDAAPIInited() else None
 
-    def as_setOverheatProgressS(self, value, timeLeft, isSnapshot=False):
-        return self.flashObject.as_setOverheatProgress(value, timeLeft, isSnapshot) if self._isDAAPIInited() else None
-
     def as_addOverheatS(self, overheatMark):
         return self.flashObject.as_addOverheat(overheatMark) if self._isDAAPIInited() else None
 
     def as_removeOverheatS(self):
         return self.flashObject.as_removeOverheat() if self._isDAAPIInited() else None
 
-    def as_setFlameDistanceVisibilityS(self, value):
-        return self.flashObject.as_setFlameDistanceVisibility(value) if self._isDAAPIInited() else None
+    def as_setDistanceVisibilityS(self, value, distance):
+        return self.flashObject.as_setDistanceVisibility(value, distance) if self._isDAAPIInited() else None
+
+    def as_setOverheatProgressS(self, value, timeLeft, isSnapshot=False):
+        return self.flashObject.as_setOverheatProgress(value, timeLeft, isSnapshot) if self._isDAAPIInited() else None
+
+    def as_setOverheatStatusS(self, isOverheated=False):
+        return self.flashObject.as_setOverheatStatus(isOverheated) if self._isDAAPIInited() else None
+
+    def as_setOverheatStateS(self, state):
+        return self.flashObject.as_setOverheatState(state) if self._isDAAPIInited() else None

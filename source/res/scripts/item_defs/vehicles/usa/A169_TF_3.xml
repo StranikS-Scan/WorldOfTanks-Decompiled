@@ -42,18 +42,18 @@
     <armor>
       <armor_1>	130	</armor_1>
       <armor_2>	260	</armor_2>
-      <armor_3>	80	</armor_3>
+      <armor_3>	100	</armor_3>
       <armor_4>	40	</armor_4>
       <armor_5>	40	</armor_5>
       <armor_6>	295	</armor_6>
       <armor_7>	200	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	190	</armor_9>
+      <armor_9>	160	</armor_9>
       <armor_10>	30	</armor_10>
-      <armor_11>	175	</armor_11>
-      <armor_12>	160	</armor_12>
-      <armor_13>	145	</armor_13>
-      <armor_14>	115	</armor_14>
+      <armor_11>	145	</armor_11>
+      <armor_12>	130	</armor_12>
+      <armor_13>	180	</armor_13>
+      <armor_14>	90	</armor_14>
       <armor_15>	50	</armor_15>
       <armor_16>	165	</armor_16>
       <armor_17>	40	</armor_17>
@@ -66,11 +66,11 @@
       <armor_24>	70	</armor_24>
       <armor_25>	170	</armor_25>
       <armor_26>	110	</armor_26>
-      <armor_27>	90	</armor_27>
+      <armor_27>	185	</armor_27>
       <armor_28>	50	</armor_28>
-      <armor_29>	105	</armor_29>
+      <armor_29>	135	</armor_29>
       <armor_30>	130	</armor_30>
-      <armor_31>	185	</armor_31>
+      <armor_31>	120	</armor_31>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	26130	</weight>
@@ -1342,7 +1342,7 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <mud>	largeTankMud	</mud>
+        <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	trds_yoh_pc	</wwsoundPC>
       <wwsoundNPC>	trds_yoh_npc	</wwsoundNPC>
@@ -2686,7 +2686,7 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <mud>	largeTankMud	</mud>
+        <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	trds_yoh_pc	</wwsoundPC>
       <wwsoundNPC>	trds_yoh_npc	</wwsoundNPC>

@@ -168,6 +168,7 @@ class ThermalVisionController(BigWorld.DynamicScriptComponent):
             self.__indicatorProxy.setState(self.stateStatus)
             self.__stopAllSounds()
             self.__updateSectorSettings()
+            self.__setSectorState(THERMAL_VISION_STATE.IDLE)
             BigWorld.PyrometerSector.setParams(params.distance, params.hSectorAngle, params.vSectorAngle)
             if self.stateStatus is not None:
                 self.__updateState()
@@ -259,17 +260,15 @@ class ThermalVisionController(BigWorld.DynamicScriptComponent):
             _logger.error('Failed to show sector on terrain for %s', self.entity.id)
 
     def __onSettingsChanged(self, diff):
-        if self.stateStatus is None:
-            return
-        else:
-            isActive = self.stateStatus is not None and self.state == THERMAL_VISION_STATE.ACTIVE
-            if GAME.ENABLE_THERMAL_VISION_EFFECT in diff:
-                self.__setIsPyrometer(isActive and diff[GAME.ENABLE_THERMAL_VISION_EFFECT])
-            if GAME.ENABLE_THERMAL_VISION_SECTOR_EFFECT in diff:
-                self.__toggleTerrainSector(isActive and diff[GAME.ENABLE_THERMAL_VISION_SECTOR_EFFECT])
-            if GAME.SHOW_THERMAL_VISION_SECTOR_ON_MAP in diff:
-                self.__setSectorState(self.state)
-            return
+        state = self.state if self.stateStatus is not None else THERMAL_VISION_STATE.IDLE
+        isActive = state == THERMAL_VISION_STATE.ACTIVE
+        if GAME.SHOW_THERMAL_VISION_SECTOR_ON_MAP in diff:
+            self.__setSectorState(state)
+        if GAME.ENABLE_THERMAL_VISION_EFFECT in diff:
+            self.__setIsPyrometer(isActive and diff[GAME.ENABLE_THERMAL_VISION_EFFECT])
+        if GAME.ENABLE_THERMAL_VISION_SECTOR_EFFECT in diff:
+            self.__toggleTerrainSector(isActive and diff[GAME.ENABLE_THERMAL_VISION_SECTOR_EFFECT])
+        return
 
     def __showStateErrorMessage(self, state):
         errorMessageName = _STATE_ERROR_MESSAGES[state]

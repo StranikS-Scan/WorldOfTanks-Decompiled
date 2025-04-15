@@ -20,6 +20,7 @@ from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from constants import DOSSIER_TYPE, IS_DEVELOPMENT, SEASON_TYPE_BY_NAME, EVENT_TYPE, INVOICE_LIMITS, ENTITLEMENT_OPS, DailyQuestsLevels, MAX_LOG_EXT_INFO_LEN, MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 from soft_exception import SoftException
 from customization_quests_common import validateCustomizationQuestToken
+from collections import OrderedDict
 if TYPE_CHECKING:
     from ResMgr import DataSection
 __all__ = ['readBonusSection', 'readUTC', 'SUPPORTED_BONUSES']
@@ -1137,7 +1138,7 @@ _RESERVED_NAMES = frozenset(['config',
  'probabilityStageDependence',
  'bonusProbability',
  'depthLevel'])
-SUPPORTED_BONUSES = frozenset(__BONUS_READERS.iterkeys())
+SUPPORTED_BONUSES = set(__BONUS_READERS.iterkeys())
 __SORTED_BONUSES = sorted(SUPPORTED_BONUSES)
 SUPPORTED_BONUSES_IDS = dict(((n, i) for i, n in enumerate(__SORTED_BONUSES)))
 SUPPORTED_BONUSES_NAMES = {i:n for i, n in enumerate(__SORTED_BONUSES)}
@@ -1197,20 +1198,20 @@ def __readBonusConfig(section):
     return config
 
 
-def readBonusSection(bonusRange, section, eventType=None, checkLimit=True):
+def readBonusSection(bonusRange, section, eventType=None, checkLimit=True, orderedBonuses=False):
     if section is None:
         return {}
     else:
         bonusReaders = getBonusReaders(bonusRange)
         config = __readBonusConfig(section['config']) if section.has_key('config') else {}
-        limitIDs, bonus = __readBonusSubSection(config, bonusReaders, section, eventType, checkLimit)
+        limitIDs, bonus = __readBonusSubSection(config, bonusReaders, section, eventType, checkLimit, orderedBonuses)
         if config:
             bonus['config'] = config
         return bonus
 
 
-def __readBonusSubSection(config, bonusReaders, section, eventType=None, checkLimit=True):
-    bonus = {}
+def __readBonusSubSection(config, bonusReaders, section, eventType=None, checkLimit=True, orderedBonuses=False):
+    bonus = {} if not orderedBonuses else OrderedDict()
     resultLimitIDs = set()
     for name, subSection in section.items():
         if name in __PROBABILITY_READERS:

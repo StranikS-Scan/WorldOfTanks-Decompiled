@@ -671,6 +671,7 @@ class ServerSettingsManager(object):
                                        SESSION_STATS.SHOW_SPOTTED: 16,
                                        SESSION_STATS.ONLY_ONCE_HINT_SHOWN_FIELD: 17}, offsets={}),
      SETTINGS_SECTIONS.BATTLE_PASS_STORAGE: Section(masks={BATTLE_PASS.INTRO_SHOWN: 16,
+                                             BATTLE_PASS.EXTRA_CHAPTER_FIRST_ENTER: 17,
                                              BATTLE_PASS.EXTRA_CHAPTER_VIDEO_SHOWN: 18,
                                              BATTLE_PASS.EXTRA_CHAPTER_INTRO_SHOWN: 19,
                                              BATTLE_PASS.INTRO_VIDEO_SHOWN: 20}, offsets={BATTLE_PASS.BUY_ANIMATION_WAS_SHOWN: Offset(10, 31 << 10),

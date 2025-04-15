@@ -1,7 +1,7 @@
 <sequences.xml>
-  <xmlns:ussr>	ussr	</xmlns:ussr>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
   <xmlns:germany>	germany	</xmlns:germany>
-  <xmlns:usa>	usa	</xmlns:usa>
+  <xmlns:czech0>	usa	</xmlns:czech0>
   <xmlns:china>	china	</xmlns:china>
   <xmlns:france>	france	</xmlns:france>
   <xmlns:uk>	uk	</xmlns:uk>
@@ -9,6 +9,8 @@
   <xmlns:czech>	czech	</xmlns:czech>
   <xmlns:sweden>	sweden	</xmlns:sweden>
   <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
   <itemGroup>
     <name>	sequences	</name>
     <userString>	#vehicle_customization:sequence/general	</userString>
@@ -130,6 +132,11 @@
       <id>	31	</id>
       <name>	Ch45_WZ_114_3DSt_turret	</name>
       <sequenceName>	particles/Tank/customization/Ch45_WZ_114_3DSt/Ch45_WZ_114_3DSt_turret.ssm	</sequenceName>
+    </sequence>
+    <sequence>
+      <id>	32	</id>
+      <name>	Flag_SM	</name>
+      <sequenceName>	vehicles/russian/R224_IS_3_1945/Flag.ssm	</sequenceName>
     </sequence>
   </itemGroup>
 </sequences.xml>

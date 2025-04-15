@@ -79,7 +79,8 @@ def createPlugins():
      'artyCamDist': ArtyCameraDistancePlugin,
      'spgShotResultIndicator': SPGShotResultIndicatorPlugin,
      'dualAccuracyMechanics': DualAccuracyGunPlugin,
-     'temperatureMechanics': TemperatureGunPlugin}
+     'temperatureMechanics': TemperatureGunPlugin,
+     'shotDistance': ShotDistancePlugin}
     return resultPlugins
 
 
@@ -1644,14 +1645,15 @@ class DualAccuracyGunPlugin(CrosshairPlugin):
 
 
 class TemperatureGunPlugin(CrosshairPlugin):
-    __slots__ = ('__temperatureGunCtrl', '__isReplay')
-    _MAX_TEMPERATURE_PROGRESS = 1.0
-    _MIN_TEMPERATURE_PROGRESS = 0.0
+    __slots__ = ('__temperatureGunCtrl', '__isReplay', '__isStateHidden', '__isOverheated')
+    _HIDDEN_STATE = -1
 
     def __init__(self, parentObj):
         super(TemperatureGunPlugin, self).__init__(parentObj)
         self.__temperatureGunCtrl = None
         self.__isReplay = False
+        self.__isStateHidden = True
+        self.__isOverheated = False
         return
 
     def start(self):
@@ -1683,28 +1685,145 @@ class TemperatureGunPlugin(CrosshairPlugin):
     def __subscribeTemperatureCtrl(self, temperatureGunCtrl):
         if temperatureGunCtrl:
             self.__temperatureGunCtrl = temperatureGunCtrl
+            temperatureGunCtrl.onSetOverheat += self.__onSetOverheat
+            temperatureGunCtrl.onTemperatureProgress += self.__update
+            temperatureGunCtrl.onSetState += self.__onSetState
+            isOverheated = temperatureGunCtrl.isOverheated
             self.__isReplay = self.sessionProvider.isReplayPlaying
-            self.__temperatureGunCtrl.onSetOverheat += self.__onOverheat
-            self.__temperatureGunCtrl.onTemperatureProgress += self.__onTemperatureProgress
+            self.__isStateHidden = True
+            self.__onSetState(temperatureGunCtrl.state)
+            self.__onSetOverheat(isOverheated)
 
     def __unsubscribeTemperatureCtrl(self):
-        if self.__temperatureGunCtrl:
-            self.__temperatureGunCtrl.onTemperatureProgress -= self.__onTemperatureProgress
-            self.__temperatureGunCtrl.onSetOverheat -= self.__onOverheat
+        temperatureGunCtrl = self.__temperatureGunCtrl
+        if temperatureGunCtrl:
+            temperatureGunCtrl.onTemperatureProgress -= self.__update
+            temperatureGunCtrl.onSetOverheat -= self.__onSetOverheat
+            temperatureGunCtrl.onSetState -= self.__onSetState
             self.__temperatureGunCtrl = None
             self.__isReplay = False
+            self.__isStateHidden = True
+            self.__isOverheated = False
         return
 
-    def __update(self, temperatureProgress):
-        if self.__temperatureGunCtrl:
-            timeLeft = self.__temperatureGunCtrl.calculateCoolingTime()
-            self.parentObj.as_setOverheatProgressS(temperatureProgress, timeLeft, self.__isReplay)
+    def __onSetOverheat(self, isOverheat):
+        self.__isOverheated = isOverheat
+        self.parentObj.as_setOverheatStatusS(isOverheat)
+        self.__update(self.__temperatureGunCtrl.overheatPercent, self.__temperatureGunCtrl.getCoolingTime(), not isOverheat)
 
-    def __onOverheat(self, isOverheat):
-        if isOverheat:
-            self.__update(self._MAX_TEMPERATURE_PROGRESS)
+    def __onSetState(self, state):
+        if self.__isStateHidden:
+            state = self._HIDDEN_STATE
+        self.parentObj.as_setOverheatStateS(state)
+
+    def __update(self, temperatureProgress, timeLeft, isForceSkip=False):
+        hiddenStateFlag = not temperatureProgress or self.__isOverheated
+        if hiddenStateFlag != self.__isStateHidden:
+            self.__isStateHidden = hiddenStateFlag
+            self.__onSetState(self.__temperatureGunCtrl.state)
+        self.parentObj.as_setOverheatProgressS(temperatureProgress, timeLeft, self.__isReplay or isForceSkip)
+
+
+class ShotDistancePlugin(_DistancePlugin):
+    __slots__ = ('__currentShellDistance', '__trackID', '__isTargetLocked', '__canHitTarget')
+
+    def __init__(self, parentObj):
+        super(ShotDistancePlugin, self).__init__(parentObj)
+        self.__trackID = 0
+        self.__currentShellDistance = 0
+        self.__isTargetLocked = False
+        self.__canHitTarget = False
+
+    def start(self):
+        super(ShotDistancePlugin, self).start()
+        ctrl = self.sessionProvider.shared.feedback
+        if ctrl is not None:
+            ctrl.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
+        ctrl = self.sessionProvider.shared.ammo
+        if ctrl is not None:
+            self.__onCurrentShellChanged(ctrl.getCurrentShellCD())
+            ctrl.onCurrentShellChanged += self.__onCurrentShellChanged
+        g_eventBus.addListener(GameEvent.ON_TARGET_VEHICLE_CHANGED, self.__handleTargetLock, scope=EVENT_BUS_SCOPE.BATTLE)
+        return
+
+    def stop(self):
+        super(ShotDistancePlugin, self).stop()
+        ctrl = self.sessionProvider.shared.feedback
+        if ctrl is not None:
+            ctrl.onVehicleFeedbackReceived -= self.__onVehicleFeedbackReceived
+        ctrl = self.sessionProvider.shared.ammo
+        if ctrl is not None:
+            ctrl.onCurrentShellChanged -= self.__onCurrentShellChanged
+        g_eventBus.removeListener(GameEvent.ON_TARGET_VEHICLE_CHANGED, self.__handleTargetLock, scope=EVENT_BUS_SCOPE.BATTLE)
+        return
+
+    def _update(self):
+        target = BigWorld.entity(self.__trackID)
+        if target is None:
+            self.__stopTrack()
+            return
         else:
-            self.__update(self._MIN_TEMPERATURE_PROGRESS)
+            self.__updateDistance(target)
+            return
 
-    def __onTemperatureProgress(self, temperatureProgress):
-        self.__update(temperatureProgress)
+    def _onCrosshairViewChanged(self, viewID):
+        pass
+
+    def __handleTargetLock(self, event):
+        vehicleID = event.ctx.get('vehicleID')
+        self.__isTargetLocked = vehicleID is not None and vehicleID != 0
+        if self.__isTargetLocked:
+            self.__startTrack(vehicleID)
+        else:
+            self.__stopTrack()
+        return
+
+    def __onCurrentShellChanged(self, currentIntCD):
+        ctrl = self.sessionProvider.shared.ammo
+        if ctrl is None:
+            return
+        else:
+            self.__currentShellDistance = ctrl.getGunSettings().getMaxDistance(currentIntCD)
+            self._parentObj.as_setDistanceVisibilityS(self.__canHitTarget, self.__getShellDistanceString())
+            return
+
+    def __startTrack(self, vehicleID):
+        self.__stopTrack()
+        target = BigWorld.entity(vehicleID)
+        if target is not None and self.__shouldTrackVehicle(target):
+            self.__trackID = vehicleID
+            self.__updateDistance(target)
+            self._interval.start()
+        return
+
+    def __stopTrack(self):
+        self._interval.stop()
+        self.__trackID = 0
+        if self.__canHitTarget:
+            self.__canHitTarget = False
+            self._parentObj.as_setDistanceVisibilityS(self.__canHitTarget, self.__getShellDistanceString())
+
+    def __updateDistance(self, target):
+        targetDistance = avatar_getter.getDistanceToTarget(target)
+        canHitTarget = self.__currentShellDistance >= math.floor(targetDistance)
+        if canHitTarget != self.__canHitTarget:
+            self.__canHitTarget = canHitTarget
+            self._parentObj.as_setDistanceVisibilityS(self.__canHitTarget, self.__getShellDistanceString())
+
+    def __getShellDistanceString(self):
+        return '%d' % self.__currentShellDistance + backport.text(R.strings.ingame_gui.marker.meters())
+
+    @staticmethod
+    def __shouldTrackVehicle(target):
+        return target.isAlive() and BigWorld.player().team != target.publicInfo['team']
+
+    def __onVehicleFeedbackReceived(self, eventID, vehicleID, value):
+        if self.__isTargetLocked or eventID != FEEDBACK_EVENT_ID.ENTITY_IN_FOCUS:
+            return
+        isInFocus, entityType = value
+        if entityType != ENTITY_IN_FOCUS_TYPE.VEHICLE:
+            return
+        if isInFocus:
+            self.__startTrack(vehicleID)
+        else:
+            self.__stopTrack()

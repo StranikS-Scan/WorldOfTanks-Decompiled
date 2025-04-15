@@ -48,7 +48,7 @@ class HollowChargeType(ShellType):
 
 
 class HighExplosiveImpactParams(object):
-    __slots__ = ('radius', 'damages', 'coneAngleCos', 'piercingSpalls', 'damageAbsorptionType', 'isActive')
+    __slots__ = ('radius', 'damages', 'coneAngleCos', 'piercingSpalls', 'damageAbsorptionType', 'isActive', 'useEffectiveArmor')
 
     def __init__(self):
         self.radius = component_constants.ZERO_FLOAT
@@ -56,11 +56,12 @@ class HighExplosiveImpactParams(object):
         self.coneAngleCos = None
         self.piercingSpalls = None
         self.damageAbsorptionType = None
+        self.useEffectiveArmor = False
         self.isActive = True
         return
 
     def __repr__(self):
-        return 'HighExplosiveImpactParams(radius={}, damages={}, coneAngleCos={}, piersingSpalls={}, damageAbsorption={})'.format(self.radius, self.damages, self.coneAngleCos, self.piercingSpalls, DamageAbsorptionTypeToLabel[self.damageAbsorptionType] if self.damageAbsorptionType else None)
+        return 'HighExplosiveImpactParams(radius={}, damages={}, coneAngleCos={}, piersingSpalls={}, damageAbsorption={}, useEffectiveArmor={})'.format(self.radius, self.damages, self.coneAngleCos, self.piercingSpalls, DamageAbsorptionTypeToLabel[self.damageAbsorptionType] if self.damageAbsorptionType else None, self.useEffectiveArmor)
 
 
 class HighExplosiveType(ShellType):

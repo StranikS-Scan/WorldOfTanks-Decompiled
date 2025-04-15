@@ -52,6 +52,9 @@ _ARENA_PERIOD_STATE_NAME = 'STATE_arenastate'
 _ARENA_PERIOD_STATE = {ARENA_PERIOD.WAITING: 'STATE_arenastate_waiting',
  ARENA_PERIOD.PREBATTLE: 'STATE_arenastate_counter',
  ARENA_PERIOD.BATTLE: 'STATE_arenastate_battle'}
+_STATE_POSTMORTEM = 'STATE_postmortem_mode'
+_STATE_POSTMORTEM_OFF = 'STATE_postmortem_mode_off'
+_STATE_POSTMORTEM_ON = 'STATE_postmortem_mode_on'
 g_musicController = None
 
 def create():
@@ -106,6 +109,12 @@ def play(eventId=None):
             g_musicController.play(AMBIENT_EVENT_LOBBY, None, True)
         else:
             g_musicController.play(eventId)
+    return
+
+
+def onPostmortemState(enable):
+    if g_musicController is not None:
+        g_musicController.onPostmortemState(enable)
     return
 
 
@@ -251,6 +260,7 @@ class MusicController(object):
 
     def onLeaveArena(self):
         self.__isOnArena = False
+        self.onPostmortemState(False)
         BigWorld.player().arena.onVehicleKilled -= self.__onArenaVehicleKilled
         BigWorld.player().arena.onPeriodChange -= self.__onArenaStateChanged
 
@@ -314,6 +324,9 @@ class MusicController(object):
         if not self.__vehicleKilled:
             WWISE.WW_eventGlobal(_ON_VEHICLE_KILLED_EVENT)
             self.__vehicleKilled = True
+
+    def onPostmortemState(self, enable):
+        WWISE.WW_setState(_STATE_POSTMORTEM, _STATE_POSTMORTEM_ON if enable else _STATE_POSTMORTEM_OFF)
 
     def __getArenaSoundEvent(self, eventId):
         soundEventName = None

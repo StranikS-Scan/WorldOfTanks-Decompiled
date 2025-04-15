@@ -11,7 +11,7 @@ _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
 
 class BattlePassStateMachine(StateMachine):
-    __slots__ = ('__rewards', '__data', '__rewardsToChoose', '__packageRewards', '__chapterStyle', '__manualFlow')
+    __slots__ = ('__rewards', '__data', '__rewardsToChoose', '__packageRewards', '__chapterStyle', '__chapterVehicle', '__manualFlow')
 
     def __init__(self):
         super(BattlePassStateMachine, self).__init__()
@@ -20,6 +20,7 @@ class BattlePassStateMachine(StateMachine):
         self.__rewardsToChoose = []
         self.__packageRewards = None
         self.__chapterStyle = None
+        self.__chapterVehicle = None
         self.__manualFlow = False
         return
 
@@ -57,7 +58,7 @@ class BattlePassStateMachine(StateMachine):
         choiceState.configure()
         rewardState.configure()
         lobbyState.lobbyWait.addTransition(ConditionTransition(self.__hasChoiceOption, priority=2), target=choiceState.choiceItem)
-        lobbyState.lobbyWait.addTransition(ConditionTransition(self.__hasStyleReward, priority=1), target=videoState)
+        lobbyState.lobbyWait.addTransition(ConditionTransition(self.__hasVideoReward, priority=1), target=videoState)
         lobbyState.lobbyWait.addTransition(ConditionTransition(self.__hasAnyReward, priority=0), target=rewardState.rewardAny)
         choiceState.choiceItem.addTransition(ConditionTransition(self.__hasAnyReward, priority=1), target=rewardState.rewardAny)
         choiceState.choiceItem.addTransition(ConditionTransition(lambda _: True, priority=0), target=lobbyState.lobbyWait)
@@ -72,11 +73,12 @@ class BattlePassStateMachine(StateMachine):
     def hasActiveFlow(self):
         return not self.isStateEntered(states.BattlePassRewardStateID.LOBBY)
 
-    def saveRewards(self, data, defaultRewards=None, chapterStyle=None, packageRewards=None, rewardsToChoose=None):
+    def saveRewards(self, data, defaultRewards=None, chapterStyle=None, chapterVehicle=None, packageRewards=None, rewardsToChoose=None):
         self.__data = data
         self.__rewards = defaultRewards
         self.__packageRewards = packageRewards
         self.__chapterStyle = chapterStyle
+        self.__chapterVehicle = chapterVehicle
         self.__rewardsToChoose = rewardsToChoose or []
 
     def setManualFlow(self):
@@ -114,6 +116,9 @@ class BattlePassStateMachine(StateMachine):
     def setChapterForStyle(self, chapter):
         self.__chapterStyle = chapter
 
+    def getChosenVehicleChapter(self):
+        return self.__chapterVehicle
+
     def getLeftRewardsCount(self):
         return len(self.__rewardsToChoose)
 
@@ -130,11 +135,18 @@ class BattlePassStateMachine(StateMachine):
         self.__data = None
         self.__rewardsToChoose = []
         self.__chapterStyle = None
+        self.__chapterVehicle = None
         self.__manualFlow = False
         return
 
     def __hasStyleReward(self, *_):
         return self.__chapterStyle is not None
+
+    def __hasVideoReward(self, *_):
+        return self.__hasStyleReward() or self.__hasVehicleReward()
+
+    def __hasVehicleReward(self, *_):
+        return self.__chapterVehicle is not None
 
     def __hasChoiceOption(self, *_):
         return bool(self.__rewardsToChoose)

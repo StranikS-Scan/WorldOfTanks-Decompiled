@@ -3,12 +3,13 @@
 from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusModel
+from gui.impl.gen.view_models.common.missions.bonuses.item_bonus_model import ItemBonusModel
 from gui_lootboxes.gui.impl.gen.view_models.views.lobby.gui_lootboxes.vehicle_bonus_model import VehicleBonusModel
 
 class LootboxTooltipRotationModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=3, commands=0):
+    def __init__(self, properties=4, commands=0):
         super(LootboxTooltipRotationModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -35,8 +36,19 @@ class LootboxTooltipRotationModel(ViewModel):
     def getVehicleStageListType():
         return VehicleBonusModel
 
+    def getRewardsStageList(self):
+        return self._getArray(3)
+
+    def setRewardsStageList(self, value):
+        self._setArray(3, value)
+
+    @staticmethod
+    def getRewardsStageListType():
+        return ItemBonusModel
+
     def _initialize(self):
         super(LootboxTooltipRotationModel, self)._initialize()
         self._addViewModelProperty('compensation', BonusModel())
         self._addNumberProperty('stageRotation', 1)
         self._addArrayProperty('vehicleStageList', Array())
+        self._addArrayProperty('rewardsStageList', Array())

@@ -2,13 +2,13 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/regular/missions_page.py
 import weakref
 from collections import namedtuple
-import typing
 import BigWorld
 import Windowing
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import MISSIONS_PAGE
 from adisp import adisp_async as adispasync, adisp_process
+from gui.impl.lobby.daily.unseen_quests_component import getAvailableDailyQuests
 from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.marathon.collective_goal_marathon import COLLECTIVE_GOAL_MARATHON_PREFIX
 from wg_async import wg_async, wg_await
@@ -28,7 +28,6 @@ from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.locale.BATTLE_PASS import BATTLE_PASS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.impl.lobby.subscription.subscription_helpers import isSubscriptionDailyQuestsIntroShown
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.marathon.marathon_event_controller import getMarathons
@@ -46,14 +45,11 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items import getTypeOfCompactDescr
 from skeletons.gui.event_boards_controllers import IEventBoardController
-from skeletons.gui.game_control import IBattlePassController, IHangarSpaceSwitchController, IGameSessionController, IMapboxController, IMarathonEventsController, IRankedBattlesController, IFunRandomController, ILimitedUIController, ICollectiveGoalMarathonsController
+from skeletons.gui.game_control import IBattlePassController, IHangarSpaceSwitchController, IGameSessionController, IMapboxController, IMarathonEventsController, IRankedBattlesController, IFunRandomController, ILimitedUIController, ICollectiveGoalMarathonsController, IUnseenEventsCounter
 from skeletons.gui.app_loader import IAppLoader, GuiGlobalSpaceID
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
-if typing.TYPE_CHECKING:
-    from typing import List, Union
-    from gui.server_events.event_items import DailyTokenQuest, DailyQuest, PremiumQuest
 TabData = namedtuple('TabData', ('alias',
  'linkage',
  'tooltip',
@@ -92,6 +88,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
     __battleMattersController = dependency.descriptor(IBattleMattersController)
     __limitedUIController = dependency.descriptor(ILimitedUIController)
     __collectiveGoalMarathonsController = dependency.descriptor(ICollectiveGoalMarathonsController)
+    __unseenEventsManager = dependency.descriptor(IUnseenEventsCounter)
 
     def __init__(self, ctx):
         super(MissionsPage, self).__init__(ctx)
@@ -190,7 +187,8 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         self.addListener(MissionsEvent.ON_FILTER_CHANGED, self.__onFilterChanged, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(MissionsEvent.ON_FILTER_CLOSED, self.__onFilterClosed, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(MissionsEvent.PAGE_INVALIDATE, self.__pageInvalidate, EVENT_BUS_SCOPE.LOBBY)
-        self.eventsCache.onEventsVisited += self.__onEventsVisited
+        self.__unseenEventsManager.onUnseenEventUpdated += self.__onUnseenEventUpdated
+        self.__unseenEventsManager.onSeenEvents += self.__onUnseenEventUpdated
         enterEvent, _ = self.__VOICED_TABS.get(self.__currentTabAlias, (None, None))
         if enterEvent is not None:
             self.soundManager.playSound(enterEvent)
@@ -235,11 +233,13 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         self.removeListener(MissionsEvent.ON_FILTER_CHANGED, self.__onFilterChanged, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(MissionsEvent.ON_FILTER_CLOSED, self.__onFilterClosed, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(MissionsEvent.PAGE_INVALIDATE, self.__pageInvalidate, EVENT_BUS_SCOPE.LOBBY)
-        self.eventsCache.onEventsVisited -= self.__onEventsVisited
+        self.__unseenEventsManager.onUnseenEventUpdated -= self.__onUnseenEventUpdated
+        self.__unseenEventsManager.onSeenEvents -= self.__onUnseenEventUpdated
         self.__mapboxCtrl.onPrimeTimeStatusUpdated -= self.__onPrimeTimeStatusUpdated
         caches.getNavInfo().setMissionsTab(self.__currentTabAlias)
         caches.getNavInfo().setMarathonPrefix(self.__marathonPrefix)
         self.fireEvent(events.MissionsEvent(events.MissionsEvent.ON_DEACTIVATE), EVENT_BUS_SCOPE.LOBBY)
+        self.__unseenEventsManager.commitToSettings()
         return
 
     def _onRegisterFlashComponent(self, viewPy, alias):
@@ -345,7 +345,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
             self.__scrollToGroup()
         return
 
-    def __onEventsVisited(self, counters=None):
+    def __onUnseenEventUpdated(self, *_):
         if self.currentTab is not None:
             self.__updateHeader(False)
         return
@@ -436,16 +436,12 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
              QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS):
                 newEventsCount = 0
                 if alias == QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS:
-                    availableDailyQuests = []
-                    availableDailyQuests.extend(self.eventsCache.getDailyQuests(includeEpic=True).values())
-                    availableDailyQuests.extend(self.eventsCache.getPremiumQuests(lambda q: q.isAvailable().isValid).values())
-                    if self.lobbyContext.getServerSettings().isDailyQuestsExtraRewardsEnabled() and not isSubscriptionDailyQuestsIntroShown():
-                        newEventsCount += 1
+                    suitableEvents = getAvailableDailyQuests(self.eventsCache)
                 elif alias == QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS:
+                    suitableEvents = tuple()
                     newEventsCount = self.__mapboxCtrl.getUnseenItemsCount()
                 elif self.currentTab is not None and self.__currentTabAlias == alias:
                     suitableEvents = self.__getSuitableEvents(self.currentTab)
-                    newEventsCount = len(settings.getNewCommonEvents(suitableEvents))
                 else:
                     if alias == QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS:
                         from gui.Scaleform.daapi.view.lobby.missions.regular.missions_views import MissionsCategoriesView
@@ -454,8 +450,8 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
                     else:
                         advisableQuests = self.eventsCache.getAdvisableQuests()
                     advisableEvents = self.__builders[alias].getBlocksAdvisableEvents(advisableQuests)
-                    newEventsCount = len(settings.getNewCommonEvents(advisableEvents))
-                tab['value'] = newEventsCount
+                    suitableEvents = {q.getID() for q in advisableEvents}
+                tab['value'] = self.__unseenEventsManager.getUnseenEventsCount(suitableEvents) + newEventsCount
             return (headerTab, tab)
 
     def __battleMattersTabIsEnabled(self):
@@ -600,12 +596,6 @@ class MissionView(MissionViewBase):
          'hideUnavailable': False}
         AccountSettings.setFilter(MISSIONS_PAGE, filterData)
         self.fireEvent(events.MissionsEvent(events.MissionsEvent.ON_FILTER_CHANGED, ctx=filterData), EVENT_BUS_SCOPE.LOBBY)
-
-    def markVisited(self):
-        super(MissionView, self).markVisited()
-        quests = self.eventsCache.getAdvisableQuests()
-        counter = len(settings.getNewCommonEvents(quests.values()))
-        self.eventsCache.onEventsVisited({'missions': counter})
 
     def _populate(self):
         super(MissionView, self)._populate()

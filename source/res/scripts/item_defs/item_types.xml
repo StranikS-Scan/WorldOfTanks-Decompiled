@@ -83,6 +83,9 @@
       <private></private>
       <disabledInRoaming></disabledInRoaming>
       <event_battles></event_battles>
+      <event_premium_vehicle></event_premium_vehicle>
+      <event_not_elite_vehicle></event_not_elite_vehicle>
+      <event_overturn_recovery></event_overturn_recovery>
       <fallout></fallout>
       <epic_battles></epic_battles>
       <bob></bob>
@@ -97,6 +100,23 @@
       <premiumIGR></premiumIGR>
       <HD></HD>
       <pillbox></pillbox>
+      <stationary></stationary>
+      <supply></supply>
+      <supply_Pillbox></supply_Pillbox>
+      <supply_Bunker></supply_Bunker>
+      <supply_ATgun></supply_ATgun>
+      <supply_Barricades></supply_Barricades>
+      <supply_WatchTower></supply_WatchTower>
+      <supply_Mortar></supply_Mortar>
+      <supply_Flamer></supply_Flamer>
+      <supply_hull_bsp_model></supply_hull_bsp_model>
+      <supply_turret_bsp_model></supply_turret_bsp_model>
+      <supply_WithoutSelfRamming></supply_WithoutSelfRamming>
+      <supply_WithoutRamming></supply_WithoutRamming>
+      <supply_structure></supply_structure>
+      <noCollisionWhenDestroyed></noCollisionWhenDestroyed>
+      <isDestructibleSupply></isDestructibleSupply>
+      <visibleToWatchTower></visibleToWatchTower>
       <dog></dog>
       <excluded_from_sandbox></excluded_from_sandbox>
       <testTank></testTank>
@@ -116,6 +136,7 @@
       <wheeledVehicle></wheeledVehicle>
       <wheeledVehicleWithoutFeatures></wheeledVehicleWithoutFeatures>
       <magneticAutoAim></magneticAutoAim>
+      <burnout></burnout>
       <lockDevices></lockDevices>
       <lockEquipment></lockEquipment>
       <lockShells></lockShells>
@@ -162,6 +183,7 @@
       <rentEligible></rentEligible>
       <bot_hunter></bot_hunter>
       <debutBoxes></debutBoxes>
+      <notInShop></notInShop>
     </tags>
   </vehicle>
   <vehicleChassis>
@@ -252,6 +274,7 @@
       <minefield></minefield>
       <artillery></artillery>
       <bomber></bomber>
+      <pick-up></pick-up>
     </tags>
   </shell>
   <equipment>
@@ -292,6 +315,12 @@
       <additInvisibilityDevice></additInvisibilityDevice>
       <commandersView></commandersView>
       <notBuyWhenAutoEquip></notBuyWhenAutoEquip>
+      <eventItem></eventItem>
+      <eventBuff></eventBuff>
+      <event_battles></event_battles>
+      <hb_ability></hb_ability>
+      <hb_passive_ability></hb_passive_ability>
+      <hb_roleAbility></hb_roleAbility>
       <repairKitBattleRoyale></repairKitBattleRoyale>
       <advancedLogging></advancedLogging>
       <hideIfNotInShop></hideIfNotInShop>
@@ -369,6 +398,7 @@
       <offspringArenaMusic></offspringArenaMusic>
       <sabatonArenaMusic></sabatonArenaMusic>
       <ariaArenaMusic></ariaArenaMusic>
+      <event_battles></event_battles>
     </tags>
   </customizationItem>
   <crewSkin>

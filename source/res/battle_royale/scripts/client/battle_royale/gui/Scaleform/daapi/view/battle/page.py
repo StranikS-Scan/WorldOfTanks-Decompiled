@@ -24,7 +24,7 @@ from gui.battle_control.battle_constants import BATTLE_CTRL_ID, VEHICLE_VIEW_STA
 from battle_royale.gui.battle_control.controllers.spawn_ctrl import ISpawnListener
 from battle_royale.gui.br_effect_player import BRUpgradeEffectPlayer
 from battle_royale.gui.game_control.br_battle_messages import ProgressionMessagesPlayer
-from battle_royale.gui.battle_control.controllers.br_battle_sounds import BRBattleSoundController, RadarSoundPlayer, LevelSoundPlayer, EnemiesAmountSoundPlayer, PhaseSoundPlayer, PostmortemSoundPlayer, InstallModuleSoundPlayer, EquipmentSoundPlayer, SelectRespawnSoundPlayer, ArenaPeriodSoundPlayer
+from battle_royale.gui.battle_control.controllers.br_battle_sounds import BRBattleSoundController, RadarSoundPlayer, LevelSoundPlayer, EnemiesAmountSoundPlayer, PhaseSoundPlayer, InstallModuleSoundPlayer, EquipmentSoundPlayer, SelectRespawnSoundPlayer, ArenaPeriodSoundPlayer
 
 class _DynamicAliases(CONST_CONTAINER):
     SELECT_RESPAWN_SOUND_PLAYER = 'selectRespawnSoundPlayer'
@@ -33,7 +33,6 @@ class _DynamicAliases(CONST_CONTAINER):
     LEVEL_SOUND_PLAYER = 'levelSoundPlayer'
     ENEMIES_AMOUNT_SOUND_PLAYER = 'enemiesAmountSoundPlayer'
     PHASE_SOUND_PLAYER = 'phaseSoundPlayer'
-    POSTMORTEM_SOUND_PLAYER = 'postmortemSoundPlayer'
     INSTALL_MODULE_SOUND_PLAYER = 'installModuleSoundPlayer'
     ARENA_PERIOD_SOUND_PLAYER = 'arenaPeriodSoundPlayer'
     EQUIPMENT_SOUND_PLAYER = 'equipmentSoundPlayer'
@@ -83,7 +82,6 @@ class _BattleRoyaleComponentsConfig(ComponentsConfig):
            BATTLE_VIEW_ALIASES.FULL_STATS,
            _DynamicAliases.ENEMIES_AMOUNT_SOUND_PLAYER,
            _DynamicAliases.PHASE_SOUND_PLAYER,
-           _DynamicAliases.POSTMORTEM_SOUND_PLAYER,
            _DynamicAliases.ARENA_PERIOD_SOUND_PLAYER,
            _DynamicAliases.EQUIPMENT_SOUND_PLAYER)),
          (BATTLE_CTRL_ID.AMMO, (BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL,))), ((DynamicAliases.DRONE_MUSIC_PLAYER, drone_music_player.DroneMusicPlayer),
@@ -93,7 +91,6 @@ class _BattleRoyaleComponentsConfig(ComponentsConfig):
          (_DynamicAliases.LEVEL_SOUND_PLAYER, LevelSoundPlayer),
          (_DynamicAliases.ENEMIES_AMOUNT_SOUND_PLAYER, EnemiesAmountSoundPlayer),
          (_DynamicAliases.PHASE_SOUND_PLAYER, PhaseSoundPlayer),
-         (_DynamicAliases.POSTMORTEM_SOUND_PLAYER, PostmortemSoundPlayer),
          (_DynamicAliases.INSTALL_MODULE_SOUND_PLAYER, InstallModuleSoundPlayer),
          (_DynamicAliases.ARENA_PERIOD_SOUND_PLAYER, ArenaPeriodSoundPlayer),
          (_DynamicAliases.VEH_UPGRADE_EFFECT_PLAYER, BRUpgradeEffectPlayer),

@@ -308,7 +308,7 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         return False if self.prbEntity is None else bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.COMP7)
 
     def isBattleModifiersAvailable(self):
-        return self.isComp7PrbActive() and len(self.battleModifiers) > 0
+        return len(self.battleModifiers) > 0
 
     def getPlatoonRatingRestriction(self):
         unitMgr = prb_getters.getClientUnitMgr()
@@ -354,7 +354,8 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         if not self.__comp7RanksConfig:
             return False
         if not self.__comp7RanksConfig.ranks:
-            _logger.error('No ranks data available.')
+            if not self.__comp7Config.isTournamentEnabled:
+                _logger.error('No ranks data available.')
             return False
         return True
 

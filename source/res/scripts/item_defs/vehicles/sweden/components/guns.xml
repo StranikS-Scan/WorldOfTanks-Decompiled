@@ -57,6 +57,7 @@
     <_105mm_Bofors_D_G5_SH>	1004	</_105mm_Bofors_D_G5_SH>
     <_120mm_akan_L_40_G6_SH>	1005	</_120mm_akan_L_40_G6_SH>
     <_105mm_strvkan_L_55>	31001	</_105mm_strvkan_L_55>
+    <_120mm_akan_L_40_Kranvagn>	31010	</_120mm_akan_L_40_Kranvagn>
   </ids>
   <shared>
     <_20mm_akan_m_Madsen>
@@ -1837,14 +1838,14 @@
           <speed>	852	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	179 167	</piercingPower>
+          <piercingPower>	198 177	</piercingPower>
         </_105mm_slpgr_m_42>
         <_105mm_slpprj_m_49>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	1009	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	224 194	</piercingPower>
+          <piercingPower>	232 214	</piercingPower>
         </_105mm_slpprj_m_49>
         <_105mm_sgr_m_40_B>
           <defaultPortion>	0	</defaultPortion>
@@ -1901,7 +1902,7 @@
           <speed>	1350	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	242 220	</piercingPower>
+          <piercingPower>	248 230	</piercingPower>
         </_105mm_slpprj_m_52_B>
         <_105mm_sgr_m_52>
           <defaultPortion>	0	</defaultPortion>
@@ -2718,6 +2719,63 @@
         </_120mm_sgr_m_51>
       </shots>
     </_120mm_akan_L_40>
+    <_120mm_akan_L_40_Kranvagn>
+      <userString>	#sweden_vehicles:_120mm_akan_L_40	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	320000	</price>
+      <impulse>	0.64	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.66	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -12.0 1.0 -12.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26	</rotationSpeed>
+      <reloadTime>	10	</reloadTime>
+      <maxAmmo>	36	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	1600	</weight>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.3	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_120mm_slpprj_m_51>
+          <defaultPortion>	1.00	</defaultPortion>
+          <speed>	1000	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	258 236	</piercingPower>
+        </_120mm_slpprj_m_51>
+        <_120mm_psgr_m_51>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	840	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	310 310	</piercingPower>
+        </_120mm_psgr_m_51>
+        <_120mm_sgr_m_51>
+          <defaultPortion>	0.00	</defaultPortion>
+          <speed>	680	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	60 60	</piercingPower>
+        </_120mm_sgr_m_51>
+      </shots>
+    </_120mm_akan_L_40_Kranvagn>
     <_120mm_akan_L_40B>
       <userString>	#sweden_vehicles:_120mm_akan_L_40	</userString>
       <tags></tags>

@@ -29,7 +29,8 @@ if typing.TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 _AVAILABLE_GUI_TYPES_LABELS = {constants.ARENA_BONUS_TYPE.REGULAR: constants.ARENA_GUI_TYPE.RANDOM,
  constants.ARENA_BONUS_TYPE.TRAINING: constants.ARENA_GUI_TYPE.TRAINING,
- constants.ARENA_BONUS_TYPE.TOURNAMENT_REGULAR: constants.ARENA_GUI_TYPE.TRAINING}
+ constants.ARENA_BONUS_TYPE.TOURNAMENT_REGULAR: constants.ARENA_GUI_TYPE.TRAINING,
+ constants.ARENA_BONUS_TYPE.TOURNAMENT_COMP7: constants.ARENA_GUI_TYPE.COMP7}
 _AVAILABLE_BONUS_TYPES_LABELS = {constants.ARENA_BONUS_TYPE.CYBERSPORT: 'team7x7'}
 _RELATIONS = formatters.RELATIONS
 _RELATIONS_SCHEME = formatters.RELATIONS_SCHEME
@@ -1698,3 +1699,32 @@ def getProgressFromQuestWithSingleAccumulative(quest):
             currentProgress, totalProgress = item.getProgressPerGroup().get(None, [])[:2]
             return (currentProgress, totalProgress)
     return (None, None)
+
+
+def getTokenNeededCountInCondition(quest, tokenName, default=None):
+    return default if quest is None else _getTokenNeededCountInCondition(quest.accountReqs.getConditions().items, tokenName, default)
+
+
+def _getTokenNeededCountInCondition(items, tokenName, default=None):
+    item = _getTokenItemInCondition(items, tokenName)
+    return default if item is None else item.getNeededCount()
+
+
+def getTokenReceivedCountInCondition(quest, tokenName, default=None):
+    return default if quest is None else _getTokenReceivedCountInCondition(quest.accountReqs.getConditions().items, tokenName, default)
+
+
+def _getTokenReceivedCountInCondition(items, tokenName, default=None):
+    item = _getTokenItemInCondition(items, tokenName)
+    return default if item is None else item.getReceivedCount()
+
+
+def _getTokenItemInCondition(items, tokenName):
+    res = None
+    for item in items:
+        if isinstance(item, _ConditionsGroup):
+            res = _getTokenItemInCondition(item.items, tokenName)
+        if item.getName() == 'token' and item.getID() == tokenName:
+            return item
+
+    return res

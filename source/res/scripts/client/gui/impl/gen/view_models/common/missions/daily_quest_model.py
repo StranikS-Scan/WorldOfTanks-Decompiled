@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.common.missions.quest_model import QuestModel
 class DailyQuestModel(QuestModel):
     __slots__ = ()
 
-    def __init__(self, properties=16, commands=0):
+    def __init__(self, properties=17, commands=0):
         super(DailyQuestModel, self).__init__(properties=properties, commands=commands)
 
     def getIcon(self):
@@ -44,6 +44,12 @@ class DailyQuestModel(QuestModel):
     def setIsFirstView(self, value):
         self._setBool(15, value)
 
+    def getHasPremium(self):
+        return self._getBool(16)
+
+    def setHasPremium(self, value):
+        self._setBool(16, value)
+
     def _initialize(self):
         super(DailyQuestModel, self)._initialize()
         self._addStringProperty('icon', '')
@@ -51,3 +57,4 @@ class DailyQuestModel(QuestModel):
         self._addBoolProperty('isEnabledSubscription', False)
         self._addBoolProperty('isActiveSubscription', False)
         self._addBoolProperty('isFirstView', False)
+        self._addBoolProperty('hasPremium', False)

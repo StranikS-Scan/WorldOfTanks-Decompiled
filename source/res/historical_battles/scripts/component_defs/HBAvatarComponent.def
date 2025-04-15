@@ -1,0 +1,66 @@
+<HBAvatarComponent.def>
+  <BaseMethods>
+    <requestRespawn>
+      <Arg>	INT32	</Arg>
+    </requestRespawn>
+  </BaseMethods>
+  <CellMethods>
+    <selectVehicle>
+      <Exposed></Exposed>
+      <Arg>	INT32	</Arg>
+    </selectVehicle>
+    <confirmVehicleSelection>
+      <Exposed></Exposed>
+    </confirmVehicleSelection>
+    <prepareSpawn>
+      <Exposed></Exposed>
+      <Arg>	FLOAT32	</Arg>
+    </prepareSpawn>
+    <performRespawn>
+      <Arg>	RESPAWN_INFO_VEHICLE	</Arg>
+    </performRespawn>
+  </CellMethods>
+  <Properties>
+    <tankSet>
+      <Type>	ARRAY	  <of>	INT32	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </tankSet>
+    <tankSetMask>
+      <Type>	ARRAY	  <of>	BOOL	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </tankSetMask>
+    <respawnTime>
+      <Type>	FLOAT64	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </respawnTime>
+    <respawnPrepared>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </respawnPrepared>
+    <divisionID>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </divisionID>
+    <divisionLevel>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </divisionLevel>
+    <respawnsExhausted>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+      <Default>	0	</Default>
+    </respawnsExhausted>
+  </Properties>
+  <ofEntity>
+    <Avatar></Avatar>
+  </ofEntity>
+</HBAvatarComponent.def>

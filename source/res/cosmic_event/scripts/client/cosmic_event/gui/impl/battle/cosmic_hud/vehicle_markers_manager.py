@@ -78,3 +78,9 @@ class VehicleMarkersManager(plugins.IMarkersManager):
 
     def _setupPlugins(self, arenaVisitor):
         pass
+
+    def setMarkerCustomDistanceStr(self, markerID, customStr):
+        pass
+
+    def setMarkerTextLabelEnabled(self, markerID, enabled):
+        pass

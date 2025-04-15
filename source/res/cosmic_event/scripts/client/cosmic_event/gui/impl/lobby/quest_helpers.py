@@ -9,7 +9,7 @@ if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.common.missions.daily_quest_model import DailyQuestModel
     from gui.impl.gen.view_models.common.missions.conditions.preformatted_condition_model import PreformattedConditionModel
     from gui.server_events.event_items import Quest
-    from gui.impl.gen.view_models.views.lobby.missions.widget.widget_quest_model import WidgetQuestModel
+    from gui.impl.gen.view_models.views.lobby.daily.widget_quest_model import WidgetQuestModel
 
 def getDailyQuestModelFromQuest(quest):
     questUIPacker = DailyCosmicQuestUIDataPacker(quest)

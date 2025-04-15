@@ -29,7 +29,7 @@ from frameworks.wulf import ViewFlags, ViewSettings, WindowLayer, ViewStatus
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.missions.widget.widget_quest_model import WidgetQuestModel
+from gui.impl.gen.view_models.views.lobby.daily.widget_quest_model import WidgetQuestModel
 from gui.impl.gui_decorators import args2params
 from gui.impl.lobby.common.view_helpers import packBonusModelAndTooltipData
 from gui.impl.lobby.common.view_mixins import LobbyHeaderVisibility

@@ -21,6 +21,8 @@ class ClanInvitesViewWithTable(ClanInvitesViewWithTableMeta):
         super(ClanInvitesViewWithTable, self).__init__()
         self._parentWnd = None
         self._searchDP = self._createSearchDP()
+        self._searchDP.setFlashObject(self.as_getTableDPS())
+        self._searchDP.buildList(None)
         return
 
     @property

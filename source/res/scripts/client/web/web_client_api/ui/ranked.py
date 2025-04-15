@@ -27,9 +27,7 @@ class OpenRankedPagesMixin(object):
 
     @w2c(_OpenRankedBattlesScheme, name='open_ranked_page')
     def openRankedPage(self, cmd):
-        self.__rankedController.showRankedBattlePage(ctx={'selectedItemID': cmd.pageId,
-         'showedFromWeb': True,
-         'webParams': cmd.pageParams})
+        pass
 
     @w2c(_OpenBrowserOverlaySchema, name='open_ranked_overlay')
     def openRankedOverlay(self, cmd):

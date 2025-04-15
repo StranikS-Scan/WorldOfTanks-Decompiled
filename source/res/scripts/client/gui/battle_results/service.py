@@ -205,7 +205,7 @@ class BattleResultsService(IBattleResultsService):
             personalMissions = {}
             questsProgress = reusableInfo.personal.getQuestsProgress()
             if questsProgress:
-                premiumQuests = self.eventsCache.getPremiumQuests()
+                premiumQuests = self.eventsCache.getDailyPremiumQuests()
                 allCommonQuests = self.eventsCache.getQuests()
                 allCommonQuests.update(self.eventsCache.getHiddenQuests(lambda q: q.isShowedPostBattle()))
                 for qID, qProgress in questsProgress.iteritems():

@@ -3,12 +3,14 @@
 import BigWorld
 import logging
 import constants
-from account_helpers.AccountSettings import NEW_SETTINGS_COUNTER
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import NEW_SETTINGS_COUNTER, KEY_SETTINGS
 from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS, SESSION_STATS, BattlePassStorageKeys, BattleCommStorageKeys, OnceOnlyHints, ScorePanelStorageKeys, SPGAim, GuiSettingsBehavior, NewYearStorageKeys, GRAPHICS
 from adisp import adisp_process, adisp_async
 from debug_utils import LOG_DEBUG
 from gui.server_events.pm_constants import PM_TUTOR_FIELDS
 from helpers import dependency
+from gui.shared.utils.graphics import getCurrentGraphicPresetName, getGraphicPresetSettingsByName, getGraphicPresetSettingsByIndex
 from skeletons.account_helpers.settings_core import ISettingsCache
 from skeletons.gui.game_control import IIGRController
 _logger = logging.getLogger(__name__)
@@ -16,7 +18,6 @@ _logger = logging.getLogger(__name__)
 def _initializeDefaultSettings(core, data, initialized):
     LOG_DEBUG('Initializing server settings.')
     from account_helpers.counter_settings import dropCounters as dropNewSettingsCounters
-    from account_helpers.AccountSettings import AccountSettings
     options = core.options
     gameData = data['gameData'] = {GAME.DATE_TIME_MESSAGE_INDEX: 2,
      GAME.ENABLE_OL_FILTER: options.getSetting(GAME.ENABLE_OL_FILTER).getDefaultValue(),
@@ -365,7 +366,6 @@ def __migrateMaskValue(currentVal, mask, offset):
 
 def _migrateTo36(core, data, initialized):
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-    from account_helpers.AccountSettings import AccountSettings
     default = AccountSettings.getSettingsDefault(GAME.GAMEPLAY_MASK)
     storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.GAMEPLAY, default)
     currentMask = storedValue & 65535
@@ -381,7 +381,6 @@ def _migrateTo37(core, data, initialized):
 
 def _migrateTo38(core, data, initialized):
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-    from account_helpers.AccountSettings import AccountSettings
     default = AccountSettings.getSettingsDefault(GAME.GAMEPLAY_MASK)
     storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.GAMEPLAY, default)
     currentGameplayMask = storedValue & 65535
@@ -823,7 +822,6 @@ def _migrateTo92(core, data, initialized):
 
 
 def _migrateTo93(_, data, __):
-    from account_helpers import AccountSettings
     from account_helpers.AccountSettings import FUN_RANDOM_CAROUSEL_FILTER_1, FUN_RANDOM_CAROUSEL_FILTER_2
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS as SECTIONS
     data[SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_1] = AccountSettings.getFilterDefault(FUN_RANDOM_CAROUSEL_FILTER_1)
@@ -912,7 +910,6 @@ def _migrateTo98(core, data, initialized):
 
 
 def _migrateTo99(_, data, __):
-    from account_helpers import AccountSettings
     from account_helpers.AccountSettings import FUN_RANDOM_CAROUSEL_FILTER_1, FUN_RANDOM_CAROUSEL_FILTER_2
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS as SECTIONS
     data[SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_1] = AccountSettings.getFilterDefault(FUN_RANDOM_CAROUSEL_FILTER_1)
@@ -942,7 +939,6 @@ def _migrateTo102(core, data, initialized):
 
 
 def _migrateTo103(core, data, initialized):
-    from account_helpers import AccountSettings
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS, LIMITED_UI_STORAGES, LIMITED_UI_SPAM_OFF, LIMITED_UI_KEY
     for storage in LIMITED_UI_STORAGES:
         data[storage][LIMITED_UI_KEY] = 0
@@ -961,7 +957,6 @@ def _migrateTo103(core, data, initialized):
 
 
 def _migrateTo104(_, data, __):
-    from account_helpers import AccountSettings
     from account_helpers.AccountSettings import FUN_RANDOM_CAROUSEL_FILTER_1, FUN_RANDOM_CAROUSEL_FILTER_2
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS as SECTIONS
     data[SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_1] = AccountSettings.getFilterDefault(FUN_RANDOM_CAROUSEL_FILTER_1)
@@ -1012,7 +1007,6 @@ def _migrateTo110(core, data, initialized):
 
 
 def _migrateTo111(core, data, initialized):
-    from account_helpers import AccountSettings
     from account_helpers.AccountSettings import CREW_SKINS_VIEWED
     from skeletons.gui.shared import IItemsCache
     itemsCache = dependency.instance(IItemsCache)
@@ -1026,7 +1020,6 @@ def _migrateTo111(core, data, initialized):
 
 
 def _migrateTo112(core, data, initialized):
-    from account_helpers import AccountSettings
     from account_helpers.AccountSettings import CREW_SKINS_VIEWED
     crewSkinsViewed = AccountSettings.getSettings(CREW_SKINS_VIEWED)
     if not isinstance(crewSkinsViewed, dict):
@@ -1046,7 +1039,6 @@ def _migrateTo114(core, data, initialized):
 
 def _migrateTo115(core, data, initialized):
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS, ARMORY_YARD_KEYS
-    from account_helpers import AccountSettings
     data[SETTINGS_SECTIONS.ARMORY_YARD][ARMORY_YARD_KEYS.BUILD_PROGRESS] = 0
     AccountSettings.clearArmoryYard()
 
@@ -1342,17 +1334,7 @@ def _migrateTo130(core, data, initialized):
 
 
 def _migrateTo131(core, data, initialized):
-    from account_helpers.AccountSettings import AccountSettings
-    uiEffects = AccountSettings.getSettings(GRAPHICS.UI_EFFECTS)
-    if uiEffects is None:
-        presetIdx = BigWorld.autoDetectGraphicsSettings()
-        presets = core.options.getSetting(GRAPHICS.PRESETS).pack().get('options')
-        if presets:
-            uiEffectsIsEnabled = presets[presetIdx].get('settings', {}).get(GRAPHICS.UI_EFFECTS, False)
-            AccountSettings.setSettings(GRAPHICS.UI_EFFECTS, uiEffectsIsEnabled)
-        else:
-            _logger.warning('Graphic presets are not found')
-    return
+    pass
 
 
 def _migrateTo132(core, data, initialized):
@@ -1381,6 +1363,80 @@ def _migrateTo135(core, data, initialized):
     data['gameExtData2'][GAME.ENABLE_THERMAL_VISION_EFFECT] = True
     data['gameExtData2'][GAME.ENABLE_THERMAL_VISION_SECTOR_EFFECT] = True
     data['gameExtData2'][GAME.SHOW_THERMAL_VISION_SECTOR_ON_MAP] = True
+
+
+def _migrateTo136(core, data, initialized):
+    oldFlagKey = 'uiEffects'
+    oldValue = AccountSettings.getSettings(oldFlagKey)
+    if oldValue is not None:
+        core.applySettings({GRAPHICS.UI_EFFECTS: oldValue})
+        AccountSettings.delUnusedSetting(KEY_SETTINGS, oldFlagKey)
+    else:
+        BigWorld.updateCurrentPresetIndex()
+        presetKey = getCurrentGraphicPresetName()
+        if presetKey == 'CUSTOM':
+            presetIdx = BigWorld.autoDetectGraphicsSettings()
+            presetSettings = getGraphicPresetSettingsByIndex(presetIdx)
+        else:
+            presetSettings = getGraphicPresetSettingsByName(presetKey)
+        core.applySettings({GRAPHICS.UI_EFFECTS: presetSettings.get('settings', {}).get(GRAPHICS.UI_EFFECTS, 0)})
+    return
+
+
+def _migrateTo137(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import GUI_START_BEHAVIOR
+    data[GUI_START_BEHAVIOR][GuiSettingsBehavior.RANKED_WELCOME_VIEW_SHOWED] = False
+    data['rankedCarouselFilter1'] = {'ussr': False,
+     'germany': False,
+     'usa': False,
+     'china': False,
+     'france': False,
+     'uk': False,
+     'japan': False,
+     'czech': False,
+     'sweden': False,
+     'poland': False,
+     'italy': False,
+     'lightTank': False,
+     'mediumTank': False,
+     'heavyTank': False,
+     'SPG': False,
+     'AT-SPG': False,
+     'level_1': False,
+     'level_2': False,
+     'level_3': False,
+     'level_4': False,
+     'level_5': False,
+     'level_6': False,
+     'level_7': False,
+     'level_8': False,
+     'level_9': False,
+     'level_10': False}
+    data['rankedCarouselFilter2'] = {'premium': False,
+     'elite': False,
+     'igr': False,
+     'rented': True,
+     'event': True,
+     'gameMode': False,
+     'favorite': False,
+     'bonus': False,
+     'crystals': False,
+     'ranked': True,
+     'role_HT_assault': False,
+     'role_HT_break': False,
+     'role_HT_universal': False,
+     'role_HT_support': False,
+     'role_MT_assault': False,
+     'role_MT_universal': False,
+     'role_MT_sniper': False,
+     'role_MT_support': False,
+     'role_ATSPG_assault': False,
+     'role_ATSPG_universal': False,
+     'role_ATSPG_sniper': False,
+     'role_ATSPG_support': False,
+     'role_LT_universal': False,
+     'role_LT_wheeled': False,
+     'role_SPG': False}
 
 
 _versions = ((1,
@@ -1917,6 +1973,14 @@ _versions = ((1,
   False),
  (135,
   _migrateTo135,
+  False,
+  False),
+ (136,
+  _migrateTo136,
+  False,
+  False),
+ (137,
+  _migrateTo137,
   False,
   False))
 

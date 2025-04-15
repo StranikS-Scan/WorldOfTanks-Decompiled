@@ -4,20 +4,27 @@ import logging
 from functools import wraps
 import typing
 import BigWorld
-from adisp import isAsync
+from adisp import adisp_process, adisp_async, isAsync
 from frameworks.wulf import Window, View, WindowSettings, ViewSettings, WindowFlags, WindowStatus
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.fading_cover_view_model import FadingCoverViewModel
 from gui.impl.gen_utils import DynAccessor
+from gui.impl.pub.dialog_window import DialogWindow
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.impl import IGuiLoader
 from wg_async import wg_async, wg_await, await_callback, AsyncSemaphore, BrokenPromiseError
 if typing.TYPE_CHECKING:
     from typing import Callable, Optional, Union
+    from gui.Scaleform.framework.managers.loaders import GuiImplViewLoadParams
+    from typing import Callable, Optional, Union, Type
+    from gui.Scaleform.framework.application import AppEntry
+    from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindowWrapper
 _logger = logging.getLogger(__name__)
 FADE_IN_DURATION = 0.15
 FADE_OUT_DURATION = 0.4
+VIEW_LOADING_DELAY = 0.1
 BRING_TO_FRONT_FRAMES_COUNT = 2
 
 class ICover(object):
@@ -238,3 +245,55 @@ class useDefaultFade(useFade):
 
     def __init__(self, layer, background=None, fadeInDuration=FADE_IN_DURATION, fadeOutDuration=FADE_OUT_DURATION):
         super(useDefaultFade, self).__init__(layer, DefaultFadingCover, background=background, fadeInDuration=fadeInDuration, fadeOutDuration=fadeOutDuration)
+
+
+@adisp_async
+def waitGuiImplViewLoading(loadParams, delay=None, callback=None, *args, **kwargs):
+    if delay is None:
+        delay = VIEW_LOADING_DELAY
+    app = dependency.instance(IAppLoader).getApp()
+
+    def viewLoadedHandler(view):
+        if view.key.alias == loadParams.viewKey.alias:
+            app.containerManager.onViewLoaded -= viewLoadedHandler
+            BigWorld.callback(delay, lambda : callback(None))
+
+    app.containerManager.onViewLoaded += viewLoadedHandler
+    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(loadParams, *args, **kwargs), scope=EVENT_BUS_SCOPE.LOBBY)
+    return
+
+
+@adisp_async
+def waitWindowLoading(window, delay=None, callback=None):
+    if delay is None:
+        delay = VIEW_LOADING_DELAY
+
+    def windowStatusChanged(newStatus):
+        if newStatus in (WindowStatus.LOADED, WindowStatus.DESTROYING):
+            window.onStatusChanged -= windowStatusChanged
+            BigWorld.callback(delay, lambda : callback(None))
+
+    window.onStatusChanged += windowStatusChanged
+    window.load()
+    return
+
+
+@adisp_async
+@wg_async
+def showDialog(dialog, callback=None):
+    result = yield wg_await(dialog.wait())
+    callback(result)
+
+
+@adisp_async
+@adisp_process
+def showDialogWithFading(dialog, layer=None, callback=None):
+    with FadeManager(layer or dialog.layer) as fadeManager:
+        yield wg_await(fadeManager.show())
+        yield wg_await(waitWindowLoading(dialog))
+        yield wg_await(fadeManager.hide())
+        result = yield wg_await(showDialog(dialog))
+        yield wg_await(fadeManager.show())
+        dialog.destroy()
+        yield wg_await(fadeManager.hide())
+        callback(result)

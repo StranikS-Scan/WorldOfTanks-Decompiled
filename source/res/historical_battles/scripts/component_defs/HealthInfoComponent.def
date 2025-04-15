@@ -1,0 +1,23 @@
+<HealthInfoComponent.def>
+  <CellMethods></CellMethods>
+  <ClientMethods></ClientMethods>
+  <Properties>
+    <healthInfo>
+      <Type>	ARRAY	  <of>	FIXED_DICT	  <Properties>
+            <vehicleID>
+              <Type>	OBJECT_ID	</Type>
+            </vehicleID>
+            <health>
+              <Type>	INT16	</Type>
+            </health>
+          </Properties>
+        </of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </healthInfo>
+  </Properties>
+  <ofEntity>
+    <ArenaInfo></ArenaInfo>
+  </ofEntity>
+  <DefaultKeyName>	healthInfoComponent	</DefaultKeyName>
+</HealthInfoComponent.def>

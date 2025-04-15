@@ -6,7 +6,7 @@ import BigWorld
 from constants import FIRE_NOTIFICATION_CODES
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
-import Health
+from Health import FireComponent
 import TriggersManager
 from TriggersManager import TRIGGER_TYPE
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
@@ -32,9 +32,9 @@ class Fire(BigWorld.DynamicScriptComponent):
             return False
         else:
             if vehicle.health > 0:
-                fire = appearance.findComponentByType(Health.FireComponent)
+                fire = appearance.findComponentByType(FireComponent)
                 if fire is None:
-                    appearance.createComponent(Health.FireComponent)
+                    appearance.createComponent(FireComponent)
                 isUnderwater = appearance.isUnderwater
                 if not isUnderwater and self.__effectListPlayerRef is None:
                     self.__playEffect()
@@ -62,7 +62,7 @@ class Fire(BigWorld.DynamicScriptComponent):
 
     def _cleanup(self):
         vehicle = self.entity
-        vehicle.appearance.removeComponentByType(Health.FireComponent)
+        vehicle.appearance.removeComponentByType(FireComponent)
         vehicle.onAppearanceReady -= self.__tryShowFlameEffect
         if vehicle.health > 0:
             self.__fadeEffects()

@@ -869,7 +869,7 @@
     <hint>	ResearchPostProgressionEntryPointHint	  <item-id>	ResearchPostProgressionEntryPoint	</item-id>
       <text>	_(#veh_post_progression:hint/entryPoint)	</text>
       <arrow>
-        <direction>	R	</direction>
+        <direction>	T	</direction>
         <loop>	True	</loop>
       </arrow>
       <checked-ui-state>
@@ -966,6 +966,7 @@
       <condition>
         <global-active>	_isPM3Enabled	</global-active>
         <global-inactive>	cosmicActive	</global-inactive>
+        <global-inactive>	historicalBattlesActive	</global-inactive>
         <class-condition>	LimitedUIHintChecker	  <path>	gui.limited_ui.lui_tutorial_hints	</path>
           <arguments>	NewCampaignHint	</arguments>
         </class-condition>
@@ -1037,6 +1038,7 @@
           <service>	IParagonsController	  <path>	skeletons.gui.game_control	</path>
           </service>
           <global-inactive>	cosmicActive	</global-inactive>
+          <global-inactive>	historicalBattlesActive	</global-inactive>
         </condition-and>
       </condition>
       <update-runtime>	True	</update-runtime>

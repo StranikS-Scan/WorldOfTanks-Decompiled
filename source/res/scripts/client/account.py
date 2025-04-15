@@ -16,7 +16,7 @@ from ClientUnitMgr import ClientUnitMgr, ClientUnitBrowser
 from ContactInfo import ContactInfo
 from OfflineMapCreator import g_offlineMapCreator
 from PlayerEvents import g_playerEvents as events
-from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_blueprints, client_recycle_bin, AccountSettings, client_anonymizer, ClientBattleRoyale, ArmoryYard
+from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_blueprints, client_recycle_bin, AccountSettings, client_anonymizer, ClientBattleRoyale, ArmoryYard, HistoricalBattles
 from account_helpers.dog_tags import DogTags
 from account_helpers.maps_training import MapsTraining
 from account_helpers.offers.sync_data import OffersSyncData
@@ -38,6 +38,7 @@ from account_helpers.gift_system import GiftSystem
 from account_helpers.trade_in import TradeIn
 from account_helpers.winback import Winback
 from account_helpers.referral_program import ReferralProgram
+from account_helpers.play_streak import PlayStreak
 from account_shared import NotificationItem
 from version_utils import readClientServerVersion
 from gui.prb_control import prbEntityProperty
@@ -174,6 +175,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.blueprints = g_accountRepository.blueprints
         self.festivities = g_accountRepository.festivities
         self.armoryYard = g_accountRepository.armoryYard
+        self.historicalBattles = g_accountRepository.historicalBattles
         self.sessionStats = g_accountRepository.sessionStats
         self.spaFlags = g_accountRepository.spaFlags
         self.anonymizer = g_accountRepository.anonymizer
@@ -190,6 +192,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.winback = g_accountRepository.winback
         self.achievements20 = g_accountRepository.achievements20
         self.referralProgram = g_accountRepository.referralProgram
+        self.playStreak = g_accountRepository.playStreak
         self.paragons = g_accountRepository.paragons
         self.customFilesCache = g_accountRepository.customFilesCache
         self.syncData.setAccount(self)
@@ -209,6 +212,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.ranked.setAccount(self)
         self.battleRoyale.setAccount(self)
         self.armoryYard.setAccount(self)
+        self.historicalBattles.setAccount(self)
         self.badges.setAccount(self)
         self.tokens.setAccount(self)
         self.epicMetaGame.setAccount(self)
@@ -222,6 +226,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.telecomRentals.setAccount(self)
         self.tradeIn.setAccount(self)
         self.referralProgram.setAccount(self)
+        self.playStreak.setAccount(self)
         g_accountRepository.commandProxy.setGateway(self.__doCmd)
         self.isLongDisconnectedFromCenter = False
         self.prebattle = None
@@ -265,6 +270,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.ranked.onAccountBecomePlayer()
         self.battleRoyale.onAccountBecomePlayer()
         self.armoryYard.onAccountBecomePlayer()
+        self.historicalBattles.onAccountBecomePlayer()
         self.badges.onAccountBecomePlayer()
         self.tokens.onAccountBecomeNonPlayer()
         self.epicMetaGame.onAccountBecomePlayer()
@@ -283,6 +289,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.resourceWell.onAccountBecomePlayer()
         self.achievements20.onAccountBecomePlayer()
         self.referralProgram.onAccountBecomePlayer()
+        self.playStreak.onAccountBecomePlayer()
         chatManager.switchPlayerProxy(self)
         events.onAccountBecomePlayer()
         BigWorld.target.source = BigWorld.MouseTargetingMatrix()
@@ -317,6 +324,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.blueprints.onAccountBecomeNonPlayer()
         self.festivities.onAccountBecomeNonPlayer()
         self.armoryYard.onAccountBecomeNonPlayer()
+        self.historicalBattles.onAccountBecomeNonPlayer()
         self.sessionStats.onAccountBecomeNonPlayer()
         self.spaFlags.onAccountBecomeNonPlayer()
         self.anonymizer.onAccountBecomeNonPlayer()
@@ -330,6 +338,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.resourceWell.onAccountBecomeNonPlayer()
         self.achievements20.onAccountBecomeNonPlayer()
         self.referralProgram.onAccountBecomeNonPlayer()
+        self.playStreak.onAccountBecomeNonPlayer()
         self.__cancelCommands()
         self.syncData.setAccount(None)
         self.inventory.setAccount(None)
@@ -346,6 +355,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.ranked.setAccount(None)
         self.battleRoyale.setAccount(None)
         self.armoryYard.setAccount(None)
+        self.historicalBattles.setAccount(None)
         self.badges.setAccount(None)
         self.tokens.setAccount(None)
         self.epicMetaGame.setAccount(None)
@@ -356,6 +366,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.offers.setAccount(None)
         self.achievements20.setAccount(None)
         self.referralProgram.setAccount(None)
+        self.playStreak.setAccount(None)
         g_accountRepository.commandProxy.setGateway(None)
         self.unitMgr.clear()
         self.unitBrowser.clear()
@@ -1233,6 +1244,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.ranked.synchronize(isFullSync, diff)
             self.battleRoyale.synchronize(isFullSync, diff)
             self.armoryYard.synchronize(isFullSync, diff)
+            self.historicalBattles.synchronize(isFullSync, diff)
             self.badges.synchronize(isFullSync, diff)
             self.tokens.synchronize(isFullSync, diff)
             self.epicMetaGame.synchronize(isFullSync, diff)
@@ -1251,6 +1263,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.resourceWell.synchronize(isFullSync, diff)
             self.achievements20.synchronize(isFullSync, diff)
             self.referralProgram.synchronize(isFullSync, diff)
+            self.playStreak.synchronize(isFullSync, diff)
             self.paragons.synchronize(isFullSync, diff)
             self._synchronizeServerSettings(diff)
             self._synchronizeDisabledPersonalMissions(diff)
@@ -1494,6 +1507,7 @@ class _AccountRepository(object):
         self.blueprints = client_blueprints.ClientBlueprints(self.syncData)
         self.festivities = FestivityManager(self.syncData, self.commandProxy)
         self.armoryYard = ArmoryYard.ArmoryYard(self.syncData)
+        self.historicalBattles = HistoricalBattles.HistoricalBattles(self.syncData)
         self.sessionStats = SessionStatistics(self.syncData)
         self.spaFlags = SPAFlags(self.syncData)
         self.anonymizer = client_anonymizer.ClientAnonymizer(self.syncData)
@@ -1513,6 +1527,7 @@ class _AccountRepository(object):
         self.platformBlueprintsConvertSaleLimits = {}
         self.freePremiumCrew = {}
         self.referralProgram = ReferralProgram(self.syncData)
+        self.playStreak = PlayStreak(self.syncData)
         self.gMap = ClientGlobalMap()
         self.onTokenReceived = Event.Event()
         self.requestID = AccountCommands.REQUEST_ID_UNRESERVED_MIN

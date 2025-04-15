@@ -7,7 +7,6 @@ from gui.Scaleform.daapi.view.lobby.profile.profile_statistics_vos import getSta
 from gui.Scaleform.daapi.view.meta.ProfileStatisticsMeta import ProfileStatisticsMeta
 from gui.Scaleform.genConsts.BATTLE_TYPES import BATTLE_TYPES
 from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
-from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.ranked_battles.constants import RankedDossierKeys, ARCHIVE_SEASON_ID
@@ -64,10 +63,6 @@ class ProfileStatistics(ProfileStatisticsMeta):
         if self.__getSeasonsManager().setSeason(seasonId):
             self.as_updatePlayerStatsBtnS(self.__getSeasonsManager().getPlayersStatsBtnEnabled())
             self.invokeUpdate()
-
-    def showPlayersStats(self):
-        self.__rankedController.showRankedBattlePage(ctx={'selectedItemID': RANKEDBATTLES_CONSTS.RANKED_BATTLES_RATING_ID,
-         'clientParams': {'spaID': self._databaseID}})
 
     def onCompletedSeasonsInfoChanged(self):
         self._setInitData()

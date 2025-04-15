@@ -1102,7 +1102,7 @@
           <isLeft>	true	</isLeft>
           <template>	W_L	</template>
           <geometry>
-            <radius>	0.4	</radius>
+            <radius>	0.48	</radius>
           </geometry>
           <startIndex>	0	</startIndex>
           <count>	4	</count>
@@ -1112,7 +1112,7 @@
           <isLeft>	true	</isLeft>
           <name>	W_L4	</name>
           <geometry>
-            <radius>	0.41	</radius>
+            <radius>	0.48	</radius>
           </geometry>
           <trackPairIdx>	0	</trackPairIdx>
           <syncAngle>	27.692308	</syncAngle>
@@ -1140,7 +1140,7 @@
           <isLeft>	false	</isLeft>
           <template>	W_R	</template>
           <geometry>
-            <radius>	0.4	</radius>
+            <radius>	0.48	</radius>
           </geometry>
           <startIndex>	0	</startIndex>
           <count>	4	</count>
@@ -1150,7 +1150,7 @@
           <isLeft>	false	</isLeft>
           <name>	W_R4	</name>
           <geometry>
-            <radius>	0.405000	</radius>
+            <radius>	0.48	</radius>
           </geometry>
           <trackPairIdx>	0	</trackPairIdx>
           <syncAngle>	27.692308	</syncAngle>
@@ -1168,351 +1168,6 @@
       <topRightCarryingPoint>	1.319976 1.899546	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
-      <trackNodes>
-        <trackPair>
-          <trackPairIdx>	0	</trackPairIdx>
-          <trackThickness>	0	</trackThickness>
-          <maxAmplitude>	0.15	</maxAmplitude>
-          <maxOffset>	0.15	</maxOffset>
-          <gravity>	-10	</gravity>
-          <damping>	2	</damping>
-          <enable>	true	</enable>
-          <linkBones>	true	</linkBones>
-          <elasticity>	2000	</elasticity>
-          <node>
-            <isLeft>	true	</isLeft>
-            <name>	Track_VD_L0	</name>
-            <forwardElastK>	1.4	</forwardElastK>
-            <backwardElastK>	2.3	</backwardElastK>
-            <trackPairIdx>	0	</trackPairIdx>
-            <rightSibling>	Track_VD_L1	</rightSibling>
-          </node>
-          <node>
-            <isLeft>	true	</isLeft>
-            <name>	Track_VD_L1	</name>
-            <forwardElastK>	1.9	</forwardElastK>
-            <backwardElastK>	3	</backwardElastK>
-            <trackPairIdx>	0	</trackPairIdx>
-            <leftSibling>	Track_VD_L0	</leftSibling>
-            <rightSibling>	Track_VD_L2	</rightSibling>
-          </node>
-          <node>
-            <isLeft>	false	</isLeft>
-            <name>	Track_VD_R0	</name>
-            <forwardElastK>	5	</forwardElastK>
-            <backwardElastK>	2.3	</backwardElastK>
-            <trackPairIdx>	0	</trackPairIdx>
-            <rightSibling>	Track_VD_R1	</rightSibling>
-          </node>
-          <node>
-            <isLeft>	false	</isLeft>
-            <name>	Track_VD_R1	</name>
-            <backwardElastK>	3	</backwardElastK>
-            <offset>	-0.5	</offset>
-            <trackPairIdx>	0	</trackPairIdx>
-            <leftSibling>	Track_VD_R0	</leftSibling>
-            <rightSibling>	Track_VD_R2	</rightSibling>
-          </node>
-          <node>
-            <isLeft>	true	</isLeft>
-            <name>	Track_VT_L0	</name>
-            <forwardElastK>	1.5	</forwardElastK>
-            <backwardElastK>	3	</backwardElastK>
-            <offset>	-0.03	</offset>
-            <trackPairIdx>	0	</trackPairIdx>
-            <rightSibling>	Track_VT_L1	</rightSibling>
-          </node>
-          <node>
-            <isLeft>	true	</isLeft>
-            <name>	Track_VT_L1	</name>
-            <forwardElastK>	1.5	</forwardElastK>
-            <backwardElastK>	3	</backwardElastK>
-            <offset>	-0.09	</offset>
-            <trackPairIdx>	0	</trackPairIdx>
-            <leftSibling>	Track_VT_L0	</leftSibling>
-            <rightSibling>	Track_VT_L2	</rightSibling>
-          </node>
-          <node>
-            <isLeft>	true	</isLeft>
-            <name>	Track_VT_L10	</name>
-            <forwardElastK>	1.5	</forwardElastK>
-            <backwardElastK>	3	</backwardElastK>
-            <trackPairIdx>	0	</trackPairIdx>
-            <leftSibling>	Track_VT_L9	</leftSibling>
-            <rightSibling>	Track_VT_L11	</rightSibling>
-          </node>
-          <node>
-            <isLeft>	true	</isLeft>
-            <name>	Track_VT_L2	</name>
-            <forwardElastK>	1.5	</forwardElastK>
-            <backwardElastK>	3	</backwardElastK>
-            <offset>	-0.13	</offset>
-            <trackPairIdx>	0	</trackPairIdx>
-            <leftSibling>	Track_VT_L1	</leftSibling>
-            <rightSibling>	Track_VT_L3	</rightSibling>
-          </node>
-          <node>
-            <isLeft>	true	</isLeft>
-            <name>	Track_VT_L3	</name>
-            <forwardElastK>	1.5	</forwardElastK>
-            <backwardElastK>	3	</backwardElastK>
-            <offset>	-0.09	</offset>
-            <trackPairIdx>	0	</trackPairIdx>
-            <leftSibling>	Track_VT_L2	</leftSibling>
-            <rightSibling>	Track_VT_L4	</rightSibling>
-          </node>
-          <node>
-            <isLeft>	true	</isLeft>
-            <name>	Track_VT_L4	</name>
-            <forwardElastK>	1.5	</forwardElastK>
-            <backwardElastK>	3	</backwardElastK>
-            <offset>	-0.13	</offset>
-            <trackPairIdx>	0	</trackPairIdx>
-            <leftSibling>	Track_VT_L3	</leftSibling>
-            <rightSibling>	Track_VT_L5	</rightSibling>
-          </node>
-          <node>
-            <isLeft>	true	</isLeft>
-            <name>	Track_VT_L5	</name>
-            <forwardElastK>	1.5	</forwardElastK>
-            <backwardElastK>	3	</backwardElastK>
-            <offset>	-0.09	</offset>
-            <trackPairIdx>	0	</trackPairIdx>
-            <leftSibling>	Track_VT_L4	</leftSibling>
-            <rightSibling>	Track_VT_L6	</rightSibling>
-          </node>
-          <node>
-            <isLeft>	true	</isLeft>
-            <name>	Track_VT_L6	</name>
-            <forwardElastK>	1.5	</forwardElastK>
-            <backwardElastK>	3	</backwardElastK>
-            <offset>	-0.13	</offset>
-            <trackPairIdx>	0	</trackPairIdx>
-            <leftSibling>	Track_VT_L5	</leftSibling>
-            <rightSibling>	Track_VT_L7	</rightSibling>
-          </node>
-          <node>
-            <isLeft>	true	</isLeft>
-            <name>	Track_VT_L7	</name>
-            <forwardElastK>	1.5	</forwardElastK>
-            <backwardElastK>	3	</backwardElastK>
-            <offset>	-0.09	</offset>
-            <trackPairIdx>	0	</trackPairIdx>
-            <leftSibling>	Track_VT_L6	</leftSibling>
-            <rightSibling>	Track_VT_L8	</rightSibling>
-          </node>
-          <node>
-            <isLeft>	true	</isLeft>
-            <name>	Track_VT_L8	</name>
-            <forwardElastK>	1.5	</forwardElastK>
-            <backwardElastK>	3	</backwardElastK>
-            <offset>	-0.1	</offset>
-            <trackPairIdx>	0	</trackPairIdx>
-            <leftSibling>	Track_VT_L7	</leftSibling>
-            <rightSibling>	Track_VT_L9	</rightSibling>
-          </node>
-          <node>
-            <isLeft>	true	</isLeft>
-            <name>	Track_VT_L9	</name>
-            <forwardElastK>	1.5	</forwardElastK>
-            <backwardElastK>	3	</backwardElastK>
-            <offset>	-0.06	</offset>
-            <trackPairIdx>	0	</trackPairIdx>
-            <leftSibling>	Track_VT_L8	</leftSibling>
-            <rightSibling>	Track_VT_L10	</rightSibling>
-          </node>
-          <node>
-            <isLeft>	false	</isLeft>
-            <name>	Track_VT_R0	</name>
-            <forwardElastK>	1.5	</forwardElastK>
-            <backwardElastK>	3	</backwardElastK>
-            <offset>	-0.03	</offset>
-            <trackPairIdx>	0	</trackPairIdx>
-            <rightSibling>	Track_VT_R1	</rightSibling>
-          </node>
-          <node>
-            <isLeft>	false	</isLeft>
-            <name>	Track_VT_R1	</name>
-            <forwardElastK>	1.5	</forwardElastK>
-            <backwardElastK>	3	</backwardElastK>
-            <offset>	-0.09	</offset>
-            <trackPairIdx>	0	</trackPairIdx>
-            <leftSibling>	Track_VT_R0	</leftSibling>
-            <rightSibling>	Track_VT_R2	</rightSibling>
-          </node>
-          <node>
-            <isLeft>	false	</isLeft>
-            <name>	Track_VT_R10	</name>
-            <forwardElastK>	1.5	</forwardElastK>
-            <backwardElastK>	3	</backwardElastK>
-            <trackPairIdx>	0	</trackPairIdx>
-            <leftSibling>	Track_VT_R9	</leftSibling>
-            <rightSibling>	Track_VT_R11	</rightSibling>
-          </node>
-          <node>
-            <isLeft>	false	</isLeft>
-            <name>	Track_VT_R2	</name>
-            <forwardElastK>	1.5	</forwardElastK>
-            <backwardElastK>	3	</backwardElastK>
-            <offset>	-0.13	</offset>
-            <trackPairIdx>	0	</trackPairIdx>
-            <leftSibling>	Track_VT_R1	</leftSibling>
-            <rightSibling>	Track_VT_R3	</rightSibling>
-          </node>
-          <node>
-            <isLeft>	false	</isLeft>
-            <name>	Track_VT_R3	</name>
-            <forwardElastK>	1.5	</forwardElastK>
-            <backwardElastK>	3	</backwardElastK>
-            <offset>	-0.09	</offset>
-            <trackPairIdx>	0	</trackPairIdx>
-            <leftSibling>	Track_VT_R2	</leftSibling>
-            <rightSibling>	Track_VT_R4	</rightSibling>
-          </node>
-          <node>
-            <isLeft>	false	</isLeft>
-            <name>	Track_VT_R4	</name>
-            <forwardElastK>	1.5	</forwardElastK>
-            <backwardElastK>	3	</backwardElastK>
-            <offset>	-0.13	</offset>
-            <trackPairIdx>	0	</trackPairIdx>
-            <leftSibling>	Track_VT_R3	</leftSibling>
-            <rightSibling>	Track_VT_R5	</rightSibling>
-          </node>
-          <node>
-            <isLeft>	false	</isLeft>
-            <name>	Track_VT_R5	</name>
-            <forwardElastK>	1.5	</forwardElastK>
-            <backwardElastK>	3	</backwardElastK>
-            <offset>	-0.09	</offset>
-            <trackPairIdx>	0	</trackPairIdx>
-            <leftSibling>	Track_VT_R4	</leftSibling>
-            <rightSibling>	Track_VT_R6	</rightSibling>
-          </node>
-          <node>
-            <isLeft>	false	</isLeft>
-            <name>	Track_VT_R6	</name>
-            <forwardElastK>	1.5	</forwardElastK>
-            <backwardElastK>	3	</backwardElastK>
-            <offset>	-0.13	</offset>
-            <trackPairIdx>	0	</trackPairIdx>
-            <leftSibling>	Track_VT_R5	</leftSibling>
-            <rightSibling>	Track_VT_R7	</rightSibling>
-          </node>
-          <node>
-            <isLeft>	false	</isLeft>
-            <name>	Track_VT_R7	</name>
-            <forwardElastK>	1.5	</forwardElastK>
-            <backwardElastK>	3	</backwardElastK>
-            <offset>	-0.09	</offset>
-            <trackPairIdx>	0	</trackPairIdx>
-            <leftSibling>	Track_VT_R6	</leftSibling>
-            <rightSibling>	Track_VT_R8	</rightSibling>
-          </node>
-          <node>
-            <isLeft>	false	</isLeft>
-            <name>	Track_VT_R8	</name>
-            <forwardElastK>	1.5	</forwardElastK>
-            <backwardElastK>	3	</backwardElastK>
-            <offset>	-0.1	</offset>
-            <trackPairIdx>	0	</trackPairIdx>
-            <leftSibling>	Track_VT_R7	</leftSibling>
-            <rightSibling>	Track_VT_R9	</rightSibling>
-          </node>
-          <node>
-            <isLeft>	false	</isLeft>
-            <name>	Track_VT_R9	</name>
-            <forwardElastK>	1.5	</forwardElastK>
-            <backwardElastK>	3	</backwardElastK>
-            <offset>	-0.06	</offset>
-            <trackPairIdx>	0	</trackPairIdx>
-            <leftSibling>	Track_VT_R8	</leftSibling>
-            <rightSibling>	Track_VT_R10	</rightSibling>
-          </node>
-        </trackPair>
-      </trackNodes>
-      <groundNodes>
-        <node>
-          <name>	Track_L0	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	true	</isLeft>
-          <minOffset>	0.07	</minOffset>
-          <maxOffset>	-0.04	</maxOffset>
-          <trackPairIdx>	0	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_L1	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	true	</isLeft>
-          <minOffset>	0.07	</minOffset>
-          <maxOffset>	-0.04	</maxOffset>
-          <trackPairIdx>	0	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_L2	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	true	</isLeft>
-          <minOffset>	0.07	</minOffset>
-          <maxOffset>	-0.04	</maxOffset>
-          <trackPairIdx>	0	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_L3	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	true	</isLeft>
-          <minOffset>	0.07	</minOffset>
-          <maxOffset>	-0.04	</maxOffset>
-          <trackPairIdx>	0	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_L4	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	true	</isLeft>
-          <minOffset>	0.07	</minOffset>
-          <maxOffset>	-0.04	</maxOffset>
-          <trackPairIdx>	0	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_R0	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	false	</isLeft>
-          <minOffset>	0.07	</minOffset>
-          <maxOffset>	-0.04	</maxOffset>
-          <trackPairIdx>	0	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_R1	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	false	</isLeft>
-          <minOffset>	0.07	</minOffset>
-          <maxOffset>	-0.04	</maxOffset>
-          <trackPairIdx>	0	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_R2	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	false	</isLeft>
-          <minOffset>	0.07	</minOffset>
-          <maxOffset>	-0.04	</maxOffset>
-          <trackPairIdx>	0	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_R3	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	false	</isLeft>
-          <minOffset>	0.07	</minOffset>
-          <maxOffset>	-0.04	</maxOffset>
-          <trackPairIdx>	0	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_R4	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	false	</isLeft>
-          <minOffset>	0.07	</minOffset>
-          <maxOffset>	-0.04	</maxOffset>
-          <trackPairIdx>	0	</trackPairIdx>
-        </node>
-      </groundNodes>
       <splineDesc>
         <trackPair>
           <trackPairIdx>	0	</trackPairIdx>
@@ -1520,7 +1175,7 @@
           <segmentModelRight>	vehicles/russian/R223_T_54B_1958/track/segment.model	</segmentModelRight>
           <left>	vehicles/russian/R223_T_54B_1958/track/left.track	</left>
           <right>	vehicles/russian/R223_T_54B_1958/track/right.track	</right>
-          <segmentLength>	0.136452	</segmentLength>
+          <segmentLength>	0.13	</segmentLength>
           <segmentOffset>	0.12	</segmentOffset>
           <atlas>
             <UTiles>	1	</UTiles>
@@ -1534,7 +1189,7 @@
           <trackPairIdx>	0	</trackPairIdx>
           <segmentsCount>	91	</segmentsCount>
           <segmentsOuterThickness>	0.049178	</segmentsOuterThickness>
-          <segmentsInnerThickness>	-0.009381	</segmentsInnerThickness>
+          <segmentsInnerThickness>	-0.08	</segmentsInnerThickness>
           <segmentsPlaneOffset>	-1.32	</segmentsPlaneOffset>
           <mainSegment>
             <model>	vehicles/russian/R223_T_54B_1958/track/segment.model	</model>
@@ -1718,8 +1373,8 @@
         <right>
           <trackPairIdx>	0	</trackPairIdx>
           <segmentsCount>	91	</segmentsCount>
-          <segmentsOuterThickness>	0.05351	</segmentsOuterThickness>
-          <segmentsInnerThickness>	0.00618	</segmentsInnerThickness>
+          <segmentsOuterThickness>	0.04918	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.08	</segmentsInnerThickness>
           <segmentsPlaneOffset>	1.32	</segmentsPlaneOffset>
           <mainSegment>
             <model>	vehicles/russian/R223_T_54B_1958/track/segment.model	</model>
@@ -1728,7 +1383,7 @@
           <springsLength>
             <backwardMovement>
               <back>	0.138	</back>
-              <top>	0.09	</top>
+              <top>	0.12	</top>
               <front>	0.131514	</front>
               <bottom>	0.081314	</bottom>
             </backwardMovement>
@@ -1925,6 +1580,277 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
+      <trackNodes>
+        <trackPair>
+          <trackPairIdx>	0	</trackPairIdx>
+          <trackThickness>	0	</trackThickness>
+          <maxAmplitude>	0.02	</maxAmplitude>
+          <maxOffset>	0.02	</maxOffset>
+          <gravity>	-9.8	</gravity>
+          <damping>	2	</damping>
+          <enable>	true	</enable>
+          <linkBones>	false	</linkBones>
+          <elasticity>	1200	</elasticity>
+          <node>
+            <isLeft>	true	</isLeft>
+            <name>	Track_VD_L0	</name>
+            <forwardElastK>	0.7	</forwardElastK>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	true	</isLeft>
+            <name>	Track_VD_L1	</name>
+            <backwardElastK>	0.9	</backwardElastK>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	false	</isLeft>
+            <name>	Track_VD_R0	</name>
+            <forwardElastK>	0.7	</forwardElastK>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	false	</isLeft>
+            <name>	Track_VD_R1	</name>
+            <backwardElastK>	0.9	</backwardElastK>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	true	</isLeft>
+            <name>	Track_VT_L0	</name>
+            <forwardElastK>	0.45	</forwardElastK>
+            <backwardElastK>	0.65	</backwardElastK>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	true	</isLeft>
+            <name>	Track_VT_L1	</name>
+            <forwardElastK>	0.4	</forwardElastK>
+            <backwardElastK>	0.5	</backwardElastK>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	true	</isLeft>
+            <name>	Track_VT_L10	</name>
+            <forwardElastK>	0.5	</forwardElastK>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	true	</isLeft>
+            <name>	Track_VT_L2	</name>
+            <forwardElastK>	0.35	</forwardElastK>
+            <backwardElastK>	0.47	</backwardElastK>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	true	</isLeft>
+            <name>	Track_VT_L3	</name>
+            <forwardElastK>	0.4	</forwardElastK>
+            <backwardElastK>	0.4	</backwardElastK>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	true	</isLeft>
+            <name>	Track_VT_L4	</name>
+            <forwardElastK>	0.38	</forwardElastK>
+            <backwardElastK>	0.5	</backwardElastK>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	true	</isLeft>
+            <name>	Track_VT_L5	</name>
+            <forwardElastK>	0.4	</forwardElastK>
+            <backwardElastK>	0.4	</backwardElastK>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	true	</isLeft>
+            <name>	Track_VT_L6	</name>
+            <forwardElastK>	0.4	</forwardElastK>
+            <backwardElastK>	0.5	</backwardElastK>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	true	</isLeft>
+            <name>	Track_VT_L7	</name>
+            <forwardElastK>	0.4	</forwardElastK>
+            <backwardElastK>	0.4	</backwardElastK>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	true	</isLeft>
+            <name>	Track_VT_L8	</name>
+            <forwardElastK>	0.43	</forwardElastK>
+            <backwardElastK>	0.5	</backwardElastK>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	true	</isLeft>
+            <name>	Track_VT_L9	</name>
+            <forwardElastK>	0.4	</forwardElastK>
+            <backwardElastK>	0.65	</backwardElastK>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	false	</isLeft>
+            <name>	Track_VT_R0	</name>
+            <forwardElastK>	0.45	</forwardElastK>
+            <backwardElastK>	0.65	</backwardElastK>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	false	</isLeft>
+            <name>	Track_VT_R1	</name>
+            <forwardElastK>	0.4	</forwardElastK>
+            <backwardElastK>	0.5	</backwardElastK>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	false	</isLeft>
+            <name>	Track_VT_R10	</name>
+            <forwardElastK>	0.5	</forwardElastK>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	false	</isLeft>
+            <name>	Track_VT_R2	</name>
+            <forwardElastK>	0.35	</forwardElastK>
+            <backwardElastK>	0.47	</backwardElastK>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	false	</isLeft>
+            <name>	Track_VT_R3	</name>
+            <forwardElastK>	0.4	</forwardElastK>
+            <backwardElastK>	0.4	</backwardElastK>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	false	</isLeft>
+            <name>	Track_VT_R4	</name>
+            <forwardElastK>	0.38	</forwardElastK>
+            <backwardElastK>	0.5	</backwardElastK>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	false	</isLeft>
+            <name>	Track_VT_R5	</name>
+            <forwardElastK>	0.4	</forwardElastK>
+            <backwardElastK>	0.4	</backwardElastK>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	false	</isLeft>
+            <name>	Track_VT_R6	</name>
+            <forwardElastK>	0.4	</forwardElastK>
+            <backwardElastK>	0.5	</backwardElastK>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	false	</isLeft>
+            <name>	Track_VT_R7	</name>
+            <forwardElastK>	0.4	</forwardElastK>
+            <backwardElastK>	0.4	</backwardElastK>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	false	</isLeft>
+            <name>	Track_VT_R8	</name>
+            <forwardElastK>	0.43	</forwardElastK>
+            <backwardElastK>	0.5	</backwardElastK>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	false	</isLeft>
+            <name>	Track_VT_R9	</name>
+            <forwardElastK>	0.4	</forwardElastK>
+            <backwardElastK>	0.65	</backwardElastK>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+        </trackPair>
+      </trackNodes>
+      <groundNodes>
+        <node>
+          <name>	Track_L0	</name>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.05	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_L1	</name>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.05	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_L2	</name>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.05	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_L3	</name>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.05	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_L4	</name>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.05	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_R0	</name>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.05	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_R1	</name>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.05	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_R2	</name>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.05	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_R3	</name>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.05	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_R4	</name>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.05	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+      </groundNodes>
       <camouflage>
         <density>	184.583878 184.021942	</density>
         <aoTextureSize>	1024 1024	</aoTextureSize>
@@ -2617,4 +2543,9 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	1.0	</alpha>
   </emblems>
+  <prefabAttachments>
+    <Curtain>
+      <attachmentId>	31052	</attachmentId>
+    </Curtain>
+  </prefabAttachments>
 </R223_T_54B_1958.xml>

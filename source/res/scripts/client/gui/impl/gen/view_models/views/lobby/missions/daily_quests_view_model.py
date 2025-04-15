@@ -17,9 +17,9 @@ class OffersState(Enum):
 
 
 class DailyQuestsViewModel(ViewModel):
-    __slots__ = ('onClose', 'onReroll', 'onTabClick', 'onInfoToggle', 'onBuyPremiumBtnClick', 'onRerollEnabled', 'onClaimRewards')
+    __slots__ = ('onClose', 'onReroll', 'onTabClick', 'onInfoToggle', 'onBuyPremiumBtnClick', 'onVehiclePreviewClick', 'onStylePreviewClick', 'onRerollEnabled', 'onClaimRewards')
 
-    def __init__(self, properties=12, commands=7):
+    def __init__(self, properties=12, commands=9):
         super(DailyQuestsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -119,5 +119,7 @@ class DailyQuestsViewModel(ViewModel):
         self.onTabClick = self._addCommand('onTabClick')
         self.onInfoToggle = self._addCommand('onInfoToggle')
         self.onBuyPremiumBtnClick = self._addCommand('onBuyPremiumBtnClick')
+        self.onVehiclePreviewClick = self._addCommand('onVehiclePreviewClick')
+        self.onStylePreviewClick = self._addCommand('onStylePreviewClick')
         self.onRerollEnabled = self._addCommand('onRerollEnabled')
         self.onClaimRewards = self._addCommand('onClaimRewards')

@@ -626,15 +626,16 @@ def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, 
     return
 
 
-def showHeroTankPreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previousBackAlias=None, previewBackCb=None, hangarVehicleCD=None, bottomPanelTextData=None):
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.HERO_VEHICLE_PREVIEW), ctx={'itemCD': vehTypeCompDescr,
+def showHeroTankPreview(vehTypeCompDescr, viewAlias=VIEW_ALIAS.HERO_VEHICLE_PREVIEW, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previousBackAlias=None, previewBackCb=None, hangarVehicleCD=None, bottomPanelTextData=None, backBtnLabel=None):
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(viewAlias), ctx={'itemCD': vehTypeCompDescr,
      'previewAlias': previewAlias,
      'previewAppearance': HeroTankPreviewAppearance(),
      'isHeroTank': True,
      'previousBackAlias': previousBackAlias,
      'previewBackCb': previewBackCb,
      'hangarVehicleCD': hangarVehicleCD,
-     'bottomPanelTextData': bottomPanelTextData}), scope=EVENT_BUS_SCOPE.LOBBY)
+     'bottomPanelTextData': bottomPanelTextData,
+     'backBtnLabel': backBtnLabel}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def hideVehiclePreview(back=True, close=False):
@@ -1003,6 +1004,15 @@ def showParagonsRewardsWindow(bonuses, chapter=None, level=None, isVehicleSelect
         window.load()
 
 
+def isViewLoaded(layoutID):
+    uiLoader = dependency.instance(IGuiLoader)
+    if not uiLoader or not uiLoader.windowsManager:
+        return False
+    else:
+        view = uiLoader.windowsManager.getViewByLayoutID(layoutID)
+        return view is not None
+
+
 def showStylePreview(vehCD, style, descr='', backCallback=None, backBtnDescrLabel='', *args, **kwargs):
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.STYLE_PREVIEW), ctx={'itemCD': vehCD,
      'style': style,
@@ -1076,6 +1086,11 @@ def showRankedYearAwardWindow(rawAwards, points, useQueue=False, showRemainedSel
     findAndLoadWindow(useQueue, RankedYearAwardWindow, rawAwards, points, showRemainedSelection)
 
 
+def showRankedSelectedRewardWindow(rawAwards, useQueue=False):
+    from gui.impl.lobby.ranked.ranked_selected_reward_view import RankedSelectedRewardWindow
+    findAndLoadWindow(useQueue, RankedSelectedRewardWindow, rawAwards)
+
+
 def showRankedYearLBAwardWindow(playerPosition, rewardsData, useQueue=False):
     from gui.impl.lobby.ranked.year_leaderboard_view import YearLeaderboardAwardWindow
     findAndLoadWindow(useQueue, YearLeaderboardAwardWindow, playerPosition, rewardsData)
@@ -1125,14 +1140,14 @@ def showResSimpleDialog(resources, icon, formattedMessage, parent=None):
 
 
 @wg_async
-def showDynamicButtonInfoDialogBuilder(resources, icon, formattedMessage, parent=None):
+def showDynamicButtonInfoDialogBuilder(resources, icon, formattedMessage, parent=None, loadCallback=None, destroyCallback=None):
     from gui.impl.dialogs import dialogs
     from gui.impl.dialogs.builders import InfoDialogBuilder
     builder = InfoDialogBuilder()
     builder.setMessagesAndButtons(resources, resources)
     builder.setIcon(icon)
     builder.setFormattedMessage(formattedMessage)
-    result = yield wg_await(dialogs.showSimple(builder.build(parent)))
+    result = yield wg_await(dialogs.showSimple(builder.build(parent), loadCallback=loadCallback, destroyCallback=destroyCallback))
     raise AsyncReturn(result)
 
 
@@ -2227,6 +2242,13 @@ def showRankedProgressionWindow():
     RankedProgressionWindow().load()
 
 
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
+def showDailyEpicQuestRewardWindow(bonuses, notificationMgr=None):
+    from gui.impl.lobby.daily.weekly_reward_screen import WeeklyRewardScreenWindow
+    window = WeeklyRewardScreenWindow(bonuses)
+    notificationMgr.append(WindowNotificationCommand(window))
+
+
 def checkParagonsIntroSeen(func):
     from gui.impl.lobby.paragons.paragons_window_events import showParagonsIntroView
     from account_helpers.AccountSettings import AccountSettings, Paragons
@@ -2276,3 +2298,27 @@ def getTechTreeLoadEvent(nation, blueprintMode=False):
     from gui.techtree.go_back_helper import BackButtonContextKeys, LoadGuiImplViewEventWithCtx, WulfPreviewAlias
     return LoadGuiImplViewEventWithCtx(GuiImplViewLoadParams(R.views.lobby.techtree.VehicleTechTree(), VehicleTechTree, ScopeTemplates.LOBBY_SUB_SCOPE), ctx={BackButtonContextKeys.NATION: nation,
      BackButtonContextKeys.BLUEPRINT_MODE: blueprintMode}, name=WulfPreviewAlias.WULF_TECHTREE)
+
+
+def showDailyQuestsIntroWindow():
+    from gui.impl.lobby.daily.daily_intro_screen_view import DailyIntroScreenViewWindow
+    DailyIntroScreenViewWindow(parent=getParentWindow()).load()
+
+
+@dependency.replace_none_kwargs(guiLoader=IGuiLoader)
+def showDailyQuestsView(guiLoader=None):
+    view = guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.daily.DailyQuestsView())
+    if view:
+        view.initView()
+
+
+@wg_async
+def showDailyQuestsConfirmDialog(rerollPremium, callback):
+    from gui.impl.dialogs import dialogs
+    from gui.impl.lobby.daily.daily_quest_reroll_view import DailyQuestRerollView
+    result = yield wg_await(dialogs.showSingleDialogWithResultData(rerollPremium=rerollPremium, layoutID=DailyQuestRerollView.LAYOUT_ID, wrappedViewClass=DailyQuestRerollView))
+    if result.busy:
+        callback((False, {}))
+    else:
+        isOK, data = result.result
+        callback((isOK, data))

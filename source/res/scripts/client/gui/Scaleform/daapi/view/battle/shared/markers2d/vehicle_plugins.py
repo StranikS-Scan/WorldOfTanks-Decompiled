@@ -894,17 +894,27 @@ class MarkerDistanceUpdater(object):
         def getSettings(markerType, distanceSettings):
             return self.settingsCore.getSetting(markerType).get(distanceSettings)
 
+        def isUseExtendedInfo(flagToCheck):
+            return bool(flagToCheck & self._DISTANCE_ALLY_ALT and flagToCheck ^ self._DISTANCE_ALLY or flagToCheck & self._DISTANCE_ENEMY_ALT and flagToCheck ^ self._DISTANCE_ENEMY)
+
         flag = 0
         flag |= self._DISTANCE_ALLY if getSettings(MARKERS.ALLY, MARKER_SETTINGS.MARKER_BASE_VEHICLE_DIST) else 0
         flag |= self._DISTANCE_ALLY_ALT if getSettings(MARKERS.ALLY, MARKER_SETTINGS.MARKER_ALT_VEHICLE_DIST) else 0
         flag |= self._DISTANCE_ENEMY if getSettings(MARKERS.ENEMY, MARKER_SETTINGS.MARKER_BASE_VEHICLE_DIST) else 0
         flag |= self._DISTANCE_ENEMY_ALT if getSettings(MARKERS.ENEMY, MARKER_SETTINGS.MARKER_ALT_VEHICLE_DIST) else 0
+        isNewFlagUseExtendedInfo = isUseExtendedInfo(flag)
+        isOldFlagUseExtendedInfo = isUseExtendedInfo(self.__flag)
+        self.__updateExtendedInfoListener(isOldFlagUseExtendedInfo, isNewFlagUseExtendedInfo)
         self.__flag = flag
-        if flag & self._DISTANCE_ALLY_ALT and flag ^ self._DISTANCE_ALLY or flag & self._DISTANCE_ENEMY_ALT and flag ^ self._DISTANCE_ENEMY:
+        self.__updateInterval()
+
+    def __updateExtendedInfoListener(self, oldFlag, newFlag):
+        if oldFlag == newFlag:
+            return
+        if newFlag:
             g_eventBus.addListener(GameEvent.SHOW_EXTENDED_INFO, self.__handleShowExtendedInfo, scope=settings.SCOPE)
         else:
             g_eventBus.removeListener(GameEvent.SHOW_EXTENDED_INFO, self.__handleShowExtendedInfo, scope=settings.SCOPE)
-        self.__updateInterval()
 
     def onServerSettingsChanged(self, diff):
         if {MARKERS.ENEMY, MARKERS.ALLY}.intersection(diff.keys()):

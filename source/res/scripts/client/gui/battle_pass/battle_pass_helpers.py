@@ -86,6 +86,10 @@ def getIntroSlidesNames():
     return GUI_SETTINGS.battlePassIntroSlides
 
 
+def getMarathonIntroSlidesNames():
+    return GUI_SETTINGS.battlePassMarathonIntroSlides
+
+
 def isIntroVideoExist():
     return bool(GUI_SETTINGS.battlePassUrls.get('introVideo'))
 
@@ -273,6 +277,7 @@ def _updateServerSettings(data):
     data[BattlePassStorageKeys.BUY_ANIMATION_WAS_SHOWN] = 0
     data[BattlePassStorageKeys.EXTRA_CHAPTER_INTRO_SHOWN] = False
     data[BattlePassStorageKeys.EXTRA_CHAPTER_VIDEO_SHOWN] = False
+    data[BattlePassStorageKeys.EXTRA_CHAPTER_FIRST_ENTER] = True
 
 
 def _isChapterShown(shownChapters, chapter):

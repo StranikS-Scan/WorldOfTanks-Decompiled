@@ -11,18 +11,18 @@ if typing.TYPE_CHECKING:
     from typing import Optional, List
 
 class RestrictedVehicleTagDataProvider(object):
-    __slots__ = ('__unitEntity',)
+    __slots__ = ('_unitEntity',)
     _VEHICLE_TAG = ''
 
     def __init__(self):
-        self.__unitEntity = None
+        self._unitEntity = None
         return
 
     def init(self, unitEntity):
-        self.__unitEntity = unitEntity
+        self._unitEntity = unitEntity
 
     def fini(self):
-        self.__unitEntity = None
+        self._unitEntity = None
         return
 
     def getMaxPossibleVehicles(self):
@@ -36,11 +36,11 @@ class RestrictedVehicleTagDataProvider(object):
         availableVehicles = self.getMaxPossibleVehicles() - self.getCurrentVehiclesCount()
         if self.getMaxPossibleVehicles() == 0:
             return False
-        elif self.__unitEntity.isCommander(accountDbID):
+        elif self._unitEntity.isCommander(accountDbID):
             return True
         elif availableVehicles == 0:
-            _, _ = self.__unitEntity.getUnit()
-            vInfos = self.__unitEntity.getVehiclesInfo()
+            _, _ = self._unitEntity.getUnit()
+            vInfos = self._unitEntity.getVehiclesInfo()
             for vInfo in vInfos:
                 if self.getRestrictionLevels() is not None and vInfo.vehLevel not in self.getRestrictionLevels():
                     continue
@@ -53,11 +53,11 @@ class RestrictedVehicleTagDataProvider(object):
 
     def hasSlotForVehicle(self):
         accountDbID = account_helpers.getAccountDatabaseID()
-        return self.getMaxPossibleVehicles() > 0 and (self.getCurrentVehiclesCount() < self.getMaxPossibleVehicles() or self.__unitEntity.isCommander(accountDbID))
+        return self.getMaxPossibleVehicles() > 0 and (self.getCurrentVehiclesCount() < self.getMaxPossibleVehicles() or self._unitEntity.isCommander(accountDbID))
 
     def getCurrentVehiclesCount(self):
         enableVehicleCount = 0
-        _, unit = self.__unitEntity.getUnit(safe=True)
+        _, unit = self._unitEntity.getUnit(safe=True)
         if unit is None:
             return enableVehicleCount
         else:

@@ -1,0 +1,29 @@
+<h01_victory_day_2025.xml>
+  <name>	#arenas:h01_victory_day_2025/name	</name>
+  <description>	#arenas:h01_victory_day_2025/description	</description>
+  <wwambientSound>	hangar_h01_vd_ambient	</wwambientSound>
+  <wwmusic>	hangar_h01_vd_2d_music	</wwmusic>
+  <wwDefaultReverb></wwDefaultReverb>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	ambient.bnk	</name>
+      </bank>
+      <bank>
+        <name>	hangar_h01_victory_day_2025.bnk	</name>
+      </bank>
+      <bank>
+        <name>	env_Forest.bnk	</name>
+      </bank>
+    </loadBanks>
+  </soundRemapping>
+  <minimap>	spaces/h01_victory_day_2025/mmap.dds	</minimap>
+  <roadMap></roadMap>
+  <gameplayTypes>
+    <ctf></ctf>
+  </gameplayTypes>
+  <boundingBox>
+    <bottomLeft>	-300.000000 -300.000000	</bottomLeft>
+    <upperRight>	300.000000 300.000000	</upperRight>
+  </boundingBox>
+</h01_victory_day_2025.xml>

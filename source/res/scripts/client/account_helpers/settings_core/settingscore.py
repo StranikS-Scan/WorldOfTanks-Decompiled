@@ -213,7 +213,6 @@ class SettingsCore(ISettingsCore):
          (GRAPHICS.DYNAMIC_FOV_ENABLED, options.DynamicFOVEnabledSetting(storage=FOV_SETTINGS_STORAGE)),
          (GRAPHICS.VERTICAL_SYNC, options.VerticalSyncSetting()),
          (GRAPHICS.COLOR_BLIND, options.AccountDumpSetting(GRAPHICS.COLOR_BLIND, GRAPHICS.COLOR_BLIND)),
-         (GRAPHICS.UI_EFFECTS, options.AccountDumpSetting(GRAPHICS.UI_EFFECTS, GRAPHICS.UI_EFFECTS)),
          (GRAPHICS.TESSELLATION_SUPPORTED, options.ReadOnlySetting(BigWorld.isTesselationSupported)),
          (GRAPHICS.IS_SD_QUALITY, options.GraphicsQuality()),
          (SOUND.MASTER_TOGGLE, options.SoundEnableSetting()),

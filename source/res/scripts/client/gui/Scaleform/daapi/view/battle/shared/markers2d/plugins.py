@@ -87,6 +87,12 @@ class IMarkersManager(object):
     def _setupPlugins(self, arenaVisitor):
         raise NotImplementedError
 
+    def setMarkerCustomDistanceStr(self, markerID, customStr):
+        raise NotImplementedError
+
+    def setMarkerTextLabelEnabled(self, markerID, enabled):
+        raise NotImplementedError
+
 
 class MarkerPlugin(IPlugin):
     __slots__ = ()
@@ -141,6 +147,12 @@ class MarkerPlugin(IPlugin):
 
     def _setMarkerObjectInFocus(self, markerID, isBoundEnabled):
         self._parentObj.setMarkerObjectInFocus(markerID, isBoundEnabled)
+
+    def _setMarkerCustomDistanceStr(self, markerID, customStr):
+        self._parentObj.setMarkerCustomDistanceStr(markerID, customStr)
+
+    def _setMarkerTextLabelEnabled(self, markerID, enabled):
+        self._parentObj.setMarkerTextLabelEnabled(markerID, enabled)
 
 
 class ControlModePlugin(MarkerPlugin):
@@ -539,6 +551,7 @@ _EQUIPMENT_DELAY_FORMAT = '{0:.0f}'
 
 class EquipmentsMarkerPlugin(MarkerPlugin):
     __slots__ = ('__callbackIDs', '__finishTime', '__defaultPostfix')
+    _MARKER_SYMBOL = settings.MARKER_SYMBOL_NAME.EQUIPMENT_MARKER
 
     def __init__(self, parentObj):
         super(EquipmentsMarkerPlugin, self).__init__(parentObj)

@@ -12,7 +12,6 @@ from gui.Scaleform.daapi.view.battle.shared.markers2d import MarkersManager, mar
 from gui.Scaleform.daapi.view.battle.shared.markers2d import plugins
 from gui.Scaleform.daapi.view.battle.shared.markers2d import settings
 from gui.Scaleform.daapi.view.battle.shared.markers2d.markers import BaseMarker
-from gui.Scaleform.daapi.view.battle.shared.markers2d.plugin_items.step_repair_point import StepRepairPointPlugin
 from gui.Scaleform.daapi.view.battle.shared.markers2d.plugins import ChatCommunicationComponent, ReplyStateForMarker
 from gui.Scaleform.genConsts.EPIC_CONSTS import EPIC_CONSTS
 from gui.battle_control import avatar_getter
@@ -746,6 +745,114 @@ class HeadquartersPlugin(EpicMissionsPlugin, ChatCommunicationComponent):
             self._setMarkerReplied(marker, False)
             self._setMarkerReplyCount(marker, 0)
         self._checkNextState(marker)
+
+
+class StepRepairPointPlugin(plugins.MarkerPlugin):
+    __slots__ = ('__markers',)
+
+    def __init__(self, parentObj):
+        super(StepRepairPointPlugin, self).__init__(parentObj)
+        self.__markers = {}
+
+    def init(self):
+        super(StepRepairPointPlugin, self).init()
+        stepRepairPointComponent = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'stepRepairPointComponent', None)
+        if stepRepairPointComponent is not None:
+            stepRepairPointComponent.onStepRepairPointAdded += self.__onStepRepairPointAdded
+            stepRepairPointComponent.onStepRepairPointActiveStateChanged += self.__onStepRepairPointActiveStateChanged
+        else:
+            _logger.error('Expected StepRepairPointComponent not present!')
+        progressCtrl = self.sessionProvider.dynamic.progressTimer
+        if progressCtrl is not None:
+            progressCtrl.onTimerUpdated += self.__onTimerUpdated
+            progressCtrl.onCircleStatusChanged += self.__onCircleStatusChanged
+            progressCtrl.onVehicleEntered += self.__onVehicleEntered
+            progressCtrl.onVehicleLeft += self.__onVehicleLeft
+        return
+
+    def fini(self):
+        stepRepairPointComponent = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'stepRepairPointComponent', None)
+        if stepRepairPointComponent is not None:
+            stepRepairPointComponent.onStepRepairPointAdded -= self.__onStepRepairPointAdded
+            stepRepairPointComponent.onStepRepairPointActiveStateChanged -= self.__onStepRepairPointActiveStateChanged
+        ctrl = self.sessionProvider.dynamic.progressTimer
+        if ctrl is not None:
+            ctrl.onTimerUpdated -= self.__onTimerUpdated
+            ctrl.onCircleStatusChanged -= self.__onCircleStatusChanged
+            ctrl.onVehicleEntered -= self.__onVehicleEntered
+            ctrl.onVehicleLeft -= self.__onVehicleLeft
+        super(StepRepairPointPlugin, self).fini()
+        return
+
+    def start(self):
+        super(StepRepairPointPlugin, self).start()
+        progressCtrl = self.sessionProvider.dynamic.progressTimer
+        stepRepairPointComponent = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'stepRepairPointComponent', None)
+        if stepRepairPointComponent is not None:
+            repairPts = stepRepairPointComponent.stepRepairPoints
+            for pt in repairPts:
+                self.__onStepRepairPointAdded(pt)
+                inCircle, state = progressCtrl.getPlayerCircleState(PROGRESS_CIRCLE_TYPE.SECTOR_BASE_CIRCLE, pt.id)
+                if inCircle:
+                    self.__onVehicleEntered(PROGRESS_CIRCLE_TYPE.RESUPPLY_CIRCLE, pt.id, state)
+
+        else:
+            _logger.error('Expected StepRepairPointComponent not present!')
+        return
+
+    def stop(self):
+        for markerID in self.__markers.values():
+            self._destroyMarker(markerID)
+
+        self.__markers.clear()
+        super(StepRepairPointPlugin, self).stop()
+
+    def __onVehicleEntered(self, type_, idx, state):
+        if type_ != PROGRESS_CIRCLE_TYPE.RESUPPLY_CIRCLE:
+            return
+        else:
+            handle = self.__markers[idx]
+            if handle is not None:
+                self._invokeMarker(handle, 'notifyVehicleInCircle', True)
+                self._parentObj.invokeMarker(handle, 'setState', [state])
+            return
+
+    def __onVehicleLeft(self, type_, idx):
+        if type_ != PROGRESS_CIRCLE_TYPE.RESUPPLY_CIRCLE:
+            return
+        else:
+            handle = self.__markers[idx]
+            if handle is not None:
+                self._invokeMarker(handle, 'notifyVehicleInCircle', False)
+            return
+
+    def __onTimerUpdated(self, type_, pointId, timeLeft):
+        if type_ is not PROGRESS_CIRCLE_TYPE.RESUPPLY_CIRCLE:
+            return
+        handle = self.__markers[pointId]
+        self._parentObj.invokeMarker(handle, 'setCooldown', [time_utils.getTimeLeftFormat(timeLeft)])
+
+    def __onCircleStatusChanged(self, type_, pointId, state):
+        if type_ is not PROGRESS_CIRCLE_TYPE.RESUPPLY_CIRCLE:
+            return
+        handle = self.__markers[pointId]
+        self._parentObj.invokeMarker(handle, 'setState', [state])
+
+    def __onStepRepairPointAdded(self, stepRepairPoint):
+        handle = self._createMarkerWithPosition(settings.MARKER_SYMBOL_NAME.STEP_REPAIR_MARKER_TYPE, stepRepairPoint.position + settings.MARKER_POSITION_ADJUSTMENT)
+        if handle is None:
+            return
+        else:
+            self._setMarkerActive(handle, stepRepairPoint.isActiveForPlayerTeam())
+            self._setMarkerRenderInfo(handle, _SMALL_MARKER_MIN_SCALE, _EMPTY_MARKER_BOUNDS, _EMPTY_MARKER_INNER_BOUNDS, _NEAR_MARKER_CULL_DISTANCE, _SECTOR_BASES_BOUNDS_MIN_SCALE)
+            self.__markers[stepRepairPoint.id] = handle
+            return
+
+    def __onStepRepairPointActiveStateChanged(self, pointId, isActive):
+        handle = self.__markers[pointId]
+        if handle is not None:
+            self._setMarkerActive(handle, isActive)
+        return
 
 
 class SectorWarningPlugin(plugins.MarkerPlugin):

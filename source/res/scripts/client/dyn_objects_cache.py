@@ -201,6 +201,9 @@ class DynObjectsBase(object):
     def getHealPointEffect(self):
         return {}
 
+    def getCircleRestrictionEffect(self):
+        return {}
+
 
 class _CommonForBattleRoyaleAndEpicBattleDynObjects(DynObjectsBase):
 
@@ -504,6 +507,7 @@ registerDynObjCache(ARENA_GUI_TYPE.EPIC_BATTLE, _EpicBattleDynObjects)
 registerDynObjCache(ARENA_GUI_TYPE.EPIC_TRAINING, _EpicBattleDynObjects)
 registerDynObjCache(ARENA_GUI_TYPE.EVENT_BATTLES, _EpicBattleDynObjects)
 registerDynObjCache(ARENA_GUI_TYPE.COMP7, _Comp7DynObjects)
+registerDynObjCache(ARENA_GUI_TYPE.TOURNAMENT_COMP7, _Comp7DynObjects)
 
 class BattleDynamicObjectsCache(IBattleDynamicObjectsCache):
 

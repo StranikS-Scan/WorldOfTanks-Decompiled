@@ -148,7 +148,11 @@ class VideoState(State):
         machine = self.getMachine()
         if machine is not None:
             chapter = machine.getChosenStyleChapter()
-            _, level = getStyleInfoForChapter(chapter)
+            if chapter is not None:
+                _, level = getStyleInfoForChapter(chapter)
+            else:
+                chapter = machine.getChosenVehicleChapter()
+                level = 0
             showBPGamefaceVideo(chapter, level, onVideoClosed=partial(machine.post, StateEvent()))
         return
 
@@ -188,6 +192,9 @@ class RewardStyleState(State):
             return
         else:
             chapterID = machine.getChosenStyleChapter()
+            if chapterID is None:
+                machine.post(StateEvent())
+                return
             _, level = getStyleInfoForChapter(chapterID)
             style = getStyleForChapter(chapterID)
             additionalRewards, _, _ = machine.getRewardsData()

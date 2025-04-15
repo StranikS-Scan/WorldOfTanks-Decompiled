@@ -100,7 +100,8 @@ def getDefaultBonusPackersMap():
      constants.WoTPlusBonusType.EXCLUSIVE_VEHICLE: wotPlusBonusPacker,
      constants.WoTPlusBonusType.ATTENDANCE_REWARD: wotPlusBonusPacker,
      constants.WoTPlusBonusType.TEAM_CREDITS_BONUS: wotPlusBonusPacker,
-     constants.WoTPlusBonusType.DAILY_QUESTS_REWARDS: wotPlusBonusPacker}
+     constants.WoTPlusBonusType.DAILY_QUESTS_REWARDS: wotPlusBonusPacker,
+     'lootBoxToken': tokenBonusPacker}
 
 
 def getLocalizedBonusName(name):

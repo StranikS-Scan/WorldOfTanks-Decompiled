@@ -8,14 +8,16 @@ from frontline.gui.impl.gen.view_models.views.lobby.views.skill_category_base_mo
 from gui.impl.pub import ViewImpl, WindowImpl
 from gui.impl.gen import R
 from helpers import dependency
-from skeletons.gui.game_control import IEpicBattleMetaGameController
+from skeletons.gui.game_control import IEpicBattleMetaGameController, IBattlePassController
 from frontline.gui.impl.gen.view_models.views.lobby.views.info_view_model import InfoViewModel
 from frontline.gui.impl.gen.view_models.views.lobby.views.rank_item_model import RankItemModel
+from frameworks.wulf.view.array import fillIntsArray
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Array
 
 class InfoView(ViewImpl):
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
+    __battlePassController = dependency.descriptor(IBattlePassController)
 
     def __init__(self, layoutID=R.views.frontline.lobby.InfoView(), showFullScreen=False, **kwargs):
         self._isFullScreen = showFullScreen
@@ -68,6 +70,10 @@ class InfoView(ViewImpl):
                 rankItemPoints.addNumber(points)
                 rankItemPoints.addNumber(xpBonus)
                 ranks.addViewModel(rankItem)
+
+            winPoints, losePoints = self.__battlePassController.getWinLosePointsList()
+            fillIntsArray(winPoints, vm.getWinTablePoints())
+            fillIntsArray(losePoints, vm.getLoseTablePoints())
 
     def __updateVehLevels(self, vehilceLevels):
         vehilceLevels.clear()

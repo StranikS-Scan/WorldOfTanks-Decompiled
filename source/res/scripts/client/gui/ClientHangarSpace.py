@@ -159,6 +159,10 @@ class ClientHangarSpace(object):
         _HANGAR_CFGS = _readHangarSettings()
         return
 
+    @property
+    def spaceId(self):
+        return self.__spaceId
+
     def create(self, isPremium, onSpaceLoadedCallback=None):
         global _CFG
         BigWorld.worldDrawEnabled(False)
@@ -375,6 +379,12 @@ class _ClientHangarSpacePathOverride(object):
             else:
                 event()
         return
+
+    def setEnvironmentAndVisibilityMask(self, environmentName, visibilityMask):
+        if not constants.IS_DEVELOPMENT:
+            return
+        BigWorld.CustomizationEnvironment().enable(True, environmentName)
+        BigWorld.wg_setSpaceItemsVisibilityMask(self.hangarSpace.space.spaceId, visibilityMask)
 
     def __onDisconnected(self):
         global _EVENT_HANGAR_PATHS

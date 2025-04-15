@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: gui_lootboxes/scripts/client/gui_lootboxes/gui/impl/lobby/gui_lootboxes/bonus_probabilities_view.py
+from account_helpers.settings_core.settings_constants import OnceOnlyHints
 from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer, Array
 from frameworks.wulf.view.array import fillFloatsArray
 from gui.impl.gen import R
@@ -11,6 +12,7 @@ from gui.impl.pub import ViewImpl, WindowImpl
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from helpers import dependency
 from shared_utils import findFirst
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IGuiLootBoxesController
 from gui_lootboxes.gui.bonuses.bonuses_packers import getLootboxesWithPossibleCompensationBonusPacker
 from gui_lootboxes.gui.bonuses.bonuses_sorter import sortBonuses
@@ -19,8 +21,10 @@ from gui_lootboxes.gui.impl.gen.view_models.views.lobby.gui_lootboxes.slot_view_
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.sound import LOOT_BOXES_OVERLAY_SOUND_SPACE
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.gui_helpers import detectBonusType
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.compensation_tooltip import LootBoxesCompensationTooltip
-from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_tooltip import LootboxTooltip, ExtendedLootboxTooltip
+from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_tooltip import LootboxTooltip
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_key_tooltip import LootboxKeyTooltip
+from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.probability_guaranteed_reward_tooltip import ProbabilityGuaranteedRewardTooltip
+from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.probability_stage_buttons_tooltip import ProbabilityStageButtonsTooltip
 from gui_lootboxes.gui.impl.gen.view_models.views.lobby.gui_lootboxes.lb_bonus_type_model import BonusType
 from skeletons.gui.shared import IItemsCache
 SLOT_BONUSES_PROCESSORS = []
@@ -62,6 +66,7 @@ class BonusProbabilitiesView(ViewImpl):
     __slots__ = ('__lootBox', '__tooltipData')
     __guiLootBoxes = dependency.descriptor(IGuiLootBoxesController)
     __itemsCache = dependency.descriptor(IItemsCache)
+    __settingsCore = dependency.descriptor(ISettingsCore)
     _COMMON_SOUND_SPACE = LOOT_BOXES_OVERLAY_SOUND_SPACE
 
     def __init__(self, layoutID, lootBox):
@@ -88,12 +93,15 @@ class BonusProbabilitiesView(ViewImpl):
             tooltipData = self.getTooltipData(event)
             if tooltipData:
                 return LootBoxesCompensationTooltip(*tooltipData.specialArgs)
+        else:
+            if contentID == R.views.gui_lootboxes.lobby.gui_lootboxes.tooltips.ProbabilityStageButtonsTooltip():
+                return ProbabilityStageButtonsTooltip()
+            if contentID == R.views.gui_lootboxes.lobby.gui_lootboxes.tooltips.ProbabilityGuaranteedRewardTooltip():
+                return ProbabilityGuaranteedRewardTooltip(self.__lootBox)
         if contentID == R.views.gui_lootboxes.lobby.gui_lootboxes.tooltips.LootboxTooltip():
             tooltipData = self.getTooltipData(event)
             lootBoxID = tooltipData.get('lootBoxID')
             lootBox = self.__itemsCache.items.tokens.getLootBoxByID(int(lootBoxID))
-            if lootBox.isExtendedTooltip():
-                return ExtendedLootboxTooltip(lootBox)
             return LootboxTooltip(lootBox)
         if contentID == R.views.gui_lootboxes.lobby.gui_lootboxes.tooltips.LootboxKeyTooltip():
             tooltipData = self.getTooltipData(event)
@@ -110,6 +118,12 @@ class BonusProbabilitiesView(ViewImpl):
         super(BonusProbabilitiesView, self)._onLoading(*args, **kwargs)
         with self.viewModel.transaction() as model:
             self.__update(model=model)
+
+    def _finalize(self):
+        serverSettings = self.__settingsCore.serverSettings
+        if not serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.LOOT_PROBABILITY_HINT):
+            serverSettings.setOnceOnlyHintsSettings({OnceOnlyHints.LOOT_PROBABILITY_HINT: True})
+        super(BonusProbabilitiesView, self)._finalize()
 
     def _getEvents(self):
         return ((self.__guiLootBoxes.onBoxInfoUpdated, self.__update),)

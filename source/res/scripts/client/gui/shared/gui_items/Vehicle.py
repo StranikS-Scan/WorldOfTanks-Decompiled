@@ -1063,6 +1063,10 @@ class Vehicle(FittingItem):
         return checkForTags(self.tags, 'scout')
 
     @property
+    def isFlamethrower(self):
+        return self._descriptor.isFlamethrower
+
+    @property
     def isTrackWithinTrack(self):
         return self._descriptor.isTrackWithinTrack
 

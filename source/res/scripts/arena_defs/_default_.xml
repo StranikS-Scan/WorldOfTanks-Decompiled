@@ -174,6 +174,23 @@
     <BATTLE_ROYALE_TRN_SQUAD>
       <runDelayDev>	15	</runDelayDev>
     </BATTLE_ROYALE_TRN_SQUAD>
+    <HB_OFFENCE>
+      <estimatedLoad>	0.45	</estimatedLoad>
+      <runDelay>	30	</runDelay>
+      <runDelayDev>	4	</runDelayDev>
+      <maxPlayersInTeam>	5	</maxPlayersInTeam>
+    </HB_OFFENCE>
+    <HB_DEFENCE>
+      <estimatedLoad>	0.51	</estimatedLoad>
+      <runDelay>	30	</runDelay>
+      <runDelayDev>	4	</runDelayDev>
+      <maxPlayersInTeam>	5	</maxPlayersInTeam>
+    </HB_DEFENCE>
+    <TOURNAMENT_COMP7>
+      <runDelay>	45	</runDelay>
+      <runDelayDev>	45	</runDelayDev>
+      <maxPlayersInTeam>	7	</maxPlayersInTeam>
+    </TOURNAMENT_COMP7>
   </bonusTypeOverrides>
   <gameplayTypes>
     <ctf>
@@ -367,5 +384,49 @@
       </soundRemapping>
     </comp7>
     <bob></bob>
+    <historical_battles>
+      <soundRemapping>
+        <loadBanks>
+          <bank>
+            <name>	ev_secret_event_voiceover.bnk	</name>
+          </bank>
+          <bank>
+            <name>	ev_secret_event_voiceover.pck	</name>
+          </bank>
+          <bank>
+            <name>	ev_secret_event_gameplay.bnk	</name>
+          </bank>
+          <bank>
+            <name>	ev_secret_event_gameplay.pck	</name>
+          </bank>
+          <bank>
+            <name>	env_Forest.bnk	</name>
+          </bank>
+          <bank>
+            <name>	destructible_objects.bnk	</name>
+          </bank>
+          <bank>
+            <name>	destructible_objects.pck	</name>
+          </bank>
+        </loadBanks>
+        <unloadBanks>
+          <bank>
+            <name></name>
+          </bank>
+        </unloadBanks>
+        <events>
+          <event>
+            <name>	expl_enemy_NPC	</name>
+            <mod>	ev_secret_event_silence	</mod>
+            <modAUX>	ev_secret_event_silence	</modAUX>
+          </event>
+          <event>
+            <name>	expl_ally_NPC	</name>
+            <mod>	ev_secret_event_silence	</mod>
+            <modAUX>	ev_secret_event_silence	</modAUX>
+          </event>
+        </events>
+      </soundRemapping>
+    </historical_battles>
   </extraSoundRemapping>
 </_default_.xml>

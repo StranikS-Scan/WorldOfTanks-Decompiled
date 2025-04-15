@@ -91,5 +91,12 @@
     <accountPrebattle_removeAccountFromWhiteList>
       <Arg>	DB_ID	</Arg>
     </accountPrebattle_removeAccountFromWhiteList>
+    <accountPrebattle_setPrebattleVehiclesLimits>
+      <Arg>	PYTHON	</Arg>
+      <Arg>	UINT8	</Arg>
+    </accountPrebattle_setPrebattleVehiclesLimits>
+    <accountPrebattle_setPrebattleBonusType>
+      <Arg>	UINT32	</Arg>
+    </accountPrebattle_setPrebattleBonusType>
   </BaseMethods>
 </AccountPrebattle.def>

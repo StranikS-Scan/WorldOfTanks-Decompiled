@@ -30,9 +30,9 @@ SplineSegmentModelSet = reflectedNamedTuple('SplineSegmentModelSet', ('left', 'r
 
 class SplineTrackPairDesc(object):
     __metaclass__ = ReflectionMetaclass
-    __slots__ = ('trackPairIdx', 'segmentModelSets', 'leftDesc', 'rightDesc', 'segmentLength', 'segmentOffset', 'segment2Offset', 'atlasUTiles', 'atlasVTiles')
+    __slots__ = ('trackPairIdx', 'segmentModelSets', 'leftDesc', 'rightDesc', 'segmentLength', 'segmentOffset', 'segment2Offset', 'atlasUTiles', 'atlasVTiles', 'castShadows')
 
-    def __init__(self, trackPairIdx, segmentModelSets, leftDesc, rightDesc, segmentLength, segmentOffset, segment2Offset, atlasUTiles, atlasVTiles):
+    def __init__(self, trackPairIdx, segmentModelSets, leftDesc, rightDesc, segmentLength, segmentOffset, segment2Offset, atlasUTiles, atlasVTiles, castShadows):
         self.trackPairIdx = trackPairIdx
         self.leftDesc = leftDesc
         self.rightDesc = rightDesc
@@ -41,6 +41,7 @@ class SplineTrackPairDesc(object):
         self.segment2Offset = segment2Offset
         self.atlasUTiles = atlasUTiles
         self.atlasVTiles = atlasVTiles
+        self.castShadows = castShadows
         self.segmentModelSets = {}
         segmentModelSets = segmentModelSets or {}
         for setName, setPaths in segmentModelSets.iteritems():

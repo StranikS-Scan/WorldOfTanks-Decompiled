@@ -282,7 +282,8 @@ class SummaryView(SubModelPresenter):
          dumpDossier(self.__dossier),
          block,
          name,
-         isRareAchievement(achievement)))
+         isRareAchievement(achievement),
+         not self.__isOtherPlayer))
 
     def __getPrevStates(self):
         with self.viewModel.transaction() as model:

@@ -979,7 +979,7 @@
         <item>	10038	  <name>	id	</name>
           <type>	int	</type>
         </item>
-        <item>	1.03	  <name>	weight	</name>
+        <item>	1.08	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	2	  <name>	group	</name>
@@ -1003,7 +1003,7 @@
         <item>	10039	  <name>	id	</name>
           <type>	int	</type>
         </item>
-        <item>	1.04	  <name>	weight	</name>
+        <item>	1.07	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	3	  <name>	group	</name>
@@ -1027,7 +1027,7 @@
         <item>	10040	  <name>	id	</name>
           <type>	int	</type>
         </item>
-        <item>	1.05	  <name>	weight	</name>
+        <item>	1.06	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	3	  <name>	group	</name>
@@ -1051,7 +1051,7 @@
         <item>	10041	  <name>	id	</name>
           <type>	int	</type>
         </item>
-        <item>	1.06	  <name>	weight	</name>
+        <item>	1.05	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	4	  <name>	group	</name>
@@ -1075,7 +1075,7 @@
         <item>	10042	  <name>	id	</name>
           <type>	int	</type>
         </item>
-        <item>	1.07	  <name>	weight	</name>
+        <item>	1.04	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	4	  <name>	group	</name>
@@ -1099,7 +1099,7 @@
         <item>	10043	  <name>	id	</name>
           <type>	int	</type>
         </item>
-        <item>	1.08	  <name>	weight	</name>
+        <item>	1.03	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	5	  <name>	group	</name>
@@ -1221,6 +1221,24 @@
         </item>
         <item>	1	  <name>	type	</name>
           <type>	int	</type>
+        </item>
+        <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	80_years_of_victory	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	31055	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.32	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
         </item>
         <item>	False	  <name>	achievable	</name>
           <type>	bool	</type>
@@ -4989,6 +5007,24 @@
           <type>	int	</type>
         </item>
         <item>	4.001	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	may_2025	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	149	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.002	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	gold	  <name>	highlight	</name>

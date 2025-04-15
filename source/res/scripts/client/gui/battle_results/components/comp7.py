@@ -48,8 +48,12 @@ class PrestigePointsBlock(base.StatsBlock):
             return
         else:
             achievedComp7Rating = result.get('avatar', {}).get('comp7RatingDelta', 0)
+            if achievedComp7Rating != 0:
+                achievedComp7Rating = getFormattedRating(achievedComp7Rating)
+            else:
+                achievedComp7Rating = str(achievedComp7Rating)
             if achievedComp7Rating is not None:
-                self.value = text_styles.grandTitle(getFormattedRating(achievedComp7Rating))
+                self.value = text_styles.grandTitle(achievedComp7Rating)
                 self.label = text_styles.creditsSmall(backport.text(R.strings.comp7.battleResult.personal.label()))
                 self.tooltip = TOOLTIPS_CONSTANTS.COMP7_BATTLE_RESULTS_PRESTIGE_POINTS
             return
@@ -156,7 +160,7 @@ class Comp7RankBlock(base.StatsBlock):
         formattedRating = getFormattedRating(achievedRating)
         if achievedRating < 0:
             return text_styles.error(formattedRating)
-        return text_styles.tutorial(formattedRating) if achievedRating == 0 else text_styles.bonusAppliedText(formattedRating)
+        return text_styles.tutorial(str(achievedRating)) if achievedRating == 0 else text_styles.bonusAppliedText(formattedRating)
 
     @staticmethod
     def __getQualificationTitle():

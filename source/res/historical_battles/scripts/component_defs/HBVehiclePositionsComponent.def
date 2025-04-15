@@ -1,0 +1,19 @@
+<HBVehiclePositionsComponent.def>
+  <ClientMethods>
+    <receivePosition>
+      <Args>
+        <vehicleEntityID>	UINT32	</vehicleEntityID>
+        <position>	VECTOR3	</position>
+      </Args>
+    </receivePosition>
+    <receivePositions>
+      <Args>
+        <package>	PYTHON	</package>
+      </Args>
+    </receivePositions>
+  </ClientMethods>
+  <ofEntity>
+    <ArenaInfo></ArenaInfo>
+  </ofEntity>
+  <DefaultKeyName>	hbVehiclePositionsComponent	</DefaultKeyName>
+</HBVehiclePositionsComponent.def>

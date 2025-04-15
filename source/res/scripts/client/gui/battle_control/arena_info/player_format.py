@@ -6,21 +6,26 @@ from skeletons.gui.lobby_context import ILobbyContext
 
 class _FORMAT_MASK(object):
     NONE = 0
-    VEHICLE = 1
-    CLAN = 16
-    REGION = 256
-    VEH_CLAN = VEHICLE | CLAN
-    VEH_REGION = VEHICLE | REGION
-    REG_CLAN = CLAN | REGION
-    ALL = VEHICLE | CLAN | REGION
+    NAME = 1
+    VEHICLE = 2
+    CLAN = 4
+    REGION = 8
+    NAME_VEHICLE = NAME | VEHICLE
+    NAME_CLAN = NAME | CLAN
+    NAME_VEH_CLAN = NAME | VEHICLE | CLAN
+    NAME_REGION = NAME | REGION
+    NAME_VEH_REGION = NAME | VEHICLE | REGION
+    NAME_REG_CLAN = NAME | CLAN | REGION
+    ALL = NAME | VEHICLE | CLAN | REGION
 
 
-_PLAYER_FULL_NAME_FORMATS = {_FORMAT_MASK.VEHICLE: u'{0:>s} ({2:>s})',
- _FORMAT_MASK.CLAN: u'{0:>s}[{1:>s}]',
- _FORMAT_MASK.VEH_CLAN: u'{0:>s}[{1:>s}] ({2:>s})',
- _FORMAT_MASK.REGION: u'{0:>s} {3:>s}',
- _FORMAT_MASK.VEH_REGION: u'{0:>s} {3:>s} ({2:>s})',
- _FORMAT_MASK.REG_CLAN: u'{0:>s}[{1:>s}] {3:>s}',
+_PLAYER_FULL_NAME_FORMATS = {_FORMAT_MASK.VEHICLE: u'{2:>s}',
+ _FORMAT_MASK.NAME_VEHICLE: u'{0:>s} ({2:>s})',
+ _FORMAT_MASK.NAME_CLAN: u'{0:>s}[{1:>s}]',
+ _FORMAT_MASK.NAME_VEH_CLAN: u'{0:>s}[{1:>s}] ({2:>s})',
+ _FORMAT_MASK.NAME_REGION: u'{0:>s} {3:>s}',
+ _FORMAT_MASK.NAME_VEH_REGION: u'{0:>s} {3:>s} ({2:>s})',
+ _FORMAT_MASK.NAME_REG_CLAN: u'{0:>s}[{1:>s}] {3:>s}',
  _FORMAT_MASK.ALL: u'{0:>s}[{1:>s}] {3:>s} ({2:>s})'}
 PlayerFormatResult = namedtuple('PlayerFormatResult', ('playerFullName', 'playerName', 'playerFakeName', 'clanAbbrev', 'regionCode', 'vehicleName'))
 
@@ -43,6 +48,7 @@ class PlayerFullNameFormatter(object):
         self.__isVehicleShortNameShown = False
         self.__isClanShown = True
         self.__isRegionShown = True
+        self.__isPlayerNameShown = True
 
     @classmethod
     def create(cls, isVehicleShortNameShown=True, isClanShown=True, isRegionShown=True):
@@ -61,6 +67,9 @@ class PlayerFullNameFormatter(object):
     def setRegionShown(self, flag):
         self.__isRegionShown = flag
 
+    def setPlayerNameShown(self, flag):
+        self.__isPlayerNameShown = flag
+
     def format(self, vInfoVO, playerName=None):
         key = _FORMAT_MASK.NONE
         vehShortName = ''
@@ -73,6 +82,8 @@ class PlayerFullNameFormatter(object):
                 key |= _FORMAT_MASK.VEHICLE
             else:
                 vehName = vehType.name
+        if self.__isPlayerNameShown:
+            key |= _FORMAT_MASK.NAME
         if playerName is None:
             playerName = self._normalizePlayerName(vInfoVO.player.getPlayerLabel())
         fakePlayerName = vInfoVO.player.getPlayerFakeLabel()

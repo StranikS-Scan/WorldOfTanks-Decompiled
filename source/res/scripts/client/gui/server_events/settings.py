@@ -20,14 +20,20 @@ class _PMSettings(utils.SettingRecord):
 
 class _DQSettings(utils.SettingRecord):
 
-    def __init__(self, lastVisitedDQTabIdx=None, premMissionsTabDiscovered=False, *args, **kwargs):
-        super(_DQSettings, self).__init__(lastVisitedDQTabIdx=lastVisitedDQTabIdx, premMissionsTabDiscovered=premMissionsTabDiscovered)
+    def __init__(self, lastVisitedDQTabIdx=None, premMissionsTabDiscovered=False, lastBonusMissionVisited=None, dailyQuestsIntroSeen=False, *args, **kwargs):
+        super(_DQSettings, self).__init__(lastVisitedDQTabIdx=lastVisitedDQTabIdx, premMissionsTabDiscovered=premMissionsTabDiscovered, lastBonusMissionVisited=lastBonusMissionVisited, dailyQuestsIntroSeen=dailyQuestsIntroSeen)
 
     def setLastVisitedDQTab(self, lastVisitedDQTabIdx):
         self.update(lastVisitedDQTabIdx=lastVisitedDQTabIdx)
 
-    def onPremMissionsTabDiscovered(self):
-        self.update(premMissionsTabDiscovered=True)
+    def setPremMissionsTabDiscovered(self, premMissionsTabDiscovered):
+        self.update(premMissionsTabDiscovered=premMissionsTabDiscovered)
+
+    def setLastBonusMissionVisited(self, lastBonusMissionVisited):
+        self.update(lastBonusMissionVisited=lastBonusMissionVisited)
+
+    def setDailyQuestsIntroSeen(self, dailyQuestsIntroSeen):
+        self.update(dailyQuestsIntroSeen=dailyQuestsIntroSeen)
 
 
 class _DogTagsRootSettings(utils.SettingRootRecord):
@@ -165,7 +171,7 @@ def get():
 def isNewCommonEvent(svrEvent, settings=None):
     settings = settings or get()
     if settings is not None and not svrEvent.isCompleted() and not svrEvent.isOutOfDate():
-        eventID = svrEvent.getID()
+        eventID = svrEvent.getSeenSettingID()
         isVisitedSettings = eventID in settings['visited']
         isNaVisitedSettings = eventID in settings['naVisited']
         if isVisitedSettings and isNaVisitedSettings:
@@ -187,32 +193,34 @@ def getNewCommonEvents(events):
     return [ e for e in events if isNewCommonEvent(e, settings) ]
 
 
-@dependency.replace_none_kwargs(eventsCache=IEventsCache)
-def visitEventGUI(event, counters=(), eventsCache=None):
+def visitEventGUI(event):
     if event is None:
         return
     else:
         s = get()
-        isNaVisitedChanged = s.updateVisited('naVisited', event.getID())
+        isNaVisitedChanged = s.updateVisited('naVisited', event.getSeenSettingID())
         if event.isAvailable()[0]:
-            isVisitedChanged = s.updateVisited('visited', event.getID())
+            isVisitedChanged = s.updateVisited('visited', event.getSeenSettingID())
         else:
             isVisitedChanged = False
         if isNaVisitedChanged or isVisitedChanged:
             s.save()
-            converted = {}
-            for counter in counters:
-                key, value = counter(eventsCache)
-                converted[key] = value
-
-            eventsCache.onEventsVisited(converted)
-        return
+        return isNaVisitedChanged or isVisitedChanged
 
 
-def visitEventsGUI(events):
+@dependency.replace_none_kwargs(eventsCache=IEventsCache)
+def visitEventsGUI(events, counters=(), eventsCache=None):
+    visitedEvents = set()
     if events:
         for event in events:
-            visitEventGUI(event)
+            if visitEventGUI(event):
+                visitedEvents.add(event)
+
+    if visitedEvents:
+        converted = {}
+        for counter in counters:
+            key, value = counter(eventsCache)
+            converted[key] = value
 
 
 def expandGroup(groupID, isExpanded):
@@ -227,7 +235,7 @@ def expandGroup(groupID, isExpanded):
 
 def updateCommonEventsSettings(svrEvents):
     s = get()
-    s.removeCompleted(set((e.getID() for e in svrEvents.itervalues() if e.isCompleted())))
+    s.removeCompleted(set((e.getSeenSettingID() for e in svrEvents.itervalues() if e.isCompleted())))
     s.save()
 
 

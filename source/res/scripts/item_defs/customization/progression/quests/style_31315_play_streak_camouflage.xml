@@ -1,0 +1,124 @@
+<style_31315_play_streak_camouflage.xml>
+  <quests>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <delayed>	true	</delayed>
+      <hidden>	true	</hidden>
+      <id>	play_streak_progression:2	</id>
+      <description>
+        <key>	#vehicle_customization:customization/tooltip/quests/play_streak_2/condition	</key>
+      </description>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	play_streak:progress	</id>
+                <greaterOrEqual>	126	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	cust_progress_31315_1	</id>
+                <less>	2	</less>
+              </token>
+              <token>
+                <id>	play_streak_blocker	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_31315_1	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	2	</count>
+          <limit>	2	</limit>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <delayed>	true	</delayed>
+      <hidden>	true	</hidden>
+      <id>	play_streak_progression:3	</id>
+      <description>
+        <key>	#vehicle_customization:customization/tooltip/quests/play_streak_3/condition	</key>
+      </description>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	play_streak:progress	</id>
+                <greaterOrEqual>	254	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	cust_progress_31315_1	</id>
+                <less>	3	</less>
+              </token>
+              <token>
+                <id>	play_streak_blocker	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_31315_1	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	3	</count>
+          <limit>	3	</limit>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <delayed>	true	</delayed>
+      <hidden>	true	</hidden>
+      <id>	play_streak_progression:4	</id>
+      <description>
+        <key>	#vehicle_customization:customization/tooltip/quests/play_streak_4/condition	</key>
+      </description>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	play_streak:progress	</id>
+                <greaterOrEqual>	358	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	cust_progress_31315_1	</id>
+                <less>	4	</less>
+              </token>
+              <token>
+                <id>	play_streak_blocker	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_31315_1	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	4	</count>
+          <limit>	4	</limit>
+        </token>
+      </bonus>
+    </tokenQuest>
+  </quests>
+</style_31315_play_streak_camouflage.xml>

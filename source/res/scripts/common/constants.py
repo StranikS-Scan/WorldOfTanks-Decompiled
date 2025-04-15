@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/constants.py
+import re
 import enum
 import calendar
 import time
@@ -9,6 +10,7 @@ from collections import namedtuple
 from itertools import izip, chain
 from Math import Vector3
 from realm import CURRENT_REALM, IS_CT
+from enumerations import Enumeration, AttributeEnumItem
 try:
     import BigWorld
 except ImportError:
@@ -164,6 +166,7 @@ if IS_EDITOR:
 ARENA_GAMEPLAY_IDS = dict(((value, index) for index, value in enumerate(ARENA_GAMEPLAY_NAMES)))
 ARENA_GAMEPLAY_MASK_DEFAULT = 1048575
 VALID_TRAINING_ARENA_GAMEPLAY_IDS = frozenset((ARENA_GAMEPLAY_IDS[gameplayName] for gameplayName in ('ctf', 'domination', 'assault', 'nations', 'ctf2', 'domination2', 'assault2', 'epic', 'bootcamp', 'ctf30x30', 'domination30x30', 'rts', 'rts_1x1', 'rts_bootcamp', 'domination3')))
+VALID_PREBATTLE_GAMEPLAY_IDS = VALID_TRAINING_ARENA_GAMEPLAY_IDS.union(frozenset((ARENA_GAMEPLAY_IDS[gameplayName] for gameplayName in ('comp7',))))
 
 class HANGAR_VISIBILITY_TAGS:
     LAYERS = ('1', '2', '3', '4', '5', '6', '7')
@@ -201,6 +204,7 @@ class ARENA_GUI_TYPE:
     RTS_BOOTCAMP = 28
     FUN_RANDOM = 29
     COMP7 = 30
+    TOURNAMENT_COMP7 = 33
     VERSUS_AI = 31000
     RANGE = (UNKNOWN,
      RANDOM,
@@ -226,11 +230,13 @@ class ARENA_GUI_TYPE:
      RTS_BOOTCAMP,
      FUN_RANDOM,
      COMP7,
-     VERSUS_AI)
+     VERSUS_AI,
+     TOURNAMENT_COMP7)
     RANDOM_RANGE = (RANDOM, EPIC_RANDOM)
     FALLOUT_RANGE = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
     EPIC_RANGE = (EPIC_BATTLE, EPIC_TRAINING)
     STRONGHOLD_RANGE = (SORTIE_2, FORT_BATTLE_2)
+    COMP7_RANGE = (COMP7, TOURNAMENT_COMP7)
     VOIP_SUPPORTED = RANDOM_RANGE + EPIC_RANGE
     BATTLE_CHAT_SETTING_SUPPORTED = (RANDOM,
      RANKED,
@@ -263,7 +269,8 @@ class ARENA_GUI_TYPE_LABEL:
      ARENA_GUI_TYPE.MAPS_TRAINING: 'maps_training',
      ARENA_GUI_TYPE.FUN_RANDOM: 'fun_random',
      ARENA_GUI_TYPE.COMP7: 'comp7',
-     ARENA_GUI_TYPE.VERSUS_AI: 'versusAI'}
+     ARENA_GUI_TYPE.VERSUS_AI: 'versusAI',
+     ARENA_GUI_TYPE.TOURNAMENT_COMP7: 'tournament_comp7'}
 
 
 class ARENA_BONUS_TYPE:
@@ -303,6 +310,7 @@ class ARENA_BONUS_TYPE:
     RTS_BOOTCAMP = 41
     FUN_RANDOM = 42
     COMP7 = 43
+    TOURNAMENT_COMP7 = 47
     VERSUS_AI = 50
     RANGE = (UNKNOWN,
      REGULAR,
@@ -315,6 +323,7 @@ class ARENA_BONUS_TYPE:
      GLOBAL_MAP,
      TOURNAMENT_REGULAR,
      TOURNAMENT_CLAN,
+     TOURNAMENT_COMP7,
      FALLOUT_CLASSIC,
      FALLOUT_MULTITEAM,
      BOOTCAMP,
@@ -346,7 +355,8 @@ class ARENA_BONUS_TYPE:
     TOURNAMENT_RANGE = (TOURNAMENT,
      TOURNAMENT_REGULAR,
      TOURNAMENT_CLAN,
-     TOURNAMENT_EVENT)
+     TOURNAMENT_EVENT,
+     TOURNAMENT_COMP7)
     BATTLE_ROYALE_RANGE = (BATTLE_ROYALE_SOLO,
      BATTLE_ROYALE_SQUAD,
      BATTLE_ROYALE_TRN_SOLO,
@@ -361,7 +371,10 @@ class ARENA_BONUS_TYPE:
      TOURNAMENT,
      TOURNAMENT_CLAN,
      TOURNAMENT_REGULAR,
-     TOURNAMENT_EVENT)
+     TOURNAMENT_EVENT,
+     TOURNAMENT_COMP7)
+    INVITATION_PROCESS_BONUS_TYPES = RANDOM_RANGE + (EPIC_BATTLE, MAPBOX, EVENT_BATTLES)
+    NOT_IMMEDIATE_BATTLE_RESULTS = BATTLE_ROYALE_RANGE + (MAPS_TRAINING, EVENT_BATTLES)
 
 
 ARENA_BONUS_TYPE_NAMES = dict([ (k, v) for k, v in ARENA_BONUS_TYPE.__dict__.iteritems() if isinstance(v, int) ])
@@ -472,6 +485,7 @@ class ARENA_SYNC_OBJECTS:
     OVERTIME = 6
     SMOKE = 7
     BR_DEATH_ZONE = 8
+    GAME_EVENT = 9
 
 
 ARENA_SYNC_OBJECT_NAMES = dict([ (v, k) for k, v in ARENA_SYNC_OBJECTS.__dict__.iteritems() if not k.startswith('_') ])
@@ -528,6 +542,8 @@ class FINISH_REASON:
     OWN_VEHICLE_DESTROYED = 9
     DESTROYED_OBJECTS = 10
     OBJECTIVES_COMPLETED = 11
+    HB_ENEMY_EXTERMINATION = 12
+    HB_ALLY_SPG_EXTERMINATION = 13
 
 
 FINISH_REASON_NAMES = dict([ (v, k) for k, v in FINISH_REASON.__dict__.iteritems() if not k.startswith('_') ])
@@ -724,7 +740,8 @@ OBSERVERS_BONUS_TYPES = (ARENA_BONUS_TYPE.TRAINING,
  ARENA_BONUS_TYPE.TOURNAMENT_CLAN,
  ARENA_BONUS_TYPE.TOURNAMENT_REGULAR,
  ARENA_BONUS_TYPE.EPIC_RANDOM_TRAINING,
- ARENA_BONUS_TYPE.TOURNAMENT_EVENT)
+ ARENA_BONUS_TYPE.TOURNAMENT_EVENT,
+ ARENA_BONUS_TYPE.TOURNAMENT_COMP7)
 
 class PREBATTLE_ERRORS:
     ROSTER_LIMIT = 'ROSTER_LIMIT'
@@ -776,7 +793,7 @@ class PREBATTLE_INVITE_STATE:
     EXPIRED = 4
 
 
-UNIT_COMMENT_MAX_LENGTH = 400
+UNIT_COMMENT_MAX_LENGTH = 100
 UNIT_MAX_SEND_INVITES = 100
 
 class UNIT_FINDER:
@@ -991,6 +1008,7 @@ class Configs(enum.Enum):
     RANDOM_BATTLES_CONFIG = 'random_battles_config'
     MODE_SELECTOR_CONFIG = 'mode_selector_config'
     PARAGONS_CONFIG = 'paragons_config'
+    PLAY_STREAK_CONFIG = 'play_streak_config'
 
 
 INBATTLE_CONFIGS = ['spgRedesignFeatures',
@@ -1261,6 +1279,7 @@ class ATTACK_REASON(object):
     RAM = 'ramming'
     WORLD_COLLISION = 'world_collision'
     DEATH_ZONE = 'death_zone'
+    PERSONAL_DEATH_ZONE = 'personal_death_zone'
     DROWNING = 'drowning'
     GAS_ATTACK = 'gas_attack'
     OVERTURN = 'overturn'
@@ -1268,6 +1287,7 @@ class ATTACK_REASON(object):
     ARTILLERY_PROTECTION = 'artillery_protection'
     ARTILLERY_SECTOR = 'artillery_sector'
     BOMBERS = 'bombers'
+    BOMBERCAS = 'bombercas'
     RECOVERY = 'recovery'
     ARTILLERY_EQ = 'artillery_eq'
     BOMBER_EQ = 'bomber_eq'
@@ -1286,11 +1306,18 @@ class ATTACK_REASON(object):
     STATIC_DEATH_ZONE = 'static_deathzone'
     CGF_WORLD = 'cgf_world'
     AUTOSHOOT = 'autoshoot'
+    SPAWNED_BOT_RAM = 'spawned_bot_ram'
+    ARTILLERY_ROCKET = 'artillery_rocket'
+    ARTILLERY_MORTAR = 'artillery_mortar'
     NONE = 'none'
 
     @classmethod
     def getIndex(cls, attackReason):
         return ATTACK_REASON_INDICES[attackReason]
+
+    @classmethod
+    def getValue(cls, index):
+        return ATTACK_REASON_VALUES[index]
 
 
 ATTACK_REASONS = (ATTACK_REASON.SHOT,
@@ -1298,6 +1325,7 @@ ATTACK_REASONS = (ATTACK_REASON.SHOT,
  ATTACK_REASON.RAM,
  ATTACK_REASON.WORLD_COLLISION,
  ATTACK_REASON.DEATH_ZONE,
+ ATTACK_REASON.PERSONAL_DEATH_ZONE,
  ATTACK_REASON.DROWNING,
  ATTACK_REASON.GAS_ATTACK,
  ATTACK_REASON.OVERTURN,
@@ -1305,6 +1333,7 @@ ATTACK_REASONS = (ATTACK_REASON.SHOT,
  ATTACK_REASON.ARTILLERY_PROTECTION,
  ATTACK_REASON.ARTILLERY_SECTOR,
  ATTACK_REASON.BOMBERS,
+ ATTACK_REASON.BOMBERCAS,
  ATTACK_REASON.RECOVERY,
  ATTACK_REASON.ARTILLERY_EQ,
  ATTACK_REASON.BOMBER_EQ,
@@ -1323,8 +1352,12 @@ ATTACK_REASONS = (ATTACK_REASON.SHOT,
  ATTACK_REASON.FORT_ARTILLERY_EQ,
  ATTACK_REASON.STATIC_DEATH_ZONE,
  ATTACK_REASON.AUTOSHOOT,
- ATTACK_REASON.CGF_WORLD)
+ ATTACK_REASON.CGF_WORLD,
+ ATTACK_REASON.SPAWNED_BOT_RAM,
+ ATTACK_REASON.ARTILLERY_ROCKET,
+ ATTACK_REASON.ARTILLERY_MORTAR)
 ATTACK_REASON_INDICES = dict(((value, index) for index, value in enumerate(ATTACK_REASONS)))
+ATTACK_REASON_VALUES = dict(((index, value) for index, value in enumerate(ATTACK_REASONS)))
 BOT_RAM_REASONS = (ATTACK_REASON.BRANDER_RAM, ATTACK_REASON.CLING_BRANDER_RAM)
 WORLD_ATTACK_REASONS = (ATTACK_REASON.WORLD_COLLISION, ATTACK_REASON.CGF_WORLD)
 DEATH_REASON_ALIVE = -1
@@ -1890,6 +1923,7 @@ class REQUEST_COOLDOWN:
     PARAGONS_SELECT_CHAPTER = 1.0
     PARAGONS_UNLOCK_ITEM = 1.0
     PARAGONS_MARK_SELECTED_REWARDS = 1.0
+    REROLL_DAILY_QUESTS = 1.0
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -2358,6 +2392,8 @@ class FAIRPLAY_VIOLATIONS:
     COMP7_DESERTER = 'comp7_deserter'
     BATTLEROYALE_DESERTER = 'battleroyale_deserter'
     BATTLEROYALE_AFK = 'battleroyale_afk'
+    HB_AFK = 'hb_afk'
+    HB_DESERTER = 'hb_deserter'
 
 
 FAIRPLAY_VIOLATIONS_NAMES = (FAIRPLAY_VIOLATIONS.DESERTER,
@@ -2368,7 +2404,9 @@ FAIRPLAY_VIOLATIONS_NAMES = (FAIRPLAY_VIOLATIONS.DESERTER,
  FAIRPLAY_VIOLATIONS.EPIC_DESERTER,
  FAIRPLAY_VIOLATIONS.COMP7_DESERTER,
  FAIRPLAY_VIOLATIONS.BATTLEROYALE_DESERTER,
- FAIRPLAY_VIOLATIONS.BATTLEROYALE_AFK)
+ FAIRPLAY_VIOLATIONS.BATTLEROYALE_AFK,
+ FAIRPLAY_VIOLATIONS.HB_AFK,
+ FAIRPLAY_VIOLATIONS.HB_DESERTER)
 FAIRPLAY_VIOLATIONS_MASKS = {name:1 << index for index, name in enumerate(FAIRPLAY_VIOLATIONS_NAMES)}
 
 class INVALID_CLIENT_STATS:
@@ -3243,12 +3281,18 @@ class DailyQuestsLevels(object):
     MEDIUM_SUBS = 'medium_subs'
     HARD_SUBS = 'hard_subs'
     BONUS_SUBS = 'bonus_subs'
+    EASY_PREMIUM = 'easy_premium'
+    MEDIUM_PREMIUM = 'medium_premium'
+    HARD_PREMIUM = 'hard_premium'
     ALL = (EASY,
      EASY_SUBS,
+     EASY_PREMIUM,
      MEDIUM,
      MEDIUM_SUBS,
+     MEDIUM_PREMIUM,
      HARD,
      HARD_SUBS,
+     HARD_PREMIUM,
      BONUS,
      BONUS_SUBS,
      EPIC)
@@ -3261,6 +3305,10 @@ class DailyQuestsLevels(object):
      MEDIUM_SUBS,
      HARD_SUBS,
      BONUS_SUBS)
+    DAILY_PREMIUM = (EASY_PREMIUM, MEDIUM_PREMIUM, HARD_PREMIUM)
+    DAILY_SIMPLE_WITH_PREMIUM = DAILY_SIMPLE + DAILY_PREMIUM
+    DAILY_QUESTS_WITHOUT_EPIC = DAILY + DAILY_PREMIUM
+    SORTED = DAILY + (EPIC,) + DAILY_PREMIUM + SUBS
     MAP_DAILY_QUESTS = {EASY: EASY_SUBS,
      MEDIUM: MEDIUM_SUBS,
      HARD: HARD_SUBS,
@@ -3732,3 +3780,38 @@ class VEHICLE_MOVEMENT_STATES(object):
 class UNIQUE_UNLOCK_FEATURE_NAMES:
     EARLY_ACCESS_FEATURE_NAME = 'earlyAccess'
     PARAGONS_FEATURE_NAME = 'paragons'
+
+
+class EVENT:
+    DISABLE_AI_BATTLE_RESULTS_SEND = True
+    INVALID_BATTLE_PLACE = -1
+
+
+EVENT_BATTLES_TAG = 'event_battles'
+
+class BuffComponentVisibilityMode(enum.IntEnum):
+    NONE = 0
+    SELF = 1
+    OTHERS = 2
+    ALL = 3
+
+
+class BuffTarget(enum.IntEnum):
+    VICTIM = 0
+    ATTACKER = 1
+
+
+class EventStorageModifiers(enum.Enum):
+    SOUND_ON_SHOT = 'soundOnShot'
+    MARKER = 'marker'
+
+
+class EventMarkerBlinkingParams(enum.Enum):
+    BLINKING_DURATION_CUSTOM_MARKER = 10
+    BLINKING_DURATION_ARROW_MARKER = 5
+    BLINKING_SPEED_CUSTOM_MARKER_MS = 600
+    BLINKING_SPEED_ARROW_MARKER_MS = 1000
+
+
+ALL_EVENT_TYPES_FOR_BONUSES = 'all'
+EXTENSIONS_BONUSES = {}

@@ -12,6 +12,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 class CloseConfirmatorsHelper(object):
     __slots__ = ('__closeConfirmator',)
     _lobbyContext = dependency.descriptor(ILobbyContext)
+    ADD_HEADER_NAV_CONFIRMATOR = True
 
     def __init__(self):
         self.__closeConfirmator = None
@@ -45,13 +46,15 @@ class CloseConfirmatorsHelper(object):
 
     def start(self, closeConfirmator):
         self.__closeConfirmator = closeConfirmator
-        self._lobbyContext.addHeaderNavigationConfirmator(self.__confirmHeaderNavigation)
+        if self.ADD_HEADER_NAV_CONFIRMATOR:
+            self._lobbyContext.addHeaderNavigationConfirmator(self.__confirmHeaderNavigation)
         for event in self.getRestrictedEvents():
             g_eventBus.addRestriction(event, self.__confirmEvent, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def stop(self):
         self.__closeConfirmator = None
-        self._lobbyContext.deleteHeaderNavigationConfirmator(self.__confirmHeaderNavigation)
+        if self.ADD_HEADER_NAV_CONFIRMATOR:
+            self._lobbyContext.deleteHeaderNavigationConfirmator(self.__confirmHeaderNavigation)
         for event in self.getRestrictedEvents():
             g_eventBus.removeRestriction(event, self.__confirmEvent, scope=EVENT_BUS_SCOPE.LOBBY)
 

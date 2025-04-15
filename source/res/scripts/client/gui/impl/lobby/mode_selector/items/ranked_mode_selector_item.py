@@ -62,11 +62,9 @@ class RankedModeSelectorItem(ModeSelectorLegacyItem):
                 nextSeason = self.__rankedBattleController.getNextSeason()
                 if nextSeason is not None:
                     startDate = nextSeason.getStartDate()
-                    name = self.__getRankedBattlesSeasonName(nextSeason)
-                    return backport.text(msR.notStarted(), eventName=name, date=backport.getShortDateFormat(startDate))
+                    return backport.text(msR.notStarted(), date=backport.getShortDateFormat(startDate))
                 prevSeason = self.__rankedBattleController.getPreviousSeason()
                 if prevSeason is not None:
-                    name = self.__getRankedBattlesSeasonName(prevSeason)
                     return backport.text(msR.finished())
         return ''
 

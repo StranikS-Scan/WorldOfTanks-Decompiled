@@ -224,6 +224,9 @@ class ServerEventAbstract(object):
     def getParentsName(self):
         return []
 
+    def getSeenSettingID(self):
+        return self.getID()
+
     def _checkConditions(self):
         return True
 
@@ -546,6 +549,9 @@ class DailyQuest(Quest):
     def isSimple(self):
         return self.getLevel() in constants.DailyQuestsLevels.DAILY_SIMPLE
 
+    def isPremium(self):
+        return self.getLevel() in constants.DailyQuestsLevels.DAILY_PREMIUM
+
     def isBonus(self):
         return self.getLevel() == constants.DailyQuestsLevels.BONUS
 
@@ -553,10 +559,13 @@ class DailyQuest(Quest):
         return self.getLevel() == constants.DailyQuestsLevels.EPIC
 
     def getSortKey(self):
-        return constants.DailyQuestsLevels.DAILY.index(self.getLevel())
+        return constants.DailyQuestsLevels.SORTED.index(self.getLevel())
 
     def getUserName(self):
         return backport.text(R.strings.quests.dailyQuests.postBattle.dyn('genericTitle_%s' % self.getLevel())())
+
+    def getSeenSettingID(self):
+        return constants.DailyQuestsTokensPrefixes.QUEST_TOKEN + self.getLevel()
 
 
 class DailyTokenQuest(TokenQuest):
@@ -567,11 +576,17 @@ class DailyTokenQuest(TokenQuest):
     def isBonus(self):
         return self.getLevel() == constants.DailyQuestsLevels.BONUS_SUBS
 
+    def isEpic(self):
+        return self.getLevel() == constants.DailyQuestsLevels.EPIC
+
     def getSortKey(self):
-        return constants.DailyQuestsLevels.SUBS.index(self.getLevel())
+        return constants.DailyQuestsLevels.SORTED.index(self.getLevel())
 
     def getUserName(self):
         return backport.text(R.strings.quests.dailyQuests.postBattle.dyn('genericTitle_%s' % self.getLevel())())
+
+    def getSeenSettingID(self):
+        return constants.DailyQuestsTokensPrefixes.QUEST_TOKEN + self.getLevel()
 
 
 class PersonalQuest(Quest):
@@ -1507,6 +1522,8 @@ def getPM3QuestTypeByQuestID(questID):
     pm3Start = 480
     questID = questID - pm3Start
     indxInBranch = questID % questsInSubBranch or questsInSubBranch
+    if indxInBranch > 0:
+        indxInBranch -= 1
     divisionResult = indxInBranch // 5
     if divisionResult == 0:
         return PM3QuestLineTypes.HIT
@@ -1517,4 +1534,4 @@ def getPM3QuestTypeByQuestID(questID):
     elif divisionResult == 3:
         return PM3QuestLineTypes.BATTLE
     else:
-        return PM3QuestLineTypes.MASTER if divisionResult in (4, 5) else None
+        return PM3QuestLineTypes.MASTER if divisionResult == 4 else None

@@ -41,6 +41,10 @@ class Shop(object):
         self.__isFirstSync = True
         return
 
+    @property
+    def cacheRevision(self):
+        return self.__getCacheRevision()
+
     def onAccountBecomePlayer(self):
         self.__ignore = False
         self.__isFirstSync = True

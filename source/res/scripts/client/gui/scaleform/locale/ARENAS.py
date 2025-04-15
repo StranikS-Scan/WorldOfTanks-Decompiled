@@ -151,8 +151,8 @@ class ARENAS(object):
     C_95_LOST_CITY_CTF_DESCRIPTION = '#arenas:95_lost_city_ctf/description'
     C_83_KHARKIV_NAME = '#arenas:83_kharkiv/name'
     C_83_KHARKIV_DESCRIPTION = '#arenas:83_kharkiv/description'
-    C_209_WG_EPIC_SUBURBIA_NAME = '#arenas:209_wg_epic_suburbia/name'
-    C_209_WG_EPIC_SUBURBIA_DESCRIPTION = '#arenas:209_wg_epic_suburbia/description'
+    C_209_EPIC_SUBURBIA_NAME = '#arenas:209_epic_suburbia/name'
+    C_209_EPIC_SUBURBIA_DESCRIPTION = '#arenas:209_epic_suburbia/description'
     C_105_GERMANY_NAME = '#arenas:105_germany/name'
     C_105_GERMANY_DESCRIPTION = '#arenas:105_germany/description'
     C_60_ASIA_MIAO_NAME = '#arenas:60_asia_miao/name'
@@ -198,6 +198,8 @@ class ARENAS(object):
     C_503_KALININGRAD_DESCRIPTION = '#arenas:503_kaliningrad/description'
     H08_MT_HANGAR_NAME = '#arenas:h08_mt_hangar/name'
     H08_MT_HANGAR_DESCRIPTION = '#arenas:h08_mt_hangar/description'
+    H01_VICTORY_DAY_2025_NAME = '#arenas:h01_victory_day_2025/name'
+    H01_VICTORY_DAY_2025_DESCRIPTION = '#arenas:h01_victory_day_2025/description'
     ALL_ENUM = (TYPE_CTF_NAME,
      TYPE_CTF_DESCRIPTION,
      TYPE_DOMINATION_NAME,
@@ -346,8 +348,8 @@ class ARENAS(object):
      C_95_LOST_CITY_CTF_DESCRIPTION,
      C_83_KHARKIV_NAME,
      C_83_KHARKIV_DESCRIPTION,
-     C_209_WG_EPIC_SUBURBIA_NAME,
-     C_209_WG_EPIC_SUBURBIA_DESCRIPTION,
+     C_209_EPIC_SUBURBIA_NAME,
+     C_209_EPIC_SUBURBIA_DESCRIPTION,
      C_105_GERMANY_NAME,
      C_105_GERMANY_DESCRIPTION,
      C_60_ASIA_MIAO_NAME,
@@ -392,7 +394,9 @@ class ARENAS(object):
      C_503_KALININGRAD_NAME,
      C_503_KALININGRAD_DESCRIPTION,
      H08_MT_HANGAR_NAME,
-     H08_MT_HANGAR_DESCRIPTION)
+     H08_MT_HANGAR_DESCRIPTION,
+     H01_VICTORY_DAY_2025_NAME,
+     H01_VICTORY_DAY_2025_DESCRIPTION)
 
     @classmethod
     def all(cls, key0):

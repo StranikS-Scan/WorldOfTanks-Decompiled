@@ -146,9 +146,6 @@ class BRStates(object):
     STATE_STATUS = 'STATE_BR_gameplay_music_status'
     STATE_STATUS_EXPLORING = 'STATE_BR_gameplay_music_status_exploring'
     STATE_STATUS_COMBAT = 'STATE_BR_gameplay_music_status_combat'
-    STATE_POSTMORTEM = 'STATE_postmortem_mode'
-    STATE_POSTMORTEM_OFF = 'STATE_postmortem_mode_off'
-    STATE_POSTMORTEM_ON = 'STATE_postmortem_mode_on'
     STATE_BR = 'STATE_BR_gameplay'
     STATE_BR_ON = 'STATE_BR_gameplay_on'
     STATE_BR_OFF = 'STATE_BR_gameplay_off'
@@ -532,14 +529,6 @@ class ArenaPeriodSoundPlayer(IAbstractPeriodView, IViewComponentsCtrlListener, I
                     self.__period = None
                     self.__winStatus = None
             return
-
-
-class PostmortemSoundPlayer(IVehicleCountListener):
-
-    def setPlayerVehicleAlive(self, isAlive):
-        isOff = isAlive and not BigWorld.player().isObserver()
-        stateValue = BRStates.STATE_POSTMORTEM_OFF if isOff else BRStates.STATE_POSTMORTEM_ON
-        BRStates.setState(BRStates.STATE_POSTMORTEM, stateValue)
 
 
 class ArenaTypeSoundPlayer(object):

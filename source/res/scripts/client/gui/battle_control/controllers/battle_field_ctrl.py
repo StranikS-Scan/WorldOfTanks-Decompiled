@@ -23,6 +23,9 @@ class IBattleFieldListener(object):
     def updateVehicleHealth(self, vehicleID, newHealth, maxHealth):
         pass
 
+    def postUpdateVehicleHealth(self):
+        pass
+
     def updateDeadVehicles(self, aliveAllies, deadAllies, aliveEnemies, deadEnemies):
         pass
 
@@ -62,6 +65,12 @@ class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, V
         else:
             return self._aliveEnemies.get(vehicleID, None)
 
+    def getAliveEnemies(self):
+        return self._aliveEnemies
+
+    def getAliveAllies(self):
+        return self._aliveAllies
+
     def startControl(self, battleCtx, arenaVisitor):
         self.__battleCtx = battleCtx
 
@@ -82,6 +91,10 @@ class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, V
     def setVehicleHealth(self, vehicleID, newHealth):
         self.__changeVehicleHealth(vehicleID, newHealth)
         self.__updateVehicleHealth(vehicleID)
+
+    def postSetVehicleHealth(self):
+        for viewCmp in self._viewComponents:
+            viewCmp.postUpdateVehicleHealth()
 
     def setVehicleVisible(self, vehicleID, health):
         self.__changeVehicleHealth(vehicleID, health)

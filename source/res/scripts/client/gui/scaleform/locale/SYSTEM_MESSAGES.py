@@ -178,6 +178,7 @@ class SYSTEM_MESSAGES(object):
     SQUAD_NOTVALIDDELETED = '#system_messages:squad/notValidDeleted'
     SQUAD_NOTVALIDDELETEDFILTER = '#system_messages:squad/notValidDeletedFilter'
     SQUAD_NOTVALIDMAXSPGDELETED = '#system_messages:squad/notValidMaxSpgDeleted'
+    SQUAD_NOTVALIDMAXFLAMETHROWERDELETED = '#system_messages:squad/notValidMaxFlamethrowerDeleted'
     SQUAD_NOTVALIDMAXSCOUTDELETED = '#system_messages:squad/notValidMaxScoutDeleted'
     SQUAD_NOTVALIDENQUEUEDATA = '#system_messages:squad/notValidEnqueueData'
     BATTLESESSION_KICKEDFROMQUEUE = '#system_messages:battleSession/kickedFromQueue'
@@ -878,6 +879,7 @@ class SYSTEM_MESSAGES(object):
     UNIT_ERRORS_INSUFFICIENT_ROLE = '#system_messages:unit/errors/INSUFFICIENT_ROLE'
     UNIT_ERRORS_NO_UNIT = '#system_messages:unit/errors/NO_UNIT'
     UNIT_ERRORS_JOIN_CTX_LOCK = '#system_messages:unit/errors/JOIN_CTX_LOCK'
+    UNIT_ERRORS_HB_BANNED = '#system_messages:unit/errors/HB_BANNED'
     UNIT_ERRORS_CANT_INVITE = '#system_messages:unit/errors/CANT_INVITE'
     UNIT_ERRORS_NOT_READY = '#system_messages:unit/errors/NOT_READY'
     UNIT_ERRORS_NOT_IN_QUEUE = '#system_messages:unit/errors/NOT_IN_QUEUE'
@@ -1224,11 +1226,26 @@ class SYSTEM_MESSAGES(object):
     DAILY_QUESTS_SWITCH_OFF_BODY = '#system_messages:daily_quests/switch_off/body'
     DAILY_QUESTS_SWITCH_ON_TITLE = '#system_messages:daily_quests/switch_on/title'
     DAILY_QUESTS_SWITCH_ON_BODY = '#system_messages:daily_quests/switch_on/body'
-    DAILY_QUESTS_REROLL_SUCCESS = '#system_messages:daily_quests/reroll/success'
-    DAILY_QUESTS_REROLL_REROLL_DISABLED = '#system_messages:daily_quests/reroll/reroll_disabled'
-    DAILY_QUESTS_REROLL_REROLL_IN_COOLDOWN = '#system_messages:daily_quests/reroll/reroll_in_cooldown'
-    DAILY_QUESTS_REROLL_QUEST_IS_ALREADY_COMPLETED = '#system_messages:daily_quests/reroll/quest_is_already_completed'
-    DAILY_QUESTS_REROLL_UNKNOWN_ERROR = '#system_messages:daily_quests/reroll/unknown_error'
+    DAILY_QUESTS_SIMPLE_REROLL_SUCCESS = '#system_messages:daily_quests/simple/reroll/success'
+    DAILY_QUESTS_PREMIUM_REROLL_SUCCESS = '#system_messages:daily_quests/premium/reroll/success'
+    DAILY_QUESTS_SIMPLE_REROLL_QUEST_IS_ALREADY_COMPLETED = '#system_messages:daily_quests/simple/reroll/quest_is_already_completed'
+    DAILY_QUESTS_SIMPLE_REROLL_UNKNOWN_ERROR = '#system_messages:daily_quests/simple/reroll/unknown_error'
+    DAILY_QUESTS_PREMIUM_REROLL_QUEST_IS_ALREADY_COMPLETED = '#system_messages:daily_quests/premium/reroll/quest_is_already_completed'
+    DAILY_QUESTS_PREMIUM_REROLL_UNKNOWN_ERROR = '#system_messages:daily_quests/premium/reroll/unknown_error'
+    DAILY_QUESTS_EPIC_QUEST_OFF_TITLE = '#system_messages:daily_quests/epic_quest_off/title'
+    DAILY_QUESTS_EPIC_QUEST_OFF_BODY = '#system_messages:daily_quests/epic_quest_off/body'
+    DAILY_QUESTS_EPIC_QUEST_ON_TITLE = '#system_messages:daily_quests/epic_quest_on/title'
+    DAILY_QUESTS_EPIC_QUEST_ON_BODY = '#system_messages:daily_quests/epic_quest_on/body'
+    DAILY_QUESTS_REROLL_OFF_TITLE = '#system_messages:daily_quests/reroll_off/title'
+    DAILY_QUESTS_REROLL_OFF_BODY = '#system_messages:daily_quests/reroll_off/body'
+    DAILY_QUESTS_REROLL_ON_TITLE = '#system_messages:daily_quests/reroll_on/title'
+    DAILY_QUESTS_REROLL_ON_BODY = '#system_messages:daily_quests/reroll_on/body'
+    DAILY_QUESTS_PREMIUM_ACTIVE = '#system_messages:daily_quests/premium/active'
+    DAILY_QUESTS_BONUS_QUEST_AVAILABLE_TITLE = '#system_messages:daily_quests/bonus_quest_available/title'
+    DAILY_QUESTS_BONUS_QUEST_AVAILABLE_BODY = '#system_messages:daily_quests/bonus_quest_available/body'
+    DAILY_QUESTS_NOTIFICATION_EPIC_QUEST_HEADER = '#system_messages:daily_quests/notification/epic_quest/header'
+    DAILY_QUESTS_NOTIFICATION_EPIC_QUEST_BODY = '#system_messages:daily_quests/notification/epic_quest/body'
+    DAILY_QUESTS_NOTIFICATION_EPIC_QUEST_COMPENSATION = '#system_messages:daily_quests/notification/epic_quest/compensation'
     BATTLEPASS_BUY_SERVER_ERROR = '#system_messages:battlePass_buy/server_error'
     BATTLEPASSLEVELS_BUY_SERVER_ERROR = '#system_messages:battlePassLevels_buy/server_error'
     BATTLEPASS_SWITCH_STARTED_STYLE_TITLE = '#system_messages:battlePass/switch_started/style/title'
@@ -1401,6 +1418,7 @@ class SYSTEM_MESSAGES(object):
      UNIT_ERRORS_INSUFFICIENT_ROLE,
      UNIT_ERRORS_NO_UNIT,
      UNIT_ERRORS_JOIN_CTX_LOCK,
+     UNIT_ERRORS_HB_BANNED,
      UNIT_ERRORS_CANT_INVITE,
      UNIT_ERRORS_NOT_READY,
      UNIT_ERRORS_NOT_IN_QUEUE,
@@ -1683,6 +1701,7 @@ class SYSTEM_MESSAGES(object):
      SQUAD_NOTVALIDDELETED,
      SQUAD_NOTVALIDDELETEDFILTER,
      SQUAD_NOTVALIDMAXSPGDELETED,
+     SQUAD_NOTVALIDMAXFLAMETHROWERDELETED,
      SQUAD_NOTVALIDMAXSCOUTDELETED,
      SQUAD_NOTVALIDENQUEUEDATA,
      BATTLESESSION_KICKEDFROMQUEUE,
@@ -2383,6 +2402,7 @@ class SYSTEM_MESSAGES(object):
      UNIT_ERRORS_INSUFFICIENT_ROLE,
      UNIT_ERRORS_NO_UNIT,
      UNIT_ERRORS_JOIN_CTX_LOCK,
+     UNIT_ERRORS_HB_BANNED,
      UNIT_ERRORS_CANT_INVITE,
      UNIT_ERRORS_NOT_READY,
      UNIT_ERRORS_NOT_IN_QUEUE,
@@ -2729,11 +2749,26 @@ class SYSTEM_MESSAGES(object):
      DAILY_QUESTS_SWITCH_OFF_BODY,
      DAILY_QUESTS_SWITCH_ON_TITLE,
      DAILY_QUESTS_SWITCH_ON_BODY,
-     DAILY_QUESTS_REROLL_SUCCESS,
-     DAILY_QUESTS_REROLL_REROLL_DISABLED,
-     DAILY_QUESTS_REROLL_REROLL_IN_COOLDOWN,
-     DAILY_QUESTS_REROLL_QUEST_IS_ALREADY_COMPLETED,
-     DAILY_QUESTS_REROLL_UNKNOWN_ERROR,
+     DAILY_QUESTS_SIMPLE_REROLL_SUCCESS,
+     DAILY_QUESTS_PREMIUM_REROLL_SUCCESS,
+     DAILY_QUESTS_SIMPLE_REROLL_QUEST_IS_ALREADY_COMPLETED,
+     DAILY_QUESTS_SIMPLE_REROLL_UNKNOWN_ERROR,
+     DAILY_QUESTS_PREMIUM_REROLL_QUEST_IS_ALREADY_COMPLETED,
+     DAILY_QUESTS_PREMIUM_REROLL_UNKNOWN_ERROR,
+     DAILY_QUESTS_EPIC_QUEST_OFF_TITLE,
+     DAILY_QUESTS_EPIC_QUEST_OFF_BODY,
+     DAILY_QUESTS_EPIC_QUEST_ON_TITLE,
+     DAILY_QUESTS_EPIC_QUEST_ON_BODY,
+     DAILY_QUESTS_REROLL_OFF_TITLE,
+     DAILY_QUESTS_REROLL_OFF_BODY,
+     DAILY_QUESTS_REROLL_ON_TITLE,
+     DAILY_QUESTS_REROLL_ON_BODY,
+     DAILY_QUESTS_PREMIUM_ACTIVE,
+     DAILY_QUESTS_BONUS_QUEST_AVAILABLE_TITLE,
+     DAILY_QUESTS_BONUS_QUEST_AVAILABLE_BODY,
+     DAILY_QUESTS_NOTIFICATION_EPIC_QUEST_HEADER,
+     DAILY_QUESTS_NOTIFICATION_EPIC_QUEST_BODY,
+     DAILY_QUESTS_NOTIFICATION_EPIC_QUEST_COMPENSATION,
      BATTLEPASS_BUY_SERVER_ERROR,
      BATTLEPASSLEVELS_BUY_SERVER_ERROR,
      BATTLEPASS_SWITCH_STARTED_STYLE_TITLE,

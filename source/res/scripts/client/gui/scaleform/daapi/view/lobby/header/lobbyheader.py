@@ -58,7 +58,6 @@ from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import PRE_QUEUE_RESTRICTION, REQUEST_TYPE
 from gui.server_events import recruit_helper, settings as quest_settings
-from gui.server_events.events_helpers import isDailyQuest
 from gui.shared import event_dispatcher as shared_events, events, g_eventBus
 from gui.clans.clan_cache import g_clanCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -80,7 +79,7 @@ from shared_utils import CONST_CONTAINER, BitmaskHelper
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import IAnonymizerController, IBadgesController, IBattleRoyaleController, IBoostersController, IBootcampController, IChinaController, IClanNotificationController, IComp7Controller, IEpicBattleMetaGameController, IEventBattlesController, IFunRandomController, IGameSessionController, IIGRController, ILimitedUIController, IMapboxController, IMapsTrainingController, IPlatoonController, IRankedBattlesController, IServerStatsController, ISteamCompletionController, IWalletController, IAchievements20Controller, IEarlyAccessController
+from skeletons.gui.game_control import IAnonymizerController, IBadgesController, IBattleRoyaleController, IBoostersController, IBootcampController, IChinaController, IClanNotificationController, IComp7Controller, IEpicBattleMetaGameController, IEventBattlesController, IFunRandomController, IGameSessionController, IIGRController, ILimitedUIController, IMapboxController, IMapsTrainingController, IPlatoonController, IRankedBattlesController, IServerStatsController, ISteamCompletionController, IWalletController, IAchievements20Controller, IEarlyAccessController, IUnseenEventsCounter
 from skeletons.gui.game_control import IWotPlusController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader
@@ -302,12 +301,13 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     __achievements20Controller = dependency.descriptor(IAchievements20Controller)
     __limitedUIController = dependency.descriptor(ILimitedUIController)
     __earlyAccessController = dependency.descriptor(IEarlyAccessController)
+    __unseenEventsManager = dependency.descriptor(IUnseenEventsCounter)
     __SELECTOR_TOOLTIP_TYPE = TOOLTIPS.HEADER_BATTLETYPE
 
     def __init__(self):
         super(LobbyHeader, self).__init__()
         self.__currentScreen = None
-        self.__shownCounters = set()
+        self.__shownCounters = {}
         self._isLobbyHeaderControlsDisabled = False
         self.__viewLifecycleWatcher = ViewLifecycleWatcher()
         self.__isFightBtnDisabled = self.bootcampController.isInBootcamp()
@@ -515,7 +515,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         return [ button for button in self.BUTTONS.ALL() if button not in buttonsToExclude ]
 
     def _populate(self):
-        self._cleanupVisitedSettings()
+        self.__unseenEventsManager.cleanUpPremium()
+        self.__unseenEventsManager.clearBonusDQ()
         self._updateHangarMenuData()
         battle_selector_items.create()
         super(LobbyHeader, self)._populate()
@@ -528,6 +529,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             self.as_disableFightButtonS(self.__isFightBtnDisabled)
         self.__updateUiEffectsState()
         g_eventBus.addListener(LobbySimpleEvent.HANGAR_STATUS_CHANGED, self.__onHangarStatusChanged, scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(LobbySimpleEvent.ON_GET_VISIBILITY_MENU_STATE, self.__onGetVisibilityMenuState, scope=EVENT_BUS_SCOPE.LOBBY)
         self._onPopulateEnd()
 
     def _invalidate(self, *args, **kwargs):
@@ -541,6 +543,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self._removeListeners()
         self.__clearMenuVisibiliby()
         g_eventBus.removeListener(LobbySimpleEvent.HANGAR_STATUS_CHANGED, self.__onHangarStatusChanged, scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(LobbySimpleEvent.ON_GET_VISIBILITY_MENU_STATE, self.__onGetVisibilityMenuState, scope=EVENT_BUS_SCOPE.LOBBY)
         super(LobbyHeader, self)._dispose()
 
     def _canShowWotPlus(self):
@@ -609,6 +612,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self._wotPlusCtrl.onStateUpdate += self.__updateWotPlusAttrs
         AccountSettings.onSettingsChanging += self.__updateWotPlusAttrs
         self.lobbyContext.getServerSettings().onServerSettingsChange += self._onServerSettingsChange
+        self.__unseenEventsManager.onSeenEvents += self.__onSeenEvent
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.BubbleTooltipEvent.SHOW, self.__showBubbleTooltip, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -672,6 +676,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.removeListener(events.BubbleTooltipEvent.SHOW, self.__showBubbleTooltip, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.CloseWindowEvent.GOLD_FISH_CLOSED, self.__onGoldFishWindowClosed, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(HEADER_BUTTONS_COUNTERS_CHANGED_EVENT, self.__onCounterChanged, scope=EVENT_BUS_SCOPE.DEFAULT)
+        self.__unseenEventsManager.onSeenEvents -= self.__onSeenEvent
         self.anonymizerController.onStateChanged -= self.__updateAnonymizedState
         self.gameSession.onPremiumNotify -= self.__onPremiumTimeChanged
         self.gameSession.onPremiumTypeChanged -= self._onPremiumTypeChanged
@@ -1308,7 +1313,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         return not canDo or isLocked
 
     def _updateTabCounters(self):
-        self._updatePremiumQuestsVisitedStatus(self.eventsCache.getPremiumQuests())
+        self._updatePremiumQuestsVisitedStatus(self.eventsCache.getDailyPremiumQuests())
         self.__onProfileVisited()
         self.__updateStrongholdCounter()
         self.__updateShopTabCounter()
@@ -1318,6 +1323,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.__updateRecruitsTabCounter(self.TABS.BARRACKS)
 
     def _onPremiumTypeChanged(self, _):
+        self.__unseenEventsManager.cleanUpPremium()
         self._updateTabCounters()
 
     def __handleFightButtonUpdated(self, _):
@@ -1349,16 +1355,15 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     def __onBattleMattersStateChanged(self, *_):
         self.__onEventsCacheResync()
 
-    def __onEventsVisited(self, counters=None):
-        if counters is not None:
-            if 'missions' in counters:
-                counter = counters['missions'] + self.__mapboxCtrl.getUnseenItemsCount()
-                self.__onMissionVisited(counter)
-        else:
-            quests = self.eventsCache.getAdvisableQuests()
-            counter = len(quest_settings.getNewCommonEvents(quests.values())) + self.__mapboxCtrl.getUnseenItemsCount()
-            self.__onMissionVisited(counter)
+    def __onEventsVisited(self, newEvents=None):
+        quests = {q.getID():1 for q in quest_settings.getNewCommonEvents(self.eventsCache.getAdvisableQuests().values())} if newEvents is None else {q.getID():1 for q in newEvents}
+        self.__unseenEventsManager.commitToSettings()
+        self.__unseenEventsManager.updateUnseenEvents(quests)
+        self.__onMissionVisited(self.__unseenEventsManager.getAllUnseenEventsCount() + self.__mapboxCtrl.getUnseenItemsCount())
         return
+
+    def __onSeenEvent(self, *_):
+        self.__onMissionVisited(self.__unseenEventsManager.getAllUnseenEventsCount())
 
     @staticmethod
     def _updatePremiumQuestsVisitedStatus(quests):
@@ -1688,14 +1693,15 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     def __setCounter(self, alias, counter=None):
         if not self.__isTabPresent(alias):
             return
-        self.__shownCounters.add(alias)
+        self.__shownCounters[alias] = counter
         counter = counter or i18n.makeString(MENU.HEADER_NOTIFICATIONSIGN)
         self.as_setButtonCounterS(alias, text_styles.counterLabelText(counter))
 
     def __hideCounter(self, alias):
         if alias in self.__shownCounters:
-            self.__shownCounters.remove(alias)
+            self.__shownCounters.pop(alias, None)
             self.as_removeButtonCounterS(alias)
+        return
 
     def __setTabHighlight(self, alias, highlightImage):
         self.as_setButtonHighlightS(alias, highlightImage)
@@ -1749,14 +1755,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             self.__clanIconID = None
         return
 
-    def _cleanupVisitedSettings(self):
-        currentDynamicQuests = list(self.eventsCache.getDailyQuests(includeEpic=True).keys())
-        questSettings = AccountSettings.getSettings(QUESTS)
-        for visitedKey in ['visited', 'naVisited']:
-            visitedQuestIds = questSettings[visitedKey]
-            questSettings[visitedKey] = tuple((q for q in visitedQuestIds if not isDailyQuest(q) or q in currentDynamicQuests))
-            AccountSettings.setSettings(QUESTS, questSettings)
-
     def __clearMenuVisibiliby(self):
         self.__menuVisibilityHelper.clear()
         self.__menuVisibilityHelper = None
@@ -1784,6 +1782,9 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
 
     def __onHangarStatusChanged(self, event):
         self.__updateUiEffectsState(not event.ctx.get('isVisible', False))
+
+    def __onGetVisibilityMenuState(self, event):
+        event.ctx['visibilityMenuState'] = self.__menuVisibilityHelper.getActiveState()
 
 
 class _BoosterInfoPresenter(object):

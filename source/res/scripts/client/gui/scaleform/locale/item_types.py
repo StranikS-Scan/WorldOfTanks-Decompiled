@@ -25,6 +25,7 @@ class ITEM_TYPES(object):
     GUN_NAME = '#item_types:gun/name'
     DUALGUN_NAME = '#item_types:dualGun/name'
     FLAMEGUN_NAME = '#item_types:flameGun/name'
+    AUTOSHOOTFLAMEGUN_NAME = '#item_types:autoShootFlameGun/name'
     GUN_DESC = '#item_types:gun/desc'
     GUN_TAGS = '#item_types:gun/tags'
     ENGINE_NAME = '#item_types:engine/name'

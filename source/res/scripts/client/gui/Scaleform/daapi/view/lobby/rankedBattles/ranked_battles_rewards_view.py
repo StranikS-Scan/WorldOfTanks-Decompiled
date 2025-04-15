@@ -242,11 +242,6 @@ class RankedBattlesRewardsLeaguesView(RankedBattlesRewardsLeaguesMeta, IResetabl
     def reset(self):
         pass
 
-    @classmethod
-    def _backToLeaguesCallback(cls):
-        cls.__rankedController.showRankedBattlePage(ctx={'selectedItemID': _RBC.RANKED_BATTLES_REWARDS_ID,
-         'rewardsSelectedTab': RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_LEAGUES_UI})
-
     def _populate(self):
         super(RankedBattlesRewardsLeaguesView, self)._populate()
         data = self.__getLeaguesData()
@@ -310,7 +305,7 @@ class RankedBattlesRewardsLeaguesView(RankedBattlesRewardsLeaguesMeta, IResetabl
                 AccountSettings.setSettings(RANKED_STYLED_VEHICLES_POOL, vehiclesPool)
         styleDescr = self.__styleDescriptions.get(styleID, '')
         style = first(self.__itemsCache.items.getStyles(REQ_CRITERIA.CUSTOM(lambda item: item.id == styleID)).values())
-        showStylePreview(styledVehicleCD, style, styleDescr, self._backToLeaguesCallback)
+        showStylePreview(styledVehicleCD, style, styleDescr)
         return
 
 

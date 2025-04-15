@@ -7,7 +7,7 @@ from cosmic_event.gui.impl.gen.view_models.views.lobby.cosmic_lobby_view.medal_m
 from cosmic_event.gui.impl.gen.view_models.views.lobby.cosmic_lobby_view.progression_model import ProgressionModel
 from cosmic_event.gui.impl.gen.view_models.views.lobby.cosmic_lobby_view.rovers_model import RoversModel
 from cosmic_event.gui.impl.gen.view_models.views.lobby.cosmic_lobby_view.scoring_model import ScoringModel
-from gui.impl.gen.view_models.views.lobby.missions.widget.widget_quest_model import WidgetQuestModel
+from gui.impl.gen.view_models.views.lobby.daily.widget_quest_model import WidgetQuestModel
 
 class LobbyRouteEnum(Enum):
     MAIN = 'main'

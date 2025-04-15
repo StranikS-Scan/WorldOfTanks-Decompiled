@@ -242,7 +242,7 @@ def showProgressiveItemsBrowserView(ctx):
 
 
 def showMission(eventID, eventType=None):
-    from gui.impl.lobby.missions.daily_quests_view import DailyTabs
+    from gui.impl.lobby.daily import DailyTabs
     from gui.impl.lobby.paragons.paragons_window_events import showParagonsNavigationView
     if eventType == constants.EVENT_TYPE.C11N_PROGRESSION:
         itemIntCD, vehicleIntCD = parseEventID(eventID)
@@ -291,10 +291,10 @@ def showMission(eventID, eventType=None):
                     showMissionsGrouped(missionID=quest.getID(), groupID=group.getID(), anchor=group.getID())
                 else:
                     showMissionsGrouped(anchor=group.getID())
+            elif events_helpers.isDailyPremiumQuest(quest.getID()):
+                showDailyQuests(subTab=DailyTabs.PREMIUM)
             elif events_helpers.isDailyQuest(quest.getID()):
                 showDailyQuests(subTab=DailyTabs.QUESTS)
-            elif events_helpers.isPremium(quest.getID()):
-                showDailyQuests(subTab=DailyTabs.PREMIUM_MISSIONS)
             elif events_helpers.isDebutBoxesQuest(quest.getID()):
                 debutBoxesController = dependency.instance(IDebutBoxesController)
                 if debutBoxesController.isEnabled():

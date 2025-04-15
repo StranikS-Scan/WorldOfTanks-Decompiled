@@ -9,6 +9,7 @@ from tutorial.logger import LOG_MEMORY, LOG_ERROR
 import SoundGroups
 import Event
 __all__ = ('StartReqs', 'BonusesRequester', 'SoundPlayer', 'GlobalStorage', 'SOUND_EVENT', 'GLOBAL_FLAG')
+MARATHON_POSTFIX = 'Marathon'
 
 class StartReqs(object):
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -133,10 +134,14 @@ class GLOBAL_FLAG(object):
     IS_CHANGE_AI_MODE = 'isChangeAIMode'
     PARAGONS_FIRST_RESET = '_ParagonsFirstReset'
     IS_PM3_ENABLED = '_isPM3Enabled'
-    COSMIC_ACTIVE = 'cosmicActive'
     BATTLE_PASS_ACTIVE_CHAPTER = '_BattlePassActiveChapter'
     BATTLE_PASS_PROGRESSION = '_BattlePassProgression'
     BATTLE_PASS_ENTRY_POINT = '_BattlePassEntryPoint'
+    BATTLE_PASS_ACTIVE_CHAPTER_MARATHON = BATTLE_PASS_ACTIVE_CHAPTER + MARATHON_POSTFIX
+    BATTLE_PASS_PROGRESSION_MARATHON = BATTLE_PASS_PROGRESSION + MARATHON_POSTFIX
+    BATTLE_PASS_ENTRY_POINT_MARATHON = BATTLE_PASS_ENTRY_POINT + MARATHON_POSTFIX
+    COSMIC_ACTIVE = 'cosmicActive'
+    HISTORICAL_BATTLES_ACTIVE = 'historicalBattlesActive'
     ALL = (MAY_PAWN_PERSONAL_MISSION,
      HAVE_NEW_BADGE,
      HAVE_NEW_SUFFIX_BADGE,
@@ -147,12 +152,13 @@ class GLOBAL_FLAG(object):
      IS_CHANGE_AI_MODE,
      PARAGONS_FIRST_RESET,
      IS_PM3_ENABLED,
-     COSMIC_ACTIVE,
-     PARAGONS_FIRST_RESET,
-     IS_PM3_ENABLED,
      BATTLE_PASS_ACTIVE_CHAPTER,
      BATTLE_PASS_PROGRESSION,
-     BATTLE_PASS_ENTRY_POINT)
+     BATTLE_PASS_ENTRY_POINT,
+     COSMIC_ACTIVE,
+     BATTLE_PASS_ACTIVE_CHAPTER_MARATHON,
+     BATTLE_PASS_PROGRESSION_MARATHON,
+     BATTLE_PASS_ENTRY_POINT_MARATHON)
 
 
 class GlobalStorage(object):

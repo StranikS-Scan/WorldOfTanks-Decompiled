@@ -8,8 +8,10 @@ from gui.impl.gen import R
 from gui.impl.pub.notification_commands import EventNotificationCommand, NotificationEvent
 from gui.server_events.events_dispatcher import showMissionsBattlePass
 from helpers import dependency
+from items.vehicles import makeVehicleTypeCompDescrByName
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.offers import IOffersDataProvider
+from skeletons.gui.lobby_context import ILobbyContext
 if typing.TYPE_CHECKING:
     from account_helpers.offers.events_data import OfferEventData
     from typing import Any, Callable, Dict, List, Optional
@@ -35,9 +37,23 @@ def getChapterForStyleId(style, battlePass=None):
     return None
 
 
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def getChapterForVehicleCD(vehicleCD, lobbyContext=None):
+    config = lobbyContext.getServerSettings().getBattlePassConfig()
+    for chapterId, chapterInfo in config.chapters.iteritems():
+        vehicleName = chapterInfo.get('vehicle')
+        if vehicleName:
+            rewardVehicleCD = makeVehicleTypeCompDescrByName(vehicleName)
+            if vehicleCD == rewardVehicleCD:
+                return chapterId
+
+    return None
+
+
 def separateRewards(rewards):
     styleTokens = []
-    chosenStyle = None
+    chosenStyleChapterID = None
+    chosenVehicleChapterID = None
     defaultRewards = rewards[:]
     blocksToRemove = []
     for index, rewardBlock in enumerate(defaultRewards):
@@ -48,7 +64,7 @@ def separateRewards(rewards):
                     chapter = int(tokenID.split(':')[3])
                     intCD, _ = getStyleInfoForChapter(chapter)
                     if intCD is not None:
-                        chosenStyle = chapter
+                        chosenStyleChapterID = chapter
 
         for tokenID in styleTokens:
             rewardBlock.get('tokens', {}).pop(tokenID, None)
@@ -60,7 +76,14 @@ def separateRewards(rewards):
                 if custItem['custType'] == 'style':
                     chapterId = getChapterForStyleId(custItem['id'])
                     if chapterId is not None:
-                        chosenStyle = chapterId
+                        chosenStyleChapterID = chapterId
+
+        if 'vehicles' in rewardBlock:
+            for vehicleItem in rewardBlock['vehicles']:
+                for vehicleCD in vehicleItem:
+                    chapterId = getChapterForVehicleCD(vehicleCD)
+                    if chapterId is not None:
+                        chosenVehicleChapterID = chapterId
 
         if not rewardBlock:
             blocksToRemove.append(index)
@@ -69,7 +92,7 @@ def separateRewards(rewards):
     for index in sorted(blocksToRemove, reverse=True):
         defaultRewards.pop(index)
 
-    return (defaultRewards, chosenStyle)
+    return (defaultRewards, chosenStyleChapterID, chosenVehicleChapterID)
 
 
 @dependency.replace_none_kwargs(battlePass=IBattlePassController)

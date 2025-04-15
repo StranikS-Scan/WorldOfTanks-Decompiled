@@ -53,10 +53,12 @@ from gui.shared.gui_items.customization import CustomizationTooltipContext
 from gui.shared.gui_items.customization.c11n_helpers import getProgressionStyle
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.money import Currency, Money
+from gui.shared.system_factory import collectClientBonusMergers
 from gui.shared.utils.functions import makeTooltip, stripColorTagDescrTags
 from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID, getVehicleCDForIntelligence, getVehicleCDForNational, makeIntelligenceCD, makeNationalCD
 from helpers import dependency, getLocalizedData, i18n, time_utils
 from helpers.i18n import makeString as _ms
+from historical_battles_common.hb_constants import FRONT_COUPON_TOKEN_PREFIX
 from items import tankmen, vehicles
 from items.components import c11n_components as cc
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
@@ -655,6 +657,22 @@ class BattleTokensBonus(TokensBonus):
         return i18n.makeString(webCache.getTokenInfo(styleID))
 
 
+class HBCouponTokenBonus(BattleTokensBonus):
+
+    def __init__(self, name, value, isCompensation=False, ctx=None):
+        super(HBCouponTokenBonus, self).__init__(name, value, isCompensation, ctx)
+        self._name = 'HBCoupon'
+
+    def formatValue(self):
+        result = []
+        awardTemplate = R.strings.hb_tooltips.quest.award
+        for tokenID, tokenData in self._value.iteritems():
+            userName = backport.text(awardTemplate(), bonusName=tokenID.split('_')[-1], count=tokenData['count'])
+            result.append(userName)
+
+        return ', '.join(result) if result else None
+
+
 class BattlePassTokensBonus(TokensBonus):
 
     def __init__(self, name, value, isCompensation=False, ctx=None):
@@ -879,7 +897,7 @@ class LootBoxTokensBonus(TokensBonus):
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, value, isCompensation=False, ctx=None):
-        super(TokensBonus, self).__init__('battleToken', value, isCompensation, ctx)
+        super(TokensBonus, self).__init__('lootBoxToken', value, isCompensation, ctx)
 
     def isShowInGUI(self):
         return True
@@ -1376,6 +1394,8 @@ def tokensFactory(name, value, isCompensation=False, ctx=None):
             result.append(CollectionTokenBonus(COLLECTION_ITEM_BONUS_NAME, {tID: tValue}, isCompensation, ctx))
         if tID.startswith(VERSUS_AI_PROGRESSION_TOKEN_PREFIX):
             result.append(VersusAIProgressionsTokenBonus(name, {tID: tValue}, isCompensation, ctx))
+        if tID.startswith(FRONT_COUPON_TOKEN_PREFIX):
+            result.append(HBCouponTokenBonus(name, {tID: tValue}, isCompensation, ctx))
         result.append(BattleTokensBonus(name, {tID: tValue}, isCompensation, ctx))
 
     return result
@@ -1951,6 +1971,11 @@ class BadgesGroupBonus(SimpleBonus):
 
 
 class DossierBonus(SimpleBonus):
+    DOSSIER_BONUS = 'dossier'
+
+    @staticmethod
+    def hasBadges(bonus):
+        return False if not isinstance(bonus, DossierBonus) else len(bonus.getBadges()) > 0
 
     def getRecords(self):
         records = {}
@@ -3217,6 +3242,10 @@ def getMergeBonusFunction(lhv, rhv):
     elif hasOneBaseClass(lhv, rhv, C11nProgressTokenBonus):
         return None
     else:
+        for predicate, merger in collectClientBonusMergers():
+            if predicate(lhv, rhv):
+                return merger
+
         return mergeSimpleBonuses if ofSameClassWithBase(lhv, lhv, SimpleBonus) else None
 
 

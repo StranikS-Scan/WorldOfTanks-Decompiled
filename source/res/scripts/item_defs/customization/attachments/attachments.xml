@@ -1,7 +1,7 @@
 <attachments.xml>
-  <xmlns:ussr>	ussr	</xmlns:ussr>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
   <xmlns:germany>	germany	</xmlns:germany>
-  <xmlns:usa>	usa	</xmlns:usa>
+  <xmlns:czech0>	usa	</xmlns:czech0>
   <xmlns:china>	china	</xmlns:china>
   <xmlns:france>	france	</xmlns:france>
   <xmlns:uk>	uk	</xmlns:uk>
@@ -9,6 +9,8 @@
   <xmlns:czech>	czech	</xmlns:czech>
   <xmlns:sweden>	sweden	</xmlns:sweden>
   <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
   <itemGroup>
     <name>	attachments	</name>
     <userString>	#vehicle_customization:attachment/general	</userString>
@@ -596,6 +598,45 @@
       <hangarModelName>	vehicles/czech/Cz37_Vz_59_Dravec/SleeveEjectionHangar.prefab	</hangarModelName>
       <attachmentLogic>	prefab	</attachmentLogic>
       <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	31049	</id>
+      <name>	attachment_01	</name>
+      <modelName>	vehicles/russian/R224_IS_3_1945/normal/lod0/Shaft_01.model	</modelName>
+      <attachmentLogic>	flagPart	</attachmentLogic>
+      <initialVisibility>	false	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	31050	</id>
+      <name>	R224_IS_3_1945_Flag	</name>
+      <modelName>	vehicles/russian/R224_IS_3_1945/normal/lod0/Flag_01.model	</modelName>
+      <sequenceId>	32	</sequenceId>
+      <attachmentLogic>	flagAnimation	</attachmentLogic>
+      <initialVisibility>	false	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	31051	</id>
+      <name>	R224_IS_3_1945_anim	</name>
+      <modelName>	vehicles/russian/R224_IS_3_1945/R224_IS_3_1945_anim.prefab	</modelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+      <hangarModelName>	vehicles/russian/R224_IS_3_1945/R224_IS_3_1945_hangar.prefab	</hangarModelName>
+    </attachment>
+    <attachment>
+      <id>	31052	</id>
+      <name>	R223_T_54B_1958_anim	</name>
+      <initialVisibility>	true	</initialVisibility>
+      <modelName>	vehicles/russian/R223_T_54B_1958/T_54B_1958_anim.prefab	</modelName>
+      <hangarModelName>	vehicles/russian/R223_T_54B_1958/T_54B_1958_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+    </attachment>
+    <attachment>
+      <id>	31053	</id>
+      <name>	chain	</name>
+      <modelName>	vehicles/french/F130_AMX_Tracteur_D/F130_AMX_Tracteur_D_anim.prefab	</modelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+      <hangarModelName>	vehicles/french/F130_AMX_Tracteur_D/F130_AMX_Tracteur_D_anim_hangar.prefab	</hangarModelName>
     </attachment>
   </itemGroup>
 </attachments.xml>

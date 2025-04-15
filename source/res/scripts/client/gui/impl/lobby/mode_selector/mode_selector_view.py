@@ -64,7 +64,8 @@ _SIMPLE_TOOLTIP_IDS = [ModeSelectorTooltipsConstants.RANKED_CALENDAR_DAY_INFO_TO
  ModeSelectorTooltipsConstants.RANKED_BATTLES_BONUS_TOOLTIP,
  ModeSelectorTooltipsConstants.MAPBOX_CALENDAR_TOOLTIP,
  ModeSelectorTooltipsConstants.EPIC_BATTLE_CALENDAR_TOOLTIP,
- ModeSelectorTooltipsConstants.COMP7_CALENDAR_DAY_EXTENDED_INFO]
+ ModeSelectorTooltipsConstants.COMP7_CALENDAR_DAY_EXTENDED_INFO,
+ ModeSelectorTooltipsConstants.HB_CALENDAR_TOOLTIP]
 
 def _getTooltipByContentIdMap():
     return {R.views.lobby.battle_pass.tooltips.BattlePassNotStartedTooltipView(): BattlePassNotStartedTooltipView,

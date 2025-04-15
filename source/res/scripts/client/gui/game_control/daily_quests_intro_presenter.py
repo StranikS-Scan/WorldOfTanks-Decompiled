@@ -19,7 +19,7 @@ class DailyQuestsIntroPresenter(IDailyQuestIntroPresenter):
 
     @property
     def parentViewLayoutID(self):
-        return R.views.lobby.missions.Daily()
+        return R.views.lobby.missions.legacy.Daily()
 
     def onLobbyStarted(self, *_):
         self.__addListeners()

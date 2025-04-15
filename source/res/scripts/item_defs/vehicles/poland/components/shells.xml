@@ -814,6 +814,60 @@
       </damage>
     </armorSpalls>
   </_85mm_UOF_DAP>
+  <_85mm_PPP_372BS>
+    <id>	31025	</id>
+    <userString>	#poland_vehicles:_85mm_PPP_372BS	</userString>
+    <icon>	ap	</icon>
+    <price>	315	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	85	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	200	</armor>
+      <devices>	115	</devices>
+    </damage>
+  </_85mm_PPP_372BS>
+  <_85mm_PK_7>
+    <id>	31026	</id>
+    <userString>	#poland_vehicles:_85mm_PK_7	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	3600	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	85	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	200	</armor>
+      <devices>	115	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_85mm_PK_7>
+  <_85mm_PW_372>
+    <id>	31027	</id>
+    <userString>	#poland_vehicles:_85mm_PW_372	</userString>
+    <icon>	he_modern	</icon>
+    <price>	235	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	85	</caliber>
+    <explosionRadius>	1.32	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	115	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.32	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	160	</armor>
+        <devices>	60	</devices>
+      </damage>
+    </armorSpalls>
+  </_85mm_PW_372>
   <_90mm_AP>
     <id>	42	</id>
     <userString>	#poland_vehicles:_90mm_AP	</userString>

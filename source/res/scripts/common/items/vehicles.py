@@ -332,6 +332,11 @@ def vehicleAttributeFactors():
      'stunResistanceEffect': 0.0,
      'stunResistanceDuration': 0.0,
      'repeatedStunDurationFactor': 1.0,
+     'vehicle/canBeDamaged': True,
+     'vehicle/canBeRammed': True,
+     'vehicle/antifragmentationLiningFactor': 1.0,
+     'deviceCanBeRepaired/leftTrackHealth': True,
+     'deviceCanBeRepaired/rightTrackHealth': True,
      'healthFactor': 1.0,
      'damageFactor': 1.0,
      'enginePowerFactor': 1.0,
@@ -353,7 +358,9 @@ def vehicleAttributeFactors():
      'engineAndFuelTanksDamageFactor': 1.0,
      'armorSpallsDamageFactor': 1.0,
      'deviceDamageFactor': 1.0,
-     'gun/temperature/heatingFactor': 1.0}
+     'gun/temperature/heatingFactor': 1.0,
+     'vehicle/canBeAutorepaired': True,
+     'vehicle/canBeDamagedByAoE': True}
     for ten in TANKMAN_EXTRA_NAMES:
         factors[ten + CHANCE_TO_HIT_SUFFIX_FACTOR] = 0.0
 
@@ -361,6 +368,7 @@ def vehicleAttributeFactors():
 
 
 WHEEL_SIZE_COEF = 2.2
+VEHICLE_ATTRIBUTE_FACTORS = vehicleAttributeFactors()
 _g_prices = None
 
 class CamouflageBonus():
@@ -1563,6 +1571,8 @@ class VehicleDescriptor(object):
          'radioHealthFactor': 1.0,
          'surveyingDeviceHealthFactor': 1.0,
          'gunHealthFactor': 1.0,
+         'deviceCanBeRepaired/leftTrackHealth': True,
+         'deviceCanBeRepaired/rightTrackHealth': True,
          'demaskMovingFactor': 1.0,
          'centerRotationFwdSpeedFactor': 1.0,
          'deathZones/sensitivityFactor': 1.0,
@@ -1621,7 +1631,7 @@ class VehicleDescriptor(object):
             physics['rotationSpeedLimit'] = rotationSpeedLimit
             physics['rotationEnergy'] = rotationEnergy
             physics['massRotationFactor'] = defWeight / weight
-            if IS_CELLAPP or IS_CLIENT or IS_UE_EDITOR or IS_BOT:
+            if IS_CELLAPP or IS_CLIENT or IS_UE_EDITOR or IS_BOT or IS_WEB:
                 invisibilityFactor = 1.0
                 for turretDescr, _ in self.turrets:
                     invisibilityFactor *= turretDescr.invisibilityFactor
@@ -2045,6 +2055,7 @@ class VehicleType(object):
             self.emblemsLodDist = shared_readers.readLodDist(xmlCtx, section, 'emblems/lodDist', g_cache)
             self.emblemsAlpha = _xml.readFraction(xmlCtx, section, 'emblems/alpha')
             self._prereqs = None
+        if IS_CLIENT or IS_WEB or IS_UE_EDITOR:
             self.clientAdjustmentFactors = _readClientAdjustmentFactors(xmlCtx, section)
         if IS_CELLAPP or IS_CLIENT or IS_UE_EDITOR:
             collisionVelCfg = commonConfig['miscParams']['collisionEffectVelocities']
@@ -3070,6 +3081,10 @@ def getVehicleClass(compactDescr):
     return getVehicleClassFromVehicleType(getVehicleType(compactDescr))
 
 
+def getVehicleTags(compactDescr):
+    return getVehicleType(compactDescr).tags
+
+
 def getVehicleRole(compactDescr):
     return getVehicleRoleFromVehicleType(getVehicleType(compactDescr))
 
@@ -3156,6 +3171,12 @@ def stripOptionalDeviceFromVehicleCompactDescr(compactDescr):
     optionalDevices = ''
     optionalDevicesSlots = 0
     return _combineVehicleCompactDescr(vehType, components, optionalDevicesSlots, optionalDevices, enhancements, emblemSlots, emblems, inscriptions, camouflages)
+
+
+def getSuitableShellsForVehicle(compDescr):
+    _, nationID, vehTypeID = parseIntCompactDescr(compDescr)
+    vehType = g_cache.vehicle(nationID, vehTypeID)
+    return [ shot.shell.compactDescr for turrets in vehType.turrets for turret in turrets for gun in turret.guns for shot in gun.shots ]
 
 
 def isShellSuitableForGun(shellCompactDescr, gunDescr):
@@ -3294,6 +3315,28 @@ def isFlamethrower(vehTypeCD):
 
 def isAssaultSPG(vehTypeCD):
     return hasAnyOfTags(vehTypeCD, (VEHICLE_TAGS.ASSAULT_SPG,))
+
+
+def makeOutfitCD(outfitData):
+    from items import customizations
+    outfit = ''
+    if outfitData:
+        camouflages = None
+        camouflageID = outfitData.get('camouflage')
+        if camouflageID:
+            camouflages = [customizations.CamouflageComponent(camouflageID, appliedTo=ApplyArea.HULL | ApplyArea.TURRET | ApplyArea.GUN)]
+        decals = []
+        decalID = outfitData.get('decal')
+        if decalID:
+            decals.append(customizations.DecalComponent(decalID, ApplyArea.ALL))
+        paints = []
+        paintID = outfitData.get('paint')
+        if paintID:
+            flag = ApplyArea.CHASSIS | ApplyArea.HULL | ApplyArea.TURRET
+            paints.append(customizations.PaintComponent(paintID, flag))
+        styleId = outfitData.get('style', 0)
+        outfit = customizations.CustomizationOutfit(camouflages=camouflages, decals=decals, paints=paints, styleId=styleId).makeCompDescr()
+    return outfit
 
 
 def _readComponents(xmlPath, reader, nationID, itemTypeID):
@@ -6816,11 +6859,14 @@ def _readCamouflageTilingSettings(xmlCtx, section):
 
 
 def _readCamouflageTilingType(xmlCtx, section):
-    readType = _xml.readNonEmptyString(xmlCtx, section, 'type')
-    tilingType = CamouflageTilingTypeNameToType.get(upper(readType), None)
-    if tilingType is None:
-        _xml.raiseWrongXml(xmlCtx, '', "invalid tiling type '{}'".format(readType))
-    return tilingType
+    readType = _xml.readStringOrNone(xmlCtx, section, 'type')
+    if readType is None:
+        return CamouflageTilingType.LEGACY
+    else:
+        tilingType = CamouflageTilingTypeNameToType.get(upper(readType), None)
+        if tilingType is None:
+            _xml.raiseWrongXml(xmlCtx, '', "invalid tiling type '{}'".format(readType))
+        return tilingType
 
 
 def _readPlayerEmblems(xmlPath):
@@ -7258,6 +7304,7 @@ def _readImpactParams(xmlCtx, section, paramName):
         if subsection.has_key('damageAbsorption'):
             label = _xml.readNonEmptyString(subXmlCtx, subsection, 'damageAbsorption')
             params.damageAbsorptionType = DamageAbsorptionLabelToType.get(label)
+        params.useEffectiveArmor = subsection.has_key('useEffectiveArmor')
         params.isActive = params.radius and (params.damages[0] or params.damages[1])
         return params
 
@@ -7274,7 +7321,7 @@ def _readTemperatureMechanics(xmlCtx, section, paramName):
         coolingOverheatPerSec = _xml.readPositiveInt(subXmlCtx, section, 'coolingOverheatPerSec')
         thermalStateHysteresis = _xml.readPositiveInt(subXmlCtx, section, 'thermalStateHysteresis')
         if thermalStateHysteresis > MAX_SUPPORTED_THERMAL_HYSTERESIS:
-            _xml.raiseWrongXml(subXmlCtx, '', 'Not supported thermal hysteresis value')
+            _xml.raiseWrongXml(subXmlCtx, '', 'Not supported thermal hysteresis value. Max supported is %d' % MAX_SUPPORTED_THERMAL_HYSTERESIS)
         defaultValues = (heatingPerShot,
          heatingPerSec,
          coolingPerSec,

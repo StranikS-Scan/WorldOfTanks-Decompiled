@@ -12,7 +12,10 @@ from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from battleground.location_point_manager import g_locationPointManager
 from bootcamp.Bootcamp import g_bootcamp
 from chat_commands_consts import getBaseTeamAndIDFromUniqueID, BATTLE_CHAT_COMMAND_NAMES, _COMMAND_NAME_TRANSFORM_MARKER_TYPE, _PERSONAL_MESSAGE_MUTE_DURATION, MarkerType, ONE_SHOT_COMMANDS_TO_REPLIES
+from frameworks.wulf import WindowLayer
 from gui import GUI_CTRL_MODE_FLAG
+from gui.Scaleform.daapi.view.battle.shared import SharedPage
+from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.sounds.epic_sound_constants import EPIC_SOUND
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
@@ -22,6 +25,7 @@ from messenger.proto.events import g_messengerEvents
 from messenger_common_chat2 import BATTLE_CHAT_COMMANDS_BY_NAMES
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
 from skeletons.account_helpers.settings_core import ISettingsCore, ISettingsCache
+from skeletons.gui.app_loader import IAppLoader
 _DELAY_FOR_OPENING_RADIAL_MENU = 0.2
 _TARGET_ID_IS_ENEMY_VEHICLE = {BATTLE_CHAT_COMMAND_NAMES.ATTACK_ENEMY, BATTLE_CHAT_COMMAND_NAMES.ATTACKING_ENEMY}
 _CHAT_COMMAND_DEFINING_SOS_REPLY = {BATTLE_CHAT_COMMAND_NAMES.HELPME}
@@ -34,13 +38,15 @@ _SKIP_ON_COMMAND_RECEIVED = {BATTLE_CHAT_COMMAND_NAMES.GOING_THERE,
  BATTLE_CHAT_COMMAND_NAMES.PREBATTLE_WAYPOINT,
  BATTLE_CHAT_COMMAND_NAMES.CLEAR_CHAT_COMMANDS,
  BATTLE_CHAT_COMMAND_NAMES.NAVIGATION_POINT,
- BATTLE_CHAT_COMMAND_NAMES.FLAG_POINT}
+ BATTLE_CHAT_COMMAND_NAMES.FLAG_POINT,
+ BATTLE_CHAT_COMMAND_NAMES.OBJECTIVES_POINT}
 CommandNotificationData = namedtuple('CommandNotificationData', 'matrixProvider, targetID')
 _logger = logging.getLogger(__name__)
 
 class AvatarChatKeyHandling(object):
     settingsCore = dependency.descriptor(ISettingsCore)
     settingsCache = dependency.descriptor(ISettingsCache)
+    appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self):
         self.__isEnabled = None
@@ -88,6 +94,8 @@ class AvatarChatKeyHandling(object):
         if not self.__isEnabled or calloutCtrl is None or BattleReplay.g_replayCtrl.isPlaying:
             return False
         elif self.__isEpicBattleOverviewMapScreenVisible():
+            return False
+        elif self.__isFullScreenViewOnPage():
             return False
         cmdMap = CommandMapping.g_instance
         if cmdMap.isFiredList((CommandMapping.CMD_CHAT_SHORTCUT_THANKYOU,
@@ -469,3 +477,8 @@ class AvatarChatKeyHandling(object):
         isEpicBattle = arenaVisitor.gui.isInEpicRange()
         ctrl = self.guiSessionProvider.dynamic.maps
         return False if not ctrl else isEpicBattle and ctrl.overviewMapScreenVisible
+
+    def __isFullScreenViewOnPage(self):
+        app = self.appLoader.getApp()
+        view = app.containerManager.getView(WindowLayer.VIEW)
+        return view.hasFullScreenView(ignoreAlias=BATTLE_VIEW_ALIASES.RADIAL_MENU) if isinstance(view, SharedPage) else False

@@ -11,7 +11,6 @@ from gui.ranked_battles.ranked_formatters import getRankedAwardsFormatter
 from gui.ranked_battles.ranked_helpers.web_season_provider import UNDEFINED_LEAGUE_ID
 from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.bonuses import getBonuses
-from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from helpers import dependency
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.shared import IItemsCache
@@ -32,10 +31,6 @@ class RankedBattlesSeasonCompleteView(RankedBattlesSeasonCompleteViewMeta):
 
     def onSoundTrigger(self, soundName):
         SoundGroups.g_instance.playSound2D(soundName)
-
-    def showRating(self):
-        self.__rankedController.showRankedBattlePage(ctx={'selectedItemID': RANKEDBATTLES_CONSTS.RANKED_BATTLES_RATING_ID})
-        self.destroy()
 
     def _populate(self):
         super(RankedBattlesSeasonCompleteView, self)._populate()

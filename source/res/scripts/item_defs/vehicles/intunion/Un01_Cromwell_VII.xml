@@ -1349,7 +1349,7 @@
           <damping>	2	</damping>
           <enable>	true	</enable>
           <linkBones>	true	</linkBones>
-          <elasticity>	1000	</elasticity>
+          <elasticity>	1400	</elasticity>
           <node>
             <isLeft>	true	</isLeft>
             <name>	Track_VD_L0	</name>
@@ -1711,13 +1711,13 @@
               <back>	0.098	</back>
               <top>	0.09	</top>
               <front>	0.095	</front>
-              <bottom>	0.1	</bottom>
+              <bottom>	0.08	</bottom>
             </backwardMovement>
             <forwardMovement>
               <back>	0.095	</back>
               <top>	0.098	</top>
               <front>	0.098	</front>
-              <bottom>	0.1	</bottom>
+              <bottom>	0.08	</bottom>
             </forwardMovement>
           </springsLength>
           <bottomWheels>
@@ -2200,13 +2200,13 @@
               <back>	0.098	</back>
               <top>	0.09	</top>
               <front>	0.095	</front>
-              <bottom>	0.1	</bottom>
+              <bottom>	0.08	</bottom>
             </backwardMovement>
             <forwardMovement>
               <back>	0.095	</back>
               <top>	0.098	</top>
               <front>	0.098	</front>
-              <bottom>	0.1	</bottom>
+              <bottom>	0.08	</bottom>
             </forwardMovement>
           </springsLength>
           <bottomWheels>
@@ -3008,8 +3008,8 @@
           <node>
             <isLeft>	true	</isLeft>
             <name>	Track_VD_L0	</name>
-            <forwardElastK>	0.7	</forwardElastK>
-            <backwardElastK>	1.5	</backwardElastK>
+            <forwardElastK>	0.9	</forwardElastK>
+            <backwardElastK>	2	</backwardElastK>
             <offset>	-0.12	</offset>
             <trackPairIdx>	0	</trackPairIdx>
             <rightSibling>	Track_VD_L1	</rightSibling>
@@ -3018,7 +3018,7 @@
             <isLeft>	true	</isLeft>
             <name>	Track_VD_L1	</name>
             <forwardElastK>	1.8	</forwardElastK>
-            <backwardElastK>	0.65	</backwardElastK>
+            <backwardElastK>	0.85	</backwardElastK>
             <offset>	-0.1	</offset>
             <trackPairIdx>	0	</trackPairIdx>
             <leftSibling>	Track_VD_L0	</leftSibling>
@@ -3027,8 +3027,9 @@
           <node>
             <isLeft>	false	</isLeft>
             <name>	Track_VD_R0	</name>
-            <forwardElastK>	0.7	</forwardElastK>
-            <backwardElastK>	1.5	</backwardElastK>
+            <forwardElastK>	0.9	</forwardElastK>
+            <backwardElastK>	2	</backwardElastK>
+            <offset>	-0.12	</offset>
             <trackPairIdx>	0	</trackPairIdx>
             <rightSibling>	Track_VD_R1	</rightSibling>
           </node>
@@ -3036,7 +3037,8 @@
             <isLeft>	false	</isLeft>
             <name>	Track_VD_R1	</name>
             <forwardElastK>	1.8	</forwardElastK>
-            <backwardElastK>	0.65	</backwardElastK>
+            <backwardElastK>	0.85	</backwardElastK>
+            <offset>	-0.1	</offset>
             <trackPairIdx>	0	</trackPairIdx>
             <leftSibling>	Track_VD_R0	</leftSibling>
             <rightSibling>	Track_VD_R2	</rightSibling>
@@ -3364,13 +3366,13 @@
               <back>	0.098	</back>
               <top>	0.09	</top>
               <front>	0.095	</front>
-              <bottom>	0.1	</bottom>
+              <bottom>	0.08	</bottom>
             </backwardMovement>
             <forwardMovement>
               <back>	0.095	</back>
               <top>	0.098	</top>
               <front>	0.098	</front>
-              <bottom>	0.1	</bottom>
+              <bottom>	0.08	</bottom>
             </forwardMovement>
           </springsLength>
           <bottomWheels>
@@ -3853,13 +3855,13 @@
               <back>	0.098	</back>
               <top>	0.09	</top>
               <front>	0.095	</front>
-              <bottom>	0.1	</bottom>
+              <bottom>	0.08	</bottom>
             </backwardMovement>
             <forwardMovement>
               <back>	0.095	</back>
               <top>	0.098	</top>
               <front>	0.098	</front>
-              <bottom>	0.1	</bottom>
+              <bottom>	0.08	</bottom>
             </forwardMovement>
           </springsLength>
           <bottomWheels>

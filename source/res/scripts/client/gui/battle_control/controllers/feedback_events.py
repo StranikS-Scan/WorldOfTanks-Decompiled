@@ -132,6 +132,9 @@ class _DamageExtra(object):
     def isStaticDeathZone(self):
         return self.isAttackReason(ATTACK_REASON.STATIC_DEATH_ZONE)
 
+    def isPersonalDeathZone(self):
+        return self.isAttackReason(ATTACK_REASON.PERSONAL_DEATH_ZONE)
+
     def isProtectionZone(self, primary=True):
         return self.isAttackReason(ATTACK_REASON.ARTILLERY_PROTECTION) or self.isAttackReason(ATTACK_REASON.ARTILLERY_SECTOR) if primary else self.isSecondaryAttackReason(ATTACK_REASON.ARTILLERY_PROTECTION) or self.isSecondaryAttackReason(ATTACK_REASON.ARTILLERY_SECTOR)
 
@@ -141,8 +144,17 @@ class _DamageExtra(object):
     def isFortArtilleryEq(self, primary=True):
         return self.isAttackReason(ATTACK_REASON.FORT_ARTILLERY_EQ) if primary else self.isSecondaryAttackReason(ATTACK_REASON.FORT_ARTILLERY_EQ)
 
+    def isArtilleryRocket(self, primary=True):
+        return self.isAttackReason(ATTACK_REASON.ARTILLERY_ROCKET) if primary else self.isSecondaryAttackReason(ATTACK_REASON.ARTILLERY_ROCKET)
+
+    def isArtilleryMortar(self, primary=True):
+        return self.isAttackReason(ATTACK_REASON.ARTILLERY_MORTAR) if primary else self.isSecondaryAttackReason(ATTACK_REASON.ARTILLERY_MORTAR)
+
     def isBomberEq(self, primary=True):
         return self.isAttackReason(ATTACK_REASON.BOMBER_EQ) if primary else self.isSecondaryAttackReason(ATTACK_REASON.BOMBER_EQ)
+
+    def isBombercas(self, primary=True):
+        return self.isAttackReason(ATTACK_REASON.BOMBERCAS) if primary else self.isSecondaryAttackReason(ATTACK_REASON.BOMBERCAS)
 
     def isBombers(self, primary=True):
         return self.isAttackReason(ATTACK_REASON.BOMBERS) if primary else self.isSecondaryAttackReason(ATTACK_REASON.BOMBERS)
@@ -277,6 +289,9 @@ class _CritsExtra(object):
 
     def isStaticDeathZone(self):
         return self.isAttackReason(ATTACK_REASON.STATIC_DEATH_ZONE)
+
+    def isPersonalDeathZone(self):
+        return self.isAttackReason(ATTACK_REASON.PERSONAL_DEATH_ZONE)
 
     def isProtectionZone(self, primary=True):
         return self.isAttackReason(ATTACK_REASON.ARTILLERY_PROTECTION) or self.isAttackReason(ATTACK_REASON.ARTILLERY_SECTOR) if primary else self.isSecondaryAttackReason(ATTACK_REASON.ARTILLERY_PROTECTION) or self.isSecondaryAttackReason(ATTACK_REASON.ARTILLERY_SECTOR)

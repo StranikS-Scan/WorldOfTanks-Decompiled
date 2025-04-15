@@ -124,6 +124,7 @@ class PLATOON(object):
     MEMBERS_FOOTER_INVALIDVEHICLELEVEL = '#platoon:members/footer/invalidVehicleLevel'
     MEMBERS_FOOTER_SCOUTFORBIDDEN = '#platoon:members/footer/scoutForbidden'
     MEMBERS_FOOTER_SCOUTFULL = '#platoon:members/footer/scoutFull'
+    MEMBERS_FOOTER_FLAMETHROWERFULL = '#platoon:members/footer/flamethrowerFull'
     MEMBERS_FOOTER_SPGFORBIDDEN = '#platoon:members/footer/spgForbidden'
     MEMBERS_FOOTER_SPGFULL = '#platoon:members/footer/spgFull'
     MEMBERS_FOOTER_VEHICLES_DIFFERENTLEVELS = '#platoon:members/footer/vehicles/differentLevels'

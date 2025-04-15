@@ -381,7 +381,7 @@ class MissionsCategoriesView(_GroupedMissionsView):
         return RES_ICONS.MAPS_ICONS_MISSIONS_BACKGROUNDS_CATEGORIES
 
     def _getViewQuestFilter(self):
-        return self.getViewQuestFilterIncludingDailyQuests() if self.__showDQInMissionsTab else self.getViewQuestFilter()
+        return self.getViewQuestFilter()
 
     def __onServerSettingsChange(self, diff):
         if PremiumConfigs.PREM_QUESTS not in diff:

@@ -8,7 +8,7 @@ import constants
 import pwd_token
 from Event import Event, EventManager
 from PlayerEvents import g_playerEvents
-from debug_utils import LOG_DEBUG, LOG_NOTE, LOG_WARNING
+from debug_utils import LOG_DEBUG, LOG_NOTE, LOG_WARNING, LOG_ERROR
 from shared_utils import nextTick
 from predefined_hosts import g_preDefinedHosts, AUTO_LOGIN_QUERY_URL
 from helpers import getClientLanguage, uniprof
@@ -114,8 +114,6 @@ class ConnectionManager(IConnectionManager):
     @uniprof.regionDecorator(label='offline.connect', scope='enter')
     def __connect(self):
         self.__retryConnectionCallbackID = None
-        if constants.IS_DEVELOPMENT:
-            LOG_DEBUG('Calling BigWorld.connect with params: {0}, serverName: {1}, inactivityTimeout: {2}, publicKeyPath: {3}'.format(self.__connectionData.username, self.__connectionUrl, constants.CLIENT_INACTIVITY_TIMEOUT, self.__connectionData.publicKeyPath))
         if self.__connectionInProgress:
             LOG_WARNING('Try to call BigWorld.connect while connection in progress')
             return
@@ -131,6 +129,7 @@ class ConnectionManager(IConnectionManager):
                 else:
                     self.__hostItem = self.__hostItem._replace(name=self.__connectionUrl, shortName=self.__connectionUrl)
 
+            LOG_DEBUG('Calling BigWorld.connect with params: {0}, serverUrl: {1}, inactivityTimeout: {2}, publicKeyPath: {3}, serverName: {4}, peripheryID: {5}'.format(self.__connectionData.username, self.__connectionUrl, constants.CLIENT_INACTIVITY_TIMEOUT, self.__connectionData.publicKeyPath, self.__hostItem.shortName, self.__hostItem.peripheryID))
             return
 
     def __tryConnect(self):
@@ -142,11 +141,10 @@ class ConnectionManager(IConnectionManager):
 
     @uniprof.regionDecorator(label='offline.connect', scope='exit')
     def __serverResponseHandler(self, stage, status, responseDataJSON):
-        if constants.IS_DEVELOPMENT:
-            LOG_DEBUG('Received server response with stage: {0}, status: {1}, responseData: {2}'.format(stage, status, responseDataJSON))
         status = str(status)
         self.__connectionInProgress = False
         self.__connectionStatus = status
+        msg = 'Received server response with stage: {0}, status: {1}, responseData: {2}'.format(stage, status, responseDataJSON)
         try:
             responseData = json.loads(responseDataJSON)
         except ValueError:
@@ -159,6 +157,7 @@ class ConnectionManager(IConnectionManager):
                 self.__lastSessionID = responseData.get('session_id', '')
                 self.onLoggedOn(responseData)
                 self.onConnected()
+                LOG_DEBUG(msg)
         else:
             if self.__retryConnectionCallbackID is None:
                 status_ = self.__connectionStatus
@@ -171,6 +170,10 @@ class ConnectionManager(IConnectionManager):
             if stage == 6:
                 self.onDisconnected()
                 g_playerEvents.onDisconnected()
+            if status == LOGIN_STATUS.NOT_SET or status == LOGIN_STATUS.LOGGED_ON_OFFLINE:
+                LOG_DEBUG(msg)
+            else:
+                LOG_ERROR(msg)
         return
 
     def __setConnectionData(self, params, password):

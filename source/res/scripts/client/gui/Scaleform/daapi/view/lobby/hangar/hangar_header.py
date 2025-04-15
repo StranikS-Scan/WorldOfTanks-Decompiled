@@ -55,6 +55,7 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.tutorial import ITutorialLoader
 from soft_exception import SoftException
+from historical_battles.skeletons.gui.game_event_controller import IGameEventController
 if typing.TYPE_CHECKING:
     from typing import Optional
 _logger = logging.getLogger(__name__)
@@ -324,6 +325,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     __armoryYardCtrl = dependency.descriptor(IArmoryYardController)
     __earlyAccessCtrl = dependency.descriptor(IEarlyAccessController)
     __limitedUIController = dependency.descriptor(ILimitedUIController)
+    __historicalBattleController = dependency.descriptor(IGameEventController)
     __externalWidgets = {}
 
     def __init__(self):
@@ -474,6 +476,8 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         emptyHeaderVO = {'isVisible': False,
          'quests': []}
         if not self.__tutorialLoader.gui.hangarHeaderEnabled:
+            return emptyHeaderVO
+        if self.__historicalBattleController.isHBPrbActive():
             return emptyHeaderVO
         versusAIController = dependency.getInstanceIfHas(IVersusAIController)
         if versusAIController and versusAIController.isVersusAIPrbActive():
@@ -686,11 +690,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
                     personalMissionID = quest.getID()
                     icon = _getPersonalMissionsIcon(vehicle, branch, True, personalMissionID)
                     label = _ms(MENU.hangarHeaderPersonalMissionsLabel(LABEL_STATE.ACTIVE), current=_getQuestLabel(branch, quest))
-                    if not isPM3:
-                        tooltip = TOOLTIPS_CONSTANTS.PERSONAL_QUESTS_PREVIEW
-                    else:
-                        isTooltipWulf = True
-                        tooltip = TOOLTIPS_CONSTANTS.PM3_QUEST_CARD_TOOLTIP
+                    tooltip = TOOLTIPS_CONSTANTS.PERSONAL_QUESTS_PREVIEW
                 elif pmState == WIDGET_PM_STATE.ON_PAUSE:
                     personalMissionID = quest.getID()
                     icon = _getPersonalMissionsIcon(vehicle, branch, True, personalMissionID)
@@ -730,7 +730,10 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
                     label = MENU.hangarHeaderPersonalMissionsLabel(LABEL_STATE.INACTIVE)
                     tooltip = _getPersonalMissionsTooltip(branch, pmState)
                     enable = False
-                isTooltipSpecial = bool(pmState & WIDGET_PM_STATE.IN_PROGRESS and not isPM3 or pmState & WIDGET_PM_STATE.ON_PAUSE)
+                if isPM3 and pmState in (WIDGET_PM_STATE.IN_PROGRESS, WIDGET_PM_STATE.ON_PAUSE):
+                    isTooltipWulf = True
+                    tooltip = TOOLTIPS_CONSTANTS.PM3_QUEST_CARD_TOOLTIP
+                isTooltipSpecial = bool((pmState & WIDGET_PM_STATE.IN_PROGRESS or pmState & WIDGET_PM_STATE.ON_PAUSE) and not isPM3)
                 result.append(self._headerQuestFormatterVo(enable, icon, label, questType, questID=personalMissionID, tooltip=tooltip, isTooltipSpecial=isTooltipSpecial, isTooltipWulf=isTooltipWulf))
 
             if all([ st == WIDGET_PM_STATE.DONE for st in states ]):

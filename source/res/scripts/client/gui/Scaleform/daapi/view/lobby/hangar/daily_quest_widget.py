@@ -6,7 +6,7 @@ from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComp
 from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.server_events.events_helpers import isDailyQuestsEnable
-from gui.impl.lobby.missions.daily_quests_widget_view import DailyQuestsWidgetView
+from gui.impl.lobby.daily.daily_quests_widget_view import DailyQuestsWidgetView
 from gui.Scaleform.daapi.view.meta.DailyQuestMeta import DailyQuestMeta
 from gui.Scaleform.managers import UtilsManager
 from helpers import dependency
@@ -55,7 +55,8 @@ class DailyQuestWidget(InjectComponentAdaptor, DailyQuestMeta, IGlobalListener):
         enabledQueues = (QUEUE_TYPE.RANDOMS,
          QUEUE_TYPE.MAPBOX,
          QUEUE_TYPE.COMP7,
-         QUEUE_TYPE.RANKED)
+         QUEUE_TYPE.RANKED,
+         QUEUE_TYPE.STRONGHOLD_UNITS)
         return any((self.__isQueueSelected(queueType) for queueType in enabledQueues))
 
     def isLimitedUiRuleCompleted(self):
@@ -94,27 +95,13 @@ class DailyQuestWidget(InjectComponentAdaptor, DailyQuestMeta, IGlobalListener):
         isEnabled = False
         if self.__shouldHide():
             self.__hide()
-        elif self.__hasIncompleteQuests() or self.__hasQuestStatusChanged():
+        else:
             isEnabled = True
             self.__show()
         self.as_setEnabledS(isEnabled)
 
     def __shouldHide(self):
         return not isDailyQuestsEnable() or self.promoController.isTeaserOpen() or not self._isQueueEnabled() or not self.isLimitedUiRuleCompleted()
-
-    def __hasIncompleteQuests(self):
-        for quest in self.eventsCache.getDailyQuests().values():
-            if not quest.isCompleted():
-                return True
-
-        return False
-
-    def __hasQuestStatusChanged(self):
-        for quest in self.eventsCache.getDailyQuests().values():
-            if self.eventsCache.questsProgress.getQuestCompletionChanged(quest.getID()):
-                return True
-
-        return False
 
     def __onServerSettingsChanged(self, diff):
         if DAILY_QUESTS_CONFIG in diff:

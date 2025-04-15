@@ -235,7 +235,11 @@ class OptDeviceInstaller(ModuleInstallProcessor):
         itemCD = self.item.intCD if self.install else 0
         if not self.install and useDemountKit:
             g_eventBus.handleEvent(ItemRemovalByDemountKitEvent(ItemRemovalByDemountKitEvent.DECLARED, self.slotIdx), EVENT_BUS_SCOPE.LOBBY)
-        BigWorld.player().inventory.equipOptionalDevice(self.vehicle.invID, itemCD, self.slotIdx, self.allSetups, self.financeOperation, lambda code, ext=None: self._response(code, callback, ctx=ext), useDemountKit)
+        equipmentSetupLayout = self.vehicle.optDevices.setupLayouts
+        layoutIndex = equipmentSetupLayout.layoutIndex
+        if not equipmentSetupLayout.containsIntCD(itemCD, layoutIndex, self.slotIdx) and not self.install:
+            layoutIndex = equipmentSetupLayout.getLayoutIdxByItemAndSlotIdx(self.item, self.slotIdx)
+        BigWorld.player().inventory.equipOptionalDevice(self.vehicle.invID, itemCD, self.slotIdx, layoutIndex, self.allSetups, self.financeOperation, lambda code, ext=None: self._response(code, callback, ctx=ext), useDemountKit)
         return
 
     def _response(self, code, callback, errStr='', ctx=None):

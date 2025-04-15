@@ -1589,6 +1589,7 @@ class PostMortemControlMode(IControlMode):
         self.__aih = weakref.proxy(avatarInputHandler)
         self.__cam = ArcadeCamera.ArcadeCamera(dataSection['camera'], dataSection.readVector2('defaultOffset'))
         self.__curVehicleID = None
+        self.__selfVehicleID = None
         self.__isEnabled = False
         self.__postmortemDelay = None
         self.__isObserverMode = False
@@ -1691,6 +1692,7 @@ class PostMortemControlMode(IControlMode):
         self.__disconnectFromArena()
         self.__cam.disable()
         self.__curVehicleID = None
+        self.__selfVehicleID = None
         return
 
     def handleKeyEvent(self, isDown, key, mods, event=None):
@@ -2079,6 +2081,38 @@ class _ShellingControl(object):
 
     def __showTargetModel_directly(self, value):
         self.__targetModel.visible = value
+
+
+class _PlayerGunInformation(object):
+
+    @staticmethod
+    def getCurrentShotInfo():
+        player = BigWorld.player()
+        gunRotator = player.gunRotator
+        shotDesc = player.getVehicleDescriptor().shot
+        gunMat = AimingSystems.getPlayerGunMat(gunRotator.turretYaw, gunRotator.gunPitch)
+        position = gunMat.translation
+        velocity = gunMat.applyVector(Math.Vector3(0, 0, shotDesc.speed))
+        return (position, velocity, Math.Vector3(0, -shotDesc.gravity, 0))
+
+    @staticmethod
+    def updateMarkerDispersion(spgMarkerComponent, isServerAim=False):
+        dispersionAngle = BigWorld.player().gunRotator.dispersionAngle
+        replayCtrl = BattleReplay.g_replayCtrl
+        if replayCtrl.isPlaying and replayCtrl.isClientReady:
+            d, s = replayCtrl.getSPGGunMarkerParams()
+            if d != -1.0 and s != -1.0:
+                dispersionAngle = d
+        elif replayCtrl.isRecording:
+            if replayCtrl.isServerAim and isServerAim:
+                replayCtrl.setSPGGunMarkerParams(dispersionAngle, 0.0)
+            elif not isServerAim:
+                replayCtrl.setSPGGunMarkerParams(dispersionAngle, 0.0)
+        spgMarkerComponent.setupConicDispersion(dispersionAngle)
+
+    @staticmethod
+    def updateServerMarkerDispersion(spgMarkerComponent):
+        _PlayerGunInformation.updateMarkerDispersion(spgMarkerComponent, True)
 
 
 class _MouseVehicleRotator(object):

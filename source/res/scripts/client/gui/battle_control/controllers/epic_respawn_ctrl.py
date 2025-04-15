@@ -7,9 +7,13 @@ from gui.battle_control.controllers.respawn_ctrl import RespawnsController, IRes
 from gui.impl import backport
 from gui.impl.gen import R
 from helpers import dependency
+from shared_utils import first
 from skeletons.gui.battle_session import IBattleSessionProvider
 EB_MIN_RESPAWN_LANE_IDX = 1
 EB_MAX_RESPAWN_LANE_IDX = 4
+LIMITED_TEXT_BY_TAGS = {'SPG': backport.text(R.strings.epic_battle.deploymentMap.spgLimitReached()),
+ 'flamethrower': backport.text(R.strings.epic_battle.deploymentMap.flamethrowerLimitReached()),
+ 'default': backport.text(R.strings.epic_battle.deploymentMap.spgLimitReached())}
 
 class IEpicRespawnView(IRespawnView):
 
@@ -105,13 +109,17 @@ class EpicRespawnsController(RespawnsController):
                     isEnoughPlace = True
                 else:
                     isEnoughPlace = playerDataComp.getPlayersForTeamAndGroup(avatar_getter.getPlayerTeam(), lane) < limit
-                isVehicleBlocked = lane in vehicleLimits and selectedVehicleID in vehicleLimits[lane]
+                blockedTag = None
+                if lane in vehicleLimits:
+                    vehicleLimitsTags = vehicleLimits[lane]
+                    blockedTag = first({tag for tag, limitedIds in vehicleLimitsTags.iteritems() if selectedVehicleID in limitedIds})
+                isVehicleBlocked = blockedTag is not None
                 isAvailableForPlayer = (isEnoughPlace or playerDataComp.respawnLane == lane and not availableLanes) and not isVehicleBlocked
                 reasonText = ''
                 if not isEnoughPlace:
                     reasonText = backport.text(R.strings.epic_battle.deploymentMap.lanePlayerLimitReached())
                 elif isVehicleBlocked:
-                    reasonText = backport.text(R.strings.epic_battle.deploymentMap.spgLimitReached())
+                    reasonText = LIMITED_TEXT_BY_TAGS.get(blockedTag, LIMITED_TEXT_BY_TAGS['default'])
                 if not isEnoughPlace or isVehicleBlocked:
                     LOG_DEBUG('lane %d is blocked for %d ', lane, selectedVehicleID, isVehicleBlocked, 0 if lane not in vehicleLimits else vehicleLimits[lane])
                 for viewCmp in self._viewComponents:

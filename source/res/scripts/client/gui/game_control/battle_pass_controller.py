@@ -4,7 +4,6 @@ import bisect
 import logging
 from collections import namedtuple
 from copy import deepcopy
-from datetime import datetime, timedelta
 from itertools import groupby
 from Event import Event, EventManager
 from PlayerEvents import g_playerEvents
@@ -18,16 +17,19 @@ from gui.battle_pass.state_machine.delegator import BattlePassRewardLogic
 from gui.battle_pass.state_machine.machine import BattlePassStateMachine
 from gui.battle_pass.battle_pass_constants import ChapterState
 from gui.shared.gui_items.processors.battle_pass import BattlePassActivateChapterProcessor
+from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from gui.shared.utils.scheduled_notifications import SimpleNotifier
 from helpers import dependency, time_utils
 from helpers.events_handler import EventsHandler
 from helpers.server_settings import serverSettingsChangeListener
+from items.vehicles import makeVehicleTypeCompDescrByName
 from shared_utils import findFirst, first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.shared import IItemsCache
+from tutorial.control.context import MARATHON_POSTFIX
 _logger = logging.getLogger(__name__)
 TopPoints = namedtuple('TopPoints', ['label', 'winPoint', 'losePoint'])
 BattleRoyaleTopPoints = namedtuple('BattleRoyaleTopPoints', ['label', 'points'])
@@ -154,6 +156,9 @@ class BattlePassController(IBattlePassController, EventsHandler):
     def isResourceChaptersCompleted(self):
         return all(map(self.isChapterCompleted, self.getResourceChapterIDs())) if self.hasResource() else True
 
+    def isResourceChaptersBought(self):
+        return all(map(self.isBought, self.getResourceChapterIDs())) if self.hasResource() else False
+
     def isMarathonChaptersCompleted(self):
         return all(map(self.isChapterCompleted, self.getMarathonChapterIDs())) if self.hasMarathon() else True
 
@@ -224,6 +229,15 @@ class BattlePassController(IBattlePassController, EventsHandler):
             return not expireTimestamp or time_utils.getServerUTCTime() < expireTimestamp
 
         return [ chapterID for chapterID in self.__getConfig().getChapterIDs() if isActive(chapterID) ]
+
+    def isMainChaptersCompleted(self):
+        return all((self.isChapterCompleted(chapterID) for chapterID in self.getChapterIDs() if not self.isMarathonChapter(chapterID)))
+
+    def setTriggerHint(self, globalFlag, value):
+        if self.hasMarathon() and self.isMainChaptersCompleted():
+            getTutorialGlobalStorage().setValue(globalFlag, False)
+            globalFlag = globalFlag + MARATHON_POSTFIX
+        getTutorialGlobalStorage().setValue(globalFlag, value)
 
     def getPotentialChaptersLevels(self):
         points = self.__itemsCache.items.battlePass.getSumPoints()
@@ -482,6 +496,12 @@ class BattlePassController(IBattlePassController, EventsHandler):
 
         return result
 
+    def getWinLosePointsList(self, gameMode=ARENA_BONUS_TYPE.EPIC_BATTLE):
+        result = self.getPerBattlePoints(gameMode)
+        winPoints = [ entry.winPoint for entry in result if entry.winPoint > 0 ]
+        losePoints = [ entry.losePoint for entry in result if entry.losePoint > 0 ]
+        return (winPoints, losePoints)
+
     def getPerBattleRoyalePoints(self, gameMode=ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO, vehCompDesc=None):
         winList = self.__getConfig().bonusPointsList(vehCompDesc, isWinner=True, gameMode=gameMode)
         pointsList = list(self.__getConfig().bonusPointsList(vehCompDesc, isWinner=False, gameMode=gameMode))
@@ -576,6 +596,11 @@ class BattlePassController(IBattlePassController, EventsHandler):
     def getStylesConfig(self):
         return {chapterID:chapterInfo.get('styleId') for chapterID, chapterInfo in self.__getConfig().chapters.iteritems()}
 
+    def getVehicleCDRewardForChapter(self, chapterId):
+        chapter = self.__getConfig().chapters.get(chapterId, {})
+        vehicleName = chapter.get('vehicle')
+        return None if not vehicleName else makeVehicleTypeCompDescrByName(vehicleName)
+
     def getNotChosenRewardCount(self):
         return sum((token.startswith(BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS) for token in self.__itemsCache.items.tokens.getTokens().iterkeys())) if not self.isOfferEnabled() else sum((token.startswith(BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS) for token in self.__itemsCache.items.tokens.getTokens().iterkeys() if self.__offersProvider.getOfferByToken(getOfferTokenByGift(token)) is not None))
 
@@ -620,10 +645,7 @@ class BattlePassController(IBattlePassController, EventsHandler):
         return getMaxAvalable3DStyleProgressInChapter(self.getSeasonID(), chapter, self.__itemsCache.items.tokens.getTokens().keys())
 
     def getTimeToLimitReset(self):
-        currentServerTime = datetime.fromtimestamp(time_utils.getServerUTCTime())
-        nextWeekStart = currentServerTime + timedelta(days=7 - currentServerTime.weekday())
-        nextWeekStartMidnight = nextWeekStart.replace(hour=0, minute=0, second=0, microsecond=0)
-        return int((nextWeekStartMidnight - currentServerTime).total_seconds())
+        return int(time_utils.getGameWeekTimeLeft())
 
     def _getEvents(self):
         return ((self.__lobbyContext.getServerSettings().onServerSettingsChange, self.__onConfigChanged),

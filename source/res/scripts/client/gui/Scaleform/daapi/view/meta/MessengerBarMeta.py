@@ -19,6 +19,9 @@ class MessengerBarMeta(BaseDAAPIComponent):
     def as_setVehicleCompareCartButtonVisibleS(self, value):
         return self.flashObject.as_setVehicleCompareCartButtonVisible(value) if self._isDAAPIInited() else None
 
+    def as_setVehicleCompareCartButtonEnabledS(self, value):
+        return self.flashObject.as_setVehicleCompareCartButtonEnabled(value) if self._isDAAPIInited() else None
+
     def as_setReferralProgramButtonVisibleS(self, value):
         return self.flashObject.as_setReferralProgramButtonVisible(value) if self._isDAAPIInited() else None
 

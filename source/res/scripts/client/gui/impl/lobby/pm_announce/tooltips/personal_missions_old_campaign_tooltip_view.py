@@ -7,11 +7,14 @@ from gui.impl.gen.view_models.views.lobby.pm_announce.tooltips.personal_missions
 from gui.impl.lobby.pm_announce.tooltips import getRewardStatusForOperation
 from gui.impl.pub import ViewImpl
 from helpers import dependency
+from personal_missions import PM_BRANCH
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 
 class PersonalMissionsOldCampaignTooltipView(ViewImpl):
     __slots__ = ()
     __eventsCache = dependency.descriptor(IEventsCache)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, layoutID):
         settings = ViewSettings(layoutID)
@@ -50,7 +53,11 @@ class PersonalMissionsOldCampaignTooltipView(ViewImpl):
             rewardsArray.addViewModel(rewardModel)
 
         array.invalidate()
-        if isCompleted and isFullCompleted:
+        isEnabled = all((self.__lobbyContext.getServerSettings().isPersonalMissionsEnabled(branch) for branch in (PM_BRANCH.PERSONAL_MISSION_2, PM_BRANCH.REGULAR)))
+        if not isEnabled:
+            model.setMissionStatus(MissionStatus.DISABLED)
+            rewardsArray.clear()
+        elif isCompleted and isFullCompleted:
             model.setMissionStatus(MissionStatus.COMPLETEDPERFECT)
             rewardsArray.clear()
         elif isCompleted:

@@ -1,0 +1,266 @@
+<08_ruinberg_att.xml>
+  <name>	#arenas:08_ruinberg_att/name	</name>
+  <description>	#arenas:08_ruinberg_att/description	</description>
+  <geometry>	spaces/08_ruinberg_att	</geometry>
+  <explicitRequestOnly>	true	</explicitRequestOnly>
+  <estimatedLoad>	0.45	</estimatedLoad>
+  <roundLength>	1200	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-425.000000 -400.000000	</bottomLeft>
+    <upperRight>	425.000000 450.000000	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/08_ruinberg_att/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <defaultGroundEffect>	None	</defaultGroundEffect>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_attack_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	ev_secret_event_silence	</wwmusicIntensive>
+    <wwmusicRelaxed>	ev_secret_event_silence	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_attack_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	ev_secret_event_silence	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_attack_result_defeat	</wwmusicResultDefeat>
+    <wwmusicLoadingVoice>	vo_se_loading_08_ruinberg_att	</wwmusicLoadingVoice>
+  </wwmusicSetup>
+  <wwambientSound>	ambient_wind_summer_02	</wwambientSound>
+  <gameplayTypes>
+    <ctf>
+      <pythonScript>	RuinbergArenaAttackBattleComponent	</pythonScript>
+      <notificationsRemapping>
+        <notification>
+          <name>	start_battle	</name>
+          <mod>	vo_se_start_battle	</mod>
+        </notification>
+        <notification>
+          <name>	enemy_killed_by_player	</name>
+          <mod>	vo_se_gameplay_enemy_killed	</mod>
+        </notification>
+        <notification>
+          <name>	ally_killed_by_player	</name>
+        </notification>
+        <notification>
+          <name>	ammo_bay_damaged	</name>
+        </notification>
+        <notification>
+          <name>	enemy_no_piercing_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_no_hp_damage_at_attempt_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_ricochet_by_player	</name>
+        </notification>
+        <notification>
+          <name>	commander_killed	</name>
+        </notification>
+        <notification>
+          <name>	crew_deactivated	</name>
+        </notification>
+        <notification>
+          <name>	enemy_hp_damaged_by_near_explosion_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_no_hp_damage_by_near_explosion_by_player	</name>
+        </notification>
+        <notification>
+          <name>	driver_killed	</name>
+        </notification>
+        <notification>
+          <name>	enemy_fire_started_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_hp_damaged_by_explosion_at_direct_hit_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_hp_damaged_by_projectile_and_chassis_damaged_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_hp_damaged_by_projectile_and_gun_damaged_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_hp_damaged_by_projectile_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_killed	</name>
+        </notification>
+        <notification>
+          <name>	enemy_no_hp_damage_at_attempt_and_chassis_damaged_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_no_hp_damage_at_attempt_and_gun_damaged_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_no_hp_damage_at_no_attempt_and_chassis_damaged_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_no_hp_damage_at_no_attempt_and_gun_damaged_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_no_hp_damage_at_no_attempt_by_player	</name>
+        </notification>
+        <notification>
+          <name>	engine_damaged	</name>
+        </notification>
+        <notification>
+          <name>	engine_destroyed	</name>
+        </notification>
+        <notification>
+          <name>	engine_functional	</name>
+        </notification>
+        <notification>
+          <name>	fire_started	</name>
+        </notification>
+        <notification>
+          <name>	fire_stopped	</name>
+        </notification>
+        <notification>
+          <name>	fuel_tank_damaged	</name>
+        </notification>
+        <notification>
+          <name>	gun_damaged	</name>
+        </notification>
+        <notification>
+          <name>	gun_destroyed	</name>
+        </notification>
+        <notification>
+          <name>	gun_functional	</name>
+        </notification>
+        <notification>
+          <name>	gunner_killed	</name>
+        </notification>
+        <notification>
+          <name>	loader_killed	</name>
+        </notification>
+        <notification>
+          <name>	radio_damaged	</name>
+        </notification>
+        <notification>
+          <name>	radioman_killed	</name>
+        </notification>
+        <notification>
+          <name>	surveying_devices_damaged	</name>
+        </notification>
+        <notification>
+          <name>	surveying_devices_destroyed	</name>
+        </notification>
+        <notification>
+          <name>	surveying_devices_functional	</name>
+        </notification>
+        <notification>
+          <name>	target_captured	</name>
+        </notification>
+        <notification>
+          <name>	target_lost	</name>
+        </notification>
+        <notification>
+          <name>	target_unlocked	</name>
+        </notification>
+        <notification>
+          <name>	track_damaged	</name>
+        </notification>
+        <notification>
+          <name>	track_destroyed	</name>
+        </notification>
+        <notification>
+          <name>	track_functional	</name>
+        </notification>
+        <notification>
+          <name>	track_functional_can_move	</name>
+        </notification>
+        <notification>
+          <name>	turret_rotator_damaged	</name>
+        </notification>
+        <notification>
+          <name>	turret_rotator_destroyed	</name>
+        </notification>
+        <notification>
+          <name>	turret_rotator_functional	</name>
+        </notification>
+        <notification>
+          <name>	respawn	</name>
+        </notification>
+        <notification>
+          <name>	vehicle_destroyed	</name>
+        </notification>
+        <notification>
+          <name>	damage_by_near_explosion_by_enemy	</name>
+        </notification>
+      </notificationsRemapping>
+    </ctf>
+    <domination></domination>
+    <assault2>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
+    </assault2>
+    <bootcamp>
+      <wwmusicSetup>
+        <wwmusicLoading>	bc_music_loadingscreen	</wwmusicLoading>
+        <wwmusicIntensive>	bc_music_mission_04	</wwmusicIntensive>
+        <wwmusicRelaxed>	bc_music_mission_04	</wwmusicRelaxed>
+        <wwmusicStop>	music_dron_stop	</wwmusicStop>
+        <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+        <wwmusicResultWin>	music_ruinberg_result_win	</wwmusicResultWin>
+        <wwmusicResultDrawn>	music_ruinberg_result_drawn	</wwmusicResultDrawn>
+        <wwmusicResultDefeat>	music_ruinberg_result_defeat	</wwmusicResultDefeat>
+      </wwmusicSetup>
+      <boundingBox>
+        <bottomLeft>	-200.000000 -400.000000	</bottomLeft>
+        <upperRight>	350.000000 400.000000	</upperRight>
+      </boundingBox>
+      <maxPlayersInTeam>	1	</maxPlayersInTeam>
+      <minimap>	spaces/08_ruinberg/mmap_bootcamp.dds	</minimap>
+      <runDelay>	10	</runDelay>
+      <visualScript>
+        <server>
+          <plan>	BootCamp/Lesson_4_arena_08_ruinberg	</plan>
+        </server>
+        <client>
+          <plan>	BootCamp/Lesson_4_hints_08_ruinberg	</plan>
+        </client>
+      </visualScript>
+    </bootcamp>
+    <maps_training></maps_training>
+    <comp7>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	74.665291 -370.243011	</position>
+          <type>	4	</type>
+        </point>
+        <point>
+          <position>	400.851135 348.091125	</position>
+          <type>	4	</type>
+        </point>
+        <point>
+          <position>	-47.127899 366.439453	</position>
+          <type>	3	</type>
+        </point>
+        <point>
+          <position>	-253.252441 -376.364136	</position>
+          <type>	3	</type>
+        </point>
+      </pointsOfInterestUDO>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+    </comp7>
+  </gameplayTypes>
+</08_ruinberg_att.xml>

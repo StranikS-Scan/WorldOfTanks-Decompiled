@@ -9,7 +9,7 @@ from gui.impl.gen.view_models.views.lobby.missions.missions_completed_visited_mo
 class DailyQuestsModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=9, commands=0):
+    def __init__(self, properties=10, commands=0):
         super(DailyQuestsModel, self).__init__(properties=properties, commands=commands)
 
     def getTitle(self):
@@ -34,51 +34,58 @@ class DailyQuestsModel(ViewModel):
     def setIsEnabled(self, value):
         self._setBool(2, value)
 
-    def getRerollEnabled(self):
+    def getHasPremium(self):
         return self._getBool(3)
 
-    def setRerollEnabled(self, value):
+    def setHasPremium(self, value):
         self._setBool(3, value)
 
+    def getRerollEnabled(self):
+        return self._getBool(4)
+
+    def setRerollEnabled(self, value):
+        self._setBool(4, value)
+
     def getRerollCountDown(self):
-        return self._getNumber(4)
-
-    def setRerollCountDown(self, value):
-        self._setNumber(4, value)
-
-    def getRerollTimeout(self):
         return self._getNumber(5)
 
-    def setRerollTimeout(self, value):
+    def setRerollCountDown(self, value):
         self._setNumber(5, value)
 
+    def getRerollTimeout(self):
+        return self._getNumber(6)
+
+    def setRerollTimeout(self, value):
+        self._setNumber(6, value)
+
     def getBonusMissionVisited(self):
-        return self._getBool(6)
+        return self._getBool(7)
 
     def setBonusMissionVisited(self, value):
-        self._setBool(6, value)
+        self._setBool(7, value)
 
     def getMissionsCompletedVisited(self):
-        return self._getArray(7)
+        return self._getArray(8)
 
     def setMissionsCompletedVisited(self, value):
-        self._setArray(7, value)
+        self._setArray(8, value)
 
     @staticmethod
     def getMissionsCompletedVisitedType():
         return MissionsCompletedVisitedModel
 
     def getSyncInitiator(self):
-        return self._getNumber(8)
+        return self._getNumber(9)
 
     def setSyncInitiator(self, value):
-        self._setNumber(8, value)
+        self._setNumber(9, value)
 
     def _initialize(self):
         super(DailyQuestsModel, self)._initialize()
         self._addResourceProperty('title', R.invalid())
         self._addArrayProperty('quests', Array())
         self._addBoolProperty('isEnabled', False)
+        self._addBoolProperty('hasPremium', False)
         self._addBoolProperty('rerollEnabled', False)
         self._addNumberProperty('rerollCountDown', 0)
         self._addNumberProperty('rerollTimeout', 0)

@@ -600,7 +600,7 @@ class PQType(object):
 
 class PQStorage(object):
 
-    def __init__(self, compDescr=None, storage=None):
+    def __init__(self, compDescr=None, storage=None, storageW=None):
         if compDescr is not None:
             self.__compDescr = compDescr
             self.__quests = quests = {}
@@ -612,9 +612,11 @@ class PQStorage(object):
                 v = lst[i]
                 quests[v >> 6 & 1023] = (v >> 3 & 7, v & 7)
 
+            self.__questsW = lambda : quests
         elif storage is not None:
             self.__compDescr = None
             self.__quests = storage
+            self.__questsW = storageW or (lambda : storage)
         return
 
     def keys(self):
@@ -635,7 +637,7 @@ class PQStorage(object):
             return
         else:
             self.__compDescr = None
-            self.__quests[id] = value
+            self.__questsW()[id] = value
             return
 
     def __contains__(self, id):
@@ -650,7 +652,7 @@ class PQStorage(object):
             return
         else:
             self.__compDescr = None
-            self.__quests.pop(id)
+            self.__questsW().pop(id)
             return
 
     def makeCompDescr(self):

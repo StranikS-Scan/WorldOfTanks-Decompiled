@@ -698,6 +698,22 @@
     <type>	EMBLEM	</type>
   </itemGroup>
   <itemGroup>
+    <name>	TradingCaravan_Emblem_2025	</name>
+    <userString>	#vehicle_customization:emblem/animals	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT emblems 25g notInShop	</priceGroup>
+    <decal>
+      <id>	31330	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/animals/TradingCaravan_Emblem_01_2025.dds	</texture>
+      <type>	emblem	</type>
+      <tags>	hiddenInUI	</tags>
+      <userString>	#vehicle_customization:TradingCaravan_Emblem_01_2025/name	</userString>
+      <description>	#vehicle_customization:TradingCaravan_Emblem_01_2025/description	</description>
+      <mirror>	true	</mirror>
+    </decal>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:emblem/battle	</userString>
     <season>	ALL	</season>
     <historical>	0	</historical>
@@ -1106,6 +1122,25 @@
       <userString>	#vehicle_customization:Pve_May_Emblem_02_2024_MT/name	</userString>
       <description>	#vehicle_customization:Pve_May_Emblem_02_2024_MT/description	</description>
       <type>	emblem	</type>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	MayPvE_Emblem_2025	</name>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT emblems 25g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:emblem/battle	</userString>
+    <decal>
+      <id>	31316	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/battle/MayPvE_Emblem_01_2025.dds	</texture>
+      <userString>	#vehicle_customization:MayPvE_Emblem_01_2025/name	</userString>
+      <description>	#vehicle_customization:MayPvE_Emblem_01_2025/description	</description>
+      <type>	emblem	</type>
+      <vehicleFilter>
+        <include>
+          <nations>	ussr	</nations>
+        </include>
+      </vehicleFilter>
     </decal>
   </itemGroup>
   <itemGroup>
@@ -7908,6 +7943,26 @@
     </decal>
     <priceGroup>	MT emblems 25g notInShop	</priceGroup>
     <tags>	styleOnly hiddenInUI	</tags>
+  </itemGroup>
+  <itemGroup>
+    <name>	ClanReward_Emblem_2025	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:emblem/clan_content	</userString>
+    <decal>
+      <id>	31321	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/clan_content/ClanStore_Emblem_2024.dds	</texture>
+      <type>	emblem	</type>
+      <userString>	#vehicle_customization:ClanReward_Emblem_2025/name	</userString>
+      <description>	#vehicle_customization:ClanReward_Emblem_2025/description	</description>
+    </decal>
+    <vehicleFilter>
+      <include>
+        <levels>	8 9 10	</levels>
+      </include>
+    </vehicleFilter>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	MT emblems 25g notInShop	</priceGroup>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:emblem/IGR	</userString>
@@ -14743,6 +14798,7 @@
     <decal>
       <id>	31153	</id>
       <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
+      <type>	inscription	</type>
       <texture>	gui/maps/vehicles/decals/inscriptions/ussr/Pve_May_inscription_MK_2024_MT.dds	</texture>
       <userString>	#vehicle_customization:Pve_May_inscription_MK_2024_MT/name	</userString>
       <description>	#vehicle_customization:Pve_May_inscription_MK_2024_MT/description	</description>
@@ -14750,6 +14806,7 @@
     <decal>
       <id>	31154	</id>
       <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
+      <type>	inscription	</type>
       <texture>	gui/maps/vehicles/decals/inscriptions/ussr/Pve_May_inscription_DK_2024_MT.dds	</texture>
       <userString>	#vehicle_customization:Pve_May_inscription_DK_2024_MT/name	</userString>
       <description>	#vehicle_customization:Pve_May_inscription_DK_2024_MT/description	</description>
@@ -15311,6 +15368,85 @@
       <type>	inscription	</type>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/WebEvent_Inscription_2025.dds	</texture>
     </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	80YearsVictory_Inscription_2025	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:inscription/other	</userString>
+    <decal>
+      <id>	31322	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/80YearsVictory_Inscription_2025.dds	</texture>
+      <type>	inscription	</type>
+      <userString>	#vehicle_customization:80YearsVictory_Inscription_2025/name	</userString>
+      <description>	#vehicle_customization:80YearsVictory_Inscription_2025/description	</description>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:inscription/other	</userString>
+    <decal>
+      <id>	31328	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/BP16_Marathon_Inscription_01_2025.dds	</texture>
+      <userString>	#vehicle_customization:BP16_Marathon_Inscription_01_2025/name	</userString>
+      <description>	#vehicle_customization:BP16_Marathon_Inscription_01_2025/description	</description>
+      <type>	inscription	</type>
+    </decal>
+    <decal>
+      <id>	31329	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/BP16_Marathon_Inscription_02_2025.dds	</texture>
+      <userString>	#vehicle_customization:BP16_Marathon_Inscription_02_2025/name	</userString>
+      <description>	#vehicle_customization:BP16_Marathon_Inscription_02_2025/description	</description>
+      <type>	inscription	</type>
+    </decal>
+    <name>	BP16_Marathon_Inscription_2025	</name>
+    <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
+  </itemGroup>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <decal>
+      <id>	31323	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/Tournament_Inscription_01_2025.dds	</texture>
+      <userString>	#vehicle_customization:Tournament_Inscription_01_2025/name	</userString>
+      <description>	#vehicle_customization:Tournament_Inscription_01_2025/description	</description>
+      <type>	inscription	</type>
+    </decal>
+    <decal>
+      <id>	31324	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/Tournament_Inscription_02_2025.dds	</texture>
+      <userString>	#vehicle_customization:Tournament_Inscription_02_2025/name	</userString>
+      <description>	#vehicle_customization:Tournament_Inscription_02_2025/description	</description>
+      <type>	inscription	</type>
+    </decal>
+    <name>	Tournament_Inscription_2025	</name>
+  </itemGroup>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <decal>
+      <id>	31326	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/Tournament_Inscription_01_2025.dds	</texture>
+      <userString>	#vehicle_customization:Tournament_Inscription_01_2025/name	</userString>
+      <description>	#vehicle_customization:Tournament_Inscription_01_2025/description	</description>
+      <type>	inscription	</type>
+      <tags>	styleOnly	</tags>
+    </decal>
+    <decal>
+      <id>	31327	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/Tournament_Inscription_02_2025.dds	</texture>
+      <userString>	#vehicle_customization:Tournament_Inscription_02_2025/name	</userString>
+      <description>	#vehicle_customization:Tournament_Inscription_02_2025/description	</description>
+      <type>	inscription	</type>
+      <tags>	styleOnly	</tags>
+    </decal>
+    <name>	Tournament_Style_Inscription_2025	</name>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:inscription/IGR	</userString>
@@ -17388,6 +17524,39 @@
     </decal>
     <name>	Clan Content USSR	</name>
     <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <name>	PvE_May_Inscription_2025	</name>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:inscription/historical	</userString>
+    <vehicleFilter>
+      <include>
+        <nations>	ussr	</nations>
+      </include>
+    </vehicleFilter>
+    <decal>
+      <id>	31317	</id>
+      <type>	inscription	</type>
+      <texture>	gui/maps/vehicles/decals/inscriptions/ussr/PvE_May_Inscription_01_2025.dds	</texture>
+      <userString>	#vehicle_customization:PvE_May_Inscription_01_2025/name	</userString>
+      <description>	#vehicle_customization:PvE_May_Inscription_01_2025/description	</description>
+    </decal>
+    <decal>
+      <id>	31318	</id>
+      <type>	inscription	</type>
+      <texture>	gui/maps/vehicles/decals/inscriptions/ussr/PvE_May_Inscription_02_2025.dds	</texture>
+      <userString>	#vehicle_customization:PvE_May_Inscription_02_2025/name	</userString>
+      <description>	#vehicle_customization:PvE_May_Inscription_02_2025/description	</description>
+    </decal>
+    <decal>
+      <id>	31319	</id>
+      <type>	inscription	</type>
+      <texture>	gui/maps/vehicles/decals/inscriptions/ussr/PvE_May_Inscription_03_2025.dds	</texture>
+      <userString>	#vehicle_customization:PvE_May_Inscription_03_2025/name	</userString>
+      <description>	#vehicle_customization:PvE_May_Inscription_03_2025/description	</description>
+    </decal>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:inscription/historical	</userString>

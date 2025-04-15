@@ -760,8 +760,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
 
     def doActionOnEntryPointClick(self):
         isEnabled = self.isEnabled()
-        isYearGap = self.isYearGap()
-        isYearLBEnabled = self.isYearLBEnabled()
         hasCurSeason = self.getCurrentSeason() is not None
         passedSeasons = self.getSeasonPassed()
         if isEnabled:
@@ -769,12 +767,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
                 self.__showPreSeason()
             elif hasCurSeason:
                 self.__switchForcedToRankedPrb()
-            elif isYearGap and isYearLBEnabled:
-                self.__showYearlyLeaders()
-            else:
-                self.__showBetweenSeason()
-        else:
-            self.__showYearlyLeaders()
         return
 
     def getYearRewardCount(self):
@@ -1142,19 +1134,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         return (rankID, rankState, progress)
 
     def __openWebPageByCtx(self, ctx):
-        url = alias = None
-        selectedItemID = ctx.get('selectedItemID', '')
-        clientParams = ctx.get('clientParams', {})
-        clientParams['isLobbySub'] = True
-        if selectedItemID == RANKEDBATTLES_CONSTS.RANKED_BATTLES_YEAR_RATING_ID and self.isYearLBEnabled():
-            url = ranked_helpers.getRankedBattlesYearRatingUrl(**clientParams)
-            alias = RANKEDBATTLES_ALIASES.RANKED_BATTLE_YEAR_RATING_LANDING
-        elif selectedItemID == RANKEDBATTLES_CONSTS.RANKED_BATTLES_SHOP_ID and self.isRankedShopEnabled():
-            url = ranked_helpers.getRankedBattlesShopUrl(**clientParams)
-            alias = RANKEDBATTLES_ALIASES.RANKED_BATTLE_SHOP_LANDING
-        if url and alias is not None:
-            _showSeparateWebView(url, alias)
-        return
+        pass
 
     def __partialFlushRanksCache(self):
         leftFlushBorder = min(self.__clientRank[0], self.getCurrentRank()[0])
@@ -1203,16 +1183,8 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         criteria |= ~REQ_CRITERIA.VEHICLE.HIDDEN_IN_HANGAR
         return criteria
 
-    def __showBetweenSeason(self):
-        ctx = {'selectedItemID': RANKEDBATTLES_CONSTS.RANKED_BATTLES_RANKS_ID}
-        self.showRankedBattlePage(ctx)
-
     def __showPreSeason(self):
         event_dispatcher.showRankedBattleIntro()
-
-    def __showYearlyLeaders(self):
-        ctx = {'selectedItemID': RANKEDBATTLES_CONSTS.RANKED_BATTLES_YEAR_RATING_ID}
-        self.showRankedBattlePage(ctx)
 
     def __storeCycle(self):
         lastCycleID = AccountSettings.getSettings(RANKED_LAST_CYCLE_ID)

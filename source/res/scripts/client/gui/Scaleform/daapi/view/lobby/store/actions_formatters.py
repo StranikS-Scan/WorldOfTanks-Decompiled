@@ -6,7 +6,7 @@ from gui.Scaleform.daapi.view.lobby.store.actions_helpers import getActionInfoDa
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.QUESTS import QUESTS
-from gui.server_events.settings import visitEventGUI
+from gui.server_events.settings import visitEventsGUI
 from helpers import i18n
 from shared_utils import findFirst
 _INTERSECTED_ACTIONS_LIST = {'set_EconomicsPrices',
@@ -320,7 +320,7 @@ class ActionsBuilder(object):
         cards = self.__visibleCards[_VISIBLE_CARDS.ACTIONS]
         visitedCard = findFirst(lambda x: x.getID() == actionID, cards)
         if visitedCard:
-            visitEventGUI(visitedCard, counters=(_getNewActiveActionsCounter,))
+            visitEventsGUI((visitedCard,), counters=(_getNewActiveActionsCounter,))
 
     def __setVisualPriority(self, items, priority):
         for item in items:

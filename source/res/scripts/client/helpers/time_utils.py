@@ -89,6 +89,10 @@ def getDayTimeLeft():
     return ONE_DAY - getServerRegionalTimeCurrentDay()
 
 
+def getGameWeekTimeLeft():
+    return getServerRegionalDaysLeftInGameWeek() * ONE_DAY + getDayTimeLeft()
+
+
 def getServerRegionalTimeCurrentDay():
     ts = time.gmtime(_g_instance.serverRegionalTime)
     return ts.tm_hour * ONE_HOUR + ts.tm_min * ONE_MINUTE + ts.tm_sec

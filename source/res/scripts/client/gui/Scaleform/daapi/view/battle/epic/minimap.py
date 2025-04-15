@@ -16,12 +16,11 @@ from gui.Scaleform.daapi.view.battle.classic.minimap import GlobalSettingsPlugin
 from gui.Scaleform.daapi.view.battle.shared.minimap import settings, plugins, common
 from gui.Scaleform.daapi.view.battle.shared.minimap.common import SimplePlugin
 from gui.Scaleform.daapi.view.battle.shared.minimap.plugins import PersonalEntriesPlugin, ArenaVehiclesPlugin, _LOCATION_PING_RANGE, _EMinimapMouseKey
-from gui.Scaleform.daapi.view.battle.shared.minimap.plugin_items.step_repair_point_entries import StepRepairPointEntriesPlugin
 from gui.Scaleform.daapi.view.meta.EpicMinimapMeta import EpicMinimapMeta
 from gui.Scaleform.genConsts.BATTLE_MINIMAP_CONSTS import BATTLE_MINIMAP_CONSTS
 from gui.Scaleform.genConsts.LAYER_NAMES import LAYER_NAMES
 from gui.battle_control import minimap_utils, avatar_getter
-from gui.battle_control.battle_constants import SECTOR_STATE_ID, FEEDBACK_EVENT_ID
+from gui.battle_control.battle_constants import PROGRESS_CIRCLE_TYPE, SECTOR_STATE_ID, FEEDBACK_EVENT_ID
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
 _C_NAME = settings.CONTAINER_NAME
 _S_NAME = settings.ENTRY_SYMBOL_NAME
@@ -63,6 +62,7 @@ class MINIMAP_SCALE_TYPES(object):
     NO_SCALE = 0
     REAL_SCALE = 1
     ADAPTED_SCALE = 2
+    FULLMAP_SCALE = 3
 
 
 class EpicMinimapComponent(EpicMinimapMeta):
@@ -228,7 +228,7 @@ class RespawningPersonalEntriesPlugin(PersonalEntriesPlugin):
             self._parentObj.setEntryParameters(self._getAnimationID(), doClip=False)
         for cam in self._getCameraIDs():
             if self._getCameraIDs()[cam] >= 0:
-                if cam not in [_S_NAME.RECTANGLE_AREA]:
+                if cam not in [_S_NAME.RECTANGLE_AREA, _S_NAME.DIRECTION_ENTRY]:
                     self._parentObj.setEntryParameters(self._getCameraIDs()[cam], doClip=False)
                 else:
                     self._parentObj.setEntryParameters(self._getCameraIDs()[cam], doClip=False, scaleType=MINIMAP_SCALE_TYPES.REAL_SCALE)
@@ -668,6 +668,64 @@ class EpicGlobalSettingsPlugin(GlobalSettingsPlugin):
 
     def _toogleVisible(self):
         pass
+
+
+class StepRepairPointEntriesPlugin(SimplePlugin):
+    __slots__ = ('__ptDict',)
+
+    def __init__(self, parentObj):
+        super(StepRepairPointEntriesPlugin, self).__init__(parentObj)
+        self.__ptDict = {}
+
+    def start(self):
+        super(StepRepairPointEntriesPlugin, self).start()
+        stepRepairPointComponent = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'stepRepairPointComponent', None)
+        if stepRepairPointComponent is not None:
+            stepRepairPointComponent.onStepRepairPointAdded += self.__onStepRepairPointAdded
+            stepRepairPointComponent.onStepRepairPointActiveStateChanged += self.__onStepRepairPointActiveStateChanged
+            repairPts = stepRepairPointComponent.stepRepairPoints
+            for pt in repairPts:
+                self.__onStepRepairPointAdded(pt)
+
+        else:
+            _logger.error('Expected StepRepairPointComponent not present!')
+        ctrl = self.sessionProvider.dynamic.progressTimer
+        ctrl.onCircleStatusChanged += self.__onCircleStatusChanged
+        return
+
+    def fini(self):
+        super(StepRepairPointEntriesPlugin, self).fini()
+        stepRepairPointComponent = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'stepRepairPointComponent', None)
+        if stepRepairPointComponent is not None:
+            stepRepairPointComponent.onStepRepairPointAdded -= self.__onStepRepairPointAdded
+            stepRepairPointComponent.onStepRepairPointActiveStateChanged -= self.__onStepRepairPointActiveStateChanged
+        ctrl = self.sessionProvider.dynamic.progressTimer
+        if ctrl is not None:
+            ctrl.onCircleStatusChanged -= self.__onCircleStatusChanged
+        return
+
+    def __onCircleStatusChanged(self, type_, pointId, state):
+        if type_ is not PROGRESS_CIRCLE_TYPE.RESUPPLY_CIRCLE:
+            return
+        entryID = self.__ptDict[pointId]
+        self._parentObj.invoke(entryID, BATTLE_MINIMAP_CONSTS.SET_STATE, state)
+
+    def __onStepRepairPointAdded(self, stepRepairPoint):
+        symbol = _S_NAME.EPIC_REPAIR
+        entryID = self.__ptDict[stepRepairPoint.id] = self.__addRPEntry(symbol, stepRepairPoint.position)
+        self._parentObj.invoke(entryID, 'setActive', stepRepairPoint.isActiveForPlayerTeam())
+
+    def __onStepRepairPointActiveStateChanged(self, pointId, isActive):
+        entryID = self.__ptDict[pointId]
+        if entryID is not None:
+            self._parentObj.invoke(entryID, 'setActive', isActive)
+        return
+
+    def __addRPEntry(self, symbol, position):
+        matrix = Math.Matrix()
+        matrix.setTranslate(position)
+        entryID = self._addEntry(symbol, _EPIC_ICONS, matrix=matrix, active=True)
+        return entryID
 
 
 class ProtectionZoneEntriesPlugin(SimplePlugin):

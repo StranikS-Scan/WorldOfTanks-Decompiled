@@ -14,14 +14,14 @@ from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.quest_card_model
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.weekly_quests_model import SeasonState
 from gui.impl.lobby.comp7.comp7_quest_helpers import parseComp7WeeklyQuestID
 from gui.server_events.awards_formatters import AWARDS_SIZES
-from gui.server_events.events_helpers import isPremium, isDailyQuest
+from gui.server_events.events_helpers import isPremium, isDailyQuest, isPremiumPlusAccount
 from gui.server_events.formatters import DECORATION_SIZES
 from gui.shared.missions.packers.bonus import getDefaultBonusPacker, packMissionsBonusModelAndTooltipData
-from gui.shared.missions.packers.conditions import PostBattleConditionPacker
 from gui.shared.missions.packers.conditions import BonusConditionPacker
+from gui.shared.missions.packers.conditions import PostBattleConditionPacker
 from helpers import dependency
-from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.game_control import IComp7Controller, IWotPlusController
+from skeletons.gui.server_events import IEventsCache
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
     from gui.server_events.event_items import ServerEventAbstract
@@ -218,6 +218,10 @@ class DailyQuestUIDataPacker(BattleQuestUIDataPacker):
             self.__resolveQuestIcon(model)
             return model
 
+    def _packModel(self, model):
+        super(DailyQuestUIDataPacker, self)._packModel(model)
+        model.setHasPremium(isPremiumPlusAccount())
+
     def __resolveQuestIcon(self, model):
         iconId = self._event.getIconID()
         if iconId is not None and iconId > 0:
@@ -261,12 +265,12 @@ def preformatEventBonuses(event, bonusFormatter=CurtailingAwardsComposer(DEFAULT
 def getEventUIDataPacker(event, tooltipData=None):
     if event.getLevel() in constants.DailyQuestsLevels.SUBS:
         return DailySubscriptionQuestUIDataPacker(event, tooltipData=tooltipData)
+    elif isPremium(event.getID()) or isDailyQuest(event.getID()):
+        return DailyQuestUIDataPacker(event)
     elif event.getType() == constants.EVENT_TYPE.TOKEN_QUEST:
         return TokenUIDataPacker(event)
     elif event.getType() == constants.EVENT_TYPE.PERSONAL_QUEST:
         return PrivateMissionUIDataPacker(event)
-    elif isPremium(event.getID()) or isDailyQuest(event.getID()):
-        return DailyQuestUIDataPacker(event)
     else:
         return BattleQuestUIDataPacker(event) if event.getType() in constants.EVENT_TYPE.LIKE_BATTLE_QUESTS else None
 

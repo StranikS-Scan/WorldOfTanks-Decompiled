@@ -29,6 +29,8 @@ _VIEWS = {_R_VIEWS.BattlePassIntroView(): IntroView,
 _INTRO_VIDEO_SHOWN = BattlePassStorageKeys.INTRO_VIDEO_SHOWN
 _EXTRA_VIDEO_SHOWN = BattlePassStorageKeys.EXTRA_CHAPTER_VIDEO_SHOWN
 _INTRO_SHOWN = BattlePassStorageKeys.INTRO_SHOWN
+_EXTRA_CHAPTER_INTRO_SHOWN = BattlePassStorageKeys.EXTRA_CHAPTER_INTRO_SHOWN
+_EXTRA_CHAPTER_FIRST_ENTER = BattlePassStorageKeys.EXTRA_CHAPTER_FIRST_ENTER
 
 class _IntroVideoManager(object):
     __battlePass = dependency.descriptor(IBattlePassController)
@@ -127,11 +129,17 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
     def _onPopulate(self):
         pass
 
+    def _isMarathonIntroShow(self):
+        return not _hasTrueInBPStorage(_EXTRA_CHAPTER_INTRO_SHOWN) and self.__battlePass.hasMarathon()
+
+    def _isMarathonFirstEnter(self):
+        return _hasTrueInBPStorage(_EXTRA_CHAPTER_FIRST_ENTER) and self.__battlePass.hasMarathon()
+
     def _populate(self):
         super(BattlePassViewsHolderComponent, self)._populate()
         self.__battlePass.onBattlePassSettingsChange += self.__onSettingsChanged
         self.__introVideoManager.init()
-        if not _hasTrueInBPStorage(_INTRO_SHOWN):
+        if self._isMarathonIntroShow() or not _hasTrueInBPStorage(_INTRO_SHOWN):
             showBattlePassIntro()
 
     def _dispose(self):
@@ -175,7 +183,10 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
         def isExtraActiveFirstTime():
             return ctrl.hasMarathon() and not self.__introVideoManager.isExtraVideoShown and isExtraIntroVideoExist()
 
-        return _R_VIEWS.BattlePassProgressionsView() if not isExtraActiveFirstTime() and (ctrl.hasActiveChapter() or ctrl.isChapterExists(chapterID)) else _R_VIEWS.ChapterChoiceView()
+        if self._isMarathonFirstEnter():
+            _setFalseToBPStorage(_EXTRA_CHAPTER_FIRST_ENTER)
+            return _R_VIEWS.ChapterChoiceView()
+        return _R_VIEWS.BattlePassProgressionsView() if not isExtraActiveFirstTime() and (ctrl.hasActiveChapter() or ctrl.isChapterExists(chapterID)) and not self._isMarathonFirstEnter() else _R_VIEWS.ChapterChoiceView()
 
     def __setDummyVisible(self, isVisible):
         self.__isDummyVisible = isVisible
@@ -189,6 +200,7 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
              'btnTooltip': '',
              'btnEvent': 'OpenHangar',
              'btnLinkage': BUTTON_LINKAGES.BUTTON_BLACK})
+            self.as_showViewS()
             self._destroyInjected()
         else:
             self.as_setBackgroundS('')
@@ -207,3 +219,8 @@ def _hasTrueInBPStorage(storageSettingName, settingsCore=None):
 @dependency.replace_none_kwargs(settingsCore=ISettingsCore)
 def _setTrueToBPStorage(storageSettingName, settingsCore=None):
     settingsCore.serverSettings.saveInBPStorage({storageSettingName: True})
+
+
+@dependency.replace_none_kwargs(settingsCore=ISettingsCore)
+def _setFalseToBPStorage(storageSettingName, settingsCore=None):
+    settingsCore.serverSettings.saveInBPStorage({storageSettingName: False})

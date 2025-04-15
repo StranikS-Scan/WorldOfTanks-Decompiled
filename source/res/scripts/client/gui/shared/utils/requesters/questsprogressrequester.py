@@ -132,7 +132,7 @@ class PersonalMissionsProgressRequester(_QuestsProgressRequester):
 
     def _response(self, resID, value, callback=None):
         if value is not None:
-            self.__pmStorage = personal_missions.PMStorage(value['potapovQuests']['compDescr'])
+            self.__pmStorage = personal_missions.PMStorage(storage=value['pqStates'])
         super(_QuestsProgressRequester, self)._response(resID, value, callback)
         return
 

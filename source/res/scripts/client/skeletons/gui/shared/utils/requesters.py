@@ -1252,6 +1252,13 @@ class IArmoryYardRequester(IRequester):
         raise NotImplementedError
 
 
+class IHistoricalBattlesRequester(IRequester):
+
+    @property
+    def data(self):
+        raise NotImplementedError
+
+
 class IReferralProgramRequester(IRequester):
 
     def getRPPgbPoints(self):
@@ -1264,4 +1271,13 @@ class IReferralProgramRequester(IRequester):
         raise NotImplementedError
 
     def getRPPassiveIncome(self):
+        raise NotImplementedError
+
+
+class IPlayStreakRequester(IRequester):
+
+    def getRedemptionDay(self):
+        raise NotImplementedError
+
+    def getDailyConditionCompleted(self):
         raise NotImplementedError

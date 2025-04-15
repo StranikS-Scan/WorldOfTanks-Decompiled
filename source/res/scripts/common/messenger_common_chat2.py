@@ -259,7 +259,10 @@ BATTLE_CHAT_COMMANDS = (BattleChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS.
  BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.SHOOTING_POINT, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText=None, vehMarker=None, senderVehMarker=None, soundNotification='mt_combat_marker', soundNotificationReply=None),
  BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.NAVIGATION_POINT, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText=None, vehMarker=None, senderVehMarker=None, soundNotification='mt_navi_marker', soundNotificationReply=None),
  BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.FLAG_POINT, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText=None, vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
- BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.OVERHEAT_CANT_SHOOT, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='overheat_cant_shoot', vehMarker='reloading_gun', senderVehMarker=None, soundNotification='ibc_ping_attention', soundNotificationReply='ibc_ping_reply'))
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.OVERHEAT_CANT_SHOOT, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='overheat_cant_shoot', vehMarker='reloading_gun', senderVehMarker=None, soundNotification='ibc_ping_attention', soundNotificationReply='ibc_ping_reply'),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.OBJECTIVES_POINT, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText=None, vehMarker='attackBoss', senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.HB_ARTILLERY_ON_YOURSELF, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='hb_ability/artillery_on_yourself', vehMarker='help_me', senderVehMarker=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.HB_LAST_STAND, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='hb_ability/last_stand', vehMarker='help_me', senderVehMarker=None))
 BATTLE_CHAT_COMMANDS_BY_NAMES = {v.name:v for v in BATTLE_CHAT_COMMANDS}
 
 class MUC_SERVICE_TYPE(object):

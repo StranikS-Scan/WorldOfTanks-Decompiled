@@ -379,17 +379,11 @@ class RankedBattlesConfig(namedtuple('RankedBattlesConfig', ('isEnabled',
  'yearLBState',
  'yearRewardState',
  'leagueRewardEnabled',
- 'seasonRatingPageUrl',
- 'yearRatingPageUrl',
- 'infoPageUrl',
- 'introPageUrl',
- 'seasonGapPageUrl',
- 'shopPageUrl',
  'hasSpecialSeason'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, peripheryIDs={}, winnerRankChanges=(), loserRankChanges=(), minXP=0, unburnableRanks={}, unburnableStepRanks={}, minLevel=0, maxLevel=0, accRanks=0, accSteps=(), cycleFinishSeconds=0, primeTimes={}, seasons={}, cycleTimes=(), shields={}, divisions={}, bonusBattlesMultiplier=0, expectedSeasons=0, yearAwardsMarks=(), rankGroups=(), qualificationBattles=0, yearLBSize=0, leaguesBonusBattles=(), forbiddenClassTags=(), forbiddenVehTypes=(), shopState=SwitchState.DISABLED, yearLBState=SwitchState.DISABLED, yearRewardState=SwitchState.ENABLED, leagueRewardEnabled=True, seasonRatingPageUrl='', yearRatingPageUrl='', infoPageUrl='', introPageUrl='', seasonGapPageUrl='', shopPageUrl='', hasSpecialSeason=False)
+        defaults = dict(isEnabled=False, peripheryIDs={}, winnerRankChanges=(), loserRankChanges=(), minXP=0, unburnableRanks={}, unburnableStepRanks={}, minLevel=0, maxLevel=0, accRanks=0, accSteps=(), cycleFinishSeconds=0, primeTimes={}, seasons={}, cycleTimes=(), shields={}, divisions={}, bonusBattlesMultiplier=0, expectedSeasons=0, yearAwardsMarks=(), rankGroups=(), qualificationBattles=0, yearLBSize=0, leaguesBonusBattles=(), forbiddenClassTags=(), forbiddenVehTypes=(), shopState=SwitchState.DISABLED, yearLBState=SwitchState.DISABLED, yearRewardState=SwitchState.ENABLED, leagueRewardEnabled=True, hasSpecialSeason=False)
         defaults.update(kwargs)
         return super(RankedBattlesConfig, cls).__new__(cls, **defaults)
 
@@ -1054,6 +1048,28 @@ class _CollectiveGoalEntryPointConfig(namedtuple('_CollectiveGoalConfig', ('isEn
         return cls()
 
 
+class _PlayStreakConfig(namedtuple('_PlayStreakConfig', ('isEnabled',
+ 'isPaused',
+ 'bonusTypes',
+ 'daySkipSettings',
+ 'rewardsCalendar'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(isEnabled=False, isPaused=False, bonusTypes=None, daySkipSettings=None, rewardsCalendar=None)
+        defaults.update(kwargs)
+        return super(_PlayStreakConfig, cls).__new__(cls, **defaults)
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+
 class _CollectiveGoalMarathonsConfig(namedtuple('_CollectiveGoalMarathonsConfig', ('isEnabled',
  'startTime',
  'finishTime',
@@ -1131,6 +1147,7 @@ class _Comp7QualificationConfig(settingsBlock('_Comp7QualificationConfig', ('bat
 
 
 class Comp7Config(settingsBlock('Comp7Config', ('isEnabled',
+ 'isTournamentEnabled',
  'peripheryIDs',
  'primeTimes',
  'seasons',
@@ -1149,7 +1166,7 @@ class Comp7Config(settingsBlock('Comp7Config', ('isEnabled',
 
     @classmethod
     def defaults(cls):
-        return dict(isEnabled=False, peripheryIDs={}, primeTimes={}, seasons={}, battleModifiersDescr=(), cycleTimes={}, roleEquipments={}, numPlayers=7, levels=[], forbiddenClassTags=set(), forbiddenVehTypes=set(), squadRatingRestriction={}, squadSizes=[], createVivoxTeamChannels=False, qualification=makeTupleByDict(_Comp7QualificationConfig, {}))
+        return dict(isEnabled=False, isTournamentEnabled=False, peripheryIDs={}, primeTimes={}, seasons={}, battleModifiersDescr=(), cycleTimes={}, roleEquipments={}, numPlayers=7, levels=[], forbiddenClassTags=set(), forbiddenVehTypes=set(), squadRatingRestriction={}, squadSizes=[], createVivoxTeamChannels=False, qualification=makeTupleByDict(_Comp7QualificationConfig, {}))
 
     @classmethod
     def _preprocessData(cls, data):
@@ -1776,6 +1793,7 @@ class ServerSettings(object):
         self.__randomBattlesConfig = RandomBattlesConfig()
         self.__modeSelectorConfig = ModeSelectorConfig()
         self.__paragonsConfig = ParagonsConfig.defaults()
+        self.__playStreakConfig = _PlayStreakConfig()
         self.__schemaManager = getSchemaManager()
         self.set(serverSettings)
 
@@ -1885,6 +1903,8 @@ class ServerSettings(object):
             self.__battleMattersConfig = makeTupleByDict(_BattleMattersConfig, self.__serverSettings[Configs.BATTLE_MATTERS_CONFIG.value])
         if Configs.COLLECTIVE_GOAL_ENTRY_POINT_CONFIG.value in self.__serverSettings:
             self.__collectiveGoalEntryPointConfig = makeTupleByDict(_CollectiveGoalEntryPointConfig, self.__serverSettings[Configs.COLLECTIVE_GOAL_ENTRY_POINT_CONFIG.value])
+        if Configs.PLAY_STREAK_CONFIG.value in self.__serverSettings:
+            self.__playStreakConfig = makeTupleByDict(_PlayStreakConfig, self.__serverSettings[Configs.PLAY_STREAK_CONFIG.value])
         if Configs.COLLECTIVE_GOAL_MARATHONS_CONFIG.value in self.__serverSettings:
             self.__collectiveGoalMarathonsConfig = makeTupleByDict(_CollectiveGoalMarathonsConfig, self.__serverSettings[Configs.COLLECTIVE_GOAL_MARATHONS_CONFIG.value])
         if Configs.PERIPHERY_ROUTING_CONFIG.value in self.__serverSettings:
@@ -2091,6 +2111,8 @@ class ServerSettings(object):
             self.__serverSettings[lbKeyConfig] = serverSettingsDiff[lbKeyConfig]
         if Configs.RANDOM_BATTLES_CONFIG.value in serverSettingsDiff:
             self.__updateRandomBattlesConfig(serverSettingsDiff)
+        if Configs.PLAY_STREAK_CONFIG.value in serverSettingsDiff:
+            self.__updatePlayStreakConfig(serverSettingsDiff)
         self.__schemaManager.update(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
 
@@ -2250,6 +2272,10 @@ class ServerSettings(object):
     @property
     def universalFlagEntryPointConfig(self):
         return self.__getGlobalSetting(Configs.UNIVERSAL_FLAG_ENTRY_POINT_CONFIG.value, {'isEnabled': False})
+
+    @property
+    def playStreakConfig(self):
+        return self.__playStreakConfig
 
     @property
     def collectiveGoalMarathonsConfig(self):
@@ -2549,6 +2575,9 @@ class ServerSettings(object):
     def getMaxSPGinSquads(self):
         return self.__getGlobalSetting('maxSPGinSquads', 0)
 
+    def getMaxFlamethrowerInSquads(self):
+        return self.__getGlobalSetting('maxFlamethrowerInSquads', 0)
+
     def getMaxScoutInSquads(self):
         return self.__getGlobalSetting('maxScoutInSquads', 0)
 
@@ -2666,6 +2695,9 @@ class ServerSettings(object):
     def getRPConfig(self):
         return self.__referralProgramConfig
 
+    def getPlayStreakConfig(self):
+        return self.__getGlobalSetting(Configs.PLAY_STREAK_CONFIG.value, {})
+
     def __getGlobalSetting(self, settingsName, default=None):
         return self.__serverSettings.get(settingsName, default)
 
@@ -2780,6 +2812,9 @@ class ServerSettings(object):
 
     def __updateCollectiveGoalEntryPointConfig(self, diff):
         self.__collectiveGoalEntryPointConfig = self.__collectiveGoalEntryPointConfig.replace(diff[Configs.COLLECTIVE_GOAL_ENTRY_POINT_CONFIG.value])
+
+    def __updatePlayStreakConfig(self, diff):
+        self.__playStreakConfig = self.__playStreakConfig.replace(diff[Configs.PLAY_STREAK_CONFIG.value])
 
     def __updateCollectiveGoalMarathonsConfig(self, diff):
         self.__collectiveGoalMarathonsConfig = self.__collectiveGoalMarathonsConfig.replace(diff[Configs.COLLECTIVE_GOAL_MARATHONS_CONFIG.value])

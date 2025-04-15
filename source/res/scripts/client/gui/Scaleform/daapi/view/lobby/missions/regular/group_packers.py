@@ -27,14 +27,14 @@ from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.cond_formatters.tokens import TokensMarathonFormatter
 from gui.server_events.event_items import DEFAULTS_GROUPS
 from gui.server_events.events_constants import RANKED_DAILY_GROUP_ID, RANKED_PLATFORM_GROUP_ID, BATTLE_ROYALE_GROUPS_ID, EPIC_BATTLE_GROUPS_ID, FUN_RANDOM_GROUP_ID
-from gui.server_events.events_helpers import isBattleMattersQuestID, isPremium, premMissionsSortFunc, isPremiumQuestsEnable, getPremiumGroup, getDailyEpicGroup, getRankedDailyGroup, getRankedPlatformGroup, getDailyBattleRoyaleGroup, getFunRandomDailyGroup, isDebutBoxesGroup, isVersusAIQuest
+from gui.server_events.events_helpers import isBattleMattersQuestID, isPremium, dailyQuestsSortFunc, isPremiumQuestsEnable, getPremiumGroup, getDailyEpicGroup, getRankedDailyGroup, getRankedPlatformGroup, getDailyBattleRoyaleGroup, getFunRandomDailyGroup, isDebutBoxesGroup, isVersusAIQuest
 from gui.server_events.events_helpers import missionsSortFunc
 from gui.server_events.formatters import DECORATION_SIZES
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.icons import makeImageTag
 from helpers import dependency, time_utils, getLanguageCode
 from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IEpicBattleMetaGameController, IFunRandomController, IDebutBoxesController, IWinbackController
+from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IEpicBattleMetaGameController, IFunRandomController, IDebutBoxesController, IWinbackController, IUnseenEventsCounter
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -325,6 +325,7 @@ class ElenGroupsBuilder(_EventsBlockBuilder):
 
 class _EventsBlockInfo(object):
     blockType = GuiGroupBlockID.BASE
+    __unseenEventsManager = dependency.descriptor(IUnseenEventsCounter)
 
     def __init__(self, headerLinkage='', bodyLinkage=''):
         self._headerLinkage = headerLinkage
@@ -351,7 +352,7 @@ class _EventsBlockInfo(object):
         return self.findEvents(srvEvents)
 
     def markVisited(self):
-        settings.visitEventsGUI(self._suitableEvents)
+        self.__unseenEventsManager.seenEvents({e.getID():1 for e in self._suitableEvents})
 
     def clear(self):
         self._events = ()
@@ -766,7 +767,7 @@ class _PremiumGroupedQuestsBlockInfo(_GroupedQuestsBlockInfo):
         self._filterEnable = False
 
     def findEvents(self, srvEvents):
-        return sorted(self._findEvents(srvEvents), cmp=premMissionsSortFunc, reverse=False)
+        return sorted(self._findEvents(srvEvents), key=dailyQuestsSortFunc, reverse=False)
 
     def getTitle(self):
         title = backport.text(R.strings.quests.premiumQuests.header.default())

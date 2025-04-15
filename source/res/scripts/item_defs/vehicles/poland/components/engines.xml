@@ -55,6 +55,7 @@
     <B_16_x2_wz46>	31005	</B_16_x2_wz46>
     <SGT_3Cz_M_7x7>	31006	</SGT_3Cz_M_7x7>
     <W_12_U>	31007	</W_12_U>
+    <GTD_2T4>	31008	</GTD_2T4>
     <Development_Engine>	65000	</Development_Engine>
     <Maybach_VL_2_SH>	36	</Maybach_VL_2_SH>
     <SGT_3Cz_SH>	37	</SGT_3Cz_SH>
@@ -109,8 +110,8 @@
       <maxRegenHealth>	129	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	564	</rpm_min>
-      <rpm_max>	2508	</rpm_max>
+      <rpm_min>	700	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
     </Maybach_HL_230P30A>
     <W_12_5>
       <userString>	#poland_vehicles:W_12_5	</userString>
@@ -126,8 +127,8 @@
       <maxRegenHealth>	129	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	497	</rpm_min>
-      <rpm_max>	2663	</rpm_max>
+      <rpm_min>	612	</rpm_min>
+      <rpm_max>	2401	</rpm_max>
     </W_12_5>
     <GTD>
       <userString>	#poland_vehicles:GTD	</userString>
@@ -143,8 +144,8 @@
       <maxRegenHealth>	129	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	537	</rpm_min>
-      <rpm_max>	2570	</rpm_max>
+      <rpm_min>	664	</rpm_min>
+      <rpm_max>	2280	</rpm_max>
     </GTD>
     <W_12_5_B>
       <userString>	#poland_vehicles:W_12_5_B	</userString>
@@ -159,8 +160,8 @@
       <maxRegenHealth>	170	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	360	</rpm_min>
-      <rpm_max>	2120	</rpm_max>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	2000	</rpm_max>
     </W_12_5_B>
     <W_12_U>
       <userString>	#poland_vehicles:W_12_U	</userString>
@@ -168,16 +169,16 @@
       <level>	9	</level>
       <price>	75000	</price>
       <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
       <power>	1050	</power>
       <weight>	1024	</weight>
       <maxHealth>	360	</maxHealth>
       <maxRegenHealth>	170	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	240	</rpm_min>
-      <rpm_max>	2480	</rpm_max>
+      <rpm_min>	375	</rpm_min>
+      <rpm_max>	2150	</rpm_max>
     </W_12_U>
     <W_12_5_P_1>
       <userString>	#poland_vehicles:W_12_5_P_1	</userString>
@@ -185,16 +186,16 @@
       <level>	8	</level>
       <price>	75000	</price>
       <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
       <power>	800	</power>
       <weight>	2000	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	129	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	306	</rpm_min>
-      <rpm_max>	2280	</rpm_max>
+      <rpm_min>	500	</rpm_min>
+      <rpm_max>	1900	</rpm_max>
     </W_12_5_P_1>
     <Maybach_HL_108>
       <userString>	#poland_vehicles:Maybach_HL_108	</userString>
@@ -209,24 +210,24 @@
       <maxRegenHealth>	62	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	343	</rpm_min>
-      <rpm_max>	2701	</rpm_max>
+      <rpm_min>	290	</rpm_min>
+      <rpm_max>	2868	</rpm_max>
     </Maybach_HL_108>
     <Maybach_VL_2>
       <userString>	#poland_vehicles:Maybach_VL_2	</userString>
       <tags>	gasoline	</tags>
       <level>	5	</level>
       <price>	21100	</price>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_Continental_R975_C1_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_C1_npc	</wwsoundNPC>
       <power>	550	</power>
       <weight>	550	</weight>
       <maxHealth>	124	</maxHealth>
       <maxRegenHealth>	62	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	280	</rpm_min>
-      <rpm_max>	2901	</rpm_max>
+      <rpm_min>	449	</rpm_min>
+      <rpm_max>	2375	</rpm_max>
     </Maybach_VL_2>
     <RR_Kestrel>
       <userString>	#poland_vehicles:RR_Kestrel	</userString>
@@ -241,24 +242,24 @@
       <maxRegenHealth>	62	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	324	</rpm_min>
-      <rpm_max>	2761	</rpm_max>
+      <rpm_min>	265	</rpm_min>
+      <rpm_max>	2949	</rpm_max>
     </RR_Kestrel>
     <RR_Kestrel_B>
       <userString>	#poland_vehicles:RR_Kestrel_B	</userString>
       <tags>	gasoline	</tags>
       <level>	5	</level>
       <price>	21000	</price>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_Continental_R975_C1_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_C1_npc	</wwsoundNPC>
       <power>	560	</power>
       <weight>	434	</weight>
       <maxHealth>	124	</maxHealth>
       <maxRegenHealth>	62	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	274	</rpm_min>
-      <rpm_max>	2921	</rpm_max>
+      <rpm_min>	439	</rpm_min>
+      <rpm_max>	2411	</rpm_max>
     </RR_Kestrel_B>
     <Maybach_HL_108x2>
       <userString>	#poland_vehicles:Maybach_HL_108x2	</userString>
@@ -273,72 +274,72 @@
       <maxRegenHealth>	129	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	497	</rpm_min>
-      <rpm_max>	2663	</rpm_max>
+      <rpm_min>	612	</rpm_min>
+      <rpm_max>	2401	</rpm_max>
     </Maybach_HL_108x2>
     <W_12_5_P>
       <userString>	#poland_vehicles:W_12_5_P	</userString>
       <tags>	diesel	</tags>
       <level>	9	</level>
       <price>	83000	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
       <power>	800	</power>
       <weight>	1100	</weight>
       <maxHealth>	360	</maxHealth>
       <maxRegenHealth>	170	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	306	</rpm_min>
-      <rpm_max>	2280	</rpm_max>
+      <rpm_min>	500	</rpm_min>
+      <rpm_max>	1900	</rpm_max>
     </W_12_5_P>
     <W_48>
       <userString>	#poland_vehicles:W_48	</userString>
       <tags>	diesel	</tags>
       <level>	6	</level>
       <price>	27200	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
       <power>	520	</power>
       <weight>	750	</weight>
       <maxHealth>	145	</maxHealth>
       <maxRegenHealth>	72	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	381	</rpm_min>
-      <rpm_max>	2056	</rpm_max>
+      <rpm_min>	379	</rpm_min>
+      <rpm_max>	2141	</rpm_max>
     </W_48>
     <W_48M>
       <userString>	#poland_vehicles:W_48M	</userString>
       <tags>	diesel	</tags>
       <level>	7	</level>
       <price>	36500	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
       <power>	550	</power>
       <weight>	800	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	129	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	373	</rpm_min>
-      <rpm_max>	2080	</rpm_max>
+      <rpm_min>	349	</rpm_min>
+      <rpm_max>	2201	</rpm_max>
     </W_48M>
     <Rytla_Wernera>
       <userString>	#poland_vehicles:Rytla_Wernera	</userString>
       <tags>	diesel	</tags>
       <level>	6	</level>
       <price>	27400	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
       <power>	500	</power>
       <weight>	750	</weight>
       <maxHealth>	145	</maxHealth>
       <maxRegenHealth>	72	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	386	</rpm_min>
-      <rpm_max>	2040	</rpm_max>
+      <rpm_min>	399	</rpm_min>
+      <rpm_max>	2101	</rpm_max>
     </Rytla_Wernera>
     <Rytla_Wernera_M>
       <userString>	#poland_vehicles:Rytla_Wernera_M	</userString>
@@ -353,8 +354,8 @@
       <maxRegenHealth>	72	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	333	</rpm_min>
-      <rpm_max>	2200	</rpm_max>
+      <rpm_min>	299	</rpm_min>
+      <rpm_max>	2301	</rpm_max>
     </Rytla_Wernera_M>
     <Rytla_Wernera_x2>
       <userString>	#poland_vehicles:Rytla_Wernera_x2	</userString>
@@ -369,24 +370,24 @@
       <maxRegenHealth>	129	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	320	</rpm_min>
-      <rpm_max>	2240	</rpm_max>
+      <rpm_min>	249	</rpm_min>
+      <rpm_max>	2452	</rpm_max>
     </Rytla_Wernera_x2>
     <W_2_53M>
       <userString>	#poland_vehicles:W_2_53M	</userString>
       <tags>	diesel	</tags>
       <level>	8	</level>
       <price>	47600	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
       <power>	580	</power>
       <weight>	1400	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	129	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	365	</rpm_min>
-      <rpm_max>	2104	</rpm_max>
+      <rpm_min>	319	</rpm_min>
+      <rpm_max>	2261	</rpm_max>
     </W_2_53M>
     <W_2_57D>
       <userString>	#poland_vehicles:W_2_57D	</userString>
@@ -401,8 +402,8 @@
       <maxRegenHealth>	129	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	349	</rpm_min>
-      <rpm_max>	2152	</rpm_max>
+      <rpm_min>	359	</rpm_min>
+      <rpm_max>	2120	</rpm_max>
     </W_2_57D>
     <W_2_58D>
       <userString>	#poland_vehicles:W_2_58D	</userString>
@@ -417,8 +418,8 @@
       <maxRegenHealth>	129	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	328	</rpm_min>
-      <rpm_max>	2216	</rpm_max>
+      <rpm_min>	279	</rpm_min>
+      <rpm_max>	2361	</rpm_max>
     </W_2_58D>
     <GTD_M11>
       <userString>	#poland_vehicles:GTD_M11	</userString>
@@ -434,8 +435,8 @@
       <maxRegenHealth>	170	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	551	</rpm_min>
-      <rpm_max>	2539	</rpm_max>
+      <rpm_min>	682	</rpm_min>
+      <rpm_max>	2240	</rpm_max>
     </GTD_M11>
     <GTD_M1>
       <userString>	#poland_vehicles:GTD_M1	</userString>
@@ -450,24 +451,24 @@
       <maxRegenHealth>	170	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	551	</rpm_min>
-      <rpm_max>	2539	</rpm_max>
+      <rpm_min>	682	</rpm_min>
+      <rpm_max>	2240	</rpm_max>
     </GTD_M1>
     <GTD_M2>
       <userString>	#poland_vehicles:GTD_M2	</userString>
       <tags>	gasoline	</tags>
       <level>	9	</level>
       <price>	76500	</price>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_Continental_R975_C1_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_C1_npc	</wwsoundNPC>
       <power>	670	</power>
       <weight>	1900	</weight>
       <maxHealth>	360	</maxHealth>
       <maxRegenHealth>	170	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	605	</rpm_min>
-      <rpm_max>	2416	</rpm_max>
+      <rpm_min>	329	</rpm_min>
+      <rpm_max>	2797	</rpm_max>
     </GTD_M2>
     <_2x_GTD-F>
       <userString>	#poland_vehicles:_2x_GTD-F	</userString>
@@ -475,16 +476,16 @@
       <level>	8	</level>
       <price>	47600	</price>
       <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_Continental_R975_C1_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_C1_npc	</wwsoundNPC>
       <power>	650	</power>
       <weight>	2000	</weight>
       <maxHealth>	360	</maxHealth>
       <maxRegenHealth>	170	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	632	</rpm_min>
-      <rpm_max>	2354	</rpm_max>
+      <rpm_min>	349	</rpm_min>
+      <rpm_max>	2727	</rpm_max>
     </_2x_GTD-F>
     <Maybach_HL_120>
       <userString>	#poland_vehicles:Maybach_HL_120	</userString>
@@ -499,40 +500,40 @@
       <maxRegenHealth>	73	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	374	</rpm_min>
-      <rpm_max>	2601	</rpm_max>
+      <rpm_min>	332	</rpm_min>
+      <rpm_max>	2735	</rpm_max>
     </Maybach_HL_120>
     <Maybach_HL_157_P6>
       <userString>	#poland_vehicles:Maybach_HL_157_P6	</userString>
       <tags>	gasoline	</tags>
       <level>	6	</level>
       <price>	31100	</price>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_Continental_R975_C1_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_C1_npc	</wwsoundNPC>
       <power>	585	</power>
       <weight>	750	</weight>
       <maxHealth>	145	</maxHealth>
       <maxRegenHealth>	73	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	258	</rpm_min>
-      <rpm_max>	2971	</rpm_max>
+      <rpm_min>	414	</rpm_min>
+      <rpm_max>	2498	</rpm_max>
     </Maybach_HL_157_P6>
     <Maybach_VL_2_ZTB>
       <userString>	#poland_vehicles:Maybach_VL_2_ZTB	</userString>
       <tags>	gasoline	</tags>
       <level>	6	</level>
       <price>	24300	</price>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_Continental_R975_C1_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_C1_npc	</wwsoundNPC>
       <power>	550	</power>
       <weight>	750	</weight>
       <maxHealth>	145	</maxHealth>
       <maxRegenHealth>	73	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	280	</rpm_min>
-      <rpm_max>	2901	</rpm_max>
+      <rpm_min>	449	</rpm_min>
+      <rpm_max>	2375	</rpm_max>
     </Maybach_VL_2_ZTB>
     <Maybach_HL_157>
       <userString>	#poland_vehicles:Maybach_HL_157	</userString>
@@ -547,56 +548,56 @@
       <maxRegenHealth>	129	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	343	</rpm_min>
-      <rpm_max>	2701	</rpm_max>
+      <rpm_min>	290	</rpm_min>
+      <rpm_max>	2868	</rpm_max>
     </Maybach_HL_157>
     <Maybach_HL_157_P>
       <userString>	#poland_vehicles:Maybach_HL_157_P	</userString>
       <tags>	gasoline	</tags>
       <level>	7	</level>
       <price>	37000	</price>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_Continental_R975_C1_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_C1_npc	</wwsoundNPC>
       <power>	650	</power>
       <weight>	850	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	129	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	632	</rpm_min>
-      <rpm_max>	2354	</rpm_max>
+      <rpm_min>	349	</rpm_min>
+      <rpm_max>	2727	</rpm_max>
     </Maybach_HL_157_P>
     <W12_5B>
       <userString>	#poland_vehicles:W12_5B	</userString>
       <tags>	gasoline	</tags>
       <level>	6	</level>
       <price>	24300	</price>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_Continental_R975_C1_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_C1_npc	</wwsoundNPC>
       <power>	600	</power>
       <weight>	750	</weight>
       <maxHealth>	145	</maxHealth>
       <maxRegenHealth>	73	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	700	</rpm_min>
-      <rpm_max>	2200	</rpm_max>
+      <rpm_min>	399	</rpm_min>
+      <rpm_max>	2551	</rpm_max>
     </W12_5B>
     <MT_50T>
       <userString>	#poland_vehicles:MT_50T	</userString>
       <tags>	gasoline	</tags>
       <level>	7	</level>
       <price>	34000	</price>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_Continental_R975_C1_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_C1_npc	</wwsoundNPC>
       <power>	650	</power>
       <weight>	800	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	129	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	632	</rpm_min>
-      <rpm_max>	2354	</rpm_max>
+      <rpm_min>	349	</rpm_min>
+      <rpm_max>	2727	</rpm_max>
     </MT_50T>
     <MT_50T_T>
       <userString>	#poland_vehicles:MT_50T	</userString>
@@ -604,16 +605,16 @@
       <level>	7	</level>
       <price>	34000	</price>
       <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_Continental_R975_C1_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_C1_npc	</wwsoundNPC>
       <power>	650	</power>
       <weight>	800	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	129	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	632	</rpm_min>
-      <rpm_max>	2354	</rpm_max>
+      <rpm_min>	349	</rpm_min>
+      <rpm_max>	2727	</rpm_max>
     </MT_50T_T>
     <J_V12>
       <userString>	#poland_vehicles:J_V12	</userString>
@@ -644,8 +645,8 @@
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	468	</rpm_min>
-      <rpm_max>	2300	</rpm_max>
+      <rpm_min>	458	</rpm_min>
+      <rpm_max>	2333	</rpm_max>
     </J_V12_M>
     <Maybach_HL_120_TR>
       <userString>	#poland_vehicles:Maybach_HL_120_TR	</userString>
@@ -660,8 +661,8 @@
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	487	</rpm_min>
-      <rpm_max>	2240	</rpm_max>
+      <rpm_min>	483	</rpm_min>
+      <rpm_max>	2253	</rpm_max>
     </Maybach_HL_120_TR>
     <PLInz235>
       <userString>	#poland_vehicles:PLInz235	</userString>
@@ -676,8 +677,8 @@
       <maxRegenHealth>	22	</maxRegenHealth>
       <repairCost>	1	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	342	</rpm_min>
-      <rpm_max>	2015	</rpm_max>
+      <rpm_min>	334	</rpm_min>
+      <rpm_max>	2030	</rpm_max>
     </PLInz235>
     <PLInz155>
       <userString>	#poland_vehicles:PLInz155	</userString>
@@ -692,8 +693,8 @@
       <maxRegenHealth>	39	</maxRegenHealth>
       <repairCost>	2	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	337	</rpm_min>
-      <rpm_max>	2024	</rpm_max>
+      <rpm_min>	329	</rpm_min>
+      <rpm_max>	2040	</rpm_max>
     </PLInz155>
     <PLInz_RWA>
       <userString>	#poland_vehicles:PLInz_RWA	</userString>
@@ -708,8 +709,8 @@
       <maxRegenHealth>	62	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	449	</rpm_min>
-      <rpm_max>	2360	</rpm_max>
+      <rpm_min>	433	</rpm_min>
+      <rpm_max>	2414	</rpm_max>
     </PLInz_RWA>
     <MT_50_T>
       <userString>	#poland_vehicles:MT_50_T	</userString>
@@ -724,8 +725,8 @@
       <maxRegenHealth>	185	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	346	</rpm_min>
-      <rpm_max>	2160	</rpm_max>
+      <rpm_min>	349	</rpm_min>
+      <rpm_max>	2150	</rpm_max>
     </MT_50_T>
     <MT_50_TM>
       <userString>	#poland_vehicles:MT_50_TM	</userString>
@@ -741,8 +742,8 @@
       <maxRegenHealth>	185	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	312	</rpm_min>
-      <rpm_max>	2264	</rpm_max>
+      <rpm_min>	219	</rpm_min>
+      <rpm_max>	2542	</rpm_max>
     </MT_50_TM>
     <B_16_x2_wz46>
       <userString>	#poland_vehicles:B_16_x2	</userString>
@@ -750,16 +751,16 @@
       <level>	10	</level>
       <price>	130000	</price>
       <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
       <power>	900	</power>
       <weight>	2400	</weight>
       <maxHealth>	370	</maxHealth>
       <maxRegenHealth>	185	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	280	</rpm_min>
-      <rpm_max>	2360	</rpm_max>
+      <rpm_min>	450	</rpm_min>
+      <rpm_max>	2000	</rpm_max>
     </B_16_x2_wz46>
     <SGT_3Cz>
       <userString>	#poland_vehicles:SGT_3Cz	</userString>
@@ -774,8 +775,8 @@
       <maxRegenHealth>	185	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	564	</rpm_min>
-      <rpm_max>	2508	</rpm_max>
+      <rpm_min>	700	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
     </SGT_3Cz>
     <SGT_3Cz_M>
       <userString>	#poland_vehicles:SGT_3Cz_M	</userString>
@@ -791,8 +792,8 @@
       <maxRegenHealth>	185	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	510	</rpm_min>
-      <rpm_max>	2632	</rpm_max>
+      <rpm_min>	629	</rpm_min>
+      <rpm_max>	2360	</rpm_max>
     </SGT_3Cz_M>
     <SGT_3Cz_M_7x7>
       <userString>	#poland_vehicles:SGT_3Cz_M	</userString>
@@ -808,8 +809,8 @@
       <maxRegenHealth>	185	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	510	</rpm_min>
-      <rpm_max>	2632	</rpm_max>
+      <rpm_min>	629	</rpm_min>
+      <rpm_max>	2360	</rpm_max>
     </SGT_3Cz_M_7x7>
     <SGT_3Cz_M_02>
       <userString>	#poland_vehicles:SGT_3Cz_M	</userString>
@@ -825,8 +826,8 @@
       <maxRegenHealth>	185	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	510	</rpm_min>
-      <rpm_max>	2632	</rpm_max>
+      <rpm_min>	629	</rpm_min>
+      <rpm_max>	2360	</rpm_max>
     </SGT_3Cz_M_02>
     <SGT_3CzP>
       <userString>	#poland_vehicles:SGT_3CzP	</userString>
@@ -841,8 +842,8 @@
       <maxRegenHealth>	185	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	564	</rpm_min>
-      <rpm_max>	2508	</rpm_max>
+      <rpm_min>	700	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
     </SGT_3CzP>
     <SGT_3CzM2>
       <userString>	#poland_vehicles:SGT_3CzM2	</userString>
@@ -857,8 +858,8 @@
       <maxRegenHealth>	185	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	483	</rpm_min>
-      <rpm_max>	2694	</rpm_max>
+      <rpm_min>	594	</rpm_min>
+      <rpm_max>	2441	</rpm_max>
     </SGT_3CzM2>
     <GTD_2T6x2>
       <userString>	#poland_vehicles:GTD_2T6x2	</userString>
@@ -874,8 +875,8 @@
       <maxRegenHealth>	185	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	497	</rpm_min>
-      <rpm_max>	2663	</rpm_max>
+      <rpm_min>	612	</rpm_min>
+      <rpm_max>	2401	</rpm_max>
     </GTD_2T6x2>
     <GTD_2T6x2_T>
       <userString>	#poland_vehicles:GTD_2T6x2	</userString>
@@ -891,24 +892,24 @@
       <maxRegenHealth>	185	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	497	</rpm_min>
-      <rpm_max>	2663	</rpm_max>
+      <rpm_min>	612	</rpm_min>
+      <rpm_max>	2401	</rpm_max>
     </GTD_2T6x2_T>
     <GTD_2T5x2>
       <userString>	#poland_vehicles:GTD_2T5x2	</userString>
       <tags>	gasoline	</tags>
       <level>	8	</level>
       <price>	52000	</price>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_Continental_R975_C1_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_C1_npc	</wwsoundNPC>
       <power>	680	</power>
       <weight>	2200	</weight>
       <maxHealth>	360	</maxHealth>
       <maxRegenHealth>	170	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	591	</rpm_min>
-      <rpm_max>	2447	</rpm_max>
+      <rpm_min>	319	</rpm_min>
+      <rpm_max>	2833	</rpm_max>
     </GTD_2T5x2>
     <GTD_2T5x2_T>
       <userString>	#poland_vehicles:GTD_2T5x2	</userString>
@@ -916,49 +917,66 @@
       <level>	8	</level>
       <price>	52000	</price>
       <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_Continental_R975_C1_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_C1_npc	</wwsoundNPC>
       <power>	680	</power>
       <weight>	2200	</weight>
       <maxHealth>	360	</maxHealth>
       <maxRegenHealth>	170	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	591	</rpm_min>
-      <rpm_max>	2447	</rpm_max>
+      <rpm_min>	319	</rpm_min>
+      <rpm_max>	2833	</rpm_max>
     </GTD_2T5x2_T>
     <GTD_2T4x2>
       <userString>	#poland_vehicles:GTD_2T4x2	</userString>
       <tags>	gasoline	</tags>
       <level>	7	</level>
       <price>	36500	</price>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_Continental_R975_C1_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_C1_npc	</wwsoundNPC>
       <power>	600	</power>
       <weight>	2100	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	129	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	700	</rpm_min>
-      <rpm_max>	2200	</rpm_max>
+      <rpm_min>	399	</rpm_min>
+      <rpm_max>	2551	</rpm_max>
     </GTD_2T4x2>
+    <GTD_2T4>
+      <userString>	#poland_vehicles:GTD_2T4	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	52000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	750	</power>
+      <weight>	800	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	497	</rpm_min>
+      <rpm_max>	2663	</rpm_max>
+    </GTD_2T4>
     <V-2-34_B>
       <userString>	#poland_vehicles:V-2-34_B	</userString>
       <tags>	diesel	</tags>
       <level>	6	</level>
       <price>	27860	</price>
       <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
       <power>	500	</power>
       <weight>	750	</weight>
       <maxHealth>	145	</maxHealth>
       <maxRegenHealth>	72	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	386	</rpm_min>
-      <rpm_max>	2040	</rpm_max>
+      <rpm_min>	399	</rpm_min>
+      <rpm_max>	2101	</rpm_max>
     </V-2-34_B>
     <Development_Engine>
       <userString>	Development Engine	</userString>
@@ -966,16 +984,16 @@
       <level>	5	</level>
       <notInShop>	true	</notInShop>
       <price>	1	</price>
-      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
       <power>	540	</power>
       <weight>	750	</weight>
       <maxHealth>	105	</maxHealth>
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	4	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	700	</rpm_min>
-      <rpm_max>	3000	</rpm_max>
+      <rpm_min>	359	</rpm_min>
+      <rpm_max>	2181	</rpm_max>
     </Development_Engine>
     <Maybach_VL_2_SH>
       <userString>	#poland_vehicles:Maybach_VL_2_SH	</userString>
@@ -983,16 +1001,16 @@
       <level>	1	</level>
       <price>	0	</price>
       <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_Continental_R975_C1_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_C1_npc	</wwsoundNPC>
       <power>	600	</power>
       <weight>	1000	</weight>
       <maxHealth>	103	</maxHealth>
       <maxRegenHealth>	65	</maxRegenHealth>
       <repairCost>	0	</repairCost>
       <fireStartingChance>	0.0	</fireStartingChance>
-      <rpm_min>	700	</rpm_min>
-      <rpm_max>	2200	</rpm_max>
+      <rpm_min>	399	</rpm_min>
+      <rpm_max>	2551	</rpm_max>
     </Maybach_VL_2_SH>
     <SGT_3Cz_SH>
       <userString>	#poland_vehicles:SGT_3Cz_SH	</userString>
@@ -1008,8 +1026,8 @@
       <maxRegenHealth>	65	</maxRegenHealth>
       <repairCost>	0	</repairCost>
       <fireStartingChance>	0.0	</fireStartingChance>
-      <rpm_min>	443	</rpm_min>
-      <rpm_max>	2179	</rpm_max>
+      <rpm_min>	452	</rpm_min>
+      <rpm_max>	2150	</rpm_max>
     </SGT_3Cz_SH>
     <W_12_5_P_SH>
       <userString>	#poland_vehicles:W_12_5_P_SH	</userString>
@@ -1017,16 +1035,16 @@
       <level>	3	</level>
       <price>	0	</price>
       <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
       <power>	1450	</power>
       <weight>	1000	</weight>
       <maxHealth>	103	</maxHealth>
       <maxRegenHealth>	65	</maxRegenHealth>
       <repairCost>	0	</repairCost>
       <fireStartingChance>	0.0	</fireStartingChance>
-      <rpm_min>	200	</rpm_min>
-      <rpm_max>	2600	</rpm_max>
+      <rpm_min>	300	</rpm_min>
+      <rpm_max>	2300	</rpm_max>
     </W_12_5_P_SH>
   </shared>
 </engines.xml>

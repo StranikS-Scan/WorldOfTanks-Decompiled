@@ -10,7 +10,8 @@ from constants import MarathonConfig, IS_CLIENT
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.utils import IHangarSpace
-from hover_component import IsHoveredComponent, SelectionComponent
+from skeletons.gui.game_control import IExternalLinksController
+from hover_component import IsHoveredComponent, SelectionComponent, IsExternalHoveredComponent
 if IS_CLIENT:
     from gui.impl import backport
     from gui.impl.gen import R
@@ -37,6 +38,19 @@ class OpenBrowserOnClickComponent(object):
         unparsedUrl = getterFunc()
         url = yield self.__urlParser.parse(unparsedUrl)
         showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_OVERLAY)
+
+
+@registerComponent
+class OpenExternalBrowserOnClickComponent(object):
+    domain = CGF.DomainOption.DomainClient
+    url = ComponentProperty(type=CGFMetaTypes.STRING, editorName='url', value='')
+
+    def doAction(self):
+        self.__openBrowser()
+
+    def __openBrowser(self):
+        linkCtrl = dependency.instance(IExternalLinksController)
+        linkCtrl.open(self.url)
 
 
 def getMarathonVideoUrl():
@@ -68,6 +82,14 @@ class ClientSelectableComponentsManager(CGF.ComponentManager):
     @onRemovedQuery(OpenBrowserOnClickComponent, SelectionComponent)
     def handleOpenBrowserOnClickRemoved(self, openBrowserOnClickComponent, selectionComponent):
         selectionComponent.onClickAction -= openBrowserOnClickComponent.doAction
+
+    @onAddedQuery(OpenExternalBrowserOnClickComponent, SelectionComponent)
+    def handleOpenExternalBrowserOnClickAdded(self, openExtBrowserOnClickComp, selectionComponent):
+        selectionComponent.onClickAction += openExtBrowserOnClickComp.doAction
+
+    @onRemovedQuery(OpenExternalBrowserOnClickComponent, SelectionComponent)
+    def handleOpenExternalBrowserOnClickRemoved(self, openExtBrowserOnClickComp, selectionComponent):
+        selectionComponent.onClickAction -= openExtBrowserOnClickComp.doAction
 
     @onAddedQuery(OpenCollectionOnClickComponent, SelectionComponent)
     def handleOpenCollectionOnClickAdded(self, openCollectionOnClickComponent, selectionComponent):
@@ -107,12 +129,18 @@ class ClickManager(CGF.ComponentManager):
         self._hangarSpace.onMouseUp -= self._onMouseUp
 
     def _onMouseDown(self):
-        clickQuery = CGF.Query(self.spaceID, (CGF.GameObject, IsHoveredComponent, SelectionComponent))
+        clickQuery = CGF.Query(self.spaceID, (CGF.GameObject,
+         IsHoveredComponent,
+         SelectionComponent,
+         CGF.No(IsExternalHoveredComponent)))
         for go, _, __ in clickQuery:
             self._selectedGO = go
 
     def _onMouseUp(self):
-        clickQuery = CGF.Query(self.spaceID, (CGF.GameObject, IsHoveredComponent, SelectionComponent))
+        clickQuery = CGF.Query(self.spaceID, (CGF.GameObject,
+         IsHoveredComponent,
+         SelectionComponent,
+         CGF.No(IsExternalHoveredComponent)))
         for go, _, selectionComponent in clickQuery:
             if self._selectedGO == go:
                 _logger.info('ClickManager::Clicked')

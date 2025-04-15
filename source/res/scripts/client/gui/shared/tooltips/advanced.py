@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/advanced.py
+import typing
 from constants import SHELL_TYPES
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
@@ -19,11 +20,22 @@ from gui.shared.tooltips.common import BlocksTooltipData
 from helpers import dependency
 from helpers import i18n
 from skeletons.account_helpers.settings_core import ISettingsCore
+if typing.TYPE_CHECKING:
+    from gui.shared.gui_items.vehicle_modules import Shell
 DISABLED_ITEMS_ID = 12793
 CHASSIS_TRACK_WITHIN_TRACK = 'vehicleTrackWithinTrackChassis'
 MULTI_TRACK_CHASSIS = 'vehicleMultiTrackChassis'
 AUTO_SHOOT_FLAME_GUN = 'vehicleAutoShootFlameGun'
 THERMAL_VISION = 'vehicleThermalVision'
+
+def getPreparedShellItemType(item):
+    itemType = item.type
+    if item.isModernMechanics:
+        itemType += _MODERN_POSTFIX
+    elif item.hasStun:
+        itemType += _STUN_POSTFIX
+    return itemType
+
 
 class ComplexTooltip(BlocksTooltipData):
     __settingsCore = dependency.descriptor(ISettingsCore)
@@ -112,15 +124,13 @@ class ComplexAdvanced(BaseAdvancedTooltip):
 
 
 class HangarShellAdvanced(BaseAdvancedTooltip):
-    _MODERN_SUFFIX = '_MODERN'
 
     def _getBlocksList(self, *args, **kwargs):
-        movie = SHELL_MOVIES.get((self._item.type, self._item.isModernMechanics), None)
-        header = backport.text(R.strings.tooltips.advanced.header.shellType.dyn(self._item.type, default=R.invalid)())
-        description = self._item.type
-        if self._item.isModernMechanics:
-            description += self._MODERN_SUFFIX
-        return self._packAdvancedBlocks(movie, header, description)
+        item = self._item
+        header = backport.text(R.strings.tooltips.advanced.header.shellType.dyn(item.type, default=R.invalid)())
+        preparedItemType = getPreparedShellItemType(item)
+        movie = SHELL_MOVIES.get(preparedItemType, None)
+        return self._packAdvancedBlocks(movie=movie, header=header, description=preparedItemType)
 
 
 class HangarBoosterAdvanced(BaseAdvancedTooltip):
@@ -277,7 +287,7 @@ MODULE_MOVIES = {'largeRepairkit': 'consumablesRepairKitBig',
  'rammer': 'equipmentMediumCaliberTankGunRammer',
  'vehicleGun': 'moduleGun',
  'vehicleDualGun': 'moduleDualGun',
- AUTO_SHOOT_FLAME_GUN: 'moduleGun',
+ AUTO_SHOOT_FLAME_GUN: 'moduleTemperatureGun',
  'vehicleRadio': 'moduleRadio',
  'vehicleEngine': 'moduleEngine',
  'vehicleChassis': 'moduleSuspension',
@@ -326,10 +336,14 @@ TANKMAN_MOVIES = {'commander': 'crewCommander',
  'gunner': 'crewGunner',
  'loader': 'crewLoader',
  'radioman': 'crewRadioOperator'}
-SHELL_MOVIES = {(SHELL_TYPES.ARMOR_PIERCING, False): 'bulletAP',
- (SHELL_TYPES.HOLLOW_CHARGE, False): 'bulletHEAT',
- (SHELL_TYPES.HIGH_EXPLOSIVE, False): 'bulletHE',
- (SHELL_TYPES.ARMOR_PIERCING_CR, False): 'bulletAPCR',
- (SHELL_TYPES.ARMOR_PIERCING_FSDS, False): 'bulletAPFSDS',
- (SHELL_TYPES.HIGH_EXPLOSIVE, True): 'bulletHEModern',
- (SHELL_TYPES.FLAME, False): 'bulletFlame'}
+_MODERN_POSTFIX = '_MODERN'
+_STUN_POSTFIX = '_STUN'
+SHELL_MOVIES = {SHELL_TYPES.ARMOR_PIERCING: 'bulletAP',
+ SHELL_TYPES.HOLLOW_CHARGE: 'bulletHEAT',
+ SHELL_TYPES.HIGH_EXPLOSIVE: 'bulletHE',
+ SHELL_TYPES.ARMOR_PIERCING_CR: 'bulletAPCR',
+ SHELL_TYPES.ARMOR_PIERCING_FSDS: 'bulletAPFSDS',
+ SHELL_TYPES.HIGH_EXPLOSIVE + _MODERN_POSTFIX: 'bulletHEModern',
+ SHELL_TYPES.HIGH_EXPLOSIVE + _STUN_POSTFIX: 'bulletHE',
+ SHELL_TYPES.FLAME: 'bulletFlame',
+ SHELL_TYPES.FLAME + _STUN_POSTFIX: 'bulletFlameStun'}

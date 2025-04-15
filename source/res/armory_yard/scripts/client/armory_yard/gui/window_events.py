@@ -18,7 +18,7 @@ from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shop import showBuyGoldWebOverlay, Source
 from gui.sounds.filters import StatesGroup, States
 from helpers import dependency
-from skeletons.gui.game_control import IArmoryYardController
+from skeletons.gui.game_control import IArmoryYardController, IArmoryYardShopController
 from skeletons.gui.impl import INotificationWindowController
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items import Vehicle
@@ -68,9 +68,11 @@ def showArmoryYardBundlesWindow(armoryYard=None, parent=None, isBlurEnabled=Fals
         window.load()
 
 
-def showArmoryYardShopWindow(parent=None, onLoadedCallback=None):
-    from armory_yard.gui.impl.lobby.feature.armory_yard_shop_view import ArmoryYardShopWindow
-    ArmoryYardShopWindow(parent=parent, onLoadedCallback=onLoadedCallback).load()
+@dependency.replace_none_kwargs(armoryYardShopController=IArmoryYardShopController)
+def showArmoryYardShopWindow(parent=None, onLoadedCallback=None, armoryYardShopController=None):
+    if armoryYardShopController.isEnabled:
+        from armory_yard.gui.impl.lobby.feature.armory_yard_shop_view import ArmoryYardShopWindow
+        ArmoryYardShopWindow(parent=parent, onLoadedCallback=onLoadedCallback).load()
 
 
 def showArmoryYardShopBuyWindow(productId, onClosedCallback=None, onLoadedCallback=None):

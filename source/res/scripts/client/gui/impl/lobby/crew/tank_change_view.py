@@ -18,6 +18,7 @@ from gui.impl.lobby.crew.filter.data_providers import VehiclesDataProvider
 from gui.impl.lobby.crew.filter.filter_panel_widget import FilterPanelWidget
 from gui.impl.lobby.crew.filter.state import FilterState
 from gui.impl.lobby.crew.utils import VEHICLE_TAGS_FILTER
+from gui.shared import event_dispatcher
 from gui.shared.event_dispatcher import showChangeCrewMember
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import NO_TANKMAN, MAX_ROLE_LEVEL, NO_SLOT
@@ -119,7 +120,12 @@ class TankChangeView(BaseCrewView):
 
     def _onClose(self, params=None):
         self._logClose(params)
-        self._onBack(False)
+        self._onBack(logClick=False)
+
+    def _onBack(self, logClick=True):
+        if logClick:
+            self._uiLogger.logNavigationButtonClick(self._backButtonLogingKey)
+        event_dispatcher.showPersonalCase(tankmanInvID=self.__selectedTmanInvID)
 
     def _onMembersUpdate(self):
         self.destroyWindow()

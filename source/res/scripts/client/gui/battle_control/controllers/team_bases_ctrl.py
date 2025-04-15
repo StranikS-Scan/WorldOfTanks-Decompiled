@@ -4,6 +4,7 @@ from collections import defaultdict
 import BattleReplay
 import BigWorld
 import SoundGroups
+import Event
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 from constants import TEAMS_IN_ARENA
@@ -69,7 +70,7 @@ class ITeamBasesListener(object):
 
 class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
-    __slots__ = ('__battleCtx', '__arenaVisitor', '__clientIDs', '__points', '__sounds', '__callbackIDs', '__snap', '__captured')
+    __slots__ = ('__battleCtx', '__arenaVisitor', '__clientIDs', '__points', '__sounds', '__callbackIDs', '__snap', '__captured', '__teamBases', 'onTeamBasePointsUpdated', 'onBaseTeamChanged', 'onBaseCapturingStopped')
 
     def __init__(self):
         super(BattleTeamsBasesController, self).__init__()
@@ -81,6 +82,10 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
         self.__sounds = {}
         self.__callbackIDs = {}
         self.__snap = defaultdict(tuple)
+        self.__teamBases = {}
+        self.onTeamBasePointsUpdated = Event.Event()
+        self.onBaseTeamChanged = Event.Event()
+        self.onBaseCapturingStopped = Event.Event()
         return
 
     def getControllerID(self):
@@ -107,6 +112,7 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
         self.__points.clear()
         self.__sounds.clear()
         self.__snap.clear()
+        self.__teamBases.clear()
         feedback = self.sessionProvider.shared.feedback
         if feedback is not None:
             feedback.onRoundFinished -= self.__onRoundFinished
@@ -165,6 +171,7 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
                 if not invadersCnt:
                     self.__clearUpdateCallback(clientID)
                     self.__clientIDs.remove(clientID)
+                self.onBaseCapturingStopped(baseID, baseTeam)
                 for viewCmp in self._viewComponents:
                     viewCmp.stopTeamBaseCapturing(clientID, points)
                     if not invadersCnt:
@@ -182,6 +189,7 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
                 self.__clientIDs.add(clientID)
                 self._addCapturingTeamBase(clientID, playerTeam, points, timeLeft, invadersCnt, capturingStopped)
                 self.__addUpdateCallback(clientID)
+            self.onTeamBasePointsUpdated(baseID, points)
             if not capturingStopped:
                 self.__playCaptureSound(playerTeam, baseTeam)
             elif not self.__hasBaseID(baseTeam, exclude=clientID) or isEnemyBase:
@@ -213,12 +221,19 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
                 viewCmp.removeTeamsBases()
 
         self.__stopCaptureSounds()
+        self.__teamBases.clear()
 
     def clearViewComponents(self):
         while self.__clientIDs:
             clientID = self.__clientIDs.pop()
             for viewCmp in self._viewComponents:
                 viewCmp.removeTeamBase(clientID)
+
+    def addTeamBase(self, base):
+        self.__teamBases[base.baseID] = base
+
+    def getTeamBases(self):
+        return self.__teamBases
 
     def _teamBaseLeft(self, points, invadersCnt):
         return not points

@@ -1,0 +1,37 @@
+<HBGoalComponent.def>
+  <CellMethods></CellMethods>
+  <Properties>
+    <goalsInfo>
+      <Type>	ARRAY	  <of>	FIXED_DICT	  <Properties>
+            <id>
+              <Type>	STRING	</Type>
+            </id>
+            <state>
+              <Type>	UINT8	</Type>
+            </state>
+            <time>
+              <Type>	FLOAT32	</Type>
+            </time>
+            <finishTime>
+              <Type>	FLOAT32	</Type>
+            </finishTime>
+            <progress>
+              <Type>	UINT32	</Type>
+            </progress>
+            <progressTotal>
+              <Type>	UINT32	</Type>
+            </progressTotal>
+            <subState>
+              <Type>	STRING	</Type>
+            </subState>
+          </Properties>
+        </of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </goalsInfo>
+  </Properties>
+  <ofEntity>
+    <ArenaInfo></ArenaInfo>
+  </ofEntity>
+  <DefaultKeyName>	goalComponent	</DefaultKeyName>
+</HBGoalComponent.def>

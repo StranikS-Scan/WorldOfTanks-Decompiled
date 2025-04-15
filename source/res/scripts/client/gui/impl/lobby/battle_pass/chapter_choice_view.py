@@ -25,8 +25,7 @@ from gui.impl.pub import ViewImpl
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.server_events.events_dispatcher import showMissionsBattlePass
 from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import hideVehiclePreview, showBattlePassBuyWindow, showBattlePassHowToEarnPointsView, showBrowserOverlayView, showHangar, showShop, showStylePreview, showStyleProgressionPreview, showCollectionWindow
-from gui.shared.tutorial_helper import getTutorialGlobalStorage
+from gui.shared.event_dispatcher import hideVehiclePreview, showBattlePassBuyWindow, showBattlePassHowToEarnPointsView, showBrowserOverlayView, showHangar, showShop, showStylePreview, showStyleProgressionPreview, showCollectionWindow, showVehiclePreviewWithoutBottomPanel
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController
 from skeletons.gui.shared import IItemsCache
@@ -41,10 +40,6 @@ _CHAPTER_STATES = {ChapterState.ACTIVE: ChapterStates.ACTIVE,
  ChapterState.NOT_STARTED: ChapterStates.NOTSTARTED,
  ChapterState.DISABLED: ChapterStates.DISABLED}
 _FULL_PROGRESS = 100
-
-def chapterChoiceTrigger(toShow):
-    getTutorialGlobalStorage().setValue(GLOBAL_FLAG.BATTLE_PASS_ACTIVE_CHAPTER, toShow)
-
 
 class ChapterChoiceView(ViewImpl):
     __battlePass = dependency.descriptor(IBattlePassController)
@@ -73,9 +68,12 @@ class ChapterChoiceView(ViewImpl):
     def _onLoading(self, *args, **kwargs):
         super(ChapterChoiceView, self)._onLoading(*args, **kwargs)
         self._fillModel()
-        chapterChoiceTrigger(self.__battlePass.isShowHint())
+        self.__setTriggerHint()
+
+    def __setTriggerHint(self):
         if self.__battlePass.isShowWidgetHint():
             AccountSettings.setSettings(WIDGET_HINT_TRIGGER, self.__battlePass.getPotentialChaptersLevels())
+        self.__battlePass.setTriggerHint(GLOBAL_FLAG.BATTLE_PASS_ACTIVE_CHAPTER, self.__battlePass.isShowHint())
 
     def _getEvents(self):
         return ((self.viewModel.onAboutClick, self.__showAboutView),
@@ -124,7 +122,11 @@ class ChapterChoiceView(ViewImpl):
             if self.__battlePass.getRewardType(chapterID) == FinalReward.STYLE:
                 style = getStyleForChapter(chapterID)
                 chapterModel.setStyleName(style.userName)
-                self.__fillVehicle(style, chapterModel)
+                vehicleCD = getVehicleCDForStyle(style, itemsCache=self.__itemsCache)
+                self.__fillVehicle(vehicleCD, chapterModel)
+            elif self.__battlePass.getRewardType(chapterID) == FinalReward.VEHICLE:
+                vehicleCD = self.__battlePass.getVehicleCDRewardForChapter(chapterID)
+                self.__fillVehicle(vehicleCD, chapterModel)
             chapterModel.setChapterID(chapterID)
             chapterModel.setFinalReward(self.__battlePass.getRewardType(chapterID).value)
             chapterModel.setChapterType(ChapterType(self.__battlePass.getChapterType(chapterID)))
@@ -135,8 +137,7 @@ class ChapterChoiceView(ViewImpl):
 
         chapters.invalidate()
 
-    def __fillVehicle(self, style, model):
-        vehicleCD = getVehicleCDForStyle(style, itemsCache=self.__itemsCache)
+    def __fillVehicle(self, vehicleCD, model):
         vehicle = getVehicleByIntCD(vehicleCD)
         fillVehicleInfo(model.vehicleInfo, vehicle)
         model.setIsVehicleInHangar(vehicle.isInInventory)
@@ -172,6 +173,7 @@ class ChapterChoiceView(ViewImpl):
         model.setFreePoints(self.__battlePass.getFreePoints())
 
     def __onPointsUpdated(self, *_):
+        self.__setTriggerHint()
         with self.viewModel.transaction() as model:
             self.__updateChaptersProgression(model.getChapters())
             self.__updateFreePoints(model=model)
@@ -204,6 +206,10 @@ class ChapterChoiceView(ViewImpl):
             return
         else:
             hideVehiclePreview(back=False)
+            if self.__battlePass.getRewardType(chapterID) == FinalReward.VEHICLE:
+                self.__showFinalRewardVehiclePreview(chapterID)
+                self.destroyWindow()
+                return
             style = getStyleForChapter(chapterID, battlePass=self.__battlePass)
             vehicleCD = getVehicleCDForStyle(style, itemsCache=self.__itemsCache)
             if self.__battlePass.isMarathonChapter(chapterID) or not style.isProgressive:
@@ -212,6 +218,10 @@ class ChapterChoiceView(ViewImpl):
                 self.__showProgressionStylePreview(style, vehicleCD)
             self.destroyWindow()
             return
+
+    def __showFinalRewardVehiclePreview(self, chapterID):
+        vehicleCD = self.__battlePass.getVehicleCDRewardForChapter(chapterID)
+        showVehiclePreviewWithoutBottomPanel(vehicleCD, backCallback=self.__getPreviewCallback(), itemsPack=(ItemPackEntry(type=ItemPackType.CREW_100, groupID=1),))
 
     def __showStylePreview(self, style, vehicleCD):
         itemsPack = (ItemPackEntry(type=ItemPackType.CREW_100, groupID=1),)
@@ -270,7 +280,6 @@ class ChapterChoiceView(ViewImpl):
         chapterID = int(args.get('chapterID', 0))
         if not self.__battlePass.isChapterCompleted(chapterID) and not self.__battlePass.isChapterActive(chapterID):
             self.__battlePass.activateChapter(chapterID, self)
-            chapterChoiceTrigger(False)
 
     def __openCollection(self):
         if not AccountSettings.getSettings(IS_BATTLE_PASS_COLLECTION_SEEN):
@@ -281,5 +290,6 @@ class ChapterChoiceView(ViewImpl):
         showCollectionWindow(collectionId=self.__battlePass.getCurrentCollectionId(), backCallback=backCallback, backBtnText=backText)
 
     def __onChapterChanged(self):
+        self.__setTriggerHint()
         with self.viewModel.transaction() as model:
             self.__updateChapters(model.getChapters())

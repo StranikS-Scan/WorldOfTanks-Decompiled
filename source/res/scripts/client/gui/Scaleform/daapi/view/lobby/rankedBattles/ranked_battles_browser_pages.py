@@ -1,13 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rankedBattles/ranked_battles_browser_pages.py
 from helpers import dependency
-from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.components.browser_view_page import BrowserPageComponent
 from gui.Scaleform.daapi.view.lobby.hangar.BrowserView import BrowserView
 from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_battles_page import IResetablePage
 from gui.Scaleform.daapi.view.lobby.shared.web_view import WebView
-from gui.ranked_battles.constants import SeasonResultTokenPatterns
-from gui.ranked_battles.ranked_helpers import getRankedBattlesSeasonRatingUrl, getRankedBattlesInfoPageUrl, getRankedBattlesSeasonGapUrl, getRankedBattlesYearRatingUrl, getRankedBattlesShopUrl
 from gui.ranked_battles.ranked_helpers.sound_manager import RANKED_MAIN_PAGE_SOUND_SPACE, RANKED_OVERLAY_SOUND_SPACE, Sounds, AmbientType
 from skeletons.gui.game_control import IRankedBattlesController
 from web.web_client_api.ranked_battles import createRankedBattlesWebHandlers, createRankedOverlayHandlers
@@ -54,75 +51,6 @@ class RankedBrowserPage(BrowserPageComponent, IResetablePage):
 
     def __patchUrlByCtx(self):
         return self.__ctx.get('webParams', '') if self.__ctx is not None else ''
-
-
-class RankedSeasonGapPage(RankedBrowserPage):
-    __rankedController = dependency.descriptor(IRankedBattlesController)
-
-    def __init__(self):
-        super(RankedSeasonGapPage, self).__init__()
-        self.__previousSeasonID = 0
-
-    def _populate(self):
-        super(RankedSeasonGapPage, self)._populate()
-        previousSeason = self.__rankedController.getPreviousSeason()
-        self.__previousSeasonID = previousSeason.getSeasonID() if previousSeason else self.__previousSeasonID
-        g_clientUpdateManager.addCallbacks({'tokens': self.__onTokensUpdate})
-        self.__rankedController.onUpdated += self.refreshUrl
-
-    def _dispose(self):
-        self.__rankedController.onUpdated -= self.refreshUrl
-        g_clientUpdateManager.removeObjectCallbacks(self)
-        super(RankedSeasonGapPage, self)._dispose()
-
-    def _getBaseUrl(self, **kwargs):
-        return getRankedBattlesSeasonGapUrl(**kwargs)
-
-    def __onTokensUpdate(self, diff):
-        for pattern in SeasonResultTokenPatterns.ALL():
-            if pattern.format(self.__previousSeasonID) in diff:
-                self.refreshUrl()
-
-
-class RankedShopPage(RankedBrowserPage):
-
-    def _isForcedRefresh(self):
-        return True
-
-    def _getBaseUrl(self, **kwargs):
-        return getRankedBattlesShopUrl(**kwargs)
-
-    def _updateSounds(self, soundManager):
-        soundManager.setCustomProgressSound(Sounds.PROGRESSION_STATE_SHOP)
-        soundManager.setAmbient(AmbientType.HANGAR)
-
-    def _getWebHandlers(self):
-        return createRankedBattlesWebHandlers()
-
-
-class RankedRatingPage(RankedBrowserPage):
-
-    def _getBaseUrl(self, **kwargs):
-        return getRankedBattlesSeasonRatingUrl(**kwargs)
-
-    @classmethod
-    def _isRightClickAllowed(cls):
-        return True
-
-
-class RankedYearRatingPage(RankedBrowserPage):
-
-    def _getBaseUrl(self, **kwargs):
-        return getRankedBattlesYearRatingUrl(**kwargs)
-
-    def _updateSounds(self, soundManager):
-        soundManager.setProgressSound()
-
-
-class RankedBattlesInfoPage(RankedBrowserPage):
-
-    def _getBaseUrl(self, **kwargs):
-        return getRankedBattlesInfoPageUrl(**kwargs)
 
 
 class RankedLandingView(BrowserView):

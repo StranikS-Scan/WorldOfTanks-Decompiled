@@ -254,14 +254,10 @@ class EventPostBattleInfo(EventInfoModel):
     def _getProgresses(self, pCur, pPrev):
         index = 0
         progresses = []
-        isQuestDailyQuest = isDailyQuest(str(self.event.getID()))
         for cond in self.event.bonusCond.getConditions().items:
             if isinstance(cond, conditions._Cumulativable):
                 for _, (curProg, totalProg, diff, _) in cond.getProgressPerGroup(pCur, pPrev).iteritems():
-                    if not isQuestDailyQuest:
-                        label = cond.getUserString()
-                    else:
-                        label = cond.getCustomDescription()
+                    label = cond.getUserString()
                     if not diff or not label:
                         continue
                     index += 1
@@ -427,6 +423,36 @@ class QuestPostBattleInfo(EventPostBattleInfo, QuestInfoModel):
         return result
 
 
+class DailyQuestPostBattleInfo(QuestPostBattleInfo):
+
+    def _getProgresses(self, pCur, pPrev):
+        index = 0
+        progresses = []
+        for cond in self.event.bonusCond.getConditions().items:
+            if isinstance(cond, conditions._Cumulativable):
+                for _, (curProg, totalProg, diff, _) in cond.getProgressPerGroup(pCur, pPrev).iteritems():
+                    label = cond.getCustomDescription()
+                    if not diff or not label:
+                        if isinstance(cond, conditions.BattlesCount):
+                            for pbcond in self.event.postBattleCond.getConditions().items:
+                                label = pbcond.getCustomDescription()
+                                if label:
+                                    break
+
+                        if not label:
+                            continue
+                    index += 1
+                    progresses.append({'progrTooltip': None,
+                     'progrBarType': formatters.PROGRESS_BAR_TYPE.SIMPLE,
+                     'maxProgrVal': totalProg,
+                     'currentProgrVal': curProg,
+                     'description': '%d. %s' % (index, label),
+                     'progressDiff': '+ %s' % backport.getIntegralFormat(diff),
+                     'progressDiffTooltip': TOOLTIPS.QUESTS_PROGRESS_EARNEDINBATTLE})
+
+        return progresses
+
+
 class PersonalMissionPostBattleInfo(EventPostBattleInfo):
 
     def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData):
@@ -439,7 +465,7 @@ class PersonalMissionPostBattleInfo(EventPostBattleInfo):
         statusState, statusText = self._getStatus(pmComplete=isCompleted, failed=failedDescr)
         descr = failedDescr or condFormatter.getMultiplierDescription()
         info.update({'title': text_styles.highTitle(info.get('title')),
-         'linkBtnVisible': statusState == PERSONAL_MISSIONS_ALIASES.POST_BATTLE_STATE_IN_PROGRESS,
+         'linkBtnVisible': True,
          'collapsedToggleBtnVisible': statusState == PERSONAL_MISSIONS_ALIASES.POST_BATTLE_STATE_IN_PROGRESS,
          'descr': descr,
          'personalInfo': self._getPersonalInfo(condFormatter),
@@ -599,6 +625,8 @@ def _getEventInfoData(event):
         return PersonalMissionPostBattleInfo(event)
     if event.getType() == constants.EVENT_TYPE.MOTIVE_QUEST:
         return MotiveQuestPostBattleInfo(event)
+    if isDailyQuest(str(event.getID())):
+        return DailyQuestPostBattleInfo(event)
     if event.getType() in constants.EVENT_TYPE.QUEST_RANGE:
         postBattleInfoCls = event.postBattleInfo() or QuestPostBattleInfo
         return postBattleInfoCls(event)
@@ -803,3 +831,26 @@ def getClassificationRestrictions(classificationAttrs, replaceWithIcons=False):
 
 
 _questBranchToTabMap = {PM_BRANCH.REGULAR: QUESTS_ALIASES.SEASON_VIEW_TAB_RANDOM}
+
+@dependency.replace_none_kwargs(eventsCache=IEventsCache)
+def getEpicDailyQuestProgressInfo(qdCounter, eventsCache=None):
+    epicQuest = eventsCache.getDailyEpicQuest()
+    if not epicQuest:
+        return None
+    elif epicQuest.isCompleted():
+        return None
+    else:
+        token = first(epicQuest.accountReqs.getTokens())
+        return None if token is None else {'awards': [],
+         'alertMsg': '',
+         'questInfo': _getEventInfoData(epicQuest).getInfo([]),
+         'questState': MISSIONS_STATES.IN_PROGRESS,
+         'questType': epicQuest.getType(),
+         'progressList': [{'progrTooltip': None,
+                           'progrBarType': formatters.PROGRESS_BAR_TYPE.SIMPLE,
+                           'maxProgrVal': token.getNeededCount(),
+                           'currentProgrVal': token.getReceivedCount(),
+                           'description': backport.text(R.strings.quests.dailyQuests.postBattle.epic_condition_progress()),
+                           'progressDiff': '+ %s' % backport.getIntegralFormat(qdCounter),
+                           'progressDiffTooltip': None,
+                           'questState': MISSIONS_STATES.IN_PROGRESS}]}

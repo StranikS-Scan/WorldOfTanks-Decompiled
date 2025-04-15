@@ -37,7 +37,7 @@ from story_mode.gui.battle_control.arena_info.player_format import StoryModeName
 from story_mode.gui.fade_in_out import UseStoryModeFading
 from story_mode.gui.impl.lobby.base_prb_view import BasePrbView
 from story_mode.gui.shared.event_dispatcher import showMissionSelectionView
-from story_mode.gui.story_mode_gui_constants import STOP_ONBOARDING_MUSIC, SOUND_REMAPPING, START_ONBOARDING_MUSIC, GAMEMODE_GROUP, GAMEMODE_STATE
+from story_mode.gui.story_mode_gui_constants import STOP_ONBOARDING_MUSIC, SOUND_REMAPPING, START_ONBOARDING_MUSIC, GAMEMODE_GROUP, GAMEMODE_STATE, GAMEMODE_DEFAULT
 from story_mode.gui.story_mode_gui_constants import VIEW_ALIAS
 from story_mode.skeletons.story_mode_controller import IStoryModeController
 from story_mode_common.configs.story_mode_missions import missionsSchema, MissionsModel, MissionModel
@@ -212,6 +212,7 @@ class StoryModeController(IStoryModeController, IGlobalListener):
     def stopOnboardingMusic(self):
         if self.__isOnboardingMusicStarted:
             self.__isOnboardingMusicStarted = False
+            WWISE.WW_setState(GAMEMODE_GROUP, GAMEMODE_DEFAULT)
             SoundGroups.g_instance.playSound2D(STOP_ONBOARDING_MUSIC)
 
     @adisp_process

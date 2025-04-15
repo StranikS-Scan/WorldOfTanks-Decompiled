@@ -1,9 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/NotificationPopUpViewer.py
+from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.view.meta.NotificationPopUpViewerMeta import NotificationPopUpViewerMeta
 from gui.game_loading.resources.consts import Milestones
 from gui.impl.lobby.paragons.sound_constants import Sounds
 from gui.shared.notifications import NotificationPriorityLevel, NotificationGroup
+from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
+from gui.impl.lobby.gf_notifications import GFNotificationInject
 from helpers import dependency
 from messenger import g_settings
 from messenger.formatters import TimeFormatter
@@ -31,6 +34,16 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
         self.__pendingMessagesQueue = []
         super(NotificationPopUpViewer, self).__init__()
         self.setModel(mvc.getModel())
+
+    def registerGFNotification(self, component, alias, gfViewName, isPopUp, linkageData):
+        from gui.Scaleform.framework import g_entitiesFactories
+        idx = WindowLayer.UNDEFINED
+        componentPy = g_entitiesFactories.initialize(GFNotificationInject(gfViewName, isPopUp, linkageData), component, idx)
+        self.components[alias] = componentPy
+        componentPy.setEnvironment(self.app)
+        componentPy.create()
+        g_eventBus.handleEvent(events.ComponentEvent(events.ComponentEvent.COMPONENT_REGISTERED, self, componentPy, alias), EVENT_BUS_SCOPE.GLOBAL)
+        self._onRegisterFlashComponent(componentPy, alias)
 
     def onClickAction(self, typeID, entityID, action):
         NotificationMVC.g_instance.handleAction(typeID, self._getNotificationID(entityID), action)

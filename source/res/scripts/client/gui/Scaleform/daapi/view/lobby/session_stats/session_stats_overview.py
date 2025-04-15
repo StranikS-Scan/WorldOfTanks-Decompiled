@@ -217,7 +217,7 @@ class SessionStatsOverview(SessionStatsOverviewMeta):
         stats = self._itemsCache.items.sessionStats.getAccountStats(ARENA_BONUS_TYPE.REGULAR)
         clearBtnEnabled = stats.battleCnt > 0 or stats.xp > 0 or stats.freeXP > 0
         label = backport.text(R.strings.session_stats.moreBtn.label())
-        isHofBtnUnlocked = not self.prbDispatcher.getFunctionalState().isNavigationDisabled() and self._isHofAccessible
+        isHofBtnVisible = isHofBtnUnlocked = not self.prbDispatcher.getFunctionalState().isNavigationDisabled() and self._isHofAccessible
         if isHofBtnUnlocked:
             moreBtnTooltip = makeTooltip(header=backport.text(R.strings.session_stats.tooltip.moreBtn.header()), body=backport.text(R.strings.session_stats.tooltip.moreBtn.available.body()))
         else:
@@ -237,11 +237,14 @@ class SessionStatsOverview(SessionStatsOverviewMeta):
         clearBtnTooltip = makeTooltip(header=clearBtnTooltipHeader, body=clearBtnTooltipBody)
         return [{'btnLabel': label,
           'btnTooltip': moreBtnTooltip,
-          'btnEnabled': isHofBtnUnlocked}, {'btnLabel': backport.text(R.strings.session_stats.resetBtn.label()),
+          'btnEnabled': isHofBtnUnlocked,
+          'btnVisible': isHofBtnVisible}, {'btnLabel': backport.text(R.strings.session_stats.resetBtn.label()),
           'btnTooltip': clearBtnTooltip,
-          'btnEnabled': clearBtnEnabled}, {'btnIcon': RES_ICONS.MAPS_ICONS_MESSENGER_ICONSETTINGS,
+          'btnEnabled': clearBtnEnabled,
+          'btnVisible': True}, {'btnIcon': RES_ICONS.MAPS_ICONS_MESSENGER_ICONSETTINGS,
           'btnTooltip': makeTooltip(header=backport.text(R.strings.session_stats.tooltip.settingsBtn.header()), body=backport.text(R.strings.session_stats.tooltip.settingsBtn.body())),
-          'btnEnabled': True}]
+          'btnEnabled': True,
+          'btnVisible': True}]
 
     def __timeToClearText(self, timeToClear):
         if timeToClear.tm_hour == 0 and timeToClear.tm_min == 0:

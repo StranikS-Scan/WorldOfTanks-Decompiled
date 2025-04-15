@@ -42,27 +42,27 @@
     <armor>
       <armor_1>	100	</armor_1>
       <armor_2>	150	</armor_2>
-      <armor_3>	85	</armor_3>
+      <armor_3>	110	</armor_3>
       <armor_4>	45	</armor_4>
       <armor_5>	40	</armor_5>
       <armor_6>	40	</armor_6>
       <armor_7>	270	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	145	</armor_9>
+      <armor_9>	170	</armor_9>
       <armor_10>	30	</armor_10>
       <armor_11>	300	</armor_11>
       <armor_12>	230	</armor_12>
-      <armor_13>	200	</armor_13>
+      <armor_13>	170	</armor_13>
       <armor_14>	110	</armor_14>
       <armor_15>	220	</armor_15>
       <armor_16>	135	</armor_16>
       <armor_17>	75	</armor_17>
-      <armor_18>	210	</armor_18>
+      <armor_18>	230	</armor_18>
       <armor_19>	150	</armor_19>
-      <armor_20>	180	</armor_20>
+      <armor_20>	200	</armor_20>
       <armor_21>	130	</armor_21>
       <armor_22>	145	</armor_22>
-      <armor_23>	105	</armor_23>
+      <armor_23>	130	</armor_23>
       <armor_24>	65	</armor_24>
       <armor_25>	55	</armor_25>
       <armor_26>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -1548,7 +1548,7 @@
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <mud>	largeTankMud	</mud>
+        <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	trds_yoh_pc	</wwsoundPC>
       <wwsoundNPC>	trds_yoh_npc	</wwsoundNPC>
@@ -3480,9 +3480,9 @@
       <AODecals>
         <decal>
           <transform>
-            <row0>	2.430480 0.000000 0.000000	</row0>
-            <row1>	0.000000 1.342020 0.000000	</row1>
-            <row2>	0.000000 0.000000 3.652850	</row2>
+            <row0>	5.180000 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.340000 0.000000	</row1>
+            <row2>	0.000000 0.000000 10.200000	</row2>
             <row3>	0.000000 0.000000 0.000000	</row3>
           </transform>
         </decal>
@@ -3689,7 +3689,7 @@
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <mud>	largeTankMud	</mud>
+        <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>

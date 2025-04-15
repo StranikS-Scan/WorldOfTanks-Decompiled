@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/prb_control/entities/epic/squad/actions_validator.py
 from constants import BATTLE_MODE_VEH_TAGS_EXCEPT_EPIC
 from CurrentVehicle import g_currentVehicle
-from gui.prb_control.entities.base.actions_validator import ActionsValidatorComposite
+from gui.prb_control.entities.base.actions_validator import ActionsValidatorComposite, BaseActionsValidator
 from gui.prb_control.entities.base.squad.actions_validator import SquadActionsValidator, SquadVehiclesValidator
 from gui.prb_control.entities.random.squad.actions_validator import BalancedSquadVehiclesValidator, SPGForbiddenSquadVehiclesValidator
 from gui.prb_control.items import ValidationResult
@@ -25,6 +25,13 @@ class _EpicBalancedSquadVehiclesValidator(BalancedSquadVehiclesValidator):
         return ValidationResult(False, UNIT_RESTRICTION.VEHICLE_INVALID_LEVEL) if not pInfo.isReady and g_currentVehicle.isPresent() and g_currentVehicle.item.level not in availableLevels else super(_EpicBalancedSquadVehiclesValidator, self)._validate()
 
 
+class FlamethrowerForbiddenSquadVehiclesValidator(BaseActionsValidator):
+
+    def _validate(self):
+        pInfo = self._entity.getPlayerInfo()
+        return ValidationResult(False, UNIT_RESTRICTION.FLAMETHROWER_IS_FULL) if not pInfo.isReady and g_currentVehicle.isPresent() and g_currentVehicle.item.isFlamethrower and not self._entity.hasSlotForFlamethrower() else super(FlamethrowerForbiddenSquadVehiclesValidator, self)._validate()
+
+
 class _EpicStateValidator(UnitStateValidator):
     __epicCtrl = dependency.descriptor(IEpicBattleMetaGameController)
 
@@ -39,7 +46,10 @@ class _EpicStateValidator(UnitStateValidator):
 class EpicSquadActionsValidator(SquadActionsValidator):
 
     def _createVehiclesValidator(self, entity):
-        return ActionsValidatorComposite(entity, validators=[_EpicBalancedSquadVehiclesValidator(entity), _EpicVehiclesValidator(entity), SPGForbiddenSquadVehiclesValidator(entity)])
+        return ActionsValidatorComposite(entity, validators=[_EpicBalancedSquadVehiclesValidator(entity),
+         _EpicVehiclesValidator(entity),
+         SPGForbiddenSquadVehiclesValidator(entity),
+         FlamethrowerForbiddenSquadVehiclesValidator(entity)])
 
     def _createStateValidator(self, entity):
         return _EpicStateValidator(entity)

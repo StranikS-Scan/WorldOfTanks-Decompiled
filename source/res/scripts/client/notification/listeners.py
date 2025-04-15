@@ -8,11 +8,11 @@ import datetime
 import weakref
 from collections import defaultdict
 from functools import partial
-from typing import TYPE_CHECKING, Tuple
+import typing
 import WWISE
 from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import INTEGRATED_AUCTION_NOTIFICATIONS, IS_BATTLE_PASS_MARATHON_STARTED, TRADING_CARAVAN_NOTIFICATIONS, PROGRESSIVE_REWARD_VISITED, RESOURCE_WELL_END_SHOWN, RESOURCE_WELL_NOTIFICATIONS, RESOURCE_WELL_START_SHOWN, SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP, ArmoryYard, REFERRAL_PROGRAM_PGB_FULL, BIRTHDAY_2023_INTRO_SHOWN, SUBSCRIPTION_LAST_EXPIRATION_NOTIFICATION, BattleMatters, EarlyAccess, Paragons
+from account_helpers.AccountSettings import INTEGRATED_AUCTION_NOTIFICATIONS, IS_BATTLE_PASS_MARATHON_STARTED, TRADING_CARAVAN_NOTIFICATIONS, PROGRESSIVE_REWARD_VISITED, RESOURCE_WELL_END_SHOWN, RESOURCE_WELL_NOTIFICATIONS, RESOURCE_WELL_START_SHOWN, SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP, ArmoryYard, REFERRAL_PROGRAM_PGB_FULL, BIRTHDAY_2023_INTRO_SHOWN, SUBSCRIPTION_LAST_EXPIRATION_NOTIFICATION, BattleMatters, EarlyAccess, Paragons, PREMIUM_QUESTS_NOTIFICATION
 from adisp import adisp_process
 from armory_yard.gui.shared.formatters import formatSpentCurrencies, formatPurchaseItems, formatBundlePurchase
 from armory_yard_constants import State
@@ -23,7 +23,7 @@ from early_access_common import EARLY_ACCESS_POSTPR_KEY
 from battle_pass_common import FinalReward
 from chat_shared import SYS_MESSAGE_TYPE
 from collector_vehicle import CollectorVehicleConsts
-from constants import ARENA_BONUS_TYPE, AUTO_MAINTENANCE_RESULT, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG, MAPS_TRAINING_ENABLED_KEY, PremiumConfigs, SwitchState
+from constants import ARENA_BONUS_TYPE, AUTO_MAINTENANCE_RESULT, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG, MAPS_TRAINING_ENABLED_KEY, PremiumConfigs, SwitchState, DailyQuestsLevels
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -75,7 +75,7 @@ from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwi
 from notification.settings import NOTIFICATION_TYPE, NotificationData
 from shared_utils import first
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import IBattlePassController, IBootcampController, ICollectionsSystemController, IEventsNotificationsController, IGameSessionController, ILimitedUIController, IResourceWellController, ISeniorityAwardsController, ISteamCompletionController, IArmoryYardController, IReferralProgramController, IWotPlusController, IEarlyAccessController, IArmoryYardShopController, IParagonsController
+from skeletons.gui.game_control import IBattlePassController, IBootcampController, ICollectionsSystemController, IEventsNotificationsController, IGameSessionController, ILimitedUIController, IResourceWellController, ISeniorityAwardsController, ISteamCompletionController, IArmoryYardController, IReferralProgramController, IWotPlusController, IEarlyAccessController, IArmoryYardShopController, IParagonsController, IUnseenEventsCounter
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -87,8 +87,8 @@ from skeletons.gui.system_messages import ISystemMessages
 from tutorial.control.context import GLOBAL_FLAG
 from tutorial.control.game_vars import getVehicleByIntCD
 from wg_async import wg_async, wg_await
-if TYPE_CHECKING:
-    from typing import List, Dict, Optional, Any, Type
+if typing.TYPE_CHECKING:
+    from typing import List, Dict, Optional, Any, Type, Tuple
     from notification.NotificationsModel import NotificationsModel
     from gui.platform.wgnp.steam_account.statuses import SteamAccEmailStatus
     from collections_common import Collection
@@ -132,6 +132,14 @@ class _StateExtractor(object):
         return cls.__lobbyContext.getServerSettings().getDailyQuestConfig().get('enabled', False)
 
     @classmethod
+    def getEpicDailyQuestsState(cls):
+        return cls.__lobbyContext.getServerSettings().getDailyQuestConfig().get('epicRewardEnabled', False)
+
+    @classmethod
+    def getDailyQuestsRerrolState(cls):
+        return cls.__lobbyContext.getServerSettings().getDailyQuestConfig().get('rerollEnabled', False)
+
+    @classmethod
     def getCollectorVehicleState(cls):
         return cls.__lobbyContext.getServerSettings().isCollectorVehicleEnabled()
 
@@ -148,33 +156,37 @@ class _StateExtractor(object):
         return cls.__lobbyContext.getServerSettings().isMapsTrainingEnabled()
 
 
-_FEATURES_DATA = {PremiumConfigs.DAILY_BONUS: {_FeatureState.ON: (R.strings.system_messages.daily_xp_bonus.switch_on.title(), R.strings.system_messages.daily_xp_bonus.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
-                              _FeatureState.OFF: (R.strings.system_messages.daily_xp_bonus.switch_off.title(), R.strings.system_messages.daily_xp_bonus.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
-                              _FUNCTION: _StateExtractor.getAdditionalBonusState},
- PremiumConfigs.PREM_SQUAD: {_FeatureState.ON: (R.strings.system_messages.squad_bonus.switch_on.title(), R.strings.system_messages.squad_bonus.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
-                             _FeatureState.OFF: (R.strings.system_messages.squad_bonus.switch_off.title(), R.strings.system_messages.squad_bonus.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
-                             _FUNCTION: _StateExtractor.getSquadPremiumState},
- PremiumConfigs.IS_PREFERRED_MAPS_ENABLED: {_FeatureState.ON: (R.strings.system_messages.maps_black_list.switch_on.title(), R.strings.system_messages.maps_black_list.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
-                                            _FeatureState.OFF: (R.strings.system_messages.maps_black_list.switch_off.title(), R.strings.system_messages.maps_black_list.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
-                                            _FUNCTION: _StateExtractor.getPreferredMapsState},
- PremiumConfigs.PIGGYBANK: {_FeatureState.ON: (R.strings.system_messages.piggybank.switch_on.title(), R.strings.system_messages.piggybank.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
-                            _FeatureState.OFF: (R.strings.system_messages.piggybank.switch_off.title(), R.strings.system_messages.piggybank.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
-                            _FUNCTION: _StateExtractor.getPiggyBankState},
- PremiumConfigs.PREM_QUESTS: {_FeatureState.ON: (R.strings.system_messages.premium_quests.switch_on.title(), R.strings.system_messages.premium_quests.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
-                              _FeatureState.OFF: (R.strings.system_messages.premium_quests.switch_off.title(), R.strings.system_messages.premium_quests.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
-                              _FUNCTION: _StateExtractor.getPremQuestsState},
- DAILY_QUESTS_CONFIG: {_FeatureState.ON: (R.strings.system_messages.daily_quests.switch_on.title(), R.strings.system_messages.daily_quests.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
-                       _FeatureState.OFF: (R.strings.system_messages.daily_quests.switch_off.title(), R.strings.system_messages.daily_quests.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
-                       _FUNCTION: _StateExtractor.getDailyQuestsState},
- CollectorVehicleConsts.CONFIG_NAME: {_FeatureState.ON: (R.strings.system_messages.collectorVehicle.switch_on.title(), R.strings.system_messages.collectorVehicle.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
-                                      _FeatureState.OFF: (R.strings.system_messages.collectorVehicle.switch_off.title(), R.strings.system_messages.collectorVehicle.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
-                                      _FUNCTION: _StateExtractor.getCollectorVehicleState},
- DOG_TAGS_CONFIG: {_FeatureState.ON: (R.strings.system_messages.dog_tags.switch_on.title(), R.strings.system_messages.dog_tags.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
-                   _FeatureState.OFF: (R.strings.system_messages.dog_tags.switch_off.title(), R.strings.system_messages.dog_tags.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
-                   _FUNCTION: _StateExtractor.getDogTagsUnlockingState},
- MAPS_TRAINING_ENABLED_KEY: {_FeatureState.ON: (R.strings.system_messages.maps_training.switch.title(), R.strings.system_messages.maps_training.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
-                             _FeatureState.OFF: (R.strings.system_messages.maps_training.switch.title(), R.strings.system_messages.maps_training.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
-                             _FUNCTION: _StateExtractor.getMapsTrainingState}}
+_FEATURES_DATA = {PremiumConfigs.DAILY_BONUS: ({_FeatureState.ON: (R.strings.system_messages.daily_xp_bonus.switch_on.title(), R.strings.system_messages.daily_xp_bonus.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
+                               _FeatureState.OFF: (R.strings.system_messages.daily_xp_bonus.switch_off.title(), R.strings.system_messages.daily_xp_bonus.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
+                               _FUNCTION: _StateExtractor.getAdditionalBonusState},),
+ PremiumConfigs.PREM_SQUAD: ({_FeatureState.ON: (R.strings.system_messages.squad_bonus.switch_on.title(), R.strings.system_messages.squad_bonus.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
+                              _FeatureState.OFF: (R.strings.system_messages.squad_bonus.switch_off.title(), R.strings.system_messages.squad_bonus.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
+                              _FUNCTION: _StateExtractor.getSquadPremiumState},),
+ PremiumConfigs.IS_PREFERRED_MAPS_ENABLED: ({_FeatureState.ON: (R.strings.system_messages.maps_black_list.switch_on.title(), R.strings.system_messages.maps_black_list.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
+                                             _FeatureState.OFF: (R.strings.system_messages.maps_black_list.switch_off.title(), R.strings.system_messages.maps_black_list.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
+                                             _FUNCTION: _StateExtractor.getPreferredMapsState},),
+ PremiumConfigs.PIGGYBANK: ({_FeatureState.ON: (R.strings.system_messages.piggybank.switch_on.title(), R.strings.system_messages.piggybank.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
+                             _FeatureState.OFF: (R.strings.system_messages.piggybank.switch_off.title(), R.strings.system_messages.piggybank.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
+                             _FUNCTION: _StateExtractor.getPiggyBankState},),
+ PremiumConfigs.PREM_QUESTS: ({_FeatureState.ON: (R.strings.system_messages.premium_quests.switch_on.title(), R.strings.system_messages.premium_quests.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
+                               _FeatureState.OFF: (R.strings.system_messages.premium_quests.switch_off.title(), R.strings.system_messages.premium_quests.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
+                               _FUNCTION: _StateExtractor.getPremQuestsState},),
+ DAILY_QUESTS_CONFIG: ({_FeatureState.ON: (R.strings.system_messages.daily_quests.switch_on.title(), R.strings.system_messages.daily_quests.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
+                        _FeatureState.OFF: (R.strings.system_messages.daily_quests.switch_off.title(), R.strings.system_messages.daily_quests.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
+                        _FUNCTION: _StateExtractor.getDailyQuestsState}, {_FeatureState.ON: (R.strings.system_messages.daily_quests.epic_quest_on.title(), R.strings.system_messages.daily_quests.epic_quest_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
+                        _FeatureState.OFF: (R.strings.system_messages.daily_quests.epic_quest_off.title(), R.strings.system_messages.daily_quests.epic_quest_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
+                        _FUNCTION: _StateExtractor.getEpicDailyQuestsState}, {_FeatureState.ON: (R.strings.system_messages.daily_quests.reroll_on.title(), R.strings.system_messages.daily_quests.reroll_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
+                        _FeatureState.OFF: (R.strings.system_messages.daily_quests.reroll_off.title(), R.strings.system_messages.daily_quests.reroll_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
+                        _FUNCTION: _StateExtractor.getDailyQuestsRerrolState}),
+ CollectorVehicleConsts.CONFIG_NAME: ({_FeatureState.ON: (R.strings.system_messages.collectorVehicle.switch_on.title(), R.strings.system_messages.collectorVehicle.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
+                                       _FeatureState.OFF: (R.strings.system_messages.collectorVehicle.switch_off.title(), R.strings.system_messages.collectorVehicle.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
+                                       _FUNCTION: _StateExtractor.getCollectorVehicleState},),
+ DOG_TAGS_CONFIG: ({_FeatureState.ON: (R.strings.system_messages.dog_tags.switch_on.title(), R.strings.system_messages.dog_tags.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
+                    _FeatureState.OFF: (R.strings.system_messages.dog_tags.switch_off.title(), R.strings.system_messages.dog_tags.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
+                    _FUNCTION: _StateExtractor.getDogTagsUnlockingState},),
+ MAPS_TRAINING_ENABLED_KEY: ({_FeatureState.ON: (R.strings.system_messages.maps_training.switch.title(), R.strings.system_messages.maps_training.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
+                              _FeatureState.OFF: (R.strings.system_messages.maps_training.switch.title(), R.strings.system_messages.maps_training.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
+                              _FUNCTION: _StateExtractor.getMapsTrainingState},)}
 
 class _NotificationListener(object):
 
@@ -947,7 +959,7 @@ class SwitcherListener(_NotificationListener):
 
     def __init__(self):
         super(SwitcherListener, self).__init__()
-        self.__currentStates = {}
+        self.__currentStates = defaultdict(list)
 
     def start(self, model):
         super(SwitcherListener, self).start(model)
@@ -962,19 +974,20 @@ class SwitcherListener(_NotificationListener):
         return
 
     def __onServerSettingsChange(self, diff):
-        for feature, data in _FEATURES_DATA.iteritems():
+        for feature, dataList in _FEATURES_DATA.iteritems():
             if feature in diff:
-                isEnabled = data[_FUNCTION]()
-                self.__addMessage(feature, isEnabled)
-                self.__currentStates[feature] = isEnabled
+                for idx, data in enumerate(dataList):
+                    isEnabled = data[_FUNCTION]()
+                    self.__addMessage(feature, idx, isEnabled)
+                    self.__currentStates[feature][idx] = isEnabled
 
     def __fillCurrentStates(self):
-        for featureName, value in _FEATURES_DATA.iteritems():
-            self.__currentStates[featureName] = value[_FUNCTION]()
+        for featureName, dataList in _FEATURES_DATA.iteritems():
+            self.__currentStates[featureName] = [ data[_FUNCTION]() for data in dataList ]
 
-    def __addMessage(self, featureName, newState):
-        if self.__currentStates[featureName] != newState:
-            msg = _FEATURES_DATA[featureName]
+    def __addMessage(self, featureName, idx, newState):
+        if self.__currentStates[featureName][idx] != newState:
+            msg = _FEATURES_DATA[featureName][idx]
             if newState:
                 msgTitle, msgBody, msgType = msg[_FeatureState.ON]
                 SystemMessages.pushMessage(type=msgType, text=backport.text(msgBody), messageData={'header': backport.text(msgTitle)})
@@ -1023,6 +1036,9 @@ class TankPremiumListener(_NotificationListener):
         if not isPremActive:
             priority = NotificationPriorityLevel.LOW
             SystemMessages.pushMessage(priority=priority, text=backport.text(R.strings.messenger.serviceChannelMessages.piggyBank.onPause()))
+        elif AccountSettings.getSettings(PREMIUM_QUESTS_NOTIFICATION) and isPremActive and self.__lobbyContext.getServerSettings().getPremQuestsConfig().get('enabled'):
+            SystemMessages.pushMessage(priority=NotificationPriorityLevel.LOW, text=backport.text(R.strings.system_messages.daily_quests.premium.active()))
+        AccountSettings.setSettings(PREMIUM_QUESTS_NOTIFICATION, not isPremActive)
 
 
 class BattlePassListener(_NotificationListener):
@@ -2042,7 +2058,7 @@ class ArmoryYardListener(_NotificationListener):
         return backport.text(self.ARMORY_YARD_SHOP_TEXT.title())
 
     def __collectReward(self):
-        SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.collectRewards()), type=SystemMessages.SM_TYPE.InformationHeader, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': backport.text(self.ARMORY_YARD_TEXT.rewards.title())})
+        SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.collectRewards()), type=SystemMessages.SM_TYPE.ArmoryYardMain, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': backport.text(self.ARMORY_YARD_TEXT.rewards.title())})
 
     def __switchChange(self):
         if self.__armoryYardCtrl.getState() != State.DISABLED:
@@ -2673,6 +2689,45 @@ class ParagonsListener(_NotificationListener):
         pushParagonsNewStageAvailableMessage()
 
 
+class DailyBonusQuestListener(_NotificationListener):
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __eventsCache = dependency.descriptor(IEventsCache)
+    __unseenEventsManager = dependency.descriptor(IUnseenEventsCounter)
+    __slots__ = ('__needBonusTokens', '__bonusTokenName')
+
+    def __init__(self):
+        super(DailyBonusQuestListener, self).__init__()
+        self.__bonusTokenName = None
+        self.__needBonusTokens = None
+        return
+
+    def start(self, model):
+        if self.__bonusTokenName is None:
+            bq = first(self.__eventsCache.getDailyQuests(filterLevels=(DailyQuestsLevels.BONUS,)).values())
+            if bq is not None:
+                token = first(bq.accountReqs.getTokens())
+                if token is not None:
+                    self.__bonusTokenName = token.getID()
+                    self.__needBonusTokens = token.getNeededCount()
+                else:
+                    _logger.warning('Can not find token in bonus daily quest condition')
+            else:
+                self.__bonusTokenName = ''
+        g_clientUpdateManager.addCallback('tokens', self.__onTokensUpdate)
+        return super(DailyBonusQuestListener, self).start(model)
+
+    def stop(self):
+        super(DailyBonusQuestListener, self).stop()
+        g_clientUpdateManager.removeObjectCallbacks(self)
+
+    def __onTokensUpdate(self, diff):
+        if self.__needBonusTokens is not None and self.__bonusTokenName in diff:
+            if self.__itemsCache.items.tokens.getTokenCount(self.__bonusTokenName) == self.__needBonusTokens:
+                self.__unseenEventsManager.clearBonusDQ()
+                SystemMessages.pushMessage(type=SystemMessages.SM_TYPE.InformationHeader, text=backport.text(R.strings.system_messages.daily_quests.bonus_quest_available.body()), messageData={'header': backport.text(R.strings.system_messages.daily_quests.bonus_quest_available.title())}, priority=NotificationPriorityLevel.LOW)
+        return
+
+
 registerNotificationsListeners((ServiceChannelListener,
  MissingEventsListener,
  PrbInvitesListener,
@@ -2701,7 +2756,8 @@ registerNotificationsListeners((ServiceChannelListener,
  SubscriptionListener,
  EarlyAccessListener,
  PersonalMissionsListener,
- ParagonsListener))
+ ParagonsListener,
+ DailyBonusQuestListener))
 
 class NotificationsListeners(_NotificationListener):
 

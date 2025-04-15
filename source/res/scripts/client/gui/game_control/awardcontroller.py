@@ -63,7 +63,7 @@ from gui.server_events.events_helpers import isACEmailConfirmationQuest, isDaily
 from gui.server_events.finders import CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID, PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId, BRANCH_TO_OPERATION_IDS
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared import event_dispatcher
-from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showResourceWellAwardWindow, showSeniorityRewardAwardWindow, showBlankGiftWindow, showCollectionAwardsWindow, showParagonsRewardsWindow
+from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showResourceWellAwardWindow, showSeniorityRewardAwardWindow, showBlankGiftWindow, showCollectionAwardsWindow, showParagonsRewardsWindow, showDailyEpicQuestRewardWindow
 from gui.shared.events import PersonalMissionsEvent
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.system_factory import registerAwardControllerHandlers, collectAwardControllerHandlers
@@ -1972,6 +1972,30 @@ class PersonalMission3RewardHandler(BattleQuestsAutoWindowHandler):
             return
 
 
+class DailyEpicQuestsHandler(ServiceChannelHandler):
+    _EPIC_QUEST = 'QUEST_EPIC_REWARD'
+
+    def __init__(self, awardCtrl):
+        super(DailyEpicQuestsHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
+        self.__mergedBonuses = {}
+
+    def _showAward(self, ctx):
+        showDailyEpicQuestRewardWindow(self.__mergedBonuses)
+
+    def _needToShowAward(self, ctx):
+        _, message = ctx
+        return bool(self.__checkEpicQuest(message.data)) if isinstance(message.data, dict) else None
+
+    def __checkEpicQuest(self, data):
+        rewards = []
+        for questID in data.get('completedQuestIDs', set()):
+            if self._EPIC_QUEST in questID:
+                rewards.append(data.get('detailedRewards', {}).get(questID, {}))
+
+        self.__mergedBonuses = getMergedBonusesFromDicts(rewards)
+        return bool(self.__mergedBonuses)
+
+
 registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,
  PunishWindowHandler,
  TokenQuestsWindowHandler,
@@ -2017,4 +2041,5 @@ registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,
  PremiumSubsEntitlementReceivedHandler,
  Comp7CouponHandler,
  EarlyAccessQuestHandler,
- PersonalMission3RewardHandler))
+ PersonalMission3RewardHandler,
+ DailyEpicQuestsHandler))

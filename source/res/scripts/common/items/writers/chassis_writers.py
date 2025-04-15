@@ -224,6 +224,7 @@ def writeSplineDesc(splineDesc, section, cache):
                 _xml.rewriteFloat(section, 'segment2Offset', item.segment2Offset)
             _xml.rewriteInt(section, 'atlas/UTiles', item.atlasUTiles)
             _xml.rewriteInt(section, 'atlas/VTiles', item.atlasVTiles)
+            _xml.deleteAndCleanup(section, 'castShadows') if item.castShadows else _xml.rewriteBool(section, 'castShadows', False)
             return
 
         def writeModelSets(item, section):

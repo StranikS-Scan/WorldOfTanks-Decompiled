@@ -7,6 +7,7 @@ from messenger.formatters import service_channel as _sc
 from messenger.formatters import wot_plus as _wotPlusFormatters
 from messenger.formatters import token_quest_subformatters
 from messenger.formatters.new_year_post_event.converter_formatters import NewYearMandarinsConverterFormatter
+from messenger.formatters.daily_quests_initial_event.converter_formatters import DailyQuestsEpicCompensationFormatter
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 registerTokenQuestsSubFormatters((token_quest_subformatters.LootBoxTokenQuestFormatter(),
  token_quest_subformatters.RecruitQuestsFormatter(),
@@ -23,6 +24,7 @@ registerTokenQuestsSubFormatters((token_quest_subformatters.LootBoxTokenQuestFor
  token_quest_subformatters.CrewPerksFormatter(),
  token_quest_subformatters.ParagonsTokenQuestsSubformatter()))
 registerConvertersSubFormatter('newYear25', NewYearMandarinsConverterFormatter)
+registerConvertersSubFormatter('dailyQuests', DailyQuestsEpicCompensationFormatter)
 _HANGAR_QUESTS_SUB_FORMATTERS = (token_quest_subformatters.BattleMattersAwardsFormatter(),)
 _PERSONAL_MISSIONS_SUB_FORMATTERS = (token_quest_subformatters.PersonalMissionsFormatter(),)
 SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
@@ -68,6 +70,7 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.royaleQuests.index(): _sc.BRQuestsFormatter(),
  _SM_TYPE.bootcamp.index(): _sc.BootcampResultsFormatter(),
  _SM_TYPE.prbVehicleMaxSpgKick.index(): _sc.PrbVehicleMaxSpgKickFormatter(),
+ _SM_TYPE.prbVehicleMaxFlamethrowerKick.index(): _sc.PrbVehicleMaxFlamethrowerKickFormatter(),
  _SM_TYPE.hangarQuests.index(): _sc.TokenQuestsFormatter(subFormatters=_HANGAR_QUESTS_SUB_FORMATTERS),
  _SM_TYPE.prbVehicleMaxScoutKick.index(): _sc.PrbVehicleMaxScoutKickFormatter(),
  _SM_TYPE.currencyUpdate.index(): _sc.CurrencyUpdateFormatter(),
@@ -127,7 +130,10 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.earlyAccessCompensation.index(): _sc.EarlyAccessCompensationFormatter(),
  _SM_TYPE.earlyAccessVehicle.index(): _sc.EarlyAccessVehicleObtainFormatter(),
  _SM_TYPE.paragonsLevelRewardsReceived.index(): _sc.ParagonsLevelCompletedFormatter(),
- _SM_TYPE.paragonsCoinsGranted.index(): _sc.ParagonsCoinsGrantedFormatter()}
+ _SM_TYPE.paragonsCoinsGranted.index(): _sc.ParagonsCoinsGrantedFormatter(),
+ _SM_TYPE.playStreakRewards.index(): _sc.PlayStreakRewardsFormatter(),
+ _SM_TYPE.playStreakSysMessage.index(): _sc.PlayStreakSysMessageFormatter(),
+ _SM_TYPE.playStreakSysWithRewardsMessage.index(): _sc.PlayStreakSysMessageRewardsFormatter()}
 
 def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.serverReboot.index(), _sc.ServerRebootFormatter())
@@ -173,6 +179,7 @@ def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.royaleQuests.index(), _sc.BRQuestsFormatter())
     registerMessengerServerFormatter(_SM_TYPE.bootcamp.index(), _sc.BootcampResultsFormatter())
     registerMessengerServerFormatter(_SM_TYPE.prbVehicleMaxSpgKick.index(), _sc.PrbVehicleMaxSpgKickFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.prbVehicleMaxFlamethrowerKick.index(), _sc.PrbVehicleMaxFlamethrowerKickFormatter())
     registerMessengerServerFormatter(_SM_TYPE.hangarQuests.index(), _sc.TokenQuestsFormatter(subFormatters=_HANGAR_QUESTS_SUB_FORMATTERS))
     registerMessengerServerFormatter(_SM_TYPE.prbVehicleMaxScoutKick.index(), _sc.PrbVehicleMaxScoutKickFormatter())
     registerMessengerServerFormatter(_SM_TYPE.currencyUpdate.index(), _sc.CurrencyUpdateFormatter())
@@ -209,6 +216,8 @@ def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.wotPlusExcludedVehicleExpired.index(), _sc.ExclusiveVehicleWotPlusFormatter(isEnabled=False))
     registerMessengerServerFormatter(_SM_TYPE.wotPlusExpired.index(), _wotPlusFormatters.WotPlusExpiredFormatter())
     registerMessengerServerFormatter(_SM_TYPE.bonusExcludedMap.index(), _sc.SimpleFormatter('BonusExcludedMapAvailable'))
+    registerMessengerServerFormatter(_SM_TYPE.playStreakSysMessage.index(), _sc.PlayStreakSysMessageFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.playStreakSysWithRewardsMessage.index(), _sc.PlayStreakSysMessageRewardsFormatter())
     registerMessengerServerFormatter(_SM_TYPE.goldReserveIsFull.index(), _sc.SimpleFormatter('GoldReserveFullMessage'))
     registerMessengerServerFormatter(_SM_TYPE.passiveXPNoTank.index(), _sc.SimpleFormatter('PassiveXPNoTankMessage'))
     registerMessengerServerFormatter(_SM_TYPE.passiveXPIncompatibleCrewNewDay.index(), _sc.SimpleFormatter('PassiveXPIncompatibleCrewNewDayMessage'))
@@ -269,3 +278,5 @@ def initRegistrationFormatters():
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.PARAGONS_SM_TYPE, _sc.ParagonsFormatter())
     registerMessengerServerFormatter(_SM_TYPE.paragonsLevelRewardsReceived.index(), _sc.ParagonsLevelCompletedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.paragonsCoinsGranted.index(), _sc.ParagonsCoinsGrantedFormatter())
+    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.GF_SM_TYPE, _sc.GFSMFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.playStreakRewards.index(), _sc.PlayStreakRewardsFormatter())

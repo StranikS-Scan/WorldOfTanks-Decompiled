@@ -203,8 +203,9 @@
       <module>	client.cgf_components.engine_components	</module>
       <module>	client.cgf_components.auto_shoot_guns_component	</module>
       <module>	client.cgf_components.gun_spin_animator_component	</module>
-      <module>	client.cgf_components.temperature_gun_component	</module>
       <module>	client.cgf_components.customizable_model_component	</module>
+      <module>	client.cgf_components.view_camera_sync	</module>
+      <module>	client.cgf_components.view_components	</module>
     </script>
     <testScript>
       <module>	client.cgf_demo_client.test_client_component	</module>
@@ -291,6 +292,8 @@
       <path>	content/CGFPrefabs/cosmic_event/cosmic_event_stun_debuff.prefab	</path>
       <path>	content/CGFPrefabs/cosmic_event/cosmic_event_artifact_stages.prefab	</path>
     </prefabs>
-    <prefabFolders></prefabFolders>
+    <prefabFolders>
+      <path>	content/CGFPrefabs/May	</path>
+    </prefabFolders>
   </cgf>
 </resources.xml>

@@ -18,7 +18,6 @@ from gui.prb_control.formatters.invites import getPreQueueName
 from gui.server_events.events_dispatcher import showMissionsBattlePass
 from gui.shared import EVENT_BUS_SCOPE, events
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
-from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from helpers import dependency
 from helpers.events_handler import EventsHandler
 from helpers.time_utils import MS_IN_SECOND
@@ -26,10 +25,6 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.shared import IItemsCache
 from tutorial.control.context import GLOBAL_FLAG
-
-def entryPointTrigger(toShow):
-    getTutorialGlobalStorage().setValue(GLOBAL_FLAG.BATTLE_PASS_ENTRY_POINT, toShow)
-
 
 class _LastEntryState(object):
 
@@ -113,10 +108,10 @@ class BaseBattlePassEntryPointView(IGlobalListener, EventsHandler):
     @property
     def isBought(self):
         chapterID = self.chapterID
-        if chapterID and self.__battlePass.isBought(chapterID=chapterID):
-            return True
+        if chapterID:
+            return self.__battlePass.isBought(chapterID=chapterID)
         chapterIDs = self.__battlePass.getChapterIDs()
-        return all((self.__battlePass.isBought(chapterID=chapter) for chapter in chapterIDs))
+        return True if all((self.__battlePass.isBought(chapterID=chapter) for chapter in chapterIDs)) else self.__battlePass.isResourceChaptersBought() and self.__battlePass.isCompleted() and not self.isCompleted
 
     @property
     def isCompleted(self):
@@ -250,7 +245,6 @@ class BattlePassEntryPointView(ViewImpl, BaseBattlePassEntryPointView):
         super(BattlePassEntryPointView, self)._onLoading(*args, **kwargs)
         self._start()
         self.__notifications.addNotificator(PeriodicNotifier(self.__attentionTickTime, self.__showAttentionAnimation))
-        entryPointTrigger(self.__battlePass.isShowWidgetHint())
 
     def _finalize(self):
         self.__notifications.clearNotification()
@@ -267,6 +261,7 @@ class BattlePassEntryPointView(ViewImpl, BaseBattlePassEntryPointView):
 
     def _updateData(self, *_):
         self.__updateViewModel()
+        self.__battlePass.setTriggerHint(GLOBAL_FLAG.BATTLE_PASS_ENTRY_POINT, self.__battlePass.isShowWidgetHint())
 
     def __attentionTickTime(self):
         return ATTENTION_TIMER_DELAY

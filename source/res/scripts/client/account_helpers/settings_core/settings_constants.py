@@ -17,7 +17,7 @@ class GRAPHICS(CONST_CONTAINER):
     TRIPLE_BUFFERED = 'tripleBuffered'
     IGB_HARDWARE_ACCELERATION = 'igbHardwareAcceleration'
     COLOR_BLIND = 'isColorBlind'
-    UI_EFFECTS = 'uiEffects'
+    UI_EFFECTS = 'UI_EFFECTS'
     GRAPHICS_QUALITY_HD_SD = 'graphicsQualityHDSD'
     GRAPHICS_QUALITY_HD_SD_HIGH = 'graphicsQualityHDSDHigh'
     IS_SD_QUALITY = 'isSDQuality'
@@ -494,6 +494,7 @@ class BattlePassStorageKeys(CONST_CONTAINER):
     FLAGS_VERSION = 'flagsVersion'
     EXTRA_CHAPTER_INTRO_SHOWN = 'extraChapterIntroShown'
     EXTRA_CHAPTER_VIDEO_SHOWN = 'extraChapterVideoShown'
+    EXTRA_CHAPTER_FIRST_ENTER = 'extraChapterFirstEnter'
 
 
 class BattleCommStorageKeys(CONST_CONTAINER):

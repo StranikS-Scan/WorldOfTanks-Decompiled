@@ -309,12 +309,24 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
         return self._repository.getController(BATTLE_CTRL_ID.COMP7_PREBATTLE_SETUP_CTRL)
 
     @property
+    def highlightMarker(self):
+        return self._repository.getController(BATTLE_CTRL_ID.HIGHLIGHT_MARKER)
+
+    @property
     def comp7VOIPController(self):
         return self._repository.getController(BATTLE_CTRL_ID.COMP7_VOIP_CTRL)
 
     @property
     def overrideSettingsController(self):
         return self._repository.getController(BATTLE_CTRL_ID.OVERRIDE_SETTINGS)
+
+    @property
+    def areaPointMarker(self):
+        return self._repository.getController(BATTLE_CTRL_ID.AREA_POINT)
+
+    @property
+    def areaVehicleMarker(self):
+        return self._repository.getController(BATTLE_CTRL_ID.AREA_VEHICLE_MARKER)
 
 
 class _EmptyRepository(interfaces.IBattleControllersRepository):
@@ -561,3 +573,4 @@ for guiType in ARENA_GUI_TYPE.STRONGHOLD_RANGE:
 registerBattleControllerRepo(ARENA_GUI_TYPE.EVENT_BATTLES, EventControllerRepository)
 registerBattleControllerRepo(ARENA_GUI_TYPE.MAPS_TRAINING, MapsTrainingControllerRepository)
 registerBattleControllerRepo(ARENA_GUI_TYPE.COMP7, Comp7ControllerRepository)
+registerBattleControllerRepo(ARENA_GUI_TYPE.TOURNAMENT_COMP7, Comp7ControllerRepository)

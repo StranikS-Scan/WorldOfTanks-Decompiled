@@ -27,7 +27,7 @@ def getSquadFightBtnTooltipData(state):
     elif state in (UNIT_RESTRICTION.SPG_IS_FULL, UNIT_RESTRICTION.SPG_IS_FORBIDDEN):
         header = backport.text(R.strings.tooltips.hangar.tankCarusel.wrongSquadSPGVehicle.header())
         body = backport.text(R.strings.tooltips.hangar.tankCarusel.wrongSquadSPGVehicle.body())
-    elif state in (UNIT_RESTRICTION.SCOUT_IS_FULL, UNIT_RESTRICTION.SCOUT_IS_FORBIDDEN):
+    elif state in (UNIT_RESTRICTION.SCOUT_IS_FULL, UNIT_RESTRICTION.SCOUT_IS_FORBIDDEN, UNIT_RESTRICTION.FLAMETHROWER_IS_FULL):
         header = backport.text(R.strings.tooltips.hangar.tankCarusel.wrongSquadSPGVehicle.header())
         body = backport.text(R.strings.tooltips.hangar.tankCarusel.wrongSquadSPGVehicle.body())
     else:

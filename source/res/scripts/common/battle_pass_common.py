@@ -73,6 +73,7 @@ VEHICLE_WEEK_CAP_SHIFT_INDEX = 1
 class FinalReward(Enum):
     STYLE = 'style'
     TANKMAN = 'tankman'
+    VEHICLE = 'vehicle'
 
 
 @unique

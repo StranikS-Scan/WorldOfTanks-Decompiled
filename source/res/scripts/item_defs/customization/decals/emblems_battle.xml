@@ -422,4 +422,23 @@
       <type>	emblem	</type>
     </decal>
   </itemGroup>
+  <itemGroup>
+    <name>	MayPvE_Emblem_2025	</name>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT emblems 25g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:emblem/battle	</userString>
+    <decal>
+      <id>	31316	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/battle/MayPvE_Emblem_01_2025.dds	</texture>
+      <userString>	#vehicle_customization:MayPvE_Emblem_01_2025/name	</userString>
+      <description>	#vehicle_customization:MayPvE_Emblem_01_2025/description	</description>
+      <type>	emblem	</type>
+      <vehicleFilter>
+        <include>
+          <nations>	ussr	</nations>
+        </include>
+      </vehicleFilter>
+    </decal>
+  </itemGroup>
 </emblems_battle.xml>

@@ -14,7 +14,7 @@ def _advancedBlockCondition(context):
 
     def advancedTooltipExist(*args):
         item = context.buildItem(*args)
-        return not item.isFlameGun() if item.itemTypeName == FITTING_TYPES.VEHICLE_GUN else item.getGUIEmblemID() in advanced.MODULE_MOVIES and not (item.itemTypeID == GUI_ITEM_TYPE.CHASSIS and item.isWheeledOnSpotRotationChassis())
+        return not item.isFlameGun() or item.isAutoShootFlameGun() if item.itemTypeName == FITTING_TYPES.VEHICLE_GUN else item.getGUIEmblemID() in advanced.MODULE_MOVIES and not (item.itemTypeID == GUI_ITEM_TYPE.CHASSIS and item.isWheeledOnSpotRotationChassis())
 
     return advancedTooltipExist
 
@@ -23,7 +23,7 @@ def _shellAdvancedBlockCondition(context):
 
     def advancedTooltipExist(intCD, *_):
         item = context.buildItem(intCD)
-        return (item.type, item.isModernMechanics) in advanced.SHELL_MOVIES
+        return advanced.getPreparedShellItemType(item) in advanced.SHELL_MOVIES
 
     return advancedTooltipExist
 
@@ -32,7 +32,7 @@ def _nationChangeShellAdvancedBlockCondition(context):
 
     def advancedTooltipExist(vehCD, intCD, *_):
         item = context.buildItem(vehCD, intCD)
-        return (item.type, item.isModernMechanics) in advanced.SHELL_MOVIES
+        return advanced.getPreparedShellItemType(item) in advanced.SHELL_MOVIES
 
     return advancedTooltipExist
 

@@ -256,12 +256,13 @@ def readSplineTrackPairDesc(xmlCtx, section, cache):
     length = _xml.readFloat(xmlCtx, section, 'segmentLength')
     offset = _xml.readFloat(xmlCtx, section, 'segmentOffset', 0)
     offset2 = _xml.readFloat(xmlCtx, section, 'segment2Offset', 0)
+    castShadows = _xml.readBool(xmlCtx, section, 'castShadows', True)
     trackPairIdx = section.readInt('trackPairIdx', 0)
     atlasUTiles = section.readInt('atlas/UTiles', 1)
     atlasVTiles = section.readInt('atlas/VTiles', 1)
     leftDesc = _xml.readStringOrNone(xmlCtx, section, 'left')
     rightDesc = _xml.readStringOrNone(xmlCtx, section, 'right')
-    return SplineTrackPairDesc(trackPairIdx, splineSegmentModelSets, leftDesc, rightDesc, length, offset, offset2, atlasUTiles, atlasVTiles)
+    return SplineTrackPairDesc(trackPairIdx, splineSegmentModelSets, leftDesc, rightDesc, length, offset, offset2, atlasUTiles, atlasVTiles, castShadows)
 
 
 def readSplineConfig(xmlCtx, section, cache):

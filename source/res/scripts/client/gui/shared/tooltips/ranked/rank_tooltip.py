@@ -32,9 +32,9 @@ class RankedTooltipData(BlocksTooltipData):
         topPaddingText = formatters.packPadding(top=-5)
         items = super(RankedTooltipData, self)._packBlocks()
         items.append(self.__packTitle())
-        comment = self.__packComment()
-        if comment is not None:
-            items.append(comment)
+        comments = self.__packComments()
+        if comments:
+            items.append(comments)
         items.append(formatters.packBuildUpBlockData([formatters.packRankBlockData(rank=self.item, padding=formatters.packPadding(top=10, bottom=15))]))
         if self.item.isQualification():
             quest = self.__getQualificationQuest()
@@ -67,9 +67,13 @@ class RankedTooltipData(BlocksTooltipData):
             text = text_styles.concatStylesToMultiLine(name, divisionName)
         return formatters.packTextBlockData(text)
 
-    def __packComment(self):
-        comment = self.__getDivisionComment() or self.__getShieldComment() or self.__getUnburnableComment()
-        return formatters.packTextBlockData(comment) if comment is not None else None
+    def __packComments(self):
+        result = []
+        for comment in (self.__getDivisionComment(), self.__getShieldComment(), self.__getUnburnableComment()):
+            if comment is not None:
+                result.append(comment)
+
+        return formatters.packTextBlockData('\n\n'.join(result))
 
     def __getDivisionComment(self):
         comment = None

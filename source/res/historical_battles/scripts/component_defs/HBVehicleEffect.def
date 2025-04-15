@@ -1,0 +1,17 @@
+<HBVehicleEffect.def>
+  <Properties>
+    <eqId>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </eqId>
+    <ownerType>
+      <Type>	INT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </ownerType>
+    <startTime>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </startTime>
+  </Properties>
+  <DefaultKeyName>	hbVehicleEffect	</DefaultKeyName>
+</HBVehicleEffect.def>

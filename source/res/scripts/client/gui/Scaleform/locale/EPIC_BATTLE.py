@@ -203,6 +203,7 @@ class EPIC_BATTLE(object):
     RESPAWNSCREEN_RESPAWNWARNING = '#epic_battle:respawnScreen/respawnWarning'
     PLAYER_ERRORS_MINEFIELDISINTERSECTED = '#epic_battle:player_errors/minefieldIsIntersected'
     DEPLOYMENTMAP_SPGLIMITREACHED = '#epic_battle:deploymentMap/spgLimitReached'
+    DEPLOYMENTMAP_FLAMETHROWERLIMITREACHED = '#epic_battle:deploymentMap/flamethrowerLimitReached'
     DEPLOYMENTMAP_LANEPLAYERLIMITREACHED = '#epic_battle:deploymentMap/lanePlayerLimitReached'
     DEPLOYMENTMAP_RESPAWNWARNING = '#epic_battle:deploymentMap/respawnWarning'
     EPIC_BATTLES_AFTER_BATTLE_TITLE = '#epic_battle:epic_battles_after_battle/Title'

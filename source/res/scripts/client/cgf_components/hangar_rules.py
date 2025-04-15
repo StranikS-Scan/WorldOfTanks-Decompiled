@@ -7,10 +7,12 @@ from cgf_components.token_component import TokenManager
 from cgf_script.managers_registrator import registerManager, Rule, registerRule
 from hover_component import HoverManager
 from highlight_component import HighlightManager
-from on_click_components import ClickManager
+from on_click_components import ClickManager, ClientSelectableComponentsManager
 from armory_yard_components import AssemblyStageIndexManager
 from hangar_camera_manager import HangarCameraManager
 from c11n_logic_manager import C11nLogicManager
+from view_camera_sync import ViewCameraSyncManager, ViewCameraLinksManager
+from marker_component import LobbyGFMarkersManager
 
 @registerRule
 class SelectionRule(Rule):
@@ -31,6 +33,10 @@ class SelectionRule(Rule):
 
     @registerManager(TooltipManager)
     def reg4(self):
+        return None
+
+    @registerManager(ClientSelectableComponentsManager)
+    def reg5(self):
         return None
 
 
@@ -75,4 +81,28 @@ class HangarTokenRule(Rule):
 
     @registerManager(TriggerVSEComponentsManager)
     def reg2(self):
+        return None
+
+
+@registerRule
+class ViewCameraSyncRule(Rule):
+    category = 'Hangar rules'
+    domain = CGF.DomainOption.DomainClient
+
+    @registerManager(ViewCameraSyncManager)
+    def reg1(self):
+        return None
+
+    @registerManager(ViewCameraLinksManager)
+    def reg2(self):
+        return None
+
+
+@registerRule
+class LobbyGFMarkerRule(Rule):
+    category = 'Hangar rules'
+    domain = CGF.DomainOption.DomainClient
+
+    @registerManager(LobbyGFMarkersManager)
+    def reg1(self):
         return None

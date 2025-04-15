@@ -30,6 +30,9 @@ class QuestProgress(object):
             if itemDiff is not None:
                 synchronizeDicts(itemDiff, self.__cache.setdefault(item, {}))
 
+        cache = diff.get('cache', {})
+        if 'pqStates' in cache:
+            synchronizeDicts(cache['pqStates'], self.__cache.setdefault('pqStates', {}))
         return
 
     def getCache(self, callback=None):

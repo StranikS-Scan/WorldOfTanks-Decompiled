@@ -625,10 +625,10 @@ def setupSplineTracks(fashion, vDesc, chassisModel, prereqs, modelsSet):
                 if not chassisModel.isValid():
                     _logger.error('chassisModel is not valid')
                     return
-                track = BigWorld.wg_createSplineTrack(chassisModel, trackDesc.leftDesc, idx, trackDesc.segmentLength, segmentModelLeft, trackDesc.segmentOffset, segment2ModelLeft, trackDesc.segment2Offset, _ROOT_NODE_NAME, trackDesc.atlasUTiles, trackDesc.atlasVTiles)
+                track = BigWorld.wg_createSplineTrack(chassisModel, trackDesc.leftDesc, idx, trackDesc.segmentLength, segmentModelLeft, trackDesc.segmentOffset, segment2ModelLeft, trackDesc.segment2Offset, _ROOT_NODE_NAME, trackDesc.atlasUTiles, trackDesc.atlasVTiles, trackDesc.castShadows)
                 if track is not None:
                     leftSpline.append(track)
-                track = BigWorld.wg_createSplineTrack(chassisModel, trackDesc.rightDesc, idx, trackDesc.segmentLength, segmentModelRight, trackDesc.segmentOffset, segment2ModelRight, trackDesc.segment2Offset, _ROOT_NODE_NAME, trackDesc.atlasUTiles, trackDesc.atlasVTiles)
+                track = BigWorld.wg_createSplineTrack(chassisModel, trackDesc.rightDesc, idx, trackDesc.segmentLength, segmentModelRight, trackDesc.segmentOffset, segment2ModelRight, trackDesc.segment2Offset, _ROOT_NODE_NAME, trackDesc.atlasUTiles, trackDesc.atlasVTiles, trackDesc.castShadows)
                 if track is not None:
                     rightSpline.append(track)
 

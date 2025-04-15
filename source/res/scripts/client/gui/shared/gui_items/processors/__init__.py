@@ -3,6 +3,8 @@
 import logging
 import typing
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from gui.impl import backport
+from gui.impl.gen import R
 from helpers import dependency
 from helpers import i18n
 from adisp import adisp_process, adisp_async
@@ -12,6 +14,8 @@ from gui.shared.gui_items.processors import plugins as proc_plugs
 from skeletons.gui.shared import IItemsCache
 from collections import namedtuple
 _logger = logging.getLogger(__name__)
+if typing.TYPE_CHECKING:
+    from gui.impl.gen_utils import DynAccessor
 
 def makeSuccess(userMsg='', msgType=SM_TYPE.Information, auxData=None, msgData=None, msgPriority=None):
     return ResultMsg(True, userMsg, msgType, msgPriority, msgData if msgData is not None else {}, auxData)
@@ -25,11 +29,19 @@ def makeI18nSuccess(sysMsgKey='', auxData=None, *args, **kwargs):
     return makeSuccess(i18n.makeString('#system_messages:{}'.format(sysMsgKey), *args, **kwargs), kwargs.get('type', SM_TYPE.Information), auxData)
 
 
+def makeSimpleTextSuccess(textRes=R.invalid, auxData=None, *args, **kwargs):
+    return makeSuccess(backport.text(textRes(), *args, **kwargs), kwargs.get('type', SM_TYPE.Information), auxData)
+
+
 def makeI18nError(sysMsgKey='', defaultSysMsgKey='', auxData=None, *args, **kwargs):
     localKey = '#system_messages:{}'.format(sysMsgKey)
     if localKey not in SYSTEM_MESSAGES.ALL_ENUM and defaultSysMsgKey:
         localKey = '#system_messages:{}'.format(defaultSysMsgKey)
     return makeError(i18n.makeString(localKey, *args, **kwargs), kwargs.get('type', SM_TYPE.Error), auxData)
+
+
+def makeSimpleTextError(textRes=R.invalid, defTextRes=R.invalid, auxData=None, *args, **kwargs):
+    return makeError(backport.text((textRes() if textRes.exists() else defTextRes()), *args, **kwargs), kwargs.get('type', SM_TYPE.Error), auxData)
 
 
 class GroupedServerResponse(namedtuple('GroupedServerResponse', ['itemID', 'itemCount'])):

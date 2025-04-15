@@ -377,6 +377,7 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.r
  (_AB.SINGLE, 'BattlePassCommonPr_14_Marathon'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'BattlePassCommonPr_15'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'BattlePassCommonPr_16'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'BattlePassCommonPr_16_Marathon'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.TOTAL, 'collectorVehicle'): _NationAchieveFactory.get(_as.nation_specific.VehicleCollectorAchievement),
  (_AB.SINGLE, 'dedicationMedal1'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'dedicationMedal2'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
@@ -480,7 +481,13 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.r
  (_AB.SINGLE, 'comp7_4_3_champion'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'comp7_4_3_legend'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'cosm2025_medal_1'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
- (_AB.SINGLE, 'cosm2025_medal_2'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement)}
+ (_AB.SINGLE, 'cosm2025_medal_2'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'hb25MedalOffence'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'hb25MedalDefence'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'bob2025Lebwa'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'bob2025Yusha'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'bob2025NearYou'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'bob2025Jove'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement)}
 for _nID, _ in enumerate(nations.NAMES):
     _ACHIEVEMENTS_BY_NAME[_AB.TOTAL, 'tankExpert%d' % _nID] = _NationAchieveFactory.get(_as.nation_specific.TankExpertAchievement, _nID)
     _ACHIEVEMENTS_BY_NAME[_AB.TOTAL, 'mechanicEngineer%d' % _nID] = _NationAchieveFactory.get(_as.nation_specific.MechEngineerAchievement, _nID)

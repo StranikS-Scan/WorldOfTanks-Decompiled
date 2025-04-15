@@ -5,23 +5,19 @@ from account_helpers.AccountSettings import GUI_START_BEHAVIOR
 from account_helpers.settings_core.settings_constants import GuiSettingsBehavior
 from frameworks.wulf import WindowLayer
 from gui import GUI_SETTINGS
-from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.ranked_battles.ranked_helpers.sound_manager import RANKED_MAIN_PAGE_SOUND_SPACE
-from gui.ranked_battles.ranked_helpers import getRankedBattlesIntroPageUrl
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.RankedBattlesIntroMeta import RankedBattlesIntroMeta
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
-from gui.shared import event_dispatcher, events, EVENT_BUS_SCOPE
+from gui.shared import event_dispatcher
 from gui.shared.event_dispatcher import showBrowserOverlayView
-from gui.shared.utils.functions import getUniqueViewName
 from gui.shared.formatters import text_styles
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IRankedBattlesController
-from web.web_client_api import webApiCollection, ui as ui_web_api, sound as sound_web_api
 BLOCKS_COUNT = 3
 
 class RankedBattlesIntro(LobbySubView, RankedBattlesIntroMeta):
@@ -75,7 +71,6 @@ class RankedBattlesIntro(LobbySubView, RankedBattlesIntroMeta):
         if not self.__rankedController.isYearRewardEnabled():
             blocksData[-1]['imgSource'] = backport.image(R.images.gui.maps.icons.rankedBattles.intro.yearRewardDisabled())
             blocksData[-1]['description'] = text_styles.mainBig(backport.text(R.strings.ranked_battles.introPage.blocks.yearRewardDisabled()))
-        url = getRankedBattlesIntroPageUrl()
         self.__state = RANKEDBATTLES_CONSTS.INTRO_STATE_NORMAL
         if self.__rankedController.isFrozen():
             self.__state = RANKEDBATTLES_CONSTS.INTRO_STATE_DISABLED
@@ -90,7 +85,7 @@ class RankedBattlesIntro(LobbySubView, RankedBattlesIntroMeta):
         if self.__state != RANKEDBATTLES_CONSTS.INTRO_STATE_NORMAL and self.__rankedController.getRankedWelcomeCallback() is None:
             self.__rankedController.setRankedWelcomeCallback(lambda : None)
         self.as_setDataS({'state': self.__state,
-         'hasURL': bool(url),
+         'hasURL': False,
          'headerData': headerData,
          'blocksData': blocksData})
         return
@@ -103,11 +98,7 @@ class RankedBattlesIntro(LobbySubView, RankedBattlesIntroMeta):
              'iconSrc': backport.image(R.images.gui.maps.icons.library.ClockIcon_1())})
 
     def __showVideo(self):
-        webHandlers = webApiCollection(ui_web_api.CloseViewWebApi, sound_web_api.SoundWebApi, sound_web_api.HangarSoundWebApi)
-        alias = VIEW_ALIAS.BROWSER_VIEW
-        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(alias, getUniqueViewName(alias)), ctx={'url': getRankedBattlesIntroPageUrl(),
-         'webHandlers': webHandlers,
-         'returnAlias': self.alias}), EVENT_BUS_SCOPE.LOBBY)
+        pass
 
     def __getShowStateFlags(self):
         defaults = AccountSettings.getFilterDefault(GUI_START_BEHAVIOR)

@@ -203,6 +203,8 @@ NEW_SHOP_TABS = 'newShopTabs'
 IS_COLLECTIBLE_VEHICLES_VISITED = 'isCollectibleVehiclesVisited'
 LAST_SHOP_TAB_COUNTER = 'lastShopTabCounter'
 QUESTS = 'quests'
+DAILY_QUESTS = 'dailyQuests'
+DAILY_QUESTS_INTRO_SEEN = 'dailyQuestsIntroSeen'
 QUEST_DELTAS = 'questDeltas'
 QUEST_DELTAS_COMPLETION = 'questCompletion'
 QUEST_DELTAS_PROGRESS = 'questProgress'
@@ -301,6 +303,7 @@ NY_FIRST_VIDEO_SHUFFLE = 'NYFirstVideoShuffle'
 NY_ACTIVE_WIDGET_TRANSITION_SHOWN = 'NyActiveWidgetTransitionShown'
 NY_PET_SLOT_VISITED = 'NyPetSlotVisited'
 NY_GREETINGS_SEEN = 'NYGreetingsSeen'
+PREMIUM_QUESTS_NOTIFICATION = 'PremiumPurchased'
 
 class BattleMatters(object):
     BATTLE_MATTERS_SETTINGS = 'battleMattersSettings'
@@ -375,6 +378,14 @@ class Paragons(object):
     PROJECT_IS_CONTINUING_NOTIFICATION_WAS_SHOWN = 'ParagonsProjectPaused'
     BRANCH_RESET_AVAILABILITY_NOTIFICATION_WAS_SHOWN = 'ParagonsResettableBranchAvailableNotificationWasShown'
     CHAPTER_COUNTER = 'ParagonsChapterCounter'
+
+
+class PlayStreak(object):
+    PLAY_STREAK_SETTINGS = 'PlayStreakSettings'
+    PLAY_STREAK_CLICK = 'PlayStreakClick'
+    PLAY_STREAK_LAST_LEVEL_SEEN = 'PlayStreakLastLevelSeen'
+    PLAY_STREAK_LAST_LEVEL_SEEN_WIDGET = 'PlayStreakLastLevelSeenWidget'
+    PLAY_STREAK_LAST_LEVEL_SEEN_TAB = 'PlayStreakLastLevelSeenTab'
 
 
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
@@ -616,8 +627,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                               'level_5': False,
                                               'level_6': False,
                                               'level_7': False,
-                                              'level_8': False,
-                                              'level_9': True,
+                                              'level_8': True,
+                                              'level_9': False,
                                               'level_10': False,
                                               'level_11': False},
                EPICBATTLE_CAROUSEL_FILTER_2: {'premium': False,
@@ -648,11 +659,11 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                               'role_SPG_flame': False,
                                               'role_SPG_assault': False},
                EPICBATTLE_CAROUSEL_FILTER_CLIENT_1: {'epicBattleSeason': 0,
-                                                     'level_9': True,
+                                                     'level_8': True,
                                                      'searchNameVehicle': '',
                                                      'clanRented': False},
                EPICBATTLE_CAROUSEL_FILTER_CLIENT_2: {'epicBattleSeason': 0,
-                                                     'level_9': True,
+                                                     'level_8': True,
                                                      'searchNameVehicle': '',
                                                      'clanRented': False},
                BATTLEPASS_CAROUSEL_FILTER_1: {'isCommonProgression': False},
@@ -1063,7 +1074,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'showExInf4Destroyed': False,
                 'ingameHelpVersion': -1,
                 'isColorBlind': False,
-                'uiEffects': None,
                 'useServerAim': False,
                 'showDamageIcon': True,
                 'showVehiclesCounter': True,
@@ -1112,10 +1122,10 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                          'personalMissions': {'introShown': False,
                                               'operationsVisited': set(),
                                               'headerAlert': False},
-                         'dailyQuests': {'lastVisitedDQTabIdx': None,
-                                         'seenCompleted': False,
-                                         'visitedBonus': False,
-                                         'premMissionsTabDiscovered': False},
+                         DAILY_QUESTS: {'lastVisitedDQTabIdx': None,
+                                        'premMissionsTabDiscovered': False,
+                                        'lastBonusMissionVisited': '',
+                                        DAILY_QUESTS_INTRO_SEEN: False},
                          QUEST_DELTAS: {QUEST_DELTAS_COMPLETION: dict(),
                                         QUEST_DELTAS_PROGRESS: dict(),
                                         QUEST_DELTAS_TOKENS_PROGRESS: dict()}},
@@ -1324,6 +1334,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 SHOWN_PERSONAL_RESERVES_INTRO: False,
                 SHOWN_WOT_PLUS_INTRO: True,
                 SHOWN_WOT_PLUS_COUNTER: False,
+                PREMIUM_QUESTS_NOTIFICATION: True,
                 SUBSCRIPTION_DAILY_QUESTS_INTRO_SHOWN: False,
                 SUBSCRIPTION_DAILY_QUESTS_SHINE_SHOWN: False,
                 SUBSCRIPTION_LAST_EXPIRATION_NOTIFICATION: 0,
@@ -1598,7 +1609,11 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                               Paragons.PROJECT_IS_CONTINUING_NOTIFICATION_WAS_SHOWN: False,
                               Paragons.CHAPTER_COUNTER: 1},
  FunRandomMaps.FUN_RANDOM_MAPS_SETTINGS: {FunRandomMaps.FUN_RANDOM_LAST_SELECTED_MAP: None,
-                                          FunRandomMaps.FUN_RANDOM_WIDGET_VISITED_SUBMODES: set()}}
+                                          FunRandomMaps.FUN_RANDOM_WIDGET_VISITED_SUBMODES: set()},
+ PlayStreak.PLAY_STREAK_SETTINGS: {PlayStreak.PLAY_STREAK_CLICK: False,
+                                   PlayStreak.PLAY_STREAK_LAST_LEVEL_SEEN: 0,
+                                   PlayStreak.PLAY_STREAK_LAST_LEVEL_SEEN_WIDGET: 0,
+                                   PlayStreak.PLAY_STREAK_LAST_LEVEL_SEEN_TAB: 0}}
 
 def _filterAccountSection(dataSec):
     for key, section in dataSec.items()[:]:
@@ -1633,7 +1648,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 74
+    version = 75
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -2333,6 +2348,23 @@ class AccountSettings(object):
                         lootBoxesSettings[LOOT_BOXES_INTRO_SHOWN] = set()
                         accSettings.write(GUI_LOOT_BOXES, _pack(lootBoxesSettings))
 
+            if currVersion < 75:
+                for _, section in _filterAccountSection(ads):
+                    accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
+                    if QUESTS in accSettings.keys():
+                        quests = _unpack(accSettings[QUESTS].asString)
+                        if DAILY_QUESTS in quests:
+                            quests[DAILY_QUESTS] = {'lastVisitedDQTabIdx': None,
+                             'premMissionsTabDiscovered': False,
+                             DAILY_QUESTS_INTRO_SEEN: False}
+                        if 'visited' in quests:
+                            newVisited = [ q for q in quests['visited'] if not q.startswith('dq:') ]
+                            quests['visited'] = newVisited
+                        if 'naVisited' in quests:
+                            newNaVisited = [ q for q in quests['naVisited'] if not q.startswith('dq:') ]
+                            quests['naVisited'] = newNaVisited
+                        accSettings.write(QUESTS, _pack(quests))
+
             ads.writeInt('version', AccountSettings.version)
         return
 
@@ -2554,6 +2586,26 @@ class AccountSettings(object):
         fds = AccountSettings._readSection(AccountSettings._readUserSection(), Paragons.PARAGONS_SETTINGS)
         for name in fds.keys():
             fds.deleteSection(name)
+
+    @staticmethod
+    def delUnusedSetting(settingSection, name):
+        if name in DEFAULT_VALUES.get(settingSection, []):
+            raise SoftException('The setting "{}" is still being used in DEFAULT_VALUES["{}"]'.format(name, settingSection))
+        settings = AccountSettings._readSection(AccountSettings._readUserSection(), settingSection)
+        if name in settings.keys():
+            settings.deleteSection(name)
+            return True
+        if settingSection not in DEFAULT_VALUES:
+            raise SoftException('"{}" does not exist in DEFAULT_VALUES'.format(settingSection))
+        return False
+
+    @staticmethod
+    def getPlayStreak(name):
+        return AccountSettings._getValue(name, PlayStreak.PLAY_STREAK_SETTINGS, True)
+
+    @staticmethod
+    def setPlayStreak(name, value):
+        AccountSettings._setValue(name, value, PlayStreak.PLAY_STREAK_SETTINGS, True)
 
     @staticmethod
     def _getValue(name, setting, force=False):

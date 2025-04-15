@@ -5,7 +5,8 @@ from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.personal_missions.personal_missions_intro_view_model import PersonalMissionsIntroViewModel
 from gui.impl.lobby.personal_missions.personal_missions_window_events import showPersonalMissionsWebbrg, showIntroVideoView, PM3_INFO_PAGE
-from gui.impl.pub import ViewImpl, WindowImpl
+from gui.impl.pub import ViewImpl
+from gui.impl.pub.lobby_window import LobbyWindow
 from gui.server_events.events_dispatcher import showPersonalMissionsOperationsMap
 from personal_missions import PM_BRANCH
 from gui.server_events.pm3_constants import SOUNDS
@@ -53,7 +54,7 @@ class PersonalMissionsIntroView(ViewImpl):
         self.soundManager.playSound(SOUNDS.AMBIENT)
 
 
-class PersonalMissionsIntroViewWindow(WindowImpl):
+class PersonalMissionsIntroViewWindow(LobbyWindow):
     __slots__ = ()
 
     def __init__(self, parent=None):

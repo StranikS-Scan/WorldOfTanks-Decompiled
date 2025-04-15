@@ -2868,6 +2868,10 @@
       <userString>	#japan_vehicles:Turret_1_Chi_Ri	</userString>
       <tags></tags>
       <level>	6	</level>
+      <unlocks>
+        <turret>	Turret_2_Chi_Ri	  <cost>	10200	</cost>
+        </turret>
+      </unlocks>
       <price>	13000	</price>
       <armor>
         <armor_1>	75	</armor_1>
@@ -2978,10 +2982,6 @@
           </camouflage>
         </_75mm_Gun_Type5>
         <_75mm_Gun_Type5_M1>	shared	  <maxAmmo>	97	</maxAmmo>
-          <unlocks>
-            <turret>	Turret_2_Chi_Ri	  <cost>	10200	</cost>
-            </turret>
-          </unlocks>
           <armor>
             <armor_1>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3815,8 +3815,8 @@
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <reloadTime>	10	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	3	</afterShot>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	2	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.7	</aimingTime>
@@ -4510,11 +4510,11 @@
     <detailed>
       <engines>
         <_Type4_V12_Kakyuu>
-          <smplEnginePower>	528.6406	</smplEnginePower>
+          <smplEnginePower>	550	</smplEnginePower>
           <smplFwMaxSpeed>	42	</smplFwMaxSpeed>
         </_Type4_V12_Kakyuu>
         <_Type98_V12>
-          <smplEnginePower>	581.5046	</smplEnginePower>
+          <smplEnginePower>	610	</smplEnginePower>
           <smplFwMaxSpeed>	42	</smplFwMaxSpeed>
         </_Type98_V12>
       </engines>

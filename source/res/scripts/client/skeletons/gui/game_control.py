@@ -1862,6 +1862,9 @@ class IBattlePassController(IGameController):
     def isResourceChaptersCompleted(self):
         raise NotImplementedError
 
+    def isResourceChaptersBought(self):
+        raise NotImplementedError
+
     def isMarathonChaptersCompleted(self):
         raise NotImplementedError
 
@@ -1914,6 +1917,12 @@ class IBattlePassController(IGameController):
         raise NotImplementedError
 
     def getChapterIDs(self):
+        raise NotImplementedError
+
+    def isMainChaptersCompleted(self):
+        raise NotImplementedError
+
+    def setTriggerHint(self, globalFlag, value):
         raise NotImplementedError
 
     def getPotentialChaptersLevels(self):
@@ -2042,6 +2051,9 @@ class IBattlePassController(IGameController):
     def getPerBattlePoints(self, gameMode=ARENA_BONUS_TYPE.REGULAR, vehCompDesc=None):
         raise NotImplementedError
 
+    def getWinLosePointsList(self, gameMode=ARENA_BONUS_TYPE.EPIC_BATTLE):
+        raise NotImplementedError
+
     def getPerBattleRoyalePoints(self, gameMode=ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO, vehCompDesc=None):
         raise NotImplementedError
 
@@ -2100,6 +2112,9 @@ class IBattlePassController(IGameController):
         raise NotImplementedError
 
     def getStylesConfig(self):
+        raise NotImplementedError
+
+    def getVehicleCDRewardForChapter(self, chapterID):
         raise NotImplementedError
 
     def getNotChosenRewardCount(self):
@@ -4230,4 +4245,58 @@ class IParagonsRewardsShopController(IGameController):
         raise NotImplementedError
 
     def selectableRewardReceived(self, data):
+        raise NotImplementedError
+
+
+class IUnseenEventsCounter(IGameController):
+    onUnseenEventUpdated = None
+    onSeenEvents = None
+
+    def addUnseenEvent(self, eventID, count):
+        raise NotImplementedError
+
+    def updateUnseenEvents(self, eventsData):
+        raise NotImplementedError
+
+    def getAllUnseenEventsCount(self):
+        raise NotImplementedError
+
+    def isUnseenEvent(self, eventID):
+        return eventID in self.__unseenQuests
+
+    def seenEvent(self, eventID, count):
+        raise NotImplementedError
+
+    def seenEvents(self, eventsData):
+        raise NotImplementedError
+
+    def commitToSettings(self):
+        raise NotImplementedError
+
+    def getUnseenEventsCount(self, eventsID):
+        raise NotImplementedError
+
+    def cleanUpPremium(self):
+        raise NotImplementedError
+
+    def clearBonusDQ(self):
+        raise NotImplementedError
+
+
+class IPlayStreakController(IGameController):
+    onDataUpdated = None
+
+    def getSkipDayCount(self):
+        raise NotImplementedError
+
+    def getStreakProgress(self):
+        raise NotImplementedError
+
+    def getRewardsCalendar(self):
+        raise NotImplementedError
+
+    def getBattleTypes(self):
+        raise NotImplementedError
+
+    def getIsBlocked(self):
         raise NotImplementedError

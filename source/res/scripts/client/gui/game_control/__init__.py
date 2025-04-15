@@ -96,6 +96,8 @@ def getGameControllersConfig(manager):
     from gui.game_control.hangar_feature_state_controller import HangarFeatureStateController
     from gui.game_control.paragons_controller import ParagonsController
     from gui.game_control.paragons_reward_controller import ParagonsRewardsShopController
+    from gui.game_control.unseen_events_manager import UnseenEventManager
+    from gui.game_control.play_streak_controller import PlayStreakController
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -188,4 +190,6 @@ def getGameControllersConfig(manager):
     _config(_interface.IEarlyAccessController, EarlyAccessController())
     _config(_interface.IModeSelectorController, ModeSelectorController())
     _config(_interface.IPersonalMissionsController, PersonalMissionsController())
+    _config(_interface.IPlayStreakController, PlayStreakController())
+    _config(_interface.IUnseenEventsCounter, UnseenEventManager())
     collectGameControllers(_config)

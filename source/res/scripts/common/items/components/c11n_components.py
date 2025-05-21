@@ -580,7 +580,7 @@ class Font(object):
         return items.makeIntCompactDescrByID('customizationItem', self.itemType, self.id)
 
 if IS_EDITOR:
-    CUSTOMIZATION_TYPES = {CustomizationType.CAMOUFLAGE: CamouflageItem, CustomizationType.PAINT: PaintItem, CustomizationType.MODIFICATION: ModificationItem, CustomizationType.SEQUENCE: SequenceItem, CustomizationType.INSIGNIA: InsigniaItem, CustomizationType.STYLE: StyleItem, CustomizationType.DECAL: DecalItem, CustomizationType.FONT: Font, CustomizationType.PERSONAL_NUMBER: PersonalNumberItem, CustomizationType.ATTACHMENT: AttachmentItem, CustomizationType.PROJECTION_DECAL: ProjectionDecalItem}
+    CUSTOMIZATION_TYPES = {CustomizationType.CAMOUFLAGE: CamouflageItem, CustomizationType.PAINT: PaintItem, CustomizationType.MODIFICATION: ModificationItem, CustomizationType.ATTACHMENT: AttachmentItem, CustomizationType.INSIGNIA: InsigniaItem, CustomizationType.STYLE: StyleItem, CustomizationType.DECAL: DecalItem, CustomizationType.SEQUENCE: SequenceItem, CustomizationType.PERSONAL_NUMBER: PersonalNumberItem, CustomizationType.FONT: Font, CustomizationType.PROJECTION_DECAL: ProjectionDecalItem}
     CUSTOMIZATION_CLASSES = {v : k for k, v in CUSTOMIZATION_TYPES.items()}
 class _Filter(object):
     __slots__ = ('include', 'exclude')
@@ -811,7 +811,7 @@ class CustomizationCache(object):
         self._CustomizationCache__questStyles = None
         self.itemGroupByProgressionBonusType = {arenaTypeID : list() for arenaTypeID in ARENA_BONUS_TYPE_NAMES.values() if ARENA_BONUS_TYPE_CAPS.checkAny(arenaTypeID, ARENA_BONUS_TYPE_CAPS.CUSTOMIZATION_PROGRESSION)}
         self.topVehiclesByNation = {}
-        self.itemTypes = {CustomizationType.PAINT: self.paints, CustomizationType.DECAL: self.decals, CustomizationType.CAMOUFLAGE: self.camouflages, CustomizationType.PROJECTION_DECAL: self.projection_decals, CustomizationType.PERSONAL_NUMBER: self.personal_numbers, CustomizationType.STYLE: self.styles, CustomizationType.SEQUENCE: self.sequences, CustomizationType.MODIFICATION: self.modifications, CustomizationType.ATTACHMENT: self.attachments, CustomizationType.INSIGNIA: self.insignias}
+        self.itemTypes = {CustomizationType.PROJECTION_DECAL: self.projection_decals, CustomizationType.DECAL: self.decals, CustomizationType.CAMOUFLAGE: self.camouflages, CustomizationType.PAINT: self.paints, CustomizationType.STYLE: self.styles, CustomizationType.SEQUENCE: self.sequences, CustomizationType.MODIFICATION: self.modifications, CustomizationType.ATTACHMENT: self.attachments, CustomizationType.INSIGNIA: self.insignias, CustomizationType.PERSONAL_NUMBER: self.personal_numbers}
         super(CustomizationCache, self).__init__()
 
     def getQuestProgressionStyles(self):

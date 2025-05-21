@@ -1,0 +1,86 @@
+<extension.xml>
+  <FeatureName>	last_stand	</FeatureName>
+  <IsEnabled>	True	</IsEnabled>
+  <Personality>	last_stand_personality	</Personality>
+  <EditorPersonality>	editor_last_stand_personality	</EditorPersonality>
+  <Components>
+    <StaticComponents>
+      <LastStandComponent></LastStandComponent>
+      <LSAccountComponent></LSAccountComponent>
+      <LSAccountEquipmentController></LSAccountEquipmentController>
+      <LSArenaBattleResultComponent></LSArenaBattleResultComponent>
+      <LSKafkaPublisherComponent></LSKafkaPublisherComponent>
+    </StaticComponents>
+    <DynamicComponents>
+      <LSTeamInfoStatsComponent></LSTeamInfoStatsComponent>
+      <LSVehicleBattleStatsComponent></LSVehicleBattleStatsComponent>
+      <LSArenaDropComponent></LSArenaDropComponent>
+      <LSArenaPhasesComponent></LSArenaPhasesComponent>
+      <LSVehicleSoulsContainerComponent></LSVehicleSoulsContainerComponent>
+      <LSVehicleCheatsComponent></LSVehicleCheatsComponent>
+      <LSBuffNitroComponent></LSBuffNitroComponent>
+      <LSBuffNitroAccelerationComponent></LSBuffNitroAccelerationComponent>
+      <LSBuffFactorsComponent></LSBuffFactorsComponent>
+      <LSBuffSequencesComponent></LSBuffSequencesComponent>
+      <LSArenaVehicleKillComponent></LSArenaVehicleKillComponent>
+      <LSBuffRepairComponent></LSBuffRepairComponent>
+      <LSBuffPeriodicHealComponent></LSBuffPeriodicHealComponent>
+      <LSVehicleAIComponent></LSVehicleAIComponent>
+      <LSBuffRadiusAoEComponent></LSBuffRadiusAoEComponent>
+      <LSVehicleFireComponent></LSVehicleFireComponent>
+      <LSBuffIgniteVehicleComponent></LSBuffIgniteVehicleComponent>
+      <LSBuffDrainHealthComponent></LSBuffDrainHealthComponent>
+      <LSBuffDamageVehicleComponent></LSBuffDamageVehicleComponent>
+      <LSBuffVehicleIconComponent></LSBuffVehicleIconComponent>
+      <LSVehicleRepairComponent></LSVehicleRepairComponent>
+      <LSVehicleFeedbackComponent></LSVehicleFeedbackComponent>
+      <LSVehicleDissolveComponent></LSVehicleDissolveComponent>
+      <LSBuffDamageResistsComponent></LSBuffDamageResistsComponent>
+      <LSBuffSoulsDrainResistComponent></LSBuffSoulsDrainResistComponent>
+      <LSArenaVehicleRemovalComponent></LSArenaVehicleRemovalComponent>
+      <LSBuffInterruptibleComponent></LSBuffInterruptibleComponent>
+      <LSBuffEffectsListPlayerComponent></LSBuffEffectsListPlayerComponent>
+      <LSVehicleMaxHealthModifierComponent></LSVehicleMaxHealthModifierComponent>
+      <LSBuffAddBuffOnShotComponent></LSBuffAddBuffOnShotComponent>
+      <LSBuffAddMaxHealthComponent></LSBuffAddMaxHealthComponent>
+      <LSBuffVehicleEffectsComponent></LSBuffVehicleEffectsComponent>
+      <LSBuffLaserSightComponent></LSBuffLaserSightComponent>
+      <LSArenaSoundComponent></LSArenaSoundComponent>
+      <LSVehicleSoundComponent></LSVehicleSoundComponent>
+      <LSVehicleDeathOnFall></LSVehicleDeathOnFall>
+      <LSBuffInvisibilityForAIComponent></LSBuffInvisibilityForAIComponent>
+      <LSBuffSoundComponent></LSBuffSoundComponent>
+      <LSKafkaVehicleLoggingComponent></LSKafkaVehicleLoggingComponent>
+      <LSKafkaLoggingComponent></LSKafkaLoggingComponent>
+      <LSBuffDissolveComponent></LSBuffDissolveComponent>
+      <LSBuffAddDynGroupComponent></LSBuffAddDynGroupComponent>
+      <LSLootVisualComponent></LSLootVisualComponent>
+      <LSLootVehicleWatcherComponent></LSLootVehicleWatcherComponent>
+      <LSNitroAccelerationControl></LSNitroAccelerationControl>
+      <LSFairplayVehicleBattleStatsComponent></LSFairplayVehicleBattleStatsComponent>
+      <LSBuffShootComponent></LSBuffShootComponent>
+      <LSVehicleInstantShotComponent></LSVehicleInstantShotComponent>
+      <LSVehicleShotChargerComponent></LSVehicleShotChargerComponent>
+      <LSBuffStunVehicleComponent></LSBuffStunVehicleComponent>
+      <LSVehicleMultiAuraHandlerComponent></LSVehicleMultiAuraHandlerComponent>
+      <LSVehicleShellsComponent></LSVehicleShellsComponent>
+      <LSWaveProgressComponent></LSWaveProgressComponent>
+      <LSVehicleHitDirectionComponent></LSVehicleHitDirectionComponent>
+      <LSBuffOnShotComponent></LSBuffOnShotComponent>
+    </DynamicComponents>
+  </Components>
+  <Entities>
+    <ServerOnlyEntities>
+      <LSBattlesMgr></LSBattlesMgr>
+      <LSMediumBattlesMgr></LSMediumBattlesMgr>
+      <LSHardBattlesMgr></LSHardBattlesMgr>
+      <LSUnitMgr></LSUnitMgr>
+    </ServerOnlyEntities>
+  </Entities>
+  <ExternalComponents></ExternalComponents>
+  <cgf>
+    <script>
+      <module>	client.last_stand.cgf_components.show_event_component	</module>
+    </script>
+  </cgf>
+</extension.xml>

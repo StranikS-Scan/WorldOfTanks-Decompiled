@@ -1,0 +1,41 @@
+<list.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <itemGroup>
+    <name>	sequences	</name>
+    <userString>	#vehicle_customization:sequence/general	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	sequences 50g notInShop	</priceGroup>
+    <tags>	hiddenInUI	</tags>
+    <sequence>
+      <id>	6001	</id>
+      <name>	Last Stand common light	</name>
+      <sequenceName>	particles/Tank/customization/halloween/hell_headlight.ssm	</sequenceName>
+    </sequence>
+    <sequence>
+      <id>	6002	</id>
+      <name>	Last Stand minion hull light	</name>
+      <sequenceName>	particles/Tank/customization/halloween/hellminion_headlight_hull.ssm	</sequenceName>
+    </sequence>
+    <sequence>
+      <id>	6003	</id>
+      <name>	Last Stand minion turret light	</name>
+      <sequenceName>	particles/Tank/customization/halloween/hellminion_headlight_turret.ssm	</sequenceName>
+    </sequence>
+    <sequence>
+      <id>	6004	</id>
+      <name>	Last Stand minion turret base	</name>
+      <sequenceName>	particles/Tank/customization/halloween/hellminion_turret_base.seq	</sequenceName>
+    </sequence>
+    <sequence>
+      <id>	6006	</id>
+      <name>	Last Stand enemy leader	</name>
+      <sequenceName>	particles/Tank/customization/halloween/hw_enemy_leader.seq	</sequenceName>
+    </sequence>
+    <sequence>
+      <id>	6104	</id>
+      <name>	Last Stand enemy tank collector	</name>
+      <sequenceName>	particles/eff_sequence/halloween/enemies/tank_dem_collector_enemy.seq	</sequenceName>
+    </sequence>
+  </itemGroup>
+</list.xml>

@@ -1,0 +1,24 @@
+<LSVehicleSoulsContainerComponent.def>
+  <CellMethods></CellMethods>
+  <ClientMethods></ClientMethods>
+  <Properties>
+    <lastCollected>
+      <Type>	TUPLE	  <of>	UINT32	</of>
+        <size>	2	</size>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </lastCollected>
+    <souls>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </souls>
+    <capacity>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </capacity>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	lsSoulsContainer	</DefaultKeyName>
+</LSVehicleSoulsContainerComponent.def>

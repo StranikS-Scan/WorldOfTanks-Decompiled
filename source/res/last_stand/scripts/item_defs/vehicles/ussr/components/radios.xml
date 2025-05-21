@@ -1,0 +1,59 @@
+<radios.xml>
+  <ids>
+    <_12RT_LS_BOT>	6004	</_12RT_LS_BOT>
+    <R113_LS_BOT>	6005	</R113_LS_BOT>
+    <Radio_R77_KV2_Mosquito_LS_BOT>	6006	</Radio_R77_KV2_Mosquito_LS_BOT>
+    <R113_LS_PLAYER>	6007	</R113_LS_PLAYER>
+  </ids>
+  <shared>
+    <_12RT_LS_BOT>
+      <userString>	#last_stand.ussr_vehicles.extend:_12RT_LS_BOT	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	33600	</price>
+      <notInShop>	True	</notInShop>
+      <weight>	110	</weight>
+      <distance>	50	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </_12RT_LS_BOT>
+    <R113_LS_BOT>
+      <userString>	#last_stand.ussr_vehicles.extend:R113_LS_BOT	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52200	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	80	</weight>
+      <distance>	50	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <invulnerable>	True	</invulnerable>
+    </R113_LS_BOT>
+    <Radio_R77_KV2_Mosquito_LS_BOT>
+      <userString>	#last_stand.ussr_vehicles.extend:Radio_R77_KV2_Mosquito_LS_BOT	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	18600	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	440	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	125	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </Radio_R77_KV2_Mosquito_LS_BOT>
+    <R113_LS_PLAYER>
+      <userString>	#last_stand.ussr_vehicles.extend:R113_LS_PLAYER	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52200	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	80	</weight>
+      <distance>	730	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R113_LS_PLAYER>
+  </shared>
+</radios.xml>

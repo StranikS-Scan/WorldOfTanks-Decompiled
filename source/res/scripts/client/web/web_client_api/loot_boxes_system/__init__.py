@@ -3,7 +3,7 @@
 import BigWorld
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.lootbox_system.base.bonuses_packers import mergeNeededBonuses
+from gui.lootbox_system.base.bonuses_packers import mergeNeededBonuses, processCompensationsWithLootbox
 from gui.lootbox_system.base.common import ViewID, Views
 from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.shared.event_dispatcher import showHangar, showShop
@@ -87,6 +87,7 @@ class LootBoxSystemWebApi(object):
         result = {}
         for idx, slotData in slotsInfo.iteritems():
             bonuses = mergeNeededBonuses(slotData.get('bonuses', []), eventName)
+            bonuses = processCompensationsWithLootbox(bonuses, eventName, showLootboxCompensation=False)
             result.update({idx: {'probability': int(slotData.get('probability', [0])[0] * 10000 + 1e-06) / 100.0,
                    'bonuses': []}})
             for bonus in bonuses:

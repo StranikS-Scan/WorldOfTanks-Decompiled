@@ -1,0 +1,42 @@
+<engines.xml>
+  <ids>
+    <Saab_Scania_DSI_14B_LS_BOT>	6502	</Saab_Scania_DSI_14B_LS_BOT>
+    <Saab_Scania_DS14_Alt_5B_LS_BOT>	6503	</Saab_Scania_DS14_Alt_5B_LS_BOT>
+  </ids>
+  <shared>
+    <Saab_Scania_DSI_14B_LS_BOT>
+      <userString>	#last_stand.sweden_vehicles.extend:Saab_Scania_DSI_14B_LS_BOT	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	80500	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	590	</power>
+      <weight>	1700	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	362	</rpm_min>
+      <rpm_max>	2112	</rpm_max>
+    </Saab_Scania_DSI_14B_LS_BOT>
+    <Saab_Scania_DS14_Alt_5B_LS_BOT>
+      <userString>	#last_stand.sweden_vehicles.extend:Saab_Scania_DS14_Alt_5B_LS_BOT	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	43300	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	550	</power>
+      <weight>	1230	</weight>
+      <maxHealth>	285	</maxHealth>
+      <maxRegenHealth>	142	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	373	</rpm_min>
+      <rpm_max>	2080	</rpm_max>
+    </Saab_Scania_DS14_Alt_5B_LS_BOT>
+  </shared>
+</engines.xml>

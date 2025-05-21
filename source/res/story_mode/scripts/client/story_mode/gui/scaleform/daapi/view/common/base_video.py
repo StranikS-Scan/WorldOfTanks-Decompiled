@@ -52,13 +52,14 @@ class BaseVideo(IntroVideoMeta):
         self._isVideoStarted = True
         self._uiLogger.logVideoStarted(self._missionId)
         if self._videoSettings is not None:
-            if self._videoSettings.music.group and self._videoSettings.music.state:
-                WWISE.WW_setState(self._videoSettings.music.group, self._videoSettings.music.state)
-            else:
+            hasState = self._videoSettings.music.group and self._videoSettings.music.state
+            if not hasState:
                 self._storyModeCtrl.stopMusic(True)
             if self._videoSettings.music.start:
                 self.soundManager.playSound(self._videoSettings.music.start)
-        self.soundManager.playSound(self._videoSettings.vo)
+            if hasState:
+                WWISE.WW_setState(self._videoSettings.music.group, self._videoSettings.music.state)
+            self.soundManager.playSound(self._videoSettings.vo)
         g_keyEventHandlers.add(self._handleKeyEvent)
         return
 

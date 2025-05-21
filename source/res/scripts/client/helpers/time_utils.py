@@ -54,6 +54,17 @@ class _TimeCorrector(object):
 
         return _g_instance.serverUTCTime - regionalNewDayUTC
 
+    @property
+    def serverGameDayTime(self):
+        regionalNewGameDayUTC = 0
+        try:
+            serverRegionalSettings = BigWorld.player().serverSettings['regional_settings']
+            regionalNewGameDayUTC = serverRegionalSettings['starting_time_of_a_new_game_day']
+        except Exception:
+            LOG_CURRENT_EXCEPTION()
+
+        return _g_instance.serverUTCTime - regionalNewGameDayUTC
+
 
 _g_instance = _TimeCorrector()
 
@@ -89,12 +100,25 @@ def getDayTimeLeft():
     return ONE_DAY - getServerRegionalTimeCurrentDay()
 
 
+def getGameDayTimeLeft():
+    return ONE_DAY - getServerRegionalTimeCurrentGameDay()
+
+
 def getGameWeekTimeLeft():
     return getServerRegionalDaysLeftInGameWeek() * ONE_DAY + getDayTimeLeft()
 
 
+def getGameWeekTimeLeftByGameDayStartingTime():
+    return getServerDaysLeftInGameWeek() * ONE_DAY + getGameDayTimeLeft()
+
+
 def getServerRegionalTimeCurrentDay():
     ts = time.gmtime(_g_instance.serverRegionalTime)
+    return ts.tm_hour * ONE_HOUR + ts.tm_min * ONE_MINUTE + ts.tm_sec
+
+
+def getServerRegionalTimeCurrentGameDay():
+    ts = time.gmtime(_g_instance.serverGameDayTime)
     return ts.tm_hour * ONE_HOUR + ts.tm_min * ONE_MINUTE + ts.tm_sec
 
 
@@ -112,12 +136,25 @@ def getServerRegionalWeekDay():
     return datetime.datetime.utcfromtimestamp(_g_instance.serverRegionalTime).isoweekday()
 
 
+def getServerWeekDay():
+    return datetime.datetime.utcfromtimestamp(_g_instance.serverGameDayTime).isoweekday()
+
+
 def getServerRegionalDaysLeftInGameWeek():
     regionalSettings = BigWorld.player().serverSettings['regional_settings']
     weekStartDayOffset = 0
     if 'starting_day_of_a_new_week' in regionalSettings:
         weekStartDayOffset = regionalSettings['starting_day_of_a_new_week']
     currentDay = getServerRegionalWeekDay()
+    return (WEEK_END - currentDay + weekStartDayOffset) % WEEK_END
+
+
+def getServerDaysLeftInGameWeek():
+    regionalSettings = BigWorld.player().serverSettings['regional_settings']
+    weekStartDayOffset = 0
+    if 'starting_day_of_a_new_week' in regionalSettings:
+        weekStartDayOffset = regionalSettings['starting_day_of_a_new_week']
+    currentDay = getServerWeekDay()
     return (WEEK_END - currentDay + weekStartDayOffset) % WEEK_END
 
 

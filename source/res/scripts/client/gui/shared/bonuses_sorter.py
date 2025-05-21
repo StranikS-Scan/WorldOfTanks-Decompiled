@@ -79,7 +79,8 @@ _BONUSES_KEYS_FUNC = {VehiclesBonus.VEHICLES_BONUS: _vehiclesBonusKeyFunc,
  'tmanToken': lambda b: (-BonusesSortWeights.TMAN, 0),
  'crewBooks': lambda b: (-BonusesSortWeights.CREW_BOOK, 0),
  'customizations': lambda b: (-BonusesSortWeights.STYLE, 0),
- 'battleToken': _tokensBonusKeyFunc}
+ 'battleToken': _tokensBonusKeyFunc,
+ 'lootBoxToken': _tokensBonusKeyFunc}
 
 def bonusesSortKeyFunc(bonus):
     return _BONUSES_KEYS_FUNC.get(bonus.getName(), lambda b: (BonusesSortWeights.UNSORTABLE, bonus.getName()))(bonus)

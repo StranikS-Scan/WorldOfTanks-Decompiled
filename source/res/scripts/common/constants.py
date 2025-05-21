@@ -1309,6 +1309,7 @@ class ATTACK_REASON(object):
     SPAWNED_BOT_RAM = 'spawned_bot_ram'
     ARTILLERY_ROCKET = 'artillery_rocket'
     ARTILLERY_MORTAR = 'artillery_mortar'
+    ARTILLERY_ON_YOURSELF = 'artillery_on_yourself'
     NONE = 'none'
 
     @classmethod
@@ -1355,7 +1356,8 @@ ATTACK_REASONS = (ATTACK_REASON.SHOT,
  ATTACK_REASON.CGF_WORLD,
  ATTACK_REASON.SPAWNED_BOT_RAM,
  ATTACK_REASON.ARTILLERY_ROCKET,
- ATTACK_REASON.ARTILLERY_MORTAR)
+ ATTACK_REASON.ARTILLERY_MORTAR,
+ ATTACK_REASON.ARTILLERY_ON_YOURSELF)
 ATTACK_REASON_INDICES = dict(((value, index) for index, value in enumerate(ATTACK_REASONS)))
 ATTACK_REASON_VALUES = dict(((index, value) for index, value in enumerate(ATTACK_REASONS)))
 BOT_RAM_REASONS = (ATTACK_REASON.BRANDER_RAM, ATTACK_REASON.CLING_BRANDER_RAM)
@@ -3284,6 +3286,7 @@ class DailyQuestsLevels(object):
     EASY_PREMIUM = 'easy_premium'
     MEDIUM_PREMIUM = 'medium_premium'
     HARD_PREMIUM = 'hard_premium'
+    EPIC_ACCESS = 'epic_access'
     ALL = (EASY,
      EASY_SUBS,
      EASY_PREMIUM,
@@ -3330,6 +3333,7 @@ DailyQuestDecorationMap = {1: DailyQuestsDecorations.WIN,
 class DailyQuestsTokensPrefixes(object):
     QUEST_TOKEN = 'dq:'
     QUEST_TICKET = 'dqt:'
+    EPIC_ACCESS_TOKEN = 'dqa:'
 
 
 class OVERRIDDEN_BADGE(object):

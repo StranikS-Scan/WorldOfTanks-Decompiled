@@ -32,8 +32,10 @@ class HistoricalBattleSquadActionsHandler(SquadActionsHandler):
             player = unit.getPlayer(dbID=account_helpers.getAccountDatabaseID())
             extraData = player.get('extraData', {})
             eventEnqueueData = extraData.get('eventEnqueueData', {})
-            frontID = eventEnqueueData.get('frontID', 0)
-            self.__gameEventController.updateFrontData(frontID)
+            frontID = eventEnqueueData.get('frontID')
+            if frontID is not None:
+                self.__gameEventController.updateFrontData(frontID)
+        return
 
     @wg_async
     def _validateUnitState(self, entity):

@@ -41,7 +41,7 @@ class HistoricalBattlesEntity(PreQueueEntity):
     def __init__(self):
         latestFront = self.gameEventController.frontController.getLatestFront()
         if latestFront is not None and not self.gameEventController.frontController.isFrontSeen(latestFront.getID()):
-            self.gameEventController.frontController.setSelectedFrontID(latestFront.getID())
+            self.gameEventController.updateFrontData(frontId=latestFront.getID(), processSceneChange=False)
         front = self.gameEventController.frontController.getSelectedFront()
         super(HistoricalBattlesEntity, self).__init__(FUNCTIONAL_FLAG.HISTORICAL_BATTLES, front.getFrontQueueType(), PreQueueSubscriber())
         return

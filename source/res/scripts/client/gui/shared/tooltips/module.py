@@ -713,9 +713,10 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
     def __getGunExtraStatusTitle(cls, module, vDescr):
         result = []
         if module.isFlameGun():
-            result.append(_ModuleExtraStatuses.FLAME_GUN)
-        elif module.isAutoShootFlameGun(vDescr):
-            result.append(_ModuleExtraStatuses.AUTOSHOOT_FLAME_GUN)
+            if module.isAutoShootFlameGun(vDescr):
+                result.append(_ModuleExtraStatuses.AUTOSHOOT_FLAME_GUN)
+            else:
+                result.append(_ModuleExtraStatuses.FLAME_GUN)
         elif module.isClipGun(vDescr):
             result.append(_ModuleExtraStatuses.CLIP_GUN)
         elif module.isAutoReloadable(vDescr):

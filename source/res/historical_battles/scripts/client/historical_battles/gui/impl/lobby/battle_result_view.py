@@ -3,6 +3,7 @@
 import typing
 import logging
 import BigWorld
+from constants import DEATH_REASON_ALIVE
 from historical_battles_common.helpers_common import getFrontCouponModifier
 from frameworks.wulf import ViewSettings, WindowFlags, ViewFlags
 from gui.Scaleform.Waiting import Waiting
@@ -18,6 +19,7 @@ from helpers import dependency
 from PlayerEvents import g_playerEvents
 from historical_battles.gui.impl.lobby.tooltips.battle_result_progress_tooltip import BattleResultProgressTooltip
 from historical_battles.gui.impl.lobby.base_event_view import BaseEventView
+from shared_utils import nextTick
 from skeletons.gui.battle_results import IBattleResultsService
 from historical_battles.gui.impl.gen.view_models.views.common.base_team_member_model import BaseTeamMemberModel, TeamMemberBanType
 from historical_battles.gui.impl.gen.view_models.views.lobby.battle_result_view_model import BattleResultViewModel, BattleResultType, BoosterType, FairplayStatus
@@ -112,8 +114,7 @@ class BattleResultView(BaseEventView):
         if self.battleResults.areResultsPosted(self.__arenaUniqueID):
             self.__fillViewModel()
         else:
-            Waiting.show('stats')
-            self.battleResults.onResultPosted += self.__handleBattleResultsPosted
+            nextTick(self.destroyWindow)()
         if not self._gameEventController.isHistoricalBattlesMode():
             inOutData = {'visibilityMenuState': -1}
             g_eventBus.handleEvent(LobbySimpleEvent(LobbySimpleEvent.ON_GET_VISIBILITY_MENU_STATE, ctx=inOutData), scope=EVENT_BUS_SCOPE.LOBBY)
@@ -253,7 +254,7 @@ class BattleResultView(BaseEventView):
         member.setId(index)
         member.setIsCurrentPlayer(playerVO['isSelf'])
         member.setIsOwnSquad(playerVO['isSelf'] or playerVO['isOwnSquad'])
-        member.setIsAlive(playerVO['killerID'] == 0)
+        member.setIsAlive(True)
         member.setSquadNum(playerVO['squadID'])
         member.setBanType(playerVO.get('violationName', TeamMemberBanType.NOTBANNED))
         member.stats.setAssist(playerVO['damageAssisted'])
@@ -286,10 +287,15 @@ class BattleResultView(BaseEventView):
         model.playerInfo.user.setClanAbbrev(vo['playerClan'])
         model.playerInfo.vehicle.setVehicleName(vo['tankName'])
         model.playerInfo.vehicle.setVehicleType(vo['tankType'])
-        model.playerInfo.setIsKilled(vo['isKilled'])
-        model.playerInfo.setReason(vo['deathReason'])
-        model.playerInfo.killerVehicle.setVehicleName(vo['killerInfo']['name'])
-        model.playerInfo.killerVehicle.setVehicleType(vo['killerInfo']['type'])
+        playerVehicles = vo['common']['playerVehicles']
+        hasAliveVehicle = any([ vehicle['deathReason'] == DEATH_REASON_ALIVE for vehicle in playerVehicles ])
+        isPrematureLeaved = any([ vehicle['isPrematureLeave'] for vehicle in playerVehicles ])
+        model.playerInfo.setIsKilled(not hasAliveVehicle)
+        if isPrematureLeaved:
+            model.playerInfo.setIsKilled(True)
+            model.playerInfo.setReason('premature_leave')
+        elif not hasAliveVehicle:
+            model.playerInfo.setReason('division_vehicles_exterminated')
         model.playerInfo.setTasksAmount(vo['arenaPhases']['total'])
         model.playerInfo.setTasksCompleted(vo['arenaPhases']['current'])
         model.playerInfo.stats.setKills(vo['kills'])

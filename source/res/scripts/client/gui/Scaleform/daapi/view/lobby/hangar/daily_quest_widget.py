@@ -5,7 +5,7 @@ from constants import QUEUE_TYPE, DAILY_QUESTS_CONFIG
 from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor
 from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.prb_control.entities.listener import IGlobalListener
-from gui.server_events.events_helpers import isDailyQuestsEnable
+from gui.server_events.events_helpers import isDailyQuestsEnable, isPlayStreakEnable
 from gui.impl.lobby.daily.daily_quests_widget_view import DailyQuestsWidgetView
 from gui.Scaleform.daapi.view.meta.DailyQuestMeta import DailyQuestMeta
 from gui.Scaleform.managers import UtilsManager
@@ -101,7 +101,7 @@ class DailyQuestWidget(InjectComponentAdaptor, DailyQuestMeta, IGlobalListener):
         self.as_setEnabledS(isEnabled)
 
     def __shouldHide(self):
-        return not isDailyQuestsEnable() or self.promoController.isTeaserOpen() or not self._isQueueEnabled() or not self.isLimitedUiRuleCompleted()
+        return self.promoController.isTeaserOpen() or not self._isQueueEnabled() or not self.isLimitedUiRuleCompleted() or not any((isDailyQuestsEnable(), isPlayStreakEnable()))
 
     def __onServerSettingsChanged(self, diff):
         if DAILY_QUESTS_CONFIG in diff:

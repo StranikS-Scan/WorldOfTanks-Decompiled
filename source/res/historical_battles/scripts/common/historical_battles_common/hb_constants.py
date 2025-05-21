@@ -96,7 +96,7 @@ class AccountSettingsKeys(object):
     LAST_FRONT_ID_IN_AWARDS = 'lastFrontIdInAwards'
 
 
-ACCOUNT_DEFAULT_SETTINGS = {AccountSettingsKeys.EVENT_KEY: {AccountSettingsKeys.HISTORICAL_BATTLES_FRONTS: {AccountSettingsKeys.SELECTED_HISTORICAL_BATTLES_FRONT: FrontType.DEFENCE,
+ACCOUNT_DEFAULT_SETTINGS = {AccountSettingsKeys.EVENT_KEY: {AccountSettingsKeys.HISTORICAL_BATTLES_FRONTS: {AccountSettingsKeys.SELECTED_HISTORICAL_BATTLES_FRONT: FrontType.DEFENCE.value,
                                                                                  AccountSettingsKeys.SEEN_HISTORICAL_BATTLES_FRONTS: {},
                                                                                  AccountSettingsKeys.SEEN_historical_battles_POINTS: 0},
                                  AccountSettingsKeys.SELECTED_HB_DIVISION: {},

@@ -33,7 +33,7 @@ class DailyQuestsView(ViewImpl):
     eventsCache = dependency.descriptor(IEventsCache)
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
-    __slots__ = ('__proxyMissionsPage', '__viewActive', '__tabs', '__tabsToSubview', '__subviews', '__currentTabID', '__dailyQuests', '__em', 'onIsCurrentMissionTab', '__playStreak', '__battleTypes', '__tooltipData')
+    __slots__ = ('__proxyMissionsPage', '__viewActive', '__tabs', '__tabsToSubview', '__subviews', '__currentTabID', '__dailyQuests', '__em', 'onIsCurrentMissionTab', 'onPlayStreakTab', '__playStreak', '__battleTypes', '__tooltipData')
 
     def __init__(self, layoutID=R.views.lobby.daily.DailyQuestsView()):
         viewSettings = ViewSettings(layoutID, ViewFlags.VIEW, DailyQuestsViewModel())
@@ -51,6 +51,7 @@ class DailyQuestsView(ViewImpl):
         self.__viewActive = False
         self.__em = EventManager()
         self.onIsCurrentMissionTab = Event(self.__em)
+        self.onPlayStreakTab = Event(self.__em)
         self.__tooltipData = {}
         return
 
@@ -143,6 +144,8 @@ class DailyQuestsView(ViewImpl):
 
     @args2params(int)
     def __onTabClick(self, tabIdx):
+        if tabIdx == DailyTabs.SERIAL:
+            self.onPlayStreakTab()
         self.changeTab(tabIdx)
 
     def __onCloseView(self):

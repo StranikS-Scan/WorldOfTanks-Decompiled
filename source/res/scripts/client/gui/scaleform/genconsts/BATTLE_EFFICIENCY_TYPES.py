@@ -68,3 +68,5 @@ class BATTLE_EFFICIENCY_TYPES(object):
     TOTAL_VEHICLES_HEAL_APPLIED = 'TotalVehiclesHealApplied'
     HEAL_SELF_VEHICLE_APPLIED = 'healSelfVehicleApplied'
     DAMAGE_BY_HB_TACTICAL_MINE = 'damageByHBTacticalMine'
+    DAMAGE_BY_ARTILLERY_ON_YOURSELF = 'damageByArtilleryOnYourself'
+    RECEIVED_BY_ARTILLERY_ON_YOURSELF = 'receivedByArtilleryOnYourself'

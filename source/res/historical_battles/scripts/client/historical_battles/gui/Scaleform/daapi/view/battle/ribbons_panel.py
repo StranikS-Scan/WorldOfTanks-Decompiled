@@ -31,7 +31,9 @@ _RIBBONS_FMTS = {_BET.BOMBERS: _singleVehRibbonFormatter,
  _BET.DAMAGE_BY_ARTILLERY_MORTAR: _singleVehRibbonFormatter,
  _BET.HEAL_VEHICLE_APPLIED: _healVehicleFormatter,
  _BET.TOTAL_VEHICLES_HEAL_APPLIED: _totalVehiclesHealFormatter,
- _BET.HEAL_SELF_VEHICLE_APPLIED: _totalVehiclesHealFormatter}
+ _BET.HEAL_SELF_VEHICLE_APPLIED: _totalVehiclesHealFormatter,
+ _BET.DAMAGE_BY_ARTILLERY_ON_YOURSELF: _singleVehRibbonFormatter,
+ _BET.RECEIVED_BY_ARTILLERY_ON_YOURSELF: _singleVehRibbonFormatter}
 
 class HistoricalBattlesRibbonsPanel(BattleRibbonsPanel):
 
@@ -98,4 +100,6 @@ class HistoricalBattlesRibbonsPanel(BattleRibbonsPanel):
          [_BET.DAMAGE_BY_HB_MINEFIELD, backport.text(R.strings.hb_battle.efficiencyRibbons.damageByHBMinefield())],
          [_BET.HEAL_VEHICLE_APPLIED, backport.text(R.strings.hb_battle.efficiencyRibbons.healVehicleApplied())],
          [_BET.TOTAL_VEHICLES_HEAL_APPLIED, backport.text(R.strings.hb_battle.efficiencyRibbons.TotalVehiclesHealApplied())],
-         [_BET.HEAL_SELF_VEHICLE_APPLIED, backport.text(R.strings.hb_battle.efficiencyRibbons.healSelfVehicleApplied())]]
+         [_BET.HEAL_SELF_VEHICLE_APPLIED, backport.text(R.strings.hb_battle.efficiencyRibbons.healSelfVehicleApplied())],
+         [_BET.DAMAGE_BY_ARTILLERY_ON_YOURSELF, backport.text(R.strings.hb_battle.efficiencyRibbons.artilleryOnYourself())],
+         [_BET.RECEIVED_BY_ARTILLERY_ON_YOURSELF, backport.text(R.strings.hb_battle.efficiencyRibbons.artilleryOnYourself())]]

@@ -645,7 +645,7 @@ class BattlePassController(IBattlePassController, EventsHandler):
         return getMaxAvalable3DStyleProgressInChapter(self.getSeasonID(), chapter, self.__itemsCache.items.tokens.getTokens().keys())
 
     def getTimeToLimitReset(self):
-        return int(time_utils.getGameWeekTimeLeft())
+        return int(time_utils.getGameWeekTimeLeftByGameDayStartingTime())
 
     def _getEvents(self):
         return ((self.__lobbyContext.getServerSettings().onServerSettingsChange, self.__onConfigChanged),

@@ -5,6 +5,7 @@ from gui.impl.gen import R
 from historical_battles.gui.impl.gen.view_models.views.lobby.division_upgrade_rewards_view_model import DivisionUpgradeRewardsViewModel, DivisionUpgradeAbilityModel
 from historical_battles.gui.impl.lobby.tooltips.new_vehicles_available_tooltip import NewVehiclesAvailableTooltip
 from gui.impl.pub import ViewImpl, WindowImpl
+from gui.sounds.filters import switchHangarFilteredFilter
 from helpers import dependency
 from historical_battles.skeletons.gui.game_event_controller import IGameEventController
 from items import vehicles
@@ -39,12 +40,14 @@ class DivisionUpgradeRewardsView(ViewImpl):
 
     def _onLoading(self, *args, **kwargs):
         super(DivisionUpgradeRewardsView, self)._onLoading(*args, **kwargs)
+        switchHangarFilteredFilter(True)
         self.__updateModel()
 
     def _finalize(self):
         self.__subdivisionId = None
         self.__previousLevel = None
         self.__currentLevel = None
+        switchHangarFilteredFilter(False)
         super(DivisionUpgradeRewardsView, self)._finalize()
         return
 

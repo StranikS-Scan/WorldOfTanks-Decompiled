@@ -35,9 +35,6 @@ class HBSubdivisionItemController(ProgressItemsController):
     def getInstanceClass(self):
         return HBSubdivisionItem
 
-    def __onPrbEntitySwitched(self):
-        self.setSelectedSubdivisionID(self.getActiveItemIDs()[0])
-
     def getSelectedSubdivisionID(self):
         return self.selectedSubdivisionID
 
@@ -60,6 +57,10 @@ class HBSubdivisionItemController(ProgressItemsController):
         conf = self.getSubdivisionsConfig()
         activeItems = [ key for key, value in conf.items() if value.get('frontID', None) == self.frontID ]
         return activeItems
+
+    def __onPrbEntitySwitched(self, isHistoricalBattlesMode):
+        if not isHistoricalBattlesMode:
+            self.setSelectedSubdivisionID(self.getActiveItemIDs()[0])
 
     def __cacheSelectedSubdivisionId(self):
         self._gameEventController.frontController.setCachedSelectedSubdivisionId(self.frontID, self.selectedSubdivisionID)

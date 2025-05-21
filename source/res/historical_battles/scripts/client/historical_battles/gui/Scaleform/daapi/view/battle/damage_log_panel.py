@@ -24,7 +24,15 @@ class _HistoricalBattlesDamageActionImgVOBuilder(_DamageActionImgVOBuilder):
             return _HB_IMAGES.DAMAGELOG_ARTILLERY_TEAM_16X16
         if info.isArtilleryMortarDamage():
             return _HB_IMAGES.DAMAGELOG_ARTILLERY_TEAM_16X16
-        return _HB_IMAGES.DAMAGELOG_BOMBERCAS_TEAM_16X16 if info.isBombercasDamage() else super(_HistoricalBattlesDamageActionImgVOBuilder, self)._getImage(info)
+        if info.isBombercasDamage():
+            return _HB_IMAGES.DAMAGELOG_BOMBERCAS_TEAM_16X16
+        if info.isArtilleryOnYourself():
+            damageIcon = _HB_IMAGES.DAMAGELOG_ARTILLERY_TEAM_16X16
+            receivedIcon = _HB_IMAGES.DAMAGELOG_BY_ARTILLERY_FIELD_16X16
+            if info.getType() == _ETYPE.RECEIVED_DAMAGE:
+                return receivedIcon
+            return damageIcon
+        return super(_HistoricalBattlesDamageActionImgVOBuilder, self)._getImage(info)
 
 
 class _HistoricalBattlesLogViewComponent(_LogViewComponent):

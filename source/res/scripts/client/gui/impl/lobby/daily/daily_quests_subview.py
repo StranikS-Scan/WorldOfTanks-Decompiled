@@ -137,7 +137,10 @@ class DailyQuestsSubview(DailyQuestsSubviewBase):
             presenter.finalize()
 
     def _getEvents(self):
-        return ((self.viewModel.onReroll, self.__onReroll), (self.viewModel.onBuyPremiumBtnClick, self.__onBuyPremiumBtn), (self.__parent.onIsCurrentMissionTab, self.__onIsCurrentMissionTab))
+        return ((self.viewModel.onReroll, self.__onReroll),
+         (self.viewModel.onBuyPremiumBtnClick, self.__onBuyPremiumBtn),
+         (self.__parent.onIsCurrentMissionTab, self.__onIsCurrentMissionTab),
+         (self.__parent.onPlayStreakTab, self.__onPlayStreakTab))
 
     @adisp_process
     @args2params(bool)
@@ -151,6 +154,9 @@ class DailyQuestsSubview(DailyQuestsSubviewBase):
 
     def __onIsCurrentMissionTab(self, isActive):
         self.__unseenComponent.setIsCurrentMissionTab(isActive)
+
+    def __onPlayStreakTab(self):
+        self.__unseenComponent.setIsCurrentMissionTab(False)
 
     def __onBuyPremiumBtn(self):
         showShop(getBuyPremiumUrl())

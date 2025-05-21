@@ -70,10 +70,6 @@ class FrontPanelView(HangarSelectableView):
         super(FrontPanelView, self)._onLoaded(*args, **kwargs)
         SelectorBattleTypesUtils.setBattleTypeAsKnown(prb_config.PREBATTLE_ACTION_NAME.HISTORICAL_BATTLES)
 
-    def _onReady(self):
-        super(FrontPanelView, self)._onReady()
-        self.__gameEventController.updateVehicle()
-
     def _finalize(self):
         self.__callbackDelayer.clearCallbacks()
         self.viewModel.onFrontClick -= self.__onFrontClick
@@ -147,9 +143,9 @@ class FrontPanelView(HangarSelectableView):
             return
         else:
             front = self.__gameEventController.frontController.getFrontByID(frontId)
-            frontName = front.getName()
+            self.frontName = front.getName()
             with self.viewModel.transaction() as tx:
-                tx.setSelectedFront(frontName)
+                tx.setSelectedFront(self.frontName)
                 self.__updateFrontStates(tx)
             return
 

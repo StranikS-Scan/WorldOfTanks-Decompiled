@@ -777,8 +777,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	26	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.08	</vehicleMovement>
-        <vehicleRotation>	0.08	</vehicleRotation>
+        <vehicleMovement>	0.16	</vehicleMovement>
+        <vehicleRotation>	0.16	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	240	</maxHealth>
@@ -1953,7 +1953,7 @@
           </shotDispersionFactors>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <reloadTime>	11.2	</reloadTime>
-          <aimingTime>	2.4	</aimingTime>
+          <aimingTime>	3	</aimingTime>
           <invisibilityFactorAtShot>	0.095	</invisibilityFactorAtShot>
           <multiGunEffects>	shot_dualgun_large_mb_L shot_dualgun_large_mb_R	</multiGunEffects>
           <dualGun>
@@ -2654,21 +2654,21 @@
     <detailed>
       <engines>
         <W_12_U>
-          <smplEnginePower>	750	</smplEnginePower>
-          <smplFwMaxSpeed>	26	</smplFwMaxSpeed>
+          <smplEnginePower>	1050	</smplEnginePower>
+          <smplFwMaxSpeed>	46	</smplFwMaxSpeed>
         </W_12_U>
       </engines>
       <chassis>
         <Chassis_Pl209_ULAN>
           <grounds>
             <soft>
-              <rollingFriction>	0.12295	</rollingFriction>
+              <rollingFriction>	0.15295	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.06855	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0205	</rollingFriction>
+              <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

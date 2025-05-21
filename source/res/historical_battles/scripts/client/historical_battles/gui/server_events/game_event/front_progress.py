@@ -86,6 +86,8 @@ class FrontsProgressController(ProgressItemsController):
         return self.getSelectedFront().getAllSubdivisions()
 
     def setSelectedFrontID(self, frontID):
+        if not self.getFront(frontID).isAvailable():
+            return
         frontSettings = HBAccountSettings.getSettings(AccountSettingsKeys.HISTORICAL_BATTLES_FRONTS)
         settingsChanged = False
         lastID = frontSettings[AccountSettingsKeys.SELECTED_HISTORICAL_BATTLES_FRONT]
@@ -94,7 +96,7 @@ class FrontsProgressController(ProgressItemsController):
             frontSettings[AccountSettingsKeys.SELECTED_HISTORICAL_BATTLES_FRONT] = frontID
             settingsChanged = True
         seenFronts = frontSettings[AccountSettingsKeys.SEEN_HISTORICAL_BATTLES_FRONTS]
-        if not seenFronts.get(frontID, False) and self.getFront(frontID).isAvailable():
+        if not seenFronts.get(frontID, False):
             seenFronts[frontID] = True
             settingsChanged = True
         if settingsChanged:

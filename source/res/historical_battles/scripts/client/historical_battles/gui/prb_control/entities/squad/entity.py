@@ -11,6 +11,7 @@ from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base.squad.entity import SquadEntryPoint, SquadEntity
 from gui.prb_control.items import SelectResult, ValidationResult
 from gui.prb_control.storages import storage_getter, RECENT_PRB_STORAGE
+from gui.shared.event_dispatcher import showHangar
 from gui.shared.utils.decorators import ReprInjector
 from historical_battles_common.hb_constants_extension import PREBATTLE_TYPE, QUEUE_TYPE, CLIENT_UNIT_CMD, INVALID_DIVISION_ID, INVALID_FRONT_ID
 from historical_battles.gui.prb_control.entities.squad.hb_vehicles_watcher import HistoricalBattlesUnitVehiclesWatcher
@@ -100,7 +101,7 @@ class HistoricalBattleSquadEntity(SquadEntity):
         return QUEUE_TYPE.UNKNOWN if not front else front.getFrontQueueType()
 
     def loadHangar(self):
-        pass
+        showHangar()
 
     def showDialog(self, meta, callback, parent=None):
         if not self.__isInfoDialogShown:

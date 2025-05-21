@@ -137,6 +137,8 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
         return postBattleModel if postBattleModel else bonusConditionModel
 
     def _onPremiumTypeChanged(self, *_):
+        if not isPremiumQuestsEnable():
+            return
         premiumQuests = sorted(self.__eventsCache.getDailyPremiumQuests().values(), key=dailyQuestsSortFunc)
         with self.getViewModel().transaction() as tx:
             modelPremiumQuests = tx.getPremiumQuests()

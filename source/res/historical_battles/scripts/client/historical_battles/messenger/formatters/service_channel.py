@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: historical_battles/scripts/client/historical_battles/messenger/formatters/service_channel.py
 import itertools
+import ArenaType
 import BigWorld
 from gui.shared.notifications import NotificationPriorityLevel
 from historical_battles_common import hb_constants_extension
@@ -19,7 +20,7 @@ from messenger.formatters.service_channel import ServiceChannelFormatter, Invoic
 from messenger.formatters.service_channel_helpers import MessageData
 from skeletons.gui.shared import IItemsCache
 from historical_battles.skeletons.gui.game_event_controller import IGameEventController
-from historical_battles_common.hb_constants import BADGE_QUEST_ID
+from historical_battles_common.hb_constants import BADGE_QUEST_ID, FrontType
 from historical_battles.hb_constants import FrontsOpenStates
 from historical_battles_common.helpers_common import getVehicleBonus
 from historical_battles.notification.decorators import HBProgressionLockButtonDecorator
@@ -115,8 +116,10 @@ class HBProgressionSystemMessageFormatter(ServiceChannelFormatter):
         messageHeader = backport.text(R.strings.historical_battles_progression.serviceChannelMessages.header())
         stage = stageInfo.get('stage')
         frontId = stageInfo.get('frontId')
+        frontName = FrontType(frontId).name.lower()
+        modeName = backport.text(R.strings.historical_battles_progression.serviceChannelMessages.modeName.dyn(frontName)())
         progressionName = backport.text(R.strings.historical_battles_progression.serviceChannelMessages.progressionName())
-        messageBody = backport.text(R.strings.historical_battles_progression.serviceChannelMessages.body(), stage=str(stage), progressionName=progressionName)
+        messageBody = backport.text(R.strings.historical_battles_progression.serviceChannelMessages.body(), stage=str(stage), modeName=modeName, progressionName=progressionName)
         rewardsData = stageInfo.get('detailedRewards', {})
         if not rewardsData:
             return None
@@ -149,6 +152,9 @@ def __getBadgeIdFromResult(battleResults, questID):
 
 
 def hbExtendBattleResultsContext(ctx, battleResults):
+    arenaTypeID = battleResults.get('arenaTypeID', 0)
+    arenaType = ArenaType.g_cache[arenaTypeID]
+    ctx['arenaName'] = backport.text(R.strings.arenas.dyn('c_{}'.format(arenaType.name.split('/')[0])).name())
     divisionID = battleResults['divisionID']
     hbCoins = battleResults['hbCoins']
     badgeQuestComplete = 'completedQuestIDs' in battleResults and BADGE_QUEST_ID in battleResults['completedQuestIDs']

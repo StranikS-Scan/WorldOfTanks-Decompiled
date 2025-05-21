@@ -52,4 +52,4 @@ class RerollTooltip(ViewImpl):
             model.setIsBonusCompleted(first(self.eventsCache.getDailyQuests(filterLevels=(DailyQuestsLevels.BONUS,)).values()).isCompleted())
             _isComplited = all((quest.isCompleted() for quest in self.eventsCache.getDailyPremiumQuests().itervalues()))
             model.setIsCompleted(_isComplited)
-            model.setCanReroll(not self.eventsCache.dailyQuests.isRerollInCooldownPrem() and not _isComplited and isPremiumPlusAccount() and isPremiumQuestsEnable())
+            model.setCanReroll(not self.eventsCache.dailyQuests.isRerollInCooldownPrem() and not _isComplited and isPremiumQuestsEnable() and isRerollEnabled())

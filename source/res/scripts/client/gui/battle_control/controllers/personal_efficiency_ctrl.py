@@ -127,6 +127,9 @@ class _DamageEfficiencyInfo(_FeedbackEventEfficiencyInfo):
     def isFortArtilleryEqDamage(self, primary=True):
         return self.__damage.isFortArtilleryEq(primary=primary)
 
+    def isArtilleryOnYourself(self, primary=True):
+        return self.__damage.isArtilleryOnYourself(primary=primary)
+
     def getShellType(self):
         return self.__damage.getShellType()
 

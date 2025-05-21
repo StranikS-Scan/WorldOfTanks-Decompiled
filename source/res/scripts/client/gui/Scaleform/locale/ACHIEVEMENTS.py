@@ -1466,3 +1466,5 @@ class ACHIEVEMENTS(object):
     BOB2025NEARYOU_DESCR = '#achievements:bob2025NearYou_descr'
     BOB2025JOVE = '#achievements:bob2025Jove'
     BOB2025JOVE_DESCR = '#achievements:bob2025Jove_descr'
+    SUPPORT_2025 = '#achievements:support_2025'
+    SUPPORT_2025_DESCR = '#achievements:support_2025_descr'

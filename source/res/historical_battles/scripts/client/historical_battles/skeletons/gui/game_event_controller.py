@@ -132,7 +132,7 @@ class IGameEventController(IGameController):
     def banExpiryTime(self):
         raise NotImplementedError
 
-    def updateFrontData(self, frontId=None, divisionID=None):
+    def updateFrontData(self, frontId=None, divisionID=None, processSceneChange=None):
         raise NotImplementedError
 
     def isHBPrbActive(self):

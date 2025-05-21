@@ -30,6 +30,7 @@
     <respawnController_updateVehicleLimits>
       <Arg>	ARRAY	  <of>	RESPAWN_LIMITED_VEHICLES	</of>
       </Arg>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
     </respawnController_updateVehicleLimits>
     <respawnController_onTeamLivesRestored>
       <Arg>	ARRAY	  <of>	UINT8	</of>

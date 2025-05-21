@@ -572,6 +572,20 @@ class _EnemyDetectionRibbon(_MultiVehicleRibbon):
         return BATTLE_EFFICIENCY_TYPES.DETECTION
 
 
+class _ArtilleryOnYourselfDamageHitRibbon(_SingleVehicleReceivedHitRibbon):
+    __slots__ = ()
+
+    def getType(self):
+        return BATTLE_EFFICIENCY_TYPES.DAMAGE_BY_ARTILLERY_ON_YOURSELF
+
+
+class _ArtilleryOnYourselfReceivedHitRibbon(_SingleVehicleReceivedHitRibbon):
+    __slots__ = ()
+
+    def getType(self):
+        return BATTLE_EFFICIENCY_TYPES.RECEIVED_BY_ARTILLERY_ON_YOURSELF
+
+
 class _RibbonClassFactory(object):
     __slots__ = ()
 
@@ -604,9 +618,9 @@ class _CriticalRibbonClassFactory(_RibbonClassFactory):
 
 
 class _DamageRibbonClassFactory(_RibbonClassFactory):
-    __slots__ = ('__damageCls', '__fireCls', '__ramCls', '__wcCls', '__artDmgCls', '__artRocketDmgCls', '__artMortarDmgCls', '__bombDmgCls', '__bombercasDmgCls', '__artFireCls', '__bombFireCls', '__recoveryCls', '__deathZoneCls', '__personalDeathZoneCls', '__berserker', '__spawnedBotDmgCls', '__damageByMinefield', '__damagedBySmoke')
+    __slots__ = ('__damageCls', '__fireCls', '__ramCls', '__wcCls', '__artDmgCls', '__artRocketDmgCls', '__artMortarDmgCls', '__bombDmgCls', '__bombercasDmgCls', '__artFireCls', '__bombFireCls', '__recoveryCls', '__deathZoneCls', '__personalDeathZoneCls', '__berserker', '__spawnedBotDmgCls', '__damageByMinefield', '__damagedBySmoke', '__damagedByArtilleryOnYourself')
 
-    def __init__(self, damageCls, fireCls, ramCls, wcCls, artDmgCls, artRocketDmgCls, artMortarDmgCls, bombDmgCls, bombercasDmgCls, artFireCls, bombFireCls, deathZoneCls, personalDeathZoneCls, recoveryCls, berserker, spawnedBotDmgCls, minefieldDamageCls, damagedBySmoke):
+    def __init__(self, damageCls, fireCls, ramCls, wcCls, artDmgCls, artRocketDmgCls, artMortarDmgCls, bombDmgCls, bombercasDmgCls, artFireCls, bombFireCls, deathZoneCls, personalDeathZoneCls, recoveryCls, berserker, spawnedBotDmgCls, minefieldDamageCls, damagedBySmoke, damagedByArtilleryOnYourself):
         super(_DamageRibbonClassFactory, self).__init__()
         self.__damageCls = damageCls
         self.__fireCls = fireCls
@@ -626,6 +640,7 @@ class _DamageRibbonClassFactory(_RibbonClassFactory):
         self.__spawnedBotDmgCls = spawnedBotDmgCls
         self.__damageByMinefield = minefieldDamageCls
         self.__damagedBySmoke = damagedBySmoke
+        self.__damagedByArtilleryOnYourself = damagedByArtilleryOnYourself
 
     def getRibbonClass(self, event):
         damageExtra = event.getExtra()
@@ -664,6 +679,8 @@ class _DamageRibbonClassFactory(_RibbonClassFactory):
             ribbonCls = self.__damageByMinefield
         elif damageExtra.isDamagingSmoke():
             ribbonCls = self.__damagedBySmoke
+        elif damageExtra.isArtilleryOnYourself():
+            ribbonCls = self.__damagedByArtilleryOnYourself
         else:
             ribbonCls = self.__ramCls
         if not ribbonCls:
@@ -839,8 +856,8 @@ class HBRibbonsAggregator(RibbonsAggregator):
      FEEDBACK_EVENT_ID.PLAYER_DAMAGED_DEVICE_ENEMY: _RibbonSingleClassFactory(_CriticalHitRibbon),
      FEEDBACK_EVENT_ID.PLAYER_KILLED_ENEMY: _RibbonSingleClassFactory(_EnemyKillRibbon),
      FEEDBACK_EVENT_ID.ENEMY_DAMAGED_DEVICE_PLAYER: _CriticalRibbonClassFactory(),
-     FEEDBACK_EVENT_ID.PLAYER_DAMAGED_HP_ENEMY: _DamageRibbonClassFactory(damageCls=_CausedDamageRibbon, fireCls=_FireHitRibbon, ramCls=_RamHitRibbon, wcCls=_WorldCollisionHitRibbon, artDmgCls=_ArtilleryHitRibbon, bombDmgCls=_BombersHitRibbon, bombercasDmgCls=_BombercasHitRibbon, artFireCls=_ArtilleryFireHitRibbon, bombFireCls=_BombersFireHitRibbon, recoveryCls=_EpicRecoveryRibbon, deathZoneCls=_DeathZoneRibbon, personalDeathZoneCls=_PersonalDeathZoneRibbon, artRocketDmgCls=_ArtilleryRocketHitRibbon, artMortarDmgCls=_ArtilleryMortarHitRibbon, berserker=_ReceivedBerserkerHitRibbon, spawnedBotDmgCls=_SpawnedBotCausedDamageRibbon, minefieldDamageCls=_MinefieldDamageRibbon, damagedBySmoke=_ReceivedByDamagingSmokeRibbon),
-     FEEDBACK_EVENT_ID.ENEMY_DAMAGED_HP_PLAYER: _DamageRibbonClassFactory(damageCls=_ReceivedDamageHitRibbon, fireCls=_ReceivedFireHitRibbon, ramCls=_ReceivedRamHitRibbon, wcCls=_ReceivedWorldCollisionHitRibbon, artDmgCls=_ArtilleryReceivedDamageHitRibbon, bombDmgCls=_BombersReceivedDamageHitRibbon, bombercasDmgCls=_BombercasHitRibbon, artFireCls=_ArtilleryReceivedFireHitRibbon, bombFireCls=_BombersReceivedFireHitRibbon, recoveryCls=_EpicRecoveryRibbon, deathZoneCls=_DeathZoneRibbon, personalDeathZoneCls=_PersonalDeathZoneRibbon, artRocketDmgCls=_ArtilleryRocketHitRibbon, artMortarDmgCls=_ArtilleryMortarHitRibbon, berserker=_ReceivedBerserkerHitRibbon, spawnedBotDmgCls=_ReceivedBySpawnedBotHitRibbon, minefieldDamageCls=_ReceivedByMinefieldRibbon, damagedBySmoke=_ReceivedByDamagingSmokeRibbon),
+     FEEDBACK_EVENT_ID.PLAYER_DAMAGED_HP_ENEMY: _DamageRibbonClassFactory(damageCls=_CausedDamageRibbon, fireCls=_FireHitRibbon, ramCls=_RamHitRibbon, wcCls=_WorldCollisionHitRibbon, artDmgCls=_ArtilleryHitRibbon, bombDmgCls=_BombersHitRibbon, bombercasDmgCls=_BombercasHitRibbon, artFireCls=_ArtilleryFireHitRibbon, bombFireCls=_BombersFireHitRibbon, recoveryCls=_EpicRecoveryRibbon, deathZoneCls=_DeathZoneRibbon, personalDeathZoneCls=_PersonalDeathZoneRibbon, artRocketDmgCls=_ArtilleryRocketHitRibbon, artMortarDmgCls=_ArtilleryMortarHitRibbon, berserker=_ReceivedBerserkerHitRibbon, spawnedBotDmgCls=_SpawnedBotCausedDamageRibbon, minefieldDamageCls=_MinefieldDamageRibbon, damagedBySmoke=_ReceivedByDamagingSmokeRibbon, damagedByArtilleryOnYourself=_ArtilleryOnYourselfDamageHitRibbon),
+     FEEDBACK_EVENT_ID.ENEMY_DAMAGED_HP_PLAYER: _DamageRibbonClassFactory(damageCls=_ReceivedDamageHitRibbon, fireCls=_ReceivedFireHitRibbon, ramCls=_ReceivedRamHitRibbon, wcCls=_ReceivedWorldCollisionHitRibbon, artDmgCls=_ArtilleryReceivedDamageHitRibbon, bombDmgCls=_BombersReceivedDamageHitRibbon, bombercasDmgCls=_BombercasHitRibbon, artFireCls=_ArtilleryReceivedFireHitRibbon, bombFireCls=_BombersReceivedFireHitRibbon, recoveryCls=_EpicRecoveryRibbon, deathZoneCls=_DeathZoneRibbon, personalDeathZoneCls=_PersonalDeathZoneRibbon, artRocketDmgCls=_ArtilleryRocketHitRibbon, artMortarDmgCls=_ArtilleryMortarHitRibbon, berserker=_ReceivedBerserkerHitRibbon, spawnedBotDmgCls=_ReceivedBySpawnedBotHitRibbon, minefieldDamageCls=_ReceivedByMinefieldRibbon, damagedBySmoke=_ReceivedByDamagingSmokeRibbon, damagedByArtilleryOnYourself=_ArtilleryOnYourselfReceivedHitRibbon),
      FEEDBACK_EVENT_ID.PLAYER_ASSIST_TO_KILL_ENEMY: _AssistRibbonClassFactory(trackAssistCls=_TrackAssistRibbon, radioAssistCls=_RadioAssistRibbon, stunAssistCls=_StunAssistRibbon),
      FEEDBACK_EVENT_ID.PLAYER_ASSIST_TO_STUN_ENEMY: _AssistRibbonClassFactory(trackAssistCls=_TrackAssistRibbon, radioAssistCls=_RadioAssistRibbon, stunAssistCls=_StunAssistRibbon),
      FEEDBACK_EVENT_ID.ENEMY_SECTOR_CAPTURED: _RibbonSingleClassFactory(_EpicEnemySectorCapturedRibbon),

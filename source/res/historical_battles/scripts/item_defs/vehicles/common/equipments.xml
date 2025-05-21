@@ -194,7 +194,7 @@
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
       <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
-      <cooldownTime>	120	</cooldownTime>
+      <cooldownTime>	150	</cooldownTime>
       <cooldownFactors></cooldownFactors>
       <sharedCooldownTime>	0	</sharedCooldownTime>
       <consumeAmmo>	false	</consumeAmmo>
@@ -267,7 +267,7 @@
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
       <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
-      <cooldownTime>	90	</cooldownTime>
+      <cooldownTime>	120	</cooldownTime>
       <cooldownFactors></cooldownFactors>
       <sharedCooldownTime>	0	</sharedCooldownTime>
       <consumeAmmo>	false	</consumeAmmo>
@@ -339,7 +339,7 @@
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
       <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
-      <cooldownTime>	35	</cooldownTime>
+      <cooldownTime>	55	</cooldownTime>
       <cooldownFactors></cooldownFactors>
       <sharedCooldownTime>	0	</sharedCooldownTime>
       <consumeAmmo>	false	</consumeAmmo>
@@ -412,7 +412,7 @@
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
       <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
-      <cooldownTime>	210	</cooldownTime>
+      <cooldownTime>	240	</cooldownTime>
       <cooldownFactors></cooldownFactors>
       <sharedCooldownTime>	0	</sharedCooldownTime>
       <consumeAmmo>	false	</consumeAmmo>
@@ -494,7 +494,7 @@
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
       <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber	</tooltips>
-      <cooldownTime>	180	</cooldownTime>
+      <cooldownTime>	210	</cooldownTime>
       <cooldownFactors></cooldownFactors>
       <sharedCooldownTime>	0	</sharedCooldownTime>
       <consumeAmmo>	false	</consumeAmmo>
@@ -566,7 +566,7 @@
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
       <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber	</tooltips>
-      <cooldownTime>	90	</cooldownTime>
+      <cooldownTime>	120	</cooldownTime>
       <cooldownFactors></cooldownFactors>
       <sharedCooldownTime>	0	</sharedCooldownTime>
       <consumeAmmo>	false	</consumeAmmo>
@@ -648,7 +648,7 @@
   <recon_hb>
     <id>	13111	</id>
     <userString>	#historical_battles.hb_artefacts:recon_hb/name	</userString>
-    <description>	#historical_battles.hb_artefacts:recon_hb/shortDescr	</description>
+    <description>	#historical_battles.hb_artefacts:recon_hb/descr	</description>
     <playerMessagesKey>	RECON_PLANE_HB	</playerMessagesKey>
     <icon>	recon_flight	</icon>
     <soundNotification>	vo_se_ab_recon_flight_ready	</soundNotification>
@@ -904,7 +904,7 @@
       <preparingAreaVisual>	content/Interface/TargetPoint/TargetPoint_red.visual	</preparingAreaVisual>
       <areaShow>	always	</areaShow>
       <noOwner>	false	</noOwner>
-      <attackerType>	ARTILLERY_EQ	</attackerType>
+      <attackerType>	ARTILLERY_ON_YOURSELF	</attackerType>
       <shotSoundPreDelay>	1	</shotSoundPreDelay>
       <wwsoundEquipmentUsed>	vo_se_ab_call_fire_on_myself	</wwsoundEquipmentUsed>
       <wwsoundEquipmentUsedNPC>	vo_se_ab_call_fire_on_myself_npc	</wwsoundEquipmentUsedNPC>
@@ -971,7 +971,7 @@
           <type>	DamageVehicle	</type>
           <applyTo>	team1	</applyTo>
           <args>
-            <damage>	50	</damage>
+            <damage>	75	</damage>
           </args>
         </action>
       </actions>

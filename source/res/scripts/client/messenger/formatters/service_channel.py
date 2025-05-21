@@ -3310,7 +3310,7 @@ class PersonalMissionsQuestAchievesFormatter(QuestAchievesFormatter):
                 countText = text_styles.rewards(backport.text(R.strings.messenger.serviceChannelMessages.battleResults.quests.entitlements.fmtMultiplier(), count=offersTokenCount))
                 offerName = g_settings.htmlTemplates.format('offerTokenText', {'text': text})
                 fmt = g_settings.htmlTemplates.format('offersAccruedInvoiceReceived', {'offer': offerName})
-                offerText = text_styles.concatStylesWithSpace(fmt, countText)
+                offerText = text_styles.concatStylesToSingleLine(fmt, countText)
                 result.append(offerText)
             return ', '.join(result)
 

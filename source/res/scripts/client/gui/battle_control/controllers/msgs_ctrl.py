@@ -313,6 +313,8 @@ class HistoricalBattlesMessagesController(BattleMessagesController):
         self._attackReasonCodes[_AR_INDICES['artillery_eq']] = 'ARTILLERY_EQ'
         self._attackReasonCodes[_AR_INDICES['artillery_rocket']] = 'ARTILLERY_ROCKET'
         self._attackReasonCodes[_AR_INDICES['bomber_eq']] = 'BOMBER_EQ'
+        self._attackReasonCodes[_AR_INDICES['artillery_on_yourself']] = 'ARTILLERY_ON_YOURSELF'
+        self._attackReasonCodes[_AR_INDICES['minefield_eq']] = 'MINEFIELD_EQ'
 
 
 @dependency.replace_none_kwargs(battleSessionProvider=IBattleSessionProvider)

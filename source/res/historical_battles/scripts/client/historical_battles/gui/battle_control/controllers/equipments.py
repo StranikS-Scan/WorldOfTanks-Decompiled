@@ -183,6 +183,10 @@ class _HBReplayReconPlaneItem(_ReplayReconItem):
 
 class _HBShotItem(_HBBufItem):
 
+    @property
+    def becomeActive(self):
+        return self._prevStage == EQUIPMENT_STAGES.READY and self._stage in (EQUIPMENT_STAGES.PREPARING, EQUIPMENT_STAGES.COOLDOWN, EQUIPMENT_STAGES.EXHAUSTED)
+
     def canActivate(self, entityName=None, avatar=None):
         result = True
         error = None

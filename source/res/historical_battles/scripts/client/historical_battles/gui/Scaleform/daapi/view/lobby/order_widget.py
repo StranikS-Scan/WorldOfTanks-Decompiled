@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: historical_battles/scripts/client/historical_battles/gui/Scaleform/daapi/view/lobby/order_widget.py
 import logging
+from PlayerEvents import g_playerEvents
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.impl.gen import R
 from gui.impl.lobby.hangar_selectable_view import HangarSelectableView
@@ -10,6 +11,7 @@ from helpers import dependency
 from historical_battles.skeletons.gui.game_event_controller import IGameEventController
 from historical_battles.gui.shared.event_dispatcher import showHBOrderView
 from historical_battles.gui.impl.gen.view_models.views.lobby.order_model import OrderModel, OrderType
+from historical_battles_common.hb_constants import FRONT_COUPON_TOKEN_PREFIX
 from gui.impl.pub.tooltip_window import ToolTipWindow
 from historical_battles.gui.impl.lobby.tooltips.hb_order_widget_tooltip import HbOrderWidgetTooltip
 from historical_battles.gui.impl.lobby.tooltips.order_tooltip import OrderTooltip
@@ -35,7 +37,7 @@ class OrderWidgetView(HangarSelectableView):
         return super(OrderWidgetView, self).getViewModel()
 
     def _getEvents(self):
-        return ((self.__gameEventController.frontDataUpdated, self.__onFrontDataUpdated),)
+        return ((self.__gameEventController.frontDataUpdated, self.__onFrontDataUpdated), (g_playerEvents.onClientUpdated, self.__onTokensUpdated))
 
     def _onLoading(self, *args, **kwargs):
         super(OrderWidgetView, self)._onLoading(*args, **kwargs)
@@ -63,7 +65,7 @@ class OrderWidgetView(HangarSelectableView):
         return super(OrderWidgetView, self).createToolTip(event)
 
     def __fillOrders(self):
-        with self.getViewModel().transaction() as model:
+        with self.viewModel.transaction() as model:
             ordersModel = model.getOrders()
             ordersModel.clear()
             orders = self.__gameEventController.frontCoupons.getGroupedFrontCoupons()
@@ -89,6 +91,15 @@ class OrderWidgetView(HangarSelectableView):
 
     def __removeEventListeners(self):
         self.viewModel.onClick -= self.__onClick
+
+    def __onTokensUpdated(self, diff, _):
+        tokens = diff.get('tokens')
+        if not tokens:
+            return
+        for token in tokens:
+            if token.startswith(FRONT_COUPON_TOKEN_PREFIX):
+                self.__fillOrders()
+                return
 
     @staticmethod
     def __onClick():

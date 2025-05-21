@@ -676,7 +676,7 @@ def __readBonus_tokens(bonus, _name, section, eventType, checkLimit):
         token['limit'] = section['limit'].asInt
     token['count'] = 1
     if section.has_key('count'):
-        token['count'] = section['count'].asInt
+        token['count'] = __readIntWithTokenExpansion(section['count'])
     res = validateCustomizationQuestToken(id, token)
     if not res[0]:
         raise SoftException(res[1])

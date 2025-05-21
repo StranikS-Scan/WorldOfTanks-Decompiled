@@ -197,6 +197,9 @@ class _DamageExtra(object):
     def isClingBranderRam(self):
         return self.isAttackReason(ATTACK_REASON.CLING_BRANDER_RAM)
 
+    def isArtilleryOnYourself(self, primary=True):
+        return self.isAttackReason(ATTACK_REASON.ARTILLERY_ON_YOURSELF) if primary else self.isSecondaryAttackReason(ATTACK_REASON.ARTILLERY_ON_YOURSELF)
+
 
 class _VisibilityExtra(object):
     __slots__ = ('__isVisible', '__isDirect', '__isRoleAction')

@@ -1976,24 +1976,26 @@ class DailyEpicQuestsHandler(ServiceChannelHandler):
     _EPIC_QUEST = 'QUEST_EPIC_REWARD'
 
     def __init__(self, awardCtrl):
-        super(DailyEpicQuestsHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
-        self.__mergedBonuses = {}
+        super(DailyEpicQuestsHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
+        self._qId = None
+        return
 
     def _showAward(self, ctx):
-        showDailyEpicQuestRewardWindow(self.__mergedBonuses)
+        _, message = ctx
+        rewards = message.data.get('detailedRewards', {}).get(self._qId, {})
+        bonuses = getMergedBonusesFromDicts([rewards])
+        if bonuses:
+            showDailyEpicQuestRewardWindow(bonuses)
+        else:
+            _logger.error("Can't show empty or invalid reward!")
 
     def _needToShowAward(self, ctx):
+        if not super(DailyEpicQuestsHandler, self)._needToShowAward(ctx):
+            return False
         _, message = ctx
-        return bool(self.__checkEpicQuest(message.data)) if isinstance(message.data, dict) else None
-
-    def __checkEpicQuest(self, data):
-        rewards = []
-        for questID in data.get('completedQuestIDs', set()):
-            if self._EPIC_QUEST in questID:
-                rewards.append(data.get('detailedRewards', {}).get(questID, {}))
-
-        self.__mergedBonuses = getMergedBonusesFromDicts(rewards)
-        return bool(self.__mergedBonuses)
+        questIDs = message.data.get('completedQuestIDs', set())
+        self._qId = findFirst(lambda x: self._EPIC_QUEST in x, questIDs, self._qId)
+        return bool(self._qId)
 
 
 registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,

@@ -177,6 +177,7 @@ def getDefaultFormattersMap():
      'tokens': tokenBonusFormatter,
      'tankwomanBonus': TankwomanBonusFormatter(),
      'battleToken': tokenBonusFormatter,
+     'lootBoxToken': tokenBonusFormatter,
      'tankmen': TankmenBonusFormatter(),
      'customizations': CustomizationsBonusFormatter(),
      'goodies': GoodiesBonusFormatter(),

@@ -34,7 +34,8 @@ class UnseenQuestsComponent(SubModelPresenter):
         super(UnseenQuestsComponent, self).finalize()
         self.__unseenEventsManager.onUnseenEventUpdated -= self.__updateUnseen
         self.__unseenEventsManager.onSeenEvents -= self.__updateUnseen
-        self.__seenAllQuestsInTab(self.__currentTabID)
+        if self.__eventsCache.isStarted:
+            self.__seenAllQuestsInTab(self.__currentTabID)
 
     def setIsCurrentMissionTab(self, isCurrent):
         if not isCurrent:

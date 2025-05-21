@@ -67,13 +67,6 @@
       <undamaged>	vehicles/russian/R07_T-34-85/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/russian/R07_T-34-85/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/russian/R07_T-34-85/crash/lod0/Hull.model	</exploded>
-      <sets>
-        <Victory_Day>
-          <undamaged>	vehicles/russian/R07_T-34-85/_skins/Victory_Day/normal/lod0/Hull.model	</undamaged>
-          <destroyed>	vehicles/russian/R07_T-34-85/_skins/Victory_Day/crash/lod0/Hull.model	</destroyed>
-          <exploded>	vehicles/russian/R07_T-34-85/_skins/Victory_Day/crash/lod0/Hull.model	</exploded>
-        </Victory_Day>
-      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -1068,36 +1061,6 @@
       <slot>
         <slotType>	projectionDecal	</slotType>
         <slotId>	15084	</slotId>
-        <tags>	formfactor_square	</tags>
-        <compatibleModels>	Victory_Day	</compatibleModels>
-        <position>	-0.811302 1.34988 2.03779	</position>
-        <rotation>	0.56412 -0.013483 3.13442	</rotation>
-        <scale>	0.53873 0.538731 0.538731	</scale>
-        <showOn>	16	</showOn>
-      </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	15085	</slotId>
-        <tags>	formfactor_square	</tags>
-        <compatibleModels>	Victory_Day	</compatibleModels>
-        <position>	1.14198 1.34264 1.48813	</position>
-        <rotation>	0.813611 1.55464 3.1328	</rotation>
-        <scale>	0.436208 0.436209 0.436208	</scale>
-        <showOn>	16	</showOn>
-      </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	15086	</slotId>
-        <tags>	formfactor_square	</tags>
-        <compatibleModels>	Victory_Day	</compatibleModels>
-        <position>	-0.00408 1.72066 -1.03554	</position>
-        <rotation>	3.13588 -0.014257 0.033618	</rotation>
-        <scale>	0.523207 0.523209 0.523207	</scale>
-        <showOn>	16	</showOn>
-      </slot>
-      <slot>
-        <slotType>	projectionDecal	</slotType>
-        <slotId>	15087	</slotId>
         <tags>	formfactor_square front safe	</tags>
         <position>	-0.792289 1.29788 2.0153	</position>
         <rotation>	0.674215 -0.000011 3.1154	</rotation>
@@ -1109,7 +1072,7 @@
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	15088	</slotId>
+        <slotId>	15085	</slotId>
         <tags>	formfactor_rect1x2 safe front	</tags>
         <position>	-0.835489 1.37102 2.18216	</position>
         <rotation>	0.563297 -0.030571 3.13874	</rotation>
@@ -1121,7 +1084,7 @@
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
-        <slotId>	15089	</slotId>
+        <slotId>	15086	</slotId>
         <tags>	formfactor_rect1x2 mimic front	</tags>
         <position>	-0.001038 1.11065 2.09125	</position>
         <rotation>	0.693756 -0.0003 3.13965	</rotation>
@@ -1170,13 +1133,6 @@
         <undamaged>	vehicles/russian/R07_T-34-85/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/russian/R07_T-34-85/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/russian/R07_T-34-85/crash/lod0/Chassis.model	</exploded>
-        <sets>
-          <Victory_Day>
-            <undamaged>	vehicles/russian/R07_T-34-85/_skins/Victory_Day/normal/lod0/Chassis.model	</undamaged>
-            <destroyed>	vehicles/russian/R07_T-34-85/_skins/Victory_Day/crash/lod0/Chassis.model	</destroyed>
-            <exploded>	vehicles/russian/R07_T-34-85/_skins/Victory_Day/crash/lod0/Chassis.model	</exploded>
-          </Victory_Day>
-        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -2075,7 +2031,7 @@
             <gun>	30	</gun>
           </armor>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	5	</reloadTime>
+          <reloadTime>	5.5	</reloadTime>
           <aimingTime>	2.5	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -22 1 -22	</minPitch>
@@ -2091,13 +2047,6 @@
             <undamaged>	vehicles/russian/R07_T-34-85/normal/lod0/Gun_07.model	</undamaged>
             <destroyed>	vehicles/russian/R07_T-34-85/crash/lod0/Gun_07.model	</destroyed>
             <exploded>	vehicles/russian/R07_T-34-85/crash/lod0/Gun_07.model	</exploded>
-            <sets>
-              <Victory_Day>
-                <undamaged>	vehicles/russian/R07_T-34-85/_skins/Victory_Day/normal/lod0/Gun_07.model	</undamaged>
-                <destroyed>	vehicles/russian/R07_T-34-85/_skins/Victory_Day/crash/lod0/Gun_07.model	</destroyed>
-                <exploded>	vehicles/russian/R07_T-34-85/_skins/Victory_Day/crash/lod0/Gun_07.model	</exploded>
-              </Victory_Day>
-            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R07_T-34-85/collision/Gun_07.model	</collisionModelServer>
@@ -2155,13 +2104,6 @@
         <undamaged>	vehicles/russian/R07_T-34-85/normal/lod0/Turret_02.model	</undamaged>
         <destroyed>	vehicles/russian/R07_T-34-85/crash/lod0/Turret_02.model	</destroyed>
         <exploded>	vehicles/russian/R07_T-34-85/crash/lod0/Turret_02.model	</exploded>
-        <sets>
-          <Victory_Day>
-            <undamaged>	vehicles/russian/R07_T-34-85/_skins/Victory_Day/normal/lod0/Turret_02.model	</undamaged>
-            <destroyed>	vehicles/russian/R07_T-34-85/_skins/Victory_Day/crash/lod0/Turret_02.model	</destroyed>
-            <exploded>	vehicles/russian/R07_T-34-85/_skins/Victory_Day/crash/lod0/Turret_02.model	</exploded>
-          </Victory_Day>
-        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R07_T-34-85/collision/Turret_02.model	</collisionModelServer>
@@ -2594,26 +2536,6 @@
         <slot>
           <slotType>	projectionDecal	</slotType>
           <slotId>	35034	</slotId>
-          <tags>	formfactor_square	</tags>
-          <compatibleModels>	Victory_Day	</compatibleModels>
-          <position>	-0.260638 2.4481 1.08264	</position>
-          <rotation>	0.03299 0.000699 3.13588	</rotation>
-          <scale>	0.371208 0.371208 0.371208	</scale>
-          <showOn>	256	</showOn>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35035	</slotId>
-          <tags>	formfactor_square	</tags>
-          <compatibleModels>	Victory_Day	</compatibleModels>
-          <position>	-0.193223 2.49868 -0.450355	</position>
-          <rotation>	-3.10831 -0.008361 -0.003191	</rotation>
-          <scale>	0.461142 0.461142 0.461142	</scale>
-          <showOn>	256	</showOn>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35036	</slotId>
           <tags>	formfactor_rect1x2 mimic left direction_right_to_left	</tags>
           <position>	-0.807919 2.07537 1.26797	</position>
           <rotation>	1.20046 -1.4662 3.00132	</rotation>
@@ -2624,7 +2546,7 @@
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
-          <slotId>	35037	</slotId>
+          <slotId>	35035	</slotId>
           <tags>	formfactor_rect1x2 mimic right direction_left_to_right	</tags>
           <position>	0.793674 2.06968 1.26425	</position>
           <rotation>	1.20049 1.46625 -3.00127	</rotation>
@@ -2635,7 +2557,7 @@
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
-          <slotId>	35038	</slotId>
+          <slotId>	35036	</slotId>
           <tags>	formfactor_square safe left direction_right_to_left	</tags>
           <position>	-0.677513 2.05926 1.07035	</position>
           <rotation>	1.29782 -1.30904 3.1405	</rotation>
@@ -2647,7 +2569,7 @@
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
-          <slotId>	35039	</slotId>
+          <slotId>	35037	</slotId>
           <tags>	formfactor_square safe right direction_left_to_right	</tags>
           <position>	0.690472 2.03183 1.06263	</position>
           <rotation>	1.08272 1.32831 -3.11237	</rotation>
@@ -2659,7 +2581,7 @@
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
-          <slotId>	35040	</slotId>
+          <slotId>	35038	</slotId>
           <tags>	formfactor_rect1x2 cover direction_right_to_left	</tags>
           <position>	0.000272 1.83244 0.400351	</position>
           <rotation>	-0.000014 -1.56943 2.78871	</rotation>
@@ -2671,7 +2593,7 @@
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
-          <slotId>	35041	</slotId>
+          <slotId>	35039	</slotId>
           <tags>	formfactor_rect1x2 safe left direction_right_to_left	</tags>
           <position>	-0.809363 2.05413 1.2454	</position>
           <rotation>	1.29443 -1.30406 3.12535	</rotation>
@@ -2683,7 +2605,7 @@
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
-          <slotId>	35042	</slotId>
+          <slotId>	35040	</slotId>
           <tags>	formfactor_rect1x2 safe right direction_left_to_right	</tags>
           <position>	0.809405 2.05411 1.2454	</position>
           <rotation>	1.29446 1.3041 3.12537	</rotation>
@@ -2692,20 +2614,6 @@
           <showOn>	256	</showOn>
           <clipAngle>	1.36533	</clipAngle>
           <anchorShift>	0.025435	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	attachment	</slotType>
-          <slotId>	38000	</slotId>
-          <position>	0 0 0	</position>
-          <rotation>	0 0 0	</rotation>
-          <attachNode>	HP_flagShaft	</attachNode>
-        </slot>
-        <slot>
-          <slotType>	attachment	</slotType>
-          <slotId>	38001	</slotId>
-          <position>	0 0 0	</position>
-          <rotation>	0 0 0	</rotation>
-          <attachNode>	HP_flag	</attachNode>
         </slot>
       </customizationSlots>
       <customization>

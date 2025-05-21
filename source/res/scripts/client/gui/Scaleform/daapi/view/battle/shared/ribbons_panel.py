@@ -86,7 +86,7 @@ def _baseRibbonFormatter(ribbon, updater, arenaDP, vehicleDataGetter):
     updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), leftFieldStr=str(ribbon.getPoints()))
 
 
-def _perkRibbonFormatter(ribbon, arenaDP, updater):
+def _perkRibbonFormatter(ribbon, updater, arenaDP, vehicleDataGetter):
     perkID = ribbon.getPerkID()
     skillName = tankmen.getSkillsConfig().vsePerkToSkill.get(perkID)
     rightFieldStr = R.strings.crew_perks.dyn(skillName).name

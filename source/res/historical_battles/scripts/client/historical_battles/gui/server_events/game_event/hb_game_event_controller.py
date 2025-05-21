@@ -231,7 +231,7 @@ class HBGameEventController(PerformanceAnalyzerMixin, Notifiable, IGameEventCont
         elif self.__prbIsSwitching:
             self.__onHangarExited()
             getTutorialGlobalStorage().setValue(GLOBAL_FLAG.HISTORICAL_BATTLES_ACTIVE, False)
-        self.onPrbEntityStateChanged()
+        self.onPrbEntityStateChanged(self.isHistoricalBattlesMode())
         self.__prbIsSwitching = False
 
     @adisp_process
@@ -258,7 +258,7 @@ class HBGameEventController(PerformanceAnalyzerMixin, Notifiable, IGameEventCont
             yield dispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.RANDOM))
             return
 
-    def updateFrontData(self, frontId=None, divisionID=None):
+    def updateFrontData(self, frontId=None, divisionID=None, processSceneChange=True):
         if frontId is not None:
             self.frontController.setSelectedFrontID(frontId)
         if divisionID is not None:
@@ -266,7 +266,8 @@ class HBGameEventController(PerformanceAnalyzerMixin, Notifiable, IGameEventCont
             front.setSelectedSubdivisionID(divisionID)
         self.__selectVehicle()
         self.frontDataUpdated(frontId, divisionID)
-        self.__spaceSwitchController.processPossibleSceneChange()
+        if processSceneChange:
+            self.__spaceSwitchController.processPossibleSceneChange()
         return
 
     def updateVehicle(self):
@@ -606,7 +607,7 @@ class HBGameEventController(PerformanceAnalyzerMixin, Notifiable, IGameEventCont
             availableFront = self.frontController.getLatestFront()
             if availableFront:
                 self.updateFrontData(frontId=availableFront.getID())
-            else:
+            elif self.isHistoricalBattlesMode():
                 _logger.error('There is no available front')
                 closeEvent()
 

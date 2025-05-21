@@ -105,6 +105,7 @@ class BattleQuestAwardsView(ViewImpl, IPrbListener):
         self.__addListeners()
 
     def _finalize(self):
+        self.__executeCloseCallback()
         self.__removeListeners()
         super(BattleQuestAwardsView, self)._finalize()
 
@@ -144,10 +145,8 @@ class BattleQuestAwardsView(ViewImpl, IPrbListener):
         return False
 
     def __onClose(self):
-        if self.__closeCallback is not None:
-            self.__closeCallback()
+        self.__executeCloseCallback()
         self.destroyWindow()
-        return
 
     def __onApprove(self):
         self.__onClose()
@@ -163,6 +162,13 @@ class BattleQuestAwardsView(ViewImpl, IPrbListener):
             self.__gameEventController.onCloseAllAwardsWindow()
             event_dispatcher.selectVehicleInHangar(vehicleCD)
             closeEvent()
+
+    def __executeCloseCallback(self):
+        if self.__closeCallback is not None:
+            callback = self.__closeCallback
+            self.__closeCallback = None
+            callback()
+        return
 
 
 class BattleQuestAwardsViewWindow(LobbyNotificationWindow):

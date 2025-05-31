@@ -17,6 +17,7 @@ from gui.impl.pub import ViewImpl
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.shared import IItemsCache
+from PlayerEvents import g_playerEvents
 if typing.TYPE_CHECKING:
     from typing import List, Type
     from gui.impl.lobby.container_views.base.controllers import InteractionController
@@ -43,6 +44,9 @@ class PersonalFileView(ContainerBase, IPersonalTab, ViewImpl):
             self.__clearAnimationData(self.context.skillAnimationsSkipped)
         if hasattr(self, 'interactionCtrl'):
             self.interactionCtrl.onChangeTankman(tankmanID)
+
+    def _getEvents(self):
+        return ((g_playerEvents.onDisconnected, self.__onDisconnected),)
 
     def onStopAnimations(self):
         if hasattr(self, 'interactionCtrl'):
@@ -101,3 +105,6 @@ class PersonalFileView(ContainerBase, IPersonalTab, ViewImpl):
     def __clearAnimationData(self, skipped=False):
         if not skipped:
             BigWorld.player().crewAccountController.clearTankmanAnimanions(self.context.tankman.invID)
+
+    def __onDisconnected(self):
+        self.destroyWindow()

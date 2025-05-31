@@ -26,7 +26,9 @@ def registerComp7Battle():
     registerIngameHelpPagesBuilder(Comp7PagesBuilder)
     extendEquipmentController({ARENA_BONUS_TYPE.COMP7: comp7_equipment_ctrl.Comp7EquipmentController,
      ARENA_BONUS_TYPE.TOURNAMENT_COMP7: comp7_equipment_ctrl.Comp7EquipmentController,
-     ARENA_BONUS_TYPE.TRAINING_COMP7: comp7_equipment_ctrl.Comp7EquipmentController}, {ARENA_BONUS_TYPE.COMP7: comp7_equipment_ctrl.Comp7ReplayEquipmentController})
+     ARENA_BONUS_TYPE.TRAINING_COMP7: comp7_equipment_ctrl.Comp7EquipmentController}, {ARENA_BONUS_TYPE.COMP7: comp7_equipment_ctrl.Comp7ReplayEquipmentController,
+     ARENA_BONUS_TYPE.TOURNAMENT_COMP7: comp7_equipment_ctrl.Comp7ReplayEquipmentController,
+     ARENA_BONUS_TYPE.TRAINING_COMP7: comp7_equipment_ctrl.Comp7ReplayEquipmentController})
     registerGameModeArenaInfoKeys(ARENA_GUI_TYPE.COMP7, Comp7Keys)
     registerGameModeArenaInfoKeys(ARENA_GUI_TYPE.TOURNAMENT_COMP7, TournamentComp7Keys)
     registerGameModeArenaInfoKeys(ARENA_GUI_TYPE.TRAINING_COMP7, Comp7Keys)

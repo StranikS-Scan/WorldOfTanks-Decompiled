@@ -211,8 +211,16 @@ class AttachmentSlot(BaseCustomizationSlot):
         return self.descriptor.size
 
     @property
+    def hangerId(self):
+        return self.descriptor.hangerId
+
+    @property
     def scaleFactorId(self):
         return self.descriptor.scaleFactorId
+
+    @property
+    def hangerRotation(self):
+        return self.descriptor.hangerRotation
 
 
 def getProgectionDecalAspect(slotDescriptor):

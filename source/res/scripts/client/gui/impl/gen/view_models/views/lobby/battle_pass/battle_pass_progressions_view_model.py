@@ -32,9 +32,9 @@ class ChapterType(Enum):
 
 
 class BattlePassProgressionsViewModel(CommonViewModel):
-    __slots__ = ('onClose', 'onActionClick', 'onTakeClick', 'onTakeAllClick', 'onOpenShopClick', 'onAboutClick', 'onPointsInfoClick', 'onFinishedAnimation', 'onLevelsAnimationFinished', 'onChapterChoice', 'onViewLoaded')
+    __slots__ = ('onClose', 'onActionClick', 'onTakeClick', 'onTakeAllClick', 'onOpenShopClick', 'onAboutClick', 'onPointsInfoClick', 'onFinishedAnimation', 'onLevelsAnimationFinished', 'onStyleBonusPreview', 'onChapterChoice', 'onViewLoaded')
 
-    def __init__(self, properties=40, commands=12):
+    def __init__(self, properties=40, commands=13):
         super(BattlePassProgressionsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -320,5 +320,6 @@ class BattlePassProgressionsViewModel(CommonViewModel):
         self.onPointsInfoClick = self._addCommand('onPointsInfoClick')
         self.onFinishedAnimation = self._addCommand('onFinishedAnimation')
         self.onLevelsAnimationFinished = self._addCommand('onLevelsAnimationFinished')
+        self.onStyleBonusPreview = self._addCommand('onStyleBonusPreview')
         self.onChapterChoice = self._addCommand('onChapterChoice')
         self.onViewLoaded = self._addCommand('onViewLoaded')

@@ -9,6 +9,13 @@
     <arenaFinish>
       <Arg>	UINT8	</Arg>
     </arenaFinish>
+    <updateVehicleOnRespawn>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT32	</Arg>
+      <ReturnValues>
+        <Arg>	BOOL	</Arg>
+      </ReturnValues>
+    </updateVehicleOnRespawn>
   </BaseMethods>
   <ofEntity>
     <Arena></Arena>

@@ -724,11 +724,14 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
     def enqueueMapsTraininig(self, mapGeometryID, vehCompDescr, team):
         if not events.isPlayerEntityChanging:
-            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_MAPS_TRAINING, mapGeometryID, vehCompDescr, team)
+            self.base.doCmdIntArr(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_IN_BATTLE_QUEUE, [QUEUE_TYPE.MAPS_TRAINING,
+             vehCompDescr,
+             mapGeometryID,
+             team])
 
     def dequeueMapsTraininig(self):
         if not events.isPlayerEntityChanging:
-            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_MAPS_TRAINING, 0, 0, 0)
+            self.base.doCmdInt(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_FROM_BATTLE_QUEUE, QUEUE_TYPE.MAPS_TRAINING)
 
     def enqueueWinback(self, vehInvID, winbackFlags=0):
         if events.isPlayerEntityChanging:
@@ -899,7 +902,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
          tmanInnation,
          roleID]
         if callback is not None:
-            proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
+            proxy = lambda requestID, resultID, errorCode, ctx: callback(resultID, errorCode, ctx)
         else:
             proxy = None
         self._doCmdIntArr(AccountCommands.CMD_GET_POTAPOV_QUEST_REWARD, arr, proxy)

@@ -10,7 +10,7 @@ from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.controllers.interfaces import IBattleController
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
-from gui.shared.system_factory import collectIngameHelpPagesBuilders, collectIngameHelpPagesFilters
+from gui.shared.system_factory import collectIngameHelpPagesBuilders
 if typing.TYPE_CHECKING:
     from Vehicle import Vehicle
 
@@ -39,15 +39,9 @@ class IngameHelpController(IBattleController):
 
     def showIngameHelp(self, vehicle):
         ctx = {'vehName': vehicle.typeDescriptor.type.userString if vehicle is not None else None}
-        builders = collectIngameHelpPagesBuilders()
-        buildFilters = collectIngameHelpPagesFilters(self.__arenaVisitor.getArenaGuiType())
-        for buildFilter in buildFilters:
-            builders = buildFilter.filter(builders)
-
-        hasDetailedHelpScreen = any([ builder.collectHelpCtx(ctx, self.__arenaVisitor, vehicle) for builder in builders ])
+        hasDetailedHelpScreen = any([ builder.collectHelpCtx(ctx, self.__arenaVisitor, vehicle) for builder in collectIngameHelpPagesBuilders() ])
         if hasDetailedHelpScreen:
             ctx['currentHintCtx'] = self.__currentHintContext
-            ctx['builders'] = builders
             gui_event_dispatcher.toggleHelpDetailed(ctx)
         else:
             gui_event_dispatcher.toggleHelp()

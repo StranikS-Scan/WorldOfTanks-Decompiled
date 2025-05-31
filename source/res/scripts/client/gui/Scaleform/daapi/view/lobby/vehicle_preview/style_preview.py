@@ -90,7 +90,6 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         self.__heroTanksControl.setInteractive(True)
         g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.VEHICLE_PREVIEW_HIDDEN), scope=EVENT_BUS_SCOPE.LOBBY)
         super(VehicleStylePreview, self)._dispose()
-        g_currentPreviewVehicle.selectNoVehicle()
         return
 
     def _onRegisterFlashComponent(self, viewPy, alias):

@@ -239,10 +239,8 @@ def skillOnSimilarCrewComparator(vehicle, skillNames=None, highlightedSkills=Non
     situationalBonuses = []
     highlightedSkills = highlightedSkills or []
     skillNames = skillNames or []
-    for skillName in skillNames:
-        if skillName in CREW_MASTERY_BONUSES:
-            situationalBonuses.append(skillName)
-
+    if any((skillName in CREW_MASTERY_BONUSES for skillName in skillNames)):
+        situationalBonuses = list(CREW_MASTERY_BONUSES)
     if highlightedSkills:
         for highlightedSkill in highlightedSkills:
             if isSituationalBonus(highlightedSkill):

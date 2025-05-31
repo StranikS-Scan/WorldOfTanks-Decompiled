@@ -13,26 +13,26 @@ import Vehicular
 import AnimationSequence
 from emission_params import getEmissionParams
 from helpers import dependency
+from items.components import c11n_constants
 from items.customization_slot_tags_validator import getDirectionAndFormFactorTags
 from shared_utils import first
 from skeletons.gui.shared import IItemsCache
 import items.vehicles
 from constants import IS_EDITOR
-from items.vehicles import makeIntCompactDescrByID, getItemByCompactDescr
+from items.vehicles import makeIntCompactDescrByID, getItemByCompactDescr, VehicleDescr
 from items.customizations import parseOutfitDescr, CustomizationOutfit, createNationalEmblemComponents
 from vehicle_outfit.outfit import Outfit, Area
 from vehicle_outfit.packers import ProjectionDecalPacker
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes, VehiclePartsTuple
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.graphics import isRendererPipelineDeferred
-from items.components.c11n_constants import ModificationType, C11N_MASK_REGION, DEFAULT_DECAL_SCALE_FACTORS, SeasonType, CustomizationType, EMPTY_ITEM_ID, DEFAULT_DECAL_CLIP_ANGLE, ApplyArea, MAX_PROJECTION_DECALS_PER_AREA, CamouflageTilingType, CustomizationTypeNames, SLOT_TYPE_NAMES, DEFAULT_DECAL_TINT_COLOR, Options, SLOT_DEFAULT_ALLOWED_MODEL, ItemTags, DEFAULT_GLOSS, DEFAULT_METALLIC, ProjectionDecalMatchingTags, ProjectionDecalDirectionTags, AttachmentSize, AttachmentLogic
+from items.components.c11n_constants import ModificationType, C11N_MASK_REGION, DEFAULT_DECAL_SCALE_FACTORS, SeasonType, CustomizationType, EMPTY_ITEM_ID, DEFAULT_DECAL_CLIP_ANGLE, ApplyArea, MAX_PROJECTION_DECALS_PER_AREA, CamouflageTilingType, CustomizationTypeNames, SLOT_TYPE_NAMES, DEFAULT_DECAL_TINT_COLOR, Options, SLOT_DEFAULT_ALLOWED_MODEL, ItemTags, DEFAULT_GLOSS, DEFAULT_METALLIC, ProjectionDecalMatchingTags, ProjectionDecalDirectionTags, AttachmentSize, AttachmentLogic, HANGER_POSTFIX
 from gui.shared.gui_items.customization.c11n_items import Customization
 import math_utils
 from helpers import newFakeModel
 from soft_exception import SoftException
-from CurrentVehicle import g_currentVehicle
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
-from items.readers.shared_readers import getAttachmentSlotScale
+from items.readers.shared_readers import getAttachmentSlotScale, getHangerFromId
 if typing.TYPE_CHECKING:
     from items.components.shared_components import ProjectionDecalSlotDescription
     from vehicle_outfit.containers import ProjectionDecalsMultiSlot
@@ -80,7 +80,7 @@ ProjectionDecalGenericParams.__new__.__defaults__ = (Math.Vector4(0.0),
 ModelAnimatorParams = namedtuple('ModelAnimatorParams', ('transform', 'attachNode', 'animatorName'))
 ModelAnimatorParams.__new__.__defaults__ = (math_utils.createIdentityMatrix(), '', '')
 LoadedModelAnimator = namedtuple('LoadedModelAnimator', ('animator', 'node', 'attachmentPartNode'))
-AttachmentParams = namedtuple('AttachmentParams', ('scale', 'rotation', 'attachNode', 'modelName', 'sequenceId', 'attachmentLogic', 'slotId', 'hiddenForUser', 'partNodeAlias'))
+AttachmentParams = namedtuple('AttachmentParams', ('scale', 'rotation', 'attachNode', 'modelName', 'sequenceId', 'attachmentLogic', 'hiddenForUser', 'partNodeAlias', 'slotName'))
 AttachmentParams.__new__.__defaults__ = (Math.Vector3(),
  Math.Vector3(),
  '',
@@ -227,10 +227,10 @@ def getCurrentLevelForProgressiveStyle(outfit):
     inventory = itemsCache.items.inventory
     intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, outfit.style.id)
     progressData = None
-    if g_currentVehicle.isPresent():
-        vehDesc = g_currentVehicle.item.descriptor
+    if outfit.vehicleCD:
+        vehDesc = VehicleDescr(compactDescr=outfit.vehicleCD)
         progressData = inventory.getC11nProgressionData(intCD, vehDesc.type.compactDescr)
-    return progressData.currentLevel if progressData else 1
+    return progressData.currentLevel if progressData is not None and progressData.currentLevel else 1
 
 
 def getStyleProgressionOutfit(outfit, toLevel=0, season=None):
@@ -270,7 +270,8 @@ def getStyleProgressionOutfit(outfit, toLevel=0, season=None):
             sequenceSlot = resOutfit.misc.slotFor(GUI_ITEM_TYPE.SEQUENCE)
             for seq in levelAdditionalOutfit.sequences:
                 intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.SEQUENCE, seq.id)
-                sequenceSlot.append(intCD, seq)
+                if seq.slotId in sequenceSlot.getRegions():
+                    sequenceSlot.set(intCD, sequenceSlot.getRegions().index(seq.slotId), seq)
 
     return resOutfit
 
@@ -591,22 +592,24 @@ def __prepareAnimator(loadedAnimators, animatorName, wrapperToBind, node, attach
         return LoadedModelAnimator(animator, node, attachmentPartNode)
 
 
-def __getParams(outfit, vehicleDescr, slotTypeName, slotType, paramsConverter):
+def getParams(outfit, vehicleDescr, slotTypeName, slotType, paramsConverter, useEmptySlots=False):
     result = []
     slotsByIdMap = createSlotMap(vehicleDescr, slotTypeName)
     for partIdx in Area.ALL:
         multiSlot = outfit.getContainer(partIdx).slotFor(slotType)
         if multiSlot:
-            for idx in range(multiSlot.capacity()):
+            for idx, slotId in enumerate(multiSlot.getRegions()):
                 slotData = multiSlot.getSlotData(idx)
-                if not slotData.isEmpty():
-                    if slotData.component.slotId in slotsByIdMap:
-                        slotParams = slotsByIdMap[slotData.component.slotId]
-                        result.append(paramsConverter(slotParams, slotData, idx, partIdx))
+                if not slotData.isEmpty() or useEmptySlots:
+                    if slotId in slotsByIdMap:
+                        slotParams = slotsByIdMap[slotId]
                     else:
                         _logger.warning('SlotId mismatch (slotId=%(slotId)d component=%(component)s)', {'slotId': slotData.component.slotId,
                          'component': slotData.component})
                         continue
+                    params = paramsConverter(slotParams, slotData, idx)
+                    if params is not None:
+                        result.append(params)
 
     return result
 
@@ -618,11 +621,11 @@ def __createMiscTransform(slotParams):
 
 def __getModelAnimators(outfit, vehicleDescr):
 
-    def getModelAnimatorParams(slotParams, slotData, _, __):
+    def getModelAnimatorParams(slotParams, slotData, _):
         item = getItemByCompactDescr(slotData.intCD)
         return ModelAnimatorParams(transform=__createMiscTransform(slotParams), attachNode=slotParams.attachNode, animatorName=item.sequenceName)
 
-    return __getParams(outfit, vehicleDescr, 'sequence', GUI_ITEM_TYPE.SEQUENCE, getModelAnimatorParams)
+    return getParams(outfit, vehicleDescr, 'sequence', GUI_ITEM_TYPE.SEQUENCE, getModelAnimatorParams)
 
 
 @dependency.replace_none_kwargs(guiItemsFactory=IGuiItemsFactory)
@@ -645,12 +648,28 @@ def __getAttachmentPath(item, isDestroyed, isHangar):
 
 def getAttachments(outfit, vehicleDescr, isDestroyed=False, isHangar=False):
 
-    def getAttachmentParams(slotParams, slotData, idx, partIdx):
+    def getAttachmentParams(slotParams, slotData, idx):
         item = getItemByCompactDescr(slotData.intCD)
         scale = getAttachmentSlotScale(slotParams.applyType, AttachmentSize.ALL[item.scaleFactorId], AttachmentSize.ALL[slotData.component.scaleFactorId])
-        return AttachmentParams(rotation=Math.Vector3(math.pi if slotData.component.isRotated else 0, 0, 0), scale=scale, attachNode=slotParams.attachNode, modelName=__getAttachmentPath(item, isDestroyed, isHangar), sequenceId=item.sequenceId, attachmentLogic=item.attachmentLogic, slotId=slotParams.slotId, hiddenForUser=slotParams.hiddenForUser, partNodeAlias='attachment' + str(idx) if item.attachmentLogic in AttachmentLogic.FLAGS else None)
+        modelName = __getAttachmentPath(item, isDestroyed, isHangar)
+        return None if not modelName else AttachmentParams(rotation=Math.Vector3(math.pi if slotData.component.isRotated else 0, 0, 0), scale=scale, attachNode=slotParams.attachNode, modelName=modelName, sequenceId=item.sequenceId, attachmentLogic=item.attachmentLogic, hiddenForUser=slotParams.hiddenForUser, partNodeAlias='attachment' + str(idx) if item.attachmentLogic in AttachmentLogic.FLAGS else None, slotName=str(slotParams.slotId))
 
-    return __getParams(outfit, vehicleDescr, 'attachment', GUI_ITEM_TYPE.ATTACHMENT, getAttachmentParams)
+    def getHangerParams(slotParams, slotData, idx):
+        if slotParams.hangerId == 0:
+            return None
+        elif not IS_EDITOR and (slotData.isEmpty() or not __getAttachmentPath(getItemByCompactDescr(slotData.intCD), isDestroyed, isHangar)):
+            return None
+        elif IS_EDITOR and not slotParams.edDisplayHanger:
+            return None
+        else:
+            item = getHangerFromId(slotParams.hangerId)
+            modelName = item.get('crashModelName') or item.get('modelName') if isDestroyed else item.get('modelName')
+            return AttachmentParams(rotation=c11n_constants.DEFAULT_ROTATION, scale=c11n_constants.DEFAULT_SCALE, attachNode=slotParams.attachNode, modelName=modelName, sequenceId=0, attachmentLogic='prefab', hiddenForUser=slotParams.hiddenForUser, partNodeAlias=None, slotName=str(slotParams.slotId) + HANGER_POSTFIX)
+
+    attachmentParameters = getParams(outfit, vehicleDescr, 'attachment', GUI_ITEM_TYPE.ATTACHMENT, getAttachmentParams)
+    hangerParameters = getParams(outfit, vehicleDescr, 'attachment', GUI_ITEM_TYPE.ATTACHMENT, getHangerParams, useEmptySlots=True)
+    attachmentParameters.extend(hangerParameters)
+    return attachmentParameters
 
 
 def _getMatchingTag(slot):

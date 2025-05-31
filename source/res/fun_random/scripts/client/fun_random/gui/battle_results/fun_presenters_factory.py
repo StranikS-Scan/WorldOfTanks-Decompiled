@@ -5,9 +5,8 @@ from fun_random_common.fun_constants import FunSubModeImpl
 from fun_random.gui.battle_results.pbs_helpers import getEventID
 from fun_random.gui.feature.util.fun_mixins import FunSubModesWatcher
 from fun_random.gui.battle_results.presenter import FunRandomBattleResultsPresenter
-from fun_random.gui.shared.fun_system_factory import registerFunBattleResultsPresenter, collectFunBattleResultsPresenter
 _logger = logging.getLogger(__name__)
-registerFunBattleResultsPresenter(FunSubModeImpl.DEFAULT, FunRandomBattleResultsPresenter)
+_SUB_MODE_IMPLS_TO_FUN_PRESENTERS_MAP = {FunSubModeImpl.DEFAULT: FunRandomBattleResultsPresenter}
 
 class FunRandomBattleResultsPresenterFactory(FunSubModesWatcher):
 
@@ -19,5 +18,5 @@ class FunRandomBattleResultsPresenterFactory(FunSubModesWatcher):
             return
         else:
             subModeImpl = subMode.getSubModeImpl()
-            presenterCls = collectFunBattleResultsPresenter(subModeImpl) or FunRandomBattleResultsPresenter
-            return presenterCls(reusable)
+            subPresenterCls = _SUB_MODE_IMPLS_TO_FUN_PRESENTERS_MAP.get(subModeImpl, FunRandomBattleResultsPresenter)
+            return subPresenterCls(reusable)

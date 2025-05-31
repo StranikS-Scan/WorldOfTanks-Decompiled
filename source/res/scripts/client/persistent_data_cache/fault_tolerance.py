@@ -3,8 +3,6 @@
 import typing
 from persistent_data_cache_common.common import getLogger
 from helpers import base64_utils
-from PlayerEvents import g_playerEvents as playerEvents
-from uilogging.persistent_data_cache.loggers import PDCFaultToleranceLogger
 if typing.TYPE_CHECKING:
     from ResMgr import DataSection
     from persistent_data_cache_common.types import TPDCVersion
@@ -34,14 +32,12 @@ def _loadData(version, userPrefs):
 
 
 class FaultTolerance(object):
-    __slots__ = ('_lastErrors', '_userPrefs', '_data', '_version', '_modified')
+    __slots__ = ('_userPrefs', '_data', '_version', '_modified')
 
     def __init__(self, version, userPrefs):
         self._version = version
         self._userPrefs = userPrefs
         self._data, self._modified = _loadData(self._version, self._userPrefs)
-        self._lastErrors = {}
-        playerEvents.onUILoggingStarted += self._sendLastErrors
         _logger.debug('Initialized. <version==%s, modified=%s, data=%s>.', self._version, self._modified, self._data)
 
     def isLimitsReached(self):
@@ -51,14 +47,12 @@ class FaultTolerance(object):
 
     def increaseFailedToLoadCount(self, error):
         self._increaseCount(_FAILED_TO_LOAD_COUNT_KEY)
-        self._lastErrors[_FAILED_TO_LOAD_COUNT_KEY] = error
 
     def resetFailedToLoadCount(self):
         self._resetCount(_FAILED_TO_LOAD_COUNT_KEY)
 
     def increaseFailedToSaveCount(self, error):
         self._increaseCount(_FAILED_TO_SAVE_COUNT_KEY)
-        self._lastErrors[_FAILED_TO_SAVE_COUNT_KEY] = error
 
     def resetFailedToSaveCount(self):
         self._resetCount(_FAILED_TO_SAVE_COUNT_KEY)
@@ -80,8 +74,6 @@ class FaultTolerance(object):
                     self._userPrefs.deleteSection(_PREFS_NAME)
         self._userPrefs = None
         self._modified = False
-        playerEvents.onUILoggingStarted -= self._sendLastErrors
-        self._lastErrors.clear()
         _logger.debug('Finalized.')
         return
 
@@ -97,13 +89,6 @@ class FaultTolerance(object):
         self._data[key] = count
         self._modified = True
         _logger.debug('Count <%s> value changed to <%s>.', key, count)
-
-    def _sendLastErrors(self):
-        if self._lastErrors:
-            errors = {eType:(self._data.get(eType, 0), error) for eType, error in self._lastErrors.iteritems()}
-            self._lastErrors.clear()
-            _logger.debug('Sending last errors to logging service. <%s>.', errors)
-            PDCFaultToleranceLogger().logErrors(errors)
 
 
 _g_faultTolerance = None

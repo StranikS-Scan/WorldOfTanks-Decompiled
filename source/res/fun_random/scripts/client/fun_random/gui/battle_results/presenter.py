@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/battle_results/presenter.py
 import typing
-from constants import ARENA_BONUS_TYPE
 from fun_random.gui.battle_results.pbs_helpers import getEventID
 from fun_random.gui.battle_results.packers.fun_packers import FunRandomPersonalEfficiency, FunRandomTeamStats, FunRandomBattleInfo, FunRandomPersonalRewards, FunRandomPremiumPlus, FunRandomProgress
 from fun_random.gui.battle_results.tooltips.earned_currency_tooltips import FunEarnedCurrencyTooltipsPacker
@@ -19,7 +18,6 @@ if typing.TYPE_CHECKING:
 
 class FunRandomBattleResultsPresenter(BaseStatsPresenter, FunSubModesWatcher):
     __slots__ = ()
-    _ARENA_BONUS_TYPE = ARENA_BONUS_TYPE.FUN_RANDOM
     _TOOLTIPS_PACKERS = {TooltipType.FUN_EFFICIENCY_PARAMETER: FunEfficiencyTooltipsPacker,
      TooltipType.FUN_EARNED_CURRENCY: FunEarnedCurrencyTooltipsPacker}
     _CONTEXT_MENU_TYPE = CONTEXT_MENU_HANDLER_TYPE.BATTLE_RESULTS_USER

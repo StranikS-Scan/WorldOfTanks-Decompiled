@@ -395,7 +395,6 @@ class SETTINGS(object):
     GAMEPLAY_ASSAULT = '#settings:gameplay/assault'
     GAMEPLAY_EPIC_STANDARD = '#settings:gameplay/epic_standard'
     GAMEPLAY_DEVMAPS = '#settings:gameplay/devMaps'
-    GAMEPLAY_ONLY10MODE = '#settings:gameplay/only10Mode'
     GAMEPLAY_EPIC_ENCOUNTER = '#settings:gameplay/epic_encounter'
     GAMEPLAY_NATIONS = '#settings:gameplay/nations'
     GAME_FIELDSET_HEADERVEHICLEMARKER = '#settings:game/fieldset/headerVehicleMarker'

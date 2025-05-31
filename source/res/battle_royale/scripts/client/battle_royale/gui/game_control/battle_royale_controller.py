@@ -539,7 +539,8 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
     def __enableRoyaleMode(self):
         self.__isBRLogicEnabled = True
         royaleVehicleID = AccountSettings.getFavorites(ROYALE_VEHICLE)
-        if not royaleVehicleID or self.__itemsCache.items.getVehicle(royaleVehicleID) is None:
+        vehicle = self.__itemsCache.items.getVehicle(royaleVehicleID)
+        if not royaleVehicleID or vehicle is None or not vehicle.isOnlyForBattleRoyaleBattles:
             criteria = REQ_CRITERIA.VEHICLE.HAS_TAGS([VEHICLE_TAGS.BATTLE_ROYALE]) | REQ_CRITERIA.INVENTORY
             vehicles = self.__itemsCache.items.getVehicles
             values = vehicles(criteria=criteria).values()

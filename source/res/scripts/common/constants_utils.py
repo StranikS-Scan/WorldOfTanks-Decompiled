@@ -511,10 +511,6 @@ class AbstractBattleMode(object):
     def _client_arenaInfoKeys(self):
         return None
 
-    @property
-    def _client_equipmentItems(self):
-        return tuple()
-
     def registerSquadTypes(self):
         addQueueTypeByUnitMgrRoster(self._QUEUE_TYPE, self._ROSTER_TYPE, self._personality)
         addPrbTypeByUnitMgrRoster(self._PREBATTLE_TYPE, self._ROSTER_TYPE, self._personality)
@@ -822,8 +818,3 @@ class AbstractBattleMode(object):
     def registerPrbTypeForWotPlusAssistant(self, loadoutType):
         from gui.game_control.wot_plus_assistant import registerAllowedPrebattleType
         registerAllowedPrebattleType(self._PREBATTLE_TYPE, loadoutType)
-
-    def registerClientEquipmentItems(self):
-        from gui.shared.system_factory import registerEquipmentItem
-        for name, _class, replayClass in self._client_equipmentItems:
-            registerEquipmentItem(name, _class, replayClass)

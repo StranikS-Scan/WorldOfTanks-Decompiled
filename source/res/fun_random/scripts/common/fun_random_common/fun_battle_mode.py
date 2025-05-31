@@ -15,8 +15,6 @@ class FunRandomBattleMode(AbstractBattleMode):
     _UNIT_MGR_FLAGS = UNIT_MGR_FLAGS.FUN_RANDOM
     _ROSTER_TYPE = ROSTER_TYPE.FUN_RANDOM_ROSTER
     _BATTLE_RESULTS_CONFIG = fun_random
-    _SM_TYPE_BATTLE_RESULT = 'funRandomBattleResults'
-    _SM_TYPES = [_SM_TYPE_BATTLE_RESULT]
 
     @property
     def _rosterClass(self):

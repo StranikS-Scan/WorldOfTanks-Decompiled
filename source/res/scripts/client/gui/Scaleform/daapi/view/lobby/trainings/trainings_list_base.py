@@ -3,6 +3,7 @@
 import ArenaType
 from adisp import adisp_process
 from constants import PREBATTLE_MAX_OBSERVERS_IN_TEAM, OBSERVERS_BONUS_TYPES
+from CurrentVehicle import g_currentPreviewVehicle, g_currentVehicle
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.settings import ICONS_SIZES
@@ -84,6 +85,9 @@ class TrainingsListBase(LobbySubView, TrainingFormMeta, ILegacyListener):
 
     def _populate(self):
         super(TrainingsListBase, self)._populate()
+        g_currentPreviewVehicle.selectNoVehicle()
+        if g_currentVehicle.isPresent():
+            g_currentVehicle.refreshModel()
         Waiting.show('Flash')
         self.startPrbListening()
         self.__setViewData()

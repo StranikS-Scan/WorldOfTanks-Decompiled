@@ -23,6 +23,7 @@ from items.readers.crewSkins_readers import readCrewSkinsCacheFromXML
 from items.tankman_flags import TankmanFlags
 from soft_exception import SoftException
 from vehicles import EXTENDED_VEHICLE_TYPE_ID_FLAG, VEHICLE_CLASS_TAGS
+from struct_helpers import unpackByte, packByte
 if TYPE_CHECKING:
     from items.vehicles import VehicleDescriptor, VehicleType
     from items.artefacts import SkillEquipment
@@ -234,14 +235,14 @@ def generateCompactDescr(passport, vehicleTypeID, role, roleLevel=MAX_SKILL_LEVE
     fmt = '>H' if tf.extendedVehicleTypeID else 'B'
     cd += pack(fmt, vehicleTypeID)
     sef = skillsEfficiencyXP
-    cd += chr((SKILL_INDICES[role] << 1) + (sef >> 16 & 1)) + chr(sef >> 8 & 255) + chr(sef & 255)
+    cd += packByte((SKILL_INDICES[role] << 1) + (sef >> 16 & 1)) + packByte(sef >> 8 & 255) + packByte(sef & 255)
     numSkills = len(skills) + len(freeSkills)
     allSkills = [ SKILL_INDICES[s] for s in freeSkills ]
     for s in skills:
         allSkills.append(SKILL_INDICES[s])
 
     cd += pack((str(1 + numSkills) + 'B'), numSkills, *allSkills)
-    cd += chr(lastSkillLevel if numSkills else 0)
+    cd += packByte(lastSkillLevel if numSkills else 0)
     if tf.hasFreeSkills:
         cd += pack('B', len(freeSkills))
     if tf.hasBonusSkills:
@@ -297,7 +298,7 @@ def stripNonBattle(compactDescr):
     l += tf.len
     l += 2 if tf.extendedVehicleTypeID else 1
     l += 3
-    numSkills = ord(compactDescr[l])
+    numSkills = unpackByte(compactDescr[l])
     l += 2 + numSkills
     l += 1 if tf.hasFreeSkills else 0
     if tf.hasBonusSkills:
@@ -313,7 +314,7 @@ def sortTankmanRoles(roles, rolesOrder):
 
 def parseNationSpecAndRole(compactDescr):
     cd = compactDescr
-    nationID = ord(compactDescr[0]) >> 4
+    nationID = unpackByte(compactDescr[0]) >> 4
     cd = cd[1:]
     tf = TankmanFlags.fromCD(cd)
     cd = cd[tf.len:]
@@ -323,17 +324,17 @@ def parseNationSpecAndRole(compactDescr):
     else:
         vehicleTypeID = struct.unpack('B', cd[:1])
         cd = cd[1:]
-    roleID = ord(cd[0]) >> 1
+    roleID = unpackByte(cd[0]) >> 1
     return (nationID, vehicleTypeID, roleID)
 
 
 def fixObsoleteNames(compactDescr):
     cd = compactDescr
-    header = ord(cd[0])
+    header = unpackByte(cd[0])
     vehTypeOffset = 1 if header & EXTENDED_VEHICLE_TYPE_ID_FLAG else 0
     nationID = header >> 4 & 15
     conf = getNationConfig(nationID)
-    namesOffset = ord(cd[4 + vehTypeOffset]) + 7 + vehTypeOffset
+    namesOffset = unpackByte(cd[4 + vehTypeOffset]) + 7 + vehTypeOffset
     firstNameID, lastNameID = struct.unpack('<2H', cd[namesOffset:namesOffset + 4])
     hasChanges = False
     if not conf.hasFirstName(firstNameID):
@@ -966,11 +967,11 @@ class TankmanDescr(object):
         fmt = '>H' if flags.extendedVehicleTypeID else 'B'
         cd += pack(fmt, self.vehicleTypeID)
         rs = (SKILL_INDICES[self.role] << 17) + self.skillsEfficiencyXP
-        cd += chr(rs >> 16 & 255) + chr(rs >> 8 & 255) + chr(rs & 255)
+        cd += packByte(rs >> 16 & 255) + packByte(rs >> 8 & 255) + packByte(rs & 255)
         numSkills = self.lastSkillNumber
         skills = [ SKILL_INDICES[s] for s in self._skills ]
         cd += pack((str(1 + numSkills) + 'B'), numSkills, *skills)
-        cd += chr(self.__lastSkillLevel if numSkills else 0)
+        cd += packByte(self.__lastSkillLevel if numSkills else 0)
         if flags.hasFreeSkills:
             cd += chr(self.freeSkillsNumber)
         if flags.hasBonusSkills:
@@ -1017,7 +1018,7 @@ class TankmanDescr(object):
                 self.__lastSkillLevel = 0
             else:
                 self._skills = self.__readSkills(cd, numSkills)
-                self.__lastSkillLevel = ord(cd[numSkills])
+                self.__lastSkillLevel = unpackByte(cd[numSkills])
                 if self.__lastSkillLevel > MAX_SKILL_LEVEL:
                     raise SoftException('Incorrect last skill level', self.__lastSkillLevel)
             cd = cd[numSkills + 1:]

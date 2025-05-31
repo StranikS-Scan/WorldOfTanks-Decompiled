@@ -202,12 +202,13 @@ class MusicController(object):
             newSoundEvent = self.__getEvent(eventId)
             if newSoundEvent is None:
                 return
+            unlink = False
             if eventId < AMBIENT_EVENT_NONE:
                 eventSnd = self.__music
-                unlink = True
+                if eventId not in (MUSIC_EVENT_COMBAT_VICTORY, MUSIC_EVENT_COMBAT_LOSE, MUSIC_EVENT_COMBAT_DRAW):
+                    unlink = True
             else:
                 eventSnd = self.__ambient
-                unlink = False
             if checkIsPlaying and eventSnd.isPlaying():
                 return
             eventSnd.replace(newSoundEvent, eventId, unlink)

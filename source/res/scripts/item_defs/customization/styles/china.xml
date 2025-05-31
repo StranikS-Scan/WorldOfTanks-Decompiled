@@ -1021,4 +1021,50 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	china:Ch41_WZ_111_5A	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	1086	</id>
+      <texture>	gui/maps/vehicles/styles/Ch41_WZ_111_5A_TXVII_3Dst.png	</texture>
+      <modelsSet>	Ch41_WZ_111_5A_TXVII_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/Ch41_WZ_111_5A_TXVII_3Dst	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/Ch41_WZ_111_5A_TXVII_3Dst_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required c11n3D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <slotId>	18005	</slotId>
+              <id>	145	</id>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
 </china.xml>

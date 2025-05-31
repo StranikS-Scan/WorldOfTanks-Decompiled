@@ -309,9 +309,12 @@ class SequencePacker(CustomizationPacker):
 
     @classmethod
     def unpack(cls, slot, component):
-        for _, subcomp in enumerate(component.sequences):
-            intCD = cls.create(subcomp, CustomizationType.SEQUENCE)
-            slot.append(intCD, component=subcomp)
+        regions = slot.getRegions()
+        for subcomp in component.sequences:
+            if subcomp.slotId in regions:
+                regionIdx = regions.index(subcomp.slotId)
+                intCD = cls.create(subcomp, CustomizationType.SEQUENCE)
+                slot.set(intCD, regionIdx, component=subcomp)
 
     @classmethod
     def invalidate(cls, slot):
@@ -335,11 +338,11 @@ class AttachmentPacker(CustomizationPacker):
     @classmethod
     def unpack(cls, slot, component):
         regions = slot.getRegions()
-        for region, subcomp in product(regions, component.attachments):
-            if subcomp.slotId == region:
-                slotIdx = regions.index(region)
+        for subcomp in component.attachments:
+            if subcomp.slotId in regions:
+                regionIdx = regions.index(subcomp.slotId)
                 intCD = cls.create(subcomp, CustomizationType.ATTACHMENT)
-                slot.set(intCD, slotIdx, component=subcomp)
+                slot.set(intCD, regionIdx, component=subcomp)
 
     @classmethod
     def invalidate(cls, slot):

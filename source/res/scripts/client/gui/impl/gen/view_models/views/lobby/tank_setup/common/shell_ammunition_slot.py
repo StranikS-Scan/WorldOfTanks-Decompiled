@@ -5,20 +5,20 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.common.base_ammunition_slot
 class ShellAmmunitionSlot(BaseAmmunitionSlot):
     __slots__ = ()
 
-    def __init__(self, properties=15, commands=0):
+    def __init__(self, properties=14, commands=0):
         super(ShellAmmunitionSlot, self).__init__(properties=properties, commands=commands)
 
     def getCount(self):
-        return self._getNumber(13)
+        return self._getNumber(12)
 
     def setCount(self, value):
-        self._setNumber(13, value)
+        self._setNumber(12, value)
 
     def getIsInfinity(self):
-        return self._getBool(14)
+        return self._getBool(13)
 
     def setIsInfinity(self, value):
-        self._setBool(14, value)
+        self._setBool(13, value)
 
     def _initialize(self):
         super(ShellAmmunitionSlot, self)._initialize()

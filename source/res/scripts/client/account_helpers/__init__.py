@@ -25,7 +25,7 @@ def isDemonstratorExpert(attrs):
 
 
 def isRoamingEnabled(attrs):
-    return __checkAccountAttr(attrs, ACCOUNT_ATTR.ROAMING)
+    return False
 
 
 def isOutOfWallet(attrs):

@@ -67,5 +67,7 @@ class Comp7PlayerMessages(PlayerMessages):
                     return
                 roleType = ROLE_TYPE_TO_LABEL.get(vehicle.typeDescriptor.role)
                 equipment = self.__comp7Controller.getRoleEquipment(roleType)
+                if equipment is None:
+                    return
                 self.sessionProvider.shared.messages.showVehicleMessage(_ROLE_EQUIPMENT_PROMOTED, {'name': equipment.userString})
             return

@@ -104,7 +104,6 @@ class SteamCompletionController(ISteamCompletionController):
             return False
         battles = self._itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount()
         sessions = BigWorld.player().incarnationID
-        sessions = sessions if self.__connectionManager.isStandalone() else sessions / 2
         return steamShadeConfig.battlesPlayed <= battles and steamShadeConfig.sessions < sessions
 
     def setAddEmailOverlayShown(self):

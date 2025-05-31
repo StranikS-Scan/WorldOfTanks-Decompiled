@@ -2,7 +2,7 @@
 # Embedded file name: fun_random/scripts/client/fun_random/gui/impl/lobby/feature/fun_random_battle_results_view.py
 import logging
 from collections import namedtuple
-from constants import PremiumConfigs
+from constants import ARENA_BONUS_TYPE, PremiumConfigs
 from frameworks.wulf import ViewFlags, ViewSettings
 from fun_random.gui.feature.fun_sounds import FUN_BATTLE_RESULTS_SOUND_SPACE
 from fun_random.gui.impl.lobby.common.fun_view_helpers import packBonuses
@@ -148,7 +148,7 @@ class FunRandomBattleResultsView(ViewImpl, LobbyHeaderVisibility):
     def __onTeamStatsSorted(self, event):
         column = event.get('column')
         sortDirection = event.get('sortDirection')
-        self.__presenter.saveStatsSorting(column, sortDirection)
+        self.__battleResults.saveStatsSorting(ARENA_BONUS_TYPE.FUN_RANDOM, column, sortDirection)
 
     def __onTabChanged(self, event):
         tabID = event.get('tabId')

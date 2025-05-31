@@ -8,7 +8,7 @@ from battle_modifiers_ext.battle_params import BaseBattleParam, BattleParam, Fak
 from battle_modifiers_ext.battle_modifier import modifier_readers, modifier_appliers
 from battle_modifiers_ext.battle_modifier.modifier_filters import ModificationTree
 from battle_modifiers_ext.battle_modifier.modifier_helpers import Serializable
-from battle_modifiers_ext.constants_ext import BATTLE_MODIFIERS_DIR, BATTLE_MODIFIERS_XML, ERROR_TEMPLATE, FAKE_PARAM_NAME, UseType, GameplayImpact, ModifierDomain, ModifierRestriction, NodeType, PhysicalType
+from battle_modifiers_ext.constants_ext import BATTLE_MODIFIERS_DIR, BATTLE_MODIFIERS_XML, ERROR_TEMPLATE, FAKE_PARAM_NAME, UseType, GameplayImpact, ModifierDomain, ModifierRestriction, NodeType
 from battle_modifiers_ext.modification_cache import vehicle_modifications, constants_modifications
 from typing import TYPE_CHECKING, Optional, Any, Tuple, Union, List
 from soft_exception import SoftException
@@ -182,9 +182,7 @@ class FakeBattleModifier(ModifierBase):
             useType = UseType.NAME_TO_ID[useTypeName]
         clientData = self.param.clientData
         if useType not in clientData.useTypes:
-            raise SoftException(ERROR_TEMPLATE.format('[Fake modifier] You should define physical type to unlock use types', clientData.resName))
-        if useType == UseType.VAL and clientData.physicalType == PhysicalType.UNDEFINED and self.value != 0:
-            raise SoftException(ERROR_TEMPLATE.format('[Fake modifier] You should define physical type for non-zero value', clientData.resName))
+            raise SoftException(ERROR_TEMPLATE.format('[Fake modifier] You should define physical type to unlock dimensional use types', clientData.resName))
         return useType
 
     def __readRestrictions(self, config):

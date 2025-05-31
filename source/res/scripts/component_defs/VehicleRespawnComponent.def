@@ -36,6 +36,10 @@
       <DetailLevel>	MY_VEHICLE	</DetailLevel>
       <Default>	0	</Default>
     </isLeaveAllowed>
+    <respawnID>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </respawnID>
   </Properties>
   <ofEntity>
     <Vehicle></Vehicle>

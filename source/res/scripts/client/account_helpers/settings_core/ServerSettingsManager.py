@@ -239,7 +239,6 @@ class ServerSettingsManager(object):
                                        GAME.HANGAR_CAM_PERIOD: Offset(18, 7 << 18),
                                        GAME.SNIPER_ZOOM: Offset(27, 3 << 27)}),
      SETTINGS_SECTIONS.GAME_EXTENDED_2: Section(masks={GAME.SHOW_ARTY_HIT_ON_MAP: 0,
-                                         GAME.GAMEPLAY_ONLY_10_MODE: 1,
                                          GAME.SCROLL_SMOOTHING: 4,
                                          GAME.GAMEPLAY_DEV_MAPS: 5,
                                          GAME.NEWBIE_PREBATTLE_HINTS: 6,

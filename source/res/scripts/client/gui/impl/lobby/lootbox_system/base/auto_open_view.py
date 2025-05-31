@@ -57,7 +57,7 @@ class AutoOpenView(ViewImpl):
     def __getGroupsLayout(cls):
         layout = (RewardsGroup(name=REWARDS_GROUP_NAME_RES.vehicles(), bonusTypes=('vehicles',), bonuses={}, filterFuncs=(getVehiclesFilter((noCompensation,)),)),
          RewardsGroup(name=REWARDS_GROUP_NAME_RES.customizations(), bonusTypes=('customizations',), bonuses={}, filterFuncs=None),
-         RewardsGroup(name=REWARDS_GROUP_NAME_RES.crewBooksAndCrew(), bonusTypes=('items', 'goodies', 'tokens', 'crewSkins'), bonuses={}, filterFuncs=(getItemsFilter((isCrewBook,)), getGoodiesFilter((cls.__goodiesCache.getRecertificationForm,)), getTankmenFilter)),
+         RewardsGroup(name=REWARDS_GROUP_NAME_RES.crewBooksAndCrew(), bonusTypes=('items', 'goodies', 'tokens', 'crewSkins'), bonuses={}, filterFuncs=(getItemsFilter((isCrewBook,)), getGoodiesFilter((cls.__goodiesCache.getRecertificationForm, cls.__goodiesCache.getMentoringLicense)), getTankmenFilter)),
          RewardsGroup(name=REWARDS_GROUP_NAME_RES.optionalDevicesAndBattleBoosters(), bonusTypes=('items', 'goodies'), bonuses={}, filterFuncs=(getItemsFilter((isOptionalDevice, isBattleBooster)), getGoodiesFilter((cls.__goodiesCache.getDemountKit,)))),
          RewardsGroup(name=REWARDS_GROUP_NAME_RES.other(), bonusTypes=(), bonuses={}, filterFuncs=None))
         return layout

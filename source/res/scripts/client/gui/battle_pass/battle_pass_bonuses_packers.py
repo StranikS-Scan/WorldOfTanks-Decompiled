@@ -17,7 +17,7 @@ from gui.impl.gen.view_models.views.lobby.battle_pass.vehicle_bonus_model import
 from gui.server_events.awards_formatters import BATTLE_BONUS_X5_TOKEN, CREW_BONUS_X3_TOKEN
 from gui.server_events.bonuses import BlueprintsBonusSubtypes
 from gui.server_events.recruit_helper import getRecruitInfo
-from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.customization import CustomizationTooltipContext
 from gui.shared.missions.packers.bonus import BACKPORT_TOOLTIP_CONTENT_ID, BaseBonusUIPacker, BlueprintBonusUIPacker, BonusUIPacker, CrewBookBonusUIPacker, DossierBonusUIPacker, GoodiesBonusUIPacker, ItemBonusUIPacker, SimpleBonusUIPacker, TokenBonusUIPacker, VehiclesBonusUIPacker, getDefaultBonusPackersMap
 from gui.shared.money import Currency
@@ -202,13 +202,19 @@ class BattlePassCustomizationsBonusPacker(_BattlePassFinalBonusPacker):
         bigIcon = '_'.join([iconName, str(customizationItem.intCD)])
         if not R.images.gui.maps.icons.battlePass.rewards.dyn(bigIcon).exists():
             bigIcon = iconName
+        if iconName == GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.ATTACHMENT]:
+            model.setName(iconName)
+            bigIcon = iconName = customizationItem.name
+            model.setOverlayType(customizationItem.rarity)
+        model.setId(customizationItem.intCD)
         model.setValue(str(data.get('value', '')))
         model.setIcon(iconName)
         model.setBigIcon(bigIcon)
         model.setUserName(cls._getUserName(customizationItem))
         model.setLabel(cls._getLabel(customizationItem))
         model.setIsCollectionEntity(cls._isCollectionItem(customizationItem.intCD))
-        cls._injectAwardID(model, str(customizationItem.intCD))
+        if customizationItem.itemTypeName != GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.ATTACHMENT]:
+            cls._injectAwardID(model, str(customizationItem.intCD))
         return model
 
     @classmethod

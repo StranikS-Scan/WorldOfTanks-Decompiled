@@ -68,18 +68,6 @@ class _DefaultGunEffectsComposer(_BaseComposer):
         return None
 
 
-class _DefaultExhaustEffectsComposer(_BaseComposer):
-
-    @classmethod
-    def _getItemName(cls, _, oldValue):
-        from items import vehicles
-        for k, v in vehicles.g_cache.exhaustEffects.iteritems():
-            if v == oldValue:
-                return k
-
-        return None
-
-
 class _DefaultShotEffectsComposer(_BaseComposer):
 
     @classmethod
@@ -108,8 +96,7 @@ class _DefaultSoundNotificationsComposer(_BaseComposer):
 
 _DEFAULT_COMPOSERS = {ModifiersWithRemapping.GUN_EFFECTS: _DefaultGunEffectsComposer,
  ModifiersWithRemapping.SHOT_EFFECTS: _DefaultShotEffectsComposer,
- ModifiersWithRemapping.SOUND_NOTIFICATIONS: _DefaultSoundNotificationsComposer,
- ModifiersWithRemapping.EXHAUST_EFFECTS: _DefaultExhaustEffectsComposer}
+ ModifiersWithRemapping.SOUND_NOTIFICATIONS: _DefaultSoundNotificationsComposer}
 _COMPOSERS_FACTORY = {}
 
 def getComposerClass(remappingName, modifierName):

@@ -126,6 +126,7 @@ class MultiPlanProvider(object):
                 holder.start()
         else:
             holder = PlanHolder(VSE.Plan(), PlanHolder.LOADING, autoStart)
+            holder.key = key
             holder.params = params
             if contextInstance:
                 holder.plan.setContext(contextInstance)

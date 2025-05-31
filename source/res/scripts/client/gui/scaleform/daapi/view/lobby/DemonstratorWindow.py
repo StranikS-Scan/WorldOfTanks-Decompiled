@@ -155,8 +155,6 @@ class DemonstratorWindow(DemonstratorWindowMeta, IGlobalListener):
             self.__setGameplayTabs()
             self.__setMapsList()
             self.__disableBattleButton()
-        elif GAME.GAMEPLAY_ONLY_10_MODE in diff:
-            self.__setLevelsList()
 
     def __onVehicleChanged(self):
         self.__vehicleSelected = g_currentVehicle.item
@@ -233,8 +231,6 @@ class DemonstratorWindow(DemonstratorWindowMeta, IGlobalListener):
     def __getAvailableLevelsBattleTypes(self):
         vehicleLevel = self.__vehicleSelected.level
         minBattleLevel, maxBattleLevel = self.__getAvailableBattleLevelRange()
-        clientIsOnly10ModeEnabled = self.__settingsCore.getSetting(GAME.GAMEPLAY_ONLY_10_MODE)
-        serverIsOnly10ModeEnabled = dependency.instance(ILobbyContext).getServerSettings().isOnly10ModeEnabled()
         battleConfigs = BATTLE_TO_VEHICLE_LEVELS[minBattleLevel - 1:maxBattleLevel]
         battleConfigs = [ set(item) for item in battleConfigs ]
         levels = []
@@ -245,7 +241,7 @@ class DemonstratorWindow(DemonstratorWindowMeta, IGlobalListener):
                 continue
             if not (battleType != BATTLE_TYPES.TOP1 or minBattleLevel <= vehicleLevel <= maxBattleLevel):
                 continue
-            isEnabled = not (serverIsOnly10ModeEnabled and clientIsOnly10ModeEnabled and vehicleLevel == 10 and battleType != BATTLE_TYPES.TOP1 or not self.__availableMapsLength)
+            isEnabled = self.__availableMapsLength != 0
             levels.append((level, isEnabled))
             battleTypes.append(battleType)
 

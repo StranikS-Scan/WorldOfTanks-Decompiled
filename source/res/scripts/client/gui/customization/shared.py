@@ -175,7 +175,7 @@ def getAvailableRegions(areaId, slotType, vehicleDescr=None):
             if areaId == Area.MISC:
                 return (0,)
             return ()
-        if slotType in (GUI_ITEM_TYPE.PROJECTION_DECAL, GUI_ITEM_TYPE.SEQUENCE):
+        if slotType in (GUI_ITEM_TYPE.PROJECTION_DECAL,):
             return tuple(range(len(slot.getRegions())))
         if slotType in (GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.EMBLEM):
             return __getAvailableDecalRegions(areaId, slotType, vehicleDescr)
@@ -183,6 +183,8 @@ def getAvailableRegions(areaId, slotType, vehicleDescr=None):
             return __getAppliedToRegions(areaId, slotType, vehicleDescr)
         if slotType in (GUI_ITEM_TYPE.ATTACHMENT,):
             return __getAvailableAttachmentRegions(areaId, slot, slotType, vehicleDescr)
+        if slotType in (GUI_ITEM_TYPE.SEQUENCE,):
+            return ()
         _logger.error('Wrong customization slotType: %s', slotType)
         return ()
 

@@ -65,6 +65,6 @@ def runTestPlan(planPath, aspect=None):
     logger.warn('-- running VSE test plan: %s ', planPath)
     if aspect is None:
         aspect = 'CLIENT'
-    if planObj.load(planPath, aspect):
+    if planObj.load(planPath, '', aspect):
         planObj.start()
     return

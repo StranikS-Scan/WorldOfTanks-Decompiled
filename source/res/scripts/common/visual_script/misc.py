@@ -26,11 +26,16 @@ class EDITOR_TYPE(object):
     VEHICLE_PRESET_SELECTOR = 5
 
 
+class EDITOR_CUSTOM_ICON(object):
+    EVENT_DELAYED = 1
+
+
 class BLOCK_MODE(object):
     NONE = 0
     UNIQUE = 32
     DEV = 64
     HIDE_FROM_LIB = 256
+    CAN_BE_CONST_EXPR = 2048
 
 
 def makePlanPath(planName):

@@ -28,6 +28,7 @@ DEFAULT_ROTATION = (0, 0, 0)
 DEFAULT_SCALE = (1, 1, 1)
 DEFAULT_GLOSS = 0.509
 DEFAULT_METALLIC = 0.23
+HANGER_POSTFIX = '_hanger'
 
 class CustomizationType(object):
     PAINT = 1

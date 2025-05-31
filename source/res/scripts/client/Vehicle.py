@@ -1028,7 +1028,8 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             self.appearance.changeEngineMode(self.engineMode)
             if self.isPlayerVehicle or self.typeDescriptor is None or not self.typeDescriptor.hasSiegeMode:
                 self.appearance.changeSiegeState(self.siegeState)
-            self.appearance.onVehicleHealthChanged(self.isPlayerVehicle)
+            showEffects = False if BattleReplay.g_replayCtrl.isPlaying and not self.isAlive() else self.isPlayerVehicle
+            self.appearance.onVehicleHealthChanged(showEffects)
             if self.isPlayerVehicle:
                 if self.isAlive():
                     self.appearance.setupGunMatrixTargets(avatar.gunRotator)

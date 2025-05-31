@@ -39,6 +39,8 @@ def writeAttachmentSlots(slotDS, slot):
     _xml.rewriteBool(slotDS, 'hiddenForUser', slot.hiddenForUser, False)
     _xml.rewriteString(slotDS, 'applyType', slot.applyType, '')
     _xml.rewriteString(slotDS, 'size', slot.size, '')
+    _xml.rewriteInt(slotDS, 'hangerId', slot.hangerId, 0)
+    _xml.rewriteVector3(slotDS, 'hangerRotation', slot.hangerRotation, (0, 0, 0))
 
 
 def writeAnchorSlots(slotDS, slot):

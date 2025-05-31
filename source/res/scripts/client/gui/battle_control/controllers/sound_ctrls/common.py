@@ -96,14 +96,16 @@ class VehicleStateSoundPlayer(SoundPlayer):
     _sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def _subscribe(self):
-        ctrl = self._sessionProvider.shared.vehicleState
-        ctrl.onVehicleStateUpdated += self._onVehicleStateUpdated
-        BigWorld.player().onSwitchingViewPoint += self._onSwitchViewPoint
+        vehicleCtrl = self._sessionProvider.shared.vehicleState
+        if vehicleCtrl is not None:
+            vehicleCtrl.onVehicleStateUpdated += self._onVehicleStateUpdated
+            BigWorld.player().onSwitchingViewPoint += self._onSwitchViewPoint
+        return
 
     def _unsubscribe(self):
-        ctrl = self._sessionProvider.shared.vehicleState
-        if ctrl is not None:
-            ctrl.onVehicleStateUpdated -= self._onVehicleStateUpdated
+        vehicleCtrl = self._sessionProvider.shared.vehicleState
+        if vehicleCtrl is not None:
+            vehicleCtrl.onVehicleStateUpdated -= self._onVehicleStateUpdated
         if isPlayerAvatar():
             BigWorld.player().onSwitchingViewPoint -= self._onSwitchViewPoint
         return

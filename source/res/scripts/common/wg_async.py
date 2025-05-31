@@ -8,10 +8,17 @@ from soft_exception import SoftException
 import BigWorld
 from BWUtil import AsyncReturn
 from functools import wraps, partial
-from constants import IS_DEVELOPMENT, IS_CLIENT, IS_BOT
+from inspect import isgeneratorfunction
+from constants import IS_DEVELOPMENT, IS_CLIENT, IS_BOT, IS_BASEAPP, IS_CELLAPP
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING, LOG_DEBUG, LOG_DEBUG_DEV, LOG_DEBUG_DEV_NICE
 
+def wg_return(value):
+    raise AsyncReturn(value)
+
+
 def wg_async(func):
+    if (IS_BASEAPP or IS_CELLAPP) and not isgeneratorfunction(func):
+        LOG_WARNING('wg_async: not a generator:', func.__module__, func.__name__)
 
     @wraps(func)
     def wrapper(*args, **kwargs):
@@ -74,6 +81,8 @@ def await_deferred(d):
     promise = _Promise()
 
     def callback(value):
+        if isinstance(value, tuple) and len(value) == 1:
+            value = value[0]
         promise.set_value(value)
 
     def errback(failure):
@@ -82,14 +91,7 @@ def await_deferred(d):
         except:
             promise.set_exception(*sys.exc_info())
 
-    futureCallback = getattr(d, 'addCallback', None)
-    if futureCallback is not None:
-        futureCallback(callback)
-        futureErrback = getattr(d, 'addErrback', None)
-        if futureErrback is not None:
-            futureErrback(errback)
-    else:
-        callback(d)
+    d.addCallbacks(callback, errback)
     return promise.get_future()
 
 
@@ -100,36 +102,81 @@ def resignTickIfRequired(timeout=0.101):
         return _g_alwaysReadyFuture
 
 
-def delay(timeout):
-    promise = _Promise()
+if IS_CLIENT:
+    from shared_utils import safeCancelCallback
 
-    def onDelayTimer(*_):
-        promise.set_value(None)
-        return
+    def delay(timeout):
+        promise = _Promise()
 
-    if IS_CLIENT:
-        from shared_utils import safeCancelCallback
+        def onDelayTimer(*_):
+            promise.set_value(None)
+            return
+
         timerID, handler = BigWorld.callback(timeout, onDelayTimer), safeCancelCallback
-    else:
+        promise.set_cancel_handler(partial(handler, timerID))
+        return promise.get_future()
+
+
+else:
+
+    def delay(timeout):
+        promise = _Promise()
+
+        def onDelayTimer(*_):
+            promise.set_value(None)
+            return
+
         timerID, handler = BigWorld.addTimer(onDelayTimer, timeout), BigWorld.delTimer
-    promise.set_cancel_handler(partial(handler, timerID))
-    return promise.get_future()
+        promise.set_cancel_handler(partial(handler, timerID))
+        return promise.get_future()
 
 
 def _logReachedMaxTicksToDelay(logID, maxTicksToDelay):
     LOG_DEBUG('delayWhileTickPending reached maxTicksToDelay', logID, maxTicksToDelay)
 
 
-@wg_async
-def delayWhileTickPending(maxTicksToDelay=1, timeout=0.105, minTimeout=0.1, logID=None):
-    decay = max(0.0, (timeout - minTimeout) / max(maxTicksToDelay - 1, 1)) if minTimeout else 0.0
-    for n in xrange(maxTicksToDelay):
-        if not BigWorld.isNextTickPending():
+if IS_CLIENT:
+
+    @wg_async
+    def delayWhileTickPending(maxTicksToDelay=1, timeout=0.105, minTimeout=0.1, logID=None):
+        decay = max(0.0, (timeout - minTimeout) / max(maxTicksToDelay - 1, 1)) if minTimeout else 0.0
+        for n in xrange(maxTicksToDelay):
+            if not BigWorld.isNextTickPending():
+                LOG_DEBUG_DEV('delayWhileTickPending', logID, n)
+                break
+            yield wg_await(delay(timeout - decay * n))
+        else:
+            _logReachedMaxTicksToDelay(logID, maxTicksToDelay)
+
+
+else:
+
+    def _onDelayWhileTickPendingTimer(n, args, *_):
+        logID, timeout, maxTicksToDelay, decay, addTimer, delTimer, isNextTickPending, bind, promise = args
+        if n < maxTicksToDelay:
+            if isNextTickPending():
+                timerID = addTimer(bind(_onDelayWhileTickPendingTimer, n + 1, args), timeout - decay * n)
+                promise.set_cancel_handler(bind(delTimer, timerID))
+                return
             LOG_DEBUG_DEV('delayWhileTickPending', logID, n)
-            break
-        yield wg_await(delay(timeout - decay * n))
-    else:
-        _logReachedMaxTicksToDelay(logID, maxTicksToDelay)
+        else:
+            _logReachedMaxTicksToDelay(logID, maxTicksToDelay)
+        promise.set_value(None)
+        return
+
+
+    def delayWhileTickPending(maxTicksToDelay=1, timeout=0.105, minTimeout=0.1, logID=None):
+        promise = _Promise()
+        _onDelayWhileTickPendingTimer(0, (logID,
+         timeout,
+         maxTicksToDelay,
+         max(0.0, (timeout - minTimeout) / max(maxTicksToDelay - 1, 1)) if minTimeout else 0.0,
+         BigWorld.addTimer,
+         BigWorld.delTimer,
+         BigWorld.isNextTickPending,
+         partial,
+         promise))
+        return promise.get_future()
 
 
 def delayable(maxTicksToDelay=1, timeout=0.105, minTimeout=0.1):
@@ -422,8 +469,8 @@ class _AsyncExecutor(object):
             future.then(self.__resume)
         except AsyncReturn as r:
             self.__promise.set_value(r.value)
-        except StopIteration:
-            self.__promise.set_value(None)
+        except StopIteration as e:
+            self.__promise.set_value(getattr(e, 'value', None))
         except BaseException:
             self.__promise.set_exception(*sys.exc_info())
 

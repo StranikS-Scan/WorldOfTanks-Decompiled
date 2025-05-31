@@ -16,7 +16,8 @@ BATTLE_MODE_VEH_TAGS_EXCEPT_FUN = constants.BATTLE_MODE_VEHICLE_TAGS - {'fun_ran
 class FunSubModeImpl(object):
     DEV_TEST = 0
     DEFAULT = 1
-    ALL = (DEFAULT,) + ((DEV_TEST,) if constants.IS_DEVELOPMENT else ())
+    EQUALIZATION = 2
+    ALL = (DEFAULT, EQUALIZATION) + ((DEV_TEST,) if constants.IS_DEVELOPMENT else ())
 
 
 class FunProgressionCondition(object):
@@ -67,7 +68,6 @@ class FunEfficiencyParameterCount(object):
 
 class ARENA_GUI_TYPE(constants.ARENA_GUI_TYPE, ConstInjector):
     FUN_RANDOM = 29
-    FUN_RANDOM_RANGE = (FUN_RANDOM,)
 
 
 class UNIT_MGR_FLAGS(UnitBase.UNIT_MGR_FLAGS, ConstInjector):

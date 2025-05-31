@@ -285,7 +285,7 @@ class HangarCameraManager(CGF.ComponentManager):
         elif self.__cameraName not in TANK_CAMERA_NAMES:
             return
         else:
-            self.__mouseMoveParams.distConstraints[0] = min(value, self.__mouseMoveParams.distConstraints[1])
+            self.__mouseMoveParams.distConstraints[0] = math_utils.clamp(self.__mouseMoveParams.distConstraints[0], self.__mouseMoveParams.distConstraints[1], value)
             self.__mouseMoveParams.updateLength()
             dist = math_utils.clamp(self.__mouseMoveParams.distConstraints[0], self.__mouseMoveParams.distConstraints[1], self.__cam.pivotMaxDist)
             self.__cam.pivotMaxDist = dist

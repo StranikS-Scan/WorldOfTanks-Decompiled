@@ -81,6 +81,11 @@
           <destroyed>	vehicles/american/A120_M48A5/_skins/A120_M48A5_3DSt_TLXXL/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/american/A120_M48A5/_skins/A120_M48A5_3DSt_TLXXL/crash/lod0/Hull.model	</exploded>
         </A120_M48A5_3DSt_TLXXL>
+        <A120_M48A5_TXVII_3Dst>
+          <undamaged>	vehicles/american/A120_M48A5/_skins/A120_M48A5_TXVII_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/american/A120_M48A5/_skins/A120_M48A5_TXVII_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/american/A120_M48A5/_skins/A120_M48A5_TXVII_3Dst/crash/lod0/Hull.model	</exploded>
+        </A120_M48A5_TXVII_3Dst>
       </sets>
     </models>
     <swinging>
@@ -109,6 +114,16 @@
         <rayEnd>	-0.40198 0.019303 2.53501	</rayEnd>
         <rayUp>	0 0 -1	</rayUp>
         <size>	0.3	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </slot>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	10001	</slotId>
+        <rayStart>	1.386878 0.458892 3.275681	</rayStart>
+        <rayEnd>	1.474978 0.019286 3.101111	</rayEnd>
+        <rayUp>	0.012953 0.37128 -0.928431	</rayUp>
+        <compatibleModels>	A120_M48A5_TXVII_3Dst	</compatibleModels>
+        <size>	0.29	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </slot>
       <slot>
@@ -654,6 +669,72 @@
         <showOn>	16	</showOn>
       </slot>
       <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15047	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A120_M48A5_TXVII_3Dst	</compatibleModels>
+        <position>	-1.42767 1.47279 3.21389	</position>
+        <rotation>	0.530464 0.000001 3.14159	</rotation>
+        <scale>	0.431806 0.216714 0.431807	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.36786	</clipAngle>
+        <anchorShift>	-0.011025	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15048	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A120_M48A5_TXVII_3Dst	</compatibleModels>
+        <position>	1.40736 1.41591 -3.40489	</position>
+        <rotation>	2.39751 -0.000008 -0.00001	</rotation>
+        <scale>	0.498644 0.498643 0.498643	</scale>
+        <showOn>	16	</showOn>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15049	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A120_M48A5_TXVII_3Dst	</compatibleModels>
+        <position>	-1.88721 1.14033 -1.02584	</position>
+        <rotation>	1.56884 1.56906 -0.000031	</rotation>
+        <scale>	0.504781 0.1 0.50478	</scale>
+        <showOn>	16	</showOn>
+        <anchorShift>	0.059999	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15050	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A120_M48A5_TXVII_3Dst	</compatibleModels>
+        <position>	1.88534 1.14809 -2.27146	</position>
+        <rotation>	1.56878 -1.56908 0.000118	</rotation>
+        <scale>	0.504781 0.095126 0.50478	</scale>
+        <showOn>	16	</showOn>
+        <anchorShift>	0.059999	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15051	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A120_M48A5_TXVII_3Dst	</compatibleModels>
+        <position>	-1.42071 1.71837 -1.02503	</position>
+        <rotation>	3.08612 1.56906 -0	</rotation>
+        <scale>	0.457212 0.086162 0.457212	</scale>
+        <showOn>	16	</showOn>
+        <anchorShift>	0.059999	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15052	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A120_M48A5_TXVII_3Dst	</compatibleModels>
+        <position>	1.3856 1.7203 -1.02497	</position>
+        <rotation>	3.08611 -1.56905 -0.000001	</rotation>
+        <scale>	0.457212 0.086162 0.457212	</scale>
+        <showOn>	16	</showOn>
+        <anchorShift>	0.059999	</anchorShift>
+      </slot>
+      <slot>
         <slotType>	attachment	</slotType>
         <slotId>	18000	</slotId>
         <position>	0 0 0	</position>
@@ -741,6 +822,11 @@
             <destroyed>	vehicles/american/A120_M48A5/_skins/A120_M48A5_3DSt_TLXXL/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/american/A120_M48A5/_skins/A120_M48A5_3DSt_TLXXL/crash/lod0/Chassis.model	</exploded>
           </A120_M48A5_3DSt_TLXXL>
+          <A120_M48A5_TXVII_3Dst>
+            <undamaged>	vehicles/american/A120_M48A5/_skins/A120_M48A5_TXVII_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A120_M48A5/_skins/A120_M48A5_TXVII_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A120_M48A5/_skins/A120_M48A5_TXVII_3Dst/crash/lod0/Chassis.model	</exploded>
+          </A120_M48A5_TXVII_3Dst>
         </sets>
       </models>
       <traces>
@@ -832,6 +918,39 @@
                   <row1>	0.000000 0.195295 -0.227728	</row1>
                   <row2>	0.000000 0.435690 0.373639	</row2>
                   <row3>	0.000000 1.487534 -3.241681	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	A120_M48A5_TXVII_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	2.118686 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.474417 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.815000	</row2>
+                  <row3>	0.000000 1.112524 -0.002000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.902000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.489523	</row2>
+                  <row3>	0.000000 1.575459 -0.014912	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.785000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.213789 0.210462	</row1>
+                  <row2>	0.000000 -0.402657 0.409022	</row2>
+                  <row3>	0.000000 1.361000 3.327000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.778000 -0.000001 0.000000	</row0>
+                  <row1>	0.000000 0.171871 -0.245887	</row1>
+                  <row2>	0.000000 0.669167 0.467738	</row2>
+                  <row3>	0.000000 1.299000 -3.329000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.707355 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.873000	</row2>
+                  <row3>	-2.016000 1.248448 0.000000	</row3>
                 </boxCollider>
               </hullCollider>
               <hullCollider>
@@ -943,6 +1062,39 @@
                   <row1>	0.000000 0.195295 -0.227728	</row1>
                   <row2>	0.000000 0.435690 0.373639	</row2>
                   <row3>	0.000000 1.487534 -3.241681	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	A120_M48A5_TXVII_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	2.118690 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.474420 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.815000	</row2>
+                  <row3>	0.000000 1.112520 -0.002000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.902000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.489520	</row2>
+                  <row3>	0.000000 1.575460 -0.014912	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.785000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.213789 0.210462	</row1>
+                  <row2>	0.000000 -0.402657 0.409022	</row2>
+                  <row3>	0.000000 1.361000 3.327000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.778000 -0.000001 0.000000	</row0>
+                  <row1>	0.000000 0.171871 -0.245887	</row1>
+                  <row2>	0.000000 0.669167 0.467738	</row2>
+                  <row3>	0.000000 1.299000 -3.329000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.707355 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.873000	</row2>
+                  <row3>	2.016000 1.248450 0.000000	</row3>
                 </boxCollider>
               </hullCollider>
               <hullCollider>
@@ -2156,6 +2308,11 @@
                 <destroyed>	vehicles/american/A120_M48A5/_skins/A120_M48A5_3DSt_TLXXL/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/american/A120_M48A5/_skins/A120_M48A5_3DSt_TLXXL/crash/lod0/Gun_01.model	</exploded>
               </A120_M48A5_3DSt_TLXXL>
+              <A120_M48A5_TXVII_3Dst>
+                <undamaged>	vehicles/american/A120_M48A5/_skins/A120_M48A5_TXVII_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/american/A120_M48A5/_skins/A120_M48A5_TXVII_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/american/A120_M48A5/_skins/A120_M48A5_TXVII_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </A120_M48A5_TXVII_3Dst>
             </sets>
           </models>
           <hitTester>
@@ -2236,6 +2393,11 @@
             <destroyed>	vehicles/american/A120_M48A5/_skins/A120_M48A5_3DSt_TLXXL/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/american/A120_M48A5/_skins/A120_M48A5_3DSt_TLXXL/crash/lod0/Turret_01.model	</exploded>
           </A120_M48A5_3DSt_TLXXL>
+          <A120_M48A5_TXVII_3Dst>
+            <undamaged>	vehicles/american/A120_M48A5/_skins/A120_M48A5_TXVII_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/american/A120_M48A5/_skins/A120_M48A5_TXVII_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/american/A120_M48A5/_skins/A120_M48A5_TXVII_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </A120_M48A5_TXVII_3Dst>
         </sets>
       </models>
       <hitTester>
@@ -2673,6 +2835,18 @@
           <showOn>	256	</showOn>
           <clipAngle>	0.930294	</clipAngle>
           <anchorShift>	0.150693	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35033	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A120_M48A5_TXVII_3Dst	</compatibleModels>
+          <position>	-0.681709 2.55102 -1.00929	</position>
+          <rotation>	3.13985 -0.000011 -0.000058	</rotation>
+          <scale>	0.31827 0.131564 0.318269	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.566105	</clipAngle>
+          <anchorShift>	0.078185	</anchorShift>
         </slot>
         <slot>
           <slotType>	sequence	</slotType>

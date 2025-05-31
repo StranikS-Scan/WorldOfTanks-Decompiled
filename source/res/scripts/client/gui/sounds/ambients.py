@@ -343,7 +343,6 @@ class BattleResultsEnv(SoundEnv):
 
     def stop(self):
         self._clearMusicEvent()
-        _MC.g_musicController.reloadSounds()
         super(BattleResultsEnv, self).stop()
 
     def _getLastWinStatus(self):

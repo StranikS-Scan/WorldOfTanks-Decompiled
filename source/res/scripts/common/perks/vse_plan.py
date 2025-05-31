@@ -158,7 +158,7 @@ class VsePlan(object):
             if IS_CELLAPP:
                 future.get()
             self._usedEvents = []
-            self._isPlanLoaded = self._plan.load(self._planId, (ASPECT.SERVER, ASPECT.CLIENT), [], self._usedEvents)
+            self._isPlanLoaded = self._plan.load(self._planId, '', (ASPECT.SERVER, ASPECT.CLIENT), [], self._usedEvents)
             if self._isPlanLoaded and self._contextCreator:
                 self._context = context = self._contextCreator(self.perkId, self._level, self.scopeId, *self._contextArgs)
                 self._plan.setContext(context)

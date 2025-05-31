@@ -42,7 +42,8 @@ class VehicleRespawnComponent(DynamicScriptComponent):
             vehInfo = avatar.arena.vehicles[self.entity.id]
             isVehicleAlive = vehInfo['isAlive'] and not self.entity.isDestroyed and hasattr(self.entity, 'isStarted') and self.entity.isStarted and self.entity.isAlive()
             isVehicleReady = avatar.playerVehicleID != self.entity.id or avatar.vehicle and avatar.vehicle.id == avatar.playerVehicleID
-            if not isVehicleAlive or not isVehicleReady:
+            isInfoSynced = hasattr(self.entity, 'publicInfo') and vehInfo['respawnID'] == self.entity.publicInfo.respawnID == self.respawnID
+            if not isVehicleAlive or not isVehicleReady or not isInfoSynced:
                 nextTick(makeCallbackWeak(self.waitForRespawnReadiness))()
                 return
             self._respawnVehicle()

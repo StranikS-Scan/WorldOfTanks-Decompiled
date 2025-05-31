@@ -16,12 +16,6 @@ class FunRandomQueueProvider(RandomQueueProvider, FunAssetPacksMixin, FunSubMode
     def processQueueInfo(self, qInfo):
         super(FunRandomQueueProvider, self).processQueueInfo(qInfo or {})
 
-    def needAdditionalInfo(self):
-        return False
-
-    def additionalInfo(self):
-        pass
-
     @hasDesiredSubMode()
     def _doRequestQueueInfo(self, currPlayer):
         super(FunRandomQueueProvider, self)._doRequestQueueInfo(currPlayer)

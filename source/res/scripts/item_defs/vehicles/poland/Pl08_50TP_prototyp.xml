@@ -1160,6 +1160,33 @@
         <clipAngle>	0.833569	</clipAngle>
         <anchorShift>	0.267394	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0.76715 0.045476 -3.987756	</position>
+        <rotation>	-0 -1.569051 1.569051	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	-1.899312 0.137012 -1.428864	</position>
+        <rotation>	-0 -0 1.536994	</rotation>
+        <scale>	0.999999 0.999999 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	1.899 0.137012 -1.42886	</position>
+        <rotation>	-0 3.139847 1.536937	</rotation>
+        <scale>	0.999998 0.999998 0.999999	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -2492,6 +2519,24 @@
           <scale>	1.08531 1.08532 1.08532	</scale>
           <hiddenForUser>	true	</hiddenForUser>
           <showOn>	256	</showOn>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	0.288997 0.920158 0.221258	</position>
+          <rotation>	-0 -0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	gunMantlet	</applyType>
+          <size>	medium	</size>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38001	</slotId>
+          <position>	-0.681753 0.906296 -0.376212	</position>
+          <rotation>	-0 -0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	turret	</applyType>
+          <size>	small	</size>
         </slot>
       </customizationSlots>
       <customization>

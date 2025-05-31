@@ -7,7 +7,7 @@ from constants import BonusTypes
 from gui.shared.gui_items import KPI
 from gui.shared.items_parameters import params_cache
 from shared_utils import first
-from gui.shared.utils import WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, DUAL_GUN_CHARGE_TIME, SHOT_DISPERSION_ANGLE, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, DISPERSION_RADIUS, CHASSIS_REPAIR_TIME, TURBOSHAFT_SWITCH_TIME, DUAL_GUN_RATE_TIME, DUAL_ACCURACY_COOLING_DELAY, BURST_FIRE_RATE, BURST_TIME_INTERVAL, AUTO_SHOOT_CLIP_FIRE_RATE
+from gui.shared.utils import WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, DUAL_GUN_CHARGE_TIME, SHOT_DISPERSION_ANGLE, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, DISPERSION_RADIUS, CHASSIS_REPAIR_TIME, TURBOSHAFT_SWITCH_TIME, DUAL_GUN_RATE_TIME, DUAL_ACCURACY_COOLING_DELAY, BURST_FIRE_RATE, BURST_TIME_INTERVAL, AUTO_SHOOT_CLIP_FIRE_RATE, TWIN_GUN_RELOAD_ONE_GUN_TIME, TWIN_GUN_RELOAD_TWO_GUN_TIME
 if typing.TYPE_CHECKING:
     from gui.shared.items_parameters.params import _PenaltyInfo
 BACKWARD_QUALITY_PARAMS = frozenset(['aimingTime',
@@ -53,6 +53,8 @@ BACKWARD_QUALITY_PARAMS = frozenset(['aimingTime',
  KPI.Name.WOUNDED_CREW_EFFICIENCY,
  DUAL_GUN_RATE_TIME,
  DUAL_ACCURACY_COOLING_DELAY,
+ TWIN_GUN_RELOAD_ONE_GUN_TIME,
+ TWIN_GUN_RELOAD_TWO_GUN_TIME,
  KPI.Name.ART_NOTIFICATION_DELAY_FACTOR,
  KPI.Name.DAMAGED_MODULES_DETECTION_TIME,
  KPI.Name.PENALTY_TO_DAMAGED_SURVEYING_DEVICE,
@@ -347,7 +349,11 @@ CONDITIONAL_BONUSES = {('invisibilityMovingFactor',
                                                                                             ('improvedSights_tier2', BonusTypes.OPTIONAL_DEVICE),
                                                                                             ('improvedSights_tier3', BonusTypes.OPTIONAL_DEVICE),
                                                                                             ('trophyBasicImprovedSights', BonusTypes.OPTIONAL_DEVICE),
-                                                                                            ('trophyUpgradedImprovedSights', BonusTypes.OPTIONAL_DEVICE))},
+                                                                                            ('trophyUpgradedImprovedSights', BonusTypes.OPTIONAL_DEVICE),
+                                                                                            ('deluxeImprovedSights', BonusTypes.OPTIONAL_DEVICE),
+                                                                                            ('modernizedImprovedSightsEnhancedAimDrives1', BonusTypes.OPTIONAL_DEVICE),
+                                                                                            ('modernizedImprovedSightsEnhancedAimDrives2', BonusTypes.OPTIONAL_DEVICE),
+                                                                                            ('modernizedImprovedSightsEnhancedAimDrives3', BonusTypes.OPTIONAL_DEVICE))},
  ('aimingTime',): {(('improvedVentilationBattleBooster', BonusTypes.BATTLE_BOOSTER),): (('improvedVentilation_tier1', BonusTypes.OPTIONAL_DEVICE),
                                                                                         ('improvedVentilation_tier2', BonusTypes.OPTIONAL_DEVICE),
                                                                                         ('improvedVentilation_tier3', BonusTypes.OPTIONAL_DEVICE),

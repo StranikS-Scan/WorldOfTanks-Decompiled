@@ -59,13 +59,15 @@ class DemountKitToolTipData(BlocksTooltipData):
         self._setContentMargin(top=15, left=19, bottom=21, right=13)
         self._setMargins(afterBlock=14)
         self._setWidth(self._WIDTH)
+        self.canIgnoreInventoryBlock = False
 
     def _packBlocks(self, *args, **kwargs):
         items = super(DemountKitToolTipData, self)._packBlocks(*args, **kwargs)
         self._item = self.context.buildItem(*args, **kwargs)
         items.append(self._packHeader())
         items.append(self._packDescription())
-        items.append(self._packInventoryBlock())
+        if not self.canIgnoreInventoryBlock or self.canIgnoreInventoryBlock and self._item.inventoryCount > 0:
+            items.append(self._packInventoryBlock())
         return items
 
     def _packHeader(self):

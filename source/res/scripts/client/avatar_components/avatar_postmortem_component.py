@@ -6,7 +6,7 @@ from AvatarInputHandler.control_modes import PostMortemControlMode
 from account_helpers.settings_core.settings_constants import GAME
 from aih_constants import CTRL_MODE_NAME
 from helpers import dependency
-from constants import POSTMORTEM_MODIFIERS, DEFAULT_POSTMORTEM_SETTINGS, ARENA_BONUS_TYPE
+from constants import POSTMORTEM_MODIFIERS, DEFAULT_POSTMORTEM_SETTINGS, ARENA_BONUS_TYPE, RM_STATE
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 _TRAJECTORY_PROGRESS_DELAY = 0.1
@@ -84,6 +84,10 @@ class AvatarPostmortemComponent(object):
             if self.isPostmortemFeatureEnabled(CTRL_MODE_NAME.LOOK_AT_KILLER):
                 return CTRL_MODE_NAME.LOOK_AT_KILLER
         if self.isPostmortemFeatureEnabled(CTRL_MODE_NAME.KILL_CAM) and (currentControlMode is CTRL_MODE_NAME.LOOK_AT_KILLER or currentControlMode not in CTRL_MODE_NAME.POSTMORTEM_CONTROL_MODES):
+            recoveryArgs = self.getLastRecoveryArgs()
+            respawnCtrl = self._guiSessionProvider.dynamic.respawn
+            if recoveryArgs and recoveryArgs[1] == RM_STATE.RECOVERING_RESPAWNING and respawnCtrl and respawnCtrl.playerLives:
+                return CTRL_MODE_NAME.POSTMORTEM
             return CTRL_MODE_NAME.KILL_CAM
         if currentControlMode == CTRL_MODE_NAME.KILL_CAM and self.isPostmortemFeatureEnabled(CTRL_MODE_NAME.DEATH_FREE_CAM) and self.isPostmortemModificationActive(CTRL_MODE_NAME.DEATH_FREE_CAM, POSTMORTEM_MODIFIERS.FORCED_IF_NO_LIVES):
             respawnCtrl = self._guiSessionProvider.dynamic.respawn

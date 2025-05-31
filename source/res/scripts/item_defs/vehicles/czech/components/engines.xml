@@ -33,6 +33,7 @@
     <Skoda_V16_diesel_600_a>	32	</Skoda_V16_diesel_600_a>
     <Skoda_16_ADH_140_F>	33	</Skoda_16_ADH_140_F>
     <CKD_AXL_CN>	34	</CKD_AXL_CN>
+    <Skoda_AHK_60>	35	</Skoda_AHK_60>
     <Saurer_CT1D_SZ1007>	37	</Saurer_CT1D_SZ1007>
     <CKD_AXK_56G>	39	</CKD_AXK_56G>
     <UTD_20_64>	40	</UTD_20_64>
@@ -45,6 +46,9 @@
     <Skoda_V8_diesel>	49	</Skoda_V8_diesel>
     <Skoda_V8_turbodiesel>	50	</Skoda_V8_turbodiesel>
     <_5_TD_DBV>	52	</_5_TD_DBV>
+    <V12_TD>	55	</V12_TD>
+    <Skoda_16_AH_145J>	56	</Skoda_16_AH_145J>
+    <V_59T>	58	</V_59T>
     <Development_Engine>	65000	</Development_Engine>
   </ids>
   <shared>
@@ -485,6 +489,23 @@
       <rpm_min>	338	</rpm_min>
       <rpm_max>	2184	</rpm_max>
     </CKD_AXK_proto>
+    <V12_TD>
+      <userString>	#czech_vehicles:V12_TD	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	60000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	940	</power>
+      <weight>	1900	</weight>
+      <maxHealth>	275	</maxHealth>
+      <maxRegenHealth>	138	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	269	</rpm_min>
+      <rpm_max>	2392	</rpm_max>
+    </V12_TD>
     <UTD_20_64>
       <userString>	#czech_vehicles:UTD_20_64	</userString>
       <tags>	diesel	</tags>
@@ -616,6 +637,23 @@
       <rpm_min>	360	</rpm_min>
       <rpm_max>	2120	</rpm_max>
     </CKD_AXK_56G>
+    <V_59T>
+      <userString>	#czech_vehicles:V_59T	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	90000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	950	</power>
+      <weight>	1700	</weight>
+      <maxHealth>	310	</maxHealth>
+      <maxRegenHealth>	155	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	253	</rpm_min>
+      <rpm_max>	2440	</rpm_max>
+    </V_59T>
     <DTN_10>
       <userString>	#czech_vehicles:DTN_10	</userString>
       <tags>	diesel	</tags>
@@ -633,6 +671,23 @@
       <rpm_min>	253	</rpm_min>
       <rpm_max>	2440	</rpm_max>
     </DTN_10>
+    <Skoda_AHK_60>
+      <userString>	#czech_vehicles:Skoda_AHK_60	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	120000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	950	</power>
+      <weight>	1700	</weight>
+      <maxHealth>	345	</maxHealth>
+      <maxRegenHealth>	173	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	266	</rpm_min>
+      <rpm_max>	2400	</rpm_max>
+    </Skoda_AHK_60>
     <Skoda_16_AH_145>
       <userString>	#czech_vehicles:Skoda_16_AH_145	</userString>
       <tags>	diesel	</tags>
@@ -649,6 +704,23 @@
       <rpm_min>	320	</rpm_min>
       <rpm_max>	2240	</rpm_max>
     </Skoda_16_AH_145>
+    <Skoda_16_AH_145J>
+      <userString>	#czech_vehicles:Skoda_16_AH_145J	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	90000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	850	</power>
+      <weight>	1400	</weight>
+      <maxHealth>	310	</maxHealth>
+      <maxRegenHealth>	155	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	293	</rpm_min>
+      <rpm_max>	2320	</rpm_max>
+    </Skoda_16_AH_145J>
     <Skoda_V16_AHK_2>
       <userString>	#czech_vehicles:Skoda_V16_AHK_2	</userString>
       <tags>	diesel	</tags>

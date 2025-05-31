@@ -77,6 +77,13 @@
       <undamaged>	vehicles/british/GB142_FV230_Canopener/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/british/GB142_FV230_Canopener/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/british/GB142_FV230_Canopener/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <GB142_FV230_Canopener_TXVII_3Dst>
+          <undamaged>	vehicles/british/GB142_FV230_Canopener/_skins/GB142_FV230_Canopener_TXVII_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/british/GB142_FV230_Canopener/_skins/GB142_FV230_Canopener_TXVII_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/british/GB142_FV230_Canopener/_skins/GB142_FV230_Canopener_TXVII_3Dst/crash/lod0/Hull.model	</exploded>
+        </GB142_FV230_Canopener_TXVII_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -102,6 +109,16 @@
         <rayStart>	-0.545745 0.630274 2.203041	</rayStart>
         <rayEnd>	-0.545745 0.466444 2.088326	</rayEnd>
         <rayUp>	-0 0.573577 -0.819152	</rayUp>
+        <size>	0.35	</size>
+        <isUVProportional>	false	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	10001	</slotId>
+        <compatibleModels>	GB142_FV230_Canopener_TXVII_3Dst	</compatibleModels>
+        <rayStart>	-0.850826 0.690848 2.116532	</rayStart>
+        <rayEnd>	-0.850826 0.527018 2.001817	</rayEnd>
+        <rayUp>	0 0.573577 -0.819152	</rayUp>
         <size>	0.35	</size>
         <isUVProportional>	false	</isUVProportional>
       </slot>
@@ -719,6 +736,28 @@
         <clipAngle>	1.3046	</clipAngle>
       </slot>
       <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15058	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB142_FV230_Canopener_TXVII_3Dst	</compatibleModels>
+        <position>	1.467 1.26814 3.65179	</position>
+        <rotation>	0.750523 -0.000003 3.14159	</rotation>
+        <scale>	0.395935 0.2 0.395935	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.3046	</clipAngle>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15059	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB142_FV230_Canopener_TXVII_3Dst	</compatibleModels>
+        <position>	-0.720251 1.80699 -4.95783	</position>
+        <rotation>	3.13985 -0.000003 -0.000007	</rotation>
+        <scale>	0.350559 0.25 0.35056	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.3046	</clipAngle>
+      </slot>
+      <slot>
         <slotType>	attachment	</slotType>
         <slotId>	18000	</slotId>
         <position>	-2.033213 -0.023594 -1.599859	</position>
@@ -744,6 +783,13 @@
         <scale>	0.999998 1 0.999999	</scale>
         <applyType>	universal	</applyType>
         <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18003	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <hiddenForUser>	true	</hiddenForUser>
       </slot>
     </customizationSlots>
     <customization>
@@ -787,6 +833,13 @@
         <undamaged>	vehicles/british/GB142_FV230_Canopener/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/british/GB142_FV230_Canopener/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/british/GB142_FV230_Canopener/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <GB142_FV230_Canopener_TXVII_3Dst>
+            <undamaged>	vehicles/british/GB142_FV230_Canopener/_skins/GB142_FV230_Canopener_TXVII_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/british/GB142_FV230_Canopener/_skins/GB142_FV230_Canopener_TXVII_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/british/GB142_FV230_Canopener/_skins/GB142_FV230_Canopener_TXVII_3Dst/crash/lod0/Chassis.model	</exploded>
+          </GB142_FV230_Canopener_TXVII_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -878,6 +931,39 @@
                   <row3>	-2.118794 0.954171 -0.420786	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	GB142_FV230_Canopener_TXVII_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	2.085123 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.492694 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.866187	</row2>
+                  <row3>	0.000000 1.258571 -0.610700	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.027632 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.569126 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.627053	</row2>
+                  <row3>	0.000000 1.602494 -0.354482	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.027630 -0.000001 0.000001	</row0>
+                  <row1>	0.000000 0.238212 0.182359	</row1>
+                  <row2>	0.000000 -0.372854 0.487052	</row2>
+                  <row3>	0.000000 1.312609 3.555506	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.027630 0.000000 -0.000001	</row0>
+                  <row1>	0.000000 0.213744 -0.210507	</row1>
+                  <row2>	0.000000 0.583893 0.592872	</row2>
+                  <row3>	0.000000 1.374949 -4.300822	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.000000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 8.222566	</row2>
+                  <row3>	-2.118794 0.954171 -0.420786	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -926,6 +1012,39 @@
                 </wheelGroup>
               </wheelGroups>
               <hullCollider>
+                <boxCollider>
+                  <row0>	2.085123 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.492694 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.866187	</row2>
+                  <row3>	0.000000 1.258571 -0.610700	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.027632 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.569126 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.627053	</row2>
+                  <row3>	0.000000 1.602494 -0.354482	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.027630 0.000001 -0.000001	</row0>
+                  <row1>	0.000000 0.238212 0.182359	</row1>
+                  <row2>	0.000000 -0.372854 0.487052	</row2>
+                  <row3>	0.000000 1.312609 3.555506	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.027630 0.000000 0.000001	</row0>
+                  <row1>	0.000000 0.213744 -0.210507	</row1>
+                  <row2>	0.000000 0.583893 0.592872	</row2>
+                  <row3>	0.000000 1.374949 -4.300822	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.000000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 8.222566	</row2>
+                  <row3>	2.118794 0.954171 -0.420786	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	GB142_FV230_Canopener_TXVII_3Dst	</modelsSet>
                 <boxCollider>
                   <row0>	2.085123 0.000000 0.000000	</row0>
                   <row1>	0.000000 1.492694 0.000000	</row1>
@@ -1662,6 +1781,24 @@
               <rayUp>	0.12 0 0	</rayUp>
               <size>	0.65	</size>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49002	</slotId>
+              <rayStart>	-0.22 -0.003 2.48	</rayStart>
+              <rayEnd>	-0.22 -0.003 3	</rayEnd>
+              <rayUp>	0.15 0 0	</rayUp>
+              <compatibleModels>	GB142_FV230_Canopener_TXVII_3Dst	</compatibleModels>
+              <size>	0.52	</size>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49003	</slotId>
+              <rayStart>	0.22 -0.003 2.48	</rayStart>
+              <rayEnd>	0.22 -0.003 3	</rayEnd>
+              <rayUp>	0.15 0 0	</rayUp>
+              <compatibleModels>	GB142_FV230_Canopener_TXVII_3Dst	</compatibleModels>
+              <size>	0.52	</size>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -1673,6 +1810,13 @@
             <undamaged>	vehicles/british/GB142_FV230_Canopener/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/british/GB142_FV230_Canopener/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/british/GB142_FV230_Canopener/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <GB142_FV230_Canopener_TXVII_3Dst>
+                <undamaged>	vehicles/british/GB142_FV230_Canopener/_skins/GB142_FV230_Canopener_TXVII_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/british/GB142_FV230_Canopener/_skins/GB142_FV230_Canopener_TXVII_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/british/GB142_FV230_Canopener/_skins/GB142_FV230_Canopener_TXVII_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </GB142_FV230_Canopener_TXVII_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/british/GB142_FV230_Canopener/collision/Gun_01.model	</collisionModelServer>
@@ -1688,6 +1832,13 @@
         <undamaged>	vehicles/british/GB142_FV230_Canopener/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/british/GB142_FV230_Canopener/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/british/GB142_FV230_Canopener/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <GB142_FV230_Canopener_TXVII_3Dst>
+            <undamaged>	vehicles/british/GB142_FV230_Canopener/_skins/GB142_FV230_Canopener_TXVII_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB142_FV230_Canopener/_skins/GB142_FV230_Canopener_TXVII_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/british/GB142_FV230_Canopener/_skins/GB142_FV230_Canopener_TXVII_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </GB142_FV230_Canopener_TXVII_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/british/GB142_FV230_Canopener/collision/Turret_01.model	</collisionModelServer>
@@ -2018,6 +2169,66 @@
           <anchorShift>	1.64429	</anchorShift>
         </slot>
         <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35025	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	GB142_FV230_Canopener_TXVII_3Dst	</compatibleModels>
+          <position>	-1.3313 2.03391 -0.177163	</position>
+          <rotation>	1.86913 1.56905 -0.000002	</rotation>
+          <scale>	0.330752 0.171324 0.330753	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.620846	</clipAngle>
+          <anchorShift>	0.03	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35026	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	GB142_FV230_Canopener_TXVII_3Dst	</compatibleModels>
+          <position>	1.33131 2.0339 -0.177163	</position>
+          <rotation>	1.86912 -1.56905 -0.000002	</rotation>
+          <scale>	0.330752 0.171324 0.330753	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.620846	</clipAngle>
+          <anchorShift>	0.03	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35027	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	GB142_FV230_Canopener_TXVII_3Dst	</compatibleModels>
+          <position>	-0.353455 2.77373 0.59854	</position>
+          <rotation>	-0 0 3.1413	</rotation>
+          <scale>	0.384197 0.071278 0.3842	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.620846	</clipAngle>
+          <anchorShift>	0.03	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35028	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	GB142_FV230_Canopener_TXVII_3Dst	</compatibleModels>
+          <position>	0.000013 2.78383 -1.44357	</position>
+          <rotation>	3.13985 -0.000002 -0.000009	</rotation>
+          <scale>	0.63883 0.118518 0.638834	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.620846	</clipAngle>
+          <anchorShift>	0.03	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35029	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	GB142_FV230_Canopener_TXVII_3Dst	</compatibleModels>
+          <position>	0.101988 2.47048 -2.05911	</position>
+          <rotation>	1.91637 -0.000028 -0.000027	</rotation>
+          <scale>	0.532388 0.098771 0.532392	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.620846	</clipAngle>
+          <anchorShift>	0.03	</anchorShift>
+        </slot>
+        <slot>
           <slotType>	attachment	</slotType>
           <slotId>	38000	</slotId>
           <position>	0.000011 1.07202 -1.14911	</position>
@@ -2034,7 +2245,7 @@
         </customizableVehicleAreas>
       </customization>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <physicsShape>	1.043 0 1 0 0.936 -0.064 0.5 0.5 0.012 0.5 0.193 0.5 0.138 0.571 0	</physicsShape>
+      <physicsShape>	1.043 0 1 0 0.69 0.087 0.5 0.5 0.012 0.5 0.193 0.5 0.138 0.571 0	</physicsShape>
       <camouflage>
         <density>	119.289948 120.287399	</density>
         <aoTextureSize>	1024 512	</aoTextureSize>

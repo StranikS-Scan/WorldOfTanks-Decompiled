@@ -141,7 +141,6 @@ class SYSTEM_MESSAGES(object):
     CONNECTED = '#system_messages:connected'
     DISCONNECTED = '#system_messages:disconnected'
     CLIENT_INACTIVE = '#system_messages:client_inactive'
-    ROAMING_NOT_ALLOWED = '#system_messages:roaming_not_allowed'
     STEAM_LOGIN_NOT_ALLOWED = '#system_messages:steam_login_not_allowed'
     SERVER_SHUT_DOWN = '#system_messages:server_shut_down'
     UNLOCKS_VEHICLE_UNLOCK_SUCCESS = '#system_messages:unlocks/vehicle/unlock_success'
@@ -1669,7 +1668,6 @@ class SYSTEM_MESSAGES(object):
      CONNECTED,
      DISCONNECTED,
      CLIENT_INACTIVE,
-     ROAMING_NOT_ALLOWED,
      STEAM_LOGIN_NOT_ALLOWED,
      SERVER_SHUT_DOWN,
      UNLOCKS_VEHICLE_UNLOCK_SUCCESS,

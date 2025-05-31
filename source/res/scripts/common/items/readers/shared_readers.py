@@ -17,6 +17,7 @@ _ALLOWED_SLOTS_ANCHORS = component_constants.ALLOWED_SLOTS_ANCHORS
 _ALLOWED_MISC_SLOTS = component_constants.ALLOWED_MISC_SLOTS
 _ALLOWED_PROJECTION_DECALS_ANCHORS = component_constants.ALLOWED_PROJECTION_DECALS_ANCHORS
 _CUSTOMIZATION_CONSTANTS_PATH = ITEM_DEFS_PATH + '/customization/constants.xml'
+_HANGERS_PATH = ITEM_DEFS_PATH + '/customization/attachments/hangers.xml'
 _logger = logging.getLogger(__name__)
 
 def _readEmblemSlot(ctx, subsection, slotType):
@@ -32,7 +33,7 @@ def _readMiscSlot(ctx, subsection, slotType):
 
 
 def _readAttachmentSlot(ctx, subsection, slotType):
-    descr = shared_components.AttachmentSlotDescription(slotType=slotType, slotId=_xml.readInt(ctx, subsection, 'slotId'), position=_xml.readVector3OrNone(ctx, subsection, 'position'), rotation=_xml.readVector3OrNone(ctx, subsection, 'rotation'), scale=_xml.readVector3OrNone(ctx, subsection, 'scale'), attachNode=_xml.readStringOrNone(ctx, subsection, 'attachNode'), hiddenForUser=_xml.readBool(ctx, subsection, 'hiddenForUser', False), applyType=_xml.readStringOrEmpty(ctx, subsection, 'applyType'), size=_xml.readStringOrEmpty(ctx, subsection, 'size'))
+    descr = shared_components.AttachmentSlotDescription(slotType=slotType, slotId=_xml.readInt(ctx, subsection, 'slotId'), position=_xml.readVector3(ctx, subsection, 'position', c11n_constants.DEFAULT_POSITION), rotation=_xml.readVector3(ctx, subsection, 'rotation', c11n_constants.DEFAULT_ROTATION), scale=_xml.readVector3(ctx, subsection, 'scale', c11n_constants.DEFAULT_SCALE), attachNode=_xml.readStringOrNone(ctx, subsection, 'attachNode'), hiddenForUser=_xml.readBool(ctx, subsection, 'hiddenForUser', False), applyType=_xml.readStringOrEmpty(ctx, subsection, 'applyType'), size=_xml.readStringOrEmpty(ctx, subsection, 'size'), hangerId=_xml.readNonNegativeInt(ctx, subsection, 'hangerId', 0), hangerRotation=_xml.readVector3(ctx, subsection, 'hangerRotation', Math.Vector3(0, 0, 0)))
     _verifySlotId(ctx, slotType, descr.slotId)
     return descr
 
@@ -70,6 +71,7 @@ def _readCompatibleModels(subsection, ctx):
 
 
 __customizationConstants = None
+__hangers = None
 
 def __getInitedSlotIdRanges():
     global __customizationConstants
@@ -80,6 +82,17 @@ def __getInitedSlotIdRanges():
 def getAttachmentSlotSizes():
     _initCustomizationConstants()
     return __customizationConstants['attachment_slot_sizes']
+
+
+def getHangers():
+    global __hangers
+    _initHangers()
+    return __hangers
+
+
+def getHangerFromId(id):
+    hangers = getHangers()
+    return hangers.get(id, None)
 
 
 def getAttachmentSlotScale(applyType, baseSize, selectedSize):
@@ -144,6 +157,28 @@ def _initCustomizationConstants():
             __customizationConstants['attachment_hanging_effects'][typeName] = dict()
             for rareName, value in _xml.getChildren(xmlCtx, attachmentSlotTypes, typeName):
                 __customizationConstants['attachment_hanging_effects'][typeName][rareName] = value.asString
+
+        return
+
+
+def _initHangers():
+    global __hangers
+    if __hangers is not None:
+        return
+    else:
+        __hangers = dict()
+        filePath = _HANGERS_PATH
+        section = ResMgr.openSection(filePath)
+        if section is None:
+            _xml.raiseWrongXml(None, filePath, 'can not open or read')
+        xmlCtx = (None, filePath)
+        for itemName, item in _xml.getChildren(xmlCtx, section, 'hanger'):
+            id = _xml.readInt(xmlCtx, item, 'id')
+            modelName = _xml.readString(xmlCtx, item, 'modelName')
+            crashModelName = _xml.readStringOrNone(xmlCtx, item, 'crashModelName')
+            hanger = {'modelName': modelName,
+             'crashModelName': crashModelName}
+            __hangers[id] = hanger
 
         return
 

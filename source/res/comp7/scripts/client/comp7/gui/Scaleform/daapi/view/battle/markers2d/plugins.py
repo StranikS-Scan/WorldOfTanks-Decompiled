@@ -169,10 +169,12 @@ class Comp7VehicleMarkerPlugin(VehicleMarkerPlugin):
         self.__setIsPlayerLoaded(marker, vInfo)
         periodCtrl = self.sessionProvider.shared.arenaPeriod
         if periodCtrl is not None and periodCtrl.getPeriod() < ARENA_PERIOD.BATTLE:
-            vehSwitchComponent = avatar_getter.getArena().teamInfo.TeamInfoInBattleVehicleSwitch
-            if vehSwitchComponent is not None:
-                vehStatus = vehSwitchComponent.statuses.get(vInfo.vehicleID, False)
-                self.__onTeammateSelectionStatuses({vInfo.vehicleID: vehStatus})
+            teamInfo = avatar_getter.getArena().teamInfo
+            if teamInfo is not None:
+                vehSwitchComponent = teamInfo.TeamInfoInBattleVehicleSwitch
+                if vehSwitchComponent is not None:
+                    vehStatus = vehSwitchComponent.statuses.get(vInfo.vehicleID, False)
+                    self.__onTeammateSelectionStatuses({vInfo.vehicleID: vehStatus})
         return
 
     def __setRole(self, marker, vInfo):

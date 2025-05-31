@@ -34,6 +34,7 @@ class EpicBattleRecertificationFormTooltip(DemountKitToolTipData):
     def __init__(self, context):
         super(EpicBattleRecertificationFormTooltip, self).__init__(context)
         self._setContentMargin(top=15, left=18, bottom=21, right=0)
+        self.canIgnoreInventoryBlock = True
 
     def _packDescription(self):
         return formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.equipment.effect())), desc=text_styles.main(backport.text(R.strings.recertification_form.base.recertificationForm.description())), blocksLinkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE)

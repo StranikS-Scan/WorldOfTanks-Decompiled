@@ -8659,6 +8659,29 @@
     <type>	EMBLEM	</type>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	emblems 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	8 9 10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <decal>
+      <id>	1158	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_862.dds	</texture>
+      <userString>	#vehicle_customization:special_style/clans_2d_thor	</userString>
+      <tags>	hiddenInUI	</tags>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Clans 2D	</name>
+    <type>	EMBLEM	</type>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:emblem/IGR	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
@@ -9288,6 +9311,13 @@
       <tags>	hiddenInUI	</tags>
     </decal>
     <type>	EMBLEM	</type>
+    <decal>
+      <id>	16023	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_863.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_863	</userString>
+      <mirror>	true	</mirror>
+      <tags>	hiddenInUI	</tags>
+    </decal>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:emblem/special	</userString>
@@ -16464,6 +16494,26 @@
       <mirror>	false	</mirror>
     </decal>
     <name>	V Day 2025	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <decal>
+      <id>	1159	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_818.dds	</texture>
+      <userString>	#vehicle_customization:special_style/bp2025_s17_2	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	BattlePass 2025	</name>
     <type>	INSCRIPTION	</type>
   </itemGroup>
   <itemGroup>

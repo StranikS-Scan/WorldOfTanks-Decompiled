@@ -74,10 +74,10 @@ def hasVehicleForCustomization(customization, itemsCache=None):
 
 
 @dependency.replace_none_kwargs(itemsFactory=IGuiItemsFactory)
-def getPreviewOutfit(style, branchID, progressLevel, itemsFactory=None):
+def getPreviewOutfit(style, branchID, progressLevel, vehicleCD, itemsFactory=None):
     camo = getComp7ProgressionStyleCamouflage(style.id, branchID, progressLevel)
     season = first(style.seasons)
-    outfit = style.getOutfit(season)
+    outfit = style.getOutfit(season, vehicleCD=vehicleCD)
     outfitComponent = outfit.pack()
     if camo:
         for camoComponent in outfitComponent.camouflages:

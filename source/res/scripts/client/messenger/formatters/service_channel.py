@@ -648,9 +648,6 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
 
         return messages
 
-    def _getBattleResultsKey(self, battleResults):
-        return battleResults.get(u'isWinner', 0)
-
     def _getFairplayData(self, message):
         arenaTypeID = message.data.get(u'arenaTypeID', 0)
         if arenaTypeID > 0 and arenaTypeID in ArenaType.g_cache:
@@ -698,7 +695,7 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
         bonusCapsOverrides = battleResults.get(u'bonusCapsOverrides')
         if xp or BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.XP, specificOverrides=bonusCapsOverrides):
             ctx[u'xp'] = u'<br/>' + backport.text(R.strings.messenger.serviceChannelMessages.battleResults.experience(), text_styles.expText(backport.getIntegralFormat(xp)))
-        battleResKey = self._getBattleResultsKey(battleResults)
+        battleResKey = battleResults.get(u'isWinner', 0)
         ctx[u'xpEx'] = self.__makeXpExString(xp, battleResKey, battleResults.get(u'xpPenalty', 0), battleResults)
         ctx[Currency.GOLD] = self.__makeGoldString(battleResults.get(Currency.GOLD, 0))
         accCredits = battleResults.get(Currency.CREDITS) - battleResults.get(u'creditsToDraw', 0)
@@ -2772,6 +2769,11 @@ class QuestAchievesFormatter(object):
                 rf = cls.__goodiesCache.getRecertificationForm(goodieID)
                 if rf is not None and rf.enabled:
                     itemsNames.append(backport.text(R.strings.system_messages.bonuses.booster.value(), count=ginfo.get(u'count'), name=rf.userName))
+            if goodieID in cls._itemsCache.items.shop.mentoringLicenses:
+                excludeGoodies.add(goodieID)
+                mentoringLicense = cls.__goodiesCache.getMentoringLicense(goodieID)
+                if mentoringLicense is not None and mentoringLicense.enabled:
+                    itemsNames.append(backport.text(R.strings.system_messages.bonuses.booster.value(), count=ginfo.get(u'count'), name=mentoringLicense.userName))
 
         abilityPts = data.get(constants.EPIC_ABILITY_PTS_NAME)
         if abilityPts:

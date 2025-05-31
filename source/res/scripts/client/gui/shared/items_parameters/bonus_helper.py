@@ -163,6 +163,7 @@ class BonusExtractor(object):
 
     def getBonusInfo(self):
         self.__reorderDevices(self.__bonuses)
+        self.__bonuses = self.__reorderSkills(self.__bonuses, self.__vehicle)
         for bnsId, bnsGroup in self.__bonuses:
             yield (bnsGroup, bnsId, self.extractBonus(bnsGroup, bnsId))
 
@@ -195,6 +196,34 @@ class BonusExtractor(object):
             camoNetIndex = camoNet.index(True)
             if invisDeviceIndex < camoNetIndex:
                 devices[invisDeviceIndex], devices[camoNetIndex] = devices[camoNetIndex], devices[invisDeviceIndex]
+
+    @staticmethod
+    def __reorderSkills(bonuses, vehicle):
+        orderedSkillList = []
+        for _, tankman in vehicle.crew:
+            if tankman is None:
+                continue
+            for bonusSkills in tankman.bonusSkills.itervalues():
+                for bonusSkill in reversed(bonusSkills):
+                    if bonusSkill and bonusSkill.isSkillActive:
+                        orderedSkillList.append(bonusSkill.name)
+
+            for skill in tankman.skills:
+                if skill.isSkillActive:
+                    orderedSkillList.append(skill.name)
+
+        orderedSkillMap = {item:index for index, item in enumerate(orderedSkillList)}
+        sortableSkills = [ skill for skill in bonuses if skill[0] in orderedSkillMap ]
+        sortableSkills.sort(key=lambda x: orderedSkillMap[x[0]])
+        sortedBonuses = []
+        skillIndex = 0
+        for item in bonuses:
+            if item[0] in orderedSkillMap:
+                sortedBonuses.append(sortableSkills[skillIndex])
+                skillIndex += 1
+            sortedBonuses.append(item)
+
+        return sortedBonuses
 
 
 class EasyTankEquipBonusExtractor(BonusExtractor):

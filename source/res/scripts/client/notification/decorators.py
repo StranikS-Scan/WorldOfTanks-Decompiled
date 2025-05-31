@@ -1370,6 +1370,7 @@ class PrestigeFirstEntryDecorator(LockButtonMessageDecorator):
 
 
 class PrestigeLvlUpDecorator(LockButtonMessageDecorator):
+    __appLoader = dependency.descriptor(IAppLoader)
     __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, entityID, entity=None, settings=None, model=None):
@@ -1379,6 +1380,12 @@ class PrestigeLvlUpDecorator(LockButtonMessageDecorator):
     def clear(self):
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
         super(PrestigeLvlUpDecorator, self).clear()
+
+    def _make(self, formatted=None, settings=None):
+        super(PrestigeLvlUpDecorator, self)._make(formatted, settings)
+        isOnBattleQueueScreen = self.__appLoader.getApp().containerManager.getView(WindowLayer.SUB_VIEW, criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.BATTLE_QUEUE}) is not None
+        self._updateButtonsState(lock=isOnBattleQueueScreen)
+        return
 
     def _updateButtonsState(self, lock=False):
         config = self.__lobbyContext.getServerSettings().prestigeConfig

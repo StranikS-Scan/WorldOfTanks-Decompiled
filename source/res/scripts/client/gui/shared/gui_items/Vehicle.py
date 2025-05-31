@@ -39,7 +39,7 @@ from gui.shared.utils.functions import replaceHyphenToUnderscore
 from helpers import i18n, time_utils, dependency
 from items import customizations, filterIntCDsByItemType, getTypeInfoByName, getTypeOfCompactDescr, tankmen, vehicles
 from items.components.c11n_constants import HIDDEN_CAMOUFLAGE_ID, EMPTY_ITEM_ID, ApplyArea, ItemTags, SeasonType
-from items.tankmen import MAX_SKILLS_EFFICIENCY_XP, MAX_SKILL_LEVEL, NO_SLOT
+from items.tankmen import MAX_SKILLS_EFFICIENCY_XP, MAX_SKILL_LEVEL, NO_SLOT, TankmanDescr
 from items.vehicles import getItemByCompactDescr, getVehicleType
 from nation_change.nation_change_helpers import hasNationGroup, iterVehTypeCDsInNationGroup
 from post_progression_common import TankSetupGroupsId
@@ -412,6 +412,8 @@ class Vehicle(FittingItem):
                 elif slotType == GUI_ITEM_TYPE.ATTACHMENT:
                     regionIdx = len(slotsAnchors[slotType][areaId])
                     customizationSlot = AttachmentSlot(anchor, slotHelper.tankAreaId, regionIdx)
+                elif slotType == GUI_ITEM_TYPE.SEQUENCE:
+                    continue
                 else:
                     if anchor.applyTo is not None:
                         regions = REGIONS_BY_SLOT_TYPE[areaId][slotType]
@@ -1017,16 +1019,9 @@ class Vehicle(FittingItem):
     def isAmmoNotFullInSetups(self):
         return self.shells.setupLayouts.isAmmoNotFull(self.ammoMinSize)
 
-    def isAmmoFullInSetups(self, setupIdx=None):
-        return self.shells.setupLayouts.isAmmoFull(setupIdx, self.ammoMinSize)
-
     @property
     def isAmmoCanSwitch(self):
         return self.isSetupSwitchActive(TankSetupGroupsId.EQUIPMENT_AND_SHELLS)
-
-    @property
-    def hasShells(self):
-        return self.shells.setupLayouts.isAmmoFull(minAmmo=1)
 
     @property
     def isTooHeavy(self):
@@ -1035,6 +1030,10 @@ class Vehicle(FittingItem):
     @property
     def hasCrew(self):
         return findFirst(lambda x: x[1] is not None, self.crew) is not None
+
+    @property
+    def hasShells(self):
+        return self.shells.setupLayouts.isAmmoFull(minAmmo=1)
 
     @property
     def hasConsumables(self):
@@ -1074,6 +1073,9 @@ class Vehicle(FittingItem):
     @property
     def isNationChangeAvailable(self):
         return self.hasNationGroup and not self.isLocked and not self.isBroken and (self.isPurchased or self.isRented)
+
+    def isAmmoFullInSetups(self, setupIdx=None):
+        return self.shells.setupLayouts.isAmmoFull(setupIdx, self.ammoMinSize)
 
     def getAllNationGroupVehs(self, proxy):
         nationGroupVehs = [ proxy.getItemByCD(cd) for cd in iterVehTypeCDsInNationGroup(self.intCD) ]
@@ -1763,7 +1765,8 @@ class Vehicle(FittingItem):
                         elif skillName in skills[-1:]:
                             lastSkillLevel = MAX_SKILL_LEVEL
                     else:
-                        rolesBonusSkills.setdefault(roleType, []).append(skillName)
+                        if skillName not in rolesBonusSkills[roleType]:
+                            rolesBonusSkills.setdefault(roleType, []).append(skillName)
                         skillNamesMaxLvl.append(skillName)
                     skillsAdded = True
 
@@ -1795,12 +1798,16 @@ class Vehicle(FittingItem):
             for role, bonusSkills in tman.bonusSkills.iteritems():
                 for bonusSkill in bonusSkills:
                     if bonusSkill and skillName != bonusSkill.name:
-                        bonusSkillsLevels.append(bonusSkill.level)
                         rolesBonusSkills[role].append(bonusSkill.name)
 
             if skillName in skills:
                 skills.remove(skillName)
-            unskilledTman = self.itemsFactory.createTankman(tankmen.generateCompactDescr(tmanDescr.getPassport(), tmanDescr.vehicleTypeID, tmanDescr.role, tmanDescr.roleLevel, skills, lastSkillLevel, skillsEfficiencyXP=tmanDescr.skillsEfficiencyXP, rolesBonusSkills=rolesBonusSkills), vehicle=self, vehicleSlotIdx=tman.vehicleSlotIdx, bonusSkillsLevels=[bonusSkillsLevels])
+            unskilledTmanCD = tankmen.generateCompactDescr(tmanDescr.getPassport(), tmanDescr.vehicleTypeID, tmanDescr.role, tmanDescr.roleLevel, skills, lastSkillLevel, skillsEfficiencyXP=tmanDescr.skillsEfficiencyXP, rolesBonusSkills=rolesBonusSkills)
+            if tmanDescr.freeXP:
+                unskilledTmanDescr = TankmanDescr(compactDescr=unskilledTmanCD)
+                unskilledTmanDescr.addXP(tmanDescr.freeXP, isCheckForEfficiency=False)
+                unskilledTmanCD = unskilledTmanDescr.makeCompactDescr()
+            unskilledTman = self.itemsFactory.createTankman(unskilledTmanCD, vehicle=self, vehicleSlotIdx=tman.vehicleSlotIdx, bonusSkillsLevels=[bonusSkillsLevels])
             crewItems.append((slotIdx, unskilledTman))
 
         return sortCrew(crewItems, crewRoles)

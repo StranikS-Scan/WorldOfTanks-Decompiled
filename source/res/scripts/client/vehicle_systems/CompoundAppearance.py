@@ -98,7 +98,6 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         self.__dirtUpdateTime = 0.0
         self.__inSpeedTreeCollision = False
         self.__isConstructed = False
-        self.__ignoreEngineStart = False
         self.__tmpGameObjects = {}
         self.__engineStarted = False
         self.__turbochargerSoundPlaying = False
@@ -121,12 +120,6 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
             retriever.setupFilter(floatFilter)
 
         return
-
-    def setIgnoreEngineStart(self):
-        self.__ignoreEngineStart = True
-
-    def isIgnoreEngineStart(self):
-        return self.__ignoreEngineStart
 
     def getVehicle(self):
         return self._vehicle
@@ -231,7 +224,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         self.stopCallback(self.__onPeriodicTimerDirt)
 
     def _onEngineStart(self):
-        if self.__ignoreEngineStart:
+        if super(CompoundAppearance, self).isIgnoreEngineStart():
             return
         else:
             super(CompoundAppearance, self)._onEngineStart()
@@ -605,9 +598,11 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
             self.__reattachComponents(self.compoundModel)
             self._connectCollider()
             self.filter.syncGunAngles(prevTurretYaw, prevGunPitch)
-            vehicle_composition.removeComposition(self.gameObject)
-            vehicle_composition.createVehicleComposition(self.gameObject)
             self._updateAttachments()
+            prefabMap = [ CGF.PrefabsMapItem(attachment.slotName, attachment.modelName) for attachment in self.attachments if not attachment.hiddenForUser ]
+            extraSlots = vehicle_composition.getExtraSlotMap(self.typeDescriptor, self)
+            vehicle_composition.removeComposition(self.gameObject)
+            vehicle_composition.createVehicleComposition(self.gameObject, prefabMap=prefabMap, followNodes=True, extraSlots=extraSlots)
             self.onModelChanged()
             return
 

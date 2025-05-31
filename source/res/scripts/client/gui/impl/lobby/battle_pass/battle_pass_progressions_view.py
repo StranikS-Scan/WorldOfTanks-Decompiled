@@ -28,9 +28,11 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_progressions_view_model import ActionTypes, BattlePassProgressionsViewModel, ChapterStates, ChapterType
 from gui.impl.gen.view_models.views.lobby.battle_pass.reward_level_model import RewardLevelModel
 from gui.impl.gen.view_models.views.lobby.vehicle_preview.top_panel.top_panel_tabs_model import TabID
+from gui.impl.gui_decorators import args2params
 from gui.impl.pub import ViewImpl
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.lootbox_system.base.common import ViewID, Views
+from gui.lootbox_system.base.utils import getVehicleForStyle
 from gui.server_events.events_dispatcher import showMissionsBattlePass
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -135,6 +137,7 @@ class BattlePassProgressionsView(ViewImpl):
          (self.viewModel.onPointsInfoClick, self.__onPointsInfoClick),
          (self.viewModel.onFinishedAnimation, self.__resetReplaceRewardAnimations),
          (self.viewModel.onLevelsAnimationFinished, self.__resetLevelAnimations),
+         (self.viewModel.onStyleBonusPreview, self.__onStyleBonusPreview),
          (self.viewModel.widgetFinalRewards.showTankmen, self.__showTankmen),
          (self.viewModel.onChapterChoice, self.__onChapterChoice),
          (self.viewModel.awardsWidget.onBpcoinClick, self.__showCoinsShop),
@@ -391,11 +394,12 @@ class BattlePassProgressionsView(ViewImpl):
         fillCollectionModel(model.awardsWidget.collectionEntryPoint, self.__battlePass.getCurrentCollectionId())
         self.__onTicketsUpdated()
         self.__onTicketsCountUpdated()
-        self.__setExpirations(model)
+        self.__setExpirations(model=model)
         self.__setFinalRewardsWidget(model)
         self.__updateRewardSelectButton(model=model)
 
-    def __setExpirations(self, model):
+    @replaceNoneKwargsModel
+    def __setExpirations(self, model=None):
         if self.__battlePass.isExtraChapter(self.__chapterID):
             endTimestamp = self.__battlePass.getChapterExpiration(self.__chapterID)
             timeLeft = self.__battlePass.getChapterRemainingTime(self.__chapterID)
@@ -815,3 +819,10 @@ class BattlePassProgressionsView(ViewImpl):
 
     def __onTicketsCountUpdated(self):
         self.viewModel.awardsWidget.setTicketsCount(self.__lootBoxes.getBoxesCount(BATTLE_PASS_TICKETS_EVENT))
+
+    @args2params(int)
+    def __onStyleBonusPreview(self, bonusId):
+        style = self.__itemsCache.items.getItemByCD(bonusId)
+        vehicle = getVehicleForStyle(style)
+        self.__switchCamera()
+        showStylePreview(vehicle.intCD, style=style, backCallback=self.__getPreviewCallback())

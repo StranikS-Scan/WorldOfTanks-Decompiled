@@ -14,9 +14,6 @@ class IBattleResultStatsCtrl(object):
     def clear(self):
         raise NotImplementedError
 
-    def saveStatsSorting(self, columnType, sortDirection):
-        pass
-
     def setResults(self, results, reusable):
         raise NotImplementedError
 

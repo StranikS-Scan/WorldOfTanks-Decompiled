@@ -410,7 +410,7 @@ class ShopPage(PageSubModelPresenter):
         if self.__currentItemCD and g_currentPreviewVehicle.intCD == self.__currentItemCD:
             vehDescr = g_currentPreviewVehicle.item.descriptor
             customizationOutfit = customizations.getNationalEmblemsOutfit(vehDescr)
-            outfit = self.__guiItemsFactory.createOutfit(component=customizationOutfit)
+            outfit = self.__guiItemsFactory.createOutfit(component=customizationOutfit, vehicleCD=vehDescr.makeCompactDescr())
             self.__hangarSpace.updateVehicleOutfit(outfit)
         elif not g_currentPreviewVehicle.isHeroTank:
             g_currentPreviewVehicle.selectVehicle(self.__currentItemCD)

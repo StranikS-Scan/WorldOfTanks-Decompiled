@@ -5,7 +5,6 @@ from gui.impl.lobby.crew.dialogs.base_crew_dialog_template_view import BaseCrewD
 from gui.impl.lobby.crew.dialogs.recruit_window.recruit_content import NO_DATA_VALUE, RecruitContent
 from gui.impl.gen.view_models.views.lobby.crew.dialogs.recruit_window.recruit_dialog_template_view_model import RecruitDialogTemplateViewModel
 from gui.shared.event_dispatcher import showRecruitConfirmIrrelevantConversionDialog
-from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors.quests import PMGetTankwomanReward
 from items import vehicles
 from gui.impl.lobby.crew.dialogs.recruit_window.recruit_dialog_utils import getIcon, getTitle, getIconBackground, getIconName, getTitleFromTokenData
@@ -13,7 +12,7 @@ from gui.impl.lobby.crew.crew_sounds import SOUNDS as CREW_SOUNDS
 from gui.impl.dialogs.dialog_template_button import CancelButton, ConfirmButton
 from gui.impl.pub.dialog_window import DialogButtons
 from gui.impl.gen.resources import R
-from gui import SystemMessages, _logger
+from gui import SystemMessages
 from gui.shared.gui_items.processors.tankman import TankmanTokenRecruit, TankmanUnload, TankmanEquip
 from gui.shared.utils import decorators
 from helpers import dependency
@@ -24,7 +23,7 @@ from sound_gui_manager import CommonSoundSpaceSettings
 from gui.server_events import recruit_helper
 from gui.server_events.pm_constants import SOUNDS, PERSONAL_MISSIONS_SILENT_SOUND_SPACE
 from gui.sounds.filters import States, StatesGroup
-from wg_async import AsyncEvent, wg_await, BrokenPromiseError, AsyncReturn, wg_async
+from wg_async import wg_await, wg_async
 from gui.shared.gui_items.Tankman import NO_TANKMAN
 
 class BaseRecruitDialog(BaseCrewDialogTemplateView):
@@ -162,7 +161,7 @@ class TokenRecruitDialog(BaseRecruitDialog):
 
 
 class QuestRecruitDialog(BaseRecruitDialog):
-    __slots__ = ('__mission', '__isFemale', '__vehicleSlotToUnpack', '__vehicle', '__inventoryUpdateEvent')
+    __slots__ = ('__mission', '__isFemale', '__vehicleSlotToUnpack', '__vehicle')
     _itemsCache = dependency.descriptor(IItemsCache)
     _COMMON_SOUND_SPACE = PERSONAL_MISSIONS_SILENT_SOUND_SPACE
 
@@ -172,8 +171,6 @@ class QuestRecruitDialog(BaseRecruitDialog):
         self.__isFemale = ctx['isFemale']
         self.__vehicleSlotToUnpack = ctx['slot']
         self.__vehicle = ctx['vehicle']
-        self.__inventoryUpdateEvent = AsyncEvent(state=False, scope=None)
-        return
 
     def _onLoading(self, *args, **kwargs):
         super(QuestRecruitDialog, self)._onLoading(*args, **kwargs)
@@ -205,16 +202,9 @@ class QuestRecruitDialog(BaseRecruitDialog):
         g_clientUpdateManager.removeObjectCallbacks(self)
         return
 
-    def _getCallbacks(self):
-        return (('inventory', self._onInventoryUpdate),)
-
     def _setResult(self, result):
         if result == DialogButtons.SUBMIT:
-            tmanID = self.__vehicle.getTankmanIDBySlotIdx(self.__vehicleSlotToUnpack) if self.__vehicle else NO_TANKMAN
-            if tmanID != NO_TANKMAN:
-                self._unloadOldTankman()
-            else:
-                self._unpackQuestRecruit()
+            self._unpackQuestRecruit()
         super(QuestRecruitDialog, self)._setResult(result)
 
     @decorators.adisp_process('updating')
@@ -225,41 +215,14 @@ class QuestRecruitDialog(BaseRecruitDialog):
         res = yield PMGetTankwomanReward(self.__mission, int(self._selectedNation), int(vehTypeID), self._selectedSpecialization).request()
         if res.userMsg:
             SystemMessages.pushMessage(res.userMsg, type=res.sysMsgType)
-        if res.success and self.__vehicleSlotToUnpack != -1:
-            self._waitForInventoryUpdate()
+        newTankman = self._itemsCache.items.getTankman(res.auxData.get('tmanInvID', NO_TANKMAN))
+        if res.success and newTankman and self.__vehicle and self.__vehicleSlotToUnpack != -1:
+            self._equipTankman(newTankman)
         else:
             recruit_helper.setNewRecruitVisited(missionIDs)
-
-    @wg_async
-    def _waitForInventoryUpdate(self):
-        try:
-            yield wg_await(self.__inventoryUpdateEvent.wait())
-            super(QuestRecruitDialog, self)._setResult(DialogButtons.SUBMIT)
-        except BrokenPromiseError:
-            _logger.debug('%s has been destroyed without user decision', self)
-
-        raise AsyncReturn(DialogButtons.SUBMIT)
-
-    @decorators.adisp_process('unloading')
-    def _unloadOldTankman(self):
-        result = yield TankmanUnload(self.__vehicle.invID, self.__vehicleSlotToUnpack).request()
-        if result.userMsg:
-            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
-        if result.success:
-            self._unpackQuestRecruit()
 
     @decorators.adisp_process('equipping')
     def _equipTankman(self, newTankman):
         result = yield TankmanEquip(newTankman.invID, self.__vehicle.invID, self.__vehicleSlotToUnpack).request()
         if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
-
-    def _onInventoryUpdate(self, invDiff):
-        if GUI_ITEM_TYPE.TANKMAN in invDiff:
-            tmenCompDescr = invDiff[GUI_ITEM_TYPE.TANKMAN].get('compDescr', {})
-            for key, _ in tmenCompDescr.items():
-                tmn = self._itemsCache.items.getTankman(key)
-                if tmn and self._selectedVehicle == tmn.vehicleNativeDescr.type.compactDescr and self._selectedSpecialization == tmn.role:
-                    self._equipTankman(tmn)
-                    self.__inventoryUpdateEvent.set()
-                    return

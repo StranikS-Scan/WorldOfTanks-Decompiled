@@ -310,3 +310,25 @@ class UniCapList(List):
         if not isinstance(incoming, (list, tuple)):
             incoming = [incoming]
         return super(UniCapList, self)._convert(incoming, onlyPublic, method)
+
+
+class ListFromString(Field):
+    __slots__ = ('_delimiter', '_listOfFields', '_stringField')
+
+    def __init__(self, field, delimiter=' ', required=True, default=list, public=True, serializedValidators=None, deserializedValidators=None):
+        super(ListFromString, self).__init__(required=required, default=default, public=public, serializedValidators=serializedValidators, deserializedValidators=deserializedValidators)
+        self._delimiter = delimiter
+        self._listOfFields = List(field)
+        self._stringField = String()
+
+    def _serialize(self, incoming, onlyPublic=False):
+        return self._delimiter.join([ str(v) for v in self._listOfFields.serialize(incoming, onlyPublic=onlyPublic) ])
+
+    def _deserialize(self, incoming, onlyPublic=False):
+        string = self._stringField.deserialize(incoming, onlyPublic=onlyPublic)
+        return self._listOfFields.deserialize(self._splitString(string), onlyPublic=onlyPublic)
+
+    def _splitString(self, string):
+        if string:
+            return [ x.strip() for x in string.split(self._delimiter) ]
+        return []

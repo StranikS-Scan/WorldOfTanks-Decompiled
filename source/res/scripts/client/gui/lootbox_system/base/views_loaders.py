@@ -10,7 +10,7 @@ from gui.customization.constants import CustomizationModes
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.lootbox_system.base.common import ViewID, Views, getTextResource
-from gui.lootbox_system.base.utils import getIntroVideoUrl, getShopOverlayUrl, getVehicleForStyle
+from gui.lootbox_system.base.utils import getIntroVideoUrl, getIsShowIntro, getShopOverlayUrl, getVehicleForStyle
 from gui.shared.event_dispatcher import hideVehiclePreview, selectVehicleInHangar, showBrowserOverlayView, showStylePreview, showVehiclePreviewWithoutBottomPanel
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA
@@ -25,7 +25,7 @@ if TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 
 def showIntro(eventName):
-    if getIntroVideoUrl(eventName):
+    if getIsShowIntro(eventName):
         showBrowserOverlayView(getIntroVideoUrl(eventName), VIEW_ALIAS.LOOT_BOXES_INTRO_BROWSER_VIEW)
 
 
@@ -95,6 +95,7 @@ def showCustomizationHangar(style, previewBackCb=None, backBtnLabel=None, itemsC
                 ctx = customization.getCtx()
                 ctx.changeMode(CustomizationModes.STYLE_3D if style.is3D else CustomizationModes.STYLE_2D)
                 ctx.mode.installItem(style.intCD, StyledMode.STYLE_SLOT)
+                ctx.selectItem(style.intCD)
         return
 
     vehicles = itemsCache.items.getVehicles(REQ_CRITERIA.CUSTOM(style.mayInstall))

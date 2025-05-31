@@ -179,9 +179,11 @@ class RankRewardsPage(PageSubModelPresenter):
     def __onPreviewOpen(self, rank, index):
         bonus = first(self.__bonusData[rank]).bonus
         style = self.__c11nService.getItemByID(GUI_ITEM_TYPE.STYLE, bonus.getStyleID())
-        vehicleCD = getStylePreviewVehicle(style, makeVehicleTypeCompDescrByName(_DEFAULT_PREVIEW_VEHICLE))
-        outfit = getPreviewOutfit(style, bonus.getBranchID(), bonus.getProgressLevel())
-        showStylePreview(vehicleCD, style, backCallback=partial(comp7_events.showComp7MetaRootView, self.pageId, index), outfit=outfit)
+        vehIntCD = getStylePreviewVehicle(style, makeVehicleTypeCompDescrByName(_DEFAULT_PREVIEW_VEHICLE))
+        vehicle = self.__itemsCache.items.getItemByCD(vehIntCD)
+        compactDescr = vehicle.descriptor.makeCompactDescr()
+        outfit = getPreviewOutfit(style, bonus.getBranchID(), bonus.getProgressLevel(), compactDescr)
+        showStylePreview(vehIntCD, style, backCallback=partial(comp7_events.showComp7MetaRootView, self.pageId, index), outfit=outfit)
 
     @staticmethod
     def __setRewards(itemModel, bonusData):

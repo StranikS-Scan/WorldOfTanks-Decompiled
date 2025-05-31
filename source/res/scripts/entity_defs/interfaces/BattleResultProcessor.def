@@ -6,13 +6,14 @@
     </battleResultProcessor_onBattleResultsReceived>
     <battleResultProcessor_onPlayerLeftArena>
       <Arg>	INT32	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	STRING	</Arg>
+      <Arg>	MAILBOX	</Arg>
       <Arg>	UINT64	</Arg>
       <Arg>	PYTHON	</Arg>
       <Arg>	PYTHON	</Arg>
-      <Arg>	INT32	</Arg>
       <Arg>	INT64	</Arg>
+      <ReturnValues>
+        <result>	BOOL	</result>
+      </ReturnValues>
     </battleResultProcessor_onPlayerLeftArena>
   </BaseMethods>
   <ClientMethods></ClientMethods>

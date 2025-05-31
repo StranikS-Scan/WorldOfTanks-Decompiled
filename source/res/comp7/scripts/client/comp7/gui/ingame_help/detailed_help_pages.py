@@ -9,7 +9,6 @@ from gui.shared.formatters import text_styles
 
 class Comp7PagesBuilder(DetailedHelpPagesBuilder):
     _SUITABLE_CTX_KEYS = ('isComp7',)
-    HINT_CONTEXT = None
 
     @classmethod
     def priority(cls):

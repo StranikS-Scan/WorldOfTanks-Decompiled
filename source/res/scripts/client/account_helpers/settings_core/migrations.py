@@ -620,7 +620,7 @@ def _migrateTo72(core, data, initialized):
 
 
 def _migrateTo73(core, data, initialized):
-    data['gameExtData2'][GAME.GAMEPLAY_ONLY_10_MODE] = False
+    pass
 
 
 def _migrateTo74(core, data, initialized):
@@ -1349,6 +1349,15 @@ def _migrateTo140(core, data, initialized):
     recruit_helper.updateNegative()
 
 
+def _migrateTo141(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.GAME_EXTENDED_2, 0)
+    settingOffset = 2
+    if storedValue & settingOffset:
+        clear = data['clear']
+        clear[SETTINGS_SECTIONS.GAME_EXTENDED_2] = clear.get(SETTINGS_SECTIONS.GAME_EXTENDED_2, 0) | settingOffset
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -1903,6 +1912,10 @@ _versions = ((1,
   False),
  (140,
   _migrateTo140,
+  False,
+  False),
+ (141,
+  _migrateTo141,
   False,
   False))
 

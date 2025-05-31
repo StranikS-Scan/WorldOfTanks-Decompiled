@@ -5558,4 +5558,24 @@
     <name>	V Day 2025	</name>
     <type>	INSCRIPTION	</type>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <decal>
+      <id>	1159	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_818.dds	</texture>
+      <userString>	#vehicle_customization:special_style/bp2025_s17_2	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	BattlePass 2025	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
 </inscriptions_special.xml>

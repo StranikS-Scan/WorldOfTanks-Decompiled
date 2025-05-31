@@ -68,11 +68,8 @@ GAME_MODE_ARENA_INFO_KEYS = 64
 AMMUNITION_SETUP_VIEW = 65
 GUI_ITEMS_CACHE_INVALIDATOR = 66
 IGNORED_MODE_FOR_AUTO_SELECTED_VEHICLE = 67
-INGAME_HELP_PAGES_FILTERS = 68
-POSTBATTLE_SQUAD_FINDER = 69
-POSTMORTEM_INFO_VIEW = 70
 
-class CollectEventsManager(object):
+class _CollectEventsManager(object):
 
     def __init__(self):
         self.__handlers = defaultdict(list)
@@ -91,7 +88,7 @@ class CollectEventsManager(object):
         return self.__handlers
 
 
-__collectEM = CollectEventsManager()
+__collectEM = _CollectEventsManager()
 
 def registerScaleformBattlePackages(guiType, packages):
 
@@ -636,18 +633,6 @@ def collectIngameHelpPagesBuilders():
     return __collectEM.handleEvent(INGAME_HELP_PAGES_BUILDERS, {'builders': []})['builders']
 
 
-def registerIngameHelpPagesFilters(guiType, filterCls):
-
-    def onCollect(ctx):
-        ctx['helpPageFilter'].append(filterCls)
-
-    __collectEM.addListener((INGAME_HELP_PAGES_FILTERS, guiType), onCollect)
-
-
-def collectIngameHelpPagesFilters(guiType):
-    return __collectEM.handleEvent((INGAME_HELP_PAGES_FILTERS, guiType), ctx={'helpPageFilter': []})['helpPageFilter']
-
-
 def registerQuestBuilder(questBuilder):
 
     def onCollect(ctx):
@@ -1022,27 +1007,3 @@ def registerIgnoredModeForAutoSelectVehicle(modeFlags):
 
 def collectIgnoredModeForAutoSelectVehicle():
     return __collectEM.handleEvent(IGNORED_MODE_FOR_AUTO_SELECTED_VEHICLE, ctx=[])
-
-
-def registerPostbattleSquadFinder(guiType, squadFinderClass):
-
-    def onCollect(ctx):
-        ctx['pbs_squad_finder_data'] = squadFinderClass
-
-    __collectEM.addListener((POSTBATTLE_SQUAD_FINDER, guiType), onCollect)
-
-
-def collectPostbattleSquadFinder(guiType):
-    return __collectEM.handleEvent((POSTBATTLE_SQUAD_FINDER, guiType), ctx={}).get('pbs_squad_finder_data', None)
-
-
-def registerPostmortemInfoView(guiType, viewCls):
-
-    def onCollect(ctx):
-        ctx['postmortem_info_view'] = viewCls
-
-    __collectEM.addListener((POSTMORTEM_INFO_VIEW, guiType), onCollect)
-
-
-def collectPostmortemInfoView(guiType):
-    return __collectEM.handleEvent((POSTMORTEM_INFO_VIEW, guiType), ctx={}).get('postmortem_info_view', None)

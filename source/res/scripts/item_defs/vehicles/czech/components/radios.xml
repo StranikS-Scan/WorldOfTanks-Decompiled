@@ -12,6 +12,7 @@
     <Radiostanice_R_113>	9	</Radiostanice_R_113>
     <Radiostanice_RM_31T_A>	10	</Radiostanice_RM_31T_A>
     <Radiostanice_RM_31T_A_CN>	12	</Radiostanice_RM_31T_A_CN>
+    <Radiostanice_R113S>	13	</Radiostanice_R113S>
     <Lorenz_vz_38>	15	</Lorenz_vz_38>
     <Radiostanice_RM_31T_56G>	17	</Radiostanice_RM_31T_56G>
     <Radiostanice_R_123T>	18	</Radiostanice_R_123T>
@@ -19,6 +20,9 @@
     <Radiostanice_R_123S>	22	</Radiostanice_R_123S>
     <Radiostanice_R_123>	23	</Radiostanice_R_123>
     <Radiostanice_R_120_DBV>	25	</Radiostanice_R_120_DBV>
+    <_10_RT_26>	28	</_10_RT_26>
+    <Radiostanice_R_113_JA>	29	</Radiostanice_R_113_JA>
+    <_10_RT_26L>	30	</_10_RT_26L>
     <Development_Radio>	65000	</Development_Radio>
   </ids>
   <shared>
@@ -135,6 +139,30 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </Radiostanice_RM_31T>
+    <_10_RT_26>
+      <userString>	#czech_vehicles:_10_RT_26	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	30000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	60	</weight>
+      <distance>	570	</distance>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	2.5	</repairCost>
+    </_10_RT_26>
+    <_10_RT_26L>
+      <userString>	#czech_vehicles:_10_RT_26L	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	40000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	60	</weight>
+      <distance>	670	</distance>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </_10_RT_26L>
     <Radiostanice_RM_31T_56G>
       <userString>	#czech_vehicles:Radiostanice_RM_31T_56G	</userString>
       <tags></tags>
@@ -159,6 +187,18 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </Radiostanice_RM_31T_A>
+    <Radiostanice_R113S>
+      <userString>	#czech_vehicles:Radiostanice_R113S	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	55000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	80	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	230	</maxHealth>
+      <maxRegenHealth>	115	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </Radiostanice_R113S>
     <Radiostanice_R_113>
       <userString>	#czech_vehicles:Radiostanice_R_113	</userString>
       <tags></tags>
@@ -170,6 +210,18 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </Radiostanice_R_113>
+    <Radiostanice_R_113_JA>
+      <userString>	#czech_vehicles:Radiostanice_R_113_JA	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	40000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	80	</weight>
+      <distance>	670	</distance>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </Radiostanice_R_113_JA>
     <Radiostanice_R_120_DBV>
       <userString>	#czech_vehicles:Radiostanice_R_120_DBV	</userString>
       <tags></tags>

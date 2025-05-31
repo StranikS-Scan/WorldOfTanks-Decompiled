@@ -11,7 +11,6 @@ from gui.shared.formatters import text_styles
 
 class FunRandomHelpPagesBuilder(DetailedHelpPagesBuilder, FunSubModesWatcher):
     _SUITABLE_CTX_KEYS = ('isFunRandom',)
-    HINT_CONTEXT = HelpHintContext.FUN_RANDOM
 
     @classmethod
     def priority(cls):
@@ -26,10 +25,10 @@ class FunRandomHelpPagesBuilder(DetailedHelpPagesBuilder, FunSubModesWatcher):
         localsRoot = battleSubMode.getLocalsResRoot()
         commonTitle = backport.text(localsRoot.detailsHelpTitle())
         for pageID, pageRes in sorted(localsRoot.detailsHelp.items()):
-            addPage(pages, commonTitle, backport.text(pageRes.title()), text_styles.mainBig(backport.text(pageRes.description())), [], [], backport.image(iconsRoot.battle_help.dyn(pageID)()), hintCtx=cls.HINT_CONTEXT)
+            addPage(pages, commonTitle, backport.text(pageRes.title()), text_styles.mainBig(backport.text(pageRes.description())), [], [], backport.image(iconsRoot.battle_help.dyn(pageID)()), hintCtx=HelpHintContext.FUN_RANDOM)
 
         return pages
 
     @classmethod
     def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
-        ctx['isFunRandom'] = arenaVisitor.getArenaGuiType() in ARENA_GUI_TYPE.FUN_RANDOM_RANGE
+        ctx['isFunRandom'] = arenaVisitor.getArenaGuiType() == ARENA_GUI_TYPE.FUN_RANDOM

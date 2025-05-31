@@ -5,7 +5,7 @@ from gui.impl.gen.view_models.views.lobby.battle_results.battle_info_model impor
 class FunRandomBattleInfoModel(BattleInfoModel):
     __slots__ = ()
 
-    def __init__(self, properties=9, commands=0):
+    def __init__(self, properties=8, commands=0):
         super(FunRandomBattleInfoModel, self).__init__(properties=properties, commands=commands)
 
     def getAssetsPointer(self):
@@ -20,14 +20,7 @@ class FunRandomBattleInfoModel(BattleInfoModel):
     def setSubModeAssetsPointer(self, value):
         self._setString(7, value)
 
-    def getBattleType(self):
-        return self._getString(8)
-
-    def setBattleType(self, value):
-        self._setString(8, value)
-
     def _initialize(self):
         super(FunRandomBattleInfoModel, self)._initialize()
         self._addStringProperty('assetsPointer', 'undefined')
         self._addStringProperty('subModeAssetsPointer', 'undefined')
-        self._addStringProperty('battleType', 'standard')

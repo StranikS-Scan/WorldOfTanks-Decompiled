@@ -4,7 +4,6 @@ import BattleReplay
 from ReservesEvents import randomReservesEvents
 from frontline_common.constants import CallbackDataNames
 from frontline.FLReplayController import FLReplayController
-from debug_utils import LOG_DEBUG_DEV
 from skeletons.gui.battle_session import IBattleSessionProvider
 from helpers import dependency
 from script_component.DynamicScriptComponent import DynamicScriptComponent
@@ -24,7 +23,6 @@ class FLAvatarComponent(DynamicScriptComponent):
         FLReplayController.setDataCallback(CallbackDataNames.FL_MODIFIER, randomReservesEvents.onChangedReservesModifier)
 
     def callCtrl(self, func, *args):
-        LOG_DEBUG_DEV('FLVehicleRespawnComponent::{}'.format(func), args)
         respawnCtrl = self.__guiSessionProvider.dynamic.respawn
         if respawnCtrl:
             getattr(respawnCtrl, func, lambda *x: None)(*args)

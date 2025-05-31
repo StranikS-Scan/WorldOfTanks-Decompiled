@@ -103,15 +103,12 @@ class BattleLoading(BaseBattleLoadingMeta, IArenaVehiclesController):
     def _addArenaTypeData(self):
         self.as_setMapIconS(self._arenaVisitor.getArenaIcon('battleLoading'))
 
-    def _getSettingsID(self, loadingInfo):
-        return self.settingsCore.options.getSetting(loadingInfo).getSettingID(isVisualOnly=self._arenaVisitor.gui.isEventBattle())
+    def _getSettingsID(self, loadingInfo, tip):
+        return self.settingsCore.options.getSetting(loadingInfo).getSettingID(isVisualOnly=self._arenaVisitor.gui.isEventBattle()) if tip is not None and tip.isValid() else BattleLoadingTipSetting.OPTIONS.TEXT
 
     def _makeVisualTipVO(self, arenaDP, tip=None):
         loadingInfo = settings_constants.GAME.BATTLE_LOADING_RANKED_INFO if self._arenaVisitor.gui.isRankedBattle() else settings_constants.GAME.BATTLE_LOADING_INFO
-        if tip is not None and tip.isValid():
-            settingID = self._getSettingsID(loadingInfo)
-        else:
-            settingID = BattleLoadingTipSetting.OPTIONS.TEXT
+        settingID = self._getSettingsID(loadingInfo, tip)
         tipIconPath = self.gui.resourceManager.getImagePath(tip.icon)
         vo = {'settingID': settingID,
          'tipIcon': tipIconPath if settingID == BattleLoadingTipSetting.OPTIONS.VISUAL else None,

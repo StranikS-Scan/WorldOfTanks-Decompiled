@@ -59,7 +59,7 @@ class IngameSoundNotifications(CallbackDelayer, TimeDeltaMeter):
         self.__vseContextClass = self.__importVSEContextClass(planContextPath)
         self.__readConfigs()
         self._vsePlan = VSE.Plan()
-        self._vsePlan.load(planPath, 'CLIENT')
+        self._vsePlan.load(planPath, '', 'CLIENT')
         self.__soundNotificationsContext = None
         return
 

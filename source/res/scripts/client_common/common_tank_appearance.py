@@ -215,6 +215,7 @@ class CommonTankAppearance(ScriptGameObject):
         self._loadingQueue = []
         self.__customEffectsEnabled = True
         self.__useEngStartControlIdle = False
+        self.__ignoreEngineStart = False
         self._swingingAnimator = CGF.ComponentLink(Vehicular.SwingingAnimator)
         self._gunRecoilLink = CGF.ComponentLink(Vehicular.GunRecoilComponent)
         self._gunAnimators = GunAnimators()
@@ -348,7 +349,9 @@ class CommonTankAppearance(ScriptGameObject):
             self.engineAudition.setIsInWaterInfo(DataLinks.createBoolLink(self.waterSensor, 'isInWater'))
         self.__postSetupFilter()
         compoundModel.setPartBoundingBoxAttachNode(TankPartIndexes.GUN, TankNodeNames.GUN_INCLINATION)
-        vehicle_composition.createVehicleComposition(self.gameObject)
+        prefabMap = [ CGF.PrefabsMapItem(attachment.slotName, attachment.modelName) for attachment in self.__attachments if not attachment.hiddenForUser ]
+        extraSlots = vehicle_composition.getExtraSlotMap(self.typeDescriptor, self)
+        vehicle_composition.createVehicleComposition(self.gameObject, prefabMap=prefabMap, followNodes=True, extraSlots=extraSlots)
         camouflages.updateFashions(self)
         if self.damageState.isCurrentModelUndamaged:
             model_assembler.assembleCustomLogicComponents(self, self.typeDescriptor, self.__attachments, self.__modelAnimators)
@@ -427,6 +430,12 @@ class CommonTankAppearance(ScriptGameObject):
 
         self._chassisDecal.detach()
         self._detachStickers()
+
+    def setIgnoreEngineStart(self):
+        self.__ignoreEngineStart = True
+
+    def isIgnoreEngineStart(self):
+        return self.__ignoreEngineStart
 
     def setSwingingAnimator(self, gameObject):
         self._swingingAnimator.set(gameObject)
@@ -556,7 +565,7 @@ class CommonTankAppearance(ScriptGameObject):
         else:
             if self.vehicleStickers is not None:
                 self._destroyStickers()
-            self._vehicleStickers = VehicleStickers(self.spaceID, self.typeDescriptor, outfit=self.outfit)
+            self._vehicleStickers = VehicleStickers(self.spaceID, self.gameObject, self.typeDescriptor, outfit=self.outfit)
             return
 
     def _destroyStickers(self):
@@ -661,9 +670,12 @@ class CommonTankAppearance(ScriptGameObject):
             htManager.setStatus(modelStatus)
 
     def _onEngineStart(self):
-        if self.engineAudition is not None:
-            self.engineAudition.onEngineStart()
-        return
+        if self.__ignoreEngineStart:
+            return
+        else:
+            if self.engineAudition is not None:
+                self.engineAudition.onEngineStart()
+            return
 
     def __assembleNonDamagedOnly(self, resourceRefs, isPlayer, lodLink, lodStateLink):
         multiGun = self.typeDescriptor.turret.multiGun

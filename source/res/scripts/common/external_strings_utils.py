@@ -6,6 +6,7 @@ import unicodedata
 from debug_utils import LOG_CURRENT_EXCEPTION
 from constants import CREDENTIALS_RESTRICTION, CREDENTIALS_RESTRICTION_SET
 from soft_exception import SoftException
+from struct_helpers import unpackByte, packByte
 _MAX_NORMALIZED_NAME_BYTES = 96
 
 class TextRestrictionsBasic(object):
@@ -206,7 +207,7 @@ def isClanNameValid(text):
         if not 2 <= len(utext) <= _CLAN_NAME_MAX_LENGTH:
             return False
         for word in utext.split(' '):
-            if not word or any(map(lambda c: ord(c) < 32, word)):
+            if not word or any(map(lambda c: unpackByte(c) < 32, word)):
                 return False
 
         return True
@@ -278,17 +279,17 @@ def truncate_utf8(utf8str, maxbytes):
 
 
 def _is_utf8_one_byte(byte):
-    o = ord(byte)
+    o = unpackByte(byte)
     return 127 & o == o
 
 
 def _is_utf8_first_byte(byte):
-    o = ord(byte)
+    o = unpackByte(byte)
     return 191 & o != o
 
 
 def _decode_utf8_len_byte(byte):
-    o = ord(byte)
+    o = unpackByte(byte)
     v = 240 & o
     if v >= 240:
         return 4

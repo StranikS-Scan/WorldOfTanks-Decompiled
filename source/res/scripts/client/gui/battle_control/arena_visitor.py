@@ -275,13 +275,10 @@ class _ArenaGuiTypeVisitor(IArenaVisitor):
         self._guiType = _GUI_TYPE.UNKNOWN
 
     def isRandomBattle(self):
-        return self._guiType in _GUI_TYPE.RANDOM_RANGE
+        return self._guiType in (_GUI_TYPE.EPIC_RANDOM, _GUI_TYPE.RANDOM)
 
     def isBattleChatSupported(self):
         return self._guiType in _GUI_TYPE.BATTLE_CHAT_SETTING_SUPPORTED
-
-    def isNonDesertionArena(self):
-        return self._guiType in _GUI_TYPE.NON_DESERTION_ARENAS
 
     def isEventBattle(self):
         return self._guiType == _GUI_TYPE.EVENT_BATTLES

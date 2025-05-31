@@ -329,22 +329,6 @@ class MultiSlot(object):
         return result
 
 
-class SizableMultiSlot(MultiSlot):
-    __slots__ = ()
-
-    def append(self, intCD, component=None):
-        newRegion = self.capacity()
-        self._regions.append(newRegion)
-        super(SizableMultiSlot, self).set(intCD, newRegion, component)
-
-    def clear(self):
-        super(SizableMultiSlot, self).clear()
-        self._regions = []
-
-    def _cloneEmpty(self):
-        return SizableMultiSlot(self.getTypes(), self.getRegions())
-
-
 class ProjectionDecalsMultiSlot(MultiSlot):
     __slots__ = ('_limit', '_order')
 

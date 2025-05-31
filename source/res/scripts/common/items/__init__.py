@@ -6,6 +6,7 @@ from constants import IS_CLIENT, ITEM_DEFS_PATH
 from extension_utils import ResMgr
 from items import _xml
 from soft_exception import SoftException
+from struct_helpers import unpackByte, packByte
 if IS_CLIENT:
     from helpers import i18n
 _g_itemTypes = None
@@ -207,9 +208,9 @@ def getTypeOfCompactDescr(compactDescr):
             if 0 != itemTypeID <= 15:
                 raise SoftException("value is not a 'compact descriptor'")
     else:
-        itemTypeID = ord(compactDescr[0]) & 15
+        itemTypeID = unpackByte(compactDescr[0]) & 15
         if itemTypeID == 0:
-            itemTypeID = ord(compactDescr[1])
+            itemTypeID = unpackByte(compactDescr[1])
         elif itemTypeID in SIMPLE_ITEM_TYPE_INDICES:
             itemTypeID = itemTypeID - 2
     if itemTypeID >= len(ITEM_TYPE_NAMES):

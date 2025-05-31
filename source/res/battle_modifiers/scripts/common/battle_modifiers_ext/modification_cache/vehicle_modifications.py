@@ -8,7 +8,6 @@ from battle_modifiers_ext.modification_cache.modification_cache import Modificat
 from constants import IS_CELLAPP, IS_CLIENT, SHELL_TYPES, SHELL_MECHANICS_TYPE, VEHICLE_MODE
 from math import tan, atan, cos, acos
 from items.components.component_constants import DEFAULT_GUN_CLIP, DEFAULT_GUN_BURST, DEFAULT_GUN_AUTORELOAD, DEFAULT_GUN_DUALGUN, KMH_TO_MS, MS_TO_KMH, DEFAULT_GUN_AUTOSHOOT, DynamicShotEffect, ZERO_FLOAT, DEFAULT_GUN_TWINGUN
-from items.components.shell_components import createShellType
 from typing import TYPE_CHECKING, Optional, Type, Dict, Tuple
 from Math import Vector2
 from debug_utils import LOG_DEBUG
@@ -43,8 +42,6 @@ class VehicleModifier(object):
             damageByStaticsChances = vehType.damageByStaticsChances
             vehType.damageByStaticsChances = {'tankman': modifiers(BattleParams.ENV_TANKMAN_DAMAGE_CHANCE, damageByStaticsChances['tankman']),
              'module': modifiers(BattleParams.ENV_MODULE_DAMAGE_CHANCE, damageByStaticsChances['module'])}
-            if IS_CLIENT:
-                vehType.effects = cls.__modifyVehicleEffects(vehType.effects, modifiers)
         if modifiers.haveDomain(ModifierDomain.CHASSIS):
             vehType.chassis = tuple((cls.__modifyChassis(chassis, modifiers) for chassis in vehType.chassis))
         if modifiers.haveDomain(ModifierDomain.TURRET_COMPONENTS):
@@ -135,11 +132,11 @@ class VehicleModifier(object):
             if gun.autoShoot != DEFAULT_GUN_AUTOSHOOT:
                 gun.autoShoot = gun.autoShoot._replace(shotDispersionPerSec=modifiers(BattleParams.AUTO_SHOOT_DISPERSION_PER_SEC, gun.autoShoot.shotDispersionPerSec), maxShotDispersion=modifiers(BattleParams.AUTO_SHOOT_MAX_SHOT_DISPERSION_FACTOR, gun.autoShoot.maxShotDispersion))
         if modifiers.haveDomain(ModifierDomain.SHOT_COMPONENTS):
-            gun.shots = tuple((cls.__modifyShot(gun, shot, modifiers) for shot in gun.shots))
+            gun.shots = tuple((cls.__modifyShot(shot, modifiers) for shot in gun.shots))
         return gun
 
     @classmethod
-    def __modifyShot(cls, gun, shot, modifiers):
+    def __modifyShot(cls, shot, modifiers):
         if DEBUG_MODIFIERS:
             LOG_DEBUG("[BattleModifiers][Debug] Modify shell '{}'".format(shot.shell.name))
         modifiers.modificationCtx['shell'] = shot.shell
@@ -155,13 +152,13 @@ class VehicleModifier(object):
             piercingPower = shot.piercingPower
             shot.piercingPower = Vector2(modifiers(BattleParams.PIERCING_POWER_FIRST, piercingPower[0]), modifiers(BattleParams.PIERCING_POWER_LAST, piercingPower[1]))
         if modifiers.haveDomain(ModifierDomain.SHELL_COMPONENTS):
-            shot.shell = cls.__modifyShell(gun, shot.shell, modifiers)
+            shot.shell = cls.__modifyShell(shot.shell, modifiers)
         from helpers_common import computeShotMaxDistance
         shot.maxDistance = computeShotMaxDistance(shot, modifiers)
         return shot
 
     @classmethod
-    def __modifyShell(cls, gun, shell, modifiers):
+    def __modifyShell(cls, shell, modifiers):
         shell = copy.copy(shell)
         if modifiers.haveDomain(ModifierDomain.SHELL):
             shell.damageRandomization = modifiers(BattleParams.DAMAGE_RANDOMIZATION, shell.damageRandomization)
@@ -183,16 +180,12 @@ class VehicleModifier(object):
             shell.dynamicEffectsIndexes = tuple(newDynamicEffectsIndexes)
             modifiers.modificationCtx.pop('shotsCount')
         if modifiers.haveDomain(ModifierDomain.SHELL_TYPE):
-            shell.type = cls.__modifyShellType(gun, shell, shell.type, modifiers)
+            shell.type = cls.__modifyShellType(shell.type, modifiers)
         return shell
 
     @classmethod
-    def __modifyShellType(cls, gun, shell, shellType, modifiers):
-        if BattleParams.CHANGE_SHELL_TYPE in modifiers:
-            shellType = createShellType(modifiers(BattleParams.CHANGE_SHELL_TYPE, None))
-            shell.stun = None
-        else:
-            shellType = copy.copy(shellType)
+    def __modifyShellType(cls, shellType, modifiers):
+        shellType = copy.copy(shellType)
         isArmorPiercing = shellType.name.startswith('ARMOR_PIERCING')
         isHollowCharge = shellType.name == SHELL_TYPES.HOLLOW_CHARGE
         isHE = shellType.name == SHELL_TYPES.HIGH_EXPLOSIVE
@@ -202,11 +195,6 @@ class VehicleModifier(object):
         if BattleParams.RICOCHET_ANGLE in modifiers and (isArmorPiercing or isHollowCharge):
             initAngle = acos(shellType.ricochetAngleCos)
             shellType.ricochetAngleCos = cos(modifiers(BattleParams.RICOCHET_ANGLE, initAngle))
-        if isHE and BattleParams.CALIBER_TO_EXPLOSION_RADIUS in modifiers:
-            if 'autoShoot' in gun.tags:
-                shellType.explosionRadius = 0
-            else:
-                shellType.explosionRadius = modifiers(BattleParams.CALIBER_TO_EXPLOSION_RADIUS, shell.caliber)
         if isModernHE and shellType.armorSpalls.isActive:
             armorSpalls = copy.copy(shellType.armorSpalls)
             armorSpalls.radius = modifiers(BattleParams.ARMOR_SPALLS_IMPACT_RADIUS, armorSpalls.radius)
@@ -245,11 +233,10 @@ class VehicleModifier(object):
             LOG_DEBUG('[BattleModifiers][Debug] Modify hull')
         hull = copy.copy(hull)
         if IS_CLIENT:
-            customEffects = tuple((copy.copy(descr) for descr in hull.customEffects))
-            for descr in customEffects:
-                descr.descriptors = {tag:modifiers(BattleParams.EXHAUST_EFFECTS, value) for tag, value in descr.descriptors.items()}
+            for descr in hull.customEffects:
+                for tag, value in descr.descriptors.items():
+                    descr.descriptors[tag] = modifiers(BattleParams.EXHAUST_EFFECT, value)
 
-            hull.customEffects = customEffects
         return hull
 
     @classmethod
@@ -294,15 +281,6 @@ class VehicleModifier(object):
             engine['smplFwMaxSpeed'] = msSpeed * MS_TO_KMH
 
         return physics
-
-    @classmethod
-    def __modifyVehicleEffects(cls, vehEffects, modifiers):
-        if DEBUG_MODIFIERS:
-            LOG_DEBUG('[BattleModifiers][Debug] Modify vehicle effects')
-        effects = copy.copy(vehEffects)
-        efType = 'destruction'
-        effects[efType] = modifiers(BattleParams.DESTRUCTION_EFFECT, effects[efType])
-        return effects
 
 
 class VehicleModificationCache(ModificationCache):

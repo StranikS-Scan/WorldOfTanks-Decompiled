@@ -6,12 +6,12 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.common.opt_device_ammunitio
 class OptDevicesPresetSlotModel(OptDeviceAmmunitionSlot):
     __slots__ = ()
 
-    def __init__(self, properties=18, commands=0):
+    def __init__(self, properties=17, commands=0):
         super(OptDevicesPresetSlotModel, self).__init__(properties=properties, commands=commands)
 
     @property
     def info(self):
-        return self._getViewModel(17)
+        return self._getViewModel(16)
 
     @staticmethod
     def getInfoType():

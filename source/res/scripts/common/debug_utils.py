@@ -79,7 +79,7 @@ def init():
     if not (IS_CLIENT or IS_BOT):
 
         def splitMessageIntoChunks(prefix, msg, func):
-            if prefix not in ('EXCEPTION', 'CRITICAL'):
+            if len(msg) >= 8960 and prefix not in ('EXCEPTION', 'CRITICAL'):
                 msg = msg[:8960]
             blockSize = 1792
             with _g_logLock:

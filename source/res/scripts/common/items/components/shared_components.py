@@ -63,9 +63,9 @@ class ProjectionDecalSlotDescription(object):
 
 class AttachmentSlotDescription(object):
     __metaclass__ = ReflectionMetaclass
-    __slots__ = ('type', 'slotId', 'position', 'rotation', 'scale', 'attachNode', 'hiddenForUser', 'applyType', 'size')
+    __slots__ = ('type', 'slotId', 'position', 'rotation', 'scale', 'attachNode', 'hiddenForUser', 'applyType', 'size', 'hangerId', 'hangerRotation')
 
-    def __init__(self, slotType='', slotId=0, position=None, rotation=None, scale=None, attachNode=None, hiddenForUser=False, applyType='', size=''):
+    def __init__(self, slotType='', slotId=0, position=None, rotation=None, scale=None, attachNode=None, hiddenForUser=False, applyType='', size='', hangerId=0, hangerRotation=None):
         self.type = slotType
         self.slotId = slotId
         self.position = position
@@ -75,6 +75,8 @@ class AttachmentSlotDescription(object):
         self.hiddenForUser = hiddenForUser
         self.applyType = applyType
         self.size = size
+        self.hangerId = hangerId
+        self.hangerRotation = hangerRotation
 
     @property
     def scaleFactorId(self):

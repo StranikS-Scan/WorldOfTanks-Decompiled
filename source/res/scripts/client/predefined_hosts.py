@@ -531,7 +531,7 @@ class _PreDefinedHostList(object):
     def roamingHosts(self):
         p = BigWorld.player()
         result = []
-        if hasattr(p, 'serverSettings'):
+        if hasattr(p, 'serverSettings') and 'roaming' in p.serverSettings:
             for peripheryID, name, shortName, host, keyPath in p.serverSettings['roaming'][3]:
                 result.append(self._makeHostItem(name, shortName, host, keyPath=keyPath, peripheryID=peripheryID))
 

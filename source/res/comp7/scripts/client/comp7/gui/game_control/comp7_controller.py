@@ -144,7 +144,8 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
 
     @property
     def qualificationBattlesNumber(self):
-        return self.getModeSettings().qualification.battlesNumber
+        modeSettings = self.getModeSettings()
+        return modeSettings.qualification.battlesNumber if modeSettings else None
 
     @property
     def qualificationBattlesStatuses(self):

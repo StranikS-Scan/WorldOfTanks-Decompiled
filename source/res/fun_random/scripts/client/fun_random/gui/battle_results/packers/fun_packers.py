@@ -6,7 +6,6 @@ from fun_random.gui.battle_results.packers.fun_progression_helpers import FunPbs
 from fun_random.gui.battle_results.pbs_helpers import getTotalTMenXPToShow, getTotalGoldToShow, getEventID, isCreditsShown, isGoldShown, isXpShown, isFreeXpShown, isTmenXpShown, isCrystalShown, isFunAddXpBonusStatusAcceptable
 from fun_random.gui.feature.util.fun_helpers import isFunProgressionUnlimitedTrigger
 from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin, FunSubModesWatcher, FunProgressionWatcher
-from fun_random.gui.impl.gen.view_models.views.lobby.feature.battle_results.fun_battle_type import FunBattleType
 from fun_random.gui.impl.gen.view_models.views.lobby.feature.battle_results.fun_player_model import FunPlayerModel
 from fun_random.gui.impl.gen.view_models.views.lobby.feature.battle_results.fun_random_reward_item_model import FunRandomRewardItemModel, FunRewardTypes
 from fun_random.gui.impl.lobby.common.fun_view_helpers import packStageRewards, sortFunProgressionBonuses
@@ -25,7 +24,6 @@ from helpers import time_utils
 
 class FunRandomBattleInfo(BattleInfo, FunAssetPacksMixin, FunSubModesWatcher):
     __slots__ = ()
-    _BATTLE_TYPE = FunBattleType.STANDARD
 
     @classmethod
     def packModel(cls, model, battleResults):
@@ -34,7 +32,6 @@ class FunRandomBattleInfo(BattleInfo, FunAssetPacksMixin, FunSubModesWatcher):
         model.setAssetsPointer(cls.getModeAssetsPointer())
         subMode = cls.getSubMode(getEventID(battleResults.reusable))
         model.setSubModeAssetsPointer(subMode.getAssetsPointer())
-        model.setBattleType(cls._BATTLE_TYPE)
 
 
 class FunRandomPersonalEfficiency(PersonalEfficiency, FunSubModesWatcher):

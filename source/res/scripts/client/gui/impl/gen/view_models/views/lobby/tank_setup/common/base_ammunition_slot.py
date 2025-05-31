@@ -6,7 +6,7 @@ from frameworks.wulf import ViewModel
 class BaseAmmunitionSlot(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=13, commands=0):
+    def __init__(self, properties=12, commands=0):
         super(BaseAmmunitionSlot, self).__init__(properties=properties, commands=commands)
 
     def getId(self):
@@ -81,12 +81,6 @@ class BaseAmmunitionSlot(ViewModel):
     def setCategoryImgSource(self, value):
         self._setResource(11, value)
 
-    def getNonRemovable(self):
-        return self._getBool(12)
-
-    def setNonRemovable(self, value):
-        self._setBool(12, value)
-
     def _initialize(self):
         super(BaseAmmunitionSlot, self)._initialize()
         self._addNumberProperty('id', 0)
@@ -101,4 +95,3 @@ class BaseAmmunitionSlot(ViewModel):
         self._addStringProperty('overlayType', '')
         self._addStringProperty('highlightType', '')
         self._addResourceProperty('categoryImgSource', R.invalid())
-        self._addBoolProperty('nonRemovable', False)

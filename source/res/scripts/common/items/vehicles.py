@@ -54,6 +54,7 @@ from material_kinds import IDS_BY_NAMES
 from items.customization_slot_tags_validator import getDirectionAndFormFactorTags
 from extension_utils import ResMgr, importClass
 from battle_modifiers_common import BattleParams, BattleModifiers, ModifiersContext
+from struct_helpers import unpackByte, packByte
 if IS_UE_EDITOR:
     from meta_objects.items.vehicle_items_meta.utils import getEffectNameByEffect
     from combined_data_section import CombinedDataSection
@@ -472,7 +473,7 @@ class VehicleDescriptor(object):
             ext = vehicleTypeID >> 8
             header += EXTENDED_VEHICLE_TYPE_ID_FLAG if ext else 0
             compactDescr = struct.pack('<2B', header, vehicleTypeID & 255)
-            compactDescr += chr(ext) if ext else ''
+            compactDescr += packByte(ext) if ext else ''
             compactDescr += struct.pack('<6HB', type.chassis[0].id[1], type.engines[0].id[1], type.fuelTanks[0].id[1], type.radios[0].id[1], turretDescr.id[1], turretDescr.guns[0].id[1], 0)
         self.__initFromCompactDescr(compactDescr, vehMode, vehType)
         self.__applyExternalData(extData)
@@ -1078,7 +1079,7 @@ class VehicleDescriptor(object):
         for idx, item in enumerate(self.playerInscriptions):
             if item[0] is not None:
                 emblemPositions |= 1 << idx + 4
-                inscriptions += _packIDAndDuration(item[0], item[1], item[2]) + chr(item[3])
+                inscriptions += _packIDAndDuration(item[0], item[1], item[2]) + packByte(item[3])
 
         camouflages = ''
         for item in self.camouflages:
@@ -1472,7 +1473,7 @@ class VehicleDescriptor(object):
                      None]
                     for idx in _RANGE_4:
                         if emblemPositions & 1 << idx + 4:
-                            slots[idx] = _unpackIDAndDuration(inscriptions[:6]) + (ord(inscriptions[6]),)
+                            slots[idx] = _unpackIDAndDuration(inscriptions[:6]) + (unpackByte(inscriptions[6]),)
                             inscriptions = inscriptions[7:]
                             customization['inscriptions'][slots[idx][0]]
                             customization['inscriptionColors'][slots[idx][3]]
@@ -2601,10 +2602,6 @@ class Cache(object):
     def exhaustEffect(self, effectName):
         return self.__customEffects['exhaust'].get(effectName) if 'exhaust' in self.__customEffects else None
 
-    @property
-    def exhaustEffects(self):
-        return self.__customEffects.get('exhaust', {})
-
     def customization20(self, createNew=True):
         if self.__customization20 is None and createNew:
             from items.components.c11n_components import CustomizationCache
@@ -2982,7 +2979,7 @@ class VehicleList(object):
 def parseVehicleCompactDescr(compactDescr):
     header, vehicleTypeID = struct.unpack('2B', compactDescr[:2])
     if header & EXTENDED_VEHICLE_TYPE_ID_FLAG:
-        vehicleTypeID += ord(compactDescr[2]) << 8
+        vehicleTypeID += unpackByte(compactDescr[2]) << 8
     return (header >> 4 & 15, vehicleTypeID)
 
 
@@ -3104,7 +3101,7 @@ def stripCustomizationFromVehicleCompactDescr(compactDescr, stripEmblems=True, s
         remainedInscriptions = ''
         for pos in _RANGE_4:
             if emblemSlots & 1 << pos + 4:
-                inscrInfo = _unpackIDAndDuration(inscriptions[:6]) + (ord(inscriptions[6]),)
+                inscrInfo = _unpackIDAndDuration(inscriptions[:6]) + (unpackByte(inscriptions[6]),)
                 if keepInfinite and inscrInfo[2] == 0:
                     remainedInscriptions += inscriptions[:7]
                 else:
@@ -7216,11 +7213,11 @@ def _summPriceDiff(price, priceAdd, priceSub):
 
 
 def _splitVehicleCompactDescr(compactDescr, vehMode=VEHICLE_MODE.DEFAULT, vehType=None):
-    header = ord(compactDescr[0])
+    header = unpackByte(compactDescr[0])
     vehTypeOffset = 0
-    vehicleTypeID = ord(compactDescr[1])
+    vehicleTypeID = unpackByte(compactDescr[1])
     if header & EXTENDED_VEHICLE_TYPE_ID_FLAG:
-        vehicleTypeID += ord(compactDescr[2]) << 8
+        vehicleTypeID += unpackByte(compactDescr[2]) << 8
         vehTypeOffset += 1
     nationID = header >> 4 & 15
     if vehType is None:
@@ -7229,7 +7226,7 @@ def _splitVehicleCompactDescr(compactDescr, vehMode=VEHICLE_MODE.DEFAULT, vehTyp
         type = vehType
     idx = 10 + vehTypeOffset + len(type.turrets) * 4
     components = compactDescr[2 + vehTypeOffset:idx]
-    flags = ord(compactDescr[idx])
+    flags = unpackByte(compactDescr[idx])
     idx += 1
     count = 0
     optionalDeviceSlots = 0
@@ -7241,13 +7238,13 @@ def _splitVehicleCompactDescr(compactDescr, vehMode=VEHICLE_MODE.DEFAULT, vehTyp
     optionalDevices = compactDescr[idx:idx + count * 2]
     idx += count * 2
     if flags & 16:
-        count = ord(compactDescr[idx])
+        count = unpackByte(compactDescr[idx])
         enhancements = compactDescr[idx:idx + 1 + count * 6]
         idx += 1 + count * 6
     else:
         enhancements = ''
     if flags & 32:
-        emblemPositions = ord(compactDescr[idx])
+        emblemPositions = unpackByte(compactDescr[idx])
         idx += 1
         count = 0
         for i in _RANGE_4:
@@ -7294,15 +7291,15 @@ def _combineVehicleCompactDescr(type, components, optionalDeviceSlots, optionalD
         flags |= 32
     if camouflages:
         flags |= 128
-    vehTypeCD = chr(vehicleTypeID & 255)
+    vehTypeCD = packByte(vehicleTypeID & 255)
     if vehicleTypeID > 255:
-        vehTypeCD += chr(vehicleTypeID >> 8)
+        vehTypeCD += packByte(vehicleTypeID >> 8)
         header += EXTENDED_VEHICLE_TYPE_ID_FLAG
-    cd = chr(header) + vehTypeCD + components + chr(flags) + optionalDevices
+    cd = packByte(header) + vehTypeCD + components + packByte(flags) + optionalDevices
     if enhancements:
         cd += enhancements
     if emblems or inscriptions:
-        cd += chr(emblemPositions) + emblems + inscriptions
+        cd += packByte(emblemPositions) + emblems + inscriptions
     if camouflages:
         cd += camouflages
     return cd

@@ -13,7 +13,7 @@ import VehicleStickers
 import Vehicular
 import math_utils
 from dossiers2.ui.achievements import MARK_ON_GUN_RECORD
-from items.components.c11n_constants import EASING_TRANSITION_DURATION
+from items.components.c11n_constants import EASING_TRANSITION_DURATION, HANGER_POSTFIX
 from gui import g_tankActiveCamouflage
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.simple_turret_rotator import SimpleTurretRotator
@@ -31,7 +31,6 @@ from vehicle_systems import camouflages, vehicle_composition
 from vehicle_systems.components.vehicle_shadow_manager import VehicleShadowManager
 from vehicle_systems.tankStructure import ModelsSetParams, TankPartNames, ColliderTypes, TankPartIndexes
 from vehicle_systems.tankStructure import VehiclePartsTuple, TankNodeNames
-from vehicle_systems.components import attachment_slot_manager
 from vehicle_systems.components.vehicle_appearance_component import VehicleAppearanceComponent
 from cgf_obsolete_script.script_game_object import ComponentDescriptor, ScriptGameObject
 from vehicle_systems.stricted_loading import makeCallbackWeak
@@ -124,6 +123,7 @@ class HangarVehicleAppearance(ScriptGameObject):
     fashions = property(lambda self: self.__fashions)
     attachments = property(lambda self: self.__attachments)
     typeDescriptor = property(lambda self: self.__vDesc)
+    vehicleStickers = property(lambda self: self.__vehicleStickers)
 
     @property
     def filter(self):
@@ -544,7 +544,9 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.__setGunMatrix(gunPitchMatrix)
         if self.gameObject.findComponentByType(GenericComponents.DynamicModelComponent) is None:
             self.gameObject.createComponent(GenericComponents.DynamicModelComponent, self.compoundModel)
-        vehicle_composition.createVehicleComposition(self.gameObject, followNodes=True)
+        prefabMap = [ CGF.PrefabsMapItem(attachment.slotName, attachment.modelName) for attachment in self.__attachments if not attachment.hiddenForUser ]
+        extraSlots = vehicle_composition.getExtraSlotMap(self.__vDesc, self)
+        vehicle_composition.createVehicleComposition(self.gameObject, prefabMap=prefabMap, followNodes=True, extraSlots=extraSlots)
         return
 
     def __onItemsCacheSyncCompleted(self, updateReason, _):
@@ -730,6 +732,7 @@ class HangarVehicleAppearance(ScriptGameObject):
                 self.__onLoadedAfterRefreshCallback = partial(self.__applyCustomization, outfit, callback)
                 return
             self.__applyCustomization(outfit, None)
+            self.__outfit = outfit.copy()
             return
 
     def rotateTurretForAnchor(self, anchorId, duration=EASING_TRANSITION_DURATION):
@@ -804,7 +807,7 @@ class HangarVehicleAppearance(ScriptGameObject):
     def __updateDecals(self, outfit):
         if self.__vehicleStickers is not None:
             self.__vehicleStickers.detach()
-        self.__vehicleStickers = VehicleStickers.VehicleStickers(self.__spaceId, self.__vDesc, self._getThisVehicleDossierInsigniaRank(), outfit)
+        self.__vehicleStickers = VehicleStickers.VehicleStickers(self.__spaceId, self.gameObject, self.__vDesc, self._getThisVehicleDossierInsigniaRank(), outfit)
         self.__vehicleStickers.alpha = self.__currentEmblemsAlpha
         self.__vehicleStickers.attach(self.__vEntity.model, self.__isVehicleDestroyed, False)
         self._requestClanDBIDForStickers(self.__onClanDBIDRetrieved)
@@ -819,13 +822,50 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.__attachments = camouflages.getAttachments(outfit, self.__vDesc, self.__isVehicleDestroyed, True)
         animatorResources = camouflages.getModelAnimatorsPrereqs(outfit, self.__spaceId)
         animatorResources.extend(camouflages.getAttachmentsAnimatorsPrereqs(self.__attachments, self.__spaceId))
-        attachment_slot_manager.updateAttachments(self)
+        self.updateAttachments(outfit)
         if not self.__isVehicleDestroyed:
             if animatorResources:
                 BigWorld.loadResourceListBG(tuple(animatorResources), makeCallbackWeak(self.__onAnimatorsLoaded, self.__curBuildInd, outfit))
             else:
                 from vehicle_systems import model_assembler
                 model_assembler.assembleCustomLogicComponents(self, self.__vEntity.typeDescriptor, self.__attachments, self.__modelAnimators)
+
+    def simpleParamsConverter(self, slotParams, slotData, idx):
+        return slotParams
+
+    def updateAttachments(self, outfit):
+        diff = self.__outfit.diff(outfit)
+        backwardsDiff = outfit.diff(self.__outfit)
+        slotParamsList = camouflages.getParams(backwardsDiff, self.__vDesc, 'attachment', GUI_ITEM_TYPE.ATTACHMENT, self.simpleParamsConverter)
+        for slotParams in slotParamsList:
+            hierarchy = CGF.HierarchyManager(self.__spaceId)
+            extraGO = hierarchy.findFirstNode(self.gameObject, str(slotParams.slotId))
+            childrenGO = hierarchy.getChildren(extraGO)
+            for child in childrenGO:
+                CGF.removeGameObject(child)
+
+            hangerGO = hierarchy.findFirstNode(self.gameObject, str(slotParams.slotId) + HANGER_POSTFIX)
+            if hangerGO:
+                hangerChildrenGO = hierarchy.getChildren(hangerGO)
+                for child in hangerChildrenGO:
+                    CGF.removeGameObject(child)
+
+        CGF.clearLoadingQueue(self.__spaceId)
+        slotParamsList = camouflages.getParams(diff, self.__vDesc, 'attachment', GUI_ITEM_TYPE.ATTACHMENT, self.simpleParamsConverter)
+        for slotParams in slotParamsList:
+            for attachment in self.__attachments:
+                hierarchy = CGF.HierarchyManager(self.__spaceId)
+                child = hierarchy.findFirstNode(self.gameObject, attachment.slotName)
+                if attachment.slotName == str(slotParams.slotId):
+                    transformComponent = child.findComponentByType(GenericComponents.TransformComponent)
+                    rotationYPR = Math.Vector3(slotParams.rotation.y, slotParams.rotation.x, slotParams.rotation.z)
+                    slotTransform = math_utils.createSRTMatrix(slotParams.scale, rotationYPR, slotParams.position)
+                    transform = math_utils.createSRTMatrix(attachment.scale, attachment.rotation, Math.Vector3(0, 0, 0))
+                    transform.postMultiply(slotTransform)
+                    transformComponent.transform = transform
+                    CGF.loadGameObjectIntoHierarchy(attachment.modelName, child, Math.Vector3(0, 0, 0))
+                if attachment.slotName == str(slotParams.slotId) + HANGER_POSTFIX:
+                    CGF.loadGameObjectIntoHierarchy(attachment.modelName, child, Math.Vector3(0, 0, 0))
 
     def __updateStyleProgression(self, outfit):
         camouflages.changeStyleProgression(outfit.style, self, outfit.progressionLevel)

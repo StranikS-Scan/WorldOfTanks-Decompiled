@@ -74,6 +74,11 @@
           <destroyed>	vehicles/chinese/Ch41_WZ_111_5A/_skins/Ch41_WZ_111_5A_3Dst/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/chinese/Ch41_WZ_111_5A/_skins/Ch41_WZ_111_5A_3Dst/crash/lod0/Hull.model	</exploded>
         </Ch41_WZ_111_5A_3Dst>
+        <Ch41_WZ_111_5A_TXVII_3Dst>
+          <undamaged>	vehicles/chinese/Ch41_WZ_111_5A/_skins/Ch41_WZ_111_5A_TXVII_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/chinese/Ch41_WZ_111_5A/_skins/Ch41_WZ_111_5A_TXVII_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/chinese/Ch41_WZ_111_5A/_skins/Ch41_WZ_111_5A_TXVII_3Dst/crash/lod0/Hull.model	</exploded>
+        </Ch41_WZ_111_5A_TXVII_3Dst>
       </sets>
     </models>
     <swinging>
@@ -103,6 +108,17 @@
         <rayUp>	0.604624 0.041713 -0.795418	</rayUp>
         <size>	0.35	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
+      </slot>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	10001	</slotId>
+        <rayStart>	0.85674 0.660961 2.415841	</rayStart>
+        <rayEnd>	0.753842 0.318312 2.236967	</rayEnd>
+        <rayUp>	-0.427154 0.515909 -0.742548	</rayUp>
+        <compatibleModels>	Ch41_WZ_111_5A_TXVII_3Dst	</compatibleModels>
+        <size>	0.25	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+        <isUVProportional>	false	</isUVProportional>
       </slot>
       <slot>
         <slotType>	paint	</slotType>
@@ -926,6 +942,29 @@
         <anchorShift>	0.331168	</anchorShift>
       </slot>
       <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15072	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Ch41_WZ_111_5A_TXVII_3Dst	</compatibleModels>
+        <position>	-1.34369 1.13029 3.45906	</position>
+        <rotation>	0.219388 -0.000005 3.14156	</rotation>
+        <scale>	0.544447 0.544448 0.544448	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.754825	</clipAngle>
+        <anchorShift>	0.096511	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15073	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Ch41_WZ_111_5A_TXVII_3Dst	</compatibleModels>
+        <position>	0.000029 1.47954 -2.18376	</position>
+        <rotation>	3.14159 -0.000008 -0.00006	</rotation>
+        <scale>	0.459467 0.14 0.459465	</scale>
+        <showOn>	16	</showOn>
+        <anchorShift>	0.114589	</anchorShift>
+      </slot>
+      <slot>
         <slotType>	attachment	</slotType>
         <slotId>	18000	</slotId>
         <position>	-1.707 0.218 0.116	</position>
@@ -951,6 +990,14 @@
         <scale>	0.999949 0.999953 0.999948	</scale>
         <applyType>	universal	</applyType>
         <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18005	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <scale>	1 1 1	</scale>
+        <hiddenForUser>	true	</hiddenForUser>
       </slot>
     </customizationSlots>
     <customization>
@@ -1000,6 +1047,11 @@
             <destroyed>	vehicles/chinese/Ch41_WZ_111_5A/_skins/Ch41_WZ_111_5A_3Dst/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/chinese/Ch41_WZ_111_5A/_skins/Ch41_WZ_111_5A_3Dst/crash/lod0/Chassis.model	</exploded>
           </Ch41_WZ_111_5A_3Dst>
+          <Ch41_WZ_111_5A_TXVII_3Dst>
+            <undamaged>	vehicles/chinese/Ch41_WZ_111_5A/_skins/Ch41_WZ_111_5A_TXVII_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch41_WZ_111_5A/_skins/Ch41_WZ_111_5A_TXVII_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch41_WZ_111_5A/_skins/Ch41_WZ_111_5A_TXVII_3Dst/crash/lod0/Chassis.model	</exploded>
+          </Ch41_WZ_111_5A_TXVII_3Dst>
         </sets>
       </models>
       <traces>
@@ -1111,6 +1163,39 @@
                   <row3>	-1.833573 0.909640 0.000000	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	Ch41_WZ_111_5A_TXVII_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	1.977065 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.140187 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.356758	</row2>
+                  <row3>	0.000000 1.006310 0.009925	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.542947 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.208124	</row2>
+                  <row3>	0.000000 1.279101 0.018911	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.542950 0.000000 -0.000002	</row0>
+                  <row1>	0.000000 0.218054 0.206040	</row1>
+                  <row2>	0.000000 -0.537435 0.568769	</row2>
+                  <row3>	0.000001 1.291644 3.597057	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.782459 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.401334	</row2>
+                  <row3>	-1.833573 0.909640 0.000000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.542950 -0.000027 0.000033	</row0>
+                  <row1>	-0.000004 -0.173263 0.244908	</row1>
+                  <row2>	0.000000 -0.638816 -0.451940	</row2>
+                  <row3>	0.000000 1.088693 -3.585640	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -1207,6 +1292,39 @@
                   <row1>	0.000000 0.782459 0.000000	</row1>
                   <row2>	0.000000 0.000000 7.401334	</row2>
                   <row3>	1.834000 0.909640 0.000000	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	Ch41_WZ_111_5A_TXVII_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	1.977065 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.140187 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.356758	</row2>
+                  <row3>	0.000000 1.006310 0.009925	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.542947 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.208124	</row2>
+                  <row3>	0.000000 1.279101 0.018911	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.542950 0.000000 0.000003	</row0>
+                  <row1>	0.000000 0.218053 0.206041	</row1>
+                  <row2>	0.000000 -0.537435 0.568769	</row2>
+                  <row3>	-0.000001 1.291644 3.597057	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.782459 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.401334	</row2>
+                  <row3>	1.833573 0.909640 0.000000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.542950 -0.000027 0.000034	</row0>
+                  <row1>	-0.000004 -0.173264 0.244908	</row1>
+                  <row2>	-0.000001 -0.638816 -0.451940	</row2>
+                  <row3>	0.000000 1.088693 -3.585640	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1426,6 +1544,12 @@
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
           </atlas>
+          <modelSets>
+            <Ch41_WZ_111_5A_TXVII_3Dst>
+              <segmentModelLeft>	vehicles/chinese/Ch41_WZ_111_5A/_skins/Ch41_WZ_111_5A_TXVII_3Dst/track/segment.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/chinese/Ch41_WZ_111_5A/_skins/Ch41_WZ_111_5A_TXVII_3Dst/track/segment.model	</segmentModelRight>
+            </Ch41_WZ_111_5A_TXVII_3Dst>
+          </modelSets>
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
@@ -1453,6 +1577,11 @@
             <model>	vehicles/chinese/Ch41_WZ_111_5A/track/segment.model	</model>
             <length>	0.155	</length>
           </mainSegment>
+          <modelSets>
+            <Ch41_WZ_111_5A_TXVII_3Dst>
+              <mainSegmentModel>	vehicles/chinese/Ch41_WZ_111_5A/_skins/Ch41_WZ_111_5A_TXVII_3Dst/track/segment.model	</mainSegmentModel>
+            </Ch41_WZ_111_5A_TXVII_3Dst>
+          </modelSets>
           <collisionHull>
             <bottom>
               <part>
@@ -1607,7 +1736,7 @@
             <segmentSyncPivotOffset>	-1.344	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_L5	</name>
-              <startAngle>	2.731650	</startAngle>
+              <startAngle>	2.73165	</startAngle>
               <teethCount>	14	</teethCount>
             </sync>
             <sync>
@@ -1783,6 +1912,11 @@
             <model>	vehicles/chinese/Ch41_WZ_111_5A/track/segment.model	</model>
             <length>	0.155	</length>
           </mainSegment>
+          <modelSets>
+            <Ch41_WZ_111_5A_TXVII_3Dst>
+              <mainSegmentModel>	vehicles/chinese/Ch41_WZ_111_5A/_skins/Ch41_WZ_111_5A_TXVII_3Dst/track/segment.model	</mainSegmentModel>
+            </Ch41_WZ_111_5A_TXVII_3Dst>
+          </modelSets>
           <collisionHull>
             <bottom>
               <part>
@@ -2182,6 +2316,11 @@
                 <destroyed>	vehicles/chinese/Ch41_WZ_111_5A/_skins/Ch41_WZ_111_5A_3Dst/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/chinese/Ch41_WZ_111_5A/_skins/Ch41_WZ_111_5A_3Dst/crash/lod0/Gun_01.model	</exploded>
               </Ch41_WZ_111_5A_3Dst>
+              <Ch41_WZ_111_5A_TXVII_3Dst>
+                <undamaged>	vehicles/chinese/Ch41_WZ_111_5A/_skins/Ch41_WZ_111_5A_TXVII_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/chinese/Ch41_WZ_111_5A/_skins/Ch41_WZ_111_5A_TXVII_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/chinese/Ch41_WZ_111_5A/_skins/Ch41_WZ_111_5A_TXVII_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </Ch41_WZ_111_5A_TXVII_3Dst>
             </sets>
           </models>
           <hitTester>
@@ -2237,9 +2376,9 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	0.000065 -0.026 1.48338	</rayStart>
-              <rayEnd>	0.000065 -0.026 2.23338	</rayEnd>
-              <rayUp>	0.126 0 0	</rayUp>
+              <rayStart>	0.000065 -0.026 2.03	</rayStart>
+              <rayEnd>	0.000065 -0.026 2.78	</rayEnd>
+              <rayUp>	0.15 0 0	</rayUp>
               <size>	0.75	</size>
             </slot>
           </customizationSlots>
@@ -2267,6 +2406,11 @@
             <destroyed>	vehicles/chinese/Ch41_WZ_111_5A/_skins/Ch41_WZ_111_5A_3Dst/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/chinese/Ch41_WZ_111_5A/_skins/Ch41_WZ_111_5A_3Dst/crash/lod0/Turret_01.model	</exploded>
           </Ch41_WZ_111_5A_3Dst>
+          <Ch41_WZ_111_5A_TXVII_3Dst>
+            <undamaged>	vehicles/chinese/Ch41_WZ_111_5A/_skins/Ch41_WZ_111_5A_TXVII_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch41_WZ_111_5A/_skins/Ch41_WZ_111_5A_TXVII_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch41_WZ_111_5A/_skins/Ch41_WZ_111_5A_TXVII_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </Ch41_WZ_111_5A_TXVII_3Dst>
         </sets>
       </models>
       <hitTester>
@@ -2683,6 +2827,42 @@
           <showOn>	256	</showOn>
           <clipAngle>	1.12876	</clipAngle>
           <anchorShift>	0.19589	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35032	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Ch41_WZ_111_5A_TXVII_3Dst	</compatibleModels>
+          <position>	-1.29489 1.82005 0.283736	</position>
+          <rotation>	2.03723 1.33571 -0.001415	</rotation>
+          <scale>	0.453399 0.453397 0.453398	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.754825	</clipAngle>
+          <anchorShift>	0.040511	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35033	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Ch41_WZ_111_5A_TXVII_3Dst	</compatibleModels>
+          <position>	1.3733 1.99354 0.063718	</position>
+          <rotation>	1.85963 -1.15273 0.08846	</rotation>
+          <scale>	0.359474 0.359473 0.359474	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.489425	</clipAngle>
+          <anchorShift>	0.040513	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35034	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Ch41_WZ_111_5A_TXVII_3Dst	</compatibleModels>
+          <position>	-0.30572 2.25935 0.995811	</position>
+          <rotation>	0.06676 -0.000002 -2.91928	</rotation>
+          <scale>	0.517868 0.117045 0.517872	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.057367	</clipAngle>
+          <anchorShift>	0.050336	</anchorShift>
         </slot>
         <slot>
           <slotType>	attachment	</slotType>

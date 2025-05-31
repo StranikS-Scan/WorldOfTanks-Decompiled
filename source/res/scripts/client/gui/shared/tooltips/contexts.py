@@ -1355,7 +1355,7 @@ class BattlePassGiftTokenContext(ToolTipContext):
             self.__hasOffer = False
             return result
         else:
-            if shortName in ('brochure_gift', 'guide_gift'):
+            if shortName in ('brochure_gift', 'guide_gift', 'crewbook_gift'):
                 gift = first(offer.getAllGifts())
                 if gift is not None:
                     result.append(gift.bonus.displayedItem.getXP())

@@ -83,7 +83,10 @@ class IntroScreen(ViewImpl, IGlobalListener):
     def __updateData(self):
         with self.viewModel.transaction() as vm:
             comp7_model_helpers.setScheduleInfo(vm.scheduleInfo)
-            vm.setQualificationBattlesCount(self.__comp7Controller.qualificationBattlesNumber)
+            qualificationBattlesNumber = self.__comp7Controller.qualificationBattlesNumber
+            if qualificationBattlesNumber is not None:
+                vm.setQualificationBattlesCount(qualificationBattlesNumber)
+        return
 
     def __onClose(self):
         event_dispatcher.showHangar()

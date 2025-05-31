@@ -1156,6 +1156,19 @@
     <tags>	mediumTank role_MT_assault HD mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </G142_M48RPz>
+  <G177_E65_Zwilling>
+    <id>	119	</id>
+    <userString>	#germany_vehicles:G177_E65_Zwilling	</userString>
+    <shortUserString>	#germany_vehicles:G177_E65_Zwilling_short	</shortUserString>
+    <description>	#germany_vehicles:G177_E65_Zwilling_descr	</description>
+    <shortDescriptionSpecial>	#germany_vehicles:G177_E65_Zwilling_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#germany_vehicles:G177_E65_Zwilling_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_break HD siegeMode dualgun charger heavyTank1 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user secret testTank	</tags>
+    <level>	8	</level>
+  </G177_E65_Zwilling>
   <G143_E75_TS>
     <id>	183	</id>
     <userString>	#germany_vehicles:G143_E75_TS	</userString>
@@ -2280,7 +2293,7 @@
   <G1018_JagdPanther_StoryModeStealth>
     <id>	424	</id>
     <userString>	#germany_vehicles:JagdPanther	</userString>
-    <shortUserString>	#germany_vehicles:JagdPanther_short	</shortUserString>
+    <shortUserString>	#germany_vehicles:G18_JagdPanther_short	</shortUserString>
     <description>	#germany_vehicles:JagdPanther_descr	</description>
     <price>	1345000	</price>
     <tags>	AT-SPG role_ATSPG_universal HD beast mediumAT-SPG improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user cannot_be_sold lockOutfit lockCrew secret private	</tags>
@@ -2306,4 +2319,28 @@
     <level>	7	</level>
     <notInShop>	True	</notInShop>
   </G1003_PzV_Panther_StoryModeStealth>
+  <G184_Windhund>
+    <id>	121	</id>
+    <userString>	#germany_vehicles:G184_Windhund	</userString>
+    <description>	#germany_vehicles:G184_Windhund_descr	</description>
+    <shortDescriptionSpecial>	#germany_vehicles:G184_Windhund_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#germany_vehicles:G184_Windhund_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG role_ATSPG_sniper HD siegeMode hydraulicChassis mediumAT-SPG AT-SPG1 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user special testTank secret	</tags>
+    <level>	8	</level>
+  </G184_Windhund>
+  <G186_Schwertwal>
+    <id>	122	</id>
+    <userString>	#germany_vehicles:G186_Schwertwal	</userString>
+    <description>	#germany_vehicles:G186_Schwertwal_descr	</description>
+    <shortDescriptionSpecial>	#germany_vehicles:G186_Schwertwal_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#germany_vehicles:G186_Schwertwal_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_assault HD heavyTank1 rocketAcceleration improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals special secret testTank	</tags>
+    <level>	10	</level>
+  </G186_Schwertwal>
 </list.xml>

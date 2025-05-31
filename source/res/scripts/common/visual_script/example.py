@@ -3,7 +3,7 @@
 import BigWorld
 from block import Block, Meta, InitParam, buildStrKeysValue, makeResEditorData
 from slot_types import SLOT_TYPE, arrayOf
-from visual_script.misc import ASPECT, BLOCK_MODE, EDITOR_TYPE
+from visual_script.misc import ASPECT, BLOCK_MODE, EDITOR_TYPE, EDITOR_CUSTOM_ICON
 from tunable_event_block import TunableEventBlock
 from type import VScriptType, VScriptEnum, VScriptStruct, VScriptStructField
 import weakref
@@ -88,6 +88,10 @@ class MulArray(Block, Example):
         array = map(lambda v: v * mul, array)
         self._arrayOut.setValue(array)
 
+    @classmethod
+    def mode(cls):
+        return Example.mode() | BLOCK_MODE.CAN_BE_CONST_EXPR
+
 
 class SumArray(Block, Example):
 
@@ -99,6 +103,10 @@ class SumArray(Block, Example):
     def _execute(self):
         res = sum(self._inArray.getValue(), 0.0)
         self._out.setValue(res)
+
+    @classmethod
+    def mode(cls):
+        return Example.mode() | BLOCK_MODE.CAN_BE_CONST_EXPR
 
 
 class WeightSequence(Block, Example):
@@ -279,6 +287,10 @@ class MakeTestType(Block, Example):
     def _exec(self):
         self._out.setValue(TestType(self._name.getValue(), self._age.getValue()))
 
+    @classmethod
+    def mode(cls):
+        return Example.mode() | BLOCK_MODE.CAN_BE_CONST_EXPR
+
 
 class BreakTestType(Block, Example):
 
@@ -293,6 +305,10 @@ class BreakTestType(Block, Example):
 
     def _execAge(self):
         self._age.setValue(self._in.getValue().age)
+
+    @classmethod
+    def mode(cls):
+        return Example.mode() | BLOCK_MODE.CAN_BE_CONST_EXPR
 
 
 class MakeTestTypeArray(Block, Example):
@@ -333,3 +349,23 @@ class PrintTestStruct(Block, Example):
         newStuct.value = 1981
         self._ns.setValue(newStuct)
         self._out.call()
+
+
+class TestOnResult(Block, Example):
+
+    def __init__(self, *args, **kwargs):
+        super(TestOnResult, self).__init__(*args, **kwargs)
+        self._in = self._makeEventInputSlot('in', self._exec)
+        self._a = self._makeDataInputSlot('a', SLOT_TYPE.INT)
+        self._a.setDefaultValue(2)
+        self._out = self._makeEventOutputSlot('out')
+        self._onResult = self._makeEventOutputSlot('onResult')
+        self._onResult.setEditorData(EDITOR_CUSTOM_ICON.EVENT_DELAYED)
+        self._sqr = self._makeDataOutputSlot('sqr', SLOT_TYPE.INT, None)
+        return
+
+    def _exec(self):
+        self._out.call()
+        a = self._a.getValue()
+        self._sqr.setValue(a * a)
+        self._onResult.call()

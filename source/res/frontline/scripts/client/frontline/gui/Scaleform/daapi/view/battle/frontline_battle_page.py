@@ -206,9 +206,8 @@ class FrontlineBattlePage(FrontlineBattlePageMeta, BattleGUIKeyHandler):
             visibleUI = _STATE_TO_UI[targetState].copy()
             currVis = set(self.as_getComponentsVisibilityS())
             hiddenUI = currVis.difference(visibleUI)
-            if targetState != PageStates.LOADING:
-                hiddenUI.difference_update(_NEVER_HIDE)
-                visibleUI.update(_NEVER_HIDE)
+            hiddenUI.difference_update(_NEVER_HIDE)
+            visibleUI.update(_NEVER_HIDE)
             ctrl = self.sessionProvider.shared.vehicleState
             vehicle = ctrl.getControllingVehicle()
             if vehicle is not None:
@@ -232,6 +231,9 @@ class FrontlineBattlePage(FrontlineBattlePageMeta, BattleGUIKeyHandler):
                 self._swapVisibleStates(visibleUI, hiddenUI, BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL, True)
             if self.__respawnAvailable and self.as_isComponentVisibleS(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL):
                 self._swapVisibleStates(visibleUI, hiddenUI, BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL, True)
+            if targetState == PageStates.RESPAWN or targetState == PageStates.LOADING:
+                visibleUI.difference_update(_NEVER_HIDE)
+                hiddenUI.update(_NEVER_HIDE)
             self._setComponentsVisibility(visible=visibleUI, hidden=hiddenUI)
             return
 

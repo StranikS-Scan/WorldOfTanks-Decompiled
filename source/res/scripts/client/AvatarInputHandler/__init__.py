@@ -94,11 +94,6 @@ def addEmptyIfNotExits(name):
     return
 
 
-DISABLE_CTRL_SWITCH_CAPS_MAP = {_CTRL_MODE.STRATEGIC: ARENA_BONUS_TYPE_CAPS.DISABLE_ARTY_AIMING_MODE,
- _CTRL_MODE.ARTY: ARENA_BONUS_TYPE_CAPS.DISABLE_ARTY_AIMING_MODE,
- _CTRL_MODE.SNIPER: ARENA_BONUS_TYPE_CAPS.DISABLE_SNIPER_AIMING_MODE,
- _CTRL_MODE.DUAL_GUN: ARENA_BONUS_TYPE_CAPS.DISABLE_SNIPER_AIMING_MODE,
- _CTRL_MODE.TWIN_GUN: ARENA_BONUS_TYPE_CAPS.DISABLE_SNIPER_AIMING_MODE}
 OVERWRITE_CTRLS_DESC_MAP = {}
 for royaleBonusCap in constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
     OVERWRITE_CTRLS_DESC_MAP[royaleBonusCap] = {_CTRL_MODE.POSTMORTEM: (steel_hunter_control_modes.SHPostMortemControlMode, 'postMortemMode', _CTRL_TYPE.USUAL)}
@@ -596,7 +591,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
     @disableShotPointCache
     def onControlModeChanged(self, eMode, **kwargs):
         _logger.debug('onControlModeChanged %s', eMode)
-        if not self.__isArenaStarted and not self.__isModeSwitchInPrebattlePossible(eMode) or not self.isToControlModeSwitchEnabled(eMode):
+        if not self.__isArenaStarted and not self.__isModeSwitchInPrebattlePossible(eMode):
             return
         else:
             player = BigWorld.player()
@@ -979,11 +974,6 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         if eMode in (_CTRL_MODE.POSTMORTEM, _CTRL_MODE.KILL_CAM, _CTRL_MODE.LOOK_AT_KILLER):
             return True
         return True if self.__ctrlModeName == _CTRL_MODE.VEHICLES_SELECTION and eMode == _CTRL_MODE.ARCADE else False
-
-    @staticmethod
-    def isToControlModeSwitchEnabled(eMode):
-        disableCaps = DISABLE_CTRL_SWITCH_CAPS_MAP.get(eMode)
-        return disableCaps is None or not BigWorld.player().hasBonusCap(disableCaps)
 
 
 class _Targeting(object):

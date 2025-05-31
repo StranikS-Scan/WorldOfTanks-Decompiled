@@ -58,6 +58,7 @@ class _HelperTypes(str, Enum):
     STIMULATOR = 'stimulator'
     DEMOUNT_KIT = 'demountKit'
     RECERTIFICATION_FORM = 'recertificationForm'
+    MENTORING_LICENSE = 'mentoringLicense'
     TANKWOMAN = 'tankwoman'
 
 
@@ -111,7 +112,9 @@ class _GoodiesSubTypeGetter(_BaseSubTypeGetter):
         subType = ''
         if bonus.getDemountKits():
             return _HelperTypes.DEMOUNT_KIT
-        return _HelperTypes.RECERTIFICATION_FORM if bonus.getRecertificationForms() else subType
+        if bonus.getRecertificationForms():
+            return _HelperTypes.RECERTIFICATION_FORM
+        return _HelperTypes.MENTORING_LICENSE if bonus.getMentoringLicenses() else subType
 
 
 class _ItemsSubTypeGetter(_BaseSubTypeGetter):

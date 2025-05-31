@@ -742,7 +742,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
         vehicleID = vInfo.vehicleID
         if vehicleID in self._entries:
             entry = self._entries[vehicleID]
-            guiLabel = self._getGuiPropsName(arenaDP.getPlayerGuiProps(vehicleID, vInfo.team))
+            guiLabel = arenaDP.getPlayerGuiProps(vehicleID, vInfo.team).name()
             self.__setGUILabel(entry, guiLabel)
 
     def getVehiclePosition(self, vehicleID):
@@ -797,12 +797,6 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
     def _getDisplayedName(self, vInfo):
         return vInfo.getDisplayedName()
 
-    def _getGuiPropsName(self, guiProps):
-        return guiProps.name()
-
-    def _getSymbolName(self):
-        return _S_NAME.VEHICLE
-
     def _convertSettingToFeatures(self, value, previous, settingsType):
         return settings.convertSettingToFeatures(value, previous, settingsType)
 
@@ -812,13 +806,13 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
 
     def _setVehicleInfo(self, vehicleID, entry, vInfo, guiProps, isSpotted=False):
         classTag = vInfo.vehicleType.classTag
+        name = self._getDisplayedName(vInfo)
         if classTag is not None:
-            guiPropsName = self._getGuiPropsName(guiProps)
-            entry.setVehicleInfo(not guiProps.isFriend, guiPropsName, classTag, vInfo.isAlive())
+            entry.setVehicleInfo(not guiProps.isFriend, guiProps.name(), classTag, vInfo.isAlive())
             animation = self.__getSpottedAnimation(entry, isSpotted)
             if animation:
                 self.__playSpottedSound(entry)
-            self._invoke(entry.getID(), 'setVehicleInfo', vehicleID, self._getDisplayedVehicleClassTag(vInfo), self._getDisplayedName(vInfo), guiPropsName, animation)
+            self._invoke(entry.getID(), 'setVehicleInfo', vehicleID, self._getDisplayedVehicleClassTag(vInfo), name, guiProps.name(), animation)
         return
 
     def _onVehicleHealthChanged(self, vehicleID, currH, maxH):
@@ -843,7 +837,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
         else:
             matrix, location = matrix_factory.getVehicleMPAndLocation(vehicleID, positions or {})
         active = location != VEHICLE_LOCATION.UNDEFINED
-        model = self._addEntryEx(vehicleID, self._getSymbolName(), _C_NAME.ALIVE_VEHICLES, matrix=matrix, active=active)
+        model = self._addEntryEx(vehicleID, _S_NAME.VEHICLE, _C_NAME.ALIVE_VEHICLES, matrix=matrix, active=active)
         if model is not None:
             model.setLocation(location)
         return model

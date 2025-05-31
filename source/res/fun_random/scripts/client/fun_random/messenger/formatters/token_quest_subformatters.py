@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/messenger/formatters/token_quest_subformatters.py
+from typing import Dict, List
 from adisp import adisp_async, adisp_process
 from constants import LOOTBOX_TOKEN_PREFIX
 from fun_random.gui.feature.fun_constants import FEP_MODE_ITEMS_QUEST_ID, FEP_PROGRESSION_EXECUTOR_QUEST_ID
@@ -110,6 +111,14 @@ class FunProgressionRewardsSyncFormatter(SyncTokenQuestsSubFormatter, FunProgres
 
 
 class FunRandomLootBoxFormatter(QuestAchievesFormatter, FunAssetPacksMixin):
+
+    @classmethod
+    def getFormattedAchieves(cls, data, asBattleFormatter, processCustomizations=True, processTokens=True):
+        result = super(FunRandomLootBoxFormatter, cls).getFormattedAchieves(data, asBattleFormatter, processCustomizations, processTokens)
+        battlePassPoints = sum((points for points in data.get('battlePassPoints', {}).get('vehicles', {}).itervalues()))
+        if battlePassPoints > 0:
+            result.append(backport.text(R.strings.messenger.serviceChannelMessages.battleResults.quests.battlePassPoints(), value=text_styles.neutral(battlePassPoints)))
+        return result
 
     @classmethod
     def _processTokens(cls, data):

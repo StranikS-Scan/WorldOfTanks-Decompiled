@@ -6,8 +6,12 @@ import weakref
 from collections import namedtuple
 import math
 import BigWorld
+import CGF
+import GenericComponents
+import GpuDecals
 import math_utils
 import items
+from cgf_script.managers_registrator import autoregister, onAddedQuery, onRemovedQuery
 from debug_utils import LOG_ERROR, LOG_WARNING
 from constants import IS_EDITOR
 from helpers import dependency
@@ -16,6 +20,7 @@ from items.vehicles import getItemByCompactDescr
 from items.components.c11n_constants import CustomizationType, DecalType, SLOT_DEFAULT_ALLOWED_MODEL
 from skeletons.gui.lobby_context import ILobbyContext
 from vehicle_systems import stricted_loading
+from vehicle_systems import vehicle_composition
 from vehicle_systems.tankStructure import TankPartIndexes, TankPartNames, TankNodeNames
 from vehicle_systems.tankStructure import DetachedTurretPartIndexes, DetachedTurretPartNames
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -39,7 +44,11 @@ DEBUG_STICKER_TEXTURE = 'gui/maps/vehicles/decals/player_stickers/cool/sticker_1
 _TextureParams = namedtuple('TextureParams', ('textureName', 'bumpTextureName', 'mirror'))
 _CounterParams = namedtuple('CounterParams', ('atlas', 'alphabet', 'mirror'))
 _StickerSlotPair = namedtuple('_StickerSlotPair', ('componentSlot', 'stickerParams', 'emissionParams'))
-_PersonalNumberTexParams = namedtuple('PersonalNumberTexParams', ('textureName', 'textureMap', 'text', 'fontMask', 'digitsCount'))
+_PersonalNumberTexParams = namedtuple('PersonalNumberTexParams', ('textureName',
+ 'textureMap',
+ 'text',
+ 'fontMask',
+ 'digitsCount'))
 _INSIGNIA_LETTER = '*'
 
 class StickerAttributes(object):
@@ -100,6 +109,7 @@ class ModelStickers(object):
                     stickerPack.bind(componentIdx, slot)
 
         self.__model = None
+        self.__partIdx = None
         self.__toPartRootMatrix = math_utils.createIdentityMatrix()
         self.__parentNode = None
         self.__isDamaged = False
@@ -111,9 +121,14 @@ class ModelStickers(object):
         self.__isLoadingClanEmblems = False
         self.detachStickers()
 
-    def attachStickers(self, model, parentNode, isDamaged, toPartRootMatrix=None):
+    @property
+    def partIdx(self):
+        return self.__partIdx
+
+    def attachStickers(self, model, partIdx, parentNode, isDamaged, toPartRootMatrix=None):
         self.detachStickers()
         self.__model = model
+        self.__partIdx = partIdx
         if toPartRootMatrix is not None:
             self.__toPartRootMatrix = toPartRootMatrix
         self.__parentNode = parentNode
@@ -142,8 +157,16 @@ class ModelStickers(object):
 
             self.__stickerModel.clear()
             self.__model = None
+            self.__partIdx = None
             self.__parentNode = None
             return
+
+    def bindReceiver(self, receiverId):
+        if receiverId != GpuDecals.INVALID_BLOCK_IDX:
+            self.__stickerModel.setReceiverId(receiverId)
+
+    def unbindReceiver(self):
+        self.__stickerModel.resetReceiverId()
 
     def addDamageSticker(self, stickerID, segStart, segEnd):
         return 0 if self.__model is None else self.__stickerModel.addDamageSticker(stickerID, segStart, segEnd)
@@ -638,11 +661,12 @@ class VehicleStickers(object):
 
     show = property(lambda self: self.__show, __setShow)
 
-    def __init__(self, spaceID, vehicleDesc, insigniaRank=0, outfit=None, currentModelsSet=None):
+    def __init__(self, spaceID, go, vehicleDesc, insigniaRank=0, outfit=None, currentModelsSet=None):
         self.__defaultAlpha = vehicleDesc.type.emblemsAlpha
         self.__show = True
         self.__animateGunInsignia = vehicleDesc.gun.animateEmblemSlots
         self.__currentInsigniaRank = insigniaRank
+        self.__go = go
         self.__vDesc = vehicleDesc
         self.__componentNames = [(TankPartNames.HULL, TankPartNames.HULL), (TankPartNames.TURRET, TankPartNames.TURRET), (TankPartNames.GUN, TankNodeNames.GUN_INCLINATION)]
         if outfit is None:
@@ -676,16 +700,18 @@ class VehicleStickers(object):
 
     def attach(self, compoundModel, isDamaged, showDamageStickers, isDetachedTurret=False):
         for componentName, attachNodeName in self.__componentNames:
-            idx = DetachedTurretPartNames.getIdx(componentName) if isDetachedTurret else TankPartNames.getIdx(componentName)
+            partIdx = DetachedTurretPartNames.getIdx(componentName) if isDetachedTurret else TankPartNames.getIdx(componentName)
             node = compoundModel.node(attachNodeName)
             if node is None:
                 continue
-            if idx is None:
+            if partIdx is None:
                 node = compoundModel.node(componentName + ('_normal' if not isDamaged else '_destroyed'))
-                idx = compoundModel.findPartHandleByNode(node)
-            geometryLink = compoundModel.getPartGeometryLink(idx)
+                partIdx = compoundModel.findPartHandleByNode(node)
+            geometryLink = compoundModel.getPartGeometryLink(partIdx)
+            receiverId = VehicleStickersManager.getReceiverId(self.__go, partIdx)
             componentStickers = self.__stickers[componentName]
-            componentStickers.stickers.attachStickers(geometryLink, node, isDamaged)
+            componentStickers.stickers.attachStickers(geometryLink, partIdx, node, isDamaged)
+            componentStickers.stickers.bindReceiver(receiverId)
             if showDamageStickers:
                 for damageSticker in componentStickers.damageStickers.itervalues():
                     if damageSticker.handle is not None:
@@ -694,15 +720,16 @@ class VehicleStickers(object):
                         LOG_WARNING('Adding %s damage sticker to occupied slot' % componentName)
                     damageSticker.handle = componentStickers.stickers.addDamageSticker(damageSticker.stickerID, damageSticker.rayStart, damageSticker.rayEnd)
 
-        if isDetachedTurret:
-            gunGeometry = compoundModel.getPartGeometryLink(DetachedTurretPartIndexes.GUN)
-        else:
-            gunGeometry = compoundModel.getPartGeometryLink(TankPartIndexes.GUN)
+        gunPartIdx = DetachedTurretPartIndexes.GUN if isDetachedTurret else TankPartIndexes.GUN
+        gunGeometry = compoundModel.getPartGeometryLink(gunPartIdx)
+        gunReceiverId = VehicleStickersManager.getReceiverId(self.__go, gunPartIdx)
         for key in set(Insignia.Types.ALL) & set(self.__stickers.keys()):
             gunNode, toPartRoot = self.__getInsigniaAttachNode(key, isDamaged, compoundModel)
             if gunNode is None:
                 return
-            self.__stickers[key].stickers.attachStickers(gunGeometry, gunNode, isDamaged, toPartRoot)
+            componentStickers = self.__stickers[key]
+            componentStickers.stickers.attachStickers(gunGeometry, gunPartIdx, gunNode, isDamaged, toPartRoot)
+            componentStickers.stickers.bindReceiver(gunReceiverId)
 
         return
 
@@ -713,6 +740,16 @@ class VehicleStickers(object):
                 dmgSticker.handle = None
 
         return
+
+    def bindReceiver(self, partIdx, receiverId):
+        for componentStickers in self.__stickers.itervalues():
+            if componentStickers.stickers.partIdx == partIdx:
+                componentStickers.stickers.bindReceiver(receiverId)
+
+    def unbindReceiver(self, partIdx):
+        for componentStickers in self.__stickers.itervalues():
+            if componentStickers.stickers.partIdx == partIdx:
+                componentStickers.stickers.unbindReceiver()
 
     def addDamageSticker(self, code, componentIdx, stickerID, segStart, segEnd, collisionComponent, segLength=None):
         componentName = TankPartIndexes.getName(componentIdx)
@@ -839,3 +876,35 @@ class VehicleStickers(object):
             toPartRoot.invert()
             toPartRoot.preMultiply(compoundModel.node(TankNodeNames.GUN_INCLINATION))
         return (gunNode, toPartRoot)
+
+
+@autoregister(presentInAllWorlds=True, domain=CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor)
+class VehicleStickersManager(CGF.ComponentManager):
+
+    @onAddedQuery(CGF.GameObject, GenericComponents.SlotMarkerComponent, GpuDecals.GpuDecalsReceiverComponent)
+    def onReceiverAdded(self, gameObject, slotMarker, receiver):
+        appearance = vehicle_composition.findParentVehicleAppearance(gameObject)
+        if appearance is not None:
+            partIdx = TankPartNames.getIdx(slotMarker.slotName)
+            if appearance.vehicleStickers is not None:
+                appearance.vehicleStickers.bindReceiver(partIdx, receiver.blockIdx)
+        return
+
+    @onRemovedQuery(CGF.GameObject, GenericComponents.SlotMarkerComponent, GpuDecals.GpuDecalsReceiverComponent)
+    def onReceiverRemoved(self, gameObject, slotMarker, receiver):
+        appearance = vehicle_composition.findParentVehicleAppearance(gameObject)
+        if appearance is not None:
+            partIdx = TankPartNames.getIdx(slotMarker.slotName)
+            if appearance.vehicleStickers is not None:
+                appearance.vehicleStickers.unbindReceiver(partIdx)
+        return
+
+    @staticmethod
+    def getReceiverId(gameObject, partIdx):
+        if gameObject.isValid():
+            partGO = GenericComponents.findSlot(gameObject, TankPartIndexes.getName(partIdx))
+            if partGO is not None and partGO.isValid():
+                receiver = partGO.findComponentByType(GpuDecals.GpuDecalsReceiverComponent)
+                if receiver is not None:
+                    return receiver.blockIdx
+        return GpuDecals.INVALID_BLOCK_IDX

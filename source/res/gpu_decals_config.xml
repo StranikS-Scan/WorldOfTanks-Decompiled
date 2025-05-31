@@ -1,0 +1,82 @@
+<gpu_decals_config.xml>
+  <enabled>	true	</enabled>
+  <atlases>
+    <anisotropy>	4	</anisotropy>
+    <firstMip>	0	</firstMip>
+    <atlas>
+      <name>	Albedo	</name>
+      <width>	8192	</width>
+      <height>	8192	</height>
+      <format>	DXT5	</format>
+      <constrains>
+        <minWidth>	128	</minWidth>
+        <minHeight>	128	</minHeight>
+        <maxWidth>	1024	</maxWidth>
+        <maxHeight>	1024	</maxHeight>
+        <format>	DXT5	</format>
+      </constrains>
+    </atlas>
+    <atlas>
+      <name>	Normal	</name>
+      <width>	8192	</width>
+      <height>	8192	</height>
+      <format>	DXT5	</format>
+      <constrains>
+        <minWidth>	128	</minWidth>
+        <minHeight>	128	</minHeight>
+        <maxWidth>	1024	</maxWidth>
+        <maxHeight>	1024	</maxHeight>
+        <format>	DXT5	</format>
+      </constrains>
+    </atlas>
+    <atlas>
+      <name>	GlossMetallic	</name>
+      <width>	8192	</width>
+      <height>	8192	</height>
+      <format>	DXT5	</format>
+      <constrains>
+        <minWidth>	128	</minWidth>
+        <minHeight>	128	</minHeight>
+        <maxWidth>	1024	</maxWidth>
+        <maxHeight>	1024	</maxHeight>
+        <format>	DXT5	</format>
+      </constrains>
+    </atlas>
+    <atlas>
+      <name>	Emissive	</name>
+      <width>	4096	</width>
+      <height>	4096	</height>
+      <format>	DXT5	</format>
+      <constrains>
+        <minWidth>	128	</minWidth>
+        <minHeight>	128	</minHeight>
+        <maxWidth>	512	</maxWidth>
+        <maxHeight>	512	</maxHeight>
+        <format>	DXT5	</format>
+      </constrains>
+    </atlas>
+    <atlas>
+      <name>	Temperature	</name>
+      <width>	4096	</width>
+      <height>	4096	</height>
+      <format>	ATI1N	</format>
+      <constrains>
+        <minWidth>	128	</minWidth>
+        <minHeight>	128	</minHeight>
+        <maxWidth>	512	</maxWidth>
+        <maxHeight>	512	</maxHeight>
+        <format>	ATI1N	</format>
+      </constrains>
+    </atlas>
+  </atlases>
+  <buffers>
+    <blockCapacity>	256	</blockCapacity>
+    <blocksCount>	256	</blocksCount>
+  </buffers>
+  <clusterization>
+    <farPlane>	700.0	</farPlane>
+  </clusterization>
+  <gradients>
+    <capacity>	1024	</capacity>
+  </gradients>
+</gpu_decals_config.xml>

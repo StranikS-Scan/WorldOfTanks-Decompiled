@@ -840,16 +840,6 @@ class GameplaySetting(StorageAccountSetting):
         return super(GameplaySetting, self)._get()
 
 
-class RandomOnly10ModeSetting(StorageAccountSetting):
-    lobbyContext = dependency.descriptor(ILobbyContext)
-
-    def pack(self):
-        return SettingsExtraData(self._get(), self._getOptions(), self.getExtraData())._asdict()
-
-    def getExtraData(self):
-        return {'enabled': self.lobbyContext.getServerSettings().isOnly10ModeEnabled()}
-
-
 class DevMapsSetting(StorageAccountSetting):
     lobbyContext = dependency.descriptor(ILobbyContext)
 

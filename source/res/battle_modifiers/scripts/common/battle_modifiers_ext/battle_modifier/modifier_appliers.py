@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_modifiers/scripts/common/battle_modifiers_ext/battle_modifier/modifier_appliers.py
 from itertools import chain
-from typing import Callable, Dict, List, Optional, TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Optional, Dict, Union
 from battle_modifiers_common.battle_modifiers import BattleParams
 from battle_modifiers_ext import remappings_cache
 from battle_modifiers_ext.battle_modifier.modifier_helpers import makeUseTypeMethods
@@ -47,19 +47,13 @@ def _engineSoundsApplier(_, paramVal, __=None):
     return WWTripleSoundConfig(wwsound='', wwsoundPC='_'.join((paramVal, 'pc')), wwsoundNPC='_'.join((paramVal, 'npc')))
 
 
-def _exhaustEffectsApplier(value, paramVal, ctx=None):
+def _exhaustEffectApplier(_, paramVal, __=None):
     from items import vehicles
-    overriddenValue = remappings_cache.g_cache.getValue(ModifiersWithRemapping.EXHAUST_EFFECTS, paramVal, value, ctx)
-    return vehicles.g_cache.exhaustEffects.get(overriddenValue) or value
+    return vehicles.g_cache.exhaustEffect(paramVal)
 
 
 def _soundNotificationsApplier(value, paramVal, ctx=None):
     return remappings_cache.g_cache.getValues(ModifiersWithRemapping.SOUND_NOTIFICATIONS, paramVal, value) if isinstance(value, dict) else remappings_cache.g_cache.getValue(ModifiersWithRemapping.SOUND_NOTIFICATIONS, paramVal, value, ctx)
-
-
-def _vehicleEffectsApplier(value, paramVal, ctx=None):
-    from items import vehicles
-    return vehicles.g_cache.getVehicleEffect(paramVal) or value
 
 
 _customAppliers = {BattleParams.VEHICLE_HEALTH: {UseType.MUL: lambda val, paramVal, _=None: int(ceilTo(val * paramVal, VEHICLE_HEALTH_DECIMALS))},
@@ -67,17 +61,14 @@ _customAppliers = {BattleParams.VEHICLE_HEALTH: {UseType.MUL: lambda val, paramV
  BattleParams.GUN_EFFECTS: _gunEffectsApplier,
  BattleParams.GUN_MAIN_PREFAB: _gunPrefabsApplier,
  BattleParams.ENGINE_SOUNDS: _engineSoundsApplier,
- BattleParams.EXHAUST_EFFECTS: _exhaustEffectsApplier,
+ BattleParams.EXHAUST_EFFECT: _exhaustEffectApplier,
  BattleParams.SOUND_NOTIFICATIONS: _soundNotificationsApplier,
- BattleParams.DESTRUCTION_EFFECT: _vehicleEffectsApplier,
  BattleParams.VSE_MODIFIER: lambda val, paramVal, _=None: paramVal['plan'] if val in paramVal['aspects'] else None}
 
-def registerParamAppliers(paramId, dataType, customFunc=None):
+def registerParamAppliers(paramId, dataType):
     global g_cache
     paramAppliers = makeUseTypeMethods(_dataTypeAppliers[dataType], True)
-    if customFunc:
-        paramAppliers.update(makeUseTypeMethods(customFunc))
-    elif paramId in _customAppliers:
+    if paramId in _customAppliers:
         paramAppliers.update(makeUseTypeMethods(_customAppliers[paramId]))
     g_cache[paramId] = paramAppliers
 

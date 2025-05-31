@@ -115,7 +115,6 @@ class GAME(CONST_CONTAINER):
     GAMEPLAY_ASSAULT = 'gameplay_assault'
     GAMEPLAY_NATIONS = 'gameplay_nations'
     GAMEPLAY_EPIC_STANDARD = 'gameplay_epicStandard'
-    GAMEPLAY_ONLY_10_MODE = 'gameplay_only10Mode'
     GAMEPLAY_EPIC_DOMINATION = 'gameplay_epicDomination'
     GAMEPLAY_DEV_MAPS = 'gameplay_devMaps'
     SHOW_VECTOR_ON_MAP = 'showVectorOnMap'

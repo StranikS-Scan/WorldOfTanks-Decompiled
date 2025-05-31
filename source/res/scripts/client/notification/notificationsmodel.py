@@ -4,7 +4,6 @@ import Event
 from notification.NotificationsCollection import NotificationsCollection
 from notification.listeners import NotificationsListeners
 from notification.settings import NOTIFICATION_STATE
-from gui.impl.lobby.gf_notifications.cache import getCache
 
 class NotificationsModel(object):
 
@@ -96,7 +95,6 @@ class NotificationsModel(object):
         self.__listeners.stop()
         self.__counter.resetUnreadCount()
         self.__counter = None
-        getCache().clear()
         self.onDisplayStateChanged.clear()
         self.onNotificationReceived.clear()
         self.onNotifiedMessagesCountChanged.clear()

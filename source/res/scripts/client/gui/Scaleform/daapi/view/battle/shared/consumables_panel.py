@@ -212,10 +212,10 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
         self._cds[idx] = intCD
         bwKey, sfKeyCode = self._genKey(idx)
         self._extraKeys[idx] = self._keys[bwKey] = partial(self.__handleAmmoPressed, intCD)
-        tooltipText = self._makeShellTooltip(descriptor, int(round(gunSettings.getPiercingPower(intCD))), gunSettings.getShotSpeed(intCD))
+        tooltipText = self.__makeShellTooltip(descriptor, int(round(gunSettings.getPiercingPower(intCD))), gunSettings.getShotSpeed(intCD))
         icon = descriptor.icon[0]
         iconName = icon.split('.png')[0]
-        shellIconPath = self._getAmmoIcon(iconName)
+        shellIconPath = backport.image(R_AMMO_ICON.dyn(iconName)())
         noShellIconPath = backport.image(R_AMMO_ICON.dyn(NO_AMMO_ICON.format(iconName))())
         self.as_addShellSlotS(idx, bwKey, sfKeyCode, quantity, gunSettings.clip.size, shellIconPath, noShellIconPath, tooltipText, isInfinite)
 
@@ -277,9 +277,6 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
 
     def _getEquipmentIcon(self, idx, item, icon):
         return backport.image(self._getEquipmentIconPath(item).dyn(icon)())
-
-    def _getAmmoIcon(self, icon):
-        return backport.image(R_AMMO_ICON.dyn(icon)())
 
     def _isIdxInKeysRange(self, idx):
         return idx in self.__equipmentRange or idx in self.__ordersRange
@@ -464,7 +461,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
         if eventID == FEEDBACK_EVENT_ID.VEHICLE_ATTRS_CHANGED:
             for payload in self.sessionProvider.shared.ammo.getOrderedShellsLayout():
                 intCD, descriptor, _, _, gunSettings = payload[:5]
-                self.as_updateTooltipS(idx=self._cds.index(intCD), tooltipStr=self._makeShellTooltip(descriptor, int(round(gunSettings.getPiercingPower(intCD))), gunSettings.getShotSpeed(intCD)))
+                self.as_updateTooltipS(idx=self._cds.index(intCD), tooltipStr=self.__makeShellTooltip(descriptor, int(round(gunSettings.getPiercingPower(intCD))), gunSettings.getShotSpeed(intCD)))
 
     def _addListeners(self):
         vehicleCtrl = self.sessionProvider.shared.vehicleState
@@ -495,8 +492,8 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
         optDevicesCtrl = self.sessionProvider.shared.optionalDevices
         if optDevicesCtrl is not None:
             self.__fillOptionalDevices(optDevicesCtrl)
-            optDevicesCtrl.onOptionalDeviceAdded += self._onOptionalDeviceAdded
-            optDevicesCtrl.onOptionalDeviceUpdated += self._onOptionalDeviceUpdated
+            optDevicesCtrl.onOptionalDeviceAdded += self.__onOptionalDeviceAdded
+            optDevicesCtrl.onOptionalDeviceUpdated += self.__onOptionalDeviceUpdated
             optDevicesCtrl.onOptionalDevicesCleared += self.__onOptionalDevicesCleared
         crosshairCtrl = self.sessionProvider.shared.crosshair
         if crosshairCtrl is not None:
@@ -550,8 +547,8 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
             eqCtrl.onEquipmentsCleared -= self._onEquipmentsCleared
         optDevicesCtrl = self.sessionProvider.shared.optionalDevices
         if optDevicesCtrl is not None:
-            optDevicesCtrl.onOptionalDeviceAdded -= self._onOptionalDeviceAdded
-            optDevicesCtrl.onOptionalDeviceUpdated -= self._onOptionalDeviceUpdated
+            optDevicesCtrl.onOptionalDeviceAdded -= self.__onOptionalDeviceAdded
+            optDevicesCtrl.onOptionalDeviceUpdated -= self.__onOptionalDeviceUpdated
             optDevicesCtrl.onOptionalDevicesCleared -= self.__onOptionalDevicesCleared
         feedbackCtrl = self.sessionProvider.shared.feedback
         if feedbackCtrl is not None:
@@ -578,7 +575,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
             sfKey = getScaleformKey(bwKey)
         return (bwKey, sfKey)
 
-    def _makeShellTooltip(self, descriptor, piercingPower, shotSpeed):
+    def __makeShellTooltip(self, descriptor, piercingPower, shotSpeed):
         kind = descriptor.kind
         projSpeedFactor = vehicles.g_cache.commonConfig['miscParams']['projectileSpeedFactor']
         vehAttrs = self.sessionProvider.shared.feedback.getVehicleAttrs()
@@ -745,12 +742,12 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
                 self.ammoReloadingStatus[shellIndex] = reloadingFinished
                 self.as_setCoolDownTimeS(shellIndex, actualValue, state.getBaseValue(), state.getTimePassed())
 
-    def _onOptionalDeviceAdded(self, optDeviceInBattle):
+    def __onOptionalDeviceAdded(self, optDeviceInBattle):
         if optDeviceInBattle.getIntCD() not in self._cds:
             idx = self.__genNextIdx(self.__optDeviceFullMask, self._OPT_DEVICE_START_IDX)
             self._addOptionalDeviceSlot(idx, optDeviceInBattle)
 
-    def _onOptionalDeviceUpdated(self, optDeviceInBattle):
+    def __onOptionalDeviceUpdated(self, optDeviceInBattle):
         intCD = optDeviceInBattle.getIntCD()
         if intCD in self._cds:
             self._updateOptionalDeviceSlot(self._cds.index(intCD), optDeviceInBattle)
@@ -867,7 +864,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
         forEach(lambda args: self._onEquipmentAdded(*args), ctrl.getOrderedEquipmentsLayout())
 
     def __fillOptionalDevices(self, ctrl):
-        forEach(lambda args: self._onOptionalDeviceAdded(*args), ctrl.getOrderedOptionalDevicesLayout())
+        forEach(lambda args: self.__onOptionalDeviceAdded(*args), ctrl.getOrderedOptionalDevicesLayout())
 
     def __onSPGShotsIndicatorStateChanged(self, shotStates):
         vehicle = self.sessionProvider.shared.vehicleState.getControllingVehicle()

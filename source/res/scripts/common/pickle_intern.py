@@ -3,6 +3,7 @@
 import pickle
 from copy import deepcopy
 from StringIO import StringIO
+from struct_helpers import unpackByte, packByte
 STR_LEN_FOR_INTERN = 20
 
 class UnpicklerWithIntern(pickle.Unpickler, object):
@@ -13,7 +14,7 @@ class UnpicklerWithIntern(pickle.Unpickler, object):
         self.dispatch[pickle.SHORT_BINSTRING] = UnpicklerWithIntern.load_short_binstring
 
     def load_short_binstring(self):
-        str_len = ord(self.read(1))
+        str_len = unpackByte(self.read(1))
         obj = self.read(str_len)
         if len(obj) <= STR_LEN_FOR_INTERN:
             obj = intern(obj)

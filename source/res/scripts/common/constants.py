@@ -232,7 +232,6 @@ class ARENA_GUI_TYPE:
      EPIC_RANDOM,
      EPIC_BATTLE,
      MAPBOX)
-    NON_DESERTION_ARENAS = (TRAINING, MAPS_TRAINING, EPIC_RANDOM_TRAINING)
 
 
 class ARENA_GUI_TYPE_LABEL:
@@ -3034,10 +3033,12 @@ class BotNamingType(object):
     VEHICLE_MODEL = 2
     CUSTOM = 3
     DEFAULT = CREW_MEMBER
+    CONFIG_TYPE = ('BotNamingTypeEnumType', 'py::BotNamingTypeEnum')
     _parseDict = {'crew': CREW_MEMBER,
      'vehicle': VEHICLE_MODEL,
      'custom': CUSTOM,
      'default': DEFAULT}
+    _descriptions = {}
 
     @classmethod
     def parse(cls, typeString):
@@ -3545,7 +3546,6 @@ class ACCOUNT_KICK_REASONS(object):
     SESSION_TRACKER_KICK = 2
     CLIENT_INACTIVE = 4
     SYSTEM_FAILURE = 5
-    ROAMING_NOT_ALLOWED = 6
     SERVER_SHUT_DOWN = 7
     BAN = 8
     STEAM_LOGIN_NOT_ALLOWED = 9
@@ -3780,12 +3780,7 @@ class RandomizationType(object):
 
 
 class RANDOM_FLAGS:
-    IS_ONLY_10_MODE_ENABLED = 1
     IS_MAPS_IN_DEVELOPMENT_ENABLED = 2
-
-
-class WINBACK_FLAGS:
-    IS_MAPS_IN_DEVELOPMENT_ENABLED = 1
 
 
 class JUNK_TANKMAN_NOVELTY:
@@ -3903,3 +3898,6 @@ class CommendationsState(IntEnum):
         if self.value == CommendationsState.UNSENT:
             return CommendationsState.RECEIVED
         return CommendationsState.MUTUAL if self.value == CommendationsState.SENT else None
+
+
+DEFAULT_VEHICLE_BOUNDING_RADIUS = 11.2

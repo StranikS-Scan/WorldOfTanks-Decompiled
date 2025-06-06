@@ -3,9 +3,9 @@
 from frameworks.wulf import ViewModel
 
 class DialogBaseFocusViewModel(ViewModel):
-    __slots__ = ('onGotFocus',)
+    __slots__ = ()
 
-    def __init__(self, properties=1, commands=1):
+    def __init__(self, properties=1, commands=0):
         super(DialogBaseFocusViewModel, self).__init__(properties=properties, commands=commands)
 
     def getFocusedIndex(self):
@@ -17,4 +17,3 @@ class DialogBaseFocusViewModel(ViewModel):
     def _initialize(self):
         super(DialogBaseFocusViewModel, self)._initialize()
         self._addNumberProperty('focusedIndex', -1)
-        self.onGotFocus = self._addCommand('onGotFocus')

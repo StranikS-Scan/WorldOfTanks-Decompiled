@@ -57,6 +57,7 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  AUOTSHOOT_FLAME_OVERHEAT_COOLING_TIME: MENU.TANK_PARAMS_S,
  AUTOSHOOT_FIRE_UNTIL_OVERHEAT_TIME: MENU.TANK_PARAMS_S,
  'flameMaxDistance': MENU.TANK_PARAMS_M,
+ 'explosionDelay': MENU.TANK_PARAMS_S,
  'turboshaftBurstFireRate': MENU.TANK_PARAMS_BURSTSEC,
  BURST_TIME_INTERVAL: MENU.TANK_PARAMS_S,
  BURST_COUNT: MENU.TANK_PARAMS_CNT,
@@ -203,7 +204,7 @@ ITEMS_PARAMS_LIST = {ITEM_TYPES.vehicleRadio: ('radioDistance', 'weight'),
                         artefacts.AttackArtilleryFortEquipment: ('maxDamage', 'areaRadius', 'duration', 'commonDelay'),
                         artefacts.FortConsumableInspire: ('crewRolesFactor', 'commonAreaRadius', 'inactivationDelay', 'duration'),
                         artefacts.ConsumableInspire: ('crewRolesFactor', 'commonAreaRadius', 'inactivationDelay', 'duration')},
- ITEM_TYPES.shell: ('caliber', 'damage', 'damagePerSecond', 'avgPiercingPower', 'shotSpeed', 'explosionRadius', 'flameMaxDistance', 'stunMaxDuration'),
+ ITEM_TYPES.shell: ('caliber', 'damage', 'damagePerSecond', 'avgPiercingPower', 'shotSpeed', 'explosionRadius', 'flameMaxDistance', 'stunMaxDuration', 'explosion', 'explosionDelay'),
  ITEM_TYPES.optionalDevice: ('weight',),
  ITEM_TYPES.vehicleGun: ('caliber',
                          'shellsCount',
@@ -428,6 +429,7 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'aimingTime': _niceListFormat,
  'avgDamagePerMinute': _niceFormat,
  'avgDamagePerSecond': _niceFormat,
+ 'explosionDelay': _niceFormat,
  'relativeArmor': _integralFormat,
  'avgDamage': _niceFormat,
  'maxHealth': _integralFormat,
@@ -653,7 +655,8 @@ def formatParameterDelta(pInfo, deltaScheme=None, formatSettings=None):
 
 
 def getFormattedParamsList(descriptor, parameters, excludeRelative=False):
-    if vehicles.isVehicleDescr(descriptor):
+    isVehicleDescr = vehicles.isVehicleDescr(descriptor)
+    if isVehicleDescr:
         compactDescr = descriptor.type.compactDescr
     else:
         compactDescr = descriptor.compactDescr
@@ -671,7 +674,8 @@ def getFormattedParamsList(descriptor, parameters, excludeRelative=False):
         if paramValue or isValidEmptyValue(paramName, paramValue):
             fmtValue = formatParameter(paramName, paramValue)
             if fmtValue:
-                paramName = getFormattedParamName(descriptor, paramName)
+                if isVehicleDescr:
+                    paramName = getFormattedParamName(descriptor, paramName)
                 params.append((paramName, fmtValue))
 
     return params

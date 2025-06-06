@@ -16,28 +16,30 @@ def encodeRoster(team, assigned):
 
 
 def isVehicleValid(vehDescr, vehAmmo, limits):
-    minLevel, maxLevel = limits['level']
-    classLevelLimits = limits['classLevel']
-    for classTag in VEHICLE_CLASSES:
-        if classTag not in vehDescr.type.tags:
-            continue
-        if classTag in classLevelLimits:
-            classMinLevel, classMaxLevel = classLevelLimits[classTag]
-            if not classMinLevel <= vehDescr.level <= classMaxLevel:
-                return (False, 'limits/classLevel')
-        if not minLevel <= vehDescr.level <= maxLevel:
-            return (False, 'limits/level')
-
-    classesLimits = limits['classes']
-    if classesLimits is not None:
-        for classTag in VEHICLE_CLASSES:
-            if classTag in vehDescr.type.tags and classTag not in classesLimits:
-                return (False, 'limits/classes')
-
-    nationLimits = limits['nations']
-    if nationLimits is not None and nations.NAMES[vehDescr.type.id[0]] not in nationLimits:
-        return (False, 'limits/nations')
+    if vehDescr.type.compactDescr in limits['forbiddenVehicles']:
+        return (False, 'limits/tags')
     else:
+        minLevel, maxLevel = limits['level']
+        classLevelLimits = limits['classLevel']
+        for classTag in VEHICLE_CLASSES:
+            if classTag not in vehDescr.type.tags:
+                continue
+            if classTag in classLevelLimits:
+                classMinLevel, classMaxLevel = classLevelLimits[classTag]
+                if not classMinLevel <= vehDescr.level <= classMaxLevel:
+                    return (False, 'limits/classLevel')
+            if not minLevel <= vehDescr.level <= maxLevel:
+                return (False, 'limits/level')
+
+        classesLimits = limits['classes']
+        if classesLimits is not None:
+            for classTag in VEHICLE_CLASSES:
+                if classTag in vehDescr.type.tags and classTag not in classesLimits:
+                    return (False, 'limits/classes')
+
+        nationLimits = limits['nations']
+        if nationLimits is not None and nations.NAMES[vehDescr.type.id[0]] not in nationLimits:
+            return (False, 'limits/nations')
         vehTypeCompDescr = vehDescr.type.compactDescr
         vehicleLimits = limits['vehicles']
         if vehicleLimits is not None and vehTypeCompDescr not in vehicleLimits:
@@ -229,7 +231,8 @@ LIMIT_DEFAULTS = {'maxCountTotal': 256,
  'ammo': None,
  'shells': {},
  'tags': None,
- 'nations': None}
+ 'nations': None,
+ 'forbiddenVehicles': set()}
 
 def _collectCurrentReplaceableVehicleComponents(vehicleDescr):
     res = []

@@ -1,13 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/type.py
-import weakref
 from inspect import getmembers
-from enum import Enum
-from enumerations import Enumeration, EnumItem
+from enumerations import Enumeration
 from enum import IntEnum
 from misc import EDITOR_TYPE, ASPECT
 from typing import Any, List
-__all__ = ('VScriptType', 'VScriptEntityType', 'VScriptEnum', 'VScriptStruct', 'VScriptStructField')
+__all__ = ('VScriptType', 'VScriptEnum', 'VScriptStruct', 'VScriptStructField')
 
 class VScriptType(object):
 
@@ -54,16 +52,6 @@ class VScriptType(object):
     @classmethod
     def vs_iconDisconnected(cls):
         pass
-
-
-class VScriptEntityType(VScriptType):
-
-    def __init__(self, entity):
-        self._entity = entity if type(entity).__name__ == 'weakproxy' else weakref.proxy(entity)
-
-    @property
-    def entity(self):
-        return self._entity
 
 
 class VScriptEnum(object):

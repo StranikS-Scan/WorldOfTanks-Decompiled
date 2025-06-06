@@ -5,7 +5,6 @@ import BigWorld
 from Math import Vector3, Vector4
 from Event import Event
 from helpers import dependency
-from PlayerEvents import g_playerEvents
 from gui.shared import g_eventBus
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
@@ -73,16 +72,6 @@ class StaticDeathZoneVisual(DynamicScriptComponent):
         spaceID = self._spaceID
         if spaceID:
             BigWorld.ArenaBorderHelper.removeBorder(spaceID, self.zoneIndex)
-
-    def _activateDeathZone(self):
-        g_playerEvents.onStaticDeathZoneActivated(self)
-        self._drawBorders()
-        self._createMarker()
-
-    def _deactivateDeathZone(self):
-        g_playerEvents.onStaticDeathZoneDeactivated(self.zoneId)
-        self._hideBorders()
-        self._removeMarker()
 
     def _drawBorders(self):
         spaceID = self._spaceID

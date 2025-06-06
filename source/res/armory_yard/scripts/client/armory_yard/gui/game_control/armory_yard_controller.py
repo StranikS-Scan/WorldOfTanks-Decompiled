@@ -179,6 +179,7 @@ class ArmoryYardController(IArmoryYardController):
         self.__serverSettings.stop()
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.__soundManager.clear()
+        self.unloadScene(False)
         self.__sceneLoadingManager.destroy()
         self.__cameraManager.destroy()
         self.__stopNotification()
@@ -220,6 +221,10 @@ class ArmoryYardController(IArmoryYardController):
     def isEnabled(self):
         startSeasonDate, _ = self.getSeasonInterval()
         return startSeasonDate is not None and self.__serverSettings.isEnabled()
+
+    @property
+    def isPaused(self):
+        return self.__isPaused
 
     def isCompleted(self):
         totalTokens, receivedTokens = self.getTokensInfo()
@@ -403,6 +408,13 @@ class ArmoryYardController(IArmoryYardController):
     def getTokensInfo(self):
         return (self.getTotalSteps(), self.getCurrencyTokenCount())
 
+    def isAllTokensReceived(self):
+        for cycleID, _ in self.serverSettings.iterAllCycles():
+            if self.totalTokensInChapter(cycleID) > self.receivedTokensInChapter(cycleID) and not self.isChapterFinished(cycleID):
+                return False
+
+        return False if self.getTotalSteps() > self.getCurrencyTokenCount() else True
+
     def totalTokensInChapter(self, cycleID):
         quest = self.__eventsCache.getQuestByID(getEndQuestID(cycleID))
         if quest is None:
@@ -551,12 +563,14 @@ class ArmoryYardController(IArmoryYardController):
         if self.isEnabled():
             self.__checkSeason()
             self.onCheckNotify()
-            self.checkAnnouncement()
             self.__fillBundlesProducts()
             if self.__isPaused != self.serverSettings.isPaused:
                 self.__isPaused = self.serverSettings.isPaused
                 self.onServerSwitchChange()
         self.onUpdated()
+
+    def isInAnnouncement(self):
+        return self.getState() == State.BEFOREPROGRESSION
 
     def checkAnnouncement(self):
         if self.getState() == State.BEFOREPROGRESSION:

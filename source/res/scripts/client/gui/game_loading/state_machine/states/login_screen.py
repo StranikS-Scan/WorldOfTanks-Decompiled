@@ -7,9 +7,10 @@ from gui.game_loading.state_machine.const import GameLoadingStates
 from gui.game_loading.state_machine.models import ImageViewSettingsModel
 from gui.game_loading.state_machine.states.slide import StaticSlideState
 if typing.TYPE_CHECKING:
-    from gui.game_loading.resources.cdn.images import CdnImagesResources
+    from gui.game_loading.resources.base import BaseResources
 
 class LoginScreenState(StaticSlideState):
+    LOGIN_DEFAULT_PATH = 'gui/maps/loading/login.jpg'
     __slots__ = ('_nextSlideDuration',)
 
     def __init__(self, images, nextSlideDuration, viewSettings):

@@ -2,12 +2,12 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/lobby/ChannelsManagementWindow.py
 from constants import IS_CHINA
 from debug_utils import LOG_ERROR
+from gui.Scaleform.daapi.view.meta.ChannelsManagementWindowMeta import ChannelsManagementWindowMeta
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.managers.windows_stored_data import DATA_TYPE, TARGET_ID
 from gui.Scaleform.managers.windows_stored_data import stored_window
 from helpers import i18n
 from messenger.gui.Scaleform.data.search_data_providers import SearchChannelsDataProvider
-from messenger.gui.Scaleform.meta.ChannelsManagementWindowMeta import ChannelsManagementWindowMeta
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents

@@ -1077,9 +1077,4 @@ class ArcadeCameraEpic(ArcadeCamera):
         else:
             return
 
-class ArcadeCameraAOE(ArcadeCamera):
-    @staticmethod
-    def _getConfigsKey():
-        return ArcadeCameraAOE.__name__
-
 

@@ -2573,7 +2573,15 @@ class DynamicCamera(StorageDumpSetting):
 class SniperModeStabilization(StorageDumpSetting):
 
     def getDefaultValue(self):
-        return AvatarInputHandler.isSniperStabilized()
+        return True
+
+    @staticmethod
+    def getExtraData():
+        return {'checkBoxLabel': i18n.makeString(SETTINGS.GAME_HORSTABILIZATIONSNP),
+         'tooltip': makeTooltip(TOOLTIPS.HORSTABILIZATIONSNP_HEADER, i18n.makeString(TOOLTIPS.HORSTABILIZATIONSNP_BODY))}
+
+    def pack(self):
+        return SettingsExtraData(self._get(), self._getOptions(), self.getExtraData())._asdict()
 
 
 class WindowsTarget4StoredData(SettingAbstract):
@@ -2934,7 +2942,7 @@ class DamageLogEventPositionsSetting(GroupSetting):
         pass
 
 
-class BattleEventsSetting(SettingFalseByDefault):
+class BattleEventsSetting(SettingTrueByDefault):
 
     def __init__(self, settingName, storage, isPreview=False, delegate=lambda : True):
         self.__callable = delegate
@@ -2978,7 +2986,7 @@ class BattleBorderMapModeShow(GroupSetting):
         super(BattleBorderMapModeShow, self).__init__(settingName, storage, options=self.OPTIONS, settingsKey='#settings:feedback/tab/borderMap/showMode/%s', isPreview=isPreview)
 
     def getDefaultValue(self):
-        return self.SHOW_BY_ALT_PRESS
+        return self.SHOW_ALWAYS
 
 
 class BattleBorderMapType(GroupSetting):

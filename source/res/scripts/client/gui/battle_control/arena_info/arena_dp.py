@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/arena_info/arena_dp.py
-from typing import TYPE_CHECKING, Optional
 import logging
 import operator
 from constants import TEAMS_IN_ARENA, PLAYER_RANK
@@ -18,8 +17,6 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.battle_session import IArenaDataProvider
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
-if TYPE_CHECKING:
-    from gui.battle_control.arena_info.arena_vos import VehicleArenaInfoVO
 _logger = logging.getLogger(__name__)
 _OP = settings.INVALIDATE_OP
 _INVITATION_STATUS = settings.INVITATION_DELIVERY_STATUS

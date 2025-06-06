@@ -11,7 +11,7 @@ import nations
 from debug_utils import LOG_CURRENT_EXCEPTION
 from items import vehicles, ITEM_TYPES, EQUIPMENT_TYPES
 from items.vehicles import getVehicleType
-from gui.shared.utils import GUN_NORMAL, GUN_CAN_BE_CLIP, GUN_CLIP, GUN_CAN_BE_AUTO_RELOAD, GUN_AUTO_RELOAD, GUN_DUAL_GUN, GUN_CAN_BE_DUAL_GUN, GUN_AUTOSHOOT_FLAME, GUN_CAN_BE_AUTOSHOOT_FLAME
+from gui.shared.utils import GUN_NORMAL, GUN_CAN_BE_CLIP, GUN_CLIP, GUN_CAN_BE_AUTO_RELOAD, GUN_AUTO_RELOAD, GUN_DUAL_GUN, GUN_CAN_BE_DUAL_GUN, GUN_AUTOSHOOT_FLAME, GUN_CAN_BE_AUTOSHOOT_FLAME, GUN_AUTO_RELOAD_DUAL_GUN, GUN_CLIP_DUAL_GUN, GUN_CAN_BE_AUTO_RELOAD_DUAL_GUN, GUN_CAN_BE_CLIP_DUAL_GUN
 from post_progression_common import ACTION_TYPES
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
@@ -89,16 +89,24 @@ class PrecachedGun(namedtuple('PrecachedGun', ('clipVehicles',
         if vehicleCD is None:
             if self.autoReloadVehicles:
                 reloadingType = GUN_CAN_BE_AUTO_RELOAD
+                if self.dualGunVehicles:
+                    reloadingType = GUN_CAN_BE_AUTO_RELOAD_DUAL_GUN
             elif self.clipVehicles:
                 reloadingType = GUN_CAN_BE_CLIP
+                if self.dualGunVehicles:
+                    reloadingType = GUN_CAN_BE_CLIP_DUAL_GUN
             elif self.dualGunVehicles:
                 reloadingType = GUN_CAN_BE_DUAL_GUN
             elif self.autoShootFlameVehicles:
                 reloadingType = GUN_CAN_BE_AUTOSHOOT_FLAME
         elif self.autoReloadVehicles and vehicleCD in self.autoReloadVehicles:
             reloadingType = GUN_AUTO_RELOAD
+            if self.dualGunVehicles and vehicleCD in self.dualGunVehicles:
+                reloadingType = GUN_AUTO_RELOAD_DUAL_GUN
         elif self.clipVehicles is not None and vehicleCD in self.clipVehicles:
             reloadingType = GUN_CLIP
+            if self.dualGunVehicles and vehicleCD in self.dualGunVehicles:
+                reloadingType = GUN_CLIP_DUAL_GUN
         elif self.dualGunVehicles and vehicleCD in self.dualGunVehicles:
             reloadingType = GUN_DUAL_GUN
         elif self.autoShootFlameVehicles and vehicleCD in self.autoShootFlameVehicles:

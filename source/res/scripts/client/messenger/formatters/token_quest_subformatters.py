@@ -934,11 +934,14 @@ class Comp7RewardsFormatter(SyncTokenQuestsSubFormatter):
 
     def __formatRegularMessage(self, message, rewardsData, rewardType):
         if not rewardsData:
-            return None
+            return
         else:
             formattedRewards = self._achievesFormatter.formatQuestAchieves(rewardsData, asBattleFormatter=False)
-            return g_settings.msgTemplates.format(self.__REGULAR_REWARD_MESSAGE_TEMPLATE, ctx={'title': backport.text(self.__R_SYS_MESSAGES.dyn(rewardType).title()),
-             'body': backport.text(self.__R_SYS_MESSAGES.dyn(rewardType).body(), at=TimeFormatter.getLongDatetimeFormat(time_utils.makeLocalServerTime(message.sentTime)), rewards=formattedRewards)})
+            msg = None
+            if formattedRewards:
+                msg = g_settings.msgTemplates.format(self.__REGULAR_REWARD_MESSAGE_TEMPLATE, ctx={'title': backport.text(self.__R_SYS_MESSAGES.dyn(rewardType).title()),
+                 'body': backport.text(self.__R_SYS_MESSAGES.dyn(rewardType).body(), at=TimeFormatter.getLongDatetimeFormat(time_utils.makeLocalServerTime(message.sentTime)), rewards=formattedRewards)})
+            return msg
 
     def __hasQualificationQuest(self, questIDs):
         return COMP7_QUALIFICATION_QUEST_ID in questIDs

@@ -6,7 +6,7 @@ from gui.impl.gen.view_models.common.missions.quest_model import QuestModel
 class ArmoryYardQuestModel(QuestModel):
     __slots__ = ()
 
-    def __init__(self, properties=16, commands=0):
+    def __init__(self, properties=19, commands=0):
         super(ArmoryYardQuestModel, self).__init__(properties=properties, commands=commands)
 
     def getChapterId(self):
@@ -51,6 +51,24 @@ class ArmoryYardQuestModel(QuestModel):
     def getBattleTypesType():
         return int
 
+    def getCurrent(self):
+        return self._getNumber(16)
+
+    def setCurrent(self, value):
+        self._setNumber(16, value)
+
+    def getTotal(self):
+        return self._getNumber(17)
+
+    def setTotal(self, value):
+        self._setNumber(17, value)
+
+    def getIconKey(self):
+        return self._getString(18)
+
+    def setIconKey(self, value):
+        self._setString(18, value)
+
     def _initialize(self):
         super(ArmoryYardQuestModel, self)._initialize()
         self._addNumberProperty('chapterId', 0)
@@ -58,3 +76,6 @@ class ArmoryYardQuestModel(QuestModel):
         self._addBoolProperty('showLevelsAsRange', False)
         self._addArrayProperty('vehicleTypes', Array())
         self._addArrayProperty('battleTypes', Array())
+        self._addNumberProperty('current', 0)
+        self._addNumberProperty('total', 0)
+        self._addStringProperty('iconKey', '')

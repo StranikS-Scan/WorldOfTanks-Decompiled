@@ -131,6 +131,7 @@ class PersonalMissionsQuestAwardScreen(PersonalMissionsQuestAwardScreenMeta):
         return
 
     def __fireOnClose(self):
+        self.fireEvent(PersonalMissionsEvent(PersonalMissionsEvent.ON_AWARD_PM_SCREEN_CLOSE, ctx={'questID': self._quest.getID()}), EVENT_BUS_SCOPE.LOBBY)
         if self._quest.isFinal():
             self.fireEvent(PersonalMissionsEvent(PersonalMissionsEvent.ON_AWARD_SCEEN_CLOSE, ctx={'operationID': self._quest.getOperationID(),
              'eventID': self._quest.getID()}), EVENT_BUS_SCOPE.LOBBY)

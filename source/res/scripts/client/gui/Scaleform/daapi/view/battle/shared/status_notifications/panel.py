@@ -87,14 +87,13 @@ class StatusNotificationTimerPanel(StatusNotificationsPanelMeta, MethodsRules):
             verticalOffset = self._VERTICAL_SHIFT_WITH_AUTOLOADER_IN_SNIPER_MODE
         return verticalOffset
 
-    def _addNotificationTimerSetting(self, data, typeId, iconName, linkage, color=_COLORS.ORANGE, noiseVisible=False, pulseVisible=False, text='', countdownVisible=True, iconOffsetY=0, iconSmallName='', isReversedTimerDirection=False, canBlink=False, descriptionFontSize=14, descriptionOffsetY=0):
+    def _addNotificationTimerSetting(self, data, typeId, iconName, linkage, color=_COLORS.ORANGE, noiseVisible=False, text='', countdownVisible=True, iconOffsetY=0, iconSmallName='', isReversedTimerDirection=False, canBlink=False, descriptionFontSize=14, descriptionOffsetY=0):
         data.append({'typeId': typeId,
          'iconName': iconName,
          'iconSmallName': iconSmallName,
          'linkage': linkage,
          'color': color,
          'noiseVisible': noiseVisible,
-         'pulseVisible': pulseVisible,
          'text': text,
          'countdownVisible': countdownVisible,
          'iconOffsetY': iconOffsetY,

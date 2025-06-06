@@ -56,8 +56,7 @@ class ArmoryYardBundlesView(ViewImpl):
         showArmoryYardBuyBundleWindow(args.get('bundleId'), parent=self.__parent, onLoadedCallback=self.__onLoadedCallback, onClosedCallback=self.destroyWindow)
 
     def onBuyTokens(self):
-        showArmoryYardBuyWindow(parent=self.__parent, onLoadedCallback=self.__onLoadedCallback)
-        self.destroyWindow()
+        showArmoryYardBuyWindow(parent=self.__parent, onLoadedCallback=self.__onLoadedCallback, onClosedCallback=self.destroyWindow)
 
     def _onLoaded(self, *args, **kwargs):
         super(ArmoryYardBundlesView, self)._onLoaded(*args, **kwargs)
@@ -88,7 +87,9 @@ class ArmoryYardBundlesView(ViewImpl):
         packsSettings = self.__armoryYardCtrl.getStarterPackSettings()
         with self.viewModel.transaction() as vm:
             tokenGoldCost = self.__armoryYardCtrl.getCurrencyTokenCost(Currency.GOLD)
-            PriceModelBuilder.fillPriceModel(vm.tokenPrice, tokenGoldCost)
+            tokenCrystalCost = self.__armoryYardCtrl.getCurrencyTokenCost(Currency.CRYSTAL)
+            PriceModelBuilder.fillPriceModel(vm.tokenPriceGold, tokenGoldCost)
+            PriceModelBuilder.fillPriceModel(vm.tokenPriceCrystal, tokenCrystalCost)
             vm.setCurrentTime(time_utils.getServerUTCTime())
             vm.setEndTime(packsSettings['endTime'])
             bundles = vm.getBundles()

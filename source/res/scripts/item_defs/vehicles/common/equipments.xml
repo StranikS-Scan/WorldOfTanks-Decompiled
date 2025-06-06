@@ -13,10 +13,6 @@
       <cooldownSeconds>	105	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
       <activeSeconds>	3	</activeSeconds>
-      <ctrlItems>
-        <default>	_ExtinguisherItem	</default>
-        <replay>	_ReplayItem	</replay>
-      </ctrlItems>
     </script>
     <tooltipSection>	equipment	</tooltipSection>
   </handExtinguishers>
@@ -35,10 +31,6 @@
       <cooldownSeconds>	90	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
       <activeSeconds>	3	</activeSeconds>
-      <ctrlItems>
-        <default>	_ExtinguisherItem	</default>
-        <replay>	_ReplayItem	</replay>
-      </ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -64,10 +56,6 @@
       <cooldownSeconds>	105	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
       <activeSeconds>	3	</activeSeconds>
-      <ctrlItems>
-        <default>	_MedKitItem	</default>
-        <replay>	_ReplayMedKitItem	</replay>
-      </ctrlItems>
     </script>
     <tooltipSection>	equipment	</tooltipSection>
   </smallMedkit>
@@ -88,10 +76,6 @@
       <cooldownSeconds>	90	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
       <activeSeconds>	3	</activeSeconds>
-      <ctrlItems>
-        <default>	_MedKitItem	</default>
-        <replay>	_ReplayMedKitItem	</replay>
-      </ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -119,10 +103,6 @@
       <cooldownSeconds>	105	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
       <activeSeconds>	3	</activeSeconds>
-      <ctrlItems>
-        <default>	_RepairKitItem	</default>
-        <replay>	_ReplayRepairKitItem	</replay>
-      </ctrlItems>
     </script>
     <tooltipSection>	equipment	</tooltipSection>
   </smallRepairkit>
@@ -148,10 +128,6 @@
       <cooldownSeconds>	90	</cooldownSeconds>
       <activeSeconds>	3	</activeSeconds>
       <reuseCount>	-1	</reuseCount>
-      <ctrlItems>
-        <default>	_RepairKitItem	</default>
-        <replay>	_ReplayRepairKitItem	</replay>
-      </ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -180,7 +156,6 @@
     </vehicleFilter>
     <script>	Fuel	  <enginePowerFactor>	1.05	</enginePowerFactor>
       <turretRotationSpeedFactor>	1.0	</turretRotationSpeedFactor>
-      <ctrlItems></ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -214,7 +189,6 @@
     </vehicleFilter>
     <script>	Fuel	  <enginePowerFactor>	1.05	</enginePowerFactor>
       <turretRotationSpeedFactor>	1.05	</turretRotationSpeedFactor>
-      <ctrlItems></ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -253,7 +227,6 @@
     </vehicleFilter>
     <script>	Fuel	  <enginePowerFactor>	1.1	</enginePowerFactor>
       <turretRotationSpeedFactor>	1.1	</turretRotationSpeedFactor>
-      <ctrlItems></ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -283,7 +256,6 @@
       </include>
     </vehicleFilter>
     <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
-      <ctrlItems></ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -309,7 +281,6 @@
       </include>
     </vehicleFilter>
     <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
-      <ctrlItems></ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -335,7 +306,6 @@
       </include>
     </vehicleFilter>
     <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
-      <ctrlItems></ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -361,9 +331,6 @@
     </vehicleFilter>
     <script>	RemovedRpmLimiter	  <enginePowerFactor>	1.1	</enginePowerFactor>
       <engineHpLossPerSecond>	1.5	</engineHpLossPerSecond>
-      <ctrlItems>
-        <default>	_TriggerItem	</default>
-      </ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -389,7 +356,6 @@
       </include>
     </vehicleFilter>
     <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
-      <ctrlItems></ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -422,10 +388,6 @@
       <enginePowerFactor>	1.7	</enginePowerFactor>
       <maxSpeedFactor>	2.0	</maxSpeedFactor>
       <cooldownSeconds>	3	</cooldownSeconds>
-      <ctrlItems>
-        <default>	_AfterburningItem	</default>
-        <replay>	_ReplayAfterburningItem	</replay>
-      </ctrlItems>
     </script>
     <tooltipSection>	equipment	</tooltipSection>
   </afterburning>
@@ -445,7 +407,6 @@
       </include>
     </vehicleFilter>
     <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
-      <ctrlItems></ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -474,7 +435,6 @@
     </vehicleFilter>
     <script>	Fuel	  <enginePowerFactor>	1.05	</enginePowerFactor>
       <turretRotationSpeedFactor>	1.0	</turretRotationSpeedFactor>
-      <ctrlItems></ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -500,7 +460,6 @@
       </include>
     </vehicleFilter>
     <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
-      <ctrlItems></ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -526,7 +485,6 @@
       </include>
     </vehicleFilter>
     <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
-      <ctrlItems></ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -552,7 +510,6 @@
       </include>
     </vehicleFilter>
     <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
-      <ctrlItems></ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -578,7 +535,6 @@
       </include>
     </vehicleFilter>
     <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
-      <ctrlItems></ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -604,7 +560,6 @@
       </include>
     </vehicleFilter>
     <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
-      <ctrlItems></ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -630,7 +585,6 @@
       </include>
     </vehicleFilter>
     <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
-      <ctrlItems></ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -665,786 +619,6 @@
     </kpi>
     <tooltipSection>	crew_mastery	</tooltipSection>
   </ration_intunion>
-  <artillery_tier1>
-    <id>	19	</id>
-    <userString>	#artefacts:artillery/name	</userString>
-    <description>	#artefacts:artillery/shortDescr	</description>
-    <icon>	artillery 0 0	</icon>
-    <price>	50	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	1	</minLevel>
-          <maxLevel>	1	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageArtillery	  <delay>	4.0	</delay>
-      <duration>	4.0	</duration>
-      <shotsNumber>	25	</shotsNumber>
-      <areaRadius>	10	</areaRadius>
-      <shellCompactDescr>	33306	</shellCompactDescr>
-      <piercingPower>	80 80	</piercingPower>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	65.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-      <ctrlItems>
-        <default>	_ArtilleryItem	</default>
-        <replay>	_ReplayArtilleryItem	</replay>
-      </ctrlItems>
-    </script>
-  </artillery_tier1>
-  <artillery_tier2>
-    <id>	20	</id>
-    <userString>	#artefacts:artillery/name	</userString>
-    <description>	#artefacts:artillery/shortDescr	</description>
-    <icon>	artillery 0 0	</icon>
-    <price>	75	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	2	</minLevel>
-          <maxLevel>	2	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageArtillery	  <delay>	4.0	</delay>
-      <duration>	4.0	</duration>
-      <shotsNumber>	30	</shotsNumber>
-      <areaRadius>	11	</areaRadius>
-      <shellCompactDescr>	33306	</shellCompactDescr>
-      <piercingPower>	80 80	</piercingPower>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	65.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-      <ctrlItems>
-        <default>	_ArtilleryItem	</default>
-        <replay>	_ReplayArtilleryItem	</replay>
-      </ctrlItems>
-    </script>
-  </artillery_tier2>
-  <artillery_tier3>
-    <id>	21	</id>
-    <userString>	#artefacts:artillery/name	</userString>
-    <description>	#artefacts:artillery/shortDescr	</description>
-    <icon>	artillery 0 0	</icon>
-    <price>	100	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	3	</minLevel>
-          <maxLevel>	3	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageArtillery	  <delay>	4.0	</delay>
-      <duration>	4.0	</duration>
-      <shotsNumber>	35	</shotsNumber>
-      <areaRadius>	12	</areaRadius>
-      <shellCompactDescr>	33306	</shellCompactDescr>
-      <piercingPower>	80 80	</piercingPower>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	60.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-      <ctrlItems>
-        <default>	_ArtilleryItem	</default>
-        <replay>	_ReplayArtilleryItem	</replay>
-      </ctrlItems>
-    </script>
-  </artillery_tier3>
-  <artillery_tier4>
-    <id>	22	</id>
-    <userString>	#artefacts:artillery/name	</userString>
-    <description>	#artefacts:artillery/shortDescr	</description>
-    <icon>	artillery 0 0	</icon>
-    <price>	150	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	4	</minLevel>
-          <maxLevel>	4	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageArtillery	  <delay>	4.0	</delay>
-      <duration>	4.0	</duration>
-      <shotsNumber>	40	</shotsNumber>
-      <areaRadius>	12	</areaRadius>
-      <shellCompactDescr>	33306	</shellCompactDescr>
-      <piercingPower>	80 80	</piercingPower>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	60.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-      <ctrlItems>
-        <default>	_ArtilleryItem	</default>
-        <replay>	_ReplayArtilleryItem	</replay>
-      </ctrlItems>
-    </script>
-  </artillery_tier4>
-  <artillery_tier5>
-    <id>	23	</id>
-    <userString>	#artefacts:artillery/name	</userString>
-    <description>	#artefacts:artillery/shortDescr	</description>
-    <icon>	artillery 0 0	</icon>
-    <price>	200	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	1	</minLevel>
-          <maxLevel>	10	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageArtillery	  <delay>	4.0	</delay>
-      <duration>	4.0	</duration>
-      <shotsNumber>	55	</shotsNumber>
-      <areaRadius>	14	</areaRadius>
-      <shellCompactDescr>	33306	</shellCompactDescr>
-      <piercingPower>	80 80	</piercingPower>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	60.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-      <ctrlItems>
-        <default>	_ArtilleryItem	</default>
-        <replay>	_ReplayArtilleryItem	</replay>
-      </ctrlItems>
-    </script>
-  </artillery_tier5>
-  <artillery_tier6>
-    <id>	24	</id>
-    <userString>	#artefacts:artillery/name	</userString>
-    <description>	#artefacts:artillery/shortDescr	</description>
-    <icon>	artillery 0 0	</icon>
-    <price>	300	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	6	</minLevel>
-          <maxLevel>	6	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageArtillery	  <delay>	4.0	</delay>
-      <duration>	4.0	</duration>
-      <shotsNumber>	75	</shotsNumber>
-      <areaRadius>	16	</areaRadius>
-      <shellCompactDescr>	33306	</shellCompactDescr>
-      <piercingPower>	90 90	</piercingPower>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	56.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-      <ctrlItems>
-        <default>	_ArtilleryItem	</default>
-        <replay>	_ReplayArtilleryItem	</replay>
-      </ctrlItems>
-    </script>
-  </artillery_tier6>
-  <artillery_tier7>
-    <id>	25	</id>
-    <userString>	#artefacts:artillery/name	</userString>
-    <description>	#artefacts:artillery/shortDescr	</description>
-    <icon>	artillery 0 0	</icon>
-    <price>	400	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	1	</minLevel>
-          <maxLevel>	10	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageArtillery	  <delay>	4.0	</delay>
-      <duration>	4.0	</duration>
-      <shotsNumber>	90	</shotsNumber>
-      <areaRadius>	19	</areaRadius>
-      <shellCompactDescr>	33306	</shellCompactDescr>
-      <piercingPower>	90 90	</piercingPower>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	52.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-      <ctrlItems>
-        <default>	_ArtilleryItem	</default>
-        <replay>	_ReplayArtilleryItem	</replay>
-      </ctrlItems>
-    </script>
-  </artillery_tier7>
-  <artillery_tier8>
-    <id>	26	</id>
-    <userString>	#artefacts:artillery/name	</userString>
-    <description>	#artefacts:artillery/shortDescr	</description>
-    <icon>	artillery 0 0	</icon>
-    <price>	500	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageArtillery	  <delay>	4.0	</delay>
-      <duration>	4.0	</duration>
-      <shotsNumber>	115	</shotsNumber>
-      <areaRadius>	21	</areaRadius>
-      <shellCompactDescr>	33306	</shellCompactDescr>
-      <piercingPower>	95 95	</piercingPower>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	48.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-      <ctrlItems>
-        <default>	_ArtilleryItem	</default>
-        <replay>	_ReplayArtilleryItem	</replay>
-      </ctrlItems>
-    </script>
-  </artillery_tier8>
-  <artillery_tier9>
-    <id>	27	</id>
-    <userString>	#artefacts:artillery/name	</userString>
-    <description>	#artefacts:artillery/shortDescr	</description>
-    <icon>	artillery 0 0	</icon>
-    <price>	650	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	9	</minLevel>
-          <maxLevel>	9	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageArtillery	  <delay>	4.0	</delay>
-      <duration>	4.0	</duration>
-      <shotsNumber>	130	</shotsNumber>
-      <areaRadius>	23	</areaRadius>
-      <shellCompactDescr>	33306	</shellCompactDescr>
-      <piercingPower>	95 95	</piercingPower>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	44.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-      <ctrlItems>
-        <default>	_ArtilleryItem	</default>
-        <replay>	_ReplayArtilleryItem	</replay>
-      </ctrlItems>
-    </script>
-  </artillery_tier9>
-  <artillery_tier10>
-    <id>	28	</id>
-    <userString>	#artefacts:artillery/name	</userString>
-    <description>	#artefacts:artillery/shortDescr	</description>
-    <icon>	artillery 0 0	</icon>
-    <price>	750	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	1	</minLevel>
-          <maxLevel>	10	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageArtillery	  <delay>	3.0	</delay>
-      <duration>	5.0	</duration>
-      <shotsNumber>	140	</shotsNumber>
-      <areaRadius>	24	</areaRadius>
-      <shellCompactDescr>	33306	</shellCompactDescr>
-      <piercingPower>	100 100	</piercingPower>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	40.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-      <ctrlItems>
-        <default>	_ArtilleryItem	</default>
-        <replay>	_ReplayArtilleryItem	</replay>
-      </ctrlItems>
-    </script>
-  </artillery_tier10>
-  <bomber_tier1>
-    <id>	29	</id>
-    <userString>	#artefacts:bomber/name	</userString>
-    <description>	#artefacts:bomber/shortDescr	</description>
-    <icon>	bomber 0 0	</icon>
-    <price>	50	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	1	</minLevel>
-          <maxLevel>	1	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageBomber	  <delay>	7.0	</delay>
-      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <wwsoundEvent>	plane_bomber_02	</wwsoundEvent>
-      <speed>	80	</speed>
-      <heights>	170 120	</heights>
-      <areaLength>	20.	</areaLength>
-      <areaWidth>	15.	</areaWidth>
-      <antepositions>	0.	</antepositions>
-      <lateropositions>	0.	</lateropositions>
-      <bombingMask>	1	</bombingMask>
-      <waveFraction>	1	</waveFraction>
-      <bombsNumber>	15	</bombsNumber>
-      <shellCompactDescr>	33050	</shellCompactDescr>
-      <tracerKind>	1	</tracerKind>
-      <piercingPower>	80 80	</piercingPower>
-      <gravity>	10000	</gravity>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	65.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-      <ctrlItems>
-        <default>	_BomberItem	</default>
-        <replay>	_ReplayBomberItem	</replay>
-      </ctrlItems>
-    </script>
-  </bomber_tier1>
-  <bomber_tier2>
-    <id>	30	</id>
-    <userString>	#artefacts:bomber/name	</userString>
-    <description>	#artefacts:bomber/shortDescr	</description>
-    <icon>	bomber 0 0	</icon>
-    <price>	75	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	2	</minLevel>
-          <maxLevel>	2	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageBomber	  <delay>	7.0	</delay>
-      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <wwsoundEvent>	plane_bomber_03	</wwsoundEvent>
-      <speed>	80	</speed>
-      <heights>	170 120	</heights>
-      <areaLength>	20.	</areaLength>
-      <areaWidth>	15.	</areaWidth>
-      <antepositions>	0.	</antepositions>
-      <lateropositions>	0.	</lateropositions>
-      <bombingMask>	1	</bombingMask>
-      <waveFraction>	1	</waveFraction>
-      <bombsNumber>	20	</bombsNumber>
-      <shellCompactDescr>	33050	</shellCompactDescr>
-      <tracerKind>	1	</tracerKind>
-      <piercingPower>	80 80	</piercingPower>
-      <gravity>	10000	</gravity>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	65.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-      <ctrlItems>
-        <default>	_BomberItem	</default>
-        <replay>	_ReplayBomberItem	</replay>
-      </ctrlItems>
-    </script>
-  </bomber_tier2>
-  <bomber_tier3>
-    <id>	31	</id>
-    <userString>	#artefacts:bomber/name	</userString>
-    <description>	#artefacts:bomber/shortDescr	</description>
-    <icon>	bomber 0 0	</icon>
-    <price>	100	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	3	</minLevel>
-          <maxLevel>	3	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageBomber	  <delay>	7.0	</delay>
-      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <wwsoundEvent>	plane_bomber_01	</wwsoundEvent>
-      <speed>	50	</speed>
-      <heights>	170 120	</heights>
-      <areaLength>	30.	</areaLength>
-      <areaWidth>	20.	</areaWidth>
-      <antepositions>	0.	</antepositions>
-      <lateropositions>	0	</lateropositions>
-      <bombingMask>	1	</bombingMask>
-      <waveFraction>	1	</waveFraction>
-      <bombsNumber>	25	</bombsNumber>
-      <shellCompactDescr>	33050	</shellCompactDescr>
-      <tracerKind>	1	</tracerKind>
-      <piercingPower>	80 80	</piercingPower>
-      <gravity>	10000	</gravity>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	60.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-      <ctrlItems>
-        <default>	_BomberItem	</default>
-        <replay>	_ReplayBomberItem	</replay>
-      </ctrlItems>
-    </script>
-  </bomber_tier3>
-  <bomber_tier4>
-    <id>	32	</id>
-    <userString>	#artefacts:bomber/name	</userString>
-    <description>	#artefacts:bomber/shortDescr	</description>
-    <icon>	bomber 0 0	</icon>
-    <price>	150	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	4	</minLevel>
-          <maxLevel>	4	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageBomber	  <delay>	7.0	</delay>
-      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <wwsoundEvent>	plane_bomber_02	</wwsoundEvent>
-      <speed>	50	</speed>
-      <heights>	170 120	</heights>
-      <areaLength>	30.	</areaLength>
-      <areaWidth>	20.	</areaWidth>
-      <antepositions>	0.	</antepositions>
-      <lateropositions>	0	</lateropositions>
-      <bombingMask>	1	</bombingMask>
-      <waveFraction>	1	</waveFraction>
-      <bombsNumber>	30	</bombsNumber>
-      <shellCompactDescr>	33050	</shellCompactDescr>
-      <tracerKind>	1	</tracerKind>
-      <piercingPower>	80 80	</piercingPower>
-      <gravity>	10000	</gravity>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	60.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-      <ctrlItems>
-        <default>	_BomberItem	</default>
-        <replay>	_ReplayBomberItem	</replay>
-      </ctrlItems>
-    </script>
-  </bomber_tier4>
-  <bomber_tier5>
-    <id>	33	</id>
-    <userString>	#artefacts:bomber/name	</userString>
-    <description>	#artefacts:bomber/shortDescr	</description>
-    <icon>	bomber 0 0	</icon>
-    <price>	200	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	1	</minLevel>
-          <maxLevel>	10	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageBomber	  <delay>	7.0	</delay>
-      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <wwsoundEvent>	plane_bomber_03	</wwsoundEvent>
-      <speed>	80	</speed>
-      <heights>	170 120	</heights>
-      <areaLength>	30.	</areaLength>
-      <areaWidth>	20.	</areaWidth>
-      <antepositions>	0.	</antepositions>
-      <lateropositions>	0	</lateropositions>
-      <bombingMask>	1	</bombingMask>
-      <waveFraction>	1	</waveFraction>
-      <bombsNumber>	35	</bombsNumber>
-      <shellCompactDescr>	33050	</shellCompactDescr>
-      <tracerKind>	1	</tracerKind>
-      <piercingPower>	80 80	</piercingPower>
-      <gravity>	10000	</gravity>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	60.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-      <ctrlItems>
-        <default>	_BomberItem	</default>
-        <replay>	_ReplayBomberItem	</replay>
-      </ctrlItems>
-    </script>
-  </bomber_tier5>
-  <bomber_tier6>
-    <id>	34	</id>
-    <userString>	#artefacts:bomber/name	</userString>
-    <description>	#artefacts:bomber/shortDescr	</description>
-    <icon>	bomber 0 0	</icon>
-    <price>	300	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	6	</minLevel>
-          <maxLevel>	6	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageBomber	  <delay>	7.0	</delay>
-      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <wwsoundEvent>	plane_bomber_04	</wwsoundEvent>
-      <speed>	50	</speed>
-      <heights>	170 120	</heights>
-      <areaLength>	40.	</areaLength>
-      <areaWidth>	30.	</areaWidth>
-      <antepositions>	0.	</antepositions>
-      <lateropositions>	0.	</lateropositions>
-      <bombingMask>	1	</bombingMask>
-      <waveFraction>	1	</waveFraction>
-      <bombsNumber>	60	</bombsNumber>
-      <shellCompactDescr>	33050	</shellCompactDescr>
-      <tracerKind>	1	</tracerKind>
-      <piercingPower>	90 90	</piercingPower>
-      <gravity>	10000	</gravity>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	56.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-      <ctrlItems>
-        <default>	_BomberItem	</default>
-        <replay>	_ReplayBomberItem	</replay>
-      </ctrlItems>
-    </script>
-  </bomber_tier6>
-  <bomber_tier7>
-    <id>	35	</id>
-    <userString>	#artefacts:bomber/name	</userString>
-    <description>	#artefacts:bomber/shortDescr	</description>
-    <icon>	bomber 0 0	</icon>
-    <price>	400	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	1	</minLevel>
-          <maxLevel>	10	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageBomber	  <delay>	6.0	</delay>
-      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <wwsoundEvent>	plane_bomber_01	</wwsoundEvent>
-      <speed>	80	</speed>
-      <heights>	170 120	</heights>
-      <areaLength>	40.	</areaLength>
-      <areaWidth>	30.	</areaWidth>
-      <antepositions>	0.	</antepositions>
-      <lateropositions>	0.	</lateropositions>
-      <bombingMask>	1	</bombingMask>
-      <waveFraction>	1	</waveFraction>
-      <bombsNumber>	75	</bombsNumber>
-      <shellCompactDescr>	33050	</shellCompactDescr>
-      <tracerKind>	1	</tracerKind>
-      <piercingPower>	90 90	</piercingPower>
-      <gravity>	10000	</gravity>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	52.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-      <ctrlItems>
-        <default>	_BomberItem	</default>
-        <replay>	_ReplayBomberItem	</replay>
-      </ctrlItems>
-    </script>
-  </bomber_tier7>
-  <bomber_tier8>
-    <id>	36	</id>
-    <userString>	#artefacts:bomber/name	</userString>
-    <description>	#artefacts:bomber/shortDescr	</description>
-    <icon>	bomber 0 0	</icon>
-    <price>	500	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	8	</minLevel>
-          <maxLevel>	8	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageBomber	  <delay>	6.0	</delay>
-      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <wwsoundEvent>	plane_bomber_02	</wwsoundEvent>
-      <speed>	200	</speed>
-      <heights>	170 120	</heights>
-      <areaLength>	55.	</areaLength>
-      <areaWidth>	35.	</areaWidth>
-      <antepositions>	0.	</antepositions>
-      <lateropositions>	0.	</lateropositions>
-      <bombingMask>	1	</bombingMask>
-      <waveFraction>	1	</waveFraction>
-      <bombsNumber>	110	</bombsNumber>
-      <shellCompactDescr>	33050	</shellCompactDescr>
-      <tracerKind>	1	</tracerKind>
-      <piercingPower>	95 95	</piercingPower>
-      <gravity>	10000	</gravity>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	48.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-      <ctrlItems>
-        <default>	_BomberItem	</default>
-        <replay>	_ReplayBomberItem	</replay>
-      </ctrlItems>
-    </script>
-  </bomber_tier8>
-  <bomber_tier9>
-    <id>	37	</id>
-    <userString>	#artefacts:bomber/name	</userString>
-    <description>	#artefacts:bomber/shortDescr	</description>
-    <icon>	bomber 0 0	</icon>
-    <price>	650	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	9	</minLevel>
-          <maxLevel>	9	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageBomber	  <delay>	6.0	</delay>
-      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <wwsoundEvent>	plane_bomber_03	</wwsoundEvent>
-      <speed>	80	</speed>
-      <heights>	170 120	</heights>
-      <areaLength>	55.	</areaLength>
-      <areaWidth>	35.	</areaWidth>
-      <antepositions>	0.	</antepositions>
-      <lateropositions>	0.	</lateropositions>
-      <bombingMask>	1	</bombingMask>
-      <waveFraction>	1	</waveFraction>
-      <bombsNumber>	120	</bombsNumber>
-      <shellCompactDescr>	33050	</shellCompactDescr>
-      <tracerKind>	1	</tracerKind>
-      <piercingPower>	95 95	</piercingPower>
-      <gravity>	10000	</gravity>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	44.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-      <ctrlItems>
-        <default>	_BomberItem	</default>
-        <replay>	_ReplayBomberItem	</replay>
-      </ctrlItems>
-    </script>
-  </bomber_tier9>
-  <bomber_tier10>
-    <id>	38	</id>
-    <userString>	#artefacts:bomber/name	</userString>
-    <description>	#artefacts:bomber/shortDescr	</description>
-    <icon>	bomber 0 0	</icon>
-    <price>	750	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	1	</minLevel>
-          <maxLevel>	10	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	RageBomber	  <delay>	6.0	</delay>
-      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <wwsoundEvent>	plane_bomber_04	</wwsoundEvent>
-      <speed>	80	</speed>
-      <heights>	170 120	</heights>
-      <areaLength>	55	</areaLength>
-      <areaWidth>	35	</areaWidth>
-      <antepositions>	0	</antepositions>
-      <lateropositions>	0	</lateropositions>
-      <bombingMask>	1	</bombingMask>
-      <waveFraction>	1	</waveFraction>
-      <bombsNumber>	130	</bombsNumber>
-      <shellCompactDescr>	33050	</shellCompactDescr>
-      <tracerKind>	1	</tracerKind>
-      <piercingPower>	100 100	</piercingPower>
-      <gravity>	10000	</gravity>
-      <reusable>	false	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	40.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
-      <noOwner>	true	</noOwner>
-      <ctrlItems>
-        <default>	_BomberItem	</default>
-        <replay>	_ReplayBomberItem	</replay>
-      </ctrlItems>
-    </script>
-  </bomber_tier10>
   <artillery_cw_tier6>
     <id>	45	</id>
     <userString>	#artefacts:artillery/name	</userString>
@@ -1473,10 +647,6 @@
       <deployTime>	56.0	</deployTime>
       <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
       <noOwner>	true	</noOwner>
-      <ctrlItems>
-        <default>	_ArtilleryItem	</default>
-        <replay>	_ReplayArtilleryItem	</replay>
-      </ctrlItems>
     </script>
   </artillery_cw_tier6>
   <artillery_cw_tier8>
@@ -1507,10 +677,6 @@
       <deployTime>	48.0	</deployTime>
       <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
       <noOwner>	true	</noOwner>
-      <ctrlItems>
-        <default>	_ArtilleryItem	</default>
-        <replay>	_ReplayArtilleryItem	</replay>
-      </ctrlItems>
     </script>
   </artillery_cw_tier8>
   <artillery_cw_tier10>
@@ -1541,10 +707,6 @@
       <deployTime>	40.0	</deployTime>
       <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
       <noOwner>	true	</noOwner>
-      <ctrlItems>
-        <default>	_ArtilleryItem	</default>
-        <replay>	_ReplayArtilleryItem	</replay>
-      </ctrlItems>
     </script>
   </artillery_cw_tier10>
   <bomber_cw_tier6>
@@ -1585,10 +747,6 @@
       <deployTime>	56.0	</deployTime>
       <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
       <noOwner>	true	</noOwner>
-      <ctrlItems>
-        <default>	_BomberItem	</default>
-        <replay>	_ReplayBomberItem	</replay>
-      </ctrlItems>
     </script>
   </bomber_cw_tier6>
   <bomber_cw_tier8>
@@ -1629,10 +787,6 @@
       <deployTime>	48.0	</deployTime>
       <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
       <noOwner>	true	</noOwner>
-      <ctrlItems>
-        <default>	_BomberItem	</default>
-        <replay>	_ReplayBomberItem	</replay>
-      </ctrlItems>
     </script>
   </bomber_cw_tier8>
   <bomber_cw_tier10>
@@ -1673,10 +827,6 @@
       <deployTime>	40.0	</deployTime>
       <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
       <noOwner>	true	</noOwner>
-      <ctrlItems>
-        <default>	_BomberItem	</default>
-        <replay>	_ReplayBomberItem	</replay>
-      </ctrlItems>
     </script>
   </bomber_cw_tier10>
   <artillery_fallout>
@@ -1707,10 +857,6 @@
       <deployTime>	60.0	</deployTime>
       <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
       <noOwner>	false	</noOwner>
-      <ctrlItems>
-        <default>	_ArtilleryItem	</default>
-        <replay>	_ReplayArtilleryItem	</replay>
-      </ctrlItems>
     </script>
   </artillery_fallout>
   <bomber_fallout>
@@ -1751,10 +897,6 @@
       <deployTime>	40.0	</deployTime>
       <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
       <noOwner>	false	</noOwner>
-      <ctrlItems>
-        <default>	_BomberItem	</default>
-        <replay>	_ReplayBomberItem	</replay>
-      </ctrlItems>
     </script>
   </bomber_fallout>
   <artillery_aoe_fort_6lvl_1>
@@ -7885,10 +7027,6 @@
       <cooldownSeconds>	90	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
       <activeSeconds>	3	</activeSeconds>
-      <ctrlItems>
-        <default>	_RepairKitItem	</default>
-        <replay>	_ReplayRepairKitItem	</replay>
-      </ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -8023,7 +7161,7 @@
       <heightUpFraction>	0.7	</heightUpFraction>
       <expansionDuration>	2.	</expansionDuration>
       <dispersionRadius>	5.	</dispersionRadius>
-      <totalDuration>	20.	</totalDuration>
+      <totalDuration>	25.	</totalDuration>
       <smokeOpacity>	10.	</smokeOpacity>
       <attrFactorMods>
         <circularVisionRadius>
@@ -9021,10 +8159,6 @@
           </args>
         </action>
       </actions>
-      <ctrlItems>
-        <default>	_ArcadeArtilleryItem	</default>
-        <replay>	_ReplayArtilleryItem	</replay>
-      </ctrlItems>
     </script>
   </arcade_artillery_aoe>
   <arcade_bomber_aoe>
@@ -9087,10 +8221,6 @@
           </args>
         </action>
       </actions>
-      <ctrlItems>
-        <default>	_ArcadeBomberItem	</default>
-        <replay>	_ReplayBomberItem	</replay>
-      </ctrlItems>
     </script>
   </arcade_bomber_aoe>
   <artillery_deathzone_aoe>
@@ -9122,7 +8252,7 @@
       <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
       <areaShow>	always	</areaShow>
       <noOwner>	false	</noOwner>
-      <attackerType>	PERSONAL_DEATH_ZONE	</attackerType>
+      <attackerType>	DEATH_ZONE	</attackerType>
       <shotSoundPreDelay>	1	</shotSoundPreDelay>
       <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
       <effects>
@@ -9146,12 +8276,27 @@
           </args>
         </action>
       </actions>
-      <ctrlItems>
-        <default>	_ArtilleryItem	</default>
-        <replay>	_ReplayArtilleryItem	</replay>
-      </ctrlItems>
     </script>
   </artillery_deathzone_aoe>
+  <exampleAbility>
+    <id>	900	</id>
+    <userString>	#artefacts:exampleAbility/name	</userString>
+    <description>	#artefacts:exampleAbility/descr	</description>
+    <icon>	ration_uk 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale trigger	</tags>
+    <type>	regular	</type>
+    <script>	VisualScriptEquipment	  <visualScript>
+        <client>
+          <plan>	abilities/exampleAbility_client	</plan>
+        </client>
+        <server>
+          <plan>	abilities/exampleAbility_server	</plan>
+        </server>
+      </visualScript>
+    </script>
+  </exampleAbility>
   <comp7_aoe_heal>
     <id>	9501	</id>
     <userString>	#artefacts:comp7_aoe_heal/name	</userString>
@@ -9194,7 +8339,7 @@
           <plan>	comp7Abilities/allySupport_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	20	  <exports>	vse	</exports>
+      <cooldownSeconds>	15	  <exports>	vse	</exports>
       </cooldownSeconds>
       <duration>	20	  <exports>	vse tooltip	</exports>
       </duration>
@@ -9245,15 +8390,15 @@
           <plan>	comp7Abilities/concentration_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	20	  <exports>	vse	</exports>
+      <cooldownSeconds>	10	  <exports>	vse	</exports>
       </cooldownSeconds>
       <duration>	15	  <exports>	vse tooltip	</exports>
       </duration>
-      <aimingTimeBuff>	0.5 0.35 0.25	  <exports>	vse	</exports>
+      <aimingTimeBuff>	0.5 0.35 0.15	  <exports>	vse	</exports>
       </aimingTimeBuff>
       <shotDispersionFactors>	0.5 0.35 0.25	  <exports>	vse	</exports>
       </shotDispersionFactors>
-      <clipReloadTimeBoost>	0.5 0.75 0.95	  <exports>	vse tooltip	</exports>
+      <clipReloadTimeBoost>	0.65 0.8 1.15	  <exports>	vse tooltip	</exports>
       </clipReloadTimeBoost>
     </script>
   </comp7_concentration>
@@ -9297,11 +8442,11 @@
           <plan>	comp7Abilities/aoeInspire_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	10	  <exports>	vse	</exports>
+      <cooldownSeconds>	15	  <exports>	vse	</exports>
       </cooldownSeconds>
-      <duration>	25	  <exports>	vse tooltip	</exports>
+      <duration>	15	  <exports>	vse tooltip	</exports>
       </duration>
-      <crewBuff>	25 40 55	  <exports>	vse tooltip	</exports>
+      <crewBuff>	20 30 40	  <exports>	vse tooltip	</exports>
       </crewBuff>
     </script>
   </comp7_aoe_inspire>
@@ -9320,15 +8465,15 @@
           <plan>	comp7Abilities/redline_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	30	  <exports>	vse	</exports>
+      <cooldownSeconds>	20	  <exports>	vse	</exports>
       </cooldownSeconds>
-      <delay>	2	  <exports>	vse tooltip	</exports>
+      <delay>	3	  <exports>	vse tooltip	</exports>
       </delay>
-      <radius>	7 8 9	  <exports>	vse tooltip	</exports>
+      <radius>	7 8 10	  <exports>	vse tooltip	</exports>
       </radius>
       <damage>	100 250 500	  <exports>	vse tooltip	</exports>
       </damage>
-      <stunDuration>	3 9 15	  <exports>	vse tooltip	</exports>
+      <stunDuration>	3 9 12	  <exports>	vse tooltip	</exports>
       </stunDuration>
       <fraction>	0	  <exports>	vse tooltip	</exports>
       </fraction>
@@ -9341,8 +8486,8 @@
       <effects>
         <action>
           <shotEffects>	epicArtilleryStrike	</shotEffects>
-          <offsetDeviation>	8	</offsetDeviation>
-          <repeatCount>	3	</repeatCount>
+          <offsetDeviation>	9	</offsetDeviation>
+          <repeatCount>	4	</repeatCount>
           <repeatDelay>	0	</repeatDelay>
           <repeatDelayDeviationPercent>	0	</repeatDelayDeviationPercent>
         </action>
@@ -9366,7 +8511,7 @@
           <plan>	comp7Abilities/fastRecharge_client	</plan>
         </client>
       </visualScript>
-      <cooldownSeconds>	15	  <exports>	vse	</exports>
+      <cooldownSeconds>	12	  <exports>	vse	</exports>
       </cooldownSeconds>
       <gunReloadTimeBuff>	0.65 0.45 0.25	  <exports>	vse	</exports>
       </gunReloadTimeBuff>
@@ -9388,15 +8533,15 @@
       </visualScript>
       <cooldownSeconds>	10	  <exports>	vse	</exports>
       </cooldownSeconds>
-      <duration>	15 25 35	  <exports>	vse tooltip	</exports>
+      <duration>	15 20 30	  <exports>	vse tooltip	</exports>
       </duration>
-      <enginePowerFactor>	1.25	  <exports>	vse	</exports>
+      <enginePowerFactor>	1.35	  <exports>	vse	</exports>
       </enginePowerFactor>
       <stunDurationFactor>	0.25	  <exports>	vse	</exports>
       </stunDurationFactor>
       <repairBuff>	75	  <exports>	vse tooltip	</exports>
       </repairBuff>
-      <gunReloadBoost>	4.0	  <exports>	vse tooltip	</exports>
+      <gunReloadBoost>	6.0	  <exports>	vse tooltip	</exports>
       </gunReloadBoost>
     </script>
   </comp7_juggernaut>
@@ -9448,7 +8593,7 @@
       </dispersionFactor>
       <damageDistance>	350	  <exports>	vse tooltip	</exports>
       </damageDistance>
-      <damageFactors>	1.15 1.25 1.65	  <exports>	vse tooltip	</exports>
+      <damageFactors>	1.15 1.25 1.45	  <exports>	vse tooltip	</exports>
       </damageFactors>
     </script>
   </comp7_sniper>
@@ -9468,19 +8613,19 @@
       </visualScript>
       <cooldownSeconds>	20	  <exports>	vse	</exports>
       </cooldownSeconds>
-      <duration>	7	  <exports>	vse tooltip	</exports>
+      <duration>	6	  <exports>	vse tooltip	</exports>
       </duration>
-      <healDuration>	7	  <exports>	vse tooltip	</exports>
+      <healDuration>	6	  <exports>	vse tooltip	</exports>
       </healDuration>
-      <baseHeal>	99	  <exports>	vse tooltip	</exports>
+      <baseHeal>	50	  <exports>	vse tooltip	</exports>
       </baseHeal>
-      <extraHealFactor>	0.3 0.6 0.99	  <exports>	vse	</exports>
+      <extraHealFactor>	0.3 0.5 0.7	  <exports>	vse	</exports>
       </extraHealFactor>
-      <fwdSpeedBoost>	20	  <exports>	vse tooltip	</exports>
+      <fwdSpeedBoost>	1	  <exports>	vse tooltip	</exports>
       </fwdSpeedBoost>
-      <bkwSpeedBoost>	15	  <exports>	vse tooltip	</exports>
+      <bkwSpeedBoost>	5	  <exports>	vse tooltip	</exports>
       </bkwSpeedBoost>
-      <enginePowerBuff>	15	  <exports>	vse tooltip	</exports>
+      <enginePowerBuff>	30	  <exports>	vse tooltip	</exports>
       </enginePowerBuff>
     </script>
   </comp7_risky_attack>
@@ -9498,13 +8643,13 @@
           <plan>	comp7Abilities/recon_point_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	25	  <exports>	vse	</exports>
+      <cooldownSeconds>	8	  <exports>	vse	</exports>
       </cooldownSeconds>
       <duration>	10 15 25	  <exports>	vse tooltip	</exports>
       </duration>
-      <delay>	1	  <exports>	vse tooltip	</exports>
+      <delay>	2	  <exports>	vse tooltip	</exports>
       </delay>
-      <radius>	40 60 80	  <exports>	vse tooltip	</exports>
+      <radius>	50 70 90	  <exports>	vse tooltip	</exports>
       </radius>
       <areaVisual>	content/Interface/TargetPoint/ReconFlight_02.visual	</areaVisual>
     </script>
@@ -9564,7 +8709,7 @@
     <icon>	sure_shot 0 0	</icon>
     <price>	100	</price>
     <notInShop>	True	</notInShop>
-    <tags>	notForSale abilityEquipment trigger public stopOutsideBattle	</tags>
+    <tags>	notForSale visualScriptAbilityEquipment trigger public stopOutsideBattle	</tags>
     <type>	battleAbilities	</type>
     <activationSound>	ability_start_button	</activationSound>
     <deactivationSound>	ability_stop_button	</deactivationSound>
@@ -9631,7 +8776,7 @@
     <icon>	juggernaut 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
-    <tags>	notForSale abilityEquipment public stopOutsideBattle	</tags>
+    <tags>	notForSale visualScriptAbilityEquipment public stopOutsideBattle	</tags>
     <type>	battleAbilities	</type>
     <activationSound>	ability_start_button	</activationSound>
     <deactivationSound>	ability_stop_button	</deactivationSound>
@@ -9694,7 +8839,7 @@
     <icon>	concentration 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
-    <tags>	notForSale abilityEquipment public stopOutsideBattle	</tags>
+    <tags>	notForSale visualScriptAbilityEquipment public stopOutsideBattle	</tags>
     <type>	battleAbilities	</type>
     <activationSound>	ability_start_button	</activationSound>
     <deactivationSound>	ability_stop_button	</deactivationSound>
@@ -9750,4 +8895,78 @@
       </add>
     </kpi>
   </concentration>
+  <recoil_recuperator>
+    <id>	11003	</id>
+    <userString>	#artefacts:recoil_recuperator/name	</userString>
+    <description>	#artefacts:recoil_recuperator/descr	</description>
+    <icon>	recoil_recuperator 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale abilityEquipment	</tags>
+    <type>	battleAbilities	</type>
+    <activationSound>	ability_start_button	</activationSound>
+    <deactivationSound>	ability_stop_button	</deactivationSound>
+    <refillSound>	ability_recharging	</refillSound>
+    <script>	RecoilRecuperatorEquipment	  <visualScript>
+        <client>
+          <plan>	abilities/base_ability_controller_client	</plan>
+        </client>
+      </visualScript>
+      <cooldownSeconds>	90	</cooldownSeconds>
+      <reuseCount>	3	</reuseCount>
+      <duration>	30	</duration>
+      <additiveFactors>
+        <gun-chargeTimeBonus>	1	</gun-chargeTimeBonus>
+        <gun-reloadLockTimeBonus>	2	</gun-reloadLockTimeBonus>
+        <gun-loadShellIntoDualGunBonus>	4	</gun-loadShellIntoDualGunBonus>
+        <vehicle-fwMaxSpeedBonus>	6	</vehicle-fwMaxSpeedBonus>
+        <vehicle-bkMaxSpeedBonus>	6	</vehicle-bkMaxSpeedBonus>
+      </additiveFactors>
+      <multiplicativeFactors>
+        <chassis-shotDispersionFactors-movement>	1.2	</chassis-shotDispersionFactors-movement>
+        <chassis-shotDispersionFactors-rotation>	1.2	</chassis-shotDispersionFactors-rotation>
+        <gun-shotDispersionFactors-afterShot>	1.2	</gun-shotDispersionFactors-afterShot>
+        <gun-shotDispersionFactors-turretRotation>	1.2	</gun-shotDispersionFactors-turretRotation>
+        <engine-power>	1.5	</engine-power>
+      </multiplicativeFactors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotDispersionChassisMovement	</name>
+        <value>	20	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionChassisRotation	</name>
+        <value>	20	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionTurretRotation	</name>
+        <value>	20	</value>
+      </mul>
+      <add>
+        <name>	chargeTimeBonus	</name>
+        <value>	-1	</value>
+      </add>
+      <add>
+        <name>	penaltyAfterShotBonus	</name>
+        <value>	-2	</value>
+      </add>
+      <add>
+        <name>	loadShellIntoDualGunBonus	</name>
+        <value>	-4	</value>
+      </add>
+      <mul>
+        <name>	vehicleGunShotDispersionAfterShot	</name>
+        <value>	20	</value>
+      </mul>
+      <add>
+        <name>	speedLimitsBonus	</name>
+        <value>	6	</value>
+      </add>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	50	</value>
+      </mul>
+    </kpi>
+  </recoil_recuperator>
 </equipments.xml>

@@ -14,7 +14,7 @@ class LastMissionStatus(Enum):
 class PersonalMissionsLastOperationTooltipModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=5, commands=0):
+    def __init__(self, properties=6, commands=0):
         super(PersonalMissionsLastOperationTooltipModel, self).__init__(properties=properties, commands=commands)
 
     def getMissionStatus(self):
@@ -41,11 +41,17 @@ class PersonalMissionsLastOperationTooltipModel(ViewModel):
     def setAll(self, value):
         self._setNumber(3, value)
 
+    def getVehicleName(self):
+        return self._getString(4)
+
+    def setVehicleName(self, value):
+        self._setString(4, value)
+
     def getRewards(self):
-        return self._getArray(4)
+        return self._getArray(5)
 
     def setRewards(self, value):
-        self._setArray(4, value)
+        self._setArray(5, value)
 
     @staticmethod
     def getRewardsType():
@@ -57,4 +63,5 @@ class PersonalMissionsLastOperationTooltipModel(ViewModel):
         self._addStringProperty('name', '')
         self._addNumberProperty('completed', 0)
         self._addNumberProperty('all', 0)
+        self._addStringProperty('vehicleName', '')
         self._addArrayProperty('rewards', Array())

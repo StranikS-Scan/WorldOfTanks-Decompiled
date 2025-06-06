@@ -118,7 +118,8 @@ def getSupportedArenaBonusTypeFor(queueType, isInUnit, isSortie=True):
          QUEUE_TYPE.RANKED: ARENA_BONUS_TYPE.RANKED,
          QUEUE_TYPE.MAPBOX: ARENA_BONUS_TYPE.MAPBOX,
          QUEUE_TYPE.EPIC: ARENA_BONUS_TYPE.EPIC_BATTLE,
-         QUEUE_TYPE.COMP7: ARENA_BONUS_TYPE.COMP7}
+         QUEUE_TYPE.COMP7: ARENA_BONUS_TYPE.COMP7,
+         QUEUE_TYPE.VERSUS_AI: ARENA_BONUS_TYPE.VERSUS_AI}
         arenaBonusType = arenaBonusTypeByQueueType.get(queueType, ARENA_BONUS_TYPE.UNKNOWN)
     return arenaBonusType
 
@@ -284,9 +285,11 @@ def _isChapterShown(shownChapters, chapter):
     return shownChapters & chapter == 0
 
 
-def fillBattleTypes(model):
+@dependency.replace_none_kwargs(battlePass=IBattlePassController)
+def fillBattleTypes(model, battlePass=None):
     array = model.getAvailableBattleTypes()
     for battleType in SUPPORTED_ARENA_BONUS_TYPES:
-        array.addNumber(battleType)
+        if battlePass.isGameModeEnabled(battleType):
+            array.addNumber(battleType)
 
     array.invalidate()

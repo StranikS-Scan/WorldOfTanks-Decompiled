@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/lobby/BaseContactView.py
 from debug_utils import LOG_ERROR
-from messenger.gui.Scaleform.meta.BaseContactViewMeta import BaseContactViewMeta
+from gui.Scaleform.daapi.view.meta.BaseContactViewMeta import BaseContactViewMeta
 
 class BaseContactView(BaseContactViewMeta):
 

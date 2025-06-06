@@ -74,6 +74,14 @@ class FittingSlotVO(dict):
                     uiStorage = dependency.instance(ISettingsCore).serverSettings.getUIStorage2()
                     if not uiStorage.get(UI_STORAGE_KEYS.DUAL_ACCURACY_MARK_IS_SHOWN):
                         self['counter'] = self.get('counter', 0) + 1
+                if vehicleModule.isAutoReloadableDualGun(vehicle.descriptor):
+                    uiStorage = dependency.instance(ISettingsCore).serverSettings.getUIStorage2()
+                    if not uiStorage.get(UI_STORAGE_KEYS.AUTO_RELOAD_DUAL_GUN_MARK_IS_SHOWN):
+                        self['counter'] = self.get('counter', 0) + 1
+                if vehicleModule.isClipDualGun(vehicle.descriptor):
+                    uiStorage = dependency.instance(ISettingsCore).serverSettings.getUIStorage2()
+                    if not uiStorage.get(UI_STORAGE_KEYS.CLIP_DUAL_GUN_MARK_IS_SHOWN):
+                        self['counter'] = self.get('counter', 0) + 1
             if vehicleModule.itemTypeID == ITEM_TYPES.vehicleEngine:
                 if vehicleModule.hasTurboshaftEngine():
                     uiStorage = dependency.instance(ISettingsCore).serverSettings.getUIStorage()

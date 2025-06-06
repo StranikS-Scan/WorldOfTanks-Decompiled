@@ -4,12 +4,14 @@ from aih_constants import CTRL_MODE_NAME
 from constants import ARENA_PERIOD
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.battle.shared import SharedPage, finish_sound_player, drone_music_player
+from gui.Scaleform.daapi.view.battle.shared.artillery.manager import ArtilleryMarkersManager
 from gui.Scaleform.daapi.view.battle.shared.page import ComponentsConfig
 from gui.Scaleform.daapi.view.battle.shared.start_countdown_sound_player import StartCountdownSoundPlayer
 from gui.Scaleform.daapi.view.battle.shared.tabbed_full_stats import TabsAliases
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from shared_utils import CONST_CONTAINER
+from gui.Scaleform.daapi.view.battle.shared import crosshair
 
 class DynamicAliases(CONST_CONTAINER):
     PREBATTLE_TIMER_SOUND_PLAYER = 'prebattleTimerSoundPlayer'
@@ -42,10 +44,11 @@ class _ClassicComponentsConfig(ComponentsConfig):
 
 COMMON_CLASSIC_CONFIG = _ClassicComponentsConfig()
 EXTENDED_CLASSIC_CONFIG = COMMON_CLASSIC_CONFIG + ComponentsConfig(config=((BATTLE_CTRL_ID.ARENA_PERIOD, (DynamicAliases.FINISH_SOUND_PLAYER,)), (BATTLE_CTRL_ID.TEAM_BASES, (DynamicAliases.FINISH_SOUND_PLAYER,)), (BATTLE_CTRL_ID.BATTLE_FIELD_CTRL, (DynamicAliases.FINISH_SOUND_PLAYER,))), viewsConfig=((DynamicAliases.FINISH_SOUND_PLAYER, finish_sound_player.FinishSoundPlayer),))
+_ARTILLERY_EXTERNAL_COMPONENTS = (crosshair.CrosshairPanelContainer, ArtilleryMarkersManager)
 
 class ClassicPage(SharedPage):
 
-    def __init__(self, components=None, external=None, fullStatsAlias=BATTLE_VIEW_ALIASES.FULL_STATS):
+    def __init__(self, components=None, external=_ARTILLERY_EXTERNAL_COMPONENTS, fullStatsAlias=BATTLE_VIEW_ALIASES.FULL_STATS):
         self._fullStatsAlias = fullStatsAlias
         if components is None:
             components = COMMON_CLASSIC_CONFIG if self.sessionProvider.isReplayPlaying else EXTENDED_CLASSIC_CONFIG

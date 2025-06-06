@@ -1186,6 +1186,7 @@ class QUESTS(object):
     TOKEN_DEFAULT_ITALY = '#quests:token/default/italy'
     TOKEN_DEFAULT_INTUNION = '#quests:token/default/intunion'
     TOKEN_DEFAULT_WOT = '#quests:token/default/wot'
+    TOKEN_DEFAULT_DEFAULT = '#quests:token/default/default'
     TOKEN_DEFAULT_LIGHTTANK = '#quests:token/default/lightTank'
     TOKEN_DEFAULT_MEDIUMTANK = '#quests:token/default/mediumTank'
     TOKEN_DEFAULT_HEAVYTANK = '#quests:token/default/heavyTank'
@@ -1288,6 +1289,7 @@ class QUESTS(object):
     BONUSNAME_ATTENDANCE_REWARD = '#quests:bonusName/attendance_reward'
     BONUSNAME_TEAM_CREDITS_BONUS = '#quests:bonusName/team_credits_bonus'
     BONUSNAME_DAILY_QUESTS_REWARDS = '#quests:bonusName/daily_quests_rewards'
+    BONUSNAME_BUMBLEBEE_COIN = '#quests:bonusName/bumblebee_coin'
     ACTION_AUTO_CALENDAR = '#quests:action/auto/calendar'
     ACTION_FULL_CALENDAR = '#quests:action/full/calendar'
     ACTION_HERO_FULL_CALENDAR = '#quests:action/hero/full/calendar'
@@ -1837,6 +1839,7 @@ class QUESTS(object):
      TOKEN_DEFAULT_ITALY,
      TOKEN_DEFAULT_INTUNION,
      TOKEN_DEFAULT_WOT,
+     TOKEN_DEFAULT_DEFAULT,
      TOKEN_DEFAULT_LIGHTTANK,
      TOKEN_DEFAULT_MEDIUMTANK,
      TOKEN_DEFAULT_HEAVYTANK,
@@ -1947,7 +1950,8 @@ class QUESTS(object):
      BONUSNAME_EXCLUSIVE_VEHICLE,
      BONUSNAME_ATTENDANCE_REWARD,
      BONUSNAME_TEAM_CREDITS_BONUS,
-     BONUSNAME_DAILY_QUESTS_REWARDS)
+     BONUSNAME_DAILY_QUESTS_REWARDS,
+     BONUSNAME_BUMBLEBEE_COIN)
     ACTION_ENUM = (ACTION_AUTO_CALENDAR,
      ACTION_FULL_CALENDAR,
      ACTION_HERO_FULL_CALENDAR,

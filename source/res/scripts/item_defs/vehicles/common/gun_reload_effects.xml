@@ -225,6 +225,17 @@
     <runTimeDeltaAmmoLow>	0.5	</runTimeDeltaAmmoLow>
     <caliber>	SWITCH_ext_rld_autoloader_caliber_115_152mm	</caliber>
   </dualgun_reload115_152>
+  <dualgun_autoloader_reload115_152>
+    <type>	DualGunAutoReload	</type>
+    <dualGunSound>	gun_rld_dual_reloading_oneshell	</dualGunSound>
+    <runTimeDelta>	1.8	</runTimeDelta>
+    <duration>	335.0	</duration>
+    <autoReloadSound>	gun_rld_autoloader_mausekonig_long_oneshell	</autoReloadSound>
+    <autoLoaderFull>	gun_rld_autoloader_mausekonig_full_complete	</autoLoaderFull>
+    <clipShellLoad>	gun_rld_autoloader_mausekonig_long_oneshell	</clipShellLoad>
+    <clipShellLoadDuration>	335.0	</clipShellLoadDuration>
+    <caliber>	SWITCH_ext_rld_autoloader_caliber_115_152mm	</caliber>
+  </dualgun_autoloader_reload115_152>
   <reload155_170>
     <type>	SimpleReload	</type>
     <duration>	2100.0	</duration>
@@ -234,6 +245,15 @@
       <sound>	gun_rld_intuition_155_170mm	</sound>
     </intuition_overrides>
   </reload155_170>
+  <reload180>
+    <type>	SimpleReload	</type>
+    <duration>	2100.0	</duration>
+    <sound>	gun_rld_180mm	</sound>
+    <intuition_overrides>
+      <duration>	1000.0	</duration>
+      <sound>	gun_rld_intuition_180mm	</sound>
+    </intuition_overrides>
+  </reload180>
   <reload_automat_reloading_155_170>
     <type>	BarrelReload	</type>
     <duration>	6450	</duration>

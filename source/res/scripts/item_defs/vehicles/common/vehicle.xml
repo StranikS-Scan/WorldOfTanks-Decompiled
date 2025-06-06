@@ -44,8 +44,6 @@
     <groundCollisionLight>	groundCollisionLight	</groundCollisionLight>
     <groundCollisionHeavy>	groundCollisionHeavy	</groundCollisionHeavy>
     <collisionDamage>	collisionDamage	</collisionDamage>
-    <oilCollisionLight>	oilCollisionLight	</oilCollisionLight>
-    <oilCollisionHeavy>	oilCollisionHeavy	</oilCollisionHeavy>
     <sandCollisionLight>	sandCollisionLight	</sandCollisionLight>
     <sandCollisionHeavy>	sandCollisionHeavy	</sandCollisionHeavy>
     <snowCollisionLight>	snowCollisionLight	</snowCollisionLight>
@@ -76,7 +74,6 @@
     <flamingOnGround>	turret_flaming_medium	</flamingOnGround>
     <collision>
       <ground>	turret_touchdown_medium	</ground>
-      <oil>	turret_touchdown_medium	</oil>
       <sand>	turret_touchdown_medium	</sand>
       <snow>	turret_touchdown_medium	</snow>
       <stone>	turret_touchdown_medium_solid	</stone>
@@ -88,7 +85,6 @@
     </collision>
     <pull>
       <ground>	turret_pull_ground	</ground>
-      <oil>	turret_pull_oil	</oil>
       <sand>	turret_pull_sand	</sand>
       <snow>	turret_pull_snow	</snow>
       <stone>	turret_pull_stone	</stone>
@@ -111,15 +107,14 @@
     <improvedSightsBattleBooster>	NoneExtra : BattleBoosterForOptionalDevice	</improvedSightsBattleBooster>
     <additInvisibilityDeviceBattleBooster>	NoneExtra : BattleBoosterForOptionalDevice	</additInvisibilityDeviceBattleBooster>
     <camouflageBattleBooster>	NoneExtra : BattleBoosterForCrewSkill	</camouflageBattleBooster>
-    <smoothTurretBattleBooster>	NoneExtra : BattleBoosterForCrewSkill	</smoothTurretBattleBooster>
-    <virtuosoBattleBooster>	NoneExtra : BattleBoosterForCrewSkill	</virtuosoBattleBooster>
-    <smoothDrivingBattleBooster>	NoneExtra : BattleBoosterForCrewSkill	</smoothDrivingBattleBooster>
+    <smoothTurretBattleBooster>	NoneExtra : BattleBoosterForPerk	</smoothTurretBattleBooster>
+    <virtuosoBattleBooster>	NoneExtra : BattleBoosterForPerk	</virtuosoBattleBooster>
+    <smoothDrivingBattleBooster>	NoneExtra : BattleBoosterForPerk	</smoothDrivingBattleBooster>
     <fireFightingBattleBooster>	NoneExtra : BattleBoosterForCrewSkill	</fireFightingBattleBooster>
     <sixthSenseBattleBooster>	NoneExtra : BattleBoosterForCrewSkill	</sixthSenseBattleBooster>
     <rancorousBattleBooster>	NoneExtra : BattleBoosterForCrewSkill	</rancorousBattleBooster>
     <pedantBattleBooster>	NoneExtra : BattleBoosterForCrewSkill	</pedantBattleBooster>
     <lastEffortBattleBooster>	NoneExtra : BattleBoosterForCrewSkill	</lastEffortBattleBooster>
-    <quickShellChanger>	NoneExtra : QuickShellChanger	</quickShellChanger>
     <shoot>	ShowShooting : Shoot	</shoot>
     <noAmmo>	NoneExtra : NoAmmo	</noAmmo>
     <gunReload>	NoneExtra : GunReload	</gunReload>
@@ -175,17 +170,6 @@
         <visionRadius>	0.5	</visionRadius>
       </gameplayFactors>
     </lift_over>
-    <overturn_event_battles>	NoneExtra : OverturnEventBattles	  <correctionDelay>	5.0	</correctionDelay>
-      <isOnboardShotAllowed>	true	</isOnboardShotAllowed>
-      <gameplayFactors>
-        <reloadTime>	2.0	</reloadTime>
-        <turretRotationSpeed>	0.5	</turretRotationSpeed>
-        <gunRotationSpeed>	0.5	</gunRotationSpeed>
-        <aimingTime>	2.0	</aimingTime>
-        <shotDispersion>	2.0	</shotDispersion>
-        <visionRadius>	0.5	</visionRadius>
-      </gameplayFactors>
-    </overturn_event_battles>
     <drowning>	NoneExtra : Drowning	</drowning>
     <burnout>	NoneExtra : Burnout	</burnout>
     <afterburning>	NoneExtra : Afterburning	</afterburning>
@@ -194,6 +178,7 @@
     <sure_shot>	NoneExtra : VisualScriptEquipmentExtra	</sure_shot>
     <juggernaut>	NoneExtra : VisualScriptEquipmentExtra	</juggernaut>
     <concentration>	NoneExtra : VisualScriptEquipmentExtra	</concentration>
+    <recoil_recuperator>	NoneExtra : AbilityEquipmentExtra	</recoil_recuperator>
     <engineHealth>	DamageMarker : EngineHealth	  <sounds>
         <critical>	engine_damaged	</critical>
         <destroyed>	engine_destroyed	</destroyed>
@@ -326,6 +311,7 @@
     <tuner>	NoneExtra: Tuner	</tuner>
     <builtinRepairkit>	NoneExtra : Repairkit	</builtinRepairkit>
     <dualShoot>	ShowShootingMultiGun : DualGunShoot	</dualShoot>
+    <dualClipShoot>	ShowShootingMultiGun : DualGunClipShoot	</dualClipShoot>
     <charger>	NoneExtra : DualGunCharger	</charger>
     <laserSight>	BlinkingLaserSight : BlinkingLaserSight	  <isEnabledBlinking>	False	</isEnabledBlinking>
       <shouldCollideTarget>	False	</shouldCollideTarget>
@@ -334,9 +320,6 @@
       <bindNode>	HP_gunFire	</bindNode>
     </laserSight>
     <multiShoot>	ShowShootingMultiGun : MultiShoot	</multiShoot>
-    <visionDistanceTuner>	NoneExtra : VehicleVisionDistanceTuner	</visionDistanceTuner>
-    <radioDistanceTuner>	NoneExtra : VehicleRadioDistanceTuner	</radioDistanceTuner>
-    <visibilityOverwrite>	NoneExtra: VisibilityOverwrite	</visibilityOverwrite>
     <large_repairkit_battle_royale>	NoneExtra : RepairkitBattleRoyale	</large_repairkit_battle_royale>
     <lift_over_battle_royale>	NoneExtra : LiftOver	  <isOnboardShotAllowed>	true	</isOnboardShotAllowed>
       <liftOverTimeout>	5.0	</liftOverTimeout>
@@ -726,6 +709,86 @@
       <checkCaliberForRichet>	true	</checkCaliberForRichet>
       <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_32>
+    <armor_33>
+      <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+      <useArmorHomogenization>	true	</useArmorHomogenization>
+      <useHitAngle>	true	</useHitAngle>
+      <useAntifragmentationLining>	true	</useAntifragmentationLining>
+      <mayRicochet>	true	</mayRicochet>
+      <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
+    </armor_33>
+    <armor_34>
+      <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+      <useArmorHomogenization>	true	</useArmorHomogenization>
+      <useHitAngle>	true	</useHitAngle>
+      <useAntifragmentationLining>	true	</useAntifragmentationLining>
+      <mayRicochet>	true	</mayRicochet>
+      <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
+    </armor_34>
+    <armor_35>
+      <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+      <useArmorHomogenization>	true	</useArmorHomogenization>
+      <useHitAngle>	true	</useHitAngle>
+      <useAntifragmentationLining>	true	</useAntifragmentationLining>
+      <mayRicochet>	true	</mayRicochet>
+      <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
+    </armor_35>
+    <armor_36>
+      <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+      <useArmorHomogenization>	true	</useArmorHomogenization>
+      <useHitAngle>	true	</useHitAngle>
+      <useAntifragmentationLining>	true	</useAntifragmentationLining>
+      <mayRicochet>	true	</mayRicochet>
+      <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
+    </armor_36>
+    <armor_37>
+      <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+      <useArmorHomogenization>	true	</useArmorHomogenization>
+      <useHitAngle>	true	</useHitAngle>
+      <useAntifragmentationLining>	true	</useAntifragmentationLining>
+      <mayRicochet>	true	</mayRicochet>
+      <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
+    </armor_37>
+    <armor_38>
+      <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+      <useArmorHomogenization>	true	</useArmorHomogenization>
+      <useHitAngle>	true	</useHitAngle>
+      <useAntifragmentationLining>	true	</useAntifragmentationLining>
+      <mayRicochet>	true	</mayRicochet>
+      <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
+    </armor_38>
+    <armor_39>
+      <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+      <useArmorHomogenization>	true	</useArmorHomogenization>
+      <useHitAngle>	true	</useHitAngle>
+      <useAntifragmentationLining>	true	</useAntifragmentationLining>
+      <mayRicochet>	true	</mayRicochet>
+      <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
+    </armor_39>
+    <armor_40>
+      <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+      <useArmorHomogenization>	true	</useArmorHomogenization>
+      <useHitAngle>	true	</useHitAngle>
+      <useAntifragmentationLining>	true	</useAntifragmentationLining>
+      <mayRicochet>	true	</mayRicochet>
+      <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
+    </armor_40>
     <engine>
       <extra>	engineHealth	</extra>
       <vehicleDamageFactor>	1.0	</vehicleDamageFactor>

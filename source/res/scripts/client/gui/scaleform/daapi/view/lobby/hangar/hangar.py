@@ -279,7 +279,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self._offersBannerController.showBanners()
         self.__updateCarouselEventEntryState()
         self.fireEvent(events.HangarCustomizationEvent(events.HangarCustomizationEvent.RESET_VEHICLE_MODEL_TRANSFORM), scope=EVENT_BUS_SCOPE.LOBBY)
-        if not self.__isHistoricalBattlesMode() and g_currentVehicle.isPresent():
+        if g_currentVehicle.isPresent():
             g_currentVehicle.refreshModel()
         if self.bootcampController.isInBootcamp():
             self.as_setDQWidgetLayoutS(DAILY_QUESTS_WIDGET_CONSTANTS.WIDGET_LAYOUT_SINGLE)
@@ -365,6 +365,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
                     newCarouselAlias = HANGAR_ALIASES.EPICBATTLE_TANK_CAROUSEL
                 elif self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.VERSUS_AI) or self.prbDispatcher.getFunctionalState().isInUnit(PREBATTLE_TYPE.VERSUS_AI):
                     newCarouselAlias = HANGAR_ALIASES.VERSUS_AI_TANK_CAROUSEL
+                elif self.prbDispatcher.getFunctionalState().entityTypeID == PREBATTLE_TYPE.EPIC_TRAINING:
+                    newCarouselAlias = HANGAR_ALIASES.EPICBATTLE_TANK_CAROUSEL
             if self.prbDispatcher is not None and self.battlePassController.isVisible() and self.battlePassController.isValidBattleType(self.prbDispatcher.getEntity()):
                 newCarouselAlias = HANGAR_ALIASES.BATTLEPASS_TANK_CAROUSEL
             if self.prbDispatcher is not None and self.__debutBoxesController.isEnabled() and self.prbDispatcher.getEntity().getQueueType() == QUEUE_TYPE.RANDOMS and newCarouselAlias in (HANGAR_ALIASES.TANK_CAROUSEL, HANGAR_ALIASES.BATTLEPASS_TANK_CAROUSEL):
@@ -759,6 +761,3 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     def __updateFunRandomModifiersWidget(self):
         self.as_setFunRandomModifiersVisibleS(self.__funRandomCtrl.isFunRandomPrbActive())
-
-    def __isHistoricalBattlesMode(self):
-        return self.__hangarComponentsCtrl.isComponentAvailable(HANGAR_CONSTS.HB_PANELS)

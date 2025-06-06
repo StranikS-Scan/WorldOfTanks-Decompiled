@@ -52,8 +52,6 @@ def addArenaGuiTypesFromExtension(extArenaGuiType, personality):
     ARENA_GUI_TYPE.VOIP_SUPPORTED += extraValues
     ARENA_GUI_TYPE.BATTLE_CHAT_SETTING_SUPPORTED += extraValues
     ARENA_GUI_TYPE_LABEL.LABELS.update({value:attr.lower() for attr, value in extraAttrs.iteritems()})
-    ARENA_BONUS_TYPE.INVITATION_PROCESS_BONUS_TYPES += extraValues
-    ARENA_BONUS_TYPE.NOT_IMMEDIATE_BATTLE_RESULTS += extraValues
 
 
 def addArenaBonusTypesFromExtension(extArenaBonusType, personality):
@@ -110,6 +108,7 @@ def addInvitationTypes(extInvitationType, personality):
 
 def addClientUnitCmd(extClientUnitCmd, personality):
     extraAttrs = extClientUnitCmd.getExtraAttrs()
+    extClientUnitCmd.inject(personality)
     CMD_NAMES.update({value:attr for attr, value in extraAttrs.iteritems()})
 
 
@@ -591,24 +590,16 @@ class AbstractBattleMode(object):
         if self._BASE_WINNER_PROCESSOR_CLASS:
             scu.addWinnerProcessor(self._ARENA_BONUS_TYPE, self._BASE_WINNER_PROCESSOR_CLASS, self._personality)
 
-    def addUnitCmdHandlers(self):
-        import server_constants_utils as scu
-        if self._server_unitCmdHandlers:
-            scu.addUnitCmdHandlers(self._server_unitCmdHandlers, self._personality)
-
-    def addUnitMethodRoles(self):
-        import server_constants_utils as scu
-        if self._server_unitMethodRoles:
-            scu.addUnitMethodRoles(self._server_unitMethodRoles, self._personality)
-
     def registerBaseUnit(self):
         import server_constants_utils as scu
         scu.addCanCreateUnitMgrHandler(self._ROSTER_TYPE, self._server_canCreateUnitMgr, self._personality)
         scu.addSquadConnector(self._UNIT_MGR_FLAGS, self._server_unitConnector, self._personality)
         scu.addUnitVehicleChecker(self._UNIT_MGR_FLAGS, self._server_unitChecker, self._personality)
         scu.addInvitationSquadExtraHandler(self._INVITATION_TYPE, self._server_invitationSquadExtraHandler, self._personality)
-        self.addUnitCmdHandlers()
-        self.addUnitMethodRoles()
+        if self._server_unitCmdHandlers:
+            scu.addUnitCmdHandlers(self._server_unitCmdHandlers, self._personality)
+        if self._server_unitMethodRoles:
+            scu.addUnitMethodRoles(self._server_unitMethodRoles, self._personality)
 
     def registerClient(self):
         from gui.prb_control import prb_utils

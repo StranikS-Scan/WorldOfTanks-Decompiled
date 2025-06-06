@@ -493,7 +493,7 @@ class PersonalMissionPostBattleInfo(EventPostBattleInfo):
         return PostBattleConditionsFormatter
 
     def _getPersonalInfo(self, condFormatter):
-        return [condFormatter.getConditionsData(isMain=True), condFormatter.getConditionsData(isMain=False)]
+        return [[condFormatter.getConditionsData(isMain=True)], [condFormatter.getConditionsData(isMain=False)]]
 
 
 class PM3PersonalMissionPostBattleInfo(PersonalMissionPostBattleInfo):
@@ -502,12 +502,9 @@ class PM3PersonalMissionPostBattleInfo(PersonalMissionPostBattleInfo):
         return PM3PostBattleConditionsFormatter
 
     def _getPersonalInfo(self, condFormatter):
-        personalInfo = condFormatter.getConditionsDataList(isMain=True)
+        personalInfo = [condFormatter.getConditionsDataList(isMain=True)]
         if self.event.getPMType().withAdd:
-            personalInfo.extend(condFormatter.getConditionsDataList(isMain=False))
-        if len(personalInfo) > 2:
-            _logger.error('Postbattle PersonalMission3 formatting went wrong for quest: %s', self.event.getGeneralQuestID())
-            personalInfo = [personalInfo[0], personalInfo[-1]]
+            personalInfo.append(condFormatter.getConditionsDataList(isMain=False))
         return personalInfo
 
 

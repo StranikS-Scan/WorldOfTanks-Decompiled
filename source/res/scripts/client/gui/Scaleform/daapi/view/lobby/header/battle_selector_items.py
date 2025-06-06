@@ -215,7 +215,7 @@ class _MapsTrainingItem(_SelectorItem):
             self._isSelected = False
 
     def _update(self, state):
-        self._isVisible = True
+        self._isVisible = self.mapsTrainingController.isMapsTrainingEnabled
         if self.mapsTrainingController.isMapsTrainingEnabled:
             self._isDisabled = state.hasLockedState
             self._isSelected = state.isQueueSelected(QUEUE_TYPE.MAPS_TRAINING)

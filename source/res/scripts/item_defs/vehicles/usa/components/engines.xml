@@ -166,6 +166,7 @@
     <Continental_AOI_1790_12_4>	31024	</Continental_AOI_1790_12_4>
     <Continental_AV_1790_3_T>	31025	</Continental_AV_1790_3_T>
     <Continental_AOSI_1195_5_T>	31009	</Continental_AOSI_1195_5_T>
+    <Ford_GAF_R1_T>	35002	</Ford_GAF_R1_T>
   </ids>
   <shared>
     <Ford_GAC>
@@ -2551,6 +2552,23 @@
       <rpm_min>	500	</rpm_min>
       <rpm_max>	2200	</rpm_max>
     </Ford_GAF_R1>
+    <Ford_GAF_R1_T>
+      <userString>	#usa_vehicles:Ford_GAF_R1_T	</userString>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	38700	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_C1_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_C1_npc	</wwsoundNPC>
+      <power>	500	</power>
+      <weight>	641	</weight>
+      <maxHealth>	234	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	500	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
+    </Ford_GAF_R1_T>
     <Continental_W-670-12>
       <userString>	#usa_vehicles:Continental_W-670-12	</userString>
       <shortUserString>	#usa_vehicles:Continental_W-670-12_short	</shortUserString>

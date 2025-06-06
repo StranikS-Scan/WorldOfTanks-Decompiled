@@ -1,7 +1,8 @@
 <engine_config.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <personality>	game	</personality>
   <appTitle>	Мир танков	</appTitle>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -565,6 +566,12 @@
         <bank>
           <name>	paragons.bnk	</name>
         </bank>
+        <bank>
+          <name>	style_3D_It15_Rinoceronte_3dst_Jungle.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_Pl29_NC_Wz_70T_3dst_Sand.bnk	</name>
+        </bank>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>
         <bank>
@@ -715,6 +722,18 @@
         </bank>
         <bank>
           <name>	ability.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_R77_KV2_3dst_02.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_It15_Rinoceronte_3dst_Jungle.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_Pl29_NC_Wz_70T_3dst_Sand.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_Ch22_113_3dst_02.bnk	</name>
         </bank>
       </SFX_soundbanks_arena>
       <SFX_soundbanks_editor>

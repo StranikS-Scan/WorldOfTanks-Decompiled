@@ -263,4 +263,5 @@ _VIEW_STATE_UPDATERS = {BuffDisplayedState.AOE_INSPIRE: _AoeInspireStateUpdater,
  BuffDisplayedState.AGGRESSIVE_DETECTION: _AggressiveDetectionStateUpdater,
  BuffDisplayedState.ABILITY_JUGGERNAUT: _AbilityStateUpdater,
  BuffDisplayedState.ABILITY_CONCENTRATION: _AbilityStateUpdater,
- BuffDisplayedState.ABILITY_SURE_SHOT: _AbilityStateUpdater}
+ BuffDisplayedState.ABILITY_SURE_SHOT: _AbilityStateUpdater,
+ BuffDisplayedState.ABILITY_RECOIL_RECUPERATOR: _AbilityStateUpdater}

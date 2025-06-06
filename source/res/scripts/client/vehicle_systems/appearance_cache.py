@@ -34,7 +34,7 @@ class _LoadInfo(object):
 
 
 class AppearanceCache(IAppearanceCache):
-    __slots__ = ('__appearanceCache', '__assemblerCache', '__resourceCache', '__loadingAssemblerQueue', '__loadingResourceQueue')
+    __slots__ = ('__arena', '__appearanceCache', '__assemblerCache', '__loadingAssemblerQueue')
 
     def __init__(self):
         self.__appearanceCache = {}

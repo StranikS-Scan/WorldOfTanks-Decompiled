@@ -6,7 +6,7 @@ import BigWorld
 from constants import VEHICLE_SETTING, DAMAGE_INFO_CODES, DAMAGE_INFO_INDICES
 from items import vehicles, ITEM_TYPES
 from wotdecorators import noexcept
-Cooldowns = namedtuple('Cooldows', ['id', 'leftTime', 'baseTime'])
+Cooldowns = namedtuple('Cooldowns', ['id', 'leftTime', 'baseTime'])
 _DO_LOG = False
 
 def noneAccepted(func):

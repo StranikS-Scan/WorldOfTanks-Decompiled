@@ -186,6 +186,7 @@
       <module>	client.cgf_components.rocket_acceleration_component	</module>
       <module>	client.cgf_components.zone_components	</module>
       <module>	client.cgf_components.on_shot_components	</module>
+      <module>	client.cgf_components.artillery_shot_zone_manager	</module>
       <module>	client.cgf_components.on_death_components	</module>
       <module>	client.cgf_components.shot_color_transmission_component	</module>
       <module>	common.cgf_components_common.shots_receiver	</module>
@@ -291,9 +292,8 @@
       <path>	content/CGFPrefabs/cosmic_event/cosmic_event_supernova_item.prefab	</path>
       <path>	content/CGFPrefabs/cosmic_event/cosmic_event_stun_debuff.prefab	</path>
       <path>	content/CGFPrefabs/cosmic_event/cosmic_event_artifact_stages.prefab	</path>
+      <path>	content/CGFPrefabs/Battle/Consumables/bomb.prefab	</path>
     </prefabs>
-    <prefabFolders>
-      <path>	content/CGFPrefabs/May	</path>
-    </prefabFolders>
+    <prefabFolders></prefabFolders>
   </cgf>
 </resources.xml>

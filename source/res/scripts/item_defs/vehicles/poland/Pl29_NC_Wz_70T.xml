@@ -89,6 +89,13 @@
       <undamaged>	vehicles/poland/Pl29_NC_Wz_70T/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/poland/Pl29_NC_Wz_70T/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/poland/Pl29_NC_Wz_70T/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <Pl29_NC_Wz_70T_3dst_Sand>
+          <undamaged>	vehicles/poland/Pl29_NC_Wz_70T/_skins/Pl29_NC_Wz_70T_3dst_Sand/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/poland/Pl29_NC_Wz_70T/_skins/Pl29_NC_Wz_70T_3dst_Sand/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/poland/Pl29_NC_Wz_70T/_skins/Pl29_NC_Wz_70T_3dst_Sand/crash/lod0/Hull.model	</exploded>
+        </Pl29_NC_Wz_70T_3dst_Sand>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -964,6 +971,62 @@
         <clipAngle>	0.614086	</clipAngle>
         <anchorShift>	1.64429	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15071	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Pl29_NC_Wz_70T_3dst_Sand	</compatibleModels>
+        <position>	0.027973 2.486347 0.932461	</position>
+        <rotation>	0.003602 0.00141 3.14158	</rotation>
+        <scale>	1.072329 1.072329 1.072329	</scale>
+        <showOn>	16	</showOn>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15072	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Pl29_NC_Wz_70T_3dst_Sand	</compatibleModels>
+        <position>	-0.02281 2.123178 2.214092	</position>
+        <rotation>	0.041923 0.00141 3.14158	</rotation>
+        <scale>	0.60647 0.60647 0.606471	</scale>
+        <showOn>	16	</showOn>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15073	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Pl29_NC_Wz_70T_3dst_Sand	</compatibleModels>
+        <position>	1.198002 1.906269 1.97881	</position>
+        <rotation>	0.73584 0.536756 -2.789337	</rotation>
+        <scale>	0.654589 0.654589 0.654589	</scale>
+        <showOn>	16	</showOn>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15074	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Pl29_NC_Wz_70T_3dst_Sand	</compatibleModels>
+        <position>	-1.281003 1.89311 1.921054	</position>
+        <rotation>	0.702028 -0.327965 -2.894064	</rotation>
+        <scale>	0.654589 0.654589 0.654589	</scale>
+        <showOn>	16	</showOn>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15075	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Pl29_NC_Wz_70T_3dst_Sand	</compatibleModels>
+        <position>	-0.541676 2.47515 -0.150575	</position>
+        <rotation>	2.943847 0 0	</rotation>
+        <scale>	1.07233 1.07233 1.07233	</scale>
+        <showOn>	16	</showOn>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1005,6 +1068,13 @@
         <undamaged>	vehicles/poland/Pl29_NC_Wz_70T/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/poland/Pl29_NC_Wz_70T/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/poland/Pl29_NC_Wz_70T/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <Pl29_NC_Wz_70T_3dst_Sand>
+            <undamaged>	vehicles/poland/Pl29_NC_Wz_70T/_skins/Pl29_NC_Wz_70T_3dst_Sand/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/poland/Pl29_NC_Wz_70T/_skins/Pl29_NC_Wz_70T_3dst_Sand/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/poland/Pl29_NC_Wz_70T/_skins/Pl29_NC_Wz_70T_3dst_Sand/crash/lod0/Chassis.model	</exploded>
+          </Pl29_NC_Wz_70T_3dst_Sand>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1091,6 +1161,45 @@
                   <row3>	-1.363649 1.148728 3.458712	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	Pl29_NC_Wz_70T_3dst_Sand	</modelsSet>
+                <boxCollider>
+                  <row0>	1.993000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 2.010590 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.895310	</row2>
+                  <row3>	0.000000 1.452000 0.044000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.459000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.139970 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.488000	</row2>
+                  <row3>	0.000000 1.864000 0.038999	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.556920 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.913000	</row2>
+                  <row3>	-1.870000 1.041000 0.018000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.058000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.851000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 0.409024	</row2>
+                  <row3>	0.004000 0.842000 -3.368710	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.758951 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.696649 0.430210	</row1>
+                  <row2>	0.000000 -0.157628 0.255251	</row2>
+                  <row3>	-1.363650 0.856745 -3.457260	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.758950 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.758193 -0.309102	</row1>
+                  <row2>	0.000000 0.113254 0.277800	</row2>
+                  <row3>	-1.363650 1.148730 3.458710	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -1128,6 +1237,45 @@
                 </wheelGroup>
               </wheelGroups>
               <hullCollider>
+                <boxCollider>
+                  <row0>	1.993000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 2.010590 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.895310	</row2>
+                  <row3>	0.000000 1.452000 0.044000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.459000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.139970 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.488000	</row2>
+                  <row3>	0.000000 1.864000 0.038999	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.556920 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.913000	</row2>
+                  <row3>	1.870000 1.041000 0.018000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.058000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.851000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 0.409024	</row2>
+                  <row3>	-0.004000 0.842000 -3.368710	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.758951 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.696649 0.430210	</row1>
+                  <row2>	0.000000 -0.157628 0.255251	</row2>
+                  <row3>	1.364000 0.856745 -3.457260	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.758950 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.758193 -0.309102	</row1>
+                  <row2>	0.000000 0.113254 0.277800	</row2>
+                  <row3>	1.364000 1.148730 3.458710	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	Pl29_NC_Wz_70T_3dst_Sand	</modelsSet>
                 <boxCollider>
                   <row0>	1.993000 0.000000 0.000000	</row0>
                   <row1>	0.000000 2.010590 0.000000	</row1>
@@ -1861,6 +2009,13 @@
             <undamaged>	vehicles/poland/Pl29_NC_Wz_70T/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/poland/Pl29_NC_Wz_70T/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/poland/Pl29_NC_Wz_70T/crash/lod0/Gun_03.model	</exploded>
+            <sets>
+              <Pl29_NC_Wz_70T_3dst_Sand>
+                <undamaged>	vehicles/poland/Pl29_NC_Wz_70T/_skins/Pl29_NC_Wz_70T_3dst_Sand/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/poland/Pl29_NC_Wz_70T/_skins/Pl29_NC_Wz_70T_3dst_Sand/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/poland/Pl29_NC_Wz_70T/_skins/Pl29_NC_Wz_70T_3dst_Sand/crash/lod0/Gun_01.model	</exploded>
+              </Pl29_NC_Wz_70T_3dst_Sand>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/poland/Pl29_NC_Wz_70T/collision/Gun_03.model	</collisionModelServer>

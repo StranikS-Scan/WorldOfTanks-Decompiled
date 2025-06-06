@@ -51,7 +51,8 @@ class BattlePassHowToEarnPointsView(ViewImpl):
             gameModes = tx.getGameModes()
             if not gameModes:
                 for supportedArenaType in SUPPORTED_ARENA_BONUS_TYPES:
-                    gameModes.addViewModel(self.__getGameMode(supportedArenaType))
+                    if self.__battlePass.isGameModeEnabled(supportedArenaType):
+                        gameModes.addViewModel(self.__getGameMode(supportedArenaType))
 
             else:
                 for gameMode in gameModes:

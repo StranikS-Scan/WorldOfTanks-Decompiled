@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/game_control/universal_flag_entry_point_controller/__init__.py
 import logging
 from Event import EventManager, Event
-from gui.game_control.universal_flag_entry_point_controller.config import UniversalFlagConfig, MissionsMarathonTarget, FullScreenBrowserTarget, ShopPageTarget, NopeTarget, UniversalFlagState, universalFlagConfigSchema
+from gui.game_control.universal_flag_entry_point_controller.config import UniversalFlagConfig, MissionsMarathonTarget, FullScreenBrowserTarget, ShopPageTarget, NopeTarget, UniversalFlagState, universalFlagConfigSchema, ProgressStateToken, ProgressStateExpirationToken
 from skeletons.gui.game_control import ILobbyCdnController
 from gui.impl.lobby.universal_web_event_window.universal_web_event_view import UniversalWebEventWindow
 from gui.server_events.events_dispatcher import showMissionsMarathon
@@ -32,6 +32,8 @@ class UniversalFlagEntryPointController(IUniversalFlagEntryPointController, Even
         self.__eventsManager = EventManager()
         self.onDataUpdated = Event(self.__eventsManager)
         self.__notifier = SimpleNotifier(self.__getNextPhaseTimeDelta, self.__onNextPhaseTime)
+        self.__tokenProviders = []
+        self.__expirationTokenProviders = []
         self.__eventCaption = ''
         self.__eventDescription = ''
         self.__flagBackground = IUniversalFlagEntryPointController.FlagBackground()
@@ -40,6 +42,7 @@ class UniversalFlagEntryPointController(IUniversalFlagEntryPointController, Even
         self.__timerText = ''
         self.__tooltipBackground = ''
         self.__activeStateIndex = None
+        self.__eventStateTarget = None
         return
 
     @property
@@ -55,7 +58,7 @@ class UniversalFlagEntryPointController(IUniversalFlagEntryPointController, Even
             return IUniversalFlagEntryPointController.VisibilityState.HIDDEN if not bg.active or not bg.activeHover or not bg.disabled or not bg.activeHover else IUniversalFlagEntryPointController.VisibilityState.SHOWN
 
     def openEvent(self):
-        target = self.__config.target
+        target = self.__eventStateTarget or self.__config.target
         if isinstance(target, NopeTarget):
             return
         else:
@@ -106,6 +109,7 @@ class UniversalFlagEntryPointController(IUniversalFlagEntryPointController, Even
 
     def onLobbyInited(self, event):
         self._subscribe()
+        g_clientUpdateManager.addCallbacks({'tokens': self.__onTokensUpdate})
         self.__readServerConfig()
         self.__notifier.startNotification()
 
@@ -147,6 +151,8 @@ class UniversalFlagEntryPointController(IUniversalFlagEntryPointController, Even
         self.__reloadState()
 
     def __readServerConfig(self):
+        self.__tokenProviders = []
+        self.__expirationTokenProviders = []
         settings = self.__lobbyContext.getServerSettings().universalFlagEntryPointConfig
         if 'isEnabled' not in settings or not settings['isEnabled']:
             self.__config = UniversalFlagConfig()
@@ -157,6 +163,15 @@ class UniversalFlagEntryPointController(IUniversalFlagEntryPointController, Even
             if self.__config is None:
                 _logger.exception('Wrong flag config structure.')
                 self.__config = UniversalFlagConfig()
+            tokens = self.__itemsCache.items.tokens
+            for state in self.__config.states:
+                if isinstance(state.token, ProgressStateToken):
+                    state.token.update(tokens)
+                    self.__tokenProviders.append(state.token)
+                if isinstance(state.token, ProgressStateExpirationToken):
+                    state.token.update(tokens)
+                    self.__expirationTokenProviders.append(state.token)
+
             self.__reloadState()
             return
 
@@ -175,6 +190,9 @@ class UniversalFlagEntryPointController(IUniversalFlagEntryPointController, Even
         self.__activeStateIndex = -1
         while 1:
             self.__activeStateIndex + 1 < len(self.__config.states) and self.__config.states[self.__activeStateIndex + 1].startTime <= time and self.__activeStateIndex += 1
+            token = self.__config.states[self.__activeStateIndex].token
+            if token is not None and token.checkCompareAmountWithExpected():
+                break
 
         if self.__activeStateIndex == -1 or time >= self.__config.states[self.__activeStateIndex].finishTime:
             self.__activeStateIndex = None
@@ -187,6 +205,7 @@ class UniversalFlagEntryPointController(IUniversalFlagEntryPointController, Even
             self.__timerIconType = currentState.timer.iconType
             self.__timerTime = currentState.timer.time
             self.__timerText = self.__formatString(currentState.timer.text)
+            self.__eventStateTarget = currentState.target
             bg = self.__flagBackground
             bg.disabled = self.__lobbyCdn.resolveCdnImage(currentState.background.disabled)
             bg.disabledHover = self.__lobbyCdn.resolveCdnImage(currentState.background.disabledHover)
@@ -196,3 +215,11 @@ class UniversalFlagEntryPointController(IUniversalFlagEntryPointController, Even
                 self.__tooltipBackground = self.__lobbyCdn.resolveCdnImage(currentState.tooltipBackground)
             self.onDataUpdated()
             return
+
+    def __onTokensUpdate(self, diff):
+        updated = False
+        tokens = self.__itemsCache.items.tokens
+        updated = updated or any([ provider.update(tokens) for provider in self.__tokenProviders ])
+        updated = updated or any([ provider.update(tokens) for provider in self.__expirationTokenProviders ])
+        if updated:
+            self.__reloadState()

@@ -2068,10 +2068,15 @@ class ArmoryYardListener(_NotificationListener):
             SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.switcher.disabled()), type=SystemMessages.SM_TYPE.ErrorHeader, priority=NotificationPriorityLevel.HIGH, messageData={'header': self.__getHeader()})
 
     def __announcement(self, startDate, chapterInfo=None):
-        if chapterInfo is None:
-            if not AccountSettings.getArmoryYard(ArmoryYard.EVENT_ANNOUNCEMENT):
-                AccountSettings.setArmoryYard(ArmoryYard.EVENT_ANNOUNCEMENT, True)
-                SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.announcement.event(), startDate=backport.getDateTimeFormat(startDate)), type=SystemMessages.SM_TYPE.InformationHeader, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
+        if chapterInfo is None and not AccountSettings.getArmoryYard(ArmoryYard.EVENT_ANNOUNCEMENT):
+            vehicle = self.__armoryYardCtrl.getFinalRewardVehicle()
+            isSpecial = vehicle.isSpecial
+            typeName = 'premium'
+            if isSpecial and vehicle.type.endswith('SPG'):
+                typeName = 'specialSPG'
+            elif isSpecial:
+                typeName = 'special'
+            SystemMessages.pushMessage(text=backport.text(self.ARMORY_YARD_TEXT.announcement.event(), startDate=backport.getDateTimeFormat(startDate), typeName=backport.text(self.ARMORY_YARD_TEXT.announcement.dyn(typeName)()), tankName=vehicle.userName, tankLevel=int2roman(vehicle.level), roleName=backport.text(self.ARMORY_YARD_TEXT.announcement.dyn(vehicle.type.replace('-', '_'))())), type=SystemMessages.SM_TYPE.InformationHeader, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
         else:
             key = '%s_%s' % (ArmoryYard.ANNOUNCEMENT_CHAPTER_PREFIX, chapterInfo.ID)
             if not AccountSettings.getArmoryYard(key):
@@ -2087,20 +2092,21 @@ class ArmoryYardListener(_NotificationListener):
         return SystemMessages.SM_TYPE.FinancialTransactionWithArmoryCoinsHeader if isCoins else SystemMessages.SM_TYPE.FinancialTransactionWithGoldHeader
 
     def __onShopPurchaseComplete(self, productId, currencies, rewards, isBundle):
-        SystemMessages.pushMessage(text=backport.text(R.strings.armory_shop.notifications.financialTransaction(), date=TimeFormatter.getLongDatetimeFormat(time.time()), currencies=formatSpentCurrencies(currencies)), type=self.__getShopPurchaseSMType(currencies), priority=NotificationPriorityLevel.MEDIUM, messageData={'header': backport.text(R.strings.messenger.serviceChannelMessages.currencyUpdate.financial_transaction())})
+        SystemMessages.pushMessage(text=backport.text(R.strings.armory_shop.notifications.financialTransaction(), date=TimeFormatter.getLongDatetimeFormat(time_utils.getServerUTCTime()), currencies=formatSpentCurrencies(currencies)), type=self.__getShopPurchaseSMType(currencies), priority=NotificationPriorityLevel.MEDIUM, messageData={'header': backport.text(R.strings.messenger.serviceChannelMessages.currencyUpdate.financial_transaction())})
         text = formatBundlePurchase(productId, rewards) if isBundle else formatPurchaseItems(rewards)
         smType = SystemMessages.SM_TYPE.ArmoryYardBundlePurchase if isBundle else SystemMessages.SM_TYPE.InformationHeader
         SystemMessages.pushMessage(text=text, type=smType, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': backport.text(R.strings.messenger.serviceChannelMessages.sysMsg.titles.purchase())})
 
     def __payed(self, isPostProgression, count, price=None, currency=Currency.GOLD):
         bodySection = self.ARMORY_YARD_TEXT.postPayed if isPostProgression else self.ARMORY_YARD_TEXT.payed
+        messageType = SystemMessages.SM_TYPE.FinancialTransactionBuyAYFreeCoins if isPostProgression else SystemMessages.SM_TYPE.FinancialTransactionBuyAYCoins
         messageResID = bodySection.single() if count == 1 else bodySection.multiple()
-        SystemMessages.pushMessage(text=backport.text(messageResID, count=count), type=SystemMessages.SM_TYPE.InformationHeader, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
+        SystemMessages.pushMessage(text=backport.text(messageResID, count=count), type=messageType, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
         if price is None or currency not in self.CURRENCY_TYPE_MAP:
             return
         else:
-            systemMessageType, messagePriceResID = self.CURRENCY_TYPE_MAP[currency]
-            SystemMessages.pushMessage(text=backport.text(messagePriceResID(), price=backport.getGoldFormat(price.getSignValue(currency))), type=systemMessageType, priority=NotificationPriorityLevel.MEDIUM)
+            systemMessageType, _ = self.CURRENCY_TYPE_MAP[currency]
+            SystemMessages.pushMessage(text=backport.text(R.strings.armory_shop.notifications.financialTransaction(), date=TimeFormatter.getLongDatetimeFormat(time_utils.getServerUTCTime()), currencies=formatSpentCurrencies([(currency, price.getSignValue(currency))])), type=systemMessageType, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': backport.text(R.strings.messenger.serviceChannelMessages.currencyUpdate.financial_transaction())})
             return
 
     def __paymentError(self):

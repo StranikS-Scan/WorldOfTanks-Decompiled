@@ -5,13 +5,14 @@ from gui.game_loading.resources.models import StatusTextModel
 from gui.game_loading.state_machine.const import ContentState
 
 class ImageViewSettingsModel(object):
-    __slots__ = ('showVfx', 'contentState', 'ageRatingPath', 'info')
+    __slots__ = ('showVfx', 'contentState', 'ageRatingPath', 'info', 'hasVignette')
 
-    def __init__(self, showVfx=True, contentState=ContentState.INVISIBLE, ageRatingPath='', info=''):
+    def __init__(self, showVfx=True, contentState=ContentState.INVISIBLE, ageRatingPath='', info='', hasVignette=True):
         self.showVfx = showVfx
         self.contentState = contentState
         self.ageRatingPath = ageRatingPath
         self.info = info
+        self.hasVignette = hasVignette
 
     def __repr__(self):
         return '<ImageViewSettingsModel(vfx={}, contentState={}, ageRatingPath={}, info={})>'.format(self.showVfx, self.contentState, self.ageRatingPath, self.info)

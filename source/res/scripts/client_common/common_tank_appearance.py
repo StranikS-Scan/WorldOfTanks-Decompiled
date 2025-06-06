@@ -548,7 +548,7 @@ class CommonTankAppearance(ScriptGameObject):
             return
         else:
             self.vehicleStickers.alpha = DEFAULT_STICKERS_ALPHA
-            self.vehicleStickers.attach(compoundModel=self.compoundModel, isDamaged=isCurrentModelDamaged, showDamageStickers=not isCurrentModelDamaged)
+            self.vehicleStickers.attach(compoundModel=self.compoundModel, isDamaged=isCurrentModelDamaged, showDamageStickers=not isCurrentModelDamaged, collisionComponent=self.collisions)
             return
 
     def _detachStickers(self):

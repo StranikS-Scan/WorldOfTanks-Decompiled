@@ -7,6 +7,7 @@ from gui.shared.events import ArmoryYardEvent
 from helpers import dependency
 from shared_utils import first
 from gui.impl.gen import R
+from frameworks.wulf import WindowLayer
 from gui.shared.event_dispatcher import showHangar
 from armory_yard.gui.window_events import showArmoryYardShopWindow, showArmoryYardShopBuyWindow
 from gui.impl.pub import ViewImpl
@@ -136,10 +137,16 @@ class ArmoryYardMainView(ViewImpl, IGlobalListener):
         else:
             return first([ presenter.getTooltipData(tooltipId, tooltipType) for presenter in self.__tabs.itervalues() ])
 
+    def _destroySubViews(self):
+        windows = self.gui.windowsManager.findWindows(lambda w: w.layer == WindowLayer.TOP_SUB_VIEW)
+        for window in windows:
+            window.destroy()
+
     def __setTab(self, tabID=None):
         if tabID is None:
             tabID = self.__initedTabId
         if self.__tabId != tabID:
+            self._destroySubViews()
             if self.__tabId is not None:
                 self.__tabs[self.__tabId].onUnload()
             if tabID == TabId.SHOP:

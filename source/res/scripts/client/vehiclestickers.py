@@ -146,8 +146,8 @@ class ModelStickers(object):
             self.__parentNode = None
             return
 
-    def addDamageSticker(self, stickerID, segStart, segEnd):
-        return 0 if self.__model is None else self.__stickerModel.addDamageSticker(stickerID, segStart, segEnd)
+    def addDamageSticker(self, stickerID, segStart, segEnd, compIdx, collisionComponent):
+        return 0 if self.__model is None else self.__stickerModel.addDamageSticker(stickerID, segStart, segEnd, compIdx, collisionComponent)
 
     def delDamageSticker(self, handle):
         if self.__model is not None:
@@ -688,7 +688,7 @@ class VehicleStickers(object):
     def getStickerPack(self, packType):
         return self.__stickerPacks[packType]
 
-    def attach(self, compoundModel, isDamaged, showDamageStickers, isDetachedTurret=False):
+    def attach(self, compoundModel, isDamaged, showDamageStickers, collisionComponent, isDetachedTurret=False):
         for componentName, attachNodeName in self.__componentNames:
             idx = DetachedTurretPartNames.getIdx(componentName) if isDetachedTurret else TankPartNames.getIdx(componentName)
             node = compoundModel.node(attachNodeName)
@@ -706,7 +706,7 @@ class VehicleStickers(object):
                         componentStickers.stickers.delDamageSticker(damageSticker.handle)
                         damageSticker.handle = None
                         LOG_WARNING('Adding %s damage sticker to occupied slot' % componentName)
-                    damageSticker.handle = componentStickers.stickers.addDamageSticker(damageSticker.stickerID, damageSticker.rayStart, damageSticker.rayEnd)
+                    damageSticker.handle = componentStickers.stickers.addDamageSticker(damageSticker.stickerID, damageSticker.rayStart, damageSticker.rayEnd, idx, collisionComponent)
 
         if isDetachedTurret:
             gunGeometry = compoundModel.getPartGeometryLink(DetachedTurretPartIndexes.GUN)
@@ -739,8 +739,10 @@ class VehicleStickers(object):
         segLen = segment.lengthSquared
         if segLen != 0:
             segStart -= 0.25 * segment / math.sqrt(segLen)
-        handle = componentStickers.stickers.addDamageSticker(stickerID, segStart, segEnd)
-        componentStickers.damageStickers[code] = DamageSticker(stickerID, segStart, segEnd, handle)
+        handle = componentStickers.stickers.addDamageSticker(stickerID, segStart, segEnd, componentIdx, collisionComponent)
+        FILTERED_STICKER_INDEX = -2
+        if handle != FILTERED_STICKER_INDEX:
+            componentStickers.damageStickers[code] = DamageSticker(stickerID, segStart, segEnd, handle)
 
     def delDamageSticker(self, code):
         for componentStickers in self.__stickers.itervalues():

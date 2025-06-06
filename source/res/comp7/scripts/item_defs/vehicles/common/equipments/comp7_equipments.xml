@@ -41,7 +41,7 @@
           <plan>	comp7Abilities/allySupport_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	20	  <exports>	vse	</exports>
+      <cooldownSeconds>	15	  <exports>	vse	</exports>
       </cooldownSeconds>
       <duration>	20	  <exports>	vse tooltip	</exports>
       </duration>
@@ -92,15 +92,15 @@
           <plan>	comp7Abilities/concentration_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	20	  <exports>	vse	</exports>
+      <cooldownSeconds>	10	  <exports>	vse	</exports>
       </cooldownSeconds>
       <duration>	15	  <exports>	vse tooltip	</exports>
       </duration>
-      <aimingTimeBuff>	0.5 0.35 0.25	  <exports>	vse	</exports>
+      <aimingTimeBuff>	0.5 0.35 0.15	  <exports>	vse	</exports>
       </aimingTimeBuff>
       <shotDispersionFactors>	0.5 0.35 0.25	  <exports>	vse	</exports>
       </shotDispersionFactors>
-      <clipReloadTimeBoost>	0.5 0.75 0.95	  <exports>	vse tooltip	</exports>
+      <clipReloadTimeBoost>	0.65 0.8 1.15	  <exports>	vse tooltip	</exports>
       </clipReloadTimeBoost>
     </script>
   </comp7_concentration>
@@ -144,11 +144,11 @@
           <plan>	comp7Abilities/aoeInspire_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	10	  <exports>	vse	</exports>
+      <cooldownSeconds>	15	  <exports>	vse	</exports>
       </cooldownSeconds>
-      <duration>	25	  <exports>	vse tooltip	</exports>
+      <duration>	15	  <exports>	vse tooltip	</exports>
       </duration>
-      <crewBuff>	25 40 55	  <exports>	vse tooltip	</exports>
+      <crewBuff>	20 30 40	  <exports>	vse tooltip	</exports>
       </crewBuff>
     </script>
   </comp7_aoe_inspire>
@@ -167,15 +167,15 @@
           <plan>	comp7Abilities/redline_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	30	  <exports>	vse	</exports>
+      <cooldownSeconds>	20	  <exports>	vse	</exports>
       </cooldownSeconds>
-      <delay>	2	  <exports>	vse tooltip	</exports>
+      <delay>	3	  <exports>	vse tooltip	</exports>
       </delay>
-      <radius>	7 8 9	  <exports>	vse tooltip	</exports>
+      <radius>	7 8 10	  <exports>	vse tooltip	</exports>
       </radius>
       <damage>	100 250 500	  <exports>	vse tooltip	</exports>
       </damage>
-      <stunDuration>	3 9 15	  <exports>	vse tooltip	</exports>
+      <stunDuration>	3 9 12	  <exports>	vse tooltip	</exports>
       </stunDuration>
       <fraction>	0	  <exports>	vse tooltip	</exports>
       </fraction>
@@ -188,8 +188,8 @@
       <effects>
         <action>
           <shotEffects>	epicArtilleryStrike	</shotEffects>
-          <offsetDeviation>	8	</offsetDeviation>
-          <repeatCount>	3	</repeatCount>
+          <offsetDeviation>	9	</offsetDeviation>
+          <repeatCount>	4	</repeatCount>
           <repeatDelay>	0	</repeatDelay>
           <repeatDelayDeviationPercent>	0	</repeatDelayDeviationPercent>
         </action>
@@ -213,7 +213,7 @@
           <plan>	comp7Abilities/fastRecharge_client	</plan>
         </client>
       </visualScript>
-      <cooldownSeconds>	15	  <exports>	vse	</exports>
+      <cooldownSeconds>	12	  <exports>	vse	</exports>
       </cooldownSeconds>
       <gunReloadTimeBuff>	0.65 0.45 0.25	  <exports>	vse	</exports>
       </gunReloadTimeBuff>
@@ -235,15 +235,15 @@
       </visualScript>
       <cooldownSeconds>	10	  <exports>	vse	</exports>
       </cooldownSeconds>
-      <duration>	15 25 35	  <exports>	vse tooltip	</exports>
+      <duration>	15 20 30	  <exports>	vse tooltip	</exports>
       </duration>
-      <enginePowerFactor>	1.25	  <exports>	vse	</exports>
+      <enginePowerFactor>	1.35	  <exports>	vse	</exports>
       </enginePowerFactor>
       <stunDurationFactor>	0.25	  <exports>	vse	</exports>
       </stunDurationFactor>
       <repairBuff>	75	  <exports>	vse tooltip	</exports>
       </repairBuff>
-      <gunReloadBoost>	4.0	  <exports>	vse tooltip	</exports>
+      <gunReloadBoost>	6.0	  <exports>	vse tooltip	</exports>
       </gunReloadBoost>
     </script>
   </comp7_juggernaut>
@@ -295,7 +295,7 @@
       </dispersionFactor>
       <damageDistance>	350	  <exports>	vse tooltip	</exports>
       </damageDistance>
-      <damageFactors>	1.15 1.25 1.65	  <exports>	vse tooltip	</exports>
+      <damageFactors>	1.15 1.25 1.45	  <exports>	vse tooltip	</exports>
       </damageFactors>
     </script>
   </comp7_sniper>
@@ -315,19 +315,19 @@
       </visualScript>
       <cooldownSeconds>	20	  <exports>	vse	</exports>
       </cooldownSeconds>
-      <duration>	7	  <exports>	vse tooltip	</exports>
+      <duration>	6	  <exports>	vse tooltip	</exports>
       </duration>
-      <healDuration>	7	  <exports>	vse tooltip	</exports>
+      <healDuration>	6	  <exports>	vse tooltip	</exports>
       </healDuration>
-      <baseHeal>	99	  <exports>	vse tooltip	</exports>
+      <baseHeal>	50	  <exports>	vse tooltip	</exports>
       </baseHeal>
-      <extraHealFactor>	0.3 0.6 0.99	  <exports>	vse	</exports>
+      <extraHealFactor>	0.3 0.5 0.7	  <exports>	vse	</exports>
       </extraHealFactor>
-      <fwdSpeedBoost>	20	  <exports>	vse tooltip	</exports>
+      <fwdSpeedBoost>	1	  <exports>	vse tooltip	</exports>
       </fwdSpeedBoost>
-      <bkwSpeedBoost>	15	  <exports>	vse tooltip	</exports>
+      <bkwSpeedBoost>	5	  <exports>	vse tooltip	</exports>
       </bkwSpeedBoost>
-      <enginePowerBuff>	15	  <exports>	vse tooltip	</exports>
+      <enginePowerBuff>	30	  <exports>	vse tooltip	</exports>
       </enginePowerBuff>
     </script>
   </comp7_risky_attack>
@@ -345,13 +345,13 @@
           <plan>	comp7Abilities/recon_point_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	25	  <exports>	vse	</exports>
+      <cooldownSeconds>	8	  <exports>	vse	</exports>
       </cooldownSeconds>
       <duration>	10 15 25	  <exports>	vse tooltip	</exports>
       </duration>
-      <delay>	1	  <exports>	vse tooltip	</exports>
+      <delay>	2	  <exports>	vse tooltip	</exports>
       </delay>
-      <radius>	40 60 80	  <exports>	vse tooltip	</exports>
+      <radius>	50 70 90	  <exports>	vse tooltip	</exports>
       </radius>
       <areaVisual>	content/Interface/TargetPoint/ReconFlight_02.visual	</areaVisual>
     </script>

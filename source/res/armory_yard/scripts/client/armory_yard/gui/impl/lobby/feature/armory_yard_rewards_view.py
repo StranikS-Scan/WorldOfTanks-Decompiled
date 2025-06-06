@@ -66,14 +66,8 @@ class ArmoryYardRewardsView(ViewImpl):
         return self.__tooltipData.get(index, None)
 
     def __cutVehCompensation(self):
-        for vehicleDict in self.__vehicles:
-            vehDelete = []
-            for intCD, params in vehicleDict.iteritems():
-                if 'customCompensation' in params:
-                    vehDelete.append(intCD)
-
-            for intCD in vehDelete:
-                del vehicleDict[intCD]
+        for vehDict in self.__vehicles:
+            vehDict = {intCD:params for intCD, params in vehDict.iteritems() if 'customCompensation' not in params}
 
     def onClose(self):
         g_eventBus.handleEvent(LobbySimpleEvent(LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, ctx={'isOver3dScene': True}), EVENT_BUS_SCOPE.GLOBAL)

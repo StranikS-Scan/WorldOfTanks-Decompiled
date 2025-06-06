@@ -21,6 +21,7 @@ from account_helpers.AccountSettings import PersonalMissions
 from gui.impl.gen.view_models.views.lobby.personal_missions.personal_missions_operations_view_model import RewardsStatus
 from gui.impl.gen.view_models.views.lobby.personal_missions.pm3_operation_model import Pm3OperationModel, MissionStatus
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from helpers import int2roman, i18n
 from gui.impl.gen.view_models.views.lobby.personal_missions.pm3_operation_model import LastMissionStatus
@@ -29,11 +30,10 @@ from gui.impl.lobby.personal_missions.personal_missions_window_events import sho
 from gui.server_events.pm3_constants import SOUNDS
 if typing.TYPE_CHECKING:
     import Event
-_FRAME_NAME = {8: 'bct',
- 9: 'waffen',
- 10: 'bct',
- 11: 'hidden'}
-LAST_OPERATION = (11, 'hidden', LastMissionStatus.DEVELOPMENT)
+LAST_OPERATION = {'id': 11,
+ 'tankLevel': 11,
+ 'tankType': 'heavyTank',
+ 'tankName': i18n.makeString('#personal_missions:operations/lastOperationTankName')}
 
 class PersonalMissionsOperationsView(ViewImpl):
     __slots__ = ()
@@ -42,6 +42,7 @@ class PersonalMissionsOperationsView(ViewImpl):
     __settingsCore = dependency.descriptor(ISettingsCore)
     __selectableRewardManager = PersonalMissionsSelectableRewardManager
     __lobbyContext = dependency.descriptor(ILobbyContext)
+    __eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, layoutID=R.views.lobby.personal_missions.PersonalMissionsOperationsView()):
         settings = ViewSettings(layoutID)
@@ -129,7 +130,6 @@ class PersonalMissionsOperationsView(ViewImpl):
         operationId = operation.getID()
         operationModel.setOperationId(operationId)
         operationModel.setIsHasLevels(self.getIsHasLevels(operation))
-        operationModel.setIcon(_FRAME_NAME.get(operationId, 'hidden'))
         operationModel.setTotalQuests(operation.getQuestsCount())
         currentCompletedQuests = len(operation.getCompletedQuests())
         prevCompletedQuests = self.__getPrevCompletedQuests(operationId)
@@ -152,12 +152,23 @@ class PersonalMissionsOperationsView(ViewImpl):
             operationModel.setTypeIcon(vehicle.type)
             return
 
+    def __getLastOperationStatus(self):
+        operations = self.__eventsCache.getPersonalMissions().getOperationsForBranch(PM_BRANCH.PERSONAL_MISSION_3)
+        isFullCompleted = all((operation.isFullCompleted() for operation in operations.itervalues()))
+        if isFullCompleted:
+            return LastMissionStatus.COMPLETED
+        isCompleted = all((operation.isCompleted() for operation in operations.itervalues()))
+        return LastMissionStatus.ACTIVE if isCompleted else LastMissionStatus.DISABLED
+
     def __updateLastOperation(self, model):
-        operationId, icon, status = LAST_OPERATION
+        operationId = LAST_OPERATION['id']
         model.setName(i18n.makeString('#personal_missions:operations/title%d' % operationId))
-        model.setStatus(status)
+        model.setStatus(LastMissionStatus.DEVELOPMENT)
         model.setOperationId(operationId)
-        model.setIcon(icon)
+        model.setLevel(int2roman(LAST_OPERATION['tankLevel']))
+        model.setVehicleName(LAST_OPERATION['tankName'])
+        model.setTypeIcon(LAST_OPERATION['tankType'])
+        model.setIsElite(True)
         model.setTotalQuests(len(self.__pm3Controller.getFinalQuests()))
         currentCompletedQuests = len(self.__pm3Controller.getFullCompletedFinalQuests())
         model.setCompletedQuests(currentCompletedQuests)

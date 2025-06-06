@@ -1980,56 +1980,6 @@
       <lifetimeEffect>	none	</lifetimeEffect>
     </entry>
     <entry>
-      <filename>	content/Decor/hd_dec_EU_028_Flowerpot/normal/lod0/hd_dec_EU_028_Flowerpot_04.model	</filename>
-      <health>	1	</health>
-      <decayEffect>	none	</decayEffect>
-      <effect>	inf_envEU_009_TownEnv_flowerpot_02	</effect>
-      <effectHP>	HP_module0	</effectHP>
-      <effectScale>	1	</effectScale>
-      <matName>	n_stone0	</matName>
-      <lifetimeEffect>	none	</lifetimeEffect>
-    </entry>
-    <entry>
-      <filename>	content/Decor/hd_dec_EU_028_Flowerpot/normal/lod0/hd_dec_EU_028_Flowerpot_07.model	</filename>
-      <health>	1	</health>
-      <decayEffect>	none	</decayEffect>
-      <effect>	inf_envEU_009_TownEnv_flowerpot_02_03	</effect>
-      <effectHP>	HP_module0	</effectHP>
-      <effectScale>	1	</effectScale>
-      <matName>	n_stone0	</matName>
-      <lifetimeEffect>	none	</lifetimeEffect>
-    </entry>
-    <entry>
-      <filename>	content/Decor/hd_dec_EU_028_Flowerpot/normal/lod0/hd_dec_EU_028_Flowerpot_08.model	</filename>
-      <health>	1	</health>
-      <decayEffect>	none	</decayEffect>
-      <effect>	inf_envEU_009_TownEnv_flowerpot_02_04	</effect>
-      <effectHP>	HP_module0	</effectHP>
-      <effectScale>	1	</effectScale>
-      <matName>	n_stone0	</matName>
-      <lifetimeEffect>	none	</lifetimeEffect>
-    </entry>
-    <entry>
-      <filename>	content/Decor/hd_dec_EU_028_Flowerpot/normal/lod0/hd_dec_EU_028_Flowerpot_10.model	</filename>
-      <health>	1	</health>
-      <decayEffect>	none	</decayEffect>
-      <effect>	inf_envEU_009_TownEnv_flowerpot_02_06	</effect>
-      <effectHP>	HP_module0	</effectHP>
-      <effectScale>	1	</effectScale>
-      <matName>	n_stone0	</matName>
-      <lifetimeEffect>	none	</lifetimeEffect>
-    </entry>
-    <entry>
-      <filename>	content/Decor/hd_dec_EU_028_Flowerpot/normal/lod0/hd_dec_EU_028_Flowerpot_15.model	</filename>
-      <health>	1	</health>
-      <decayEffect>	none	</decayEffect>
-      <effect>	inf_env_19_29_Flowerpot_03	</effect>
-      <effectHP>	HP_module0	</effectHP>
-      <effectScale>	1	</effectScale>
-      <matName>	n_stone0	</matName>
-      <lifetimeEffect>	none	</lifetimeEffect>
-    </entry>
-    <entry>
       <filename>	content/Environment/hd_env002_Logs/normal/lod0/hd_env002_Logs.model	</filename>
       <health>	10	</health>
       <decayEffect>	none	</decayEffect>
@@ -3008,6 +2958,17 @@
       <lifetimeEffect>	none	</lifetimeEffect>
     </entry>
     <entry>
+      <filename>	content/Environment/hd_envEU_010_Cars_01/normal/lod0/hd_envEU_010_Cars_01_Yellow.model	</filename>
+      <health>	10	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	inf_env418_OldGMercedes3_05	</effect>
+      <hitEffect>	inf_fuel_env418_OldGMercedes2_27_hit	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_metal0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
       <filename>	content/Environment/hd_envEU_010_Cars_02/normal/lod0/hd_envEU_010_Cars_02.model	</filename>
       <health>	10	</health>
       <decayEffect>	none	</decayEffect>
@@ -3833,7 +3794,6 @@
       <effectScale>	1	</effectScale>
       <matName>	n_wood0	</matName>
       <lifetimeEffect>	none	</lifetimeEffect>
-      <hitEffect>	inf_env_AF_033_Tent	</hitEffect>
     </entry>
     <entry>
       <filename>	content/Environment/hd_env_AM_002_Barrels/normal/lod0/hd_env_AM_002_Barrels_01.model	</filename>
@@ -14821,7 +14781,7 @@
       <hitEffect>	inf_mle009_BoxCamouflage1	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
-      <matName>	n_wood0_1	</matName>
+      <matName>	n_wood0	</matName>
       <lifetimeEffect>	none	</lifetimeEffect>
     </entry>
     <entry>
@@ -22334,16 +22294,6 @@
       <touchdownEffect>	tree_Apple_8m_Classic_touchdown	</touchdownEffect>
     </entry>
     <entry>
-      <filename>	vegetation/Broadleaves/Apple_Frost/Apple_Frost_8m_Classic_Dry.srt	</filename>
-      <health>	15	</health>
-      <density>	0.25	</density>
-      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
-      <lifetimeEffect>	none	</lifetimeEffect>
-      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	inf_deadtree_fall	</fractureEffect>
-      <touchdownEffect>	inf_deadtree_touchdown	</touchdownEffect>
-    </entry>
-    <entry>
       <filename>	vegetation/Broadleaves/Shrubs/Aucuba/Aucuba_10m.srt	</filename>
       <health>	3	</health>
       <density>	0.5	</density>
@@ -25187,16 +25137,6 @@
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
       <fractureEffect>	inf_tree_oak_dry_fall_big	</fractureEffect>
       <touchdownEffect>	inf_tree_oak_dry_touchdown_big	</touchdownEffect>
-    </entry>
-    <entry>
-      <filename>	vegetation/Broadleaves/Oak_Dry_Frost/Oak_Dry_Frost_20m.srt	</filename>
-      <health>	30	</health>
-      <density>	0.25	</density>
-      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
-      <lifetimeEffect>	none	</lifetimeEffect>
-      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	inf_tree_oak_dry_fall_med	</fractureEffect>
-      <touchdownEffect>	inf_tree_oak_dry_touchdown_med	</touchdownEffect>
     </entry>
     <entry>
       <filename>	vegetation/Broadleaves/Oak_dry_moss/Oak_dry_moss_20m.srt	</filename>

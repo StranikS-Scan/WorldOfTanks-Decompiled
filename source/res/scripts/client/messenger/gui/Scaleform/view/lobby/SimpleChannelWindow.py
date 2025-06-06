@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/lobby/SimpleChannelWindow.py
+from gui.Scaleform.daapi.view.meta.ChannelWindowMeta import ChannelWindowMeta
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.events import FocusEvent
-from messenger.gui.Scaleform.meta.ChannelWindowMeta import ChannelWindowMeta
 from gui.shared import events, EVENT_BUS_SCOPE
 from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
 from messenger.inject import channelsCtrlProperty

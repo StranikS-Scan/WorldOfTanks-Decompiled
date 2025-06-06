@@ -82,6 +82,36 @@ class DualGunParamsExtender(ReplaceModuleParamsExtender):
         return settings.checkDualGunHighlights()
 
 
+class AutoloadDualGunParamsExtender(ReplaceModuleParamsExtender):
+
+    def __init__(self):
+        super(AutoloadDualGunParamsExtender, self).__init__(UI_STORAGE_KEYS.AUTO_RELOAD_DUAL_GUN_HIGHLIGHTS_COUNTER, (_ModuleParamExtendInfo('reloadTime', 'reloadTimeSecs'),))
+
+    def check(self, vehicleModule, vehicleDescriptor):
+        if vehicleModule.itemTypeID == GUI_ITEM_TYPE.GUN:
+            gun = typing.cast(VehicleGun, vehicleModule)
+            return gun.isAutoReloadableDualGun(vehicleDescriptor)
+        return False
+
+    def highlightCheck(self, settings):
+        return settings.checkAutoReloadDualGunHighlights()
+
+
+class ClipDualGunParamsExtender(ReplaceModuleParamsExtender):
+
+    def __init__(self):
+        super(ClipDualGunParamsExtender, self).__init__(UI_STORAGE_KEYS.CLIP_DUAL_GUN_HIGHLIGHTS_COUNTER, (_ModuleParamExtendInfo('reloadTime', 'reloadTimeSecs'),))
+
+    def check(self, vehicleModule, vehicleDescriptor):
+        if vehicleModule.itemTypeID == GUI_ITEM_TYPE.GUN:
+            gun = typing.cast(VehicleGun, vehicleModule)
+            return gun.isClipDualGun(vehicleDescriptor)
+        return False
+
+    def highlightCheck(self, settings):
+        return settings.checkClipDualGunHighlights()
+
+
 class TurboshaftParamsExtender(ModuleParamsExtender):
 
     def __init__(self):
@@ -127,5 +157,7 @@ class RocketAccelerationParamsExtender(ModuleParamsExtender):
 def fittingSelectModuleExtenders():
     return (AutoReloadParamsExtender(),
      DualGunParamsExtender(),
+     AutoloadDualGunParamsExtender(),
+     ClipDualGunParamsExtender(),
      TurboshaftParamsExtender(),
      RocketAccelerationParamsExtender())

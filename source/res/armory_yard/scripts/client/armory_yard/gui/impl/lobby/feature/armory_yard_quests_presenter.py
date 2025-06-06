@@ -5,7 +5,7 @@ from operator import attrgetter
 from account_helpers.AccountSettings import ArmoryYard, AccountSettings
 from frameworks.wulf.view.array import fillIntsArray
 from gui.impl.gen.view_models.common.missions.event_model import EventStatus
-from gui.shared.missions.packers.events import BattleQuestUIDataPacker
+from gui.shared.missions.packers.events import ArmoryYardQuestUIDataPacker
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from Event import SuspendableEventSubscriber
 from helpers import dependency, time_utils
@@ -141,7 +141,7 @@ class _QuestsTabPresenter(object):
         for quest in self.__armoryYardCtrl.iterCycleProgressionQuests(cycleID):
             totalQuests += 1
             vehicleClasses, vehicleLevels = self.__armoryYardCtrl.getRequiredVehicleTypeAndLevelsForQuest(quest.getID())
-            packer = BattleQuestUIDataPacker(quest, bonusPackerGetter=getArmoryYardBonusPacker)
+            packer = ArmoryYardQuestUIDataPacker(quest, bonusPackerGetter=getArmoryYardBonusPacker)
             questModel = packer.pack(model=ArmoryYardQuestModel())
             questModel.setChapterId(cycleID)
             questModel.setStatus(EventStatus.ACTIVE)

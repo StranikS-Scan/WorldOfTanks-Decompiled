@@ -12,6 +12,8 @@ from constants import DUAL_GUN
 from constants import VEHICLE_MISC_STATUS
 from debug_utils import LOG_WARNING
 from dualgun_sounds import DualGunSounds
+from gui.Scaleform.daapi.view.battle.shared.helper import getClipType
+from gui.Scaleform.genConsts.CROSSHAIR_CASSETTE_TYPES import CROSSHAIR_CASSETTE_TYPES
 from items.utils import getFirstReloadTime
 from gui.Scaleform.daapi.view.meta.DualGunPanelMeta import DualGunPanelMeta
 from gui.battle_control import avatar_getter
@@ -189,6 +191,9 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
         if arenaDP is not None:
             vInfo = arenaDP.getVehicleInfo()
             self.__isObserver = vInfo.isObserver()
+        ammoCtrl = self.__sessionProvider.shared.ammo
+        clipType = getClipType(ammoCtrl.getGunSettings())
+        self.as_setClipParamsS(clipType)
         return
 
     def _dispose(self):
@@ -313,6 +318,13 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
     def __updateGunState(self, gunID, state, serverCooldownData):
         leftTime = int(serverCooldownData[gunID].leftTime * DualGunConstants.TIME_MULTIPLIER)
         baseTime = int(serverCooldownData[gunID].baseTime * DualGunConstants.TIME_MULTIPLIER)
+        ammoCtrl = self.__sessionProvider.shared.ammo
+        shellsQuantity, _ = ammoCtrl.getCurrentShells()
+        gunSettings = ammoCtrl.getGunSettings()
+        isAutoloaderMultiGun = gunSettings.isMultiGun() and gunSettings.hasAutoReload()
+        if isAutoloaderMultiGun and shellsQuantity == 0:
+            leftTime = 0
+            baseTime = 0
         self.as_setGunStateS(gunID, state, leftTime, baseTime)
 
     def __onVehicleFeedbackReceived(self, eventID, vehicleID, value):
@@ -380,6 +392,9 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
             self.__bulletCollapsed = False
             self.__soundManager.onCooldownEnd(debuff.leftTime)
             totalDebuffTime = debuff.leftTime + cooldownTimes[DUAL_GUN.ACTIVE_GUN.LEFT].baseTime + cooldownTimes[DUAL_GUN.ACTIVE_GUN.RIGHT].baseTime
+            ammoCtrl = self.__sessionProvider.shared.ammo
+            if getClipType(ammoCtrl.getGunSettings()) == CROSSHAIR_CASSETTE_TYPES.MULTIPLE_BARREL_AUTOLOADER:
+                totalDebuffTime = debuff.leftTime
             self.as_setCooldownS(totalDebuffTime * DualGunConstants.TIME_MULTIPLIER)
             self.__updateTimeUntilNextDoubleShot(increaseByDebuff=True)
             return
@@ -444,11 +459,12 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
             return
 
     def __updateChargeTimerState(self, *args):
-        shellsQuantity = self.__sessionProvider.shared.ammo.getShellsQuantityLeft()
-        if shellsQuantity > 1 or shellsQuantity < 0 or not self.__isPlayerVehicle():
-            self.as_setTimerVisibleS(True)
-        else:
-            self.as_setTimerVisibleS(False)
+        ammoCtrl = self.__sessionProvider.shared.ammo
+        shellsQuantity = ammoCtrl.getShellsQuantityLeft()
+        gunSettings = ammoCtrl.getGunSettings()
+        isAutoloaderMultiGun = gunSettings.isMultiGun() and gunSettings.hasAutoReload()
+        isTimerVisible = isAutoloaderMultiGun or shellsQuantity > 1 or shellsQuantity < 0 or not self.__isPlayerVehicle()
+        self.as_setTimerVisibleS(isTimerVisible)
 
     def __onReplayTimeWarpStart(self):
         self.as_resetS()

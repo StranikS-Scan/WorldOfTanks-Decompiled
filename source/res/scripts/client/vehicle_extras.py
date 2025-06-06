@@ -155,6 +155,8 @@ class ShowShootingMultiGun(ShowShooting):
         if currentGuns == self._SHOT_ALL_GUNS:
             data['_gunIndex'] = range(0, len(gunDescr.effects))
             data['_gunSequence'] = [data['_gunIndex']] * burstCount
+            if vehicle.typeDescriptor.isDualgunVehicle and burstCount > 1:
+                self.__recalculateDualGunBursts(vehicle, data, burstCount)
         elif currentGuns < 0:
             data['_gunIndex'] = turretDescr.multiGunState.patterns[currentGuns].gunIndexes
             data['_gunSequence'] = turretDescr.multiGunState.patterns[currentGuns].sequence
@@ -250,6 +252,16 @@ class ShowShootingMultiGun(ShowShooting):
         appearance = vehicle.appearance
         gunIndexes = data['_gunIndex']
         appearance.multiGunRecoil(gunIndexes)
+
+    def __recalculateDualGunBursts(self, vehicle, data, burstCount):
+        ammoCtrl = vehicle.guiSessionProvider.shared.ammo
+        _, quantityInClip = ammoCtrl.getCurrentShells()
+        isEnoughClipsForDualBurst = quantityInClip >= len(data['_gunIndex']) * burstCount
+        if not isEnoughClipsForDualBurst:
+            dualBurstShotsLeft = quantityInClip - burstCount
+            data['_gunSequence'] = [data['_gunIndex']] * dualBurstShotsLeft
+            activeGunIndex = ammoCtrl.getDualGunActiveID()
+            data['_gunSequence'].extend([[activeGunIndex]] * (burstCount - dualBurstShotsLeft))
 
 
 class DamageMarker(EntityExtra):

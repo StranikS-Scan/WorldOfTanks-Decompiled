@@ -140,6 +140,7 @@ class OnAnyVehicleShoot(Block, VehicleMeta):
     def __init__(self, *args, **kwargs):
         super(OnAnyVehicleShoot, self).__init__(*args, **kwargs)
         self._out = self._makeEventOutputSlot('out')
+        self._gunIndex = self._makeDataOutputSlot('gunIndex', SLOT_TYPE.INT, None)
         self._outVehicle = self._makeDataOutputSlot('vehicle', SLOT_TYPE.VEHICLE, None)
         return
 
@@ -149,7 +150,8 @@ class OnAnyVehicleShoot(Block, VehicleMeta):
     def onFinishScript(self):
         g_playerEvents.onShowShooterTracer -= self.__onShotEvent
 
-    def __onShotEvent(self, shooterEntity):
+    def __onShotEvent(self, shooterEntity, gunIndex):
+        self._gunIndex.setValue(gunIndex)
         self._outVehicle.setValue(weakref.proxy(shooterEntity))
         self._out.call()
 

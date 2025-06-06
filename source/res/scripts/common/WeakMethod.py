@@ -75,6 +75,3 @@ class WeakMethodProxy(object):
 
     def __repr__(self):
         return self._methodRef.__repr__()
-
-    def hasReference(self):
-        return self._methodRef() is not None

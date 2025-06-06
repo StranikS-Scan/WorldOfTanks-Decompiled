@@ -17,7 +17,7 @@ from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.events_helpers import isPremium, isDailyQuest, isPremiumPlusAccount
 from gui.server_events.formatters import DECORATION_SIZES
 from gui.shared.missions.packers.bonus import getDefaultBonusPacker, packMissionsBonusModelAndTooltipData
-from gui.shared.missions.packers.conditions import BonusConditionPacker
+from gui.shared.missions.packers.conditions import BonusConditionPacker, AYBonusConditionPacker
 from gui.shared.missions.packers.conditions import PostBattleConditionPacker
 from helpers import dependency
 from skeletons.gui.game_control import IComp7Controller, IWotPlusController
@@ -102,6 +102,14 @@ class BattleQuestUIDataPacker(_EventUIDataPacker):
         if not model.bonusCondition.getItems() and not model.postBattleCondition.getItems():
             postBattleContitionPacker = PostBattleConditionPacker()
             postBattleContitionPacker.packDefaultCondition(model.postBattleCondition)
+
+
+class ArmoryYardQuestUIDataPacker(BattleQuestUIDataPacker):
+
+    def _packBonusConds(self, model):
+        bonusConditionPacker = AYBonusConditionPacker()
+        bonusConditionPacker.packBattlesBonusCond(self._event, model)
+        bonusConditionPacker.packWithPostBattleCondCheck(self._event, model.bonusCondition, bool(model.postBattleCondition.getItems()))
 
 
 class TokenUIDataPacker(_EventUIDataPacker):

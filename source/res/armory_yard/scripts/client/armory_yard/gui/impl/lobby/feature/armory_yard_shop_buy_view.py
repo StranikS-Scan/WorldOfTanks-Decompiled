@@ -230,7 +230,7 @@ class ArmoryYardShopBuyView(ArmoryYardShopBaseView):
             model.setCurrencyAmount(tokens)
 
     def __getPreviewVehicleCD(self):
-        return self.__getProductData()['exclusiveVehicle']
+        return self.__getProductData().get('exclusiveVehicle', -1)
 
 
 class ArmoryYardShopBuyWindow(LobbyWindow):

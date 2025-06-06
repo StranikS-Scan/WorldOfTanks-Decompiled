@@ -51,7 +51,6 @@ from skeletons.gui.game_control import IHeroTankController, IVehicleComparisonBa
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
-from skeletons.gui.lobby_context import ILobbyContext
 from tutorial.control.context import GLOBAL_FLAG
 from uilogging.shop.loggers import getPreviewUILoggers
 from uilogging.shop.logging_constants import ShopCloseItemStates
@@ -124,7 +123,6 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
     __hangarSpace = dependency.descriptor(IHangarSpace)
     __settingsCore = dependency.descriptor(ISettingsCore)
     __guiLoader = dependency.descriptor(IGuiLoader)
-    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, ctx=None):
         self.__ctx = ctx
@@ -209,8 +207,6 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self.__hangarSpace.onSpaceCreate += self.__onHangarCreateOrRefresh
         self.__hangarSpace.onSpaceRefresh += self.closeView
         self.__hangarSpace.setVehicleSelectable(True)
-        serverSettings = self.__lobbyContext.getServerSettings()
-        serverSettings.onServerSettingsChange += self.__onServerSettingsChanged
         if not g_currentPreviewVehicle.isPresent():
             event_dispatcher.showHangar()
         if not self._heroInteractive:
@@ -249,8 +245,6 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self.__hangarSpace.onSpaceRefresh -= self.closeView
         self.__hangarSpace.setVehicleSelectable(self.__keepVehicleSelectionEnabled)
         self.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.handleSelectedEntityUpdated)
-        serverSettings = self.__lobbyContext.getServerSettings()
-        serverSettings.onServerSettingsChange -= self.__onServerSettingsChanged
         isMapsTrainingViewOpened = self.__guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.maps_training.MapsTrainingPage()) is not None
         if self._needToResetAppearance and not isMapsTrainingViewOpened:
             g_currentPreviewVehicle.selectNoVehicle()
@@ -294,7 +288,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         _updatePostProgressionParameters()
 
     def onGoToPostProgressionClick(self):
-        self.__resetPostProgressionBullet()
+        self._resetPostProgressionBullet()
         if self._backAlias == VIEW_ALIAS.VEH_POST_PROGRESSION and callable(self._previewBackCb):
             self._previewBackCb()
         else:
@@ -443,10 +437,6 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
                 g_currentPreviewVehicle.previewCamouflage(customizationItem)
         return
 
-    def __onServerSettingsChanged(self, diff):
-        if not self.__lobbyContext.getServerSettings().isIngamePreviewEnabled():
-            event_dispatcher.showHangar()
-
     def __fullUpdate(self):
         self.__updateHeaderData()
         self.__updateTabsData()
@@ -564,7 +554,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
     def __updateModuleBullet(self):
         self.as_setBulletVisibilityS(_getModulesTabIdx(), _isPostProgressionBulletVisible())
 
-    def __resetPostProgressionBullet(self):
+    def _resetPostProgressionBullet(self):
         if _isPostProgressionBulletVisible(settingsCore=self.__settingsCore):
             self.__settingsCore.serverSettings.saveInUIStorage({UI_STORAGE_KEYS.VEH_PREVIEW_POST_PROGRESSION_BULLET_SHOWN: True})
             self.__updateModuleBullet()

@@ -17,6 +17,7 @@ from gui.prb_control.entities.epic_battle_training.actions_validator import Trai
 from gui.prb_control.entities.epic_battle_training.ctx import EpicTrainingSettingsCtx, SetPlayerObserverStateCtx
 from gui.prb_control.entities.epic_battle_training.permissions import EpicBattleTrainingPermissions, EpicBattleTrainingIntroPermissions
 from gui.prb_control.entities.epic_battle_training.requester import EpicBattleTrainingListRequester
+from gui.prb_control.entities.epic.pre_queue.vehicles_watcher import EpicVehiclesWatcher
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.items import prb_items, SelectResult, ValidationResult
 from gui.prb_control.prb_helpers import TrainingEntityViewLifecycleHandler
@@ -116,9 +117,11 @@ class EpicBattleTrainingEntity(LegacyEntity):
          REQUEST_TYPE.EPIC_SWAP_IN_TEAM: self.swapInTeam,
          REQUEST_TYPE.EPIC_SWAP_BETWEEN_TEAM: self.swapBetweenTeam}
         super(EpicBattleTrainingEntity, self).__init__(FUNCTIONAL_FLAG.EPIC_TRAINING, settings, permClass=EpicBattleTrainingPermissions, limits=EpicBattleTrainingLimits(self), requestHandlers=requests)
+        self.__watcher = None
         self.__settingRecords = []
         self.__viewLifecycleWatcher = ViewLifecycleWatcher()
         self.storage = legacy_storage_getter(PREBATTLE_TYPE.EPIC_TRAINING)()
+        return
 
     def init(self, clientPrb=None, ctx=None):
         result = super(EpicBattleTrainingEntity, self).init(clientPrb=clientPrb)
@@ -131,9 +134,14 @@ class EpicBattleTrainingEntity(LegacyEntity):
         g_eventDispatcher.addEpicTrainingToCarousel(False)
         result = FUNCTIONAL_FLAG.addIfNot(result, FUNCTIONAL_FLAG.LOAD_WINDOW)
         result = FUNCTIONAL_FLAG.addIfNot(result, FUNCTIONAL_FLAG.LOAD_PAGE)
+        self.__watcher = EpicVehiclesWatcher()
+        self.__watcher.start()
         return result
 
     def fini(self, clientPrb=None, ctx=None, woEvents=False):
+        if self.__watcher is not None:
+            self.__watcher.stop()
+            self.__watcher = None
         super(EpicBattleTrainingEntity, self).fini(clientPrb=clientPrb, ctx=ctx, woEvents=woEvents)
         clientPrb = prb_getters.getClientPrebattle()
         if clientPrb is not None:

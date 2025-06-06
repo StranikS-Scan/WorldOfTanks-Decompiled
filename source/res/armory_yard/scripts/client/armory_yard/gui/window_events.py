@@ -45,10 +45,10 @@ def showArmoryYardShopRewardWindow(description, iconPath, count=1, itemType='', 
 
 
 @dependency.replace_none_kwargs(armoryYard=IArmoryYardController)
-def showArmoryYardBuyWindow(armoryYard=None, parent=None, isBlurEnabled=False, onLoadedCallback=None):
+def showArmoryYardBuyWindow(armoryYard=None, parent=None, isBlurEnabled=False, onLoadedCallback=None, onClosedCallback=None):
     from armory_yard.gui.impl.lobby.feature.armory_yard_buy_view import ArmoryYardBuyWindow
     if armoryYard.isActive():
-        window = ArmoryYardBuyWindow(parent=parent, isBlurEnabled=isBlurEnabled, onLoadedCallback=onLoadedCallback)
+        window = ArmoryYardBuyWindow(parent=parent, isBlurEnabled=isBlurEnabled, onLoadedCallback=onLoadedCallback, onClosedCallback=onClosedCallback)
         window.load()
 
 

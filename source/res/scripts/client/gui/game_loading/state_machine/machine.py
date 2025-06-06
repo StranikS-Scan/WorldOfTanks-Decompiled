@@ -7,6 +7,7 @@ from gui.game_loading import loggers
 from gui.game_loading.resources.cdn.images import CdnImagesResources
 from gui.game_loading.resources.consts import LoadingTypes
 from gui.game_loading.resources.local.base import LocalResources
+from gui.game_loading.resources.models import LocalImageModel
 from gui.game_loading.state_machine.const import GameLoadingStatesEvents, GameLoadingStates
 from gui.game_loading.state_machine.states.base import BaseTickingState, BaseGroupTickingStates
 from gui.game_loading.state_machine.states.client_loading import ClientLoadingState
@@ -74,7 +75,7 @@ class GameLoadingStateMachine(StateMachine):
         playerLoadingViewSettings = settings.getPlayerLoadingStateViewSettings()
         logosLoadingState = LogosLoadingState(self._logos, clientLoadingViewSettings.ageRatingPath)
         clientLoadingState = ClientLoadingState()
-        loginScreenState = LoginScreenState(self._cdnImages, loginNextSlideDuration, loginViewSettings)
+        loginScreenState = LoginScreenState(LocalResources([LocalImageModel(LoginScreenState.LOGIN_DEFAULT_PATH)]), loginNextSlideDuration, loginViewSettings)
         playerLoadingState = PlayerLoadingState()
         idlState = IdlState()
         logosLoadingState.configure()

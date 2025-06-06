@@ -81,13 +81,12 @@ class BaseDialogBuilder(object):
     def setDescription(self, text):
         self.__description = toString(text)
 
-    def setIcon(self, mainIcon, backgrounds=None, overlays=None, layoutID=None, iconPositionLogic=IconPositionLogicEnum.CENTREDANDTHROUGHCONTENT.value, pushingDown=True):
+    def setIcon(self, mainIcon, backgrounds=None, overlays=None, layoutID=None, iconPositionLogic=IconPositionLogicEnum.CENTREDANDTHROUGHCONTENT.value):
         self.__icon = {'iconResID': mainIcon,
          'backgroundResIDList': backgrounds,
          'overlayResIDList': overlays,
          'layoutID': layoutID,
-         'iconPositionLogic': iconPositionLogic,
-         'isBottomPushingDown': pushingDown}
+         'iconPositionLogic': iconPositionLogic}
 
     def addButton(self, buttonSettings):
         self.__buttons.append(buttonSettings)

@@ -10,14 +10,6 @@ _EQUIPMENT_CONTROLLERS = {ARENA_BONUS_TYPE.COMP7: comp7_equipment_ctrl.Comp7Equi
 _REPLAY_EQUIPMENT_CONTROLLERS = {ARENA_BONUS_TYPE.COMP7: comp7_equipment_ctrl.Comp7ReplayEquipmentController,
  ARENA_BONUS_TYPE.TOURNAMENT_COMP7: comp7_equipment_ctrl.Comp7ReplayEquipmentController}
 
-def updateEquipmentControllers(key, value):
-    _EQUIPMENT_CONTROLLERS.update({key: value})
-
-
-def updateReplayEquipmentControllers(key, value):
-    _REPLAY_EQUIPMENT_CONTROLLERS.update({key: value})
-
-
 def createAmmoCtrl(setup):
     if setup.isReplayRecording:
         return ammo_ctrl.AmmoReplayRecorder(setup.replayCtrl)

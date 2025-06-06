@@ -229,14 +229,21 @@ class LootBoxesStorageView(ViewImpl):
 
     @replaceNoneKwargsModel
     def __fillLootBoxKeysModel(self, model=None):
+        boxesOpenedWithKeys = [ lb for lb in self.__guiLootBoxesCtr.getGuiLootBoxes() if self.__isActiveLootbox(lb) ]
         keyArray = model.getLootboxKeys()
         keyArray.clear()
         for keyID, keyConfig in self.__lobbyContext.getServerSettings().getLootBoxKeyConfig().iteritems():
             keyToken = makeLBKeyTokenID(keyID)
             keyItem = LootBoxKey(keyToken, self.__itemsCache.items.tokens.getTokenCount(keyToken), keyConfig)
-            keyArray.addViewModel(getLootBoxKeyViewModel(keyItem))
+            for lootbox in boxesOpenedWithKeys:
+                if lootbox.openedWithKey(keyID):
+                    keyArray.addViewModel(getLootBoxKeyViewModel(keyItem))
+                    break
 
         keyArray.invalidate()
+
+    def __isActiveLootbox(self, lb):
+        return lb and lb.isVisibleInStorage() and lb.getUnlockKeyIDs()
 
     @replaceNoneKwargsModel
     def __setMainData(self, model=None):
@@ -331,6 +338,7 @@ class LootBoxesStorageView(ViewImpl):
     def __onBoxInfoUpdated(self):
         if self.__context.getCurrentState() == States.STORAGE_VIEWING:
             self.__fillLootBoxesModel()
+            self.__fillLootBoxKeysModel()
 
     def __changeAnimationEnabledSetting(self, args):
         isEnabled = args.get('enabled', None)

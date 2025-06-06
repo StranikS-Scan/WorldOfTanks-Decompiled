@@ -28,13 +28,14 @@ from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IPersonalMissionsController, IVehicleComparisonBasket, IHangarFeatureStateController
 from skeletons.gui.shared import IItemsCache
+from shared_utils import first
 if typing.TYPE_CHECKING:
     import Event
     from gui.shared.gui_items.Vehicle import Vehicle
     from frameworks.wulf import ViewEvent, Window
 
 class PersonalMissionsVehicleView(ViewImpl):
-    __slots__ = ('__isAnimationPlaying', '__hasDelayedBalanceUpdates', '__currentVehicleCD', '__isFromTechTree', '__isAnimationFreeze', '__operationId', '__operation', '__tooltipData')
+    __slots__ = ('__isAnimationPlaying', '__hasDelayedBalanceUpdates', '__currentVehicleCD', '__isFromTechTree', '__isAnimationFreeze', '__operationId', '__operation', '__tooltipData', '__isFinalRewardsView')
     __personalMissionsController = dependency.descriptor(IPersonalMissionsController)
     __appLoader = dependency.descriptor(IAppLoader)
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -46,13 +47,16 @@ class PersonalMissionsVehicleView(ViewImpl):
         settings.flags = ViewFlags.LOBBY_SUB_VIEW
         settings.model = PersonalMissionsVehicleViewModel()
         super(PersonalMissionsVehicleView, self).__init__(settings)
-        self.__operation = self.__personalMissionsController.getOperationById(operationId)
-        self.__currentVehicleCD = self.__operation.getVehicleBonus().intCD
+        ctrl = self.__personalMissionsController
+        self.__isFinalRewardsView = operationId == 11
+        self.__operation = None if self.__isFinalRewardsView else ctrl.getOperationById(operationId)
+        self.__currentVehicleCD = first(ctrl.getVehiclesForChampionQuestPM3()).intCD if self.__isFinalRewardsView else self.__operation.getVehicleBonus().intCD
         self.__isAnimationFreeze = False
         self.__isAnimationPlaying = False
         self.__hasDelayedBalanceUpdates = False
         self.__operationId = operationId
         self.__tooltipData = {}
+        return
 
     def _onShown(self):
         super(PersonalMissionsVehicleView, self)._onShown()

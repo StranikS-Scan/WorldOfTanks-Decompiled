@@ -10,8 +10,11 @@ from gui.Scaleform.framework.managers.loaders import GuiImplViewLoadParams
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.personal_missions.personal_missions_rewards_view_model import CompletedQuestsType
 from gui.impl.pub.lobby_window import LobbyWindow
+from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.impl.gen.view_models.views.lobby.personal_missions.personal_missions_main_quests_view_model import PageViewIdEnum
+from helpers import dependency
+from skeletons.gui.impl import INotificationWindowController
 _logger = logging.getLogger(__name__)
 PM3_INFO_PAGE = 'pm3InfoPage'
 SERVER_SETTINGS_KEYS = ('disabledPMOperations', 'disabledPersonalMissions', 'isPM3QuestEnabled')
@@ -54,10 +57,14 @@ def showPersonalMissionsVehicleView(operationId):
     g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.lobby.personal_missions.PersonalMissionsVehicleView(), PersonalMissionsVehicleView, ScopeTemplates.LOBBY_SUB_SCOPE), operationId=operationId), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showPersonalMissionsVideoRewardView(operationId):
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
+def showPersonalMissionsVideoRewardView(operationId, addToQueue=False, notificationMgr=None):
     from gui.impl.lobby.personal_missions.personal_missions_video_rewards_view import PersonalMissionsVideoRewardsViewWindow
     window = PersonalMissionsVideoRewardsViewWindow(operationId)
-    window.load()
+    if addToQueue:
+        notificationMgr.append(WindowNotificationCommand(window))
+    else:
+        window.load()
 
 
 def showIntroView():
@@ -98,13 +105,21 @@ def __createPersonalMissionsBrowserView(url, viewFlags, returnClb=None):
     return BrowserView(R.views.lobby.common.BrowserView(), settings)
 
 
-def showPersonalMissionsRewardsView(qID, selectedBonuses=None, viewType=CompletedQuestsType.COMPLETE):
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
+def showPersonalMissionsRewardsView(qID, selectedBonuses=None, viewType=CompletedQuestsType.COMPLETE, addToQueue=False, notificationMgr=None):
     from gui.impl.lobby.personal_missions.personal_missions_rewards_view import PersonalMissionsRewardsWindow
     window = PersonalMissionsRewardsWindow(qID, selectedBonuses, viewType)
-    window.load()
+    if addToQueue:
+        notificationMgr.append(WindowNotificationCommand(window))
+    else:
+        window.load()
 
 
-def showOperationAdditionRewardsView(operationID):
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
+def showOperationAdditionRewardsView(operationID, addToQueue=False, notificationMgr=None):
     from gui.impl.lobby.personal_missions.personal_missions_rewards_view import PersonalMissionsRewardsWindow
     window = PersonalMissionsRewardsWindow(operationID=operationID)
-    window.load()
+    if addToQueue:
+        notificationMgr.append(WindowNotificationCommand(window))
+    else:
+        window.load()

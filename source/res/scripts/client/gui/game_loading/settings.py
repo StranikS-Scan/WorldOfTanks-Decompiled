@@ -155,17 +155,19 @@ class GameLoadingSettings(object):
             contentState = ContentState.INVISIBLE
             ageRatingPath = self._getAgeRatingPath()
             info = ''
+            hasVignette = True
             if stateSection is not None:
                 showVfx = stateSection.readBool('showVfx', False)
                 contentStateValue = stateSection.readInt('contentState', ContentState.INVISIBLE.value)
                 info = makeString(stateSection.readString('info') or '')
+                hasVignette = stateSection.readBool('hasVignette', hasVignette)
                 if contentStateValue not in ContentState.values():
                     _logger.warning('Not supported contentState value for %s state: %s not in %s.', state, contentStateValue, ContentState.values())
                 else:
                     contentState = ContentState(contentStateValue)
             else:
                 _logger.warning('No section can be found for %s view state', state)
-            return ImageViewSettingsModel(showVfx=showVfx, contentState=contentState, ageRatingPath=ageRatingPath, info=info)
+            return ImageViewSettingsModel(showVfx=showVfx, contentState=contentState, ageRatingPath=ageRatingPath, info=info, hasVignette=hasVignette)
 
     def _getAgeRatingPath(self):
         if self._ageRatingPath is None:

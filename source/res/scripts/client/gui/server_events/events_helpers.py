@@ -341,10 +341,6 @@ def isRegularQuest(eventID):
     return not (isMarathon(eventID) or isBattleMattersQuestID(eventID) or isPremium(eventID) or idGameModeEvent)
 
 
-def filterEventAvailableQuest(quest):
-    return quest.isAvailable()[0]
-
-
 def isAdvisableQuest(quest, filterRanked=False, filterFunRandom=False, filterEpic=False, battleRoalQuestsGetter=None):
     qGroup = quest.getGroupID()
     qIsValid = None
@@ -571,22 +567,6 @@ def isArmoryYardQuest(eventID, armoryYardCtrl=None):
 @dependency.replace_none_kwargs(earlyAccessCtrl=IEarlyAccessController)
 def isActiveEarlyAccessQuest(eventID, earlyAccessCtrl=None):
     return earlyAccessCtrl.isQuestActive() and (earlyAccessCtrl.isProgressionQuest(eventID) or earlyAccessCtrl.isPostProgressionQuest(eventID))
-
-
-def getPreviousBattleQuest(quest):
-    eventsCache = dependency.instance(IEventsCache)
-    group = eventsCache.getGroups().get(quest.getGroupID())
-    if group is not None:
-        questID = quest.getID()
-        quests = eventsCache.getQuests()
-        groupContent = group.getGroupContent(quests)
-        sortedQuests = sorted(groupContent, key=operator.methodcaller('getPriority'), reverse=True)
-        for idx, quest_ in enumerate(sortedQuests):
-            if quest_.getID() == questID:
-                if idx != 0:
-                    return sortedQuests[idx - 1]
-
-    return
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)

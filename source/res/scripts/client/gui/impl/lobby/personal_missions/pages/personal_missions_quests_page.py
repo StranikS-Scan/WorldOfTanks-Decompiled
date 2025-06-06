@@ -4,7 +4,7 @@ from typing import Union, Dict, Any, List
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
 from frameworks.wulf.view.submodel_presenter import PageSubModelPresenter
 from gui.impl.gen.view_models.views.lobby.personal_missions.personal_missions_main_quests_view_model import PageViewIdEnum
-from gui.impl.gen.view_models.views.lobby.personal_missions.pages.pm3_quests_card_model import Pm3QuestsCardModel, CardState
+from gui.impl.gen.view_models.views.lobby.personal_missions.pages.pm3_quests_card_model import Pm3QuestsCardModel, CardState, AnimationCardState
 from gui.impl.gen.view_models.views.lobby.personal_missions.pages.pm3_quests_line_model import Pm3QuestsLineModel, QuestLineType
 from gui.impl.gen.view_models.views.lobby.personal_missions.pages.pm3_quests_page_tab_model import Pm3QuestsPageTabModel, TabState
 from gui.impl.gen.view_models.views.lobby.personal_missions.pages.pm3_quests_view_model import Pm3QuestsViewModel, OperationState
@@ -20,6 +20,10 @@ from frameworks.wulf import Array
 from constants import MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 from CurrentVehicle import g_currentVehicle
 from skeletons.gui.lobby_context import ILobbyContext
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import PersonalMissions
+from gui.shared.events import PersonalMissionsEvent
+from gui.shared import EVENT_BUS_SCOPE, g_eventBus
 QuestLineTypeIndexes = {0: QuestLineType.HIT,
  1: QuestLineType.KILLS,
  2: QuestLineType.ASSIST,
@@ -63,11 +67,14 @@ class PersonalMissionQuestsPage(PageSubModelPresenter):
         serverSettings = self.__settingsCore.serverSettings
         if not serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.PM_NEW_CAMPAIGN_HINT):
             serverSettings.setOnceOnlyHintsSettings({OnceOnlyHints.PM_NEW_CAMPAIGN_HINT: True})
+        g_eventBus.addListener(PersonalMissionsEvent.ON_ALL_REWARDS_PM3_VIEW_CLOSE, self.__onRewardsViewClose, EVENT_BUS_SCOPE.LOBBY)
+
+    def finalize(self):
+        g_eventBus.removeListener(PersonalMissionsEvent.ON_ALL_REWARDS_PM3_VIEW_CLOSE, self.__onRewardsViewClose, EVENT_BUS_SCOPE.LOBBY)
+        super(PersonalMissionQuestsPage, self).finalize()
 
     def _getEvents(self):
         return ((self.__personalMissionsCtrl.onUpdated, self.__updateData),
-         (self.__personalMissionsCtrl.onQuestsUpdated, self.__updateData),
-         (self.__personalMissionsCtrl.onItemCacheUpdated, self.__updateData),
          (self.viewModel.switchTab, self.__switchTab),
          (self.viewModel.backToOperation, self.__backToOperation),
          (self.viewModel.openVehicleViewWindow, self.__openVehicleViewWindow),
@@ -106,6 +113,56 @@ class PersonalMissionQuestsPage(PageSubModelPresenter):
             return CardState.NOTAVAILABLE
         return CardState.INPROGRESS if quest.isInProgress() else CardState.AVAILABLE
 
+    @staticmethod
+    def getCurrentAnimationCardState(quest, prevAnimationCardState):
+        if quest.isCompleted():
+            if not quest.isFinal():
+                return AnimationCardState.COMPLETEBASIC
+            if quest.isFullCompleted():
+                return AnimationCardState.COMPLETEHONOR
+            if quest.isOnPause:
+                if prevAnimationCardState in (AnimationCardState.ONPAUSE, AnimationCardState.SWITCHHONORPROGRESS):
+                    return prevAnimationCardState
+                if prevAnimationCardState not in (AnimationCardState.INPROGRESSHONOR, AnimationCardState.SWITCHHONORPAUSE, AnimationCardState.SWITCHCOMPLETEINPROGRESS):
+                    return AnimationCardState.ONPAUSE
+                return AnimationCardState.SWITCHHONORPROGRESS
+            if quest.isInProgress():
+                if prevAnimationCardState in (AnimationCardState.INPROGRESSHONOR, AnimationCardState.SWITCHHONORPAUSE, AnimationCardState.SWITCHCOMPLETEINPROGRESS):
+                    return prevAnimationCardState
+                if prevAnimationCardState not in (AnimationCardState.ONPAUSE, AnimationCardState.SWITCHHONORPROGRESS):
+                    if prevAnimationCardState in (AnimationCardState.COMPLETE, AnimationCardState.SWITCHINPROGRESSCOMPLETE):
+                        return AnimationCardState.SWITCHCOMPLETEINPROGRESS
+                    return AnimationCardState.INPROGRESSHONOR
+                return AnimationCardState.SWITCHHONORPAUSE
+            if prevAnimationCardState in (AnimationCardState.INPROGRESSHONOR,
+             AnimationCardState.SWITCHCOMPLETEINPROGRESS,
+             AnimationCardState.SWITCHINPROGRESSCOMPLETE,
+             AnimationCardState.SWITCHHONORPAUSE):
+                return AnimationCardState.SWITCHINPROGRESSCOMPLETE
+            return AnimationCardState.COMPLETE
+        if quest.isOnPause:
+            if prevAnimationCardState in (AnimationCardState.SWITCHPAUSE, AnimationCardState.ONPAUSE):
+                return prevAnimationCardState
+            if prevAnimationCardState in (AnimationCardState.INPROGRESS, AnimationCardState.SWITCHPROGRESS):
+                return AnimationCardState.SWITCHPAUSE
+            return AnimationCardState.ONPAUSE
+        if quest.isUnlocked():
+            isPrevLocked = prevAnimationCardState == AnimationCardState.LOCKED
+            if not quest.isInProgress():
+                if isPrevLocked:
+                    return AnimationCardState.UNLOCK
+                return AnimationCardState.DEFAULT
+            if isPrevLocked:
+                return AnimationCardState.UNLOCKINPROGRESS
+            if prevAnimationCardState == AnimationCardState.UNLOCKINPROGRESS:
+                return prevAnimationCardState
+            if prevAnimationCardState in (AnimationCardState.SWITCHPROGRESS, AnimationCardState.INPROGRESS):
+                return prevAnimationCardState
+            if prevAnimationCardState in (AnimationCardState.ONPAUSE, AnimationCardState.SWITCHPAUSE):
+                return AnimationCardState.SWITCHPROGRESS
+            return AnimationCardState.INPROGRESS
+        return AnimationCardState.LOCKED if quest.isFinal() else AnimationCardState.DEFAULT
+
     def __onSettingsChange(self, diff):
         if not any((key in SERVER_SETTINGS_KEYS for key in diff.iterkeys())):
             return
@@ -117,6 +174,9 @@ class PersonalMissionQuestsPage(PageSubModelPresenter):
             showPersonalMissionsOperationsMap(PM_BRANCH.PERSONAL_MISSION_3)
             return
         self.__updateData()
+
+    def __onRewardsViewClose(self, event):
+        self.__updateData(isSwitched=True)
 
     def __updateData(self, isSwitched=False):
         ctrl = self.__personalMissionsCtrl
@@ -214,6 +274,14 @@ class PersonalMissionQuestsPage(PageSubModelPresenter):
             card = Pm3QuestsCardModel()
             card.setId(questId)
             card.setType(self.getCardState(quest))
+            generalQuestId = quest.getGeneralQuestID()
+            prevAnimationState = self.__getPrevAnimationCardState(generalQuestId)
+            animationState = self.getCurrentAnimationCardState(quest, prevAnimationState)
+            if prevAnimationState != animationState:
+                card.setAnimationType(animationState)
+                self.__saveAnimationCardState(generalQuestId, animationState)
+            else:
+                card.setAnimationType(AnimationCardState.DEFAULT)
             card.setSelected(quest.isInProgress())
             card.setIsLast(quest.isFinal())
             card.setQuestName(currentQuest.getUserName())
@@ -230,3 +298,13 @@ class PersonalMissionQuestsPage(PageSubModelPresenter):
     def __backToOperation(self):
         self.destroy()
         showHangar()
+
+    def __saveAnimationCardState(self, generalQuestID, animationCardState):
+        settings = AccountSettings.getPersonalMissions(PersonalMissions.CURR_QUESTS_STATEMENT)
+        settings.setdefault(generalQuestID, {})
+        settings[generalQuestID]['animationCardState'] = animationCardState
+        AccountSettings.setPersonalMissions(PersonalMissions.CURR_QUESTS_STATEMENT, settings)
+
+    def __getPrevAnimationCardState(self, generalQuestID):
+        settings = AccountSettings.getPersonalMissions(PersonalMissions.CURR_QUESTS_STATEMENT)
+        return settings.get(generalQuestID, {}).get('animationCardState', AnimationCardState.DEFAULT)

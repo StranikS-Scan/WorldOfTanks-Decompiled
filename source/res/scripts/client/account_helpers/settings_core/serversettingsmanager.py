@@ -103,6 +103,10 @@ class UI_STORAGE_KEYS(CONST_CONTAINER):
     FLAMETHROWER_MARK_IS_SHOWN = 'flamethrower_mark_shown'
     THERMAL_VISION_HIGHLIGHTS_COUNTER = 'thermal_vision_highlights_count'
     THERMAL_VISION_MARK_IS_SHOWN = 'thermal_vision_mark_shown'
+    AUTO_RELOAD_DUAL_GUN_HIGHLIGHTS_COUNTER = 'auto_reload_dual_gun_highlights_counter'
+    AUTO_RELOAD_DUAL_GUN_MARK_IS_SHOWN = 'auto_reload_dual_gun_mark_is_shown'
+    CLIP_DUAL_GUN_HIGHLIGHTS_COUNTER = 'clip_dual_gun_highlights_counter'
+    CLIP_DUAL_GUN_MARK_IS_SHOWN = 'clip_dual_gun_mark_is_shown'
 
 
 class BATTLE_MATTERS_KEYS(CONST_CONTAINER):
@@ -644,10 +648,14 @@ class ServerSettingsManager(object):
                                       UI_STORAGE_KEYS.GUI_LOOTBOXES_ENTRY_POINT: 5,
                                       UI_STORAGE_KEYS.DUAL_ACCURACY_MARK_IS_SHOWN: 9,
                                       UI_STORAGE_KEYS.FLAMETHROWER_MARK_IS_SHOWN: 13,
-                                      UI_STORAGE_KEYS.THERMAL_VISION_MARK_IS_SHOWN: 17}, offsets={UI_STORAGE_KEYS.ROCKET_ACCELERATION_HIGHLIGHTS_COUNTER: Offset(1, 14),
+                                      UI_STORAGE_KEYS.THERMAL_VISION_MARK_IS_SHOWN: 17,
+                                      UI_STORAGE_KEYS.AUTO_RELOAD_DUAL_GUN_MARK_IS_SHOWN: 21,
+                                      UI_STORAGE_KEYS.CLIP_DUAL_GUN_MARK_IS_SHOWN: 25}, offsets={UI_STORAGE_KEYS.ROCKET_ACCELERATION_HIGHLIGHTS_COUNTER: Offset(1, 14),
                                       UI_STORAGE_KEYS.DUAL_ACCURACY_HIGHLIGHTS_COUNTER: Offset(6, 448),
                                       UI_STORAGE_KEYS.FLAMETHROWER_HIGHLIGHTS_COUNTER: Offset(10, 7168),
-                                      UI_STORAGE_KEYS.THERMAL_VISION_HIGHLIGHTS_COUNTER: Offset(14, 114688)}),
+                                      UI_STORAGE_KEYS.THERMAL_VISION_HIGHLIGHTS_COUNTER: Offset(14, 114688),
+                                      UI_STORAGE_KEYS.AUTO_RELOAD_DUAL_GUN_HIGHLIGHTS_COUNTER: Offset(18, 1835008),
+                                      UI_STORAGE_KEYS.CLIP_DUAL_GUN_HIGHLIGHTS_COUNTER: Offset(22, 29360128)}),
      SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS: Section(masks={}, offsets={BATTLE_MATTERS_KEYS.QUESTS_SHOWN: Offset(0, 255),
                                                BATTLE_MATTERS_KEYS.QUEST_PROGRESS: Offset(8, 4294967040L)}),
      SETTINGS_SECTIONS.QUESTS_PROGRESS: Section(masks={}, offsets={QUESTS_PROGRESS.VIEW_TYPE: Offset(0, 3),
@@ -942,6 +950,8 @@ class ServerSettingsManager(object):
     _MAX_DUAL_ACCURACY_HIGHLIGHTS_COUNT = 5
     _MAX_FLAMETHROWER_HIGHLIGHTS_COUNT = 5
     _MAX_THERMAL_VISION_HIGHLIGHTS_COUNT = 5
+    _MAX_AUTO_RELOAD_DUAL_GUN_HIGHLIGHTS_COUNT = 5
+    _MAX_CLIP_DUAL_GUN_HIGHLIGHTS_COUNT = 5
 
     def __init__(self, core):
         self._core = weakref.proxy(core)
@@ -1059,6 +1069,12 @@ class ServerSettingsManager(object):
 
     def checkThermalVisionHighlights(self, increase=False):
         return self.__checkUIHighlights(UI_STORAGE_KEYS.THERMAL_VISION_HIGHLIGHTS_COUNTER, self._MAX_THERMAL_VISION_HIGHLIGHTS_COUNT, increase)
+
+    def checkAutoReloadDualGunHighlights(self, increase=False):
+        return self.__checkUIHighlights(UI_STORAGE_KEYS.AUTO_RELOAD_DUAL_GUN_HIGHLIGHTS_COUNTER, self._MAX_AUTO_RELOAD_DUAL_GUN_HIGHLIGHTS_COUNT, increase)
+
+    def checkClipDualGunHighlights(self, increase=False):
+        return self.__checkUIHighlights(UI_STORAGE_KEYS.CLIP_DUAL_GUN_HIGHLIGHTS_COUNTER, self._MAX_CLIP_DUAL_GUN_HIGHLIGHTS_COUNT, increase)
 
     def updateUIStorageCounter(self, key, step=1):
         storageSection = self.getSection(SETTINGS_SECTIONS.UI_STORAGE)

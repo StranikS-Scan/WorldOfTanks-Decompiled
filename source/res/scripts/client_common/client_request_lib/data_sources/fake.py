@@ -647,7 +647,7 @@ class FakeDataAccessor(base.BaseDataAccessor):
 
     @fake_method(example={'data': {'promo_name': 'Bang bang bang',
               'type': 'news',
-              'image': '//webbrg-ru.wgcdn.co/dcont/fb/image/9.12.jpg',
+              'image': '//webbrg.tanki.su/dcont/fb/image/9.12.jpg',
               'video': 'https://www.youtube.com/watch?v=_jGPljdFBqA',
               'important': False,
               'promoscreen_url': '/promoscreens/<slug>/'},

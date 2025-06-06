@@ -450,7 +450,7 @@ class StyleXmlReader(BaseCustomizationItemXmlReader):
                 ix.raiseWrongXml(xmlCtx, 'type', 'unsupported type is used')
             fn.types = types
         if section.has_key('historical'):
-            fn.customizationDisplayType = ix.readInt(xmlCtx, section, 'historical', CustomizationDisplayType.HISTORICAL, CustomizationDisplayType.FANTASTICAL)
+            fn.customizationDisplayType = ix.readInt(xmlCtx, section, 'historical', CustomizationDisplayType.NON_HISTORICAL)
         return fn
 
     def _readClientOnlyFromXml(self, target, xmlCtx, section, cache=None):

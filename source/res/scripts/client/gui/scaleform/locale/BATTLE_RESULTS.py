@@ -128,6 +128,7 @@ class BATTLE_RESULTS(object):
     COMMON_VEHICLESTATE_DEAD7 = '#battle_results:common/vehicleState/dead7'
     COMMON_VEHICLESTATE_DEAD12 = '#battle_results:common/vehicleState/dead12'
     COMMON_VEHICLESTATE_DEAD13 = '#battle_results:common/vehicleState/dead13'
+    COMMON_VEHICLESTATE_DEAD15 = '#battle_results:common/vehicleState/dead15'
     COMMON_VEHICLESTATE_DEAD27 = '#battle_results:common/vehicleState/dead27'
     COMMON_VEHICLESTATE_DEAD29 = '#battle_results:common/vehicleState/dead29'
     COMMON_VEHICLESTATE_PREMATURELEAVE = '#battle_results:common/vehicleState/prematureLeave'
@@ -469,6 +470,7 @@ class BATTLE_RESULTS(object):
      COMMON_VEHICLESTATE_DEAD7,
      COMMON_VEHICLESTATE_DEAD12,
      COMMON_VEHICLESTATE_DEAD13,
+     COMMON_VEHICLESTATE_DEAD15,
      COMMON_VEHICLESTATE_DEAD27,
      COMMON_VEHICLESTATE_DEAD29)
 

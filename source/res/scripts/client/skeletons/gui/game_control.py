@@ -3270,6 +3270,10 @@ class IArmoryYardController(IGameController):
     def isFinalQuestCompleted(self):
         raise NotImplementedError
 
+    @property
+    def isPaused(self):
+        raise NotImplementedError
+
     def getCollectableRewards(self):
         raise NotImplementedError
 
@@ -3283,6 +3287,9 @@ class IArmoryYardController(IGameController):
         raise NotImplementedError
 
     def getTokensInfo(self):
+        raise NotImplementedError
+
+    def isAllTokensReceived(self):
         raise NotImplementedError
 
     def getSeasonInterval(self):
@@ -3366,6 +3373,9 @@ class IArmoryYardController(IGameController):
     def update(self):
         raise NotImplementedError
 
+    def isInAnnouncement(self):
+        raise NotImplementedError
+
     def onLoadingHangar(self):
         raise NotImplementedError
 
@@ -3403,6 +3413,9 @@ class IArmoryYardController(IGameController):
         raise NotImplementedError
 
     def getHangarFlagData(self):
+        raise NotImplementedError
+
+    def updateVisibilityHangarHeaderMenu(self, isVisible=False):
         raise NotImplementedError
 
 
@@ -3843,9 +3856,6 @@ class IEarlyAccessController(IGameController, ISeasonProvider):
     def isEnabled(self):
         raise NotImplementedError
 
-    def isPaused(self):
-        raise NotImplementedError
-
     def getInfoPageLink(self):
         raise NotImplementedError
 
@@ -3980,7 +3990,6 @@ class IPersonalMissionsController(IGameController):
     cgfCameraManager = None
     onItemCacheUpdated = None
     sysMessageController = None
-    onRewardsViewClose = None
 
     def fini(self):
         raise NotImplementedError

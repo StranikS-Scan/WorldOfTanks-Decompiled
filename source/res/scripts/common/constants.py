@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/constants.py
-import re
 import enum
 import calendar
 import time
@@ -10,7 +9,6 @@ from collections import namedtuple
 from itertools import izip, chain
 from Math import Vector3
 from realm import CURRENT_REALM, IS_CT
-from enumerations import Enumeration, AttributeEnumItem
 try:
     import BigWorld
 except ImportError:
@@ -373,8 +371,6 @@ class ARENA_BONUS_TYPE:
      TOURNAMENT_REGULAR,
      TOURNAMENT_EVENT,
      TOURNAMENT_COMP7)
-    INVITATION_PROCESS_BONUS_TYPES = RANDOM_RANGE + (EPIC_BATTLE, MAPBOX, EVENT_BATTLES)
-    NOT_IMMEDIATE_BATTLE_RESULTS = BATTLE_ROYALE_RANGE + (MAPS_TRAINING, EVENT_BATTLES)
 
 
 ARENA_BONUS_TYPE_NAMES = dict([ (k, v) for k, v in ARENA_BONUS_TYPE.__dict__.iteritems() if isinstance(v, int) ])
@@ -485,7 +481,6 @@ class ARENA_SYNC_OBJECTS:
     OVERTIME = 6
     SMOKE = 7
     BR_DEATH_ZONE = 8
-    GAME_EVENT = 9
 
 
 ARENA_SYNC_OBJECT_NAMES = dict([ (v, k) for k, v in ARENA_SYNC_OBJECTS.__dict__.iteritems() if not k.startswith('_') ])
@@ -542,8 +537,6 @@ class FINISH_REASON:
     OWN_VEHICLE_DESTROYED = 9
     DESTROYED_OBJECTS = 10
     OBJECTIVES_COMPLETED = 11
-    HB_ENEMY_EXTERMINATION = 12
-    HB_ALLY_SPG_EXTERMINATION = 13
 
 
 FINISH_REASON_NAMES = dict([ (v, k) for k, v in FINISH_REASON.__dict__.iteritems() if not k.startswith('_') ])
@@ -1279,7 +1272,6 @@ class ATTACK_REASON(object):
     RAM = 'ramming'
     WORLD_COLLISION = 'world_collision'
     DEATH_ZONE = 'death_zone'
-    PERSONAL_DEATH_ZONE = 'personal_death_zone'
     DROWNING = 'drowning'
     GAS_ATTACK = 'gas_attack'
     OVERTURN = 'overturn'
@@ -1287,7 +1279,6 @@ class ATTACK_REASON(object):
     ARTILLERY_PROTECTION = 'artillery_protection'
     ARTILLERY_SECTOR = 'artillery_sector'
     BOMBERS = 'bombers'
-    BOMBERCAS = 'bombercas'
     RECOVERY = 'recovery'
     ARTILLERY_EQ = 'artillery_eq'
     BOMBER_EQ = 'bomber_eq'
@@ -1306,19 +1297,11 @@ class ATTACK_REASON(object):
     STATIC_DEATH_ZONE = 'static_deathzone'
     CGF_WORLD = 'cgf_world'
     AUTOSHOOT = 'autoshoot'
-    SPAWNED_BOT_RAM = 'spawned_bot_ram'
-    ARTILLERY_ROCKET = 'artillery_rocket'
-    ARTILLERY_MORTAR = 'artillery_mortar'
-    ARTILLERY_ON_YOURSELF = 'artillery_on_yourself'
     NONE = 'none'
 
     @classmethod
     def getIndex(cls, attackReason):
         return ATTACK_REASON_INDICES[attackReason]
-
-    @classmethod
-    def getValue(cls, index):
-        return ATTACK_REASON_VALUES[index]
 
 
 ATTACK_REASONS = (ATTACK_REASON.SHOT,
@@ -1326,7 +1309,6 @@ ATTACK_REASONS = (ATTACK_REASON.SHOT,
  ATTACK_REASON.RAM,
  ATTACK_REASON.WORLD_COLLISION,
  ATTACK_REASON.DEATH_ZONE,
- ATTACK_REASON.PERSONAL_DEATH_ZONE,
  ATTACK_REASON.DROWNING,
  ATTACK_REASON.GAS_ATTACK,
  ATTACK_REASON.OVERTURN,
@@ -1334,7 +1316,6 @@ ATTACK_REASONS = (ATTACK_REASON.SHOT,
  ATTACK_REASON.ARTILLERY_PROTECTION,
  ATTACK_REASON.ARTILLERY_SECTOR,
  ATTACK_REASON.BOMBERS,
- ATTACK_REASON.BOMBERCAS,
  ATTACK_REASON.RECOVERY,
  ATTACK_REASON.ARTILLERY_EQ,
  ATTACK_REASON.BOMBER_EQ,
@@ -1353,13 +1334,8 @@ ATTACK_REASONS = (ATTACK_REASON.SHOT,
  ATTACK_REASON.FORT_ARTILLERY_EQ,
  ATTACK_REASON.STATIC_DEATH_ZONE,
  ATTACK_REASON.AUTOSHOOT,
- ATTACK_REASON.CGF_WORLD,
- ATTACK_REASON.SPAWNED_BOT_RAM,
- ATTACK_REASON.ARTILLERY_ROCKET,
- ATTACK_REASON.ARTILLERY_MORTAR,
- ATTACK_REASON.ARTILLERY_ON_YOURSELF)
+ ATTACK_REASON.CGF_WORLD)
 ATTACK_REASON_INDICES = dict(((value, index) for index, value in enumerate(ATTACK_REASONS)))
-ATTACK_REASON_VALUES = dict(((index, value) for index, value in enumerate(ATTACK_REASONS)))
 BOT_RAM_REASONS = (ATTACK_REASON.BRANDER_RAM, ATTACK_REASON.CLING_BRANDER_RAM)
 WORLD_ATTACK_REASONS = (ATTACK_REASON.WORLD_COLLISION, ATTACK_REASON.CGF_WORLD)
 DEATH_REASON_ALIVE = -1
@@ -1551,6 +1527,7 @@ ENDLESS_TOKEN_TIME = int(calendar.timegm(time.strptime(ENDLESS_TOKEN_TIME_STRING
 LOOTBOX_TOKEN_PREFIX = 'lootBox:'
 LOOTBOX_LIMIT_ITEM_PREFIX = 'lb_limit_item:'
 LOOTBOX_KEY_PREFIX = 'lb_key:'
+LOOTBOX_MTL_CATEGORY = 'mtl_universal'
 TWITCH_TOKEN_PREFIX = 'token:twitch'
 CUSTOMIZATION_PROGRESS_PREFIX = 'cust_progress_'
 EMAIL_CONFIRMATION_QUEST_ID = 'email_confirmation'
@@ -2394,8 +2371,6 @@ class FAIRPLAY_VIOLATIONS:
     COMP7_DESERTER = 'comp7_deserter'
     BATTLEROYALE_DESERTER = 'battleroyale_deserter'
     BATTLEROYALE_AFK = 'battleroyale_afk'
-    HB_AFK = 'hb_afk'
-    HB_DESERTER = 'hb_deserter'
 
 
 FAIRPLAY_VIOLATIONS_NAMES = (FAIRPLAY_VIOLATIONS.DESERTER,
@@ -2406,9 +2381,7 @@ FAIRPLAY_VIOLATIONS_NAMES = (FAIRPLAY_VIOLATIONS.DESERTER,
  FAIRPLAY_VIOLATIONS.EPIC_DESERTER,
  FAIRPLAY_VIOLATIONS.COMP7_DESERTER,
  FAIRPLAY_VIOLATIONS.BATTLEROYALE_DESERTER,
- FAIRPLAY_VIOLATIONS.BATTLEROYALE_AFK,
- FAIRPLAY_VIOLATIONS.HB_AFK,
- FAIRPLAY_VIOLATIONS.HB_DESERTER)
+ FAIRPLAY_VIOLATIONS.BATTLEROYALE_AFK)
 FAIRPLAY_VIOLATIONS_MASKS = {name:1 << index for index, name in enumerate(FAIRPLAY_VIOLATIONS_NAMES)}
 
 class INVALID_CLIENT_STATS:
@@ -2761,6 +2734,7 @@ class StunTypes(enum.IntEnum):
     DEFAULT = 1
     FLAME = 2
     BULLET = 3
+    ARTILLERY_REWORK = 4
 
 
 AVAILABLE_STUN_TYPES_NAMES = [ key for key, value in StunTypes.__members__.iteritems() if value > 0 ]
@@ -3647,6 +3621,7 @@ class BuffDisplayedState(enum.IntEnum):
     ABILITY_JUGGERNAUT = 15
     ABILITY_CONCENTRATION = 16
     ABILITY_SURE_SHOT = 17
+    ABILITY_RECOIL_RECUPERATOR = 18
 
 
 class EntityCaptured(object):
@@ -3786,36 +3761,10 @@ class UNIQUE_UNLOCK_FEATURE_NAMES:
     PARAGONS_FEATURE_NAME = 'paragons'
 
 
-class EVENT:
-    DISABLE_AI_BATTLE_RESULTS_SEND = True
-    INVALID_BATTLE_PLACE = -1
-
-
-EVENT_BATTLES_TAG = 'event_battles'
-
-class BuffComponentVisibilityMode(enum.IntEnum):
-    NONE = 0
-    SELF = 1
-    OTHERS = 2
-    ALL = 3
-
-
-class BuffTarget(enum.IntEnum):
-    VICTIM = 0
-    ATTACKER = 1
-
-
-class EventStorageModifiers(enum.Enum):
-    SOUND_ON_SHOT = 'soundOnShot'
-    MARKER = 'marker'
-
-
-class EventMarkerBlinkingParams(enum.Enum):
-    BLINKING_DURATION_CUSTOM_MARKER = 10
-    BLINKING_DURATION_ARROW_MARKER = 5
-    BLINKING_SPEED_CUSTOM_MARKER_MS = 600
-    BLINKING_SPEED_ARROW_MARKER_MS = 1000
-
-
 ALL_EVENT_TYPES_FOR_BONUSES = 'all'
 EXTENSIONS_BONUSES = {}
+
+class ArtilleryZoneType:
+    EXPLOSION = 1
+    SHOT = 2
+    FRIENDLY = 3

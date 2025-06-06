@@ -191,6 +191,47 @@ class BonusConditionPacker(UIConditionPacker):
             return None
 
 
+class AYBonusConditionPacker(BonusConditionPacker):
+    BATTLE_TYPE = u'battles'
+
+    def packWithPostBattleCondCheck(self, event, model, isPostBattleConditionPresent):
+        self.isPostBattleConditionPresent = isPostBattleConditionPresent
+        self.pack(event, model)
+
+    def packBattlesBonusCond(self, event, model):
+        bonusConditions = event.bonusCond.getConditions()
+        bonusCondsModelList, _ = self._packConditions(bonusConditions, event)
+        if bonusCondsModelList:
+            for condition in bonusCondsModelList:
+                if condition.getConditionType() == self.BATTLE_TYPE:
+                    model.setCurrent(condition.getCurrent())
+                    model.setTotal(condition.getTotal())
+                    model.setIconKey(condition.getIconKey())
+
+        return None
+
+    def pack(self, event, bonusModel):
+        return self._pack(event, bonusModel)
+
+    def _pack(self, event, model):
+        bonusConditions = event.bonusCond.getConditions()
+        bonusCondsModelList, typeOfBonusConditionGroup = self._packConditions(bonusConditions, event)
+        isItemAddedToBonusCondModel = False
+        if not bonusCondsModelList:
+            _logger.debug('BonusConditions were not received for event %s.', event.getID())
+            return None
+        else:
+            for bonusCondModel in bonusCondsModelList:
+                if not bonusCondModel or bonusCondModel.getConditionType() == self.BATTLE_TYPE:
+                    continue
+                model.getItems().addViewModel(bonusCondModel)
+                isItemAddedToBonusCondModel = True
+
+            if isItemAddedToBonusCondModel:
+                model.setConditionType(typeOfBonusConditionGroup)
+            return None
+
+
 class PostBattleConditionPacker(UIConditionPacker):
 
     def __init__(self):

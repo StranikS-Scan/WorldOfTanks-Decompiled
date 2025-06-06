@@ -71,7 +71,7 @@ def _updateServerSettings(settingsCore=None, comp7Controller=None):
         if data[GuiSettingsBehavior.COMP7_VERSION_FLAG] != version:
             data[GuiSettingsBehavior.COMP7_VERSION_FLAG] = version
             stateFlags = settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
-            stateFlags[GuiSettingsBehavior.COMP7_WHATS_NEW_SHOWN] = False
+            stateFlags[GuiSettingsBehavior.COMP7_WHATS_NEW_SHOWN] = True
             if version > MAX_VERSION:
                 _logger.error('[COMP7] Version must be less 15')
             stateFlags[GuiSettingsBehavior.COMP7_VERSION_FLAG] = version

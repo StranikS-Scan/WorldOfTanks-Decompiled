@@ -70,6 +70,11 @@
           <destroyed>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3DSt_HW_21/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3DSt_HW_21/crash/lod0/Hull.model	</exploded>
         </GB100_Manticore_3DSt_HW_21>
+        <GB100_Manticore_3Dst_Snow>
+          <undamaged>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3Dst_Snow/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3Dst_Snow/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3Dst_Snow/crash/lod0/Hull.model	</exploded>
+        </GB100_Manticore_3Dst_Snow>
       </sets>
     </models>
     <swinging>
@@ -602,6 +607,30 @@
         <clipAngle>	1.16565	</clipAngle>
         <anchorShift>	0.081269	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15043	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB100_Manticore_3Dst_Snow	</compatibleModels>
+        <position>	-1.067042 1.050898 1.092974	</position>
+        <rotation>	0.173494 0.000006 3.14157	</rotation>
+        <scale>	0.321403 0.1 0.321403	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.784012	</clipAngle>
+        <anchorShift>	0.075325	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15044	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB100_Manticore_3Dst_Snow	</compatibleModels>
+        <position>	-0.236894 0.929212 1.740505	</position>
+        <rotation>	0.173494 0.000006 3.14157	</rotation>
+        <scale>	0.371369 0.37137 0.371369	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.784012	</clipAngle>
+        <anchorShift>	0.075325	</anchorShift>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -649,13 +678,24 @@
             <destroyed>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3DSt_HW_21/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3DSt_HW_21/crash/lod0/Chassis.model	</exploded>
           </GB100_Manticore_3DSt_HW_21>
+          <GB100_Manticore_3Dst_Snow>
+            <undamaged>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3Dst_Snow/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3Dst_Snow/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3Dst_Snow/crash/lod0/Chassis.model	</exploded>
+          </GB100_Manticore_3Dst_Snow>
         </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
-        <bufferPrefs>	mediumTank	</bufferPrefs>
-        <textureSet>	ussr_01	</textureSet>
-        <size>	0.5 0.32	</size>
+        <activePostmortem>	false	</activePostmortem>
+        <tracesParams>
+          <trackPairIdx>	0	</trackPairIdx>
+          <bufferPrefs>	mediumTank	</bufferPrefs>
+          <textureSet>	ussr_01	</textureSet>
+          <size>	0.5 0.32	</size>
+          <offset>	0 0	</offset>
+          <centerOffsetFactor>	1 1	</centerOffsetFactor>
+        </tracesParams>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
@@ -934,82 +974,157 @@
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <groundNodes>
-        <group>
-          <template>	Track_L	</template>
-          <startIndex>	0	</startIndex>
-          <count>	5	</count>
+        <node>
+          <name>	Track_L0	</name>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
           <isLeft>	true	</isLeft>
           <minOffset>	-0.1	</minOffset>
           <maxOffset>	0.1	</maxOffset>
-        </group>
-        <group>
-          <template>	Track_R	</template>
-          <startIndex>	0	</startIndex>
-          <count>	5	</count>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_L1	</name>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_L2	</name>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_L3	</name>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_L4	</name>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_R0	</name>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
           <isLeft>	false	</isLeft>
           <minOffset>	-0.1	</minOffset>
           <maxOffset>	0.1	</maxOffset>
-        </group>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_R1	</name>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_R2	</name>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_R3	</name>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_R4	</name>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
       </groundNodes>
-      <trackThickness>	-0.00845771	</trackThickness>
       <trackNodes>
-        <enable>	true	</enable>
-        <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.05	</maxAmplitude>
-        <maxOffset>	0.05	</maxOffset>
-        <gravity>	-9.8	</gravity>
-        <elasticity>	1100	</elasticity>
-        <damping>	2	</damping>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L0	</name>
-          <backwardElastK>	2	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R0	</name>
-          <backwardElastK>	2	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L0	</name>
-          <forwardElastK>	2	</forwardElastK>
-          <backwardElastK>	0.7	</backwardElastK>
-          <offset>	-0.0959596	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L1	</name>
-          <forwardElastK>	1.8	</forwardElastK>
-          <backwardElastK>	0.7	</backwardElastK>
-          <offset>	-0.0959596	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L2	</name>
-          <forwardElastK>	1.8	</forwardElastK>
-          <backwardElastK>	1.5	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R0	</name>
-          <forwardElastK>	2	</forwardElastK>
-          <backwardElastK>	0.7	</backwardElastK>
-          <offset>	-0.0959596	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R1	</name>
-          <forwardElastK>	1.8	</forwardElastK>
-          <backwardElastK>	0.7	</backwardElastK>
-          <offset>	-0.0959596	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R2	</name>
-          <forwardElastK>	1.8	</forwardElastK>
-          <backwardElastK>	1.5	</backwardElastK>
-        </node>
+        <trackPair>
+          <trackPairIdx>	0	</trackPairIdx>
+          <trackThickness>	-0.008458	</trackThickness>
+          <maxAmplitude>	0.05	</maxAmplitude>
+          <maxOffset>	0.05	</maxOffset>
+          <gravity>	-9.8	</gravity>
+          <damping>	2	</damping>
+          <enable>	true	</enable>
+          <linkBones>	false	</linkBones>
+          <elasticity>	1100	</elasticity>
+          <node>
+            <isLeft>	true	</isLeft>
+            <name>	Track_VD_L0	</name>
+            <backwardElastK>	2	</backwardElastK>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	false	</isLeft>
+            <name>	Track_VD_R0	</name>
+            <backwardElastK>	2	</backwardElastK>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	true	</isLeft>
+            <name>	Track_VT_L0	</name>
+            <forwardElastK>	2	</forwardElastK>
+            <backwardElastK>	0.7	</backwardElastK>
+            <offset>	-0.09596	</offset>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	true	</isLeft>
+            <name>	Track_VT_L1	</name>
+            <forwardElastK>	1.8	</forwardElastK>
+            <backwardElastK>	0.7	</backwardElastK>
+            <offset>	-0.09596	</offset>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	true	</isLeft>
+            <name>	Track_VT_L2	</name>
+            <forwardElastK>	1.8	</forwardElastK>
+            <backwardElastK>	1.5	</backwardElastK>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	false	</isLeft>
+            <name>	Track_VT_R0	</name>
+            <forwardElastK>	2	</forwardElastK>
+            <backwardElastK>	0.7	</backwardElastK>
+            <offset>	-0.09596	</offset>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	false	</isLeft>
+            <name>	Track_VT_R1	</name>
+            <forwardElastK>	1.8	</forwardElastK>
+            <backwardElastK>	0.7	</backwardElastK>
+            <offset>	-0.09596	</offset>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	false	</isLeft>
+            <name>	Track_VT_R2	</name>
+            <forwardElastK>	1.8	</forwardElastK>
+            <backwardElastK>	1.5	</backwardElastK>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+        </trackPair>
       </trackNodes>
       <splineDesc>
         <trackPair>
@@ -1024,6 +1139,12 @@
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
           </atlas>
+          <modelSets>
+            <GB100_Manticore_3Dst_Snow>
+              <segmentModelLeft>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3Dst_Snow/track/segment_L_pair_0.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3Dst_Snow/track/segment_R_pair_0.model	</segmentModelRight>
+            </GB100_Manticore_3Dst_Snow>
+          </modelSets>
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
@@ -1051,6 +1172,11 @@
             <model>	vehicles/british/GB100_Manticore/track/segment.model	</model>
             <length>	0.082884	</length>
           </mainSegment>
+          <modelSets>
+            <GB100_Manticore_3Dst_Snow>
+              <mainSegmentModel>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3Dst_Snow/track/segment_L_pair_0.model	</mainSegmentModel>
+            </GB100_Manticore_3Dst_Snow>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -1232,6 +1358,11 @@
             <model>	vehicles/british/GB100_Manticore/track/segment.model	</model>
             <length>	0.082914	</length>
           </mainSegment>
+          <modelSets>
+            <GB100_Manticore_3Dst_Snow>
+              <mainSegmentModel>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3Dst_Snow/track/segment_R_pair_0.model	</mainSegmentModel>
+            </GB100_Manticore_3Dst_Snow>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -1513,6 +1644,11 @@
                 <destroyed>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3DSt_HW_21/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3DSt_HW_21/crash/lod0/Gun_01.model	</exploded>
               </GB100_Manticore_3DSt_HW_21>
+              <GB100_Manticore_3Dst_Snow>
+                <undamaged>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3Dst_Snow/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3Dst_Snow/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3Dst_Snow/crash/lod0/Gun_01.model	</exploded>
+              </GB100_Manticore_3Dst_Snow>
             </sets>
           </models>
           <hitTester>
@@ -1940,6 +2076,17 @@
               <rayUp>	0.097444 0 0	</rayUp>
               <size>	0.6	</size>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	0 0 3.45	</rayStart>
+              <rayEnd>	0 0 4.05	</rayEnd>
+              <rayUp>	0.11 0 0	</rayUp>
+              <applyToFabric>	false	</applyToFabric>
+              <compatibleModels>	GB100_Manticore_3Dst_Snow	</compatibleModels>
+              <size>	0.6	</size>
+              <isUVProportional>	false	</isUVProportional>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -1964,6 +2111,11 @@
             <destroyed>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3DSt_HW_21/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3DSt_HW_21/crash/lod0/Turret_01.model	</exploded>
           </GB100_Manticore_3DSt_HW_21>
+          <GB100_Manticore_3Dst_Snow>
+            <undamaged>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3Dst_Snow/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3Dst_Snow/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/british/GB100_Manticore/_skins/GB100_Manticore_3Dst_Snow/crash/lod0/Turret_01.model	</exploded>
+          </GB100_Manticore_3Dst_Snow>
         </sets>
       </models>
       <hitTester>
@@ -2169,6 +2321,65 @@
           <showOn>	256	</showOn>
           <clipAngle>	0.784013	</clipAngle>
           <anchorShift>	0.144464	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35014	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	GB100_Manticore_3Dst_Snow	</compatibleModels>
+          <position>	-0.735167 1.667655 -1.086746	</position>
+          <rotation>	3.141593 0 0	</rotation>
+          <scale>	0.578434 0.05 0.578434	</scale>
+          <showOn>	4096	</showOn>
+          <clipAngle>	1.047198	</clipAngle>
+          <verticalMirror>	true	</verticalMirror>
+          <anchorShift>	0.05	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35015	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	GB100_Manticore_3Dst_Snow	</compatibleModels>
+          <position>	0.099195 1.666491 -1.246662	</position>
+          <rotation>	3.141593 0 0	</rotation>
+          <scale>	0.578434 0.05 0.578434	</scale>
+          <showOn>	4096	</showOn>
+          <clipAngle>	1.308997	</clipAngle>
+          <verticalMirror>	true	</verticalMirror>
+          <anchorShift>	0.04	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35016	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	GB100_Manticore_3Dst_Snow	</compatibleModels>
+          <position>	0.001771 1.734164 -0.470415	</position>
+          <rotation>	3.141593 0 0	</rotation>
+          <scale>	0.650501 0.650501 0.650501	</scale>
+          <showOn>	4096	</showOn>
+          <verticalMirror>	true	</verticalMirror>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35017	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	GB100_Manticore_3Dst_Snow	</compatibleModels>
+          <position>	-0.256447 1.426517 0.438911	</position>
+          <rotation>	1.559545 -0.773385 -2.37912	</rotation>
+          <scale>	0.361097 0.5 0.361097	</scale>
+          <showOn>	4096	</showOn>
+          <verticalMirror>	true	</verticalMirror>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35018	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	GB100_Manticore_3Dst_Snow	</compatibleModels>
+          <position>	0.27472 1.426498 0.439001	</position>
+          <rotation>	1.559603 0.768127 2.363268	</rotation>
+          <scale>	0.361097 0.5 0.361097	</scale>
+          <showOn>	4096	</showOn>
+          <verticalMirror>	true	</verticalMirror>
         </slot>
         <slot>
           <slotType>	sequence	</slotType>

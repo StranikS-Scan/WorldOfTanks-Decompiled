@@ -119,12 +119,14 @@
     <Hispano-Suiza_HS110_7x7>	31007	</Hispano-Suiza_HS110_7x7>
     <Hispano_Suiza_12Z>	31008	</Hispano_Suiza_12Z>
     <Maybach_HL_295_F_bob>	31009	</Maybach_HL_295_F_bob>
+    <Maybach_HL_275>	31010	</Maybach_HL_275>
     <Development_Engine>	65000	</Development_Engine>
     <AMX_B_271_SH>	10000	</AMX_B_271_SH>
     <Detroit_Diesel_6V53T_SH>	10001	</Detroit_Diesel_6V53T_SH>
     <Hispano-Suiza_HS110_SH>	10002	</Hispano-Suiza_HS110_SH>
     <_6F11SRY_MapsTraining_Dummy_SPG_2>	11	</_6F11SRY_MapsTraining_Dummy_SPG_2>
     <Maybach_HL_230_bootcamp>	1002	</Maybach_HL_230_bootcamp>
+    <Hispano-Suiza_HS110_T>	35002	</Hispano-Suiza_HS110_T>
   </ids>
   <shared>
     <Somua_S-40>
@@ -474,6 +476,23 @@
       <rpm_min>	279	</rpm_min>
       <rpm_max>	2361	</rpm_max>
     </Hispano-Suiza_HS110>
+    <Hispano-Suiza_HS110_T>
+      <userString>	#france_vehicles:Hispano-Suiza_HS110_T	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	94250	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	720	</power>
+      <weight>	1426	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	279	</rpm_min>
+      <rpm_max>	2361	</rpm_max>
+    </Hispano-Suiza_HS110_T>
     <Hispano-Suiza_HS110_7x7>
       <userString>	#france_vehicles:Hispano-Suiza_HS110	</userString>
       <tags>	diesel	</tags>
@@ -951,6 +970,23 @@
       <rpm_min>	470	</rpm_min>
       <rpm_max>	2094	</rpm_max>
     </Maybach_HL_234P45A>
+    <Maybach_HL_275>
+      <userString>	#france_vehicles:Maybach_HL_275	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	55000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	800	</power>
+      <weight>	1200	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	129	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	524	</rpm_min>
+      <rpm_max>	2602	</rpm_max>
+    </Maybach_HL_275>
     <Maybach_HL_295_1250>
       <userString>	#france_vehicles:Maybach_HL_295_1250	</userString>
       <tags>	gasoline	</tags>

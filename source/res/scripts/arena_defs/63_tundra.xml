@@ -38,18 +38,18 @@
     <ctf>
       <teamBasePositions>
         <team1>
-          <position1>	85.432190 -167.152176	</position1>
+          <position1>	85.416489 -167.155136	</position1>
         </team1>
         <team2>
-          <position1>	-72.202568 141.256195	</position1>
+          <position1>	-72.202553 141.256042	</position1>
         </team2>
       </teamBasePositions>
       <teamSpawnPoints>
         <team1>
-          <position>	13.326 -306.419	</position>
+          <position>	13.326000 -306.419006	</position>
         </team1>
         <team2>
-          <position>	-3.164 282.311	</position>
+          <position>	-3.164000 282.311005	</position>
         </team2>
       </teamSpawnPoints>
     </ctf>
@@ -58,19 +58,85 @@
       <winnerIfExtermination>	1	</winnerIfExtermination>
       <teamSpawnPoints>
         <team1>
-          <position>	-325.562 96.459	</position>
+          <position>	-325.562012 96.459000	</position>
         </team1>
         <team2>
-          <position>	316.803 0.031	</position>
+          <position>	316.803009 0.031000	</position>
         </team2>
       </teamSpawnPoints>
       <teamBasePositions>
         <team1>
-          <position1>	-41.347172 224.069397	</position1>
-          <position2>	-215.285431 -235.364349	</position2>
+          <position1>	-41.347176 224.069412	</position1>
+          <position2>	-215.285446 -235.364365	</position2>
         </team1>
         <team2></team2>
       </teamBasePositions>
     </assault2>
+    <comp7>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <teamBasePositions>
+        <team1>
+          <position1>	-204.914001 -237.908997	</position1>
+          <position2>	7.506012 241.912994	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	85.252571 355.180542	</position>
+          <type>	3	</type>
+        </point>
+        <point>
+          <position>	-281.412628 329.707703	</position>
+          <type>	4	</type>
+        </point>
+        <point>
+          <position>	-346.809509 -334.669220	</position>
+          <type>	3	</type>
+        </point>
+        <point>
+          <position>	125.223190 -132.927444	</position>
+          <type>	3	</type>
+        </point>
+        <point>
+          <position>	-129.269348 57.644901	</position>
+          <type>	3	</type>
+        </point>
+        <point>
+          <position>	-261.583557 -75.334488	</position>
+          <type>	4	</type>
+        </point>
+        <point>
+          <position>	100.599289 -361.857178	</position>
+          <type>	4	</type>
+        </point>
+      </pointsOfInterestUDO>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-337.886078 89.354393	</position>
+        </team1>
+        <team2>
+          <position>	305.327606 0.455456	</position>
+        </team2>
+      </teamSpawnPoints>
+    </comp7>
   </gameplayTypes>
 </63_tundra.xml>

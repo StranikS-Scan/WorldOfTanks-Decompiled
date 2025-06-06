@@ -4879,4 +4879,148 @@
       </mul>
     </kpi>
   </role_HT_flame_pair_5_2>
+  <role_XI_Mausekonig_pair_4_1>
+    <id>	7361	</id>
+    <imgName>	reinforcedStructure	</imgName>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/antifragmentationLiningFactor	</name>
+        <value>	1.25	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/crewChanceToHitFactor	</name>
+        <value>	0.75	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/rollingFrictionFactor	</name>
+        <value>	1.1	</value>
+      </mul>
+      <add>
+        <name>	miscAttrs/backwardMaxSpeedKMHTerm	</name>
+        <value>	-5	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleRamOrExplosionDamageResistance	</name>
+        <value>	0.75	</value>
+      </mul>
+      <mul>
+        <name>	crewHitChance	</name>
+        <value>	1.25	</value>
+      </mul>
+      <mul>
+        <name>	vehicleSpeedGain	</name>
+        <value>	0.9	</value>
+      </mul>
+      <add>
+        <name>	vehicleBackwardMaxSpeed	</name>
+        <value>	-5	</value>
+      </add>
+    </kpi>
+  </role_XI_Mausekonig_pair_4_1>
+  <role_XI_Mausekonig_pair_4_2>
+    <id>	7362	</id>
+    <imgName>	improvedSpeedIndicatorBackwards	</imgName>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/rollingFrictionFactor	</name>
+        <value>	0.9	</value>
+      </mul>
+      <add>
+        <name>	miscAttrs/backwardMaxSpeedKMHTerm	</name>
+        <value>	5	</value>
+      </add>
+      <mul>
+        <name>	miscAttrs/antifragmentationLiningFactor	</name>
+        <value>	0.75	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/crewChanceToHitFactor	</name>
+        <value>	1.25	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleSpeedGain	</name>
+        <value>	1.1	</value>
+      </mul>
+      <add>
+        <name>	vehicleBackwardMaxSpeed	</name>
+        <value>	5	</value>
+      </add>
+      <mul>
+        <name>	vehicleRamOrExplosionDamageResistance	</name>
+        <value>	1.25	</value>
+      </mul>
+      <mul>
+        <name>	crewHitChance	</name>
+        <value>	0.75	</value>
+      </mul>
+    </kpi>
+  </role_XI_Mausekonig_pair_4_2>
+  <role_XI_Mausekonig_pair_5_1>
+    <id>	7363	</id>
+    <imgName>	improvedEnginePower	</imgName>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/enginePowerFactor	</name>
+        <value>	1.16	</value>
+      </mul>
+      <add>
+        <name>	miscAttrs/forwardMaxSpeedKMHTerm	</name>
+        <value>	2	</value>
+      </add>
+      <mul>
+        <name>	miscAttrs/gunReloadTimeFactor	</name>
+        <value>	1.06	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	1.16	</value>
+      </mul>
+      <add>
+        <name>	vehicleForwardMaxSpeed	</name>
+        <value>	2	</value>
+      </add>
+      <mul>
+        <name>	vehicleGunReloadTime	</name>
+        <value>	1.06	</value>
+      </mul>
+    </kpi>
+  </role_XI_Mausekonig_pair_5_1>
+  <role_XI_Mausekonig_pair_5_2>
+    <id>	7364	</id>
+    <imgName>	improvedGunBreech	</imgName>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/gunReloadTimeFactor	</name>
+        <value>	0.94	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/enginePowerFactor	</name>
+        <value>	0.84	</value>
+      </mul>
+      <add>
+        <name>	miscAttrs/forwardMaxSpeedKMHTerm	</name>
+        <value>	-2	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleGunReloadTime	</name>
+        <value>	0.94	</value>
+      </mul>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	0.84	</value>
+      </mul>
+      <add>
+        <name>	vehicleForwardMaxSpeed	</name>
+        <value>	-2	</value>
+      </add>
+    </kpi>
+  </role_XI_Mausekonig_pair_5_2>
 </modifications.xml>

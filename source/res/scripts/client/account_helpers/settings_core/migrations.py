@@ -5,7 +5,7 @@ import logging
 import constants
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import NEW_SETTINGS_COUNTER, KEY_SETTINGS
-from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS, SESSION_STATS, BattlePassStorageKeys, BattleCommStorageKeys, OnceOnlyHints, ScorePanelStorageKeys, SPGAim, GuiSettingsBehavior, NewYearStorageKeys, GRAPHICS
+from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS, SESSION_STATS, BattlePassStorageKeys, BattleCommStorageKeys, OnceOnlyHints, ScorePanelStorageKeys, SPGAim, GuiSettingsBehavior, NewYearStorageKeys, GRAPHICS, FEEDBACK, CONTOUR
 from adisp import adisp_process, adisp_async
 from debug_utils import LOG_DEBUG
 from gui.server_events.pm_constants import PM_TUTOR_FIELDS
@@ -17,25 +17,31 @@ _logger = logging.getLogger(__name__)
 
 def _initializeDefaultSettings(core, data, initialized):
     LOG_DEBUG('Initializing server settings.')
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
     from account_helpers.counter_settings import dropCounters as dropNewSettingsCounters
     options = core.options
     gameData = data['gameData'] = {GAME.DATE_TIME_MESSAGE_INDEX: 2,
      GAME.ENABLE_OL_FILTER: options.getSetting(GAME.ENABLE_OL_FILTER).getDefaultValue(),
      GAME.ENABLE_SPAM_FILTER: options.getSetting(GAME.ENABLE_SPAM_FILTER).getDefaultValue(),
      GAME.INVITES_FROM_FRIENDS: options.getSetting(GAME.INVITES_FROM_FRIENDS).getDefaultValue(),
-     GAME.RECEIVE_FRIENDSHIP_REQUEST: core.options.getSetting(GAME.RECEIVE_FRIENDSHIP_REQUEST).getDefaultValue(),
-     GAME.STORE_RECEIVER_IN_BATTLE: core.options.getSetting(GAME.STORE_RECEIVER_IN_BATTLE).getDefaultValue(),
+     GAME.RECEIVE_FRIENDSHIP_REQUEST: options.getSetting(GAME.RECEIVE_FRIENDSHIP_REQUEST).getDefaultValue(),
+     GAME.STORE_RECEIVER_IN_BATTLE: options.getSetting(GAME.STORE_RECEIVER_IN_BATTLE).getDefaultValue(),
      GAME.REPLAY_ENABLED: core.getSetting(GAME.REPLAY_ENABLED),
      GAME.ENABLE_SERVER_AIM: core.getSetting(GAME.ENABLE_SERVER_AIM),
      GAME.SHOW_DAMAGE_ICON: core.getSetting(GAME.SHOW_DAMAGE_ICON),
      GAME.SHOW_VEHICLES_COUNTER: core.getSetting(GAME.SHOW_VEHICLES_COUNTER),
      GAME.MINIMAP_ALPHA: core.getSetting(GAME.MINIMAP_ALPHA),
-     GAME.PLAYERS_PANELS_SHOW_LEVELS: core.getSetting(GAME.PLAYERS_PANELS_SHOW_LEVELS)}
+     GAME.PLAYERS_PANELS_SHOW_LEVELS: core.getSetting(GAME.PLAYERS_PANELS_SHOW_LEVELS),
+     GAME.SNIPER_MODE_STABILIZATION: core.getSetting(GAME.SNIPER_MODE_STABILIZATION)}
     data['gameExtData'] = {GAME.CHAT_CONTACTS_LIST_ONLY: options.getSetting(GAME.CHAT_CONTACTS_LIST_ONLY).getDefaultValue(),
      GAME.SNIPER_ZOOM: core.getSetting(GAME.SNIPER_ZOOM),
      GAME.HULLLOCK_ENABLED: core.getSetting(GAME.HULLLOCK_ENABLED),
      GAME.PRE_COMMANDER_CAM: core.getSetting(GAME.PRE_COMMANDER_CAM),
-     GAME.COMMANDER_CAM: core.getSetting(GAME.COMMANDER_CAM)}
+     GAME.COMMANDER_CAM: core.getSetting(GAME.COMMANDER_CAM),
+     GAME.INCREASED_ZOOM: core.getSetting(GAME.INCREASED_ZOOM),
+     GAME.CAROUSEL_TYPE: core.getSetting(GAME.CAROUSEL_TYPE),
+     GAME.MINIMAP_MIN_SPOTTING_RANGE: core.getSetting(GAME.MINIMAP_MIN_SPOTTING_RANGE)}
+    data['gameExtData2'] = {GAME.CUSTOMIZATION_DISPLAY_TYPE: core.getSetting(GAME.CUSTOMIZATION_DISPLAY_TYPE)}
     gameplayData = data['gameplayData'] = {GAME.GAMEPLAY_MASK: AccountSettings.getSettingsDefault('gameplayMask')}
     aimData = data['aimData'] = {'arcade': core.getSetting('arcade'),
      'sniper': core.getSetting('sniper')}
@@ -61,15 +67,6 @@ def _initializeDefaultSettings(core, data, initialized):
                 if key in tags:
                     gameData[key] = getattr(subSec, reader)(key)
 
-        try:
-            value = section['replayPrefs'].readBool('enabled', None)
-            if value:
-                gameData[GAME.REPLAY_ENABLED] = 2
-            elif value is not None:
-                gameData[GAME.REPLAY_ENABLED] = 0
-        except Exception:
-            LOG_DEBUG('Replay preferences is not available.')
-
         gameData[GAME.ENABLE_SERVER_AIM] = AccountSettings.getSettings('useServerAim')
         gameData[GAME.SHOW_VEHICLES_COUNTER] = AccountSettings.getSettings('showVehiclesCounter')
         gameData[GAME.MINIMAP_ALPHA] = AccountSettings.getSettings('minimapAlpha')
@@ -91,8 +88,14 @@ def _initializeDefaultSettings(core, data, initialized):
     data['markersData'] = AccountSettings.getSettings('markers')
     data['graphicsData'] = {GAME.LENS_EFFECT: core.getSetting(GAME.LENS_EFFECT)}
     data['marksOnGun'] = {GAME.SHOW_MARKS_ON_GUN: core.getSetting(GAME.SHOW_MARKS_ON_GUN)}
+    data[SETTINGS_SECTIONS.CONTOUR] = {CONTOUR.ENHANCED_CONTOUR: core.getSetting(CONTOUR.ENHANCED_CONTOUR),
+     CONTOUR.CONTOUR_PENETRABLE_ZONE: core.getSetting(CONTOUR.CONTOUR_PENETRABLE_ZONE),
+     CONTOUR.CONTOUR_IMPENETRABLE_ZONE: core.getSetting(CONTOUR.CONTOUR_IMPENETRABLE_ZONE)}
+    data['battleHud'] = {ScorePanelStorageKeys.SHOW_HP_BAR: core.getSetting(ScorePanelStorageKeys.SHOW_HP_BAR),
+     ScorePanelStorageKeys.SHOW_HP_VALUES: core.getSetting(ScorePanelStorageKeys.SHOW_HP_VALUES),
+     ScorePanelStorageKeys.SHOW_HP_DIFFERENCE: core.getSetting(ScorePanelStorageKeys.SHOW_HP_DIFFERENCE),
+     ScorePanelStorageKeys.ENABLE_TIER_GROUPING: core.getSetting(ScorePanelStorageKeys.ENABLE_TIER_GROUPING)}
     dropNewSettingsCounters()
-    return
 
 
 @adisp_async
@@ -272,7 +275,7 @@ def _migrateTo27(core, data, initialized):
 
 
 def _migrateTo28(core, data, initialized):
-    data['gameExtData'][GAME.CAROUSEL_TYPE] = 1
+    pass
 
 
 def _migrateTo29(core, data, initialized):
@@ -327,37 +330,68 @@ def _migrateTo35(core, data, initialized):
     feedbackBattleEvents = data.get('feedbackBattleEvents', {})
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
     currentVal = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.FEEDBACK, 0)
-    feedbackDamageIndicator[DAMAGE_INDICATOR.TYPE] = __migrateMaskValue(currentVal, 1, 0)
-    feedbackDamageIndicator[DAMAGE_INDICATOR.PRESET_CRITS] = __migrateMaskValue(currentVal, 1, 1)
-    feedbackDamageIndicator[DAMAGE_INDICATOR.DAMAGE_VALUE] = __migrateMaskValue(currentVal, 1, 2)
-    feedbackDamageIndicator[DAMAGE_INDICATOR.VEHICLE_INFO] = __migrateMaskValue(currentVal, 1, 3)
-    feedbackDamageIndicator[DAMAGE_INDICATOR.ANIMATION] = __migrateMaskValue(currentVal, 1, 4)
-    feedbackDamageIndicator[DAMAGE_INDICATOR.DYNAMIC_INDICATOR] = __migrateMaskValue(currentVal, 1, 25)
-    feedbackDamageLog[DAMAGE_LOG.TOTAL_DAMAGE] = __migrateMaskValue(currentVal, 1, 5)
-    feedbackDamageLog[DAMAGE_LOG.BLOCKED_DAMAGE] = __migrateMaskValue(currentVal, 1, 6)
-    feedbackDamageLog[DAMAGE_LOG.ASSIST_DAMAGE] = __migrateMaskValue(currentVal, 1, 7)
-    feedbackDamageLog[DAMAGE_LOG.ASSIST_STUN] = False
-    feedbackDamageLog[DAMAGE_LOG.SHOW_DETAILS] = __migrateMaskValue(currentVal, 3, 8)
-    feedbackDamageLog[DAMAGE_LOG.SHOW_EVENT_TYPES] = __migrateMaskValue(currentVal, 3, 28)
-    feedbackDamageLog[DAMAGE_LOG.EVENT_POSITIONS] = __migrateMaskValue(currentVal, 3, 30)
-    feedbackBattleEvents[BATTLE_EVENTS.SHOW_IN_BATTLE] = __migrateMaskValue(currentVal, 1, 10)
-    feedbackBattleEvents[BATTLE_EVENTS.ENEMY_HP_DAMAGE] = __migrateMaskValue(currentVal, 1, 11)
-    feedbackBattleEvents[BATTLE_EVENTS.ENEMY_BURNING] = __migrateMaskValue(currentVal, 1, 12)
-    feedbackBattleEvents[BATTLE_EVENTS.ENEMY_RAM_ATTACK] = __migrateMaskValue(currentVal, 1, 13)
-    feedbackBattleEvents[BATTLE_EVENTS.BLOCKED_DAMAGE] = __migrateMaskValue(currentVal, 1, 14)
-    feedbackBattleEvents[BATTLE_EVENTS.ENEMY_DETECTION_DAMAGE] = __migrateMaskValue(currentVal, 1, 15)
-    feedbackBattleEvents[BATTLE_EVENTS.ENEMY_TRACK_DAMAGE] = __migrateMaskValue(currentVal, 1, 16)
-    feedbackBattleEvents[BATTLE_EVENTS.ENEMY_DETECTION] = __migrateMaskValue(currentVal, 1, 17)
-    feedbackBattleEvents[BATTLE_EVENTS.ENEMY_KILL] = __migrateMaskValue(currentVal, 1, 18)
-    feedbackBattleEvents[BATTLE_EVENTS.BASE_CAPTURE_DROP] = __migrateMaskValue(currentVal, 1, 19)
-    feedbackBattleEvents[BATTLE_EVENTS.BASE_CAPTURE] = __migrateMaskValue(currentVal, 1, 20)
-    feedbackBattleEvents[BATTLE_EVENTS.ENEMY_CRITICAL_HIT] = __migrateMaskValue(currentVal, 1, 21)
-    feedbackBattleEvents[BATTLE_EVENTS.EVENT_NAME] = __migrateMaskValue(currentVal, 1, 22)
-    feedbackBattleEvents[BATTLE_EVENTS.VEHICLE_INFO] = __migrateMaskValue(currentVal, 1, 23)
-    feedbackBattleEvents[BATTLE_EVENTS.ENEMY_WORLD_COLLISION] = __migrateMaskValue(currentVal, 1, 24)
-    feedbackBattleEvents[BATTLE_EVENTS.RECEIVED_DAMAGE] = __migrateMaskValue(currentVal, 1, 26)
-    feedbackBattleEvents[BATTLE_EVENTS.RECEIVED_CRITS] = __migrateMaskValue(currentVal, 1, 27)
-    feedbackBattleEvents[BATTLE_EVENTS.ENEMY_ASSIST_STUN] = False
+    if currentVal:
+        feedbackDamageIndicator[DAMAGE_INDICATOR.TYPE] = __migrateMaskValue(currentVal, 1, 0)
+        feedbackDamageIndicator[DAMAGE_INDICATOR.PRESET_CRITS] = __migrateMaskValue(currentVal, 1, 1)
+        feedbackDamageIndicator[DAMAGE_INDICATOR.DAMAGE_VALUE] = __migrateMaskValue(currentVal, 1, 2)
+        feedbackDamageIndicator[DAMAGE_INDICATOR.VEHICLE_INFO] = __migrateMaskValue(currentVal, 1, 3)
+        feedbackDamageIndicator[DAMAGE_INDICATOR.ANIMATION] = __migrateMaskValue(currentVal, 1, 4)
+        feedbackDamageIndicator[DAMAGE_INDICATOR.DYNAMIC_INDICATOR] = __migrateMaskValue(currentVal, 1, 25)
+        feedbackDamageLog[DAMAGE_LOG.TOTAL_DAMAGE] = __migrateMaskValue(currentVal, 1, 5)
+        feedbackDamageLog[DAMAGE_LOG.BLOCKED_DAMAGE] = __migrateMaskValue(currentVal, 1, 6)
+        feedbackDamageLog[DAMAGE_LOG.ASSIST_DAMAGE] = __migrateMaskValue(currentVal, 1, 7)
+        feedbackDamageLog[DAMAGE_LOG.ASSIST_STUN] = False
+        feedbackDamageLog[DAMAGE_LOG.SHOW_DETAILS] = __migrateMaskValue(currentVal, 3, 8)
+        feedbackDamageLog[DAMAGE_LOG.SHOW_EVENT_TYPES] = __migrateMaskValue(currentVal, 3, 28)
+        feedbackDamageLog[DAMAGE_LOG.EVENT_POSITIONS] = __migrateMaskValue(currentVal, 3, 30)
+        feedbackBattleEvents[BATTLE_EVENTS.SHOW_IN_BATTLE] = __migrateMaskValue(currentVal, 1, 10)
+        feedbackBattleEvents[BATTLE_EVENTS.ENEMY_HP_DAMAGE] = __migrateMaskValue(currentVal, 1, 11)
+        feedbackBattleEvents[BATTLE_EVENTS.ENEMY_BURNING] = __migrateMaskValue(currentVal, 1, 12)
+        feedbackBattleEvents[BATTLE_EVENTS.ENEMY_RAM_ATTACK] = __migrateMaskValue(currentVal, 1, 13)
+        feedbackBattleEvents[BATTLE_EVENTS.BLOCKED_DAMAGE] = __migrateMaskValue(currentVal, 1, 14)
+        feedbackBattleEvents[BATTLE_EVENTS.ENEMY_DETECTION_DAMAGE] = __migrateMaskValue(currentVal, 1, 15)
+        feedbackBattleEvents[BATTLE_EVENTS.ENEMY_TRACK_DAMAGE] = __migrateMaskValue(currentVal, 1, 16)
+        feedbackBattleEvents[BATTLE_EVENTS.ENEMY_DETECTION] = __migrateMaskValue(currentVal, 1, 17)
+        feedbackBattleEvents[BATTLE_EVENTS.ENEMY_KILL] = __migrateMaskValue(currentVal, 1, 18)
+        feedbackBattleEvents[BATTLE_EVENTS.BASE_CAPTURE_DROP] = __migrateMaskValue(currentVal, 1, 19)
+        feedbackBattleEvents[BATTLE_EVENTS.BASE_CAPTURE] = __migrateMaskValue(currentVal, 1, 20)
+        feedbackBattleEvents[BATTLE_EVENTS.ENEMY_CRITICAL_HIT] = __migrateMaskValue(currentVal, 1, 21)
+        feedbackBattleEvents[BATTLE_EVENTS.EVENT_NAME] = __migrateMaskValue(currentVal, 1, 22)
+        feedbackBattleEvents[BATTLE_EVENTS.VEHICLE_INFO] = __migrateMaskValue(currentVal, 1, 23)
+        feedbackBattleEvents[BATTLE_EVENTS.ENEMY_WORLD_COLLISION] = __migrateMaskValue(currentVal, 1, 24)
+        feedbackBattleEvents[BATTLE_EVENTS.RECEIVED_DAMAGE] = __migrateMaskValue(currentVal, 1, 26)
+        feedbackBattleEvents[BATTLE_EVENTS.RECEIVED_CRITS] = __migrateMaskValue(currentVal, 1, 27)
+        feedbackBattleEvents[BATTLE_EVENTS.ENEMY_ASSIST_STUN] = False
+    else:
+        data[FEEDBACK.DAMAGE_INDICATOR] = {DAMAGE_INDICATOR.TYPE: core.getSetting(DAMAGE_INDICATOR.TYPE),
+         DAMAGE_INDICATOR.PRESET_CRITS: core.getSetting(DAMAGE_INDICATOR.PRESET_CRITS),
+         DAMAGE_INDICATOR.DAMAGE_VALUE: core.getSetting(DAMAGE_INDICATOR.DAMAGE_VALUE),
+         DAMAGE_INDICATOR.VEHICLE_INFO: core.getSetting(DAMAGE_INDICATOR.VEHICLE_INFO),
+         DAMAGE_INDICATOR.ANIMATION: core.getSetting(DAMAGE_INDICATOR.ANIMATION),
+         DAMAGE_INDICATOR.DYNAMIC_INDICATOR: core.getSetting(DAMAGE_INDICATOR.DYNAMIC_INDICATOR)}
+        data[FEEDBACK.DAMAGE_LOG] = {DAMAGE_LOG.TOTAL_DAMAGE: core.getSetting(DAMAGE_INDICATOR.DYNAMIC_INDICATOR),
+         DAMAGE_LOG.ASSIST_DAMAGE: core.getSetting(DAMAGE_INDICATOR.DYNAMIC_INDICATOR),
+         DAMAGE_LOG.BLOCKED_DAMAGE: core.getSetting(DAMAGE_INDICATOR.DYNAMIC_INDICATOR),
+         DAMAGE_LOG.ASSIST_STUN: core.getSetting(DAMAGE_INDICATOR.DYNAMIC_INDICATOR)}
+        data[FEEDBACK.BATTLE_EVENTS] = {BATTLE_EVENTS.SHOW_IN_BATTLE: core.getSetting(BATTLE_EVENTS.SHOW_IN_BATTLE),
+         BATTLE_EVENTS.ENEMY_HP_DAMAGE: core.getSetting(BATTLE_EVENTS.ENEMY_HP_DAMAGE),
+         BATTLE_EVENTS.ENEMY_BURNING: core.getSetting(BATTLE_EVENTS.ENEMY_BURNING),
+         BATTLE_EVENTS.ENEMY_RAM_ATTACK: core.getSetting(BATTLE_EVENTS.ENEMY_RAM_ATTACK),
+         BATTLE_EVENTS.BLOCKED_DAMAGE: core.getSetting(BATTLE_EVENTS.BLOCKED_DAMAGE),
+         BATTLE_EVENTS.ENEMY_DETECTION_DAMAGE: core.getSetting(BATTLE_EVENTS.ENEMY_DETECTION_DAMAGE),
+         BATTLE_EVENTS.ENEMY_TRACK_DAMAGE: core.getSetting(BATTLE_EVENTS.ENEMY_TRACK_DAMAGE),
+         BATTLE_EVENTS.ENEMY_DETECTION: core.getSetting(BATTLE_EVENTS.ENEMY_DETECTION),
+         BATTLE_EVENTS.ENEMY_KILL: core.getSetting(BATTLE_EVENTS.ENEMY_KILL),
+         BATTLE_EVENTS.BASE_CAPTURE_DROP: core.getSetting(BATTLE_EVENTS.BASE_CAPTURE_DROP),
+         BATTLE_EVENTS.BASE_CAPTURE: core.getSetting(BATTLE_EVENTS.BASE_CAPTURE),
+         BATTLE_EVENTS.ENEMY_CRITICAL_HIT: core.getSetting(BATTLE_EVENTS.ENEMY_CRITICAL_HIT),
+         BATTLE_EVENTS.EVENT_NAME: core.getSetting(BATTLE_EVENTS.EVENT_NAME),
+         BATTLE_EVENTS.VEHICLE_INFO: core.getSetting(BATTLE_EVENTS.VEHICLE_INFO),
+         BATTLE_EVENTS.ENEMY_WORLD_COLLISION: core.getSetting(BATTLE_EVENTS.ENEMY_WORLD_COLLISION),
+         BATTLE_EVENTS.RECEIVED_DAMAGE: core.getSetting(BATTLE_EVENTS.RECEIVED_DAMAGE),
+         BATTLE_EVENTS.RECEIVED_CRITS: core.getSetting(BATTLE_EVENTS.RECEIVED_CRITS),
+         BATTLE_EVENTS.ENEMY_ASSIST_STUN: core.getSetting(BATTLE_EVENTS.ENEMY_ASSIST_STUN),
+         BATTLE_EVENTS.ENEMIES_STUN: core.getSetting(BATTLE_EVENTS.ENEMIES_STUN)}
 
 
 def __migrateMaskValue(currentVal, mask, offset):
@@ -395,7 +429,7 @@ def _migrateTo38(core, data, initialized):
 
 
 def _migrateTo39(core, data, initialized):
-    data['gameExtData2'][GAME.CUSTOMIZATION_DISPLAY_TYPE] = 0
+    pass
 
 
 def _migrateTo40(core, data, initialized):
@@ -467,11 +501,7 @@ def _migrateTo50(core, data, initialized):
 
 
 def _migrateTo51(core, data, initialized):
-    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-    currentVal = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.DAMAGE_INDICATOR, 0)
-    feedbackDamageIndicator = data.get('feedbackDamageIndicator', {})
-    feedbackDamageIndicator[DAMAGE_INDICATOR.PRESET_CRITS] = not __migrateMaskValue(currentVal, 1, 1)
-    feedbackDamageIndicator[DAMAGE_INDICATOR.PRESET_ALLIES] = True
+    pass
 
 
 def _migrateTo52(core, data, initialized):
@@ -540,7 +570,6 @@ def _migrateTo62(core, data, initialized):
 
 def _migrateTo63(core, data, initialized):
     gameData = data['gameExtData']
-    gameData[GAME.MINIMAP_MIN_SPOTTING_RANGE] = False
     gameData[GAME.ENABLE_REPAIR_TIMER] = True
 
 
@@ -550,8 +579,7 @@ def _migrateTo64(core, data, initialized):
 
 
 def _migrateTo65(core, data, initialized):
-    battlehudData = data['battleHud']
-    battlehudData[ScorePanelStorageKeys.SHOW_HP_BAR] = True
+    pass
 
 
 def _migrateTo66(core, data, initialized):
@@ -765,11 +793,7 @@ def _migrateTo88(core, data, initialized):
 
 
 def _migrateTo89(core, data, initialized):
-    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-    from account_helpers.settings_core.settings_constants import CONTOUR
-    data[SETTINGS_SECTIONS.CONTOUR][CONTOUR.ENHANCED_CONTOUR] = False
-    data[SETTINGS_SECTIONS.CONTOUR][CONTOUR.CONTOUR_PENETRABLE_ZONE] = 0
-    data[SETTINGS_SECTIONS.CONTOUR][CONTOUR.CONTOUR_IMPENETRABLE_ZONE] = 0
+    pass
 
 
 def _migrateTo90(core, data, initialized):
@@ -1439,6 +1463,11 @@ def _migrateTo137(core, data, initialized):
      'role_SPG': False}
 
 
+def _migrateTo138(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import GUI_START_BEHAVIOR
+    data[GUI_START_BEHAVIOR][GuiSettingsBehavior.COMP7_WHATS_NEW_SHOWN] = True
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -1981,6 +2010,10 @@ _versions = ((1,
   False),
  (137,
   _migrateTo137,
+  False,
+  False),
+ (138,
+  _migrateTo138,
   False,
   False))
 

@@ -5,9 +5,7 @@ from frameworks.state_machine.transitions import StringEventTransition
 from gui.game_loading.resources.cdn.models import LocalSlideModel
 from gui.game_loading.state_machine.const import GameLoadingStatesEvents
 from gui.game_loading.state_machine.states.client_loading import ClientLoadingSlideState
-from gui.game_loading.state_machine.states.login_screen import LoginScreenState
 from gui.game_loading.state_machine.states.player_loading import PlayerLoadingState
-from gui.game_loading.state_machine.states.slide import SlideState
 if typing.TYPE_CHECKING:
     from frameworks.state_machine.events import StringEvent
 
@@ -39,12 +37,7 @@ class PlayerLoadingTransition(StringEventTransition):
                 image = None
                 nextSlideDuration = 0
                 vfx = None
-                if isinstance(source, LoginScreenState):
-                    image = source.lastShownImage
-                    if image:
-                        nextSlideDuration = max(source.nextSlideDuration, 0)
-                        vfx = image.vfx
-                elif isinstance(source, ClientLoadingSlideState):
+                if isinstance(source, ClientLoadingSlideState):
                     image = source.lastShownImage
                     if image:
                         nextSlideDuration = max(source.timeLeft, 0)
@@ -71,19 +64,3 @@ class LoginScreenTransition(StringEventTransition):
 
     def __init__(self, priority=0):
         super(LoginScreenTransition, self).__init__(token=GameLoadingStatesEvents.LOGIN_SCREEN.value, priority=priority)
-
-    def execute(self, event):
-        result = super(LoginScreenTransition, self).execute(event)
-        if result:
-            source = self.getSource()
-            if not source or not isinstance(source, SlideState):
-                return result
-            image = source.lastShownImage
-            if not image:
-                return result
-            for target in self.getTargets():
-                if target and isinstance(target, LoginScreenState):
-                    target.setImage(image)
-                    break
-
-        return result

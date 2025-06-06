@@ -37,7 +37,7 @@ class QuestModelParser(object):
         self.questConfig = {}
         return
 
-    def updateQuestModelFromID(self, questID, questModel=Pm3QuestModel(), isShowAnimationRewards=False):
+    def updateQuestModelFromID(self, questID, questModel=Pm3QuestModel(), selectedRewards=None):
         self.questInfo = self.__pm3Controller.getQuest(questID)
         if self.questInfo is None:
             return
@@ -59,9 +59,9 @@ class QuestModelParser(object):
 
             self.__tooltipData.clear()
             questsProgress = self.questInfo.getConditionsProgress()
-            self.__updateQuestsPartModel(questModel.mainQuests, mainQuestsDict, questsProgress, isShowAnimationRewards=isShowAnimationRewards)
+            self.__updateQuestsPartModel(questModel.mainQuests, mainQuestsDict, questsProgress, selectedRewards=selectedRewards)
             if addQuestsDict:
-                self.__updateQuestsPartModel(questModel.addQuests, addQuestsDict, questsProgress, isMain=False, isShowAnimationRewards=isShowAnimationRewards)
+                self.__updateQuestsPartModel(questModel.addQuests, addQuestsDict, questsProgress, isMain=False, selectedRewards=selectedRewards)
             else:
                 self.__clearPm3QuestPartModel(questModel.addQuests)
             self.__updateResetPauseButtons(self.questInfo, questModel, questsProgress, mainQuestsDict, addQuestsDict)
@@ -106,12 +106,12 @@ class QuestModelParser(object):
     def getTooltipData(self):
         return self.__tooltipData
 
-    def __updateQuestsPartModel(self, questsPartModel, quests, questsProgress, isMain=True, isShowAnimationRewards=False):
+    def __updateQuestsPartModel(self, questsPartModel, quests, questsProgress, isMain=True, selectedRewards=None):
         rewardList = questsPartModel.getRewards()
         rewardList.clear()
         groupsModel = questsPartModel.relation.getGroups()
         questsPartModel.relation.setRelationType(QuestRelationType.OR)
-        packBonusModelAndTooltipData(self.questInfo.getBonuses(isMain=isMain), rewardList, self.__tooltipData, offersDataProvider=self.__offersProvider, isShowAnimationRewards=isShowAnimationRewards)
+        packBonusModelAndTooltipData(self.questInfo.getBonuses(isMain=isMain), rewardList, self.__tooltipData, offersDataProvider=self.__offersProvider, selectedRewards=selectedRewards)
         rewardList.invalidate()
         questIsDone = isMain and self.questInfo.isCompleted() or not isMain and self.questInfo.isFullCompleted()
         questsPartModel.setIsDone(questIsDone)

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/play_streak/play_streak_subview.py
 import logging
+import weakref
 from functools import partial
 import typing
 from CurrentVehicle import g_currentVehicle
@@ -18,6 +19,7 @@ from gui.impl.lobby.play_streak.play_streak_bonus_packer import getPlayStreakBon
 from gui.impl.pub import ViewImpl
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_tooltip import LootboxTooltip
+from gui.impl.lobby.daily.tooltips.periodic_rewards_tooltip import PeriodicRewardsTooltip
 from gui.server_events.events_dispatcher import showDailyQuests
 from gui.shared.event_dispatcher import showStylePreview, showStyleProgressionPreview, showVehiclePreview, showHangar
 from helpers import dependency
@@ -56,7 +58,7 @@ class PlayStreakSubView(PlayStreakSubViewBase):
     def __init__(self, parent, layoutID):
         viewSettings = ViewSettings(layoutID, ViewFlags.VIEW, PlayStreakViewModel())
         super(PlayStreakSubView, self).__init__(viewSettings)
-        self.__parent = parent
+        self.__parent = weakref.proxy(parent)
         self.__tooltipData = {}
 
     @property
@@ -73,6 +75,8 @@ class PlayStreakSubView(PlayStreakSubViewBase):
 
     def createToolTipContent(self, event, contentID):
         tooltipId = event.getArgument('tooltipId')
+        if contentID == R.views.lobby.daily.tooltips.PeriodicRewardsTooltip():
+            return PeriodicRewardsTooltip(contentID)
         if tooltipId:
             lootBoxId = self.__tooltipData.get(tooltipId).get('lootBoxID')
             if lootBoxId:
@@ -102,9 +106,6 @@ class PlayStreakSubView(PlayStreakSubViewBase):
     def _update(self):
         with self.viewModel.transaction() as tx:
             self._updateModel(tx)
-
-    def finalize(self):
-        self._finalize()
 
     def _updateModel(self, model):
         with model.transaction() as tx:

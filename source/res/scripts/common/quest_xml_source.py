@@ -810,12 +810,15 @@ class Source(object):
         node.addChild(set(arenaIDs))
 
     def __readBattleFilter_BonusTypes(self, _, section, node):
-        res = set()
+        res = []
         for bonusType in section.asString.split():
-            if int(bonusType) not in ARENA_BONUS_TYPE.RANGE:
+            bonusType = int(bonusType)
+            if bonusType not in ARENA_BONUS_TYPE.RANGE:
                 raise SoftException('Unknown bonus type %s' % bonusType)
-            res.add(int(bonusType))
+            res.append(bonusType)
 
+        if len(set(res)) != len(res):
+            raise SoftException('Duplicate bonus types %s' % res)
         node.addChild(res)
 
     def __readBattleFilter_CamouflageKind(self, _, section, node):

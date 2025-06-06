@@ -2,11 +2,11 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/lobby/ContactsListPopover.py
 from account_helpers.AccountSettings import AccountSettings, CONTACTS
 from debug_utils import LOG_DEBUG, LOG_WARNING
+from gui.Scaleform.daapi.view.meta.ContactsListPopoverMeta import ContactsListPopoverMeta
 from gui.Scaleform.genConsts.CONTACTS_ALIASES import CONTACTS_ALIASES
 from gui.impl import backport
 from gui.impl.gen import R
 from helpers import dependency
-from messenger.gui.Scaleform.meta.ContactsListPopoverMeta import ContactsListPopoverMeta
 from messenger import normalizeGroupId
 from messenger.gui.Scaleform.view.lobby.ContactsCMListener import ContactsCMListener
 from messenger.m_constants import PROTO_TYPE

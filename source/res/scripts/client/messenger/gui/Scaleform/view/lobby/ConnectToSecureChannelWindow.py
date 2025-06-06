@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/lobby/ConnectToSecureChannelWindow.py
+from gui.Scaleform.daapi.view.meta.ConnectToSecureChannelWindowMeta import ConnectToSecureChannelWindowMeta
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from helpers import i18n
-from messenger.gui.Scaleform.meta.ConnectToSecureChannelWindowMeta import ConnectToSecureChannelWindowMeta
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents

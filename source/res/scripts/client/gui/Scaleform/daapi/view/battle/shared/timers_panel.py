@@ -8,6 +8,7 @@ import BigWorld
 from battle_royale.gui.constants import BattleRoyaleEquipments
 import BattleReplay
 import SoundGroups
+import constants
 from AvatarInputHandler import AvatarInputHandler
 from constants import StunTypes
 from ReplayEvents import g_replayEvents
@@ -442,10 +443,9 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
 
     def _generateSecondaryTimersData(self):
         link = BATTLE_NOTIFICATIONS_TIMER_LINKAGES.SECONDARY_TIMER_UI
-        data = [self._getNotificationTimerData(_TIMER_STATES.STUN, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.STUN_ICON, link, noiseVisible=True, text=INGAME_GUI.STUN_INDICATOR),
-         self._getNotificationTimerData(_TIMER_STATES.STUN_FLAME, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.STUN_FLAME_ICON, link, BATTLE_NOTIFICATIONS_TIMER_COLORS.ORANGE, noiseVisible=True, text=INGAME_GUI.STUNFLAME_INDICATOR),
-         self._getNotificationTimerData(_TIMER_STATES.THERMAL_VISION_WARNING, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.THERMAL_VISION_WARNING, link, color=BATTLE_NOTIFICATIONS_TIMER_COLORS.YELLOW),
-         self._getNotificationTimerData(_TIMER_STATES.ABILITY, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.ABILITY_ICON, link, BATTLE_NOTIFICATIONS_TIMER_COLORS.GREEN, noiseVisible=False)]
+        data = [self._getNotificationTimerData(_TIMER_STATES.STUN_FLAME, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.STUN_FLAME_ICON, link, BATTLE_NOTIFICATIONS_TIMER_COLORS.ORANGE, noiseVisible=True, text=INGAME_GUI.STUNFLAME_INDICATOR), self._getNotificationTimerData(_TIMER_STATES.THERMAL_VISION_WARNING, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.THERMAL_VISION_WARNING, link, color=BATTLE_NOTIFICATIONS_TIMER_COLORS.YELLOW), self._getNotificationTimerData(_TIMER_STATES.ABILITY, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.ABILITY_ICON, link, BATTLE_NOTIFICATIONS_TIMER_COLORS.GREEN, noiseVisible=False)]
+        if BigWorld.player().arena.guiType != constants.ARENA_GUI_TYPE.FUN_RANDOM:
+            data.append(self._getNotificationTimerData(_TIMER_STATES.STUN, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.STUN_ICON, link, noiseVisible=True, text=INGAME_GUI.STUN_INDICATOR))
         return data
 
     def _getNotificationTimerData(self, typeId, iconName, linkage, color=BATTLE_NOTIFICATIONS_TIMER_COLORS.ORANGE, noiseVisible=False, pulseVisible=False, text='', countdownVisible=True, isCanBeMainType=False, priority=10000, iconOffsetY=0, description=''):

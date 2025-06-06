@@ -320,3 +320,12 @@ def _readAggregateKPI(xmlCtx, section, kpiType):
     elif name not in KPI.Name.ALL():
         _xml.raiseWrongXml(xmlCtx, kpiType, 'unsupported value in <name> tag')
     return KPI(name, subKpies, kpiType)
+
+
+class VehicleAttribute(object):
+    __slots__ = ('name', 'operation', 'value')
+
+    def __init__(self, factorName, operation, value):
+        self.name = factorName
+        self.operation = operation
+        self.value = value

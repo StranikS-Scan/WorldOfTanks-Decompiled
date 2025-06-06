@@ -271,9 +271,6 @@ class _CurrentVehicle(_CachedVehicle):
     def isOnlyForEventBattles(self):
         return self.isPresent() and self.item.isOnlyForEventBattles
 
-    def isHiddenInHangar(self):
-        return self.isPresent() and self.item.isHiddenInHangar
-
     def isOnlyForEpicBattles(self):
         return self.isPresent() and self.item.isOnlyForEpicBattles
 
@@ -403,7 +400,7 @@ class _CurrentVehicle(_CachedVehicle):
             AccountSettings.setFavorites(ROYALE_VEHICLE, vehInvID)
         elif self.isInBootcamp():
             AccountSettings.setFavorites(BOOTCAMP_VEHICLE, vehInvID)
-        elif not self.isHiddenInHangar():
+        else:
             AccountSettings.setFavorites(CURRENT_VEHICLE, vehInvID)
         self.refreshModel()
         self._setChangeCallback(callback)

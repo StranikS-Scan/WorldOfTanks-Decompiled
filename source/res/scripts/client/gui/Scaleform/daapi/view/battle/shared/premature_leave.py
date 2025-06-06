@@ -82,18 +82,6 @@ def showComp7LeaverAliveWindow():
 
 
 @wg_async
-def showHbLeaverAliveWindow(IGR=False):
-    quitBattleR = R.strings.dialogs.quitBattle
-    title = quitBattleR.IGR.leaver.title() if IGR else quitBattleR.leaver.title()
-    confirm = quitBattleR.IGR.leaver.submit() if IGR else R.strings.hb_battle.confirmQuit.leaver.confirm()
-    cancel = quitBattleR.IGR.leaver.cancel() if IGR else quitBattleR.leaver.cancel()
-    description = quitBattleR.IGR.leaver.descriptionAlive() if IGR else quitBattleR.leaver.descriptionAlive()
-    icon = R.images.gui.maps.icons.battle.deserterLeaveBattle()
-    result = yield wg_await(showResDialogWindow(title, confirm=confirm, cancel=cancel, description=description, icon=icon))
-    raise AsyncReturn(result)
-
-
-@wg_async
 def showLeaverReplayWindow():
     result = yield wg_await(showResDialogWindow(R.strings.dialogs.quitBattle.replay.title(), confirm=R.strings.dialogs.quitBattle.replay.submit(), cancel=R.strings.dialogs.quitBattle.replay.cancel()))
     raise AsyncReturn(result)
@@ -102,10 +90,4 @@ def showLeaverReplayWindow():
 @wg_async
 def showExitWindow():
     result = yield wg_await(showResDialogWindow(R.strings.dialogs.quitBattle.title()))
-    raise AsyncReturn(result)
-
-
-@wg_async
-def showHbExitWindow():
-    result = yield wg_await(showResDialogWindow(R.strings.dialogs.quitBattle.title(), confirm=R.strings.hb_battle.confirmQuit.confirm()))
     raise AsyncReturn(result)

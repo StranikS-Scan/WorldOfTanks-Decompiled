@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/lobby/LobbyChannelWindow.py
 from constants import PREBATTLE_TYPE
+from gui.Scaleform.daapi.view.meta.LobbyChannelWindowMeta import LobbyChannelWindowMeta
 from gui.Scaleform.managers.windows_stored_data import DATA_TYPE, TARGET_ID
 from gui.Scaleform.managers.windows_stored_data import stored_window
 from gui.Scaleform.locale.MESSENGER import MESSENGER
@@ -8,7 +9,6 @@ from gui.shared.formatters import text_styles, icons
 from helpers import i18n
 from messenger.ext.channel_num_gen import getClientID4Prebattle
 from messenger.gui.Scaleform.data.MembersDataProvider import MembersDataProvider
-from messenger.gui.Scaleform.meta.LobbyChannelWindowMeta import LobbyChannelWindowMeta
 from messenger.gui.Scaleform.view.lobby import antispam_message
 from messenger.m_constants import PROTO_TYPE
 

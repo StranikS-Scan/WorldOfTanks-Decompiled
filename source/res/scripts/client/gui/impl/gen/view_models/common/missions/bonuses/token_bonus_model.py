@@ -5,7 +5,7 @@ from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusMo
 class TokenBonusModel(BonusModel):
     __slots__ = ()
 
-    def __init__(self, properties=15, commands=0):
+    def __init__(self, properties=11, commands=0):
         super(TokenBonusModel, self).__init__(properties=properties, commands=commands)
 
     def getUserName(self):
@@ -32,37 +32,9 @@ class TokenBonusModel(BonusModel):
     def setIcon(self, value):
         self._setString(10, value)
 
-    def getTankType(self):
-        return self._getString(11)
-
-    def setTankType(self, value):
-        self._setString(11, value)
-
-    def getTankUserName(self):
-        return self._getString(12)
-
-    def setTankUserName(self, value):
-        self._setString(12, value)
-
-    def getTankLevel(self):
-        return self._getNumber(13)
-
-    def setTankLevel(self, value):
-        self._setNumber(13, value)
-
-    def getDiscountPercent(self):
-        return self._getNumber(14)
-
-    def setDiscountPercent(self, value):
-        self._setNumber(14, value)
-
     def _initialize(self):
         super(TokenBonusModel, self)._initialize()
         self._addStringProperty('userName', '')
         self._addStringProperty('iconSmall', '')
         self._addStringProperty('iconBig', '')
         self._addStringProperty('icon', '')
-        self._addStringProperty('tankType', '')
-        self._addStringProperty('tankUserName', '')
-        self._addNumberProperty('tankLevel', 0)
-        self._addNumberProperty('discountPercent', 0)

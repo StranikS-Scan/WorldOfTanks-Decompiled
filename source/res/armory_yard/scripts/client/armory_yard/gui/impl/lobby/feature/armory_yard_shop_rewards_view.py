@@ -42,8 +42,8 @@ class ArmoryYardShopRewardsView(ViewImpl):
         return ((self.viewModel.onClose, self.onClose),)
 
     def _finalize(self):
-        super(ArmoryYardShopRewardsView, self)._finalize()
         self.__closeCallback = None
+        super(ArmoryYardShopRewardsView, self)._finalize()
         return
 
 

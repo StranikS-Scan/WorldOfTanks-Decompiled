@@ -22,11 +22,13 @@ from gui.impl.lobby.personal_missions.personal_missions_window_events import sho
 from gui.shared.utils.functions import makeTooltip
 from gui.impl.backport import createTooltipData
 from frameworks.wulf import WindowLayer
-from gui.impl.pub.lobby_window import LobbyWindow
+from gui.impl.pub.lobby_window import LobbyNotificationWindow
 import personal_mission_bonuses_packers as BonusPacker
 from skeletons.gui.shared import IItemsCache
 from gui.server_events.pm3_constants import VoiceOvers, SOUNDS
 from gui.impl.lobby.personal_missions.personal_mission_bonuses_packers import packBonusModelAndTooltipData
+from gui.shared.events import PersonalMissionsEvent
+from gui.shared import EVENT_BUS_SCOPE, g_eventBus
 _logger = logging.getLogger(__name__)
 LineTypeIndexes = {0: LineType.HIT,
  1: LineType.KILLS,
@@ -63,9 +65,10 @@ class PersonalMissionsRewardsView(ViewImpl):
         if self.soundManager.isSoundPlaying(VoiceOvers.REWARD_SCREEN_VO):
             self.soundManager.playSound(VoiceOvers.STOP_REWARD_VO)
         self.soundManager.setState(SOUNDS.STATE_OVERLAY_HANGAR_GENERAL_GROUP, SOUNDS.STATE_OVERLAY_HANGAR_GENERAL_OFF)
-        self.destroy()
-        self.__personalMissionsController.onRewardsViewClose(questId=self.__questId, isSelectedRewards=self.__selectedBonuses is not None)
-        return
+        self.destroyWindow()
+        g_eventBus.handleEvent(PersonalMissionsEvent(PersonalMissionsEvent.ON_AWARD_PM_SCREEN_CLOSE, ctx={'questID': self.__questId,
+         'selectedRewards': self.__selectedBonuses,
+         'operationID': self.__operationID}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _onLoading(self, *args, **kwargs):
         super(PersonalMissionsRewardsView, self)._onLoading(*args, **kwargs)
@@ -233,7 +236,7 @@ class PersonalMissionsRewardsView(ViewImpl):
             self.closeView()
 
 
-class PersonalMissionsRewardsWindow(LobbyWindow):
+class PersonalMissionsRewardsWindow(LobbyNotificationWindow):
     __slots__ = ()
 
     def __init__(self, questId=None, selectedBonuses=None, viewType=None, parent=None, operationID=None):

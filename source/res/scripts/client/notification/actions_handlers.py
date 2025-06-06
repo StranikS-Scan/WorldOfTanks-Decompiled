@@ -27,7 +27,7 @@ from gui.impl.lobby.poll.poll_browser_action import PollBrowserButtonHandler
 from gui.platform.base.statuses.constants import StatusTypes
 from gui.prb_control import prbDispatcherProperty, prbInvitesProperty
 from gui.ranked_battles import ranked_helpers
-from gui.server_events.events_dispatcher import showMissionsBattlePass, showMissionsMapboxProgression, showPersonalMission
+from gui.server_events.events_dispatcher import showMissionsBattlePass, showMissionsMapboxProgression, showPersonalMission, showBattleMatters
 from gui.shared import EVENT_BUS_SCOPE, actions, event_dispatcher as shared_events, events, g_eventBus
 from gui.shared.event_dispatcher import hideWebBrowserOverlay, showBlueprintsSalePage, showCollectionAwardsWindow, showCollectionWindow, showDelayedReward, showEpicBattlesAfterBattleWindow, showPersonalReservesConversion, showProgressiveRewardWindow, showRankedYearAwardWindow, showResourceWellProgressionWindow, showShop, showSteamConfirmEmailOverlay, showWotPlusIntroView, showBarracks
 from gui.shared.notifications import NotificationPriorityLevel
@@ -1488,6 +1488,20 @@ class ShowParagonsResearchesViewHandler(NavigationDisabledActionHandler):
         showVehicleTechTreeView()
 
 
+class _OpenBattleMattersHandler(NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        showBattleMatters()
+
+
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ShowFortBattleResultsHandler,
  OpenPollHandler,
@@ -1562,7 +1576,8 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ParagonsProjectViewHandler,
  ParagonsCharaptersViewHandler,
  ShowParagonsResearchesViewHandler,
- ParagonsSelectRewardViewHandler)
+ ParagonsSelectRewardViewHandler,
+ _OpenBattleMattersHandler)
 registerNotificationsActionsHandlers(_AVAILABLE_HANDLERS)
 
 class NotificationsActionsHandlers(object):

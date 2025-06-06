@@ -37,8 +37,8 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
     def as_setAmmoStockS(self, quantity, quantityInClip, clipState, clipReloaded=False):
         return self.flashObject.as_setAmmoStock(quantity, quantityInClip, clipState, clipReloaded) if self._isDAAPIInited() else None
 
-    def as_setClipParamsS(self, clipCapacity, burst, isAutoloader=False):
-        return self.flashObject.as_setClipParams(clipCapacity, burst, isAutoloader) if self._isDAAPIInited() else None
+    def as_setClipParamsS(self, clipCapacity, burst, clipType=0):
+        return self.flashObject.as_setClipParams(clipCapacity, burst, clipType) if self._isDAAPIInited() else None
 
     def as_setDistanceS(self, dist):
         return self.flashObject.as_setDistance(dist) if self._isDAAPIInited() else None

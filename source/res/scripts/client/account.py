@@ -16,7 +16,7 @@ from ClientUnitMgr import ClientUnitMgr, ClientUnitBrowser
 from ContactInfo import ContactInfo
 from OfflineMapCreator import g_offlineMapCreator
 from PlayerEvents import g_playerEvents as events
-from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_blueprints, client_recycle_bin, AccountSettings, client_anonymizer, ClientBattleRoyale, ArmoryYard, HistoricalBattles
+from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_blueprints, client_recycle_bin, AccountSettings, client_anonymizer, ClientBattleRoyale, ArmoryYard
 from account_helpers.dog_tags import DogTags
 from account_helpers.maps_training import MapsTraining
 from account_helpers.offers.sync_data import OffersSyncData
@@ -175,7 +175,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.blueprints = g_accountRepository.blueprints
         self.festivities = g_accountRepository.festivities
         self.armoryYard = g_accountRepository.armoryYard
-        self.historicalBattles = g_accountRepository.historicalBattles
         self.sessionStats = g_accountRepository.sessionStats
         self.spaFlags = g_accountRepository.spaFlags
         self.anonymizer = g_accountRepository.anonymizer
@@ -212,7 +211,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.ranked.setAccount(self)
         self.battleRoyale.setAccount(self)
         self.armoryYard.setAccount(self)
-        self.historicalBattles.setAccount(self)
         self.badges.setAccount(self)
         self.tokens.setAccount(self)
         self.epicMetaGame.setAccount(self)
@@ -270,7 +268,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.ranked.onAccountBecomePlayer()
         self.battleRoyale.onAccountBecomePlayer()
         self.armoryYard.onAccountBecomePlayer()
-        self.historicalBattles.onAccountBecomePlayer()
         self.badges.onAccountBecomePlayer()
         self.tokens.onAccountBecomeNonPlayer()
         self.epicMetaGame.onAccountBecomePlayer()
@@ -324,7 +321,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.blueprints.onAccountBecomeNonPlayer()
         self.festivities.onAccountBecomeNonPlayer()
         self.armoryYard.onAccountBecomeNonPlayer()
-        self.historicalBattles.onAccountBecomeNonPlayer()
         self.sessionStats.onAccountBecomeNonPlayer()
         self.spaFlags.onAccountBecomeNonPlayer()
         self.anonymizer.onAccountBecomeNonPlayer()
@@ -355,7 +351,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.ranked.setAccount(None)
         self.battleRoyale.setAccount(None)
         self.armoryYard.setAccount(None)
-        self.historicalBattles.setAccount(None)
         self.badges.setAccount(None)
         self.tokens.setAccount(None)
         self.epicMetaGame.setAccount(None)
@@ -1244,7 +1239,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.ranked.synchronize(isFullSync, diff)
             self.battleRoyale.synchronize(isFullSync, diff)
             self.armoryYard.synchronize(isFullSync, diff)
-            self.historicalBattles.synchronize(isFullSync, diff)
             self.badges.synchronize(isFullSync, diff)
             self.tokens.synchronize(isFullSync, diff)
             self.epicMetaGame.synchronize(isFullSync, diff)
@@ -1507,7 +1501,6 @@ class _AccountRepository(object):
         self.blueprints = client_blueprints.ClientBlueprints(self.syncData)
         self.festivities = FestivityManager(self.syncData, self.commandProxy)
         self.armoryYard = ArmoryYard.ArmoryYard(self.syncData)
-        self.historicalBattles = HistoricalBattles.HistoricalBattles(self.syncData)
         self.sessionStats = SessionStatistics(self.syncData)
         self.spaFlags = SPAFlags(self.syncData)
         self.anonymizer = client_anonymizer.ClientAnonymizer(self.syncData)

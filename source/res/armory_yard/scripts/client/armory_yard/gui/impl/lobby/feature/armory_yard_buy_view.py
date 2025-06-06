@@ -37,13 +37,13 @@ _PARENT_ALIASES_TO_VIEW_KEY = {ParentAlias.MAINVIEW: ViewKeyDynamic(R.views.armo
 _VIEW_KEY_TO_PARENT_ALIASES = {value:key for key, value in _PARENT_ALIASES_TO_VIEW_KEY.iteritems()}
 
 class ArmoryYardBuyView(ViewImpl):
-    __slots__ = ('__tooltipData', '__selectedStep', '__blur', '__onLoadedCallback')
+    __slots__ = ('__tooltipData', '__selectedStep', '__blur', '__onLoadedCallback', '__onClosedCallback')
     __armoryYardCtrl = dependency.descriptor(IArmoryYardController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __itemsCache = dependency.descriptor(IItemsCache)
     __wallet = dependency.descriptor(IWalletController)
 
-    def __init__(self, layoutID, isBlurEnabled=False, onLoadedCallback=None):
+    def __init__(self, layoutID, isBlurEnabled=False, onLoadedCallback=None, onClosedCallback=None):
         settings = ViewSettings(layoutID)
         settings.flags = ViewFlags.LOBBY_TOP_SUB_VIEW
         settings.model = ArmoryYardBuyViewModel()
@@ -54,6 +54,7 @@ class ArmoryYardBuyView(ViewImpl):
         self.__selectedStep = 0
         self.__blur = CachedBlur(ownLayer=self.layer - 1) if isBlurEnabled else None
         self.__onLoadedCallback = onLoadedCallback
+        self.__onClosedCallback = onClosedCallback
         return
 
     @property
@@ -77,11 +78,15 @@ class ArmoryYardBuyView(ViewImpl):
         return self.__tooltipData.get(tooltipType, {}).get(tooltipId, None) if tooltipId is not None and tooltipType is not None else None
 
     def onCancel(self, *args):
-        self.destroyWindow()
+        self.destroyWindow(fromScene=True)
 
-    def destroyWindow(self):
-        g_eventBus.handleEvent(LobbySimpleEvent(LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, ctx={'isOver3dScene': True}), EVENT_BUS_SCOPE.GLOBAL)
+    def destroyWindow(self, fromScene=False):
+        if fromScene:
+            if self.__onClosedCallback is not None:
+                self.__onClosedCallback(True)
+            g_eventBus.handleEvent(LobbySimpleEvent(LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, ctx={'isOver3dScene': True}), EVENT_BUS_SCOPE.GLOBAL)
         super(ArmoryYardBuyView, self).destroyWindow()
+        return
 
     @adisp_process
     def onBuySteps(self, args):
@@ -101,7 +106,7 @@ class ArmoryYardBuyView(ViewImpl):
         result = yield factory.asyncDoAction(action)
         if result:
             self.__armoryYardCtrl.onPayed(False, stepCount, price, currency)
-            self.destroyWindow()
+            self.destroyWindow(fromScene=True)
         else:
             self.__armoryYardCtrl.onPayedError()
 
@@ -218,14 +223,14 @@ class ArmoryYardBuyView(ViewImpl):
 
     def __onProgressUpdated(self):
         if self.__armoryYardCtrl.isCompleted():
-            self.destroyWindow()
+            self.destroyWindow(fromScene=True)
         else:
             with self.viewModel.transaction() as vm:
                 self.__updatePassedSteps(vm)
 
     def __onEventUpdated(self):
         if not self.__armoryYardCtrl.isActive() or self.__armoryYardCtrl.isCompleted():
-            self.destroyWindow()
+            self.destroyWindow(fromScene=True)
 
     def __getPassedSteps(self):
         return self.__armoryYardCtrl.getCurrencyTokenCount()
@@ -289,5 +294,5 @@ class ArmoryYardBuyView(ViewImpl):
 class ArmoryYardBuyWindow(LobbyWindow):
     __slots__ = ()
 
-    def __init__(self, parent=None, isBlurEnabled=False, onLoadedCallback=None):
-        super(ArmoryYardBuyWindow, self).__init__(wndFlags=WindowFlags.WINDOW, layer=WindowLayer.TOP_SUB_VIEW, content=ArmoryYardBuyView(R.views.armory_yard.lobby.feature.ArmoryYardBuyView(), isBlurEnabled, onLoadedCallback), parent=parent)
+    def __init__(self, parent=None, isBlurEnabled=False, onLoadedCallback=None, onClosedCallback=None):
+        super(ArmoryYardBuyWindow, self).__init__(wndFlags=WindowFlags.WINDOW, layer=WindowLayer.TOP_SUB_VIEW, content=ArmoryYardBuyView(R.views.armory_yard.lobby.feature.ArmoryYardBuyView(), isBlurEnabled, onLoadedCallback, onClosedCallback), parent=parent)

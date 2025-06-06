@@ -46,6 +46,7 @@
     <Cannone_da_90_Rh_P6>	31001	</Cannone_da_90_Rh_P6>
     <_120mm_Cannone_Da_120_55_Orso>	31002	</_120mm_Cannone_Da_120_55_Orso>
     <_130mm_Cannone_da_130_45_bob>	31003	</_130mm_Cannone_da_130_45_bob>
+    <_105mm_Cannone_Da_105_71G>	31004	</_105mm_Cannone_Da_105_71G>
   </ids>
   <shared>
     <Mitragliera_Breda_cal_20_mod_35>
@@ -1927,6 +1928,64 @@
         </_105mm_HE_M393>
       </shots>
     </_105mm_Cannone_Da_105_76>
+    <_105mm_Cannone_Da_105_71G>
+      <userString>	#italy_vehicles:_105mm_Cannone_Da_105_71G	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	220000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	7.5	</reloadTime>
+      <maxAmmo>	60	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	1900	</weight>
+      <maxHealth>	170	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_GS_mod_57>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	1475	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	264 238	</piercingPower>
+        </_105mm_GS_mod_57>
+        <_105mm_GEP_mod_51>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1174	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	320 320	</piercingPower>
+        </_105mm_GEP_mod_51>
+        <_105mm_GEF_mod_51>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	770	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	105 105	</piercingPower>
+        </_105mm_GEF_mod_51>
+      </shots>
+    </_105mm_Cannone_Da_105_71G>
     <Cannone_da_105_51_M68>
       <userString>	#italy_vehicles:Cannone_da_105_51_M68	</userString>
       <tags></tags>

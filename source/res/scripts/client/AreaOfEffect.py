@@ -70,7 +70,6 @@ class EffectRunner(object):
             if effect['areaColor']:
                 area = CombatSelectedArea.CombatSelectedArea()
                 area.setup(position, Math.Vector3(0, 0, 0), Math.Vector2(radius * 2, radius * 2), CombatSelectedArea.DEFAULT_RADIUS_MODEL, effect['areaColor'], None)
-                area.enableAccurateCollision(effect['areaAccurateCollision'])
                 areaID = self._idGen.next()
                 self._areas[areaID] = area
             return
@@ -100,9 +99,7 @@ class EffectRunner(object):
             sequenceID, sequenceData = random.choice(effect['sequences'].items())
             matrix = Math.Matrix()
             matrix.setRotateY(self._entity.yaw)
-            scaleMatrix = Math.Matrix()
-            scaleMatrix.setScale(sequenceData['scale'])
-            matrix.preMultiply(scaleMatrix)
+            matrix.setScale(sequenceData['scale'])
             matrix.translation = targetPosition
             loader = AnimationSequence.Loader(sequenceID, self._entity.spaceID)
             animator = loader.loadSync()
@@ -223,7 +220,7 @@ class AreaOfEffect(BigWorld.Entity, EffectRunner):
         if self._equipment.areaShow == AreaShow.ALWAYS:
             delay += self._equipment.duration
         equipmentsCtrl = self.sessionProvider.shared.equipments
-        if equipmentsCtrl and delay > 0 and self._equipment.show2DMarkerOnScene:
+        if equipmentsCtrl and delay > 0:
             equipmentsCtrl.showMarker(self._equipment, self.position, self._direction, delay)
 
     def _isAttackerEnemy(self):

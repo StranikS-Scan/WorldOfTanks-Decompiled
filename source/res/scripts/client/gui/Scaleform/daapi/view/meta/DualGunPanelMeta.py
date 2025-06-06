@@ -57,3 +57,6 @@ class DualGunPanelMeta(BaseDAAPIComponent):
 
     def as_setChangeGunTweenPropsS(self, duration, delay):
         return self.flashObject.as_setChangeGunTweenProps(duration, delay) if self._isDAAPIInited() else None
+
+    def as_setClipParamsS(self, clipType=0):
+        return self.flashObject.as_setClipParams(clipType) if self._isDAAPIInited() else None

@@ -175,3 +175,5 @@ class INGAME_HELP(object):
     DETAILSHELP_AUTOSHOOTFLAMETANK_DESCRIPTION = '#ingame_help:detailsHelp/autoShootFlameTank/description'
     DETAILSHELP_AUTOSHOOTFLAMETANK_PROSCONS_TITLE = '#ingame_help:detailsHelp/autoShootFlameTank/prosCons/title'
     DETAILSHELP_AUTOSHOOTFLAMETANK_PROSCONS = '#ingame_help:detailsHelp/autoShootFlameTank/prosCons'
+    DETAILSHELP_DUALGUNWITHAUTORELOADCLIP_TITLE = '#ingame_help:detailsHelp/dualgunWithAutoreloadClip/title'
+    DETAILSHELP_DUALGUNWITHAUTORELOADCLIP_DESCRIPTION = '#ingame_help:detailsHelp/dualgunWithAutoreloadClip/description'

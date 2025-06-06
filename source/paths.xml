@@ -1,7 +1,7 @@
 <root>
   <Paths>
-    <Path cacheSubdirs="true">./res_mods/1.34.0.0</Path>
-    <Path mask="*.wotmod" mode="recursive" root="res">./mods/1.34.0.0</Path>
+    <Path cacheSubdirs="true">./res_mods/1.35.0.0</Path>
+    <Path mask="*.mtmod" mode="recursive" root="res">./mods/1.35.0.0</Path>
     <Packages>
       <Package type="sd,hd">./res/packages/shared_content-part1.pkg</Package>
       <Package type="sd,hd">./res/packages/shared_content-part3.pkg</Package>
@@ -26,6 +26,7 @@
       <Package type="hd">./res/packages/04_himmelsdorf_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/04_himmelsdorf_bin.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/05_prohorovka.pkg</Package>
+      <Package type="hd">./res/packages/05_prohorovka_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/05_prohorovka_bin.pkg</Package>
       <Package type="sd,hd">./res/packages/06_ensk.pkg</Package>
       <Package type="hd">./res/packages/06_ensk_hd.pkg</Package>
@@ -36,18 +37,12 @@
       <Package type="sandbox,sd,hd">./res/packages/08_ruinberg.pkg</Package>
       <Package type="hd">./res/packages/08_ruinberg_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/08_ruinberg_bin.pkg</Package>
-      <Package type="sd,hd">./res/packages/08_ruinberg_att.pkg</Package>
-      <Package type="hd">./res/packages/08_ruinberg_att_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/08_ruinberg_att_bin.pkg</Package>
       <Package type="sd,hd">./res/packages/101_dday.pkg</Package>
       <Package type="hd">./res/packages/101_dday_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/101_dday_bin.pkg</Package>
       <Package type="sd,hd">./res/packages/105_germany.pkg</Package>
       <Package type="hd">./res/packages/105_germany_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/105_germany_bin.pkg</Package>
-      <Package type="sd,hd">./res/packages/105_germany_att.pkg</Package>
-      <Package type="hd">./res/packages/105_germany_att_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/105_germany_att_bin.pkg</Package>
       <Package type="sd,hd">./res/packages/108_normandy_nom.pkg</Package>
       <Package type="hd">./res/packages/108_normandy_nom_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/108_normandy_nom_bin.pkg</Package>
@@ -60,8 +55,6 @@
       <Package type="sd,hd">./res/packages/114_czech.pkg</Package>
       <Package type="hd">./res/packages/114_czech_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/114_czech_bin.pkg</Package>
-      <Package type="sd,hd">./res/packages/114_czech_att.pkg</Package>
-      <Package type="sd,hd">./res/packages/114_czech_att_bin.pkg</Package>
       <Package type="sd,hd">./res/packages/115_sweden.pkg</Package>
       <Package type="hd">./res/packages/115_sweden_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/115_sweden_bin.pkg</Package>
@@ -80,14 +73,9 @@
       <Package type="sd,hd">./res/packages/13_erlenberg.pkg</Package>
       <Package type="hd">./res/packages/13_erlenberg_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/13_erlenberg_bin.pkg</Package>
-      <Package type="sd,hd">./res/packages/13_erlenberg_se22_def.pkg</Package>
-      <Package type="hd">./res/packages/13_erlenberg_se22_def_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/13_erlenberg_se22_def_bin.pkg</Package>
       <Package type="sd,hd">./res/packages/14_siegfried_line.pkg</Package>
       <Package type="hd">./res/packages/14_siegfried_line_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/14_siegfried_line_bin.pkg</Package>
-      <Package type="sd,hd">./res/packages/14_siegfried_line_att.pkg</Package>
-      <Package type="sd,hd">./res/packages/14_siegfried_line_att_bin.pkg</Package>
       <Package type="sd,hd">./res/packages/14_siegfried_line_nom.pkg</Package>
       <Package type="hd">./res/packages/14_siegfried_line_nom_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/14_siegfried_line_nom_bin.pkg</Package>
@@ -118,9 +106,6 @@
       <Package type="sd,hd">./res/packages/222_er_clime.pkg</Package>
       <Package type="hd">./res/packages/222_er_clime_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/222_er_clime_bin.pkg</Package>
-      <Package type="sd,hd">./res/packages/222_er_clime_def.pkg</Package>
-      <Package type="hd">./res/packages/222_er_clime_def_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/222_er_clime_def_bin.pkg</Package>
       <Package type="sd,hd">./res/packages/23_westfeld.pkg</Package>
       <Package type="hd">./res/packages/23_westfeld_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/23_westfeld_bin.pkg</Package>
@@ -154,8 +139,6 @@
       <Package type="sd,hd">./res/packages/35_steppes.pkg</Package>
       <Package type="hd">./res/packages/35_steppes_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/35_steppes_bin.pkg</Package>
-      <Package type="sd,hd">./res/packages/35_steppes_def.pkg</Package>
-      <Package type="sd,hd">./res/packages/35_steppes_def_bin.pkg</Package>
       <Package type="sd,hd">./res/packages/36_fishing_bay.pkg</Package>
       <Package type="hd">./res/packages/36_fishing_bay_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/36_fishing_bay_bin.pkg</Package>
@@ -204,23 +187,12 @@
       <Package type="sd,hd">./res/packages/99_poland.pkg</Package>
       <Package type="hd">./res/packages/99_poland_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/99_poland_bin.pkg</Package>
-      <Package type="sd,hd">./res/packages/99_poland_se22_def.pkg</Package>
-      <Package type="sd,hd">./res/packages/99_poland_se22_def_bin.pkg</Package>
       <Package type="sd,hd">./res/packages/h00_armory_yard.pkg</Package>
       <Package type="hd">./res/packages/h00_armory_yard_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/h00_armory_yard_bin.pkg</Package>
-      <Package type="sd,hd">./res/packages/h01_victory_day_2025.pkg</Package>
-      <Package type="hd">./res/packages/h01_victory_day_2025_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/h01_victory_day_2025_bin.pkg</Package>
       <Package type="sd,hd">./res/packages/h08_mt_hangar.pkg</Package>
       <Package type="hd">./res/packages/h08_mt_hangar_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/h08_mt_hangar_bin.pkg</Package>
-      <Package type="sd,hd">./res/packages/h11_mt_maypve_2025.pkg</Package>
-      <Package type="hd">./res/packages/h11_mt_maypve_2025_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/h11_mt_maypve_2025_bin.pkg</Package>
-      <Package type="sd,hd">./res/packages/h12_mt_maypve_2025.pkg</Package>
-      <Package type="hd">./res/packages/h12_mt_maypve_2025_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/h12_mt_maypve_2025_bin.pkg</Package>
       <Package type="sd,hd">./res/packages/h33_battle_royale_2021.pkg</Package>
       <Package type="hd">./res/packages/h33_battle_royale_2021_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/h33_battle_royale_2021_bin.pkg</Package>
@@ -244,7 +216,6 @@
       <Package type="sandbox,sd,hd">./res/packages/gui-part2.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/gui-part1.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/gui_lootboxes.pkg</Package>
-      <Package type="sandbox,sd,hd">./res/packages/historical_battles.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/in_battle_achievements.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/misc.pkg</Package>
       <Package type="hd">./res/packages/misc_hd.pkg</Package>

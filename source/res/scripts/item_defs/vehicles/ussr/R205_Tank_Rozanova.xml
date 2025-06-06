@@ -7,11 +7,11 @@
     <loader></loader>
   </crew>
   <speedLimits>
-    <forward>	38	</forward>
-    <backward>	12	</backward>
+    <forward>	44	</forward>
+    <backward>	14	</backward>
   </speedLimits>
   <supplySlots>	2 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_MT_assault	</postProgressionTree>
+  <postProgressionTree>	role_MT_universal	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <optDevsOverrides>
     <camouflageNet>
@@ -53,22 +53,22 @@
       <armor_1>	100	</armor_1>
       <armor_2>	80	</armor_2>
       <armor_3>	40	</armor_3>
-      <armor_4>	50	</armor_4>
+      <armor_4>	40	</armor_4>
       <armor_5>	20	</armor_5>
       <armor_6>	20	</armor_6>
-      <armor_7>	50	</armor_7>
+      <armor_7>	40	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	110	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+      <armor_9>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_9>
-      <armor_10>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+      <armor_10>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_10>
-      <armor_11>	110	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+      <armor_11>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_11>
       <armor_12>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_12>
       <armor_13>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_13>
-      <armor_14>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+      <armor_14>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_14>
       <armor_15>	60	</armor_15>
       <armor_16>	60	</armor_16>
@@ -107,7 +107,7 @@
       <sensitivityToImpulse>	0.94	</sensitivityToImpulse>
     </swinging>
     <exhaust>
-      <pixie>	diesel_large	</pixie>
+      <pixie>	diesel_medium	</pixie>
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
@@ -903,7 +903,7 @@
       <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <mud>	largeTankMud	</mud>
+        <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
@@ -1557,22 +1557,22 @@
       </surveyingDeviceHealth>
       <circularVisionRadius>	350	</circularVisionRadius>
       <armor>
-        <armor_1>	185	</armor_1>
+        <armor_1>	140	</armor_1>
         <armor_2>	20	</armor_2>
         <armor_3>	80	</armor_3>
         <armor_4>	80	</armor_4>
         <armor_5>	80	</armor_5>
-        <armor_6>	52	</armor_6>
-        <armor_7>	70	</armor_7>
+        <armor_6>	30	</armor_6>
+        <armor_7>	80	</armor_7>
         <armor_8>	0	</armor_8>
         <armor_9>	80	</armor_9>
-        <armor_10>	135	</armor_10>
-        <armor_11>	85	</armor_11>
-        <armor_12>	185	</armor_12>
-        <armor_13>	185	</armor_13>
-        <armor_14>	185	</armor_14>
-        <armor_15>	185	</armor_15>
-        <armor_16>	185	</armor_16>
+        <armor_10>	95	</armor_10>
+        <armor_11>	80	</armor_11>
+        <armor_12>	140	</armor_12>
+        <armor_13>	140	</armor_13>
+        <armor_14>	140	</armor_14>
+        <armor_15>	140	</armor_15>
+        <armor_16>	140	</armor_16>
         <armor_17>	20	</armor_17>
         <armor_18>	20	</armor_18>
         <armor_19>	20	</armor_19>
@@ -1582,8 +1582,8 @@
         <armor_23>	20	</armor_23>
         <armor_24>	90	</armor_24>
         <armor_25>	80	</armor_25>
-        <armor_27>	185	</armor_27>
-        <armor_28>	185	</armor_28>
+        <armor_27>	140	</armor_27>
+        <armor_28>	140	</armor_28>
       </armor>
       <guns>
         <_85mm_H_3_457>	shared	  <maxAmmo>	60	</maxAmmo>
@@ -1593,31 +1593,31 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	8.0	</reloadTime>
-          <aimingTime>	1.9	</aimingTime>
+          <reloadTime>	7.0	</reloadTime>
+          <aimingTime>	2.2	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.16	</turretRotation>
             <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
-            <armor_1>	185	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	185	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_2>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
             <armor_3>	65	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	170	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_5>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_5>
-            <armor_6>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_6>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_6>
-            <armor_7>	185	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_7>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_7>
             <armor_8>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_8>
-            <armor_9>	185	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_9>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_9>
             <armor_10>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_10>
@@ -1625,9 +1625,9 @@
             </armor_11>
             <armor_13>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_13>
-            <armor_14>	185	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_14>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_14>
-            <armor_15>	185	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_15>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_15>
             <gun>	40	</gun>
           </armor>
@@ -2168,8 +2168,8 @@
     <detailed>
       <engines>
         <V_2_IS_520_Roz>
-          <smplEnginePower>	600	</smplEnginePower>
-          <smplFwMaxSpeed>	38	</smplFwMaxSpeed>
+          <smplEnginePower>	640	</smplEnginePower>
+          <smplFwMaxSpeed>	44	</smplFwMaxSpeed>
         </V_2_IS_520_Roz>
       </engines>
       <chassis>
@@ -2194,7 +2194,6 @@
   <useHullZOffset>	True	</useHullZOffset>
   <effects>
     <collision></collision>
-    <damagedStateGroup>	large	</damagedStateGroup>
   </effects>
   <emblems>
     <default>	15501	</default>

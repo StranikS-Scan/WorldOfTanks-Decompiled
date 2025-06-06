@@ -55,7 +55,6 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.tutorial import ITutorialLoader
 from soft_exception import SoftException
-from historical_battles.skeletons.gui.game_event_controller import IGameEventController
 if typing.TYPE_CHECKING:
     from typing import Optional
 _logger = logging.getLogger(__name__)
@@ -325,7 +324,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     __armoryYardCtrl = dependency.descriptor(IArmoryYardController)
     __earlyAccessCtrl = dependency.descriptor(IEarlyAccessController)
     __limitedUIController = dependency.descriptor(ILimitedUIController)
-    __historicalBattleController = dependency.descriptor(IGameEventController)
     __externalWidgets = {}
 
     def __init__(self):
@@ -477,8 +475,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
          'quests': []}
         if not self.__tutorialLoader.gui.hangarHeaderEnabled:
             return emptyHeaderVO
-        if self.__historicalBattleController.isHBPrbActive():
-            return emptyHeaderVO
         versusAIController = dependency.getInstanceIfHas(IVersusAIController)
         if versusAIController and versusAIController.isVersusAIPrbActive():
             return {'isVisible': True,
@@ -555,14 +551,14 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         return quests
 
     def __isArmoryYardFlagVisible(self):
-        return self.__armoryYardCtrl.isEnabled() and self.__limitedUIController.isRuleCompleted(LuiRules.ARMORY_YARD_ENTRY_POINT) and (self.__getCurrentArenaBonusType() in (constants.ARENA_BONUS_TYPE.REGULAR,
+        return self.__armoryYardCtrl.isEnabled() and self.__armoryYardCtrl.isQuestActive() and not self.__armoryYardCtrl.isAllTokensReceived() and self.__limitedUIController.isRuleCompleted(LuiRules.ARMORY_YARD_ENTRY_POINT) and (self.__getCurrentArenaBonusType() in (constants.ARENA_BONUS_TYPE.REGULAR,
          constants.ARENA_BONUS_TYPE.GLOBAL_MAP,
          constants.ARENA_BONUS_TYPE.SORTIE_2,
          constants.ARENA_BONUS_TYPE.FORT_BATTLE_2,
          constants.ARENA_BONUS_TYPE.BOB,
          constants.ARENA_BONUS_TYPE.MAPBOX,
          constants.ARENA_BONUS_TYPE.FUN_RANDOM,
-         constants.ARENA_BONUS_TYPE.COMP7) or self.prbEntity is not None and self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.STRONGHOLD)
+         constants.ARENA_BONUS_TYPE.COMP7) or self.prbEntity is not None and self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.STRONGHOLD) or self.__armoryYardCtrl.isInAnnouncement() or self.__armoryYardCtrl.isPaused and not self.__armoryYardCtrl.isAllTokensReceived()
 
     def __isEarlyAccessFlagVisible(self):
         return self.__earlyAccessCtrl.isEnabled() and self.__limitedUIController.isRuleCompleted(LuiRules.EARLY_ACCESS_ENTRY_POINT) and self.__earlyAccessCtrl.isAnyQuestAvailable() and self.__getCurrentArenaBonusType() in (constants.ARENA_BONUS_TYPE.REGULAR, constants.ARENA_BONUS_TYPE.EPIC_RANDOM, constants.ARENA_BONUS_TYPE.COMP7)

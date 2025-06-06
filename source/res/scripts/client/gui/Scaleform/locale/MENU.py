@@ -587,6 +587,7 @@ class MENU(object):
     TANK_PARAMS_VALUES_PARAM11_VALUE3 = '#menu:tank_params/values/param11/value3'
     TANK_PARAMS_EXPLOSIONRADIUS = '#menu:tank_params/explosionRadius'
     TANK_PARAMS_FLAMEMAXDISTANCE = '#menu:tank_params/flameMaxDistance'
+    TANK_PARAMS_EXPLOSIONDELAY = '#menu:tank_params/explosionDelay'
     TANK_PARAMS_INCREASEHEALTH = '#menu:tank_params/increaseHealth'
     TANK_PARAMS_T = '#menu:tank_params/t'
     TANK_PARAMS_P = '#menu:tank_params/p'
@@ -683,10 +684,16 @@ class MENU(object):
     EXTRAPARAMS_NAME_DAMAGEANDPIERCINGDISTRIBUTIONLOWERBOUND = '#menu:extraParams/name/damageAndPiercingDistributionLowerBound'
     EXTRAPARAMS_NAME_DAMAGEANDPIERCINGDISTRIBUTIONUPPERBOUND = '#menu:extraParams/name/damageAndPiercingDistributionUpperBound'
     EXTRAPARAMS_NAME_ENEMYMODULESCREWCRITCHANCE = '#menu:extraParams/name/enemyModulesCrewCritChance'
+    EXTRAPARAMS_NAME_PENALTYAFTERSHOTBONUS = '#menu:extraParams/name/penaltyAfterShotBonus'
+    EXTRAPARAMS_NAME_LOADSHELLINTODUALGUNBONUS = '#menu:extraParams/name/loadShellIntoDualGunBonus'
+    EXTRAPARAMS_NAME_CHARGETIMEBONUS = '#menu:extraParams/name/chargeTimeBonus'
+    EXTRAPARAMS_NAME_SPEEDLIMITSBONUS = '#menu:extraParams/name/speedLimitsBonus'
     DESCRIPTIONS_VEHICLE = '#menu:descriptions/vehicle'
     DESCRIPTIONS_VEHICLEGUN = '#menu:descriptions/vehicleGun'
     DESCRIPTIONS_VEHICLEGUN_AUTORELOAD = '#menu:descriptions/vehicleGun/autoReload'
     DESCRIPTIONS_VEHICLEGUN_DUALGUN = '#menu:descriptions/vehicleGun/dualGun'
+    DESCRIPTIONS_VEHICLEGUN_AUTORELOADDUALGUN = '#menu:descriptions/vehicleGun/autoReloadDualGun'
+    DESCRIPTIONS_VEHICLEGUN_CLIPDUALGUN = '#menu:descriptions/vehicleGun/clipDualGun'
     DESCRIPTIONS_VEHICLETURRET = '#menu:descriptions/vehicleTurret'
     DESCRIPTIONS_VEHICLEENGINE = '#menu:descriptions/vehicleEngine'
     DESCRIPTIONS_VEHICLECHASSIS = '#menu:descriptions/vehicleChassis'
@@ -745,7 +752,6 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_TRAININGLEAVEOWNER = '#menu:headerButtons/battle/types/trainingLeaveOwner'
     HEADERBUTTONS_BATTLE_TYPES_TRAININGLEAVE = '#menu:headerButtons/battle/types/trainingLeave'
     HEADERBUTTONS_BATTLE_TYPES_MAPSTRAINING = '#menu:headerButtons/battle/types/mapsTraining'
-    HEADERBUTTONS_BATTLE_TYPES_EVENTBATTLE = '#menu:headerButtons/battle/types/eventBattle'
     HEADERBUTTONS_BATTLE_TYPES_SPEC = '#menu:headerButtons/battle/types/spec'
     HEADERBUTTONS_BATTLE_TYPES_SPEC_DESCR = '#menu:headerButtons/battle/types/spec/descr'
     HEADERBUTTONS_BATTLE_TYPES_LEAVESPEC_DESCR = '#menu:headerButtons/battle/types/leaveSpec/descr'
@@ -1136,6 +1142,10 @@ class MENU(object):
     MODULEINFO_AUTORELOADGUNLABEL = '#menu:moduleInfo/autoReloadGunLabel'
     MODULEINFO_AUTORELOADGUNLABEL_BOOST = '#menu:moduleInfo/autoReloadGunLabel/boost'
     MODULEINFO_DUALGUNLABEL = '#menu:moduleInfo/dualGunLabel'
+    MODULEINFO_AUTORELOADDUALGUNLABEL = '#menu:moduleInfo/autoReloadDualGunLabel'
+    MODULEINFO_AUTORELOADDUALGUNWITHOUTRESETRELOADLABEL = '#menu:moduleInfo/autoReloadDualGunWithoutResetReloadLabel'
+    MODULEINFO_CLIPDUALGUNLABEL = '#menu:moduleInfo/clipDualGunLabel'
+    MODULEINFO_CLIPDUALGUNWITHOUTRESETRELOADLABEL = '#menu:moduleInfo/clipDualGunWithoutResetReloadLabel'
     MODULEINFO_DUALACCURACYGUNLABEL = '#menu:moduleInfo/dualAccuracyGunLabel'
     MODULEINFO_TRACKWITHINTRACKCHASSISLABEL = '#menu:moduleInfo/trackWithinTrackChassisLabel'
     MODULEINFO_MULTITRACKCHASSISLABEL = '#menu:moduleInfo/multiTrackChassisLabel'
@@ -1177,6 +1187,7 @@ class MENU(object):
     MODULEINFO_PARAMS_BURSTCOUNT = '#menu:moduleInfo/params/burstCount'
     MODULEINFO_PARAMS_BURSTSIZE = '#menu:moduleInfo/params/burstSize'
     MODULEINFO_PARAMS_AUTORELOADTIME = '#menu:moduleInfo/params/autoReloadTime'
+    MODULEINFO_PARAMS_EXPLOSIONDELAY = '#menu:moduleInfo/params/explosionDelay'
     MODULEINFO_PARAMS_AUTORELOADTIME_BOOST = '#menu:moduleInfo/params/autoReloadTime/boost'
     MODULEINFO_PARAMS_RELOADTIME = '#menu:moduleInfo/params/reloadTime'
     MODULEINFO_PARAMS_RELOADTIMEPERSECOND = '#menu:moduleInfo/params/reloadTimePerSecond'
@@ -1694,7 +1705,6 @@ class MENU(object):
     CONTEXTMENU_CREATEBATTLEROYALESQUAD = '#menu:contextMenu/createBattleRoyaleSquad'
     CONTEXTMENU_CREATEMAPBOXSQUAD = '#menu:contextMenu/createMapboxSquad'
     CONTEXTMENU_CREATECOMP7SQUAD = '#menu:contextMenu/createComp7Squad'
-    CONTEXTMENU_CREATEHISTORICALBATTLESQUAD = '#menu:contextMenu/createHistoricalBattleSquad'
     CONTEXTMENU_INVITE = '#menu:contextMenu/invite'
     CONTEXTMENU_APPEAL = '#menu:contextMenu/appeal'
     CONTEXTMENU_INCORRECTBEHAVIOR = '#menu:contextMenu/incorrectBehavior'
@@ -2036,7 +2046,6 @@ class MENU(object):
     BOOSTERSWINDOW_TABS_NOTAVAILABLELABEL = '#menu:boostersWindow/tabs/notAvailableLabel'
     BOOSTERSWINDOW_TABS_BUYLABEL = '#menu:boostersWindow/tabs/buyLabel'
     BOOSTERSWINDOW_ACTIVEBOOSTERS = '#menu:boostersWindow/activeBoosters'
-    BOOSTERSWINDOW_BOOSTERSTABLERENDERER_HEADER = '#menu:boostersWindow/boostersTableRenderer/header'
     BOOSTERSWINDOW_BOOSTERSTABLERENDERER_TIME = '#menu:boostersWindow/boostersTableRenderer/time'
     BOOSTERSWINDOW_BOOSTERSTABLERENDERER_UNDEFINETIME = '#menu:boostersWindow/boostersTableRenderer/undefineTime'
     BOOSTERSWINDOW_BOOSTERSTABLERENDERER_QUESTFOROPEN = '#menu:boostersWindow/boostersTableRenderer/questForOpen'
@@ -2403,7 +2412,6 @@ class MENU(object):
      CONTEXTMENU_CREATEBATTLEROYALESQUAD,
      CONTEXTMENU_CREATEMAPBOXSQUAD,
      CONTEXTMENU_CREATECOMP7SQUAD,
-     CONTEXTMENU_CREATEHISTORICALBATTLESQUAD,
      CONTEXTMENU_INVITE,
      CONTEXTMENU_APPEAL,
      CONTEXTMENU_INCORRECTBEHAVIOR,
@@ -2782,6 +2790,7 @@ class MENU(object):
      TANK_PARAMS_VALUES_PARAM11_VALUE3,
      TANK_PARAMS_EXPLOSIONRADIUS,
      TANK_PARAMS_FLAMEMAXDISTANCE,
+     TANK_PARAMS_EXPLOSIONDELAY,
      TANK_PARAMS_INCREASEHEALTH,
      TANK_PARAMS_T,
      TANK_PARAMS_P,

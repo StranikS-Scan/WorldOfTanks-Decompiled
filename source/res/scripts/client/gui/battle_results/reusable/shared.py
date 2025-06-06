@@ -674,9 +674,8 @@ class VehicleDetailedInfo(_VehicleInfo):
 
     @classmethod
     @no_key_error
-    def makeForEnemy(cls, vehicleID, vehicle, player, detailsRecords, deathReason=DEATH_REASON_ALIVE, isTeamKiller=False, instanceCls=None):
-        instanceCls = instanceCls or cls
-        info = instanceCls(vehicleID, vehicle, player, deathReason=deathReason)
+    def makeForEnemy(cls, vehicleID, vehicle, player, detailsRecords, deathReason=DEATH_REASON_ALIVE, isTeamKiller=False):
+        info = cls(vehicleID, vehicle, player, deathReason=deathReason)
         info._critsInfo = makeCritsInfo(detailsRecords['crits'])
         info._rickochetsReceived = detailsRecords['rickochetsReceived']
         info._targetKills = detailsRecords['targetKills']
@@ -688,9 +687,8 @@ class VehicleDetailedInfo(_VehicleInfo):
 
     @classmethod
     @no_key_error
-    def makeForVehicle(cls, vehicleID, vehicle, player, vehicleRecords, critsRecords=None, instanceCls=None):
-        instanceCls = instanceCls or cls
-        info = instanceCls(vehicleID, vehicle, player)
+    def makeForVehicle(cls, vehicleID, vehicle, player, vehicleRecords, critsRecords=None):
+        info = cls(vehicleID, vehicle, player)
         if critsRecords is not None:
             critsInfo = makeCritsInfo(0)
             for crits in critsRecords:

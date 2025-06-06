@@ -63,6 +63,7 @@ from avatar_components.visual_script_controller import VisualScriptController
 from avatar_helpers import AvatarSyncData, getBestShotResultSound
 from battle_results_shared import AVATAR_PRIVATE_STATS, listToDict
 from bootcamp.Bootcamp import g_bootcamp
+from cgf_components.artillery_shot_zone_manager import ArtilleryShotZoneManager
 from constants import ARENA_PERIOD, AIMING_MODE, VEHICLE_SETTING, DEVELOPMENT_INFO, ARENA_GUI_TYPE
 from constants import DEFAULT_VECTOR_3
 from constants import DROWN_WARNING_LEVEL
@@ -89,8 +90,8 @@ from material_kinds import EFFECT_MATERIALS
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from physics_shared import computeBarrelLocalPoint
-from shared_utils.avatar_helpers import DualGun
 from math_utils import almostZero
+from shared_utils.avatar_helpers.DualGun import createDualGunHelper
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
@@ -101,7 +102,6 @@ from skeletons.helpers.statistics import IStatisticsCollector
 from soft_exception import SoftException
 from streamIDs import RangeStreamIDCallbacks, STREAM_ID_CHAT_MAX, STREAM_ID_CHAT_MIN, STREAM_ID_AVATAR_BATTLE_RESULTS
 from TemperatureGunController import getPlayerVehicleTemperatureGunController
-from avatar_components.battle_hints_controller import BattleHintsController
 from vehicle_systems.stricted_loading import makeCallbackWeak
 from messenger import MessengerEntry
 from battle_modifiers_common import BattleModifiers, BattleParams
@@ -169,8 +169,7 @@ AVATAR_COMPONENTS = {CombatEquipmentManager,
  VehicleHealthBroadcastListenerComponent,
  AvatarChatKeyHandling,
  TriggersController,
- VisualScriptController,
- BattleHintsController}
+ VisualScriptController}
 
 class VehicleDeinitFailureException(SoftException):
 
@@ -178,7 +177,7 @@ class VehicleDeinitFailureException(SoftException):
         super(VehicleDeinitFailureException, self).__init__('Exception during vehicle deinit has been detected, thus leading to unstable state of it. Please, check the first exception happened in this function call instead of analyzing c++ crash.')
 
 
-class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarObserver, TeamHealthbarMechanic, AvatarEpicData, AvatarRecoveryMechanic, AvatarRespawnMechanic, VehiclesSpawnListStorage, VehicleRemovalController, VehicleHealthBroadcastListenerComponent, AvatarChatKeyHandling, TriggersController, VisualScriptController, BattleHintsController):
+class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarObserver, TeamHealthbarMechanic, AvatarEpicData, AvatarRecoveryMechanic, AvatarRespawnMechanic, VehiclesSpawnListStorage, VehicleRemovalController, VehicleHealthBroadcastListenerComponent, AvatarChatKeyHandling, TriggersController, VisualScriptController):
     __onStreamCompletePredef = {STREAM_ID_AVATAR_BATTLE_RESULTS: 'receiveBattleResults'}
     isOnArena = property(lambda self: self.__isOnArena)
     isVehicleAlive = property(lambda self: self.__isVehicleAlive)
@@ -586,8 +585,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             ctrl = self.guiSessionProvider.shared.vehicleState
             if self.vehicle.stunInfo.stunFinishTime > 0.0 and (self.isObserver() or ctrl.isInPostmortem):
                 self.vehicle.updateStunInfo()
-            if self.__dualGunHelper is not None:
-                self.__dualGunHelper.reset()
+            self.__dualGunHelper = createDualGunHelper(self.vehicle)
             if self.vehicle.typeDescriptor.hasSiegeMode:
                 siegeState = self.vehicle.siegeState
                 siegeModeParams = self.vehicle.typeDescriptor.type.siegeModeParams
@@ -896,13 +894,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                     return True
                 if not isGuiEnabled and self.guiSessionProvider.shared.drrScale is not None and self.guiSessionProvider.shared.drrScale.handleKey(key, isDown):
                     return True
-                if cmdMap.isFiredList((CommandMapping.CMD_MINIMAP_SIZE_DOWN, CommandMapping.CMD_MINIMAP_SIZE_UP), key) and isDown:
+                if cmdMap.isFiredList((CommandMapping.CMD_MINIMAP_SIZE_DOWN, CommandMapping.CMD_MINIMAP_SIZE_UP, CommandMapping.CMD_MINIMAP_VISIBLE), key) and isDown:
                     gui_event_dispatcher.setMinimapCmd(key)
-                    return True
-                if cmdMap.isFired(CommandMapping.CMD_MINIMAP_VISIBLE, key):
-                    if isDown:
-                        gui_event_dispatcher.setMinimapCmd(key)
-                    gui_event_dispatcher.setFullMapCmd(key, isDown)
                     return True
                 if cmdMap.isFired(CommandMapping.CMD_RELOAD_PARTIAL_CLIP, key) and isDown:
                     self.guiSessionProvider.shared.ammo.reloadPartialClip(self)
@@ -1255,16 +1248,19 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
 
     def updateVehicleClipReloadTime(self, vehicleID, timeLeft, baseTime, firstTime, stunned, isBoostApplicable):
         self.guiSessionProvider.shared.ammo.setGunAutoReloadTime(timeLeft, baseTime, firstTime, stunned, isBoostApplicable)
+        if self.__dualGunHelper is not None:
+            self.__dualGunHelper.updateClipReloadTime(self, vehicleID, timeLeft, baseTime, firstTime, stunned, isBoostApplicable, self.guiSessionProvider.shared.ammo)
+        return
 
     def updateDualGunState(self, vehicleID, activeGun, gunStates, cooldownTimes):
+        if self.__dualGunHelper is not None:
+            self.__dualGunHelper.updateGunReloadTime(self, vehicleID, activeGun, gunStates, cooldownTimes, self.guiSessionProvider.shared.ammo)
         vehicle = BigWorld.entity(vehicleID)
         if vehicle is not None and vehicle.typeDescriptor is not None and vehicle.typeDescriptor.isDualgunVehicle and vehicle.isStarted:
             vehicle.onActiveGunChanged(activeGun, cooldownTimes[DUAL_GUN.COOLDOWNS.SWITCH])
             self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.DUAL_GUN_STATE_UPDATED, (activeGun, cooldownTimes, gunStates))
         elif self.isObserver():
             self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.DUAL_GUN_STATE_UPDATED, (activeGun, cooldownTimes, gunStates))
-        if self.__dualGunHelper is not None:
-            self.__dualGunHelper.updateGunReloadTime(self, vehicleID, activeGun, gunStates, cooldownTimes, self.guiSessionProvider.shared.ammo)
         self.__canMakeDualShot = all((state == DUAL_GUN.GUN_STATE.READY for state in gunStates))
         self.guiSessionProvider.shared.ammo.setDualGunQuickChangeReady(self.__canMakeDualShot)
         LOG_DEBUG_DEV('updateDualGunState', vehicleID, activeGun, gunStates, cooldownTimes)
@@ -1272,6 +1268,24 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
 
     def stopSetupSelection(self):
         self.guiSessionProvider.shared.prebattleSetups.stopSelection()
+
+    def addArtilleryShotZone(self, shotID, startTime, shotTime, hitPoint, explosionRadius, zoneType):
+        zoneManager = CGF.getManager(self.spaceID, ArtilleryShotZoneManager)
+        if zoneManager is None:
+            LOG_WARNING('Avatar.py: addArtilleryShotZone failed')
+        zoneManager.addArtilleryShotZone(shotID, hitPoint, explosionRadius, zoneType)
+        artilleryTimeZoneComponent = self.arena.componentSystem.artilleryTimeZoneComponent
+        artilleryTimeZoneComponent.addTimeZone(shotID, startTime, shotTime, hitPoint, explosionRadius, zoneType)
+        return
+
+    def removeArtilleryShotZone(self, shotID):
+        zoneManager = CGF.getManager(self.spaceID, ArtilleryShotZoneManager)
+        if zoneManager is None:
+            LOG_WARNING('Avatar.py: removeArtilleryShotZone failed')
+        zoneManager.removeArtilleryShotZone(shotID)
+        artilleryTimeZoneComponent = self.arena.componentSystem.artilleryTimeZoneComponent
+        artilleryTimeZoneComponent.removeTimeZone(shotID)
+        return
 
     def beforeSetupUpdate(self, vehicleID):
         vehicleDescriptor = self.__getDetailedVehicleDescriptor()
@@ -1507,16 +1521,13 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.guiSessionProvider.invalidateVehicleState(timer, value)
 
     def updatePersonalDeathZoneWarningNotification(self, enable, time):
-        self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.PERSONAL_DEATHZONE, DeathZoneTimerViewState(DeathZoneTimerViewState.DEFAULT_ZONE_ID, False, max(time - BigWorld.serverTime(), 0), 'warning' if enable else None, 0))
-        return
+        self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.PERSONAL_DEATHZONE, (enable, time))
 
-    def updateDeathZoneWarningNotification(self, enable, playerEntering, strikeTime, waveDuration, isCausingDamage):
-        if isCausingDamage:
-            value = DeathZoneTimerViewState.makeCloseTimerState(1, isCausingDamage)
-        else:
-            value = DeathZoneTimerViewState(DeathZoneTimerViewState.DEFAULT_ZONE_ID, isCausingDamage, waveDuration, 'warning' if enable else None, strikeTime)
-        self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.DEATHZONE, value)
-        return
+    def updateDeathZoneWarningNotification(self, enable, playerEntering, strikeTime, waveDuration):
+        self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.DEATHZONE, (enable,
+         playerEntering,
+         strikeTime,
+         waveDuration))
 
     def showOwnVehicleHitDirection(self, hitDirYaw, attackerID, damage, crits, isBlocked, isShellHE, damagedID, attackReasonID):
         if not self.__isVehicleAlive and not self.isObserver():
@@ -1716,7 +1727,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             startPoint = refStartPoint
             shooter = BigWorld.entity(shooterID)
             if shooter is not None:
-                g_playerEvents.onShowShooterTracer(shooter)
+                g_playerEvents.onShowShooterTracer(shooter, gunIndex)
             if not isRicochet and shooter is not None and shooter.isStarted and effectsDescr.get('artilleryID') is None:
                 multiGun = shooter.typeDescriptor.turret.multiGun
                 if shooter.typeDescriptor.isDualgunVehicle and multiGun is not None:
@@ -1802,8 +1813,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         g_bootcamp.onBattleAction(details[0], details[1:])
 
     def updateArena(self, updateType, argStr):
-        if self.arena:
-            self.arena.update(updateType, argStr)
+        self.arena.update(updateType, argStr)
 
     def updatePositions(self, indices, positions):
         try:
@@ -1880,19 +1890,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
 
     def isVehicleMoving(self):
         return self.__isVehicleMoving
-
-    def sendPlayerBattleLogNotification(self, messageKey, messageParams):
-        self.guiSessionProvider.sendPlayerBattleLogNotification(messageKey, messageParams)
-
-    def sendEquipmentBattleLogNotification(self, compactDescr, playerName, isOwner):
-        descriptor = vehicles.getItemByCompactDescr(compactDescr)
-        if isOwner:
-            params = {'equipment_name': descriptor.shortUserString}
-            self.sendPlayerBattleLogNotification('EQUIPMENT_USAGE', params)
-        else:
-            params = {'equipment_name': descriptor.shortUserString,
-             'player_name': playerName}
-            self.sendPlayerBattleLogNotification('TEAM_EQUIPMENT_USAGE', params)
 
     def receiveAccountStats(self, requestID, stats):
         callback = self.__onCmdResponse.pop(requestID, None)
@@ -2591,7 +2588,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.__projectileMover.setSpaceID(self.spaceID)
         self.__initGunRotator()
         self.positionControl = AvatarPositionControl.AvatarPositionControl(self)
-        self.__dualGunHelper = DualGun.DualGunHelper()
+        playerVehicle = BigWorld.entities[self.playerVehicleID]
+        self.__dualGunHelper = createDualGunHelper(playerVehicle)
         self.__startGUI()
 
     def __initGUI(self):

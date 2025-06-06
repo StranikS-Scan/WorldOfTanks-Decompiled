@@ -82,8 +82,15 @@ class CosmicPostBattleView(ViewImpl, LobbyHeaderVisibility):
         return self._battleResultsData.results['common']
 
     def _getPersonalData(self):
-        vehicleCompId = self.__battleController.getEventVehicle().intCD
-        return self._battleResultsData.results['personal'][vehicleCompId]
+        myTeamId = self._battleResultsData.results.get('personal', {}).get('avatar', {}).get('team')
+        if myTeamId is None:
+            return {}
+        else:
+            myVehicle = [ vehicle[0] for _, vehicle in self._battleResultsData.results['vehicles'].iteritems() if vehicle[0]['team'] == myTeamId ]
+            if not myVehicle:
+                return {}
+            vehicleCompId = myVehicle[0]['typeCompDescr']
+            return self._battleResultsData.results['personal'][vehicleCompId]
 
     def _getVehiclesData(self):
         vehicleData = self._battleResultsData.results['vehicles']

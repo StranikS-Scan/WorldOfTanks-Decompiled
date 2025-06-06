@@ -56,7 +56,6 @@ class LuiRules(enum.Enum):
     EARLY_ACCESS_ENTRY_POINT = 'EarlyAccessEntryPoint'
     PARAGONS_ENTRY_POINT = 'ParagonsEntryPoint'
     NEW_CAMPAIGN_HINT = 'NewCampaignHint'
-    HB_ENTRY_POINT = 'HBEntryPoint'
 
 
 class _LimitedUIRule(namedtuple('_LimitedUIRule', ('idx', 'expression', 'tokens', 'message'))):

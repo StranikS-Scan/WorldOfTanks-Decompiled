@@ -6,7 +6,7 @@
     <icon>	sure_shot 0 0	</icon>
     <price>	100	</price>
     <notInShop>	True	</notInShop>
-    <tags>	notForSale abilityEquipment trigger public stopOutsideBattle	</tags>
+    <tags>	notForSale visualScriptAbilityEquipment trigger public stopOutsideBattle	</tags>
     <type>	battleAbilities	</type>
     <activationSound>	ability_start_button	</activationSound>
     <deactivationSound>	ability_stop_button	</deactivationSound>
@@ -73,7 +73,7 @@
     <icon>	juggernaut 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
-    <tags>	notForSale abilityEquipment public stopOutsideBattle	</tags>
+    <tags>	notForSale visualScriptAbilityEquipment public stopOutsideBattle	</tags>
     <type>	battleAbilities	</type>
     <activationSound>	ability_start_button	</activationSound>
     <deactivationSound>	ability_stop_button	</deactivationSound>
@@ -136,7 +136,7 @@
     <icon>	concentration 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
-    <tags>	notForSale abilityEquipment public stopOutsideBattle	</tags>
+    <tags>	notForSale visualScriptAbilityEquipment public stopOutsideBattle	</tags>
     <type>	battleAbilities	</type>
     <activationSound>	ability_start_button	</activationSound>
     <deactivationSound>	ability_stop_button	</deactivationSound>
@@ -192,4 +192,78 @@
       </add>
     </kpi>
   </concentration>
+  <recoil_recuperator>
+    <id>	11003	</id>
+    <userString>	#artefacts:recoil_recuperator/name	</userString>
+    <description>	#artefacts:recoil_recuperator/descr	</description>
+    <icon>	recoil_recuperator 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale abilityEquipment	</tags>
+    <type>	battleAbilities	</type>
+    <activationSound>	ability_start_button	</activationSound>
+    <deactivationSound>	ability_stop_button	</deactivationSound>
+    <refillSound>	ability_recharging	</refillSound>
+    <script>	RecoilRecuperatorEquipment	  <visualScript>
+        <client>
+          <plan>	abilities/base_ability_controller_client	</plan>
+        </client>
+      </visualScript>
+      <cooldownSeconds>	90	</cooldownSeconds>
+      <reuseCount>	3	</reuseCount>
+      <duration>	30	</duration>
+      <additiveFactors>
+        <gun-chargeTimeBonus>	1	</gun-chargeTimeBonus>
+        <gun-reloadLockTimeBonus>	2	</gun-reloadLockTimeBonus>
+        <gun-loadShellIntoDualGunBonus>	4	</gun-loadShellIntoDualGunBonus>
+        <vehicle-fwMaxSpeedBonus>	6	</vehicle-fwMaxSpeedBonus>
+        <vehicle-bkMaxSpeedBonus>	6	</vehicle-bkMaxSpeedBonus>
+      </additiveFactors>
+      <multiplicativeFactors>
+        <chassis-shotDispersionFactors-movement>	1.2	</chassis-shotDispersionFactors-movement>
+        <chassis-shotDispersionFactors-rotation>	1.2	</chassis-shotDispersionFactors-rotation>
+        <gun-shotDispersionFactors-afterShot>	1.2	</gun-shotDispersionFactors-afterShot>
+        <gun-shotDispersionFactors-turretRotation>	1.2	</gun-shotDispersionFactors-turretRotation>
+        <engine-power>	1.5	</engine-power>
+      </multiplicativeFactors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotDispersionChassisMovement	</name>
+        <value>	20	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionChassisRotation	</name>
+        <value>	20	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionTurretRotation	</name>
+        <value>	20	</value>
+      </mul>
+      <add>
+        <name>	chargeTimeBonus	</name>
+        <value>	-1	</value>
+      </add>
+      <add>
+        <name>	penaltyAfterShotBonus	</name>
+        <value>	-2	</value>
+      </add>
+      <add>
+        <name>	loadShellIntoDualGunBonus	</name>
+        <value>	-4	</value>
+      </add>
+      <mul>
+        <name>	vehicleGunShotDispersionAfterShot	</name>
+        <value>	20	</value>
+      </mul>
+      <add>
+        <name>	speedLimitsBonus	</name>
+        <value>	6	</value>
+      </add>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	50	</value>
+      </mul>
+    </kpi>
+  </recoil_recuperator>
 </ability_equipments.xml>

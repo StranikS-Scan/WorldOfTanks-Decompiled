@@ -10,7 +10,7 @@ from gui.impl.gen.view_models.views.lobby.personal_missions.personal_missions_vi
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.impl.lobby.personal_missions.personal_mission_bonuses_packers import packBonusModelAndTooltipData
 from gui.impl.pub import ViewImpl
-from gui.impl.pub.lobby_window import LobbyWindow
+from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.server_events.finders import BRANCH_TO_OPERATION_IDS
 from items.vehicles import getVehicleClassFromVehicleType
 from helpers import dependency
@@ -21,6 +21,8 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from CurrentVehicle import g_currentVehicle
 from gui.impl.lobby.personal_missions.video_sound_control.video_sound_control import PM3VideoSoundControl
+from gui.shared.events import PersonalMissionsEvent
+from gui.shared import EVENT_BUS_SCOPE, g_eventBus
 _logger = logging.getLogger(__name__)
 
 class PersonalMissionsVideoRewardsView(ViewImpl):
@@ -108,6 +110,7 @@ class PersonalMissionsVideoRewardsView(ViewImpl):
 
     def __onClose(self):
         self.destroyWindow()
+        g_eventBus.handleEvent(PersonalMissionsEvent(PersonalMissionsEvent.ON_AWARD_PM_SCREEN_CLOSE, ctx={'operationID': self.__operation.getID()}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __onError(self, args):
         errorFilePath = str(args.get('errorFilePath', ''))
@@ -134,7 +137,7 @@ class PersonalMissionsVideoRewardsView(ViewImpl):
             self.__soundControl.pause()
 
 
-class PersonalMissionsVideoRewardsViewWindow(LobbyWindow):
+class PersonalMissionsVideoRewardsViewWindow(LobbyNotificationWindow):
     __slots__ = ()
 
     def __init__(self, operationId=None, parent=None):

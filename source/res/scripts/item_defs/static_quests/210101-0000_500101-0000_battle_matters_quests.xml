@@ -52,16 +52,13 @@
       <id>	battle_matters_1	</id>
       <name>
         <ru>	Первый бой	</ru>
-        <en>	First Battle	</en>
       </name>
       <description>
         <ru>	Добро пожаловать в игру! Сражайтесь вместе с поклонниками стальных гигантов со всех уголков планеты и одерживайте блестящие победы!	</ru>
-        <en>	Welcome to the game! Battle with other fans from all across the world, and celebrate spectacular victories!	</en>
       </description>
       <conditions>
         <description>
           <ru>	Выйдите в Случайный бой на машине любого уровня.	</ru>
-          <en>	Start a Random Battle in a vehicle of any tier.	</en>
         </description>
         <preBattle>
           <account>
@@ -113,16 +110,13 @@
       <id>	battle_matters_2	</id>
       <name>
         <ru>	Боевой опыт	</ru>
-        <en>	Combat Experience	</en>
       </name>
       <description>
         <ru>	Боевой опыт начисляется по итогам боя. Накапливайте боевой опыт и исследуйте новые модули, которые повысят эффективность вашей машины.	</ru>
-        <en>	Combat Experience is awarded after each battle. Earn Combat Experience to research new modules that improve your vehicle's efficiency.	</en>
       </description>
       <conditions>
         <description>
           <ru>	Исследуйте модуль и установите его на машину любого уровня.	</ru>
-          <en>	Research a module and mount it on a vehicle of any tier.	</en>
         </description>
         <preBattle>
           <account>
@@ -163,16 +157,13 @@
       <id>	battle_matters_3	</id>
       <name>
         <ru>	Множитель опыта	</ru>
-        <en>	Experience Multiplier	</en>
       </name>
       <description>
         <ru>	За первую победу в день на каждой машине можно получить вдвое больше опыта. Используйте эту возможность для быстрого улучшения техники.	</ru>
-        <en>	You can receive twice the experience for your first victory of the day in each vehicle. Use this feature to upgrade your vehicles even faster.	</en>
       </description>
       <conditions>
         <description>
           <ru>	Получите удвоенный опыт за победу в Случайном бою на технике любого уровня.	</ru>
-          <en>	Receive double the experience for your first victory of the day in Random Battles in a vehicle of any tier.	</en>
         </description>
         <preBattle>
           <battle>
@@ -214,16 +205,13 @@
       <id>	battle_matters_4	</id>
       <name>
         <ru>	Свободный опыт	</ru>
-        <en>	Free Experience	</en>
       </name>
       <description>
         <ru>	Если для исследования модуля или машины вам не хватает боевого опыта, вы можете воспользоваться свободным опытом — он общий для всей техники.	</ru>
-        <en>	If you do not have enough Combat Experience to research a module or vehicle, you can use Free Experience, which can be earned for any vehicle.	</en>
       </description>
       <conditions>
         <description>
           <ru>	Используйте свободный опыт для исследования любого модуля.	</ru>
-          <en>	Use Free Experience to research any module.	</en>
         </description>
         <preBattle>
           <account>
@@ -261,16 +249,13 @@
       <id>	battle_matters_5	</id>
       <name>
         <ru>	Боеприпасы	</ru>
-        <en>	Ammunition	</en>
       </name>
       <description>
         <ru>	Бронебойный, осколочно-фугасный и подкалиберный снаряды подходят для разных ситуаций в бою. Выбирайте мудро, чтобы получить преимущество!	</ru>
-        <en>	Armor-Piercing, High-Explosive, and Armor-Piercing Composite Rigid shells are used for different situations in battle. Choose wisely to gain an advantage!	</en>
       </description>
       <conditions>
         <description>
           <ru>	Загрузите несколько альтернативных снарядов и выйдите в Случайный бой на машине III–XI уровня.	</ru>
-          <en>	Load some alternative shells and start a Random Battle in a Tier III–XI vehicle.	</en>
         </description>
         <preBattle>
           <battle>
@@ -313,16 +298,13 @@
       <id>	battle_matters_6	</id>
       <name>
         <ru>	Склад	</ru>
-        <en>	Depot	</en>
       </name>
       <description>
-        <ru>	На Складе хранятся неиспользуемые модули, снаряды, оборудование, снаряжение и прочее. Ненужное игровое имущество можно продать за кредиты.	</ru>
-        <en>	Unused modules, shells, equipment, consumables, and other items are stored in the Depot. You can sell extra items for credits.	</en>
+        <ru>	На Складе хранятся неиспользуемые модули, снаряды, оборудование, снаряжение и прочее. Ненужное игровое имущество можно продать за серебро.	</ru>
       </description>
       <conditions>
         <description>
           <ru>	Продайте ненужный модуль со Склада.	</ru>
-          <en>	Sell an unused module from the Depot.	</en>
         </description>
         <preBattle>
           <account>
@@ -358,17 +340,14 @@
       <showPostBattleStat>	True	</showPostBattleStat>
       <id>	battle_matters_7	</id>
       <name>
-        <ru>	Кредиты	</ru>
-        <en>	Credits	</en>
+        <ru>	Серебро	</ru>
       </name>
       <description>
-        <ru>	Кредиты нужны для покупки снарядов, новой техники, ремонта машин и т.д. Важно уметь экономить и рационально использовать заработанные кредиты.	</ru>
-        <en>	Credits are used to purchase shells and new vehicles, repair vehicles, and more. It is important to know how to save up and use them wisely.	</en>
+        <ru>	Серебро необходимо для покупки снарядов, новой техники, ремонта машин и т.д. Важно уметь экономить и рационально его использовать.	</ru>
       </description>
       <conditions>
         <description>
-          <ru>	Заработайте 25 000 кредитов в Cлучайных боях на технике III–XI уровней.	</ru>
-          <en>	Earn 25,000 credits in Random Battles in Tier III–XI vehicles.	</en>
+          <ru>	Заработайте 25 000 серебра в Cлучайных боях на технике III–XI уровней.	</ru>
         </description>
         <preBattle>
           <battle>
@@ -417,16 +396,13 @@
       <id>	battle_matters_8	</id>
       <name>
         <ru>	Снаряжение	</ru>
-        <en>	Consumables	</en>
       </name>
       <description>
         <ru>	Снаряжение устраняет критические повреждения машины и ранения экипажа в бою. Своевременное использование снаряжения — основа выживаемости на поле боя.	</ru>
-        <en>	Consumables can fix critical vehicle damage and heal crew injuries in battle. Using consumables at the right time is crucial for surviving on the battlefield.	</en>
       </description>
       <conditions>
         <description>
           <ru>	Проведите 3 Случайных боя на технике III–XI уровней с установленным во все доступные слоты снаряжением.	</ru>
-          <en>	Fight 3 Random Battles in Tier III–XI vehicles with consumables mounted in all available slots.	</en>
         </description>
         <preBattle>
           <battle>
@@ -497,16 +473,13 @@
       <id>	battle_matters_9	</id>
       <name>
         <ru>	Оборудование	</ru>
-        <en>	Equipment	</en>
       </name>
       <description>
         <ru>	Машину можно оснастить оборудованием, которое улучшит некоторые её характеристики. Выбор оборудования зависит от конкретной машины и стиля игры.	</ru>
-        <en>	Vehicles can be outfitted with equipment in order to improve some of their characteristics. The equipment loadout will depend on the vehicle and playstyle.	</en>
       </description>
       <conditions>
         <description>
           <ru>	Проведите 3 Cлучайных боя на технике III–XI уровней с любым установленным оборудованием.	</ru>
-          <en>	Fight 3 Random Battles in Tier III–XI vehicles with any mounted equipment.	</en>
         </description>
         <preBattle>
           <battle>
@@ -560,16 +533,13 @@
       <id>	battle_matters_10	</id>
       <name>
         <ru>	Машина IV уровня	</ru>
-        <en>	Tier IV Vehicle	</en>
       </name>
       <description>
         <ru>	Покупка новой машины — важный момент. С каждым уровнем машины становятся интереснее, а полностью обученный экипаж повысит комфорт игры.	</ru>
-        <en>	Purchasing a new vehicle is an important occasion. With each new tier, vehicles become more interesting. A trained crew will also improve overall gameplay.	</en>
       </description>
       <conditions>
         <description>
           <ru>	Исследуйте и купите любую машину IV уровня.	</ru>
-          <en>	Research and purchase any Tier IV vehicle.	</en>
         </description>
         <preBattle>
           <account>
@@ -653,16 +623,13 @@
       <id>	battle_matters_11	</id>
       <name>
         <ru>	Внешний вид техники	</ru>
-        <en>	Vehicle Exteriors	</en>
       </name>
       <description>
         <ru>	Технике можно придать индивидуальность, изменив её внешний вид готовыми стилями, либо создав свой стиль из камуфляжа, надписей, эмблем и декалей.	</ru>
-        <en>	Vehicles can be customized by changing their exterior with preset styles or by creating your own style using camouflage, inscriptions, emblems, and decals.	</en>
       </description>
       <conditions>
         <description>
           <ru>	Проведите 3 Cлучайных боя на технике IV–XI уровней с любым нанесённым элементом внешнего вида.	</ru>
-          <en>	Fight 3 Random Battles in Tier IV–XI vehicles with any applied customization element.	</en>
         </description>
         <preBattle>
           <battle>
@@ -730,16 +697,13 @@
       <id>	battle_matters_12	</id>
       <name>
         <ru>	Навыки экипажа	</ru>
-        <en>	Crew Perks	</en>
       </name>
       <description>
         <ru>	Освоив основную специальность, члены экипажа начинают изучать навыки, повышающие их эффективность или дающие новые возможности.	</ru>
-        <en>	After training their major qualification to 100%, crew members can train additional perks to enhance their effectiveness or obtain new capabilities.	</en>
       </description>
       <conditions>
         <description>
           <ru>	Начните изучение любого навыка для любого члена экипажа.	</ru>
-          <en>	Start training any perk for any crew member.	</en>
         </description>
         <preBattle>
           <account>
@@ -781,17 +745,14 @@
       <showPostBattleStat>	True	</showPostBattleStat>
       <id>	battle_matters_13	</id>
       <name>
-        <ru>	Накопление кредитов	</ru>
-        <en>	Accumulating Credits	</en>
+        <ru>	Накопление серебра	</ru>
       </name>
       <description>
-        <ru>	Чем выше уровень боёв, тем больше кредитов потребуется на обслуживание техники, пополнение боекомплекта, покупку модулей и оборудования.	</ru>
-        <en>	The higher the battle level, the more credits you will need to maintain your vehicle, replenish ammunition, and purchase modules and equipment.	</en>
+        <ru>	Чем выше уровень боёв, тем больше серебра потребуется на обслуживание техники, пополнение боекомплекта, покупку модулей и оборудования.	</ru>
       </description>
       <conditions>
         <description>
-          <ru>	Заработайте 150 000 кредитов в Cлучайных боях на технике IV–XI уровней.	</ru>
-          <en>	Earn 150,000 credits in Random Battles in Tier IV–XI vehicles.	</en>
+          <ru>	Заработайте 150 000 серебра в Cлучайных боях на технике IV–XI уровней.	</ru>
         </description>
         <preBattle>
           <battle>
@@ -834,16 +795,13 @@
       <id>	battle_matters_14	</id>
       <name>
         <ru>	Машина V уровня	</ru>
-        <en>	Tier V Vehicle	</en>
       </name>
       <description>
         <ru>	На V уровне появляется уже серьёзная техника, а требования к игровым навыкам возрастают. Полностью обученный экипаж будет крайне полезен.	</ru>
-        <en>	Tier V is where the more serious vehicles start appearing and your game skills are truly put to the test. A completely trained crew will really come in handy.	</en>
       </description>
       <conditions>
         <description>
           <ru>	Исследуйте и купите любую машину V уровня.	</ru>
-          <en>	Research and purchase any Tier V vehicle.	</en>
         </description>
         <preBattle>
           <account>
@@ -893,16 +851,13 @@
       <id>	battle_matters_15	</id>
       <name>
         <ru>	Установка оборудования	</ru>
-        <en>	Mounting Equipment	</en>
       </name>
       <description>
         <ru>	Просветлённая оптика или улучшенная вентиляция? Подчеркнуть достоинства машины и нивелировать eё недостатки позволит правильно подобранное оборудование.	</ru>
-        <en>	Coated Optics or Improved Ventilation? The right equipment can boost your vehicle's strengths and reduce its weaknesses.	</en>
       </description>
       <conditions>
         <description>
           <ru>	Проведите 10 Cлучайных боёв на технике V–XI уровней с 3 ед. установленного оборудования.	</ru>
-          <en>	Fight 10 Random Battles in Tier V–XI vehicles with 3 equipment items mounted.	</en>
         </description>
         <preBattle>
           <battle>
@@ -946,24 +901,25 @@
         </token>
       </bonus>
     </battleQuest>
-    <tokenQuest>
+    <battleQuest>
       <enabled>	true	</enabled>
       <hidden>	true	</hidden>
+      <showPostBattleStat>	True	</showPostBattleStat>
       <id>	battle_matters_16	</id>
       <name>
-        <ru>	Топография	</ru>
-        <en>	Topography	</en>
+        <ru>	Полигон	</ru>
       </name>
       <description>
-        <ru>	Хорошее знание карт, ключевых позиций и объектов на них, а также разъездов и тактик поможет увереннее чувствовать себя на поле боя.	</ru>
-        <en>	To gain confidence on the battlefield, it is best to have a good understanding of pathways, tactics, and maps, including the key positions and objects on them.	</en>
+        <ru>	Важно понимать свою машину и тактику её применения на карте. Для этого можно посетить режим «Полигон», где вместе с другими игроками вы сразитесь против ИИ.	</ru>
       </description>
       <conditions>
         <description>
-          <ru>	Выполните один базовый сценарий в режиме «Топография».	</ru>
-          <en>	Complete one basic scenario in the Topography mode.	</en>
+          <ru>	Провести 1 бой в режиме «Полигон».	</ru>
         </description>
         <preBattle>
+          <battle>
+            <bonusTypes>	50	</bonusTypes>
+          </battle>
           <account>
             <and>
               <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
@@ -972,16 +928,13 @@
                 <greaterOrEqual>	1	</greaterOrEqual>
                 <consume>	1	</consume>
               </token>
-              <mapsTraining>
-                <scenariosCompleted>
-                  <greaterOrEqual>	1	</greaterOrEqual>
-                  <difficulty>	1	</difficulty>
-                </scenariosCompleted>
-              </mapsTraining>
             </and>
           </account>
         </preBattle>
         <common>
+          <battles>
+            <count>	1	</count>
+          </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
       </conditions>
@@ -998,25 +951,26 @@
           <expires>	01.02.2050 00:00	</expires>
         </token>
       </bonus>
-    </tokenQuest>
-    <tokenQuest>
+    </battleQuest>
+    <battleQuest>
       <enabled>	true	</enabled>
       <hidden>	true	</hidden>
+      <showPostBattleStat>	True	</showPostBattleStat>
       <id>	battle_matters_17	</id>
       <name>
-        <ru>	Продвинутая Топография	</ru>
-        <en>	Advanced Topography	</en>
+        <ru>	Мастер полигона	</ru>
       </name>
       <description>
-        <ru>	Периодически возвращайтесь к Топографии, чтобы изучать карты для Случайных боёв. 4 сценария позволяют рассмотреть локацию под разными углами.	</ru>
-        <en>	Enter the Topography mode from time to time to study maps for Random Battles. The four scenarios allow you to explore the location from different angles.	</en>
+        <ru>	Полигон — не только способ изучить игру, но и возможность отдохнуть от вызовов Случайных боёв. Если чувствуете, что усталость берёт верх — полигон может стать решением.	</ru>
       </description>
       <conditions>
         <description>
-          <ru>	Выполните 4 продвинутых сценария на одной карте в режиме «Топография».	</ru>
-          <en>	Complete 4 advanced scenarios on one map in Topography.	</en>
+          <ru>	5 раз победить и попасть в топ-8 игроков по опыту в режиме «Полигон».	</ru>
         </description>
         <preBattle>
+          <battle>
+            <bonusTypes>	50	</bonusTypes>
+          </battle>
           <account>
             <and>
               <isBattleMattersEnabled>	true	</isBattleMattersEnabled>
@@ -1025,16 +979,22 @@
                 <greaterOrEqual>	1	</greaterOrEqual>
                 <consume>	1	</consume>
               </token>
-              <mapsTraining>
-                <mapsCompleted>
-                  <greaterOrEqual>	1	</greaterOrEqual>
-                  <difficulty>	2	</difficulty>
-                </mapsCompleted>
-              </mapsTraining>
             </and>
           </account>
         </preBattle>
+        <postBattle>
+          <and>
+            <results>
+              <key>	xp	</key>
+              <max>	8	</max>
+            </results>
+            <win></win>
+          </and>
+        </postBattle>
         <common>
+          <battles>
+            <count>	5	</count>
+          </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
       </conditions>
@@ -1057,7 +1017,7 @@
           <expires>	01.02.2050 00:00	</expires>
         </token>
       </bonus>
-    </tokenQuest>
+    </battleQuest>
     <battleQuest>
       <enabled>	true	</enabled>
       <hidden>	true	</hidden>
@@ -1065,16 +1025,13 @@
       <id>	battle_matters_18	</id>
       <name>
         <ru>	Личные резервы	</ru>
-        <en>	Personal Reserves	</en>
       </name>
       <description>
-        <ru>	При активации позволяют получить дополнительные бонусы по результатам боя: к боевому опыту, свободному опыту и опыту экипажа, а также к кредитам.	</ru>
-        <en>	When activated, you can get additional bonuses to Combat XP, Free and Crew XP, or credits after each battle.	</en>
+        <ru>	При активации позволяют получить дополнительные бонусы по результатам боя: к боевому опыту, свободному опыту и опыту экипажа, а также к заработку серебра.	</ru>
       </description>
       <conditions>
         <description>
-          <ru>	Проведите 10 Cлучайных боёв на технике V–XI уровней с активированным личным резервом.	</ru>
-          <en>	Fight 10 Random Battles in Tier V–XI vehicles with an activated Personal Reserve.	</en>
+          <ru>	Перейдите в режим «Случайный бой» и проведите 10 боёв на технике V–XI уровней с активированным личным резервом.	</ru>
         </description>
         <preBattle>
           <battle>
@@ -1130,16 +1087,13 @@
       <id>	battle_matters_19	</id>
       <name>
         <ru>	6 задач на x5 опыта	</ru>
-        <en>	6 Missions for ×5 XP	</en>
       </name>
       <description>
         <ru>	Эти задачи позволят за каждый успешный бой получить в 5 раз больше опыта. Для этого нужно победить и войти в топ-10 своей команды по опыту.	</ru>
-        <en>	These missions allow you to earn 5 times more XP per successful battle. For this, you need to win and be among the top 10 players on your team by XP earned.	</en>
       </description>
       <conditions>
         <description>
           <ru>	Попадите в топ-10 своей команды по заработанному опыту 6 раз в Cлучайных победных боях на технике V–XI уровней.	</ru>
-          <en>	Be among the top 10 on your team by XP earned 6 times in victorious Random Battles in Tier V–XI vehicles.	</en>
         </description>
         <preBattle>
           <battle>
@@ -1191,16 +1145,13 @@
       <id>	battle_matters_20	</id>
       <name>
         <ru>	Машина VI уровня	</ru>
-        <en>	Tier VI Vehicle	</en>
       </name>
       <description>
         <ru>	Исследование машины следующего уровня потребует больше времени и сил. 100%-й экипаж повысит комфорт игры, а свободный опыт поможет двигаться быстрее.	</ru>
-        <en>	In each subsequent tier, researching vehicles will require more time and effort. Free XP will help you advance faster, and a trained crew will come in handy.	</en>
       </description>
       <conditions>
         <description>
           <ru>	Исследуйте и купите любую машину VI уровня.	</ru>
-          <en>	Research and purchase any Tier VI vehicle.	</en>
         </description>
         <preBattle>
           <account>
@@ -1282,16 +1233,13 @@
       <id>	battle_matters_21	</id>
       <name>
         <ru>	Личные боевые задачи	</ru>
-        <en>	Personal Missions	</en>
       </name>
       <description>
         <ru>	Кампании — это цепочки задач для разных типов техники, выполнение которых гарантирует получение наград и уникальных машин.	</ru>
-        <en>	Campaigns are chains of missions for different types of vehicles. When completed, you can obtain useful rewards and unique vehicles.	</en>
       </description>
       <conditions>
         <description>
           <ru>	Выполните одну из личных боевых задач в рамках Кампании.	</ru>
-          <en>	Complete one Personal Mission in any campaign.	</en>
         </description>
         <preBattle>
           <account>
@@ -1338,16 +1286,13 @@
       <id>	battle_matters_22	</id>
       <name>
         <ru>	Учебные материалы	</ru>
-        <en>	Crew Books	</en>
       </name>
       <description>
         <ru>	С помощью учебных материалов можно значительно ускорить обучение экипажа, добавив определённое количество опыта одному или всем его членам.	</ru>
-        <en>	Crew Books allow you to significantly accelerate crew training by adding a certain amount of XP to one or all crew members.	</en>
       </description>
       <conditions>
         <description>
           <ru>	Обучите экипаж с помощью универсального учебного пособия.	</ru>
-          <en>	Train a crew with a Universal Manual.	</en>
         </description>
         <preBattle>
           <account>
@@ -1386,16 +1331,13 @@
       <id>	battle_matters_23	</id>
       <name>
         <ru>	Инструкции для экипажа	</ru>
-        <en>	Directives for Crew	</en>
       </name>
       <description>
         <ru>	Инструкциями можно усилить навыки экипажа на один бой. Как и снаряжение, их можно купить или получить в награду.	</ru>
-        <en>	Directives can improve crew perks for one battle. Like consumables, directives can be purchased or received as a reward.	</en>
       </description>
       <conditions>
         <description>
           <ru>	Проведите 10 Cлучайных боёв на технике VI–XI уровней с установленной предбоевой инструкцией для экипажа.	</ru>
-          <en>	Fight 10 Random Battles in Tier VI–XI vehicles equipped with a directive for crew.	</en>
         </description>
         <preBattle>
           <battle>
@@ -1499,16 +1441,13 @@
       <id>	battle_matters_24	</id>
       <name>
         <ru>	Магазин	</ru>
-        <en>	Store	</en>
       </name>
       <description>
         <ru>	В Магазине можно купить всё необходимое: золото, премиум технику и т.д. Регулярные акции позволят найти особо выгодные предложения.	</ru>
-        <en>	In the in-game Store, you can purchase everything you need, including gold, Premium vehicles, and more. There are regular promotions that offer great deals.	</en>
       </description>
       <conditions>
         <description>
           <ru>	Купите специальный набор новобранца в Магазине.	</ru>
-          <en>	Purchase a special Rookie Bundle in the in-game Store.	</en>
         </description>
         <preBattle>
           <account>
@@ -1549,16 +1488,13 @@
       <id>	battle_matters_25	</id>
       <name>
         <ru>	Премиум техника	</ru>
-        <en>	Premium Vehicles	</en>
       </name>
       <description>
-        <ru>	Эту технику не нужно исследовать, она приносит больше боевого опыта, опыта экипажа и кредитов, а пересадка экипажа не требует его переобучения.	</ru>
-        <en>	These vehicles do not need to be researched. They earn more Combat XP, Crew XP, and credits, and they allow you to transfer a crew without retraining.	</en>
+        <ru>	Эту технику не нужно исследовать, она приносит больше боевого опыта, опыта экипажа и серебра, а пересадка экипажа не требует его переобучения.	</ru>
       </description>
       <conditions>
         <description>
           <ru>	Проведите 10 Cлучайных боёв на премиум машине VI–XI уровня.	</ru>
-          <en>	Fight 10 Random Battles in Tier VI–XI Premium vehicles.	</en>
         </description>
         <preBattle>
           <battle>
@@ -1611,16 +1547,13 @@
       <id>	battle_matters_26	</id>
       <name>
         <ru>	Инструкции к оборудованию	</ru>
-        <en>	Directives for Equipment	</en>
       </name>
       <description>
         <ru>	Инструкциями можно повысить эффективность установленного оборудования. Как и снаряжение, их можно купить или получить в награду.	</ru>
-        <en>	Directives allow you to increase the effectiveness of mounted equipment. Like consumables, directives can be purchased or received as a reward.	</en>
       </description>
       <conditions>
         <description>
           <ru>	Проведите 10 Cлучайных боёв на технике VI–XI уровней с установленной предбоевой инструкцией к оборудованию.	</ru>
-          <en>	Fight 10 Random Battles in Tier VI–XI vehicles with a directive for equipment.	</en>
         </description>
         <preBattle>
           <battle>
@@ -1674,16 +1607,13 @@
       <id>	battle_matters_27	</id>
       <name>
         <ru>	15 задач на x5 опыта	</ru>
-        <en>	15 Missions for ×5 XP	</en>
       </name>
       <description>
         <ru>	Эти задачи позволят за каждый успешный бой получить в 5 раз больше опыта. Для этого нужно победить и войти в топ-10 своей команды по опыту.	</ru>
-        <en>	These missions allow you to earn 5 times more XP per successful battle. For this, you need to win and be among the top 10 players on your team by XP earned.	</en>
       </description>
       <conditions>
         <description>
           <ru>	Попадите в топ-10 своей команды по заработанному опыту 15 раз в Cлучайных победных боях на технике VI–XI уровней.	</ru>
-          <en>	Be among the top 10 on your team by XP earned 15 times in victorious Random Battles in Tier VI–XI vehicles.	</en>
         </description>
         <preBattle>
           <battle>
@@ -1735,16 +1665,13 @@
       <id>	battle_matters_28	</id>
       <name>
         <ru>	Машина VII уровня	</ru>
-        <en>	Tier VII Vehicle	</en>
       </name>
       <description>
         <ru>	На этом уровне техники требования к мастерству повышаются ещё больше: машины становятся более грозными и эффективными, как и ваши соперники.	</ru>
-        <en>	For this vehicle tier, the skill requirements increase even more. Vehicles become more formidable and more efficient—just like your opponents.	</en>
       </description>
       <conditions>
         <description>
           <ru>	Исследуйте и купите любую машину VII уровня.	</ru>
-          <en>	Research and purchase any Tier VII vehicle.	</en>
         </description>
         <preBattle>
           <account>
@@ -1798,17 +1725,14 @@
       <id>	battle_matters_29	</id>
       <name>
         <ru>	Большое снаряжение	</ru>
-        <en>	Large Consumables	</en>
       </name>
       <description>
         <ru>	Большое снаряжение обладает пассивными бонусами, ускоряющими ремонт модулей, уменьшающими вероятности пожара и ранения экипажа.	</ru>
-        <en>	Large consumables can repair all damaged modules at once, treat all injured crew members, or automatically extinguish a fire.	</en>
         <be>	Вялікі рыштунак валодае пасіўнымі бонусамі, якія паскараюць рамонт модуляў і памяншаюць імавернасць пажару і ранення экіпажа.	</be>
       </description>
       <conditions>
         <description>
           <ru>	Проведите 10 Cлучайных боёв на технике VII–XI уровней с Большой аптечкой, Большим ремкомплектом и Автоматическим огнетушителем.	</ru>
-          <en>	Fight 10 Random Battles in Tier VII–XI vehicles with a Large First Aid Kit, Large Repair Kit, and Automatic Fire Extinguisher.	</en>
         </description>
         <preBattle>
           <battle>
@@ -1893,6 +1817,10 @@
           <compDescr>	65442	</compDescr>
           <count>	3	</count>
         </blueprint>
+        <blueprint>
+          <compDescr>	65458	</compDescr>
+          <count>	3	</count>
+        </blueprint>
         <token>
           <id>	battle_matters_30_unlock	</id>
           <expires>	01.02.2050 00:00	</expires>
@@ -1905,16 +1833,13 @@
       <id>	battle_matters_30	</id>
       <name>
         <ru>	Чертежи техники	</ru>
-        <en>	Vehicle Blueprints	</en>
       </name>
       <description>
         <ru>	Чертежи дают скидку в опыте и ускоряют исследование машины. Их можно получить в награду или создать из национальных и универсальных фрагментов.	</ru>
-        <en>	Blueprints provide a discount in XP and speed up research on a vehicle. They can be received as a reward or converted from universal and national fragments.	</en>
       </description>
       <conditions>
         <description>
           <ru>	Создайте фрагмент чертежа любой неисследованной машины.	</ru>
-          <en>	Create a blueprint fragment for any unresearched vehicle.	</en>
         </description>
         <preBattle>
           <account>
@@ -1992,16 +1917,13 @@
       <showPostBattleStat>	True	</showPostBattleStat>
       <name>
         <ru>	20 задач на x5 опыта	</ru>
-        <en>	20 Missions for ×5 XP	</en>
       </name>
       <description>
         <ru>	Эти задачи позволят за каждый успешный бой получить в 5 раз больше опыта. Для этого нужно победить и войти в топ-10 своей команды по опыту.	</ru>
-        <en>	These missions allow you to earn 5 times more XP per successful battle. For this, you need to win and be among the top 10 players on your team by XP earned.	</en>
       </description>
       <conditions>
         <description>
           <ru>	Попадите в топ-10 своей команды по заработанному опыту 20 раз в Cлучайных победных боях на технике VII–XI уровней.	</ru>
-          <en>	Be among the top 10 on your team by XP earned 20 times in victorious Random Battles in Tier VII–XI vehicles.	</en>
         </description>
         <preBattle>
           <battle>
@@ -2053,16 +1975,13 @@
       <id>	battle_matters_32	</id>
       <name>
         <ru>	Машина VIII уровня	</ru>
-        <en>	Tier VIII Vehicle	</en>
       </name>
       <description>
         <ru>	Техника VIII уровня требует применения всех полученных знаний. Противники не дадут скучать, но позволят получить самые яркие эмоции от игры и бесценный опыт.	</ru>
-        <en>	Tier VIII vehicles require you to use all your gained knowledge. Enemies will not let you get bored, providing high-octane thrills and invaluable experience.	</en>
       </description>
       <conditions>
         <description>
           <ru>	Исследуйте и купите любую машину VIII уровня.	</ru>
-          <en>	Research and purchase any Tier VIII vehicle.	</en>
         </description>
         <preBattle>
           <account>

@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/lobby/SearchContactView.py
+from gui.Scaleform.daapi.view.meta.SearchContactViewMeta import SearchContactViewMeta
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from helpers import i18n
 from messenger.gui.Scaleform.data.search_data_providers import SearchUsersDataProvider
-from messenger.gui.Scaleform.meta.SearchContactViewMeta import SearchContactViewMeta
 from messenger.gui.Scaleform.view.lobby import ACCOUNT_NAME_MIN_CHARS_LENGTH, ACCOUNT_NAME_MAX_CHARS_LENGTH
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter

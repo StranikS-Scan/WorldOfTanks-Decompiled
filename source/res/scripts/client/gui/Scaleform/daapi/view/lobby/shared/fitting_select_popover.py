@@ -245,6 +245,8 @@ class PopoverLogicProvider(object):
         self._needToResetTurboshaft = False
         self._needToResetRocketAcceleration = False
         self._needToResetDualAccuracy = False
+        self._needToResetAutoReloadDualGun = False
+        self._needToResetClipDualGun = False
         self.__moduleExtenders = fittingSelectModuleExtenders()
         return
 
@@ -276,14 +278,18 @@ class PopoverLogicProvider(object):
     def resetCounters(self):
         if self._needToResetAutoReload:
             self._settingsCore.serverSettings.saveInUIStorage({UI_STORAGE_KEYS.AUTO_RELOAD_MARK_IS_SHOWN: True})
-        elif self._needToResetDualGun:
+        if self._needToResetDualGun:
             self._settingsCore.serverSettings.saveInUIStorage({UI_STORAGE_KEYS.DUAL_GUN_MARK_IS_SHOWN: True})
-        elif self._needToResetTurboshaft:
+        if self._needToResetTurboshaft:
             self._settingsCore.serverSettings.saveInUIStorage({UI_STORAGE_KEYS.TURBOSHAFT_MARK_IS_SHOWN: True})
-        elif self._needToResetRocketAcceleration:
+        if self._needToResetRocketAcceleration:
             self._settingsCore.serverSettings.saveInUIStorage2({UI_STORAGE_KEYS.ROCKET_ACCELERATION_MARK_IS_SHOWN: True})
-        elif self._needToResetDualAccuracy:
+        if self._needToResetDualAccuracy:
             self._settingsCore.serverSettings.saveInUIStorage2({UI_STORAGE_KEYS.DUAL_ACCURACY_MARK_IS_SHOWN: True})
+        if self._needToResetAutoReloadDualGun:
+            self._settingsCore.serverSettings.saveInUIStorage2({UI_STORAGE_KEYS.AUTO_RELOAD_DUAL_GUN_MARK_IS_SHOWN: True})
+        if self._needToResetClipDualGun:
+            self._settingsCore.serverSettings.saveInUIStorage2({UI_STORAGE_KEYS.CLIP_DUAL_GUN_MARK_IS_SHOWN: True})
 
     def _checkCounters(self, vehicleModule):
         if vehicleModule.itemTypeID == GUI_ITEM_TYPE.GUN:
@@ -293,6 +299,10 @@ class PopoverLogicProvider(object):
                 self._needToResetDualGun = True
             elif not self._needToResetDualAccuracy and vehicleModule.hasDualAccuracy(self._vehicle.descriptor):
                 self._needToResetDualAccuracy = True
+            elif not self._needToResetAutoReloadDualGun and vehicleModule.isAutoReloadableDualGun(self._vehicle.descriptor):
+                self._needToResetAutoReloadDualGun = True
+            elif not self._needToResetClipDualGun and vehicleModule.isClipDualGun(self._vehicle.descriptor):
+                self._needToResetClipDualGun = True
         elif vehicleModule.itemTypeID == GUI_ITEM_TYPE.ENGINE:
             if not self._needToResetTurboshaft and vehicleModule.hasTurboshaftEngine():
                 self._needToResetTurboshaft = True

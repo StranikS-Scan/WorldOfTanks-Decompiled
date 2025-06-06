@@ -242,10 +242,6 @@
       <Flags>	BASE_AND_CLIENT	</Flags>
       <ExposedForReplay>	true	</ExposedForReplay>
     </goodiesSnapshot>
-    <hbDivisionData>
-      <Type>	PYTHON	</Type>
-      <Flags>	CELL_PRIVATE	</Flags>
-    </hbDivisionData>
   </Properties>
   <TempProperties>
     <_Avatar__p></_Avatar__p>
@@ -303,6 +299,17 @@
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	VECTOR3	</Arg>
     </onSwitchViewpoint>
+    <addArtilleryShotZone>
+      <Arg>	UINT64	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+    </addArtilleryShotZone>
+    <removeArtilleryShotZone>
+      <Arg>	UINT64	</Arg>
+    </removeArtilleryShotZone>
     <onBootcampEvent>
       <Arg>	ARRAY	  <of>	UINT64	</of>
       </Arg>
@@ -506,16 +513,6 @@
     <setUpdatedGoodiesSnapshot>
       <Arg>	BATTLE_GOODIES_LIST	</Arg>
     </setUpdatedGoodiesSnapshot>
-    <sendPlayerBattleLogNotification>
-      <Arg>	STRING	</Arg>
-      <Arg>	PYTHON	</Arg>
-      <AllowUnsafeData>	true	</AllowUnsafeData>
-    </sendPlayerBattleLogNotification>
-    <sendEquipmentBattleLogNotification>
-      <Arg>	UINT32	</Arg>
-      <Arg>	STRING	</Arg>
-      <Arg>	BOOL	</Arg>
-    </sendEquipmentBattleLogNotification>
   </ClientMethods>
   <CellMethods>
     <autoAim>

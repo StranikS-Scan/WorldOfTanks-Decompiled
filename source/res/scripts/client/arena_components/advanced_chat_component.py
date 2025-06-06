@@ -540,9 +540,7 @@ class AdvancedChatComponent(ClientArenaComponent):
          BATTLE_CHAT_COMMAND_NAMES.CONFIRM,
          BATTLE_CHAT_COMMAND_NAMES.POSITIVE,
          BATTLE_CHAT_COMMAND_NAMES.SOS,
-         BATTLE_CHAT_COMMAND_NAMES.HELPME,
-         BATTLE_CHAT_COMMAND_NAMES.HB_ARTILLERY_ON_YOURSELF,
-         BATTLE_CHAT_COMMAND_NAMES.HB_LAST_STAND)
+         BATTLE_CHAT_COMMAND_NAMES.HELPME)
         if cmd.isPrivate() and (cmd.isReceiver() or cmd.isSender()):
             vMarker = cmd.getVehMarker()
             if vMarker and senderID:

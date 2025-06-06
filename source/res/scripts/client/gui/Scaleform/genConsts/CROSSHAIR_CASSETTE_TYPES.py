@@ -1,0 +1,15 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
+# Embedded file name: scripts/client/gui/Scaleform/genConsts/CROSSHAIR_CASSETTE_TYPES.py
+
+
+class CROSSHAIR_CASSETTE_TYPES(object):
+    NO_CASSETTE = 0
+    CASSETTE = 1
+    AUTOLOADER = 2
+    MULTIPLE_BARREL_CASSETTE = 3
+    MULTIPLE_BARREL_AUTOLOADER = 4
+    CASSETTE_TYPES = [NO_CASSETTE,
+     CASSETTE,
+     AUTOLOADER,
+     MULTIPLE_BARREL_CASSETTE,
+     MULTIPLE_BARREL_AUTOLOADER]

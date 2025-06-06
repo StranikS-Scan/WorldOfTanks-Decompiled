@@ -26,7 +26,8 @@ class BitMaskBase(Block, BitMaskMeta):
         super(BitMaskBase, self).__init__(*args, **kwargs)
         self._flags = []
         flagsCount, bitMaskType = self._getInitParams()
-        self._inFlags = {name:value for name, value in self._MASK_TYPES[bitMaskType].__dict__.iteritems() if not name.startswith('_')}
+        type = self._MASK_TYPES[bitMaskType]
+        self._inFlags = {name:getattr(type, name) for name, value in type.__dict__.iteritems() if not name.startswith('_')}
         for _ in xrange(flagsCount):
             self._addInputNode()
 

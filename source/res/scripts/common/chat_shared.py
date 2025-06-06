@@ -361,10 +361,7 @@ CHAT_COMMANDS = Enumeration('chatCommands', [('initAck', {'chnlCmd': 0}),
  (BATTLE_CHAT_COMMAND_NAMES.SHOOTING_POINT, {'battleCmd': 1}),
  (BATTLE_CHAT_COMMAND_NAMES.NAVIGATION_POINT, {'battleCmd': 1}),
  (BATTLE_CHAT_COMMAND_NAMES.FLAG_POINT, {'battleCmd': 1}),
- (BATTLE_CHAT_COMMAND_NAMES.OVERHEAT_CANT_SHOOT, {'battleCmd': 1}),
- (BATTLE_CHAT_COMMAND_NAMES.OBJECTIVES_POINT, {'battleCmd': 1}),
- (BATTLE_CHAT_COMMAND_NAMES.HB_ARTILLERY_ON_YOURSELF, {'battleCmd': 1}),
- (BATTLE_CHAT_COMMAND_NAMES.HB_LAST_STAND, {'battleCmd': 1})], instance=AttributeEnumItem)
+ (BATTLE_CHAT_COMMAND_NAMES.OVERHEAT_CANT_SHOOT, {'battleCmd': 1})], instance=AttributeEnumItem)
 CHAT_MEMBER_STATUSES = Enumeration('chatMemberStatuses', ['available', 'inBattle'])
 CHAT_MEMBER_BAN_TYPE = Enumeration('chatMemberBanType', ['none', 'readonly', 'full'])
 CHAT_MEMBER_ROLE = Enumeration('chatMemberRole', ['member', 'visitor', 'moderator'])

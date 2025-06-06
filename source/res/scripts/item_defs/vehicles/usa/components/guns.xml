@@ -183,6 +183,7 @@
     <_40mm_M7_6E2_flamegun>	31018	</_40mm_M7_6E2_flamegun>
     <_40mm_T13E3_flamegun_T>	31019	</_40mm_T13E3_flamegun_T>
     <_120mm_Gun_M58A_T>	31007	</_120mm_Gun_M58A_T>
+    <_240mm_Howitzer_M1_T>	35002	</_240mm_Howitzer_M1_T>
   </ids>
   <shared>
     <_12.7mm_MG_HB_M2>
@@ -9484,6 +9485,59 @@
         </_240mm_M114_M78>
       </shots>
     </_240mm_Howitzer_M1>
+    <_240mm_Howitzer_M1_T>
+      <userString>	#usa_vehicles:_240mm_Howitzer_M1_T	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	350000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.88	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.3	</amplitude>
+        <recoilEffect>	huge	</recoilEffect>
+      </recoil>
+      <effects>	shot_superhuge	</effects>
+      <reloadEffect>	reload155_170	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -45.0 1.0 -45.0	</minPitch>
+        <maxPitch>	0.0 0.0 1.0 0.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	17.5	</rotationSpeed>
+      <reloadTime>	46.8	</reloadTime>
+      <maxAmmo>	20	</maxAmmo>
+      <aimingTime>	7.42857142857143	</aimingTime>
+      <weight>	11385	</weight>
+      <maxHealth>	288	</maxHealth>
+      <maxRegenHealth>	144	</maxRegenHealth>
+      <repairCost>	12	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.617142857142857	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.61	</turretRotation>
+        <afterShot>	6.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_240mm_HE_M146_T>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	450	</speed>
+          <gravity>	144	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	60 60	</piercingPower>
+          <maxHeight>	441	</maxHeight>
+        </_240mm_HE_M146_T>
+        <_240mm_M114_M78_T>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	270	</speed>
+          <gravity>	52	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	319 224	</piercingPower>
+          <maxHeight>	635	</maxHeight>
+        </_240mm_M114_M78_T>
+      </shots>
+    </_240mm_Howitzer_M1_T>
     <_76mm_Gun_T185E_IGR>
       <userString>	#igr_vehicles:_76mm_Gun_T185E_IGR	</userString>
       <tags></tags>

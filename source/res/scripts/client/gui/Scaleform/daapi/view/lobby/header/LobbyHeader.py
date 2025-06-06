@@ -529,7 +529,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             self.as_disableFightButtonS(self.__isFightBtnDisabled)
         self.__updateUiEffectsState()
         g_eventBus.addListener(LobbySimpleEvent.HANGAR_STATUS_CHANGED, self.__onHangarStatusChanged, scope=EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.addListener(LobbySimpleEvent.ON_GET_VISIBILITY_MENU_STATE, self.__onGetVisibilityMenuState, scope=EVENT_BUS_SCOPE.LOBBY)
         self._onPopulateEnd()
 
     def _invalidate(self, *args, **kwargs):
@@ -543,7 +542,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self._removeListeners()
         self.__clearMenuVisibiliby()
         g_eventBus.removeListener(LobbySimpleEvent.HANGAR_STATUS_CHANGED, self.__onHangarStatusChanged, scope=EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.removeListener(LobbySimpleEvent.ON_GET_VISIBILITY_MENU_STATE, self.__onGetVisibilityMenuState, scope=EVENT_BUS_SCOPE.LOBBY)
         super(LobbyHeader, self)._dispose()
 
     def _canShowWotPlus(self):
@@ -1782,9 +1780,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
 
     def __onHangarStatusChanged(self, event):
         self.__updateUiEffectsState(not event.ctx.get('isVisible', False))
-
-    def __onGetVisibilityMenuState(self, event):
-        event.ctx['visibilityMenuState'] = self.__menuVisibilityHelper.getActiveState()
 
 
 class _BoosterInfoPresenter(object):

@@ -13,14 +13,16 @@ from PlayerEvents import g_playerEvents
 from ReplayEvents import g_replayEvents
 from account_helpers.settings_core.settings_constants import GRAPHICS, AIM, GAME, SPGAim, MARKERS
 from aih_constants import CHARGE_MARKER_STATE, CTRL_MODE_NAME as CTRL_MODE
-from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, DUALGUN_CHARGER_STATUS, SERVER_TICK_LENGTH
+from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, DUALGUN_CHARGER_STATUS, SERVER_TICK_LENGTH, DUAL_GUN
 from debug_utils import LOG_WARNING
 from gui import makeHtmlString, GUI_SETTINGS
 from gui.Scaleform.daapi.view.battle.shared.crosshair.settings import SHOT_RESULT_TO_ALT_COLOR
 from gui.Scaleform.daapi.view.battle.shared.crosshair.settings import SHOT_RESULT_TO_DEFAULT_COLOR
 from gui.Scaleform.daapi.view.battle.shared.formatters import getHealthPercent
+from gui.Scaleform.daapi.view.battle.shared.helper import getClipType
 from gui.Scaleform.daapi.view.battle.shared.timers_common import PythonTimer
 from gui.Scaleform.genConsts.AUTOLOADERBOOSTVIEWSTATES import AUTOLOADERBOOSTVIEWSTATES
+from gui.Scaleform.genConsts.CROSSHAIR_CASSETTE_TYPES import CROSSHAIR_CASSETTE_TYPES
 from gui.Scaleform.genConsts.CROSSHAIR_CONSTANTS import CROSSHAIR_CONSTANTS
 from gui.Scaleform.genConsts.DUAL_GUN_MARKER_STATE import DUAL_GUN_MARKER_STATE
 from gui.Scaleform.genConsts.GUN_MARKER_VIEW_CONSTANTS import GUN_MARKER_VIEW_CONSTANTS as _VIEW_CONSTANTS
@@ -440,16 +442,21 @@ class _PythonAutoReloadProxy(_ReloadingAnimationsProxy):
 
 
 class AmmoPlugin(CrosshairPlugin):
-    __slots__ = ('__guiSettings', '__burstSize', '__shellsInClip', '__autoReloadCallbackID', '__autoReloadSnapshot', '__scaledInterval', '__reloadAnimator', '__isShowingAutoloadingBoost')
+    __slots__ = ('__guiSettings', '__burstSize', '__shells', '__shellsInClip', '__shellSetResult', '__autoReloadCallbackID', '__autoReloadSnapshot', '__scaledInterval', '__reloadAnimator', '__isShowingAutoloadingBoost', '__dualGunIsApplied', '__clipType')
+    _AUTOLOADER_ANIMATION_STATIC_TIME = 0.5
 
     def __init__(self, parentObj):
         super(AmmoPlugin, self).__init__(parentObj)
         self.__guiSettings = None
+        self.__shells = 0
         self.__shellsInClip = 0
+        self.__shellSetResult = 0
+        self.__clipType = CROSSHAIR_CASSETTE_TYPES.NO_CASSETTE
         self.__autoReloadCallbackID = None
         self.__autoReloadSnapshot = None
         self.__reloadAnimator = None
         self.__isShowingAutoloadingBoost = True
+        self.__dualGunIsApplied = False
         self.__scaledInterval = None
         return
 
@@ -467,8 +474,10 @@ class AmmoPlugin(CrosshairPlugin):
         ctrl.onShellsUpdated += self.__onShellsUpdated
         ctrl.onCurrentShellChanged += self.__onCurrentShellChanged
         ctrl.onCurrentShellReset += self.__onCurrentShellReset
+        ctrl.onDebuffFinished += self.__onDebuffFinished
         ctrl.onShellChangeTimeUpdated += self.__onShellChangeTimeUpdated
         vehStateCtrl.onVehicleControlling += self.__onVehicleControlling
+        vehStateCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
         g_replayEvents.onPause += self.__onReplayPaused
         return
 
@@ -489,8 +498,10 @@ class AmmoPlugin(CrosshairPlugin):
             ctrl.onShellsUpdated -= self.__onShellsUpdated
             ctrl.onCurrentShellChanged -= self.__onCurrentShellChanged
             ctrl.onCurrentShellReset -= self.__onCurrentShellReset
+            ctrl.onDebuffFinished -= self.__onDebuffFinished
         g_replayEvents.onPause -= self.__onReplayPaused
         if vehStateCtrl is not None:
+            vehStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
             vehStateCtrl.onVehicleControlling -= self.__onVehicleControlling
         return
 
@@ -532,7 +543,12 @@ class AmmoPlugin(CrosshairPlugin):
     def __setupGuiSettings(self, gunSettings):
         guiSettings = _createAmmoSettings(gunSettings)
         self.__guiSettings = guiSettings
-        self._parentObj.as_setClipParamsS(guiSettings.getClipCapacity(), guiSettings.getBurstSize(), guiSettings.hasAutoReload)
+        self.__clipType = getClipType(gunSettings)
+        clipCapacity = guiSettings.getClipCapacity()
+        qtyGuns = gunSettings.getQtyGuns()
+        if qtyGuns > 1:
+            clipCapacity = max(0, clipCapacity - qtyGuns)
+        self._parentObj.as_setClipParamsS(clipCapacity, guiSettings.getBurstSize(), self.__clipType)
 
     def __onGunReloadCleared(self, state):
         self.__setReloadingState(state)
@@ -543,24 +559,37 @@ class AmmoPlugin(CrosshairPlugin):
             self.__notifyAutoLoader(state)
 
     def __notifyAutoLoader(self, state):
-        actualTime = state.getActualValue()
-        baseTime = state.getBaseValue()
-        if self.__shellsInClip <= 0 and state.isReloading():
-            timeGone = baseTime - actualTime
-            clipInterval = self.__guiSettings.getClipInterval()
-            if clipInterval > timeGone:
-                actualTime = clipInterval - timeGone
-                baseTime = clipInterval
-                if self.__autoReloadCallbackID is not None:
-                    BigWorld.cancelCallback(self.__autoReloadCallbackID)
-                self.__autoReloadCallbackID = BigWorld.callback(actualTime, self.__autoReloadFirstShellCallback)
-                self.__scaledInterval = clipInterval
-            else:
-                self.__reloadAnimator.setClipAutoLoading(actualTime, self.__reCalcFirstShellAutoReload(baseTime), isTimerOn=True, isRedText=True)
-                actualTime = baseTime = 0
-            self.__autoReloadSnapshot = state
-        self.__reloadAnimator.setShellLoading(actualTime, baseTime)
-        return
+        if self.__clipType == CROSSHAIR_CASSETTE_TYPES.MULTIPLE_BARREL_AUTOLOADER:
+            return
+        else:
+            actualTime = state.getActualValue()
+            baseTime = state.getBaseValue()
+            if self.__shellsInClip <= 0 and state.isReloading():
+                timeGone = baseTime - actualTime
+                clipInterval = self.__guiSettings.getClipInterval()
+                if clipInterval > timeGone:
+                    actualTime = clipInterval - timeGone
+                    baseTime = clipInterval
+                    if self.__autoReloadCallbackID is not None:
+                        BigWorld.cancelCallback(self.__autoReloadCallbackID)
+                    self.__autoReloadCallbackID = BigWorld.callback(actualTime, self.__autoReloadFirstShellCallback)
+                    self.__scaledInterval = clipInterval
+                else:
+                    self.__reloadAnimator.setClipAutoLoading(actualTime, self.__reCalcFirstShellAutoReload(baseTime), isTimerOn=True, isRedText=True)
+                    actualTime = baseTime = 0
+                self.__autoReloadSnapshot = state
+            if self.__clipType != CROSSHAIR_CASSETTE_TYPES.MULTIPLE_BARREL_AUTOLOADER:
+                self.__reloadAnimator.setShellLoading(actualTime, baseTime)
+            return
+
+    def __onDualGunStateUpdated(self, value):
+        if self.__clipType != CROSSHAIR_CASSETTE_TYPES.MULTIPLE_BARREL_AUTOLOADER:
+            return
+        _, times, _ = value
+        if times[DUAL_GUN.COOLDOWNS.LEFT].baseTime == times[DUAL_GUN.COOLDOWNS.LEFT].leftTime or times[DUAL_GUN.COOLDOWNS.RIGHT].baseTime == times[DUAL_GUN.COOLDOWNS.RIGHT].leftTime or times[DUAL_GUN.COOLDOWNS.SWITCH].baseTime == times[DUAL_GUN.COOLDOWNS.SWITCH].leftTime and self.__shellsInClip > 0:
+            actualTime = baseTime = self._AUTOLOADER_ANIMATION_STATIC_TIME
+            self.__reloadAnimator.setShellLoading(actualTime, baseTime)
+            self.__setShells()
 
     def __autoReloadFirstShellCallback(self):
         timeLeft = min(self.__autoReloadSnapshot.getTimeLeft(), self.__autoReloadSnapshot.getActualValue())
@@ -611,13 +640,37 @@ class AmmoPlugin(CrosshairPlugin):
         return result
 
     def __onShellsUpdated(self, _, quantity, quantityInClip, result):
-        if not result & SHELL_SET_RESULT.CURRENT:
-            return
+        self.__shells = quantity
         self.__shellsInClip = quantityInClip
-        state = self.__guiSettings.getState(quantity, quantityInClip)
-        self._parentObj.as_setAmmoStockS(quantity, quantityInClip, state, result & SHELL_SET_RESULT.CASSETTE_RELOAD > 0)
-        if quantity + quantityInClip == 0:
-            self.__reloadAnimator.setClipAutoLoading(0, 0, isRedText=True)
+        self.__shellSetResult = result
+        self.__setShells()
+
+    def __onDebuffFinished(self):
+        self.__dualGunIsApplied = False
+        self.__setShells()
+
+    def __onVehicleStateUpdated(self, stateID, value):
+        if stateID == VEHICLE_VIEW_STATE.DUAL_GUN_CHARGER:
+            self.__onDualGunChargeStateUpdated(value)
+        elif stateID == VEHICLE_VIEW_STATE.DUAL_GUN_STATE_UPDATED:
+            self.__onDualGunStateUpdated(value)
+
+    def __onDualGunChargeStateUpdated(self, value):
+        status, _ = value
+        self.__dualGunIsApplied = status == DUALGUN_CHARGER_STATUS.APPLIED
+
+    def __setShells(self):
+        if self.__dualGunIsApplied or not self.__shellSetResult & SHELL_SET_RESULT.CURRENT:
+            return
+        state = self.__guiSettings.getState(self.__shells, self.__shellsInClip)
+        quantityInClip = self.__shellsInClip
+        ammo = self.sessionProvider.shared.ammo
+        if ammo.getGunSettings().isMultiGun():
+            shellsInGuns = ammo.getShellsInGuns()
+            quantityInClip = max(0, self.__shellsInClip - shellsInGuns)
+        self._parentObj.as_setAmmoStockS(self.__shells, quantityInClip, state, self.__shellSetResult & SHELL_SET_RESULT.CASSETTE_RELOAD > 0)
+        if self.__shells + quantityInClip == 0:
+            self.__reloadAnimator.setClipAutoLoading(0, 0, isTimerOn=True, isRedText=True)
 
     def __onCurrentShellChanged(self, _):
         ctrl = self.sessionProvider.shared.ammo

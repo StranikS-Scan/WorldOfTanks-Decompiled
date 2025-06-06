@@ -36,6 +36,7 @@ class PersonalMissionsLastOperationTooltip(ViewImpl):
         model.setName(i18n.makeString('#personal_missions:operations/title%d' % 11))
         model.setAll(len(ctrl.getFinalQuests()))
         model.setCompleted(len(ctrl.getFullCompletedFinalQuests()))
+        model.setVehicleName(i18n.makeString('#personal_missions:operations/lastOperationTankName'))
         array = model.getRewards()
         for item in rewards:
             nextModel = Pm3LastOperationTooltipRewardsModel()

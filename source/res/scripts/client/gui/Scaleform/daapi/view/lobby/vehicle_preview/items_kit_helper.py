@@ -320,6 +320,8 @@ def getItemTitle(rawItem, item, forBox=False, additionalInfo=False):
         title = backport.text(getCollectionRes(rawItem.id).anyCollectionItem.tooltip.header())
     elif rawItem.type == ItemPackType.CUSTOM_BERTHS:
         title = backport.text(R.strings.tooltips.awardItem.berths.header())
+    elif rawItem.type == ItemPackType.CUSTOM_BUMBLEE_COIN:
+        title = _ms(TOOLTIPS.AWARDITEM_BUMBLEBEE_COIN_HEADER)
     else:
         title = rawItem.title or ''
     return title
@@ -370,6 +372,8 @@ def getItemDescription(rawItem, item):
         description = backport.text(getCollectionRes(rawItem.id).anyCollectionItem.tooltip.body())
     elif rawItem.type == ItemPackType.CUSTOM_BERTHS:
         description = backport.text(R.strings.tooltips.awardItem.berths.body())
+    elif rawItem.type == ItemPackType.CUSTOM_BUMBLEE_COIN:
+        description = _ms(TOOLTIPS.AWARDITEM_BUMBLEBEE_COIN_BODY)
     else:
         description = rawItem.description or ''
     return description

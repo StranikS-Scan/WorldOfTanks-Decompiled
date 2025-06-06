@@ -2461,6 +2461,60 @@
       </damage>
     </armorSpalls>
   </_120mm_OE_mle_1951>
+  <_120mm_OP_1943>
+    <id>	31016	</id>
+    <userString>	#france_vehicles:_120mm_OP_1943	</userString>
+    <icon>	ap	</icon>
+    <price>	1060	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_120mm_OP_1943>
+  <_120mm_OCC_M469>
+    <id>	31017	</id>
+    <userString>	#france_vehicles:_120mm_OCC_M469	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_120mm_OCC_M469>
+  <_120mm_OE_1930>
+    <id>	31018	</id>
+    <userString>	#france_vehicles:_120mm_OE_1930	</userString>
+    <icon>	he_modern	</icon>
+    <price>	900	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	120	</caliber>
+    <explosionRadius>	2.42	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	515	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.42	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	260	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
+  </_120mm_OE_1930>
   <_127mm_Capped_Common_Semi_AP>
     <id>	124	</id>
     <userString>	#france_vehicles:_127mm_Capped_Common_Semi_AP	</userString>
@@ -2734,6 +2788,66 @@
       <devices>	100	</devices>
     </damage>
   </_155mm_AP_M112>
+  <_155mm_OE_M101M4_T>
+    <id>	35000	</id>
+    <userString>	#france_vehicles:_155mm_OE_M101M4_T	</userString>
+    <icon>	he_spg_stun	</icon>
+    <price>	1120	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	155	</caliber>
+    <explosionRadius>	7.5	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	7	</stunDuration>
+    <stunType>	ARTILLERY_REWORK	</stunType>
+    <isTracer>	true	</isTracer>
+    <effects>	hugeSH_artillery	</effects>
+    <damage>
+      <armor>	800	</armor>
+      <devices>	105	</devices>
+    </damage>
+    <deviceDamagePossibility>
+      <protectFromIndirectHits>	internal tankmen	</protectFromIndirectHits>
+    </deviceDamagePossibility>
+    <delayedBomb>
+      <explosionDelay>	0	</explosionDelay>
+      <isDestroyAvailable>	False	</isDestroyAvailable>
+      <isDestroyWithExplosion>	False	</isDestroyWithExplosion>
+      <size>	0	</size>
+      <isProximityEnabled>	False	</isProximityEnabled>
+      <underWaterDelta>	0	</underWaterDelta>
+      <isShotZoneVisible>	True	</isShotZoneVisible>
+      <isOwnShotZoneVisible>	False	</isOwnShotZoneVisible>
+    </delayedBomb>
+  </_155mm_OE_M101M4_T>
+  <_155mm_OE_M101M6_T>
+    <id>	35001	</id>
+    <userString>	#france_vehicles:_155mm_OE_M101M6_T	</userString>
+    <icon>	he_spg	</icon>
+    <price>	1330	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	155	</caliber>
+    <explosionRadius>	4	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	hugeSF	</effects>
+    <damage>
+      <armor>	830	</armor>
+      <devices>	105	</devices>
+    </damage>
+  </_155mm_OE_M101M6_T>
+  <_155mm_AP_M112_T>
+    <id>	35002	</id>
+    <userString>	#france_vehicles:_155mm_AP_M112_T	</userString>
+    <icon>	ap	</icon>
+    <price>	1255	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	155	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	hugeSA	</effects>
+    <damage>
+      <armor>	650	</armor>
+      <devices>	105	</devices>
+    </damage>
+  </_155mm_AP_M112_T>
   <_155_OE_mle_1956>
     <id>	76	</id>
     <userString>	#france_vehicles:_155_OE_mle_1956	</userString>

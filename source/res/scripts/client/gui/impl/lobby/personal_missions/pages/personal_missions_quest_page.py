@@ -23,6 +23,8 @@ from gui.shared.utils import decorators
 from gui import SystemMessages
 from gui.shared.gui_items.processors import quests as quests_proc
 from frameworks.wulf import Array
+from gui.shared.events import PersonalMissionsEvent
+from gui.shared import EVENT_BUS_SCOPE, g_eventBus
 QuestTypeIndexes = {0: QuestLineType.HIT,
  1: QuestLineType.KILLS,
  2: QuestLineType.ASSIST,
@@ -55,6 +57,11 @@ class PersonalMissionQuestPage(PageSubModelPresenter):
         questId = kwargs.get('questId', 481)
         self.__currentQuestId = int(questId)
         self.__updateData()
+        g_eventBus.addListener(PersonalMissionsEvent.ON_AWARD_PM_SCREEN_CLOSE, self.__onRewardsViewClose, EVENT_BUS_SCOPE.LOBBY)
+
+    def finalize(self):
+        g_eventBus.removeListener(PersonalMissionsEvent.ON_AWARD_PM_SCREEN_CLOSE, self.__onRewardsViewClose, EVENT_BUS_SCOPE.LOBBY)
+        super(PersonalMissionQuestPage, self).finalize()
 
     def getQuestState(self, quest):
         ctrl = self.__personalMissionsCtrl
@@ -113,7 +120,6 @@ class PersonalMissionQuestPage(PageSubModelPresenter):
     def _getEvents(self):
         return ((self.__personalMissionsCtrl.onUpdated, self.__updateData),
          (self.__personalMissionsCtrl.onQuestsUpdated, self.__updateData),
-         (self.__personalMissionsCtrl.onRewardsViewClose, self.__onRewardsViewClose),
          (self.viewModel.applyQuest, self.__applyQuest),
          (self.viewModel.switchSelected, self.__switchSelected),
          (self.viewModel.backToOperation, self.__backToOperation),
@@ -163,7 +169,7 @@ class PersonalMissionQuestPage(PageSubModelPresenter):
             return
         self.__updateData()
 
-    def __updateData(self, isShowAnimationRewards=False):
+    def __updateData(self, selectedRewards=None):
         ctrl = self.__personalMissionsCtrl
         currentQuest = ctrl.getQuest(self.__currentQuestId)
         if currentQuest is None:
@@ -190,15 +196,18 @@ class PersonalMissionQuestPage(PageSubModelPresenter):
                     self.__updatePersonalMissionsCard(cardsListModel, ctrl.getAllQuestsPM3(), questId)
 
                 model.setCardsList(cardsListModel)
-                self.__questModelParser.updateQuestModelFromID(questID=self.__currentQuestId, questModel=model.questData, isShowAnimationRewards=isShowAnimationRewards)
+                self.__questModelParser.updateQuestModelFromID(questID=self.__currentQuestId, questModel=model.questData, selectedRewards=selectedRewards)
                 questState = self.getQuestState(currentQuest)
                 model.setState(questState)
                 model.setTitleValue(ctrl.getPreviousOperationName(currentQuest.getOperationID()) if questState == QuestState.NAPREVIOUS else '-'.join([int2roman(currentQuest.getVehMinLevel()), int2roman(currentQuest.getVehMaxLevel())]))
             return
 
-    def __onRewardsViewClose(self, **kwargs):
-        if self.__currentQuestId == kwargs.get('questId', 0):
-            self.__updateData(isShowAnimationRewards=kwargs.get('isSelectedRewards', False))
+    def __onRewardsViewClose(self, event):
+        if self.__currentQuestId == event.ctx.get('questID', 0):
+            selectedRewards = event.ctx.get('selectedRewards')
+            itemsRewards = None if selectedRewards is None else selectedRewards.get('items')
+            self.__updateData(selectedRewards=itemsRewards)
+        return
 
     def __updatePersonalMissionsCard(self, cardsListModel, quests, questId):
         quest = quests.get(questId, None)

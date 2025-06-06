@@ -34,7 +34,7 @@
           <position1>	-83.616577 -197.318390	</position1>
         </team1>
         <team2>
-          <position1>	61.929832 242.775162	</position1>
+          <position1>	61.929829 242.775162	</position1>
         </team2>
       </teamBasePositions>
     </ctf>
@@ -44,10 +44,69 @@
           <position1>	-83.616577 -197.318390	</position1>
         </team1>
         <team2>
-          <position1>	61.929832 242.775162	</position1>
+          <position1>	61.929829 242.775162	</position1>
         </team2>
       </teamBasePositions>
     </maps_training>
+    <comp7>
+      <minimap>	spaces/17_munchen/mmap_comp7.dds	</minimap>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <teamSpawnPoints>
+        <team1>
+          <position>	133.303574 -256.029022	</position>
+        </team1>
+        <team2>
+          <position>	-252.010284 244.986069	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1>
+          <position1>	78.454208 49.936558	</position1>
+          <position2>	-235.372055 -250.827072	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	285.381989 184.761002	</position>
+          <type>	4	</type>
+        </point>
+        <point>
+          <position>	60.691002 -119.973999	</position>
+          <type>	4	</type>
+        </point>
+        <point>
+          <position>	-271.149994 82.046997	</position>
+          <type>	4	</type>
+        </point>
+        <point>
+          <position>	40.987999 170.164001	</position>
+          <type>	3	</type>
+        </point>
+        <point>
+          <position>	-135.927994 -47.245998	</position>
+          <type>	3	</type>
+        </point>
+      </pointsOfInterestUDO>
+    </comp7>
   </gameplayTypes>
   <useAdvancedPhysics>	true	</useAdvancedPhysics>
 </17_munchen.xml>

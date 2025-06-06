@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/lobby/contact_manage_note_views.py
+from gui.Scaleform.daapi.view.meta.ContactNoteManageViewMeta import ContactNoteManageViewMeta
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from messenger.gui.Scaleform.data.contacts_vo_converter import ContactConverter
-from messenger.gui.Scaleform.meta.ContactNoteManageViewMeta import ContactNoteManageViewMeta
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.xmpp.xmpp_string_utils import validateContactNote

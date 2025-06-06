@@ -146,7 +146,7 @@ class DestructibleEntity(BigWorld.Entity):
                     LOG_ERROR('component is not available for damage sticker: ', hitCompIndx)
                     continue
                 segStart, segEnd = self.__activeStateResource.reduceSegmentLength(hitCompIndx, segStart, segEnd)
-                self.__activeStateResource.damageStickers[hitCompIndx].addDamageSticker(sticker, stickerID, segStart, segEnd)
+                self.__activeStateResource.damageStickers[hitCompIndx].addDamageSticker(sticker, stickerID, segStart, segEnd, hitCompIndx, self.__activeStateResource.collisionComponent)
 
             return
 

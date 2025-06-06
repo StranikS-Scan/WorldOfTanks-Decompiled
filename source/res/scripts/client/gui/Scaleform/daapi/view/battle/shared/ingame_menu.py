@@ -27,9 +27,8 @@ from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IServerStatsController
 from gui.Scaleform.locale.MENU import MENU
-from gui.Scaleform.daapi.view.battle.shared.premature_leave import showLeaverAliveWindow, showExitWindow, showHbExitWindow, showLeaverReplayWindow, showComp7LeaverAliveWindow, showHbLeaverAliveWindow
+from gui.Scaleform.daapi.view.battle.shared.premature_leave import showLeaverAliveWindow, showExitWindow, showLeaverReplayWindow, showComp7LeaverAliveWindow
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
-from historical_battles_common.hb_constants_extension import ARENA_GUI_TYPE
 
 class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
     serverStats = dependency.descriptor(IServerStatsController)
@@ -102,7 +101,7 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
         self.as_setServerSettingS(serverName, tooltipFullData, state)
 
     def _setServerStats(self):
-        if constants.IS_SHOW_SERVER_STATS and BigWorld.player().arenaGuiType not in ARENA_GUI_TYPE.HB_RANGE:
+        if constants.IS_SHOW_SERVER_STATS:
             self.as_setServerStatsS(*self.serverStats.getFormattedStats())
 
     def _setMenuButtonsLabels(self):
@@ -139,11 +138,7 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
         elif BattleReplay.isPlaying():
             result = yield wg_await(showLeaverReplayWindow())
         else:
-            arenaBonusType = BigWorld.player().arenaBonusType
-            if ARENA_BONUS_TYPE_CAPS.checkAny(arenaBonusType, ARENA_BONUS_TYPE_CAPS.HISTORICAL_BATTLES):
-                result = yield wg_await(showHbExitWindow())
-            else:
-                result = yield wg_await(showExitWindow())
+            result = yield wg_await(showExitWindow())
         if result:
             self.__doExit()
         else:
@@ -159,9 +154,7 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
     @staticmethod
     def _showLeaverAliveWindow(isPlayerIGR):
         arenaBonusType = BigWorld.player().arenaBonusType
-        if ARENA_BONUS_TYPE_CAPS.checkAny(arenaBonusType, ARENA_BONUS_TYPE_CAPS.COMP7):
-            return showComp7LeaverAliveWindow()
-        return showHbLeaverAliveWindow() if ARENA_BONUS_TYPE_CAPS.checkAny(arenaBonusType, ARENA_BONUS_TYPE_CAPS.HISTORICAL_BATTLES) else showLeaverAliveWindow(isPlayerIGR)
+        return showComp7LeaverAliveWindow() if ARENA_BONUS_TYPE_CAPS.checkAny(arenaBonusType, ARENA_BONUS_TYPE_CAPS.COMP7) else showLeaverAliveWindow(isPlayerIGR)
 
     @staticmethod
     def __isPlayerIGR(playerInfo):

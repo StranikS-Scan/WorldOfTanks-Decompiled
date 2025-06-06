@@ -34,7 +34,6 @@ from wg_async import wg_async, wg_await
 from gui.impl.dialogs import dialogs
 from system_events import g_systemEvents
 from helpers import styles_perf_toolset
-from helpers.buffs import ClientBuffsRepository
 try:
     locale.setlocale(locale.LC_TIME, '')
 except locale.Error:
@@ -132,7 +131,6 @@ def init(scriptConfig, engineConfig, userPreferences):
         player_ranks.init()
         import destructible_entities
         destructible_entities.init()
-        ClientBuffsRepository.init()
         from AvatarInputHandler.cameras import FovExtended
         FovExtended.instance().resetFov()
         BigWorld.pauseDRRAutoscaling(True)
@@ -266,7 +264,6 @@ def fini():
         voipRespHandler.destroy()
     SoundGroups.g_instance.destroy()
     Settings.g_instance.save()
-    ClientBuffsRepository.fini()
     WebBrowser.destroyExternalCache()
     gameLoading.getLoader().stop()
     if constants.HAS_DEV_RESOURCES:

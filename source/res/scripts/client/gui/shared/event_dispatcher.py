@@ -626,8 +626,8 @@ def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, 
     return
 
 
-def showHeroTankPreview(vehTypeCompDescr, viewAlias=VIEW_ALIAS.HERO_VEHICLE_PREVIEW, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previousBackAlias=None, previewBackCb=None, hangarVehicleCD=None, bottomPanelTextData=None, backBtnLabel=None):
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(viewAlias), ctx={'itemCD': vehTypeCompDescr,
+def showHeroTankPreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previousBackAlias=None, previewBackCb=None, hangarVehicleCD=None, bottomPanelTextData=None, backBtnLabel=None):
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.HERO_VEHICLE_PREVIEW), ctx={'itemCD': vehTypeCompDescr,
      'previewAlias': previewAlias,
      'previewAppearance': HeroTankPreviewAppearance(),
      'isHeroTank': True,
@@ -1004,15 +1004,6 @@ def showParagonsRewardsWindow(bonuses, chapter=None, level=None, isVehicleSelect
         window.load()
 
 
-def isViewLoaded(layoutID):
-    uiLoader = dependency.instance(IGuiLoader)
-    if not uiLoader or not uiLoader.windowsManager:
-        return False
-    else:
-        view = uiLoader.windowsManager.getViewByLayoutID(layoutID)
-        return view is not None
-
-
 def showStylePreview(vehCD, style, descr='', backCallback=None, backBtnDescrLabel='', *args, **kwargs):
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.STYLE_PREVIEW), ctx={'itemCD': vehCD,
      'style': style,
@@ -1140,14 +1131,14 @@ def showResSimpleDialog(resources, icon, formattedMessage, parent=None):
 
 
 @wg_async
-def showDynamicButtonInfoDialogBuilder(resources, icon, formattedMessage, parent=None, loadCallback=None, destroyCallback=None):
+def showDynamicButtonInfoDialogBuilder(resources, icon, formattedMessage, parent=None):
     from gui.impl.dialogs import dialogs
     from gui.impl.dialogs.builders import InfoDialogBuilder
     builder = InfoDialogBuilder()
     builder.setMessagesAndButtons(resources, resources)
     builder.setIcon(icon)
     builder.setFormattedMessage(formattedMessage)
-    result = yield wg_await(dialogs.showSimple(builder.build(parent), loadCallback=loadCallback, destroyCallback=destroyCallback))
+    result = yield wg_await(dialogs.showSimple(builder.build(parent)))
     raise AsyncReturn(result)
 
 

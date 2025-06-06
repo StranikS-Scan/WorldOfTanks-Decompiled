@@ -119,12 +119,6 @@ class ITeamsBasesController(IArenaController):
     def removeTeamsBases(self):
         pass
 
-    def addTeamBase(self, base):
-        pass
-
-    def getTeamBases(self):
-        pass
-
 
 class IArenaPeriodController(IArenaController):
     __slots__ = ()
@@ -170,9 +164,6 @@ class IBattleFieldController(IArenaVehiclesController):
     __slots__ = ()
 
     def setVehicleHealth(self, vehicleID, newHealth):
-        pass
-
-    def postSetVehicleHealth(self):
         pass
 
     def setVehicleData(self, data):

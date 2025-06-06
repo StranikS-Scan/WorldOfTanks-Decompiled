@@ -39,7 +39,7 @@ from soft_exception import SoftException
 from helpers.styles_perf_toolset import g_reportGenerator
 _logger = logging.getLogger(__name__)
 g_replayCtrl = None
-REPLAY_FILE_EXTENSION = '.wotreplay'
+REPLAY_FILE_EXTENSION = '.mtreplay'
 AUTO_RECORD_TEMP_FILENAME = 'temp'
 FIXED_REPLAY_FILENAME = 'replay_last_battle'
 REPLAY_TIME_MARK_CLIENT_READY = 2147483648L
@@ -54,7 +54,7 @@ _FORWARD_INPUT_CTRL_MODES = (CTRL_MODE_NAME.POSTMORTEM,
  CTRL_MODE_NAME.DEATH_FREE_CAM)
 _ARENA_GUI_TYPE_TO_MODE_TAG = {ARENA_GUI_TYPE.COMP7: 'Onslaught',
  ARENA_GUI_TYPE.FUN_RANDOM: 'Arcade'}
-_IGNORED_SWITCHING_CTRL_MODES = [CTRL_MODE_NAME.SNIPER,
+_IGNORED_SWITCHING_CTRL_MODES = (CTRL_MODE_NAME.SNIPER,
  CTRL_MODE_NAME.ARCADE,
  CTRL_MODE_NAME.ARTY,
  CTRL_MODE_NAME.SPG_ONLY_ARTY_MODE,
@@ -63,7 +63,7 @@ _IGNORED_SWITCHING_CTRL_MODES = [CTRL_MODE_NAME.SNIPER,
  CTRL_MODE_NAME.MAP_CASE,
  CTRL_MODE_NAME.MAP_CASE_ARCADE,
  CTRL_MODE_NAME.MAP_CASE_EPIC,
- CTRL_MODE_NAME.MAP_CASE_ARCADE_EPIC_MINEFIELD]
+ CTRL_MODE_NAME.MAP_CASE_ARCADE_EPIC_MINEFIELD)
 
 class CallbackDataNames(object):
     APPLY_ZOOM = 'applyZoom'
@@ -378,7 +378,7 @@ class BattleReplay(object):
         unpickler = SafeUnpickler.SafeUnpickler()
         self.__originalPickleLoads = pickle.loads
         pickle.loads = unpickler.loads
-        if fileName is not None and fileName.rfind('.wotreplaylist') != -1:
+        if fileName is not None and fileName.rfind('.mtreplaylist') != -1:
             self.__playList = []
             self.__isPlayingPlayList = True
             try:

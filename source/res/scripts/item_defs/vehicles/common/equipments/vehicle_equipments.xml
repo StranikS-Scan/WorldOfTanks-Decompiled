@@ -12,10 +12,6 @@
       <cooldownSeconds>	105	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
       <activeSeconds>	3	</activeSeconds>
-      <ctrlItems>
-        <default>	_ExtinguisherItem	</default>
-        <replay>	_ReplayItem	</replay>
-      </ctrlItems>
     </script>
     <tooltipSection>	equipment	</tooltipSection>
   </handExtinguishers>
@@ -34,10 +30,6 @@
       <cooldownSeconds>	90	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
       <activeSeconds>	3	</activeSeconds>
-      <ctrlItems>
-        <default>	_ExtinguisherItem	</default>
-        <replay>	_ReplayItem	</replay>
-      </ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -63,10 +55,6 @@
       <cooldownSeconds>	105	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
       <activeSeconds>	3	</activeSeconds>
-      <ctrlItems>
-        <default>	_MedKitItem	</default>
-        <replay>	_ReplayMedKitItem	</replay>
-      </ctrlItems>
     </script>
     <tooltipSection>	equipment	</tooltipSection>
   </smallMedkit>
@@ -87,10 +75,6 @@
       <cooldownSeconds>	90	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
       <activeSeconds>	3	</activeSeconds>
-      <ctrlItems>
-        <default>	_MedKitItem	</default>
-        <replay>	_ReplayMedKitItem	</replay>
-      </ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -118,10 +102,6 @@
       <cooldownSeconds>	105	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
       <activeSeconds>	3	</activeSeconds>
-      <ctrlItems>
-        <default>	_RepairKitItem	</default>
-        <replay>	_ReplayRepairKitItem	</replay>
-      </ctrlItems>
     </script>
     <tooltipSection>	equipment	</tooltipSection>
   </smallRepairkit>
@@ -147,10 +127,6 @@
       <cooldownSeconds>	90	</cooldownSeconds>
       <activeSeconds>	3	</activeSeconds>
       <reuseCount>	-1	</reuseCount>
-      <ctrlItems>
-        <default>	_RepairKitItem	</default>
-        <replay>	_ReplayRepairKitItem	</replay>
-      </ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -179,7 +155,6 @@
     </vehicleFilter>
     <script>	Fuel	  <enginePowerFactor>	1.05	</enginePowerFactor>
       <turretRotationSpeedFactor>	1.0	</turretRotationSpeedFactor>
-      <ctrlItems></ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -213,7 +188,6 @@
     </vehicleFilter>
     <script>	Fuel	  <enginePowerFactor>	1.05	</enginePowerFactor>
       <turretRotationSpeedFactor>	1.05	</turretRotationSpeedFactor>
-      <ctrlItems></ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -252,7 +226,6 @@
     </vehicleFilter>
     <script>	Fuel	  <enginePowerFactor>	1.1	</enginePowerFactor>
       <turretRotationSpeedFactor>	1.1	</turretRotationSpeedFactor>
-      <ctrlItems></ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -282,7 +255,6 @@
       </include>
     </vehicleFilter>
     <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
-      <ctrlItems></ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -308,7 +280,6 @@
       </include>
     </vehicleFilter>
     <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
-      <ctrlItems></ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -334,7 +305,6 @@
       </include>
     </vehicleFilter>
     <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
-      <ctrlItems></ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -360,9 +330,6 @@
     </vehicleFilter>
     <script>	RemovedRpmLimiter	  <enginePowerFactor>	1.1	</enginePowerFactor>
       <engineHpLossPerSecond>	1.5	</engineHpLossPerSecond>
-      <ctrlItems>
-        <default>	_TriggerItem	</default>
-      </ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -388,7 +355,6 @@
       </include>
     </vehicleFilter>
     <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
-      <ctrlItems></ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -421,10 +387,6 @@
       <enginePowerFactor>	1.7	</enginePowerFactor>
       <maxSpeedFactor>	2.0	</maxSpeedFactor>
       <cooldownSeconds>	3	</cooldownSeconds>
-      <ctrlItems>
-        <default>	_AfterburningItem	</default>
-        <replay>	_ReplayAfterburningItem	</replay>
-      </ctrlItems>
     </script>
     <tooltipSection>	equipment	</tooltipSection>
   </afterburning>
@@ -444,7 +406,6 @@
       </include>
     </vehicleFilter>
     <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
-      <ctrlItems></ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -473,7 +434,6 @@
     </vehicleFilter>
     <script>	Fuel	  <enginePowerFactor>	1.05	</enginePowerFactor>
       <turretRotationSpeedFactor>	1.0	</turretRotationSpeedFactor>
-      <ctrlItems></ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -499,7 +459,6 @@
       </include>
     </vehicleFilter>
     <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
-      <ctrlItems></ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -525,7 +484,6 @@
       </include>
     </vehicleFilter>
     <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
-      <ctrlItems></ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -551,7 +509,6 @@
       </include>
     </vehicleFilter>
     <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
-      <ctrlItems></ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -577,7 +534,6 @@
       </include>
     </vehicleFilter>
     <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
-      <ctrlItems></ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -603,7 +559,6 @@
       </include>
     </vehicleFilter>
     <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
-      <ctrlItems></ctrlItems>
     </script>
     <kpi>
       <mul>
@@ -629,7 +584,6 @@
       </include>
     </vehicleFilter>
     <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
-      <ctrlItems></ctrlItems>
     </script>
     <kpi>
       <mul>

@@ -207,7 +207,7 @@ def isClanNameValid(text):
         if not 2 <= len(utext) <= _CLAN_NAME_MAX_LENGTH:
             return False
         for word in utext.split(' '):
-            if not word or any(map(lambda c: unpackByte(c) < 32, word)):
+            if not word or any(map(lambda c: ord(c) < 32, word)):
                 return False
 
         return True

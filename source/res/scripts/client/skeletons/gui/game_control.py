@@ -3212,6 +3212,9 @@ class IComp7Controller(IGameController, ISeasonProvider):
     def isComp7PrbActive(self):
         raise NotImplementedError
 
+    def isComp7TournamentsPrbActive(self):
+        raise NotImplementedError
+
     def isBattleModifiersAvailable(self):
         raise NotImplementedError
 

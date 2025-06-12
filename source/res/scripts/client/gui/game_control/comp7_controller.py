@@ -11,7 +11,7 @@ from Event import EventManager
 from ExtensionsManager import g_extensionsManager
 from comp7_common import Comp7QualificationState, SEASON_POINTS_ENTITLEMENTS
 from comp7_ranks_common import COMP7_RATING_ENTITLEMENT, COMP7_ELITE_ENTITLEMENT, COMP7_ACTIVITY_ENTITLEMENT
-from constants import Configs, RESTRICTION_TYPE, ARENA_BONUS_TYPE, COMP7_SCENE
+from constants import Configs, RESTRICTION_TYPE, ARENA_BONUS_TYPE, COMP7_SCENE, ARENA_GUI_TYPE, QUEUE_TYPE
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.comp7.shared import Comp7AlertData
 from gui.comp7.comp7_helpers import updateComp7Settings
@@ -307,8 +307,15 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
     def isComp7PrbActive(self):
         return False if self.prbEntity is None else bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.COMP7)
 
+    def isComp7TournamentsPrbActive(self):
+        if self.prbEntity is None:
+            return False
+        else:
+            isSpecBattle = self.prbEntity.getQueueType() == QUEUE_TYPE.SPEC_BATTLE
+            return isSpecBattle and self.prbEntity.getSettings()['arenaGuiType'] == ARENA_GUI_TYPE.TOURNAMENT_COMP7
+
     def isBattleModifiersAvailable(self):
-        return len(self.battleModifiers) > 0
+        return (self.isComp7PrbActive() or self.isComp7TournamentsPrbActive()) and len(self.battleModifiers) > 0
 
     def getPlatoonRatingRestriction(self):
         unitMgr = prb_getters.getClientUnitMgr()

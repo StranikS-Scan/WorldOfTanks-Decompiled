@@ -35,6 +35,7 @@ class ReturnPlaces(IntEnum):
     TO_NY_CUSTOMIZATION = 2
     TO_SHARDS = 3
     TO_REFERRAL = 4
+    TO_BIRTHDAY = 5
 
 
 def _handlerOnOpenClick(eventData):
@@ -87,6 +88,7 @@ def _handleRequestToOpen(context, event, eventLootBoxesCtrl=None):
             auxData['clientData'] = {'openWithKey': True if keyID else False}
             auxData['clientData'].update({'usedKeys': {keyID: count}})
             auxData['clientData']['countOfOpened'] = auxData.get('extData', {}).get('openedLootBoxes', {}).get(lootBox.getID(), count)
+            auxData['clientData']['giftsInfo'] = auxData.get('giftsInfo')
             prepareOpenResult(result)
     context.postGlobalEvent(GlobalEvents.OPEN_RESPONSE_RECEIVED, result)
     return

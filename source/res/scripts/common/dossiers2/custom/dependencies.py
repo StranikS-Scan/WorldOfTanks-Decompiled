@@ -6,15 +6,22 @@ from dossiers2.custom.config import RECORD_CONFIGS
 from dossiers2.custom.cache import getCache
 from dossiers2.custom.utils import getVehicleNationID
 _SECONDS_IN_DAY = 86400
+MEDAL_ALIASES = {'medalHalonen': 'medalKrysov',
+ 'medalCarius': 'medalSamokhin',
+ 'medalLehvaslaiho': 'medalKhazov',
+ 'medalTamadaYoshio': 'medalTrubin',
+ 'medalTarczay': 'medalLyubushkin',
+ 'medalKnispel': 'medalGudz',
+ 'medalWittmann': 'medalUshakov'}
 A15X15_STATS_DEPENDENCIES = {}
 
 def _set_A15X15_STATS_DEPENDENCIES():
     global A15X15_STATS_DEPENDENCIES
     A15X15_STATS_DEPENDENCIES.update({'winAndSurvived': [_updateMedalAbrams],
-     'frags': [_updateMedalCarius],
+     'frags': [_updateMedalSamokhin],
      'frags8p': [_updateMedalEkins],
-     'damageDealt': [_updateMedalKnispel],
-     'damageReceived': [_updateMedalKnispel],
+     'damageDealt': [_updateMedalGudz],
+     'damageReceived': [_updateMedalGudz],
      'spotted': [_updateMedalPoppel],
      'capturePoints': [_updateMedalLeClerc],
      'droppedCapturePoints': [_updateMedalLavrinenko]})
@@ -25,10 +32,10 @@ A30X30_STATS_DEPENDENCIES = {}
 def _set_A30X30_STATS_DEPENDENCIES():
     global A30X30_STATS_DEPENDENCIES
     A30X30_STATS_DEPENDENCIES.update({'winAndSurvived': [_updateMedalAbrams],
-     'frags': [_updateMedalCarius],
+     'frags': [_updateMedalSamokhin],
      'frags8p': [_updateMedalEkins],
-     'damageDealt': [_updateMedalKnispel],
-     'damageReceived': [_updateMedalKnispel],
+     'damageDealt': [_updateMedalGudz],
+     'damageReceived': [_updateMedalGudz],
      'spotted': [_updateMedalPoppel],
      'capturePoints': [_updateMedalLeClerc],
      'droppedCapturePoints': [_updateMedalLavrinenko]})
@@ -39,10 +46,10 @@ A7X7_STATS_DEPENDENCIES = {}
 def _set_A7X7_STATS_DEPENDENCIES():
     global A7X7_STATS_DEPENDENCIES
     A7X7_STATS_DEPENDENCIES.update({'winAndSurvived': [_updateMedalAbrams],
-     'frags': [_updateMedalCarius],
+     'frags': [_updateMedalSamokhin],
      'frags8p': [_updateMedalEkins],
-     'damageDealt': [_updateMedalKnispel],
-     'damageReceived': [_updateMedalKnispel],
+     'damageDealt': [_updateMedalGudz],
+     'damageReceived': [_updateMedalGudz],
      'spotted': [_updateMedalPoppel],
      'capturePoints': [_updateMedalLeClerc],
      'droppedCapturePoints': [_updateMedalLavrinenko],
@@ -152,10 +159,10 @@ HISTORICAL_STATS_DEPENDENCIES = {}
 def _set_HISTORICAL_STATS_DEPENDENCIES():
     global HISTORICAL_STATS_DEPENDENCIES
     HISTORICAL_STATS_DEPENDENCIES.update({'winAndSurvived': [_updateMedalAbrams],
-     'frags': [_updateMedalCarius],
+     'frags': [_updateMedalSamokhin],
      'frags8p': [_updateMedalEkins],
-     'damageDealt': [_updateMedalKnispel],
-     'damageReceived': [_updateMedalKnispel],
+     'damageDealt': [_updateMedalGudz],
+     'damageReceived': [_updateMedalGudz],
      'spotted': [_updateMedalPoppel],
      'capturePoints': [_updateMedalLeClerc],
      'droppedCapturePoints': [_updateMedalLavrinenko]})
@@ -166,10 +173,10 @@ FORT_BATTLES_STATS_DEPENDENCIES = {}
 def _set_FORT_BATTLES_STATS_DEPENDENCIES():
     global FORT_BATTLES_STATS_DEPENDENCIES
     FORT_BATTLES_STATS_DEPENDENCIES.update({'winAndSurvived': [_updateMedalAbrams],
-     'frags': [_updateMedalCarius],
+     'frags': [_updateMedalSamokhin],
      'frags8p': [_updateMedalEkins],
-     'damageDealt': [_updateMedalKnispel],
-     'damageReceived': [_updateMedalKnispel],
+     'damageDealt': [_updateMedalGudz],
+     'damageReceived': [_updateMedalGudz],
      'spotted': [_updateMedalPoppel],
      'capturePoints': [_updateMedalLeClerc],
      'droppedCapturePoints': [_updateMedalLavrinenko]})
@@ -180,10 +187,10 @@ FORT_SORTIES_STATS_DEPENDENCIES = {}
 def _set_FORT_SORTIES_STATS_DEPENDENCIES():
     global FORT_SORTIES_STATS_DEPENDENCIES
     FORT_SORTIES_STATS_DEPENDENCIES.update({'winAndSurvived': [_updateMedalAbrams],
-     'frags': [_updateMedalCarius],
+     'frags': [_updateMedalSamokhin],
      'frags8p': [_updateMedalEkins],
-     'damageDealt': [_updateMedalKnispel],
-     'damageReceived': [_updateMedalKnispel],
+     'damageDealt': [_updateMedalGudz],
+     'damageReceived': [_updateMedalGudz],
      'spotted': [_updateMedalPoppel],
      'capturePoints': [_updateMedalLeClerc],
      'droppedCapturePoints': [_updateMedalLavrinenko],
@@ -262,10 +269,10 @@ def _set_GLOBAL_MAP_STATS_DEPENDENCIES():
     global GLOBAL_MAP_STATS_DEPENDENCIES
     GLOBAL_MAP_STATS_DEPENDENCIES.update({'battlesCount': [_updateMedalRotmistrov],
      'winAndSurvived': [_updateMedalAbrams],
-     'frags': [_updateMedalCarius],
+     'frags': [_updateMedalSamokhin],
      'frags8p': [_updateMedalEkins],
-     'damageDealt': [_updateMedalKnispel],
-     'damageReceived': [_updateMedalKnispel],
+     'damageDealt': [_updateMedalGudz],
+     'damageReceived': [_updateMedalGudz],
      'spotted': [_updateMedalPoppel],
      'capturePoints': [_updateMedalLeClerc],
      'droppedCapturePoints': [_updateMedalLavrinenko]})
@@ -293,10 +300,10 @@ RANKED_STATS_DEPENDENCIES = {}
 def _set_RANKED_STATS_DEPENDENCIES():
     global RANKED_STATS_DEPENDENCIES
     RANKED_STATS_DEPENDENCIES.update({'winAndSurvived': [_updateMedalAbrams],
-     'frags': [_updateMedalCarius],
+     'frags': [_updateMedalSamokhin],
      'frags8p': [_updateMedalEkins],
-     'damageDealt': [_updateMedalKnispel],
-     'damageReceived': [_updateMedalKnispel],
+     'damageDealt': [_updateMedalGudz],
+     'damageReceived': [_updateMedalGudz],
      'spotted': [_updateMedalPoppel],
      'capturePoints': [_updateMedalLeClerc],
      'droppedCapturePoints': [_updateMedalLavrinenko]})
@@ -308,27 +315,27 @@ def _set_EPIC_BATTLE_STATS_DEPENDENCIES():
     pass
 
 
-def _updateMedalCarius(dossierDescr, dossierBlockDescr, key, value, prevValue):
+def _updateMedalSamokhin(dossierDescr, dossierBlockDescr, key, value, prevValue):
     frags = 0
     for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute', 'a30x30'):
         if dossierDescr.isBlockInLayout(block):
             if block in dossierDescr:
                 frags += dossierDescr[block]['frags']
 
-    medalCariusCfg = RECORD_CONFIGS['medalCarius']
-    maxMedalClass = len(medalCariusCfg)
+    medalSamokhinCfg = RECORD_CONFIGS['medalSamokhin']
+    maxMedalClass = len(medalSamokhinCfg)
     for medalClass in xrange(1, maxMedalClass + 1):
-        if frags >= medalCariusCfg[maxMedalClass - medalClass]:
+        if frags >= medalSamokhinCfg[maxMedalClass - medalClass]:
             break
     else:
         return
 
-    curClass = dossierDescr['achievements']['medalCarius']
+    curClass = dossierDescr['achievements']['medalSamokhin']
     if curClass == 0 or curClass > medalClass:
-        dossierDescr['achievements']['medalCarius'] = medalClass
+        dossierDescr['achievements']['medalSamokhin'] = medalClass
 
 
-def _updateMedalKnispel(dossierDescr, dossierBlockDescr, key, value, prevValue):
+def _updateMedalGudz(dossierDescr, dossierBlockDescr, key, value, prevValue):
     damage = 0
     for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute', 'a30x30'):
         if dossierDescr.isBlockInLayout(block):
@@ -336,17 +343,17 @@ def _updateMedalKnispel(dossierDescr, dossierBlockDescr, key, value, prevValue):
                 damage += dossierDescr[block]['damageDealt']
                 damage += dossierDescr[block]['damageReceived']
 
-    medalKnispelCfg = RECORD_CONFIGS['medalKnispel']
-    maxMedalClass = len(medalKnispelCfg)
+    medalGudzCfg = RECORD_CONFIGS['medalGudz']
+    maxMedalClass = len(medalGudzCfg)
     for medalClass in xrange(1, maxMedalClass + 1):
-        if damage >= medalKnispelCfg[maxMedalClass - medalClass]:
+        if damage >= medalGudzCfg[maxMedalClass - medalClass]:
             break
     else:
         return
 
-    curClass = dossierDescr['achievements']['medalKnispel']
+    curClass = dossierDescr['achievements']['medalGudz']
     if curClass == 0 or curClass > medalClass:
-        dossierDescr['achievements']['medalKnispel'] = medalClass
+        dossierDescr['achievements']['medalGudz'] = medalClass
 
 
 def _updateMedalPoppel(dossierDescr, dossierBlockDescr, key, value, prevValue):

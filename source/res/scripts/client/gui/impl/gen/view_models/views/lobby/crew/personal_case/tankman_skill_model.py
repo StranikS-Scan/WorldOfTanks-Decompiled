@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class TankmanSkillModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=6, commands=0):
+    def __init__(self, properties=7, commands=0):
         super(TankmanSkillModel, self).__init__(properties=properties, commands=commands)
 
     def getSkillId(self):
@@ -44,6 +44,12 @@ class TankmanSkillModel(ViewModel):
     def setIsZero(self, value):
         self._setBool(5, value)
 
+    def getIsSingleHasLearnt(self):
+        return self._getBool(6)
+
+    def setIsSingleHasLearnt(self, value):
+        self._setBool(6, value)
+
     def _initialize(self):
         super(TankmanSkillModel, self)._initialize()
         self._addStringProperty('skillId', '')
@@ -52,3 +58,4 @@ class TankmanSkillModel(ViewModel):
         self._addNumberProperty('skillProgress', 0)
         self._addBoolProperty('isInProgress', False)
         self._addBoolProperty('isZero', False)
+        self._addBoolProperty('isSingleHasLearnt', False)

@@ -50,12 +50,22 @@ class PlayStreakTabView(ViewImpl):
     @replaceNoneKwargsModel
     def __setIsFirstAppearance(self, model=None):
         streakProgress = self.__playStreakController.getStreakProgress()
+        freezeProgress = self.itemsCache.items.playStreak.getRedemptionDay()
         lastSeenCount = AccountSettings.getPlayStreak(PlayStreak.PLAY_STREAK_LAST_LEVEL_SEEN_TAB)
+        lastFreezeSeenCount = AccountSettings.getPlayStreak(PlayStreak.PLAY_STREAK_LAST_LEVEL_FREEZE_SEEN_TAB)
         if streakProgress != lastSeenCount and streakProgress:
             AccountSettings.setPlayStreak(PlayStreak.PLAY_STREAK_LAST_LEVEL_SEEN_TAB, streakProgress)
             model.setIsFirstAppearance(True)
+        elif lastFreezeSeenCount != freezeProgress and self.itemsCache.items.playStreak.getDailyConditionCompleted():
+            AccountSettings.setPlayStreak(PlayStreak.PLAY_STREAK_LAST_LEVEL_FREEZE_SEEN_TAB, freezeProgress)
+            if freezeProgress > 0:
+                model.setIsFirstAppearanceRedemptionDay(True)
+            else:
+                model.setIsLastDayRedemption(True)
         else:
             model.setIsFirstAppearance(False)
+            model.setIsLastDayRedemption(False)
+            model.setIsFirstAppearanceRedemptionDay(False)
 
     def __onFinishAnimation(self):
         self.__setIsFirstAppearance()

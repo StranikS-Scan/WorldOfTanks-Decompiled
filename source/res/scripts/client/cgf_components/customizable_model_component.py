@@ -43,6 +43,7 @@ class CustomizableModelManager(CGF.ComponentManager):
         self.__dirtComponents = {}
         self.__appearanceToGOs = {}
         self.__c11nComponents = {}
+        self.__outfitDataCache = {}
 
     def deactivate(self):
         self.clear()
@@ -55,6 +56,7 @@ class CustomizableModelManager(CGF.ComponentManager):
         self.__dirtComponents = {}
         self.__appearanceToGOs = {}
         self.__c11nComponents = {}
+        self.__outfitDataCache = {}
 
     @onAddedQuery(CustomizableModelAttachmentComponent, GenericComponents.DynamicModelComponent, CGF.No(ModelFashionAttachedComponent), CGF.GameObject, tickGroup='postHierarchyUpdateFinish')
     def onAddedModel(self, _, modelComponent, go):
@@ -75,6 +77,7 @@ class CustomizableModelManager(CGF.ComponentManager):
         gameObjects = self.__appearanceToGOs.get(attachedComponent.appearanceId)
         if gameObjects and modelGO in gameObjects:
             self.__appearanceToGOs[attachedComponent.appearanceId].remove(modelGO)
+        self.invalidateOutfitDataCache(attachedComponent.appearanceId)
 
     def __applyCamo(self, c11nComponent, camo):
         c11nComponent.setPartCamo(camo)
@@ -84,6 +87,10 @@ class CustomizableModelManager(CGF.ComponentManager):
 
     def __applyDecals(self, c11Component, decals):
         c11Component.setDecals(decals)
+
+    def invalidateOutfitDataCache(self, appearanceId):
+        if appearanceId in self.__outfitDataCache:
+            del self.__outfitDataCache[appearanceId]
 
     def applyTempOutfitToAttachments(self, appearance, vDesc, outfit):
         damagedState = hasattr(appearance, 'isVehicleDestroyed') and appearance.isVehicleDestroyed or hasattr(appearance, 'damageState') and appearance.damageState.isCurrentModelDamaged
@@ -141,7 +148,14 @@ class CustomizableModelManager(CGF.ComponentManager):
         attachmentModelComponent = gameObject.findComponentByType(CustomizableModelAttachmentComponent)
         if not attachmentModelComponent:
             return
-        camos, paints, decals, materials = camouflages.getOutfitData(appearance, outfit, vDesc, damagedState)
+        if appearance.id in self.__outfitDataCache:
+            camos, paints, decals, materials = self.__outfitDataCache[appearance.id]
+        else:
+            camos, paints, decals, materials = camouflages.getOutfitData(appearance, outfit, vDesc, damagedState)
+            self.__outfitDataCache[appearance.id] = (camos,
+             paints,
+             decals,
+             materials)
         tankPartIdx = TankPartNames.getIdx(attachmentModelComponent.tankPart)
         newCamos = [camos[tankPartIdx]] if attachmentModelComponent.enableCamouflage else []
         newPaints = [paints[tankPartIdx]] if attachmentModelComponent.enablePaint else []

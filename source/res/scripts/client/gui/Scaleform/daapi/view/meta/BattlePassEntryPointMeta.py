@@ -6,3 +6,6 @@ class BattlePassEntryPointMeta(InjectComponentAdaptor):
 
     def setIsSmall(self, value):
         self._printOverrideError('setIsSmall')
+
+    def as_isChapterChosenS(self, value):
+        return self.flashObject.as_isChapterChosen(value) if self._isDAAPIInited() else None

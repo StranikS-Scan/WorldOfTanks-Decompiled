@@ -10,10 +10,10 @@ from gui.impl.gen import R
 from gui.shared.formatters import formatPrice, formatPriceValue
 from gui.shared.gui_items import Tankman
 from gui.shared.gui_items.Tankman import NO_SLOT, getTankmanSkill
-from gui.shared.gui_items.processors import Processor, ItemProcessor, GroupedRequestProcessor, makeI18nSuccess, makeSuccess, makeI18nError, plugins
+from gui.shared.gui_items.processors import Processor, ItemProcessor, GroupedRequestProcessor, makeI18nSuccess, makeSuccess, makeError, makeI18nError, plugins
 from gui.shared.money import Money, Currency
 from helpers import dependency
-from items import tankmen, makeIntCompactDescrByID
+from items import makeIntCompactDescrByID
 from items.tankmen import SKILL_INDICES, getSkillsConfig
 from skeletons.gui.game_control import IRestoreController
 from skeletons.gui.shared import IItemsCache
@@ -35,9 +35,10 @@ def _getFinancialTransactionSysMsgType(price):
 class TankmanDismiss(ItemProcessor):
     restore = dependency.descriptor(IRestoreController)
 
-    def __init__(self, tankman):
-        vehicle = self.itemsCache.items.getVehicle(tankman.vehicleInvID)
-        super(TankmanDismiss, self).__init__(tankman, [plugins.TankmanLockedValidator(tankman), plugins.VehicleValidator(vehicle, isEnabled=tankman.vehicleInvID > 0)])
+    def __init__(self, tankmans):
+        vehicles = [ self.itemsCache.items.getVehicle(tankman.vehicleInvID) for tankman in tankmans if tankman.vehicleInvID > 0 ]
+        super(TankmanDismiss, self).__init__(tankmans, [plugins.TankmansLockedValidator(tankmans), plugins.VehiclesValidator(vehicles, prop={'isLocked': True,
+          'isInInventory': True}, setAll=False)])
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeI18nError(sysMsgKey='dismiss_tankman/{}'.format(errStr), defaultSysMsgKey='dismiss_tankman/server_error')
@@ -47,8 +48,9 @@ class TankmanDismiss(ItemProcessor):
         return makeI18nSuccess('dismiss_tankman/success', type=SM_TYPE.Information, auxData=additionalMsgs)
 
     def _request(self, callback):
-        _logger.debug('Make server request to dismiss tankman: %s', self.item)
-        BigWorld.player().inventory.dismissTankman(self.item.invID, lambda code: self._response(code, callback))
+        _logger.debug('Make server request to dismiss tankmans: %s', self.item)
+        tmanInvIds = [ item.invID for item in self.item ]
+        BigWorld.player().inventory.dismissTankman(tmanInvIds, lambda code: self._response(code, callback))
 
 
 def _getRecruitPrice(tmanCostTypeIdx):
@@ -178,22 +180,29 @@ class CrewSkinsProcessorBase(Processor):
         return makeI18nSuccess(sysMsgKey='crewSkinsNotification/SkinChanged', type=SM_TYPE.Information, auxData=additionalMsgs)
 
 
-class CrewSkinUnequip(CrewSkinsProcessorBase):
+class SkinRequestProcessor(GroupedRequestProcessor):
 
-    def _request(self, callback):
-        _logger.debug('Make server request to equip crewSkin: %d', self._tmanInvID)
-        BigWorld.player().inventory.unequipCrewSkin(self._tmanInvID, lambda code: self._response(code, callback))
+    def __init__(self, request, *args, **kwargs):
+        super(SkinRequestProcessor, self).__init__(request, *args, **kwargs)
+        self._sysMsgPrefix = 'crewSkinsNotification'
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError(sysMsgKey='{}/Error'.format(self._sysMsgPrefix), defaultSysMsgKey='{}/Error'.format(self._sysMsgPrefix), auxData=self._makeErrorData(errStr), type=SM_TYPE.Error)
+
+    def _successHandler(self, code, ctx=None):
+        return makeI18nSuccess(sysMsgKey='{}/SkinChanged'.format(self._sysMsgPrefix), type=SM_TYPE.Information, auxData=self._makeSuccessData(ctx))
 
 
-class CrewSkinEquip(CrewSkinsProcessorBase):
+class CrewSkinUnequip(SkinRequestProcessor):
 
-    def __init__(self, tmanInvID, skinID):
-        super(CrewSkinEquip, self).__init__(tmanInvID)
-        self.__skinID = skinID
+    def __init__(self, tmanInvID, groupID=0, groupSize=1):
+        super(CrewSkinUnequip, self).__init__(BigWorld.player().inventory.unequipCrewSkin, tmanInvID, groupID=groupID, groupSize=groupSize)
 
-    def _request(self, callback):
-        _logger.debug('Make server request to equip crewSkin : %d, %d', self._tmanInvID, self.__skinID)
-        BigWorld.player().inventory.equipCrewSkin(self._tmanInvID, self.__skinID, lambda code: self._response(code, callback))
+
+class CrewSkinEquip(SkinRequestProcessor):
+
+    def __init__(self, tmanInvID, skinID, groupID=0, groupSize=1):
+        super(CrewSkinEquip, self).__init__(BigWorld.player().inventory.equipCrewSkin, tmanInvID, skinID, groupID=groupID, groupSize=groupSize)
 
 
 class TankmanUnload(GroupedRequestProcessor):
@@ -368,40 +377,24 @@ class TankmanDropSkills(ItemProcessor):
         return SM_TYPE.FinancialTransactionWithGold if dropSkillCostIdx == 2 else SM_TYPE.Information
 
 
-class TankmanChangePassport(ItemProcessor):
+class TankmanChangePassport(GroupedRequestProcessor):
 
-    def __init__(self, tankmanInvID, firstNameID, firstNameGroup, lastNameID, lastNameGroup, iconID, iconGroup):
+    def __init__(self, tankmanInvID, firstNameID, firstNameGroup, lastNameID, lastNameGroup, iconID, iconGroup, groupID=0, groupSize=1):
         tankman = self.itemsCache.items.getTankman(tankmanInvID)
-        super(TankmanChangePassport, self).__init__(tankman, (plugins.TankmanChangePassportValidator(tankman),))
         self.firstNameID = firstNameID
         self.firstNameGroup = firstNameGroup
         self.lastNameID = lastNameID
         self.lastNameGroup = lastNameGroup
         self.iconID = iconID
         self.iconGroup = iconGroup
-        self.isFemale = tankman.descriptor.isFemale
         self.isPremium = tankman.descriptor.isPremium
+        super(TankmanChangePassport, self).__init__(BigWorld.player().inventory.replacePassport, tankmanInvID, self.isPremium, self.firstNameGroup, self.firstNameID, self.lastNameGroup, self.lastNameID, self.iconGroup, self.iconID, groupID=groupID, groupSize=groupSize, plugins=(plugins.TankmanChangePassportValidator(tankman),))
 
     def _successHandler(self, code, ctx=None):
         return makeI18nSuccess(sysMsgKey='replace_tankman/success', type=SM_TYPE.Information)
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeI18nError(sysMsgKey='replace_tankman/{}'.format(errStr), defaultSysMsgKey='replace_tankman/server_error')
-
-    def _request(self, callback):
-        _logger.debug('Make server request to change tankman passport: %s, %s, %s, %s, %s, %s, %s', self.item.invID, self.isPremium, self.isFemale, self.firstNameGroup, self.firstNameID, self.lastNameGroup, self.lastNameID)
-        BigWorld.player().inventory.replacePassport(self.item.invID, self.isPremium, self.isFemale, self.firstNameGroup, self.firstNameID, self.lastNameGroup, self.lastNameID, self.iconGroup, self.iconID, lambda code: self._response(code, callback))
-
-    @classmethod
-    def __hasUniqueData(cls, tankman, firstNameID, lastNameID, iconID):
-        tDescr = tankman.descriptor
-        nationConfig = tankmen.getNationConfig(tankman.nationID)
-        for group in nationConfig.normalGroups.itervalues():
-            if group.notInShop:
-                if tDescr.firstNameID != firstNameID and firstNameID is not None and tDescr.firstNameID in group.firstNamesList or tDescr.lastNameID != lastNameID and lastNameID is not None and tDescr.lastNameID in group.lastNamesList or tDescr.iconID != iconID and iconID is not None and tDescr.iconID in group.iconsList:
-                    return True
-
-        return False
 
 
 class TankmanRestore(GroupedRequestProcessor):
@@ -419,3 +412,28 @@ class TankmanRestore(GroupedRequestProcessor):
             currency = self.__restorePrice.getCurrency()
             return makeI18nSuccess(sysMsgKey='restore_tankman/financial_success', type=_getFinancialTransactionSysMsgType(self.__restorePrice), money=formatPrice(Money(self.__restorePrice.get(currency)), justValue=True), auxData=self._makeSuccessData())
         return makeI18nSuccess(sysMsgKey='restore_tankman/success', type=SM_TYPE.Information, auxData=self._makeSuccessData())
+
+
+class TankmansRestore(ItemProcessor):
+
+    def __init__(self, tankmans):
+        self.__totalPrice = Money()
+        for tankman in tankmans:
+            restorePrice, _ = getTankmenRestoreInfo(tankman)
+            self.__totalPrice += restorePrice
+
+        super(TankmansRestore, self).__init__(tankmans, [plugins.TankmansLockedValidator(tankmans), plugins.MoneyValidator(self.__totalPrice), plugins.IsLongDisconnectedFromCenter()])
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError(sysMsgKey='restore_tankman/{}'.format(errStr), defaultSysMsgKey='restore_tankman/server_error', auxData=[makeError()])
+
+    def _successHandler(self, code, ctx=None):
+        if self.__totalPrice:
+            currency = self.__totalPrice.getCurrency()
+            return makeI18nSuccess(sysMsgKey='restore_tankman/financial_success', type=_getFinancialTransactionSysMsgType(self.__totalPrice), money=formatPrice(Money(self.__totalPrice.get(currency)), justValue=True), auxData=[makeSuccess()])
+        return makeI18nSuccess(sysMsgKey='restore_tankman/success', type=SM_TYPE.Information, auxData=[makeSuccess()])
+
+    def _request(self, callback):
+        _logger.debug('Make server request to restore tankmans: %s', self.item)
+        tmanInvIds = [ item.invID for item in self.item ]
+        BigWorld.player().recycleBin.restoreTankmans(tmanInvIds, lambda code, errStr='': self._response(code, callback, errStr=errStr))

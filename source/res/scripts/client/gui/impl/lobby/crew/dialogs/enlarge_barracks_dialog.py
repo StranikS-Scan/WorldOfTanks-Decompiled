@@ -39,7 +39,7 @@ class EnlargeBarracksDialog(BaseCrewDialogTemplateView):
         if contentID == R.views.dialogs.common.DialogTemplateGenericTooltip():
             shortage = self.__pricePacksBerths.get(self.__berthCurrency) - self.itemsCache.items.stats.money.get(self.__berthCurrency)
             return createBackportTooltipContent(TOOLTIPS_CONSTANTS.NOT_ENOUGH_MONEY, (shortage, self.__berthCurrency))
-        return BunksConfirmDiscountTooltip(bunksCount=self.__berthsInPack, oldCost=self.__defaultBerthPrice.get(self.__berthCurrency, 0), newCost=self.__berthPrice.get(self.__berthCurrency, 0), isEnough=self.__isEnoughMoney()) if contentID == R.views.lobby.crew.tooltips.BunksConfirmDiscountTooltip() else super(EnlargeBarracksDialog, self).createToolTipContent(event=event, contentID=contentID)
+        return BunksConfirmDiscountTooltip(bunksCount=self.__berthsInPack, oldCost=self.__defaultBerthPrice.get(self.__berthCurrency, 0), newCost=self.__berthPrice.get(self.__berthCurrency, 0), isEnough=self.__isEnoughMoney(), currencyType=self.__berthCurrency) if contentID == R.views.lobby.crew.tooltips.BunksConfirmDiscountTooltip() else super(EnlargeBarracksDialog, self).createToolTipContent(event=event, contentID=contentID)
 
     @property
     def viewModel(self):
@@ -107,8 +107,7 @@ class EnlargeBarracksDialog(BaseCrewDialogTemplateView):
     def __getCountSlotsAndFreeBerths(self):
         tankmenInBarracks = self.itemsCache.items.tankmenInBarracksCount()
         slotsCount = self.itemsCache.items.stats.tankmenBerthsCount
-        freeBerthsCount = max(slotsCount - tankmenInBarracks, 0)
-        return (slotsCount, freeBerthsCount)
+        return (slotsCount, tankmenInBarracks)
 
     @args2params(int)
     def __onBunksCountChange(self, selectedCount):

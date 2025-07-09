@@ -328,6 +328,8 @@ class BATTLE_RESULTS(object):
     DETAILS_CALCULATIONS_SQUAD_RESTRICTIONS_TITLE = '#battle_results:details/calculations/squad/restrictions/title'
     DETAILS_CALCULATIONS_CRYSTAL_TOTAL = '#battle_results:details/calculations/crystal/total'
     DETAILS_CALCULATIONS_CRYSTAL_EVENTS = '#battle_results:details/calculations/crystal/events'
+    DETAILS_CALCULATIONS_BIRTHDAYECONOMICSBONUS = '#battle_results:details/calculations/birthdayEconomicsBonus'
+    DETAILS_CALCULATIONS_DIRECTIVES = '#battle_results:details/calculations/directives'
     TANKSELECTOR_NEXT = '#battle_results:tankSelector/next'
     VICTORYSCORE = '#battle_results:victoryScore'
     EXTERMINATIONVICTORY_ALLIES = '#battle_results:exterminationVictory/allies'
@@ -412,7 +414,9 @@ class BATTLE_RESULTS(object):
      DETAILS_CALCULATIONS_MULTIPLIERINFO_VEHICLESEPARATOR,
      DETAILS_CALCULATIONS_SQUAD_RESTRICTIONS_TITLE,
      DETAILS_CALCULATIONS_CRYSTAL_TOTAL,
-     DETAILS_CALCULATIONS_CRYSTAL_EVENTS)
+     DETAILS_CALCULATIONS_CRYSTAL_EVENTS,
+     DETAILS_CALCULATIONS_BIRTHDAYECONOMICSBONUS,
+     DETAILS_CALCULATIONS_DIRECTIVES)
     TEAM_STATS_LABELS_ENUM = (TEAM_STATS_LABELS_XP,
      TEAM_STATS_LABELS_XPFORATTACK,
      TEAM_STATS_LABELS_XPFORASSIST,

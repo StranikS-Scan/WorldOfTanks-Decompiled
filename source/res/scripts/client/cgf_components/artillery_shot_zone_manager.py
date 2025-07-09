@@ -6,7 +6,7 @@ import Math
 from constants import ArtilleryZoneType
 from cgf_script.managers_registrator import autoregister
 from GenericComponents import TerrainSelectedAreaComponent, TransformComponent
-zoneTypes = {ArtilleryZoneType.EXPLOSION: 'content/Interface/CheckPoint/shot_zone_explosion_rework.visual',
+ARTILLERY_SHOT_ZONE_VISUAL = {ArtilleryZoneType.EXPLOSION: 'content/Interface/CheckPoint/shot_zone_explosion_rework.visual',
  ArtilleryZoneType.SHOT: 'content/Interface/CheckPoint/shot_zone_shot_rework.visual',
  ArtilleryZoneType.FRIENDLY: 'content/Interface/CheckPoint/shot_zone_friendly_rework.visual'}
 
@@ -20,7 +20,7 @@ class ArtilleryShotZoneManager(CGF.ComponentManager):
     def addArtilleryShotZone(self, shotId, pos, radius, zoneType=ArtilleryZoneType.SHOT):
         go = CGF.GameObject(BigWorld.player().spaceID, 'ShotZone')
         go.createComponent(TransformComponent, pos)
-        go.createComponent(TerrainSelectedAreaComponent, zoneTypes[zoneType], Math.Vector2(2 * radius, 2 * radius), 0.2, 4294967295L)
+        go.createComponent(TerrainSelectedAreaComponent, ARTILLERY_SHOT_ZONE_VISUAL[zoneType], Math.Vector2(2 * radius, 2 * radius), 0.2, 4294967295L)
         go.activate()
         self.__activeZones[shotId] = go
 

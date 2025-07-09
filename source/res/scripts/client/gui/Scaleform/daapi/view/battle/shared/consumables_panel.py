@@ -561,8 +561,10 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
             if descriptor.hasStun and self.lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():
                 stun = descriptor.stun
                 params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.stunDuration(), maxValue=backport.getNiceNumberFormat(stun.stunDuration)))
-            if descriptor.isDelayedBomb:
-                params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.explosionDelay(), value=backport.getNiceNumberFormat(descriptor.delayedBomb.explosionDelay)))
+            if descriptor.kind == SHELL_TYPES.DELAYED_HE:
+                params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.explosionDelay(), value=backport.getNiceNumberFormat(descriptor.type.explosionDelay)))
+                delayedShellDescr = vehicles.getItemByCompactDescr(descriptor.type.delayedShell)
+                params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.explosionRadius(), value=backport.getNiceNumberFormat(delayedShellDescr.type.explosionRadius)))
             if maxDistance >= 0:
                 if kind == SHELL_TYPES.FLAME:
                     params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.flameMaxDistance(), value=backport.getNiceNumberFormat(maxDistance)))

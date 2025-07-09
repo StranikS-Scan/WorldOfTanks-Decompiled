@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/crew/barracks_view.py
 import nations
 from frameworks.wulf import ViewFlags, ViewSettings
+from frameworks.wulf.view.array import fillIntsArray
 from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from gui.game_control import restore_contoller
@@ -16,7 +17,8 @@ from gui.impl.gui_decorators import args2params
 from gui.impl.lobby.crew.base_tankman_list_view import BaseTankmanListView
 from gui.impl.lobby.crew.crew_helpers.model_setters import setTankmanModel, setTmanSkillsModel, setRecruitTankmanModel
 from gui.impl.lobby.crew.filter import getTankmanKindSettings, getNationSettings, getTankmanRoleSettings, getVehicleTypeSettings, getVehicleTierSettings, getVehicleGradeSettings, SEARCH_MAX_LENGTH
-from gui.impl.lobby.crew.filter.data_providers import CompoundDataProvider, TankmenDataProvider, RecruitsDataProvider
+from gui.impl.lobby.crew.filter.data_providers import CompoundDataProvider, BarracksDataProvider
+from gui.shared.gui_items.Tankman import NO_SLOT
 from gui.impl.lobby.crew.filter.filter_panel_widget import FilterPanelWidget
 from gui.impl.lobby.crew.filter.state import FilterState
 from gui.impl.lobby.crew.tooltips.bunks_confirm_discount_tooltip import BunksConfirmDiscountTooltip
@@ -33,13 +35,15 @@ from uilogging.crew.loggers import CrewViewLogger
 from uilogging.crew.logging_constants import CrewViewKeys, CrewNavigationButtons, CrewBarracksKeys, CrewMemberAdditionalInfo
 from wg_async import wg_await, wg_async
 from PlayerEvents import g_playerEvents
+from gui.shared.gui_items.Vehicle import NO_VEHICLE_ID
+_SELECTION_CARDS_LIMIT = 200
 
 class BarracksView(BaseTankmanListView):
     itemsCache = dependency.descriptor(IItemsCache)
     restore = dependency.descriptor(IRestoreController)
     specialSounds = dependency.descriptor(ISpecialSoundCtrl)
     eventsCache = dependency.descriptor(IEventsCache)
-    __slots__ = ('__dataProviders', '__filterState', '__hasFilters', '__filterPanelWidget', '__berthPrice', '__berthsInPack', '__defaultBerthPrice', '__uiLogger')
+    __slots__ = ('__dataProviders', '__filterState', '__hasFilters', '__filterPanelWidget', '__berthPrice', '__berthsInPack', '__defaultBerthPrice', '__uiLogger', '__selectMode', '__selectedTankmans', '__selectionLimitOver')
 
     def __init__(self, layoutID=R.views.lobby.crew.BarracksView(), *args, **kwargs):
         settings = ViewSettings(layoutID, flags=ViewFlags.LOBBY_SUB_VIEW, model=BarracksViewModel(), args=args, kwargs=kwargs)
@@ -50,15 +54,17 @@ class BarracksView(BaseTankmanListView):
         self.__hasFilters = location == BARRACKS_CONSTANTS.LOCATION_FILTER_NOT_RECRUITED
         self.__filterState = FilterState({FilterState.GROUPS.TANKMANKIND.value: TankmanKind.RECRUIT.value if self.__hasFilters else TankmanKind.TANKMAN.value})
         self.__filterPanelWidget = self.__initFilterPanelWidget()
-        self.__dataProviders = CompoundDataProvider(tankmen=TankmenDataProvider(self.__filterState), recruits=RecruitsDataProvider(self.__filterState))
+        self.__dataProviders = CompoundDataProvider(barracks=BarracksDataProvider(self.__filterState))
         self.__uiLogger = CrewViewLogger(self, CrewViewKeys.BARRACKS)
+        self.__selectedTankmans = []
+        self.__selectionLimitOver = False
         super(BarracksView, self).__init__(settings)
 
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.lobby.crew.tooltips.BunksConfirmDiscountTooltip():
             currency = self.__berthPrice.getCurrency()
             money = int(self.itemsCache.items.stats.money.getSignValue(currency))
-            return BunksConfirmDiscountTooltip(bunksCount=self.__berthsInPack, oldCost=self.__defaultBerthPrice.get(currency, 0), newCost=self.__berthPrice.get(currency, 0), isEnough=self.__berthPrice.get(currency, 0) <= money)
+            return BunksConfirmDiscountTooltip(bunksCount=self.__berthsInPack, oldCost=self.__defaultBerthPrice.get(currency, 0), newCost=self.__berthPrice.get(currency, 0), isEnough=self.__berthPrice.get(currency, 0) <= money, currencyType=currency)
         return super(BarracksView, self).createToolTipContent(event, contentID)
 
     @property
@@ -97,9 +103,9 @@ class BarracksView(BaseTankmanListView):
 
     def _finalize(self):
         self.restore.onTankmenBufferUpdated -= self.__onTankmenBufferUpdated
+        super(BarracksView, self)._finalize()
         self.__dataProviders.unsubscribe()
         self.__dataProviders.clear()
-        super(BarracksView, self)._finalize()
         self.__uiLogger.finalize()
         self.__filterState = None
         self.__dataProviders = None
@@ -121,17 +127,18 @@ class BarracksView(BaseTankmanListView):
          (self.viewModel.showHangar, self.__showHangar),
          (self.viewModel.onLoadCards, self._onLoadCards),
          (self.__filterState.onStateChanged, self.__onFilterStateUpdated),
+         (self.__filterPanelWidget.viewModel.onDismissOrRestore, self.__onDismissOrRestore),
+         (self.__filterPanelWidget.onSelectedModeChange, self.__onSelectedModeChange),
+         (self.__filterPanelWidget.onResetSelection, self.__resetSelectedTankmanList),
+         (self.__filterPanelWidget.onUpdateToggle, self.__onUpdateToggle),
          (self.__dataProviders.onDataChanged, self.__fillCardList),
          (self.itemsCache.onSyncCompleted, self.__onBerthsPricesChanged),
-         (g_playerEvents.onVehicleLockChanged, self._onVehicleLockChanged))
+         (g_playerEvents.onVehicleLockChanged, self._onVehicleLockChanged),
+         (self.viewModel.onTankmanSelectedChange, self.__onTankmanSelectedChange))
 
     @property
-    def _tankmenProvider(self):
-        return self.__dataProviders['tankmen']
-
-    @property
-    def _recruitsProvider(self):
-        return self.__dataProviders['recruits']
+    def _viewProvider(self):
+        return self.__dataProviders['barracks']
 
     @property
     def _filterState(self):
@@ -201,8 +208,18 @@ class BarracksView(BaseTankmanListView):
         self.__hasFilters = self.__filterPanelWidget.hasAppliedFilters()
 
     def __onResetFilters(self):
-        self.__filterPanelWidget.resetState()
-        self.__filterPanelWidget.applyStateToModel()
+        self.__filterPanelWidget.resetPopoverFilter()
+
+    def __onSelectedModeChange(self, enable):
+        self.__setCardToggleEnabled(enable)
+        self.__fillAmountInfo(enable)
+
+    def __setCardToggleEnabled(self, enable):
+        if enable:
+            self.__selectionLimitOver = self._viewProvider.initialItemsCount > _SELECTION_CARDS_LIMIT
+        with self.viewModel.transaction() as tx:
+            tx.setIsSelectedMode(enable)
+            tx.setIsSelectedLimitReached(False)
 
     @wg_async
     def __onClickBuyBerth(self):
@@ -225,8 +242,13 @@ class BarracksView(BaseTankmanListView):
 
     @args2params(str)
     def __onPlayTankmanVoiceover(self, recruitID):
-        self._onPlayVoiceover(recruitID)
         self.__uiLogger.logClick(CrewBarracksKeys.CARD_VOICEOVER_BUTTON)
+        self._onPlayVoiceover(recruitID)
+
+    @args2params(int)
+    def _onTankmanRestore(self, tankmanID):
+        self.__uiLogger.logClick(CrewBarracksKeys.CARD_RESTORE_BUTTON)
+        dialogs.showRestoreTankmanDialog(tankmanID, NO_VEHICLE_ID, NO_SLOT, parentViewKey=self._uiLoggingKey)
 
     def __initFilterPanelWidget(self):
         widget = FilterPanelWidget(getTankmanKindSettings(), (getVehicleGradeSettings(withLocation=True, labelResId=R.strings.crew.filter.group.details.title(), tooltipDynAccessor=R.strings.crew.filter.tooltip.crewMemberVehicleGrade),
@@ -238,21 +260,28 @@ class BarracksView(BaseTankmanListView):
 
     def __fillCardList(self):
         with self.viewModel.transaction() as tx:
+            tx.setHeaderTitle(self.__filterPanelWidget.getActiveFilterTitle())
             tx.setHasFilters(self.__filterPanelWidget.hasAppliedFilters())
-            slots = self.itemsCache.items.stats.tankmenBerthsCount
-            self.__filterPanelWidget.updateAmountInfo(self.__dataProviders.itemsCount, self.__dataProviders.initialItemsCount)
-            tx.setItemsAmount(self.__dataProviders.itemsCount)
-            tx.setItemsOffset(self._itemsOffset)
+            fillIntsArray(self._viewProvider.getHeaderIndexes(), tx.getHeadersIndexes())
             self.__filterPanelWidget.applyStateToModel()
-            newRecruitCount = self._recruitsProvider.newItemsCount
+            self.__fillAmountInfo(self.__filterPanelWidget.isSelectedMode())
+            tx.setItemsAmount(self._viewProvider.getActualItemsAmount())
+            tx.setItemsOffset(self._itemsOffset)
+            newRecruitCount = self._viewProvider.newItemsCount
             if newRecruitCount:
                 self.__filterPanelWidget.updateFilterToggleCounter(TankmanKind.RECRUIT.value, newRecruitCount)
             self._fillVisibleCards(tx.getTankmanList())
-            tankmenInBarracks = self._tankmenProvider.tankmenInBarracksCount()
-            tx.berthsAmount.setFrom(max(slots - tankmenInBarracks, 0))
-            tx.berthsAmount.setTo(slots)
-            if self._recruitsProvider.itemsCount:
+            tx.berthsAmount.setFrom(self._viewProvider.tankmanInBarracksCount())
+            tx.berthsAmount.setTo(self.itemsCache.items.stats.tankmenBerthsCount)
+            if self._viewProvider.recruitTankmanCount():
                 self.__setNewRecruitVisited()
+
+    def __fillAmountInfo(self, selectable):
+        if selectable:
+            self.__updateSelectedTankmanAmountInfo()
+        else:
+            self.__resetSelectedTankmanList()
+            self.__filterPanelWidget.updateAmountInfo(self._viewProvider.itemsCount, self._viewProvider.initialItemsCount)
 
     def __showHangar(self):
         self.__uiLogger.logNavigationButtonClick(CrewNavigationButtons.ESC)
@@ -261,3 +290,64 @@ class BarracksView(BaseTankmanListView):
     def __setNewRecruitVisited(self):
         recruit_helper.setNewRecruitsVisited()
         self.__filterPanelWidget.updateFilterToggleCounter(TankmanKind.RECRUIT.value, 0)
+
+    def _getSortedTankmanList(self):
+        tmanKind = self._viewProvider.stateValue
+        if tmanKind in (TankmanKind.RECRUIT.value, TankmanKind.DISMISSED.value):
+            return self._viewProvider.items()
+        return self._viewProvider.getTankmanSortedList() if tmanKind in (TankmanKind.TANKMAN.value, TankmanKind.UNIQUE.value) else []
+
+    def __onUpdateToggle(self, isTankmanFilter):
+        with self.viewModel.transaction() as tx:
+            tx.setIsAllTankmanFilter(isTankmanFilter)
+
+    @args2params(int)
+    def __onTankmanSelectedChange(self, tankmanID):
+        if tankmanID in self.__selectedTankmans:
+            self.__selectedTankmans.remove(tankmanID)
+        else:
+            self.__selectedTankmans.append(tankmanID)
+        self.__updateSelectedTankmanAmount()
+
+    def __updateSelectedTankmanAmount(self):
+        self.__fillModelSelectedTankmanList()
+        self.__updateSelectedTankmanAmountInfo()
+
+    def __updateSelectedTankmanAmountInfo(self):
+        tmanLen = len(self.__selectedTankmans)
+        selectionLimit = _SELECTION_CARDS_LIMIT if self.__selectionLimitOver else tmanLen
+        self.__filterPanelWidget.updateAmountInfo(tmanLen, selectionLimit)
+
+    def __resetSelectedTankmanList(self):
+        self.__selectedTankmans = []
+        self.__updateSelectedTankmanAmount()
+
+    def __fillModelSelectedTankmanList(self):
+        with self.viewModel.transaction() as tx:
+            fillIntsArray(self.__selectedTankmans, tx.getSelectedTankmanList())
+            selectedTankmanCount = len(self.__selectedTankmans)
+            self.__filterPanelWidget.enableSelectionButton(selectedTankmanCount > 0)
+            limitReached = selectedTankmanCount == _SELECTION_CARDS_LIMIT
+            tx.setIsSelectedLimitReached(limitReached)
+            self.__filterPanelWidget.setSelectedLimitReached(limitReached)
+
+    @wg_async()
+    def __onDismissOrRestore(self):
+        isRestore = TankmanKind.DISMISSED.value in self._viewProvider.stateValue
+        isSingle = len(self.__selectedTankmans) == 1
+        logKey = CrewBarracksKeys.CARD_SELECTED_RESTORE_BUTTON if isRestore else CrewBarracksKeys.CARD_SELECTED_DISMISS_BUTTON
+        self.__uiLogger.logClick(logKey)
+        dialog = self.__getDialog(isRestore, isSingle)
+        result = yield wg_await(dialog)
+        if result.result:
+            self.__resetSelectedTankmanList()
+            self.__filterPanelWidget.disableSelectedMode()
+            self.__setCardToggleEnabled(False)
+
+    def __getDialog(self, isRestore, isSingle):
+        if isSingle:
+            tmanID = self.__selectedTankmans[0]
+            if isRestore:
+                return dialogs.showRestoreTankmanDialog(tmanID, NO_VEHICLE_ID, NO_SLOT, parentViewKey=self._uiLoggingKey)
+            return dialogs.showDismissTankmanDialog(tmanID, parentViewKey=CrewViewKeys.BARRACKS)
+        return dialogs.showRestoreSelectedTankmansDialog(self.__selectedTankmans, CrewViewKeys.BARRACKS) if isRestore else dialogs.showDismissSelectedTankmansDialog(self.__selectedTankmans, CrewViewKeys.BARRACKS)

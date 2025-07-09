@@ -49,8 +49,6 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
 
     def invalidateItem(self, itemTypeID, invIdx):
         cache = self.__itemsCache[itemTypeID]
-        if itemTypeID == 29:
-            print invIdx
         if invIdx in cache:
             self.__itemsPreviousCache[itemTypeID][invIdx] = cache[invIdx]
             del cache[invIdx]
@@ -398,11 +396,20 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
         else:
             result = dict()
             for key, values in vehItemsData.iteritems():
-                value = values.get(invID)
+                value = self.__getVehItemByKey(key, values, invID)
                 if value is not None:
                     result[key] = value
 
             return result
+
+    def __getVehItemByKey(self, key, values, invID):
+        if key in ('lastCrew',):
+            value = values.get(self.__vehsCDsByID.get(invID))
+            if value:
+                return value[0]
+            return None
+        else:
+            return values.get(invID)
 
     def __getCustomizationsData(self, intCD):
         _, cType, idx = parseIntCompactDescr(intCD)

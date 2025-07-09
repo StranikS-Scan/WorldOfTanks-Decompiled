@@ -1,0 +1,19 @@
+<RankedVoiceComponent.def>
+  <Properties>
+    <teamVivoxChannel>
+      <Type>	PYTHON	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+      <Default>	{}	</Default>
+    </teamVivoxChannel>
+  </Properties>
+  <CellMethods>
+    <setVivoxPresence>
+      <Arg>	BOOL	</Arg>
+      <Exposed></Exposed>
+    </setVivoxPresence>
+  </CellMethods>
+  <ofEntity>
+    <TeamInfo></TeamInfo>
+  </ofEntity>
+</RankedVoiceComponent.def>

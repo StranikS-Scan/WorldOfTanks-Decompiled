@@ -156,6 +156,13 @@ def showRetrainDialog(tankmenIds, vehicleCD):
 
 
 @wg_async
+def showRetrainingTankmanWindowDialog():
+    from gui.impl.lobby.crew.dialogs.change_tankman_training import ChangeTankmanTrainingDialog
+    result = yield wg_await(showSingleDialogWithResultData(layoutID=ChangeTankmanTrainingDialog.LAYOUT_ID, wrappedViewClass=ChangeTankmanTrainingDialog))
+    raise AsyncReturn(result)
+
+
+@wg_async
 def showRecruitNewTankmanDialog(vehicleCD, slotIdx, putInTank=False):
     from gui.impl.lobby.crew.dialogs.recruit_new_tankman_dialog import RecruitNewTankmanDialog
     result = yield wg_await(showSingleDialog(layoutID=RecruitNewTankmanDialog.LAYOUT_ID, wrappedViewClass=RecruitNewTankmanDialog, vehicleCD=vehicleCD, slotIdx=slotIdx, putInTank=putInTank))
@@ -178,8 +185,8 @@ def showCrewBooksPurchaseDialog(crewBookCD):
 
 @wg_async
 def showDocumentChangeDialog(tankmanInvID, ctx=None):
-    from gui.impl.lobby.crew.dialogs.document_change_dialog import DocumentChangeDialog
-    result = yield wg_await(showSingleDialog(layoutID=DocumentChangeDialog.LAYOUT_ID, wrappedViewClass=DocumentChangeDialog, tankmanInvID=tankmanInvID, ctx=ctx))
+    from gui.impl.lobby.crew.dialogs.skin_change_dialog import SkinChangeDialog
+    result = yield wg_await(showSingleDialogWithResultData(layoutID=SkinChangeDialog.LAYOUT_ID, wrappedViewClass=SkinChangeDialog, tankmanInvID=tankmanInvID, ctx=ctx))
     raise AsyncReturn(result)
 
 
@@ -201,4 +208,18 @@ def showDismissTankmanDialog(tankmanId, parentViewKey=None):
 def showRestoreTankmanDialog(tankmanId, vehicleId, slotIdx, parentViewKey=None):
     from gui.impl.lobby.crew.dialogs.restore_tankman_dialog import RestoreTankmanDialog
     result = yield wg_await(showSingleDialog(layoutID=RestoreTankmanDialog.LAYOUT_ID, wrappedViewClass=RestoreTankmanDialog, tankmanId=tankmanId, vehicleId=vehicleId, slotIdx=slotIdx, parentViewKey=parentViewKey))
+    raise AsyncReturn(result)
+
+
+@wg_async
+def showDismissSelectedTankmansDialog(tankmans, parentViewKey=None):
+    from gui.impl.lobby.crew.dialogs.dismiss_selected_tankmans import DismissSelectedTankmans
+    result = yield wg_await(showSingleDialog(layoutID=DismissSelectedTankmans.LAYOUT_ID, wrappedViewClass=DismissSelectedTankmans, tankmans=tankmans, parentViewKey=parentViewKey))
+    raise AsyncReturn(result)
+
+
+@wg_async
+def showRestoreSelectedTankmansDialog(tankmans, parentViewKey=None):
+    from gui.impl.lobby.crew.dialogs.restore_selected_tankmans import RestoreSelectedTankmans
+    result = yield wg_await(showSingleDialog(layoutID=RestoreSelectedTankmans.LAYOUT_ID, wrappedViewClass=RestoreSelectedTankmans, tankmans=tankmans, parentViewKey=parentViewKey))
     raise AsyncReturn(result)

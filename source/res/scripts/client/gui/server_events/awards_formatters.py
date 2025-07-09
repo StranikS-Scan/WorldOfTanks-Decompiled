@@ -37,7 +37,7 @@ from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 if TYPE_CHECKING:
-    from typing import Callable, List, Optional, Any, Union
+    from typing import Callable, List, Optional, Any, Union, Dict
     from account_helpers.offers.events_data import OfferEventData
     from gui.goodies.goodie_items import Booster
     from gui.server_events.bonuses import SimpleBonus, CrystalBonus, GoodiesBonus, PlusPremiumDaysBonus, EpicSelectTokensBonus, X5BattleTokensBonus, X3CrewTokensBonus
@@ -222,7 +222,8 @@ def getEpicBattleFormattersMap():
      'dossier': EpicDossierBonusFormatter(),
      'vehicles': RankedVehiclesBonusFormatter(),
      'epicSelectToken': InstructionEpicBattleBonusFormatter(),
-     'goodies': GoodiesEpicBattleBonusFormatter()})
+     'goodies': GoodiesEpicBattleBonusFormatter(),
+     'entitlements': EntitlementWulfTooltipFormatter()})
     return mapping
 
 
@@ -257,7 +258,8 @@ def getPostBattleFormatterMap():
 def getMissionsDefaultFormatterMap():
     mapping = getDefaultFormattersMap()
     mapping.update({'blueprints': BlueprintGroupBonusFormatter(),
-     'finalBlueprints': BlueprintGroupBonusFormatter()})
+     'finalBlueprints': BlueprintGroupBonusFormatter(),
+     'entitlements': EntitlementWulfTooltipFormatter()})
     return mapping
 
 
@@ -1787,6 +1789,28 @@ class EntitlementFormatter(SimpleBonusFormatter):
         value = bonus.getValue()
         isFormattedAmount = bonus.isFormattedAmount(value.id)
         return PreformattedBonus(bonusName=bonus.getName(), userName=bonus.getUserName(value.id), label=formatCountLabel(value.amount) if isFormattedAmount else backport.getIntegralFormat(value.amount), labelFormatter=self._getLabelFormatter(bonus), images=self._getImages(bonus), tooltip=bonus.getTooltip(), align=LABEL_ALIGN.RIGHT if isFormattedAmount else LABEL_ALIGN.CENTER, isCompensation=self._isCompensation(bonus))
+
+
+class EntitlementWulfTooltipFormatter(EntitlementFormatter):
+    ENTITLEMENTS = {}
+
+    def _format(self, bonus):
+        result = []
+        if bonus.isShowInGUI():
+            if bonus.getValue().id in self.ENTITLEMENTS:
+                result.append(self.__formatEnt(bonus))
+            else:
+                result.extend(super(EntitlementWulfTooltipFormatter, self)._format(bonus))
+        return result
+
+    def __formatEnt(self, bonus):
+        value = bonus.getValue()
+        isFormattedAmount = bonus.isFormattedAmount(value.id)
+        return PreformattedBonus(bonusName=bonus.getName(), label=formatCountLabel(value.amount) if isFormattedAmount else backport.getIntegralFormat(value.amount), userName=bonus.getUserName(value.id), labelFormatter=self._getLabelFormatter(bonus), images=self._getImages(bonus), align=LABEL_ALIGN.RIGHT if isFormattedAmount else LABEL_ALIGN.CENTER, isCompensation=self._isCompensation(bonus), compensationReason=self._getCompensationReason(bonus), tooltip=self.ENTITLEMENTS.get(value.id), specialArgs=[], isWulfTooltip=True)
+
+
+def registerEntitlementWulfTooltipFormatter(key, value):
+    EntitlementWulfTooltipFormatter.ENTITLEMENTS[key] = value
 
 
 class BattlePassBonusFormatter(SimpleBonusFormatter):

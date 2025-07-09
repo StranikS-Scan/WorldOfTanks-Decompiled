@@ -158,7 +158,7 @@ class ItemProcessor(Processor):
 
     def _response(self, code, callback, ctx=None, errStr=''):
         if code < 0:
-            _logger.error("Server responses an error [%s] while process %s '%s'", code2str(code), self.item.itemTypeName, str(self.item))
+            _logger.warning('Server fail response: code=%r, error=%r, ctx=%r', code, errStr, ctx)
             return callback(self._errorHandler(code, ctx=ctx, errStr=errStr))
         return callback(self._successHandler(code, ctx=ctx))
 

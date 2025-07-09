@@ -6,6 +6,7 @@ from gui.impl.gen import R
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.impl.lobby.tank_setup.tank_setup_helper import isEconomicDirBattleEnabled
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import getKpiValueString
 from gui.shared.tooltips import formatters, TOOLTIP_TYPE
@@ -152,6 +153,8 @@ class EffectsBlockConstructor(BattleBoosterTooltipBlockConstructor):
             block.append(formatters.packImageTextBlockData(title=skillNotLearntText % skillName, txtOffset=20))
             block.append(formatters.packImageTextBlockData(title=boostText, img=backport.image(R.images.gui.maps.icons.buttons.checkmark()) if skillLearnt and applyStyles else None, imgPadding=formatters.packPadding(left=2, top=3), txtOffset=20, padding=formatters.packPadding(top=15)))
             block.append(formatters.packImageTextBlockData(title=skillLearntText % skillName, txtOffset=20))
+        elif module.isEconomicBooster():
+            block.append(formatters.packMultipleText('', formatters.getImage(backport.image(R.images.gui.maps.icons.personal_reserves.tooltips.lightening_icon()), width=10, height=16, vspace=-3), text_styles.yellowText(backport.text(R.strings.tooltips.boostersWindow.booster.activateInfo.bonus())), ' ', text_styles.main(self.module.descriptor.description)))
         else:
             kpi = first(module.getKpi(self.configuration.vehicle))
             if kpi:
@@ -175,9 +178,17 @@ class BoosterHasNoEffectBlockConstructor(BattleBoosterTooltipBlockConstructor):
 
     def construct(self):
         block = list()
-        module = self.module
-        vehicle = self.configuration.vehicle
-        if vehicle is not None and not module.isAffectsOnVehicle(vehicle, self.configuration.eqSetupIDx):
-            block.append(formatters.packTextBlockData(text_styles.statusAlert(backport.text(R.strings.tooltips.battleBooster.useless.header()))))
-            block.append(formatters.packTextBlockData(text=text_styles.main(backport.text(R.strings.tooltips.battleBooster.useless.body())), padding=formatters.packPadding(top=8)))
+        if self.module.isEconomicBooster():
+            if self.configuration.isCompare:
+                self.__packUnsuitableBlockData(block, R.strings.tooltips.battleBooster.useless.compare())
+            elif not isEconomicDirBattleEnabled():
+                self.__packUnsuitableBlockData(block, R.strings.tooltips.battleBooster.useless.unsuitable_battlemode())
+        elif self.module.isEquipmentBooster():
+            vehicle = self.configuration.vehicle
+            if vehicle is not None and not self.module.isAffectsOnVehicle(vehicle, self.configuration.eqSetupIDx):
+                self.__packUnsuitableBlockData(block, R.strings.tooltips.battleBooster.useless.no_suitable_equipment())
         return block
+
+    def __packUnsuitableBlockData(self, block, text):
+        block.append(formatters.packTextBlockData(text_styles.statusAlert(backport.text(R.strings.tooltips.battleBooster.useless.header()))))
+        block.append(formatters.packTextBlockData(text=text_styles.main(backport.text(text)), padding=formatters.packPadding(top=8)))

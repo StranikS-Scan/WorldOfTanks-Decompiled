@@ -87,3 +87,4 @@ class HANGAR_ALIASES(object):
     CAROUSEL_EVENT_ENTRY_HOLDER = 'carouselEventEntryHolder'
     COLLECTION_ENTRY_POINT = 'CollectionEntryPoint'
     WINBACK_WIDGET = 'WinbackWidget'
+    BIRTHDAY_BANNER_ENTRY_POINT = 'BirthdayBannerEntryPoint'

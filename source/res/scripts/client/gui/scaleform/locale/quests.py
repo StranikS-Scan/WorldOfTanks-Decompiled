@@ -779,17 +779,17 @@ class QUESTS(object):
     DETAILS_DOSSIER_SUPPORTER = '#quests:details/dossier/supporter'
     DETAILS_DOSSIER_SCOUT = '#quests:details/dossier/scout'
     DETAILS_DOSSIER_MEDALKAY = '#quests:details/dossier/medalKay'
-    DETAILS_DOSSIER_MEDALCARIUS = '#quests:details/dossier/medalCarius'
-    DETAILS_DOSSIER_MEDALKNISPEL = '#quests:details/dossier/medalKnispel'
+    DETAILS_DOSSIER_MEDALSAMOKHIN = '#quests:details/dossier/medalSamokhin'
+    DETAILS_DOSSIER_MEDALGUDZ = '#quests:details/dossier/medalGudz'
     DETAILS_DOSSIER_MEDALPOPPEL = '#quests:details/dossier/medalPoppel'
     DETAILS_DOSSIER_MEDALABRAMS = '#quests:details/dossier/medalAbrams'
     DETAILS_DOSSIER_MEDALLECLERC = '#quests:details/dossier/medalLeClerc'
     DETAILS_DOSSIER_MEDALLAVRINENKO = '#quests:details/dossier/medalLavrinenko'
     DETAILS_DOSSIER_MEDALEKINS = '#quests:details/dossier/medalEkins'
-    DETAILS_DOSSIER_MEDALWITTMANN = '#quests:details/dossier/medalWittmann'
+    DETAILS_DOSSIER_MEDALUSHAKOV = '#quests:details/dossier/medalUshakov'
     DETAILS_DOSSIER_MEDALORLIK = '#quests:details/dossier/medalOrlik'
     DETAILS_DOSSIER_MEDALOSKIN = '#quests:details/dossier/medalOskin'
-    DETAILS_DOSSIER_MEDALHALONEN = '#quests:details/dossier/medalHalonen'
+    DETAILS_DOSSIER_MEDALKRYSOV = '#quests:details/dossier/medalKrysov'
     DETAILS_DOSSIER_MEDALBURDA = '#quests:details/dossier/medalBurda'
     DETAILS_DOSSIER_MEDALBILLOTTE = '#quests:details/dossier/medalBillotte'
     DETAILS_DOSSIER_MEDALKOLOBANOV = '#quests:details/dossier/medalKolobanov'
@@ -808,10 +808,10 @@ class QUESTS(object):
     DETAILS_DOSSIER_MEDALRADLEYWALTERS = '#quests:details/dossier/medalRadleyWalters'
     DETAILS_DOSSIER_MEDALLAFAYETTEPOOL = '#quests:details/dossier/medalLafayettePool'
     DETAILS_DOSSIER_MEDALBRUNOPIETRO = '#quests:details/dossier/medalBrunoPietro'
-    DETAILS_DOSSIER_MEDALTARCZAY = '#quests:details/dossier/medalTarczay'
+    DETAILS_DOSSIER_MEDALLYUBUSHKIN = '#quests:details/dossier/medalLyubushkin'
     DETAILS_DOSSIER_MEDALPASCUCCI = '#quests:details/dossier/medalPascucci'
     DETAILS_DOSSIER_MEDALDUMITRU = '#quests:details/dossier/medalDumitru'
-    DETAILS_DOSSIER_MEDALLEHVASLAIHO = '#quests:details/dossier/medalLehvaslaiho'
+    DETAILS_DOSSIER_MEDALKHAZOV = '#quests:details/dossier/medalKhazov'
     DETAILS_DOSSIER_MEDALNIKOLAS = '#quests:details/dossier/medalNikolas'
     DETAILS_DOSSIER_FRAGSSINAI = '#quests:details/dossier/fragsSinai'
     DETAILS_DOSSIER_SINAI = '#quests:details/dossier/sinai'
@@ -819,7 +819,7 @@ class QUESTS(object):
     DETAILS_DOSSIER_MEDALBROTHERSINARMS = '#quests:details/dossier/medalBrothersInArms'
     DETAILS_DOSSIER_MEDALCRUCIALCONTRIBUTION = '#quests:details/dossier/medalCrucialContribution'
     DETAILS_DOSSIER_MEDALDELANGLADE = '#quests:details/dossier/medalDeLanglade'
-    DETAILS_DOSSIER_MEDALTAMADAYOSHIO = '#quests:details/dossier/medalTamadaYoshio'
+    DETAILS_DOSSIER_MEDALTRUBIN = '#quests:details/dossier/medalTrubin'
     DETAILS_DOSSIER_BOMBARDIER = '#quests:details/dossier/bombardier'
     DETAILS_DOSSIER_HUNTSMAN = '#quests:details/dossier/huntsman'
     DETAILS_DOSSIER_STURDY = '#quests:details/dossier/sturdy'
@@ -1289,7 +1289,7 @@ class QUESTS(object):
     BONUSNAME_ATTENDANCE_REWARD = '#quests:bonusName/attendance_reward'
     BONUSNAME_TEAM_CREDITS_BONUS = '#quests:bonusName/team_credits_bonus'
     BONUSNAME_DAILY_QUESTS_REWARDS = '#quests:bonusName/daily_quests_rewards'
-    BONUSNAME_BUMBLEBEE_COIN = '#quests:bonusName/bumblebee_coin'
+    BONUSNAME_QUESTS = '#quests:bonusName/quests'
     ACTION_AUTO_CALENDAR = '#quests:action/auto/calendar'
     ACTION_FULL_CALENDAR = '#quests:action/full/calendar'
     ACTION_HERO_FULL_CALENDAR = '#quests:action/hero/full/calendar'
@@ -1951,7 +1951,7 @@ class QUESTS(object):
      BONUSNAME_ATTENDANCE_REWARD,
      BONUSNAME_TEAM_CREDITS_BONUS,
      BONUSNAME_DAILY_QUESTS_REWARDS,
-     BONUSNAME_BUMBLEBEE_COIN)
+     BONUSNAME_QUESTS)
     ACTION_ENUM = (ACTION_AUTO_CALENDAR,
      ACTION_FULL_CALENDAR,
      ACTION_HERO_FULL_CALENDAR,

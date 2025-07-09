@@ -5312,10 +5312,25 @@ def _readShells(xmlPath, nationID):
         descrs[id] = _readShell(xmlCtx, subsection, name, nationID, id, icons)
         ids[name] = id
 
+    _checkAndUpdateDelayedHE(descrs)
     section = None
     subsection = None
     ResMgr.purge(xmlPath, True)
     return (descrs, ids)
+
+
+def _checkAndUpdateDelayedHE(descrs):
+    for shellDescr in descrs.itervalues():
+        if shellDescr.kind == SHELL_TYPES.DELAYED_HE:
+            shellID = shellDescr.type.delayedShell
+            delayedShellDescr = descrs.get(shellID)
+            if delayedShellDescr is None:
+                raise SoftException('Unknown shellID {}'.format(shellID))
+            if delayedShellDescr.kind not in HAS_EXPLOSION:
+                raise SoftException('Bad delayedShell type {}'.format(shellID))
+            shellDescr.type.delayedShell = delayedShellDescr.compactDescr
+
+    return
 
 
 def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
@@ -5362,6 +5377,7 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
             factor = g_cache.commonConfig['miscParams']['shellFragmentsDamageAbsorptionFactor']
         setattr(shellType, 'shellFragmentsDamageAbsorptionFactor', factor)
         if isModernHighExplosive:
+            shellType.obstaclePenetration = _xml.readBool(xmlCtx, section, 'obstaclePenetration', component_constants.DEFAULT_MODERN_HE_OBSTACLE_PENETRATION)
             shellType.shieldPenetration = _xml.readBool(xmlCtx, section, 'shieldPenetration', component_constants.DEFAULT_MODERN_HE_SHIELD_PENETRATION)
             blastWave = _readImpactParams(xmlCtx, section, HighExplosiveImpact.BLAST_WAVE)
             shellFragments = _readImpactParams(xmlCtx, section, HighExplosiveImpact.SHELL_FRAGMENTS)
@@ -5385,12 +5401,6 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
 
             if shellType.explosionEdgeDamageFactor > 1.0:
                 _xml.raiseWrongXml(xmlCtx, 'explosionEdgeDamageFactor', 'explosionEdgeDamageFactor must be < 1')
-        if section.has_key('delayedBomb'):
-            shell.delayedBomb = _readShellDelayedBomb(xmlCtx, section['delayedBomb'])
-        isDelayedBomb = shell.delayedBomb.explosionDelay != 0
-        if isDelayedBomb or isModernHighExplosive:
-            shellType.maxDamage = max(shellType.maxDamage, *shell.damage)
-            shellType.obstaclePenetration = _xml.readBool(xmlCtx, section, 'obstaclePenetration', component_constants.DEFAULT_MODERN_HE_OBSTACLE_PENETRATION)
     elif mechanics == SHELL_MECHANICS_TYPE.GUARANTEED_DAMAGE:
         shellType.mechanics = mechanics
         subXmlCtx, subsection = _xml.getSubSectionWithContext(xmlCtx, section, 'guaranteedDamages', throwIfMissing=False)
@@ -5421,10 +5431,20 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
             else:
                 stunRadius = shellType.explosionRadius
             stun.stunRadius = stunRadius
+        stun.stunOnlyWithDamage = _xml.readBool(xmlCtx, section, 'stunOnlyWithDamage', False)
         stun.stunDuration = _xml.readPositiveFloat(xmlCtx, section, 'stunDuration') if section.has_key('stunDuration') else stunConfig.get('baseStunDuration', 30)
     else:
         stun = None
     shell.stun = stun
+    if kind == SHELL_TYPES.DELAYED_HE:
+        shellType.explosionDelay = section.readFloat('explosionDelay')
+        shellType.size = section.readFloat('size')
+        shellType.underWaterDelta = section.readFloat('underWaterDelta')
+        shellType.delayedShell = section.readInt('delayedShell')
+    if section.has_key('isArtilleryShotZoneVisible'):
+        shell.isArtilleryShotZoneVisible = section.readBool('isArtilleryShotZoneVisible', False)
+    if section.has_key('isOwnArtilleryShotZoneVisible'):
+        shell.isOwnArtilleryShotZoneVisible = section.readBool('isOwnArtilleryShotZoneVisible', False)
     effName = _xml.readNonEmptyString(xmlCtx, section, 'effects')
     v = g_cache.shotEffectsIndexes.get(effName)
     if v is None:
@@ -5732,6 +5752,7 @@ def _writeDualGun(item, section):
         _xml.rewriteFloat(subSection, 'preChargeIndication', item.dualGun.preChargeIndication)
         _xml.rewriteFloat(subSection, 'chargeCancelTime', item.dualGun.chargeCancelTime, 0.2)
         _xml.rewriteBool(subSection, 'resetReloadAfterShot', item.dualGun.resetReloadAfterShot, True)
+        _xml.rewriteBool(subSection, 'autoloadWithClip', item.dualGun.autoloadWithClip, False)
         return
 
 
@@ -7167,7 +7188,11 @@ def _readGunDualGunParams(xmlCtx, section):
     if subSection is None:
         return
     else:
-        res = component_constants.DualGun(chargeTime=_xml.readNonNegativeFloat(xmlCtx, subSection, 'chargeTime'), shootImpulse=_xml.readNonNegativeInt(xmlCtx, subSection, 'shootImpulse'), reloadLockTime=_xml.readNonNegativeFloat(xmlCtx, subSection, 'reloadLockTime'), reloadTimes=_xml.readTupleOfPositiveFloats(xmlCtx, subSection, 'reloadTimes'), rateTime=_xml.readNonNegativeFloat(xmlCtx, subSection, 'rateTime'), chargeThreshold=_xml.readNonNegativeFloat(xmlCtx, subSection, 'chargeThreshold'), afterShotDelay=_xml.readNonNegativeFloat(xmlCtx, subSection, 'afterShotDelay'), preChargeIndication=_xml.readNonNegativeFloat(xmlCtx, subSection, 'preChargeIndication'), chargeCancelTime=_xml.readNonNegativeFloat(xmlCtx, subSection, 'chargeCancelTime', 0.2), resetReloadAfterShot=_xml.readBool(xmlCtx, subSection, 'resetReloadAfterShot', True))
+        if subSection.has_key('autoloadWithClip'):
+            isAppropriateConfig = section.has_key('clip') and not section.has_key('autoreload')
+            if not isAppropriateConfig:
+                _xml.raiseWrongXml(xmlCtx, 'dualGun', "'autoloadWithClip' can only be used with regular clip.")
+        res = component_constants.DualGun(chargeTime=_xml.readNonNegativeFloat(xmlCtx, subSection, 'chargeTime'), shootImpulse=_xml.readNonNegativeInt(xmlCtx, subSection, 'shootImpulse'), reloadLockTime=_xml.readNonNegativeFloat(xmlCtx, subSection, 'reloadLockTime'), reloadTimes=_xml.readTupleOfPositiveFloats(xmlCtx, subSection, 'reloadTimes'), rateTime=_xml.readNonNegativeFloat(xmlCtx, subSection, 'rateTime'), chargeThreshold=_xml.readNonNegativeFloat(xmlCtx, subSection, 'chargeThreshold'), afterShotDelay=_xml.readNonNegativeFloat(xmlCtx, subSection, 'afterShotDelay'), preChargeIndication=_xml.readNonNegativeFloat(xmlCtx, subSection, 'preChargeIndication'), chargeCancelTime=_xml.readNonNegativeFloat(xmlCtx, subSection, 'chargeCancelTime', 0.2), resetReloadAfterShot=_xml.readBool(xmlCtx, subSection, 'resetReloadAfterShot', True), autoloadWithClip=_xml.readBool(xmlCtx, subSection, 'autoloadWithClip', False))
         return res
 
 
@@ -7652,18 +7677,6 @@ def reinstallOptionalDevices(vehDescr, newDevices):
 
     vehDescr.rebuildAttrs()
     return vehDescr
-
-
-def _readShellDelayedBomb(xmlCtx, section):
-    explosionDelay = _xml.readNonNegativeFloat(xmlCtx, section, 'explosionDelay')
-    size = _xml.readNonNegativeFloat(xmlCtx, section, 'size')
-    isDestroyAvailable = _xml.readBool(xmlCtx, section, 'isDestroyAvailable', True)
-    isProximityEnabled = _xml.readBool(xmlCtx, section, 'isProximityEnabled', True)
-    underWaterDelta = _xml.readNonNegativeFloat(xmlCtx, section, 'underWaterDelta')
-    isShotZoneVisible = _xml.readBool(xmlCtx, section, 'isShotZoneVisible', False)
-    isOwnShotZoneVisible = _xml.readBool(xmlCtx, section, 'isOwnShotZoneVisible', False)
-    isDestroyWithExplosion = _xml.readBool(xmlCtx, section, 'isDestroyWithExplosion', False)
-    return component_constants.DelayedBomb(explosionDelay=explosionDelay, isDestroyAvailable=isDestroyAvailable, size=size, isProximityEnabled=isProximityEnabled, underWaterDelta=underWaterDelta, isShotZoneVisible=isShotZoneVisible, isOwnShotZoneVisible=isOwnShotZoneVisible, isDestroyWithExplosion=isDestroyWithExplosion)
 
 
 _EMPTY_EMBLEM = (None, _CUSTOMIZATION_EPOCH, 0)

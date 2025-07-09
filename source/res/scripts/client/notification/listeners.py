@@ -12,7 +12,7 @@ import typing
 import WWISE
 from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import INTEGRATED_AUCTION_NOTIFICATIONS, IS_BATTLE_PASS_MARATHON_STARTED, TRADING_CARAVAN_NOTIFICATIONS, PROGRESSIVE_REWARD_VISITED, RESOURCE_WELL_END_SHOWN, RESOURCE_WELL_NOTIFICATIONS, RESOURCE_WELL_START_SHOWN, SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP, ArmoryYard, REFERRAL_PROGRAM_PGB_FULL, BIRTHDAY_2023_INTRO_SHOWN, SUBSCRIPTION_LAST_EXPIRATION_NOTIFICATION, BattleMatters, EarlyAccess, Paragons, PREMIUM_QUESTS_NOTIFICATION
+from account_helpers.AccountSettings import INTEGRATED_AUCTION_NOTIFICATIONS, IS_BATTLE_PASS_MARATHON_STARTED, TRADING_CARAVAN_NOTIFICATIONS, PROGRESSIVE_REWARD_VISITED, RESOURCE_WELL_END_SHOWN, RESOURCE_WELL_NOTIFICATIONS, RESOURCE_WELL_START_SHOWN, SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP, ArmoryYard, REFERRAL_PROGRAM_PGB_FULL, SUBSCRIPTION_LAST_EXPIRATION_NOTIFICATION, BattleMatters, EarlyAccess, Paragons, PREMIUM_QUESTS_NOTIFICATION, CUSTOM_NOTIFICATIONS
 from adisp import adisp_process
 from armory_yard.gui.shared.formatters import formatSpentCurrencies, formatPurchaseItems, formatBundlePurchase
 from armory_yard_constants import State
@@ -58,6 +58,7 @@ from gui.shared.utils import showInvitationInWindowsBar
 from gui.shared.utils.scheduled_notifications import SimpleNotifier
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
 from gui.shop_sales_event.constants import TRADING_CARAVAN_REFILL_SEEN, TRADING_CARAVAN_REFILL_EVENT_TYPE
+from gui.custom_notifications.constants import CUSTOM_NOTIFICATIONS_SEEN, CUSTOM_NOTIFICATIONS_EVENT_TYPE
 from gui.wgcg.clan.contexts import GetClanInfoCtx
 from gui.wgnc import g_wgncEvents, g_wgncProvider, wgnc_settings
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
@@ -71,7 +72,7 @@ from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from nations import AVAILABLE_NAMES
-from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C2DProgressionStyleDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, FriendshipRequestDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, SeniorityAwardsDecorator, WGNCPopUpDecorator, WotPlusIntroViewMessageDecorator, BattleMattersReminderDecorator, C11nProgressiveItemDecorator, TradingCaravanRefillDecorator, EarlyAccessDecorator
+from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C2DProgressionStyleDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, FriendshipRequestDecorator, CustomNotificationsStartDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, SeniorityAwardsDecorator, WGNCPopUpDecorator, WotPlusIntroViewMessageDecorator, BattleMattersReminderDecorator, C11nProgressiveItemDecorator, TradingCaravanRefillDecorator, EarlyAccessDecorator
 from notification.settings import NOTIFICATION_TYPE, NotificationData
 from shared_utils import first
 from skeletons.gui.battle_matters import IBattleMattersController
@@ -1861,6 +1862,93 @@ class TradingCaravanListener(_NotificationListener):
         AccountSettings.setNotifications(TRADING_CARAVAN_NOTIFICATIONS, settings)
 
 
+class CustomNotificationListener(_NotificationListener):
+    __slots__ = ('__startNotifiers',)
+    __eventNotifications = dependency.descriptor(IEventsNotificationsController)
+    __EVENT_TYPE_TO_SETTING = {CUSTOM_NOTIFICATIONS_EVENT_TYPE: CUSTOM_NOTIFICATIONS_SEEN}
+    __EVENT_TYPE_TO_DECORATOR = {CUSTOM_NOTIFICATIONS_EVENT_TYPE: CustomNotificationsStartDecorator}
+    __luiController = dependency.descriptor(ILimitedUIController)
+
+    def __init__(self):
+        self.__startNotifiers = {}
+        super(CustomNotificationListener, self).__init__()
+
+    def start(self, model):
+        result = super(CustomNotificationListener, self).start(model)
+        if result:
+            self.__eventNotifications.onEventNotificationsChanged += self.__onEventNotification
+            self.__tryNotify(self.__eventNotifications.getEventsNotifications())
+        return True
+
+    def stop(self):
+        self.__clearNotifiers()
+        self.__eventNotifications.onEventNotificationsChanged -= self.__onEventNotification
+        super(CustomNotificationListener, self).stop()
+
+    def __clearNotifiers(self):
+        for notifier in self.__startNotifiers.itervalues():
+            notifier.stopNotification()
+            notifier.clear()
+
+        self.__startNotifiers.clear()
+
+    def __onEventNotification(self, added, _):
+        self.__tryNotify(added)
+
+    def __tryNotify(self, notifications):
+        for notification in notifications:
+            if notification.eventType == CUSTOM_NOTIFICATIONS_EVENT_TYPE and self.__luiController.isRuleCompleted(LuiRules.SHOP_SALES_ENTRY_POINT):
+                notificationData = json.loads(notification.data)
+                self.__addNotification(notificationData, notification.eventType)
+
+    def __addNotification(self, data, eventType):
+        model = self._model()
+        if model is None:
+            return
+        else:
+            settings = AccountSettings.getNotifications(CUSTOM_NOTIFICATIONS)
+            settingName = self.__EVENT_TYPE_TO_SETTING[eventType]
+            notificationID = str(data['id'])
+            if notificationID not in settings[settingName]:
+                startDate = getTimestampByStrDate(str(data['startDate']))
+                endDate = getTimestampByStrDate(str(data['endDate']))
+                title = str(data['title'])
+                text = str(data['text'])
+                if startDate <= time_utils.getServerUTCTime() < endDate:
+                    decorator = self.__EVENT_TYPE_TO_DECORATOR.get(eventType)
+                    if callable(decorator):
+                        model.addNotification(decorator(entityID=int(notificationID), message={'title': title,
+                         'text': text}))
+                        self.__setNotificationShown(settings, settingName, notificationID)
+                        self.__removeNotifier(notificationID, eventType)
+                elif startDate > time_utils.getServerUTCTime():
+                    self.__addNotifier(notificationID, eventType, startDate)
+            return
+
+    def __addNotifier(self, notificationID, eventType, startDate):
+        notifiers = self.__startNotifiers
+        if notificationID not in notifiers:
+            notifiers[notificationID] = SimpleNotifier(partial(self.__getTimeToStart, startDate), self.__onNotifierUpdate)
+            notifiers[notificationID].startNotification()
+
+    def __removeNotifier(self, notificationID, eventType):
+        notifiers = self.__startNotifiers
+        if notificationID in notifiers:
+            notifiers[notificationID].stopNotification()
+            notifiers[notificationID].clear()
+            notifiers.pop(notificationID)
+
+    def __onNotifierUpdate(self):
+        self.__tryNotify(self.__eventNotifications.getEventsNotifications())
+
+    def __getTimeToStart(self, startDate):
+        return startDate - time_utils.getServerUTCTime()
+
+    def __setNotificationShown(self, settings, settingName, notificationID):
+        settings[settingName].add(notificationID)
+        AccountSettings.setNotifications(CUSTOM_NOTIFICATIONS, settings)
+
+
 class CollectionsListener(_NotificationListener, EventsHandler):
     __collections = dependency.descriptor(ICollectionsSystemController)
     __eventNotifications = dependency.descriptor(IEventsNotificationsController)
@@ -2338,33 +2426,6 @@ class BattleMattersTaskReminderListener(BaseReminderListener, EventsHandler):
         return todayStart <= timestamp <= todayEnd
 
 
-class Birthday2023Listener(_NotificationListener):
-    __eventNotifications = dependency.descriptor(IEventsNotificationsController)
-
-    def start(self, model):
-        result = super(Birthday2023Listener, self).start(model)
-        if result:
-            self.__eventNotifications.onEventNotificationsChanged += self.__onEventNotification
-            self.__tryNotify(self.__eventNotifications.getEventsNotifications())
-        return True
-
-    def stop(self):
-        self.__eventNotifications.onEventNotificationsChanged -= self.__onEventNotification
-        super(Birthday2023Listener, self).stop()
-
-    def __onEventNotification(self, added, _):
-        self.__tryNotify(added)
-
-    def __tryNotify(self, notifications):
-        for notification in notifications:
-            if notification.eventType == 'birthday2023Start':
-                introShown = AccountSettings.getSettings(BIRTHDAY_2023_INTRO_SHOWN)
-                if introShown:
-                    return
-                from gui.shared.event_dispatcher import showBirthday2023Intro
-                showBirthday2023Intro()
-
-
 class EarlyAccessListener(_NotificationListener):
     __earlyAccessController = dependency.descriptor(IEarlyAccessController)
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -2734,6 +2795,10 @@ class DailyBonusQuestListener(_NotificationListener):
         return
 
 
+class ExtNotificationListener(_NotificationListener):
+    pass
+
+
 registerNotificationsListeners((ServiceChannelListener,
  MissingEventsListener,
  PrbInvitesListener,
@@ -2756,9 +2821,9 @@ registerNotificationsListeners((ServiceChannelListener,
  CollectionsListener,
  ArmoryYardListener,
  ReferralProgramListener,
- Birthday2023Listener,
  BattleMattersTaskReminderListener,
  TradingCaravanListener,
+ CustomNotificationListener,
  SubscriptionListener,
  EarlyAccessListener,
  PersonalMissionsListener,

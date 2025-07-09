@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/impl/lobby/views/sub_views/rewards_view.py
+from gui.impl.lobby.frontline import RegisteredFrontlineTooltips
 from helpers import dependency
 from battle_pass_common import BattlePassState
 from frameworks.wulf import ViewFlags, ViewSettings
@@ -43,7 +44,14 @@ class RewardsView(ViewImpl):
 
     @createTooltipContentDecorator()
     def createToolTipContent(self, event, contentID):
-        return None
+        if contentID in RegisteredFrontlineTooltips.REGISTERED_SIMPLE_TOOLTIPS:
+            view = RegisteredFrontlineTooltips.REGISTERED_SIMPLE_TOOLTIPS.get(contentID)
+            return view()
+        elif contentID in RegisteredFrontlineTooltips.REGISTERED_TOOLTIPS:
+            view = RegisteredFrontlineTooltips.REGISTERED_TOOLTIPS.get(contentID)
+            return view(event)
+        else:
+            return None
 
     @property
     def viewModel(self):

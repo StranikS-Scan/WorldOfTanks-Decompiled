@@ -32,6 +32,10 @@ class KeySensor(object):
         self.__currentKeys = set()
         return
 
+    @property
+    def isActive(self):
+        return bool(self.__currentKeys)
+
     def addVelocity(self, velocity):
         if self.currentVelocity is None:
             self.currentVelocity = velocity
@@ -305,9 +309,7 @@ class VideoCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
             BigWorld.camera(self.__cameraTransition)
         else:
             BigWorld.camera(self._cam)
-        worldMat = Math.Matrix(self._cam.invViewMatrix)
-        self.__ypr = Math.Vector3(worldMat.yaw, worldMat.pitch, worldMat.roll)
-        self.__position = worldMat.translation
+        self._initCameraLocation()
         self.__velocity = Math.Vector3()
         self.__yprVelocity = Math.Vector3()
         self.__zoomVelocity = 0.0
@@ -331,6 +333,9 @@ class VideoCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         self.__isModeOverride = False
         self._cam.speedTreeTarget = None
         return
+
+    def getDesiredShotPoint(self):
+        return None
 
     def handleKeyEvent(self, key, isDown):
         if key is None:
@@ -403,6 +408,11 @@ class VideoCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
             result[0].y = 0.0
             result[2].y = 0.0
         return result
+
+    def _initCameraLocation(self):
+        worldMat = Math.Matrix(self._cam.invViewMatrix)
+        self.__ypr = Math.Vector3(worldMat.yaw, worldMat.pitch, worldMat.roll)
+        self.__position = worldMat.translation
 
     def _update(self):
         worldMatrix = Matrix(self._cam.invViewMatrix)

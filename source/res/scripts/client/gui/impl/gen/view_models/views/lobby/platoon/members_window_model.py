@@ -17,6 +17,7 @@ class PrebattleTypes(Enum):
     MAPBOX = 'mapbox'
     COMP7 = 'comp7'
     FUNRANDOM = 'funRandom'
+    RANKED = 'ranked'
 
 
 class MembersWindowModel(WindowModel):

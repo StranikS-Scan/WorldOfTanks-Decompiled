@@ -12,9 +12,24 @@ from gui.impl.lobby.tank_setup.interactors.base_equipment import BaseEquipmentIn
 from gui.shared.gui_items.processors.vehicle import VehicleAutoBattleBoosterEquipProcessor
 from gui.shared.utils import decorators
 from gui.shared.gui_items.items_actions import factory as ActionsFactory
+from AccountCommands import VEHICLE_SETTINGS_FLAG
+from gui.impl.gen.view_models.views.lobby.tank_setup.common.deal_panel_model import AutoRenewalType
+_VEHICLE_EQUIP_SETTING = {VEHICLE_SETTINGS_FLAG.AUTO_EQUIP_BOOSTER_SOFT | VEHICLE_SETTINGS_FLAG.AUTO_EQUIP_BOOSTER: AutoRenewalType.SOFT,
+ VEHICLE_SETTINGS_FLAG.AUTO_EQUIP_BOOSTER: AutoRenewalType.HARD}
+_NAME_TO_SETTING = {AutoRenewalType.SOFT: VEHICLE_SETTINGS_FLAG.AUTO_EQUIP_BOOSTER_SOFT | VEHICLE_SETTINGS_FLAG.AUTO_EQUIP_BOOSTER,
+ AutoRenewalType.HARD: VEHICLE_SETTINGS_FLAG.AUTO_EQUIP_BOOSTER}
 
 class BattleBoosterAutoRenewal(BaseAutoRenewal):
     __slots__ = ()
+
+    def setLocalTypeEquip(self, typeEquip):
+        self._typeEquip = typeEquip
+
+    def getLocalTypeEquip(self):
+        return self.getTypeEquip() if self._typeEquip is None else self._typeEquip
+
+    def getTypeEquip(self):
+        return _VEHICLE_EQUIP_SETTING.get(self._vehicle.settings & (VEHICLE_SETTINGS_FLAG.AUTO_EQUIP_BOOSTER | VEHICLE_SETTINGS_FLAG.AUTO_EQUIP_BOOSTER_SOFT), AutoRenewalType.SOFT)
 
     def getValue(self):
         return self._vehicle.isAutoBattleBoosterEquip()
@@ -22,9 +37,19 @@ class BattleBoosterAutoRenewal(BaseAutoRenewal):
     @decorators.adisp_process('techMaintenance')
     def changeValue(self, callback):
         value = self.getLocalValue()
+        typeEquip = self.getLocalTypeEquip()
         if value != self.getValue():
-            yield VehicleAutoBattleBoosterEquipProcessor(self._vehicle, value).request()
+            if not value:
+                yield VehicleAutoBattleBoosterEquipProcessor(self._vehicle, value, settings=VEHICLE_SETTINGS_FLAG.AUTO_EQUIP_BOOSTER_SOFT | VEHICLE_SETTINGS_FLAG.AUTO_EQUIP_BOOSTER).request()
+            else:
+                yield VehicleAutoBattleBoosterEquipProcessor(self._vehicle, value, settings=_NAME_TO_SETTING[typeEquip]).request()
             self.setLocalValue(None)
+            self.setLocalTypeEquip(None)
+        elif typeEquip != self.getTypeEquip() and typeEquip != AutoRenewalType.UNDEFINED:
+            flag = bool(self._vehicle.settings & VEHICLE_SETTINGS_FLAG.AUTO_EQUIP_BOOSTER_SOFT)
+            yield VehicleAutoBattleBoosterEquipProcessor(self._vehicle, not flag, settings=VEHICLE_SETTINGS_FLAG.AUTO_EQUIP_BOOSTER_SOFT).request()
+            self.setLocalValue(None)
+            self.setLocalTypeEquip(None)
         callback(None)
         return
 

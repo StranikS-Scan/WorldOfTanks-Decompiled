@@ -71,6 +71,12 @@ class AdventCalendarAccessor(BaseAccessor):
         return self._data_source.advent_calendar_fetch_hero_tank_info(callback)
 
 
+class GoldWagonAccessor(BaseAccessor):
+
+    def gold_wagon_fetch_info(self, callback):
+        return self._data_source.gold_wagon_fetch_info(callback)
+
+
 class CrafmachineAccessor(BaseAccessor):
 
     def craftmachine_modules_info(self, callback):
@@ -382,6 +388,9 @@ class GiftSystemAccessor(BaseAccessor):
     def post_gift_system_gift(self, callback, entitlementCode, receiverID, metaInfo):
         return self._data_source.post_gift_system_gift(callback, entitlementCode, receiverID, metaInfo)
 
+    def post_gift_system_gift_multiple(self, callback, entitlementCode, receiverIDs, metaInfo):
+        return self._data_source.post_gift_system_gift_multiple(callback, entitlementCode, receiverIDs, metaInfo)
+
 
 class ShopAccessor(BaseAccessor):
 
@@ -423,6 +432,7 @@ class Requester(object):
     gifts = RequestDescriptor(GiftSystemAccessor)
     uilogging = RequestDescriptor(UILoggingAccessor)
     shop = RequestDescriptor(ShopAccessor)
+    gold_wagon_info = RequestDescriptor(GoldWagonAccessor)
 
     @classmethod
     def create_requester(cls, url_fetcher, config, client_lang=None, user_agent=None):

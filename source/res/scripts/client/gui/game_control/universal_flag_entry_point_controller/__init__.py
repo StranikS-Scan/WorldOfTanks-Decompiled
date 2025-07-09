@@ -2,11 +2,12 @@
 # Embedded file name: scripts/client/gui/game_control/universal_flag_entry_point_controller/__init__.py
 import logging
 from Event import EventManager, Event
-from gui.game_control.universal_flag_entry_point_controller.config import UniversalFlagConfig, MissionsMarathonTarget, FullScreenBrowserTarget, ShopPageTarget, NopeTarget, UniversalFlagState, universalFlagConfigSchema, ProgressStateToken, ProgressStateExpirationToken
+from gui.game_control.universal_flag_entry_point_controller.config import UniversalFlagConfig, MissionsMarathonTarget, FullScreenBrowserTarget, ShopPageTarget, NopeTarget, UniversalFlagState, TopSubBrowserTarget, universalFlagConfigSchema, ProgressStateToken, ProgressStateExpirationToken
 from skeletons.gui.game_control import ILobbyCdnController
 from gui.impl.lobby.universal_web_event_window.universal_web_event_view import UniversalWebEventWindow
 from gui.server_events.events_dispatcher import showMissionsMarathon
-from gui.shared.event_dispatcher import showShop
+from gui.shared.event_dispatcher import showShop, showBrowserOverlayView
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from constants import Configs
 from gui.shared.utils.scheduled_notifications import SimpleNotifier
 from helpers import dependency, time_utils
@@ -72,6 +73,8 @@ class UniversalFlagEntryPointController(IUniversalFlagEntryPointController, Even
                 window.load()
             elif isinstance(target, ShopPageTarget):
                 showShop(path=target.relativeUrl)
+            elif isinstance(target, TopSubBrowserTarget):
+                showBrowserOverlayView(target.url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB)
             else:
                 _logger.error('Unknown flag target. Check universal flag config')
             return
@@ -199,6 +202,11 @@ class UniversalFlagEntryPointController(IUniversalFlagEntryPointController, Even
             self.onDataUpdated()
             return
         else:
+            token = self.__config.states[self.__activeStateIndex].token
+            if token is not None and not token.checkCompareAmountWithExpected():
+                self.__activeStateIndex = None
+                self.onDataUpdated()
+                return
             currentState = self.__config.states[self.__activeStateIndex]
             self.__eventCaption = self.__formatString(currentState.caption)
             self.__eventDescription = self.__formatString(currentState.description)

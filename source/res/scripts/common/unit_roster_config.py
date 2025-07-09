@@ -42,6 +42,10 @@ class Comp7Slot(BaseUnitRosterSlot):
     DEFAULT_LEVELS = (10, 10)
 
 
+class RankedSlot(BaseUnitRosterSlot):
+    DEFAULT_LEVELS = (6, 6)
+
+
 class SquadRoster(BaseUnitRoster):
     MAX_SLOTS = 3
     MAX_EMPTY_SLOTS = 2
@@ -116,3 +120,12 @@ class VersusAIRoster(BaseUnitRoster):
     SLOT_TYPE = RosterSlot11
     DEFAULT_SLOT_PACK = RosterSlot11().pack()
     LIMITS_TYPE = BaseUnitRosterLimits
+
+
+class RankedRoster(BaseUnitRoster):
+    MAX_SLOTS = 2
+    MAX_EMPTY_SLOTS = 1
+    SLOT_TYPE = RankedSlot
+    DEFAULT_SLOT_PACK = RankedSlot().pack()
+    LIMITS_TYPE = BaseUnitRosterLimits
+    MAX_VEHICLES = 10000

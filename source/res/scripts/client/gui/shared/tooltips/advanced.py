@@ -137,18 +137,20 @@ class HangarBoosterAdvanced(BaseAdvancedTooltip):
 
     def _getBlocksList(self, *args, **kwargs):
         item = self._item
-        itemId = item.getGUIEmblemID()
-        header = self._item.userName
+        itemId = descr = item.getGUIEmblemID()
+        movie = MODULE_MOVIES.get(itemId, None)
+        header = item.userName
         descReady = False
-        if 'crewSkillBattleBooster' in item.tags:
+        if item.isCrewBooster():
             movie = SKILL_MOVIES[itemId]
             affectedSkillName = item.getAffectedSkillName()
             skillLocales = R.strings.crew_perks.dyn(affectedSkillName)
-            itemId = backport.text(skillLocales.shortDescription()) if skillLocales.isValid() else affectedSkillName
+            descr = backport.text(skillLocales.shortDescription()) if skillLocales.isValid() else affectedSkillName
             descReady = True
-        else:
-            movie = MODULE_MOVIES[itemId]
-        return self._packAdvancedBlocks(movie, header, itemId, descReady)
+        elif item.isEconomicBooster():
+            descr = item.descriptor.shortDescriptionSpecial
+            descReady = True
+        return self._packAdvancedBlocks(movie, header, descr, descReady)
 
 
 class HangarModuleAdvanced(BaseAdvancedTooltip):
@@ -330,7 +332,16 @@ MODULE_MOVIES = {'largeRepairkit': 'consumablesRepairKitBig',
  'turbocharger': 'equipmentTurbocharger',
  THERMAL_VISION: 'thermalVision',
  'modernizedDamageVentilation': 'equipmentExperimentalDamageVentilation',
- 'modernizedTankRammerSights': 'equipmentExperimentalTankRammerSights'}
+ 'modernizedTankRammerSights': 'equipmentExperimentalTankRammerSights',
+ 'xpDirectivesBattleBooster1': 'xpDirectivesBattleBooster',
+ 'xpDirectivesBattleBooster2': 'xpDirectivesBattleBooster',
+ 'xpDirectivesBattleBooster3': 'xpDirectivesBattleBooster',
+ 'creditsDirectivesBattleBooster1': 'creditsDirectivesBattleBooster',
+ 'creditsDirectivesBattleBooster2': 'creditsDirectivesBattleBooster',
+ 'creditsDirectivesBattleBooster3': 'creditsDirectivesBattleBooster',
+ 'comboXpDirectivesBattleBooster1': 'comboXpDirectivesBattleBooster',
+ 'comboXpDirectivesBattleBooster2': 'comboXpDirectivesBattleBooster',
+ 'comboXpDirectivesBattleBooster3': 'comboXpDirectivesBattleBooster'}
 TANKMAN_MOVIES = {'commander': 'crewCommander',
  'driver': 'crewDriver',
  'gunner': 'crewGunner',

@@ -13,6 +13,7 @@ class PrebattleType(Enum):
     BATTLEROYAL = 'battle_royal'
     EPIC = 'epic'
     MAPBOX = 'mapbox'
+    RANKED = 'ranked'
 
 
 class ErrorType(IntEnum):

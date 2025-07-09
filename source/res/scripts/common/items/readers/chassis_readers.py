@@ -247,11 +247,11 @@ def readLeveredSuspension(xmlCtx, section, cache):
 
 
 def readSplineTrackPairDesc(xmlCtx, section, cache):
-    splineSegmentModelSets = {'default': chassis_components.SplineSegmentModelSet(left=_xml.readNonEmptyString(xmlCtx, section, 'segmentModelLeft'), right=_xml.readNonEmptyString(xmlCtx, section, 'segmentModelRight'), secondLeft=_xml.readStringOrNone(xmlCtx, section, 'segment2ModelLeft') or '', secondRight=_xml.readStringOrNone(xmlCtx, section, 'segment2ModelRight') or '')}
+    splineSegmentModelSets = {'default': chassis_components.SplineSegmentModelSet(modelsSetName='default', left=_xml.readNonEmptyString(xmlCtx, section, 'segmentModelLeft'), right=_xml.readNonEmptyString(xmlCtx, section, 'segmentModelRight'), secondLeft=_xml.readStringOrNone(xmlCtx, section, 'segment2ModelLeft') or '', secondRight=_xml.readStringOrNone(xmlCtx, section, 'segment2ModelRight') or '')}
     modelSetsSection = section['modelSets']
     if modelSetsSection:
         for sname, subSection in modelSetsSection.items():
-            splineSegmentModelSets[sname] = chassis_components.SplineSegmentModelSet(left=_xml.readNonEmptyString(xmlCtx, subSection, 'segmentModelLeft'), right=_xml.readNonEmptyString(xmlCtx, subSection, 'segmentModelRight'), secondLeft=_xml.readStringOrNone(xmlCtx, subSection, 'segment2ModelLeft') or '', secondRight=_xml.readStringOrNone(xmlCtx, subSection, 'segment2ModelRight') or '')
+            splineSegmentModelSets[sname] = chassis_components.SplineSegmentModelSet(modelsSetName=sname, left=_xml.readNonEmptyString(xmlCtx, subSection, 'segmentModelLeft'), right=_xml.readNonEmptyString(xmlCtx, subSection, 'segmentModelRight'), secondLeft=_xml.readStringOrNone(xmlCtx, subSection, 'segment2ModelLeft') or '', secondRight=_xml.readStringOrNone(xmlCtx, subSection, 'segment2ModelRight') or '')
 
     length = _xml.readFloat(xmlCtx, section, 'segmentLength')
     offset = _xml.readFloat(xmlCtx, section, 'segmentOffset', 0)

@@ -182,7 +182,7 @@ class ConfirmedBattleBooster(ConfirmedArtefact):
         vehicleToInstall = self.__itemsCache.items.getVehicle(vehInvID)
         skillLearn = REQ_CRITERIA.CUSTOM(lambda item: not item.isAffectedSkillLearnt(vehicleToInstall) and not item.isBuiltinPerkBooster())
         return {ItemHighlightTypes.BATTLE_BOOSTER_REPLACE: REQ_CRITERIA.BATTLE_BOOSTER.CREW_EFFECT | skillLearn,
-         ItemHighlightTypes.BATTLE_BOOSTER: (REQ_CRITERIA.BATTLE_BOOSTER.CREW_EFFECT | ~skillLearn) ^ REQ_CRITERIA.BATTLE_BOOSTER.OPTIONAL_DEVICE_EFFECT}
+         ItemHighlightTypes.BATTLE_BOOSTER: (REQ_CRITERIA.BATTLE_BOOSTER.CREW_EFFECT | ~skillLearn) ^ REQ_CRITERIA.BATTLE_BOOSTER.OPTIONAL_DEVICE_EFFECT ^ REQ_CRITERIA.BATTLE_BOOSTER.ECONOMIC_DIRECTIVES}
 
 
 class ConfirmedBattleAbility(ConfirmedItem):

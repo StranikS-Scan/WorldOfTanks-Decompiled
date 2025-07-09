@@ -21,6 +21,13 @@ class GiftEventDevGifter(GiftEventBaseGifter, IDevMessagesPusher):
             _logger.info('%s send gift rejected by reason=%s', self, result.state.value)
             self._pushClientMessage('{}\nsend gift rejected'.format(self))
 
+    @adisp_process
+    def sendGiftMultiple(self, entitlementCode, receiverIDs, metaInfo, callback=None):
+        result = yield super(GiftEventDevGifter, self).sendGift(entitlementCode, receiverIDs, metaInfo)
+        if result.state not in (GifterResponseState.WEB_SUCCESS, GifterResponseState.WEB_FAILURE):
+            _logger.info('%s send gift rejected by reason=%s', self, result.state.value)
+            self._pushClientMessage('{}\nsend gift rejected'.format(self))
+
     @classmethod
     def _formatMessage(cls, message):
         return text_styles.statusAlert(message)

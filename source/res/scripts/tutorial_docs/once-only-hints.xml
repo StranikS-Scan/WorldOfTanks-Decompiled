@@ -1041,5 +1041,30 @@
       </condition>
       <update-runtime>	True	</update-runtime>
     </hint>
+    <hint>	BirthdayPostbattleExtraTabHint	  <item-id>	PostbattleExtraTab	</item-id>
+      <text>	_(#tutorial:hint/battleResults/postbattleExtraTab)	</text>
+      <arrow>
+        <direction>	R	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <checked-ui-state>
+        <simple-state>
+          <state>	visible	</state>
+          <value>	True	</value>
+        </simple-state>
+      </checked-ui-state>
+      <update-runtime>	True	</update-runtime>
+      <ignore-outside-click>	True	</ignore-outside-click>
+    </hint>
+    <hint>	AddEconomicDirectivesHint	  <item-id>	AddEconomicDirectivesHintNew	</item-id>
+      <text>	_(#tutorial:economicDirectives/new/hint)	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <update-runtime>	True	</update-runtime>
+      <ignore-outside-click>	True	</ignore-outside-click>
+      <hide-immediately>	True	</hide-immediately>
+    </hint>
   </hints>
 </once-only-hints.xml>

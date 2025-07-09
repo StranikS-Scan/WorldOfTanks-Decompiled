@@ -137,7 +137,8 @@ _SHELL_KINDS = (SHELL_TYPES.HOLLOW_CHARGE,
  SHELL_TYPES.ARMOR_PIERCING_HE,
  SHELL_TYPES.ARMOR_PIERCING_CR,
  SHELL_TYPES.ARMOR_PIERCING_FSDS,
- SHELL_TYPES.FLAME)
+ SHELL_TYPES.FLAME,
+ SHELL_TYPES.DELAYED_HE)
 _POWER_PIERCING_SHELLS = (SHELL_TYPES.ARMOR_PIERCING, SHELL_TYPES.ARMOR_PIERCING_CR, SHELL_TYPES.ARMOR_PIERCING_FSDS)
 _AUTOCANNON_SHOT_DISTANCE = 400
 
@@ -703,7 +704,11 @@ class VehicleParams(_ParameterBase):
     @property
     def explosionRadius(self):
         shotShell = self._itemDescr.shot.shell
-        return round(shotShell.type.explosionRadius, 2) if shotShell.kind in HAS_EXPLOSION else 0
+        if shotShell.kind in HAS_EXPLOSION:
+            return round(shotShell.type.explosionRadius, 2)
+        if shotShell.kind == SHELL_TYPES.DELAYED_HE:
+            delayedShellDescr = vehicles.getItemByCompactDescr(shotShell.type.delayedShell)
+            return round(delayedShellDescr.type.explosionRadius, 2)
 
     @property
     def aimingTime(self):
@@ -1632,7 +1637,11 @@ class ShellParams(CompatibleParams):
 
     @property
     def explosionRadius(self):
-        return self._itemDescr.type.explosionRadius if self._itemDescr.kind in HAS_EXPLOSION else 0
+        if self._itemDescr.kind in HAS_EXPLOSION:
+            return self._itemDescr.type.explosionRadius
+        if self._itemDescr.kind == SHELL_TYPES.DELAYED_HE:
+            delayedShellDescr = vehicles.getItemByCompactDescr(self._itemDescr.type.delayedShell)
+            return delayedShellDescr.type.explosionRadius
 
     @property
     def piercingPowerTable(self):
@@ -1669,7 +1678,7 @@ class ShellParams(CompatibleParams):
 
     @property
     def explosionDelay(self):
-        return self._itemDescr.delayedBomb.explosionDelay if self._itemDescr.isDelayedBomb else None
+        return self._itemDescr.type.explosionDelay if self._itemDescr.kind == SHELL_TYPES.DELAYED_HE else None
 
     @property
     def isBasic(self):

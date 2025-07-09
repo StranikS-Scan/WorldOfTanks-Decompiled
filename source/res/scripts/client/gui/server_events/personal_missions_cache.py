@@ -140,6 +140,13 @@ class PersonalMissionsCache(object):
 
         return result
 
+    def getAllPMVehiclesCDs(self):
+        result = []
+        for operation in self.getAllOperations():
+            result.append(self.getAllOperations().get(operation).getVehicleBonus().intCD)
+
+        return result
+
     def getOldOperations(self):
         result = {}
         for branch in PM_BRANCH.OLD_BRANCHES:

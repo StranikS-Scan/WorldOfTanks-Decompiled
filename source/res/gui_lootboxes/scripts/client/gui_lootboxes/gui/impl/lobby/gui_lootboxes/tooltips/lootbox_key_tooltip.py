@@ -4,6 +4,7 @@ from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
 from gui.impl.pub import ViewImpl
 from gui_lootboxes.gui.impl.gen.view_models.views.lobby.gui_lootboxes.tooltips.lootbox_key_tooltip_model import LootboxKeyTooltipModel
+from gui_lootboxes.gui.impl.lobby.gui_lootboxes import gui_helpers
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 
@@ -38,9 +39,4 @@ class LootboxKeyTooltip(ViewImpl):
         lootboxNames.invalidate()
         vm.setIsActionTooltip(self.__isActionTooltip)
         vm.setIsShowCount(self.__isShowCount)
-        vm.lootboxKey.setKeyID(self.__key.keyID)
-        vm.lootboxKey.setCount(self.__key.count)
-        vm.lootboxKey.keyType.setValue(self.__key.keyType)
-        vm.lootboxKey.setIconName(self.__key.iconName)
-        vm.lootboxKey.setUserName(self.__key.userName)
-        vm.lootboxKey.setOpenProbability(self.__key.openProbability)
+        gui_helpers.fillKeyModel(vm.lootboxKey, self.__key)

@@ -260,7 +260,7 @@ class StatisticsCollector(IStatisticsCollector):
          'contentType': ResMgr.activeContentType(),
          'gpuDriverVersion': statisticsDict['gpuDriverVersion'],
          'graphicsAPIID': statisticsDict['graphicsAPIID'],
-         'multiGPU': statisticsDict['multiGPU'],
+         'multiGPU': 0,
          'cpuName': statisticsDict['cpuName'],
          'hangarFirstLoadingTime': self.__hangarLoadingTime,
          'clientBit': statisticsDict['clientBit'],

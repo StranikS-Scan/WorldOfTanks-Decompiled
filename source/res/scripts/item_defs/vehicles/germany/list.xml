@@ -1309,7 +1309,7 @@
     <price>	11000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank role_LT_universal HD lockExceptProgression scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
+    <tags>	lightTank role_LT_universal private HD lockExceptProgression scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
     <level>	8	</level>
   </G120_M41_90_GrandFinal>
   <G32_PzV_PzIV>
@@ -2087,4 +2087,31 @@
     <tags>	AT-SPG role_ATSPG_support heavyAT-SPG HD beast tankRammer_class1_user extraHealthReserve_class1_user improvedVentilation_class1_user antifragmentationLining_heavy_user earn_crystals special secret testTank	</tags>
     <level>	10	</level>
   </G178_Sturmtiger_V1>
+  <G64_Panther_II_FL>
+    <id>	31005	</id>
+    <userString>	#germany_vehicles:Panther_II_FL	</userString>
+    <shortUserString>	#germany_vehicles:Panther_II_FL_short	</shortUserString>
+    <description>	#germany_vehicles:Panther_II_descr	</description>
+    <shortDescriptionSpecial>	#germany_vehicles:Panther_II_FL_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#germany_vehicles:Panther_II_FL_long_special	</longDescriptionSpecial>
+    <price>	1	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	mediumTank role_MT_assault private epic_battles HD beast improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user	</tags>
+    <level>	8	</level>
+  </G64_Panther_II_FL>
+  <G189_E100_02>
+    <id>	31007	</id>
+    <userString>	#germany_vehicles:G189_E100_02	</userString>
+    <shortUserString>	#germany_vehicles:G189_E100_02_short	</shortUserString>
+    <description>	#germany_vehicles:G189_E100_02_descr	</description>
+    <shortDescriptionSpecial>	#germany_vehicles:G189_E100_02_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#germany_vehicles:G189_E100_02_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_assault HD heavyTank1 rocketAcceleration improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals special secret testTank	</tags>
+    <level>	10	</level>
+  </G189_E100_02>
 </list.xml>

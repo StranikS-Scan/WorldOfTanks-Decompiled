@@ -2,33 +2,39 @@
 # Embedded file name: scripts/client/gui/impl/lobby/crew/filter/data_providers.py
 import operator
 import random
+import nations
 from collections import OrderedDict, namedtuple
 from typing import Optional
-import nations
 from Event import Event
 from constants import MAX_VEHICLE_LEVEL
 from gui import GUI_NATIONS_ORDER_INDICES, GUI_NATIONS_ORDER_INDEX
+from gui.game_control import restore_contoller
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crew.common.filter_toggle_group_model import ToggleGroupType
-from gui.impl.gen.view_models.views.lobby.crew.tankman_model import TankmanLocation
+from gui.impl.gen.view_models.views.lobby.crew.tankman_model import TankmanKind, TankmanLocation
 from gui.impl.lobby.crew.crew_helpers.sort_helpers import SortHeap
 from gui.impl.lobby.crew.filter import VEHICLE_LOCATION_IN_HANGAR, GRADE_PREMIUM, GRADE_ELITE, GRADE_PRIMARY
 from gui.impl.lobby.crew.utils import getDocGroupValues, getSecretWithoutRentCriteria, getPremiumWithoutRentCriteria
 from gui.server_events import recruit_helper
+from gui.server_events.recruit_helper import _BaseRecruitInfo
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.Tankman import Tankman, getFullUserName
+from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER_INDICES, VEHICLE_TAGS, checkForTags
 from gui.shared.utils.requesters import REQ_CRITERIA, RequestCriteria
 from helpers import dependency
 from items import tankmen
 from skeletons.gui.shared import IItemsCache
+from itertools import groupby
 
 class FilterableItemsDataProvider(object):
+    __slots__ = ('_state', '_initialItemsCount', '__itemsCount', '__vehSortHeap', '__items', 'onDataChanged')
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, state):
         self.onDataChanged = Event()
         self._state = state
-        self.__initialItemsCount = None
+        self._initialItemsCount = None
         self.__itemsCount = None
         self.__vehSortHeap = None
         self.__items = None
@@ -38,7 +44,7 @@ class FilterableItemsDataProvider(object):
         return self.items()[item]
 
     def clear(self):
-        self.__initialItemsCount = None
+        self._initialItemsCount = None
         self.__itemsCount = None
         self.__vehSortHeap = None
         self.__items = None
@@ -52,9 +58,9 @@ class FilterableItemsDataProvider(object):
 
     @property
     def initialItemsCount(self):
-        if self.__initialItemsCount is None:
-            self.__initialItemsCount = len(self._getInitialItems())
-        return self.__initialItemsCount
+        if self._initialItemsCount is None:
+            self._initialItemsCount = len(self._getInitialItems())
+        return self._initialItemsCount
 
     @property
     def itemsCount(self):
@@ -65,7 +71,7 @@ class FilterableItemsDataProvider(object):
     def reinit(self):
         self.__items = None
         self.__itemsCount = None
-        self.__initialItemsCount = None
+        self._initialItemsCount = None
         return
 
     def update(self):
@@ -263,217 +269,280 @@ class VehiclesDataProvider(FilterableItemsDataProvider):
         return self.itemsCache.items.getVehicles(criteria)
 
 
-class TankmenDataProvider(FilterableItemsDataProvider):
+class TankmanDataProviderBase(FilterableItemsDataProvider):
+    SECONDS_IN_DAY = 86400
+    __slots__ = ('_inventoryTankman', '_dismissedTankman', '_recruitTankman', '_uniqueTankman', '_groupedSortedList', '_headerIndexes')
 
     def __init__(self, state):
-        super(TankmenDataProvider, self).__init__(state)
-        self.__inventoryTankmen = None
-        self.__dismissedTankmen = None
+        super(TankmanDataProviderBase, self).__init__(state)
+        self._inventoryTankman = None
+        self._dismissedTankman = None
+        self._recruitTankman = None
+        self._uniqueTankman = None
+        self._groupedSortedList = None
+        self._headerIndexes = None
         return
 
-    def dissmissed(self):
-        items = self._getDismissedTankmen()
-        return self.__applyFilters(items)
+    @property
+    def stateValue(self):
+        return self._state
+
+    def getActualItemsAmount(self):
+        return len(self.getTankmanSortedList()) if self._shouldUseSortedList() else self.itemsCount
+
+    def _shouldUseSortedList(self):
+        return False
 
     def clear(self):
-        self.__inventoryTankmen = None
-        self.__dismissedTankmen = None
-        super(TankmenDataProvider, self).clear()
-        return
-
-    def regular(self):
-        items = self._getInventoryTankmen()
-        return self.__applyFilters(items)
-
-    def tankmenInBarracksCount(self):
-        return sum((1 for tankman in self._getInventoryTankmen() if not tankman.isInTank))
+        self._resetValues()
+        super(TankmanDataProviderBase, self).clear()
 
     def reinit(self):
-        super(TankmenDataProvider, self).reinit()
-        self.__inventoryTankmen = None
-        self.__dismissedTankmen = None
+        self._resetValues()
+        super(TankmanDataProviderBase, self).reinit()
+
+    def getHeaderIndexes(self):
+        if self._shouldSkipHeaders():
+            return []
+        elif self._headerIndexes is not None:
+            return self._headerIndexes
+        else:
+            self.getTankmanSortedList()
+            return self._headerIndexes
+
+    def _shouldSkipHeaders(self):
+        raise NotImplementedError()
+
+    def getTankmanSortedList(self):
+        raise NotImplementedError
+
+    def _resetValues(self):
+        self._inventoryTankman = None
+        self._dismissedTankman = None
+        self._recruitTankman = None
+        self._uniqueTankman = None
+        self._groupedSortedList = None
+        self._headerIndexes = None
         return
 
-    def _getFiltersList(self):
-        return [self._getFilterByVehicleTypeCriteria(),
-         self._getFilterByVehicleTierCriteria(),
-         self._getFilterByVehicleGradeCriteria(),
-         self._getFilterByVehicleCDCriteria(),
-         self._getFilterByNationCriteria(),
-         self._getFilterByLocationCriteria(),
-         self._getFilterByTankmanRoleCriteria(),
-         self._getSearchCriteria()]
+    def _getCombinedTankman(self):
+        return self._getInventoryTankman() + self._getRecruitsTankman()
 
-    def _getInitialFilterCriteria(self):
-        return ~REQ_CRITERIA.TANKMAN.VEHICLE_BATTLE_ROYALE | ~REQ_CRITERIA.TANKMAN.VEHICLE_HIDDEN_IN_HANGAR
+    def _getInventoryTankman(self):
+        if self._inventoryTankman is None:
+            self._inventoryTankman = self.itemsCache.items.getInventoryTankmen().values()
+        return self._inventoryTankman
 
-    def _getFilterByVehicleTypeCriteria(self):
-        vehicleTypes = self._state[ToggleGroupType.VEHICLETYPE.value]
-        return REQ_CRITERIA.TANKMAN.VEHICLE_NATIVE_TYPES(vehicleTypes) if vehicleTypes else None
+    def _getDismissedTankman(self):
+        if self._dismissedTankman is None:
+            self._dismissedTankman = self.itemsCache.items.getDismissedTankmen().values()
+        return self._dismissedTankman
 
-    def _getFilterByVehicleTierCriteria(self):
-        vehicleTiers = self._state[ToggleGroupType.VEHICLETIER.value]
-        vehicleTiers = {int(t) for t in vehicleTiers}
-        return REQ_CRITERIA.TANKMAN.VEHICLE_NATIVE_LEVELS(vehicleTiers) if vehicleTiers else None
+    def _getRecruitsTankman(self):
+        if self._recruitTankman is None:
+            self._recruitTankman = recruit_helper.getAllRecruitsInfo()
+        return self._recruitTankman
 
-    def _getFilterByVehicleGradeCriteria(self):
-        grades = self._state[ToggleGroupType.VEHICLEGRADE.value]
-        if not grades & {GRADE_PREMIUM, GRADE_ELITE, GRADE_PRIMARY}:
-            return None
-        else:
-            criteria = REQ_CRITERIA.NONE
-            if GRADE_PREMIUM in grades:
-                criteria ^= REQ_CRITERIA.CUSTOM(lambda item: item.vehicleNativeDescr.type.isPremium)
-            if GRADE_ELITE in grades:
-                criteria ^= REQ_CRITERIA.CUSTOM(lambda item: getattr(item.getVehicle(), 'isElite', False) and not getattr(item.getVehicle(), 'isPremium', False))
-            if GRADE_PRIMARY in grades:
-                criteria ^= REQ_CRITERIA.CUSTOM(lambda item: getattr(item.getVehicle(), 'isFavorite', False))
-            return criteria
-
-    def _getFilterByVehicleCDCriteria(self):
-        vehicleCDs = self._state[ToggleGroupType.VEHICLECD.value]
-        return REQ_CRITERIA.TANKMAN.NATIVE_TANKS(vehicleCDs) if vehicleCDs else None
-
-    def _getFilterByNationCriteria(self):
-        value = self._state[ToggleGroupType.NATION.value]
-        return REQ_CRITERIA.TANKMAN.NATION(value) if value else None
-
-    def _getFilterByLocationCriteria(self):
-        locations = self._state[ToggleGroupType.VEHICLEGRADE.value]
-        if not locations & {TankmanLocation.INBARRACKS.value, TankmanLocation.INTANK.value}:
-            return None
-        else:
-            criteria = REQ_CRITERIA.NONE
-            if TankmanLocation.INBARRACKS.value in locations:
-                criteria ^= ~REQ_CRITERIA.TANKMAN.IN_TANK
-            if TankmanLocation.INTANK.value in locations:
-                criteria ^= REQ_CRITERIA.TANKMAN.IN_TANK
-            return criteria
-
-    def _getFilterByTankmanRoleCriteria(self):
-        roles = self._state[ToggleGroupType.TANKMANROLE.value]
-        return REQ_CRITERIA.TANKMAN.ROLES(roles) if roles else None
-
-    def _getSearchCriteria(self):
-        return REQ_CRITERIA.TANKMAN.SPECIFIC_BY_NAME_OR_SKIN(self._state.searchString) if self._state.searchString else None
+    def _getUniqueTankman(self):
+        if self._uniqueTankman is None:
+            self._uniqueTankman = []
+            inventoryTankman = self._getInventoryTankman() or []
+            recruitsTankman = self._getRecruitsTankman() or []
+            self._uniqueTankman.extend((item for item in inventoryTankman if item.descriptor and item.descriptor.isUnique or item.isInSkin))
+            self._uniqueTankman.extend((item for item in recruitsTankman if hasattr(item, 'isUnique') and item.isUnique()))
+        return self._uniqueTankman
 
     def _getSortKeyCriteria(self):
+        return REQ_CRITERIA.CUSTOM(self._getUnifiedSortKey)
 
-        def key(item):
+    def _getUnifiedSortKey(self, item):
+        return self._getExtraSortKey(item) + self._getBaseSortKey(item)
+
+    def _getExtraSortKey(self, item):
+        pass
+
+    def _getBaseSortKey(self, item):
+        if isinstance(item, Tankman):
+            dismissedDays = 0
+            if item.isDismissed:
+                _, time = restore_contoller.getTankmenRestoreInfo(item)
+                dismissedDays = time // self.SECONDS_IN_DAY
             tdescr = item.descriptor
-            return (GUI_NATIONS_ORDER_INDICES[item.nationID],
-             -tdescr.totalXP(freeSkillsAsCommon=True),
-             Tankman.TANKMEN_ROLES_ORDER[tdescr.role],
-             getFullUserName(item.nationID, tdescr.firstNameID, tdescr.lastNameID))
+            isInTank = int(item.isInTank)
+            nationOrder = GUI_NATIONS_ORDER_INDICES[item.nationID]
+            newSkills, progressToNext = item.getNewSkillCount(onlyFull=True)
+            freeSkills = len(tdescr.freeSkills)
+            totalSkillCount = len(tdescr.skills) + newSkills
+            roleLevel = tdescr.roleLevel
+            roleOrder = Tankman.TANKMEN_ROLES_ORDER[tdescr.role]
+            vehicleLevel = item.vehicleNativeDescr.level if item.vehicleNativeDescr else 0
+        else:
+            dismissedDays = 0
+            isInTank = 0
+            nationOrder = GUI_NATIONS_ORDER_INDICES[item.defaultNation] if len(item.getNations()) == 1 else -1
+            freeSkills = len(item.getFreeSkills())
+            totalSkillCount = len(item.getEarnedSkills(multiplyNew=True)) + freeSkills
+            _, progressToNext = item.getNewSkillCount(onlyFull=False)
+            roleLevel = item.getRoleLevel()
+            roleOrder = Tankman.TANKMEN_ROLES_ORDER[item.defaultRole] if len(item.getRoles()) == 1 else -1
+            vehicleLevel = 0
+        return (dismissedDays,
+         isInTank,
+         nationOrder,
+         -totalSkillCount,
+         -freeSkills,
+         -progressToNext,
+         -roleLevel,
+         roleOrder,
+         -vehicleLevel)
 
-        criteria = REQ_CRITERIA.CUSTOM(key)
-        return criteria
-
-    def _getConditionSortCriteria(self):
-        criteria = REQ_CRITERIA.TANKMAN.ACTIVE
-        criteria |= REQ_CRITERIA.TANKMAN.DISMISSED
-        return criteria
-
-    def _itemsGetter(self, criteria, initial=False):
-        tankmenKinds = self._state[ToggleGroupType.TANKMANKIND.value]
-        if not tankmenKinds or initial:
-            tankmenKinds = ['tankman', 'dismissed']
-        items = []
-        if 'tankman' in tankmenKinds:
-            items += self._getInventoryTankmen()
-        if 'dismissed' in tankmenKinds:
-            items += self._getDismissedTankmen()
-        items = filter(criteria, items)
-        return items
-
-    def _getInventoryTankmen(self):
-        if self.__inventoryTankmen is None:
-            self.__inventoryTankmen = self.itemsCache.items.getInventoryTankmen().values()
-        return self.__inventoryTankmen
-
-    def _getDismissedTankmen(self):
-        if self.__dismissedTankmen is None:
-            dismissedTankmen = self.itemsCache.items.getDismissedTankmen().values()
-            self.__dismissedTankmen = sorted(dismissedTankmen, key=operator.attrgetter('dismissedAt'), reverse=True)
-        return self.__dismissedTankmen
-
-    def __applyFilters(self, items):
-        criteria = self._getFilterCriteria()
-        return filter(criteria, items)
+    def _buildFilterCriteria(self, combined=None, recruit=None, dismissed=None):
+        raise NotImplementedError
 
 
-class RecruitsDataProvider(FilterableItemsDataProvider):
+class BarracksDataProvider(TankmanDataProviderBase):
 
     @property
     def newItemsCount(self):
         return recruit_helper.getNewRecruitsCounter()
 
+    @property
+    def stateValue(self):
+        tankmanKinds = self._state[ToggleGroupType.TANKMANKIND.value]
+        return next(iter(tankmanKinds), '') if isinstance(tankmanKinds, set) else tankmanKinds
+
+    @property
+    def initialItemsCount(self):
+        if self._initialItemsCount is None:
+            stateHandler = {TankmanKind.TANKMAN.value: self._getCombinedTankman,
+             TankmanKind.UNIQUE.value: self._getUniqueTankman,
+             TankmanKind.RECRUIT.value: self._getRecruitsTankman,
+             TankmanKind.DISMISSED.value: self._getDismissedTankman}
+            handler = stateHandler.get(self.stateValue)
+            if handler is not None:
+                self._initialItemsCount = len(handler())
+            else:
+                self._initialItemsCount = self.itemsCount
+        return self._initialItemsCount
+
+    def tankmanInBarracksCount(self):
+        return sum((not tankman.isInTank for tankman in self._getInventoryTankman()))
+
+    def recruitTankmanCount(self):
+        return len(self._getRecruitsTankman())
+
+    def _shouldUseSortedList(self):
+        return self.stateValue in (TankmanKind.TANKMAN.value, TankmanKind.UNIQUE.value)
+
+    def getTankmanSortedList(self):
+        if self._groupedSortedList is not None:
+            return self._groupedSortedList
+        else:
+            items = self.items()
+            if not items:
+                self._groupedSortedList = []
+                self._headerIndexes = []
+                return self._groupedSortedList
+            title = {True: backport.text(R.strings.crew.tankmanList.tooltip.location.in_tank.title()),
+             False: backport.text(R.strings.crew.tankmanList.tooltip.location.in_barracks.title())}
+            self._groupedSortedList = []
+            self._headerIndexes = []
+            for isInTank, group in groupby(items, key=lambda t: bool(getattr(t, 'isInTank', False))):
+                self._headerIndexes.append(len(self._groupedSortedList))
+                self._groupedSortedList.append({'type': 'header',
+                 'title': title[isInTank]})
+                self._groupedSortedList.extend(group)
+
+            return self._groupedSortedList
+
+    def _getInitialFilterCriteria(self):
+        if self.stateValue in (TankmanKind.TANKMAN.value, TankmanKind.UNIQUE.value):
+            criteria = ~REQ_CRITERIA.COMBINED.VEHICLE_BATTLE_ROYALE()
+            criteria |= ~REQ_CRITERIA.COMBINED.VEHICLE_HIDDEN_IN_HANGAR()
+            criteria |= REQ_CRITERIA.COMBINED.IS_LOCK_CREW()
+            return criteria
+        return REQ_CRITERIA.EMPTY
+
+    def _shouldSkipHeaders(self):
+        return self.stateValue not in (TankmanKind.TANKMAN.value, TankmanKind.UNIQUE.value)
+
+    def _itemsGetter(self, criteria, initial=False):
+        state = {TankmanKind.TANKMAN.value: self._getCombinedTankman,
+         TankmanKind.UNIQUE.value: self._getUniqueTankman,
+         TankmanKind.RECRUIT.value: self._getRecruitsTankman,
+         TankmanKind.DISMISSED.value: self._getDismissedTankman}
+        getter = state.get(self.stateValue)
+        items = getter() if getter else []
+        self._groupedSortedList = None
+        self._headerIndexes = None
+        self._initialItemsCount = None
+        if criteria:
+            return [ item for item in items if criteria(item) ]
+        else:
+            return items
+
     def _getFiltersList(self):
-        return [self._getFilterByRoles(),
+        return [self._getFilterByLocation(),
          self._getFilterByNations(),
-         self._getFilterByLocationCriteria(),
-         self._getSearchCriteria()]
+         self._getFilterByRoles(),
+         self._getSearchCriteria(),
+         self._getFilterByVehicleType(),
+         self._getFilterByVehicleTier(),
+         self._getFilterByVehicleGrade(),
+         self._getFilterByVehicleCD()]
+
+    def _buildFilterCriteria(self, combined=None, recruit=None, dismissed=None):
+        stateHandler = {TankmanKind.TANKMAN.value: combined,
+         TankmanKind.UNIQUE.value: combined,
+         TankmanKind.RECRUIT.value: recruit,
+         TankmanKind.DISMISSED.value: dismissed}
+        handler = stateHandler.get(self.stateValue)
+        return handler() if handler else None
+
+    def _getSearchCriteria(self):
+        search = self._state.searchString
+        return None if not search else self._buildFilterCriteria(combined=lambda : REQ_CRITERIA.COMBINED.SPECIFIC_BY_NAME(search), recruit=lambda : REQ_CRITERIA.RECRUIT.SPECIFIC_BY_NAME(search), dismissed=lambda : REQ_CRITERIA.TANKMAN.SPECIFIC_BY_NAME_OR_SKIN(search))
 
     def _getFilterByRoles(self):
         roles = self._state[ToggleGroupType.TANKMANROLE.value]
-        return REQ_CRITERIA.RECRUIT.ROLES(roles) if roles else None
+        return None if not roles else self._buildFilterCriteria(combined=lambda : REQ_CRITERIA.COMBINED.ROLES(roles), recruit=lambda : REQ_CRITERIA.RECRUIT.ROLES(roles), dismissed=lambda : REQ_CRITERIA.TANKMAN.ROLES(roles))
 
     def _getFilterByNations(self):
-        value = self._state[ToggleGroupType.NATION.value]
-        return REQ_CRITERIA.RECRUIT.NATION(value) if value else None
+        nation = self._state[ToggleGroupType.NATION.value]
+        return None if not nation else self._buildFilterCriteria(combined=lambda : REQ_CRITERIA.COMBINED.NATION(nation), recruit=lambda : REQ_CRITERIA.RECRUIT.NATION(nation), dismissed=lambda : REQ_CRITERIA.TANKMAN.NATION(nation))
 
-    def _getFilterByLocationCriteria(self):
-        locations = self._state[ToggleGroupType.LOCATION.value]
-        if not locations or TankmanLocation.INBARRACKS.value in locations:
-            return None
-        else:
-            return REQ_CRITERIA.NONE if {TankmanLocation.INTANK.value, TankmanLocation.DISMISSED.value} & locations else None
+    def _getFilterByLocation(self):
+        locations = self._state[ToggleGroupType.VEHICLEGRADE.value]
+        return None if not locations & {TankmanLocation.INBARRACKS.value, TankmanLocation.INTANK.value} else self._buildFilterCriteria(combined=lambda : REQ_CRITERIA.COMBINED.LOCATION(locations), recruit=lambda : REQ_CRITERIA.RECRUIT.LOCATION(locations), dismissed=lambda : REQ_CRITERIA.TANKMAN.LOCATION(locations))
 
-    def _getSearchCriteria(self):
-        return REQ_CRITERIA.RECRUIT.SPECIFIC_BY_NAME(self._state.searchString) if self._state.searchString else None
+    def _getFilterByVehicleType(self):
+        vehicleTypes = self._state[ToggleGroupType.VEHICLETYPE.value]
+        return None if not vehicleTypes else self._buildFilterCriteria(combined=lambda : REQ_CRITERIA.COMBINED.VEHICLE_NATIVE_TYPES(vehicleTypes), recruit=lambda : REQ_CRITERIA.NONE, dismissed=lambda : REQ_CRITERIA.TANKMAN.VEHICLE_NATIVE_TYPES(vehicleTypes))
 
-    def _getSortKeyCriteria(self):
-        rolesOrder = Tankman.TANKMEN_ROLES_ORDER
-        nationsOrder = GUI_NATIONS_ORDER_INDICES
-        criteria = REQ_CRITERIA.CUSTOM(lambda item: (-len(item.getFreeSkills()), -len(item.getEarnedSkills(multiplyNew=True))))
-        criteria |= REQ_CRITERIA.CUSTOM(lambda item: -item.getFreeXP())
-        criteria |= REQ_CRITERIA.CUSTOM(lambda item: nationsOrder[item.defaultNation] if len(item.getNations()) == 1 else nations.NONE_INDEX)
-        criteria |= REQ_CRITERIA.CUSTOM(lambda item: rolesOrder[item.defaultRole] if len(item.getRoles()) == 1 else len(rolesOrder))
-        criteria |= REQ_CRITERIA.CUSTOM(lambda item: item.getFullUserName())
-        return criteria
+    def _getFilterByVehicleTier(self):
+        vehicleTiers = {int(t) for t in self._state[ToggleGroupType.VEHICLETIER.value]}
+        return None if not vehicleTiers else self._buildFilterCriteria(combined=lambda : REQ_CRITERIA.COMBINED.VEHICLE_NATIVE_LEVELS(vehicleTiers), recruit=lambda : REQ_CRITERIA.NONE, dismissed=lambda : REQ_CRITERIA.TANKMAN.VEHICLE_NATIVE_LEVELS(vehicleTiers))
 
-    def _getConditionSortCriteria(self):
-        return REQ_CRITERIA.EMPTY
+    def _getFilterByVehicleGrade(self):
+        grades = self._state[ToggleGroupType.VEHICLEGRADE.value]
+        return None if not grades & {GRADE_PREMIUM, GRADE_ELITE, GRADE_PRIMARY} else self._buildFilterCriteria(combined=lambda : REQ_CRITERIA.COMBINED.VEHICLE_GRADE(grades), recruit=lambda : REQ_CRITERIA.NONE, dismissed=lambda : REQ_CRITERIA.TANKMAN.VEHICLE_GRADE(grades))
 
-    def _itemsGetter(self, criteria, initial=False):
-        tankmenKinds = self._state[ToggleGroupType.TANKMANKIND.value]
-        if not tankmenKinds or initial:
-            tankmenKinds = ['recruit']
-        items = []
-        if 'recruit' in tankmenKinds:
-            items += recruit_helper.getAllRecruitsInfo(sortByExpireTime=True)
-        return filter(criteria, items)
+    def _getFilterByVehicleCD(self):
+        vehicleCDs = self._state[ToggleGroupType.VEHICLECD.value]
+        return None if not vehicleCDs else self._buildFilterCriteria(combined=lambda : REQ_CRITERIA.COMBINED.NATIVE_TANKS(vehicleCDs), recruit=lambda : REQ_CRITERIA.NONE, dismissed=lambda : REQ_CRITERIA.TANKMAN.NATIVE_TANKS(vehicleCDs))
 
 
-class TankmenChangeDataProvider(TankmenDataProvider):
+class MemberChangeDataProvider(TankmanDataProviderBase):
     __slots__ = ('__tankman', '__vehicle', '__rolesOrder', '__role')
+    GROUP_IN_VEHICLE = 'inVehicle'
+    GROUP_IN_BARRACKS = 'inBarracks'
+    GROUP_IN_TANK = 'inTank'
 
     def __init__(self, state, tankman=None, vehicle=None, role=None):
+        super(MemberChangeDataProvider, self).__init__(state)
         self.__tankman = tankman
         self.__vehicle = vehicle
         self.role = role
-        super(TankmenChangeDataProvider, self).__init__(state)
-
-    def items(self):
-        items = super(TankmenChangeDataProvider, self).items()
-        return [self.__tankman] + items if items and self.__tankman else items
-
-    def clear(self):
-        self.__tankman = None
-        self.__vehicle = None
-        self.role = None
-        super(TankmenChangeDataProvider, self).clear()
-        return
 
     @property
     def role(self):
@@ -492,124 +561,182 @@ class TankmenChangeDataProvider(TankmenDataProvider):
     def vehicle(self):
         return self.__vehicle
 
+    @property
+    def stateValue(self):
+        return self._state[ToggleGroupType.LOCATION.value]
+
+    def items(self):
+        items = super(MemberChangeDataProvider, self).items()
+        return [self.__tankman] + items if self.__tankman and not self._isDismissedFilter() else items
+
+    def _shouldUseSortedList(self):
+        return not self._isDismissedFilter()
+
+    def getTankmanSortedList(self):
+        if self._groupedSortedList is not None:
+            return self._groupedSortedList
+        else:
+            items = self.items()
+            if not items or self._isDismissedFilter():
+                self._groupedSortedList = items if items else []
+                self._headerIndexes = []
+                return self._groupedSortedList
+            currentTankman = self.tankman
+            currentVehicleCD = self.vehicle.intCD if self.vehicle else None
+
+            def getGroupType(tman):
+                if not isinstance(tman, Tankman) or not tman.isInTank:
+                    return self.GROUP_IN_BARRACKS
+                return self.GROUP_IN_VEHICLE if tman.vehicleDescr and tman.vehicleDescr.type.compactDescr == currentVehicleCD else self.GROUP_IN_TANK
+
+            titleMap = {self.GROUP_IN_VEHICLE: R.strings.crew.tankmanList.tooltip.location.in_vehicle.title(),
+             self.GROUP_IN_BARRACKS: R.strings.crew.tankmanList.tooltip.location.in_barracks.title(),
+             self.GROUP_IN_TANK: R.strings.crew.tankmanList.tooltip.location.in_tank.title()}
+            groups = {self.GROUP_IN_VEHICLE: [],
+             self.GROUP_IN_BARRACKS: [],
+             self.GROUP_IN_TANK: []}
+            for tankman in items:
+                groupType = getGroupType(tankman)
+                groups[groupType].append(tankman)
+
+            self._groupedSortedList = []
+            self._headerIndexes = []
+            for groupType in (self.GROUP_IN_VEHICLE, self.GROUP_IN_BARRACKS, self.GROUP_IN_TANK):
+                group = groups[groupType]
+                if not group:
+                    continue
+                self._headerIndexes.append(len(self._groupedSortedList))
+                self._groupedSortedList.append({'type': 'header',
+                 'title': backport.text(titleMap[groupType])})
+                self._groupedSortedList.extend(group)
+
+            if currentTankman:
+                for i, t in enumerate(self._groupedSortedList):
+                    if isinstance(t, Tankman) and t.invID == currentTankman.invID:
+                        del self._groupedSortedList[i]
+                        self._groupedSortedList.insert(self._headerIndexes[0] + 1, currentTankman)
+                        break
+
+            return self._groupedSortedList
+
     def reinit(self, tankman=None, role=None):
+        self._resetValues()
         self.__tankman = tankman
         self.role = role
-        super(TankmenChangeDataProvider, self).reinit()
+        super(MemberChangeDataProvider, self).reinit()
+
+    def clear(self):
+        self._resetValues()
+        self.__vehicle = None
+        self.__tankman = None
+        self.role = None
+        super(MemberChangeDataProvider, self).clear()
+        return
+
+    def _isDismissedFilter(self):
+        return TankmanKind.DISMISSED.value in self._state[ToggleGroupType.TANKMANKIND.value]
+
+    def _getInitialItems(self):
+        items = super(MemberChangeDataProvider, self)._getInitialItems()
+        return [self.__tankman] + items if self.__tankman else items
+
+    def _shouldSkipHeaders(self):
+        return self._isDismissedFilter()
 
     def _getInitialFilterCriteria(self):
-        criteria = super(TankmenChangeDataProvider, self)._getInitialFilterCriteria()
-        criteria |= REQ_CRITERIA.TANKMAN.NATION(nations.NAMES[self.__vehicle.nationID])
+        if self._isDismissedFilter():
+            return self._getDismissedInitialFilterCriteria()
+        state = self.stateValue
+        if state & {TankmanKind.TANKMAN.value, TankmanKind.UNIQUE.value}:
+            return self._getCombineInitialFilterCriteria()
+        return self._getRecruitInitialFilterCriteria() if TankmanKind.RECRUIT.value in state else REQ_CRITERIA.EMPTY
+
+    def _getDismissedInitialFilterCriteria(self):
+        criteria = ~REQ_CRITERIA.TANKMAN.VEHICLE_BATTLE_ROYALE
+        criteria |= ~REQ_CRITERIA.TANKMAN.VEHICLE_HIDDEN_IN_HANGAR
+        criteria |= REQ_CRITERIA.TANKMAN.NATION([nations.NAMES[self.__vehicle.nationID]])
         criteria |= ~REQ_CRITERIA.CUSTOM(lambda tankman: checkForTags(self.itemsCache.items.getVehicle(tankman.vehicleInvID).tags, VEHICLE_TAGS.CREW_LOCKED) if tankman.isInTank else False)
         criteria |= REQ_CRITERIA.CUSTOM(lambda tankman: tankmen.tankmenGroupHasRole(tankman.descriptor.nationID, tankman.descriptor.gid, tankman.descriptor.isPremium, self.role))
         return criteria
 
-    def _getFilterByLocationCriteria(self):
-        locations = self._state[ToggleGroupType.LOCATION.value]
-        locations = locations - {'tankman', 'recruit'}
-        if not locations:
-            return None
-        else:
-            criteria = REQ_CRITERIA.NONE
-            if TankmanLocation.INBARRACKS.value in locations:
-                criteria ^= ~REQ_CRITERIA.TANKMAN.IN_TANK
-            if TankmanLocation.INTANK.value in locations:
-                criteria ^= REQ_CRITERIA.TANKMAN.IN_TANK
-            return criteria
-
-    def _getSortKeyCriteria(self):
-        criteria = REQ_CRITERIA.CUSTOM(lambda item: self.__rolesOrder[item.role])
-        criteria |= REQ_CRITERIA.CUSTOM(lambda item: -int(item.vehicleNativeDescr.type.compactDescr == self.__vehicle.intCD))
-        criteria |= REQ_CRITERIA.CUSTOM(lambda item: -int(item.vehicleNativeType == self.__vehicle.type))
-        criteria |= REQ_CRITERIA.CUSTOM(lambda item: VEHICLE_TYPES_ORDER_INDICES[item.vehicleNativeType])
-        criteria |= REQ_CRITERIA.CUSTOM(lambda item: -item.descriptor.totalXP(freeSkillsAsCommon=True))
-        criteria |= REQ_CRITERIA.CUSTOM(lambda item: item.fullUserName)
+    def _getCombineInitialFilterCriteria(self):
+        criteria = ~REQ_CRITERIA.COMBINED.VEHICLE_BATTLE_ROYALE()
+        criteria |= ~REQ_CRITERIA.COMBINED.VEHICLE_HIDDEN_IN_HANGAR()
+        criteria |= REQ_CRITERIA.COMBINED.IS_LOCK_CREW()
+        criteria |= REQ_CRITERIA.COMBINED.NATION([nations.NAMES[self.__vehicle.nationID]])
         return criteria
 
-    def _getInitialItems(self):
-        items = super(TankmenChangeDataProvider, self)._getInitialItems()
-        return [self.__tankman] + items if self.__tankman else items
+    def _getRecruitInitialFilterCriteria(self):
+        criteria = REQ_CRITERIA.RECRUIT.ROLES([self.role])
+        criteria |= REQ_CRITERIA.RECRUIT.NATION([nations.NAMES[self.__vehicle.nationID]])
+        return criteria
+
+    def _getFiltersList(self):
+        return [self._getFilterByVehicleType(),
+         self._getFilterByVehicleTier(),
+         self._getFilterByRoles(),
+         self._getFilterByLocations(),
+         self._getFilterNotAllowRecruit()]
+
+    def _buildFilterCriteria(self, combined=None, recruit=None, dismissed=None):
+        if self._isDismissedFilter() and dismissed:
+            return dismissed()
+        else:
+            priorityList = [(TankmanKind.RECRUIT.value, recruit), (TankmanKind.TANKMAN.value, combined), (TankmanKind.UNIQUE.value, combined)]
+            state = self.stateValue
+            for priority, handler in priorityList:
+                if priority in state and handler:
+                    return handler()
+
+            return None
+
+    def _getFilterByVehicleType(self):
+        vehicleTypes = self._state[ToggleGroupType.VEHICLETYPE.value]
+        return None if not vehicleTypes else self._buildFilterCriteria(combined=lambda : REQ_CRITERIA.COMBINED.VEHICLE_NATIVE_TYPES(vehicleTypes), recruit=lambda : REQ_CRITERIA.EMPTY, dismissed=lambda : REQ_CRITERIA.TANKMAN.VEHICLE_NATIVE_TYPES(vehicleTypes))
+
+    def _getFilterByVehicleTier(self):
+        vehicleTiers = {int(t) for t in self._state[ToggleGroupType.VEHICLETIER.value]}
+        return None if not vehicleTiers else self._buildFilterCriteria(combined=lambda : REQ_CRITERIA.COMBINED.VEHICLE_NATIVE_LEVELS(vehicleTiers), recruit=lambda : REQ_CRITERIA.NONE, dismissed=lambda : REQ_CRITERIA.TANKMAN.VEHICLE_NATIVE_LEVELS(vehicleTiers))
+
+    def _getFilterByRoles(self):
+        roles = self._state[ToggleGroupType.TANKMANROLE.value]
+        return None if not roles else self._buildFilterCriteria(combined=lambda : REQ_CRITERIA.COMBINED.ROLES(roles), recruit=lambda : REQ_CRITERIA.RECRUIT.ROLES(roles), dismissed=lambda : REQ_CRITERIA.TANKMAN.ROLES(roles))
+
+    def _getFilterNotAllowRecruit(self):
+        return REQ_CRITERIA.CUSTOM(lambda item: any((role == self.role for role in item.getRoles())) if isinstance(item, _BaseRecruitInfo) else True)
+
+    def _getFilterByLocations(self):
+        state = self.stateValue
+        state = state - {TankmanKind.TANKMAN.value, TankmanKind.UNIQUE.value, TankmanKind.RECRUIT.value}
+        return REQ_CRITERIA.COMBINED.LOCATION(state) if state else None
+
+    def _getExtraSortKey(self, item):
+        if isinstance(item, Tankman):
+            sameVehicle = int(item.vehicleNativeDescr.type.compactDescr == self.__vehicle.intCD)
+            return (-sameVehicle,)
 
     def _itemsGetter(self, criteria, initial=False):
-        tankmenKinds = self._state[ToggleGroupType.TANKMANKIND.value]
-        if 'tankman' in self._state[ToggleGroupType.LOCATION.value]:
-            tankmenKinds = tankmenKinds | {'tankman'}
-        if 'recruit' in self._state[ToggleGroupType.LOCATION.value]:
-            tankmenKinds = tankmenKinds | {'recruit'}
-        if not tankmenKinds or initial:
-            tankmenKinds = ['tankman']
-        items = []
-        if 'dismissed' in tankmenKinds:
-            items += self._getDismissedTankmen()
-        elif 'tankman' in tankmenKinds:
-            items += self._getInventoryTankmen()
-        items = filter(criteria, items)
-        if self.__tankman and self.__tankman in items:
-            items.remove(self.__tankman)
-        return items
+        self._groupedSortedList = None
+        self._headerIndexes = None
+        if self._isDismissedFilter():
+            return filter(criteria, self._getDismissedTankman())
+        else:
+            state = {TankmanKind.TANKMAN.value: self._getCombinedTankman,
+             TankmanKind.UNIQUE.value: self._getUniqueTankman,
+             TankmanKind.RECRUIT.value: self._getRecruitsTankman}
+            currentState = self.stateValue
+            items = []
+            for kind, getter in state.items():
+                if kind in currentState:
+                    items += getter()
+
+            if self.__tankman and self.__tankman in items:
+                items.remove(self.__tankman)
+            return filter(criteria, items) if criteria else items
 
     def __reorderRoles(self, requiredRole):
         roles = [requiredRole] + [ role for role in Tankman.TANKMEN_ROLES_ORDER if role != requiredRole ]
         self.__rolesOrder = OrderedDict([ (role, idx) for idx, role in enumerate(roles) ])
-
-
-class RecruitsChangeDataProvider(RecruitsDataProvider):
-    __slots__ = ('__tankman', '__vehicle', '__role')
-
-    def __init__(self, state, tankman=None, vehicle=None, role=None):
-        self.__tankman = tankman
-        self.__vehicle = vehicle
-        self.__role = role
-        super(RecruitsChangeDataProvider, self).__init__(state)
-
-    @property
-    def tankman(self):
-        return self.__tankman
-
-    @property
-    def vehicle(self):
-        return self.__vehicle
-
-    @property
-    def role(self):
-        return self.__role
-
-    def clear(self):
-        self.__tankman = None
-        self.__vehicle = None
-        self.__role = None
-        super(RecruitsChangeDataProvider, self).clear()
-        return
-
-    def reinit(self, tankman=None, role=None):
-        self.__tankman = tankman
-        self.__role = role
-        super(RecruitsChangeDataProvider, self).reinit()
-
-    def _getInitialFilterCriteria(self):
-        criteria = super(RecruitsChangeDataProvider, self)._getInitialFilterCriteria()
-        criteria |= REQ_CRITERIA.RECRUIT.ROLES([self.__role])
-        criteria |= REQ_CRITERIA.RECRUIT.NATION([nations.NAMES[self.__vehicle.nationID]])
-        return criteria
-
-    def _getSortKeyCriteria(self):
-        rolesOrder = Tankman.TANKMEN_ROLES_ORDER
-        criteria = REQ_CRITERIA.CUSTOM(lambda item: rolesOrder[item.defaultRole] if len(item.getRoles()) == 1 else len(rolesOrder))
-        criteria |= REQ_CRITERIA.CUSTOM(lambda item: (-len(item.getFreeSkills()), -len(item.getEarnedSkills(multiplyNew=True))))
-        criteria |= REQ_CRITERIA.CUSTOM(lambda item: -item.getFreeXP())
-        criteria |= REQ_CRITERIA.CUSTOM(lambda item: item.getFullUserName())
-        return criteria
-
-    def _itemsGetter(self, criteria, initial=False):
-        if 'dismissed' in self._state[ToggleGroupType.TANKMANKIND.value]:
-            return []
-        tankmenKinds = {'recruit', 'tankman'} & self._state[ToggleGroupType.LOCATION.value]
-        if not tankmenKinds or initial:
-            tankmenKinds = {'recruit'}
-        items = []
-        if 'recruit' in tankmenKinds:
-            items += recruit_helper.getAllRecruitsInfo(sortByExpireTime=True)
-        return filter(criteria, items)
 
 
 class CrewSkinsDataProvider(FilterableItemsDataProvider):
@@ -700,7 +827,7 @@ class DocumentsDataProvider(FilterableItemsDataProvider):
         return []
 
     def _removeCurrentItemCriteria(self):
-        return ~REQ_CRITERIA.CUSTOM(lambda doc: bool(self.tankman.descriptor.iconID == doc.icon.id))
+        return REQ_CRITERIA.EMPTY
 
     def _getSortKeyCriteria(self):
         return REQ_CRITERIA.CUSTOM(lambda doc: -doc.icon.id)

@@ -10,7 +10,7 @@ from gui.impl.gen.view_models.views.lobby.crew.common.tooltip_constants import T
 from gui.impl.gen.view_models.views.lobby.crew.personal_case.personal_file_view_model import PersonalFileViewModel, SkillsState
 from gui.impl.gen.view_models.views.lobby.crew.personal_case.tankman_skill_model import TankmanSkillModel
 from gui.impl.gen.view_models.views.lobby.crew.personal_case.tankman_skills_group_model import TankmanSkillsGroupModel
-from gui.impl.lobby.crew.crew_helpers.skill_helpers import getTmanNewSkillCount
+from gui.impl.lobby.crew.crew_helpers.skill_helpers import getTmanNewSkillCount, checkSingleSkillOnVehicle
 from gui.impl.lobby.crew.personal_case import IPersonalTab
 from gui.impl.lobby.crew.personal_case.base_personal_case_view import BasePersonalCaseView
 from gui.impl.lobby.crew.tankman_info import TankmanInfo
@@ -163,6 +163,8 @@ class PersonalFileView(IPersonalTab, BasePersonalCaseView):
             tankmanSkillModel.setSkillIcon(skill.extensionLessIconName)
             tankmanSkillModel.setIsInProgress(skill.name in self.tankman.skillsInProgress)
             tankmanSkillModel.setIsZero(skill.name in self.tankman.freeSkillsNames)
+            if checkSingleSkillOnVehicle(skill, self.tankman):
+                tankmanSkillModel.setIsSingleHasLearnt(True)
             skillsListVM.addViewModel(tankmanSkillModel)
 
         skillsListVM.invalidate()

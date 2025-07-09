@@ -183,6 +183,7 @@ registerSquadFinder(ARENA_GUI_TYPE.BATTLE_ROYALE, TeamScopeNumberingFinder)
 registerSquadFinder(ARENA_GUI_TYPE.MAPBOX, TeamScopeNumberingFinder)
 registerSquadFinder(ARENA_GUI_TYPE.FALLOUT_MULTITEAM, ContinuousNumberingFinder)
 registerSquadFinder(ARENA_GUI_TYPE.COMP7, Comp7TeamScopeNumberingFinder)
+registerSquadFinder(ARENA_GUI_TYPE.RANKED, TeamScopeNumberingFinder)
 
 def createSquadFinder(arenaVisitor):
     teams = arenaVisitor.type.getTeamsOnArenaRange()

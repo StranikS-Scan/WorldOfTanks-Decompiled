@@ -1,12 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: gui_lootboxes/scripts/client/gui_lootboxes/gui/impl/lobby/gui_lootboxes/loot_boxes_lose_reward_screen.py
 from gui_lootboxes.gui.impl.gen.view_models.views.lobby.gui_lootboxes.loot_boxes_lose_reward_screen_model import LootBoxesLoseRewardScreenModel
-from gui_lootboxes.gui.shared.events import LootBoxesEvent
+from gui_lootboxes.gui.impl.lobby.gui_lootboxes import gui_helpers
 from constants import LOOTBOX_KEY_PREFIX
 from frameworks.wulf import WindowFlags, WindowLayer, ViewSettings
 from gui.impl.gen import R
 from gui.impl.pub import ViewImpl, WindowImpl
-from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from helpers import dependency
 from shared_utils import first
 from skeletons.gui.game_control import IGuiLootBoxesController
@@ -52,23 +51,13 @@ class LootBoxesLoseRewardScreen(ViewImpl):
         vm.setLootboxNameKey(self.__lootbox.getUserNameKey())
         vm.setLootboxID(self.__lootbox.getID())
         if self.__key:
-            vm.lootboxKey.setKeyID(self.__key.keyID)
-            vm.lootboxKey.setCount(self.__key.count)
-            vm.lootboxKey.keyType.setValue(self.__key.keyType)
-            vm.lootboxKey.setIconName(self.__key.iconName)
-            vm.lootboxKey.setUserName(self.__key.userName)
-            vm.lootboxKey.setOpenProbability(self.__key.openProbability)
+            gui_helpers.fillKeyModel(vm.lootboxKey, self.__key)
 
     def __onClose(self):
         self.destroyWindow()
 
     def __onRepeatOpen(self, args=None):
-        lootBoxID = int(args.get('lootBoxID', 0))
-        count = int(args.get('count', 1))
-        keyID = int(args.get('keyID', 0))
-        g_eventBus.handleEvent(LootBoxesEvent(LootBoxesEvent.OPEN_LOOTBOXES, ctx={'lootBoxID': lootBoxID,
-         'count': count,
-         'keyID': keyID}), scope=EVENT_BUS_SCOPE.LOBBY)
+        gui_helpers.repeatOpen(args)
         self.destroyWindow()
 
 

@@ -4118,6 +4118,250 @@
       </mul>
     </kpi>
   </additInvisibilityDeviceBattleBooster>
+  <xpDirectivesBattleBooster1>
+    <id>	205	</id>
+    <userString>	#artefacts:xpDirectivesBattleBooster1/name	</userString>
+    <description>	#artefacts:xpDirectivesBattleBooster1/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:xpDirectivesBattleBooster1/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:xpDirectivesBattleBooster1/long_special	</longDescriptionSpecial>
+    <icon>	xpDirectivesBattleBooster1	</icon>
+    <price>	10000	  <credits></credits>
+    </price>
+    <type>	battleBoosters	</type>
+    <tags>	notForSale economicDirectiveBattleBooster	</tags>
+    <script>	EconomicDirectives	  <modifiers>
+        <mul>
+          <name>	Xp	</name>
+          <value>	50	</value>
+        </mul>
+      </modifiers>
+    </script>
+    <kpi>
+      <mul>
+        <name>	gameXp	</name>
+        <value>	1.50	</value>
+      </mul>
+    </kpi>
+  </xpDirectivesBattleBooster1>
+  <creditsDirectivesBattleBooster1>
+    <id>	206	</id>
+    <userString>	#artefacts:creditsDirectivesBattleBooster1/name	</userString>
+    <description>	#artefacts:creditsDirectivesBattleBooster1/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:creditsDirectivesBattleBooster1/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:creditsDirectivesBattleBooster1/long_special	</longDescriptionSpecial>
+    <icon>	creditsDirectivesBattleBooster1	</icon>
+    <price>	10000	  <credits></credits>
+    </price>
+    <type>	battleBoosters	</type>
+    <tags>	notForSale economicDirectiveBattleBooster notBuyWhenAutoEquip	</tags>
+    <notInShop>	true	</notInShop>
+    <script>	EconomicDirectives	  <modifiers>
+        <mul>
+          <name>	Credits	</name>
+          <value>	25	</value>
+        </mul>
+      </modifiers>
+    </script>
+    <kpi>
+      <mul>
+        <name>	gameCredits	</name>
+        <value>	1.25	</value>
+      </mul>
+    </kpi>
+  </creditsDirectivesBattleBooster1>
+  <comboXpDirectivesBattleBooster1>
+    <id>	207	</id>
+    <userString>	#artefacts:comboXpDirectivesBattleBooster1/name	</userString>
+    <description>	#artefacts:comboXpDirectivesBattleBooster1/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:comboXpDirectivesBattleBooster1/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:comboXpDirectivesBattleBooster1/long_special	</longDescriptionSpecial>
+    <icon>	comboXpDirectivesBattleBooster1	</icon>
+    <price>	10000	  <credits></credits>
+    </price>
+    <type>	battleBoosters	</type>
+    <tags>	notForSale economicDirectiveBattleBooster	</tags>
+    <script>	EconomicDirectives	  <modifiers>
+        <mul>
+          <name>	CrewXp	</name>
+          <value>	100	</value>
+        </mul>
+        <mul>
+          <name>	FreeXp	</name>
+          <value>	100	</value>
+        </mul>
+      </modifiers>
+    </script>
+    <kpi>
+      <mul>
+        <name>	gameFreeXpAndCrewXp	</name>
+        <value>	2.0	</value>
+      </mul>
+    </kpi>
+  </comboXpDirectivesBattleBooster1>
+  <xpDirectivesBattleBooster2>
+    <id>	208	</id>
+    <userString>	#artefacts:xpDirectivesBattleBooster2/name	</userString>
+    <description>	#artefacts:xpDirectivesBattleBooster2/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:xpDirectivesBattleBooster2/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:xpDirectivesBattleBooster2/long_special	</longDescriptionSpecial>
+    <icon>	xpDirectivesBattleBooster2	</icon>
+    <price>	20000	  <credits></credits>
+    </price>
+    <type>	battleBoosters	</type>
+    <tags>	notForSale economicDirectiveBattleBooster notBuyWhenAutoEquip	</tags>
+    <notInShop>	true	</notInShop>
+    <script>	EconomicDirectives	  <modifiers>
+        <mul>
+          <name>	Xp	</name>
+          <value>	100	</value>
+        </mul>
+      </modifiers>
+    </script>
+    <kpi>
+      <mul>
+        <name>	gameXp	</name>
+        <value>	2.0	</value>
+      </mul>
+    </kpi>
+  </xpDirectivesBattleBooster2>
+  <xpDirectivesBattleBooster3>
+    <id>	209	</id>
+    <userString>	#artefacts:xpDirectivesBattleBooster3/name	</userString>
+    <description>	#artefacts:xpDirectivesBattleBooster3/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:xpDirectivesBattleBooster3/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:xpDirectivesBattleBooster3/long_special	</longDescriptionSpecial>
+    <icon>	xpDirectivesBattleBooster3	</icon>
+    <price>	60000	  <credits></credits>
+    </price>
+    <type>	battleBoosters	</type>
+    <tags>	notForSale economicDirectiveBattleBooster notBuyWhenAutoEquip	</tags>
+    <notInShop>	true	</notInShop>
+    <script>	EconomicDirectives	  <modifiers>
+        <mul>
+          <name>	Xp	</name>
+          <value>	300	</value>
+        </mul>
+      </modifiers>
+    </script>
+    <kpi>
+      <mul>
+        <name>	gameXp	</name>
+        <value>	4.0	</value>
+      </mul>
+    </kpi>
+  </xpDirectivesBattleBooster3>
+  <creditsDirectivesBattleBooster2>
+    <id>	210	</id>
+    <userString>	#artefacts:creditsDirectivesBattleBooster2/name	</userString>
+    <description>	#artefacts:creditsDirectivesBattleBooster2/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:creditsDirectivesBattleBooster2/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:creditsDirectivesBattleBooster2/long_special	</longDescriptionSpecial>
+    <icon>	creditsDirectivesBattleBooster2	</icon>
+    <price>	20000	  <credits></credits>
+    </price>
+    <type>	battleBoosters	</type>
+    <tags>	notForSale economicDirectiveBattleBooster notBuyWhenAutoEquip	</tags>
+    <notInShop>	true	</notInShop>
+    <script>	EconomicDirectives	  <modifiers>
+        <mul>
+          <name>	Credits	</name>
+          <value>	50	</value>
+        </mul>
+      </modifiers>
+    </script>
+    <kpi>
+      <mul>
+        <name>	gameCredits	</name>
+        <value>	1.5	</value>
+      </mul>
+    </kpi>
+  </creditsDirectivesBattleBooster2>
+  <creditsDirectivesBattleBooster3>
+    <id>	211	</id>
+    <userString>	#artefacts:creditsDirectivesBattleBooster3/name	</userString>
+    <description>	#artefacts:creditsDirectivesBattleBooster3/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:creditsDirectivesBattleBooster3/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:creditsDirectivesBattleBooster3/long_special	</longDescriptionSpecial>
+    <icon>	creditsDirectivesBattleBooster3	</icon>
+    <price>	80000	  <credits></credits>
+    </price>
+    <type>	battleBoosters	</type>
+    <tags>	notForSale economicDirectiveBattleBooster notBuyWhenAutoEquip	</tags>
+    <notInShop>	true	</notInShop>
+    <script>	EconomicDirectives	  <modifiers>
+        <mul>
+          <name>	Credits	</name>
+          <value>	200	</value>
+        </mul>
+      </modifiers>
+    </script>
+    <kpi>
+      <mul>
+        <name>	gameCredits	</name>
+        <value>	3.0	</value>
+      </mul>
+    </kpi>
+  </creditsDirectivesBattleBooster3>
+  <comboXpDirectivesBattleBooster2>
+    <id>	212	</id>
+    <userString>	#artefacts:comboXpDirectivesBattleBooster2/name	</userString>
+    <description>	#artefacts:comboXpDirectivesBattleBooster2/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:comboXpDirectivesBattleBooster2/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:comboXpDirectivesBattleBooster2/long_special	</longDescriptionSpecial>
+    <icon>	comboXpDirectivesBattleBooster2	</icon>
+    <price>	20000	  <credits></credits>
+    </price>
+    <type>	battleBoosters	</type>
+    <tags>	notForSale economicDirectiveBattleBooster notBuyWhenAutoEquip	</tags>
+    <notInShop>	true	</notInShop>
+    <script>	EconomicDirectives	  <modifiers>
+        <mul>
+          <name>	CrewXp	</name>
+          <value>	200	</value>
+        </mul>
+        <mul>
+          <name>	FreeXp	</name>
+          <value>	200	</value>
+        </mul>
+      </modifiers>
+    </script>
+    <kpi>
+      <mul>
+        <name>	gameFreeXpAndCrewXp	</name>
+        <value>	3.0	</value>
+      </mul>
+    </kpi>
+  </comboXpDirectivesBattleBooster2>
+  <comboXpDirectivesBattleBooster3>
+    <id>	213	</id>
+    <userString>	#artefacts:comboXpDirectivesBattleBooster3/name	</userString>
+    <description>	#artefacts:comboXpDirectivesBattleBooster3/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:comboXpDirectivesBattleBooster3/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:comboXpDirectivesBattleBooster3/long_special	</longDescriptionSpecial>
+    <icon>	comboXpDirectivesBattleBooster3	</icon>
+    <price>	60000	  <credits></credits>
+    </price>
+    <type>	battleBoosters	</type>
+    <tags>	notForSale economicDirectiveBattleBooster notBuyWhenAutoEquip	</tags>
+    <notInShop>	true	</notInShop>
+    <script>	EconomicDirectives	  <modifiers>
+        <mul>
+          <name>	CrewXp	</name>
+          <value>	600	</value>
+        </mul>
+        <mul>
+          <name>	FreeXp	</name>
+          <value>	600	</value>
+        </mul>
+      </modifiers>
+    </script>
+    <kpi>
+      <mul>
+        <name>	gameFreeXpAndCrewXp	</name>
+        <value>	7.0	</value>
+      </mul>
+    </kpi>
+  </comboXpDirectivesBattleBooster3>
   <artillery_epic>
     <id>	118	</id>
     <userString>	#artefacts:artillery/name	</userString>
@@ -8912,9 +9156,9 @@
           <plan>	abilities/base_ability_controller_client	</plan>
         </client>
       </visualScript>
-      <cooldownSeconds>	90	</cooldownSeconds>
-      <reuseCount>	3	</reuseCount>
-      <duration>	30	</duration>
+      <cooldownSeconds>	180	</cooldownSeconds>
+      <reuseCount>	2	</reuseCount>
+      <duration>	25	</duration>
       <additiveFactors>
         <gun-chargeTimeBonus>	1	</gun-chargeTimeBonus>
         <gun-reloadLockTimeBonus>	2	</gun-reloadLockTimeBonus>

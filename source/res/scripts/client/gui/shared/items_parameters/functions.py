@@ -89,7 +89,7 @@ def getKpiFactors(vehicle):
             otherKPI.addKPI(kpi.name, kpi.value, kpi.type)
 
     for item in vehicle.battleBoosters.installed:
-        if item is None or item.isCrewBooster() or not item.isAffectsOnVehicle(vehicle):
+        if item is None or item.isCrewBooster() or item.isEconomicBooster() or not item.isAffectsOnVehicle(vehicle):
             continue
         for kpi in item.getKpi(vehicle):
             otherKPI.addKPI(kpi.name, kpi.value, kpi.type)

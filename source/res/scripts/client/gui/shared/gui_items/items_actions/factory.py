@@ -30,6 +30,9 @@ EQUIP_TANKMAN = 'equipTankman'
 CHANGE_TANKMAN_PASSPORT = 'changeTankmanPassport'
 DISMISS_TANKMAN = 'dismissTankman'
 RESTORE_TANKMAN = 'restoreTankman'
+RESTORE_TANKMANS = 'restoreTankmans'
+CREW_SKIN_EQUIP = 'crewSkinEquip'
+CREW_SKIN_UNEQUIP = 'crewSkinUnequip'
 CHANGE_NATION = 'changeNation'
 INSTALL_BATTLE_ABILITIES = 'installBattleAbilities'
 BUY_BATTLE_ABILITIES = 'buyBattleAbilities'
@@ -72,6 +75,9 @@ _ACTION_MAP = {SELL_ITEM: actions.SellItemAction,
  CHANGE_TANKMAN_PASSPORT: actions.TankmanChangePassportAction,
  DISMISS_TANKMAN: actions.TankmanDismissAction,
  RESTORE_TANKMAN: actions.TankmanRestoreAction,
+ RESTORE_TANKMANS: actions.TankmansRestoreAction,
+ CREW_SKIN_EQUIP: actions.CrewSkinEquipAction,
+ CREW_SKIN_UNEQUIP: actions.CrewSkinUnequipAction,
  CHANGE_NATION: actions.ChangeVehicleNationAction,
  INSTALL_BATTLE_ABILITIES: actions.InstallBattleAbilities,
  BUY_BATTLE_ABILITIES: actions.BuyBattleAbilities,

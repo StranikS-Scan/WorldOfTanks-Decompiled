@@ -40,10 +40,11 @@ from gui.impl.lobby.account_completion.utils.decorators import waitShowOverlay
 from gui.impl.lobby.battle_royale import BATTLE_ROYALE_LOCK_SOURCE_NAME
 from gui.impl.lobby.common.congrats.common_congrats_view import CongratsWindow
 from gui.impl.lobby.maps_training.maps_training_queue_view import MapsTrainingQueueView
+from gui.impl.lobby.promo_code_reward_screen import WAITING_DATA_TIMEOUT
 from gui.impl.lobby.tank_setup.dialogs.confirm_dialog import TankSetupConfirmDialog, TankSetupExitConfirmDialog
 from gui.impl.lobby.tank_setup.dialogs.refill_shells import ExitFromShellsConfirm, RefillShells
 from gui.impl.pub.lobby_window import LobbyNotificationWindow, LobbyWindow
-from gui.impl.pub.notification_commands import WindowNotificationCommand, EventNotificationCommand, NotificationEvent
+from gui.impl.pub.notification_commands import WindowNotificationCommand, EventNotificationCommand, NotificationEvent, WindowNotificationWithWaitingCommand
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
 from gui.resource_well.resource import Resource
 from gui.resource_well.resource_well_helpers import isResourceWellRewardVehicle
@@ -349,13 +350,6 @@ def showDailyExpPageView(exitEvent=None):
 def showDashboardView():
     from gui.impl.lobby.account_dashboard.account_dashboard_view import AccountDashboardView
     g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.lobby.account_dashboard.AccountDashboard(), AccountDashboardView, ScopeTemplates.LOBBY_SUB_SCOPE)), scope=EVENT_BUS_SCOPE.LOBBY)
-
-
-@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
-def showBirthday2023Intro(notificationMgr=None):
-    from gui.impl.lobby.birthday2023.birthday_intro_view import BirthdayIntro2023Window
-    window = BirthdayIntro2023Window()
-    notificationMgr.append(WindowNotificationCommand(window))
 
 
 @wg_async
@@ -1862,14 +1856,6 @@ def showPostProgressionResearchDialog(vehicle, stepIDs, parent=None):
 
 
 @wg_async
-def showTokenRecruitDialog(ctx, parentViewKey=None):
-    from gui.impl.dialogs import dialogs
-    from gui.impl.lobby.crew.dialogs.recruit_window.recruit_dialog import TokenRecruitDialog
-    result = yield wg_await(dialogs.showSingleDialogWithResultData(ctx=ctx, parentViewKey=parentViewKey, layoutID=TokenRecruitDialog.LAYOUT_ID, wrappedViewClass=TokenRecruitDialog))
-    raise AsyncReturn(result)
-
-
-@wg_async
 def showTankwomanRecruitAwardDialog(ctx, parentViewKey=None):
     from gui.impl.dialogs import dialogs
     from gui.impl.lobby.crew.dialogs.recruit_window.recruit_dialog import QuestRecruitDialog
@@ -2313,3 +2299,21 @@ def showDailyQuestsConfirmDialog(rerollPremium, callback):
     else:
         isOK, data = result.result
         callback((isOK, data))
+
+
+def showChangeCrewWindow(tankmanInvID, isRecruit, slotToUnpack=-1, vehicle=None, recruitData=None):
+    from gui.impl.lobby.crew.tankman_change_and_recruit_view import TankmanChangeAndRecruitViewWindow
+    TankmanChangeAndRecruitViewWindow(parent=getParentWindow(), tankmanInvID=tankmanInvID, isRecruit=isRecruit, slotToUnpack=slotToUnpack, vehicle=vehicle, recruitData=recruitData).load()
+
+
+def showChangeTankmanSkinWindow(tankmanID, selectedIcon, selectedIconID, selectedSkinID, selectedNation, parent=None):
+    from gui.impl.lobby.crew.change_tankman_skin_view import ChangeTankmanSkinViewWindow
+    ChangeTankmanSkinViewWindow(tankmanID=tankmanID, selectedIcon=selectedIcon, selectedNation=selectedNation, selectedIconID=selectedIconID, selectedSkinID=selectedSkinID, parent=parent).load()
+
+
+def showPromoCodeRewardScreen(promoCodeToken, rewards):
+    from gui.impl.lobby.promo_code_reward_screen import WAITING_MESSAGE
+    from gui.impl.lobby.promo_code_reward_screen.promo_code_reward_screen_view import PromoCodeRewardScreenViewWindow
+    notificationMgr = dependency.instance(INotificationWindowController)
+    window = PromoCodeRewardScreenViewWindow(promoCodeToken, rewards)
+    notificationMgr.append(WindowNotificationWithWaitingCommand(window, WAITING_MESSAGE, WAITING_DATA_TIMEOUT))

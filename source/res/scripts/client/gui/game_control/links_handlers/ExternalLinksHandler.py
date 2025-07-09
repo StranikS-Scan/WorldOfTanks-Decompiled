@@ -179,7 +179,7 @@ class ExternalLinksHandler(IExternalLinksController):
     def _getHandlers(self):
         if not self.__linksHandlers:
             self.__linksHandlers = []
-            if self.__loginManager.isWgcSteam:
+            if self.__loginManager.isLgcSteam:
                 self.__linksHandlers.append(external.PremShopLinksHandler())
                 self.__linksHandlers.append(external.AddPlatformTagLinksHandler())
                 self.__linksHandlers.append(external.PremShopLinksForArgsUrlHandler())

@@ -136,6 +136,7 @@
     <Continental_AV-1790-7B_7x7>	503	</Continental_AV-1790-7B_7x7>
     <Continental_AOSI-895-5A_FL>	504	</Continental_AOSI-895-5A_FL>
     <AOI-1490_7x7>	505	</AOI-1490_7x7>
+    <Ford_GAFM2_A68_T28_Prototype_FL>	506	</Ford_GAFM2_A68_T28_Prototype_FL>
     <Continental_AV-1790-1_FL>	31002	</Continental_AV-1790-1_FL>
     <Wright_Continental_R-975C1_bootcamp>	64004	</Wright_Continental_R-975C1_bootcamp>
     <Development_Engine>	65535	</Development_Engine>
@@ -165,6 +166,7 @@
     <Continental_AOSI_1195_6_4>	31023	</Continental_AOSI_1195_6_4>
     <Continental_AOI_1790_12_4>	31024	</Continental_AOI_1790_12_4>
     <Continental_AV_1790_3_T>	31025	</Continental_AV_1790_3_T>
+    <AVI_1790_8>	31026	</AVI_1790_8>
     <Continental_AOSI_1195_5_T>	31009	</Continental_AOSI_1195_5_T>
     <Ford_GAF_R1_T>	35002	</Ford_GAF_R1_T>
   </ids>
@@ -1127,6 +1129,24 @@
       <rpm_min>	392	</rpm_min>
       <rpm_max>	2903	</rpm_max>
     </AOI-1490>
+    <AVI_1790_8>
+      <userString>	#usa_vehicles:AVI_1790_8	</userString>
+      <shortUserString>	#usa_vehicles:AVI_1790_8_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	550	</power>
+      <weight>	1350	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	436	</rpm_min>
+      <rpm_max>	2803	</rpm_max>
+    </AVI_1790_8>
     <AOI-1490_cl>
       <userString>	#usa_vehicles:AOI-1490	</userString>
       <shortUserString>	#usa_vehicles:AOI-1490_short	</shortUserString>
@@ -1258,7 +1278,7 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
-      <power>	810	</power>
+      <power>	900	</power>
       <weight>	1159	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	130	</maxRegenHealth>
@@ -1669,6 +1689,23 @@
       <rpm_min>	418	</rpm_min>
       <rpm_max>	2843	</rpm_max>
     </Ford_GAFM2_A68_T28_Prototype>
+    <Ford_GAFM2_A68_T28_Prototype_FL>
+      <userString>	#usa_vehicles:Ford_GAFM2	</userString>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	34600	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	860	</power>
+      <weight>	569	</weight>
+      <maxHealth>	280	</maxHealth>
+      <maxRegenHealth>	147	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	418	</rpm_min>
+      <rpm_max>	2843	</rpm_max>
+    </Ford_GAFM2_A68_T28_Prototype_FL>
     <Ford_GAF_V8>
       <userString>	#usa_vehicles:Ford_GAF_V8	</userString>
       <tags>	gasoline	</tags>

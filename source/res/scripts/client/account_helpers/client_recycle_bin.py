@@ -70,6 +70,19 @@ class ClientRecycleBin(object):
             self.__account._doCmdIntArr(AccountCommands.CMD_TMAN_RESTORE, arr, proxy)
             return
 
+    def restoreTankmans(self, tmanInvIDs, callback):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER)
+            return
+        else:
+            if callback is not None:
+                proxy = lambda requestID, resultID, errStr='': callback(resultID, errStr)
+            else:
+                proxy = None
+            self.__account._doCmdIntArr(AccountCommands.CMD_TMANS_RESTORE, tmanInvIDs, proxy)
+            return
+
     def __onGetCacheResponse(self, callback, resultID):
         if resultID < 0:
             if callback is not None:

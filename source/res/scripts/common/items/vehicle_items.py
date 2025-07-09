@@ -382,7 +382,7 @@ class Hull(BasicItem):
 
 
 class Shell(BasicItem):
-    __slots__ = ('caliber', 'isTracer', 'isForceTracer', 'damage', 'damageRandomization', 'piercingPowerRandomization', 'icon', 'iconName', 'isGold', 'type', 'stun', 'effectsIndex', 'tags', 'secondaryAttackReason', 'useAltDamageRandomization', 'dynamicEffectsIndexes', 'hitDeviceChanceMultiplier', 'hitCrewChanceMultiplier', 'maxDistanceInsideVehicle', 'damagedDevicesLimit', 'engineFireFactor', 'distanceDmg', 'delayedBomb')
+    __slots__ = ('caliber', 'isTracer', 'isForceTracer', 'damage', 'damageRandomization', 'piercingPowerRandomization', 'icon', 'iconName', 'isGold', 'type', 'stun', 'effectsIndex', 'tags', 'secondaryAttackReason', 'useAltDamageRandomization', 'dynamicEffectsIndexes', 'hitDeviceChanceMultiplier', 'hitCrewChanceMultiplier', 'maxDistanceInsideVehicle', 'damagedDevicesLimit', 'engineFireFactor', 'distanceDmg', 'isArtilleryShotZoneVisible', 'isOwnArtilleryShotZoneVisible')
 
     def __init__(self, typeID, componentID, componentName, compactDescr):
         super(Shell, self).__init__(typeID, componentID, componentName, compactDescr)
@@ -407,16 +407,13 @@ class Shell(BasicItem):
         self.damagedDevicesLimit = None
         self.engineFireFactor = None
         self.distanceDmg = None
-        self.delayedBomb = component_constants.DEFAULT_SHELL_DELAYED_BOMB
+        self.isArtilleryShotZoneVisible = False
+        self.isOwnArtilleryShotZoneVisible = False
         return
 
     def __repr__(self):
         nationId, shellId = self.id
         return 'Shell(nation = {}, shellId = {}, shellName={})'.format(nations.NAMES[nationId], shellId, self.name)
-
-    @property
-    def isDelayedBomb(self):
-        return bool(self.delayedBomb.explosionDelay)
 
     @property
     def kind(self):
@@ -454,7 +451,8 @@ class Shell(BasicItem):
         return self.kind in (SHELL_TYPES.ARMOR_PIERCING,
          SHELL_TYPES.ARMOR_PIERCING_HE,
          SHELL_TYPES.ARMOR_PIERCING_CR,
-         SHELL_TYPES.ARMOR_PIERCING_FSDS)
+         SHELL_TYPES.ARMOR_PIERCING_FSDS,
+         SHELL_TYPES.DELAYED_HE)
 
     @property
     def prereqEffectIndexes(self):

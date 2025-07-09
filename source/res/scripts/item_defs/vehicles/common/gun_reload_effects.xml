@@ -234,8 +234,36 @@
     <autoLoaderFull>	gun_rld_autoloader_mausekonig_full_complete	</autoLoaderFull>
     <clipShellLoad>	gun_rld_autoloader_mausekonig_long_oneshell	</clipShellLoad>
     <clipShellLoadDuration>	335.0	</clipShellLoadDuration>
+    <ammoLow>	gun_rld_autoloader_no_enough_shells	</ammoLow>
     <caliber>	SWITCH_ext_rld_autoloader_caliber_115_152mm	</caliber>
   </dualgun_autoloader_reload115_152>
+  <dualgun_barrel_reload115_152>
+    <type>	DualGunBarrelReload	</type>
+    <duration>	6450	</duration>
+    <shellDuration>	1500	</shellDuration>
+    <barrelReloadSound>	gun_rld_automat_reloading_short_oneshell	</barrelReloadSound>
+    <startLong>	gun_rld_automat_reloading_long_start	</startLong>
+    <startLoop>	gun_rld_automat_reloading_long_loop	</startLoop>
+    <stopLoop>	gun_rld_automat_reloading_long_loop_stop	</stopLoop>
+    <loopShell>	gun_rld_automat_reloading_long_oneshell	</loopShell>
+    <loopShellDt>	0.3	</loopShellDt>
+    <loopShellLast>	gun_rld_automat_reloading_long_oneshell_last	</loopShellLast>
+    <loopShellLastDt>	1.5	</loopShellLastDt>
+    <lastShellAlert>	gun_rld_automat_reloading_short_lastshell	</lastShellAlert>
+    <ammoLow>	gun_rld_automat_no_enough_shells	</ammoLow>
+    <caliber>	SWITCH_ext_rld_automat_caliber_115_152mm	</caliber>
+    <intuition_overrides>
+      <duration>	2500.0	</duration>
+      <startLong>	gun_rld_intuition_automat_reloading_long_start	</startLong>
+      <loopShell>	gun_rld_intuition_automat_reloading_long_oneshell	</loopShell>
+      <loopShellLast>	gun_rld_intuition_automat_reloading_long_oneshell_last	</loopShellLast>
+      <loopShellLastDt>	0.5	</loopShellLastDt>
+    </intuition_overrides>
+    <dualGunSound>	gun_rld_dual_reloading_oneshell	</dualGunSound>
+    <runTimeDelta>	1.8	</runTimeDelta>
+    <ammoLowSound>	gun_rld_dual_reloading_oneshell_last	</ammoLowSound>
+    <runTimeDeltaAmmoLow>	0.5	</runTimeDeltaAmmoLow>
+  </dualgun_barrel_reload115_152>
   <reload155_170>
     <type>	SimpleReload	</type>
     <duration>	2100.0	</duration>

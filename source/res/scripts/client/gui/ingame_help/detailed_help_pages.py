@@ -43,6 +43,7 @@ class HelpPagePriority(object):
     AUTOSHOOT_FLAMETHROWER = 11
     THERMAL_VISION = 11
     DUAL_GUN_WITH_AUTORELOAD_CLIP = 12
+    DUAL_GUN_WITH_CLIP = 12
 
 
 def addPage(datailedList, headerTitle, title, descr, vKeys, buttons, image, roleImage=None, roleActions=None, hintCtx=None):
@@ -568,8 +569,28 @@ class DualgunWithAutoreloadClip(DetailedHelpPagesBuilder):
 
     @classmethod
     def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
-        ctx['hasDualgunWithAutoreloadClip'] = hasDualgunWithAutoreloadClip = vehicle is not None and vehicle.typeDescriptor.isDualgunVehicle and vehicle.typeDescriptor.isClipGun
+        ctx['hasDualgunWithAutoreloadClip'] = hasDualgunWithAutoreloadClip = vehicle is not None and vehicle.typeDescriptor.isDualgunVehicle and vehicle.typeDescriptor.isClipGun and vehicle.typeDescriptor.isAutoReloadGun
         ctx['hasUniqueVehicleHelpScreen'] = ctx.get('hasUniqueVehicleHelpScreen') or hasDualgunWithAutoreloadClip
+        return
+
+
+class DualgunWithClip(DetailedHelpPagesBuilder):
+    _SUITABLE_CTX_KEYS = ('hasDualgunWithClip',)
+
+    @classmethod
+    def priority(cls):
+        return HelpPagePriority.DUAL_GUN_WITH_CLIP
+
+    @classmethod
+    def buildPages(cls, ctx):
+        pages = []
+        addPage(pages, buildTitle(ctx), backport.text(R.strings.ingame_help.detailsHelp.dualgunWithClip.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.dualgunWithClip.description())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.clipDualGunHelp.dualgun_with_clip()), hintCtx=HelpHintContext.MECHANICS)
+        return pages
+
+    @classmethod
+    def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
+        ctx['hasDualgunWithClip'] = hasDualgunWithClip = vehicle is not None and vehicle.typeDescriptor.isDualgunVehicle and vehicle.typeDescriptor.isClipGun and not vehicle.typeDescriptor.isAutoReloadGun
+        ctx['hasUniqueVehicleHelpScreen'] = ctx.get('hasUniqueVehicleHelpScreen') or hasDualgunWithClip
         return
 
 
@@ -592,4 +613,5 @@ registerIngameHelpPagesBuilders((SiegeModePagesBuilder,
  TankWithAbilityPagesBuilder,
  AutoshootFlameTankPagesBuilder,
  ThermalVisionPagesBuilder,
- DualgunWithAutoreloadClip))
+ DualgunWithAutoreloadClip,
+ DualgunWithClip))

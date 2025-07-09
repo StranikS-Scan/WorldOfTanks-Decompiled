@@ -10,6 +10,7 @@ from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.impl.lobby.loot_box.loot_box_helper import aggregateSimilarBonuses, isAllVehiclesObtainedInSlot
 from gui.impl.pub import ViewImpl, WindowImpl
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
+from gui_lootboxes.gui.impl.lobby.gui_lootboxes import RegisteredTooltips
 from helpers import dependency
 from shared_utils import findFirst
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -27,6 +28,7 @@ from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.probability_guaranteed_
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.probability_stage_buttons_tooltip import ProbabilityStageButtonsTooltip
 from gui_lootboxes.gui.impl.gen.view_models.views.lobby.gui_lootboxes.lb_bonus_type_model import BonusType
 from skeletons.gui.shared import IItemsCache
+from uilogging.lootboxes import LootboxProbabilityViewLogger
 SLOT_BONUSES_PROCESSORS = []
 
 class LootBoxSlot(object):
@@ -63,7 +65,7 @@ class LootBoxSlot(object):
 
 
 class BonusProbabilitiesView(ViewImpl):
-    __slots__ = ('__lootBox', '__tooltipData')
+    __slots__ = ('__lootBox', '__tooltipData', '__uiLogger')
     __guiLootBoxes = dependency.descriptor(IGuiLootBoxesController)
     __itemsCache = dependency.descriptor(IItemsCache)
     __settingsCore = dependency.descriptor(ISettingsCore)
@@ -75,6 +77,7 @@ class BonusProbabilitiesView(ViewImpl):
         super(BonusProbabilitiesView, self).__init__(settings)
         self.__lootBox = lootBox
         self.__tooltipData = {}
+        self.__uiLogger = LootboxProbabilityViewLogger()
 
     @property
     def viewModel(self):
@@ -108,6 +111,12 @@ class BonusProbabilitiesView(ViewImpl):
             lootBoxKeyID = tooltipData.get('lootBoxKeyID')
             lootBoxKey = self.__guiLootBoxes.getKeyByID(lootBoxKeyID)
             return LootboxKeyTooltip(lootBoxKey)
+        if contentID in RegisteredTooltips.REGISTERED_SIMPLE_TOOLTIPS:
+            view = RegisteredTooltips.REGISTERED_SIMPLE_TOOLTIPS.get(contentID)
+            return view()
+        if contentID in RegisteredTooltips.REGISTERED_TOOLTIPS:
+            view = RegisteredTooltips.REGISTERED_TOOLTIPS.get(contentID)
+            return view(event)
         return super(BonusProbabilitiesView, self).createToolTipContent(event, contentID)
 
     def getTooltipData(self, event):
@@ -118,6 +127,7 @@ class BonusProbabilitiesView(ViewImpl):
         super(BonusProbabilitiesView, self)._onLoading(*args, **kwargs)
         with self.viewModel.transaction() as model:
             self.__update(model=model)
+        self.__uiLogger.startViewAction()
 
     def _finalize(self):
         serverSettings = self.__settingsCore.serverSettings
@@ -126,11 +136,17 @@ class BonusProbabilitiesView(ViewImpl):
         super(BonusProbabilitiesView, self)._finalize()
 
     def _getEvents(self):
-        return ((self.__guiLootBoxes.onBoxInfoUpdated, self.__update),)
+        return ((self.__guiLootBoxes.onBoxInfoUpdated, self.__update), (self.viewModel.onClose, self._onClose))
+
+    def _onClose(self, args):
+        self.__uiLogger.stopViewAction(args.get('closeMethod', None))
+        self.destroyWindow()
+        return
 
     @replaceNoneKwargsModel
     def __update(self, model=None):
         model.setLootboxName(self.__lootBox.getUserNameKey())
+        model.setLootboxID(self.__lootBox.getID())
         model.setLootboxTier(self.__lootBox.getTier())
         model.setHasLootLists(self.__lootBox.hasLootLists())
         slots = self.__lootBox.getBonusSlots()

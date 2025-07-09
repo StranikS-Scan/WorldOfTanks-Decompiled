@@ -72,7 +72,7 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
         self.__destroyMarker(vehicle.id)
 
     def addCgfMarker(self, entityId, markerComponent, matrix):
-        flashMarker = self.as_createCustomMarkerS(entityId, markerComponent.icon.replace('gui', '..'), makeString(markerComponent.textKey))
+        flashMarker = self.as_createCustomMarkerS(entityId, markerComponent.icon.replace('gui', '..'), makeString(markerComponent.textKey), markerComponent.iconPosition)
         self.__markersCache[entityId] = GUI.WGHangarVehicleMarker()
         self.__markersCache[entityId].setMarker(flashMarker, matrix)
         self.__updateMarkerVisibility(entityId)

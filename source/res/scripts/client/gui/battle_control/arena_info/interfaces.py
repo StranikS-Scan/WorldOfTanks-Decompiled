@@ -486,6 +486,33 @@ class IComp7VOIPController(IArenaLoadController):
         raise NotImplementedError
 
 
+class IRankedVOIPController(IArenaLoadController):
+    __slots__ = ()
+
+    @property
+    def isVoipSupported(self):
+        raise NotImplementedError
+
+    @property
+    def isVoipEnabled(self):
+        raise NotImplementedError
+
+    @property
+    def isTeamChannelAvailable(self):
+        raise NotImplementedError
+
+    @property
+    def isJoined(self):
+        raise NotImplementedError
+
+    @property
+    def isTeamVoipEnabled(self):
+        raise NotImplementedError
+
+    def toggleChannelConnection(self):
+        raise NotImplementedError
+
+
 class IMapZonesController(IBattleController):
     onMarkerToZoneAdded = None
     onMarkerFromZoneRemoved = None

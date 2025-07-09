@@ -268,9 +268,8 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
                         vos = []
                     vos.append(_makeReceiverVO(*receiver))
 
-        self.as_setReceiversS(vos)
-        if self.__invalidateReceiverIndex():
-            self.as_changeReceiverS(self.__receiverIndex)
+        self.__invalidateReceiverIndex()
+        self.as_setReceiversS(vos, self.__receiverIndex)
         return
 
     def invalidateUserPreferences(self):
@@ -487,6 +486,7 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
         else:
             leftReceiversCount = 0
         index = self.__receiverIndex
+        self.__receiverIndex = 0
         while leftReceiversCount:
             leftReceiversCount -= 1
             index += 1

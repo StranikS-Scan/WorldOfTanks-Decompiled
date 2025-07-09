@@ -8,6 +8,9 @@ class LRUCache(object):
         self.__cache = collections.OrderedDict()
         self.__limit = limit
 
+    def __iter__(self):
+        return self.__cache.iteritems()
+
     def get(self, key):
         try:
             value = self.__cache.pop(key)

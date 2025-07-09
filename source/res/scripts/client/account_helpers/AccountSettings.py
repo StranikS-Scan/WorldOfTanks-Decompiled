@@ -24,6 +24,7 @@ from gui.collection.collections_constants import COLLECTIONS_UPDATED_ENTRY_SEEN,
 from gui.integrated_auction.constants import AUCTION_FINISH_STAGE_SEEN, AUCTION_STAGE_START_SEEN
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 from gui.shop_sales_event.constants import TRADING_CARAVAN_REFILL_SEEN
+from gui.custom_notifications.constants import CUSTOM_NOTIFICATIONS_SEEN
 from helpers import dependency, getClientVersion
 from items.components.crew_books_constants import CREW_BOOK_RARITY
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -45,6 +46,7 @@ PM_SELECTOR_FILTER = 'PM_SELECTOR_FILTER'
 RANKED_CAROUSEL_FILTER_1 = 'RANKED_CAROUSEL_FILTER_1'
 RANKED_CAROUSEL_FILTER_2 = 'RANKED_CAROUSEL_FILTER_2'
 RANKED_CAROUSEL_FILTER_CLIENT_1 = 'RANKED_CAROUSEL_FILTER_CLIENT_1'
+RANKED_IS_VOIP_IN_BATTLE_ACTIVATED = 'rankedIsVoipInBattleActivated'
 EPICBATTLE_CAROUSEL_FILTER_1 = 'EPICBATTLE_CAROUSEL_FILTER_1'
 EPICBATTLE_CAROUSEL_FILTER_2 = 'EPICBATTLE_CAROUSEL_FILTER_2'
 EPICBATTLE_CAROUSEL_FILTER_CLIENT_1 = 'EPICBATTLE_CAROUSEL_FILTER_CLIENT_1'
@@ -133,6 +135,7 @@ DEFAULT_LEVELS_FILTERS = [False] * MAX_VEHICLE_LEVEL
 SHOW_OPT_DEVICE_HINT = 'showOptDeviceHint'
 SHOW_OPT_DEVICE_HINT_TROPHY = 'showOptDeviceHintTrophy'
 SHOW_OPT_MODERNIZED_DEVICE_HINT = 'showOptModernizedDeviceHint'
+SHOW_ECONOMIC_DIRECTIVES_HINT = 'showOEconomicDirectivesHint'
 LAST_BADGES_VISIT = 'lastBadgesVisit'
 LAST_SELECTED_SUFFIX_BADGE_ID = 'lastSelectedSuffixBadgeID'
 ENABLE_RANKED_ANIMATIONS = 'enableRankedAnimations'
@@ -229,6 +232,7 @@ MAPBOX_SURVEYS = 'mapbox_surveys'
 CLAN_NEWS_SEEN = 'clanNewsSeen'
 INTEGRATED_AUCTION_NOTIFICATIONS = 'integratedAuctionNotifications'
 TRADING_CARAVAN_NOTIFICATIONS = 'tradingCaravanNotifications'
+CUSTOM_NOTIFICATIONS = 'customNotifications'
 SHOWN_PERSONAL_RESERVES_INTRO = 'shownPersonalReserves'
 SHOWN_WOT_PLUS_INTRO = 'shownWotPlusIntro'
 SHOWN_WOT_PLUS_COUNTER = 'shownWotPlusCounter'
@@ -253,7 +257,6 @@ LOOT_BOXES_VIEWED_HAS_INFINITE = 'lootBoxesViewedHasInfinite'
 LOOT_BOXES_COUNT = 'lootBoxesCount'
 LOOT_BOXES_LAST_ADDED_ID = 'lootBoxesLastAdded'
 KEY_LOOTBOX_TRIGGER_HINT_SHOWN = 'keyLootboxTriggerHintShown'
-BIRTHDAY_2023_INTRO_SHOWN = 'birthday2023IntroShown'
 COLLECTIONS_SECTION = 'collections'
 COLLECTIONS_INTRO_SHOWN = 'collectionsIntroShown'
 COLLECTION_SHOWN_NEW_REWARDS = 'collectionsNewRewards'
@@ -386,6 +389,9 @@ class PlayStreak(object):
     PLAY_STREAK_LAST_LEVEL_SEEN = 'PlayStreakLastLevelSeen'
     PLAY_STREAK_LAST_LEVEL_SEEN_WIDGET = 'PlayStreakLastLevelSeenWidget'
     PLAY_STREAK_LAST_LEVEL_SEEN_TAB = 'PlayStreakLastLevelSeenTab'
+    PLAY_STREAK_LAST_LEVEL_FREEZE_SEEN = 'PlayStreakLastLevelFreezeSeen'
+    PLAY_STREAK_LAST_LEVEL_FREEZE_SEEN_WIDGET = 'PlayStreakLastLevelFreezeSeenWidget'
+    PLAY_STREAK_LAST_LEVEL_FREEZE_SEEN_TAB = 'PlayStreakLastLevelFreezeSeenTab'
 
 
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
@@ -1070,6 +1076,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 COMP7_PREBATTLE_CAROUSEL_ROW_VALUE: -1,
                 COMP7_PREBATTLE_MINIMAP_SIZE: -1,
                 COMP7_IS_VOIP_IN_BATTLE_ACTIVATED: False,
+                RANKED_IS_VOIP_IN_BATTLE_ACTIVATED: False,
                 'showVehicleIcon': False,
                 'showVehicleLevel': False,
                 'showExInf4Destroyed': False,
@@ -1247,6 +1254,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 SHOW_OPT_DEVICE_HINT: True,
                 SHOW_OPT_DEVICE_HINT_TROPHY: True,
                 SHOW_OPT_MODERNIZED_DEVICE_HINT: True,
+                SHOW_ECONOMIC_DIRECTIVES_HINT: True,
                 LAST_BADGES_VISIT: 0,
                 LAST_SELECTED_SUFFIX_BADGE_ID: 0,
                 ENABLE_RANKED_ANIMATIONS: True,
@@ -1377,7 +1385,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                  LOOT_BOXES_COUNT: {},
                                  LOOT_BOXES_LAST_ADDED_ID: 0,
                                  KEY_LOOTBOX_TRIGGER_HINT_SHOWN: False},
-                BIRTHDAY_2023_INTRO_SHOWN: False,
                 NEW_YEAR: {NY_DAILY_QUESTS_VISITED: False,
                            NY_BONUS_DAILY_QUEST_VISITED: False,
                            NY_OLD_COLLECTIONS_BY_YEAR_VISITED: {18: False,
@@ -1439,6 +1446,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                      INTEGRATED_AUCTION_NOTIFICATIONS: {AUCTION_STAGE_START_SEEN: set(),
                                                         AUCTION_FINISH_STAGE_SEEN: set()},
                      TRADING_CARAVAN_NOTIFICATIONS: {TRADING_CARAVAN_REFILL_SEEN: set()},
+                     CUSTOM_NOTIFICATIONS: {CUSTOM_NOTIFICATIONS_SEEN: set()},
                      FUN_RANDOM_NOTIFICATIONS: {FUN_RANDOM_NOTIFICATIONS_FROZEN: set(),
                                                 FUN_RANDOM_NOTIFICATIONS_PROGRESSIONS: set(),
                                                 FUN_RANDOM_NOTIFICATIONS_SUB_MODES: set()},
@@ -1617,7 +1625,10 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
  PlayStreak.PLAY_STREAK_SETTINGS: {PlayStreak.PLAY_STREAK_CLICK: False,
                                    PlayStreak.PLAY_STREAK_LAST_LEVEL_SEEN: 0,
                                    PlayStreak.PLAY_STREAK_LAST_LEVEL_SEEN_WIDGET: 0,
-                                   PlayStreak.PLAY_STREAK_LAST_LEVEL_SEEN_TAB: 0}}
+                                   PlayStreak.PLAY_STREAK_LAST_LEVEL_SEEN_TAB: 0,
+                                   PlayStreak.PLAY_STREAK_LAST_LEVEL_FREEZE_SEEN: 0,
+                                   PlayStreak.PLAY_STREAK_LAST_LEVEL_FREEZE_SEEN_WIDGET: 0,
+                                   PlayStreak.PLAY_STREAK_LAST_LEVEL_FREEZE_SEEN_TAB: 0}}
 
 def _filterAccountSection(dataSec):
     for key, section in dataSec.items()[:]:

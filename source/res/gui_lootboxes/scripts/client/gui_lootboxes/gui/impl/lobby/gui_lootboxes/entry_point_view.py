@@ -12,6 +12,8 @@ from gui.limited_ui.lui_rules_storage import LuiRules
 from helpers import dependency
 from skeletons.gui.game_control import IGuiLootBoxesController, ILimitedUIController
 from skeletons.gui.hangar import ICarouselEventEntry
+from uilogging.lootboxes import logLootboxStorageOpen
+from uilogging.lootboxes.constants import Items, Views
 _ENABLED_PRE_QUEUES = (QUEUE_TYPE.RANDOMS, QUEUE_TYPE.VERSUS_AI)
 
 class LootBoxesEntryPointWidget(ViewImpl, ICarouselEventEntry):
@@ -45,6 +47,7 @@ class LootBoxesEntryPointWidget(ViewImpl, ICarouselEventEntry):
 
     def __onOpenStorage(self):
         if self.__guiLootBoxes.isLootBoxesAvailable():
+            logLootboxStorageOpen(Views.HANGAR, Items.CAROUSEL_ENTRY_POINT)
             showStorageView()
             self.viewModel.setHasNew(False)
             self.__guiLootBoxes.setSetting(LOOT_BOXES_VIEWED_COUNT, self.__guiLootBoxes.getBoxesCount())

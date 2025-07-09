@@ -2,12 +2,14 @@
 # Embedded file name: scripts/client/gui/impl/lobby/crew/crew_helpers/skill_helpers.py
 from typing import Tuple
 from collections import OrderedDict
+from helpers import dependency
 from gui import TANKMEN_ROLES_ORDER_DICT
 from gui.impl.gen.view_models.views.lobby.crew.crew_constants import CrewConstants
-from gui.shared.gui_items.Tankman import Tankman
+from gui.shared.gui_items.Tankman import Tankman, isLockSingleSkill
 from items import tankmen
 from items.components.skills_constants import SKILLS_BY_ROLES, UNLEARNABLE_SKILLS
 from skill_formatters import SkillLvlFormatter
+from skeletons.gui.shared import IItemsCache
 
 def isTmanSkillIrrelevant(tankman, skill):
     return not any([ skill.name in SKILLS_BY_ROLES.get(role) for role in tankman.roles() ])
@@ -142,3 +144,12 @@ def quickEarnCrewSkills(crew, selectedTankmanID, personalXP, commonXP):
         res[slotIdx] = quickEarnTmanSkills(tankman, commonXP + personalXP if tankman.invID == selectedTankmanID else commonXP)
 
     return res
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def checkSingleSkillOnVehicle(skill, tankman, itemsCache=None):
+    if tankman and tankman.vehicleDescr is not None:
+        vehicle = itemsCache.items.getItemByCD(tankman.vehicleDescr.type.compactDescr)
+        return skill.isSingleOnVehicle and isLockSingleSkill(skill.name, tankman, vehicle.crew)
+    else:
+        return False

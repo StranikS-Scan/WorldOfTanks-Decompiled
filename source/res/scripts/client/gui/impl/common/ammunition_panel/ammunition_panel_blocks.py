@@ -13,7 +13,7 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.common.opt_device_ammunitio
 from gui.impl.gen.view_models.views.lobby.tank_setup.common.shell_ammunition_slot import ShellAmmunitionSlot
 from gui.impl.gen.view_models.views.lobby.tank_setup.common.specialization_model import SpecializationModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
-from gui.impl.lobby.tank_setup.tank_setup_helper import getCategoriesMask, NONE_ID
+from gui.impl.lobby.tank_setup.tank_setup_helper import getCategoriesMask, NONE_ID, isEconomicDirBattleEnabled
 from helpers import dependency
 from helpers.epic_game import searchRankForSlot
 from items.components.supply_slot_categories import SlotCategories
@@ -298,14 +298,13 @@ class BattleBoostersBlock(BaseBlock):
     def _updateOverlayAspects(self, slotModel, slotItem):
         affectsAtTTC = slotItem.isAffectsOnVehicle(self._vehicle)
         slotModel.setWithAttention(not affectsAtTTC)
+        slotModel.setOverlayType(ItemHighlightTypes.BATTLE_BOOSTER)
         if slotItem.isCrewBooster():
             isPerkReplace = not slotItem.isAffectedSkillLearnt(self._vehicle) and not slotItem.isBuiltinPerkBooster()
             if isPerkReplace:
                 slotModel.setOverlayType(ItemHighlightTypes.BATTLE_BOOSTER_REPLACE)
-            else:
-                slotModel.setOverlayType(ItemHighlightTypes.BATTLE_BOOSTER)
-        else:
-            slotModel.setOverlayType(ItemHighlightTypes.BATTLE_BOOSTER)
+        elif slotItem.isEconomicBooster():
+            slotModel.setWithAttention(not isEconomicDirBattleEnabled())
 
 
 class BattleAbilitiesBlock(BaseBlock):

@@ -589,34 +589,34 @@ class TankmanDescr(object):
         groups = config.getGroups(isPremium)
         if firstNameID is not None:
             if fnGroupID not in groups:
-                return (False, 'Invalid fn group', None)
+                return (False, 'Invalid fn group %s' % fnGroupID, None)
             group = groups[fnGroupID]
             if group.notInShop:
-                return (False, 'Not in shop', None)
+                return (False, 'Not in shop %s' % fnGroupID, None)
             if bool(group.isFemales) != bool(isFemale):
                 return (False, 'Invalid group sex', None)
             if firstNameID not in group.firstNames:
-                return (False, 'Invalid first name', None)
+                return (False, 'Invalid first name %s' % firstNameID, None)
         if lastNameID is not None:
             if lnGroupID not in groups:
-                return (False, 'Invalid ln group', None)
+                return (False, 'Invalid ln group %s' % lnGroupID, None)
             group = groups[lnGroupID]
             if group.notInShop:
-                return (False, 'Not in shop', None)
+                return (False, 'Not in shop %s' % lnGroupID, None)
             if bool(group.isFemales) != bool(isFemale):
                 return (False, 'Invalid group sex', None)
             if lastNameID not in group.lastNames:
-                return (False, 'Invalid last name', None)
+                return (False, 'Invalid last name %s' % lastNameID, None)
         if iconID is not None:
             if iGroupID not in groups:
-                return (False, 'Invalid i group', None)
+                return (False, 'Invalid i group %s' % iGroupID, None)
             group = groups[iGroupID]
             if group.notInShop:
-                return (False, 'Not in shop', None)
+                return (False, 'Not in shop %s' % iGroupID, None)
             if bool(group.isFemales) != bool(isFemale):
                 return (False, 'Invalid group sex', None)
             if iconID not in group.icons:
-                return (False, 'Invalid icon id', None)
+                return (False, 'Invalid icon id %s' % iconID, None)
         if firstNameID is None:
             firstNameID = self.firstNameID
         if lastNameID is None:

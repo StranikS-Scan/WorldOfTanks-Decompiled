@@ -502,7 +502,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             return
         else:
             buttonsToExclude = []
-            if self.__loginManager.isWgcSteam:
+            if self.__loginManager.isLgcSteam:
                 buttonsToExclude.append(self.BUTTONS.PREMSHOP)
             if not self._canShowWotPlus():
                 buttonsToExclude.append(self.BUTTONS.WOT_PLUS)
@@ -722,6 +722,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.techTreeEventsListener.onSettingsChanged -= self._updateHangarMenuData
         self._wotPlusCtrl.onDataChanged -= self._onWotPlusDataChanged
         self._wotPlusCtrl.onStateUpdate -= self.__updateWotPlusAttrs
+        AccountSettings.onSettingsChanging -= self.__updateWotPlusAttrs
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self._onServerSettingsChange
         self.removeListener(events.TutorialEvent.OVERRIDE_HANGAR_MENU_BUTTONS, self.__onOverrideHangarMenuButtons, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.TutorialEvent.OVERRIDE_HEADER_MENU_BUTTONS, self.__onOverrideHeaderMenuButtons, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -1176,7 +1177,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             self.as_doDisableHeaderButtonS(self.BUTTONS.SQUAD, isEnabled=isSquadEnabled)
             isNavigationEnabled = not state.isNavigationDisabled()
             isEvent = state.isInPreQueue(constants.QUEUE_TYPE.EVENT_BATTLES) or state.isInUnit(constants.PREBATTLE_TYPE.EVENT)
-            isRanked = state.isInPreQueue(constants.QUEUE_TYPE.RANKED)
+            isRanked = state.isInPreQueue(constants.QUEUE_TYPE.RANKED) or state.isInUnit(constants.PREBATTLE_TYPE.RANKED)
             isEpic = state.isInPreQueue(constants.QUEUE_TYPE.EPIC) or state.isInUnit(constants.PREBATTLE_TYPE.EPIC)
             isRoyale = state.isInPreQueue(constants.QUEUE_TYPE.BATTLE_ROYALE) or state.isInUnit(constants.PREBATTLE_TYPE.BATTLE_ROYALE)
             isRoyaleTournament = state.isInPreQueue(constants.QUEUE_TYPE.BATTLE_ROYALE_TOURNAMENT) or state.isInUnit(constants.PREBATTLE_TYPE.BATTLE_ROYALE_TOURNAMENT)
@@ -1214,18 +1215,20 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
                         tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_VERSUSAISQUAD
                     else:
                         tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_SQUAD
+                elif isRoyale:
+                    tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_BATTLEROYALESQUAD
+                elif isRanked:
+                    tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_RANKEDSQUAD
+                elif isComp7:
+                    tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_COMP7SQUAD
+                    if canDoMsg == PRE_QUEUE_RESTRICTION.BAN_IS_SET:
+                        tooltip = MENU.HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7BANISSET
+                    if not self.__comp7Controller.isQualificationSquadAllowed():
+                        tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_COMP7QUALIFICATIONSQUAD
+                elif isCosmic:
+                    tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_COSMICSQUAD
                 else:
-                    if isRoyale:
-                        tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_BATTLEROYALESQUAD
-                    else:
-                        tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_SQUAD
-                    if isComp7:
-                        if canDoMsg == PRE_QUEUE_RESTRICTION.BAN_IS_SET:
-                            tooltip = MENU.HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7BANISSET
-                        if not self.__comp7Controller.isQualificationSquadAllowed():
-                            tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_COMP7QUALIFICATIONSQUAD
-                    if isCosmic:
-                        tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_COSMICSQUAD
+                    tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_SQUAD
                 hasEventSquadCap = bool(BONUS_CAPS.checkAny(constants.ARENA_BONUS_TYPE.EVENT_BATTLES, BONUS_CAPS.SQUADS))
                 isEventSquadEnable = isEvent and hasEventSquadCap
                 hasInfoPopover = self.platoonCtrl.hasWelcomeWindow() or self.platoonCtrl.canSelectSquadSize() or self.prbDispatcher.getEntity().getPermissions().hasSquadArrow()

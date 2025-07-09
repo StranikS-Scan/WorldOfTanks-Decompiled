@@ -90,6 +90,8 @@ class CompareBattleBoostersBlock(BattleBoostersBlock):
     def _updateSlotWithItem(self, model, idx, slotItem):
         super(CompareBattleBoostersBlock, self)._updateSlotWithItem(model, idx, slotItem)
         model.setIsInstalled(False)
+        if slotItem.isEconomicBooster():
+            model.setWithAttention(True)
 
 
 class CompareCamouflageBlock(BaseBlock):

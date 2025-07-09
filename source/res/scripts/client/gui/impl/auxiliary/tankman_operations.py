@@ -129,7 +129,7 @@ def packPerksResetTankmanAfter(vm, tankman):
         vmSkill = CrewWidgetTankmanSkillModel()
         vmSkill.setName(skill.name)
         vmSkill.setIcon(skill.extensionLessIconName)
-        skillType = SkillType.LEARNING if skill.level < 100 else SkillType.LEARNED
+        skillType = SkillType.LEARNING if skill.level < 100 else SkillType.ZEROSKILL
         vmSkill.setType(skillType)
         vmSkillsList.addViewModel(vmSkill)
 

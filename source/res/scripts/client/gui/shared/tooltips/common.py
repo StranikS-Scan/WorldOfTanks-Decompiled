@@ -303,10 +303,9 @@ class ContactTooltipData(ToolTipBaseData):
             commonGuiData = self.__converter.makeVO(userEntity, useBigIcons=True)
             tags = userEntity.getTags()
             resourceID = self.__converter.getGuiResourceID(userEntity)
-            if resourceID == constants.WG_GAMES.TANKS:
+            statusDescription = ''
+            if resourceID == constants.CURRENT_GAME_ID:
                 statusDescription = makeContactStatusDescription(userEntity.isOnline(), tags, userEntity.getClientInfo())
-            else:
-                statusDescription = makeString('#tooltips:Contact/resource/%s' % resourceID)
             commonGuiData['statusDescription'] = statusDescription
             if defaultName and USER_TAG.INVALID_NAME in tags:
                 commonGuiData['userProps']['userName'] = defaultName

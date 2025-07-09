@@ -3680,7 +3680,6 @@
       <id>	585	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_401.dds	</texture>
       <userString>	#vehicle_customization:emblem/special/sticker_401	</userString>
-      <priceGroup>	MT emblems 25g notInShop	</priceGroup>
       <mirror>	false	</mirror>
     </decal>
     <name>	SABATON Emblems	</name>
@@ -4046,28 +4045,24 @@
       <id>	563	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_391.dds	</texture>
       <userString>	#vehicle_customization:emblem/special/sticker_391	</userString>
-      <priceGroup>	MT emblems 25g notInShop	</priceGroup>
       <mirror>	false	</mirror>
     </decal>
     <decal>
       <id>	564	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_392.dds	</texture>
       <userString>	#vehicle_customization:emblem/special/sticker_392	</userString>
-      <priceGroup>	MT emblems 25g notInShop	</priceGroup>
       <mirror>	false	</mirror>
     </decal>
     <decal>
       <id>	565	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_393.dds	</texture>
       <userString>	#vehicle_customization:emblem/special/sticker_393	</userString>
-      <priceGroup>	MT emblems 25g notInShop	</priceGroup>
       <mirror>	false	</mirror>
     </decal>
     <decal>
       <id>	566	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_394.dds	</texture>
       <userString>	#vehicle_customization:emblem/special/sticker_394	</userString>
-      <priceGroup>	MT emblems 25g notInShop	</priceGroup>
       <mirror>	false	</mirror>
     </decal>
     <name>	Football 2018	</name>
@@ -8115,6 +8110,21 @@
     </decal>
   </itemGroup>
   <itemGroup>
+    <name>	LestaCard_Emblem_2025	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <decal>
+      <id>	31365	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/LestaCard_Emblem_2025.dds	</texture>
+      <type>	emblem	</type>
+      <userString>	#vehicle_customization:LestaCard_Emblem_2025/name	</userString>
+      <description>	#vehicle_customization:LestaCard_Emblem_2025/description	</description>
+    </decal>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	MT emblems 25g notInShop	</priceGroup>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:emblem/IGR	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
@@ -10409,7 +10419,6 @@
       <id>	584	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_205.dds	</texture>
       <userString>	#vehicle_customization:inscription/special/special_205	</userString>
-      <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
       <mirror>	false	</mirror>
     </decal>
     <name>	SABATON	</name>
@@ -15746,6 +15755,21 @@
       <description>	#vehicle_customization:ArmoryYard_02_Inscription_2025/description	</description>
       <type>	inscription	</type>
     </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	LestaCard_Inscription_2025	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <decal>
+      <id>	31366	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/LestaCard_Inscription_2025.dds	</texture>
+      <userString>	#vehicle_customization:LestaCard_Inscription_01_2025/name	</userString>
+      <description>	#vehicle_customization:LestaCard_Inscription_01_2025/description	</description>
+      <type>	inscription	</type>
+    </decal>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:inscription/IGR	</userString>

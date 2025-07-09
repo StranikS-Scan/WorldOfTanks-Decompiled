@@ -46,7 +46,7 @@ class GameplayLogic(IGameplayLogic):
         self.postStateEvent(PlayerEventID.NON_PLAYER_BECOME_PLAYER, disconnectReason=DisconnectReason.REQUEST)
 
     def goToLoginByDisconnectRQ(self):
-        self.loginMgr.tryPrepareWGCLogin()
+        self.loginMgr.tryPrepareLGCLogin()
         self.goToLoginByRQ()
 
     def goToLoginByEvent(self):

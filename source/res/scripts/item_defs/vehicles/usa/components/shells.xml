@@ -3437,6 +3437,60 @@
       </damage>
     </armorSpalls>
   </_120mm_HE_T_M356E1>
+  <_120mm_AP_T_M358>
+    <id>	31041	</id>
+    <userString>	#usa_vehicles:_120mm_AP_T_M358	</userString>
+    <icon>	ap	</icon>
+    <price>	1110	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_120mm_AP_T_M358>
+  <_120mm_HEAT_T_M469>
+    <id>	41042	</id>
+    <userString>	#usa_vehicles:_120mm_HEAT_T_M469	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	5200	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_120mm_HEAT_T_M469>
+  <_120mm_HE_T_M356>
+    <id>	31043	</id>
+    <userString>	#usa_vehicles:_120mm_HE_T_M356	</userString>
+    <icon>	he_modern	</icon>
+    <price>	790	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	120	</caliber>
+    <explosionRadius>	2.42	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	530	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.42	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	265	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
+  </_120mm_HE_T_M356>
   <_120mm_HEAT-T_M469_fallout>
     <id>	116	</id>
     <userString>	#usa_vehicles:_120mm_HEAT-T_M469_fallout	</userString>
@@ -3924,37 +3978,44 @@
       <devices>	160	</devices>
     </damage>
   </_240mm_M114_M78>
-  <_240mm_HE_M146_T>
-    <id>	35000	</id>
+  <_240mm_HEDelayed_M146_T>
+    <id>	35007	</id>
     <userString>	#usa_vehicles:_240mm_HE_M146_T	</userString>
-    <icon>	he_spg_stun	</icon>
+    <icon>	he_spg	</icon>
     <price>	2500	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	240	</caliber>
     <explosionRadius>	18.0	</explosionRadius>
-    <hasStun>	true	</hasStun>
-    <stunDuration>	17	</stunDuration>
-    <stunType>	ARTILLERY_REWORK	</stunType>
     <isTracer>	true	</isTracer>
     <effects>	hugeSH_artillery	</effects>
     <damage>
       <armor>	2000	</armor>
       <devices>	160	</devices>
     </damage>
-    <delayedBomb>
-      <explosionDelay>	1.5	</explosionDelay>
-      <isDestroyAvailable>	True	</isDestroyAvailable>
-      <isDestroyWithExplosion>	False	</isDestroyWithExplosion>
-      <size>	2	</size>
-      <isProximityEnabled>	False	</isProximityEnabled>
-      <underWaterDelta>	3	</underWaterDelta>
-      <isShotZoneVisible>	True	</isShotZoneVisible>
-      <isOwnShotZoneVisible>	False	</isOwnShotZoneVisible>
-    </delayedBomb>
     <obstaclePenetration>	True	</obstaclePenetration>
     <deviceDamagePossibility>
       <protectFromIndirectHits>	internal tankmen	</protectFromIndirectHits>
     </deviceDamagePossibility>
+  </_240mm_HEDelayed_M146_T>
+  <_240mm_HE_M146_T>
+    <id>	35000	</id>
+    <userString>	#usa_vehicles:_240mm_HE_M146_T	</userString>
+    <icon>	he_spg	</icon>
+    <price>	2500	</price>
+    <kind>	DELAYED_HE	</kind>
+    <caliber>	240	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	hugeSH_artillery	</effects>
+    <damage>
+      <armor>	2000	</armor>
+      <devices>	160	</devices>
+    </damage>
+    <isArtilleryShotZoneVisible>	False	</isArtilleryShotZoneVisible>
+    <isOwnArtilleryShotZoneVisible>	False	</isOwnArtilleryShotZoneVisible>
+    <explosionDelay>	3.0	</explosionDelay>
+    <size>	2	</size>
+    <underWaterDelta>	3	</underWaterDelta>
+    <delayedShell>	35007	</delayedShell>
   </_240mm_HE_M146_T>
   <_240mm_HE_M160_T>
     <id>	35001	</id>

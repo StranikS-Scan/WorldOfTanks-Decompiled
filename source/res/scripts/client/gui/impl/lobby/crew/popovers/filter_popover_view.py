@@ -5,6 +5,7 @@ import Event
 from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crew.common.filter_toggle_group_model import FilterToggleGroupModel
+from gui.impl.gen.view_models.views.lobby.crew.filter_panel_widget_model import FilterPanelType
 from gui.impl.gen.view_models.views.lobby.crew.popovers.filter_popover_vehicle_model import FilterPopoverVehicleModel
 from gui.impl.gen.view_models.views.lobby.crew.popovers.filter_popover_view_model import FilterPopoverViewModel, VehicleSortColumn
 from gui.impl.gui_decorators import args2params
@@ -24,10 +25,10 @@ if typing.TYPE_CHECKING:
     FilterGroups = Iterable[GroupSettings]
 
 class FilterPopoverView(PopOverViewImpl):
-    __slots__ = ('__title', '__groupSettings', '__onStateUpdated', '__state', '__hasVehicleFilter', '__vehiclesSortColum', '__isVehicleSortAscending', '__canResetCallback', 'onTooltipCreated')
+    __slots__ = ('__title', '__groupSettings', '__onStateUpdated', '__state', '__hasVehicleFilter', '__vehiclesSortColum', '__isVehicleSortAscending', '__canResetCallback', '__panelType', 'onTooltipCreated')
     itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, title, groupSettings, onStateUpdated, state=None, hasVehicleFilter=False, canResetCallback=None):
+    def __init__(self, title, groupSettings, onStateUpdated, state=None, hasVehicleFilter=False, canResetCallback=None, panelType=FilterPanelType.DEFAULT):
         settings = ViewSettings(layoutID=R.views.lobby.crew.popovers.FilterPopoverView(), model=FilterPopoverViewModel())
         super(FilterPopoverView, self).__init__(settings)
         self.__title = title
@@ -38,6 +39,7 @@ class FilterPopoverView(PopOverViewImpl):
         self.__vehiclesSortColum = VehicleSortColumn.TIER.value
         self.__isVehicleSortAscending = False
         self.__canResetCallback = canResetCallback
+        self.__panelType = panelType
         self.onTooltipCreated = Event.Event()
 
     @property
@@ -92,12 +94,11 @@ class FilterPopoverView(PopOverViewImpl):
         if vehicleCD not in self.__state[VEHICLE_FILTER]:
             self.__state[VEHICLE_FILTER].clear()
         self.__state.update(VEHICLE_FILTER, vehicleCD)
-        with self.viewModel.transaction() as tx:
-            self.__fillVehicleList(tx)
+        self.__fillModel()
         self.__onStateUpdated()
 
     def __onResetFilter(self):
-        self.__state.clear()
+        self.__state.resetPopoverFilter(self.__panelType)
         self.__fillModel()
         self.__onStateUpdated()
 

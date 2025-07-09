@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/data/contacts_vo_converter.py
-from constants import WG_GAMES
+from constants import CURRENT_GAME_ID
 from gui import makeHtmlString
 from gui.Scaleform.genConsts.CONTACTS_ALIASES import CONTACTS_ALIASES
 from gui.Scaleform.locale.MESSENGER import MESSENGER as I18N_MESSENGER
@@ -155,7 +155,7 @@ class ContactConverter(object):
         baseUserProps['tags'] = list(tags)
         resourceIconId = cls.getGuiResourceID(contact)
         isColorBlind = cls.settingsCore.getSetting('isColorBlind')
-        if resourceIconId == WG_GAMES.TANKS:
+        if resourceIconId == CURRENT_GAME_ID:
             if contact.isOnline():
                 if USER_TAG.PRESENCE_DND in tags:
                     resourceIconId = _WOT_GAME_RESOURCE.BUSY_BLIND if isColorBlind else _WOT_GAME_RESOURCE.BUSY
@@ -163,6 +163,8 @@ class ContactConverter(object):
                     resourceIconId = _WOT_GAME_RESOURCE.ONLINE
             else:
                 resourceIconId = _WOT_GAME_RESOURCE.UNKNOWN
+        else:
+            resourceIconId = _WOT_GAME_RESOURCE.UNKNOWN
         return {'userProps': baseUserProps,
          'dbID': dbID,
          'note': escape(note),
@@ -186,15 +188,8 @@ class ContactConverter(object):
     @classmethod
     def getGuiResourceID(cls, contact):
         resourceId = contact.getResourceID()
-        if resourceId:
-            for prefix in WG_GAMES.ALL:
-                if prefix != WG_GAMES.TANKS:
-                    if prefix in resourceId:
-                        resourceId = prefix
-                        break
-
         if not resourceId:
-            resourceId = WG_GAMES.TANKS
+            resourceId = CURRENT_GAME_ID
         return resourceId
 
     @classmethod

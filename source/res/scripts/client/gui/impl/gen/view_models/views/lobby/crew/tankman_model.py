@@ -26,6 +26,7 @@ class TankmanKind(Enum):
     TANKMAN = 'tankman'
     RECRUIT = 'recruit'
     DISMISSED = 'dismissed'
+    UNIQUE = 'unique'
 
 
 class TankmanCardState(Enum):

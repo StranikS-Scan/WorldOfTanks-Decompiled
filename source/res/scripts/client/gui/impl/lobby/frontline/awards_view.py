@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/frontline/awards_view.py
 from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator
+from gui.impl.lobby.frontline import RegisteredFrontlineTooltips
 from gui.server_events.bonuses import getNonQuestBonuses, mergeBonuses, splitBonuses
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.frontline.awards_view_model import AwardsViewModel
@@ -40,7 +41,14 @@ class AwardsView(ViewImpl):
 
     @createTooltipContentDecorator()
     def createToolTipContent(self, event, contentID):
-        return None
+        if contentID in RegisteredFrontlineTooltips.REGISTERED_SIMPLE_TOOLTIPS:
+            view = RegisteredFrontlineTooltips.REGISTERED_SIMPLE_TOOLTIPS.get(contentID)
+            return view()
+        elif contentID in RegisteredFrontlineTooltips.REGISTERED_TOOLTIPS:
+            view = RegisteredFrontlineTooltips.REGISTERED_TOOLTIPS.get(contentID)
+            return view(event)
+        else:
+            return None
 
     def getTooltipData(self, event):
         tooltipId = event.getArgument('tooltipId')

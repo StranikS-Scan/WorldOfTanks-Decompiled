@@ -6,7 +6,7 @@ from web.web_client_api.platform.base import IPlatformWebApi
 class WgPlatformWebApi(IPlatformWebApi):
 
     def getType(self):
-        return DISTRIBUTION_PLATFORM.WG.value
+        return DISTRIBUTION_PLATFORM.BASE.value
 
     def isInited(self):
         return True

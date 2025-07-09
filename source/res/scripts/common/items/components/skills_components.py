@@ -9,15 +9,16 @@ from items.components.skills_constants import SkillTypeName
 from perks_constants import StubPerkIDs
 
 class BasicSkill(legacy_stuff.LegacyStuff):
-    __slots__ = ('__name', '__i18n', '__icon', '__vsePerk', '__uiSettings')
+    __slots__ = ('__name', '__i18n', '__icon', '__vsePerk', '__uiSettings', '__tags')
 
-    def __init__(self, name, i18n=None, icon=None, vsePerk=None, uiSettings=None):
+    def __init__(self, name, i18n=None, icon=None, vsePerk=None, uiSettings=None, tags=None):
         super(BasicSkill, self).__init__()
         self.__name = name
         self.__i18n = i18n
         self.__icon = icon
         self.__vsePerk = vsePerk
         self.__uiSettings = uiSettings
+        self.__tags = tags
 
     def __repr__(self):
         return '{}({})'.format(self.__class__.__name__, self.__name)
@@ -125,16 +126,20 @@ class BasicSkill(legacy_stuff.LegacyStuff):
     def params(self):
         return self.uiSettings.params if self.uiSettings else {}
 
+    @property
+    def tags(self):
+        return self.__tags
+
 
 class ExtendedSkill(BasicSkill):
     __slots__ = ('_setOfParameters',)
 
     def __init__(self, basicSkill, *args):
-        super(ExtendedSkill, self).__init__(basicSkill.name, i18n=basicSkill.i18n, icon=basicSkill.icon, vsePerk=basicSkill.vsePerk, uiSettings=basicSkill.uiSettings)
+        super(ExtendedSkill, self).__init__(basicSkill.name, i18n=basicSkill.i18n, icon=basicSkill.icon, vsePerk=basicSkill.vsePerk, uiSettings=basicSkill.uiSettings, tags=basicSkill.tags)
         self._setOfParameters = args
 
     def recreate(self, *args):
-        return self.__class__(BasicSkill(self.name, self.i18n, self.icon, self.vsePerk, self.uiSettings), *args)
+        return self.__class__(BasicSkill(self.name, self.i18n, self.icon, self.vsePerk, self.uiSettings, self.tags), *args)
 
 
 class BrotherhoodSkill(ExtendedSkill):

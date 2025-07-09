@@ -4,9 +4,9 @@ from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.views.lobby.common.vehicle_model import VehicleModel
 
 class TankmanInfoModel(ViewModel):
-    __slots__ = ('onPlayUniqueVoice', 'onChangeVehicle', 'onRetrain')
+    __slots__ = ('onPlayUniqueVoice', 'onChangeVehicle', 'onRetrain', 'onEditProfileClick')
 
-    def __init__(self, properties=15, commands=3):
+    def __init__(self, properties=15, commands=4):
         super(TankmanInfoModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -123,3 +123,4 @@ class TankmanInfoModel(ViewModel):
         self.onPlayUniqueVoice = self._addCommand('onPlayUniqueVoice')
         self.onChangeVehicle = self._addCommand('onChangeVehicle')
         self.onRetrain = self._addCommand('onRetrain')
+        self.onEditProfileClick = self._addCommand('onEditProfileClick')

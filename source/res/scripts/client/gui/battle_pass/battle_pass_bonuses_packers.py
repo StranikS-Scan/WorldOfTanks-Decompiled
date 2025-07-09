@@ -250,7 +250,7 @@ class BattlePassCustomizationsBonusPacker(_BattlePassFinalBonusPacker):
 
 
 class BattlePassPremiumDaysPacker(BaseBonusUIPacker):
-    _ICONS_AVAILABLE = (1, 2, 3, 7, 14, 30, 90, 180, 360)
+    _ICONS_AVAILABLE = (1, 2, 3, 5, 7, 14, 30, 90, 180, 360)
 
     @classmethod
     def _pack(cls, bonus):
@@ -414,6 +414,9 @@ class ExtendedItemBonusUIPacker(ItemBonusUIPacker):
         if item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and item.isModernized:
             model.setOverlayType('{}_{}'.format(ItemHighlightTypes.MODERNIZED, item.level))
             model.setBigIcon(item.getGUIEmblemID())
+        if item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER:
+            if item.isEconomicBooster():
+                model.setBigIcon(item.name + 'BattleBooster')
         return model
 
     @classmethod

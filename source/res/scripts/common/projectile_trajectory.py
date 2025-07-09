@@ -41,4 +41,4 @@ def getShotAngles(vehTypeDescr, vehMatrix, curShotAngles, point, adjust=True, ov
     shot = vehTypeDescr.getShot(overrideShotIdx)
     speed = shot.speed
     gravity = shot.gravity
-    return BigWorld.wg_getShotAngles(turretOffs, gunOffs, vehMatrix, speed, gravity, curShotAngles[0], curShotAngles[1], point, adjust)
+    return BigWorld.getShotAngles(turretOffs, gunOffs, vehMatrix, speed, gravity, curShotAngles[0], curShotAngles[1], point, adjust)

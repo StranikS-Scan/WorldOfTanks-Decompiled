@@ -46,7 +46,7 @@ if typing.TYPE_CHECKING:
     from typing import Dict, List, Callable
     from frameworks.wulf.view.array import Array
     from gui.goodies.goodie_items import BoosterUICommon, RecertificationForm
-    from gui.server_events.bonuses import CustomizationsBonus, CrewSkinsBonus, TokensBonus, SimpleBonus, ItemsBonus, DossierBonus, VehicleBlueprintBonus, CrewBooksBonus, GoodiesBonus, TankmenBonus, VehiclesBonus, DogTagComponentBonus, BattlePassPointsBonus, CurrenciesBonus
+    from gui.server_events.bonuses import CustomizationsBonus, CrewSkinsBonus, TokensBonus, SimpleBonus, ItemsBonus, DossierBonus, VehicleBlueprintBonus, CrewBooksBonus, GoodiesBonus, TankmenBonus, VehiclesBonus, DogTagComponentBonus, BattlePassPointsBonus, CurrenciesBonus, EntitlementBonus
     from gui.shared.gui_items.fitting_item import FittingItem
     from gui.shared.gui_items.Vehicle import Vehicle
 _logger = logging.getLogger(__name__)
@@ -101,7 +101,8 @@ def getDefaultBonusPackersMap():
      constants.WoTPlusBonusType.ATTENDANCE_REWARD: wotPlusBonusPacker,
      constants.WoTPlusBonusType.TEAM_CREDITS_BONUS: wotPlusBonusPacker,
      constants.WoTPlusBonusType.DAILY_QUESTS_REWARDS: wotPlusBonusPacker,
-     'lootBoxToken': tokenBonusPacker}
+     'lootBoxToken': tokenBonusPacker,
+     'entitlements': EntitlementBonusUIPacker()}
 
 
 def getLocalizedBonusName(name):
@@ -179,6 +180,41 @@ class SimpleBonusUIPacker(BaseBonusUIPacker):
     @classmethod
     def _getBonusModel(cls):
         return BonusModel()
+
+
+class EntitlementBonusUIPacker(BaseBonusUIPacker):
+    entitlementsMap = dict()
+
+    @classmethod
+    def _pack(cls, bonus):
+        entitlementPacker = cls._getEntitlementPacker(bonus)
+        result = []
+        if entitlementPacker:
+            result.extend(entitlementPacker.pack(bonus))
+        return result
+
+    @classmethod
+    def _getEntitlementPacker(cls, bonus):
+        return cls.entitlementsMap.get(bonus.getValue().id)
+
+    @classmethod
+    def _getContentId(cls, bonus):
+        entitlementPacker = cls._getEntitlementPacker(bonus)
+        return entitlementPacker.getContentId(bonus)
+
+    @classmethod
+    def _getToolTip(cls, bonus):
+        entitlementPacker = cls._getEntitlementPacker(bonus)
+        return entitlementPacker.getToolTip(bonus)
+
+
+def registerEntitlementBonusPackerHandler(entitlementName, packer):
+    EntitlementBonusUIPacker.entitlementsMap[entitlementName] = packer
+
+
+def unregisterEntitlementBonusPackerHandler(entitlementName):
+    if entitlementName in EntitlementBonusUIPacker.entitlementsMap:
+        del EntitlementBonusUIPacker.entitlementsMap[entitlementName]
 
 
 class TokenBonusUIPacker(BaseBonusUIPacker):

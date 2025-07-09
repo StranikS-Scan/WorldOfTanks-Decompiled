@@ -4,6 +4,7 @@ import copy
 import functools
 import logging
 import types
+import urlparse
 from collections import namedtuple
 import typing
 import constants
@@ -131,6 +132,16 @@ class _FileServerSettings(object):
 
     def getMissionsDecorationUrl(self, decorationID, size):
         return self.__getUrl('missions_decoration', size, decorationID)
+
+    def getRewardScreensDescrsUrl(self, langID):
+        if isinstance(langID, unicode):
+            langID = str(langID)
+        baseUrl = self.__getUrl('reward_screens_config')
+        return urlparse.urljoin(baseUrl, 'reward_screen_descr_{}.xml'.format(langID))
+
+    def getRewardScreenBackgroundUrl(self, decorName):
+        baseUrl = self.__getUrl('reward_screens_config')
+        return urlparse.urljoin(baseUrl, 'background/{}'.format(decorName))
 
     def getOffersRootUrl(self):
         return self.__getUrl('offers')
@@ -379,11 +390,13 @@ class RankedBattlesConfig(namedtuple('RankedBattlesConfig', ('isEnabled',
  'yearLBState',
  'yearRewardState',
  'leagueRewardEnabled',
- 'hasSpecialSeason'))):
+ 'hasSpecialSeason',
+ 'createVivoxTeamChannels',
+ 'squadRankRestrictions'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, peripheryIDs={}, winnerRankChanges=(), loserRankChanges=(), minXP=0, unburnableRanks={}, unburnableStepRanks={}, minLevel=0, maxLevel=0, accRanks=0, accSteps=(), cycleFinishSeconds=0, primeTimes={}, seasons={}, cycleTimes=(), shields={}, divisions={}, bonusBattlesMultiplier=0, expectedSeasons=0, yearAwardsMarks=(), rankGroups=(), qualificationBattles=0, yearLBSize=0, leaguesBonusBattles=(), forbiddenClassTags=(), forbiddenVehTypes=(), shopState=SwitchState.DISABLED, yearLBState=SwitchState.DISABLED, yearRewardState=SwitchState.ENABLED, leagueRewardEnabled=True, hasSpecialSeason=False)
+        defaults = dict(isEnabled=False, peripheryIDs={}, winnerRankChanges=(), loserRankChanges=(), minXP=0, unburnableRanks={}, unburnableStepRanks={}, minLevel=0, maxLevel=0, accRanks=0, accSteps=(), cycleFinishSeconds=0, primeTimes={}, seasons={}, cycleTimes=(), shields={}, divisions={}, bonusBattlesMultiplier=0, expectedSeasons=0, yearAwardsMarks=(), rankGroups=(), qualificationBattles=0, yearLBSize=0, leaguesBonusBattles=(), forbiddenClassTags=(), forbiddenVehTypes=(), shopState=SwitchState.DISABLED, yearLBState=SwitchState.DISABLED, yearRewardState=SwitchState.ENABLED, leagueRewardEnabled=True, hasSpecialSeason=False, createVivoxTeamChannels=False, squadRankRestrictions={})
         defaults.update(kwargs)
         return super(RankedBattlesConfig, cls).__new__(cls, **defaults)
 
@@ -1059,6 +1072,28 @@ class _PlayStreakConfig(namedtuple('_PlayStreakConfig', ('isEnabled',
         defaults = dict(isEnabled=False, isPaused=False, bonusTypes=None, daySkipSettings=None, rewardsCalendar=None)
         defaults.update(kwargs)
         return super(_PlayStreakConfig, cls).__new__(cls, **defaults)
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+
+class _IngameBrowserEventConfig(namedtuple('_IngameBrowserEventConfig', ('isEnabled',
+ 'startTime',
+ 'finishTime',
+ 'url',
+ 'secondaryUrl'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(isEnabled=False, startTime=None, finishTime=None, url=None, secondaryUrl=None)
+        defaults.update(kwargs)
+        return super(_IngameBrowserEventConfig, cls).__new__(cls, **defaults)
 
     def replace(self, data):
         allowedFields = self._fields
@@ -1794,6 +1829,7 @@ class ServerSettings(object):
         self.__modeSelectorConfig = ModeSelectorConfig()
         self.__paragonsConfig = ParagonsConfig.defaults()
         self.__playStreakConfig = _PlayStreakConfig()
+        self.__ingameBrowserEventConfig = _IngameBrowserEventConfig()
         self.__schemaManager = getSchemaManager()
         self.set(serverSettings)
 
@@ -1905,6 +1941,8 @@ class ServerSettings(object):
             self.__collectiveGoalEntryPointConfig = makeTupleByDict(_CollectiveGoalEntryPointConfig, self.__serverSettings[Configs.COLLECTIVE_GOAL_ENTRY_POINT_CONFIG.value])
         if Configs.PLAY_STREAK_CONFIG.value in self.__serverSettings:
             self.__playStreakConfig = makeTupleByDict(_PlayStreakConfig, self.__serverSettings[Configs.PLAY_STREAK_CONFIG.value])
+        if Configs.INGAME_BROWSER_EVENT_CONFIG.value in self.__serverSettings:
+            self.__ingameBrowserEventConfig = makeTupleByDict(_IngameBrowserEventConfig, self.__serverSettings[Configs.INGAME_BROWSER_EVENT_CONFIG.value])
         if Configs.COLLECTIVE_GOAL_MARATHONS_CONFIG.value in self.__serverSettings:
             self.__collectiveGoalMarathonsConfig = makeTupleByDict(_CollectiveGoalMarathonsConfig, self.__serverSettings[Configs.COLLECTIVE_GOAL_MARATHONS_CONFIG.value])
         if Configs.PERIPHERY_ROUTING_CONFIG.value in self.__serverSettings:
@@ -2113,6 +2151,8 @@ class ServerSettings(object):
             self.__updateRandomBattlesConfig(serverSettingsDiff)
         if Configs.PLAY_STREAK_CONFIG.value in serverSettingsDiff:
             self.__updatePlayStreakConfig(serverSettingsDiff)
+        if Configs.INGAME_BROWSER_EVENT_CONFIG.value in serverSettingsDiff:
+            self.__updateIngameBrowserEventConfig(serverSettingsDiff)
         self.__schemaManager.update(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
 
@@ -2276,6 +2316,10 @@ class ServerSettings(object):
     @property
     def playStreakConfig(self):
         return self.__playStreakConfig
+
+    @property
+    def ingameBrowserEventConfig(self):
+        return self.__ingameBrowserEventConfig
 
     @property
     def collectiveGoalMarathonsConfig(self):
@@ -2538,6 +2582,9 @@ class ServerSettings(object):
     def isAutoSellCheckBoxEnabled(self):
         return self.getMiscGUISettings().get('buyModuleDialog', {}).get('enableAutoSellCheckBox', False)
 
+    def isPromoCodeRewardScreenEnabled(self):
+        return self.getMiscGUISettings().get('isPromoCodeRewardScreenEnabled', True)
+
     def getMiscGUISettings(self):
         return self.__getGlobalSetting(MISC_GUI_SETTINGS, {})
 
@@ -2698,6 +2745,9 @@ class ServerSettings(object):
     def getPlayStreakConfig(self):
         return self.__getGlobalSetting(Configs.PLAY_STREAK_CONFIG.value, {})
 
+    def getIngameBrowserEventConfig(self):
+        return self.__getGlobalSetting(Configs.INGAME_BROWSER_EVENT_CONFIG.value, {})
+
     def __getGlobalSetting(self, settingsName, default=None):
         return self.__serverSettings.get(settingsName, default)
 
@@ -2815,6 +2865,9 @@ class ServerSettings(object):
 
     def __updatePlayStreakConfig(self, diff):
         self.__playStreakConfig = self.__playStreakConfig.replace(diff[Configs.PLAY_STREAK_CONFIG.value])
+
+    def __updateIngameBrowserEventConfig(self, diff):
+        self.__ingameBrowserEventConfig = self.__ingameBrowserEventConfig.replace(diff[Configs.INGAME_BROWSER_EVENT_CONFIG.value])
 
     def __updateCollectiveGoalMarathonsConfig(self, diff):
         self.__collectiveGoalMarathonsConfig = self.__collectiveGoalMarathonsConfig.replace(diff[Configs.COLLECTIVE_GOAL_MARATHONS_CONFIG.value])

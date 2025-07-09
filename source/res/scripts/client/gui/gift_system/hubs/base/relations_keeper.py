@@ -5,6 +5,7 @@ from collections import defaultdict
 from gui.gift_system.constants import GiftMessageType, GifterResponseState
 from gui.gift_system.hubs.subsystems import BaseMessegesDelayer
 from gui.gift_system.wrappers import ifMessagesAllowed, ifMessagesEnabled
+from gui.impl.gen import R
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
 from helpers.time_utils import getCurrentTimestamp
 if typing.TYPE_CHECKING:
@@ -27,6 +28,9 @@ class IGiftEventKeeper(BaseMessegesDelayer):
     def getExpirationDelta(self):
         raise NotImplementedError
 
+    def getExpirationTime(self):
+        raise NotImplementedError
+
     def getIncomeRelations(self, implicitCopy=True):
         raise NotImplementedError
 
@@ -43,6 +47,10 @@ class IGiftEventKeeper(BaseMessegesDelayer):
         raise NotImplementedError
 
     def processWebState(self, webState):
+        raise NotImplementedError
+
+    @staticmethod
+    def getPhraseByID(phraseID):
         raise NotImplementedError
 
 
@@ -83,6 +91,9 @@ class GiftEventBaseKeeper(IGiftEventKeeper, Notifiable):
 
     def getExpirationDelta(self):
         return self.__expireDelta
+
+    def getExpirationTime(self):
+        return self.__expireTime
 
     def getIncomeRelations(self, implicitCopy=True):
         return self.__incomeRelations.copy() if implicitCopy else self.__incomeRelations
@@ -139,10 +150,13 @@ class GiftEventBaseKeeper(IGiftEventKeeper, Notifiable):
 
     @ifMessagesAllowed(GiftMessageType.OUTCOME, useQueue=False)
     def _processOutcomeMessage(self, outcomeData):
-        if outcomeData.outCount is not None:
-            self.__outcomeRelations[outcomeData.receiverID] = outcomeData.outCount
-        elif outcomeData.state == GifterResponseState.WEB_SUCCESS:
-            self.__outcomeRelations[outcomeData.receiverID] += 1
+        for receiverID in outcomeData.receiverIDs:
+            if receiverID not in outcomeData.declinedReceivers:
+                if outcomeData.outCount is not None:
+                    self.__outcomeRelations[receiverID] = outcomeData.outCount
+                elif outcomeData.state == GifterResponseState.WEB_SUCCESS:
+                    self.__outcomeRelations[receiverID] += 1
+
         return
 
     @ifMessagesAllowed(GiftMessageType.LIMITS, useQueue=False)
@@ -151,6 +165,10 @@ class GiftEventBaseKeeper(IGiftEventKeeper, Notifiable):
         for accID, outcome, income in [ packedRelations[i:i + 3] for i in xrange(0, len(packedRelations), 3) ]:
             self.__outcomeRelations[accID] = outcome
             self.__incomeRelations[accID] = income
+
+    @staticmethod
+    def getPhraseByID(phraseID):
+        return R.invalid
 
     def __isCurrentTimestamp(self, timestamp):
         return False if self.__expireDelta is None or self.__expireTime is None else self.__getTimestampInterval(timestamp) == self.__currentTimeInterval

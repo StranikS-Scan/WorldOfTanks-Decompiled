@@ -215,3 +215,7 @@ def unicodeToStr(data):
 
         return res
     return data
+
+
+def getPercentsFromFloat(number):
+    return int((number - int(number)) * 100)

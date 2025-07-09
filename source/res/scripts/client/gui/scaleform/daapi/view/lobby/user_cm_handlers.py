@@ -33,7 +33,7 @@ from messenger.proto.entities import ClanInfo as UserClanInfo
 from messenger.proto.entities import SharedUserEntity
 from messenger.storage import storage_getter
 from nation_change_helpers.client_nation_change_helper import getValidVehicleCDForNationChange
-from skeletons.gui.game_control import IVehicleComparisonBasket, IBattleRoyaleController, IMapboxController, IEventBattlesController, IPlatoonController, IEpicBattleMetaGameController, IComp7Controller
+from skeletons.gui.game_control import IVehicleComparisonBasket, IBattleRoyaleController, IMapboxController, IEventBattlesController, IPlatoonController, IEpicBattleMetaGameController, IComp7Controller, IRankedBattlesController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -66,6 +66,7 @@ class USER(object):
     END_REFERRAL_COMPANY = 'endReferralCompany'
     CREATE_MAPBOX_SQUAD = 'createMapboxSquad'
     CREATE_COMP7_SQUAD = 'createComp7Squad'
+    CREATE_RANKED_SQUAD = 'createRankedSquad'
 
 
 _CM_ICONS = {USER.END_REFERRAL_COMPANY: 'endReferralCompany'}
@@ -81,6 +82,7 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     __platoonCtrl = dependency.descriptor(IPlatoonController)
     __epicCtrl = dependency.descriptor(IEpicBattleMetaGameController)
     __comp7Ctrl = dependency.descriptor(IComp7Controller)
+    __rankedCtrl = dependency.descriptor(IRankedBattlesController)
 
     @prbDispatcherProperty
     def prbDispatcher(self):
@@ -183,6 +185,9 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     def createComp7Squad(self):
         self._doSelect(PREBATTLE_ACTION_NAME.COMP7_SQUAD, (self.databaseID,))
 
+    def createRankedSquad(self):
+        self._doSelect(PREBATTLE_ACTION_NAME.RANKED_SQUAD, (self.databaseID,))
+
     def invite(self):
         user = self.usersStorage.getUser(self.databaseID)
         if self.prbEntity.getPermissions().canSendInvite():
@@ -208,7 +213,8 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
          USER.INVITE: 'invite',
          USER.REQUEST_FRIENDSHIP: 'requestFriendship',
          USER.CREATE_MAPBOX_SQUAD: 'createMapboxSquad',
-         USER.CREATE_COMP7_SQUAD: 'createComp7Squad'}
+         USER.CREATE_COMP7_SQUAD: 'createComp7Squad',
+         USER.CREATE_RANKED_SQUAD: 'createRankedSquad'}
         if not IS_CHINA:
             handlers.update({USER.SET_MUTED: 'setMuted',
              USER.UNSET_MUTED: 'unsetMuted'})
@@ -304,6 +310,11 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
                 primeTimeStatus, _, _ = self.__comp7Ctrl.getPrimeTimeStatus()
                 isEnabled = primeTimeStatus == PrimeTimeStatus.AVAILABLE and not self.__comp7Ctrl.isBanned and not self.__comp7Ctrl.isOffline and self.__comp7Ctrl.hasSuitableVehicles() and self.__comp7Ctrl.isQualificationSquadAllowed()
                 options.append(self._makeItem(USER.CREATE_COMP7_SQUAD, MENU.contextmenu(USER.CREATE_COMP7_SQUAD), optInitData={'enabled': canCreate and isEnabled,
+                 'textColor': 13347959}))
+            if self.__rankedCtrl.isEnabled():
+                primeTimeStatus, _, _ = self.__rankedCtrl.getPrimeTimeStatus()
+                isEnabled = primeTimeStatus == PrimeTimeStatus.AVAILABLE and self.__rankedCtrl.hasSuitableVehicles()
+                options.append(self._makeItem(USER.CREATE_RANKED_SQUAD, MENU.contextmenu(USER.CREATE_RANKED_SQUAD), optInitData={'enabled': canCreate and isEnabled,
                  'textColor': 13347959}))
         return options
 

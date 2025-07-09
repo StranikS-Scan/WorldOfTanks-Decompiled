@@ -424,6 +424,8 @@ class CustomFilesCache(object):
                         if code in (304, 200):
                             info = fh.info()
                             last_modified = info.getheader('Last-Modified')
+                            if last_modified is None and code == 304:
+                                last_modified = modified_time
                             expires = info.getheader('Expires')
                         if code == 200:
                             remote_file = fh.read()

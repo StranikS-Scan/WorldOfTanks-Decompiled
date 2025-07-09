@@ -52,6 +52,7 @@ class BaseDealPanel(object):
         autoRenewal = interactor.getAutoRenewal()
         if autoRenewal is not None:
             dealPanelModel.setIsAutoRenewalEnabled(autoRenewal.getLocalValue())
+            dealPanelModel.setSelectedAutoRenewalType(autoRenewal.getLocalTypeEquip())
         return
 
     @classmethod

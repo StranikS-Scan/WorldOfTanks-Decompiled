@@ -32,9 +32,11 @@ from nation_change.nation_change_helpers import isMainInNationGroupSafe, iterVeh
 from skeletons.gui.game_control import IVehiclePostProgressionController
 from skeletons.gui.shared import IItemsCache, IItemsRequester
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
+from gui.shared.gui_items.Tankman import Tankman
+from gui.impl.gen.view_models.views.lobby.crew.tankman_model import TankmanLocation
+from gui.impl.lobby.crew.filter import GRADE_PREMIUM, GRADE_ELITE, GRADE_PRIMARY
 if TYPE_CHECKING:
     import skeletons.gui.shared.utils.requesters as requesters
-    from gui.shared.gui_items.Tankman import Tankman
     from gui.shared.gui_items.Vehicle import Vehicle
     from gui.veh_post_progression.models.progression import PostProgressionItem
     from items.vehicles import VehicleType
@@ -326,10 +328,91 @@ class REQ_CRITERIA(object):
         DISMISSED = RequestCriteria(PredicateCondition(lambda item: item.isDismissed))
         ACTIVE = ~DISMISSED
 
+        @staticmethod
+        def LOCATION(locations):
+            criteria = REQ_CRITERIA.NONE
+            if TankmanLocation.INBARRACKS.value in locations:
+                criteria ^= ~REQ_CRITERIA.TANKMAN.IN_TANK
+            if TankmanLocation.INTANK.value in locations:
+                criteria ^= REQ_CRITERIA.TANKMAN.IN_TANK
+            return criteria
+
+        @staticmethod
+        def VEHICLE_GRADE(grades):
+            criteria = REQ_CRITERIA.NONE
+            if GRADE_PREMIUM in grades:
+                criteria ^= REQ_CRITERIA.CUSTOM(lambda item: item.vehicleNativeDescr.type.isPremium)
+            if GRADE_ELITE in grades:
+                criteria ^= REQ_CRITERIA.CUSTOM(lambda item: getattr(item.getVehicle(), 'isElite', False) and not getattr(item.getVehicle(), 'isPremium', False))
+            if GRADE_PRIMARY in grades:
+                criteria ^= REQ_CRITERIA.CUSTOM(lambda item: getattr(item.getVehicle(), 'isFavorite', False))
+            return criteria
+
     class RECRUIT(object):
         ROLES = staticmethod(lambda roles=tankmen.ROLES: RequestCriteria(PredicateCondition(lambda item: (any([ role in roles for role in item.getRoles() ]) if item.getRoles() else True))))
         NATION = staticmethod(lambda _nations=nations.NAMES: RequestCriteria(PredicateCondition(lambda item: any([ nation in _nations for nation in item.getNations() ]))))
         SPECIFIC_BY_NAME = staticmethod(lambda name: RequestCriteria(PredicateCondition(lambda item: name.lower() in unicode(item.getFullUserName()).lower())))
+
+        @staticmethod
+        def LOCATION(locations):
+            if TankmanLocation.INBARRACKS.value in locations:
+                return None
+            else:
+                return REQ_CRITERIA.NONE if {TankmanLocation.INTANK.value, TankmanLocation.DISMISSED.value} & locations else None
+
+    class COMBINED(object):
+
+        @staticmethod
+        def SPECIFIC_BY_NAME(search_str):
+            return REQ_CRITERIA.CUSTOM(lambda item: REQ_CRITERIA.TANKMAN.SPECIFIC_BY_NAME_OR_SKIN(search_str)(item) if isinstance(item, Tankman) else REQ_CRITERIA.RECRUIT.SPECIFIC_BY_NAME(search_str)(item))
+
+        @staticmethod
+        def ROLES(roles):
+            return REQ_CRITERIA.CUSTOM(lambda item: REQ_CRITERIA.TANKMAN.ROLES(roles)(item) if isinstance(item, Tankman) else REQ_CRITERIA.RECRUIT.ROLES(roles)(item))
+
+        @staticmethod
+        def NATION(value):
+            return REQ_CRITERIA.CUSTOM(lambda item: REQ_CRITERIA.TANKMAN.NATION(value)(item) if isinstance(item, Tankman) else REQ_CRITERIA.RECRUIT.NATION(value)(item))
+
+        @staticmethod
+        def LOCATION(locations):
+
+            def condition(item):
+                if isinstance(item, Tankman):
+                    inBarracks = TankmanLocation.INBARRACKS.value in locations and not item.isInTank
+                    inTank = TankmanLocation.INTANK.value in locations and item.isInTank
+                    return inBarracks or inTank
+                return TankmanLocation.INBARRACKS.value in locations
+
+            return REQ_CRITERIA.CUSTOM(condition)
+
+        @staticmethod
+        def VEHICLE_NATIVE_TYPES(vehicleTypes):
+            return REQ_CRITERIA.CUSTOM(lambda item: REQ_CRITERIA.TANKMAN.VEHICLE_NATIVE_TYPES(vehicleTypes)(item) if isinstance(item, Tankman) else REQ_CRITERIA.NONE)
+
+        @staticmethod
+        def VEHICLE_NATIVE_LEVELS(vehicleTiers):
+            return REQ_CRITERIA.CUSTOM(lambda item: REQ_CRITERIA.TANKMAN.VEHICLE_NATIVE_LEVELS(vehicleTiers)(item) if isinstance(item, Tankman) else None)
+
+        @staticmethod
+        def VEHICLE_GRADE(grades):
+            return REQ_CRITERIA.CUSTOM(lambda item: REQ_CRITERIA.TANKMAN.VEHICLE_GRADE(grades)(item) if isinstance(item, Tankman) else None)
+
+        @staticmethod
+        def NATIVE_TANKS(vehicleCDs):
+            return REQ_CRITERIA.CUSTOM(lambda item: REQ_CRITERIA.TANKMAN.NATIVE_TANKS(vehicleCDs)(item) if isinstance(item, Tankman) else None)
+
+        @staticmethod
+        def VEHICLE_BATTLE_ROYALE():
+            return REQ_CRITERIA.CUSTOM(lambda item: isinstance(item, Tankman) and REQ_CRITERIA.TANKMAN.VEHICLE_BATTLE_ROYALE(item))
+
+        @staticmethod
+        def VEHICLE_HIDDEN_IN_HANGAR():
+            return REQ_CRITERIA.CUSTOM(lambda item: isinstance(item, Tankman) and REQ_CRITERIA.TANKMAN.VEHICLE_HIDDEN_IN_HANGAR(item))
+
+        @staticmethod
+        def IS_LOCK_CREW():
+            return REQ_CRITERIA.CUSTOM(lambda item: REQ_CRITERIA.TANKMAN.IS_LOCK_CREW(item) if isinstance(item, Tankman) else REQ_CRITERIA.NONE)
 
     class CREW_ITEM(object):
         IN_ACCOUNT = RequestCriteria(PredicateCondition(lambda item: item.inAccount()))
@@ -361,7 +444,8 @@ class REQ_CRITERIA(object):
     class BATTLE_BOOSTER(object):
         ALL = RequestCriteria(PredicateCondition(lambda item: item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER))
         CREW_EFFECT = RequestCriteria(PredicateCondition(lambda item: item.isCrewBooster()))
-        OPTIONAL_DEVICE_EFFECT = RequestCriteria(PredicateCondition(lambda item: not item.isCrewBooster()))
+        OPTIONAL_DEVICE_EFFECT = RequestCriteria(PredicateCondition(lambda item: item.isEquipmentBooster()))
+        ECONOMIC_DIRECTIVES = RequestCriteria(PredicateCondition(lambda item: item.isEconomicBooster()))
 
     class SHELL(object):
         TYPE = staticmethod(lambda typesList: RequestCriteria(PredicateCondition(lambda item: item.type in typesList)))

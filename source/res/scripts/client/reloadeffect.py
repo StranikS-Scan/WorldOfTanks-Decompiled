@@ -22,12 +22,13 @@ class ReloadEffectsType(object):
     DUALGUN_RELOAD = 'DualGunReload'
     AUTO_SHOOT_CHANGE_SHELL_RELOAD = 'AutoShootChangeShellReload'
     DUALGUN_AUTORELOAD = 'DualGunAutoReload'
+    DUALGUN_BARREL = 'DualGunBarrelReload'
 
 
 class ReloadType(object):
-    ANY = 'any'
-    AUTORELOAD = 'autoreload'
-    DUALGUN = 'dualgun'
+    ANY = 0
+    CLIP = 1
+    DUALGUN = 2
 
 
 def _createReloadEffectDesc(eType, dataSection):
@@ -185,6 +186,23 @@ class _DualGunAutoReloadDesc(_ReloadDesc):
 
     def createIntuitionReload(self):
         return self.autoReloadDesc.createIntuitionReload()
+
+
+class _DualGunBarrelReloadDesc(_ReloadDesc):
+
+    def __init__(self, dataSection, eType):
+        super(_DualGunBarrelReloadDesc, self).__init__()
+        self.dualGunDesc = _DualGunReloadDesc(dataSection, eType)
+        self.barrelReloadDesc = _BarrelReloadDesc(dataSection, eType)
+        self.dualGunDesc.soundEvent = dataSection.readString('dualGunSound', '')
+        self.barrelReloadDesc.soundEvent = dataSection.readString('barrelReloadSound', '')
+        self.effectType = eType
+
+    def create(self):
+        return DualGunBarrelReload(self)
+
+    def createIntuitionReload(self):
+        return self.barrelReloadDesc.createIntuitionReload()
 
 
 class _AutoShootChangeShellGunReloadDescr(_SimpleReloadDesc):
@@ -651,6 +669,8 @@ class DualGunReload(_GunReload):
                 replayCtrl = BattleReplay.g_replayCtrl
                 if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
                     return
+                if self.__sound.isPlaying:
+                    self.__sound.stop()
                 self.__sound.play()
             return
 
@@ -666,6 +686,15 @@ class DualGunReload(_GunReload):
                 self.__ammoLowSound.play()
             return
 
+    def onClipLoad(self, _, __, ___, ____):
+        _logger.error('onClipLoad called for DualGun. You may need to change <reloadEffect>.')
+
+    def onFull(self):
+        _logger.error('onFull called for DualGun. You may need to change <reloadEffect>.')
+
+    def shotFail(self):
+        _logger.error('shotFail called for DualGun. You may need to change <reloadEffect>.')
+
 
 class DualGunAutoReload(_GunReload):
 
@@ -674,11 +703,13 @@ class DualGunAutoReload(_GunReload):
         self.__dualGunReload = DualGunReload(effectDesc.dualGunDesc)
         self.__autoReload = AutoReload(effectDesc.autoReloadDesc)
 
-    def start(self, shellReloadTime, alert, shellCount, reloadShellCount, shellID, reloadStart, clipCapacity, reloadType):
+    def start(self, shellReloadTime, ammoLowMask, shellCount, reloadShellCount, shellID, reloadStart, clipCapacity, reloadType):
         if reloadType in (ReloadType.DUALGUN, ReloadType.ANY):
-            self.__dualGunReload.start(shellReloadTime, alert, directTrigger=reloadType == ReloadType.DUALGUN)
-        elif reloadType == ReloadType.AUTORELOAD:
-            self.__autoReload.start(shellReloadTime, alert, shellCount, reloadShellCount, shellID, reloadStart, clipCapacity)
+            isAmmoLow = ammoLowMask & 1 << ReloadType.DUALGUN
+            self.__dualGunReload.start(shellReloadTime, isAmmoLow, directTrigger=reloadType == ReloadType.DUALGUN)
+        elif reloadType == ReloadType.CLIP:
+            isAmmoLow = ammoLowMask & 1 << ReloadType.CLIP
+            self.__autoReload.start(shellReloadTime, isAmmoLow, shellCount, reloadShellCount, shellID, reloadStart, clipCapacity)
 
     def stop(self):
         self.__dualGunReload.stop()
@@ -695,6 +726,38 @@ class DualGunAutoReload(_GunReload):
 
     def shotFail(self):
         self.__autoReload.shotFail()
+
+
+class DualGunBarrelReload(_GunReload):
+
+    def __init__(self, effectDesc):
+        _GunReload.__init__(self, effectDesc)
+        self.__dualGunReload = DualGunReload(effectDesc.dualGunDesc)
+        self.__barrelReload = BarrelReload(effectDesc.barrelReloadDesc)
+
+    def start(self, shellReloadTime, ammoLowMask, shellCount, reloadShellCount, shellID, reloadStart, clipCapacity, reloadType):
+        if reloadType in (ReloadType.DUALGUN, ReloadType.ANY):
+            isAmmoLow = ammoLowMask & 1 << ReloadType.DUALGUN
+            self.__dualGunReload.start(shellReloadTime, isAmmoLow, directTrigger=reloadType == ReloadType.DUALGUN)
+        elif reloadType == ReloadType.CLIP:
+            isAmmoLow = ammoLowMask & 1 << ReloadType.CLIP
+            self.__barrelReload.start(shellReloadTime, isAmmoLow, shellCount, reloadShellCount, shellID, reloadStart, clipCapacity)
+
+    def stop(self):
+        self.__dualGunReload.stop()
+        self.__barrelReload.stop()
+
+    def reloadEnd(self):
+        self.__barrelReload.reloadEnd()
+
+    def onClipLoad(self, timeLeft, shellCount, lastShell, canBeFull):
+        self.__barrelReload.onClipLoad(timeLeft, shellCount, lastShell, canBeFull)
+
+    def onFull(self):
+        self.__barrelReload.onFull()
+
+    def shotFail(self):
+        self.__barrelReload.shotFail()
 
 
 class AutoShootChangeShellReload(_GunReload):
@@ -798,8 +861,7 @@ class ReloadEffectStrategy(object):
     def __reloadStartEffect(self, timeLeft, clipCapacity, reloadFromStart, reloadType):
         ammoCtrl = self.__sessionProvider.shared.ammo
         currentShellCD = ammoCtrl.getCurrentShellCD()
-        shellCounts = ammoCtrl.getShells(currentShellCD)
-        shellsQuantityLeft = ammoCtrl.getShellsQuantityLeft()
+        quantity, quantityInClip = ammoCtrl.getShells(currentShellCD)
         isIntuition = ammoCtrl.getIntuitionReloadInProcess()
         reloadShellCount = clipCapacity
         if isIntuition and self.__intuitionReloadEffect is not None:
@@ -810,21 +872,27 @@ class ReloadEffectStrategy(object):
             self.__currentReloadEffect.stop()
         self.__currentReloadEffect = relloadEffect
         if relloadEffect is not None:
-            ammoLow = False
-            if clipCapacity > shellCounts[0]:
-                ammoLow = True
-                reloadShellCount = shellCounts[0]
             gunReloadType = self.getGunReloadType()
-            if gunReloadType in (ReloadEffectsType.DUALGUN_RELOAD, ReloadEffectsType.DUALGUN_AUTORELOAD):
-                if shellsQuantityLeft == 1:
-                    ammoLow = True
+            ammoLowMask = self.__getAmmoLowMask(gunReloadType, clipCapacity, quantity)
+            if clipCapacity > quantity:
+                reloadShellCount = quantity
             if gunReloadType == ReloadEffectsType.DUALGUN_RELOAD:
-                relloadEffect.start(timeLeft, ammoLow, directTrigger=reloadType == ReloadType.DUALGUN)
-            elif gunReloadType == ReloadEffectsType.DUALGUN_AUTORELOAD:
-                relloadEffect.start(timeLeft, ammoLow, shellCounts[1], reloadShellCount, currentShellCD, reloadFromStart, clipCapacity, reloadType)
+                relloadEffect.start(timeLeft, ammoLowMask, directTrigger=reloadType == ReloadType.DUALGUN)
+            elif gunReloadType in (ReloadEffectsType.DUALGUN_AUTORELOAD, ReloadEffectsType.DUALGUN_BARREL):
+                relloadEffect.start(timeLeft, ammoLowMask, quantityInClip, reloadShellCount, currentShellCD, reloadFromStart, clipCapacity, reloadType)
             else:
-                relloadEffect.start(timeLeft, ammoLow, shellCounts[1], reloadShellCount, currentShellCD, reloadFromStart, clipCapacity)
+                relloadEffect.start(timeLeft, ammoLowMask, quantityInClip, reloadShellCount, currentShellCD, reloadFromStart, clipCapacity)
         return
+
+    @staticmethod
+    def __getAmmoLowMask(gunReloadType, clipCapacity, shellsLeft):
+        ammoLowMask = 0
+        if clipCapacity > shellsLeft:
+            ammoLowMask |= 1 << ReloadType.CLIP
+        if gunReloadType in (ReloadEffectsType.DUALGUN_RELOAD, ReloadEffectsType.DUALGUN_AUTORELOAD, ReloadEffectsType.DUALGUN_BARREL):
+            if shellsLeft == 1:
+                ammoLowMask |= 1 << ReloadType.DUALGUN
+        return ammoLowMask
 
 
 @dependency.replace_none_kwargs(sessionProvider=IBattleSessionProvider)
@@ -841,4 +909,5 @@ RELOAD_EFFECTS_DESCR_MAP = {ReloadEffectsType.SIMPLE_RELOAD: _SimpleReloadDesc,
  ReloadEffectsType.AUTO_RELOAD: _AutoReloadDesc,
  ReloadEffectsType.DUALGUN_RELOAD: _DualGunReloadDesc,
  ReloadEffectsType.AUTO_SHOOT_CHANGE_SHELL_RELOAD: _AutoShootChangeShellGunReloadDescr,
- ReloadEffectsType.DUALGUN_AUTORELOAD: _DualGunAutoReloadDesc}
+ ReloadEffectsType.DUALGUN_AUTORELOAD: _DualGunAutoReloadDesc,
+ ReloadEffectsType.DUALGUN_BARREL: _DualGunBarrelReloadDesc}

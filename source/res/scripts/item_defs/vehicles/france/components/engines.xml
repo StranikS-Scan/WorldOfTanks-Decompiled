@@ -106,6 +106,7 @@
     <SOFAM_8Gxb_B_7x7>	503	</SOFAM_8Gxb_B_7x7>
     <Saurer_1000_7x7>	504	</Saurer_1000_7x7>
     <Detroit_Diesel_6V53T_FL>	31001	</Detroit_Diesel_6V53T_FL>
+    <Mathis_300_FL>	505	</Mathis_300_FL>
     <Detroit_Diesel_6V53T-S_FL>	31003	</Detroit_Diesel_6V53T-S_FL>
     <Maybach_HL_295_IGR>	60001	</Maybach_HL_295_IGR>
     <Detroit_Diesel_6V53T-S_IGR>	60002	</Detroit_Diesel_6V53T-S_IGR>
@@ -120,6 +121,7 @@
     <Hispano_Suiza_12Z>	31008	</Hispano_Suiza_12Z>
     <Maybach_HL_295_F_bob>	31009	</Maybach_HL_295_F_bob>
     <Maybach_HL_275>	31010	</Maybach_HL_275>
+    <Saurer_MP_65>	31011	</Saurer_MP_65>
     <Development_Engine>	65000	</Development_Engine>
     <AMX_B_271_SH>	10000	</AMX_B_271_SH>
     <Detroit_Diesel_6V53T_SH>	10001	</Detroit_Diesel_6V53T_SH>
@@ -1288,6 +1290,23 @@
       <rpm_min>	400	</rpm_min>
       <rpm_max>	2100	</rpm_max>
     </Saurer_F155>
+    <Saurer_MP_65>
+      <userString>	#france_vehicles:Saurer_MP_65	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	110000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
+      <power>	1000	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	2100	</rpm_max>
+    </Saurer_MP_65>
     <Aster_M>
       <userString>	#france_vehicles:Aster_M	</userString>
       <tags>	diesel	</tags>
@@ -1400,6 +1419,23 @@
       <rpm_min>	332	</rpm_min>
       <rpm_max>	2735	</rpm_max>
     </Mathis_300>
+    <Mathis_300_FL>
+      <userString>	#france_vehicles:Mathis_300	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	44500	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	400	</power>
+      <weight>	400	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	332	</rpm_min>
+      <rpm_max>	2735	</rpm_max>
+    </Mathis_300_FL>
     <Mathis_300_exp>
       <userString>	#france_vehicles:Mathis_300_exp	</userString>
       <tags>	gasoline	</tags>

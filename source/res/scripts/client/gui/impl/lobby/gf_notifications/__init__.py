@@ -30,3 +30,7 @@ class PresentersFactory(object):
         else:
             LOG_ERROR("Cant fined presenter for '%s'" % viewName)
             return
+
+    @staticmethod
+    def add(viewName, resId, clazz):
+        NOTIFICATION_PRESENTERS[viewName] = (resId, clazz)

@@ -33,5 +33,17 @@ class _OpenTabWebApi(OpenTabWebApi):
         return (lambda : showShop(backUrl)) if backUrl is not None else None
 
 
+class ExtShopWebHandlers(object):
+    REGISTERED_WEB_API = []
+
+    @classmethod
+    def registerHandler(cls, webApi):
+        cls.REGISTERED_WEB_API.append(webApi)
+
+    @classmethod
+    def unregisterHandler(cls, webApi):
+        cls.REGISTERED_WEB_API.remove(webApi)
+
+
 def createShopWebHandlers():
-    return webApiCollection(CloseWindowWebApi, OpenWindowWebApi, NotificationWebApi, _OpenTabWebApi, RequestWebApi, ShopWebApi, SoundWebApi, SoundStateWebApi, HangarSoundWebApi, UtilWebApi, FrontLineWebApi, HeroTankWebApi, BattlePassWebApi, ClansWebApi, RankedBattlesWebApi, BlueprintsConvertSaleWebApi, PlatformWebApi, QuestsWebApi, LootBoxWebApi, UILoggingWebApi)
+    return webApiCollection(CloseWindowWebApi, OpenWindowWebApi, NotificationWebApi, _OpenTabWebApi, RequestWebApi, ShopWebApi, SoundWebApi, SoundStateWebApi, HangarSoundWebApi, UtilWebApi, FrontLineWebApi, HeroTankWebApi, BattlePassWebApi, ClansWebApi, RankedBattlesWebApi, BlueprintsConvertSaleWebApi, PlatformWebApi, QuestsWebApi, LootBoxWebApi, UILoggingWebApi, *ExtShopWebHandlers.REGISTERED_WEB_API)

@@ -94,17 +94,17 @@ class MedalAbramsAchievement(ClassProgressAchievement):
         return dossier.getRandomStats().getWinAndSurvived() + dossier.getTeam7x7Stats().getWinAndSurvived() + dossier.getFortBattlesStats().getWinAndSurvived() + dossier.getFortSortiesStats().getWinAndSurvived() + dossier.getGlobalMapStats().getWinAndSurvived()
 
 
-class MedalCariusAchievement(ClassProgressAchievement):
+class MedalSamokhinAchievement(ClassProgressAchievement):
     __slots__ = ()
 
     def __init__(self, dossier, value=None):
-        super(MedalCariusAchievement, self).__init__('medalCarius', _AB.TOTAL, dossier, value)
+        super(MedalSamokhinAchievement, self).__init__('medalSamokhin', _AB.TOTAL, dossier, value)
 
     def getNextLevelInfo(self):
         return ('vehiclesLeft', self._lvlUpValue)
 
     def _readProgressValue(self, dossier):
-        return dossier.getRecordValue(_AB.TOTAL, 'medalCarius')
+        return dossier.getRecordValue(_AB.TOTAL, 'medalSamokhin')
 
     def _readCurrentProgressValue(self, dossier):
         return dossier.getRandomStats().getFragsCount() - dossier.getClanStats().getFragsCount() + dossier.getTeam7x7Stats().getFragsCount() + dossier.getFortBattlesStats().getFragsCount() + dossier.getFortSortiesStats().getFragsCount() + dossier.getGlobalMapStats().getFragsCount()
@@ -142,17 +142,17 @@ class MedalKayAchievement(ClassProgressAchievement):
         return dossier.getRecordValue(_AB.TOTAL, 'battleHeroes')
 
 
-class MedalKnispelAchievement(ClassProgressAchievement):
+class MedalGudzAchievement(ClassProgressAchievement):
     __slots__ = ()
 
     def __init__(self, dossier, value=None):
-        super(MedalKnispelAchievement, self).__init__('medalKnispel', _AB.TOTAL, dossier, value)
+        super(MedalGudzAchievement, self).__init__('medalGudz', _AB.TOTAL, dossier, value)
 
     def getNextLevelInfo(self):
         return ('damageLeft', self._lvlUpValue)
 
     def _readProgressValue(self, dossier):
-        return dossier.getRecordValue(_AB.TOTAL, 'medalKnispel')
+        return dossier.getRecordValue(_AB.TOTAL, 'medalGudz')
 
     def _readCurrentProgressValue(self, dossier):
         random = dossier.getRandomStats()

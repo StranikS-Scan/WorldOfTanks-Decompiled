@@ -117,12 +117,22 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
         return ((LobbySimpleEvent.CLOSE_HELPLAYOUT, self.__onHelpLayoutHide, EVENT_BUS_SCOPE.LOBBY), (LobbySimpleEvent.SHOW_HELPLAYOUT, self.__onHelpLayoutShow, EVENT_BUS_SCOPE.LOBBY))
 
     def __setIsFirstAppearance(self, streakProgress, model):
+        freezeProgress = self.itemsCache.items.playStreak.getRedemptionDay()
         lastSeenCount = AccountSettings.getPlayStreak(PlayStreak.PLAY_STREAK_LAST_LEVEL_SEEN_WIDGET)
+        lastFreezeSeenCount = AccountSettings.getPlayStreak(PlayStreak.PLAY_STREAK_LAST_LEVEL_FREEZE_SEEN_WIDGET)
         if streakProgress != lastSeenCount and streakProgress:
             AccountSettings.setPlayStreak(PlayStreak.PLAY_STREAK_LAST_LEVEL_SEEN_WIDGET, streakProgress)
             model.setIsFirstAppearance(True)
+        elif lastFreezeSeenCount != freezeProgress and self.itemsCache.items.playStreak.getDailyConditionCompleted():
+            AccountSettings.setPlayStreak(PlayStreak.PLAY_STREAK_LAST_LEVEL_FREEZE_SEEN_WIDGET, freezeProgress)
+            if freezeProgress > 0:
+                model.setIsFirstAppearanceRedemptionDay(True)
+            else:
+                model.setIsLastDayRedemption(True)
         else:
             model.setIsFirstAppearance(False)
+            model.setIsLastDayRedemption(False)
+            model.setIsFirstAppearanceRedemptionDay(False)
 
     def _finalize(self):
         self.mainWindowWatcherDestroy()

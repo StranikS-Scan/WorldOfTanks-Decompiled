@@ -15,6 +15,7 @@ from items.artefacts_helpers import VehicleFilter, _ArtefactFilter, readKpi, Veh
 from items.basic_item import BasicItem
 from items.components import shared_components, component_constants
 from items.components.supply_slot_categories import SupplySlotFilter, LevelsFactor, AttrsOperation, SlotCategories
+from items.economic_directives import Operation
 from items.vehicles import VehicleDescriptor
 from soft_exception import SoftException
 from tankmen import MAX_SKILL_LEVEL
@@ -568,6 +569,9 @@ class Equipment(Artefact):
 
     def doesDependOnOptionalDevice(self):
         return False
+
+    def hasTag(self, tag):
+        return tag in self.tags
 
 
 class ExtraHealthReserve(StaticOptionalDevice):
@@ -1478,6 +1482,45 @@ class FactorSkillBattleBooster(SkillEquipment):
             a.baseAvgLevel = 100
         else:
             a.factor = 0.57 + (a.factor - 0.57) * self.efficiencyFactor
+
+
+class EconomicDirectives(Equipment):
+    __slots__ = ('equipmentOperation', 'operatiomType')
+    OPERATIONS_TYPE = {'add': 'additive',
+     'mul': 'multiplicative'}
+
+    def __init__(self):
+        super(EconomicDirectives, self).__init__()
+        self.equipmentOperation = None
+        self.operatiomType = None
+        return
+
+    def _readConfig(self, xmlCtx, section):
+        subXmlCtx, subsection = _xml.getSubSectionWithContext(xmlCtx, section, 'modifiers')
+        modifiers = []
+        for opType, m in subsection.items():
+            if not self.operatiomType:
+                self.operatiomType = opType
+            elif self.operatiomType != opType:
+                _xml.raiseWrongXml(subXmlCtx, opType, 'Cannot be different modifier type')
+            name = m.readString('name')
+            value = m.readInt('value')
+            if not name or not value:
+                _xml.raiseWrongXml(subXmlCtx, opType, 'Has not attribute name or value')
+            if not any((item[0] == name for item in modifiers)):
+                modifiers.append((name, value))
+            else:
+                _xml.raiseWrongXml(xmlCtx, 'modifiers', 'modifier: {} is duplicated'.format(name))
+            if opType not in self.OPERATIONS_TYPE.keys():
+                _xml.raiseWrongXml(xmlCtx, 'modifiers', 'Unknown operation type: {}. Use one of the {}'.format(opType, self.OPERATIONS_TYPE.keys()))
+
+        self.equipmentOperation = Operation(self.OPERATIONS_TYPE[self.operatiomType], modifiers)
+
+    def getLevelParamsForDevice(self, *_):
+        return None
+
+    def getLevelIDForVehicle(self, *_):
+        return None
 
 
 class SixthSenseBattleBooster(SkillEquipment):

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/shared_utils/avatar_helpers/DualGun.py
+from math import ceil
 import BigWorld
 from OwnVehicleBase import Cooldowns
 from ReloadEffect import ReloadType
@@ -8,8 +9,8 @@ from gui.battle_control.battle_constants import CANT_SHOOT_ERROR
 
 def createDualGunHelper(vehicle):
     if vehicle.typeDescriptor.isDualgunVehicle:
-        if vehicle.typeDescriptor.isAutoReloadGun:
-            return DualGunClipAutoReloadHelper()
+        if vehicle.typeDescriptor.isAutoReloadGun or vehicle.typeDescriptor.isClipGun:
+            return DualGunClipAutoReloadHelper(vehicle.typeDescriptor.gun.dualGun.autoloadWithClip)
         return DualGunHelper()
     return DualGunHelper()
 
@@ -86,15 +87,16 @@ class DualGunHelper(IDualGunHelper):
 
 class DualGunClipAutoReloadHelper(IDualGunHelper):
 
-    def __init__(self):
+    def __init__(self, autoloadWithClip):
         super(DualGunClipAutoReloadHelper, self).__init__()
         self.__debuffTrigger = False
-        self.__reloadingFirstShell = True
+        self.__reloadingFirstShellOrFullClip = True
         self.__activeGun = None
         self.__gunStates = None
         self.__cooldownTimes = None
         self.__stateFixTime = None
         self.__firstShellInClipTime = None
+        self.__autoloadWithClip = autoloadWithClip
         return
 
     @staticmethod
@@ -135,37 +137,51 @@ class DualGunClipAutoReloadHelper(IDualGunHelper):
                 ammoCtrl.triggerReloadEffect(cooldownTimes[reloadingGun].leftTime, cooldownTimes[reloadingGun].baseTime, ReloadType.DUALGUN)
             _, canShotState = ammoCtrl.canShoot()
             _, shellsInClip = ammoCtrl.getCurrentShells()
+            burstSize = ammoCtrl.getGunSettings().burst.size
+            if burstSize > 1:
+                shellsInClip = int(ceil(float(shellsInClip) / burstSize))
             firstAvailableShell = ammoCtrl.getFirstAvailableShell()
             if shellsInClip <= 0:
-                self.__reloadingFirstShell = True
+                self.__reloadingFirstShellOrFullClip = True
             elif gunStates[activeGun] == DUAL_GUN.GUN_STATE.READY:
-                self.__reloadingFirstShell = False
-        if gunStates[activeGun] == DUAL_GUN.GUN_STATE.RELOADING:
-            if debuffLeftTime <= 0:
-                self.__debuffTrigger = False
+                self.__reloadingFirstShellOrFullClip = False
+        if debuffLeftTime <= 0:
+            if self.__debuffTrigger:
                 if ammoCtrl is not None:
                     ammoCtrl.debuffFinish()
-                baseTime = activeGunReloadBaseTime
-                if self.__reloadingFirstShell:
-                    baseTime += shellChangeTime
-                self.__callReloadTimeWrapper(avatar, vehicleID, cooldownTimes[activeGun].leftTime, baseTime)
+                self.__debuffTrigger = False
+                if gunStates[activeGun] in (DUAL_GUN.GUN_STATE.EMPTY, DUAL_GUN.GUN_STATE.RELOADING):
+                    return
+        switchCD = cooldownTimes[DUAL_GUN.COOLDOWNS.SWITCH]
+        if gunStates[activeGun] == DUAL_GUN.GUN_STATE.RELOADING:
+            if debuffLeftTime <= 0:
+                activeGunLeftTime = cooldownTimes[activeGun].leftTime
+                if switchCD.leftTime > activeGunLeftTime:
+                    baseTime, leftTime = switchCD.baseTime, switchCD.leftTime
+                else:
+                    baseTime, leftTime = activeGunReloadBaseTime, activeGunLeftTime
+                    if self.__reloadingFirstShellOrFullClip:
+                        baseTime += shellChangeTime
+                self.__callReloadTimeWrapper(avatar, vehicleID, leftTime, baseTime)
         elif gunStates[activeGun] == DUAL_GUN.GUN_STATE.READY:
-            switchCD = cooldownTimes[DUAL_GUN.COOLDOWNS.SWITCH]
             if switchCD.leftTime > 0:
                 self.__callReloadTimeWrapper(avatar, vehicleID, switchCD.leftTime, switchCD.baseTime)
             elif gunStates[secondGun] == DUAL_GUN.GUN_STATE.READY:
                 self.__callReloadTimeWrapper(avatar, vehicleID, 0, switchCD.baseTime)
             else:
                 totalBaseTime = cooldownTimes[activeGun].baseTime
-                if shellsInClip < 2:
+                if shellsInClip <= 1:
+                    if self.__autoloadWithClip:
+                        totalBaseTime = 0
                     totalBaseTime += shellChangeTime
                 self.__callReloadTimeWrapper(avatar, vehicleID, 0, totalBaseTime)
         else:
+            if self.__reloadingFirstShellOrFullClip and self.__autoloadWithClip:
+                activeGunReloadBaseTime = 0
             if canShotState == CANT_SHOOT_ERROR.WAITING:
                 avatar.updateVehicleGunReloadTime(vehicleID, -1, activeGunReloadBaseTime + shellChangeTime)
                 return
-            totalBaseTime = activeGunReloadBaseTime
-            totalLeftTime = activeGunReloadBaseTime
+            totalBaseTime = totalLeftTime = activeGunReloadBaseTime
             if canShotState is None or canShotState == CANT_SHOOT_ERROR.NO_AMMO and firstAvailableShell is None:
                 avatar.updateVehicleGunReloadTime(vehicleID, -1, 0)
                 return
@@ -176,7 +192,7 @@ class DualGunClipAutoReloadHelper(IDualGunHelper):
             if self.__debuffTrigger:
                 totalBaseTime += debuffBaseTime
                 totalLeftTime += debuffLeftTime
-            if self.__reloadingFirstShell:
+            if self.__reloadingFirstShellOrFullClip:
                 totalBaseTime += shellChangeTime
                 leftTimeAdd = shellChangeTime
                 if ammoCtrl is not None and not self.__debuffTrigger:
@@ -192,11 +208,11 @@ class DualGunClipAutoReloadHelper(IDualGunHelper):
             if self.__firstShellInClipTime != firstTime:
                 self.__firstShellInClipTime = firstTime
                 self.updateGunReloadTime(avatar, vehicleID, self.__activeGun, self.__gunStates, self.__correctCooldownTimes(self.__cooldownTimes, self.__stateFixTime), ammoCtrl)
-            elif self.__reloadingFirstShell:
+            elif self.__reloadingFirstShellOrFullClip:
                 self.updateGunReloadTime(avatar, vehicleID, self.__activeGun, self.__gunStates, self.__correctCooldownTimes(self.__cooldownTimes, self.__stateFixTime), ammoCtrl)
             _, shellsInClip = ammoCtrl.getCurrentShells()
-            if shellsInClip == 0:
-                ammoCtrl.triggerReloadEffect(timeLeft, baseTime, ReloadType.AUTORELOAD)
+            if shellsInClip == 0 or timeLeft <= 0:
+                ammoCtrl.triggerReloadEffect(timeLeft, baseTime, ReloadType.CLIP)
             return
 
     @staticmethod

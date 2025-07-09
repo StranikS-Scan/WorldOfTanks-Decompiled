@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/resources.py
-from constants import IGR_TYPE, WG_GAMES
+from constants import IGR_TYPE, CURRENT_GAME_ID
 from gui.shared.utils.decorators import ReprInjector
 from messenger.m_constants import USER_TAG
 from messenger.proto.xmpp.gloox_constants import PRESENCES_ORDER, PRESENCE
@@ -32,7 +32,7 @@ class Resource(object):
             elif info.igrID == IGR_TYPE.PREMIUM:
                 tags.add(USER_TAG.IGR_PREMIUM)
         info = self.__wgExts.ban
-        if info and info.isBanned(game=WG_GAMES.TANKS):
+        if info and info.isBanned(game=CURRENT_GAME_ID):
             tags.add(USER_TAG.BAN_CHAT)
         return tags
 

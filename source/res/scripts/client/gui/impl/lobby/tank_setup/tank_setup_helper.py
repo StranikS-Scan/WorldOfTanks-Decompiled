@@ -1,11 +1,22 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/tank_setup_helper.py
 import logging
+from gui.prb_control.dispatcher import g_prbLoader
 from wg_async import wg_async, wg_await, await_callback
 from BWUtil import AsyncReturn
+from constants import QUEUE_TYPE
 from gui.impl.lobby.tank_setup.tank_setup_sounds import playSlotActionSound
 from items.components.supply_slot_categories import SlotCategories
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
+from helpers.dependency import replace_none_kwargs
+from skeletons.gui.battle_session import IBattleSessionProvider
 _logger = logging.getLogger(__name__)
+ECONOMIC_DIRECTIVE_QUEUES = (QUEUE_TYPE.RANDOMS,
+ QUEUE_TYPE.MAPBOX,
+ QUEUE_TYPE.COMP7,
+ QUEUE_TYPE.RANKED,
+ QUEUE_TYPE.EPIC,
+ QUEUE_TYPE.VERSUS_AI)
 NONE_ID = -1
 _CATEGORY_MASK = {category:1 << idx for idx, category in enumerate(SlotCategories.ORDER)}
 
@@ -34,6 +45,18 @@ def clearLastSlotAction(viewModel):
         tx.setRightID(NONE_ID)
         tx.setLeftIntCD(NONE_ID)
         tx.setRightIntCD(NONE_ID)
+
+
+def __isQueueSelected(queueType):
+    dispatcher = g_prbLoader.getDispatcher()
+    return dispatcher.getFunctionalState().isQueueSelected(queueType) if dispatcher is not None else False
+
+
+@replace_none_kwargs(sessionProvider=IBattleSessionProvider)
+def isEconomicDirBattleEnabled(sessionProvider=None):
+    ctrl = sessionProvider.shared.prebattleSetups
+    isArenaLoaded = ctrl.isArenaLoaded() if ctrl is not None else False
+    return ARENA_BONUS_TYPE_CAPS.checkAny(sessionProvider.arenaVisitor.getArenaBonusType(), ARENA_BONUS_TYPE_CAPS.ECONOMIC_DIRECTIVES) if isArenaLoaded else any((__isQueueSelected(queueType) for queueType in ECONOMIC_DIRECTIVE_QUEUES))
 
 
 class TankSetupAsyncCommandLock(object):

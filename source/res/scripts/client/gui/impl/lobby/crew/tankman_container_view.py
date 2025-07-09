@@ -3,8 +3,6 @@
 import typing
 from collections import OrderedDict
 import Event
-from account_helpers.AccountSettings import CREW_SKINS_VIEWED
-from account_helpers import AccountSettings
 from base_crew_view import BaseCrewView
 from frameworks.wulf import ViewSettings, ViewFlags
 from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
@@ -13,7 +11,6 @@ from gui.impl.gen.view_models.views.lobby.crew.tankman_container_tab_model impor
 from gui.impl.gen.view_models.views.lobby.crew.tankman_container_view_model import TankmanContainerViewModel
 from gui.impl.lobby.crew.personal_case import IPersonalTab
 from gui.impl.lobby.crew.personal_case.base_personal_case_view import BasePersonalCaseView
-from gui.impl.lobby.crew.personal_case.personal_data_view import PersonalDataView
 from gui.impl.lobby.crew.personal_case.personal_file_view import PersonalFileView
 from gui.impl.lobby.crew.personal_case.service_record_view import ServiceRecordView
 from gui.impl.lobby.crew.widget.crew_widget import NO_TANKMAN
@@ -32,13 +29,12 @@ if typing.TYPE_CHECKING:
 
 class TabsId(object):
     PERSONAL_FILE = R.views.lobby.crew.personal_case.PersonalFileView()
-    PERSONAL_DATA = R.views.lobby.crew.personal_case.PersonalDataView()
     SERVICE_RECORD = R.views.lobby.crew.personal_case.ServiceRecordView()
-    ALL = [PERSONAL_FILE, PERSONAL_DATA, SERVICE_RECORD]
+    ALL = [PERSONAL_FILE, SERVICE_RECORD]
     DEFAULT = PERSONAL_FILE
 
 
-TABS = OrderedDict([(TabsId.PERSONAL_FILE, PersonalFileView), (TabsId.PERSONAL_DATA, PersonalDataView), (TabsId.SERVICE_RECORD, ServiceRecordView)])
+TABS = OrderedDict([(TabsId.PERSONAL_FILE, PersonalFileView), (TabsId.SERVICE_RECORD, ServiceRecordView)])
 
 class TankmanContainerView(BaseCrewView):
     __slots__ = ('_tankmanInvID', 'vehicleID', '_activeTab', '_createdTabs', '_previousViewID', 'paramsView', 'onTabChanged')
@@ -107,8 +103,6 @@ class TankmanContainerView(BaseCrewView):
             tabModel = TankmanContainerTabModel()
             tabModel.setId(resId)
             tabModel.setTitle(viewCls.TITLE)
-            if resId == TabsId.PERSONAL_DATA:
-                tabModel.setCounter(self.__getNewSkinsAmount())
             tabs.addViewModel(tabModel)
 
         tabs.invalidate()
@@ -121,10 +115,7 @@ class TankmanContainerView(BaseCrewView):
 
     def _getEvents(self):
         eventsTuple = super(TankmanContainerView, self)._getEvents()
-        return eventsTuple + ((self.viewModel.onTabChange, self._onTabChange), (AccountSettings.onSettingsChanging, self.__onAccountSettingsChanging))
-
-    def _getCallbacks(self):
-        return (('inventory.13', self._onSkinsUpdate),)
+        return eventsTuple + ((self.viewModel.onTabChange, self._onTabChange),)
 
     def _finalize(self):
         super(TankmanContainerView, self)._finalize()
@@ -151,22 +142,6 @@ class TankmanContainerView(BaseCrewView):
 
     def _onEmptySlotClick(self, tankmanID, slotIdx):
         showChangeCrewMember(slotIdx, self.vehicleID, self._activeTab)
-
-    def _onSkinsUpdate(self, _):
-        self.__updateNewSkinsCounter()
-
-    def __onAccountSettingsChanging(self, key, _):
-        if key == CREW_SKINS_VIEWED:
-            self.__updateNewSkinsCounter()
-
-    def __updateNewSkinsCounter(self):
-        with self.viewModel.transaction() as vm:
-            tabs = vm.getTabs()
-            for tab in tabs:
-                if tab.getId() == TabsId.PERSONAL_DATA:
-                    tab.setCounter(self.__getNewSkinsAmount())
-                    tabs.invalidate()
-                    break
 
     def __getNewSkinsAmount(self):
         items = self.itemsCache.items.getItems(GUI_ITEM_TYPE.CREW_SKINS, REQ_CRITERIA.CREW_ITEM.IN_ACCOUNT)

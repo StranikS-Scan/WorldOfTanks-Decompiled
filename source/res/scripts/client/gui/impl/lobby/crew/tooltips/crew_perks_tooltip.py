@@ -2,10 +2,12 @@
 # Embedded file name: scripts/client/gui/impl/lobby/crew/tooltips/crew_perks_tooltip.py
 import typing
 from frameworks.wulf import ViewSettings
+from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crew.tooltips.crew_perks_tooltip_booster_model import CrewPerksTooltipBoosterModel
 from gui.impl.gen.view_models.views.lobby.crew.tooltips.crew_perks_tooltip_model import CrewPerksTooltipModel
 from gui.impl.pub import ViewImpl
+from gui.impl.lobby.crew.crew_helpers.skill_helpers import checkSingleSkillOnVehicle
 from gui.shared.gui_items.Tankman import getTankmanSkill, crewMemberRealSkillLevel, tankmanPersonalSkillLevel, getBattleBooster
 from gui.shared.skill_parameters.skills_packers import g_skillPackers, packBase
 from gui.shared.tooltips.advanced import SKILL_MOVIES
@@ -81,6 +83,8 @@ class CrewPerksTooltip(ViewImpl):
             else:
                 vm.setDescription(self._skill.getMaxLvlDescription())
                 vm.setAlertDescription(self._skill.getMaxLvlAlertDescription())
+            if checkSingleSkillOnVehicle(self._skill, self._tankman):
+                vm.setAlertDescription(backport.text(R.strings.crew_perks.singleOnVehcile.alertDescription()))
         return
 
     def fillCurrentLvlInfo(self, vm):

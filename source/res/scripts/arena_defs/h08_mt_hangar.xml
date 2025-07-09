@@ -2,7 +2,7 @@
   <name>	#arenas:h08_mt_hangar/name	</name>
   <description>	#arenas:h08_mt_hangar/description	</description>
   <wwambientSound>	hangar_h08_amb_silence	</wwambientSound>
-  <wwmusic>	hangar_h08_mt_music	</wwmusic>
+  <wwmusic>	tabs_music	</wwmusic>
   <soundRemapping>
     <loadBanks>
       <bank>
@@ -30,6 +30,13 @@
     <unloadBanks>
       <bank>	hangar_premium_2018.bnk	</bank>
     </unloadBanks>
+    <events>
+      <event>
+        <name>	tabs_music	</name>
+        <mod>	tabs_music	</mod>
+        <modAUX>	hangar_h08_mt_music	</modAUX>
+      </event>
+    </events>
   </soundRemapping>
   <roadMap></roadMap>
   <gameplayTypes>

@@ -41,7 +41,7 @@ from gui.prb_control import prb_getters
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.promo.hangar_teaser_widget import TeaserViewer
-from gui.resource_well.resource_well_helpers import isResourceWellRewardVehicle
+from gui.resource_well.resource_well_helpers import isResourceWellVehicleAnnounced
 from gui.shared import EVENT_BUS_SCOPE, event_dispatcher as shared_events, events
 from gui.shared.events import AmmunitionPanelViewEvent, LobbySimpleEvent
 from gui.shared.formatters import text_styles
@@ -359,7 +359,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         newCarouselAlias, linkage = self.__hangarComponentsCtrl.getHangarCarouselSettings()
         if self.prbDispatcher is not None:
             if newCarouselAlias is None or newCarouselAlias == HANGAR_ALIASES.TANK_CAROUSEL:
-                if self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED):
+                if self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED) or self.prbDispatcher.getFunctionalState().isInUnit(PREBATTLE_TYPE.RANKED):
                     newCarouselAlias = HANGAR_ALIASES.RANKED_TANK_CAROUSEL
                 elif self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.EPIC) or self.prbDispatcher.getFunctionalState().isInUnit(PREBATTLE_TYPE.EPIC):
                     newCarouselAlias = HANGAR_ALIASES.EPICBATTLE_TANK_CAROUSEL
@@ -516,7 +516,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
             if isinstance(entity, HeroTank) and entity.typeDescriptor:
                 vehicleCD = entity.typeDescriptor.type.compactDescr
                 if not self.__showEventVehiclePreview(vehicleCD):
-                    if isResourceWellRewardVehicle(vehicleCD=vehicleCD):
+                    if isResourceWellVehicleAnnounced(vehicleCD=vehicleCD):
                         shared_events.showResourceWellHeroPreview(vehicleCD)
                     else:
                         shared_events.showHeroTankPreview(vehicleCD)
@@ -585,7 +585,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateBattleRoyaleComponents()
         self.__hangarComponentsCtrl.updateComponentsVisibility()
         self.__updateComp7ModifiersWidget()
-        self.__updateFunRandomModifiersWidget()
         Waiting.hide('updateVehicle')
 
     def __onCurrentVehicleChanged(self):
@@ -665,7 +664,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateBattleRoyaleComponents()
         self.__hangarComponentsCtrl.updateComponentsVisibility()
         self.__updateComp7ModifiersWidget()
-        self.__updateFunRandomModifiersWidget()
 
     def __onFunRandomUpdate(self, *_):
         self.__onEntityChanged()

@@ -50,3 +50,5 @@ class TEXT_MANAGER_STYLES(object):
     GRAND_TITLE = 'grandTitle'
     GRAND_TITLE_YELLOW = 'grandTitleYellow'
     GRAND_TITLE_TK = 'grandTitleTK'
+    WHITE_TITLE_15 = 'whiteTitle15'
+    WHITE_TITLE_12 = 'whiteTitle12'

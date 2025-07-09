@@ -21,8 +21,9 @@ def _readSkillBasics(xmlCtx, section, subsectionName):
     vsePerk = _xml.readIntOrNone(xmlCtx, section, 'vsePerk')
     if IS_CLIENT or IS_WEB:
         uiSettings = _readUISettings(xmlCtx, section, 'UISettings')
+        tags = _readTags(xmlCtx, section, 'tags')
         skillLocales = _readLocales(subsectionName, section)
-        skill = skills_components.BasicSkill(subsectionName, i18n=skillLocales, icon=_xml.readStringWithDefaultValue(xmlCtx, section, 'icon', '{}.png'.format(subsectionName)), vsePerk=vsePerk, uiSettings=uiSettings)
+        skill = skills_components.BasicSkill(subsectionName, i18n=skillLocales, icon=_xml.readStringWithDefaultValue(xmlCtx, section, 'icon', '{}.png'.format(subsectionName)), vsePerk=vsePerk, uiSettings=uiSettings, tags=tags)
     else:
         skill = skills_components.BasicSkill(subsectionName, vsePerk=vsePerk)
     return (skill, xmlCtx, section)
@@ -51,6 +52,18 @@ def _readUISettings(xmlCtx, section, subsectionName):
     if IS_CLIENT and section.has_key('kpi'):
         kpi = readKpi(xmlCtx, section['kpi'])
     return SkillUISettings(tooltipSection=_xml.readStringWithDefaultValue(xmlCtx, section, 'tooltipSection', TTC_TOOLTIP_SECTIONS.SKILLS).split(), typeName=_xml.readStringWithDefaultValue(xmlCtx, section, 'typeName', SkillTypeName.MAIN), kpi=kpi, descrArgs=_readDescrArgs(xmlCtx, section, 'descr'), params=_readTTCParams(xmlCtx, section, 'params'))
+
+
+def _readTags(xmlCtx, section, subsectionName):
+    tagNames = _xml.readStringOrNone(xmlCtx, section, subsectionName)
+    if tagNames is None:
+        return frozenset()
+    else:
+        res = set()
+        for tagName in tagNames.split():
+            res.add(intern(tagName))
+
+        return frozenset(res)
 
 
 def _readDescrArgs(xmlCtx, section, subsectionName):

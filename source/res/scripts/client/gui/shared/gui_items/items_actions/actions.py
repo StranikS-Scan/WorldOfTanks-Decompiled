@@ -44,7 +44,7 @@ from gui.shared.gui_items.processors import makeSuccess
 from gui.shared.gui_items.processors.common import ConvertBlueprintFragmentProcessor, BuyBattleAbilitiesProcessor
 from gui.shared.gui_items.processors.common import TankmanBerthsBuyer
 from gui.shared.gui_items.processors.common import UseCrewBookProcessor
-from gui.shared.gui_items.processors.tankman import TankmanFreeToOwnXpConvertor, TankmanRetraining, TankmanUnload, TankmanEquip, TankmanChangePassport, TankmanDismiss, TankmanRestore, TankmanChangeRole
+from gui.shared.gui_items.processors.tankman import TankmanFreeToOwnXpConvertor, TankmanRetraining, TankmanUnload, TankmanEquip, TankmanChangePassport, TankmanDismiss, TankmanRestore, TankmansRestore, TankmanChangeRole, CrewSkinEquip, CrewSkinUnequip
 from gui.shared.gui_items.processors.goodies import BoosterBuyer, BoosterActivator
 from gui.shared.gui_items.processors.messages.items_processor_messages import ItemDeconstructionProcessorMessage, MultItemsDeconstructionProcessorMessage
 from gui.shared.gui_items.processors.module import BuyAndInstallItemProcessor, BCBuyAndInstallItemProcessor, OptDeviceInstaller, ModuleDeconstruct
@@ -779,6 +779,22 @@ class TankmanRestoreAction(GroupedItemAction):
         self._pushGroupedMessages(result)
 
 
+class TankmansRestoreAction(CachedItemAction):
+
+    def __init__(self, tankmans):
+        super(TankmansRestoreAction, self).__init__()
+        self.__tankmans = tankmans
+
+    @decorators.adisp_process('updating')
+    def doAction(self):
+        result = yield TankmansRestore(self.__tankmans).request()
+        if result and result.auxData:
+            if result.success:
+                SystemMessages.pushMessage(result.userMsg + ' ' + ', '.join((m.userMsg for m in result.auxData if m)), type=result.sysMsgType, priority=result.msgPriority, messageData=result.msgData)
+            else:
+                SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+
+
 class BuyBoosterAction(CachedItemAction):
 
     def __init__(self, booster, count, currency):
@@ -1005,10 +1021,10 @@ class TankmanChangeRoleAction(GroupedItemAction):
         self._pushGroupedMessages(result)
 
 
-class TankmanChangePassportAction(IGUIItemAction):
+class TankmanChangePassportAction(GroupedItemAction):
 
-    def __init__(self, tankmanInvID, firstNameID, firstNameGroup, lastNameID, lastNameGroup, iconID, iconGroup):
-        super(TankmanChangePassportAction, self).__init__()
+    def __init__(self, tankmanInvID, firstNameID, firstNameGroup, lastNameID, lastNameGroup, iconID, iconGroup, groupID=0, groupSize=1):
+        super(TankmanChangePassportAction, self).__init__(groupID, groupSize)
         self.__tankmanInvID = tankmanInvID
         self.__firstNameID = firstNameID
         self.__firstNameGroup = firstNameGroup
@@ -1019,7 +1035,8 @@ class TankmanChangePassportAction(IGUIItemAction):
 
     @decorators.adisp_process('updating')
     def doAction(self):
-        yield TankmanChangePassport(self.__tankmanInvID, self.__firstNameID, self.__firstNameGroup, self.__lastNameID, self.__lastNameGroup, self.__iconID, self.__iconGroup).request()
+        result = yield TankmanChangePassport(self.__tankmanInvID, self.__firstNameID, self.__firstNameGroup, self.__lastNameID, self.__lastNameGroup, self.__iconID, self.__iconGroup, self._groupID, self._groupSize).request()
+        self._pushGroupedMessages(result)
 
 
 class TankmanUnloadAction(GroupedItemAction):
@@ -1049,16 +1066,40 @@ class TankmanEquipAction(GroupedItemAction):
         self._pushGroupedMessages(result)
 
 
-class TankmanDismissAction(CachedItemAction):
+class CrewSkinEquipAction(GroupedItemAction):
 
-    def __init__(self, tankmanInvID):
-        super(TankmanDismissAction, self).__init__()
+    def __init__(self, tankmanInvID, skinID, groupID=0, groupSize=1):
+        super(CrewSkinEquipAction, self).__init__(groupID, groupSize)
+        self.__tankmanInvID = tankmanInvID
+        self.__skinID = skinID
+
+    @decorators.adisp_process('updating')
+    def doAction(self):
+        result = yield CrewSkinEquip(self.__tankmanInvID, self.__skinID, self._groupID, self._groupSize).request()
+        self._pushGroupedMessages(result)
+
+
+class CrewSkinUnequipAction(GroupedItemAction):
+
+    def __init__(self, tankmanInvID, groupID=0, groupSize=1):
+        super(CrewSkinUnequipAction, self).__init__(groupID, groupSize)
         self.__tankmanInvID = tankmanInvID
 
     @decorators.adisp_process('updating')
     def doAction(self):
-        tankman = self._itemsCache.items.getTankman(self.__tankmanInvID)
-        result = yield TankmanDismiss(tankman).request()
+        result = yield CrewSkinUnequip(self.__tankmanInvID, self._groupID, self._groupSize).request()
+        self._pushGroupedMessages(result)
+
+
+class TankmanDismissAction(CachedItemAction):
+
+    def __init__(self, tankmans):
+        super(TankmanDismissAction, self).__init__()
+        self.__tankmans = tankmans
+
+    @decorators.adisp_process('updating')
+    def doAction(self):
+        result = yield TankmanDismiss(self.__tankmans).request()
         SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
 

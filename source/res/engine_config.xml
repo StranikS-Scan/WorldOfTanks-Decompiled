@@ -1,7 +1,8 @@
 <engine_config.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <personality>	game	</personality>
   <appTitle>	Мир танков	</appTitle>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -24,7 +25,6 @@
   </lod>
   <renderer>
     <concurrentRenderer>	true	</concurrentRenderer>
-    <disableSLI>	false	</disableSLI>
     <gammaCorrectionOutside>	1.0	</gammaCorrectionOutside>
     <gammaCorrectionInside>	1.0	</gammaCorrectionInside>
     <gammaCorrectionSpeed>	0.2	</gammaCorrectionSpeed>
@@ -384,6 +384,9 @@
           <name>	music_interactive_part_14.pck	</name>
         </bank>
         <bank>
+          <name>	music_interactive_part_15.pck	</name>
+        </bank>
+        <bank>
           <name>	wheel_vehicle_GUI.pck	</name>
         </bank>
         <bank>
@@ -570,6 +573,18 @@
         </bank>
         <bank>
           <name>	style_3D_Pl29_NC_Wz_70T_3dst_Sand.bnk	</name>
+        </bank>
+        <bank>
+          <name>	birthday_lootbox_video.bnk	</name>
+        </bank>
+        <bank>
+          <name>	Tank_mail.bnk	</name>
+        </bank>
+        <bank>
+          <name>	tabs_music.bnk	</name>
+        </bank>
+        <bank>
+          <name>	tabs_music.pck	</name>
         </bank>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>

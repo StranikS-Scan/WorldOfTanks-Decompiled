@@ -8166,6 +8166,31 @@
         </effects>
       </variant1>
     </hd_env_su_2019_scaffold_short>
+    <hd_env_SU_2020_Ladder_02>
+      <variant1>
+        <stages>
+          <base>	35.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/environment/buildings/hd_env_su_2020_ladder_02.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	44.000000	</wood_1>
+              <wood_2>	64.000000	</wood_2>
+              <cloth>	36.000000	</cloth>
+              <weight>	1535.000000	</weight>
+              <debrisAmount>	13.000000	</debrisAmount>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_SU_2020_Ladder_02>
     <hd_env_uni_0035_pierwood_01>
       <variant1>
         <stages>
@@ -11665,6 +11690,54 @@
         </effects>
       </variant1>
     </hd_gaf_SU_0002_SandBagsSmall_Snow_Heap>
+    <hd_gaf_SU_0009_CaucasusFence_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/environment/objects/hd_gaf_su_0009_caucasusfence_01.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <wwsound>	obj_generative	</wwsound>
+            <startKey>	base	</startKey>
+            <params>
+              <stone_1>	50	</stone_1>
+              <stone_2>	31.000000	</stone_2>
+              <debrisAmount>	27.67	</debrisAmount>
+              <weight>	6553.4	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_gaf_SU_0009_CaucasusFence_01>
+    <hd_gaf_SU_0009_CaucasusFence_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/environment/objects/hd_gaf_su_0009_caucasusfence_02.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <wwsound>	obj_generative	</wwsound>
+            <startKey>	base	</startKey>
+            <params>
+              <stone_1>	50	</stone_1>
+              <stone_2>	13.59	</stone_2>
+              <debrisAmount>	27.67	</debrisAmount>
+              <weight>	6553.4	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_gaf_SU_0009_CaucasusFence_02>
     <hd_gaf_SU_007_AvenueFence_01>
       <variant1>
         <stages>
@@ -18893,8 +18966,9 @@
             <params>
               <stone_1>	30	</stone_1>
               <wood_1>	50	</wood_1>
-              <debrisAmount>	90	</debrisAmount>
+              <debrisAmount>	100.000000	</debrisAmount>
               <weight>	4000	</weight>
+              <cloth>	100.000000	</cloth>
             </params>
           </destructionSound>
         </effects>

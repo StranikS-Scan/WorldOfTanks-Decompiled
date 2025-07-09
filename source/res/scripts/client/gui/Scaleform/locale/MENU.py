@@ -68,9 +68,9 @@ class MENU(object):
     LOGIN_STATUS_LOGIN_REJECTED_REGISTRATION_NOT_CONFIRMED = '#menu:login/status/LOGIN_REJECTED_REGISTRATION_NOT_CONFIRMED'
     LOGIN_SOCIAL_WARNING_SOCIAL_NETWORK_LOGOUT_BOTH = '#menu:login/social/warning/SOCIAL_NETWORK_LOGOUT_BOTH'
     LOGIN_SOCIAL_WARNING_SOCIAL_NETWORK_LOGOUT = '#menu:login/social/warning/SOCIAL_NETWORK_LOGOUT'
-    LOGIN_STATUS_WGC_LOGOUT = '#menu:login/status/WGC_LOGOUT'
+    LOGIN_STATUS_LGC_LOGOUT = '#menu:login/status/LGC_LOGOUT'
     LOGIN_SOCIAL_STATUS_SYSTEM_ERROR = '#menu:login/social/status/SYSTEM_ERROR'
-    LOGIN_SOCIAL_STATUS_WGC_ERROR = '#menu:login/social/status/WGC_ERROR'
+    LOGIN_SOCIAL_STATUS_LGC_ERROR = '#menu:login/social/status/LGC_ERROR'
     LOGIN_HEALTHNOTICE = '#menu:login/healthNotice'
     LOGIN_LICENSES_HEADER_1 = '#menu:login/licenses/header_1'
     LOGIN_LICENSES_HEADER_2 = '#menu:login/licenses/header_2'
@@ -767,6 +767,7 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_FALLOUT = '#menu:headerButtons/battle/types/fallout'
     HEADERBUTTONS_BATTLE_TYPES_MAPBOXSQUAD = '#menu:headerButtons/battle/types/mapboxSquad'
     HEADERBUTTONS_BATTLE_TYPES_COMP7SQUAD = '#menu:headerButtons/battle/types/comp7Squad'
+    HEADERBUTTONS_BATTLE_TYPES_RANKEDSQUAD = '#menu:headerButtons/battle/types/rankedSquad'
     HEADERBUTTONS_BATTLE_TYPES_MAPBOX = '#menu:headerButtons/battle/types/mapbox'
     HEADERBUTTONS_BATTLE_TYPES_COMP7 = '#menu:headerButtons/battle/types/comp7'
     HEADERBUTTONS_BATTLE_TYPES_COMP7_DESCR = '#menu:headerButtons/battle/types/comp7/descr'
@@ -1146,6 +1147,8 @@ class MENU(object):
     MODULEINFO_AUTORELOADDUALGUNWITHOUTRESETRELOADLABEL = '#menu:moduleInfo/autoReloadDualGunWithoutResetReloadLabel'
     MODULEINFO_CLIPDUALGUNLABEL = '#menu:moduleInfo/clipDualGunLabel'
     MODULEINFO_CLIPDUALGUNWITHOUTRESETRELOADLABEL = '#menu:moduleInfo/clipDualGunWithoutResetReloadLabel'
+    MODULEINFO_CLIPDUALGUNWITHAUTOLOADWITHCLIPLABEL = '#menu:moduleInfo/clipDualGunWithAutoloadWithClipLabel'
+    MODULEINFO_CLIPDUALGUNWITHOUTRESETRELOADANDWITHAUTOLOADWITHCLIPLABEL = '#menu:moduleInfo/clipDualGunWithoutResetReloadAndWithAutoloadWithClipLabel'
     MODULEINFO_DUALACCURACYGUNLABEL = '#menu:moduleInfo/dualAccuracyGunLabel'
     MODULEINFO_TRACKWITHINTRACKCHASSISLABEL = '#menu:moduleInfo/trackWithinTrackChassisLabel'
     MODULEINFO_MULTITRACKCHASSISLABEL = '#menu:moduleInfo/multiTrackChassisLabel'
@@ -1705,6 +1708,7 @@ class MENU(object):
     CONTEXTMENU_CREATEBATTLEROYALESQUAD = '#menu:contextMenu/createBattleRoyaleSquad'
     CONTEXTMENU_CREATEMAPBOXSQUAD = '#menu:contextMenu/createMapboxSquad'
     CONTEXTMENU_CREATECOMP7SQUAD = '#menu:contextMenu/createComp7Squad'
+    CONTEXTMENU_CREATERANKEDSQUAD = '#menu:contextMenu/createRankedSquad'
     CONTEXTMENU_INVITE = '#menu:contextMenu/invite'
     CONTEXTMENU_APPEAL = '#menu:contextMenu/appeal'
     CONTEXTMENU_INCORRECTBEHAVIOR = '#menu:contextMenu/incorrectBehavior'
@@ -1763,6 +1767,7 @@ class MENU(object):
     FINALSTATISTIC_TABS_TEAMSTATS = '#menu:finalStatistic/tabs/teamStats'
     FINALSTATISTIC_TABS_DETAILSSTATS = '#menu:finalStatistic/tabs/detailsStats'
     FINALSTATISTIC_TABS_EPICSTATS = '#menu:finalStatistic/tabs/epicStats'
+    FINALSTATISTIC_TABS_POSTBATTLEEXTRATAB = '#menu:finalStatistic/tabs/postbattleExtraTab'
     FINALSTATISTIC_COMMONSTATS_RESULTLABEL_WIN = '#menu:finalStatistic/commonStats/resultlabel/win'
     FINALSTATISTIC_COMMONSTATS_RESULTLABEL_LOSE = '#menu:finalStatistic/commonStats/resultlabel/lose'
     FINALSTATISTIC_COMMONSTATS_RESULTLABEL_TIE = '#menu:finalStatistic/commonStats/resultlabel/tie'
@@ -1824,6 +1829,7 @@ class MENU(object):
     BONUSTYPE_24 = '#menu:bonusType/24'
     BONUSTYPE_27 = '#menu:bonusType/27'
     BONUSTYPE_29 = '#menu:bonusType/29'
+    BONUSTYPE_30 = '#menu:bonusType/30'
     BONUSTYPE_32 = '#menu:bonusType/32'
     BONUSTYPE_37 = '#menu:bonusType/37'
     BONUSTYPE_38 = '#menu:bonusType/38'
@@ -2412,6 +2418,7 @@ class MENU(object):
      CONTEXTMENU_CREATEBATTLEROYALESQUAD,
      CONTEXTMENU_CREATEMAPBOXSQUAD,
      CONTEXTMENU_CREATECOMP7SQUAD,
+     CONTEXTMENU_CREATERANKEDSQUAD,
      CONTEXTMENU_INVITE,
      CONTEXTMENU_APPEAL,
      CONTEXTMENU_INCORRECTBEHAVIOR,

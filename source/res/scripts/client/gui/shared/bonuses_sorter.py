@@ -27,7 +27,8 @@ class BonusesSortWeights(IntEnum):
     STYLE = 14
     OPTIONAL_DEVICE = 15
     LOOTBOX = 16
-    VEHICLE = 17
+    QUESTS = 17
+    VEHICLE = 18
 
 
 def _itemsBonusKeyFunc(bonus):
@@ -80,7 +81,8 @@ _BONUSES_KEYS_FUNC = {VehiclesBonus.VEHICLES_BONUS: _vehiclesBonusKeyFunc,
  'crewBooks': lambda b: (-BonusesSortWeights.CREW_BOOK, 0),
  'customizations': lambda b: (-BonusesSortWeights.STYLE, 0),
  'battleToken': _tokensBonusKeyFunc,
- 'lootBoxToken': _tokensBonusKeyFunc}
+ 'lootBoxToken': _tokensBonusKeyFunc,
+ 'quests': lambda b: (-BonusesSortWeights.QUESTS, 0)}
 
 def bonusesSortKeyFunc(bonus):
     return _BONUSES_KEYS_FUNC.get(bonus.getName(), lambda b: (BonusesSortWeights.UNSORTABLE, bonus.getName()))(bonus)

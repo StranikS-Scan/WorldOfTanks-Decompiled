@@ -74,13 +74,13 @@ class _ProductExtraData(object):
 
 
 class _PurchaseDescriptor(object):
-    __slots__ = ('__entitlements', '__metadataWot', '__currencies', '__isEntitlementsInvalid', '__tokens', '__titleID', '__productExtraData', '__iconID', '__productName', '__mainAmount', '__displayWays')
+    __slots__ = ('__entitlements', '__gameMetadata', '__currencies', '__isEntitlementsInvalid', '__tokens', '__titleID', '__productExtraData', '__iconID', '__productName', '__mainAmount', '__displayWays')
 
-    def __init__(self, entitlements=None, currencies=None, metadataWot=None):
+    def __init__(self, entitlements=None, currencies=None, gameMetadata=None):
         super(_PurchaseDescriptor, self).__init__()
-        self.__isEntitlementsInvalid = not bool(entitlements) or not bool(metadataWot)
+        self.__isEntitlementsInvalid = not bool(entitlements) or not bool(gameMetadata)
         self.__entitlements = entitlements if entitlements is not None else []
-        self.__metadataWot = metadataWot if metadataWot is not None else {}
+        self.__gameMetadata = gameMetadata if gameMetadata is not None else {}
         self.__currencies = currencies
         self.__titleID = self.__getMetadataValueByName('title', '')
         self.__productName = self.__getMetadataValueByName('name', '')
@@ -95,7 +95,7 @@ class _PurchaseDescriptor(object):
         self.__productExtraData = None
         self.__entitlements = None
         self.__currencies = None
-        self.__metadataWot = None
+        self.__gameMetadata = None
         self.__displayWays = None
         self.__tokens = None
         return
@@ -136,15 +136,15 @@ class _PurchaseDescriptor(object):
                             metadataPrefix = 'entitlements_{}'.format(dataIndex)
                             title = self.__getMetadataValueByName('{}_title'.format(metadataPrefix))
                             description = self.__getMetadataValueByName('{}_description'.format(metadataPrefix))
-                            imgBig = self.__extractValue(self.__metadataWot.get('{}_image_large'.format(metadataPrefix), {}).get('data', {}).get('url', {}))
-                            imgSmall = self.__extractValue(self.__metadataWot.get('{}_icon_url_big'.format(metadataPrefix), {}).get('data', {}).get('url', {}))
+                            imgBig = self.__extractValue(self.__gameMetadata.get('{}_image_large'.format(metadataPrefix), {}).get('data', {}).get('url', {}))
+                            imgSmall = self.__extractValue(self.__gameMetadata.get('{}_icon_url_big'.format(metadataPrefix), {}).get('data', {}).get('url', {}))
 
                 self.__tokens[tID] = _TokenDescriptor(imgSmall, imgBig, title, description)
             return self.__tokens[tID]
         return _TokenDescriptor('', '', '', '')
 
     def __getMetadataValueByName(self, name, default=None):
-        return self.__getDataValueByName(name, self.__metadataWot, default)
+        return self.__getDataValueByName(name, self.__gameMetadata, default)
 
     def __getDataValueByName(self, name, targetSection, default=None):
         if not targetSection:
@@ -170,7 +170,7 @@ class _PurchaseDescriptor(object):
         return value
 
     def __getMetadataDisplayWays(self):
-        params = self.__metadataWot.get('params', {})
+        params = self.__gameMetadata.get('params', {})
         return _DisplayWays(params.get('show_nc', False), params.get('show_award', False))
 
 
@@ -211,13 +211,13 @@ class _PurchasePackage(object):
         return
 
     def _initDescriptor(self, dataDict):
-        metadataWot = dataDict.get('metadata', {}).get('wot')
-        if not metadataWot:
-            _logger.error('Could not find "metadata/wot" section in the obtained product descriptor!')
+        gameMetadata = dataDict.get('metadata', {}).get('wot')
+        if not gameMetadata:
+            _logger.error('Could not find game meta data section in the obtained product descriptor!')
         entitlements = dataDict.get('entitlements')
         if not entitlements:
             _logger.error('Could not find "entitlements" section in the obtained product descriptor!')
-        return _PurchaseDescriptor(entitlements, dataDict.get('currencies'), metadataWot)
+        return _PurchaseDescriptor(entitlements, dataDict.get('currencies'), gameMetadata)
 
     def __onDescriptorLoaded(self, url, data):
         descrData = None

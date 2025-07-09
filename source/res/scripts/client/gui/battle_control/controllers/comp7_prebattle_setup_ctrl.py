@@ -19,18 +19,22 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 _logger = logging.getLogger(__name__)
 
 class _SceneController(object):
-    __slots__ = ('__spawnPoints', '__config', '__pendingSpawnPoints')
+    __slots__ = ('__spawnPoints', '__config', '__pendingSpawnPoints', '__observers')
     __dynObjectsCache = dependency.descriptor(IBattleDynamicObjectsCache)
 
     def __init__(self, arenaGuiType):
         self.__spawnPoints = {}
         self.__config = {}
+        self.__observers = set()
         dynObject = self.__dynObjectsCache.getConfig(arenaGuiType)
         if dynObject:
             self.__config = dynObject.getSpawnPointsConfig()
         self.__pendingSpawnPoints = {}
 
     def createSpawnPoint(self, vehicleID, positionNumber, status):
+        if BigWorld.player().isObserverBothTeams:
+            self.__observers.add(vehicleID)
+            return
         if vehicleID in BigWorld.entities.keys():
             self.__createSpawnPointPrefab(BigWorld.entities[vehicleID], positionNumber, status)
         else:
@@ -40,6 +44,8 @@ class _SceneController(object):
              'status': status}
 
     def updateSpawnPoint(self, vehicleID, newStatus):
+        if vehicleID in self.__observers:
+            return
         if vehicleID in self.__spawnPoints:
             areaComponent = self.__spawnPoints[vehicleID].findComponentByType(GenericComponents.TerrainSelectedAreaComponent)
             newColor = self.__getAreaColor(vehicleID, newStatus)
@@ -55,11 +61,15 @@ class _SceneController(object):
 
         self.__spawnPoints.clear()
         self.__pendingSpawnPoints.clear()
+        self.__observers.clear()
 
     def __onVehicleEnterWorld(self, vehicle):
         if vehicle.id in self.__pendingSpawnPoints:
             spawnPointData = self.__pendingSpawnPoints.pop(vehicle.id)
-            self.__createSpawnPointPrefab(vehicle, spawnPointData['positionNumber'], spawnPointData['status'])
+            if 'observer' in vehicle.typeDescriptor.type.tags:
+                self.__observers.add(vehicle.id)
+            else:
+                self.__createSpawnPointPrefab(vehicle, spawnPointData['positionNumber'], spawnPointData['status'])
             if not self.__pendingSpawnPoints:
                 BigWorld.player().onVehicleEnteredWorld -= self.__onVehicleEnterWorld
 

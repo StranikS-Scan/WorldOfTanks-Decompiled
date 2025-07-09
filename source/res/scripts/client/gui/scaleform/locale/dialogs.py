@@ -1064,6 +1064,7 @@ class DIALOGS(object):
     PERKSREST_PRICECARD_FREE_DESCRIPTION = '#dialogs:perksRest/priceCard/free/description'
     PERKSREST_PRICECARD_CREDITS_DESCRIPTION = '#dialogs:perksRest/priceCard/credits/description'
     PERKSREST_PRICECARD_GOLD_DESCRIPTION = '#dialogs:perksRest/priceCard/gold/description'
+    RETRAIN_HEADER = '#dialogs:retrain/header'
     RETRAIN_TITLE_SINGLE = '#dialogs:retrain/title/single'
     RETRAIN_TITLE_MASSIVE = '#dialogs:retrain/title/massive'
     RETRAIN_WARNING_PREMIUMVEHICLE = '#dialogs:retrain/warning/premiumVehicle'
@@ -1082,6 +1083,8 @@ class DIALOGS(object):
     RECRUIT_PRICECARD_GOLD_DESCRIPTION = '#dialogs:recruit/priceCard/gold/description'
     RECRUIT_SUBMIT = '#dialogs:recruit/submit'
     RECRUIT_CANCEL = '#dialogs:recruit/cancel'
+    TANKMANRETRAINING_SUBMIT = '#dialogs:tankmanRetraining/submit'
+    TANKMANRETRAINING_CANCEL = '#dialogs:tankmanRetraining/cancel'
     CREWMEMBERTANKCHANGE_TITLE = '#dialogs:crewMemberTankChange/title'
     CREWMEMBERTANKCHANGE_DESC = '#dialogs:crewMemberTankChange/desc'
     CREWMEMBERTANKCHANGE_TRANSFER = '#dialogs:crewMemberTankChange/transfer'
@@ -1101,21 +1104,36 @@ class DIALOGS(object):
     CREWBOOKPURCHASE_DESCRIPTION_PERSONAL = '#dialogs:crewBookPurchase/description/personal'
     CREWBOOKPURCHASE_DESCRIPTION_CREW = '#dialogs:crewBookPurchase/description/crew'
     CREWBOOKPURCHASE_BTNDISABLEDTOOLTIP = '#dialogs:crewBookPurchase/btnDisabledTooltip'
-    DOCUMENTCHANGEDIALOG_TITLE = '#dialogs:documentChangeDialog/title'
-    DOCUMENTCHANGEDIALOG_BUTTON_SUBMIT = '#dialogs:documentChangeDialog/button/submit'
-    DOCUMENTCHANGEDIALOG_DROPDOWN_FIRSTNAME = '#dialogs:documentChangeDialog/dropdown/firstName'
-    DOCUMENTCHANGEDIALOG_DROPDOWN_LASTNAME = '#dialogs:documentChangeDialog/dropdown/lastName'
+    SKINCHANGEDIALOG_TITLE = '#dialogs:skinChangeDialog/title'
+    SKINCHANGEDIALOG_BUTTON_SUBMIT = '#dialogs:skinChangeDialog/button/submit'
+    SKINCHANGEDIALOG_TEXT = '#dialogs:skinChangeDialog/text'
+    SKINCHANGEDIALOG_WARNING = '#dialogs:skinChangeDialog/warning'
     SKINAPPLYDIALOG_BUTTON_SUBMIT = '#dialogs:skinApplyDialog/button/submit'
+    SKINAPPLYDIALOG_WARNING = '#dialogs:skinApplyDialog/warning'
     DISMISSTANKMAN_HEADER = '#dialogs:dismissTankman/header'
     DISMISSTANKMAN_DESCRIPTION_TIME = '#dialogs:dismissTankman/description/time'
+    DISMISSTANKMAN_DESCRIPTION_TIMETEXT = '#dialogs:dismissTankman/description/timeText'
     DISMISSTANKMAN_LIMITED = '#dialogs:dismissTankman/limited'
     DISMISSTANKMAN_NORECOVERY = '#dialogs:dismissTankman/noRecovery'
     DISMISSTANKMAN_BUTTONS_DISMISS = '#dialogs:dismissTankman/buttons/dismiss'
+    DISMISSTANKMAN_BUTTONS_RESTORE = '#dialogs:dismissTankman/buttons/restore'
     RESTORETANKMAN_HEADER = '#dialogs:restoreTankman/header'
     RESTORETANKMAN_DESCRIPTION = '#dialogs:restoreTankman/description'
     RESTORETANKMAN_PRICE = '#dialogs:restoreTankman/price'
     RESTORETANKMAN_FREE = '#dialogs:restoreTankman/free'
     RESTORETANKMAN_BUTTONS_RECOVER = '#dialogs:restoreTankman/buttons/recover'
+    DISMISSORRESTORE_HEADER_DISMISS = '#dialogs:dismissOrRestore/header/dismiss'
+    DISMISSORRESTORE_HEADER_RESTORE = '#dialogs:dismissOrRestore/header/restore'
+    DISMISSORRESTORE_SELECTTANKMANS_DISMISS = '#dialogs:dismissOrRestore/selectTankmans/dismiss'
+    DISMISSORRESTORE_SELECTTANKMANS_RESTORE = '#dialogs:dismissOrRestore/selectTankmans/restore'
+    DISMISSORRESTORE_RESTORE_CURRENCY = '#dialogs:dismissOrRestore/restore/currency'
+    DISMISSORRESTORE_DISMISS_CAPCHA_TITLE_NORMAL = '#dialogs:dismissOrRestore/dismiss/capcha/title/normal'
+    DISMISSORRESTORE_DISMISS_CAPCHA_TITLEHIGHLIGHT_NORMAL = '#dialogs:dismissOrRestore/dismiss/capcha/titleHighlight/normal'
+    DISMISSORRESTORE_ERROR_TEXT = '#dialogs:dismissOrRestore/error/text'
+    DISMISSORRESTORE_LIMITERROR_ERROR = '#dialogs:dismissOrRestore/limitError/error'
+    DISMISSORRESTORE_DISMISS_CAPCHA_TITLE_LIMITERROR = '#dialogs:dismissOrRestore/dismiss/capcha/title/limitError'
+    DISMISSORRESTORE_DISMISS_CAPCHA_TITLEHIGHLIGHT_LIMITERROR = '#dialogs:dismissOrRestore/dismiss/capcha/titleHighlight/limitError'
+    DISMISSORRESTORE_DISMISS_CAPCHA_TITLEHIGHLIGHTKEYWORD = '#dialogs:dismissOrRestore/dismiss/capcha/titleHighlightKeyword'
     BUYBERTHSCONFIRMATION_MESSAGE = '#dialogs:buyBerthsConfirmation/message'
     BUYBERTHSCONFIRMATION_TITLE = '#dialogs:buyBerthsConfirmation/title'
     BUYBERTHSCONFIRMATION_SUBMIT = '#dialogs:buyBerthsConfirmation/submit'
@@ -2177,6 +2195,7 @@ class DIALOGS(object):
      PERKSREST_PRICECARD_FREE_DESCRIPTION,
      PERKSREST_PRICECARD_CREDITS_DESCRIPTION,
      PERKSREST_PRICECARD_GOLD_DESCRIPTION,
+     RETRAIN_HEADER,
      RETRAIN_TITLE_SINGLE,
      RETRAIN_TITLE_MASSIVE,
      RETRAIN_WARNING_PREMIUMVEHICLE,
@@ -2195,6 +2214,8 @@ class DIALOGS(object):
      RECRUIT_PRICECARD_GOLD_DESCRIPTION,
      RECRUIT_SUBMIT,
      RECRUIT_CANCEL,
+     TANKMANRETRAINING_SUBMIT,
+     TANKMANRETRAINING_CANCEL,
      CREWMEMBERTANKCHANGE_TITLE,
      CREWMEMBERTANKCHANGE_DESC,
      CREWMEMBERTANKCHANGE_TRANSFER,
@@ -2214,21 +2235,36 @@ class DIALOGS(object):
      CREWBOOKPURCHASE_DESCRIPTION_PERSONAL,
      CREWBOOKPURCHASE_DESCRIPTION_CREW,
      CREWBOOKPURCHASE_BTNDISABLEDTOOLTIP,
-     DOCUMENTCHANGEDIALOG_TITLE,
-     DOCUMENTCHANGEDIALOG_BUTTON_SUBMIT,
-     DOCUMENTCHANGEDIALOG_DROPDOWN_FIRSTNAME,
-     DOCUMENTCHANGEDIALOG_DROPDOWN_LASTNAME,
+     SKINCHANGEDIALOG_TITLE,
+     SKINCHANGEDIALOG_BUTTON_SUBMIT,
+     SKINCHANGEDIALOG_TEXT,
+     SKINCHANGEDIALOG_WARNING,
      SKINAPPLYDIALOG_BUTTON_SUBMIT,
+     SKINAPPLYDIALOG_WARNING,
      DISMISSTANKMAN_HEADER,
      DISMISSTANKMAN_DESCRIPTION_TIME,
+     DISMISSTANKMAN_DESCRIPTION_TIMETEXT,
      DISMISSTANKMAN_LIMITED,
      DISMISSTANKMAN_NORECOVERY,
      DISMISSTANKMAN_BUTTONS_DISMISS,
+     DISMISSTANKMAN_BUTTONS_RESTORE,
      RESTORETANKMAN_HEADER,
      RESTORETANKMAN_DESCRIPTION,
      RESTORETANKMAN_PRICE,
      RESTORETANKMAN_FREE,
      RESTORETANKMAN_BUTTONS_RECOVER,
+     DISMISSORRESTORE_HEADER_DISMISS,
+     DISMISSORRESTORE_HEADER_RESTORE,
+     DISMISSORRESTORE_SELECTTANKMANS_DISMISS,
+     DISMISSORRESTORE_SELECTTANKMANS_RESTORE,
+     DISMISSORRESTORE_RESTORE_CURRENCY,
+     DISMISSORRESTORE_DISMISS_CAPCHA_TITLE_NORMAL,
+     DISMISSORRESTORE_DISMISS_CAPCHA_TITLEHIGHLIGHT_NORMAL,
+     DISMISSORRESTORE_ERROR_TEXT,
+     DISMISSORRESTORE_LIMITERROR_ERROR,
+     DISMISSORRESTORE_DISMISS_CAPCHA_TITLE_LIMITERROR,
+     DISMISSORRESTORE_DISMISS_CAPCHA_TITLEHIGHLIGHT_LIMITERROR,
+     DISMISSORRESTORE_DISMISS_CAPCHA_TITLEHIGHLIGHTKEYWORD,
      BUYBERTHSCONFIRMATION_MESSAGE,
      BUYBERTHSCONFIRMATION_TITLE,
      BUYBERTHSCONFIRMATION_SUBMIT,

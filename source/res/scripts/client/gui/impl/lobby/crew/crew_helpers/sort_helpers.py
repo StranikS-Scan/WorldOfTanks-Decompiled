@@ -37,13 +37,15 @@ class KeySortRequestCriteria(RequestCriteria):
 
 
 class SortHeap(object):
-    __slot__ = ('key', 'condition', 'data')
+    __slot__ = ('key', 'condition', 'data', 'sortedList')
 
     def __init__(self, items=None, criteria=REQ_CRITERIA.EMPTY, keys=REQ_CRITERIA.CUSTOM(lambda item: tuple())):
+        self.sortedList = None
         self.condition = SortRequestCriteria(criteria)
         self.key = KeySortRequestCriteria(keys)
         self.data = list(((self.condition(item),) + self.key(item) + (i, item) for i, item in enumerate(items or [])))
         self.rebuild()
+        return
 
     def rebuild(self):
         if self.data:
@@ -78,9 +80,6 @@ class SortHeap(object):
             return
 
     def getSortedList(self):
-        sortedList = []
-        data = self.data[:]
-        while data:
-            sortedList.append(heapq.heappop(data)[-1])
-
-        return sortedList
+        if self.sortedList is None:
+            self.sortedList = [ heapq.heappop(self.data)[-1] for _ in range(len(self.data)) ]
+        return self.sortedList

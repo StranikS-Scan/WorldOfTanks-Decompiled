@@ -7,5 +7,5 @@ class ArtilleryMarkersManager(MarkersManager):
 
     def _setupPlugins(self, arenaVisitor):
         setup = super(ArtilleryMarkersManager, self)._setupPlugins(arenaVisitor)
-        setup['step_repairs'] = ArtilleryTimeZonePlugin
+        setup['artillery_time_zones'] = ArtilleryTimeZonePlugin
         return setup

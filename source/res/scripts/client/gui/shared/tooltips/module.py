@@ -63,6 +63,8 @@ class _ModuleExtraStatuses(CONST_CONTAINER):
     AUTOLOADER_DUAL_GUN_WITHOUT_RESET_RELOAD = 'autoreloadDualGunWithoutResetReload'
     CLIP_DUAL_GUN = 'clipDualGun'
     CLIP_DUAL_GUN_WITHOUT_RESET_RELOAD = 'clipDualGunWithoutResetReload'
+    CLIP_DUAL_GUN_WITH_AUTOLOAD_WITH_CLIP = 'clipDualGunWithAutoloadWithClip'
+    CLIP_DUAL_GUN_WITH_ALL_MODIFICATORS = 'clipDualGunWithoutResetReloadAndWithAutoloadWithClip'
 
 
 _MODULE_EXTRA_STATUS_RESOURCES = {_ModuleExtraStatuses.AUTOLOADER_GUN: (_STR_EXTRA_PATH.autoReloadGunLabel, _IMG_EXTRA_PATH.autoLoaderGun),
@@ -83,7 +85,9 @@ _MODULE_EXTRA_STATUS_RESOURCES = {_ModuleExtraStatuses.AUTOLOADER_GUN: (_STR_EXT
  _ModuleExtraStatuses.AUTOLOADER_DUAL_GUN: (_STR_EXTRA_PATH.autoReloadDualGunLabel, _IMG_EXTRA_PATH.autoLoaderDualGunIcon),
  _ModuleExtraStatuses.AUTOLOADER_DUAL_GUN_WITHOUT_RESET_RELOAD: (_STR_EXTRA_PATH.autoReloadDualGunWithoutResetReloadLabel, _IMG_EXTRA_PATH.autoLoaderDualGunIcon),
  _ModuleExtraStatuses.CLIP_DUAL_GUN: (_STR_EXTRA_PATH.clipDualGunLabel, _IMG_EXTRA_PATH.magazineDualGunIcon),
- _ModuleExtraStatuses.CLIP_DUAL_GUN_WITHOUT_RESET_RELOAD: (_STR_EXTRA_PATH.clipDualGunWithoutResetReloadLabel, _IMG_EXTRA_PATH.magazineDualGunIcon)}
+ _ModuleExtraStatuses.CLIP_DUAL_GUN_WITHOUT_RESET_RELOAD: (_STR_EXTRA_PATH.clipDualGunWithoutResetReloadLabel, _IMG_EXTRA_PATH.magazineDualGunIcon),
+ _ModuleExtraStatuses.CLIP_DUAL_GUN_WITH_AUTOLOAD_WITH_CLIP: (_STR_EXTRA_PATH.clipDualGunWithAutoloadWithClipLabel, _IMG_EXTRA_PATH.magazineDualGunIcon),
+ _ModuleExtraStatuses.CLIP_DUAL_GUN_WITH_ALL_MODIFICATORS: (_STR_EXTRA_PATH.clipDualGunWithoutResetReloadAndWithAutoloadWithClipLabel, _IMG_EXTRA_PATH.magazineDualGunIcon)}
 
 class ModuleBlockTooltipData(BlocksTooltipData):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -780,10 +784,14 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
         elif module.isClipDualGun(vDescr):
             gun = findFirst(lambda g: module.intCD == g.compactDescr, vDescr.turret.guns)
             dualGunParams = gun.dualGun
-            if dualGunParams.resetReloadAfterShot:
-                result.append(_ModuleExtraStatuses.CLIP_DUAL_GUN)
-            else:
+            if not dualGunParams.resetReloadAfterShot and dualGunParams.autoloadWithClip:
+                result.append(_ModuleExtraStatuses.CLIP_DUAL_GUN_WITH_ALL_MODIFICATORS)
+            elif not dualGunParams.resetReloadAfterShot:
                 result.append(_ModuleExtraStatuses.CLIP_DUAL_GUN_WITHOUT_RESET_RELOAD)
+            elif dualGunParams.autoloadWithClip:
+                result.append(_ModuleExtraStatuses.CLIP_DUAL_GUN_WITH_AUTOLOAD_WITH_CLIP)
+            else:
+                result.append(_ModuleExtraStatuses.CLIP_DUAL_GUN)
         elif module.isAutoReloadable(vDescr):
             hasBoost = False
             for gun in vDescr.type.getGuns():

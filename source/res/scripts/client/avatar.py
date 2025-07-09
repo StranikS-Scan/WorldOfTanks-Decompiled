@@ -867,7 +867,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                         gui_event_dispatcher.choiceConsumable(key)
                         return True
                 isComp7 = ARENA_BONUS_TYPE_CAPS.checkAny(self.arenaBonusType, ARENA_BONUS_TYPE_CAPS.COMP7)
-                if not isComp7 and cmdMap.isFired(CommandMapping.CMD_VOICECHAT_ENABLE, key) and not isDown:
+                isRanked = ARENA_BONUS_TYPE_CAPS.checkAny(self.arenaBonusType, ARENA_BONUS_TYPE_CAPS.RANKED)
+                voiceEnable = CommandMapping.CMD_VOICECHAT_ENABLE
+                if not isRanked and not isComp7 and cmdMap.isFired(voiceEnable, key) and not isDown:
                     if self.__isPlayerInSquad() and not BattleReplay.isPlaying():
                         if VOIP.getVOIPManager().isVoiceSupported():
                             gui_event_dispatcher.toggleVoipChannelEnabled(self.arenaBonusType)
@@ -1261,7 +1263,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.DUAL_GUN_STATE_UPDATED, (activeGun, cooldownTimes, gunStates))
         elif self.isObserver():
             self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.DUAL_GUN_STATE_UPDATED, (activeGun, cooldownTimes, gunStates))
-        self.__canMakeDualShot = all((state == DUAL_GUN.GUN_STATE.READY for state in gunStates))
+        self.__canMakeDualShot = all((state == DUAL_GUN.GUN_STATE.READY for state in gunStates)) and cooldownTimes[DUAL_GUN.COOLDOWNS.SWITCH].leftTime < 0.1
         self.guiSessionProvider.shared.ammo.setDualGunQuickChangeReady(self.__canMakeDualShot)
         LOG_DEBUG_DEV('updateDualGunState', vehicleID, activeGun, gunStates, cooldownTimes)
         return
@@ -1269,13 +1271,13 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def stopSetupSelection(self):
         self.guiSessionProvider.shared.prebattleSetups.stopSelection()
 
-    def addArtilleryShotZone(self, shotID, startTime, shotTime, hitPoint, explosionRadius, zoneType):
+    def addArtilleryShotZone(self, shotID, shotTime, hitPoint, explosionRadius, zoneType):
         zoneManager = CGF.getManager(self.spaceID, ArtilleryShotZoneManager)
         if zoneManager is None:
             LOG_WARNING('Avatar.py: addArtilleryShotZone failed')
         zoneManager.addArtilleryShotZone(shotID, hitPoint, explosionRadius, zoneType)
         artilleryTimeZoneComponent = self.arena.componentSystem.artilleryTimeZoneComponent
-        artilleryTimeZoneComponent.addTimeZone(shotID, startTime, shotTime, hitPoint, explosionRadius, zoneType)
+        artilleryTimeZoneComponent.addTimeZone(shotID, shotTime, hitPoint, explosionRadius, zoneType)
         return
 
     def removeArtilleryShotZone(self, shotID):
@@ -1397,6 +1399,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 self.__cancelWaitingForCharge()
             elif status == DUALGUN_CHARGER_STATUS.APPLIED:
                 self.dropStopUntilFireMode()
+                if self.__shotWaitingTimerID is not None:
+                    self.__canMakeDualShot = False
             return
 
     def updateBurnoutUnavailable(self, vehicleID, status):

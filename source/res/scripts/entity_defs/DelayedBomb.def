@@ -2,24 +2,20 @@
   <Properties>
     <ownerVehicleID>
       <Type>	UINT32	</Type>
-      <Flags>	ALL_CLIENTS	</Flags>
+      <Flags>	CELL_PRIVATE	</Flags>
     </ownerVehicleID>
-    <size>
+    <shellCompDescr>
       <Type>	UINT32	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
-    </size>
-    <hitYaw>
-      <Type>	FLOAT32	</Type>
+    </shellCompDescr>
+    <shotID>
+      <Type>	UINT32	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
-    </hitYaw>
-    <hitPitch>
-      <Type>	FLOAT32	</Type>
+    </shotID>
+    <team>
+      <Type>	UINT32	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
-    </hitPitch>
-    <prefab>
-      <Type>	STRING	</Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-    </prefab>
+    </team>
   </Properties>
   <CellMethods></CellMethods>
   <ClientMethods></ClientMethods>

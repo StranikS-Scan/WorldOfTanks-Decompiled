@@ -170,7 +170,8 @@ class _CrosshairShotResults(object):
      constants.SHELL_TYPES.ARMOR_PIERCING_HE: shellExtraData(True, False, False, 0.0),
      constants.SHELL_TYPES.HOLLOW_CHARGE: shellExtraData(False, True, False, 0.5),
      constants.SHELL_TYPES.HIGH_EXPLOSIVE: shellExtraData(False, False, False, 0.0),
-     constants.SHELL_TYPES.FLAME: shellExtraData(False, False, False, 0.0)}
+     constants.SHELL_TYPES.FLAME: shellExtraData(False, False, False, 0.0),
+     constants.SHELL_TYPES.DELAYED_HE: shellExtraData(False, False, False, 0.0)}
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     @classmethod

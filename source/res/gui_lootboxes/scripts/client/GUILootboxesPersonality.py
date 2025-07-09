@@ -8,7 +8,7 @@ from gui_lootboxes.notification import registerClientNotificationListener, regis
 from gui.impl.gen import R
 from gui.shared.system_factory import registerCarouselEventEntryPoint
 from gui.impl.lobby.loot_box.unique_reward_handler import MTLUniqueRewardHandler
-from gui_lootboxes.gui.impl.lobby.gui_lootboxes.unique_rewards_view import registerHandler
+from gui_lootboxes.gui.impl.lobby.gui_lootboxes.unique_rewards_view import registerHandler, unregisterHandler
 
 def preInit():
     registerCarouselEventEntryPoint(R.views.gui_lootboxes.lobby.gui_lootboxes.EntryPointView(), LootBoxesEntryPointWidget)
@@ -30,4 +30,4 @@ def start():
 
 
 def fini():
-    pass
+    unregisterHandler(MTLUniqueRewardHandler)

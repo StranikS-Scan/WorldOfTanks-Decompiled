@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/skeletons/gui/login_manager.py
 import typing
 if typing.TYPE_CHECKING:
-    from constants import WGC_PUBLICATION
+    from constants import LGC_PUBLICATION
 
 class ILoginManager(object):
     onConnectionInitiated = None
@@ -13,26 +13,26 @@ class ILoginManager(object):
         raise NotImplementedError
 
     @property
-    def wgcAvailable(self):
+    def lgcAvailable(self):
         raise NotImplementedError
 
-    def getWgcPublication(self):
+    def getLgcPublication(self):
         raise NotImplementedError
 
     @property
-    def isWgcSteam(self):
+    def isLgcSteam(self):
         raise NotImplementedError
 
-    def tryPrepareWGCLogin(self):
+    def tryPrepareLGCLogin(self):
         raise NotImplementedError
 
-    def checkWgcCouldRetry(self, loginStatus):
+    def checkLgcCouldRetry(self, loginStatus):
         raise NotImplementedError
 
-    def addOnWgcErrorListener(self, listener):
+    def addOnLgcErrorListener(self, listener):
         raise NotImplementedError
 
-    def removeOnWgcErrorListener(self, listener):
+    def removeOnLgcErrorListener(self, listener):
         raise NotImplementedError
 
     def init(self):
@@ -47,10 +47,10 @@ class ILoginManager(object):
     def initiateSocialLogin(self, socialNetworkName, serverName, rememberUser, isRegistration):
         raise NotImplementedError
 
-    def tryWgcLogin(self, serverName=None):
+    def tryLgcLogin(self, serverName=None):
         raise NotImplementedError
 
-    def stopWgc(self):
+    def stopLgc(self):
         raise NotImplementedError
 
     def initiateRelogin(self, login, token2, serverName):

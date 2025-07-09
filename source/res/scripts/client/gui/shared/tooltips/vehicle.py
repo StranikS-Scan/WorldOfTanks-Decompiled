@@ -107,9 +107,6 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         textGap = -2
         headerItems = [formatters.packBuildUpBlockData(HeaderBlockConstructor(vehicle, statsConfig, leftPadding, rightPadding).construct(), padding=leftRightPadding, blockWidth=410), formatters.packBuildUpBlockData(self._getCrewIconBlock(), gap=2, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, align=BLOCKS_TOOLTIP_TYPES.ALIGN_RIGHT, padding=formatters.packPadding(top=34, right=0), blockWidth=20)]
         headerBlockItems = [formatters.packBuildUpBlockData(headerItems, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, padding=formatters.packPadding(bottom=-16))]
-        telecomBlock = TelecomBlockConstructor(vehicle, valueWidth, leftPadding, rightPadding).construct()
-        if telecomBlock:
-            headerBlockItems.append(formatters.packBuildUpBlockData(telecomBlock, padding=leftRightPadding))
         self.__createStatusBlock(vehicle, headerBlockItems, statsConfig, paramsConfig, valueWidth)
         items.append(formatters.packBuildUpBlockData(headerBlockItems, gap=-4, padding=formatters.packPadding(bottom=-12)))
         if vehicle.isWotPlus:
@@ -489,25 +486,6 @@ class WotPlusBlockConstructor(VehicleTooltipBlockConstructor):
         if self.configuration.showDebutBoxes and self.__debutBoxController.isEnabled() and Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE not in self.vehicle.getState() and self.__debutBoxController.isQuestsAvailableOnVehicle(self.vehicle):
             blocks.append(formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main(backport.text(R.strings.tooltips.vehicle.debut_box_available())), icon=backport.image(R.images.gui.maps.icons.library.debut_boxes_16x16()), padding=formatters.packPadding(left=60, top=0, bottom=-5), iconPadding=formatters.packPadding(top=2), titlePadding=formatters.packPadding(left=3)))
         return (blocks, linkage)
-
-
-class TelecomBlockConstructor(VehicleTooltipBlockConstructor):
-    lobbyContext = dependency.descriptor(ILobbyContext)
-
-    def __init__(self, vehicle, valueWidth, leftPadding, rightPadding):
-        super(TelecomBlockConstructor, self).__init__(vehicle, None, leftPadding, rightPadding)
-        self._valueWidth = valueWidth
-        return
-
-    def construct(self):
-        if self.vehicle.isTelecom:
-            telecomConfig = self.lobbyContext.getServerSettings().telecomConfig
-            telecomBundleId = self.itemsCache.items.stats.getTelecomBundleId()
-            provider = telecomConfig.getInternetProvider(telecomBundleId)
-            providerLocRes = R.strings.menu.internet_provider.dyn(provider)
-            telecomTextRes = R.strings.tooltips.vehicle.deal.telecom.main.dyn(provider, R.strings.tooltips.vehicle.deal.telecom.main.default)
-            return [formatters.packTextBlockData(text=text_styles.main(backport.text(telecomTextRes(), tariff=backport.text(providerLocRes.tariff()) if providerLocRes else '', provider=backport.text(providerLocRes.name()) if providerLocRes else '')))]
-        return []
 
 
 class PriceBlockConstructor(VehicleTooltipBlockConstructor):

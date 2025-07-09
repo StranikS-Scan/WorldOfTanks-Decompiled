@@ -194,6 +194,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.playStreak = g_accountRepository.playStreak
         self.paragons = g_accountRepository.paragons
         self.customFilesCache = g_accountRepository.customFilesCache
+        self.commandProxy = g_accountRepository.commandProxy
         self.syncData.setAccount(self)
         self.inventory.setAccount(self)
         self.stats.setAccount(self)

@@ -297,13 +297,6 @@ class SYSTEM_MESSAGES(object):
     SECURITYMESSAGE_OLD_PASS = '#system_messages:securityMessage/old_pass'
     SECURITYMESSAGE_CHANGE_SETINGS = '#system_messages:securityMessage/change_setings'
     ACCOUNT_WAS_RESTORED = '#system_messages:account_was_restored'
-    LOGIN_TO_OTHER_GAME_WOT = '#system_messages:login_to_other_game_wot'
-    LOGIN_TO_OTHER_GAME_WOWP = '#system_messages:login_to_other_game_wowp'
-    LOGIN_TO_OTHER_GAME_WOTG = '#system_messages:login_to_other_game_wotg'
-    LOGIN_TO_OTHER_GAME_WOWS = '#system_messages:login_to_other_game_wows'
-    LOGIN_TO_OTHER_GAME_WOTB = '#system_messages:login_to_other_game_wotb'
-    LOGIN_TO_OTHER_GAME_UNKNOWN = '#system_messages:login_to_other_game_unknown'
-    LOGIN_TO_OTHER_GAME_WEB = '#system_messages:login_to_other_game_web'
     RECRUIT_WINDOW_SERVER_ERROR = '#system_messages:recruit_window/server_error'
     RECRUIT_WINDOW_SUCCESS = '#system_messages:recruit_window/success'
     RECRUIT_WINDOW_FINANCIAL_SUCCESS = '#system_messages:recruit_window/financial_success'
@@ -1167,6 +1160,7 @@ class SYSTEM_MESSAGES(object):
     BADGES_SELECT_SERVER_ERROR = '#system_messages:badges/select/server_error'
     CREWSKINSNOTIFICATION_SKINGAIN = '#system_messages:crewSkinsNotification/SkinGain'
     CREWSKINSNOTIFICATION_SKINCHANGED = '#system_messages:crewSkinsNotification/SkinChanged'
+    CREWSKINSNOTIFICATION_ERROR = '#system_messages:crewSkinsNotification/Error'
     BLUEPRINTS_SWITCH_OFF = '#system_messages:blueprints/switch_off'
     BLUEPRINTS_SWITCH_ON = '#system_messages:blueprints/switch_on'
     BLUEPRINTS_CONVERSION_ERROR = '#system_messages:blueprints/conversion/error'
@@ -1818,13 +1812,6 @@ class SYSTEM_MESSAGES(object):
      SECURITYMESSAGE_OLD_PASS,
      SECURITYMESSAGE_CHANGE_SETINGS,
      ACCOUNT_WAS_RESTORED,
-     LOGIN_TO_OTHER_GAME_WOT,
-     LOGIN_TO_OTHER_GAME_WOWP,
-     LOGIN_TO_OTHER_GAME_WOTG,
-     LOGIN_TO_OTHER_GAME_WOWS,
-     LOGIN_TO_OTHER_GAME_WOTB,
-     LOGIN_TO_OTHER_GAME_UNKNOWN,
-     LOGIN_TO_OTHER_GAME_WEB,
      RECRUIT_WINDOW_SERVER_ERROR,
      RECRUIT_WINDOW_SUCCESS,
      RECRUIT_WINDOW_FINANCIAL_SUCCESS,
@@ -2688,6 +2675,7 @@ class SYSTEM_MESSAGES(object):
      BADGES_SELECT_SERVER_ERROR,
      CREWSKINSNOTIFICATION_SKINGAIN,
      CREWSKINSNOTIFICATION_SKINCHANGED,
+     CREWSKINSNOTIFICATION_ERROR,
      BLUEPRINTS_SWITCH_OFF,
      BLUEPRINTS_SWITCH_ON,
      BLUEPRINTS_CONVERSION_ERROR,

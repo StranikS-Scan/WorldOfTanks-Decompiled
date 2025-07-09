@@ -136,6 +136,8 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
         self.__inBattle = False
         self.__reloadEventReceived = False
         self.__isObserver = False
+        self.__clipType = CROSSHAIR_CASSETTE_TYPES.NO_CASSETTE
+        self.__isBothGunsReady = False
         self.__currentTotalTimeTimer = 0
         self.__soundManager = DualGunSounds()
         return
@@ -191,9 +193,8 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
         if arenaDP is not None:
             vInfo = arenaDP.getVehicleInfo()
             self.__isObserver = vInfo.isObserver()
-        ammoCtrl = self.__sessionProvider.shared.ammo
-        clipType = getClipType(ammoCtrl.getGunSettings())
-        self.as_setClipParamsS(clipType)
+        self.__clipType = getClipType(ammoCtrl.getGunSettings())
+        self.as_setClipParamsS(self.__clipType)
         return
 
     def _dispose(self):
@@ -250,7 +251,7 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
             self.as_setVisibleS(False)
         elif stateID in self.__deviceStateHandlers:
             self.__deviceStateHandlers[stateID](value)
-            self.as_setReloadingTimeIncreasedS(self.__reloadingState.hasNegativeEffect())
+            self.as_setReloadingTimeIncreasedS(self.__hasNegativeEffect())
 
     def __onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
         self.__isEnabled = False
@@ -291,7 +292,7 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
                     else:
                         self.__deviceStateHandlers[stateID](value)
 
-            self.as_setReloadingTimeIncreasedS(self.__reloadingState.hasNegativeEffect())
+            self.as_setReloadingTimeIncreasedS(self.__hasNegativeEffect())
             return
 
     @staticmethod
@@ -321,8 +322,8 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
         ammoCtrl = self.__sessionProvider.shared.ammo
         shellsQuantity, _ = ammoCtrl.getCurrentShells()
         gunSettings = ammoCtrl.getGunSettings()
-        isAutoloaderMultiGun = gunSettings.isMultiGun() and gunSettings.hasAutoReload()
-        if isAutoloaderMultiGun and shellsQuantity == 0:
+        isClipMultiGun = gunSettings.isMultiGun() and gunSettings.isCassetteClip()
+        if isClipMultiGun and shellsQuantity == 0:
             leftTime = 0
             baseTime = 0
         self.as_setGunStateS(gunID, state, leftTime, baseTime)
@@ -387,13 +388,13 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
 
     def __updateDualGunState(self, states, cooldownTimes):
         debuff = cooldownTimes[DUAL_GUN.COOLDOWNS.DEBUFF]
+        self.__isBothGunsReady = all((state == DUAL_GUN.GUN_STATE.READY for state in states))
         if debuff.leftTime > 0:
             self.__debuffInProgress = True
             self.__bulletCollapsed = False
             self.__soundManager.onCooldownEnd(debuff.leftTime)
             totalDebuffTime = debuff.leftTime + cooldownTimes[DUAL_GUN.ACTIVE_GUN.LEFT].baseTime + cooldownTimes[DUAL_GUN.ACTIVE_GUN.RIGHT].baseTime
-            ammoCtrl = self.__sessionProvider.shared.ammo
-            if getClipType(ammoCtrl.getGunSettings()) == CROSSHAIR_CASSETTE_TYPES.MULTIPLE_BARREL_AUTOLOADER:
+            if self.__clipType in (CROSSHAIR_CASSETTE_TYPES.MULTIPLE_BARREL_AUTOLOADER, CROSSHAIR_CASSETTE_TYPES.MULTIPLE_BARREL_CASSETTE):
                 totalDebuffTime = debuff.leftTime
             self.as_setCooldownS(totalDebuffTime * DualGunConstants.TIME_MULTIPLIER)
             self.__updateTimeUntilNextDoubleShot(increaseByDebuff=True)
@@ -431,7 +432,8 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
             if keyDown:
                 self.__bulletCollapsed = True
                 self.as_collapsePanelS()
-            if not keyDown and self.__bulletCollapsed:
+            dualShotIsInProgress = self.__chargeState == DUALGUN_CHARGER_STATUS.APPLIED and self.__isBothGunsReady
+            if not keyDown and self.__bulletCollapsed and not dualShotIsInProgress:
                 self.__bulletCollapsed = False
                 self.as_expandPanelS()
         return
@@ -462,8 +464,8 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
         ammoCtrl = self.__sessionProvider.shared.ammo
         shellsQuantity = ammoCtrl.getShellsQuantityLeft()
         gunSettings = ammoCtrl.getGunSettings()
-        isAutoloaderMultiGun = gunSettings.isMultiGun() and gunSettings.hasAutoReload()
-        isTimerVisible = isAutoloaderMultiGun or shellsQuantity > 1 or shellsQuantity < 0 or not self.__isPlayerVehicle()
+        isClipMultiGun = gunSettings.isMultiGun() and gunSettings.isCassetteClip()
+        isTimerVisible = isClipMultiGun or shellsQuantity > 1 or shellsQuantity < 0 or not self.__isPlayerVehicle()
         self.as_setTimerVisibleS(isTimerVisible)
 
     def __onReplayTimeWarpStart(self):
@@ -490,3 +492,6 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
             if ctrl.isInPostmortem and avatar_getter.getInputHandler().ctrlModeName == CTRL_MODE_NAME.POSTMORTEM:
                 isVisible = False
         return isVisible
+
+    def __hasNegativeEffect(self):
+        return False if self.__clipType in (CROSSHAIR_CASSETTE_TYPES.MULTIPLE_BARREL_AUTOLOADER, CROSSHAIR_CASSETTE_TYPES.MULTIPLE_BARREL_CASSETTE) else self.__reloadingState.hasNegativeEffect()

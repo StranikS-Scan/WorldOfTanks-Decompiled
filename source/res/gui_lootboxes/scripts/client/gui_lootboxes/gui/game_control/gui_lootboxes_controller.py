@@ -25,7 +25,8 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from gui.impl.lobby.loot_box.loot_box_helper import getKeyByTokenID, getKeyByID, hasInfiniteLootBoxes
 if typing.TYPE_CHECKING:
-    from typing import Any
+    from typing import Any, Optional
+    from gui.shared.gui_items.loot_box import LootBox
 _logger = logging.getLogger(__name__)
 
 class _SettingsMgr(object):
@@ -59,6 +60,7 @@ class GuiLootBoxesController(IGuiLootBoxesController):
         self.onKeysUpdate = Event.Event(self.__em)
         self.onBoxesHistoryUpdate = Event.Event(self.__em)
         self.onBoxInfoUpdated = Event.Event(self.__em)
+        self.onStorageVisited = Event.Event(self.__em)
         self.__bonusesConfig = None
         self.__boxesCount = 0
         self.__boxKeysCount = 0
@@ -125,6 +127,7 @@ class GuiLootBoxesController(IGuiLootBoxesController):
 
     def setStorageVisited(self):
         self.__isFirstStorageEnter = False
+        self.onStorageVisited()
 
     def getDayLimit(self):
         return self.__getConfig().lootBoxBuyDayLimit
@@ -136,7 +139,10 @@ class GuiLootBoxesController(IGuiLootBoxesController):
             if callable(handler):
                 handler()
             else:
-                showShop(getShopURL() + self.__getConfig().getShopCategoryUrl())
+                shopURL = self.__getConfig().getShopCategoryUrl()
+                if lootBox:
+                    shopURL = lootBox.getLootBoxShopURL() or shopURL
+                showShop(getShopURL() + shopURL)
         return
 
     def getStoreInfo(self, category=EVENT_LOOT_BOXES_CATEGORY):

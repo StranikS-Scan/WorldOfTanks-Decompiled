@@ -8,6 +8,8 @@ class WarningDescription(Enum):
     TOOHEAVY = 'too_heavy'
     USELESSBATTLEBOOSTER = 'useless_battle_booster'
     NOTWITHINSTALLEDEQUIPMENT = 'not_with_installed_equipment'
+    UNSUITABLEBATTLEMOD = 'unsuitable_battlemode'
+    COMPARE = 'compare'
 
 
 class WarningTooltipViewModel(ViewModel):

@@ -382,6 +382,7 @@ class OnceOnlyHints(CONST_CONTAINER):
     RESEARCH_POST_PROGRESSION_ENTRY_POINT_HINT = 'ResearchPostProgressionEntryPointHint'
     HERO_VEHICLE_POST_PROGRESSION_ENTRY_POINT_HINT = 'HeroVehiclePreviewPostProgressionButtonHint'
     SWITCH_EQUIPMENT_AUXILIARY_LOADOUT_HINT = 'SwitchEquipmentAuxiliaryLoadoutHint'
+    ADD_ECONOMIC_DIRECTIVES_HINT = 'AddEconomicDirectivesHint'
     SWITCH_EQUIPMENT_ESSENTIALS_LOADOUT_HINT = 'SwitchEquipmentEssentialsLoadoutHint'
     COMPARE_MODIFICATIONS_PANEL_HINT = 'CompareModificationsPanelHint'
     COMPARE_SPECIALIZATION_BUTTON_HINT = 'CompareSpecializationButtonHint'
@@ -401,6 +402,7 @@ class OnceOnlyHints(CONST_CONTAINER):
     PARAGONS_FIRST_RESET_HINT = 'ParagonsFirstResetHint'
     PARAGONS_ENTRY_POINT_HINT = 'ParagonsEntryPointHint'
     PARAGONS_RESEARCH_BUTTON_HINT = 'ParagonsResearchButtonHint'
+    BIRTHDAY_POSTBATTLE_EXTRA_TAB_HINT = 'BirthdayPostbattleExtraTabHint'
 
 
 class SESSION_STATS(CONST_CONTAINER):

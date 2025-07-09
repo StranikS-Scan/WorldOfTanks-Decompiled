@@ -88,3 +88,8 @@ def getNumberChannelName(isSerial, resourceWell=None):
 @dependency.replace_none_kwargs(resourceWell=IResourceWellController)
 def isResourceWellRewardVehicle(vehicleCD, resourceWell=None):
     return resourceWell.isActive() and resourceWell.getRewardVehicle() == vehicleCD
+
+
+@dependency.replace_none_kwargs(resourceWell=IResourceWellController)
+def isResourceWellVehicleAnnounced(vehicleCD, resourceWell=None):
+    return resourceWell.isEnabled() and resourceWell.getRewardVehicle() == vehicleCD

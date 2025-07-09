@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/platform/wgnp/steam_account/request.py
-from constants import WG_GAMES
+from constants import CURRENT_GAME_ID
 from gui.platform.base.request import Params
 from gui.platform.wgnp.steam_account.response import WGNPSteamAccEmailAddResponse, WGNPSteamAccEmailConfirmResponse
 
@@ -17,7 +17,7 @@ class AddEmailParams(Params):
     proofOfWorkURL = './personal/api/v2/account/email/create/challenge/?type=pow'
     method = 'POST'
     queryParams = {'type': 'pow'}
-    postData = {'game': WG_GAMES.TANKS}
+    postData = {'game': CURRENT_GAME_ID}
 
     def __init__(self, urlHost, email):
         super(AddEmailParams, self).__init__(urlHost)

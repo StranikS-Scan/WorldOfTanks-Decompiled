@@ -609,7 +609,7 @@
     <attachment>
       <id>	31050	</id>
       <name>	R224_IS_3_1945_Flag	</name>
-      <modelName>	vehicles/russian/R224_IS_3_1945/normal/lod0/Flag_01.model	</modelName>
+      <modelName>	vehicles/russian/R224_IS_3_1945/normal/lod0/IS-3_Flag_Big_All_Animation_DN.model	</modelName>
       <sequenceId>	32	</sequenceId>
       <attachmentLogic>	flagAnimation	</attachmentLogic>
       <initialVisibility>	false	</initialVisibility>
@@ -721,7 +721,39 @@
       <id>	31066	</id>
       <name>	sleeveEjection	</name>
       <modelName>	vehicles/british/GB135_FV240/SleeveEjection.prefab	</modelName>
-      <hangarModelName>	vehicles/british/GB135_FV240/SleeveEjection.prefab	</hangarModelName>
+      <hangarModelName>	vehicles/british/GB135_FV240/SleeveEjection_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	31071	</id>
+      <name>	G178_Sturmtiger_V1_3Dst_01_anim	</name>
+      <modelName>	vehicles/german/G178_Sturmtiger_V1/_skin/G178_Sturmtiger_V1_3Dst_01/G178_Sturmtiger_V1_3Dst_01_anim.prefab	</modelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+      <hangarModelName>	vehicles/german/G178_Sturmtiger_V1/_skin/G178_Sturmtiger_V1_3Dst_01/G178_Sturmtiger_V1_3Dst_01_static.prefab	</hangarModelName>
+    </attachment>
+    <attachment>
+      <id>	31073	</id>
+      <name>	SleeveEjection_SAT	</name>
+      <modelName>	vehicles/czech/Cz38_Projekt_SAT/SleeveEjection.prefab	</modelName>
+      <hangarModelName>	vehicles/czech/Cz38_Projekt_SAT/Hangar_cz38.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	31074	</id>
+      <name>	sleeveEjection	</name>
+      <modelName>	vehicles/british/GB136_FV245/SleeveEjection.prefab	</modelName>
+      <hangarModelName>	vehicles/british/GB136_FV245/SleeveEjection_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	31076	</id>
+      <name>	SleeveEjection	</name>
+      <modelName>	vehicles/french/F133_Projet_57/SleeveEjection.prefab	</modelName>
+      <hangarModelName>	vehicles/french/F133_Projet_57/Sleeve_hangar.prefab	</hangarModelName>
       <attachmentLogic>	prefab	</attachmentLogic>
       <initialVisibility>	true	</initialVisibility>
     </attachment>

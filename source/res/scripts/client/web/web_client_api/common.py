@@ -113,7 +113,6 @@ class ItemPackType(CONST_CONTAINER):
     CUSTOM_SEVERAL_SLOTS = 'custom/slots'
     CUSTOM_REFERRAL_CREW = 'custom/crew'
     CUSTOM_SUPPLY_POINT = 'custom/supply_point'
-    CUSTOM_BUMBLEE_COIN = 'custom/bumblebee_coin'
     CUSTOM_BATTLE_PASS_POINTS = 'custom/battlePassPoints'
     CUSTOM_X5_BATTLE_BONUS = 'custom/X5_battle'
     CUSTOM_COLLECTION_ENTITLEMENT = 'custom/collectionItem'
@@ -165,6 +164,7 @@ class ItemPackType(CONST_CONTAINER):
     OFFER_BROCHURE = 'offer/crew_book/brochure'
     OFFER_BATTLE_BOOSTER = 'offer/item/equipment'
     TMAN_TOKEN = 'tmanToken'
+    ENTITLEMENTS = 'custom/entitlements'
 
 
 class ItemPackTypeGroup(CONST_CONTAINER):
@@ -205,8 +205,7 @@ class ItemPackTypeGroup(CONST_CONTAINER):
      ItemPackType.CUSTOM_EVENT_COIN_EXTERNAL,
      ItemPackType.CUSTOM_REFERRAL_CREW,
      ItemPackType.CUSTOM_SLOT,
-     ItemPackType.CUSTOM_SUPPLY_POINT,
-     ItemPackType.CUSTOM_BUMBLEE_COIN)
+     ItemPackType.CUSTOM_SUPPLY_POINT)
     CREW = (ItemPackType.CREW_50,
      ItemPackType.CREW_75,
      ItemPackType.CREW_100,

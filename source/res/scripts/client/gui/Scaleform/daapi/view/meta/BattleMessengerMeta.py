@@ -61,8 +61,8 @@ class BattleMessengerMeta(BaseDAAPIComponent):
     def as_setUserPreferencesS(self, tooltipStr):
         return self.flashObject.as_setUserPreferences(tooltipStr) if self._isDAAPIInited() else None
 
-    def as_setReceiversS(self, receivers):
-        return self.flashObject.as_setReceivers(receivers) if self._isDAAPIInited() else None
+    def as_setReceiversS(self, receivers, receiverIdx):
+        return self.flashObject.as_setReceivers(receivers, receiverIdx) if self._isDAAPIInited() else None
 
     def as_enableToSendMessageS(self):
         return self.flashObject.as_enableToSendMessage() if self._isDAAPIInited() else None

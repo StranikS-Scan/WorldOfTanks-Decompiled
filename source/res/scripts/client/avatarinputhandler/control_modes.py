@@ -273,7 +273,7 @@ class VideoCameraControlMode(_GunControlMode):
         self._cam.enable(**args)
 
     def getDesiredShotPoint(self, ignoreAimingMode=False):
-        return None
+        return self._cam.getDesiredShotPoint()
 
     def setForcedGuiControlMode(self, enable):
         if enable:

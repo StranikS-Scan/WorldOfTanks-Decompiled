@@ -150,7 +150,7 @@ class Comp7ConsumablesPanel(ConsumablesPanel):
         arena = avatar_getter.getArena()
         if arena is not None and arena.period < ARENA_PERIOD.BATTLE and self.__prebattleCtrl is not None:
             vehicle = self.__prebattleCtrl.getCurrentGUIVehicle()
-            if vehicle is not None:
+            if vehicle is not None and not vehicle.isObserver:
                 roleName = ROLE_TYPE_TO_LABEL.get(vehicle.descriptor.role)
                 roleSkillEquipment = self.__comp7Controller.getRoleEquipment(roleName)
                 bwKey, sfKey = self._genKey(self._ROLE_EQUIPMENT_IDX)

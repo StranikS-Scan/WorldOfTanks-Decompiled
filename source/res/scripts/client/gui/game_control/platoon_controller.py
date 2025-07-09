@@ -1057,11 +1057,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         teamMate = [ player for player in players.values() if player.isInSlot and not player.isCurrentPlayer() ]
         if teamMate:
             teamMateAccID = teamMate[0].accID
-            currentPlayerIdx = 1
-            newSlotIdx, removeSlotIdx = (2, 0) if currentPlayer.isCommander() else (0, 2)
-            if self.__tankDisplayPosition.get(teamMateAccID) == removeSlotIdx:
-                self.onPlatoonTankRemove(removeSlotIdx)
-                self.__removeAccFromPositions(teamMateAccID)
+            newSlotIdx = 0
             self.__tankDisplayPosition[teamMateAccID] = newSlotIdx
         else:
             allTeams = [ data for data in self.__tankDisplayPosition.iteritems() if data[0] != currentPlayer.accID ]
@@ -1069,8 +1065,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
                 teamMateAccID, teamMateIdx = allTeams[0]
                 self.onPlatoonTankRemove(teamMateIdx)
                 self.__removeAccFromPositions(teamMateAccID)
-            currentPlayerIdx = 0
-        self.__tankDisplayPosition[currentPlayer.accID] = currentPlayerIdx
+        self.__tankDisplayPosition[currentPlayer.accID] = 1
 
     def __removeAccFromPositions(self, accID):
         maxSlotCount = self.prbEntity.getRosterSettings().getMaxSlots()

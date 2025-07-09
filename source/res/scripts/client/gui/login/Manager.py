@@ -5,7 +5,7 @@ import time
 import typing
 import logging
 import BigWorld
-import WGC
+import LGC
 import Settings
 import constants
 from account_helpers.settings_core.settings_constants import GAME
@@ -41,31 +41,31 @@ class Manager(ILoginManager):
     def __init__(self):
         self._preferences = None
         self.__servers = None
-        self.__wgcPublication = constants.WGC_PUBLICATION.WGC_UNKNOWN
-        self.__wgcManager = None
-        self.__triedToInitWGC = False
+        self.__lgcPublication = constants.LGC_PUBLICATION.LGC_UNKNOWN
+        self.__lgcManager = None
+        self.__triedToInitLGC = False
         self.onConnectionInitiated = Event()
         self.onConnectionRejected = Event()
         return
 
     @property
-    def wgcAvailable(self):
-        return self.__wgcManager is not None
+    def lgcAvailable(self):
+        return self.__lgcManager is not None
 
-    def getWgcPublication(self):
-        return self.__wgcPublication
+    def getLgcPublication(self):
+        return self.__lgcPublication
 
     @property
-    def isWgcSteam(self):
-        return self.__wgcPublication == constants.WGC_PUBLICATION.WGC_STEAM
+    def isLgcSteam(self):
+        return self.__lgcPublication == constants.LGC_PUBLICATION.LGC_STEAM
 
     def init(self):
-        if WGC.prepare():
-            publication = WGC.getPublication()
-            self.__wgcPublication = constants.WGC_PUBLICATION.WGC_PC if constants.WGC_PUBLICATION.LGC_PC == publication else publication
+        if LGC.prepare():
+            publication = LGC.getPublication()
+            self.__lgcPublication = constants.LGC_PUBLICATION.LGC_BASE if constants.LGC_PUBLICATION.LGC_PC == publication else publication
         else:
-            _logger.error('WGC API initialization failed')
-        self.tryPrepareWGCLogin()
+            _logger.error('LGC API initialization failed')
+        self.tryPrepareLGCLogin()
         self._preferences = Preferences()
         if constants.IS_DEVELOPMENT:
             self.__servers = DevelopmentServers(self._preferences)
@@ -81,7 +81,7 @@ class Manager(ILoginManager):
         self._preferences = None
         self.__servers.fini()
         self.__servers = None
-        self.stopWgc()
+        self.stopLgc()
         self.onConnectionInitiated.clear()
         self.onConnectionRejected.clear()
         return
@@ -101,7 +101,7 @@ class Manager(ILoginManager):
          'session': self._preferences['session'],
          'temporary': str(int(not rememberUser)),
          'auth_method': authMethod,
-         'publication': str(self.__wgcPublication)}
+         'publication': str(self.__lgcPublication)}
         if isToken2Login:
             loginParams['token2'] = self._preferences['token2']
         if not isSocialToken2Login:
@@ -113,8 +113,8 @@ class Manager(ILoginManager):
         self.onConnectionInitiated()
         self.connectionMgr.onRejected += self._onRejected
         self._preferences['server_name'] = serverName
-        if self.wgcAvailable:
-            self.__wgcManager.relogin(token2, serverName)
+        if self.lgcAvailable:
+            self.__lgcManager.relogin(token2, serverName)
         else:
             loginParams = {'login': login,
              'token2': token2,
@@ -145,13 +145,13 @@ class Manager(ILoginManager):
         self.lobbyContext.setCredentials(name, token2)
         serverName = self._preferences['server_name']
         serverSelect = self.settingsCore.getSetting(GAME.LOGIN_SERVER_SELECTION)
-        if self.wgcAvailable and self.__wgcManager.onLoggedOn(responseData):
+        if self.lgcAvailable and self.__lgcManager.onLoggedOn(responseData):
             self._preferences.clear()
             self._preferences['server_name'] = serverName
             self._preferences['server_select_was_set'] = serverSelect
             self._preferences.writeLoginInfo()
-            self.__wgcManager.onRejected -= self._onRejected
-            self.__wgcManager.onInitiated -= self._onWGCInitiated
+            self.__lgcManager.onRejected -= self._onRejected
+            self.__lgcManager.onInitiated -= self._onLGCInitiated
             return
         loginCount = self._preferences.get('loginCount', 0)
         self._preferences['loginCount'] = 1 if loginCount >= _LIMIT_LOGIN_COUNT else loginCount + 1
@@ -174,7 +174,7 @@ class Manager(ILoginManager):
         self._showSecurityMessage(responseData)
         self.connectionMgr.onRejected -= self._onRejected
 
-    def _onWGCInitiated(self, *_):
+    def _onLGCInitiated(self, *_):
         self.onConnectionInitiated()
 
     def _onRejected(self, *_):
@@ -227,59 +227,59 @@ class Manager(ILoginManager):
         Settings.g_instance.userPrefs[Settings.KEY_LOGIN_INFO].writeString('user', name)
         Settings.g_instance.save()
 
-    def addOnWgcErrorListener(self, listener):
-        if self.wgcAvailable:
-            self.__wgcManager.onWgcError += listener
+    def addOnLgcErrorListener(self, listener):
+        if self.lgcAvailable:
+            self.__lgcManager.onLgcError += listener
         else:
-            _logger.warning('Try to addOnWgcErrorListener while WGC is not available')
+            _logger.warning('Try to addOnLgcErrorListener while LGC is not available')
 
-    def removeOnWgcErrorListener(self, listener):
-        if self.wgcAvailable:
-            self.__wgcManager.onWgcError -= listener
+    def removeOnLgcErrorListener(self, listener):
+        if self.lgcAvailable:
+            self.__lgcManager.onLgcError -= listener
         else:
-            _logger.warning('Try to removeOnWgcErrorListener while WGC is not available')
+            _logger.warning('Try to removeOnLgcErrorListener while LGC is not available')
 
-    def tryWgcLogin(self, serverName=None):
-        if not self.wgcAvailable:
-            _logger.warning('WGC is not available, no possibility to login via it, so return')
+    def tryLgcLogin(self, serverName=None):
+        if not self.lgcAvailable:
+            _logger.warning('LGC is not available, no possibility to login via it, so return')
             return
         else:
             if serverName is None:
                 selectedServer = self.__servers.selectedServer
                 if not selectedServer:
-                    _logger.warning('No server was selected when WGC connect happened, so return')
+                    _logger.warning('No server was selected when LGC connect happened, so return')
                     return
                 serverName = selectedServer['data']
             else:
                 self._preferences['server_name'] = serverName
-            self.__wgcManager.onRejected += self._onRejected
-            self.__wgcManager.onInitiated += self._onWGCInitiated
+            self.__lgcManager.onRejected += self._onRejected
+            self.__lgcManager.onInitiated += self._onLGCInitiated
             hostName = self._getHost(CONNECTION_METHOD.TOKEN, serverName)
-            self.__wgcManager.login(hostName)
+            self.__lgcManager.login(hostName)
             return
 
-    def stopWgc(self):
-        if self.wgcAvailable:
-            self.__wgcManager.onRejected -= self._onRejected
-            self.__wgcManager.onInitiated -= self._onWGCInitiated
-            self.__wgcManager.destroy()
-            self.__wgcManager = None
+    def stopLgc(self):
+        if self.lgcAvailable:
+            self.__lgcManager.onRejected -= self._onRejected
+            self.__lgcManager.onInitiated -= self._onLGCInitiated
+            self.__lgcManager.destroy()
+            self.__lgcManager = None
         return
 
-    def tryPrepareWGCLogin(self):
-        if self.wgcAvailable:
-            if not WGC.prepareLogin():
-                self.stopWgc()
-                WGC.printLastError()
-        elif not self.__triedToInitWGC:
-            if WGC.prepareLogin():
-                self.__wgcManager = _WgcModeManager()
+    def tryPrepareLGCLogin(self):
+        if self.lgcAvailable:
+            if not LGC.prepareLogin():
+                self.stopLgc()
+                LGC.printLastError()
+        elif not self.__triedToInitLGC:
+            if LGC.prepareLogin():
+                self.__lgcManager = _LgcModeManager()
             else:
-                WGC.printLastError()
-        self.__triedToInitWGC = True
+                LGC.printLastError()
+        self.__triedToInitLGC = True
 
-    def checkWgcCouldRetry(self, status):
-        return self.__wgcManager.checkWgcCouldRetry(status) if self.wgcAvailable else False
+    def checkLgcCouldRetry(self, status):
+        return self.__lgcManager.checkLgcCouldRetry(status) if self.lgcAvailable else False
 
     def __onServerSettingsChanged(self, diff):
         if 'isEnabled' in diff and not diff['isEnabled']:
@@ -291,12 +291,12 @@ class Manager(ILoginManager):
             return
 
 
-class _WgcModeManager(object):
+class _LgcModeManager(object):
     connectionMgr = dependency.descriptor(IConnectionManager)
     __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
-        self.onWgcError = Event()
+        self.onLgcError = Event()
         self.__token2ToStore = None
         self.__selectedServer = None
         g_playerEvents.onAccountShowGUI += self.__onAccountDone
@@ -314,75 +314,75 @@ class _WgcModeManager(object):
 
     def login(self, selectedServer):
         self.__selectedServer = selectedServer
-        self.__lobbyContext.setAccountComplete(WGC.isAccountComplete())
+        self.__lobbyContext.setAccountComplete(LGC.isAccountComplete())
         self.onInitiated()
-        WGC.prepareToken()
+        LGC.prepareToken()
         Waiting.show('login')
-        self.__wgcCheck()
+        self.__lgcCheck()
 
     def relogin(self, token2, selectedServer):
         self.__selectedServer = selectedServer
-        loginParams = WGC.loginData()
+        loginParams = LGC.loginData()
         loginParams['token2'] = token2
         loginParams['auth_method'] = CONNECTION_METHOD.TOKEN2
         loginParams['auth_realm'] = constants.AUTH_REALM
         self.connectionMgr.initiateConnection(loginParams, '', selectedServer)
 
-    def checkWgcCouldRetry(self, status):
+    def checkLgcCouldRetry(self, status):
         return self.connectionMgr.connectionMethod == CONNECTION_METHOD.TOKEN2 and (status == LOGIN_STATUS.SESSION_END or status == LOGIN_STATUS.LOGIN_REJECTED_INVALID_PASSWORD)
 
     def onLoggedOn(self, responseData):
         self.__token2ToStore = responseData['token2']
-        if WGC.processingState() == constants.WGC_STATE.LOGIN_IN_PROGRESS:
-            WGC.onServerResponse(True)
+        if LGC.processingState() == constants.LGC_STATE.LOGIN_IN_PROGRESS:
+            LGC.onServerResponse(True)
             return True
         return False
 
-    def __wgcCheck(self):
-        state = WGC.processingState()
-        if state == constants.WGC_STATE.WAITING_TOKEN_1:
-            BigWorld.callback(0.0, self.__wgcCheck)
-        elif state == constants.WGC_STATE.LOGIN_IN_PROGRESS:
-            self.__wgcConnect()
+    def __lgcCheck(self):
+        state = LGC.processingState()
+        if state == constants.LGC_STATE.WAITING_TOKEN_1:
+            BigWorld.callback(0.0, self.__lgcCheck)
+        elif state == constants.LGC_STATE.LOGIN_IN_PROGRESS:
+            self.__lgcConnect()
         else:
-            WGC.printLastError()
+            LGC.printLastError()
             Waiting.hide('login')
             self.onRejected()
-            self.onWgcError()
+            self.onLgcError()
 
-    def __wgcConnect(self):
+    def __lgcConnect(self):
         if self.__selectedServer is not None:
-            state = WGC.processingState()
-            if state == constants.WGC_STATE.LOGIN_IN_PROGRESS:
-                loginParams = WGC.loginData()
+            state = LGC.processingState()
+            if state == constants.LGC_STATE.LOGIN_IN_PROGRESS:
+                loginParams = LGC.loginData()
                 if loginParams is not None:
                     self.connectionMgr.initiateConnection(loginParams, '', self.__selectedServer)
                     self.connectionMgr.setLastLogin('')
                     return
-                _logger.warning('No login params for WGC login, so return')
+                _logger.warning('No login params for LGC login, so return')
             else:
-                _logger.warning('Could not login via WGC because wrong processingState (%d), so return', state)
+                _logger.warning('Could not login via LGC because wrong processingState (%d), so return', state)
         else:
-            _logger.warning('No server was selected when WGC connect happened, so return')
+            _logger.warning('No server was selected when LGC connect happened, so return')
         Waiting.hide('login')
         self.onRejected()
         return
 
     def __onRejected(self, status, _):
         Waiting.hide('login')
-        if self.checkWgcCouldRetry(status):
-            WGC.onToken2Expired()
+        if self.checkLgcCouldRetry(status):
+            LGC.onToken2Expired()
             self.login(self.__selectedServer)
         else:
-            WGC.onServerResponse(False)
+            LGC.onServerResponse(False)
             self.onRejected()
 
     def __onDisconnected(self):
-        WGC.onServerResponse(False)
+        LGC.onServerResponse(False)
 
     def __onAccountDone(self, *args):
         if self.__token2ToStore:
-            if WGC.processingState() == constants.WGC_STATE.LOGGEDIN and WGC.getUserId() == BigWorld.player().databaseID:
-                WGC.storeToken2(self.__token2ToStore, BigWorld.player().databaseID)
+            if LGC.processingState() == constants.LGC_STATE.LOGGEDIN and LGC.getUserId() == BigWorld.player().databaseID:
+                LGC.storeToken2(self.__token2ToStore, BigWorld.player().databaseID)
             self.__token2ToStore = None
         return

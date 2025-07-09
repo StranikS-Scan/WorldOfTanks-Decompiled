@@ -388,7 +388,9 @@ def makeBattleBoosterFormatter(fittedVehGetter=None):
         return CREW_SKILL_TO_KPI_NAME_MAP.get(i.getAffectedSkillName(), '') if i.isCrewBooster() else ''
 
     def formatBoosterType(i):
-        return 'skill' if i.isCrewBooster() else 'device'
+        if i.isCrewBooster():
+            return 'skill'
+        return 'economic' if i.isEconomicBooster() else 'device'
 
     def formatBoosterTypeName(i):
         if i.isCrewBooster():
@@ -398,7 +400,10 @@ def makeBattleBoosterFormatter(fittedVehGetter=None):
         return i18n.makeString(key)
 
     def formatBoosterDescription(i):
-        return i.getCrewBoosterDescription(False) if i.isCrewBooster() else i.getOptDeviceBoosterDescription(vehicle=None, valueFormatter=formatValueToColorTag)
+        if i.isCrewBooster():
+            return i.getCrewBoosterDescription(False)
+        else:
+            return i.getEconomicDirectivesDescription() if i.isEconomicBooster() else i.getOptDeviceBoosterDescription(vehicle=None, valueFormatter=formatValueToColorTag)
 
     fields.extend([Field('affectedSkill', formatAffectedSkill),
      Field('affectedSkillName', lambda i: i.getAffectedSkillUserName()),

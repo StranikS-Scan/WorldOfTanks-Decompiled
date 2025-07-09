@@ -15,9 +15,9 @@ class FilterPanelType(Enum):
 
 
 class FilterPanelWidgetModel(ViewModel):
-    __slots__ = ('onSearch', 'onUpdateFilter', 'onResetFilter')
+    __slots__ = ('onSearch', 'onUpdateFilter', 'onResetFilter', 'onSelectedModeChange', 'onCancelSelection', 'onDismissOrRestore')
 
-    def __init__(self, properties=15, commands=3):
+    def __init__(self, properties=19, commands=6):
         super(FilterPanelWidgetModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -114,6 +114,30 @@ class FilterPanelWidgetModel(ViewModel):
     def setPanelType(self, value):
         self._setString(14, value.value)
 
+    def getIsSelectedMode(self):
+        return self._getBool(15)
+
+    def setIsSelectedMode(self, value):
+        self._setBool(15, value)
+
+    def getIsSelectButtonVisible(self):
+        return self._getBool(16)
+
+    def setIsSelectButtonVisible(self, value):
+        self._setBool(16, value)
+
+    def getIsSelectButtonActive(self):
+        return self._getBool(17)
+
+    def setIsSelectButtonActive(self, value):
+        self._setBool(17, value)
+
+    def getIsSelectedLimitReached(self):
+        return self._getBool(18)
+
+    def setIsSelectedLimitReached(self, value):
+        self._setBool(18, value)
+
     def _initialize(self):
         super(FilterPanelWidgetModel, self)._initialize()
         self._addViewModelProperty('amountInfo', RangeModel())
@@ -131,6 +155,13 @@ class FilterPanelWidgetModel(ViewModel):
         self._addBoolProperty('hasDiscountAlert', False)
         self._addBoolProperty('hasAppliedFilters', False)
         self._addStringProperty('panelType')
+        self._addBoolProperty('isSelectedMode', False)
+        self._addBoolProperty('isSelectButtonVisible', True)
+        self._addBoolProperty('isSelectButtonActive', False)
+        self._addBoolProperty('isSelectedLimitReached', False)
         self.onSearch = self._addCommand('onSearch')
         self.onUpdateFilter = self._addCommand('onUpdateFilter')
         self.onResetFilter = self._addCommand('onResetFilter')
+        self.onSelectedModeChange = self._addCommand('onSelectedModeChange')
+        self.onCancelSelection = self._addCommand('onCancelSelection')
+        self.onDismissOrRestore = self._addCommand('onDismissOrRestore')

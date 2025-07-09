@@ -335,10 +335,7 @@ def showRecruitWindow(recruitID, vehicleSlotToUnpack=-1, vehicle=None, eventsCac
             if needToGetTankman and bonus.tankman is not None:
                 showTankwomanAward(quest.getID(), first(bonus.tankman.getTankmenData()), vehicleSlotToUnpack, vehicle, parentViewKey=parentViewKey)
         else:
-            shared_events.showTokenRecruitDialog({'tokenName': recruitID,
-             'tokenData': recruitData,
-             'slot': vehicleSlotToUnpack,
-             'vehicle': vehicle}, parentViewKey=parentViewKey)
+            shared_events.showChangeCrewWindow(tankmanInvID=recruitID, isRecruit=True, slotToUnpack=vehicleSlotToUnpack, vehicle=vehicle, recruitData=recruitData)
         return
 
 

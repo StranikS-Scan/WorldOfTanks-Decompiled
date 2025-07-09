@@ -5,6 +5,7 @@ import Event
 from gui.impl.lobby.tank_setup.tank_setup_helper import NONE_ID
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
+from gui.impl.gen.view_models.views.lobby.tank_setup.common.deal_panel_model import AutoRenewalType
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
 
@@ -33,11 +34,12 @@ class InteractingItem(object):
 
 
 class BaseAutoRenewal(object):
-    __slots__ = ('_vehicle', '_value')
+    __slots__ = ('_vehicle', '_value', '_typeEquip')
 
     def __init__(self, vehicle):
         self._vehicle = vehicle
         self._value = None
+        self._typeEquip = None
         return
 
     def getValue(self):
@@ -45,6 +47,12 @@ class BaseAutoRenewal(object):
 
     def getLocalValue(self):
         return self.getValue() if self._value is None else self._value
+
+    def setLocalTypeEquip(self, typeEquip):
+        self._typeEquip = typeEquip
+
+    def getLocalTypeEquip(self):
+        return AutoRenewalType.UNDEFINED
 
     def setLocalValue(self, value):
         self._value = value

@@ -80,6 +80,13 @@
       <undamaged>	vehicles/german/G178_Sturmtiger_V1/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/german/G178_Sturmtiger_V1/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/german/G178_Sturmtiger_V1/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <G178_Sturmtiger_V1_3Dst_01>
+          <undamaged>	vehicles/german/G178_Sturmtiger_V1/_skin/G178_Sturmtiger_V1_3Dst_01/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/german/G178_Sturmtiger_V1/_skin/G178_Sturmtiger_V1_3Dst_01/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/german/G178_Sturmtiger_V1/_skin/G178_Sturmtiger_V1_3Dst_01/crash/lod0/Hull.model	</exploded>
+        </G178_Sturmtiger_V1_3Dst_01>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -102,9 +109,9 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-1.260433 0.795941 2.212426	</rayStart>
-        <rayEnd>	-1.254907 0.658397 2.067336	</rayEnd>
-        <rayUp>	-0.000001 0.72573 -0.68798	</rayUp>
+        <rayStart>	-1.12637 0.809691 2.204498	</rayStart>
+        <rayEnd>	-1.120844 0.672147 2.059408	</rayEnd>
+        <rayUp>	-0.000001 0.725727 -0.687982	</rayUp>
         <size>	0.32	</size>
         <isUVProportional>	false	</isUVProportional>
       </slot>
@@ -1371,6 +1378,42 @@
         <scale>	0.644241 0.32212 0.644242	</scale>
         <showOn>	16	</showOn>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15130	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G178_Sturmtiger_V1_3Dst_01	</compatibleModels>
+        <position>	-1.059654 2.119832 1.800872	</position>
+        <rotation>	0.794016 -0.025064 3.123716	</rotation>
+        <scale>	0.568897 0.568897 0.568897	</scale>
+        <showOn>	16	</showOn>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15131	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G178_Sturmtiger_V1_3Dst_01	</compatibleModels>
+        <position>	-0.950636 2.691722 0.207861	</position>
+        <rotation>	-0.003261 0.010264 3.141572	</rotation>
+        <scale>	0.568897 0.568896 0.568896	</scale>
+        <showOn>	16	</showOn>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15132	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G178_Sturmtiger_V1_3Dst_01	</compatibleModels>
+        <position>	1.621922 1.496734 -2.454499	</position>
+        <rotation>	1.509995 -0.642123 0.957873	</rotation>
+        <scale>	0.408709 0.408709 0.408709	</scale>
+        <showOn>	16	</showOn>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1399,10 +1442,10 @@
       <terrainResistance>	1.3 1.5 2.5	</terrainResistance>
       <brakeForce>	65000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	17	</rotationSpeed>
+      <rotationSpeed>	28	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.2	</vehicleMovement>
-        <vehicleRotation>	0.2	</vehicleRotation>
+        <vehicleMovement>	0.16	</vehicleMovement>
+        <vehicleRotation>	0.16	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	300	</maxHealth>
@@ -1412,6 +1455,13 @@
         <undamaged>	vehicles/german/G178_Sturmtiger_V1/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/german/G178_Sturmtiger_V1/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/german/G178_Sturmtiger_V1/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <G178_Sturmtiger_V1_3Dst_01>
+            <undamaged>	vehicles/german/G178_Sturmtiger_V1/_skin/G178_Sturmtiger_V1_3Dst_01/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G178_Sturmtiger_V1/_skin/G178_Sturmtiger_V1_3Dst_01/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G178_Sturmtiger_V1/_skin/G178_Sturmtiger_V1_3Dst_01/crash/lod0/Chassis.model	</exploded>
+          </G178_Sturmtiger_V1_3Dst_01>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1515,6 +1565,33 @@
                   <row3>	-0.000001 1.078194 -2.756283	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	G178_Sturmtiger_V1_3Dst_01	</modelsSet>
+                <boxCollider>
+                  <row0>	2.018196 0.000000 0.000000	</row0>
+                  <row1>	0.000000 2.382947 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.892762	</row2>
+                  <row3>	0.000000 1.644077 0.153686	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.674270 -0.000001 -0.000001	</row0>
+                  <row1>	0.000000 0.299416 -0.018709	</row1>
+                  <row2>	0.000002 0.365712 5.852800	</row2>
+                  <row3>	0.000000 1.304190 0.047438	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.568200 0.000000 -0.000001	</row0>
+                  <row1>	0.000000 0.291865 0.069390	</row1>
+                  <row2>	0.000000 -0.245333 1.031916	</row2>
+                  <row3>	0.000001 1.274337 2.619397	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.684600 -0.000002 -0.000002	</row0>
+                  <row1>	0.000000 0.234059 -0.187660	</row1>
+                  <row2>	0.000001 0.663492 0.827542	</row2>
+                  <row3>	-0.000001 1.078190 -2.756280	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -1595,6 +1672,33 @@
                 </boxCollider>
                 <boxCollider>
                   <row0>	3.568200 -0.000002 -0.000002	</row0>
+                  <row1>	0.000000 0.234059 -0.187660	</row1>
+                  <row2>	0.000001 0.663492 0.827542	</row2>
+                  <row3>	-0.000001 1.078190 -2.756280	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	G178_Sturmtiger_V1_3Dst_01	</modelsSet>
+                <boxCollider>
+                  <row0>	2.018196 0.000000 0.000000	</row0>
+                  <row1>	0.000000 2.382947 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.892762	</row2>
+                  <row3>	0.000000 1.644077 0.153686	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.674273 -0.000001 -0.000001	</row0>
+                  <row1>	0.000000 0.299416 -0.018709	</row1>
+                  <row2>	0.000002 0.365712 5.852800	</row2>
+                  <row3>	0.000000 1.304190 0.047438	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.568200 0.000000 -0.000001	</row0>
+                  <row1>	0.000000 0.291865 0.069389	</row1>
+                  <row2>	0.000000 -0.245333 1.031920	</row2>
+                  <row3>	0.000001 1.274340 2.619400	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.684598 -0.000002 -0.000002	</row0>
                   <row1>	0.000000 0.234059 -0.187660	</row1>
                   <row2>	0.000001 0.663492 0.827542	</row2>
                   <row3>	-0.000001 1.078190 -2.756280	</row3>
@@ -2098,6 +2202,12 @@
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
           </atlas>
+          <modelSets>
+            <G178_Sturmtiger_V1_3Dst_01>
+              <segmentModelLeft>	vehicles/german/G178_Sturmtiger_V1/track/segment_2.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/german/G178_Sturmtiger_V1/track/segment_1.model	</segmentModelRight>
+            </G178_Sturmtiger_V1_3Dst_01>
+          </modelSets>
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
@@ -2603,6 +2713,13 @@
             <undamaged>	vehicles/german/G178_Sturmtiger_V1/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G178_Sturmtiger_V1/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/german/G178_Sturmtiger_V1/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <G178_Sturmtiger_V1_3Dst_01>
+                <undamaged>	vehicles/german/G178_Sturmtiger_V1/_skin/G178_Sturmtiger_V1_3Dst_01/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/german/G178_Sturmtiger_V1/_skin/G178_Sturmtiger_V1_3Dst_01/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/german/G178_Sturmtiger_V1/_skin/G178_Sturmtiger_V1_3Dst_01/crash/lod0/Gun_01.model	</exploded>
+              </G178_Sturmtiger_V1_3Dst_01>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G178_Sturmtiger_V1/collision/Gun_01.model	</collisionModelServer>
@@ -2620,6 +2737,13 @@
         <undamaged>	vehicles/german/G178_Sturmtiger_V1/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/german/G178_Sturmtiger_V1/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/german/G178_Sturmtiger_V1/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <G178_Sturmtiger_V1_3Dst_01>
+            <undamaged>	vehicles/german/G178_Sturmtiger_V1/_skin/G178_Sturmtiger_V1_3Dst_01/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/german/G178_Sturmtiger_V1/_skin/G178_Sturmtiger_V1_3Dst_01/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/german/G178_Sturmtiger_V1/_skin/G178_Sturmtiger_V1_3Dst_01/crash/lod0/Turret_01.model	</exploded>
+          </G178_Sturmtiger_V1_3Dst_01>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/german/G178_Sturmtiger_V1/collision/Turret_01.model	</collisionModelServer>

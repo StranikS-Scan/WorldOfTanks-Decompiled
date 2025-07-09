@@ -264,6 +264,17 @@ class TournamentComp7StatsComposer(StatsComposer):
         return templates.COMP7_BATTLE_PASS_PROGRESS_STATS_BLOCK
 
 
+class RandomStatsComposer(RegularStatsComposer):
+    _TAB_COMPONENT_INDEX = 0
+
+    def _registerTabs(self, reusable):
+        self._block.addComponent(self._TAB_COMPONENT_INDEX, templates.RANDOM_TABS_BLOCK.clone())
+
+    def getTabs(self):
+        postBattleTabsComponent = self._block.getComponent(self._TAB_COMPONENT_INDEX)
+        return postBattleTabsComponent
+
+
 def createComposer(reusable):
     bonusType = reusable.common.arenaBonusType
     composer = collectBattleResultsComposer(bonusType)
@@ -284,3 +295,5 @@ registerBattleResultsComposer(ARENA_BONUS_TYPE.BOOTCAMP, BootcampStatsComposer)
 registerBattleResultsComposer(ARENA_BONUS_TYPE.MAPS_TRAINING, MapsTrainingStatsComposer)
 registerBattleResultsComposer(ARENA_BONUS_TYPE.COMP7, Comp7StatsComposer)
 registerBattleResultsComposer(ARENA_BONUS_TYPE.TOURNAMENT_COMP7, TournamentComp7StatsComposer)
+for bt in ARENA_BONUS_TYPE.RANDOM_RANGE:
+    registerBattleResultsComposer(bt, RandomStatsComposer)

@@ -4,9 +4,9 @@ from collections import namedtuple
 from functools import wraps
 OpenedGiftData = namedtuple('OpenedGiftData', 'senderID, metaInfo')
 GiftsHistoryData = namedtuple('GiftsHistoryData', ('aggregated', 'detailed'))
-GiftsWebState = namedtuple('GiftsWebState', ('sendLimit', 'expireTime', 'expireDelta', 'executionTime', 'state'))
+GiftsWebState = namedtuple('GiftsWebState', ('sendLimit', 'expireTime', 'expireDelta', 'executionTime', 'state', 'common'))
 IncomeSysMessage = namedtuple('IncomeSysMessage', ('eventID', 'senderID', 'giftItemID', 'meta', 'executionTime'))
-SendGiftResponse = namedtuple('SendGiftResponse', ('state', 'receiverID', 'outCount', 'entitlementCode', 'meta', 'executionTime'))
+SendGiftResponse = namedtuple('SendGiftResponse', ('state', 'receiverIDs', 'outCount', 'entitlementCode', 'declinedReceivers', 'meta', 'executionTime', 'description', 'statusCode'))
 
 def ifMessagesEnabled(method):
 

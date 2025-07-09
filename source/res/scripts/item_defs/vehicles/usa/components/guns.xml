@@ -161,6 +161,7 @@
     <_105mm_Gun_M68_7x7>	503	</_105mm_Gun_M68_7x7>
     <_76mm_Gun_M32_late_FL>	504	</_76mm_Gun_M32_late_FL>
     <_155mm_AT_Gun_T7E2_7x7>	505	</_155mm_AT_Gun_T7E2_7x7>
+    <_120mm_AT_Gun_T53_FL>	506	</_120mm_AT_Gun_T53_FL>
     <_105mm_AT_Gun_T5E1_FL>	31002	</_105mm_AT_Gun_T5E1_FL>
     <_75mm_Gun_M3_L37_bootcamp>	64004	</_75mm_Gun_M3_L37_bootcamp>
     <_75mm_Howitzer_M3T_MapsTraining_Dummy_MT_1>	18	</_75mm_Howitzer_M3T_MapsTraining_Dummy_MT_1>
@@ -182,6 +183,7 @@
     <_40mm_M7_8_flamegun_T>	31017	</_40mm_M7_8_flamegun_T>
     <_40mm_M7_6E2_flamegun>	31018	</_40mm_M7_6E2_flamegun>
     <_40mm_T13E3_flamegun_T>	31019	</_40mm_T13E3_flamegun_T>
+    <_120mm_Gun_T123E7>	31020	</_120mm_Gun_T123E7>
     <_120mm_Gun_M58A_T>	31007	</_120mm_Gun_M58A_T>
     <_240mm_Howitzer_M1_T>	35002	</_240mm_Howitzer_M1_T>
   </ids>
@@ -6973,6 +6975,13 @@
           <maxDistance>	720	</maxDistance>
           <piercingPower>	310 288	</piercingPower>
         </_105mm_APCR_T140E3>
+        <_105mm_HE_M11A2>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1067	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	53 53	</piercingPower>
+        </_105mm_HE_M11A2>
       </shots>
     </_105mm_Gun_T140E2>
     <_105mm_Howitzer_M3>
@@ -8427,6 +8436,64 @@
         </_120mm_HE_Shot>
       </shots>
     </_120mm_Gun_T123E6>
+    <_120mm_Gun_T123E7>
+      <userString>	#usa_vehicles:_120mm_Gun_T123E7	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	310000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.68	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 9.0 1.0 9.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	11	</reloadTime>
+      <maxAmmo>	22	</maxAmmo>
+      <aimingTime>	2.6	</aimingTime>
+      <weight>	2950	</weight>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_120mm_AP_T_M358>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	1067	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	268 248	</piercingPower>
+        </_120mm_AP_T_M358>
+        <_120mm_HEAT_T_M469>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1067	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	340 340	</piercingPower>
+        </_120mm_HEAT_T_M469>
+        <_120mm_HE_T_M356>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	1067	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	60 60	</piercingPower>
+        </_120mm_HE_T_M356>
+      </shots>
+    </_120mm_Gun_T123E7>
     <_155mm_AT_Gun_T7E1_57>
       <userString>	#usa_vehicles:_155mm_AT_Gun_T7E1_57	</userString>
       <tags></tags>
@@ -8600,6 +8667,64 @@
         </_120mm_HE-T67>
       </shots>
     </_120mm_AT_Gun_T53>
+    <_120mm_AT_Gun_T53_FL>
+      <userString>	#usa_vehicles:_120mm_AT_Gun_T53	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	250000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.68	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.2	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+        <maxPitch>	0.0 11.0 1.0 11.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	10.0571428571429	</reloadTime>
+      <maxAmmo>	22	</maxAmmo>
+      <aimingTime>	2.05714285714286	</aimingTime>
+      <weight>	2790	</weight>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.377142857142857	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_120mm_AP_T42>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	945	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	248 238	</piercingPower>
+        </_120mm_AP_T42>
+        <_120mm_APCR_T62>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1181	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	297 255	</piercingPower>
+        </_120mm_APCR_T62>
+        <_120mm_HE-T67>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	945	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	60 60	</piercingPower>
+        </_120mm_HE-T67>
+      </shots>
+    </_120mm_AT_Gun_T53_FL>
     <_120mm_T123E2_SPG>
       <userString>	#usa_vehicles:_120mm_T123E2_SPG	</userString>
       <tags></tags>

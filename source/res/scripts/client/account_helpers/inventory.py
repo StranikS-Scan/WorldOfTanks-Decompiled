@@ -116,7 +116,7 @@ class Inventory(object):
             self.__account.shop.waitForSync(partial(self.__sellVehicleOnShopSynced, vehiclesSellData, callback))
             return
 
-    def dismissTankman(self, tmanInvID, callback):
+    def dismissTankman(self, tmanInvIDs, callback):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER)
@@ -126,10 +126,10 @@ class Inventory(object):
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
             else:
                 proxy = None
-            self.__account._doCmdInt3(AccountCommands.CMD_DISMISS_TMAN, tmanInvID, 0, 0, proxy)
+            self.__account._doCmdIntArr(AccountCommands.CMD_DISMISS_TMAN, tmanInvIDs, proxy)
             return
 
-    def equipCrewSkin(self, tmanInvID, skinID, callback):
+    def equipCrewSkin(self, tmanInvID, skinID, groupID, groupSize, callback):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER)
@@ -137,11 +137,15 @@ class Inventory(object):
         else:
             proxy = None
             if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
-            self.__account._doCmdInt3(AccountCommands.CMD_TMAN_EQUIP_CREW_SKIN, tmanInvID, skinID, 0, proxy)
+                proxy = lambda requestID, resultID, errorStr='', ext=None: callback(resultID, errorStr, ext)
+            arr = [tmanInvID,
+             skinID,
+             groupID,
+             groupSize]
+            self.__account._doCmdIntArr(AccountCommands.CMD_TMAN_EQUIP_CREW_SKIN, arr, proxy)
             return
 
-    def unequipCrewSkin(self, tmanInvID, callback):
+    def unequipCrewSkin(self, tmanInvID, groupID, groupSize, callback):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER)
@@ -149,8 +153,9 @@ class Inventory(object):
         else:
             proxy = None
             if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
-            self.__account._doCmdInt3(AccountCommands.CMD_TMAN_UNEQUIP_CREW_SKIN, tmanInvID, 0, 0, proxy)
+                proxy = lambda requestID, resultID, errorStr='', ext=None: callback(resultID, errorStr, ext)
+            arr = [tmanInvID, groupID, groupSize]
+            self.__account._doCmdIntArr(AccountCommands.CMD_TMAN_UNEQUIP_CREW_SKIN, arr, proxy)
             return
 
     def useCrewBook(self, crewBookCD, crewBookCount, vehInvID, tmanInvID, groupID, groupSize, callback):
@@ -429,13 +434,13 @@ class Inventory(object):
             self.__account.shop.waitForSync(partial(self.__changeTankmanRoleOnShopSynced, tmanInvID, roleIdx, vehTypeCompDescr, groupID, groupSize, callback))
             return
 
-    def replacePassport(self, tmanInvID, isPremium, isFemale, fnGroupID, firstNameID, lnGroupID, lastNameID, iGroupID, iconID, callback):
+    def replacePassport(self, tmanInvID, isPremium, fnGroupID, firstNameID, lnGroupID, lastNameID, iGroupID, iconID, groupID, groupSize, callback):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER)
             return
         else:
-            self.__account.shop.waitForSync(partial(self.__replacePassportOnShopSynced, tmanInvID, isPremium, isFemale, fnGroupID, firstNameID, lnGroupID, lastNameID, iGroupID, iconID, callback))
+            self.__account.shop.waitForSync(partial(self.__replacePassportOnShopSynced, tmanInvID, isPremium, fnGroupID, firstNameID, lnGroupID, lastNameID, iGroupID, iconID, groupID, groupSize, callback))
             return
 
     def freeXPToTankman(self, tmanInvID, freeXP, groupID, groupSize, callback):
@@ -711,27 +716,23 @@ class Inventory(object):
             self.__account._doCmdIntArr(AccountCommands.CMD_TMAN_CHANGE_ROLE, arr, proxy)
             return
 
-    def __replacePassportOnShopSynced(self, tmanInvID, isPremium, isFemale, fnGroupID, firstNameID, lnGroupID, lastNameID, iGroupID, iconID, callback, resultID, shopRev):
+    def __replacePassportOnShopSynced(self, tmanInvID, isPremium, fnGroupID, firstNameID, lnGroupID, lastNameID, iGroupID, iconID, groupID, groupSize, callback, resultID, shopRev):
         if resultID < 0:
             if callback is not None:
                 callback(resultID)
             return
         else:
             arr = [shopRev, tmanInvID, isPremium]
-            if isFemale is None:
-                arr.append(-1)
-            elif isFemale:
-                arr.append(1)
-            else:
-                arr.append(0)
             arr.append(fnGroupID)
             arr.append(firstNameID if firstNameID is not None else -1)
             arr.append(lnGroupID)
             arr.append(lastNameID if lastNameID is not None else -1)
             arr.append(iGroupID)
             arr.append(iconID if iconID is not None else -1)
+            arr.append(groupID)
+            arr.append(groupSize)
             if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+                proxy = lambda requestID, resultID, errorStr='', ext=None: callback(resultID, errorStr, ext)
             else:
                 proxy = None
             self.__account._doCmdIntArr(AccountCommands.CMD_TMAN_PASSPORT, arr, proxy)

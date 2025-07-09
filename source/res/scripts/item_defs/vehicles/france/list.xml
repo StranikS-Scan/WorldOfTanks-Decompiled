@@ -927,7 +927,7 @@
     <price>	8000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank role_LT_universal HD lockExceptProgression inGame scout improvedVentilation_class3_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
+    <tags>	lightTank role_LT_universal private HD lockExceptProgression inGame scout improvedVentilation_class3_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
     <level>	7	</level>
   </F69_AMX13_57_100_GrandFinal>
   <F68_AMX_Chasseur_de_char_46>
@@ -1157,7 +1157,7 @@
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	SPG role_SPG HD mediumSPG antifragmentationLining_medium_user earn_crystals special secret testTank fun_random	</tags>
+    <tags>	SPG role_SPG spgOnlyArtyMode assaultSPG HD mediumSPG antifragmentationLining_medium_user earn_crystals special secret testTank fun_random	</tags>
     <level>	10	</level>
   </F1038_Bat_Chatillon155_58_T>
   <F131_Coutelas>
@@ -1173,4 +1173,31 @@
     <tags>	AT-SPG role_ATSPG_support HD mediumAT-SPG improvedVentilation_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank	</tags>
     <level>	8	</level>
   </F131_Coutelas>
+  <F133_Projet_57>
+    <id>	31007	</id>
+    <userString>	#france_vehicles:F133_Projet_57	</userString>
+    <shortUserString>	#france_vehicles:F133_Projet_57_short	</shortUserString>
+    <description>	#france_vehicles:F133_Projet_57_descr	</description>
+    <shortDescriptionSpecial>	#france_vehicles:F133_Projet_57_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#france_vehicles:F133_Projet_57_long_special	</longDescriptionSpecial>
+    <price>	25000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_support HD heavyTank2 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals special secret testTank	</tags>
+    <level>	10	</level>
+  </F133_Projet_57>
+  <F87_Batignolles-Chatillon_12t_FL>
+    <id>	31008	</id>
+    <userString>	#france_vehicles:F87_Batignolles-Chatillon_12t_FL	</userString>
+    <shortUserString>	#france_vehicles:F87_Batignolles-Chatillon_12t_FL_short	</shortUserString>
+    <description>	#france_vehicles:F87_Batignolles-Chatillon_12t_descr	</description>
+    <shortDescriptionSpecial>	#france_vehicles:F87_Batignolles-Chatillon_12t_FL_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#france_vehicles:F87_Batignolles-Chatillon_12t_FL_long_special	</longDescriptionSpecial>
+    <price>	1	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	lightTank role_LT_universal private epic_battles HD scout improvedVentilation_class3_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
+    <level>	8	</level>
+  </F87_Batignolles-Chatillon_12t_FL>
 </list.xml>

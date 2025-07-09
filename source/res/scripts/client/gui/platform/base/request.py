@@ -14,7 +14,7 @@ import wg_async
 import BigWorld
 import soft_exception
 from BWUtil import AsyncReturn
-from constants import WG_GAMES, CURRENT_REALM
+from constants import CURRENT_GAME_ID, CURRENT_REALM
 from gui.platform.base.settings import REQUEST_TIMEOUT, POLLING_PERIOD, POLLING_REQUEST_TIMEOUT, SOLVE_POW_TIMEOUT, ACCEPTED_HTTP_CODES
 from gui.platform.base import logger
 from gui.platform.base.response import PlatformResponse
@@ -91,7 +91,7 @@ class Params(object):
         if self.addUserAgentHeader:
             if 'User-Agent' in headers:
                 self._logger.warning('User-Agent=%s in default headers will be replaced.', headers['User-Agent'])
-            headers['User-Agent'] = '{app}-{realm}/{version}'.format(app=WG_GAMES.TANKS, realm=CURRENT_REALM, version=getClientVersion(force=False))
+            headers['User-Agent'] = '{app}-{realm}/{version}'.format(app=CURRENT_GAME_ID, realm=CURRENT_REALM, version=getClientVersion(force=False))
         return headers
 
     def _addHost(self, host, url):

@@ -15,6 +15,9 @@ class IBattleResultsService(object):
     def clear(self):
         raise NotImplementedError
 
+    def composers(self):
+        raise NotImplementedError
+
     def requestResults(self, ctx, callback=None):
         raise NotImplementedError
 

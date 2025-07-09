@@ -98,13 +98,26 @@ class TournamentComp7Keys(Enum):
         return []
 
 
+class RankedKeys(Enum):
+    VOIP_CONNECTED = 'voipConnected'
+
+    @staticmethod
+    def getKeys(static=True):
+        return [(RankedKeys.VOIP_CONNECTED, False)] if static else []
+
+    @staticmethod
+    def getSortingKeys(static=True):
+        return []
+
+
 GAMEMODE_SPECIFIC_KEYS = {ARENA_GUI_TYPE.EPIC_RANDOM: EPIC_RANDOM_KEYS,
  ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING: EPIC_RANDOM_KEYS,
  ARENA_GUI_TYPE.EPIC_BATTLE: EPIC_BATTLE_KEYS,
  ARENA_GUI_TYPE.EPIC_TRAINING: EPIC_BATTLE_KEYS,
  ARENA_GUI_TYPE.BATTLE_ROYALE: BattleRoyaleKeys,
  ARENA_GUI_TYPE.COMP7: Comp7Keys,
- ARENA_GUI_TYPE.TOURNAMENT_COMP7: TournamentComp7Keys}
+ ARENA_GUI_TYPE.TOURNAMENT_COMP7: TournamentComp7Keys,
+ ARENA_GUI_TYPE.RANKED: RankedKeys}
 
 class GameModeDataVO(object):
     __slots__ = ('__internalData', '__sortingKeys')

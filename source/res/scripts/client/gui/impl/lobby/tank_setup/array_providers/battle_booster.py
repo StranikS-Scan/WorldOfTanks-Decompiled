@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/array_providers/battle_booster.py
+from gui.impl.gen import R
 from gui.impl.gen.view_models.constants.item_highlight_types import ItemHighlightTypes
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.base_slot_model import BaseSlotModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.battle_booster_slot_model import BattleBoosterSlotModel
 from gui.impl.lobby.tank_setup.array_providers.base import VehicleBaseArrayProvider
+from gui.impl.lobby.tank_setup.tank_setup_helper import isEconomicDirBattleEnabled
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA
 from web.web_client_api.shop.formatters import formatValueToColorTag, COLOR_TAG_CLOSE, COLOR_TAG_OPEN
@@ -30,6 +32,7 @@ class BaseBattleBoosterProvider(VehicleBaseArrayProvider):
         self._fillStatus(model, item, ctx.slotID)
         self._fillBuyStatus(model, item, isInstalledOrMounted)
         self._fillDescription(model, item)
+        self._fillEffects(model)
 
     def _fillHighlights(self, model, item):
         model.setHighlightType(ItemHighlightTypes.BATTLE_BOOSTER)
@@ -43,6 +46,10 @@ class BaseBattleBoosterProvider(VehicleBaseArrayProvider):
 
     def _fillDescription(self, model, item):
         raise NotImplementedError
+
+    @staticmethod
+    def _fillEffects(model):
+        pass
 
     @classmethod
     def _getItemTypeID(cls):
@@ -65,7 +72,7 @@ class OptDeviceBattleBoosterProvider(BaseBattleBoosterProvider):
 
     def _getItemCriteria(self):
         installedSet = self._getInstaledBoosterSet()
-        return REQ_CRITERIA.CUSTOM(lambda item: not item.isCrewBooster() and (not item.isHidden or item.isInInventory or item.intCD in installedSet))
+        return REQ_CRITERIA.CUSTOM(lambda item: item.isEquipmentBooster() and (not item.isHidden or item.isInInventory or item.intCD in installedSet))
 
     def _fillDescription(self, model, item):
         model.setDescription(item.getOptDeviceBoosterDescription(self._getVehicle(), formatValueToColorTag))
@@ -87,3 +94,24 @@ class CrewBattleBoosterProvider(BaseBattleBoosterProvider):
         skillLearnt = item.isAffectedSkillLearnt(self._getVehicle())
         model.setDescription(item.getCrewBoosterDescription(not skillLearnt, {'colorTagOpen': COLOR_TAG_OPEN,
          'colorTagClose': COLOR_TAG_CLOSE}))
+
+
+class EconomicBattleBoosterProvider(BaseBattleBoosterProvider):
+    __slots__ = ()
+
+    def _getItemCriteria(self):
+        installedSet = self._getInstaledBoosterSet()
+        return REQ_CRITERIA.CUSTOM(lambda item: item.isEconomicBooster() and (not item.isHidden or item.isInInventory or item.intCD in installedSet))
+
+    def _fillStatus(self, model, item, slotID):
+        super(EconomicBattleBoosterProvider, self)._fillStatus(model, item, slotID)
+        if not isEconomicDirBattleEnabled():
+            model.setLockReason('unsuitable_battlemode')
+            model.setIsLocked(True)
+
+    def _fillDescription(self, model, item):
+        model.setDescription(item.getEconomicDirectivesDescription())
+
+    @staticmethod
+    def _fillEffects(model):
+        model.setEffect(R.strings.artefacts.economicBattleBooster.effect())

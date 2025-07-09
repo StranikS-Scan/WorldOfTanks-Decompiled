@@ -1,0 +1,52 @@
+<505_caucasus.xml>
+  <name>	#arenas:505_caucasus/name	</name>
+  <description>	#arenas:505_caucasus/description	</description>
+  <geometry>	spaces/505_caucasus	</geometry>
+  <estimatedLoad>	0.3	</estimatedLoad>
+  <boundingBox>
+    <bottomLeft>	-500.000000 -550.000000	</bottomLeft>
+    <upperRight>	700.000000 650.000000	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/505_caucasus/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_caucasus_2025_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_caucasus_2025_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_caucasus_2025_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_caucasus_2025_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_caucasus_2025_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_caucasus_2025_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	amb_map_505_caucasus_wind_summer	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	env_Mountain.bnk	</name>
+      </bank>
+    </loadBanks>
+  </soundRemapping>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	27.117233 439.508270	</position1>
+        </team1>
+        <team2>
+          <position1>	46.162140 -336.537872	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+  </gameplayTypes>
+  <mapActivities></mapActivities>
+</505_caucasus.xml>

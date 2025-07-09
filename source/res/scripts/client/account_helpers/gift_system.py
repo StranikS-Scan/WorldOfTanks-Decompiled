@@ -12,8 +12,17 @@ _CACHE_DIFF_KEY = 'cache'
 _GIFT_SYSTEM_KEY = 'giftsData'
 
 def _packEventHistoryData(eventExt):
-    return makeTupleByDict(GiftsHistoryData, {'aggregated': eventExt,
-     'detailed': []})
+    aggregatedData = {}
+    detailedData = []
+    for itemID, details in eventExt.iteritems():
+        aggregatedData[itemID] = details[0]
+        metaInfo = details[1]
+        for senderID, messageID in metaInfo:
+            detailedData.append({itemID: {'senderID': senderID,
+                      'messageID': messageID}})
+
+    return makeTupleByDict(GiftsHistoryData, {'aggregated': aggregatedData,
+     'detailed': detailedData})
 
 
 class _RequestHistoryProxy(object):

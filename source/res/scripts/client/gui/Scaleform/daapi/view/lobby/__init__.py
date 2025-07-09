@@ -87,6 +87,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.telecom_rentals.telecom_rentals_browser_pages import VehicleTelecomRentalView
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.resource_well_preview import ResourceWellVehiclePreview
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.early_access_vehicle_preview import EarlyAccessVehiclePreview
+    from gui.Scaleform.daapi.view.lobby.postbattle_extra_tab.postbattle_extra_tab import PostbattleExtraTab
     return (ViewSettings(VIEW_ALIAS.LOBBY, LobbyView, 'lobbyPage.swf', WindowLayer.VIEW, None, ScopeTemplates.DEFAULT_SCOPE, False, (ContainerSettings(WindowLayer.SUB_VIEW, containers.DefaultContainer), ContainerSettings(WindowLayer.TOP_SUB_VIEW, containers.PopUpContainer))),
      ConditionalViewSettings(VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW, BootcampComponentOverride(LobbyVehicleMarkerView, BCLobbyVehicleMarkerView), 'lobbyVehicleMarkerView.swf', WindowLayer.MARKER, None, VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BATTLE_QUEUE, BattleQueue, 'battleQueue.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.BATTLE_QUEUE, ScopeTemplates.DEFAULT_SCOPE),
@@ -156,7 +157,8 @@ def getViewSettings():
      ComponentSettings(VIEW_ALIAS.MINI_CLIENT_LINKED, MiniClientComponentMeta, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VIEW_ALIAS.SERVERS_STATS, ServerStats, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VIEW_ALIAS.BROWSER, Browser, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(VIEW_ALIAS.BOOTCAMP_PROGRESS, BootcampProgressComponent, ScopeTemplates.DEFAULT_SCOPE))
+     ComponentSettings(VIEW_ALIAS.BOOTCAMP_PROGRESS, BootcampProgressComponent, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(VIEW_ALIAS.POSTBATTLE_EXTRA_TAB, PostbattleExtraTab, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

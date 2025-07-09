@@ -88,6 +88,8 @@ class _ItemsSubTypeGetter(_BaseSubTypeGetter):
         elif item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER:
             if item.isCrewBooster():
                 subType = _HelperConsts.CREW_BATTLE_BOOSTER_TYPE
+            elif item.isEconomicBooster():
+                subType = _HelperConsts.ECONOMIC_BOOSTER_TYPE
             else:
                 subType = _HelperConsts.DEVICE_BATTLE_BOOSTER_TYPE
         return subType
@@ -357,5 +359,6 @@ class _HelperConsts(object):
     MODERNIZED_DEVICE_TYPE = 'modernizedDevice'
     CONSUMABLE_TYPE = 'consumable'
     CREW_BATTLE_BOOSTER_TYPE = 'crewBattleBooster'
+    ECONOMIC_BOOSTER_TYPE = 'economicBattleBooster'
     DEVICE_BATTLE_BOOSTER_TYPE = 'deviceBattleBooster'
     STYLE_3D_TYPE = 'style3D'

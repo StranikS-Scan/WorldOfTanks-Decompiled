@@ -26,9 +26,7 @@ class SPECIAL_VOICE_TAG(object):
     DAY_OF_COSMONAUTICS_21 = 'gagarin21_specialVoice'
     MIHO = 'mihoSpecialVoice'
     YHA = 'yhaSpecialVoice'
-    QUICKY_BABY = 'quickyBabySpecialVoice'
     WITCHES_CREW = 'witchesSpecialVoice'
-    HAND_OF_BLOOD = 'handOfBloodSpecialVoice'
     HW_CREW = 'crewHWvoice'
     ARIA_CREW = 'ariaCrew'
     A157F = 'a157FSpecialVoice'
@@ -38,7 +36,6 @@ class SPECIAL_VOICE_TAG(object):
     WHITE_TIGER_EVENT_2021 = ('letov_SpecialVoice', 'armand_SpecialVoice', 'elisa_SpecialVoice', 'krieger_SpecialVoice')
     WHITE_TIGER_EVENT_2022 = ('villanelle_SpecialVoice', 'ermelinda_SpecialVoice')
     SABATON_2021 = 'sabaton21_specialVoice'
-    G_I_JOE_2022 = ('baroness22SpecialVoice', 'coverGirl22SpecialVoice')
     BPH_MT_2022 = ('IvanCarevichSpecialVoice', 'VasilisaSpecialVoice', 'KashcheiSpecialVoice', 'BabaYagaSpecialVoice')
     HW_2023 = ('IvanCarevichHWSpecialVoice', 'VasilisaHWSpecialVoice', 'KashcheiHWSpecialVoice', 'BabaYagaHWSpecialVoice', 'KatrinaHWSpecialVoice')
     MOSFILM_2023 = ('TrusSpecialVoice', 'BalbesSpecialVoice', 'ByvalySpecialVoice')
@@ -56,12 +53,10 @@ class SPECIAL_VOICE_TAG(object):
      CELEBRITY_2022,
      DAY_OF_COSMONAUTICS_21,
      SABATON_2021,
-     QUICKY_BABY,
      WITCHES_CREW,
      HW_CREW,
      CELEBRITY_2023,
-     HAND_OF_BLOOD,
-     A157F) + BATTLE_OF_BLOGGERS + BATTLE_OF_BLOGGERS_2021 + G_I_JOE_TWITCH_2021 + WHITE_TIGER_EVENT_2021 + G_I_JOE_2022 + WHITE_TIGER_EVENT_2022 + BPH_MT_2022 + MOSFILM_2023 + HW_2023 + KIN_DZA_DZA_2024 + BATTLE_OF_BLOGGERS_2025
+     A157F) + BATTLE_OF_BLOGGERS + BATTLE_OF_BLOGGERS_2021 + G_I_JOE_TWITCH_2021 + WHITE_TIGER_EVENT_2021 + WHITE_TIGER_EVENT_2022 + BPH_MT_2022 + MOSFILM_2023 + HW_2023 + KIN_DZA_DZA_2024 + BATTLE_OF_BLOGGERS_2025
 
 
 class SPECIAL_CREW_TAG(object):

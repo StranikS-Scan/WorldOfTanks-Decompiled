@@ -11,6 +11,7 @@ class GifterResponseState(Enum):
     WGCG_NOT_AVAILABLE = 'wgcgNotAvailable'
     REQUEST_IN_PROGRESS = 'requestInProgress'
     CENTER_DISCONNECTED = 'centerDisconnected'
+    GIFT_SYSTEM_LIMIT_REACHED = 'giftSystemLimitReached'
 
 
 @unique

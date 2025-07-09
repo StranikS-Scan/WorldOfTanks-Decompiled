@@ -150,6 +150,10 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         url = '/advc/herotank/'
         return self._request_data(callback, url)
 
+    def gold_wagon_fetch_info(self, callback):
+        url = '/goldwagon/api/settings/'
+        return self._request_data(callback, url)
+
     def craftmachine_modules_info(self, callback):
         url = '/craft/client_settings/'
         return self._request_data(callback, url)
@@ -644,6 +648,13 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         url = '/giftsystem/gift'
         post_data = {'entitlement_code': entitlement_code,
          'receiver_id': receiver_id}
+        post_data.update(meta_info)
+        return self._request_data(callback, url, method='POST', post_data=post_data)
+
+    def post_gift_system_gift_multiple(self, callback, entitlement_code, receiver_ids, meta_info):
+        url = '/giftsystem/gift/multiple'
+        post_data = {'entitlement_code': entitlement_code,
+         'receiver_ids': receiver_ids}
         post_data.update(meta_info)
         return self._request_data(callback, url, method='POST', post_data=post_data)
 

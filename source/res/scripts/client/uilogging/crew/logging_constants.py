@@ -33,6 +33,7 @@ class CrewDialogKeys(Enum):
     SKIN_APPLY = 'skin_apply_dialog'
     CONFIRM_SKILLS_LEARN = 'confirm_skills_learn_dialog'
     FREE_SKILL_CONFIRMATION = 'free_skill_confirmation_dialog'
+    DISMISS_OR_RESTORE = 'dismiss_or_restore_dialog'
 
 
 class CrewWidgetKeys(Enum):
@@ -74,6 +75,7 @@ class CrewPersonalFileKeys(Enum):
 
 class CrewMemberChangeKeys(Enum):
     CARD = 'member_change_view_card'
+    CARD_RESTORE_BUTTON = 'member_change_view_card_restore_button'
     CARD_VOICEOVER_BUTTON = 'member_change_view_card_voiceover_button'
     TANKMAN_CARD_TOOLTIP = 'member_change_view_tankman_card_tooltip'
     DISMISSED_TOGGLE_TOOLTIP = 'member_change_view_dismissed_toggle_tooltip'
@@ -100,6 +102,9 @@ class CrewPersonalDataKeys(Enum):
 class CrewBarracksKeys(Enum):
     CARD = 'barracks_view_card'
     CARD_DISMISS_BUTTON = 'barracks_view_card_dismiss_button'
+    CARD_RESTORE_BUTTON = 'barracks_view_card_restore_button'
+    CARD_SELECTED_DISMISS_BUTTON = 'barracks_view_card_selected_dismiss_button'
+    CARD_SELECTED_RESTORE_BUTTON = 'barracks_view_card_selected_restore_button'
     CARD_VOICEOVER_BUTTON = 'barracks_view_card_voiceover_button'
     CARD_CONTEXT_MENU = 'barracks_view_card_context_menu'
 
@@ -137,7 +142,6 @@ class TooltipAdditionalInfo(Enum):
 
 
 LAYOUT_ID_TO_ITEM = {R.views.lobby.crew.personal_case.PersonalFileView(): CrewViewKeys.PERSONAL_FILE,
- R.views.lobby.crew.personal_case.PersonalDataView(): CrewViewKeys.PERSONAL_DATA,
  R.views.lobby.crew.personal_case.ServiceRecordView(): CrewViewKeys.SERVICE_RECORD,
  R.views.lobby.crew.BarracksView(): CrewViewKeys.BARRACKS,
  R.views.lobby.crew.HangarCrewWidget(): CrewViewKeys.HANGAR,
@@ -145,5 +149,4 @@ LAYOUT_ID_TO_ITEM = {R.views.lobby.crew.personal_case.PersonalFileView(): CrewVi
  R.views.lobby.crew.TankChangeView(): CrewViewKeys.TANK_CHANGE,
  R.views.lobby.crew.QuickTrainingView(): CrewViewKeys.QUICK_TRAINING}
 TABS_LOGGING_KEYS = {R.views.lobby.crew.personal_case.PersonalFileView(): CrewPersonalFileKeys.TAB_PERSONAL_FILE,
- R.views.lobby.crew.personal_case.PersonalDataView(): CrewPersonalFileKeys.TAB_PERSONAL_DATA,
  R.views.lobby.crew.personal_case.ServiceRecordView(): CrewPersonalFileKeys.TAB_SERVICE_RECORD}

@@ -189,7 +189,6 @@
       <id>	584	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_205.dds	</texture>
       <userString>	#vehicle_customization:inscription/special/special_205	</userString>
-      <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
       <mirror>	false	</mirror>
     </decal>
     <name>	SABATON	</name>
@@ -5526,5 +5525,20 @@
       <description>	#vehicle_customization:ArmoryYard_02_Inscription_2025/description	</description>
       <type>	inscription	</type>
     </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	LestaCard_Inscription_2025	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <decal>
+      <id>	31366	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/LestaCard_Inscription_2025.dds	</texture>
+      <userString>	#vehicle_customization:LestaCard_Inscription_01_2025/name	</userString>
+      <description>	#vehicle_customization:LestaCard_Inscription_01_2025/description	</description>
+      <type>	inscription	</type>
+    </decal>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
   </itemGroup>
 </inscriptions_special.xml>

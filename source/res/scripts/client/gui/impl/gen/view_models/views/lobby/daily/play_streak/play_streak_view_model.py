@@ -8,7 +8,7 @@ from gui.impl.gen.view_models.views.lobby.play_streak.rewards_calendar_item impo
 class PlayStreakViewModel(ViewModel):
     __slots__ = ('onVehiclePreviewClick', 'onShowVehicle', 'onStylePreviewClick')
 
-    def __init__(self, properties=13, commands=3):
+    def __init__(self, properties=15, commands=3):
         super(PlayStreakViewModel, self).__init__(properties=properties, commands=commands)
 
     def getStreakLength(self):
@@ -47,59 +47,71 @@ class PlayStreakViewModel(ViewModel):
     def setIsFirstAppearance(self, value):
         self._setBool(5, value)
 
+    def getIsFirstAppearanceRedemptionDay(self):
+        return self._getBool(6)
+
+    def setIsFirstAppearanceRedemptionDay(self, value):
+        self._setBool(6, value)
+
+    def getIsLastDayRedemption(self):
+        return self._getBool(7)
+
+    def setIsLastDayRedemption(self, value):
+        self._setBool(7, value)
+
     def getRedemptionDayCount(self):
-        return self._getNumber(6)
+        return self._getNumber(8)
 
     def setRedemptionDayCount(self, value):
-        self._setNumber(6, value)
+        self._setNumber(8, value)
 
     def getRedemptionMaxDayCount(self):
-        return self._getNumber(7)
+        return self._getNumber(9)
 
     def setRedemptionMaxDayCount(self, value):
-        self._setNumber(7, value)
+        self._setNumber(9, value)
 
     def getIsEnabled(self):
-        return self._getBool(8)
+        return self._getBool(10)
 
     def setIsEnabled(self, value):
-        self._setBool(8, value)
+        self._setBool(10, value)
 
     def getBattleTypes(self):
-        return self._getArray(9)
+        return self._getArray(11)
 
     def setBattleTypes(self, value):
-        self._setArray(9, value)
+        self._setArray(11, value)
 
     @staticmethod
     def getBattleTypesType():
         return int
 
     def getRewardsCalendar(self):
-        return self._getArray(10)
+        return self._getArray(12)
 
     def setRewardsCalendar(self, value):
-        self._setArray(10, value)
+        self._setArray(12, value)
 
     @staticmethod
     def getRewardsCalendarType():
         return RewardsCalendarItem
 
     def getTopRewards(self):
-        return self._getArray(11)
+        return self._getArray(13)
 
     def setTopRewards(self, value):
-        self._setArray(11, value)
+        self._setArray(13, value)
 
     @staticmethod
     def getTopRewardsType():
         return RewardsCalendarItem
 
     def getPeriodicRewards(self):
-        return self._getArray(12)
+        return self._getArray(14)
 
     def setPeriodicRewards(self, value):
-        self._setArray(12, value)
+        self._setArray(14, value)
 
     @staticmethod
     def getPeriodicRewardsType():
@@ -113,6 +125,8 @@ class PlayStreakViewModel(ViewModel):
         self._addBoolProperty('isBlocked', False)
         self._addBoolProperty('isPaused', False)
         self._addBoolProperty('isFirstAppearance', False)
+        self._addBoolProperty('isFirstAppearanceRedemptionDay', False)
+        self._addBoolProperty('isLastDayRedemption', False)
         self._addNumberProperty('redemptionDayCount', 0)
         self._addNumberProperty('redemptionMaxDayCount', 0)
         self._addBoolProperty('isEnabled', False)

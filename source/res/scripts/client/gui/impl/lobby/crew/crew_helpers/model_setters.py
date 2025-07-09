@@ -43,12 +43,12 @@ def setTankmanModel(tm, tman, tmanNativeVeh, tmanVeh=None, compVeh=None, require
             lastSkillLvl = tdescr.lastSkillLevel
         tm.setLastSkillLevel(lastSkillLvl)
         if tmanVeh:
-            if tmanVeh.isInBattle or tmanVeh.isDisabled or tmanVeh.isInPrebattle:
-                tm.setCardState(TankmanCardState.DISABLED)
             if tmanVeh.isInBattle or tmanVeh.isDisabled:
+                tm.setCardState(TankmanCardState.DISABLED)
                 tm.setDisableIcon(R.images.gui.maps.icons.vehicleStates.battle())
                 tm.setDisableReason(R.strings.crew.common.inBattle())
             elif tmanVeh.isInPrebattle:
+                tm.setCardState(TankmanCardState.DISABLED)
                 tm.setDisableIcon(R.images.gui.maps.icons.vehicleStates.inPrebattle())
                 tm.setDisableReason(R.strings.crew.common.inPrebattle())
             fillVehicleInfo(tm.vehicleInfo, tmanVeh)
@@ -59,7 +59,7 @@ def setTankmanModel(tm, tman, tmanNativeVeh, tmanVeh=None, compVeh=None, require
 
 def setFreeSkillsToTmanModel(sm, tman):
     for skill in tman.freeSkills:
-        sm.addViewModel(getCrewWidgetTmanSkillModel(tman, skill))
+        sm.addViewModel(getCrewWidgetTmanSkillModel(tman, skill, True))
 
 
 def setRecruiteFreeSkillsToTmanModel(sm, tman, wrapper):
@@ -101,7 +101,7 @@ def getCrewWidgetTmanSkillModel(tman, skill=None, isFreeSkill=False):
     else:
         tsm.setName(skill.name)
         tsm.setIcon(skill.extensionLessIconName)
-        tsm.setType(SkillType.IRRELEVANT if not isFreeSkill and isTmanSkillIrrelevant(tman, skill) else (SkillType.LEARNED if skill.isMaxLevel else (SkillType.LEARNING if skill.level < MAX_SKILL_LEVEL else SkillType.LEARNED)))
+        tsm.setType(SkillType.ZEROSKILL if isFreeSkill else (SkillType.IRRELEVANT if not isFreeSkill and isTmanSkillIrrelevant(tman, skill) else (SkillType.LEARNED if skill.isMaxLevel else (SkillType.LEARNING if skill.level < MAX_SKILL_LEVEL else SkillType.LEARNED))))
         return tsm
 
 
@@ -139,6 +139,8 @@ def setRecruitTankmanModel(tm, recruitInfo):
         lastSkillLevel = SkillLvlFormatter()
     tm.setLastSkillLevel(lastSkillLevel.intSkillLvl)
     tm.setLocation(TankmanLocation.INBARRACKS)
+    tm.setDisableIcon(R.images.gui.maps.icons.tankmen.crew.recruitLock())
+    tm.setDisableReason(R.strings.crew.common.recruitLock())
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)

@@ -1019,7 +1019,8 @@ class AutoMaintenanceFormatter(WaitItemsSyncFormatter):
                                                  AUTO_MAINTENANCE_TYPE.EQUIP_BOOSTER: R.strings.messenger.serviceChannelMessages.autoBoosterErrorNoWallet(),
                                                  AUTO_MAINTENANCE_TYPE.CUSTOMIZATION: R.strings.messenger.serviceChannelMessages.autoRentStyleErrorNoWallet()},
      AUTO_MAINTENANCE_RESULT.RENT_IS_OVER: {AUTO_MAINTENANCE_TYPE.CUSTOMIZATION: R.strings.messenger.serviceChannelMessages.autoRentStyleRentIsOver.text()},
-     AUTO_MAINTENANCE_RESULT.RENT_IS_ALMOST_OVER: {AUTO_MAINTENANCE_TYPE.CUSTOMIZATION: R.strings.messenger.serviceChannelMessages.autoRentStyleRentIsAlmostOverAutoprolongationOFF.text()}}
+     AUTO_MAINTENANCE_RESULT.RENT_IS_ALMOST_OVER: {AUTO_MAINTENANCE_TYPE.CUSTOMIZATION: R.strings.messenger.serviceChannelMessages.autoRentStyleRentIsAlmostOverAutoprolongationOFF.text()},
+     AUTO_MAINTENANCE_RESULT.NOT_ENOUGH_BOOSTER: {AUTO_MAINTENANCE_TYPE.EQUIP_BOOSTER: R.strings.messenger.serviceChannelMessages.autoEquipNotEnough()}}
     __currencyTemplates = {Currency.CREDITS: u'PurchaseForCreditsSysMessage',
      Currency.GOLD: u'PurchaseForGoldSysMessage',
      Currency.CRYSTAL: u'PurchaseForCrystalSysMessage',
@@ -4539,6 +4540,11 @@ class EpicQuestAchievesFormatter(QuestAchievesFormatter):
     _SEPARATOR = u'<br>'
     __rEpicReward = R.strings.messenger.serviceChannelMessages.epicReward
     __rewardTemplate = u'epicLevelUpReward'
+    __REGISTERED_HANDLERS = []
+
+    @classmethod
+    def registerHandler(cls, processor):
+        cls.__REGISTERED_HANDLERS.append(processor)
 
     @classmethod
     def formatQuestAchieves(cls, data, asBattleFormatter, processCustomizations=True, processTokens=True):
@@ -4561,6 +4567,11 @@ class EpicQuestAchievesFormatter(QuestAchievesFormatter):
         crewBookResult = cls.__processCrewBook(data)
         if crewBookResult:
             result.append(crewBookResult)
+        for processor in cls.__REGISTERED_HANDLERS:
+            processorResult = processor(data, cls.__rewardTemplate, cls.__makeQuestsAchieve)
+            if processorResult:
+                result.append(processorResult)
+
         return cls._SEPARATOR.join(result)
 
     @classmethod

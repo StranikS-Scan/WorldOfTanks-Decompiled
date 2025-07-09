@@ -82,6 +82,7 @@ class BattlePassEntryPointComponent(BattlePassEntryPointMeta):
     def _makeInjectView(self):
         self.__view = BattlePassEntryPointView(flags=ViewFlags.VIEW)
         self.__view.setIsSmall(self.__isSmall)
+        self.as_isChapterChosenS(self.__view.isChapterChosen)
         return self.__view
 
 

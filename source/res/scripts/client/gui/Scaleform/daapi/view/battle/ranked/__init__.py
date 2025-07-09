@@ -14,7 +14,7 @@ def getContextMenuHandlers():
 
 def getViewSettings():
     from gui.Scaleform.daapi.view.battle.shared import frag_correlation_bar
-    from gui.Scaleform.daapi.view.battle.classic import players_panel
+    from gui.Scaleform.daapi.view.battle.ranked import players_panel
     from gui.Scaleform.daapi.view.battle.ranked import stats_exchange
     from gui.Scaleform.daapi.view.battle.ranked import battle_loading
     from gui.Scaleform.daapi.view.battle.ranked import full_stats

@@ -242,6 +242,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     FEEDBACK_QUESTS_PROGRESS = 'feedbackQuestsProgress'
     FEEDBACK_SIXTH_SENSE = 'feedbackSixthSense'
     CONFIRM_EXCHANGE_BERTHS_DIALOG = 'confirmExchangeBerthsDialog'
+    POSTBATTLE_EXTRA_TAB = 'PostbattleExtraTab'
     BATTLE_PAGES = (CLASSIC_BATTLE_PAGE,
      DEV_BATTLE_PAGE,
      EVENT_BATTLE_PAGE,

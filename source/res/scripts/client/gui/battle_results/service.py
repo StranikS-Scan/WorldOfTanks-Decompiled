@@ -62,6 +62,10 @@ class BattleResultsService(IBattleResultsService):
 
         self.__eventsManager.clear()
 
+    @property
+    def composers(self):
+        return self.__composers
+
     @adisp_async
     @adisp_process
     def requestResults(self, ctx, callback=None):

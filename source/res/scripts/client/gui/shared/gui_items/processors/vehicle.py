@@ -610,8 +610,8 @@ class VehicleAutoEquipProcessor(VehicleSettingsProcessor):
 
 class VehicleAutoBattleBoosterEquipProcessor(VehicleSettingsProcessor):
 
-    def __init__(self, vehicle, value):
-        super(VehicleAutoBattleBoosterEquipProcessor, self).__init__(vehicle, VEHICLE_SETTINGS_FLAG.AUTO_EQUIP_BOOSTER, value)
+    def __init__(self, vehicle, value, settings=VEHICLE_SETTINGS_FLAG.AUTO_EQUIP_BOOSTER | VEHICLE_SETTINGS_FLAG.AUTO_EQUIP_BOOSTER_SOFT):
+        super(VehicleAutoBattleBoosterEquipProcessor, self).__init__(vehicle, settings, value)
 
 
 class VehicleAutoStyleEquipProcessor(VehicleSettingsProcessor):

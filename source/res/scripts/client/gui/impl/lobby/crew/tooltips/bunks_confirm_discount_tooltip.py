@@ -6,13 +6,14 @@ from gui.impl.gen.view_models.views.lobby.crew.tooltips.bunks_confirm_discount_t
 from gui.impl.pub import ViewImpl
 
 class BunksConfirmDiscountTooltip(ViewImpl):
-    __slots__ = ('__bunksCount', '__oldCost', '__newCost', '__isEnough')
+    __slots__ = ('__bunksCount', '__oldCost', '__newCost', '__isEnough', '__currencyType')
 
-    def __init__(self, bunksCount, oldCost, newCost, isEnough):
+    def __init__(self, bunksCount, oldCost, newCost, isEnough, currencyType):
         self.__bunksCount = bunksCount
         self.__oldCost = oldCost
         self.__newCost = newCost
         self.__isEnough = isEnough
+        self.__currencyType = currencyType
         settings = ViewSettings(R.views.lobby.crew.tooltips.BunksConfirmDiscountTooltip(), model=BunksConfirmDiscountTooltipViewModel())
         super(BunksConfirmDiscountTooltip, self).__init__(settings)
 
@@ -26,3 +27,4 @@ class BunksConfirmDiscountTooltip(ViewImpl):
             vm.setOldCost(self.__oldCost)
             vm.setNewCost(self.__newCost)
             vm.setIsEnough(self.__isEnough)
+            vm.setCurrencyType(self.__currencyType)

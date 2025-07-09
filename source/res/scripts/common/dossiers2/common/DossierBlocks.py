@@ -31,7 +31,7 @@ class DossierBlockDescrInterface(object):
 class StaticDossierBlockDescr(DossierBlockDescrInterface):
     eventsEnabled = True
 
-    def __init__(self, name, dossierDescr, compDescr, eventsHandlers, popUpRecords, recordsLayout, packing, format, blockSize, initialData, logRecords):
+    def __init__(self, name, dossierDescr, compDescr, eventsHandlers, popUpRecords, recordsLayout, packing, format, blockSize, initialData, logRecords, aliases=None):
         self.name = name
         self.__dossierDescrRef = weakref.ref(dossierDescr)
         self.__initialCompDescr = compDescr
@@ -42,6 +42,7 @@ class StaticDossierBlockDescr(DossierBlockDescrInterface):
         self.__packing = packing
         self.__format = format
         self.__blockSize = blockSize
+        self.__aliases = aliases or {}
         self.__isExpanded = False
         self.__data = {}
         self.__changed = set()
@@ -50,6 +51,7 @@ class StaticDossierBlockDescr(DossierBlockDescrInterface):
             self.__data = dict(initialData)
 
     def __getitem__(self, record):
+        record = self.__aliases.get(record) or record
         data = self.__data
         if record in data:
             return data[record]
@@ -62,6 +64,7 @@ class StaticDossierBlockDescr(DossierBlockDescrInterface):
         return value
 
     def __setitem__(self, record, value):
+        record = self.__aliases.get(record) or record
         packing = self.__packing[record]
         if packing['type'] == 'p':
             value = min(value, packing['maxValue'])
@@ -82,6 +85,7 @@ class StaticDossierBlockDescr(DossierBlockDescrInterface):
         _callEventHandlers(eventsEnabled=self.eventsEnabled, handlers=self.__eventsHandlers.get(record, []), dossierDescr=self.__dossierDescrRef(), dossierBlockDescr=self, args=(record, value, prevValue))
 
     def __contains__(self, record):
+        record = self.__aliases.get(record) or record
         return record in self.__packing
 
     def __str__(self):

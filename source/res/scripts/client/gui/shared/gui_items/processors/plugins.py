@@ -155,6 +155,23 @@ class VehicleValidator(SyncValidator):
             return makeError('vehicle_not_found_in_inventory') if self.isInInventory and not self.vehicle.isInInventory else makeSuccess()
 
 
+class VehiclesValidator(VehicleValidator):
+
+    def __init__(self, vehicles, isEnabled=True, prop=None, setAll=False):
+        self._vehicles = vehicles
+        super(VehiclesValidator, self).__init__(None, isEnabled=isEnabled, prop=prop, setAll=setAll)
+        return
+
+    def _validate(self):
+        for veh in self._vehicles:
+            self.vehicle = veh
+            result = super(VehiclesValidator, self)._validate()
+            if not result.success:
+                return result
+
+        return makeSuccess()
+
+
 class VehicleRoleValidator(SyncValidator):
 
     def __init__(self, vehicle, role, tankman, isEnabled=True):
@@ -858,6 +875,16 @@ class TankmanLockedValidator(SyncValidator):
 
     def _validate(self):
         return makeError('FORBIDDEN') if self._tankman and tankmen.ownVehicleHasTags(self._tankman.strCD, (VEHICLE_TAGS.CREW_LOCKED,)) else makeSuccess()
+
+
+class TankmansLockedValidator(SyncValidator):
+
+    def __init__(self, tankmans):
+        super(TankmansLockedValidator, self).__init__()
+        self._tankmans = tankmans
+
+    def _validate(self):
+        return makeError('FORBIDDEN') if any((tankmen.ownVehicleHasTags(item.strCD, (VEHICLE_TAGS.CREW_LOCKED,)) for item in self._tankmans)) else makeSuccess()
 
 
 class TankmanChangePassportValidator(TankmanLockedValidator):

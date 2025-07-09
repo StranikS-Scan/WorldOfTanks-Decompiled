@@ -77,6 +77,12 @@ def post_gift_system_gift(*_):
     return response_stub
 
 
+def post_gift_system_gift_multiple(*_):
+    current_time = int(time.time())
+    response_stub = {'execution_time': current_time - time_utils.ONE_SECOND}
+    return response_stub
+
+
 def get_uilogging_session(*_, **__):
     return {'auth': {'token': 'uilogging_token_stub',
               'expiration': time.time() + 86400},
@@ -685,6 +691,11 @@ class FakeDataAccessor(base.BaseDataAccessor):
     def post_gift_system_gift(self, *_):
         self._storage.get('post_gift_system_gift', {}).clear()
         return self._request_data('post_gift_system_gift', None)
+
+    @fake_method(example=post_gift_system_gift_multiple)
+    def post_gift_system_gift_multiple(self, *_):
+        self._storage.get('post_gift_system_gift_multiple', {}).clear()
+        return self._request_data('post_gift_system_gift_multiple', None)
 
     @fake_method(example=get_uilogging_session)
     def get_uilogging_session(self):

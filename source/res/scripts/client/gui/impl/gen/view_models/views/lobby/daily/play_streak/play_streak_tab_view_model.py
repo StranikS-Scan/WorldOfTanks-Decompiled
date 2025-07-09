@@ -6,7 +6,7 @@ from frameworks.wulf import ViewModel
 class PlayStreakTabViewModel(ViewModel):
     __slots__ = ('onShowInfo', 'onFinishAnimation')
 
-    def __init__(self, properties=10, commands=2):
+    def __init__(self, properties=12, commands=2):
         super(PlayStreakTabViewModel, self).__init__(properties=properties, commands=commands)
 
     def getStreakLength(self):
@@ -51,23 +51,35 @@ class PlayStreakTabViewModel(ViewModel):
     def setIsFirstAppearance(self, value):
         self._setBool(6, value)
 
-    def getIsPaused(self):
+    def getIsFirstAppearanceRedemptionDay(self):
         return self._getBool(7)
 
-    def setIsPaused(self, value):
+    def setIsFirstAppearanceRedemptionDay(self, value):
         self._setBool(7, value)
 
-    def getIsEnabled(self):
+    def getIsLastDayRedemption(self):
         return self._getBool(8)
 
-    def setIsEnabled(self, value):
+    def setIsLastDayRedemption(self, value):
         self._setBool(8, value)
 
+    def getIsPaused(self):
+        return self._getBool(9)
+
+    def setIsPaused(self, value):
+        self._setBool(9, value)
+
+    def getIsEnabled(self):
+        return self._getBool(10)
+
+    def setIsEnabled(self, value):
+        self._setBool(10, value)
+
     def getBattleTypes(self):
-        return self._getArray(9)
+        return self._getArray(11)
 
     def setBattleTypes(self, value):
-        self._setArray(9, value)
+        self._setArray(11, value)
 
     @staticmethod
     def getBattleTypesType():
@@ -82,6 +94,8 @@ class PlayStreakTabViewModel(ViewModel):
         self._addBoolProperty('dailyWin', False)
         self._addBoolProperty('isBlocked', False)
         self._addBoolProperty('isFirstAppearance', False)
+        self._addBoolProperty('isFirstAppearanceRedemptionDay', False)
+        self._addBoolProperty('isLastDayRedemption', False)
         self._addBoolProperty('isPaused', False)
         self._addBoolProperty('isEnabled', False)
         self._addArrayProperty('battleTypes', Array())

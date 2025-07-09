@@ -5,7 +5,7 @@ from account_helpers import isLongDisconnectedFromCenter
 from adisp import adisp_async, adisp_process
 from gui.gift_system.constants import GifterResponseState
 from gui.gift_system.hubs.subsystems import BaseHubSubsystem
-from gui.wgcg.gift_system.contexts import GiftSystemSendGiftCtx
+from gui.wgcg.gift_system.contexts import GiftSystemSendGiftCtx, GiftSystemSendGiftMultipleCtx
 from helpers import dependency
 from skeletons.gui.web import IWebController
 if typing.TYPE_CHECKING:
@@ -22,6 +22,11 @@ class IGiftEventGifter(BaseHubSubsystem):
     @adisp_async
     @adisp_process
     def sendGift(self, entitlementCode, receiverID, metaInfo, callback):
+        raise NotImplementedError
+
+    @adisp_async
+    @adisp_process
+    def sendGiftMultiple(self, entitlementCode, receiverIDs, metaInfo, callback):
         raise NotImplementedError
 
 
@@ -62,6 +67,15 @@ class GiftEventBaseGifter(IGiftEventGifter):
             callback(responseData)
         return
 
+    @adisp_async
+    @adisp_process
+    def sendGiftMultiple(self, entitlementCode, receiverIDs, metaInfo, callback=None):
+        requestCtx = GiftSystemSendGiftMultipleCtx(entitlementCode, receiverIDs, metaInfo)
+        responseData = yield self.__doExternalRequest(requestCtx)
+        if callback is not None:
+            callback(responseData)
+        return
+
     def _isRequestsEnabled(self):
         return self._settings.isEnabled
 
@@ -76,7 +90,7 @@ class GiftEventBaseGifter(IGiftEventGifter):
             self.__requestCtx = requestCtx
             result = yield self.__webController.sendRequest(requestCtx)
             resultState = GifterResponseState.WEB_SUCCESS if result.isSuccess() else GifterResponseState.WEB_FAILURE
-            resultData = requestCtx.getDataObj(resultState, result.data)
+            resultData = requestCtx.getDataObj(resultState, result.data, code=result.code)
             self.__requestCtx = None
             callback(resultData)
             if self.__responseCallback is not None:

@@ -717,6 +717,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.__updateProjectionDecals(outfit)
         self.__updateSequences(outfit)
         self.__customizablePrefabsManager.applyTempOutfitToAttachments(self, self.__vDesc, outfit)
+        self.__customizablePrefabsManager.invalidateOutfitDataCache(self.id)
         from prefab_attachment_utils import addPrefabAttachments
         addPrefabAttachments(self, self.__vEntity.typeDescriptor)
         if callback is not None:

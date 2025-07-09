@@ -23,6 +23,8 @@ from gui.impl.gen.view_models.views.lobby.platoon.bonus_model import BonusModel
 from gui.impl.gen.view_models.views.lobby.platoon.comp7_slot_model import Comp7SlotModel
 from gui.impl.gen.view_models.views.lobby.platoon.comp7_window_model import Comp7WindowModel
 from gui.impl.gen.view_models.views.lobby.platoon.members_window_model import MembersWindowModel, PrebattleTypes
+from gui.impl.gen.view_models.views.lobby.platoon.ranked_slot_model import RankedSlotModel
+from gui.impl.gen.view_models.views.lobby.platoon.ranked_window_model import RankedWindowModel
 from gui.impl.gen.view_models.views.lobby.platoon.slot_label_element_model import SlotLabelElementModel, Types
 from gui.impl.gen.view_models.views.lobby.platoon.slot_model import SlotModel, ErrorType
 from gui.impl.lobby.comp7 import comp7_shared
@@ -34,7 +36,7 @@ from gui.impl.lobby.platoon.view.subview.platoon_chat_subview import ChatSubview
 from gui.impl.lobby.platoon.view.subview.platoon_tiers_filter_subview import SettingsPopover
 from gui.impl.lobby.platoon.view.subview.platoon_tiers_limit_subview import TiersLimitSubview
 from gui.impl.lobby.common.vehicle_model_helpers import fillVehicleModel
-from gui.impl.lobby.premacc.squad_bonus_tooltip_content import SquadBonusTooltipContent, Comp7SquadBonusTooltipContent
+from gui.impl.lobby.premacc.squad_bonus_tooltip_content import SquadBonusTooltipContent, Comp7SquadBonusTooltipContent, RankedSquadBonusTooltipContent
 from gui.impl.pub import ViewImpl
 from gui.prb_control import prb_getters, prbEntityProperty
 from gui.prb_control.settings import CTRL_ENTITY_TYPE, REQUEST_TYPE, SELECTOR_BATTLE_TYPES
@@ -47,7 +49,7 @@ from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from shared_utils import findFirst
-from skeletons.gui.game_control import IPlatoonController, IComp7Controller, IEpicBattleMetaGameController
+from skeletons.gui.game_control import IPlatoonController, IComp7Controller, IEpicBattleMetaGameController, IRankedBattlesController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -838,6 +840,79 @@ class Comp7MembersView(SquadMembersView):
         ranksConfig = cls._lobbyContext.getServerSettings().comp7RanksConfig
         division = findFirst(lambda d: rating in d.range, ranksConfig.divisionsByRank.get(rank, ()))
         return division
+
+
+class RankedMembersView(SquadMembersView):
+    _rankedController = dependency.descriptor(IRankedBattlesController)
+    _prebattleType = PrebattleTypes.RANKED
+    _bonusTooltipTexts = R.strings.tooltips.squadBonus.complex.ranked
+
+    def __init__(self, prbType):
+        super(RankedMembersView, self).__init__(prbType)
+        self.__unitMgr = prb_getters.getClientUnitMgr()
+
+    @prbEntityProperty
+    def prbEntity(self):
+        return None
+
+    def createToolTipContent(self, event, contentID):
+        return RankedSquadBonusTooltipContent(SELECTOR_BATTLE_TYPES.RANKED) if contentID == R.views.lobby.premacc.squad_bonus_tooltip_content.SquadBonusTooltipContent() else super(RankedMembersView, self).createToolTipContent(event=event, contentID=contentID)
+
+    def _addSubviews(self):
+        self._addSubviewToLayout(ChatSubview())
+
+    def _onFindPlayers(self):
+        pass
+
+    def _getIsVehiclePremium(self, vehicle):
+        return False
+
+    def _getWTRStatus(self):
+        return False
+
+    @staticmethod
+    def __sortCurrentUser(slot):
+        accID = BigWorld.player().id
+        player = slot['player'] or {}
+        return accID != player.get('accID')
+
+    def _getPlatoonSlotsData(self):
+        slots = super(RankedMembersView, self)._getPlatoonSlotsData()
+        slots.sort(key=self.__sortCurrentUser)
+        return slots
+
+    @property
+    def _viewModelClass(self):
+        return RankedWindowModel
+
+    @property
+    def _slotModelClass(self):
+        return RankedSlotModel
+
+    def _setModeSlotSpecificData(self, slotData, slotModel):
+        playerData = slotData.get('player', {})
+        queueInfo = playerData.get('extraData', {}).get('rankedEnqueueData', {})
+        rankID = queueInfo.get('rank', 0)
+        division = self._rankedController.getDivision(rankID)
+        divisionID = division.getID() + 1 if rankID == division.lastRank else division.getID()
+        userRank = 0 if rankID == division.lastRank else max(rankID - division.firstRank + 1, 0)
+        slotModel.rankData.setRank(userRank)
+        slotModel.rankData.setDivision(divisionID)
+        slotModel.setErrorType(ErrorType.NONE)
+
+    def _getWindowInfoTooltipHeaderAndBody(self):
+        rankRestriction = self._rankedController.getRankSquadRestriction()
+        divisionRestriction = self._rankedController.getDivisionSquadRestriction()
+        keys = ['restriction']
+        keys.extend([ key for key, restriction in (('rank', rankRestriction), ('division', divisionRestriction)) if restriction is not None ])
+        tooltipHeader = backport.text(R.strings.platoon.members.header.tooltip.ranked.header())
+        tooltipBody = backport.text(R.strings.platoon.members.header.tooltip.ranked.dyn('_'.join(keys))(), rank=rankRestriction)
+        return (tooltipHeader, tooltipBody)
+
+    def _createSimpleBonusTooltip(self):
+        header = backport.text(R.strings.tooltips.squadBonus.complex.ranked.header())
+        body = backport.text(R.strings.tooltips.squadBonus.complex.ranked.body())
+        return self._createSimpleTooltipContent(header=header, body=body)
 
 
 class MembersWindow(PreloadableWindow):

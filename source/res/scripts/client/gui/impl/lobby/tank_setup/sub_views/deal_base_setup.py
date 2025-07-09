@@ -5,6 +5,7 @@ from gui.impl.lobby.tank_setup.configurations.base import BaseDealPanel
 from gui.impl.lobby.tank_setup.sub_views.base_setup import BaseSetupSubView
 from gui.impl.lobby.tank_setup.tank_setup_sounds import playSound, TankSetupSoundEvents
 from wg_async import wg_async, await_callback, wg_await
+from gui.impl.gen.view_models.views.lobby.tank_setup.common.deal_panel_model import AutoRenewalType
 
 class DealBaseSetupSubView(BaseSetupSubView):
     __slots__ = ()
@@ -83,5 +84,7 @@ class DealBaseSetupSubView(BaseSetupSubView):
 
     def _onAutoRenewalChanged(self, args):
         newValue = args.get('value')
+        newType = args.get('type')
         self._interactor.getAutoRenewal().setLocalValue(newValue)
+        self._interactor.getAutoRenewal().setLocalTypeEquip(AutoRenewalType(newType))
         self._getDealPanel().updateAutoRenewalState(self._interactor, self._viewModel.dealPanel)

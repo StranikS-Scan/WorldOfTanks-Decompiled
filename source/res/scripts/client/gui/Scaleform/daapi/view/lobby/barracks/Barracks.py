@@ -121,7 +121,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
                     return
                 result = yield TankmanUnload(tmanVehile.invID, tankman.vehicleSlotIdx).request()
             else:
-                result = yield TankmanDismiss(tankman).request()
+                result = yield TankmanDismiss([tankman]).request()
             SystemMessages.pushMessagesFromResult(result)
         return
 

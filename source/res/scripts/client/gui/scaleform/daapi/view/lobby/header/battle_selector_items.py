@@ -620,6 +620,28 @@ class _Comp7SquadItem(SpecialSquadItem):
         return backport.image(_R_ICONS.battleTypes.c_40x40.comp7Squad())
 
 
+class _RankedSquadItem(SpecialSquadItem):
+    __controller = dependency.descriptor(IRankedBattlesController)
+
+    def __init__(self, label, data, order, selectorType=None, isVisible=True):
+        super(_RankedSquadItem, self).__init__(label, data, order, selectorType, isVisible)
+        primeTimeStatus, _, _ = self.__controller.getPrimeTimeStatus()
+        self._prebattleType = PREBATTLE_TYPE.RANKED
+        self._isVisible = self.__controller.isEnabled() and self.__controller.isInPrimeTime()
+        self._isDisabled = self._isDisabled or primeTimeStatus != PrimeTimeStatus.AVAILABLE
+
+    def _update(self, state):
+        super(_RankedSquadItem, self)._update(state)
+        self._isSelected = state.isQueueSelected(QUEUE_TYPE.RANKED)
+        primeTimeStatus, _, _ = self.__controller.getPrimeTimeStatus()
+        self._isVisible = self.__controller.isEnabled() and self.__controller.isInPrimeTime() and state.isInPreQueue(queueType=QUEUE_TYPE.RANKED)
+        self._isDisabled = self._isDisabled or primeTimeStatus != PrimeTimeStatus.AVAILABLE
+
+    @property
+    def squadIcon(self):
+        return backport.image(_R_ICONS.battleTypes.c_40x40.rankedSquad())
+
+
 class _RankedItem(_SelectorItem):
     rankedController = dependency.descriptor(IRankedBattlesController)
 
@@ -643,7 +665,7 @@ class _RankedItem(_SelectorItem):
         selectorUtils.setBattleTypeAsKnown(self._selectorType)
 
     def _update(self, state):
-        self._isSelected = state.isInPreQueue(QUEUE_TYPE.RANKED)
+        self._isSelected = state.isQueueSelected(QUEUE_TYPE.RANKED)
         self.__hasPastSeason = self.rankedController.getPreviousSeason() is not None
         isDisabled = self.rankedController.isFrozen() and self.rankedController.getCurrentSeason() is not None
         self._isDisabled = state.hasLockedState or isDisabled
@@ -1032,6 +1054,10 @@ def _addComp7SquadType(items):
     items.append(_Comp7SquadItem(text_styles.middleTitle(backport.text(_R_BATTLE_TYPES.comp7Squad())), PREBATTLE_ACTION_NAME.COMP7_SQUAD, 1))
 
 
+def _addRankedSquadType(items):
+    items.append(_RankedSquadItem(text_styles.middleTitle(backport.text(_R_BATTLE_TYPES.rankedSquad())), PREBATTLE_ACTION_NAME.RANKED_SQUAD, 1))
+
+
 def _addBattleRoyaleSquadType(items):
     label = text_styles.middleTitle(backport.text(R.strings.menu.headerButtons.battle.types.battleRoyaleSquad()))
     items.append(_BattleRoyaleSquadItem(label, PREBATTLE_ACTION_NAME.BATTLE_ROYALE_SQUAD, 2))
@@ -1049,7 +1075,8 @@ BATTLES_SELECTOR_SQUAD_ITEMS = {PREBATTLE_ACTION_NAME.SQUAD: _addSimpleSquadType
  PREBATTLE_ACTION_NAME.BATTLE_ROYALE_SQUAD: _addBattleRoyaleSquadType,
  PREBATTLE_ACTION_NAME.MAPBOX_SQUAD: _addMapboxSquadType,
  PREBATTLE_ACTION_NAME.EVENT_SQUAD: _addEventSquadType,
- PREBATTLE_ACTION_NAME.COMP7_SQUAD: _addComp7SquadType}
+ PREBATTLE_ACTION_NAME.COMP7_SQUAD: _addComp7SquadType,
+ PREBATTLE_ACTION_NAME.RANKED_SQUAD: _addRankedSquadType}
 
 def _createSquadSelectorItems():
     items = []

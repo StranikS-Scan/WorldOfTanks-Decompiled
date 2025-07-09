@@ -9,6 +9,7 @@ class GuiLootBoxesControllerStub(IGuiLootBoxesController):
     onBoxesCountChange = Event.Event()
     onKeysUpdate = Event.Event()
     onWelcomeScreenClosed = Event.Event()
+    onStorageVisited = Event.Event()
 
     @property
     def isConsumesEntitlements(self):

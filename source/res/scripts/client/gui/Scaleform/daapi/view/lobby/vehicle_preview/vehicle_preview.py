@@ -49,6 +49,7 @@ from preview_selectable_logic import PreviewSelectableLogic
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IHeroTankController, IVehicleComparisonBasket
 from skeletons.gui.impl import IGuiLoader
+from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from tutorial.control.context import GLOBAL_FLAG
@@ -118,6 +119,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
     __background_alpha__ = 0.0
     __metaclass__ = event_bus_handlers.EventBusListener
     _itemsCache = dependency.descriptor(IItemsCache)
+    __eventsCache = dependency.descriptor(IEventsCache)
     __comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
     __heroTanksControl = dependency.descriptor(IHeroTankController)
     __hangarSpace = dependency.descriptor(IHangarSpace)
@@ -344,6 +346,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             elif self.__bottomPanelTextData:
                 viewPy.setPanelTextData(**self.__bottomPanelTextData)
         elif alias == VEHPREVIEW_CONSTANTS.CREW_LINKAGE:
+            pmVehicleCDs = self.__eventsCache.getPersonalMissions().getAllPMVehiclesCDs()
             if self._itemsPack:
                 crewItems = tuple((item for item in self._itemsPack if item.type in ItemPackTypeGroup.CREW))
                 vehicleItems = tuple((item for item in self._itemsPack if item.type in ItemPackTypeGroup.VEHICLE))
@@ -360,6 +363,8 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
                     viewPy.setVehicleCrews((ItemPackEntry(id=g_currentPreviewVehicle.item.intCD, groupID=1),), (ItemPackEntry(type=ItemPackType.CREW_CUSTOM, groupID=1, extra=crewData),))
                 else:
                     viewPy.setVehicleCrews((ItemPackEntry(id=g_currentPreviewVehicle.item.intCD, groupID=1),), ())
+            elif g_currentPreviewVehicle.item.intCD in pmVehicleCDs:
+                viewPy.setVehicleCrews((ItemPackEntry(id=g_currentPreviewVehicle.item.intCD, groupID=1),), [ItemPackEntry(id=1, type=ItemPackType.CREW_100, count=1, groupID=1)])
             else:
                 viewPy.setVehicleCrews((ItemPackEntry(id=g_currentPreviewVehicle.item.intCD, groupID=1),), ())
         elif alias == VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE:

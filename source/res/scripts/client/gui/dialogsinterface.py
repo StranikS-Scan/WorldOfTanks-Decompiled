@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/DialogsInterface.py
 import BigWorld
-import WGC
+import LGC
 from account_shared import getFairPlayViolationName
 from adisp import adisp_process
 from constants import ACCOUNT_KICK_REASONS
@@ -63,7 +63,7 @@ def showI18nInfoDialog(i18nKey, callback, meta=None):
 def showDemoAccountBootcampFailureDialog(i18nKey, meta=None):
     result = yield showDialog(DemoAccountBootcampFailureMeta(i18nKey, meta=meta))
     if result == DIALOG_BUTTON_ID.HYPERLINK:
-        WGC.requestCompleteAccount()
+        LGC.requestCompleteAccount()
     BigWorld.quit()
 
 

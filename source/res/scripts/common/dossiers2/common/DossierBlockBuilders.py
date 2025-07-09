@@ -20,12 +20,13 @@ class IBlockBuilderWithRecordsLayout(object):
 
 class StaticSizeBlockBuilder(IBlockBuilderWithRecordsLayout):
 
-    def __init__(self, name, recordsLayout, eventsHandlers, popUpRecords, logRecords=None):
+    def __init__(self, name, recordsLayout, eventsHandlers, popUpRecords, logRecords=None, aliases=None):
         self.name = name
         self.recordsLayout = recordsLayout
         self.__eventsHandlers = eventsHandlers
         self.__popUpRecords = set(popUpRecords)
         self.__logRecords = set(logRecords) if logRecords else popUpRecords
+        self.__aliases = aliases or {}
         self.__layout = layout = [ (record, {}) for record in recordsLayout ]
         self.__packing = dict(layout)
         self.__format = '<'
@@ -54,7 +55,7 @@ class StaticSizeBlockBuilder(IBlockBuilderWithRecordsLayout):
         return
 
     def build(self, dossierDescr, compDescr=''):
-        return StaticDossierBlockDescr(name=self.name, dossierDescr=dossierDescr, compDescr=compDescr, eventsHandlers=self.__eventsHandlers, popUpRecords=self.__popUpRecords, logRecords=self.__logRecords, recordsLayout=self.__layout, packing=self.__packing, format=self.__format, blockSize=self.__blockSize, initialData=self.__initialData)
+        return StaticDossierBlockDescr(name=self.name, dossierDescr=dossierDescr, compDescr=compDescr, eventsHandlers=self.__eventsHandlers, popUpRecords=self.__popUpRecords, logRecords=self.__logRecords, recordsLayout=self.__layout, packing=self.__packing, format=self.__format, blockSize=self.__blockSize, initialData=self.__initialData, aliases=self.__aliases)
 
 
 class DictBlockBuilder(object):

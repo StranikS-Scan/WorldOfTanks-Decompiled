@@ -18,7 +18,8 @@ def _packEventWebState(eventData):
              'expireTime': eventData['expiration_time'],
              'expireDelta': eventData['expiration_delta'],
              'executionTime': eventData['execution_time'],
-             'state': eventData['state']}
+             'state': eventData['state'],
+             'common': eventData.get('common', {})}
             result = makeTupleByDict(GiftsWebState, result)
         except (KeyError, TypeError):
             _logger.exception('Can not _packEventWebState because of invalid eventData')
@@ -55,13 +56,13 @@ class GiftSystemStateCtx(CommonWebRequestCtx):
         return {eventID:None for eventID in self.__reqEventIds}
 
 
-class GiftSystemSendGiftCtx(CommonWebRequestCtx):
+class GiftSystemBaseSendGiftCtx(CommonWebRequestCtx):
 
-    def __init__(self, entitlementCode, receiverID=0, metaInfo=None, waitingID=''):
-        super(GiftSystemSendGiftCtx, self).__init__(waitingID)
+    def __init__(self, entitlementCode, receiverIDs, metaInfo=None, waitingID=''):
+        super(GiftSystemBaseSendGiftCtx, self).__init__(waitingID)
         self.__entitlementCode = entitlementCode
         self.__metaInfo = metaInfo or {}
-        self.__receiverID = receiverID
+        self.__receiverIDs = receiverIDs
 
     def isAuthorizationRequired(self):
         return True
@@ -72,29 +73,49 @@ class GiftSystemSendGiftCtx(CommonWebRequestCtx):
     def isCaching(self):
         return False
 
-    def getRequestType(self):
-        return WebRequestDataType.GIFT_SYSTEM_POST_GIFT
-
     def getEntitlementCode(self):
         return self.__entitlementCode
 
     def getMetaInfo(self):
         return self.__metaInfo
 
-    def getReceiverID(self):
-        return self.__receiverID
+    def getReceiverIDs(self):
+        return self.__receiverIDs
 
-    def getDataObj(self, state, incomeData=None):
-        resultData = self.getDefDataObj(state)
+    def getDataObj(self, state, incomeData=None, code=200):
+        resultData = self.getDefDataObj(state, code)
         if incomeData is not None and isinstance(incomeData, dict):
             resultData['outCount'] = incomeData.get('outcoming', resultData['outCount'])
             resultData['executionTime'] = incomeData.get('execution_time', resultData['executionTime'])
+            resultData['description'] = incomeData.get('description', resultData['description'])
+            resultData['declinedReceivers'] = incomeData.get('declined_receivers', resultData['declinedReceivers'])
         return makeTupleByDict(SendGiftResponse, resultData)
 
-    def getDefDataObj(self, state):
+    def getDefDataObj(self, state, code=200):
         return {'state': state,
          'outCount': None,
          'meta': self.__metaInfo,
-         'receiverID': self.__receiverID,
+         'receiverIDs': self.__receiverIDs,
          'entitlementCode': self.__entitlementCode,
-         'executionTime': int(time.time())}
+         'declinedReceivers': [],
+         'executionTime': int(time.time()),
+         'description': None,
+         'statusCode': code}
+
+
+class GiftSystemSendGiftCtx(GiftSystemBaseSendGiftCtx):
+
+    def __init__(self, entitlementCode, receiverID=0, metaInfo=None, waitingID=''):
+        super(GiftSystemSendGiftCtx, self).__init__(entitlementCode=entitlementCode, receiverIDs=[receiverID], metaInfo=metaInfo, waitingID=waitingID)
+
+    def getRequestType(self):
+        return WebRequestDataType.GIFT_SYSTEM_POST_GIFT
+
+    def getReceiverID(self):
+        return self.getReceiverIDs()[0]
+
+
+class GiftSystemSendGiftMultipleCtx(GiftSystemBaseSendGiftCtx):
+
+    def getRequestType(self):
+        return WebRequestDataType.GIFT_SYSTEM_POST_GIFT_MULTIPLE

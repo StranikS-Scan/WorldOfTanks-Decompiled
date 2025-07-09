@@ -144,6 +144,7 @@ class TankmanInfo(BaseCrewSoundView):
         return ((self.viewModel.onPlayUniqueVoice, self.__onPlayUniqueVoice),
          (self.viewModel.onChangeVehicle, self.__onChangeVehicle),
          (self.viewModel.onRetrain, self.__onRetrain),
+         (self.viewModel.onEditProfileClick, self.__onEditProfileClick),
          (self._itemsCache.onSyncCompleted, self._onCacheResync))
 
     def _updateViewModel(self):
@@ -195,6 +196,9 @@ class TankmanInfo(BaseCrewSoundView):
         self._uiLogger.logClick(CrewPersonalFileKeys.RETRAIN_BUTTON)
         vehicleIntCD = self._tankmanCurrentVehicle.intCD if self._tankmanCurrentVehicle else self._itemsCache.items.getItemByCD(self._tankman.vehicleNativeDescr.type.compactDescr).intCD
         yield wg_await(showRetrainDialog([self._tankman.invID], vehicleIntCD))
+
+    def __onEditProfileClick(self):
+        event_dispatcher.showChangeCrewWindow(tankmanInvID=self._tankman.invID, isRecruit=False)
 
     def __onChangeVehicle(self):
         self._uiLogger.logClick(CrewPersonalFileKeys.CHANGE_SPECIALIZATION_BUTTON)

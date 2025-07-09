@@ -190,5 +190,6 @@ class BattleBoostersActionSoundHelper(ActionSoundHelper):
 
     @classmethod
     def _playOptDeviceBoosterSelectSound(cls, vehicle, item):
-        if not item.isAffectsOnVehicle(vehicle):
+        from gui.impl.lobby.tank_setup.tank_setup_helper import isEconomicDirBattleEnabled
+        if not item.isAffectsOnVehicle(vehicle) or item.isEconomicBooster() and not isEconomicDirBattleEnabled():
             playSound(TankSetupSoundEvents.INSTRUCTIONS_EQUIP_NOT_SUITABLE)

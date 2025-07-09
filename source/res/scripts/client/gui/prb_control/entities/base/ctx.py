@@ -99,6 +99,17 @@ class Comp7PrbAction(PrbAction):
         return self.__squadSize
 
 
+@ReprInjector.withParent(('getSquadSize', 'squadSize'))
+class RankedPrbAction(PrbAction):
+
+    def __init__(self, actionName, squadSize, mmData=0, accountsToInvite=None):
+        super(RankedPrbAction, self).__init__(actionName, mmData, accountsToInvite)
+        self.__squadSize = squadSize
+
+    def getSquadSize(self):
+        return self.__squadSize
+
+
 @ReprInjector.simple('isExit')
 class LeavePrbAction(object):
     __slots__ = ('isExit', 'ignoreConfirmation', 'parent')

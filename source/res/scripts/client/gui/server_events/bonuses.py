@@ -78,7 +78,6 @@ from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from web.web_client_api.common import ItemPackEntry, ItemPackType, ItemPackTypeGroup, getItemPackByGroupAndName
-from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 if typing.TYPE_CHECKING:
     from typing import List, Tuple, Dict, Callable, Optional, Any
     from account_helpers.offers.events_data import OfferEventData
@@ -400,7 +399,6 @@ class EquipCoinBonus(IntegralBonus):
 
 
 class CurrenciesBonus(IntegralBonus):
-    __TEMPLATE_NAME = 'platformCurrency'
 
     def __init__(self, *args, **kwargs):
         super(CurrenciesBonus, self).__init__(*args, **kwargs)
@@ -411,19 +409,6 @@ class CurrenciesBonus(IntegralBonus):
         return [{'value': self.formatValue(),
           'itemSource': self.getIconBySize(AWARDS_SIZES.SMALL),
           'tooltip': self.getTooltip()}]
-
-    def _format(self, styleSubset):
-        if self.__ifPlatformCurrency(self._code):
-            formattedValue = self.formatValue()
-            if self._name is not None and formattedValue is not None:
-                text = makeHtmlString('html_templates:lobby/quests/{}'.format(styleSubset), self.__TEMPLATE_NAME, {'value': formattedValue,
-                 'iconName': self._code})
-                if text != self.__TEMPLATE_NAME:
-                    return text
-            return formattedValue
-        else:
-            super(CurrenciesBonus, self)._format(styleSubset)
-            return
 
     def getCode(self):
         return self._code
@@ -450,9 +435,6 @@ class CurrenciesBonus(IntegralBonus):
                    AWARDS_SIZES.BIG: self.getIconBySize(AWARDS_SIZES.BIG)},
           'name': backport.text(awardItem.header()) if awardItem else '',
           'description': backport.text(awardItem.body()) if awardItem else ''}]
-
-    def __ifPlatformCurrency(self, currencyCode):
-        return currencyCode not in Currency.ALL + (CURRENCIES_CONSTANTS.FREE_XP,)
 
 
 class FreeXpBonus(IntegralBonus):
@@ -1174,6 +1156,10 @@ class EntitlementBonus(SimpleBonus):
                 countRes = R.strings.messenger.serviceChannelMessages.battleResults.quests.entitlements.multiplier()
                 formattedCountStr = backport.text(countRes, count=backport.getIntegralFormat(count))
             return text_styles.concatStylesToSingleLine(cls.getUserName(entitlementID), formattedCountStr)
+
+    @classmethod
+    def extendFormattedAmount(cls, entitlementIDs):
+        cls._FORMATTED_AMOUNT.extend(entitlementIDs)
 
     def isShowInGUI(self):
         value = self.getValue()

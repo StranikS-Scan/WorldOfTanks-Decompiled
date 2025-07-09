@@ -25,6 +25,7 @@ from helpers import dependency, time_utils
 from helpers.time_utils import getServerUTCTime
 from shared_utils import first
 from skeletons.gui.game_control import IRankedBattlesController
+from skeletons.gui.shared import IItemsCache
 from visual_script_client.web_blocks import WWISE
 if typing.TYPE_CHECKING:
     from frameworks.wulf import ViewEvent, Window
@@ -35,12 +36,14 @@ _logger = logging.getLogger(__name__)
 UNDEFINED_EFFICIENCY_VALUE = -1
 EFFICIENCY_MULTIPLIER = 10000
 _R_BACKPORT_TOOLTIP = R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent
+_R_LOOTBOX_TOOLTIP = R.views.dyn('gui_lootboxes').dyn('lobby').dyn('gui_lootboxes').dyn('tooltips').dyn('LootboxTooltip')
 _DIVISION_TO_GF_PROGRESSION_SOUND = {0: Sounds.PROGRESSION_STATE_3_DIVISION,
  1: Sounds.PROGRESSION_STATE_2_DIVISION,
  2: Sounds.PROGRESSION_STATE_1_DIVISION}
 
 class RankedProgressionView(ViewImpl):
     __slots__ = ('__tooltipItems', '__periodicNotifier')
+    __itemsCache = dependency.descriptor(IItemsCache)
     __rankedController = dependency.descriptor(IRankedBattlesController)
     _COMMON_SOUND_SPACE = RANKED_MAIN_PAGE_SOUND_SPACE
 
@@ -81,6 +84,16 @@ class RankedProgressionView(ViewImpl):
             return createAndLoadBackportTooltipWindow(self.getParentWindow(), tooltipId=tooltipId, isSpecial=True, specialArgs=(None,))
         else:
             return super(RankedProgressionView, self).createToolTip(event)
+
+    def createToolTipContent(self, event, contentID):
+        if _R_LOOTBOX_TOOLTIP.exists() and contentID == _R_LOOTBOX_TOOLTIP():
+            from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_tooltip import LootboxTooltip
+            tooltipId = event.getArgument('tooltipId', '')
+            tooltipData = self.__tooltipItems.get(tooltipId, {})
+            lootBoxID = tooltipData.get('lootBoxID')
+            lootBox = self.__itemsCache.items.tokens.getLootBoxByID(int(lootBoxID))
+            return LootboxTooltip(lootBox)
+        return super(RankedProgressionView, self).createToolTipContent(event=event, contentID=contentID)
 
     def getTooltipData(self, event):
         tooltipId = event.getArgument('tooltipId')

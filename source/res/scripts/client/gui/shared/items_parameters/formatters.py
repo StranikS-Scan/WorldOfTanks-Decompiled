@@ -695,8 +695,6 @@ def getBonusIconRes(bonusId, bonusType, archetype=None):
             iconR = R.images.gui.maps.icons.vehParams.tooltips.bonuses.battleModifiers()
     elif bonusId.find('Rammer') >= 0 and bonusId != 'deluxRammer' and bonusId.find('modernizedTankRammerSights') == -1 and bonusId.find('trophy') == -1:
         iconR = R.images.gui.maps.icons.vehParams.tooltips.bonuses.rammer()
-    elif archetype:
-        iconR = R.images.gui.maps.icons.vehParams.tooltips.bonuses.archetypes.dyn(archetype, R.invalid)()
     else:
         iconR = R.images.gui.maps.icons.vehParams.tooltips.bonuses.dyn(bonusId.split('_class')[0], R.invalid)()
     return iconR

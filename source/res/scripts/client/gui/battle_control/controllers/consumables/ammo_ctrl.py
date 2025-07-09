@@ -25,6 +25,7 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from helpers import dependency
 __all__ = ('AmmoController', 'AmmoReplayPlayer')
 _ClipBurstSettings = namedtuple('_ClipBurstSettings', 'size interval')
+_DualGunSettings = namedtuple('_DualGunSettings', 'autoloadWithClip')
 _HUNDRED_PERCENT = 100.0
 _DualGunShellChangeTime = namedtuple('_DualGunShellChangeTime', 'left right activeIdx')
 _DualGunState = namedtuple('_DualGunState', 'left right')
@@ -36,17 +37,18 @@ if typing.TYPE_CHECKING:
     from gui.shared.gui_items.vehicle_modules import Shell
     from items.vehicle_items import Gun
 
-class _GunSettings(namedtuple('_GunSettings', 'clip burst shots reloadEffect autoReload autoShoot isDualGun isTemperatureGun')):
+class _GunSettings(namedtuple('_GunSettings', 'clip burst dualgun shots reloadEffect autoReload autoShoot isDualGun isTemperatureGun')):
 
     @classmethod
     def default(cls):
-        return cls.__new__(cls, _ClipBurstSettings(1, 0.0), _ClipBurstSettings(1, 0.0), {}, None, None, None, False, False)
+        return cls.__new__(cls, _ClipBurstSettings(1, 0.0), _ClipBurstSettings(1, 0.0), _DualGunSettings(False), {}, None, None, None, False, False)
 
     @classmethod
     def make(cls, gun, modelsSet=None):
         shots = {}
         clip = _ClipBurstSettings(*gun.clip)
         burst = _ClipBurstSettings(*gun.burst)
+        dualgun = _DualGunSettings(gun.dualGun.autoloadWithClip)
         reloadEffect = None
         if modelsSet and gun.reloadEffectSets and modelsSet in gun.reloadEffectSets:
             reloadEffectDesc = gun.reloadEffectSets[modelsSet]
@@ -67,7 +69,7 @@ class _GunSettings(namedtuple('_GunSettings', 'clip burst shots reloadEffect aut
         autoReload = gun.autoreload if 'autoreload' in gun.tags else None
         autoShoot = gun.autoShoot if 'autoShoot' in gun.tags else None
         isTemperatureGun = 'temperature' in gun.tags
-        return cls.__new__(cls, clip, burst, shots, reloadEffect, autoReload, autoShoot, isDualGun, isTemperatureGun)
+        return cls.__new__(cls, clip, burst, dualgun, shots, reloadEffect, autoReload, autoShoot, isDualGun, isTemperatureGun)
 
     def isCassetteClip(self):
         return self.clip.size > 1 or self.burst.size > 1
@@ -84,7 +86,7 @@ class _GunSettings(namedtuple('_GunSettings', 'clip burst shots reloadEffect aut
     def isMultiGun(self):
         return self.isDualGun
 
-    def getQtyGuns(self):
+    def getGunsCount(self):
         return 2 if self.isDualGun else 1
 
     def hasCustomReloadEffectLogic(self):
@@ -609,19 +611,21 @@ class AmmoController(MethodsRules, ViewComponentsController):
 
     @MethodsRules.delayable('setCurrentShellCD')
     def setGunReloadTime(self, timeLeft, baseTime, skipAutoLoader=False):
-        if not self.__gunSettings.hasAutoReload():
+        gunStgs = self.__gunSettings
+        hasCustomQuickShellChangeTime = gunStgs.hasAutoReload() or gunStgs.isMultiGun() and gunStgs.isCassetteClip()
+        if not hasCustomQuickShellChangeTime:
             self.__shellChangeTime = baseTime
-        if not self.__gunSettings.hasCustomReloadEffectLogic():
+        if not gunStgs.hasCustomReloadEffectLogic():
             self.triggerReloadEffect(timeLeft, baseTime)
-        interval = self.__gunSettings.getClipInterval()
+        interval = gunStgs.getClipInterval()
         if interval > 0 and self.__currShellCD in self.__ammo and baseTime > 0.0:
             shellsInClip = self.__ammo[self.__currShellCD][1]
-            if self.__gunSettings.isBurstAndClip():
-                quantityClip = ceil(shellsInClip / float(self.__gunSettings.burst.size))
-                if not (quantityClip == 1 and timeLeft == 0 and not self.__gunSettings.hasAutoReload() or quantityClip <= 1 and timeLeft != 0):
+            if gunStgs.isBurstAndClip():
+                quantityClip = ceil(shellsInClip / float(gunStgs.burst.size))
+                if not (quantityClip == 1 and timeLeft == 0 and not gunStgs.hasAutoReload() or quantityClip <= 1 and timeLeft != 0):
                     if interval <= baseTime:
                         baseTime = interval
-            elif not (shellsInClip == 1 and timeLeft == 0 and not self.__gunSettings.hasAutoReload() or shellsInClip == 0 and timeLeft != 0):
+            elif not (shellsInClip == 1 and timeLeft == 0 and not gunStgs.hasAutoReload() or shellsInClip == 0 and timeLeft != 0):
                 if interval <= baseTime:
                     baseTime = interval
         elif baseTime == 0.0:
@@ -650,6 +654,8 @@ class AmmoController(MethodsRules, ViewComponentsController):
         self._autoReloadingState.setTimes(timeLeft, baseTime)
         if self.__gunSettings.hasAutoReload():
             self.__shellChangeTime = firstClipBaseTime
+        elif self.__gunSettings.isMultiGun() and self.__gunSettings.isCassetteClip() and baseTime > 0:
+            self.__shellChangeTime = baseTime
         self.__notifyAboutAutoReloadTimeChanges(isSlowed)
         self._autoReloadingBoostState.setReloadingTimeSnapshot(self._autoReloadingState.getSnapshot(), isBoostApplicable, self.__gunSettings)
         if self.__gunSettings.reloadEffect is not None and self.__currShellCD in self.__ammo:
@@ -876,7 +882,7 @@ class AmmoController(MethodsRules, ViewComponentsController):
             else:
                 activeGunTime = self.__dualGunShellChangeTime.right
             quickTime = getRestrictedTime(activeGunTime, self.__quickChangerFactor, restrict)
-            if self.__gunSettings.hasAutoReload():
+            if self.__gunSettings.isCassetteClip():
                 quickShellChangeTime += quickTime
             else:
                 quickShellChangeTime = quickTime

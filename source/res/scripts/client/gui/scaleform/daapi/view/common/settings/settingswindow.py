@@ -3,7 +3,7 @@
 import functools
 import BattleReplay
 import BigWorld
-import WGC
+import LGC
 import VOIP
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import COLOR_SETTINGS_TAB_IDX
@@ -128,7 +128,7 @@ class SettingsWindow(SettingsWindowMeta):
 
     def __restartGame(self):
         BigWorld.savePreferences()
-        WGC.notifyRestart()
+        LGC.notifyRestart()
         BigWorld.worldDrawEnabled(False)
         BigWorld.restartGame()
 

@@ -11,3 +11,9 @@ _HUB_BY_EVENT_ID = {GiftEventID.DEV_TEST: GiftEventDevHub}
 
 def createGiftEventHub(eventID, eventSettings, isMessagesAllowed):
     return _HUB_BY_EVENT_ID.get(eventID, GiftEventBaseHub)(eventSettings, isMessagesAllowed)
+
+
+def overrideGiftEventHub(name, value):
+    if name in _HUB_BY_EVENT_ID:
+        return
+    _HUB_BY_EVENT_ID[name] = value

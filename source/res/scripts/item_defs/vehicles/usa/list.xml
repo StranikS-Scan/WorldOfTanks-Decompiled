@@ -1302,7 +1302,7 @@
     <price>	11000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_assault HD lockExceptProgression heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <tags>	heavyTank role_HT_assault private HD lockExceptProgression heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </A115_Chrysler_K_GF>
   <A117_T26E5>
@@ -1680,7 +1680,7 @@
     </price>
     <notInShop>	true	</notInShop>
     <level>	9	</level>
-    <tags>	lightTank role_LT_universal HD scout improvedVentilation_class3_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_light_user earn_crystals	</tags>
+    <tags>	lightTank role_LT_universal private HD scout improvedVentilation_class3_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_light_user earn_crystals	</tags>
   </A162_ATAC_II>
   <A163_H_3>
     <id>	31001	</id>
@@ -1806,7 +1806,34 @@
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	SPG role_SPG HD heavySPG tankRammer_class1_user antifragmentationLining_heavy_user earn_crystals special secret testTank fun_random	</tags>
+    <tags>	SPG role_SPG spgOnlyArtyMode assaultSPG HD heavySPG tankRammer_class1_user antifragmentationLining_heavy_user earn_crystals special secret testTank fun_random	</tags>
     <level>	10	</level>
   </A1038_T92_T>
+  <A164_TS_6>
+    <id>	31012	</id>
+    <userString>	#usa_vehicles:A164_TS_6	</userString>
+    <shortUserString>	#usa_vehicles:A164_TS_6_short	</shortUserString>
+    <description>	#usa_vehicles:A164_TS_6_descr	</description>
+    <shortDescriptionSpecial>	#usa_vehicles:A164_TS_6_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:A164_TS_6_long_special	</longDescriptionSpecial>
+    <price>	25000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals special secret testTank	</tags>
+    <level>	10	</level>
+  </A164_TS_6>
+  <A68_T28_Prototype_FL>
+    <id>	31013	</id>
+    <userString>	#usa_vehicles:T28_Prototype_FL	</userString>
+    <description>	#usa_vehicles:T28_Prototype_descr	</description>
+    <shortUserString>	#usa_vehicles:T28_Prototype_FL_short	</shortUserString>
+    <shortDescriptionSpecial>	#usa_vehicles:T28_Prototype_FL_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:T28_Prototype_FL_long_special	</longDescriptionSpecial>
+    <price>	1	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	AT-SPG role_ATSPG_universal private epic_battles HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	8	</level>
+  </A68_T28_Prototype_FL>
 </list.xml>

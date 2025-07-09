@@ -59,7 +59,7 @@ class AddPlatformTagLinksHandler(OpenBrowserHandler):
         return False
 
     def _getPlatform(self):
-        return DISTRIBUTION_PLATFORM.STEAM.value if self.__loginManager.isWgcSteam else ''
+        return DISTRIBUTION_PLATFORM.STEAM.value if self.__loginManager.isLgcSteam else ''
 
     def _hasWotPlatformTags(self, url):
         query = urlparse.urlparse(url).query

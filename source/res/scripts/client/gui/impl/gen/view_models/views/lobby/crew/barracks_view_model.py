@@ -6,9 +6,9 @@ from gui.impl.gen.view_models.views.lobby.crew.common.range_model import RangeMo
 from gui.impl.gen.view_models.views.lobby.crew.tankman_model import TankmanModel
 
 class BarracksViewModel(ViewModel):
-    __slots__ = ('onResetFilters', 'onBuyBerth', 'onTankmanSelected', 'onTankmanRecruit', 'onTankmanDismiss', 'onPlayTankmanVoiceover', 'onTankmanRestore', 'onLoadCards', 'showHangar')
+    __slots__ = ('onResetFilters', 'onBuyBerth', 'onTankmanSelected', 'onTankmanRecruit', 'onTankmanDismiss', 'onPlayTankmanVoiceover', 'onTankmanRestore', 'onLoadCards', 'showHangar', 'onTankmanSelectedChange')
 
-    def __init__(self, properties=6, commands=9):
+    def __init__(self, properties=12, commands=10):
         super(BarracksViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -41,17 +41,61 @@ class BarracksViewModel(ViewModel):
     def getTankmanListType():
         return TankmanModel
 
-    def getIsBerthsOnSale(self):
-        return self._getBool(4)
+    def getSelectedTankmanList(self):
+        return self._getArray(4)
 
-    def setIsBerthsOnSale(self, value):
-        self._setBool(4, value)
+    def setSelectedTankmanList(self, value):
+        self._setArray(4, value)
 
-    def getHasFilters(self):
+    @staticmethod
+    def getSelectedTankmanListType():
+        return int
+
+    def getIsSelectedLimitReached(self):
         return self._getBool(5)
 
-    def setHasFilters(self, value):
+    def setIsSelectedLimitReached(self, value):
         self._setBool(5, value)
+
+    def getIsBerthsOnSale(self):
+        return self._getBool(6)
+
+    def setIsBerthsOnSale(self, value):
+        self._setBool(6, value)
+
+    def getHasFilters(self):
+        return self._getBool(7)
+
+    def setHasFilters(self, value):
+        self._setBool(7, value)
+
+    def getHeaderTitle(self):
+        return self._getString(8)
+
+    def setHeaderTitle(self, value):
+        self._setString(8, value)
+
+    def getIsSelectedMode(self):
+        return self._getBool(9)
+
+    def setIsSelectedMode(self, value):
+        self._setBool(9, value)
+
+    def getHeadersIndexes(self):
+        return self._getArray(10)
+
+    def setHeadersIndexes(self, value):
+        self._setArray(10, value)
+
+    @staticmethod
+    def getHeadersIndexesType():
+        return int
+
+    def getIsAllTankmanFilter(self):
+        return self._getBool(11)
+
+    def setIsAllTankmanFilter(self, value):
+        self._setBool(11, value)
 
     def _initialize(self):
         super(BarracksViewModel, self)._initialize()
@@ -59,8 +103,14 @@ class BarracksViewModel(ViewModel):
         self._addNumberProperty('itemsAmount', 0)
         self._addNumberProperty('itemsOffset', 0)
         self._addArrayProperty('tankmanList', Array())
+        self._addArrayProperty('selectedTankmanList', Array())
+        self._addBoolProperty('isSelectedLimitReached', False)
         self._addBoolProperty('isBerthsOnSale', False)
         self._addBoolProperty('hasFilters', False)
+        self._addStringProperty('headerTitle', '')
+        self._addBoolProperty('isSelectedMode', False)
+        self._addArrayProperty('headersIndexes', Array())
+        self._addBoolProperty('isAllTankmanFilter', True)
         self.onResetFilters = self._addCommand('onResetFilters')
         self.onBuyBerth = self._addCommand('onBuyBerth')
         self.onTankmanSelected = self._addCommand('onTankmanSelected')
@@ -70,3 +120,4 @@ class BarracksViewModel(ViewModel):
         self.onTankmanRestore = self._addCommand('onTankmanRestore')
         self.onLoadCards = self._addCommand('onLoadCards')
         self.showHangar = self._addCommand('showHangar')
+        self.onTankmanSelectedChange = self._addCommand('onTankmanSelectedChange')

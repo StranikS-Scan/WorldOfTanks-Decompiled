@@ -685,10 +685,15 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
     def resetToDefault(self):
         self.__vehicle, self.__crewSkillsManager = self.getInitialVehicleData()
         self.__vehItem.setItem(self.__vehicle)
-        basketShellIndex = self.getBasketVehCmpData().getInventoryShellIndex()
+        basketVehicle = self.getBasketVehCmpData()
+        basketShellIndex = basketVehicle.getInventoryShellIndex()
         self.__updateSelectedShell(basketShellIndex)
+        battleBooster = basketVehicle.getBattleBooster()
+        if battleBooster is not None:
+            self.removeBattleBooster()
         self.__recalculateCrewBonuses()
         self.__notifyViews('onResetToDefault')
+        return
 
     def installOptionalDevice(self, newId, slotIndex):
         isInstalled, _ = vehicle_adjusters.installOptionalDevice(self.__vehicle, newId, slotIndex)
@@ -846,8 +851,9 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
         currVehHasCamouflage = cmp_helpers.isCamouflageSet(self.__vehicle)
         if hasCamouflage != currVehHasCamouflage:
             return True
-        currVehBattleBoosters = self.__vehicle.battleBoosters.installed
-        if currVehBattleBoosters.getCapacity() > 0 and not battleBooster == currVehBattleBoosters[0]:
+        currBoosters = self.__vehicle.battleBoosters.installed
+        currBooster = currBoosters[0] if currBoosters.getCapacity() > 0 else None
+        if currBooster:
             return True
         if currVehHasCamouflage:
             targetVehicle = Vehicle(self.__vehicle.descriptor.makeCompactDescr())

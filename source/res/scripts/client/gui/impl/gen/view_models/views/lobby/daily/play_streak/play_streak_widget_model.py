@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class PlayStreakWidgetModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=9, commands=0):
+    def __init__(self, properties=11, commands=0):
         super(PlayStreakWidgetModel, self).__init__(properties=properties, commands=commands)
 
     def getStreakLength(self):
@@ -56,11 +56,23 @@ class PlayStreakWidgetModel(ViewModel):
     def setIsFirstAppearance(self, value):
         self._setBool(7, value)
 
-    def getIsEnabled(self):
+    def getIsFirstAppearanceRedemptionDay(self):
         return self._getBool(8)
 
-    def setIsEnabled(self, value):
+    def setIsFirstAppearanceRedemptionDay(self, value):
         self._setBool(8, value)
+
+    def getIsLastDayRedemption(self):
+        return self._getBool(9)
+
+    def setIsLastDayRedemption(self, value):
+        self._setBool(9, value)
+
+    def getIsEnabled(self):
+        return self._getBool(10)
+
+    def setIsEnabled(self, value):
+        self._setBool(10, value)
 
     def _initialize(self):
         super(PlayStreakWidgetModel, self)._initialize()
@@ -72,4 +84,6 @@ class PlayStreakWidgetModel(ViewModel):
         self._addBoolProperty('isBlocked', False)
         self._addBoolProperty('isPaused', False)
         self._addBoolProperty('isFirstAppearance', False)
+        self._addBoolProperty('isFirstAppearanceRedemptionDay', False)
+        self._addBoolProperty('isLastDayRedemption', False)
         self._addBoolProperty('isEnabled', False)

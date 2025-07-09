@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/crew/member_change_view.py
 import BigWorld
 from frameworks.wulf import ViewFlags, ViewSettings
+from frameworks.wulf.view.array import fillIntsArray
 from gui.game_control import restore_contoller
 from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
 from gui.impl.dialogs import dialogs
@@ -15,7 +16,7 @@ from gui.impl.lobby.crew.base_crew_view import BaseCrewView
 from gui.impl.lobby.crew.base_tankman_list_view import BaseTankmanListView
 from gui.impl.lobby.crew.crew_helpers.model_setters import setTankmanModel, setTmanSkillsModel, setRecruitTankmanModel
 from gui.impl.lobby.crew.filter import getTankmanLocationSettings, getTankmanRoleSettings, getVehicleTypeSettings, getVehicleTierSettings, getTankmanKindSettings
-from gui.impl.lobby.crew.filter.data_providers import CompoundDataProvider, TankmenChangeDataProvider, RecruitsChangeDataProvider
+from gui.impl.lobby.crew.filter.data_providers import CompoundDataProvider, MemberChangeDataProvider
 from gui.impl.lobby.crew.filter.filter_panel_widget import FilterPanelWidget
 from gui.impl.lobby.crew.filter.state import FilterState
 from gui.impl.lobby.crew.utils import discountPercent
@@ -39,6 +40,7 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
     itemsCache = dependency.descriptor(IItemsCache)
     restore = dependency.descriptor(IRestoreController)
     specialSounds = dependency.descriptor(ISpecialSoundCtrl)
+    __slots__ = ('__currentVehicle', '__tankmanId', '__slotIdx', '__requiredRole', '__tankman', '__filterPanelWidget')
 
     def __init__(self, layoutID, **kwargs):
         settings = ViewSettings(layoutID=layoutID, flags=ViewFlags.LOBBY_TOP_SUB_VIEW, model=MemberChangeViewModel(), kwargs=kwargs)
@@ -51,8 +53,9 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
         self.__tankman = None
         self.__filterPanelWidget = None
         self.__updateTankmanData(slotIdx)
-        self.__filterState = FilterState({FilterState.GROUPS.TANKMANROLE.value: self.__requiredRole})
-        self.__dataProviders = CompoundDataProvider(tankmen=TankmenChangeDataProvider(self.__filterState, self.__tankman, self.__currentVehicle, self.__requiredRole), recruits=RecruitsChangeDataProvider(self.__filterState, self.__tankman, self.__currentVehicle, self.__requiredRole))
+        self.__filterState = FilterState({FilterState.GROUPS.LOCATION.value: TankmanKind.TANKMAN.value,
+         FilterState.GROUPS.TANKMANROLE.value: self.__requiredRole})
+        self.__dataProviders = CompoundDataProvider(memberChange=MemberChangeDataProvider(self.__filterState, self.__tankman, self.__currentVehicle, self.__requiredRole))
         self.__requiredNation = self.__currentVehicle.nationName
         self.__paramsView = None
         self.__hasFilters = False
@@ -62,12 +65,8 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
         return
 
     @property
-    def _tankmenProvider(self):
-        return self.__dataProviders['tankmen']
-
-    @property
-    def _recruitsProvider(self):
-        return self.__dataProviders['recruits']
+    def _viewProvider(self):
+        return self.__dataProviders['memberChange']
 
     @property
     def _filterState(self):
@@ -87,11 +86,12 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
         return super(MemberChangeView, self).createToolTip(event)
 
     def selectSlot(self, slotIdx):
-        self._onChangeSlotIdx(slotIdx)
-        self._crewWidget.updateSlotIdx(self.__slotIdx)
-        with self.viewModel.transaction() as tx:
-            tx.setRequiredRole(self.__requiredRole)
-            self._fillTankmenList(tx)
+        if self.__slotIdx != slotIdx:
+            self._onChangeSlotIdx(slotIdx)
+            self._crewWidget.updateSlotIdx(self.__slotIdx)
+            with self.viewModel.transaction() as tx:
+                tx.setRequiredRole(self.__requiredRole)
+                self._fillTankmenList(tx)
 
     def _getEvents(self):
         eventsTuple = super(MemberChangeView, self)._getEvents()
@@ -100,7 +100,7 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
          (self.viewModel.onRecruitSelected, self._onRecruitSelected),
          (self.viewModel.onRecruitNewTankman, self._onRecruitNewTankman),
          (self.viewModel.onTankmanRestore, self._onTankmanRestore),
-         (self.viewModel.onPlayRecruitVoiceover, self._onPlayRecruitVoiceover),
+         (self.viewModel.onPlayRecruitVoiceover, self._onPlayTankmanVoiceover),
          (self.viewModel.onLoadCards, self._onLoadCards),
          (self.__filterState.onStateChanged, self._onFilterStateUpdated),
          (self.__dataProviders.onDataChanged, self._onDataChanged),
@@ -132,21 +132,28 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
 
     def _fillTankmenList(self, tx):
         self.__filterPanelWidget.updateAmountInfo(self.__dataProviders.itemsCount, self.__dataProviders.initialItemsCount)
+        fillIntsArray(self._viewProvider.getHeaderIndexes(), tx.getHeadersIndexes())
         self.__filterPanelWidget.applyStateToModel()
         tx.setHasFilters(self.__hasFilters)
-        tx.setItemsAmount(self.__dataProviders.itemsCount)
+        tx.setItemsAmount(self._viewProvider.getActualItemsAmount())
         tx.setItemsOffset(self._itemsOffset)
         self._fillVisibleCards(tx.getTankmanList())
 
-    def _fillVisibleCards(self, cardsList):
-        cardsList.clear()
-        cardsList.invalidate()
-        recruitsAmount, visibleAmount = self._fillTankmen(cardsList, self._itemsLimit, self._itemsOffset)
-        tankmanOffset = max(self._itemsOffset - recruitsAmount, 0)
-        self._fillRecruits(cardsList, self._itemsLimit - visibleAmount, tankmanOffset)
+    def _getSortedTankmanList(self):
+        return self._viewProvider.getTankmanSortedList()
 
     def _fillTankmanCard(self, cardsList, tankman):
-        cardsList.addViewModel(self.__createTankmanModelByTankman(tankman))
+        tm = TankmanModel()
+        setTankmanModel(tm, tankman, tmanNativeVeh=self.itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr), tmanVeh=self.itemsCache.items.getVehicle(tankman.vehicleInvID), compVeh=self.__currentVehicle, requiredRole=self.__requiredRole)
+        if tankman.invID == self.__tankmanId:
+            tm.setCardState(TankmanCardState.SELECTED)
+        tm.setHasRolePenalty(self.__requiredRole != tankman.role)
+        setTmanSkillsModel(tm.getSkills(), tankman)
+        tm.setHasVoiceover(False)
+        if tankman.isDismissed:
+            _, time = restore_contoller.getTankmenRestoreInfo(tankman)
+            tm.setTimeToDismiss(time)
+        cardsList.addViewModel(tm)
 
     def _fillRecruitCard(self, cardsList, recruitInfo):
         tm = TankmanModel()
@@ -159,7 +166,7 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
         self.__dataProviders.update()
         self.__uiTooltipLogger.initialize()
         if self.__dataProviders.itemsCount < 1:
-            self.__filterState.reinit({})
+            self.__filterState.reinit({FilterState.GROUPS.LOCATION.value: TankmanKind.TANKMAN.value})
 
     def widgetAutoSelectSlot(self, **kwargs):
         self._crewWidget.updateSlotIdx(self.__slotIdx)
@@ -211,7 +218,7 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
         self.selectSlot(slotIdx)
 
     def _onResetFilters(self):
-        self.__filterPanelWidget.resetState()
+        self.__filterPanelWidget.resetPopoverFilter()
 
     def _onCrewChanged(self, *_, **__):
         self._onChangeSlotIdx(self.__slotIdx)
@@ -220,9 +227,10 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
         self.__updateTankmanData(slotIdx)
         self.viewModel.setHasCrew(self.__currentVehicle.hasCrew)
         self.__dataProviders.reinit(tankman=self.__tankman, role=self.__requiredRole)
-        self.__filterState.reinit({FilterState.GROUPS.TANKMANROLE.value: self.__requiredRole})
+        self.__filterState.reinit({FilterState.GROUPS.TANKMANROLE.value: self.__requiredRole,
+         FilterState.GROUPS.LOCATION.value: TankmanKind.TANKMAN.value})
         if self.__dataProviders.itemsCount < 1:
-            self.__filterState.reinit({})
+            self.__filterState.reinit({FilterState.GROUPS.LOCATION.value: TankmanKind.TANKMAN.value})
 
     @wg_async
     @args2params(int)
@@ -244,7 +252,7 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
         self._crewWidget.updateSlotIdx(self.__slotIdx)
 
     @args2params(str)
-    def _onPlayRecruitVoiceover(self, recruitID):
+    def _onPlayTankmanVoiceover(self, recruitID):
         self._uiLogger.logClick(CrewMemberChangeKeys.CARD_VOICEOVER_BUTTON)
         self._onPlayVoiceover(recruitID)
 
@@ -255,6 +263,7 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
 
     @args2params(int)
     def _onTankmanRestore(self, tankmanID):
+        self._uiLogger.logClick(CrewMemberChangeKeys.CARD_RESTORE_BUTTON)
         dialogs.showRestoreTankmanDialog(tankmanID, self.__currentVehicle.invID, self.__slotIdx, parentViewKey=self._uiLoggingKey)
 
     def _onRecruitNewTankman(self):
@@ -304,7 +313,10 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
     def __changeRoleAndEquip(self, newTankman):
         if not self.__currentVehicle:
             return
-        doActions = [(factory.CHANGE_ROLE_TANKMAN,
+        newVehicle = self.itemsCache.items.getVehicle(newTankman.vehicleInvID)
+        unloadVehicle = newVehicle if newVehicle and newTankman.vehicleInvID != self.__currentVehicle.invID else self.__currentVehicle
+        unloadSlot = self.__getSlotForNewTankman(unloadVehicle, newTankman)
+        doActions = [(factory.UNLOAD_TANKMAN, unloadVehicle.invID, int(self.__slotIdx) if unloadSlot < 0 else unloadSlot), (factory.CHANGE_ROLE_TANKMAN,
           newTankman.invID,
           self.__requiredRole,
           self.__currentVehicle.intCD,
@@ -317,18 +329,10 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
         while doActions:
             factory.doAction(*(doActions.pop(0) + (groupID, groupSize)))
 
-    def __createTankmanModelByTankman(self, tankman):
-        tm = TankmanModel()
-        setTankmanModel(tm, tankman, tmanNativeVeh=self.itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr), tmanVeh=self.itemsCache.items.getVehicle(tankman.vehicleInvID), compVeh=self.__currentVehicle, requiredRole=self.__requiredRole)
-        if tankman.invID == self.__tankmanId:
-            tm.setCardState(TankmanCardState.SELECTED)
-        tm.setHasRolePenalty(self.__requiredRole != tankman.role)
-        setTmanSkillsModel(tm.getSkills(), tankman)
-        tm.setHasVoiceover(False)
-        if tankman.isDismissed:
-            _, time = restore_contoller.getTankmenRestoreInfo(tankman)
-            tm.setTimeToDismiss(time)
-        return tm
+    def __getSlotForNewTankman(self, unloadVehicle, newTankman):
+        for slotIdx, tman in unloadVehicle.crew:
+            if tman and tman.invID == newTankman.invID:
+                return slotIdx
 
     def __updateTankmanData(self, slotIdx):
         self.__slotIdx = int(slotIdx)

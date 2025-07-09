@@ -3502,6 +3502,10 @@
           </camouflage>
         </_75mm_Gun_Mk_V>
         <_75mm_Gun_Vickers_HV>	shared	  <maxAmmo>	100	</maxAmmo>
+          <unlocks>
+            <vehicle>	GB133_Cyclone_Mk_2	  <cost>	60850	</cost>
+            </vehicle>
+          </unlocks>
           <pitchLimits>
             <minPitch>	0 -12 1 -12	</minPitch>
             <maxPitch>	0 4 0.325226 4 0.388888 3 0.611112 3 0.674774 4 1 4	</maxPitch>

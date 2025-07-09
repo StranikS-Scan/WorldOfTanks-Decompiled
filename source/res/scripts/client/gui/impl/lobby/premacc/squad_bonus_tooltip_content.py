@@ -46,3 +46,16 @@ class Comp7SquadBonusTooltipContent(SquadBonusTooltipContent):
         with self.viewModel.transaction() as model:
             if self.__battleType:
                 model.setBattleType(self.__battleType)
+
+
+class RankedSquadBonusTooltipContent(SquadBonusTooltipContent):
+
+    def __init__(self, battleType=None):
+        self.__battleType = battleType
+        super(RankedSquadBonusTooltipContent, self).__init__()
+
+    def _initialize(self, *args, **kwargs):
+        super(RankedSquadBonusTooltipContent, self)._initialize(*args, **kwargs)
+        with self.viewModel.transaction() as model:
+            if self.__battleType:
+                model.setBattleType(self.__battleType)

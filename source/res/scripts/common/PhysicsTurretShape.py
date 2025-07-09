@@ -13,26 +13,31 @@ class PhysicsTurretShape:
      'xPos': (-2.0, 2.0, 0.0, 3),
      'yScale': (0.0, 2.0, 1.0, 4),
      'yPos': (-2.0, 2.0, 0.0, 5),
-     'zRounding': (0.0, 1.0, 0.5, 6),
-     'zRoundingCenter': (0.0, 1.0, 0.5, 7),
-     'xRounding': (0.0, 1.0, 0.5, 8),
-     'xRoundingCenter': (0.0, 1.0, 0.5, 9),
-     'xSlope': (0.0, 1.0, 0.5, 10),
-     'xSlopeCenter': (0.0, 1.0, 0.5, 11),
-     'zSlope': (0.0, 1.0, 0.6, 12),
-     'zSlopeCenter': (0.0, 1.0, 0.1, 13),
-     'topSlope': (0.0, 1.0, 0.5, 14)}
+     'zRounding': (0.0, 1.0, 0.0, 6),
+     'zRoundingCenter': (0.0, 1.0, 0.0, 7),
+     'xRounding': (0.0, 1.0, 0.0, 8),
+     'xRoundingCenter': (0.0, 1.0, 0.0, 9),
+     'xSlope': (0.0, 1.0, 0.0, 10),
+     'xSlopeCenter': (0.0, 1.0, 0.0, 11),
+     'zSlope': (0.0, 1.0, 0.0, 12),
+     'zSlopeCenter': (0.0, 1.0, 0.0, 13),
+     'topSlope': (0.0, 1.0, 0.0, 14)}
     PARAM_NAME_BY_INDEX = dict(((desc[3], name) for name, desc in PARAMS_DESC.iteritems()))
 
     def __init__(self, bbMin=None, bbMax=None):
         self.__polys = None
-        self.__params = dict(zip(PhysicsTurretShape.PARAMS_DESC.iterkeys(), (d[2] for d in PhysicsTurretShape.PARAMS_DESC.itervalues())))
+        self.__params = None
+        self.resetParams()
         self.__box = None
         if bbMin is not None and bbMax is not None:
             self.__box = (Math.Vector3(bbMin), Math.Vector3(bbMax))
         self.__isDirty = True
         self.__isSetParams = False
         return
+
+    def resetParams(self):
+        self.__params = dict(zip(PhysicsTurretShape.PARAMS_DESC.iterkeys(), (d[2] for d in PhysicsTurretShape.PARAMS_DESC.itervalues())))
+        self.__isDirty = True
 
     def getIsDirty(self):
         return self.__isDirty

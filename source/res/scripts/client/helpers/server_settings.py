@@ -1423,8 +1423,8 @@ class ServerSettings(object):
             self.__progressiveReward = makeTupleByDict(_ProgressiveReward, self.__serverSettings['progressive_reward_config'])
         else:
             self.__progressiveReward = _ProgressiveReward()
-        if 'seniority_awards_config' in self.__serverSettings:
-            self.__seniorityAwardsConfig = makeTupleByDict(SeniorityAwardsConfig, self.__serverSettings['seniority_awards_config'])
+        if Configs.SENIORITY_AWARDS_CONFIG.value in self.__serverSettings:
+            self.__seniorityAwardsConfig = makeTupleByDict(SeniorityAwardsConfig, self.__serverSettings[Configs.SENIORITY_AWARDS_CONFIG.value])
         else:
             self.__seniorityAwardsConfig = SeniorityAwardsConfig()
         if 'exchange_rates_config' in self.__serverSettings:
@@ -1567,7 +1567,7 @@ class ServerSettings(object):
             self.__serverSettings['lootBoxes_config'] = serverSettingsDiff['lootBoxes_config']
         if 'progressive_reward_config' in serverSettingsDiff:
             self.__updateProgressiveReward(serverSettingsDiff)
-        if 'seniority_awards_config' in serverSettingsDiff:
+        if Configs.SENIORITY_AWARDS_CONFIG.value in serverSettingsDiff:
             self.__updateSeniorityAwards(serverSettingsDiff)
         if 'event_battles_config' in serverSettingsDiff:
             self.__updateEventBattles(serverSettingsDiff)
@@ -2247,7 +2247,7 @@ class ServerSettings(object):
         self.__progressiveReward = self.__progressiveReward.replace(targetSettings['progressive_reward_config'])
 
     def __updateSeniorityAwards(self, targetSettings):
-        self.__seniorityAwardsConfig = self.__seniorityAwardsConfig.replace(targetSettings['seniority_awards_config'])
+        self.__seniorityAwardsConfig = self.__seniorityAwardsConfig.replace(targetSettings[Configs.SENIORITY_AWARDS_CONFIG.value])
 
     def __updateReactiveCommunicationConfig(self, settings):
         if 'reactiveCommunicationConfig' in settings:

@@ -595,6 +595,13 @@
       <attachmentLogic>	prefab	</attachmentLogic>
     </attachment>
     <attachment>
+      <id>	141	</id>
+      <name>	A167_TS_6_G90_3Dst	</name>
+      <modelName>	particles/Tank/customization/A167_TS_6_G90_3Dst/A167_TS_6_G90_3Dst.prefab	</modelName>
+      <hangarModelName>	particles/Tank/customization/A167_TS_6_G90_3Dst/A167_TS_6_G90_3Dst_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+    </attachment>
+    <attachment>
       <id>	142	</id>
       <name>	Cz40_ABM_122_RW6_3Dst_Lamp	</name>
       <modelName>	vehicles/czech/Cz40_DBV_152/_skins/Cz40_DBV_152_RW6_3Dst/lamp_76779.prefab	</modelName>
@@ -622,6 +629,25 @@
       <id>	146	</id>
       <name>	GB142_FV230_Canopener_TXVII_3Dst	</name>
       <modelName>	particles/Tank/customization/GB142_FV230_Canopener_TXVII_3Dst/GB142_FV230_Canopener_TXVII_3Dst.prefab	</modelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+    </attachment>
+    <attachment>
+      <id>	147	</id>
+      <name>	A171_IMT_G90_3Dst	</name>
+      <modelName>	particles/Tank/customization/A171_IMT_G90_3Dst/A171_IMT_G90_3Dst.prefab	</modelName>
+      <hangarModelName>	particles/Tank/customization/A171_IMT_G90_3Dst/A171_IMT_G90_3Dst_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+    </attachment>
+    <attachment>
+      <id>	155	</id>
+      <name>	GB134_Gryphon_RW7_3Dst_Lamp	</name>
+      <modelName>	vehicles/british/GB134_Gryphon/_skins/GB134_Gryphon_RW7_3Dst/lamp_switcher.prefab	</modelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+    </attachment>
+    <attachment>
+      <id>	156	</id>
+      <name>	GB134_Gryphon_RW7_3Dst_GunNum	</name>
+      <modelName>	vehicles/british/GB134_Gryphon/_skins/GB134_Gryphon_RW7_3Dst/gun_number_switcher.prefab	</modelName>
       <attachmentLogic>	prefab	</attachmentLogic>
     </attachment>
   </itemGroup>
@@ -1341,6 +1367,74 @@
       <rarity>	rare	</rarity>
       <priceGroup>	attachments 600g notInShop	</priceGroup>
       <userString>	#vehicle_customization:attachment/anomaly_armory/Cus_47_LS_TV_02	</userString>
+    </attachment>
+  </itemGroup>
+  <itemGroup>
+    <name>	BIrthday Bash	</name>
+    <userString>	#vehicle_customization:attachment/birthday_bash	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <attachment>
+      <id>	1079	</id>
+      <name>	Cus_103_A15_Mouse_mascot	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_103_A15_Mouse_mascot/Cus_103_A15_Mouse_mascot.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_103_A15_Mouse_mascot/Cus_103_A15_Mouse_mascot_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	gunMantlet	</applyType>
+      <size>	medium	</size>
+      <rarity>	legendary	</rarity>
+      <priceGroup>	attachments 2795g notInShop	</priceGroup>
+      <tags>	battleEffect	</tags>
+      <userString>	#vehicle_customization:attachment/birthday_bash/Cus_103_A15_Mouse_mascot	</userString>
+      <description>	#vehicle_customization:attachment/birthday_bash/Cus_103_A15_Mouse_mascot/description	</description>
+    </attachment>
+    <attachment>
+      <id>	1080	</id>
+      <name>	Cus_104_A15_Deer_mascot	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_104_A15_Deer_mascot/Cus_104_A15_Deer_mascot.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_104_A15_Deer_mascot/Cus_104_A15_Deer_mascot.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	turret	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 650g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/birthday_bash/Cus_104_A15_Deer_mascot	</userString>
+    </attachment>
+    <attachment>
+      <id>	1081	</id>
+      <name>	Cus_105_A15_Safe	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_105_A115_Safe/Cus_105_A115_Safe.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_105_A115_Safe/Cus_105_A115_Safe.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 650g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/birthday_bash/Cus_105_A15_Safe	</userString>
+    </attachment>
+    <attachment>
+      <id>	1082	</id>
+      <name>	Cus_106_A15_Cinema_Set	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_106_A15_Cinema_Set/Cus_106_A15_Cinema_Set.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_106_A15_Cinema_Set/Cus_106_A15_Cinema_Set.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 650g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/birthday_bash/Cus_106_A15_Cinema_Set	</userString>
+    </attachment>
+    <attachment>
+      <id>	1083	</id>
+      <name>	Cus_107_A15_Tank_builder_set	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_107_A15_Tank_builder_set/Cus_107_A15_Tank_builder_set.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_107_A15_Tank_builder_set/Cus_107_A15_Tank_builder_set.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 650g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/birthday_bash/Cus_107_A15_Tank_builder_set	</userString>
     </attachment>
   </itemGroup>
   <itemGroup>

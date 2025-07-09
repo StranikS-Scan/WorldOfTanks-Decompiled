@@ -9,9 +9,9 @@ import motivation_quests
 import customization_quests
 import nations
 import static_quests
+from BWUtil import AsyncReturn
 from Event import Event, EventManager
 from PlayerEvents import g_playerEvents
-from adisp import adisp_async, adisp_process
 from constants import EVENT_CLIENT_DATA, EVENT_TYPE, LOOTBOX_TOKEN_PREFIX, OFFER_TOKEN_PREFIX, TWITCH_TOKEN_PREFIX
 from debug_utils import LOG_DEBUG
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
@@ -36,6 +36,7 @@ from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared.utils import IRaresCache
+from wg_async import wg_async, wg_await, await_callback
 if typing.TYPE_CHECKING:
     from typing import Optional, Dict, Callable, Union
     from gui.server_events.event_items import DailyEpicTokenQuest, DailyQuest
@@ -193,55 +194,45 @@ class EventsCache(IEventsCache):
 
         return result
 
-    @adisp_async
-    @adisp_process
+    @wg_async
     def update(self, diff=None, callback=None):
         clearModifiersCache()
-        yield self.getPersonalMissions().questsProgressRequest()
+        yield wg_await(self.getPersonalMissions().questsProgressRequest())
         if not self.getPersonalMissions().isQuestsProgressSynced():
-            callback(False)
-            return
-        else:
-            yield self.__questsProgressRequester.request()
-            if not self.__questsProgressRequester.isSynced():
-                callback(False)
-                return
-            isNeedToInvalidate = True
-            isNeedToClearItemsCaches = False
-            isQPUpdated = False
-
-            def _cbWrapper(*args):
-                callback(*args)
-                self.__personalMissions.update(self, diff)
-
-            if diff is not None:
-                isQPUpdated = 'quests' in diff or 'potapovQuests' in diff or 'pm2_progress' in diff
-                if not isQPUpdated and 'tokens' in diff:
-                    for tokenID in diff['tokens'].iterkeys():
-                        if all((not tokenID.startswith(t) for t in NOT_FOR_PERSONAL_MISSIONS_TOKENS)):
-                            isQPUpdated = True
-                            break
-
-                isEventsDataUpdated = ('eventsData', '_r') in diff or diff.get('eventsData', {})
-                isNeedToInvalidate = isQPUpdated or isEventsDataUpdated
-                hasVehicleUnlocks = False
-                diffStats = diff.get('stats', {})
-                for intCD in diffStats.get('unlocks', set()) | diffStats.get(('unlocks', '_r'), set()):
-                    if getTypeOfCompactDescr(intCD) == GUI_ITEM_TYPE.VEHICLE:
-                        hasVehicleUnlocks = True
+            raise AsyncReturn(False)
+        yield wg_await(self.__questsProgressRequester.request())
+        if not self.__questsProgressRequester.isSynced():
+            raise AsyncReturn(False)
+        isNeedToInvalidate = True
+        isNeedToClearItemsCaches = False
+        isQPUpdated = False
+        if diff is not None:
+            isQPUpdated = 'quests' in diff or 'potapovQuests' in diff or 'pm2_progress' in diff
+            if not isQPUpdated and 'tokens' in diff:
+                for tokenID in diff['tokens'].iterkeys():
+                    if all((not tokenID.startswith(t) for t in NOT_FOR_PERSONAL_MISSIONS_TOKENS)):
+                        isQPUpdated = True
                         break
 
-                isNeedToClearItemsCaches = hasVehicleUnlocks or 'inventory' in diff and GUI_ITEM_TYPE.VEHICLE in diff['inventory']
-            if isNeedToInvalidate:
-                self.__invalidateData(_cbWrapper)
-            else:
-                if isNeedToClearItemsCaches:
-                    self.__clearQuestsItemsCache()
-                if isQPUpdated:
-                    _cbWrapper(True)
-                else:
-                    callback(True)
-            return
+            isEventsDataUpdated = ('eventsData', '_r') in diff or diff.get('eventsData', {})
+            isNeedToInvalidate = isQPUpdated or isEventsDataUpdated
+            hasVehicleUnlocks = False
+            diffStats = diff.get('stats', {})
+            for intCD in diffStats.get('unlocks', set()) | diffStats.get(('unlocks', '_r'), set()):
+                if getTypeOfCompactDescr(intCD) == GUI_ITEM_TYPE.VEHICLE:
+                    hasVehicleUnlocks = True
+                    break
+
+            isNeedToClearItemsCaches = hasVehicleUnlocks or 'inventory' in diff and GUI_ITEM_TYPE.VEHICLE in diff['inventory']
+        if isNeedToInvalidate:
+            yield await_callback(self.__invalidateData)()
+            self.__personalMissions.update(self, diff)
+        else:
+            if isNeedToClearItemsCaches:
+                self.__clearQuestsItemsCache()
+            if isQPUpdated:
+                self.__personalMissions.update(self, diff)
+        return
 
     def getQuests(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
@@ -543,7 +534,7 @@ class EventsCache(IEventsCache):
             alias = first((m.getAlias() for m in action.getModifiers()))
         return (alias, counterValue)
 
-    def _getQuests(self, filterFunc=None, includePersonalMissions=False):
+    def _getQuests(self, filterFunc=None, includePersonalMissions=False, makeRelations=True):
         result = {}
         groups = {}
         filterFunc = filterFunc or (lambda a: True)
@@ -569,6 +560,8 @@ class EventsCache(IEventsCache):
                 if qID in result:
                     result[qID].setGroupID(gID)
 
+        if not makeRelations:
+            return result
         children, parents, parentsName = self._makeQuestsRelations(result)
         for qID, q in result.iteritems():
             if qID in children:
@@ -674,7 +667,7 @@ class EventsCache(IEventsCache):
 
         return (children, parents, parentsName)
 
-    def __invalidateData(self, callback=lambda *args: None):
+    def __invalidateData(self, callback=None):
         self.__clearCache()
         self.__clearInvalidateCallback()
         self.__waitForSync = True
@@ -731,7 +724,8 @@ class EventsCache(IEventsCache):
         self.__syncActionsWithQuests()
         self.__invalidateCompensations()
         self.onSyncCompleted()
-        callback(True)
+        if callback is not None:
+            callback(True)
         return
 
     def __invalidateCompensations(self):
@@ -740,7 +734,7 @@ class EventsCache(IEventsCache):
             self.__compensations.update(q.getCompensation())
 
     def __clearQuestsItemsCache(self):
-        for _, q in self._getQuests().iteritems():
+        for q in self._getQuests(makeRelations=False).itervalues():
             q.accountReqs.clearItemsCache()
             q.vehicleReqs.clearItemsCache()
 

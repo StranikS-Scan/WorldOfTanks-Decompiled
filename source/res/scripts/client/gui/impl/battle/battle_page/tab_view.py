@@ -78,6 +78,17 @@ _COMMENDATIONS_STATE_TO_ENUM = {CommendationsState.UNSENT: CommendationStateEnum
  CommendationsState.RECEIVED: CommendationStateEnum.COMMENDBACK,
  CommendationsState.MUTUAL: CommendationStateEnum.MUTUALCOMMENDATION}
 
+def checkArenaDataProvider(func):
+
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except AttributeError:
+            _logger.debug('[TabView] Trying to load tab view without arena data provider')
+
+    return wrapper
+
+
 def _playerCompositionKey(playerModel):
     return (playerModel.getIsKilled(),
      -playerModel.getVehicleLevel(),
@@ -353,6 +364,7 @@ class TabView(ViewImpl):
     def _getPrebattleID(vehicleInfo):
         return vehicleInfo.get('prebattleID', 0) if vehicleInfo is not None else 0
 
+    @checkArenaDataProvider
     def _isPlatoonInvitationEnabled(self, vehicleId):
         arenaDP = self.sessionProvider.getArenaDP()
         vehicleInfo = arenaDP.getVehicleInfo(vehicleId)
@@ -369,7 +381,9 @@ class TabView(ViewImpl):
     def _invalidateVehicleStats(self, player):
         vehicleId = player.getVehicleId()
         if vehicleId:
-            player.setKills(self._visitor.getArenaStatistics().get(vehicleId, {}).get('frags', 0))
+            stats = self._visitor.getArenaStatistics().get(vehicleId, {})
+            kills = stats.get('frags', 0) - stats.get('tkills', 0)
+            player.setKills(kills)
 
     def _invalidateVehicleTypeInfo(self, player):
         vehicleId = player.getVehicleId()
@@ -494,6 +508,7 @@ class TabView(ViewImpl):
                 return
             self._updateStats(vehicleId)
 
+    @checkArenaDataProvider
     def _onPlayerSpeaking(self, accountDBID, isSpeak):
         vehicleId = self.sessionProvider.getArenaDP().getVehIDByAccDBID(accountDBID)
         with self.modifyBattlePlayer(vehicleId) as player:
@@ -502,6 +517,7 @@ class TabView(ViewImpl):
             player.setIsVoiceActive(isSpeak)
         return
 
+    @checkArenaDataProvider
     def _hasMutedSelfInPlatoon(self, vehicleId):
         arenaDP = self.sessionProvider.getArenaDP()
         vehicleInfo = arenaDP.getVehicleInfo(vehicleId)
@@ -514,6 +530,7 @@ class TabView(ViewImpl):
             return False
         return False if self.sessionProvider.isReplayPlaying else not (voipMgr.isEnabled() and voipMgr.isCurrentChannelEnabled())
 
+    @checkArenaDataProvider
     def _invalidateChatActions(self, vehicleId):
         sessionId = self.sessionProvider.getArenaDP().getSessionIDByVehID(vehicleId)
         mutedUsers, ignoredUsers = self._getChatUserStatuses()
@@ -532,6 +549,7 @@ class TabView(ViewImpl):
             return
         self._invalidateChatActions(vehicleId)
 
+    @checkArenaDataProvider
     def _updateChatActions(self, _, user):
         vehicleId = self.sessionProvider.getArenaDP().getVehIDBySessionID(user.getID())
         if not vehicleId:

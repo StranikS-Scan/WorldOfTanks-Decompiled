@@ -28,11 +28,13 @@ class StylePopover(CustomizationKitPopoverMeta):
         self.destroy()
 
     def removeCustomizationKit(self):
-        if self.__has3DAttachments():
-            self.__ctx.mode.removeItemsFromSeason(SeasonType.ALL)
+        if self.__ctx.hasCommonItems():
+            self.__ctx.mode.removeItemsFromSeason(SeasonType.ALL, refresh=False)
         if self.__style is not None:
-            self.__ctx.mode.removeStyle(self.__style.intCD)
+            self.__ctx.mode.removeStyle(self.__style.intCD, refresh=False)
             self.__style = None
+        self.__ctx.refreshOutfit()
+        self.__ctx.events.onItemsRemoved()
         return
 
     def updateAutoProlongation(self):
@@ -63,7 +65,7 @@ class StylePopover(CustomizationKitPopoverMeta):
         return
 
     def __setHeader(self):
-        if self.__has3DAttachments():
+        if self.__ctx.hasCommonItems():
             header = backport.text(R.strings.vehicle_customization.customization.kitPopover.title.summary())
         elif self.__style is None:
             header = backport.text(R.strings.vehicle_customization.customization.kitPopover.title.items())
@@ -85,7 +87,7 @@ class StylePopover(CustomizationKitPopoverMeta):
         return
 
     def __setClearMessage(self):
-        if self.__style is None and not self.__has3DAttachments():
+        if self.__style is None and not self.__ctx.hasCommonItems():
             isClear = True
             clearMessage = R.strings.vehicle_customization.customization.itemsPopover.message.clear
             clearMessage = backport.text(clearMessage())
@@ -97,21 +99,15 @@ class StylePopover(CustomizationKitPopoverMeta):
 
     def __update(self, *_):
         self.__style = self.__ctx.mode.modifiedStyle
-        if self.__style is not None and self.__style.isEditable and not self.__has3DAttachments():
+        if self.__style is not None and self.__style.isEditable and not self.__ctx.hasCommonItems():
             self.destroy()
-        self._assignedDP.rebuildList()
-        self.__setHeader()
-        self.__setRent()
-        self.__setClearMessage()
-        return
-
-    def __has3DAttachments(self):
-        for intCD in self.__ctx.getCommonModifiedOutfit().items():
-            item = self.__service.getItemByCD(intCD)
-            if not item.isHiddenInUI() and item.itemTypeID == GUI_ITEM_TYPE.ATTACHMENT:
-                return True
-
-        return False
+            return
+        else:
+            self._assignedDP.rebuildList()
+            self.__setHeader()
+            self.__setRent()
+            self.__setClearMessage()
+            return
 
 
 class StylePopoverDataProvider(SortableDAAPIDataProvider):
@@ -200,4 +196,4 @@ class StylePopoverDataProvider(SortableDAAPIDataProvider):
         return TYPES_ORDER.index(item.itemTypeID)
 
     def __getModifiedOutfit(self, season, style, vehicleCD=''):
-        return self.__ctx.getCommonModifiedOutfit() if season == SeasonType.ALL else style.getOutfit(season, vehicleCD=vehicleCD)
+        return self.__ctx.commonModifiedOutfit if season == SeasonType.ALL else style.getOutfit(season, vehicleCD=vehicleCD)

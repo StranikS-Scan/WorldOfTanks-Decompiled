@@ -261,8 +261,7 @@ class DossierRequester(AbstractSyncDataRequester, IDossierRequester):
         super(DossierRequester, self).__init__()
         self.__users = {}
 
-    @adisp_async
-    def _requestCache(self, callback):
+    def _requestCache(self, callback=None):
         BigWorld.player().dossierCache.getCache(lambda resID, value: self._response(resID, value, callback))
 
     def getVehicleDossier(self, vehTypeCompDescr):

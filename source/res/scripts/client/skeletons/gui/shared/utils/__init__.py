@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/skeletons/gui/shared/utils/__init__.py
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Optional, Dict
 from skeletons.gui.shared.utils import requesters
 if TYPE_CHECKING:
     from gui.shared.gui_items import ItemsCollection
@@ -164,6 +164,9 @@ class IItemsRequester(requesters.IRequester):
         raise NotImplementedError
 
     def getBadges(self, criteria=None):
+        raise NotImplementedError
+
+    def getReceivedBadges(self, onlySelected=False):
         raise NotImplementedError
 
     def getBadgeByID(self, badgeID):

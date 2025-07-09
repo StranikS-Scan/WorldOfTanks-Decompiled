@@ -611,21 +611,25 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         return self._request_data(callback, url, method='POST')
 
     def get_teaser(self, callback, additionalData=None):
+        url = '/promobe/teaser/'
         get_params = {'language': self._get_formatted_language_code()}
         if additionalData:
             get_params.update(additionalData)
-        url = '/promobe/teaser/'
         return self._request_data(callback, url, get_data=get_params, method='GET')
 
-    def send_teaser(self, callback, promo_id):
+    def send_teaser(self, callback, promo_id, additionalData=None):
         url = '/promobe/teaser/view/'
         params = {'promoscreen_id': promo_id,
          'language': self._get_formatted_language_code()}
+        if additionalData:
+            params.update(additionalData)
         return self._request_data(callback, url, params, method='POST')
 
-    def get_unread_count(self, callback):
-        get_params = {'language': self._get_formatted_language_code()}
+    def get_unread_count(self, callback, additionalData=None):
         url = '/promobe/unread/'
+        get_params = {'language': self._get_formatted_language_code()}
+        if additionalData:
+            get_params.update(additionalData)
         return self._request_data(callback, url, get_data=get_params, method='GET')
 
     def client_promo_log(self, callback, data):

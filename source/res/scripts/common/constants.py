@@ -899,7 +899,6 @@ RENEWABLE_SUBSCRIPTION_CONFIG = 'renewable_subscription_config'
 OPTIONAL_DEVICES_USAGE_CONFIG = 'optional_devices_usage_config'
 PLAYER_SUBSCRIPTIONS_CONFIG = 'player_subscriptions_config'
 IS_LOOT_BOXES_ENABLED = 'isLootBoxesEnabled'
-SENIORITY_AWARDS_CONFIG = 'seniority_awards_config'
 MAGNETIC_AUTO_AIM_CONFIG = 'magnetic_auto_aim_config'
 BATTLE_NOTIFIER_CONFIG = 'battle_notifier_config'
 BATTLE_ACHIEVEMENTS_CONFIG = 'battle_achievements_config'
@@ -945,6 +944,8 @@ class Configs(enum.Enum):
     EASY_TANK_EQUIP_CONFIG = 'easy_tank_equip_config'
     PLAYER_SATISFACTION_CONFIG = 'player_satisfaction_config'
     COMMENDATIONS_CONFIG = 'commendations_config'
+    SENIORITY_AWARDS_CONFIG = 'seniority_awards_config'
+    WTR_CONFIG = 'wtr_config'
 
 
 INBATTLE_CONFIGS = ['spgRedesignFeatures',
@@ -2004,6 +2005,7 @@ class REQUEST_COOLDOWN:
     RESET_ALL_TANKMEN_SKILLS = 60.0
     FILL_ALL_TANKMEN_SKILLS = 60.0
     CMD_EASY_TANK_EQUIP_APPLY = 1.0
+    CMD_SELLING = 5.0
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -3901,3 +3903,23 @@ class CommendationsState(IntEnum):
 
 
 DEFAULT_VEHICLE_BOUNDING_RADIUS = 11.2
+
+class VehiclePartName(object):
+    CHASSIS = 'chassis'
+    HULL = 'hull'
+    TURRET = 'turret'
+    GUN = 'gun'
+    ALL = (CHASSIS,
+     HULL,
+     TURRET,
+     GUN)
+    _NAME_TO_IDX = {name:idx for idx, name in enumerate(ALL)}
+    _IDX_TO_NAME = {idx:name for idx, name in enumerate(ALL)}
+
+    @classmethod
+    def getIdx(cls, name):
+        return cls._NAME_TO_IDX.get(name)
+
+    @classmethod
+    def getName(cls, idx):
+        return cls._IDX_TO_NAME.get(idx)

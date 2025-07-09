@@ -6,7 +6,7 @@ from gui.Scaleform.daapi.view.lobby.customization.customization_carousel import 
 from gui.Scaleform.daapi.view.lobby.customization.popovers import C11nPopoverItemData, orderKey
 from gui.Scaleform.daapi.view.lobby.customization.shared import getCurrentVehicleAvailableRegionsMap, fitOutfit, ITEM_TYPE_TO_SLOT_TYPE, removePartsFromOutfit
 from gui.Scaleform.daapi.view.meta.CustomizationProgressiveKitPopoverMeta import CustomizationProgressiveKitPopoverMeta
-from gui.customization.shared import SEASONS_ORDER, SEASON_TYPE_TO_NAME, EDITABLE_STYLE_IRREMOVABLE_TYPES, C11nId, C11N_ITEM_TYPE_MAP
+from gui.customization.shared import SEASONS_ORDER, SEASON_TYPE_TO_NAME, EDITABLE_STYLE_IRREMOVABLE_TYPES, C11nId
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.formatters import text_styles, getItemPricesVO
@@ -14,7 +14,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from items.components.c11n_components import getItemSlotType
-from items.components.c11n_constants import SeasonType, CustomizationType
+from items.components.c11n_constants import SeasonType
 from skeletons.gui.customization import ICustomizationService
 POPOVER_SEASONS_ORDER = (SeasonType.ALL,) + SEASONS_ORDER
 
@@ -41,7 +41,7 @@ class ProgressiveStylePopover(CustomizationProgressiveKitPopoverMeta):
         self.destroy()
 
     def remove(self, intCD, slotIds, season):
-        if C11N_ITEM_TYPE_MAP[slotIds[0].slotType] in CustomizationType.COMMON_TYPES:
+        if slotIds[0].slotType in GUI_ITEM_TYPE.COMMON_C11NS:
             self.__ctx.mode.removeFromSlots(slotIds, season)
             return
         if season == SeasonType.ALL:
@@ -52,17 +52,19 @@ class ProgressiveStylePopover(CustomizationProgressiveKitPopoverMeta):
             self.__ctx.mode.removeFromSlots(slotIds, season)
 
     def removeAll(self):
-        if self.__has3DAttachments():
-            self.__ctx.mode.removeItemsFromSeason(SeasonType.ALL)
+        if self.__ctx.hasCommonItems():
+            self.__ctx.mode.removeItemsFromSeason(SeasonType.ALL, refresh=False)
         if self.__style is not None:
             reqCriteria = self.__getFilterReq()
             if not reqCriteria.conditions:
                 self.__ctx.returnToStyleMode()
-                self.__ctx.mode.removeStyle(self.__style.intCD)
+                self.__ctx.mode.removeStyle(self.__style.intCD, refresh=False)
             else:
                 for season in SeasonType.COMMON_SEASONS:
-                    self.__ctx.mode.removeItemsFromSeason(season=season, filterMethod=self.__getFilterReq())
+                    self.__ctx.mode.removeItemsFromSeason(season=season, filterMethod=self.__getFilterReq(), refresh=False)
 
+        self.__ctx.refreshOutfit()
+        self.__ctx.events.onItemsRemoved()
         return
 
     def setToDefault(self):
@@ -102,15 +104,17 @@ class ProgressiveStylePopover(CustomizationProgressiveKitPopoverMeta):
         self.__style = self.__service.getItemByID(GUI_ITEM_TYPE.STYLE, outfit.id) if outfit.id else None
         if self.__style is not None and (not self.__style.isEditable or not self.__style.isQuestsProgression):
             self.destroy()
-        self.__itemsList = self.__buildList()
-        self.as_setItemsS({'items': self.__itemsList})
-        self.__setHeader()
-        self.__setClearMessage()
-        self.as_setDefaultButtonEnabledS(self.__hasIsRemovable())
-        return
+            return
+        else:
+            self.__itemsList = self.__buildList()
+            self.as_setItemsS({'items': self.__itemsList})
+            self.__setHeader()
+            self.__setClearMessage()
+            self.as_setDefaultButtonEnabledS(self.__hasIsRemovable())
+            return
 
     def __setHeader(self):
-        if [ pItem for pItem in self.__ctx.getPurchaseItems() if pItem.item.itemTypeID == GUI_ITEM_TYPE.ATTACHMENT ]:
+        if self.__ctx.hasCommonItems():
             header = backport.text(R.strings.vehicle_customization.customization.kitPopover.title.summary())
         elif self.__style is None:
             header = backport.text(R.strings.vehicle_customization.customization.kitPopover.title.items())
@@ -165,7 +169,7 @@ class ProgressiveStylePopover(CustomizationProgressiveKitPopoverMeta):
                 isBase = not pItem.isEdited
                 if item.itemTypeID == GUI_ITEM_TYPE.STYLE:
                     isRemovable = False
-                elif sType in self.__style.changeableSlotTypes or item.itemTypeID == GUI_ITEM_TYPE.ATTACHMENT:
+                elif sType in self.__style.changeableSlotTypes or item.itemTypeID in GUI_ITEM_TYPE.COMMON_C11NS:
                     if isBase:
                         isRemovable = False
                     elif item.itemTypeID in EDITABLE_STYLE_IRREMOVABLE_TYPES:
@@ -293,12 +297,4 @@ class ProgressiveStylePopover(CustomizationProgressiveKitPopoverMeta):
         return False
 
     def __getBaseOutfit(self, season, vehicleCD=''):
-        return self.__ctx.getCommonOutfit() if season == SeasonType.ALL else removePartsFromOutfit(season, self.__style.getOutfit(season, vehicleCD))
-
-    def __has3DAttachments(self):
-        for intCD in self.__ctx.getCommonModifiedOutfit().items():
-            item = self.__service.getItemByCD(intCD)
-            if not item.isHiddenInUI() and item.itemTypeID == GUI_ITEM_TYPE.ATTACHMENT:
-                return True
-
-        return False
+        return self.__ctx.commonOriginalOutfit if season == SeasonType.ALL else removePartsFromOutfit(season, self.__style.getOutfit(season, vehicleCD))

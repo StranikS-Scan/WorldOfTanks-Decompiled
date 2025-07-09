@@ -14,10 +14,12 @@ class PromoDataParser(object):
      'video': 'video',
      'expiration_time': 'finishTime',
      'type': 'promoType',
+     'show_for_steam': 'showForSteam',
      'slug': 'slug'}
     _DATA_FIELD_NAME = 'data'
     _INT_FIELDS = ('id', 'unread', 'sent_at')
     _INT64_FIELDS = ('expiration_time',)
+    _BOOL_FIELDS = ('show_for_steam',)
 
     @classmethod
     def parse(cls, data):
@@ -46,7 +48,9 @@ class PromoDataParser(object):
     def __extractFromXML(cls, data, key):
         if key in cls._INT_FIELDS:
             return data.readInt(key)
-        return data.readInt64(key) if key in cls._INT64_FIELDS else data.readString(key)
+        if key in cls._INT64_FIELDS:
+            return data.readInt64(key)
+        return data.readBool(key) if key in cls._BOOL_FIELDS else data.readString(key)
 
     @staticmethod
     def __extractFromArray(data, key):

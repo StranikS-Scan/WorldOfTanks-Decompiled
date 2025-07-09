@@ -2,11 +2,14 @@
 # Embedded file name: scripts/client/ProjectileMover.py
 import BigWorld
 import Math
+import CGF
+from cgf_modules import game_events
 import constants
 import TriggersManager
 import helpers
 from TriggersManager import TRIGGER_TYPE
 import FlockManager
+from items.components.component_constants import INVALID_EFFECT_INDEX
 from vehicle_systems.tankStructure import TankPartNames, ColliderTypes
 from helpers import gEffectsDisabled
 from helpers.trajectory_drawer import TrajectoryDrawer
@@ -52,7 +55,8 @@ class ProjectileMover(object):
 
         return
 
-    def add(self, shotID, effectsDescr, gravity, refStartPoint, refVelocity, startPoint, maxDistance, attackerID=0, tracerCameraPos=Math.Vector3(0, 0, 0)):
+    def add(self, shotID, effectsDescr, prefabEffIndex, gravity, refStartPoint, refVelocity, startPoint, maxDistance, shellTypeIdx, shellCaliber, attackerID=0, tracerCameraPos=None):
+        tracerCameraPos = tracerCameraPos or Math.Vector3(0, 0, 0)
         import BattleReplay
         if BattleReplay.g_replayCtrl.isTimeWarpInProgress or self.__isPaused:
             return
@@ -75,6 +79,9 @@ class ProjectileMover(object):
             proj = {'model': model,
              'motor': projectileMotor,
              'effectsDescr': effectsDescr,
+             'prefabEffIndex': prefabEffIndex,
+             'shellType': shellTypeIdx,
+             'caliber': shellCaliber,
              'showExplosion': False,
              'fireMissedTrigger': isOwnShoot,
              'autoScaleProjectile': isOwnShoot,
@@ -104,7 +111,7 @@ class ProjectileMover(object):
             self.__ballistics.hideProjectile(shotID, endPoint)
             return
 
-    def explode(self, shotID, effectsDescr, effectMaterial, endPoint, velocityDir):
+    def explode(self, shotID, effectsDescr, prefabEffIndex, effectMaterial, shellType, caliber, endPoint, velocityDir, speed):
         if effectsDescr.has_key('artilleryID') or self.__isPaused:
             return
         else:
@@ -113,17 +120,23 @@ class ProjectileMover(object):
                 __proj = {}
                 __proj['effectsDescr'] = effectsDescr
                 __proj['effectMaterial'] = effectMaterial
+                __proj['prefabEffIndex'] = prefabEffIndex
+                __proj['shellType'] = shellType
+                __proj['caliber'] = caliber
                 __proj['attackerID'] = 0
-                self.__addExplosionEffect(endPoint, __proj, velocityDir)
+                self.__addExplosionEffect(endPoint, __proj, velocityDir, speed)
                 return
             if proj['fireMissedTrigger']:
                 proj['fireMissedTrigger'] = False
                 TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.PLAYER_SHOT_MISSED)
             params = self.__ballistics.explodeProjectile(shotID, endPoint)
             if params is not None:
+                proj['shellType'] = shellType
+                proj['caliber'] = caliber
                 if not proj.has_key('effectMaterial'):
                     proj['effectMaterial'] = effectMaterial
-                self.__addExplosionEffect(params[0], proj, params[1])
+                velocityVec = params[2]
+                self.__addExplosionEffect(params[0], proj, params[1], velocityVec.length)
             else:
                 proj['showExplosion'] = True
                 proj['effectMaterial'] = effectMaterial
@@ -152,11 +165,12 @@ class ProjectileMover(object):
         BigWorld.player().inputHandler.onProjectileHit(hitPosition, proj['effectsDescr']['caliber'], proj['effectsDescr']['targetCameraSensitivity'], proj['autoScaleProjectile'])
         FlockManager.getManager().onProjectile(hitPosition)
 
-    def __addExplosionEffect(self, position, proj, velocityDir):
+    def __addExplosionEffect(self, position, proj, velocityDir, speed):
         if self.__isPaused:
             return
         else:
-            effectTypeStr = proj.get('effectMaterial', '') + 'Hit'
+            matKind = proj.get('effectMaterial', '')
+            effectTypeStr = matKind + 'Hit'
             p0 = Math.Vector3(position.x, 1000, position.z)
             p1 = Math.Vector3(position.x, -1000, position.z)
             waterDist = BigWorld.wg_collideWater(p0, p1, False)
@@ -174,9 +188,14 @@ class ProjectileMover(object):
                     self.__addWaterRipples(position, rippleDiameter, 5)
             keyPoints, effects, _ = proj['effectsDescr'][effectTypeStr]
             BigWorld.player().terrainEffects.addNew(position, effects, keyPoints, None, dir=velocityDir, start=position + velocityDir.scale(-1.0), end=position + velocityDir.scale(1.0), attackerID=proj['attackerID'])
+            prefabEffIndex = proj['prefabEffIndex']
+            if prefabEffIndex != INVALID_EFFECT_INDEX:
+                shellType = proj['shellType']
+                caliber = proj['caliber']
+                CGF.postEvent(BigWorld.player().spaceID, game_events.SceneHitEvent(position, caliber, shellType, speed, velocityDir, prefabEffIndex, effectTypeStr, matKind))
             return
 
-    def __killProjectile(self, shotID, position, impactVelDir, deathType, explode):
+    def __killProjectile(self, shotID, position, impactVelDir, velocity, deathType, explode):
         proj = self.__projectiles.get(shotID)
         if proj is None:
             return
@@ -185,7 +204,7 @@ class ProjectileMover(object):
             projEffects = effectsDescr['projectile'][2]
             projEffects.detachFrom(proj['effectsData'], 'stopFlying', deathType)
             if proj['showExplosion'] and explode and not helpers.isShowingKillCam():
-                self.__addExplosionEffect(position, proj, impactVelDir)
+                self.__addExplosionEffect(position, proj, impactVelDir, velocity.length)
             return
 
     def __deleteProjectile(self, shotID):

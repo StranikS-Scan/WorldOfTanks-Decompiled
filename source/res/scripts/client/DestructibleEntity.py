@@ -41,7 +41,7 @@ class DestructibleEntity(BigWorld.Entity):
         self.__prereqs = None
         self.__destroyEffectsList = None
         self.__activeStateResource = None
-        self.__prevDamageStickers = None
+        self.__prevDamageStickerCodes = None
         self.__stateResources = {}
         for stateName, stateProperties in self.__properties.states.iteritems():
             self.__stateResources[stateName] = DestructibleEntityState(stateName, stateProperties, self.id, self.__stateTriggers[stateName], self.spaceID)
@@ -70,7 +70,7 @@ class DestructibleEntity(BigWorld.Entity):
             stateResource.onResourcesLoaded(prereqs)
 
         self.__checkStateTriggers()
-        self.__prevDamageStickers = frozenset()
+        self.__prevDamageStickerCodes = frozenset()
 
     def onLeaveWorld(self):
         if self.__activeStateResource is not None:
@@ -133,22 +133,23 @@ class DestructibleEntity(BigWorld.Entity):
         if not self.isAlive():
             return
         else:
-            prev = self.__prevDamageStickers
-            curr = frozenset(self.damageStickers)
-            self.__prevDamageStickers = curr
-            for sticker in prev.difference(curr):
+            prev = self.__prevDamageStickerCodes
+            stickerMap = {DamageFromShotDecoder.encodeHitPoint(hitPoint):hitPoint for hitPoint in self.damageStickers}
+            curr = frozenset(stickerMap.keys())
+            for code in prev.difference(curr):
                 for damageStickers in self.__activeStateResource.damageStickers.itervalues():
-                    damageStickers.delDamageSticker(sticker)
+                    damageStickers.delDamageSticker(code)
 
-            for sticker in curr.difference(prev):
-                hitCompIndx, stickerID, segStart, segEnd = DamageFromShotDecoder.decodeSegment(sticker, self.__activeStateResource.collisionComponent)
-                if hitCompIndx is None:
-                    return
+            for code in curr.difference(prev):
+                parsedHitPoint = DamageFromShotDecoder.parseHitPoint(stickerMap[code], self.__activeStateResource.collisionComponent)
+                if parsedHitPoint is None:
+                    continue
+                hitCompIndx, stickerID, segStart, segEnd = parsedHitPoint
                 if hitCompIndx not in self.__activeStateResource.damageStickers:
                     LOG_ERROR('component is not available for damage sticker: ', hitCompIndx)
                     continue
                 segStart, segEnd = self.__activeStateResource.reduceSegmentLength(hitCompIndx, segStart, segEnd)
-                self.__activeStateResource.damageStickers[hitCompIndx].addDamageSticker(sticker, stickerID, segStart, segEnd)
+                self.__activeStateResource.damageStickers[hitCompIndx].addDamageSticker(code, stickerID, segStart, segEnd)
 
             return
 

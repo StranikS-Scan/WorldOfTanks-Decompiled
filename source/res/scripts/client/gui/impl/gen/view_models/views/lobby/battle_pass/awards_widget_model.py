@@ -47,11 +47,11 @@ class AwardsWidgetModel(ViewModel):
     def setIsChooseRewardsEnabled(self, value):
         self._setBool(5, value)
 
-    def getIsSpecialVoiceTankmenEnabled(self):
-        return self._getBool(6)
+    def getTankmenScreenID(self):
+        return self._getNumber(6)
 
-    def setIsSpecialVoiceTankmenEnabled(self, value):
-        self._setBool(6, value)
+    def setTankmenScreenID(self, value):
+        self._setNumber(6, value)
 
     def getIsTalerEnabled(self):
         return self._getBool(7)
@@ -79,7 +79,7 @@ class AwardsWidgetModel(ViewModel):
         self._addNumberProperty('bpcoinCount', 0)
         self._addNumberProperty('ticketsCount', 0)
         self._addBoolProperty('isChooseRewardsEnabled', True)
-        self._addBoolProperty('isSpecialVoiceTankmenEnabled', False)
+        self._addNumberProperty('tankmenScreenID', 0)
         self._addBoolProperty('isTalerEnabled', False)
         self._addBoolProperty('isBpCoinEnabled', False)
         self._addBoolProperty('isTicketsEnabled', False)

@@ -4,7 +4,7 @@ from itertools import product
 from debug_utils import LOG_WARNING
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from items.components.c11n_constants import CustomizationType
-from items.customizations import PaintComponent, CamouflageComponent, DecalComponent, ProjectionDecalComponent, InsigniaComponent, PersonalNumberComponent, SequenceComponent, AttachmentComponent
+from items.customizations import PaintComponent, CamouflageComponent, DecalComponent, ProjectionDecalComponent, InsigniaComponent, PersonalNumberComponent, SequenceComponent, AttachmentComponent, StatTrackerComponent
 from items.vehicles import makeIntCompactDescrByID, getItemByCompactDescr
 from soft_exception import SoftException
 from constants import IS_EDITOR
@@ -30,6 +30,8 @@ def pickPacker(itemTypeID):
         return SequencePacker
     if itemTypeID == GUI_ITEM_TYPE.ATTACHMENT:
         return AttachmentPacker
+    if itemTypeID == GUI_ITEM_TYPE.STAT_TRACKER:
+        return StatTrackerPacker
     LOG_WARNING('Unsupported packer for the given type', itemTypeID)
     return CustomizationPacker
 
@@ -354,3 +356,32 @@ class AttachmentPacker(CustomizationPacker):
     @staticmethod
     def getRawComponent():
         return AttachmentComponent
+
+
+class StatTrackerPacker(CustomizationPacker):
+
+    @staticmethod
+    def pack(slot, component):
+        for _, intCD, subcomp in slot.items():
+            item = getItemByCompactDescr(intCD)
+            component.stat_trackers.append(StatTrackerComponent(id=item.id, slotId=subcomp.slotId))
+
+    @classmethod
+    def unpack(cls, slot, component):
+        regions = slot.getRegions()
+        for region, subcomp in product(regions, component.stat_trackers):
+            if subcomp.slotId == region:
+                slotIdx = regions.index(region)
+                intCD = cls.create(subcomp, CustomizationType.STAT_TRACKER)
+                slot.set(intCD, slotIdx, component=subcomp)
+
+    @classmethod
+    def invalidate(cls, slot):
+        for region, intCD, comp in slot.items():
+            item = getItemByCompactDescr(intCD)
+            comp.id = item.id
+            comp.slotId = region
+
+    @staticmethod
+    def getRawComponent():
+        return StatTrackerComponent

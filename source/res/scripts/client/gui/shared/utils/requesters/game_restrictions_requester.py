@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/shared/utils/requesters/game_restrictions_requester.py
 import typing
 import BigWorld
-from adisp import adisp_async
 from constants import RESTRICTION_KEY
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from skeletons.gui.shared.utils.requesters import IGameRestrictionsRequester
@@ -28,6 +27,5 @@ class GameRestrictionsRequester(AbstractSyncDataRequester, IGameRestrictionsRequ
     def privateChat(self):
         return self.getCacheValue(RESTRICTION_KEY.PRIVATE_CHAT) or {}
 
-    @adisp_async
-    def _requestCache(self, callback):
+    def _requestCache(self, callback=None):
         BigWorld.player().gameRestrictions.getCache(lambda resID, value: self._response(resID, value, callback))

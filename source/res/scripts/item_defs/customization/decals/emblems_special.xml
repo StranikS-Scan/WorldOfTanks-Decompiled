@@ -966,6 +966,9 @@
         <include>
           <nations>	japan sweden uk usa	</nations>
         </include>
+        <exclude>
+          <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+        </exclude>
       </vehicleFilter>
       <mirror>	true	</mirror>
     </decal>
@@ -977,6 +980,9 @@
         <include>
           <nations>	japan sweden uk usa	</nations>
         </include>
+        <exclude>
+          <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+        </exclude>
       </vehicleFilter>
       <mirror>	true	</mirror>
     </decal>
@@ -988,6 +994,9 @@
         <include>
           <nations>	japan sweden uk usa	</nations>
         </include>
+        <exclude>
+          <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+        </exclude>
       </vehicleFilter>
       <mirror>	true	</mirror>
     </decal>
@@ -3046,6 +3055,11 @@
     <season>	ALL	</season>
     <historical>	1	</historical>
     <priceGroup>	emblems 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
+    </vehicleFilter>
     <decal>
       <id>	121	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_555.dds	</texture>

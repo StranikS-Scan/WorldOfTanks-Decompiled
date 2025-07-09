@@ -2,22 +2,22 @@
   <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <crew>
     <commander>	radioman	</commander>
-    <driver></driver>
     <gunner></gunner>
+    <driver></driver>
     <loader></loader>
   </crew>
   <supplySlots>	4 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_ATSPG_sniper	</postProgressionTree>
+  <postProgressionTree>	role_ATSPG_support	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	5	</forward>
-    <backward>	5	</backward>
+    <forward>	20	</forward>
+    <backward>	20	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.057	</moving>
-    <still>	0.095	</still>
+    <moving>	0.253	</moving>
+    <still>	0.421	</still>
     <camouflageBonus>	0.04	</camouflageBonus>
-    <firePenalty>	0.143	</firePenalty>
+    <firePenalty>	0.632	</firePenalty>
   </invisibility>
   <optDevsOverrides>
     <camouflageNet>
@@ -36,11 +36,11 @@
       <invisibilityBonus>	0.08	</invisibilityBonus>
     </deluxeAdditionalInvisibilityDevice>
   </optDevsOverrides>
-  <repairCost>	6.0	</repairCost>
-  <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
+  <repairCost>	10	</repairCost>
+  <premiumVehicleXPFactor>	0.05	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
-    <priceFactor>	1.6	</priceFactor>
+    <priceFactor>	1.8	</priceFactor>
     <density>	1.029905 1.029905	</density>
   </camouflage>
   <hull>
@@ -48,37 +48,39 @@
       <lobby>	0	</lobby>
       <battle>	0	</battle>
     </fakeTurrets>
-    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-    <weight>	15000	</weight>
-    <maxHealth>	1000	</maxHealth>
-    <ammoBayHealth>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	135	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
-    </ammoBayHealth>
     <armor>
-      <armor_1>	80	</armor_1>
-      <armor_2>	80	</armor_2>
-      <armor_3>	60	</armor_3>
-      <armor_4>	60	</armor_4>
+      <armor_1>	100	</armor_1>
+      <armor_2>	200	</armor_2>
+      <armor_3>	40	</armor_3>
+      <armor_4>	30	</armor_4>
       <armor_5>	25	</armor_5>
       <armor_6>	80	</armor_6>
-      <armor_7>	135	</armor_7>
-      <armor_8>	0	</armor_8>
-      <armor_9>	80	</armor_9>
+      <armor_7>	70	</armor_7>
+      <armor_8>	50	</armor_8>
+      <armor_9>	100	</armor_9>
       <armor_10>	15	</armor_10>
-      <armor_11>	60	</armor_11>
-      <armor_12>	40	</armor_12>
-      <armor_13>	60	</armor_13>
-      <armor_14>	25	</armor_14>
+      <armor_11>	100	</armor_11>
+      <armor_12>	30	</armor_12>
+      <armor_13>	40	</armor_13>
+      <armor_14>	30	</armor_14>
       <armor_15>	30	</armor_15>
       <armor_16>	15	</armor_16>
-      <armor_17>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-      </armor_17>
       <armor_18>	80	</armor_18>
+      <armor_19>	60	</armor_19>
+      <armor_20>	40	</armor_20>
+      <armor_21>	30	</armor_21>
+      <armor_22>	10	</armor_22>
       <leftTrack>	20	</leftTrack>
       <rightTrack>	20	</rightTrack>
     </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	24670	</weight>
+    <maxHealth>	1280	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	230	</maxHealth>
+      <maxRegenHealth>	173	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+    </ammoBayHealth>
     <models>
       <undamaged>	vehicles/russian/R199_SU_122V/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/russian/R199_SU_122V/crash/lod0/Hull.model	</destroyed>
@@ -859,6 +861,51 @@
         <clipAngle>	0.778417	</clipAngle>
         <anchorShift>	0.71	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	-1.625944 0.174965 -0.81	</position>
+        <rotation>	0 -0 1.378202	</rotation>
+        <scale>	0.999986 0.999986 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	1.626 0.174965 -0.81	</position>
+        <rotation>	0 3.141593 1.529384	</rotation>
+        <scale>	0.999986 0.999986 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	-0.000005 -0.071191 -2.946773	</position>
+        <rotation>	-0 -1.570796 1.570796	</rotation>
+        <scale>	0.999993 0.999994 0.999993	</scale>
+        <applyType>	universal	</applyType>
+        <size>	small	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18003	</slotId>
+        <position>	-1.201995 1.246438 -1.248	</position>
+        <rotation>	-0 -0 0	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	turret	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18004	</slotId>
+        <position>	1.126336 1.263916 -2.206418	</position>
+        <rotation>	-0 -0 0	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	gunMantlet	</applyType>
+        <size>	medium	</size>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -875,26 +922,26 @@
     <Chassis_R199_SU_122V>
       <userString>	#ussr_vehicles:Chassis_R199_SU_122V	</userString>
       <tags></tags>
-      <level>	8	</level>
-      <price>	30000	</price>
+      <level>	9	</level>
+      <price>	60000	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <leftTrack>	20	</leftTrack>
         <rightTrack>	20	</rightTrack>
       </armor>
-      <weight>	13000	</weight>
-      <maxLoad>	35000	</maxLoad>
-      <terrainResistance>	1.5 1.7 2.8	</terrainResistance>
-      <brakeForce>	32000	</brakeForce>
+      <weight>	13500	</weight>
+      <maxLoad>	45000	</maxLoad>
+      <terrainResistance>	1 1.2 2	</terrainResistance>
+      <brakeForce>	43000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	24	</rotationSpeed>
+      <rotationSpeed>	45	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.25	</vehicleMovement>
-        <vehicleRotation>	0.15	</vehicleRotation>
+        <vehicleMovement>	0.1	</vehicleMovement>
+        <vehicleRotation>	0.1	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	220	</maxHealth>
-      <maxRegenHealth>	165	</maxRegenHealth>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R199_SU_122V/normal/lod0/Chassis.model	</undamaged>
@@ -1729,38 +1776,38 @@
           <trackPairIdx>	0	</trackPairIdx>
         </right>
       </physicalTracks>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	6.66666651	</repairTime>
     </Chassis_R199_SU_122V>
   </chassis>
   <turrets0>
     <Turret_1_R199_SU_122V>
       <userString>	#ussr_vehicles:Turret_1_R199_SU_122V	</userString>
       <tags>	cannotDetach	</tags>
-      <level>	8	</level>
-      <price>	100	</price>
+      <level>	9	</level>
+      <price>	60000	</price>
       <notInShop>	true	</notInShop>
-      <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
-      <weight>	100	</weight>
-      <maxHealth>	200	</maxHealth>
-      <rotationSpeed>	16	</rotationSpeed>
-      <turretRotatorHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
-      </turretRotatorHealth>
-      <circularVisionRadius>	350	</circularVisionRadius>
-      <surveyingDeviceHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
-      </surveyingDeviceHealth>
       <armor>
         <armor_1>	0	</armor_1>
       </armor>
-      <guns>	.	  <_122mm_M62VA>
-          <maxAmmo>	40	</maxAmmo>
+      <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
+      <weight>	100	</weight>
+      <maxHealth>	320	</maxHealth>
+      <rotationSpeed>	16	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	170	</maxHealth>
+        <maxRegenHealth>	85	</maxRegenHealth>
+        <repairCost>	9	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	350	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	110	</maxHealth>
+        <maxRegenHealth>	55	</maxRegenHealth>
+        <repairCost>	2	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_122mm_M_62VA>	shared	  <maxAmmo>	40	</maxAmmo>
           <armor>
-            <armor_1>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
@@ -1770,20 +1817,21 @@
             </armor_4>
             <gun>	50	</gun>
           </armor>
+          <turretYawLimits>	-3 3	</turretYawLimits>
+          <staticTurretYaw>	0	</staticTurretYaw>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 3 1 3	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.25	</shotDispersionRadius>
-          <reloadTime>	10.3	</reloadTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	9.1	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.20	</turretRotation>
-            <afterShot>	3.0	</afterShot>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	1.5	</aimingTime>
-          <invisibilityFactorAtShot>	0.205	</invisibilityFactorAtShot>
-          <turretYawLimits>	-3 3	</turretYawLimits>
+          <aimingTime>	2	</aimingTime>
+          <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -1835,7 +1883,7 @@
             <density>	107.100731 107.47171	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_122mm_M62VA>
+        </_122mm_M_62VA>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R199_SU_122V/normal/lod0/Turret_01.model	</undamaged>
@@ -1875,34 +1923,34 @@
     </Turret_1_R199_SU_122V>
   </turrets0>
   <engines>
-    <B_2>	shared	</B_2>
+    <V_2A>	shared	</V_2A>
   </engines>
   <fuelTanks>
-    <Heavy>	shared	</Heavy>
+    <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <R123A>	shared	</R123A>
+    <R_123B>	shared	</R_123B>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
   <physics>
     <detailed>
       <engines>
-        <B_2>
-          <smplEnginePower>	400	</smplEnginePower>
-          <smplFwMaxSpeed>	5	</smplFwMaxSpeed>
-        </B_2>
+        <V_2A>
+          <smplEnginePower>	820	</smplEnginePower>
+          <smplFwMaxSpeed>	20	</smplFwMaxSpeed>
+        </V_2A>
       </engines>
       <chassis>
         <Chassis_R199_SU_122V>
           <grounds>
             <soft>
-              <rollingFriction>	0.2254	</rollingFriction>
+              <rollingFriction>	0.161	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.13685	</rollingFriction>
+              <rollingFriction>	0.0966	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.12075	</rollingFriction>
+              <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>
@@ -1911,8 +1959,8 @@
     </detailed>
   </physics>
   <siege_mode>
-    <switchOnTime>	2	</switchOnTime>
-    <switchOffTime>	2	</switchOffTime>
+    <switchOnTime>	1	</switchOnTime>
+    <switchOffTime>	1	</switchOffTime>
     <engineDamageCoeff>	2	</engineDamageCoeff>
     <soundStateChange>
       <on>	strv_siege_mode_on_PC	</on>

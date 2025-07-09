@@ -1008,6 +1008,19 @@
     <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </A168_XM_57>
+  <A166_H_3>
+    <id>	165	</id>
+    <userString>	#usa_vehicles:A166_H_3	</userString>
+    <description>	#usa_vehicles:A166_H_3_descr	</description>
+    <shortUserString>	#usa_vehicles:A166_H_3_short	</shortUserString>
+    <shortDescriptionSpecial>	#usa_vehicles:A166_H_3_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:A166_H_3_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_support HD heavyTank2 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals secret testTank	</tags>
+    <level>	9	</level>
+  </A166_H_3>
   <A72_T25_2_SH>
     <id>	167	</id>
     <userString>	#usa_vehicles:T25_2_SH	</userString>
@@ -1077,10 +1090,10 @@
     <shortUserString>	#usa_vehicles:A167_TS_6_short	</shortUserString>
     <shortDescriptionSpecial>	#usa_vehicles:A167_TS_6_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#usa_vehicles:A167_TS_6_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
+    <price>	13100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_assault HD secret testTank improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
+    <tags>	heavyTank role_HT_assault HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
     <level>	9	</level>
   </A167_TS_6>
   <A160_M24_594>
@@ -1270,7 +1283,7 @@
     <price>	9400	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank	</tags>
     <level>	8	</level>
   </A159_Chrysler_MTC_2>
   <A93_T7_Combat_Car>
@@ -1844,10 +1857,10 @@
     <description>	#usa_vehicles:A171_IMT_descr	</description>
     <shortDescriptionSpecial>	#usa_vehicles:A171_IMT_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#usa_vehicles:A171_IMT_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
+    <price>	9250	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank	</tags>
+    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </A171_IMT>
   <A1034_M24_Chaffee_StoryModeStealth>
@@ -1860,4 +1873,24 @@
     <level>	5	</level>
     <notInShop>	True	</notInShop>
   </A1034_M24_Chaffee_StoryModeStealth>
+  <A143_M_V_Y_FEP23>
+    <id>	47	</id>
+    <userString>	#usa_vehicles:A143_M_V_Y_FEP	</userString>
+    <description>	#usa_vehicles:A143_M_V_Y_FEP_descr	</description>
+    <shortUserString>	#usa_vehicles:A143_M_V_Y_FEP_short	</shortUserString>
+    <price>	1	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_universal HD fun_random mode_hidden autocannon secret earn_crystals cannot_be_sold builtinRepairkit_user lockCrew lockCrewSkills hideCrew lockOptionalDevices lockShells lockEquipment lockDevices hideStorage lockOutfit	</tags>
+    <level>	10	</level>
+  </A143_M_V_Y_FEP23>
+  <A116_XM551_FEP23>
+    <id>	48	</id>
+    <userString>	#usa_vehicles:A116_XM551_FEP	</userString>
+    <shortUserString>	#usa_vehicles:A116_XM551_FEP_short	</shortUserString>
+    <description>	#usa_vehicles:A116_XM551_FEP_descr	</description>
+    <price>	1	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank role_LT_universal HD fun_random mode_hidden autocannon secret earn_crystals cannot_be_sold builtinRepairkit_user lockCrew lockCrewSkills hideCrew lockOptionalDevices lockShells lockEquipment lockDevices hideStorage lockOutfit	</tags>
+    <level>	10	</level>
+  </A116_XM551_FEP23>
 </list.xml>

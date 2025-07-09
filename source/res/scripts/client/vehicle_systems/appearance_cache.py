@@ -10,11 +10,6 @@ from soft_exception import SoftException
 from vehicle_systems.CompoundAppearance import CompoundAppearance
 from vehicle_systems.stricted_loading import loadingPriority
 _logger = logging.getLogger(__name__)
-VehicleAppearanceCacheInfo = namedtuple('VehicleAppearanceCacheInfo', ['typeDescr',
- 'health',
- 'isCrewActive',
- 'isTurretDetached',
- 'outfitCD'])
 _AssemblerData = namedtuple('_AssemblerData', ['appearance', 'typeDescr', 'prereqsNames'])
 
 class _LoadInfo(object):
@@ -158,7 +153,7 @@ class AppearanceCache(IAppearanceCache):
             return loadInfo.appearance
         else:
             appearance = CompoundAppearance()
-            prereqs = appearance.prerequisites(info.typeDescr, key[0], info.health, info.isCrewActive, info.isTurretDetached, info.outfitCD)
+            prereqs = appearance.prerequisites(key[0], info)
             taskId = BigWorld.loadResourceListBG(prereqs, functools.partial(self.__onAppearanceLoaded, key), loadingPriority(key[0]))
             _logger.debug('loadResourceListBG vehicle = (%d), task = (%d)', key[0], taskId)
             self.__loadingAssemblerQueue[key] = _LoadInfo(appearance, taskId, info.typeDescr, onLoadedCallback)

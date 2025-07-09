@@ -11,8 +11,8 @@ import Math
 from cgf_demo.demo_category import DEMO_CATEGORY
 from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
 from cgf_demo.test_movers import TestScriptAxisRotator
-from cgf_script.managers_registrator import autoregister, tickGroup, onAddedQuery
-from cgf_components_common.state_components import HealthComponent as HealthComponentCGF
+from cgf_script.managers_registrator import tickGroup, onAddedQuery
+from HealthComponent import HealthComponent
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -141,7 +141,7 @@ class TestVehicleAreaTriggerComponent(object):
 class TestHealthTriggersComponent(object):
     category = DEMO_CATEGORY
     domain = CGF.DomainOption.DomainServer | CGF.DomainOption.DomainEditor
-    healthComponent = ComponentProperty(type=CGFMetaTypes.LINK, editorName='Health component link', value=HealthComponentCGF)
+    healthComponent = ComponentProperty(type=CGFMetaTypes.LINK, editorName='Health component link', value=HealthComponent)
     trigger = ComponentProperty(type=CGFMetaTypes.LINK, editorName='AreaTrigger', value=Triggers.AreaTriggerComponent)
     health = ComponentProperty(type=CGFMetaTypes.INT, editorName='Health count', value=0)
     isDamageTrigger = ComponentProperty(type=CGFMetaTypes.BOOL, editorName='Is Damage trigger')

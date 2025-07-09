@@ -6,6 +6,15 @@ from gui.prb_control.entities.base.actions_validator import BaseActionsValidator
 from helpers import dependency
 from story_mode.skeletons.story_mode_controller import IStoryModeController
 
+class StoryModeVehicleValidator(BaseActionsValidator):
+
+    def _validate(self):
+        ctrl = dependency.instance(IStoryModeController)
+        selectedMissionId = ctrl.selectedMissionId
+        mission = ctrl.missions.getMission(selectedMissionId)
+        return ValidationResult(False) if mission is None or not mission.vehicle.name else super(StoryModeVehicleValidator, self)._validate()
+
+
 class StoryModeStateValidator(BaseActionsValidator):
 
     def _validate(self):

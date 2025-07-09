@@ -41,6 +41,10 @@ def writeAttachmentSlots(slotDS, slot):
     _xml.rewriteString(slotDS, 'size', slot.size, '')
     _xml.rewriteInt(slotDS, 'hangerId', slot.hangerId, 0)
     _xml.rewriteVector3(slotDS, 'hangerRotation', slot.hangerRotation, (0, 0, 0))
+    if len(slot.compatibleModels) == 1 and slot.compatibleModels[0] == 'default':
+        slotDS.deleteSection('compatibleModels')
+    else:
+        slotDS.write('compatibleModels', ' '.join(slot.compatibleModels))
 
 
 def writeAnchorSlots(slotDS, slot):
@@ -153,3 +157,27 @@ def writeBuilders(builders, section, subsectionName):
     if currentBuilderIndex + 1 < len(builders):
         _xml.raiseWrongXml(None, subsectionName, 'Unexpected builders count')
     return
+
+
+def writeSlotPrefabs(slotPrefabs, section):
+    sectIndex = section.getFirstIndex('slotPrefabs')
+    section.deleteSection('slotPrefabs')
+    if not slotPrefabs:
+        return
+    prefabsSection = section.insertSection('slotPrefabs', sectIndex)
+    for slot, prefab in slotPrefabs:
+        prefabsSection.write(slot, prefab)
+
+
+def writeObjectSlots(objectSlots, section):
+    sectIndex = section.getFirstIndex('objectSlots')
+    section.deleteSection('objectSlots')
+    if not objectSlots:
+        return
+    slotsSection = section.insertSection('objectSlots', sectIndex)
+    for slot in objectSlots:
+        slotSection = slotsSection.createSection('slot')
+        slotSection.write('name', slot.name)
+        slotSection.write('type', slot.type)
+        slotSection.write('position', slot.position)
+        slotSection.write('rotation', slot.rotation)

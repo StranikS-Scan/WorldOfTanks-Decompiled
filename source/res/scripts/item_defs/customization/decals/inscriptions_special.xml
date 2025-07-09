@@ -852,6 +852,9 @@
         <include>
           <nations>	france sweden uk usa	</nations>
         </include>
+        <exclude>
+          <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+        </exclude>
       </vehicleFilter>
       <mirror>	false	</mirror>
     </decal>
@@ -1312,6 +1315,9 @@
         <include>
           <nations>	usa	</nations>
         </include>
+        <exclude>
+          <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+        </exclude>
       </vehicleFilter>
       <mirror>	false	</mirror>
     </decal>
@@ -5576,6 +5582,77 @@
       <mirror>	false	</mirror>
     </decal>
     <name>	BattlePass 2025	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <decal>
+      <id>	1154	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_808.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_808	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1155	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_809.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_809	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1156	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_810.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_810	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1157	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_811.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_811	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	BattlePass 2025	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <decal>
+      <id>	1171	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_821.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_821	</userString>
+      <tags>	styleOnly	</tags>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1172	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_822.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_822	</userString>
+      <tags>	styleOnly	</tags>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1173	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_823.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_823	</userString>
+      <tags>	styleOnly	</tags>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Onslaught 2025 2026	</name>
     <type>	INSCRIPTION	</type>
   </itemGroup>
 </inscriptions_special.xml>

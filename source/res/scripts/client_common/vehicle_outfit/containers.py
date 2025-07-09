@@ -6,7 +6,7 @@ from items.components.c11n_constants import ProjectionDecalMatchingTags
 from shared_utils import first
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from items.components.c11n_components import CustomizationType, DecalType, EMPTY_ITEM_ID
-from items.customizations import EmptyComponent, PaintComponent, CamouflageComponent, DecalComponent, ProjectionDecalComponent, PersonalNumberComponent, SequenceComponent, AttachmentComponent
+from items.customizations import EmptyComponent, PaintComponent, CamouflageComponent, DecalComponent, ProjectionDecalComponent, PersonalNumberComponent, SequenceComponent, AttachmentComponent, StatTrackerComponent
 from items.vehicles import getItemByCompactDescr
 from soft_exception import SoftException
 from vehicle_outfit import packers
@@ -70,7 +70,9 @@ def emptyComponent(itemTypeID):
         return ProjectionDecalComponent()
     if itemTypeID == GUI_ITEM_TYPE.SEQUENCE:
         return SequenceComponent()
-    return AttachmentComponent() if itemTypeID == GUI_ITEM_TYPE.ATTACHMENT else EmptyComponent()
+    if itemTypeID == GUI_ITEM_TYPE.ATTACHMENT:
+        return AttachmentComponent()
+    return StatTrackerComponent() if itemTypeID == GUI_ITEM_TYPE.STAT_TRACKER else EmptyComponent()
 
 
 def getItemType(itemDescriptor):
@@ -92,7 +94,9 @@ def getItemType(itemDescriptor):
         return GUI_ITEM_TYPE.PERSONAL_NUMBER
     if itemDescriptor.itemType == CustomizationType.SEQUENCE:
         return GUI_ITEM_TYPE.SEQUENCE
-    return GUI_ITEM_TYPE.ATTACHMENT if itemDescriptor.itemType == CustomizationType.ATTACHMENT else GUI_ITEM_TYPE.CUSTOMIZATION
+    if itemDescriptor.itemType == CustomizationType.ATTACHMENT:
+        return GUI_ITEM_TYPE.ATTACHMENT
+    return GUI_ITEM_TYPE.STAT_TRACKER if itemDescriptor.itemType == CustomizationType.STAT_TRACKER else GUI_ITEM_TYPE.CUSTOMIZATION
 
 
 class OutfitContainer(object):

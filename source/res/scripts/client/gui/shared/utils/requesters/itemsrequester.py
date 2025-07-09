@@ -9,7 +9,6 @@ import BigWorld
 import constants
 import dossiers2
 import nations
-import wg_async as future_async
 from PlayerEvents import g_playerEvents
 from account_shared import LayoutIterator
 from adisp import adisp_async, adisp_process
@@ -34,6 +33,7 @@ from skeletons.gui.game_control import IVehiclePostProgressionController
 from skeletons.gui.shared import IItemsCache, IItemsRequester
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from gui.shared.system_factory import collectGuiItemsCacheInvalidators, GuiItemsCacheInvalidatorParams
+from wg_async import wg_async, wg_await, distributeLoopOverTicks
 if TYPE_CHECKING:
     from typing import Optional, Dict, List
     import skeletons.gui.shared.utils.requesters as requesters
@@ -573,72 +573,48 @@ class ItemsRequester(IItemsRequester):
     def tankmenStatsCache(self):
         return self.__tankmenStatsCache
 
-    @adisp_async
-    @adisp_process
+    @wg_async
     def request(self, callback=None):
         from gui.Scaleform.Waiting import Waiting
         g_playerEvents.onLoadingMilestoneReached(Milestones.INVENTORY)
         Waiting.show('download/inventory')
-        yield self.__stats.request()
-        yield self.__inventory.request()
-        yield self.__vehicleRotation.request()
+        yield wg_await(self.__stats.request())
+        yield wg_await(self.__inventory.request())
+        yield wg_await(self.__vehicleRotation.request())
         Waiting.hide('download/inventory')
         g_playerEvents.onLoadingMilestoneReached(Milestones.SHOP)
         Waiting.show('download/shop')
-        yield self.__shop.request()
+        yield wg_await(self.__shop.request())
         Waiting.hide('download/shop')
         g_playerEvents.onLoadingMilestoneReached(Milestones.DOSSIER)
         Waiting.show('download/dossier')
-        yield self.__dossiers.request()
-        yield self.__sessionStats.request()
+        yield wg_await(self.__dossiers.request())
+        yield wg_await(self.__sessionStats.request())
         Waiting.hide('download/dossier')
         g_playerEvents.onLoadingMilestoneReached(Milestones.DISCOUNTS)
         Waiting.show('download/discounts')
-        yield self.__goodies.request()
+        yield wg_await(self.__goodies.request())
         Waiting.hide('download/discounts')
         g_playerEvents.onLoadingMilestoneReached(Milestones.RECYCLE_BIN)
         Waiting.show('download/recycleBin')
-        yield self.__recycleBin.request()
+        yield wg_await(self.__recycleBin.request())
         Waiting.hide('download/recycleBin')
         g_playerEvents.onLoadingMilestoneReached(Milestones.PLAYER_DATA)
-        Waiting.show('download/anonymizer')
-        yield self.__anonymizer.request()
-        Waiting.hide('download/anonymizer')
-        Waiting.show('download/ranked')
-        yield self.__ranked.request()
-        Waiting.hide('download/ranked')
-        Waiting.show('download/ranked')
-        yield self.__battleRoyale.request()
-        Waiting.hide('download/ranked')
-        Waiting.show('download/badges')
-        yield self.__badges.request()
-        Waiting.hide('download/badges')
-        Waiting.show('download/epicMetaGame')
-        yield self.epicMetaGame.request()
-        Waiting.hide('download/epicMetaGame')
-        Waiting.show('download/blueprints')
-        yield self.__blueprints.request()
-        Waiting.hide('download/blueprints')
-        Waiting.show('download/tokens')
-        yield self.__tokens.request()
-        Waiting.hide('download/tokens')
-        Waiting.show('download/battlePass')
-        yield self.__battlePass.request()
-        Waiting.hide('download/battlePass')
-        Waiting.show('download/festivity')
-        yield self.__festivity.request()
-        Waiting.hide('download/festivity')
-        Waiting.show('download/giftSystem')
-        yield self.__giftSystem.request()
-        Waiting.hide('download/giftSystem')
-        Waiting.show('download/gameRestrictions')
-        yield self.__gameRestrictions.request()
-        Waiting.hide('download/gameRestrictions')
-        Waiting.show('download/achievements20')
-        yield self.__achievements20.request()
-        Waiting.hide('download/achievements20')
+        Waiting.show('download/common')
+        yield wg_await(self.__anonymizer.request())
+        yield wg_await(self.__ranked.request())
+        yield wg_await(self.__battleRoyale.request())
+        yield wg_await(self.__badges.request())
+        yield wg_await(self.epicMetaGame.request())
+        yield wg_await(self.__blueprints.request())
+        yield wg_await(self.__tokens.request())
+        yield wg_await(self.__battlePass.request())
+        yield wg_await(self.__festivity.request())
+        yield wg_await(self.__giftSystem.request())
+        yield wg_await(self.__gameRestrictions.request())
+        yield wg_await(self.__achievements20.request())
+        Waiting.hide('download/common')
         self.__brokenSyncAlreadyLoggedTypes.clear()
-        callback(self)
 
     def isSynced(self):
         return self.__stats.isSynced() and self.__inventory.isSynced() and self.__recycleBin.isSynced() and self.__shop.isSynced() and self.__dossiers.isSynced() and self.__giftSystem.isSynced() and self.__goodies.isSynced() and self.__vehicleRotation.isSynced() and self.ranked.isSynced() and self.__anonymizer.isSynced() and self.epicMetaGame.isSynced() and self.__battleRoyale.isSynced() and self.__gameRestrictions.isSynced() and self.__blueprints.isSynced() if self.__blueprints is not None else False
@@ -931,7 +907,7 @@ class ItemsRequester(IItemsRequester):
 
         return result
 
-    @future_async.wg_async
+    @wg_async
     def getItemsAsync(self, itemTypeID=None, criteria=REQ_CRITERIA.EMPTY, nationID=None, onlyWithPrices=True, callback=None):
         result = ItemsCollection()
         if not isinstance(itemTypeID, tuple):
@@ -955,7 +931,7 @@ class ItemsRequester(IItemsRequester):
 
             return
 
-        yield future_async.wg_await(future_async.distributeLoopOverTicks(asyncGetItems(), minPerTick=10, maxPerTick=100, logID='getItemsAsync', tickLength=0.0))
+        yield wg_await(distributeLoopOverTicks(asyncGetItems(), minPerTick=10, maxPerTick=100, logID='getItemsAsync', tickLength=0.0))
         callback(result)
 
     def getTankmen(self, criteria=REQ_CRITERIA.TANKMAN.ACTIVE):
@@ -1026,15 +1002,25 @@ class ItemsRequester(IItemsRequester):
         result = ItemsCollection()
         receivedBadges = self.getAccountDossier().getDossierDescr()[BADGES_BLOCK]
         for badgeID, badgeData in self.__badges.available.iteritems():
-            item = self.itemsFactory.createBadge(badgeData, proxy=self, receivedBadges=receivedBadges)
+            item = self.__makeBadge(badgeID, badgeData=badgeData, receivedBadges=receivedBadges)
             if criteria(item):
                 result[badgeID] = item
 
         return result
 
+    def getReceivedBadges(self, onlySelected=False):
+        result = ItemsCollection()
+        receivedBadges = self.getAccountDossier().getDossierDescr()[BADGES_BLOCK]
+        for badgeID in self.__badges.selected if onlySelected else receivedBadges:
+            badge = self.__makeBadge(badgeID, receivedBadges=receivedBadges)
+            if badge is None:
+                continue
+            result[badgeID] = badge
+
+        return result
+
     def getBadgeByID(self, badgeID):
-        badgeData = self.__badges.available.get(badgeID)
-        return None if badgeData is None else self.itemsFactory.createBadge(badgeData, proxy=self)
+        return self.__makeBadge(badgeID)
 
     def getItemByCD(self, typeCompDescr):
         return self.__makeVehicle(typeCompDescr) if getTypeOfCompactDescr(typeCompDescr) == GUI_ITEM_TYPE.VEHICLE else self.__makeSimpleItem(typeCompDescr)
@@ -1246,6 +1232,15 @@ class ItemsRequester(IItemsRequester):
 
     def __makeSimpleItem(self, typeCompDescr):
         return self.__makeItem(getTypeOfCompactDescr(typeCompDescr), typeCompDescr, intCompactDescr=typeCompDescr, proxy=self)
+
+    def __makeBadge(self, badgeID, badgeData=None, receivedBadges=None):
+        if badgeData is None:
+            badgeData = self.__badges.available.get(badgeID)
+        if badgeData is None:
+            _logger.warning('Can not find config for badge by ID = %s', badgeID)
+            return
+        else:
+            return self.itemsFactory.createBadge(badgeData, proxy=self, receivedBadges=receivedBadges)
 
     def __getTankmenIDsForVehicle(self, vehData):
         vehTmanIDs = set()

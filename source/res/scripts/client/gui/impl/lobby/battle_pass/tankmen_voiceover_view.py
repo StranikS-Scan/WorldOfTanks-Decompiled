@@ -3,29 +3,33 @@
 import logging
 from urlparse import urljoin
 from battle_pass_common import BattlePassTankmenSource, TANKMAN_QUEST_CHAIN_ENTITLEMENT_POSTFIX
-from frameworks.wulf import ViewSettings, WindowFlags
+from frameworks.wulf import ViewSettings, WindowFlags, Array
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getShopURL
-from gui.battle_pass.battle_pass_helpers import getReceivedTankmenCount
+from gui.battle_pass.battle_pass_helpers import getReceivedTankmenCount, getDataByTankman
 from gui.battle_pass.sounds import BattlePassSounds
 from gui.collection.collections_helpers import getTankmanFullName
 from gui.impl.gen import R
+from gui.impl.gen.view_models.views.lobby.battle_pass.skill_model import SkillModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.tankman_model import TankmanModel, TankmanStates
 from gui.impl.gen.view_models.views.lobby.battle_pass.tankmen_voiceover_view_model import TankmenVoiceoverViewModel
+from gui.impl.lobby.battle_pass.tooltips.crew_member_skill_tooltip import CrewMemberSkillTooltip
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
+from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.event_dispatcher import showShop
 from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency
+from shared_utils import findFirst
 from skeletons.gui.game_control import IBattlePassController
 _logger = logging.getLogger(__name__)
 
 class TankmenVoiceoverView(ViewImpl):
-    __slots__ = ('__backCallback',)
     __battlePass = dependency.descriptor(IBattlePassController)
 
-    def __init__(self, layoutID, model, ctx=None):
+    def __init__(self, layoutID, model, screenID, ctx=None):
         settings = ViewSettings(layoutID)
         settings.model = model()
+        self.__screenID = screenID
         self.__backCallback = None if ctx is None else ctx.get('backCallback')
         super(TankmenVoiceoverView, self).__init__(settings)
         return
@@ -33,6 +37,9 @@ class TankmenVoiceoverView(ViewImpl):
     @property
     def viewModel(self):
         return super(TankmenVoiceoverView, self).getViewModel()
+
+    def createToolTipContent(self, event, contentID):
+        return CrewMemberSkillTooltip(event.getArgument('name'), event.getArgument('isZero'), event.getArgument('hasZeroPerk')) if contentID == R.views.lobby.battle_pass.tooltips.CrewMemberSkillTooltip() else super(TankmenVoiceoverView, self).createToolTipContent(event, contentID)
 
     def _onLoading(self, *args, **kwargs):
         super(TankmenVoiceoverView, self)._onLoading(*args, **kwargs)
@@ -66,12 +73,13 @@ class TankmenVoiceoverView(ViewImpl):
 
     def __showShop(self, args):
         tankmanGroupName = args.get('tankmanGroupName')
-        tankmanBundlePath = self.__battlePass.getSpecialTankmen().get(tankmanGroupName, {}).get('bundlePath', '')
+        tankmanToken = findFirst(lambda tankman: tankmanGroupName in tankman, self.__getTankmenForView(), '')
+        tankmanBundlePath = self.__getTankmenForView().get(tankmanToken, {}).get('bundlePath', '')
         showShop(urljoin(getShopURL(), tankmanBundlePath))
         self.destroyWindow()
 
     def __getTankmanInfo(self, tankman):
-        tankmanInfo = self.__battlePass.getSpecialTankmen().get(tankman, {})
+        tankmanInfo = self.__getTankmenForView().get(tankman, {})
         if not tankmanInfo:
             _logger.error('Tankman info for %s cannot be empty!', tankman)
         return tankmanInfo
@@ -82,9 +90,13 @@ class TankmenVoiceoverView(ViewImpl):
     def __getCount(self, tankman):
         return self.__getTankmanInfo(tankman).get('availableCount', 0)
 
+    def __getTankmenForView(self):
+        return self.__battlePass.getTankmenScreens().get(self.__screenID, {}).get('tankmen', {})
+
     def __fillModel(self):
         with self.viewModel.transaction() as model:
-            self.__fillTankmen(self.__battlePass.getSpecialTankmen(), model.getTankmen())
+            self.__fillTankmen(self.__getTankmenForView(), model.getTankmen())
+            model.setScreenID(self.__screenID)
 
     def __fillTankmen(self, tankmenDict, tankmenModels):
         tankmenModels.clear()
@@ -95,25 +107,40 @@ class TankmenVoiceoverView(ViewImpl):
 
         tankmenModels.invalidate()
 
-    def __fillTankmanModel(self, model, groupName):
-        tankmanInfo = self.__getTankmanInfo(groupName)
-        count = self.__getCount(groupName)
+    def __fillTankmanModel(self, model, tankman):
+        _, _, freeSkills, earnedSkills, groupName = getDataByTankman(getRecruitInfo(tankman))
+        tankmanInfo = self.__getTankmanInfo(tankman)
+        count = self.__getCount(tankman)
+        skillsArray = Array()
+        for skill in freeSkills:
+            skillModel = SkillModel()
+            skillModel.setName(skill)
+            skillModel.setIsZero(True)
+            skillsArray.addViewModel(skillModel)
+
+        for skill in earnedSkills:
+            skillModel = SkillModel()
+            skillModel.setName(skill)
+            skillModel.setIsZero(False)
+            skillsArray.addViewModel(skillModel)
+
         model.setGroupName(groupName)
         model.setFullName(getTankmanFullName(groupName))
         model.setCount(count)
+        model.setSkills(skillsArray)
         model.setHasVoiceover(self.__battlePass.isVoicedTankman(groupName))
-        self.__fillTankmenStateForModel(model, groupName, tankmanInfo, count)
+        self.__fillTankmenStateForModel(model, tankman, tankmanInfo, count)
         self.__fillTankmenProgressionInfo(model, tankmanInfo)
 
-    def __fillTankmenStateForModel(self, model, groupName, tankmanInfo, count):
-        receivedCount = getReceivedTankmenCount(groupName)
+    def __fillTankmenStateForModel(self, model, tankman, tankmanInfo, count):
+        receivedCount = getReceivedTankmenCount(tankman)
         availableCount = count - receivedCount
         state = TankmanStates.UNAVAILABLE
         source = tankmanInfo.get('source', '')
         if source == BattlePassTankmenSource.SHOP:
             state = self.__getStateForShopTankmanModel(count, availableCount)
         if source == BattlePassTankmenSource.QUEST_CHAIN:
-            state, availableCount = self.__getStateForQuestChainTankmanModel(groupName, count)
+            state, availableCount = self.__getStateForQuestChainTankmanModel(tankman, count)
             if state == TankmanStates.AVAILABLE_IN_QUEST_CHAIN and receivedCount:
                 state = TankmanStates.RECEIVED
         if source in BattlePassTankmenSource.PROGRESSION:
@@ -133,8 +160,8 @@ class TankmenVoiceoverView(ViewImpl):
             return TankmanStates.RECEIVED
         return TankmanStates.IN_SHOP if availableCount == count else TankmanStates.NOT_FULL
 
-    def __getStateForQuestChainTankmanModel(self, groupName, count):
-        receivedQuestCount = getReceivedTankmenCount(groupName + TANKMAN_QUEST_CHAIN_ENTITLEMENT_POSTFIX)
+    def __getStateForQuestChainTankmanModel(self, tankman, count):
+        receivedQuestCount = getReceivedTankmenCount(tankman, TANKMAN_QUEST_CHAIN_ENTITLEMENT_POSTFIX)
         questChainsLeftToBuy = count - receivedQuestCount
         if questChainsLeftToBuy <= 0:
             state = TankmanStates.AVAILABLE_IN_QUEST_CHAIN
@@ -163,5 +190,5 @@ class TankmenVoiceoverView(ViewImpl):
 class TankmenVoiceoverWindow(LobbyWindow):
     __slots__ = ()
 
-    def __init__(self, ctx=None, parent=None):
-        super(TankmenVoiceoverWindow, self).__init__(wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=TankmenVoiceoverView(R.views.lobby.battle_pass.TankmenVoiceoverView(), TankmenVoiceoverViewModel, ctx=ctx), parent=parent)
+    def __init__(self, screenID, ctx=None, parent=None):
+        super(TankmenVoiceoverWindow, self).__init__(wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=TankmenVoiceoverView(R.views.lobby.battle_pass.TankmenVoiceoverView(), TankmenVoiceoverViewModel, screenID=screenID, ctx=ctx), parent=parent)

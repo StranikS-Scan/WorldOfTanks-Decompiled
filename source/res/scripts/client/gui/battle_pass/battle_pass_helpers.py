@@ -6,7 +6,7 @@ from collections import namedtuple
 import typing
 from enum import Enum
 import nations
-from account_helpers.AccountSettings import AccountSettings, IS_BATTLE_PASS_COLLECTION_SEEN, IS_BATTLE_PASS_EXTRA_START_NOTIFICATION_SEEN, IS_BATTLE_PASS_START_NOTIFICATION_SEEN, LAST_BATTLE_PASS_POINTS_SEEN, LAST_BATTLE_PASS_CYCLES_SEEN
+from account_helpers.AccountSettings import AccountSettings, IS_BATTLE_PASS_COLLECTION_SEEN, IS_BATTLE_PASS_EXTRA_START_NOTIFICATION_SEEN, IS_BATTLE_PASS_START_NOTIFICATION_SEEN, LAST_BATTLE_PASS_POINTS_SEEN, LAST_BATTLE_PASS_CYCLES_SEEN, EXTRA_CHAPTERS_VIDEO_SHOWN, BUY_ANIMATIONS_WAS_SHOWN
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
 from battle_pass_common import BattlePassConsts, BattlePassTankmenSource, HOLIDAY_SEASON_OFFSET, TANKMAN_QUEST_CHAIN_ENTITLEMENT_POSTFIX, isPostProgressionChapter
 from constants import ARENA_BONUS_TYPE, QUEUE_TYPE
@@ -25,7 +25,6 @@ from helpers.dependency import replace_none_kwargs
 from items.tankmen import getNationGroups
 from nations import INDICES
 from shared_utils import findFirst, first
-from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IBattlePassController
 if typing.TYPE_CHECKING:
@@ -93,8 +92,10 @@ def getInfoPageURL():
     return getBattlePassUrl('infoPage')
 
 
-def getExtraInfoPageURL():
-    return getBattlePassUrl('extraInfoPage')
+def getExtraInfoPageURL(chapterID):
+    baseUrl = GUI_SETTINGS.baseUrls['webBridgeRootURL']
+    chapterUrl = (GUI_SETTINGS.battlePassUrls.get('extraInfoPage') or {}).get(str(chapterID), '')
+    return ''.join((baseUrl, chapterUrl))
 
 
 def getIntroVideoURL():
@@ -102,7 +103,12 @@ def getIntroVideoURL():
 
 
 def getExtraIntroVideoURL():
-    return getBattlePassUrl('extraIntroVideo')
+    videoUrl = GUI_SETTINGS.battlePassUrls.get('extraIntroVideo')
+    if videoUrl is None:
+        return ''
+    else:
+        baseUrl = GUI_SETTINGS.baseUrls['webBridgeRootURL']
+        return ''.join((baseUrl, videoUrl))
 
 
 def getIntroSlidesNames():
@@ -123,15 +129,6 @@ def isSeasonWithAdditionalBackground():
         return False
     else:
         return hasAdditionalBackground
-
-
-def isSeasonWithSpecialTankmenScreen():
-    hasSpecialTankmenScreen = getSeasonVisualSettings().get('hasSpecialTankmenScreen')
-    if hasSpecialTankmenScreen is None:
-        _logger.warning('"hasSpecialTankmenScreen" section is missing in "battlePassVisuals->season" settings')
-        return False
-    else:
-        return hasSpecialTankmenScreen
 
 
 def chaptersWithLogoBg():
@@ -286,16 +283,20 @@ def getDataByTankman(tankman):
     nation = getRecruitNation(tankman)
     iconName = tankman.getIconByNation(nation)
     tankmanName = tankman.getFullUserNameByNation(nation)
-    skills = tankman.getAllKnownSkills(True)
+    freeSkills = tankman.getFreeSkills()
+    earnedSkills = tankman.getEarnedSkills(True)
     groupName = tankman.getGroupName()
     return (iconName,
      tankmanName,
-     skills,
+     freeSkills,
+     earnedSkills,
      groupName)
 
 
 @replace_none_kwargs(battlePass=IBattlePassController)
-def getReceivedTankmenCount(groupName, battlePass=None):
+def getReceivedTankmenCount(tankman, tankmanPostfix='', battlePass=None):
+    tankmanInfo = getRecruitInfo(tankman)
+    groupName = tankmanInfo.getGroupName() + tankmanPostfix if tankmanInfo is not None else ''
     entitlement = battlePass.getTankmenEntitlements().get(groupName)
     return entitlement.amount if entitlement is not None else 0
 
@@ -352,16 +353,11 @@ def getDefaultChaptersView(battlePass=None):
     return R.views.lobby.battle_pass.PostProgressionView() if battlePass.isPostProgressionActive() else R.views.lobby.battle_pass.ChapterChoiceView()
 
 
-@replace_none_kwargs(settingsCore=ISettingsCore, battlePass=IBattlePassController)
-def updateBuyAnimationFlag(chapterID, settingsCore=None, battlePass=None):
-    settings = settingsCore.serverSettings
-    shownChapters = settings.getBPStorage().get(BattlePassStorageKeys.BUY_ANIMATION_WAS_SHOWN)
-    chapterIndex = battlePass.getChapterIndex(chapterID)
-    if not battlePass.isHoliday():
-        chapterIndex -= 1
-    chapter = 1 << chapterIndex
-    if _isChapterShown(shownChapters, chapter):
-        settings.saveInBPStorage({BattlePassStorageKeys.BUY_ANIMATION_WAS_SHOWN: shownChapters | chapter})
+def updateBuyAnimationFlag(chapterID):
+    settings = AccountSettings.getSettings(BUY_ANIMATIONS_WAS_SHOWN)
+    if chapterID not in settings:
+        settings.add(chapterID)
+        AccountSettings.setSettings(BUY_ANIMATIONS_WAS_SHOWN, settings)
         return True
     return False
 
@@ -383,19 +379,15 @@ def updateBattlePassSettings(data, battlePass=None):
 
 def _updateClientSettings():
     AccountSettings.setSettings(LAST_BATTLE_PASS_POINTS_SEEN, {})
-    AccountSettings.setSettings(IS_BATTLE_PASS_EXTRA_START_NOTIFICATION_SEEN, False)
+    AccountSettings.setSettings(IS_BATTLE_PASS_EXTRA_START_NOTIFICATION_SEEN, set())
     AccountSettings.setSettings(IS_BATTLE_PASS_COLLECTION_SEEN, False)
     AccountSettings.setSettings(IS_BATTLE_PASS_START_NOTIFICATION_SEEN, False)
     AccountSettings.setSettings(LAST_BATTLE_PASS_CYCLES_SEEN, 0)
+    AccountSettings.setSettings(EXTRA_CHAPTERS_VIDEO_SHOWN, set())
+    AccountSettings.setSettings(BUY_ANIMATIONS_WAS_SHOWN, set())
 
 
 def _updateServerSettings(data):
     data[BattlePassStorageKeys.INTRO_SHOWN] = False
     data[BattlePassStorageKeys.INTRO_VIDEO_SHOWN] = False
-    data[BattlePassStorageKeys.BUY_ANIMATION_WAS_SHOWN] = 0
     data[BattlePassStorageKeys.EXTRA_CHAPTER_INTRO_SHOWN] = False
-    data[BattlePassStorageKeys.EXTRA_CHAPTER_VIDEO_SHOWN] = False
-
-
-def _isChapterShown(shownChapters, chapter):
-    return shownChapters & chapter == 0

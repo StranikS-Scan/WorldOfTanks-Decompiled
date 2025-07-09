@@ -14,7 +14,7 @@ import persistent_data_cache_common as pdc
 from Math import Vector2, Vector3
 from backports.functools_lru_cache import lru_cache
 from collections import namedtuple, defaultdict
-from constants import ACTION_LABEL_TO_TYPE, ROLE_LABEL_TO_TYPE, ROLE_TYPE, DamageAbsorptionLabelToType, ROLE_LEVELS, ROLE_TYPE_TO_LABEL, VEHICLE_HEALTH_DECIMALS, IGR_TYPE, IS_RENTALS_ENABLED, IS_CELLAPP, IS_BASEAPP, IS_CLIENT, IS_UE_EDITOR, IS_BOT, IS_WEB, IS_PROCESS_REPLAY, ITEM_DEFS_PATH, SHELL_TYPES, VEHICLE_SIEGE_STATE, VEHICLE_MODE, VEHICLE_CLASSES, ShootImpulseApplicationPoint, SHELL_MECHANICS_TYPE, TrackBreakMode, HighExplosiveImpact, RandomizationType, INFINITE_SHELL_TAG, FORCE_FINITE_SHELL_TAG
+from constants import ACTION_LABEL_TO_TYPE, ROLE_LABEL_TO_TYPE, ROLE_TYPE, DamageAbsorptionLabelToType, ROLE_LEVELS, ROLE_TYPE_TO_LABEL, VEHICLE_HEALTH_DECIMALS, IGR_TYPE, IS_RENTALS_ENABLED, IS_CELLAPP, IS_BASEAPP, IS_CLIENT, IS_UE_EDITOR, IS_BOT, IS_WEB, IS_PROCESS_REPLAY, ITEM_DEFS_PATH, SHELL_TYPES, VEHICLE_SIEGE_STATE, VEHICLE_MODE, VEHICLE_CLASSES, ShootImpulseApplicationPoint, SHELL_MECHANICS_TYPE, TrackBreakMode, HighExplosiveImpact, RandomizationType, INFINITE_SHELL_TAG, FORCE_FINITE_SHELL_TAG, VehiclePartName
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION
 from functools import partial
 from items import ItemsPrices
@@ -25,7 +25,7 @@ from items._xml import cachedFloat
 from items.attributes_helpers import onCollectAttributes, STATIC_ATTR_PREFIX, readModifiers
 from items.artefacts_helpers import readKpi
 from items.components import component_constants, shell_components, chassis_components, skills_constants
-from items.components import shared_components
+from items.components import shared_components, gun_components
 from items.components.c11n_constants import ApplyArea, CamouflageTilingType, CamouflageTilingTypeNameToType, ProjectionDecalMatchingTags
 from items.components.post_progression_components import PostProgressionCache, getActiveModifications
 from items.components.shared_components import ImpulseData
@@ -36,6 +36,7 @@ from items.readers import gun_readers
 from items.readers import json_vehicle_reader
 from items.readers import shared_readers
 from items.readers import sound_readers
+from items.readers import prefab_effects_readers
 from items.stun import g_cfg as stunConfig
 from items.writers import chassis_writers
 from items.writers import gun_writers
@@ -152,6 +153,7 @@ _VEHICLE_TYPE_XML_PATH = ITEM_DEFS_PATH + 'vehicles/'
 _DEFAULT_HEALTH_BURN_PER_SEC_LOSS_FRACTION = 0.0875
 _CUSTOMIZATION_EPOCH = 1306886400
 _CUSTOMIZATION_XML_PATH = ITEM_DEFS_PATH + 'customization/'
+_PREFAB_EFFECTS_XML_PATH = _VEHICLE_TYPE_XML_PATH + 'common/prefab_effects/'
 _readTags = shared_readers.readAllowedTags
 EmblemSlot = namedtuple('EmblemSlot', ['rayStart',
  'rayEnd',
@@ -481,6 +483,20 @@ class VehicleDescriptor(object):
         return
 
     @property
+    def slotPrefabs(self):
+        result = list(itertools.chain(self.chassis.slotPrefabs, self.hull.slotPrefabs, self.turret.slotPrefabs, self.gun.slotPrefabs))
+        if IS_UE_EDITOR:
+            for _, slot in self.objectSlots:
+                if not slot.edVisible and slot.prefab:
+                    result.remove((slot.name, slot.prefab))
+
+        return result
+
+    @property
+    def objectSlots(self):
+        return list(itertools.chain([ (VehiclePartName.CHASSIS, slot) for slot in self.chassis.objectSlots ], [ (VehiclePartName.HULL, slot) for slot in self.hull.objectSlots ], [ (VehiclePartName.TURRET, slot) for slot in self.turret.objectSlots ], [ (VehiclePartName.GUN, slot) for slot in self.gun.objectSlots ]))
+
+    @property
     def maxHealth(self):
         if IS_BASEAPP:
             self.__updateAttributes(onAnyApp=True)
@@ -520,7 +536,10 @@ class VehicleDescriptor(object):
     isTwinGunVehicle = property(lambda self: 'twinGun' in self.gun.tags)
     isDualgunVehicle = property(lambda self: 'dualGun' in self.gun.tags)
     hasDualAccuracy = property(lambda self: 'dualAccuracy' in self.gun.tags)
+    isMultiGunVehicle = property(lambda self: 'multiGun' in self.turret.tags)
     isAutoShootGunVehicle = property(lambda self: 'autoShoot' in self.gun.tags)
+    isSpinGunVehicle = property(lambda self: self.isAutoShootGunVehicle and 'spin' in self.gun.tags)
+    isTemperatureGun = property(lambda self: self.isAutoShootGunVehicle and 'temperature' in self.gun.tags)
     hasTurboshaftEngine = property(lambda self: self.type.hasTurboshaftEngine)
     hasHydraulicChassis = property(lambda self: self.type.hasHydraulicChassis)
     hasCharge = property(lambda self: self.type.hasCharge)
@@ -1191,6 +1210,8 @@ class VehicleDescriptor(object):
                     keyPoints, effects, readyPrereqs = gunDescr.effects
                     if not readyPrereqs:
                         prereqs.update(effects.prerequisites())
+            if gunDescr.prefabEffects is not None:
+                prereqs.add(gunDescr.prefabEffects.prefab)
             for shotDescr in gunDescr.shots:
                 for effectsIndex in shotDescr.shell.prereqEffectIndexes:
                     effectsDescr = g_cache.shotEffects[effectsIndex]
@@ -1209,6 +1230,15 @@ class VehicleDescriptor(object):
                         prereqs.update(effectsDescr['armorRicochet'][1].prerequisites())
                         prereqs.update(effectsDescr['armorHit'][1].prerequisites())
                         prereqs.update(effectsDescr['armorCriticalHit'][1].prerequisites())
+
+                iPrefabEff = shotDescr.shell.prefabEffectsIndex
+                if iPrefabEff == component_constants.INVALID_EFFECT_INDEX:
+                    continue
+                for effName, effDesc in g_cache.prefabEffects.shot.effects[iPrefabEff].groups.iteritems():
+                    prereqs.add(effDesc.prefab)
+
+        for _, prefab in self.slotPrefabs:
+            prereqs.add(prefab)
 
         if self.type._prereqs is None and not newPhysic:
             prereqs.update(self.hull['exhaust'].prerequisites())
@@ -1262,7 +1292,7 @@ class VehicleDescriptor(object):
                         if not readyPrereqs:
                             readyPrereqs.update(_extractNeededPrereqs(prereqs, effects.prerequisites()))
 
-                else:
+                elif gunDescr.effects is not None:
                     keyPoints, effects, readyPrereqs = gunDescr.effects
                     if not readyPrereqs:
                         readyPrereqs.update(_extractNeededPrereqs(prereqs, effects.prerequisites()))
@@ -1544,7 +1574,9 @@ class VehicleDescriptor(object):
     def shootExtraName(self):
         if self.isDualgunVehicle:
             return 'dualShoot'
-        return 'undefined' if self.isTwinGunVehicle else 'shoot'
+        if self.isTwinGunVehicle:
+            return 'undefined'
+        return 'multiShoot' if self.isMultiGunVehicle else 'shoot'
 
     def __updateAttributes(self, onAnyApp=False):
         self.miscAttrs = None
@@ -1654,7 +1686,7 @@ class VehicleDescriptor(object):
                     invisibilityFactor *= turretDescr.invisibilityFactor
 
                 miscAttrs['invisibilityFactor'] = invisibilityFactor
-        if IS_CELLAPP:
+        if IS_CELLAPP or IS_UE_EDITOR:
             hullPos = self.chassis.hullPosition
             hullBboxMin, hullBboxMax, _ = self.hull.hitTester.bbox
             turretPosOnHull = self.hull.turretPositions[0]
@@ -1679,16 +1711,12 @@ class VehicleDescriptor(object):
             miscAttrs[attribute.name] = attribute.applyFactor(miscAttrs[attribute.name])
 
         hullMaxHealth = round_int(miscAttrs['hullMaxHealth'])
-        if hullMaxHealth > 0:
-            self.hull.maxHealth = hullMaxHealth
+        if hullMaxHealth <= 0:
+            hullMaxHealth = self.hull.maxHealth
         turretMaxHealth = round_int(miscAttrs['turretMaxHealth'])
-        if turretMaxHealth > 0:
-            turretDescr = self.turrets[0][0]
-            turretDescr.healthParams.maxHealth = turretMaxHealth
-        maxHealth = self.hull.maxHealth
-        for turretDescr, gunDescr in self.turrets:
-            maxHealth += turretDescr.maxHealth
-
+        if turretMaxHealth <= 0:
+            turretMaxHealth = sum((turretDescr.maxHealth for turretDescr, _ in self.turrets), 0)
+        maxHealth = hullMaxHealth + turretMaxHealth
         self._defaultMaxHealth = maxHealth
         self._maxHealth = self.battleModifiers(BattleParams.VEHICLE_HEALTH, maxHealth)
         if miscAttrs['healthFactor'] != 1.0:
@@ -2478,8 +2506,10 @@ class SupplySlotsStorage(object):
             raise SoftException('Number of shells ({}) must be equal to NUM_SHELLS_SLOTS({}) now'.format(shellSlots, NUM_SHELLS_SLOTS))
 
 
+PrefabEffects = typing.NamedTuple('PrefabEffects', (('gun', prefab_effects_readers.EffectDescMap), ('shot', prefab_effects_readers.ShotEffects)))
+
 class Cache(object):
-    __slots__ = ('__vehicles', '__commonConfig', '__chassis', '__engines', '__fuelTanks', '__radios', '__turrets', '__guns', '__shells', '__optionalDevices', '__optionalDeviceIDs', '__equipments', '__equipmentIDs', '__chassisIDs', '__engineIDs', '__fuelTankIDs', '__radioIDs', '__turretIDs', '__gunIDs', '__shellIDs', '__customization', '__playerEmblems', '__shotEffects', '__shotEffectsIndexes', '__shotEffectsNames', '__damageStickers', '__vehicleEffects', '__gunEffects', '__gunReloadEffects', '__gunRecoilEffects', '__turretDetachmentEffects', '__customEffects', '__requestOncePrereqs', '__customization20', '__roles', '__supplySlots', '__supplySlotsStorages', '__moduleKind', '__postProgression')
+    __slots__ = ('__vehicles', '__commonConfig', '__chassis', '__engines', '__fuelTanks', '__radios', '__turrets', '__guns', '__shells', '__optionalDevices', '__optionalDeviceIDs', '__equipments', '__equipmentIDs', '__chassisIDs', '__engineIDs', '__fuelTankIDs', '__radioIDs', '__turretIDs', '__gunIDs', '__shellIDs', '__customization', '__playerEmblems', '__shotEffects', '__shotEffectsIndexes', '__shotEffectsNames', '__damageStickers', '__vehicleEffects', '__gunEffects', '__gunReloadEffects', '__gunRecoilEffects', '__turretDetachmentEffects', '__customEffects', '__requestOncePrereqs', '__customization20', '__roles', '__supplySlots', '__supplySlotsStorages', '__moduleKind', '__postProgression', '__prefabEffects')
     NATION_COMPONENTS_SECTION = '/components/'
     NATION_ITEM_SOURCE = {ITEM_TYPES.vehicleChassis: 'chassis.xml',
      ITEM_TYPES.vehicleEngine: 'engines.xml',
@@ -2521,6 +2551,7 @@ class Cache(object):
         self.__supplySlotsStorages = None
         self.__moduleKind = {}
         self.__postProgression = None
+        self.__prefabEffects = None
         if IS_CLIENT or IS_UE_EDITOR:
             self.__vehicleEffects = None
             self.__gunEffects = None
@@ -2786,6 +2817,12 @@ class Cache(object):
             self.__customEffects['slip'] = _readCustomEffectGroups(_VEHICLE_TYPE_XML_PATH + 'common/trackSlip_effects.xml')
             self.__customEffects['exhaust'] = _readCustomEffectGroups(_VEHICLE_TYPE_XML_PATH + 'common/exhaust_effects.xml')
         return self.__customEffects
+
+    @property
+    def prefabEffects(self):
+        if self.__prefabEffects is None:
+            self.__prefabEffects = PrefabEffects(prefab_effects_readers.readEffects(_PREFAB_EFFECTS_XML_PATH + 'gun_effects.xml'), prefab_effects_readers.readShotEffects(_PREFAB_EFFECTS_XML_PATH + 'shot_effects.xml'))
+        return self.__prefabEffects
 
     @property
     def _turretDetachmentEffects(self):
@@ -3517,12 +3554,16 @@ def _readHull(xmlCtx, section):
         item.primaryArmor = _readPrimaryArmor(xmlCtx, section, 'primaryArmor', item.materials)
         if IS_UE_EDITOR and hasattr(item, 'editorData'):
             item.editorData.primaryArmors = _readPrimaryArmorKinds(xmlCtx, section, 'primaryArmor')
+    item.slotPrefabs = shared_readers.readSlotPrefabs(section)
+    item.objectSlots = shared_readers.readObjectSlots(xmlCtx, section)
     return item
 
 
 def _writeHulls(hulls, section, materialData):
     section = _xml.getSubsection(None, section, 'hull')
     item = hulls[0]
+    shared_writers.writeSlotPrefabs(item.slotPrefabs, section)
+    shared_writers.writeObjectSlots(item.objectSlots, section)
     _writeHitTester(item.hitTesterManager, None, section, 'hitTester')
     _writeArmor(item.materials, section, materialData.get('hull', None) if materialData is not None else None, item.editorData.primaryArmors)
     _xml.rewriteFloat(section, 'weight', item.weight)
@@ -3887,15 +3928,18 @@ def _readChassis(xmlCtx, section, item, unlocksDescrs=None, _=None, isWheeledVeh
         item.customEffects = (CustomEffectsDescriptor.getDescriptor(section, g_cache._customEffects['slip'], xmlCtx, 'effects/mud'),)
         item.AODecals = _readAODecals(xmlCtx, section, 'AODecals')
         item.prefabs = shared_readers.readPrefabsSets(section['prefabs'], ('custom',))
+    item.slotPrefabs = shared_readers.readSlotPrefabs(section)
+    item.objectSlots = shared_readers.readObjectSlots(xmlCtx, section)
     item.unlocks = _readUnlocks(xmlCtx, section, 'unlocks', unlocksDescrs, item.compactDescr)
     return
 
 
 def _writeChassis(item, section, sharedSections, materialData, *args, **kwargs):
+    shared_writers.writeSlotPrefabs(item.slotPrefabs, section)
+    shared_writers.writeObjectSlots(item.objectSlots, section)
     _writeHitTester(item.hitTesterManager, None, section, 'hitTester')
     _xml.rewriteFloat(section, 'weight', item.weight)
     _xml.rewriteFloat(section, 'rotationSpeed', degrees(item.rotationSpeed))
-    _writeCamouflageSettings(section, 'camouflage', item.camouflage)
     chassisMatData = materialData.get('chassis', None) if materialData is not None else None
     if len(item.trackPairs) != 2:
         _writeArmor(item.materials, section, chassisMatData.get(item.name, None) if chassisMatData is not None else None)
@@ -4348,6 +4392,12 @@ def _readTurret(xmlCtx, section, item, unlocksDescrs=None, _=None):
     item.customizableVehicleAreas = _readCustomizableAreas(xmlCtx, section, 'customization')
     if section.has_key('multiGun'):
         item.multiGun = _readMultiGun(xmlCtx, section, 'multiGun')
+    if section.has_key('multiGunState'):
+        item.multiGunState = _readMultiGunState(xmlCtx, section['multiGunState'], item.multiGun)
+        item.tags = item.tags.union(('multiGun',))
+    else:
+        item.multiGunState = component_constants.DEFAULT_TURRET_MULTI_GUN_STATE
+        item.tags = item.tags.difference(('multiGun',))
     item.materials = _readArmor(xmlCtx, section, 'armor')
     item.weight = _xml.readNonNegativeFloat(xmlCtx, section, 'weight')
     item.healthParams = shared_components.DeviceHealth(_xml.readInt(xmlCtx, section, 'maxHealth', 1))
@@ -4393,10 +4443,14 @@ def _readTurret(xmlCtx, section, item, unlocksDescrs=None, _=None):
     item.guns = _readInstallableComponents(xmlCtx, section, 'guns', nationID, _readGun, _readGunLocals, g_cache.guns(nationID), g_cache.gunIDs(nationID), unlocksDescrs, item.compactDescr)
     if not item.multiGun:
         pass
+    item.slotPrefabs = shared_readers.readSlotPrefabs(section)
+    item.objectSlots = shared_readers.readObjectSlots(xmlCtx, section)
     item.unlocks = _readUnlocks(xmlCtx, section, 'unlocks', unlocksDescrs, item.compactDescr)
 
 
 def _writeTurret(item, section, sharedSections, materialData, *args, **kwargs):
+    shared_writers.writeSlotPrefabs(item.slotPrefabs, section)
+    shared_writers.writeObjectSlots(item.objectSlots, section)
     _xml.rewriteFloat(section, 'weight', item.weight)
     _xml.rewriteFloat(section, 'gunJointPitch', degrees(item.gunJointPitch), 0.0)
     _xml.rewriteBool(section, 'showEmblemsOnGun', item.showEmblemsOnGun, defaultValue=False)
@@ -4482,6 +4536,25 @@ def _readMultiGun(xmlCtx, section, subsection):
     return multiGun
 
 
+def _readMultiGunState(xmlCtx, section, multiGun):
+    sequence = map(int, _xml.readStringOrEmpty(xmlCtx, section, 'sequence').split())
+    patterns = {}
+    if IS_CLIENT or IS_UE_EDITOR:
+        if multiGun is None:
+            _xml.raiseWrongXml(xmlCtx, 'multiGunState', 'multiGunState specified without multiGun')
+        patternIndex = 1
+        patterns[-patternIndex] = range(0, len(multiGun))
+        if section.has_key('patterns'):
+            for _, pattern in section['patterns'].items():
+                patternIndex += 1
+                gunIndexes = map(int, _xml.readStringOrEmpty(xmlCtx, pattern, 'gunIndexes').split())
+                patSequence = map(int, _xml.readStringOrEmpty(xmlCtx, pattern, 'sequence').split())
+                patSequence = [ (gunIndex,) for gunIndex in patSequence ]
+                patterns[-patternIndex] = component_constants.MultiGunPattern(gunIndexes=gunIndexes, sequence=patSequence)
+
+    return component_constants.MultiGunState(patterns=patterns, sequence=sequence)
+
+
 def makeMultiExtraNameTemplate(name):
     return name.replace('_', '{}', 1) if '_' in name else name + '{}'
 
@@ -4539,10 +4612,10 @@ def _readGun(xmlCtx, section, item, unlocksDescrs=None, _=None):
             item.modelsSets = shared_readers.readModelsSets(xmlCtx, section, 'models')
             item.models = item.modelsSets['default']
         effName = _xml.readNonEmptyString(xmlCtx, section, 'effects')
-        eff = g_cache.gunEffects.get(effName)
-        if eff is None:
+        item.effects = g_cache.gunEffects.get(effName)
+        item.prefabEffects = g_cache.prefabEffects.gun.get(effName)
+        if item.effects is None and item.prefabEffects is None:
             _xml.raiseWrongXml(xmlCtx, 'effects', "unknown effect '%s'" % effName)
-        item.effects = eff
         effName = _xml.readStringOrNone(xmlCtx, section, 'reloadEffect')
         if effName is not None:
             reloadEff = g_cache._gunReloadEffects.get(effName, None)
@@ -4558,6 +4631,7 @@ def _readGun(xmlCtx, section, item, unlocksDescrs=None, _=None):
         if section.has_key('emblemSlots'):
             item.emblemSlots, item.slotsAnchors = shared_readers.readEmblemSlots(xmlCtx, section, 'emblemSlots')
         item.edgeByVisualModel = section.readBool('edgeByVisualModel', True)
+        item.muzzleBrake = _readMuzzleBrake(xmlCtx, section)
     if IS_CLIENT or IS_UE_EDITOR or IS_BOT or IS_BASEAPP:
         if section.has_key('customizationSlots'):
             item.emblemSlots, item.slotsAnchors = shared_readers.readCustomizationSlots(xmlCtx, section, 'customizationSlots')
@@ -4609,6 +4683,14 @@ def _readGun(xmlCtx, section, item, unlocksDescrs=None, _=None):
         item.twinGun = component_constants.DEFAULT_GUN_TWINGUN
     else:
         item.twinGun = _readGunTwinGunParams(xmlCtx, section)
+    if not section.has_key('spin'):
+        item.spin = component_constants.DEFAULT_SPIN_GUN
+    else:
+        item.spin = _readSpinGun(xmlCtx, section)
+    if not section.has_key('temperatureMechanics'):
+        item.temperature = None
+    else:
+        item.temperature = _readTemperatureMechanics(xmlCtx, section, 'temperatureMechanics')
     if item.burst[0] > item.clip[0] > 1:
         _xml.raiseWrongXml(xmlCtx, 'burst', 'burst/count is larger than clip/count')
     if item.autoreload != component_constants.DEFAULT_GUN_AUTORELOAD and item.clip[0] <= 1:
@@ -4641,6 +4723,14 @@ def _readGun(xmlCtx, section, item, unlocksDescrs=None, _=None):
         tags -= {'twinGun'}
     else:
         tags |= {'twinGun'}
+    if item.spin == component_constants.DEFAULT_SPIN_GUN:
+        tags -= {'spin'}
+    else:
+        tags |= {'spin'}
+    if item.temperature is None:
+        tags -= {'temperature'}
+    else:
+        tags |= {'temperature'}
     if dualGun is None:
         tags = tags.difference(('dualGun',))
     else:
@@ -4662,6 +4752,8 @@ def _readGun(xmlCtx, section, item, unlocksDescrs=None, _=None):
     item.isDamageMutable = any((shot.shell.isDamageMutable for shot in item.shots))
     if IS_CLIENT or IS_WEB:
         item.effectsCaliber = _xml.readPositiveFloat(xmlCtx, section, 'effectsCaliber', v[0].shell.effectsCaliber)
+    item.slotPrefabs = shared_readers.readSlotPrefabs(section)
+    item.objectSlots = shared_readers.readObjectSlots(xmlCtx, section)
     item.unlocks = _readUnlocks(xmlCtx, section, 'unlocks', unlocksDescrs, item.compactDescr)
     return
 
@@ -4766,6 +4858,16 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
     else:
         hasOverride = True
         autoShoot = _readGunClipAutoShoot(xmlCtx, section)
+    if not section.has_key('spin'):
+        spin = sharedItem.spin
+    else:
+        hasOverride = True
+        spin = _readSpinGun(xmlCtx, section)
+    if not section.has_key('temperatureMechanics'):
+        temperatureMechanics = sharedItem.temperature
+    else:
+        hasOverride = True
+        temperatureMechanics = _readTemperatureMechanics(xmlCtx, section, 'temperatureMechanics')
     if not section.has_key('burst'):
         burst = sharedItem.burst
     else:
@@ -4816,12 +4918,14 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
             models = modelsSets['default']
         if not section.has_key('effects'):
             effects = sharedItem.effects
+            prefabEffects = sharedItem.prefabEffects
         else:
             hasOverride = True
             __markEditorPropertyAsOverride(sharedItem, 'effects')
             effName = _xml.readNonEmptyString(xmlCtx, section, 'effects')
             effects = g_cache.gunEffects.get(effName)
-            if effects is None:
+            prefabEffects = g_cache.prefabEffects.gun.get(effName)
+            if effects is None and prefabEffects is None:
                 _xml.raiseWrongXml(xmlCtx, 'effects', "unknown effect '%s'" % effName)
         if section.has_key('multiGunEffects'):
             multiGunEffects = _xml.readNonEmptyString(xmlCtx, section, 'multiGunEffects')
@@ -4873,6 +4977,10 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
             drivenJoints = _readDrivenJoints(xmlCtx, section, 'drivenJoints')
         else:
             drivenJoints = {}
+        muzzleBrake = sharedItem.muzzleBrake
+        if section.has_key('muzzleBrake'):
+            hasOverride = True
+            muzzleBrake = _readMuzzleBrake(xmlCtx, section)
     slotsAnchors = tuple([])
     if IS_CLIENT or IS_UE_EDITOR or IS_BOT or IS_BASEAPP:
         if not section.has_key('emblemSlots') and not section.has_key('customizationSlots'):
@@ -4911,6 +5019,16 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
     else:
         hasOverride = True
         unlocks = _readUnlocks(xmlCtx, section, 'unlocks', unlocksDescrs, sharedItem.compactDescr, turretCompactDescr)
+    if not section.has_key('slotPrefabs'):
+        slotPrefabs = sharedItem.slotPrefabs
+    else:
+        hasOverride = True
+        slotPrefabs = shared_readers.readSlotPrefabs(section)
+    if not section.has_key('objectSlots'):
+        objectSlots = sharedItem.objectSlots
+    else:
+        hasOverride = True
+        objectSlots = shared_readers.readObjectSlots(xmlCtx, section)
     if not hasOverride:
         return sharedItem
     else:
@@ -4966,6 +5084,22 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
             else:
                 tags |= {'twinGun'}
             item.tags = tags
+        if spin is not sharedItem.spin:
+            item.spin = spin
+            tags = item.tags
+            if spin == component_constants.DEFAULT_SPIN_GUN:
+                tags -= {'spin'}
+            else:
+                tags |= {'spin'}
+            item.tags = tags
+        if temperatureMechanics is not sharedItem.temperature:
+            item.temperature = temperatureMechanics
+            tags = item.tags
+            if temperatureMechanics is None:
+                tags -= {'temperature'}
+            else:
+                tags |= {'temperature'}
+            item.tags = tags
         if dualGun is not None:
             item.dualGun = dualGun
             tags = item.tags
@@ -4988,6 +5122,7 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
             item.modelsSets = modelsSets
             item.models = models
             item.effects = effects
+            item.prefabEffects = prefabEffects
             item.recoil = recoil
             item.impulse = impulse
             item.camouflage = cam
@@ -4997,13 +5132,18 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
             item.emblemSlots = emblemSlots
             item.reloadEffect = reloadEffect
             item.drivenJoints = drivenJoints
+            item.muzzleBrake = muzzleBrake
         if IS_CLIENT or IS_UE_EDITOR or IS_BOT or IS_BASEAPP:
             item.slotsAnchors = slotsAnchors
         item.invisibilityFactorAtShot = invisibilityFactorAtShot
+        item.slotPrefabs = slotPrefabs
+        item.objectSlots = objectSlots
         return item
 
 
 def _writeGun(item, section, sharedSections, materialData, *args, **kwargs):
+    shared_writers.writeSlotPrefabs(item.slotPrefabs, section)
+    shared_writers.writeObjectSlots(item.objectSlots, section)
     _xml.rewriteFloat(section, 'rotationSpeed', degrees(item.rotationSpeed))
     _xml.rewriteFloat(section, 'weight', item.weight)
     _xml.rewriteFloat(section, 'reloadTime', item.reloadTime)
@@ -5163,6 +5303,44 @@ def _readGunClipAutoShoot(xmlCtx, section):
     return component_constants.AutoShoot(shotDispersionPerSec=shotDispersionPerSec, maxShotDispersion=maxShotDispersion, groupSize=groupSize)
 
 
+def _readSpinGun(xmlCtx, section):
+    spinUpTimeout = _xml.readNonNegativeFloat(xmlCtx, section, 'spin/spinUpTimeout', 0.0)
+    spinDownTimeout = _xml.readNonNegativeFloat(xmlCtx, section, 'spin/spinDownTimeout', 0.0)
+    startFactor = _xml.readNonNegativeFloat(xmlCtx, section, 'spin/startFactor', 0.0)
+    isSpinUpShootingEnable = _xml.readBool(xmlCtx, section, 'spin/isSpinUpShootingEnable', True)
+    return component_constants.SpinGun(spinUpTimeout=spinUpTimeout, spinDownTimeout=spinDownTimeout, isSpinUpShootingEnable=isSpinUpShootingEnable, startFactor=startFactor)
+
+
+def _readTemperatureMechanics(xmlCtx, section, paramName):
+    subXmlCtx, section = _xml.getSubSectionWithContext(xmlCtx, section, paramName, throwIfMissing=False)
+    if section is None:
+        return
+    else:
+        heatingPerShot = _xml.readPositiveInt(subXmlCtx, section, 'heatingPerShot')
+        heatingPerSec = _xml.readPositiveInt(subXmlCtx, section, 'heatingPerSec')
+        coolingDelay = _xml.readNonNegativeFloat(subXmlCtx, section, 'coolingDelay')
+        coolingPerSec = _xml.readPositiveInt(subXmlCtx, section, 'coolingPerSec')
+        coolingOverheatPerSec = _xml.readPositiveInt(subXmlCtx, section, 'coolingOverheatPerSec')
+        thermalStateHysteresis = _xml.readPositiveInt(subXmlCtx, section, 'thermalStateHysteresis')
+        temperatureSegmentSize = _xml.readNonNegativeFloat(subXmlCtx, section, 'temperatureSegmentSize')
+        states = []
+        for tag, subsection in section['thermalStates'].items():
+            if tag == 'state':
+                maxTemperature = _xml.readNonNegativeInt(subXmlCtx, subsection, 'maxTemperature')
+                isOverheated = _xml.readBool(subXmlCtx, subsection, 'isOverheated', False)
+                modifiers = readModifiers(subXmlCtx, _xml.getSubsection(subXmlCtx, subsection, 'modifiers'))
+                state = gun_components.TemperatureGunState(temperature=maxTemperature, isOverheated=isOverheated, modifiers=modifiers)
+                states.append(state)
+
+        if not states:
+            _xml.raiseWrongXml(subXmlCtx, '', 'no temperature states in thermalStates, the presence of {} does not matter'.format(paramName))
+        states.sort(key=lambda state: state.temperature)
+        temperatureRanges = [ state.temperature for state in states ]
+        if len(temperatureRanges) != len(set(temperatureRanges)):
+            _xml.raiseWrongXml(subXmlCtx, '', 'states with the same temperature range')
+        return gun_components.TemperatureGunParams(states=states, heatingPerShot=heatingPerShot, heatingPerSec=heatingPerSec, coolingDelay=coolingDelay, coolingPerSec=coolingPerSec, coolingOverheatPerSec=coolingOverheatPerSec, thermalStateHysteresis=thermalStateHysteresis, temperatureSegmentSize=temperatureSegmentSize)
+
+
 def _readGunClipAutoreload(xmlCtx, section):
     reloadTime = _xml.readTupleOfPositiveFloats(xmlCtx, section, 'autoreload/reloadTime')
     if not len(reloadTime):
@@ -5306,10 +5484,12 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
         stun = None
     shell.stun = stun
     effName = _xml.readNonEmptyString(xmlCtx, section, 'effects')
-    v = g_cache.shotEffectsIndexes.get(effName)
-    if v is None:
+    effIdx = g_cache.shotEffectsIndexes.get(effName, component_constants.INVALID_EFFECT_INDEX)
+    prefabEffIdx = g_cache.prefabEffects.shot.indexes.get(effName, component_constants.INVALID_EFFECT_INDEX)
+    if effIdx == component_constants.INVALID_EFFECT_INDEX and prefabEffIdx == effIdx:
         _xml.raiseWrongXml(xmlCtx, 'effects', "unknown effect '%s'" % effName)
-    shell.effectsIndex = v
+    shell.effectsIndex = effIdx
+    shell.prefabEffectsIndex = prefabEffIdx
     shell.effectsCaliber = _xml.readPositiveFloat(xmlCtx, section, 'effectsCaliber', shell.caliber)
     if section.has_key('dynamicEffects'):
         dynamicEffects = []
@@ -5486,7 +5666,7 @@ _g_boolMatInfoParams = ('useArmorHomogenization',
  'mayRicochet',
  'collideOnceOnly',
  'continueTraceIfNoHit',
- 'checkCaliberForRichet',
+ 'checkCaliberForRicochet',
  'checkCaliberForHitAngleNorm')
 
 def _readPrimaryArmor(xmlCtx, section, subsectionName, materials):
@@ -6310,7 +6490,7 @@ def _readMaterials(xmlCtx, section, subsectionName, extrasDict):
                 autoDamageKindMaterials.add(materialKind)
             else:
                 _xml.raiseWrongXml(ctx, 'damageKind', 'wrong damage kind name')
-        materials[materialKind] = shared_components.MaterialInfo(kind=materialKind, armor=None if extraIsNone else 0, extra=extra if not multipleExtra else makeMultiExtraNameTemplate(extra), multipleExtra=multipleExtra, vehicleDamageFactor=_xml.readFraction(ctx, subsection, 'vehicleDamageFactor'), useArmorHomogenization=_xml.readBool(ctx, subsection, 'useArmorHomogenization'), useHitAngle=_xml.readBool(ctx, subsection, 'useHitAngle'), useAntifragmentationLining=_xml.readBool(ctx, subsection, 'useAntifragmentationLining'), mayRicochet=_xml.readBool(ctx, subsection, 'mayRicochet'), collideOnceOnly=_xml.readBool(ctx, subsection, 'collideOnceOnly'), checkCaliberForRichet=_xml.readBool(ctx, subsection, 'checkCaliberForRichet'), checkCaliberForHitAngleNorm=_xml.readBool(ctx, subsection, 'checkCaliberForHitAngleNorm'), damageKind=damageKind, chanceToHitByProjectile=1.0 if extraIsNone else _xml.readFraction(ctx, subsection, 'chanceToHitByProjectile'), chanceToHitByExplosion=1.0 if extraIsNone else _xml.readFraction(ctx, subsection, 'chanceToHitByExplosion'), continueTraceIfNoHit=True if extraIsNone else _xml.readBool(ctx, subsection, 'continueTraceIfNoHit'))
+        materials[materialKind] = shared_components.MaterialInfo(kind=materialKind, armor=None if extraIsNone else 0, extra=extra if not multipleExtra else makeMultiExtraNameTemplate(extra), multipleExtra=multipleExtra, vehicleDamageFactor=_xml.readFraction(ctx, subsection, 'vehicleDamageFactor'), useArmorHomogenization=_xml.readBool(ctx, subsection, 'useArmorHomogenization'), useHitAngle=_xml.readBool(ctx, subsection, 'useHitAngle'), useAntifragmentationLining=_xml.readBool(ctx, subsection, 'useAntifragmentationLining'), mayRicochet=_xml.readBool(ctx, subsection, 'mayRicochet'), collideOnceOnly=_xml.readBool(ctx, subsection, 'collideOnceOnly'), checkCaliberForRicochet=_xml.readBool(ctx, subsection, 'checkCaliberForRicochet'), checkCaliberForHitAngleNorm=_xml.readBool(ctx, subsection, 'checkCaliberForHitAngleNorm'), damageKind=damageKind, chanceToHitByProjectile=1.0 if extraIsNone else _xml.readFraction(ctx, subsection, 'chanceToHitByProjectile'), chanceToHitByExplosion=1.0 if extraIsNone else _xml.readFraction(ctx, subsection, 'chanceToHitByExplosion'), continueTraceIfNoHit=True if extraIsNone else _xml.readBool(ctx, subsection, 'continueTraceIfNoHit'))
 
     return (materials, autoDamageKindMaterials)
 
@@ -7165,6 +7345,12 @@ def _readPostProgressionPricesOverrides(xmlCtx, section):
                     raise SoftException('Wrong currency for subsection: {}, ctx: {}'.format(sname, xmlCtx))
 
         return postProgressionPricesOverrides
+
+
+def _readMuzzleBrake(xmlCtx, section):
+    default = component_constants.MuzzleBreakType(component_constants.MuzzleBreakType.NONE).name
+    muzzleBrakeType = intern(_xml.readStringWithDefaultValue(xmlCtx, section, 'muzzleBrake', default))
+    return component_constants.MuzzleBreakType[muzzleBrakeType]
 
 
 def _descrByID(descrList, id):

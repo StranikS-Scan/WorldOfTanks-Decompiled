@@ -4,12 +4,12 @@ import logging
 from collections import namedtuple
 import BigWorld
 from AccountCommands import isCodeValid, RES_FAILURE, RES_SUCCESS
+from gui.Scaleform.Waiting import Waiting
+from gui.shared.utils import code2str
+from gui.shared.utils.decorators import ReprInjector
 from helpers import isPlayerAccount
 from ids_generators import Int32IDGenerator
-from gui.shared.utils import code2str
-from adisp import adisp_async, adisp_process
-from gui.Scaleform.Waiting import Waiting
-from gui.shared.utils.decorators import ReprInjector
+from wg_async import wg_async, await_callback
 _logger = logging.getLogger(__name__)
 
 class AbstractRequester(object):
@@ -18,18 +18,15 @@ class AbstractRequester(object):
         self._data = self._getDefaultDataValue()
         self.__synced = False
 
-    @adisp_async
-    @adisp_process
-    def request(self, callback):
+    @wg_async
+    def request(self):
         _logger.debug('Prepare requester %s', self.__class__.__name__)
         self.__synced = False
         if not isPlayerAccount():
-            yield lambda callback: callback(None)
             _logger.error('Player is not account, requester %s can not be invoked.', self.__class__.__name__)
         else:
             _logger.debug('Invoke requester %s', self.__class__.__name__)
-            self._data = yield self._requestCache()
-        callback(self)
+            self._data = yield await_callback(self._requestCache)()
 
     def isSynced(self):
         return self.__synced
@@ -49,8 +46,7 @@ class AbstractRequester(object):
             callback(self._preprocessValidData(value))
         return
 
-    @adisp_async
-    def _requestCache(self, callback):
+    def _requestCache(self, callback=None):
         self._response(0, self._getDefaultDataValue(), callback)
 
     def _getDefaultDataValue(self):

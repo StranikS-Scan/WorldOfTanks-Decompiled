@@ -105,6 +105,7 @@ class VEHICLE_STATS:
     PRESTIGE_SYSTEM = 'prestigeSystem'
     VEHICLE_ACHIEVEMENTS = 'vehicleAchievements'
     CUSTOMIZATION_ACHIEVEMENTS = 'customizationAchievements'
+    STAT_TRACKERS_VEH_STATS_CUT = 'statTrackersVehStatsCut'
     ALL = (FRAGS,
      A15x15_CUT,
      A30x30_CUT,
@@ -130,7 +131,8 @@ class VEHICLE_STATS:
      PRESTIGE_SYSTEM,
      VEHICLE_ACHIEVEMENTS,
      CUSTOMIZATION_ACHIEVEMENTS,
-     COMP7_CUT_ARCHIVE_PEGASUS)
+     COMP7_CUT_ARCHIVE_PEGASUS,
+     STAT_TRACKERS_VEH_STATS_CUT)
 
 
 _vehTypeFragsBlockBuilder = DictBlockBuilder(VEHICLE_STATS.FRAGS, 'I', 'H', VEH_TYPE_FRAGS_DEPENDENCIES)
@@ -156,6 +158,7 @@ _comp7CutSeason2BlockBuilder = DictBlockBuilder(VEHICLE_STATS.COMP7_CUT_SEASON_2
 _comp7CutSeason3BlockBuilder = DictBlockBuilder(VEHICLE_STATS.COMP7_CUT_SEASON_3, 'I', 'IIII', {})
 _comp7CutArchiveGriffinBlockBuilder = DictBlockBuilder(VEHICLE_STATS.COMP7_CUT_ARCHIVE_GRIFFIN, 'I', 'IIII', {})
 _comp7CutArchivePegasusBlockBuilder = DictBlockBuilder(VEHICLE_STATS.COMP7_CUT_ARCHIVE_PEGASUS, 'I', 'IIII', {})
+_statTrackersVehStatsCutBlockBuilder = DictBlockBuilder(VEHICLE_STATS.STAT_TRACKERS_VEH_STATS_CUT, 'I', 'I', {})
 _ACHIEVEMENTS15X15_BLOCK_LAYOUT = ['fragsBeast',
  'sniperSeries',
  'maxSniperSeries',
@@ -933,8 +936,8 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'BattlePassCommonPr_NY25',
  'BattlePassCommonPr_16',
  'BattlePassCommonPr_17',
- 'BPReserveAchievement_2',
- 'BPReserveAchievement_3',
+ 'BattlePassCommonPr_17extra_1',
+ 'BattlePassCommonPr_17extra_2',
  'BPReserveAchievement_4',
  'BPReserveAchievement_5',
  'BPReserveAchievement_6',
@@ -1193,8 +1196,8 @@ _singleAchievementsPopUps = ['titleSniper',
  'BattlePassCommonPr_NY25',
  'BattlePassCommonPr_16',
  'BattlePassCommonPr_17',
- 'BPReserveAchievement_2',
- 'BPReserveAchievement_3',
+ 'BattlePassCommonPr_17extra_1',
+ 'BattlePassCommonPr_17extra_2',
  'BPReserveAchievement_4',
  'BPReserveAchievement_5',
  'BPReserveAchievement_6',
@@ -1389,7 +1392,8 @@ accountDossierLayout = (_a15x15BlockBuilder,
  _comp7ArchivePegasusBlockBuilder,
  _maxComp7ArchivePegasusBlockBuilder,
  _comp7CutArchivePegasusBlockBuilder,
- _commendationsBlockBuilder)
+ _commendationsBlockBuilder,
+ _statTrackersVehStatsCutBlockBuilder)
 ACCOUNT_DOSSIER_BLOCKS = {b.name:b for b in accountDossierLayout}
 ACCOUNT_DOSSIER_STATIC_BLOCKS = frozenset((b.name for b in accountDossierLayout if type(b) == StaticSizeBlockBuilder))
 ACCOUNT_DOSSIER_BINARY_SET_BLOCKS = [ b.name for b in accountDossierLayout if type(b) == BinarySetDossierBlockBuilder ]

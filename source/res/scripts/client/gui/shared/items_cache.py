@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_cache.py
 from Event import Event
-from adisp import adisp_async
 from debug_utils import LOG_DEBUG
 from PlayerEvents import g_playerEvents
 from gui.shared.utils.requesters import ItemsRequester
@@ -29,6 +28,7 @@ from helpers import dependency
 from skeletons.festivity_factory import IFestivityFactory
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
+from wg_async import wg_async, wg_await
 
 class CACHE_SYNC_REASON(object):
     SHOW_GUI, CLIENT_UPDATE, SHOP_RESYNC, INVENTORY_RESYNC, DOSSIER_RESYNC, STATS_RESYNC = range(1, 7)
@@ -76,12 +76,12 @@ class ItemsCache(IItemsCache):
     def compatVehiclesCache(self):
         return self.__compatVehiclesCache
 
-    @adisp_async
-    def update(self, updateReason, diff=None, notify=True, callback=None):
+    @wg_async
+    def update(self, updateReason, diff=None, notify=True):
         if diff is None or self.__syncFailed:
-            self.__invalidateFullData(updateReason, notify, callback)
+            yield wg_await(self.__invalidateFullData(updateReason, notify))
         else:
-            self.__invalidateData(updateReason, diff, notify, callback)
+            yield wg_await(self.__invalidateData(updateReason, diff, notify))
         return
 
     def clear(self):
@@ -89,7 +89,7 @@ class ItemsCache(IItemsCache):
         self.__compatVehiclesCache.clear()
         return self.items.clear()
 
-    def request(self, callback):
+    def request(self, callback=None):
         raise SoftException('This method should not be reached in this context')
 
     def onDisconnected(self):
@@ -102,7 +102,8 @@ class ItemsCache(IItemsCache):
     def _onCenterIsLongDisconnected(self, isLongDisconnected):
         self.items.dossiers.onCenterIsLongDisconnected(isLongDisconnected)
 
-    def __invalidateData(self, updateReason, diff, notify=True, callback=lambda *args: None):
+    @wg_async
+    def __invalidateData(self, updateReason, diff, notify=True):
         self.__waitForSync = True
         wasSyncFailed = self.__syncFailed
         self.__syncFailed = False
@@ -111,42 +112,35 @@ class ItemsCache(IItemsCache):
             invalidItems = self.__items.invalidateCache(diff)
         else:
             invalidItems = {}
+        yield wg_await(self.__items.request())
+        self.__waitForSync = False
+        if not self.isSynced():
+            self.__syncFailed = True
+            self.onSyncFailed(updateReason)
+        else:
+            self.__compatVehiclesCache.invalidateData(self, invalidItems)
+            if notify:
+                self.onSyncCompleted(updateReason, invalidItems)
 
-        def cbWrapper(*args):
-            self.__waitForSync = False
-            if not self.isSynced():
-                self.__syncFailed = True
-                self.onSyncFailed(updateReason)
-            else:
-                self.__compatVehiclesCache.invalidateData(self, invalidItems)
-                if notify:
-                    self.onSyncCompleted(updateReason, invalidItems)
-            callback(*args)
-
-        self.__items.request()(cbWrapper)
-
-    def __invalidateFullData(self, updateReason, notify=True, callback=lambda *args: None):
+    @wg_async
+    def __invalidateFullData(self, updateReason, notify=True):
         self.__waitForSync = True
         wasSyncFailed = self.__syncFailed
         self.__syncFailed = False
         self.onSyncStarted()
-
-        def cbWrapper(*args):
-            self.__waitForSync = False
-            if not self.isSynced():
-                self.__syncFailed = True
-                self.onSyncFailed(updateReason)
+        yield wg_await(self.__items.request())
+        self.__waitForSync = False
+        if not self.isSynced():
+            self.__syncFailed = True
+            self.onSyncFailed(updateReason)
+        else:
+            if updateReason != CACHE_SYNC_REASON.DOSSIER_RESYNC or wasSyncFailed:
+                invalidItems = self.__items.invalidateCache()
             else:
-                if updateReason != CACHE_SYNC_REASON.DOSSIER_RESYNC or wasSyncFailed:
-                    invalidItems = self.__items.invalidateCache()
-                else:
-                    invalidItems = {}
-                self.__compatVehiclesCache.invalidateFullData(self)
-                if notify:
-                    self.onSyncCompleted(updateReason, invalidItems)
-            callback(*args)
-
-        self.__items.request()(cbWrapper)
+                invalidItems = {}
+            self.__compatVehiclesCache.invalidateFullData(self)
+            if notify:
+                self.onSyncCompleted(updateReason, invalidItems)
 
     def isSynced(self):
         return self.items.isSynced()

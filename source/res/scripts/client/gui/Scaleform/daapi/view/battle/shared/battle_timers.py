@@ -101,7 +101,7 @@ class BattleTimer(BattleTimerMeta, IAbstractPeriodView):
 
     def __init__(self):
         super(BattleTimer, self).__init__()
-        self.__isTicking = False
+        self._isTicking = False
         self.__state = COUNTDOWN_STATE.UNDEFINED
         self.__roundLength = self.arenaVisitor.getRoundLength()
         self.__endingSoonTime = self.arenaVisitor.type.getBattleEndingSoonTime()
@@ -126,11 +126,11 @@ class BattleTimer(BattleTimerMeta, IAbstractPeriodView):
     def setTotalTime(self, totalTime):
         if self.__endWarningIsEnabled and self.__state == COUNTDOWN_STATE.STOP:
             if _BATTLE_END_TIME < totalTime <= self.__endingSoonTime:
-                if not self.__isTicking:
+                if not self._isTicking:
                     self._startTicking()
                 if totalTime == self.__endingSoonTime:
                     self._callWWISE(_WWISE_EVENTS.BATTLE_ENDING_SOON)
-            elif self.__isTicking:
+            elif self._isTicking:
                 self.__stopTicking()
         self._sendTime(totalTime)
 
@@ -173,16 +173,16 @@ class BattleTimer(BattleTimerMeta, IAbstractPeriodView):
         return
 
     def _setColor(self):
-        self.as_setColorS(self.__isTicking)
+        self.as_setColorS(self._isTicking)
 
     def _startTicking(self):
         self._callWWISE(_WWISE_EVENTS.COUNTDOWN_TICKING)
-        self.__isTicking = True
+        self._isTicking = True
         self._setColor()
 
     def __stopTicking(self):
         self._callWWISE(_WWISE_EVENTS.STOP_TICKING)
-        self.__isTicking = False
+        self._isTicking = False
         self._setColor()
 
     def __validateEndingSoonTime(self):

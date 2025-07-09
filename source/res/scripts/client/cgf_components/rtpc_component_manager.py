@@ -6,7 +6,7 @@ from cgf_script.managers_registrator import autoregister, onAddedQuery, onRemove
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 from Sound import RTPCComponent
-from Vehicular import KineticEnergyGetter, RemainingAmmoClipPercentGetter, DistanceToCannonGetter
+from Vehicular import KineticEnergyGetter, RemainingAmmoClipPercentGetter, DistanceToCannonGetter, OverheatValueGetter
 from vehicle_systems.cgf_helpers import getVehicleGameObjectByGameObject, getVehicleEntityByGameObject, getVehicleEntityByVehicleGameObject
 from vehicle_systems.sound_objects import getGunSoundObjectDistance
 
@@ -20,7 +20,8 @@ class RTPCSourceType(object):
     INTERVAL_BETWEEN_SHOTS = 2
     REMAINIG_AMMO_CLIP_PERCENT = 3
     DISTANCE_TO_CANNON = 4
-    COUNT = 5
+    OVERHEAT_VALUE = 5
+    COUNT = 6
 
 
 @autoregister(presentInAllWorlds=True)
@@ -100,3 +101,14 @@ class RTPCComponentManager(CGF.ComponentManager):
             distance = getGunSoundObjectDistance(vehicle)
             rtpcComponent.setRTPCsBySourceType(RTPCSourceType.DISTANCE_TO_CANNON, distance)
         return
+
+    @onProcessQuery(CGF.GameObject, RTPCComponent, OverheatValueGetter)
+    def onOverheatValueRTPCAdded(self, gameObject, rtpcComponent, _):
+        vehicle = self.getVehicleComponentForRTPC(gameObject)
+        if vehicle is None:
+            return
+        else:
+            temperatureGunController = vehicle.dynamicComponents.get('temperatureGunController')
+            if temperatureGunController is not None:
+                rtpcComponent.setRTPCsBySourceType(RTPCSourceType.OVERHEAT_VALUE, vehicle.temperatureGunController.temperatureProgress)
+            return

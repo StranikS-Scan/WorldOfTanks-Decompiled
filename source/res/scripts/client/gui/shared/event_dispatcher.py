@@ -2031,9 +2031,9 @@ def showSteamEmailConfirmRewardsView(rewards=None, notificationMgr=None):
     notificationMgr.append(WindowNotificationCommand(window))
 
 
-def showBattlePassTankmenVoiceover(ctx=None):
+def showBattlePassTankmenVoiceover(screenID, ctx=None):
     from gui.impl.lobby.battle_pass.tankmen_voiceover_view import TankmenVoiceoverWindow
-    window = TankmenVoiceoverWindow(ctx=ctx)
+    window = TankmenVoiceoverWindow(screenID=screenID, ctx=ctx)
     window.load()
 
 

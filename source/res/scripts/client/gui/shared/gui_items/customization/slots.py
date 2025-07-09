@@ -222,6 +222,10 @@ class AttachmentSlot(BaseCustomizationSlot):
     def hangerRotation(self):
         return self.descriptor.hangerRotation
 
+    @property
+    def compatibleModels(self):
+        return self._descriptor.compatibleModels
+
 
 def getProgectionDecalAspect(slotDescriptor):
     formfactor = first((tag for tag in slotDescriptor.tags if tag.startswith(ProjectionDecalFormTags.PREFIX)))

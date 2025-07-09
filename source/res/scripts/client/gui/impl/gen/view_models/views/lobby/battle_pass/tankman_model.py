@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/battle_pass/tankman_model.py
 from enum import Enum
+from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
+from gui.impl.gen.view_models.views.lobby.battle_pass.skill_model import SkillModel
 
 class TankmanStates(Enum):
     RECEIVED = 'received'
@@ -17,7 +19,7 @@ class TankmanStates(Enum):
 class TankmanModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=8, commands=0):
+    def __init__(self, properties=9, commands=0):
         super(TankmanModel, self).__init__(properties=properties, commands=commands)
 
     def getFullName(self):
@@ -68,6 +70,16 @@ class TankmanModel(ViewModel):
     def setHasVoiceover(self, value):
         self._setBool(7, value)
 
+    def getSkills(self):
+        return self._getArray(8)
+
+    def setSkills(self, value):
+        self._setArray(8, value)
+
+    @staticmethod
+    def getSkillsType():
+        return SkillModel
+
     def _initialize(self):
         super(TankmanModel, self)._initialize()
         self._addStringProperty('fullName', '')
@@ -78,3 +90,4 @@ class TankmanModel(ViewModel):
         self._addNumberProperty('count', 1)
         self._addNumberProperty('availableCount', 0)
         self._addBoolProperty('hasVoiceover', False)
+        self._addArrayProperty('skills', Array())

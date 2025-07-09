@@ -27,7 +27,7 @@ class BattlePassCompletedTooltipView(ViewImpl):
         with self.getViewModel().transaction() as model:
             model.setIsBattlePassPurchased(isBought)
             model.setNotChosenRewardCount(self.__battlePass.getNotChosenRewardCount())
-            model.setChapterType(ChapterType(getChapterType(self.__battlePass.getExtraChapterID())))
+            model.setChapterType(ChapterType(getChapterType(self.__battlePass.getCurrentChapterID())))
             model.setIsAvailableTankmen(self.__isAvailableTankmen(getTankmenShopPackages()))
 
     def __isAvailableTankmen(self, shopPackages):

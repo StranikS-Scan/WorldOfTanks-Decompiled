@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/items/components/c11n_constants.py
 import constants
 from soft_exception import SoftException
+from functools import reduce
 RENT_DEFAULT_BATTLES = 50
 MAX_OUTFIT_LENGTH = 1024
 MAX_CAMOUFLAGE_PATTERN_SIZE = 5
@@ -10,7 +11,8 @@ HIDDEN_CAMOUFLAGE_ID = 1
 TOTAL_COUNTER_TYPE_DESCR = -1
 MAX_PROJECTION_DECALS = 9
 MAX_SEQUENCES = 5
-MAX_ATTACHMENTS = 5
+MAX_ATTACHMENTS = 6
+MAX_STAT_TRACKERS = 1
 MAX_USERS_PROJECTION_DECALS = 3
 MAX_PROJECTION_DECALS_PER_AREA = 3
 PROJECTION_DECALS_SCALE_ID_VALUES = (0, 1, 2, 3)
@@ -43,6 +45,7 @@ class CustomizationType(object):
     FONT = 10
     SEQUENCE = 11
     ATTACHMENT = 12
+    STAT_TRACKER = 13
     RANGE = {PAINT,
      CAMOUFLAGE,
      DECAL,
@@ -52,7 +55,8 @@ class CustomizationType(object):
      PROJECTION_DECAL,
      PERSONAL_NUMBER,
      FONT,
-     ATTACHMENT}
+     ATTACHMENT,
+     STAT_TRACKER}
     STYLE_ONLY_RANGE = {SEQUENCE}
     FULL_RANGE = RANGE | STYLE_ONLY_RANGE
     APPLIED_TO_TYPES = (PAINT,
@@ -63,7 +67,8 @@ class CustomizationType(object):
      MODIFICATION,
      PROJECTION_DECAL,
      SEQUENCE,
-     ATTACHMENT)
+     ATTACHMENT,
+     STAT_TRACKER)
     SIMPLE_OUTFIT_COMPONENT_TYPES = (MODIFICATION, PROJECTION_DECAL)
     DISMOUNT_TYPE = (PAINT,
      CAMOUFLAGE,
@@ -71,13 +76,14 @@ class CustomizationType(object):
      PERSONAL_NUMBER,
      MODIFICATION,
      PROJECTION_DECAL,
-     ATTACHMENT)
+     ATTACHMENT,
+     STAT_TRACKER)
     TYPES_FOR_EDITABLE_STYLE = (PAINT,
      DECAL,
      PERSONAL_NUMBER,
      MODIFICATION,
      PROJECTION_DECAL)
-    COMMON_TYPES = (ATTACHMENT,)
+    COMMON_TYPES = (ATTACHMENT, STAT_TRACKER)
 
 
 CustomizationTypeNames = {getattr(CustomizationType, k):k for k in dir(CustomizationType) if isinstance(getattr(CustomizationType, k), int)}
@@ -111,6 +117,7 @@ class ItemTags(object):
     LOCKED_ON_VEHICLE = 'lockedOnVehicle'
     IS_3D = 'c11n3D'
     BATTLE_EFFECT = 'battleEffect'
+    SHOW_DISABLED = 'showDisabled'
 
 
 class ProjectionDecalType(object):
@@ -318,6 +325,7 @@ class ModificationType(object):
     PAINT_FADING = 3
     GLOSS = 4
     METALLIC = 5
+    USE_NEW_WEAR = 6
 
 
 class DecalType(object):
@@ -386,6 +394,8 @@ class SLOT_TYPE_NAMES(object):
     EFFECT = 'effect'
     PROJECTION_DECAL = 'projectionDecal'
     INSIGNIA = 'insignia'
+    ATTACHMENT = 'attachment'
+    STAT_TRACKER = 'statTracker'
     FIXED_EMBLEM = 'fixedEmblem'
     FIXED_INSCRIPTION = 'fixedInscription'
     FIXED_PROJECTION_DECAL = 'fixedProjectionDecal'
@@ -402,7 +412,9 @@ class SLOT_TYPE_NAMES(object):
      INSIGNIA,
      FIXED_EMBLEM,
      FIXED_INSCRIPTION,
-     FIXED_PROJECTION_DECAL)
+     FIXED_PROJECTION_DECAL,
+     ATTACHMENT,
+     STAT_TRACKER)
 
 
 class EDITING_STYLE_REASONS(object):
@@ -440,11 +452,18 @@ class AttachmentType(object):
     UNKNOWN = ''
     UNIVERSAL = 'universal'
     TURRET = 'turret'
-    GUN = 'gunMantlet'
+    GUN_MANTLET = 'gunMantlet'
+    GUN = 'gun'
+    GUN_RIGHT = 'gunRight'
+    GUN_LEFT = 'gunLeft'
+    GUN_SLOTS = (GUN, GUN_RIGHT, GUN_LEFT)
     ALL = (UNKNOWN,
      UNIVERSAL,
      TURRET,
-     GUN)
+     GUN_MANTLET,
+     GUN,
+     GUN_RIGHT,
+     GUN_LEFT)
 
 
 class AttachmentSize(object):
@@ -456,3 +475,9 @@ class AttachmentSize(object):
      SMALL,
      MEDIUM,
      LARGE)
+    DEFAULT = MEDIUM
+
+
+class StatTrackerStatistic(object):
+    KILLS = 'kills'
+    ALL = (KILLS,)

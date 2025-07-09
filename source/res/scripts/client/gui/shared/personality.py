@@ -182,17 +182,15 @@ def onAccountBecomePlayer():
     guiModsSendEvent('onAccountBecomePlayer')
 
 
-@adisp_process
+@future_async.wg_async
 def onClientUpdate(diff, updateOnlyLobbyCtx):
-    yield lambda callback: callback(None)
     if updateOnlyLobbyCtx:
         ServicesLocator.lobbyContext.update(diff)
     else:
         if isPlayerAccount():
-            yield crewBooksViewedCache().onCrewBooksUpdated(diff)
-            yield ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.CLIENT_UPDATE, diff)
-            yield ServicesLocator.eventsCache.update(diff)
-            yield g_clanCache.update(diff)
+            crewBooksViewedCache().onCrewBooksUpdated(diff)
+            yield future_async.wg_await(ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.CLIENT_UPDATE, diff))
+            yield future_async.wg_await(ServicesLocator.eventsCache.update(diff))
         ServicesLocator.lobbyContext.update(diff)
         _logger.info('onClientUpdate: diff = %r', diff)
         g_clientUpdateManager.update(diff)
@@ -203,16 +201,14 @@ def onShopResyncStarted():
     Waiting.show('synchronize')
 
 
-@adisp_process
+@future_async.wg_async
 def onShopResync():
-    yield ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.SHOP_RESYNC)
-    if not ServicesLocator.itemsCache.isSynced():
-        Waiting.hide('synchronize')
-        return
-    yield ServicesLocator.eventsCache.update()
+    yield future_async.wg_await(ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.SHOP_RESYNC))
+    if ServicesLocator.itemsCache.isSynced():
+        yield future_async.wg_await(ServicesLocator.eventsCache.update())
+        now = time_utils.getCurrentTimestamp()
+        SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.SHOP_RESYNC, date=backport.getLongDateFormat(now), time=backport.getShortTimeFormat(now), type=SystemMessages.SM_TYPE.Information)
     Waiting.hide('synchronize')
-    now = time_utils.getCurrentTimestamp()
-    SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.SHOP_RESYNC, date=backport.getLongDateFormat(now), time=backport.getShortTimeFormat(now), type=SystemMessages.SM_TYPE.Information)
 
 
 def onCenterIsLongDisconnected(isLongDisconnected):
@@ -391,21 +387,21 @@ def __runComponentsSync(ctx, funcs):
     g_playerEvents.onAccountComponentsSynced(ctx, success)
 
 
-@adisp_process
+@future_async.wg_async
 def __runItemsCacheSync(_, callback=None):
-    yield ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.SHOW_GUI, notify=False)
+    yield future_async.wg_await(ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.SHOW_GUI, notify=False))
     if not ServicesLocator.itemsCache.isSynced():
         ServicesLocator.gameplay.goToLoginByError('#menu:disconnect/codes/0')
         callback(False)
-        return
-    callback(True)
+    else:
+        callback(True)
 
 
-@adisp_process
+@future_async.wg_async
 def __runQuestSync(_, callback=None):
     ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.QUESTS_SYNC)
     ServicesLocator.eventsCache.start()
-    yield ServicesLocator.eventsCache.update()
+    yield future_async.wg_await(ServicesLocator.eventsCache.update())
     callback(True)
 
 

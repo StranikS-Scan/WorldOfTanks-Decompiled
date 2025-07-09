@@ -6,6 +6,7 @@
   <EXTRA_ID>	UINT8	</EXTRA_ID>
   <VEH_TYPE_CD>	UINT32	</VEH_TYPE_CD>
   <ARENA_UNIQUE_ID>	UINT64	</ARENA_UNIQUE_ID>
+  <NETWORK_ID>	UINT32	</NETWORK_ID>
   <SERVER_STATISTICS>	FIXED_DICT	  <Properties>
       <clusterCCU>
         <Type>	UINT32	</Type>
@@ -488,6 +489,9 @@
       <prestigeGradeMarkID>
         <Type>	INT32	</Type>
       </prestigeGradeMarkID>
+      <stFrags>
+        <Type>	UINT32	</Type>
+      </stFrags>
     </Properties>
   </ARENA_VEH_INFO>
   <USER_EXTRA_SETTINGS>	FIXED_DICT	  <Properties>
@@ -1243,6 +1247,9 @@
       <prestigeGradeMarkID>
         <Type>	INT32	</Type>
       </prestigeGradeMarkID>
+      <stFrags>
+        <Type>	UINT32	</Type>
+      </stFrags>
     </Properties>
   </RESPAWN_INFO_VEHICLE>
   <BUFF_EFFECT>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
@@ -1652,6 +1659,15 @@
       </dispersion>
     </Properties>
   </GUN_MARKER>
+  <VEHICLE_HIT_POINT>	FIXED_DICT	  <Properties>
+      <networkID>
+        <Type>	NETWORK_ID	</Type>
+      </networkID>
+      <segment>
+        <Type>	UINT64	</Type>
+      </segment>
+    </Properties>
+  </VEHICLE_HIT_POINT>
   <KILL_CAM_ATTACKER_SPOTTED>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <position>
@@ -1715,7 +1731,7 @@
         <Type>	UINT16	</Type>
       </siegeState>
       <damageStickers>
-        <Type>	ARRAY	  <of>	UINT64	</of>
+        <Type>	ARRAY	  <of>	VEHICLE_HIT_POINT	</of>
         </Type>
       </damageStickers>
       <causeOfDeath>
@@ -1800,7 +1816,7 @@
         <Type>	INT32	</Type>
       </shellCompDescr>
       <segments>
-        <Type>	ARRAY	  <of>	UINT64	</of>
+        <Type>	ARRAY	  <of>	VEHICLE_HIT_POINT	</of>
         </Type>
       </segments>
       <piercingPower>
@@ -2223,6 +2239,19 @@
       </maxShotDispersion>
     </Properties>
   </AUTO_SHOOT_GUN_STATE_STATUS>
+  <SPIN_GUN_STATE_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <state>
+        <Type>	UINT8	</Type>
+      </state>
+      <stateActivationTime>
+        <Type>	FLOAT32	</Type>
+      </stateActivationTime>
+      <spinFactor>
+        <Type>	FLOAT32	</Type>
+      </spinFactor>
+    </Properties>
+  </SPIN_GUN_STATE_STATUS>
   <GOODIE_RESOURCE>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <type>
@@ -2387,27 +2416,6 @@
       </placed>
     </Properties>
   </TEAM_SPAWN_KEY_POINT>
-  <GAME_OBJECT_STATE>	FIXED_DICT	  <Properties>
-      <id>
-        <Type>	STRING	</Type>
-      </id>
-      <state>
-        <Type>	BOOL	</Type>
-      </state>
-    </Properties>
-  </GAME_OBJECT_STATE>
-  <GAME_OBJECT_ACTIVATION>	FIXED_DICT	  <Properties>
-      <id>
-        <Type>	STRING	</Type>
-      </id>
-      <start>
-        <Type>	FLOAT32	</Type>
-      </start>
-      <end>
-        <Type>	FLOAT32	</Type>
-      </end>
-    </Properties>
-  </GAME_OBJECT_ACTIVATION>
   <POLYGON_TRIGGER_PARAMS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <step>
@@ -2573,6 +2581,9 @@
       <respawnID>
         <Type>	UINT32	</Type>
       </respawnID>
+      <stFrags>
+        <Type>	UINT32	</Type>
+      </stFrags>
       <__generation>
         <Type>	UINT32	</Type>
       </__generation>
@@ -2891,4 +2902,31 @@
   </COMMENDATIONS_BATTLE_STATISTICS>
   <COMMENDATIONS_BATTLE_STATISTICS_LIST>	ARRAY	  <of>	COMMENDATIONS_BATTLE_STATISTICS	</of>
   </COMMENDATIONS_BATTLE_STATISTICS_LIST>
+  <GAME_OBJECT_STATE_INFO>	FIXED_DICT	  <Properties>
+      <prefabPath>
+        <Type>	STRING	</Type>
+      </prefabPath>
+      <recreateMethod>
+        <Type>	UINT8	</Type>
+      </recreateMethod>
+      <networkID>
+        <Type>	UINT32	</Type>
+      </networkID>
+      <parentID>
+        <Type>	UINT32	</Type>
+      </parentID>
+      <active>
+        <Type>	BOOL	</Type>
+      </active>
+    </Properties>
+  </GAME_OBJECT_STATE_INFO>
+  <VEHICLE_HIERARCHY_INFO>	FIXED_DICT	  <Properties>
+      <slotName>
+        <Type>	STRING	</Type>
+      </slotName>
+      <networkID>
+        <Type>	UINT32	</Type>
+      </networkID>
+    </Properties>
+  </VEHICLE_HIERARCHY_INFO>
 </alias.xml>

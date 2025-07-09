@@ -503,7 +503,6 @@ def _migrateTo55(core, data, initialized):
 
 
 def _migrateTo56(core, data, initialized):
-    data['battlePassStorage'][BattlePassStorageKeys.BUY_ANIMATION_WAS_SHOWN] = False
     data['battlePassStorage'][BattlePassStorageKeys.INTRO_VIDEO_SHOWN] = False
 
 
@@ -767,7 +766,6 @@ def _migrateTo87(core, data, initialized):
 
 def _migrateTo88(core, data, initialized):
     data['battlePassStorage'][BattlePassStorageKeys.EXTRA_CHAPTER_INTRO_SHOWN] = False
-    data['battlePassStorage'][BattlePassStorageKeys.EXTRA_CHAPTER_VIDEO_SHOWN] = False
 
 
 def _migrateTo89(core, data, initialized):
@@ -1358,6 +1356,26 @@ def _migrateTo141(core, data, initialized):
         clear[SETTINGS_SECTIONS.GAME_EXTENDED_2] = clear.get(SETTINGS_SECTIONS.GAME_EXTENDED_2, 0) | settingOffset
 
 
+def _migrateTo142(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    battlePassUpdateKey = 'battlePassStorage'
+    battlePassSettings = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, 0)
+    startPosition = 10
+    endPosition = 13
+    for position in range(startPosition, endPosition + 1):
+        offset = 1 << position
+        if battlePassSettings & offset:
+            data['clear'][battlePassUpdateKey] = data['clear'].get(battlePassUpdateKey, 0) | offset
+
+    introOffset = 65536
+    extraOffset = 262144
+    if battlePassSettings & introOffset:
+        data[battlePassUpdateKey][BattlePassStorageKeys.INTRO_SHOWN] = True
+        data['clear'][battlePassUpdateKey] = data['clear'].get(battlePassUpdateKey, 0) | introOffset
+    elif battlePassSettings & extraOffset:
+        data['clear'][battlePassUpdateKey] = data['clear'].get(battlePassUpdateKey, 0) | extraOffset
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -1916,6 +1934,10 @@ _versions = ((1,
   False),
  (141,
   _migrateTo141,
+  False,
+  False),
+ (142,
+  _migrateTo142,
   False,
   False))
 

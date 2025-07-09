@@ -9,7 +9,6 @@ from ClientSelectableCameraObject import ClientSelectableCameraObject
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import STYLE_PREVIEW_VEHICLES_POOL
-from constants import NC_MESSAGE_PRIORITY
 from debug_utils import LOG_ERROR
 from gui import SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -27,6 +26,7 @@ from gui.shared import event_dispatcher
 from gui.shared.event_dispatcher import showHangar, showMarathonRewardScreen, showStyleBuyingPreview, showStylePreview, showStyleProgressionPreview
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import Currency, MONEY_UNDEFINED, Money
+from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from helpers.i18n import makeString as _ms
@@ -437,7 +437,7 @@ class VehicleComparisonBasketWebApiMixin(object):
 
 
 def _pushInvalidPreviewMessage():
-    SystemMessages.pushMessage(backport.text(R.strings.w2c.error.invalidPreviewVehicle()), SystemMessages.SM_TYPE.Error, NC_MESSAGE_PRIORITY.MEDIUM)
+    SystemMessages.pushMessage(backport.text(R.strings.w2c.error.invalidPreviewVehicle()), SystemMessages.SM_TYPE.Error, NotificationPriorityLevel.MEDIUM)
 
 
 class VehiclePreviewWebApiMixin(object):

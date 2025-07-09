@@ -13,6 +13,7 @@ class C11nSerializationTypes(object):
     PERSONAL_NUMBER = 8
     SEQUENCE = 9
     ATTACHMENT = 10
+    STAT_TRACKER = 11
 
 
 class TankmanSerializationTypes(object):

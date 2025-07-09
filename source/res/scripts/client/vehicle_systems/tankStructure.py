@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/tankStructure.py
 from collections import namedtuple
+from constants import VehiclePartName
 
 class CgfTankNodes(object):
     TANK_ROOT = 'Tank.Root'
@@ -46,10 +47,10 @@ class TankCollisionPartNames(object):
 
 
 class TankPartNames(object):
-    CHASSIS = 'chassis'
-    HULL = 'hull'
-    TURRET = 'turret'
-    GUN = 'gun'
+    CHASSIS = VehiclePartName.CHASSIS
+    HULL = VehiclePartName.HULL
+    TURRET = VehiclePartName.TURRET
+    GUN = VehiclePartName.GUN
     ALL = (CHASSIS,
      HULL,
      TURRET,
@@ -104,7 +105,7 @@ class TankPartIndexes(object):
 
     @staticmethod
     def getName(idx):
-        return TankPartNames.ALL[idx] if idx < len(TankPartNames.ALL) else None
+        return TankPartNames.ALL[idx] if 0 <= idx < len(TankPartNames.ALL) else None
 
 
 class TankNodeNames(object):

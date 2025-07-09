@@ -2,16 +2,18 @@
 # Embedded file name: scripts/client/gui/game_control/seniority_awards_controller.py
 from enum import Enum
 import re
-import typing
+from typing import Dict, Iterable, Optional, TYPE_CHECKING
 import BigWorld
 import Event
 import logging
 from BWUtil import AsyncReturn
+from constants import Configs
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
+from gui.shared.notifications import NotificationPriorityLevel
 from helpers import dependency, time_utils
 from skeletons.gui.game_control import ISeniorityAwardsController, IHangarLoadingController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -20,6 +22,8 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from helpers.server_settings import SeniorityAwardsConfig
 from wg_async import wg_async, wg_await, TimeoutError, AsyncEvent, AsyncScope, BrokenPromiseError
+if TYPE_CHECKING:
+    from gui.server_events.event_items import Quest
 REG_EXP_QUEST_YEAR_TIER = ':([Y, y]\\d+):'
 REG_EXP_QUEST_TEST_GROUP = ':([A,a,B,b][T,t])'
 WDR_CURRENCY = 'wdrcoin'
@@ -59,20 +63,24 @@ class SeniorityAwardsController(ISeniorityAwardsController):
         self.__vehicleSelectionQuestCompletedEvent = AsyncEvent(scope=self.__scope)
         self.__vehicleSelectionQuestId = ''
         self.__years = -1
-        self.__yearTier = ''
-        self.__rewardCategory = ''
-        self.__testGroup = ''
-        self.__seniorityAwardsCompletedQuests = {}
+        self.__yearTier = None
+        self.__rewardCategory = None
+        self.__testGroup = None
+        self.__seniorityAwardsCompletedQuests = None
         self.__vehiclesForSelection = {}
         return
 
     @property
+    def config(self):
+        return self.__lobbyContext.getServerSettings().getSeniorityAwardsConfig() if self.__lobbyContext else SeniorityAwardsConfig()
+
+    @property
     def isEnabled(self):
-        return self._config.enabled
+        return self.config.enabled
 
     @property
     def isActive(self):
-        return self._config.active
+        return self.config.active
 
     @property
     def isAvailable(self):
@@ -80,11 +88,11 @@ class SeniorityAwardsController(ISeniorityAwardsController):
 
     @property
     def timeLeft(self):
-        return self._config.endTime - time_utils.getServerUTCTime() if self.isEnabled else -1
+        return self.config.endTime - time_utils.getServerUTCTime() if self.isEnabled else -1
 
     @property
     def endTime(self):
-        return self._config.endTime
+        return self.config.endTime
 
     @property
     def isVehicleSelectionAvailable(self):
@@ -92,8 +100,8 @@ class SeniorityAwardsController(ISeniorityAwardsController):
 
     @property
     def yearsInGame(self):
-        if self.__years < 0 and self._yearTier:
-            self.__years = int(self._yearTier[1:])
+        if self.__years < 0 and self.yearTier:
+            self.__years = int(self.yearTier[1:])
         return self.__years
 
     @property
@@ -102,26 +110,26 @@ class SeniorityAwardsController(ISeniorityAwardsController):
         def __vehicleSelectionFilterFunc(q):
             return q.getID().startswith(self.vehicleSelectionQuestPrefix)
 
-        vehCanSellectAmm = 0
+        vehCanSelectAmm = 0
         for quest in self.__eventsCache.getHiddenQuests(__vehicleSelectionFilterFunc).values():
             vehicleBonuses = quest.getBonuses('vehicles')
             if vehicleBonuses:
                 questsBonusVehAmm = len(vehicleBonuses[0].getValue())
-                vehCanSellectAmm = max(vehCanSellectAmm, questsBonusVehAmm)
+                vehCanSelectAmm = max(vehCanSelectAmm, questsBonusVehAmm)
 
-        return vehCanSellectAmm
+        return vehCanSelectAmm
 
     @property
     def isRewardReceived(self):
-        return self.__itemsCache.items.tokens.isTokenAvailable(self._config.receivedRewardsToken)
+        return self.__itemsCache.items.tokens.isTokenAvailable(self.config.receivedRewardsToken)
 
     @property
     def seniorityQuestPrefix(self):
-        return self._config.rewardQuestsPrefix
+        return self.config.rewardQuestsPrefix
 
     @property
     def vehicleSelectionQuestPattern(self):
-        return self._config.vehicleSelectionQuestPattern.format(category=self.rewardCategory or self.testGroup)
+        return self.config.vehicleSelectionQuestPattern.format(category=self.rewardCategory or self.testGroup)
 
     @property
     def vehicleSelectionQuestPrefix(self):
@@ -129,11 +137,11 @@ class SeniorityAwardsController(ISeniorityAwardsController):
 
     @property
     def vehicleSelectionToken(self):
-        return self._config.vehicleSelectionTokenPattern.format(category=self.rewardCategory or self.testGroup)
+        return self.config.vehicleSelectionTokenPattern.format(category=self.rewardCategory or self.testGroup)
 
     @property
     def categories(self):
-        return self._config.categories
+        return self.config.categories
 
     @property
     def showRewardHangarNotification(self):
@@ -141,11 +149,11 @@ class SeniorityAwardsController(ISeniorityAwardsController):
 
     @property
     def showRewardNotification(self):
-        return self._config.showRewardNotification
+        return self.config.showRewardNotification
 
     @property
     def isEligibleToReward(self):
-        return self.isEnabled and self.__itemsCache.items.tokens.isTokenAvailable(self._config.rewardEligibilityToken)
+        return self.isEnabled and self.__itemsCache.items.tokens.isTokenAvailable(self.config.rewardEligibilityToken)
 
     @property
     def isNeedToShowRewardNotification(self):
@@ -160,14 +168,14 @@ class SeniorityAwardsController(ISeniorityAwardsController):
 
     @property
     def clockOnNotification(self):
-        return self._config.clockOnNotification
+        return self.config.clockOnNotification
 
     def getSACoin(self):
         return self.__itemsCache.items.stats.dynamicCurrencies.get(WDR_CURRENCY, 0)
 
     @property
     def claimVehicleRewardTokenPattern(self):
-        return self._config.claimVehicleRewardTokenPattern.format(category=self.rewardCategory or self.testGroup)
+        return self.config.claimVehicleRewardTokenPattern.format(category=self.rewardCategory or self.testGroup)
 
     @property
     def pendingReminderTimestamp(self):
@@ -175,13 +183,13 @@ class SeniorityAwardsController(ISeniorityAwardsController):
             return None
         else:
             timestamp = time_utils.getServerUTCTime()
-            reminders = self._config.reminders
+            reminders = self.config.reminders
             pendingNotifications = [ reminderTS for reminderTS in reminders if reminderTS < timestamp ]
             return max(pendingNotifications) if pendingNotifications else None
 
     @property
     def completedSeniorityAwardsQuests(self):
-        if not self.__seniorityAwardsCompletedQuests:
+        if self.__seniorityAwardsCompletedQuests is None:
 
             def __questCompletedFilterFunc(q):
                 return self.__filterFunc(q) and q.isCompleted()
@@ -197,19 +205,26 @@ class SeniorityAwardsController(ISeniorityAwardsController):
 
     @property
     def rewardCategory(self):
-        if not self.__rewardCategory:
+        if self.__rewardCategory is None:
+            self.__rewardCategory = ''
             for idx, years in self.categories.items():
                 if self.yearsInGame in years:
                     self.__rewardCategory = idx
-                    return self.__rewardCategory
+                    break
 
         return self.__rewardCategory
 
     @property
     def testGroup(self):
-        if not self.__testGroup:
+        if self.__testGroup is None:
             self.__testGroup = self.getSeniorityLevel(self.completedSeniorityAwardsQuests.keys(), REG_EXP_QUEST_TEST_GROUP)
         return self.__testGroup
+
+    @property
+    def yearTier(self):
+        if self.__yearTier is None:
+            self.__yearTier = self.getSeniorityLevel(self.completedSeniorityAwardsQuests.keys(), REG_EXP_QUEST_YEAR_TIER)
+        return self.__yearTier
 
     def isVehicleSelectionQuestCompleted(self, vehicleRewardId):
         return self.vehicleSelectionQuestPattern.format(id=vehicleRewardId) in self.completedSeniorityAwardsQuests
@@ -263,7 +278,7 @@ class SeniorityAwardsController(ISeniorityAwardsController):
     def claimReward(self):
         self.__showWaiting()
         self.__scheduleClaimTimeout()
-        BigWorld.player().requestSingleToken(self._config.claimRewardToken)
+        BigWorld.player().requestSingleToken(self.config.claimRewardToken)
 
     def markRewardReceived(self):
         self.__hideWaiting()
@@ -283,7 +298,7 @@ class SeniorityAwardsController(ISeniorityAwardsController):
     def onLobbyInited(self, event):
         super(SeniorityAwardsController, self).onLobbyInited(event)
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onSettingsChanged
-        self.__itemsCache.onSyncCompleted += self.__onCacheResync
+        self.__itemsCache.onSyncCompleted += self.__onItemsCacheUpdated
         g_clientUpdateManager.addCallbacks({'tokens': self.__onTokensUpdate})
         self.__eventsCache.onSyncCompleted += self.__onEventsCacheSynced
         if self.__hangarSpace.spaceInited:
@@ -309,49 +324,43 @@ class SeniorityAwardsController(ISeniorityAwardsController):
         self.__removeListeners()
         super(SeniorityAwardsController, self).onAvatarBecomePlayer()
 
-    @property
-    def _config(self):
-        return self.__lobbyContext.getServerSettings().getSeniorityAwardsConfig() if self.__lobbyContext else SeniorityAwardsConfig()
-
-    @property
-    def _yearTier(self):
-        if not self.__yearTier:
-            self.__yearTier = self.getSeniorityLevel(self.completedSeniorityAwardsQuests.keys(), REG_EXP_QUEST_YEAR_TIER)
-        return self.__yearTier
-
     def __onHangarLoaded(self):
         self.__update()
 
     def __clear(self):
         self.__removeListeners()
         self.__cancelClaimTimeout()
+        self.__vehicleSelectionQuestId = ''
         self.__endTimestamp = None
         self.__clockOnNotification = None
-        self.__vehicleSelectionQuestId = ''
         self.__vehicleSelectionQuestCompletedEvent.clear()
-        self.__rewardCategory = ''
-        self.__testGroup = ''
-        self.__seniorityAwardsCompletedQuests = {}
+        self.__clearCachedValues()
+        return
+
+    def __clearCachedValues(self):
+        self.__rewardCategory = None
+        self.__testGroup = None
+        self.__seniorityAwardsCompletedQuests = None
         self.__vehiclesForSelection.clear()
         self.__years = -1
-        self.__yearTier = ''
+        self.__yearTier = None
         return
 
     def __removeListeners(self):
         self.__eventsCache.onSyncCompleted -= self.__onEventsCacheSynced
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onSettingsChanged
-        self.__itemsCache.onSyncCompleted -= self.__onCacheResync
+        self.__itemsCache.onSyncCompleted -= self.__onItemsCacheUpdated
         self.__hangarSpace.onSpaceCreate -= self.__onHangarLoaded
         g_clientUpdateManager.removeObjectCallbacks(self)
 
     def __onTokensUpdate(self, diff):
-        eligibilityToken = self._config.rewardEligibilityToken
+        eligibilityToken = self.config.rewardEligibilityToken
         if eligibilityToken and eligibilityToken in diff:
             self.__update()
         return self.__onVehicleSelectionStateChanged() if self.vehicleSelectionToken in diff else None
 
     def __onSettingsChanged(self, diff):
-        if 'seniority_awards_config' in diff:
+        if Configs.SENIORITY_AWARDS_CONFIG.value in diff:
             self.__update()
 
     def __scheduleClaimTimeout(self):
@@ -367,7 +376,7 @@ class SeniorityAwardsController(ISeniorityAwardsController):
     def __onClaimRewardFailed(self):
         self.__cancelClaimTimeout()
         self.__hideWaiting()
-        SystemMessages.pushI18nMessage('#system_messages:seniority_awards/claim_reward_failed', type=SystemMessages.SM_TYPE.Error, priority='high')
+        SystemMessages.pushI18nMessage('#system_messages:seniority_awards/claim_reward_failed', type=SystemMessages.SM_TYPE.Error, priority=NotificationPriorityLevel.HIGH)
 
     @staticmethod
     def __showWaiting():
@@ -385,9 +394,8 @@ class SeniorityAwardsController(ISeniorityAwardsController):
         qId = quest.getID()
         return qId.startswith(SENIORITY_AWARDS_PREFIX)
 
-    def __onEventsCacheSynced(self, *args, **kwargs):
-        self.__seniorityAwardsCompletedQuests = {}
-        self.__vehiclesForSelection = {}
+    def __onEventsCacheSynced(self, *_, **__):
+        self.__clearCachedValues()
         if self.__vehicleSelectionQuestId and not self.__vehicleSelectionQuestCompletedEvent.is_set() and self.isVehicleSelectionQuestCompleted(self.__vehicleSelectionQuestId):
             self.__vehicleSelectionQuestCompletedEvent.set()
 
@@ -395,23 +403,22 @@ class SeniorityAwardsController(ISeniorityAwardsController):
         pattern = self.claimVehicleRewardTokenPattern.format(id='')
         return bool([ token for token in self.__itemsCache.items.tokens.getTokens() if token.startswith(pattern) ])
 
-    def __onCacheResync(self, reason, diff):
-        if self.isVehicleSelectionAvailable:
-            if reason == CACHE_SYNC_REASON.CLIENT_UPDATE and diff is not None and GUI_ITEM_TYPE.VEHICLE in diff:
-                vehDiff = diff[GUI_ITEM_TYPE.VEHICLE]
-                recievedVehicles = []
-                for key, vehicle in self.vehiclesForSelection.items():
-                    if vehicle.intCD in vehDiff:
-                        recievedVehicles.append(key)
+    def __onItemsCacheUpdated(self, reason, diff):
+        if reason != CACHE_SYNC_REASON.CLIENT_UPDATE or diff is None or GUI_ITEM_TYPE.VEHICLE not in diff:
+            return
+        elif not self.isVehicleSelectionAvailable:
+            return
+        else:
+            vehDiff = diff[GUI_ITEM_TYPE.VEHICLE]
+            receivedVehicles = [ key for key, vehicle in self.vehiclesForSelection.items() if vehicle.intCD in vehDiff ]
+            if receivedVehicles:
+                for key in receivedVehicles:
+                    self.vehiclesForSelection.pop(key, None)
 
-                if recievedVehicles:
-                    for key in recievedVehicles:
-                        self.vehiclesForSelection.pop(key, None)
-
-                    self.onVehicleSelectionChanged(VehiclesForSelectionState.VEHICLES_CHANGED)
+                self.onVehicleSelectionChanged(VehiclesForSelectionState.VEHICLES_CHANGED)
             if not self.vehiclesForSelection:
                 self.__onVehicleSelectionStateChanged()
-        return
+            return
 
     def __onVehicleSelectionStateChanged(self):
         self.onVehicleSelectionChanged(VehiclesForSelectionState.STATE_CHANGED)

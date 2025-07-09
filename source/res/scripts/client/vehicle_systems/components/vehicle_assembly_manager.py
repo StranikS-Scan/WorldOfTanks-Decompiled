@@ -16,6 +16,7 @@ from cgf_script.managers_registrator import autoregister, onAddedQuery
 from constants import IS_UE_EDITOR
 from helpers import isPlayerAccount, isPlayerAvatar
 from vehicle_systems import vehicle_composition as veh_comp
+from vehicle_systems.components import vehicle_variable_storage, gun_info
 from vehicle_systems.tankStructure import TankPartNames, TankRenderMode
 if typing.TYPE_CHECKING:
     from common_tank_appearance import CommonTankAppearance
@@ -46,10 +47,9 @@ class Assembler(object):
                 return
             go.removeComponentByType(GenericComponents.TransformComponent)
             go.createComponent(GenericComponents.TransformComponent, node.localMatrix)
+            go.removeComponentByType(Compound.NodeLeaderComponent)
             go.createComponent(Compound.NodeLeaderComponent, node.name)
-            go.removeComponent(followerComponent)
-        else:
-            _logger.error("Can't find LocalTransformNodeFollower for game object: %s", go.name)
+            go.removeComponentByType(Compound.LocalTransformNodeFollower)
         return
 
 
@@ -64,16 +64,14 @@ class TurretGunRotationAssembler(Assembler):
         return slotMarker.slotName in self._SLOTS
 
     def assemble(self, gameObject, slotMarker):
-        if gameObject.findComponentByType(GenericComponents.MatrixProviderFollowerComponent):
-            return
-        else:
-            appearance = veh_comp.findParentVehicleAppearance(gameObject)
-            if appearance is not None:
-                matrixProvider = self.__getMatrixProvider(slotMarker.slotName, appearance)
-                if matrixProvider is not None:
-                    self._replaceWithNodeDriver(gameObject, appearance)
-                    gameObject.createComponent(GenericComponents.MatrixProviderFollowerComponent, matrixProvider)
-            return
+        appearance = veh_comp.findParentVehicleAppearance(gameObject)
+        if appearance is not None:
+            matrixProvider = self.__getMatrixProvider(slotMarker.slotName, appearance)
+            if matrixProvider is not None:
+                self._replaceWithNodeDriver(gameObject, appearance)
+                gameObject.removeComponentByType(GenericComponents.MatrixProviderFollowerComponent)
+                gameObject.createComponent(GenericComponents.MatrixProviderFollowerComponent, matrixProvider)
+        return
 
     def __getMatrixProvider(self, slotName, appearance):
         if slotName == veh_comp.VehicleSlots.TURRET.value:
@@ -102,14 +100,11 @@ class RecoilAssembler(Assembler):
         return slotMarker.slotName in self._SLOTS
 
     def assemble(self, gameObject, _):
-        if gameObject.findComponentByType(Vehicular.GunRecoilComponent):
-            return
-        else:
-            appearance = veh_comp.findParentVehicleAppearance(gameObject)
-            if appearance is not None:
-                if self._createComponent(gameObject, appearance) is not None:
-                    appearance.setGunRecoil(gameObject)
-            return
+        appearance = veh_comp.findParentVehicleAppearance(gameObject)
+        if appearance is not None:
+            if self._createComponent(gameObject, appearance) is not None:
+                appearance.setGunRecoil(gameObject)
+        return
 
     def _createComponent(self, gameObject, appearance):
         vehicleDesc = appearance.typeDescriptor
@@ -118,6 +113,7 @@ class RecoilAssembler(Assembler):
             return
         else:
             self._replaceWithNodeDriver(gameObject, appearance)
+            gameObject.removeComponentByType(Vehicular.GunRecoilComponent)
             return gameObject.createComponent(Vehicular.GunRecoilComponent, recoilDescr.backoffTime, recoilDescr.returnTime, recoilDescr.amplitude, False)
 
 
@@ -148,13 +144,10 @@ class SwingingAnimationManager(Assembler):
         return slotMarker.slotName == veh_comp.VehicleSlots.HULL.value
 
     def assemble(self, gameObject, slotMarker):
-        if gameObject.findComponentByType(Vehicular.SwingingAnimator):
-            return
-        else:
-            appearance = veh_comp.findParentVehicleAppearance(gameObject)
-            if appearance is not None:
-                self.__assembleSwinging(gameObject, appearance)
-            return
+        appearance = veh_comp.findParentVehicleAppearance(gameObject)
+        if appearance is not None:
+            self.__assembleSwinging(gameObject, appearance)
+        return
 
     def __assembleSwinging(self, gameObject, appearance):
         hullNode = appearance.compoundModel.node(TankPartNames.HULL)
@@ -174,6 +167,7 @@ class SwingingAnimationManager(Assembler):
             return swingingAnimator
 
     def __createSwingingAnimator(self, gameObject, vehicleDesc, basisMatrix, worldMProv=None, lodLink=None):
+        gameObject.removeComponentByType(Vehicular.SwingingAnimator)
         swingingAnimator = gameObject.createComponent(Vehicular.SwingingAnimator)
         transformComponent = gameObject.findComponentByType(GenericComponents.TransformComponent)
         if transformComponent is not None:
@@ -212,10 +206,31 @@ class DecalsAssembler(Assembler):
             fashion = getattr(appearance.fashions, slotMarker.slotName, None)
             if fashion is None:
                 return _logger.error('Failed to setup GPU Decals receiver for game object: %s. Missing fashion for part: %s', gameObject.name, slotMarker.slotName)
-            if not gameObject.findComponentByType(GenericComponents.FashionComponent):
-                gameObject.createComponent(GenericComponents.FashionComponent, fashion, partIdx)
-            if not gameObject.findComponentByType(GpuDecals.GpuDecalsReceiverComponent):
-                gameObject.createComponent(GpuDecals.GpuDecalsReceiverComponent)
+            gameObject.removeComponentByType(GenericComponents.FashionComponent)
+            gameObject.createComponent(GenericComponents.FashionComponent, fashion, partIdx)
+            gameObject.removeComponentByType(GpuDecals.GpuDecalsReceiverComponent)
+            gameObject.createComponent(GpuDecals.GpuDecalsReceiverComponent)
+        return
+
+
+class GunInfoAssembler(Assembler):
+    _SLOTS = (veh_comp.VehicleSlots.GUN.value,)
+
+    def checkSlotMarker(self, slotMarker):
+        return slotMarker.slotName in self._SLOTS
+
+    def assemble(self, gameObject, slotMarker):
+        appearance = veh_comp.findParentVehicleAppearance(gameObject)
+        if appearance is not None:
+            if appearance.compoundModel.node(TankPartNames.GUN) is None:
+                return
+            typeDescr = appearance.typeDescriptor
+            if typeDescr is None:
+                _logger.error('typeDescriptor of appearance is None')
+                return
+            if not typeDescr.gun.prefabBased:
+                vehicle_variable_storage.createForGun(appearance, gameObject)
+                gun_info.createGunInfo(gameObject, typeDescr.turret, typeDescr.gun)
         return
 
 
@@ -227,7 +242,8 @@ class VehicleAssemblyManager(CGF.ComponentManager):
      _AssemblerData(AssemblyType.BATTLE | AssemblyType.EDITOR, RecoilAssembler),
      _AssemblerData(AssemblyType.BATTLE | AssemblyType.EDITOR, MultiGunRecoilAssembler),
      _AssemblerData(AssemblyType.BATTLE | AssemblyType.EDITOR, SwingingAnimationManager),
-     _AssemblerData(AssemblyType.BATTLE | AssemblyType.HANGAR | AssemblyType.EDITOR, DecalsAssembler))
+     _AssemblerData(AssemblyType.BATTLE | AssemblyType.HANGAR | AssemblyType.EDITOR, DecalsAssembler),
+     _AssemblerData(AssemblyType.BATTLE | AssemblyType.EDITOR, GunInfoAssembler))
 
     def __init__(self):
         super(VehicleAssemblyManager, self).__init__()
@@ -235,7 +251,7 @@ class VehicleAssemblyManager(CGF.ComponentManager):
             assemblyType = AssemblyType.EDITOR
         elif isPlayerAccount():
             assemblyType = AssemblyType.HANGAR
-        elif isPlayerAvatar() or BattleReplay.isServerSideReplay():
+        elif isPlayerAvatar() or BattleReplay.isPlaying() or BattleReplay.isServerSideReplay():
             assemblyType = AssemblyType.BATTLE
         else:
             assemblyType = AssemblyType.NONE

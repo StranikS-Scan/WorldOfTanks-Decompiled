@@ -64,7 +64,7 @@ class CrashedTrackController(Component):
         return
 
     def deactivate(self):
-        if self.__entity is not None and not self.__entity.isDestroyed and self.__model is not None:
+        if self.__entity is not None and not getattr(self.__entity, 'isDestroyed', False) and self.__model is not None:
             self.__entity.delModel(self.__model)
         self.__isActive = False
         self.__loading = False

@@ -10,3 +10,6 @@ class GeneralSpaceData(BigWorld.Space):
             self.setEnvironment(name)
         else:
             self.resetEnvironment()
+
+    def set_replicableHash(self, _):
+        self.setReplicableHash(self.replicableHash)

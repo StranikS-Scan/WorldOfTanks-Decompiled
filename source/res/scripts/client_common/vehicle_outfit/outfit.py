@@ -29,7 +29,8 @@ ANCHOR_TYPE_TO_SLOT_TYPE_MAP = {'inscription': GUI_ITEM_TYPE.INSCRIPTION,
  'style': GUI_ITEM_TYPE.STYLE,
  'effect': GUI_ITEM_TYPE.MODIFICATION,
  'sequence': GUI_ITEM_TYPE.SEQUENCE,
- 'attachment': GUI_ITEM_TYPE.ATTACHMENT}
+ 'attachment': GUI_ITEM_TYPE.ATTACHMENT,
+ 'statTracker': GUI_ITEM_TYPE.STAT_TRACKER}
 SLOT_TYPE_TO_ANCHOR_TYPE_MAP = {v:k for k, v in ANCHOR_TYPE_TO_SLOT_TYPE_MAP.iteritems()}
 SLOT_TYPES = tuple((slotType for slotType in SLOT_TYPE_TO_ANCHOR_TYPE_MAP))
 EditableStyleDiff = namedtuple('EditableStyleDiff', ('applied', 'removed'))
@@ -41,7 +42,8 @@ def scaffold():
       MultiSlot(slotTypes=(GUI_ITEM_TYPE.EMBLEM,), regions=ApplyArea.HULL_EMBLEM_REGIONS),
       MultiSlot(slotTypes=(GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.PERSONAL_NUMBER), regions=ApplyArea.HULL_INSCRIPTION_REGIONS),
       MultiSlot(slotTypes=(GUI_ITEM_TYPE.INSIGNIA,), regions=ApplyArea.HULL_INSIGNIA_REGIONS),
-      MultiSlot(slotTypes=(GUI_ITEM_TYPE.ATTACHMENT,), regions=[]))),
+      MultiSlot(slotTypes=(GUI_ITEM_TYPE.ATTACHMENT,), regions=[]),
+      MultiSlot(slotTypes=(GUI_ITEM_TYPE.STAT_TRACKER,), regions=[]))),
      OutfitContainer(areaID=Area.TURRET, slots=(MultiSlot(slotTypes=(GUI_ITEM_TYPE.PAINT,), regions=ApplyArea.TURRET_PAINT_REGIONS),
       MultiSlot(slotTypes=(GUI_ITEM_TYPE.CAMOUFLAGE,), regions=ApplyArea.TURRET_CAMOUFLAGE_REGIONS),
       MultiSlot(slotTypes=(GUI_ITEM_TYPE.EMBLEM,), regions=ApplyArea.TURRET_EMBLEM_REGIONS),
@@ -114,9 +116,10 @@ class Outfit(HasStrCD):
             self.misc.setSlotFor(GUI_ITEM_TYPE.PROJECTION_DECAL, projectionDeclasMultiSlot)
             sequenceMultiSlot = MultiSlot(slotTypes=(GUI_ITEM_TYPE.SEQUENCE,), regions=self.__getTypeRegions(vehicleDescriptor, GUI_ITEM_TYPE.SEQUENCE))
             self.misc.setSlotFor(GUI_ITEM_TYPE.SEQUENCE, sequenceMultiSlot)
-            for partIdx in TankPartIndexes.ALL:
-                attachmentMultiSlot = MultiSlot(slotTypes=(GUI_ITEM_TYPE.ATTACHMENT,), regions=self.__getTypeRegions(vehicleDescriptor, GUI_ITEM_TYPE.ATTACHMENT, (partIdx,)))
-                self.getContainer(partIdx).setSlotFor(GUI_ITEM_TYPE.ATTACHMENT, attachmentMultiSlot)
+            for itemType in GUI_ITEM_TYPE.ATTACHMENT_TYPES:
+                for partIdx in TankPartIndexes.ALL:
+                    attachmentMultiSlot = MultiSlot(slotTypes=(itemType,), regions=self.__getTypeRegions(vehicleDescriptor, itemType, (partIdx,)))
+                    self.getContainer(partIdx).setSlotFor(itemType, attachmentMultiSlot)
 
             return
 

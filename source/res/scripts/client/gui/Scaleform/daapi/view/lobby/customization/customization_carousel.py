@@ -6,7 +6,7 @@ from itertools import chain
 import typing
 from CurrentVehicle import g_currentVehicle
 from cache import cached_property
-from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs, TYPES_ORDER, isItemLimitReached, isItemUsedUp, vehicleHasSlot
+from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs, TYPES_ORDER, isStatTrackerTabEnabled, isItemLimitReached, isItemUsedUp, vehicleHasSlot
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.customization.constants import CustomizationModes
 from gui.customization.shared import getBaseStyleItems, createCustomizationBaseRequestCriteria, C11N_ITEM_TYPE_MAP, getInheritors, getAncestors, getGroupHelper
@@ -29,11 +29,14 @@ _logger = logging.getLogger(__name__)
 def comparisonKey(item):
     typeOrder = TYPES_ORDER.index(item.itemTypeID)
     isNationalEmblem = ItemTags.NATIONAL_EMBLEM in item.tags
+    isShowDisabled = ItemTags.SHOW_DISABLED in item.tags
     formfactorId = ProjectionDecalFormTags.ALL.index(item.formfactor) if hasattr(item, 'formfactor') and item.formfactor else 0
     return (typeOrder,
      not isNationalEmblem,
      not item.isRare(),
+     not isShowDisabled,
      item.groupID,
+     item.showDisabled and isItemUsedUp(item),
      formfactorId,
      item.id)
 
@@ -51,7 +54,7 @@ class ItemsData(object):
 
     @cached_property
     def hasUsedUpItems(self):
-        return any((isItemUsedUp(item) for item in self.items))
+        return any((isItemUsedUp(item) and not item.showDisabled for item in self.items))
 
     @cached_property
     def hasProgressiveItems(self):
@@ -96,22 +99,27 @@ class CarouselCache(object):
         return
 
     def getVisibleTabs(self):
-        season, modeId = self.__ctx.season, self.__ctx.modeId
+        season, modeId, tabId = self.__ctx.season, self.__ctx.modeId, self.__ctx.mode.tabId
         self.__invalidateEditableStyleCache()
         self.__initCache()
-        return self.__itemsData[modeId][season].keys() if modeId == CustomizationModes.STYLE_2D_EDITABLE else CustomizationTabs.ALL
+        if tabId == CustomizationTabs.STAT_TRACKERS:
+            return (CustomizationTabs.STAT_TRACKERS,)
+        return tuple((tabId for tabId in self.__itemsData[modeId][season].keys() if tabId != CustomizationTabs.STAT_TRACKERS)) if modeId == CustomizationModes.STYLE_2D_EDITABLE else CustomizationTabs.ALL
 
     def getEnabledTabs(self):
         season, modeId = self.__ctx.season, self.__ctx.modeId
         self.__invalidateEditableStyleCache()
         self.__initCache()
-        if modeId == CustomizationModes.STYLE_2D_EDITABLE:
-            return self.__itemsData[modeId][season].keys()
         enabledTabs = set()
-        for mode in CustomizationModes.BASE:
-            enabledTabs.update(self.__itemsData[mode][season].keys())
+        if modeId == CustomizationModes.STYLE_2D_EDITABLE:
+            enabledTabs.update(self.__itemsData[modeId][season].keys())
+        else:
+            for mode in CustomizationModes.BASE:
+                enabledTabs.update(self.__itemsData[mode][season].keys())
 
-        enabledTabs.update(CustomizationTabs.ALWAYS_ENABLED)
+            enabledTabs.update(CustomizationTabs.ALWAYS_ENABLED)
+        if isStatTrackerTabEnabled():
+            enabledTabs.add(CustomizationTabs.STAT_TRACKERS)
         return sorted(list(enabledTabs))
 
     def getItemsData(self, season=None, modeId=None, tabId=None):
@@ -180,7 +188,7 @@ class CarouselCache(object):
 
     def __initItemsData(self):
         self.__itemsData.clear()
-        requirement = createCustomizationBaseRequestCriteria(g_currentVehicle.item, self.__eventsCache.questsProgress, self.__ctx.mode.getAppliedItems())
+        requirement = createCustomizationBaseRequestCriteria(g_currentVehicle.item, self.__eventsCache.questsProgress)
         requirement |= REQ_CRITERIA.CUSTOM(lambda item: not item.isHiddenInUI())
         itemTypes = []
         for tabId, slotType in CustomizationTabs.SLOT_TYPES.iteritems():
@@ -246,7 +254,10 @@ class CarouselCache(object):
                                         questItems.append(item)
                                         questItemsIDs.append(item.id)
 
-                filteredItems = [ item for item in itemsData.items if itemsFilter(item.descriptor) and item.id not in questItemsIDs ]
+                if tabId == CustomizationTabs.STAT_TRACKERS:
+                    filteredItems = itemsData.items[:]
+                else:
+                    filteredItems = [ item for item in itemsData.items if itemsFilter(item.descriptor) and item.id not in questItemsIDs ]
                 alternateItems = []
                 for itemType in itemTypes:
                     c11nType = C11N_ITEM_TYPE_MAP[itemType]
@@ -524,7 +535,7 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
          FilterAliases.FANTASTICAL: REQ_CRITERIA.CUSTOMIZATION.FANTASTICAL})
         self.__carouselFilters[FilterTypes.INVENTORY] = SimpleCarouselFilter(criteria=REQ_CRITERIA.CUSTOM(lambda item: self.__ctx.mode.getItemInventoryCount(item) > 0 and item.isUnlockedByToken()))
         self.__carouselFilters[FilterTypes.APPLIED] = SimpleCarouselFilter(criteria=REQ_CRITERIA.CUSTOM(lambda item: item.intCD in self.__ctx.mode.getAppliedItems(isOriginal=False)))
-        self.__carouselFilters[FilterTypes.USED_UP] = SimpleCarouselFilter(criteria=REQ_CRITERIA.CUSTOM(lambda item: not isItemUsedUp(item)), requirements=lambda : self.__ctx.isItemsOnAnotherVeh, inverse=True)
+        self.__carouselFilters[FilterTypes.USED_UP] = SimpleCarouselFilter(criteria=REQ_CRITERIA.CUSTOM(lambda item: not isItemUsedUp(item) or item.showDisabled), requirements=lambda : self.__ctx.isItemsOnAnotherVeh, inverse=True)
         self.__carouselFilters[FilterTypes.EDITABLE_STYLES] = DisjunctionCarouselFilter(criteria={FilterAliases.EDITABLE_STYLES: REQ_CRITERIA.CUSTOM(lambda item: item.canBeEditedForVehicle(g_currentVehicle.item.intCD)),
          FilterAliases.NON_EDITABLE_STYLES: REQ_CRITERIA.CUSTOM(lambda item: not item.canBeEditedForVehicle(g_currentVehicle.item.intCD))}, requirements=lambda : self.__ctx.mode.tabId == CustomizationTabs.STYLES_2D)
         self.__carouselFilters[FilterTypes.PROGRESSION] = SimpleCarouselFilter(criteria=REQ_CRITERIA.CUSTOM(lambda item: item.isProgressive), requirements=lambda : self.__ctx.isProgressiveItemsExist)

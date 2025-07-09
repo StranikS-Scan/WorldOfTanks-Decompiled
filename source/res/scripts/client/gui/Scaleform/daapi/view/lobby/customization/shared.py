@@ -30,7 +30,7 @@ from helpers.func_utils import CallParams, cooldownCallerDecorator
 from helpers.i18n import makeString as _ms
 from items import parseIntCompactDescr
 from items.components.c11n_components import getItemSlotType
-from items.components.c11n_constants import SeasonType, ProjectionDecalFormTags, CustomizationType
+from items.components.c11n_constants import SeasonType, ProjectionDecalFormTags, CustomizationType, SLOT_DEFAULT_ALLOWED_MODEL
 from items.customizations import CustomizationOutfit
 from items.vehicles import VEHICLE_CLASS_TAGS
 from serializable_types.customizations.projection_decal import ProjectionDecalComponent
@@ -43,7 +43,11 @@ from vehicle_outfit.containers import SlotData
 from vehicle_outfit.outfit import Area, Outfit
 from vehicle_outfit.packers import ProjectionDecalPacker
 if typing.TYPE_CHECKING:
+    from items.vehicles import VehicleDescriptor
+    from gui.shared.gui_items.customization.c11n_items import Style
+    from gui.shared.gui_items.Vehicle import Vehicle
     from items.components.c11n_components import StyleItem
+    from typing import Optional, List
 _logger = logging.getLogger(__name__)
 EMPTY_PERSONAL_NUMBER = ''
 
@@ -58,6 +62,7 @@ class CustomizationTabs(object):
     STYLES_2D = 7
     STYLES_3D = 8
     ATTACHMENTS = 9
+    STAT_TRACKERS = 10
     ALL = (STYLES_3D,
      STYLES_2D,
      ATTACHMENTS,
@@ -73,21 +78,24 @@ class CustomizationTabs(object):
      STYLES_2D,
      STYLES_3D)
     ALWAYS_ENABLED = (PROJECTION_DECALS, ATTACHMENTS)
+    STYLES = (STYLES_2D, STYLES_3D)
     MODES = {CustomizationModes.CUSTOM: (PAINTS,
                                  CAMOUFLAGES,
                                  PROJECTION_DECALS,
                                  EMBLEMS,
                                  INSCRIPTIONS,
                                  MODIFICATIONS,
-                                 ATTACHMENTS),
-     CustomizationModes.STYLE_2D: (STYLES_2D, ATTACHMENTS),
-     CustomizationModes.STYLE_3D: (STYLES_3D,),
+                                 ATTACHMENTS,
+                                 STAT_TRACKERS),
+     CustomizationModes.STYLE_2D: (STYLES_2D, ATTACHMENTS, STAT_TRACKERS),
+     CustomizationModes.STYLE_3D: (STYLES_3D, STAT_TRACKERS),
      CustomizationModes.STYLE_2D_EDITABLE: (PAINTS,
                                             CAMOUFLAGES,
                                             PROJECTION_DECALS,
                                             EMBLEMS,
                                             INSCRIPTIONS,
-                                            MODIFICATIONS)}
+                                            MODIFICATIONS,
+                                            STAT_TRACKERS)}
     TAB_TO_MODE = {PAINTS: CustomizationModes.CUSTOM,
      CAMOUFLAGES: CustomizationModes.CUSTOM,
      PROJECTION_DECALS: CustomizationModes.CUSTOM,
@@ -96,7 +104,8 @@ class CustomizationTabs(object):
      MODIFICATIONS: CustomizationModes.CUSTOM,
      STYLES_2D: CustomizationModes.STYLE_2D,
      STYLES_3D: CustomizationModes.STYLE_3D,
-     ATTACHMENTS: CustomizationModes.STYLE_2D}
+     ATTACHMENTS: CustomizationModes.STYLE_2D,
+     STAT_TRACKERS: CustomizationModes.CUSTOM}
     TAB_NAMES = {PAINTS: 'paint',
      CAMOUFLAGES: 'camouflage',
      PROJECTION_DECALS: 'projectionDecal',
@@ -105,7 +114,8 @@ class CustomizationTabs(object):
      MODIFICATIONS: 'modification',
      STYLES_2D: 'customStyle',
      STYLES_3D: 'uncustomStyle',
-     ATTACHMENTS: 'attachment'}
+     ATTACHMENTS: 'attachment',
+     STAT_TRACKERS: 'statTracker'}
     SLOT_TYPES = {PAINTS: GUI_ITEM_TYPE.PAINT,
      CAMOUFLAGES: GUI_ITEM_TYPE.CAMOUFLAGE,
      PROJECTION_DECALS: GUI_ITEM_TYPE.PROJECTION_DECAL,
@@ -114,7 +124,8 @@ class CustomizationTabs(object):
      MODIFICATIONS: GUI_ITEM_TYPE.MODIFICATION,
      STYLES_2D: GUI_ITEM_TYPE.STYLE,
      STYLES_3D: GUI_ITEM_TYPE.STYLE,
-     ATTACHMENTS: GUI_ITEM_TYPE.ATTACHMENT}
+     ATTACHMENTS: GUI_ITEM_TYPE.ATTACHMENT,
+     STAT_TRACKERS: GUI_ITEM_TYPE.STAT_TRACKER}
     ITEM_TYPES = {PAINTS: (GUI_ITEM_TYPE.PAINT,),
      CAMOUFLAGES: (GUI_ITEM_TYPE.CAMOUFLAGE,),
      PROJECTION_DECALS: (GUI_ITEM_TYPE.PROJECTION_DECAL,),
@@ -123,7 +134,8 @@ class CustomizationTabs(object):
      MODIFICATIONS: (GUI_ITEM_TYPE.MODIFICATION,),
      STYLES_2D: (GUI_ITEM_TYPE.STYLE,),
      STYLES_3D: (GUI_ITEM_TYPE.STYLE,),
-     ATTACHMENTS: (GUI_ITEM_TYPE.ATTACHMENT,)}
+     ATTACHMENTS: (GUI_ITEM_TYPE.ATTACHMENT,),
+     STAT_TRACKERS: (GUI_ITEM_TYPE.STAT_TRACKER,)}
     TABS_WITH_RARITY = (ATTACHMENTS,)
 
 
@@ -138,6 +150,7 @@ APPLIED_TO_TYPES = (GUI_ITEM_TYPE.EMBLEM,
 SCALE_SIZE = (VEHICLE_CUSTOMIZATION.CUSTOMIZATION_POPOVER_SCALE_SMALL, VEHICLE_CUSTOMIZATION.CUSTOMIZATION_POPOVER_SCALE_NORMAL, VEHICLE_CUSTOMIZATION.CUSTOMIZATION_POPOVER_SCALE_LARGE)
 TYPES_ORDER = (GUI_ITEM_TYPE.STYLE,
  GUI_ITEM_TYPE.ATTACHMENT,
+ GUI_ITEM_TYPE.STAT_TRACKER,
  GUI_ITEM_TYPE.PAINT,
  GUI_ITEM_TYPE.CAMOUFLAGE,
  GUI_ITEM_TYPE.PROJECTION_DECAL,
@@ -148,6 +161,7 @@ TYPES_ORDER = (GUI_ITEM_TYPE.STYLE,
 SEASON_TYPE_TO_INFOTYPE_MAP = {SeasonType.SUMMER: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_MAPTYPE_SUMMER,
  SeasonType.DESERT: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_MAPTYPE_DESERT,
  SeasonType.WINTER: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_MAPTYPE_WINTER}
+COMMON_C11N_AUTO_INSTALL_TYPES = (GUI_ITEM_TYPE.STAT_TRACKER,)
 
 class BillPopoverButtons(object):
     CUSTOMIZATION_CLEAR = 'customizationClear'
@@ -587,14 +601,14 @@ def getProgressionItemStatusText(level):
     return backport.text(R.strings.vehicle_customization.progression.item.doneFirst()) if level == 1 else backport.text(R.strings.vehicle_customization.customization.infotype.progression.achievedState(), level=int2roman(level))
 
 
-def vehicleHasSlot(slotType, vehicle=None):
+def vehicleHasSlot(slotType, vehicle=None, modelsSet=None):
     vehicle = vehicle or g_currentVehicle.item
     if vehicle is None:
         return False
     else:
         for areaId in Area.ALL:
             for _, anchor in vehicle.getAnchors(slotType, areaId):
-                if not anchor.hiddenForUser:
+                if not anchor.hiddenForUser and (modelsSet is None or modelsSet in anchor.compatibleModels):
                     return True
 
         return False
@@ -871,3 +885,44 @@ def getStyledModeRequestData(requestData, style, vehicle, purchaseItems=None, st
             requestData.append((outfit, season))
 
     return requestData
+
+
+def remove3DStyleIncompatibleCommonItems(outfit, style=None, vehicle=None):
+    vehicle = vehicle or g_currentVehicle.item
+    for slotType in GUI_ITEM_TYPE.COMMON_C11NS:
+        for partIdx in Area.ALL:
+            multiSlot = outfit.getContainer(partIdx).slotFor(slotType)
+            if multiSlot:
+                for idx in range(multiSlot.capacity()):
+                    slotData = multiSlot.getSlotData(idx)
+                    if not slotData.isEmpty():
+                        if slotType not in GUI_ITEM_TYPE.COMMON_C11N_COMPATIBLE_WITH_3D_STYLES:
+                            multiSlot.remove(idx)
+                        elif style is not None and style.modelsSet:
+                            anchor = vehicle.getAnchorBySlotId(slotType, partIdx, idx)
+                            if style.modelsSet not in anchor.compatibleModels:
+                                multiSlot.remove(idx)
+
+    return
+
+
+@dependency.replace_none_kwargs(c11nService=ICustomizationService)
+def isStatTrackerTabEnabled(c11nService=None):
+    ctx = c11nService.getCtx()
+    if ctx is None:
+        _logger.error('Helper function "isStatTrackerTabEnabled" called outside of customization context')
+        return False
+    else:
+        outfit = ctx.mode.outfits[ctx.season]
+        modelsSet = SLOT_DEFAULT_ALLOWED_MODEL
+        if outfit.style is not None:
+            modelsSet = outfit.style.modelsSet or modelsSet
+        return True if vehicleHasSlot(CustomizationTabs.SLOT_TYPES[CustomizationTabs.STAT_TRACKERS], modelsSet=modelsSet) else False
+
+
+def getAvailableSlots(slotType, vehicleDescr=None):
+    availableSlots = []
+    for areaId in Area.ALL:
+        availableSlots.extend((C11nId(areaId, slotType, region) for region in getAvailableRegions(areaId, slotType, vehicleDescr)))
+
+    return availableSlots

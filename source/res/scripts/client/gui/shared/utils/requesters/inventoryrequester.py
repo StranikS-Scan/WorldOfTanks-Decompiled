@@ -4,7 +4,6 @@ import typing
 from itertools import imap
 from collections import namedtuple, defaultdict
 import BigWorld
-from adisp import adisp_async
 from constants import CustomizationInvData, SkinInvData, VEHICLE_NO_INV_ID
 from debug_utils import LOG_DEBUG
 from items import vehicles, tankmen, getTypeOfCompactDescr, parseIntCompactDescr, makeIntCompactDescrByID
@@ -253,7 +252,6 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
     def getDynSlotTypeID(self, vehIntCD):
         return self.getCacheValue(GUI_ITEM_TYPE.VEHICLE, {}).get('customRoleSlots', {}).get(vehIntCD, 0)
 
-    @adisp_async
     def _requestCache(self, callback=None):
         BigWorld.player().inventory.getCache(lambda resID, value: self._response(resID, value, callback))
 

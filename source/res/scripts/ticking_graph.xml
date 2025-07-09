@@ -3,6 +3,18 @@
     <preInitGroup>
       <before>	true	</before>
     </preInitGroup>
+    <journalInit></journalInit>
+    <journalUpdate></journalUpdate>
+    <clientRecreate></clientRecreate>
+    <networkObjectsUpdate></networkObjectsUpdate>
+    <transformPreUpdate></transformPreUpdate>
+    <transformUpdate></transformUpdate>
+    <transformPostUpdate></transformPostUpdate>
+    <modelUpdate></modelUpdate>
+    <vehicleHierarchyUpdate></vehicleHierarchyUpdate>
+    <compositionUpdate></compositionUpdate>
+    <vehicleHierarchyPostUpdate></vehicleHierarchyPostUpdate>
+    <postModelUpdate></postModelUpdate>
   </Init>
   <Simulation>
     <PreSimulation>

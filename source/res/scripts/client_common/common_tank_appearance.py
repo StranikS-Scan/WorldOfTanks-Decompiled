@@ -21,8 +21,10 @@ from cgf_obsolete_script.script_game_object import ComponentDescriptor, ScriptGa
 from cgf_obsolete_script.auto_properties import AutoProperty
 from items.components.component_constants import MAIN_TRACK_PAIR_IDX
 from items.vehicle_items import CHASSIS_ITEM_TYPE
-from vehicle_systems import model_assembler, vehicle_composition
+from objects_hierarchy import PrefabsMapItem
+from vehicle_systems import model_assembler
 from vehicle_systems import camouflages
+from vehicle_systems.vehicle_composition import getExtraSlotMap, getObjectSlots, createVehicleComposition
 from vehicle_systems.vehicle_damage_state import VehicleDamageState
 from vehicle_systems.tankStructure import VehiclePartsTuple, ModelsSetParams, TankPartNames, ColliderTypes, TankPartIndexes, TankNodeNames, TankRenderMode, CgfTankNodes, TankSoundObjectsIndexes
 from vehicle_systems.components.CrashedTracks import CrashedTrackController
@@ -208,6 +210,7 @@ class CommonTankAppearance(ScriptGameObject):
         self._vehicleInfo = {}
         self.__vID = 0
         self.__renderMode = None
+        self.__forceDynAttachmentLoading = False
         self.__frameTimestamp = 0
         self.__periodicTimerID = None
         self.customizationGameObjects = []
@@ -219,15 +222,23 @@ class CommonTankAppearance(ScriptGameObject):
         self._swingingAnimator = CGF.ComponentLink(Vehicular.SwingingAnimator)
         self._gunRecoilLink = CGF.ComponentLink(Vehicular.GunRecoilComponent)
         self._gunAnimators = GunAnimators()
+        self._entityGameObject = CGF.GameObject.INVALID_GAME_OBJECT
         return
 
-    def prerequisites(self, typeDescriptor, vID, health, isCrewActive, isTurretDetached, outfitCD, renderMode=None):
-        self.damageState.update(health, isCrewActive, False)
+    @property
+    def slotPrefabs(self):
+        return [ PrefabsMapItem(*it) for it in self.typeDescriptor.slotPrefabs ]
+
+    def prerequisites(self, vID, vInfo, renderMode=None):
+        typeDescriptor = vInfo.typeDescr
+        self.damageState.update(vInfo.health, vInfo.isCrewActive, False)
         self.__typeDesc = typeDescriptor
         self.__vID = vID
-        self._isTurretDetached = isTurretDetached
+        self._isTurretDetached = vInfo.isTurretDetached
+        self.__forceDynAttachmentLoading = vInfo.forceDynAttachmentLoading
+        self._entityGameObject = vInfo.entityGameObject
         self.__updateModelStatus()
-        self.__outfit = self._prepareOutfit(outfitCD)
+        self.__outfit = self._prepareOutfit(vInfo.outfitCD)
         self._updateAttachments()
         self.__renderMode = renderMode
         prereqs = self.typeDescriptor.prerequisites(True)
@@ -246,7 +257,7 @@ class CommonTankAppearance(ScriptGameObject):
         compoundAssembler = model_assembler.prepareCompoundAssembler(self.typeDescriptor, modelsSetParams, self.spaceID, self.isTurretDetached, renderMode=self.renderMode)
         prereqs.append(compoundAssembler)
         if renderMode == TankRenderMode.OVERLAY_COLLISION:
-            self.damageState.update(0, isCrewActive, False)
+            self.damageState.update(0, vInfo.isCrewActive, False)
         collisionAssembler = model_assembler.prepareCollisionAssembler(self.typeDescriptor, self.isTurretDetached, self.spaceID)
         prereqs.append(collisionAssembler)
         physicalTracksBuilders = self.typeDescriptor.chassis.physicalTracks
@@ -349,9 +360,14 @@ class CommonTankAppearance(ScriptGameObject):
             self.engineAudition.setIsInWaterInfo(DataLinks.createBoolLink(self.waterSensor, 'isInWater'))
         self.__postSetupFilter()
         compoundModel.setPartBoundingBoxAttachNode(TankPartIndexes.GUN, TankNodeNames.GUN_INCLINATION)
-        prefabMap = [ CGF.PrefabsMapItem(attachment.slotName, attachment.modelName) for attachment in self.__attachments if not attachment.hiddenForUser ]
-        extraSlots = vehicle_composition.getExtraSlotMap(self.typeDescriptor, self)
-        vehicle_composition.createVehicleComposition(self.gameObject, prefabMap=prefabMap, followNodes=True, extraSlots=extraSlots)
+        prefabMap = [ PrefabsMapItem(attachment.slotName, attachment.modelName) for attachment in self.__attachments if not attachment.hidden ]
+        if IS_EDITOR or self.__forceDynAttachmentLoading:
+            prefabMap += self.slotPrefabs
+        extraSlots = getExtraSlotMap(self.typeDescriptor, self) + getObjectSlots(self.typeDescriptor)
+        dynSlots = None
+        if self.typeDescriptor.type.isWheeledVehicle:
+            dynSlots = self.typeDescriptor.chassis.generalWheelsAnimatorConfig.getNonTrackWheelNodeNames()
+        createVehicleComposition(gameObject=self.gameObject, vehicleGameObject=self._entityGameObject, prefabMap=prefabMap, followNodes=True, extraSlots=extraSlots, dynSlotNodes=dynSlots)
         camouflages.updateFashions(self)
         if self.damageState.isCurrentModelUndamaged:
             model_assembler.assembleCustomLogicComponents(self, self.typeDescriptor, self.__attachments, self.__modelAnimators)
@@ -365,6 +381,7 @@ class CommonTankAppearance(ScriptGameObject):
     def destroy(self):
         self._vehicleInfo = {}
         self.flagComponent = None
+        self.__forceDynAttachmentLoading = False
         self._destroySystems()
         fashions = VehiclePartsTuple(None, None, None, None)
         self._setFashions(fashions, self._isTurretDetached)
@@ -583,7 +600,7 @@ class CommonTankAppearance(ScriptGameObject):
             return
         else:
             self.vehicleStickers.alpha = DEFAULT_STICKERS_ALPHA
-            self.vehicleStickers.attach(compoundModel=self.compoundModel, isDamaged=isCurrentModelDamaged, showDamageStickers=not isCurrentModelDamaged)
+            self.vehicleStickers.attach(compoundModel=self.compoundModel, isDamaged=isCurrentModelDamaged, showDamageStickers=not isCurrentModelDamaged, collisionComponent=self.collisions)
             return
 
     def _detachStickers(self):

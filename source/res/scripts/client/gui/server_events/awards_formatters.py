@@ -1433,15 +1433,28 @@ class InstructionEpicBattleBonusFormatter(SimpleBonusFormatter):
 class GoodiesEpicBattleBonusFormatter(SimpleBonusFormatter):
 
     def _format(self, bonus):
-        goodID = list(bonus.getValue())[0]
-        return [PreformattedBonus(bonusName=bonus.getName(), label=self._getLabel(bonus), userName=self._getUserName(bonus), labelFormatter=self._getLabelFormatter(bonus), images=self._getImages(bonus), align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus), compensationReason=self._getCompensationReason(bonus), isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.EPIC_BATTLE_RECERTIFICATION_FORM_TOOLTIP, specialArgs=[goodID])]
+        preformattedBonuses = []
+        for goodID in list(bonus.getValue()):
+            isMentoringLicenseBonus = self._isMentoringLicenseBonus(goodID)
+            specialAlias = self._getSpecialAlias(goodID)
+            preformattedBonuses.append(PreformattedBonus(bonusName=bonus.getName(), label=self._getLabel(bonus), userName=self._getUserName(bonus), labelFormatter=self._getLabelFormatter(bonus), images=self._getImages(goodID), align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus), compensationReason=self._getCompensationReason(bonus), isSpecial=not isMentoringLicenseBonus, isWulfTooltip=isMentoringLicenseBonus, tooltip=specialAlias, specialAlias=specialAlias, specialArgs=[goodID]))
+
+        return preformattedBonuses
+
+    @classmethod
+    def _isMentoringLicenseBonus(cls, goodID):
+        return goodID == MENTORING_LICENSE_GOODIE_ID
+
+    @classmethod
+    def _getSpecialAlias(cls, goodID):
+        return TOOLTIPS_CONSTANTS.MENTOR_LICENSE if cls._isMentoringLicenseBonus(goodID) else TOOLTIPS_CONSTANTS.EPIC_BATTLE_RECERTIFICATION_FORM_TOOLTIP
 
     def _getLabel(self, bonus):
         return formatCountLabel(list(bonus.getValue().values())[0]['count'])
 
     @classmethod
-    def _getImages(cls, bonus):
-        return getMentoringLicenseImages() if bonus.getValue().keys()[0] == MENTORING_LICENSE_GOODIE_ID else getRecertificationFormImages()
+    def _getImages(cls, goodID):
+        return getMentoringLicenseImages() if cls._isMentoringLicenseBonus(goodID) else getRecertificationFormImages()
 
 
 class GoodiesBonusFormatter(SimpleBonusFormatter):

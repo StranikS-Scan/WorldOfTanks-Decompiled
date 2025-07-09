@@ -12,7 +12,6 @@ import season_common
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import ROYALE_VEHICLE, CURRENT_VEHICLE, ROYALE_INTRO_VIDEO_SHOWN_FOR_SEASON
-from account_helpers.settings_core.settings_constants import GRAPHICS
 from adisp import adisp_process
 from battle_royale.gui.constants import AmmoTypes, BattleRoyalePerfProblems, BattleRoyaleSubMode
 from battle_royale.gui.game_control.br_vo_controller import BRVoiceOverController
@@ -42,6 +41,7 @@ from gui.shared.event_dispatcher import getParentWindow, showBrowserOverlayView
 from gui.shared.events import ProfilePageEvent, ProfileStatisticEvent, ProfileTechniqueEvent
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS, VEHICLE_TYPES_ORDER_INDICES
 from gui.shared.utils import SelectorBattleTypesUtils
+from gui.shared.utils.graphics import getGraphicsEngineValue
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier, PeriodicNotifier, TimerNotifier
 from helpers import dependency, time_utils
@@ -50,7 +50,6 @@ from items.battle_royale import isBattleRoyale
 from battle_royale.gui.constants import SUB_MODE_ID_KEY
 from shared_utils import first
 from shared_utils import nextTick
-from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IEventsNotificationsController, IHangarSpaceSwitchController, IBattleRoyaleController, IBattleRoyaleTournamentController, IPlatoonController
 from skeletons.gui.impl import IGuiLoader
@@ -80,14 +79,13 @@ def predicateOpenedWindowsExist(window):
 PERFORMANCE_GROUP_LIMITS = {BattleRoyalePerfProblems.HIGH_RISK: [{BATTLE_ROYALE_GAME_LIMIT_TYPE.SYSTEM_DATA: {'osBit': 1,
                                                                                    'graphicsEngine': 0}}, {BATTLE_ROYALE_GAME_LIMIT_TYPE.HARDWARE_PARAMS: {HARDWARE_SCORE_PARAMS.PARAM_GPU_MEMORY: 490}}, {BATTLE_ROYALE_GAME_LIMIT_TYPE.SYSTEM_DATA: {'graphicsEngine': 0},
                                        BATTLE_ROYALE_GAME_LIMIT_TYPE.HARDWARE_PARAMS: {HARDWARE_SCORE_PARAMS.PARAM_RAM: 2900}}],
- BattleRoyalePerfProblems.MEDIUM_RISK: [{BATTLE_ROYALE_GAME_LIMIT_TYPE.HARDWARE_PARAMS: {HARDWARE_SCORE_PARAMS.PARAM_GPU_SCORE: 150}}, {BATTLE_ROYALE_GAME_LIMIT_TYPE.HARDWARE_PARAMS: {HARDWARE_SCORE_PARAMS.PARAM_CPU_SCORE: 50000}}]}
+ BattleRoyalePerfProblems.MEDIUM_RISK: [{BATTLE_ROYALE_GAME_LIMIT_TYPE.HARDWARE_PARAMS: {HARDWARE_SCORE_PARAMS.PARAM_GPU_SCORE: 300}}, {BATTLE_ROYALE_GAME_LIMIT_TYPE.HARDWARE_PARAMS: {HARDWARE_SCORE_PARAMS.PARAM_CPU_SCORE: 50000}}]}
 
 class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController, IGlobalListener):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __eventsCache = dependency.descriptor(IEventsCache)
     __itemsCache = dependency.descriptor(IItemsCache)
     __hangarsSpace = dependency.descriptor(IHangarSpace)
-    __settingsCore = dependency.descriptor(ISettingsCore)
     __spaceSwitchController = dependency.descriptor(IHangarSpaceSwitchController)
     __notificationsCtrl = dependency.descriptor(IEventsNotificationsController)
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -100,15 +98,16 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
 
     def __init__(self):
         super(BattleRoyaleController, self).__init__()
-        self.onUpdated = Event.Event()
-        self.onPrimeTimeStatusUpdated = Event.Event()
-        self.onWidgetUpdate = Event.Event()
-        self.onBalanceUpdated = Event.Event()
-        self.onSubModeUpdated = Event.Event()
-        self.onBattleRoyaleSpaceLoaded = Event.Event()
-        self.onStatusTick = Event.Event()
-        self.onTournamentBannerStateChanged = Event.Event()
-        self.onEntryPointUpdated = Event.Event()
+        self.__em = Event.EventManager()
+        self.onUpdated = Event.Event(self.__em)
+        self.onPrimeTimeStatusUpdated = Event.Event(self.__em)
+        self.onWidgetUpdate = Event.Event(self.__em)
+        self.onBalanceUpdated = Event.Event(self.__em)
+        self.onSubModeUpdated = Event.Event(self.__em)
+        self.onBattleRoyaleSpaceLoaded = Event.Event(self.__em)
+        self.onStatusTick = Event.Event(self.__em)
+        self.onTournamentBannerStateChanged = Event.Event(self.__em)
+        self.onEntryPointUpdated = Event.Event(self.__em)
         self.__balance = None
         self.__clientValuesInited = False
         self.__clientShields = {}
@@ -149,9 +148,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         self.__equipmentCount = None
         self.__defaultHangars = None
         self.__urlMacros = None
-        self.onUpdated.clear()
-        self.onPrimeTimeStatusUpdated.clear()
-        self.onEntryPointUpdated.clear()
+        self.__em.clear()
         self.__spaceSwitchController.onCheckSceneChange -= self.__onCheckSceneChange
         self.clearNotification()
         if self.__callbackID is not None:
@@ -748,7 +745,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
 
     def __analyzeClientSystem(self):
         stats = BigWorld.wg_getClientStatistics()
-        stats['graphicsEngine'] = self.__settingsCore.getSetting(GRAPHICS.RENDER_PIPELINE)
+        stats['graphicsEngine'] = getGraphicsEngineValue()
         self.__performanceGroup = BattleRoyalePerfProblems.LOW_RISK
         for groupName, conditions in PERFORMANCE_GROUP_LIMITS.iteritems():
             for currentLimit in conditions:

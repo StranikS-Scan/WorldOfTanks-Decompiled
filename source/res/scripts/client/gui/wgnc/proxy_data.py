@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/wgnc/proxy_data.py
+import logging
 from account_helpers import getAccountDatabaseID
 from adisp import adisp_process
 from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL
@@ -15,8 +16,10 @@ from helpers import dependency
 from gui.wgnc.image_notification_helper import showPaymentMethodLinkNotification, showPaymentMethodUnlinkNotification
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 from skeletons.gui.game_control import IBrowserController, IPromoController, IReferralProgramController, IClanNotificationController
+from skeletons.gui.login_manager import ILoginManager
 from skeletons.gui.shared.promo import IPromoLogger
 from skeletons.gui.system_messages import ISystemMessages
+_logger = logging.getLogger(__name__)
 
 class _ProxyDataItem(object):
 
@@ -202,6 +205,7 @@ class ClanInviteAcceptedItem(_ClanInviteActionResultItem):
 
 
 class ShowTeaserItem(_ProxyDataItem):
+    _loginManager = dependency.descriptor(ILoginManager)
     _promoCtrl = dependency.descriptor(IPromoController)
 
     def __init__(self, data):
@@ -211,7 +215,11 @@ class ShowTeaserItem(_ProxyDataItem):
         return WGNC_DATA_PROXY_TYPE.SHOW_PROMO_TEASER
 
     def show(self, _):
-        dependency.instance(IPromoLogger).logTeaserAction(self.__data['lastPromo'], action=PromoLogActions.RECEIVED_WGNC, source=PromoLogSourceType.WGNC)
+        teaserData = self.__data.get('lastPromo', {})
+        if not teaserData.get('showForSteam', False) and self._loginManager.isWgcSteam:
+            _logger.info('The received teaser was hidden due to it cannot be shown on Steam client. Promo id: %s.', teaserData['promoID'])
+            return
+        dependency.instance(IPromoLogger).logTeaserAction(teaserData, action=PromoLogActions.RECEIVED_WGNC, source=PromoLogSourceType.WGNC)
         self._promoCtrl.setNewTeaserData(self.__data)
 
 

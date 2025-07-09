@@ -1,16 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/TokenRequester.py
+import cPickle
 import logging
 import time
-import cPickle
 from functools import partial
 import BigWorld
+from TokenResponse import TokenResponse
 from adisp import adisp_async, adisp_process
 from constants import REQUEST_COOLDOWN, TOKEN_TYPE
 from debug_utils import LOG_CURRENT_EXCEPTION
-from TokenResponse import TokenResponse
-from ids_generators import SequenceIDGenerator
 from helpers import isPlayerAccount
+from ids_generators import SequenceIDGenerator
 _logger = logging.getLogger(__name__)
 
 def _getAccountRepository():

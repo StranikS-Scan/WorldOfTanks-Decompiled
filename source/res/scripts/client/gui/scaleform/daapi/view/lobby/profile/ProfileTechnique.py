@@ -136,7 +136,7 @@ class ProfileTechnique(ProfileTechniqueMeta):
     def _getStorageData(self):
         return AccountSettings.getFilter(self._getStorageId())
 
-    def _getDefaultTableHeader(self, isFallout=False):
+    def _getDefaultTableHeader(self, isFallout=False, showMarkOfMastery=True):
         isPrestigeVisible = self._isPrestigeVisible()
         result = [self._createTableBtnInfo('nationIndex', 36, 0, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_NATION, 'ascending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_NATIONS_ALL, inverted=True),
          self._createTableBtnInfo('typeIndex', 34, 1, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_TECHNIQUE, 'descending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_TANKS_ALL),
@@ -147,8 +147,9 @@ class ProfileTechnique(ProfileTechniqueMeta):
          self._createTableBtnInfo('avgExperience', 74 if isPrestigeVisible else 90, 5, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_AVGEXP, 'descending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_AVGEXP)]
         if isPrestigeVisible:
             result.append(self._createTableBtnInfo('prestigeLevel', 54, 8, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_PRESTIGELEVEL, 'descending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_PRESTIGELEVEL))
-        markOfMasteryEnabled = self._battlesType in (PROFILE_DROPDOWN_KEYS.ALL, PROFILE_DROPDOWN_KEYS.EPIC_RANDOM)
-        result.append(self._createTableBtnInfo('markOfMastery', 62 if isPrestigeVisible else 70, 6, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_MARKSOFMASTERY, 'descending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_MARKOFMASTERY, enabled=markOfMasteryEnabled))
+        if showMarkOfMastery:
+            markOfMasteryEnabled = self._battlesType in (PROFILE_DROPDOWN_KEYS.ALL, PROFILE_DROPDOWN_KEYS.EPIC_RANDOM)
+            result.append(self._createTableBtnInfo('markOfMastery', 62 if isPrestigeVisible else 70, 6, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_MARKSOFMASTERY, 'descending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_MARKOFMASTERY, enabled=markOfMasteryEnabled))
         return result
 
     def _createTableBtnInfo(self, iconId, buttonWidth, sortOrder, toolTip, defaultSortDirection, label='', iconSource='', inverted=False, sortType='numeric', showSeparator=True, enabled=True):

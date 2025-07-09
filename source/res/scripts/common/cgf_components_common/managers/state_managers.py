@@ -3,15 +3,11 @@
 import CGF
 import logging
 from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery, autoregister
-from constants import IS_CLIENT, IS_CELLAPP
 from GenericComponents import HealthGradationComponent, EHealthGradation
 from cgf_components_common.state_components import StateSwitcherComponent
 from functools import partial
+from HealthComponent import HealthComponent
 _logger = logging.getLogger(__name__)
-if IS_CLIENT or IS_CELLAPP:
-    from HealthComponent import HealthComponent
-else:
-    from cgf_components_common.state_components import HealthComponent
 
 @autoregister(presentInAllWorlds=True, domain=CGF.DomainOption.DomainClient | CGF.DomainOption.DomainServer)
 class StateSwitcherManager(CGF.ComponentManager):
@@ -27,9 +23,11 @@ class StateSwitcherManager(CGF.ComponentManager):
 
     @onRemovedQuery(StateSwitcherComponent, HealthComponent)
     def onRemoved(self, switcher, health, *_):
-        if not health.entity.isDestroyed:
+        entity = health.entity
+        if entity is not None and not entity.isDestroyed:
             health.onHealthChanged -= switcher.callback
         self.__deactivateAll(switcher)
+        return
 
     def __activateState(self, go):
         if go is not None and go.isValid() and not go.isActive():

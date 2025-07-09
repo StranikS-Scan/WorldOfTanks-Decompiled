@@ -58,11 +58,11 @@ class CustomizationMainViewMeta(View):
     def resetC11nItemsNovelty(self, itemsList):
         self._printOverrideError('resetC11nItemsNovelty')
 
-    def onProgressionEntryPointClick(self):
-        self._printOverrideError('onProgressionEntryPointClick')
-
     def onShopEntryPointClick(self):
         self._printOverrideError('onShopEntryPointClick')
+
+    def onEntryPointClick(self, itemId):
+        self._printOverrideError('onEntryPointClick')
 
     def as_hideS(self, value):
         return self.flashObject.as_hide(value) if self._isDAAPIInited() else None
@@ -112,5 +112,5 @@ class CustomizationMainViewMeta(View):
     def as_attachToCursorS(self, data):
         return self.flashObject.as_attachToCursor(data) if self._isDAAPIInited() else None
 
-    def as_progressionEntryPointVisibleS(self, value):
-        return self.flashObject.as_progressionEntryPointVisible(value) if self._isDAAPIInited() else None
+    def as_updateInnerEntriesS(self, items):
+        return self.flashObject.as_updateInnerEntries(items) if self._isDAAPIInited() else None

@@ -1,22 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/auxiliary/crew_books_helper.py
 from collections import defaultdict
-import BigWorld
 from enum import Enum
+import BigWorld
 from CurrentVehicle import g_currentVehicle
+from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import CREW_BOOKS_VIEWED
-from adisp import adisp_async
-from nations import INDICES, NONE_INDEX
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers.dependency import descriptor
-from items.components.crew_books_constants import CREW_BOOK_RARITY
 from items import tankmen
+from items.components.crew_books_constants import CREW_BOOK_RARITY
+from nations import INDICES, NONE_INDEX
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from PlayerEvents import g_playerEvents
 MIN_ROLE_LEVEL = 100
 MAX_SKILL_VIEW_COUNT = 4
 _g_crewBooksViewedCache = None
@@ -122,8 +121,7 @@ class _CrewBooksViewedCache(object):
         vehicle = g_currentVehicle.item
         return vehicle is None
 
-    @adisp_async
-    def onCrewBooksUpdated(self, diff, callback):
+    def onCrewBooksUpdated(self, diff):
         inventory = diff.get('inventory', {})
         if GUI_ITEM_TYPE.CREW_BOOKS in inventory:
             for cd, count in inventory[GUI_ITEM_TYPE.CREW_BOOKS].iteritems():
@@ -135,7 +133,6 @@ class _CrewBooksViewedCache(object):
                 self.__booksCountByNation[item.type][self.__getNationID(item.nation)] = count
 
             self._setState(self.STATE.UPDATE)
-        callback(True)
         return
 
     def destroy(self):

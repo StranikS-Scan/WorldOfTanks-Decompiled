@@ -28,18 +28,19 @@ def magneticAimProcessor(previousSimpleTarget=None, previousMagneticTarget=None)
 
 
 def magneticAimFindTarget():
-    vehicleAttached = BigWorld.player().getVehicleAttached()
-    aimCamera = BigWorld.player().inputHandler.ctrl.camera
+    playerAvatar = BigWorld.player()
+    vehicleAttached = playerAvatar.getVehicleAttached()
+    aimCamera = playerAvatar.inputHandler.ctrl.camera
     aimCameraDirection = aimCamera.aimingSystem.matrixProvider.applyToAxis(2)
     if vehicleAttached is None or not vehicleAttached.isAlive():
         return
     else:
         minAngleVehicle = None
-        for vehicleID in BigWorld.player().arena.vehicles.iterkeys():
+        for vehicleID in playerAvatar.arena.vehicles.iterkeys():
             vehicle = BigWorld.entity(vehicleID)
             if vehicle is None:
                 continue
-            allyOrSelfVehicle = vehicle.publicInfo['team'] == BigWorld.player().team or vehicle.isPlayerVehicle
+            allyOrSelfVehicle = vehicle.publicInfo['team'] == playerAvatar.team or vehicle.isPlayerVehicle
             if allyOrSelfVehicle or not vehicle.isStarted or not vehicle.isAlive():
                 continue
             vehiclePositionDirection = vehicle.position - aimCamera.camera.position
@@ -86,16 +87,17 @@ def getVehiclePointsGen(vehicle):
 
 def getVisibilityCheckPointsGen(vehicle):
     matrix = Matrix(vehicle.matrix)
-    return chain((vehicle.position,), (matrix.applyPoint(pt) for pt in getVehiclePointsGen(vehicle)))
+    return chain((vehicle.position,), (matrix.applyPoint(pt) for pt in getVehiclePointsGen(vehicle)), BigWorld.getDynamicVisibilityPoints(vehicle.entityGameObject))
 
 
 def isVehicleVisibleFromCamera(vehicle, aimCamera):
-    for vehiclePoint in getVisibilityCheckPointsGen(vehicle):
-        startPos = aimCamera.camera.position
-        endPos = vehiclePoint
-        testResStatic = BigWorld.wg_collideSegment(BigWorld.player().spaceID, startPos, endPos, 128)
+    spaceID = vehicle.spaceID
+    startPos = aimCamera.camera.position
+    playerVehicleID = BigWorld.player().playerVehicleID
+    for endPos in getVisibilityCheckPointsGen(vehicle):
+        testResStatic = BigWorld.wg_collideSegment(spaceID, startPos, endPos, 128)
         if testResStatic is None:
-            testResDynamic = BigWorld.wg_collideDynamic(BigWorld.player().spaceID, startPos, endPos, BigWorld.player().playerVehicleID)
+            testResDynamic = BigWorld.wg_collideDynamic(spaceID, startPos, endPos, playerVehicleID)
             if testResDynamic is None:
                 return True
 

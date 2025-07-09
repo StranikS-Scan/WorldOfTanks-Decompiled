@@ -25,7 +25,7 @@ from skeletons.gui.shared import IItemsCache
 from web.web_client_api.common import ItemPackEntry
 if typing.TYPE_CHECKING:
     from gui.server_events.event_items import Quest
-    from gui.server_events.bonuses import SimpleBonus
+    from gui.server_events.bonuses import SimpleBonus, TankmenBonus
 _logger = logging.getLogger(__name__)
 
 class MarathonEvent(object):
@@ -217,7 +217,7 @@ class MarathonEvent(object):
 
     def updateQuestsData(self):
         currentStep, _ = self.getMarathonProgress()
-        self._data.setQuest(self._eventsCache.getHiddenQuests(self.__marathonFilterFunc), currentStep)
+        self._data.setQuest(self.getMarathonQuests(), currentStep)
         self._data.setGroup(self._eventsCache.getGroups(self.__marathonFilterFunc))
         tokensData = self.getTokensData(prefix=self._data.tokenPrefix)
         self._data.setRewardObtained(tokensData)
@@ -262,10 +262,9 @@ class MarathonEvent(object):
 
     def getRewardsForQuestNumber(self, questNumber):
         rewardsQuests = self._getQuestsWithRewards()
-        hiddenQuests = self._eventsCache.getHiddenQuests()
-        questID = rewardsQuests[questNumber]
-        rewards = hiddenQuests.get(questID).getBonuses()
-        return rewards
+        sortedQuestsIDs = natsorted(rewardsQuests)
+        questID = sortedQuestsIDs[questNumber]
+        return rewardsQuests[questID].getBonuses()
 
     def getStyleQuestReward(self):
         quests = self._eventsCache.getHiddenQuests(self.__styleQuestFilterFunc)
@@ -277,24 +276,20 @@ class MarathonEvent(object):
     def _getRemainingRewards(self):
         finished, _ = self.getMarathonProgress()
         rewardsQuests = self._getQuestsWithRewards()
-        remainingQuests = rewardsQuests[finished:]
-        hiddenQuests = self._eventsCache.getHiddenQuests()
+        sortedQuestsIDs = natsorted(rewardsQuests)
+        remainingQuestsIDs = sortedQuestsIDs[finished:]
         bonuses = []
-        for questID in remainingQuests:
-            quest = hiddenQuests.get(questID)
-            bonuses.extend(quest.getBonuses())
+        for questID in remainingQuestsIDs:
+            bonuses.extend(rewardsQuests[questID].getBonuses())
 
         merged = mergeBonuses(bonuses)
         return merged
 
     def getVehicleCrewReward(self):
-        hiddenQuests = self._eventsCache.getHiddenQuests()
         vehiclesReward = None
-        for questID in self._getQuestsWithRewards():
-            quest = hiddenQuests.get(questID)
-            if quest:
-                bonuses = quest.getBonuses()
-                vehiclesReward = next((reward for reward in bonuses if isinstance(reward, VehiclesBonus)), None)
+        for quest in self._getQuestsWithRewards().values():
+            bonuses = quest.getBonuses()
+            vehiclesReward = next((reward for reward in bonuses if isinstance(reward, VehiclesBonus)), None)
             if vehiclesReward:
                 break
 
@@ -308,8 +303,7 @@ class MarathonEvent(object):
         return packed
 
     def _getQuestsWithRewards(self):
-        hiddenQuests = self._eventsCache.getHiddenQuests(self.__rewardQuestsFilterFunc)
-        return natsorted(hiddenQuests)
+        return self._eventsCache.getHiddenQuests(self.__rewardQuestsFilterFunc)
 
     def __rewardQuestsFilterFunc(self, quest):
         questID = quest.getID()

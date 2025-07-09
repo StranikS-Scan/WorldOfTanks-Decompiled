@@ -365,7 +365,8 @@ class ClientArena(object):
         self.__vehicleIndexToId = dict(zip(range(len(vehs)), sorted(vehs.keys())))
 
     def __vehicleStatisticsAsDict(self, stats):
-        return (stats[0], {'frags': stats[1]})
+        return (stats[0], {'frags': stats[1],
+          'tkills': stats[2]})
 
     def runVsePlan(self, planName, params, key='', context=None):
         if self._vsePlans is not None:

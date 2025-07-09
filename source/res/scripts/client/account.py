@@ -20,7 +20,7 @@ from PlayerEvents import g_playerEvents as events
 from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_blueprints, client_recycle_bin, client_anonymizer, ClientBattleRoyale
 from account_helpers import ClientInvitations, vehicle_rotation
 from account_helpers import client_epic_meta_game, tokens
-from account_helpers import client_ranked, ClientBadges
+from account_helpers import client_ranked, client_badges
 from account_helpers.achievements20 import Achievements20
 from account_helpers.battle_pass import BattlePassManager
 from account_helpers.dog_tags import DogTags
@@ -1392,7 +1392,7 @@ class _AccountRepository(object):
         self.recycleBin = client_recycle_bin.ClientRecycleBin(self.syncData)
         self.ranked = client_ranked.ClientRanked(self.syncData)
         self.battleRoyale = ClientBattleRoyale.ClientBattleRoyale(self.syncData)
-        self.badges = ClientBadges.ClientBadges(self.syncData)
+        self.badges = client_badges.ClientBadges(self.syncData)
         self.tokens = tokens.Tokens(self.syncData)
         self.epicMetaGame = client_epic_meta_game.ClientEpicMetaGame(self.syncData)
         self.blueprints = client_blueprints.ClientBlueprints(self.syncData)

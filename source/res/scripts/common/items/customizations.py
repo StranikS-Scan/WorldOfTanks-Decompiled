@@ -8,8 +8,8 @@ from constants import IS_CELLAPP, IS_BASEAPP
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from items import decodeEnum, vehicles
 from items.components import c11n_components as cn
-from items.components.c11n_constants import ApplyArea, SeasonType, CustomizationType, CustomizationTypeNames, MAX_USERS_PROJECTION_DECALS, EMPTY_ITEM_ID
-from serializable_types.customizations import PaintComponent, CamouflageComponent, getAllItemsFromOutfit, AttachmentComponent, ProjectionDecalComponent, SequenceComponent, PersonalNumberComponent, InsigniaComponent, CustomizationOutfit, DecalComponent, CUSTOMIZATION_CLASSES as _CUSTOMIZATION_CLASSES, parseC11sComponentDescr
+from items.components.c11n_constants import ApplyArea, SeasonType, CustomizationType, CustomizationTypeNames, MAX_USERS_PROJECTION_DECALS, EMPTY_ITEM_ID, MAX_ATTACHMENTS, MAX_STAT_TRACKERS
+from serializable_types.customizations import PaintComponent, CamouflageComponent, getAllItemsFromOutfit, AttachmentComponent, ProjectionDecalComponent, SequenceComponent, PersonalNumberComponent, InsigniaComponent, CustomizationOutfit, DecalComponent, CUSTOMIZATION_CLASSES as _CUSTOMIZATION_CLASSES, parseC11sComponentDescr, StatTrackerComponent
 from serialization import ComponentBinDeserializer, ComponentXmlDeserializer, SerializationException, EmptyComponent, makeCompDescr, FieldTypes, FieldFlags, FieldType, SerializableComponent, intField, intArrayField, xmlOnlyFloatField, xmlOnlyFloatArrayField, applyAreaEnumField, customFieldType, customArrayField, optionsEnumField, arrayField, strField, xmlOnlyApplyAreaEnumField, xmlOnlyIntField, xmlOnlyTagsField
 from serialization.serializable_component import SerializableComponentChildType
 from soft_exception import SoftException
@@ -54,15 +54,18 @@ def isEditedStyle(outfit):
     styleProgressLvl = outfit.styleProgressionLevel
     styleSerialNumber = outfit.serial_number
     attachments = outfit.attachments
+    stat_trackers = outfit.stat_trackers
     outfit.styleId = 0
     outfit.styleProgressionLevel = 0
     outfit.serial_number = ''
     outfit.attachments = []
+    outfit.stat_trackers = []
     isEmpty = not outfit
     outfit.styleId = styleId
     outfit.styleProgressionLevel = styleProgressLvl
     outfit.serial_number = styleSerialNumber
     outfit.attachments = attachments
+    outfit.stat_trackers = stat_trackers
     return not isEmpty
 
 
@@ -114,6 +117,8 @@ class OutfitLogEntry(object):
         self._projection_decals = outfit.projection_decals
         self._camouflages = applyAreaBitmaskToDict(outfit.camouflages)
         self._personal_numbers = applyAreaBitmaskToDict(outfit.personal_numbers)
+        self._attachments = outfit.attachments
+        self._stat_trackers = outfit.stat_trackers
         self.chassis_paint_cd = getPaintCd(ApplyArea.CHASSIS)
         self.hull_paint_cd = getPaintCd(ApplyArea.HULL)
         self.turret_paint_cd = getPaintCd(ApplyArea.TURRET)
@@ -139,6 +144,14 @@ class OutfitLogEntry(object):
         getProjectionDecalData = self.__getProjectionDecalData
         for number in xrange(0, MAX_USERS_PROJECTION_DECALS):
             setattr(self, 'projection_decal{}'.format(number), getProjectionDecalData(number))
+
+        getAttachmentsData = self.__getAttachmentsData
+        for number in xrange(0, MAX_ATTACHMENTS):
+            setattr(self, 'attachment{}'.format(number), getAttachmentsData(number))
+
+        getStatTrackersData = self.__getStatTrackersData
+        for number in xrange(0, MAX_STAT_TRACKERS):
+            setattr(self, 'stat_tracker{}'.format(number), getStatTrackersData(number))
 
         self.style_progression_level = outfit.styleProgressionLevel
         self.serial_number = outfit.serial_number
@@ -188,6 +201,34 @@ class OutfitLogEntry(object):
         value['personal_number_cd'] = self.__getPersonalNumberCd(area)
         number = self._personal_numbers.get(area)
         value['number'] = number[0].number if number else ''
+        return value
+
+    def __getAttachmentsData(self, number):
+        value = {'attachment_cd': 0,
+         'attachment_slot': 0,
+         'attachment_scaleFactorId': 0,
+         'attachment_rotated': 0}
+        try:
+            attachment = self._attachments[number]
+            value['attachment_cd'] = cn.AttachmentItem.makeIntDescr(attachment.id)
+            value['attachment_slot'] = attachment.slotId
+            value['attachment_scaleFactorId'] = attachment.scaleFactorId
+            value['attachment_rotated'] = attachment.rotated
+        except IndexError:
+            pass
+
+        return value
+
+    def __getStatTrackersData(self, number):
+        value = {'stat_tracker_cd': 0,
+         'stat_tracker_slot': 0}
+        try:
+            statTracker = self._stat_trackers[number]
+            value['stat_tracker_cd'] = cn.StatTrackerItem.makeIntDescr(statTracker.id)
+            value['stat_tracker_slot'] = statTracker.slotId
+        except IndexError:
+            pass
+
         return value
 
     def toDict(self):

@@ -364,10 +364,6 @@ class BattlePassConfig(object):
         return self._season.get('chapters', {})
 
     @property
-    def specialVoiceChapters(self):
-        return self._season.get('specialVoiceChapters', set())
-
-    @property
     def vehLevelCaps(self):
         return self._season.get('vehLevelCaps', (0,) * MAX_VEHICLE_LEVEL)
 
@@ -417,11 +413,14 @@ class BattlePassConfig(object):
     def getMainChapterIds(self):
         return self._mainChapterIds
 
+    def getExtraChapterIds(self):
+        return self._extraChapterIds
+
     def getBattlePassCost(self, chapterID):
         return self.chapters.get(chapterID, {}).get('battlePassCost', {'priceA': {'gold': 0}})
 
-    def getSpecialTankmen(self):
-        return self._season.get('specialTankmen', {})
+    def getTankmenScreens(self):
+        return self._season.get('tankmenScreens', {})
 
     @staticmethod
     def iterRewardRanges(prevLvl, newLvl, rewardMask):

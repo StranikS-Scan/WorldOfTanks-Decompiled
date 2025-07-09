@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/vehicle_rotation_requester.py
 import BigWorld
-from adisp import adisp_async
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from skeletons.gui.shared.utils.requesters import IVehicleRotationRequester
 
@@ -35,6 +34,5 @@ class VehicleRotationRequester(AbstractSyncDataRequester, IVehicleRotationReques
          'isGroupLocked': [],
          'unlockedBy': {}})
 
-    @adisp_async
-    def _requestCache(self, callback):
+    def _requestCache(self, callback=None):
         BigWorld.player().vehicleRotation.getCache(lambda resID, value: self._response(resID, value, callback))

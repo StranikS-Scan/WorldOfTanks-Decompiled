@@ -159,6 +159,8 @@ class MapZoneManager(CGF.ComponentManager):
     def __init__(self):
         super(MapZoneManager, self).__init__()
         self.__subscriptionsCount = 0
+
+    def activate(self):
         if _isAvatarReady():
             self.__onAvatarReady()
         else:

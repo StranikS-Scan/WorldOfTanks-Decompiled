@@ -35910,7 +35910,7 @@
         <levels>	10	</levels>
       </include>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1 ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -101214,7 +101214,7 @@
     <priceGroup>	camouflages 50g notInShop	</priceGroup>
     <vehicleFilter>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1 ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <camouflage>
@@ -103792,6 +103792,44 @@
     </camouflage>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1 ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	942	</id>
+      <texture>	vehicles/russian/Camouflage/liveops_backtoschool_2025.dds	</texture>
+      <description>	#vehicle_customization:camouflage/liveops_backtoschool_2025/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/liveops_backtoschool_2025/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.31 2.31	</factor>
+        <offset>	1.39 -6.21	</offset>
+      </tilingSettings>
+      <rotation>
+        <HULL>	0.042062	</HULL>
+        <TURRET>	0.042062	</TURRET>
+        <GUN>	0.042062	</GUN>
+      </rotation>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:camouflage/transparent	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
@@ -104062,6 +104100,405 @@
         <factor>	2.7 2.7	</factor>
         <offset>	-1.49 -0.15	</offset>
       </tilingSettings>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1 ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	975	</id>
+      <texture>	vehicles/russian/Camouflage/cn360_relaunch_820.dds	</texture>
+      <description>	#vehicle_customization:camouflage/cn360_relaunch_820/description	</description>
+      <scales>	1.2 1 0.92	</scales>
+      <userString>	#vehicle_customization:camouflage/cn360_relaunch_820/label	</userString>
+      <tags>	hiddenInUI fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	1.874135	</HULL>
+        <TURRET>	1.874135	</TURRET>
+        <GUN>	1.874135	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	3.08 3.08	</factor>
+        <offset>	8.21 -2.57	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1 ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	947	</id>
+      <texture>	vehicles/russian/Camouflage/bp2025_lc_1.dds	</texture>
+      <description>	#vehicle_customization:camouflage/bp2025_lc_1/description	</description>
+      <scales>	1.2 2.75 0.63	</scales>
+      <userString>	#vehicle_customization:camouflage/bp2025_lc_1/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	1 1	</factor>
+        <offset>	2.9 0.12	</offset>
+      </tilingSettings>
+      <rotation>
+        <HULL>	0.261799	</HULL>
+        <TURRET>	0.261799	</TURRET>
+        <GUN>	0.261799	</GUN>
+      </rotation>
+    </camouflage>
+    <camouflage>
+      <id>	948	</id>
+      <texture>	vehicles/russian/Camouflage/bp2025_lc_2.dds	</texture>
+      <description>	#vehicle_customization:camouflage/bp2025_lc_2/description	</description>
+      <scales>	1.2 1.81 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/bp2025_lc_2/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	1 1	</factor>
+        <offset>	0.6 0.09	</offset>
+      </tilingSettings>
+      <rotation>
+        <HULL>	0.289899	</HULL>
+        <TURRET>	0.289899	</TURRET>
+        <GUN>	0.289899	</GUN>
+      </rotation>
+    </camouflage>
+    <camouflage>
+      <id>	949	</id>
+      <texture>	vehicles/russian/Camouflage/bp2025_dn_1.dds	</texture>
+      <description>	#vehicle_customization:camouflage/bp2025_dn_1/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/bp2025_dn_1/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.67 2.67	</factor>
+        <offset>	-0.13 0.3	</offset>
+      </tilingSettings>
+      <rotation>
+        <HULL>	-0.24836	</HULL>
+        <TURRET>	-0.24836	</TURRET>
+        <GUN>	-0.24836	</GUN>
+      </rotation>
+    </camouflage>
+    <camouflage>
+      <id>	950	</id>
+      <texture>	vehicles/russian/Camouflage/bp2025_dn_2.dds	</texture>
+      <description>	#vehicle_customization:camouflage/bp2025_dn_2/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/bp2025_dn_2/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.3 2.3	</factor>
+        <offset>	-0.02 -0.47	</offset>
+      </tilingSettings>
+      <rotation>
+        <HULL>	1.570796	</HULL>
+        <TURRET>	1.570796	</TURRET>
+        <GUN>	1.570796	</GUN>
+      </rotation>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1 ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	980	</id>
+      <texture>	vehicles/russian/Camouflage/onslaught_autumn_2025_blue_silver.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/onslaught_autumn_2025_blue_silver/label	</userString>
+      <description>	#vehicle_customization:camouflage/onslaught_autumn_2025/description	</description>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <scales>	1.2 1 0.7	</scales>
+      <tags>	styleOnly hiddenInUI fullRGB	</tags>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.148702	</HULL>
+        <TURRET>	-0.148702	</TURRET>
+        <GUN>	-0.148702	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.89 2.89	</factor>
+        <offset>	-1.08 -1.02	</offset>
+      </tilingSettings>
+      <glossMetallicMap>	vehicles/russian/Camouflage/onslaught_autumn_2025_GMM.dds	</glossMetallicMap>
+      <style>	1140	</style>
+    </camouflage>
+    <camouflage>
+      <id>	981	</id>
+      <texture>	vehicles/russian/Camouflage/onslaught_autumn_2025_blue_gold.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/onslaught_autumn_2025_blue_gold/label	</userString>
+      <description>	#vehicle_customization:camouflage/onslaught_autumn_2025/description	</description>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <scales>	1.2 1 0.7	</scales>
+      <tags>	styleOnly hiddenInUI fullRGB	</tags>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.148702	</HULL>
+        <TURRET>	-0.148702	</TURRET>
+        <GUN>	-0.148702	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.89 2.89	</factor>
+        <offset>	-1.08 -1.02	</offset>
+      </tilingSettings>
+      <glossMetallicMap>	vehicles/russian/Camouflage/onslaught_autumn_2025_GMM.dds	</glossMetallicMap>
+      <style>	1141	</style>
+    </camouflage>
+    <camouflage>
+      <id>	982	</id>
+      <texture>	vehicles/russian/Camouflage/onslaught_winter_2026_red_silver.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/onslaught_winter_2026_red_silver/label	</userString>
+      <description>	#vehicle_customization:camouflage/onslaught_autumn_2025/description	</description>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <scales>	1.2 1 0.7	</scales>
+      <tags>	styleOnly hiddenInUI fullRGB	</tags>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.148702	</HULL>
+        <TURRET>	-0.148702	</TURRET>
+        <GUN>	-0.148702	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.89 2.89	</factor>
+        <offset>	-1.08 -1.02	</offset>
+      </tilingSettings>
+      <glossMetallicMap>	vehicles/russian/Camouflage/onslaught_autumn_2025_GMM.dds	</glossMetallicMap>
+      <style>	1143	</style>
+    </camouflage>
+    <camouflage>
+      <id>	983	</id>
+      <texture>	vehicles/russian/Camouflage/onslaught_winter_2026_red_gold.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/onslaught_winter_2026_red_gold/label	</userString>
+      <description>	#vehicle_customization:camouflage/onslaught_autumn_2025/description	</description>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <scales>	1.2 1 0.7	</scales>
+      <tags>	styleOnly hiddenInUI fullRGB	</tags>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.148702	</HULL>
+        <TURRET>	-0.148702	</TURRET>
+        <GUN>	-0.148702	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.89 2.89	</factor>
+        <offset>	-1.08 -1.02	</offset>
+      </tilingSettings>
+      <glossMetallicMap>	vehicles/russian/Camouflage/onslaught_autumn_2025_GMM.dds	</glossMetallicMap>
+      <style>	1144	</style>
+    </camouflage>
+    <camouflage>
+      <id>	984	</id>
+      <texture>	vehicles/russian/Camouflage/onslaught_spring_2026_green_silver.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/onslaught_spring_2026_green_silver/label	</userString>
+      <description>	#vehicle_customization:camouflage/onslaught_autumn_2025/description	</description>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <scales>	1.2 1 0.7	</scales>
+      <tags>	styleOnly hiddenInUI fullRGB	</tags>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.148702	</HULL>
+        <TURRET>	-0.148702	</TURRET>
+        <GUN>	-0.148702	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.89 2.89	</factor>
+        <offset>	-1.08 -1.02	</offset>
+      </tilingSettings>
+      <glossMetallicMap>	vehicles/russian/Camouflage/onslaught_autumn_2025_GMM.dds	</glossMetallicMap>
+      <style>	1146	</style>
+    </camouflage>
+    <camouflage>
+      <id>	985	</id>
+      <texture>	vehicles/russian/Camouflage/onslaught_spring_2026_green_gold.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/onslaught_spring_2026_green_gold/label	</userString>
+      <description>	#vehicle_customization:camouflage/onslaught_autumn_2025/description	</description>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <scales>	1.2 1 0.7	</scales>
+      <tags>	styleOnly hiddenInUI fullRGB	</tags>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.148702	</HULL>
+        <TURRET>	-0.148702	</TURRET>
+        <GUN>	-0.148702	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.89 2.89	</factor>
+        <offset>	-1.08 -1.02	</offset>
+      </tilingSettings>
+      <glossMetallicMap>	vehicles/russian/Camouflage/onslaught_autumn_2025_GMM.dds	</glossMetallicMap>
+      <style>	1147	</style>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1 ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	1008	</id>
+      <texture>	vehicles/russian/Camouflage/liveops_upsell_1.dds	</texture>
+      <description>	#vehicle_customization:camouflage/empty/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/liveops_upsell_1/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	3.2 3.2	</factor>
+        <offset>	-5.49 0.21	</offset>
+      </tilingSettings>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <glossMetallicMap>	vehicles/russian/Camouflage/liveops_upsell_1_GMM.dds	</glossMetallicMap>
+    </camouflage>
+    <camouflage>
+      <id>	1009	</id>
+      <texture>	vehicles/russian/Camouflage/liveops_upsell_2.dds	</texture>
+      <description>	#vehicle_customization:camouflage/empty/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/liveops_upsell_2/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.5 2.5	</factor>
+        <offset>	-10.13 0.48	</offset>
+      </tilingSettings>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <glossMetallicMap>	vehicles/russian/Camouflage/liveops_upsell_2_GMM.dds	</glossMetallicMap>
     </camouflage>
   </itemGroup>
   <itemGroup>
@@ -109597,6 +110034,44 @@
       </exclude>
     </vehicleFilter>
     <camouflage>
+      <id>	927	</id>
+      <texture>	vehicles/russian/Camouflage/pub_west_ua.dds	</texture>
+      <description>	#vehicle_customization:camouflage/pub_west_ua/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/pub_west_ua/label	</userString>
+      <tags>	hiddenInUI fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-1.81968	</HULL>
+        <TURRET>	-1.81968	</TURRET>
+        <GUN>	-1.81968	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.8 2.8	</factor>
+        <offset>	-0.21 -1.29	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1 ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
       <id>	16024	</id>
       <texture>	vehicles/russian/Camouflage/boosteroidstyle_03.dds	</texture>
       <description>	#vehicle_customization:camouflage/Boosteroid_03/description	</description>
@@ -109659,6 +110134,45 @@
         <type>	relativewithfactor	</type>
         <factor>	4 4	</factor>
         <offset>	-0.19 0.52	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1 ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	16028	</id>
+      <texture>	vehicles/russian/Camouflage/crimson_wind.dds	</texture>
+      <description>	#vehicle_customization:camouflage/crimson_wind/description	</description>
+      <userString>	#vehicle_customization:camouflage/crimson_wind/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <scales>	1.3 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.261799	</HULL>
+        <TURRET>	-0.261799	</TURRET>
+        <GUN>	-0.261799	</GUN>
+      </rotation>
+      <tiling></tiling>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.9 2.9	</factor>
+        <offset>	1.37 -1.48	</offset>
       </tilingSettings>
     </camouflage>
   </itemGroup>
@@ -120629,6 +121143,44 @@
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	france	</nations>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	944	</id>
+      <texture>	vehicles/russian/Camouflage/pub_west_bastille_day.dds	</texture>
+      <description>	#vehicle_customization:camouflage/pub_west_bastille_day/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/pub_west_bastille_day/label	</userString>
+      <tags>	hiddenInUI fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	2.967234	</HULL>
+        <TURRET>	2.967234	</TURRET>
+        <GUN>	2.967234	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.88 2.88	</factor>
+        <offset>	-3.29 -2.91	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
     <season>	winter	</season>
     <historical>	1	</historical>
     <priceGroup>	camouflages 50g IGR notInShop	</priceGroup>
@@ -129723,6 +130275,39 @@
     <season>	ALL	</season>
     <historical>	0	</historical>
     <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <camouflage>
+      <id>	899	</id>
+      <texture>	vehicles/german/Camouflage/Polylines.dds	</texture>
+      <description>	#vehicle_customization:camouflage/waffentrager_e100_tlxxl_s/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/waffentrager_e100_tlxxl_s/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	0	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	183 149 69 255	</c0>
+          <c1>	80 85 89 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	2.30174	</HULL>
+        <TURRET>	2.30174	</TURRET>
+        <GUN>	2.30174	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1.88487 1.88554	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <vehicles>	germany:G89_Leopard1	</vehicles>
@@ -137008,6 +137593,44 @@
         <TURRET>	-1.745329	</TURRET>
         <GUN>	-1.413717	</GUN>
       </rotation>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	poland	</nations>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	945	</id>
+      <texture>	vehicles/russian/Camouflage/pub_west_warsaw_uprising.dds	</texture>
+      <description>	#vehicle_customization:camouflage/pub_west_warsaw_uprising/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/pub_west_warsaw_uprising/label	</userString>
+      <tags>	hiddenInUI fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-1.033584	</HULL>
+        <TURRET>	-1.033584	</TURRET>
+        <GUN>	-1.033584	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2 2	</factor>
+        <offset>	-2.31 -2.21	</offset>
+      </tilingSettings>
     </camouflage>
   </itemGroup>
   <itemGroup>
@@ -146271,6 +146894,171 @@
         <type>	relativewithfactor	</type>
         <factor>	4 4	</factor>
         <offset>	2.24 -2.91	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	summer	</season>
+    <historical>	0	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB134_Gryphon	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	986	</id>
+      <texture>	vehicles/russian/Camouflage/GB134_Gryphon_RW7_3Dst.dds	</texture>
+      <description>	#vehicle_customization:camouflage/GB134_Gryphon_RW7_3Dst/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/GB134_Gryphon_RW7_3Dst/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	68 81 58 255	</c0>
+          <c1>	0 255 0 0	</c1>
+          <c2>	47 48 34 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	0.97 0.97	</factor>
+        <offset>	1.38 -0.12	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	987	</id>
+      <texture>	vehicles/russian/Camouflage/GB134_Gryphon_RW7_3Dst.dds	</texture>
+      <description>	#vehicle_customization:camouflage/GB134_Gryphon_RW7_3Dst/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/GB134_Gryphon_RW7_3Dst/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	47 48 34 255	</c0>
+          <c1>	0 255 0 0	</c1>
+          <c2>	68 81 58 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	1.13 1.13	</factor>
+        <offset>	0.94 0	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	desert	</season>
+    <historical>	0	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB134_Gryphon	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	988	</id>
+      <texture>	vehicles/russian/Camouflage/GB134_Gryphon_RW7_3Dst.dds	</texture>
+      <description>	#vehicle_customization:camouflage/GB134_Gryphon_RW7_3Dst/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/GB134_Gryphon_RW7_3Dst/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	112 95 65 255	</c0>
+          <c1>	0 255 0 0	</c1>
+          <c2>	69 54 24 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	0.97 0.97	</factor>
+        <offset>	1.38 -0.12	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	989	</id>
+      <texture>	vehicles/russian/Camouflage/GB134_Gryphon_RW7_3Dst.dds	</texture>
+      <description>	#vehicle_customization:camouflage/GB134_Gryphon_RW7_3Dst/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/GB134_Gryphon_RW7_3Dst/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	69 55 24 255	</c0>
+          <c1>	0 255 0 0	</c1>
+          <c2>	112 95 65 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	1.13 1.13	</factor>
+        <offset>	0.94 0	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	winter	</season>
+    <historical>	0	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB134_Gryphon	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	990	</id>
+      <texture>	vehicles/russian/Camouflage/GB134_Gryphon_RW7_3Dst.dds	</texture>
+      <description>	#vehicle_customization:camouflage/GB134_Gryphon_RW7_3Dst/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/GB134_Gryphon_RW7_3Dst/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	166 164 165 255	</c0>
+          <c1>	0 255 0 0	</c1>
+          <c2>	74 66 74 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	0.97 0.97	</factor>
+        <offset>	1.38 -0.12	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	991	</id>
+      <texture>	vehicles/russian/Camouflage/GB134_Gryphon_RW7_3Dst.dds	</texture>
+      <description>	#vehicle_customization:camouflage/GB134_Gryphon_RW7_3Dst/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/GB134_Gryphon_RW7_3Dst/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	74 66 70 255	</c0>
+          <c1>	0 255 0 0	</c1>
+          <c2>	166 164 166 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	1.13 1.13	</factor>
+        <offset>	0.94 0	</offset>
       </tilingSettings>
     </camouflage>
   </itemGroup>

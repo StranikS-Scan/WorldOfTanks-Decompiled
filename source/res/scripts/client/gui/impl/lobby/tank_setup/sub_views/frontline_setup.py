@@ -16,8 +16,6 @@ from frontline.gui.impl.gen.view_models.views.lobby.views.info_page_scroll_to_se
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from CurrentVehicle import g_currentVehicle
-from uilogging.epic_battle.constants import EpicBattleLogKeys, EpicBattleLogActions, EpicBattleLogButtons, EpicBattleLogAdditionalInfo
-from uilogging.epic_battle.loggers import EpicBattleTooltipLogger
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.battle_ability_level_model import BattleAbilityLevelModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.battle_ability_level_param_model import BattleAbilityLevelParamModel
@@ -70,18 +68,16 @@ class FLScenarioInfoBtnHintChecker(object):
 class EpicBattleSetupSubView(BaseEquipmentSetupSubView):
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
     _appLoader = dependency.descriptor(IAppLoader)
-    __slots__ = ('__tooltipMgr', '__uiEpicBattleLogger', '__pendingPurchaseSkillIds', '__pendingPurchaseItemIntCDs', '__totalPurchasePrice', '__selectedSlotId', '__itemDetailsLevelMap', '__isCurrentlyActiveSubView')
+    __slots__ = ('__tooltipMgr', '__pendingPurchaseSkillIds', '__pendingPurchaseItemIntCDs', '__totalPurchasePrice', '__selectedSlotId', '__itemDetailsLevelMap')
 
     def __init__(self, viewModel, interactor):
         super(EpicBattleSetupSubView, self).__init__(viewModel, interactor)
         self.__tooltipMgr = None
-        self.__uiEpicBattleLogger = EpicBattleTooltipLogger()
         self.__pendingPurchaseSkillIds = []
         self.__pendingPurchaseItemIntCDs = []
         self.__itemDetailsLevelMap = {}
         self.__totalPurchasePrice = 0
         self.__selectedSlotId = 0
-        self.__isCurrentlyActiveSubView = False
         app = self._appLoader.getApp()
         if app is not None:
             self.__tooltipMgr = app.getToolTipMgr()
@@ -99,22 +95,10 @@ class EpicBattleSetupSubView(BaseEquipmentSetupSubView):
     def onLoading(self, currentSlotID, *args, **kwargs):
         super(EpicBattleSetupSubView, self).onLoading(currentSlotID, *args, **kwargs)
         self.__selectedSlotId = currentSlotID
-        self.__isCurrentlyActiveSubView = True
         self.__updateDetails()
-        self.__uiEpicBattleLogger.log(EpicBattleLogActions.OPEN, item=EpicBattleLogKeys.SETUP_VIEW, parentScreen=EpicBattleLogKeys.HANGAR)
-        self.__uiEpicBattleLogger.initialize(EpicBattleLogKeys.SETUP_VIEW)
-        self.__uiEpicBattleLogger.startAction(EpicBattleLogActions.VIEW_WATCHED.value)
-
-    def finalize(self):
-        super(EpicBattleSetupSubView, self).finalize()
-        self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLOSE, item=EpicBattleLogKeys.SETUP_VIEW, parentScreen=EpicBattleLogKeys.HANGAR)
-        self.__resumeViewWatchedLogger()
-        self.__uiEpicBattleLogger.stopAction(EpicBattleLogActions.VIEW_WATCHED, EpicBattleLogKeys.SETUP_VIEW, EpicBattleLogKeys.HANGAR, timeLimit=self.__uiEpicBattleLogger.TIME_LIMIT)
-        self.__uiEpicBattleLogger.reset()
 
     def updateSlots(self, slotID, fullUpdate=True, updateData=True):
         self.__selectedSlotId = slotID
-        self.__resumeViewWatchedLogger()
         self._viewModel.setIsLocked(self.__hasBattleAbilities())
         super(EpicBattleSetupSubView, self).updateSlots(slotID, True, updateData)
         self.__updateDetails()
@@ -151,23 +135,11 @@ class EpicBattleSetupSubView(BaseEquipmentSetupSubView):
 
             self.update()
             result = yield wg_await(super(EpicBattleSetupSubView, self).canQuit(skipApplyAutoRenewal))
-        if result:
-            self.__isCurrentlyActiveSubView = False
-            self.__uiEpicBattleLogger.suspendAction(EpicBattleLogActions.VIEW_WATCHED.value)
         raise AsyncReturn(result)
 
     def update(self, fullUpdate=False):
         super(EpicBattleSetupSubView, self).update(fullUpdate)
         self.__updateDetails()
-
-    def _onDealConfirmed(self, _=None):
-        super(EpicBattleSetupSubView, self)._onDealConfirmed(_)
-        info = EpicBattleLogAdditionalInfo.APPLY_TO_CLASS.value if self._viewModel.getIsTypeSelected() else EpicBattleLogAdditionalInfo.APPLY_TO_VEHICLE.value
-        self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLICK.value, item=EpicBattleLogButtons.CONFIRM.value, parentScreen=EpicBattleLogKeys.SETUP_VIEW.value, info=info)
-
-    def _onDealCancelled(self, _=None):
-        super(EpicBattleSetupSubView, self)._onDealCancelled(_)
-        self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLICK.value, item=EpicBattleLogButtons.CANCEL.value, parentScreen=EpicBattleLogKeys.SETUP_VIEW.value)
 
     def _createTabsController(self):
         return EpicBattleTabsController()
@@ -221,11 +193,6 @@ class EpicBattleSetupSubView(BaseEquipmentSetupSubView):
             super(EpicBattleSetupSubView, self)._setTab(tabName)
             self.__updateProvider()
 
-    def __resumeViewWatchedLogger(self):
-        if not self.__isCurrentlyActiveSubView:
-            self.__isCurrentlyActiveSubView = True
-            self.__uiEpicBattleLogger.resumeAction(EpicBattleLogActions.VIEW_WATCHED.value)
-
     def __onEpicUpdated(self, diff):
         if 'isEnabled' in diff and not self.__epicController.isEnabled():
             return
@@ -241,7 +208,6 @@ class EpicBattleSetupSubView(BaseEquipmentSetupSubView):
     def __applyAbilitiesToTypeSettings(self, state):
         self._interactor.setCheckboxState(state)
         self._viewModel.setIsTypeSelected(state)
-        self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLICK.value, item=EpicBattleLogButtons.CHECKBOX.value, parentScreen=EpicBattleLogKeys.SETUP_VIEW.value)
 
     def __onChangeApplyAbilitiesToTypeSettings(self, *_):
         state = not self._viewModel.getIsTypeSelected()
@@ -269,7 +235,6 @@ class EpicBattleSetupSubView(BaseEquipmentSetupSubView):
 
     def __showInfoPage(self, *_):
         showFrontlineInfoWindow(autoscrollSection=InfoPageScrollToSection.BATTLE_SCENARIOS)
-        self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLICK, item=EpicBattleLogButtons.INFO_PAGE, parentScreen=EpicBattleLogKeys.SETUP_VIEW)
 
     def __setCurrentSlotDetailsLevel(self, params):
         level = params.get('level', 0)

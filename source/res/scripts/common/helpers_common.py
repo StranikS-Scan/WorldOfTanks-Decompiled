@@ -4,6 +4,8 @@ import math
 from typing import TYPE_CHECKING, Sequence, Optional, Tuple, List, Union
 from soft_exception import SoftException
 from battle_modifiers_common import BattleModifiers
+from Math import Vector3
+from debug_utils import LOG_WARNING
 if TYPE_CHECKING:
     from battle_modifiers_common import BATTLE_MODIFIERS_TYPE
     from items.components.gun_components import GunShot
@@ -156,3 +158,78 @@ def castNumberToPrettyStr(value):
 
 def getPercentFromFloat(value, accuracy=2):
     return round(value * 100, accuracy)
+
+
+def _clipSegmentByAABB(start, stop, aabb):
+    min = Vector3(aabb[0])
+    max = Vector3(aabb[1])
+    start = Vector3(start)
+    stop = Vector3(stop)
+    delta = stop - start
+    tbeg = 0.0
+    tend = 1.0
+    for i in (0, 1, 2):
+        d = delta[i]
+        if d:
+            t1 = (min[i] - start[i]) / d
+            t2 = (max[i] - start[i]) / d
+            if d > 0.0:
+                if t1 > tend:
+                    return None
+                if t1 > tbeg:
+                    tbeg = t1
+                if t2 < tbeg:
+                    return None
+                if t2 < tend:
+                    tend = t2
+            else:
+                if t2 > tend:
+                    return None
+                if t2 > tbeg:
+                    tbeg = t2
+                if t1 < tbeg:
+                    return None
+                if t1 < tend:
+                    tend = t1
+        if start[i] < min[i] or start[i] > max[i]:
+            return None
+
+    return (start + tbeg * delta, start + tend * delta)
+
+
+def encodeSegment(bbox, componentIndex, startPoint, endPoint):
+    test = _clipSegmentByAABB(startPoint, endPoint, bbox)
+    if test is None:
+        LOG_WARNING('Cannot encode segment', startPoint, endPoint, bbox)
+        return componentIndex << 8
+    else:
+        min = Vector3(bbox[0])
+        max = Vector3(bbox[1])
+        a = (test[0] - min) * 255
+        b = (test[1] - min) * 255
+        d = max - min
+        return int(round(b[2] / d[2])) << 56 | int(round(b[1] / d[1])) << 48 | int(round(b[0] / d[0])) << 40 | int(round(a[2] / d[2])) << 32 | int(round(a[1] / d[1])) << 24 | int(round(a[0] / d[0])) << 16 | componentIndex << 8
+
+
+def getComponentIndexFromEncodedSegment(segment):
+    return (segment & 65280) >> 8
+
+
+def getEncodedSegmentContextData(segment):
+    return segment & 255
+
+
+def setEncodedSegmentContextData(segment, data):
+    return segment & -256 | data & 255
+
+
+def decodeSegment(segment, bbox):
+    minimum = Vector3(bbox[0])
+    delta = (bbox[1] - minimum).scale(1.0 / 255.0)
+    segStart = minimum + Vector3(delta[0] * (segment >> 16 & 255), delta[1] * (segment >> 24 & 255), delta[2] * (segment >> 32 & 255))
+    segEnd = minimum + Vector3(delta[0] * (segment >> 40 & 255), delta[1] * (segment >> 48 & 255), delta[2] * (segment >> 56 & 255))
+    offset = (segEnd - segStart) * 0.01
+    return (int(segment >> 8 & 255),
+     int(segment & 255),
+     segStart - offset,
+     segEnd + offset)

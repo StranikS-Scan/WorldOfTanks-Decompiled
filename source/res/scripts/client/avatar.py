@@ -44,6 +44,7 @@ from ClientChat import ClientChat
 from Flock import DebugLine
 from OfflineMapCreator import g_offlineMapCreator
 from PlayerEvents import g_playerEvents
+from TemperatureGunController import getPlayerVehicleTemperatureGunController
 from TriggersManager import TRIGGER_TYPE
 from account_helpers import BattleResultsCache, ClientInvitations
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as _CAPS
@@ -783,6 +784,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                         return True
                     if key == Keys.KEY_J:
                         self.base.setDevelopmentFeature(0, 'stun', 0, '')
+                        return True
+                    if key == Keys.KEY_M:
+                        self.base.setDevelopmentFeature(0, 'temperatureGunController/reset_temperature_gun', 0, '')
                         return True
                 if constants.HAS_DEV_RESOURCES and cmdMap.isFired(CommandMapping.CMD_SWITCH_SERVER_MARKER, key) and isDown:
                     self.gunRotator.showServerMarker = not self.gunRotator.showServerMarker
@@ -1683,7 +1687,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         else:
             self.guiSessionProvider.shared.feedback.setVehicleAttrs(self.playerVehicleID, attrs)
 
-    def showTracer(self, shooterID, shotID, isRicochet, effectsIndex, refStartPoint, velocity, gravity, maxShotDist, gunIndex):
+    def showTracer(self, shooterID, shotID, isRicochet, effectsIndex, prefabEffIndex, shellTypeIdx, shellCaliber, refStartPoint, velocity, gravity, maxShotDist, gunIndex):
         g_playerEvents.onTracerReceived(shotID)
         if not self.userSeesWorld() or self.__projectileMover is None:
             return
@@ -1708,7 +1712,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                     replayCtrl = BattleReplay.g_replayCtrl
                     if (gunFirePos - refStartPoint).length > 50.0 > (gunFirePos - BigWorld.camera().position).length and replayCtrl.isPlaying:
                         velocity = velocity.length * gunMatrix.applyVector((0, 0, 1))
-            self.__projectileMover.add(shotID, effectsDescr, gravity, refStartPoint, velocity, startPoint, maxShotDist, shooterID, BigWorld.camera().position)
+            self.__projectileMover.add(shotID, effectsDescr, prefabEffIndex, gravity, refStartPoint, velocity, startPoint, maxShotDist, shellTypeIdx, shellCaliber, shooterID, BigWorld.camera().position)
             TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.SHOW_TRACER, attackerId=shooterID, isRicochet=isRicochet, startPoint=refStartPoint, velocity=velocity, gravity=gravity, maxShotDist=maxShotDist)
             if isRicochet:
                 self.__projectileMover.hold(shotID)
@@ -1722,11 +1726,11 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def projectileMover(self):
         return self.__projectileMover
 
-    def explodeProjectile(self, shotID, effectsIndex, effectMaterialIndex, endPoint, velocityDir, damagedDestructibles):
+    def explodeProjectile(self, shotID, effectsIndex, prefabEffIndex, effectMaterialIndex, shellTypeIdx, shellCaliber, endPoint, velocityDir, speed, damagedDestructibles):
         if self.userSeesWorld() and self.__projectileMover is not None:
             effectsDescr = vehicles.g_cache.shotEffects[effectsIndex]
             effectMaterial = EFFECT_MATERIALS[effectMaterialIndex]
-            self.__projectileMover.explode(shotID, effectsDescr, effectMaterial, endPoint, velocityDir)
+            self.__projectileMover.explode(shotID, effectsDescr, prefabEffIndex, effectMaterial, shellTypeIdx, shellCaliber, endPoint, velocityDir, speed)
             physParams = effectsDescr['physicsParams']
             if damagedDestructibles:
                 damagedDestructibles = unpackChunkObstacles(damagedDestructibles)
@@ -2046,15 +2050,16 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             if self.__isOwnVehicleSwitchingSiegeMode():
                 return
             self.cell.vehicle_shoot()
-            shotArgs = None
+            shotArgs = (0, False, 0)
             predictShooting = True
             vehicle = BigWorld.entity(self.playerVehicleID)
             if vehicle is not None and vehicle.isStarted:
+                shotKindIdx = 0
                 typeDescriptor = vehicle.typeDescriptor
                 if typeDescriptor is not None:
-                    predictShooting = not typeDescriptor.isTwinGunVehicle
-                if vehicle.dualGunIndex is not None:
-                    shotArgs = (vehicle.dualGunIndex, False)
+                    predictShooting = not typeDescriptor.isTwinGunVehicle and not vehicle.typeDescriptor.isMultiGunVehicle
+                    shotKindIdx = typeDescriptor.shot.shell.kindIdx
+                shotArgs = (vehicle.dualGunIndex or 0, False, shotKindIdx)
             if error != CANT_SHOOT_ERROR.EMPTY_CLIP:
                 self.__startWaitingForShot(predictShooting, shotArgs=shotArgs)
             TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.PLAYER_DISCRETE_SHOOT, aimingInfo=self.__aimingInfo)
@@ -2125,6 +2130,11 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         elif self.isGunLocked or self.__isOwnBarrelUnderWater():
             if not isRepeat:
                 self.showVehicleError(self.__cantShootCriticals['gun_locked'])
+            return (False, error)
+        temperatureGunController = getPlayerVehicleTemperatureGunController()
+        if temperatureGunController is not None and temperatureGunController.isOverheated:
+            if not isRepeat:
+                self.showVehicleError(self.__cantShootCriticals['gun_overheated'])
             return (False, error)
         else:
             return (True, error)
@@ -2472,7 +2482,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
      'crew_destroyed': 'cantShootCrewInactive',
      'no_ammo': 'cantShootNoAmmo',
      'gun_reload': 'cantShootGunReloading',
-     'gun_locked': 'cantShootGunLocked'}
+     'gun_locked': 'cantShootGunLocked',
+     'gun_overheated': 'cantShootGunOverheated'}
 
     def __createFakeCameraMatrix(self):
         BigWorld.camera(BigWorld.FreeCamera())
@@ -2636,7 +2647,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.guiSessionProvider.shared.messages.showVehicleError(msgName, args)
 
     def startWaitingForShot(self, shootingCooldown, predictShooting=True):
-        self.__startWaitingForShot(predictShooting, shotArgs=(0, False))
+        shotKindIdx = self.__activeShellKindIdx()
+        self.__startWaitingForShot(predictShooting, shotArgs=(0, False, shotKindIdx))
         self.__gunReloadCommandWaitEndTime = BigWorld.time() + shootingCooldown
 
     def __showDamageIconAndPlaySound(self, damageCode, extra, vehicleID, ignoreMessages=False):
@@ -2795,7 +2807,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             self.__shotWaitingTimerID = BigWorld.callback(timeout, partial(self.__showTimedOutShooting, shotArgs))
             self.__gunReloadCommandWaitEndTime = BigWorld.time() + 2.0
         else:
-            self.__shotWaitingTimerID = BigWorld.callback(timeout, self.__clearTimedOutShooting)
+            self.__shotWaitingTimerID = BigWorld.callback(1.0, self.__clearTimedOutShooting)
         self.inputHandler.setAimingMode(True, AIMING_MODE.SHOOTING)
         if not self.inputHandler.getAimingMode(AIMING_MODE.USER_DISABLED):
             self.gunRotator.targetLastShotPoint = True
@@ -2809,7 +2821,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def __onTimedOutCharge(self):
         self.__chargeWaitingTimerID = None
         if self.__canMakeDualShot:
-            self.__startWaitingForShot(shotArgs=(0, True))
+            shotKindIdx = self.__activeShellKindIdx()
+            self.__startWaitingForShot(shotArgs=(0, True, shotKindIdx))
         return
 
     def __cancelWaitingForCharge(self):
@@ -2824,6 +2837,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             vehicle = BigWorld.entity(self.playerVehicleID)
             if vehicle is not None and vehicle.isStarted:
                 return self.__isOwnBarrelUnderWater() and None
+            gunIndexDelayed, isDual, shellTypeIdx = shotArgs or (0, False, 0)
             gunDescr = vehicle.typeDescriptor.gun
             burstCount = gunDescr.burst[0]
             ammo = self.guiSessionProvider.shared.ammo
@@ -2834,11 +2848,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 if gunDescr.clip[0] > 1:
                     if burstCount > shotsInClip > 0:
                         burstCount = shotsInClip
-                if shotArgs is not None:
-                    gunIndexDelayed, isDual = shotArgs
-                    vehicle.showShooting(burstCount, -1 if isDual else gunIndexDelayed, True)
-                    return
-                vehicle.showShooting(burstCount, None, True)
+                vehicle.showShooting(burstCount, -1 if isDual else gunIndexDelayed, shellTypeIdx, True)
         except Exception:
             LOG_CURRENT_EXCEPTION()
 
@@ -3195,6 +3205,10 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
 
     def hotReloadCGF(self):
         self.base.setDevelopmentFeature(0, 'hot_reload', 0, '')
+
+    def __activeShellKindIdx(self):
+        vehicle = BigWorld.entity(self.playerVehicleID)
+        return vehicle.typeDescriptor.shot.shell.kindIdx if vehicle is not None and vehicle.typeDescriptor is not None else 0
 
 
 def preload(alist):

@@ -85,12 +85,7 @@ class FrontlineRespawnAmmunitionPanelInject(RespawnAmmunitionPanelInject, IFront
         super(FrontlineRespawnAmmunitionPanelInject, self)._updateGuiVehicle(vehicleInfo, setupIndexes)
         ammoViews = BigWorld.player().ammoViews
         idx = ammoViews['vehTypeCompDescrs'].index(self._vehicle.intCD)
-        abilities = ammoViews['compDescrs'][idx] if len(ammoViews['compDescrs']) > idx else vehicleInfo.battleAbilities
-        battleAbilities = self.__getBattleAbilities(abilities)
+        abilitiesCDs = ammoViews['compDescrs'][idx] if len(ammoViews['compDescrs']) > idx else vehicleInfo.battleAbilities
+        battleAbilities = list(((BattleAbility(abilityCD) if abilityCD else None) for abilityCD in abilitiesCDs))
         self._vehicle.battleAbilities.setLayout(*battleAbilities)
         self._vehicle.battleAbilities.setInstalled(*battleAbilities)
-
-    def __getBattleAbilities(self, abilitiesCDs):
-        amountOfSlots = self.__epicController.getNumAbilitySlots(self._vehicle.typeDescr)
-        battleAbility = list(((BattleAbility(abilityCD) if abilityCD else None) for abilityCD in abilitiesCDs))
-        return battleAbility + [None] * (amountOfSlots - len(battleAbility))

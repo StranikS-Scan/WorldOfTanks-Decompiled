@@ -115,5 +115,22 @@
       <userString>	#vehicle_customization:modifications/age_effect_06	</userString>
       <tags>	hiddenInUI	</tags>
     </modification>
+    <modification>
+      <id>	7	</id>
+      <texture>	gui/maps/vehicles/modifications/effect_new.png	</texture>
+      <effects>
+        <effect>
+          <type>	paint_age	</type>
+          <value>	0.0	</value>
+        </effect>
+        <effect>
+          <type>	paint_fading	</type>
+          <value>	0.15	</value>
+        </effect>
+      </effects>
+      <userString>	#vehicle_customization:modifications/age_effect_07	</userString>
+      <useNewWear>	true	</useNewWear>
+      <tags>	hiddenInUI	</tags>
+    </modification>
   </itemGroup>
 </list.xml>

@@ -354,11 +354,11 @@ class PromoScreensAccessor(BaseAccessor):
     def get_teaser(self, callback, additionalData=None):
         return self._data_source.get_teaser(callback, additionalData)
 
-    def send_teaser(self, callback, promo_id):
-        return self._data_source.send_teaser(callback, promo_id)
+    def send_teaser(self, callback, promo_id, additionalData=None):
+        return self._data_source.send_teaser(callback, promo_id, additionalData)
 
-    def get_unread_count(self, callback):
-        return self._data_source.get_unread_count(callback)
+    def get_unread_count(self, callback, additionalData=None):
+        return self._data_source.get_unread_count(callback, additionalData)
 
     def client_promo_log(self, callback, data):
         return self._data_source.client_promo_log(callback, data)

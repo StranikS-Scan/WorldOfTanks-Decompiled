@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 CLAN_LOCK = 1
 GUI_ITEM_TYPE_NAMES = tuple(ITEM_TYPE_NAMES) + tuple(['reserved'] * (16 - len(ITEM_TYPE_NAMES)))
-GUI_ITEM_TYPE_NAMES += ('dossierAccount', 'dossierVehicle', 'dossierTankman', 'achievement', 'tankmanSkill', 'battleBooster', 'badge', 'battleAbility', 'lootBox', 'demountKit', 'vehPostProgression', 'recertificationForm', 'mentoringLicense', 'paint', 'camouflage', 'modification', 'outfit', 'style', 'decal', 'emblem', 'inscription', 'projectionDecal', 'insignia', 'personalNumber', 'sequence', 'attachment')
+GUI_ITEM_TYPE_NAMES += ('dossierAccount', 'dossierVehicle', 'dossierTankman', 'achievement', 'tankmanSkill', 'battleBooster', 'badge', 'battleAbility', 'lootBox', 'demountKit', 'vehPostProgression', 'recertificationForm', 'mentoringLicense', 'paint', 'camouflage', 'modification', 'outfit', 'style', 'decal', 'emblem', 'inscription', 'projectionDecal', 'insignia', 'personalNumber', 'sequence', 'attachment', 'statTracker')
 GUI_ITEM_TYPE_INDICES = dict(((n, idx) for idx, n in enumerate(GUI_ITEM_TYPE_NAMES)))
 
 class GUI_ITEM_TYPE(CONST_CONTAINER):
@@ -48,6 +48,7 @@ class GUI_ITEM_TYPE(CONST_CONTAINER):
     PERSONAL_NUMBER = GUI_ITEM_TYPE_INDICES['personalNumber']
     SEQUENCE = GUI_ITEM_TYPE_INDICES['sequence']
     ATTACHMENT = GUI_ITEM_TYPE_INDICES['attachment']
+    STAT_TRACKER = GUI_ITEM_TYPE_INDICES['statTracker']
     DEMOUNT_KIT = GUI_ITEM_TYPE_INDICES['demountKit']
     RECERTIFICATION_FORM = GUI_ITEM_TYPE_INDICES['recertificationForm']
     MENTORING_LICENSE = GUI_ITEM_TYPE_INDICES['mentoringLicense']
@@ -83,7 +84,8 @@ class GUI_ITEM_TYPE(CONST_CONTAINER):
      PROJECTION_DECAL,
      PERSONAL_NUMBER,
      SEQUENCE,
-     ATTACHMENT)
+     ATTACHMENT,
+     STAT_TRACKER)
     CUSTOMIZATIONS_WITHOUT_STYLE = (PAINT,
      CAMOUFLAGE,
      MODIFICATION,
@@ -91,6 +93,9 @@ class GUI_ITEM_TYPE(CONST_CONTAINER):
      INSCRIPTION,
      PROJECTION_DECAL,
      PERSONAL_NUMBER)
+    ATTACHMENT_TYPES = (ATTACHMENT, STAT_TRACKER)
+    COMMON_C11NS = (ATTACHMENT, STAT_TRACKER)
+    COMMON_C11N_COMPATIBLE_WITH_3D_STYLES = (STAT_TRACKER,)
 
 
 def getItemTypeID(bonusName):
@@ -102,6 +107,8 @@ def getItemTypeID(bonusName):
             itemTypeID = GUI_ITEM_TYPE.PROJECTION_DECAL
         elif bonusName == 'personal_number':
             itemTypeID = GUI_ITEM_TYPE.PERSONAL_NUMBER
+        elif bonusName == 'stat_tracker':
+            itemTypeID = GUI_ITEM_TYPE.STAT_TRACKER
         return itemTypeID
 
 

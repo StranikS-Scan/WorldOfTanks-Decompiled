@@ -1,23 +1,22 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/ShopRequester.py
-import typing
-import weakref
-from collections import namedtuple
-from abc import ABCMeta, abstractmethod
 import logging
+import weakref
+from abc import ABCMeta, abstractmethod
+from collections import namedtuple
+import typing
 import BigWorld
-from adisp import adisp_async
 from constants import WIN_XP_FACTOR_MODE, ARENA_BONUS_TYPE
-from items import ItemsPrices
 from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_TARGET_TYPE, GOODIE_RESOURCE_TYPE
 from goodies.goodie_helpers import getPremiumCost, getPriceWithDiscount, GoodieData
+from gui.shared.gui_items.gui_item_economics import ItemPrice
 from gui.shared.money import Money, MONEY_UNDEFINED, Currency
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
+from items import ItemsPrices
 from items.item_price import getNextSlotPrice, getNextBerthPackPrice
 from post_progression_common import CUSTOM_ROLE_SLOT_CHANGE_PRICE
 from post_progression_prices_common import getPostProgressionPrice
 from skeletons.gui.shared.utils.requesters import IShopCommonStats, IShopRequester
-from gui.shared.gui_items.gui_item_economics import ItemPrice
 if typing.TYPE_CHECKING:
     from typing import Tuple, Dict, Any
 _logger = logging.getLogger(__name__)
@@ -368,8 +367,7 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats, IShopRequester):
         super(ShopRequester, self)._response(resID, invData, callback)
         return
 
-    @adisp_async
-    def _requestCache(self, callback):
+    def _requestCache(self, callback=None):
         BigWorld.player().shop.getCache(lambda resID, value, rev: self._response(resID, value, callback))
 
     def _preprocessValidData(self, data):

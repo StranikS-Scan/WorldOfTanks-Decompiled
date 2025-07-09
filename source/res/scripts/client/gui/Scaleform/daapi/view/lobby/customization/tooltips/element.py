@@ -155,8 +155,10 @@ class ElementTooltip(BlocksTooltipData):
     CUSTOMIZATION_TOOLTIP_ICON_WIDTH_OTHER_BIG = 226
     CUSTOMIZATION_TOOLTIP_ICON_WIDTH_INSCRIPTION = 278
     CUSTOMIZATION_TOOLTIP_ICON_WIDTH_PERSONAL_NUMBER = 390
-    CUSTOMIZATION_TOOLTIP_ICON_WIDTH_ATTACHMENT = 232
-    CUSTOMIZATION_TOOLTIP_ICON_HEIGHT_ATTACHMENT = 174
+    CUSTOMIZATION_TOOLTIP_ICON_WIDTHS = {GUI_ITEM_TYPE.ATTACHMENT: 232,
+     GUI_ITEM_TYPE.STAT_TRACKER: 232}
+    CUSTOMIZATION_TOOLTIP_ICON_HEIGHTS = {GUI_ITEM_TYPE.ATTACHMENT: 174,
+     GUI_ITEM_TYPE.STAT_TRACKER: 174}
     ALL_SEASON_MAP_ICON = 'all_season'
     HISTORICAL_ICON = 'historical'
     NON_HISTORICAL_ICON = 'non_historical'
@@ -220,6 +222,9 @@ class ElementTooltip(BlocksTooltipData):
         self.installedCount = self._item.installedCount(vehIntCD) if vehIntCD else 0
         itemCD = self._item.intCD
         isItemInStyle = self._item.isStyleOnly or itemCD in getBaseStyleItems()
+        if vehIntCD and self._item.itemTypeID == GUI_ITEM_TYPE.STAT_TRACKER:
+            if self._item.fullCount(vehIntCD) > 0:
+                items.append(self._packStatTrackerStatBlock())
         if self._item.isProgressive:
             progressBlock = self._packProgressBlock()
             if progressBlock is not None:
@@ -521,19 +526,20 @@ class ElementTooltip(BlocksTooltipData):
             mayHave = self._item.itemTypeID in GUI_ITEM_TYPE.CUSTOMIZATIONS and self._item.itemTypeID not in customizationTypes
             if mustNotHave and (isItemHidden or isItemInStyle) or mayHave and isItemHidden and isItemInStyle and not self._item.isQuestsProgression:
                 return None
-            if self._item.itemTypeID == GUI_ITEM_TYPE.ATTACHMENT:
-                return formatters.packTitleDescBlock(title=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_SUITABLE_TITLE), desc=text_styles.main(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_ATTACHMENTEARN), padding=formatters.packPadding(top=-2))
+            defaultTitleText = backport.text(R.strings.vehicle_customization.customization.tooltip.suitable.title())
             if self._item.isProgressive and self._item.isProgressionAutoBound or ItemTags.NATIONAL_EMBLEM in self._item.tags:
-                return formatters.packTitleDescBlock(title=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_SUITABLE_TITLE), desc=text_styles.main(self.__vehicle.shortUserName), padding=formatters.packPadding(top=-2))
+                return formatters.packTitleDescBlock(title=text_styles.middleTitle(defaultTitleText), desc=text_styles.main(self.__vehicle.shortUserName), padding=formatters.packPadding(top=-2))
             boundAndInstalledVehs = self.boundVehs | self.installedVehs
             if self._item.isVehicleBound and not self._item.mayApply and boundAndInstalledVehs:
-                return formatters.packTitleDescBlock(title=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_SUITABLE_TITLE), desc=text_styles.main(makeVehiclesShortNamesString(boundAndInstalledVehs, self.__vehicle)), padding=formatters.packPadding(top=-2))
+                return formatters.packTitleDescBlock(title=text_styles.middleTitle(defaultTitleText), desc=text_styles.main(makeVehiclesShortNamesString(boundAndInstalledVehs, self.__vehicle)), padding=formatters.packPadding(top=-2))
             if not self._item.descriptor.filter or not self._item.descriptor.filter.include:
-                return formatters.packTitleDescBlock(title=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_SUITABLE_TITLE), desc=text_styles.main(backport.text(R.strings.vehicle_customization.customization.tooltip.suitable.text.allVehicle())), padding=formatters.packPadding(top=-2))
+                if self._item.itemTypeID == GUI_ITEM_TYPE.ATTACHMENT and not self._item.isVehicleBound:
+                    return formatters.packTitleDescBlock(title=text_styles.middleTitle(defaultTitleText), desc=text_styles.main(backport.text(R.strings.vehicle_customization.customization.tooltip.attachmentEarn())), padding=formatters.packPadding(top=-2))
+                return formatters.packTitleDescBlock(title=text_styles.middleTitle(defaultTitleText), desc=text_styles.main(backport.text(R.strings.vehicle_customization.customization.tooltip.suitable.text.allVehicle())), padding=formatters.packPadding(top=-2))
             blocks = []
             icn = getSuitableText(self._item, self.__vehicle)
             blocks.append(formatters.packTextBlockData(text=icn, padding=formatters.packPadding(top=-2)))
-            blocks.insert(0, formatters.packTitleDescBlock(title=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_SUITABLE_TITLE)))
+            blocks.insert(0, formatters.packTitleDescBlock(title=text_styles.middleTitle(defaultTitleText)))
             return formatters.packBuildUpBlockData(blocks=blocks, padding=formatters.packPadding(top=-8, bottom=-18))
 
     def _packAppliedBlock(self):
@@ -686,8 +692,8 @@ class ElementTooltip(BlocksTooltipData):
 
     def _countImageWidth(self):
         iconWidth = self.CUSTOMIZATION_TOOLTIP_ICON_WIDTH
-        if self._item.itemTypeID == GUI_ITEM_TYPE.ATTACHMENT:
-            iconWidth = self.CUSTOMIZATION_TOOLTIP_ICON_WIDTH_ATTACHMENT
+        if self._item.itemTypeID in self.CUSTOMIZATION_TOOLTIP_ICON_WIDTHS:
+            iconWidth = self.CUSTOMIZATION_TOOLTIP_ICON_WIDTHS[self._item.itemTypeID]
         elif self._item.isWide():
             if self._item.itemTypeID == GUI_ITEM_TYPE.INSCRIPTION:
                 iconWidth = self.CUSTOMIZATION_TOOLTIP_ICON_WIDTH_WIDE
@@ -699,12 +705,16 @@ class ElementTooltip(BlocksTooltipData):
 
     def _countImageHeight(self):
         iconHeight = self.CUSTOMIZATION_TOOLTIP_ICON_HEIGHT
-        if self._item.itemTypeID == GUI_ITEM_TYPE.ATTACHMENT:
-            iconHeight = self.CUSTOMIZATION_TOOLTIP_ICON_HEIGHT_ATTACHMENT
+        if self._item.itemTypeID in self.CUSTOMIZATION_TOOLTIP_ICON_HEIGHTS:
+            iconHeight = self.CUSTOMIZATION_TOOLTIP_ICON_HEIGHTS[self._item.itemTypeID]
         return iconHeight
 
     def _packIconBlock(self, isDim=False):
         width = self._countImageWidth()
+        height = self._countImageHeight()
+        padding = formatters.packPadding(top=-5, bottom=-3, right=20)
+        if self._item.itemTypeID == GUI_ITEM_TYPE.STAT_TRACKER:
+            padding = formatters.packPadding(top=-5, bottom=-3)
         formfactor = ''
         if self._item.itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL:
             formfactor = self._item.formfactor
@@ -719,7 +729,7 @@ class ElementTooltip(BlocksTooltipData):
         else:
             component = None
             img = self._item.getIconApplied(component)
-        return formatters.packCustomizationImageBlockData(img=img, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, width=width, height=self.CUSTOMIZATION_TOOLTIP_ICON_HEIGHT, padding=formatters.packPadding(top=-5, bottom=-3, right=20), formfactor=formfactor, isDim=isDim)
+        return formatters.packCustomizationImageBlockData(img=img, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, width=width, height=height, padding=padding, formfactor=formfactor, isDim=isDim)
 
     def _packBonusBlock(self, bonus, camo, isApplied):
         blocks = []
@@ -741,7 +751,11 @@ class ElementTooltip(BlocksTooltipData):
         if self._item.itemTypeID == GUI_ITEM_TYPE.ATTACHMENT:
             if desc and self._item.rarity == Rarity.LEGENDARY:
                 blocks.append(formatters.packTextBlockData(text=text_styles.neutral(desc), padding=formatters.packPadding(bottom=15)))
-            blocks.append(formatters.packTextBlockData(text=text_styles.main(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_GETATTACHMENT)))
+            blocks.append(formatters.packTextBlockData(text=text_styles.main(self._item.shortDescriptionSpecial or backport.text(R.strings.vehicle_customization.customization.tooltip.getattachment()))))
+        elif self._item.itemTypeID == GUI_ITEM_TYPE.STAT_TRACKER:
+            blocks.append(formatters.packTextBlockData(text=text_styles.main(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_STATTRACKER_DESCRIPTION)))
+            if desc:
+                blocks.append(formatters.packTextBlockData(text=text_styles.main(desc)))
         elif desc:
             blocks.append(formatters.packTextBlockData(text=text_styles.main(desc)))
         return formatters.packBuildUpBlockData(blocks, gap=-6, padding=formatters.packPadding(bottom=-5)) if blocks else None
@@ -806,6 +820,13 @@ class ElementTooltip(BlocksTooltipData):
                 desc = text_styles.concatStylesToSingleLine(icons.markerBlocked(), text_styles.error(backport.text(R.strings.vehicle_customization.customization.infotype.progression.notAvailableState.title())))
                 desc = text_styles.concatStylesToMultiLine(desc, text_styles.main(backport.text(R.strings.vehicle_customization.customization.infotype.progression.notAvailableState.desc())))
             return formatters.packAlignedTextBlockData(text=desc, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER)
+
+    def _packStatTrackerStatBlock(self):
+        blocks = []
+        statValue = self._item.getStatValue(self.__vehicle)
+        textResId = R.strings.vehicle_customization.customization.tooltip.statTracker.counter.dyn(self._item.trackedStatistic)
+        blocks.append(formatters.packAlignedTextBlockData(text=text_styles.main(backport.text(textResId(), value=text_styles.stats(statValue))), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
+        return formatters.packBuildUpBlockData(blocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE)
 
     def __packInheritorBlock(self, ancestors):
         getItemByCD = self.__itemsCache.items.getItemByCD

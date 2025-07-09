@@ -10,7 +10,7 @@ from gui.Scaleform.daapi.view.lobby.customization.context.custom_mode import Cus
 from gui.Scaleform.daapi.view.lobby.customization.context.editable_style_mode import EditableStyleMode
 from gui.Scaleform.daapi.view.lobby.customization.context.styled_diffs_cache import StyleDiffsCache
 from gui.Scaleform.daapi.view.lobby.customization.context.styled_mode import StyledMode
-from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs, resetC11nItemsNovelty, getCommonPurchaseItems, vehicleHasSlot
+from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs, resetC11nItemsNovelty, getCommonPurchaseItems, vehicleHasSlot, remove3DStyleIncompatibleCommonItems
 from gui.Scaleform.daapi.view.lobby.customization.vehicle_anchors_updater import VehicleAnchorsUpdater
 from gui.customization.constants import CustomizationModes
 from gui.hangar_cameras.c11n_hangar_camera_manager import C11nHangarCameraManager
@@ -24,6 +24,7 @@ from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from soft_exception import SoftException
+from vehicle_outfit.outfit import Area
 if typing.TYPE_CHECKING:
     from gui.customization.shared import C11nId, PurchaseItem
     from gui.customization.constants import CustomizationModeSource
@@ -92,7 +93,10 @@ class CustomizationContext(object):
         self.__c11nCameraManager = C11nHangarCameraManager()
         self.__stylesDiffsCache = StyleDiffsCache()
         self.__commonOriginalOutfit = None
+        self.__commonOriginal3DOutfit = None
         self.__commonModifiedOutfit = None
+        self.__commonOutfitStyleId = None
+        self.__commonOutfitDiff = None
         self.updateCommonOutfits()
         self.__carouselItems = None
         self.__initialItemCD = None
@@ -154,11 +158,32 @@ class CustomizationContext(object):
 
     @property
     def commonOriginalOutfit(self):
-        return self._service.getEmptyOutfit(self._vehicle.descriptor.makeCompactDescr()) if self.__styleModeId and self.__styleModeId == CustomizationModes.STYLE_3D else self.__commonOriginalOutfit
+        if not self.__commonOriginalOutfit:
+            self.updateCommonOutfits()
+        return self.__commonOriginal3DOutfit if self.isInStyleMode(CustomizationModes.STYLE_3D) else self.__commonOriginalOutfit
 
     @property
-    def commonOutfit(self):
-        return self._service.getEmptyOutfit(self._vehicle.descriptor.makeCompactDescr()) if self.__styleModeId and self.__styleModeId == CustomizationModes.STYLE_3D else self.__commonModifiedOutfit
+    def commonModifiedOutfit(self):
+        if not self.__commonModifiedOutfit:
+            self.updateCommonOutfits()
+        if self.__styleModeId and self.styleMode.modifiedStyle:
+            currentStyleId = self.styleMode.modifiedStyle.id
+        else:
+            currentStyleId = 0
+        if self.__commonOutfitStyleId == currentStyleId:
+            return self.__commonModifiedOutfit
+        else:
+            if self.__commonOutfitDiff:
+                self.__commonModifiedOutfit = self.__commonModifiedOutfit.adjust(self.__commonOutfitDiff)
+                self.__commonOutfitDiff = None
+            if self.isInStyleMode(CustomizationModes.STYLE_3D):
+                newOutfit = self.__commonModifiedOutfit.copy()
+                remove3DStyleIncompatibleCommonItems(newOutfit, self.styleMode.modifiedStyle)
+                newOutfit.invalidate()
+                self.__commonOutfitDiff = newOutfit.diff(self.__commonModifiedOutfit)
+                self.__commonModifiedOutfit = newOutfit
+            self.__commonOutfitStyleId = currentStyleId
+            return self.__commonModifiedOutfit
 
     @property
     def isModeChangeInProgress(self):
@@ -200,7 +225,10 @@ class CustomizationContext(object):
         self.__vehicleAnchorsUpdater.stopUpdater()
         self.__vehicleAnchorsUpdater = None
         self.__commonOriginalOutfit = None
+        self.__commonOriginal3DOutfit = None
         self.__commonModifiedOutfit = None
+        self.__commonOutfitStyleId = None
+        self.__commonOutfitDiff = None
         self.__events.fini()
         self.__events = None
         self._itemsCache.onSyncCompleted -= self.__onCacheResync
@@ -232,6 +260,8 @@ class CustomizationContext(object):
                 self.__styleModeId = None
             elif self.__modeId in CustomizationModes.BASE_STYLES:
                 self.__styleModeId = self.__modeId
+            if prevModeId != CustomizationModes.STYLE_2D_EDITABLE and modeId != CustomizationModes.STYLE_2D_EDITABLE:
+                self.__commonOutfitStyleId = None
             newMode = self.__modes[modeId]
             newMode.start(tabId=tabId, source=source)
             self.refreshOutfit()
@@ -299,8 +329,17 @@ class CustomizationContext(object):
         self.mode.unselectItem()
 
     def cancelChanges(self):
-        if not (self.__styleModeId and self.__styleModeId == CustomizationModes.STYLE_3D):
-            self.__commonModifiedOutfit = self.__commonOriginalOutfit.copy()
+        self.__commonModifiedOutfit = self.commonOriginalOutfit.copy()
+        if self.isInStyleMode(CustomizationModes.STYLE_3D) and self.__commonOutfitDiff:
+            for slotType in GUI_ITEM_TYPE.COMMON_C11N_COMPATIBLE_WITH_3D_STYLES:
+                for partIdx in Area.ALL:
+                    multiSlot = self.__commonOutfitDiff.getContainer(partIdx).slotFor(slotType)
+                    if multiSlot:
+                        for idx in range(multiSlot.capacity()):
+                            slotData = multiSlot.getSlotData(idx)
+                            if not slotData.isEmpty():
+                                multiSlot.remove(idx)
+
         self.mode.cancelChanges()
 
     def removeOldSeasonPreview(self, season):
@@ -308,21 +347,11 @@ class CustomizationContext(object):
         outfit.removePreview()
 
     def getPurchaseItems(self):
-        return self.mode.getPurchaseItems() + getCommonPurchaseItems(self.commonOutfit)
-
-    def getCommonOutfit(self):
-        if not self.__commonOriginalOutfit:
-            self.updateCommonOutfits()
-        return self.__commonOriginalOutfit.copy()
-
-    def getCommonModifiedOutfit(self):
-        if not self.__commonModifiedOutfit:
-            self.updateCommonOutfits()
-        return self.__commonModifiedOutfit.copy()
+        return self.mode.getPurchaseItems() + getCommonPurchaseItems(self.commonModifiedOutfit)
 
     def getNotModifedCommonItems(self):
-        commonOutfit = self.getCommonOutfit()
-        commonModifiedOutfit = self.getCommonModifiedOutfit()
+        commonOutfit = self.commonOriginalOutfit
+        commonModifiedOutfit = self.commonModifiedOutfit
         df = commonModifiedOutfit.diff(commonOutfit)
         notModifiedItems = df.diff(commonOutfit)
         return notModifiedItems
@@ -330,7 +359,13 @@ class CustomizationContext(object):
     def updateCommonOutfits(self):
         outfit = self._service.getCommonOutfit()
         self.__commonOriginalOutfit = outfit.copy()
+        self.__commonOriginal3DOutfit = outfit.copy()
+        remove3DStyleIncompatibleCommonItems(self.__commonOriginal3DOutfit, self.styleMode.originalStyle if self.isInStyleMode(CustomizationModes.STYLE_3D) else None)
+        self.__commonOriginal3DOutfit.invalidate()
         self.__commonModifiedOutfit = outfit.copy()
+        self.__commonOutfitStyleId = None
+        self.__commonOutfitDiff = None
+        return
 
     def updateOutfits(self):
         self.updateCommonOutfits()
@@ -345,7 +380,7 @@ class CustomizationContext(object):
             outfit.invalidateItemsCounter()
         else:
             outfit.invalidate()
-            self._service.tryOnOutfit(outfit.adjust(self.commonOutfit))
+            self._service.tryOnOutfit(outfit.adjust(self.commonModifiedOutfit))
             g_tankActiveCamouflage[g_currentVehicle.item.intCD] = self.season
         return
 
@@ -360,8 +395,8 @@ class CustomizationContext(object):
         return
 
     def isCommonOutfitModified(self):
-        modifiedOutfit = self.__commonModifiedOutfit
-        originalOutfit = self.__commonOriginalOutfit
+        modifiedOutfit = self.commonModifiedOutfit
+        originalOutfit = self.commonOriginalOutfit
         for _, component, _, _, _ in originalOutfit.diff(modifiedOutfit).itemsFull():
             if component.isFilled():
                 return True
@@ -375,7 +410,7 @@ class CustomizationContext(object):
     def isOutfitsModified(self):
         if self.mode.isOutfitsModified():
             return True
-        return True if not (self.__styleModeId and self.__styleModeId == CustomizationModes.STYLE_3D) and self.isCommonOutfitModified() else False
+        return True if self.isCommonOutfitModified() else False
 
     @staticmethod
     def resetItemsNovelty(items):
@@ -390,13 +425,16 @@ class CustomizationContext(object):
             self.changeMode(self.__styleModeId, source=source)
             return
 
-    def has3DAttachments(self):
-        for intCD in self.getCommonModifiedOutfit().items():
+    def hasCommonItems(self):
+        for intCD in self.commonModifiedOutfit.items():
             item = self._service.getItemByCD(intCD)
-            if not item.isHiddenInUI() and item.itemTypeID == GUI_ITEM_TYPE.ATTACHMENT:
+            if not item.isHiddenInUI() and item.itemTypeID in GUI_ITEM_TYPE.COMMON_C11NS:
                 return True
 
         return False
+
+    def isInStyleMode(self, styleModeId):
+        return self.__styleModeId is not None and self.__styleModeId == styleModeId
 
     def __onCacheResync(self, reason, items):
         self.events.onCacheResync(reason, items)
@@ -406,10 +444,11 @@ class CustomizationContext(object):
             _logger.error('There is no vehicle in hangar for customization.')
             return
         else:
-            self._vehicle = g_currentVehicle.item
-            self.stylesDiffsCache.clearDiffs()
-            self.updateOutfits()
-            self.refreshOutfit()
+            if self._vehicle != g_currentVehicle.item:
+                self._vehicle = g_currentVehicle.item
+                self.stylesDiffsCache.clearDiffs()
+                self.updateOutfits()
+                self.refreshOutfit()
             return
 
     def __onPreviewVehicleChanged(self):

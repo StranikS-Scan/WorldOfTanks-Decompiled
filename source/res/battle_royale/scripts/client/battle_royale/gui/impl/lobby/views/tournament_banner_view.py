@@ -12,7 +12,7 @@ from gui.tournament.tournament_helpers import isTournamentEnabled, showTournamen
 from helpers import dependency, time_utils
 from skeletons.gui.game_control import IBattleRoyaleController
 from battle_royale.gui.impl.lobby.tooltips.tournament_banner_tooltip_view import TournamentBannerTooltipView
-from gui.shared.utils.graphics import isRendererPipelineDeferred
+from gui.shared.utils.graphics import isLowPreset
 _logger = logging.getLogger(__name__)
 CHALLENGE_TAB_ROUTE = '/challenges'
 OPEN_TOURNAMENTS_URL = 'openTournamentChallenge'
@@ -90,4 +90,4 @@ class TournamentBannerView(ViewImpl):
             tx.setDateEnd(getTimestampDelta(self.__bannerData['endDate']))
             tx.setDateStart(getTimestampDelta(self.__bannerData['startDate']))
             tx.setIsExtended(self.__isExtended)
-            tx.setImprovedGraphics(isRendererPipelineDeferred())
+            tx.setImprovedGraphics(not isLowPreset())

@@ -8,20 +8,15 @@ from vehicle_systems.tankStructure import TankPartNames
 
 class VehicleDecal(object):
     settingsCore = dependency.descriptor(ISettingsCore)
-    SHADOW_OFF_SETTING = 3.9
     DECALS_OFF = 0
-    FORWARD_DECAL = 1
-    OCCLUSION_DECAL = 2
+    OCCLUSION_DECAL = 1
 
     @staticmethod
     def getDecalType():
         decalType = VehicleDecal.DECALS_OFF
-        if BigWorld.isForwardPipeline() is False:
-            if BigWorld.isShadowsEnabled():
-                if BigWorld.isSSAOEnabled():
-                    decalType = VehicleDecal.OCCLUSION_DECAL
-            else:
-                decalType = VehicleDecal.FORWARD_DECAL
+        if not BigWorld.isForwardPipeline():
+            if BigWorld.isShadowsEnabled() and BigWorld.isSSAOEnabled():
+                decalType = VehicleDecal.OCCLUSION_DECAL
         return decalType
 
     def __init__(self, appearance):
@@ -80,16 +75,9 @@ class VehicleDecal(object):
         self.__attach()
 
     def onSettingsChanged(self, diff=None):
-        enabled = False
         if 'SHADOWS_QUALITY' in diff:
-            decalType = VehicleDecal.DECALS_OFF
-            value = diff['SHADOWS_QUALITY']
-            if value <= self.SHADOW_OFF_SETTING:
-                decalType = VehicleDecal.getDecalType()
-                enabled = decalType == VehicleDecal.OCCLUSION_DECAL
-            elif value > self.SHADOW_OFF_SETTING:
-                decalType = VehicleDecal.getDecalType()
-                enabled = decalType == VehicleDecal.FORWARD_DECAL
+            decalType = VehicleDecal.getDecalType()
+            enabled = decalType == VehicleDecal.OCCLUSION_DECAL
             if enabled:
                 self.__reattach(decalType)
             else:
@@ -105,18 +93,18 @@ class VehicleDecal(object):
             self.__chassisDecals = []
             self.__hullDecals = []
             self.__turretDecals = []
-            if decalType == VehicleDecal.DECALS_OFF:
+            if decalType != VehicleDecal.OCCLUSION_DECAL:
                 return
             for transform in typeDesc.chassis.AODecals:
-                decal = self.__createDecal(transform, False, decalType)
+                decal = self.__createDecal(transform, False)
                 self.__chassisDecals.append(decal)
 
             for transform in typeDesc.hull.AODecals:
-                decal = self.__createDecal(transform, True, decalType)
+                decal = self.__createDecal(transform, True)
                 self.__hullDecals.append(decal)
 
             for transform in typeDesc.turret.AODecals:
-                decal = self.__createDecal(transform, True, decalType)
+                decal = self.__createDecal(transform, True)
                 self.__turretDecals.append(decal)
 
             return
@@ -141,24 +129,19 @@ class VehicleDecal(object):
             self.__attached = True
             return
 
-    def __createDecal(self, transform, applyToAll, decalType):
+    def __createDecal(self, transform, applyToAll):
         addTexture = 'maps/spots/TankOcclusion/TankOcclusionMap.dds'
         priority = 0
         influence = 30
         if applyToAll:
             influence = 62
-        if decalType == VehicleDecal.OCCLUSION_DECAL:
-            diffuseTexture = ''
-            bumpTexture = ''
-            hmTexture = ''
-            materialType = 4
-            visibilityMask = 4294967295L
-            accuracy = 2
-            decal = BigWorld.WGOcclusionDecal()
-            decal.create(diffuseTexture, bumpTexture, hmTexture, addTexture, priority, materialType, influence, visibilityMask, accuracy)
-        else:
-            materialType = 6
-            decal = BigWorld.WGShadowForwardDecal()
-            decal.setup(addTexture, materialType, priority, influence)
+        diffuseTexture = ''
+        bumpTexture = ''
+        hmTexture = ''
+        materialType = 4
+        visibilityMask = 4294967295L
+        accuracy = 2
+        decal = BigWorld.WGOcclusionDecal()
+        decal.create(diffuseTexture, bumpTexture, hmTexture, addTexture, priority, materialType, influence, visibilityMask, accuracy)
         decal.setLocalTransform(transform)
         return decal

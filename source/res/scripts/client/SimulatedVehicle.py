@@ -1,20 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/SimulatedVehicle.py
 import logging
+from copy import copy
 import BigWorld
 import Math
+from cgf_network import C_INVALID_NETWORK_OBJECT_ID
 from functools import partial
 from Event import Event
 from VehicleEffects import DamageFromShotDecoder
 from cgf_obsolete_script.script_game_object import ScriptGameObject
+from common_tank_structure import VehicleAppearanceCacheInfo
 from constants import VEHICLE_SIEGE_STATE, SPECIAL_VEHICLE_HEALTH, VEHICLE_HIT_EFFECT
 from gui.battle_control import vehicle_getter
 from helpers import dependency
 from items import vehicles
 from shared_utils.vehicle_utils import createWheelFilters
 from skeletons.vehicle_appearance_cache import IAppearanceCache
-from vehicle_systems.appearance_cache import VehicleAppearanceCacheInfo
 from vehicle_systems.tankStructure import TankPartIndexes
+from helpers_common import setEncodedSegmentContextData
 import GenericComponents
 _logger = logging.getLogger(__name__)
 _UNSPOTTED_CONE_WIDTH_SCALE = 1
@@ -88,12 +91,12 @@ class VehicleBase(object):
     def speedInfo(self):
         return self._speedInfo
 
-    def getSpeed(self):
-        return self._speedInfo.value[0]
-
     @property
     def isCrewActive(self):
         return self._isCrewActive
+
+    def getSpeed(self):
+        return self._speedInfo.value[0]
 
     def isAlive(self):
         return True
@@ -103,18 +106,6 @@ class VehicleBase(object):
 
     def showCollisionEffect(self, hitPos, collisionEffectName='collisionVehicle', collisionNormal=None, isTracks=False, damageFactor=0, impulse=None, pcEnergy=None):
         pass
-
-    def getMatinfo(self, parIndex, matKind):
-        matInfo = None
-        if parIndex == TankPartIndexes.CHASSIS:
-            matInfo = self.typeDescriptor.chassis.materials.get(matKind)
-        elif parIndex == TankPartIndexes.HULL:
-            matInfo = self.typeDescriptor.hull.materials.get(matKind)
-        elif parIndex == TankPartIndexes.TURRET:
-            matInfo = self.typeDescriptor.turret.materials.get(matKind)
-        elif parIndex == TankPartIndexes.GUN:
-            matInfo = self.typeDescriptor.gun.materials.get(matKind)
-        return matInfo
 
     def getOptionalDevices(self):
         return vehicle_getter.getOptionalDevices() if self.isPlayerVehicle else []
@@ -238,12 +229,40 @@ class SimulatedVehicle(BigWorld.Entity, VehicleBase, ScriptGameObject):
         if hlOn:
             highlighter.highlight(True, hlSimpleEdge)
 
+    def getMatinfo(self, partIndex, matKind):
+        matInfo = None
+        if partIndex > self.appearance.collisions.maxStaticPartIndex:
+            matInfo = BigWorld.getMaterialInfo(self.appearance.collisions.getPartGameObject(partIndex), matKind)
+        elif partIndex == TankPartIndexes.CHASSIS:
+            matInfo = self.typeDescriptor.chassis.materials.get(matKind)
+        elif partIndex == TankPartIndexes.HULL:
+            matInfo = self.typeDescriptor.hull.materials.get(matKind)
+        elif partIndex == TankPartIndexes.TURRET:
+            matInfo = self.typeDescriptor.turret.materials.get(matKind)
+        elif partIndex == TankPartIndexes.GUN:
+            matInfo = self.typeDescriptor.gun.materials.get(matKind)
+        return matInfo
+
+    def showKillingSticker(self, shellCompactDescr, isArmorPierced, hitPoints):
+        shellDescr = vehicles.getItemByCompactDescr(shellCompactDescr)
+        targetSticker = 'armorPierced' if isArmorPierced else 'armorResisted'
+        stickerID = vehicles.g_cache.shotEffects[shellDescr.effectsIndex]['targetStickers'][targetSticker]
+        if stickerID is None:
+            return
+        else:
+            for hitPoint in hitPoints:
+                sticker = copy(hitPoint)
+                sticker['segment'] = setEncodedSegmentContextData(sticker['segment'], stickerID)
+                self.__decodeAndAddSticker(sticker)
+
+            return
+
     def _createAppearance(self, entityID, forceReloading):
         if forceReloading:
             oldAppearance = self.__appearanceCache.removeAppearance(entityID)
             if oldAppearance is not None:
                 oldAppearance.destroy()
-        newInfo = VehicleAppearanceCacheInfo(self.typeDescriptor, self.health, self.isCrewActive, self.isTurretDetached, self.publicInfo.outfit)
+        newInfo = VehicleAppearanceCacheInfo(self.typeDescriptor, self.health, self.isCrewActive, self.isTurretDetached, self.publicInfo.outfit, forceDynAttachmentLoading=True, entityGameObject=self.gameObject)
         appearance = self.__appearanceCache.getAppearance(entityID, newInfo, self.__onAppearanceReady)
         appearance.setUseEngStartControlIdle(True)
         return appearance
@@ -292,28 +311,12 @@ class SimulatedVehicle(BigWorld.Entity, VehicleBase, ScriptGameObject):
         if self.extras:
             _logger.warning('this code point should have never been reached')
 
-    def __applyDamageSticker(self):
-        if self.isStarted:
-            prev = self.__prevDamageStickers
-            curr = frozenset(self.simulationData_damageStickers)
-            self.__prevDamageStickers = curr
-            for sticker in prev.difference(curr):
-                self.appearance.removeDamageSticker(sticker)
-
-            maxComponentIdx = self.getMaxComponentIndex()
-            for sticker in curr.difference(prev):
-                self.appearance.addDamageSticker(sticker, *DamageFromShotDecoder.decodeSegment(sticker, self.appearance.collisions, maxComponentIdx))
-
     def getMaxComponentIndex(self, skipWheels=False):
         maxComponentIdx = TankPartIndexes.ALL[-1]
         wheelsConfig = self.appearance.typeDescriptor.chassis.generalWheelsAnimatorConfig
         if wheelsConfig and not skipWheels:
             maxComponentIdx = maxComponentIdx + wheelsConfig.getNonTrackWheelsCount()
         return maxComponentIdx
-
-    def decodeHitPoints(self, points):
-        maxComponentIdx = self.getMaxComponentIndex(skipWheels=True)
-        return DamageFromShotDecoder.decodeHitPoints(points, self.appearance.collisions, maxComponentIdx, self.typeDescriptor)
 
     def __calcMaxHitEffectAndHasPiercedShot(self, shotPoints):
         maxHitEffectCode = VEHICLE_HIT_EFFECT.ARMOR_PIERCED_NO_DAMAGE
@@ -323,54 +326,23 @@ class SimulatedVehicle(BigWorld.Entity, VehicleBase, ScriptGameObject):
 
         return (maxHitEffectCode, DamageFromShotDecoder.hasDamaged(maxHitEffectCode))
 
-    def __getComponentInfo(self, projData):
-        origin = projData['trajectoryData'][0][0]
-        points = projData['segments']
-        longestDistSquared = lastHitPoint = None
-        decodedPoints = self.decodeHitPoints(points)
-        _, hasPiercedHit = self.__calcMaxHitEffectAndHasPiercedShot(decodedPoints)
-        if not decodedPoints and not hasPiercedHit:
-            return (False, None, None)
-        else:
-            compoundModel = self.appearance.compoundModel
-            for hitPoint in decodedPoints:
-                compoundMatrix = Math.Matrix(compoundModel.node(hitPoint.componentName))
-                worldHitPoint = compoundMatrix.applyPoint(hitPoint.matrix.translation)
-                distSquared = (worldHitPoint - origin).lengthSquared
-                if lastHitPoint is None or distSquared > longestDistSquared:
-                    longestDistSquared = distSquared
-                    lastHitPoint = hitPoint
+    def __showDamageStickers(self, stickers):
+        for sticker in stickers:
+            self.__decodeAndAddSticker(sticker)
 
-            componentName = lastHitPoint.componentName
-            compoundMatrix = Math.Matrix(compoundModel.node(componentName))
-            return (True, componentName, compoundMatrix)
-
-    def __showDamageStickers(self, segments):
-        maxComponentIdx = self.getMaxComponentIndex()
-        for sticker in segments:
-            self.__decodeAndAddSticker(sticker, maxComponentIdx)
-
-    def showKillingSticker(self, shellCompactDescr, hasProjectilePierced, hasNonPiercedDamage, segments):
-        if not segments:
+    def __decodeAndAddSticker(self, hitPoint):
+        networkID = hitPoint['networkID']
+        if networkID != C_INVALID_NETWORK_OBJECT_ID:
             return
         else:
-            shellDescr = vehicles.getItemByCompactDescr(shellCompactDescr)
-            targetSticker = 'armorPierced' if hasProjectilePierced or hasNonPiercedDamage else 'armorResisted'
-            stickerID = vehicles.g_cache.shotEffects[shellDescr.effectsIndex]['targetStickers'][targetSticker]
-            if stickerID is not None:
-                maxComponentID = self.getMaxComponentIndex()
-                for segment in segments:
-                    sticker = segment | stickerID
-                    self.__decodeAndAddSticker(sticker, maxComponentID)
-
-            return
-
-    def __decodeAndAddSticker(self, sticker, componentID):
-        componentName, value, start, end = DamageFromShotDecoder.decodeSegment(sticker, self.appearance.collisions, componentID, self.typeDescriptor)
-        if componentName == TankPartIndexes.CHASSIS or None in (start, end, value):
-            return
-        else:
-            self.appearance.addDamageSticker(sticker, componentName, value, start, end)
+            parsedHitPoint = DamageFromShotDecoder.parseHitPoint(hitPoint, self.appearance.collisions)
+            if parsedHitPoint is None:
+                return
+            componentIndex, stickerID, start, end = parsedHitPoint
+            if componentIndex <= TankPartIndexes.CHASSIS or None in (start, end, stickerID):
+                return
+            code = DamageFromShotDecoder.encodeHitPoint(hitPoint)
+            self.appearance.addDamageSticker(code, componentIndex, stickerID, start, end)
             return
 
     def updateBrokenTracks(self, trackStates):

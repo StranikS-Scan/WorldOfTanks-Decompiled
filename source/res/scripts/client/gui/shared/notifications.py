@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/notifications.py
-from constants import NC_MESSAGE_PRIORITY
+import logging
+from constants import IS_DEVELOPMENT, NC_MESSAGE_PRIORITY
+_logger = logging.getLogger(__name__)
 
 class NotificationPriorityLevel(object):
     HIGH = 'high'
@@ -13,10 +15,7 @@ class NotificationPriorityLevel(object):
 
     @classmethod
     def convertFromNC(cls, priority):
-        result = NotificationPriorityLevel.MEDIUM
-        if priority in cls.NC_MAPPING:
-            result = cls.NC_MAPPING[priority]
-        return result
+        return cls.NC_MAPPING.get(priority, NotificationPriorityLevel.MEDIUM)
 
 
 class NotificationGroup(object):
@@ -42,6 +41,7 @@ class NotificationGuiSettings(object):
         self.decorator = decorator
         self.lifeTime = lifeTime
         self.__customEvent = None
+        self.__validate()
         return
 
     def setCustomEvent(self, eType, ctx=None):
@@ -49,3 +49,7 @@ class NotificationGuiSettings(object):
 
     def getCustomEvent(self):
         return self.__customEvent
+
+    def __validate(self):
+        if IS_DEVELOPMENT and self.priorityLevel not in NotificationPriorityLevel.RANGE:
+            _logger.error('Invalid notification priority: %s', self.priorityLevel)

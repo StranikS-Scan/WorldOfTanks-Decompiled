@@ -882,4 +882,53 @@
       </itemFilters>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 1500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	poland	</nations>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	1105	</id>
+      <texture>	gui/maps/vehicles/styles/pub_west_warsaw_uprising.png	</texture>
+      <userString>	#vehicle_customization:special_style/pub_west_warsaw_uprising	</userString>
+      <description>	#vehicle_customization:special_style/pub_west_warsaw_uprising_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/pub_west_warsaw_uprising_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required c11n2D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	945	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	554	</id>
+              <appliedTo>	7	</appliedTo>
+            </item>
+            <item>
+              <id>	555	</id>
+              <appliedTo>	20752	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
 </poland.xml>

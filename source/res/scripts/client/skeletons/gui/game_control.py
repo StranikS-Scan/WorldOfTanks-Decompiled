@@ -48,7 +48,7 @@ if typing.TYPE_CHECKING:
     from gui.shared.gui_items.tankman_skill import TankmanSkill
     from gui.shared.money import Money, CURRENCY_TYPE
     from gui.shared.utils.requesters.EpicMetaGameRequester import EpicMetaGameRequester
-    from helpers.server_settings import BattleRoyaleConfig, EpicGameConfig, GiftSystemConfig, RankedBattlesConfig, VehiclePostProgressionConfig, _MapboxConfig, WinbackConfig, LiveOpsWebEventsConfig, EasyTankEquipConfig
+    from helpers.server_settings import BattleRoyaleConfig, EpicGameConfig, GiftSystemConfig, RankedBattlesConfig, VehiclePostProgressionConfig, _MapboxConfig, WinbackConfig, LiveOpsWebEventsConfig, EasyTankEquipConfig, SeniorityAwardsConfig
     from items.vehicles import VehicleType
     from season_common import GameSeason
     from items.artefacts import Equipment
@@ -1722,13 +1722,13 @@ class IBattlePassController(IGameController):
     def hasExtra(self):
         raise NotImplementedError
 
+    def getExtraChapterIDs(self):
+        raise NotImplementedError
+
     def isRegularProgressionCompleted(self):
         raise NotImplementedError
 
     def isPostProgressionActive(self):
-        raise NotImplementedError
-
-    def getExtraChapterID(self):
         raise NotImplementedError
 
     def getRewardTypes(self, chapterID):
@@ -1860,7 +1860,7 @@ class IBattlePassController(IGameController):
     def getChapterIndex(self, chapterID):
         raise NotImplementedError
 
-    def getSpecialVoiceChapters(self):
+    def getTankmenScreens(self):
         raise NotImplementedError
 
     def getTankmenEntitlements(self):
@@ -1960,6 +1960,12 @@ class IBattlePassController(IGameController):
         raise NotImplementedError
 
     def getSpecialTankmen(self):
+        raise NotImplementedError
+
+    def getTankmenScreenID(self, chapterID):
+        raise NotImplementedError
+
+    def getChapterToTankmenScreen(self):
         raise NotImplementedError
 
 
@@ -2474,6 +2480,10 @@ class ISeniorityAwardsController(IGameController):
     onVehicleSelectionChanged = None
 
     @property
+    def config(self):
+        raise NotImplementedError
+
+    @property
     def isEnabled(self):
         raise NotImplementedError
 
@@ -2551,6 +2561,10 @@ class ISeniorityAwardsController(IGameController):
 
     @property
     def yearsInGame(self):
+        raise NotImplementedError
+
+    @property
+    def yearTier(self):
         raise NotImplementedError
 
     @property

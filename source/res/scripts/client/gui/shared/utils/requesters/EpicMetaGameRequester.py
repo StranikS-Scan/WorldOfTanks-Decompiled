@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/shared/utils/requesters/EpicMetaGameRequester.py
 import typing
 import BigWorld
-from adisp import adisp_async
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from skeletons.gui.shared.utils.requesters import IEpicMetaGameRequester
 
@@ -36,8 +35,7 @@ class EpicMetaGameRequester(AbstractSyncDataRequester, IEpicMetaGameRequester):
     def averageXP(self):
         return self.getCacheValue('famePts', 0) / self.battleCount if self.battleCount > 0 else 0
 
-    @adisp_async
-    def _requestCache(self, callback):
+    def _requestCache(self, callback=None):
         BigWorld.player().epicMetaGame.getCache(lambda resID, value: self._response(resID, value, callback))
 
     def _preprocessValidData(self, data):

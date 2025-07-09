@@ -7,6 +7,7 @@ import constants
 from adisp import adisp_async, adisp_process
 from helpers import getClientLanguage, dependency
 from helpers.http.url_formatters import addParamsToUrlQuery
+from skeletons.gui.login_manager import ILoginManager
 from skeletons.gui.web import IWebController
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IMarathonEventsController
@@ -121,6 +122,11 @@ def getMarathonStylePackage(args=None, marathonCtrl=None):
     return result
 
 
+@dependency.replace_none_kwargs(loginManager=ILoginManager)
+def isSteamClient(args=None, loginManager=None):
+    return str(int(loginManager.isWgcSteam))
+
+
 def getClanDBID(args=None):
     clansCtrl = dependency.instance(IWebController)
     return str(clansCtrl.getClanDbID())
@@ -138,7 +144,8 @@ def getSyncMacroses():
      'CLAN_DBID': getClanDBID,
      'CURRENT_REALM': getCurrentRealm,
      'PACKAGE_ID': getMarathonPackage,
-     'STYLE_PACKAGE_ID': getMarathonStylePackage}
+     'STYLE_PACKAGE_ID': getMarathonStylePackage,
+     'IS_STEAM': isSteamClient}
 
 
 @adisp_async

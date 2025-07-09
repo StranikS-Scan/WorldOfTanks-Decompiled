@@ -6,6 +6,7 @@ from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
 from battle_results_helpers import determineWinnerTeam
 from debug_utils import LOG_DEBUG_DEV
 from dossiers2.custom import records
+from dossiers2.custom.account_layout import VEHICLE_STATS
 from dossiers2.custom.config import RECORD_CONFIGS
 from dossiers2.custom.cache import getCache
 from dossiers2.custom.utils import isVehicleSPG, getInBattleSeriesIndex
@@ -564,6 +565,11 @@ def __updateAccountDossierCuts(dossierDescr, results, dossierXP, vehTypeCompDesc
         epicBattleAccountDossierCut = dossierDescr['epicBattleCut']
         epicBattleVehicleDossier = vehDossierDescr['epicBattle']
         epicBattleAccountDossierCut[vehTypeCompDescr] = (epicBattleVehicleDossier['battlesCount'], epicBattleVehicleDossier['wins'], epicBattleVehicleDossier['xp'])
+    if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.STAT_TRACKERS_STATS):
+        accVehStatsCut = dossierDescr[VEHICLE_STATS.STAT_TRACKERS_VEH_STATS_CUT]
+        kills = len(results['killList'])
+        storedFrags = accVehStatsCut.get(vehTypeCompDescr, 0)
+        accVehStatsCut[vehTypeCompDescr] = storedFrags + kills
 
 
 def __updateTankmanDossierImpl(dossierDescr, results):

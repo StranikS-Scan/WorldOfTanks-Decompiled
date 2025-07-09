@@ -1,0 +1,19 @@
+<list.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <itemGroup>
+    <name>	Stat Trackers	</name>
+    <userString>	#vehicle_customization:statTrackers	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	statracker 50g notInShop	</priceGroup>
+    <stat_tracker>
+      <id>	1	</id>
+      <name>	statTracker_01	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Statrackers/Statracker_01/Statracker_01.prefab	</modelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <userString>	#vehicle_customization:statTrackers/statTracker_01	</userString>
+      <tags>	vehicleBound showDisabled	</tags>
+      <trackedStatistic>	kills	</trackedStatistic>
+    </stat_tracker>
+  </itemGroup>
+</list.xml>

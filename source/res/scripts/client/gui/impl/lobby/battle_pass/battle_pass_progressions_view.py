@@ -19,7 +19,7 @@ from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
 from gui.battle_pass.battle_pass_bonuses_packers import changeBonusTooltipData, packBonusModelAndTooltipData, packSpecialTooltipData
 from gui.battle_pass.battle_pass_constants import ChapterState, MIN_LEVEL
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator
-from gui.battle_pass.battle_pass_helpers import fillBattlePassCompoundPrice, getAllFinalRewards, getChapterType, getDataByTankman, getExtraInfoPageURL, getFinalTankmen, getInfoPageURL, getIntroVideoURL, getRewardSourceByType, getStyleForChapter, getVehicleInfoForChapter, isSeasonEndingSoon, isSeasonWithSpecialTankmenScreen, updateBuyAnimationFlag, getSingleVehicleForCustomization, getDefaultChaptersView
+from gui.battle_pass.battle_pass_helpers import fillBattlePassCompoundPrice, getAllFinalRewards, getChapterType, getDataByTankman, getExtraInfoPageURL, getFinalTankmen, getInfoPageURL, getIntroVideoURL, getRewardSourceByType, getStyleForChapter, getVehicleInfoForChapter, isSeasonEndingSoon, updateBuyAnimationFlag, getSingleVehicleForCustomization, getDefaultChaptersView
 from gui.battle_pass.sounds import BattlePassSounds
 from gui.collection.collections_helpers import loadCollectionsFromBattlePass
 from gui.impl.auxiliary.collections_helper import fillCollectionModel
@@ -27,6 +27,7 @@ from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_progressions_view_model import ActionTypes, BattlePassProgressionsViewModel, ChapterStates, ChapterType
 from gui.impl.gen.view_models.views.lobby.battle_pass.reward_level_model import RewardLevelModel
+from gui.impl.gen.view_models.views.lobby.battle_pass.skill_model import SkillModel
 from gui.impl.gen.view_models.views.lobby.vehicle_preview.top_panel.top_panel_tabs_model import TabID
 from gui.impl.gui_decorators import args2params
 from gui.impl.pub import ViewImpl
@@ -212,7 +213,7 @@ class BattlePassProgressionsView(ViewImpl):
             self.__showBuyWindow()
 
     def __onAboutClick(self):
-        self.__loadUrl(getExtraInfoPageURL() if self.__battlePass.isExtraChapter(self.__chapterID) else getInfoPageURL())
+        self.__loadUrl(getExtraInfoPageURL(self.__chapterID) if self.__battlePass.isExtraChapter(self.__chapterID) else getInfoPageURL())
 
     @staticmethod
     def __onClose():
@@ -293,10 +294,19 @@ class BattlePassProgressionsView(ViewImpl):
         return
 
     def __setCharacterModel(self, model, character):
-        iconName, characterName, skills, groupName = getDataByTankman(character)
+        iconName, characterName, freeSkills, earnedSkills, groupName = getDataByTankman(character)
         skillsArray = Array()
-        for skill in skills:
-            skillsArray.addString(skill)
+        for skill in freeSkills:
+            skillModel = SkillModel()
+            skillModel.setName(skill)
+            skillModel.setIsZero(True)
+            skillsArray.addViewModel(skillModel)
+
+        for skill in earnedSkills:
+            skillModel = SkillModel()
+            skillModel.setName(skill)
+            skillModel.setIsZero(False)
+            skillsArray.addViewModel(skillModel)
 
         model.setIcon(iconName)
         model.setTankman(characterName)
@@ -384,13 +394,13 @@ class BattlePassProgressionsView(ViewImpl):
         model.setChapterType(ChapterType(getChapterType(self.__chapterID)))
         model.setIsSeasonEndingSoon(isSeasonEndingSoon())
         model.setHasExtra(self.__battlePass.hasExtra())
-        model.setIsSpecialTankmenEnabled(self.__isSpecialVoiceTankmenEnabled())
+        model.setTankmenScreenID(self.__battlePass.getTankmenScreenID(self.__chapterID))
         model.awardsWidget.setIsTalerEnabled(not self.__battlePass.isHoliday())
         model.awardsWidget.setIsBpCoinEnabled(not self.__battlePass.isHoliday())
         model.awardsWidget.setTalerCount(self.__itemsCache.items.stats.dynamicCurrencies.get(CurrencyBP.TALER.value, 0))
         model.awardsWidget.setNotChosenRewardCount(self.__battlePass.getNotChosenRewardCount())
         model.awardsWidget.setIsChooseRewardsEnabled(self.__battlePass.canChooseAnyReward())
-        model.awardsWidget.setIsSpecialVoiceTankmenEnabled(self.__isSpecialVoiceTankmenEnabled())
+        model.awardsWidget.setTankmenScreenID(self.__battlePass.getTankmenScreenID(self.__chapterID))
         fillCollectionModel(model.awardsWidget.collectionEntryPoint, self.__battlePass.getCurrentCollectionId())
         self.__onTicketsUpdated()
         self.__onTicketsCountUpdated()
@@ -653,7 +663,7 @@ class BattlePassProgressionsView(ViewImpl):
         showAnimations = False
         isBattlePassBought = self.__battlePass.isBought(chapterID=self.__chapterID)
         if isBattlePassBought:
-            showAnimations = updateBuyAnimationFlag(chapterID=self.__chapterID, settingsCore=self.__settingsCore, battlePass=self.__battlePass)
+            showAnimations = updateBuyAnimationFlag(chapterID=self.__chapterID)
             model.setIsBattlePassPurchased(isBattlePassBought)
         model.setShowBuyAnimations(showAnimations)
         model.setShowLevelsAnimations(self.ANIMATIONS[self.ANIMATION_PURCHASE_LEVELS])
@@ -754,18 +764,18 @@ class BattlePassProgressionsView(ViewImpl):
 
     def __showTankmen(self):
         self.__stopVoiceovers()
-        showBattlePassTankmenVoiceover()
+        showBattlePassTankmenVoiceover(self.__battlePass.getTankmenScreenID(self.__chapterID))
 
     def __stopSounds(self):
         self.__stopVoiceovers()
         if self.__battlePass.isExtraChapter(self.__chapterID):
-            self.soundManager.playInstantSound(BattlePassSounds.SPECIAL_TASKS_EXIT)
+            self.soundManager.playInstantSound(BattlePassSounds.SPECIAL_EXIT_EVENTS[self.__getExtraChapterIndex()])
         self.__exitSoundsIsPlayed = True
 
     def __startSounds(self):
         if self.__battlePass.isExtraChapter(self.__chapterID):
             self.soundManager.playInstantSound(BattlePassSounds.TASKS_EXIT)
-            self.soundManager.playInstantSound(BattlePassSounds.SPECIAL_TASKS_ENTER)
+            self.soundManager.playInstantSound(BattlePassSounds.SPECIAL_ENTER_EVENTS[self.__getExtraChapterIndex()])
         self.__exitSoundsIsPlayed = False
 
     def __startCommonSound(self):
@@ -781,12 +791,6 @@ class BattlePassProgressionsView(ViewImpl):
             else:
                 voiceoverStopSound = BattlePassSounds.REGULAR_VOICEOVER_STOP
             self.soundManager.playInstantSound(voiceoverStopSound)
-
-    def __isSpecialVoiceTankmenEnabled(self):
-        if not isSeasonWithSpecialTankmenScreen():
-            return False
-        specialVoiceChapters = self.__battlePass.getSpecialVoiceChapters()
-        return self.__battlePass.isExtraChapter(self.__chapterID) and self.__chapterID in specialVoiceChapters or any((not self.__battlePass.isExtraChapter(chapterID) for chapterID in specialVoiceChapters))
 
     def __setRewardTypes(self, model):
         freeArray = model.getFreeFinalRewards()
@@ -826,3 +830,9 @@ class BattlePassProgressionsView(ViewImpl):
         vehicle = getVehicleForStyle(style)
         self.__switchCamera()
         showStylePreview(vehicle.intCD, style=style, backCallback=self.__getPreviewCallback())
+
+    def __getExtraChapterIndex(self):
+        if not self.__battlePass.isExtraChapter(self.__chapterID):
+            return 0
+        extraChapterIDs = sorted(self.__battlePass.getExtraChapterIDs())
+        return extraChapterIDs.index(self.__chapterID)

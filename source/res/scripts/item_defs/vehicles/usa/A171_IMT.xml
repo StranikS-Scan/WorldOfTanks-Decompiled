@@ -73,6 +73,13 @@
       <undamaged>	vehicles/american/A171_IMT/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/american/A171_IMT/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/american/A171_IMT/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <A171_IMT_G90_3Dst>
+          <undamaged>	vehicles/american/A171_IMT/_skins/A171_IMT_G90_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/american/A171_IMT/_skins/A171_IMT_G90_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/american/A171_IMT/_skins/A171_IMT_G90_3Dst/crash/lod0/Hull.model	</exploded>
+        </A171_IMT_G90_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -98,6 +105,16 @@
         <rayStart>	-0.403041 0.388137 2.275554	</rayStart>
         <rayEnd>	-0.403041 0.234923 2.147003	</rayEnd>
         <rayUp>	-0 0.642755 -0.766072	</rayUp>
+        <size>	0.3	</size>
+        <isUVProportional>	false	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	10001	</slotId>
+        <rayStart>	0.00191 0.540191 2.181221	</rayStart>
+        <rayEnd>	0.00191 0.386977 2.05267	</rayEnd>
+        <rayUp>	-0 0.642756 -0.766071	</rayUp>
+        <compatibleModels>	A171_IMT_G90_3Dst	</compatibleModels>
         <size>	0.3	</size>
         <isUVProportional>	false	</isUVProportional>
       </slot>
@@ -359,6 +376,14 @@
         <clipAngle>	0.426961	</clipAngle>
         <anchorShift>	-0.02	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <scale>	1 1 1	</scale>
+        <hiddenForUser>	true	</hiddenForUser>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -401,6 +426,13 @@
         <undamaged>	vehicles/american/A171_IMT/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/american/A171_IMT/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/american/A171_IMT/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <A171_IMT_G90_3Dst>
+            <undamaged>	vehicles/american/A171_IMT/_skins/A171_IMT_G90_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A171_IMT/_skins/A171_IMT_G90_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A171_IMT/_skins/A171_IMT_G90_3Dst/crash/lod0/Chassis.model	</exploded>
+          </A171_IMT_G90_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -480,6 +512,45 @@
                   <row3>	0.000000 1.231630 2.707936	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	A171_IMT_G90_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	1.605296 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.683151 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.728146	</row2>
+                  <row3>	0.000000 1.162994 0.000000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.307000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.492253 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.728150	</row2>
+                  <row3>	0.000000 1.263262 0.000000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.303900 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.223213 0.200439	</row1>
+                  <row2>	0.000000 -0.408853 0.455306	</row2>
+                  <row3>	0.000000 1.231630 2.707936	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.303900 -0.000001 0.000001	</row0>
+                  <row1>	0.000000 0.290034 -0.076684	</row1>
+                  <row2>	0.000000 0.177113 0.669872	</row2>
+                  <row3>	0.000000 1.049000 -2.780000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.070000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.668858 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.787000	</row2>
+                  <row3>	0.000000 0.773979 -0.099000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.845412 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.421233 0.000000	</row1>
+                  <row2>	0.000000 0.000000 0.385000	</row2>
+                  <row3>	0.000000 0.731394 3.043000	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -545,6 +616,45 @@
                   <row1>	0.000000 0.223213 0.200439	</row1>
                   <row2>	0.000000 -0.408853 0.455306	</row2>
                   <row3>	0.000000 1.231630 2.707936	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	A171_IMT_G90_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	1.605296 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.683151 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.728146	</row2>
+                  <row3>	0.000000 1.162994 0.000000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.307000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.492253 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.728150	</row2>
+                  <row3>	0.000000 1.257237 0.000000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.303900 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.223213 0.200439	</row1>
+                  <row2>	0.000000 -0.408853 0.455306	</row2>
+                  <row3>	0.000000 1.231630 2.707936	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.303900 -0.000001 0.000001	</row0>
+                  <row1>	0.000000 0.290034 -0.076684	</row1>
+                  <row2>	0.000000 0.177113 0.669872	</row2>
+                  <row3>	0.000000 1.049000 -2.780000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.070000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.668858 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.787000	</row2>
+                  <row3>	0.000000 0.773979 -0.099000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.845410 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.421233 0.000000	</row1>
+                  <row2>	0.000000 0.000000 0.385000	</row2>
+                  <row3>	0.000000 0.731394 3.043000	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -810,6 +920,14 @@
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
           </atlas>
+          <modelSets>
+            <A171_IMT_G90_3Dst>
+              <segmentModelLeft>	vehicles/american/A171_IMT/_skins/A171_IMT_G90_3Dst/track/segment_01_L.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/american/A171_IMT/_skins/A171_IMT_G90_3Dst/track/segment_01_R.model	</segmentModelRight>
+              <segment2ModelLeft>	vehicles/american/A171_IMT/_skins/A171_IMT_G90_3Dst/track/segment_02_L.model	</segment2ModelLeft>
+              <segment2ModelRight>	vehicles/american/A171_IMT/_skins/A171_IMT_G90_3Dst/track/segment_02_R.model	</segment2ModelRight>
+            </A171_IMT_G90_3Dst>
+          </modelSets>
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
@@ -828,6 +946,12 @@
             <model>	vehicles/american/A171_IMT/track/segment2.model	</model>
             <length>	0.070449	</length>
           </secSegment>
+          <modelSets>
+            <A171_IMT_G90_3Dst>
+              <mainSegmentModel>	vehicles/american/A171_IMT/_skins/A171_IMT_G90_3Dst/track/segment_01_L.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/american/A171_IMT/_skins/A171_IMT_G90_3Dst/track/segment_02_L.model	</secSegmentModel>
+            </A171_IMT_G90_3Dst>
+          </modelSets>
           <springsLength>
             <backwardMovement>
               <back>	0.070314	</back>
@@ -1095,6 +1219,12 @@
             <model>	vehicles/american/A171_IMT/track/segment2.model	</model>
             <length>	0.070449	</length>
           </secSegment>
+          <modelSets>
+            <A171_IMT_G90_3Dst>
+              <mainSegmentModel>	vehicles/american/A171_IMT/_skins/A171_IMT_G90_3Dst/track/segment_01_R.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/american/A171_IMT/_skins/A171_IMT_G90_3Dst/track/segment_02_R.model	</secSegmentModel>
+            </A171_IMT_G90_3Dst>
+          </modelSets>
           <springsLength>
             <backwardMovement>
               <back>	0.070314	</back>
@@ -1444,7 +1574,7 @@
             </armor_15>
             <armor_16>	73.6	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_16>
-            <gun>	35	</gun>
+            <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <reloadTime>	12.3	</reloadTime>
@@ -1487,6 +1617,17 @@
               <size>	0.5	</size>
               <isUVProportional>	false	</isUVProportional>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	0 0 1.38	</rayStart>
+              <rayEnd>	0 0 1.88	</rayEnd>
+              <rayUp>	0.12 0 0	</rayUp>
+              <applyToFabric>	false	</applyToFabric>
+              <compatibleModels>	A171_IMT_G90_3Dst	</compatibleModels>
+              <size>	0.5	</size>
+              <isUVProportional>	false	</isUVProportional>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -1498,6 +1639,13 @@
             <undamaged>	vehicles/american/A171_IMT/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/american/A171_IMT/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/american/A171_IMT/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <A171_IMT_G90_3Dst>
+                <undamaged>	vehicles/american/A171_IMT/_skins/A171_IMT_G90_3Dst/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/american/A171_IMT/_skins/A171_IMT_G90_3Dst/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/american/A171_IMT/_skins/A171_IMT_G90_3Dst/crash/lod0/Gun_02.model	</exploded>
+              </A171_IMT_G90_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A171_IMT/collision/Gun_02.model	</collisionModelServer>
@@ -1514,6 +1662,13 @@
         <undamaged>	vehicles/american/A171_IMT/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/american/A171_IMT/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/american/A171_IMT/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <A171_IMT_G90_3Dst>
+            <undamaged>	vehicles/american/A171_IMT/_skins/A171_IMT_G90_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/american/A171_IMT/_skins/A171_IMT_G90_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/american/A171_IMT/_skins/A171_IMT_G90_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </A171_IMT_G90_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/american/A171_IMT/collision/Turret_01.model	</collisionModelServer>
@@ -1919,7 +2074,7 @@
         </customizableVehicleAreas>
       </customization>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <physicsShape>	1 -0.071 0.897 0 0.496 0.123 0.531 0.5 0.435 0.5 0.013 0.5 0.1 0.457 0	</physicsShape>
+      <physicsShape>	1.007 -0.171 0.957 0 0.814 -0.129 0.686 0.421 0.239 0.5 0.264 0.5 0.229 0.693 0.089	</physicsShape>
       <camouflage>
         <density>	118.302551 118.549278	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
@@ -1933,14 +2088,14 @@
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <AN_VRC-3I>	shared	</AN_VRC-3I>
+    <AN_VRC_3I>	shared	</AN_VRC_3I>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
   <physics>
     <detailed>
       <engines>
         <Continental_AVI_1790I>
-          <smplEnginePower>	850	</smplEnginePower>
+          <smplEnginePower>	900	</smplEnginePower>
           <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </Continental_AVI_1790I>
       </engines>

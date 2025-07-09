@@ -190,7 +190,7 @@ class VehicleAnchorsUpdater(object):
             self.__updateDecalAnchorsVisability()
         elif self.__ctx.mode.tabId == CustomizationTabs.PROJECTION_DECALS:
             self.__updateProjectionDecalAnchorsVisability()
-        elif self.__ctx.mode.tabId == CustomizationTabs.ATTACHMENTS:
+        elif self.__ctx.mode.slotType in GUI_ITEM_TYPE.ATTACHMENT_TYPES:
             self.__updateAttachmentAnchorsVisability()
 
     def __updateRegionsAnchorsVisability(self):
@@ -275,11 +275,11 @@ class VehicleAnchorsUpdater(object):
         self.__updateAnchorsVisability()
 
     def __onCarouselItemSelected(self, *_, **__):
-        if self.__ctx.mode.tabId in (CustomizationTabs.PROJECTION_DECALS, CustomizationTabs.ATTACHMENTS):
+        if self.__ctx.mode.tabId == CustomizationTabs.PROJECTION_DECALS or self.__ctx.mode.slotType in GUI_ITEM_TYPE.ATTACHMENT_TYPES:
             self.__updateAnchorsVisability()
 
     def __onCarouselItemUnselected(self, *_, **__):
-        if self.__ctx.mode.tabId in (CustomizationTabs.PROJECTION_DECALS, CustomizationTabs.ATTACHMENTS):
+        if self.__ctx.mode.tabId == CustomizationTabs.PROJECTION_DECALS or self.__ctx.mode.slotType in GUI_ITEM_TYPE.ATTACHMENT_TYPES:
             for anchor in self.__processedAnchors.itervalues():
                 anchor.state.onItemUnselected()
 

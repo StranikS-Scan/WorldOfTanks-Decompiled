@@ -15,10 +15,10 @@
     <backward>	18	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.015	</moving>
-    <still>	0.03	</still>
+    <moving>	0.018	</moving>
+    <still>	0.035	</still>
     <camouflageBonus>	0.02	</camouflageBonus>
-    <firePenalty>	0.045	</firePenalty>
+    <firePenalty>	0.053	</firePenalty>
   </invisibility>
   <optDevsOverrides>
     <camouflageNet>
@@ -82,7 +82,7 @@
       <lodDist>	FAR	</lodDist>
       <pitchParams>	0.34 38 0.36 1 0.05 0.34	</pitchParams>
       <rollParams>	1 0.34 38 0.36 1 0.06 0.4	</rollParams>
-      <sensitivityToImpulse>	0.94	</sensitivityToImpulse>
+      <sensitivityToImpulse>	0.3	</sensitivityToImpulse>
     </swinging>
     <exhaust>
       <pixie>	diesel_large	</pixie>
@@ -815,10 +815,10 @@
       </armor>
       <weight>	15000	</weight>
       <maxLoad>	75000	</maxLoad>
-      <terrainResistance>	1.3 1.5 2.5	</terrainResistance>
+      <terrainResistance>	1 1.2 2	</terrainResistance>
       <brakeForce>	65000	</brakeForce>
-      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	38	</rotationSpeed>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	42	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.12	</vehicleMovement>
         <vehicleRotation>	0.12	</vehicleRotation>
@@ -1879,6 +1879,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.8	</aimingTime>
+          <invisibilityFactorAtShot>	0.12	</invisibilityFactorAtShot>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -2355,13 +2356,13 @@
         <Chassis_F131_Brennos>
           <grounds>
             <soft>
-              <rollingFriction>	0.20125	</rollingFriction>
+              <rollingFriction>	0.161	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.12075	</rollingFriction>
+              <rollingFriction>	0.0966	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

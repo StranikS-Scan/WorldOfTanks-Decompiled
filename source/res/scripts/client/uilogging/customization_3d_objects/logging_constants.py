@@ -67,6 +67,7 @@ class CustomizationCarouselTabs(Enum):
     STYLES_2D = '2d_styles_tab'
     STYLES_3D = '3d_styles_tab'
     ATTACHMENTS = '3d_attachments_tab'
+    STAT_TRACKERS = 'statTracker_tab'
 
 
 class CustomizationCarouselModes(Enum):
@@ -85,6 +86,7 @@ class CustomizationAttachmentSlots(Enum):
     UNIVERSAL = '3d_attachment_universal_anchor'
     GUN_MANTLET = '3d_attachment_gun_mantlet_anchor'
     TURRET = '3d_attachment_turret_anchor'
+    GUN = '3d_attachment_gun_anchor'
 
 
 class CustomizationFilterButtons(Enum):
@@ -113,7 +115,8 @@ CUSTOMIZATION_CAROUSEL_TAB_MAPPING = {CustomizationTabs.PAINTS: CustomizationCar
  CustomizationTabs.MODIFICATIONS: CustomizationCarouselTabs.EFFECTS,
  CustomizationTabs.STYLES_2D: CustomizationCarouselTabs.STYLES_2D,
  CustomizationTabs.STYLES_3D: CustomizationCarouselTabs.STYLES_3D,
- CustomizationTabs.ATTACHMENTS: CustomizationCarouselTabs.ATTACHMENTS}
+ CustomizationTabs.ATTACHMENTS: CustomizationCarouselTabs.ATTACHMENTS,
+ CustomizationTabs.STAT_TRACKERS: CustomizationCarouselTabs.STAT_TRACKERS}
 CUSTOMIZATION_CAROUSEL_MODE_MAPPING = {CustomizationModes.STYLE_3D: CustomizationCarouselModes.STYLE_3D,
  CustomizationModes.STYLE_2D: CustomizationCarouselModes.STYLE_2D,
  CustomizationModes.CUSTOM: CustomizationCarouselModes.CUSTOM,
@@ -121,5 +124,6 @@ CUSTOMIZATION_CAROUSEL_MODE_MAPPING = {CustomizationModes.STYLE_3D: Customizatio
 VEHICLE_CUSTOMIZATION_FILTER_MAPPING = {FILTER_KEYS.OWN_3D_STYLE: VehicleCustomizationFilterButtons.OWN_3D_STYLE,
  FILTER_KEYS.CAN_INSTALL_ATTACHMENTS: VehicleCustomizationFilterButtons.CAN_INSTALL_ATTACHMENTS}
 ATTACHMENT_TYPE_MAPPING = {AttachmentType.UNIVERSAL: CustomizationAttachmentSlots.UNIVERSAL,
- AttachmentType.GUN: CustomizationAttachmentSlots.GUN_MANTLET,
- AttachmentType.TURRET: CustomizationAttachmentSlots.TURRET}
+ AttachmentType.GUN_MANTLET: CustomizationAttachmentSlots.GUN_MANTLET,
+ AttachmentType.TURRET: CustomizationAttachmentSlots.TURRET,
+ AttachmentType.GUN: CustomizationAttachmentSlots.GUN}

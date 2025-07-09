@@ -169,6 +169,9 @@ class BasePrbEntity(IActionsValidator, PrbFunctionalFlags):
     def hasLockedState(self):
         return False
 
+    def hasSpecialVehicles(self):
+        return False
+
     def getPermissions(self, pID=None, **kwargs):
         return IPrbPermissions()
 

@@ -55,6 +55,7 @@
     <_75mm_Gun_Type5_2>	54	</_75mm_Gun_Type5_2>
     <_75mm_Type_88R_Gun>	55	</_75mm_Type_88R_Gun>
     <_88mm_Type3_Gun>	56	</_88mm_Type3_Gun>
+    <_105mm_Type_5_Se>	57	</_105mm_Type_5_Se>
     <_88mm_Type3_Gun_L56>	58	</_88mm_Type3_Gun_L56>
     <_105mm_Type_92_L45>	59	</_105mm_Type_92_L45>
     <_105mm_Type_14_L34_2>	60	</_105mm_Type_14_L34_2>
@@ -2555,6 +2556,64 @@
         </_120mm_Type_10_HE>
       </shots>
     </_120mm_Gun_Type_10>
+    <_105mm_Type_5_Se>
+      <userString>	#japan_vehicles:_105mm_Type_5_Se	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	100000	</price>
+      <impulse>	0.48	</impulse>
+      <notInShop>	true	</notInShop>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 14.0 1.0 14.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	9.4	</reloadTime>
+      <maxAmmo>	60	</maxAmmo>
+      <aimingTime>	2.28571428571429	</aimingTime>
+      <weight>	2200	</weight>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.422857142857143	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_AP_Experimental_Type5_TK>
+          <defaultPortion>	0.80	</defaultPortion>
+          <speed>	1000	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	220 209	</piercingPower>
+        </_105mm_AP_Experimental_Type5_TK>
+        <_105mm_AP_Experimental_Type5_TS>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1150	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	255 240	</piercingPower>
+        </_105mm_AP_Experimental_Type5_TS>
+        <_105mm_HE_Type93>
+          <defaultPortion>	0.20	</defaultPortion>
+          <speed>	1000	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	53 53	</piercingPower>
+        </_105mm_HE_Type93>
+      </shots>
+    </_105mm_Type_5_Se>
     <_90mm_Gun_M3A1>
       <userString>	#japan_vehicles:_90mm_Gun_M3A1	</userString>
       <tags></tags>

@@ -32,7 +32,7 @@ class KillCamDataComponent(BigWorld.DynamicScriptComponent):
 
     def getSimulationData(self):
         self.__updateLateAttackerData()
-        if self.processedData is not None and self.processedData.get('trajectoryData', None) is None:
+        if self.processedData is not None and self.processedData.get('trajectoryData') is None:
             self.processedData['trajectoryData'], self.processedData['unspottedOrigin'] = self.__setupTrajectory()
         return self.processedData
 

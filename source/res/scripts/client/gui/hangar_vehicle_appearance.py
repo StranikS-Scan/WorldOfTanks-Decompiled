@@ -13,21 +13,24 @@ import VehicleStickers
 import Vehicular
 import math_utils
 from dossiers2.ui.achievements import MARK_ON_GUN_RECORD
-from items.components.c11n_constants import EASING_TRANSITION_DURATION, HANGER_POSTFIX
+from items.components.c11n_constants import EASING_TRANSITION_DURATION
 from gui import g_tankActiveCamouflage
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.simple_turret_rotator import SimpleTurretRotator
+from shared_utils import nextTick
 from skeletons.gui.customization import ICustomizationService
-from vehicle_outfit.outfit import Area, ANCHOR_TYPE_TO_SLOT_TYPE_MAP, SLOT_TYPES
+from vehicle_outfit.outfit import Area, ANCHOR_TYPE_TO_SLOT_TYPE_MAP, SLOT_TYPES, SLOT_TYPE_TO_ANCHOR_TYPE_MAP
 from gui.shared.gui_items.customization.slots import SLOT_ASPECT_RATIO, BaseCustomizationSlot, EmblemSlot, getProgectionDecalAspect
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from helpers import dependency
-from items.components.c11n_constants import ApplyArea
+from items.components.c11n_constants import ApplyArea, AttachmentType
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from skeletons.gui.turret_gun_angles import ITurretAndGunAngles
-from vehicle_systems import camouflages, vehicle_composition
+from objects_hierarchy import PrefabsMapItem
+from vehicle_systems import camouflages
+from vehicle_systems.vehicle_composition import getExtraSlotMap, getObjectSlots, createVehicleComposition, removeComposition, ATTACHMENT_TYPE_TO_SLOT
 from vehicle_systems.components.vehicle_shadow_manager import VehicleShadowManager
 from vehicle_systems.tankStructure import ModelsSetParams, TankPartNames, ColliderTypes, TankPartIndexes
 from vehicle_systems.tankStructure import VehiclePartsTuple, TankNodeNames
@@ -168,6 +171,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         g_eventBus.addListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__handleEntityUpdated)
         g_currentVehicle.onChanged += self.__onVehicleChanged
         self.customizationGameObjects = []
+        self.onDecalsUpdated = Event.Event()
         return
 
     def recreate(self, vDesc, vState=None, callback=None, outfit=None):
@@ -185,6 +189,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.__vState = None
         self.__isVehicleDestroyed = False
         self.__vEntity.model = None
+        self.onDecalsUpdated.clear()
         self.reset()
         if self.collisions:
             BigWorld.removeCameraCollider(self.collisions.getColliderID())
@@ -235,6 +240,10 @@ class HangarVehicleAppearance(ScriptGameObject):
     def fakeShadowDefinedInHullTexture(self):
         return self.__vDesc.hull.hangarShadowTexture if self.__vDesc else None
 
+    @property
+    def slotPrefabs(self):
+        return [ PrefabsMapItem(*it) for it in self.typeDescriptor.slotPrefabs ]
+
     def isLoaded(self):
         return self.__loadState.isLoaded
 
@@ -253,9 +262,9 @@ class HangarVehicleAppearance(ScriptGameObject):
         height = 0.0
         if self.collisions is not None:
             desc = self.__vDesc
-            hullBB = self.collisions.getBoundingBox(TankPartNames.getIdx(TankPartNames.HULL))
-            turretBB = self.collisions.getBoundingBox(TankPartNames.getIdx(TankPartNames.TURRET))
-            gunBB = self.collisions.getBoundingBox(TankPartNames.getIdx(TankPartNames.GUN))
+            hullBB = self.collisions.getExtendedBoundingBox(TankPartNames.getIdx(TankPartNames.HULL))
+            turretBB = self.collisions.getExtendedBoundingBox(TankPartNames.getIdx(TankPartNames.TURRET))
+            gunBB = self.collisions.getExtendedBoundingBox(TankPartNames.getIdx(TankPartNames.GUN))
             hullTopY = desc.chassis.hullPosition[1] + hullBB[1][1]
             turretTopY = desc.chassis.hullPosition[1] + desc.hull.turretPositions[0][1] + turretBB[1][1]
             gunTopY = desc.chassis.hullPosition[1] + desc.hull.turretPositions[0][1] + desc.turret.gunPosition[1] + gunBB[1][1]
@@ -266,7 +275,7 @@ class HangarVehicleAppearance(ScriptGameObject):
     def computeVehicleLength(self):
         vehicleLength = 0.0
         if self.collisions is not None:
-            hullBB = self.collisions.getBoundingBox(TankPartNames.getIdx(TankPartNames.HULL))
+            hullBB = self.collisions.getExtendedBoundingBox(TankPartIndexes.HULL)
             vehicleLength = abs(hullBB[1][2] - hullBB[0][2])
         return vehicleLength
 
@@ -283,7 +292,7 @@ class HangarVehicleAppearance(ScriptGameObject):
     def __reload(self, vDesc, vState, outfit):
         self.__clearCustomLogicComponents()
         self.__loadState.unload()
-        vehicle_composition.removeComposition(self.gameObject)
+        removeComposition(self.gameObject)
         if self.fashion is not None:
             self.fashion.removePhysicalTracks()
         if self.tracks is not None:
@@ -385,9 +394,12 @@ class HangarVehicleAppearance(ScriptGameObject):
 
     def __onResourcesLoaded(self, buildInd, resourceRefs):
         self.removeComponentByType(GenericComponents.HierarchyComponent)
-        self.removeComponentByType(GenericComponents.TransformComponent)
         self.createComponent(GenericComponents.HierarchyComponent, self.__vEntity.entityGameObject)
-        self.createComponent(GenericComponents.TransformComponent, Math.Vector3(0, 0, 0))
+        transform = self.findComponentByType(GenericComponents.TransformComponent)
+        if transform:
+            transform.transform = Math.createIdentityMatrix()
+        else:
+            self.createComponent(GenericComponents.TransformComponent, Math.createIdentityMatrix())
         if not self.__vDesc:
             self.__fireResourcesLoadedEvent()
             return
@@ -544,9 +556,9 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.__setGunMatrix(gunPitchMatrix)
         if self.gameObject.findComponentByType(GenericComponents.DynamicModelComponent) is None:
             self.gameObject.createComponent(GenericComponents.DynamicModelComponent, self.compoundModel)
-        prefabMap = [ CGF.PrefabsMapItem(attachment.slotName, attachment.modelName) for attachment in self.__attachments if not attachment.hiddenForUser ]
-        extraSlots = vehicle_composition.getExtraSlotMap(self.__vDesc, self)
-        vehicle_composition.createVehicleComposition(self.gameObject, prefabMap=prefabMap, followNodes=True, extraSlots=extraSlots)
+        prefabMap = [ PrefabsMapItem(attachment.slotName, attachment.modelName) for attachment in self.__attachments if not attachment.hidden ] + self.slotPrefabs
+        extraSlots = getExtraSlotMap(self.__vDesc, self) + getObjectSlots(self.__vDesc)
+        createVehicleComposition(gameObject=self.gameObject, prefabMap=prefabMap, followNodes=True, extraSlots=extraSlots)
         return
 
     def __onItemsCacheSyncCompleted(self, updateReason, _):
@@ -576,7 +588,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         wheelConfig = typeDescr.chassis.generalWheelsAnimatorConfig
         if self.wheelsAnimator is not None and wheelConfig is not None:
             self.wheelsAnimator.createCollision(wheelConfig, self.collisions)
-        gunColBox = self.collisions.getBoundingBox(TankPartNames.getIdx(TankPartNames.GUN) + 3)
+        gunColBox = self.collisions.getExtendedBoundingBox(TankPartNames.getIdx(TankPartNames.GUN) + 3)
         center = 0.5 * (gunColBox[1] - gunColBox[0])
         gunoffset = Math.Matrix()
         gunoffset.setTranslate((0.0, 0.0, center.z + gunColBox[0].z))
@@ -606,7 +618,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         if not self.collisions:
             return
         if state != CameraMovementStates.FROM_OBJECT:
-            colliderData = (self.collisions.getColliderID(), (TankPartNames.getIdx(TankPartNames.GUN) + 1, TankPartNames.getIdx(TankPartNames.GUN) + 2, TankPartNames.getIdx(TankPartNames.GUN) + 3))
+            colliderData = (self.collisions.getColliderID(), tuple(self.collisions.partIndices))
             BigWorld.appendCameraCollider(colliderData)
             cameraManager = CGF.getManager(self.__spaceId, HangarCameraManager)
             if cameraManager:
@@ -712,6 +724,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.__updateDecals(outfit)
         self.__updateProjectionDecals(outfit)
         self.__updateCustomLogicComponents(outfit)
+        nextTick(self.onDecalsUpdated)()
         if callback is not None:
             callback()
         return
@@ -758,9 +771,12 @@ class HangarVehicleAppearance(ScriptGameObject):
             return True
 
     def getVehicleCentralPoint(self):
+        hullAABB = self.collisions.getExtendedBoundingBox(TankPartIndexes.HULL)
+        return math_utils.getCenterFromBox(hullAABB)
+
+    def __getHullCentralPoint(self):
         hullAABB = self.collisions.getBoundingBox(TankPartIndexes.HULL)
-        centralPoint = Math.Vector3((hullAABB[1].x + hullAABB[0].x) / 2.0, hullAABB[1].y / 2.0, (hullAABB[1].z + hullAABB[0].z) / 2.0)
-        return centralPoint
+        return math_utils.getCenterFromBox(hullAABB)
 
     def __getAnchorHelperById(self, anchorId):
         if anchorId.slotType not in self.__anchorsHelpers:
@@ -819,10 +835,11 @@ class HangarVehicleAppearance(ScriptGameObject):
 
     def __updateCustomLogicComponents(self, outfit):
         self.__clearCustomLogicComponents()
+        prevAttachments = self.__attachments
         self.__attachments = camouflages.getAttachments(outfit, self.__vDesc, self.__isVehicleDestroyed, True)
+        self.updateAttachments(prevAttachments)
         animatorResources = camouflages.getModelAnimatorsPrereqs(outfit, self.__spaceId)
         animatorResources.extend(camouflages.getAttachmentsAnimatorsPrereqs(self.__attachments, self.__spaceId))
-        self.updateAttachments(outfit)
         if not self.__isVehicleDestroyed:
             if animatorResources:
                 BigWorld.loadResourceListBG(tuple(animatorResources), makeCallbackWeak(self.__onAnimatorsLoaded, self.__curBuildInd, outfit))
@@ -830,42 +847,38 @@ class HangarVehicleAppearance(ScriptGameObject):
                 from vehicle_systems import model_assembler
                 model_assembler.assembleCustomLogicComponents(self, self.__vEntity.typeDescriptor, self.__attachments, self.__modelAnimators)
 
-    def simpleParamsConverter(self, slotParams, slotData, idx):
-        return slotParams
+    def updateAttachments(self, prevAttachments):
+        hierarchy = CGF.HierarchyManager(self.__spaceId)
+        slotsByIdMap = {}
+        for itemType in GUI_ITEM_TYPE.ATTACHMENT_TYPES:
+            slotsByIdMap.update(camouflages.createSlotMap(self.__vDesc, SLOT_TYPE_TO_ANCHOR_TYPE_MAP[itemType]))
 
-    def updateAttachments(self, outfit):
-        diff = self.__outfit.diff(outfit)
-        backwardsDiff = outfit.diff(self.__outfit)
-        slotParamsList = camouflages.getParams(backwardsDiff, self.__vDesc, 'attachment', GUI_ITEM_TYPE.ATTACHMENT, self.simpleParamsConverter)
-        for slotParams in slotParamsList:
-            hierarchy = CGF.HierarchyManager(self.__spaceId)
-            extraGO = hierarchy.findFirstNode(self.gameObject, str(slotParams.slotId))
-            childrenGO = hierarchy.getChildren(extraGO)
-            for child in childrenGO:
-                CGF.removeGameObject(child)
-
-            hangerGO = hierarchy.findFirstNode(self.gameObject, str(slotParams.slotId) + HANGER_POSTFIX)
-            if hangerGO:
-                hangerChildrenGO = hierarchy.getChildren(hangerGO)
-                for child in hangerChildrenGO:
+        for prevAttachment in prevAttachments:
+            if prevAttachment not in self.__attachments:
+                slotGO = hierarchy.findFirstNode(self.gameObject, prevAttachment.slotName)
+                childrenGO = hierarchy.getChildren(slotGO)
+                for child in childrenGO:
                     CGF.removeGameObject(child)
 
-        CGF.clearLoadingQueue(self.__spaceId)
-        slotParamsList = camouflages.getParams(diff, self.__vDesc, 'attachment', GUI_ITEM_TYPE.ATTACHMENT, self.simpleParamsConverter)
-        for slotParams in slotParamsList:
-            for attachment in self.__attachments:
-                hierarchy = CGF.HierarchyManager(self.__spaceId)
-                child = hierarchy.findFirstNode(self.gameObject, attachment.slotName)
-                if attachment.slotName == str(slotParams.slotId):
-                    transformComponent = child.findComponentByType(GenericComponents.TransformComponent)
+        for attachment in self.__attachments:
+            if attachment not in prevAttachments:
+                slotGO = hierarchy.findFirstNode(self.gameObject, attachment.slotName)
+                loadedCallback = partial(self.__onAttachmentLoaded, attachment)
+                if attachment.isHanger:
+                    CGF.loadGameObjectIntoHierarchy(attachment.modelName, slotGO, Math.Vector3(0, 0, 0), hierarchyLoadedCallback=loadedCallback)
+                else:
+                    transformComponent = slotGO.findComponentByType(GenericComponents.TransformComponent)
+                    slotParams = slotsByIdMap[attachment.slotId]
                     rotationYPR = Math.Vector3(slotParams.rotation.y, slotParams.rotation.x, slotParams.rotation.z)
                     slotTransform = math_utils.createSRTMatrix(slotParams.scale, rotationYPR, slotParams.position)
                     transform = math_utils.createSRTMatrix(attachment.scale, attachment.rotation, Math.Vector3(0, 0, 0))
                     transform.postMultiply(slotTransform)
                     transformComponent.transform = transform
-                    CGF.loadGameObjectIntoHierarchy(attachment.modelName, child, Math.Vector3(0, 0, 0))
-                if attachment.slotName == str(slotParams.slotId) + HANGER_POSTFIX:
-                    CGF.loadGameObjectIntoHierarchy(attachment.modelName, child, Math.Vector3(0, 0, 0))
+                    CGF.loadGameObjectIntoHierarchy(attachment.modelName, slotGO, Math.Vector3(0, 0, 0), hierarchyLoadedCallback=loadedCallback)
+
+    def __onAttachmentLoaded(self, attachment, gameObject):
+        if attachment not in self.__attachments:
+            CGF.removeGameObject(gameObject)
 
     def __updateStyleProgression(self, outfit):
         camouflages.changeStyleProgression(outfit.style, self, outfit.progressionLevel)
@@ -895,11 +908,6 @@ class HangarVehicleAppearance(ScriptGameObject):
         return
 
     def __updateAnchorsParams(self, tankPartsToUpdate):
-        tankPartsMatrices = {}
-        for tankPartIdx in TankPartIndexes.ALL:
-            tankPartName = TankPartIndexes.getName(tankPartIdx)
-            tankPartsMatrices[tankPartIdx] = Math.Matrix(self.__vEntity.model.node(tankPartName))
-
         for slotType in SLOT_TYPES:
             for areaId in Area.ALL:
                 anchorHelpers = self.__anchorsHelpers[slotType][areaId]
@@ -907,7 +915,16 @@ class HangarVehicleAppearance(ScriptGameObject):
                     attachedPartIdx = anchorHelper.attachedPartIdx
                     if attachedPartIdx not in tankPartsToUpdate:
                         continue
-                    anchorLocationWS = self.__getAnchorLocationWS(anchorHelper.location, anchorHelper.partIdx)
+                    if slotType in GUI_ITEM_TYPE.ATTACHMENT_TYPES and anchorHelper.descriptor.applyType in ATTACHMENT_TYPE_TO_SLOT:
+                        nodeName = ATTACHMENT_TYPE_TO_SLOT[anchorHelper.descriptor.applyType]
+                        node = self.__vEntity.model.node(nodeName)
+                        if not node:
+                            _logger.error('Could not find tank node %s', nodeName)
+                            continue
+                        partMatrix = Math.Matrix(node)
+                    else:
+                        partMatrix = Math.Matrix(self.__vEntity.model.node(TankPartIndexes.getName(anchorHelper.partIdx)))
+                    anchorLocationWS = self.__applyToAnchorLocation(anchorHelper.location, partMatrix)
                     self.__anchorsParams[slotType][areaId][regionIdx] = AnchorParams(anchorLocationWS, anchorHelper.descriptor, AnchorId(slotType, areaId, regionIdx))
 
     def __initAnchorsHelpers(self):
@@ -950,20 +967,23 @@ class HangarVehicleAppearance(ScriptGameObject):
             up = rotationMatrix.applyVector((0, 0, -1))
             up.normalise()
             position = Math.Vector3(anchor.position) + anchor.descriptor.anchorShift * normal
-        elif slotType == GUI_ITEM_TYPE.ATTACHMENT:
+        elif slotType in GUI_ITEM_TYPE.ATTACHMENT_TYPES:
             partIdx = anchor.areaId
             pyr = anchor.rotation
             rotationMatrix = Math.Matrix()
             rotationMatrix.setRotateYPR((pyr.y, pyr.x, pyr.z))
             normal = rotationMatrix.applyVector((0, 1, 0))
             normal.normalise()
-            up = rotationMatrix.applyVector((0, 0, 1))
+            if anchor.applyType in AttachmentType.GUN_SLOTS:
+                up = rotationMatrix.applyVector((-1, 0, 0))
+            else:
+                up = rotationMatrix.applyVector((0, 0, -1))
             up.normalise()
             position = Math.Vector3(anchor.position)
         else:
             if slotType in (GUI_ITEM_TYPE.MODIFICATION, GUI_ITEM_TYPE.STYLE):
                 partIdx = TankPartIndexes.HULL
-                position = self.getVehicleCentralPoint()
+                position = self.__getHullCentralPoint()
             else:
                 partIdx = anchor.areaId
                 position = anchor.anchorPosition
@@ -1058,10 +1078,6 @@ class HangarVehicleAppearance(ScriptGameObject):
             normal = Math.Vector3(0, -1, 0) + up * 0.01
             normal.normalise()
         return AnchorLocation(position, normal, up)
-
-    def __getAnchorLocationWS(self, anchorLocation, partIdx):
-        partMatrix = Math.Matrix(self.__vEntity.model.node(TankPartIndexes.getName(partIdx)))
-        return self.__applyToAnchorLocation(anchorLocation, partMatrix)
 
     def __getGunNode(self):
         gunNode = self.compoundModel.node(TankNodeNames.GUN_INCLINATION)

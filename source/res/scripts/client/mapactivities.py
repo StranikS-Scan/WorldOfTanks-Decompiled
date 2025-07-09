@@ -406,8 +406,9 @@ class WarplaneActivity(BaseMapActivity):
         if self.__model is not None:
             if self.__motor is not None and self.__motor in self.__model.motors:
                 self.__model.delMotor(self.__motor)
-            if self.__model in BigWorld.player().models:
-                BigWorld.player().delModel(self.__model)
+            avatar = BigWorld.player()
+            if avatar and self.__model in avatar.models:
+                avatar.delModel(self.__model)
             self.__model = None
             self.__motor = None
             self.__curve = None

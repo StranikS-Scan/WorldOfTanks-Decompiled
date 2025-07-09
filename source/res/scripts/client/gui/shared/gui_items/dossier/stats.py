@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/stats.py
+import collections
 import itertools
 import logging
 from collections import namedtuple, defaultdict, OrderedDict
@@ -78,7 +79,7 @@ class _StatsMaxBlock(_StatsBlockAbstract):
 
 
 class _VehiclesStatsBlock(_StatsBlockAbstract):
-    _VehiclesDossiersCut = namedtuple('VehiclesDossiersCut', ','.join(['battlesCount', 'wins', 'xp']))
+    _VehiclesDossiersCut = namedtuple('VehiclesDossiersCut', ('battlesCount', 'wins', 'xp'))
 
     class VehiclesDossiersCut(_VehiclesDossiersCut):
 
@@ -94,7 +95,9 @@ class _VehiclesStatsBlock(_StatsBlockAbstract):
         self._vehsList = {}
         self._markOfMasteryCut = dossier.getDossierDescr()['markOfMasteryCut']
         for intCD, cut in self._getVehDossiersCut(dossier).iteritems():
-            self._vehsList[intCD] = self._packVehicle(*cut)
+            if isinstance(cut, collections.Iterable):
+                self._vehsList[intCD] = self._packVehicle(*cut)
+            self._vehsList[intCD] = self._packVehicle(cut)
 
     def getVehicles(self):
         return self._vehsList
@@ -1708,6 +1711,9 @@ class AccountDossierStats(_DossierStats):
     def getPrestigeStats(self):
         return AccountPrestigeStatsBlock(self._getDossierItem())
 
+    def getStatTrackersVehicleStatsBlock(self):
+        return AccountSTVehStatsBlock(self._getDossierItem())
+
 
 class VehicleDossierStats(_DossierStats):
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -2099,3 +2105,13 @@ class AccountPrestigeStatsBlock(_VehiclesStatsBlock):
 
     def _packVehicle(self, currentLevel=0, remainingPoints=0):
         return self._PrestigeVehiclesDossiersCut(currentLevel, remainingPoints)
+
+
+class AccountSTVehStatsBlock(_VehiclesStatsBlock):
+    _STVehStatsDossierCut = namedtuple('STVehStatsDossierCut', ['frags'])
+
+    def _getVehDossiersCut(self, dossier):
+        return dossier.getDossierDescr()[VEHICLE_STATS.STAT_TRACKERS_VEH_STATS_CUT]
+
+    def _packVehicle(self, frags=0):
+        return self._STVehStatsDossierCut(frags)

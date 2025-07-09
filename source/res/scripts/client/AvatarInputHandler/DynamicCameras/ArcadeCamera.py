@@ -306,10 +306,11 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
             if initialVehicleMatrix is None:
                 initialVehicleMatrix = player.getOwnVehicleMatrix(Math.Matrix(self.vehicleMProv)) if vehicle is None else vehicle.matrix
             vehicleMProv = initialVehicleMatrix
-            if self._ArcadeCamera__compareCurrStateSettingsKey(GAME.COMMANDER_CAM) or arcadeState is not None:
-                state = None
-                newCameraDistance = self._distRange.max
-                if arcadeState is not None:
+            if not self.isInArcadeZoomState() or arcadeState is not None:
+                if arcadeState is None:
+                    state = None
+                    newCameraDistance = self._cfg['distRange'].max
+                else:
                     self._ArcadeCamera__zoomStateSwitcher.switchToState(arcadeState.zoomSwitcherState)
                     state = self._ArcadeCamera__zoomStateSwitcher.getCurrentState()
                     newCameraDistance = arcadeState.camDist

@@ -82,7 +82,8 @@ def createPlugins():
      'mutableDamage': MutableDamagePlugin,
      'aimDamage': AimDamagePlugin,
      'cameraTransition': CameraTransitionPlugin,
-     'twinGun': TwinGunPlugin}
+     'twinGun': TwinGunPlugin,
+     'temperatureMechanics': TemperatureGunPlugin}
     return resultPlugins
 
 
@@ -1986,3 +1987,51 @@ class TwinGunPlugin(VehicleMechanicPlugin):
             collisions = collisions if collisions is not None else crosshairCtrl.getMultiGunCollisions()
             self.parentObj.as_setTwinGunMarkerStateS(self._getTwinGunMarkerState(collisions))
             return
+
+
+class TemperatureGunPlugin(CrosshairPlugin):
+
+    def __init__(self, parentObj):
+        super(TemperatureGunPlugin, self).__init__(parentObj)
+        self.__temperatureGunCtrl = None
+        return
+
+    def start(self):
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        if vStateCtrl is not None:
+            vStateCtrl.onVehicleControlling += self.__onVehicleControlling
+            vehicle = vStateCtrl.getControllingVehicle()
+            self.__onVehicleControlling(vehicle)
+        return
+
+    def stop(self):
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        if vStateCtrl is not None:
+            vStateCtrl.onVehicleControlling -= self.__onVehicleControlling
+        self.__unsubscribeTemperatureCtrl()
+        return
+
+    def __onVehicleControlling(self, vehicle):
+        if vehicle and vehicle.typeDescriptor.isTemperatureGun:
+            self.__subscribeTemperatureCtrl(vehicle.dynamicComponents.get('temperatureGunController'))
+            self.parentObj.as_addOverheatS(self.__temperatureGunCtrl.overheatMarkPercent if self.__temperatureGunCtrl else 0.0)
+        else:
+            self.__unsubscribeTemperatureCtrl()
+            self.parentObj.as_removeOverheatS()
+
+    def __subscribeTemperatureCtrl(self, temperatureGunCtr):
+        if temperatureGunCtr:
+            self.__temperatureGunCtrl = temperatureGunCtr
+            self.__temperatureGunCtrl.onTemperatureProgress += self.__onTemperatureProgress
+            self.__temperatureGunCtrl.onSetOverheat += self.__onTemperatureProgress
+
+    def __unsubscribeTemperatureCtrl(self):
+        if self.__temperatureGunCtrl:
+            self.__temperatureGunCtrl.onTemperatureProgress -= self.__onTemperatureProgress
+            self.__temperatureGunCtrl.onSetOverheat -= self.__onTemperatureProgress
+            self.__temperatureGunCtrl = None
+        return
+
+    def __onTemperatureProgress(self, _):
+        if self.__temperatureGunCtrl:
+            self.parentObj.as_setOverheatProgressS(self.__temperatureGunCtrl.overheatProgress, self.__temperatureGunCtrl.isOverheated)

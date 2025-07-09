@@ -6,7 +6,6 @@ import time
 import typing
 import BigWorld
 from account_helpers.AccountSettings import QUEST_DELTAS_TOKENS_PROGRESS
-from adisp import adisp_async, adisp_process
 from constants import LOOTBOX_TOKEN_PREFIX
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from gui.shared.utils.requesters.common import BaseDelta
@@ -16,6 +15,7 @@ from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from skeletons.gui.shared.utils.requesters import ITokensRequester
+from wg_async import wg_async, await_callback
 if typing.TYPE_CHECKING:
     from typing import Dict, Tuple
 _logger = logging.getLogger(__name__)
@@ -142,18 +142,16 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
         self.__tokensProgressDelta.update(data)
         return data
 
-    @adisp_async
-    @adisp_process
-    def _requestCache(self, callback):
-        result = yield self.__requestTokensCache()
+    @wg_async
+    def _requestCache(self, callback=None):
+        result = yield await_callback(self.__requestTokensCache)()
         if 'tokens' in result:
             if not self.__lootBoxCache:
                 self.__createLootBoxes(self.lobbyContext.getServerSettings().getLootBoxConfig())
             self.__updateLootBoxes(result['tokens'])
         callback(result)
 
-    @adisp_async
-    def __requestTokensCache(self, callback):
+    def __requestTokensCache(self, callback=None):
         BigWorld.player().tokens.getCache(lambda resID, value: self._response(resID, value, callback))
 
     def __createLootBoxes(self, data):

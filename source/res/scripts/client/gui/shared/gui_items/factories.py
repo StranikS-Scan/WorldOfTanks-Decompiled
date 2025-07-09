@@ -6,7 +6,7 @@ from debug_utils import LOG_WARNING
 from items import vehicles, EQUIPMENT_TYPES, getTypeOfCompactDescr
 from items.components.c11n_constants import CustomizationType, DecalType
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.customization.c11n_items import Customization, Paint, Camouflage, Modification, Insignia, Decal, Emblem, Inscription, Style, ProjectionDecal, PersonalNumber, Sequence, Attachment
+from gui.shared.gui_items.customization.c11n_items import Customization, Paint, Camouflage, Modification, Insignia, Decal, Emblem, Inscription, Style, ProjectionDecal, PersonalNumber, Sequence, Attachment, StatTracker
 from vehicle_outfit.outfit import Outfit
 from gui.shared.gui_items.dossier import TankmanDossier, AccountDossier, VehicleDossier
 from gui.shared.gui_items.vehicle_modules import Shell, VehicleGun, VehicleChassis, VehicleEngine, VehicleRadio, VehicleTurret, VehicleFuelTank
@@ -131,6 +131,8 @@ class GuiItemFactory(IGuiItemsFactory):
             cls = Sequence
         elif descriptor.itemType == CustomizationType.ATTACHMENT:
             cls = Attachment
+        elif descriptor.itemType == CustomizationType.STAT_TRACKER:
+            cls = StatTracker
         else:
             LOG_WARNING('Unknown customization type', descriptor.itemType)
             cls = Customization
@@ -184,6 +186,7 @@ _ITEM_TYPES_MAPPING = {_NONE_GUI_ITEM_TYPE: lambda *args, **kwargs: None,
  GUI_ITEM_TYPE.PROJECTION_DECAL: GuiItemFactory.createCustomization,
  GUI_ITEM_TYPE.SEQUENCE: GuiItemFactory.createCustomization,
  GUI_ITEM_TYPE.ATTACHMENT: GuiItemFactory.createCustomization,
+ GUI_ITEM_TYPE.STAT_TRACKER: GuiItemFactory.createCustomization,
  GUI_ITEM_TYPE.OUTFIT: GuiItemFactory.createOutfit,
  GUI_ITEM_TYPE.CREW_SKINS: GuiItemFactory.createCrewSkin,
  GUI_ITEM_TYPE.CREW_BOOKS: GuiItemFactory.createCrewBook,

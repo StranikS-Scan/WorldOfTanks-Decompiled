@@ -170,6 +170,7 @@
       <module>	client.cgf_components.attack_artillery_fort_components	</module>
       <module>	client.cgf_components.marker_component	</module>
       <module>	client.cgf_components.serial_number_component	</module>
+      <module>	client.cgf_components.stats_display_components	</module>
       <module>	client.cgf_components.trigger_vse_component	</module>
       <module>	client.cgf_components.highlight_component	</module>
       <module>	client.cgf_components.hover_component	</module>
@@ -181,6 +182,7 @@
       <module>	client.points_of_interest.registrars	</module>
       <module>	client.vehicle_systems.components.vehicle_custom_effects_settings	</module>
       <module>	client.vehicle_systems.components.shot_damage_components	</module>
+      <module>	client.vehicle_systems.components.insignia_stickers_receiver_component	</module>
       <module>	client.vehicle_systems.components.debris_crashed_track_manager	</module>
       <module>	client.vehicle_systems.components.vehicle_pickup_manager	</module>
       <module>	client.vehicle_systems.components.vehicle_assembly_manager	</module>
@@ -192,14 +194,13 @@
       <module>	client.cgf_components.shot_color_transmission_component	</module>
       <module>	client.cgf_components.bunkers	</module>
       <module>	client.cgf_components.auto_shoot_gun_components	</module>
+      <module>	client.cgf_components.gun_spin_animator_component	</module>
       <module>	client.cgf_components.gun_audition_component	</module>
       <module>	client.cgf_components.rtpc_component_manager	</module>
       <module>	client.cgf_components.twin_gun_components	</module>
       <module>	client.cgf_components.on_player_in_zone_manager	</module>
-      <module>	common.cgf_components_common.shots_receiver	</module>
       <module>	common.cgf_components_common.state_components	</module>
       <module>	common.cgf_components_common.vehicle_components	</module>
-      <module>	common.cgf_components_common.scenario.sequence_network_sync	</module>
       <module>	common.cgf_components_common.material_component	</module>
       <module>	common.cgf_components_common.managers.state_managers	</module>
       <module>	common.cgf_components_common.bunkers	</module>
@@ -212,12 +213,17 @@
       <module>	cell.cgf_cell.heightmap_patch_manager	</module>
       <module>	cell.cgf_cell.static_obstacle_manager	</module>
       <module>	cell.cgf_cell.vehicle_destroying_manager	</module>
-      <module>	cell.cgf_cell.bunkers	</module>
       <module>	editor.cgf_editor.entity_follower	</module>
       <module>	client.cgf_components.visual_effect_component_manager	</module>
       <module>	cell.cgf_cell.partial_visibility_group	</module>
       <module>	cell.cgf_cell.damage_zone	</module>
       <module>	client.cgf_components.color_blind_component	</module>
+      <module>	cell.cgf_cell.bunkers	</module>
+      <module>	client.HealthComponent	</module>
+      <module>	client.DeathComponent	</module>
+      <module>	client.SequenceNetworkSync	</module>
+      <module>	client.ShotsReceiver	</module>
+      <module>	cell.cgf_cell.cgf_replication_hash	</module>
     </script>
     <testScript>
       <module>	client.cgf_demo_client.test_client_component	</module>
@@ -232,10 +238,10 @@
       <module>	common.cgf_demo.test_bridge	</module>
       <module>	common.cgf_demo.test_manager_rule	</module>
       <module>	common.cgf_demo.test_edge_drawer	</module>
-      <module>	common.cgf_demo.test_replicable	</module>
       <module>	cell.cgf_demo_cell.demo_rules	</module>
       <module>	cell.cgf_demo_cell.demo_managers	</module>
       <module>	cell.cgf_demo_cell.demo_scenario_trigger	</module>
+      <module>	cell.TestReplicableComponent	</module>
     </testScript>
     <testPrefabs></testPrefabs>
     <prefabs>
@@ -303,6 +309,14 @@
       <path>	particles/Tank/customization/Cz17_Vz_55_NY2025_3Dst/Cz17_Vz_55_NY2025_3Dst.prefab	</path>
       <path>	particles/Tank/customization/Cz17_Vz_55_NY2025_3Dst/Cz17_Vz_55_NY2025_3Dst_Gun_01.prefab	</path>
       <path>	particles/Tank/customization/Cz17_Vz_55_NY2025_3Dst/Cz17_Vz_55_NY2025_3Dst_Gun_02.prefab	</path>
+      <path>	content/CGFPrefabs/Frontline/fullDestruction.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/fep_qfg/_23mm_AZP23x4_FEP.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/fep_qfg/_37mm_T250_FEP.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/fep_qfg/_40mm_Mle51_EBR_FEP.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/fep_qfg/_50mm_MK_46_ROTARY_FEP.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/fep_qfg/_57mm_C68x2_FEP.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/fep_qfg/_75mm_XM247_FEP.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/fep_qfg/_88mm_Flakzwilling_FEP.prefab	</path>
     </prefabs>
   </cgf>
 </resources.xml>

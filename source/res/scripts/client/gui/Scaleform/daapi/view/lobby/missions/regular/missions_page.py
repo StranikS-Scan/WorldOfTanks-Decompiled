@@ -273,6 +273,8 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         requestedTab = ctx.get('tab')
         self.__subTab = ctx.get('subTab')
         self.__marathonPrefix = ctx.get('marathonPrefix') or caches.getNavInfo().getMarathonPrefix()
+        if self.__currentTabAlias != requestedTab and self.__currentTabAlias == QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS and self.currentTab is not None:
+            self.currentTab.stop()
         if requestedTab:
             self.__currentTabAlias = requestedTab
         else:

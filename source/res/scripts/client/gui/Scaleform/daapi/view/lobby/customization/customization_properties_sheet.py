@@ -483,6 +483,8 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             renderers = self.__makeStyleRenderersVOs()
         elif slotType == GUI_ITEM_TYPE.ATTACHMENT:
             renderers = self.__makeAttachmentRenderersVOs()
+        elif slotType == GUI_ITEM_TYPE.STAT_TRACKER:
+            renderers = []
         else:
             _logger.error('Cannot get customization properties sheet renderers for slotType: %s', slotType)
             renderers = []
@@ -635,7 +637,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         if slotId.slotType == GUI_ITEM_TYPE.ATTACHMENT:
             disableTooltip = backport.text(R.strings.vehicle_customization.customization.propertySheet.disabled.attachment.move())
             enabled = False
-            multiSlot = self.__ctx.commonOutfit.getContainer(slotId.areaId).slotFor(slotId.slotType)
+            multiSlot = self.__ctx.commonModifiedOutfit.getContainer(slotId.areaId).slotFor(slotId.slotType)
             for regionIdx, anchor in g_currentVehicle.item.getAnchors(slotId.slotType, slotId.areaId):
                 if not multiSlot.getItemCD(regionIdx) and anchor.applyType == self._currentItem.applyType:
                     enabled = True
@@ -669,6 +671,8 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_CAMOUFLAGE
         elif slotType == GUI_ITEM_TYPE.ATTACHMENT:
             actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_ATTACHMENT
+        elif slotType == GUI_ITEM_TYPE.STAT_TRACKER:
+            actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_STATTRACKER
         else:
             actionBtnLabel = VEHICLE_CUSTOMIZATION.getSheetBtnRemoveText(getCustomizationTankPartName(self._attachedAnchor.areaId, self._attachedAnchor.regionIdx))
         disableIcon = backport.image(R.images.gui.maps.icons.customization.property_sheet.disable.icon_remove_disable())

@@ -5,15 +5,23 @@ import logging
 import BigWorld
 from functools import partial
 from Event import Event
-from cgf_components_common.scenario.sequence_network_sync import SequenceNetworkSync as Sync
-from script_component.DynamicScriptComponent import DynamicScriptComponent
 from cgf_components.sequence_components import SequencePauseComponent, SequenceSnapshotComponent
 from cgf_script.managers_registrator import onAddedQuery, autoregister, onProcessQuery, onRemovedQuery
 from GenericComponents import Sequence
-from constants import HAS_DEV_RESOURCES
+from constants import HAS_DEV_RESOURCES, IS_EDITOR
+from cgf_script.component_meta_class import registerReplicableComponent
 _logger = logging.getLogger(__name__)
+if IS_EDITOR:
 
-class SequenceNetworkSync(DynamicScriptComponent, Sync):
+    class DynamicScriptComponent(object):
+        pass
+
+
+else:
+    from BigWorld import DynamicScriptComponent
+
+@registerReplicableComponent
+class SequenceNetworkSync(DynamicScriptComponent):
 
     def __init__(self):
         super(SequenceNetworkSync, self).__init__()

@@ -267,11 +267,11 @@ class BattlePassProgressionsViewModel(CommonViewModel):
     def setSeasonNum(self, value):
         self._setNumber(38, value)
 
-    def getIsSpecialTankmenEnabled(self):
-        return self._getBool(39)
+    def getTankmenScreenID(self):
+        return self._getNumber(39)
 
-    def setIsSpecialTankmenEnabled(self, value):
-        self._setBool(39, value)
+    def setTankmenScreenID(self, value):
+        self._setNumber(39, value)
 
     def _initialize(self):
         super(BattlePassProgressionsViewModel, self)._initialize()
@@ -310,7 +310,7 @@ class BattlePassProgressionsViewModel(CommonViewModel):
         self._addNumberProperty('expireTime', 0)
         self._addNumberProperty('timeLeft', 0)
         self._addNumberProperty('seasonNum', 0)
-        self._addBoolProperty('isSpecialTankmenEnabled', False)
+        self._addNumberProperty('tankmenScreenID', 0)
         self.onClose = self._addCommand('onClose')
         self.onActionClick = self._addCommand('onActionClick')
         self.onTakeClick = self._addCommand('onTakeClick')

@@ -11,8 +11,8 @@ from gui.customization.constants import CustomizationModes
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from gui.shared.money import Currency, ZERO_MONEY
-from items.components.c11n_components import getVehicleAttachmentSlotParams
-from items.components.c11n_constants import CustomizationType, C11N_MASK_REGION, MAX_USERS_PROJECTION_DECALS, ProjectionDecalFormTags, SeasonType, ApplyArea, C11N_GUN_APPLY_REGIONS, UNBOUND_VEH_KEY, EMPTY_ITEM_ID, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID
+from items.components.c11n_components import getVehicleSlotParams
+from items.components.c11n_constants import CustomizationType, C11N_MASK_REGION, MAX_USERS_PROJECTION_DECALS, ProjectionDecalFormTags, SeasonType, ApplyArea, C11N_GUN_APPLY_REGIONS, UNBOUND_VEH_KEY, EMPTY_ITEM_ID, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID, SLOT_DEFAULT_ALLOWED_MODEL
 from shared_utils import CONST_CONTAINER, isEmpty
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IExchangeRatesWithDiscountsProvider
@@ -40,9 +40,11 @@ C11N_ITEM_TYPE_MAP = {GUI_ITEM_TYPE.PAINT: CustomizationType.PAINT,
  GUI_ITEM_TYPE.STYLE: CustomizationType.STYLE,
  GUI_ITEM_TYPE.PROJECTION_DECAL: CustomizationType.PROJECTION_DECAL,
  GUI_ITEM_TYPE.ATTACHMENT: CustomizationType.ATTACHMENT,
- GUI_ITEM_TYPE.SEQUENCE: CustomizationType.SEQUENCE}
+ GUI_ITEM_TYPE.SEQUENCE: CustomizationType.SEQUENCE,
+ GUI_ITEM_TYPE.STAT_TRACKER: CustomizationType.STAT_TRACKER}
 PURCHASE_ITEMS_ORDER = (GUI_ITEM_TYPE.STYLE,
  GUI_ITEM_TYPE.ATTACHMENT,
+ GUI_ITEM_TYPE.STAT_TRACKER,
  GUI_ITEM_TYPE.SEQUENCE,
  GUI_ITEM_TYPE.PROJECTION_DECAL,
  GUI_ITEM_TYPE.PERSONAL_NUMBER,
@@ -56,6 +58,8 @@ PURCHASE_ITEMS_ORDER += tuple((key << _EDITED_ITEM_ORDER_SHIFT for key in PURCHA
 EDITABLE_STYLE_IRREMOVABLE_TYPES = (GUI_ITEM_TYPE.PAINT, GUI_ITEM_TYPE.CAMOUFLAGE, GUI_ITEM_TYPE.MODIFICATION)
 EDITABLE_STYLE_APPLY_TO_ALL_AREAS_TYPES = {GUI_ITEM_TYPE.PAINT: C11nId(Area.HULL, GUI_ITEM_TYPE.PAINT, 0),
  GUI_ITEM_TYPE.CAMOUFLAGE: C11nId(Area.HULL, GUI_ITEM_TYPE.CAMOUFLAGE, 0)}
+COMMON_C11N_TYPE_TO_OUTFIT_FIELD_MAP = {GUI_ITEM_TYPE.STAT_TRACKER: 'stat_trackers',
+ GUI_ITEM_TYPE.ATTACHMENT: 'attachments'}
 
 class PurchaseItem(object):
     __slots__ = ('item', 'price', 'areaID', 'slotType', 'regionIdx', 'selected', 'group', 'isFromInventory', 'component', 'locked', 'isEdited', 'progressionLevel')
@@ -181,7 +185,7 @@ def getAvailableRegions(areaId, slotType, vehicleDescr=None):
             return __getAvailableDecalRegions(areaId, slotType, vehicleDescr)
         if slotType in (GUI_ITEM_TYPE.PAINT, GUI_ITEM_TYPE.CAMOUFLAGE):
             return __getAppliedToRegions(areaId, slotType, vehicleDescr)
-        if slotType in (GUI_ITEM_TYPE.ATTACHMENT,):
+        if slotType in GUI_ITEM_TYPE.ATTACHMENT_TYPES:
             return __getAvailableAttachmentRegions(areaId, slot, slotType, vehicleDescr)
         if slotType in (GUI_ITEM_TYPE.SEQUENCE,):
             return ()
@@ -193,9 +197,9 @@ def getCustomizationTankPartName(areaId, regionIdx):
     return CustomizationTankPartNames.MASK if areaId == TankPartIndexes.GUN and regionIdx == C11N_MASK_REGION else TankPartIndexes.getName(areaId)
 
 
-def createCustomizationBaseRequestCriteria(vehicle, progress, appliedItems, season=None, itemTypeID=None):
+def createCustomizationBaseRequestCriteria(vehicle, progress, season=None, itemTypeID=None):
     season = season or SeasonType.ALL
-    criteria = REQ_CRITERIA.CUSTOM(lambda item: (not itemTypeID or item.itemTypeID == itemTypeID) and item.season & season and (not item.requiredToken or progress.getTokenCount(item.requiredToken) > 0) and (item.buyCount > 0 or item.fullInventoryCount(vehicle.intCD) > 0 or appliedItems and item.intCD in appliedItems or item.installedCount() > 0 and not item.isVehicleBound) and item.mayInstall(vehicle) and (not item.isProgressive or item.getLatestOpenedProgressionLevel(vehicle) > 0))
+    criteria = REQ_CRITERIA.CUSTOM(lambda item: (not itemTypeID or item.itemTypeID == itemTypeID) and item.season & season and (not item.requiredToken or progress.getTokenCount(item.requiredToken) > 0) and (item.buyCount > 0 or item.fullInventoryCount(vehicle.intCD) > 0 or item.installedCount(vehicle.intCD) > 0 or item.installedCount() > 0 and not item.isVehicleBound or item.showDisabled) and item.mayInstall(vehicle) and (not item.isProgressive or item.getLatestOpenedProgressionLevel(vehicle) > 0))
     return criteria
 
 
@@ -353,9 +357,7 @@ def isVehicleCanBeCustomized(vehicle, itemTypeID, itemsFilter=None):
 
         customizationService = dependency.instance(ICustomizationService)
         eventsCache = dependency.instance(IEventsCache)
-        customizationCtx = customizationService.getCtx()
-        appliedItems = customizationCtx.mode.getAppliedItems() if customizationCtx is not None else set()
-        requirement = createCustomizationBaseRequestCriteria(vehicle, eventsCache.questsProgress, appliedItems, itemTypeID=itemTypeID)
+        requirement = createCustomizationBaseRequestCriteria(vehicle, eventsCache.questsProgress, itemTypeID=itemTypeID)
         if itemsFilter is not None:
             requirement |= REQ_CRITERIA.CUSTOM(itemsFilter)
         for itemID in customizationCache[cType]:
@@ -512,7 +514,8 @@ class C11nVehicleListHintChecker(object):
         return not vehicleHasSlot(GUI_ITEM_TYPE.ATTACHMENT)
 
 
-def validateOutfitComponent(vehicleDescr, outfitComponent):
+@dependency.replace_none_kwargs(service=ICustomizationService)
+def validateOutfitComponent(vehicleDescr, outfitComponent, service=None):
     for itemType in CustomizationType.STYLE_ONLY_RANGE:
         typeName = CustomizationTypeNames[itemType].lower()
         componentsAttrName = '{}s'.format(typeName)
@@ -529,13 +532,45 @@ def validateOutfitComponent(vehicleDescr, outfitComponent):
         _logger.error('Hidden Camouflage cannot be installed manually. %s removed.', camoComponent)
 
     outfitComponent.camouflages = camouflages
+    anchorType = SLOT_TYPE_TO_ANCHOR_TYPE_MAP[GUI_ITEM_TYPE.ATTACHMENT]
     attachments = []
     for attachment in outfitComponent.attachments:
-        slotId = attachment.slotId
-        slotParams = getVehicleAttachmentSlotParams(vehicleDescr, slotId)
+        slotParams = getVehicleSlotParams(anchorType, vehicleDescr, attachment.slotId)
         if not slotParams.hiddenForUser:
             attachments.append(attachment)
         _logger.error('Hidden Attachment cannot be installed manually. %s removed.', attachment)
 
     outfitComponent.attachments = attachments
+    style = None
+    modelsSet = SLOT_DEFAULT_ALLOWED_MODEL
+    if outfitComponent.styleId:
+        style = service.getItemByID(GUI_ITEM_TYPE.STYLE, outfitComponent.styleId)
+        modelsSet = style.modelsSet or modelsSet
+    if style is not None and style.is3D:
+        incompatibleTypes = set(GUI_ITEM_TYPE.COMMON_C11N_COMPATIBLE_WITH_3D_STYLES).difference(GUI_ITEM_TYPE.COMMON_C11NS)
+        for itemType in incompatibleTypes:
+            if itemType not in COMMON_C11N_TYPE_TO_OUTFIT_FIELD_MAP:
+                _logger.error('No outfit field defined for common customization type: %d', itemType)
+                continue
+            itemFieldName = COMMON_C11N_TYPE_TO_OUTFIT_FIELD_MAP[itemType]
+            if getattr(outfitComponent, itemFieldName):
+                _logger.error('%s items cannot be installed with a 3D style', itemFieldName)
+                setattr(outfitComponent, itemFieldName, [])
+
+    for itemType in GUI_ITEM_TYPE.COMMON_C11N_COMPATIBLE_WITH_3D_STYLES:
+        if itemType not in COMMON_C11N_TYPE_TO_OUTFIT_FIELD_MAP:
+            _logger.error('No outfit field defined for common customization type: %d', itemType)
+            continue
+        itemFieldName = COMMON_C11N_TYPE_TO_OUTFIT_FIELD_MAP[itemType]
+        anchorType = SLOT_TYPE_TO_ANCHOR_TYPE_MAP[itemType]
+        validatedItems = []
+        for itemComponent in getattr(outfitComponent, itemFieldName):
+            slotParams = getVehicleSlotParams(anchorType, vehicleDescr, itemComponent.slotId)
+            if modelsSet not in slotParams.compatibleModels:
+                _logger.error('%s item cannot be installed in the selected slot. %s removed.', itemFieldName, itemComponent)
+                continue
+            validatedItems.append(itemComponent)
+
+        setattr(outfitComponent, itemFieldName, validatedItems)
+
     return

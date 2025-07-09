@@ -9,7 +9,7 @@ from gui.impl.lobby.mode_selector.items import setBattlePassState
 from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorLegacyItem, formatSeasonLeftTime
 from gui.impl.lobby.mode_selector.items.items_constants import ModeSelectorRewardID
 from gui.shared.event_dispatcher import showMapboxIntro
-from gui.shared.utils.graphics import isRendererPipelineDeferred
+from gui.shared.utils.graphics import isLowPreset
 from helpers import dependency, time_utils
 from skeletons.gui.game_control import IMapboxController
 if typing.TYPE_CHECKING:
@@ -66,7 +66,7 @@ class MapboxModeSelectorItem(ModeSelectorLegacyItem):
             vm.setStatusNotActive(self.__getNotActiveStatus())
             vm.setIsDisabled(self._getIsDisabled())
             setBattlePassState(self.viewModel)
-            hasRisk = not isRendererPipelineDeferred()
+            hasRisk = isLowPreset()
             riskType = PerformanceRiskEnum.MEDIUMRISK if hasRisk else PerformanceRiskEnum.LOWRISK
             vm.performance.setShowPerfRisk(hasRisk)
             vm.performance.setPerformanceRisk(riskType)

@@ -56,6 +56,7 @@ def saveCustomizationItems(cache, folder):
     writeFontType(FontXmlWriter(), cache, folder, 'font')
     writeItemType(SequenceXmlWriter(), cache, folder, 'sequence')
     writeItemType(AttachmentXmlWriter(), cache, folder, 'attachment')
+    writeItemType(StatTrackerXmlWriter(), cache, folder, 'stat_tracker')
 
 
 class GroupSectionPicker(object):
@@ -313,8 +314,9 @@ CUSTOMIZATION_ITEMS_TYPE_TO_NAME = {CustomizationType.DECAL: 'decal',
  CustomizationType.STYLE: 'style',
  CustomizationType.INSIGNIA: 'insignia',
  CustomizationType.FONT: 'font',
+ CustomizationType.SEQUENCE: 'sequence',
  CustomizationType.ATTACHMENT: 'attachment',
- CustomizationType.SEQUENCE: 'sequence'}
+ CustomizationType.STAT_TRACKER: 'stat_tracker'}
 CUSTOMIZATION_ITEMS_NAME_TO_TYPE = {v:k for k, v in CUSTOMIZATION_ITEMS_TYPE_TO_NAME.items()}
 
 def saveItemFilter(filter, section, filterName, valueDescription):
@@ -397,12 +399,14 @@ class BaseCustomizationItemXmlWriter(object):
         changed = False
         changed |= rewriteInt(section, 'id', item, 'id')
         changed |= rewriteString(section, 'texture', item, 'texture', '')
-        changed |= rewriteString(section, 'description', item, 'i18n.descriptionKey', '')
         return changed
 
     def writeBaseGroup(self, item, section):
         changed = False
         changed |= rewriteString(section, 'userString', item, 'i18n.userKey', '')
+        changed |= rewriteString(section, 'description', item, 'i18n.descriptionKey', '')
+        changed |= rewriteString(section, 'shortDescriptionSpecial', item, 'i18n.shortDescriptionSpecialKey', '')
+        changed |= rewriteString(section, 'longDescriptionSpecial', item, 'i18n.longDescriptionSpecialKey', '')
         if _needWrite(item, 'season'):
             enumValue = encodeEnum(SeasonType, item.season)
             if enumValue is None:
@@ -502,6 +506,7 @@ class CamouflageXmlWriter(BaseCustomizationItemXmlWriter):
             changed |= rewriteCamouflageTilingSettings(section, item)
             changed |= rewriteCamouflageGlossMetallicSettings(section, item)
             changed |= rewriteEmissionParams(section, item)
+            changed |= rewriteCamouflageNormalSettings(section, item)
         return changed
 
 
@@ -868,17 +873,39 @@ class InsigniaXmlWriter(BaseCustomizationItemXmlWriter):
 class AttachmentXmlWriter(BaseCustomizationItemXmlWriter):
 
     def write(self, item, section, group=None):
-        changed = self.writeBase(item, section)
+        changed = False
+        changed |= rewriteInt(section, 'id', item, 'id')
         if group:
             changed |= rewriteString(section, 'name', item, 'name', '')
             changed |= rewriteInt(section, 'sequenceId', item, 'sequenceId', 0)
             changed |= rewriteString(section, 'modelName', item, 'modelName', '')
             changed |= rewriteString(section, 'hangarModelName', item, 'hangarModelName', '')
             changed |= rewriteString(section, 'crashModelName', item, 'crashModelName', '')
+            changed |= rewriteString(section, 'leftModelName', item, 'leftModelName', '')
+            changed |= rewriteString(section, 'rightModelName', item, 'rightModelName', '')
             changed |= rewriteString(section, 'attachmentLogic', item, 'attachmentLogic', '')
             changed |= rewriteString(section, 'applyType', item, 'applyType', '')
             changed |= rewriteString(section, 'size', item, 'size', '')
             changed |= rewriteString(section, 'rarity', item, 'rarity', '')
+        changed |= self.writeBaseGroup(item, section)
+        return changed
+
+
+class StatTrackerXmlWriter(BaseCustomizationItemXmlWriter):
+
+    def write(self, item, section, group=None):
+        changed = False
+        changed |= rewriteInt(section, 'id', item, 'id')
+        if group:
+            changed |= rewriteString(section, 'name', item, 'name', '')
+            changed |= rewriteString(section, 'modelName', item, 'modelName', '')
+            changed |= rewriteString(section, 'hangarModelName', item, 'hangarModelName', '')
+            changed |= rewriteString(section, 'crashModelName', item, 'crashModelName', '')
+            changed |= rewriteString(section, 'leftModelName', item, 'leftModelName', '')
+            changed |= rewriteString(section, 'rightModelName', item, 'rightModelName', '')
+            changed |= rewriteString(section, 'attachmentLogic', item, 'attachmentLogic', '')
+            changed |= rewriteString(section, 'applyType', item, 'applyType', '')
+            changed |= rewriteString(section, 'trackedStatistic', item, 'trackedStatistic', '')
         changed |= self.writeBaseGroup(item, section)
         return changed
 
@@ -1129,6 +1156,16 @@ def rewriteCamouflageGlossMetallicSettings(section, camouflageItem):
         changed |= section.deleteSection('gloss')
         changed |= section.deleteSection('metallic')
         changed |= _xml.rewriteString(section, 'glossMetallicMap', camouflageItem.glossMetallicSettings['glossMetallicMap'])
+    return changed
+
+
+def rewriteCamouflageNormalSettings(section, camouflageItem):
+    if camouflageItem.normalMapSettings['normalMap'] == '':
+        return section.deleteSection('normal')
+    changed = False
+    normalSection = findOrCreate(section, 'normal')
+    changed |= _xml.rewriteString(normalSection, 'normalMap', camouflageItem.normalMapSettings['normalMap'])
+    changed |= _xml.rewriteFloat(normalSection, 'normalStrength', camouflageItem.normalMapSettings['normalStrength'])
     return changed
 
 

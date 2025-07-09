@@ -66,7 +66,13 @@ class EpicEquipmentsController(equipment_ctrl.EquipmentsController):
         if not oldIntCD and newIntCD:
             super(EpicEquipmentsController, self).setEquipment(newIntCD, quantity, stage, timeRemaining, totalTime, index)
         else:
+            oldEquipment = self._equipments.get(oldIntCD)
+            onPrepareStage = oldEquipment and oldEquipment.getStage() == STAGES.PREPARING
             super(EpicEquipmentsController, self).resetEquipment(oldIntCD, newIntCD, quantity, stage, timeRemaining, totalTime, index)
+            if oldIntCD != newIntCD and onPrepareStage:
+                newEquipment = self._equipments.get(newIntCD)
+                if newEquipment:
+                    newEquipment.updateMapCase()
 
 
 class EpicReplayEquipmentController(EpicEquipmentsController):

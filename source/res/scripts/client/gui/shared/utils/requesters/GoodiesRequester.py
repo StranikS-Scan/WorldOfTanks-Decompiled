@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/shared/utils/requesters/GoodiesRequester.py
 from collections import namedtuple
 import BigWorld
-from adisp import adisp_async
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from skeletons.gui.shared.utils.requesters import IGoodiesRequester
 GoodieVariable = namedtuple('GoodieVariable', 'state finishTime count expirations')
@@ -16,8 +15,7 @@ class _ClanReserveInfo(namedtuple('_ClanReserveInfo', 'finishTime value duration
 
 class GoodiesRequester(AbstractSyncDataRequester, IGoodiesRequester):
 
-    @adisp_async
-    def _requestCache(self, callback):
+    def _requestCache(self, callback=None):
         BigWorld.player().goodies.getCache(lambda resID, value: self._response(resID, value, callback))
 
     @property

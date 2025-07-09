@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/battleground/simulated_scene.py
 import math
 import logging
+import typing
 import Event
 import BigWorld
 import Math
@@ -11,17 +12,20 @@ import CGF
 import AreaDestructibles
 from collections import namedtuple
 from avatar_components.avatar_postmortem_component import SimulatedVehicleType
+from avatar_components.CombatEquipmentManager import CombatEquipmentManager
 from battleground.kill_cam_visuals import EffectsController
 from cgf_components.sequence_components import SequencePauseComponent, SequenceSnapshotComponent
 from constants import SHELL_TYPES
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackPauseManager, TimeDeltaMeter
+from skeletons.map_activities import IMapActivities
+from simulation_movement_tracker import SimulationMovementTracker, SimulationMovementData
+from VehicleEffects import DamageFromShotDecoder
 from vehicle_systems.tankStructure import TankPartNames
 from wotdecorators import noexcept
-from skeletons.map_activities import IMapActivities
-from avatar_components.CombatEquipmentManager import CombatEquipmentManager
-from simulation_movement_tracker import SimulationMovementTracker, SimulationMovementData
+if typing.TYPE_CHECKING:
+    from typing import Dict, List, Optional
 _ANIMATION_EASING_CURVE = math_utils.linearTween
 _ANIMATION_DISTANCE_UPPER_LIMIT = 8.0
 ANIMATION_DURATION_BEFORE_SHOT = 3.0
@@ -209,15 +213,18 @@ class SimulatedScene(object):
 
     def displayEffects(self, vehicleID):
         simulatedVehicle = BigWorld.entity(vehicleID)
-        segments = self.__rawSimulationData['projectile']['segments'] if 'segments' in self.__rawSimulationData['projectile'] else []
-        shellCompDecr = self.__rawSimulationData['projectile']['shellCompDescr'] if 'shellCompDescr' in self.__rawSimulationData['projectile'] else []
+        segments = self.__rawSimulationData['projectile'].get('segments', [])
         projectileData = self.__rawSimulationData['projectile']
+        hasProjectilePierced = projectileData['hasProjectilePierced']
+        hasNonPiercedDamage = projectileData['hasNonPiercedDamage']
         if segments:
-            simulatedVehicle.showKillingSticker(shellCompDecr, projectileData['hasProjectilePierced'], projectileData['hasNonPiercedDamage'], segments)
-            decodedHitPoint = calculateWorldHitPoint(simulatedVehicle, segments)
+            shellCompDecr = self.__rawSimulationData['projectile'].get('shellCompDescr', [])
+            isArmorPierced = hasProjectilePierced or hasNonPiercedDamage
+            simulatedVehicle.showKillingSticker(shellCompDecr, isArmorPierced, segments)
+            decodedHitPoint = _calculateWorldHitPoint(simulatedVehicle, segments)
             if decodedHitPoint:
                 self.__trajectoryPoints[-1] = decodedHitPoint
-        self.__effectsController.displayKillCamEffects(simulatedVehicle.appearance, simulatedVehicle.getMaxComponentIndex(), projectileData['hasProjectilePierced'], projectileData['hasNonPiercedDamage'], self.__isAttackerSPG(), self.__rawSimulationData['attacker']['spotted'], projectileData['shellKind'] == SHELL_TYPES.HIGH_EXPLOSIVE, projectileData['explosionRadius'], self.__trajectoryPoints, segments, projectileData['impactPoint'], projectileData['ricochetCount'] > 0)
+        self.__effectsController.displayKillCamEffects(simulatedVehicle.appearance, simulatedVehicle.getMaxComponentIndex(), hasProjectilePierced, hasNonPiercedDamage, self.__isAttackerSPG(), self.__rawSimulationData['attacker']['spotted'], projectileData['shellKind'] == SHELL_TYPES.HIGH_EXPLOSIVE, projectileData['explosionRadius'], self.__trajectoryPoints, segments, projectileData['impactPoint'], projectileData['ricochetCount'] > 0)
 
     def saveKillSnapshot(self):
         self.__movementTracker.saveSnapshot(isKill=True)
@@ -624,12 +631,12 @@ class SimulationAnimator(CallbackPauseManager, TimeDeltaMeter):
                 self._simulatedVehicle.appearance.updateTracksScroll(leftScroll, rightScroll)
 
 
-def calculateWorldHitPoint(vehicle, segment):
-    if not segment:
+def _calculateWorldHitPoint(vehicle, segments):
+    if not segments:
         return None
     else:
-        points = segment
-        decodedPoints = vehicle.decodeHitPoints(points)
+        points = segments
+        decodedPoints = DamageFromShotDecoder.parseHitPoints(points, vehicle.appearance.collisions)
         if not decodedPoints:
             return None
         decodedPoint = decodedPoints[-1]

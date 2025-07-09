@@ -15,8 +15,6 @@ from gui.shared.event_dispatcher import showHangar
 from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency
 from skeletons.gui.game_control import IEpicBattleMetaGameController
-from uilogging.epic_battle.constants import EpicBattleLogKeys, EpicBattleLogActions, EpicBattleLogButtons
-from uilogging.epic_battle.loggers import EpicBattleTooltipLogger
 
 def _isValidReward(level, tokenID):
     tokenLevel = tokenID.split(':')[-1]
@@ -24,7 +22,7 @@ def _isValidReward(level, tokenID):
 
 
 class RewardsSelectionView(SelectableRewardBase):
-    __slots__ = ('__onRewardsReceivedCallback', '__onCloseCallback', '__onLoadedCallback', '__isViewLoaded', '__uiEpicBattleLogger', '__isAutoDestroyWindowsOnReceivedRewards')
+    __slots__ = ('__onRewardsReceivedCallback', '__onCloseCallback', '__onLoadedCallback', '__isViewLoaded', '__isAutoDestroyWindowsOnReceivedRewards')
     _helper = EpicSelectableRewardManager
     _epicController = dependency.descriptor(IEpicBattleMetaGameController)
 
@@ -34,7 +32,6 @@ class RewardsSelectionView(SelectableRewardBase):
         self.__onLoadedCallback = onLoadedCallback
         self.__isViewLoaded = False
         self.__isAutoDestroyWindowsOnReceivedRewards = isAutoDestroyWindowsOnReceivedRewards
-        self.__uiEpicBattleLogger = EpicBattleTooltipLogger()
         super(RewardsSelectionView, self).__init__(R.views.lobby.frontline.RewardsSelectionView(), self._helper.getAvailableSelectableBonuses(partial(_isValidReward, level)), RewardsSelectionViewModel)
 
     @property
@@ -45,7 +42,6 @@ class RewardsSelectionView(SelectableRewardBase):
         super(RewardsSelectionView, self)._initialize(*args, **kwargs)
         self._epicController.onUpdated += self._onEpicUpdate
         switchHangarOverlaySoundFilter(on=True)
-        self.__uiEpicBattleLogger.initialize(EpicBattleLogKeys.REWARDS_SELECTION_VIEW.value)
 
     def _onLoading(self, *args, **kwargs):
         super(RewardsSelectionView, self)._onLoading(*args, **kwargs)
@@ -56,17 +52,11 @@ class RewardsSelectionView(SelectableRewardBase):
         switchHangarOverlaySoundFilter(on=False)
         self._epicController.onUpdated -= self._onEpicUpdate
         self.viewModel.onLoadedView -= self.__onViewLoaded
-        self.__uiEpicBattleLogger.reset()
         super(RewardsSelectionView, self)._finalize()
 
     def _onOkClick(self):
         super(RewardsSelectionView, self)._onOkClick()
-        self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLICK.value, EpicBattleLogButtons.REWARDS_SELECTION_CONFIRM.value, EpicBattleLogKeys.REWARDS_SELECTION_VIEW.value)
         self.destroyWindow()
-
-    def _onCloseClick(self):
-        super(RewardsSelectionView, self)._onCloseClick()
-        self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLICK.value, EpicBattleLogButtons.REWARDS_SELECTION_CLOSE.value, EpicBattleLogKeys.REWARDS_SELECTION_VIEW.value)
 
     def _onEpicUpdate(self, diff, *args):
         if 'isEnabled' in diff and not diff['isEnabled']:

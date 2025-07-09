@@ -1,4 +1,7 @@
 <SequenceNetworkSync.def>
+  <Implements>
+    <Interface>	ReplicableComponent	</Interface>
+  </Implements>
   <Properties>
     <syncTime>
       <Type>	FLOAT	</Type>

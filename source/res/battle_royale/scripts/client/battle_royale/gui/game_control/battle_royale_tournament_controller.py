@@ -40,8 +40,9 @@ class BattleRoyaleTournamentController(IBattleRoyaleTournamentController):
         self.__isChangingInternalState = False
         self.__previousInviteIDs = set()
         self.__isReady = False
-        self.onUpdatedParticipants = Event.Event()
-        self.onSelectBattleRoyaleTournament = Event.Event()
+        self.__em = Event.EventManager()
+        self.onUpdatedParticipants = Event.Event(self.__em)
+        self.onSelectBattleRoyaleTournament = Event.Event(self.__em)
         return
 
     def onLobbyInited(self, event):
@@ -144,6 +145,7 @@ class BattleRoyaleTournamentController(IBattleRoyaleTournamentController):
         g_playerEvents.onClientUpdated -= self.__onClientUpdated
         g_playerEvents.onCollectPrebattleInvites -= self.__onCollectPrebattleInvites
         g_playerEvents.onPrebattleAutoInvitesChanged -= self.__onPrebattleAutoInvitesChanged
+        self.__em.clear()
 
     def __clearInternalData(self):
         self.__previousInviteIDs = set()

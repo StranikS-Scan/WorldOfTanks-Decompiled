@@ -162,9 +162,9 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
             self.as_removeAllMessagesS()
             self.__pendingMessagesQueue = []
 
-    def __getPopUpVO(self, notificaton):
-        flashId = self._getFlashID(notificaton.getCounterInfo())
-        return notificaton.getPopUpVO(flashId)
+    def __getPopUpVO(self, notification):
+        flashId = self._getFlashID(notification.getCounterInfo())
+        return notification.getPopUpVO(flashId)
 
     def __isLocked(self, notification):
         priorities = {priority for val in self.__lockedNotificationPriority.values() for priority in val}

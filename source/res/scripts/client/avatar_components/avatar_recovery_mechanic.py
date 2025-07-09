@@ -80,7 +80,8 @@ class AvatarRecoveryMechanic(object):
                 elif state in {RM_STATE.NOT_RECOVERING, RM_STATE.TEMPORARILY_BLOCKED_FROM_RECOVERING, RM_STATE.RECOVERING_RESPAWNING}:
                     self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.RECOVERY, (False, 0, None))
                 self.guiSessionProvider.shared.feedback.setVehicleRecoveryState(self.playerVehicleID, activated, state, timerDuration, endOfTimer)
-            if state == RM_STATE.RECOVERING_RESPAWNING and BigWorld.player().vehicle.isPlayerVehicle:
+            vehicle = BigWorld.player().vehicle
+            if state == RM_STATE.RECOVERING_RESPAWNING and vehicle and vehicle.isPlayerVehicle:
                 self.inputHandler.activatePostmortem()
             return
 

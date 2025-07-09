@@ -73,4 +73,34 @@
       </item>
     </usages>
   </itemGroup>
+  <itemGroup>
+    <name>	PUB West Warsaw Uprising	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	poland	</nations>
+      </include>
+    </vehicleFilter>
+    <paint>
+      <id>	554	</id>
+      <texture>	gui/maps/vehicles/repaints/italy_color_07.png	</texture>
+      <color>	133 37 50 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:special_style/pub_west_warsaw_uprising	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	555	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_11.png	</texture>
+      <color>	163 163 163 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:special_style/pub_west_warsaw_uprising	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+  </itemGroup>
 </poland.xml>

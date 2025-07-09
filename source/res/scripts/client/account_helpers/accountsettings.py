@@ -166,6 +166,8 @@ COMP7_LIGHT_PROGRESSION_POINTS_SEEN = 'comp7LightProgressionPointsSeen'
 IS_BATTLE_PASS_EXTRA_START_NOTIFICATION_SEEN = 'isBattlePassExtraStarted'
 IS_BATTLE_PASS_COLLECTION_SEEN = 'isCollectionSeen'
 IS_BATTLE_PASS_START_NOTIFICATION_SEEN = 'isBattlePassStarted'
+EXTRA_CHAPTERS_VIDEO_SHOWN = 'extraChaptersVideoShown'
+BUY_ANIMATIONS_WAS_SHOWN = 'buyAnimationsWasShown'
 CRYSTALS_INFO_SHOWN = 'crystalsInfoShown'
 IS_CUSTOMIZATION_INTRO_VIEWED = 'isCustomizationIntroViewed'
 NPS_STORAGE = 'nps_storage'
@@ -1197,9 +1199,11 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 NATION_CHANGE_VIEWED: False,
                 LAST_BATTLE_PASS_POINTS_SEEN: {},
                 LAST_BATTLE_PASS_CYCLES_SEEN: 0,
-                IS_BATTLE_PASS_EXTRA_START_NOTIFICATION_SEEN: False,
+                IS_BATTLE_PASS_EXTRA_START_NOTIFICATION_SEEN: set(),
                 IS_BATTLE_PASS_COLLECTION_SEEN: False,
                 IS_BATTLE_PASS_START_NOTIFICATION_SEEN: False,
+                EXTRA_CHAPTERS_VIDEO_SHOWN: set(),
+                BUY_ANIMATIONS_WAS_SHOWN: set(),
                 MODULES_ANIMATION_SHOWN: False,
                 SUBTITLES: True,
                 RANKED_YEAR_POSITION: None,
@@ -1490,7 +1494,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 87
+    version = 88
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -2259,6 +2263,13 @@ class AccountSettings(object):
                     notifications = AccountSettings._readSection(section, KEY_NOTIFICATIONS)
                     if 'recruitNotifications' in notifications.keys():
                         notifications.deleteSection('recruitNotifications')
+
+            if currVersion < 88:
+                for key, section in _filterAccountSection(ads):
+                    keySettings = AccountSettings._readSection(section, KEY_SETTINGS)
+                    if IS_BATTLE_PASS_EXTRA_START_NOTIFICATION_SEEN in keySettings.keys():
+                        keySettings.write(IS_BATTLE_PASS_EXTRA_START_NOTIFICATION_SEEN, _pack(set()))
+                    keySettings.write(BUY_ANIMATIONS_WAS_SHOWN, _pack(set()))
 
             ads.writeInt('version', AccountSettings.version)
         return

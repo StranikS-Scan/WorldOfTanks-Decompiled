@@ -48,5 +48,7 @@ class StateMachineActivatorManager(CGF.ComponentManager):
     @onRemovedQuery(TestStateMachineStatesActivator)
     def onActivatorRemoved(self, activator):
         if activator.trigger is not None and activator.callbackID is not None:
-            activator.trigger().removeFireReaction(activator.callbackID)
+            trigger = activator.trigger()
+            if trigger is not None:
+                trigger.removeFireReaction(activator.callbackID)
         return

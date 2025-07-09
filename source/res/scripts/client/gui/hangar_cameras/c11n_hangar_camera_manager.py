@@ -2,13 +2,16 @@
 # Embedded file name: scripts/client/gui/hangar_cameras/c11n_hangar_camera_manager.py
 import copy
 import math
+import math_utils
 import BigWorld
 import Math
 import CGF
-from gui.shared.utils.graphics import isRendererPipelineDeferred
+from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.utils.graphics import isLowPreset
 from items.components.c11n_constants import EASING_TRANSITION_DURATION
 from helpers import dependency
 from helpers.CallbackDelayer import TimeDeltaMeter
+from math_utils import extendBoundingBox, getCenterFromBox
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.customization import ICustomizationService
@@ -25,6 +28,7 @@ _STYLE_INFO_MAX_VEHICLE_WIDTH = 0.45
 _STYLE_INFO_MAX_VEHICLE_HEIGHT = 0.3
 _STYLE_INFO_VEHICLE_SCREEN_X_SHIFT = 1.0 / 3
 _PROJECTION_DECALS_DIR_CLIP_COS = 0.8
+_ATTACHMENT_MAX_PITCH = math.radians(30)
 
 class C11nCameraModes(object):
     START_STATE = 0
@@ -96,7 +100,8 @@ class C11nHangarCameraManager(TimeDeltaMeter):
         else:
             camPosition = copy.copy(position)
             if normal is not None:
-                yaw, pitch = self.__getCameraYawPitch(up, normal, clipCos=_PROJECTION_DECALS_DIR_CLIP_COS)
+                maxPitch = _ATTACHMENT_MAX_PITCH if slotId.slotType in GUI_ITEM_TYPE.ATTACHMENT_TYPES else None
+                yaw, pitch = self.__getCameraYawPitch(up, normal, clipCos=_PROJECTION_DECALS_DIR_CLIP_COS, maxPitch=maxPitch)
             else:
                 yaw = None
                 pitch = None
@@ -115,23 +120,25 @@ class C11nHangarCameraManager(TimeDeltaMeter):
     def locateCameraToStyleInfoPreview(self):
         cameraManager = CGF.getManager(self._hangarSpace.spaceID, HangarCameraManager)
         if not cameraManager:
-            return False
+            return
         elif self.vEntity is None or self.vEntity.appearance is None or self.vEntity.appearance.compoundModel is None:
             return
         else:
             appearance = self.vEntity.appearance
-            position = appearance.getVehicleCentralPoint()
-            m = Math.Matrix(appearance.compoundModel.node(TankPartNames.HULL))
-            targetPos = m.applyPoint(position)
             mat = Math.Matrix()
             mat.setRotateYPR((_STYLE_INFO_YAW, -_STYLE_INFO_PITCH, 0.0))
             pivotDir = mat.applyVector(Math.Vector3(1, 0, 0))
             pivotDir = Math.Vector3(pivotDir.x, 0, pivotDir.z)
             pivotDir.normalise()
-            hullAABB = appearance.collisions.getBoundingBox(TankPartIndexes.HULL)
-            width = hullAABB[1].x - hullAABB[0].x
-            length = hullAABB[1].z - hullAABB[0].z
-            height = hullAABB[1].y - hullAABB[0].y
+            hullAABB = appearance.collisions.getExtendedBoundingBox(TankPartIndexes.HULL)
+            turretBox = appearance.collisions.getExtendedBoundingBox(TankPartIndexes.TURRET)
+            hullTurretBox = extendBoundingBox(hullAABB, turretBox)
+            width = hullTurretBox[1].x - hullTurretBox[0].x
+            length = hullTurretBox[1].z - hullTurretBox[0].z
+            height = hullTurretBox[1].y - hullTurretBox[0].y
+            position = getCenterFromBox(hullTurretBox)
+            m = Math.Matrix(appearance.compoundModel.node(TankPartNames.HULL))
+            targetPos = m.applyPoint(position)
             hullViewSpaceX = width * abs(math.cos(_STYLE_INFO_YAW)) + length * abs(math.sin(_STYLE_INFO_YAW))
             hullViewSpaceZ = width * abs(math.sin(_STYLE_INFO_YAW)) + length * abs(math.cos(_STYLE_INFO_YAW))
             aspect = BigWorld.getAspectRatio()
@@ -145,7 +152,7 @@ class C11nHangarCameraManager(TimeDeltaMeter):
             futureCamDir = mat.applyVector(Math.Vector3(0, 0, 1))
             futureCamPos = targetPos - futureCamDir * dist
             paramsDOF = None
-            if isRendererPipelineDeferred():
+            if isLowPreset():
                 paramsDOF = self.__getStyleInfoDOFParams(futureCamPos)
             cameraManager.setDOFParams(True, paramsDOF)
             cameraManager.moveCamera(targetPos, _STYLE_INFO_YAW, _STYLE_INFO_PITCH, dist, EASING_TRANSITION_DURATION)
@@ -186,7 +193,7 @@ class C11nHangarCameraManager(TimeDeltaMeter):
             dists.sort()
             return DOFParams(nearStart=0, nearDist=0, farStart=dists[2], farDist=1)
 
-    def __getCameraYawPitch(self, up, normal, clipCos=None):
+    def __getCameraYawPitch(self, up, normal, clipCos=None, maxPitch=None):
         if up.dot(_WORLD_UP) > 0.99:
             direction = -normal
         else:
@@ -199,4 +206,4 @@ class C11nHangarCameraManager(TimeDeltaMeter):
                 direction = -direction
             if clipCos is not None and direction.dot(-normal) < clipCos:
                 direction = -normal
-        return (direction.yaw, -direction.pitch)
+        return (direction.yaw, -math_utils.clamp(-maxPitch, maxPitch, direction.pitch)) if maxPitch is not None else (direction.yaw, -direction.pitch)

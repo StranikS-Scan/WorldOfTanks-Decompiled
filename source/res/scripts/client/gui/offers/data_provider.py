@@ -4,6 +4,7 @@ import logging
 from functools import wraps
 import typing
 import adisp
+from BWUtil import AsyncReturn
 from Event import Event, EventManager
 from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
@@ -23,6 +24,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.shared import IItemsCache
 from web.cache.web_cache import CachePrefetchResult
+from wg_async import wg_async, wg_await
 if typing.TYPE_CHECKING:
     from typing import Callable, Optional, Set, Union
 _logger = logging.getLogger(__name__)
@@ -237,10 +239,10 @@ class OffersDataProvider(IOffersDataProvider):
         return self._pendingNotify and self._ready and isPlayerAccount()
 
     @_ifFeatureDisabled(None)
-    @adisp.adisp_process
+    @wg_async
     def _notify(self):
         if self._readyToNotify:
-            yield self._states.request()
+            yield wg_await(self._states.request())
             if self._readyToNotify and self.isSynced:
                 self._cache.clear()
                 self._checkAvailableOffersChanged()
@@ -248,8 +250,9 @@ class OffersDataProvider(IOffersDataProvider):
                 self._pendingNotify = False
                 _logger.debug('[Offers provider] send notification')
                 self.onOffersUpdated()
-                return
+                raise AsyncReturn(None)
         _logger.debug('[Offers provider] can not send notification')
+        return
 
     def _onConnected(self, *args, **kwargs):
         self._lobbyContext.onServerSettingsChanged += self._onServerSettingsChanged

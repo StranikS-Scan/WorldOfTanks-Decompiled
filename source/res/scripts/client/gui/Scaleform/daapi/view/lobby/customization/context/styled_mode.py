@@ -67,9 +67,9 @@ class StyledMode(CustomizationMode):
     def getDependenciesData(self):
         return self.__modifiedStyle.getDependenciesIntCDs() if self.__modifiedStyle else {}
 
-    def removeStyle(self, intCD):
+    def removeStyle(self, intCD, refresh=True):
         if self.__modifiedStyle is not None and self.__modifiedStyle.intCD == intCD:
-            self.removeItem(self.STYLE_SLOT)
+            self.removeItem(self.STYLE_SLOT, refresh=refresh)
         return
 
     def prolongRent(self, style):
@@ -153,13 +153,11 @@ class StyledMode(CustomizationMode):
         return
 
     def _selectItem(self, intCD, progressionLevel=0):
-        if super(StyledMode, self)._selectItem(intCD, progressionLevel):
-            return True
+        self.selectSlot(self.STYLE_SLOT)
+        currentItem = self.getItemFromSlot(self._selectedSlot)
+        if currentItem is not None and currentItem.intCD == intCD:
+            return False
         else:
-            self.selectSlot(self.STYLE_SLOT)
-            currentItem = self.getItemFromSlot(self._selectedSlot)
-            if currentItem is not None and currentItem.intCD == intCD:
-                return False
             self.installItem(intCD, self._selectedSlot)
             item = self._service.getItemByCD(intCD)
             serverSettings = self._settingsCore.serverSettings
@@ -175,8 +173,6 @@ class StyledMode(CustomizationMode):
             return True
 
     def _installItem(self, intCD, slotId, season=None, component=None):
-        if super(StyledMode, self)._installItem(intCD, slotId):
-            return True
         item = self._service.getItemByCD(intCD)
         if item.itemTypeID != GUI_ITEM_TYPE.STYLE:
             _logger.warning('Wrong itemType: %s. Only styles could be installed in styled customization mode.', item.itemTypeID)
@@ -213,10 +209,10 @@ class StyledMode(CustomizationMode):
             return True
 
     def _cancelChanges(self):
-        super(StyledMode, self)._cancelChanges()
         self._ctx.stylesDiffsCache.clearModeDiffs(self.__is3DMode)
         self.__modifiedStyle = self.__originalStyle
         self.__autoRentEnabled = g_currentVehicle.item.isAutoRentStyle
+        super(StyledMode, self)._cancelChanges()
 
     def _getRequestData(self, purchaseItems):
         requestData = super(StyledMode, self)._getRequestData(purchaseItems)
@@ -226,7 +222,7 @@ class StyledMode(CustomizationMode):
     @adisp_process
     def _applyItems(self, purchaseItems, callback):
         originalOutfits = self.getOriginalOutfits()
-        originalOutfits[SeasonType.ALL] = self._ctx.commonOriginalOutfit.copy()
+        originalOutfits[SeasonType.ALL] = self._ctx.commonOriginalOutfit
         results = []
         requestData = self._getRequestData(purchaseItems)
         if requestData:

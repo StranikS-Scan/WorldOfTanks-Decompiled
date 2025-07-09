@@ -122,7 +122,9 @@ class BaseEfficiencySoundPlayer(SoundPlayer):
 
     def _subscribe(self):
         ctrl = self.__sessionProvider.shared.personalEfficiencyCtrl
-        ctrl.onPersonalEfficiencyReceived += self._onEfficiencyReceived
+        if ctrl is not None:
+            ctrl.onPersonalEfficiencyReceived += self._onEfficiencyReceived
+        return
 
     def _unsubscribe(self):
         ctrl = self.__sessionProvider.shared.personalEfficiencyCtrl

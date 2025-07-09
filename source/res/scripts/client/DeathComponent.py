@@ -4,12 +4,14 @@ import BigWorld
 import CGF
 import GenericComponents
 import Math
-from cgf_components_common.state_components import DeathComponent as DeathComponentCGF, SpawnOnDeathComponent, RemoveOnDeathComponent
+from cgf_components_common.state_components import DeathComponentDescriptor, SpawnOnDeathComponent, RemoveOnDeathComponent
 from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery, autoregister
+from cgf_script.component_meta_class import registerReplicableComponent
 from cgf_components.on_death_components import SoundOnDeathComponent, EffectOnDeathComponent, ChangeModelOnDeathComponent
 from debug_utils import LOG_DEBUG_DEV
 
-class DeathComponent(BigWorld.DynamicScriptComponent, DeathComponentCGF):
+@registerReplicableComponent
+class DeathComponent(BigWorld.DynamicScriptComponent, DeathComponentDescriptor):
     pass
 
 

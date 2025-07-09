@@ -12,7 +12,7 @@ from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBattleP
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData
 from gui.battle_pass.battle_pass_constants import ChapterState
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator
-from gui.battle_pass.battle_pass_helpers import getInfoPageURL, isSeasonWithSpecialTankmenScreen
+from gui.battle_pass.battle_pass_helpers import getInfoPageURL
 from gui.collection.collections_helpers import loadCollectionsFromBattlePass
 from gui.impl.auxiliary.collections_helper import fillCollectionModel
 from gui.impl.gen import R
@@ -52,8 +52,10 @@ class PostProgressionView(ViewImpl):
         settings.model = PostProgressionViewModel()
         super(PostProgressionView, self).__init__(settings)
         self.__chapterID = self.__battlePass.getPostProgressionChapterID()
+        self.__tankmenScreen = None
         self.__tooltipItems = {}
         self.__animationState = _AnimationState.NORMAL_STATE
+        return
 
     @createBackportTooltipDecorator()
     def createToolTip(self, event):
@@ -130,7 +132,7 @@ class PostProgressionView(ViewImpl):
             model.awardsWidget.setIsTalerEnabled(not self.__battlePass.isHoliday())
             model.awardsWidget.setIsBpCoinEnabled(not self.__battlePass.isHoliday())
             model.awardsWidget.setTalerCount(self.__itemsCache.items.stats.dynamicCurrencies.get(CurrencyBP.TALER.value, 0))
-            model.awardsWidget.setIsSpecialVoiceTankmenEnabled(self.__isSpecialVoiceTankmenEnabled(self.__battlePass.getMainChapterIDs()))
+            model.awardsWidget.setTankmenScreenID(self.__getTankmenScreenID())
 
     @replaceNoneKwargsModel
     def __updatePostProgressionData(self, model=None):
@@ -237,11 +239,12 @@ class PostProgressionView(ViewImpl):
         chapterState = self.__battlePass.getChapterState(chapterID)
         return _CHAPTER_STATUSES.get(chapterState, ChapterStatus.NOTSTARTED)
 
-    def __isSpecialVoiceTankmenEnabled(self, activeChapters):
-        if not isSeasonWithSpecialTankmenScreen():
-            return False
-        specialVoiceChapters = self.__battlePass.getSpecialVoiceChapters()
-        return any((chapterID in activeChapters for chapterID in specialVoiceChapters))
+    def __getTankmenScreenID(self):
+        tankmenScreens = set((screen for chapter, screen in self.__battlePass.getChapterToTankmenScreen().iteritems() if self.__battlePass.isChapterExists(chapter)))
+        if len(tankmenScreens) == 1:
+            self.__tankmenScreen = first(tankmenScreens)
+            return self.__tankmenScreen
+        return False
 
     def __checkBattlePassState(self, *_):
         if self.__battlePass.isPaused():
@@ -287,9 +290,8 @@ class PostProgressionView(ViewImpl):
         showHangar()
         Views.load(ViewID.MAIN, eventName=BATTLE_PASS_TICKETS_EVENT, backCallback=partial(showMissionsBattlePass, R.views.lobby.battle_pass.PostProgressionView()))
 
-    @staticmethod
-    def __showTankmen():
-        showBattlePassTankmenVoiceover()
+    def __showTankmen(self):
+        showBattlePassTankmenVoiceover(self.__tankmenScreen)
 
     def __claimRewards(self):
         self.__battlePass.takeAllRewards()

@@ -20,11 +20,12 @@ from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY, ItemPrice
 from gui.shared.image_helper import getTextureLinkByID
 from gui.shared.money import Money
 from gui.shared.utils.functions import getImageResourceFromPath
+from gui.shared.vehicle_stats_helper import getStatTrackersVehicleStats
 from helpers import dependency
 from items import makeIntCompactDescrByID, vehicles
 from items.components import c11n_components as cc
 from items.components.c11n_components import EditingStyleReason
-from items.components.c11n_constants import CustomizationType, EDITING_STYLE_REASONS, ImageOptions, ItemTags, ProjectionDecalFormTags, SeasonType, UNBOUND_VEH_KEY
+from items.components.c11n_constants import CustomizationType, EDITING_STYLE_REASONS, ImageOptions, ItemTags, ProjectionDecalFormTags, SeasonType, UNBOUND_VEH_KEY, StatTrackerStatistic
 from items.customizations import createNationalEmblemComponents, isEditedStyle, parseCompDescr, parseOutfitDescr
 from items.vehicles import VehicleDescr
 from shared_utils import first
@@ -662,6 +663,10 @@ class Customization(FittingItem):
                 return self.__progressingData[UNBOUND_VEH_KEY]
         return
 
+    @property
+    def showDisabled(self):
+        return ItemTags.SHOW_DISABLED in self.tags
+
     def _matchVehicleTags(self, vehicle):
         return not (vehicle and vehicle.isProgressionDecalsOnly)
 
@@ -760,6 +765,10 @@ class Modification(Customization):
     @property
     def effects(self):
         return self.descriptor.effects
+
+    @property
+    def useNewWear(self):
+        return self.descriptor.useNewWear
 
     def isWide(self):
         return True
@@ -996,6 +1005,14 @@ class Attachment(Customization):
         return self.descriptor.crashModelName
 
     @property
+    def leftModelName(self):
+        return self.descriptor.leftModelName
+
+    @property
+    def rightModelName(self):
+        return self.descriptor.rightModelName
+
+    @property
     def sequenceId(self):
         return self.descriptor.sequenceId
 
@@ -1026,13 +1043,43 @@ class Attachment(Customization):
     def hasSlot(self, vehicle):
         for areaId in Area.ALL:
             for _, anchor in vehicle.getAnchors(self.itemTypeID, areaId):
-                if not anchor.hiddenForUser:
+                if not anchor.hiddenForUser and anchor.applyType == self.applyType:
                     return True
 
         return False
 
     def mayInstall(self, vehicle, _=None):
         return super(Attachment, self).mayInstall(vehicle) and self.hasSlot(vehicle)
+
+
+class StatTracker(Attachment):
+    __slots__ = ()
+
+    def __init__(self, *args, **kwargs):
+        super(StatTracker, self).__init__(*args, **kwargs)
+        self.itemTypeID = GUI_ITEM_TYPE.STAT_TRACKER
+
+    @property
+    def trackedStatistic(self):
+        return self.descriptor.trackedStatistic
+
+    def hasSlot(self, vehicle):
+        for areaId in Area.ALL:
+            for _, anchor in vehicle.getAnchors(self.itemTypeID, areaId):
+                if not anchor.hiddenForUser:
+                    return True
+
+        return False
+
+    def getStatValue(self, vehicle):
+        vehCD = vehicle.compactDescr
+        frags = getStatTrackersVehicleStats(vehCD)
+        value = 0
+        if self.trackedStatistic == StatTrackerStatistic.KILLS:
+            value = frags
+        else:
+            _logger.error('Unknown stat tracker statistics type: %s', self.trackedStatistic)
+        return self.descriptor.adjustToAllowedNumber(value)
 
 
 class Style(Customization):

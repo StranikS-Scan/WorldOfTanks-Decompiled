@@ -1,0 +1,13 @@
+<NetworkReplicationPointComponent.def>
+  <Properties>
+    <status>
+      <Type>	ARRAY	  <of>	GAME_OBJECT_STATE_INFO	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <IsReliable>	true	</IsReliable>
+    </status>
+  </Properties>
+  <CellMethods></CellMethods>
+  <ClientMethods></ClientMethods>
+  <DefaultKeyName>	networkReplicationPointComponent	</DefaultKeyName>
+</NetworkReplicationPointComponent.def>

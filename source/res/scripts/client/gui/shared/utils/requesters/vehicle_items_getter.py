@@ -123,6 +123,10 @@ def _getAttachment(_):
     return vehicles.g_cache.customization20().attachments.itervalues()
 
 
+def _getStatTrackers(_):
+    return vehicles.g_cache.customization20().stat_trackers.itervalues()
+
+
 def _getSequence(_):
     return vehicles.g_cache.customization20().sequences.itervalues()
 
@@ -150,7 +154,8 @@ _MODULES_GETTERS = {GUI_ITEM_TYPE.VEHICLE: _getVehicles,
  GUI_ITEM_TYPE.CREW_SKINS: _getCrewSkins,
  GUI_ITEM_TYPE.CREW_BOOKS: _getCrewBooks,
  GUI_ITEM_TYPE.SEQUENCE: _getSequence,
- GUI_ITEM_TYPE.ATTACHMENT: _getAttachment}
+ GUI_ITEM_TYPE.ATTACHMENT: _getAttachment,
+ GUI_ITEM_TYPE.STAT_TRACKER: _getStatTrackers}
 
 def getItemsIterator(data, nationID=None, itemTypeID=None, onlyWithPrices=False):
     if 'itemPrices' in data and onlyWithPrices:

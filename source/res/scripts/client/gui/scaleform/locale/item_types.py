@@ -127,6 +127,7 @@ class ITEM_TYPES(object):
     CUSTOMIZATION_PERSONALNUMBER_2 = '#item_types:customization/personalNumber_2'
     CUSTOMIZATION_PERSONALNUMBER_1 = '#item_types:customization/personalNumber_1'
     CUSTOMIZATION_ATTACHMENT = '#item_types:customization/attachment'
+    CUSTOMIZATION_STATTRACKER = '#item_types:customization/statTracker'
     CUSTOMIZATION_PLURAL_PAINT = '#item_types:customization/plural/paint'
     CUSTOMIZATION_PLURAL_CAMOUFLAGE = '#item_types:customization/plural/camouflage'
     CUSTOMIZATION_PLURAL_MODIFICATION = '#item_types:customization/plural/modification'
@@ -139,6 +140,7 @@ class ITEM_TYPES(object):
     CUSTOMIZATION_PLURAL_PROJECTIONDECAL = '#item_types:customization/plural/projectionDecal'
     CUSTOMIZATION_PLURAL_PERSONALNUMBER = '#item_types:customization/plural/personalNumber'
     CUSTOMIZATION_PLURAL_ATTACHMENT = '#item_types:customization/plural/attachment'
+    CUSTOMIZATION_PLURAL_STATTRACKER = '#item_types:customization/plural/statTracker'
     CREWSKINS_ITEMTYPE_COMMON = '#item_types:crewSkins/itemType/common'
     CREWSKINS_ITEMTYPE_RARE = '#item_types:crewSkins/itemType/rare'
     CREWSKINS_ITEMTYPE_EPIC = '#item_types:crewSkins/itemType/epic'
@@ -213,6 +215,7 @@ class ITEM_TYPES(object):
      CUSTOMIZATION_PERSONALNUMBER_2,
      CUSTOMIZATION_PERSONALNUMBER_1,
      CUSTOMIZATION_ATTACHMENT,
+     CUSTOMIZATION_STATTRACKER,
      CUSTOMIZATION_PLURAL_PAINT,
      CUSTOMIZATION_PLURAL_CAMOUFLAGE,
      CUSTOMIZATION_PLURAL_MODIFICATION,
@@ -224,7 +227,8 @@ class ITEM_TYPES(object):
      CUSTOMIZATION_PLURAL_INSCRIPTION,
      CUSTOMIZATION_PLURAL_PROJECTIONDECAL,
      CUSTOMIZATION_PLURAL_PERSONALNUMBER,
-     CUSTOMIZATION_PLURAL_ATTACHMENT)
+     CUSTOMIZATION_PLURAL_ATTACHMENT,
+     CUSTOMIZATION_PLURAL_STATTRACKER)
     CUSTOMIZATION_PLURAL_ENUM = (CUSTOMIZATION_PLURAL_PAINT,
      CUSTOMIZATION_PLURAL_CAMOUFLAGE,
      CUSTOMIZATION_PLURAL_MODIFICATION,
@@ -236,7 +240,8 @@ class ITEM_TYPES(object):
      CUSTOMIZATION_PLURAL_INSCRIPTION,
      CUSTOMIZATION_PLURAL_PROJECTIONDECAL,
      CUSTOMIZATION_PLURAL_PERSONALNUMBER,
-     CUSTOMIZATION_PLURAL_ATTACHMENT)
+     CUSTOMIZATION_PLURAL_ATTACHMENT,
+     CUSTOMIZATION_PLURAL_STATTRACKER)
 
     @classmethod
     def shell_kindsabbreviation(cls, key0):

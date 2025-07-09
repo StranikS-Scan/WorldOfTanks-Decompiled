@@ -194,5 +194,12 @@ def isGammaSupported():
 
 
 def isRendererPipelineDeferred():
-    pipelineType = BigWorld.getGraphicsSetting('RENDER_PIPELINE')
-    return pipelineType == 0
+    return not BigWorld.isForwardPipeline()
+
+
+def isLowPreset():
+    return BigWorld.isForwardPipeline() or BigWorld.isSimplifiedPipeline()
+
+
+def getGraphicsEngineValue():
+    return 1 if isLowPreset() else 0

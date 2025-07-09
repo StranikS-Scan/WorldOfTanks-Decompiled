@@ -1243,11 +1243,13 @@ class StagingDataAccessor(base.BaseDataAccessor):
             return data or {}
 
         params = {'promoscreen_id': promo_id}
+        if fields:
+            params.update(fields)
         url = '/teaser/view/'
         return self._request_data(inner_callback, 'promo', url, method='POST', postData=self._pack_promo_params(params))
 
     def get_unread_count(self, callback, fields=None):
-        url = '/unread/?%s' % urlencode(self._pack_promo_params())
+        url = '/unread/?%s' % urlencode(self._pack_promo_params(fields))
 
         @preprocess_callback(callback, 'promo')
         def inner_callback(data):

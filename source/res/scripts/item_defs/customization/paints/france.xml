@@ -73,4 +73,25 @@
       </item>
     </usages>
   </itemGroup>
+  <itemGroup>
+    <name>	PUB West Bastille Day	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	france	</nations>
+      </include>
+    </vehicleFilter>
+    <paint>
+      <id>	544	</id>
+      <texture>	gui/maps/vehicles/repaints/italy_color_05.png	</texture>
+      <color>	176 161 127 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:special_style/pub_west_bastille_day	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+  </itemGroup>
 </france.xml>

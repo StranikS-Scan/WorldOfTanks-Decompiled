@@ -54,6 +54,7 @@ from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 from vehicle_outfit.outfit import Area, REGIONS_BY_SLOT_TYPE, ANCHOR_TYPE_TO_SLOT_TYPE_MAP
 from constants import NEW_PERK_SYSTEM as NPS
+from dossiers2.custom.cache import getCache as getDossiersCache
 if typing.TYPE_CHECKING:
     from skeletons.gui.shared import IItemsRequester
     from items.customizations import CustomizationOutfit
@@ -299,7 +300,7 @@ class Vehicle(FittingItem):
             self._xp = self._proxy.stats.vehiclesXPs.get(self.intCD, self._xp)
             if self._proxy.shop.winXPFactorMode == WIN_XP_FACTOR_MODE.ALWAYS or self.intCD not in self._proxy.stats.multipliedVehicles and not self.isOnlyForEventBattles:
                 self._dailyXPFactor = self._proxy.shop.dailyXPFactor
-            self._isElite = not vehDescr.type.unlocksDescrs or self.intCD in self._proxy.stats.eliteVehicles
+            self._isElite = not vehDescr.type.unlocksDescrs and vehDescr.type.compactDescr not in getDossiersCache()['vehiclesInTrees'] or self.intCD in self._proxy.stats.eliteVehicles
             self._isFullyElite = self.isElite and not any((data[1] not in self._proxy.stats.unlocks for data in vehDescr.type.unlocksDescrs))
             clanDamageLock = self._proxy.stats.vehicleTypeLocks.get(self.intCD, {}).get(CLAN_LOCK, 0)
             clanNewbieLock = self._proxy.stats.globalVehicleLocks.get(CLAN_LOCK, 0)
@@ -409,7 +410,7 @@ class Vehicle(FittingItem):
                 if slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
                     regionIdx = len(slotsAnchors[slotType][areaId])
                     customizationSlot = ProjectionDecalSlot(anchor, slotHelper.tankAreaId, regionIdx)
-                elif slotType == GUI_ITEM_TYPE.ATTACHMENT:
+                elif slotType in GUI_ITEM_TYPE.ATTACHMENT_TYPES:
                     regionIdx = len(slotsAnchors[slotType][areaId])
                     customizationSlot = AttachmentSlot(anchor, slotHelper.tankAreaId, regionIdx)
                 elif slotType == GUI_ITEM_TYPE.SEQUENCE:

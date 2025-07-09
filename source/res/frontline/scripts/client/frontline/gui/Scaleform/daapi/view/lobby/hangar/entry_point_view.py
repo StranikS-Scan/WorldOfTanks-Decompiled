@@ -7,8 +7,6 @@ from frontline.gui.impl.gen.view_models.views.lobby.views.banner_view_model impo
 from gui.impl.pub import ViewImpl
 from helpers import dependency
 from skeletons.gui.game_control import IEpicBattleMetaGameController
-from uilogging.epic_battle.constants import EpicBattleLogActions, EpicBattleLogButtons, EpicBattleLogKeys
-from uilogging.epic_battle.loggers import EpicBattleLogger
 
 class EpicBattlesEntryPointView(ViewImpl):
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
@@ -17,7 +15,6 @@ class EpicBattlesEntryPointView(ViewImpl):
         settings = ViewSettings(R.views.frontline.lobby.BannerView())
         settings.flags = flags
         settings.model = BannerViewModel()
-        self.__uiEpicBattleLogger = EpicBattleLogger()
         super(EpicBattlesEntryPointView, self).__init__(settings)
 
     @property
@@ -50,4 +47,3 @@ class EpicBattlesEntryPointView(ViewImpl):
         if isHangarAvailable():
             self.__epicController.selectEpicBattle()
         self.__epicController.showProgressionDuringSomeStates()
-        self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLICK.value, EpicBattleLogButtons.ENTRY_POINT.value, parentScreen=EpicBattleLogKeys.HANGAR.value)

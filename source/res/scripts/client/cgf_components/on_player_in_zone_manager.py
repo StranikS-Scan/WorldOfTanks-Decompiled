@@ -26,11 +26,13 @@ class OnPlayerInZoneManager(CGF.ComponentManager):
         super(OnPlayerInZoneManager, self).__init__()
         self.__prefabPathMap = defaultdict(OrderedDict)
         self.__activePrefab = None
+        return
+
+    def activate(self):
         if _isAvatarReady():
             self.__onAvatarReady()
         else:
             g_playerEvents.onAvatarReady += self.__onAvatarReady
-        return
 
     def deactivate(self):
         self.__prefabPathMap.clear()

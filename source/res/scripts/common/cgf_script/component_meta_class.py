@@ -99,6 +99,14 @@ def defaultRegistrator(cls):
         if baseMeta is not None:
             basePropIndex += len(baseMeta)
             all_meta.extend(baseMeta)
+        baseAtttrs = vars(base)
+        for key, value in baseAtttrs.iteritems():
+            if isinstance(value, ComponentProperty):
+                setattr(cls, key, None)
+                value.name = key
+                value.ownerName = name
+                value.applyIndex(basePropIndex)
+                meta.append(value)
 
     for key, value in attrs.iteritems():
         if isinstance(value, ComponentProperty):

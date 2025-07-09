@@ -93,7 +93,7 @@ class CustomPopover(CustomizationItemsPopoverMeta):
         nonHistoricItemsCount = 0
         fantasticalItemsCount = 0
         allOutfitsEmpty = True
-        for outfit in self.__ctx.mode.getModifiedOutfits().values() + [self.__ctx.commonOutfit]:
+        for outfit in self.__ctx.mode.getModifiedOutfits().values() + [self.__ctx.commonModifiedOutfit]:
             historicItems = [ intCD for intCD in outfit.items() if self.__service.getItemByCD(intCD).customizationDisplayType() == CustomizationDisplayType.HISTORICAL ]
             historicItemsCount += len(historicItems)
             nonHistoricItems = [ intCD for intCD in outfit.items() if self.__service.getItemByCD(intCD).customizationDisplayType() == CustomizationDisplayType.NON_HISTORICAL ]
@@ -194,8 +194,8 @@ class CustomPopoverDataProvider(SortableDAAPIDataProvider):
         season = season or self.__ctx.season
         purchaseItems = ifilter(lambda i: i.group == season, purchaseItems)
         if season == SeasonType.ALL:
-            modifiedOutfit = self.__ctx.getCommonModifiedOutfit()
-            originalOutfit = self.__ctx.getCommonOutfit()
+            modifiedOutfit = self.__ctx.commonModifiedOutfit
+            originalOutfit = self.__ctx.commonOriginalOutfit
         else:
             modifiedOutfit = self.__ctx.mode.getModifiedOutfit(season)
             originalOutfit = self.__ctx.mode.getOriginalOutfit(season)

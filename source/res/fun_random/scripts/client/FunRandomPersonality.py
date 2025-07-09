@@ -140,6 +140,11 @@ class ClientFunRandomBattleMode(FunRandomBattleMode):
         return [FunRandomLootboxAutoOpenFormatter()]
 
     @property
+    def _client_ammunitionPanelViews(self):
+        from fun_random.gui.impl.lobby.tank_setup.qfg_ammunition_panel import FunRandomQuickFireGunsAmmunitionPanelView
+        return (FunRandomQuickFireGunsAmmunitionPanelView,)
+
+    @property
     def _client_vehicleViewStates(self):
         from fun_random.gui.vehicle_view_states import FunRandomVehicleViewState
         return (FunRandomVehicleViewState,)
@@ -180,6 +185,7 @@ def preInit():
     battleMode.registerMessengerClientFormatters(fun_gui_constants)
     battleMode.registerClientTokenQuestsSubFormatters()
     battleMode.registerClientLootBoxAutoOpenSubFormatters()
+    battleMode.registerAmmunitionPanelViews()
     battleMode.registerVehicleViewStates()
     registerFunRandomOthersPrbParams()
     registerFunRandomAwardControllers()

@@ -26,9 +26,10 @@ class Comp7ProfileTechniquePage(ProfileTechniquePage):
     def _getEmptyScreenLabel(self):
         return backport.text(R.strings.profile.section.technique.emptyScreenLabel.battleType.comp7()) if self._battlesType == PROFILE_DROPDOWN_KEYS.COMP7 else super(Comp7ProfileTechniquePage, self)._getEmptyScreenLabel()
 
-    def _getDefaultTableHeader(self, isFallout=False):
-        result = super(Comp7ProfileTechniquePage, self)._getDefaultTableHeader()
-        if self._battlesType == PROFILE_DROPDOWN_KEYS.COMP7:
+    def _getDefaultTableHeader(self, isFallout=False, showMarkOfMastery=False):
+        isComp7BattleType = self._battlesType == PROFILE_DROPDOWN_KEYS.COMP7
+        result = super(Comp7ProfileTechniquePage, self)._getDefaultTableHeader(showMarkOfMastery=not isComp7BattleType)
+        if isComp7BattleType:
             result.append(self._createTableBtnInfo('prestigePoints', 62 if self._isPrestigeVisible() else 70, 6, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_PRESTIGEPOINTS, 'descending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_PRESTIGEPOINTS))
         return result
 

@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/feature/sub_systems/fun_performance_analyzers.py
 import BigWorld
-from gui.shared.utils.graphics import isRendererPipelineDeferred
+from gui.shared.utils.graphics import isLowPreset
 
 class PerformanceGroup(object):
     LOW_RISK = 0
@@ -16,7 +16,7 @@ class IPerformanceAlertHandler(object):
 
 
 class GraphicsPresetAnalyzerHandler(IPerformanceAlertHandler):
-    __ALERT_LEVELS_KEYS = {PerformanceGroup.HIGH_RISK: ['MIN', 'LOW'],
+    __ALERT_LEVELS_KEYS = {PerformanceGroup.HIGH_RISK: ['LOW'],
      PerformanceGroup.MEDIUM_RISK: ['MEDIUM']}
 
     def analyze(self):
@@ -33,7 +33,7 @@ class GraphicsPresetAnalyzerHandler(IPerformanceAlertHandler):
 class RenderPipelineAnalyzerHandler(IPerformanceAlertHandler):
 
     def analyze(self):
-        return PerformanceGroup.MEDIUM_RISK if not isRendererPipelineDeferred() else PerformanceGroup.LOW_RISK
+        return PerformanceGroup.MEDIUM_RISK if isLowPreset() else PerformanceGroup.LOW_RISK
 
 
 class HighPerformanceGroupHandler(IPerformanceAlertHandler):

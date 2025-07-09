@@ -68,7 +68,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	24600	</weight>
-    <maxHealth>	1600	</maxHealth>
+    <maxHealth>	1680	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	250	</maxHealth>
       <maxRegenHealth>	188	</maxRegenHealth>
@@ -78,6 +78,13 @@
       <undamaged>	vehicles/british/GB134_Gryphon/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/british/GB134_Gryphon/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/british/GB134_Gryphon/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <GB134_Gryphon_RW7_3Dst>
+          <undamaged>	vehicles/british/GB134_Gryphon/_skins/GB134_Gryphon_RW7_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/british/GB134_Gryphon/_skins/GB134_Gryphon_RW7_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/british/GB134_Gryphon/_skins/GB134_Gryphon_RW7_3Dst/crash/lod0/Hull.model	</exploded>
+        </GB134_Gryphon_RW7_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -659,6 +666,42 @@
         <anchorShift>	0.02	</anchorShift>
       </slot>
       <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15049	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB134_Gryphon_RW7_3Dst	</compatibleModels>
+        <position>	-1.35271 1.28313 3.37396	</position>
+        <rotation>	0.533869 -0.000489 3.13964	</rotation>
+        <scale>	0.676725 0.4 0.676724	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.785398	</clipAngle>
+        <anchorShift>	0.02	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15050	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB134_Gryphon_RW7_3Dst	</compatibleModels>
+        <position>	-1.388921 1.440269 2.427269	</position>
+        <rotation>	-0.161856 0.000779 3.13989	</rotation>
+        <scale>	0.676725 0.4 0.676724	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.785398	</clipAngle>
+        <anchorShift>	-0.05	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15051	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB134_Gryphon_RW7_3Dst	</compatibleModels>
+        <position>	0.679093 1.487298 1.855729	</position>
+        <rotation>	0.373705 0.558631 3.091636	</rotation>
+        <scale>	0.494432 0.138431 0.494427	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.785398	</clipAngle>
+        <anchorShift>	0.02	</anchorShift>
+      </slot>
+      <slot>
         <slotType>	attachment	</slotType>
         <slotId>	18000	</slotId>
         <position>	-1.749985 0.184666 -1.360948	</position>
@@ -684,6 +727,22 @@
         <scale>	1 0.999999 1	</scale>
         <applyType>	universal	</applyType>
         <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18003	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <scale>	1 1 1	</scale>
+        <hiddenForUser>	true	</hiddenForUser>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18004	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <scale>	1 1 1	</scale>
+        <hiddenForUser>	true	</hiddenForUser>
       </slot>
     </customizationSlots>
     <customization>
@@ -727,6 +786,13 @@
         <undamaged>	vehicles/british/GB134_Gryphon/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/british/GB134_Gryphon/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/british/GB134_Gryphon/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <GB134_Gryphon_RW7_3Dst>
+            <undamaged>	vehicles/british/GB134_Gryphon/_skins/GB134_Gryphon_RW7_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/british/GB134_Gryphon/_skins/GB134_Gryphon_RW7_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/british/GB134_Gryphon/_skins/GB134_Gryphon_RW7_3Dst/crash/lod0/Chassis.model	</exploded>
+          </GB134_Gryphon_RW7_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1230,7 +1296,7 @@
             <segmentSyncPivotOffset>	0	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_L5	</name>
-              <startAngle>	-3.026832	</startAngle>
+              <startAngle>	-3.106686	</startAngle>
               <teethCount>	12	</teethCount>
             </sync>
             <sync>
@@ -1427,7 +1493,7 @@
             <segmentSyncPivotOffset>	0	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_R5	</name>
-              <startAngle>	-3.026837	</startAngle>
+              <startAngle>	-3.106686	</startAngle>
               <teethCount>	12	</teethCount>
             </sync>
             <sync>
@@ -1581,7 +1647,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	10000	</weight>
-      <maxHealth>	400	</maxHealth>
+      <maxHealth>	420	</maxHealth>
       <rotationSpeed>	32	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	185	</maxHealth>
@@ -1655,9 +1721,19 @@
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
               <rayStart>	0 0 3.054	</rayStart>
-              <rayEnd>	0 0 3.574	</rayEnd>
+              <rayEnd>	0 0 3.554	</rayEnd>
               <rayUp>	0.142088 0 0	</rayUp>
               <size>	0.5	</size>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	0 0.008 2.47	</rayStart>
+              <rayEnd>	0 0.008 2.92	</rayEnd>
+              <rayUp>	0.1 0 0	</rayUp>
+              <applyToFabric>	false	</applyToFabric>
+              <compatibleModels>	GB134_Gryphon_RW7_3Dst	</compatibleModels>
+              <size>	0.39	</size>
             </slot>
           </customizationSlots>
           <customization>
@@ -1670,6 +1746,13 @@
             <undamaged>	vehicles/british/GB134_Gryphon/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/british/GB134_Gryphon/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/british/GB134_Gryphon/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <GB134_Gryphon_RW7_3Dst>
+                <undamaged>	vehicles/british/GB134_Gryphon/_skins/GB134_Gryphon_RW7_3Dst/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/british/GB134_Gryphon/_skins/GB134_Gryphon_RW7_3Dst/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/british/GB134_Gryphon/_skins/GB134_Gryphon_RW7_3Dst/crash/lod0/Gun_02.model	</exploded>
+              </GB134_Gryphon_RW7_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/british/GB134_Gryphon/collision/Gun_02.model	</collisionModelServer>
@@ -1688,6 +1771,13 @@
         <undamaged>	vehicles/british/GB134_Gryphon/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/british/GB134_Gryphon/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/british/GB134_Gryphon/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <GB134_Gryphon_RW7_3Dst>
+            <undamaged>	vehicles/british/GB134_Gryphon/_skins/GB134_Gryphon_RW7_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB134_Gryphon/_skins/GB134_Gryphon_RW7_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/british/GB134_Gryphon/_skins/GB134_Gryphon_RW7_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </GB134_Gryphon_RW7_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/british/GB134_Gryphon/collision/Turret_01.model	</collisionModelServer>
@@ -2054,6 +2144,29 @@
           <showOn>	4368	</showOn>
           <clipAngle>	0.785398	</clipAngle>
           <anchorShift>	1.57718	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35028	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	GB134_Gryphon_RW7_3Dst	</compatibleModels>
+          <position>	-0.610402 2.164522 -0.131826	</position>
+          <rotation>	1.569036 -1.03495 -2.63333	</rotation>
+          <scale>	0.543779 0.2 0.543776	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.785398	</clipAngle>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35029	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	GB134_Gryphon_RW7_3Dst	</compatibleModels>
+          <position>	0.846664 1.734767 1.080183	</position>
+          <rotation>	0.422003 0.904011 3.127446	</rotation>
+          <scale>	0.498899 0.183493 0.498896	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.785398	</clipAngle>
+          <anchorShift>	-0.01	</anchorShift>
         </slot>
         <slot>
           <slotType>	attachment	</slotType>

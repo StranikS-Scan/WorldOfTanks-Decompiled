@@ -1182,7 +1182,6 @@ class MENU(object):
     MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTE = '#menu:moduleInfo/params/noPiercingDistance/footnote'
     MODULEINFO_PARAMS_PIERCINGDISTANCE_FOOTNOTE = '#menu:moduleInfo/params/piercingDistance/footnote'
     MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTE_MAXDISTANCE = '#menu:moduleInfo/params/noPiercingDistance/footnote/maxDistance'
-    MODULEINFO_PARAMS_GUARANTEEDDAMAGE_FOOTNOTE = '#menu:moduleInfo/params/guaranteedDamage/footnote'
     MODULEINFO_PARAMS_STUNMAXDURATION = '#menu:moduleInfo/params/stunMaxDuration'
     MODULEINFO_PARAMS_STUNMINDURATION = '#menu:moduleInfo/params/stunMinDuration'
     MODULEINFO_PARAMS_STUNMAXDURATIONLIST = '#menu:moduleInfo/params/stunMaxDurationList'

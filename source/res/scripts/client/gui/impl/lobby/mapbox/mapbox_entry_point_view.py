@@ -8,7 +8,7 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mapbox.mapbox_entry_point_view_model import MapboxEntryPointViewModel, State
 from gui.impl.pub import ViewImpl
 from gui.periodic_battles.models import PeriodType
-from gui.shared.utils.graphics import isRendererPipelineDeferred
+from gui.shared.utils.graphics import isLowPreset
 from helpers import dependency, time_utils, server_settings
 from skeletons.gui.game_control import IMapboxController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -88,7 +88,7 @@ class MapBoxEntryPointView(ViewImpl):
             model.setStartTime(startTime)
             model.setEndTime(endTime)
             model.setLeftTime(leftTime)
-            model.setPerformanceAlertEnabled(not isRendererPipelineDeferred())
+            model.setPerformanceAlertEnabled(isLowPreset())
 
     @staticmethod
     def __getEntryPointState(periodInfo):

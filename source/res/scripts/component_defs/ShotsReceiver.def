@@ -1,13 +1,20 @@
 <ShotsReceiver.def>
+  <Implements>
+    <Interface>	ReplicableComponent	</Interface>
+  </Implements>
   <Properties></Properties>
   <ClientMethods>
     <receiveShot>
       <Args>
         <hitPoint>	VECTOR3	</hitPoint>
         <hitDir>	VECTOR3	</hitDir>
+        <speed>	FLOAT32	</speed>
         <normal>	VECTOR3	</normal>
         <shotID>	INT64	</shotID>
-        <effectIndex>	INT64	</effectIndex>
+        <effectIndex>	UINT8	</effectIndex>
+        <prefabEffectIndex>	UINT8	</prefabEffectIndex>
+        <shellType>	UINT8	</shellType>
+        <shellCaliber>	FLOAT32	</shellCaliber>
         <matKind>	INT64	</matKind>
         <damagedDestructibles>	ARRAY	  <of>	UINT32	</of>
         </damagedDestructibles>

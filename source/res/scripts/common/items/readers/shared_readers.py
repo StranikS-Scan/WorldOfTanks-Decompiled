@@ -6,7 +6,7 @@ import typing
 from copy import deepcopy
 import ResMgr
 import Math
-from constants import IS_CLIENT, IS_BOT, ITEM_DEFS_PATH, IS_EDITOR, DeviceRepairMode
+from constants import IS_CLIENT, IS_BOT, ITEM_DEFS_PATH, IS_EDITOR, DeviceRepairMode, IS_UE_EDITOR
 from items import _xml, getTypeInfoByName
 from items.components import component_constants
 from items.components import shared_components
@@ -35,6 +35,8 @@ def _readMiscSlot(ctx, subsection, slotType):
 def _readAttachmentSlot(ctx, subsection, slotType):
     descr = shared_components.AttachmentSlotDescription(slotType=slotType, slotId=_xml.readInt(ctx, subsection, 'slotId'), position=_xml.readVector3(ctx, subsection, 'position', c11n_constants.DEFAULT_POSITION), rotation=_xml.readVector3(ctx, subsection, 'rotation', c11n_constants.DEFAULT_ROTATION), scale=_xml.readVector3(ctx, subsection, 'scale', c11n_constants.DEFAULT_SCALE), attachNode=_xml.readStringOrNone(ctx, subsection, 'attachNode'), hiddenForUser=_xml.readBool(ctx, subsection, 'hiddenForUser', False), applyType=_xml.readStringOrEmpty(ctx, subsection, 'applyType'), size=_xml.readStringOrEmpty(ctx, subsection, 'size'), hangerId=_xml.readNonNegativeInt(ctx, subsection, 'hangerId', 0), hangerRotation=_xml.readVector3(ctx, subsection, 'hangerRotation', Math.Vector3(0, 0, 0)))
     _verifySlotId(ctx, slotType, descr.slotId)
+    if subsection.has_key('compatibleModels'):
+        descr.compatibleModels = _xml.readTupleOfStrings(ctx, subsection, 'compatibleModels')
     return descr
 
 
@@ -460,3 +462,28 @@ def readPrefabsSets(section, prefabsKeys):
             prefabs[k] = {k:v.readStrings(k) for k in prefabsKeys}
 
         return prefabs
+
+
+def readSlotPrefabs(section):
+    slotPrefabsSection = section['slotPrefabs']
+    if not slotPrefabsSection:
+        if IS_UE_EDITOR:
+            return []
+        return component_constants.EMPTY_LIST
+    return [ (slot, prefab.asString) for slot, prefab in slotPrefabsSection.items() ]
+
+
+def readObjectSlots(xmlCtx, section):
+
+    def readSlot(ctx, subsection):
+        slotType = _xml.readString(ctx, subsection, 'type')
+        if slotType not in component_constants.ObjectSlotType.ALL:
+            _xml.raiseWrongXml(ctx, 'type', 'Unsupported object slot type: {}'.format(slotType))
+        return shared_components.ObjectSlot(name=_xml.readString(ctx, subsection, 'name'), type=slotType, position=_xml.readVector3(ctx, subsection, 'position', component_constants.ZERO_VECTOR3), rotation=_xml.readVector3(ctx, subsection, 'rotation', component_constants.ZERO_VECTOR3))
+
+    slotsCtx, slotsSection = _xml.getSubSectionWithContext(xmlCtx, section, 'objectSlots', throwIfMissing=False)
+    if not slotsSection:
+        if IS_UE_EDITOR:
+            return []
+        return component_constants.EMPTY_LIST
+    return [ readSlot(ctx, section) for _, (ctx, section) in _xml.getItemsWithContext(slotsCtx, slotsSection, 'slot') ]

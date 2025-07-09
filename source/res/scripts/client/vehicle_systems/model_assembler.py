@@ -841,5 +841,5 @@ def loadAppearancePrefab(prefab, appearance, posloadCallback=None):
 
 
 def __assemblePrefabComponent(appearance, attachment, _, __):
-    if attachment.hiddenForUser:
+    if attachment.hidden:
         loadAppearancePrefab(attachment.modelName, appearance)

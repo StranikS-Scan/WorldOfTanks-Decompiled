@@ -9,12 +9,10 @@ from frontline.gui.impl.gen.view_models.views.lobby.dialogs.reserves_confirm_dia
 from gui.impl.pub.dialog_window import DialogButtons
 from helpers import dependency
 from skeletons.gui.game_control import IEpicBattleMetaGameController
-from uilogging.epic_battle.constants import EpicBattleLogKeys, EpicBattleLogActions, EpicBattleLogButtons as LogButtons
-from uilogging.epic_battle.loggers import EpicBattleLogger
 
 class ReservesConfirmDialog(DialogTemplateView):
     __epicMetaGameCtrl = dependency.descriptor(IEpicBattleMetaGameController)
-    __slots__ = ('__skillsInteractor', '__vehicleType', '__isBuy', '__isCloseButtonClicked', '__uiEpicBattleLogger')
+    __slots__ = ('__skillsInteractor', '__vehicleType', '__isBuy', '__isCloseButtonClicked')
     LAYOUT_ID = R.views.frontline.lobby.dialogs.ReservesConfirmDialog()
     VIEW_MODEL = ReservesConfirmDialogModel
 
@@ -23,7 +21,6 @@ class ReservesConfirmDialog(DialogTemplateView):
         self.__skillsInteractor = skillsInteractor
         self.__vehicleType = vehicleType
         self.__isBuy = isBuy
-        self.__uiEpicBattleLogger = EpicBattleLogger()
         self.__isCloseButtonClicked = False
 
     def _onLoading(self, *args, **kwargs):
@@ -31,7 +28,6 @@ class ReservesConfirmDialog(DialogTemplateView):
         self.addButton(ConfirmButton())
         self.addButton(CancelButton())
         self._setConfirmBtnLabel()
-        self.__uiEpicBattleLogger.log(EpicBattleLogActions.OPEN.value, item=EpicBattleLogKeys.ABILITIES_CONFIRM.value, parentScreen=EpicBattleLogKeys.SETUP_VIEW.value)
         self._fillViewModel()
         super(ReservesConfirmDialog, self)._onLoading(*args, **kwargs)
 
@@ -90,8 +86,3 @@ class ReservesConfirmDialog(DialogTemplateView):
     def _closeClickHandler(self, _=None):
         self.__isCloseButtonClicked = True
         super(ReservesConfirmDialog, self)._closeClickHandler(_)
-
-    def _setResult(self, result):
-        item = LogButtons.INSTALL if result == DialogButtons.SUBMIT else (LogButtons.CLOSE if self.__isCloseButtonClicked else LogButtons.NOT_INSTALL)
-        self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLICK, item=item, parentScreen=EpicBattleLogKeys.ABILITIES_CONFIRM)
-        super(ReservesConfirmDialog, self)._setResult(result)

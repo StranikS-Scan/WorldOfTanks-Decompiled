@@ -533,6 +533,7 @@ class UnitPlayerDataKey(object):
     MATCHMAKER_STATS = 'matchmakerStats'
     MAP_BLACKLIST = 'mapBlackList'
     ACCOUNT_WTR = 'accountWTR'
+    ACCOUNT_NEW_WTR = 'accountNewWTR'
     HAS_WINBACK_TOKEN = 'hasWinbackToken'
     CLAN_DBID = 'clanDBID'
     CLAN_ABBREV = 'clanAbbrev'

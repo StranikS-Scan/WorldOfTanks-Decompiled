@@ -5,7 +5,7 @@ from frameworks.wulf import ViewFlags, ViewSettings
 from battle_pass_common import FinalReward, BattlePassConsts, BattlePassTankmenSource
 from gui.battle_pass.battle_pass_award import BattlePassAwardsManager
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator
-from gui.battle_pass.battle_pass_helpers import getReceivedTankmenCount, getTankmenShopPackages, getStyleForChapter, getVehicleInfoForChapter, isSeasonEndingSoon, isSeasonWithSpecialTankmenScreen
+from gui.battle_pass.battle_pass_helpers import getReceivedTankmenCount, getTankmenShopPackages, getStyleForChapter, getVehicleInfoForChapter, isSeasonEndingSoon
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData
 from gui.impl.gen import R
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getVehicleCDForStyle
@@ -94,7 +94,7 @@ class HolidayFinalView(ViewImpl):
         with self.viewModel.transaction() as model:
             model.awardsWidget.setIsTalerEnabled(not self.__battlePass.isHoliday())
             model.awardsWidget.setIsBpCoinEnabled(not self.__battlePass.isHoliday())
-            model.awardsWidget.setIsSpecialVoiceTankmenEnabled(isSeasonWithSpecialTankmenScreen())
+            model.awardsWidget.setTankmenScreenID(self.__battlePass.getTankmenScreenID(self.__chapter))
             model.setIsSeasonEndingSoon(isSeasonEndingSoon())
             self.__updateRewardChoice(model=model)
 
@@ -150,7 +150,7 @@ class HolidayFinalView(ViewImpl):
     def __updateState(self):
         if not self.__battlePass.isBought(self.__chapter):
             state = self.viewModel.BUY_STATE
-        elif not len(self.__battlePass.getSpecialTankmen()) < 2 and not self.__isTankmenReceived(getTankmenShopPackages()):
+        elif self.__battlePass.getTankmenScreenID(self.__chapter) and not self.__isTankmenReceived(getTankmenShopPackages()):
             state = self.viewModel.TANKMEN_STATE
         elif self.__battlePass.getNotChosenRewardCount() > 0:
             state = self.viewModel.SELECTABLE_REWARDS_STATE
@@ -177,9 +177,8 @@ class HolidayFinalView(ViewImpl):
     def __takeAllRewards(self):
         self.__battlePass.takeAllRewards()
 
-    @staticmethod
-    def __showTankmen():
-        showBattlePassTankmenVoiceover()
+    def __showTankmen(self):
+        showBattlePassTankmenVoiceover(self.__battlePass.getTankmenScreenID(self.__chapter))
 
     def __showVehicle(self):
         vehicle, _ = getVehicleInfoForChapter(self.__chapter)

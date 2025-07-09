@@ -12,7 +12,6 @@ import nations
 from CurrentVehicle import g_currentVehicle
 from account_helpers.AccountSettings import AccountSettings, GUI_START_BEHAVIOR, EPIC_LAST_CYCLE_ID
 from account_helpers.client_epic_meta_game import skipResponse
-from account_helpers.settings_core.settings_constants import GRAPHICS
 from adisp import adisp_async, adisp_process
 from constants import ARENA_BONUS_TYPE, PREBATTLE_TYPE, QUEUE_TYPE, Configs
 from epic_constants import EPIC_SELECT_BONUS_NAME, EPIC_CHOICE_REWARD_OFFER_GIFT_TOKENS, LEVELUP_TOKEN_TEMPLATE, CATEGORIES_ORDER
@@ -31,6 +30,7 @@ from gui.shared import event_dispatcher
 from gui.shared.event_dispatcher import showFrontlineContainerWindow, showEpicBattlesPrimeTimeWindow
 from gui.shared.event_dispatcher import showFrontlineWelcomeWindow, showFrontlineInfoWindow
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.utils.graphics import getGraphicsEngineValue
 from gui.shared.utils import SelectorBattleTypesUtils
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier, PeriodicNotifier
@@ -48,8 +48,6 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from uilogging.epic_battle.constants import EpicBattleLogKeys, EpicBattleLogActions, EpicBattleLogButtons
-from uilogging.epic_battle.loggers import EpicBattleLogger
 from season_provider import SeasonProvider
 if typing.TYPE_CHECKING:
     from gui.server_events.event_items import Quest
@@ -72,7 +70,7 @@ class EPIC_META_GAME_LIMIT_TYPE(object):
 PERFORMANCE_GROUP_LIMITS = {EPIC_PERF_GROUP.HIGH_RISK: [{EPIC_META_GAME_LIMIT_TYPE.SYSTEM_DATA: {'osBit': 1,
                                                                       'graphicsEngine': 0}}, {EPIC_META_GAME_LIMIT_TYPE.HARDWARE_PARAMS: {HARDWARE_SCORE_PARAMS.PARAM_GPU_MEMORY: 490}}, {EPIC_META_GAME_LIMIT_TYPE.SYSTEM_DATA: {'graphicsEngine': 0},
                               EPIC_META_GAME_LIMIT_TYPE.HARDWARE_PARAMS: {HARDWARE_SCORE_PARAMS.PARAM_RAM: 2900}}],
- EPIC_PERF_GROUP.MEDIUM_RISK: [{EPIC_META_GAME_LIMIT_TYPE.HARDWARE_PARAMS: {HARDWARE_SCORE_PARAMS.PARAM_GPU_SCORE: 150}}, {EPIC_META_GAME_LIMIT_TYPE.HARDWARE_PARAMS: {HARDWARE_SCORE_PARAMS.PARAM_CPU_SCORE: 50000}}]}
+ EPIC_PERF_GROUP.MEDIUM_RISK: [{EPIC_META_GAME_LIMIT_TYPE.HARDWARE_PARAMS: {HARDWARE_SCORE_PARAMS.PARAM_GPU_SCORE: 300}}, {EPIC_META_GAME_LIMIT_TYPE.HARDWARE_PARAMS: {HARDWARE_SCORE_PARAMS.PARAM_CPU_SCORE: 50000}}]}
 
 class EpicMetaGameSkillLevel(object):
     __slots__ = ('level', 'name', 'shortDescr', 'longDescr', 'shortFilterAlert', 'longFilterAlert', 'icon', 'eqID')
@@ -279,7 +277,6 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
     def getAlertBlock(self):
 
         def showFLInfoWindow():
-            EpicBattleLogger().log(EpicBattleLogActions.CLICK, item=EpicBattleLogButtons.INFO_PAGE, parentScreen=EpicBattleLogKeys.HANGAR)
             showFrontlineInfoWindow(autoscrollSection=InfoPageScrollToSection.BATTLE_SCENARIOS)
 
         alertData = epic_helpers.getAlertStatusVO()
@@ -785,7 +782,7 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
 
     def __analyzeClientSystem(self):
         stats = BigWorld.wg_getClientStatistics()
-        stats['graphicsEngine'] = self.__settingsCore.getSetting(GRAPHICS.RENDER_PIPELINE)
+        stats['graphicsEngine'] = getGraphicsEngineValue()
         self.__performanceGroup = EPIC_PERF_GROUP.LOW_RISK
         for groupName, conditions in PERFORMANCE_GROUP_LIMITS.iteritems():
             for currentLimit in conditions:

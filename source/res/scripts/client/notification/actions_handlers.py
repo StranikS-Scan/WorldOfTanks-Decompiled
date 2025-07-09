@@ -53,8 +53,6 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
 from skeletons.gui.web import IWebController
 from soft_exception import SoftException
-from uilogging.epic_battle.constants import EpicBattleLogActions, EpicBattleLogButtons, EpicBattleLogKeys
-from uilogging.epic_battle.loggers import EpicBattleLogger
 from uilogging.seniority_awards.constants import SeniorityAwardsLogSpaces
 from uilogging.seniority_awards.loggers import VehicleSelectionNotificationLogger, CoinsNotificationLogger, RewardNotificationLogger
 from uilogging.wot_plus.loggers import WotPlusNotificationLogger
@@ -994,9 +992,10 @@ class _OpenBPExtraWillEndSoon(NavigationDisabledActionHandler):
         pass
 
     def doAction(self, model, entityID, action):
-        chapterID = self.__battlePassController.getExtraChapterID()
-        if chapterID:
+        chapterID = model.getNotification(self.getNotType(), entityID).getSavedData().get('chapterID')
+        if chapterID is not None and self.__battlePassController.isChapterExists(chapterID):
             showMissionsBattlePass(R.views.lobby.battle_pass.BattlePassProgressionsView(), chapterID)
+        return
 
 
 class _OpentBlueprintsConvertSale(NavigationDisabledActionHandler):
@@ -1069,11 +1068,6 @@ class _OpenChapterChoiceView(_OpenBattlePassProgressionView):
 
 
 class _OpenEpicBattlesAfterBattleWindow(NavigationDisabledActionHandler):
-    __slots__ = ('__uiEpicBattleLogger',)
-
-    def __init__(self):
-        super(_OpenEpicBattlesAfterBattleWindow, self).__init__()
-        self.__uiEpicBattleLogger = EpicBattleLogger()
 
     @classmethod
     def getNotType(cls):
@@ -1087,7 +1081,6 @@ class _OpenEpicBattlesAfterBattleWindow(NavigationDisabledActionHandler):
         notification = model.getNotification(self.getNotType(), entityID)
         levelUpInfo = notification.getSavedData()
         showEpicBattlesAfterBattleWindow(levelUpInfo)
-        self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLICK.value, EpicBattleLogButtons.LEVELUP_NOTIFICATION.value, EpicBattleLogKeys.HANGAR.value)
 
 
 class _OpenCustomizationStylesSection(NavigationDisabledActionHandler):

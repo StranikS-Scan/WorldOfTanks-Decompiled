@@ -7,36 +7,46 @@ import Math
 import logging
 from Event import Event
 from cgf_components_common.material_component import MaterialComponent
-from cgf_components_common.shots_receiver import ShotsReceiver as Receiver
 from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery, autoregister
 from material_kinds import EFFECT_MATERIAL_INDEXES_BY_IDS, EFFECT_MATERIAL_INDEXES_BY_NAMES
+from functools import partial
+from constants import IS_EDITOR
 from cgf_components.on_shot_components import EffectOnShotComponent, SoundOnShotComponent
+from cgf_script.component_meta_class import registerReplicableComponent
 _logger = logging.getLogger(__name__)
 _DIR_UP = Math.Vector3(0.0, 1.0, 0.0)
+if IS_EDITOR:
 
-class ShotsReceiver(BigWorld.DynamicScriptComponent, Receiver):
+    class DynamicScriptComponent(object):
+        pass
+
+
+else:
+    from BigWorld import DynamicScriptComponent
+
+@registerReplicableComponent
+class ShotsReceiver(DynamicScriptComponent):
 
     def __init__(self):
         super(ShotsReceiver, self).__init__()
         self.onShot = Event()
 
-    def receiveShot(self, hitPoint, hitDir, normal, shotID, effectIndex, matKind, damagedDestructibles):
-        if self.entity.gameObject.isValid():
-            self.onShot(hitPoint, hitDir, normal, shotID, effectIndex, matKind, damagedDestructibles, self.entity.gameObject.id)
+    def receiveShot(self, hitPoint, hitDir, speed, normal, shotID, effectIndex, prefabEffectIndex, shellType, shellCaliber, matKind, damagedDestructibles):
+        self.onShot(hitPoint, hitDir, speed, normal, shotID, effectIndex, prefabEffectIndex, shellType, shellCaliber, matKind, damagedDestructibles)
 
 
-@autoregister(presentInAllWorlds=True)
+@autoregister(presentInAllWorlds=True, domain=CGF.DomainOption.DomainClient | CGF.DomainOption.DomainServer)
 class ShotReceiverManager(CGF.ComponentManager):
 
     @onAddedQuery(CGF.GameObject, ShotsReceiver)
     def onShotsReceiverAdded(self, gameObject, shotsReceiver):
-        shotsReceiver.onShot += self.__onShot
+        shotsReceiver.onShot += partial(self.__onShot, gameObject)
 
     @onRemovedQuery(CGF.GameObject, ShotsReceiver)
     def onShotsReceiverRemoved(self, gameObject, shotsReceiver):
         shotsReceiver.onShot -= self.__onShot
 
-    def __onShot(self, hitPoint, hitDir, normal, shotID, effectIndex, matKind, damagedDestructibles, gameObjectID):
+    def __onShot(self, go, hitPoint, hitDir, speed, normal, shotID, effectIndex, prefabEffectIndex, shellType, shellCaliber, matKind, damagedDestructibles):
         effectQuery = CGF.Query(self.spaceID, (CGF.GameObject,
          ShotsReceiver,
          EffectOnShotComponent,
@@ -49,21 +59,25 @@ class ShotReceiverManager(CGF.ComponentManager):
         normal.normalise()
         shot = {'hitPoint': hitPoint,
          'hitDir': hitDir,
+         'speed': speed,
          'normal': normal,
          'shotID': int(shotID),
          'effectIndex': int(effectIndex),
+         'prefabEffectIndex': int(prefabEffectIndex),
+         'shellType': int(shellType),
+         'caliber': float(shellCaliber),
          'matKind': int(matKind),
          'damagedDestructibles': damagedDestructibles}
         for gameObject, _, effectComponent, transform in effectQuery:
-            if gameObject.id == gameObjectID:
+            if gameObject.id == go.id:
                 self.__processEffect(gameObject, shot, effectComponent.effectPath, transform)
 
         for gameObject, _, soundComponent, transform in soundQuery:
-            if gameObject.id == gameObjectID:
+            if gameObject.id == go.id:
                 self.__processSound(gameObject, shot, soundComponent.soundPath, transform)
 
         for gameObject, _ in explosionQuery:
-            if gameObject.id == gameObjectID:
+            if gameObject.id == go.id:
                 self.__processExplosion(gameObject, shot)
 
     def __processExplosion(self, gameObject, shot):
@@ -74,7 +88,7 @@ class ShotReceiverManager(CGF.ComponentManager):
             material = gameObject.findComponentByType(MaterialComponent)
             if material:
                 materialIdx = EFFECT_MATERIAL_INDEXES_BY_NAMES[material.kind]
-        BigWorld.player().explodeProjectile(shot['shotID'], shot['effectIndex'], materialIdx, shot['hitPoint'], shot['hitDir'], shot['damagedDestructibles'])
+        BigWorld.player().explodeProjectile(shot['shotID'], shot['effectIndex'], shot['prefabEffectIndex'], materialIdx, shot['shellType'], shot['caliber'], shot['hitPoint'], shot['hitDir'], shot['speed'], shot['damagedDestructibles'])
 
     def __processEffect(self, gameObject, shot, effectPath, transform):
         position, normal = shot['hitPoint'], shot['normal']

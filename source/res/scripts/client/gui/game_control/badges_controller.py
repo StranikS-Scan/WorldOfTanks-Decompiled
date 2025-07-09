@@ -18,7 +18,7 @@ if typing.TYPE_CHECKING:
     from gui.shared.gui_items.badge import Badge
 
 class BadgesController(IBadgesController, Notifiable):
-    itemsCache = dependency.descriptor(IItemsCache)
+    __itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         super(BadgesController, self).__init__()
@@ -45,9 +45,8 @@ class BadgesController(IBadgesController, Notifiable):
         self.__clear()
 
     def onLobbyStarted(self, ctx):
-        badges = self.itemsCache.items.getBadges()
-        self.__initCurrentBadges(badges)
-        self.__badgesProcessing(badges)
+        self.__initCurrentBadges()
+        self.__badgesProcessing()
         g_clientUpdateManager.addCallbacks({'badges': self.__updateBadges,
          'stats.dossier': self.__updateBadges})
 
@@ -72,21 +71,19 @@ class BadgesController(IBadgesController, Notifiable):
         if self.__pendingBadges is not None:
             return
         else:
-            badges = self.itemsCache.items.getBadges()
-            self.__initCurrentBadges(badges)
-            self.__badgesProcessing(badges)
+            self.__initCurrentBadges()
+            self.__badgesProcessing()
             self.onUpdated()
             return
 
-    def __initCurrentBadges(self, badges):
+    def __initCurrentBadges(self):
         self.__currentSelectedPrefix = None
         self.__currentSelectedSuffix = None
-        for badge in badges.itervalues():
-            if badge.isSelected:
-                if badge.isPrefixLayout() and badge.isAchieved:
-                    self.__currentSelectedPrefix = badge
-                elif badge.isSuffixLayout() and badge.isAchieved:
-                    self.__currentSelectedSuffix = badge
+        for badge in self.__itemsCache.items.getReceivedBadges(onlySelected=True).values():
+            if badge.isPrefixLayout():
+                self.__currentSelectedPrefix = badge
+            if badge.isSuffixLayout():
+                self.__currentSelectedSuffix = badge
 
         return
 
@@ -104,7 +101,7 @@ class BadgesController(IBadgesController, Notifiable):
             self.__currentSelectedSuffix = None
             self.__currentSelectedPrefix = None
             for badgeID in badges:
-                badge = self.itemsCache.items.getBadgeByID(badgeID)
+                badge = self.__itemsCache.items.getBadgeByID(badgeID)
                 if badge is not None:
                     badge.isSelected = True
                     if badge.isPrefixLayout():
@@ -123,23 +120,23 @@ class BadgesController(IBadgesController, Notifiable):
         if result and result.userMsg:
             SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
         else:
-            self.__initCurrentBadges(self.itemsCache.items.getBadges())
+            self.__initCurrentBadges()
         self.__pendingBadges = None
         self.onUpdated()
         return
 
-    def __badgesProcessing(self, badges):
+    def __badgesProcessing(self):
         currentSelectedPrefix = self.__currentSelectedPrefix
-        for badge in badges.itervalues():
-            if self.__tutorStorage is not None and badge.isNew() and badge.isAchieved:
+        for badge in self.__itemsCache.items.getReceivedBadges().itervalues():
+            if self.__tutorStorage is not None and badge.isNew():
                 if badge.isPrefixLayout():
                     self.__tutorStorage.setValue(GLOBAL_FLAG.HAVE_NEW_BADGE, True)
                 elif badge.isSuffixLayout():
                     self.__tutorStorage.setValue(GLOBAL_FLAG.HAVE_NEW_SUFFIX_BADGE, True)
-            if currentSelectedPrefix is not None and currentSelectedPrefix.isCollapsible() and badge.isCollapsible() and badge.group == currentSelectedPrefix.group and badge.getBadgeClass() > currentSelectedPrefix.getBadgeClass() and badge.isAchieved:
+            if currentSelectedPrefix is not None and currentSelectedPrefix.isCollapsible() and badge.isCollapsible() and badge.group == currentSelectedPrefix.group and badge.getBadgeClass() > currentSelectedPrefix.getBadgeClass():
                 currentSelectedPrefix = badge
 
-        if currentSelectedPrefix != self.__currentSelectedPrefix and self.itemsCache.isSynced():
+        if currentSelectedPrefix != self.__currentSelectedPrefix and self.__itemsCache.isSynced():
             self.__currentSelectedPrefix.isSelected = False
             self.__currentSelectedPrefix = currentSelectedPrefix
             self.select([ b.badgeID for b in (self.__currentSelectedPrefix, self.__currentSelectedSuffix) if b is not None ])

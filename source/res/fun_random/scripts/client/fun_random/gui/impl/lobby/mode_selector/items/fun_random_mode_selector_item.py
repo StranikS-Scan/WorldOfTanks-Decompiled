@@ -167,7 +167,7 @@ class FunRandomSelectorItem(ModeSelectorLegacyItem, FunAssetPacksMixin, FunSubMo
         rewardID = ModeSelectorRewardID.OTHER
         if progression.isInUnlimitedProgression and all([ isinstance(b, LootBoxTokensBonus) for b in progression.unlimitedProgression.bonuses ]):
             rewardID = ModeSelectorRewardID.RANDOM
-        self._addReward(rewardID, icon=ModeSelectorRewardID.OTHER.value, tooltipID=ModeSelectorTooltipsConstants.FUN_RANDOM_REWARDS)
+        self._addReward(rewardID, tooltipID=ModeSelectorTooltipsConstants.FUN_RANDOM_REWARDS)
 
     def __reloadModeHelper(self):
         if self.__subModesHelper is not None:

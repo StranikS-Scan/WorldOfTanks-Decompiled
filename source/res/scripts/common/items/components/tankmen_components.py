@@ -53,6 +53,7 @@ class SPECIAL_VOICE_TAG(object):
     BP_15_M = ('tankmen_bp15_5', 'tankmen_bp15_6', 'tankmen_bp15_7', 'tankmen_bp15_8', 'tankmen_bp15_9')
     BP_H4 = ('tankmen_bp1004_1', 'tankmen_bp1004_2', 'tankmen_bp1004_3', 'tankmen_bp1004_4', 'tankmen_bp1004_5')
     BP_16_M = ('tankmen_bp16_5', 'tankmen_bp16_6', 'tankmen_bp16_7', 'tankmen_bp16_8', 'tankmen_bp16_9')
+    BP_17_DC_M = ('tankmen_bp17_5', 'tankmen_bp17_8')
     ALL = (BUFFON,
      SABATON,
      OFFSPRING,
@@ -80,7 +81,7 @@ class SPECIAL_VOICE_TAG(object):
      MIKA,
      MARTY_VOLE,
      MT_LB_1,
-     CELEBRITY_2025) + BATTLE_OF_BLOGGERS + BATTLE_OF_BLOGGERS_2021 + G_I_JOE_TWITCH_2021 + WHITE_TIGER_EVENT_2021 + G_I_JOE_2022 + WHITE_TIGER_EVENT_2022 + BPH_2022 + WHITE_TIGER_EVENT_2023 + BP_12_M + BP_H2 + BP_13 + CTM_24 + BP_14_M + WHITE_TIGER_EVENT_2024 + BP_15_M + BP_H4 + BP_16_M
+     CELEBRITY_2025) + BATTLE_OF_BLOGGERS + BATTLE_OF_BLOGGERS_2021 + G_I_JOE_TWITCH_2021 + WHITE_TIGER_EVENT_2021 + G_I_JOE_2022 + WHITE_TIGER_EVENT_2022 + BPH_2022 + WHITE_TIGER_EVENT_2023 + BP_12_M + BP_H2 + BP_13 + CTM_24 + BP_14_M + WHITE_TIGER_EVENT_2024 + BP_15_M + BP_H4 + BP_16_M + BP_17_DC_M
 
 
 class SPECIAL_CREW_TAG(object):

@@ -16,6 +16,7 @@ from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packActionTooltipData
 from helpers import dependency
+from items.components.c11n_constants import SeasonType
 from shared_utils import first
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
@@ -78,7 +79,13 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
         yield DialogsInterface.showDialog(ConfirmC11nSellMeta(self._intCD, inventoryCount, self.__ctx.mode.sellItem, vehicle=g_currentVehicle.item))
 
     def removeItemFromTank(self):
-        if self.__ctx.modeId in CustomizationModes.BASE_STYLES:
+        if self._item.itemTypeID in GUI_ITEM_TYPE.COMMON_C11NS:
+
+            def intCdFilter(item):
+                return item.intCD == self._intCD
+
+            self.__ctx.mode.removeItemsFromSeason(SeasonType.ALL, filterMethod=intCdFilter)
+        elif self.__ctx.modeId in CustomizationModes.BASE_STYLES:
             self.__ctx.mode.removeStyle(self._intCD)
         else:
             self.__ctx.mode.removeItems(True, self._intCD)
@@ -193,6 +200,10 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
         if itemType == GUI_ITEM_TYPE.STYLE:
             style = self.__ctx.mode.modifiedStyle
             isInstalled = style is not None and style.intCD == item.intCD
+            textKey = CustomizationOptions.REMOVE_FROM_TANK
+        elif itemType in GUI_ITEM_TYPE.COMMON_C11NS:
+            outfit = self.__ctx.commonModifiedOutfit
+            isInstalled = outfit.has(item)
             textKey = CustomizationOptions.REMOVE_FROM_TANK
         else:
             outfit = self.__ctx.mode.getModifiedOutfit()

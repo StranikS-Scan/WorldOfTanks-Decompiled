@@ -676,8 +676,9 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             if vehicle is not None and vehicle.appearance is not None:
                 vehicle.appearance.removeComponentByType(GenericComponents.ControlModeStatus)
                 vehicle.appearance.createComponent(GenericComponents.ControlModeStatus, _CTRL_MODES.index(eMode))
-            player.entityGameObject.removeComponentByType(GenericComponents.ControlModeStatus)
-            player.entityGameObject.createComponent(GenericComponents.ControlModeStatus, _CTRL_MODES.index(self.__ctrlModeName))
+            if player.inWorld:
+                player.entityGameObject.removeComponentByType(GenericComponents.ControlModeStatus)
+                player.entityGameObject.createComponent(GenericComponents.ControlModeStatus, _CTRL_MODES.index(self.__ctrlModeName))
             BigWorld.setEdgeDrawerRenderMode(1 if eMode in aih_constants.MAP_CASE_MODES else 0)
             return
 

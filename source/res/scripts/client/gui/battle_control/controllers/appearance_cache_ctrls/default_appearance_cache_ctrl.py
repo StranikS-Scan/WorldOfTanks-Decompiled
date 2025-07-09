@@ -2,12 +2,13 @@
 # Embedded file name: scripts/client/gui/battle_control/controllers/appearance_cache_ctrls/default_appearance_cache_ctrl.py
 import logging
 import BigWorld
+import CGF
+from common_tank_structure import VehicleAppearanceCacheInfo
 from gui.battle_control.arena_info.interfaces import IAppearanceCacheController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from skeletons.vehicle_appearance_cache import IAppearanceCache
 from helpers import dependency
 from soft_exception import SoftException
-from vehicle_systems.appearance_cache import VehicleAppearanceCacheInfo
 from wg_async import wg_async
 _logger = logging.getLogger(__name__)
 
@@ -126,6 +127,6 @@ class DefaultAppearanceCacheController(IAppearanceCacheController):
         if typeDescriptor is not None:
             isAlive = vInfo['isAlive']
             outfitCD = vInfo['outfitCD']
-            info = VehicleAppearanceCacheInfo(typeDescr=typeDescriptor, health=int(isAlive), isCrewActive=isAlive, isTurretDetached=False, outfitCD=outfitCD)
+            info = VehicleAppearanceCacheInfo(typeDescr=typeDescriptor, health=int(isAlive), isCrewActive=isAlive, isTurretDetached=False, outfitCD=outfitCD, forceDynAttachmentLoading=False, entityGameObject=CGF.GameObject.INVALID_GAME_OBJECT)
             self._appearanceCache.getAppearance(vId, info, strCD=typeDescriptor.makeCompactDescr())
         return

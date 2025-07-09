@@ -31,6 +31,9 @@
     <KillCamDataComponent></KillCamDataComponent>
     <AutoShootGunController></AutoShootGunController>
     <TwinGunController></TwinGunController>
+    <SpinGunController></SpinGunController>
+    <TemperatureGunController></TemperatureGunController>
+    <MultiGunState></MultiGunState>
     <RocketAcceleration></RocketAcceleration>
     <VisualScriptEquipment></VisualScriptEquipment>
     <VisualScriptCache></VisualScriptCache>
@@ -82,5 +85,7 @@
     <ForcedReloadComponent></ForcedReloadComponent>
     <FairplayVehicleBattleStatsComponent></FairplayVehicleBattleStatsComponent>
     <AvatarFairplayMessageComponent></AvatarFairplayMessageComponent>
+    <NetworkReplicationPointComponent></NetworkReplicationPointComponent>
+    <NetworkVehicleHierarchy></NetworkVehicleHierarchy>
   </DynamicComponents>
 </components.xml>

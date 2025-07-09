@@ -179,7 +179,7 @@ class _CrosshairShotResults(object):
         if armor == 0:
             return False
         if hitAngleCos <= shell.type.ricochetAngleCos:
-            if not matInfo.checkCaliberForRichet:
+            if not matInfo.checkCaliberForRicochet:
                 return True
             if not shellExtraData.checkCaliberForRicochet:
                 return True

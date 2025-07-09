@@ -2252,4 +2252,140 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB134_Gryphon	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	1087	</id>
+      <texture>	gui/maps/vehicles/styles/GB134_Gryphon_RW7_3Dst.png	</texture>
+      <modelsSet>	GB134_Gryphon_RW7_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/GB134_Gryphon_RW7_3Dst	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/GB134_Gryphon_RW7_3Dst_desc/long	</longDescriptionSpecial>
+      <tags>	styleSerialNumber c11n3D	</tags>
+      <outfits>
+        <outfit>
+          <season>	summer	</season>
+          <camouflages>
+            <item>
+              <id>	986	</id>
+              <appliedTo>	16	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	987	</id>
+              <appliedTo>	4352	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	1254	</id>
+              <tags>	mimic formfactor_rect1x2 left	</tags>
+            </item>
+          </projection_decals>
+          <attachments>
+            <item>
+              <slotId>	18003	</slotId>
+              <id>	155	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
+            </item>
+            <item>
+              <slotId>	18004	</slotId>
+              <id>	156	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
+            </item>
+          </attachments>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <camouflages>
+            <item>
+              <id>	988	</id>
+              <appliedTo>	16	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	989	</id>
+              <appliedTo>	4352	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	1254	</id>
+              <tags>	mimic formfactor_rect1x2 left	</tags>
+            </item>
+          </projection_decals>
+          <attachments>
+            <item>
+              <slotId>	18003	</slotId>
+              <id>	155	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
+            </item>
+            <item>
+              <slotId>	18004	</slotId>
+              <id>	156	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
+            </item>
+          </attachments>
+        </outfit>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	990	</id>
+              <appliedTo>	16	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	991	</id>
+              <appliedTo>	4352	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	1254	</id>
+              <tags>	mimic formfactor_rect1x2 left	</tags>
+            </item>
+          </projection_decals>
+          <attachments>
+            <item>
+              <slotId>	18003	</slotId>
+              <id>	155	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
+            </item>
+            <item>
+              <slotId>	18004	</slotId>
+              <id>	156	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
+            </item>
+          </attachments>
+        </outfit>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
 </uk.xml>

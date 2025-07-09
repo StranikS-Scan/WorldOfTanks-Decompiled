@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/battle_pass_view.py
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import EXTRA_CHAPTERS_VIDEO_SHOWN
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
 from frameworks.wulf import ViewStatus
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
@@ -20,7 +22,7 @@ from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared.event_dispatcher import showBrowserOverlayView, showHangar
 from gui.shared.formatters import text_styles
 from helpers import dependency
-from shared_utils import nextTick
+from shared_utils import nextTick, first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.impl import IGuiLoader
@@ -31,7 +33,6 @@ _VIEWS = {_R_VIEWS.BattlePassIntroView(): IntroView,
  _R_VIEWS.HolidayFinalView(): HolidayFinalView,
  _R_VIEWS.PostProgressionView(): PostProgressionView}
 _INTRO_VIDEO_SHOWN = BattlePassStorageKeys.INTRO_VIDEO_SHOWN
-_EXTRA_VIDEO_SHOWN = BattlePassStorageKeys.EXTRA_CHAPTER_VIDEO_SHOWN
 _INTRO_SHOWN = BattlePassStorageKeys.INTRO_SHOWN
 
 class _IntroVideoManager(object):
@@ -47,7 +48,8 @@ class _IntroVideoManager(object):
 
     @property
     def isExtraVideoShown(self):
-        return _hasTrueInBPStorage(_EXTRA_VIDEO_SHOWN)
+        chapterID = first(self.__battlePass.getExtraChapterIDs())
+        return chapterID is not None and chapterID in AccountSettings.getSettings(EXTRA_CHAPTERS_VIDEO_SHOWN)
 
     def init(self):
         g_eventBus.addListener(events.BattlePassEvent.VIDEO_SHOWN, self.showIntroVideoIfNeeded, EVENT_BUS_SCOPE.LOBBY)
@@ -70,9 +72,15 @@ class _IntroVideoManager(object):
 
     @nextTick
     def __showExtraVideoIfNeeded(self):
-        if not self.isExtraVideoShown and self.__battlePass.hasExtra():
-            _showOverlayVideo(getExtraIntroVideoURL())
-            _setTrueToBPStorage(_EXTRA_VIDEO_SHOWN)
+        if self.__battlePass.hasExtra() and not self.isExtraVideoShown:
+            videoUrl = getExtraIntroVideoURL()
+            if videoUrl:
+                _showOverlayVideo(videoUrl)
+            settings = AccountSettings.getSettings(EXTRA_CHAPTERS_VIDEO_SHOWN)
+            for extraChapterID in self.__battlePass.getExtraChapterIDs():
+                settings.add(extraChapterID)
+
+            AccountSettings.setSettings(EXTRA_CHAPTERS_VIDEO_SHOWN, settings)
             if not self.__isIntroVideoShown:
                 showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
         g_eventBus.removeListener(events.BattlePassEvent.VIDEO_SHOWN, self.showIntroVideoIfNeeded, EVENT_BUS_SCOPE.LOBBY)

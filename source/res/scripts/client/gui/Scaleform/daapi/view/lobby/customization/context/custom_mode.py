@@ -248,17 +248,15 @@ class CustomMode(CustomizationMode):
             self._modifiedOutfits[season] = outfit.copy()
 
     def _selectItem(self, intCD, progressionLevel=0):
-        if super(CustomMode, self)._selectItem(intCD, progressionLevel):
+        item = self._service.getItemByCD(intCD)
+        if item.itemTypeID in self.__SELFINSTALL_ITEM_TYPES:
+            slotId = self.__SELFINSTALL_ITEM_TYPES[item.itemTypeID]
+            self.selectSlot(slotId)
+        if self.selectedSlot is None:
+            self._selectedItem = item
+            self.__storedProgressionLevel = progressionLevel
             return True
         else:
-            item = self._service.getItemByCD(intCD)
-            if item.itemTypeID in self.__SELFINSTALL_ITEM_TYPES:
-                slotId = self.__SELFINSTALL_ITEM_TYPES[item.itemTypeID]
-                self.selectSlot(slotId)
-            if self.selectedSlot is None:
-                self._selectedItem = item
-                self.__storedProgressionLevel = progressionLevel
-                return True
             self.installItem(intCD, self.selectedSlot)
             return True
 
@@ -276,12 +274,10 @@ class CustomMode(CustomizationMode):
         return super(CustomMode, self)._unselectSlot()
 
     def _installItem(self, intCD, slotId, season=None, component=None):
-        if super(CustomMode, self)._installItem(intCD, slotId):
-            return True
+        outfit = self._modifiedOutfits[self.season if season is None else season]
+        if isItemsQuantityLimitReached(outfit, slotId.slotType) and not isSlotFilled(outfit, slotId):
+            return False
         else:
-            outfit = self._modifiedOutfits[self.season if season is None else season]
-            if isItemsQuantityLimitReached(outfit, slotId.slotType) and not isSlotFilled(outfit, slotId):
-                return False
             item = self._service.getItemByCD(intCD)
             component = component or self._getComponent(item, slotId)
             multiSlot = outfit.getContainer(slotId.areaId).slotFor(slotId.slotType)
@@ -315,7 +311,7 @@ class CustomMode(CustomizationMode):
     @adisp_process
     def _applyItems(self, purchaseItems, callback):
         originalOutfits = self.getOriginalOutfits()
-        originalOutfits[SeasonType.ALL] = self._ctx.commonOriginalOutfit.copy()
+        originalOutfits[SeasonType.ALL] = self._ctx.commonOriginalOutfit
         results = []
         requestData = self._getRequestData(purchaseItems)
         if requestData:

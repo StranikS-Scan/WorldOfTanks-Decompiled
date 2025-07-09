@@ -708,11 +708,11 @@ class FakeDataAccessor(base.BaseDataAccessor):
               'promoscreen_url': '/promoscreens/<slug>/'},
      'unread': 3,
      'sent_at': 1423813849})
-    def get_teaser(self, fields=None, **kwargs):
+    def get_teaser(self, fields=None):
         return self._request_data('teaser', None)
 
     @fake_method(example=None)
-    def send_teaser(self, promo_id):
+    def send_teaser(self, promo_id, fields=None):
         return self._request_data('send_teaser', None)
 
     @fake_method(example={'unread': 3})

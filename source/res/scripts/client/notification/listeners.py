@@ -1121,9 +1121,11 @@ class BattlePassListener(_NotificationListener):
         SystemMessages.pushMessage(text=text, type=SystemMessages.SM_TYPE.BattlePassGameModeEnabled, messageData={'header': header})
 
     def __notifyStartExtra(self, chapterID):
-        AccountSettings.setSettings(IS_BATTLE_PASS_EXTRA_START_NOTIFICATION_SEEN, True)
         if not self.__luiController.isRuleCompleted(LUI_RULES.sysMsgCollectionStartBattlePass):
             return
+        settings = AccountSettings.getSettings(IS_BATTLE_PASS_EXTRA_START_NOTIFICATION_SEEN)
+        settings.add(chapterID)
+        AccountSettings.setSettings(IS_BATTLE_PASS_EXTRA_START_NOTIFICATION_SEEN, settings)
         header = backport.text(R.strings.system_messages.battlePass.extraStarted.header())
         chapterName = backport.text(R.strings.battle_pass.chapter.fullName.num(chapterID)())
         SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.extraStarted.body(), name=chapterName), priority=NotificationPriorityLevel.HIGH, type=SM_TYPE.BattlePassExtraStart, messageData={'header': header})
@@ -1152,7 +1154,7 @@ class BattlePassListener(_NotificationListener):
         chapterName = backport.text(textRes())
         header = backport.text(R.strings.system_messages.battlePass.extraWillEndSoon.header(), name=chapterName)
         text = backport.text(R.strings.system_messages.battlePass.extraWillEndSoon.body(), name=chapterName)
-        SystemMessages.pushMessage(text=text, type=SM_TYPE.BattlePassExtraWillEndSoon, messageData={'header': header})
+        SystemMessages.pushMessage(text=text, type=SM_TYPE.BattlePassExtraWillEndSoon, messageData={'header': header}, savedData={'chapterID': chapterID})
 
     def __checkAndNotifyOtherBattleTypes(self):
         supportedTypes = self.__battlePass.getSupportedArenaBonusTypes()
@@ -1182,8 +1184,11 @@ class BattlePassListener(_NotificationListener):
                     self.__pushEnabled()
         if needToPushStarted:
             self.__initArenaBonusTypeEnabledStates()
-        if isStarted and self.__battlePass.hasExtra() and not AccountSettings.getSettings(IS_BATTLE_PASS_EXTRA_START_NOTIFICATION_SEEN):
-            self.__notifyStartExtra(self.__battlePass.getExtraChapterID())
+        if isStarted:
+            for chapterID in self.__battlePass.getExtraChapterIDs():
+                if chapterID not in AccountSettings.getSettings(IS_BATTLE_PASS_EXTRA_START_NOTIFICATION_SEEN):
+                    self.__notifyStartExtra(chapterID)
+
         self.__isStarted = isStarted
         self.__isFinished = isFinished
         return

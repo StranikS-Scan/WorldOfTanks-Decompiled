@@ -191,8 +191,8 @@ class ModelHitTester(object):
 
             return res
 
-    def localSphericHitTest(self, center, radius, bOutsidePolygonsOnly=True, value=0):
-        return self.__getBspModel(value).collideSphere(center, radius, bOutsidePolygonsOnly)
+    def localSphericHitTest(self, center, radius, outsidePolygonsOnly=True, allCollisions=False, value=0):
+        return self.__getBspModel(value).collideSphere(center, radius, outsidePolygonsOnly, allCollisions)
 
     def localCollidesWithTriangle(self, triangle, hitDir, value=0):
         return self.__getBspModel(value).collidesWithTriangle(triangle, hitDir)

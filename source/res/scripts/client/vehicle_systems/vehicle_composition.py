@@ -4,21 +4,26 @@ import typing
 import enum
 import BigWorld
 import Compound
-import GenericComponents
+import CGF
 import Math
+import GenericComponents
 import math_utils
 from constants import IS_UE_EDITOR
-from items.components.c11n_constants import HANGER_POSTFIX
+from items.components import component_constants
+from items.components.c11n_constants import HANGER_POSTFIX, AttachmentType
 from vehicle_systems.tankStructure import TankNodeNames, TankPartNames, TankCollisionPartNames
 from vehicle_systems.components.vehicle_appearance_component import VehicleAppearanceComponent
 from helpers import isPlayerAccount
-import CGF
+from objects_hierarchy import PrefabsMapItem, ExtraSlotsMapItem
 if typing.TYPE_CHECKING:
+    from CGF import GameObject
     from Vehicle import Vehicle
+    from items.vehicles import VehicleDescriptor
     from ClientSelectableCameraVehicle import ClientSelectableCameraVehicle
     from SimulatedVehicle import SimulatedVehicle
     from common_tank_appearance import CommonTankAppearance
     from gui.hangar_vehicle_appearance import HangarVehicleAppearance
+    from typing import Iterable
     TAppearance = typing.Union[HangarVehicleAppearance, CommonTankAppearance, None]
 
 class VehicleSlots(enum.Enum):
@@ -40,21 +45,24 @@ def removeComposition(gameObject):
     gameObject.removeComponentByType(Compound.CompoundBasedComposerComponent)
 
 
-def createVehicleComposition(gameObject, prefabMap=None, followNodes=True, extraSlots=None):
+def createVehicleComposition(gameObject, vehicleGameObject=CGF.GameObject.INVALID_GAME_OBJECT, prefabMap=None, followNodes=True, extraSlots=None, dynSlotNodes=None):
+    dynSlotNodes = dynSlotNodes or {}
     if IS_UE_EDITOR:
 
         def predicate(_, nodeName):
-            return nodeName.startswith('HP_') or nodeName.endswith('Collision') or nodeName == TankPartNames.GUN
+            return nodeName.startswith('HP_') or nodeName.endswith('Collision') or nodeName == TankPartNames.GUN or nodeName in dynSlotNodes
 
     else:
 
         def predicate(_, nodeName):
-            return nodeName.startswith('HP_') or nodeName == TankPartNames.GUN
+            return nodeName.startswith('HP_') or nodeName == TankPartNames.GUN or nodeName in dynSlotNodes
 
     def nodeInteractTypeResolver(_, nodeName):
         return Compound.NodeInteractType.NONE if not followNodes else Compound.NodeInteractType.FOLLOW
 
-    gameObject.createComponent(Compound.CompoundBasedComposerComponent, predicate, nodeInteractTypeResolver, _VEHICLE_SLOTS_MAP, prefabMap or [], extraSlots or [])
+    slotsMap = {node:node for node in dynSlotNodes}
+    slotsMap.update(_VEHICLE_SLOTS_MAP)
+    gameObject.createComponent(Compound.CompoundBasedComposerComponent, vehicleGameObject, predicate, nodeInteractTypeResolver, slotsMap, prefabMap or [], extraSlots or [])
 
 
 def _getSlotTransform(scale, rotation, position):
@@ -62,46 +70,48 @@ def _getSlotTransform(scale, rotation, position):
     return math_utils.createSRTMatrix(scale, rotationYPR, position)
 
 
-VEHICLE_SLOT_TO_PART = {TankPartNames.CHASSIS: VehicleSlots.CHASSIS.value,
+VEHICLE_PART_TO_SLOT = {TankPartNames.CHASSIS: VehicleSlots.CHASSIS.value,
  TankPartNames.HULL: VehicleSlots.HULL.value,
  TankPartNames.TURRET: VehicleSlots.TURRET.value,
  TankPartNames.GUN: VehicleSlots.GUN_INCLINATION.value}
-DESTROYED_VEHICLE_SLOT_TO_PART = {TankPartNames.CHASSIS: VehicleSlots.CHASSIS.value,
+DESTROYED_VEHICLE_PART_TO_SLOT = {TankPartNames.CHASSIS: VehicleSlots.CHASSIS.value,
  TankPartNames.HULL: VehicleSlots.HULL.value,
  TankPartNames.TURRET: VehicleSlots.TURRET.value,
  TankPartNames.GUN: VehicleSlots.GUN_JOINT.value}
+ATTACHMENT_TYPE_TO_SLOT = {AttachmentType.GUN: VehicleSlots.GUN_RECOIL.value,
+ AttachmentType.GUN_RIGHT: VehicleSlots.GUN_RECOIL_R.value,
+ AttachmentType.GUN_LEFT: VehicleSlots.GUN_RECOIL_L.value}
 
 def getExtraSlotMap(vDesc, appearance):
     extraSlotMap = []
-    attachmentScale = Math.Vector3(0, 0, 0)
-    attachmentRotation = Math.Vector3(0, 0, 0)
     for partName in TankPartNames.ALL:
         customizationSlots = getattr(vDesc, partName).slotsAnchors
         for slot in customizationSlots:
-            if slot.type == 'attachment':
-                for attachment in appearance.attachments:
-                    if attachment.slotName == str(slot.slotId):
-                        attachmentScale = attachment.scale
-                        attachmentRotation = attachment.rotation
-
+            if slot.type in component_constants.ALLOWED_ATTACHMENT_SLOTS:
                 slotTransform = _getSlotTransform(slot.scale, slot.rotation, slot.position)
-                transform = math_utils.createSRTMatrix(attachmentScale, attachmentRotation, Math.Vector3(0, 0, 0))
-                transform.postMultiply(slotTransform)
+                for attachment in appearance.attachments:
+                    if attachment.slotId == slot.slotId:
+                        transform = math_utils.createSRTMatrix(attachment.scale, attachment.rotation, Math.Vector3(0, 0, 0))
+                        slotTransform.preMultiply(transform)
+                        break
+
                 if appearance.isDestroyed:
-                    part = str(DESTROYED_VEHICLE_SLOT_TO_PART.get(partName))
+                    parentSlot = str(DESTROYED_VEHICLE_PART_TO_SLOT.get(partName))
+                elif slot.applyType in ATTACHMENT_TYPE_TO_SLOT:
+                    parentSlot = str(ATTACHMENT_TYPE_TO_SLOT[slot.applyType])
                 else:
-                    part = str(VEHICLE_SLOT_TO_PART.get(partName))
-                extraSlotMap.append(CGF.ExtraSlotMapItem(str(slot.slotId), part, transform))
+                    parentSlot = str(VEHICLE_PART_TO_SLOT.get(partName))
+                extraSlotMap.append(ExtraSlotsMapItem(str(slot.slotId), parentSlot, slotTransform))
                 if slot.hangerId != 0:
                     hangerSlotRotation = slot.hangerRotation + slot.rotation
                     hangerSlotTransform = _getSlotTransform(slot.scale, hangerSlotRotation, slot.position)
-                    extraSlotMap.append(CGF.ExtraSlotMapItem(str(slot.slotId) + HANGER_POSTFIX, part, hangerSlotTransform))
+                    extraSlotMap.append(ExtraSlotsMapItem(str(slot.slotId) + HANGER_POSTFIX, parentSlot, hangerSlotTransform))
 
     return extraSlotMap
 
 
 def createDetachedTurretComposition(gameObject, prefabMap=None, extraSlots=None):
-    gameObject.createComponent(Compound.CompoundBasedComposerComponent, lambda *args: True, lambda *args: Compound.NodeInteractType.NONE, _DETACHED_TURRET_SLOTS_MAP, prefabMap or [], extraSlots or [])
+    gameObject.createComponent(Compound.CompoundBasedComposerComponent, CGF.GameObject.INVALID_GAME_OBJECT, lambda *args: True, lambda *args: Compound.NodeInteractType.NONE, _DETACHED_TURRET_SLOTS_MAP, prefabMap or [], extraSlots or [])
 
 
 def findParentVehicle(gameObject):
@@ -130,6 +140,15 @@ def findParentVehicleAppearance(gameObject):
     hierarchy = CGF.HierarchyManager(gameObject.spaceID)
     findResult = hierarchy.findComponentInParent(gameObject, VehicleAppearanceComponent)
     return findResult[1].appearance if findResult is not None and len(findResult) > 1 else None
+
+
+def getObjectSlots(typeDescriptor):
+    slots = []
+    for parentName, slot in typeDescriptor.objectSlots:
+        tr = Math.createRTMatrix(slot.rotation, slot.position)
+        slots.append(ExtraSlotsMapItem(slot.name, parentName, tr))
+
+    return slots
 
 
 _VEHICLE_SLOTS_MAP = {TankNodeNames.HULL_SWINGING: VehicleSlots.HULL.value,

@@ -379,3 +379,19 @@ class VectorConstant(object):
     Vector4I = Math.Vector4(1.0, 0.0, 0.0, 0.0)
     Vector4J = Math.Vector4(0.0, 1.0, 0.0, 0.0)
     Vector4L = Math.Vector4(0.0, 0.0, 0.0, 1.0)
+
+
+def extendBoundingBox(a, b):
+    c = (Math.Vector3(), Math.Vector3(), max(a[2], b[2]))
+    for i in range(0, 3):
+        c[0][i] = min(a[0][i], b[0][i])
+
+    for i in range(0, 3):
+        c[1][i] = max(a[1][i], b[1][i])
+
+    return c
+
+
+def getCenterFromBox(aabb):
+    centralPoint = Math.Vector3((aabb[1].x + aabb[0].x) / 2.0, (aabb[1].y + aabb[0].y) / 2.0, (aabb[1].z + aabb[0].z) / 2.0)
+    return centralPoint

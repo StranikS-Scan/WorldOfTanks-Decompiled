@@ -8,11 +8,7 @@ import Triggers
 from cgf_demo.demo_category import DEMO_CATEGORY
 from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
 from cgf_script.managers_registrator import onAddedQuery, onProcessQuery
-from constants import IS_EDITOR
-if IS_EDITOR:
-    from cgf_components_common.state_components import HealthComponent
-else:
-    from HealthComponent import HealthComponent
+from HealthComponent import HealthComponent
 
 @registerComponent
 class ShowHealthInfoComponent(object):

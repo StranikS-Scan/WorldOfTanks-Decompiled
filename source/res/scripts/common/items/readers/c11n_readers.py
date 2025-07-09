@@ -82,9 +82,9 @@ class BaseCustomizationItemXmlReader(object):
 
     def _readClientOnlyFromXml(self, target, xmlCtx, section, cache=None):
         if IS_EDITOR:
-            target.i18n = I18nExposedComponentMeta(section.readString('name'), section.readString('userString'), section.readString('description'), section.readString('longDescriptionSpecial'))
+            target.i18n = I18nExposedComponentMeta(section.readString('name'), section.readString('userString'), section.readString('description'), section.readString('longDescriptionSpecial'), section.readString('shortDescriptionSpecial'))
         else:
-            target.i18n = shared_components.I18nExposedComponent(section.readString('userString'), section.readString('description'), section.readString('longDescriptionSpecial'), section.readString('name'))
+            target.i18n = shared_components.I18nExposedComponent(section.readString('userString'), section.readString('description'), section.readString('longDescriptionSpecial'), section.readString('name'), section.readString('shortDescriptionSpecial'))
 
     @staticmethod
     def readVehicleFilterFromXml(xmlCtx, section):
@@ -238,10 +238,20 @@ class AttachmentXmlReader(BaseCustomizationItemXmlReader):
         target.modelName = ix.readStringOrEmpty(xmlCtx, section, 'modelName')
         target.hangarModelName = ix.readStringOrEmpty(xmlCtx, section, 'hangarModelName')
         target.crashModelName = ix.readStringOrEmpty(xmlCtx, section, 'crashModelName')
+        target.leftModelName = ix.readStringOrEmpty(xmlCtx, section, 'leftModelName')
+        target.rightModelName = ix.readStringOrEmpty(xmlCtx, section, 'rightModelName')
         target.sequenceId = ix.readNonNegativeInt(xmlCtx, section, 'sequenceId', 0)
         target.attachmentLogic = ix.readStringOrEmpty(xmlCtx, section, 'attachmentLogic')
         if IS_EDITOR:
             target.name = ix.readStringOrNone(xmlCtx, section, 'name')
+
+
+class StatTrackerXmlReader(AttachmentXmlReader):
+    __slots__ = ()
+
+    def _readClientOnlyFromXml(self, target, xmlCtx, section, cache=None):
+        super(StatTrackerXmlReader, self)._readClientOnlyFromXml(target, xmlCtx, section)
+        target.trackedStatistic = ix.readStringOrEmpty(xmlCtx, section, 'trackedStatistic')
 
 
 class ModificationXmlReader(BaseCustomizationItemXmlReader):
@@ -265,6 +275,9 @@ class ModificationXmlReader(BaseCustomizationItemXmlReader):
                 i += 1
 
             target.effects = result
+        if section.has_key('useNewWear'):
+            xmlSubCtx = (xmlCtx, 'useNewWear')
+            target.useNewWear = ix.readBool(xmlSubCtx, section, 'useNewWear', False)
 
 
 class CamouflageXmlReader(BaseCustomizationItemXmlReader):
@@ -319,7 +332,19 @@ class CamouflageXmlReader(BaseCustomizationItemXmlReader):
             target.rotation = {'hull': rotation.readFloat('HULL', 0.0),
              'turret': rotation.readFloat('TURRET', 0.0),
              'gun': rotation.readFloat('GUN', 0.0)}
+        if section.has_key('normal'):
+            scamo_normal = section['normal']
+            if target.normalMapSettings is not None:
+                target.normalMapSettings = deepcopy(target.normalMapSettings)
+            else:
+                target.normalMapSettings = {'normalMap': '',
+                 'normalStrength': 0.0}
+            if scamo_normal.has_key('normalMap'):
+                target.normalMapSettings['normalMap'] = scamo_normal.readString('normalMap', '')
+            if scamo_normal.has_key('normalStrength'):
+                target.normalMapSettings['normalStrength'] = scamo_normal.readFloat('normalStrength', 0.0)
         readEmissionParams(target, xmlCtx, section)
+        return
 
     @staticmethod
     def getDefaultNationId(target):
@@ -505,7 +530,10 @@ def readCustomizationCacheFromXml(cache, folder):
     _readFonts(cache, (None, 'fonts/list.xml'), ResMgr.openSection(pgFile), 'font')
     ResMgr.purge(pgFile)
     pgFile = os.path.join(folder, 'personal_numbers', 'prohibitedNumbers.xml')
-    _readProhibitedNumbers((None, 'personal_numbers/prohibitedNumbers.xml'), ResMgr.openSection(pgFile))
+    _readProhibitedNumbers(cc.PersonalNumberItem, (None, 'personal_numbers/prohibitedNumbers.xml'), ResMgr.openSection(pgFile))
+    ResMgr.purge(pgFile)
+    pgFile = os.path.join(folder, 'stat_trackers', 'prohibitedNumbers.xml')
+    _readProhibitedNumbers(cc.StatTrackerItem, (None, 'stat_trackers/prohibitedNumbers.xml'), ResMgr.openSection(pgFile))
     ResMgr.purge(pgFile)
     __readItemFolder(cc.PaintItem, folder, 'paint', cache.paints)
     __readItemFolder(cc.CamouflageItem, folder, 'camouflage', cache.camouflages)
@@ -517,6 +545,7 @@ def readCustomizationCacheFromXml(cache, folder):
     __readItemFolder(cc.PersonalNumberItem, folder, 'personal_number', cache.personal_numbers)
     __readItemFolder(cc.SequenceItem, folder, 'sequence', cache.sequences)
     __readItemFolder(cc.AttachmentItem, folder, 'attachment', cache.attachments)
+    __readItemFolder(cc.StatTrackerItem, folder, 'stat_tracker', cache.stat_trackers)
     pgFile = os.path.join(folder, 'progression', 'list.xml')
     for style, questProgression in readQuestProgression(cache, (None, 'progression/list.xml'), ResMgr.openSection(pgFile), 'styleProgress'):
         style.questsProgression = questProgression
@@ -578,13 +607,15 @@ def _validateCamouflages(cache):
                 raise SoftException('Link style {} in camouflage {} not exist '.format(styleId, camouflage.id))
 
 
-def _readProhibitedNumbers(xmlCtx, section):
+def _readProhibitedNumbers(itemCls, xmlCtx, section):
     prohibitedNumbers = ix.readTupleOfStrings(xmlCtx, section, 'ProhibitedNumbers')
+    if all((prohibitedNumber == '' for prohibitedNumber in prohibitedNumbers)):
+        return
     for prohibitedNumber in prohibitedNumbers:
         if not prohibitedNumber.isdigit():
             ix.raiseWrongXml(xmlCtx, 'ProhibitedNumbers', '%s is not a number' % prohibitedNumber)
 
-    cc.PersonalNumberItem.setProhibitedNumbers(prohibitedNumbers)
+    itemCls.setProhibitedNumbers(prohibitedNumbers)
 
 
 def __readProgressLevel(xmlCtx, section):
@@ -942,4 +973,5 @@ __xmlReaders = {cc.PaintItem: PaintXmlReader(),
  cc.InsigniaItem: InsigniaXmlReader(),
  cc.PersonalNumberItem: PersonalNumberXmlReader(),
  cc.SequenceItem: SequenceXmlReader(),
- cc.AttachmentItem: AttachmentXmlReader()}
+ cc.AttachmentItem: AttachmentXmlReader(),
+ cc.StatTrackerItem: StatTrackerXmlReader()}

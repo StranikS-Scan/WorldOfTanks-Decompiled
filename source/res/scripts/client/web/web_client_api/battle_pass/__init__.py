@@ -32,9 +32,18 @@ def _isValidChapterID(_, data, battlePass):
     raise WebCommandException('chapter_id: "{}" is not valid'.format(chapterID))
 
 
+@dependency.replace_none_kwargs(battlePass=IBattlePassController)
+def _isValidTankman(_, data, battlePass):
+    tankmanToken = data.get('tankman')
+    if tankmanToken in battlePass.getSpecialTankmen():
+        return True
+    raise WebCommandException('Tankman token: "{}" is not valid'.format(tankmanToken))
+
+
 class _ShowViewSchema(W2CSchema):
     id = Field(required=False, type=basestring, validator=_isValidViewID)
     chapter_id = Field(required=False, type=int, validator=_isValidChapterID)
+    tankman = Field(required=False, type=basestring, validator=_isValidTankman)
 
 
 @w2capi(name='battle_pass', key='action')
@@ -43,9 +52,9 @@ class BattlePassWebApi(W2CSchema):
 
     @w2c(_ShowViewSchema, name='show_view')
     def handleShowView(self, cmd):
-        if cmd.id in _VIEWS_COMMANDS:
+        if cmd.id in _VIEWS_COMMANDS and hasattr(cmd, 'tankman'):
             showView = _VIEWS_COMMANDS[cmd.id]
-            showView()
+            showView(self.__getTankmenScreenID(cmd.tankman))
         else:
             showMissionsBattlePass(_VIEWS_IDS.get(cmd.id), cmd.chapter_id)
 
@@ -56,3 +65,8 @@ class BattlePassWebApi(W2CSchema):
     @w2c(W2CSchema, name='finish_bp_purchase')
     def finishBattlePassPurchase(self, _):
         g_eventBus.handleEvent(events.BattlePassEvent(events.BattlePassEvent.ON_FINISH_BATTLE_PASS_PURCHASE), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def __getTankmenScreenID(self, groupName):
+        for screenID, screenData in self.__battlePass.getTankmenScreens().iteritems():
+            if groupName in screenData['tankmen']:
+                return screenID

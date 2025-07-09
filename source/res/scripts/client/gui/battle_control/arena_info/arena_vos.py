@@ -636,12 +636,13 @@ class VehicleArenaInteractiveStatsVO(object):
 
 
 class VehicleArenaStatsVO(object):
-    __slots__ = ('vehicleID', '__frags', '__interactive', '__gameModeSpecific', '__chatCommand', '__spottedStatus')
+    __slots__ = ('vehicleID', '__frags', '__interactive', '__gameModeSpecific', '__chatCommand', '__spottedStatus', '__tkills')
 
-    def __init__(self, vehicleID, frags=0, **kwargs):
+    def __init__(self, vehicleID, frags=0, tkills=0, **kwargs):
         super(VehicleArenaStatsVO, self).__init__()
         self.vehicleID = vehicleID
         self.__frags = frags
+        self.__tkills = tkills
         self.__chatCommand = ChatCommandVO()
         self.__spottedStatus = VehicleSpottedStatus.DEFAULT
         self.__interactive = None
@@ -649,11 +650,19 @@ class VehicleArenaStatsVO(object):
         return
 
     def __repr__(self):
-        return 'VehicleArenaStatsVO(vehicleID = {}, frags = {}, interactive = {})'.format(self.vehicleID, self.__frags, self.__interactive)
+        return 'VehicleArenaStatsVO(vehicleID = {}, frags = {}, tkills = {}, interactive = {})'.format(self.vehicleID, self.__frags, self.__tkills, self.__interactive)
 
     @property
     def frags(self):
+        return self.__frags + self.__interactive.equipmentKills - self.__tkills if self.__interactive is not None else self.__frags - self.__tkills
+
+    @property
+    def enemyKills(self):
         return self.__frags + self.__interactive.equipmentKills if self.__interactive is not None else self.__frags
+
+    @property
+    def tkills(self):
+        return self.__tkills
 
     @property
     def interactive(self):
@@ -720,12 +729,12 @@ class VehicleArenaStatsVO(object):
         self.__spottedStatus = spottedStatus
         return _INVALIDATE_OP.VEHICLE_STATS
 
-    def updateVehicleStats(self, frags=None, **kwargs):
-        if frags is not None:
-            self.__frags = frags
+    def updateVehicleStats(self, frags=0, tkills=0, **kwargs):
+        if frags or tkills:
+            self.__frags = frags or self.__frags
+            self.__tkills = tkills or self.__tkills
             return _INVALIDATE_OP.VEHICLE_STATS
-        else:
-            return _INVALIDATE_OP.NONE
+        return _INVALIDATE_OP.NONE
 
 
 class PlayerRankedInfoVO(object):

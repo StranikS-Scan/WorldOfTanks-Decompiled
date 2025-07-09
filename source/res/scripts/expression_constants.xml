@@ -1,0 +1,49 @@
+<expression_constants.xml>
+  <constants>
+    <exampleConst>	10.0	</exampleConst>
+  </constants>
+  <enums>
+    <muzzleBrakeType>
+      <none>	0	</none>
+      <standard>	1	</standard>
+    </muzzleBrakeType>
+    <armorHitPlacement>
+      <regular>	0	</regular>
+      <wheel>	1	</wheel>
+    </armorHitPlacement>
+    <hitType>
+      <armorPiercedNoDamage>	0	</armorPiercedNoDamage>
+      <intermediateRicochet>	1	</intermediateRicochet>
+      <finalRicochet>	2	</finalRicochet>
+      <armorNotPierced>	3	</armorNotPierced>
+      <armorPierced>	4	</armorPierced>
+      <criticalHit>	5	</criticalHit>
+      <armorPiercedDeviceDamaged>	6	</armorPiercedDeviceDamaged>
+    </hitType>
+    <shellType>
+      <hollowCharge>	0	</hollowCharge>
+      <highExplosive>	1	</highExplosive>
+      <armorPiercing>	2	</armorPiercing>
+      <armorPiercingHE>	3	</armorPiercingHE>
+      <armorPiercingCR>	4	</armorPiercingCR>
+      <smoke>	5	</smoke>
+    </shellType>
+    <obstacleType>
+      <static>	1	</static>
+      <terrain>	2	</terrain>
+      <water>	4	</water>
+      <dynamic>	8	</dynamic>
+    </obstacleType>
+    <matKind>
+      <ground>	0	</ground>
+      <sand>	1	</sand>
+      <stone>	2	</stone>
+      <wood>	3	</wood>
+      <snow>	4	</snow>
+      <metal>	5	</metal>
+      <dirt>	6	</dirt>
+      <oil>	7	</oil>
+      <water>	8	</water>
+    </matKind>
+  </enums>
+</expression_constants.xml>

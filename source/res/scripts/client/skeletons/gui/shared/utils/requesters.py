@@ -16,7 +16,7 @@ if typing.TYPE_CHECKING:
 
 class IRequester(object):
 
-    def request(self, callback):
+    def request(self, callback=None):
         raise NotImplementedError
 
     def isSynced(self):

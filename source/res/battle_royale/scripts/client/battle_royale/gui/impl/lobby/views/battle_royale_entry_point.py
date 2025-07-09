@@ -82,5 +82,6 @@ class BattleRoyaleEntryPoint(ViewImpl):
         if not brController.isInPrimeTime() and brController.hasAvailablePrimeTimeServers():
             event_dispatcher.showBattleRoyalePrimeTimeWindow()
         else:
+            self.destroy()
             brController.selectRoyaleBattle()
             selectorUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.BATTLE_ROYALE)

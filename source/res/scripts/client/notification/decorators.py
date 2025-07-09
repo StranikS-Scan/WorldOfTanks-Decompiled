@@ -107,10 +107,7 @@ class _NotificationDecorator(EventsHandler):
         return self._settings
 
     def getPriorityLevel(self):
-        result = NotificationPriorityLevel.MEDIUM
-        if self._settings:
-            result = self._settings.priorityLevel
-        return result
+        return self._settings.priorityLevel if self._settings else NotificationPriorityLevel.MEDIUM
 
     def isAlert(self):
         result = False
@@ -265,7 +262,7 @@ class RecruitReminderMessageDecorator(MessageDecorator):
 
     def update(self, formatted):
         _NotificationDecorator.update(self, formatted)
-        settings = NotificationGuiSettings(isNotify=getNewRecruitsCounter() > 0, priorityLevel=self.getPriorityLevel)
+        settings = NotificationGuiSettings(isNotify=getNewRecruitsCounter() > 0, priorityLevel=self.getPriorityLevel())
         super(RecruitReminderMessageDecorator, self)._make(formatted, settings)
 
 

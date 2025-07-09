@@ -272,4 +272,5 @@ class RemappingConditionNames(object):
 
 class RemappingNames(object):
     TEST = 'test'
-    ALL = set(() + ((TEST,) if IS_DEVELOPMENT else ()))
+    AUTO_SHOOT_GUNS = 'auto_shoot_guns'
+    ALL = set((AUTO_SHOOT_GUNS,) + ((TEST,) if IS_DEVELOPMENT else ()))

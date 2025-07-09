@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/shared/utils/requesters/achievements20_requester.py
 import typing
 import BigWorld
-from adisp import adisp_async
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from skeletons.gui.shared.utils.requesters import IAchievements20Requester
 from constants import AchievementsLayoutStates
@@ -26,6 +25,5 @@ class Achievements20Requester(AbstractSyncDataRequester, IAchievements20Requeste
     def _preprocessValidData(self, data):
         return dict(data.get('achievements20', {}))
 
-    @adisp_async
-    def _requestCache(self, callback):
+    def _requestCache(self, callback=None):
         BigWorld.player().achievements20.getCache(lambda resID, value: self._response(resID, value, callback))

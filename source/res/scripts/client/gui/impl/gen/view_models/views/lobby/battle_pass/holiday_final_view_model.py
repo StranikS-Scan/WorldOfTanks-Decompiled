@@ -20,7 +20,7 @@ class HolidayFinalViewModel(ViewModel):
     SELECTABLE_REWARDS_STATE = 'selectableRewardsState'
     FINAL_STATE = 'finalState'
 
-    def __init__(self, properties=10, commands=8):
+    def __init__(self, properties=9, commands=8):
         super(HolidayFinalViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -57,35 +57,29 @@ class HolidayFinalViewModel(ViewModel):
     def setIsChooseRewardsEnabled(self, value):
         self._setBool(4, value)
 
-    def getIsSpecialVoiceTankmen(self):
-        return self._getBool(5)
-
-    def setIsSpecialVoiceTankmen(self, value):
-        self._setBool(5, value)
-
     def getChapterID(self):
-        return self._getNumber(6)
+        return self._getNumber(5)
 
     def setChapterID(self, value):
-        self._setNumber(6, value)
+        self._setNumber(5, value)
 
     def getCurrentLevel(self):
-        return self._getNumber(7)
+        return self._getNumber(6)
 
     def setCurrentLevel(self, value):
-        self._setNumber(7, value)
+        self._setNumber(6, value)
 
     def getChapterState(self):
-        return ChapterStates(self._getNumber(8))
+        return ChapterStates(self._getNumber(7))
 
     def setChapterState(self, value):
-        self._setNumber(8, value.value)
+        self._setNumber(7, value.value)
 
     def getIsSeasonEndingSoon(self):
-        return self._getBool(9)
+        return self._getBool(8)
 
     def setIsSeasonEndingSoon(self, value):
-        self._setBool(9, value)
+        self._setBool(8, value)
 
     def _initialize(self):
         super(HolidayFinalViewModel, self)._initialize()
@@ -94,7 +88,6 @@ class HolidayFinalViewModel(ViewModel):
         self._addStringProperty('state', 'buyState')
         self._addNumberProperty('notChosenRewardCount', 0)
         self._addBoolProperty('isChooseRewardsEnabled', True)
-        self._addBoolProperty('isSpecialVoiceTankmen', True)
         self._addNumberProperty('chapterID', 0)
         self._addNumberProperty('currentLevel', 0)
         self._addNumberProperty('chapterState')

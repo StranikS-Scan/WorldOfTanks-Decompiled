@@ -5,6 +5,7 @@ import ResMgr
 import Settings
 from constants import ARENA_PERIOD, INVALID_CLIENT_STATS
 from account_helpers.settings_core.settings_constants import GRAPHICS
+from gui.shared.utils.graphics import getGraphicsEngineValue
 from gui.shared.utils import monitor_settings
 from debug_utils import LOG_DEBUG, LOG_NOTE
 from helpers import dependency, isPlayerAvatar
@@ -16,6 +17,8 @@ from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.helpers.statistics import IStatisticsCollector
 from uilogging.helpers import getClientPeripheryID
 STATISTICS_VERSION = '0.0.2'
+_OLD_CUSTOM_PRESET_IDX = 6
+_NEW_CUSTOM_PRESET_IDX = 5
 
 class _STATISTICS_STATE(object):
     STARTED = 0
@@ -259,7 +262,7 @@ class StatisticsCollector(IStatisticsCollector):
          'fps_deviation': statisticsDict['fpsDeviation'],
          'ping': statisticsDict['ping'],
          'lag': statisticsDict['lag'],
-         'graphics_preset': self.settingsCore.getSetting(GRAPHICS.PRESETS),
+         'graphics_preset': self.__getPresetIdx(),
          'screen_res_width': resolutionContainer.width,
          'screen_res_height': resolutionContainer.height,
          'window_mode': windowModeLUT.get(windowMode, 0),
@@ -307,7 +310,7 @@ class StatisticsCollector(IStatisticsCollector):
          'gpu_vendor': statisticsDict['gpuVendor'],
          'gpumemory': statisticsDict['gpuMemory'],
          'os': statisticsDict['os'],
-         'graphics_engine': self.settingsCore.getSetting(GRAPHICS.RENDER_PIPELINE),
+         'graphics_engine': getGraphicsEngineValue(),
          'cpu_score': BigWorld.getAutoDetectGraphicsSettingsScore(HARDWARE_SCORE_PARAMS.PARAM_CPU_SCORE),
          'gpu_score': BigWorld.getAutoDetectGraphicsSettingsScore(HARDWARE_SCORE_PARAMS.PARAM_GPU_SCORE),
          'os_bit': statisticsDict['osBit'],
@@ -373,3 +376,9 @@ class StatisticsCollector(IStatisticsCollector):
 
     def __updateBattle(self):
         pass
+
+    def __getPresetIdx(self):
+        presetIdx = self.settingsCore.getSetting(GRAPHICS.PRESETS)
+        if presetIdx == _NEW_CUSTOM_PRESET_IDX:
+            presetIdx = _OLD_CUSTOM_PRESET_IDX
+        return presetIdx

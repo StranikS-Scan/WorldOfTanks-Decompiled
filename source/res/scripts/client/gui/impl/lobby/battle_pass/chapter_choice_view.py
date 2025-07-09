@@ -135,7 +135,7 @@ class ChapterChoiceView(ViewImpl):
         tankmanNames = Array()
         for rewardSource in (BattlePassConsts.REWARD_FREE, BattlePassConsts.REWARD_PAID):
             for character in getFinalTankmen(chapterID, rewardSource, battlePass=self.__battlePass):
-                _, characterName, _, _ = getDataByTankman(character)
+                _, characterName, _, _, _ = getDataByTankman(character)
                 tankmanNames.addString(characterName)
 
         model.setTankmanNames(tankmanNames)

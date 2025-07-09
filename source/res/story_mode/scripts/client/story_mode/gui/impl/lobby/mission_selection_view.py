@@ -4,7 +4,6 @@ import json
 import logging
 from datetime import datetime
 import typing
-import BigWorld
 import ResMgr
 from PlayerEvents import g_playerEvents
 from frameworks.wulf import ViewStatus, WindowLayer
@@ -16,6 +15,7 @@ from gui.impl.lobby.common.tooltips.extended_text_tooltip import ExtendedTextToo
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.server_events.bonuses import getNonQuestBonuses
 from gui.shared.event_dispatcher import showBrowserOverlayView
+from gui.shared.utils.graphics import isLowPreset
 from helpers import i18n, dependency
 from ids_generators import SequenceIDGenerator
 from items import vehicles
@@ -335,12 +335,11 @@ class MissionSelectionView(BasePrbView):
             model.setIsParallaxEnabled(False)
             _logger.info('story_mode_settings.xml parallaxEnabled is False')
             return
+        elif isLowPreset():
+            model.setIsParallaxEnabled(False)
+            _logger.info('Low graphics settings')
+            return
         else:
-            isDeferredRendering = BigWorld.getGraphicsSetting('RENDER_PIPELINE') == 0
-            if not isDeferredRendering:
-                model.setIsParallaxEnabled(False)
-                _logger.info('Low graphics settings')
-                return
             missionParallaxConfig = self._parallaxConfig.get(str(missionId))
             if missionParallaxConfig is None:
                 model.setIsParallaxEnabled(False)

@@ -92,6 +92,11 @@
           <destroyed>	vehicles/german/G42_Maus/_skins/G42_Maus_BXI_3DSt/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/german/G42_Maus/_skins/G42_Maus_BXI_3DSt/crash/lod0/Hull.model	</exploded>
         </G42_Maus_BXI_3DSt>
+        <G42_Maus_SFV_3Dst>
+          <undamaged>	vehicles/german/G42_Maus/_skins/G42_Maus_SFV_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/german/G42_Maus/_skins/G42_Maus_SFV_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/german/G42_Maus/_skins/G42_Maus_SFV_3Dst/crash/lod0/Hull.model	</exploded>
+        </G42_Maus_SFV_3Dst>
       </sets>
     </models>
     <swinging>
@@ -120,6 +125,16 @@
         <rayEnd>	-1.202814 0.373784 3.90366	</rayEnd>
         <rayUp>	0.000283 0.577923 -0.816091	</rayUp>
         <size>	0.32	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </slot>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	10002	</slotId>
+        <rayStart>	-1.243166 0.700222 3.993657	</rayStart>
+        <rayEnd>	-1.243326 0.373785 3.762487	</rayEnd>
+        <rayUp>	0.000283 0.577923 -0.816091	</rayUp>
+        <compatibleModels>	G42_Maus_SFV_3Dst	</compatibleModels>
+        <size>	0.37	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </slot>
       <slot>
@@ -980,6 +995,18 @@
         <anchorShift>	0.203756	</anchorShift>
       </slot>
       <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15080	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G42_Maus_SFV_3Dst	</compatibleModels>
+        <position>	1.12452 1.55982 4.19924	</position>
+        <rotation>	0.592618 -0.000007 3.14158	</rotation>
+        <scale>	0.621224 0.362489 0.621215	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.10845	</clipAngle>
+        <anchorShift>	0.117973	</anchorShift>
+      </slot>
+      <slot>
         <slotType>	attachment	</slotType>
         <slotId>	18000	</slotId>
         <position>	0 0 0	</position>
@@ -1058,6 +1085,11 @@
             <destroyed>	vehicles/german/G42_Maus/_skins/G42_Maus_BXI_3DSt/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/german/G42_Maus/_skins/G42_Maus_BXI_3DSt/crash/lod0/Chassis.model	</exploded>
           </G42_Maus_BXI_3DSt>
+          <G42_Maus_SFV_3Dst>
+            <undamaged>	vehicles/german/G42_Maus/_skins/G42_Maus_SFV_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G42_Maus/_skins/G42_Maus_SFV_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G42_Maus/_skins/G42_Maus_SFV_3Dst/crash/lod0/Chassis.model	</exploded>
+          </G42_Maus_SFV_3Dst>
         </sets>
       </models>
       <traces>
@@ -1195,6 +1227,45 @@
                   <row3>	0.000000 1.493146 4.266961	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	G42_Maus_SFV_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	1.155218 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.798000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 9.345000	</row2>
+                  <row3>	0.000000 1.390000 -0.053000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.669000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.912000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 9.489000	</row2>
+                  <row3>	0.000000 1.931000 -0.232000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.453000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.465536 0.000000	</row1>
+                  <row2>	0.000000 0.000000 9.094000	</row2>
+                  <row3>	-1.976000 1.262000 0.031000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.830260 -0.000001 -0.000001	</row0>
+                  <row1>	0.000000 0.183442 -0.237379	</row1>
+                  <row2>	0.000000 0.750657 0.580094	</row2>
+                  <row3>	0.000000 1.287326 -4.264986	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.830260 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.130239 0.270255	</row1>
+                  <row2>	0.000000 -0.854619 0.411851	</row2>
+                  <row3>	0.000000 1.327970 4.388681	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.830260 -0.000001 0.000000	</row0>
+                  <row1>	0.000000 0.248792 0.167638	</row1>
+                  <row2>	0.000000 -0.282831 0.419752	</row2>
+                  <row3>	0.000000 1.493146 4.266961	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -1311,6 +1382,45 @@
                   <row1>	0.000000 0.130239 0.270255	</row1>
                   <row2>	0.000000 -0.854619 0.411851	</row2>
                   <row3>	0.000000 1.377980 4.442630	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.830260 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.248799 0.167628	</row1>
+                  <row2>	0.000000 -0.282814 0.419763	</row2>
+                  <row3>	0.000000 1.493150 4.266960	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	G42_Maus_SFV_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	1.155220 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.798000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 9.345000	</row2>
+                  <row3>	0.000000 1.390000 -0.053000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.669000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.912000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 9.489000	</row2>
+                  <row3>	0.000000 1.931000 -0.232000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.453000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.465536 0.000000	</row1>
+                  <row2>	0.000000 0.000000 9.094000	</row2>
+                  <row3>	1.976000 1.262000 0.031000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.830260 -0.000001 -0.000001	</row0>
+                  <row1>	0.000000 0.183442 -0.237379	</row1>
+                  <row2>	0.000000 0.750657 0.580094	</row2>
+                  <row3>	0.000000 1.287330 -4.264990	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.830260 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.130239 0.270255	</row1>
+                  <row2>	0.000000 -0.854619 0.411851	</row2>
+                  <row3>	0.000000 1.327970 4.388680	</row3>
                 </boxCollider>
                 <boxCollider>
                   <row0>	3.830260 0.000000 0.000000	</row0>
@@ -2322,6 +2432,11 @@
                 <destroyed>	vehicles/german/G42_Maus/_skins/G42_Maus_BXI_3DSt/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/german/G42_Maus/_skins/G42_Maus_BXI_3DSt/crash/lod0/Gun_01.model	</exploded>
               </G42_Maus_BXI_3DSt>
+              <G42_Maus_SFV_3Dst>
+                <undamaged>	vehicles/german/G42_Maus/_skins/G42_Maus_SFV_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/german/G42_Maus/_skins/G42_Maus_SFV_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/german/G42_Maus/_skins/G42_Maus_SFV_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </G42_Maus_SFV_3Dst>
             </sets>
           </models>
           <hitTester>
@@ -2369,6 +2484,15 @@
               <rayUp>	0.108 0 0	</rayUp>
               <size>	0.46	</size>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	-0.072 0.013159 5.02	</rayStart>
+              <rayEnd>	-0.072 0.013159 5.48	</rayEnd>
+              <rayUp>	0.108 0 0	</rayUp>
+              <compatibleModels>	G42_Maus_SFV_3Dst	</compatibleModels>
+              <size>	0.49	</size>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -2399,6 +2523,11 @@
             <destroyed>	vehicles/german/G42_Maus/_skins/G42_Maus_BXI_3DSt/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/german/G42_Maus/_skins/G42_Maus_BXI_3DSt/crash/lod0/Turret_01.model	</exploded>
           </G42_Maus_BXI_3DSt>
+          <G42_Maus_SFV_3Dst>
+            <undamaged>	vehicles/german/G42_Maus/_skins/G42_Maus_SFV_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/german/G42_Maus/_skins/G42_Maus_SFV_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/german/G42_Maus/_skins/G42_Maus_SFV_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </G42_Maus_SFV_3Dst>
         </sets>
       </models>
       <hitTester>
@@ -2909,6 +3038,54 @@
           <showOn>	256	</showOn>
           <clipAngle>	0.931683	</clipAngle>
           <anchorShift>	0.344056	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35044	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G42_Maus_SFV_3Dst	</compatibleModels>
+          <position>	-1.20842 2.97953 -2.7935	</position>
+          <rotation>	1.10679 -1.56364 3.121	</rotation>
+          <scale>	0.587929 0.465744 0.605299	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.931685	</clipAngle>
+          <anchorShift>	-0.029287	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35045	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G42_Maus_SFV_3Dst	</compatibleModels>
+          <position>	1.100531 3.261166 -0.974173	</position>
+          <rotation>	1.10683 1.5636 3.121	</rotation>
+          <scale>	0.434652 0.344321 0.447494	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.931685	</clipAngle>
+          <anchorShift>	-0.05929	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35046	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G42_Maus_SFV_3Dst	</compatibleModels>
+          <position>	0.610859 3.1424 -3.40082	</position>
+          <rotation>	1.80998 -0.000372 -0.000386	</rotation>
+          <scale>	0.513891 0.312664 0.529451	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.917481	</clipAngle>
+          <anchorShift>	-0.033557	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35047	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G42_Maus_SFV_3Dst	</compatibleModels>
+          <position>	0.450477 3.38151 -2.7832	</position>
+          <rotation>	-3.11535 -0.000006 -0.000046	</rotation>
+          <scale>	0.488023 0.296768 0.495207	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.006419	</clipAngle>
+          <anchorShift>	0.08614	</anchorShift>
         </slot>
         <slot>
           <slotType>	attachment	</slotType>

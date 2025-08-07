@@ -93,6 +93,8 @@ def getGameControllersConfig(manager):
     from gui.game_control.fading_controller import FadingController
     from gui.game_control.easy_tank_equip_controller import EasyTankEquipController as _EasyTankEquipController
     from gui.game_control.commendations_controller import CommendationsController
+    from gui.game_control.wot_anniversary_controller import WotAnniversaryController
+    from skeletons.gui.wot_anniversary import IWotAnniversaryController
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -181,4 +183,5 @@ def getGameControllersConfig(manager):
     _config(_interface.IExchangeRatesWithDiscountsProvider, ExchangeRatesWithDiscountsProvider())
     _config(_interface.IFadingController, FadingController())
     _config(_interface.ICommendationsController, CommendationsController())
+    _config(IWotAnniversaryController, WotAnniversaryController())
     collectGameControllers(_config)

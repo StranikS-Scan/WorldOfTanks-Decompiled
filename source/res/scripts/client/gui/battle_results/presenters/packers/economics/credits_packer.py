@@ -17,6 +17,7 @@ class CreditsPacker(BaseCurrencyPacker):
      credits_records.BATTLE_PAYMENTS,
      credits_records.EVENT_PAYMENTS,
      credits_records.REFERRAL_BONUS,
+     credits_records.VETERAN_BONUS,
      credits_records.WOT_PLUS_BONUS,
      DESERTER_VIOLATION,
      SUICIDE_VIOLATION,

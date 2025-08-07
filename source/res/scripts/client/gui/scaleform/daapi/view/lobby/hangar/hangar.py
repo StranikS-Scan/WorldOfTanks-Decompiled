@@ -69,6 +69,7 @@ from skeletons.gui.offers import IOffersBannerController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.helpers.statistics import IStatisticsCollector
+from skeletons.gui.wot_anniversary import IWotAnniversaryController
 from sound_gui_manager import CommonSoundSpaceSettings
 from tutorial.control.context import GLOBAL_FLAG
 if typing.TYPE_CHECKING:
@@ -116,6 +117,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     __hangarGuiCtrl = dependency.descriptor(IHangarGuiController)
     __lootBoxes = dependency.descriptor(ILootBoxSystemController)
     __limitedUIController = dependency.descriptor(ILimitedUIController)
+    __wotAnniversaryController = dependency.descriptor(IWotAnniversaryController)
 
     def __init__(self, _=None):
         LobbySelectableView.__init__(self, 0)
@@ -259,6 +261,9 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__comp7Controller.onGrandTournamentBannerAvailabilityChanged += self.__updateComp7GrandTournamentWidget
         self.hangarSpace.setVehicleSelectable(True)
         self.__lootBoxes.onStatusChanged += self.__onLootBoxesStatusChanged
+        self.__wotAnniversaryController.onSettingsChanged += self.__onWotAnniversaryStatusChanged
+        self.__wotAnniversaryController.onStartDateReached += self.__onWotAnniversaryStatusChanged
+        self.__wotAnniversaryController.onEndDateReached += self.__onWotAnniversaryStatusChanged
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
         g_playerEvents.onPrebattleInvitationAccepted += self.__onPrebattleInvitationAccepted
         unitMgr = prb_getters.getClientUnitMgr()
@@ -300,6 +305,9 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__limitedUIController.stopObserve(LUI_RULES.EasyTankEquipEntryPoint, self.__updateEasyTankEquipState)
         self.itemsCache.onSyncCompleted -= self.onCacheResync
         self.__lootBoxes.onStatusChanged -= self.__onLootBoxesStatusChanged
+        self.__wotAnniversaryController.onSettingsChanged -= self.__onWotAnniversaryStatusChanged
+        self.__wotAnniversaryController.onStartDateReached -= self.__onWotAnniversaryStatusChanged
+        self.__wotAnniversaryController.onEndDateReached -= self.__onWotAnniversaryStatusChanged
         g_currentVehicle.onChanged -= self.__onCurrentVehicleChanged
         self.hangarSpace.onVehicleChangeStarted -= self.__onVehicleLoading
         self.hangarSpace.onVehicleChanged -= self.__onVehicleLoaded
@@ -485,6 +493,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updatePrestigeProgressWidget()
         self.__updateComp7ModifiersWidget()
         self.__updateComp7TournamentWidget()
+        self.__updateWotAnniversaryWidget()
         self.__updateComp7GrandTournamentWidget()
         self.__updateAlertMessage()
         self.__updateBattleRoyaleTournamentBanner()
@@ -571,6 +580,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updatePrestigeProgressWidget()
         self.__updateComp7ModifiersWidget()
         self.__updateComp7TournamentWidget()
+        self.__updateWotAnniversaryWidget()
         self.__updateComp7GrandTournamentWidget()
         self.__updateAlertMessage()
         self.__updateBattleRoyaleTournamentBanner()
@@ -609,6 +619,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
             self.__updatePrestigeProgressWidget()
         if Configs.EASY_TANK_EQUIP_CONFIG.value in diff:
             self.__updateState()
+        if Configs.WOT_ANNIVERSARY_CONFIG.value in diff:
+            self.__updateWotAnniversaryWidget()
 
     def __onSettingsChanged(self, diff):
         if SETTINGS_SECTIONS.UI_STORAGE in diff:
@@ -650,6 +662,9 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     def __onLootBoxesStatusChanged(self):
         self.__updateCarouselEventEntryState()
 
+    def __onWotAnniversaryStatusChanged(self):
+        self.__updateWotAnniversaryWidget()
+
     def __updateCarouselEventEntryState(self):
         self.as_updateCarouselEventEntryStateS(isAnyEntryVisible())
 
@@ -687,6 +702,9 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
             delay = self.__comp7Controller.banDuration % ONE_MINUTE + 1
             self.__comp7BanTimer.delayCallback(delay, self.__updateAlertComp7Ban)
         self.__updateAlertBlock(*self.__hangarGuiCtrl.getHangarAlertBlock())
+
+    def __updateWotAnniversaryWidget(self):
+        self.as_setEventEntryPointVisibleS(self.__hangarGuiCtrl.isComponentAvailable(HANGAR_CONSTS.EVENT_ENTRANCE_POINT) and self.__wotAnniversaryController.isEnabled())
 
     def __updateAlertBlock(self, visible, data, callbacks):
         hiddenComponents = [] if visible else [HANGAR_CONSTS.ALERT_MESSAGE]

@@ -30,9 +30,5 @@ class BattlePassSounds(CONST_CONTAINER):
     HOLIDAY_REWARD_SCREEN = 'bp_holiday_reward_screen'
     TASKS_ENTER = 'tasks_enter'
     TASKS_EXIT = 'tasks_exit'
-    SPECIAL_TASKS_ENTER = 'tasks_special_enter'
-    SPECIAL_TASKS_EXIT = 'tasks_special_exit'
-    SPECIAL_TASKS_ENTER_2 = 'tasks_special_2_enter'
-    SPECIAL_TASKS_EXIT_2 = 'tasks_special_2_exit'
-    SPECIAL_ENTER_EVENTS = (SPECIAL_TASKS_ENTER, SPECIAL_TASKS_ENTER_2)
-    SPECIAL_EXIT_EVENTS = (SPECIAL_TASKS_EXIT, SPECIAL_TASKS_EXIT_2)
+    SPECIAL_TASKS_ENTER = 'tasks_special_3_enter'
+    SPECIAL_TASKS_EXIT = 'tasks_special_3_exit'

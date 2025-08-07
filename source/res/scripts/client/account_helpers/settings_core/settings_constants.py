@@ -320,6 +320,7 @@ class GuiSettingsBehavior(CONST_CONTAINER):
     CREW_5075_WELCOME_SHOWN = 'crew5075WelcomeShown'
     CREW_NPS_WELCOME_SHOWN = 'crewNpsWelcomeShown'
     CREW_NPS_INTRO_SHOWN = 'crewNpsIntroShown'
+    WOT_ANNIVERSARY_15_WELCOME_SHOWN = 'wotAnniversary15WelcomeShown'
     IS_PRESTIGE_ONBOARDING_VIEWED = 'isPrestigeOnboardingViewed'
     PRESTIGE_FIRST_ENTRY_NOTIFICATION_SHOWN = 'prestigeFirstEntryNotificationShown'
     CLAN_SUPPLY_INTRO_SHOWN = 'clanSupplyIntroShown'

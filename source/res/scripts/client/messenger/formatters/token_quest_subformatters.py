@@ -1060,3 +1060,22 @@ class SkipNotificationFormatter(ServiceChannelFormatter, TokenQuestsSubFormatter
     @classmethod
     def _isQuestOfThisGroup(cls, questID):
         return questID.endswith(cls.__NOTIFICATION_QUEST_POSTFIX)
+
+
+class WotAnniversaryVeteranBadgeFormatter(ServiceChannelFormatter, TokenQuestsSubFormatter):
+    __QUEST_NAME = 'FEP_mode_veteran_rewards'
+    __TEMPLATE = 'WotAnniversaryRewardSysMessage'
+    __STR_PATH = R.strings.wot_anniversary.notifications
+
+    def format(self, message, *args):
+        data = message.data or {}
+        completedQuestID = first(self.getQuestOfThisGroup(data.get('completedQuestIDs', set())))
+        rewards = data.get('detailedRewards', {}).get(completedQuestID, {})
+        description = backport.text(self.__STR_PATH.badge.description(), rewards=QuestAchievesFormatter.formatQuestAchieves(rewards, False))
+        formatted = g_settings.msgTemplates.format(self.__TEMPLATE, ctx={'header': backport.text(self.__STR_PATH.badge.header()),
+         'text': description})
+        return [MessageData(formatted, self._getGuiSettings(message, self.__TEMPLATE))]
+
+    @classmethod
+    def _isQuestOfThisGroup(cls, questID):
+        return questID == cls.__QUEST_NAME

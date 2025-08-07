@@ -244,6 +244,7 @@ CMD_EASY_TANK_EQUIP_APPLY = 10124
 CMD_GENERATE_SSR_JWT_TOKEN = 10125
 CMD_WATCH_REPLAY = 10126
 CMD_CLEAR_COMMENDATIONS_MESSAGE_STATE = 10127
+CMD_WOT_ANNIVERSARY_OPEN_ENVELOPE = 10210
 PLAYER_CMD_NAMES = dict([ (v, k) for k, v in globals().items() if k.startswith('CMD_') ])
 KEYS_ARE_UNIQUE = len(PLAYER_CMD_NAMES) == len(set((key for key in globals() if key.startswith('CMD_'))))
 

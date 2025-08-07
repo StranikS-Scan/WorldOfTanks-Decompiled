@@ -1307,6 +1307,71 @@ class _ExchangeRatesConfig(namedtuple('_ExchangeRatesConfig', ('isGoldExchangePe
         return self._replace(**dataToUpdate)
 
 
+class WotAnniversaryDayConfig(namedtuple('WotAnniversaryDayConfig', ('rewards',
+ 'videoUrl',
+ 'additionalInfoUrl',
+ 'isSpecial'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(rewards=[], videoUrl='', additionalInfoUrl='', isSpecial=False)
+        defaults.update(kwargs)
+        return super(WotAnniversaryDayConfig, cls).__new__(cls, **defaults)
+
+
+class WotAnniversaryProgressionConfig(namedtuple('WotAnniversaryProgressionConfig', ('tokenCount', 'rewards'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(rewards=[], tokenCount=0)
+        defaults.update(kwargs)
+        return super(WotAnniversaryProgressionConfig, cls).__new__(cls, **defaults)
+
+
+class WotAnniversaryConfig(namedtuple('WotAnniversaryConfig', ('isEnabled',
+ 'startDate',
+ 'endDate',
+ 'dayToken',
+ 'progressionToken',
+ 'infoPageUrl',
+ 'days',
+ 'progression',
+ 'contentConfigUrl',
+ 'firstDayLabel'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(isEnabled=False, contentConfigUrl='', firstDayLabel=1, startDate=0, endDate=0, dayToken='', progressionToken='', infoPageUrl='', days=[], progression=[])
+        cls.__packDaysConfigs(kwargs)
+        cls.__packProgressionConfigs(kwargs)
+        defaults.update(kwargs)
+        return super(WotAnniversaryConfig, cls).__new__(cls, **defaults)
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        if 'progression' in dataToUpdate:
+            self.__packProgressionConfigs(dataToUpdate)
+        if 'days' in dataToUpdate:
+            self.__packDaysConfigs(dataToUpdate)
+        return self._replace(**dataToUpdate)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+    @classmethod
+    def __packDaysConfigs(cls, dataToUpdate):
+        dataToUpdate['days'] = [ WotAnniversaryDayConfig(**days) for days in dataToUpdate.get('days', []) ]
+
+    @classmethod
+    def __packProgressionConfigs(cls, dataToUpdate):
+        dataToUpdate['progression'] = [ WotAnniversaryProgressionConfig(**progression) for progression in dataToUpdate.get('progression', []) ]
+
+
 class ServerSettings(object):
 
     def __init__(self, serverSettings):
@@ -1360,6 +1425,7 @@ class ServerSettings(object):
         self.__schemaManager = getSchemaManager()
         self.__exchangeRatesConfig = _ExchangeRatesConfig()
         self.__easyTankEquipConfig = EasyTankEquipConfig()
+        self.__wotAnniversaryConfig = WotAnniversaryConfig()
         self.set(serverSettings)
 
     def set(self, serverSettings):
@@ -1515,6 +1581,10 @@ class ServerSettings(object):
             self.__liveOpsWebEventsConfig = makeTupleByDict(LiveOpsWebEventsConfig, self.__serverSettings[Configs.LIVE_OPS_EVENTS_CONFIG.value])
         else:
             self.__liveOpsWebEventsConfig = LiveOpsWebEventsConfig.defaults()
+        if Configs.WOT_ANNIVERSARY_CONFIG.value in self.__serverSettings:
+            self.__wotAnniversaryConfig = makeTupleByDict(WotAnniversaryConfig, self.__serverSettings[Configs.WOT_ANNIVERSARY_CONFIG.value])
+        else:
+            self.__wotAnniversaryConfig = WotAnniversaryConfig.defaults()
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -1631,6 +1701,8 @@ class ServerSettings(object):
             self.__updateReferralProgramConfig(serverSettingsDiff)
         if Configs.LIVE_OPS_EVENTS_CONFIG.value in serverSettingsDiff:
             self.__updateLiveOpsWebEventsConfig(serverSettingsDiff)
+        if Configs.WOT_ANNIVERSARY_CONFIG.value in serverSettingsDiff:
+            self.__updateWotAnniversaryConfig(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
 
     def clear(self):
@@ -1813,6 +1885,10 @@ class ServerSettings(object):
     @property
     def advancedAchievementsConfig(self):
         return self.__advancedAchievementsConfig
+
+    @property
+    def wotAnniversaryConfig(self):
+        return self.__wotAnniversaryConfig
 
     def isEpicBattleEnabled(self):
         return self.epicBattles.isEnabled
@@ -2332,6 +2408,9 @@ class ServerSettings(object):
     def __updateAdvancedAchievementsConfig(self, serverSettingsDiff):
         if Configs.ADVANCED_ACHIEVEMENTS_CONFIG.value in serverSettingsDiff:
             self.__advancedAchievementsConfig = self.__advancedAchievementsConfig.replace(serverSettingsDiff[Configs.ADVANCED_ACHIEVEMENTS_CONFIG.value])
+
+    def __updateWotAnniversaryConfig(self, serverSettingsDiff):
+        self.__wotAnniversaryConfig = self.__wotAnniversaryConfig.replace(serverSettingsDiff[Configs.WOT_ANNIVERSARY_CONFIG.value])
 
 
 def serverSettingsChangeListener(*configKeys):

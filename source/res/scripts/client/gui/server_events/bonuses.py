@@ -3244,7 +3244,7 @@ def getMergedCompensatedBonuses(rewardsDicts):
     for currency in Currency.ALL:
         if compValue.get(currency, 0) > 0:
             currencyValue = rewards.pop(currency, None)
-            if currency is not None:
+            if currencyValue is not None:
                 newCurrencyValue = currencyValue - compValue.get(currency, 0)
                 if newCurrencyValue:
                     rewards[currency] = newCurrencyValue

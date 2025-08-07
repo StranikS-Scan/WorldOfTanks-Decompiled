@@ -5655,4 +5655,41 @@
     <name>	Onslaught 2025 2026	</name>
     <type>	INSCRIPTION	</type>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <decal>
+      <id>	1170	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_825.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_825	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1174	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_826.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_826	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1175	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_827.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_827	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1176	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_828.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_828	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	15th Anniversary	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
 </inscriptions_special.xml>

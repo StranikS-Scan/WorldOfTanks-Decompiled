@@ -769,13 +769,13 @@ class BattlePassProgressionsView(ViewImpl):
     def __stopSounds(self):
         self.__stopVoiceovers()
         if self.__battlePass.isExtraChapter(self.__chapterID):
-            self.soundManager.playInstantSound(BattlePassSounds.SPECIAL_EXIT_EVENTS[self.__getExtraChapterIndex()])
+            self.soundManager.playInstantSound(BattlePassSounds.SPECIAL_TASKS_EXIT)
         self.__exitSoundsIsPlayed = True
 
     def __startSounds(self):
         if self.__battlePass.isExtraChapter(self.__chapterID):
             self.soundManager.playInstantSound(BattlePassSounds.TASKS_EXIT)
-            self.soundManager.playInstantSound(BattlePassSounds.SPECIAL_ENTER_EVENTS[self.__getExtraChapterIndex()])
+            self.soundManager.playInstantSound(BattlePassSounds.SPECIAL_TASKS_ENTER)
         self.__exitSoundsIsPlayed = False
 
     def __startCommonSound(self):
@@ -830,9 +830,3 @@ class BattlePassProgressionsView(ViewImpl):
         vehicle = getVehicleForStyle(style)
         self.__switchCamera()
         showStylePreview(vehicle.intCD, style=style, backCallback=self.__getPreviewCallback())
-
-    def __getExtraChapterIndex(self):
-        if not self.__battlePass.isExtraChapter(self.__chapterID):
-            return 0
-        extraChapterIDs = sorted(self.__battlePass.getExtraChapterIDs())
-        return extraChapterIDs.index(self.__chapterID)

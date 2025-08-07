@@ -5770,4 +5770,47 @@
     <name>	Clans 2D	</name>
     <type>	EMBLEM	</type>
   </itemGroup>
+  <itemGroup>
+    <name>	15th Anniversary	</name>
+    <type>	EMBLEM	</type>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	emblems 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <decal>
+      <id>	1177	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_867.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_867	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1178	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_868.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_868	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1179	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_869.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_869	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1180	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_870.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_870	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1181	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_871.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_871	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
 </emblems_special.xml>

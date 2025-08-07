@@ -24,3 +24,4 @@ class HANGAR_CONSTS(object):
     HEADER_WIDGET = 'headerWidget'
     HEADER_QUEST_FLAGS = 'headerQuestFlags'
     STRENGTHS_WEAKNESSES = 'StrengthsWeaknesses'
+    EVENT_ENTRANCE_POINT = 'eventEntrancePoint'

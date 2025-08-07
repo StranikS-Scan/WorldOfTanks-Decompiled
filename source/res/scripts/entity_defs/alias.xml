@@ -2929,4 +2929,19 @@
       </networkID>
     </Properties>
   </VEHICLE_HIERARCHY_INFO>
+  <VETERAN_MESSAGE_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <veterans>
+        <Type>	ARRAY	  <of>	OBJECT_ID	</of>
+        </Type>
+      </veterans>
+      <anonymVeterans>
+        <Type>	ARRAY	  <of>	OBJECT_ID	</of>
+        </Type>
+      </anonymVeterans>
+      <creditsBonus>
+        <Type>	FLOAT32	</Type>
+      </creditsBonus>
+    </Properties>
+  </VETERAN_MESSAGE_INFO>
 </alias.xml>

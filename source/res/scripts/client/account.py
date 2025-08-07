@@ -35,6 +35,7 @@ from account_helpers.spa_flags import SPAFlags
 from account_helpers.telecom_rentals import TelecomRentals
 from account_helpers.trade_in import TradeIn
 from account_helpers.winback import Winback
+from account_helpers.wot_anniversary import WotAnniversary
 from account_helpers import CrewAccountController
 from account_shared import NotificationItem, readClientServerVersion
 from constants import ARENA_BONUS_TYPE, QUEUE_TYPE, EVENT_CLIENT_DATA, ARENA_GUI_TYPE
@@ -84,7 +85,8 @@ def _isStrList(l):
 
 
 class _ClientCommandProxy(object):
-    _COMMAND_SIGNATURES = (('doCmdStr', lambda args: len(args) == 1 and _isStr(args[0])),
+    _COMMAND_SIGNATURES = (('doCmdNoArgs', lambda args: len(args) == 0),
+     ('doCmdStr', lambda args: len(args) == 1 and _isStr(args[0])),
      ('doCmdIntStr', lambda args: len(args) == 2 and _isInt(args[0]) and _isStr(args[1])),
      ('doCmdInt', lambda args: len(args) == 1 and _isInt(args[0])),
      ('doCmdInt2', lambda args: len(args) == 2 and all([ _isInt(arg) for arg in args ])),
@@ -180,6 +182,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.giftSystem = g_accountRepository.giftSystem
         self.gameRestrictions = g_accountRepository.gameRestrictions
         self.winback = g_accountRepository.winback
+        self.wotAnniversary = g_accountRepository.wotAnniversary
         self.achievements20 = g_accountRepository.achievements20
         self.crewAccountController = g_accountRepository.crewAccountController
         self.customFilesCache = g_accountRepository.customFilesCache
@@ -1408,6 +1411,7 @@ class _AccountRepository(object):
         self.telecomRentals = TelecomRentals(self.syncData)
         self.winback = Winback(self.commandProxy)
         self.achievements20 = Achievements20(self.syncData, self.commandProxy)
+        self.wotAnniversary = WotAnniversary(self.commandProxy)
         self.tradeIn = TradeIn()
         self.giftSystem = GiftSystem(self.syncData, self.commandProxy)
         self.gameRestrictions = GameRestrictions(self.syncData)

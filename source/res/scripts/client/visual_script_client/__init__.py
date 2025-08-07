@@ -30,6 +30,7 @@ def registerForGeneral():
     import cgf_blocks
     import pve_battle_hud_blocks
     import battle_hints_blocks
+    import wot_anniversary_blocks
     g_blockRegistrar.regBlocksFromModule(event_platform_blocks)
     g_blockRegistrar.regBlocksFromModule(arena_blocks)
     g_blockRegistrar.regBlocksFromModule(vehicle_blocks)
@@ -47,6 +48,7 @@ def registerForGeneral():
     g_blockRegistrar.regBlocksFromModule(pve_battle_hud_blocks)
     g_blockRegistrar.regContext(EntityContextClient)
     g_blockRegistrar.regContext(VehicleContextClient)
+    g_blockRegistrar.regBlocksFromModule(wot_anniversary_blocks)
 
 
 def registerForUEEditor():

@@ -146,6 +146,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     VEH_POST_PROGRESSION = 'vehPostProgression'
     VEH_POST_PROGRESSION_CMP = 'vehPostProgressionCmp'
     CLAN_SUPPLY_INFO_VIEW = 'clanSupplyInfoView'
+    WOT_ANNIVERSARY_VIDEO_VIEW = 'wotAnniversaryVideoView'
     MINIMAP_LOBBY = 'minimapLobby'
     MINIMAP_GRID = 'minimapGridLobby'
     MINIMAP_ON_BATTLE_LOADING = 'minimapOnBattleLoading'

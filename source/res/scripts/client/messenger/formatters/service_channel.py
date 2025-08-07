@@ -49,6 +49,7 @@ from gui.game_control.blueprints_convert_sale_controller import BCSActionState
 from gui.impl import backport
 from gui.impl.backport import getNiceNumberFormat
 from gui.impl.gen import R
+from gui.impl.gen.view_models.constants.date_time_formats import DateTimeFormatsEnum
 from gui.impl.lobby.winback.winback_helpers import getDiscountFromBlueprint, getDiscountFromGoody, getLevelFromSelectableToken
 from gui.mapbox.mapbox_helpers import formatMapboxRewards
 from gui.prb_control.formatters import getPrebattleFullDescription
@@ -57,12 +58,13 @@ from gui.ranked_battles.constants import YEAR_AWARD_SELECTABLE_OPT_DEVICE_PREFIX
 from gui.ranked_battles.ranked_helpers import getBonusBattlesIncome, getQualificationBattlesCountFromID, isQualificationQuestID
 from gui.ranked_battles.ranked_models import PostBattleRankInfo, RankChangeStates
 from gui.server_events.awards_formatters import BATTLE_BONUS_X5_TOKEN, CREW_BONUS_X3_TOKEN, CompletionTokensBonusFormatter
-from gui.server_events.bonuses import EntitlementBonus, MetaBonus, SelectableBonus, getMergedBonusesFromDicts
+from gui.server_events.bonuses import EntitlementBonus, MetaBonus, SelectableBonus, getMergedBonusesFromDicts, getMergedCompensatedBonuses
 from gui.server_events.finders import PERSONAL_MISSION_TOKEN
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared import formatters as shared_fmts
 from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.currency import applyAll, getBWFormatter, getStyle
+from gui.shared.formatters.date_time import getRegionalDateTime
 from gui.shared.formatters.time_formatters import RentDurationKeys, getTillTimeByResource, getTimeLeftInfo
 from gui.shared.gui_items.Tankman import Tankman, BaseBookConvertingFormatter
 from gui.shared.gui_items.Vehicle import getShortUserName, getUserName, getWotPlusExclusiveVehicleTypeUserName
@@ -98,6 +100,7 @@ from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.platform.catalog_service_controller import IPurchaseCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.wot_anniversary import IWotAnniversaryController
 if typing.TYPE_CHECKING:
     from typing import Any, Dict, List, Tuple, Callable, Optional, Union
     from account_helpers.offers.events_data import OfferEventData, OfferGift
@@ -5761,3 +5764,40 @@ class ResourceWellOperationFormatter(ServiceChannelFormatter):
     def __formatBlueprintCount(self, count):
         countStr = backport.getIntegralFormat(abs(count))
         return text_styles.crystal(backport.text(self.__RESOURCE_WELL_MESSAGES.blueprintCount(), count=countStr))
+
+
+class WotAnniversaryRewardFormatter(ServiceChannelFormatter):
+    __TEMPLATE = u'WotAnniversaryRewardSysMessage'
+    __STR_PATH = R.strings.wot_anniversary.notifications
+    __wotAnniversaryController = dependency.descriptor(IWotAnniversaryController)
+
+    def format(self, message, *args):
+        messages = []
+        regularRewards = message.get(u'regularRewards')
+        progressionRewards = message.get(u'progressionRewards')
+        if regularRewards:
+            dayIndex = message.get(u'openedDayID', 0)
+            timestamp = self.__wotAnniversaryController.config.startDate + time_utils.ONE_DAY * dayIndex
+            date = getRegionalDateTime(timestamp, DateTimeFormatsEnum.DAYMONTHFULL)
+            formatted = g_settings.msgTemplates.format(self.__TEMPLATE, ctx={u'header': backport.text(self.__STR_PATH.envelope.opened(), date=date),
+             u'text': self.__formatBody(regularRewards)})
+            messages.append(MessageData(formatted, self._getGuiSettings(message, self.__TEMPLATE, NotificationPriorityLevel.LOW)))
+        if progressionRewards:
+            reachedStageIndex = message.get(u'reachedStageIdx', 0)
+            progressionCompleted = len(self.__wotAnniversaryController.config.progression) - 1 == reachedStageIndex
+            headerResId = self.__STR_PATH.progression.finished() if progressionCompleted else self.__STR_PATH.progression.received()
+            formatted = g_settings.msgTemplates.format(self.__TEMPLATE, ctx={u'header': backport.text(headerResId),
+             u'text': self.__formatBody(progressionRewards)})
+            messages.append(MessageData(formatted, self._getGuiSettings(message, self.__TEMPLATE, NotificationPriorityLevel.LOW)))
+        return messages
+
+    def __formatBody(self, rewards):
+        fixedRewards = deepcopy(rewards)
+        if u'vehicles' in fixedRewards and isinstance(fixedRewards[u'vehicles'], dict):
+            fixedRewards[u'vehicles'] = [fixedRewards[u'vehicles']]
+        fixedRewards = getMergedCompensatedBonuses([fixedRewards])
+        texts = [backport.text(self.__STR_PATH.reward.received()), QuestAchievesFormatter.formatQuestAchieves(fixedRewards, False)]
+        achievements = _getAchievementsFromQuestData(rewards)
+        if achievements:
+            texts.append(backport.text(R.strings.quests.bonuses.dossier.achive(), name=u', '.join(achievements)))
+        return u'<br>'.join(texts)

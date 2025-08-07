@@ -346,6 +346,7 @@ class BATTLE_RESULTS(object):
     DETAILS_CALCULATIONS_FORTORDER = '#battle_results:details/calculations/fortOrder'
     DETAILS_CALCULATIONS_REFERRALBONUS = '#battle_results:details/calculations/referralBonus'
     DETAILS_CALCULATIONS_REFERRALBONUS_SIMPLELABEL = '#battle_results:details/calculations/referralBonus/simpleLabel'
+    DETAILS_CALCULATIONS_VETERANBONUS = '#battle_results:details/calculations/veteranBonus'
     DETAILS_CALCULATIONS_MULTIPLIERINFO_HEADER = '#battle_results:details/calculations/multiplierInfo/header'
     DETAILS_CALCULATIONS_MULTIPLIERINFO_BODY = '#battle_results:details/calculations/multiplierInfo/body'
     DETAILS_CALCULATIONS_MULTIPLIERINFO_VEHICLESEPARATOR = '#battle_results:details/calculations/multiplierInfo/vehicleSeparator'
@@ -463,6 +464,7 @@ class BATTLE_RESULTS(object):
      DETAILS_CALCULATIONS_FORTORDER,
      DETAILS_CALCULATIONS_REFERRALBONUS,
      DETAILS_CALCULATIONS_REFERRALBONUS_SIMPLELABEL,
+     DETAILS_CALCULATIONS_VETERANBONUS,
      DETAILS_CALCULATIONS_MULTIPLIERINFO_HEADER,
      DETAILS_CALCULATIONS_MULTIPLIERINFO_BODY,
      DETAILS_CALCULATIONS_MULTIPLIERINFO_VEHICLESEPARATOR,

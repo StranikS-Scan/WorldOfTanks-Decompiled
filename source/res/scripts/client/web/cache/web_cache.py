@@ -47,7 +47,9 @@ class CacheStates(object):
 def generateKey(url, appName=None):
     md = hashlib.md5()
     md.update(url)
-    return md.hexdigest() + '.wotsrvreplay' if appName == 'server_replays' else md.hexdigest()
+    if appName == 'server_replays':
+        return md.hexdigest() + '.wotsrvreplay'
+    return md.hexdigest() + '.webm' if appName == 'webmvideo' else md.hexdigest()
 
 
 def createManifestRecord(appName, host, files, code='OK', description='SUCCESS'):
@@ -203,7 +205,7 @@ class WebExternalCache(IWebExternalCache):
                 for curfile in files:
                     url = urlparse.urljoin(host, curfile)
                     url = url.replace(' ', '%20')
-                    key = generateKey(url)
+                    key = generateKey(url, appName=appName)
                     if key not in self._cache or not self._storage.isAppFileExist(appName, key):
                         _logger.debug('Resource not found in cache. Download from web: %s', url)
                         filesToDownload[url] = appName

@@ -257,6 +257,7 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
         isTotalShown |= self.__addStatsItemIfExists('battlePayments', baseCredits, premiumCredits, False, None, 'orderCreditsFactor100')
         isTotalShown |= self.__addEventsMoney(baseCredits, premiumCredits, goldRecords)
         isTotalShown |= self.__addReferralSystemFactor(baseCredits, premiumCredits)
+        isTotalShown |= self.__addStatsItemIfExists('veteranBonus', baseCredits, premiumCredits, False, None, 'veteranCreditsFactor100')
         showWotPlusBattleBonuses = self._lobbyContext.getServerSettings().isWotPlusBattleBonusesEnabled()
         if showWotPlusBattleBonuses:
             self.__addWotPlusBattleBonusCredits(baseCredits, premiumCredits, baseCreditsWithWotPlus, premiumCreditsWithWotPlus)

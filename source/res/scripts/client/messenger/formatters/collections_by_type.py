@@ -29,7 +29,8 @@ registerTokenQuestsSubFormatters((token_quest_subformatters.LootBoxTokenQuestFor
  token_quest_subformatters.WinbackRewardFormatter(),
  token_quest_subformatters.CrewPerksFormatter(),
  token_quest_subformatters.SteamCompletionFormatter(),
- token_quest_subformatters.SkipNotificationFormatter()))
+ token_quest_subformatters.SkipNotificationFormatter(),
+ token_quest_subformatters.WotAnniversaryVeteranBadgeFormatter()))
 _HANGAR_QUESTS_SUB_FORMATTERS = (token_quest_subformatters.BattleMattersAwardsFormatter(),)
 _PERSONAL_MISSIONS_SUB_FORMATTERS = (token_quest_subformatters.PersonalMissionsFormatter(),)
 
@@ -164,3 +165,4 @@ def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.mentorAssignmentUsed.index(), _sc.MentorAssignmentUsedFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.GF_SM_TYPE, _sc.GFSMFormatter())
     registerMessengerServerFormatter(_SM_TYPE.resourceWellOperation.index(), _sc.ResourceWellOperationFormatter())
+    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOT_ANNIVERSARY_REWARD, _sc.WotAnniversaryRewardFormatter())

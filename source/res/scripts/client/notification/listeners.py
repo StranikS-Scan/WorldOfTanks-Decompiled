@@ -75,6 +75,7 @@ from skeletons.gui.login_manager import ILoginManager
 from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.wot_anniversary import IWotAnniversaryController
 from uilogging.seniority_awards.constants import SeniorityAwardsLogSpaces
 from uilogging.seniority_awards.loggers import CoinsNotificationLogger, RewardNotificationLogger, VehicleSelectionNotificationLogger
 from wg_async import wg_async, wg_await
@@ -2319,6 +2320,36 @@ class LootBoxSystemListener(_NotificationListener):
         SystemMessages.pushMessage(text=backport.text(getTextResource(res + [NotificationPathPart.TEXT], eventName)()), priority=NotificationPriorityLevel.HIGH, type=SystemMessages.SM_TYPE.LootBoxSystemDisabled, messageData={'header': backport.text(getTextResource(res + [NotificationPathPart.HEADER], eventName)())})
 
 
+class WotAnniversaryStateListener(_NotificationListener):
+    slots = ('__currentState',)
+    __wotAnniversaryController = dependency.descriptor(IWotAnniversaryController)
+
+    def __init__(self):
+        super(WotAnniversaryStateListener, self).__init__()
+        self.__currentState = False
+
+    def start(self, model):
+        super(WotAnniversaryStateListener, self).start(model)
+        self.__currentState = self.__wotAnniversaryController.config.isEnabled
+        self.__wotAnniversaryController.onSettingsChanged += self.__onSettingsChanged
+        return True
+
+    def stop(self):
+        self.__wotAnniversaryController.onSettingsChanged -= self.__onSettingsChanged
+        super(WotAnniversaryStateListener, self).stop()
+
+    def __onSettingsChanged(self):
+        isEnabled = self.__wotAnniversaryController.config.isEnabled
+        self.__addMessage(isEnabled)
+        self.__currentState = isEnabled
+
+    def __addMessage(self, newState):
+        if self.__currentState != newState:
+            textsAccessor = R.strings.wot_anniversary.notifications
+            textResId = textsAccessor.switch_pause_on.description() if newState else textsAccessor.switch_pause_off.description()
+            SystemMessages.pushMessage(text=backport.text(textResId), type=SystemMessages.SM_TYPE.Warning, priority=NotificationPriorityLevel.MEDIUM)
+
+
 registerNotificationsListeners((ServiceChannelListener,
  MissingEventsListener,
  PrbInvitesListener,
@@ -2347,7 +2378,8 @@ registerNotificationsListeners((ServiceChannelListener,
  XpTranslationRatesDiscountsListener,
  GoldExchangeRatesDiscountsListener,
  LootBoxSystemListener,
- EasyTankEquipStateListener))
+ EasyTankEquipStateListener,
+ WotAnniversaryStateListener))
 
 class NotificationsListeners(_NotificationListener):
 

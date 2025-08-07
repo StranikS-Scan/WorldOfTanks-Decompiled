@@ -42,8 +42,8 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	152	</armor_1>
-      <armor_2>	127	</armor_2>
+      <armor_1>	127	</armor_1>
+      <armor_2>	101.6	</armor_2>
       <armor_3>	76	</armor_3>
       <armor_4>	38	</armor_4>
       <armor_5>	51	</armor_5>
@@ -53,7 +53,7 @@
       <armor_9>	27	</armor_9>
       <armor_10>	203	</armor_10>
       <armor_11>	25	</armor_11>
-      <armor_12>	203	</armor_12>
+      <armor_12>	177.8	</armor_12>
       <armor_13>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_13>
       <armor_14>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -4002,21 +4002,21 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	8.5	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	9.0	</reloadTime>
+          <aimingTime>	2.5	</aimingTime>
           <invisibilityFactorAtShot>	0.095	</invisibilityFactorAtShot>
           <multiGunEffects>	shot_dualgun_main_L shot_dualgun_main_R	</multiGunEffects>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.14	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <dualGun>
             <chargeTime>	1.5	</chargeTime>
             <shootImpulse>	200	</shootImpulse>
-            <reloadLockTime>	3.0	</reloadLockTime>
-            <reloadTimes>	8.5 8.5	</reloadTimes>
+            <reloadLockTime>	4.0	</reloadLockTime>
+            <reloadTimes>	9 9	</reloadTimes>
             <rateTime>	3	</rateTime>
             <chargeThreshold>	0.5	</chargeThreshold>
             <afterShotDelay>	1	</afterShotDelay>

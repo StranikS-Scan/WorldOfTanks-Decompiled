@@ -104,6 +104,7 @@ class VEHICLE_PHYSICS_TYPE():
 class VEHICLE_TAGS():
     FLAMETHROWER = 'flamethrower'
     ASSAULT_SPG = 'assaultSPG'
+    FUN_RANDOM = 'fun_random'
 
 
 VEHICLE_DEVICE_TYPE_NAMES = ('engine',
@@ -502,6 +503,7 @@ class VehicleDescriptor(object):
     isWheeledVehicleWithoutFeatures = property(lambda self: self.type.isWheeledVehicleWithoutFeatures)
     isFlamethrower = property(lambda self: self.type.isFlamethrower)
     isAssaultSPG = property(lambda self: self.type.isAssaultSPG)
+    isFunRandomVehicle = property(lambda self: self.type.isFunRandomVehicle)
     hasSpeedometer = property(lambda self: self.type.hasSpeedometer)
     isDualgunVehicle = property(lambda self: 'dualGun' in self.gun.tags)
     hasDualAccuracy = property(lambda self: 'dualAccuracy' in self.gun.tags)
@@ -1933,7 +1935,8 @@ class VehicleType(object):
      'armorMaxHealth',
      'prefabAttachments',
      'ability',
-     '__weakref__')
+     '__weakref__',
+     'isFunRandomVehicle')
 
     def __init__(self, nationID, basicInfo, xmlPath, vehMode=VEHICLE_MODE.DEFAULT):
         self.name = basicInfo.name
@@ -1961,6 +1964,7 @@ class VehicleType(object):
         self.isWheeledVehicleWithoutFeatures = 'wheeledVehicleWithoutFeatures' in self.tags
         self.isFlamethrower = VEHICLE_TAGS.FLAMETHROWER in self.tags
         self.isAssaultSPG = VEHICLE_TAGS.ASSAULT_SPG in self.tags
+        self.isFunRandomVehicle = VEHICLE_TAGS.FUN_RANDOM in self.tags
         self.isDualgunVehicleType = 'dualgun' in self.tags
         self.hasTurboshaftEngine = 'turboshaftEngine' in self.tags
         self.hasSpeedometer = 'speedometer' in self.tags

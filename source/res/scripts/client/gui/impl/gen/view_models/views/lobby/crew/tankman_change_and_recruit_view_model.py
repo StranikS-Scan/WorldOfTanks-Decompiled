@@ -10,7 +10,7 @@ from gui.impl.gen.view_models.views.lobby.crew.tankman_change_model import Tankm
 class TankmanChangeAndRecruitViewModel(ViewModel):
     __slots__ = ('onNameChange', 'onSurnameChange', 'onNationChange', 'onVehChange', 'onVehTypeChange', 'onRetrainingChange', 'onSpecialtyChange', 'onViewClose', 'onTankmanPhotoChange', 'onTankmanUpdate', 'onSetInVehChange', 'onRecruit')
 
-    def __init__(self, properties=21, commands=12):
+    def __init__(self, properties=22, commands=12):
         super(TankmanChangeAndRecruitViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -101,71 +101,77 @@ class TankmanChangeAndRecruitViewModel(ViewModel):
     def setIsCheckBoxSelected(self, value):
         self._setBool(13, value)
 
+    def getCanChangeRetraining(self):
+        return self._getBool(14)
+
+    def setCanChangeRetraining(self, value):
+        self._setBool(14, value)
+
     def getNations(self):
-        return self._getArray(14)
+        return self._getArray(15)
 
     def setNations(self, value):
-        self._setArray(14, value)
+        self._setArray(15, value)
 
     @staticmethod
     def getNationsType():
         return DropDownItemViewModel
 
     def getVehTypes(self):
-        return self._getArray(15)
+        return self._getArray(16)
 
     def setVehTypes(self, value):
-        self._setArray(15, value)
+        self._setArray(16, value)
 
     @staticmethod
     def getVehTypesType():
         return DropDownItemViewModel
 
     def getNames(self):
-        return self._getArray(16)
+        return self._getArray(17)
 
     def setNames(self, value):
-        self._setArray(16, value)
+        self._setArray(17, value)
 
     @staticmethod
     def getNamesType():
         return DropDownItemViewModel
 
     def getSurnames(self):
-        return self._getArray(17)
+        return self._getArray(18)
 
     def setSurnames(self, value):
-        self._setArray(17, value)
+        self._setArray(18, value)
 
     @staticmethod
     def getSurnamesType():
         return DropDownItemViewModel
 
     def getVehicles(self):
-        return self._getArray(18)
+        return self._getArray(19)
 
     def setVehicles(self, value):
-        self._setArray(18, value)
+        self._setArray(19, value)
 
     @staticmethod
     def getVehiclesType():
         return VehicleItemViewModel
 
     def getRetrainings(self):
-        return self._getArray(19)
+        return self._getArray(20)
 
     def setRetrainings(self, value):
-        self._setArray(19, value)
+        self._setArray(20, value)
 
     @staticmethod
     def getRetrainingsType():
         return DropDownItemViewModel
 
     def getSpecialties(self):
-        return self._getArray(20)
+        return self._getArray(21)
 
     def setSpecialties(self, value):
-        self._setArray(20, value)
+        self._setArray(21, value)
 
     @staticmethod
     def getSpecialtiesType():
@@ -183,10 +189,11 @@ class TankmanChangeAndRecruitViewModel(ViewModel):
         self._addNumberProperty('credits', 0)
         self._addNumberProperty('specialtyGold', 0)
         self._addNumberProperty('retrainingGold', 0)
-        self._addBoolProperty('isEnoughCredits', False)
-        self._addBoolProperty('isEnoughGold', False)
+        self._addBoolProperty('isEnoughCredits', True)
+        self._addBoolProperty('isEnoughGold', True)
         self._addBoolProperty('isShowCheckBox', False)
         self._addBoolProperty('isCheckBoxSelected', False)
+        self._addBoolProperty('canChangeRetraining', False)
         self._addArrayProperty('nations', Array())
         self._addArrayProperty('vehTypes', Array())
         self._addArrayProperty('names', Array())

@@ -227,10 +227,8 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
         self.__updateTankmanData(slotIdx)
         self.viewModel.setHasCrew(self.__currentVehicle.hasCrew)
         self.__dataProviders.reinit(tankman=self.__tankman, role=self.__requiredRole)
-        self.__filterState.reinit({FilterState.GROUPS.TANKMANROLE.value: self.__requiredRole,
-         FilterState.GROUPS.LOCATION.value: TankmanKind.TANKMAN.value})
-        if self.__dataProviders.itemsCount < 1:
-            self.__filterState.reinit({FilterState.GROUPS.LOCATION.value: TankmanKind.TANKMAN.value})
+        self.__filterState.state.update({FilterState.GROUPS.TANKMANROLE.value: {self.__requiredRole}})
+        self.__filterState.reinit(self.__filterState.state)
 
     @wg_async
     @args2params(int)

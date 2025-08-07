@@ -22,6 +22,7 @@ from skeletons.gui.game_control import IGiftSystemController
 from mt_birthday.skeletons.sub_controllers import IGiftSystemSubController
 from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.lobby_context import ILobbyContext
 if typing.TYPE_CHECKING:
     from typing import Optional, Set, Any, Dict, List
     from gui.shared.gui_items.loot_box import LootBox
@@ -42,6 +43,7 @@ class GiftSystemSubController(IGiftSystemSubController):
     __giftEventID = GiftEventID.BIRTHDAY_2025
     __itemsCache = dependency.descriptor(IItemsCache)
     _notificationMgr = dependency.descriptor(INotificationWindowController)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         self._giftEventHub = None
@@ -140,7 +142,7 @@ class GiftSystemSubController(IGiftSystemSubController):
             else:
                 _logger.info('Name is not lost, show reward window name: %s', name)
                 clanAbbrev = self.__userInfoHelper.getUserClanAbbrev(event.senderID)
-                bloggerFullName = '{}{}'.format(name, clanAbbrev)
+                bloggerFullName = self.__lobbyContext.getPlayerFullName(name, clanAbbrev=clanAbbrev)
             self.__sendRewardWindow(bloggerFullName, lootbox, event.meta['message_id'], spaID=event.senderID, isNameLoading=isNameLoading)
 
     def __processHistory(self, giftsInfo, *args, **kwargs):
@@ -159,7 +161,7 @@ class GiftSystemSubController(IGiftSystemSubController):
                         isNameLoading = True
                     else:
                         clanAbbrev = self.__userInfoHelper.getUserClanAbbrev(meta['senderID'])
-                        bloggerFullName = '{}{}'.format(name, clanAbbrev)
+                        bloggerFullName = self.__lobbyContext.getPlayerFullName(name, clanAbbrev=clanAbbrev)
                     self.__sendRewardWindow(bloggerFullName, lootbox, meta['messageID'], spaID=meta['senderID'], isNameLoading=isNameLoading)
 
     @checkHubExistence

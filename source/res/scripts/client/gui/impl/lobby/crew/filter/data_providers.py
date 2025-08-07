@@ -325,9 +325,6 @@ class TankmanDataProviderBase(FilterableItemsDataProvider):
         self._headerIndexes = None
         return
 
-    def _getCombinedTankman(self):
-        return self._getInventoryTankman() + self._getRecruitsTankman()
-
     def _getInventoryTankman(self):
         if self._inventoryTankman is None:
             self._inventoryTankman = self.itemsCache.items.getInventoryTankmen().values()
@@ -414,7 +411,7 @@ class BarracksDataProvider(TankmanDataProviderBase):
     @property
     def initialItemsCount(self):
         if self._initialItemsCount is None:
-            stateHandler = {TankmanKind.TANKMAN.value: self._getCombinedTankman,
+            stateHandler = {TankmanKind.TANKMAN.value: self._getInventoryTankman,
              TankmanKind.UNIQUE.value: self._getUniqueTankman,
              TankmanKind.RECRUIT.value: self._getRecruitsTankman,
              TankmanKind.DISMISSED.value: self._getDismissedTankman}
@@ -467,7 +464,7 @@ class BarracksDataProvider(TankmanDataProviderBase):
         return self.stateValue not in (TankmanKind.TANKMAN.value, TankmanKind.UNIQUE.value)
 
     def _itemsGetter(self, criteria, initial=False):
-        state = {TankmanKind.TANKMAN.value: self._getCombinedTankman,
+        state = {TankmanKind.TANKMAN.value: self._getInventoryTankman,
          TankmanKind.UNIQUE.value: self._getUniqueTankman,
          TankmanKind.RECRUIT.value: self._getRecruitsTankman,
          TankmanKind.DISMISSED.value: self._getDismissedTankman}
@@ -601,7 +598,7 @@ class MemberChangeDataProvider(TankmanDataProviderBase):
 
             self._groupedSortedList = []
             self._headerIndexes = []
-            for groupType in (self.GROUP_IN_VEHICLE, self.GROUP_IN_BARRACKS, self.GROUP_IN_TANK):
+            for groupType in (self.GROUP_IN_VEHICLE, self.GROUP_IN_TANK, self.GROUP_IN_BARRACKS):
                 group = groups[groupType]
                 if not group:
                     continue
@@ -713,7 +710,8 @@ class MemberChangeDataProvider(TankmanDataProviderBase):
     def _getExtraSortKey(self, item):
         if isinstance(item, Tankman):
             sameVehicle = int(item.vehicleNativeDescr.type.compactDescr == self.__vehicle.intCD)
-            return (-sameVehicle,)
+            sameVehType = int(item.vehicleNativeType == self.__vehicle.type)
+            return (-sameVehType, -sameVehicle)
 
     def _itemsGetter(self, criteria, initial=False):
         self._groupedSortedList = None
@@ -721,7 +719,7 @@ class MemberChangeDataProvider(TankmanDataProviderBase):
         if self._isDismissedFilter():
             return filter(criteria, self._getDismissedTankman())
         else:
-            state = {TankmanKind.TANKMAN.value: self._getCombinedTankman,
+            state = {TankmanKind.TANKMAN.value: self._getInventoryTankman,
              TankmanKind.UNIQUE.value: self._getUniqueTankman,
              TankmanKind.RECRUIT.value: self._getRecruitsTankman}
             currentState = self.stateValue

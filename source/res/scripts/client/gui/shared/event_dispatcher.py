@@ -2311,9 +2311,9 @@ def showChangeTankmanSkinWindow(tankmanID, selectedIcon, selectedIconID, selecte
     ChangeTankmanSkinViewWindow(tankmanID=tankmanID, selectedIcon=selectedIcon, selectedNation=selectedNation, selectedIconID=selectedIconID, selectedSkinID=selectedSkinID, parent=parent).load()
 
 
-def showPromoCodeRewardScreen(promoCodeToken, rewards):
+def showPromoCodeRewardScreen(promoCodeToken, rewards, rewardsSource):
     from gui.impl.lobby.promo_code_reward_screen import WAITING_MESSAGE
     from gui.impl.lobby.promo_code_reward_screen.promo_code_reward_screen_view import PromoCodeRewardScreenViewWindow
     notificationMgr = dependency.instance(INotificationWindowController)
-    window = PromoCodeRewardScreenViewWindow(promoCodeToken, rewards)
+    window = PromoCodeRewardScreenViewWindow(promoCodeToken, rewards, rewardsSource)
     notificationMgr.append(WindowNotificationWithWaitingCommand(window, WAITING_MESSAGE, WAITING_DATA_TIMEOUT))

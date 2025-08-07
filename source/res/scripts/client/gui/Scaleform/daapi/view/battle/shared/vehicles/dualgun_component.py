@@ -400,7 +400,7 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
             self.__updateTimeUntilNextDoubleShot(increaseByDebuff=True)
             return
         self.__debuffInProgress = False
-        if states[DUAL_GUN.ACTIVE_GUN.LEFT] == DUAL_GUN.GUN_STATE.READY and states[DUAL_GUN.ACTIVE_GUN.RIGHT] == DUAL_GUN.GUN_STATE.READY:
+        if states[DUAL_GUN.ACTIVE_GUN.LEFT] == DUAL_GUN.GUN_STATE.READY and states[DUAL_GUN.ACTIVE_GUN.RIGHT] == DUAL_GUN.GUN_STATE.READY and cooldownTimes[DUAL_GUN.COOLDOWNS.SWITCH].leftTime <= 0:
             self.as_readyForChargeS()
         elif BigWorld.player().isObserver() and self.__inBattle and self.__chargeState == DUALGUN_CHARGER_STATUS.APPLIED:
             if self.__prevChargeState == DUALGUN_CHARGER_STATUS.PREPARING:

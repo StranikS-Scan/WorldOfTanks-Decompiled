@@ -7,34 +7,25 @@ import GUI
 import GenericComponents
 import Math
 from GenericComponents import TransformComponent
-import Event
 import math_utils
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
-from cache import cached_property
 from cgf_script.bonus_caps_rules import bonusCapsManager
 from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
 from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery, autoregister
-from constants import IS_CLIENT, IS_CGF_DUMP
+from constants import IS_CLIENT
 from frameworks.wulf import ViewStatus
 from gui.impl.gen import R
 from helpers import dependency
+from gui.shared import events, EVENT_BUS_SCOPE, g_eventBus
 from skeletons.gui.impl import IGuiLoader
 if IS_CLIENT:
     from skeletons.gui.battle_session import IBattleSessionProvider
     from CurrentVehicle import g_currentPreviewVehicle
-    from skeletons.gui.app_loader import IAppLoader
-    from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-    from gui.Scaleform.framework.entities.View import ViewKey
-    from gui.app_loader.settings import APP_NAME_SPACE
     from gui.Scaleform.daapi.view.battle.shared.component_marker.markers import AreaMarker
     from gui.Scaleform.daapi.view.battle.shared.component_marker.markers_components import ComponentBitMask
 else:
 
     class IBattleSessionProvider(object):
-        pass
-
-
-    class IAppLoader(object):
         pass
 
 
@@ -74,37 +65,39 @@ class CombatMarker(object):
         return
 
 
+def _getMarkerData(markerId, flashMarkerComponent, matrix):
+    return {'markerId': markerId,
+     'flashMarkerComponent': flashMarkerComponent,
+     'matrix': matrix}
+
+
 @autoregister(presentInAllWorlds=False, category='lobby')
 class LobbyMarkersManager(CGF.ComponentManager):
-    if not IS_CGF_DUMP:
-        __appLoader = dependency.descriptor(IAppLoader)
 
-    def __init__(self, *args):
-        super(LobbyMarkersManager, self).__init__(*args)
-        self.onMarkerComponentAdded = Event.Event()
-        self.onMarkerComponentRemoved = Event.Event()
+    def activate(self):
+        g_eventBus.addListener(events.LobbyMarkersManagerEvent.ON_MARKER_REQUEST, self.__onMarkerRequested, EVENT_BUS_SCOPE.LOBBY)
+
+    def deactivate(self):
+        g_eventBus.removeListener(events.LobbyMarkersManagerEvent.ON_MARKER_REQUEST, self.__onMarkerRequested, EVENT_BUS_SCOPE.LOBBY)
 
     @onAddedQuery(CGF.GameObject, LobbyFlashMarker, TransformComponent)
     def handleMarkerAdded(self, gameObject, flashMarkerComponent, transformComponent):
         matrix = transformComponent.worldTransform
-        view = self.__getMarkerView()
-        if gameObject.isValid() and view:
-            view.addCgfMarker(gameObject.id, flashMarkerComponent, matrix)
+        g_eventBus.handleEvent(events.LobbyMarkersManagerEvent(events.LobbyMarkersManagerEvent.ON_MARKER_ADDED, ctx=_getMarkerData(gameObject.id, flashMarkerComponent, matrix)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     @onRemovedQuery(CGF.GameObject, LobbyFlashMarker, TransformComponent)
     def handleMarkerRemoved(self, gameObject, *_):
-        view = self.__getMarkerView()
-        if gameObject.isValid() and view:
-            view.removeCgfMarker(gameObject.id)
+        g_eventBus.handleEvent(events.LobbyMarkersManagerEvent(events.LobbyMarkersManagerEvent.ON_MARKER_REMOVED, ctx={'markerId': gameObject.id}), scope=EVENT_BUS_SCOPE.LOBBY)
 
-    @cached_property
-    def __hierarchyManager(self):
-        hierarchyManager = CGF.HierarchyManager(self.spaceID)
-        return hierarchyManager
+    def __onMarkerRequested(self, event):
+        requesterId = event.ctx['requesterId']
+        markers = []
+        for go, marker, transform in CGF.Query(self.spaceID, (CGF.GameObject, LobbyFlashMarker, TransformComponent)):
+            if go.isValid():
+                markers.append(_getMarkerData(go.id, marker, transform.worldTransform))
 
-    def __getMarkerView(self):
-        app = self.__appLoader.getApp(APP_NAME_SPACE.SF_LOBBY)
-        return app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW))
+        g_eventBus.handleEvent(events.LobbyMarkersManagerEvent(events.LobbyMarkersManagerEvent.ON_MARKER_RESPONSE, ctx={'requesterId': requesterId,
+         'markers': markers}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 @autoregister(presentInAllWorlds=False, category='lobby')

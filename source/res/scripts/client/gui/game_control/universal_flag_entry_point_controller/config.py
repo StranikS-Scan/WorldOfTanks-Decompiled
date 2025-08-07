@@ -41,6 +41,10 @@ class NopeTarget(object):
     __slots__ = tuple()
 
 
+class ShowGoldWagonTarget(object):
+    __slots__ = tuple()
+
+
 class TokenOperation(object):
     __slots__ = ('_operationType', '_expectedAmount')
     TOKEN_OPERATION_MAPPING = {'less': operator.lt,
@@ -183,6 +187,8 @@ class _TargetField(fields.Field):
             return TopSubBrowserTarget(incoming['topSubBrowser'])
         if 'nope' in incoming:
             return NopeTarget()
+        if 'showGoldWagon' in incoming:
+            return ShowGoldWagonTarget()
         raise fields.ValidationError('Invalid flag entry point target config')
 
     def _serialize(self, incoming, **kwargs):
@@ -196,6 +202,8 @@ class _TargetField(fields.Field):
             return {'topSubBrowser': incoming.url}
         elif isinstance(incoming, NopeTarget):
             return {'nope': None}
+        elif isinstance(incoming, ShowGoldWagonTarget):
+            return {'showGoldWagon': None}
         else:
             raise ValidationError('Wrong target type.')
             return None

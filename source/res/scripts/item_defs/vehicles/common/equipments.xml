@@ -9156,15 +9156,15 @@
           <plan>	abilities/base_ability_controller_client	</plan>
         </client>
       </visualScript>
-      <cooldownSeconds>	180	</cooldownSeconds>
-      <reuseCount>	2	</reuseCount>
+      <cooldownSeconds>	120	</cooldownSeconds>
+      <reuseCount>	3	</reuseCount>
       <duration>	25	</duration>
       <additiveFactors>
         <gun-chargeTimeBonus>	1	</gun-chargeTimeBonus>
         <gun-reloadLockTimeBonus>	2	</gun-reloadLockTimeBonus>
-        <gun-loadShellIntoDualGunBonus>	4	</gun-loadShellIntoDualGunBonus>
-        <vehicle-fwMaxSpeedBonus>	6	</vehicle-fwMaxSpeedBonus>
-        <vehicle-bkMaxSpeedBonus>	6	</vehicle-bkMaxSpeedBonus>
+        <gun-loadShellIntoDualGunBonus>	7	</gun-loadShellIntoDualGunBonus>
+        <vehicle-fwMaxSpeedBonus>	5	</vehicle-fwMaxSpeedBonus>
+        <vehicle-bkMaxSpeedBonus>	5	</vehicle-bkMaxSpeedBonus>
       </additiveFactors>
       <multiplicativeFactors>
         <chassis-shotDispersionFactors-movement>	1.2	</chassis-shotDispersionFactors-movement>
@@ -9197,7 +9197,7 @@
       </add>
       <add>
         <name>	loadShellIntoDualGunBonus	</name>
-        <value>	-4	</value>
+        <value>	-7	</value>
       </add>
       <mul>
         <name>	vehicleGunShotDispersionAfterShot	</name>
@@ -9205,7 +9205,7 @@
       </mul>
       <add>
         <name>	speedLimitsBonus	</name>
-        <value>	6	</value>
+        <value>	5	</value>
       </add>
       <mul>
         <name>	vehicleEnginePower	</name>

@@ -29,6 +29,7 @@ from helpers import dependency
 from shared_utils import findFirst, first
 from skeletons.gui.game_control import IGuiLootBoxesController, IGiftSystemController
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.lobby_context import ILobbyContext
 if typing.TYPE_CHECKING:
     from typing import Tuple, Dict, Optional
     from helpers.server_settings import GiftSystemConfig, GiftEventConfig
@@ -41,6 +42,7 @@ class LootBoxesRewardScreen(ViewImpl):
     __itemsCache = dependency.descriptor(IItemsCache)
     __guiLootBoxes = dependency.descriptor(IGuiLootBoxesController)
     __giftSystemController = dependency.descriptor(IGiftSystemController)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
     _COMMON_SOUND_SPACE = LOOT_BOXES_OVERLAY_SOUND_SPACE
 
     def __init__(self, layoutID, rewards, lootbox, clientData):
@@ -127,7 +129,7 @@ class LootBoxesRewardScreen(ViewImpl):
         if name:
             clanAbbrev = self.__userInfoHelper.getUserClanAbbrev(self.__spaIdOfReceivedName)
             with self.viewModel.transaction() as vm:
-                vm.setSenderName('{}{}'.format(name, clanAbbrev))
+                vm.setSenderName(self.__lobbyContext.getPlayerFullName(name, clanAbbrev=clanAbbrev))
                 vm.setIsNameLoading(False)
             self.__spaIdOfReceivedName = None
         return
@@ -186,7 +188,7 @@ class LootBoxesRewardScreen(ViewImpl):
                 sendersCount, phraseID, playerData = self._processGifts()
                 vm.setMoreSendersCount(sendersCount - 1)
                 vm.setIsNameLoading(playerData.isNameLoading)
-                vm.setSenderName('{}{}'.format(playerData.name, playerData.clanAbbrev))
+                vm.setSenderName(self.__lobbyContext.getPlayerFullName(playerData.name, clanAbbrev=playerData.clanAbbrev))
                 vm.setPhraseRes(self.__getPhraseRes(self.__lootbox.getID(), phraseID))
             self.__fillRewardsModel(self.__rewards, model=vm)
             vm.setLootBoxOpenCount(self.__clientData.get('countOfOpened', 0))

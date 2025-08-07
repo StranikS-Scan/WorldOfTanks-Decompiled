@@ -232,7 +232,7 @@ class PersonalMissionQuestsPage(PageSubModelPresenter):
                 isFullComplete = False
             if isComplete and not quest.isCompleted():
                 isComplete = False
-            if not isAvailable and not quest.isAvailable().isValid:
+            if not isAvailable and quest.isAvailable().isValid:
                 isAvailable = True
 
         if isFullComplete:

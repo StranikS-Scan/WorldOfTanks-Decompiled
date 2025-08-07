@@ -2,7 +2,6 @@
 # Embedded file name: mt_birthday/scripts/client/mt_birthday/gui/impl/lobby/birthday/birthday_main_view.py
 import typing
 import Event
-import SoundGroups
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.Scaleform.framework.managers.optimization_manager import ExternalFullscreenGraphicsOptimizationComponent
 from gui.impl.gen import R
@@ -23,6 +22,7 @@ from mt_birthday.gui.impl.lobby.tooltips.post_stamp_tooltip import PostStampTool
 from mt_birthday.gui.impl.sounds import BirthdaySoundEvents
 from mt_birthday.gui.shared.event_dispatcher import showGoldWagonTankMail
 from mt_birthday.skeletons.mt_birthday_controller import ITanksBirthdayController
+from mt_birthday.gui.impl.sounds import BIRTHDAY_SOUND_SPACE
 if typing.TYPE_CHECKING:
     from typing import Sequence, Tuple, Callable, Optional
 
@@ -52,6 +52,7 @@ class BirthdayMainViewEvents(object):
 
 class BirthdayMainView(ViewImpl):
     __mtBirthday = dependency.descriptor(ITanksBirthdayController)
+    _COMMON_SOUND_SPACE = BIRTHDAY_SOUND_SPACE
     __slots__ = ('__currentTabID', '__events', '__lootboxEntryPoint', '__graphicOptimization')
 
     def __init__(self, layoutID, tabId=None):
@@ -102,7 +103,6 @@ class BirthdayMainView(ViewImpl):
         self.__lootboxEntryPoint = None
         self.__graphicOptimization.fini()
         self.__setStateHangarSound(False)
-        SoundGroups.g_instance.playSound2D(BirthdaySoundEvents.MAIN_VIEW_EXIT)
         return
 
     def _onLoading(self, *args, **kwargs):
@@ -116,7 +116,6 @@ class BirthdayMainView(ViewImpl):
         self.__lootboxEntryPoint.onLoading()
         self.__setGoldenTicketsBalance()
         self.__graphicOptimization.init()
-        SoundGroups.g_instance.playSound2D(BirthdaySoundEvents.MAIN_VIEW_ENTER)
 
     def _onLoaded(self, *args, **kwargs):
         super(BirthdayMainView, self)._onLoaded(*args, **kwargs)

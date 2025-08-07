@@ -3,7 +3,6 @@
 from constants_utils import ConstInjector
 from messenger import m_constants
 from shared_utils import CONST_CONTAINER
-from mt_birthday.gui.shared.event_dispatcher import showMainView, showGoldWagon
 BIRTHDAY_2025_STAMP_CODE = 'giftsystem_4_stamp'
 BIRTHDAY_2025_GOLDEN_TICKET = 'birthday2025_golden_ticket'
 BIRTHDAY_2025_STAMP_CODE_SPECIAL = 'giftsystem_4_stampSpecial'
@@ -22,8 +21,6 @@ class AnchorNames(CONST_CONTAINER):
     POST_OFFICE = 'PostOffice'
 
 
-MethodByAnchorName = {AnchorNames.POST_OFFICE: showMainView,
- AnchorNames.GOLD_WAGON: showGoldWagon}
 CUSTOM_NOTIFICATION_NAME = 'BirthdayBonusNotification'
 CUSTOM_GIFT_NOTIFICATION_NAME = 'BirthdayGiftNotification'
 

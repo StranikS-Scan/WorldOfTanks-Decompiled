@@ -3,19 +3,22 @@
 import logging
 import typing
 import wg_async
-from constants import IS_CLIENT
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ScopeTemplates
-from gui.Scaleform.framework.managers.loaders import GuiImplViewLoadParams
+from gui.Scaleform.framework.managers.loaders import GuiImplViewLoadParams, SFViewLoadParams
+from gui.impl.lobby.common.browser_view import BrowserView, makeSettings
 from gui.impl.gen import R
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
-if IS_CLIENT:
-    from gui.shared.event_dispatcher import showBrowserOverlayView
+from frameworks.wulf import ViewFlags
+from gui.impl.lobby.common.sound_constants import BROWSER_VIEW_SOUND_SPACES
+from mt_birthday.gui.impl.sounds import BIRTHDAY_SOUND_SPACE
 if typing.TYPE_CHECKING:
     from typing import List
 _logger = logging.getLogger(__name__)
+TARGET_MAIN_VIEW = 'mainView'
+BROWSER_VIEW_SOUND_SPACES.update({BIRTHDAY_SOUND_SPACE.name: BIRTHDAY_SOUND_SPACE})
 
 def showMainView(tabId=None):
     from mt_birthday.gui.impl.lobby.birthday.birthday_main_view import BirthdayMainView
@@ -25,7 +28,16 @@ def showMainView(tabId=None):
         g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.mt_birthday.lobby.birthday.BirthdayMainView(), BirthdayMainView, ScopeTemplates.LOBBY_SUB_SCOPE), tabId=tabId), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showGoldWagon():
+def _webHandlers():
+    from web.web_client_api.shop import ShopWebApi
+    from web.web_client_api.platform import PlatformWebApi
+    from web.web_client_api.reactive_comm import ReactiveCommunicationWebApi
+    from web.web_client_api import webApiCollection, ui, request, sound as sound_web_api
+    from mt_birthday.web.web_client_api.gold_wagon.gold_wagon import GoldWagonWebApi
+    return webApiCollection(request.RequestWebApi, ui.OpenWindowWebApi, ui.CloseWindowWebApi, ui.OpenTabWebApi, ui.UtilWebApi, ui.NotificationWebApi, sound_web_api.SoundWebApi, sound_web_api.HangarSoundWebApi, sound_web_api.SoundStateWebApi, ShopWebApi, PlatformWebApi, ReactiveCommunicationWebApi, GoldWagonWebApi)
+
+
+def openGoldWagon(target=None):
     from mt_birthday.skeletons.mt_birthday_controller import ITanksBirthdayController
     lobbyContext = dependency.instance(ILobbyContext)
     mtBirthday = dependency.instance(ITanksBirthdayController)
@@ -34,13 +46,25 @@ def showGoldWagon():
         url = lobbyContext.getServerSettings().ingameBrowserEventConfig.url
         suffix = 'overlay=1'
         url = '?'.join([url, suffix])
-        showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB)
+
+        def closeCallbackWrapper(*args, **kwargs):
+            if kwargs.pop('forceClosed', False):
+                if target == TARGET_MAIN_VIEW:
+                    showMainView()
+                    return
+                g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
+
+        layoutID = R.views.lobby.common.BrowserView()
+        g_eventBus.handleEvent(events.DestroyGuiImplViewEvent(layoutID))
+        g_eventBus.handleEvent(events.LoadGuiImplViewEvent(loadParams=GuiImplViewLoadParams(layoutID, BrowserView, ScopeTemplates.DEFAULT_SCOPE), settings=makeSettings(url=url, webHandlers=_webHandlers(), viewFlags=ViewFlags.LOBBY_SUB_VIEW, returnClb=closeCallbackWrapper, restoreBackground=True, isClosable=True, soundSpaceID=BIRTHDAY_SOUND_SPACE.name)))
+
+
+def showGoldWagon():
+    openGoldWagon()
 
 
 def showGoldWagonTankMail():
-    lobbyContext = dependency.instance(ILobbyContext)
-    url = lobbyContext.getServerSettings().ingameBrowserEventConfig.url
-    showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB)
+    openGoldWagon(TARGET_MAIN_VIEW)
 
 
 @wg_async.wg_async
@@ -72,3 +96,8 @@ def sendBloggerGift(pid):
 
     tbc = dependency.instance(ITanksBirthdayController)
     tbc.giftSystem.sendGifts(BIRTHDAY_2025_STAMP_CODE_SPECIAL, [pid], 1, printer)
+
+
+def showCollageView():
+    from mt_birthday.gui.impl.lobby.birthday.collage_view import CollageView
+    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(loadParams=GuiImplViewLoadParams(R.views.mt_birthday.lobby.birthday.CollageView(), CollageView, ScopeTemplates.DEFAULT_SCOPE)))

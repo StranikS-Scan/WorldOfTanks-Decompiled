@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/game_control/universal_flag_entry_point_controller/__init__.py
 import logging
 from Event import EventManager, Event
-from gui.game_control.universal_flag_entry_point_controller.config import UniversalFlagConfig, MissionsMarathonTarget, FullScreenBrowserTarget, ShopPageTarget, NopeTarget, UniversalFlagState, TopSubBrowserTarget, universalFlagConfigSchema, ProgressStateToken, ProgressStateExpirationToken
+from gui.game_control.universal_flag_entry_point_controller.config import UniversalFlagConfig, MissionsMarathonTarget, FullScreenBrowserTarget, ShopPageTarget, NopeTarget, UniversalFlagState, TopSubBrowserTarget, universalFlagConfigSchema, ProgressStateToken, ProgressStateExpirationToken, ShowGoldWagonTarget
 from skeletons.gui.game_control import ILobbyCdnController
 from gui.impl.lobby.universal_web_event_window.universal_web_event_view import UniversalWebEventWindow
 from gui.server_events.events_dispatcher import showMissionsMarathon
@@ -75,6 +75,9 @@ class UniversalFlagEntryPointController(IUniversalFlagEntryPointController, Even
                 showShop(path=target.relativeUrl)
             elif isinstance(target, TopSubBrowserTarget):
                 showBrowserOverlayView(target.url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB)
+            elif isinstance(target, ShowGoldWagonTarget):
+                from mt_birthday.gui.shared.event_dispatcher import showGoldWagon
+                showGoldWagon()
             else:
                 _logger.error('Unknown flag target. Check universal flag config')
             return

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/lobby_vehicle_marker_view.py
+import logging
 import typing
 from collections import defaultdict
 import GUI
@@ -18,6 +19,8 @@ from frameworks.wulf.gui_constants import WindowLayer
 from frameworks.wulf import WindowStatus
 if typing.TYPE_CHECKING:
     from cgf_components.marker_component import LobbyFlashMarker
+    from gui.shared.events import HasCtxEvent
+_logger = logging.getLogger(__name__)
 
 class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
     __LAYERS_WITHOUT_MARKERS = {WindowLayer.FULLSCREEN_WINDOW,
@@ -40,10 +43,17 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
         self.hangarSpace.onSpaceDestroy += self.__onSpaceDestroy
         self.addListener(events.HangarVehicleEvent.ON_PLATOON_TANK_LOADED, self._onPlatoonTankLoaded, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.HangarVehicleEvent.ON_PLATOON_TANK_DESTROY, self._onHeroPlatoonTankDestroy, EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.LobbyMarkersManagerEvent.ON_MARKER_ADDED, self.__onCgfMarkerAdded, EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.LobbyMarkersManagerEvent.ON_MARKER_REMOVED, self.__removeCgfMarker, EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.LobbyMarkersManagerEvent.ON_MARKER_RESPONSE, self.__cgfMarkerInitResponse, EVENT_BUS_SCOPE.LOBBY)
         self.guiLoader.windowsManager.onWindowStatusChanged += self.__onWindowStatusChanged
+        self.fireEvent(events.LobbyMarkersManagerEvent(events.LobbyMarkersManagerEvent.ON_MARKER_REQUEST, ctx={'requesterId': id(self)}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _dispose(self):
         super(LobbyVehicleMarkerView, self)._dispose()
+        self.removeListener(events.LobbyMarkersManagerEvent.ON_MARKER_RESPONSE, self.__cgfMarkerInitResponse, EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.LobbyMarkersManagerEvent.ON_MARKER_REMOVED, self.__removeCgfMarker, EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.LobbyMarkersManagerEvent.ON_MARKER_ADDED, self.__onCgfMarkerAdded, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__onCameraEntityUpdated, EVENT_BUS_SCOPE.DEFAULT)
         self.removeListener(events.HangarVehicleEvent.ON_HERO_TANK_LOADED, self.__onHeroTankLoaded, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.HangarVehicleEvent.ON_HERO_TANK_DESTROY, self._onHeroPlatoonTankDestroy, EVENT_BUS_SCOPE.LOBBY)
@@ -71,14 +81,26 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
         vehicle = event.ctx['entity']
         self.__destroyMarker(vehicle.id)
 
-    def addCgfMarker(self, entityId, markerComponent, matrix):
-        flashMarker = self.as_createCustomMarkerS(entityId, markerComponent.icon.replace('gui', '..'), makeString(markerComponent.textKey), markerComponent.iconPosition)
-        self.__markersCache[entityId] = GUI.WGHangarVehicleMarker()
-        self.__markersCache[entityId].setMarker(flashMarker, matrix)
-        self.__updateMarkerVisibility(entityId)
+    def __onCgfMarkerAdded(self, event):
+        self.__addCgfMarker(event.ctx['markerId'], event.ctx['flashMarkerComponent'], event.ctx['matrix'])
 
-    def removeCgfMarker(self, entityId):
-        self.__destroyMarker(entityId)
+    def __addCgfMarker(self, markerId, markerComponent, matrix):
+        flashMarker = self.as_createCustomMarkerS(markerId, markerComponent.icon.replace('gui', '..'), makeString(markerComponent.textKey), markerComponent.iconPosition)
+        _logger.info('cgf marker created %s', flashMarker)
+        self.__markersCache[markerId] = GUI.WGHangarVehicleMarker()
+        self.__markersCache[markerId].setMarker(flashMarker, matrix)
+        self.__updateMarkerVisibility(markerId)
+
+    def __removeCgfMarker(self, event):
+        markerId = event.ctx['markerId']
+        self.__destroyMarker(markerId)
+
+    def __cgfMarkerInitResponse(self, event):
+        if id(self) == event.ctx['requesterId']:
+            for markerData in event.ctx['markers']:
+                markerId = markerData['markerId']
+                if markerId not in self.__markersCache:
+                    self.__addCgfMarker(markerId, markerData['flashMarkerComponent'], markerData['matrix'])
 
     def __onCameraEntityUpdated(self, event):
         entityId = event.ctx['entityId']

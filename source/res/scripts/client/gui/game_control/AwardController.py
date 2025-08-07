@@ -15,6 +15,7 @@ import gui.awards.event_dispatcher as award_events
 from gui.impl.gen.view_models.views.lobby.personal_missions.personal_missions_rewards_view_model import CompletedQuestsType
 from gui.impl.lobby import promo_code_reward_screen
 from gui.impl.lobby.personal_missions.personal_missions_window_events import showPersonalMissionsVideoRewardView, showPersonalMissionsRewardsView, showOperationAdditionRewardsView
+from gui.impl.lobby.promo_code_reward_screen import REWARDS_SOURCE_INVOICE, REWARDS_SOURCE_BATTLE_RESULTS, REWARDS_SOURCE_TOKEN_QUESTS
 from gui.shared.account_settings_helper import AccountSettingsHelper
 import personal_missions
 import wg_async
@@ -2019,17 +2020,18 @@ class PromoCodeInvoiceHandler(MultiTypeServiceChannelHandler):
         if message.type == SYS_MESSAGE_TYPE.invoiceReceived.index():
             for token in data['data'].get('tokens', {}):
                 if promo_code_reward_screen.isPromoCodeToken(token):
-                    rewards[token] = data['data']
+                    rewards[token] = (data['data'], REWARDS_SOURCE_INVOICE)
 
         if message.type in (SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index()):
             for _, rwrds in data.get('detailedRewards', {}).iteritems():
                 for token in rwrds.get('tokens', {}):
                     if promo_code_reward_screen.isPromoCodeToken(token):
-                        rewards[token] = rwrds
+                        rewardsSource = REWARDS_SOURCE_BATTLE_RESULTS if message.type else REWARDS_SOURCE_TOKEN_QUESTS
+                        rewards[token] = (rwrds, rewardsSource)
                         break
 
         for token, reward in rewards.iteritems():
-            showPromoCodeRewardScreen(token, [reward])
+            showPromoCodeRewardScreen(token, [reward[0]], reward[1])
 
 
 registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,

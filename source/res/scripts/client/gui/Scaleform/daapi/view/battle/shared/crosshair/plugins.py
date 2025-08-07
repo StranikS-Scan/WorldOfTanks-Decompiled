@@ -681,7 +681,7 @@ class AmmoPlugin(CrosshairPlugin):
         quantityInClip = self.__checkQuantityInClipForDualGun(self.__shellsInClip)
         state = self.__guiSettings.getState(self.__shells, quantityInClip)
         self._parentObj.as_setAmmoStockS(self.__shells, quantityInClip, state, self.__shellSetResult & SHELL_SET_RESULT.CASSETTE_RELOAD > 0)
-        if self.__shells + quantityInClip == 0:
+        if self.sessionProvider.shared.ammo.getAllShellsQuantityLeft() == 0:
             self.__reloadAnimator.setClipAutoLoading(0, 0, isTimerOn=True, isRedText=True)
 
     def __checkQuantityInClipForDualGun(self, quantityInClip):

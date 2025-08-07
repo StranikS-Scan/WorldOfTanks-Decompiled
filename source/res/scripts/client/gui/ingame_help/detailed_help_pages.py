@@ -260,7 +260,7 @@ class AssaultTankPagesBuilder(DetailedHelpPagesBuilder):
 
     @classmethod
     def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
-        ctx['isAssaultSPG'] = isAssaultSPG = vehicle is not None and vehicle.typeDescriptor.isAssaultSPG
+        ctx['isAssaultSPG'] = isAssaultSPG = vehicle is not None and vehicle.typeDescriptor.isAssaultSPG and not vehicle.typeDescriptor.isFunRandomVehicle
         ctx['hasUniqueVehicleHelpScreen'] = ctx.get('hasUniqueVehicleHelpScreen') or isAssaultSPG
         return
 

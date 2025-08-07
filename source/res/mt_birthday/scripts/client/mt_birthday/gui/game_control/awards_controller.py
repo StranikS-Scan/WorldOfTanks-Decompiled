@@ -36,8 +36,9 @@ class BirthdayProgressionTokenQuestsHandler(ServiceChannelHandler):
     def _showAward(self, ctx):
         _, message = ctx
         completedQuestsIDs = [ questID for questID in message.data.get('completedQuestIDs', set()) if questID.startswith(MT_BIRTHDAY_QUEST_PROGRESSION_ID) ]
+        sortedQuestIDs = sorted(completedQuestsIDs, key=lambda x: int(x.split(MT_BIRTHDAY_QUEST_PROGRESSION_ID + '_')[-1]))
         allQuests = self.__tankBirthdayController.progression.progressionConfig
-        for questID in completedQuestsIDs[::-1]:
+        for questID in sortedQuestIDs:
             rewards = message.data.get('detailedRewards', {}).get(questID)
             level = int(questID.split('_')[-1])
             progressQuest = allQuests[level]

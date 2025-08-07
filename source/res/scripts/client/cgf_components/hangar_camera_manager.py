@@ -144,6 +144,10 @@ class HangarCameraManager(CGF.ComponentManager):
         self.__isPlatoon = False
         return
 
+    @classmethod
+    def getCameraMgrForCurrentSpace(cls):
+        return CGF.getManager(cls._hangarSpace.spaceID, HangarCameraManager) if cls._hangarSpace.spaceID else None
+
     @property
     def isActive(self):
         return self.__isActive

@@ -849,3 +849,10 @@ class CosmicEvent(SharedEvent):
 
 class SurveyEvent(SharedEvent):
     SURVEY_FINISHED = 'onSurveyFinished'
+
+
+class LobbyMarkersManagerEvent(HasCtxEvent):
+    ON_MARKER_ADDED = 'lobbyMarkersManager/added'
+    ON_MARKER_REMOVED = 'lobbyMarkersManager/removed'
+    ON_MARKER_REQUEST = 'lobbyMarkersManager/request'
+    ON_MARKER_RESPONSE = 'lobbyMarkersManager/response'

@@ -18,7 +18,7 @@ from gui.impl.gen.view_models.views.lobby.promo_code_reward_screen.promo_code_re
 from gui.impl.lobby.collection.tooltips.collection_item_tooltip_view import CollectionItemTooltipView
 from gui.impl.lobby.common.view_helpers import packBonusModelAndTooltipData
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
-from gui.impl.lobby.promo_code_reward_screen import parseToken, isLootboxesExtensionAvailable, isPromoCodeToken
+from gui.impl.lobby.promo_code_reward_screen import parseToken, isLootboxesExtensionAvailable, isPromoCodeToken, REWARDS_SOURCE_INVOICE
 from gui.impl.lobby.promo_code_reward_screen.bonuses import getRewardsBonusPacker, splitBonuses, QUESTS_BUNUS_NAME
 from gui.impl.lobby.promo_code_reward_screen.metadata_fetcher import MetadataFetcher
 from gui.impl.lobby.promo_code_reward_screen.quest_conditions_tooltip import QuestConditionsTooltip
@@ -40,12 +40,13 @@ _SHOW_TO_TASKS_BUTTON_TAG = 'show_to_tasks_button'
 
 class PromoCodeRewardScreenView(ViewImpl):
 
-    def __init__(self, token, rewardsData):
+    def __init__(self, token, rewardsData, rewardsSource):
         settings = ViewSettings(R.views.lobby.promo_code_reward_screen.PromoCodeRewardScreenView())
         settings.model = PromoCodeRewardScreenViewModel()
         self.__tooltipData = {}
         self.__token = token
         self.__rewardsData = copy(rewardsData)
+        self.__rewardsSource = rewardsSource
         super(PromoCodeRewardScreenView, self).__init__(settings)
 
     @property
@@ -102,7 +103,7 @@ class PromoCodeRewardScreenView(ViewImpl):
             _logger.error('Problem with reward screen %s description! Can not open reward screen!', tokenDescr.codeId)
             return
         else:
-            preparedRewards = self.__prepareRewards(self.__rewardsData)
+            preparedRewards = self.__prepareRewards(self.__rewardsData, self.__rewardsSource)
             rewards = []
             for bonusType, bonusValue in preparedRewards.items():
                 bonus = getNonQuestBonuses(bonusType, bonusValue)
@@ -143,12 +144,13 @@ class PromoCodeRewardScreenView(ViewImpl):
         return rewards
 
     @staticmethod
-    def __prepareRewards(rawRewards):
+    def __prepareRewards(rawRewards, rewardsSource):
         rawRewards = PromoCodeRewardScreenView.__filterRewards(rawRewards)
         rewards = getMergedBonusesFromDicts(rawRewards)
         if isLootboxesExtensionAvailable():
             from gui_lootboxes.gui.bonuses.bonuses_helpers import preformatCompensationValue, preformatStyle
-            preformatCompensationValue(rewards)
+            if rewardsSource == REWARDS_SOURCE_INVOICE:
+                preformatCompensationValue(rewards)
             preformatStyle(rewards)
         return rewards
 
@@ -278,8 +280,8 @@ class PromoCodeRewardScreenView(ViewImpl):
 class PromoCodeRewardScreenViewWindow(LobbyNotificationWindow):
     _eventsCache = dependency.descriptor(IEventsCache)
 
-    def __init__(self, token, rewardsData, parent=None):
-        super(PromoCodeRewardScreenViewWindow, self).__init__(content=PromoCodeRewardScreenView(token, rewardsData), wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, parent=parent, decorator=None)
+    def __init__(self, token, rewardsData, rewardsSource, parent=None):
+        super(PromoCodeRewardScreenViewWindow, self).__init__(content=PromoCodeRewardScreenView(token, rewardsData, rewardsSource), wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, parent=parent, decorator=None)
         self.__scope = AsyncScope()
         self.__questsDataReadyEvent = AsyncEvent(scope=self.__scope)
         self.__token = token

@@ -19,6 +19,8 @@ class BirthdaySoundEvents(CONST_CONTAINER):
 
 
 BIRTHDAY_REWARD_VIDEO_SOUND_SPACE = CommonSoundSpaceSettings(name='birthday_video_reward', entranceStates={StatesGroup.VIDEO_OVERLAY: States.VIDEO_OVERLAY_ON}, exitStates={StatesGroup.VIDEO_OVERLAY: States.VIDEO_OVERLAY_OFF}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')
+BIRTHDAY_REWARD_SCREEN_SOUND_SPACE = CommonSoundSpaceSettings(name='birthday_reward_screen', entranceStates={BirthdaySoundEvents.OVERLAY_HANGAR_GENERAL: BirthdaySoundEvents.OVERLAY_HANGAR_GENERAL_ON}, exitStates={BirthdaySoundEvents.OVERLAY_HANGAR_GENERAL: BirthdaySoundEvents.OVERLAY_HANGAR_GENERAL_OFF}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True)
+BIRTHDAY_SOUND_SPACE = CommonSoundSpaceSettings(name='birthday', entranceStates={}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='hangar_h15_bday_tank_mail_enter', exitEvent='hangar_h15_bday_tank_mail_exit')
 
 class VideoRewardsSoundControl(IVideoSoundManager):
     __slots__ = ('__bonusName', '__state')

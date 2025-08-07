@@ -13,14 +13,18 @@ from gui.impl.pub import ViewImpl
 from mt_birthday.gui.impl.gen.view_models.views.lobby.tooltips.gold_ticket_tooltip_model import GoldTicketTooltipModel
 from mt_birthday.gui.shared.event_dispatcher import showGoldWagon, showGoldWagonTankMail
 from mt_birthday.skeletons.mt_birthday_controller import ITanksBirthdayController
+from mt_birthday.gui.impl.sounds import BIRTHDAY_REWARD_SCREEN_SOUND_SPACE
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.lobby_context import ILobbyContext
 _logger = logging.getLogger(__name__)
 
 class BirthdayRewardsView(ViewImpl):
     __itemsCache = dependency.descriptor(IItemsCache)
     __tankBirthdayController = dependency.descriptor(ITanksBirthdayController)
     __gui = dependency.descriptor(IGuiLoader)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+    _COMMON_SOUND_SPACE = BIRTHDAY_REWARD_SCREEN_SOUND_SPACE
     __slots__ = ('__tooltipData', '__rewards', '__bloggerName', '__stage', '__isRewardSeen', '__isFinalReward', '__phraseID', '__spaID', '__isNameLoading', '__userInfoHelper')
 
     def __init__(self, layoutID, rewards, bloggerName, stage, isRewardSeen, isFinalReward, phraseID, spaID, isNameLoading):
@@ -59,7 +63,7 @@ class BirthdayRewardsView(ViewImpl):
         if self.__spaID in receivedSpaIDs:
             bloggerName = receivedSpaIDs[self.__spaID]
             clanAbbrev = self.__userInfoHelper.getUserClanAbbrev(self.__spaID)
-            bloggerFullName = '{}{}'.format(bloggerName, clanAbbrev)
+            bloggerFullName = self.__lobbyContext.getPlayerFullName(bloggerName, clanAbbrev=clanAbbrev)
             _logger.info('Nick is found name: %s', bloggerFullName)
             with self.viewModel.transaction() as tx:
                 tx.setIsNameLoading(False)

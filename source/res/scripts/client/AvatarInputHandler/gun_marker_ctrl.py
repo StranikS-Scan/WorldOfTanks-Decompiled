@@ -35,7 +35,6 @@ _BASE_PIERCING_PERCENT = 100.0
 _ENABLED_MAX_PROJECTION_CHECK = True
 _MAX_PROJECTION_ANGLE = math.radians(60.0)
 _MAX_PROJECTION_ANGLE_COS = math.cos(_MAX_PROJECTION_ANGLE)
-_ASSAULT_CALCULATION_MAX_TIME = 20.0
 _logger = logging.getLogger(__name__)
 
 def _computePiercingPowerAtDistImpl(dist, maxDist, p100, p500):
@@ -170,8 +169,7 @@ class _CrosshairShotResults(object):
      constants.SHELL_TYPES.ARMOR_PIERCING_HE: shellExtraData(True, False, False, 0.0),
      constants.SHELL_TYPES.HOLLOW_CHARGE: shellExtraData(False, True, False, 0.5),
      constants.SHELL_TYPES.HIGH_EXPLOSIVE: shellExtraData(False, False, False, 0.0),
-     constants.SHELL_TYPES.FLAME: shellExtraData(False, False, False, 0.0),
-     constants.SHELL_TYPES.DELAYED_HE: shellExtraData(False, False, False, 0.0)}
+     constants.SHELL_TYPES.FLAME: shellExtraData(False, False, False, 0.0)}
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     @classmethod
@@ -538,16 +536,16 @@ class _GunMarkersDPFactory(object):
 
     @staticmethod
     def _makeDefaultProvider():
-        dataProvider = GUI.WGGunMarkerDataProvider()
+        dataProvider = GUI.GunMarkerDataProvider()
         dataProvider.positionMatrixProvider = Math.MatrixAnimation()
         dataProvider.setStartSize(_setupGunMarkerSizeLimits(dataProvider)[0])
         return dataProvider
 
     @staticmethod
     def _makeSPGProvider():
-        dataProvider = GUI.WGSPGGunMarkerDataProvider(aih_constants.SPG_GUN_MARKER_ELEMENTS_COUNT, aih_constants.SPG_GUN_MARKER_ELEMENTS_RATE)
+        dataProvider = GUI.SPGGunMarkerDataProvider(aih_constants.SPG_GUN_MARKER_ELEMENTS_COUNT, aih_constants.SPG_GUN_MARKER_ELEMENTS_RATE)
         dataProvider.positionMatrixProvider = Math.MatrixAnimation()
-        dataProvider.maxTime = _ASSAULT_CALCULATION_MAX_TIME
+        dataProvider.maxTime = 7.0
         dataProvider.serverTickLength = constants.SERVER_TICK_LENGTH
         dataProvider.sizeScaleRate = aih_constants.SPG_GUN_MARKER_SCALE_RATE
         dataProvider.sizeConstraint = (aih_constants.SPG_GUN_MARKER_MIN_SIZE, aih_constants.SPG_GUN_MARKER_MAX_SIZE)
@@ -556,9 +554,9 @@ class _GunMarkersDPFactory(object):
 
     @staticmethod
     def _makeAssaultSPGProvider():
-        dataProvider = GUI.WGAssaultSPGGunMarkerDataProvider(aih_constants.SPG_GUN_MARKER_ELEMENTS_COUNT, aih_constants.SPG_GUN_MARKER_ELEMENTS_RATE)
+        dataProvider = GUI.AssaultSPGGunMarkerDataProvider(aih_constants.SPG_GUN_MARKER_ELEMENTS_COUNT, aih_constants.SPG_GUN_MARKER_ELEMENTS_RATE)
         dataProvider.positionMatrixProvider = Math.MatrixAnimation()
-        dataProvider.maxTime = _ASSAULT_CALCULATION_MAX_TIME
+        dataProvider.maxTime = 7.0
         dataProvider.serverTickLength = constants.SERVER_TICK_LENGTH
         dataProvider.sizeScaleRate = aih_constants.SPG_GUN_MARKER_SCALE_RATE
         dataProvider.sizeConstraint = (aih_constants.SPG_GUN_MARKER_MIN_SIZE, aih_constants.SPG_GUN_MARKER_MAX_SIZE)
@@ -954,7 +952,7 @@ class _ArtyHitMarkerController(_SPGGunMarkerController):
         self.__areaRadius = areaRadius
         self.__interval = interval
         self.__delayer = CallbackDelayer()
-        self.__trajectoryDrawer = BigWorld.wg_trajectory_drawer()
+        self.__trajectoryDrawer = BigWorld.trajectory_drawer()
 
     def create(self):
         super(_ArtyHitMarkerController, self).create()

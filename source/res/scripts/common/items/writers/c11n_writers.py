@@ -22,7 +22,7 @@ if IS_EDITOR:
 else:
     isPropertyShared = lambda instance, path: False
 if IS_EDITOR:
-    import WotCommon
+    import UECommon
     from items.customizations import getEditorOnlySection
 
 def findOrCreate(section, subsectionName):
@@ -57,7 +57,7 @@ def saveCustomizationItems(cache, folder):
     writeFontType(FontXmlWriter(), cache, folder, 'font')
     writeItemType(SequenceXmlWriter(), cache, folder, 'sequence')
     writeItemType(AttachmentXmlWriter(), cache, folder, 'attachment')
-    WotCommon.writeAllLocalizationChanges()
+    UECommon.writeAllLocalizationChanges()
 
 
 class GroupSectionPicker(object):
@@ -400,8 +400,8 @@ def writeLocalizationProperty(item, generalLocalizationKey, propname, keyStr, pr
     else:
         key = getattr(item.i18n, keyStr, None)
         if key is not None and len(key) > 0:
-            if WotCommon.getTranslatedText(key) != propStr:
-                WotCommon.addChangedData('vehicle_customization', key, str(propStr))
+            if UECommon.getTranslatedText(key) != propStr:
+                UECommon.addChangedData('vehicle_customization', key, str(propStr))
         elif len(propStr) > 0:
             generalKey = generalLocalizationKey[0]
             if generalKey is None or len(generalKey) == 0:
@@ -415,7 +415,7 @@ def writeLocalizationProperty(item, generalLocalizationKey, propname, keyStr, pr
             key = generalKey + '/' + propType
             setattr(item.i18n, keyStr, key)
             changed |= rewriteString(section, xmlSectionName, item, 'i18n.' + keyStr, '')
-            WotCommon.addChangedData('vehicle_customization', key, propStr)
+            UECommon.addChangedData('vehicle_customization', key, propStr)
         return changed
 
 

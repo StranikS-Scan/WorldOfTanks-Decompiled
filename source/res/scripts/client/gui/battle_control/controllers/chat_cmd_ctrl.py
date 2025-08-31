@@ -98,7 +98,7 @@ PROHIBITED_IF_SPECTATOR = [BATTLE_CHAT_COMMAND_NAMES.GOING_THERE,
 def getAimedAtPositionWithinBorders(aimOffsetX, aimOffsetY):
     ray, _ = getWorldRayAndPoint(aimOffsetX, aimOffsetY)
     player = BigWorld.player()
-    staticHitPoint = BigWorld.wg_collideSegment(player.spaceID, BigWorld.camera().position, BigWorld.camera().position + ray * 100000, 128)
+    staticHitPoint = BigWorld.collideSegment(player.spaceID, BigWorld.camera().position, BigWorld.camera().position + ray * 100000, 128)
     if staticHitPoint is not None:
         staticHitPoint = staticHitPoint.closestPoint
         boundingBox = player.arena.arenaType.boundingBox
@@ -300,7 +300,7 @@ class ChatCommandsController(IBattleController):
     def sendCommandToBase(self, baseIdx, cmdName, baseName=''):
         if self.__isProhibitedToSendIfDeadOrObserver(cmdName) or self.__isEnabled is False:
             return
-        if self.sessionProvider.arenaVisitor.gui.isInEpicRange():
+        if self.sessionProvider.arenaVisitor.gui.isInEpicRange() or self.sessionProvider.arenaVisitor.gui.isWhiteTigerBattle():
             baseName = ID_TO_BASENAME[baseIdx]
         command = self.proto.battleCmd.createByBaseIndexAndName(baseIdx, cmdName, baseName)
         if command:

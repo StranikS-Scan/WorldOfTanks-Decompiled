@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/interactors/shell.py
 from itertools import izip
 import adisp
-from wg_async import wg_await, wg_async, await_callback
+from th_async import th_await, th_async, await_callback
 from BWUtil import AsyncReturn
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.base_setup_model import BaseSetupModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
@@ -71,7 +71,7 @@ class ShellInteractor(BaseInteractor):
     def isPlayerLayout(self):
         return not _hasChanged(self.getPlayerLayout(), self.getCurrentLayout())
 
-    @wg_async
+    @th_async
     def applyQuit(self, callback, skipApplyAutoRenewal):
         if not self.isPlayerLayout():
             yield await_callback(self.confirm)(skipDialog=True)
@@ -137,10 +137,10 @@ class ShellInteractor(BaseInteractor):
         if not onlyInstalled:
             self.getItem().shells.setLayout(*vehicle.shells.layout)
 
-    @wg_async
+    @th_async
     def showExitConfirmDialog(self):
         price = getVehicleShellsLayoutPrice(self.getItem())
-        result = yield wg_await(showExitFromShellsDialog(price=price, shells=self.getCurrentLayout().getItems(), startState=BuyAndExchangeStateEnum.BUY_NOT_REQUIRED if price.price == ZERO_MONEY else None))
+        result = yield th_await(showExitFromShellsDialog(price=price, shells=self.getCurrentLayout().getItems(), startState=BuyAndExchangeStateEnum.BUY_NOT_REQUIRED if price.price == ZERO_MONEY else None))
         raise AsyncReturn(result)
         return
 

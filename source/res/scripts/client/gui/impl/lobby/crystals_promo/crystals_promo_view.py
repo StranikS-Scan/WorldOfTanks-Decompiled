@@ -5,7 +5,7 @@ from account_helpers.AccountSettings import AccountSettings, CRYSTALS_INFO_SHOWN
 from constants import ARENA_BONUS_TYPE, IS_CHINA
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState
-from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBonsDevicesUrl, getBonsVehiclesUrl, getBonsInstructionsUrl
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBonsDevicesUrl, getBonsVehiclesUrl, getBonsInstructionsUrl, getComp7ProductsUrl
 from gui.impl.auxiliary.layer_monitor import LayerMonitor
 from gui.impl.backport.backport_system_locale import getIntegralFormat
 from gui.impl.gen import R
@@ -25,15 +25,21 @@ from skeletons.gui.shared import IItemsCache
 _DEFAULT_VEHICLE_PRICE = 3000
 _DEFAULT_EQUIPMENT_PRICE = 5000
 _DEFAULT_INSTRUCTION_PRICE = 12
+_DEFAULT_COMP7_PRICE = 500
 _DEFAULT_LEVEL = 10
+_COMP7_TOP_2 = 2
+_COMP7_TOP_5 = 5
+_COMP7_TOP_7 = 7
 _STR_PATH = R.strings.menu.crystals.info.tab.get
 _IMG_PATH = R.images.gui.maps.icons.crystalsInfo.get
-_SHOWED_BONUS_TYPES = (ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.EPIC_RANDOM)
+_SHOWED_BONUS_TYPES = (ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.EPIC_RANDOM, ARENA_BONUS_TYPE.COMP7)
 _BONUS_TYPE_INFO = {ARENA_BONUS_TYPE.REGULAR: 'random',
- ARENA_BONUS_TYPE.EPIC_RANDOM: 'general'}
+ ARENA_BONUS_TYPE.EPIC_RANDOM: 'general',
+ ARENA_BONUS_TYPE.COMP7: 'comp7'}
 _shopUrlsMap = {CrystalsPromoViewModel.TANKS_TAB: getBonsVehiclesUrl(),
  CrystalsPromoViewModel.EQUIPMENT_TAB: getBonsDevicesUrl(),
- CrystalsPromoViewModel.INSTRUCTIONS_TAB: getBonsInstructionsUrl()}
+ CrystalsPromoViewModel.INSTRUCTIONS_TAB: getBonsInstructionsUrl(),
+ CrystalsPromoViewModel.COMP7_TAB: getComp7ProductsUrl()}
 
 class CrystalsPromoView(ViewImpl):
     __slots__ = ('__visibility', '__destroyViewObject')
@@ -70,6 +76,7 @@ class CrystalsPromoView(ViewImpl):
             model.setEquipmentPrice(getIntegralFormat(minEquipmentPrice))
             model.setInstructionPrice(getIntegralFormat(minInstructionPrice))
             model.setVehiclePrice(getIntegralFormat(_DEFAULT_VEHICLE_PRICE))
+            model.setComp7Price(getIntegralFormat(_DEFAULT_COMP7_PRICE))
             model.setIsChina(IS_CHINA)
             self.__updateCondition(model)
 
@@ -132,7 +139,11 @@ class CrystalsPromoView(ViewImpl):
     @classmethod
     def __fillBattleItemModel(cls, model, item):
         bonusTypeLabel = _BONUS_TYPE_INFO[item.arenaType]
-        model.addViewModel(cls.__createBattleTypeModel(_STR_PATH.dyn(bonusTypeLabel)(), _IMG_PATH.dyn(bonusTypeLabel)(), [cls.__createConditionModel(item.firstTopLength, item.winTop3, item.loseTop3), cls.__createConditionModel(item.topLength, item.winTop10, item.loseTop10)]))
+        if item.arenaType == ARENA_BONUS_TYPE.COMP7:
+            tops = [cls.__createConditionModel(_COMP7_TOP_2, item.winTop2, item.loseTop2), cls.__createConditionModel(_COMP7_TOP_5, item.winTop5, item.loseTop5), cls.__createConditionModel(_COMP7_TOP_7, item.winTop7, item.loseTop7)]
+        else:
+            tops = [cls.__createConditionModel(item.firstTopLength, item.winTop3, item.loseTop3), cls.__createConditionModel(item.topLength, item.winTop10, item.loseTop10)]
+        model.addViewModel(cls.__createBattleTypeModel(_STR_PATH.dyn(bonusTypeLabel)(), _IMG_PATH.dyn(bonusTypeLabel)(), tops))
 
     @staticmethod
     def __createBattleTypeModel(title, icon, conditions):

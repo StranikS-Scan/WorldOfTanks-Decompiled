@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/interactors/consumable.py
 import typing
-from wg_async import wg_async, await_callback
+from th_async import th_async, await_callback
 from gui import shop
 from adisp import adisp_process
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -60,7 +60,7 @@ class ConsumableInteractor(BaseConsumableInteractor):
         self.onSlotAction(actionType=BaseSetupModel.REVERT_SLOT_ACTION)
         self.itemUpdated()
 
-    @wg_async
+    @th_async
     def applyQuit(self, callback, skipApplyAutoRenewal):
         if not self.isPlayerLayout():
             yield await_callback(self.confirm)(skipDialog=True)

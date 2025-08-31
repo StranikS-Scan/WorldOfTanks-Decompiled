@@ -1,6 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/shell.py
+import copy
 from itertools import izip
+from Math import Vector2
+from battle_modifiers_common import ModifiersContext, BattleParams
 from debug_utils import LOG_ERROR
 from constants import SHELL_TYPES
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
@@ -19,6 +22,7 @@ from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURREN
 from gui.shared.tooltips.module import ModuleTooltipBlockConstructor
 from helpers import dependency
 from helpers.i18n import makeString as _ms
+from skeletons.gui.game_control import IComp7Controller
 from skeletons.gui.shared import IItemsCache
 _TOOLTIP_MIN_WIDTH = 380
 _TOOLTIP_MAX_WIDTH = 420
@@ -26,6 +30,7 @@ _AUTOCANNON_SHOT_DISTANCE = 400
 _ASTERISK = '*'
 
 class ShellBlockToolTipData(BlocksTooltipData):
+    _comp7Controller = dependency.descriptor(IComp7Controller)
 
     def __init__(self, context, basicDataAllowed=True):
         super(ShellBlockToolTipData, self).__init__(context, TOOLTIP_TYPE.SHELL)
@@ -51,6 +56,16 @@ class ShellBlockToolTipData(BlocksTooltipData):
         blockPadding = formatters.packPadding(left=leftPadding, right=rightPadding, top=blockTopPadding)
         textGap = -2
         vDescr = paramsConfig.vehicle.descriptor if paramsConfig.vehicle is not None else None
+        shots = None
+        if self._comp7Controller.isBattleModifiersAvailable() and vDescr is not None:
+            modifiers = self._comp7Controller.getBattleModifiersObject()
+            if modifiers is not None:
+                shots = copy.deepcopy(vDescr.gun.shots)
+                for shot in vDescr.gun.shots:
+                    battleModifiers = ModifiersContext(modifiers, shellDescr=shot.shell)
+                    piercingPower = shot.piercingPower
+                    shot.piercingPower = Vector2(battleModifiers(BattleParams.PIERCING_POWER_FIRST, piercingPower[0]), battleModifiers(BattleParams.PIERCING_POWER_LAST, piercingPower[1]))
+
         params = params_helper.getParameters(shell, vDescr)
         showBasicData = self.__basicDataAllowed and params['isBasic']
         items.append(formatters.packBuildUpBlockData(HeaderBlockConstructor(shell, statsConfig, leftPadding, rightPadding, params).construct(), padding=formatters.packPadding(left=35, right=rightPadding, top=14)))
@@ -81,6 +96,8 @@ class ShellBlockToolTipData(BlocksTooltipData):
             shot = _ms(ITEM_TYPES.ALTSHOT_NAME if shell.type == SHELL_TYPES.FLAME else ITEM_TYPES.SHOT_NAME).lower()
             boldText = text_styles.neutral(_ms(TOOLTIPS.SHELL_BASIC_DESCRIPTION_BOLD, shot=shot))
             items.append(formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.standard(_ms(TOOLTIPS.SHELL_BASIC_DESCRIPTION, bold=boldText, shot=shot)), padding=lrPaddings)], padding=formatters.packPadding(right=rightPadding)))
+        if shots is not None:
+            vDescr.gun.shots = shots
         return items
 
 

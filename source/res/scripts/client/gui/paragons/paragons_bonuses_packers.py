@@ -125,7 +125,7 @@ class ParagonsProgressStyleBonusUIPacker(StyleProgressBonusUIPacker):
         styleID = bonus.getStyleID()
         branchID = bonus.getBranchID()
         progressLevel = bonus.getProgressLevel()
-        model.setIcon(cls.__getIcon(styleID, progressLevel))
+        model.setIcon(cls._getIcon(styleID, progressLevel))
         model.setLabel(bonus.format())
         model.setStyleID(styleID)
         model.setBranchID(branchID)
@@ -133,11 +133,11 @@ class ParagonsProgressStyleBonusUIPacker(StyleProgressBonusUIPacker):
         return model
 
     @staticmethod
-    def __getIcon(styleID, progressLevel):
+    def _getIcon(styleID, progressLevel):
         return 'style_progress_{styleID}_{progressLevel}'.format(styleID=styleID, progressLevel=progressLevel)
 
     @staticmethod
-    def __getLabel(camo):
+    def _getLabel(camo):
         return camo.longUserName
 
     @classmethod

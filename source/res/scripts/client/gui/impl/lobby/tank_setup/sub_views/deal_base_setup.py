@@ -4,7 +4,7 @@ from BWUtil import AsyncReturn
 from gui.impl.lobby.tank_setup.configurations.base import BaseDealPanel
 from gui.impl.lobby.tank_setup.sub_views.base_setup import BaseSetupSubView
 from gui.impl.lobby.tank_setup.tank_setup_sounds import playSound, TankSetupSoundEvents
-from wg_async import wg_async, await_callback, wg_await
+from th_async import th_async, await_callback, th_await
 from gui.impl.gen.view_models.views.lobby.tank_setup.common.deal_panel_model import AutoRenewalType
 
 class DealBaseSetupSubView(BaseSetupSubView):
@@ -18,13 +18,13 @@ class DealBaseSetupSubView(BaseSetupSubView):
         super(DealBaseSetupSubView, self).updateSlots(slotID, fullUpdate, updateData)
         self._updateDealPanel()
 
-    @wg_async
+    @th_async
     def canQuit(self, skipApplyAutoRenewal=None):
         result = True
         if self._asyncActionLock.isLocked:
             raise AsyncReturn(False)
         elif self._interactor.hasChanged():
-            dialogResult = yield wg_await(self._asyncActionLock.tryAsyncCommand(self._interactor.showExitConfirmDialog))
+            dialogResult = yield th_await(self._asyncActionLock.tryAsyncCommand(self._interactor.showExitConfirmDialog))
             if dialogResult is None or dialogResult.busy:
                 raise AsyncReturn(False)
             isOK, data = dialogResult.result
@@ -69,9 +69,9 @@ class DealBaseSetupSubView(BaseSetupSubView):
             self._viewModel.dealPanel.setCanAccept(self._interactor.hasChanged())
             return
 
-    @wg_async
+    @th_async
     def _onDealConfirmed(self, _=None):
-        result = yield wg_await(self._asyncActionLock.tryAsyncCommandWithCallback(self._onConfirm))
+        result = yield th_await(self._asyncActionLock.tryAsyncCommandWithCallback(self._onConfirm))
         if result:
             playSound(TankSetupSoundEvents.ACCEPT)
             yield await_callback(self._interactor.applyAutoRenewal)()

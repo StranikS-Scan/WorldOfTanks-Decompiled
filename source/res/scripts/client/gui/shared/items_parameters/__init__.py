@@ -15,6 +15,7 @@ _AUTO_RELOAD_TAG = 'autoreload'
 _DUAL_GUN_TAG = 'dualGun'
 _DUAL_ACCURACY_TAG = 'dualAccuracy'
 _AUTOSHOOT_TAG = 'autoShoot'
+_CLIP_TAG = 'clip'
 
 def _updateMinMaxValues(targetDict, key, value):
     targetDict[key] = (min(targetDict[key][0], value), max(targetDict[key][1], value))
@@ -44,6 +45,14 @@ def isDualGun(gun):
     return _DUAL_GUN_TAG in gun.tags if gun is not None else False
 
 
+def isClipGun(gun):
+    return _CLIP_TAG in gun.tags if gun is not None else False
+
+
+def isClippedDualGun(gun):
+    return isClipGun(gun) and isDualGun(gun) if gun is not None else False
+
+
 def isAutoShootGun(gun):
     return _AUTOSHOOT_TAG in gun.tags if gun is not None else False
 
@@ -65,15 +74,32 @@ def isBurstGun(gunDescr):
 
 
 def getShotsPerMinute(descriptor, reloadTime, autoReloadGun=False):
+    hasClippedDualGun = isClipGun(descriptor) and isDualGun(descriptor)
+    if hasClippedDualGun and autoReloadGun:
+        return __getShotsPerMinuteForClippedDualgunWithAutorelaod(descriptor, reloadTime)
     clip = descriptor.clip
     burst = descriptor.burst
-    if autoReloadGun:
+    if autoReloadGun or hasClippedDualGun:
         clipCount = 1
         reloadTime = max(reloadTime, clip[1])
     else:
         clipCount = float(clip[0]) / (burst[0] if clip[0] > 1 else 1)
     value = burst[0] * clipCount * time_utils.ONE_MINUTE / (reloadTime + (burst[0] - 1) * burst[1] * clipCount + (clipCount - 1) * clip[1])
     return value
+
+
+def __getShotsPerMinuteForClippedDualgunWithAutorelaod(descriptor, reloadTime):
+    clipCount = counter = descriptor.clip[0]
+    reloadTimes = descriptor.dualGun.reloadTimes[0]
+    maxShotsPerMinute = int(time_utils.ONE_MINUTE / reloadTimes)
+    possibleShotsPerMinute = min(maxShotsPerMinute, clipCount)
+    value = reloadTimes * possibleShotsPerMinute
+    if value >= time_utils.ONE_MINUTE:
+        return counter
+    shellLoading = reloadTime + reloadTimes
+    timeRemaining = time_utils.ONE_MINUTE - value
+    counter += timeRemaining / shellLoading
+    return counter
 
 
 def calcGunParams(gunDescr, descriptors):

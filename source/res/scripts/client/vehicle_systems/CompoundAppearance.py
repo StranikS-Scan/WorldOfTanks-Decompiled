@@ -32,6 +32,7 @@ from common_tank_appearance import CommonTankAppearance
 import CGF
 import GenericComponents
 from Health import UnderWaterComponent
+from cgf_components import PlayerVehicleTag
 _ROOT_NODE_NAME = 'V'
 _GUN_RECOIL_NODE_NAME = 'G'
 _PERIODIC_TIME_ENGINE = 0.1
@@ -85,6 +86,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
     wheelsScroll = property(lambda self: self._vehicle.wheelsScrollSmoothed if self._vehicle is not None else None)
     burnoutLevel = property(lambda self: self._vehicle.burnoutLevel / 255.0 if self._vehicle is not None else 0.0)
     isConstructed = property(lambda self: self.__isConstructed)
+    vehicleHealth = property(lambda self: self._vehicle.health if self._vehicle else 0.0)
     highlighter = ComponentDescriptor()
     compoundHolder = ComponentDescriptor()
     partsGameObjects = ComponentDescriptor()
@@ -92,8 +94,8 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
     def __init__(self):
         CallbackDelayer.__init__(self)
         CommonTankAppearance.__init__(self, BigWorld.player().spaceID)
-        self.turretMatrix = Math.WGAdaptiveMatrixProvider()
-        self.gunMatrix = Math.WGAdaptiveMatrixProvider()
+        self.turretMatrix = Math.AdaptiveMatrixProvider()
+        self.gunMatrix = Math.AdaptiveMatrixProvider()
         self.__originalFilter = None
         self.__terrainCircle = None
         self.__showCircleDelayed = None
@@ -117,8 +119,12 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
             self.crashedTracksController.setVehicle(vehicle)
         if self.frictionAudition is not None:
             self.frictionAudition.setVehicleMatrix(vehicle.matrix)
-        self.highlighter.setVehicle(vehicle)
-        self.__applyVehicleOutfit()
+        if self.highlighter is not None:
+            self.highlighter.setVehicle(vehicle)
+        if self.fashions is not None:
+            self.__applyVehicleOutfit()
+        if vehicle.isPlayerVehicle:
+            self.createComponent(PlayerVehicleTag)
         fstList = vehicle.wheelsScrollFilters if vehicle.wheelsScrollFilters else []
         scndList = vehicle.wheelsSteeringFilters if vehicle.wheelsSteeringFilters else []
         for retriever, floatFilter in zip(self.filterRetrievers, fstList + scndList):
@@ -277,7 +283,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
             self.removeComponent(go)
             go.deactivate()
 
-        fashions = VehiclePartsTuple(BigWorld.WGVehicleFashion(), BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion())
+        fashions = VehiclePartsTuple(BigWorld.VehicleFashion(), BigWorld.BaseFashion(), BigWorld.BaseFashion(), BigWorld.BaseFashion())
         for f in fashions:
             f.addMaterialHandler(BigWorld.PyDeadTankHandler())
 

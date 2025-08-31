@@ -7,7 +7,7 @@ from itertools import izip
 from typing import TYPE_CHECKING, List, Dict, Any, Tuple, Optional, Set, Callable, Union
 import nations
 from helpers_common import bisectLE
-from items import vehicles, ITEM_TYPES, parseIntCompactDescr, ITEM_ID_RANGES
+from items import vehicles, ITEM_TYPES, parseIntCompactDescr
 from items.components import skills_components, crew_skins_constants, crew_books_constants
 from items.components import skills_constants
 from items.components import tankmen_components
@@ -843,20 +843,6 @@ class TankmanGroupSelection(NoneGroupSelection):
             return NoneGroupSelection()
 
         return
-
-
-class TankmanGroupWoT(NoneGroupSelection):
-
-    def matches(self, tankmanDescr):
-        tman = TankmanDescr(tankmanDescr) if type(tankmanDescr) is str else tankmanDescr
-        return tman.gid in ITEM_ID_RANGES.WOT
-
-
-class TankmanGroupMT(NoneGroupSelection):
-
-    def matches(self, tankmanDescr):
-        tman = TankmanDescr(tankmanDescr) if type(tankmanDescr) is str else tankmanDescr
-        return tman.gid in ITEM_ID_RANGES.MT
 
 
 def makeTmanDescrByTmanData(tmanData):

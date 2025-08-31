@@ -71,7 +71,7 @@ class OnFailLoadingFramePointcut(aop.Pointcut):
 
 
 def _show_continue_client_download_dialog():
-    showDialog(SimpleDialogMeta(title=_ms('#miniclient:continue_download_dialog/title'), message=_ms('#miniclient:continue_download_dialog/message'), buttons=I18nConfirmDialogButtons(focusedIndex=DIALOG_BUTTON_ID.SUBMIT, i18nKey='questsConfirmDialog')), lambda proceed: BigWorld.wg_quitAndStartLauncher() if proceed else None)
+    showDialog(SimpleDialogMeta(title=_ms('#miniclient:continue_download_dialog/title'), message=_ms('#miniclient:continue_download_dialog/message'), buttons=I18nConfirmDialogButtons(focusedIndex=DIALOG_BUTTON_ID.SUBMIT, i18nKey='questsConfirmDialog')), lambda proceed: BigWorld.quitAndStartLauncher() if proceed else None)
 
 
 def _getContinueDownloadUrl():

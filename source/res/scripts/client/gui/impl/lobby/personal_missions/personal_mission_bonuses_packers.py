@@ -49,6 +49,7 @@ def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None, pac
         bonusIndexTotal = len(tooltipData)
     if offersDataProvider is not None:
         bonuses = _getUpdatedSelectableBonuses(bonuses, offersDataProvider, selectedRewards)
+    bonusModelsList.clear()
     for bonus in bonuses:
         if bonus.isShowInGUI():
             bonusList = packer.pack(bonus)

@@ -12,7 +12,7 @@ SurfaceMaterial = namedtuple('SurfaceMaterial', ('point', 'surfaceNormal', 'matK
 def calcSurfaceMaterialNearPoint(point, normal, spaceID, defaultEffectMaterial='ground'):
     segStart = point - normal * 3.0
     segStop = point + normal * 2.0
-    collided, hitPoint, surfNormal, matKind, fileName = BigWorld.wg_getMatInfoNearPoint(spaceID, segStart, segStop, point, isDestructibleBroken)
+    collided, hitPoint, surfNormal, matKind, fileName = BigWorld.getMatInfoNearPoint(spaceID, segStart, segStop, point, isDestructibleBroken)
     if collided:
         effectIdx = None
         if DESTRUCTIBLE_MATKIND.MIN <= matKind <= DESTRUCTIBLE_MATKIND.MAX:

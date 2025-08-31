@@ -3,10 +3,10 @@
 import BigWorld
 from BWUtil import AsyncReturn
 from gui.battle_control import avatar_getter
-from wg_async import wg_async
+from th_async import th_async
 from gui.Scaleform.daapi.view.battle.shared.ingame_menu import IngameMenu
 
-@wg_async
+@th_async
 def showBattleRoyaleLeaverAliveWindow():
     from gui.impl.dialogs import dialogs
     from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindowWrapper

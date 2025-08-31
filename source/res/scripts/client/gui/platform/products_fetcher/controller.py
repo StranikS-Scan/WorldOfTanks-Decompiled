@@ -5,13 +5,13 @@ import json
 import logging
 from functools import partial
 import BigWorld
-import wg_async
+import th_async
 from BWUtil import AsyncReturn
 from adisp import adisp_process
 from gui.Scaleform.Waiting import Waiting
 from gui.platform.products_fetcher.fetch_result import FetchResult
 from gui.platform.products_fetcher.product_descriptor import ProductDescriptor
-from gui.wgcg.utils.contexts import PlatformFetchProductListCtx
+from gui.clientgw.utils.contexts import PlatformFetchProductListCtx
 from helpers import dependency
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.platform.product_fetch_controller import IProductFetchController
@@ -32,13 +32,13 @@ class _PlatformProductListParams(object):
     product_codes = []
     category = ''
 
-    @wg_async.wg_async
+    @th_async.th_async
     def setFields(self):
-        yield wg_async.wg_await(self.setCountry())
+        yield th_async.th_await(self.setCountry())
         raise AsyncReturn(None)
         return
 
-    @wg_async.wg_async
+    @th_async.th_async
     def setCountry(self):
         self.country = ''
         raise AsyncReturn(None)
@@ -139,7 +139,7 @@ class ProductsFetchController(IProductFetchController):
     def isUndefined(self):
         return self._fetchResult.isUndefined
 
-    @wg_async.wg_async
+    @th_async.th_async
     def getProducts(self, showWaiting=True):
         _logger.debug('Trying to fetch products')
         if self._fetchResult.isProductsReady:
@@ -149,12 +149,12 @@ class ProductsFetchController(IProductFetchController):
             Waiting.show('loadingData')
         self._fetchResult.reset()
         params = self.platformParams()
-        yield wg_async.wg_await(params.setFields())
-        requestSuccess, productsData = yield wg_async.await_callback(partial(self._requestProducts, params))()
+        yield th_async.th_await(params.setFields())
+        requestSuccess, productsData = yield th_async.await_callback(partial(self._requestProducts, params))()
         if requestSuccess and productsData:
             _logger.debug('Products request has been successfully processed. Downloading additional data')
             self._createDescriptors(productsData)
-            yield wg_async.await_callback(partial(self.__downloader.download, self._fetchResult.products))()
+            yield th_async.await_callback(partial(self.__downloader.download, self._fetchResult.products))()
             self._fetchResult.setProcessed()
         else:
             self._fetchResult.setFailed()

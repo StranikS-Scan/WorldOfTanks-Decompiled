@@ -50,7 +50,7 @@ class GraphicsOptimizationManager(GraphicsOptimizationManagerMeta):
     def __init__(self, config=None):
         super(GraphicsOptimizationManager, self).__init__()
         self.__idsGenerator = Int32IDGenerator()
-        self.__optimizer = GUI.WGUIOptimizer()
+        self.__optimizer = GUI.UIOptimizer()
         self.__cache = {}
         self.__isUiVisible = True
         self.__config = config or {}

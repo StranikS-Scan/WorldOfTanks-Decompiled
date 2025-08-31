@@ -30,8 +30,9 @@ from gui.shared.formatters import icons
 from gui import makeHtmlString
 from gui.impl import backport
 from gui.impl.gen import R
+from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IAnonymizerController, ILimitedUIController
+from skeletons.gui.game_control import IAnonymizerController, ILimitedUIController, IWhiteTigerController
 from skeletons.gui.lobby_context import ILobbyContext
 from uilogging.limited_ui.constants import LimitedUILogItem, LimitedUILogScreenParent
 from uilogging.limited_ui.loggers import LimitedUILogger
@@ -68,6 +69,8 @@ class SettingsWindow(SettingsWindowMeta):
     settingsCore = dependency.descriptor(ISettingsCore)
     lobbyContext = dependency.descriptor(ILobbyContext)
     limitedUIController = dependency.descriptor(ILimitedUIController)
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    __wtController = dependency.descriptor(IWhiteTigerController)
 
     def __init__(self, ctx=None):
         super(SettingsWindow, self).__init__()
@@ -147,14 +150,16 @@ class SettingsWindow(SettingsWindowMeta):
          {'label': SETTINGS.FEEDBACK_TAB_QUESTSPROGRESS,
           'linkage': VIEW_ALIAS.FEEDBACK_QUESTS_PROGRESS}]
         self.as_setFeedbackDataProviderS(dataVO)
+        isActive = self.__wtController.isEventPrbActive() or self.sessionProvider.arenaVisitor.gui.isWhiteTigerBattle()
+        self.as_setTigerEventS(isActive)
         if self.__redefinedKeyModeEnabled:
-            BigWorld.wg_setRedefineKeysMode(True)
+            BigWorld.setRedefineKeysMode(True)
         self.__currentSettings = self.params.getMonitorSettings()
         self._update()
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         self.anonymizerController.onStateChanged += self.__refreshSettings
         g_guiResetters.add(self.onRecreateDevice)
-        BigWorld.wg_setAdapterOrdinalNotifyCallback(self.onRecreateDevice)
+        BigWorld.setAdapterOrdinalNotifyCallback(self.onRecreateDevice)
 
     def _update(self):
         self.as_setDataS(self.__getSettings())
@@ -168,9 +173,9 @@ class SettingsWindow(SettingsWindowMeta):
 
     def _dispose(self):
         if self.__redefinedKeyModeEnabled:
-            BigWorld.wg_setRedefineKeysMode(False)
+            BigWorld.setRedefineKeysMode(False)
         g_guiResetters.discard(self.onRecreateDevice)
-        BigWorld.wg_setAdapterOrdinalNotifyCallback(None)
+        BigWorld.setAdapterOrdinalNotifyCallback(None)
         self.stopVoicesPreview()
         self.stopAltBulbPreview()
         self.stopArtyBulbPreview()
@@ -195,7 +200,6 @@ class SettingsWindow(SettingsWindowMeta):
 
     def onSettingsChange(self, settingName, settingValue):
         settingValue = flashObject2Dict(settingValue)
-        LOG_DEBUG('onSettingsChange', settingName, settingValue)
         self.params.preview(settingName, settingValue)
 
     def applySettings(self, settings, isCloseWnd):

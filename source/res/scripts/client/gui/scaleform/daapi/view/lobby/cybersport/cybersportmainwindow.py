@@ -122,8 +122,8 @@ class CyberSportMainWindow(CyberSportMainWindowMeta):
     def onUnitAutoSearchSuccess(self, acceptDelta):
         self.__currentState = CYBER_SPORT_ALIASES.AUTO_SEARCH_CONFIRMATION_STATE
         self.__initState(acceptDelta=acceptDelta)
-        from BigWorld import WGWindowsNotifier
-        WGWindowsNotifier.onInvitation()
+        from BigWorld import WindowsNotifier
+        WindowsNotifier.onInvitation()
 
     def onUnitBrowserErrorReceived(self, errorCode):
         if errorCode == UNIT_BROWSER_ERROR.ACCEPT_TIMEOUT:

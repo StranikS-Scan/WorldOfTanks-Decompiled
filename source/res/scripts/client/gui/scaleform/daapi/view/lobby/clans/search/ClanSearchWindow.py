@@ -8,7 +8,7 @@ from gui.clans import formatters as clans_fmts
 from gui.clans.settings import CLIENT_CLAN_RESTRICTIONS as _CCR
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.wgcg.settings import WebRequestDataType
+from gui.clientgw.settings import WebRequestDataType
 from gui.Scaleform.daapi.view.meta.ClanSearchWindowMeta import ClanSearchWindowMeta
 from gui.Scaleform.framework.entities.DAAPIDataProvider import ListDAAPIDataProvider
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
@@ -42,7 +42,7 @@ class ClanSearchWindow(ClanSearchWindowMeta, ClanListener):
         super(ClanSearchWindow, self).__init__()
         self.__clanFinder = ClanFinder(self.webCtrl, None, _SEARCH_LIMIT)
         self.__clanFinder.init()
-        self._cooldown = CooldownHelper(self.__coolDownRequests, self._onCooldownHandle, CoolDownEvent.WGCG)
+        self._cooldown = CooldownHelper(self.__coolDownRequests, self._onCooldownHandle, CoolDownEvent.CLIENTGW)
         self.__isFirstPageRequested = False
         self.__invitesLimitReached = False
         return

@@ -30,7 +30,7 @@ from helpers import dependency, log
 from messenger import MessengerEntry
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gameplay import IGameplayLogic
-from wg_async import wg_async, wg_await
+from th_async import th_async, th_await
 from gui.impl.dialogs import dialogs
 from system_events import g_systemEvents
 from helpers import styles_perf_toolset
@@ -38,6 +38,8 @@ try:
     locale.setlocale(locale.LC_TIME, '')
 except locale.Error:
     LOG_CURRENT_EXCEPTION()
+
+sys.setrecursionlimit(sys.getrecursionlimit() + 1000)
 
 class ServiceLocator(object):
     connectionMgr = dependency.descriptor(IConnectionManager)
@@ -177,7 +179,7 @@ def start():
                     ServiceLocator.gameplay.start()
                 except Exception:
                     LOG_CURRENT_EXCEPTION()
-                    BigWorld.wg_writeToStdOut('Failed to run scripted test, Python exception was thrown, see python.log')
+                    BigWorld.writeToStdOut('Failed to run scripted test, Python exception was thrown, see python.log')
                     BigWorld.quit()
 
             elif sys.argv[1] == 'offlineTest':
@@ -227,7 +229,7 @@ def fini():
     LOG_DEBUG('fini')
     if g_replayCtrl is not None:
         g_replayCtrl.stop(isDestroyed=True)
-    BigWorld.wg_setScreenshotNotifyCallback(None)
+    BigWorld.setScreenshotNotifyCallback(None)
     g_critMemHandler.restore()
     g_critMemHandler.destroy()
     if constants.IS_CAT_LOADED:
@@ -239,6 +241,8 @@ def fini():
     ServiceLocator.connectionMgr.onConnected -= onConnected
     ServiceLocator.connectionMgr.onDisconnected -= onDisconnected
     MessengerEntry.g_instance.fini()
+    from helpers import ValueTracker
+    ValueTracker.ValueTracker.fini()
     from helpers import EdgeDetectColorController
     if EdgeDetectColorController.g_instance is not None:
         EdgeDetectColorController.g_instance.destroy()
@@ -387,7 +391,7 @@ def handleKeyEvent(event):
         if inputHandler is not None:
             if inputHandler.handleKeyEvent(event):
                 return True
-        for handler in g_keyEventHandlers:
+        for handler in g_keyEventHandlers.copy():
             try:
                 if handler(event):
                     return True
@@ -435,10 +439,10 @@ def getAuthRealm():
     return constants.AUTH_REALM
 
 
-@wg_async
+@th_async
 def requestQuit():
-    BigWorld.WGWindowsNotifier.onBattleBeginning()
-    isOk = yield wg_await(dialogs.quitGame())
+    BigWorld.WindowsNotifier.onBattleBeginning()
+    isOk = yield th_await(dialogs.quitGame())
     if isOk:
         BigWorld.quit()
 
@@ -458,7 +462,7 @@ def expandMacros(line):
     return re.sub(patt, repl, line)
 
 
-def wg_onChunkLoad(spaceID, chunkID, numDestructibles, isOutside):
+def onChunkLoad(spaceID, chunkID, numDestructibles, isOutside):
     if not isOutside:
         return
     if spaceID != AreaDestructibles.g_destructiblesManager.getSpaceID():
@@ -466,14 +470,14 @@ def wg_onChunkLoad(spaceID, chunkID, numDestructibles, isOutside):
     AreaDestructibles.g_destructiblesManager.onChunkLoad(chunkID, numDestructibles)
 
 
-def wg_onChunkLoose(spaceID, chunkID, isOutside):
+def onChunkLoose(spaceID, chunkID, isOutside):
     if not isOutside:
         return
     if spaceID == AreaDestructibles.g_destructiblesManager.getSpaceID():
         AreaDestructibles.g_destructiblesManager.onChunkLoose(chunkID)
 
 
-def wg_playModuleDestructionAnimation(chunkID, destrIndex, moduleIndex, isShotDamage, isHavokSpawnedDestructibles):
+def playModuleDestructionAnimation(chunkID, destrIndex, moduleIndex, isShotDamage, isHavokSpawnedDestructibles):
     AreaDestructibles.g_destructiblesManager.onPlayModuleDestructionAnimation(chunkID, destrIndex, moduleIndex, isShotDamage, isHavokSpawnedDestructibles)
 
 

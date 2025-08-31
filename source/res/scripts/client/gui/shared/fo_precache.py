@@ -8,21 +8,21 @@ if _IS_ENABLED:
     def add(path, forced=False):
         result = True
         try:
-            result = BigWorld.wg_precacheScaleformResource(path, forced)
+            result = BigWorld.precacheScaleformResource(path, forced)
             if result:
                 LOG_DEBUG('Resource is added to precache', path)
         except AttributeError:
-            LOG_ERROR('BigWorld package does not include function wg_precacheScaleformResource')
+            LOG_ERROR('BigWorld package does not include function precacheScaleformResource')
 
         return result
 
 
     def clear(path=''):
         try:
-            BigWorld.wg_eraseScaleformResFromCache(path)
+            BigWorld.eraseScaleformResFromCache(path)
             LOG_DEBUG('Resource(s) is(are) cleared from precache', path)
         except AttributeError:
-            LOG_ERROR('BigWorld package does not include function wg_eraseScaleformResFromCache')
+            LOG_ERROR('BigWorld package does not include function eraseScaleformResFromCache')
 
 
 else:

@@ -62,7 +62,7 @@ class WebBridge(object):
 
     def __onDataServerReceivedData(self, token, spaID, socialNetwork):
         Waiting.show('login')
-        BigWorld.callback(0.1, BigWorld.wg_bringWindowToForeground)
+        BigWorld.callback(0.1, BigWorld.bringWindowToForeground)
         self.__loginParams['token'] = token
         self.__loginParams['account_id'] = spaID
         from Manager import SOCIAL_NETWORKS
@@ -71,7 +71,7 @@ class WebBridge(object):
         self.connectionMgr.setLastLogin(self.__loginParams['login'])
 
     def __getWgniParams(self, isExternal, isRegistration):
-        params = {'game': 'wot',
+        params = {'game': 'mt',
          'game_port': self.__dataServer.server_port,
          'remember': int(self.__preferences['remember_user'])}
         if isExternal:

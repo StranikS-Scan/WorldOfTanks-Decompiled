@@ -1211,7 +1211,7 @@ class ClanInviteWrapper(object):
         return self.getBattlesCount()
 
     @property
-    def awgExp(self):
+    def avgXP(self):
         return self.getBattleXpAvg()
 
     @property
@@ -1365,7 +1365,7 @@ class ClanPersonalInviteWrapper(object):
         return self.getBattleXpAvg()
 
     @property
-    def awgExp(self):
+    def avgXP(self):
         return self.getBattlesPerformanceAvg()
 
     @property

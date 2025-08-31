@@ -401,7 +401,7 @@ class VehCompareBasketParamsCache(object):
         else:
             self.__view.buildList([])
 
-    def __onVehCountChanged(self, changedData):
+    def __onVehCountChanged(self, changedData, _=None):
         if self._isDisposed:
             return
         if changedData.removedIDXs:

@@ -14,15 +14,18 @@ def getClientServicesConfig(manager):
     import helpers
     import uilogging
     import festivity
+    import prebattle_vehicle
     from vehicle_systems.appearance_cache import AppearanceCache
     from skeletons.connection_mgr import IConnectionManager
     from skeletons.map_activities import IMapActivities
     from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
     from skeletons.vehicle_appearance_cache import IAppearanceCache
+    from skeletons.prebattle_vehicle import IPrebattleVehicle
     manager.addInstance(IConnectionManager, connection_mgr.ConnectionManager(), finalizer='fini')
     manager.addInstance(IMapActivities, MapActivities.MapActivities(), finalizer='destroy')
     manager.addInstance(IBattleDynamicObjectsCache, dyn_objects_cache.BattleDynamicObjectsCache(), finalizer='destroy')
     manager.addInstance(IAppearanceCache, AppearanceCache(), finalizer='clear')
+    manager.addInstance(IPrebattleVehicle, prebattle_vehicle.PrebattleVehicle(), finalizer='fini')
     manager.addConfig(account_helpers.getAccountHelpersConfig)
     manager.addConfig(gameplay.getGameplayConfig)
     manager.addConfig(festivity.getFestivityConfig)

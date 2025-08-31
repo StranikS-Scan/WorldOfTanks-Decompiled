@@ -3,7 +3,7 @@
 import json
 import logging
 import typing
-from wg_async import wg_async, wg_await
+from th_async import th_async, th_await
 from Event import Event
 from gui.game_control.reactive_comm import Subscription
 from gui.resource_well.resource_well_helpers import getNumberChannelName
@@ -61,7 +61,7 @@ class ResourceWellNumberRequester(object):
     def isDataAvailable(self):
         return self.__remainingValues is not None or self.__initialValues is not None
 
-    @wg_async
+    @th_async
     def __subscribe(self):
         channelName = self.__getChannelName()
         _logger.debug('Trying to subscribe channel: <%s>', channelName)
@@ -73,7 +73,7 @@ class ResourceWellNumberRequester(object):
             return
         else:
             self.__subscription = Subscription(channelName)
-            status = yield wg_await(self.__reactiveCommunication.subscribeToChannel(self.__subscription))
+            status = yield th_await(self.__reactiveCommunication.subscribeToChannel(self.__subscription))
             _logger.debug('Subscription status for channel <%s>: %s', channelName, status)
             if status:
                 self.__subscription.onClosed += self.__onClosed

@@ -3,7 +3,7 @@
 WEEKLY_REWARD_TAG = 'weekly'
 MONTHLY_REWARD_TAG = 'monthly'
 RENT_REWARD_TAG = 'streak_periodic_rent'
-MIN_ORIGINAL_XP = 350
+MIN_ORIGINAL_XP = 250
 PERIODIC_SKIP_DAY_TOKEN = 'play_streak:skip_day:periodic'
 ACCUMULATIVE_SKIP_DAY_TOKEN = 'play_streak:skip_day:accumulative'
 STREAK_LENGTH_TOKEN = 'play_streak:progress'

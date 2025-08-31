@@ -26,8 +26,6 @@ from gui.prb_control.items import ValidationResult
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, PRE_QUEUE_RESTRICTION, SELECTOR_BATTLE_TYPES
 from gui.ranked_battles import ranked_helpers
 from gui.ranked_battles.constants import ENTITLEMENT_EVENT_TOKEN, FINAL_LEADER_QUEST, FINAL_QUEST_PATTERN, MAX_GROUPS_IN_DIVISION, NOT_IN_LEAGUES_QUEST, STANDARD_POINTS_COUNT, YEAR_AWARDS_ORDER, YEAR_AWARD_SELECTABLE_OPT_DEVICE_PREFIX, YEAR_POINTS_TOKEN, YEAR_STRIPE_CLIENT_TOKEN, YEAR_STRIPE_SERVER_TOKEN, ZERO_RANK_ID
-from gui.ranked_battles.ranked_builders.postbattle_awards_vos import AwardBlock
-from gui.ranked_battles.ranked_formatters import getRankedAwardsFormatter
 from gui.ranked_battles.ranked_helpers.sound_manager import RankedSoundManager, Sounds
 from gui.ranked_battles.ranked_helpers.stats_composer import RankedBattlesStatsComposer
 from gui.ranked_battles.ranked_helpers.web_season_provider import RankedWebSeasonProvider, UNDEFINED_LEAGUE_ID, UNDEFINED_WEB_INFO
@@ -35,7 +33,6 @@ from gui.ranked_battles.ranked_helpers.year_position_provider import RankedYearP
 from gui.ranked_battles.ranked_models import BattleRankInfo, Division, Rank, RankChangeStates, RankData, RankProgress, RankState, RankStep, RankedAlertData, RankedSeason, ShieldStatus
 from gui.selectable_reward.common import RankedSelectableRewardManager
 from gui.selectable_reward.constants import SELECTABLE_BONUS_NAME
-from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.event_items import RankedQuest
 from gui.server_events.events_helpers import EventInfoModel
 from gui.shared import EVENT_BUS_SCOPE, event_dispatcher, events, g_eventBus
@@ -661,11 +658,9 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         return {value.getQualificationBattlesCount():value for key, value in qualificationQuests.iteritems() if value.isQualificationQuest()}
 
     def awardWindowShouldBeShown(self, rankChangeInfo):
-        if rankChangeInfo.prevAccRank == ZERO_RANK_ID:
-            return True
-        if rankChangeInfo.accRank == self.getMaxPossibleRank():
-            return True
-        return True if rankChangeInfo.stepChanges > 0 and rankChangeInfo.prevMaxRank < rankChangeInfo.accRank else False
+        if rankChangeInfo.prevAccRank == self.getMaxPossibleRank():
+            return False
+        return False if rankChangeInfo.stepChanges <= 0 and rankChangeInfo.prevAccRank == ZERO_RANK_ID else True
 
     def clearRankedWelcomeCallback(self):
         self.__rankedWelcomeCallback = None
@@ -689,19 +684,19 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         season = self.getCurrentSeason()
         if season is None:
             return
+        elif not self.awardWindowShouldBeShown(rankedInfo):
+            return
         else:
             awardsSequence = []
             quests = self.__eventsCache.getRankedQuests(lambda q: q.isHidden() and q.isForRank() and q.getSeasonID() == season.getSeasonID())
-            formatter = getRankedAwardsFormatter(maxRewardsCount=6)
             for qID, qProgress in questsProgress.iteritems():
                 _, pPrev, pCur = qProgress
                 isCompleted = pCur.get('bonusCount', 0) - pPrev.get('bonusCount', 0) > 0
                 quest = quests.get(qID)
                 if quest is not None and quest.isForRank() and isCompleted:
-                    awardsSequence.append(AwardBlock(quest.getRank(), formatter.getFormattedBonuses(quest.getBonuses(), AWARDS_SIZES.BIG), qID))
+                    awardsSequence.extend(quest.getBonuses())
 
-            if awardsSequence:
-                event_dispatcher.showRankedAwardWindow(awardsSequence=awardsSequence, rankedInfo=rankedInfo)
+            event_dispatcher.showRankedPostbattleStatusWindow(rewards=awardsSequence, rankedInfo=rankedInfo)
             return
 
     def showRankedBattlePage(self, ctx):

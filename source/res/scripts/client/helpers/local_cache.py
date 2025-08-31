@@ -238,15 +238,15 @@ class ZipIO(RedirectIO):
 class CryptIO(RedirectIO):
 
     def _doRead(self, src):
-        return BigWorld.wg_ucpdata(src)
+        return BigWorld.ucpdata(src)
 
     def _doWrite(self, dst):
-        return BigWorld.wg_cpdata(dst)
+        return BigWorld.cpdata(dst)
 
 
 def makeFileLocalCachePath(space, tags, fileFormat='.dat'):
     p = os.path
-    prefsFilePath = unicode_from_utf8(BigWorld.wg_getPreferencesFilePath())[1]
+    prefsFilePath = unicode_from_utf8(BigWorld.getPreferencesFilePath())[1]
     dirPath = p.join(p.dirname(prefsFilePath), space)
     try:
         if not os.path.isdir(dirPath):

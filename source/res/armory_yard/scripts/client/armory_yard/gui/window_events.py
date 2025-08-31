@@ -3,7 +3,7 @@
 import logging
 import typing
 import WWISE
-from wg_async import wg_async
+from th_async import th_async
 from CurrentVehicle import HeroTankPreviewAppearance
 from frameworks.wulf import WindowFlags, WindowLayer, ViewFlags
 from gui.Scaleform.Waiting import Waiting
@@ -109,7 +109,7 @@ def showArmoryYardIntroWindow(closeCallback=None, parent=None, armoryYard=None, 
         _logger.error("Final reward isn't found. Please check reward config")
 
 
-@wg_async
+@th_async
 def showArmoryYardVehPostProgressionView(vehTypeCompDescr, exitEvent=None):
     from gui.impl.lobby.veh_post_progression.post_progression_intro import getPostProgressionIntroWindowProc
     intoProc = getPostProgressionIntroWindowProc()

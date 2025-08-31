@@ -4,11 +4,11 @@ import logging
 from BWUtil import AsyncReturn
 from Event import Event
 from adisp import adisp_process
-from wg_async import wg_async, await_callback
+from th_async import th_async, await_callback
 from gui.entitlements.entitlement_common import ENTITLEMENTS, iterConsumers
 from gui.entitlements.entitlement_model import AgateEntitlementsModel
-from gui.wgcg.agate.contexts import InventoryEntitlementsCtx
-from gui.wgcg.states import WebControllerStates
+from gui.clientgw.agate.contexts import InventoryEntitlementsCtx
+from gui.clientgw.states import WebControllerStates
 from helpers import dependency
 from shared_utils import nextTick
 from skeletons.gui.game_control import IEntitlementsController
@@ -67,7 +67,7 @@ class EntitlementsController(IEntitlementsController):
     def isCodesWasFailedInLastRequest(self, codes):
         return not self.__lastFailedEntitlements.isdisjoint(codes)
 
-    @wg_async
+    @th_async
     def forceUpdateCache(self, codes):
         result = yield await_callback(self.__sendRequest)(codes)
         raise AsyncReturn(result)

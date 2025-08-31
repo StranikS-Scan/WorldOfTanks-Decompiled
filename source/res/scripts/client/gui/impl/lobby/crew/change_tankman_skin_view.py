@@ -27,7 +27,7 @@ from items.components.crew_skins_constants import CREW_SKIN_PROPERTIES_MASKS, TA
 from skeletons.gui.game_control import IPlatoonController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from wg_async import wg_async, wg_await
+from th_async import th_async, th_await
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Array
 
@@ -141,7 +141,7 @@ class ChangeTankmanSkinView(ViewImpl):
         crewSkins[cardID] = viewedSkinsCount + newCount
         AccountSettings.setSettings(CREW_SKINS_VIEWED, crewSkins)
 
-    @wg_async
+    @th_async
     @args2params(int, bool)
     def __onCardSelected(self, cardID, isSkin):
         if isSkin:
@@ -156,7 +156,7 @@ class ChangeTankmanSkinView(ViewImpl):
                     cardData = item
                     break
 
-            result = yield wg_await(showDocumentChangeDialog(self.__tankmanID, cardData))
+            result = yield th_await(showDocumentChangeDialog(self.__tankmanID, cardData))
             result, tankmanIcon = result.result
             self.__checkResultData(result, False, tankmanIcon.id, tankmanIcon.value)
         return

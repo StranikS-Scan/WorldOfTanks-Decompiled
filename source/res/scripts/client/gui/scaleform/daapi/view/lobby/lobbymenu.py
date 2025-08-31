@@ -6,7 +6,7 @@ from PlayerEvents import g_playerEvents as events
 from account_helpers.AccountSettings import AccountSettings, LOBBY_MENU_MANUAL_TRIGGER_SHOWN, LOBBY_MENU_BOOTCAMP_TRIGGER_SHOWN
 from account_helpers.counter_settings import getCountNewSettings
 from adisp import adisp_process
-from wg_async import wg_async, wg_await
+from th_async import th_async, th_await
 from gui import DialogsInterface, SystemMessages
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.meta.LobbyMenuMeta import LobbyMenuMeta
@@ -83,9 +83,9 @@ class LobbyMenu(LobbyMenuMeta):
         if isOk:
             self.gameplay.goToLoginByDisconnectRQ()
 
-    @wg_async
+    @th_async
     def quitClick(self):
-        isOk = yield wg_await(dialogs.quitGame(self.getParentWindow()))
+        isOk = yield th_await(dialogs.quitGame(self.getParentWindow()))
         if isOk:
             self.gameplay.quitFromGame()
 

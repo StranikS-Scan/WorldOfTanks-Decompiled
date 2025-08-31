@@ -3,6 +3,7 @@
 import time
 import BigWorld
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_WARNING
+from gui.referral_program import ScoresLimitReachedError
 from gui.shared.utils.decorators import ReprInjector
 from gui.wgnc.errors import ParseError, ValidationError
 from gui.wgnc.events import g_wgncEvents
@@ -128,6 +129,9 @@ class _WGNCProvider(object):
             return
         try:
             notID, ttl, actionsHolder, guiItemsHolder, proxyDataHolder = fromString(xmlString)
+        except ScoresLimitReachedError as e:
+            LOG_DEBUG('Notification skipped', e.message)
+            return
         except ParseError as e:
             LOG_ERROR('Can not parse notification', e.message, xmlString)
             return

@@ -59,7 +59,7 @@ from gui.shared.utils.scheduled_notifications import SimpleNotifier
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
 from gui.shop_sales_event.constants import TRADING_CARAVAN_REFILL_SEEN, TRADING_CARAVAN_REFILL_EVENT_TYPE
 from gui.custom_notifications.constants import CUSTOM_NOTIFICATIONS_SEEN, CUSTOM_NOTIFICATIONS_EVENT_TYPE
-from gui.wgcg.clan.contexts import GetClanInfoCtx
+from gui.clientgw.clan.contexts import GetClanInfoCtx
 from gui.wgnc import g_wgncEvents, g_wgncProvider, wgnc_settings
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
 from helpers import dependency, i18n, time_utils, int2roman
@@ -87,7 +87,7 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.system_messages import ISystemMessages
 from tutorial.control.context import GLOBAL_FLAG
 from tutorial.control.game_vars import getVehicleByIntCD
-from wg_async import wg_async, wg_await
+from th_async import th_async, th_await
 if typing.TYPE_CHECKING:
     from typing import List, Dict, Optional, Any, Type, Tuple
     from notification.NotificationsModel import NotificationsModel
@@ -1446,11 +1446,11 @@ class EmailConfirmationReminderListener(BaseReminderListener):
     def _createDecorator(self, _):
         return EmailConfirmationReminderMessageDecorator(self._getNotificationId(), backport.text(R.strings.messenger.serviceChannelMessages.emailConfirmationReminder.text()))
 
-    @wg_async
+    @th_async
     def __tryNotify(self, *args):
         if self.__bootCampController.isInBootcamp() or not self.__steamRegistrationCtrl.isSteamAccount:
             return
-        status = yield wg_await(self.__wgnpSteamAccCtrl.getEmailStatus())
+        status = yield th_await(self.__wgnpSteamAccCtrl.getEmailStatus())
         if not self.__bootCampController.isInBootcamp() and status.typeIs(StatusTypes.ADDED):
             self._notify()
 
@@ -2668,14 +2668,14 @@ class ParagonsListener(_NotificationListener):
         super(ParagonsListener, self).stop()
 
     def __subscribe(self):
-        self.__luiController.startObserve(LuiRules.PARAGONS_ENTRY_POINT, self.__updateIsLimitedUiRuleCompleted)
+        self.__luiController.startObserve(LuiRules.PARAGONS_NOTIFICATION, self.__updateIsLimitedUiRuleCompleted)
         self.__paragonsController.onSettingsChanged += self.__onProjectEnabledOrContinued
         self.__paragonsController.onSettingsChanged += self.__onProjectDisabledOrPaused
         self.__paragonsController.branches.onResettableBranchesChanged += self.__onResettableBranchAvailable
         self.__paragonsController.onParagonsUnlocksStateChanged += self.__onParagonsUnlocksStateChanged
 
     def __unsubscribe(self):
-        self.__luiController.stopObserve(LuiRules.PARAGONS_ENTRY_POINT, self.__updateIsLimitedUiRuleCompleted)
+        self.__luiController.stopObserve(LuiRules.PARAGONS_NOTIFICATION, self.__updateIsLimitedUiRuleCompleted)
         self.__paragonsController.onSettingsChanged -= self.__onProjectEnabledOrContinued
         self.__paragonsController.onSettingsChanged -= self.__onProjectDisabledOrPaused
         self.__paragonsController.branches.onResettableBranchesChanged -= self.__onResettableBranchAvailable
@@ -2701,12 +2701,12 @@ class ParagonsListener(_NotificationListener):
         return self.__paragonsController.isEnabled
 
     @property
-    def __isPausedOrLimitedUiIsNotCompleted(self):
-        return self.__isPaused or not self.__paragonsController.isLimitedUiRuleCompleted
+    def __isPausedOrLimitedUiParagonsNotificationRuleIsNotCompleted(self):
+        return self.__isPaused or not self.__paragonsController.isLimitedUiParagonsNotificationRuleCompleted
 
     @property
     def __isParagonsInvisible(self):
-        return not self.__isEnabled or self.__isPausedOrLimitedUiIsNotCompleted
+        return not self.__isEnabled or self.__isPausedOrLimitedUiParagonsNotificationRuleIsNotCompleted
 
     def __onProjectEnabledOrContinued(self, diff):
         projectIsContinuingWasShown = AccountSettings.getParagons(Paragons.PROJECT_IS_CONTINUING_NOTIFICATION_WAS_SHOWN)

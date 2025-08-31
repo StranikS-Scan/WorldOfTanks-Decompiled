@@ -1,0 +1,14 @@
+<EventPortal.def>
+  <Parent>	ClientSelectableCameraObject	</Parent>
+  <Properties>
+    <outlineModelName>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+      <Editor>
+        <Title>	Outline Model	</Title>
+        <ResourceType>	MODEL	</ResourceType>
+      </Editor>
+    </outlineModelName>
+  </Properties>
+</EventPortal.def>

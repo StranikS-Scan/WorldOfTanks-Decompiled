@@ -833,7 +833,7 @@ class TeamsOrControlsPointsPlugin(MarkerPlugin, ChatCommunicationComponent):
         return None if targetID not in self._markers or markerType != self.getMarkerType() else self._markers[targetID]
 
     def _getTerrainHeightAt(self, spaceID, x, z):
-        collisionWithTerrain = BigWorld.wg_collideSegment(spaceID, Math.Vector3(x, 1000.0, z), Math.Vector3(x, -1000.0, z), 128)
+        collisionWithTerrain = BigWorld.collideSegment(spaceID, Math.Vector3(x, 1000.0, z), Math.Vector3(x, -1000.0, z), 128)
         return collisionWithTerrain.closestPoint if collisionWithTerrain is not None else (x, 0, z)
 
     def __addBaseOrControlPointMarker(self, owner, position, baseOrControlPointID):
@@ -989,6 +989,26 @@ class BaseAreaMarkerPlugin(MarkerPlugin):
         else:
             self._parentObj.setMarkerMatrix(markerID, matrix)
             return
+
+    def invokeMarker(self, uniqueID, name, *args):
+        if uniqueID in self.__markers:
+            self._invokeMarker(self.__markers[uniqueID], name, *args)
+
+    def setMarkerRenderInfo(self, uniqueID, minScale, offset, innerOffset, cullDistance, boundsMinScale):
+        if uniqueID in self.__markers:
+            self._setMarkerRenderInfo(self.__markers[uniqueID], minScale, offset, innerOffset, cullDistance, boundsMinScale)
+
+    def setMarkerSticky(self, uniqueID, isSticky):
+        if uniqueID in self.__markers:
+            self._setMarkerSticky(self.__markers[uniqueID], isSticky)
+
+    def setMarkerLocationOffset(self, uniqueID, minYOffset, maxYOffset, distanceForMinYOffset, maxBoost, boostStart):
+        if uniqueID in self.__markers:
+            self._setMarkerLocationOffset(self.__markers[uniqueID], minYOffset, maxYOffset, distanceForMinYOffset, maxBoost, boostStart)
+
+    def setMarkerBoundEnabled(self, markerID, isBoundEnabled):
+        if markerID in self.__markers:
+            self._setMarkerBoundEnabled(self.__markers[markerID], isBoundEnabled)
 
 
 class AreaMarkerPlugin(BaseAreaMarkerPlugin):

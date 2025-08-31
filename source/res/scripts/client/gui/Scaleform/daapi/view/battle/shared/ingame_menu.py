@@ -7,7 +7,7 @@ from adisp import adisp_process
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.battle_control.battle_session import BattleExitResult
 from gui.Scaleform.genConsts.INGAMEMENU_CONSTANTS import INGAMEMENU_CONSTANTS
-from wg_async import wg_async, wg_await
+from th_async import th_async, th_await
 from gui import DialogsInterface, GUI_SETTINGS
 from gui import makeHtmlString
 from account_helpers.counter_settings import getCountNewSettings
@@ -27,7 +27,7 @@ from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IServerStatsController
 from gui.Scaleform.locale.MENU import MENU
-from gui.Scaleform.daapi.view.battle.shared.premature_leave import showLeaverAliveWindow, showExitWindow, showLeaverReplayWindow, showComp7LeaverAliveWindow
+from gui.Scaleform.daapi.view.battle.shared.premature_leave import showLeaverAliveWindow, showExitWindow, showLeaverReplayWindow, showComp7LeaverAliveWindow, showWhiteTigerLeaverAliveWindow
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 
 class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
@@ -127,18 +127,18 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
             self.fireEvent(events.TutorialEvent(events.TutorialEvent.STOP_TRAINING))
             self.destroy()
 
-    @wg_async
+    @th_async
     def __doLeaveArena(self):
         self.as_setVisibilityS(False)
         vInfo = self.sessionProvider.getArenaDP().getVehicleInfo()
         exitResult = BattleExitResult(self._getExitResult(), vInfo.player)
         if exitResult.isDeserter:
             isPlayerIGR = self.__isPlayerIGR(exitResult.playerInfo)
-            result = yield wg_await(self._showLeaverAliveWindow(isPlayerIGR))
+            result = yield th_await(self._showLeaverAliveWindow(isPlayerIGR))
         elif BattleReplay.isPlaying():
-            result = yield wg_await(showLeaverReplayWindow())
+            result = yield th_await(showLeaverReplayWindow())
         else:
-            result = yield wg_await(showExitWindow())
+            result = yield th_await(showExitWindow())
         if result:
             self.__doExit()
         else:
@@ -154,7 +154,9 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
     @staticmethod
     def _showLeaverAliveWindow(isPlayerIGR):
         arenaBonusType = BigWorld.player().arenaBonusType
-        return showComp7LeaverAliveWindow() if ARENA_BONUS_TYPE_CAPS.checkAny(arenaBonusType, ARENA_BONUS_TYPE_CAPS.COMP7) else showLeaverAliveWindow(isPlayerIGR)
+        if ARENA_BONUS_TYPE_CAPS.checkAny(arenaBonusType, ARENA_BONUS_TYPE_CAPS.COMP7):
+            return showComp7LeaverAliveWindow()
+        return showWhiteTigerLeaverAliveWindow() if ARENA_BONUS_TYPE_CAPS.checkAny(arenaBonusType, ARENA_BONUS_TYPE_CAPS.WHITE_TIGER) else showLeaverAliveWindow(isPlayerIGR)
 
     @staticmethod
     def __isPlayerIGR(playerInfo):

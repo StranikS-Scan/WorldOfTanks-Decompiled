@@ -2,11 +2,11 @@
 # Embedded file name: scripts/client/gui/gift_system/requesters/state_requester.py
 from adisp import adisp_async, adisp_process
 from gui.gift_system.requesters.base_requester import GiftSystemBaseRequester
-from gui.wgcg.gift_system.contexts import GiftSystemStateCtx
+from gui.clientgw.gift_system.contexts import GiftSystemStateCtx
 from helpers import dependency
 from helpers.time_utils import ONE_MINUTE
 from skeletons.gui.web import IWebController
-_WGCG_AVAILABILITY = 2
+_CLIENTGW_AVAILABILITY = 2
 _WGGG_AVAILABILITY = ONE_MINUTE
 
 class GiftSystemWebStateRequester(GiftSystemBaseRequester):
@@ -14,7 +14,7 @@ class GiftSystemWebStateRequester(GiftSystemBaseRequester):
     __webController = dependency.descriptor(IWebController)
 
     def _getInvokeDelay(self):
-        return _WGGG_AVAILABILITY if self.__webController.isAvailable() else _WGCG_AVAILABILITY
+        return _WGGG_AVAILABILITY if self.__webController.isAvailable() else _CLIENTGW_AVAILABILITY
 
     @adisp_async
     @adisp_process

@@ -3,7 +3,7 @@
 from gui.impl.common.fade_manager import FadeManager, DefaultFadingCover
 from story_mode.gui.story_mode_gui_constants import STORY_MODE_FADE_IN_DURATION, STORY_MODE_FADE_OUT_DURATION, IS_STORY_MODE_FADE_IN_OUT_ON
 from story_mode.skeletons.story_mode_fading_controller import IStoryModeFadingController
-from wg_async import wg_await, wg_async
+from th_async import th_await, th_async
 
 class StoryModeFadingCover(DefaultFadingCover):
 
@@ -21,21 +21,21 @@ class StoryModeFadingController(IStoryModeFadingController):
         super(StoryModeFadingController, self).__init__()
         self._managerByLayer = {}
 
-    @wg_async
+    @th_async
     def show(self, layerID):
         if not IS_STORY_MODE_FADE_IN_OUT_ON:
             return
         fadeManager = self._getFadeManager(layerID)
         if not fadeManager.isAnimating:
-            yield wg_await(fadeManager.show())
+            yield th_await(fadeManager.show())
 
-    @wg_async
+    @th_async
     def hide(self, layerID):
         if not IS_STORY_MODE_FADE_IN_OUT_ON:
             return
         fadeManager = self._getFadeManager(layerID)
         if fadeManager.isAnimating:
-            yield wg_await(fadeManager.hide())
+            yield th_await(fadeManager.hide())
 
     def onDisconnected(self):
         self._hideImmediately()

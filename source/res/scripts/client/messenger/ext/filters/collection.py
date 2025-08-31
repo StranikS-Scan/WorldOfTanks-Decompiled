@@ -68,7 +68,7 @@ class SpamFilter(IIncomingMessageFilter):
     def __init__(self):
         super(SpamFilter, self).__init__()
         try:
-            self._filter = BigWorld.WGSpamFilter()
+            self._filter = BigWorld.SpamFilter()
             self._filter.removeSpam('')
         except AttributeError:
             LOG_CURRENT_EXCEPTION()

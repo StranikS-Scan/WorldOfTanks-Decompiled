@@ -7,7 +7,7 @@ class PersonalMissionsVehicleViewModel(ViewModel):
     __slots__ = ('onCompare', 'onShowVehiclePreview', 'onShowInHangar', 'onBackToHangar', 'onMoveSpace', 'onStartMoving', 'onRestoreVehicle')
     ARG_VEHICLE_CD = 'vehicleCD'
 
-    def __init__(self, properties=3, commands=7):
+    def __init__(self, properties=4, commands=7):
         super(PersonalMissionsVehicleViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -18,21 +18,28 @@ class PersonalMissionsVehicleViewModel(ViewModel):
     def getVehicleType():
         return Pm3VehicleModel
 
+    def getIsFinalRewardsView(self):
+        return self._getBool(1)
+
+    def setIsFinalRewardsView(self, value):
+        self._setBool(1, value)
+
     def getCurrentVehicleCD(self):
-        return self._getNumber(1)
+        return self._getNumber(2)
 
     def setCurrentVehicleCD(self, value):
-        self._setNumber(1, value)
+        self._setNumber(2, value)
 
     def getOperationName(self):
-        return self._getString(2)
+        return self._getString(3)
 
     def setOperationName(self, value):
-        self._setString(2, value)
+        self._setString(3, value)
 
     def _initialize(self):
         super(PersonalMissionsVehicleViewModel, self)._initialize()
         self._addViewModelProperty('vehicle', Pm3VehicleModel())
+        self._addBoolProperty('isFinalRewardsView', False)
         self._addNumberProperty('currentVehicleCD', 0)
         self._addStringProperty('operationName', '')
         self.onCompare = self._addCommand('onCompare')

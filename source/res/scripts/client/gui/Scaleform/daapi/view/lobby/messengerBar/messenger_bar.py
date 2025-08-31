@@ -60,13 +60,14 @@ class _CompareBasketListener(object):
         self.__clearCartPopover()
         return
 
-    def __onChanged(self, changedData):
+    def __onChanged(self, changedData, settings=None):
         if changedData.addedCDs:
             cMgr = self.__getContainerManager()
             if not cMgr.isViewAvailable(WindowLayer.SUB_VIEW, {POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.VEHICLE_COMPARE}):
                 vehCmpData = self.comparisonBasket.getVehicleAt(changedData.addedIDXs[-1])
                 if not vehCmpData.isFromCache():
-                    if self.comparisonBasket.getVehiclesCount() == 1:
+                    hidePopover = settings.quiet if settings is not None else False
+                    if self.comparisonBasket.getVehiclesCount() == 1 and not hidePopover:
                         self.__view.as_openVehicleCompareCartPopoverS(True)
                     else:
                         vehicle = self.itemsCache.items.getItemByCD(vehCmpData.getVehicleCD())
@@ -76,6 +77,7 @@ class _CompareBasketListener(object):
                          'vehType': vehTypeIcon})
         if changedData.addedCDs or changedData.removedCDs:
             self.__updateBtnVisibility()
+        return
 
     def __updateBtnVisibility(self):
         isButtonVisible = self.__currentCartPopover is not None or self.comparisonBasket.getVehiclesCount() > 0
@@ -144,6 +146,7 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
         self._referralCtrl.onReferralProgramUpdated += self.__onReferralProgramUpdated
         self._referralCtrl.onPointsChanged += self.__onPointsChanged
         self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
+        self._limitedUIController.startObserve(LuiRules.CHANNELS, self.__updateChannelsBtn)
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.startGlobalListening()
         self.as_setInitDataS({'channelsHtmlIcon': backport.image(R.images.gui.maps.icons.messenger.iconChannels()),
@@ -160,6 +163,7 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
         sessionStatsSettings = SessionStatsSettingsController().getSettings()
         self.__sessionStatsBtnOnlyOnceHintShow = not sessionStatsSettings[SESSION_STATS.ONLY_ONCE_HINT_SHOWN_FIELD]
         self.__updateSessionStatsBtn()
+        self.__updateChannelsBtn()
 
     def _dispose(self):
         self.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -169,6 +173,7 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
         self._referralCtrl.onReferralProgramEnabled -= self.__onReferralProgramEnabled
         self._referralCtrl.onPointsChanged -= self.__onPointsChanged
         self.stopGlobalListening()
+        self._limitedUIController.stopObserve(LuiRules.CHANNELS, self.__updateChannelsBtn)
         super(MessengerBar, self)._dispose()
 
     def __onReferralProgramEnabled(self):
@@ -248,3 +253,7 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
             SessionStatsSettingsController().setSettings(sessionStatsSettings)
         self.__sessionStatsBtnOnlyOnceHintShow = False
         self.__updateSessionStatsHint(self.__sessionStatsBtnOnlyOnceHintShow)
+
+    def __updateChannelsBtn(self, *_):
+        visible = self._limitedUIController.isRuleCompleted(LuiRules.SESSION_STATS)
+        self.as_setChannelButtonVisibleS(visible)

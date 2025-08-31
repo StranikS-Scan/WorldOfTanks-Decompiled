@@ -104,7 +104,7 @@ class ModelStickers(object):
         self.__toPartRootMatrix = math_utils.createIdentityMatrix()
         self.__parentNode = None
         self.__isDamaged = False
-        self.__stickerModel = BigWorld.WGStickerModel(spaceID)
+        self.__stickerModel = BigWorld.StickerModel(spaceID)
         self.__stickerModel.setLODDistance(vDesc.type.emblemsLodDist)
         return
 

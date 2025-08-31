@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/paragons/select_rewards_view.py
 import functools
 import logging
-import wg_async
+import th_async
 from adisp import adisp_process
 from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags, ViewStatus
 from gui.Scaleform.Waiting import Waiting
@@ -61,8 +61,8 @@ class SelectRewardsView(ViewImpl):
         self.__levelID = levelID
         self.__entitlementID = entitlementID
         self.__tooltipData = {}
-        self.__asyncScope = wg_async.AsyncScope()
-        self.__asyncEvent = wg_async.AsyncEvent(scope=self.__asyncScope)
+        self.__asyncScope = th_async.AsyncScope()
+        self.__asyncEvent = th_async.AsyncEvent(scope=self.__asyncScope)
         super(SelectRewardsView, self).__init__(settings)
 
     @property
@@ -101,10 +101,10 @@ class SelectRewardsView(ViewImpl):
     def __onClose(self):
         self.destroyWindow()
 
-    @wg_async.wg_async
+    @th_async.th_async
     @replaceNoneKwargsModel
     def __fillRewards(self, model=None):
-        state, products = yield wg_async.await_callback(self.__getProducts)()
+        state, products = yield th_async.await_callback(self.__getProducts)()
         if self.viewStatus in (ViewStatus.DESTROYED, ViewStatus.DESTROYING):
             raise AsyncReturn(None)
         if state == ProductsStates.EMPTY:
@@ -135,19 +135,19 @@ class SelectRewardsView(ViewImpl):
         currentLevelID = self.__paragonsCtrl.paragons.getProgressByChapterID(self.__chapterID)
         return min(self.__selectableRewardsCtrl.entitlements.getEntitlementsByID(self.__entitlementID), int(currentLevelID >= self.__levelID), _MAX_AVAILABLE_TO_SELECT)
 
-    @wg_async.wg_async
+    @th_async.th_async
     @args2params(int)
     def __onClaim(self, rewardId):
         try:
             Waiting.show('paragons/selectReward')
             productCode = self.__rewards[rewardId]
             self.viewModel.requestStatus.setStatus(RequestStatus.INPROCESS)
-            isSuccess, _ = yield wg_async.await_callback(self.__buyProducts)(productCode)
+            isSuccess, _ = yield th_async.await_callback(self.__buyProducts)(productCode)
             if self.viewStatus in (ViewStatus.DESTROYED, ViewStatus.DESTROYING):
                 raise AsyncReturn(None)
             if isSuccess:
                 if not self.__asyncEvent.is_set():
-                    yield wg_async.wg_await(self.__asyncEvent.wait(), timeout=10)
+                    yield th_async.th_await(self.__asyncEvent.wait(), timeout=10)
                 if self.viewStatus not in (ViewStatus.DESTROYED, ViewStatus.DESTROYING):
                     self.destroyWindow()
             else:

@@ -13,6 +13,8 @@ from gui.server_events.event_items import PMOperation
 from gui.shared.event_dispatcher import showHangar
 from gui.shared.gui_items import Vehicle
 from personal_missions import PM_BRANCH
+from personal_missions_constants import PM3_FINAL_REWARD_VIEW_ID
+from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IPersonalMissionsController
 from helpers import dependency
@@ -26,14 +28,10 @@ from skeletons.gui.shared import IItemsCache
 from helpers import int2roman, i18n
 from gui.impl.gen.view_models.views.lobby.personal_missions.pm3_operation_model import LastMissionStatus
 from gui.impl.gen.view_models.views.lobby.personal_missions.personal_missions_main_quests_view_model import PageViewIdEnum
-from gui.impl.lobby.personal_missions.personal_missions_window_events import showPersonalMissionsOperationWindow, showPersonalMissionsWebbrg, PM3_INFO_PAGE, showPersonalMissionsRewardsSelectionWindow, SERVER_SETTINGS_KEYS
+from gui.impl.lobby.personal_missions.personal_missions_window_events import showPersonalMissionsOperationWindow, showPersonalMissionsWebbrg, PM3_INFO_PAGE, showPersonalMissionsRewardsSelectionWindow, SERVER_SETTINGS_KEYS, showPersonalMissionsVehicleView
 from gui.server_events.pm3_constants import SOUNDS
 if typing.TYPE_CHECKING:
     import Event
-LAST_OPERATION = {'id': 11,
- 'tankLevel': 11,
- 'tankType': 'heavyTank',
- 'tankName': i18n.makeString('#personal_missions:operations/lastOperationTankName')}
 
 class PersonalMissionsOperationsView(ViewImpl):
     __slots__ = ()
@@ -154,27 +152,38 @@ class PersonalMissionsOperationsView(ViewImpl):
 
     def __getLastOperationStatus(self):
         operations = self.__eventsCache.getPersonalMissions().getOperationsForBranch(PM_BRANCH.PERSONAL_MISSION_3)
-        isFullCompleted = all((operation.isFullCompleted() for operation in operations.itervalues()))
-        if isFullCompleted:
+        operationsValues = operations.itervalues()
+        allDisabled = True
+        allFullCompleted = True
+        allCompleted = True
+        for op in operationsValues:
+            if not op.isDisabled():
+                allDisabled = False
+            if not op.isFullCompleted():
+                allFullCompleted = False
+            if not op.isCompleted():
+                allCompleted = False
+
+        if allDisabled:
+            return LastMissionStatus.DISABLED
+        if allFullCompleted:
             return LastMissionStatus.COMPLETED
-        isCompleted = all((operation.isCompleted() for operation in operations.itervalues()))
-        return LastMissionStatus.ACTIVE if isCompleted else LastMissionStatus.DISABLED
+        return LastMissionStatus.ACTIVE if allCompleted else LastMissionStatus.DISABLED
 
     def __updateLastOperation(self, model):
-        operationId = LAST_OPERATION['id']
-        model.setName(i18n.makeString('#personal_missions:operations/title%d' % operationId))
-        model.setStatus(LastMissionStatus.DEVELOPMENT)
-        model.setOperationId(operationId)
-        model.setLevel(int2roman(LAST_OPERATION['tankLevel']))
-        model.setVehicleName(LAST_OPERATION['tankName'])
-        model.setTypeIcon(LAST_OPERATION['tankType'])
-        model.setIsElite(True)
+        vehicle = first(self.__pm3Controller.getVehiclesForChampionQuestPM3())
+        model.setName(i18n.makeString('#personal_missions:operations/title%d' % PM3_FINAL_REWARD_VIEW_ID))
+        model.setStatus(self.__getLastOperationStatus())
+        model.setOperationId(PM3_FINAL_REWARD_VIEW_ID)
+        model.setLevel(int2roman(vehicle.level))
+        model.setVehicleName(vehicle.userName)
+        model.setTypeIcon(vehicle.type)
         model.setTotalQuests(len(self.__pm3Controller.getFinalQuests()))
         currentCompletedQuests = len(self.__pm3Controller.getFullCompletedFinalQuests())
         model.setCompletedQuests(currentCompletedQuests)
-        prevCompletedQuests = self.__getPrevCompletedQuests(operationId)
+        prevCompletedQuests = self.__getPrevCompletedQuests(PM3_FINAL_REWARD_VIEW_ID)
         model.setDelta(prevCompletedQuests)
-        self.__saveCompletedQuests(operationId, currentCompletedQuests)
+        self.__saveCompletedQuests(PM3_FINAL_REWARD_VIEW_ID, currentCompletedQuests)
 
     def __updateRewardsStatusModel(self):
         with self.viewModel.transaction() as model:
@@ -195,7 +204,10 @@ class PersonalMissionsOperationsView(ViewImpl):
 
     def __onOpenOperation(self, args):
         operationId = int(args.get('operationId', '8'))
-        showPersonalMissionsOperationWindow(PageViewIdEnum.QUESTS, operationId)
+        if operationId == PM3_FINAL_REWARD_VIEW_ID:
+            showPersonalMissionsVehicleView(operationId)
+        else:
+            showPersonalMissionsOperationWindow(PageViewIdEnum.QUESTS, operationId)
 
     def __onTakeRewards(self):
         showPersonalMissionsRewardsSelectionWindow()

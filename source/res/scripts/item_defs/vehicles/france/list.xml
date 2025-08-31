@@ -1147,19 +1147,6 @@
     <tags>	heavyTank role_HT_support private HD secret bob cannot_be_sold heavyTank2 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
     <level>	10	</level>
   </F10_AMX_50B_bob>
-  <F1038_Bat_Chatillon155_58_T>
-    <id>	35002	</id>
-    <userString>	#france_vehicles:F1038_Bat_Chatillon155_58_T	</userString>
-    <shortUserString>	#france_vehicles:F1038_Bat_Chatillon155_58_T_short	</shortUserString>
-    <description>	#france_vehicles:F1038_Bat_Chatillon155_58_T_descr	</description>
-    <shortDescriptionSpecial>	#france_vehicles:F1038_Bat_Chatillon155_58_T_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#france_vehicles:F1038_Bat_Chatillon155_58_T_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	SPG role_SPG spgOnlyArtyMode assaultSPG HD mediumSPG antifragmentationLining_medium_user earn_crystals special secret testTank fun_random	</tags>
-    <level>	10	</level>
-  </F1038_Bat_Chatillon155_58_T>
   <F131_Coutelas>
     <id>	31005	</id>
     <userString>	#france_vehicles:F131_Coutelas	</userString>
@@ -1183,9 +1170,43 @@
     <price>	25000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_support HD heavyTank2 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals special secret testTank	</tags>
+    <tags>	heavyTank role_HT_support HD heavyTank2 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals special	</tags>
     <level>	10	</level>
   </F133_Projet_57>
+  <F18_Bat_Chatillon25t_hound_TLXXL>
+    <id>	500	</id>
+    <userString>	#france_vehicles:F18_Bat_Chatillon25t_hound_TLXXL	</userString>
+    <shortUserString>	#france_vehicles:F18_Bat_Chatillon25t_hound_TLXXL_short	</shortUserString>
+    <description>	#france_vehicles:F18_Bat_Chatillon25t_hound_TLXXL_descr	</description>
+    <shortDescriptionSpecial>	#france_vehicles:F18_Bat_Chatillon25t_hound_TLXXL_short_special	</shortDescriptionSpecial>
+    <price>	6100000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank
+			role_MT_support
+			wt_hunter
+			event_battles
+			special
+			secret
+			HD
+			lockCrew
+			lockCrewSkills
+			lockOutfit
+			lockShells
+			lockDevices
+			cannot_be_sold
+			unrecoverable
+			earn_crystals
+			builtinAfterburning_wt_user
+			builtinShield_wt_user
+			builtinRepairkit_wt_user
+			builtinLargeMedkit_wt_user
+			builtinUnionStrength_wt_user
+			mode_hidden
+			hideStorage
+			hideCrew
+			noSortBuiltinEquipment	</tags>
+    <level>	10	</level>
+  </F18_Bat_Chatillon25t_hound_TLXXL>
   <F87_Batignolles-Chatillon_12t_FL>
     <id>	31008	</id>
     <userString>	#france_vehicles:F87_Batignolles-Chatillon_12t_FL	</userString>
@@ -1200,4 +1221,44 @@
     <tags>	lightTank role_LT_universal private epic_battles HD scout improvedVentilation_class3_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
     <level>	8	</level>
   </F87_Batignolles-Chatillon_12t_FL>
+  <F08_AMX_50_100_FL>
+    <id>	31009	</id>
+    <userString>	#france_vehicles:AMX_50_100_FL	</userString>
+    <shortUserString>	#france_vehicles:AMX_50_100_FL_short	</shortUserString>
+    <description>	#france_vehicles:AMX_50_100_descr	</description>
+    <shortDescriptionSpecial>	#france_vehicles:AMX_50_100_FL_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#france_vehicles:AMX_50_100_FL_long_special	</longDescriptionSpecial>
+    <price>	1	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	heavyTank role_HT_support private epic_battles HD heavyTank2 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	8	</level>
+  </F08_AMX_50_100_FL>
+  <F133_Projet_57_Ampere>
+    <id>	31010	</id>
+    <userString>	#france_vehicles:F133_Projet_57_Ampere	</userString>
+    <shortUserString>	#france_vehicles:F133_Projet_57_Ampere_short	</shortUserString>
+    <description>	#france_vehicles:F133_Projet_57_Ampere_descr	</description>
+    <shortDescriptionSpecial>	#france_vehicles:F133_Projet_57_Ampere_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#france_vehicles:F133_Projet_57_Ampere_long_special	</longDescriptionSpecial>
+    <price>	25000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_support HD heavyTank2 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals special lockOutfit	</tags>
+    <level>	10	</level>
+  </F133_Projet_57_Ampere>
+  <F68_AMX_Chasseur_de_char_46_02>
+    <id>	31011	</id>
+    <userString>	#france_vehicles:F68_AMX_Chasseur_de_char_46_02	</userString>
+    <shortUserString>	#france_vehicles:F68_AMX_Chasseur_de_char_46_02_short	</shortUserString>
+    <description>	#france_vehicles:F68_AMX_Chasseur_de_char_46_02_descr	</description>
+    <shortDescriptionSpecial>	#france_vehicles:F68_AMX_Chasseur_de_char_46_02_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#france_vehicles:F68_AMX_Chasseur_de_char_46_02_long_special	</longDescriptionSpecial>
+    <price>	11000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_support HD mediumTank1 improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank	</tags>
+    <level>	8	</level>
+  </F68_AMX_Chasseur_de_char_46_02>
 </list.xml>

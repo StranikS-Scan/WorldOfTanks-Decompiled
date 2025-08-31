@@ -173,6 +173,10 @@
       <Type>	AVATAR_AMMO_VIEWS	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </ammoViews>
+    <ammoAdvanced>
+      <Type>	AVATAR_AMMO_FOR_CELL	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </ammoAdvanced>
     <cp>
       <Type>	PYTHON	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
@@ -294,21 +298,12 @@
       <Arg>	UINT8	</Arg>
       <Arg>	INT16	</Arg>
       <Arg>	INT16	</Arg>
+      <Arg>	INT16	</Arg>
     </updateVehicleAmmo>
     <onSwitchViewpoint>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	VECTOR3	</Arg>
     </onSwitchViewpoint>
-    <addArtilleryShotZone>
-      <Arg>	UINT64	</Arg>
-      <Arg>	FLOAT32	</Arg>
-      <Arg>	VECTOR3	</Arg>
-      <Arg>	FLOAT32	</Arg>
-      <Arg>	FLOAT32	</Arg>
-    </addArtilleryShotZone>
-    <removeArtilleryShotZone>
-      <Arg>	UINT64	</Arg>
-    </removeArtilleryShotZone>
     <onBootcampEvent>
       <Arg>	ARRAY	  <of>	UINT64	</of>
       </Arg>
@@ -586,6 +581,11 @@
       <Exposed>	OWN_CLIENT	</Exposed>
       <Arg>	UINT16	</Arg>
     </activateEquipment>
+    <activateVehicleEquipment>
+      <Exposed>	OWN_CLIENT	</Exposed>
+      <Arg>	UINT16	</Arg>
+      <Arg>	STRING	</Arg>
+    </activateVehicleEquipment>
     <setEquipmentApplicationPoint>
       <Exposed>	OWN_CLIENT	</Exposed>
       <Arg>	UINT16	</Arg>

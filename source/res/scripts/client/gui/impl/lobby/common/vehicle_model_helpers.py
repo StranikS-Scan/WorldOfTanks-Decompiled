@@ -10,7 +10,7 @@ if typing.TYPE_CHECKING:
     from typing import Optional, Iterable
 
 def fillVehicleModel(model, vehicleItem, tags=None):
-    model.setIsPremium(vehicleItem.isPremium or vehicleItem.isElite)
+    model.setIsPremium((vehicleItem.isPremium or vehicleItem.isElite) and not vehicleItem.isEvent)
     model.setName(vehicleItem.descriptor.type.shortUserString)
     model.setTechName(replaceHyphenToUnderscore(removeNationFromTechName(vehicleItem.name)))
     model.setTier(vehicleItem.level)

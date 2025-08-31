@@ -80,7 +80,7 @@ class RankedBattlesHeroAchievement(Quest, SeriesAchievement):
         return ((_AB.TOTAL, 'rankedBattlesHeroProgress'), (_AB.TOTAL, 'rankedBattlesHeroProgress'))
 
 
-class TacticalBreakthroughAchievement(SeriesAchievement):
+class TacticalBreakthroughAchievement(Deprecated, SeriesAchievement):
     __slots__ = ()
 
     def __init__(self, dossier, value=None):

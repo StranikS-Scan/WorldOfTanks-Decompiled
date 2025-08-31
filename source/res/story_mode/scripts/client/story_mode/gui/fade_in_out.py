@@ -13,7 +13,7 @@ from gui.shared.close_confiramtor_helper import CloseConfirmatorsHelper
 from helpers import dependency
 from story_mode.gui.shared.event import StoryModeViewReadyEvent
 from story_mode.skeletons.story_mode_fading_controller import IStoryModeFadingController
-from wg_async import wg_await, wg_async, BrokenPromiseError, await_callback, forwardAsFuture, AsyncEvent
+from th_async import th_await, th_async, BrokenPromiseError, await_callback, forwardAsFuture, AsyncEvent
 _logger = logging.getLogger(__name__)
 WAIT_FOR_EVENT_TIMEOUT = 10.0
 
@@ -61,7 +61,7 @@ class UseStoryModeFading(object):
     def __call__(self, func):
 
         @wraps(func)
-        @wg_async
+        @th_async
         def wrapper(*args, **kwargs):
             try:
                 asyncEvent = _AsyncEventWithTimout('Got time-out during the fade-in/fade-out animation.')
@@ -75,15 +75,15 @@ class UseStoryModeFading(object):
                 else:
                     g_eventBus.addListener(StoryModeViewReadyEvent.VIEW_READY, viewReadyHandler)
                 if not BattleReplay.isPlaying() and self._show:
-                    yield wg_await(self._fadeManager.show(self._layer))
+                    yield th_await(self._fadeManager.show(self._layer))
                 if adisp.isAsync(func):
                     yield await_callback(func)(*args, **kwargs)
                 else:
-                    yield wg_await(forwardAsFuture(func(*args, **kwargs)))
-                yield wg_await(asyncEvent.wait())
+                    yield th_await(forwardAsFuture(func(*args, **kwargs)))
+                yield th_await(asyncEvent.wait())
                 g_eventBus.removeListener(StoryModeViewReadyEvent.VIEW_READY, viewReadyHandler)
                 if not BattleReplay.isPlaying() and self._hide:
-                    yield wg_await(self._fadeManager.hide(self._layer))
+                    yield th_await(self._fadeManager.hide(self._layer))
             except BrokenPromiseError:
                 _logger.debug('%s got BrokenPromiseError during the fade-in/fade-out animation.', func)
 
@@ -97,16 +97,16 @@ class UseHeaderNavigationImpossible(object):
     def __call__(self, func):
 
         @wraps(func)
-        @wg_async
+        @th_async
         def wrapper(*args, **kwargs):
 
-            @wg_async
+            @th_async
             def confirmation():
                 raise AsyncReturn(False)
 
             confirmationHelper = CloseConfirmatorsHelper()
             confirmationHelper.start(confirmation)
-            yield wg_await(forwardAsFuture(func(*args, **kwargs)))
+            yield th_await(forwardAsFuture(func(*args, **kwargs)))
             confirmationHelper.stop()
 
         return wrapper

@@ -13,7 +13,7 @@ from story_mode.gui.shared.event_dispatcher import sendViewLoadedEvent
 from story_mode.skeletons.story_mode_controller import IStoryModeController
 from story_mode.uilogging.story_mode.consts import LogWindows, LogButtons
 from story_mode.uilogging.story_mode.loggers import WindowLogger
-from wg_async import wg_async, wg_await, forwardAsFuture
+from th_async import th_async, th_await, forwardAsFuture
 
 class CongratulationsView(ViewImpl):
     __slots__ = ('_onClose', '_isCloseVisible', '_uiLogger')
@@ -62,12 +62,12 @@ class CongratulationsView(ViewImpl):
         super(CongratulationsView, self)._finalize()
         return
 
-    @wg_async
+    @th_async
     def _closeHandler(self):
         self._uiLogger.logClick(LogButtons.CONTINUE)
         onClose = self._onClose
         if callable(onClose):
-            yield wg_await(forwardAsFuture(onClose()))
+            yield th_await(forwardAsFuture(onClose()))
         self.destroyWindow()
 
 

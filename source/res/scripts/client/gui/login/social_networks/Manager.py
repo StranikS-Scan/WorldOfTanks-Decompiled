@@ -37,7 +37,7 @@ class Manager(CredentialsLoginManager):
     def initiateSocialLogin(self, socialNetworkName, serverName, rememberUser, isRegistration):
         authMethod = CONNECTION_METHOD.TOKEN
         serverName = self._getHost(authMethod, serverName)
-        self._preferences['session'] = BigWorld.wg_cpsalt(self._preferences['session'])
+        self._preferences['session'] = BigWorld.cpsalt(self._preferences['session'])
         self._preferences['remember_user'] = rememberUser
         self._preferences['login_type'] = socialNetworkName
         self._preferences['server_name'] = serverName
@@ -45,7 +45,7 @@ class Manager(CredentialsLoginManager):
          'session': self._preferences['session'],
          'temporary': str(int(not rememberUser)),
          'auth_method': authMethod,
-         'requested_for': 'wot',
+         'requested_for': 'mt',
          'ip': '127.0.0.1'}
         return self.__webBridge.initiateLogin(loginParams, socialNetworkName != SOCIAL_NETWORKS.WGNI, isRegistration)
 

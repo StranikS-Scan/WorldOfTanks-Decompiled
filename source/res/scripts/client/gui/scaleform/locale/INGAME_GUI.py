@@ -53,6 +53,9 @@ class INGAME_GUI(object):
     PLAYER_ERRORS_EQUIPMENT_EXTINGUISHER_DOESNOTACTIVATED = '#ingame_gui:player_errors/equipment/extinguisher/doesNotActivated'
     PLAYER_ERRORS_EQUIPMENT_ORDER_NOTREADY = '#ingame_gui:player_errors/equipment/order/notReady'
     PLAYER_ERRORS_EQUIPMENT_POI_UNAVAILABLE = '#ingame_gui:player_errors/equipment/poi/unavailable'
+    PLAYER_MESSAGES_EQUIPMENT_WTEVENT_HEALTHATFULLHP = '#ingame_gui:player_messages/equipment/wtEvent/healthAtFullHP'
+    PLAYER_MESSAGES_EQUIPMENT_WTEVENT_HUNTERABILITIESDISABLED = '#ingame_gui:player_messages/equipment/wtEvent/hunterAbilitiesDisabled'
+    PLAYER_MESSAGES_EQUIPMENT_WTEVENT_NOACTIVESHIELDONBOSS = '#ingame_gui:player_messages/equipment/wtEvent/noActiveShieldOnBoss'
     PLAYER_MESSAGES_DEVICE_CRITICAL_AT_SHOT = '#ingame_gui:player_messages/DEVICE_CRITICAL_AT_SHOT'
     PLAYER_MESSAGES_DEVICE_DESTROYED_AT_SHOT = '#ingame_gui:player_messages/DEVICE_DESTROYED_AT_SHOT'
     PLAYER_MESSAGES_DEVICE_STARTED_FIRE_AT_SHOT = '#ingame_gui:player_messages/DEVICE_STARTED_FIRE_AT_SHOT'
@@ -238,7 +241,6 @@ class INGAME_GUI(object):
     SHELLS_KINDS_HOLLOW_CHARGE = '#ingame_gui:shells_kinds/HOLLOW_CHARGE'
     SHELLS_KINDS_HIGH_EXPLOSIVE = '#ingame_gui:shells_kinds/HIGH_EXPLOSIVE'
     SHELLS_KINDS_ARMOR_PIERCING = '#ingame_gui:shells_kinds/ARMOR_PIERCING'
-    SHELLS_KINDS_DELAYED_HE = '#ingame_gui:shells_kinds/DELAYED_HE'
     SHELLS_KINDS_ARMOR_PIERCING_HE = '#ingame_gui:shells_kinds/ARMOR_PIERCING_HE'
     SHELLS_KINDS_ARMOR_PIERCING_CR = '#ingame_gui:shells_kinds/ARMOR_PIERCING_CR'
     SHELLS_KINDS_ARMOR_PIERCING_FSDS = '#ingame_gui:shells_kinds/ARMOR_PIERCING_FSDS'
@@ -249,7 +251,6 @@ class INGAME_GUI(object):
     SHELLS_KINDS_PARAMS_PIERCINGPOWER = '#ingame_gui:shells_kinds/params/piercingPower'
     SHELLS_KINDS_PARAMS_SHOTSPEED = '#ingame_gui:shells_kinds/params/shotSpeed'
     SHELLS_KINDS_PARAMS_EXPLOSIONRADIUS = '#ingame_gui:shells_kinds/params/explosionRadius'
-    SHELLS_KINDS_PARAMS_EXPLOSIONDELAY = '#ingame_gui:shells_kinds/params/explosionDelay'
     SHELLS_KINDS_PARAMS_STUNDURATION = '#ingame_gui:shells_kinds/params/stunDuration'
     SHELLS_KINDS_PARAMS_FLAMEMAXDISTANCE = '#ingame_gui:shells_kinds/params/flameMaxDistance'
     DAMAGE_PANEL_DEVICES_TURRETROTATOR_NORMAL = '#ingame_gui:damage_panel/devices/turretRotator/normal'
@@ -640,10 +641,11 @@ class INGAME_GUI(object):
     EFFICIENCYRIBBONS_CANNONDMG = '#ingame_gui:efficiencyRibbons/CannonDmg'
     EFFICIENCYRIBBONS_AIRSTRIKEDMG = '#ingame_gui:efficiencyRibbons/AirstrikeDmg'
     EFFICIENCYRIBBONS_ARTILLERYDMG = '#ingame_gui:efficiencyRibbons/ArtilleryDmg'
+    EFFICIENCYRIBBONS_HEALTHADDED = '#ingame_gui:efficiencyRibbons/healthAdded'
+    EFFICIENCYRIBBONS_WTRECEIVEDCIRCUITOVERLOAD = '#ingame_gui:efficiencyRibbons/wtReceivedCircuitOverload'
     DAMAGELOG_SHELLTYPE_ARMOR_PIERCING = '#ingame_gui:damageLog/shellType/ARMOR_PIERCING'
     DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE = '#ingame_gui:damageLog/shellType/HIGH_EXPLOSIVE'
     DAMAGELOG_SHELLTYPE_FLAME = '#ingame_gui:damageLog/shellType/FLAME'
-    DAMAGELOG_SHELLTYPE_DELAYED_HE = '#ingame_gui:damageLog/shellType/DELAYED_HE'
     DAMAGELOG_SHELLTYPE_ARMOR_PIERCING_HE = '#ingame_gui:damageLog/shellType/ARMOR_PIERCING_HE'
     DAMAGELOG_SHELLTYPE_ARMOR_PIERCING_CR = '#ingame_gui:damageLog/shellType/ARMOR_PIERCING_CR'
     DAMAGELOG_SHELLTYPE_ARMOR_PIERCING_FSDS = '#ingame_gui:damageLog/shellType/ARMOR_PIERCING_FSDS'
@@ -1037,6 +1039,10 @@ class INGAME_GUI(object):
     PLAYER_ERRORS_THERMALVISION_COOLDOWN = '#ingame_gui:player_errors/thermalVision/cooldown'
     PLAYER_ERRORS_THERMALVISION_ALREADYACTIVATED = '#ingame_gui:player_errors/thermalVision/alreadyActivated'
     PLAYER_ERRORS_THERMALVISION_OVERTURNED = '#ingame_gui:player_errors/thermalVision/overturned'
+    WT_VEHICLE_MESSAGES_INCREASE_PLASMA_COUNT = '#ingame_gui:wt_vehicle_messages/INCREASE_PLASMA_COUNT'
+    WT_VEHICLE_MESSAGES_DECREASE_PLASMA_COUNT = '#ingame_gui:wt_vehicle_messages/DECREASE_PLASMA_COUNT'
+    WT_VEHICLE_MESSAGES_STUN_AREA_APPLIED = '#ingame_gui:wt_vehicle_messages/STUN_AREA_APPLIED'
+    WT_VEHICLE_MESSAGES_STUN_AREA_STOPPED = '#ingame_gui:wt_vehicle_messages/STUN_AREA_STOPPED'
     CHAT_SHORTCUTS_ENUM = (CHAT_SHORTCUTS_ATTENTION_TO_POSITION_GRIDINFO,
      CHAT_SHORTCUTS_ATTENTION_TO_POSITION,
      CHAT_SHORTCUTS_GOING_THERE_GRIDINFO,
@@ -1158,6 +1164,8 @@ class INGAME_GUI(object):
      EFFICIENCYRIBBONS_CANNONDMG,
      EFFICIENCYRIBBONS_AIRSTRIKEDMG,
      EFFICIENCYRIBBONS_ARTILLERYDMG,
+     EFFICIENCYRIBBONS_HEALTHADDED,
+     EFFICIENCYRIBBONS_WTRECEIVEDCIRCUITOVERLOAD,
      EFFICIENCYRIBBONS_ENEMYSECTORCAPTURED,
      EFFICIENCYRIBBONS_DESTRUCTIBLEDAMAGED,
      EFFICIENCYRIBBONS_DESTRUCTIBLEDESTROYED,

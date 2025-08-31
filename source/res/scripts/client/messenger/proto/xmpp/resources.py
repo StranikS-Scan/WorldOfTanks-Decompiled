@@ -4,19 +4,19 @@ from constants import IGR_TYPE, CURRENT_GAME_ID
 from gui.shared.utils.decorators import ReprInjector
 from messenger.m_constants import USER_TAG
 from messenger.proto.xmpp.gloox_constants import PRESENCES_ORDER, PRESENCE
-from messenger.proto.xmpp.wrappers import WGExtsInfo
+from messenger.proto.xmpp.wrappers import ExtsInfo
 from messenger import g_settings
 
-@ReprInjector.simple('priority', 'message', 'presence', ('__wgExts', 'exts'), ('__mucInfo', 'muc'))
+@ReprInjector.simple('priority', 'message', 'presence', ('__exts', 'exts'), ('__mucInfo', 'muc'))
 class Resource(object):
-    __slots__ = ('priority', 'message', 'presence', '__wgExts', '__mucInfo', '__order')
+    __slots__ = ('priority', 'message', 'presence', '__exts', '__mucInfo', '__order')
 
-    def __init__(self, priority=0, message=0, presence=PRESENCE.UNAVAILABLE, wgExts=None, mucInfo=None):
+    def __init__(self, priority=0, message=0, presence=PRESENCE.UNAVAILABLE, exts=None, mucInfo=None):
         super(Resource, self).__init__()
         self.priority = priority
         self.message = message
         self.presence = presence
-        self.__wgExts = wgExts or WGExtsInfo(0, '', None, None, None)
+        self.__exts = exts or ExtsInfo(0, '', None, None, None)
         self.__mucInfo = mucInfo
         self.__order = PRESENCES_ORDER.index(self.presence)
         return
@@ -25,31 +25,31 @@ class Resource(object):
         tags = set()
         if self.presence == PRESENCE.DND:
             tags.add(USER_TAG.PRESENCE_DND)
-        info = self.__wgExts.client
+        info = self.__exts.client
         if info:
             if info.igrID == IGR_TYPE.BASE:
                 tags.add(USER_TAG.IGR_BASE)
             elif info.igrID == IGR_TYPE.PREMIUM:
                 tags.add(USER_TAG.IGR_PREMIUM)
-        info = self.__wgExts.ban
+        info = self.__exts.ban
         if info and info.isBanned(game=CURRENT_GAME_ID):
             tags.add(USER_TAG.BAN_CHAT)
         return tags
 
-    def getWgDatabaseID(self):
-        return self.__wgExts.dbID
+    def getPlatformAccountDatabaseID(self):
+        return self.__exts.dbID
 
-    def getWgNickname(self):
-        return self.__wgExts.nickname
+    def getNickname(self):
+        return self.__exts.nickname
 
     def getClientInfo(self):
-        return self.__wgExts.client
+        return self.__exts.client
 
     def getClanInfo(self):
-        return self.__wgExts.clan
+        return self.__exts.clan
 
     def getBanInfo(self):
-        return self.__wgExts.ban
+        return self.__exts.ban
 
     def getMucInfo(self):
         return self.__mucInfo

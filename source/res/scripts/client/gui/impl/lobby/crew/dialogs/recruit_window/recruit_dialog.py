@@ -22,7 +22,7 @@ from sound_gui_manager import CommonSoundSpaceSettings
 from gui.server_events.pm_constants import SOUNDS as PM_SOUNDS, _SOUNDS_PRIORITIES as PM_SOUND_PRIORITIES
 from gui.impl.lobby.crew.crew_sounds import SOUNDS as CREW_SOUNDS
 from uilogging.crew.logging_constants import CrewDialogKeys
-from wg_async import AsyncEvent, wg_await, BrokenPromiseError, AsyncReturn, wg_async
+from th_async import AsyncEvent, th_await, BrokenPromiseError, AsyncReturn, th_async
 from gui.shared.gui_items.Tankman import NO_TANKMAN
 
 class BaseRecruitDialog(BaseCrewDialogTemplateView):
@@ -198,10 +198,10 @@ class QuestRecruitDialog(BaseRecruitDialog):
         if res.success and self.__vehicleSlotToUnpack != -1:
             self._waitForInventoryUpdate()
 
-    @wg_async
+    @th_async
     def _waitForInventoryUpdate(self):
         try:
-            yield wg_await(self.__inventoryUpdateEvent.wait())
+            yield th_await(self.__inventoryUpdateEvent.wait())
             super(QuestRecruitDialog, self)._setResult(DialogButtons.SUBMIT)
         except BrokenPromiseError:
             _logger.debug('%s has been destroyed without user decision', self)

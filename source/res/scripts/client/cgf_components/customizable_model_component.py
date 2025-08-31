@@ -60,7 +60,7 @@ class CustomizableModelManager(CGF.ComponentManager):
 
     @onAddedQuery(CustomizableModelAttachmentComponent, GenericComponents.DynamicModelComponent, CGF.No(ModelFashionAttachedComponent), CGF.GameObject, tickGroup='postHierarchyUpdateFinish')
     def onAddedModel(self, _, modelComponent, go):
-        self.__fashions[go.id] = BigWorld.WGBaseFashion()
+        self.__fashions[go.id] = BigWorld.BaseFashion()
         self.updateAttachmentFashions(go)
 
     @onAddedQuery(CGF.GameObject, GenericComponents.DynamicModelComponent, ModelFashionAttachedComponent)
@@ -178,7 +178,7 @@ class CustomizableModelManager(CGF.ComponentManager):
             c11nComponent = self.__createC11nComponent(gameObject, Vehicular.C11nAttachmentEditComponent, self.__fashions[gameObject.id], localTransform, newOutfitData)
         else:
             c11nComponent = self.__createC11nComponent(gameObject, Vehicular.C11nAttachmentComponent, self.__fashions[gameObject.id], localTransform, newOutfitData)
-        dirtEnabled = BigWorld.WG_dirtEnabled() and 'HD' in vDesc.type.tags and attachmentModelComponent.enableDirt
+        dirtEnabled = BigWorld.dirtEnabled() and 'HD' in vDesc.type.tags and attachmentModelComponent.enableDirt
         if dirtEnabled:
             if gameObject.findComponentByType(Vehicular.DirtComponent):
                 gameObject.removeComponentByType(Vehicular.DirtComponent)

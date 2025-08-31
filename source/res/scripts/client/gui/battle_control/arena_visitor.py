@@ -96,6 +96,7 @@ class _ArenaTypeSkeleton(object):
     roundLength = 0
     battleEndingSoonTime = 0
     battleEndWarningAppearTime = 0
+    battleEndWarningExtraAppearTime = 0
     battleEndWarningDuration = 0
     vehicleCamouflageKind = 0
 
@@ -250,6 +251,10 @@ class _ArenaTypeVisitor(IArenaVisitor):
     def getBattleEndWarningAppearTime(self):
         return self._arenaType.battleEndWarningAppearTime
 
+    @catch_attribute_exception(default=_ArenaTypeSkeleton.battleEndWarningExtraAppearTime)
+    def getBattleEndWarningExtraAppearTime(self):
+        return self._arenaType.battleEndWarningExtraAppearTime
+
     @catch_attribute_exception(default=_ArenaTypeSkeleton.battleEndWarningDuration)
     def getBattleEndWarningDuration(self):
         return self._arenaType.battleEndWarningDuration
@@ -278,6 +283,9 @@ class _ArenaGuiTypeVisitor(IArenaVisitor):
 
     def isEventBattle(self):
         return self._guiType == _GUI_TYPE.EVENT_BATTLES
+
+    def isWhiteTigerBattle(self):
+        return self._guiType == _GUI_TYPE.WHITE_TIGER
 
     def isMultiTeam(self):
         return self._guiType == _GUI_TYPE.FALLOUT_MULTITEAM
@@ -385,6 +393,9 @@ class _ArenaBonusTypeVisitor(IArenaVisitor):
 
     def hasInBattleUpgrade(self):
         return _CAPS.checkAny(self._bonusType, _CAPS.IN_BATTLE_UPGRADES)
+
+    def hasRoleExpSystem(self):
+        return _CAPS.checkAny(self._bonusType, _CAPS.ROLE_SYSTEM)
 
     def hasDogTag(self):
         return _CAPS.checkAny(self._bonusType, _CAPS.DOG_TAG)

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/achievements/edit_view.py
 import typing
 import SoundGroups
-import wg_async as future_async
+import th_async as future_async
 from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
 from adisp import adisp_process
 from constants import AchievementsLayoutStates, Configs
@@ -255,10 +255,10 @@ class EditView(ViewImpl):
         self.__fillOtherAchievements(model)
 
     @nextTick
-    @future_async.wg_async
+    @future_async.th_async
     def __onShowExitConfirm(self):
         self.__dialogType = self.__getConfirmDialogType()
-        result = yield future_async.wg_await(showDialog(dialogType=self.__dialogType, parent=self.getParentWindow()))
+        result = yield future_async.th_await(showDialog(dialogType=self.__dialogType, parent=self.getParentWindow()))
         isOK, data = result.result
         isCancel = data.get('isUserCancelAction', False)
         if self.__dialogType == DialogType.ERROR or isCancel:

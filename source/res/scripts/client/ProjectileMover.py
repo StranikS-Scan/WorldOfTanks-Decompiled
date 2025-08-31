@@ -183,10 +183,10 @@ class ProjectileMover(object):
         effectTypeStr = proj.get('effectMaterial', '') + 'Hit'
         p0 = Math.Vector3(position.x, 1000, position.z)
         p1 = Math.Vector3(position.x, -1000, position.z)
-        waterDist = BigWorld.wg_collideWater(p0, p1, False)
+        waterDist = BigWorld.collideWater(p0, p1, False)
         if waterDist > 0:
             waterY = p0.y - waterDist
-            testRes = BigWorld.wg_collideSegment(BigWorld.player().spaceID, p0, p1, 128)
+            testRes = BigWorld.collideSegment(BigWorld.player().spaceID, p0, p1, 128)
             staticY = testRes.closestPoint.y if testRes is not None else waterY
             if staticY < waterY and position.y - waterY <= 0.1:
                 shallowWaterDepth, rippleDiameter = proj['effectsDescr']['waterParams']
@@ -244,7 +244,7 @@ class ProjectileMover(object):
             return
 
     def __addWaterRipples(self, position, rippleDiameter, ripplesLeft):
-        BigWorld.wg_addWaterRipples(position, rippleDiameter)
+        BigWorld.addWaterRipples(position, rippleDiameter)
         if ripplesLeft > 0:
             BigWorld.callback(0, lambda : self.__addWaterRipples(position, rippleDiameter, ripplesLeft - 1))
 
@@ -291,7 +291,7 @@ def collideDynamicAndStatic(startPoint, endPoint, exceptIDs, collisionFlags=128,
     ignoreDynamicID = -1
     if exceptIDs:
         ignoreDynamicID = exceptIDs[0]
-    testRes = BigWorld.wg_collideDynamicStatic(BigWorld.player().spaceID, startPoint, endPoint, collisionFlags, ignoreDynamicID, -1 if not skipGun else TankPartNames.getIdx(TankPartNames.GUN), 0)
+    testRes = BigWorld.collideDynamicStatic(BigWorld.player().spaceID, startPoint, endPoint, collisionFlags, ignoreDynamicID, -1 if not skipGun else TankPartNames.getIdx(TankPartNames.GUN), 0)
     if testRes is not None:
         if testRes[1]:
             return (testRes[0], EntityCollisionData(testRes[2], testRes[3], testRes[4], True))
@@ -304,7 +304,7 @@ def collideDynamic(startPoint, endPoint, exceptIDs, skipGun=False):
     ignoreID = 0
     if exceptIDs:
         ignoreID = exceptIDs[0]
-    res = BigWorld.wg_collideDynamic(BigWorld.player().spaceID, startPoint, endPoint, ignoreID, -1 if skipGun else TankPartNames.getIdx(TankPartNames.GUN))
+    res = BigWorld.collideDynamic(BigWorld.player().spaceID, startPoint, endPoint, ignoreID, -1 if skipGun else TankPartNames.getIdx(TankPartNames.GUN))
     if res is not None:
         isVehicle = res[2] == ColliderTypes.VEHICLE_COLLIDER
         res = (res[0], EntityCollisionData(res[3], res[4], res[5], isVehicle))
@@ -312,7 +312,7 @@ def collideDynamic(startPoint, endPoint, exceptIDs, skipGun=False):
 
 
 def collideVehiclesAndStaticScene(startPoint, endPoint, vehicles, collisionFlags=128, skipGun=False):
-    testResStatic = BigWorld.wg_collideSegment(BigWorld.player().spaceID, startPoint, endPoint, collisionFlags)
+    testResStatic = BigWorld.collideSegment(BigWorld.player().spaceID, startPoint, endPoint, collisionFlags)
     testResDynamic = collideDynamic(startPoint, endPoint if testResStatic is None else testResStatic.closestPoint, vehicles, skipGun)
     if testResStatic is None and testResDynamic is None:
         return

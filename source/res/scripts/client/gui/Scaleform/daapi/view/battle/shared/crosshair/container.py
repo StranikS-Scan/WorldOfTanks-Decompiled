@@ -58,6 +58,11 @@ class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMet
         self.__isFaded = False
         return
 
+    def addPlugins(self, plugin):
+        if self.__plugins is not None:
+            self.__plugins.addPlugins(plugin)
+        return
+
     def getViewID(self):
         return self.__viewID
 
@@ -208,7 +213,7 @@ class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMet
         _logger.error('as_isFadedS must be called by GameEvent.ROLE_HINT_TOGGLE in __handleRoleHintToggled')
 
     def __configure(self):
-        self.component.wg_inputKeyMode = InputKeyMode.NO_HANDLE
+        self.component.inputKeyMode = InputKeyMode.NO_HANDLE
         self.component.position.z = DEPTH_OF_Aim
         self.component.focus = False
         self.component.moveFocus = False

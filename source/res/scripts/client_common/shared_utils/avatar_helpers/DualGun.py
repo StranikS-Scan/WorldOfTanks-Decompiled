@@ -4,7 +4,7 @@ from math import ceil
 import BigWorld
 from OwnVehicleBase import Cooldowns
 from ReloadEffect import ReloadType
-from constants import DUAL_GUN
+from constants import DUAL_GUN, ARENA_PERIOD
 from gui.battle_control.battle_constants import CANT_SHOOT_ERROR
 
 def createDualGunHelper(vehicle):
@@ -100,7 +100,7 @@ class DualGunClipAutoReloadHelper(IDualGunHelper):
         return
 
     @staticmethod
-    def __callReloadTimeWrapper(avatar, vehicleID, leftTime, baseTime):
+    def _callReloadTimeWrapper(avatar, vehicleID, leftTime, baseTime):
         avatar.updateVehicleGunReloadTime(vehicleID, -1, baseTime)
         avatar.updateVehicleGunReloadTime(vehicleID, leftTime, baseTime)
         if leftTime > 0:
@@ -162,23 +162,24 @@ class DualGunClipAutoReloadHelper(IDualGunHelper):
                     baseTime, leftTime = activeGunReloadBaseTime, activeGunLeftTime
                     if self.__reloadingFirstShellOrFullClip:
                         baseTime += shellChangeTime
-                self.__callReloadTimeWrapper(avatar, vehicleID, leftTime, baseTime)
+                self._callReloadTimeWrapper(avatar, vehicleID, leftTime, baseTime)
         elif gunStates[activeGun] == DUAL_GUN.GUN_STATE.READY:
             if switchCD.leftTime > 0:
-                self.__callReloadTimeWrapper(avatar, vehicleID, switchCD.leftTime, switchCD.baseTime)
+                self._callReloadTimeWrapper(avatar, vehicleID, switchCD.leftTime, switchCD.baseTime)
             elif gunStates[secondGun] == DUAL_GUN.GUN_STATE.READY:
-                self.__callReloadTimeWrapper(avatar, vehicleID, 0, switchCD.baseTime)
+                self._callReloadTimeWrapper(avatar, vehicleID, 0, switchCD.baseTime)
             else:
                 totalBaseTime = cooldownTimes[activeGun].baseTime
                 if shellsInClip <= 1:
                     if self.__autoloadWithClip:
                         totalBaseTime = 0
                     totalBaseTime += shellChangeTime
-                self.__callReloadTimeWrapper(avatar, vehicleID, 0, totalBaseTime)
+                self._callReloadTimeWrapper(avatar, vehicleID, 0, totalBaseTime)
         else:
             if self.__reloadingFirstShellOrFullClip and self.__autoloadWithClip:
                 activeGunReloadBaseTime = 0
-            if canShotState == CANT_SHOOT_ERROR.WAITING:
+            arenaPeriod = avatar.guiSessionProvider.shared.arenaPeriod
+            if arenaPeriod.getPeriod() == ARENA_PERIOD.WAITING or canShotState == CANT_SHOOT_ERROR.WAITING:
                 avatar.updateVehicleGunReloadTime(vehicleID, -1, activeGunReloadBaseTime + shellChangeTime)
                 return
             totalBaseTime = totalLeftTime = activeGunReloadBaseTime
@@ -198,7 +199,7 @@ class DualGunClipAutoReloadHelper(IDualGunHelper):
                 if ammoCtrl is not None and not self.__debuffTrigger:
                     leftTimeAdd = ammoCtrl.getAutoReloadingState().getTimeLeft()
                 totalLeftTime += leftTimeAdd
-            self.__callReloadTimeWrapper(avatar, vehicleID, totalLeftTime, totalBaseTime)
+            self._callReloadTimeWrapper(avatar, vehicleID, totalLeftTime, totalBaseTime)
         return
 
     def updateClipReloadTime(self, avatar, vehicleID, timeLeft, baseTime, firstTime, stunned, isBoostApplicable, ammoCtrl=None):

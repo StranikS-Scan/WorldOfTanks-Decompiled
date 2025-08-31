@@ -384,7 +384,7 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
             self._ArcadeCamera__cameraTransition.start(BigWorld.camera().matrix, self._ArcadeCamera__cam, duration)
 
     def __refineVehicleMProv(self, vehicleMProv):
-        vehicleTranslationOnly = Math.WGTranslationOnlyMP()
+        vehicleTranslationOnly = Math.TranslationOnlyMP()
         vehicleTranslationOnly.source = vehicleMProv
         refinedMatrixProvider = Math.MatrixProduct()
         refinedMatrixProvider.a = math_utils.createIdentityMatrix()

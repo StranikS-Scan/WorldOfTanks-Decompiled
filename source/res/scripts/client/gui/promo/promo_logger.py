@@ -5,7 +5,7 @@ from functools import partial
 import BigWorld
 from adisp import adisp_process
 from gui.macroses import getLanguageCode
-from gui.wgcg.promo_screens.contexts import PromoSendActionLogCtx
+from gui.clientgw.promo_screens.contexts import PromoSendActionLogCtx
 from helpers import dependency, isPlayerAccount, time_utils
 from ids_generators import Int32IDGenerator
 from shared_utils import CONST_CONTAINER

@@ -27,7 +27,7 @@ from skeletons.gui.platform.product_fetch_controller import ISubscriptionsFetchC
 from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
 from uilogging.wot_plus.loggers import WotPlusSubscriptionViewLogger
 from uilogging.wot_plus.logging_constants import WotPlusInfoPageSource, SubscriptionPageKeys
-from wg_async import wg_await, wg_async
+from th_async import th_await, th_async
 _logger = logging.getLogger(__name__)
 if typing.TYPE_CHECKING:
     from typing import Optional, Dict, Any
@@ -98,19 +98,19 @@ class PlayerSubscriptionsView(ViewImpl):
         self._wotPlusUILogger.onViewFinalize()
         super(PlayerSubscriptionsView, self)._finalize()
 
-    @wg_async
+    @th_async
     def __fetchExternalSubs(self):
         try:
             self.__incompleteSteamAccount = False
             fetchResult = FetchResult()
             if self._steamCompletionCtrl.isSteamAccount:
-                status = yield wg_await(self._wgnpSteamAccCtrl.getEmailStatus('loadingData'))
+                status = yield th_await(self._wgnpSteamAccCtrl.getEmailStatus('loadingData'))
                 if not status.typeIs(StatusTypes.CONFIRMED):
                     self.__incompleteSteamAccount = True
                 else:
-                    fetchResult = yield wg_await(self._playerSubscriptionsController.getProducts())
+                    fetchResult = yield th_await(self._playerSubscriptionsController.getProducts())
             else:
-                fetchResult = yield wg_await(self._playerSubscriptionsController.getProducts())
+                fetchResult = yield th_await(self._playerSubscriptionsController.getProducts())
             self.__subscriptionsFetchResult = fetchResult
             self.__updateViewModel()
         finally:

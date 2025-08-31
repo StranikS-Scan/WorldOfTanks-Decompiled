@@ -28,7 +28,7 @@ from helpers import dependency
 from skeletons.gui.game_control import IRestoreController
 from skeletons.gui.shared import IItemsCache
 from uilogging.crew.logging_constants import CrewDialogKeys
-from wg_async import wg_async, wg_await
+from th_async import th_async, th_await
 
 class RestoreTankmanDialog(BaseCrewDialogTemplateView):
     __slots__ = ('_tankman', '_vehicle', '_vehicleSlotIdx')
@@ -108,13 +108,13 @@ class RestoreTankmanDialog(BaseCrewDialogTemplateView):
         self.__restoreTankman()
         return True
 
-    @wg_async
+    @th_async
     def __restoreTankman(self):
         isTransfer = self._vehicle and self._vehicleSlotIdx != NO_SLOT
         if isTransfer:
             requiredRole = self._vehicle.descriptor.type.crewRoles[self._vehicleSlotIdx][0]
             if requiredRole != self._tankman.role:
-                result = yield wg_await(showCrewMemberRoleChangeDialog(self._tankman.invID, None, self._vehicle, requiredRole))
+                result = yield th_await(showCrewMemberRoleChangeDialog(self._tankman.invID, None, self._vehicle, requiredRole))
                 if not result.result:
                     isTransfer = False
         vehTankman = self.getTmanInVehBySlot(self._vehicle, self._vehicleSlotIdx)

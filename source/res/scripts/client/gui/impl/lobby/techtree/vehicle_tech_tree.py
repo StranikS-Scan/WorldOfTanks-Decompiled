@@ -286,9 +286,9 @@ class VehicleTechTree(ViewImpl):
     def __buyVehicle(self, vehicleCD):
         vehicle = self.__itemsCache.items.getItemByCD(vehicleCD)
         if canBuyGoldForVehicleThroughWeb(vehicle):
-            showVehicleBuyDialog(vehicle, previousAlias=VIEW_ALIAS.LOBBY_TECHTREE, returnCallback=checkParagonsIntroCallback)
+            showVehicleBuyDialog(vehicle, previousAlias=VIEW_ALIAS.LOBBY_TECHTREE, returnCallback=self.__invalidateVehicleBuy)
         else:
-            ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, vehicleCD, previousAlias=VIEW_ALIAS.LOBBY_TECHTREE, returnCallback=checkParagonsIntroCallback)
+            ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, vehicleCD, previousAlias=VIEW_ALIAS.LOBBY_TECHTREE, returnCallback=self.__invalidateVehicleBuy)
 
     @args2params(int)
     def __addVehicleToCompare(self, vehicleCD):
@@ -338,6 +338,10 @@ class VehicleTechTree(ViewImpl):
     def __onResetBranchShown(self):
         setParagonsResetBranchToShow(isShow=False)
         self.__updateParagonsShown()
+
+    def __invalidateVehicleBuy(self):
+        self.__invalidator.invalidateBuyVehicle()
+        checkParagonsIntroCallback()
 
     @args2params(ButtonType, int)
     def __onTechTreeButtonPressed(self, buttonType, branchID=0):
@@ -528,6 +532,9 @@ class VehicleTechTreeInvalidator(IPage):
 
     def invalidateEarlyAccess(self):
         self.__viewRef().updateEarlyAccessState()
+
+    def invalidateBuyVehicle(self):
+        self.redraw()
 
     def invalidateParagonsUnlocks(self):
         self.redraw()

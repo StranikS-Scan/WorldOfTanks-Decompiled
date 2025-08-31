@@ -189,7 +189,7 @@ class MinimapMarkerComponent(_IMarkerComponentBase):
         self._gui = lambda : None
         self._isMarkerExists = False
         self._onlyTranslation = self.__minimapData.get('onlyTranslation', False)
-        self._translationOnlyMP = Math.WGTranslationOnlyMP()
+        self._translationOnlyMP = Math.TranslationOnlyMP()
         self._translationOnlyMP.source = self._matrixProduct.a
 
     @property

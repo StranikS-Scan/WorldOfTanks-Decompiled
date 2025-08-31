@@ -40,7 +40,7 @@ from items.components.skills_constants import ORDERED_ROLES
 from shared_utils import first
 from skeletons.gui.shared import IItemsCache
 from tutorial.control.game_vars import getVehicleByIntCD
-from wg_async import wg_async
+from th_async import th_async
 from nations import INDICES, MAP
 _INVALID_IDX = -1
 _FIRST_ELEMENT = 0
@@ -314,7 +314,6 @@ class TankmanChangeAndRecruitView(ViewImpl):
             self.__selectedSpecialty = None
             vm.futureTankman.setSpecialty(str(_INVALID_IDX))
             vm.setSpecialtyGold(0)
-            self.setBlockedRetraining(vm)
             self.__setMoneyState(vm)
         for name in rolesList:
             if self.__isFemale:
@@ -419,7 +418,7 @@ class TankmanChangeAndRecruitView(ViewImpl):
             if not self.__retrain and not self.__isSpecialtyChanged:
                 self.setInitialRetraining(vm)
             if self.initialVehicle == self.vehicle:
-                self.setBlockedRetraining(vm)
+                self.setBlockedRetraining(vm, _EMPTY_VALUE)
                 self.__setMoneyState(vm)
 
     @args2params(str)
@@ -465,7 +464,7 @@ class TankmanChangeAndRecruitView(ViewImpl):
             vm.futureTankman.setIcon(image)
         return
 
-    @wg_async
+    @th_async
     def __onRetrainingChange(self):
         result = yield showRetrainingTankmanWindowDialog()
         if result.result[1] is not None and result.result[0]:
@@ -505,31 +504,25 @@ class TankmanChangeAndRecruitView(ViewImpl):
             if self.__isSpecialtyChanged:
                 vm.setSpecialtyGold(self.itemsCache.items.shop.changeRoleCost)
                 self.__isSpecialtyChanged = True
-                self.setBlockedRetraining(vm, isAcademy=True)
+                self.setBlockedRetraining(vm, _RETRAINING_TYPES[-1])
             else:
-                vm.setSpecialtyGold(0)
-                self.setInitialRetraining(vm, firstType=False)
+                self.setInitialRetraining(vm)
             self.__selectedSpecialty = specialty
             vm.futureTankman.setSpecialty(specialty)
             vm.setIsShowCheckBox(self.__tmanCanTransferToVehicle())
             self.__setMoneyState(vm)
         return
 
-    def setInitialRetraining(self, vm, firstType=True):
-        if firstType or self.__initialVehicle and self.vehicle and self.__initialVehicle != self.vehicle:
-            self.__retrain = first(_RETRAINING_TYPES)
-            self.__retrainKey = _RETRAINING_TYPES.index(self.__retrain)
-            vm.setRetraining(self.__retrain)
-            vm.setCanChangeRetraining(True)
-            vm.setRetrainingGold(0)
-            vm.setCredits(0)
-        else:
-            self.setBlockedRetraining(vm, isAcademy=False)
+    def setInitialRetraining(self, vm):
+        self.__retrain = first(_RETRAINING_TYPES)
+        self.__retrainKey = _RETRAINING_TYPES.index(self.__retrain)
+        vm.setRetraining(self.__retrain)
+        vm.setCanChangeRetraining(True)
 
-    def setBlockedRetraining(self, vm, isAcademy=False):
+    def setBlockedRetraining(self, vm, value):
         self.__retrain = None
         self.__retrainKey = None
-        vm.setRetraining(_RETRAINING_TYPES[-1] if isAcademy else _EMPTY_VALUE)
+        vm.setRetraining(value)
         vm.setRetrainingGold(0)
         vm.setCredits(0)
         vm.setCanChangeRetraining(False)

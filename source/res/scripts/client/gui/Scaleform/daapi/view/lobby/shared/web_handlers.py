@@ -5,6 +5,7 @@ from web.web_client_api import webApiCollection
 from web.web_client_api.battle_pass import BattlePassWebApi
 from web.web_client_api.blueprints_convert_sale import BlueprintsConvertSaleWebApi
 from web.web_client_api.clans import ClansWebApi
+from web.web_client_api.comp7 import Comp7WebApi
 from web.web_client_api.frontline import FrontLineWebApi
 from web.web_client_api.mapbox import MapboxWebApi
 from web.web_client_api.platform import PlatformWebApi
@@ -19,6 +20,7 @@ from web.web_client_api.sound import HangarSoundWebApi, SoundStateWebApi, SoundW
 from web.web_client_api.ui import CloseWindowWebApi, NotificationWebApi, OpenTabWebApi, OpenWindowWebApi, UtilWebApi
 from web.web_client_api.uilogging import UILoggingWebApi
 from web.web_client_api.vehicles import VehiclesWebApi
+from web.web_client_api.wt import WtWebApi
 if typing.TYPE_CHECKING:
     from typing import Dict, List, Optional
 
@@ -56,7 +58,9 @@ _DEFAULT_WEB_API_COLLECTION = (CloseWindowWebApi,
  ClansWebApi,
  RankedBattlesWebApi,
  BattleRoyaleWebApi,
- UILoggingWebApi)
+ UILoggingWebApi,
+ Comp7WebApi,
+ WtWebApi)
 
 def createWebHandlers(replaces=None):
     handlersList = list(_DEFAULT_WEB_API_COLLECTION)

@@ -10,7 +10,7 @@ from adisp import adisp_process
 from helpers import dependency
 from helpers.time_utils import ONE_MINUTE
 from skeletons.gui.web import IWebController
-from gui.wgcg.rank.contexts import RankedPositionCtx
+from gui.clientgw.rank.contexts import RankedPositionCtx
 _logger = logging.getLogger(__name__)
 _WEB_AVAILABLE_SYNC_TIME = 2
 _LEAGUE_SYNC_TIME = 2 * ONE_MINUTE

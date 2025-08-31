@@ -52,7 +52,7 @@ class NationTreeData(_ItemsData):
             if node.isAnnouncement:
                 self._addNode(nodeCD, self._makeAnnouncementNode(node, displayInfo))
             item = getItem(nodeCD)
-            if item.isHidden or item.intCD in self.__paragonsCtrl.getHiddenUIItems():
+            if item.isHidden or item.intCD in self.__paragonsCtrl.getHiddenUIItems() or not self.__paragonsCtrl.isLimitedUiParagonsTreeBranchesRuleCompleted and item.isLockedByParagons:
                 continue
             index = self._addNode(nodeCD, self._makeRealExposedNode(node, item, unlockStats, displayInfo))
             if nodeCD == selectedID:

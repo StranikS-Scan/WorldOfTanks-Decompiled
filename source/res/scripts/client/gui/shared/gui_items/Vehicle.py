@@ -47,7 +47,7 @@ from post_progression_common import TankSetupGroupsId
 from rent_common import parseRentID
 from shared_utils import findFirst, CONST_CONTAINER
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IIGRController, IRentalsController, IVehiclePostProgressionController, ITradeInController, IWotPlusController, IEarlyAccessController, IParagonsController
+from skeletons.gui.game_control import IIGRController, IRentalsController, IVehiclePostProgressionController, ITradeInController, IWotPlusController, IEarlyAccessController, IParagonsController, IWhiteTigerController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -202,6 +202,7 @@ class Vehicle(FittingItem):
         AMMO_NOT_FULL_EVENTS = 'ammoNotFullEvents'
         SERVER_RESTRICTION = 'serverRestriction'
         RENTAL_IS_OVER = 'rentalIsOver'
+        RENTAL_IS_OVER_BATTLE = 'rentalBattleIsOver'
         IGR_RENTAL_IS_OVER = 'igrRentalIsOver'
         IN_PREMIUM_IGR_ONLY = 'inPremiumIgrOnly'
         GROUP_IS_NOT_READY = 'group_is_not_ready'
@@ -211,8 +212,12 @@ class Vehicle(FittingItem):
         UNSUITABLE_TO_UNIT = 'unsuitableToUnit'
         TEMP_UNAVAILABLE = 'tempUnavailable'
         WILL_BE_UNLOCKED_IN_BATTLE = 'willBeUnlockedInBattle'
-        CUSTOM = (UNSUITABLE_TO_QUEUE, UNSUITABLE_TO_UNIT, WILL_BE_UNLOCKED_IN_BATTLE)
-        UNSUITABLE = (UNSUITABLE_TO_QUEUE, UNSUITABLE_TO_UNIT)
+        TICKETS_SHORTAGE = 'ticketsShortage'
+        CUSTOM = (UNSUITABLE_TO_QUEUE,
+         UNSUITABLE_TO_UNIT,
+         WILL_BE_UNLOCKED_IN_BATTLE,
+         TICKETS_SHORTAGE)
+        UNSUITABLE = (UNSUITABLE_TO_QUEUE, UNSUITABLE_TO_UNIT, TICKETS_SHORTAGE)
         DEAL_IS_OVER = 'dealIsOver'
         ROTATION_GROUP_UNLOCKED = 'rotationGroupUnlocked'
         ROTATION_GROUP_LOCKED = 'rotationGroupLocked'
@@ -221,6 +226,23 @@ class Vehicle(FittingItem):
         DISABLED = 'disabled'
         SUBSCRIPTION_SUSPENDED = 'subscription_suspended'
         WOT_PLUS_EXCLUSIVE_VEHICLE_DISABLED = 'wot_plus_exclusive_vehicle_disabled'
+        CRIT_STATES = (CREW_NOT_FULL,
+         DAMAGED,
+         EXPLODED,
+         DESTROYED,
+         SERVER_RESTRICTION,
+         RENTAL_IS_OVER,
+         RENTAL_IS_OVER_BATTLE,
+         IGR_RENTAL_IS_OVER,
+         AMMO_NOT_FULL,
+         AMMO_NOT_FULL_EVENTS,
+         UNSUITABLE_TO_QUEUE,
+         DEAL_IS_OVER,
+         UNSUITABLE_TO_UNIT,
+         ROTATION_GROUP_LOCKED,
+         SUBSCRIPTION_SUSPENDED,
+         WOT_PLUS_EXCLUSIVE_VEHICLE_DISABLED,
+         TICKETS_SHORTAGE)
 
     CAN_SELL_STATES = (VEHICLE_STATE.UNDAMAGED,
      VEHICLE_STATE.CREW_NOT_FULL,
@@ -261,6 +283,7 @@ class Vehicle(FittingItem):
     __earlyAccessController = dependency.descriptor(IEarlyAccessController)
     __paragonsController = dependency.descriptor(IParagonsController)
     tradeInCtrl = dependency.descriptor(ITradeInController)
+    __wtController = dependency.descriptor(IWhiteTigerController)
 
     def __init__(self, strCompactDescr=None, inventoryID=-1, typeCompDescr=None, proxy=None, extData=None, invData=None):
         self.__postProgressionCtrl.processVehExtData(getVehicleType(typeCompDescr or strCompactDescr), extData)
@@ -964,7 +987,7 @@ class Vehicle(FittingItem):
 
     @property
     def rentalIsOver(self):
-        return self.isRented and self.rentExpiryState and not self.isSelected
+        return self.rentInfo.battlesLeft == 0 or self.rentExpiryState if self.rentInfo.hasMultipleConditions and self.isRented and not self.isSelected else self.isRented and self.rentExpiryState and not self.isSelected
 
     @property
     def rentalIsActive(self):
@@ -993,6 +1016,10 @@ class Vehicle(FittingItem):
     @property
     def type(self):
         return set(vehicles.VEHICLE_CLASS_TAGS & self.tags).pop()
+
+    @property
+    def eventType(self):
+        return set(VEHICLE_TAGS.WT_VEHICLES & self.tags).pop()
 
     @property
     def typeUserName(self):
@@ -1071,8 +1098,28 @@ class Vehicle(FittingItem):
         return self._descriptor.isTrackWithinTrack
 
     @property
+    def isSquadRestricted(self):
+        return checkForTags(self.tags, 'squad_restricted')
+
+    @property
+    def isOnlyForRandomBattles(self):
+        return checkForTags(self.tags, 'random_only')
+
+    @property
     def isMultiTrack(self):
         return self._descriptor.isMultiTrack
+
+    @property
+    def isDualGun(self):
+        return self._descriptor.isDualgunVehicle
+
+    @property
+    def isClipGun(self):
+        return self._descriptor.isClipGun
+
+    @property
+    def isClippedDualGun(self):
+        return self.isDualGun and self.isClipGun
 
     @property
     def chassisType(self):
@@ -1137,6 +1184,8 @@ class Vehicle(FittingItem):
             ms = Vehicle.VEHICLE_STATE.NOT_PRESENT
         if self.isInBattle:
             ms = Vehicle.VEHICLE_STATE.BATTLE
+        elif self.rentInfo.hasMultipleConditions and self.rentalIsOver and self.rentInfo.getTimeLeft() > 0:
+            ms = Vehicle.VEHICLE_STATE.RENTAL_IS_OVER_BATTLE
         elif self.rentalIsOver:
             ms = Vehicle.VEHICLE_STATE.RENTAL_IS_OVER
             if self.isPremiumIGR:
@@ -1213,6 +1262,7 @@ class Vehicle(FittingItem):
          Vehicle.VEHICLE_STATE.DESTROYED,
          Vehicle.VEHICLE_STATE.SERVER_RESTRICTION,
          Vehicle.VEHICLE_STATE.RENTAL_IS_OVER,
+         Vehicle.VEHICLE_STATE.RENTAL_IS_OVER_BATTLE,
          Vehicle.VEHICLE_STATE.IGR_RENTAL_IS_OVER,
          Vehicle.VEHICLE_STATE.AMMO_NOT_FULL,
          Vehicle.VEHICLE_STATE.AMMO_NOT_FULL_EVENTS,
@@ -1269,6 +1319,20 @@ class Vehicle(FittingItem):
     @property
     def isEvent(self):
         return self.isOnlyForEventBattles
+
+    @property
+    def isBoss(self):
+        res = checkForTags(self.tags, VEHICLE_TAGS.WT_BOSS)
+        res = res or checkForTags(self.tags, VEHICLE_TAGS.WT_BOSS_2025)
+        return res
+
+    @property
+    def isSpecialBoss(self):
+        return checkForTags(self.tags, VEHICLE_TAGS.WT_SPECIAL_BOSS)
+
+    @property
+    def isHunterOrBoss(self):
+        return checkForTags(self.tags, VEHICLE_TAGS.WT_VEHICLES)
 
     @property
     def isDisabledInRoaming(self):
@@ -1472,6 +1536,26 @@ class Vehicle(FittingItem):
     def isEarnCrystals(self):
         return checkForTags(self.tags, VEHICLE_TAGS.EARN_CRYSTALS)
 
+    @property
+    def isWtBossMainVehicle(self):
+        return self.intCD == self.__wtController.getWtBossMainVehicleIntCD() if self.__wtController.isAvailable() else False
+
+    def isWtRent(self, context):
+        if not self.isWtBossMainVehicle:
+            return False
+        elif context.getStatusConfiguration(self).isSpecialWindow:
+            return False
+        elif self.isRented:
+            return True
+        params = context.getParams()
+        rentExpiryTime = params.get('rentExpiryTime')
+        rentBattlesLeft = params.get('rentBattlesLeft')
+        if rentExpiryTime > 0 and rentBattlesLeft is not None:
+            self._rentInfo = RentalInfoProvider(additionalData=['hasMultipleConditions'], time=rentExpiryTime, battles=rentBattlesLeft, isRented=False)
+            return True
+        else:
+            return False
+
     def getCrystalsEarnedInfo(self):
         limit = 0
         stats = self.itemsCache.items.stats
@@ -1501,6 +1585,11 @@ class Vehicle(FittingItem):
         if result:
             result = not self.isBroken and self.isCrewFull and not self.isDisabledInPremIGR and not self.isInBattle and not self.isRotationGroupLocked and not self.isDisabled
         return result
+
+    @property
+    def isUnsuitableToQueue(self):
+        state, _ = self.getState()
+        return state == self.VEHICLE_STATE.UNSUITABLE_TO_QUEUE
 
     @property
     def isReadyToFight(self):
@@ -2140,6 +2229,10 @@ def getShortUserName(vehicleType, textPrefix=False):
     return _getActualName(vehicleType.shortUserString, vehicleType.tags, textPrefix)
 
 
+def getSimpleShortUserName(vehicleType):
+    return vehicleType.descriptor.type.shortUserString
+
+
 def _getActualName(name, tags, textPrefix=False):
     if checkForTags(tags, VEHICLE_TAGS.PREMIUM_IGR):
         if textPrefix:
@@ -2206,6 +2299,7 @@ _VEHICLE_STATE_TO_ICON = {Vehicle.VEHICLE_STATE.BATTLE: RES_ICONS.MAPS_ICONS_VEH
  Vehicle.VEHICLE_STATE.EXPLODED: RES_ICONS.MAPS_ICONS_VEHICLESTATES_DAMAGED,
  Vehicle.VEHICLE_STATE.CREW_NOT_FULL: RES_ICONS.MAPS_ICONS_VEHICLESTATES_CREWNOTFULL,
  Vehicle.VEHICLE_STATE.RENTAL_IS_OVER: RES_ICONS.MAPS_ICONS_VEHICLESTATES_RENTALISOVER,
+ Vehicle.VEHICLE_STATE.RENTAL_IS_OVER_BATTLE: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT,
  Vehicle.VEHICLE_STATE.UNSUITABLE_TO_UNIT: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT,
  Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT,
  Vehicle.VEHICLE_STATE.TEMP_UNAVAILABLE: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT,
@@ -2238,3 +2332,11 @@ def getBattlesLeft(vehicle):
 
 def getRetrainTankmenIds(vehicle):
     return [ tankman.invID for _, tankman in vehicle.crew if tankman is not None and (not tankman.isMaxRoleEfficiency or not tankman.isInNativeTank) ]
+
+
+def getCommander(vehicle):
+    for _, tman in vehicle.crew:
+        if tman.role == Tankman.ROLES.COMMANDER:
+            return tman
+
+    return None

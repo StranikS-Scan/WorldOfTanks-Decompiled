@@ -19,6 +19,7 @@ from gui.shared.gui_items.customization.c11n_items import getGroupFullNameResour
 from helpers import dependency
 from preview_selectable_logic import PreviewSelectableLogic
 from skeletons.gui.game_control import IHeroTankController
+from skeletons.prebattle_vehicle import IPrebattleVehicle
 from skeletons.gui.shared.utils import IHangarSpace
 from uilogging.shop.loggers import ShopVehicleStylePreviewMetricsLogger, ShopVehicleStylePreviewFlowLogger
 _SHOW_CLOSE_BTN = False
@@ -30,6 +31,7 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
     __metaclass__ = event_bus_handlers.EventBusListener
     __hangarSpace = dependency.descriptor(IHangarSpace)
     __heroTanksControl = dependency.descriptor(IHeroTankController)
+    __prebattleVehicle = dependency.descriptor(IPrebattleVehicle)
     _COMMON_SOUND_SPACE = STYLE_PREVIEW_SOUND_SPACE
 
     def __init__(self, ctx=None):

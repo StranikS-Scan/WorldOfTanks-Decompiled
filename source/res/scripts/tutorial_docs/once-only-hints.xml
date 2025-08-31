@@ -1005,6 +1005,11 @@
           <value>	True	</value>
         </simple-state>
       </checked-ui-state>
+      <condition>
+        <class-condition>	LimitedUIHintChecker	  <path>	gui.limited_ui.lui_tutorial_hints	</path>
+          <arguments>	ParagonsNotification	</arguments>
+        </class-condition>
+      </condition>
       <update-runtime>	True	</update-runtime>
       <ignore-outside-click>	True	</ignore-outside-click>
     </hint>
@@ -1023,7 +1028,7 @@
       <condition>
         <condition-and>
           <class-condition>	LimitedUIHintChecker	  <path>	gui.limited_ui.lui_tutorial_hints	</path>
-            <arguments>	ParagonsEntryPoint	</arguments>
+            <arguments>	ParagonsNotification	</arguments>
           </class-condition>
           <condition-hint-showed>
             <hint-id>	ParagonsEntryPointHint	</hint-id>

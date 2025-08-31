@@ -13,9 +13,15 @@ from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.impl.pub import ViewImpl
 from gui.shared.event_dispatcher import showHangar
 from gui.impl.lobby.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
+from helpers import dependency
+from skeletons.gui.game_control import IFunRandomController
+from skeletons.gui.lobby_context import ILobbyContext
 _DESTROY_ACTION_NAME = 'showHangar'
+SERVER_SETTINGS_KEYS = ('fun_random_config',)
 
 class FunRandomProgressionView(ViewImpl, LobbyHeaderVisibility, FunAssetPacksMixin, FunProgressionWatcher, FunSubModesWatcher):
+    __funRandomCtrl = dependency.descriptor(IFunRandomController)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
     __slots__ = ('__tooltips',)
     _COMMON_SOUND_SPACE = FUN_PROGRESSION_SOUND_SPACE
 
@@ -55,7 +61,10 @@ class FunRandomProgressionView(ViewImpl, LobbyHeaderVisibility, FunAssetPacksMix
         self.showCommonInfoPage()
 
     def _getEvents(self):
-        return ((self.viewModel.onClose, self.showHangar), (self.viewModel.onShowInfo, self.showInfoPage), (self.viewModel.onViewSwitch, self.__onViewSwitch))
+        return ((self.viewModel.onClose, self.showHangar),
+         (self.viewModel.onShowInfo, self.showInfoPage),
+         (self.viewModel.onViewSwitch, self.__onViewSwitch),
+         (self.__lobbyContext.getServerSettings().onServerSettingsChange, self.__onSettingsChange))
 
     def _initialize(self, *args, **kwargs):
         super(FunRandomProgressionView, self)._initialize(*args, **kwargs)
@@ -78,9 +87,16 @@ class FunRandomProgressionView(ViewImpl, LobbyHeaderVisibility, FunAssetPacksMix
         progression = self.getActiveProgression()
         with self.viewModel.transaction() as model:
             model.setAssetsPointer(self.getModeAssetsPointer())
+            subModeId = self.__funRandomCtrl.subModesHolder.getDesiredSubModeID()
+            model.setIsNavigationButtonVisible(self.__funRandomCtrl.isFunRandomModifiersVisibleSBySubModeID(subModeId))
             packProgressionStages(progression, model.getStages(), self.__tooltips)
             packProgressionCondition(progression, model.condition)
             packProgressionState(progression, model.state)
+
+    def __onSettingsChange(self, diff):
+        if not any((key in SERVER_SETTINGS_KEYS for key in diff.iterkeys())):
+            return
+        self.__invalidateAll()
 
     @hasActiveProgression(abortAction=_DESTROY_ACTION_NAME)
     def __invalidateTimer(self, *_):

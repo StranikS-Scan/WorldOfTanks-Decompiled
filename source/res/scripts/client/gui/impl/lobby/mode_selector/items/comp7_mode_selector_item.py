@@ -66,7 +66,7 @@ class Comp7ModeSelectorItem(ModeSelectorLegacyItem):
         with self.viewModel.transaction() as vm:
             if isStarted:
                 vm.setTimeLeft(self.__getSeasonTimeLeft())
-                self._addReward(ModeSelectorRewardID.PROGRESSION_STYLE)
+                self._addReward(ModeSelectorRewardID.DELUXE_EQUIPMENT)
                 self._addReward(ModeSelectorRewardID.BONES)
             elif isBeforeSeasons:
                 vm.setStatusNotActive(backport.text(R.strings.mode_selector.mode.comp7.seasonStart(), date=backport.getShortDateFormat(nextSeason.getStartDate())))

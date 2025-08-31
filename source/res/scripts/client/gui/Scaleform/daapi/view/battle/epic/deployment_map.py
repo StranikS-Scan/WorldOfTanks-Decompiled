@@ -78,7 +78,7 @@ class EpicDeploymentMapComponent(EpicDeploymentMapMeta):
         return setup
 
     def _createFlashComponent(self):
-        return GUI.WGMinimapFlashAS3(self.app.movie, _DEPLOY_MAP_PATH)
+        return GUI.MinimapFlashAS3(self.app.movie, _DEPLOY_MAP_PATH)
 
     def _getMinimapSize(self):
         return self._size

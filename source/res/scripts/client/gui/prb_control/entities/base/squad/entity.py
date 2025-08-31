@@ -16,7 +16,7 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.impl.gen.resources import R
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
-from wg_async import wg_async, wg_await
+from th_async import th_async, th_await
 
 class SquadEntryPoint(UnitEntryPoint):
 
@@ -149,7 +149,7 @@ class SquadEntity(UnitEntity):
 
             return current
 
-    @wg_async
+    @th_async
     def __showDefaultDialog(self, meta, callback, parent=None):
         from gui.shared.event_dispatcher import showDynamicButtonInfoDialogBuilder
         key = meta.getKey()
@@ -158,6 +158,6 @@ class SquadEntity(UnitEntity):
             app = self.__appLoader.getApp()
             if parent is None:
                 parent = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY))
-            result = yield wg_await(showDynamicButtonInfoDialogBuilder(res, None, '', parent))
+            result = yield th_await(showDynamicButtonInfoDialogBuilder(res, None, '', parent))
             callback(result)
         return

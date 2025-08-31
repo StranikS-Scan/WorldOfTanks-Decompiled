@@ -84,7 +84,7 @@ class Highlighter(cgf_obsolete_script.py_component.Component):
     def removeHighlight(self):
         if self.isOn and self.__vehicle is not None and not self.isDisabled:
             self.__highlightStatus &= ~self.HIGHLIGHT_ON
-            BigWorld.wgDelEdgeDetectEntity(self.__vehicle)
+            BigWorld.delEdgeDetectEntity(self.__vehicle)
         return
 
     def highlight(self, enable, forceSimpleEdge=False):
@@ -126,9 +126,9 @@ class Highlighter(cgf_obsolete_script.py_component.Component):
 
     def __doHighlightOperation(self, status, args):
         if status & self.HIGHLIGHT_ON:
-            BigWorld.wgAddEdgeDetectEntity(self.__vehicle, self.__collisions, args[0], args[1], args[2])
+            BigWorld.addEdgeDetectEntity(self.__vehicle, self.__collisions, args[0], args[1], args[2])
         else:
-            BigWorld.wgDelEdgeDetectEntity(self.__vehicle)
+            BigWorld.delEdgeDetectEntity(self.__vehicle)
         self.__updateHighlightComponent(status, args)
 
     def __updateHighlightComponent(self, status, args):

@@ -29,7 +29,7 @@ from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.shared import IItemsCache
 from uilogging.crew.loggers import CrewTooltipLogger
 from uilogging.crew.logging_constants import CrewPersonalFileKeys, CrewViewKeys
-from wg_async import wg_async, wg_await
+from th_async import th_async, th_await
 
 class PersonalFileView(IPersonalTab, BasePersonalCaseView):
     __slots__ = ('tankmanID', 'tankman', 'canLearn', '__uiTooltipLogger', '__toolTipMgr')
@@ -210,7 +210,7 @@ class PersonalFileView(IPersonalTab, BasePersonalCaseView):
         self.getParentView().updateTTCWithSkillName(None)
         return
 
-    @wg_async
+    @th_async
     def __onClickSkill(self, args):
         skillId = args.get('skillId')
         skillsState = self.viewModel.getSkillsState()
@@ -220,13 +220,13 @@ class PersonalFileView(IPersonalTab, BasePersonalCaseView):
         if skillsState == SkillsState.LEARNAVAILABLE:
             newSkillCnt, newSkillLvl = getTmanNewSkillCount(self.tankman)
             level = tankmen.MAX_SKILL_LEVEL if newSkillCnt > 1 else newSkillLvl.intSkillLvl
-            result = yield wg_await(showLearnPerkConfirmationDialog(skill, int(level)))
+            result = yield th_await(showLearnPerkConfirmationDialog(skill, int(level)))
             if not result.busy:
                 isOk, _ = result.result
                 if isOk:
                     self.__onLearnSkill(skill, self.tankman)
         elif skillsState == SkillsState.ZEROSKILLS:
-            result = yield wg_await(showFreeSkillConfirmationDialog(skill=skill))
+            result = yield th_await(showFreeSkillConfirmationDialog(skill=skill))
             if not result.busy:
                 isOk, _ = result.result
                 if isOk:

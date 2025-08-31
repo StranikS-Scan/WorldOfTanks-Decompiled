@@ -128,6 +128,10 @@ class ChannelsCarouselHandler(object):
         self.__channelsDP.removeItem(clientID)
         return
 
+    def isChannelExists(self, channel):
+        clientID = channel.getClientID()
+        return clientID in self.__handlers
+
     def notifyChannel(self, channel, message):
         clientID = channel.getClientID()
         self.__setItemField(clientID, 'isNotified', True)

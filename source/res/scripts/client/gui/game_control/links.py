@@ -37,10 +37,14 @@ class URLMacros(object):
     @adisp_async
     @adisp_process
     def parse(self, url, params=None, callback=lambda *args: None):
-        for macros in self.__filter.findall(url):
-            macroName, _, args = self.__argsFilter.match(macros).groups()
-            replacement = yield self._replace(macroName, args, params)
-            url = url.replace(macros, replacement)
+        try:
+            for macros in self.__filter.findall(url):
+                macroName, _, args = self.__argsFilter.match(macros).groups()
+                replacement = yield self._replace(macroName, args, params)
+                url = url.replace(macros, replacement)
+
+        except Exception as e:
+            LOG_ERROR('Error: {0}. \nParameters for parsing: url - {1}, filter - {2}, callback - {3}'.format(e, url, self.__filter, callback))
 
         callback(url)
 

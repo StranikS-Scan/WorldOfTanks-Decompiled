@@ -258,7 +258,7 @@ class BombersWing(CallbackDelayer):
         for position in positions:
             zeroHeightPos = Vector3(position)
             zeroHeightPos.y = 0
-            collRes = BigWorld.wg_collideSegment(BigWorld.player().spaceID, zeroHeightPos + (0, 1000, 0), zeroHeightPos + (0, -1000, 0), 18)
+            collRes = BigWorld.collideSegment(BigWorld.player().spaceID, zeroHeightPos + (0, 1000, 0), zeroHeightPos + (0, -1000, 0), 18)
             if collRes is not None:
                 minFlightHeight = max(collRes.closestPoint.y + retreatHeight, minFlightHeight)
             else:

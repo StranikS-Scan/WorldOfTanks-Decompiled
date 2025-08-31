@@ -33,7 +33,7 @@ class ResponseCodes(object):
     ACCOUNT_NOT_IN_CLAN = 29
     CLAN_IS_NOT_ACTIVE = 30
     RATINGS_NOT_FOUND = 31
-    WGCG_ERROR = 32
+    CLIENTGW_ERROR = 32
     EXPORTER_DISABLED = 33
     GLOBAL_MAP_DISABLED = 34
     WGRS_DISABLED = 35
@@ -92,7 +92,7 @@ class GlobalMapError(BaseRequestError):
 
 class WgrsError(BaseRequestError):
     status_code = 500
-    description = 'Wgrs error was occurred'
+    description = 'Grs error was occurred'
     response_code = ResponseCodes.WGRS_ERROR
 
 
@@ -216,10 +216,10 @@ class ClanIsNotActiveError(BaseRequestError):
     response_code = ResponseCodes.CLAN_IS_NOT_ACTIVE
 
 
-class WgcgError(BaseRequestError):
-    description = 'WGCG error is occurred'
+class ClientgwError(BaseRequestError):
+    description = 'CLIENTGW error is occurred'
     status_code = 500
-    response_code = ResponseCodes.WGCG_ERROR
+    response_code = ResponseCodes.CLIENTGW_ERROR
 
 
 class ExporterDisabled(BaseRequestError):

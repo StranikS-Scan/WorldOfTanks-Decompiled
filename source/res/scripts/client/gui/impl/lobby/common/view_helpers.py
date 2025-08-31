@@ -38,6 +38,8 @@ def _packBonusTooltip(bonusModel, bonusIndex, bonusTooltipList, bonusContentIdLi
             tooltipData[tooltipIdx] = bonusTooltipList[bonusIndex]
         if bonusContentIdList:
             bonusModel.setTooltipContentId(str(bonusContentIdList[bonusIndex]))
+        if hasattr(bonusModel, 'setTooltipType'):
+            bonusModel.setTooltipType(str(tooltipIdx))
         return tooltipIndex + 1
 
 

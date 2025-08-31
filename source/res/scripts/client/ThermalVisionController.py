@@ -243,7 +243,7 @@ class ThermalVisionController(BigWorld.DynamicScriptComponent):
         self.__setIsPyrometer(isVisible)
 
     def __setIsPyrometer(self, isVisible):
-        binoculars = BigWorld.wg_binoculars()
+        binoculars = BigWorld.binoculars()
         if binoculars is not None:
             binoculars.setIsPyrometer(isVisible)
         return

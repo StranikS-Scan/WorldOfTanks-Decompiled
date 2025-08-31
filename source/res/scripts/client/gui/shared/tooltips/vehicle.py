@@ -107,21 +107,26 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         textGap = -2
         headerItems = [formatters.packBuildUpBlockData(HeaderBlockConstructor(vehicle, statsConfig, leftPadding, rightPadding).construct(), padding=leftRightPadding, blockWidth=410), formatters.packBuildUpBlockData(self._getCrewIconBlock(), gap=2, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, align=BLOCKS_TOOLTIP_TYPES.ALIGN_RIGHT, padding=formatters.packPadding(top=34, right=0), blockWidth=20)]
         headerBlockItems = [formatters.packBuildUpBlockData(headerItems, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, padding=formatters.packPadding(bottom=-16))]
-        self.__createStatusBlock(vehicle, headerBlockItems, statsConfig, paramsConfig, valueWidth)
+        statusBlockItems = [] if vehicle.isWtRent(self.context) else headerBlockItems
+        self.__createStatusBlock(vehicle, statusBlockItems, statsConfig, paramsConfig, valueWidth)
         items.append(formatters.packBuildUpBlockData(headerBlockItems, gap=-4, padding=formatters.packPadding(bottom=-12)))
+        if vehicle.isWtRent(self.context) and statusBlockItems:
+            items.append(formatters.packBuildUpBlockData(statusBlockItems, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILD_BLOCK_WT_RENT_LINKAGE, gap=-4, padding=formatters.packPadding(top=-4, bottom=-18, left=14)))
         if vehicle.isWotPlus:
             wotPlusBlock, linkage = WotPlusBlockConstructor(vehicle, statsConfig, leftPadding, rightPadding).construct()
             if wotPlusBlock:
                 items.append(formatters.packBuildUpBlockData(wotPlusBlock, linkage=linkage, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=0, bottom=0)))
         simplifiedStatsBlock = SimplifiedStatsBlockConstructor(vehicle, paramsConfig, leftPadding, rightPadding).construct()
-        if simplifiedStatsBlock:
+        if simplifiedStatsBlock and not vehicle.isWtRent(self.context):
             items.append(formatters.packBuildUpBlockData(simplifiedStatsBlock, gap=-4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=-8, bottom=-5)))
+        if vehicle.isWtRent(self.context):
+            items.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.wtRentVehicle.common.title())), desc=text_styles.main(backport.text(R.strings.tooltips.wtRentVehicle.common.text())), padding=formatters.packPadding(left=leftPadding, right=0, top=blockTopPadding, bottom=-4), descPadding=formatters.packPadding(left=6, top=6, right=-20)))
         if not vehicle.isRotationGroupLocked:
             commonStatsBlock = CommonStatsBlockConstructor(vehicle, paramsConfig, valueWidth, leftPadding, rightPadding).construct()
             if commonStatsBlock:
                 items.append(formatters.packBuildUpBlockData(commonStatsBlock, gap=textGap, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=blockTopPadding, bottom=-13)))
         if self.context.getParams().get(_IS_SENIORITY, False):
-            awardCrewAndHangarBlock = VehicleAdditionalItems(vehicle, paramsConfig, leftPadding, rightPadding, showVehicleSlot=True, crewLevel=100).construct()
+            awardCrewAndHangarBlock = VehicleAdditionalItems(vehicle, paramsConfig, leftPadding, rightPadding, showVehicleSlot=True, crewLevel=100, context=self.context).construct()
             if awardCrewAndHangarBlock:
                 items.append(formatters.packBuildUpBlockData(awardCrewAndHangarBlock))
         statsBlockConstructor = None
@@ -137,7 +142,7 @@ class VehicleInfoTooltipData(BlocksTooltipData):
             priceBlockConstructor, pricePadding = EarlyAccessPriceBlockConstructor, 30
         else:
             priceBlockConstructor, pricePadding = PriceBlockConstructor, 98
-        priceBlock, invalidWidth = priceBlockConstructor(vehicle, statsConfig, self.context.getParams(), valueWidth, 500, rightPadding).construct()
+        priceBlock, invalidWidth = priceBlockConstructor(vehicle, statsConfig, self.context.getParams(), valueWidth, 500, rightPadding, context=self.context).construct()
         shouldBeCut = self.calledBy and self.calledBy in _SHORTEN_TOOLTIP_CASES or vehicle.isOnlyForEpicBattles or vehicle.isOnlyForClanWarsBattles
         if priceBlock and not shouldBeCut:
             self._setWidth(_TOOLTIP_MAX_WIDTH if invalidWidth else _TOOLTIP_MIN_WIDTH)
@@ -178,31 +183,56 @@ class VehicleInfoTooltipData(BlocksTooltipData):
             if formattedTime:
                 items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.gold(backport.text(R.strings.tooltips.vehicle.telecomRental.remainingTime.dyn(timeKey)()) % {'time': formattedTime}), value='', icon=ICON_TEXT_FRAMES.RENTALS, iconYOffset=2, gap=0, valueWidth=valueWidth, padding=formatters.packPadding(left=2, bottom=-10)))
         if statsConfig.rentals and not vehicle.isPremiumIGR and not frontlineBlock and not vehicle.isTelecomRent:
-            if statsConfig.futureRentals:
+            if statsConfig.futureRentals and not vehicle.isWtRent(self.context):
                 rentLeftKey = '#tooltips:vehicle/rentLeftFuture/%s'
                 rentInfo = RentalInfoProvider(time=ctxParams.get('rentExpiryTime'), battles=ctxParams.get('rentBattlesLeft'), wins=ctxParams.get('rentWinsLeft'), seasonRent=ctxParams.get('rentSeason'), isRented=True)
             else:
                 rentLeftKey = '#tooltips:vehicle/rentLeft/%s'
                 rentInfo = vehicle.rentInfo
-            descrStr = RentLeftFormatter(rentInfo).getRentLeftStr(rentLeftKey)
-            leftStr = ''
-            rentTimeLeft = rentInfo.getTimeLeft()
-            if rentTimeLeft:
+            isSpecialWindow = self.context.getStatusConfiguration(self.item).isSpecialWindow
+            if rentInfo.hasMultipleConditions and not isSpecialWindow and rentInfo.battlesLeft is not None:
+                rentFormatter = RentLeftFormatter(rentInfo)
+                rentEndDate = backport.getDateTimeFormat(time_utils.makeLocalServerTime(rentInfo.getExpiryDate()))
+                descStrTime = backport.text(R.strings.tooltips.vehicle.rentLeft.days()) % {'date': rentEndDate}
+                descStrbattle = rentFormatter.getRentBattlesLeftStr(rentLeftKey)
+                rentTimeLeft = rentInfo.getTimeLeft()
                 _, formattedTime = getTimeLeftInfo(rentTimeLeft)
-                leftStr = str(formattedTime)
-            elif rentInfo.battlesLeft:
-                leftStr = str(rentInfo.battlesLeft)
-            elif rentInfo.winsLeft > 0:
-                leftStr = str(rentInfo.winsLeft)
-            if descrStr or leftStr:
-                items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(descrStr), value=text_styles.expText(leftStr), icon=ICON_TEXT_FRAMES.RENTALS, iconYOffset=2, gap=0, valueWidth=valueWidth, padding=formatters.packPadding(left=0, bottom=-10)))
+                leftStrTime = ''
+                leftStrBattle = str(rentInfo.battlesLeft)
+                if rentTimeLeft > 0 or vehicle.isWtRent(self.context):
+                    valueTextStyle = text_styles.error(leftStrBattle) if rentInfo.battlesLeft <= 0 else text_styles.gold(leftStrBattle)
+                    if vehicle.isWtRent(self.context):
+                        res = R.strings.tooltips.wtRentVehicle
+                        rentRes = res.rent.battles() if statsConfig.futureRentals else res.rentLeft.battles()
+                        items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.gold(backport.text(rentRes)), value=valueTextStyle, icon=ICON_TEXT_FRAMES.RENTALS, iconYOffset=2, gap=0, valueWidth=valueWidth, padding=formatters.packPadding(left=2, bottom=-12)))
+                        items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(descStrTime), value=text_styles.main(leftStrTime), icon=ICON_TEXT_FRAMES.EMPTY, iconYOffset=2, gap=0, valueWidth=valueWidth, padding=formatters.packPadding(left=2, bottom=10)))
+                    else:
+                        items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.gold(descStrbattle), value=valueTextStyle, icon=ICON_TEXT_FRAMES.BONUS_BATTLE, iconYOffset=2, gap=0, valueWidth=valueWidth, padding=formatters.packPadding(left=2, bottom=5)))
+                        items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(descStrTime), value=text_styles.main(leftStrTime), icon=ICON_TEXT_FRAMES.RENTALS, iconYOffset=2, gap=0, valueWidth=valueWidth, padding=formatters.packPadding(left=2)))
+            else:
+                descrStr = RentLeftFormatter(rentInfo).getRentLeftStr(rentLeftKey)
+                leftStr = ''
+                rentTimeLeft = rentInfo.getTimeLeft()
+                if rentTimeLeft:
+                    _, formattedTime = getTimeLeftInfo(rentTimeLeft)
+                    leftStr = str(formattedTime)
+                elif rentInfo.battlesLeft:
+                    leftStr = str(rentInfo.battlesLeft)
+                elif rentInfo.winsLeft > 0:
+                    leftStr = str(rentInfo.winsLeft)
+                if vehicle.isWtBossMainVehicle and isSpecialWindow:
+                    leftStr = ''
+                    descrStr = ''
+                if descrStr or leftStr:
+                    items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(descrStr), value=text_styles.expText(leftStr), icon=ICON_TEXT_FRAMES.RENTALS, iconYOffset=2, gap=0, valueWidth=valueWidth, padding=formatters.packPadding(left=2, bottom=-10)))
         if statsConfig.showRankedBonusBattle:
             items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(backport.text(R.strings.tooltips.vehicle.rankedBonusBattle())), value='', icon=ICON_TEXT_FRAMES.BONUS_BATTLE, iconYOffset=2, valueWidth=valueWidth, gap=0, padding=formatters.packPadding(left=0, top=-2, bottom=5)))
         if statsConfig.dailyXP and not vehicle.isWotPlus:
             attrs = self.__itemsCache.items.stats.attributes
             if attrs & constants.ACCOUNT_ATTR.DAILY_MULTIPLIED_XP and vehicle.dailyXPFactor > 0:
                 dailyXPText = text_styles.main(text_styles.expText(''.join(('x', backport.getIntegralFormat(vehicle.dailyXPFactor)))))
-                items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_DAILYXPFACTOR), value=dailyXPText, icon=ICON_TEXT_FRAMES.DOUBLE_XP_FACTOR, iconYOffset=2, valueWidth=valueWidth + 1, gap=0, padding=formatters.packPadding(left=0, top=-2, bottom=5)))
+                bottom = 11 if vehicle.isWtRent(self.context) else 5
+                items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_DAILYXPFACTOR), value=dailyXPText, icon=ICON_TEXT_FRAMES.DOUBLE_XP_FACTOR, iconYOffset=2, valueWidth=valueWidth + 1, gap=0, padding=formatters.packPadding(left=0, top=-2, bottom=bottom)))
         if statsConfig.showDebutBoxes and self.__debutBoxController.isEnabled() and Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE not in self.item.getState() and self.__debutBoxController.isQuestsAvailableOnVehicle(self.item) and not vehicle.isWotPlus:
             items.append(formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main(backport.text(R.strings.tooltips.vehicle.debut_box_available())), icon=backport.image(R.images.gui.maps.icons.library.debut_boxes_16x16()), padding=formatters.packPadding(left=79, top=-2, bottom=5), iconPadding=formatters.packPadding(top=2), titlePadding=formatters.packPadding(left=3)))
         if vehicle.isResetParagons:
@@ -491,7 +521,7 @@ class WotPlusBlockConstructor(VehicleTooltipBlockConstructor):
 class PriceBlockConstructor(VehicleTooltipBlockConstructor):
     bootcamp = dependency.descriptor(IBootcampController)
 
-    def __init__(self, vehicle, configuration, params, valueWidth, leftPadding, rightPadding):
+    def __init__(self, vehicle, configuration, params, valueWidth, leftPadding, rightPadding, context=None):
         super(PriceBlockConstructor, self).__init__(vehicle, configuration, leftPadding, rightPadding)
         self._valueWidth = valueWidth
         self._rentExpiryTime = params.get('rentExpiryTime')
@@ -500,6 +530,7 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
         self._rentSeason = params.get('rentSeason')
         self._blueprintFragmentsCount = params.get('blueprintFragmentsCount', 0)
         self._customPrice = params.get('customPrice')
+        self.__context = context
 
     def construct(self):
         xp = self.configuration.xp
@@ -546,7 +577,7 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
                 sellPrice = vehicle.sellPrices.itemPrice.price
                 sellCurrency = sellPrice.getCurrency(byWeight=True)
                 block.append(makeCompoundPriceBlock(CURRENCY_SETTINGS.SELL_PRICE, getItemSellPricesVO(sellCurrency, sellPrice)))
-        if buyPrice and not vehicle.isWotPlus:
+        if buyPrice and not vehicle.isWotPlus and not vehicle.isWtRent(self.__context):
             if vehicle.isRestorePossible():
                 price = vehicle.restorePrice
                 currency = price.getCurrency()
@@ -554,7 +585,7 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
                 if isInInventory or not isInInventory and not isUnlocked and not isNextToUnlock:
                     neededValue = None
                 block.append(makeCompoundPriceBlock(CURRENCY_SETTINGS.RESTORE_PRICE, getItemRestorePricesVO(price)))
-            elif not isInInventory or vehicle.isRentable or vehicle.isRented and not (vehicle.isDisabledForBuy or vehicle.isPremiumIGR or vehicle.isTelecom):
+            elif (not isInInventory or vehicle.isRentable or vehicle.isRented) and not (vehicle.isDisabledForBuy or vehicle.isPremiumIGR or vehicle.isTelecom or vehicle.isSpecial or vehicle.isSecret):
                 itemPrice = vehicle.buyPrices.itemPrice
                 if self._customPrice:
                     itemPrice = ItemPrice(self._customPrice, itemPrice.defPrice)
@@ -705,11 +736,12 @@ class CommonStatsBlockConstructor(VehicleTooltipBlockConstructor):
 class VehicleAdditionalItems(VehicleTooltipBlockConstructor):
     NO_CREW = -1
 
-    def __init__(self, vehicle, configuration, leftPadding=20, rightPadding=20, showVehicleSlot=False, crewLevel=NO_CREW, allModulesAvailable=False):
+    def __init__(self, vehicle, configuration, leftPadding=20, rightPadding=20, showVehicleSlot=False, crewLevel=NO_CREW, allModulesAvailable=False, context=None):
         super(VehicleAdditionalItems, self).__init__(vehicle, configuration, leftPadding, rightPadding)
         self._crewLevelValue = crewLevel
         self._showVehicleSlot = showVehicleSlot
         self._allModulesAvailable = allModulesAvailable
+        self.__context = context
 
     def construct(self):
         block = []
@@ -720,7 +752,8 @@ class VehicleAdditionalItems(VehicleTooltipBlockConstructor):
             if self._allModulesAvailable:
                 block.append(formatters.packImageTextBlockData(title='', desc=text_styles.main(TOOLTIPS.VEHICLE_ALLMODULES_HEADER), img=RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_ALLMODULES, imgPadding=formatters.packPadding(left=leftPaddingImg, top=10), txtPadding=formatters.packPadding(left=leftPaddingTxt, top=20)))
             if self._crewLevelValue != self.NO_CREW:
-                block.append(formatters.packImageTextBlockData(title='', desc=text_styles.main(_ms(TOOLTIPS.CUSTOMCREW_REFERRAL_BODY, value=self._crewLevelValue)), img=RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_TANKMEN, imgPadding=formatters.packPadding(left=leftPaddingImg, top=10), txtPadding=formatters.packPadding(left=leftPaddingTxt, top=20)))
+                descRes = R.strings.tooltips.wtRentVehicle.crew.body() if self.vehicle.isWtRent(self.__context) else R.strings.tooltips.customCrew.referral.body()
+                block.append(formatters.packImageTextBlockData(title='', desc=text_styles.main(backport.text(descRes, value=self._crewLevelValue)), img=RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_TANKMEN, imgPadding=formatters.packPadding(left=leftPaddingImg, top=10), txtPadding=formatters.packPadding(left=leftPaddingTxt, top=20)))
             if self._showVehicleSlot:
                 block.append(formatters.packImageTextBlockData(title='', desc=text_styles.main(TOOLTIPS.VEHICLE_HANGARSLOT_HEADER), img=RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_SLOTS, imgPadding=formatters.packPadding(left=leftPaddingImg, top=10), txtPadding=formatters.packPadding(left=leftPaddingTxt, top=20)))
         return block

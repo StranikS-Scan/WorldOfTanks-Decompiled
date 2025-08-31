@@ -6,7 +6,7 @@ from messenger.m_constants import CLIENT_ACTION_ID, CLIENT_ERROR_ID
 from messenger.proto.interfaces import IChatError
 from messenger.proto import shared_errors
 from messenger.proto.shared_errors import ClientActionError
-from messenger.proto.xmpp.extensions.error import StanzaErrorExtension, WgErrorExtension, DEF_STANZA_ERROR_CONDITION
+from messenger.proto.xmpp.extensions.error import StanzaErrorExtension, ProjectErrorExtension, DEF_STANZA_ERROR_CONDITION
 from messenger.proto.xmpp.extensions.shared_handlers import IQHandler, ProxyHandler
 from messenger.proto.xmpp import xmpp_constants
 
@@ -153,7 +153,7 @@ def createServerActionIQError(actionID, pyGlooxTag):
 
 
 def createServerUserRoomCreationIQError(pyGlooxTag, roomName):
-    errorID = IQHandler(WgErrorExtension()).handleTag(pyGlooxTag)
+    errorID = IQHandler(ProjectErrorExtension()).handleTag(pyGlooxTag)
     if errorID != xmpp_constants.MUC_CREATION_ERROR.UNDEFINED:
         error = ServerUserRoomCreationError(errorID, roomName)
     else:

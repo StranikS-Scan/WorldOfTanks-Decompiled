@@ -16,7 +16,7 @@ SUCCESS_STATUSES = [200, 201, 304]
 ERROR_MAP = {e.response_code:e for e in exceptions.BaseRequestError.__subclasses__()}
 
 def get_error_from_response(response_code):
-    return ERROR_MAP.get(response_code, exceptions.WgcgError)
+    return ERROR_MAP.get(response_code, exceptions.ClientgwError)
 
 
 def from_iso(iso_date):

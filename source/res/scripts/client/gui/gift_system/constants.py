@@ -8,7 +8,7 @@ class GifterResponseState(Enum):
     WEB_FAILURE = 'webFailure'
     WEB_SUCCESS = 'webSuccess'
     REQUESTS_DISABLED = 'requestsDisabled'
-    WGCG_NOT_AVAILABLE = 'wgcgNotAvailable'
+    CLIENTGW_NOT_AVAILABLE = 'clientgwNotAvailable'
     REQUEST_IN_PROGRESS = 'requestInProgress'
     CENTER_DISCONNECTED = 'centerDisconnected'
     GIFT_SYSTEM_LIMIT_REACHED = 'giftSystemLimitReached'

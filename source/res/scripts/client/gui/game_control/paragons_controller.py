@@ -112,6 +112,14 @@ class ParagonsController(IParagonsController):
         return self.__limitedUiController.isRuleCompleted(LuiRules.PARAGONS_ENTRY_POINT)
 
     @property
+    def isLimitedUiParagonsTreeBranchesRuleCompleted(self):
+        return self.__limitedUiController.isRuleCompleted(LuiRules.PARAGONS_TREE_BRANCHES)
+
+    @property
+    def isLimitedUiParagonsNotificationRuleCompleted(self):
+        return self.__limitedUiController.isRuleCompleted(LuiRules.PARAGONS_NOTIFICATION)
+
+    @property
     def isEnabledAndAvailable(self):
         return self.isEnabled and self.isAvailable
 
@@ -233,11 +241,6 @@ class ParagonsController(IParagonsController):
 
         return self.__selectedRewardReceivedTokens.get(entCode, [])
 
-    def __onParagonsEntryPointsUpdated(self, *_):
-        if not self.__limitedUiController.isRuleCompleted(LuiRules.PARAGONS_ENTRY_POINT):
-            return
-        self.__limitedUIController.stopObserve(LuiRules.PARAGONS_ENTRY_POINT, self.__onParagonsEntryPointsUpdated)
-
     def onAccountBecomePlayer(self):
         self.__onServerSettingsChanged(self.__lobbyContext.getServerSettings())
         self.__lobbyContext.onServerSettingsChanged += self.__onServerSettingsChanged
@@ -322,8 +325,6 @@ class ParagonsController(IParagonsController):
         events.onClientUpdated += self.__onClientUpdate
         self.__itemsCache.onSyncStarted += self.__onItemsSyncStarted
         self.__itemsCache.onSyncCompleted += self.__onItemsSyncCompleted
-        if self.__limitedUiController.isRuleCompleted(LuiRules.PARAGONS_ENTRY_POINT):
-            self.__limitedUiController.startObserve(LuiRules.PARAGONS_ENTRY_POINT, self.__onParagonsEntryPointsUpdated)
 
     def __removeListeners(self):
         paragons = self.paragons
@@ -332,7 +333,6 @@ class ParagonsController(IParagonsController):
         events.onClientUpdated -= self.__onClientUpdate
         self.__itemsCache.onSyncStarted -= self.__onItemsSyncStarted
         self.__itemsCache.onSyncCompleted -= self.__onItemsSyncCompleted
-        self.__limitedUiController.stopObserve(LuiRules.PARAGONS_ENTRY_POINT, self.__onParagonsEntryPointsUpdated)
 
     def __onServerSettingsChanged(self, serverSettings):
         if self.__serverSettings is not None:

@@ -19,8 +19,8 @@ from gui.shared.utils import getPlayerDatabaseID, getPlayerName
 from gui.shared.utils import sortByFields
 from gui.shared.utils.ListPaginator import ListPaginator
 from gui.shared.view_helpers import UsersInfoHelper
-from gui.wgcg.clan.contexts import ClansInfoCtx, AcceptInviteCtx, DeclineInviteCtx, DeclineInvitesCtx
-from gui.wgcg.clan.contexts import SearchClansCtx, GetRecommendedClansCtx, AccountInvitesCtx, ClanRatingsCtx
+from gui.clientgw.clan.contexts import ClansInfoCtx, AcceptInviteCtx, DeclineInviteCtx, DeclineInvitesCtx
+from gui.clientgw.clan.contexts import SearchClansCtx, GetRecommendedClansCtx, AccountInvitesCtx, ClanRatingsCtx
 from helpers import dependency
 from helpers import i18n
 from helpers import time_utils

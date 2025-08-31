@@ -642,11 +642,11 @@ class ArcadeControlMode(_GunControlMode):
         vecToPivot = pivotPos - wpoint
         if vecToPivot.x != 0:
             wpoint += ray * (vecToPivot.x / ray.x)
-        res = BigWorld.wg_collideDynamicStatic(player.spaceID, wpoint, wpoint + ray * AssaultCamera.MAX_COLLISION_DISTANCE_FROM_SCREEN, 1, player.playerVehicleID, -1, 0)
+        res = BigWorld.collideDynamicStatic(player.spaceID, wpoint, wpoint + ray * AssaultCamera.MAX_COLLISION_DISTANCE_FROM_SCREEN, 1, player.playerVehicleID, -1, 0)
         if res is not None:
             pos = res[0]
             normal = res[6]
-        waterCollisionDist = BigWorld.wg_collideWater(wpoint, wpoint + ray * AssaultCamera.MAX_COLLISION_DISTANCE_FROM_SCREEN, False)
+        waterCollisionDist = BigWorld.collideWater(wpoint, wpoint + ray * AssaultCamera.MAX_COLLISION_DISTANCE_FROM_SCREEN, False)
         if waterCollisionDist > -1.0 and (pos is None or waterCollisionDist < (pos - wpoint).length):
             pos = wpoint + ray * waterCollisionDist
             normal = math_utils.VectorConstant.Vector3J
@@ -668,7 +668,7 @@ class ArcadeControlMode(_GunControlMode):
             vehicle = player.getVehicleAttached()
             hitPoint, projectileDir = getShotTargetInfo(vehicle, pos, player.gunRotator)
             shotPosition, velocity, gravity = player.gunRotator.getShotParams(hitPoint, ignoreYawLimits=True)
-            result = BigWorld.wg_simulateProjectileTrajectory(shotPosition, velocity, gravity, constants.SERVER_TICK_LENGTH, constants.SHELL_TRAJECTORY_EPSILON_CLIENT, 4)
+            result = BigWorld.simulateProjectileTrajectory(shotPosition, velocity, gravity, constants.SERVER_TICK_LENGTH, constants.SHELL_TRAJECTORY_EPSILON_CLIENT, 4)
             if result is not None:
                 hitPoint = result[1]
                 projectileDir = result[2]
@@ -683,13 +683,13 @@ class ArcadeControlMode(_GunControlMode):
                 pos = hitPoint
                 projectileDir.normalise()
                 checkWaterDirection = projectileDir
-                hit = BigWorld.wg_collideDynamicStatic(player.spaceID, pos - projectileDir.scale(0.1), pos + projectileDir.scale(0.1), 1, player.playerVehicleID, -1, 0)
+                hit = BigWorld.collideDynamicStatic(player.spaceID, pos - projectileDir.scale(0.1), pos + projectileDir.scale(0.1), 1, player.playerVehicleID, -1, 0)
                 if hit is not None:
                     normal = hit[6]
             if checkWaterDirection.y < 0.0:
                 p0 = pos + checkWaterDirection.scale(1000.0)
                 p1 = pos - checkWaterDirection.scale(1000.0)
-                waterDist = BigWorld.wg_collideWater(p0, p1, False)
+                waterDist = BigWorld.collideWater(p0, p1, False)
                 if waterDist > 0 and waterDist > (pos - p0).length:
                     pos = p0 - checkWaterDirection.scale(waterDist)
                     normal = math_utils.VectorConstant.Vector3J
@@ -779,7 +779,7 @@ class _TrajectoryControlMode(_GunControlMode):
 
     def __init__(self, dataSection, avatarInputHandler, modeName, trajectoryUpdateInterval):
         super(_TrajectoryControlMode, self).__init__(dataSection, avatarInputHandler, modeName)
-        self.__trajectoryDrawer = BigWorld.wg_trajectory_drawer()
+        self.__trajectoryDrawer = BigWorld.trajectory_drawer()
         self.__dataUpdateCallback = None
         self.__updateInterval = trajectoryUpdateInterval
         self.__controllingVehicleID = None
@@ -1153,9 +1153,9 @@ class AssaultControlMode(_TrajectoryControlMode):
                     return
                 self._cam.teleport(aimPosition)
         super(AssaultControlMode, self).enable(**args)
-        BigWorld.wg_enableTreeHiding(True)
+        BigWorld.enableTreeHiding(True)
         treeHidingRadius, treeHidingRadiusAlpha = self._cam.getTreeHidingParams()
-        BigWorld.wg_setTreeHidingRadius(treeHidingRadius, treeHidingRadiusAlpha)
+        BigWorld.setTreeHidingRadius(treeHidingRadius, treeHidingRadiusAlpha)
         self.strategicCamera = STRATEGIC_CAMERA.TRAJECTORY
         ammoCtrl = self.__sessionProvider.shared.ammo
         if ammoCtrl is not None:
@@ -1186,7 +1186,7 @@ class AssaultControlMode(_TrajectoryControlMode):
         start = targetPoint - direction.scale(self._VEHICLE_MAX_LENGTH_ERROR)
         end = targetPoint + direction.scale(self._VEHICLE_MAX_LENGTH_ERROR)
         player = BigWorld.player()
-        result = BigWorld.wg_collideDynamic(player.spaceID, start, end, player.playerVehicleID)
+        result = BigWorld.collideDynamic(player.spaceID, start, end, player.playerVehicleID)
         vehiclePoint = None
         if result is not None:
             vehiclePoint = start + direction.scale(result[0])
@@ -1230,7 +1230,7 @@ class AssaultControlMode(_TrajectoryControlMode):
             if hitPointAngle is None:
                 return
             result = hitPointAngle[0]
-            waterCollisionDist = BigWorld.wg_collideWater(hitPointAngle[0], hitPointAngle[0] - maxDirectionScaled, False)
+            waterCollisionDist = BigWorld.collideWater(hitPointAngle[0], hitPointAngle[0] - maxDirectionScaled, False)
             if waterCollisionDist >= 0.0:
                 result = hitPointAngle[0] - maxDirection * waterCollisionDist
             return result
@@ -1251,7 +1251,7 @@ class AssaultControlMode(_TrajectoryControlMode):
 
     def disable(self):
         super(AssaultControlMode, self).disable()
-        BigWorld.wg_enableTreeHiding(False)
+        BigWorld.enableTreeHiding(False)
         self.strategicCamera = STRATEGIC_CAMERA.AERIAL
         ammoCtrl = self.__sessionProvider.shared.ammo
         if ammoCtrl is not None:
@@ -1289,7 +1289,7 @@ class SniperControlMode(_GunControlMode):
 
     def __init__(self, dataSection, avatarInputHandler, mode=CTRL_MODE_NAME.SNIPER):
         super(SniperControlMode, self).__init__(dataSection, avatarInputHandler, mode)
-        self._binoculars = BigWorld.wg_binoculars()
+        self._binoculars = BigWorld.binoculars()
         self._setupCamera(dataSection)
         self.__binocularsModes = {}
         for suffix in SniperControlMode._BINOCULARS_MODE_SUFFIX:
@@ -1328,9 +1328,9 @@ class SniperControlMode(_GunControlMode):
         self._cam.enable(args['preferredPos'], args['saveZoom'])
         self._binoculars.setEnabled(True)
         self._binoculars.setEnableLensEffects(SniperControlMode._LENS_EFFECTS_ENABLED)
-        BigWorld.wg_enableTreeHiding(True)
-        BigWorld.wg_setTreeHidingRadius(15.0, 10.0)
-        BigWorld.wg_havokSetSniperMode(True)
+        BigWorld.enableTreeHiding(True)
+        BigWorld.setTreeHidingRadius(15.0, 10.0)
+        BigWorld.havokSetSniperMode(True)
         if not BattleReplay.g_replayCtrl.isPlaying:
             TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.SNIPER_MODE)
         if BattleReplay.g_replayCtrl.isRecording:
@@ -1342,8 +1342,8 @@ class SniperControlMode(_GunControlMode):
     def disable(self, isDestroy=False):
         super(SniperControlMode, self).disable()
         self._binoculars.setEnabled(False)
-        BigWorld.wg_havokSetSniperMode(False)
-        BigWorld.wg_enableTreeHiding(False)
+        BigWorld.havokSetSniperMode(False)
+        BigWorld.enableTreeHiding(False)
         if not BattleReplay.g_replayCtrl.isPlaying:
             if TriggersManager.g_manager is not None:
                 TriggersManager.g_manager.deactivateTrigger(TRIGGER_TYPE.SNIPER_MODE)

@@ -40,7 +40,7 @@ if TYPE_CHECKING:
     from gui.game_control.epic_meta_game_ctrl import EpicBattleMetaGameController
     from gui.goodies.goodies_cache import GoodiesCache
     from gui.shared.items_cache import ItemsCache
-    from gui.wgcg.web_controller import WebController
+    from gui.clientgw.web_controller import WebController
     from gui.impl.common.personal_reserves.personal_reserves_shared_model_utils import BoosterModelData
 
 class ReservesActivationView(ReservesViewMonitor):

@@ -126,6 +126,10 @@ class RankedModeSelectorItem(ModeSelectorLegacyItem):
             if self.__rankedBattleController.getCurrentSeason():
                 bonusBattles = self.__rankedBattleController.getClientBonusBattlesCount()
             model.setBonusBattles(bonusBattles)
+            clientMaxRankID, _ = self.__rankedBattleController.getClientMaxRank()
+            model.setMaxRank(clientMaxRankID)
+            statsComposer = self.__rankedBattleController.getStatsComposer()
+            model.setBattlesTotal(statsComposer.amountBattles)
             return
 
     @staticmethod

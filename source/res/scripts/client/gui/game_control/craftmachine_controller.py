@@ -5,8 +5,8 @@ from adisp import adisp_process
 from constants import EnhancementsConfig as config
 from constants import MAX_VEHICLE_LEVEL, BATTLE_MODE_VEH_TAGS_EXCEPT_CLAN
 from helpers import dependency
-from gui.wgcg.craftmachine.contexts import CraftmachineModulesInfoCtx
-from gui.wgcg.states import WebControllerStates
+from gui.clientgw.craftmachine.contexts import CraftmachineModulesInfoCtx
+from gui.clientgw.states import WebControllerStates
 from gui.shared.utils.requesters import REQ_CRITERIA
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.game_control import ICraftmachineController

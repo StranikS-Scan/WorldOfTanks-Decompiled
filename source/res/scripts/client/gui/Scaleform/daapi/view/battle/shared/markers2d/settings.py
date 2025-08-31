@@ -24,8 +24,8 @@ class MARKER_SYMBOL_NAME(object):
     STEP_REPAIR_MARKER_TYPE = 'ResupplyMarkerUI'
     WAYPOINT_MARKER = 'SectorWaypointMarkerUI'
     SECTOR_WARNING_MARKER = 'SectorWarningMarkerUI'
-    ARTILLERY_TARGET_MARKER = 'ArtilleryTargetMarkerUI'
-    EXPLOSION_ZONE_MARKER = 'ExplosionZoneMarkerUI'
+    EVENT_VEHICLE_MARKER = 'WTVehicleMarkerUI'
+    EVENT_GENERATOR_MARKER = 'GeneratorLocationMarkerUI'
 
 
 class DAMAGE_TYPE(object):

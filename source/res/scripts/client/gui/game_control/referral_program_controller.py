@@ -16,7 +16,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.referral_program.browser.web_handlers import createReferralWebHandlers
-from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL, isCurrentUserRecruit, REF_RPOGRAM_PDATA_KEY, getReferralShopURL
+from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL, isCurrentUserRecruit, getReferralShopURL, REF_RPOGRAM_PDATA_KEY
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.impl.lobby.common.sound_constants import SUBVIEW_SOUND_SPACE
@@ -89,7 +89,7 @@ class ReferralProgramController(GameWindowController, IReferralProgramController
     def isScoresLimitReached(self):
         points = self.__itemsCache.items.stats.entitlements.get(RP_PGB_POINT, 0)
         freePoints = self.__itemsCache.items.refProgram.getRPPgbPoints()
-        return freePoints > 0 and points >= freePoints
+        return 0 <= freePoints <= points
 
     def _openWindow(self, url, _=None):
         browserView = self.__getBrowserView()

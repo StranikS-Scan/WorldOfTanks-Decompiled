@@ -1154,7 +1154,7 @@ class _DecalEffectDesc(_EffectDesc):
         extent = rayEnd - rayStart
         extent.normalise()
         extent *= size.length * 0.707
-        BigWorld.wg_addDecal(self._groupName, center - extent, center + extent, size, args['yaw'] if not self._randomYaw else random.uniform(0.0, 3.14), DecalMap.g_instance.getIndex(texName), DecalMap.g_instance.getIndex(bumpTexName), DecalMap.g_instance.getIndex(smTexName))
+        BigWorld.addDecal(self._groupName, center - extent, center + extent, size, args['yaw'] if not self._randomYaw else random.uniform(0.0, 3.14), DecalMap.g_instance.getIndex(texName), DecalMap.g_instance.getIndex(bumpTexName), DecalMap.g_instance.getIndex(smTexName))
 
     def delete(self, elem, reason):
         return True
@@ -1185,7 +1185,7 @@ class _PostProcessEffectDesc(_EffectDesc):
 class _FlashBangEffectDesc(_EffectDesc):
     __slots__ = ('_duration', '_keyframes', '__fba', '__clbackId')
     TYPE = '_FlashBangEffectDesc'
-    renderSettings = BigWorld.WGRenderSettings()
+    renderSettings = BigWorld.PyRenderSettings()
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, dataSection):
@@ -1501,7 +1501,7 @@ def _getSurfaceAlignedTransform(model, nodeName, localTransform, precalculatedNo
          Math.Vector3(0, 0, 0.1))
         spaceID = BigWorld.player().spaceID
         for offset in offsets:
-            res = BigWorld.wg_collideSegment(spaceID, pos, pos + offset, 128)
+            res = BigWorld.collideSegment(spaceID, pos, pos + offset, 128)
             if res is None:
                 continue
             normal = res.normal

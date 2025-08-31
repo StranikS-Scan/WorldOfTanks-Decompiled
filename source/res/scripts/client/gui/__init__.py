@@ -119,7 +119,7 @@ def getGuiServicesConfig(manager):
     from gui import app_loader
     from gui import battle_control
     from gui import battle_results
-    from gui import wgcg
+    from gui import clientgw
     from gui import customization
     from gui import event_boards
     from gui import game_control
@@ -144,7 +144,7 @@ def getGuiServicesConfig(manager):
     manager.addConfig(_sf.getScaleformConfig)
     manager.addConfig(battle_control.getBattleSessionConfig)
     manager.addConfig(sounds.getSoundsConfig)
-    manager.addConfig(wgcg.getWebServicesConfig)
+    manager.addConfig(clientgw.getWebServicesConfig)
     manager.addConfig(event_boards.getEventServicesConfig)
     manager.addConfig(goodies.getGoodiesCacheConfig)
     manager.addConfig(goodies.getStorageNoveltyConfig)

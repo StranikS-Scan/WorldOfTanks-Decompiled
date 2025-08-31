@@ -7,8 +7,8 @@ import typing
 import Event
 import adisp
 from gui.impl.lobby.paragons.paragons_helpers.entitlements_helpers import ParagonsEntitlementsContext
-from gui.wgcg.shop import contexts as shop_contexts
-from gui.wgcg.web_controller import WebController
+from gui.clientgw.shop import contexts as shop_contexts
+from gui.clientgw.web_controller import WebController
 from helpers import dependency
 from paragons_common import PARAGONS_STOREFRONT_SHOP
 from skeletons.gui.game_control import IParagonsRewardsShopController

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/macroses.py
+import typing
 import base64
 from urllib import quote_plus
 import BigWorld
@@ -9,7 +10,9 @@ from helpers import getClientLanguage, dependency
 from helpers.http.url_formatters import addParamsToUrlQuery
 from skeletons.gui.web import IWebController
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.game_control import IMarathonEventsController
+from skeletons.gui.game_control import IMarathonEventsController, IBattlePassController
+if typing.TYPE_CHECKING:
+    from typing import Optional, Any
 
 def getLanguageCode(args=None):
     code = getClientLanguage()
@@ -121,6 +124,11 @@ def getMarathonStylePackage(args=None, marathonCtrl=None):
     return result
 
 
+@dependency.replace_none_kwargs(bpCtrl=IBattlePassController)
+def getBattlePassSeasonID(args=None, bpCtrl=None):
+    return str(bpCtrl.getSeasonID()) if bpCtrl.isEnabled() else ''
+
+
 def getClanDBID(args=None):
     clansCtrl = dependency.instance(IWebController)
     return str(clansCtrl.getClanDbID())
@@ -138,7 +146,8 @@ def getSyncMacroses():
      'CLAN_DBID': getClanDBID,
      'CURRENT_REALM': getCurrentRealm,
      'PACKAGE_ID': getMarathonPackage,
-     'STYLE_PACKAGE_ID': getMarathonStylePackage}
+     'STYLE_PACKAGE_ID': getMarathonStylePackage,
+     'BATTLE_PASS_SEASON_ID': getBattlePassSeasonID}
 
 
 @adisp_async

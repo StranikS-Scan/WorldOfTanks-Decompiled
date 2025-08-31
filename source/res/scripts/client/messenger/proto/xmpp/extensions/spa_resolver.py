@@ -51,7 +51,7 @@ class SpaResolverQuery(PyExtension):
 
     def __init__(self, items=None):
         super(SpaResolverQuery, self).__init__(_TAG.QUERY)
-        self.setXmlNs(_NS.WG_SPA_RESOLVER)
+        self.setXmlNs(_NS.SPA_RESOLVER)
         items = items or tuple()
         for item in items:
             self.setChild(item)

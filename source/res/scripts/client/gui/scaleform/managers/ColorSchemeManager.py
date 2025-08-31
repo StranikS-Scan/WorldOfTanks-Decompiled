@@ -95,7 +95,7 @@ class BattleColorSchemeManager(ColorSchemeManager, IArenaVehiclesController):
             enemyColor = self.colors.getSubScheme('flag_team_red', group)['rgba']
             for teamIdx in teamsOnArena:
                 color = allyColor if arenaDP.isAllyTeam(teamIdx) else enemyColor
-                BigWorld.wg_setFlagColor(teamIdx, color / 255)
+                BigWorld.setFlagColor(teamIdx, color / 255)
 
             return
 
@@ -106,7 +106,7 @@ class BattleColorSchemeManager(ColorSchemeManager, IArenaVehiclesController):
         else:
             teamsOnArena = arenaDP.getTeamsOnArena()
             for teamIdx in [0] + teamsOnArena:
-                BigWorld.wg_setFlagEmblem(teamIdx, BigWorld.wg_defaultFlagEmblemPath, BigWorld.wg_defaultFlagEmblemCoords)
+                BigWorld.setFlagEmblem(teamIdx, BigWorld.defaultFlagEmblemPath, BigWorld.defaultFlagEmblemCoords)
 
             return
 

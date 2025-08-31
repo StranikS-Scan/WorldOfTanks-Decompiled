@@ -196,12 +196,25 @@ class ARENAS(object):
     QA_CONTENT_01_DESCRIPTION = '#arenas:qa_content_01/description'
     C_503_KALININGRAD_NAME = '#arenas:503_kaliningrad/name'
     C_503_KALININGRAD_DESCRIPTION = '#arenas:503_kaliningrad/description'
+    C_34_REDSHIRE_WT_NAME = '#arenas:34_redshire_wt/name'
+    C_34_REDSHIRE_WT_DESCRIPTION = '#arenas:34_redshire_wt/description'
+    C_35_STEPPES_WT_NAME = '#arenas:35_steppes_wt/name'
+    C_35_STEPPES_WT_DESCRIPTION = '#arenas:35_steppes_wt/description'
+    C_11_MUROVANKA_WT_NAME = '#arenas:11_murovanka_wt/name'
+    C_11_MUROVANKA_WT_DESCRIPTION = '#arenas:11_murovanka_wt/description'
+    C_14_SIEGFRIED_LINE_WT_NAME = '#arenas:14_siegfried_line_wt/name'
+    C_14_SIEGFRIED_LINE_WT_DESCRIPTION = '#arenas:14_siegfried_line_wt/description'
     H08_MT_HANGAR_NAME = '#arenas:h08_mt_hangar/name'
     H08_MT_HANGAR_DESCRIPTION = '#arenas:h08_mt_hangar/description'
-    H15_MT_BDAY_2025_NAME = '#arenas:h15_mt_bday_2025/name'
-    H15_MT_BDAY_2025_DESCRIPTION = '#arenas:h15_mt_bday_2025/description'
     C_505_CAUCASUS_NAME = '#arenas:505_caucasus/name'
     C_505_CAUCASUS_DESCRIPTION = '#arenas:505_caucasus/description'
+    MODIFIED = '#arenas:modified'
+    C_28_DESERT_WT_NAME = '#arenas:28_desert_wt/name'
+    C_28_DESERT_WT_DESCRIPTION = '#arenas:28_desert_wt/description'
+    H14_MT_WT_2025_NAME = '#arenas:h14_mt_wt_2025/name'
+    H14_MT_WT_2025_DESCRIPTION = '#arenas:h14_mt_wt_2025/description'
+    H08_MT_HANGAR_WT_NAME = '#arenas:h08_mt_hangar_wt/name'
+    H08_MT_HANGAR_WT_DESCRIPTION = '#arenas:h08_mt_hangar_wt/description'
     ALL_ENUM = (TYPE_CTF_NAME,
      TYPE_CTF_DESCRIPTION,
      TYPE_DOMINATION_NAME,
@@ -395,12 +408,25 @@ class ARENAS(object):
      QA_CONTENT_01_DESCRIPTION,
      C_503_KALININGRAD_NAME,
      C_503_KALININGRAD_DESCRIPTION,
+     C_34_REDSHIRE_WT_NAME,
+     C_34_REDSHIRE_WT_DESCRIPTION,
+     C_35_STEPPES_WT_NAME,
+     C_35_STEPPES_WT_DESCRIPTION,
+     C_11_MUROVANKA_WT_NAME,
+     C_11_MUROVANKA_WT_DESCRIPTION,
+     C_14_SIEGFRIED_LINE_WT_NAME,
+     C_14_SIEGFRIED_LINE_WT_DESCRIPTION,
      H08_MT_HANGAR_NAME,
      H08_MT_HANGAR_DESCRIPTION,
-     H15_MT_BDAY_2025_NAME,
-     H15_MT_BDAY_2025_DESCRIPTION,
      C_505_CAUCASUS_NAME,
-     C_505_CAUCASUS_DESCRIPTION)
+     C_505_CAUCASUS_DESCRIPTION,
+     MODIFIED,
+     C_28_DESERT_WT_NAME,
+     C_28_DESERT_WT_DESCRIPTION,
+     H14_MT_WT_2025_NAME,
+     H14_MT_WT_2025_DESCRIPTION,
+     H08_MT_HANGAR_WT_NAME,
+     H08_MT_HANGAR_WT_DESCRIPTION)
 
     @classmethod
     def all(cls, key0):

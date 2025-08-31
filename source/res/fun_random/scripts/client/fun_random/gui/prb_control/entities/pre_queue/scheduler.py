@@ -35,7 +35,7 @@ class FunRandomScheduler(PeriodicScheduler, FunAssetPacksMixin, FunSubModesWatch
         status = super(FunRandomScheduler, self)._getPrimeTimeStatus(controller)
         if status != PrimeTimeStatus.AVAILABLE:
             controller = controller or self._getController()
-            status = controller.hasAvailablePrimeTimeServers()
+            status = status if controller is None else controller.hasAvailablePrimeTimeServers()
         return status
 
     @hasDesiredSubMode(defReturn=UNKNOWN_EVENT_ID)

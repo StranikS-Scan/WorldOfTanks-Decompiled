@@ -11,7 +11,7 @@ from adisp import adisp_async as adispasync, adisp_process
 from gui.impl.lobby.daily.unseen_quests_component import getAvailableDailyQuests
 from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.marathon.collective_goal_marathon import COLLECTIVE_GOAL_MARATHON_PREFIX
-from wg_async import wg_async, wg_await
+from th_async import th_async, th_await
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
@@ -655,10 +655,10 @@ class MissionView(MissionViewBase):
          'btnEvent': '',
          'btnLinkage': BUTTON_LINKAGES.BUTTON_BLACK}
 
-    @wg_async
+    @th_async
     def _onEventsUpdate(self, *args):
         self.as_setWaitingVisibleS(True)
-        yield wg_await(self.eventsCache.prefetcher.demand())
+        yield th_await(self.eventsCache.prefetcher.demand())
         self.as_setWaitingVisibleS(False)
         if self._builder:
             self.__updateEvents()

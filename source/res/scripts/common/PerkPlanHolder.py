@@ -3,7 +3,7 @@
 from collections import defaultdict
 from constants import IS_CELLAPP, IS_BASEAPP
 from typing import TYPE_CHECKING, List, Optional
-from wg_async import wg_async, wg_await, distributeLoopOverTicks, AsyncEvent
+from th_async import th_async, th_await, distributeLoopOverTicks, AsyncEvent
 from perks.PerksLoadStrategy import getLoadStarategy, LoadType, LoadState
 from perks.vse_plan import VsePlan
 if IS_CELLAPP or IS_BASEAPP:
@@ -88,7 +88,7 @@ class PCPlanHolder(object):
         self._loader = getLoadStarategy(LoadType.AUTO_START)(self._plans, self._scopedPerks, self._owner, self._onPlanReady)
         self._loader.load()
 
-    @wg_async
+    @th_async
     def clean(self):
         self.isAllPlansLoaded.clear()
         self._setReady(False)
@@ -97,7 +97,7 @@ class PCPlanHolder(object):
             for plan in self._plans:
                 yield plan.destroy()
 
-        yield wg_await(distributeLoopOverTicks(asyncLoop(), maxPerTick=1, logID='clean'))
+        yield th_await(distributeLoopOverTicks(asyncLoop(), maxPerTick=1, logID='clean'))
         del self._plans[:]
 
     def unloadPlan(self, perkID):

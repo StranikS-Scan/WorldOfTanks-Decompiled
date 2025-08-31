@@ -10,7 +10,7 @@ from gui.clans.clan_helpers import ClanListener, showClanInviteSystemMsg
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
-from gui.wgcg.clan.contexts import CreateInviteCtx
+from gui.clientgw.clan.contexts import CreateInviteCtx
 from helpers import dependency
 from helpers.i18n import makeString
 from messenger import g_settings

@@ -6,6 +6,7 @@ from gui.impl.gen import R
 from gui.shared.tooltips.contexts import NotRecruitedTankmanContext
 from helpers.i18n import makeString
 _IMG_PATH = R.images.gui.maps.icons
+_STR_PATH = R.strings.event.tankmanTooltip
 
 class TankmanAdapter(object):
 

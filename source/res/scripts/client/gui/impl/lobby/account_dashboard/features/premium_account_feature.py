@@ -70,10 +70,10 @@ class PremiumAccountFeature(FeatureItem):
         stats = self.__getStatsRequester().dummySessionStats
         base = stats.get('base', {})
         premium = stats.get('premium', {})
-        submodel.setWotPremiumSecondsLeft(self.__getTimeLeft(PREMIUM_TYPE.PLUS))
+        submodel.setPlusPremiumSecondsLeft(self.__getTimeLeft(PREMIUM_TYPE.PLUS))
         submodel.setPremiumAccountCredits(premium.get('credits', 0))
         submodel.setPremiumAccountXp(premium.get('xp', 0))
-        submodel.setWgPremiumSecondsLeft(self.__getTimeLeft(PREMIUM_TYPE.BASIC))
+        submodel.setBasicPremiumSecondsLeft(self.__getTimeLeft(PREMIUM_TYPE.BASIC))
         submodel.setStandardAccountCredits(base.get('credits', 0))
         submodel.setStandardAccountXp(base.get('xp', 0))
 

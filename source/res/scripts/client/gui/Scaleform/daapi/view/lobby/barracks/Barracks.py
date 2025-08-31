@@ -152,7 +152,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
 
     def _populate(self):
         super(Barracks, self)._populate()
-        self.app.component.wg_inputKeyMode = InputKeyMode.IGNORE_RESULT
+        self.app.component.inputKeyMode = InputKeyMode.IGNORE_RESULT
         self.startGlobalListening()
         self.itemsCache.onSyncCompleted += self.__updateCachedTankmenList
         self.eventsCache.onProgressUpdated += self.__updateNotRecruitedTankmen

@@ -12,7 +12,7 @@ from gui.clans.settings import CLIENT_CLAN_RESTRICTIONS as RES
 from gui.impl import backport
 from gui.shared.formatters import text_styles
 from gui.shared.view_helpers.emblems import ClanEmblemsHelper
-from gui.wgcg.base.contexts import CreateApplicationCtx
+from gui.clientgw.base.contexts import CreateApplicationCtx
 from helpers import i18n
 _JOIN_BTN_ACTION_ID = 'join'
 

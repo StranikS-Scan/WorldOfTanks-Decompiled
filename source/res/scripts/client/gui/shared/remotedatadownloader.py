@@ -138,7 +138,7 @@ class _RemoteDataDownloader(object):
     def __init__(self):
         self.__storageCache = None
         self.__lock = threading.RLock()
-        self._pools = {'clans': _HttpHostDownloader('ce-ct.worldoftanks.net', 3),
+        self._pools = {'clans': _HttpHostDownloader('ce-ru.tanki.su', 3),
          'custom': threads.ThreadPool(workersLimit=2)}
         return
 

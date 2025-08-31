@@ -38,7 +38,7 @@ class DamageStickerManager(CGF.ComponentManager):
     def onAddedSticker(self, shotDamage, damageSticker, transform):
         if shotDamage.partName == TankPartNames.CHASSIS:
             return
-        damageSticker.stickerModel = BigWorld.WGStickerModel(self.spaceID)
+        damageSticker.stickerModel = BigWorld.StickerModel(self.spaceID)
         geometryLink = shotDamage.compound.getPartGeometryLink(TankPartNames.getIdx(shotDamage.partName))
         m = Math.Matrix()
         m.setIdentity()

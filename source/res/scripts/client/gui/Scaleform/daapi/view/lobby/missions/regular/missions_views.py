@@ -3,7 +3,7 @@
 from functools import partial
 import BigWorld
 from adisp import adisp_process
-from wg_async import wg_async, wg_await
+from th_async import th_async, th_await
 from constants import PremiumConfigs
 from debug_utils import LOG_ERROR
 from gui import DialogsInterface
@@ -162,9 +162,9 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
                 LOG_ERROR('Attampt to initialize browser 2nd time!')
         return
 
-    @wg_async
+    @th_async
     def _onEventsUpdate(self, *args):
-        yield wg_await(self.eventsCache.prefetcher.demand())
+        yield th_await(self.eventsCache.prefetcher.demand())
         if self._builder:
             self.__updateEvents()
 

@@ -4,6 +4,7 @@ from gui.shared.event_dispatcher import showShop
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from web.web_client_api import webApiCollection
 from web.web_client_api.clans import ClansWebApi
+from web.web_client_api.comp7 import Comp7WebApi
 from web.web_client_api.platform import PlatformWebApi
 from web.web_client_api.quests import QuestsWebApi
 from web.web_client_api.loot_boxes import LootBoxWebApi
@@ -17,6 +18,7 @@ from web.web_client_api.ui import NotificationWebApi, OpenWindowWebApi, OpenTabW
 from web.web_client_api.frontline import FrontLineWebApi
 from web.web_client_api.blueprints_convert_sale import BlueprintsConvertSaleWebApi
 from web.web_client_api.uilogging import UILoggingWebApi
+from web.web_client_api.wt import WtWebApi
 
 class _OpenTabWebApi(OpenTabWebApi):
 
@@ -46,4 +48,4 @@ class ExtShopWebHandlers(object):
 
 
 def createShopWebHandlers():
-    return webApiCollection(CloseWindowWebApi, OpenWindowWebApi, NotificationWebApi, _OpenTabWebApi, RequestWebApi, ShopWebApi, SoundWebApi, SoundStateWebApi, HangarSoundWebApi, UtilWebApi, FrontLineWebApi, HeroTankWebApi, BattlePassWebApi, ClansWebApi, RankedBattlesWebApi, BlueprintsConvertSaleWebApi, PlatformWebApi, QuestsWebApi, LootBoxWebApi, UILoggingWebApi, *ExtShopWebHandlers.REGISTERED_WEB_API)
+    return webApiCollection(CloseWindowWebApi, OpenWindowWebApi, NotificationWebApi, _OpenTabWebApi, RequestWebApi, ShopWebApi, SoundWebApi, SoundStateWebApi, HangarSoundWebApi, UtilWebApi, FrontLineWebApi, HeroTankWebApi, BattlePassWebApi, ClansWebApi, RankedBattlesWebApi, Comp7WebApi, BlueprintsConvertSaleWebApi, PlatformWebApi, QuestsWebApi, LootBoxWebApi, UILoggingWebApi, WtWebApi, *ExtShopWebHandlers.REGISTERED_WEB_API)

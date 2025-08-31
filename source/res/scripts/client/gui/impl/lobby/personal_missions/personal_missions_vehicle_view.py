@@ -18,6 +18,7 @@ from gui.impl.lobby.personal_missions.personal_mission_bonuses_packers import pa
 from gui.impl.lobby.personal_missions.personal_missions_window_events import showPersonalMissionsVehicleView, showPersonalMissionsOperationWindow
 from gui.impl.lobby.tooltips.vehicle_role_descr_view import VehicleRolesTooltipView
 from gui.impl.pub import ViewImpl
+from gui.server_events.events_dispatcher import showPersonalMissionsOperationsMap
 from gui.server_events.pm3_constants import SOUNDS
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showVehiclePreview, selectVehicleInHangar
@@ -25,6 +26,8 @@ from gui.shared.events import LobbySimpleEvent
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from helpers import dependency
+from personal_missions import PM_BRANCH
+from personal_missions_constants import PM3_FINAL_REWARD_VIEW_ID
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IPersonalMissionsController, IVehicleComparisonBasket, IHangarFeatureStateController
 from skeletons.gui.shared import IItemsCache
@@ -35,7 +38,7 @@ if typing.TYPE_CHECKING:
     from frameworks.wulf import ViewEvent, Window
 
 class PersonalMissionsVehicleView(ViewImpl):
-    __slots__ = ('__isAnimationPlaying', '__hasDelayedBalanceUpdates', '__currentVehicleCD', '__isFromTechTree', '__isAnimationFreeze', '__operationId', '__operation', '__tooltipData', '__isFinalRewardsView')
+    __slots__ = ('__isAnimationPlaying', '__hasDelayedBalanceUpdates', '__currentVehicleCD', '__isFromTechTree', '__isAnimationFreeze', '__operationId', '__operation', '__tooltipData', '__isFinalRewardsView', '__operationName')
     __personalMissionsController = dependency.descriptor(IPersonalMissionsController)
     __appLoader = dependency.descriptor(IAppLoader)
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -48,9 +51,15 @@ class PersonalMissionsVehicleView(ViewImpl):
         settings.model = PersonalMissionsVehicleViewModel()
         super(PersonalMissionsVehicleView, self).__init__(settings)
         ctrl = self.__personalMissionsController
-        self.__isFinalRewardsView = operationId == 11
-        self.__operation = None if self.__isFinalRewardsView else ctrl.getOperationById(operationId)
-        self.__currentVehicleCD = first(ctrl.getVehiclesForChampionQuestPM3()).intCD if self.__isFinalRewardsView else self.__operation.getVehicleBonus().intCD
+        self.__isFinalRewardsView = operationId == PM3_FINAL_REWARD_VIEW_ID
+        if self.__isFinalRewardsView:
+            self.__operation = None
+            self.__operationName = backport.text(R.strings.personal_missions.campaignTitle.c_3())
+            self.__currentVehicleCD = first(ctrl.getVehiclesForChampionQuestPM3()).intCD
+        else:
+            self.__operation = ctrl.getOperationById(operationId)
+            self.__operationName = self.__operation.getShortUserName()
+            self.__currentVehicleCD = self.__operation.getVehicleBonus().intCD
         self.__isAnimationFreeze = False
         self.__isAnimationPlaying = False
         self.__hasDelayedBalanceUpdates = False
@@ -73,7 +82,7 @@ class PersonalMissionsVehicleView(ViewImpl):
 
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.lobby.ranked.tooltips.RankedBattlesRolesTooltipView():
-            vehicleCD = event.getArgument('vehicleCD')
+            vehicleCD = event.getArgument(PersonalMissionsVehicleViewModel.ARG_VEHICLE_CD)
             return VehicleRolesTooltipView(int(vehicleCD))
         return super(PersonalMissionsVehicleView, self).createToolTipContent(event, contentID)
 
@@ -82,7 +91,7 @@ class PersonalMissionsVehicleView(ViewImpl):
         if tooltipDossierData is not None:
             return tooltipDossierData
         else:
-            vehicleCD = event.getArgument('vehicleCD')
+            vehicleCD = event.getArgument(PersonalMissionsVehicleViewModel.ARG_VEHICLE_CD)
             data = createTooltipData(isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.CAROUSEL_VEHICLE, specialArgs=[vehicleCD])
             return data
 
@@ -129,19 +138,25 @@ class PersonalMissionsVehicleView(ViewImpl):
 
     def __onShowVehiclePreview(self, event):
         vehicleCD = int(event.get(PersonalMissionsVehicleViewModel.ARG_VEHICLE_CD, 0))
-        showVehiclePreview(vehicleCD, previewBackCb=self.__previewBackCallback, isFromVehicleView=True, bottomPanelTextData={'uniqueVehicleTitle': text_styles.tutorial(backport.text(R.strings.vehicle_preview.buyingPanel.pmOperationVehicleLabel(), operationName=self.__operation.getShortUserName()))}, backBtnLabel=backport.text(R.strings.personal_missions_3.VehicleView.vehiclePreviewBack()))
+        txts = R.strings.vehicle_preview.buyingPanel
+        vehicleLabel = txts.pmCampaignVehicleLabel() if self.__isFinalRewardsView else txts.pmOperationVehicleLabel()
+        operationName = self.__operationName
+        showVehiclePreview(vehicleCD, previewBackCb=self.__previewBackCallback, isFromVehicleView=True, bottomPanelTextData={'uniqueVehicleTitle': text_styles.tutorial(backport.text(vehicleLabel, operationName=operationName))}, backBtnLabel=backport.text(R.strings.personal_missions_3.VehicleView.vehiclePreviewBack()))
 
     def __onShowInHangar(self, event):
         vehicleCD = int(event.get(PersonalMissionsVehicleViewModel.ARG_VEHICLE_CD, 0))
         selectVehicleInHangar(vehicleCD)
 
     def __onBackToHangar(self):
-        showPersonalMissionsOperationWindow(PageViewIdEnum.QUESTS, self.__operationId)
+        if self.__isFinalRewardsView:
+            showPersonalMissionsOperationsMap(PM_BRANCH.PERSONAL_MISSION_3)
+        else:
+            showPersonalMissionsOperationWindow(PageViewIdEnum.QUESTS, self.__operationId)
 
     def __updateModel(self):
         with self.viewModel.transaction() as model:
-            if self.__operation:
-                model.setOperationName(self.__operation.getShortUserName())
+            model.setOperationName(self.__operationName)
+            model.setIsFinalRewardsView(self.__isFinalRewardsView)
             model.setCurrentVehicleCD(self.__currentVehicleCD)
             self.__fillVehicle(model)
 
@@ -152,10 +167,8 @@ class PersonalMissionsVehicleView(ViewImpl):
         else:
             vModel = model.vehicle
             ctrl = self.__personalMissionsController
-            operation = ctrl.getOperationById(self.__operationId)
             badges = []
-            badges.extend(ctrl.getMainDossierBonusesForOperation(operation))
-            badges.extend(ctrl.getAddDossierBonusesForOperation(operation))
+            self.__fillBadgesArray(badges)
             packBonusModelAndTooltipData(badges, vModel.getBadges(), self.__tooltipData)
             fillVehicleModel(vModel, vehicle)
             vehicleState = self.getVehicleState(vehicle)
@@ -163,14 +176,23 @@ class PersonalMissionsVehicleView(ViewImpl):
             vModel.setRestoreSeconds(vehicle.restoreInfo.getRestoreCooldownTimeLeft() if vehicleState == State.LOCKED else 0)
             restorePrice = vehicle.restorePrice
             vModel.setRestorePrice(restorePrice.getSignValue(restorePrice.getCurrency()))
-            tileQuestsCount = len(ctrl.getQuestsByOperationId(self.__operationId))
-            fullCompletedQuestsCount = len(ctrl.getFullCompletedQuestsByOperationId(self.__operationId))
-            completedQuestsCount = len(ctrl.getCompletedQuestsByOperationId(self.__operationId))
-            vModel.setDefaultState(State.ININVENTORY if tileQuestsCount == completedQuestsCount else State.INPROGRESS)
+            tileQuestsCount = len(ctrl.getFinalQuests()) if self.__isFinalRewardsView else len(ctrl.getQuestsByOperationId(self.__operationId))
+            fullCompletedQuestsCount = len(ctrl.getFullCompletedFinalQuests()) if self.__isFinalRewardsView else len(ctrl.getFullCompletedQuestsByOperationId(self.__operationId))
+            completedQuestsCount = fullCompletedQuestsCount if self.__isFinalRewardsView else len(ctrl.getCompletedQuestsByOperationId(self.__operationId))
+            vModel.setDefaultState(State.ININVENTORY if tileQuestsCount == (fullCompletedQuestsCount if self.__isFinalRewardsView else completedQuestsCount) else State.INPROGRESS)
             vModel.setHonorState(State.ININVENTORY if tileQuestsCount == fullCompletedQuestsCount else State.INPROGRESS)
             vModel.setProgress(completedQuestsCount)
             vModel.setToUnlock(tileQuestsCount)
             return
+
+    def __fillBadgesArray(self, badges):
+        ctrl = self.__personalMissionsController
+        if self.__isFinalRewardsView:
+            badges.extend(ctrl.getBadgesForChampionQuestPM3())
+            return
+        operation = ctrl.getOperationById(self.__operationId)
+        badges.extend(ctrl.getMainDossierBonusesForOperation(operation))
+        badges.extend(ctrl.getAddDossierBonusesForOperation(operation))
 
     def __getBackportTooltipData(self, event):
         tooltipId = event.getArgument('tooltipId')

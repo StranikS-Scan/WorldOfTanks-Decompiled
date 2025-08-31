@@ -130,8 +130,8 @@ class _PythonTimer(PythonTimer, _IStatusAnimPlayer):
 class _TankIndicatorCtrl(object):
 
     def __init__(self, app):
-        self.__component = GUI.WGTankIndicatorFlash(app.movie, '_level0.root.{}.main.damagePanel.tankIndicator'.format(LAYER_NAMES.VIEWS))
-        self.__component.wg_inputKeyMode = InputKeyMode.NO_HANDLE
+        self.__component = GUI.TankIndicatorFlash(app.movie, '_level0.root.{}.main.damagePanel.tankIndicator'.format(LAYER_NAMES.VIEWS))
+        self.__component.inputKeyMode = InputKeyMode.NO_HANDLE
         self.__app = app
         self.__vId = None
         self.__app.component.addChild(self.__component, 'tankIndicator')
@@ -157,11 +157,11 @@ class _TankIndicatorCtrl(object):
         else:
             turretMat = vehicle.appearance.turretMatrix
         if yawLimits:
-            self.__component.wg_turretYawConstraints = yawLimits
+            self.__component.turretYawConstraints = yawLimits
         else:
-            self.__component.wg_turretYawConstraints = Math.Vector2(0.0, 0.0)
-        self.__component.wg_hullMatProv = hullMat
-        self.__component.wg_turretMatProv = turretMat
+            self.__component.turretYawConstraints = Math.Vector2(0.0, 0.0)
+        self.__component.hullMatProv = hullMat
+        self.__component.turretMatProv = turretMat
         self.__vId = vehicle.id
 
     def vehicleRemoved(self, vId):
@@ -170,10 +170,10 @@ class _TankIndicatorCtrl(object):
                 vehicle = BigWorld.entities.get(vId)
                 if vehicle is not None and vehicle.isAlive():
                     return
-            staticHullMatrix = Math.Matrix(self.__component.wg_hullMatProv)
-            staticTurretMatrix = Math.Matrix(self.__component.wg_turretMatProv)
-            self.__component.wg_hullMatProv = staticHullMatrix
-            self.__component.wg_turretMatProv = staticTurretMatrix
+            staticHullMatrix = Math.Matrix(self.__component.hullMatProv)
+            staticTurretMatrix = Math.Matrix(self.__component.turretMatProv)
+            self.__component.hullMatProv = staticHullMatrix
+            self.__component.turretMatProv = staticTurretMatrix
         return
 
 

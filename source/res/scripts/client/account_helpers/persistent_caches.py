@@ -86,7 +86,7 @@ class SimpleCache(object):
 
 def cacheFileName(account, cacheType, cacheName):
     p = os.path
-    prefsFilePath = unicode_from_utf8(BigWorld.wg_getPreferencesFilePath())[1]
+    prefsFilePath = unicode_from_utf8(BigWorld.getPreferencesFilePath())[1]
     cacheDir = p.join(p.dirname(prefsFilePath), cacheType)
     if not os.path.isdir(cacheDir):
         os.makedirs(cacheDir)

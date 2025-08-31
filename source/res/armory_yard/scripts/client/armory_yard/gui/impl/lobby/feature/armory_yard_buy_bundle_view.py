@@ -20,7 +20,7 @@ from gui.server_events.bonuses import getNonQuestBonuses, mergeBonuses, splitBon
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import LobbySimpleEvent
 from gui.shared.view_helpers.blur_manager import CachedBlur
-from gui.wgcg.shop.contexts import ShopBuyStorefrontProductCtx
+from gui.clientgw.shop.contexts import ShopBuyStorefrontProductCtx
 from helpers import dependency
 from skeletons.gui.game_control import IArmoryYardController, IWalletController
 from skeletons.gui.shared import IItemsCache

@@ -70,8 +70,8 @@ class InboundSubscriptionsBatch(object):
         getter = self.usersStorage.getUser
         setter = self.usersStorage.setUser
         while self._subs:
-            jid, name, _, wgexts = self._subs.pop(0)
-            dbID, clanInfo, isProcessed = jid.getDatabaseID(), wgexts.clan, False
+            jid, name, _, exts = self._subs.pop(0)
+            dbID, clanInfo, isProcessed = jid.getDatabaseID(), exts.clan, False
             contact = getter(dbID, PROTO_TYPE.XMPP)
             if not contact:
                 contact = entities.XMPPUserEntity(dbID, name=name, clanInfo=clanInfo, item=SubPendingItem(jid))

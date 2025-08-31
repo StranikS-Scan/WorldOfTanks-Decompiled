@@ -21,6 +21,7 @@ registerTokenQuestsSubFormatters((token_quest_subformatters.LootBoxTokenQuestFor
  token_quest_subformatters.WotPlusAttendanceRewardsFormatterTestSMViewer(),
  token_quest_subformatters.BattleMattersAwardsFormatter(),
  token_quest_subformatters.Comp7RewardsFormatter(),
+ token_quest_subformatters.WtEventProgressionQuestFormatter(),
  token_quest_subformatters.CrewPerksFormatter(),
  token_quest_subformatters.ParagonsTokenQuestsSubformatter()))
 registerConvertersSubFormatter('newYear25', NewYearMandarinsConverterFormatter)

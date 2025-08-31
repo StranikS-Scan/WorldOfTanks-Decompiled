@@ -143,7 +143,6 @@
     <_4.5inch_SPG_Howitzer_IGR>	60004	</_4.5inch_SPG_Howitzer_IGR>
     <_20pdr_AT_Gun_Type_B_IGR>	60005	</_20pdr_AT_Gun_Type_B_IGR>
     <_120mm_Gun_L1A1_IGR>	60006	</_120mm_Gun_L1A1_IGR>
-    <_9.2inch_SPG_Howitzer_T>	35003	</_9.2inch_SPG_Howitzer_T>
     <_3.7inch_Howitzer_SH>	10000	</_3.7inch_Howitzer_SH>
     <OQF_17pdr_Gun_Mk_VII_SH>	10001	</OQF_17pdr_Gun_Mk_VII_SH>
     <_32_pounder_Gun_OQF_SH>	10002	</_32_pounder_Gun_OQF_SH>
@@ -6167,17 +6166,17 @@
       <shots>
         <_105mm_APDS_L28>
           <defaultPortion>	0.8	</defaultPortion>
-          <speed>	1250	</speed>
+          <speed>	950	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	218 185	</piercingPower>
+          <piercingPower>	208 176	</piercingPower>
         </_105mm_APDS_L28>
         <_105mm_HEAT_L51>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	950	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	260 260	</piercingPower>
+          <piercingPower>	250 250	</piercingPower>
         </_105mm_HEAT_L51>
         <_105mm_HESH_L35>
           <defaultPortion>	0.2	</defaultPortion>
@@ -7789,59 +7788,6 @@
         </_9.2inch_AP_Mk_18>
       </shots>
     </_9.2inch_SPG_Howitzer>
-    <_9.2inch_SPG_Howitzer_T>
-      <userString>	#gb_vehicles:_9.2inch_SPG_Howitzer_T	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	340000	</price>
-      <notInShop>	true	</notInShop>
-      <impulse>	0.48	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.28	</amplitude>
-        <recoilEffect>	huge	</recoilEffect>
-      </recoil>
-      <effects>	shot_superhuge	</effects>
-      <reloadEffect>	reload155_170	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -45.0 1.0 -45.0	</minPitch>
-        <maxPitch>	0.0 0.0 1.0 0.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	17.5	</rotationSpeed>
-      <reloadTime>	15.88571428571430	</reloadTime>
-      <maxAmmo>	112	</maxAmmo>
-      <aimingTime>	5.14285714285714	</aimingTime>
-      <weight>	2919	</weight>
-      <maxHealth>	288	</maxHealth>
-      <maxRegenHealth>	144	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.46	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.44	</turretRotation>
-        <afterShot>	6.4	</afterShot>
-        <whileGunDamaged>	2.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_9.2inch_HE_Mk_18_T>
-          <defaultPortion>	0.9	</defaultPortion>
-          <speed>	350	</speed>
-          <gravity>	122	</gravity>
-          <maxDistance>	10000	</maxDistance>
-          <piercingPower>	59 59	</piercingPower>
-          <maxHeight>	314	</maxHeight>
-        </_9.2inch_HE_Mk_18_T>
-        <_9.2inch_AP_Mk_18_T>
-          <defaultPortion>	0.1	</defaultPortion>
-          <speed>	210	</speed>
-          <gravity>	44	</gravity>
-          <maxDistance>	10000	</maxDistance>
-          <piercingPower>	313 219	</piercingPower>
-          <maxHeight>	453	</maxHeight>
-        </_9.2inch_AP_Mk_18_T>
-      </shots>
-    </_9.2inch_SPG_Howitzer_T>
     <_20pdr_Gun_Type_A_IGR>
       <userString>	#igr_vehicles:_20pdr_Gun_Type_A_IGR	</userString>
       <tags></tags>

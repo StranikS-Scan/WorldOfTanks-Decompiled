@@ -10,11 +10,11 @@ from gui import GUI_SETTINGS
 if GUI_SETTINGS.cryptLoginInfo:
 
     def _crypt(data):
-        return BigWorld.wg_cpdata(data)
+        return BigWorld.cpdata(data)
 
 
     def _decrypt(data):
-        return BigWorld.wg_ucpdata(data)
+        return BigWorld.ucpdata(data)
 
 
 else:
@@ -69,10 +69,10 @@ class Preferences(dict):
             self['password_length'] = 0
 
     def __readOldPreferencesFormat(self, loginInfo):
-        self['login'] = BigWorld.wg_ucpdata(loginInfo.readString('login', ''))
+        self['login'] = BigWorld.ucpdata(loginInfo.readString('login', ''))
         self['remember_user'] = loginInfo.readBool('rememberPwd', False)
         if self['remember_user']:
-            pwdLengthToken2 = BigWorld.wg_ucpdata(loginInfo.readString('token2'))
+            pwdLengthToken2 = BigWorld.ucpdata(loginInfo.readString('token2'))
             if pwdLengthToken2:
                 self['password_length'] = int(pwdLengthToken2.split(':')[0])
                 self['token2'] = pwdLengthToken2.split(':', 1)[1]
@@ -80,7 +80,7 @@ class Preferences(dict):
         if lastLoginType == 'basic':
             lastLoginType = 'credentials'
         self['login_type'] = lastLoginType
-        self['session'] = BigWorld.wg_cpsalt(loginInfo.readString('salt', ''))
+        self['session'] = BigWorld.cpsalt(loginInfo.readString('salt', ''))
         self['name'] = loginInfo.readString('user', '')
 
     def __getitem__(self, key):

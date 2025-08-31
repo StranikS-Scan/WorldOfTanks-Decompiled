@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/factories.py
 import nations
-from dossiers2.ui.achievements import ACHIEVEMENT_TYPE, getType as getAchieveType, ACHIEVEMENT_BLOCK as _AB, RARE_STORAGE_RECORD, HONORED_RANK_RECORD
+from dossiers2.ui.achievements import ACHIEVEMENT_TYPE, getType as getAchieveType, ACHIEVEMENT_BLOCK as _AB, RARE_STORAGE_RECORD, HONORED_RANK_RECORD, MARK_OF_MASTERY, MARK_ON_GUN
 from gui.shared.gui_items.dossier import achievements as _as
 from gui.shared.gui_items.dossier.achievements import abstract as _abstract_achievements
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.gui_items.dossier.achievements.loyal_service import LoyalServiceAchievement
 
 class _AchieveFactory(object):
@@ -301,8 +302,8 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.r
  (_AB.EPIC_BATTLE, 'epicBattle2'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.EPIC_BATTLE, 'epicBattle3'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.EPIC_BATTLE, 'epicBattle4'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
- (_AB.UNIQUE, 'BR2019Top1Solo'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
- (_AB.UNIQUE, 'BR2019Top1Squad'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
+ (_AB.TOTAL, 'BR2019Top1Solo'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
+ (_AB.TOTAL, 'BR2019Top1Squad'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
  (_AB.SINGLE, 'BR2019Title25'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
  (_AB.SINGLE, 'BR2019Title15'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
  (_AB.SINGLE, 'BR2019Title5'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
@@ -366,6 +367,7 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.r
  (_AB.SINGLE, 'BattlePassCommonPr_16'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'BattlePassCommonPr_16_Marathon'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'BattlePassCommonPr_17'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'BattlePassCommonPr_18'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.TOTAL, 'collectorVehicle'): _NationAchieveFactory.get(_as.nation_specific.VehicleCollectorAchievement),
  (_AB.SINGLE, 'dedicationMedal1'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'dedicationMedal2'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
@@ -421,8 +423,8 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.r
  (_AB.SINGLE, 'hw2021Medal2'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'NY22_AtmsphrLevel'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'NY22_CelebChallenge'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
- (_AB.UNIQUE, 'oowTankmanWins'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
- (_AB.UNIQUE, 'oowStrategistWins'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.TOTAL, 'oowTankmanWins'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.TOTAL, 'oowStrategistWins'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.TOTAL, 'oowCompetetiveWin'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'oowCBTParticipant'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.TOTAL, 'wclTournamentParticipant'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
@@ -455,8 +457,8 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.r
  (_AB.SINGLE, 'races24FirstPlace'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'races24Progression'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'BirthdayPr_2025'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
- (_AB.UNIQUE, 'wt2024HunterWins'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
- (_AB.UNIQUE, 'wt2024BossWins'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
+ (_AB.TOTAL, 'wt2024HunterWins'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
+ (_AB.TOTAL, 'wt2024BossWins'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
  (_AB.TOTAL, 'wt2024MaxPlasma'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
  (_AB.SINGLE, 'comp7_4_1'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'comp7_4_1_champion'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
@@ -479,7 +481,18 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.r
  (_AB.SINGLE, 'support_2025'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'comp7_4_4'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'comp7_4_4_champion'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
- (_AB.SINGLE, 'comp7_4_4_legend'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement)}
+ (_AB.SINGLE, 'comp7_4_4_legend'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'wt2025'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.TEAM_7X7, 'willToWinSpirit'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.TEAM_7X7, 'armoredFist'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.TEAM_7X7, 'noMansLand'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.TEAM_7X7, 'kingOfTheHill'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.TEAM_7X7, 'godOfWar'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.TOTAL, 'luckyDevil'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.EPIC_BATTLE, 'frontlineMedal'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'comp7_5_1'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'comp7_5_1_champion'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'comp7_5_1_legend'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement)}
 for _nID, _ in enumerate(nations.NAMES):
     _ACHIEVEMENTS_BY_NAME[_AB.TOTAL, 'tankExpert%d' % _nID] = _NationAchieveFactory.get(_as.nation_specific.TankExpertAchievement, _nID)
     _ACHIEVEMENTS_BY_NAME[_AB.TOTAL, 'mechanicEngineer%d' % _nID] = _NationAchieveFactory.get(_as.nation_specific.MechEngineerAchievement, _nID)
@@ -496,3 +509,9 @@ def getAchievementFactory(record, dossier=None):
     else:
         factoryMaker = _AchieveFactory.get(_abstract_achievements.RegularAchievement)
     return factoryMaker(record[1], record[0], dossier)
+
+
+def getAchievementTooltipType(achievementName):
+    if achievementName == MARK_OF_MASTERY:
+        return TOOLTIPS_CONSTANTS.MARK_OF_MASTERY
+    return TOOLTIPS_CONSTANTS.BATTLE_STATS_MARKS_ON_GUN_ACHIEVEMENT if achievementName == MARK_ON_GUN else TOOLTIPS_CONSTANTS.BATTLE_STATS_ACHIEVS

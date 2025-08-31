@@ -20,7 +20,7 @@ class MonitorSettings(object):
 
     @property
     def currentWindowSize(self):
-        return WindowSize(*map(int, BigWorld.wg_getCurrentResolution(BigWorld.WindowModeWindowed)))
+        return WindowSize(*map(int, BigWorld.getCurrentResolution(BigWorld.WindowModeWindowed)))
 
     @property
     def borderlessSizes(self):
@@ -74,9 +74,9 @@ class MonitorSettings(object):
             BigWorld.setBorderlessFixedSize(width, height)
         BigWorld.changeVideoMode(-1, BigWorld.WindowModeBorderless)
 
-    def setGlyphCache(self, scale=1):
+    def setGlyphCache(self, scale=1.0):
         textureSize = int(1024 * math.ceil(scale))
-        GUI.wg_setGlyphCacheParams(1, textureSize, textureSize)
+        GUI.setGlyphCacheParams(1, textureSize, textureSize)
 
     @property
     def activeMonitor(self):

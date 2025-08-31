@@ -17,7 +17,7 @@ class DossierCache(object):
         self.__account = None
         self.__syncController = None
         p = os.path
-        prefsFilePath = unicode_from_utf8(BigWorld.wg_getPreferencesFilePath())[1]
+        prefsFilePath = unicode_from_utf8(BigWorld.getPreferencesFilePath())[1]
         self.__cacheDir = p.join(p.dirname(prefsFilePath), 'dossier_cache')
         self.__cacheFileName = p.join(self.__cacheDir, '%s.dat' % base64.b32encode('%s;%s;%s' % (str(BigWorld.server()), accountName, accountClassName)))
         self.__cache = {}
@@ -64,6 +64,8 @@ class DossierCache(object):
             self.__maxChangeTime = 0
         LOG_DEBUG('resynchronize', self.__maxChangeTime)
         if self.__ignore:
+            return
+        elif self.__isSynchronizing:
             return
         else:
             self.__isSynchronizing = True

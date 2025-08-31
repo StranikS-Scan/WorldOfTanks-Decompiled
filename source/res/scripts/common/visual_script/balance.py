@@ -20,8 +20,8 @@ class VsePaths(object):
             self.prevArenaPath = constants.ARENA_TYPE_XML_PATH
             self.prevItemDefPath = constants.ITEM_DEFS_PATH
             self.prevTypeXMLType = iv._VEHICLE_TYPE_XML_PATH
-            constants.ARENA_TYPE_XML_PATH = '../../../res/wot/scripts/arena_defs/'
-            constants.ITEM_DEFS_PATH = '../../../res/wot/scripts/item_defs/'
+            constants.ARENA_TYPE_XML_PATH = '../../../res/%s/scripts/arena_defs/' % constants.GAME_ROOT_DIR_NAME
+            constants.ITEM_DEFS_PATH = '../../../res/%s/scripts/item_defs/' % constants.GAME_ROOT_DIR_NAME
             iv._VEHICLE_TYPE_XML_PATH = constants.ITEM_DEFS_PATH + 'vehicles/'
 
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -53,7 +53,7 @@ def eqDataSection(eqName):
         if constants.IS_CELLAPP or constants.IS_CLIENT:
             xmlPath = constants.ITEM_DEFS_PATH
         else:
-            xmlPath = '../../../res/wot/scripts/item_defs/'
+            xmlPath = '../../../res/%s/scripts/item_defs/' % constants.GAME_ROOT_DIR_NAME
         xmlPath += 'vehicles/common/equipments.xml'
         _dataSection = ResMgr.openSection(xmlPath)
     ds = ResMgr.DataSection(eqName)

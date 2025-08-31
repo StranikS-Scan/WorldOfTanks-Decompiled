@@ -109,7 +109,7 @@ class _BlurManager(object):
     settingsCore = dependency.descriptor(ISettingsCore)
     __slots__ = ('_cache',)
     _cache = deque()
-    _globalBlur = GUI.WGUIBackgroundBlur()
+    _globalBlur = GUI.UIBackgroundBlur()
 
     def registerBlur(self, blur):
         self._cache.append(weakref.ref(blur))
@@ -219,7 +219,7 @@ class _BlurManager(object):
         for itemRef in self._cache:
             if itemRef is not None:
                 item = itemRef()
-                if item.isLayerBlur and item.enabled:
+                if item and item.isLayerBlur and item.enabled:
                     return True
 
         return False

@@ -17,8 +17,15 @@ class Comp7BattleResultEventHandler(C2WHandler, EventsHandler):
         super(Comp7BattleResultEventHandler, self).fini()
 
     def _getEvents(self):
-        return ((self.__comp7Ctrl.onComp7BattleFinished, self.__sendInfo),)
+        return ((self.__comp7Ctrl.onComp7BattleFinished, self.__sendInfo),
+         (self.__comp7Ctrl.onStatusUpdated, self.__sendStatusInfo),
+         (self.__comp7Ctrl.onComp7ConfigChanged, self.__sendStatusInfo),
+         (self.__comp7Ctrl.onComp7RanksConfigChanged, self.__sendStatusInfo))
 
     @c2w(name='comp7_battle_result')
     def __sendInfo(self, *args, **kwargs):
+        pass
+
+    @c2w(name='comp7_status_updated')
+    def __sendStatusInfo(self, *args, **kwargs):
         pass

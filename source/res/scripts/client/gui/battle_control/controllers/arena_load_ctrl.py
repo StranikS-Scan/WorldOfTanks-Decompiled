@@ -30,12 +30,12 @@ class ArenaLoadController(IArenaVehiclesController, ViewComponentsController):
 
     def startControl(self, battleCtx, arenaVisitor):
         self.__arenaVisitor = arenaVisitor
-        BigWorld.wg_updateColorGrading()
-        BigWorld.wg_enableGUIBackground(True, False)
-        BigWorld.wg_setGUIBackground(battleCtx.getArenaScreenIcon())
+        BigWorld.updateColorGrading()
+        BigWorld.enableGUIBackground(True, False)
+        BigWorld.setGUIBackground(battleCtx.getArenaScreenIcon())
 
     def stopControl(self):
-        BigWorld.wg_enableGUIBackground(False, True)
+        BigWorld.enableGUIBackground(False, True)
         self._clear()
 
     def setViewComponents(self, *components):
@@ -47,7 +47,7 @@ class ArenaLoadController(IArenaVehiclesController, ViewComponentsController):
     def spaceLoadStarted(self):
         self.gameSession.incBattlesCounter()
         self.gameplay.postStateEvent(PlayerEventID.AVATAR_ARENA_LOADING, arenaGuiType=self.__arenaVisitor.getArenaGuiType())
-        BigWorld.wg_setReducedFpsMode(True)
+        BigWorld.setReducedFpsMode(True)
 
     def invalidateArenaInfo(self):
         self.gameplay.postStateEvent(PlayerEventID.AVATAR_ARENA_INFO, arenaGuiType=self.__arenaVisitor.getArenaGuiType())
@@ -59,14 +59,14 @@ class ArenaLoadController(IArenaVehiclesController, ViewComponentsController):
         self.__isCompleted = True
         self.gameplay.postStateEvent(PlayerEventID.AVATAR_ARENA_LOADED, arenaGuiType=self.__arenaVisitor.getArenaGuiType())
         avatar_getter.setClientReady()
-        BigWorld.wg_setReducedFpsMode(False)
+        BigWorld.setReducedFpsMode(False)
         from messenger import MessengerEntry
         MessengerEntry.g_instance.onAvatarShowGUI()
         BigWorld.enableLoadingTimer(False)
         uniprof.exitFromRegion('avatar.arena.loading')
-        BigWorld.wg_enableGUIBackground(False, False)
+        BigWorld.enableGUIBackground(False, False)
         uniprof.enterToRegion('avatar.arena.battle')
-        BigWorld.wg_clearTextureReuseList()
+        BigWorld.clearTextureReuseList()
         if self._viewComponents:
             for component in self._viewComponents:
                 component.arenaLoadCompleted()

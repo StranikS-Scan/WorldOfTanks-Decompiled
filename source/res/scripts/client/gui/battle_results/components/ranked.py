@@ -325,13 +325,6 @@ class RankedChangesInfoHelper(RankedInfoHelper):
         return backport.image(R.images.gui.maps.icons.rankedBattles.ranks.c_58x80.dyn('rank%s_%s' % (division.getID(), division.getRankUserName(rankID)))())
 
 
-class RankedResultsShowWidgetAnimation(base.StatsItem):
-    rankedController = dependency.descriptor(IRankedBattlesController)
-
-    def _convert(self, value, reusable):
-        return not self.rankedController.awardWindowShouldBeShown(reusable.personal.getRankInfo())
-
-
 class RankedResultsStatusBlock(base.StatsItem):
 
     def _convert(self, value, reusable):

@@ -3,7 +3,7 @@
 import logging
 import weakref
 import typing
-from wg_async import wg_async, wg_await, AsyncReturn
+from th_async import th_async, th_await, AsyncReturn
 import Event
 from frameworks.wulf import WindowSettings, Window, WindowStatus, WindowFlags
 from gui.Scaleform.framework import g_entitiesFactories
@@ -74,10 +74,10 @@ class SFWindow(Window):
         self.onContentLoaded(self)
         self.onStatusChanged(WindowStatus.LOADED)
 
-    @wg_async
+    @th_async
     def wait(self):
         _wait = getattr(self.content, 'wait')
-        result = yield wg_await(_wait())
+        result = yield th_await(_wait())
         raise AsyncReturn(result)
 
     def _finalize(self):

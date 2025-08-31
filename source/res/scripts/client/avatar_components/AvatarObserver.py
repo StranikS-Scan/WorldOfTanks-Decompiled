@@ -131,7 +131,7 @@ class AvatarObserver(CallbackDelayer):
         if player.isObserver():
             vehicle = player.getVehicleAttached()
             if vehicle is not None:
-                if isinstance(vehicle.filter, BigWorld.WGVehicleFilter):
+                if isinstance(vehicle.filter, BigWorld.VehicleFilter):
                     return vehicle.filter.bodyMatrix
                 return vehicle.matrix
         return
@@ -141,7 +141,7 @@ class AvatarObserver(CallbackDelayer):
         if player.isObserver():
             vehicle = player.getVehicleAttached()
             if vehicle is not None:
-                if isinstance(vehicle.filter, BigWorld.WGVehicleFilter):
+                if isinstance(vehicle.filter, BigWorld.VehicleFilter):
                     return vehicle.filter.stabilisedMatrix
                 return vehicle.matrix
         return
@@ -151,7 +151,7 @@ class AvatarObserver(CallbackDelayer):
         if player.isObserver():
             vehicle = player.getVehicleAttached()
             if vehicle is not None:
-                if isinstance(vehicle.filter, BigWorld.WGVehicleFilter):
+                if isinstance(vehicle.filter, BigWorld.VehicleFilter):
                     return vehicle.filter.bodyMatrix
                 return vehicle.appearance.turretMatrix
         return

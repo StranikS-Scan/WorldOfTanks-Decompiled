@@ -15,7 +15,7 @@ from gui.shared import event_dispatcher as shared_events
 from gui.shared.formatters import text_styles
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.view_helpers import ClanEmblemsHelper
-from gui.wgcg.base.contexts import CreateApplicationCtx
+from gui.clientgw.base.contexts import CreateApplicationCtx
 from helpers.i18n import makeString as _ms
 
 def _packItemData(text, description, tooltip, icon):

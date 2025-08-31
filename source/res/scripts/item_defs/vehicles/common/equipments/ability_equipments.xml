@@ -209,20 +209,20 @@
           <plan>	abilities/base_ability_controller_client	</plan>
         </client>
       </visualScript>
-      <cooldownSeconds>	120	</cooldownSeconds>
-      <reuseCount>	3	</reuseCount>
-      <duration>	25	</duration>
+      <cooldownSeconds>	180	</cooldownSeconds>
+      <reuseCount>	2	</reuseCount>
+      <duration>	30	</duration>
       <additiveFactors>
         <gun-chargeTimeBonus>	1	</gun-chargeTimeBonus>
-        <gun-reloadLockTimeBonus>	2	</gun-reloadLockTimeBonus>
-        <gun-loadShellIntoDualGunBonus>	7	</gun-loadShellIntoDualGunBonus>
+        <gun-reloadLockTimeBonus>	0	</gun-reloadLockTimeBonus>
+        <gun-loadShellIntoDualGunBonus>	6	</gun-loadShellIntoDualGunBonus>
         <vehicle-fwMaxSpeedBonus>	5	</vehicle-fwMaxSpeedBonus>
         <vehicle-bkMaxSpeedBonus>	5	</vehicle-bkMaxSpeedBonus>
       </additiveFactors>
       <multiplicativeFactors>
-        <chassis-shotDispersionFactors-movement>	1.2	</chassis-shotDispersionFactors-movement>
-        <chassis-shotDispersionFactors-rotation>	1.2	</chassis-shotDispersionFactors-rotation>
-        <gun-shotDispersionFactors-afterShot>	1.2	</gun-shotDispersionFactors-afterShot>
+        <chassis-shotDispersionFactors-movement>	1.3	</chassis-shotDispersionFactors-movement>
+        <chassis-shotDispersionFactors-rotation>	1.3	</chassis-shotDispersionFactors-rotation>
+        <gun-shotDispersionFactors-afterShot>	1.3	</gun-shotDispersionFactors-afterShot>
         <gun-shotDispersionFactors-turretRotation>	1.2	</gun-shotDispersionFactors-turretRotation>
         <engine-power>	1.5	</engine-power>
       </multiplicativeFactors>
@@ -230,15 +230,15 @@
     <kpi>
       <mul>
         <name>	vehicleGunShotDispersionChassisMovement	</name>
-        <value>	20	</value>
+        <value>	30	</value>
       </mul>
       <mul>
         <name>	vehicleGunShotDispersionChassisRotation	</name>
-        <value>	20	</value>
+        <value>	30	</value>
       </mul>
       <mul>
         <name>	vehicleGunShotDispersionTurretRotation	</name>
-        <value>	20	</value>
+        <value>	30	</value>
       </mul>
       <add>
         <name>	chargeTimeBonus	</name>
@@ -246,11 +246,11 @@
       </add>
       <add>
         <name>	penaltyAfterShotBonus	</name>
-        <value>	-2	</value>
+        <value>	-0	</value>
       </add>
       <add>
         <name>	loadShellIntoDualGunBonus	</name>
-        <value>	-7	</value>
+        <value>	-6	</value>
       </add>
       <mul>
         <name>	vehicleGunShotDispersionAfterShot	</name>

@@ -249,6 +249,7 @@ class MENU(object):
     TANKCAROUSEL_VEHICLESTATES_FALLOUT_REQUIRED = '#menu:tankCarousel/vehicleStates/fallout_required'
     TANKCAROUSEL_VEHICLESTATES_FALLOUT_BROKEN = '#menu:tankCarousel/vehicleStates/fallout_broken'
     TANKCAROUSEL_VEHICLESTATES_RENTALISOVER = '#menu:tankCarousel/vehicleStates/rentalIsOver'
+    TANKCAROUSEL_VEHICLESTATES_RENTALBATTLEISOVER = '#menu:tankCarousel/vehicleStates/rentalBattleIsOver'
     TANKCAROUSEL_VEHICLESTATES_RENTABLE = '#menu:tankCarousel/vehicleStates/rentable'
     TANKCAROUSEL_VEHICLESTATES_RENTABLE_EPIC = '#menu:tankCarousel/vehicleStates/rentable/epic'
     TANKCAROUSEL_VEHICLESTATES_RENTABLE_RANKED = '#menu:tankCarousel/vehicleStates/rentable/ranked'
@@ -276,6 +277,7 @@ class MENU(object):
     TANKCAROUSEL_WOTPLUSSELECTIONPENDING = '#menu:tankCarousel/wotPlusSelectionPending'
     TANKCAROUSEL_VEHICLESTATES_XPMULTRECEIVED = '#menu:tankCarousel/vehicleStates/xpMultReceived'
     TANKCAROUSEL_VEHICLESTATES_XPMULTRECEIVED_NOT = '#menu:tankCarousel/vehicleStates/xpMultReceived/not'
+    TANKCAROUSEL_VEHICLESTATES_TICKETSSHORTAGE = '#menu:tankCarousel/vehicleStates/ticketsShortage'
     STORE_VEHICLESTATES_BATTLE = '#menu:store/vehicleStates/battle'
     STORE_VEHICLESTATES_LOCKED = '#menu:store/vehicleStates/locked'
     STORE_VEHICLESTATES_CLANLOCKED = '#menu:store/vehicleStates/clanLocked'
@@ -318,6 +320,7 @@ class MENU(object):
     CURRENTVEHICLESTATUS_BATTLE = '#menu:currentVehicleStatus/battle'
     CURRENTVEHICLESTATUS_INPREBATTLE = '#menu:currentVehicleStatus/inPrebattle'
     CURRENTVEHICLESTATUS_RENTALISOVER = '#menu:currentVehicleStatus/rentalIsOver'
+    CURRENTVEHICLESTATUS_RENTALBATTLEISOVER = '#menu:currentVehicleStatus/rentalBattleIsOver'
     CURRENTVEHICLESTATUS_IGRRENTALISOVER = '#menu:currentVehicleStatus/igrRentalIsOver'
     CURRENTVEHICLESTATUS_ISRENTABLE = '#menu:currentVehicleStatus/isRentable'
     CURRENTVEHICLESTATUS_RENTABLE = '#menu:currentVehicleStatus/rentable'
@@ -350,6 +353,7 @@ class MENU(object):
     CURRENTVEHICLESTATUS_ROTATIONGROUPUNLOCKED = '#menu:currentVehicleStatus/rotationGroupUnlocked'
     CURRENTVEHICLESTATUS_ROTATIONGROUPLOCKED = '#menu:currentVehicleStatus/rotationGroupLocked'
     CURRENTVEHICLESTATUS_WILLBEUNLOCKEDINBATTLE = '#menu:currentVehicleStatus/willBeUnlockedInBattle'
+    CURRENTVEHICLESTATUS_TICKETSSHORTAGE = '#menu:currentVehicleStatus/ticketsShortage'
     CURRENTVEHICLESTATUS_SUBSCRIPTION_SUSPENDED = '#menu:currentVehicleStatus/subscription_suspended'
     CURRENTVEHICLESTATUS_WOT_PLUS_EXCLUSIVE_VEHICLE_DISABLED = '#menu:currentVehicleStatus/wot_plus_exclusive_vehicle_disabled'
     REPAIR_REPAIRSTATUS = '#menu:repair/repairstatus'
@@ -587,7 +591,6 @@ class MENU(object):
     TANK_PARAMS_VALUES_PARAM11_VALUE3 = '#menu:tank_params/values/param11/value3'
     TANK_PARAMS_EXPLOSIONRADIUS = '#menu:tank_params/explosionRadius'
     TANK_PARAMS_FLAMEMAXDISTANCE = '#menu:tank_params/flameMaxDistance'
-    TANK_PARAMS_EXPLOSIONDELAY = '#menu:tank_params/explosionDelay'
     TANK_PARAMS_INCREASEHEALTH = '#menu:tank_params/increaseHealth'
     TANK_PARAMS_T = '#menu:tank_params/t'
     TANK_PARAMS_P = '#menu:tank_params/p'
@@ -735,6 +738,7 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_SQUAD = '#menu:headerButtons/battle/types/squad'
     HEADERBUTTONS_BATTLE_TYPES_SQUAD_DESCRIPTION = '#menu:headerButtons/battle/types/squad/description'
     HEADERBUTTONS_BATTLE_TYPES_SIMPLESQUAD = '#menu:headerButtons/battle/types/simpleSquad'
+    HEADERBUTTONS_BATTLE_TYPES_EVENT = '#menu:headerButtons/battle/types/event'
     HEADERBUTTONS_BATTLE_TYPES_EVENTSQUAD = '#menu:headerButtons/battle/types/eventSquad'
     HEADERBUTTONS_BATTLE_TYPES_BATTLEROYALE = '#menu:headerButtons/battle/types/battleRoyale'
     HEADERBUTTONS_BATTLE_TYPES_BATTLEROYALE_EXTRA_FROZEN = '#menu:headerButtons/battle/types/battleRoyale/extra/frozen'
@@ -1190,7 +1194,6 @@ class MENU(object):
     MODULEINFO_PARAMS_BURSTCOUNT = '#menu:moduleInfo/params/burstCount'
     MODULEINFO_PARAMS_BURSTSIZE = '#menu:moduleInfo/params/burstSize'
     MODULEINFO_PARAMS_AUTORELOADTIME = '#menu:moduleInfo/params/autoReloadTime'
-    MODULEINFO_PARAMS_EXPLOSIONDELAY = '#menu:moduleInfo/params/explosionDelay'
     MODULEINFO_PARAMS_AUTORELOADTIME_BOOST = '#menu:moduleInfo/params/autoReloadTime/boost'
     MODULEINFO_PARAMS_RELOADTIME = '#menu:moduleInfo/params/reloadTime'
     MODULEINFO_PARAMS_RELOADTIMEPERSECOND = '#menu:moduleInfo/params/reloadTimePerSecond'
@@ -1645,6 +1648,7 @@ class MENU(object):
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_BUTTONS_CLOSE = '#menu:hangar/ammunitionPanel/technicalMaitenance/buttons/close'
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_BUTTONS_LABELTOTAL = '#menu:hangar/ammunitionPanel/technicalMaitenance/buttons/labelTotal'
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_EQUIPMENTDISABLED = '#menu:hangar/ammunitionPanel/technicalMaitenance/equipmentDisabled'
+    HANGAR_CLOSEBTN = '#menu:hangar/closeBtn'
     FITTINGLISTITEMRENDERER_UNLOAD = '#menu:fittingListItemRenderer/unload'
     FITTINGLISTITEMRENDERER_REPLACE = '#menu:fittingListItemRenderer/replace'
     CUSTOMIZATION_TITLE = '#menu:customization/title'
@@ -1705,6 +1709,7 @@ class MENU(object):
     CONTEXTMENU_TAKELEADERSHIP = '#menu:contextMenu/takeLeadership'
     CONTEXTMENU_CREATESQUAD = '#menu:contextMenu/createSquad'
     CONTEXTMENU_CREATEEVENTSQUAD = '#menu:contextMenu/createEventSquad'
+    CONTEXTMENU_CREATEWHITETIGERSQUAD = '#menu:contextMenu/createWhiteTigerSquad'
     CONTEXTMENU_CREATEBATTLEROYALESQUAD = '#menu:contextMenu/createBattleRoyaleSquad'
     CONTEXTMENU_CREATEMAPBOXSQUAD = '#menu:contextMenu/createMapboxSquad'
     CONTEXTMENU_CREATECOMP7SQUAD = '#menu:contextMenu/createComp7Squad'
@@ -2337,10 +2342,12 @@ class MENU(object):
     CRYSTALS_INFO_TAB_GET_RANDOM = '#menu:crystals/info/tab/get/random'
     CRYSTALS_INFO_TAB_GET_GENERAL = '#menu:crystals/info/tab/get/general'
     CRYSTALS_INFO_TAB_GET_RANKED = '#menu:crystals/info/tab/get/ranked'
+    CRYSTALS_INFO_TAB_GET_COMP7 = '#menu:crystals/info/tab/get/comp7'
     CRYSTALS_INFO_TAB_GET_CARD_CONDITION = '#menu:crystals/info/tab/get/card/condition'
     CRYSTALS_INFO_TAB_GET_CARD_WIN = '#menu:crystals/info/tab/get/card/win'
     CRYSTALS_INFO_TAB_GET_CARD_DEFEAT = '#menu:crystals/info/tab/get/card/defeat'
     CRYSTALS_INFO_TAB_GET_CARD_DESCRIPTION = '#menu:crystals/info/tab/get/card/description'
+    CRYSTALS_INFO_TAB_GET_CARD_COMP7DESCRIPTION = '#menu:crystals/info/tab/get/card/comp7Description'
     CRYSTALS_INFO_TAB_SPEND_DESCRIPTION = '#menu:crystals/info/tab/spend/description'
     CRYSTALS_INFO_TAB_SPEND_CARD_SPECIALTANKS_TITLE = '#menu:crystals/info/tab/spend/card/specialTanks/title'
     CRYSTALS_INFO_TAB_SPEND_CARD_SPECIALTANKS_DESCRIPTION = '#menu:crystals/info/tab/spend/card/specialTanks/description'
@@ -2348,6 +2355,8 @@ class MENU(object):
     CRYSTALS_INFO_TAB_SPEND_CARD_SPECIALEQUIPMENT_DESCRIPTION = '#menu:crystals/info/tab/spend/card/specialEquipment/description'
     CRYSTALS_INFO_TAB_SPEND_CARD_INSTRUCTIONS_TITLE = '#menu:crystals/info/tab/spend/card/instructions/title'
     CRYSTALS_INFO_TAB_SPEND_CARD_INSTRUCTIONS_DESCRIPTION = '#menu:crystals/info/tab/spend/card/instructions/description'
+    CRYSTALS_INFO_TAB_SPEND_CARD_COMP7SHOP_TITLE = '#menu:crystals/info/tab/spend/card/comp7Shop/title'
+    CRYSTALS_INFO_TAB_SPEND_CARD_COMP7SHOP_DESCRIPTION = '#menu:crystals/info/tab/spend/card/comp7Shop/description'
     CRYSTALS_INFO_TAB_SPEND_CARD_TOSHOP = '#menu:crystals/info/tab/spend/card/toShop'
     CRYSTALS_INFO_TAB_SPEND_CARD_PRICE = '#menu:crystals/info/tab/spend/card/price'
     BADGE_NEW = '#menu:badge/new'
@@ -2415,6 +2424,7 @@ class MENU(object):
      CONTEXTMENU_TAKELEADERSHIP,
      CONTEXTMENU_CREATESQUAD,
      CONTEXTMENU_CREATEEVENTSQUAD,
+     CONTEXTMENU_CREATEWHITETIGERSQUAD,
      CONTEXTMENU_CREATEBATTLEROYALESQUAD,
      CONTEXTMENU_CREATEMAPBOXSQUAD,
      CONTEXTMENU_CREATECOMP7SQUAD,
@@ -2511,6 +2521,7 @@ class MENU(object):
      TANKCAROUSEL_VEHICLESTATES_FALLOUT_REQUIRED,
      TANKCAROUSEL_VEHICLESTATES_FALLOUT_BROKEN,
      TANKCAROUSEL_VEHICLESTATES_RENTALISOVER,
+     TANKCAROUSEL_VEHICLESTATES_RENTALBATTLEISOVER,
      TANKCAROUSEL_VEHICLESTATES_RENTABLE,
      TANKCAROUSEL_VEHICLESTATES_RENTABLE_EPIC,
      TANKCAROUSEL_VEHICLESTATES_RENTABLE_RANKED,
@@ -2535,6 +2546,7 @@ class MENU(object):
      TANKCAROUSEL_VEHICLESTATES_DISABLED,
      TANKCAROUSEL_VEHICLESTATES_XPMULTRECEIVED,
      TANKCAROUSEL_VEHICLESTATES_XPMULTRECEIVED_NOT,
+     TANKCAROUSEL_VEHICLESTATES_TICKETSSHORTAGE,
      TANKCAROUSEL_VEHICLESTATES_ROTATIONGROUPUNLOCKED,
      TANKCAROUSEL_VEHICLESTATES_ROTATIONGROUPLOCKED)
     DATETIME_WEEKDAYS_FULL_ENUM = (DATETIME_WEEKDAYS_FULL_1,
@@ -2797,7 +2809,6 @@ class MENU(object):
      TANK_PARAMS_VALUES_PARAM11_VALUE3,
      TANK_PARAMS_EXPLOSIONRADIUS,
      TANK_PARAMS_FLAMEMAXDISTANCE,
-     TANK_PARAMS_EXPLOSIONDELAY,
      TANK_PARAMS_INCREASEHEALTH,
      TANK_PARAMS_T,
      TANK_PARAMS_P,

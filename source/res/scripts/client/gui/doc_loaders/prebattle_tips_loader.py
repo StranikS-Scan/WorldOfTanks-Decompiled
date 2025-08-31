@@ -5,7 +5,7 @@ import resource_helper
 _PRECEDING_DEFAULT_SHOW_TIMES = 1
 DEFAULT_STATUS = 'payAttention'
 DEFAULT_GROUP = 'all'
-_OPTIONAL_FILTER_FLAGS = ('isBattlePassActiveSeason', 'isRankedYearRewardEnabled', 'isRankedLeaderboardEnabled', 'isRankedShopEnabled', 'isRankedLeagueRewardEnabled', 'isPostProgressionEnabled', 'isBirthdayActive')
+_OPTIONAL_FILTER_FLAGS = ('isBattlePassActiveSeason', 'isRankedYearRewardEnabled', 'isRankedLeaderboardEnabled', 'isRankedShopEnabled', 'isRankedLeagueRewardEnabled', 'isPostProgressionEnabled')
 
 def readPreBattleTips(prebattleXmlPath):
     filters = dict()

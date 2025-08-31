@@ -26,7 +26,7 @@ from gui.shared.money import Money, Currency
 from helpers import dependency
 from items.customizations import isEditedStyle
 from skeletons.gui.game_control import IVehicleComparisonBasket, IWotPlusController, IEpicBattleMetaGameController
-from wg_async import wg_async, wg_await, await_callback
+from th_async import th_async, th_await, await_callback
 _logger = logging.getLogger(__name__)
 
 class TankmanBerthsBuyer(Processor):
@@ -487,12 +487,12 @@ class BuyBattleAbilitiesProcessor(Processor):
         super(BuyBattleAbilitiesProcessor, self).__init__()
         self.__skillIds = skillIds
 
-    @wg_async
+    @th_async
     def _request(self, callback):
-        errorCode = yield wg_await(self._requestChain())
+        errorCode = yield th_await(self._requestChain())
         callback(makeError(errorCode) if errorCode else makeSuccess())
 
-    @wg_async
+    @th_async
     def _requestChain(self):
         for skillId in self.__skillIds:
             _, errorCode = yield await_callback(self.__epicMetaGameCtrl.increaseSkillLevel)(skillId)

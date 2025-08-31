@@ -5,7 +5,7 @@ import constants
 from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import SHOW_DEMO_ACC_REGISTRATION
-from wg_async import wg_async, wg_await
+from th_async import th_async, th_await
 from bootcamp.BootCampEvents import g_bootcampEvents
 from gui.impl.lobby.account_completion.common import errors
 from gui.platform.base.settings import CONTENT_WAITING
@@ -53,13 +53,13 @@ class SteamCompletionController(ISteamCompletionController):
     def __onExitBootcamp(self, *args, **kwargs):
         self._bootcampExit = True
 
-    @wg_async
+    @th_async
     def __onSpaceCreate(self, *args, **kwargs):
         if not self._bootcampExit or self._bootcampController.isInBootcamp() or self._overlayController.isActive or not self.isSteamAccount:
             lockNotificationManager(lock=False, releasePostponed=True)
             return
         self._bootcampExit = False
-        status = yield wg_await(self._wgnpSteamAccCtrl.getEmailStatus(waitingID=CONTENT_WAITING))
+        status = yield th_await(self._wgnpSteamAccCtrl.getEmailStatus(waitingID=CONTENT_WAITING))
         if self._overlayDestroyed or status.isUndefined or not self._hangarSpace.spaceInited:
             lockNotificationManager(lock=False, releasePostponed=True)
             return
@@ -118,9 +118,9 @@ class DemoAccCompletionController(IDemoAccCompletionController):
         if self._hangarSpace.spaceInited:
             self._showDemoAccOverlay()
 
-    @wg_async
+    @th_async
     def updateOverlayState(self, waitingID=None, onComplete=None):
-        status = yield wg_await(self._wgnpDemoAccCtrl.getCredentialsStatus(waitingID))
+        status = yield th_await(self._wgnpDemoAccCtrl.getCredentialsStatus(waitingID))
         if self._controllerDestroyed or not self._hangarSpace.spaceInited:
             return
         else:
@@ -145,11 +145,11 @@ class DemoAccCompletionController(IDemoAccCompletionController):
         if self._bootcampCtrl.isInBootcamp() and self.isInDemoAccRegistration:
             self._showDemoAccOverlay()
 
-    @wg_async
+    @th_async
     def _showDemoAccOverlay(self):
         if self._overlayController.isActive:
             return
-        yield wg_await(self.updateOverlayState(waitingID=CONTENT_WAITING))
+        yield th_await(self.updateOverlayState(waitingID=CONTENT_WAITING))
 
     def _onClientUpdate(self, diff, _):
         if constants.DEMO_ACCOUNT_ATTR in diff:

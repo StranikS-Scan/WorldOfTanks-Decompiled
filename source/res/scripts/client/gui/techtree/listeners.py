@@ -265,7 +265,7 @@ class _ItemsCacheListener(_Listener):
     def __center_onIsLongDisconnected(self, _):
         self._page.redraw()
 
-    def __onVehCompareBasketChanged(self, changedData):
+    def __onVehCompareBasketChanged(self, changedData, *args, **kwargs):
         if changedData.isFullChanged:
             self._page.invalidateVehCompare()
 
@@ -376,14 +376,16 @@ class _ParagonsListener(_Listener):
         self.__paragonsController.onSettingsChanged += self.__onParagonsSettingsUpdated
         self.__paragonsController.onParagonsStateChanged += self.__onParagonsStateUpdated
         self.__paragonsController.onProgressPointsChanged += self.__onParagonsProgressPointsChanged
-        self.__limitedUIController.startObserve(LuiRules.PARAGONS_ENTRY_POINT, self.__onLUIRulesUpdated)
+        self.__limitedUIController.startObserve(LuiRules.PARAGONS_ENTRY_POINT, self.__onParagonsEntryPointRuleUpdated)
+        self.__limitedUIController.startObserve(LuiRules.PARAGONS_TREE_BRANCHES, self.__onParagonsTreeBranchesRuleUpdated)
 
     def stopListen(self):
         self.__paragonsController.onParagonsUnlocksChanged -= self.__onParagonsUnlocksChanged
         self.__paragonsController.onSettingsChanged -= self.__onParagonsSettingsUpdated
         self.__paragonsController.onParagonsStateChanged -= self.__onParagonsStateUpdated
         self.__paragonsController.onProgressPointsChanged -= self.__onParagonsProgressPointsChanged
-        self.__limitedUIController.stopObserve(LuiRules.PARAGONS_ENTRY_POINT, self.__onLUIRulesUpdated)
+        self.__limitedUIController.stopObserve(LuiRules.PARAGONS_ENTRY_POINT, self.__onParagonsEntryPointRuleUpdated)
+        self.__limitedUIController.stopObserve(LuiRules.PARAGONS_TREE_BRANCHES, self.__onParagonsTreeBranchesRuleUpdated)
         super(_ParagonsListener, self).stopListen()
 
     def __onParagonsUnlocksChanged(self, paragonsUnlockIDs, isGranted):
@@ -392,9 +394,12 @@ class _ParagonsListener(_Listener):
     def __onParagonsUnlocksStateChanged(self, diff):
         self._page.invalidateParagonsUnlocksStateChange()
 
-    def __onLUIRulesUpdated(self, *_):
+    def __onParagonsEntryPointRuleUpdated(self, *_):
         self._page.invalidateParagonsEntryPoint(isNeedUpdateLevels=False)
         self._page.invalidateTechTreeButtons()
+
+    def __onParagonsTreeBranchesRuleUpdated(self, *_):
+        self._page.invalidateParagonsUnlocks()
 
     def __onParagonsProgressPointsChanged(self):
         self._page.invalidateParagonsEntryPoint(isNeedUpdateLevels=False)

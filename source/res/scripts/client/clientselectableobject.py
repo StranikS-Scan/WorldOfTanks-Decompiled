@@ -51,7 +51,7 @@ class ClientSelectableObject(BigWorld.Entity, ScriptGameObject, ISelectableObjec
                 self.__clickSound.stop()
             self.__clickSound.releaseMatrix()
             self.__clickSound = None
-        self.setHighlight(False)
+        self.__hideEdge()
         return
 
     def setEnable(self, enabled):
@@ -64,9 +64,8 @@ class ClientSelectableObject(BigWorld.Entity, ScriptGameObject, ISelectableObjec
             if not self.__edged and self.__enabled:
                 self._addEdgeDetect()
                 self.__edged = True
-        elif self.__edged:
-            self._delEdgeDetect()
-            self.__edged = False
+        else:
+            self.__hideEdge()
 
     def onMouseDown(self):
         pass
@@ -96,8 +95,13 @@ class ClientSelectableObject(BigWorld.Entity, ScriptGameObject, ISelectableObjec
         return collisionModels
 
     def _addEdgeDetect(self):
-        BigWorld.wgAddEdgeDetectEntity(self, None, 0, self.edgeMode, False)
+        BigWorld.addEdgeDetectEntity(self, None, 0, self.edgeMode, False)
         return
 
+    def __hideEdge(self):
+        if self.__edged:
+            self._delEdgeDetect()
+            self.__edged = False
+
     def _delEdgeDetect(self):
-        BigWorld.wgDelEdgeDetectEntity(self)
+        BigWorld.delEdgeDetectEntity(self)

@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/extensions/shared_queries.py
 from messenger.proto.xmpp.extensions import PyQuery
-from messenger.proto.xmpp.extensions.wg_items import WgClientExtension
+from messenger.proto.xmpp.extensions.custom_items import ClientExtension
 
 class MessageQuery(PyQuery):
     __slots__ = ('_body',)
@@ -17,7 +17,7 @@ class MessageQuery(PyQuery):
 class PresenceQuery(PyQuery):
 
     def __init__(self, queryType, to=''):
-        super(PresenceQuery, self).__init__(queryType, WgClientExtension(), to)
+        super(PresenceQuery, self).__init__(queryType, ClientExtension(), to)
 
     def getStatus(self):
         pass

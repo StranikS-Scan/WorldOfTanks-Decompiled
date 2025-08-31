@@ -1,9 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/tooltips/common_builders.py
-from debug_utils import LOG_ERROR
 from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.shared.tooltips import advanced, common, contexts, stronghold, ToolTipBaseData
+from gui.shared.tooltips import advanced, common, contexts, stronghold
 from gui.shared.tooltips.builders import AdvancedDataBuilder, DataBuilder, DefaultFormatBuilder, TooltipWindowBuilder
 from gui.shared.tooltips.common import ParagonsLockedTooltipData
 from gui.shared.tooltips.dog_tags import DogTagInfoTooltip
@@ -55,8 +54,7 @@ def getTooltipBuilders():
      DataBuilder(TOOLTIPS_CONSTANTS.DOG_TAGS_INFO, TOOLTIPS_CONSTANTS.DOG_TAGS_INFO_UI, DogTagInfoTooltip(contexts.DogTagInfoContext())),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.VEH_POST_PROGRESSION_ENTRY_POINT, None, common.VehPostProgressionEntryPointTooltipContentWindowData(contexts.ToolTipContext(None))),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.ADDITIONAL_REWARDS, None, common.AdditionalRewardsTooltipContentWindowData(contexts.ToolTipContext(None))),
-     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.PARAGONS_VEH_BRANCH_LOCKED, None, ParagonsLockedTooltipData(contexts.ToolTipContext(None))),
-     EconomyBonusContentTooltipBuilder(TOOLTIPS_CONSTANTS.ECONOMY_BONUS_TOOLTIP, None))
+     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.PARAGONS_VEH_BRANCH_LOCKED, None, ParagonsLockedTooltipData(contexts.ToolTipContext(None))))
 
 
 class HeaderMoneyAndXpBuilder(DataBuilder):
@@ -83,19 +81,3 @@ class AdvancedHeaderMoneyAndXpBuilder(AdvancedDataBuilder):
 
     def _buildData(self, _advanced, *args, **kwargs):
         return super(AdvancedHeaderMoneyAndXpBuilder, self)._buildData(_advanced, self.__btnType, self.__hideActionBlock)
-
-
-class EconomyBonusContentTooltipBuilder(TooltipWindowBuilder):
-    __tooltipProvider = None
-
-    def __init__(self, tooltipType, linkage):
-        provider = self.__tooltipProvider or ToolTipBaseData
-        super(EconomyBonusContentTooltipBuilder, self).__init__(tooltipType, linkage, provider(contexts.ToolTipContext(None), tooltipType))
-        return
-
-    @classmethod
-    def overrideTooltipType(cls, tooltipProvider):
-        if not issubclass(tooltipProvider, ToolTipBaseData):
-            LOG_ERROR('Parameter is not a subclass of ToolTipBaseData', tooltipProvider)
-            return
-        cls.__tooltipProvider = tooltipProvider

@@ -57,4 +57,4 @@ class VIDEO(object):
     SOUND_REWARD_1 = 'pm3_lbz_vid_A161_ARMT'
     SOUND_REWARD_2 = 'pm3_lbz_vid_A173_TF_2_CLARK'
     SOUND_REWARD_3 = 'pm3_lbz_vid_F119_Projet_Murat'
-    SOUND_REWARD_4 = 'pm3_lbz_vid_T11'
+    SOUND_REWARD_4 = 'pm3_lbz_vid_T11_MouseKonig'

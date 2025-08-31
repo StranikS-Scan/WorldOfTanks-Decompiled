@@ -21,8 +21,8 @@ from gui.shared.formatters import text_styles
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.view_helpers import CooldownHelper
 from gui.shared.view_helpers.emblems import ClanEmblemsHelper
-from gui.wgcg.clan.contexts import ClanApplicationsCtx, ClanInvitesCtx
-from gui.wgcg.settings import WebRequestDataType
+from gui.clientgw.clan.contexts import ClanApplicationsCtx, ClanInvitesCtx
+from gui.clientgw.settings import WebRequestDataType
 from helpers import dependency
 from helpers import i18n
 from helpers.i18n import makeString as _ms
@@ -35,7 +35,7 @@ class ClanInvitesWindow(ClanInvitesWindowMeta, ClanListener, ClanEmblemsHelper):
         super(ClanInvitesWindow, self).__init__()
         self.__actualRequestsCount = '0'
         self.__processedInvitesCount = '0'
-        self._cooldown = CooldownHelper(self.__coolDownRequests, self._onCooldownHandle, CoolDownEvent.WGCG)
+        self._cooldown = CooldownHelper(self.__coolDownRequests, self._onCooldownHandle, CoolDownEvent.CLIENTGW)
         self.__clanDbID = self.clanProfile.getClanDbID()
         self.__clanDossier = weakref.proxy(self.webCtrl.getClanDossier(self.__clanDbID))
         self.__pagiatorsController = _PaginatorsController(self.__clanDbID)

@@ -162,11 +162,11 @@ class BattleEntry(AppEntry):
         return GraphicsOptimizationManager(config=BATTLE_OPTIMIZATION_CONFIG)
 
     def _setup(self):
-        self.component.wg_inputKeyMode = InputKeyMode.IGNORE_RESULT
+        self.component.inputKeyMode = InputKeyMode.IGNORE_RESULT
         self.component.position.z = DEPTH_OF_Battle
         self.movie.backgroundAlpha = 0.0
         self.movie.setFocused(SCALEFORM_SWF_PATH_V3)
-        BigWorld.wg_setRedefineKeysMode(False)
+        BigWorld.setRedefineKeysMode(False)
 
     def _loadWaiting(self):
         pass

@@ -4,14 +4,14 @@ import logging
 import typing
 from functools import partial
 from BWUtil import AsyncReturn
-import wg_async
+import th_async
 from adisp import adisp_process
 from gui.Scaleform.Waiting import Waiting
 from gui.platform.products_fetcher.controller import ProductsFetchController
 from gui.platform.products_fetcher.fetch_result import FetchResult
 from gui.platform.products_fetcher.user_subscriptions.descriptor import UserSubscriptionDescriptor
 from gui.platform.products_fetcher.user_subscriptions.fetch_result import UserSubscriptionFetchResult
-from gui.wgcg.utils.contexts import PlatformGetUserSubscriptionsCtx
+from gui.clientgw.utils.contexts import PlatformGetUserSubscriptionsCtx
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.platform.product_fetch_controller import IUserSubscriptionsFetchController
@@ -58,7 +58,7 @@ class UserSubscriptionsFetchController(ProductsFetchController, IUserSubscriptio
     def resetFetch(self):
         self._fetchResult.reset()
 
-    @wg_async.wg_async
+    @th_async.th_async
     def getProducts(self, showWaiting=True):
         _logger.debug('Trying to fetch products')
         if self._fetchResult.isProductsReady:
@@ -69,7 +69,7 @@ class UserSubscriptionsFetchController(ProductsFetchController, IUserSubscriptio
         self._fetchResult.reset()
         params = self.platformParams()
         params.setFields()
-        requestSuccess, productsData = yield wg_async.await_callback(partial(self._requestProducts, params))()
+        requestSuccess, productsData = yield th_async.await_callback(partial(self._requestProducts, params))()
         if requestSuccess:
             _logger.debug('Products request has been successfully processed.')
             self._createDescriptors(productsData)

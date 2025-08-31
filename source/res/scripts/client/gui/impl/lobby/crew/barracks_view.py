@@ -33,7 +33,7 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from uilogging.crew.loggers import CrewViewLogger
 from uilogging.crew.logging_constants import CrewViewKeys, CrewNavigationButtons, CrewBarracksKeys, CrewMemberAdditionalInfo
-from wg_async import wg_await, wg_async
+from th_async import th_await, th_async
 from PlayerEvents import g_playerEvents
 from gui.shared.gui_items.Vehicle import NO_VEHICLE_ID
 _SELECTION_CARDS_LIMIT = 200
@@ -187,12 +187,9 @@ class BarracksView(BaseTankmanListView):
         self.__dataProviders.update()
 
     def __onTankmenBerthsCountUpdate(self, *_):
-        newBerthsCount = self.itemsCache.items.stats.tankmenBerthsCount
-        if newBerthsCount != self.viewModel.berthsAmount.getTo():
-            with self.viewModel.transaction() as tx:
-                tankmenInBarracks = self.itemsCache.items.tankmenInBarracksCount()
-                tx.berthsAmount.setFrom(max(newBerthsCount - tankmenInBarracks, 0))
-                tx.berthsAmount.setTo(newBerthsCount)
+        with self.viewModel.transaction() as tx:
+            tx.berthsAmount.setFrom(self._viewProvider.tankmanInBarracksCount())
+            tx.berthsAmount.setTo(self.itemsCache.items.stats.tankmenBerthsCount)
 
     def __onBerthsPricesChanged(self, *_):
         berths = self.itemsCache.items.stats.tankmenBerthsCount
@@ -221,9 +218,9 @@ class BarracksView(BaseTankmanListView):
             tx.setIsSelectedMode(enable)
             tx.setIsSelectedLimitReached(False)
 
-    @wg_async
+    @th_async
     def __onClickBuyBerth(self):
-        yield wg_await(dialogs.showEnlargeBarracksDialog())
+        yield th_await(dialogs.showEnlargeBarracksDialog())
 
     @args2params(int)
     def __onTankmanSelected(self, tankmanID):
@@ -271,8 +268,7 @@ class BarracksView(BaseTankmanListView):
             if newRecruitCount:
                 self.__filterPanelWidget.updateFilterToggleCounter(TankmanKind.RECRUIT.value, newRecruitCount)
             self._fillVisibleCards(tx.getTankmanList())
-            tx.berthsAmount.setFrom(self._viewProvider.tankmanInBarracksCount())
-            tx.berthsAmount.setTo(self.itemsCache.items.stats.tankmenBerthsCount)
+            self.__onTankmenBerthsCountUpdate()
             if self._viewProvider.recruitTankmanCount():
                 self.__setNewRecruitVisited()
 
@@ -331,14 +327,14 @@ class BarracksView(BaseTankmanListView):
             tx.setIsSelectedLimitReached(limitReached)
             self.__filterPanelWidget.setSelectedLimitReached(limitReached)
 
-    @wg_async()
+    @th_async()
     def __onDismissOrRestore(self):
         isRestore = TankmanKind.DISMISSED.value in self._viewProvider.stateValue
         isSingle = len(self.__selectedTankmans) == 1
         logKey = CrewBarracksKeys.CARD_SELECTED_RESTORE_BUTTON if isRestore else CrewBarracksKeys.CARD_SELECTED_DISMISS_BUTTON
         self.__uiLogger.logClick(logKey)
         dialog = self.__getDialog(isRestore, isSingle)
-        result = yield wg_await(dialog)
+        result = yield th_await(dialog)
         if result.result:
             self.__resetSelectedTankmanList()
             self.__filterPanelWidget.disableSelectedMode()

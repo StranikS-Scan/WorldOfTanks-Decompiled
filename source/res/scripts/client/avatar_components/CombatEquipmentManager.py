@@ -53,7 +53,7 @@ class CombatEquipmentManager(object):
         else:
             p = Vector3(BigWorld.camera().position)
             d = BigWorld.camera().direction
-            collRes = BigWorld.wg_collideSegment(BigWorld.player().spaceID, p, p + d * 1000, 18, 8)
+            collRes = BigWorld.collideSegment(BigWorld.player().spaceID, p, p + d * 1000, 18, 8)
             if collRes is None:
                 return
             strikePos = collRes.closestPoint
@@ -225,7 +225,7 @@ class CombatEquipmentManager(object):
             areaWidth, areaLength = bombEquipment.areaWidth, bombEquipment.areaLength
             if _ENABLE_DEBUG_LOG:
                 LOG_DEBUG('Ideal', areaWidth, areaLength)
-            beginExplosionPos = BigWorld.wg_collideSegment(BigWorld.player().spaceID, pos, pos + direction * 1000.0, 18)
+            beginExplosionPos = BigWorld.collideSegment(BigWorld.player().spaceID, pos, pos + direction * 1000.0, 18)
             if beginExplosionPos is None:
                 return
             beginExplosionPos = beginExplosionPos.closestPoint
@@ -233,7 +233,7 @@ class CombatEquipmentManager(object):
             flatDir.y = 0.0
             flatDir.normalise()
             endDropPoint = pos + flatDir * (areaLength * bombEquipment.waveFraction)
-            endExplosionPos = BigWorld.wg_collideSegment(BigWorld.player().spaceID, endDropPoint, endDropPoint + direction * 1000.0, 18)
+            endExplosionPos = BigWorld.collideSegment(BigWorld.player().spaceID, endDropPoint, endDropPoint + direction * 1000.0, 18)
             if endExplosionPos is None:
                 endExplosionPos = beginExplosionPos + flatDir * (areaLength * bombEquipment.waveFraction)
             else:

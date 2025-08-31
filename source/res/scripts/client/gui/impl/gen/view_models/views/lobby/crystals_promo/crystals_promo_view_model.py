@@ -9,8 +9,9 @@ class CrystalsPromoViewModel(ViewModel):
     TANKS_TAB = 'tanksTab'
     INSTRUCTIONS_TAB = 'instructionsTab'
     EQUIPMENT_TAB = 'equipmentTab'
+    COMP7_TAB = 'comp7Tab'
 
-    def __init__(self, properties=7, commands=1):
+    def __init__(self, properties=8, commands=1):
         super(CrystalsPromoViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -45,17 +46,23 @@ class CrystalsPromoViewModel(ViewModel):
     def setEquipmentPrice(self, value):
         self._setString(4, value)
 
+    def getComp7Price(self):
+        return self._getString(5)
+
+    def setComp7Price(self, value):
+        self._setString(5, value)
+
     def getSyncInitiator(self):
-        return self._getBool(5)
-
-    def setSyncInitiator(self, value):
-        self._setBool(5, value)
-
-    def getIsChina(self):
         return self._getBool(6)
 
-    def setIsChina(self, value):
+    def setSyncInitiator(self, value):
         self._setBool(6, value)
+
+    def getIsChina(self):
+        return self._getBool(7)
+
+    def setIsChina(self, value):
+        self._setBool(7, value)
 
     def _initialize(self):
         super(CrystalsPromoViewModel, self)._initialize()
@@ -64,6 +71,7 @@ class CrystalsPromoViewModel(ViewModel):
         self._addStringProperty('instructionPrice', '')
         self._addStringProperty('vehiclePrice', '')
         self._addStringProperty('equipmentPrice', '')
+        self._addStringProperty('comp7Price', '')
         self._addBoolProperty('syncInitiator', False)
         self._addBoolProperty('isChina', False)
         self.goToShop = self._addCommand('goToShop')

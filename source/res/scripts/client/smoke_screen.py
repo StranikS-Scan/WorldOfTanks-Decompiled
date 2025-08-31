@@ -66,7 +66,7 @@ class _SmokeDebugVisualization(object):
 class SmokeScreen(object):
     vignetteEnabled = False
     activeVignetteEquipmentID = -1
-    renderSettings = BigWorld.WGRenderSettings()
+    renderSettings = BigWorld.PyRenderSettings()
 
     def __init__(self, smokeId, args):
         self.__args = args

@@ -138,7 +138,9 @@ class LootBoxesRewardScreen(ViewImpl):
         senders = set()
         isNameLoading = False
         firstGift = self.__giftsInfo[0]
-        senderID, messageID = firstGift[0], firstGift[1].get('message_id', 0)
+        senderID, messageID = firstGift[0], firstGift[1].get('message_id', 1)
+        if 'c_{}'.format(messageID) not in R.strings.player_phrases.player.keys():
+            messageID = 1
         senderName, clanAbbrev = self.getSenderNameAndClanAbbrev(senderID)
         if not senderName:
             isNameLoading = True

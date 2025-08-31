@@ -5,7 +5,7 @@ import weakref
 import BigWorld
 from debug_utils import LOG_CURRENT_EXCEPTION
 from external_strings_utils import unicode_from_utf8
-from messenger.proto.xmpp.extensions.wg_items import makeWGInfoFromPresence
+from messenger.proto.xmpp.extensions.custom_items import makeExtInfoFromPresence
 from messenger.proto.xmpp.gloox_constants import PRESENCE, CONNECTION_STATE, DISCONNECT_REASON, GLOOX_EVENT, INBOUND_SUB_BATCH_SIZE, INBOUND_SUB_INTERVAL
 from messenger.proto.xmpp.jid import ContactBareJID, JID
 from messenger.proto.xmpp.log_output import CLIENT_LOG_AREA, g_logOutput
@@ -199,18 +199,18 @@ class ClientDecorator(object):
             self.__cancelInboundSubsCallback()
         self.__handleEvent(GLOOX_EVENT.ROSTER_ITEM_REMOVED, ContactBareJID(jid))
 
-    def onHandlePresence(self, jid, priority, status, presence, wgexts, mucInfo):
-        self.__handleEvent(GLOOX_EVENT.PRESENCE, JID(jid), Resource(priority, status, presence, makeWGInfoFromPresence(wgexts), makeMucInfo(mucInfo)))
+    def onHandlePresence(self, jid, priority, status, presence, exts, mucInfo):
+        self.__handleEvent(GLOOX_EVENT.PRESENCE, JID(jid), Resource(priority, status, presence, makeExtInfoFromPresence(exts), makeMucInfo(mucInfo)))
 
     def onHandlePresenceError(self, jid, pyGlooxTag):
         self.__handleEvent(GLOOX_EVENT.PRESENCE_ERROR, JID(jid), pyGlooxTag)
 
-    def onSubscriptionRequest(self, jid, message, nickname, wgexts):
+    def onSubscriptionRequest(self, jid, message, nickname, exts):
         self.__cancelInboundSubsCallback()
         self.__inboundSubs.append((ContactBareJID(jid),
          nickname,
          message,
-         makeWGInfoFromPresence(wgexts)))
+         makeExtInfoFromPresence(exts)))
         if len(self.__inboundSubs) >= INBOUND_SUB_BATCH_SIZE:
             self.__fireInboundSubsEvent()
         else:

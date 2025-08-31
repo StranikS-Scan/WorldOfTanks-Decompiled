@@ -79,13 +79,13 @@ class ClientSelectableEasterEgg(ClientSelectableObject):
     def _addEdgeDetect(self):
         if self.outlineModelName and self.models:
             compoundModel = self.models[0]
-            BigWorld.wgAddEdgeDetectCompoundModel(compoundModel, 0, self.edgeMode)
+            BigWorld.addEdgeDetectCompoundModel(compoundModel, 0, self.edgeMode)
         else:
             super(ClientSelectableEasterEgg, self)._addEdgeDetect()
 
     def _delEdgeDetect(self):
         if self.outlineModelName and self.models:
             compoundModel = self.models[0]
-            BigWorld.wgDelEdgeDetectCompoundModel(compoundModel)
+            BigWorld.delEdgeDetectCompoundModel(compoundModel)
         else:
             super(ClientSelectableEasterEgg, self)._delEdgeDetect()

@@ -57,11 +57,11 @@ class StanzaErrorExtension(PyExtension):
         return (ERROR_TYPE.CANCEL, DEF_STANZA_ERROR_CONDITION)
 
 
-class WgErrorExtension(PyExtension):
+class ProjectErrorExtension(PyExtension):
 
     def __init__(self):
-        super(WgErrorExtension, self).__init__(_TAG.ERROR)
-        self.setXmlNs(_NS.WG_EXTENSION)
+        super(ProjectErrorExtension, self).__init__(_TAG.ERROR)
+        self.setXmlNs(_NS.EXTENSION)
 
     @classmethod
     def getDefaultData(cls):

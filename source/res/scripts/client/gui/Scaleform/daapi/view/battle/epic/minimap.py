@@ -163,7 +163,7 @@ class EpicMinimapComponent(EpicMinimapMeta):
         self.as_setMapDimensionsS(mapWidthPx, mapHeightPx)
 
     def _createFlashComponent(self):
-        comp = GUI.WGScrollingMinimapGUIComponentAS3(self.app.movie, settings.MINIMAP_COMPONENT_PATH)
+        comp = GUI.ScrollingMinimapGUIComponentAS3(self.app.movie, settings.MINIMAP_COMPONENT_PATH)
         comp.setMiniMinimapHighlightProps(_MINI_MINIMAP_HIGHLIGHT_PATH, _MINI_MINIMAP_SIZE)
         return comp
 

@@ -26,6 +26,7 @@ from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.MAPBOX_ALIASES import MAPBOX_ALIASES
+from gui.Scaleform.genConsts.EVENT_BATTLES_ALIASES import EVENT_BATTLES_ALIASES
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
@@ -74,7 +75,8 @@ from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
-from wg_async import wg_async, wg_await
+from th_async import th_async, th_await
+from skeletons.gui.game_control import IWhiteTigerController
 if typing.TYPE_CHECKING:
     from typing import Callable, Dict, Generator, Iterable, List, Union, Tuple, Optional
     from gui.marathon.marathon_event import MarathonEvent
@@ -92,6 +94,19 @@ class SettingsTabIndex(object):
     AIM = 4
     MARKERS = 5
     FEEDBACK = 6
+
+
+def closePostbattleWindow():
+
+    def filterFunc(window):
+        if window.content is None:
+            return False
+        else:
+            return True if window.content.layoutID == R.views.white_tiger.lobby.postbattle.PostbattleScreen() else None
+
+    uiLoader = dependency.instance(IGuiLoader)
+    for window in uiLoader.windowsManager.findWindows(filterFunc):
+        window.destroy()
 
 
 def showBattleResultsWindow(arenaUniqueID):
@@ -132,6 +147,10 @@ def showRankedBattleIntro():
 
 def showEpicBattlesPrimeTimeWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(EPICBATTLES_ALIASES.EPIC_BATTLES_PRIME_TIME_ALIAS), ctx={}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showEventBattlesPrimeTimeWindow():
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(EVENT_BATTLES_ALIASES.EVENT_PRIME_TIME_VIEW), ctx={}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showEpicBattlesAfterBattleWindow(levelUpInfo, parent=None):
@@ -182,7 +201,7 @@ def showBattleRoyaleResultsInfo(ctx):
             return
         battleResultView.destroyWindow()
     view = BrBattleResultsViewInLobby(ctx=ctx)
-    window = LobbyNotificationWindow(content=view)
+    window = LobbyNotificationWindow(WindowFlags.WINDOW_FULLSCREEN, content=view, layer=view.layer)
     window.load()
     return
 
@@ -352,7 +371,7 @@ def showDashboardView():
     g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.lobby.account_dashboard.AccountDashboard(), AccountDashboardView, ScopeTemplates.LOBBY_SUB_SCOPE)), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-@wg_async
+@th_async
 def showBattleBoosterBuyDialog(battleBoosterIntCD):
     from gui.impl.dialogs import dialogs
     from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindowWrapper
@@ -361,7 +380,7 @@ def showBattleBoosterBuyDialog(battleBoosterIntCD):
     yield dialogs.showSimple(wrapper)
 
 
-@wg_async
+@th_async
 def showBattleBoosterSellDialog(battleBoosterIntCD):
     from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindowWrapper
     from gui.impl.lobby.instructions.booster_sell_dialog import BoosterSellWindowView
@@ -370,7 +389,7 @@ def showBattleBoosterSellDialog(battleBoosterIntCD):
     yield dialogs.showSimple(wrapper)
 
 
-@wg_async
+@th_async
 def showPlatoonWarningDialog(resources):
     from gui.impl.dialogs import dialogs
     from gui.impl.dialogs.builders import WarningDialogBuilder
@@ -378,11 +397,11 @@ def showPlatoonWarningDialog(resources):
     builder = WarningDialogBuilder()
     builder.setTitle(resources.title())
     builder.setMessagesAndButtons(message=resources, buttons=resources, focused=DialogButtons.CANCEL)
-    result = yield wg_await(dialogs.showSimple(builder.buildInLobby()))
+    result = yield th_await(dialogs.showSimple(builder.buildInLobby()))
     raise AsyncReturn(result)
 
 
-@wg_async
+@th_async
 def showPlatoonInfoDialog(resources):
     from gui.impl.dialogs import dialogs
     from gui.impl.dialogs.builders import ResSimpleDialogBuilder
@@ -392,7 +411,7 @@ def showPlatoonInfoDialog(resources):
     builder.setTitle(resources.title())
     builder.setPreset(DialogPresets.CUSTOMIZATION_INSTALL_BOUND)
     builder.setMessagesAndButtons(message=resources, buttons=resources, focused=DialogButtons.SUBMIT)
-    result = yield wg_await(dialogs.showSimple(builder.buildInLobby()))
+    result = yield th_await(dialogs.showSimple(builder.buildInLobby()))
     raise AsyncReturn(result)
 
 
@@ -715,14 +734,17 @@ def showClanSendInviteWindow(clanDbID):
 def selectVehicleInHangar(itemCD, loadHangar=True):
     from CurrentVehicle import g_currentVehicle
     itemsCache = dependency.instance(IItemsCache)
+    wtController = dependency.instance(IWhiteTigerController)
     veh = itemsCache.items.getItemByCD(int(itemCD))
     if not veh.isInInventory:
         raise SoftException('Vehicle (itemCD={}) must be in inventory.'.format(itemCD))
     g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.SELECT_VEHICLE_IN_HANGAR, ctx={'vehicleInvID': veh.invID,
      'prevVehicleInvID': g_currentVehicle.invID}), scope=EVENT_BUS_SCOPE.LOBBY)
-    g_currentVehicle.selectVehicle(veh.invID)
     if loadHangar:
+        if wtController.isEventPrbActive():
+            wtController.doLeaveEventPrb()
         showHangar()
+    g_currentVehicle.selectVehicle(veh.invID)
 
 
 def showCrewAboutView(navigateFrom=None):
@@ -915,6 +937,7 @@ def showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, params=N
     if url:
         if browserParams is None:
             browserParams = {}
+        url = GUI_SETTINGS.checkAndReplaceWebBridgeMacros(url)
         url = yield URLMacros().parse(url, params=params)
         g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(alias, parent=parent), ctx={'url': url,
          'allowRightClick': False,
@@ -1010,6 +1033,25 @@ def showStylePreview(vehCD, style, descr='', backCallback=None, backBtnDescrLabe
      'outfit': kwargs.get('outfit')}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
+def showEventStorageWindow(parent=None):
+    from white_tiger.gui.impl.lobby.wt_event_storage import WtEventStorageWindow
+    uiLoader = dependency.instance(IGuiLoader)
+    contentResId = R.views.white_tiger.lobby.PortalView()
+    if uiLoader.windowsManager.getViewByLayoutID(contentResId) is None:
+        window = WtEventStorageWindow(parent=parent)
+        window.load()
+    return
+
+
+def isViewLoaded(layoutID):
+    uiLoader = dependency.instance(IGuiLoader)
+    if not uiLoader or not uiLoader.windowsManager:
+        return False
+    else:
+        view = uiLoader.windowsManager.getViewByLayoutID(layoutID)
+        return view is not None
+
+
 def showStyleProgressionPreview(vehCD, style, descr, backCallback, backBtnDescrLabel='', *args, **kwargs):
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.STYLE_PROGRESSION_PREVIEW), ctx={'itemCD': vehCD,
      'style': style,
@@ -1102,17 +1144,17 @@ def findAndLoadWindow(useQueue, windowType, *args, **kwargs):
     return newWindow
 
 
-@wg_async
+@th_async
 def showPreformattedDialog(preset, title, message, buttons, focusedButton, btnDownSounds):
     from gui.impl.dialogs import dialogs
     from gui.impl.dialogs.builders import FormattedSimpleDialogBuilder
     builder = FormattedSimpleDialogBuilder()
     builder.setMessagesAndButtons(preset, title, message, buttons, focusedButton, btnDownSounds)
-    result = yield wg_await(dialogs.show(builder.build()))
+    result = yield th_await(dialogs.show(builder.build()))
     raise AsyncReturn(result)
 
 
-@wg_async
+@th_async
 def showResSimpleDialog(resources, icon, formattedMessage, parent=None):
     from gui.impl.dialogs import dialogs
     from gui.impl.dialogs.builders import ResSimpleDialogBuilder
@@ -1120,11 +1162,11 @@ def showResSimpleDialog(resources, icon, formattedMessage, parent=None):
     builder.setMessagesAndButtons(resources)
     builder.setIcon(icon)
     builder.setFormattedMessage(formattedMessage)
-    result = yield wg_await(dialogs.showSimple(builder.buildInLobby(parent)))
+    result = yield th_await(dialogs.showSimple(builder.buildInLobby(parent)))
     raise AsyncReturn(result)
 
 
-@wg_async
+@th_async
 def showDynamicButtonInfoDialogBuilder(resources, icon, formattedMessage, parent=None):
     from gui.impl.dialogs import dialogs
     from gui.impl.dialogs.builders import InfoDialogBuilder
@@ -1132,11 +1174,12 @@ def showDynamicButtonInfoDialogBuilder(resources, icon, formattedMessage, parent
     builder.setMessagesAndButtons(resources, resources)
     builder.setIcon(icon)
     builder.setFormattedMessage(formattedMessage)
-    result = yield wg_await(dialogs.showSimple(builder.build(parent)))
+    result = yield th_await(dialogs.showSimple(builder.build(parent)))
+    g_eventBus.handleEvent(events.LobbySimpleEvent(events.HangarSimpleEvent.CLOSE_CONFIRM_DIALOG), scope=EVENT_BUS_SCOPE.LOBBY)
     raise AsyncReturn(result)
 
 
-@wg_async
+@th_async
 def tryToShowReplaceExistingStyleDialog(parent=None):
     from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
     from gui.impl.dialogs import dialogs
@@ -1189,24 +1232,24 @@ def tryToShowReplaceExistingStyleDialog(parent=None):
     builder.setTitleArgs([newStyleName])
     builder.setMessageArgs(fmtArgs=[UserFormatStringArgModel('{} {}'.format(styleToReplaceName, backport.text(R.strings.dialogs.editableStyles.confirmReset.formattedPartOfMessage())), 'formatted_message', R.styles.AlertBigTextStyle())])
     builder.setMessagesAndButtons(R.strings.dialogs.editableStyles.confirmReset, focused=DialogButtons.CANCEL)
-    result, dontShowAgain = yield wg_await(dialogs.showSimpleWithResultData(builder.build(parent=parent)))
+    result, dontShowAgain = yield th_await(dialogs.showSimpleWithResultData(builder.build(parent=parent)))
     if result and dontShowAgain:
         serverSettings.saveInUIStorage({UI_STORAGE_KEYS.DISABLE_EDITABLE_STYLE_REWRITE_WARNING: True})
     raise AsyncReturn(result)
     return
 
 
-@wg_async
+@th_async
 def showDialog(dialog, callback):
     from gui.impl.dialogs import dialogs
-    isOk = yield wg_await(dialogs.showSimple(dialog))
+    isOk = yield th_await(dialogs.showSimple(dialog))
     callback((isOk, {}))
 
 
-@wg_async
+@th_async
 def showOptDeviceCommonWindowDialog(wrappedViewClass, deviceDescr=None, layoutID=None):
     from gui.impl.dialogs import dialogs
-    result = yield wg_await(dialogs.showSingleDialogWithResultData(compDescr=deviceDescr, layoutID=layoutID or R.views.lobby.demountkit.CommonWindow(), wrappedViewClass=wrappedViewClass))
+    result = yield th_await(dialogs.showSingleDialogWithResultData(compDescr=deviceDescr, layoutID=layoutID or R.views.lobby.demountkit.CommonWindow(), wrappedViewClass=wrappedViewClass))
     if result.busy:
         raise AsyncReturn((False, {}))
     else:
@@ -1214,7 +1257,7 @@ def showOptDeviceCommonWindowDialog(wrappedViewClass, deviceDescr=None, layoutID
         raise AsyncReturn((isOk, {}))
 
 
-@wg_async
+@th_async
 def showOptionalDeviceDestroy(itemCD, callback):
     from gui.impl.dialogs.gf_builders import WarningDialogBuilder
     builder = WarningDialogBuilder()
@@ -1224,15 +1267,15 @@ def showOptionalDeviceDestroy(itemCD, callback):
     builder.setTitle(title)
     builder.setDisplayFlags(DisplayFlags.RESPONSIVEHEADER.value)
     from gui.impl.dialogs.dialog_template import DialogTemplateView
-    result = yield wg_await(showOptDeviceCommonWindowDialog(lambda **_: builder.buildView(), layoutID=DialogTemplateView.LAYOUT_ID))
+    result = yield th_await(showOptDeviceCommonWindowDialog(lambda **_: builder.buildView(), layoutID=DialogTemplateView.LAYOUT_ID))
     callback(result)
 
 
-@wg_async
+@th_async
 def showOptionalDeviceDemount(deviceDescr, callback, forFitting=False):
     from gui.impl.dialogs import dialogs
     from gui.impl.lobby.demount_kit.demount_dialog import DemountOptionalDeviceDialog
-    result = yield wg_await(dialogs.showSingleDialogWithResultData(itemCD=deviceDescr, forFitting=forFitting, layoutID=DemountOptionalDeviceDialog.LAYOUT_ID, wrappedViewClass=DemountOptionalDeviceDialog))
+    result = yield th_await(dialogs.showSingleDialogWithResultData(itemCD=deviceDescr, forFitting=forFitting, layoutID=DemountOptionalDeviceDialog.LAYOUT_ID, wrappedViewClass=DemountOptionalDeviceDialog))
     if result.busy:
         callback((False, {}))
     else:
@@ -1243,11 +1286,11 @@ def showOptionalDeviceDemount(deviceDescr, callback, forFitting=False):
             callback((isOK, data))
 
 
-@wg_async
+@th_async
 def showOptionalDeviceDemountSinglePrice(deviceDescr, callback, forFitting=False):
     from gui.impl.dialogs import dialogs
     from gui.impl.lobby.demount_kit.demount_single_price_dialog import DemountOptionalDeviceSinglePriceDialog
-    result = yield wg_await(dialogs.showSingleDialogWithResultData(itemCD=deviceDescr, forFitting=forFitting, layoutID=DemountOptionalDeviceSinglePriceDialog.LAYOUT_ID, wrappedViewClass=DemountOptionalDeviceSinglePriceDialog))
+    result = yield th_await(dialogs.showSingleDialogWithResultData(itemCD=deviceDescr, forFitting=forFitting, layoutID=DemountOptionalDeviceSinglePriceDialog.LAYOUT_ID, wrappedViewClass=DemountOptionalDeviceSinglePriceDialog))
     if result.busy:
         callback((False, {}))
     else:
@@ -1258,11 +1301,11 @@ def showOptionalDeviceDemountSinglePrice(deviceDescr, callback, forFitting=False
             callback((isOK, data))
 
 
-@wg_async
+@th_async
 def showOptionalDeviceDemountFromSlot(deviceDescr, callback, forFitting=False, vehicle=None):
     from gui.impl.dialogs import dialogs
     from gui.impl.lobby.demount_kit.demount_from_slot_dialog import DemountOptionalDeviceFromSlotDialog
-    result = yield wg_await(dialogs.showSingleDialogWithResultData(itemCD=deviceDescr, forFitting=forFitting, vehicle=vehicle, layoutID=DemountOptionalDeviceFromSlotDialog.LAYOUT_ID, wrappedViewClass=DemountOptionalDeviceFromSlotDialog))
+    result = yield th_await(dialogs.showSingleDialogWithResultData(itemCD=deviceDescr, forFitting=forFitting, vehicle=vehicle, layoutID=DemountOptionalDeviceFromSlotDialog.LAYOUT_ID, wrappedViewClass=DemountOptionalDeviceFromSlotDialog))
     if result.busy:
         callback((False, {}))
     else:
@@ -1291,7 +1334,7 @@ def showOfferGiftsWindow(offerID, overrideSuccessCallback=None):
     g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(layoutID, OfferGiftsWindow, ScopeTemplates.LOBBY_SUB_SCOPE), offerID=offerID, overrideSuccessCallback=overrideSuccessCallback), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-@wg_async
+@th_async
 def showOfferGiftDialog(offerID, giftID, cdnTitle='', callback=None):
     from gui.impl.lobby.offers.offer_gift_dialog import makeOfferGiftDialog
     dialogBuilder = makeOfferGiftDialog(offerID, giftID, cdnTitle)
@@ -1300,23 +1343,23 @@ def showOfferGiftDialog(offerID, giftID, cdnTitle='', callback=None):
     yield showDialog(dialogBuilder.build(parent=view), callback)
 
 
-@wg_async
+@th_async
 def showBonusDelayedConfirmationDialog(vehicle, callback=None):
     from gui.impl.dialogs import dialogs
     from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindowWrapper
     from gui.impl.lobby.battle_matters.battle_matters_exchange_rewards import BattleMattersExchangeRewards
     vehicleUserName = vehicle.userName
     vehicleName = getNationLessName(vehicle.name)
-    result = yield wg_await(dialogs.showSimple(FullScreenDialogWindowWrapper(BattleMattersExchangeRewards(vehicleName, vehicleUserName))))
+    result = yield th_await(dialogs.showSimple(FullScreenDialogWindowWrapper(BattleMattersExchangeRewards(vehicleName, vehicleUserName))))
     callback(result)
 
 
-@wg_async
+@th_async
 def showPMDiscardConfirmationDialog(questID, callback=None):
     from gui.impl.dialogs import dialogs
     from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindowWrapper
     from gui.impl.lobby.personal_missions.personal_missions_quest_reset_view import PersonalMissionsQuestResetView
-    result = yield wg_await(dialogs.showSimple(FullScreenDialogWindowWrapper(PersonalMissionsQuestResetView(questID), doBlur=False)))
+    result = yield th_await(dialogs.showSimple(FullScreenDialogWindowWrapper(PersonalMissionsQuestResetView(questID), doBlur=False)))
     callback((result, {}))
 
 
@@ -1392,46 +1435,46 @@ def showCompareAmmunitionSelectorView(**kwargs):
     return
 
 
-@wg_async
+@th_async
 def showNeedRepairDialog(vehicle, wrappedViewClass, repairClazz, startState=None, parent=None):
     from gui.impl.dialogs import dialogs
-    result = yield wg_await(dialogs.showSingleDialog(layoutID=R.views.lobby.tanksetup.dialogs.NeedRepair(), wrappedViewClass=wrappedViewClass, vehicle=vehicle, startState=startState, parent=parent, repairClazz=repairClazz))
+    result = yield th_await(dialogs.showSingleDialog(layoutID=R.views.lobby.tanksetup.dialogs.NeedRepair(), wrappedViewClass=wrappedViewClass, vehicle=vehicle, startState=startState, parent=parent, repairClazz=repairClazz))
     raise AsyncReturn(result)
 
 
-@wg_async
+@th_async
 def showTankSetupConfirmDialog(items, vehicle=None, startState=None, parent=None):
     from gui.impl.dialogs import dialogs
-    result = yield wg_await(dialogs.showSingleDialogWithResultData(layoutID=R.views.lobby.tanksetup.dialogs.Confirm(), wrappedViewClass=TankSetupConfirmDialog, items=items, vehicle=vehicle, startState=startState, parent=parent))
+    result = yield th_await(dialogs.showSingleDialogWithResultData(layoutID=R.views.lobby.tanksetup.dialogs.Confirm(), wrappedViewClass=TankSetupConfirmDialog, items=items, vehicle=vehicle, startState=startState, parent=parent))
     raise AsyncReturn(result)
 
 
-@wg_async
+@th_async
 def showTankSetupExitConfirmDialog(items, vehicle=None, startState=None, fromSection=None, parent=None):
     from gui.impl.dialogs import dialogs
-    result = yield wg_await(dialogs.showSingleDialogWithResultData(layoutID=R.views.lobby.tanksetup.dialogs.Confirm(), wrappedViewClass=TankSetupExitConfirmDialog, items=items, vehicle=vehicle, startState=startState, fromSection=fromSection, parent=parent))
+    result = yield th_await(dialogs.showSingleDialogWithResultData(layoutID=R.views.lobby.tanksetup.dialogs.Confirm(), wrappedViewClass=TankSetupExitConfirmDialog, items=items, vehicle=vehicle, startState=startState, fromSection=fromSection, parent=parent))
     raise AsyncReturn(result)
 
 
-@wg_async
+@th_async
 def showRefillShellsDialog(price, shells, startState=None, parent=None):
     from gui.impl.dialogs import dialogs
-    result = yield wg_await(dialogs.showSingleDialogWithResultData(layoutID=R.views.lobby.tanksetup.dialogs.RefillShells(), wrappedViewClass=RefillShells, price=price, shells=shells, startState=startState, parent=parent))
+    result = yield th_await(dialogs.showSingleDialogWithResultData(layoutID=R.views.lobby.tanksetup.dialogs.RefillShells(), wrappedViewClass=RefillShells, price=price, shells=shells, startState=startState, parent=parent))
     raise AsyncReturn(result)
 
 
-@wg_async
+@th_async
 def showExitFromShellsDialog(price, shells, startState=None, parent=None):
     from gui.impl.dialogs import dialogs
-    result = yield wg_await(dialogs.showSingleDialogWithResultData(layoutID=R.views.lobby.tanksetup.dialogs.RefillShells(), wrappedViewClass=ExitFromShellsConfirm, price=price, shells=shells, startState=startState, parent=parent))
+    result = yield th_await(dialogs.showSingleDialogWithResultData(layoutID=R.views.lobby.tanksetup.dialogs.RefillShells(), wrappedViewClass=ExitFromShellsConfirm, price=price, shells=shells, startState=startState, parent=parent))
     raise AsyncReturn(result)
 
 
-@wg_async
+@th_async
 def showBattleAbilitiesConfirmDialog(items, vehicleType, withInstall=None, parent=None, applyForAllVehiclesByType=False):
     from gui.impl.lobby.tank_setup.dialogs.battle_abilities_confirm import BattleAbilitiesSetupConfirm
     from gui.impl.dialogs import dialogs
-    result = yield wg_await(dialogs.showSingleDialogWithResultData(layoutID=R.views.lobby.tanksetup.dialogs.Confirm(), wrappedViewClass=BattleAbilitiesSetupConfirm, items=items, withInstall=withInstall, parent=parent, vehicleType=vehicleType, applyForAllVehiclesByType=applyForAllVehiclesByType))
+    result = yield th_await(dialogs.showSingleDialogWithResultData(layoutID=R.views.lobby.tanksetup.dialogs.Confirm(), wrappedViewClass=BattleAbilitiesSetupConfirm, items=items, withInstall=withInstall, parent=parent, vehicleType=vehicleType, applyForAllVehiclesByType=applyForAllVehiclesByType))
     raise AsyncReturn(result)
 
 
@@ -1439,11 +1482,11 @@ def showBlueprintsSalePage(url=None):
     showBlueprintsExchangeOverlay(url=url)
 
 
-@wg_async
+@th_async
 def showActiveTestConfirmDialog(startTime, finishTime, link, parent=None):
     from gui.impl.dialogs import dialogs
     from gui.impl.lobby.matchmaker.active_test_confirm_view import ActiveTestConfirmView
-    result = yield wg_await(dialogs.showSingleDialog(layoutID=R.views.lobby.matchmaker.ActiveTestConfirmView(), wrappedViewClass=ActiveTestConfirmView, startTime=startTime, finishTime=finishTime, link=link, parent=parent))
+    result = yield th_await(dialogs.showSingleDialog(layoutID=R.views.lobby.matchmaker.ActiveTestConfirmView(), wrappedViewClass=ActiveTestConfirmView, startTime=startTime, finishTime=finishTime, link=link, parent=parent))
     isOK = result.result
     raise AsyncReturn(isOK)
 
@@ -1473,11 +1516,11 @@ def showFrontlineAwards(bonuses, onCloseCallback=None, onAnimationEndedCallback=
     findAndLoadWindow(useQueue, AwardsWindow, bonuses, onCloseCallback=onCloseCallback, onAnimationEndedCallback=onAnimationEndedCallback)
 
 
-@wg_async
+@th_async
 def showFrontlineConfirmDialog(skillIds, callback, confirmType=None):
     from gui.impl.lobby.tank_setup.dialogs.frontline_confirm_dialog import FrontlineReserveConfirmDialog, ConfirmType
     from gui.impl.dialogs import dialogs
-    result = yield wg_await(dialogs.showSingleDialogWithResultData(skillIds=skillIds, confirmType=confirmType or ConfirmType.Buy, layoutID=FrontlineReserveConfirmDialog.LAYOUT_ID, wrappedViewClass=FrontlineReserveConfirmDialog))
+    result = yield th_await(dialogs.showSingleDialogWithResultData(skillIds=skillIds, confirmType=confirmType or ConfirmType.Buy, layoutID=FrontlineReserveConfirmDialog.LAYOUT_ID, wrappedViewClass=FrontlineReserveConfirmDialog))
     if result.busy:
         callback(False)
     else:
@@ -1499,11 +1542,11 @@ def showNewLevelWindow(pLevel=1, cLevel=2, pXp=50, cXp=70, boosterFlXP=30, origi
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(EPICBATTLES_ALIASES.EPIC_BATTLES_AFTER_BATTLE_ALIAS), ctx={'levelUpInfo': extensionInfo}), EVENT_BUS_SCOPE.LOBBY)
 
 
-@wg_async
+@th_async
 def showBattlePassActivateChapterConfirmDialog(chapterID, parent, callback):
     from gui.impl.dialogs import dialogs
     from gui.impl.lobby.battle_pass.activate_chapter_confirm_dialog import ActivateChapterConfirmDialog
-    result = yield wg_await(dialogs.showSingleDialogWithResultData(chapterID=chapterID, layoutID=ActivateChapterConfirmDialog.LAYOUT_ID, wrappedViewClass=ActivateChapterConfirmDialog, parent=parent.getParentWindow()))
+    result = yield th_await(dialogs.showSingleDialogWithResultData(chapterID=chapterID, layoutID=ActivateChapterConfirmDialog.LAYOUT_ID, wrappedViewClass=ActivateChapterConfirmDialog, parent=parent.getParentWindow()))
     if result.busy:
         callback((False, {}))
     else:
@@ -1521,19 +1564,19 @@ def showDeconstructionDeviceWindow(ctx=None, parent=None, guiLoader=None, upgrad
     return
 
 
-@wg_async
+@th_async
 def showDeconstructionMultDeviceDialog(ctx):
     from gui.impl.dialogs import dialogs
     from gui.impl.lobby.tank_setup.dialogs.deconstruct_confirm import DeconstructMultConfirm
-    result = yield wg_await(dialogs.showSingleDialogWithResultData(layoutID=DeconstructMultConfirm.LAYOUT_ID, ctx=ctx, wrappedViewClass=DeconstructMultConfirm))
+    result = yield th_await(dialogs.showSingleDialogWithResultData(layoutID=DeconstructMultConfirm.LAYOUT_ID, ctx=ctx, wrappedViewClass=DeconstructMultConfirm))
     raise AsyncReturn(result.result)
 
 
-@wg_async
+@th_async
 def showDeconstructionDeviceDialog(itemIntCD, fromVehicle=False):
     from gui.impl.dialogs import dialogs
     from gui.impl.lobby.tank_setup.dialogs.deconstruct_confirm import DeconstructConfirm
-    result = yield wg_await(dialogs.showSingleDialogWithResultData(itemIntCD=itemIntCD, fromVehicle=fromVehicle, layoutID=DeconstructConfirm.LAYOUT_ID, wrappedViewClass=DeconstructConfirm))
+    result = yield th_await(dialogs.showSingleDialogWithResultData(itemIntCD=itemIntCD, fromVehicle=fromVehicle, layoutID=DeconstructConfirm.LAYOUT_ID, wrappedViewClass=DeconstructConfirm))
     raise AsyncReturn(result.result)
 
 
@@ -1593,7 +1636,7 @@ def showOnboardingView(styleCD=None, isFirstRun=False, parent=None, guiLoader=No
     return
 
 
-@wg_async
+@th_async
 def showVehPostProgressionView(vehTypeCompDescr, exitEvent=None):
     if isSecretExtendedNonInventoryVehicle(vehTypeCompDescr):
         return
@@ -1749,11 +1792,11 @@ def showModeSelectorWindow(isEventEnabled, provider=None, subSelectorCallback=No
     containerManager.load(GuiImplViewLoadParams(ModeSelectorView.layoutID, ModeSelectorView, ScopeTemplates.DEFAULT_SCOPE), isEventEnabled=isEventEnabled, provider=provider, subSelectorCallback=subSelectorCallback)
 
 
-@wg_async
+@th_async
 def showBuyModuleDialog(newModule, installedModule, currency, mountDisabledReason, callback):
     from gui.impl.dialogs import dialogs
     from gui.impl.lobby.research.buy_module_dialog_view import BuyModuleDialogView
-    result = yield wg_await(dialogs.showSingleDialogWithResultData(module=newModule, previousModule=installedModule, currency=currency, mountDisabledReason=mountDisabledReason, layoutID=R.views.lobby.research.BuyModuleDialogView(), wrappedViewClass=BuyModuleDialogView))
+    result = yield th_await(dialogs.showSingleDialogWithResultData(module=newModule, previousModule=installedModule, currency=currency, mountDisabledReason=mountDisabledReason, layoutID=R.views.lobby.research.BuyModuleDialogView(), wrappedViewClass=BuyModuleDialogView))
     if result.busy:
         callback((False, {}))
     else:
@@ -1790,7 +1833,7 @@ def showMapsTrainingResultsWindow(arenaUniqueID, isFromNotifications):
     return
 
 
-@wg_async
+@th_async
 def showIdleCrewBonusDialog(description, successCallback):
     from gui.impl.dialogs import dialogs
     from gui.impl.pub.dialog_window import DialogButtons
@@ -1802,12 +1845,12 @@ def showIdleCrewBonusDialog(description, successCallback):
     builder.setMessageIcon(description.icon)
     builder.setConfirmButtonLabel(stringRoot.submit())
     builder.setCancelButtonLabel(stringRoot.cancel())
-    result = yield wg_await(dialogs.show(builder.build()))
+    result = yield th_await(dialogs.show(builder.build()))
     if result.result == DialogButtons.SUBMIT:
         successCallback()
 
 
-@wg_async
+@th_async
 def showTelecomRentDialog(title, description, icon, successCallback):
     from gui.impl.dialogs import dialogs
     from gui.impl.pub.dialog_window import DialogButtons
@@ -1825,41 +1868,41 @@ def showTelecomRentDialog(title, description, icon, successCallback):
         builder.setDescription(description)
         builder.setConfirmButtonLabel(stringRoot.submit())
         builder.setCancelButtonLabel(stringRoot.cancel())
-        result = yield wg_await(dialogs.show(builder.build()))
+        result = yield th_await(dialogs.show(builder.build()))
         if result.result == DialogButtons.SUBMIT:
             successCallback()
         return
 
 
-@wg_async
+@th_async
 def showPostProgressionPairModDialog(vehicle, stepID, modID, parent=None):
     from gui.impl.lobby.veh_post_progression.dialogs.buy_pair_modification import BuyPairModificationDialog
     from gui.impl.dialogs import dialogs
-    result = yield wg_await(dialogs.showSingleDialogWithResultData(layoutID=R.views.lobby.tanksetup.dialogs.Confirm(), wrappedViewClass=BuyPairModificationDialog, vehicle=vehicle, stepID=stepID, modID=modID, parent=parent))
+    result = yield th_await(dialogs.showSingleDialogWithResultData(layoutID=R.views.lobby.tanksetup.dialogs.Confirm(), wrappedViewClass=BuyPairModificationDialog, vehicle=vehicle, stepID=stepID, modID=modID, parent=parent))
     raise AsyncReturn(result)
 
 
-@wg_async
+@th_async
 def showDestroyPairModificationsDialog(vehicle, stepIDs, parent=None):
     from gui.impl.lobby.veh_post_progression.dialogs.destroy_pair_modification import DestroyPairModificationsDialog
     from gui.impl.dialogs import dialogs
-    result = yield wg_await(dialogs.showSingleDialogWithResultData(layoutID=DestroyPairModificationsDialog.LAYOUT_ID, wrappedViewClass=DestroyPairModificationsDialog, vehicle=vehicle, stepIDs=stepIDs, parent=parent))
+    result = yield th_await(dialogs.showSingleDialogWithResultData(layoutID=DestroyPairModificationsDialog.LAYOUT_ID, wrappedViewClass=DestroyPairModificationsDialog, vehicle=vehicle, stepIDs=stepIDs, parent=parent))
     raise AsyncReturn(result)
 
 
-@wg_async
+@th_async
 def showPostProgressionResearchDialog(vehicle, stepIDs, parent=None):
     from gui.impl.lobby.veh_post_progression.dialogs.research_confirm import PostProgressionResearchConfirm
     from gui.impl.dialogs import dialogs
-    result = yield wg_await(dialogs.showSingleDialogWithResultData(layoutID=R.views.lobby.veh_post_progression.PostProgressionResearchSteps(), parent=parent, wrappedViewClass=PostProgressionResearchConfirm, vehicle=vehicle, stepIDs=stepIDs))
+    result = yield th_await(dialogs.showSingleDialogWithResultData(layoutID=R.views.lobby.veh_post_progression.PostProgressionResearchSteps(), parent=parent, wrappedViewClass=PostProgressionResearchConfirm, vehicle=vehicle, stepIDs=stepIDs))
     raise AsyncReturn(result)
 
 
-@wg_async
+@th_async
 def showTankwomanRecruitAwardDialog(ctx, parentViewKey=None):
     from gui.impl.dialogs import dialogs
     from gui.impl.lobby.crew.dialogs.recruit_window.recruit_dialog import QuestRecruitDialog
-    result = yield wg_await(dialogs.showSingleDialogWithResultData(ctx=ctx, parentViewKey=parentViewKey, layoutID=QuestRecruitDialog.LAYOUT_ID, wrappedViewClass=QuestRecruitDialog))
+    result = yield th_await(dialogs.showSingleDialogWithResultData(ctx=ctx, parentViewKey=parentViewKey, layoutID=QuestRecruitDialog.LAYOUT_ID, wrappedViewClass=QuestRecruitDialog))
     raise AsyncReturn(result)
 
 
@@ -1958,11 +2001,11 @@ def showResourcesLoadingWindow():
     ResourcesLoadingWindow().load()
 
 
-@wg_async
+@th_async
 def showResourcesLoadingConfirm(resources, isReturnOperation, callback):
     from gui.impl.dialogs.dialogs import showSingleDialogWithResultData
     from gui.impl.lobby.resource_well.resources_loading_confirm import ResourcesLoadingConfirm
-    result = yield wg_await(showSingleDialogWithResultData(layoutID=R.views.lobby.resource_well.ResourcesLoadingConfirm(), wrappedViewClass=ResourcesLoadingConfirm, resources=resources, isReturnOperation=isReturnOperation))
+    result = yield th_await(showSingleDialogWithResultData(layoutID=R.views.lobby.resource_well.ResourcesLoadingConfirm(), wrappedViewClass=ResourcesLoadingConfirm, resources=resources, isReturnOperation=isReturnOperation))
     if result.busy:
         callback((False, {}))
     else:
@@ -1970,11 +2013,11 @@ def showResourcesLoadingConfirm(resources, isReturnOperation, callback):
         callback((isOK, data))
 
 
-@wg_async
+@th_async
 def showResourceWellNoSerialVehiclesConfirm(callback):
     from gui.impl.dialogs.dialogs import showSingleDialogWithResultData
     from gui.impl.lobby.resource_well.no_serial_vehicles_confirm import NoSerialVehiclesConfirm
-    result = yield wg_await(showSingleDialogWithResultData(layoutID=R.views.lobby.resource_well.NoSerialVehiclesConfirm(), wrappedViewClass=NoSerialVehiclesConfirm))
+    result = yield th_await(showSingleDialogWithResultData(layoutID=R.views.lobby.resource_well.NoSerialVehiclesConfirm(), wrappedViewClass=NoSerialVehiclesConfirm))
     if result.busy:
         callback((False, {}))
     else:
@@ -2226,6 +2269,11 @@ def showDailyEpicQuestRewardWindow(bonuses, notificationMgr=None):
     notificationMgr.append(WindowNotificationCommand(window))
 
 
+def showRankedPostbattleStatusWindow(rewards, rankedInfo):
+    from gui.impl.lobby.ranked.ranked_postbattle_status_view import RankedPostbattleStatusWindow
+    RankedPostbattleStatusWindow(rewards, rankedInfo).load()
+
+
 def checkParagonsIntroSeen(func):
     from gui.impl.lobby.paragons.paragons_window_events import showParagonsIntroView
     from account_helpers.AccountSettings import AccountSettings, Paragons
@@ -2289,11 +2337,11 @@ def showDailyQuestsView(guiLoader=None):
         view.initView()
 
 
-@wg_async
+@th_async
 def showDailyQuestsConfirmDialog(rerollPremium, callback):
     from gui.impl.dialogs import dialogs
     from gui.impl.lobby.daily.daily_quest_reroll_view import DailyQuestRerollView
-    result = yield wg_await(dialogs.showSingleDialogWithResultData(rerollPremium=rerollPremium, layoutID=DailyQuestRerollView.LAYOUT_ID, wrappedViewClass=DailyQuestRerollView))
+    result = yield th_await(dialogs.showSingleDialogWithResultData(rerollPremium=rerollPremium, layoutID=DailyQuestRerollView.LAYOUT_ID, wrappedViewClass=DailyQuestRerollView))
     if result.busy:
         callback((False, {}))
     else:

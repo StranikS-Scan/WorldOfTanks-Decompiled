@@ -22,7 +22,7 @@ class VehicleCompareCartButton(ButtonWithCounterMeta):
         if not self.comparisonBasket.isEnabled():
             self.destroy()
 
-    def __onCountChanged(self, _):
+    def __onCountChanged(self, _, __):
         self.__changeCount(self.comparisonBasket.getVehiclesCount())
 
     def __changeCount(self, count):

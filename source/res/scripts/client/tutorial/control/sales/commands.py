@@ -12,15 +12,15 @@ from gui.shared.events import OpenLinkEvent
 from gui.shared.gui_items.items_actions import factory as ActionsFactory
 from helpers import dependency
 from skeletons.gui.game_control import ICalendarController
-from wg_async import wg_await, wg_async
+from th_async import th_await, th_async
 
 def buySlots():
     ActionsFactory.doAction(ActionsFactory.BUY_VEHICLE_SLOT)
 
 
-@wg_async
+@th_async
 def buyBerths():
-    yield wg_await(showEnlargeBarracksDialog())
+    yield th_await(showEnlargeBarracksDialog())
 
 
 def createClan():

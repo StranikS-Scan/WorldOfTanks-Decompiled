@@ -108,7 +108,8 @@ class RestoreController(IRestoreController, Notifiable):
         restoreConfig = self.itemsCache.items.shop.tankmenRestoreConfig
         self.__maxTankmenBufferLength = restoreConfig.limit
         self.__tankmanLiveTime = restoreConfig.billableDuration
-        if invalidItems == {} or any([ tmanID < 0 for tmanID in invalidItems.get(GUI_ITEM_TYPE.TANKMAN, []) ]):
+        tankmanIds = invalidItems.get(GUI_ITEM_TYPE.TANKMAN, [])
+        if tankmanIds and any((tmanID < 0 for tmanID in tankmanIds)):
             self.__updateTankmenList()
         self.__clearRestoreTimeNotifyCallback()
         self.__startRestoreTimeNotifyCallback()

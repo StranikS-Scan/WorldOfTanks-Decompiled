@@ -18,8 +18,7 @@ _SHELLS_INFO_PARAMS = (('distanceDamage', 'avgDamage'),
  ('shotSpeed',),
  ('explosionRadius',),
  ('flameMaxDistance',),
- ('stunMaxDuration',),
- ('explosionDelay',))
+ ('stunMaxDuration',))
 
 class ShellProvider(VehicleBaseArrayProvider):
     __slots__ = ('_interactor',)

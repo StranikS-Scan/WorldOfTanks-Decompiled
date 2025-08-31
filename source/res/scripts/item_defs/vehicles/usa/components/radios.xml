@@ -39,6 +39,7 @@
     <SCR_210A2>	78	</SCR_210A2>
     <AN_GRC_7A>	80	</AN_GRC_7A>
     <AN_GRC_7_RMT>	81	</AN_GRC_7_RMT>
+    <AN-VRC-7_WT>	1001	</AN-VRC-7_WT>
     <AN-ARC-27_IGR>	60001	</AN-ARC-27_IGR>
     <SCR_619_IGR>	60002	</SCR_619_IGR>
     <SCR_528A1_IGR>	60003	</SCR_528A1_IGR>
@@ -70,8 +71,9 @@
     <AN_GRC_8_4>	31013	</AN_GRC_8_4>
     <SCR_528_T>	31014	</SCR_528_T>
     <AN_GRC_7>	31015	</AN_GRC_7>
+    <SCR_610_B1>	31016	</SCR_610_B1>
     <AN_GRC_8_T>	31006	</AN_GRC_8_T>
-    <SCR_528R1_T>	35002	</SCR_528R1_T>
+    <AN_VRC-3_MBT_T>	35001	</AN_VRC-3_MBT_T>
   </ids>
   <shared>
     <SCR_200>
@@ -284,18 +286,6 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </SCR_528R1>
-    <SCR_528R1_T>
-      <userString>	#usa_vehicles:SCR_528R1_T	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	91	</weight>
-      <distance>	745	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </SCR_528R1_T>
     <British_Wireless_set_N19>
       <userString>	#usa_vehicles:British_Wireless_set_N19	</userString>
       <tags></tags>
@@ -368,6 +358,18 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </AN_VRC-3_MBT>
+    <AN_VRC-3_MBT_T>
+      <userString>	#usa_vehicles:AN_VRC-3_MBT_T	</userString>
+      <tags></tags>
+      <level>	11	</level>
+      <notInShop>	true	</notInShop>
+      <price>	71600	</price>
+      <weight>	160	</weight>
+      <distance>	745	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </AN_VRC-3_MBT_T>
     <AN_VRC-3_cl>
       <userString>	#usa_vehicles:AN_VRC-3	</userString>
       <tags></tags>
@@ -450,6 +452,18 @@
       <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	1.2	</repairCost>
     </SCR_610_ID>
+    <SCR_610_B1>
+      <userString>	#usa_vehicles:SCR_610_B1	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	24600	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	60	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.2	</repairCost>
+    </SCR_610_B1>
     <SCR_619>
       <userString>	#usa_vehicles:SCR_619	</userString>
       <tags></tags>
@@ -756,6 +770,18 @@
       <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	1.2	</repairCost>
     </T23radio>
+    <AN-VRC-7_WT>
+      <userString>	#usa_vehicles:AN-VRC-7_WT	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	945	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </AN-VRC-7_WT>
     <AN-ARC-27_IGR>
       <userString>	#igr_vehicles:AN-ARC-27_IGR	</userString>
       <tags></tags>

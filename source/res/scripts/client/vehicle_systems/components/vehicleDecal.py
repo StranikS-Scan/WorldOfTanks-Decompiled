@@ -154,11 +154,11 @@ class VehicleDecal(object):
             materialType = 4
             visibilityMask = 4294967295L
             accuracy = 2
-            decal = BigWorld.WGOcclusionDecal()
+            decal = BigWorld.OcclusionDecal()
             decal.create(diffuseTexture, bumpTexture, hmTexture, addTexture, priority, materialType, influence, visibilityMask, accuracy)
         else:
             materialType = 6
-            decal = BigWorld.WGShadowForwardDecal()
+            decal = BigWorld.ShadowForwardDecal()
             decal.setup(addTexture, materialType, priority, influence)
         decal.setLocalTransform(transform)
         return decal

@@ -189,7 +189,7 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
         self.igrCtrl.onIgrTypeChanged += self.__updateIgrType
         self.clanLock.onClanLockUpdate += self.__updateClanLocks
         self.itemsCache.onSyncCompleted += self.__onCacheResync
-        self._currentVehicle.onChanged += self.__onCurrentVehicleChanged
+        self._currentVehicle.onChanged += self._onCurrentVehicleChanged
         self.epicController.onUpdated += self.__updateEpicSeasonRent
         self.rankedController.onUpdated += self.__updateRankedBonusBattles
         self.wotPlusController.onDataChanged += self.__onWotPlusChanged
@@ -207,7 +207,7 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
         self.igrCtrl.onIgrTypeChanged -= self.__updateIgrType
         self.clanLock.onClanLockUpdate -= self.__updateClanLocks
         self.itemsCache.onSyncCompleted -= self.__onCacheResync
-        self._currentVehicle.onChanged -= self.__onCurrentVehicleChanged
+        self._currentVehicle.onChanged -= self._onCurrentVehicleChanged
         self.epicController.onUpdated -= self.__updateEpicSeasonRent
         self.rankedController.onUpdated -= self.__updateRankedBonusBattles
         self.wotPlusController.onDataChanged -= self.__onWotPlusChanged
@@ -278,10 +278,10 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
         if GUI_ITEM_TYPE.VEHICLE in diff:
             self.updateVehicles(diff.get(GUI_ITEM_TYPE.VEHICLE))
 
-    def __onCurrentVehicleChanged(self):
+    def _onCurrentVehicleChanged(self):
         self.updateAviability()
         if self._carouselDP is not None:
-            filteredIndex = self._carouselDP.findVehicleFilteredIndex(g_currentVehicle.item)
+            filteredIndex = self._carouselDP.findVehicleFilteredIndex(self._currentVehicle.item)
             if self._carouselDP.pyGetSelectedIdx() != filteredIndex and filteredIndex > -1:
                 self._carouselDP.selectVehicle(filteredIndex)
         return

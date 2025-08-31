@@ -27,7 +27,7 @@ from gui.prb_control.entities.base.external_battle_unit.base_external_battle_wai
 from gui.prb_control.entities.tournament.unit.actions_validator import TournamentActionsValidator
 from gui.prb_control.entities.tournament.unit.action_handler import TournamentActionsHandler
 from gui.prb_control.entities.base.unit.ctx import JoinUnitModeCtx
-from gui.wgcg.tournament.contexts import TournamentJoinBattleCtx, TournamentUpdateCtx, SlotVehicleFiltersUpdateCtx, TournamentMatchmakingInfoCtx, TournamentLeaveModeCtx
+from gui.clientgw.tournament.contexts import TournamentJoinBattleCtx, TournamentUpdateCtx, SlotVehicleFiltersUpdateCtx, TournamentMatchmakingInfoCtx, TournamentLeaveModeCtx
 from gui.impl.gen import R
 from gui.prb_control.items.tournament_items import TournamentSettings
 _CREATION_TIMEOUT = 30

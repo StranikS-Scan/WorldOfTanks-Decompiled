@@ -4,7 +4,7 @@ import logging
 import typing
 from collections import namedtuple
 from functools import partial
-import wg_async as future_async
+import th_async as future_async
 from adisp import adisp_process, adisp_async
 from account_helpers import isLongDisconnectedFromCenter
 from account_helpers.AccountSettings import AccountSettings
@@ -123,13 +123,13 @@ class AwaitConfirmator(ProcessorPlugin):
         super(AwaitConfirmator, self).__init__(self.TYPE.CONFIRMATOR, isAsync=True, isEnabled=isEnabled)
 
     @adisp_async
-    @future_async.wg_async
+    @future_async.th_async
     def confirm(self, callback):
         Waiting.suspend(lockerID=id(self))
-        yield future_async.wg_await(self._confirm(callback))
+        yield future_async.th_await(self._confirm(callback))
         Waiting.resume(lockerID=id(self))
 
-    @future_async.wg_async
+    @future_async.th_async
     def _confirm(self, callback):
         callback(makeSuccess())
 
@@ -1241,11 +1241,11 @@ class AsyncDialogConfirmator(AsyncConfirmator):
     def _confirm(self, callback):
         self._makeConfirm(callback)
 
-    @future_async.wg_async
+    @future_async.th_async
     def _makeConfirm(self, callback):
         Waiting.suspend()
         dialog = self.__dialogMethod(*self.__dialogArgs, **self.__dialogKwargs)
-        self.__dialogResult = yield future_async.wg_await(dialog)
+        self.__dialogResult = yield future_async.th_await(dialog)
         Waiting.resume()
         if isinstance(self.__dialogResult, DialogResult):
             result = self.__dialogResult.result in DialogButtons.ACCEPT_BUTTONS

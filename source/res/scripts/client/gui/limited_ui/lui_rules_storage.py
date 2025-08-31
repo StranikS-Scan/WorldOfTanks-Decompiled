@@ -55,7 +55,14 @@ class LuiRules(enum.Enum):
     SUBSCRIPTION_STATE = 'SubscriptionState'
     EARLY_ACCESS_ENTRY_POINT = 'EarlyAccessEntryPoint'
     PARAGONS_ENTRY_POINT = 'ParagonsEntryPoint'
+    PARAGONS_TREE_BRANCHES = 'ParagonsTreeBranches'
+    PARAGONS_NOTIFICATION = 'ParagonsNotification'
     NEW_CAMPAIGN_HINT = 'NewCampaignHint'
+    GUI_WHITE_TIGER_ENTRY_POINT = 'WhiteTigerEntryPoint'
+    TEASER = 'Teaser'
+    C7N_BUBBLE = 'CustomizationBubble'
+    COMMON_CHAT = 'CommonChat'
+    CHANNELS = 'Channels'
 
 
 class _LimitedUIRule(namedtuple('_LimitedUIRule', ('idx', 'expression', 'tokens', 'message'))):

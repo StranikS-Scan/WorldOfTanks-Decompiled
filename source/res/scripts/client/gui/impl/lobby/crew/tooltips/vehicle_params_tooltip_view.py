@@ -18,7 +18,7 @@ from gui.shared.items_parameters import formatters as param_formatter
 from helpers import i18n
 from items.vehicle_items import CHASSIS_ITEM_TYPE
 from post_progression_common import ACTION_TYPES
-from gui.shared.utils import CHASSIS_REPAIR_TIME, SHOT_DISPERSION_ANGLE, DUAL_ACCURACY_COOLING_DELAY, isRomanNumberForbidden
+from gui.shared.utils import CHASSIS_REPAIR_TIME, SHOT_DISPERSION_ANGLE, DUAL_ACCURACY_COOLING_DELAY, RELOAD_TIME_SECS_PROP_NAME, isRomanNumberForbidden
 from items import perks, vehicles, tankmen, parseIntCompactDescr
 from gui.shared.items_parameters.bonus_helper import isSituationalBonus
 from gui.shared.items_parameters.formatters import isRelativeParameter
@@ -317,6 +317,8 @@ class VehicleAdvancedParamsTooltipView(BaseVehicleAdvancedParamsTooltipView):
 
     def _fillModel(self, model):
         super(VehicleAdvancedParamsTooltipView, self)._fillModel(model)
+        if self._paramName == RELOAD_TIME_SECS_PROP_NAME and self.vehicle.isClippedDualGun:
+            return
         hasSituational = self._fillBonuses(model)
         if self.vehicle:
             self._fillPenalties(model)

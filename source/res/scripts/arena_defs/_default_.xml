@@ -20,6 +20,8 @@
     <wwmusicResultDefeat>	music_ruinberg_result_defeat	</wwmusicResultDefeat>
   </wwmusicSetup>
   <wwambientSound>	ambient_wind_summer_01	</wwambientSound>
+  <soundNotificationsPlan>	soundNotifications	</soundNotificationsPlan>
+  <soundNotificationsContext>	visual_script_client.contexts.sound_notifications_context.SoundNotificationsContext	</soundNotificationsContext>
   <umbraEnabled>	1	</umbraEnabled>
   <batchingEnabled>	0	</batchingEnabled>
   <defaultReverbPreset></defaultReverbPreset>
@@ -179,6 +181,14 @@
       <runDelayDev>	45	</runDelayDev>
       <maxPlayersInTeam>	7	</maxPlayersInTeam>
     </TOURNAMENT_COMP7>
+    <WHITE_TIGER>
+      <runDelayDev>	30	</runDelayDev>
+      <maxPlayersInTeam>	6	</maxPlayersInTeam>
+    </WHITE_TIGER>
+    <WHITE_TIGER_2>
+      <runDelayDev>	30	</runDelayDev>
+      <maxPlayersInTeam>	6	</maxPlayersInTeam>
+    </WHITE_TIGER_2>
   </bonusTypeOverrides>
   <gameplayTypes>
     <ctf>
@@ -309,6 +319,7 @@
     <comp7>
       <roundLength>	600	</roundLength>
       <battleEndWarningAppearTime>	300	</battleEndWarningAppearTime>
+      <battleEndWarningExtraAppearTime>	120	</battleEndWarningExtraAppearTime>
       <battleEndWarningDuration>	5	</battleEndWarningDuration>
       <battleEndingSoonTime>	60	</battleEndingSoonTime>
     </comp7>

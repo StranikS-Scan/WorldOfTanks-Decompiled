@@ -10,8 +10,8 @@ class SteadyVehicleMatrixCalculator(Component):
     stabilisedMProv = property(lambda self: self.__stabilisedMProv)
 
     def __init__(self):
-        self.__outputMProv = Math.WGCombinedMP()
-        self.__stabilisedMProv = Math.WGAdaptiveMatrixProvider()
+        self.__outputMProv = Math.CombinedMP()
+        self.__stabilisedMProv = Math.AdaptiveMatrixProvider()
 
     def __relinkToIdentity(self):
         self.__outputMProv.rotationSrc = math_utils.createIdentityMatrix()

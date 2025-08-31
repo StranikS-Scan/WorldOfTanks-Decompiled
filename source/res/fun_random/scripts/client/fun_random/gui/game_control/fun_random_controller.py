@@ -108,6 +108,10 @@ class FunRandomController(IFunRandomController, IGlobalListener):
     def getAssetsPointer(self):
         return self.__funRandomSettings.assetsPointer
 
+    def isFunRandomModifiersVisibleSBySubModeID(self, supModeID):
+        subModeConfig = self.__funRandomSettings.subModes.get(supModeID)
+        return False if subModeConfig is None else subModeConfig.isFunRandomMapsVisible
+
     def getIconsResRoot(self):
         assetsPointer = self.__funRandomSettings.assetsPointer
         return R.images.fun_random.gui.maps.icons.feature.asset_packs.modes.dyn(assetsPointer, R.images.fun_random.gui.maps.icons.feature.asset_packs.modes.undefined)

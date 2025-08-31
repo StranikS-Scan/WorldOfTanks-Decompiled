@@ -13,7 +13,7 @@ from PlayerEvents import g_playerEvents
 from ReplayEvents import g_replayEvents
 from account_helpers.settings_core.settings_constants import GRAPHICS, AIM, GAME, SPGAim, MARKERS
 from aih_constants import CHARGE_MARKER_STATE, CTRL_MODE_NAME as CTRL_MODE
-from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, DUALGUN_CHARGER_STATUS, SERVER_TICK_LENGTH, DUAL_GUN
+from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, DUALGUN_CHARGER_STATUS, SERVER_TICK_LENGTH, DUAL_GUN, ARENA_PERIOD
 from debug_utils import LOG_WARNING
 from gui import makeHtmlString, GUI_SETTINGS
 from gui.Scaleform.daapi.view.battle.shared.crosshair.settings import SHOT_RESULT_TO_ALT_COLOR
@@ -618,7 +618,16 @@ class AmmoPlugin(CrosshairPlugin):
         baseValue = round(state.getBaseValue(), 1)
         if self.__shellsInClip == 0:
             baseValue = self.__reCalcFirstShellAutoReload(baseValue)
-        self.__reloadAnimator.setClipAutoLoading(timeLeft, baseValue, isStun=stunned, isTimerOn=True, isRedText=self.__shellsInClip == 0)
+
+        def isRedText():
+            arenaPeriod = ARENA_PERIOD.IDLE
+            avatar = BigWorld.player()
+            periodCtrl = avatar.guiSessionProvider.shared.arenaPeriod
+            if periodCtrl is not None:
+                arenaPeriod = periodCtrl.getPeriod()
+            return self.__shellsInClip == 0 and arenaPeriod == ARENA_PERIOD.BATTLE
+
+        self.__reloadAnimator.setClipAutoLoading(timeLeft, baseValue, isStun=stunned, isTimerOn=True, isRedText=isRedText())
         self.__autoReloadSnapshot = state
 
     def __onGunAutoReloadBoostUpd(self, state, stateDuration, stateTotalTime, extraData):

@@ -7,19 +7,19 @@ from gui.battle_control.avatar_getter import getInputHandler
 from gui.battle_control.battle_constants import VEHICLE_LOCATION
 
 def makeVehicleEntityMP(vehicle):
-    provider = Math.WGTranslationOnlyMP()
+    provider = Math.TranslationOnlyMP()
     provider.source = vehicle.matrix
     return provider
 
 
 def makeVehicleEntityMPCopy(vehicle):
-    provider = Math.WGTranslationOnlyMP()
+    provider = Math.TranslationOnlyMP()
     provider.source = Math.Matrix(vehicle.matrix)
     return provider
 
 
 def makePositionMP(position):
-    provider = Math.WGReplayAwaredSmoothTranslationOnlyMP()
+    provider = Math.ReplayAwaredSmoothTranslationOnlyMP()
     matrix = Math.Matrix()
     matrix.setTranslate(position)
     provider.source = matrix
@@ -69,20 +69,20 @@ def makeVehicleMPByLocation(vehicleID, location, positions):
 
 
 def convertToLastSpottedVehicleMP(matrix):
-    converted = Math.WGReplayAwaredSmoothTranslationOnlyMP()
+    converted = Math.ReplayAwaredSmoothTranslationOnlyMP()
     converted.source = Math.Matrix(matrix.source)
     return converted
 
 
 def makeArcadeCameraMatrix():
-    matrix = Math.WGCombinedMP()
+    matrix = Math.CombinedMP()
     matrix.translationSrc = BigWorld.player().getOwnVehicleMatrix()
     matrix.rotationSrc = BigWorld.camera().invViewMatrix
     return matrix
 
 
 def makeVehicleTurretMatrixMP():
-    matrixProvider = Math.WGCombinedMP()
+    matrixProvider = Math.CombinedMP()
     vehicleMatrix = BigWorld.player().consistentMatrices.attachedVehicleMatrix
     matrixProvider.translationSrc = vehicleMatrix
     localTransform = Math.MatrixProduct()
@@ -93,17 +93,17 @@ def makeVehicleTurretMatrixMP():
 
 
 def makeStrategicCameraMatrix():
-    provider = Math.WGCombinedMP()
+    provider = Math.CombinedMP()
     handler = getInputHandler()
     aimMatrix = Math.Matrix()
     if handler is not None:
         aimingSystem = handler.ctrl.camera.aimingSystem
         if aimingSystem is not None:
             aimMatrix = handler.ctrl.camera.aimingSystem.aimMatrix
-    relativeMatrix = Math.WGRelatedToTargetMP()
+    relativeMatrix = Math.RelatedToTargetMP()
     relativeMatrix.source = BigWorld.camera().invViewMatrix
     relativeMatrix.target = aimMatrix
-    cameraMatrix = Math.WGStrategicAreaViewMP()
+    cameraMatrix = Math.StrategicAreaViewMP()
     cameraMatrix.source = relativeMatrix
     cameraMatrix.baseScale = (1.0, 1.0)
     provider.translationSrc = aimMatrix
@@ -116,8 +116,8 @@ def makeDefaultCameraMatrix():
 
 
 def makePostmortemCameraMatrix():
-    matrix = Math.WGCombinedMP()
-    translationSrc = Math.WGTranslationOnlyMP()
+    matrix = Math.CombinedMP()
+    translationSrc = Math.TranslationOnlyMP()
     translationSrc.source = BigWorld.player().consistentMatrices.attachedVehicleMatrix
     matrix.translationSrc = translationSrc
     matrix.rotationSrc = BigWorld.camera().invViewMatrix

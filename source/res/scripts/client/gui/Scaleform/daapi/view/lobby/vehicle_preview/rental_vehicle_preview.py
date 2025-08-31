@@ -7,7 +7,7 @@ from gui.Scaleform.daapi.view.meta.VehiclePreviewBottomPanelWotPlusMeta import V
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
 from gui.impl import backport
 from gui.impl.gen import R
-import wg_async as future_async
+import th_async as future_async
 from gui.Scaleform.daapi.view.lobby.event_boards.formaters import formatDate
 from gui.shared.event_dispatcher import showTelecomRentDialog
 from gui.shared.gui_items.Vehicle import getIconResourceName, getNationLessName
@@ -32,7 +32,7 @@ class VehiclePreviewBottomPanelRental(VehiclePreviewBottomPanelWotPlusMeta):
     def setOffers(self, offers):
         self.__buyParams = offers[0].buyParams
 
-    @future_async.wg_async
+    @future_async.th_async
     def __purchaseSubRent(self):
 
         def successCallback():
@@ -47,4 +47,4 @@ class VehiclePreviewBottomPanelRental(VehiclePreviewBottomPanelWotPlusMeta):
         description = backport.text(R.strings.dialogs.wotPlusRental.description()) % date
         iconName = getIconResourceName(getNationLessName(g_currentPreviewVehicle.item.name))
         icon = R.images.gui.maps.shop.vehicles.c_360x270.dyn(iconName)()
-        yield future_async.wg_await(showTelecomRentDialog(title, description, icon, successCallback))
+        yield future_async.th_await(showTelecomRentDialog(title, description, icon, successCallback))

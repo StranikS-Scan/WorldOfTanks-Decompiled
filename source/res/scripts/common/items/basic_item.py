@@ -6,7 +6,7 @@ _LONG_DESCR_PROPERTY = 'longDescriptionSpecial'
 _SHORT_DESCR_PROPERTY = 'shortDescriptionSpecial'
 
 class BasicItem(legacy_stuff.LegacyStuff):
-    __slots__ = ('typeID', 'id', 'name', 'compactDescr', 'tags', 'i18n')
+    __slots__ = ('typeID', 'id', 'name', 'compactDescr', 'tags', 'i18n', 'rawTags')
 
     def __init__(self, typeID, itemID, itemName, compactDescr):
         super(BasicItem, self).__init__()
@@ -15,6 +15,7 @@ class BasicItem(legacy_stuff.LegacyStuff):
         self.name = itemName
         self.compactDescr = compactDescr
         self.tags = component_constants.EMPTY_TAGS
+        self.rawTags = component_constants.EMPTY_RAW_TAGS
         self.i18n = None
         return
 

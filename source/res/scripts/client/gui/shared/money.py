@@ -21,6 +21,7 @@ class Currency(CONST_CONTAINER):
     FREE_XP = 'freeXP'
     EQUIP_COIN = 'equipCoin'
     AYCOIN = 'armory_coin'
+    BATTLE_PASS_POINTS = 'battlePassPoints'
     ALL = (CREDITS,
      GOLD,
      CRYSTAL,

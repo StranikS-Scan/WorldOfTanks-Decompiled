@@ -18,22 +18,24 @@ from gui.game_control import gc_constants
 from gui.game_control.links import URLMacros
 from gui.impl.lobby.common.browser_view import BrowserView, makeSettings
 from gui.impl.gen import R
+from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.promo.promo_logger import PromoLogSourceType, PromoLogActions, PromoLogSubjectType
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showBubbleTooltip
 from gui.shared.events import BrowserEvent
 from gui.shared.utils import isPopupsWindowsOpenDisabled
-from gui.wgcg.promo_screens.contexts import PromoGetTeaserRequestCtx, PromoSendTeaserShownRequestCtx, PromoGetUnreadCountRequestCtx
+from gui.clientgw.promo_screens.contexts import PromoGetTeaserRequestCtx, PromoSendTeaserShownRequestCtx, PromoGetUnreadCountRequestCtx
 from helpers import i18n, isPlayerAccount, dependency
 from helpers.http import url_formatters
 from shared_utils import findFirst
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IPromoController, IBrowserController, IEventsNotificationsController, IBootcampController
+from skeletons.gui.game_control import IPromoController, IBrowserController, IEventsNotificationsController, IBootcampController, ILimitedUIController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.promo import IPromoLogger
 from skeletons.gui.web import IWebController
 from web.web_client_api import webApiCollection, ui as ui_web_api, sound as sound_web_api
+from web.web_client_api.comp7 import Comp7WebApi
 from web.web_client_api.platform import PlatformWebApi
 from web.web_client_api.promo import PromoWebApi
 from web.web_client_api.battle_pass import BattlePassWebApi
@@ -233,6 +235,9 @@ class PromoController(IPromoController):
             self.__tryToShowTeaser()
 
     def __showTeaser(self):
+        limitedUiController = dependency.instance(ILimitedUIController)
+        if not limitedUiController.isRuleCompleted(LuiRules.TEASER):
+            return
         if self.isActive():
             self.__battlesFromLastTeaser = 0
             self.__hasPendingTeaser = False
@@ -366,7 +371,7 @@ def _showBrowserView(url, returnClb, soundSpaceID=None, guiLoader=None):
     if guiLoader.windowsManager.findViews(_predicate):
         _logger.debug('BrowserView with url %s is already opened', url)
         return
-    webHandlers = webApiCollection(PromoWebApi, VehiclesWebApi, RequestWebApi, RankedBattlesWebApi, BattlePassWebApi, ui_web_api.OpenWindowWebApi, ui_web_api.CloseWindowWebApi, ui_web_api.OpenTabWebApi, ui_web_api.NotificationWebApi, ui_web_api.ContextMenuWebApi, ui_web_api.UtilWebApi, sound_web_api.SoundWebApi, sound_web_api.HangarSoundWebApi, ShopWebApi, SocialWebApi, BlueprintsConvertSaleWebApi, PlatformWebApi)
+    webHandlers = webApiCollection(PromoWebApi, VehiclesWebApi, RequestWebApi, RankedBattlesWebApi, Comp7WebApi, BattlePassWebApi, ui_web_api.OpenWindowWebApi, ui_web_api.CloseWindowWebApi, ui_web_api.OpenTabWebApi, ui_web_api.NotificationWebApi, ui_web_api.ContextMenuWebApi, ui_web_api.UtilWebApi, sound_web_api.SoundWebApi, sound_web_api.HangarSoundWebApi, ShopWebApi, SocialWebApi, BlueprintsConvertSaleWebApi, PlatformWebApi)
 
     def _returnCallback(*args, **kwargs):
         if kwargs.pop('forceClosed', False):

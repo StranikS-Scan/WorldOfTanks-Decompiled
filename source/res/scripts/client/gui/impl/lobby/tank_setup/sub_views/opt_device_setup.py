@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/sub_views/opt_device_setup.py
 from functools import partial
 from gui.shared.event_dispatcher import showDeconstructionDeviceWindow
-from wg_async import wg_async, wg_await
+from th_async import th_async, th_await
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.base_setup_model import BaseSetupModel
 from gui.impl.lobby.tank_setup.configurations.opt_device import OptDeviceTabsController, OptDeviceSelectedFilters, getOptDeviceTabByItem, OptDeviceIntroductionController, OptDeviceTabs
 from gui.impl.lobby.tank_setup.sub_views.base_equipment_setup import BaseEquipmentSetupSubView
@@ -92,9 +92,9 @@ class OptDeviceSetupSubView(BaseEquipmentSetupSubView):
         if self._currentTabName == OptDeviceTabs.SIMPLE:
             super(OptDeviceSetupSubView, self)._updateItemByFilter()
 
-    @wg_async
+    @th_async
     def _selectItem(self, slotID, item):
-        yield wg_await(self._asyncActionLock.tryAsyncCommand(self._interactor.changeSlotItem, slotID, item))
+        yield th_await(self._asyncActionLock.tryAsyncCommand(self._interactor.changeSlotItem, slotID, item))
         self.update()
 
     def _introductionUpdate(self, tabName, forceUpdateTabs=False):
@@ -110,15 +110,15 @@ class OptDeviceSetupSubView(BaseEquipmentSetupSubView):
         OptDeviceIntroductionController.setIntroductionValue(self._viewModel.getIntroductionType())
         self._introductionUpdate(self._currentTabName)
 
-    @wg_async
+    @th_async
     def __onDemountItem(self, args, isDestroy=False, everywhere=True):
         itemIntCD = int(args.get('intCD'))
-        yield wg_await(self._asyncActionLock.tryAsyncCommand(self._interactor.demountItem, itemIntCD, isDestroy, everywhere))
+        yield th_await(self._asyncActionLock.tryAsyncCommand(self._interactor.demountItem, itemIntCD, isDestroy, everywhere))
         self.update()
 
-    @wg_async
+    @th_async
     def __onUpgradeItem(self, args):
         itemIntCD = int(args['intCD'])
-        result = yield wg_await(self._asyncActionLock.tryAsyncCommandWithCallback(self._interactor.upgradeModule, itemIntCD, self._onDeconstructed))
+        result = yield th_await(self._asyncActionLock.tryAsyncCommandWithCallback(self._interactor.upgradeModule, itemIntCD, self._onDeconstructed))
         if result:
             self.update(fullUpdate=True)

@@ -13,9 +13,9 @@ from gui.event_boards.event_boards_items import EventBoardsSettings, HangarFlagD
 from gui.event_boards.event_boards_items import EventSettings
 from gui.event_boards.listener import IEventBoardsListener
 from gui.shared.utils.requesters.abstract import Response
-from gui.wgcg import IWebController
-from gui.wgcg.elen.contexts import EventBoardsGetEventDataCtx, EventBoardsGetPlayerDataCtx, EventBoardsJoinEventCtx, EventBoardsLeaveEventCtx, EventBoardsGetMyEventTopCtx, EventBoardsGetMyLeaderboardPositionCtx, EventBoardsGetLeaderboardCtx, EventBoardsGetHangarFlagCtx
-from gui.wgcg.settings import WebRequestDataType as _crdt
+from gui.clientgw import IWebController
+from gui.clientgw.elen.contexts import EventBoardsGetEventDataCtx, EventBoardsGetPlayerDataCtx, EventBoardsJoinEventCtx, EventBoardsLeaveEventCtx, EventBoardsGetMyEventTopCtx, EventBoardsGetMyLeaderboardPositionCtx, EventBoardsGetLeaderboardCtx, EventBoardsGetHangarFlagCtx
+from gui.clientgw.settings import WebRequestDataType as _crdt
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.connection_mgr import IConnectionManager

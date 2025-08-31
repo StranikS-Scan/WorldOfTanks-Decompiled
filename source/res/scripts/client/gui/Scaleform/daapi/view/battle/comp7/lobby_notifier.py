@@ -17,5 +17,5 @@ class LobbyNotifier(IAbstractPeriodView):
 
     def __doNotify(self):
         if not self.__isNotified:
-            BigWorld.WGWindowsNotifier.onBattleBeginning()
+            BigWorld.WindowsNotifier.onBattleBeginning()
             self.__isNotified = True

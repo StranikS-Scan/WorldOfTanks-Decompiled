@@ -187,7 +187,7 @@ class LobbyGFMarkersManager(CGF.ComponentManager):
     __guiLoader = dependency.descriptor(IGuiLoader)
 
     def __init__(self, *args):
-        self.markerCtrl = GUI.WGMarkerPositionController()
+        self.markerCtrl = GUI.MarkerPositionController()
         super(LobbyGFMarkersManager, self).__init__(*args)
         self.__viewMarkers = defaultdict(dict)
 

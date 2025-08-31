@@ -65,6 +65,13 @@
       <undamaged>	vehicles/german/G125_Spz_57_Rh/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/german/G125_Spz_57_Rh/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/german/G125_Spz_57_Rh/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <G125_Spz_57_Rh_3Dst_Veilflower>
+          <undamaged>	vehicles/german/G125_Spz_57_Rh/_skin/G125_Spz_57_Rh_3Dst_Veilflower/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/german/G125_Spz_57_Rh/_skin/G125_Spz_57_Rh_3Dst_Veilflower/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/german/G125_Spz_57_Rh/_skin/G125_Spz_57_Rh_3Dst_Veilflower/normal/lod0/Hull.model	</exploded>
+        </G125_Spz_57_Rh_3Dst_Veilflower>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -74,7 +81,7 @@
     </swinging>
     <exhaust>
       <pixie>	diesel_large	</pixie>
-      <nodes>	HP_Track_Exhaus_1	</nodes>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
       <turret>	0.000000 0.724149 0.68964	</turret>
@@ -88,9 +95,9 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.676758 0.433901 2.76215	</rayStart>
-        <rayEnd>	-0.676758 0.405123 2.73733	</rayEnd>
-        <rayUp>	0 0 -1	</rayUp>
+        <rayStart>	-0.676758 0.444539 2.76215	</rayStart>
+        <rayEnd>	-0.676758 0.415761 2.73733	</rayEnd>
+        <rayUp>	0 0.653116 -0.757258	</rayUp>
         <size>	0.32	</size>
       </slot>
       <slot>
@@ -1007,6 +1014,47 @@
         <clipAngle>	0.830039	</clipAngle>
         <anchorShift>	0.306797	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15079	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G125_Spz_57_Rh_3Dst_Veilflower	</compatibleModels>
+        <position>	1.12699 1.321959 1.4905	</position>
+        <rotation>	2.223539 -1.5687 -0.093373	</rotation>
+        <scale>	0.495074 0.940997 0.495074	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.372352	</clipAngle>
+        <anchorShift>	0.391	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15080	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G125_Spz_57_Rh_3Dst_Veilflower	</compatibleModels>
+        <position>	-0.000011 1.48564 3.08267	</position>
+        <rotation>	0.667468 -0.00001 3.14157	</rotation>
+        <scale>	0.934942 1.337472 0.93495	</scale>
+        <showOn>	16	</showOn>
+        <anchorShift>	-0.15	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15081	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G125_Spz_57_Rh_3Dst_Veilflower	</compatibleModels>
+        <position>	-1.126969 1.314755 0.203818	</position>
+        <rotation>	2.22359 1.56873 0.093376	</rotation>
+        <scale>	0.494593 0.940081 0.494593	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.404467	</clipAngle>
+        <anchorShift>	0.37	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1048,6 +1096,13 @@
         <undamaged>	vehicles/german/G125_Spz_57_Rh/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/german/G125_Spz_57_Rh/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/german/G125_Spz_57_Rh/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <G125_Spz_57_Rh_3Dst_Veilflower>
+            <undamaged>	vehicles/german/G125_Spz_57_Rh/_skin/G125_Spz_57_Rh_3Dst_Veilflower/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G125_Spz_57_Rh/_skin/G125_Spz_57_Rh_3Dst_Veilflower/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G125_Spz_57_Rh/_skin/G125_Spz_57_Rh_3Dst_Veilflower/normal/lod0/Chassis.model	</exploded>
+          </G125_Spz_57_Rh_3Dst_Veilflower>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1418,6 +1473,14 @@
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
           </atlas>
+          <modelSets>
+            <G125_Spz_57_Rh_3Dst_Veilflower>
+              <segmentModelLeft>	vehicles/german/G125_Spz_57_Rh/_skin/G125_Spz_57_Rh_3Dst_Veilflower/track/segment1.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/german/G125_Spz_57_Rh/_skin/G125_Spz_57_Rh_3Dst_Veilflower/track/segment1.model	</segmentModelRight>
+              <segment2ModelLeft>	vehicles/german/G125_Spz_57_Rh/_skin/G125_Spz_57_Rh_3Dst_Veilflower/track/segment2.model	</segment2ModelLeft>
+              <segment2ModelRight>	vehicles/german/G125_Spz_57_Rh/_skin/G125_Spz_57_Rh_3Dst_Veilflower/track/segment2.model	</segment2ModelRight>
+            </G125_Spz_57_Rh_3Dst_Veilflower>
+          </modelSets>
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
@@ -1449,6 +1512,12 @@
             <model>	vehicles/german/G125_Spz_57_Rh/track/segment2.model	</model>
             <length>	0.075985	</length>
           </secSegment>
+          <modelSets>
+            <G125_Spz_57_Rh_3Dst_Veilflower>
+              <mainSegmentModel>	vehicles/german/G125_Spz_57_Rh/_skin/G125_Spz_57_Rh_3Dst_Veilflower/track/segment1.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/german/G125_Spz_57_Rh/_skin/G125_Spz_57_Rh_3Dst_Veilflower/track/segment2.model	</secSegmentModel>
+            </G125_Spz_57_Rh_3Dst_Veilflower>
+          </modelSets>
           <collisionHull>
             <bottom>
               <part>
@@ -1785,6 +1854,12 @@
             <model>	vehicles/german/G125_Spz_57_Rh/track/segment2.model	</model>
             <length>	0.075966	</length>
           </secSegment>
+          <modelSets>
+            <G125_Spz_57_Rh_3Dst_Veilflower>
+              <mainSegmentModel>	vehicles/german/G125_Spz_57_Rh/_skin/G125_Spz_57_Rh_3Dst_Veilflower/track/segment1.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/german/G125_Spz_57_Rh/_skin/G125_Spz_57_Rh_3Dst_Veilflower/track/segment2.model	</secSegmentModel>
+            </G125_Spz_57_Rh_3Dst_Veilflower>
+          </modelSets>
           <collisionHull>
             <bottom>
               <part>
@@ -2187,6 +2262,13 @@
             <undamaged>	vehicles/german/G125_Spz_57_Rh/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/german/G125_Spz_57_Rh/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/german/G125_Spz_57_Rh/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <G125_Spz_57_Rh_3Dst_Veilflower>
+                <undamaged>	vehicles/german/G125_Spz_57_Rh/_skin/G125_Spz_57_Rh_3Dst_Veilflower/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/german/G125_Spz_57_Rh/_skin/G125_Spz_57_Rh_3Dst_Veilflower/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/german/G125_Spz_57_Rh/_skin/G125_Spz_57_Rh_3Dst_Veilflower/normal/lod0/Gun_01.model	</exploded>
+              </G125_Spz_57_Rh_3Dst_Veilflower>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G125_Spz_57_Rh/collision/Gun_02.model	</collisionModelServer>
@@ -2332,6 +2414,17 @@
               <anchorShift>	0.349235	</anchorShift>
             </slot>
             <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45007	</slotId>
+              <tags>	formfactor_square	</tags>
+              <compatibleModels>	G125_Spz_57_Rh_3Dst_Veilflower	</compatibleModels>
+              <position>	0.050456 2.327054 -0.057069	</position>
+              <rotation>	3.141593 0 0	</rotation>
+              <scale>	0.527 0.939658 0.527	</scale>
+              <showOn>	4096	</showOn>
+              <verticalMirror>	true	</verticalMirror>
+            </slot>
+            <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
               <rayStart>	-0.050536 -0.000789 2.6289	</rayStart>
@@ -2356,6 +2449,13 @@
         <undamaged>	vehicles/german/G125_Spz_57_Rh/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/german/G125_Spz_57_Rh/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/german/G125_Spz_57_Rh/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <G125_Spz_57_Rh_3Dst_Veilflower>
+            <undamaged>	vehicles/german/G125_Spz_57_Rh/_skin/G125_Spz_57_Rh_3Dst_Veilflower/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/german/G125_Spz_57_Rh/_skin/G125_Spz_57_Rh_3Dst_Veilflower/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/german/G125_Spz_57_Rh/_skin/G125_Spz_57_Rh_3Dst_Veilflower/normal/lod0/Turret_01.model	</exploded>
+          </G125_Spz_57_Rh_3Dst_Veilflower>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/german/G125_Spz_57_Rh/collision/Turret_01.model	</collisionModelServer>
@@ -2560,6 +2660,30 @@
           <showOn>	256	</showOn>
           <clipAngle>	1.4245	</clipAngle>
           <anchorShift>	0.138874	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35015	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G125_Spz_57_Rh_3Dst_Veilflower	</compatibleModels>
+          <position>	0.725511 2.048942 1.294118	</position>
+          <rotation>	0.773461 0.90406 -3.066594	</rotation>
+          <scale>	0.499999 0.993681 0.5	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.584483	</clipAngle>
+          <anchorShift>	0.081299	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35016	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G125_Spz_57_Rh_3Dst_Veilflower	</compatibleModels>
+          <position>	-0.631352 2.24474 0.484471	</position>
+          <rotation>	3.141593 0 0	</rotation>
+          <scale>	0.4 0.360939 0.4	</scale>
+          <showOn>	256	</showOn>
+          <verticalMirror>	true	</verticalMirror>
+          <anchorShift>	0.19	</anchorShift>
         </slot>
       </customizationSlots>
       <customization>

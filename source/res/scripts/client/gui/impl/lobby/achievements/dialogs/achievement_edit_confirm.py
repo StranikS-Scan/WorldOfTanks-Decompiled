@@ -13,7 +13,7 @@ from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogView
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from helpers import dependency, server_settings
 from skeletons.gui.lobby_context import ILobbyContext
-from wg_async import wg_async, wg_await
+from th_async import th_async, th_await
 if typing.TYPE_CHECKING:
     from typing import Dict
     from frameworks.wulf import Window
@@ -71,7 +71,7 @@ class EditConfirm(FullScreenDialogView):
         model.setDialogType(self.__dialogType)
 
 
-@wg_async
+@th_async
 def showDialog(dialogType, parent):
-    result = yield wg_await(showSingleDialogWithResultData(layoutID=R.views.lobby.achievements.dialogs.EditConfirm(), dialogType=dialogType, parent=parent, wrappedViewClass=EditConfirm))
+    result = yield th_await(showSingleDialogWithResultData(layoutID=R.views.lobby.achievements.dialogs.EditConfirm(), dialogType=dialogType, parent=parent, wrappedViewClass=EditConfirm))
     raise AsyncReturn(result)

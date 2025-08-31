@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/clans/users.py
 import weakref
 from adisp import adisp_async, adisp_process
-from gui.wgcg.clan.contexts import AccountClanRatingsCtx
+from gui.clientgw.clan.contexts import AccountClanRatingsCtx
 
 class UserCache(object):
 

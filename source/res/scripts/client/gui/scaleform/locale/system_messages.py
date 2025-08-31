@@ -736,7 +736,7 @@ class SYSTEM_MESSAGES(object):
     CLANS_REQUEST_ERRORS_EXPORTER_ERROR_WAS_OCCURRED = '#system_messages:clans/request/errors/Exporter error was occurred'
     CLANS_REQUEST_ERRORS_SPA_ERROR_WAS_OCCURRED = '#system_messages:clans/request/errors/SPA error was occurred'
     CLANS_REQUEST_ERRORS_GLOBAL_MAP_ERROR_WAS_OCCURRED = '#system_messages:clans/request/errors/Global map error was occurred'
-    CLANS_REQUEST_ERRORS_WGRS_ERROR_WAS_OCCURRED = '#system_messages:clans/request/errors/Wgrs error was occurred'
+    CLANS_REQUEST_ERRORS_GRS_ERROR_WAS_OCCURRED = '#system_messages:clans/request/errors/Grs error was occurred'
     CLANS_REQUEST_ERRORS_WGCCFE_ERROR_WAS_OCCURRED = '#system_messages:clans/request/errors/WGCCFE error was occurred'
     CLANS_REQUEST_ERRORS_CLAN_IS_DISBANDED = '#system_messages:clans/request/errors/Clan is disbanded'
     CLANS_REQUEST_ERRORS_STRONGHOLD_IS_NOT_FOUND = '#system_messages:clans/request/errors/Stronghold is not found'
@@ -2251,7 +2251,7 @@ class SYSTEM_MESSAGES(object):
      CLANS_REQUEST_ERRORS_EXPORTER_ERROR_WAS_OCCURRED,
      CLANS_REQUEST_ERRORS_SPA_ERROR_WAS_OCCURRED,
      CLANS_REQUEST_ERRORS_GLOBAL_MAP_ERROR_WAS_OCCURRED,
-     CLANS_REQUEST_ERRORS_WGRS_ERROR_WAS_OCCURRED,
+     CLANS_REQUEST_ERRORS_GRS_ERROR_WAS_OCCURRED,
      CLANS_REQUEST_ERRORS_WGCCFE_ERROR_WAS_OCCURRED,
      CLANS_REQUEST_ERRORS_CLAN_IS_DISBANDED,
      CLANS_REQUEST_ERRORS_STRONGHOLD_IS_NOT_FOUND,

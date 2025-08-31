@@ -32,7 +32,7 @@ from helpers import dependency
 from post_progression_common import TANK_SETUP_GROUPS, TankSetupGroupsId
 from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
-from wg_async import wg_async, wg_await
+from th_async import th_async, th_await
 
 class TankSetupCloseConfirmatorsHelper(CloseConfirmatorsHelper):
 
@@ -198,9 +198,9 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
         self.viewModel.ammunitionPanel.onSpecializationSelect -= self.__onSpecializationSelect
         g_eventBus.removeListener(AmmunitionSetupViewEvent.CLOSE_VIEW, self.__onCloseView, EVENT_BUS_SCOPE.LOBBY)
 
-    @wg_async
+    @th_async
     def _onClose(self):
-        quitResult = yield wg_await(self._tankSetup.canQuit())
+        quitResult = yield th_await(self._tankSetup.canQuit())
         if quitResult:
             self.__closeWindow()
 
@@ -321,11 +321,11 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
             playExitTankSetupView()
         return
 
-    @wg_async
+    @th_async
     def __closeConfirmator(self):
         if self.__isClosed:
             raise AsyncReturn(True)
-        result = yield wg_await(self._tankSetup.canQuit())
+        result = yield th_await(self._tankSetup.canQuit())
         if result:
             self.__closeWindow()
         raise AsyncReturn(result)

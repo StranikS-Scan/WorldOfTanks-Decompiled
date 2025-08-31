@@ -236,7 +236,7 @@ class CrashedTrackController(Component):
             model = resources[TankPartNames.CHASSIS]
             self.__model = model
             self.__model.matrix = self.__entity.filter.groundPlacingMatrix
-            self.__fashion = BigWorld.WGVehicleFashion()
+            self.__fashion = BigWorld.VehicleFashion()
             matHandlers = self.__baseTrackFashion.getMaterialHandlers()
             for handler in matHandlers:
                 self.__fashion.addMaterialHandler(handler)

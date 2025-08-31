@@ -169,6 +169,9 @@ class SETTINGS(object):
     GAME_SHOWTHERMALVISIONSECTORONMAP = '#settings:game/showThermalVisionSectorOnMap'
     GAME_DISABLETHERMALVISIONEFFECT = '#settings:game/disableThermalVisionEffect'
     GAME_DISABLETHERMALVISIONSECTOREFFECT = '#settings:game/disableThermalVisionSectorEffect'
+    GAME_HANGARCREWWIDGET = '#settings:game/hangarCrewWidget'
+    GAME_HANGARCREWWIDGET_COMPACT = '#settings:game/hangarCrewWidget/compact'
+    GAME_HANGARCREWWIDGET_EXTENDED = '#settings:game/hangarCrewWidget/extended'
     GAME_CAROUSELTYPE = '#settings:game/carouselType'
     GAME_CAROUSELTYPE_SINGLE = '#settings:game/carouselType/single'
     GAME_CAROUSELTYPE_DOUBLE = '#settings:game/carouselType/double'
@@ -219,6 +222,8 @@ class SETTINGS(object):
     INTERFACESCALE_BODY = '#settings:interfaceScale/body'
     INTERFACESCALE_ATTENTION = '#settings:interfaceScale/attention'
     INTERFACESCALE_WARNING = '#settings:interfaceScale/warning'
+    INTERFACESCALE_AUTO = '#settings:interfaceScale/auto'
+    INTERFACESCALE_DROPDOWNITEM = '#settings:interfaceScale/dropDownItem'
     INTERFACESCALEDISABLED = '#settings:interfaceScaleDisabled'
     INTERFACESCALEDISABLED_DESCRIPTION = '#settings:interfaceScaleDisabled/description'
     INTERFACESCALEDISABLED_HEADER = '#settings:interfaceScaleDisabled/header'
@@ -775,6 +780,7 @@ class SETTINGS(object):
     GAME_SHOWVEHICLEHPINMINIMAP_NEVER = '#settings:game/showVehicleHPinMinimap/never'
     GAME_SHOWVEHICLEHPINMINIMAP_ALT = '#settings:game/showVehicleHPinMinimap/alt'
     GAME_SHOWVEHICLEHPINMINIMAP_ALWAYS = '#settings:game/showVehicleHPinMinimap/always'
+    EVENTSETTINGDISABLED = '#settings:eventSettingDisabled'
     SOUNDS_ACOUSTICTYPE_ENUM = (SOUNDS_ACOUSTICTYPE_ACOUSTICS20,
      SOUNDS_ACOUSTICTYPE_ACOUSTICS51,
      SOUNDS_ACOUSTICTYPE_ACOUSTICS71,

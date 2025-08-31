@@ -5,7 +5,7 @@ from frameworks.wulf import WindowStatus
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.framework.entities.sf_window import SFWindow
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
-from wg_async import wg_await, wg_async
+from th_async import th_await, th_async
 
 class NotificationEvent(object):
     __slots__ = ('_args', '_kwargs', '_method')
@@ -82,11 +82,11 @@ class WindowNotificationWithWaitingCommand(NotificationCommand):
     def fini(self):
         self.__window.destroy()
 
-    @wg_async
+    @th_async
     def execute(self):
         Waiting.show(self.__waitingMessage)
         try:
-            show = yield wg_await(self.__window.waitData(self.__timeout))
+            show = yield th_await(self.__window.waitData(self.__timeout))
         finally:
             Waiting.hide(self.__waitingMessage)
 

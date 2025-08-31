@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/epic/markers2d.py
 import logging
 import BigWorld
-from Math import Vector3, Vector4, Matrix, WGTerrainMP, WGClampMP, Vector2
+from Math import Vector3, Vector4, Matrix, TerrainMP, ClampMP, Vector2
 from arena_component_system.epic_sector_warning_component import WARNING_TYPE
 from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES, INVALID_MARKER_ID, INVALID_MARKER_SUBTYPE, MarkerType, DefaultMarkerSubType, INVALID_TARGET_ID, INVALID_COMMAND_ID
 from constants import VEHICLE_HIT_FLAGS
@@ -965,9 +965,9 @@ class SectorWarningPlugin(plugins.MarkerPlugin):
             return
 
     def __generateMatrix(self, direction, edgeStart, edgeEnd):
-        clampMatrix = WGClampMP()
+        clampMatrix = ClampMP()
         clampMatrix.source = BigWorld.player().getOwnVehicleMatrix()
-        terrainMp = WGTerrainMP(BigWorld.player().spaceID, self.MARKER_Y_OFFSET)
+        terrainMp = TerrainMP(BigWorld.player().spaceID, self.MARKER_Y_OFFSET)
         terrainMp.source = clampMatrix
         if direction == self.X_DIR:
             clampMatrix.max = Vector3(max(edgeStart[0], edgeEnd[0]), 10000, edgeStart[2])

@@ -577,6 +577,14 @@
         <name>	vehicleGunShotDispersion	</name>
         <value>	0.9	</value>
       </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionTurretRotation	</name>
+        <value>	0.9	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionAfterShot	</name>
+        <value>	0.9	</value>
+      </mul>
     </kpi>
     <tooltipSection>	equipment	</tooltipSection>
     <archetype>	improvedRotationMechanism	</archetype>
@@ -631,6 +639,14 @@
       </mul>
       <mul>
         <name>	vehicleGunShotDispersion	</name>
+        <value>	0.85	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionTurretRotation	</name>
+        <value>	0.85	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionAfterShot	</name>
         <value>	0.85	</value>
       </mul>
     </kpi>

@@ -17,8 +17,11 @@ from web.cache.web_cache import WebExternalCache
 _logger = logging.getLogger(__name__)
 _webAppLogger = logging.getLogger('{} (webapp)'.format(__name__))
 _BROWSER_KEY_LOGGING = False
-_WOT_CLIENT_PARAM_NAME = 'wot_client_param'
-_WOT_RESOURCE_CUSTOM_SCHEME = 'wotdata'
+_OLD_PREFIX = ''.join([ chr(c + 10) for c in [109, 101, 106] ])
+_MT_CLIENT_PARAM_NAME = 'mt_client_param'
+_OLD_CLIENT_PARAM_NAME = _OLD_PREFIX + '_client_param'
+_MT_RESOURCE_CUSTOM_SCHEME = 'mtdata'
+_OLD_RESOURCE_CUSTOM_SCHEME = _OLD_PREFIX + 'data'
 _WEB_CACHE_FOLDER = 'web_cache'
 _WEB_MANIFEST_KEY = 'webManifestURL'
 _g_webCache = None
@@ -524,7 +527,9 @@ class WebBrowser(object):
 
     def filterNavigation(self, url):
         query = urlparse.urlparse(url).query
-        tags = urlparse.parse_qs(query).get(_WOT_CLIENT_PARAM_NAME, [])
+        query_values = urlparse.parse_qs(query)
+        tags = query_values.get(_MT_CLIENT_PARAM_NAME, [])
+        tags.extend(query_values.get(_OLD_CLIENT_PARAM_NAME, []))
         stopNavigation = False
         closeBrowser = False
         for handler in self.__navigationFilters:
@@ -544,7 +549,7 @@ class WebBrowser(object):
 
     def onResourceLoadRequest(self, url):
         result = urlparse.urlparse(url)
-        return result.netloc + result.path if result.scheme == _WOT_RESOURCE_CUSTOM_SCHEME else _g_webCache.get(url)
+        return result.netloc + result.path if result.scheme == _MT_RESOURCE_CUSTOM_SCHEME or result.scheme == _OLD_RESOURCE_CUSTOM_SCHEME else _g_webCache.get(url)
 
     def setAllowAutoLoadingScreen(self, enabled):
         _logger.debug('setAllowAutoLoadingScreen %s', enabled)

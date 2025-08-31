@@ -39,24 +39,24 @@ class HighlightManager(CGF.ComponentManager):
     @onAddedQuery(IsHighlighted, HighlightComponent, DynamicModelComponent)
     def onDynamicModelHighlightAdded(self, _, highlightComponent, dynamicModelComponent):
         if highlightComponent.isActive:
-            BigWorld.wgSetEdgeDetectEdgeColor(3, highlightComponent.color)
-            BigWorld.wgAddEdgeDetectDynamicModel(dynamicModelComponent)
+            BigWorld.setEdgeDetectEdgeColor(3, highlightComponent.color)
+            BigWorld.addEdgeDetectDynamicModel(dynamicModelComponent)
             self.__enableGroupDraw(True, highlightComponent.groupName)
 
     @onRemovedQuery(IsHighlighted, HighlightComponent, DynamicModelComponent)
     def onDynamicModelHighlightRemoved(self, _, highlightComponent, dynamicModelComponent):
-        BigWorld.wgDelEdgeDetectDynamicModel(dynamicModelComponent)
+        BigWorld.delEdgeDetectDynamicModel(dynamicModelComponent)
         self.__enableGroupDraw(False, highlightComponent.groupName)
 
     @onRemovedQuery(HighlightComponent, DynamicModelComponent)
     def onHighlightComponentRemoved(self, _, dynamicModelComponent):
-        BigWorld.wgDelEdgeDetectDynamicModel(dynamicModelComponent)
+        BigWorld.delEdgeDetectDynamicModel(dynamicModelComponent)
 
     def __enableGroupDraw(self, enable, groupName):
         highlightQuery = CGF.Query(self.spaceID, (HighlightComponent, DynamicModelComponent))
         for highlightComponent, dynamicModelComponent in highlightQuery:
             if highlightComponent.groupName and highlightComponent.groupName == groupName:
                 if enable and highlightComponent.isActive:
-                    BigWorld.wgAddEdgeDetectDynamicModel(dynamicModelComponent)
+                    BigWorld.addEdgeDetectDynamicModel(dynamicModelComponent)
                 else:
-                    BigWorld.wgDelEdgeDetectDynamicModel(dynamicModelComponent)
+                    BigWorld.delEdgeDetectDynamicModel(dynamicModelComponent)

@@ -13,7 +13,7 @@ from debug_utils import LOG_CURRENT_EXCEPTION
 import constants
 from external_strings_utils import unicode_from_utf8
 BATTLE_RESULTS_VERSION = 1
-CACHE_DIR = os.path.join(os.path.dirname(unicode_from_utf8(BigWorld.wg_getPreferencesFilePath() if not constants.IS_BOT else '.')[1]), 'battle_results')
+CACHE_DIR = os.path.join(os.path.dirname(unicode_from_utf8(BigWorld.getPreferencesFilePath() if not constants.IS_BOT else '.')[1]), 'battle_results')
 
 class BattleResultsCache(object):
 

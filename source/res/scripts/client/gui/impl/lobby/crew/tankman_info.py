@@ -26,7 +26,7 @@ from skeletons.gui.game_control import ISpecialSoundCtrl
 from skeletons.gui.shared import IItemsCache
 from uilogging.crew.loggers import CrewTankmanInfoLogger
 from uilogging.crew.logging_constants import CrewPersonalFileKeys
-from wg_async import wg_async, wg_await
+from th_async import th_async, th_await
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
 ALT_VOICES_PREVIEW = itertools.cycle(('vo_enemy_hp_damaged_by_projectile_by_player', 'vo_enemy_fire_started_by_player', 'vo_enemy_killed_by_player'))
@@ -191,11 +191,11 @@ class TankmanInfo(BaseCrewSoundView):
             self._updateViewModel()
             return
 
-    @wg_async
+    @th_async
     def __onRetrain(self):
         self._uiLogger.logClick(CrewPersonalFileKeys.RETRAIN_BUTTON)
         vehicleIntCD = self._tankmanCurrentVehicle.intCD if self._tankmanCurrentVehicle else self._itemsCache.items.getItemByCD(self._tankman.vehicleNativeDescr.type.compactDescr).intCD
-        yield wg_await(showRetrainDialog([self._tankman.invID], vehicleIntCD))
+        yield th_await(showRetrainDialog([self._tankman.invID], vehicleIntCD))
 
     def __onEditProfileClick(self):
         event_dispatcher.showChangeCrewWindow(tankmanInvID=self._tankman.invID, isRecruit=False)

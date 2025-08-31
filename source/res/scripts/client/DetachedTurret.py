@@ -27,7 +27,7 @@ class DetachedTurret(BigWorld.Entity, ScriptGameObject):
     def __init__(self):
         ScriptGameObject.__init__(self, self.spaceID, 'DetachedTurret')
         self.__vehDescr = vehicles.VehicleDescr(compactDescr=self.vehicleCompDescr)
-        self.filter = BigWorld.WGTurretFilter()
+        self.filter = BigWorld.TurretFilter()
         self.__detachConfirmationTimer = SynchronousDetachment(self)
         self.__detachConfirmationTimer.onInit()
         self.__detachmentEffects = None
@@ -81,7 +81,7 @@ class DetachedTurret(BigWorld.Entity, ScriptGameObject):
         LOG_DEBUG('onEnterWorld', self.__vehDescr.name, self.spaceID)
         self.model = prereqs[self.__vehDescr.name]
         self.model.matrix = self.matrix
-        fashions = [BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion()]
+        fashions = [BigWorld.BaseFashion(), BigWorld.BaseFashion()]
         for fashion in fashions:
             fashion.addMaterialHandler(BigWorld.PyDeadTankHandler())
 
@@ -144,7 +144,7 @@ class DetachedTurret(BigWorld.Entity, ScriptGameObject):
             surfaceMaterial = calcSurfaceMaterialNearPoint(point, normal, self.spaceID)
             effectIdx = surfaceMaterial.effectIdx
             groundEffect = True
-            distToWater = BigWorld.wg_collideWater(self.position, surfaceMaterial.point)
+            distToWater = BigWorld.collideWater(self.position, surfaceMaterial.point)
             collisionPointDest = surfaceMaterial.point - self.position
             if distToWater != -1 and distToWater <= collisionPointDest.length:
                 vel = Math.Vector3(self.velocity).length

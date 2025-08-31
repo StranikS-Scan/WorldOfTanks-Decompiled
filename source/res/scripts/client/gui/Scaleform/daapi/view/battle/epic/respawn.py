@@ -141,15 +141,15 @@ class EpicBattleRespawn(EpicRespawnViewMeta, IEpicRespawnView):
         self.__ammunitionPanel.hide()
         if self.__countDownIsPlaying is True:
             self.__playCountDownSound(False)
-        BigWorld.wg_enableGUIBackground(False, False)
+        BigWorld.enableGUIBackground(False, False)
 
     def show(self, selectedID, vehs, cooldowns, limits=0):
         self.__ammunitionPanel.show(selectedID, vehs, cooldowns, limits=0)
         self.__updateSlotData(vehs, cooldowns, limits)
         self.__carousel.show()
-        BigWorld.wg_enableGUIBackground(True, False)
+        BigWorld.enableGUIBackground(True, False)
         if self.__battleCtx:
-            BigWorld.wg_setGUIBackground(self.__battleCtx.getArenaRespawnIcon())
+            BigWorld.setGUIBackground(self.__battleCtx.getArenaRespawnIcon())
 
     def start(self, vehs, isLimited):
         self.__carousel.sortVehicles(vehs)

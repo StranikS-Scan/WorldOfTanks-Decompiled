@@ -9,7 +9,7 @@ from battle_royale.gui.impl.gen.view_models.views.lobby.views.user_extended_mode
 from battle_royale.gui.impl.gen.view_models.views.lobby.views.user_model import UserModel
 from gui.Scaleform.Waiting import Waiting
 from helpers import dependency
-from wg_async import wg_async, wg_await
+from th_async import th_async, th_await
 from constants import IS_DEVELOPMENT
 from frameworks.wulf import ViewFlags, ViewSettings, Array
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
@@ -93,13 +93,13 @@ class PreBattleView(ViewImpl, LobbySubView):
             BigWorld.player().AccountBattleRoyaleTournamentComponent.tournamentForceStart(int(mapId))
             return
 
-    @wg_async
+    @th_async
     def __showConfirmation(self, mapId):
         texts = R.strings.dialogs.battleRoyale.preBattle
         builder = WarningDialogBuilder()
         builder.setTitle(texts.title())
         builder.setMessagesAndButtons(message=texts, buttons=texts, focused=DialogButtons.CANCEL)
-        result = yield wg_await(dialogs.showSimple(builder.build(self)))
+        result = yield th_await(dialogs.showSimple(builder.build(self)))
         if result:
             BigWorld.player().AccountBattleRoyaleTournamentComponent.tournamentForceStart(int(mapId))
 

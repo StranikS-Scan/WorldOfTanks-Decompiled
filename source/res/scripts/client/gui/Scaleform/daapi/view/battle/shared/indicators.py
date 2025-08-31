@@ -38,7 +38,7 @@ if typing.TYPE_CHECKING:
     from items.vehicles import VehicleDescriptor
     from _WWISEStubs import PySound
 _DIRECT_INDICATOR_SWF = 'battleDirectionIndicatorApp.swf'
-_DIRECT_INDICATOR_COMPONENT = 'WGDirectionIndicatorFlash'
+_DIRECT_INDICATOR_COMPONENT = 'DirectionIndicatorFlash'
 _DIRECT_INDICATOR_MC_NAME = '_root.directionalIndicatorMc'
 _DIRECT_ARTY_INDICATOR_MC_NAME = '_root.artyDirectionalIndicatorMc'
 _DIRECT_INDICATOR_SWF_SIZE = (680, 680)
@@ -162,7 +162,7 @@ class _MarkerVOBuilder(object):
          'bgStr': self._getBackground(markerData)}
 
     def _getIndicatorFrameRate(self):
-        return _DamageIndicator._DAMAGE_INDICATOR_FRAME_RATE
+        return DamageIndicator._DAMAGE_INDICATOR_FRAME_RATE
 
     def _getBackground(self, markerData):
         pass
@@ -289,6 +289,7 @@ class DamageIndicatorMeta(Flash):
         self._as_hide = root.as_hide
         self._as_setScreenSettings = root.as_setScreenSettings
         self._as_setPosition = root.as_setPosition
+        self._as_setAlpha = root.as_setAlpha
 
     def destroy(self):
         self._as_updateSettings = None
@@ -298,6 +299,7 @@ class DamageIndicatorMeta(Flash):
         self._as_hide = None
         self._as_setScreenSettings = None
         self._as_setPosition = None
+        self._as_setAlpha = None
         self.movie.root.dmgIndicator.dispose()
         return
 
@@ -322,10 +324,13 @@ class DamageIndicatorMeta(Flash):
     def as_setPosition(self, posX, posY):
         self._as_setPosition(posX, posY)
 
+    def as_setAlphaS(self, itemIdx, alpha):
+        self._as_setAlpha(itemIdx, alpha)
 
-class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
+
+class DamageIndicator(DamageIndicatorMeta, IHitIndicator):
     _DAMAGE_INDICATOR_SWF = 'battleDamageIndicatorApp.swf'
-    _DAMAGE_INDICATOR_COMPONENT = 'WGHitIndicatorFlash'
+    _DAMAGE_INDICATOR_COMPONENT = 'HitIndicatorFlash'
     _DAMAGE_INDICATOR_MC_NAME = '_root.dmgIndicator.hit_{0}'
     _DAMAGE_INDICATOR_SWF_SIZE = (680, 680)
     _DAMAGE_INDICATOR_TOTAL_FRAMES = 160
@@ -338,10 +343,10 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
 
     def __init__(self, hitsCount):
         names = tuple((self._DAMAGE_INDICATOR_MC_NAME.format(x) for x in xrange(hitsCount)))
-        super(_DamageIndicator, self).__init__(self._DAMAGE_INDICATOR_SWF, self._DAMAGE_INDICATOR_COMPONENT, (names,))
+        super(DamageIndicator, self).__init__(self._DAMAGE_INDICATOR_SWF, self._DAMAGE_INDICATOR_COMPONENT, (names,))
         self.__voBuilderFactory = None
         self.__updateMethod = None
-        self.component.wg_inputKeyMode = InputKeyMode.NO_HANDLE
+        self.component.inputKeyMode = InputKeyMode.NO_HANDLE
         self.component.position.z = DEPTH_OF_Aim
         self.movie.backgroundAlpha = 0.0
         self.component.focus = False
@@ -371,7 +376,7 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
         return HitType.HIT_DAMAGE
 
     def destroy(self):
-        super(_DamageIndicator, self).destroy()
+        super(DamageIndicator, self).destroy()
         self.settingsCore.interfaceScale.onScaleChanged -= self.__setMarkersScale
         ctrl = self.sessionProvider.shared.crosshair
         if ctrl is not None:
@@ -872,7 +877,7 @@ class _DirectionIndicator(Flash, IDirectionIndicator):
 
     def __init__(self, swf, mcName):
         super(_DirectionIndicator, self).__init__(swf, _DIRECT_INDICATOR_COMPONENT, (mcName,))
-        self.component.wg_inputKeyMode = InputKeyMode.NO_HANDLE
+        self.component.inputKeyMode = InputKeyMode.NO_HANDLE
         self.component.position.z = DEPTH_OF_Aim
         self.movie.backgroundAlpha = 0.0
         self.movie.scaleMode = SCALEFORM.eMovieScaleMode.NO_SCALE
@@ -929,7 +934,7 @@ def createDirectIndicator(swf=_DIRECT_INDICATOR_SWF, mcName=_DIRECT_INDICATOR_MC
 
 
 def createDamageIndicator():
-    return _DamageIndicator(HIT_INDICATOR_MAX_ON_SCREEN)
+    return DamageIndicator(HIT_INDICATOR_MAX_ON_SCREEN)
 
 
 def createPredictionIndicator():
@@ -940,7 +945,7 @@ class _ArtyDirectionIndicator(Flash, IDirectionIndicator):
 
     def __init__(self, swf):
         super(_ArtyDirectionIndicator, self).__init__(swf, _DIRECT_INDICATOR_COMPONENT, (_DIRECT_ARTY_INDICATOR_MC_NAME,))
-        self.component.wg_inputKeyMode = InputKeyMode.NO_HANDLE
+        self.component.inputKeyMode = InputKeyMode.NO_HANDLE
         self.component.position.z = DEPTH_OF_Aim
         self.movie.backgroundAlpha = 0.0
         self.movie.scaleMode = SCALEFORM.eMovieScaleMode.NO_SCALE
@@ -1018,7 +1023,7 @@ class PredictionIndicatorMeta(Flash):
 
 class _PredictionIndicator(PredictionIndicatorMeta, IHitIndicator):
     _PREDICTION_INDICATOR_SWF = 'battlePredictionIndicatorApp.swf'
-    _PREDICTION_INDICATOR_COMPONENT = 'WGPredictionIndicatorFlash'
+    _PREDICTION_INDICATOR_COMPONENT = 'PredictionIndicatorFlash'
     _PREDICTION_INDICATOR_MC_NAME = '_root.predictionIndicator.hit_{0}'
     _PREDICTION_INDICATOR_SWF_SIZE = (680, 680)
     _PREDICTION_INDICATOR_MAX_DUR = 20
@@ -1028,7 +1033,7 @@ class _PredictionIndicator(PredictionIndicatorMeta, IHitIndicator):
     def __init__(self, hitsCount):
         names = tuple((self._PREDICTION_INDICATOR_MC_NAME.format(x) for x in xrange(hitsCount)))
         super(_PredictionIndicator, self).__init__(self._PREDICTION_INDICATOR_SWF, self._PREDICTION_INDICATOR_COMPONENT, (names,))
-        self.component.wg_inputKeyMode = InputKeyMode.NO_HANDLE
+        self.component.inputKeyMode = InputKeyMode.NO_HANDLE
         self.component.position.z = DEPTH_OF_Aim
         self.movie.backgroundAlpha = 0.0
         self.component.focus = False

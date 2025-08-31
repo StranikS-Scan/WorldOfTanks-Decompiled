@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/interactors/frontline.py
-from wg_async import wg_await, wg_async, await_callback
+from th_async import th_await, th_async, await_callback
 from BWUtil import AsyncReturn
 from adisp import adisp_process
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.base_setup_model import BaseSetupModel
@@ -71,17 +71,17 @@ class FrontlineInteractor(BaseEquipmentInteractor):
     def setCheckboxState(self, state):
         self._checkboxState = state
 
-    @wg_async
+    @th_async
     def showBuyConfirmDialog(self, skillIds):
         result = yield await_callback(showFrontlineConfirmDialog)(skillIds)
         raise AsyncReturn(result)
 
-    @wg_async
+    @th_async
     def showExitConfirmDialog(self):
         vehicle = self.getItem()
         if not self._checkboxState:
             setupItems = self.getChangedList()
         else:
             setupItems = vehicle.battleAbilities.layout.getStorage
-        result = yield wg_await(showBattleAbilitiesConfirmDialog(items=setupItems, withInstall=bool(setupItems), vehicleType=vehicle.type, applyForAllVehiclesByType=self._checkboxState))
+        result = yield th_await(showBattleAbilitiesConfirmDialog(items=setupItems, withInstall=bool(setupItems), vehicleType=vehicle.type, applyForAllVehiclesByType=self._checkboxState))
         raise AsyncReturn(result)

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/platform/wgnp/general/controller.py
 import typing
 from BWUtil import AsyncReturn
-import wg_async
+import th_async
 from gui.platform.base.statuses.controller_mixin import StatusesMixin
 from gui.platform.wgnp.base.controller import WGNPRequestController
 from gui.platform.wgnp.general.request import AccountCountryParams
@@ -12,7 +12,7 @@ ACCOUNT_COUNTRY_CONTEXT = '<country>'
 
 class WGNPGeneralRequestController(StatusesMixin, WGNPRequestController, IWGNPGeneralRequestController):
 
-    @wg_async.wg_async
+    @th_async.th_async
     def getAccountCountry(self, waitingID=None):
         status = self._getStatus(ACCOUNT_COUNTRY_CONTEXT)
         self._logger.debug('Getting account country from cache=%s, waitingID=%s.', status, waitingID)

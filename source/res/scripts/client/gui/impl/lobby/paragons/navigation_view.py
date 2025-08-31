@@ -12,6 +12,7 @@ from gui.impl.lobby.paragons.presenters.progress_presenter import ProgressPresen
 from gui.impl.lobby.paragons.presenters.rewards_presenter import RewardsPresenter
 from gui.impl.lobby.paragons.presenters.chapters_presenter import ChaptersPresenter
 from gui.impl.lobby.paragons.presenters.about_presenter import AboutPresenter
+from gui.impl.lobby.paragons.tooltips.entry_point_tooltip import EntryPointTooltip
 from gui.impl.lobby.paragons.sound_constants import PARAGONS_SOUND_SPACE
 from gui.impl.pub import ViewImpl, WindowImpl
 from gui.impl.gen import R
@@ -60,7 +61,9 @@ class NavigationView(ViewImpl):
 
     def createToolTipContent(self, event, contentID):
         subViewTooltip = self.__tabsToPresenter[self.__currentTabID].createToolTipContent(event, contentID)
-        return subViewTooltip if subViewTooltip else super(NavigationView, self).createToolTipContent(event, contentID)
+        if subViewTooltip:
+            return subViewTooltip
+        return EntryPointTooltip() if contentID == R.views.lobby.paragons.tooltips.EntryPointTooltip() else super(NavigationView, self).createToolTipContent(event, contentID)
 
     def getTooltipData(self, event):
         return self.__tabsToPresenter[self.__currentTabID].getTooltipData(event)

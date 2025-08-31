@@ -95,7 +95,7 @@ class CosmicHudView(ViewImpl):
         settings = ViewSettings(R.views.cosmic_event.battle.cosmic_hud.CosmicReactHudView(), ViewFlags.VIEW, CosmicHudViewModel())
         super(CosmicHudView, self).__init__(settings)
         self.__callbackDelayer = CallbackDelayer()
-        self._markersCtrl = GUI.WGMarkerPositionController()
+        self._markersCtrl = GUI.MarkerPositionController()
         self._vehMarkersMan = VehicleMarkersManager(self.viewModel.getVehicleMarkers(), weakref.proxy(self._markersCtrl))
         self._currentGoal = None
         self._respawnAnnouncement = None

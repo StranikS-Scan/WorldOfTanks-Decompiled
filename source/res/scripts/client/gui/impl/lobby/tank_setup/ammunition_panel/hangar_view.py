@@ -16,7 +16,7 @@ from items import vehicles
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import ILimitedUIController
-from wg_async import wg_async
+from th_async import th_async
 _logger = logging.getLogger(__name__)
 _AMMUNITION_PANEL_HINTS = (OnceOnlyHints.AMMUNITION_PANEL_HINT, OnceOnlyHints.AMUNNITION_PANEL_EPIC_BATTLE_ABILITIES_HINT)
 _HINT_TO_RULE_ID = {OnceOnlyHints.AMMUNITION_PANEL_HINT: LuiRules.AP_ZONE_HINT,
@@ -71,7 +71,7 @@ class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
 
         return
 
-    @wg_async
+    @th_async
     def _onPanelSectionSelected(self, args):
         selectedSection = args['selectedSection']
         yield showIntro(selectedSection, self.getParentWindow())

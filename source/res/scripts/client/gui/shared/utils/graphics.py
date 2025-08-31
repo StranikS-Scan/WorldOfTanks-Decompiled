@@ -1,13 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/graphics.py
-import math
+import typing
 from collections import namedtuple
 import BigWorld
 from account_helpers.settings_core.settings_constants import GRAPHICS
 from shared_utils import CONST_CONTAINER, findFirst
+if typing.TYPE_CHECKING:
+    from typing import Tuple
 MIN_SCREEN_WIDTH = 1024
 MIN_SCREEN_HEIGHT = 768
 MIN_COLOR_DEPTH = 23
+MAX_SCALE_STEP = 1
+ScaleSettings = namedtuple('ScaleSettings', ('width', 'height', 'scales'))
+_DEFAULT_SCALE = (0.0, 1.0)
+_SCALES = (ScaleSettings(1920, 1200, _DEFAULT_SCALE),
+ ScaleSettings(2048, 1546, (0.0, 1.0, 1.25, 1.5)),
+ ScaleSettings(2560, 1600, (0.0, 1.0, 1.25, 1.5, 1.75)),
+ ScaleSettings(3200, 2048, (0.0, 1.0, 1.25, 1.5, 1.75, 2.0)),
+ ScaleSettings(4096, 2160, (0.0, 1.0, 1.25, 1.5, 1.75, 2.0)))
 VideoMode = namedtuple('VideoMode', 'index width height colorDepth label refreshRate')
 WindowSize = namedtuple('WindowSize', 'width height refreshRate')
 BorderlessSize = namedtuple('BorderlessSize', 'behaviour posX posY width height monitor')
@@ -65,7 +75,7 @@ def getSuitableVideoModes():
 def getSuitableWindowSizes():
     result = []
     for idx, monitorModes in enumerate(getSuitableVideoModes()):
-        maxSize = WindowSize(*BigWorld.wg_getMaxWindowedResolution(idx))
+        maxSize = WindowSize(*BigWorld.getMaxWindowedResolution(idx))
         modes = []
         for mode in monitorModes:
             if mode.width <= maxSize.width and mode.height <= maxSize.height:
@@ -81,7 +91,7 @@ def getSuitableWindowSizes():
 def getSuitableBorderlessSizes():
     result = []
     for idx, monitorModes in enumerate(getSuitableVideoModes()):
-        maxSize = WindowSize(*BigWorld.wg_getMaxBorderlessResolution(idx))
+        maxSize = WindowSize(*BigWorld.getMaxBorderlessResolution(idx))
         modes = []
         for mode in monitorModes:
             if mode.width <= maxSize.width and mode.height <= maxSize.height:
@@ -155,18 +165,20 @@ def getResolution():
     return WindowSize(min(width, MIN_SCREEN_WIDTH), min(height, MIN_SCREEN_HEIGHT), currWindowSize.refreshRate)
 
 
-def getInterfaceScalesList(size, powerOfTwo=True):
-    result = [SCALE_PREFIX[0]]
-    if powerOfTwo:
-        scale = max(min(int(math.log(max(size[0] / getResolution().width, 1.0), 2)), int(math.log(max(size[1] / getResolution().height, 1.0), 2))), 0)
-        for i in xrange(scale + 1):
-            result.append(SCALE_PREFIX[1] % 2 ** i)
+def getInterfaceScalesList(size):
+    screenWidth, screenHeight = size
+    scaleSetting = None
+    for value in _SCALES:
+        if screenWidth <= value.width or screenHeight <= value.height:
+            scaleSetting = value
+            break
 
+    if scaleSetting is None:
+        maxScale = int(max(min(float(screenWidth) / MIN_SCREEN_WIDTH, float(screenHeight) / MIN_SCREEN_HEIGHT), 1.0))
+        result = [0]
+        result.extend([ 1.0 + MAX_SCALE_STEP * stepIdx for stepIdx in xrange(0, maxScale) ])
     else:
-        scale = min(int(size[0] / MIN_SCREEN_WIDTH), int(size[1] / MIN_SCREEN_HEIGHT))
-        for i in xrange(1, scale):
-            result.append(SCALE_PREFIX[1] % i)
-
+        result = scaleSetting.scales
     return result
 
 
@@ -176,7 +188,7 @@ def onInterfaceScaleChanged(scale):
 
 def getNativeResolutionIndex():
     from gui.shared.utils.monitor_settings import g_monitorSettings
-    nativeResolution = BigWorld.wg_getNativeScreenResoulution(g_monitorSettings.currentMonitor)
+    nativeResolution = BigWorld.getNativeScreenResolution(g_monitorSettings.currentMonitor)
     result = []
     for modes in getSuitableVideoModes():
         resolutions = set()
@@ -198,7 +210,7 @@ def isGammaSupported():
     isFullscreen = g_monitorSettings.isFullscreen()
     if isFullscreen:
         cVideoMode = g_monitorSettings.currentVideoMode
-        nativeResolution = BigWorld.wg_getNativeScreenResoulution(g_monitorSettings.currentMonitor)
+        nativeResolution = BigWorld.getNativeScreenResolution(g_monitorSettings.currentMonitor)
         if nativeResolution is not None:
             isNativeSelected = cVideoMode.width == nativeResolution[0] and cVideoMode.height == nativeResolution[1]
         else:

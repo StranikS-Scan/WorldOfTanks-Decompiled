@@ -87,7 +87,7 @@ class _FadeWindow(object):
         self.__component.size = (2, 2)
         self.__component.focus = True
         self.__component.moveFocus = True
-        self.__component.wg_inputKeyMode = 2
+        self.__component.inputKeyMode = 2
         self.__activated = False
 
     def activate(self):

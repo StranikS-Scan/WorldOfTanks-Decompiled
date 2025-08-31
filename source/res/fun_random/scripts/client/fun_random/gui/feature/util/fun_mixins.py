@@ -10,7 +10,6 @@ from fun_random.gui.feature.util.fun_helpers import notifyCaller
 from fun_random.gui.feature.util.fun_wrappers import hasActiveProgression, hasAnySubMode, hasSingleSubMode, hasSpecifiedSubMode
 from fun_random.gui.shared.events import FunEventType, FunEventScope
 from fun_random.gui.shared.event_dispatcher import showFunRandomInfoPage, showFunRandomProgressionWindow, showFunRandomModeSubSelectorWindow
-from account_helpers.AccountSettings import FUN_RANDOM_INFO_PAGE_VIEWED_ID
 from gui.impl import backport
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from helpers import dependency
@@ -132,10 +131,6 @@ class FunSubModesWatcher(object):
     @adisp_async
     @adisp_process
     def selectFunRandomBattle(self, subModeID=UNKNOWN_EVENT_ID, callback=None):
-        funRandomInfoPageViewedId = AccountSettings.getSettings(FUN_RANDOM_INFO_PAGE_VIEWED_ID)
-        eventId = first(self.getSubModes()).getSettings().eventID
-        if eventId != funRandomInfoPageViewedId:
-            self.showSubModesInfoPage()
         selectorUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.FUN_RANDOM)
         allSubModesIDs = self._funRandomCtrl.subModesHolder.getSubModesIDs()
         if not allSubModesIDs:
@@ -170,10 +165,7 @@ class FunSubModesWatcher(object):
 
     @hasSingleSubMode(abortAction='showCommonInfoPage')
     def showSubModesInfoPage(self):
-        funRandomInfoPageViewedId = AccountSettings.getSettings(FUN_RANDOM_INFO_PAGE_VIEWED_ID)
-        eventId = first(self.getSubModes()).getSettings().eventID
-        if eventId != funRandomInfoPageViewedId:
-            AccountSettings.setSettings(FUN_RANDOM_INFO_PAGE_VIEWED_ID, eventId)
+        selectorUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.FUN_RANDOM)
         showFunRandomInfoPage(first(self.getSubModes()).getSettings().client.infoPageUrl)
 
 

@@ -3,6 +3,7 @@
 import re
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING
 from gui.impl import backport
+from gui.wgnc import wgnc_helpers
 from helpers import i18n
 _RE_FLAGS = re.M | re.U
 
@@ -188,6 +189,15 @@ class _LocalizationFormatter(_TagFormatter):
         return re.compile('(\\_\\(([^)]+)\\))', _RE_FLAGS)
 
 
+class _SpaFormater(_ValueFormatter):
+
+    def __init__(self):
+        super(_SpaFormater, self).__init__('spa')
+
+    def _getValue(self, value):
+        return wgnc_helpers.spa2Nickname(int(value))
+
+
 _formatters = (_GoldFormatter(),
  _IntegerFormatter(),
  _FloatFormatter(),
@@ -198,7 +208,8 @@ _formatters = (_GoldFormatter(),
  _LongDateFormatter(),
  _DateTimeFormatter(),
  _LinkFormatter(),
- _LocalizationFormatter())
+ _LocalizationFormatter(),
+ _SpaFormater())
 
 def formatText(text):
     for formatter in _formatters:

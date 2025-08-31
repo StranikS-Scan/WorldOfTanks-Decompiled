@@ -39,7 +39,7 @@ class AttackBomber(AreaOfEffect):
             areaLength = equipment.areaLength
             startPoint = self.position - flatDir * areaLength * 0.5
             altitude = Math.Vector3(0, self.SHOT_HEIGHT, 0)
-            collisionPoint = BigWorld.wg_collideSegment(self.spaceID, startPoint + altitude, startPoint - altitude, self.SKIP_FLAGS)
+            collisionPoint = BigWorld.collideSegment(self.spaceID, startPoint + altitude, startPoint - altitude, self.SKIP_FLAGS)
             if collisionPoint is None:
                 return
             beginExplosionPos = collisionPoint.closestPoint

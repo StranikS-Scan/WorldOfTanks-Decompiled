@@ -34,6 +34,7 @@ class VEHICLE_PREVIEW(object):
     BUYINGPANEL_ALERTLABEL = '#vehicle_preview:buyingPanel/alertLabel'
     BUYINGPANEL_UNIQUEVEHICLELABEL = '#vehicle_preview:buyingPanel/uniqueVehicleLabel'
     BUYINGPANEL_PMOPERATIONVEHICLELABEL = '#vehicle_preview:buyingPanel/pmOperationVehicleLabel'
+    BUYINGPANEL_PMCAMPAIGNVEHICLELABEL = '#vehicle_preview:buyingPanel/pmCampaignVehicleLabel'
     BUYINGPANEL_AVAILABLEFORWOTPLUS = '#vehicle_preview:buyingPanel/availableForWotPlus'
     BUYINGPANEL_TRADEINLABEL = '#vehicle_preview:buyingPanel/tradeInLabel'
     BUYINGPANEL_OFFER_RENT_TITLE_FRONTLINE_ORDINAL = '#vehicle_preview:buyingPanel/offer/rent/title/frontline/ordinal'

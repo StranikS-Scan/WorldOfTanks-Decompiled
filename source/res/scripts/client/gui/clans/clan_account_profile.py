@@ -11,8 +11,8 @@ from gui.clans import formatters as clans_fmts
 from gui.clans.clan_helpers import ClanCache, CachedValue, isInClanEnterCooldown
 from gui.clans.restrictions import ClanMemberPermissions, DefaultClanMemberPermissions
 from gui.clans.settings import CLAN_INVITE_STATES, INVITE_LIMITS_LIFE_TIME
-from gui.wgcg.clan.contexts import GetClanInfoCtx
-from gui.wgcg.settings import WebRequestDataType
+from gui.clientgw.clan.contexts import GetClanInfoCtx
+from gui.clientgw.settings import WebRequestDataType
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
 from helpers import dependency
 from messenger.ext import passCensor

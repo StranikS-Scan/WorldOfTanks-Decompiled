@@ -57,7 +57,7 @@ class GetTerrainMaterialUnderPoint(Block, ArenaMeta):
         return
 
     def _execute(self):
-        material = BigWorld.wg_getMathInfoUnderPoint(self._spaceID.getValue(), self._position.getValue(), self._dropDistance.getValue())
+        material = BigWorld.getMatInfoUnderPoint(self._spaceID.getValue(), self._position.getValue(), self._dropDistance.getValue())
         index = EFFECT_MATERIAL_INDEXES_BY_IDS.get(material)
         name = EFFECT_MATERIAL_NAMES_BY_INDEXES.get(index)
         if name is None:

@@ -192,7 +192,7 @@ class _ClanCache(object):
         if clanDBID is not None and clanDBID != 0:
             _, clanEmblemFile = yield self.getFileFromServer(clanDBID, 'clan_emblems_small' if not isBig else 'clan_emblems_big')
             if clanEmblemFile and imghdr.what(None, clanEmblemFile) is not None:
-                BigWorld.wg_addTempScaleformTexture(textureID, clanEmblemFile)
+                BigWorld.addTempScaleformTexture(textureID, clanEmblemFile)
                 callback(textureID)
                 return
         callback(None)

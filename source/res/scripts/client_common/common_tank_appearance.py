@@ -175,6 +175,7 @@ class CommonTankAppearance(ScriptGameObject):
         self.__isObserver = False
         self.__attachments = []
         self.__modelAnimators = []
+        self.__customAnimators = []
         self.turretMatrix = None
         self.gunMatrix = None
         self.__allLodCalculators = []
@@ -304,7 +305,7 @@ class CommonTankAppearance(ScriptGameObject):
         self.shadowManager = VehicleShadowManager(compoundModel, matrixBinding, changeCamera)
         if not self.damageState.isCurrentModelDamaged:
             self.__assembleNonDamagedOnly(resourceRefs, isPlayer, lodLink, lodStateLink)
-            dirtEnabled = BigWorld.WG_dirtEnabled() and 'HD' in self.typeDescriptor.type.tags
+            dirtEnabled = BigWorld.dirtEnabled() and 'HD' in self.typeDescriptor.type.tags
             if dirtEnabled and self.fashions is not None:
                 dirtHandlers = [BigWorld.PyDirtHandler(True, compoundModel.node(TankPartNames.CHASSIS).position.y),
                  BigWorld.PyDirtHandler(False, compoundModel.node(TankPartNames.HULL).position.y),
@@ -344,6 +345,7 @@ class CommonTankAppearance(ScriptGameObject):
     def destroy(self):
         self._vehicleInfo = {}
         self.flagComponent = None
+        self.clearCustomAnimators()
         self._destroySystems()
         fashions = VehiclePartsTuple(None, None, None, None)
         self._setFashions(fashions, self._isTurretDetached)
@@ -404,6 +406,7 @@ class CommonTankAppearance(ScriptGameObject):
             modelAnimator.animator.setEnabled(False)
 
         super(CommonTankAppearance, self).deactivate()
+        self.__customAnimators = []
         self.shadowManager.unregisterCompoundModel(self.compoundModel)
         self._stopSystems()
         self.wheelsGameObject.deactivate()
@@ -615,15 +618,19 @@ class CommonTankAppearance(ScriptGameObject):
             self.__periodicTimerID = None
         self.__modelAnimators = []
         self.filter.enableLagDetection(False)
+        self.clearUndamagedStateChildren()
+        return
+
+    def clearUndamagedStateChildren(self):
         for go in self.undamagedStateChildren:
             CGF.removeGameObject(go)
 
         self.undamagedStateChildren = []
-        return
 
     def _onRequestModelsRefresh(self):
         self.flagComponent = None
         self.__updateModelStatus()
+        self.clearCustomAnimators()
         return
 
     def __updateModelStatus(self):
@@ -706,7 +713,7 @@ class CommonTankAppearance(ScriptGameObject):
         return
 
     def __onPeriodicTimer(self):
-        timeStamp = BigWorld.wg_getFrameTimestamp()
+        timeStamp = BigWorld.getFrameTimestamp()
         if self.__frameTimestamp >= timeStamp:
             self.__periodicTimerID = BigWorld.callback(0.0, self.__onPeriodicTimer)
         else:
@@ -730,7 +737,7 @@ class CommonTankAppearance(ScriptGameObject):
         if self.customEffectManager:
             distanceFromPlayer = self.lodCalculator.lodDistance
             enableExhaust = distanceFromPlayer <= _LOD_DISTANCE_EXHAUST and not self.isUnderwater and self.enableExhaust
-            enableTrails = distanceFromPlayer <= _LOD_DISTANCE_TRAIL_PARTICLES and BigWorld.wg_isVehicleDustEnabled()
+            enableTrails = distanceFromPlayer <= _LOD_DISTANCE_TRAIL_PARTICLES and BigWorld.isVehicleDustEnabled()
             self.customEffectManager.enable(enableTrails, EffectSettings.SETTING_DUST)
             self.customEffectManager.enable(enableExhaust, EffectSettings.SETTING_EXHAUST)
 
@@ -835,6 +842,21 @@ class CommonTankAppearance(ScriptGameObject):
          go,
          vector,
          callback))
+
+    def addCustomAnimator(self, modelAnimator):
+        self.__customAnimators.append(modelAnimator)
+        self.registerComponent(modelAnimator)
+
+    def removeCustomAnimator(self, modelAnimator):
+        if modelAnimator in self.__customAnimators:
+            self.__customAnimators.remove(modelAnimator)
+            self.removeComponent(modelAnimator)
+
+    def clearCustomAnimators(self):
+        for animator in self.__customAnimators:
+            self.removeComponent(animator)
+
+        self.__customAnimators = []
 
     def _onCameraChanged(self, cameraName, currentVehicleId=None):
         if self.id != BigWorld.player().playerVehicleID:

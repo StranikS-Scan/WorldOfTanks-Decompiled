@@ -6,7 +6,7 @@ from constants import ARENA_GUI_TYPE
 from gui.impl.dialogs.dialog_template_utils import closeDialogTemplate
 from gui.impl.gen import R
 from gui.impl.pub.dialog_window import DialogButtons
-from wg_async import wg_await, wg_async
+from th_async import th_await, th_async
 _DIMMER_ALPHA = 0.7
 _PREMATURE_LEAVE_DIALOG_ID = 'PREMATURE_LEAVE_DIALOG'
 
@@ -14,7 +14,7 @@ def closeDialogWindow():
     closeDialogTemplate(_PREMATURE_LEAVE_DIALOG_ID)
 
 
-@wg_async
+@th_async
 def showDialogWindow(title, confirm=None, cancel=None, description=None, icon=None):
     from gui.impl.dialogs import dialogs
     from gui.impl.dialogs.gf_builders import ConfirmCancelDialogBuilder
@@ -29,23 +29,23 @@ def showDialogWindow(title, confirm=None, cancel=None, description=None, icon=No
         builder.setDescription(description)
     if icon:
         builder.setIcon(icon)
-    result = yield wg_await(dialogs.show(builder.build()))
+    result = yield th_await(dialogs.show(builder.build()))
     raise AsyncReturn(result.result)
 
 
-@wg_async
+@th_async
 def showResDialogWindow(title, confirm=None, cancel=None, description=None, icon=None):
-    result = yield wg_await(showDialogWindow(title, confirm=confirm, cancel=cancel, description=description, icon=icon))
+    result = yield th_await(showDialogWindow(title, confirm=confirm, cancel=cancel, description=description, icon=icon))
     raise AsyncReturn(result == DialogButtons.SUBMIT)
 
 
-@wg_async
+@th_async
 def showCancellationDialogWindow(title, confirm=None, cancel=None, description=None, icon=None):
-    result = yield wg_await(showDialogWindow(title, confirm=confirm, cancel=cancel, description=description, icon=icon))
+    result = yield th_await(showDialogWindow(title, confirm=confirm, cancel=cancel, description=description, icon=icon))
     raise AsyncReturn(result == DialogButtons.CANCEL)
 
 
-@wg_async
+@th_async
 def showLeaverAliveWindow(IGR=False):
     quitBattleR = R.strings.dialogs.quitBattle
     title = quitBattleR.IGR.leaver.title() if IGR else quitBattleR.leaver.title()
@@ -53,11 +53,11 @@ def showLeaverAliveWindow(IGR=False):
     cancel = quitBattleR.IGR.leaver.cancel() if IGR else quitBattleR.leaver.cancel()
     description = quitBattleR.IGR.leaver.descriptionAlive() if IGR else quitBattleR.leaver.descriptionAlive()
     icon = R.images.gui.maps.icons.battle.deserterLeaveBattle()
-    result = yield wg_await(showResDialogWindow(title, confirm=confirm, cancel=cancel, description=description, icon=icon))
+    result = yield th_await(showResDialogWindow(title, confirm=confirm, cancel=cancel, description=description, icon=icon))
     raise AsyncReturn(result)
 
 
-@wg_async
+@th_async
 def showComp7LeaverAliveWindow():
     from gui.impl.dialogs import dialogs
     from gui.impl.dialogs.gf_builders import ConfirmCancelWarningDialogBuilder, ConfirmCancelDescriptionDialogBuilder
@@ -77,17 +77,28 @@ def showComp7LeaverAliveWindow():
     if arenaGuiType == ARENA_GUI_TYPE.COMP7:
         builder.setWarningMsg(R.strings.dialogs.comp7.deserter.msgTitle())
     builder.setIcon(R.images.comp7.gui.maps.icons.comp7.battle.comp7DeserterLeaveBattle())
-    result = yield wg_await(dialogs.show(builder.build()))
+    result = yield th_await(dialogs.show(builder.build()))
     raise AsyncReturn(result.result == DialogButtons.SUBMIT)
 
 
-@wg_async
-def showLeaverReplayWindow():
-    result = yield wg_await(showResDialogWindow(R.strings.dialogs.quitBattle.replay.title(), confirm=R.strings.dialogs.quitBattle.replay.submit(), cancel=R.strings.dialogs.quitBattle.replay.cancel()))
+@th_async
+def showWhiteTigerLeaverAliveWindow():
+    title = R.strings.dialogs.white_tiger.deserter.title
+    confirm = R.strings.dialogs.white_tiger.deserter.submit()
+    cancel = R.strings.dialogs.white_tiger.deserter.cancel()
+    description = R.strings.dialogs.white_tiger.deserter.message()
+    icon = R.images.gui.maps.icons.battle.deserterLeaveBattle()
+    result = yield th_await(showResDialogWindow(title, confirm=confirm, cancel=cancel, description=description, icon=icon))
     raise AsyncReturn(result)
 
 
-@wg_async
+@th_async
+def showLeaverReplayWindow():
+    result = yield th_await(showResDialogWindow(R.strings.dialogs.quitBattle.replay.title(), confirm=R.strings.dialogs.quitBattle.replay.submit(), cancel=R.strings.dialogs.quitBattle.replay.cancel()))
+    raise AsyncReturn(result)
+
+
+@th_async
 def showExitWindow():
-    result = yield wg_await(showResDialogWindow(R.strings.dialogs.quitBattle.title()))
+    result = yield th_await(showResDialogWindow(R.strings.dialogs.quitBattle.title()))
     raise AsyncReturn(result)

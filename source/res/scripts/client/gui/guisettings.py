@@ -74,7 +74,8 @@ _SETTING_CONVERTERS = {'loginRssFeed': _convertToNamedTuple,
  'browser': _convertToNamedTuple,
  'postBattleExchange': _convertToNamedTuple,
  'easterEgg': _convertToNamedTuple,
- 'baseUrls': _dummyConverter}
+ 'baseUrls': _dummyConverter,
+ 'battlePassBaseUrls': _dummyConverter}
 _DEFAULT_SETTINGS = {'registrationURL': '',
  'registrationProxyURL': '',
  'recoveryPswdURL': '',
@@ -143,7 +144,8 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'vivoxLicense': '',
  'spgHitDirectionDelta': 10.0,
  'vehicleDisclaimerURLs': {},
- 'baseUrls': {}}
+ 'baseUrls': {},
+ 'battlePassBaseUrls': {}}
 
 class GuiSettings(object):
 

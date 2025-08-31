@@ -5584,6 +5584,30 @@
         </effects>
       </variant1>
     </hd_env_EU_446_Graves_hit>
+    <hd_env_EU_460_gertramway_snow>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/hd_env_EU_460_gertramway_snow.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	77.610001	</wood_1>
+              <debrisAmount>	58.580002	</debrisAmount>
+              <weight>	7164.180176	</weight>
+              <wood_2>	8.580000	</wood_2>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_EU_460_gertramway_snow>
     <hd_env_EU_481_RailwayOverpass_03>
       <variant1>
         <stages>
@@ -7903,6 +7927,29 @@
         </effects>
       </variant1>
     </hd_env_su_1046_gaz_m21_03_hit>
+    <hd_env_SU_1050_Bollards_01>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/hd_env_SU_1050_bollards_1.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <debrisAmount>	50.000000	</debrisAmount>
+              <weight>	5500.000000	</weight>
+              <wood_2>	30.000000	</wood_2>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_SU_1050_Bollards_01>
     <hd_env_SU_1050_bollards_1>
       <variant1>
         <stages>
@@ -8142,6 +8189,100 @@
         </effects>
       </variant1>
     </hd_env_SU_1066_CommitteeFence_05>
+    <hd_env_su_1073_kiosksnow>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/environment/objects/hd_env_su_1073_kiosksnow.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	55	</wood_1>
+              <debrisAmount>	80	</debrisAmount>
+              <weight>	5050	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_su_1073_kiosksnow>
+    <hd_env_su_1081_adpillar_snow>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/environment/buildings/hd_env_su_1081_adpillar_snow.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_2>	24	</metal_2>
+              <glass>	10	</glass>
+              <debrisAmount>	30	</debrisAmount>
+              <weight>	3000	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_su_1081_adpillar_snow>
+    <hd_env_su_1084_marketshelvessnow_01>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/hd_env_SU_1084_MarketShelvesSnow_01.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	77.610001	</wood_1>
+              <debrisAmount>	58.580002	</debrisAmount>
+              <weight>	7164.180176	</weight>
+              <wood_2>	8.580000	</wood_2>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_su_1084_marketshelvessnow_01>
+    <hd_env_su_1086_trampost>
+      <variant1>
+        <stages>
+          <base>	35.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_su_1086_trampost.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_2>	24	</metal_2>
+              <debrisAmount>	60.000000	</debrisAmount>
+              <weight>	7200.000000	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_su_1086_trampost>
     <hd_env_su_2019_scaffold_short>
       <variant1>
         <stages>
@@ -8191,6 +8332,52 @@
         </effects>
       </variant1>
     </hd_env_SU_2020_Ladder_02>
+    <hd_env_UNI_0033_Boat>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_uni_0033_boat_hit.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	49	</wood_1>
+              <debrisAmount>	80	</debrisAmount>
+              <weight>	4800	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_UNI_0033_Boat>
+    <hd_env_uni_0034_bunchlogs_snow>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_UNI_0034_BunchLogsSnow_01.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_2>	60	</wood_2>
+              <debrisAmount>	90	</debrisAmount>
+              <weight>	8700	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_uni_0034_bunchlogs_snow>
     <hd_env_uni_0035_pierwood_01>
       <variant1>
         <stages>
@@ -8264,6 +8451,126 @@
         </effects>
       </variant1>
     </hd_env_UNI_0040_TownBench>
+    <hd_env_uni_0041_lamp>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/environment/objects/hd_env_uni_0041_lamp.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_2>	24	</metal_2>
+              <glass>	10	</glass>
+              <debrisAmount>	30	</debrisAmount>
+              <weight>	3000	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_uni_0041_lamp>
+    <hd_env_uni_0041_lampbig>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/environment/objects/hd_env_uni_0041_lampbig.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_2>	24	</metal_2>
+              <glass>	10	</glass>
+              <debrisAmount>	30	</debrisAmount>
+              <weight>	3000	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_uni_0041_lampbig>
+    <hd_env_UNI_0050_Stage_Snow>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_uni_0050_stage_snow.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	55	</wood_1>
+              <debrisAmount>	70	</debrisAmount>
+              <weight>	4850	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_UNI_0050_Stage_Snow>
+    <hd_env_uni_0053_telega_snow>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_uni_0053_telega_snow.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	49	</wood_1>
+              <debrisAmount>	50	</debrisAmount>
+              <weight>	5000	</weight>
+              <metal_1>	8	</metal_1>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_uni_0053_telega_snow>
+    <hd_env_UNI_0057_RoadLighting>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/environment/objects/hd_env_UNI_0057_RoadLighting.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_2>	24	</metal_2>
+              <glass>	10	</glass>
+              <debrisAmount>	20.000000	</debrisAmount>
+              <weight>	3800.000000	</weight>
+              <stone_1>	15.000000	</stone_1>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_UNI_0057_RoadLighting>
     <hd_env_UNI_007_SnagHeap_06>
       <variant1>
         <stages>
@@ -11667,7 +11974,12 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_sandbag	</wwsound>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <weight>	8500.000000	</weight>
+              <debrisAmount>	90.000000	</debrisAmount>
+              <cloth>	50.000000	</cloth>
+            </params>
           </destructionSound>
         </effects>
       </variant1>
@@ -11685,7 +11997,12 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_sandbag	</wwsound>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <cloth>	40.000000	</cloth>
+              <debrisAmount>	60.000000	</debrisAmount>
+              <weight>	7000.000000	</weight>
+            </params>
           </destructionSound>
         </effects>
       </variant1>

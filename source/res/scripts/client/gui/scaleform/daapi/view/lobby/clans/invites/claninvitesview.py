@@ -89,7 +89,7 @@ class ClanInvitesView(ClanInvitesViewMeta):
          self._packHeaderColumnData('personalRating', '', 98, CLANS.CLANINVITESWINDOW_TOOLTIPS_TABLE_INVITES_PERSONALRATING, RES_ICONS.MAPS_ICONS_STATISTIC_RATING24),
          self._packHeaderColumnData('battlesCount', '', 98, CLANS.CLANINVITESWINDOW_TOOLTIPS_TABLE_INVITES_BATTLESCOUNT, RES_ICONS.MAPS_ICONS_STATISTIC_BATTLES24),
          self._packHeaderColumnData('wins', '', 98, CLANS.CLANINVITESWINDOW_TOOLTIPS_TABLE_INVITES_WINS, RES_ICONS.MAPS_ICONS_STATISTIC_WINS24),
-         self._packHeaderColumnData('awgExp', '', 98, CLANS.CLANINVITESWINDOW_TOOLTIPS_TABLE_INVITES_AWGEXP, RES_ICONS.MAPS_ICONS_STATISTIC_AVGEXP24),
+         self._packHeaderColumnData('avgXP', '', 98, CLANS.CLANINVITESWINDOW_TOOLTIPS_TABLE_INVITES_AVGXP, RES_ICONS.MAPS_ICONS_STATISTIC_AVGEXP24),
          self._packHeaderColumnData('status', CLANS.CLANINVITESWINDOW_TABLE_STATUS, 150, CLANS.CLANINVITESWINDOW_TOOLTIPS_TABLE_INVITES_STATUS),
          self._packHeaderColumnData('sent', CLANS.CLANINVITESWINDOW_TABLE_SENT, 150, CLANS.CLANINVITESWINDOW_TOOLTIPS_TABLE_INVITES_SENT)]
 
@@ -103,7 +103,7 @@ class InviteDataProvider(ClanInvitesAbstractDataProvider):
          'personalRating': formatField(getter=item.getPersonalRating, formatter=backport.getIntegralFormat),
          'battlesCount': formatField(getter=item.getBattlesCount, formatter=backport.getIntegralFormat),
          'wins': formatField(getter=item.getBattlesPerformanceAvg, formatter=lambda value: backport.getNiceNumberFormat(value) + '%'),
-         'awgExp': formatField(getter=item.getBattleXpAvg, formatter=backport.getIntegralFormat),
+         'avgXP': formatField(getter=item.getBattleXpAvg, formatter=backport.getIntegralFormat),
          'status': {'text': self._makeInviteStateString(item),
                     'tooltip': self._makeTooltip(body=self._makeRequestTooltip(status=item.getStatus(), user=formatField(getter=item.getSenderName), date=formatField(getter=item.getUpdatedAt, formatter=formatters.formatShortDateShortTimeString)))},
          'canShowContextMenu': True,

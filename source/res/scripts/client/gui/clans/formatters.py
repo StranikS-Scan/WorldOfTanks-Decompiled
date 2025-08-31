@@ -6,7 +6,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.formatters.text_styles import standard as standard_text_style, alert as alert_text_style
 from helpers.i18n import doesTextExist, makeString
-from gui.wgcg.settings import WebRequestDataType as REQUEST_TYPE
+from gui.clientgw.settings import WebRequestDataType as REQUEST_TYPE
 from gui.clans.settings import getClanRoleName
 ERROR_SYS_MSG_TPL = '#system_messages:clans/request/errors/%s'
 DUMMY_UNAVAILABLE_DATA = '--'

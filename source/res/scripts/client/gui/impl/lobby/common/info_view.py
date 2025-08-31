@@ -3,7 +3,7 @@
 import logging
 import typing
 from functools import partial
-import wg_async
+import th_async
 from BWUtil import AsyncReturn
 from PlayerEvents import g_playerEvents
 from frameworks.wulf import ViewSettings, WindowFlags
@@ -107,10 +107,10 @@ class _InfoWindowProcessor(IInfoWindowProcessor):
             self.__settingsCore.serverSettings.saveInUIStorage({self.uiStorageKey: True})
         return
 
-    @wg_async.wg_async
+    @th_async.th_async
     def show(self, parent=None):
         if self.showAllowed():
-            yield wg_async.await_callback(partial(self.__loadWindow, parent))()
+            yield th_async.await_callback(partial(self.__loadWindow, parent))()
         raise AsyncReturn(None)
         return
 

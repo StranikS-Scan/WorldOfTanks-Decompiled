@@ -16,7 +16,7 @@ from web.web_client_api import webApiCollection, ui as ui_web_api, sound as soun
 from web.web_client_api.promo import PromoWebApi
 from web.web_client_api.request import RequestWebApi
 from web.web_client_api.survey import SurveyWebApi
-from wg_async import wg_await, wg_async
+from th_async import th_await, th_async
 from gui.wgnc import g_wgncProvider
 
 class PollBrowserButtonHandler(object):
@@ -51,7 +51,7 @@ class PollBrowserButtonHandler(object):
                 def __onFinishSurvey(self, _):
                     self.__isSurveyFinished = True
 
-                @wg_async
+                @th_async
                 def onCloseView(self):
                     if self.__isSurveyFinished:
                         super(PollBrowserView, self).onCloseView()
@@ -64,7 +64,7 @@ class PollBrowserButtonHandler(object):
                         else:
                             LOG_WARNING('Not correct notification target "{}"'.format(target))
                         confirmationWindow = builder.build()
-                        result = yield wg_await(dialogs.show(confirmationWindow))
+                        result = yield th_await(dialogs.show(confirmationWindow))
                         if result.result == DialogButtons.CANCEL:
                             if onExitCustomAction and notID:
                                 g_wgncProvider.doAction(notID, onExitCustomAction, target)

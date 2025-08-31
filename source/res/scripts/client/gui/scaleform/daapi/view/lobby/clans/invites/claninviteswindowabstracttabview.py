@@ -6,7 +6,7 @@ from gui.Scaleform.locale.CLANS import CLANS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.clans.clan_helpers import ClanListener, showClanInviteSystemMsg
 from gui.clans.settings import CLAN_INVITE_STATES
-from gui.wgcg.settings import WebRequestDataType
+from gui.clientgw.settings import WebRequestDataType
 from gui.shared.events import CoolDownEvent
 from gui.shared.view_helpers import CooldownHelper
 from helpers.i18n import makeString as _ms
@@ -24,7 +24,7 @@ class _RefreshBtnStateController(object):
     def __init__(self, view):
         super(_RefreshBtnStateController, self).__init__()
         self.__view = weakref.proxy(view)
-        self.__cooldown = CooldownHelper(self.__coolDownRequests, self._onCooldownHandle, CoolDownEvent.WGCG)
+        self.__cooldown = CooldownHelper(self.__coolDownRequests, self._onCooldownHandle, CoolDownEvent.CLIENTGW)
         self.__isEnabled = False
         self.__tooltip = None
         self.__isInCooldown = False

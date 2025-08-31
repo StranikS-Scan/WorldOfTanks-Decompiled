@@ -6,7 +6,7 @@ from functools import partial
 import logging
 import typing
 from account_helpers.AccountSettings import AccountSettings, MAPBOX_PROGRESSION
-from wg_async import wg_async, wg_await, await_callback, BrokenPromiseError
+from th_async import th_async, th_await, await_callback, BrokenPromiseError
 import adisp
 import BigWorld
 from BWUtil import AsyncReturn
@@ -27,7 +27,7 @@ from gui.shared.event_dispatcher import showMapboxIntro, showMapboxSurvey
 from gui.shared.utils import SelectorBattleTypesUtils
 from gui.shared.utils.SelectorBattleTypesUtils import setBattleTypeAsUnknown
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier, TimerNotifier
-from gui.wgcg.mapbox.contexts import MapboxProgressionCtx, MapboxRequestCrewbookCtx, MapboxCompleteSurveyCtx
+from gui.clientgw.mapbox.contexts import MapboxProgressionCtx, MapboxRequestCrewbookCtx, MapboxCompleteSurveyCtx
 from helpers import dependency, server_settings, time_utils
 from season_provider import SeasonProvider
 from skeletons.gui.game_control import IMapboxController
@@ -187,9 +187,9 @@ class MapboxController(Notifiable, SeasonProvider, IMapboxController, IGlobalLis
     def handleSurveyCompleted(self, surveyData):
 
         @adisp.adisp_async
-        @wg_async
+        @th_async
         def proxy(callback):
-            result = yield wg_await(self.forceUpdateProgressData())
+            result = yield th_await(self.forceUpdateProgressData())
             callback(result)
 
         if self.__webCtrl.isAvailable():
@@ -200,7 +200,7 @@ class MapboxController(Notifiable, SeasonProvider, IMapboxController, IGlobalLis
                 self.surveyManager.resetSurvey(mapId)
             yield proxy()
         else:
-            _logger.error('Survey completed request not sent due to WGCG unavailability')
+            _logger.error('Survey completed request not sent due to CLIENTGW unavailability')
 
     def getUnseenItemsCount(self):
         progressionData = self.__progressionDataProvider.getProgressionData()
@@ -241,9 +241,9 @@ class MapboxController(Notifiable, SeasonProvider, IMapboxController, IGlobalLis
     def storeCycle(self):
         self.__settingsManager.storeCycle(self.isActive(), self.getCurrentCycleID())
 
-    @wg_async
+    @th_async
     def forceUpdateProgressData(self):
-        result = yield wg_await(self.__progressionDataProvider.forceUpdateProgressData())
+        result = yield th_await(self.__progressionDataProvider.forceUpdateProgressData())
         raise AsyncReturn(result)
 
     def onPrbEntitySwitched(self):
@@ -396,7 +396,7 @@ class MapboxProgressionDataProvider(Notifiable):
                 return timeLeft
         return time_utils.ONE_DAY
 
-    @wg_async
+    @th_async
     def forceUpdateProgressData(self):
         try:
             result = yield await_callback(self.__request)()

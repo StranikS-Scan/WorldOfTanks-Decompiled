@@ -5,7 +5,7 @@ from gui.clans.clan_helpers import ClanPersonalInvitesPaginator, ClanListener
 from gui.clans.items import ClanCommonData, formatField, isValueAvailable
 from gui.clans.settings import CLAN_INVITE_STATES
 from gui.impl import backport
-from gui.wgcg.settings import WebRequestDataType
+from gui.clientgw.settings import WebRequestDataType
 from gui.Scaleform.daapi.view.lobby.clans.invites.ClanInvitesViewWithTable import ClanInvitesAbstractDataProvider
 from gui.Scaleform.daapi.view.meta.ClanPersonalInvitesViewMeta import ClanPersonalInvitesViewMeta
 from gui.Scaleform.locale.CLANS import CLANS
@@ -32,7 +32,7 @@ class ClanPersonalInvitesView(ClanPersonalInvitesViewMeta, ClanListener):
          WebRequestDataType.DECLINE_INVITES,
          WebRequestDataType.CLANS_INFO,
          WebRequestDataType.CLAN_RATINGS,
-         WebRequestDataType.ACCOUNT_INVITES], self._onCooldownHandle, CoolDownEvent.WGCG)
+         WebRequestDataType.ACCOUNT_INVITES], self._onCooldownHandle, CoolDownEvent.CLIENTGW)
 
     def declineAllSelectedInvites(self):
         self._paginator.declineList(self.dataProvider.getCheckedIDs())
@@ -154,7 +154,7 @@ class ClanPersonalInvitesView(ClanPersonalInvitesViewMeta, ClanListener):
          self._packHeaderColumnData('personalRating', '', 98, CLANS.CLANPERSONALINVITESWINDOW_TOOLTIPS_TABLE_INVITES_RATING, RES_ICONS.MAPS_ICONS_STATISTIC_RATING24, enabled=True),
          self._packHeaderColumnData('battlesCount', '', 98, CLANS.CLANPERSONALINVITESWINDOW_TOOLTIPS_TABLE_INVITES_BATTLESCOUNT, RES_ICONS.MAPS_ICONS_STATISTIC_BATTLES24, enabled=True),
          self._packHeaderColumnData('wins', '', 98, CLANS.CLANPERSONALINVITESWINDOW_TOOLTIPS_TABLE_INVITES_WINS, RES_ICONS.MAPS_ICONS_STATISTIC_WINS24, enabled=True),
-         self._packHeaderColumnData('awgExp', '', 98, CLANS.CLANPERSONALINVITESWINDOW_TOOLTIPS_TABLE_INVITES_AWGEXP, RES_ICONS.MAPS_ICONS_STATISTIC_AVGEXP24, enabled=True),
+         self._packHeaderColumnData('avgXP', '', 98, CLANS.CLANPERSONALINVITESWINDOW_TOOLTIPS_TABLE_INVITES_AVGXP, RES_ICONS.MAPS_ICONS_STATISTIC_AVGEXP24, enabled=True),
          self._packHeaderColumnData('status', CLANS.CLANPERSONALINVITESWINDOW_TABLE_STATUS, 160, CLANS.CLANPERSONALINVITESWINDOW_TOOLTIPS_TABLE_INVITES_STATUS, enabled=True),
          self._packHeaderColumnData('actions', CLANS.CLANPERSONALINVITESWINDOW_TABLE_ACTIONS, 132, CLANS.CLANPERSONALINVITESWINDOW_TOOLTIPS_TABLE_REQUESTS_ACTIONS, enabled=False)]
 
@@ -245,7 +245,7 @@ class PersonalInvitesDataProvider(ClanInvitesAbstractDataProvider):
          'personalRating': formatField(getter=item.getPersonalRating, formatter=backport.getIntegralFormat),
          'battlesCount': formatField(getter=item.getBattlesCount, formatter=backport.getIntegralFormat),
          'wins': formatField(getter=item.getBattleXpAvg, formatter=lambda value: backport.getNiceNumberFormat(value) + '%'),
-         'awgExp': formatField(getter=item.getBattlesPerformanceAvg, formatter=backport.getIntegralFormat),
+         'avgXP': formatField(getter=item.getBattlesPerformanceAvg, formatter=backport.getIntegralFormat),
          'status': {'text': self._makeInviteStateString(item),
                     'tooltip': self._makeTooltip(body=self._makeRequestTooltip(status=item.getStatus(), user=formatField(getter=item.getSenderName), date=formatField(getter=item.getUpdatedAt, formatter=formatters.formatShortDateShortTimeString)))},
          'enabled': status == CLAN_INVITE_STATES.ACTIVE or status == CLAN_INVITE_STATES.ERROR,

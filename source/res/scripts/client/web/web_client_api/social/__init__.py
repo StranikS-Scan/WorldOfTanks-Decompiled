@@ -47,6 +47,10 @@ class _AddFriendSchema(W2CSchema):
     name = Field(required=True, type=basestring)
 
 
+class _ContactsFullNamesSchema(W2CSchema):
+    player_ids = Field(required=True, type=list)
+
+
 @w2capi(name='social', key='action')
 class SocialWebApi(object):
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -127,3 +131,28 @@ class SocialWebApi(object):
         playerId = cmd.player_id
         name = cmd.name
         return self.proto.contacts.addFriend(playerId, name)
+
+    @w2c(_ContactsFullNamesSchema, name='get_contacts_full_names')
+    def getContactsNames(self, cmd, ctx):
+        callback = ctx.get('callback')
+        playerIds = cmd.player_ids
+
+        def playersFullNames():
+            result = {}
+            for playerId in playerIds:
+                contact = self.__usersInfoHelper.getContact(playerId)
+                name = '{}'.format(contact.getName())
+                clanAbbrev = '[{}]'.format(contact.getClanAbbrev()) if contact.getClanAbbrev() else ''
+                result[playerId] = '{}{}'.format(name, clanAbbrev)
+
+            return result
+
+        def onNamesReceivedCallback():
+            callback(playersFullNames())
+            self.__usersInfoHelper.onNamesReceived -= onNamesReceivedCallback
+
+        if any((not bool(self.__usersInfoHelper.getUserName(playerId)) for playerId in playerIds)):
+            self.__usersInfoHelper.onNamesReceived += onNamesReceivedCallback
+            self.__usersInfoHelper.syncUsersInfo()
+        else:
+            return playersFullNames()

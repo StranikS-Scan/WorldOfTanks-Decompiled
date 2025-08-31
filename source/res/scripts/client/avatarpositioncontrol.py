@@ -17,11 +17,11 @@ class ConsistentMatrices(object):
     ownVehicleTurretMProv = property(lambda self: self.__ownVehicleTurretMProv)
 
     def __init__(self):
-        self.__attachedVehicleMatrix = Math.WGAdaptiveMatrixProvider()
+        self.__attachedVehicleMatrix = Math.AdaptiveMatrixProvider()
         self.__attachedVehicleMatrix.target = math_utils.createIdentityMatrix()
-        self.__ownVehicleMProv = Math.WGAdaptiveMatrixProvider()
+        self.__ownVehicleMProv = Math.AdaptiveMatrixProvider()
         self.__ownVehicleMProv.target = math_utils.createIdentityMatrix()
-        self.__ownVehicleTurretMProv = Math.WGAdaptiveMatrixProvider()
+        self.__ownVehicleTurretMProv = Math.AdaptiveMatrixProvider()
         self.__ownVehicleTurretMProv.target = math_utils.createIdentityMatrix()
         self.onVehicleMatrixBindingChanged = Event()
 
@@ -77,7 +77,7 @@ class ConsistentMatrices(object):
 
     def __linkOwnVehicle(self, vehicle):
         self.__ownVehicleMProv.target = vehicle.matrix
-        if isinstance(vehicle.filter, BigWorld.WGVehicleFilter):
+        if isinstance(vehicle.filter, BigWorld.VehicleFilter):
             self.__ownVehicleTurretMProv.target = vehicle.filter.turretMatrix
         elif vehicle.appearance:
             self.__ownVehicleTurretMProv.target = vehicle.appearance.turretMatrix

@@ -29,7 +29,7 @@ from skeletons.gui.game_control import IBadgesController, ISteamCompletionContro
 from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController, IWGNPDemoAccRequestController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
-from wg_async import wg_async, wg_await
+from th_async import th_async, th_await
 if typing.TYPE_CHECKING:
     from typing import Optional
     from gui.impl.gen.view_models.views.lobby.account_dashboard.header_model import HeaderModel
@@ -223,13 +223,13 @@ class HeaderFeature(FeatureItem):
         else:
             showDemoAccRenamingOverlay()
 
-    @wg_async
+    @th_async
     def __askEmailStatus(self):
         if not self.__steamRegistrationCtrl.isSteamAccount:
             _logger.debug('Account completion disabled.')
             return
         _logger.debug('Sending email status request.')
-        status = yield wg_await(self.__wgnpSteamAccCtrl.getEmailStatus())
+        status = yield th_await(self.__wgnpSteamAccCtrl.getEmailStatus())
         if status.isUndefined or self.__isDestroyed:
             _logger.warning('Can not get account email status.')
             return
@@ -240,11 +240,11 @@ class HeaderFeature(FeatureItem):
         else:
             self._setEmailConfirmed()
 
-    @wg_async
+    @th_async
     def __askDemoAccountRenameStatus(self):
         if not self.__wgnpDemoAccCtrl.settings.isRenameApiEnabled():
             return
-        status = yield wg_await(self.__wgnpDemoAccCtrl.getNicknameStatus())
+        status = yield th_await(self.__wgnpDemoAccCtrl.getNicknameStatus())
         if status.isUndefined or self.__isDestroyed:
             return
         if status.typeIs(StatusTypes.ADD_NEEDED):
@@ -252,12 +252,12 @@ class HeaderFeature(FeatureItem):
         elif status.typeIs(StatusTypes.PROCESSING):
             self._showDemoAccountRenamingInProcess()
 
-    @wg_async
+    @th_async
     def __showLeaveSquadForRenamingDialog(self):
         builder = ResDialogBuilder()
         builder.setMessagesAndButtons(R.strings.dialogs.accountCompletion.leaveSquad)
         self.__confirmationWindow = builder.build()
-        result = yield wg_await(dialogs.show(self.__confirmationWindow))
+        result = yield th_await(dialogs.show(self.__confirmationWindow))
         self.__confirmationWindow = None
         if result.result == DialogButtons.SUBMIT:
             self.__platoonCtrl.leavePlatoon(ignoreConfirmation=True)

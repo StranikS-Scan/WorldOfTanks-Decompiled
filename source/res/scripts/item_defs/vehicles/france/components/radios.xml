@@ -38,6 +38,7 @@
     <SCR_528_FL>	501	</SCR_528_FL>
     <SCR_528_Fr_7x7>	502	</SCR_528_Fr_7x7>
     <SCR_619_7x7>	503	</SCR_619_7x7>
+    <SCR_528_WT>	1001	</SCR_528_WT>
     <SCR_528_IGR>	60001	</SCR_528_IGR>
     <FuG8f_IGR>	60002	</FuG8f_IGR>
     <ER_56_IGR>	60003	</ER_56_IGR>
@@ -48,13 +49,13 @@
     <SCR_619_bob>	31006	</SCR_619_bob>
     <SCR_528C>	31007	</SCR_528C>
     <TRVP_13_P>	31008	</TRVP_13_P>
+    <SCR_528A_02>	31010	</SCR_528A_02>
     <Development_Radio>	65000	</Development_Radio>
     <SCR_528_F_SH>	43	</SCR_528_F_SH>
     <TRVP_13_SH>	44	</TRVP_13_SH>
     <SCR_508_SH>	45	</SCR_508_SH>
     <SCR_528_MapsTraining_Dummy_SPG_2>	6	</SCR_528_MapsTraining_Dummy_SPG_2>
     <SCR_508_bootcamp>	1002	</SCR_508_bootcamp>
-    <SCR_528_T>	35002	</SCR_528_T>
   </ids>
   <shared>
     <FuG_Spr.D>
@@ -92,18 +93,6 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </SCR_528_7x7>
-    <SCR_528_T>
-      <userString>	#france_vehicles:SCR_528_T	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	80	</weight>
-      <distance>	750	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </SCR_528_T>
     <SCR_528F>
       <userString>	#france_vehicles:SCR_528F	</userString>
       <tags></tags>
@@ -140,6 +129,18 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </SCR_528A>
+    <SCR_528A_02>
+      <userString>	#france_vehicles:SCR_528A_02	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	80	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </SCR_528A_02>
     <SCR_528L>
       <userString>	#france_vehicles:SCR_528	</userString>
       <tags></tags>
@@ -641,6 +642,18 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	0	</repairCost>
     </Development_Radio>
+    <SCR_528_WT>
+      <userString>	#france_vehicles:SCR_528_WT	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	80	</weight>
+      <distance>	950	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </SCR_528_WT>
     <SCR_508_SH>
       <userString>	#france_vehicles:SCR_508_SH	</userString>
       <tags></tags>

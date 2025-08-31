@@ -151,7 +151,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
 
     def handleEscKey(self, isDown):
         if isDown:
-            self.__collapseEquipmentSlot()
+            self._collapseEquipmentSlot()
             return True
         return False
 
@@ -226,7 +226,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         self._cds[idx] = intCD
         keyCode, sfKeyCode = self._genKey(idx)
         self._extraKeys[idx] = self._keys[keyCode] = partial(self.__handleAmmoPressed, intCD)
-        tooltipText = self.__makeShellTooltip(descriptor, int(round(gunSettings.getPiercingPower(intCD))), gunSettings.getShotSpeed(intCD), gunSettings.getMaxDistance(intCD))
+        tooltipText = self._makeShellTooltip(descriptor, int(round(gunSettings.getPiercingPower(intCD))), gunSettings.getShotSpeed(intCD), gunSettings.getMaxDistance(intCD))
         icon = descriptor.icon[0]
         iconName = icon.split('.png')[0]
         shellIconPath = backport.image(R_AMMO_ICON.dyn(iconName)())
@@ -268,7 +268,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         self._cds[idx] = intCD
         if item is None:
             bwKey, sfKey = self._genKey(idx)
-            self.as_addEquipmentSlotS(idx=idx, keyCode=bwKey, sfKeyCode=sfKey, quantity=0, timeRemaining=0, reloadingTime=0, iconPath='', tooltipText=EMPTY_EQUIPMENT_TOOLTIP, animation=ANIMATION_TYPES.NONE)
+            self.as_addEquipmentSlotS(idx=idx, keyCode=bwKey, sfKeyCode=sfKey, quantity=0, timeRemaining=0, reloadingTime=0, iconPath='', tooltipText=EMPTY_EQUIPMENT_TOOLTIP, animation=ANIMATION_TYPES.NONE, tag=None, stage=EQUIPMENT_STAGES.NOT_RUNNING)
             snap = self._cds[self._EQUIPMENT_START_IDX:self._EQUIPMENT_END_IDX + 1]
             if snap == self.__emptyEquipmentsSlice:
                 self.as_showEquipmentSlotsS(False)
@@ -294,7 +294,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
             if idx == self._ABILITY_EQUIPMENT_IDX and self._getPanelSettings() in _DEFAULT_PANEL_SETTINGS:
                 self.as_addAbilityEquipmentSlotS(idx=idx, keyCode=bwKey, sfKeyCode=sfKey, quantity=quantity, timeRemaining=timeRemaining, reloadingTime=reloadingTime, iconPath=iconPath, tooltipText=toolTip, animation=animationType)
             else:
-                self.as_addEquipmentSlotS(idx=idx, keyCode=bwKey, sfKeyCode=sfKey, quantity=quantity, timeRemaining=timeRemaining, reloadingTime=reloadingTime, iconPath=iconPath, tooltipText=toolTip, animation=animationType)
+                self.as_addEquipmentSlotS(idx=idx, keyCode=bwKey, sfKeyCode=sfKey, quantity=quantity, timeRemaining=timeRemaining, reloadingTime=reloadingTime, iconPath=iconPath, tooltipText=toolTip, animation=animationType, tag=next(iter(tags), None), stage=item.getStage())
         return
 
     def _addOptionalDeviceSlot(self, idx, optDeviceInBattle):
@@ -316,7 +316,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         quantity = item.getQuantity()
         currentTime = item.getTimeRemaining()
         maxTime = item.getTotalTime()
-        self.as_setItemTimeQuantityInSlotS(idx, quantity, currentTime, maxTime, item.getAnimationType())
+        self.as_setItemTimeQuantityInSlotS(idx, quantity, currentTime, maxTime, item.getAnimationType(), item.getStage())
         bwKey, _ = self._genKey(idx)
         self._setKeyHandler(item, bwKey, idx)
         self._updateEquipmentGlow(idx, item)
@@ -546,7 +546,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
             sfKey = getScaleformKey(bwKey)
         return (bwKey, sfKey)
 
-    def __makeShellTooltip(self, descriptor, piercingPower, shotSpeed, maxDistance):
+    def _makeShellTooltip(self, descriptor, piercingPower, shotSpeed, maxDistance):
         kind = descriptor.kind
         projSpeedFactor = vehicles.g_cache.commonConfig['miscParams']['projectileSpeedFactor']
         header = backport.text(R.strings.ingame_gui.shells_kinds.dyn(kind)(), caliber=backport.getNiceNumberFormat(descriptor.caliber), userString=descriptor.userString)
@@ -561,10 +561,6 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
             if descriptor.hasStun and self.lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():
                 stun = descriptor.stun
                 params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.stunDuration(), maxValue=backport.getNiceNumberFormat(stun.stunDuration)))
-            if descriptor.kind == SHELL_TYPES.DELAYED_HE:
-                params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.explosionDelay(), value=backport.getNiceNumberFormat(descriptor.type.explosionDelay)))
-                delayedShellDescr = vehicles.getItemByCompactDescr(descriptor.type.delayedShell)
-                params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.explosionRadius(), value=backport.getNiceNumberFormat(delayedShellDescr.type.explosionRadius)))
             if maxDistance >= 0:
                 if kind == SHELL_TYPES.FLAME:
                     params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.flameMaxDistance(), value=backport.getNiceNumberFormat(maxDistance)))
@@ -661,7 +657,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
                 if ctrl is not None:
                     ctrl.showVehicleError(error.key, error.ctx)
             else:
-                self.__collapseEquipmentSlot()
+                self._collapseEquipmentSlot()
             return
 
     def _handleEquipmentExpanded(self, intCD):
@@ -874,7 +870,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         self.as_expandEquipmentSlotS(index, slots)
         self.app.registerGuiKeyHandler(self)
 
-    def __collapseEquipmentSlot(self):
+    def _collapseEquipmentSlot(self):
         self.as_collapseEquipmentSlotS()
         self.app.unregisterGuiKeyHandler(self)
 
@@ -949,3 +945,9 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         description = '\n\n'.join((description, usageStr))
         toolTip = TOOLTIP_FORMAT.format(ability.userString, description)
         return toolTip
+
+    def clearEquipmentGlow(self, equipmentIndex, cancelCallback=True):
+        return self.__clearEquipmentGlow(equipmentIndex, cancelCallback)
+
+    def getEquipmentsGlowCallbacks(self):
+        return self.__equipmentsGlowCallbacks

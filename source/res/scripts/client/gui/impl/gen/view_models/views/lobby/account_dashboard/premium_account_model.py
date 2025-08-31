@@ -14,16 +14,16 @@ class PremiumAccountModel(ViewModel):
     def setIsEnabled(self, value):
         self._setBool(0, value)
 
-    def getWotPremiumSecondsLeft(self):
+    def getPlusPremiumSecondsLeft(self):
         return self._getNumber(1)
 
-    def setWotPremiumSecondsLeft(self, value):
+    def setPlusPremiumSecondsLeft(self, value):
         self._setNumber(1, value)
 
-    def getWgPremiumSecondsLeft(self):
+    def getBasicPremiumSecondsLeft(self):
         return self._getNumber(2)
 
-    def setWgPremiumSecondsLeft(self, value):
+    def setBasicPremiumSecondsLeft(self, value):
         self._setNumber(2, value)
 
     def getXpBonus(self):
@@ -71,8 +71,8 @@ class PremiumAccountModel(ViewModel):
     def _initialize(self):
         super(PremiumAccountModel, self)._initialize()
         self._addBoolProperty('isEnabled', True)
-        self._addNumberProperty('wotPremiumSecondsLeft', 0)
-        self._addNumberProperty('wgPremiumSecondsLeft', 0)
+        self._addNumberProperty('plusPremiumSecondsLeft', 0)
+        self._addNumberProperty('basicPremiumSecondsLeft', 0)
         self._addNumberProperty('xpBonus', 50)
         self._addNumberProperty('creditBonus', 50)
         self._addNumberProperty('platoonBonus', 15)

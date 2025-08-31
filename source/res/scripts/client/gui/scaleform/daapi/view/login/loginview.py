@@ -37,7 +37,7 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.login_manager import ILoginManager
 from skeletons.helpers.statistics import IStatisticsCollector
-from wg_async import wg_async, wg_await
+from th_async import th_async, th_await
 _STATUS_TO_INVALID_FIELDS_MAPPING = defaultdict(lambda : INVALID_FIELDS.ALL_VALID, {LOGIN_STATUS.LOGIN_REJECTED_INVALID_PASSWORD: INVALID_FIELDS.LOGIN_PWD_INVALID,
  LOGIN_STATUS.LOGIN_REJECTED_ILLEGAL_CHARACTERS: INVALID_FIELDS.LOGIN_PWD_INVALID,
  LOGIN_STATUS.LOGIN_REJECTED_SERVER_NOT_READY: INVALID_FIELDS.SERVER_INVALID,
@@ -84,13 +84,13 @@ class LoginView(LoginPageMeta):
     def onSetRememberPassword(self, rememberUser):
         self._loginMode.setRememberPassword(rememberUser)
 
-    @wg_async
+    @th_async
     def onLogin(self, userName, password, serverName, isSocialToken2Login):
         if self._loginMode.showRememberServerWarning:
             builder = ResSimpleDialogBuilder()
             builder.setFlags(WindowFlags.DIALOG | WindowFlags.WINDOW_FULLSCREEN)
             builder.setMessagesAndButtons(R.strings.dialogs.dyn('loginToPeripheryAndRemember'))
-            success = yield wg_await(showSimple(builder.build(self)))
+            success = yield th_await(showSimple(builder.build(self)))
             if not success:
                 return
         self._loginMode.doLogin(userName, password, serverName, isSocialToken2Login)
@@ -298,7 +298,7 @@ class LoginView(LoginPageMeta):
     @adisp_process
     def __loginRejectedUpdateNeeded(self):
         success = yield DialogsInterface.showI18nConfirmDialog('updateNeeded')
-        if success and not BigWorld.wg_quitAndStartLauncher():
+        if success and not BigWorld.quitAndStartLauncher():
             self.as_setErrorMessageS(backport.text(R.strings.menu.login.status.launchernotfound()), INVALID_FIELDS.ALL_VALID)
 
     def __loginRejectedBan(self, responseData):
@@ -363,11 +363,11 @@ class LoginView(LoginPageMeta):
 
     def __checkUserInputState(self):
         self.__capsLockCallbackID = None
-        caps = BigWorld.wg_isCapsLockOn()
+        caps = BigWorld.isCapsLockOn()
         if self.__capsLockState != caps:
             self.__capsLockState = caps
             self.as_setCapsLockStateS(self.__capsLockState)
-        lang = BigWorld.wg_getLangCode()
+        lang = BigWorld.getLangCode()
         if self.__lang != lang:
             self.__lang = lang
             self.as_setKeyboardLangS(self.__lang)
@@ -384,9 +384,9 @@ class LoginView(LoginPageMeta):
         for window in self.__gui.windowsManager.findWindows(DialogPredicate):
             window.destroy()
 
-    @wg_async
+    @th_async
     def __showExitDialog(self):
-        isOk = yield wg_await(dialogs.quitGame(self.getParentWindow()))
+        isOk = yield th_await(dialogs.quitGame(self.getParentWindow()))
         if isOk:
             self.destroy()
             BigWorld.quit()

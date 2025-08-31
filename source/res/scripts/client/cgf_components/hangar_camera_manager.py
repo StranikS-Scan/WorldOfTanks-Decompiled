@@ -144,10 +144,6 @@ class HangarCameraManager(CGF.ComponentManager):
         self.__isPlatoon = False
         return
 
-    @classmethod
-    def getCameraMgrForCurrentSpace(cls):
-        return CGF.getManager(cls._hangarSpace.spaceID, HangarCameraManager) if cls._hangarSpace.spaceID else None
-
     @property
     def isActive(self):
         return self.__isActive
@@ -487,13 +483,12 @@ class HangarCameraManager(CGF.ComponentManager):
             self.__cam.movementHalfLifeMultiplier = movementHalfLifeMultiplier
             self.__cam.pivotPosition = shiftPivotLows + shiftPivotDistances
             self.__mouseMoveParams.setPivotShifts(shiftPivotLows, shiftPivotDistances)
+            targetPos = parentTransformComponent.worldTransform.translation
             if resetTransform:
-                targetPos = parentTransformComponent.worldTransform.translation
                 yaw = self.__normaliseAngle(orbitComponent.currentYaw + worldYaw + math.pi)
                 pitch = self.__normaliseAngle(orbitComponent.currentPitch + worldPitch)
                 distance = orbitComponent.currentDist
             else:
-                targetPos = Math.Matrix(self.__cam.target).translation
                 source = Math.Matrix(self.__cam.source)
                 yaw = self.__yawCameraFilter.toLimit(source.yaw)
                 pitch = math_utils.clamp(pitchConstraints[0], pitchConstraints[1], source.pitch)

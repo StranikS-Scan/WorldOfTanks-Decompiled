@@ -5,7 +5,7 @@ from abstract.mixins import Deprecated, Fortification, NoProgressBar
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK as _AB
 from gui.shared.gui_items.dossier.achievements import validators
 
-class BattleTestedAchievement(ClassProgressAchievement):
+class BattleTestedAchievement(Deprecated, ClassProgressAchievement):
     __slots__ = ()
 
     def __init__(self, dossier, value=None):
@@ -36,7 +36,7 @@ class GuardsmanAchievement(Deprecated, NoProgressBar, ClassProgressAchievement):
         return dossier.getRecordValue(_AB.HISTORICAL, 'weakVehiclesWins')
 
 
-class ForTacticalOperationsAchievement(ClassProgressAchievement):
+class ForTacticalOperationsAchievement(Deprecated, ClassProgressAchievement):
     __slots__ = ()
 
     def __init__(self, dossier, value=None):
@@ -287,7 +287,7 @@ class RankedDivisionFighterAchievement(ClassProgressAchievement):
         return dossier.getRecordValue(_AB.TOTAL, cls.__ACHIEVEMENT_NAME)
 
 
-class ReferralProgramClassAchievement(ClassProgressAchievement):
+class ReferralProgramClassAchievement(Deprecated, ClassProgressAchievement):
     __slots__ = ()
 
     def __init__(self, dossier, value=None):

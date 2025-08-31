@@ -15,8 +15,8 @@ from gui.impl import backport
 from gui.shared.events import CoolDownEvent
 from gui.shared.formatters import text_styles
 from gui.shared.view_helpers import CooldownHelper
-from gui.wgcg.clan.contexts import AcceptApplicationCtx, DeclineApplicationCtx, CreateInviteCtx, AccountsInfoCtx
-from gui.wgcg.settings import WebRequestDataType
+from gui.clientgw.clan.contexts import AcceptApplicationCtx, DeclineApplicationCtx, CreateInviteCtx, AccountsInfoCtx
+from gui.clientgw.settings import WebRequestDataType
 from helpers.i18n import makeString as _ms
 
 class ClanRequestsView(ClanRequestsViewMeta):
@@ -31,7 +31,7 @@ class ClanRequestsView(ClanRequestsViewMeta):
          WebRequestDataType.DECLINE_INVITE,
          WebRequestDataType.DECLINE_INVITES,
          WebRequestDataType.CLAN_INVITES,
-         WebRequestDataType.CLAN_MEMBERS_RATING], self._onCooldownHandle, CoolDownEvent.WGCG)
+         WebRequestDataType.CLAN_MEMBERS_RATING], self._onCooldownHandle, CoolDownEvent.CLIENTGW)
 
     @property
     def actualRequestsPaginator(self):
@@ -134,7 +134,7 @@ class ClanRequestsView(ClanRequestsViewMeta):
          self._packHeaderColumnData('personalRating', '', 98, CLANS.CLANINVITESWINDOW_TOOLTIPS_TABLE_REQUESTS_PERSONALRATING, RES_ICONS.MAPS_ICONS_STATISTIC_RATING24),
          self._packHeaderColumnData('battlesCount', '', 98, CLANS.CLANINVITESWINDOW_TOOLTIPS_TABLE_REQUESTS_BATTLESCOUNT, RES_ICONS.MAPS_ICONS_STATISTIC_BATTLES24),
          self._packHeaderColumnData('wins', '', 98, CLANS.CLANINVITESWINDOW_TOOLTIPS_TABLE_REQUESTS_WINS, RES_ICONS.MAPS_ICONS_STATISTIC_WINS24),
-         self._packHeaderColumnData('awgExp', '', 98, CLANS.CLANINVITESWINDOW_TOOLTIPS_TABLE_REQUESTS_AWGEXP, RES_ICONS.MAPS_ICONS_STATISTIC_AVGEXP24),
+         self._packHeaderColumnData('avgXP', '', 98, CLANS.CLANINVITESWINDOW_TOOLTIPS_TABLE_REQUESTS_AVGXP, RES_ICONS.MAPS_ICONS_STATISTIC_AVGEXP24),
          self._packHeaderColumnData('status', CLANS.CLANINVITESWINDOW_TABLE_STATUS, 160, CLANS.CLANINVITESWINDOW_TOOLTIPS_TABLE_REQUESTS_STATUS),
          self._packHeaderColumnData('actions', CLANS.CLANINVITESWINDOW_TABLE_ACTIONS, 140, CLANS.CLANINVITESWINDOW_TOOLTIPS_TABLE_REQUESTS_ACTIONS, enabled=False)]
 
@@ -167,7 +167,7 @@ class RequestDataProvider(ClanInvitesAbstractDataProvider):
          'personalRating': formatField(getter=item.getPersonalRating, formatter=backport.getIntegralFormat),
          'battlesCount': formatField(getter=item.getBattlesCount, formatter=backport.getIntegralFormat),
          'wins': formatField(getter=item.getBattlesPerformanceAvg, formatter=lambda value: backport.getNiceNumberFormat(value) + '%'),
-         'awgExp': formatField(getter=item.getBattleXpAvg, formatter=backport.getIntegralFormat),
+         'avgXP': formatField(getter=item.getBattleXpAvg, formatter=backport.getIntegralFormat),
          'status': {'text': self._makeInviteStateString(item),
                     'tooltip': self._makeTooltip(body=self._makeRequestTooltip(status=item.getStatus(), user=formatField(getter=item.getChangerName), date=formatField(getter=item.getUpdatedAt, formatter=formatters.formatShortDateShortTimeString)))},
          'canShowContextMenu': True,

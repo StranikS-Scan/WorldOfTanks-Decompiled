@@ -16,7 +16,8 @@ if typing.TYPE_CHECKING:
     from skeletons.gui.game_control import ISeasonProvider
 _MODENAME_TO_PO_FILE = {SELECTOR_BATTLE_TYPES.RANKED: 'ranked_battles',
  SELECTOR_BATTLE_TYPES.MAPBOX: 'mapbox',
- SELECTOR_BATTLE_TYPES.COMP7: 'comp7'}
+ SELECTOR_BATTLE_TYPES.COMP7: 'comp7',
+ SELECTOR_BATTLE_TYPES.EVENT: 'event'}
 
 @dependency.replace_none_kwargs(connectionMgr=IConnectionManager)
 def getTimeTableBlock(modeCtrl, modeName, leftPadding=0, connectionMgr=None):

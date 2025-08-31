@@ -29,6 +29,10 @@ from gui.impl.lobby.mode_selector.mode_selector_data_provider import ModeSelecto
 from gui.impl.lobby.mode_selector.popovers.random_battle_popover import RandomBattlePopover
 from gui.impl.lobby.mode_selector.sound_constants import MODE_SELECTOR_SOUND_SPACE
 from gui.impl.lobby.mode_selector.tooltips.simply_format_tooltip import SimplyFormatTooltipView
+from white_tiger.gui.impl.lobby.tooltips.wt_event_header_widget_tooltip_view import WtEventHeaderWidgetTooltipView
+from white_tiger.gui.impl.lobby.tooltips.wt_event_stamp_tooltip_view import WtEventStampTooltipView
+from white_tiger.gui.impl.lobby.tooltips.wt_event_ticket_tooltip_view import WtEventTicketTooltipView
+from white_tiger.gui.impl.gen.view_models.views.common.wt_common_consts import WTVehicleType
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.tooltip_window import SimpleTooltipContent
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
@@ -43,7 +47,7 @@ from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from uilogging.deprecated.bootcamp.constants import BC_LOG_KEYS, BC_LOG_ACTIONS
 from uilogging.deprecated.bootcamp.loggers import BootcampLogger
-from wg_async import wg_await, await_callback, wg_async, BrokenPromiseError, forwardAsFuture
+from th_async import th_await, await_callback, th_async, BrokenPromiseError, forwardAsFuture
 if typing.TYPE_CHECKING:
     from typing import Optional, Callable
     from gui.Scaleform.framework.application import AppEntry
@@ -64,14 +68,17 @@ _SIMPLE_TOOLTIP_IDS = [ModeSelectorTooltipsConstants.RANKED_CALENDAR_DAY_INFO_TO
  ModeSelectorTooltipsConstants.RANKED_BATTLES_BONUS_TOOLTIP,
  ModeSelectorTooltipsConstants.MAPBOX_CALENDAR_TOOLTIP,
  ModeSelectorTooltipsConstants.EPIC_BATTLE_CALENDAR_TOOLTIP,
- ModeSelectorTooltipsConstants.COMP7_CALENDAR_DAY_EXTENDED_INFO]
+ ModeSelectorTooltipsConstants.COMP7_CALENDAR_DAY_EXTENDED_INFO,
+ ModeSelectorTooltipsConstants.EVENT_BATTLES_CALENDAR_TOOLTIP]
 
 def _getTooltipByContentIdMap():
     return {R.views.lobby.battle_pass.tooltips.BattlePassNotStartedTooltipView(): BattlePassNotStartedTooltipView,
      R.views.lobby.battle_pass.tooltips.BattlePassCompletedTooltipView(): BattlePassCompletedTooltipView,
      R.views.lobby.battle_pass.tooltips.BattlePassInProgressTooltipView(): partial(BattlePassInProgressTooltipView, battleType=QUEUE_TYPE.RANDOMS),
      R.views.lobby.comp7.tooltips.MainWidgetTooltip(): MainWidgetTooltip,
-     R.views.lobby.comp7.tooltips.RankInactivityTooltip(): RankInactivityTooltip}
+     R.views.lobby.comp7.tooltips.RankInactivityTooltip(): RankInactivityTooltip,
+     R.views.white_tiger.lobby.tooltips.ProgressionEntryPointTooltip(): WtEventHeaderWidgetTooltipView,
+     R.views.white_tiger.lobby.tooltips.StampTooltipView(): WtEventStampTooltipView}
 
 
 registerModeSelectorTooltips(_SIMPLE_TOOLTIP_IDS, _getTooltipByContentIdMap())
@@ -153,6 +160,8 @@ class ModeSelectorView(ViewImpl):
             if not header:
                 return
             return SimplyFormatTooltipView(header, body)
+        elif contentID == R.views.white_tiger.lobby.tooltips.TicketTooltipView():
+            return WtEventTicketTooltipView(event.getArgument('wtVehicleType', WTVehicleType.BOSS.value))
         else:
             tooltipClass = self.__tooltipConstants.get(_CONTENT_TOOLTIPS_KEY, {}).get(contentID)
             return tooltipClass() if tooltipClass else None
@@ -279,7 +288,7 @@ class ModeSelectorView(ViewImpl):
         self.__isClickProcessing = event.ctx.get('isClickProcessing', False) if event is not None else False
         return
 
-    @wg_async
+    @th_async
     def __itemClickHandler(self, event):
         self.__isClickProcessing = True
         index = int(event.get('index'))
@@ -294,7 +303,7 @@ class ModeSelectorView(ViewImpl):
                     if not navigationPossible:
                         self.__isClickProcessing = False
                         return
-                yield wg_await(forwardAsFuture(modeSelectorItem.handleClick()))
+                yield th_await(forwardAsFuture(modeSelectorItem.handleClick()))
             except BrokenPromiseError:
                 _logger.debug('%s got BrokenPromiseError during __itemClickHandler.')
 

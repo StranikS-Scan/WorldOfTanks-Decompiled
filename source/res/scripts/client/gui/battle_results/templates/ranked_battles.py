@@ -58,11 +58,10 @@ RANKED_RESULTS_BLOCK = base.DictMeta({'title': text_styles.promoTitle(backport.t
  'rightData': {},
  'animationEnabledLabel': text_styles.main(backport.text(R.strings.ranked_battles.rankedBattlesBattleResults.animationCheckBoxLabel())),
  'animationEnabled': True,
- 'showWidgetAnimation': True,
+ 'showWidgetAnimation': False,
  'statusText': '',
  'state': None})
 RANKED_ENABLE_ANIMATION_BLOCK = ranked.RankedResultsEnableAnimation('animationEnabled')
-RANKED_SHOW_WIDGET_BLOCK = ranked.RankedResultsShowWidgetAnimation('showWidgetAnimation')
 RANKED_RESULTS_STATUS_BLOCK = ranked.RankedResultsStatusBlock('statusText')
 RANKED_RESULTS_STATE_BLOCK = ranked.RankedResultsStateBlock('state')
 _RANKED_RESULTS_TEAMS_VO_META = base.DictMeta({'leftData': {},

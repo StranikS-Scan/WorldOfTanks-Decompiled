@@ -13,7 +13,7 @@ from story_mode.gui.story_mode_gui_constants import VIEW_ALIAS
 from story_mode.skeletons.story_mode_controller import IStoryModeController
 from story_mode.uilogging.story_mode.consts import LogWindows, LogButtons
 from story_mode.uilogging.story_mode.loggers import WindowLogger
-from wg_async import wg_async, wg_await
+from th_async import th_async, th_await
 from gui.Scaleform.daapi.view.battle.shared.ingame_menu import IngameMenu
 from gui.Scaleform.genConsts.INTERFACE_STATES import INTERFACE_STATES
 from helpers import dependency
@@ -26,12 +26,12 @@ class StoryModeIngameMenu(IngameMenu):
         super(StoryModeIngameMenu, self).__init__(ctx)
         self._uiLogger = WindowLogger(LogWindows.ESCAPE_MENU)
 
-    @wg_async
+    @th_async
     def quitBattleClick(self):
         self.as_setVisibilityS(False)
         self._uiLogger.logClick(LogButtons.QUIT)
         confirmExitDialog = showLeaverReplayWindow if BattleReplay.isPlaying() else self._openConfirmExitDialog
-        wantToExit = yield wg_await(confirmExitDialog())
+        wantToExit = yield th_await(confirmExitDialog())
         if wantToExit:
             self._uiLogger.logClick(LogButtons.SKIP)
             self._storyModeCtrl.skipOnboarding()
@@ -95,10 +95,10 @@ class StoryModeIngameMenu(IngameMenu):
              INGAMEMENU_CONSTANTS.CANCEL)
         self.as_setMenuButtonsS(buttons)
 
-    @wg_async
+    @th_async
     def _openConfirmExitDialog(self):
         window = showResDialogWindow(title=R.strings.sm_battle.confirmExit.title(), confirm=R.strings.sm_battle.confirmExit.exit(), cancel=R.strings.sm_battle.confirmExit.stay())
-        result = yield wg_await(window)
+        result = yield th_await(window)
         raise AsyncReturn(result)
 
     @property

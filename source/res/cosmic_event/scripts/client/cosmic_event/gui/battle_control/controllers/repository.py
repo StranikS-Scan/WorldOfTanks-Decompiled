@@ -7,6 +7,7 @@ from cosmic_event.gui.battle_control.controllers.ingame_help_ctrl import CosmicI
 from gui.battle_control.controllers import arena_load_ctrl, consumables, feedback_adaptor, msgs_ctrl, period_ctrl, vehicle_state_ctrl, view_points_ctrl, anonymizer_fakes_ctrl, prebattle_setups_ctrl, debug_ctrl
 from gui.battle_control.controllers.appearance_cache_ctrls.default_appearance_cache_ctrl import DefaultAppearanceCacheController
 from gui.battle_control.controllers.repositories import SharedControllersRepository, _ControllersRepositoryByBonuses
+from gui.battle_control.controllers.sound_ctrls.vehicle_hit_sound_ctrl import VehicleHitSound
 
 class CosmicSharedControllersRepository(SharedControllersRepository):
     __slots__ = ()
@@ -44,4 +45,5 @@ class CosmicDynamicControllersRepository(_ControllersRepositoryByBonuses):
         repository.addViewController(debug_ctrl.DebugController(), setup)
         repository.addArenaController(DefaultAppearanceCacheController(setup), setup)
         repository.addViewController(CosmicBattleHintsController(), setup)
+        repository.addController(VehicleHitSound())
         return repository

@@ -10,7 +10,7 @@ from gui.clans.clan_helpers import ClanListener, showClanInviteSystemMsg
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.view_helpers import UsersInfoHelper
-from gui.wgcg.clan import contexts as clan_ctx
+from gui.clientgw.clan import contexts as clan_ctx
 from helpers import i18n
 from messenger.m_constants import USER_TAG
 

@@ -10,6 +10,9 @@ class DualGunPanelMeta(BaseDAAPIComponent):
     def as_setViewS(self, viewId):
         return self.flashObject.as_setView(viewId) if self._isDAAPIInited() else None
 
+    def as_updateLayoutS(self, x, y):
+        return self.flashObject.as_updateLayout(x, y) if self._isDAAPIInited() else None
+
     def as_setVisibleS(self, visible):
         return self.flashObject.as_setVisible(visible) if self._isDAAPIInited() else None
 

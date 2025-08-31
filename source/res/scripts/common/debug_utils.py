@@ -12,12 +12,12 @@ from functools import wraps
 from collections import defaultdict
 from warnings import warn_explicit
 from traceback import format_exception
-from constants import IS_CLIENT, IS_CELLAPP, IS_BASEAPP, CURRENT_REALM, IS_DEVELOPMENT, IS_BOT
+from constants import IS_CLIENT, IS_CELLAPP, IS_BASEAPP, CURRENT_REALM, IS_DEVELOPMENT, IS_BOT, GAME_ROOT_DIR_NAME
 from constants import LEAKS_DETECTOR_MAX_EXECUTION_TIME
 from contextlib import contextmanager
 from threading import RLock
 from soft_exception import SoftException
-_src_file_trim_to = re.compile('res/(?:wot|wot_ext)/(?:.*/)?scripts/')
+_src_file_trim_to = re.compile('res/(?:%s|%s_ext)/(?:.*/)?scripts/' % (GAME_ROOT_DIR_NAME, GAME_ROOT_DIR_NAME))
 _g_logMapping = {}
 _g_logLock = RLock()
 GCDUMP_CROWBAR_SWITCH = False

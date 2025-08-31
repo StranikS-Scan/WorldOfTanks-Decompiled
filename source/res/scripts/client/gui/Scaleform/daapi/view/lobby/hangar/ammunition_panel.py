@@ -144,17 +144,14 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
             self.update()
 
     def __applyCustomizationNewCounter(self, vehicle):
-        if vehicle.isCustomizationEnabled() and not self.__bootcampCtrl.isInBootcamp():
+        if vehicle.isCustomizationEnabled() and not self.__bootcampCtrl.isInBootcamp() and self.__limitedUIController.isRuleCompleted(LuiRules.C7N_BUBBLE):
             availableItemTypes = getItemTypesAvailableForVehicle()
             itemsFilter = lambda item: self.__filterAvailableCustomizations(item, vehicle)
             counter = vehicle.getC11nItemsNoveltyCounter(self.__itemsCache.items, itemTypes=availableItemTypes, itemFilter=itemsFilter)
             serverSettings = self.__settingsCore.serverSettings
             progressiveItemsViewVisited = serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_PROGRESSION_VIEW_HINT)
-            if not progressiveItemsViewVisited and not self.__limitedUIController.isRuleCompleted(LuiRules.C7N_PROGRESSION_HINT):
+            if not progressiveItemsViewVisited:
                 progressiveItemsViewVisited = True
-                serverSettings.setOnceOnlyHintsSettings({OnceOnlyHints.C11N_PROGRESSION_VIEW_HINT: True,
-                 OnceOnlyHints.C11N_EDITABLE_STYLES_HINT: True,
-                 OnceOnlyHints.C11N_PROGRESSION_REQUIRED_STYLES_HINT: True})
             if not progressiveItemsViewVisited and isVehicleCanBeCustomized(vehicle, GUI_ITEM_TYPE.PROJECTION_DECAL):
                 counter += 1
             counter += getEditableStylesExtraNotificationCounter()

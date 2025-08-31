@@ -225,7 +225,7 @@ class ArenaPeriodController(IArenaPeriodController, ViewComponentsController):
 
     def _doNotify(self):
         if not self._isNotified:
-            BigWorld.WGWindowsNotifier.onBattleBeginning()
+            BigWorld.WindowsNotifier.onBattleBeginning()
             self._isNotified = True
 
     def _updateCountdown(self, timeLeft):

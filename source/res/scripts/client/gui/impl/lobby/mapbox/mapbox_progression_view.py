@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/mapbox/mapbox_progression_view.py
 import logging
 from ArenaType import g_geometryNamesToIDs
-from wg_async import wg_async, wg_await
+from th_async import th_async, th_await
 from constants import QUEUE_TYPE
 from frameworks.wulf import ViewSettings, ViewFlags, WindowStatus
 from frameworks.wulf.gui_constants import ViewStatus, WindowLayer
@@ -64,11 +64,11 @@ class MapboxProgressionView(ViewImpl):
         tooltip = getMapboxRewardTooltip(event, self.__tooltips, self.getParentWindow())
         return tooltip or super(MapboxProgressionView, self).createToolTip(event)
 
-    @wg_async
+    @th_async
     def _initialize(self, *args, **kwargs):
         super(MapboxProgressionView, self)._initialize(*args, **kwargs)
         Waiting.show('loadContent')
-        result = yield wg_await(self.__mapboxController.forceUpdateProgressData())
+        result = yield th_await(self.__mapboxController.forceUpdateProgressData())
         Waiting.hide('loadContent')
         if self.viewStatus in (ViewStatus.DESTROYING, ViewStatus.DESTROYED):
             return

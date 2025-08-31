@@ -135,7 +135,7 @@ class LobbyEntry(AppEntry):
     def _setup(self):
         self.movie.backgroundAlpha = 0.0
         self.movie.setFocused(SCALEFORM_SWF_PATH_V3)
-        BigWorld.wg_setRedefineKeysMode(True)
+        BigWorld.setRedefineKeysMode(True)
 
     def _loadWaiting(self):
         self._containerMgr.load(SFViewLoadParams(VIEW_ALIAS.WAITING))

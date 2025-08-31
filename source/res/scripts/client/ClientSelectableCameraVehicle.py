@@ -168,7 +168,7 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
     def __createFakeShadow(self, model):
         if self.__fakeShadowModel is None:
             self.__fakeShadowModel = model
-            self.__shadowModelFashion = BigWorld.WGTextureFashion()
+            self.__shadowModelFashion = BigWorld.TextureFashion()
             BigWorld.addModel(self.__fakeShadowModel, self.spaceID)
             self.__fakeShadowModel.fashion = self.__shadowModelFashion
         self.__updateFakeShadowAccordingToAppearance()

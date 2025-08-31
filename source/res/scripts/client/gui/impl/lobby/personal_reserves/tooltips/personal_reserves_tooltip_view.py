@@ -14,7 +14,7 @@ from skeletons.gui.web import IWebController
 from uilogging.personal_reserves.logging_constants import PersonalReservesLogKeys, PersonalReservesLogTooltips
 from uilogging.personal_reserves.loggers import PersonalReservesMetricsLogger
 if typing.TYPE_CHECKING:
-    from gui.wgcg.web_controller import WebController
+    from gui.clientgw.web_controller import WebController
     from gui.goodies.goodies_cache import GoodiesCache
     from gui.game_control.BoostersController import BoostersController
 

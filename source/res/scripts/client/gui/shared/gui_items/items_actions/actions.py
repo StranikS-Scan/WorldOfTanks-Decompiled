@@ -6,7 +6,7 @@ from functools import partial
 from itertools import chain
 import typing
 from typing import Callable
-import wg_async as future_async
+import th_async as future_async
 from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
@@ -581,7 +581,7 @@ class AmmunitionBuyAndInstall(AsyncGUIItemAction):
         super(AmmunitionBuyAndInstall, self).__init__()
 
     @adisp_async
-    @future_async.wg_async
+    @future_async.th_async
     def _confirm(self, callback):
         if self._changedItems and _needExchangeForBuy(sum([ item.getBuyPrice().price for item in self._changedItems if not item.isInInventory ], ZERO_MONEY)):
             startState = BuyAndExchangeStateEnum.EXCHANGE_CONTENT
@@ -592,7 +592,7 @@ class AmmunitionBuyAndInstall(AsyncGUIItemAction):
         if self.__confirmOnlyExchange and startState != BuyAndExchangeStateEnum.EXCHANGE_CONTENT:
             callback(True)
         else:
-            result = yield future_async.wg_await(shared_events.showTankSetupConfirmDialog(items=self._changedItems, vehicle=self._vehicle, startState=startState))
+            result = yield future_async.th_await(shared_events.showTankSetupConfirmDialog(items=self._changedItems, vehicle=self._vehicle, startState=startState))
             callback(result.result[0] if not result.busy else False)
 
 
@@ -656,7 +656,7 @@ class BuyAndInstallShells(AsyncGUIItemAction):
         callback(result)
 
     @adisp_async
-    @future_async.wg_async
+    @future_async.th_async
     def _confirm(self, callback):
         if _needExchangeForBuy(self.__price.price):
             startState = BuyAndExchangeStateEnum.EXCHANGE_CONTENT
@@ -667,7 +667,7 @@ class BuyAndInstallShells(AsyncGUIItemAction):
         if self.__confirmOnlyExchange and startState != BuyAndExchangeStateEnum.EXCHANGE_CONTENT:
             callback(True)
         else:
-            result = yield future_async.wg_await(shared_events.showRefillShellsDialog(price=self.__price, shells=self.__vehicle.shells.layout.getItems(), startState=startState))
+            result = yield future_async.th_await(shared_events.showRefillShellsDialog(price=self.__price, shells=self.__vehicle.shells.layout.getItems(), startState=startState))
             callback(result.result[0] if not result.busy else False)
 
 
@@ -686,14 +686,14 @@ class VehicleRepairAction(AsyncGUIItemAction):
         callback(result)
 
     @adisp_async
-    @future_async.wg_async
+    @future_async.th_async
     def _confirm(self, callback):
         if self.__vehicle.repairCost > 0:
             price = Money(credits=self.__vehicle.repairCost)
             startState = BuyAndExchangeStateEnum.EXCHANGE_CONTENT if _needExchangeForBuy(price) else None
         else:
             startState = BuyAndExchangeStateEnum.BUY_NOT_REQUIRED
-        result = yield future_async.wg_await(shared_events.showNeedRepairDialog(vehicle=self.__vehicle, startState=startState, wrappedViewClass=self.__wrappedViewClass, repairClazz=self.__repairClazz))
+        result = yield future_async.th_await(shared_events.showNeedRepairDialog(vehicle=self.__vehicle, startState=startState, wrappedViewClass=self.__wrappedViewClass, repairClazz=self.__repairClazz))
         callback(result.result if not result.busy else False)
         return
 
@@ -913,7 +913,7 @@ class BuyAndActivateBooster(ActivateBoosterAction):
         callback(False)
 
     @adisp_async
-    @future_async.wg_async
+    @future_async.th_async
     def waitForClientUpdate(self, callback):
         _logger.debug('[BuyAndActivate] waiting for cache update')
         clientUpdated = True
@@ -1122,16 +1122,16 @@ class UpgradeOptDeviceAction(AsyncGUIItemAction):
         callback(result)
 
     @adisp_async
-    @future_async.wg_async
+    @future_async.th_async
     def _confirm(self, callback):
         from gui.impl.dialogs import dialogs
         if self.__device.isModernized:
             confirmDialog = partial(dialogs.modernizedDeviceUpgradeConfirm, vehicle=self.__vehicle, onDeconstructed=self.__onDeconstructed)
         else:
             confirmDialog = dialogs.trophyDeviceUpgradeConfirm
-        result, data = yield future_async.wg_await(confirmDialog(self.__device, parent=self.__parent))
+        result, data = yield future_async.th_await(confirmDialog(self.__device, parent=self.__parent))
         if result and data and data.get('needMoreCurrency', False):
-            exchangeResult = yield future_async.wg_await(dialogs.showExchangeToUpgradeDeviceDialog(device=self.__device, parent=self.__parent))
+            exchangeResult = yield future_async.th_await(dialogs.showExchangeToUpgradeDeviceDialog(device=self.__device, parent=self.__parent))
             callback(not exchangeResult.busy and exchangeResult.result)
         else:
             callback(result)
@@ -1160,7 +1160,7 @@ class DeconstructOptDevice(AsyncGUIItemAction):
         return
 
     @adisp_async
-    @future_async.wg_async
+    @future_async.th_async
     def _confirm(self, callback):
         isOk, count = yield showDeconstructionDeviceDialog(self.__module.intCD, fromVehicle=self.__vehicle is not None)
         self.__deconstructStorageProcessor.count = count
@@ -1250,9 +1250,9 @@ class DeconstructMultOptDevice(AsyncGUIItemAction):
         return
 
     @adisp_async
-    @future_async.wg_async
+    @future_async.th_async
     def _confirm(self, callback):
-        isOk, _ = yield future_async.wg_await(showDeconstructionMultDeviceDialog)(self.ctx)
+        isOk, _ = yield future_async.th_await(showDeconstructionMultDeviceDialog)(self.ctx)
         callback(isOk)
 
     def __sortItemsKey(self, item):
@@ -1277,12 +1277,12 @@ class InstallBattleAbilities(AsyncGUIItemAction):
         callback(result)
 
     @adisp_async
-    @future_async.wg_async
+    @future_async.th_async
     def _confirm(self, callback):
         if not self.__setupItems:
             callback(True)
         else:
-            dialogResult = yield future_async.wg_await(shared_events.showBattleAbilitiesConfirmDialog(items=self.__setupItems, withInstall=bool(self.__setupItems), vehicleType=self.__vehicle.type, applyForAllVehiclesByType=self.__classVehs))
+            dialogResult = yield future_async.th_await(shared_events.showBattleAbilitiesConfirmDialog(items=self.__setupItems, withInstall=bool(self.__setupItems), vehicleType=self.__vehicle.type, applyForAllVehiclesByType=self.__classVehs))
             if dialogResult is None or dialogResult.busy:
                 callback(False)
             isOK, _ = dialogResult.result
@@ -1320,7 +1320,7 @@ class RemoveOptionalDevice(AsyncGUIItemAction):
         self.__removeProcessor = OptDeviceInstaller(self.__vehicle, self.__device, self.__slotID, install=False, allSetups=self.__everywhere, financeOperation=not self.__destroy and self.__everywhere, skipConfirm=True)
 
     @adisp_async
-    @future_async.wg_async
+    @future_async.th_async
     def _confirm(self, callback):
         isFreeToDemount = self.__wotPlusController.isFreeToDemount(self.__device)
         if self.__device.isRemovable:
@@ -1403,9 +1403,9 @@ class DiscardPostProgressionPairs(AsyncGUIItemAction):
         callback(result)
 
     @adisp_async
-    @future_async.wg_async
+    @future_async.th_async
     def _confirm(self, callback):
-        result = yield future_async.wg_await(shared_events.showDestroyPairModificationsDialog)(self.__vehicle, self.__stepIDs)
+        result = yield future_async.th_await(shared_events.showDestroyPairModificationsDialog)(self.__vehicle, self.__stepIDs)
         callback(result.result[0] if not result.busy else False)
 
 
@@ -1425,9 +1425,9 @@ class PurchasePostProgressionPair(AsyncGUIItemAction):
         callback(result)
 
     @adisp_async
-    @future_async.wg_async
+    @future_async.th_async
     def _confirm(self, callback):
-        result = yield future_async.wg_await(shared_events.showPostProgressionPairModDialog)(self.__vehicle, self.__stepID, self.__modificationID)
+        result = yield future_async.th_await(shared_events.showPostProgressionPairModDialog)(self.__vehicle, self.__stepID, self.__modificationID)
         callback(result.result[0] if not result.busy else False)
 
 
@@ -1446,9 +1446,9 @@ class PurchasePostProgressionSteps(AsyncGUIItemAction):
         callback(result)
 
     @adisp_async
-    @future_async.wg_async
+    @future_async.th_async
     def _confirm(self, callback):
-        result = yield future_async.wg_await(shared_events.showPostProgressionResearchDialog)(self.__vehicle, self.__stepIDs)
+        result = yield future_async.th_await(shared_events.showPostProgressionResearchDialog)(self.__vehicle, self.__stepIDs)
         callback(result.result[0] if not result.busy else False)
 
 
@@ -1468,14 +1468,14 @@ class SetEquipmentSlotType(AsyncGUIItemAction):
         callback(result)
 
     @adisp_async
-    @future_async.wg_async
+    @future_async.th_async
     def _confirm(self, callback):
         if self.__uiLoader.windowsManager.getViewByLayoutID(layoutID=R.views.lobby.common.SelectSlotSpecDialog()):
             callback(False)
             return
         Waiting.show('loadModalWindow', softStart=True)
         from gui.impl.lobby.common.select_slot_spec_dialog import showDialog
-        result = yield future_async.wg_await(showDialog(self.__vehicle))
+        result = yield future_async.th_await(showDialog(self.__vehicle))
         if result.busy:
             callback(False)
         else:

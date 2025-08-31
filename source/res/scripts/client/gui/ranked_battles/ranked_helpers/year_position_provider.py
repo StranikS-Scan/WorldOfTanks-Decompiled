@@ -6,7 +6,7 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import RANKED_YEAR_POSITION
 from adisp import adisp_process
 import constants
-from gui.wgcg.rank.contexts import RankedYearPositionCtx
+from gui.clientgw.rank.contexts import RankedYearPositionCtx
 from gui.ranked_battles.constants import YEAR_STRIPE_CLIENT_TOKEN, YEAR_STRIPE_SERVER_TOKEN
 from helpers import dependency, isPlayerAccount
 from helpers.time_utils import ONE_MINUTE

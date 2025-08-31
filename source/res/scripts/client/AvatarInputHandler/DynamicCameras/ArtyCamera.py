@@ -143,7 +143,7 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         return
 
     def enable(self, targetPos, saveDist, switchToPos=None, switchToPlace=None):
-        BigWorld.wg_trajectory_drawer().setStrategicMode(False)
+        BigWorld.trajectory_drawer().setStrategicMode(False)
         self.__prevTime = 0.0
         if switchToPlace == SwitchToPlaces.TO_TRANSITION_DIST:
             self.__camDist = math_utils.clamp(self._cfg['distRange'][0], self._cfg['distRange'][1], self._cfg['transitionDist'])
@@ -307,7 +307,7 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
 
     def __updateTrajectoryDrawer(self):
         shotDescr = BigWorld.player().getVehicleDescriptor().shot
-        BigWorld.wg_trajectory_drawer().setParams(shotDescr.maxDistance, Vector3(0, -shotDescr.gravity, 0), self.__aimOffset)
+        BigWorld.trajectory_drawer().setParams(shotDescr.maxDistance, Vector3(0, -shotDescr.gravity, 0), self.__aimOffset)
 
     def __updateTime(self):
         curTime = BigWorld.timeExact()

@@ -8,7 +8,7 @@ from gui.impl.gen.view_models.views.lobby.crew.common.crew_widget_slot_model imp
 class CrewWidgetModel(ViewModel):
     __slots__ = ('onSlotClick', 'onChangeCrewClick', 'onDogMoreInfoClick')
 
-    def __init__(self, properties=12, commands=3):
+    def __init__(self, properties=13, commands=3):
         super(CrewWidgetModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -89,6 +89,12 @@ class CrewWidgetModel(ViewModel):
     def setIsAcceleratedTraining(self, value):
         self._setBool(11, value)
 
+    def getIsExtended(self):
+        return self._getBool(12)
+
+    def setIsExtended(self, value):
+        self._setBool(12, value)
+
     def _initialize(self):
         super(CrewWidgetModel, self)._initialize()
         self._addViewModelProperty('buttonsBar', ButtonsBarModel())
@@ -103,6 +109,7 @@ class CrewWidgetModel(ViewModel):
         self._addNumberProperty('previousLayoutID', 0)
         self._addBoolProperty('isCrewLocked', False)
         self._addBoolProperty('isAcceleratedTraining', False)
+        self._addBoolProperty('isExtended', False)
         self.onSlotClick = self._addCommand('onSlotClick')
         self.onChangeCrewClick = self._addCommand('onChangeCrewClick')
         self.onDogMoreInfoClick = self._addCommand('onDogMoreInfoClick')

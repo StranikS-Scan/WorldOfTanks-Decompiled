@@ -92,7 +92,7 @@ class Manager(ILoginManager):
         isToken2Login = isSocialToken2Login or self._preferences['token2']
         authMethod = CONNECTION_METHOD.TOKEN2 if isToken2Login else CONNECTION_METHOD.BASIC
         serverName = self._getHost(authMethod, serverName)
-        self._preferences['session'] = BigWorld.wg_cpsalt(self._preferences['session'])
+        self._preferences['session'] = BigWorld.cpsalt(self._preferences['session'])
         self._preferences['password_length'] = len(password)
         self._preferences['remember_user'] = rememberUser
         self._preferences['login'] = email
@@ -118,7 +118,7 @@ class Manager(ILoginManager):
         else:
             loginParams = {'login': login,
              'token2': token2,
-             'session': BigWorld.wg_cpsalt(self._preferences['session']),
+             'session': BigWorld.cpsalt(self._preferences['session']),
              'temporary': str(int(not self._preferences['remember_user'])),
              'auth_method': CONNECTION_METHOD.TOKEN2}
             self.connectionMgr.initiateConnection(loginParams, '', serverName)

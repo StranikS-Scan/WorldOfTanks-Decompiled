@@ -6,7 +6,7 @@ from collections import defaultdict
 from BWUtil import AsyncReturn
 from debug_utils import LOG_CURRENT_EXCEPTION
 from adisp import adisp_process, isAsync
-from wg_async import wg_async, wg_await, await_callback
+from th_async import th_async, th_await, await_callback
 _logger = logging.getLogger(__name__)
 
 class EVENT_BUS_SCOPE(object):
@@ -88,9 +88,9 @@ class EventBus(object):
             return
         queue.remove(restriction)
 
-    @wg_async
+    @th_async
     def handleEvent(self, event, scope=EVENT_BUS_SCOPE.DEFAULT):
-        confirmed = yield wg_await(self.__verify(event, scope))
+        confirmed = yield th_await(self.__verify(event, scope))
         if not confirmed:
             return
         handlers = self.__handlers[scope][event.eventType]
@@ -110,7 +110,7 @@ class EventBus(object):
 
         self.__restrictions.clear()
 
-    @wg_async
+    @th_async
     def __verify(self, event, scope):
         restrictions = self.__restrictions[scope][event.eventType]
         for restriction in restrictions:

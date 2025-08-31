@@ -716,7 +716,7 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
             return
 
     def __analyzeClientSystem(self):
-        stats = BigWorld.wg_getClientStatistics()
+        stats = BigWorld.getClientStatistics()
         stats['graphicsEngine'] = self.__settingsCore.getSetting(GRAPHICS.RENDER_PIPELINE)
         self.__performanceGroup = EPIC_PERF_GROUP.LOW_RISK
         for groupName, conditions in PERFORMANCE_GROUP_LIMITS.iteritems():

@@ -6,7 +6,7 @@ import personal_missions
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import PersonalMissions
 from constants import MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL, DOSSIER_TYPE
-from dossiers2.ui.achievements import BADGES_BLOCK
+from dossiers2.ui.achievements import BADGES_BLOCK, ACHIEVEMENT_BLOCK
 from frameworks.wulf import Array
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.impl.lobby.personal_missions.personal_missions_window_events import showPersonalMissionsVideoRewardView
@@ -14,15 +14,19 @@ from gui.server_events import finders
 from gui.server_events.bonuses import DossierBonus
 from gui.server_events.event_items import PMOperation, PersonalMission
 from gui.server_events.finders import BRANCH_TO_OPERATION_IDS, CHAMPION_BADGE_AT_OPERATION_ID
+from gui.shared.gui_items import Vehicle
 from gui.shared.utils.scheduled_notifications import Notifiable
 from helpers import dependency, time_utils
 from personal_missions import PM_BRANCH
 from shared_utils import first
+from personal_missions_constants import PM3_FINAL_REWARD_VIEW_ID
 from skeletons.gui.game_control import IPersonalMissionsController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
 from helpers import int2roman
+_ACHIEVEMENT_WEIGHT = {ACHIEVEMENT_BLOCK.SINGLE: 0,
+ BADGES_BLOCK: 1}
 
 class PersonalMissionsController(IPersonalMissionsController):
     __eventsCache = dependency.descriptor(IEventsCache)
@@ -61,12 +65,10 @@ class PersonalMissionsController(IPersonalMissionsController):
             operation = self.getOperationById(operationId)
             if not operation or not operation.isCompleted():
                 continue
-            if settings.get(operationId, False):
-                continue
-            settings.setdefault(operationId, False)
-            settings[operationId] = True
-            showPersonalMissionsVideoRewardView(operationId)
+            self.openVideoRewardAndUpdateAccSettings(operationId, settings)
 
+        if all((self.getOperationById(operationId).isFullCompleted() for operationId in BRANCH_TO_OPERATION_IDS[PM_BRANCH.PERSONAL_MISSION_3])):
+            self.openVideoRewardAndUpdateAccSettings(PM3_FINAL_REWARD_VIEW_ID, settings)
         AccountSettings.setPersonalMissions(PersonalMissions.OPERATIONS_VIDEO_REWARDS_STATUS, settings)
 
     def getAllQuests(self):
@@ -256,14 +258,39 @@ class PersonalMissionsController(IPersonalMissionsController):
         lastPM3Operation = BRANCH_TO_OPERATION_IDS[PM_BRANCH.PERSONAL_MISSION_3][-1]
         pm3ChampionTokenQuestID = CHAMPION_BADGE_AT_OPERATION_ID[lastPM3Operation]
         championQuest = self.__eventsCache.getQuestByID(pm3ChampionTokenQuestID)
+        if not championQuest:
+            return []
         bonusList = []
-        if championQuest:
-            for name, value in championQuest.getRawBonuses().iteritems():
-                for (blockName, idx), data in value.get(DOSSIER_TYPE.ACCOUNT, {}).iteritems():
-                    if blockName == BADGES_BLOCK:
-                        bonusList.append(DossierBonus(name, {DOSSIER_TYPE.ACCOUNT: {(blockName, idx): data}}))
+        for name, value in championQuest.getRawBonuses().iteritems():
+            for (blockName, idx), data in value.get(DOSSIER_TYPE.ACCOUNT, {}).iteritems():
+                if blockName in _ACHIEVEMENT_WEIGHT:
+                    dossierData = {DOSSIER_TYPE.ACCOUNT: {(blockName, idx): data}}
+                    bonusList.append({'dossier': DossierBonus(name, dossierData),
+                     'weight': _ACHIEVEMENT_WEIGHT[blockName]})
 
-        return bonusList
+        sortedBonuses = sorted(bonusList, key=lambda x: x['weight'])
+        return [ item['dossier'] for item in sortedBonuses ]
+
+    def getVehiclesForChampionQuestPM3(self):
+        lastPM3Operation = BRANCH_TO_OPERATION_IDS[PM_BRANCH.PERSONAL_MISSION_3][-1]
+        pm3ChampionTokenQuestID = CHAMPION_BADGE_AT_OPERATION_ID[lastPM3Operation]
+        championQuest = self.__eventsCache.getQuestByID(pm3ChampionTokenQuestID)
+        vehicles = []
+        if championQuest:
+            vehicleBonuses = championQuest.getBonuses(bonusName='vehicles')
+            for vehicleBonus in vehicleBonuses:
+                for vehicle, _ in vehicleBonus.getVehicles():
+                    vehicles.append(vehicle)
+
+        return vehicles
+
+    @staticmethod
+    def openVideoRewardAndUpdateAccSettings(operationId, accSettings):
+        if accSettings.get(operationId, False):
+            return
+        accSettings.setdefault(operationId, False)
+        accSettings[operationId] = True
+        showPersonalMissionsVideoRewardView(operationId, addToQueue=True)
 
     def __onQuestsUpdated(self, diff):
         if any((questId.startswith('pm3') for questId in set(diff))):

@@ -12,18 +12,6 @@
   <xmlns:poland>	poland	</xmlns:poland>
   <xmlns:italy>	italy	</xmlns:italy>
   <xmlns:intunion>	intunion	</xmlns:intunion>
-  <xmlns:czech1>	ussr	</xmlns:czech1>
-  <xmlns:germany>	germany	</xmlns:germany>
-  <xmlns:czech0>	usa	</xmlns:czech0>
-  <xmlns:china>	china	</xmlns:china>
-  <xmlns:france>	france	</xmlns:france>
-  <xmlns:uk>	uk	</xmlns:uk>
-  <xmlns:japan>	japan	</xmlns:japan>
-  <xmlns:czech>	czech	</xmlns:czech>
-  <xmlns:sweden>	sweden	</xmlns:sweden>
-  <xmlns:poland>	poland	</xmlns:poland>
-  <xmlns:italy>	italy	</xmlns:italy>
-  <xmlns:intunion>	intunion	</xmlns:intunion>
   <itemGroup>
     <name>	attachments	</name>
     <userString>	#vehicle_customization:attachment/general	</userString>
@@ -769,6 +757,69 @@
       <hangarModelName>	vehicles/french/F133_Projet_57/Sleeve_hangar.prefab	</hangarModelName>
       <attachmentLogic>	prefab	</attachmentLogic>
       <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	31077	</id>
+      <name>	Ch19_121_3Dst_Spirit_anim	</name>
+      <modelName>	vehicles/chinese/Ch19_121/_skins/Ch19_121_3Dst_Spirit/Ch19_121_3Dst_Spirit_anim.prefab	</modelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+      <hangarModelName>	vehicles/chinese/Ch19_121/_skins/Ch19_121_3Dst_Spirit/Ch19_121_3Dst_Spirit_anim_hangar.prefab	</hangarModelName>
+    </attachment>
+    <attachment>
+      <id>	31078	</id>
+      <name>	G125_Spz_57_Rh_3Dst_Veilflower_anim	</name>
+      <modelName>	vehicles/german/G125_Spz_57_Rh/_skin/G125_Spz_57_Rh_3Dst_Veilflower/G125_Spz_57_Rh_3Dst_Veilflower_anim.prefab	</modelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <hangarModelName>	vehicles/german/G125_Spz_57_Rh/_skin/G125_Spz_57_Rh_3Dst_Veilflower/G125_Spz_57_Rh_3Dst_Veilflower_hangar.prefab	</hangarModelName>
+      <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	31079	</id>
+      <name>	GB86_Centurion_Action_X_3Dst_Phantom_anim	</name>
+      <modelName>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3Dst_Phantom/GB86_Centurion_Action_X_3Dst_Phantom_anim.prefab	</modelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+      <hangarModelName>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3Dst_Phantom/GB86_Centurion_Action_X_3Dst_Phantom_anim_hangar.prefab	</hangarModelName>
+    </attachment>
+    <attachment>
+      <id>	31081	</id>
+      <name>	sleeveEjection	</name>
+      <modelName>	vehicles/chinese/Ch63_STT_617Q/SleeveEjection.prefab	</modelName>
+      <hangarModelName>	vehicles/chinese/Ch63_STT_617Q/SleeveEjection_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	31082	</id>
+      <name>	G189_E100_02_anim	</name>
+      <modelName>	vehicles/german/G189_E100_02/G189_E100_02_anim.prefab	</modelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <hangarModelName>	vehicles/german/G189_E100_02/G189_E100_02_anim_hangar.prefab	</hangarModelName>
+      <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	31083	</id>
+      <name>	F133_Projet_57_Ampere	</name>
+      <modelName>	vehicles/french/F133_Projet_57_Ampere/F133_Projet_57_Ampere_anim.prefab	</modelName>
+      <hangarModelName>	vehicles/french/F133_Projet_57_Ampere/F133_Projet_57_Ampere_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	32000	</id>
+      <name>	R232_IS-7W	</name>
+      <modelName>	vehicles/russian/R232_IS-7W/R232_IS-7W_anim.prefab	</modelName>
+      <hangarModelName>	vehicles/russian/R232_IS-7W/R232_IS-7W_anim_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	32001	</id>
+      <name>	R232_IS-7W_idle	</name>
+      <initialVisibility>	true	</initialVisibility>
+      <modelName>	content/WtPrefabs/Boss2025Idle.prefab	</modelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
     </attachment>
   </itemGroup>
   <itemGroup>

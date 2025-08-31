@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/sub_views/frontline_setup.py
 import typing
 from BWUtil import AsyncReturn
-from wg_async import wg_async, wg_await, await_callback
+from th_async import th_async, th_await, await_callback
 from gui.impl.lobby.tank_setup.tank_setup_sounds import playSound, TankSetupSoundEvents
 from gui.impl.lobby.tank_setup.configurations.epic_battle_ability import EpicBattleTabsController, EpicBattleDealPanel
 from gui.impl.lobby.tank_setup.sub_views.base_equipment_setup import BaseEquipmentSetupSubView
@@ -114,7 +114,7 @@ class EpicBattleSetupSubView(BaseEquipmentSetupSubView):
         self._interactor.revertSlot(slotID)
         self.update()
 
-    @wg_async
+    @th_async
     def canQuit(self, skipApplyAutoRenewal=None):
         if self._asyncActionLock.isLocked:
             raise AsyncReturn(False)
@@ -123,7 +123,7 @@ class EpicBattleSetupSubView(BaseEquipmentSetupSubView):
         hasEnoughPoints = self.__epicController.getSkillPoints() >= self.__totalPurchasePrice
         hasItemsToPurchase = self._interactor.hasChanged() and len(currentItems) == len(self.__pendingPurchaseSkillIds)
         if hasItemsToPurchase and hasEnoughPoints:
-            isOk = yield wg_await(self._asyncActionLock.tryAsyncCommand(self.__purchaseSelectedAbilities))
+            isOk = yield th_await(self._asyncActionLock.tryAsyncCommand(self.__purchaseSelectedAbilities))
             if isOk:
                 isOK = yield await_callback(self._onConfirm)(skipDialog=True)
                 if isOK:
@@ -139,7 +139,7 @@ class EpicBattleSetupSubView(BaseEquipmentSetupSubView):
                     self._interactor.revertSlot(slotID)
 
             self.update()
-            result = yield wg_await(super(EpicBattleSetupSubView, self).canQuit(skipApplyAutoRenewal))
+            result = yield th_await(super(EpicBattleSetupSubView, self).canQuit(skipApplyAutoRenewal))
         if result:
             self.__isCurrentlyActiveSubView = False
             self.__uiEpicBattleLogger.suspendAction(EpicBattleLogActions.VIEW_WATCHED.value)
@@ -234,7 +234,7 @@ class EpicBattleSetupSubView(BaseEquipmentSetupSubView):
     def __onPurchaseConfirmed(self, skillIds, callback):
         self._interactor.buyAbilities(skillIds, callback)
 
-    @wg_async
+    @th_async
     def __purchaseSelectedAbilities(self):
         result = True
         if self.__pendingPurchaseSkillIds:

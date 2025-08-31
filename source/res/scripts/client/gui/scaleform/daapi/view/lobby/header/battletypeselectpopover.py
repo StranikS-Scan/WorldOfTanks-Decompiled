@@ -63,6 +63,9 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
                 isSpecial = True
             elif itemData == PREBATTLE_ACTION_NAME.COMP7:
                 tooltip, isSpecial = self.__getComp7AvailabilityData()
+            elif itemData in (PREBATTLE_ACTION_NAME.EVENT_BATTLE, PREBATTLE_ACTION_NAME.EVENT_SQUAD):
+                isSpecial = True
+                tooltip = TOOLTIPS_CONSTANTS.EVENT_BATTLES_SELECTOR_INFO
             result = {'isSpecial': isSpecial,
              'tooltip': tooltip}
             self._tooltip = tooltip

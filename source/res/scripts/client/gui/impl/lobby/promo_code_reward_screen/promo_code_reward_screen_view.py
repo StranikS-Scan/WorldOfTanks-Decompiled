@@ -31,7 +31,7 @@ from gui.shared.bonuses_sorter import bonusesSortKeyFunc
 from shared_utils import awaitNextFrame
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from wg_async import wg_async, AsyncEvent, AsyncScope, wg_await, TimeoutError
+from th_async import th_async, AsyncEvent, AsyncScope, th_await, TimeoutError
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Array
@@ -288,7 +288,7 @@ class PromoCodeRewardScreenViewWindow(LobbyNotificationWindow):
         self.__codeDescr = None
         return
 
-    @wg_async
+    @th_async
     def waitData(self, timeout):
         tokenDescr = parseToken(self.__token)
         if tokenDescr is None:
@@ -297,7 +297,7 @@ class PromoCodeRewardScreenViewWindow(LobbyNotificationWindow):
         try:
             try:
                 self.__codeDescr = None
-                yield wg_await(self.__waitData(tokenDescr.codeId), timeout)
+                yield th_await(self.__waitData(tokenDescr.codeId), timeout)
             except TimeoutError:
                 _logger.warning('TimeoutError due to waiting data for reward screen token %s', self.__token)
                 if self.__codeDescr is None:
@@ -312,9 +312,9 @@ class PromoCodeRewardScreenViewWindow(LobbyNotificationWindow):
     def getPromocodeDescr(self):
         return self.__codeDescr
 
-    @wg_async
+    @th_async
     def __waitData(self, codeId):
-        self.__codeDescr = yield wg_await(MetadataFetcher.fetch(codeId))
+        self.__codeDescr = yield th_await(MetadataFetcher.fetch(codeId))
         if self.__codeDescr is None:
             raise AsyncReturn(None)
         if not self.__codeDescr.title:
@@ -323,7 +323,7 @@ class PromoCodeRewardScreenViewWindow(LobbyNotificationWindow):
         if self.__codeDescr is not None and not self.__isQuestsDataReady(self.__codeDescr.quests):
             self._eventsCache.onSyncCompleted += partial(self.__onSyncCompleted, self.__codeDescr.quests)
             self.__questsDataReadyEvent.clear()
-            yield wg_await(self.__questsDataReadyEvent.wait())
+            yield th_await(self.__questsDataReadyEvent.wait())
         return
 
     def __onSyncCompleted(self, quests):

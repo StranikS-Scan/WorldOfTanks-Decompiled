@@ -10,7 +10,7 @@ from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from PlayerEvents import g_playerEvents
 from account_helpers.account_validator import ValidationCodes, InventoryVehiclesValidator, InventoryOutfitValidator, InventoryTankmenValidator
 from adisp import adisp_process
-import wg_async as future_async
+import th_async as future_async
 from constants import HAS_DEV_RESOURCES
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG
 from gui import SystemMessages, g_guiResetters, miniclient
@@ -103,7 +103,7 @@ class ServicesLocator(object):
         cls.clear()
 
 
-@future_async.wg_async
+@future_async.th_async
 def onAccountShowGUI(ctx):
     g_playerEvents.onLoadingMilestoneReached(Milestones.ENTER)
     Waiting.show('enter')
@@ -271,7 +271,7 @@ def init():
     g_paramsCache.init()
     g_prbLoader.init()
     g_clanCache.init()
-    BigWorld.wg_setScreenshotNotifyCallback(onScreenShotMade)
+    BigWorld.setScreenshotNotifyCallback(onScreenShotMade)
     if HAS_DEV_RESOURCES:
         try:
             from gui.development import init as dev_init
@@ -307,7 +307,7 @@ def fini():
     g_playerEvents.onCenterIsLongDisconnected -= onCenterIsLongDisconnected
     g_playerEvents.onServerReplayEntering -= onServerReplayEntering
     g_playerEvents.onServerReplayExiting -= onServerReplayExiting
-    BigWorld.wg_setScreenshotNotifyCallback(None)
+    BigWorld.setScreenshotNotifyCallback(None)
     if HAS_DEV_RESOURCES:
         try:
             from gui.development import fini as dev_fini
@@ -405,7 +405,7 @@ def __processEULA(_, callback=None):
     callback(True)
 
 
-@future_async.wg_async
+@future_async.th_async
 def __processValidator(validator, callback):
     code = yield future_async.await_callback(validator.validate)()
     if code != ValidationCodes.OK:
@@ -427,7 +427,7 @@ def __validateInventoryTankmen(_, callback=None):
     __processValidator(InventoryTankmenValidator(), callback)
 
 
-@future_async.wg_async
+@future_async.th_async
 def __cacheVehicles(_, callback=None):
     yield future_async.await_callback(ServicesLocator.itemsCache.items.getItemsAsync)(itemTypeID=GUI_ITEM_TYPE.VEHICLE, minPerTick=10, maxPerTick=100)
     callback(True)
@@ -451,7 +451,7 @@ def __requestDossier(_, callback=None):
     callback(True)
 
 
-@future_async.wg_async
+@future_async.th_async
 def __initializeHangarSpace(_, callback=None):
     premium = ServicesLocator.itemsCache.items.stats.isPremium
     if ServicesLocator.hangarSpace.inited:
@@ -482,7 +482,7 @@ def __initializeHangar(ctx=None, callback=None):
 def __processWebCtrl(_, callback=None):
     serverSettings = ServicesLocator.lobbyContext.getServerSettings()
     ServicesLocator.webCtrl.start()
-    if serverSettings.wgcg.getLoginOnStart() and not ServicesLocator.bootcamp.isInBootcamp():
+    if serverSettings.clientgw.getLoginOnStart() and not ServicesLocator.bootcamp.isInBootcamp():
         yield ServicesLocator.webCtrl.login()
     callback(True)
 

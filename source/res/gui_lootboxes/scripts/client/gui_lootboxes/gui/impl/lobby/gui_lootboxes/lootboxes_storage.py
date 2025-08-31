@@ -38,7 +38,7 @@ from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from uilogging.lootboxes import LootboxStorageLogger
-from wg_async import AsyncEvent
+from th_async import AsyncEvent
 if typing.TYPE_CHECKING:
     import Event
     from frameworks.state_machine import StringEvent

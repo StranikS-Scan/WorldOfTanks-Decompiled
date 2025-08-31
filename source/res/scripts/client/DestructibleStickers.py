@@ -8,7 +8,7 @@ class DestructibleStickers(object):
 
     def __init__(self, spaceID, model, nodeToAttach):
         self.__model = model
-        self.__stickerModel = BigWorld.WGStickerModel(spaceID)
+        self.__stickerModel = BigWorld.StickerModel(spaceID)
         self.__stickerModel.setLODDistance(1000.0)
         self.__stickerModel.setupSuperModel(model, math_utils.createIdentityMatrix())
         self.__nodeToAttach = nodeToAttach

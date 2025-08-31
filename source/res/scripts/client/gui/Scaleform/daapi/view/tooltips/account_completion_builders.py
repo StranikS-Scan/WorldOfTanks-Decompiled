@@ -18,7 +18,7 @@ class AccountCompletionTooltipData(ToolTipBaseData):
     def __init__(self, context):
         super(AccountCompletionTooltipData, self).__init__(context, TOOLTIPS_CONSTANTS.ACCOUNT_COMPLETION)
 
-    def getDisplayableData(self, email=None):
+    def getDisplayableData(self, email=None, *args, **kwargs):
         return DecoratedTooltipWindow(HangarTooltipView(email), useDecorator=False)
 
 

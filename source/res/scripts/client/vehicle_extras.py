@@ -130,12 +130,12 @@ class ShowShooting(EntityExtra):
             centerToGun.normalise()
             gunHeight = centerToGunDist * centerToGun.dot(upVec) / upVec.y
             gunPos.y -= gunHeight
-        distanceToWater = BigWorld.wg_collideWater(gunPos, gunPos + Math.Vector3(0, 1, 0), False)
+        distanceToWater = BigWorld.collideWater(gunPos, gunPos + Math.Vector3(0, 1, 0), False)
         if distanceToWater > -1:
             position = gunPos - Math.Vector3(0, distanceToWater, 0)
             matKind = material_kinds.getWaterMatKind()
         else:
-            testRes = BigWorld.wg_collideSegment(BigWorld.player().spaceID, gunPos + Math.Vector3(0, 0.5, 0), gunPos - Math.Vector3(0, 1.5, 0), 128)
+            testRes = BigWorld.collideSegment(BigWorld.player().spaceID, gunPos + Math.Vector3(0, 0.5, 0), gunPos - Math.Vector3(0, 1.5, 0), 128)
             if testRes is None:
                 return
             position = testRes.closestPoint
@@ -423,7 +423,7 @@ class BlinkingLaserSight(EntityExtra):
             gunPos = gunMatr.applyToOrigin()
             gunDir = gunMatr.applyToAxis(2)
             endPos = gunPos + gunDir * self._MAX_LASER_DISTANCE
-            collidePos = BigWorld.wg_collideDynamicStatic(vehicle.spaceID, gunPos, endPos, CollisionFlags.TRIANGLE_PROJECTILENOCOLLIDE, vehicle.id, -1, 0)
+            collidePos = BigWorld.collideDynamicStatic(vehicle.spaceID, gunPos, endPos, CollisionFlags.TRIANGLE_PROJECTILENOCOLLIDE, vehicle.id, -1, 0)
             data['isVehicleTakenAtGunPoint'] = args['isTakesAim'] or not self._shouldCollideTarget or collidePos[1]
             distanceToTarget = gunPos.distTo(collidePos[0]) if collidePos is not None else self._MAX_LASER_DISTANCE
             beamMode = args['beamMode']

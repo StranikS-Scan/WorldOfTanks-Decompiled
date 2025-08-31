@@ -5,7 +5,8 @@ import logging
 import constants
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import NEW_SETTINGS_COUNTER, KEY_SETTINGS
-from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS, SESSION_STATS, BattlePassStorageKeys, BattleCommStorageKeys, OnceOnlyHints, ScorePanelStorageKeys, SPGAim, GuiSettingsBehavior, NewYearStorageKeys, GRAPHICS, FEEDBACK, CONTOUR
+from account_helpers.settings_core.options import InterfaceScaleSetting
+from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS, SESSION_STATS, BattlePassStorageKeys, BattleCommStorageKeys, OnceOnlyHints, ScorePanelStorageKeys, SPGAim, GuiSettingsBehavior, NewYearStorageKeys, GRAPHICS, FEEDBACK, CONTOUR, SETTINGS_GROUP
 from adisp import adisp_process, adisp_async
 from debug_utils import LOG_DEBUG
 from gui.server_events.pm_constants import PM_TUTOR_FIELDS
@@ -1473,6 +1474,16 @@ def _migrateTo139(core, data, initialized):
     data[GUI_START_BEHAVIOR][GuiSettingsBehavior.RANKED_WELCOME_VIEW_SHOWED] = False
 
 
+def _migrateTo140(core, data, initialized):
+    interfaceScaleIndex = AccountSettings.getSettings(GRAPHICS.INTERFACE_SCALE)
+    oldScaleOptions = (InterfaceScaleSetting.AUTO_SCALE, 1.0, 2.0)
+    interfaceScaleIndex = interfaceScaleIndex if interfaceScaleIndex < len(oldScaleOptions) else InterfaceScaleSetting.AUTO_SCALE
+    AccountSettings.setSettings(GRAPHICS.INTERFACE_SCALE, oldScaleOptions[int(interfaceScaleIndex)])
+    newSettingsCounter = AccountSettings.getSettings(NEW_SETTINGS_COUNTER)
+    newSettingsCounter[SETTINGS_GROUP.GRAPHICS_SETTINGS]['ScreenSettings'].update({GRAPHICS.INTERFACE_SCALE: True})
+    AccountSettings.setSettings(NEW_SETTINGS_COUNTER, newSettingsCounter)
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -2023,6 +2034,10 @@ _versions = ((1,
   False),
  (139,
   _migrateTo139,
+  False,
+  False),
+ (140,
+  _migrateTo140,
   False,
   False))
 

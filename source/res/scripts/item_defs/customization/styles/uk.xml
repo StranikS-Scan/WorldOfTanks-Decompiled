@@ -1774,4 +1774,51 @@
       </itemFilters>
     </style>
   </itemGroup>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 3D styles 9-10 levels 8000g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB86_Centurion_Action_X	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	31399	</id>
+      <texture>	gui/maps/vehicles/styles/GB86_Centurion_Action_X_3Dst_Phantom.png	</texture>
+      <modelsSet>	GB86_Centurion_Action_X_3Dst_Phantom	</modelsSet>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <attachments>
+            <item>
+              <id>	31079	</id>
+              <slotId>	18001	</slotId>
+            </item>
+          </attachments>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <userString>	#vehicle_customization:GB86_Centurion_Action_X_3Dst_Phantom/name	</userString>
+      <description>	#vehicle_customization:GB86_Centurion_Action_X_3Dst_Phantom/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:GB86_Centurion_Action_X_3Dst_Phantom/longDescription	</longDescriptionSpecial>
+    </style>
+    <tags>	progression_required	</tags>
+    <maxNumber>	1	</maxNumber>
+  </itemGroup>
 </uk.xml>

@@ -57,7 +57,7 @@ class BanInfo(object):
         return self.getFirstActiveItem(game=game, components=components) is not None
 
 
-WGExtsInfo = namedtuple('WGExtsInfo', ('dbID', 'nickname', 'client', 'clan', 'ban'))
+ExtsInfo = namedtuple('ExtsInfo', ('dbID', 'nickname', 'client', 'clan', 'ban'))
 MucInfo = namedtuple('MucInfo', ('affiliation', 'role', 'statuses'))
 
 def makeClientInfo(*args):

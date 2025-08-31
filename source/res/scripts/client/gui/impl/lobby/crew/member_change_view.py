@@ -34,7 +34,7 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils.requesters import IShopRequester
 from uilogging.crew.loggers import CrewMemberChangeLogger
 from uilogging.crew.logging_constants import CrewViewKeys, LAYOUT_ID_TO_ITEM, CrewMemberChangeKeys, CrewMemberAdditionalInfo
-from wg_async import wg_async, wg_await
+from th_async import th_async, th_await
 
 class MemberChangeView(BaseCrewView, BaseTankmanListView):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -230,7 +230,7 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
         self.__filterState.state.update({FilterState.GROUPS.TANKMANROLE.value: {self.__requiredRole}})
         self.__filterState.reinit(self.__filterState.state)
 
-    @wg_async
+    @th_async
     @args2params(int)
     def _onTankmanSelected(self, tankmanID):
         if tankmanID == self.__tankmanId:
@@ -276,10 +276,10 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
     def __isChangeRoleDiscountAvailable(self):
         return self.__roleChangeDiscountPercent > 0
 
-    @wg_async
+    @th_async
     def __memberChangeConfirm(self, newTankman, vehicleNew):
         from gui.impl.dialogs.dialogs import showCrewMemberTankChangeDialog
-        result = yield wg_await(showCrewMemberTankChangeDialog(newTankman.invID, self.__currentVehicle, vehicleNew, parentViewKey=CrewViewKeys.MEMBER_CHANGE))
+        result = yield th_await(showCrewMemberTankChangeDialog(newTankman.invID, self.__currentVehicle, vehicleNew, parentViewKey=CrewViewKeys.MEMBER_CHANGE))
         if result.result:
             self.__equipTankman(newTankman)
 
@@ -300,11 +300,11 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
         if self.__currentVehicle:
             factory.doAction(factory.EQUIP_TANKMAN, newTankman.invID, self.__currentVehicle.invID, int(self.__slotIdx))
 
-    @wg_async
+    @th_async
     def __changeRoleAndEquipConfirm(self, newTankman):
         from gui.impl.dialogs.dialogs import showCrewMemberRoleChangeDialog
         vehicleNew = self.itemsCache.items.getVehicle(newTankman.vehicleInvID)
-        result = yield wg_await(showCrewMemberRoleChangeDialog(newTankman.invID, self.__currentVehicle, vehicleNew, self.__requiredRole, parentViewKey=CrewViewKeys.MEMBER_CHANGE))
+        result = yield th_await(showCrewMemberRoleChangeDialog(newTankman.invID, self.__currentVehicle, vehicleNew, self.__requiredRole, parentViewKey=CrewViewKeys.MEMBER_CHANGE))
         if result.result:
             self.__changeRoleAndEquip(newTankman)
 

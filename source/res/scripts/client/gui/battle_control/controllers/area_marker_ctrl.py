@@ -26,6 +26,7 @@ class AreaMarkersController(BaseMarkerController):
         self._battleCtx = None
         self._arenaVisitor = None
         self._vehiclesAreaMarkerHandler = VehiclesAreaMarkerHandler(self)
+        self._prevGlobalVisibility = None
         return
 
     def startControl(self, battleCtx, arenaVisitor):

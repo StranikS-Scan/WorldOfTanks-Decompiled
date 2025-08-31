@@ -8,7 +8,7 @@ from debug_utils import *
 def calcPitchLimitsFromDesc(turretYaw, pitchLimitsDesc, turretPitch=0.0, gunJointPitch=0.0):
     minPitch = pitchLimitsDesc['minPitch']
     maxPitch = pitchLimitsDesc['maxPitch']
-    return BigWorld.wg_calcGunPitchLimits(turretYaw, minPitch, maxPitch, turretPitch, gunJointPitch)
+    return BigWorld.calcGunPitchLimitsImpl(turretYaw, minPitch, maxPitch, turretPitch, gunJointPitch)
 
 
 def calcGunPitchCorrection(turretYaw, turretPitch, gunJointPitch):

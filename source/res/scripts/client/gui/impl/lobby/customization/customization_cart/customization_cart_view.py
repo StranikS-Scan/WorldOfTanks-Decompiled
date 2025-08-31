@@ -5,7 +5,7 @@ import logging
 import typing
 from frameworks.wulf import ViewFlags, ViewSettings
 from adisp import adisp_process
-from wg_async import wg_async, wg_await
+from th_async import th_async, th_await
 from CurrentVehicle import g_currentVehicle
 from frameworks.wulf import WindowFlags
 from gui import DialogsInterface
@@ -328,9 +328,9 @@ class CustomizationCartView(ViewImpl):
         self.__setTotalData(model)
         return
 
-    @wg_async
+    @th_async
     def __onBuy(self):
-        positive = yield wg_await(tryToShowReplaceExistingStyleDialog(self))
+        positive = yield th_await(tryToShowReplaceExistingStyleDialog(self))
         if not positive:
             return
         isWalletAvailable = self.__wallet.isAvailable
@@ -346,7 +346,7 @@ class CustomizationCartView(ViewImpl):
             builder = ResSimpleDialogBuilder()
             builder.setPreset(DialogPresets.CUSTOMIZATION_INSTALL_BOUND)
             builder.setMessagesAndButtons(R.strings.dialogs.customization.buy_install_bound)
-            isOk = yield wg_await(dialogs.showSimple(builder.build(self)))
+            isOk = yield th_await(dialogs.showSimple(builder.build(self)))
             self.__onBuyConfirmed(isOk)
             return
         self.__onBuyConfirmed(True)

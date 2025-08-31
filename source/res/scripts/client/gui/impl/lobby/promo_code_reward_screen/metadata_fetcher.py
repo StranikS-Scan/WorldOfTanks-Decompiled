@@ -8,18 +8,18 @@ from gui.impl.lobby.promo_code_reward_screen import RewardScreenDescr
 from helpers import getClientLanguage, dependency
 from shared_utils import findFirst
 from skeletons.gui.lobby_context import ILobbyContext
-from wg_async import wg_async, await_callback, wg_await
+from th_async import th_async, await_callback, th_await
 _logger = logging.getLogger(__name__)
 
 class MetadataFetcher(object):
 
     @staticmethod
     def get(codeId):
-        codeDescr = yield wg_await(MetadataFetcher.fetch(codeId))
+        codeDescr = yield th_await(MetadataFetcher.fetch(codeId))
         raise AsyncReturn(codeDescr)
 
     @staticmethod
-    @wg_async()
+    @th_async()
     def fetch(codeId):
         lobbyContext = dependency.instance(ILobbyContext)
         filecache = BigWorld.player().customFilesCache

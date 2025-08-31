@@ -1,7 +1,8 @@
 <engine_config.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <personality>	game	</personality>
   <appTitle>	Мир танков	</appTitle>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -577,13 +578,22 @@
           <name>	birthday_lootbox_video.bnk	</name>
         </bank>
         <bank>
-          <name>	Tank_mail.bnk	</name>
-        </bank>
-        <bank>
           <name>	tabs_music.bnk	</name>
         </bank>
         <bank>
           <name>	tabs_music.pck	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_Ch19_121_3Dst_Spirit.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_G125_Spz_57_Rh_3Dst_Veilflower.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_GB86_Centurion_Action_X_3Dst_Phantom.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_F133_Projet_57_Ampere.bnk	</name>
         </bank>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>
@@ -748,7 +758,29 @@
         <bank>
           <name>	style_3D_Ch22_113_3dst_02.bnk	</name>
         </bank>
+        <bank>
+          <name>	style_3D_Ch19_121_3Dst_Spirit.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_G125_Spz_57_Rh_3Dst_Veilflower.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_GB86_Centurion_Action_X_3Dst_Phantom.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_F133_Projet_57_Ampere.bnk	</name>
+        </bank>
       </SFX_soundbanks_arena>
+      <SFX_soundbanks_custom>
+        <white_tiger_2022>
+          <bank>
+            <name>	ev_white_tiger_2021_voiceover.bnk	</name>
+          </bank>
+          <bank>
+            <name>	ev_white_tiger_2021_voiceover.pck	</name>
+          </bank>
+        </white_tiger_2022>
+      </SFX_soundbanks_custom>
       <SFX_soundbanks_editor>
         <bank>
           <name>	fort_area.bnk	</name>

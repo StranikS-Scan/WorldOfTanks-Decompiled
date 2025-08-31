@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 import BigWorld
 from CurrentVehicle import g_currentVehicle
 from adisp import adisp_process
+from gui.Scaleform.daapi.view.lobby.comp7.comp7_profile_helper import COMP7_SEASON_NUMBERS
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getTradeInVehiclesUrl
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler, CM_BUY_COLOR
@@ -217,6 +218,10 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
             if accDossier:
                 wasInBattleSet = set(accDossier.getTotalStats().getVehicles().keys())
                 wasInBattleSet.update(accDossier.getGlobalMapStats().getVehicles().keys())
+                wasInBattleSet.update(accDossier.getComp7Stats(archive=True).getVehicles().keys())
+                for seasonId in COMP7_SEASON_NUMBERS:
+                    wasInBattleSet.update(accDossier.getComp7Stats(season=seasonId).getVehicles().keys())
+
                 if vehicle.intCD in wasInBattleSet:
                     vehicleWasInBattle = True
             if vehicle is not None:

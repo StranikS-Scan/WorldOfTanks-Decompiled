@@ -25,6 +25,9 @@ class SoundNotificationsContext(VScriptContext):
             self.__soundNotifications = None
         return
 
+    def getSoundNotifications(self):
+        return self.__soundNotifications
+
     @vse_event_out(SLOT_TYPE.STR, display_name='OnPlayQueueEvent', description='Reacts on gameplay event triggered from queue', aspects=[ASPECT.CLIENT])
     def onPlayQueueEvent(self, eventName):
         pass

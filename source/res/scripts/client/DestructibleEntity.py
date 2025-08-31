@@ -170,7 +170,7 @@ class DestructibleEntity(BigWorld.Entity):
 
     def __updateState(self, stateName):
         if self.__activeStateResource is not None:
-            BigWorld.wgDelEdgeDetectEntity(self)
+            BigWorld.delEdgeDetectEntity(self)
             self.model.matrix = None
             self.model = None
             self.__activeStateResource.deactivate()
@@ -196,11 +196,11 @@ class DestructibleEntity(BigWorld.Entity):
         if not self.model or not self.model.visible:
             return
         colorMode = EdgeColorMode.ALLY if self.isPlayerTeam else EdgeColorMode.ENEMY
-        BigWorld.wgAddEdgeDetectEntity(self, self.__activeStateResource.collisionComponent, colorMode, EdgeDrawMode.FULL, False, False)
+        BigWorld.addEdgeDetectEntity(self, self.__activeStateResource.collisionComponent, colorMode, EdgeDrawMode.FULL, False, False)
 
     def removeEdge(self, forceSimpleEdge=False):
         if self.model:
-            BigWorld.wgDelEdgeDetectEntity(self)
+            BigWorld.delEdgeDetectEntity(self)
 
     def __setPickingEnabled(self, enable):
         self.targetCaps = [1] if enable else [0]

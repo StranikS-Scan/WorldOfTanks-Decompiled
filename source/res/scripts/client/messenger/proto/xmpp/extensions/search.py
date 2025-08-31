@@ -7,7 +7,7 @@ from messenger.proto.xmpp.extensions.shared_handlers import IQChildHandler
 from messenger.proto.xmpp.extensions.ext_constants import XML_TAG_NAME as _TAG, XML_NAME_SPACE as _NS
 from messenger.proto.xmpp.entities import XMPPMucChannelEntity
 from messenger.proto.xmpp.extensions.spa_resolver import SpaResolverItem
-from messenger.proto.xmpp.extensions.wg_items import WgSharedExtension
+from messenger.proto.xmpp.extensions.custom_items import SharedExtension
 from messenger.proto.xmpp.gloox_constants import IQ_TYPE
 XmppUserSearchInfo = namedtuple('XmppUserSearchInfo', 'dbId, nickname, clanInfo')
 
@@ -28,7 +28,7 @@ class ChannelSearchQuery(PyQuery):
         self._ext = self.__initExtension()
 
     def __initExtension(self):
-        filterExtension = PyExtension(_TAG.FILTER).setXmlNs(_NS.WG_MUC_ROOMS).setAttribute('roomname-prefix', self._token).setAttribute('max-entries', self._results_count)
+        filterExtension = PyExtension(_TAG.FILTER).setXmlNs(_NS.EXT_MUC_ROOMS).setAttribute('roomname-prefix', self._token).setAttribute('max-entries', self._results_count)
         filterExtension.setChild(_SimpleCriterionExtension('muc#roomconfig_membersonly', 0))
         return PyExtension(_TAG.QUERY).setXmlNs(_NS.DISCO_ITEMS).setChild(filterExtension)
 
@@ -59,14 +59,14 @@ class UsersSearchQuery(PyQuery):
         self._ext = self.__initExtension()
 
     def __initExtension(self):
-        filterExtension = PyExtension(_TAG.ITEM).setXmlNs(_NS.WG_SPA_RESOLVER).setAttribute('nickname', self._nickname)
-        return PyExtension(_TAG.QUERY).setXmlNs(_NS.WG_SPA_RESOLVER).setChild(filterExtension)
+        filterExtension = PyExtension(_TAG.ITEM).setXmlNs(_NS.SPA_RESOLVER).setAttribute('nickname', self._nickname)
+        return PyExtension(_TAG.QUERY).setXmlNs(_NS.SPA_RESOLVER).setChild(filterExtension)
 
 
 class UserSearchHandler(IQChildHandler):
 
     def __init__(self):
-        super(UserSearchHandler, self).__init__(PyExtension(_TAG.QUERY).setXmlNs(_NS.WG_SPA_RESOLVER).setChild(UserSearchItemExtension()))
+        super(UserSearchHandler, self).__init__(PyExtension(_TAG.QUERY).setXmlNs(_NS.SPA_RESOLVER).setChild(UserSearchItemExtension()))
 
 
 class NicknamePrefixSearchQuery(PyQuery):
@@ -78,28 +78,28 @@ class NicknamePrefixSearchQuery(PyQuery):
         self._ext = self.__initExtension()
 
     def __initExtension(self):
-        return PyExtension(_TAG.WG_NICKNAME_PREFIX_SEARCH).setXmlNs(_NS.WG_SPA_RESOLVER).setAttribute('prefix', self._prefix).setAttribute('limit', self._limit)
+        return PyExtension(_TAG.NICKNAME_PREFIX_SEARCH).setXmlNs(_NS.SPA_RESOLVER).setAttribute('prefix', self._prefix).setAttribute('limit', self._limit)
 
 
 class NicknamePrefixSearchHandler(IQChildHandler):
 
     def __init__(self):
-        super(NicknamePrefixSearchHandler, self).__init__(PyExtension(_TAG.WG_NICKNAME_PREFIX_SEARCH).setXmlNs(_NS.WG_SPA_RESOLVER).setChild(UserSearchItemExtension()))
+        super(NicknamePrefixSearchHandler, self).__init__(PyExtension(_TAG.NICKNAME_PREFIX_SEARCH).setXmlNs(_NS.SPA_RESOLVER).setChild(UserSearchItemExtension()))
 
 
 class UserSearchItemExtension(SpaResolverItem):
 
     def __init__(self):
         super(UserSearchItemExtension, self).__init__(_TAG.ITEM)
-        self.setChild(WgSharedExtension())
+        self.setChild(SharedExtension())
 
     @classmethod
     def getDefaultData(cls):
-        return (SpaResolverItem.getDefaultData(), WgSharedExtension.getDefaultData())
+        return (SpaResolverItem.getDefaultData(), SharedExtension.getDefaultData())
 
     def parseTag(self, pyGlooxTag):
         dbId, nickname, _ = super(UserSearchItemExtension, self).parseTag(pyGlooxTag)
-        info = self._getChildData(pyGlooxTag, 1, WgSharedExtension.getDefaultData())
+        info = self._getChildData(pyGlooxTag, 1, SharedExtension.getDefaultData())
         if 'clanInfo' in info:
             clanInfo = info['clanInfo']
         else:

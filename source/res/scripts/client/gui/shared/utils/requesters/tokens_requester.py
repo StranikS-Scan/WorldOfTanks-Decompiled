@@ -101,6 +101,13 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
     def getLootBoxByTokenID(self, tokenID):
         return self.__lootBoxCache.get(tokenID)
 
+    def getLootBoxByType(self, typeName):
+        for box in self.__lootBoxCache.itervalues():
+            if box.getType() == typeName:
+                return box
+
+        return None
+
     def getLootBoxByID(self, boxID):
         return self.__lootBoxCache.get(LOOTBOX_TOKEN_PREFIX + str(boxID))
 
@@ -111,6 +118,11 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
             return 0
         _, limits, _ = boxesHistory[historyName]
         return 0 if guaranteedFrequencyName not in limits else limits[guaranteedFrequencyName][1]
+
+    def getReRollCount(self, box):
+        lootBoxes = self.getCacheValue('lootBoxes', None)
+        reRollHistory = lootBoxes.get('reRollHistory', None) if isinstance(lootBoxes, dict) else None
+        return 0 if not reRollHistory else len(reRollHistory.get(box.getID(), {}))
 
     def getLastViewedProgress(self, tokenId):
         return self.__tokensProgressDelta.getPrevValue(tokenId)

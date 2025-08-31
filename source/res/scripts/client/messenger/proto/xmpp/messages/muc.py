@@ -434,13 +434,13 @@ class MUCProvider(ChatProvider):
     def handlePresence(self, jid, resource):
         result = False
         presence = resource.presence
-        if not self.__isAccountInited and utils.getPlayerDatabaseID() == resource.getWgDatabaseID() and presence == PRESENCE.AVAILABLE:
+        if not self.__isAccountInited and utils.getPlayerDatabaseID() == resource.getPlatformAccountDatabaseID() and presence == PRESENCE.AVAILABLE:
             self.release(excludeLazy=True)
             self.__isAccountInited = True
         if g_settings.server.XMPP.isMucServiceAllowed(hostname=jid.getDomain()):
             mucInfo = resource.getMucInfo()
-            dbID = resource.getWgDatabaseID()
-            nickname = resource.getWgNickname() or jid.getResource()
+            dbID = resource.getPlatformAccountDatabaseID()
+            nickname = resource.getNickname() or jid.getResource()
             for action in self.__actions.itervalues():
                 result |= action.setPresence(jid, dbID, nickname, presence, mucInfo)
 

@@ -93,9 +93,9 @@ def isVehicleVisibleFromCamera(vehicle, aimCamera):
     for vehiclePoint in getVisibilityCheckPointsGen(vehicle):
         startPos = aimCamera.camera.position
         endPos = vehiclePoint
-        testResStatic = BigWorld.wg_collideSegment(BigWorld.player().spaceID, startPos, endPos, 128)
+        testResStatic = BigWorld.collideSegment(BigWorld.player().spaceID, startPos, endPos, 128)
         if testResStatic is None:
-            testResDynamic = BigWorld.wg_collideDynamic(BigWorld.player().spaceID, startPos, endPos, BigWorld.player().playerVehicleID)
+            testResDynamic = BigWorld.collideDynamic(BigWorld.player().spaceID, startPos, endPos, BigWorld.player().playerVehicleID)
             if testResDynamic is None:
                 return True
 

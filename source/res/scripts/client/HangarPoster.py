@@ -21,7 +21,7 @@ class HangarPoster(ClientSelectableObject):
 
     def onEnterWorld(self, prereqs):
         super(HangarPoster, self).onEnterWorld(prereqs)
-        self.__alphaFadeFashion = BigWorld.WGAlphaFadeFashion()
+        self.__alphaFadeFashion = BigWorld.AlphaFadeFashion()
         self.__alphaFadeFashion.minAlpha = self.minAlpha
         self.__alphaFadeFashion.maxAlphaDist = self.maxAlphaDistance * self.maxAlphaDistance
         self.model.fashion = self.__alphaFadeFashion

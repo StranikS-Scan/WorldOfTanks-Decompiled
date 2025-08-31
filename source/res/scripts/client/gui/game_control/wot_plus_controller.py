@@ -30,7 +30,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.platform.product_fetch_controller import IUserSubscriptionsFetchController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.system_messages import ISystemMessages
-from wg_async import wg_async, wg_await
+from th_async import th_async, th_await
 from wotdecorators import condition
 from shared_utils import first
 from adisp import adisp_async
@@ -298,13 +298,13 @@ class WotPlusController(IWotPlusController):
         if self._isStateUpdate:
             self.resolveState()
 
-    @wg_async
+    @th_async
     def resolveState(self):
         if not self.isEnabled():
             self._state = WotPlusState.INACTIVE
             return
         self._isStateUpdate = False
-        subscriptions = yield wg_await(self._userSubscriptionFetchCtrl.getProducts(False))
+        subscriptions = yield th_await(self._userSubscriptionFetchCtrl.getProducts(False))
         serverUTCTime = getServerUTCTime()
         filterSubscriptions = [ p for p in subscriptions.products if p.nextBilling > serverUTCTime ]
         sortedSubscriptions = sorted(filterSubscriptions, key=lambda p: (SUBSCRIPTION_STATE.get(p.status), -p.nextBilling))
@@ -333,7 +333,7 @@ class WotPlusController(IWotPlusController):
         self.onStateUpdate -= self.__onStateUpdate
         return
 
-    @wg_async
+    @th_async
     def _onClientUpdate(self, diff, _):
         itemDiff = diff.get(RS_PDATA_KEY, {})
         if IDLE_CREW_XP_PDATA_KEY in diff:
@@ -343,7 +343,7 @@ class WotPlusController(IWotPlusController):
         if itemDiff:
             synchronizeDicts(itemDiff, self._cache)
             if RS_PDATA_KEY in diff:
-                yield wg_await(self.resolveState())
+                yield th_await(self.resolveState())
             self.onDataChanged(itemDiff)
 
     def _getStrategy(self):

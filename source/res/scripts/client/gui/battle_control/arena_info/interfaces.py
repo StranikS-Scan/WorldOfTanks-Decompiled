@@ -314,7 +314,7 @@ class IRadarController(object):
 
 class ISpawnController(object):
 
-    def showSpawnPoints(self, points):
+    def showSpawnPoints(self, points, pointGuid=None):
         raise NotImplementedError
 
 
@@ -647,4 +647,16 @@ class IBattleSpamController(IBattleController):
         raise NotImplementedError
 
     def filterShotResultSound(self, vehicleID):
+        raise NotImplementedError
+
+
+class IPlayersPanelController(IArenaVehiclesController, ViewComponentsController):
+
+    def show(self, params):
+        raise NotImplementedError
+
+    def hide(self, params):
+        raise NotImplementedError
+
+    def processReplay(self, params):
         raise NotImplementedError

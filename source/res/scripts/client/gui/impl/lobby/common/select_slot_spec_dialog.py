@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/common/select_slot_spec_dialog.py
 import typing
 from BWUtil import AsyncReturn
-from wg_async import wg_async, wg_await
+from th_async import th_async, th_await
 from frameworks.wulf import ViewSettings
 from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
 from gui.impl.common.base_sub_model_view import BaseSubModelView
@@ -164,7 +164,7 @@ class SelectSlotSpecDialogMainContent(BaseSubModelView[TContentModel]):
         model.setSelectedSpecIdx(self._startIdx)
 
 
-@wg_async
+@th_async
 def showDialog(vehicle, parent=None):
-    result = yield wg_await(showSingleDialogWithResultData(layoutID=R.views.lobby.common.SelectSlotSpecDialog(), parent=parent, wrappedViewClass=SelectSlotSpecDialog, vehicle=vehicle))
+    result = yield th_await(showSingleDialogWithResultData(layoutID=R.views.lobby.common.SelectSlotSpecDialog(), parent=parent, wrappedViewClass=SelectSlotSpecDialog, vehicle=vehicle))
     raise AsyncReturn(result)

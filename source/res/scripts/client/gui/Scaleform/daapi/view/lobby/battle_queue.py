@@ -50,6 +50,10 @@ _LONG_WAITING_LEVELS = (9, 10, 11)
 _LONG_WAITING_FOR_LEVEL = (11,)
 _HTMLTEMP_PLAYERSLABEL = 'html_templates:lobby/queue/playersLabel'
 
+def _timeLabel(time):
+    return '%d:%02d' % divmod(time, 60)
+
+
 class QueueProvider(object):
 
     def __init__(self, proxy, qType=constants.QUEUE_TYPE.UNKNOWN):
@@ -116,6 +120,9 @@ class QueueProvider(object):
         if currPlayer is not None and hasattr(currPlayer, 'createArenaFromQueue'):
             currPlayer.createArenaFromQueue()
         return
+
+    def getVehicle(self):
+        return g_currentVehicle.item
 
     def _doRequestQueueInfo(self, currPlayer):
         params = self._getRequestQueueInfoParams()
@@ -305,7 +312,7 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
         g_playerEvents.onArenaCreated += self.onStartBattle
         self.__updateQueueInfo()
         self.__updateTimer()
-        self.__updateClientState()
+        self.updateClientState()
         MusicControllerWWISE.play()
 
     def _dispose(self):
@@ -316,8 +323,8 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
         self._blur.fini()
         super(BattleQueue, self)._dispose()
 
-    def __updateClientState(self):
-        if self.prbEntity is None:
+    def updateClientState(self):
+        if self.prbEntity is None or self.__provider is None:
             return
         else:
             permissions = self.prbEntity.getPermissions()
@@ -332,7 +339,7 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
             else:
                 iconlabel = 'neutral'
             additional = self.__provider.additionalInfo()
-            vehicle = g_currentVehicle.item
+            vehicle = self.__provider.getVehicle()
             textLabel = self.__provider.getTankInfoLabel()
             tankName = self.__provider.getTankName(vehicle)
             iconPath = self.__provider.getTankIcon(vehicle)
@@ -372,7 +379,7 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
         self.__timerCallback = None
         self.__timerCallback = BigWorld.callback(1, self.__updateTimer)
         textLabel = text_styles.main(makeString(MENU.PREBATTLE_TIMERLABEL))
-        timeLabel = '%d:%02d' % divmod(self.__createTime, 60)
+        timeLabel = _timeLabel(self.__createTime)
         self.as_setTimerS(textLabel, timeLabel)
         self.__createTime += 1
         return

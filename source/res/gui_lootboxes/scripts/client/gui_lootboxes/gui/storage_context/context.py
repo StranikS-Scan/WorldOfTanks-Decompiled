@@ -12,7 +12,7 @@ from gui.shared.gui_items.processors.loot_boxes import LootBoxOpenProcessor
 from gui.shared.utils.decorators import adisp_process
 from helpers import dependency
 from skeletons.gui.game_control import IGuiLootBoxesController
-from wg_async import AsyncScope
+from th_async import AsyncScope
 if typing.TYPE_CHECKING:
     from gui.SystemMessages import ResultMsg
     from gui.shared.gui_items.loot_box import LootBox

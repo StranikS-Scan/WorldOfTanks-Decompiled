@@ -6,7 +6,7 @@ from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_rank_model
 class ModeSelectorRankedWidgetModel(ModeSelectorBaseWidgetModel):
     __slots__ = ()
 
-    def __init__(self, properties=16, commands=0):
+    def __init__(self, properties=18, commands=0):
         super(ModeSelectorRankedWidgetModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -103,6 +103,18 @@ class ModeSelectorRankedWidgetModel(ModeSelectorBaseWidgetModel):
     def setIsPositionUnavailable(self, value):
         self._setBool(15, value)
 
+    def getMaxRank(self):
+        return self._getNumber(16)
+
+    def setMaxRank(self, value):
+        self._setNumber(16, value)
+
+    def getBattlesTotal(self):
+        return self._getNumber(17)
+
+    def setBattlesTotal(self, value):
+        self._setNumber(17, value)
+
     def _initialize(self):
         super(ModeSelectorRankedWidgetModel, self)._initialize()
         self._addViewModelProperty('rankLeft', ModeSelectorRankModel())
@@ -120,3 +132,5 @@ class ModeSelectorRankedWidgetModel(ModeSelectorBaseWidgetModel):
         self._addBoolProperty('isEfficiencyUnavailable', False)
         self._addNumberProperty('position', 0)
         self._addBoolProperty('isPositionUnavailable', False)
+        self._addNumberProperty('maxRank', 0)
+        self._addNumberProperty('battlesTotal', 0)

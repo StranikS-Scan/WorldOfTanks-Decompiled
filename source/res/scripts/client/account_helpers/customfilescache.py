@@ -238,7 +238,7 @@ class ThreadPool(object):
 class CustomFilesCache(object):
 
     def __init__(self, cacheFolder):
-        prefsFilePath = unicode_from_utf8(BigWorld.wg_getPreferencesFilePath())[1]
+        prefsFilePath = unicode_from_utf8(BigWorld.getPreferencesFilePath())[1]
         self.__cacheDir = os.path.join(os.path.dirname(prefsFilePath), cacheFolder)
         self.__cacheDir = os.path.normpath(self.__cacheDir)
         self.__mutex = threading.RLock()

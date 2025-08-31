@@ -191,7 +191,7 @@ class ClientArena(object):
         return
 
     def __setupBBColliders(self):
-        if BigWorld.wg_getSpaceBounds().length == 0.0:
+        if BigWorld.getSpaceBounds().length == 0.0:
             return False
         arenaBB = self.arenaType.boundingBox
         spaceBB = self.arenaType.spaceBoundingBox

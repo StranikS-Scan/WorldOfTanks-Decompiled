@@ -58,7 +58,7 @@ class GetProjectName(Block, Example):
         self._outSlot = self._makeDataOutputSlot('result', SLOT_TYPE.STR, GetProjectName._execute)
 
     def _execute(self):
-        self._outSlot.setValue('Wot')
+        self._outSlot.setValue('MT')
 
 
 class PrintToTerminal(Block, Example):
@@ -121,9 +121,8 @@ class WeightSequence(Block, Example):
 
 
 class SelectProjectID(Block, Example):
-    convert = {'WoT': 0,
-     'WoP': 1,
-     'WoS': 2}
+    convert = {'MT': 0,
+     'MK': 2}
 
     def __init__(self, *args, **kwargs):
         super(SelectProjectID, self).__init__(*args, **kwargs)

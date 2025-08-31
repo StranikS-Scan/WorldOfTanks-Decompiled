@@ -17,7 +17,7 @@ class FlockManager(object):
 
     def __init__(self):
         if _FLOCK_ENABLED:
-            self.__flockManager = BigWorld.WGFlockManager()
+            self.__flockManager = BigWorld.FlockManager()
             self.__flocks = []
             self.__flockManager.onTriggerCallback = self.__onTrigger
 

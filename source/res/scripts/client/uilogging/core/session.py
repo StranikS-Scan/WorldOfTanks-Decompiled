@@ -2,9 +2,9 @@
 # Embedded file name: scripts/client/uilogging/core/session.py
 import typing
 import adisp
-import wg_async
+import th_async
 from BWUtil import AsyncReturn
-from gui.wgcg.uilogging.contexts import UILoggingSessionCtx
+from gui.clientgw.uilogging.contexts import UILoggingSessionCtx
 from helpers import dependency, time_utils
 from helpers.log.adapters import getWithContext
 from ids_generators import SequenceIDGenerator
@@ -100,7 +100,7 @@ class Session(object):
             return True
         return False
 
-    @wg_async.wg_async
+    @th_async.th_async
     def request(self):
         if self._destroyed:
             self._logger.debug('Ui logging session destroyed.')
@@ -118,7 +118,7 @@ class Session(object):
         retries = MAX_SESSION_GET_RETRIES
         try:
             while True:
-                self._sessionData = yield wg_async.await_callback(self._getSessionData, REQUEST_SESSION_TIMEOUT)()
+                self._sessionData = yield th_async.await_callback(self._getSessionData, REQUEST_SESSION_TIMEOUT)()
                 if not self._sessionData or not self._sessionData.isExpired:
                     break
                 retries -= 1
@@ -126,10 +126,10 @@ class Session(object):
                     self._sessionData = None
                     break
 
-        except wg_async.TimeoutError:
+        except th_async.TimeoutError:
             self._logger.warning('Request session timout reached.')
             self._sessionData = None
-        except wg_async.BrokenPromiseError:
+        except th_async.BrokenPromiseError:
             self._logger.debug('Promise was destroyed while waiting for result.')
             self._sessionData = None
         except Exception:
@@ -146,14 +146,14 @@ class Session(object):
         self._clear()
         self._logger.debug('Destroyed.')
 
-    @wg_async.wg_async
+    @th_async.th_async
     def _update(self):
         self._logger.debug('Updating.')
         try:
             yield self.request()
         except WaitingSessionData:
             self._logger.debug('Already waiting session.')
-        except wg_async.BrokenPromiseError:
+        except th_async.BrokenPromiseError:
             self._logger.debug('Promise was destroyed while waiting for result.')
 
         raise AsyncReturn(None)

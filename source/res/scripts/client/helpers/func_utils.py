@@ -10,7 +10,7 @@ from BWUtil import AsyncReturn
 from PlayerEvents import g_playerEvents
 from helpers import dependency
 from skeletons.gui.game_control import IParagonsController
-from wg_async import wg_async, wg_await, AsyncScope, AsyncEvent, BrokenPromiseError
+from th_async import th_async, th_await, AsyncScope, AsyncEvent, BrokenPromiseError
 from debug_utils import LOG_DEBUG
 _logger = logging.getLogger(__name__)
 FLASH_IMG_PREFIX = 'img://'
@@ -109,18 +109,18 @@ class CooldownCaller(object):
         callParams = CallParams(args=args, kwargs=kwargs)
         self.__delayedCalls.append(callParams)
 
-    @wg_async
+    @th_async
     def __doCall(self, *args, **kwargs):
         with self.__lock:
             self.__call(*args, **kwargs)
-            result = yield wg_await(self.__waitForCooldown())
+            result = yield th_await(self.__waitForCooldown())
             if not result:
                 self.__delayedCalls = []
         if self.__delayedCalls:
             callParams = self.__mergeDelayedCalls()
             self(*callParams.args, **callParams.kwargs)
 
-    @wg_async
+    @th_async
     def __waitForCooldown(self):
         scope = AsyncScope()
         event = AsyncEvent(scope=scope)
@@ -128,7 +128,7 @@ class CooldownCaller(object):
         try:
             try:
                 g_playerEvents.onDisconnected += scope.destroy
-                yield wg_await(event.wait())
+                yield th_await(event.wait())
                 result = True
             except BrokenPromiseError:
                 BigWorld.cancelCallback(callbackId)
@@ -160,10 +160,10 @@ def replaceImgPrefix(path):
     return path.replace(FLASH_IMG_PREFIX, '')
 
 
-@wg_async
+@th_async
 def waitEventAndCall(event, func):
     try:
-        yield wg_await(event.wait())
+        yield th_await(event.wait())
         func()
     except BrokenPromiseError:
         _logger.debug('%s has not been called. AsyncEvent scope has been destroyed', func.__name__ if hasattr(func, __name__) else func)

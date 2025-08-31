@@ -146,8 +146,8 @@ class GunMarkerComponent(IGunMarkerComponent):
 class DefaultGunMarkerComponent(GunMarkerComponent):
 
     def _createView(self, container):
-        view = GUI.WGCrosshairFlash(container.movie, settings.CROSSHAIR_ITEM_PATH_FORMAT.format(self._name), settings.CROSSHAIR_RADIUS_MC_NAME)
-        view.wg_inputKeyMode = InputKeyMode.NO_HANDLE
+        view = GUI.CrosshairFlash(container.movie, settings.CROSSHAIR_ITEM_PATH_FORMAT.format(self._name), settings.CROSSHAIR_RADIUS_MC_NAME)
+        view.inputKeyMode = InputKeyMode.NO_HANDLE
         view.focus = False
         view.moveFocus = False
         view.heightMode = GUI.Simple.eSizeMode.PIXEL
@@ -164,8 +164,8 @@ class SPGGunMarkerComponent(GunMarkerComponent):
         return
 
     def _createView(self, container):
-        view = GUI.WGSPGCrosshairFlash(container.movie, settings.CROSSHAIR_ITEM_PATH_FORMAT.format(self._name), settings.SPG_GUN_MARKER_ELEMENTS_COUNT)
-        view.wg_inputKeyMode = InputKeyMode.NO_HANDLE
+        view = GUI.SPGCrosshairFlash(container.movie, settings.CROSSHAIR_ITEM_PATH_FORMAT.format(self._name), settings.SPG_GUN_MARKER_ELEMENTS_COUNT)
+        view.inputKeyMode = InputKeyMode.NO_HANDLE
         view.focus = False
         view.moveFocus = False
         view.heightMode = GUI.Simple.eSizeMode.PIXEL

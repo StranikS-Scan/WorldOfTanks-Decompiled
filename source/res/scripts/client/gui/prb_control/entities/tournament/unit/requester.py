@@ -8,7 +8,7 @@ from gui.prb_control.entities.base.requester import IUnitRequestProcessor
 from helpers import dependency
 from skeletons.gui.web import IWebController
 from soft_exception import SoftException
-from gui.wgcg.tournament.contexts import TournamentJoinBattleCtx, TournamentLeaveModeCtx, TournamentMatchmakingInfoCtx, TournamentAssignCtx, TournamentUnassignCtx, TournamentChangeOpenedCtx, TournamentSetVehicleCtx, TournamentSetReadyCtx, TournamentKickPlayerCtx, TournamentBattleQueueCtx, TournamentGiveLeadershipCtx, TournamentSendInvitesCtx, TournamentSetSlotVehicleTypeFilter, TournamentSetSlotVehiclesFilter, TournamentStopPlayersMatchingCtx
+from gui.clientgw.tournament.contexts import TournamentJoinBattleCtx, TournamentLeaveModeCtx, TournamentMatchmakingInfoCtx, TournamentAssignCtx, TournamentUnassignCtx, TournamentChangeOpenedCtx, TournamentSetVehicleCtx, TournamentSetReadyCtx, TournamentKickPlayerCtx, TournamentBattleQueueCtx, TournamentGiveLeadershipCtx, TournamentSendInvitesCtx, TournamentSetSlotVehicleTypeFilter, TournamentSetSlotVehiclesFilter, TournamentStopPlayersMatchingCtx
 
 class TournamentUnitRequestProcessor(IUnitRequestProcessor):
     clansCtrl = dependency.descriptor(IWebController)

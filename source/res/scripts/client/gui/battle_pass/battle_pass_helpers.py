@@ -63,7 +63,7 @@ def getFormattedTimeLeft(seconds):
 
 
 def getBattlePassUrl(urlPathName):
-    return ''.join((GUI_SETTINGS.baseUrls['webBridgeRootURL'], GUI_SETTINGS.battlePassUrls.get(urlPathName)))
+    return ''.join((GUI_SETTINGS.battlePassBaseUrls['webBridgeRootURL'], GUI_SETTINGS.battlePassUrls.get(urlPathName)))
 
 
 def getInfoPageURL():

@@ -66,6 +66,7 @@ from gui import makeHtmlString
 from skeletons.gui.game_control import ISpecialSoundCtrl, IAnonymizerController, IVehiclePostProgressionController
 if TYPE_CHECKING:
     from typing import Tuple as TTuple
+    from typing import List, Set
 _logger = logging.getLogger(__name__)
 
 class APPLY_METHOD(object):
@@ -570,8 +571,8 @@ class PreferencesSetting(SettingAbstract):
 
     def __init__(self, isPreview=False):
         super(PreferencesSetting, self).__init__(isPreview)
-        BigWorld.wg_subscribeToSavePreferences(self._savePrefsCallback)
-        BigWorld.wg_subscribeToReadPreferences(self._readPrefsCallback)
+        BigWorld.subscribeToSavePreferences(self._savePrefsCallback)
+        BigWorld.subscribeToReadPreferences(self._readPrefsCallback)
 
     def _savePrefsCallback(self, prefsRoot):
         pass
@@ -1594,6 +1595,22 @@ class MinimapHPSettings(StorageDumpSetting):
         return self.Options.ALT.value
 
 
+class HangarCrewWidgetSetting(StorageDumpSetting):
+
+    class OPTIONS(CONST_CONTAINER):
+        COMPACT = 'compact'
+        EXTENDED = 'extended'
+
+    HANGER_CREW_WIDGET_TYPES = (OPTIONS.COMPACT, OPTIONS.EXTENDED)
+
+    def _getOptions(self):
+        settingsKey = '#settings:game/%s/%s'
+        return [ {'label': settingsKey % (self.settingName, cType)} for cType in self.HANGER_CREW_WIDGET_TYPES ]
+
+    def getDefaultValue(self):
+        return self.HANGER_CREW_WIDGET_TYPES.index(self.OPTIONS.COMPACT)
+
+
 class CarouselTypeSetting(StorageDumpSetting):
 
     class OPTIONS(CONST_CONTAINER):
@@ -1804,7 +1821,7 @@ class FOVSetting(RegularSetting):
         self.__storage.FOV = value
 
     def init(self):
-        if not BigWorld.wg_preferencesExistedAtStartup():
+        if not BigWorld.preferencesExistedAtStartup():
             self.apply((95, 80, 100))
 
     def isEqual(self, value):
@@ -2674,35 +2691,51 @@ class HangarCamParallaxEnabledSetting(StorageAccountSetting):
 
 
 class InterfaceScaleSetting(UserPrefsFloatSetting):
+    AUTO_SCALE = 0
     settingsCore = dependency.descriptor(ISettingsCore)
     connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self, sectionName=None, isPreview=False):
         super(InterfaceScaleSetting, self).__init__(sectionName, isPreview)
-        self.__interfaceScale = self._get()
+        self.__userData = self._readValue(Settings.g_instance.userPrefs)
 
     def get(self):
+        scale = self.__getScale()
         if BattleReplay.isPlaying():
-            return self._get()
-        self.__checkAndCorrectScaleValue(self.__interfaceScale)
-        return self.__interfaceScale
+            return scale
+        self.__checkAndCorrectScaleValue(scale)
+        return scale
 
     def getDefaultValue(self):
         return AccountSettings.getSettingsDefault(self.sectionName)
 
-    def setSystemValue(self, value):
-        self.__interfaceScale = value
-        scale = self.settingsCore.interfaceScale.getScaleByIndex(value)
+    def setSystemValue(self, scale):
         width, height = GUI.screenResolution()[:2]
         event_dispatcher.changeAppResolution(width, height, scale)
         g_monitorSettings.setGlyphCache(scale)
 
     def _getOptions(self):
-        return [self.__getScales(graphics.getSuitableWindowSizes(), BigWorld.wg_getCurrentResolution(BigWorld.WindowModeWindowed)), self.__getScales(graphics.getSuitableVideoModes()), self.__getScales(graphics.getSuitableVideoModes())]
+        return [self.__getScales(graphics.getSuitableWindowSizes(), BigWorld.getCurrentResolution(BigWorld.WindowModeWindowed)), self.__getScales(graphics.getSuitableVideoModes()), self.__getScales(graphics.getSuitableVideoModes())]
 
-    def _set(self, value):
-        super(InterfaceScaleSetting, self)._save(value)
-        self.setSystemValue(value)
+    def _get(self):
+        scaleOptions = self.settingsCore.interfaceScale.getScaleOptions()
+        if self.__userData not in scaleOptions:
+            self.__userData = self.AUTO_SCALE
+        return self.settingsCore.interfaceScale.getScaleOptions().index(self.__userData)
+
+    def _set(self, index):
+        self.__userData = self.__indexToUserData(index)
+        self.setSystemValue(self.__getScale())
+
+    def _save(self, index):
+        super(InterfaceScaleSetting, self)._save(self.__indexToUserData(index))
+
+    def __getScale(self):
+        return self.settingsCore.interfaceScale.getScaleOptions()[-1] if self.__userData == self.AUTO_SCALE else self.__userData
+
+    def __indexToUserData(self, index):
+        scaleOptions = self.settingsCore.interfaceScale.getScaleOptions()
+        return self.AUTO_SCALE if index >= len(scaleOptions) else scaleOptions[int(index)]
 
     def __getScales(self, modesVariety, additionalSize=None):
         result = []
@@ -2710,15 +2743,27 @@ class InterfaceScaleSetting(UserPrefsFloatSetting):
             modes = sorted(set([ (mode.width, mode.height) for mode in modesVariety[i] ]))
             if additionalSize is not None:
                 modes.append(additionalSize[0:2])
-            result.append(map(graphics.getInterfaceScalesList, modes))
+            result.append(map(self.__getScaleLabels, modes))
 
         return result
 
-    def __checkAndCorrectScaleValue(self, value):
-        scaleLength = len(self.settingsCore.interfaceScale.getScaleOptions())
-        if value < 0 or value >= scaleLength:
-            self.__interfaceScale = 0
-            self._set(self.__interfaceScale)
+    @staticmethod
+    def __getScaleLabels(sizes):
+        loc = R.strings.settings.interfaceScale
+        result = [backport.text(loc.auto())]
+        scales = graphics.getInterfaceScalesList(sizes)[1:]
+        for scale in scales:
+            scaleFormat = '{:.0f}' if scale % 1 == 0 else '{:.2f}'
+            label = backport.text(loc.dropDownItem(), scaleFormat.format(scale))
+            result.append(label)
+
+        return result
+
+    def __checkAndCorrectScaleValue(self, scale):
+        availableScales = self.settingsCore.interfaceScale.getScaleOptions()
+        if scale < 0.0 or scale > max(availableScales):
+            self.__userData = self.AUTO_SCALE
+            self.setSystemValue(self.__getScale())
             self.settingsCore.interfaceScale.scaleChanged()
 
 

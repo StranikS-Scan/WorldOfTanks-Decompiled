@@ -162,7 +162,7 @@ class ClientHangarSpace(object):
     def create(self, isPremium, onSpaceLoadedCallback=None):
         global _CFG
         BigWorld.worldDrawEnabled(False)
-        BigWorld.wg_setSpecialFPSMode()
+        BigWorld.setSpecialFPSMode()
         self.__onLoadedCallback = onSpaceLoadedCallback
         self.__spaceId = BigWorld.createSpace(True)
         isIGR = self.igrCtrl.getRoomType() == constants.IGR_TYPE.PREMIUM
@@ -198,8 +198,8 @@ class ClientHangarSpace(object):
         camera.spaceID = self.__spaceId
         BigWorld.camera(camera)
         self.__waitCallback = BigWorld.callback(0.1, self.__waitLoadingSpace)
-        BigWorld.wg_enableGUIBackground(True, False)
-        BigWorld.wg_setGUIBackground(_LOGIN_BLACK_BG_IMG)
+        BigWorld.enableGUIBackground(True, False)
+        BigWorld.setGUIBackground(_LOGIN_BLACK_BG_IMG)
         self.mapActivities.generateOfflineActivities(spacePath)
         BigWorld.pauseDRRAutoscaling(True)
         vsePlans = _CFG.get('vse_plans', None)
@@ -311,7 +311,7 @@ class ClientHangarSpace(object):
         self.__spacePath = None
         self.__spaceVisibilityMask = None
         self.__vEntityId = None
-        BigWorld.wg_disableSpecialFPSMode()
+        BigWorld.disableSpecialFPSMode()
         return
 
     def __waitLoadingSpace(self):
@@ -331,7 +331,7 @@ class ClientHangarSpace(object):
         return
 
     def __closeOptimizedRegion(self):
-        BigWorld.wg_enableGUIBackground(False, True)
+        BigWorld.enableGUIBackground(False, True)
 
     def getSpaceID(self):
         return self.__spaceId

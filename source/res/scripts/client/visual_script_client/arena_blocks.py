@@ -431,7 +431,7 @@ class CollideSegment(Block, ArenaMeta):
         return [ASPECT.CLIENT, ASPECT.HANGAR]
 
     def _collide(self):
-        res = BigWorld.wg_collideSegment(self._spaceID.getValue(), self._from.getValue(), self._to.getValue(), self._hitFlags.getValue())
+        res = BigWorld.collideSegment(self._spaceID.getValue(), self._from.getValue(), self._to.getValue(), self._hitFlags.getValue())
         collide = res is not None
         self._collision.setValue(collide)
         if collide:

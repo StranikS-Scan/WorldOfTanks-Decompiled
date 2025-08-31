@@ -3,13 +3,15 @@
 import SoundGroups
 from gui.impl.lobby.video.video_sound_manager import IVideoSoundManager, SoundManagerStates
 from gui.server_events.pm3_constants import VIDEO
+from personal_missions_constants import PM3_FINAL_REWARD_VIEW_ID
 
 class PM3VideoSoundControl(IVideoSoundManager):
     __INTRO_ID = 0
     __VIDEO_SOUND = {__INTRO_ID: VIDEO.SOUND_INTRO,
      8: VIDEO.SOUND_REWARD_1,
      9: VIDEO.SOUND_REWARD_2,
-     10: VIDEO.SOUND_REWARD_3}
+     10: VIDEO.SOUND_REWARD_3,
+     PM3_FINAL_REWARD_VIEW_ID: VIDEO.SOUND_REWARD_4}
 
     def __init__(self, videoID=__INTRO_ID):
         self.__videoID = videoID

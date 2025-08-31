@@ -52,11 +52,11 @@ class FunSubModeSeasonalityConfig(namedtuple('FunSubModeSeasonalityConfig', ('is
         data['seasons'] = {int(seasonID):value for seasonID, value in data['seasons'].iteritems()}
 
 
-class FunSubModeConfig(namedtuple('_FunSubModeConfig', ('eventID', 'isEnabled', 'seasonality', 'filtration', 'client'))):
+class FunSubModeConfig(namedtuple('_FunSubModeConfig', ('eventID', 'isEnabled', 'seasonality', 'filtration', 'client', 'isFunRandomMapsVisible'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(eventID=UNKNOWN_EVENT_ID, isEnabled=False, seasonality={}, filtration={}, client={})
+        defaults = dict(eventID=UNKNOWN_EVENT_ID, isEnabled=False, seasonality={}, filtration={}, client={}, isFunRandomMapsVisible=False)
         allowedFields = defaults.keys()
         defaults.update(kwargs)
         cls.__packConfigPart(FunSubModeClientConfig, 'client', defaults)
@@ -67,7 +67,7 @@ class FunSubModeConfig(namedtuple('_FunSubModeConfig', ('eventID', 'isEnabled', 
 
     @classmethod
     def defaults(cls):
-        return cls(UNKNOWN_EVENT_ID, False, {}, {}, {})
+        return cls(UNKNOWN_EVENT_ID, False, {}, {}, {}, False)
 
     @classmethod
     def __filterAllowedFields(cls, data, allowedFields):

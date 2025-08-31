@@ -28,7 +28,7 @@ class ExampleDestructible(BigWorld.Entity):
             return
         self.model = prereqs[self.__MODEL_NAME]
         self.model.addMotor(BigWorld.Servo(self.matrix))
-        md = BigWorld.WGMaterialDisabler()
+        md = BigWorld.MaterialDisabler()
         self.model.matDisabler = md
         md.setPyModel(self.model)
         self.__materialDisabler = md

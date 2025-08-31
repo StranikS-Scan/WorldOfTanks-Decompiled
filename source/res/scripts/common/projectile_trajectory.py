@@ -31,7 +31,7 @@ def computeProjectileTrajectory(beginPoint, velocity, gravity, time, epsilon):
 
 
 try:
-    computeProjectileTrajectory = BigWorld.wg_computeProjectileTrajectory
+    computeProjectileTrajectory = BigWorld.computeProjectileTrajectory
 except AttributeError:
     pass
 

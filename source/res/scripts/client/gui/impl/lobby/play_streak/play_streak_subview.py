@@ -20,6 +20,7 @@ from gui.impl.pub import ViewImpl
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_tooltip import LootboxTooltip
 from gui.impl.lobby.daily.tooltips.periodic_rewards_tooltip import PeriodicRewardsTooltip
+from gui.impl.gen.view_models.views.lobby.daily.tooltips.random_rewards_tooltip_model import RandomRewardsTooltipModel
 from gui.server_events.events_dispatcher import showDailyQuests
 from gui.shared.event_dispatcher import showStylePreview, showStyleProgressionPreview, showVehiclePreview, showHangar
 from helpers import dependency
@@ -28,6 +29,7 @@ from skeletons.gui.game_control import IGameSessionController, IPlayStreakContro
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from gui.impl.lobby.play_streak.random_goodie_tooltip import RandomGoodieTooltip
 if typing.TYPE_CHECKING:
     from typing import Optional
     from frameworks.wulf.view.view_event import ViewEvent
@@ -77,6 +79,13 @@ class PlayStreakSubView(PlayStreakSubViewBase):
         tooltipId = event.getArgument('tooltipId')
         if contentID == R.views.lobby.daily.tooltips.PeriodicRewardsTooltip():
             return PeriodicRewardsTooltip(contentID)
+        if contentID == R.views.lobby.daily.tooltips.RandomGoodieTooltip():
+            return RandomGoodieTooltip()
+        if contentID == R.views.lobby.daily.tooltips.RandomRewardsTooltip():
+            model = RandomRewardsTooltipModel()
+            with model.transaction() as tx:
+                tx.setRewards(event.getArgument('rewards'))
+            return ViewImpl(ViewSettings(R.views.lobby.daily.tooltips.RandomRewardsTooltip(), model=model))
         if tooltipId:
             lootBoxId = self.__tooltipData.get(tooltipId).get('lootBoxID')
             if lootBoxId:

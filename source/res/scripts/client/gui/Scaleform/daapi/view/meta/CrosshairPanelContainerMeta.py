@@ -174,3 +174,9 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
 
     def as_setOverheatStateS(self, state):
         return self.flashObject.as_setOverheatState(state) if self._isDAAPIInited() else None
+
+    def as_showPlasmaIndicatorS(self, plasmaValue, oldPlasmaValue, plasmaMultiplicatorText):
+        return self.flashObject.as_showPlasmaIndicator(plasmaValue, oldPlasmaValue, plasmaMultiplicatorText) if self._isDAAPIInited() else None
+
+    def as_showExplosiveShotIndicatorS(self, isActive):
+        return self.flashObject.as_showExplosiveShotIndicator(isActive) if self._isDAAPIInited() else None

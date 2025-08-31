@@ -118,12 +118,12 @@ class MemoryCriticalController(object):
         self.__checkStep(30, 1.0)
 
     def cleanupCheck(self):
-        BigWorld.wg_free()
+        BigWorld.checkFree()
 
     def __checkStep(self, blockSize, dt):
         if not self.__selfCheckInProgress:
             return
-        BigWorld.wg_alloc(blockSize * 1024 * 1024)
+        BigWorld.checkAllocate(blockSize * 1024 * 1024)
         BigWorld.callback(dt, partial(self.__checkStep, blockSize, dt))
 
     @staticmethod

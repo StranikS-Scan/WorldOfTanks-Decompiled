@@ -106,7 +106,7 @@ class Comp7StyleProgressBonusUIPacker(StyleProgressBonusUIPacker):
         return Comp7StyleBonusModel()
 
     @staticmethod
-    def __getLabel(camo):
+    def _getLabel(camo):
         return backport.text(R.strings.comp7.rewards.bonus.style_progress(), name=camo.userName)
 
 

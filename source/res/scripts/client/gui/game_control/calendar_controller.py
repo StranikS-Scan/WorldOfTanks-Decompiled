@@ -16,7 +16,7 @@ from gui.game_control import CalendarInvokeOrigin
 from gui.server_events.modifiers import CalendarSplashModifier
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showHangar
-from gui.wgcg.advent_calendar.contexts import AdventCalendarFetchHeroTankInfoCtx
+from gui.clientgw.advent_calendar.contexts import AdventCalendarFetchHeroTankInfoCtx
 from helpers import dependency, time_utils, i18n
 from helpers.time_utils import ONE_HOUR
 from skeletons.gui.app_loader import IAppLoader, GuiGlobalSpaceID

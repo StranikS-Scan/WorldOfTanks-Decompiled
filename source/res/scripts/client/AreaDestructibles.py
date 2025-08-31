@@ -40,7 +40,7 @@ def clear():
 class ClientDestructiblesCache(DestructiblesCache.DestructiblesCache):
 
     def getDestructibleDesc(self, spaceID, chunkID, destrIndex):
-        filename = BigWorld.wg_getDestructibleFilename(spaceID, chunkID, destrIndex)
+        filename = BigWorld.getDestructibleFilename(spaceID, chunkID, destrIndex)
         return self.getDescByFilename(filename)
 
 
@@ -74,18 +74,18 @@ def _encodeModule(chunkID, structureIndex):
 
 
 def _getOrCreateFashion(spaceID, chunkID, destrIndex, enableHavok):
-    fashion = BigWorld.wg_getChunkModelFashion(spaceID, chunkID, destrIndex)
+    fashion = BigWorld.getChunkModelFashion(spaceID, chunkID, destrIndex)
     if fashion is None:
-        fashion = BigWorld.WGMaterialDisabler()
-        BigWorld.wg_setChunkModelFashion(spaceID, chunkID, destrIndex, fashion, enableHavok)
+        fashion = BigWorld.MaterialDisabler()
+        BigWorld.setChunkModelFashion(spaceID, chunkID, destrIndex, fashion, enableHavok)
     return fashion
 
 
 def _getOrCreateStaticHavokFashion(spaceID, chunkID, destrIndex):
-    fashion = BigWorld.wg_getChunkModelFashion(spaceID, chunkID, destrIndex)
+    fashion = BigWorld.getChunkModelFashion(spaceID, chunkID, destrIndex)
     if fashion is None:
         fashion = BigWorld.WGStaticModelFashion()
-        BigWorld.wg_setChunkModelFashion(spaceID, chunkID, destrIndex, fashion, True)
+        BigWorld.setChunkModelFashion(spaceID, chunkID, destrIndex, fashion, True)
     return fashion
 
 
@@ -194,7 +194,7 @@ def _printErrDescNotAvailable(spaceID, chunkID, destrIndex):
         spaceName = p.arena.arenaType.geometryName
     else:
         spaceName = 'unknown'
-    objName = BigWorld.wg_getDestructibleFilename(spaceID, chunkID, destrIndex)
+    objName = BigWorld.getDestructibleFilename(spaceID, chunkID, destrIndex)
     if not objName:
         objName = 'unknown'
     LOG_ERROR('Destructible descriptor is not available, space: %s, object: %s, id: %d' % (spaceName, objName, destrIndex))
@@ -341,9 +341,9 @@ class DestructiblesManager(object):
         if rewind:
             self.__savedLoadedChunkIDs = self.__loadedChunkIDs
             self.__savedSpaceID = self.__spaceID
-            BigWorld.wg_restoreDestructibles(self.__spaceID)
+            BigWorld.restoreDestructibles(self.__spaceID)
             for (chunkID, destrIndex), m in self.__destrInitialMatrices.iteritems():
-                BigWorld.wg_setDestructibleMatrix(self.__spaceID, chunkID, destrIndex, m, 1.0)
+                BigWorld.setDestructibleMatrix(self.__spaceID, chunkID, destrIndex, m, 1.0)
 
     def onAfterReplayTimeWarp(self):
         if self.__savedLoadedChunkIDs is None:
@@ -413,28 +413,28 @@ class DestructiblesManager(object):
             isNeedAnimation = False
         if dmgType == DestructiblesCache.DESTR_TYPE_FALLING_ATOM:
             destrIndex, fallDirYaw, fallSpeed = DestructiblesCache.decodeFallenColumn(destData)
-            pitchConstr, collisionFlags = BigWorld.wg_getDestructibleFallPitchConstr(self.__spaceID, chunkID, destrIndex, fallDirYaw)
+            pitchConstr, collisionFlags = BigWorld.getDestructibleFallPitchConstr(self.__spaceID, chunkID, destrIndex, fallDirYaw)
             if pitchConstr is None:
                 pitchConstr = math.pi / 2.0
             self.__dropDestructible(chunkID, destrIndex, dmgType, fallDirYaw, pitchConstr, fallSpeed, isNeedAnimation, collisionFlags)
         if dmgType == DestructiblesCache.DESTR_TYPE_TREE:
             destrIndex, fallDirYaw, pitchConstr, fallSpeed = DestructiblesCache.decodeFallenTree(destData)
-            if BigWorld.wg_checkDestructibleIsBush(self.__spaceID, chunkID, destrIndex):
-                BigWorld.wg_setDestructibleActive(self.__spaceID, chunkID, destrIndex, False)
+            if BigWorld.checkDestructibleIsBush(self.__spaceID, chunkID, destrIndex):
+                BigWorld.setDestructibleActive(self.__spaceID, chunkID, destrIndex, False)
             else:
-                _, collisionFlags = BigWorld.wg_getDestructibleFallPitchConstr(self.__spaceID, chunkID, destrIndex, fallDirYaw)
+                _, collisionFlags = BigWorld.getDestructibleFallPitchConstr(self.__spaceID, chunkID, destrIndex, fallDirYaw)
                 self.__dropDestructible(chunkID, destrIndex, dmgType, fallDirYaw, pitchConstr, fallSpeed, isNeedAnimation, collisionFlags)
         elif dmgType == DestructiblesCache.DESTR_TYPE_FRAGILE:
             destrIndex, isShotDamage = DestructiblesCache.decodeFragile(destData)
             self.__destroyFragile(chunkID, destrIndex, isNeedAnimation, isShotDamage)
-            WWISE.WG_lightSoundRemove(self.__spaceID, chunkID, destrIndex)
+            WWISE.lightSoundRemove(self.__spaceID, chunkID, destrIndex)
         elif dmgType == DestructiblesCache.DESTR_TYPE_STRUCTURE:
             destrIndex, matKind, isShotDamage = DestructiblesCache.decodeDestructibleModule(destData)
             self.__destroyModule(chunkID, destrIndex, matKind, isNeedAnimation, isShotDamage)
         return
 
     def __getEffectParams(self, lArgs):
-        destrType = BigWorld.wg_getDestructibleEffectCategory(self.__spaceID, lArgs.chunkID, lArgs.destrIndex, lArgs.moduleIndex)
+        destrType = BigWorld.getDestructibleEffectCategory(self.__spaceID, lArgs.chunkID, lArgs.destrIndex, lArgs.moduleIndex)
         effectCat = ''
         if destrType == DestructiblesCache.DESTR_TYPE_TREE:
             effectCat = 'trees'
@@ -444,22 +444,22 @@ class DestructiblesManager(object):
             effectCat = 'fragiles'
         elif destrType == DestructiblesCache.DESTR_TYPE_STRUCTURE:
             effectCat = 'structures'
-        effectName = BigWorld.wg_getDestructibleEffectName(self.__spaceID, lArgs.chunkID, lArgs.destrIndex, lArgs.moduleIndex, lArgs.effectType)
+        effectName = BigWorld.getDestructibleEffectName(self.__spaceID, lArgs.chunkID, lArgs.destrIndex, lArgs.moduleIndex, lArgs.effectType)
         if destrType == DestructiblesCache.DESTR_TYPE_TREE or destrType == DestructiblesCache.DESTR_TYPE_FALLING_ATOM:
-            chunkMatrix = BigWorld.wg_getChunkMatrix(self.__spaceID, lArgs.chunkID)
-            destrMatrix = BigWorld.wg_getDestructibleMatrix(self.__spaceID, lArgs.chunkID, lArgs.destrIndex)
+            chunkMatrix = BigWorld.getChunkMatrix(self.__spaceID, lArgs.chunkID)
+            destrMatrix = BigWorld.getDestructibleMatrix(self.__spaceID, lArgs.chunkID, lArgs.destrIndex)
             direction = destrMatrix.applyVector((0, 0, 1))
             pos = chunkMatrix.translation + destrMatrix.translation
             if destrType == DestructiblesCache.DESTR_TYPE_TREE:
                 treeScale = destrMatrix.applyVector((0.0, 1.0, 0.0)).length
                 scale = 1.0 + (treeScale - 1.0) * _TREE_EFFECTS_SCALE_RATIO
             else:
-                scale = BigWorld.wg_getDestructibleEffectScale(self.__spaceID, lArgs.chunkID, lArgs.destrIndex, lArgs.moduleIndex)
+                scale = BigWorld.getDestructibleEffectScale(self.__spaceID, lArgs.chunkID, lArgs.destrIndex, lArgs.moduleIndex)
         else:
-            hpMatrix = BigWorld.wg_getNMHardPointMatrix(self.__spaceID, lArgs.chunkID, lArgs.destrIndex, lArgs.moduleIndex)
+            hpMatrix = BigWorld.getNMHardPointMatrix(self.__spaceID, lArgs.chunkID, lArgs.destrIndex, lArgs.moduleIndex)
             direction = hpMatrix.applyVector((0, 0, 1))
             pos = hpMatrix.translation
-            scale = BigWorld.wg_getDestructibleEffectScale(self.__spaceID, lArgs.chunkID, lArgs.destrIndex, lArgs.moduleIndex)
+            scale = BigWorld.getDestructibleEffectScale(self.__spaceID, lArgs.chunkID, lArgs.destrIndex, lArgs.moduleIndex)
         lArgs = lArgs._replace(destrType=destrType, effectName=effectName, effectCategory=effectCat, pos=pos, dir=direction, scale=scale)
         return lArgs
 
@@ -513,10 +513,10 @@ class DestructiblesManager(object):
         return
 
     def __setFragileDestroyed(self, spaceID, chunkID, destrIndex, isNeedAnimation, isShotDamage):
-        return None if spaceID != self.__spaceID else BigWorld.wg_destroyFragile(spaceID, chunkID, destrIndex, isNeedAnimation, isShotDamage)
+        return None if spaceID != self.__spaceID else BigWorld.destroyFragile(spaceID, chunkID, destrIndex, isNeedAnimation, isShotDamage)
 
     def __setModuleDestroyed(self, spaceID, chunkID, destrIndex, moduleIndex, isNeedAnimation, isShotDamage):
-        return None if spaceID != self.__spaceID else BigWorld.wg_destroyModule(spaceID, chunkID, destrIndex, moduleIndex, isNeedAnimation, isShotDamage)
+        return None if spaceID != self.__spaceID else BigWorld.destroyModule(spaceID, chunkID, destrIndex, moduleIndex, isNeedAnimation, isShotDamage)
 
     def __dropDestructible(self, chunkID, destrIndex, dmgType, fallDirYaw, pitchConstr, fallSpeed, isAnimate, obstacleCollisionFlags):
         self.__stopLifetimeEffect(chunkID, destrIndex, 0)
@@ -536,7 +536,7 @@ class DestructiblesManager(object):
         else:
             touchdownCallback = None
             if isAnimate:
-                tintColor = BigWorld.wg_getDestructibleEffectsTintColor(self.__spaceID, chunkID, destrIndex)
+                tintColor = BigWorld.getDestructibleEffectsTintColor(self.__spaceID, chunkID, destrIndex)
                 self.__launchTreeFallEffect(chunkID, destrIndex, 'fractureEffect', fallDirYaw, tintColor)
                 if useEffectsOnTouchDown:
                     touchdownCallback = partial(self.__launchTreeFallEffect, chunkID, destrIndex, 'touchdownEffect', fallDirYaw, tintColor)
@@ -560,7 +560,7 @@ class DestructiblesManager(object):
             return effectID
 
     def __startLifetimeEffect(self, chunkID, destrIndex, moduleIndex):
-        chance = BigWorld.wg_getDestructibleLifetimeEffectChance(self.__spaceID, chunkID, destrIndex, moduleIndex)
+        chance = BigWorld.getDestructibleLifetimeEffectChance(self.__spaceID, chunkID, destrIndex, moduleIndex)
         if chance is None or random.random() > chance:
             return
         else:
@@ -585,7 +585,7 @@ class DestructiblesManager(object):
             return
 
     def __pickPrefferedTiltAngle(self, chunkID, destrIndex, hitDirYaw, desc):
-        transformation = BigWorld.wg_getDestructibleMatrix(self.__spaceID, chunkID, destrIndex)
+        transformation = BigWorld.getDestructibleMatrix(self.__spaceID, chunkID, destrIndex)
         dYaw = transformation.yaw
         hitYaw_localFrame = hitDirYaw - dYaw
         tiltYaw_localFrame = min(desc['preferredTiltDirections'] or [hitYaw_localFrame], key=lambda angle: abs(angle - hitYaw_localFrame))
@@ -602,15 +602,15 @@ class DestructiblesManager(object):
         self.__touchDown(chunkID, destrIndex, True)
 
     def __touchDown(self, chunkID, destrIndex, isNeedAnimation):
-        if BigWorld.wg_isHavokActive():
-            BigWorld.wg_destroyFallAtom(self.__spaceID, chunkID, destrIndex, isNeedAnimation)
+        if BigWorld.isHavokActive():
+            BigWorld.destroyFallAtom(self.__spaceID, chunkID, destrIndex, isNeedAnimation)
 
     def __delayedHavokExplosion(self, spaceID, explosionInfo):
         if spaceID != self.__spaceID:
             return
         if explosionInfo[1]:
             endPoint, _, _, _, radius, impact = explosionInfo[0]
-            BigWorld.wg_havokExplosion(endPoint, impact, radius)
+            BigWorld.havokExplosion(endPoint, impact, radius)
             explosionInfo[1] = False
 
     def __launchFallEffect(self, chunkID, destrIndex, effectType, fallDirYaw):
@@ -618,18 +618,18 @@ class DestructiblesManager(object):
         if player is None or isPlayerAccount():
             return
         else:
-            effectName = BigWorld.wg_getDestructibleEffectName(self.__spaceID, chunkID, destrIndex, -1, effectType)
+            effectName = BigWorld.getDestructibleEffectName(self.__spaceID, chunkID, destrIndex, -1, effectType)
             if effectName == 'none':
                 return
             effectVars = g_cache._getEffect(effectName, 'fallingAtoms', False)
             if effectVars is None:
                 return
             effectStuff = random.choice(effectVars)
-            chunkMatrix = BigWorld.wg_getChunkMatrix(self.__spaceID, chunkID)
-            destrMatrix = BigWorld.wg_getDestructibleMatrix(self.__spaceID, chunkID, destrIndex)
+            chunkMatrix = BigWorld.getChunkMatrix(self.__spaceID, chunkID)
+            destrMatrix = BigWorld.getDestructibleMatrix(self.__spaceID, chunkID, destrIndex)
             pos = chunkMatrix.translation + destrMatrix.translation
             direction = Math.Vector3(math.sin(fallDirYaw), 0.0, math.cos(fallDirYaw))
-            scale = BigWorld.wg_getDestructibleEffectScale(self.__spaceID, chunkID, destrIndex, -1)
+            scale = BigWorld.getDestructibleEffectScale(self.__spaceID, chunkID, destrIndex, -1)
             player.terrainEffects.addNew(pos, effectStuff.effectsList, effectStuff.keyPoints, None, dir=direction, scale=scale)
             return
 
@@ -638,15 +638,15 @@ class DestructiblesManager(object):
         if player is None or isPlayerAccount():
             return
         else:
-            effectName = BigWorld.wg_getDestructibleEffectName(self.__spaceID, chunkID, destrIndex, -1, effectType)
+            effectName = BigWorld.getDestructibleEffectName(self.__spaceID, chunkID, destrIndex, -1, effectType)
             if effectName == 'none':
                 return
             effectVars = g_cache._getEffect(effectName, 'trees', False)
             if effectVars is None:
                 return
             effectStuff = random.choice(effectVars)
-            chunkMatrix = BigWorld.wg_getChunkMatrix(self.__spaceID, chunkID)
-            destrMatrix = BigWorld.wg_getDestructibleMatrix(self.__spaceID, chunkID, destrIndex)
+            chunkMatrix = BigWorld.getChunkMatrix(self.__spaceID, chunkID)
+            destrMatrix = BigWorld.getDestructibleMatrix(self.__spaceID, chunkID, destrIndex)
             pos = chunkMatrix.translation + destrMatrix.translation
             direction = Math.Vector3(math.sin(fallDirYaw), 0.0, math.cos(fallDirYaw))
             treeScale = destrMatrix.applyVector((0.0, 1.0, 0.0)).length
@@ -655,7 +655,7 @@ class DestructiblesManager(object):
             return
 
     def __getDestrInitialMatrix(self, chunkID, destrIndex):
-        return self.__destrInitialMatrices.setdefault((chunkID, destrIndex), BigWorld.wg_getDestructibleMatrix(self.__spaceID, chunkID, destrIndex))
+        return self.__destrInitialMatrices.setdefault((chunkID, destrIndex), BigWorld.getDestructibleMatrix(self.__spaceID, chunkID, destrIndex))
 
 
 class _DestructiblesAnimator(object):
@@ -681,7 +681,7 @@ class _DestructiblesAnimator(object):
         self.__bodies = []
 
     def showFall(self, spaceID, chunkID, destrIndex, fallDirYaw, pitchConstr, discreteInitSpeed, isNeedAnimation, initialMatrix, touchdownCallback=None):
-        fallingParams = BigWorld.wg_getFallingParams(spaceID, chunkID, destrIndex)
+        fallingParams = BigWorld.getFallingParams(spaceID, chunkID, destrIndex)
         destrMatrix = Math.Matrix(initialMatrix)
         scale = destrMatrix.applyVector((0.0, 1.0, 0.0)).length
         height = fallingParams.get(0, 1) * scale
@@ -725,12 +725,12 @@ class _DestructiblesAnimator(object):
             weight = physics_shared.G * mass
             angStiffness = 0.5 * height * stiffness
             approxPitch = pitchConstr - 0.5 * fallingParams.get(1, 1)
-            body['pitch'] = BigWorld.wg_solveDestructibleFallPitch(weight, angStiffness, pitchConstr - fallingParams.get(1, 1), approxPitch)
+            body['pitch'] = BigWorld.solveDestructibleFallPitch(weight, angStiffness, pitchConstr - fallingParams.get(1, 1), approxPitch)
             self.__positionBodyModel(body)
         return
 
     def showFallTree(self, spaceID, chunkID, destrIndex, fallDirYaw, pitchConstr, discreteInitSpeed, isNeedAnimation, initialMatrix, touchdownCallback=None):
-        fallingParams = BigWorld.wg_getFallingParams(spaceID, chunkID, destrIndex)
+        fallingParams = BigWorld.getFallingParams(spaceID, chunkID, destrIndex)
         mass = fallingParams.get(0, 0)
         height = fallingParams.get(0, 1)
         airResist = fallingParams.get(0, 2)
@@ -781,7 +781,7 @@ class _DestructiblesAnimator(object):
             weight = physics_shared.G * massScaled
             angStiffness = 0.5 * heightScaled * stiffnessScaled
             approxPitch = pitchConstr - 0.5 * springAngle
-            body['pitch'] = BigWorld.wg_solveDestructibleFallPitch(weight, angStiffness, pitchConstr - springAngle, approxPitch)
+            body['pitch'] = BigWorld.solveDestructibleFallPitch(weight, angStiffness, pitchConstr - springAngle, approxPitch)
             self.__positionBodyModel(body)
         return
 
@@ -796,7 +796,7 @@ class _DestructiblesAnimator(object):
             body['pitchSpeed'] = 0.0
             body['pitch'] = pitchConstr
             pitch = pitchConstr
-            if BigWorld.wg_isHavokActive() and body['destrType'] == self.__FALL_ATOM:
+            if BigWorld.isHavokActive() and body['destrType'] == self.__FALL_ATOM:
                 touchdownCallback = body.get('touchdownCallback', None)
                 if touchdownCallback is not None:
                     del body['touchdownCallback']
@@ -811,7 +811,7 @@ class _DestructiblesAnimator(object):
             if touchdownCallback is not None:
                 touchdownCallback()
                 del body['touchdownCallback']
-                if BigWorld.wg_isHavokActive() and body['destrType'] == self.__FALL_ATOM:
+                if BigWorld.isHavokActive() and body['destrType'] == self.__FALL_ATOM:
                     return False
             anglePen = pitch + body['springAngle'] - pitchConstr
             torque -= anglePen * body['springStiffnes'] * mp
@@ -834,7 +834,7 @@ class _DestructiblesAnimator(object):
         m.translation = body['translation'] - (0.0, body['buryDepth'] * math.sin(body['pitch']), 0.0)
         windK = max(1.0 - body['simulationTime'] / 2.0, 0)
         spaceID = body['spaceID']
-        BigWorld.wg_setDestructibleMatrix(spaceID, body['chunkID'], body['destrIndex'], m, windK)
+        BigWorld.setDestructibleMatrix(spaceID, body['chunkID'], body['destrIndex'], m, windK)
 
     def __update(self, dt):
         removedBodies = []

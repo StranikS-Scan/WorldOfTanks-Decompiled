@@ -25,7 +25,7 @@ from gui.game_control.season_provider import SeasonProvider
 from gui.shared.utils.scheduled_notifications import AcyclicNotifier, Notifiable, SimpleNotifier
 from gui.Scaleform.framework.managers.loaders import GuiImplViewLoadParams
 from gui.Scaleform.framework import ScopeTemplates
-from gui.wgcg.shop.contexts import ShopStorefrontProductsCtx
+from gui.clientgw.shop.contexts import ShopStorefrontProductsCtx
 from helpers.server_settings import serverSettingsChangeListener
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager

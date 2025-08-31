@@ -11,10 +11,9 @@ from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.impl.lobby.personal_missions.personal_mission_bonuses_packers import packBonusModelAndTooltipData
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
-from gui.server_events.finders import BRANCH_TO_OPERATION_IDS
 from items.vehicles import getVehicleClassFromVehicleType
 from helpers import dependency
-from personal_missions import PM_BRANCH
+from personal_missions_constants import PM3_FINAL_REWARD_VIEW_ID
 from skeletons.gui.game_control import IPersonalMissionsController
 from gui.shared.event_dispatcher import showHangar
 from skeletons.gui.server_events import IEventsCache
@@ -23,10 +22,11 @@ from CurrentVehicle import g_currentVehicle
 from gui.impl.lobby.personal_missions.video_sound_control.video_sound_control import PM3VideoSoundControl
 from gui.shared.events import PersonalMissionsEvent
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus
+from shared_utils import first
 _logger = logging.getLogger(__name__)
 
 class PersonalMissionsVideoRewardsView(ViewImpl):
-    __slots__ = ('__vehicle', '__operation', '__soundControl', '__tooltipData')
+    __slots__ = ('__vehicle', '__operation', '__soundControl', '__tooltipData', '__isFinalPm3RewardView')
     __itemsCache = dependency.descriptor(IItemsCache)
     __personalMissionsController = dependency.descriptor(IPersonalMissionsController)
     __eventsCache = dependency.descriptor(IEventsCache)
@@ -37,9 +37,13 @@ class PersonalMissionsVideoRewardsView(ViewImpl):
         settings.flags = ViewFlags.VIEW
         settings.model = PersonalMissionsVideoRewardsViewModel()
         super(PersonalMissionsVideoRewardsView, self).__init__(settings)
-        self.__operation = self.__personalMissionsController.getOperationById(operationId)
+        self.__isFinalPm3RewardView = operationId == PM3_FINAL_REWARD_VIEW_ID
+        pm3ctrl = self.__personalMissionsController
+        self.__operation = None if self.__isFinalPm3RewardView else self.__personalMissionsController.getOperationById(operationId)
         if self.__operation is not None:
             self.__vehicle = self.__operation.getVehicleBonus()
+        if self.__isFinalPm3RewardView:
+            self.__vehicle = first(pm3ctrl.getVehiclesForChampionQuestPM3())
         BigWorld.worldDrawEnabled(False)
         self.__soundControl = PM3VideoSoundControl(operationId)
         self.__tooltipData = {}
@@ -85,22 +89,28 @@ class PersonalMissionsVideoRewardsView(ViewImpl):
                 vm.setVehicleType(getVehicleClassFromVehicleType(self.__vehicle.descriptor.type))
                 vm.setIsElite(self.__vehicle.isElite)
                 vm.setIsWindowAccessible(Windowing.isWindowAccessible())
-                vm.setVideoName(self.__getVideoNameByPreset(self.__operation.getID()))
                 bonusList = []
                 pm3ctrl = self.__personalMissionsController
-                for bonus in itertools.chain(*self.__operation.getBonuses().itervalues()):
-                    if bonus.getName() not in ('vehicles', 'slots'):
-                        bonusList.append(bonus)
-
-                if self.__operation.isFullCompleted():
-                    bonusList.extend(pm3ctrl.getAddBonusesForOperation(self.__operation))
-                lastPM3Operation = BRANCH_TO_OPERATION_IDS[PM_BRANCH.PERSONAL_MISSION_3][-1]
-                if self.__operation.getID() == lastPM3Operation and all((pm3ctrl.getOperationById(operationId).isFullCompleted() for operationId in BRANCH_TO_OPERATION_IDS[PM_BRANCH.PERSONAL_MISSION_3])):
+                vm.setVideoName(self.__getVideoNameByPreset(PM3_FINAL_REWARD_VIEW_ID if self.__isFinalPm3RewardView else self.__operation.getID()))
+                vm.setIsFinalPm3Rewards(self.__isFinalPm3RewardView)
+                if self.__isFinalPm3RewardView:
                     bonusList.extend(pm3ctrl.getBadgesForChampionQuestPM3())
+                else:
+                    for bonus in itertools.chain(*self.__operation.getBonuses().itervalues()):
+                        if bonus.getName() not in ('vehicles', 'slots'):
+                            bonusList.append(bonus)
+
+                    if self.__operation.isFullCompleted():
+                        bonusList.extend(pm3ctrl.getAddBonusesForOperation(self.__operation))
                 packBonusModelAndTooltipData(bonusList, vm.getRewards(), self.__tooltipData)
-                vm.setState(OperationState.COMPLETEWITHHONOR if self.__operation.isFullCompleted() else OperationState.COMPLETE)
+                vm.setState(self.__getOperationState())
             Windowing.addWindowAccessibilitynHandler(self.__onWindowAccessibilityChanged)
             return
+
+    def __getOperationState(self):
+        if self.__isFinalPm3RewardView:
+            return OperationState.COMPANYCOMPLETE
+        return OperationState.COMPLETEWITHHONOR if self.__operation.isFullCompleted() else OperationState.COMPLETE
 
     def __getVideoNameByPreset(self, operationId):
         presetIndx = BigWorld.detectGraphicsPresetFromSystemSettings()
@@ -110,7 +120,7 @@ class PersonalMissionsVideoRewardsView(ViewImpl):
 
     def __onClose(self):
         self.destroyWindow()
-        g_eventBus.handleEvent(PersonalMissionsEvent(PersonalMissionsEvent.ON_AWARD_PM_SCREEN_CLOSE, ctx={'operationID': self.__operation.getID()}), scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(PersonalMissionsEvent(PersonalMissionsEvent.ON_AWARD_PM_SCREEN_CLOSE, ctx={'operationID': PM3_FINAL_REWARD_VIEW_ID if self.__isFinalPm3RewardView else self.__operation.getID()}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __onError(self, args):
         errorFilePath = str(args.get('errorFilePath', ''))

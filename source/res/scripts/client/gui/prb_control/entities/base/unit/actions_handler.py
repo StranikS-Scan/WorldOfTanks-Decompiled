@@ -11,7 +11,7 @@ from gui.prb_control.entities.base import checkVehicleAmmoFull
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base.unit.ctx import BattleQueueUnitCtx, AutoSearchUnitCtx
 from gui.prb_control.settings import FUNCTIONAL_FLAG
-from wg_async import await_callback, wg_async
+from th_async import await_callback, th_async
 if typing.TYPE_CHECKING:
     from gui.prb_control.entities.base.unit.entity import BaseUnitEntity
 
@@ -69,7 +69,7 @@ class UnitActionsHandler(AbstractActionsHandler):
         g_eventDispatcher.removeUnitFromCarousel(prbType)
         g_eventDispatcher.loadHangar()
 
-    @wg_async
+    @th_async
     def execute(self):
         pInfo = self._entity.getPlayerInfo()
         if pInfo.isCommander():

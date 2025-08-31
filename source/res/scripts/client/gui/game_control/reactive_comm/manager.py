@@ -5,7 +5,7 @@ import logging
 from collections import deque
 import typing
 import BigWorld
-import wg_async
+import th_async
 import websocket
 from gui.game_control.reactive_comm import packer
 from gui.game_control.reactive_comm import channel as _ce
@@ -64,42 +64,42 @@ class ChannelsManager(object):
             _logger.error('Can not connect to server by url %s', self.__url)
             self.__tryToDestroyClient(reset=True)
 
-    @wg_async.wg_async
+    @th_async.th_async
     def subscribe(self, subscription):
         if not self.__url:
             _logger.error('Url of subscription service is empty')
-            raise wg_async.AsyncReturn(_ce.SubscriptionStatus(constants.SubscriptionClientStatus.Disabled))
+            raise th_async.AsyncReturn(_ce.SubscriptionStatus(constants.SubscriptionClientStatus.Disabled))
         name = subscription.channel
         if not _ce.isChannelNameValid(name):
             _logger.error('Name of channel is invalid: %r', name.decode('utf-8') if isinstance(name, str) else name)
-            raise wg_async.AsyncReturn(_ce.SubscriptionStatus(constants.SubscriptionClientStatus.NameNotAllowed))
+            raise th_async.AsyncReturn(_ce.SubscriptionStatus(constants.SubscriptionClientStatus.NameNotAllowed))
         if name in self.__channels:
             self.__cancelUnsubscribeCallback(name)
             channel = self.__channels[name]
         else:
             channel = self.__channels[name] = _ce.Channel(name, self.__eventsSender)
         if not channel.addSubscription(subscription):
-            raise wg_async.AsyncReturn(_ce.SubscriptionStatus(constants.SubscriptionClientStatus.InvalidObject))
+            raise th_async.AsyncReturn(_ce.SubscriptionStatus(constants.SubscriptionClientStatus.InvalidObject))
         if channel.isSubscribed:
-            raise wg_async.AsyncReturn(channel.status)
+            raise th_async.AsyncReturn(channel.status)
         elif self.__tryToCreateClient():
             if self.__client.open(self.__url, reconnect=True):
-                event = wg_async.AsyncEvent()
+                event = th_async.AsyncEvent()
                 self.__pending.append((event, subscription))
-                yield wg_async.wg_await(event.wait())
-                raise wg_async.AsyncReturn(channel.status)
+                yield th_async.th_await(event.wait())
+                raise th_async.AsyncReturn(channel.status)
             else:
                 _logger.error('Can not connect to server by url %s', self.__url)
-                raise wg_async.AsyncReturn(False)
+                raise th_async.AsyncReturn(False)
         else:
             if self.__client.status == websocket.ConnectionStatus.Opened:
                 channel.subscribe(self.__client)
             else:
                 _logger.warning('Connection is not opened, waiting for reconnect to subscribe to channel <%s>', channel.name)
-            event = wg_async.AsyncEvent()
+            event = th_async.AsyncEvent()
             self.__pending.append((event, subscription))
-            yield wg_async.wg_await(event.wait())
-            raise wg_async.AsyncReturn(channel.status)
+            yield th_async.th_await(event.wait())
+            raise th_async.AsyncReturn(channel.status)
 
     def unsubscribe(self, subscription):
         name = subscription.channel

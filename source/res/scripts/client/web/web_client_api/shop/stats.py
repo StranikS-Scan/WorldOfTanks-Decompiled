@@ -3,7 +3,7 @@
 import logging
 import adisp
 import nations
-from wg_async import wg_async, wg_await
+from th_async import th_async, th_await
 from constants import PREM_TYPE_TO_ENTITLEMENT
 from gui.shared.money import Currency
 from gui.shared.utils.vehicle_collector_helper import hasCollectibleVehicles
@@ -98,7 +98,7 @@ class BalanceWebApiMixin(object):
         return
 
     @adisp.adisp_async
-    @wg_async
+    @th_async
     def __forceUpdateEntitlementsCache(self, codes, callback):
-        result = yield wg_await(self.__entitlementsController.forceUpdateCache(codes))
+        result = yield th_await(self.__entitlementsController.forceUpdateCache(codes))
         callback(result)

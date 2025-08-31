@@ -6,7 +6,7 @@ from gui.impl.gen import R
 from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorLegacyItem
 from story_mode.gui.fade_in_out import UseStoryModeFading, UseHeaderNavigationImpossible
 from story_mode.uilogging.story_mode.loggers import SelectorCardLogger
-from wg_async import wg_async
+from th_async import th_async
 
 class StoryModeSelectorItem(ModeSelectorLegacyItem):
     __slots__ = ('_uiLogger',)
@@ -20,7 +20,7 @@ class StoryModeSelectorItem(ModeSelectorLegacyItem):
         self.viewModel.setDescription(backport.text(R.strings.sm_lobby.mode.story_mode.description()))
         self.viewModel.setStatusActive(backport.text(R.strings.sm_lobby.mode.story_mode.callToAction()))
 
-    @wg_async
+    @th_async
     def handleClick(self):
         self._uiLogger.logSelfClick()
         super(StoryModeSelectorItem, self).handleClick()

@@ -14,7 +14,7 @@ class OperationState(Enum):
 class PersonalMissionsVideoRewardsViewModel(VehicleInfoModel):
     __slots__ = ('onClose', 'onError', 'onShowVehicle', 'onVideoStarted')
 
-    def __init__(self, properties=14, commands=4):
+    def __init__(self, properties=15, commands=4):
         super(PersonalMissionsVideoRewardsViewModel, self).__init__(properties=properties, commands=commands)
 
     def getIsWindowAccessible(self):
@@ -29,17 +29,23 @@ class PersonalMissionsVideoRewardsViewModel(VehicleInfoModel):
     def setVideoName(self, value):
         self._setString(11, value)
 
+    def getIsFinalPm3Rewards(self):
+        return self._getBool(12)
+
+    def setIsFinalPm3Rewards(self, value):
+        self._setBool(12, value)
+
     def getState(self):
-        return OperationState(self._getString(12))
+        return OperationState(self._getString(13))
 
     def setState(self, value):
-        self._setString(12, value.value)
+        self._setString(13, value.value)
 
     def getRewards(self):
-        return self._getArray(13)
+        return self._getArray(14)
 
     def setRewards(self, value):
-        self._setArray(13, value)
+        self._setArray(14, value)
 
     @staticmethod
     def getRewardsType():
@@ -49,6 +55,7 @@ class PersonalMissionsVideoRewardsViewModel(VehicleInfoModel):
         super(PersonalMissionsVideoRewardsViewModel, self)._initialize()
         self._addBoolProperty('isWindowAccessible', True)
         self._addStringProperty('videoName', '')
+        self._addBoolProperty('isFinalPm3Rewards', False)
         self._addStringProperty('state')
         self._addArrayProperty('rewards', Array())
         self.onClose = self._addCommand('onClose')

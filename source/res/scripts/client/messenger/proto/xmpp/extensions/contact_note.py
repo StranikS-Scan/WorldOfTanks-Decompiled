@@ -103,7 +103,7 @@ class NoteQuery(PyExtension):
 
     def __init__(self, items=None, rsm=None):
         super(NoteQuery, self).__init__(_TAG.QUERY)
-        self.setXmlNs(_NS.WG_STORAGE)
+        self.setXmlNs(_NS.EXT_STORAGE)
         self.setChild(NoteList(items, rsm))
 
     @classmethod

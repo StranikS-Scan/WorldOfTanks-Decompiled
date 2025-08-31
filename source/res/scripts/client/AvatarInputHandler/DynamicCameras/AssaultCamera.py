@@ -231,7 +231,7 @@ class AssaultCamera(CameraWithSettings, CallbackDelayer):
         return False
 
     def enable(self, targetPos, saveDist, switchToPos=None, switchToPlace=None):
-        BigWorld.wg_trajectory_drawer().setStrategicMode(False)
+        BigWorld.trajectory_drawer().setStrategicMode(False)
         self.__prevTime = 0.0
         self.__prevVehiclePosition = BigWorld.player().getVehicleAttached().position
         camTarget = MatrixProduct()
@@ -284,7 +284,7 @@ class AssaultCamera(CameraWithSettings, CallbackDelayer):
 
     def __updateTrajectoryDrawer(self):
         shotDescr = BigWorld.player().getVehicleDescriptor().shot
-        BigWorld.wg_trajectory_drawer().setParams(shotDescr.maxDistance, Vector3(0, -shotDescr.gravity, 0), self.__aimOffset)
+        BigWorld.trajectory_drawer().setParams(shotDescr.maxDistance, Vector3(0, -shotDescr.gravity, 0), self.__aimOffset)
 
     def __updateTime(self):
         curTime = BigWorld.timeExact()
@@ -344,7 +344,7 @@ class AssaultCamera(CameraWithSettings, CallbackDelayer):
             collision = collideDynamicAndStatic(self.camera.position, endPoint, (BigWorld.player().playerVehicleID, 0))
             if collision is not None:
                 self._aimingSystem.aimPoint = collision[0]
-            waterCollisionDist = BigWorld.wg_collideWater(self.camera.position, endPoint, False)
+            waterCollisionDist = BigWorld.collideWater(self.camera.position, endPoint, False)
             if waterCollisionDist > -1.0 and (collision is None or waterCollisionDist < (collision[0] - self.camera.position).length):
                 self._aimingSystem.aimPoint = self.camera.position + self.__cam.direction * waterCollisionDist
             self.__updateTrajectoryDrawer()

@@ -28,7 +28,7 @@ from items.vehicles import CAMOUFLAGE_KINDS
 from skeletons.gui.game_control import IGameSessionController, IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from wg_async import wg_await, wg_async
+from th_async import th_await, th_async
 _logger = logging.getLogger(__name__)
 if typing.TYPE_CHECKING:
     from typing import List, Type, Any, Dict, Optional
@@ -295,7 +295,7 @@ class MapsBlacklistView(ViewImpl, SoundViewMixin):
 
         return None
 
-    @wg_async
+    @th_async
     def __showMapConfirmDialog(self, mapId):
         changeableMaps = []
         for item in self.viewModel.disabledMaps.getItems():
@@ -306,7 +306,7 @@ class MapsBlacklistView(ViewImpl, SoundViewMixin):
                 break
 
         cooldown = self.__lobbyContext.getServerSettings().getPreferredMapsConfig()['slotCooldown']
-        result, choice = yield wg_await(dialogs.mapsBlacklistConfirm(mapId, cooldown, changeableMaps, self))
+        result, choice = yield th_await(dialogs.mapsBlacklistConfirm(mapId, cooldown, changeableMaps, self))
         if result:
             self.__sendMapChangingRequest(mapId, choice)
 

@@ -23,3 +23,7 @@ def showGetVehiclePage(vehicle, params=None):
     if url:
         url = yield URLMacros().parse(url, params=params)
         showReferralProgramWindow(url)
+
+
+class ScoresLimitReachedError(Exception):
+    pass

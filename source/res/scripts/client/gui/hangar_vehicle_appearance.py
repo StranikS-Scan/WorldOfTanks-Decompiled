@@ -129,6 +129,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         return None
 
     isVehicleDestroyed = property(lambda self: self.__isVehicleDestroyed)
+    typeDescriptor = property(lambda self: self.__vDesc if self.__vEntity is None else self.__vEntity.typeDescriptor)
 
     def __init__(self, spaceId, vEntity):
         ScriptGameObject.__init__(self, vEntity.spaceID, 'HangarVehicleAppearance')
@@ -460,6 +461,8 @@ class HangarVehicleAppearance(ScriptGameObject):
         for modelAnimator in self.__modelAnimators:
             modelAnimator.animator.start()
 
+        self._onOutfitReady()
+
     def __onSettingsChanged(self, diff):
         if 'showMarksOnGun' in diff:
             self.__showMarksOnGun = not diff['showMarksOnGun']
@@ -489,7 +492,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         resources = self.__resources
         self.__vEntity.model = resources[self.__vDesc.name]
         if not self.__isVehicleDestroyed:
-            self.__fashions = VehiclePartsTuple(BigWorld.WGVehicleFashion(), BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion())
+            self.__fashions = VehiclePartsTuple(BigWorld.VehicleFashion(), BigWorld.BaseFashion(), BigWorld.BaseFashion(), BigWorld.BaseFashion())
             model_assembler.setupTracksFashion(self.__vDesc, self.__fashions.chassis)
             self.__vEntity.model.setupFashions(self.__fashions)
             model_assembler.assembleCollisionObstaclesCollector(self, None, self.__vDesc)
@@ -506,7 +509,7 @@ class HangarVehicleAppearance(ScriptGameObject):
             self.wheelsAnimator = model_assembler.createWheelsAnimator(self, ColliderTypes.VEHICLE_COLLIDER, self.__vDesc, lambda : 0, wheelsScroll, wheelsSteering, splineTracksImpl)
             self.trackNodesAnimator = model_assembler.createTrackNodesAnimator(self, self.__vDesc)
             model_assembler.assembleTracks(self.__resources, self.__vDesc, self, splineTracksImpl, True)
-            dirtEnabled = BigWorld.WG_dirtEnabled() and 'HD' in self.__vDesc.type.tags
+            dirtEnabled = BigWorld.dirtEnabled() and 'HD' in self.__vDesc.type.tags
             if dirtEnabled:
                 dirtHandlers = [BigWorld.PyDirtHandler(True, self.__vEntity.model.node(TankPartNames.CHASSIS).position.y),
                  BigWorld.PyDirtHandler(False, self.__vEntity.model.node(TankPartNames.HULL).position.y),
@@ -525,7 +528,7 @@ class HangarVehicleAppearance(ScriptGameObject):
             self.__updateDecals(self.__outfit)
             self.__updateSequences(self.__outfit)
         else:
-            self.__fashions = VehiclePartsTuple(BigWorld.WGVehicleFashion(), BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion())
+            self.__fashions = VehiclePartsTuple(BigWorld.VehicleFashion(), BigWorld.BaseFashion(), BigWorld.BaseFashion(), BigWorld.BaseFashion())
             self.__vEntity.model.setupFashions(self.__fashions)
             self.wheelsAnimator = None
             self.trackNodesAnimator = None
@@ -533,7 +536,8 @@ class HangarVehicleAppearance(ScriptGameObject):
             self.flagComponent = None
         self.__staticTurretYaw = self.__vDesc.gun.staticTurretYaw
         self.__staticGunPitch = self.__vDesc.gun.staticPitch
-        if not ('AT-SPG' in self.__vDesc.type.tags or 'SPG' in self.__vDesc.type.tags):
+        applyGunAndTurretDir = 'wt_boss' in self.__vDesc.type.tags
+        if applyGunAndTurretDir or not ('AT-SPG' in self.__vDesc.type.tags or 'SPG' in self.__vDesc.type.tags):
             if self.__staticTurretYaw is None:
                 self.__staticTurretYaw = self._getTurretYaw()
                 turretYawLimits = self.__vDesc.gun.turretYawLimits
@@ -828,7 +832,7 @@ class HangarVehicleAppearance(ScriptGameObject):
     def __updateSequences(self, outfit):
         resources = camouflages.getModelAnimatorsPrereqs(outfit, self.__spaceId)
         resources.extend(camouflages.getAttachmentsAnimatorsPrereqs(self.__attachments, self.__spaceId))
-        if not resources:
+        if not resources and not self.__attachments:
             self.__clearModelAnimators()
             if not self.__isVehicleDestroyed:
                 from vehicle_systems import model_assembler
@@ -1059,3 +1063,6 @@ class HangarVehicleAppearance(ScriptGameObject):
             return outfit
         vehicleCD = g_currentPreviewVehicle.item.descriptor.makeCompactDescr()
         return self.customizationService.getOutfitByStyleId(styleId=styleId, vehicleCD=vehicleCD) if vehicle.isOutfitLocked and styleId > 0 else self.customizationService.getEmptyOutfitWithNationalEmblems(vehicleCD=vehicleCD)
+
+    def _onOutfitReady(self):
+        pass

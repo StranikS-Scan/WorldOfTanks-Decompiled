@@ -43,7 +43,7 @@ class VehicleAnchorsUpdater(object):
     def startUpdater(self):
         if self.__vehicleCustomizationAnchors is None:
             interfaceScale = self.__settingsCore.interfaceScale.get()
-            self.__vehicleCustomizationAnchors = GUI.WGVehicleCustomizationAnchors(interfaceScale)
+            self.__vehicleCustomizationAnchors = GUI.VehicleCustomizationAnchors(interfaceScale)
             self.__ctx.events.onPropertySheetHidden += self.__onPropertySheetHidden
             self.__ctx.events.onPropertySheetShown += self.__onPropertySheetShown
             self.__ctx.events.onItemSelected += self.__onCarouselItemSelected
@@ -84,7 +84,7 @@ class VehicleAnchorsUpdater(object):
 
     def setAnchors(self, displayObjects):
         if self.__vehicleCustomizationAnchors is None:
-            _logger.error('Missing WGVehicleCustomizationAnchors.')
+            _logger.error('Missing VehicleCustomizationAnchors.')
             return
         else:
             self.__delAllAnchors()
@@ -395,7 +395,7 @@ class VehicleAnchorsUpdater(object):
 
     def __setCollisions(self):
         if self.__vehicleCustomizationAnchors is None:
-            _logger.error('Missing WGVehicleCustomizationAnchors.')
+            _logger.error('Missing VehicleCustomizationAnchors.')
             return
         else:
             appearance = self.__hangarSpace.getVehicleEntityAppearance()
@@ -414,7 +414,7 @@ class VehicleAnchorsUpdater(object):
         if self.__vehicleCustomizationAnchors is not None:
             self.__vehicleCustomizationAnchors.resetCollisions()
         else:
-            _logger.error('Missing WGVehicleCustomizationAnchors.')
+            _logger.error('Missing VehicleCustomizationAnchors.')
         return
 
 

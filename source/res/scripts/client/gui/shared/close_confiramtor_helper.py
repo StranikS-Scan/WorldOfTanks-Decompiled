@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/close_confiramtor_helper.py
 import adisp
-from wg_async import wg_async, wg_await
+from th_async import th_async, th_await
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.impl.gen import R
 from gui.prb_control.entities.base.ctx import LeavePrbAction
@@ -45,13 +45,15 @@ class CloseConfirmatorsHelper(object):
 
     def start(self, closeConfirmator):
         self.__closeConfirmator = closeConfirmator
-        self._lobbyContext.addHeaderNavigationConfirmator(self.__confirmHeaderNavigation)
+        if self._isAddHeaderNavigationConfirmator:
+            self._lobbyContext.addHeaderNavigationConfirmator(self.__confirmHeaderNavigation)
         for event in self.getRestrictedEvents():
             g_eventBus.addRestriction(event, self.__confirmEvent, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def stop(self):
         self.__closeConfirmator = None
-        self._lobbyContext.deleteHeaderNavigationConfirmator(self.__confirmHeaderNavigation)
+        if self._isAddHeaderNavigationConfirmator:
+            self._lobbyContext.deleteHeaderNavigationConfirmator(self.__confirmHeaderNavigation)
         for event in self.getRestrictedEvents():
             g_eventBus.removeRestriction(event, self.__confirmEvent, scope=EVENT_BUS_SCOPE.LOBBY)
 
@@ -63,8 +65,12 @@ class CloseConfirmatorsHelper(object):
     def _deletePlatoonCreationConfirmator(self):
         self._lobbyContext.deletePlatoonCreationConfirmator(self.__confirmPlatoonCreation)
 
+    @property
+    def _isAddHeaderNavigationConfirmator(self):
+        return True
+
     @adisp.adisp_async
-    @wg_async
+    @th_async
     def __confirmEvent(self, event, callback):
         if event.eventType == events.ViewEventType.LOAD_VIEW:
             if event.alias not in self.getRestrictedSfViews():
@@ -79,17 +85,17 @@ class CloseConfirmatorsHelper(object):
                 if event.action.ignoreConfirmation:
                     callback(True)
                     return
-        result = yield wg_await(self.__closeConfirmator())
+        result = yield th_await(self.__closeConfirmator())
         callback(result)
 
     @adisp.adisp_async
-    @wg_async
+    @th_async
     def __confirmHeaderNavigation(self, callback, alias=None):
-        result = yield wg_await(self.__closeConfirmator())
+        result = yield th_await(self.__closeConfirmator())
         callback(result)
 
     @adisp.adisp_async
-    @wg_async
+    @th_async
     def __confirmPlatoonCreation(self, callback):
-        result = yield wg_await(self.__closeConfirmator())
+        result = yield th_await(self.__closeConfirmator())
         callback(result)

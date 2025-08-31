@@ -8,7 +8,7 @@ from PerkPlanHolder import PCPlanHolder
 from debug_utils import LOG_DEBUG_DEV, LOG_ERROR, LOG_DEBUG, LOG_WARNING
 from data_structures import DynamicFactorCollectorKeyError
 from constants import IS_DEVELOPMENT
-from wg_async import wg_async, wg_await
+from th_async import th_async, th_await
 from perks.PerksLoadStrategy import LoadType
 if TYPE_CHECKING:
     from constants import PerkData
@@ -189,10 +189,10 @@ class BasePerksController(object):
         self.dynamicFactorCollectors = {}
         self._buildDynamicFactorsCollectorMap()
 
-    @wg_async
+    @th_async
     def updateScopedPerks(self, newScopedPerks):
         if self._isScopeHasContent(self._scopeContextMap, self._scopedPerks):
-            yield wg_await(self._planHolder.isAllPlansLoaded.wait())
+            yield th_await(self._planHolder.isAllPlansLoaded.wait())
         newScopedPerks = self._assignContextsToScopes(newScopedPerks)
         self._planHolder.setScopedPerks(newScopedPerks)
         for scope in self._scopeContextMap.iterkeys():

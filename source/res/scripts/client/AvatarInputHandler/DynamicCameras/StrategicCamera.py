@@ -200,7 +200,7 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         collisionPoints = []
         for direction, begPos in dirsPos:
             endPos = begPos + direction * 1000
-            testResult = BigWorld.wg_collideSegment(BigWorld.player().spaceID, begPos, endPos, 3)
+            testResult = BigWorld.collideSegment(BigWorld.player().spaceID, begPos, endPos, 3)
             collPoint = Math.Vector3(0, 0, 0)
             if collPoint is not None:
                 collPoint = testResult.closestPoint
@@ -271,7 +271,7 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         shotDescr = BigWorld.player().getVehicleDescriptor().shot
         target = BigWorld.target
         targetMaxDistance = target.maxDistance if target is not None else 710
-        BigWorld.wg_trajectory_drawer().setParams(shotDescr.maxDistance if self.__useShotMaxDistance else targetMaxDistance, Math.Vector3(0, -shotDescr.gravity, 0), aimOffset)
+        BigWorld.trajectory_drawer().setParams(shotDescr.maxDistance if self.__useShotMaxDistance else targetMaxDistance, Math.Vector3(0, -shotDescr.gravity, 0), aimOffset)
         curTime = BigWorld.time()
         deltaTime = curTime - self.__prevTime
         self.__prevTime = curTime

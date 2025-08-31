@@ -123,7 +123,7 @@ class CrosshairDataProxy(IBattleController):
 
         BattleReplay.g_replayCtrl.onServerAimChanged += self.__onGunMarkersSetChanged
         self.__viewID = getCrosshairViewIDByCtrlMode(self.__ctrlMode)
-        self.__scale = round(self.settingsCore.interfaceScale.get(), 1)
+        self.__scale = self.settingsCore.interfaceScale.get()
         self.__calculateSize(notify=False)
         self.__calculatePosition(notify=False)
 
@@ -225,7 +225,6 @@ class CrosshairDataProxy(IBattleController):
         self.__calculatePosition()
 
     def __onScaleFactorChanged(self, scale):
-        scale = round(scale, 1)
         if self.__scale != scale:
             self.__scale = scale
             self.onCrosshairScaleChanged(scale)

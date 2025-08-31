@@ -19,7 +19,7 @@
       </duration>
       <radius>	30	  <exports>	vse tooltip	</exports>
       </radius>
-      <heal>	20 45 70	  <exports>	vse	</exports>
+      <heal>	20 50 120	  <exports>	vse	</exports>
       </heal>
       <secondaryHealDebuff>	25	  <exports>	vse tooltip	</exports>
       </secondaryHealDebuff>
@@ -124,7 +124,7 @@
       </duration>
       <gunReloadTimeBuff>	0.85 0.75 0.6	  <exports>	vse	</exports>
       </gunReloadTimeBuff>
-      <damageDistance>	175	  <exports>	vse tooltip	</exports>
+      <damageDistance>	200	  <exports>	vse tooltip	</exports>
       </damageDistance>
       <shotDispersionFactors>	0.8 0.7 0.6	  <exports>	vse	</exports>
       </shotDispersionFactors>
@@ -144,7 +144,7 @@
           <plan>	comp7Abilities/aoeInspire_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	15	  <exports>	vse	</exports>
+      <cooldownSeconds>	20	  <exports>	vse	</exports>
       </cooldownSeconds>
       <duration>	15	  <exports>	vse tooltip	</exports>
       </duration>
@@ -171,11 +171,11 @@
       </cooldownSeconds>
       <delay>	3	  <exports>	vse tooltip	</exports>
       </delay>
-      <radius>	7 8 10	  <exports>	vse tooltip	</exports>
+      <radius>	10 12 15	  <exports>	vse tooltip	</exports>
       </radius>
       <damage>	100 250 500	  <exports>	vse tooltip	</exports>
       </damage>
-      <stunDuration>	3 9 12	  <exports>	vse tooltip	</exports>
+      <stunDuration>	3 5 7	  <exports>	vse tooltip	</exports>
       </stunDuration>
       <fraction>	0	  <exports>	vse tooltip	</exports>
       </fraction>
@@ -188,7 +188,7 @@
       <effects>
         <action>
           <shotEffects>	epicArtilleryStrike	</shotEffects>
-          <offsetDeviation>	9	</offsetDeviation>
+          <offsetDeviation>	12	</offsetDeviation>
           <repeatCount>	4	</repeatCount>
           <repeatDelay>	0	</repeatDelay>
           <repeatDelayDeviationPercent>	0	</repeatDelayDeviationPercent>
@@ -237,11 +237,11 @@
       </cooldownSeconds>
       <duration>	15 20 30	  <exports>	vse tooltip	</exports>
       </duration>
-      <enginePowerFactor>	1.35	  <exports>	vse	</exports>
+      <enginePowerFactor>	1.5	  <exports>	vse	</exports>
       </enginePowerFactor>
       <stunDurationFactor>	0.25	  <exports>	vse	</exports>
       </stunDurationFactor>
-      <repairBuff>	75	  <exports>	vse tooltip	</exports>
+      <repairBuff>	50	  <exports>	vse tooltip	</exports>
       </repairBuff>
       <gunReloadBoost>	6.0	  <exports>	vse tooltip	</exports>
       </gunReloadBoost>
@@ -287,9 +287,9 @@
           <plan>	comp7Abilities/sniper_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	15	  <exports>	vse	</exports>
+      <cooldownSeconds>	20	  <exports>	vse	</exports>
       </cooldownSeconds>
-      <duration>	12 17 22	  <exports>	vse tooltip	</exports>
+      <duration>	10 15 20	  <exports>	vse tooltip	</exports>
       </duration>
       <dispersionFactor>	0.001	  <exports>	vse tooltip	</exports>
       </dispersionFactor>
@@ -349,7 +349,7 @@
       </cooldownSeconds>
       <duration>	10 15 25	  <exports>	vse tooltip	</exports>
       </duration>
-      <delay>	2	  <exports>	vse tooltip	</exports>
+      <delay>	1	  <exports>	vse tooltip	</exports>
       </delay>
       <radius>	50 70 90	  <exports>	vse tooltip	</exports>
       </radius>
@@ -374,7 +374,7 @@
       </cooldownSeconds>
       <duration>	10	  <exports>	vse tooltip	</exports>
       </duration>
-      <visionFactor>	1.05 1.1 1.2	  <exports>	vse	</exports>
+      <visionFactor>	1.05 1.15 1.3	  <exports>	vse	</exports>
       </visionFactor>
     </script>
   </comp7_aggressive_detection>

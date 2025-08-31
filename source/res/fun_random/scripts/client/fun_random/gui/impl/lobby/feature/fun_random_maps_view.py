@@ -23,7 +23,7 @@ from skeletons.gui.game_control import IFunRandomController
 from skeletons.gui.lobby_context import ILobbyContext
 from battle_modifiers_ext.constants_ext import ClientDomain
 from shared_utils import first
-SERVER_SETTINGS_KEYS = ('geometryIDs',)
+SERVER_SETTINGS_KEYS = ('geometryIDs', 'fun_random_config')
 if typing.TYPE_CHECKING:
     from frameworks.wulf import View, Array
     from frameworks.wulf.view.view_event import ViewEvent
@@ -83,7 +83,12 @@ class FunRandomMapsView(ViewImpl, LobbyHeaderVisibility, FunSubModeHolder, FunSu
         self.__fullUpdateData()
 
     def __fullUpdateData(self):
-        self.catchSubMode(self.funRandomCtrl.subModesHolder.getDesiredSubModeID())
+        funRandomCtrl = self.funRandomCtrl
+        subModeId = funRandomCtrl.subModesHolder.getDesiredSubModeID()
+        if not funRandomCtrl.isFunRandomModifiersVisibleSBySubModeID(subModeId):
+            self.__close()
+            return
+        self.catchSubMode(funRandomCtrl.subModesHolder.getDesiredSubModeID())
         self.__checkUpdateSelectedMap()
         self.__updateData()
 

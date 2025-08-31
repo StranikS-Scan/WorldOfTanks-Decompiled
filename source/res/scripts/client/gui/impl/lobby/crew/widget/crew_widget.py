@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING, NamedTuple
 import Event
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import CREW_BOOKS_VIEWED
+from account_helpers.settings_core import settings_constants
 from constants import RENEWABLE_SUBSCRIPTION_CONFIG
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -39,13 +40,14 @@ from helpers.dependency import descriptor
 from items.tankmen import compareMastery, MAX_SKILL_LEVEL
 from items.vehicles import getVehicleType
 from renewable_subscription_common.passive_xp import isTagsSetOk, CrewValidator
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from uilogging.crew.loggers import CrewWidgetLogger
 from uilogging.crew.logging_constants import CrewWidgetKeys
-from wg_async import wg_async, wg_await
+from th_async import th_async, th_await
 if TYPE_CHECKING:
     from gui.impl.gen.view_models.views.lobby.crew.common.crew_widget_tankman_model import CrewWidgetTankmanModel
     from gui.impl.lobby.crew.quick_training_view import QuickTrainingView
@@ -61,6 +63,7 @@ class CrewWidget(ViewImpl):
     lobbyContext = dependency.descriptor(ILobbyContext)
     wotPlusCtrl = dependency.descriptor(IWotPlusController)
     appLoader = descriptor(IAppLoader)
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, tankmanID=NO_TANKMAN, vehicleInvID=NO_VEHICLE_ID, slotIdx=NO_SLOT, currentViewID=None, previousViewID=None, isButtonBarVisible=True):
         settings = ViewSettings(self.LAYOUT_DYN_ACCESSOR())
@@ -228,6 +231,7 @@ class CrewWidget(ViewImpl):
             if self.__previousViewID is not None:
                 vm.setPreviousLayoutID(self.__previousViewID)
         self.__updateWidgetModel()
+        self.__updateSettings()
         return
 
     def _getCallbacks(self):
@@ -244,7 +248,8 @@ class CrewWidget(ViewImpl):
          (self.viewModel.buttonsBar.onWotPlusClick, self.__onWotPlusClick),
          (self.itemsCache.onSyncCompleted, self.__onCacheResync),
          (self.lobbyContext.getServerSettings().onServerSettingsChange, self.__onServerSettingsChange),
-         (AccountSettings.onSettingsChanging, self.__onAccountSettingsChanging))
+         (AccountSettings.onSettingsChanging, self.__onAccountSettingsChanging),
+         (self.settingsCore.onSettingsChanged, self.__onGameSettingsChange))
 
     def _finalize(self):
         super(CrewWidget, self)._finalize()
@@ -391,6 +396,10 @@ class CrewWidget(ViewImpl):
             with self.viewModel.transaction() as vm:
                 self.__updateCrewBooksAmount(vm.buttonsBar.crewBooks)
 
+    def __onGameSettingsChange(self, diff):
+        if settings_constants.GAME.HANGAR_CREW_WIDGET in diff:
+            self.__updateSettings()
+
     def __onCacheResync(self, reason, diff):
         with self.viewModel.transaction() as vm:
             if reason == CACHE_SYNC_REASON.SHOP_RESYNC:
@@ -491,6 +500,11 @@ class CrewWidget(ViewImpl):
     def __checkDog(self, vm):
         vm.setHasDog(DOG in self.itemsCache.items.getItemByCD(self.__currentVehicle.intCD).tags)
 
+    def __updateSettings(self):
+        setting = self.settingsCore.options.getSetting(settings_constants.GAME.HANGAR_CREW_WIDGET)
+        with self.viewModel.transaction() as vm:
+            vm.setIsExtended(bool(setting.get()))
+
     def __updateWotPlusButtonModel(self, vmWotPlusButton):
         wotPlusState = ToggleState.HIDDEN
         vehicle = self.__currentVehicle
@@ -521,7 +535,7 @@ class CrewWidget(ViewImpl):
         showQuickTraining(vehicleInvID=self.__currentVehicle.invID, previousViewID=self.currentViewID)
         self.__uiLogger.logClick(CrewWidgetKeys.QUIK_TRAINING_BUTTON)
 
-    @wg_async
+    @th_async
     def __onWotPlusClick(self):
         wasActive = self.viewModel.buttonsBar.wotPlus.getState() == ToggleState.ON
         toBeActive = not wasActive
@@ -536,7 +550,7 @@ class CrewWidget(ViewImpl):
             toggleCallback()
         else:
             from gui.shared.event_dispatcher import showIdleCrewBonusDialog
-            yield wg_await(showIdleCrewBonusDialog(dialogMessage, toggleCallback))
+            yield th_await(showIdleCrewBonusDialog(dialogMessage, toggleCallback))
 
     def __buildConfirmationMessage(self):
         previousVehicleId = self.wotPlusCtrl.getVehicleIDWithIdleXP()

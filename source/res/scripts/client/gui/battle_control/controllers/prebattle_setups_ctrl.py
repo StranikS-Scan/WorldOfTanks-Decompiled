@@ -17,7 +17,7 @@ from gui.veh_post_progression.battle_cooldown_manager import BattleCooldownManag
 from helpers import dependency
 from items import vehicles
 from items.components.post_progression_components import getActiveModifications
-from items.utils import getCircularVisionRadius, getFirstReloadTime
+from items.utils import getCircularVisionRadius, getFirstReloadTime, getClipReloadTime
 from post_progression_common import EXT_DATA_PROGRESSION_KEY, EXT_DATA_SLOT_KEY, TANK_SETUP_GROUPS, TankSetupLayouts, TankSetups, VehicleState
 from shared_utils import CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -311,6 +311,8 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
         if self.__state & _States.SELECTION_STARTED or self.__isSelectionStopped():
             return
         if self.__isSelectionShouldStarted():
+            newFactors = self.__updateGuiVehicle()
+            self.__invalidateAllParams(newFactors)
             self.__updateState(_States.SELECTION_STARTED)
 
     def __updateAmmoCtrl(self):
@@ -318,9 +320,20 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
 
     def __updateAmmoCtrlParams(self, factors):
         ammoCtrl = self.__sessionProvider.shared.ammo
+        vehicleDescr = self.__vehicle.descriptor
         hasAmmo = any((shell.count for shell in self.__vehicle.shells.installed.getItems()))
+        self.__setGunReloadTime(ammoCtrl, hasAmmo, factors)
+        if vehicleDescr.isAutoReloadGun:
+            self.__setGunAutoReloadTime(ammoCtrl, hasAmmo, factors)
+
+    def __setGunReloadTime(self, ammoCtrl, hasAmmo, factors):
         reloadTime = getFirstReloadTime(self.__vehicle.descriptor, factors) if hasAmmo else 0.0
         ammoCtrl.setGunReloadTime(-1, reloadTime, skipAutoLoader=True)
+
+    def __setGunAutoReloadTime(self, ammoCtrl, hasAmmo, factors):
+        loadTime = getClipReloadTime(self.__vehicle.descriptor, factors)
+        firstShellLoadTime = loadTime[-1] if hasAmmo else 0.0
+        ammoCtrl.setGunAutoReloadTime(-1, firstShellLoadTime, firstShellLoadTime, False, False)
 
     def __updateFeedbackParams(self, factors):
         feedbackCtrl = self.__sessionProvider.shared.feedback
@@ -349,7 +362,6 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
             for component in self._viewComponents:
                 component.showSetupsView(self.__vehicle, self.__arenaLoaded)
 
-            self.__updateAmmoCtrl()
         if addMask == _States.SELECTION_STOPPED and self.isSelectionStarted():
             self.__state |= _States.SELECTION_AWAIT_HIDING
             self.__state &= ~_States.SELECTION_STARTED
@@ -366,15 +378,17 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
 
     def __updateSetupIndexes(self):
         newFactors = self.__updateGuiVehicle()
-        self.__updateAmmoCtrl()
-        self.__updateAmmoCtrlParams(newFactors)
-        self.__updateFeedbackParams(newFactors)
-        for component in self._viewComponents:
-            component.updateVehicleParams(self.__vehicle, newFactors)
-            component.updateVehicleSetups(self.__vehicle)
-
+        self.__invalidateAllParams(newFactors)
         if self.__sessionProvider.isReplayPlaying:
             playSound(Sounds.GAMEPLAY_SETUP_SWITCH)
+
+    def __invalidateAllParams(self, factors):
+        self.__updateAmmoCtrl()
+        self.__updateAmmoCtrlParams(factors)
+        self.__updateFeedbackParams(factors)
+        for component in self._viewComponents:
+            component.updateVehicleParams(self.__vehicle, factors)
+            component.updateVehicleSetups(self.__vehicle)
 
     def __updateSiegeState(self):
         newFactors = self.__updateGuiVehicle()

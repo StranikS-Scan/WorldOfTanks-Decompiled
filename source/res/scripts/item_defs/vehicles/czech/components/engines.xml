@@ -36,6 +36,7 @@
     <Saurer_CT1D_SZ1007>	37	</Saurer_CT1D_SZ1007>
     <Skoda_AHK_TST>	31001	</Skoda_AHK_TST>
     <Tatra_T-78>	31002	</Tatra_T-78>
+    <Praga_AXK_WT>	401	</Praga_AXK_WT>
     <Skoda_AHK_FL>	31003	</Skoda_AHK_FL>
     <DTN_10>	31004	</DTN_10>
     <V_12_6>	31005	</V_12_6>
@@ -653,6 +654,23 @@
       <rpm_min>	500	</rpm_min>
       <rpm_max>	1900	</rpm_max>
     </Praga_AXK_X16>
+    <Praga_AXK_WT>
+      <userString>	#czech_vehicles:Praga_AXK	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	110000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
+      <power>	1200	</power>
+      <weight>	1700	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.0	</fireStartingChance>
+      <rpm_min>	300	</rpm_min>
+      <rpm_max>	2300	</rpm_max>
+    </Praga_AXK_WT>
     <CKD_AXL>
       <userString>	#czech_vehicles:CKD_AXL	</userString>
       <tags>	diesel	</tags>

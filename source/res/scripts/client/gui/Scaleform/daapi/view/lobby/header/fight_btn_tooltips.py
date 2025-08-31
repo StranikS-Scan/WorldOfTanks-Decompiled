@@ -140,10 +140,30 @@ def getComp7BattlesOnlyVehicleTooltipData(result):
         return makeTooltip(header, body)
 
 
-def getEventTooltipData():
-    header = i18n.makeString(TOOLTIPS.EVENT_SQUAD_DISABLE_HEADER)
-    body = i18n.makeString(TOOLTIPS.EVENT_SQUAD_DISABLE_BODY, tankName='')
-    return makeTooltip(header, body)
+def getEventTooltipData(result):
+    state = result.restriction
+    rClass = R.strings.tooltips.hangar.startBtn
+    rSubClass = rClass.primeNotAvailable
+    if state == UNIT_RESTRICTION.COMMANDER_VEHICLE_NOT_SELECTED:
+        rSubClass = R.strings.event.hangar.startBtn.eventSquadNotReady.wrongVehicleCount
+    elif state == UNIT_RESTRICTION.EVENT_VEHICLE_NOT_SELECTED:
+        rSubClass = rClass.squadNotReady
+    else:
+        if state == PREBATTLE_RESTRICTION.TICKETS_SHORTAGE:
+            return makeTooltip(backport.text(rClass.noTicket.body()))
+        if state == PREBATTLE_RESTRICTION.VEHICLE_IN_BATTLE:
+            rSubClass = R.strings.tooltips.redButton.disabled.vehicle.inBattle
+        elif state == UNIT_RESTRICTION.VEHICLE_IS_IN_BATTLE:
+            rSubClass = R.strings.tooltips.redButton.disabled.vehicle.inBattle
+        else:
+            if state == PREBATTLE_RESTRICTION.VEHICLE_RENTALS_IS_OVER:
+                rSubClass = R.strings.event.hangar.startBtn.rentalsIsOver
+                header = backport.text(rSubClass.header())
+                body = backport.text(rSubClass.body())
+                return makeTooltip(header, body)
+            if state == UNIT_RESTRICTION.IS_IN_ARENA:
+                return makeTooltip(None, None)
+    return makeTooltip(backport.text(rSubClass.body()))
 
 
 def getPreviewTooltipData():

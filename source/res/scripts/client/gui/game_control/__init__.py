@@ -98,6 +98,8 @@ def getGameControllersConfig(manager):
     from gui.game_control.paragons_reward_controller import ParagonsRewardsShopController
     from gui.game_control.unseen_events_manager import UnseenEventManager
     from gui.game_control.play_streak_controller import PlayStreakController
+    from white_tiger.gui.wt_event_notifications import WTEventNotifications
+    from skeletons.gui.wt_event import IWTEventNotifications
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -192,4 +194,5 @@ def getGameControllersConfig(manager):
     _config(_interface.IPersonalMissionsController, PersonalMissionsController())
     _config(_interface.IPlayStreakController, PlayStreakController())
     _config(_interface.IUnseenEventsCounter, UnseenEventManager())
+    _config(IWTEventNotifications, WTEventNotifications())
     collectGameControllers(_config)

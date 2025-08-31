@@ -6,7 +6,7 @@ from constants import MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 from gui.impl.gen import R
 from gui.prb_control.entities.base.squad.actions_handler import SquadActionsHandler
 from gui.shared.event_dispatcher import showPlatoonWarningDialog
-from wg_async import wg_async, wg_await
+from th_async import th_async, th_await
 
 class RandomSquadActionsHandler(SquadActionsHandler):
     pass
@@ -14,9 +14,9 @@ class RandomSquadActionsHandler(SquadActionsHandler):
 
 class BalancedSquadActionsHandler(RandomSquadActionsHandler):
 
-    @wg_async
+    @th_async
     def _validateUnitState(self, entity):
-        result = yield wg_await(super(BalancedSquadActionsHandler, self)._validateUnitState(entity))
+        result = yield th_await(super(BalancedSquadActionsHandler, self)._validateUnitState(entity))
         if not result:
             raise AsyncReturn(result)
         if entity.isCommander():
@@ -33,7 +33,7 @@ class BalancedSquadActionsHandler(RandomSquadActionsHandler):
                     for _, unitVehicles in playerVehicles.iteritems():
                         for vehicle in unitVehicles:
                             if vehicle.vehLevel not in levelRange:
-                                result = yield wg_await(showPlatoonWarningDialog(R.strings.dialogs.squadHaveNoPlayers))
+                                result = yield th_await(showPlatoonWarningDialog(R.strings.dialogs.squadHaveNoPlayers))
                                 if not result:
                                     raise AsyncReturn(result)
 

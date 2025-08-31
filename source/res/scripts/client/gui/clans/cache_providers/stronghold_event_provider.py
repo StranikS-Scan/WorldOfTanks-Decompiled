@@ -9,8 +9,8 @@ from adisp import adisp_process
 from data_structures import DictObj
 from gui.Scaleform.daapi.view.lobby.clans.clan_helpers import getStrongholdEventEnabled
 from gui.clans.cache_providers.base_provider import IBaseProvider
-from gui.wgcg.clan.contexts import StrongholdEventSettingsCtx, StrongholdEventClanInfoCtx
-from gui.wgcg.states import WebControllerStates
+from gui.clientgw.clan.contexts import StrongholdEventSettingsCtx, StrongholdEventClanInfoCtx
+from gui.clientgw.states import WebControllerStates
 from helpers import dependency, time_utils
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.web import IWebController

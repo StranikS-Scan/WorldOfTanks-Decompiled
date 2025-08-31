@@ -269,6 +269,7 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
                     vos.append(_makeReceiverVO(*receiver))
 
         self.__invalidateReceiverIndex()
+        self.__restoreLastReceiverInBattle()
         self.as_setReceiversS(vos, self.__receiverIndex)
         return
 

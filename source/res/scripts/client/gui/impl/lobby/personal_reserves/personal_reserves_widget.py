@@ -22,7 +22,7 @@ if typing.TYPE_CHECKING:
     from gui.shared.items_cache import ItemsCache
     from gui.goodies.goodies_cache import GoodiesCache
     from gui.game_control.BoostersController import BoostersController
-    from gui.wgcg.web_controller import WebController
+    from gui.clientgw.web_controller import WebController
 _logger = logging.getLogger(__name__)
 
 class PersonalReservesWidget(ViewImpl):

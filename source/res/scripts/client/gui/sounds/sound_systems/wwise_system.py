@@ -127,7 +127,7 @@ class WWISESoundSystem(SoundSystemAbstract):
         return SoundSystems.WWISE
 
     def isMSR(self):
-        return WWISE.WG_isMSR()
+        return WWISE.isMSR()
 
     def enableDynamicPreset(self):
         wwiseEvent = 'ue_set_preset_high_dynamic_range'

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/interactors/opt_device.py
 import typing
 import adisp
-from wg_async import wg_async, wg_await, await_callback
+from th_async import th_async, th_await, await_callback
 from BWUtil import AsyncReturn
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.base_setup_model import BaseSetupModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
@@ -85,7 +85,7 @@ class OptDeviceInteractor(BaseOptDeviceInteractor):
             callback(None)
         return
 
-    @wg_async
+    @th_async
     def changeSlotItem(self, slotID, itemIntCD):
         item = self._itemsCache.items.getItemByCD(int(itemIntCD)) if itemIntCD is not None else None
         canChange = True
@@ -116,7 +116,7 @@ class OptDeviceInteractor(BaseOptDeviceInteractor):
         self.itemUpdated()
         return
 
-    @wg_async
+    @th_async
     def demountItem(self, itemIntCD, isDestroy=False, everywhere=True):
         result = None
         item = self._itemsCache.items.getItemByCD(itemIntCD)
@@ -194,10 +194,10 @@ class OptDeviceInteractor(BaseOptDeviceInteractor):
 
         return
 
-    @wg_async
+    @th_async
     def showExitConfirmDialog(self):
         changedList = self.getChangedList()
-        result = yield wg_await(showTankSetupExitConfirmDialog(items=changedList, vehicle=self.getItem(), fromSection=self.getName(), startState=BuyAndExchangeStateEnum.BUY_NOT_REQUIRED if not changedList else None))
+        result = yield th_await(showTankSetupExitConfirmDialog(items=changedList, vehicle=self.getItem(), fromSection=self.getName(), startState=BuyAndExchangeStateEnum.BUY_NOT_REQUIRED if not changedList else None))
         raise AsyncReturn(result)
         return
 

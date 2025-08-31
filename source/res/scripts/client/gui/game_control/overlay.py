@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/game_control/overlay.py
 import typing
 import GUI
-from wg_async import wg_async, wg_await, AsyncEvent
+from th_async import th_async, th_await, AsyncEvent
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.lobby_entry import LobbyEntry
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
@@ -34,7 +34,7 @@ class OverlayController(IOverlayController):
         self._stateInProgess = False
         self._backgroundAlpha = 1
         self._optimizationEnabled = True
-        self._globalBlur = GUI.WGUIBackgroundBlur()
+        self._globalBlur = GUI.UIBackgroundBlur()
         self._wasBlurEnabled = False
         self._showEvent = AsyncEvent()
         self._cameraState = CameraMovementStates.ON_OBJECT
@@ -48,12 +48,12 @@ class OverlayController(IOverlayController):
         self._showEvent.set()
         self._showEvent.destroy()
 
-    @wg_async
+    @th_async
     def waitShow(self):
         self._stateInProgess = True
         if self._canShow():
             return
-        yield wg_await(self._showEvent.wait())
+        yield th_await(self._showEvent.wait())
 
     @property
     def isActive(self):

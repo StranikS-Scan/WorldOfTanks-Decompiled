@@ -8,15 +8,15 @@ from gui.impl.lobby.pm_announce.tooltips import getRewardStatusForOperation
 from gui.impl.pub import ViewImpl
 from helpers import dependency
 from personal_missions import PM_BRANCH
+from skeletons.gui.game_control import IPersonalMissionsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
-from helpers import i18n
-LAST_REWARD = (i18n.makeString('#personal_missions:operations/lastOperationTankName'), 'R.images.gui.maps.icons.quests.bonuses.big.germany_G182_Mausekonig')
 
 class PersonalMissionsNewCampaignTooltipView(ViewImpl):
     __slots__ = ()
     __eventsCache = dependency.descriptor(IEventsCache)
     __lobbyContext = dependency.descriptor(ILobbyContext)
+    __personalMissionsCtrl = dependency.descriptor(IPersonalMissionsController)
 
     def __init__(self, layoutID):
         settings = ViewSettings(layoutID)
@@ -56,12 +56,14 @@ class PersonalMissionsNewCampaignTooltipView(ViewImpl):
             rewardsArray.addViewModel(rewardModel)
 
         if not isFullCompleted:
-            rewardModel = PersonalMissionsOldCampaignTooltipRewardsModel()
-            rewardName, icon = LAST_REWARD
-            rewardModel.setName(rewardName)
-            rewardModel.setIcon(icon)
-            rewardModel.setStatus(RewardStatus.AVAILABLE if isCompleted else RewardStatus.LOCKED)
-            rewardsArray.addViewModel(rewardModel)
+            vehicles = self.__personalMissionsCtrl.getVehiclesForChampionQuestPM3()
+            for vehicle in vehicles:
+                rewardModel = PersonalMissionsOldCampaignTooltipRewardsModel()
+                rewardModel.setName(vehicle.userName)
+                rewardModel.setIcon(vehicle.iconBonus)
+                rewardModel.setStatus(RewardStatus.AVAILABLE if isCompleted else RewardStatus.LOCKED)
+                rewardsArray.addViewModel(rewardModel)
+
         array.invalidate()
         if not self.__lobbyContext.getServerSettings().isPersonalMissionsEnabled(PM_BRANCH.PERSONAL_MISSION_3):
             model.setMissionStatus(MissionStatus.DISABLED)

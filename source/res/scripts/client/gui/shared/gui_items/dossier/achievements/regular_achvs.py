@@ -4,6 +4,7 @@ from abstract import RegularAchievement
 from abstract.mixins import NoProgressBar
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK as _AB
 from gui.shared.gui_items.dossier.achievements import validators
+from gui.shared.gui_items.dossier.achievements.abstract import Deprecated
 
 class Achieved(RegularAchievement):
     __slots__ = ()
@@ -20,7 +21,7 @@ class HonoredRankAchievement(RegularAchievement):
         super(HonoredRankAchievement, self).__init__('honoredRank', _AB.CLIENT, dossier, value)
 
     def getIcons(self):
-        iconName = self._getIconName()
+        iconName = self.getIconName()
         return {self.ICON_TYPE.IT_180X180: '%s/%s.png' % (self.ICON_PATH_180X180, iconName),
          self.ICON_TYPE.IT_67X71: '%s/%s.png' % (self.ICON_PATH_67X71, iconName)}
 
@@ -51,7 +52,7 @@ class MoonSphereAchievement(RegularAchievement, NoProgressBar):
         return validators.alreadyAchieved(cls, name, block, dossier)
 
 
-class ReferralProgramSingleAchievement(RegularAchievement):
+class ReferralProgramSingleAchievement(Deprecated, RegularAchievement):
     __slots__ = ()
 
     @classmethod

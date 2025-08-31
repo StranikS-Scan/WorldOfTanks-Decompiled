@@ -14,7 +14,7 @@ from soft_exception import SoftException
 if IS_CLIENT:
     from helpers import EffectsList
 if IS_CLIENT or IS_CELLAPP:
-    from WoT import packAngleToUint, unpackAngleFromUint
+    from BigWorld import packAngleToUint, unpackAngleFromUint
 SEARCH_AD_RADIUS = 5.0
 RADIUS_FOR_LOCATION_AD = SEARCH_AD_RADIUS - 0.5
 DESTRUCTIBLES_CONFIG_FILE = 'scripts/destructibles.xml'

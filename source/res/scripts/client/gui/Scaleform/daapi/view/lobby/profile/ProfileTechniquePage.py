@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileTechniquePage.py
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import PROFILE_TECHNIQUE
+from comp7_common import COMP7_CURRENT_SEASON
 from gui.Scaleform.daapi.view.meta.ProfileTechniquePageMeta import ProfileTechniquePageMeta
 from gui.Scaleform.locale.PROFILE import PROFILE
 from helpers.i18n import makeString
@@ -33,6 +34,16 @@ class ProfileTechniquePage(ProfileTechniquePageMeta):
             self._battlesType = PROFILE_DROPDOWN_KEYS.EPIC_RANDOM
         elif vehCD in accountDossier.getBattleRoyaleSoloStats().getVehicles():
             self._battlesType = PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SOLO
+        elif COMP7_CURRENT_SEASON >= 4 and vehCD in accountDossier.getComp7Stats(season=4).getVehicles():
+            self._battlesType = PROFILE_DROPDOWN_KEYS.COMP7_SEASON_4
+        elif COMP7_CURRENT_SEASON >= 3 and vehCD in accountDossier.getComp7Stats(season=3).getVehicles():
+            self._battlesType = PROFILE_DROPDOWN_KEYS.COMP7_SEASON_3
+        elif COMP7_CURRENT_SEASON >= 2 and vehCD in accountDossier.getComp7Stats(season=2).getVehicles():
+            self._battlesType = PROFILE_DROPDOWN_KEYS.COMP7_SEASON_2
+        elif COMP7_CURRENT_SEASON >= 1 and vehCD in accountDossier.getComp7Stats(season=1).getVehicles():
+            self._battlesType = PROFILE_DROPDOWN_KEYS.COMP7_SEASON_1
+        elif vehCD in accountDossier.getComp7Stats(archive=True).getVehicles():
+            self._battlesType = PROFILE_DROPDOWN_KEYS.COMP7_ARCHIVE_GRIFFIN
         self.as_setSelectedVehicleIntCDS(vehCD)
         return
 

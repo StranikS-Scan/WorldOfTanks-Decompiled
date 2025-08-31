@@ -1797,7 +1797,7 @@
     </tokenQuest>
     <tokenQuest>
       <enabled>	true	</enabled>
-      <id>	pt_final_badge_s3	</id>
+      <id>	pt_final_rewards_s3	</id>
       <hidden>	true	</hidden>
       <conditions>
         <preBattle>
@@ -1826,13 +1826,14 @@
           <type>	add	</type>
           <unique>	true	</unique>
         </dossier>
+        <vehicle>	germany:G182_Mausekonig	  <crewLvl>	100	</crewLvl>
+          <customCompensation>
+            <credits>	0	</credits>
+            <gold>	0	</gold>
+          </customCompensation>
+        </vehicle>
         <dossier>
           <name>	playerBadges:10044	</name>
-          <value>	timestamp	</value>
-          <type>	set	</type>
-        </dossier>
-        <dossier>
-          <name>	playerBadges:10045	</name>
           <value>	timestamp	</value>
           <type>	set	</type>
         </dossier>

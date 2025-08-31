@@ -277,6 +277,9 @@ class BattleSessionProvider(IBattleSessionProvider):
         ctrl = self.__dynamicRepo.respawn
         if ctrl is not None:
             ctrl.movingToRespawn()
+        ctrl = self.__dynamicRepo.teleport
+        if ctrl is not None:
+            ctrl.movingToRespawn()
         return
 
     def invalidateVehicleState(self, state, value, vehicleID=0):

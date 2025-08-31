@@ -314,6 +314,10 @@ def brProgressionToken(text):
     return _formatText('brProgressionToken', text)
 
 
+def battlePassPoints(text):
+    return _formatText('battlePassPointsText', text)
+
+
 def defRes(text):
     return _formatText('defresText', text)
 

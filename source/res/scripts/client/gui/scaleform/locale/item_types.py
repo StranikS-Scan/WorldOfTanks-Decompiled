@@ -106,7 +106,6 @@ class ITEM_TYPES(object):
     TANKMAN_SKILLS_TYPE_PERK_SHORT = '#item_types:tankman/skills/type/perk_short'
     SHELL_NAME = '#item_types:shell/name'
     SHELL_KINDS_ARMOR_PIERCING = '#item_types:shell/kinds/ARMOR_PIERCING'
-    SHELL_KINDS_DELAYED_HE = '#item_types:shell/kinds/DELAYED_HE'
     SHELL_KINDS_ARMOR_PIERCING_CR = '#item_types:shell/kinds/ARMOR_PIERCING_CR'
     SHELL_KINDS_ARMOR_PIERCING_FSDS = '#item_types:shell/kinds/ARMOR_PIERCING_FSDS'
     SHELL_KINDS_ARMOR_PIERCING_FSDS_SHORT = '#item_types:shell/kinds/ARMOR_PIERCING_FSDS_SHORT'
@@ -120,7 +119,6 @@ class ITEM_TYPES(object):
     SHELL_KINDSABBREVIATION_ARMOR_PIERCING_HE = '#item_types:shell/kindsAbbreviation/ARMOR_PIERCING_HE'
     SHELL_KINDSABBREVIATION_HOLLOW_CHARGE = '#item_types:shell/kindsAbbreviation/HOLLOW_CHARGE'
     SHELL_KINDSABBREVIATION_HIGH_EXPLOSIVE = '#item_types:shell/kindsAbbreviation/HIGH_EXPLOSIVE'
-    SHELL_KINDSABBREVIATION_DELAYED_HE = '#item_types:shell/kindsAbbreviation/DELAYED_HE'
     SHELL_KINDSABBREVIATION_FLAME = '#item_types:shell/kindsAbbreviation/FLAME'
     SHELL_KINDSABBREVIATION_SMOKE = '#item_types:shell/kindsAbbreviation/SMOKE'
     SHELL_DIMENSION_SM = '#item_types:shell/dimension/sm'
@@ -160,7 +158,6 @@ class ITEM_TYPES(object):
      SHELL_KINDSABBREVIATION_ARMOR_PIERCING_HE,
      SHELL_KINDSABBREVIATION_HOLLOW_CHARGE,
      SHELL_KINDSABBREVIATION_HIGH_EXPLOSIVE,
-     SHELL_KINDSABBREVIATION_DELAYED_HE,
      SHELL_KINDSABBREVIATION_FLAME,
      SHELL_KINDSABBREVIATION_SMOKE)
     TANKMAN_SKILLS_ENUM = (TANKMAN_SKILLS_MAIN,

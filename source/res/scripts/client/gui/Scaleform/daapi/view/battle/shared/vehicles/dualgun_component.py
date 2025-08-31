@@ -150,9 +150,12 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
 
     def _populate(self):
         super(DualGunComponent, self)._populate()
-        ctrl = self.__sessionProvider.shared.crosshair
-        if ctrl is not None:
-            ctrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
+        crossCtrl = self.__sessionProvider.shared.crosshair
+        if crossCtrl is not None:
+            crossCtrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
+            self.__onCrosshairPositionChanged(*crossCtrl.getScaledPosition())
+            crossCtrl.onCrosshairPositionChanged += self.__onCrosshairPositionChanged
+            crossCtrl.onCrosshairScaleChanged += self.__onCrosshairPositionChanged
         if BattleReplay.g_replayCtrl.isPlaying:
             g_replayEvents.onTimeWarpStart += self.__onReplayTimeWarpStart
             g_replayEvents.onPause += self.__onReplayPause
@@ -206,6 +209,8 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
         crosshairCtrl = self.__sessionProvider.shared.crosshair
         if crosshairCtrl is not None:
             crosshairCtrl.onCrosshairViewChanged -= self.__onCrosshairViewChanged
+            crosshairCtrl.onCrosshairPositionChanged -= self.__onCrosshairPositionChanged
+            crosshairCtrl.onCrosshairScaleChanged -= self.__onCrosshairPositionChanged
         vStateCtrl = self.__sessionProvider.shared.vehicleState
         if vStateCtrl is not None:
             vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
@@ -307,6 +312,9 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
     def __onBattleStarted(self):
         self.__updateContextAvailability()
         self.as_setVisibleS(self.__isVisible())
+
+    def __onCrosshairPositionChanged(self, *_):
+        self.as_updateLayoutS(*self.__sessionProvider.shared.crosshair.getScaledPosition())
 
     def __updateContextAvailability(self):
         prebattleCtrl = self.__sessionProvider.dynamic.comp7PrebattleSetup

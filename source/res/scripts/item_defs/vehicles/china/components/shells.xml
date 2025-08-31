@@ -1132,6 +1132,59 @@
       </damage>
     </armorSpalls>
   </_100mm_SB_Type_59_2>
+  <_100mm_CB_412D>
+    <id>	31022	</id>
+    <userString>	#china_vehicles:_100mm_CB_412D	</userString>
+    <icon>	ap	</icon>
+    <price>	530	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	135	</devices>
+    </damage>
+  </_100mm_CB_412D>
+  <_100mm_CC_412P>
+    <id>	31023	</id>
+    <userString>	#china_vehicles:_100mm_CC_412P	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4400	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	135	</devices>
+    </damage>
+  </_100mm_CC_412P>
+  <_100mm_SB_412>
+    <id>	31024	</id>
+    <userString>	#china_vehicles:_100mm_SB_412	</userString>
+    <icon>	he_modern	</icon>
+    <price>	360	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	100	</caliber>
+    <explosionRadius>	1.76	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	490	</armor>
+      <devices>	135	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.76	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	245	</armor>
+        <devices>	70	</devices>
+      </damage>
+    </armorSpalls>
+  </_100mm_SB_412>
   <_100mm_CJ-412G>
     <id>	18	</id>
     <userString>	#china_vehicles:_100mm_CJ-412G	</userString>
@@ -2588,6 +2641,75 @@
       </damage>
     </armorSpalls>
   </_180mm_HE_VO28CH_70>
+  <_180mm_AP_G-572CH_70_T>
+    <id>	31025	</id>
+    <userString>	#china_vehicles:_180mm_AP_G-572CH_70_T	</userString>
+    <icon>	ap	</icon>
+    <price>	2200	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	180	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	hugeArmorPiercing	</effects>
+    <damage>
+      <armor>	1050	</armor>
+      <devices>	240	</devices>
+    </damage>
+  </_180mm_AP_G-572CH_70_T>
+  <_180mm_HEAT_F-572CH_70_T>
+    <id>	31026	</id>
+    <userString>	#china_vehicles:_180mm_HEAT_F-572CH_70_T	</userString>
+    <icon>	ap_fsds_premium	</icon>
+    <price>	7200	</price>
+    <kind>	ARMOR_PIERCING_FSDS	</kind>
+    <caliber>	180	</caliber>
+    <improved>	true	</improved>
+    <isTracer>	true	</isTracer>
+    <effects>	hugeAPFSDS	</effects>
+    <damage>
+      <armor>	1050	</armor>
+      <devices>	240	</devices>
+    </damage>
+    <maxDistanceInsideVehicle>	40	</maxDistanceInsideVehicle>
+    <damageRandomization>	0.0	</damageRandomization>
+    <distanceDamage>
+      <isEnabled>	true	</isEnabled>
+      <damage>
+        <min>	525	</min>
+        <max>	1575	</max>
+      </damage>
+      <distance>
+        <min>	1.0	</min>
+        <max>	6.0	</max>
+      </distance>
+      <ignoreModules>	true	</ignoreModules>
+    </distanceDamage>
+    <hitDeviceChanceMultiplier>	0.3	</hitDeviceChanceMultiplier>
+    <hitCrewChanceMultiplier>	0.3	</hitCrewChanceMultiplier>
+  </_180mm_HEAT_F-572CH_70_T>
+  <_180mm_HE_VO28CH_70_T>
+    <id>	31027	</id>
+    <userString>	#china_vehicles:_180mm_HE_VO28CH_70_T	</userString>
+    <icon>	he_modern	</icon>
+    <price>	1480	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	180	</caliber>
+    <explosionRadius>	5.05	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	hugeHighExplosive	</effects>
+    <damage>
+      <armor>	1400	</armor>
+      <devices>	240	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	5.05	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	700	</armor>
+        <devices>	120	</devices>
+      </damage>
+    </armorSpalls>
+  </_180mm_HE_VO28CH_70_T>
   <_180mm_HEAT_F-572CH>
     <id>	170	</id>
     <userString>	#china_vehicles:_180mm_HEAT_F-572CH	</userString>

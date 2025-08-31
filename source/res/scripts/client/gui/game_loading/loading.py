@@ -18,7 +18,7 @@ _logger = loggers.getLoaderLogger()
 _g_Loader = GameLoadingStateMachine()
 
 def startSound():
-    WWISE.WG_loadLogin()
+    WWISE.loadLogin()
     WWISE.WW_eventGlobalSync('ue_01_loginscreen_enter')
     WWISE.WW_eventGlobal('loginscreen_ambient_start')
 

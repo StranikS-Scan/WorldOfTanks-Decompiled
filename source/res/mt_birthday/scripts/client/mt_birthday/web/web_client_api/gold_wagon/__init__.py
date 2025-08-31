@@ -1,3 +1,0 @@
-# Python bytecode 2.7 (decompiled from Python 2.7)
-# Embedded file name: mt_birthday/scripts/client/mt_birthday/web/web_client_api/gold_wagon/__init__.py
-pass

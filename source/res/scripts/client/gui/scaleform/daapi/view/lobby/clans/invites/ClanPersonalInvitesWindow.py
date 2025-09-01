@@ -9,7 +9,7 @@ from helpers.i18n import makeString as _ms
 
 class ClanPersonalInvitesWindow(ClanPersonalInvitesWindowMeta, ClanListener):
 
-    def __init__(self, *args):
+    def __init__(self, *args, **kwargs):
         super(ClanPersonalInvitesWindow, self).__init__()
 
     def onClanEnableChanged(self, enabled):

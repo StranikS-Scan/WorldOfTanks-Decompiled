@@ -45,7 +45,7 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	150	</armor_1>
+      <armor_1>	160	</armor_1>
       <armor_2>	120	</armor_2>
       <armor_3>	80	</armor_3>
       <armor_4>	80	</armor_4>
@@ -1063,8 +1063,8 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_E50_Ausf_M>
-      <userString>	#germany_vehicles:Chassis_E50_Ausf_M	</userString>
+    <Chassis_G73_E50_Ausf_M>
+      <userString>	#germany_vehicles:Chassis_G73_E50_Ausf_M	</userString>
       <tags></tags>
       <level>	10	</level>
       <price>	82500	</price>
@@ -1074,7 +1074,6 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	9000	</weight>
-      <maxLoad>	67000	</maxLoad>
       <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
       <brakeForce>	65000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2124,11 +2123,11 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_E50_Ausf_M>
+    </Chassis_G73_E50_Ausf_M>
   </chassis>
   <turrets0>
-    <Turret_1_E50_Ausf_M>
-      <userString>	#germany_vehicles:Turret_1_E50_Ausf_M	</userString>
+    <Turret_1_G73_E50_Ausf_M>
+      <userString>	#germany_vehicles:Turret_1_G73_E50_Ausf_M	</userString>
       <tags></tags>
       <level>	10	</level>
       <price>	66000	</price>
@@ -2178,7 +2177,7 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_105mm_KwK45_L52_ausf_K>	shared	  <maxAmmo>	48	</maxAmmo>
+        <_105mm_Kw_K_L_52_Ausf_K>	shared	  <maxAmmo>	48	</maxAmmo>
           <aimingTime>	2.1	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
@@ -2187,7 +2186,7 @@
           </shotDispersionFactors>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 0.069444 8 0.083333 8 0.402778 8 0.416667 7 0.583333 7 0.597222 8 0.916667 8 0.930556 8 1 8	</maxPitch>
+            <maxPitch>	0.00000 8.00 0.40278 8.00 0.41667 7.00 0.58333 7.00 0.59722 8.00 1.00000 8.00	</maxPitch>
           </pitchLimits>
           <armor>
             <armor_1>	270	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -2221,7 +2220,7 @@
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.3	</shotDispersionRadius>
-          <reloadTime>	9.6	</reloadTime>
+          <reloadTime>	9.2	</reloadTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/german/G73_E50_Ausf_M/normal/lod0/Gun_01.model	</undamaged>
@@ -2293,7 +2292,7 @@
             <density>	133.089 141.381	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_105mm_KwK45_L52_ausf_K>
+        </_105mm_Kw_K_L_52_Ausf_K>
       </guns>
       <models>
         <undamaged>	vehicles/german/G73_E50_Ausf_M/normal/lod0/Turret_01.model	</undamaged>
@@ -2997,7 +2996,7 @@
         <density>	106.484 106.579	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_1_E50_Ausf_M>
+    </Turret_1_G73_E50_Ausf_M>
   </turrets0>
   <engines>
     <Maybach_HL_235>	shared	</Maybach_HL_235>
@@ -3012,12 +3011,12 @@
     <detailed>
       <engines>
         <Maybach_HL_235>
-          <smplEnginePower>	1268.737	</smplEnginePower>
+          <smplEnginePower>	1300	</smplEnginePower>
           <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
         </Maybach_HL_235>
       </engines>
       <chassis>
-        <Chassis_E50_Ausf_M>
+        <Chassis_G73_E50_Ausf_M>
           <grounds>
             <soft>
               <rollingFriction>	0.18515	</rollingFriction>
@@ -3029,7 +3028,7 @@
               <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_E50_Ausf_M>
+        </Chassis_G73_E50_Ausf_M>
       </chassis>
     </detailed>
   </physics>

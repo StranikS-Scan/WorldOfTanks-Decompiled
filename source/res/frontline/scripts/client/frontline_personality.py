@@ -11,6 +11,7 @@ from frontline.gui.battle_control.controllers.equipment_items import registerFLE
 from frontline.gui.battle_control.controllers.repositories import registerFLBattleRepositories
 from frontline.gui.frontline_gui_constants import initFLLimitedUIIDs
 from frontline.gui.gui_constants import ViewAlias
+from frontline.gui.impl.lobby.views.frontline_event_banner import FrontlineEventBanner
 from frontline.gui.prb_control import registerFLPrebattles, extendIntroByType
 from frontline_common.constants import ACCOUNT_DEFAULT_SETTINGS
 from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
@@ -68,6 +69,10 @@ class ClientFrontlineBattleMode(AbstractBattleMode):
         from frontline.gui.hangar_presets.frontline_presets_getter import FrontlinePresetsGetter
         return FrontlinePresetsGetter
 
+    @property
+    def _client_hangarEventBannerType(self):
+        return FrontlineEventBanner
+
 
 class ClientFrontlineTrainingBattleMode(ClientFrontlineBattleMode):
     _PREBATTLE_TYPE = PREBATTLE_TYPE.EPIC_TRAINING
@@ -88,6 +93,7 @@ def preInit():
     battleMode.registerAmmunitionSetupViews()
     battleMode.registerProviderBattleQueue()
     battleMode.registerScaleformRequiredLibraries()
+    battleMode.registerHangarEventBanner()
     trainingBattleMode = ClientFrontlineTrainingBattleMode(__name__)
     trainingBattleMode.registerScaleformRequiredLibraries()
     registerFLBattleRepositories()

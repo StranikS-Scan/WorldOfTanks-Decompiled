@@ -805,8 +805,8 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_Bat_Chatillon25t_2>
-      <userString>	#france_vehicles:Chassis_Bat_Chatillon25t_2	</userString>
+    <Chassis_F18_Bat_Chatillon25t>
+      <userString>	#france_vehicles:Chassis_F18_Bat_Chatillon25t	</userString>
       <tags></tags>
       <level>	10	</level>
       <price>	68200	</price>
@@ -815,7 +815,6 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	4100	</weight>
-      <maxLoad>	28000	</maxLoad>
       <terrainResistance>	0.9 1 1.6	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -1700,13 +1699,13 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	4.57142878	</repairTime>
-    </Chassis_Bat_Chatillon25t_2>
+    </Chassis_F18_Bat_Chatillon25t>
   </chassis>
   <turrets0>
-    <Turret_1_Bat_Chatillon25t>
-      <userString>	#france_vehicles:Turret_1_Bat_Chatillon25t	</userString>
-      <shortUserString>	#france_vehicles:Turret_1_Bat_Chatillon25t_short	</shortUserString>
-      <tags></tags>
+    <Turret_1_F18_Bat_Chatillon25t>
+      <userString>	#france_vehicles:Turret_1_F18_Bat_Chatillon25t	</userString>
+      <shortUserString>	#france_vehicles:Turret_1_F18_Bat_Chatillon25t_short	</shortUserString>
+      <tags>	oscillating	</tags>
       <level>	10	</level>
       <price>	37000	</price>
       <notInShop>	true	</notInShop>
@@ -1740,8 +1739,12 @@
       </surveyingDeviceHealth>
       <guns>
         <_105mm_CN_105_57>	shared	  <maxAmmo>	50	</maxAmmo>
+          <unlocks>
+            <vehicle>	F135_AS_XX_40_t	  <cost>	325000	</cost>
+            </vehicle>
+          </unlocks>
           <pitchLimits>
-            <minPitch>	0 -11 0.269671 -11 0.333333 -8 0.666667 -8 0.730329 -11 1 -11	</minPitch>
+            <minPitch>	0.00000 -11.00 0.31944 -11.00 0.36111 -8.00 0.55556 -8.00 0.59722 -11.00 1.00000 -11.00	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
           <armor>
@@ -2453,10 +2456,10 @@
         <density>	115.135 115.86	</density>
         <aoTextureSize>	512 256	</aoTextureSize>
       </camouflage>
-    </Turret_1_Bat_Chatillon25t>
+    </Turret_1_F18_Bat_Chatillon25t>
   </turrets0>
   <engines>
-    <Hispano-Suiza_HS110>	shared	</Hispano-Suiza_HS110>
+    <Hispano_Suiza_HS_110_BC25>	shared	</Hispano_Suiza_HS_110_BC25>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
@@ -2467,13 +2470,13 @@
   <physics>
     <detailed>
       <engines>
-        <Hispano-Suiza_HS110>
+        <Hispano_Suiza_HS_110_BC25>
           <smplEnginePower>	761.2424	</smplEnginePower>
           <smplFwMaxSpeed>	65	</smplFwMaxSpeed>
-        </Hispano-Suiza_HS110>
+        </Hispano_Suiza_HS_110_BC25>
       </engines>
       <chassis>
-        <Chassis_Bat_Chatillon25t_2>
+        <Chassis_F18_Bat_Chatillon25t>
           <grounds>
             <soft>
               <rollingFriction>	0.1288	</rollingFriction>
@@ -2486,7 +2489,7 @@
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>
-        </Chassis_Bat_Chatillon25t_2>
+        </Chassis_F18_Bat_Chatillon25t>
       </chassis>
     </detailed>
   </physics>

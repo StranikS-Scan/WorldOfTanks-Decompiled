@@ -8,12 +8,13 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.battle_results.components import base
 from gui.battle_results.components import style
 from gui.battle_results.pbs_helpers.additional_bonuses import isWotPlusBonusEnabledInConfig, isGoldPiggyBankAvailaible, getAdditionalXpBonusStatus, getLeftAdditionalBonus, getAdditionalXPFactor10FromResult
+from gui.battle_results.pbs_helpers.economics import getCreditsToShow
 from gui.battle_results.reusable.records import convertFactorToPercent
 from gui.impl import backport
 from gui.impl.backport.backport_system_locale import getIntegralFormat
 from gui.impl.lobby.premacc import premacc_helpers
 from gui.impl.gen.resources import R
-from gui.impl.gen.view_models.views.lobby.battle_results.premium_plus_model import PremiumXpBonusRestriction
+from gui.impl.gen.view_models.views.lobby.battle_results.additional_bonus_model import PremiumXpBonusRestriction
 from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.icons import makeImageTag
 from gui.shared.money import Currency
@@ -142,11 +143,8 @@ class PremiumCreditsBlock(base.StatsBlock):
     def setRecord(self, result, reusable):
         canBeFaded = reusable.hasAnyPremiumInPostBattle and reusable.canResourceBeFaded
         isDiffShow = reusable.canUpgradeToPremiumPlus
-        for records in reusable.personal.getMoneyRecords():
-            baseCredits, premiumCredits = records[:2]
-            value = premiumCredits.getRecord('credits', 'originalCreditsToDraw')
-            if isDiffShow and value > 0:
-                value -= baseCredits.getRecord('credits', 'originalCreditsToDraw')
+        values = getCreditsToShow(reusable, isDiffShow)
+        for value in values:
             value = style.makeCreditsLabel(value, canBeFaded=canBeFaded, isDiff=isDiffShow)
             self.addNextComponent(base.DirectStatsItem('', value))
 
@@ -257,7 +255,6 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
         isTotalShown |= self.__addStatsItemIfExists('battlePayments', baseCredits, premiumCredits, False, None, 'orderCreditsFactor100')
         isTotalShown |= self.__addEventsMoney(baseCredits, premiumCredits, goldRecords)
         isTotalShown |= self.__addReferralSystemFactor(baseCredits, premiumCredits)
-        isTotalShown |= self.__addStatsItemIfExists('veteranBonus', baseCredits, premiumCredits, False, None, 'veteranCreditsFactor100')
         showWotPlusBattleBonuses = self._lobbyContext.getServerSettings().isWotPlusBattleBonusesEnabled()
         if showWotPlusBattleBonuses:
             self.__addWotPlusBattleBonusCredits(baseCredits, premiumCredits, baseCreditsWithWotPlus, premiumCreditsWithWotPlus)

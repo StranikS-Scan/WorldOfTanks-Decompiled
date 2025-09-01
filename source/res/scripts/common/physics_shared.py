@@ -471,8 +471,9 @@ def configurePhysics(physics, baseCfg, typeDescr, gravityFactor, updateSiegeMode
             updatePhysicsCfg(siegeBaseCfg, siegeVehicleDescr, cfg['modes']['siegeMode'])
     cfg = __buildConfigurations(cfg)
     for name, mode in cfg['modes'].iteritems():
-        applyVehDescrMiscFactors(typeDescr, mode)
-        configurePhysicsMode(mode, typeDescr, gravityFactor)
+        tDescr = typeDescr.siegeVehicleDescr if typeDescr.hasSiegeMode and name == 'siegeMode' else typeDescr
+        applyVehDescrMiscFactors(tDescr, mode)
+        configurePhysicsMode(mode, tDescr, gravityFactor)
 
     if not physics.configure(cfg):
         LOG_ERROR('configureXPhysics: configure failed')
@@ -565,9 +566,10 @@ def updatePhysics(physics, typeDesc, isSoftUpdate=False, gravityMultiplier=1.0):
         updatePhysicsCfg(siegeBaseCfg, siegeVehicleDescr, cfg['modes']['siegeMode'])
     cfg = __buildConfigurations(cfg)
     for name, mode in cfg['modes'].iteritems():
+        tDescr = typeDesc.siegeVehicleDescr if typeDesc.hasSiegeMode and name == 'siegeMode' else typeDesc
         if isSoftUpdate:
-            applyVehDescrMiscFactors(typeDesc, mode)
-        configurePhysicsMode(mode, typeDesc, gravityFactor)
+            applyVehDescrMiscFactors(tDescr, mode)
+        configurePhysicsMode(mode, tDescr, gravityFactor)
 
     if not isSoftUpdate:
         oldMatrix = Math.Matrix(physics.matrix)

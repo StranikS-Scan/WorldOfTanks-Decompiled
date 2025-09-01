@@ -147,7 +147,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	33500	</maxLoad>
       <terrainResistance>	1 1.35 1.95	</terrainResistance>
       <brakeForce>	60000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -1123,6 +1122,7 @@
             <armor_2>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
             <armor_3>	65	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_3>
             <gun>	40	</gun>
           </armor>

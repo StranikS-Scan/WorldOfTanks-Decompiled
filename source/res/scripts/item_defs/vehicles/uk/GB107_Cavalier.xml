@@ -62,7 +62,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	13081	</weight>
-    <maxHealth>	488	</maxHealth>
+    <maxHealth>	560	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	170	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -1249,8 +1249,7 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	8200	</weight>
-      <maxLoad>	25600	</maxLoad>
-      <terrainResistance>	1 1.2 2	</terrainResistance>
+      <terrainResistance>	0.9 1 1.8	</terrainResistance>
       <brakeForce>	17000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	31	</rotationSpeed>
@@ -1972,7 +1971,6 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	8200	</weight>
-      <maxLoad>	27500	</maxLoad>
       <terrainResistance>	0.9 1 1.8	</terrainResistance>
       <brakeForce>	20000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -2692,10 +2690,6 @@
       <tags></tags>
       <level>	4	</level>
       <price>	3980	</price>
-      <unlocks>
-        <turret>	Turret_2_GB107_Cavalier	  <cost>	2400	</cost>
-        </turret>
-      </unlocks>
       <armor>
         <armor_1>	76.2	</armor_1>
         <armor_2>	20	</armor_2>
@@ -2708,40 +2702,40 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3153	</weight>
-      <maxHealth>	92	</maxHealth>
+      <maxHealth>	110	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	340	</circularVisionRadius>
+      <circularVisionRadius>	350	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	70	</maxHealth>
         <maxRegenHealth>	35	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <QF_6_pounder_Mk_III>	shared	  <maxAmmo>	115	</maxAmmo>
+        <QF_6_pdr_Mk_III_A24>	shared	  <maxAmmo>	115	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 7 0.111111 7 0.174773 12 0.325227 12 0.388889 1 0.611111 1 0.674773 12 0.825227 12 0.888889 7 1 7	</maxPitch>
+            <maxPitch>	0.00000 7.00 0.06944 7.00 0.12500 12.00 0.37500 12.00 0.45833 1.00 0.54167 1.00 0.62500 12.00 0.87500 12.00 0.93056 7.00 1.00000 7.00	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <gun>	QF_6_pounder_Mk_V	  <cost>	3700	</cost>
+            <gun>	QF_6_pdr_Mk_V_A24	  <cost>	3700	</cost>
             </gun>
           </unlocks>
           <armor>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.43	</shotDispersionRadius>
-          <reloadTime>	3.0	</reloadTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	2.3	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB107_Cavalier/normal/lod0/Gun_01.model	</undamaged>
@@ -2800,23 +2794,27 @@
             <density>	136.893 139.5	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </QF_6_pounder_Mk_III>
-        <QF_6_pounder_Mk_V>	shared	  <maxAmmo>	115	</maxAmmo>
+        </QF_6_pdr_Mk_III_A24>
+        <QF_6_pdr_Mk_V_A24>	shared	  <maxAmmo>	115	</maxAmmo>
+          <unlocks>
+            <turret>	Turret_2_GB107_Cavalier	  <cost>	2400	</cost>
+            </turret>
+          </unlocks>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 7 0.111111 7 0.174773 12 0.325227 12 0.388889 1 0.611111 1 0.674773 12 0.825227 12 0.888889 7 1 7	</maxPitch>
+            <maxPitch>	0.00000 7.00 0.06944 7.00 0.12500 12.00 0.37500 12.00 0.45833 1.00 0.54167 1.00 0.62500 12.00 0.87500 12.00 0.93056 7.00 1.00000 7.00	</maxPitch>
           </pitchLimits>
           <armor>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.41	</shotDispersionRadius>
-          <reloadTime>	2.8	</reloadTime>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	2.1	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB107_Cavalier/normal/lod0/Gun_02.model	</undamaged>
@@ -2875,7 +2873,7 @@
             <density>	131.913 134.286	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </QF_6_pounder_Mk_V>
+        </QF_6_pdr_Mk_V_A24>
       </guns>
       <models>
         <undamaged>	vehicles/british/GB107_Cavalier/normal/lod0/Turret_01.model	</undamaged>
@@ -3344,8 +3342,6 @@
       <level>	5	</level>
       <price>	11000	</price>
       <unlocks>
-        <gun>	_75mm_Gun_Mk_V	  <cost>	4000	</cost>
-        </gun>
         <vehicle>	GB21_Cromwell	  <cost>	25000	</cost>
         </vehicle>
       </unlocks>
@@ -3361,7 +3357,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3390	</weight>
-      <maxHealth>	122	</maxHealth>
+      <maxHealth>	140	</maxHealth>
       <rotationSpeed>	46	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -3375,22 +3371,22 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <QF_6_pounder_Mk_III>	shared	  <maxAmmo>	115	</maxAmmo>
+        <QF_6_pdr_Mk_III_A24>	shared	  <maxAmmo>	115	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 7 0.111111 7 0.174773 12 0.325227 12 0.388889 1 0.611111 1 0.674773 12 0.825227 12 0.888889 7 1 7	</maxPitch>
+            <maxPitch>	0.00000 7.00 0.06944 7.00 0.12500 12.00 0.37500 12.00 0.45833 1.00 0.54167 1.00 0.62500 12.00 0.87500 12.00 0.93056 7.00 1.00000 7.00	</maxPitch>
           </pitchLimits>
           <armor>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	3.0	</reloadTime>
+          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <reloadTime>	2.3	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	1.9	</aimingTime>
+          <aimingTime>	1.7	</aimingTime>
           <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB107_Cavalier/normal/lod0/Gun_05.model	</undamaged>
@@ -3449,23 +3445,23 @@
             <density>	136.893 139.5	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </QF_6_pounder_Mk_III>
-        <QF_6_pounder_Mk_V>	shared	  <maxAmmo>	115	</maxAmmo>
+        </QF_6_pdr_Mk_III_A24>
+        <QF_6_pdr_Mk_V_A24>	shared	  <maxAmmo>	115	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 7 0.111111 7 0.174773 12 0.325227 12 0.388889 1 0.611111 1 0.674773 12 0.825227 12 0.888889 7 1 7	</maxPitch>
+            <maxPitch>	0.00000 7.00 0.06944 7.00 0.12500 12.00 0.37500 12.00 0.45833 1.00 0.54167 1.00 0.62500 12.00 0.87500 12.00 0.93056 7.00 1.00000 7.00	</maxPitch>
           </pitchLimits>
           <armor>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.39	</shotDispersionRadius>
-          <reloadTime>	2.8	</reloadTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	2.1	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	1.9	</aimingTime>
+          <aimingTime>	1.7	</aimingTime>
           <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB107_Cavalier/normal/lod0/Gun_06.model	</undamaged>
@@ -3524,156 +3520,7 @@
             <density>	131.913 134.286	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </QF_6_pounder_Mk_V>
-        <_75mm_Gun_Mk_V>	shared	  <maxAmmo>	75	</maxAmmo>
-          <unlocks>
-            <gun>	_3.7inch_Howitzer	  <cost>	2300	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <gun>	20	</gun>
-          </armor>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 7 0.111111 7 0.174773 12 0.325227 12 0.388889 1 0.611111 1 0.674773 12 0.825227 12 0.888889 7 1 7	</maxPitch>
-          </pitchLimits>
-          <shotDispersionRadius>	0.41	</shotDispersionRadius>
-          <reloadTime>	3.3	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	1.9	</aimingTime>
-          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/british/GB107_Cavalier/normal/lod0/Gun_07.model	</undamaged>
-            <destroyed>	vehicles/british/GB107_Cavalier/crash/lod0/Gun_07.model	</destroyed>
-            <exploded>	vehicles/british/GB107_Cavalier/crash/lod0/Gun_07.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/british/GB107_Cavalier/collision/Gun_07.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB107_Cavalier/collision_client/Gun_07.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium_mb	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.042709 -0.021162 1.11811	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.020939 -0.021162 1.11811	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.004322 1.89658 1.34686	</position>
-              <rotation>	1.56894 3.12639 0.009556	</rotation>
-              <scale>	1.28313 0.286641 1.28313	</scale>
-              <showOn>	4352	</showOn>
-              <clipAngle>	0.263835	</clipAngle>
-              <anchorShift>	0.381062	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.044317 -0.042236 1.56818	</rayStart>
-              <rayEnd>	-0.044317 -0.042236 1.96818	</rayEnd>
-              <rayUp>	0.062 0 0	</rayUp>
-              <size>	0.4	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <density>	136.582 138.113	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </_75mm_Gun_Mk_V>
-        <_3.7inch_Howitzer>	shared	  <maxAmmo>	48	</maxAmmo>
-          <armor>
-            <gun>	40	</gun>
-          </armor>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 6 0.111111 6 0.174773 12 0.325227 12 0.388889 1 0.611111 1 0.674773 12 0.825227 12 0.888889 6 1 6	</maxPitch>
-          </pitchLimits>
-          <shotDispersionRadius>	0.53	</shotDispersionRadius>
-          <reloadTime>	7.5	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/british/GB107_Cavalier/normal/lod0/Gun_08.model	</undamaged>
-            <destroyed>	vehicles/british/GB107_Cavalier/crash/lod0/Gun_08.model	</destroyed>
-            <exploded>	vehicles/british/GB107_Cavalier/crash/lod0/Gun_08.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/british/GB107_Cavalier/collision/Gun_08.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB107_Cavalier/collision_client/Gun_08.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_main	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.047688 0.026327 0.784557	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.02071 -0.017376 0.719209	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.004325 1.89924 1.34673	</position>
-              <rotation>	1.45382 -0.024916 3.14143	</rotation>
-              <scale>	1.28314 0.286642 1.28313	</scale>
-              <showOn>	4352	</showOn>
-              <clipAngle>	0.263835	</clipAngle>
-              <anchorShift>	0.628564	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.044116 -0.037808 0.817951	</rayStart>
-              <rayEnd>	-0.044116 -0.037808 1.217951	</rayEnd>
-              <rayUp>	0.085065 0 0	</rayUp>
-              <size>	0.4	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <density>	138.025 139.126	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </_3.7inch_Howitzer>
+        </QF_6_pdr_Mk_V_A24>
       </guns>
       <models>
         <undamaged>	vehicles/british/GB107_Cavalier/normal/lod0/Turret_02.model	</undamaged>
@@ -4149,11 +3996,6 @@
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <N19Mk1>	shared	  <unlocks>
-        <radio>	N19Mk2	  <cost>	3600	</cost>
-        </radio>
-      </unlocks>
-    </N19Mk1>
     <N19Mk2>	shared	</N19Mk2>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
@@ -4161,11 +4003,11 @@
     <detailed>
       <engines>
         <Nuffield_liberty_MKIII>
-          <smplEnginePower>	390	</smplEnginePower>
+          <smplEnginePower>	435	</smplEnginePower>
           <smplFwMaxSpeed>	46	</smplFwMaxSpeed>
         </Nuffield_liberty_MKIII>
         <Nuffield_liberty_MKIVA>
-          <smplEnginePower>	450	</smplEnginePower>
+          <smplEnginePower>	475	</smplEnginePower>
           <smplFwMaxSpeed>	46	</smplFwMaxSpeed>
         </Nuffield_liberty_MKIVA>
       </engines>
@@ -4174,13 +4016,13 @@
           <axleCount>	5	</axleCount>
           <grounds>
             <soft>
-              <rollingFriction>	0.161	</rollingFriction>
+              <rollingFriction>	0.1449	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.0966	</rollingFriction>
+              <rollingFriction>	0.0805	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0805	</rollingFriction>
+              <rollingFriction>	0.07245	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_GB107_Cavalier>

@@ -33,6 +33,7 @@ from constants import AIMING_MODE
 from items import makeIntCompactDescrByID
 from nations import NONE_INDEX
 from DynamicCameras.ArcadeCamera import ArcadeCameraState
+from VehicleGunRotator import GunMarkerInfo
 _logger = logging.getLogger(__name__)
 
 class _DefaultStrikeSelector(CallbackDelayer):
@@ -170,7 +171,8 @@ class _ArtilleryStrikeSelector(_DefaultStrikeSelector, _VehiclesSelector):
         return gun_marker_ctrl.createArtyHit(myArtyEquipment, areaRadius)
 
     def __markerForceUpdate(self):
-        self.__marker.update(GUN_MARKER_TYPE.CLIENT, self.hitPosition, Vector3(0.0, 0.0, 1.0), 10.0, 0.0, 1000.0, None)
+        gunMarkerInfo = GunMarkerInfo(0, 0, self.hitPosition, Vector3(0.0, 0.0, 1.0), 10.0, 0.0, 0.0, None)
+        self.__marker.update(GUN_MARKER_TYPE.CLIENT, gunMarkerInfo, (), 1000.0)
         return
 
     def processHover(self, position, force=False):
@@ -182,7 +184,8 @@ class _ArtilleryStrikeSelector(_DefaultStrikeSelector, _VehiclesSelector):
                 self.__marker.setPosition(position)
                 BigWorld.callback(SERVER_TICK_LENGTH, self.__markerForceUpdate)
             else:
-                self.__marker.update(GUN_MARKER_TYPE.CLIENT, position, Vector3(0.0, 0.0, 1.0), 10.0, 0.0, SERVER_TICK_LENGTH, None)
+                gunMarkerInfo = GunMarkerInfo(0, 0, position, Vector3(0.0, 0.0, 1.0), 10.0, 0.0, 0.0, None)
+                self.__marker.update(GUN_MARKER_TYPE.CLIENT, gunMarkerInfo, (), SERVER_TICK_LENGTH)
             self.hitPosition = position
             self.writeStateToReplay()
             return
@@ -193,7 +196,8 @@ class _ArtilleryStrikeSelector(_DefaultStrikeSelector, _VehiclesSelector):
     def processReplayHover(self):
         replayCtrl = BattleReplay.g_replayCtrl
         _, _, self.hitPosition, _ = replayCtrl.getGunMarkerParams(self.hitPosition, Math.Vector3(0.0, 0.0, 0.0))
-        self.__marker.update(GUN_MARKER_TYPE.CLIENT, self.hitPosition, Vector3(0.0, 0.0, 1.0), 10.0, 0.0, SERVER_TICK_LENGTH, None)
+        gunMarkerInfo = GunMarkerInfo(0, 0, self.hitPosition, Vector3(0.0, 0.0, 1.0), 10.0, 0.0, 0.0, None)
+        self.__marker.update(GUN_MARKER_TYPE.CLIENT, gunMarkerInfo, (), SERVER_TICK_LENGTH)
         return
 
     def writeStateToReplay(self):
@@ -851,7 +855,7 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
     def isManualBind(self):
         return True
 
-    def updateGunMarker(self, markerType, pos, direction, size, sizeOffset, relaxTime, collData):
+    def updateGunMarker(self, markerType, gunMarkerInfo, supportMarkersInfo, relaxTime):
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying:
             self.__activeSelector.processReplayHover()

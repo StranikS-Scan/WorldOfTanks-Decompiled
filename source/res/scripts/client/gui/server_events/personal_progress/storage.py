@@ -35,6 +35,9 @@ class ClientProgressStorage(quest_progress.ProgressStorage):
     def getBodyProgresses(self, isMain=None):
         raise NotImplementedError
 
+    def getUniqueCompletionRequirement(self, isMain=None):
+        raise NotImplementedError
+
     def sortProgresses(self, progresses):
         return sorted(progresses, key=lambda p: (not p.isMain(), p.getPriority()))
 
@@ -72,6 +75,9 @@ class LobbyProgressStorage(ClientProgressStorage):
 
     def getHeaderProgresses(self, isMain=None):
         return self._collectProgressInfo(collectors.LobbyHeaderProgressCollector(isMain))
+
+    def getUniqueCompletionRequirement(self, isMain=None):
+        return False
 
     def markAsCompleted(self, isCompleted, isFullCompleted):
         for progress in self.getProgresses().itervalues():
@@ -130,6 +136,9 @@ class BattleProgressStorage(ClientProgressStorage):
 
     def getBodyProgresses(self, isMain=None):
         return self._collectProgressInfo(collectors.BattleBodyProgressCollector(isMain))
+
+    def getUniqueCompletionRequirement(self, isMain=None):
+        return self._collectProgressInfo(collectors.BattleUniqueProgressCollector(isMain))
 
     def getTimerConditions(self):
         return self._collectProgressInfo(collectors.ProgressWithTimerCollector())

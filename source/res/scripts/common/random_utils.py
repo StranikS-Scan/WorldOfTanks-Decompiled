@@ -42,14 +42,14 @@ def getValueWithDeviationInPercent(value, deviation):
     return value + value * (random.randint(-deviation, deviation) / 100.0)
 
 
-def weighted_choice(seq, weights):
+def weighted_choice(seq, weights, customRandomModule=None):
     total = 0
     cum_weights = []
     for w in weights:
         total += w
         cum_weights.append(total)
 
-    x = random.random() * total
+    x = (customRandomModule.random() if customRandomModule is not None else random.random()) * total
     i = bisect(cum_weights, x)
     if i >= len(seq):
         i = len(seq) - 1

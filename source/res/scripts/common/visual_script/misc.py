@@ -1,8 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/misc.py
-import BigWorld
-from constants import IS_CLIENT, IS_BOT
-from debug_utils import LOG_ERROR
+import typing
+from debug_utils import LOG_ERROR, LOG_WARNING
+if typing.TYPE_CHECKING:
+    from typing import Dict, Union
+    from ResMgr import DataSection
+    from visual_script.block import Block
 VisualScriptTag = 'visualScript'
 
 class DeferredQueue(object):
@@ -44,6 +47,11 @@ def makePlanPath(planName):
 
 def errorVScript(owner, msg):
     LOG_ERROR('[VScript]', str(owner.planName()), str(owner.blockId()), msg)
+    owner._writeLog('%s:%s : %s' % (owner.planName(), owner.blockId(), msg))
+
+
+def warningVScript(owner, msg):
+    LOG_WARNING('[VScript]', str(owner.planName()), str(owner.blockId()), msg)
     owner._writeLog('%s:%s : %s' % (owner.planName(), owner.blockId(), msg))
 
 

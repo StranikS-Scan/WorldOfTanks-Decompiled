@@ -79,7 +79,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	3890	</weight>
-    <maxHealth>	204	</maxHealth>
+    <maxHealth>	208	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	65	</maxHealth>
       <maxRegenHealth>	45	</maxRegenHealth>
@@ -1083,7 +1083,6 @@
         <rightTrack>	5	</rightTrack>
       </armor>
       <weight>	1200	</weight>
-      <maxLoad>	6500	</maxLoad>
       <terrainResistance>	0.8 0.9 1.8	</terrainResistance>
       <brakeForce>	5900	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -1959,7 +1958,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	200	</weight>
-      <maxHealth>	51	</maxHealth>
+      <maxHealth>	52	</maxHealth>
       <rotationSpeed>	34	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	50	</maxHealth>
@@ -1975,7 +1974,7 @@
       <guns>
         <Cannone_da_37_20>	shared	  <maxAmmo>	545	</maxAmmo>
           <unlocks>
-            <gun>	Cannone_da_37_40	  <cost>	40	</cost>
+            <gun>	Cannone_da_37_40_3000	  <cost>	40	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -1986,11 +1985,17 @@
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.430556 10 0.458333 5 0.513889 5 0.541667 10 1 10	</maxPitch>
+            <maxPitch>	0.00000 10.00 0.36944 10.00 0.46667 5.00 0.56389 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
-          <reloadTime>	2.6	</reloadTime>
-          <shotDispersionRadius>	0.5	</shotDispersionRadius>
+          <reloadTime>	2.2	</reloadTime>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.16	</turretRotation>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+            <afterShot>	4.0	</afterShot>
+          </shotDispersionFactors>
+          <aimingTime>	2	</aimingTime>
           <models>
             <undamaged>	vehicles/italy/It04_Fiat_3000/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/italy/It04_Fiat_3000/crash/lod0/Gun_01.model	</destroyed>
@@ -2029,7 +2034,7 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </Cannone_da_37_20>
-        <Cannone_da_37_40>	shared	  <maxAmmo>	155	</maxAmmo>
+        <Cannone_da_37_40_3000>	shared	  <maxAmmo>	155	</maxAmmo>
           <unlocks>
             <vehicle>	It06_M14_41	  <cost>	270	</cost>
             </vehicle>
@@ -2042,7 +2047,7 @@
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.430556 10 0.458333 5 0.513889 5 0.541667 10 1 10	</maxPitch>
+            <maxPitch>	0.00000 10.00 0.42222 10.00 0.48056 5.00 0.54167 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
           <reloadTime>	2.8	</reloadTime>
@@ -2084,7 +2089,7 @@
             <density>	173.219 173.324	</density>
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
-        </Cannone_da_37_40>
+        </Cannone_da_37_40_3000>
       </guns>
       <models>
         <undamaged>	vehicles/italy/It04_Fiat_3000/normal/lod0/Turret_01.model	</undamaged>

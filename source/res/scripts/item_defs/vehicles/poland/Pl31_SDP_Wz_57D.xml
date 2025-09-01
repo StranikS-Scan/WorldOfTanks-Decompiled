@@ -82,7 +82,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	27365	</weight>
-    <maxHealth>	680	</maxHealth>
+    <maxHealth>	720	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	190	</maxHealth>
       <maxRegenHealth>	130	</maxRegenHealth>
@@ -970,8 +970,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	12000	</weight>
-      <maxLoad>	44000	</maxLoad>
-      <terrainResistance>	1.3 1.8 2.9	</terrainResistance>
+      <terrainResistance>	1.1 1.4 2.3	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	30	</rotationSpeed>
@@ -1785,7 +1784,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	12000	</weight>
-      <maxLoad>	47000	</maxLoad>
       <terrainResistance>	1.1 1.4 2.3	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2601,7 +2599,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
       <weight>	100	</weight>
-      <maxHealth>	170	</maxHealth>
+      <maxHealth>	180	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -2626,7 +2624,7 @@
           </pitchLimits>
           <turretYawLimits>	-5 5	</turretYawLimits>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	7.6	</reloadTime>
+          <reloadTime>	10.1	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	4	</afterShot>
@@ -2754,9 +2752,9 @@
             <turretRotation>	0.1	</turretRotation>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2	</aimingTime>
+          <aimingTime>	2.2	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
-          <reloadTime>	12	</reloadTime>
+          <reloadTime>	12.9	</reloadTime>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <customizationSlots>
             <slot>
@@ -2859,11 +2857,6 @@
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <N2_L>	shared	  <unlocks>
-        <radio>	RKD	  <cost>	3700	</cost>
-        </radio>
-      </unlocks>
-    </N2_L>
     <RKD>	shared	</RKD>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
@@ -2883,13 +2876,13 @@
         <Chassis_Pl31_SDP_Wz_57D>
           <grounds>
             <soft>
-              <rollingFriction>	0.23345	</rollingFriction>
+              <rollingFriction>	0.18515	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1449	</rollingFriction>
+              <rollingFriction>	0.1127	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

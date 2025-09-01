@@ -108,7 +108,7 @@ _BATTLE_ROYALE_CFG = _BattleRoyaleComponentsConfig()
 class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
     __PANELS_FOR_SHOW_HIDE = [BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL, BATTLE_VIEW_ALIASES.BATTLE_LEVEL_PANEL]
 
-    def __init__(self, components=None):
+    def __init__(self, components=None, **kwargs):
         if components is None:
             components = _BATTLE_ROYALE_CFG
         self.__selectSpawnToggling = set()

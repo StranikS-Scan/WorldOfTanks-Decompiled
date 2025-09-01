@@ -1037,8 +1037,7 @@
         </chassis>
       </unlocks>
       <weight>	13000	</weight>
-      <maxLoad>	51000	</maxLoad>
-      <terrainResistance>	1.2 1.4 2.1	</terrainResistance>
+      <terrainResistance>	1.1 1.3 2	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	28	</rotationSpeed>
@@ -1908,7 +1907,6 @@
       <level>	9	</level>
       <price>	63500	</price>
       <weight>	13000	</weight>
-      <maxLoad>	53000	</maxLoad>
       <terrainResistance>	1.1 1.3 2	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2789,9 +2787,9 @@
       <maxHealth>	360	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	170	</maxHealth>
+        <maxRegenHealth>	85	</maxRegenHealth>
+        <repairCost>	9	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	360	</circularVisionRadius>
       <surveyingDeviceHealth>
@@ -2802,7 +2800,7 @@
       <guns>
         <GG_100_162_mm>	shared	  <maxAmmo>	50	</maxAmmo>
           <unlocks>
-            <gun>	GG_85_175_mm	  <cost>	66000	</cost>
+            <gun>	GG_85_175_mm_60	  <cost>	66000	</cost>
             </gun>
           </unlocks>
           <turretYawLimits>	-5 5	</turretYawLimits>
@@ -2871,7 +2869,7 @@
           </shotDispersionFactors>
           <reloadTime>	14	</reloadTime>
           <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
-          <aimingTime>	2.7	</aimingTime>
+          <aimingTime>	2.5	</aimingTime>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -2966,7 +2964,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </GG_100_162_mm>
-        <GG_85_175_mm>	shared	  <maxAmmo>	45	</maxAmmo>
+        <GG_85_175_mm_60>	shared	  <maxAmmo>	45	</maxAmmo>
           <unlocks>
             <vehicle>	Pl29_NC_Wz_70T	  <cost>	209900	</cost>
             </vehicle>
@@ -3131,7 +3129,7 @@
             <density>	99.794731 97.583305	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </GG_85_175_mm>
+        </GG_85_175_mm_60>
       </guns>
       <models>
         <undamaged>	vehicles/poland/Pl28_SDP_Wz_60/normal/lod0/Turret_01.model	</undamaged>
@@ -3178,11 +3176,6 @@
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <RTU_Jesion_M>	shared	  <unlocks>
-        <radio>	R_113_P	  <cost>	7300	</cost>
-        </radio>
-      </unlocks>
-    </RTU_Jesion_M>
     <R_113_P>	shared	</R_113_P>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
@@ -3202,13 +3195,13 @@
         <Chassis_Pl28_SDP_Wz_60>
           <grounds>
             <soft>
-              <rollingFriction>	0.16905	</rollingFriction>
+              <rollingFriction>	0.161	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1127	</rollingFriction>
+              <rollingFriction>	0.10465	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0966	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

@@ -136,6 +136,60 @@
       <chain_4>	readyForBattleAllianceFrance	</chain_4>
     </achievements>
   </tail_7>
+  <tail_8>
+    <id>	8	</id>
+    <seasonID>	3	</seasonID>
+    <nextTileIDs>	9	</nextTileIDs>
+    <chainsCount>	3	</chainsCount>
+    <questsInChain>	15	</questsInChain>
+    <chainsCountToUnlockNext>	3	</chainsCountToUnlockNext>
+    <userString>	#personal_missions_details:tile_8	</userString>
+    <description>	#personal_missions_details:tile_8_descr	</description>
+    <iconID>	tile_8_1	</iconID>
+    <price>	0	</price>
+    <tokens>	token:pt:final:s3:t8 token:pt:s3:t8:reward:claimed	</tokens>
+    <achievements>
+      <chain_1>	readyForBattleAssault	</chain_1>
+      <chain_2>	readyForBattleSniper	</chain_2>
+      <chain_3>	readyForBattleSupport	</chain_3>
+    </achievements>
+  </tail_8>
+  <tail_9>
+    <id>	9	</id>
+    <seasonID>	3	</seasonID>
+    <nextTileIDs>	10	</nextTileIDs>
+    <chainsCount>	3	</chainsCount>
+    <questsInChain>	15	</questsInChain>
+    <chainsCountToUnlockNext>	3	</chainsCountToUnlockNext>
+    <userString>	#personal_missions_details:tile_9	</userString>
+    <description>	#personal_missions_details:tile_9_descr	</description>
+    <iconID>	tile_9_1	</iconID>
+    <price>	0	</price>
+    <tokens>	token:pt:final:s3:t9 token:pt:s3:t9:reward:claimed	</tokens>
+    <achievements>
+      <chain_1>	readyForBattleAssault	</chain_1>
+      <chain_2>	readyForBattleSniper	</chain_2>
+      <chain_3>	readyForBattleSupport	</chain_3>
+    </achievements>
+  </tail_9>
+  <tail_10>
+    <id>	10	</id>
+    <seasonID>	3	</seasonID>
+    <nextTileIDs></nextTileIDs>
+    <chainsCount>	3	</chainsCount>
+    <questsInChain>	15	</questsInChain>
+    <chainsCountToUnlockNext>	0	</chainsCountToUnlockNext>
+    <userString>	#personal_missions_details:tile_10	</userString>
+    <description>	#personal_missions_details:tile_10_descr	</description>
+    <iconID>	tile_10_1	</iconID>
+    <price>	0	</price>
+    <tokens>	token:pt:final:s3:t10 token:pt:s3:t10:reward:claimed	</tokens>
+    <achievements>
+      <chain_1>	readyForBattleAssault	</chain_1>
+      <chain_2>	readyForBattleSniper	</chain_2>
+      <chain_3>	readyForBattleSupport	</chain_3>
+    </achievements>
+  </tail_10>
   <quests>
     <tokenQuest>
       <enabled>	true	</enabled>
@@ -1586,6 +1640,2637 @@
       </conditions>
       <bonus>
         <credits>	50000	</credits>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	pm3:convertion:operation:8	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <pmActiveOperation>	8	</pmActiveOperation>
+              <token>
+                <id>	pm3:8:points	</id>
+                <less>	2700	</less>
+              </token>
+              <token>
+                <id>	token:pt:s3:finished:honor	</id>
+                <equal>	0	</equal>
+              </token>
+              <token>
+                <id>	token:pt:s3:t8:finished:base	</id>
+                <equal>	0	</equal>
+              </token>
+              <token>
+                <id>	pm:points	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <convert>
+                  <id>	pm3:8:points	</id>
+                  <expires>	01.12.2050 06:00	</expires>
+                </convert>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1000000	</bonusLimit>
+        </common>
+      </conditions>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	pm3:convertion:operation:9	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <pmActiveOperation>	9	</pmActiveOperation>
+              <token>
+                <id>	pm3:9:points	</id>
+                <less>	7200	</less>
+              </token>
+              <token>
+                <id>	token:pt:s3:finished:honor	</id>
+                <equal>	0	</equal>
+              </token>
+              <token>
+                <id>	token:pt:s3:t9:finished:base	</id>
+                <equal>	0	</equal>
+              </token>
+              <token>
+                <id>	pm:points	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <convert>
+                  <id>	pm3:9:points	</id>
+                  <expires>	01.12.2050 06:00	</expires>
+                </convert>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1000000	</bonusLimit>
+        </common>
+      </conditions>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	pm3:convertion:operation:10	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <pmActiveOperation>	10	</pmActiveOperation>
+              <token>
+                <id>	pm3:10:points	</id>
+                <less>	12300	</less>
+              </token>
+              <token>
+                <id>	token:pt:s3:finished:honor	</id>
+                <equal>	0	</equal>
+              </token>
+              <token>
+                <id>	token:pt:s3:t10:finished:base	</id>
+                <equal>	0	</equal>
+              </token>
+              <token>
+                <id>	pm:points	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <convert>
+                  <id>	pm3:10:points	</id>
+                  <expires>	01.12.2050 06:00	</expires>
+                </convert>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1000000	</bonusLimit>
+        </common>
+      </conditions>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	pm3:no_active_operation	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <or>
+                <token>
+                  <id>	token:pt:s3:finished:honor	</id>
+                  <equal>	1	</equal>
+                </token>
+                <and>
+                  <pmActiveOperation>	8	</pmActiveOperation>
+                  <or>
+                    <token>
+                      <id>	token:pt:s3:t8:finished:base	</id>
+                      <equal>	1	</equal>
+                    </token>
+                    <token>
+                      <id>	pm3:8:points	</id>
+                      <greaterOrEqual>	2700	</greaterOrEqual>
+                    </token>
+                  </or>
+                </and>
+                <and>
+                  <pmActiveOperation>	9	</pmActiveOperation>
+                  <or>
+                    <token>
+                      <id>	token:pt:s3:t9:finished:base	</id>
+                      <equal>	1	</equal>
+                    </token>
+                    <token>
+                      <id>	pm3:9:points	</id>
+                      <greaterOrEqual>	7200	</greaterOrEqual>
+                    </token>
+                  </or>
+                </and>
+                <and>
+                  <pmActiveOperation>	10	</pmActiveOperation>
+                  <or>
+                    <token>
+                      <id>	token:pt:s3:t10:finished:base	</id>
+                      <equal>	1	</equal>
+                    </token>
+                    <token>
+                      <id>	pm3:10:points	</id>
+                      <greaterOrEqual>	12300	</greaterOrEqual>
+                    </token>
+                  </or>
+                </and>
+                <not>
+                  <or>
+                    <pmActiveOperation>	8	</pmActiveOperation>
+                    <pmActiveOperation>	9	</pmActiveOperation>
+                    <pmActiveOperation>	10	</pmActiveOperation>
+                  </or>
+                </not>
+              </or>
+              <token>
+                <id>	pm:points	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1000000	</consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1000000	</bonusLimit>
+        </common>
+      </conditions>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_campaign_finished_honor	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t8:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t9:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t10:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:final:s3:t8	</id>
+                <equal>	3	</equal>
+                <consume>	3	</consume>
+              </token>
+              <token>
+                <id>	token:pt:final:s3:t9	</id>
+                <equal>	3	</equal>
+                <consume>	3	</consume>
+              </token>
+              <token>
+                <id>	token:pt:final:s3:t10	</id>
+                <equal>	3	</equal>
+                <consume>	3	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t8:reward:claimed	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t9:reward:claimed	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t10:reward:claimed	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:finished:honor	</id>
+                <equal>	0	</equal>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <premium_plus>	360	</premium_plus>
+        <token>
+          <id>	token:pt:s3:finished:honor	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <dossier>
+          <name>	playerBadges:190	</name>
+          <value>	timestamp	</value>
+          <type>	set	</type>
+        </dossier>
+        <customizations>
+          <item>
+            <value>	1	</value>
+            <custType>	attachment	</custType>
+            <id>	1068	</id>
+          </item>
+        </customizations>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_campaign_tokens_draw	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t8:finished:base	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t9:finished:base	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t10:finished:base	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t8:finished:honor	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t9:finished:honor	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t10:finished:honor	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:finished:honor	</id>
+                <equal>	1	</equal>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_8_entrypoint	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <vehiclesOwned>
+                <levels>	6 7 8 9 10 11	</levels>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </vehiclesOwned>
+              <token>
+                <id>	token:pt:s3:t8:unlock	</id>
+                <equal>	0	</equal>
+              </token>
+              <token>
+                <id>	token:pt:s3:finished:honor	</id>
+                <equal>	0	</equal>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t8:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t8:ms1:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_8_reward	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t8:vehElement:1	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t8:vehElement:2	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t8:vehElement:3	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t8:vehElement:4	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t8:vehElement:5	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t8:vehElement:6	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t8:vehElement:7	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t8:vehElement:8	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t8:vehElement:9	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t8:vehElement:10	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t8:vehElement:11	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t8:vehElement:12	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t8:vehElement:13	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t8:vehElement:14	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t8:vehElement:15	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:8:points	</id>
+                <greaterOrEqual>	2700	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonusDelayed>
+        <dossier>
+          <name>	playerBadges:184	</name>
+          <value>	timestamp	</value>
+          <type>	set	</type>
+        </dossier>
+        <slots>	1	</slots>
+        <vehicle>	germany:G184_Windhund	  <crewLvl>	100	</crewLvl>
+          <customCompensation>
+            <credits>	0	</credits>
+            <gold>	0	</gold>
+          </customCompensation>
+        </vehicle>
+        <customizations>
+          <item>
+            <value>	6	</value>
+            <custType>	projection_decal	</custType>
+            <id>	1227	</id>
+          </item>
+        </customizations>
+        <token>
+          <id>	tman_template:::tankmen_pm3_1:630180:::brotherhood::tankmen_pm3_1:	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t8:reward:claimed	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonusDelayed>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pt_final_s3_t8	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t8:finished:base	</id>
+                <equal>	0	</equal>
+              </token>
+              <token>
+                <id>	token:pt:s3:t8:reward:claimed	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t8:finished:base	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pt_final_s3_t8_honor	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:final:s3:t8	</id>
+                <equal>	3	</equal>
+              </token>
+              <token>
+                <id>	token:pt:s3:t8:finished:honor	</id>
+                <equal>	0	</equal>
+              </token>
+              <token>
+                <id>	token:pt:s3:t8:reward:claimed	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t8:finished:honor	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <dossier>
+          <name>	playerBadges:185	</name>
+          <value>	timestamp	</value>
+          <type>	set	</type>
+        </dossier>
+        <customizations>
+          <item>
+            <value>	1	</value>
+            <custType>	style	</custType>
+            <id>	1134	</id>
+          </item>
+        </customizations>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_8_points_draw	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <or>
+                <token>
+                  <id>	token:pt:s3:t8:finished:base	</id>
+                  <equal>	1	</equal>
+                </token>
+                <token>
+                  <id>	token:pt:s3:finished:honor	</id>
+                  <equal>	1	</equal>
+                </token>
+              </or>
+              <token>
+                <id>	pm3:8:points	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	2700	  <force></force>
+                </consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_9_entrypoint	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <vehiclesOwned>
+                <levels>	7 8 9 10 11	</levels>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </vehiclesOwned>
+              <token>
+                <id>	token:pt:s3:t9:unlock	</id>
+                <equal>	0	</equal>
+              </token>
+              <token>
+                <id>	token:pt:s3:finished:honor	</id>
+                <equal>	0	</equal>
+              </token>
+              <or>
+                <token>
+                  <id>	token:pt:s3:t8:finished:base	</id>
+                  <equal>	1	</equal>
+                </token>
+                <token>
+                  <id>	token:pt:s3:t8:finished:honor	</id>
+                  <equal>	1	</equal>
+                </token>
+              </or>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t9:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t9:ms1:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_9_reward	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t9:vehElement:1	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t9:vehElement:2	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t9:vehElement:3	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t9:vehElement:4	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t9:vehElement:5	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t9:vehElement:6	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t9:vehElement:7	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t9:vehElement:8	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t9:vehElement:9	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t9:vehElement:10	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t9:vehElement:11	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t9:vehElement:12	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t9:vehElement:13	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t9:vehElement:14	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t9:vehElement:15	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:9:points	</id>
+                <greaterOrEqual>	7200	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonusDelayed>
+        <slots>	1	</slots>
+        <dossier>
+          <name>	playerBadges:186	</name>
+          <value>	timestamp	</value>
+          <type>	set	</type>
+        </dossier>
+        <vehicle>	czech:Cz21_Vz_60S_Dravec	  <crewLvl>	100	</crewLvl>
+          <customCompensation>
+            <credits>	0	</credits>
+            <gold>	0	</gold>
+          </customCompensation>
+        </vehicle>
+        <customizations>
+          <item>
+            <value>	6	</value>
+            <custType>	projection_decal	</custType>
+            <id>	1229	</id>
+          </item>
+        </customizations>
+        <token>
+          <id>	tman_template:::tankmen_pm3_2:630180:::brotherhood::tankmen_pm3_2:	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t9:reward:claimed	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonusDelayed>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pt_final_s3_t9	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t9:finished:base	</id>
+                <equal>	0	</equal>
+              </token>
+              <token>
+                <id>	token:pt:s3:t9:reward:claimed	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t9:finished:base	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pt_final_s3_t9_honor	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:final:s3:t9	</id>
+                <equal>	3	</equal>
+              </token>
+              <token>
+                <id>	token:pt:s3:t9:finished:honor	</id>
+                <equal>	0	</equal>
+              </token>
+              <token>
+                <id>	token:pt:s3:t9:reward:claimed	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t9:finished:honor	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <dossier>
+          <name>	playerBadges:187	</name>
+          <value>	timestamp	</value>
+          <type>	set	</type>
+        </dossier>
+        <customizations>
+          <item>
+            <value>	1	</value>
+            <custType>	style	</custType>
+            <id>	1133	</id>
+          </item>
+        </customizations>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_9_points_draw	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <or>
+                <token>
+                  <id>	token:pt:s3:t9:finished:base	</id>
+                  <equal>	1	</equal>
+                </token>
+                <token>
+                  <id>	token:pt:s3:finished:honor	</id>
+                  <equal>	1	</equal>
+                </token>
+              </or>
+              <token>
+                <id>	pm3:9:points	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	7200	  <force></force>
+                </consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_10_entrypoint	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <vehiclesOwned>
+                <levels>	8 9 10 11	</levels>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </vehiclesOwned>
+              <token>
+                <id>	token:pt:s3:t10:unlock	</id>
+                <equal>	0	</equal>
+              </token>
+              <token>
+                <id>	token:pt:s3:finished:honor	</id>
+                <equal>	0	</equal>
+              </token>
+              <or>
+                <token>
+                  <id>	token:pt:s3:t9:finished:base	</id>
+                  <equal>	1	</equal>
+                </token>
+                <token>
+                  <id>	token:pt:s3:t9:finished:honor	</id>
+                  <equal>	1	</equal>
+                </token>
+              </or>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t10:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t10:ms1:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_10_reward	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t10:vehElement:1	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t10:vehElement:2	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t10:vehElement:3	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t10:vehElement:4	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t10:vehElement:5	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t10:vehElement:6	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t10:vehElement:7	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t10:vehElement:8	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t10:vehElement:9	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t10:vehElement:10	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t10:vehElement:11	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t10:vehElement:12	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t10:vehElement:13	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t10:vehElement:14	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s3:t10:vehElement:15	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:10:points	</id>
+                <greaterOrEqual>	12300	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonusDelayed>
+        <slots>	1	</slots>
+        <dossier>
+          <name>	playerBadges:188	</name>
+          <value>	timestamp	</value>
+          <type>	set	</type>
+        </dossier>
+        <vehicle>	usa:A179_Black_Rock	  <crewLvl>	100	</crewLvl>
+          <customCompensation>
+            <credits>	0	</credits>
+            <gold>	0	</gold>
+          </customCompensation>
+        </vehicle>
+        <customizations>
+          <item>
+            <value>	6	</value>
+            <custType>	projection_decal	</custType>
+            <id>	1228	</id>
+          </item>
+        </customizations>
+        <token>
+          <id>	tman_template:::tankmen_pm3_3:630180:::brotherhood::tankmen_pm3_3:	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t10:reward:claimed	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonusDelayed>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pt_final_s3_t10	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t10:finished:base	</id>
+                <equal>	0	</equal>
+              </token>
+              <token>
+                <id>	token:pt:s3:t10:reward:claimed	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t10:finished:base	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pt_final_s3_t10_honor	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:final:s3:t10	</id>
+                <equal>	3	</equal>
+              </token>
+              <token>
+                <id>	token:pt:s3:t10:finished:honor	</id>
+                <equal>	0	</equal>
+              </token>
+              <token>
+                <id>	token:pt:s3:t10:reward:claimed	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t10:finished:honor	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <dossier>
+          <name>	playerBadges:189	</name>
+          <value>	timestamp	</value>
+          <type>	set	</type>
+        </dossier>
+        <customizations>
+          <item>
+            <value>	1	</value>
+            <custType>	style	</custType>
+            <id>	1300	</id>
+          </item>
+        </customizations>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_10_points_draw	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <or>
+                <token>
+                  <id>	token:pt:s3:finished:honor	</id>
+                  <equal>	1	</equal>
+                </token>
+                <token>
+                  <id>	token:pt:s3:t10:finished:base	</id>
+                  <equal>	1	</equal>
+                </token>
+              </or>
+              <token>
+                <id>	pm3:10:points	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	12300	  <force></force>
+                </consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_8_milestone_1	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t8:ms1:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:8:points	</id>
+                <greaterOrEqual>	100	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t8:ms2:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t8:vehElement:1	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_8_milestone_2	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t8:ms2:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:8:points	</id>
+                <greaterOrEqual>	200	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t8:vehElement:2	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t8:ms3:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_8_milestone_3	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t8:ms3:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:8:points	</id>
+                <greaterOrEqual>	300	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t8:vehElement:3	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t8:ms4:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_8_milestone_4	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t8:ms4:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:8:points	</id>
+                <greaterOrEqual>	425	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t8:vehElement:4	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t8:ms5:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_8_milestone_5	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t8:ms5:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:8:points	</id>
+                <greaterOrEqual>	550	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t8:vehElement:5	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t8:ms6:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_8_milestone_6	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t8:ms6:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:8:points	</id>
+                <greaterOrEqual>	675	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t8:vehElement:6	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t8:ms7:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_8_milestone_7	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t8:ms7:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:8:points	</id>
+                <greaterOrEqual>	825	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t8:vehElement:7	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t8:ms8:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_8_milestone_8	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t8:ms8:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:8:points	</id>
+                <greaterOrEqual>	975	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t8:vehElement:8	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t8:ms9:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_8_milestone_9	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t8:ms9:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:8:points	</id>
+                <greaterOrEqual>	1125	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t8:vehElement:9	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t8:ms10:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_8_milestone_10	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t8:ms10:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:8:points	</id>
+                <greaterOrEqual>	1350	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t8:vehElement:10	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t8:ms11:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_8_milestone_11	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t8:ms11:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:8:points	</id>
+                <greaterOrEqual>	1575	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t8:vehElement:11	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t8:ms12:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_8_milestone_12	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t8:ms12:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:8:points	</id>
+                <greaterOrEqual>	1800	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t8:vehElement:12	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t8:ms13:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_8_milestone_13	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t8:ms13:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:8:points	</id>
+                <greaterOrEqual>	2100	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t8:vehElement:13	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t8:ms14:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_8_milestone_14	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t8:ms14:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:8:points	</id>
+                <greaterOrEqual>	2400	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t8:vehElement:14	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t8:ms15:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_8_milestone_15	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t8:ms15:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:8:points	</id>
+                <greaterOrEqual>	2700	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t8:vehElement:15	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_9_milestone_1	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t9:ms1:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:9:points	</id>
+                <greaterOrEqual>	200	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t9:vehElement:1	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t9:ms2:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_9_milestone_2	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t9:ms2:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:9:points	</id>
+                <greaterOrEqual>	400	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t9:vehElement:2	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t9:ms3:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_9_milestone_3	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t9:ms3:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:9:points	</id>
+                <greaterOrEqual>	600	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t9:vehElement:3	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t9:ms4:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_9_milestone_4	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t9:ms4:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:9:points	</id>
+                <greaterOrEqual>	900	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t9:vehElement:4	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t9:ms5:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_9_milestone_5	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t9:ms5:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:9:points	</id>
+                <greaterOrEqual>	1200	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t9:vehElement:5	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t9:ms6:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_9_milestone_6	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t9:ms6:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:9:points	</id>
+                <greaterOrEqual>	1500	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t9:vehElement:6	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t9:ms7:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_9_milestone_7	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t9:ms7:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:9:points	</id>
+                <greaterOrEqual>	1950	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t9:vehElement:7	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t9:ms8:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_9_milestone_8	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t9:ms8:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:9:points	</id>
+                <greaterOrEqual>	2400	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t9:vehElement:8	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t9:ms9:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_9_milestone_9	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t9:ms9:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:9:points	</id>
+                <greaterOrEqual>	2850	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t9:vehElement:9	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t9:ms10:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_9_milestone_10	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t9:ms10:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:9:points	</id>
+                <greaterOrEqual>	3450	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t9:vehElement:10	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t9:ms11:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_9_milestone_11	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t9:ms11:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:9:points	</id>
+                <greaterOrEqual>	4050	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t9:vehElement:11	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t9:ms12:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_9_milestone_12	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t9:ms12:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:9:points	</id>
+                <greaterOrEqual>	4650	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t9:vehElement:12	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t9:ms13:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_9_milestone_13	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t9:ms13:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:9:points	</id>
+                <greaterOrEqual>	5500	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t9:vehElement:13	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t9:ms14:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_9_milestone_14	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t9:ms14:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:9:points	</id>
+                <greaterOrEqual>	6350	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t9:vehElement:14	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t9:ms15:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_9_milestone_15	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t9:ms15:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:9:points	</id>
+                <greaterOrEqual>	7200	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t9:vehElement:15	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_10_milestone_1	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t10:ms1:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:10:points	</id>
+                <greaterOrEqual>	350	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t10:vehElement:1	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t10:ms2:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_10_milestone_2	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t10:ms2:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:10:points	</id>
+                <greaterOrEqual>	700	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t10:vehElement:2	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t10:ms3:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_10_milestone_3	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t10:ms3:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:10:points	</id>
+                <greaterOrEqual>	1050	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t10:vehElement:3	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t10:ms4:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_10_milestone_4	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t10:ms4:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:10:points	</id>
+                <greaterOrEqual>	1550	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t10:vehElement:4	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t10:ms5:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_10_milestone_5	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t10:ms5:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:10:points	</id>
+                <greaterOrEqual>	2050	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t10:vehElement:5	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t10:ms6:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_10_milestone_6	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t10:ms6:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:10:points	</id>
+                <greaterOrEqual>	2550	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t10:vehElement:6	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t10:ms7:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_10_milestone_7	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t10:ms7:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:10:points	</id>
+                <greaterOrEqual>	3300	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t10:vehElement:7	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t10:ms8:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_10_milestone_8	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t10:ms8:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:10:points	</id>
+                <greaterOrEqual>	4050	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t10:vehElement:8	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t10:ms9:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_10_milestone_9	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t10:ms9:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:10:points	</id>
+                <greaterOrEqual>	4800	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t10:vehElement:9	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t10:ms10:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_10_milestone_10	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t10:ms10:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:10:points	</id>
+                <greaterOrEqual>	5800	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t10:vehElement:10	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t10:ms11:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_10_milestone_11	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t10:ms11:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:10:points	</id>
+                <greaterOrEqual>	6800	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t10:vehElement:11	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t10:ms12:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_10_milestone_12	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t10:ms12:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:10:points	</id>
+                <greaterOrEqual>	7800	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t10:vehElement:12	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t10:ms13:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_10_milestone_13	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t10:ms13:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:10:points	</id>
+                <greaterOrEqual>	9300	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t10:vehElement:13	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t10:ms14:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_10_milestone_14	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t10:ms14:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:10:points	</id>
+                <greaterOrEqual>	10800	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t10:vehElement:14	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s3:t10:ms15:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm3_operation_10_milestone_15	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s3:t10:ms15:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm3:10:points	</id>
+                <greaterOrEqual>	12300	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s3:t10:vehElement:15	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
       </bonus>
     </tokenQuest>
   </quests>

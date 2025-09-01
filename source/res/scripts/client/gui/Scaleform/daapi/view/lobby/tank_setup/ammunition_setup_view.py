@@ -15,6 +15,12 @@ class AmmunitionSetupView(AmmunitionSetupViewMeta):
     def __init__(self, ctx):
         super(AmmunitionSetupView, self).__init__()
         self.__ctx = ctx
+        self.__injectedView = None
+        return
+
+    @property
+    def injectedView(self):
+        return self.__injectedView
 
     def registerFlashComponent(self, component, alias, *args):
         if alias == HANGAR_ALIASES.AMMUNITION_SETUP_VIEW_INJECT:
@@ -27,14 +33,17 @@ class AmmunitionSetupView(AmmunitionSetupViewMeta):
         if alias == HANGAR_ALIASES.AMMUNITION_SETUP_VIEW_VEHICLE_PARAMS:
             self.__parametersView = viewPy
         elif alias == HANGAR_ALIASES.AMMUNITION_SETUP_VIEW_INJECT:
-            viewPy.getInjectView().onClose += self.__onCloseInjectView
-            viewPy.getInjectView().onAnimationEnd += self.__onAnimationEnd
+            self.__injectedView = viewPy.getInjectView()
+            self.__injectedView.onClose += self.__onCloseInjectView
+            self.__injectedView.onAnimationEnd += self.__onAnimationEnd
 
     def _onUnregisterFlashComponent(self, viewPy, alias):
         super(AmmunitionSetupView, self)._onUnregisterFlashComponent(viewPy, alias)
         if alias == HANGAR_ALIASES.AMMUNITION_SETUP_VIEW_INJECT and viewPy.getInjectView():
             viewPy.getInjectView().onClose -= self.__onCloseInjectView
             viewPy.getInjectView().onAnimationEnd -= self.__onAnimationEnd
+            self.__injectedView = None
+        return
 
     def _populate(self):
         super(AmmunitionSetupView, self)._populate()
@@ -48,6 +57,10 @@ class AmmunitionSetupView(AmmunitionSetupViewMeta):
         g_eventBus.removeListener(AmmunitionSetupViewEvent.UPDATE_TTC, self.__onUpdateTTC, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(AmmunitionSetupViewEvent.GF_RESIZED, self.__onAmmunitionSetupViewResized, EVENT_BUS_SCOPE.LOBBY)
         return
+
+    def destroy(self):
+        g_eventBus.handleEvent(AmmunitionSetupViewEvent(AmmunitionSetupViewEvent.CLOSE_VIEW), EVENT_BUS_SCOPE.LOBBY)
+        super(AmmunitionSetupView, self).destroy()
 
     def onClose(self):
         self.destroy()

@@ -25,8 +25,8 @@ class TechTreeMeta(ResearchView):
     def request4VehCompare(self, vehCD):
         self._printOverrideError('request4VehCompare')
 
-    def onBlueprintModeSwitch(self, enabled):
-        self._printOverrideError('onBlueprintModeSwitch')
+    def onBlueprintModeSwitchToggle(self, enabled):
+        self._printOverrideError('onBlueprintModeSwitchToggle')
 
     def onGoToPremiumShop(self, nationName, level):
         self._printOverrideError('onGoToPremiumShop')

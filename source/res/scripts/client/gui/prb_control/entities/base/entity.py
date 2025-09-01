@@ -10,7 +10,6 @@ from gui.prb_control.entities.base.permissions import IPrbPermissions
 from gui.prb_control.entities.base.scheduler import BaseScheduler
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.items import SelectResult, ValidationResult
-from gui.prb_control.prb_getters import getQueueTypeFromPrbEntity
 from gui.prb_control.settings import FUNCTIONAL_FLAG, CTRL_ENTITY_TYPE
 from gui.shared.utils.listeners_collection import IListenersCollection
 if typing.TYPE_CHECKING:
@@ -81,19 +80,15 @@ class BasePrbEntity(IActionsValidator, PrbFunctionalFlags):
         self._scheduler = self._createScheduler()
         self._isActive = False
         self._cooldown = self._createCooldownManager()
-        self._previous = None
-        return
 
     def init(self, **kwargs):
         self._scheduler.init()
         self._isActive = True
-        self._goToHangar()
         return FUNCTIONAL_FLAG.UNDEFINED
 
     def fini(self, **kwargs):
         self._scheduler.fini()
         self._isActive = False
-        self._previous = None
         return FUNCTIONAL_FLAG.UNDEFINED
 
     def invalidate(self):
@@ -163,13 +158,7 @@ class BasePrbEntity(IActionsValidator, PrbFunctionalFlags):
     def getQueueType(self):
         return QUEUE_TYPE.UNKNOWN
 
-    def setPreviousEntity(self, entity):
-        self._previous = entity
-
     def hasLockedState(self):
-        return False
-
-    def hasSpecialVehicles(self):
         return False
 
     def getPermissions(self, pID=None, **kwargs):
@@ -208,8 +197,6 @@ class BasePrbEntity(IActionsValidator, PrbFunctionalFlags):
         return None
 
     def _goToHangar(self):
-        if getQueueTypeFromPrbEntity(self) == getQueueTypeFromPrbEntity(self._previous) or self.isInQueue():
-            return
         g_eventDispatcher.loadHangar()
 
     @adisp_process

@@ -1199,7 +1199,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	8000	</weight>
-      <maxLoad>	40200	</maxLoad>
       <terrainResistance>	1 1.1 2.1	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -1924,7 +1923,7 @@
   <turrets0>
     <Turret_1_F85_M4A1_FL10>
       <userString>	#france_vehicles:Turret_1_F85_M4A1_FL10	</userString>
-      <tags></tags>
+      <tags>	oscillating	</tags>
       <level>	6	</level>
       <price>	12000	</price>
       <notInShop>	true	</notInShop>

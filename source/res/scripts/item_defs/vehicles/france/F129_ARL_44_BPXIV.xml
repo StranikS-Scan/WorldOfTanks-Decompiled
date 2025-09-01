@@ -14,10 +14,10 @@
     <backward>	10	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.019	</moving>
-    <still>	0.038	</still>
+    <moving>	0.044	</moving>
+    <still>	0.088	</still>
     <camouflageBonus>	0.02	</camouflageBonus>
-    <firePenalty>	0.057	</firePenalty>
+    <firePenalty>	0.132	</firePenalty>
   </invisibility>
   <optDevsOverrides>
     <camouflageNet>
@@ -155,7 +155,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	14200	</weight>
-      <maxLoad>	50500	</maxLoad>
       <terrainResistance>	1.4 1.6 2.7	</terrainResistance>
       <brakeForce>	40500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -1222,7 +1221,6 @@
         <maxRegenHealth>	40	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
-      <invisibilityFactor>	2.421	</invisibilityFactor>
       <guns>
         <_90mm_canon_DCA_45_BPXIV>	shared	  <maxAmmo>	50	</maxAmmo>
           <armor>

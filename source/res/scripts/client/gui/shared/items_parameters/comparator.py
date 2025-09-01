@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/comparator.py
 import collections
+import logging
 import sys
 import typing
 from constants import BonusTypes
@@ -10,6 +11,7 @@ from shared_utils import first
 from gui.shared.utils import WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, DUAL_GUN_CHARGE_TIME, SHOT_DISPERSION_ANGLE, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, DISPERSION_RADIUS, CHASSIS_REPAIR_TIME, TURBOSHAFT_SWITCH_TIME, DUAL_GUN_RATE_TIME, DUAL_ACCURACY_COOLING_DELAY, BURST_FIRE_RATE, BURST_TIME_INTERVAL, AUTO_SHOOT_CLIP_FIRE_RATE, TWIN_GUN_RELOAD_ONE_GUN_TIME, TWIN_GUN_RELOAD_TWO_GUN_TIME
 if typing.TYPE_CHECKING:
     from gui.shared.items_parameters.params import _PenaltyInfo
+_logger = logging.getLogger(__name__)
 BACKWARD_QUALITY_PARAMS = frozenset(['aimingTime',
  'autoReloadTime',
  DISPERSION_RADIUS,
@@ -24,6 +26,7 @@ BACKWARD_QUALITY_PARAMS = frozenset(['aimingTime',
  BURST_TIME_INTERVAL,
  'switchOnTime',
  'switchOffTime',
+ 'vehicleWeight',
  CHASSIS_REPAIR_TIME,
  DUAL_GUN_CHARGE_TIME,
  KPI.Name.CREW_REPEATED_STUN_DURATION,
@@ -89,8 +92,7 @@ def normalizeClipFireRateValue(value):
 
 PARAMS_NORMALIZATION_MAP = {'clipFireRate': normalizeClipFireRateValue,
  SHOT_DISPERSION_ANGLE: normalizeShotDispersionValue}
-_CUSTOM_QUALITY_PARAMS = {'vehicleWeight': (True, False),
- 'clipFireRate': (True, True, False),
+_CUSTOM_QUALITY_PARAMS = {'clipFireRate': (True, True, False),
  AUTO_SHOOT_CLIP_FIRE_RATE: (True, False),
  BURST_FIRE_RATE: (True, False, False),
  'turboshaftBurstFireRate': (True, False, False),
@@ -424,12 +426,12 @@ def _getParamStateInfo(paramName, val1, val2, customReverted=False, isSituationa
         hasNoParam = False
         if isinstance(val1, float) and isinstance(val2, float):
             diff = val1 - val2
-            diff = round(diff, 4)
+            diff = round(diff, 2)
         else:
             if isinstance(val1, float):
-                val1 = round(val1, 4)
+                val1 = round(val1, 2)
             if isinstance(val2, float):
-                val2 = round(val2, 4)
+                val2 = round(val2, 2)
             diff = val1 - val2
     if diff != 0 and isSituational:
         return (PARAM_STATE.SITUATIONAL, diff)
@@ -473,3 +475,16 @@ def rateParameterState(paramName, val1, val2, customQualityParams=None, isSituat
         return tuple(result)
     else:
         return _getParamStateInfo(paramName, val1, val2, customQualityParams, isSituational)
+
+
+def addParameterValuesOfTheSameType(val1, val2):
+    if isinstance(val1, (tuple, list)):
+        if not isinstance(val2, (tuple, list)) or len(val1) != len(val2):
+            _logger.error('addParameterValuesOfTheSameType got different types of values val1: %s val2: %s', val1, val2)
+            return val1
+        result = list(val1)
+        for i, value in enumerate(val2):
+            result[i] += value
+
+        return result
+    return val1 + val2

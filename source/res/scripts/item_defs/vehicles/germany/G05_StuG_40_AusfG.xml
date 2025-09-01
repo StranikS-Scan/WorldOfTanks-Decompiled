@@ -67,7 +67,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	15140	</weight>
-    <maxHealth>	368	</maxHealth>
+    <maxHealth>	400	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	150	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
@@ -1315,8 +1315,7 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	5350	</weight>
-      <maxLoad>	22940	</maxLoad>
-      <terrainResistance>	1.1 1.7 2.9	</terrainResistance>
+      <terrainResistance>	1.1 1.4 2.3	</terrainResistance>
       <brakeForce>	28000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	39	</rotationSpeed>
@@ -2365,7 +2364,6 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	5850	</weight>
-      <maxLoad>	25690	</maxLoad>
       <terrainResistance>	1.1 1.4 2.3	</terrainResistance>
       <brakeForce>	28800	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -3408,14 +3406,14 @@
     <Turret_1_G05_StuG_40_AusfG>
       <userString>	#germany_vehicles:Turret_1_G05_StuG_40_AusfG	</userString>
       <tags>	cannotDetach	</tags>
-      <level>	4	</level>
+      <level>	5	</level>
       <price>	100	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	0	</armor_1>
       </armor>
       <weight>	0	</weight>
-      <maxHealth>	92	</maxHealth>
+      <maxHealth>	100	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -3651,11 +3649,6 @@
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <FuG5>	shared	  <unlocks>
-        <radio>	FuG7	  <cost>	1360	</cost>
-        </radio>
-      </unlocks>
-    </FuG5>
     <FuG7>	shared	</FuG7>
   </radios>
   <physics>
@@ -3674,10 +3667,10 @@
         <Chassis_G05_StuG_40_AusfG>
           <grounds>
             <soft>
-              <rollingFriction>	0.23345	</rollingFriction>
+              <rollingFriction>	0.18515	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.13685	</rollingFriction>
+              <rollingFriction>	0.1127	</rollingFriction>
             </medium>
             <firm>
               <rollingFriction>	0.08855	</rollingFriction>

@@ -3,6 +3,7 @@
 from Event import Event
 from debug_utils import LOG_DEBUG
 from PlayerEvents import g_playerEvents
+from gui.server_events.events_helpers import isSuitableForPM
 from gui.shared.utils.requesters import ItemsRequester
 from gui.shared.utils.requesters import InventoryRequester
 from gui.shared.utils.requesters import StatsRequester
@@ -39,6 +40,8 @@ class ItemsCache(IItemsCache):
     def __init__(self):
         super(ItemsCache, self).__init__()
         goodies = GoodiesRequester()
+        self.__isForPMSync = False
+        self.__needCommonSync = False
         self.__items = ItemsRequester.ItemsRequester(InventoryRequester(), StatsRequester(), DossierRequester(), goodies, ShopRequester(goodies), RecycleBinRequester(), VehicleRotationRequester(), RankedRequester(), BattleRoyaleRequester(), BadgesRequester(), EpicMetaGameRequester(), TokensRequester(), dependency.instance(IFestivityFactory).getRequester(), BlueprintsRequester(), SessionStatsRequester(), AnonymizerRequester(), BattlePassRequester(), GiftSystemRequester(), GameRestrictionsRequester(), Achievements20Requester())
         self.__compatVehiclesCache = CompatVehiclesCache()
         self.__waitForSync = False
@@ -46,6 +49,7 @@ class ItemsCache(IItemsCache):
         self.onSyncStarted = Event()
         self.onSyncCompleted = Event()
         self.onSyncFailed = Event()
+        self.onPMSyncCompleted = Event()
 
     def init(self):
         g_playerEvents.onInventoryResync += self.__pe_onInventoryResync
@@ -78,6 +82,8 @@ class ItemsCache(IItemsCache):
 
     @wg_async
     def update(self, updateReason, diff=None, notify=True):
+        if diff is not None:
+            self.__isForPMSync, self.__needCommonSync = isSuitableForPM(diff)
         if diff is None or self.__syncFailed:
             yield wg_await(self.__invalidateFullData(updateReason, notify))
         else:
@@ -107,7 +113,8 @@ class ItemsCache(IItemsCache):
         self.__waitForSync = True
         wasSyncFailed = self.__syncFailed
         self.__syncFailed = False
-        self.onSyncStarted()
+        if self.__needCommonSync:
+            self.onSyncStarted()
         if updateReason != CACHE_SYNC_REASON.DOSSIER_RESYNC or wasSyncFailed:
             invalidItems = self.__items.invalidateCache(diff)
         else:
@@ -119,7 +126,9 @@ class ItemsCache(IItemsCache):
             self.onSyncFailed(updateReason)
         else:
             self.__compatVehiclesCache.invalidateData(self, invalidItems)
-            if notify:
+            if self.__isForPMSync:
+                self.onPMSyncCompleted(updateReason, invalidItems)
+            if notify and self.__needCommonSync:
                 self.onSyncCompleted(updateReason, invalidItems)
 
     @wg_async
@@ -127,7 +136,8 @@ class ItemsCache(IItemsCache):
         self.__waitForSync = True
         wasSyncFailed = self.__syncFailed
         self.__syncFailed = False
-        self.onSyncStarted()
+        if self.__needCommonSync:
+            self.onSyncStarted()
         yield wg_await(self.__items.request())
         self.__waitForSync = False
         if not self.isSynced():
@@ -139,7 +149,11 @@ class ItemsCache(IItemsCache):
             else:
                 invalidItems = {}
             self.__compatVehiclesCache.invalidateFullData(self)
-            if notify:
+            if self.__isForPMSync:
+                self.onPMSyncCompleted(updateReason, invalidItems)
+                if self.__needCommonSync:
+                    self.onSyncCompleted(updateReason, invalidItems)
+            elif notify:
                 self.onSyncCompleted(updateReason, invalidItems)
 
     def isSynced(self):

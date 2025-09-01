@@ -1195,13 +1195,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <VVSS_T16E3>
-      <userString>	#usa_vehicles:VVSS_T16E3	</userString>
+    <Chassis_A22_M5_Stuart>
+      <userString>	#usa_vehicles:Chassis_A22_M5_Stuart	</userString>
       <tags></tags>
       <level>	3	</level>
       <price>	1500	</price>
       <unlocks>
-        <chassis>	VVSS_T36E8	  <cost>	1200	</cost>
+        <chassis>	Chassis_A22_M5_Stuart_2	  <cost>	1200	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1209,14 +1209,13 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	3000	</weight>
-      <maxLoad>	15220	</maxLoad>
-      <terrainResistance>	1 1.1 2	</terrainResistance>
+      <terrainResistance>	0.9 1 1.9	</terrainResistance>
       <brakeForce>	15000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	40	</rotationSpeed>
+      <rotationSpeed>	46	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.18	</vehicleMovement>
-        <vehicleRotation>	0.18	</vehicleRotation>
+        <vehicleMovement>	0.17	</vehicleMovement>
+        <vehicleRotation>	0.17	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	70	</maxHealth>
@@ -1947,9 +1946,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	4.57142878	</repairTime>
-    </VVSS_T16E3>
-    <VVSS_T36E8>
-      <userString>	#usa_vehicles:VVSS_T36E8	</userString>
+    </Chassis_A22_M5_Stuart>
+    <Chassis_A22_M5_Stuart_2>
+      <userString>	#usa_vehicles:Chassis_A22_M5_Stuart_2	</userString>
       <tags></tags>
       <level>	4	</level>
       <price>	5050	</price>
@@ -1958,14 +1957,13 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	3000	</weight>
-      <maxLoad>	16200	</maxLoad>
       <terrainResistance>	0.9 1 1.9	</terrainResistance>
       <brakeForce>	16000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	42	</rotationSpeed>
+      <rotationSpeed>	50	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.16	</vehicleMovement>
-        <vehicleRotation>	0.16	</vehicleRotation>
+        <vehicleMovement>	0.15	</vehicleMovement>
+        <vehicleRotation>	0.15	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	80	</maxHealth>
@@ -2696,11 +2694,11 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	4.57142878	</repairTime>
-    </VVSS_T36E8>
+    </Chassis_A22_M5_Stuart_2>
   </chassis>
   <turrets0>
-    <M44>
-      <userString>	#usa_vehicles:M44	</userString>
+    <Turret_1_A22_M5_Stuart>
+      <userString>	#usa_vehicles:Turret_1_A22_M5_Stuart	</userString>
       <tags></tags>
       <level>	3	</level>
       <price>	1890	</price>
@@ -2726,14 +2724,14 @@
         <maxRegenHealth>	40	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	340	</circularVisionRadius>
+      <circularVisionRadius>	350	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	60	</maxHealth>
         <maxRegenHealth>	30	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_37mm_M-6_L53>	shared	  <maxAmmo>	215	</maxAmmo>
+        <_37mm_Gun_M6_M5>	shared	  <maxAmmo>	215	</maxAmmo>
           <unlocks>
             <gun>	_37mm_T16	  <cost>	1100	</cost>
             </gun>
@@ -2754,8 +2752,8 @@
             <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	2.3	</reloadTime>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	2	</reloadTime>
           <aimingTime>	1.5	</aimingTime>
           <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <models>
@@ -2803,10 +2801,10 @@
             <density>	191.847 192.015	</density>
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
-        </_37mm_M-6_L53>
+        </_37mm_Gun_M6_M5>
         <_37mm_T16>	shared	  <maxAmmo>	180	</maxAmmo>
           <unlocks>
-            <turret>	M7	  <cost>	1220	</cost>
+            <turret>	Turret_2_A22_M5_Stuart	  <cost>	1220	</cost>
             </turret>
           </unlocks>
           <pitchLimits>
@@ -2821,12 +2819,12 @@
             <gun>	10	</gun>
           </armor>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	1.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	7.6	</reloadTime>
+          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <reloadTime>	8	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
           <clip>
             <count>	5	</count>
@@ -3158,12 +3156,16 @@
         <density>	138.318 137.864	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </M44>
-    <M7>
-      <userString>	#usa_vehicles:M7	</userString>
+    </Turret_1_A22_M5_Stuart>
+    <Turret_2_A22_M5_Stuart>
+      <userString>	#usa_vehicles:Turret_2_A22_M5_Stuart	</userString>
       <tags></tags>
       <level>	4	</level>
       <price>	5180	</price>
+      <unlocks>
+        <vehicle>	A34_M24_Chaffee	  <cost>	12480	</cost>
+        </vehicle>
+      </unlocks>
       <armor>
         <armor_1>	44.5	</armor_1>
         <armor_2>	44.5	</armor_2>
@@ -3194,7 +3196,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.044	</invisibilityFactor>
       <guns>
-        <_37mm_M-6_L53>	shared	  <maxAmmo>	255	</maxAmmo>
+        <_37mm_Gun_M6_M5>	shared	  <maxAmmo>	255	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.353005 10 0.416667 3 0.583333 3 0.646995 10 1 10	</maxPitch>
@@ -3211,8 +3213,8 @@
             <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	2.3	</reloadTime>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	2	</reloadTime>
           <aimingTime>	1.5	</aimingTime>
           <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <models>
@@ -3260,7 +3262,7 @@
             <density>	191.847 192.015	</density>
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
-        </_37mm_M-6_L53>
+        </_37mm_Gun_M6_M5>
         <_37mm_T16>	shared	  <maxAmmo>	220	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
@@ -3279,7 +3281,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	7.2	</reloadTime>
+          <reloadTime>	7.7	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
           <clip>
             <count>	5	</count>
@@ -3582,58 +3584,36 @@
         <density>	118.518 118.772	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </M7>
+    </Turret_2_A22_M5_Stuart>
   </turrets0>
   <engines>
     <Twin_Cadillac_42series>	shared	  <unlocks>
-        <engine>	Continental_R-975-C1	  <cost>	550	</cost>
+        <engine>	Continental_R_975_C1	  <cost>	550	</cost>
         </engine>
       </unlocks>
     </Twin_Cadillac_42series>
-    <Continental_R-975-C1>	shared	</Continental_R-975-C1>
+    <Continental_R_975_C1>	shared	</Continental_R_975_C1>
   </engines>
   <fuelTanks>
     <Medium>	shared	</Medium>
   </fuelTanks>
   <radios>
-    <SCR_508>	shared	  <unlocks>
-        <radio>	SCR_506	  <cost>	5600	</cost>
-        </radio>
-      </unlocks>
-    </SCR_508>
-    <SCR_506>	shared	  <unlocks>
-        <vehicle>	A34_M24_Chaffee	  <cost>	12480	</cost>
-        </vehicle>
-      </unlocks>
-    </SCR_506>
+    <SCR_506>	shared	</SCR_506>
   </radios>
   <physics>
     <detailed>
       <engines>
         <Twin_Cadillac_42series>
-          <smplEnginePower>	338.33	</smplEnginePower>
+          <smplEnginePower>	370	</smplEnginePower>
           <smplFwMaxSpeed>	64.4	</smplFwMaxSpeed>
         </Twin_Cadillac_42series>
-        <Continental_R-975-C1>
-          <smplEnginePower>	370.0484	</smplEnginePower>
+        <Continental_R_975_C1>
+          <smplEnginePower>	400	</smplEnginePower>
           <smplFwMaxSpeed>	64.4	</smplFwMaxSpeed>
-        </Continental_R-975-C1>
+        </Continental_R_975_C1>
       </engines>
       <chassis>
-        <VVSS_T16E3>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.161	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.08855	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.0805	</rollingFriction>
-            </firm>
-          </grounds>
-        </VVSS_T16E3>
-        <VVSS_T36E8>
+        <Chassis_A22_M5_Stuart>
           <grounds>
             <soft>
               <rollingFriction>	0.15295	</rollingFriction>
@@ -3645,7 +3625,20 @@
               <rollingFriction>	0.07245	</rollingFriction>
             </firm>
           </grounds>
-        </VVSS_T36E8>
+        </Chassis_A22_M5_Stuart>
+        <Chassis_A22_M5_Stuart_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.15295	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.0805	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.07245	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_A22_M5_Stuart_2>
       </chassis>
     </detailed>
   </physics>

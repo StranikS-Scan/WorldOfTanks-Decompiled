@@ -800,7 +800,6 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	1880	</weight>
-      <maxLoad>	12700	</maxLoad>
       <terrainResistance>	1 1.1 2.1	</terrainResistance>
       <brakeForce>	33000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -1902,10 +1901,13 @@
           </pitchLimits>
           <armor>
             <armor_1>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_1>
             <armor_2>	6	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_2>
             <armor_3>	6	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_3>
             <gun>	10	</gun>
           </armor>

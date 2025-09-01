@@ -1185,7 +1185,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	42500	</maxLoad>
       <terrainResistance>	0.6 0.7 1.6	</terrainResistance>
       <brakeForce>	42000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2108,6 +2107,10 @@
       </surveyingDeviceHealth>
       <guns>
         <_105mm_armata_wz_64>	shared	  <maxAmmo>	50	</maxAmmo>
+          <unlocks>
+            <vehicle>	Pl37_CS_67_Szakal	  <cost>	325000	</cost>
+            </vehicle>
+          </unlocks>
           <armor>
             <armor_1>	260	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -2144,7 +2147,7 @@
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 0.416667 8 0.430556 3 0.569444 3 0.583333 8 1 8	</maxPitch>
+            <maxPitch>	0.00000 8.00 0.40833 8.00 0.43333 5.00 0.50000 3.00 0.56667 5.00 0.59167 8.00 1.00000 8.00	</maxPitch>
           </pitchLimits>
           <reloadTime>	8.5	</reloadTime>
           <shotDispersionFactors>

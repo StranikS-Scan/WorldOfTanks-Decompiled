@@ -341,6 +341,7 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_ENTITLEMENTS_MULTIPLIER = '#messenger:serviceChannelMessages/battleResults/quests/entitlements/multiplier'
     SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_ENTITLEMENTS_FMTMULTIPLIER = '#messenger:serviceChannelMessages/battleResults/quests/entitlements/fmtMultiplier'
     SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_RANKEDBONUSBATTLES = '#messenger:serviceChannelMessages/battleResults/quests/rankedBonusBattles'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_PERSONAL_MISSIONS_POINTS = '#messenger:serviceChannelMessages/battleResults/quests/personal_missions_points'
     SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_RANKEDBONUSBATTLES_PERSISTENT = '#messenger:serviceChannelMessages/battleResults/quests/rankedBonusBattles/persistent'
     SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_RANKEDBONUSBATTLES_DAILY = '#messenger:serviceChannelMessages/battleResults/quests/rankedBonusBattles/daily'
     SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_BATTLEPASSPOINTS = '#messenger:serviceChannelMessages/battleResults/quests/battlePassPoints'
@@ -349,6 +350,12 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS = '#messenger:serviceChannelMessages/battleResults/personalMissions'
     SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS_1 = '#messenger:serviceChannelMessages/battleResults/personalMissions/1'
     SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS_2 = '#messenger:serviceChannelMessages/battleResults/personalMissions/2'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS_3 = '#messenger:serviceChannelMessages/battleResults/personalMissions/3'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_NOTIFICATION_PERSONALMISSIONS_3_HEADER = '#messenger:serviceChannelMessages/battleResults/notification/personalMissions/3/header'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_NOTIFICATION_PERSONALMISSIONS_3_DESCRIPTION = '#messenger:serviceChannelMessages/battleResults/notification/personalMissions/3/description'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_NOTIFICATION_PERSONALMISSIONS_3_STAGE_3_DESCRIPTION = '#messenger:serviceChannelMessages/battleResults/notification/personalMissions/3/stage/3/description'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_NOTIFICATION_PERSONALMISSIONS_3_STAGE_2_DESCRIPTION = '#messenger:serviceChannelMessages/battleResults/notification/personalMissions/3/stage/2/description'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_NOTIFICATION_PERSONALMISSIONS_3_STAGE_1_DESCRIPTION = '#messenger:serviceChannelMessages/battleResults/notification/personalMissions/3/stage/1/description'
     SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS_BOTH = '#messenger:serviceChannelMessages/battleResults/personalMissions/both'
     SERVICECHANNELMESSAGES_BATTLERESULTS_FORTRESOURCE = '#messenger:serviceChannelMessages/battleResults/fortResource'
     SERVICECHANNELMESSAGES_BATTLERESULTS_FORTBUILDING = '#messenger:serviceChannelMessages/battleResults/fortBuilding'
@@ -464,6 +471,7 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_INVOICERECEIVED_TANKMEN = '#messenger:serviceChannelMessages/invoiceReceived/tankmen'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_TANKMENTOREMOVE = '#messenger:serviceChannelMessages/invoiceReceived/tankmenToRemove'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_BOOSTERS = '#messenger:serviceChannelMessages/invoiceReceived/boosters'
+    SERVICECHANNELMESSAGES_INVOICERECEIVED_EXPIRABLEBOOSTERS = '#messenger:serviceChannelMessages/invoiceReceived/expirableBoosters'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_BOOSTERS_DEBITED = '#messenger:serviceChannelMessages/invoiceReceived/boosters/debited'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_DISCOUNTS = '#messenger:serviceChannelMessages/invoiceReceived/discounts'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_EQUIPMENT_DEBITED = '#messenger:serviceChannelMessages/invoiceReceived/equipment/debited'
@@ -1108,11 +1116,6 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_WOTPLUS_DAILYATTENDANCEREWARDED_BIG_CYCLEENDED_TITLE = '#messenger:serviceChannelMessages/wotPlus/dailyAttendanceRewarded/big/cycleEnded/title'
     SERVICECHANNELMESSAGES_WOTPLUS_DAILYATTENDANCEREWARDED_BIG_CYCLEENDED_STARTTEXT = '#messenger:serviceChannelMessages/wotPlus/dailyAttendanceRewarded/big/cycleEnded/startText'
     SERVICECHANNELMESSAGES_WOTPLUS_DAILYATTENDANCEREWARDED_BIG_CYCLEENDED_ENDTEXT = '#messenger:serviceChannelMessages/wotPlus/dailyAttendanceRewarded/big/cycleEnded/endText'
-    SERVICECHANNELMESSAGES_WOTPLUS_SUBSCRIBERSBENEFITSONBOARDING_TITLE = '#messenger:serviceChannelMessages/wotPlus/subscribersBenefitsOnboarding/title'
-    SERVICECHANNELMESSAGES_WOTPLUS_SUBSCRIBERSBENEFITSONBOARDING_BODY = '#messenger:serviceChannelMessages/wotPlus/subscribersBenefitsOnboarding/body'
-    SERVICECHANNELMESSAGES_WOTPLUS_SUBSCRIBERSBENEFITSONBOARDING_ADDITIONALBONUSES = '#messenger:serviceChannelMessages/wotPlus/subscribersBenefitsOnboarding/additionalBonuses'
-    SERVICECHANNELMESSAGES_WOTPLUS_SUBSCRIBERSBENEFITSONBOARDING_BATTLEBONUSES = '#messenger:serviceChannelMessages/wotPlus/subscribersBenefitsOnboarding/battleBonuses'
-    SERVICECHANNELMESSAGES_WOTPLUS_SUBSCRIBERSBENEFITSONBOARDING_BADGES = '#messenger:serviceChannelMessages/wotPlus/subscribersBenefitsOnboarding/badges'
     SERVICECHANNELMESSAGES_BATTLEBONUSES_AVAILABLE_TITLE = '#messenger:serviceChannelMessages/battleBonuses/available/title'
     SERVICECHANNELMESSAGES_BATTLEBONUSES_UNAVAILABLE_TITLE = '#messenger:serviceChannelMessages/battleBonuses/unavailable/title'
     SERVICECHANNELMESSAGES_BADGE_AVAILABLE_TITLE = '#messenger:serviceChannelMessages/badge/available/title'
@@ -1258,6 +1261,12 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_COMMENDATIONS_MESSAGES_DISABLE = '#messenger:serviceChannelMessages/commendations/messages/disable'
     SERVICECHANNELMESSAGES_COMMENDATIONS_LIVETAGS_ENABLE = '#messenger:serviceChannelMessages/commendations/liveTags/enable'
     SERVICECHANNELMESSAGES_COMMENDATIONS_LIVETAGS_DISABLE = '#messenger:serviceChannelMessages/commendations/liveTags/disable'
+    SERVICECHANNELMESSAGES_COMMENDATIONS_BATTLERESULTS_COMMENDATIONSRECEIVED = '#messenger:serviceChannelMessages/commendations/battleResults/commendationsReceived'
+    SERVICECHANNELMESSAGES_PERSONALMISSION3QUEST_GOTOOPERATION = '#messenger:serviceChannelMessages/PersonalMission3Quest/goToOperation'
+    SERVICECHANNELMESSAGES_PERSONALMISSION3QUEST_AFFIRMATIVE = '#messenger:serviceChannelMessages/PersonalMission3Quest/affirmative'
+    SERVICECHANNELMESSAGES_PRESTIGEMILESTONE_ERROR = '#messenger:serviceChannelMessages/prestigeMilestone/error'
+    SERVICECHANNELMESSAGES_PRESTIGEMILESTONE_TITLE = '#messenger:serviceChannelMessages/prestigeMilestone/title'
+    SERVICECHANNELMESSAGES_PRESTIGEMILESTONE_TEXT = '#messenger:serviceChannelMessages/prestigeMilestone/text'
     CLIENT_ERROR_SHARED_ENUM = (CLIENT_ERROR_SHARED_TRY_LATER,
      CLIENT_ERROR_SHARED_GENERIC,
      CLIENT_ERROR_SHARED_LOCKED,
@@ -1341,7 +1350,10 @@ class MESSENGER(object):
      LISTVIEW_EMPTYLIST_INFO,
      LISTVIEW_EMPTYLIST_INVITE,
      LISTVIEW_EMPTYLIST_OFFER)
-    SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS_ENUM = (SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS_1, SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS_2, SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS_BOTH)
+    SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS_ENUM = (SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS_1,
+     SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS_2,
+     SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS_3,
+     SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS_BOTH)
     SERVICECHANNELMESSAGES_CURRENCYUPDATE_ALL_ENUM = (SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_CREDITS,
      SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_GOLD,
      SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_CRYSTAL,

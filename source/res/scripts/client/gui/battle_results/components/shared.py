@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/components/shared.py
 from debug_utils import LOG_ERROR
-from dossiers2.ui.achievements import ACHIEVEMENT_TYPE, MARK_ON_GUN_RECORD, MARK_OF_MASTERY_RECORD
+from dossiers2.ui.achievements import ACHIEVEMENT_TYPE
 from gui.battle_results import stored_sorting
 from gui.battle_results.components import base
 from gui.battle_results.components.style import makeTeamKillerText
+from gui.battle_results.pbs_helpers.common import getAchievementCustomData, getVehicleLevel
 from gui.shared.gui_items.dossier.achievements import MarkOnGunAchievement
 
 class TrueFlag(base.StatsItem):
@@ -122,12 +123,8 @@ class AchievementBlock(base.StatsBlock):
             self.i18nValue = result.getI18nValue()
         icons = result.getIcons()
         specialIcon = icons.get(MarkOnGunAchievement.IT_95X85, None)
-        customData = []
         recordName = result.getRecordName()
-        if recordName == MARK_ON_GUN_RECORD:
-            customData.extend([result.getDamageRating(), result.getVehicleNationID()])
-        if recordName == MARK_OF_MASTERY_RECORD:
-            customData.extend([result.getPrevMarkOfMastery(), result.getCompDescr()])
+        customData = getAchievementCustomData(result)
         self.type = recordName[1]
         self.block = result.getBlock()
         self.icon = result.getSmallIcon() if specialIcon is None else ''
@@ -138,11 +135,7 @@ class AchievementBlock(base.StatsBlock):
         self.customData = customData
         if reusable:
             self.arenaType = reusable.common.arenaBonusType
-            playerVehiclesIterator = reusable.personal.getVehicleItemsIterator()
-            for _, vehicle in playerVehiclesIterator:
-                self.vehicleLevel = vehicle.level
-                break
-
+            self.vehicleLevel = getVehicleLevel(reusable)
         return
 
 

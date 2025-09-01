@@ -1,9 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/winback/winback_daily_quests_intro_view.py
-from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags, WindowLayer
+from frameworks.wulf import ViewFlags, ViewSettings
 from gui.impl.gen.view_models.views.lobby.winback.winback_daily_quests_intro_view_model import WinbackDailyQuestsIntroViewModel
-from gui.impl.pub import ViewImpl, WindowImpl
-from gui.impl.gen import R
+from gui.impl.pub import ViewImpl
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 
@@ -11,8 +10,8 @@ class WinbackDailyQuestsIntroView(ViewImpl):
     __slots__ = ()
     __battlePass = dependency.descriptor(IBattlePassController)
 
-    def __init__(self):
-        settings = ViewSettings(R.views.lobby.winback.WinbackDailyQuestsIntroView())
+    def __init__(self, layoutID):
+        settings = ViewSettings(layoutID)
         settings.flags = ViewFlags.LOBBY_TOP_SUB_VIEW
         settings.model = WinbackDailyQuestsIntroViewModel()
         super(WinbackDailyQuestsIntroView, self).__init__(settings)
@@ -33,10 +32,3 @@ class WinbackDailyQuestsIntroView(ViewImpl):
 
     def __onClose(self):
         self.destroyWindow()
-
-
-class WinbackDailyQuestsIntroWindow(WindowImpl):
-    __slots__ = ()
-
-    def __init__(self, parent=None):
-        super(WinbackDailyQuestsIntroWindow, self).__init__(WindowFlags.WINDOW, content=WinbackDailyQuestsIntroView(), parent=parent, layer=WindowLayer.TOP_SUB_VIEW)

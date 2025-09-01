@@ -1,8 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/battle_royale/battle_results/personal/personal_results_model.py
-from frameworks.wulf import Array
+from frameworks.wulf import Array, ViewModel
 from gui.impl.gen import R
-from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.views.battle_royale.battle_results.personal.battle_reward_item_model import BattleRewardItemModel
 from gui.impl.gen.view_models.views.battle_royale.battle_results.personal.stat_item_model import StatItemModel
 

@@ -1,8 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/frameworks/state_machine/visitor.py
+import typing
 from .transitions import BaseTransition
 from .exceptions import NodeError
 from .node import Node
+if typing.TYPE_CHECKING:
+    from . import State
 
 def getAncestors(node, upper=None):
     if not isinstance(node, Node):

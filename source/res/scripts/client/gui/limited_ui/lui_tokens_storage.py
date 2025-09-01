@@ -342,7 +342,7 @@ class _PersonalMissionsActive(LimitedUICondition):
     __eventsCache = dependency.descriptor(IEventsCache)
 
     def _getValue(self):
-        for branch in PM_BRANCH.ACTIVE_BRANCHES:
+        for branch in PM_BRANCH.ALL:
             operations = self.__eventsCache.getPersonalMissions().getOperationsForBranch(branch)
             if any((operation.isInProgress() for operation in itervalues(operations))):
                 return True

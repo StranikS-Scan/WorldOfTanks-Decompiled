@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/manual/manual_view_base.py
 import logging
-from gui.Scaleform.daapi import LobbySubView
+from gui.Scaleform.framework.entities.View import View
 from helpers import dependency
 from skeletons.gui.game_control import IManualController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -9,8 +9,7 @@ from gui.sounds.filters import States, StatesGroup
 from sound_gui_manager import CommonSoundSpaceSettings
 _logger = logging.getLogger(__name__)
 
-class ManualViewBase(LobbySubView):
-    __background_alpha__ = 1
+class ManualViewBase(View):
     lobbyContext = dependency.descriptor(ILobbyContext)
     manualController = dependency.descriptor(IManualController)
     SOUND_SPACE = 'manual'

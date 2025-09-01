@@ -8,6 +8,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.maps_training.maps_training_result_model import DoneValueEnum, MapsTrainingResultModel
 from gui.impl.pub import ViewImpl, WindowImpl
+from gui.shared.event_dispatcher import showMapsTrainingPage
 from gui.shared.missions.packers.bonus import getDefaultBonusPacker
 from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency
@@ -109,7 +110,7 @@ class MapsTrainingResult(ViewImpl):
         vehicle = vo['vehicle']
         team = vo['team']
         geometryType = ArenaType.g_geometryCache[mapID]
-        self.mapsTrainingController.showMapsTrainingPage(ctx={'map': geometryType.geometryName,
+        showMapsTrainingPage(ctx={'map': geometryType.geometryName,
          'vehicleType': vehicle['type'],
          'side': team,
          'showAnimation': vo['accountProgress']['hasImproved']})

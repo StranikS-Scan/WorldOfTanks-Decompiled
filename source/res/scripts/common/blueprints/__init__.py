@@ -2,7 +2,7 @@
 # Embedded file name: scripts/common/blueprints/__init__.py
 import typing
 import nations
-from constants import IS_CLIENT
+from constants import IS_CLIENT, MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 from debug_utils import LOG_CURRENT_EXCEPTION
 from soft_exception import SoftException
 from wotdecorators import singleton
@@ -118,17 +118,23 @@ def init(gameParams=None, nofail=True):
     g_cache.init(gameParams=gameParams, nofail=nofail)
 
 
-def getAllResearchedVehicles(defaultUnlocks=frozenset()):
-    return getHelperCache()['vehiclesInTrees'] - defaultUnlocks
+def getAllResearchableVehicles():
+    return getHelperCache()['vehiclesInTrees']
 
 
-def getResearchableVehiclesWithout1Lvl(unlocks=frozenset(), initialUnlocks=frozenset()):
-    return getHelperCache()['vehiclesInTreesWithout1Lvl'] - unlocks - initialUnlocks
+def _getAllDisabledVehicles():
+    vehiclesCache = getHelperCache()
+    disabledVehicles = set()
+    for level in xrange(MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL + 1):
+        if level not in g_cache.levels:
+            disabledVehicles |= vehiclesCache['vehiclesByLevel'][level]
+
+    return disabledVehicles
 
 
-def getUnlockedVehicles(unlocks=frozenset(), initialUnlocks=frozenset()):
-    return getHelperCache()['vehiclesInTrees'] & unlocks.union(initialUnlocks)
+def getAllowedVehiclesForBlueprints(unlocks, initialUnlocks):
+    return getHelperCache()['vehiclesInTrees'] - unlocks - initialUnlocks - _getAllDisabledVehicles()
 
 
-def isNationResearched(nationID, defaultUnlocks=frozenset(), unlocks=frozenset()):
-    return not bool(getHelperCache()['vehiclesInTreesByNation'][nationID] - defaultUnlocks - unlocks)
+def isNationResearchedForBlueprints(nationID, defaultUnlocks, unlocks):
+    return not bool(getHelperCache()['vehiclesInTreesByNation'][nationID] - defaultUnlocks - unlocks - _getAllDisabledVehicles())

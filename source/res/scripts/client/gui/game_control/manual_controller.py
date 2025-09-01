@@ -2,18 +2,17 @@
 # Embedded file name: scripts/client/gui/game_control/manual_controller.py
 import logging
 from account_helpers.AccountSettings import AccountSettings, LOBBY_MENU_MANUAL_TRIGGER_SHOWN
-from frameworks.wulf import WindowLayer
-from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
+from gui.Scaleform.daapi.view.lobby.manual.states import ManualState, ManualChapterState
+from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.doc_loaders.manual_xml_data_reader import ManualPageTypes
+from gui.lobby_state_machine.lobby_state_machine import LobbyStateMachine
 from helpers import dependency
 from skeletons.gui.game_control import IManualController
 from skeletons.gui.lobby_context import ILobbyContext
 from gui.app_loader import sf_lobby
 from gui.doc_loaders import manual_xml_data_reader
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from PlayerEvents import g_playerEvents
-from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 _logger = logging.getLogger(__name__)
 
 class ManualController(IManualController):
@@ -64,22 +63,21 @@ class ManualController(IManualController):
         return self.lobbyContext.getServerSettings().isManualEnabled()
 
     def getChapterView(self):
-        windowContainer = self.app.containerManager.getContainer(WindowLayer.TOP_SUB_VIEW)
-        return windowContainer.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.MANUAL_CHAPTER_VIEW})
+        lsm = getLobbyStateMachine()
+        return lsm.getRelatedView(lsm.getStateByCls(ManualChapterState))
 
     def getView(self):
-        windowContainer = self.app.containerManager.getContainer(WindowLayer.SUB_VIEW)
-        return windowContainer.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.WIKI_VIEW})
+        lsm = getLobbyStateMachine()
+        return lsm.getRelatedView(lsm.getStateByCls(ManualState))
 
     def getDescrLabelBackBtn(self):
         return self._descrLabelBackBtn
 
-    def show(self, lessonID=None, backCallback=None, descrLabelBackBtn=''):
+    def show(self, lessonID=None, descrLabelBackBtn=''):
         self._descrLabelBackBtn = descrLabelBackBtn
         view = self.getView()
-        ctx = {'backCallback': backCallback}
         if not lessonID:
-            g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.WIKI_VIEW), ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
+            ManualState.goTo()
         else:
             for chapterIndex, chapter in enumerate(self.__getChapters()):
                 pageIndex = next((pageIndex for pageIndex, pageID in enumerate(chapter['pageIDs']) if pageID == lessonID), None)
@@ -87,9 +85,7 @@ class ManualController(IManualController):
                     if view:
                         self.showChapterView(chapterIndex, pageIndex)
                     else:
-                        ctx.update({'chapterIndex': chapterIndex,
-                         'pageIndex': pageIndex})
-                        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.WIKI_VIEW), ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
+                        ManualState.goTo(chapterIndex, pageIndex)
                     return
 
             _logger.debug('Cant found page to show lesson with id %d', lessonID)
@@ -104,8 +100,7 @@ class ManualController(IManualController):
         if chapterView:
             chapterView.setData(chapterIndex, pageIndex)
             return
-        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.MANUAL_CHAPTER_VIEW), ctx={'chapterIndex': chapterIndex,
-         'pageIndex': pageIndex}), scope=EVENT_BUS_SCOPE.LOBBY)
+        ManualChapterState.goTo(chapterIndex, pageIndex)
 
     def collectUnreadPages(self, chapters):
         return [ chapter['newPageIDs'] for chapter in chapters ]

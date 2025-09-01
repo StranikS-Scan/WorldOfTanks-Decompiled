@@ -674,8 +674,8 @@
       <slot>
         <slotType>	attachment	</slotType>
         <slotId>	18002	</slotId>
-        <position>	0.001016 0.289603 -3.130375	</position>
-        <rotation>	-0 -1.570798 1.439272	</rotation>
+        <position>	0.004564 -0.00315 -3.091241	</position>
+        <rotation>	0 -1.570796 1.533972	</rotation>
         <scale>	0.999974 0.999974 0.999976	</scale>
         <applyType>	universal	</applyType>
         <size>	medium	</size>
@@ -705,7 +705,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	8000	</weight>
-      <maxLoad>	35000	</maxLoad>
       <terrainResistance>	1 1.2 2	</terrainResistance>
       <brakeForce>	26000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -778,34 +777,34 @@
               </wheelGroups>
               <hullCollider>
                 <boxCollider>
-                  <row0>	2.007134 0.000000 0.000000	</row0>
-                  <row1>	0.000000 1.558454 0.000000	</row1>
-                  <row2>	0.000000 0.000000 6.076980	</row2>
-                  <row3>	0.000000 1.292575 -0.105272	</row3>
+                  <row0>	2.023000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.579000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.413000	</row2>
+                  <row3>	0.000000 1.291000 -0.003000	</row3>
                 </boxCollider>
                 <boxCollider>
                   <row0>	3.395745 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.361445 0.000000	</row1>
+                  <row1>	0.000000 0.696000 0.000000	</row1>
                   <row2>	0.000000 0.000000 6.112910	</row2>
-                  <row3>	0.000000 1.543100 -0.105272	</row3>
+                  <row3>	0.000000 1.713000 -0.105272	</row3>
                 </boxCollider>
                 <boxCollider>
-                  <row0>	3.455862 0.000001 0.000000	</row0>
-                  <row1>	0.000000 0.208260 0.215935	</row1>
-                  <row2>	0.000000 -0.418572 0.403693	</row2>
-                  <row3>	0.000000 1.408012 3.127192	</row3>
+                  <row0>	3.455862 0.000001 0.000002	</row0>
+                  <row1>	0.000000 0.189599 0.232492	</row1>
+                  <row2>	0.000000 -0.450665 0.367521	</row2>
+                  <row3>	-0.000001 1.335151 3.076808	</row3>
                 </boxCollider>
                 <boxCollider>
-                  <row0>	3.455860 0.000001 0.000000	</row0>
-                  <row1>	0.000000 0.008588 -0.299877	</row1>
-                  <row2>	0.000000 0.581286 0.016648	</row2>
-                  <row3>	0.000000 1.121066 -3.282668	</row3>
+                  <row0>	3.455860 0.000001 -0.000035	</row0>
+                  <row1>	-0.000003 0.008589 -0.299877	</row1>
+                  <row2>	0.000000 0.581286 0.016649	</row2>
+                  <row3>	0.000000 1.107000 -3.215497	</row3>
                 </boxCollider>
                 <boxCollider>
                   <row0>	0.300000 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.579793 0.000000	</row1>
-                  <row2>	0.000000 0.000000 6.112910	</row2>
-                  <row3>	-1.835607 1.083009 -0.105272	</row3>
+                  <row1>	0.000000 1.041000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.269000	</row2>
+                  <row3>	-1.826000 1.260051 0.033000	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -852,34 +851,34 @@
               </wheelGroups>
               <hullCollider>
                 <boxCollider>
-                  <row0>	2.007130 0.000000 0.000000	</row0>
-                  <row1>	0.000000 1.558450 0.000000	</row1>
-                  <row2>	0.000000 0.000000 6.076980	</row2>
-                  <row3>	0.000000 1.292580 -0.105272	</row3>
+                  <row0>	2.023000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.579000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.413000	</row2>
+                  <row3>	0.000000 1.291000 -0.003000	</row3>
                 </boxCollider>
                 <boxCollider>
                   <row0>	3.395750 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.361445 0.000000	</row1>
+                  <row1>	0.000000 0.696000 0.000000	</row1>
                   <row2>	0.000000 0.000000 6.112910	</row2>
-                  <row3>	0.000000 1.543100 -0.105272	</row3>
+                  <row3>	0.000000 1.713000 -0.105272	</row3>
                 </boxCollider>
                 <boxCollider>
-                  <row0>	3.455860 0.000001 0.000000	</row0>
-                  <row1>	0.000000 0.208260 0.215935	</row1>
-                  <row2>	0.000000 -0.418572 0.403693	</row2>
-                  <row3>	0.000000 1.408010 3.127190	</row3>
+                  <row0>	3.455860 0.000001 0.000002	</row0>
+                  <row1>	0.000000 0.189599 0.232492	</row1>
+                  <row2>	0.000000 -0.450665 0.367521	</row2>
+                  <row3>	-0.000001 1.335150 3.076810	</row3>
                 </boxCollider>
                 <boxCollider>
-                  <row0>	3.455860 0.000001 0.000000	</row0>
-                  <row1>	0.000000 0.008588 -0.299877	</row1>
-                  <row2>	0.000000 0.581286 0.016648	</row2>
-                  <row3>	0.000000 1.121070 -3.282670	</row3>
+                  <row0>	3.455860 0.000001 -0.000035	</row0>
+                  <row1>	-0.000003 0.008589 -0.299877	</row1>
+                  <row2>	0.000000 0.581286 0.016649	</row2>
+                  <row3>	0.000000 1.107000 -3.215500	</row3>
                 </boxCollider>
                 <boxCollider>
                   <row0>	0.300000 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.579793 0.000000	</row1>
-                  <row2>	0.000000 0.000000 6.112910	</row2>
-                  <row3>	1.836000 1.083010 -0.105272	</row3>
+                  <row1>	0.000000 1.041000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.269000	</row2>
+                  <row3>	1.826000 1.260050 0.033000	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1542,6 +1541,7 @@
             <minPitch>	0 0 1 0	</minPitch>
             <maxPitch>	0 0 1 0	</maxPitch>
           </pitchLimits>
+          <staticPitch>	0	</staticPitch>
           <turretYawLimits>	-3 3	</turretYawLimits>
           <staticTurretYaw>	0	</staticTurretYaw>
           <customizationSlots>
@@ -1710,4 +1710,5 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.88	</alpha>
   </emblems>
+  <baseColorID>	4	</baseColorID>
 </G184_Windhund.xml>

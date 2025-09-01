@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/battle_pass_how_to_earn_points_view.py
-import logging
 import itertools
+import logging
 from constants import ARENA_BONUS_TYPE
 from frameworks.wulf import Array, ViewSettings, WindowFlags
 from gui.impl import backport
@@ -9,7 +9,7 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_how_to_earn_points_view_model import BattlePassHowToEarnPointsViewModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.game_mode_card_model import GameModeCardModel, PointsCardType
 from gui.impl.gen.view_models.views.lobby.battle_pass.game_mode_cell_model import GameModeCellModel
-from gui.impl.gen.view_models.views.lobby.battle_pass.game_mode_model import GameModeModel, ArenaBonusType
+from gui.impl.gen.view_models.views.lobby.battle_pass.game_mode_model import ArenaBonusType, GameModeModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.game_mode_rows_model import GameModeRowsModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.vehicle_item_model import VehicleItemModel
 from gui.impl.lobby.missions.daily_quests_view import DailyTabs
@@ -22,6 +22,7 @@ from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.shared import IItemsCache
 REVERSE_GAME_MODE_ORDER = (ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO,
  ARENA_BONUS_TYPE.EPIC_BATTLE,
+ ARENA_BONUS_TYPE.COMP7_LIGHT,
  ARENA_BONUS_TYPE.COMP7,
  ARENA_BONUS_TYPE.REGULAR)
 REVERSE_GAME_MODE_ORDER_MAP = {bonusType:idx for idx, bonusType in enumerate(REVERSE_GAME_MODE_ORDER)}
@@ -29,12 +30,11 @@ _rBattlePass = R.strings.battle_pass
 _logger = logging.getLogger(__name__)
 
 class BattlePassHowToEarnPointsView(ViewImpl):
-    __slots__ = ('__chapterID',)
     __itemsCache = dependency.descriptor(IItemsCache)
     __battlePass = dependency.descriptor(IBattlePassController)
 
-    def __init__(self, layoutID, chapterID):
-        settings = ViewSettings(layoutID)
+    def __init__(self, chapterID=0):
+        settings = ViewSettings(R.views.lobby.battle_pass.BattlePassHowToEarnPointsView())
         settings.model = BattlePassHowToEarnPointsViewModel()
         self.__chapterID = chapterID
         super(BattlePassHowToEarnPointsView, self).__init__(settings)
@@ -46,6 +46,9 @@ class BattlePassHowToEarnPointsView(ViewImpl):
     def _onLoading(self, *args, **kwargs):
         super(BattlePassHowToEarnPointsView, self)._onLoading(*args, **kwargs)
         self.__createGeneralModel()
+
+    def _getEvents(self):
+        return ((self.__battlePass.onBattlePassSettingsChange, self.__onBattlePassSettingsChange), (self.__battlePass.onSeasonStateChanged, self.__onSeasonStateChanged), (self.viewModel.onLinkClick, self.__onLinkClick))
 
     def __getGameMode(self, arenaType):
         return self.__createBattleRoyalGameModel() if arenaType == ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO else self.__createGameModel(arenaType)
@@ -180,6 +183,8 @@ class BattlePassHowToEarnPointsView(ViewImpl):
             self.__createEpicBattleCardsModel(viewModel)
         elif gameType == ARENA_BONUS_TYPE.COMP7:
             self.__createComp7CardsModel(gameType, viewModel)
+        elif gameType == ARENA_BONUS_TYPE.COMP7_LIGHT:
+            self.__createComp7LightCardsModel(gameType, viewModel)
 
     def __createRankedCardsModel(self, viewModel, gameType):
         self.__createSpecialVehCard(viewModel, gameType)
@@ -191,6 +196,9 @@ class BattlePassHowToEarnPointsView(ViewImpl):
     def __createComp7CardsModel(self, gameType, viewModel):
         self.__createSpecialVehCard(viewModel, gameType)
         self.__createDailyCard(gameType, viewModel, PointsCardType.COMP7)
+
+    def __createComp7LightCardsModel(self, gameType, viewModel):
+        self.__createDailyCard(gameType, viewModel, PointsCardType.COMP7_LIGHT)
 
     def __createRandomCardsModel(self, gameType, viewModel):
         self.__createSpecialVehCard(viewModel, gameType)
@@ -248,9 +256,6 @@ class BattlePassHowToEarnPointsView(ViewImpl):
             viewModel.getCards().addViewModel(gameModeCard)
             return
 
-    def _getEvents(self):
-        return ((self.__battlePass.onBattlePassSettingsChange, self.__onBattlePassSettingsChange), (self.__battlePass.onSeasonStateChanged, self.__onSeasonStateChanged), (self.viewModel.onLinkClick, self.__onLinkClick))
-
     def __onLinkClick(self, args):
         viewModel = args.get('viewId')
         if int(viewModel) == ARENA_BONUS_TYPE.REGULAR:
@@ -272,5 +277,5 @@ class BattlePassHowToEarnPointsView(ViewImpl):
 
 class BattlePassHowToEarnPointsWindow(LobbyWindow):
 
-    def __init__(self, parent=None, chapterID=0):
-        super(BattlePassHowToEarnPointsWindow, self).__init__(WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=BattlePassHowToEarnPointsView(R.views.lobby.battle_pass.BattlePassHowToEarnPointsView(), chapterID))
+    def __init__(self, chapterID=0):
+        super(BattlePassHowToEarnPointsWindow, self).__init__(WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=BattlePassHowToEarnPointsView(chapterID))

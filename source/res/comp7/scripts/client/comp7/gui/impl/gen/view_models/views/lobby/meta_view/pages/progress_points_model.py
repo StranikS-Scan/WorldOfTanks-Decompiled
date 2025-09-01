@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/gen/view_models/views/lobby/meta_view/pages/progress_points_model.py
-from frameworks.wulf import Array
-from frameworks.wulf import ViewModel
+from frameworks.wulf import Array, ViewModel
 from comp7.gui.impl.gen.view_models.views.lobby.comp7_bonus_model import Comp7BonusModel
 
 class ProgressPointsModel(ViewModel):

@@ -36,7 +36,7 @@
       <invisibilityBonus>	0.06	</invisibilityBonus>
     </deluxeAdditionalInvisibilityDevice>
   </optDevsOverrides>
-  <repairCost>	10	</repairCost>
+  <repairCost>	8.5	</repairCost>
   <premiumVehicleXPFactor>	0.05	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
@@ -977,14 +977,13 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	16400	</weight>
-      <maxLoad>	72000	</maxLoad>
       <terrainResistance>	1.1 1.2 2.5	</terrainResistance>
       <brakeForce>	50000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	24	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.33	</vehicleMovement>
-        <vehicleRotation>	0.33	</vehicleRotation>
+        <vehicleMovement>	0.27	</vehicleMovement>
+        <vehicleRotation>	0.27	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	240	</maxHealth>
@@ -1829,10 +1828,10 @@
           </armor>
           <shotDispersionRadius>	0.33	</shotDispersionRadius>
           <reloadTime>	20	</reloadTime>
-          <aimingTime>	3.9	</aimingTime>
+          <aimingTime>	3	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.33	</turretRotation>
-            <afterShot>	7	</afterShot>
+            <turretRotation>	0.16	</turretRotation>
+            <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>

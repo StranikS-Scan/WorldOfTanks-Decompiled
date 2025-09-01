@@ -60,7 +60,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	9922	</weight>
-    <maxHealth>	960	</maxHealth>
+    <maxHealth>	1120	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -527,8 +527,7 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	3400	</weight>
-      <maxLoad>	23000	</maxLoad>
-      <terrainResistance>	0.9 1 1.6	</terrainResistance>
+      <terrainResistance>	0.8 0.9 1.4	</terrainResistance>
       <brakeForce>	20000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	40	</rotationSpeed>
@@ -1429,7 +1428,6 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	3400	</weight>
-      <maxLoad>	23000	</maxLoad>
       <terrainResistance>	0.8 0.9 1.4	</terrainResistance>
       <brakeForce>	20000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2350,7 +2348,7 @@
       </armor>
       <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
       <weight>	4170	</weight>
-      <maxHealth>	180	</maxHealth>
+      <maxHealth>	210	</maxHealth>
       <rotationSpeed>	50	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -2383,13 +2381,13 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 7 0.35 7 0.4 0 0.6 0 0.65 7 1 7	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	1600	</maxAmmo>
+          <maxAmmo>	1408	</maxAmmo>
           <clip>
-            <count>	100	</count>
+            <count>	88	</count>
             <rate>	1650	</rate>
           </clip>
           <aimingTime>	2.2	</aimingTime>
-          <reloadTime>	18	</reloadTime>
+          <reloadTime>	20	</reloadTime>
           <invisibilityFactorAtShot>	0.116	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <shotDispersionFactors>
@@ -2901,7 +2899,7 @@
       </armor>
       <primaryArmor>	armor_15 armor_3 armor_4	</primaryArmor>
       <weight>	4670	</weight>
-      <maxHealth>	240	</maxHealth>
+      <maxHealth>	280	</maxHealth>
       <rotationSpeed>	55	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -2930,13 +2928,13 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 7 0.35 7 0.4 0 0.6 0 0.65 7 1 7	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	1600	</maxAmmo>
+          <maxAmmo>	1408	</maxAmmo>
           <clip>
-            <count>	100	</count>
+            <count>	88	</count>
             <rate>	1650	</rate>
           </clip>
           <aimingTime>	2.1	</aimingTime>
-          <reloadTime>	18	</reloadTime>
+          <reloadTime>	20	</reloadTime>
           <invisibilityFactorAtShot>	0.116	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.41	</shotDispersionRadius>
           <shotDispersionFactors>
@@ -3041,13 +3039,13 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 7 0.35 7 0.4 1 0.6 1 0.65 7 1 7	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	1200	</maxAmmo>
+          <maxAmmo>	1024	</maxAmmo>
           <clip>
-            <count>	75	</count>
+            <count>	64	</count>
             <rate>	1200	</rate>
           </clip>
           <aimingTime>	2	</aimingTime>
-          <reloadTime>	18	</reloadTime>
+          <reloadTime>	20	</reloadTime>
           <invisibilityFactorAtShot>	0.126	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <shotDispersionFactors>
@@ -3550,13 +3548,13 @@
         <Chassis_Cz28_LPT_67_Selma>
           <grounds>
             <soft>
-              <rollingFriction>	0.1288	</rollingFriction>
+              <rollingFriction>	0.1127	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.0805	</rollingFriction>
+              <rollingFriction>	0.07245	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.07245	</rollingFriction>
+              <rollingFriction>	0.0644	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

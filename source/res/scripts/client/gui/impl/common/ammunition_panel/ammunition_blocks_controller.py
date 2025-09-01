@@ -32,6 +32,9 @@ class BaseAmmunitionBlocksController(TabsController):
     def addSections(self, group):
         self._sections.update({group.groupID: group.sections})
 
+    def getCurrentSection(self):
+        return self._currentSection
+
     def _getTabs(self, **kwargs):
         if self._vehicle is None:
             return []

@@ -1,30 +1,35 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/TwinGunController.py
 import typing
-from vehicle_systems.entity_components.vehicle_mechanic_component import ifAppearanceReady, getVehicleMechanic, getPlayerVehicleMechanic, initOnce, VehicleMechanicGunPrefabComponent
-from vehicle_systems.twin_guns.custom_integrations import TwinGunCustomIntegrations
-from vehicle_systems.twin_guns.shooting_events import TwinGunShootingEvents
+from constants import DEFAULT_GUN_INSTALLATION_INDEX
+from vehicles.components.component_wrappers import ifAppearanceReady
+from vehicles.components.vehicle_component import VehicleGunPrefabDynamicComponent
+from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from vehicles.mechanics.twin_guns.custom_integrations import TwinGunCustomIntegrations
+from vehicles.mechanics.twin_guns.mechanic_events import TwinGunShootingEvents
+from vehicles.mechanics.mechanic_helpers import getVehicleMechanic, getPlayerVehicleMechanic
+from vehicles.parts.guns import IGunComponent
 if typing.TYPE_CHECKING:
-    from vehicle_systems.twin_guns.system_interfaces import ITwinGunShootingEvents
+    import CGF
+    from vehicles.mechanics.twin_guns.mechanic_interfaces import ITwinGunShootingEvents
     from Vehicle import Vehicle
 
 def getVehicleTwinGunController(vehicle):
-    return getVehicleMechanic('twinGunController', vehicle)
+    return getVehicleMechanic(VehicleMechanic.TWIN_GUN, vehicle)
 
 
 def getPlayerVehicleTwinGunController():
-    return getPlayerVehicleMechanic('twinGunController')
+    return getPlayerVehicleMechanic(VehicleMechanic.TWIN_GUN)
 
 
-class TwinGunController(VehicleMechanicGunPrefabComponent):
+class TwinGunController(VehicleGunPrefabDynamicComponent, IGunComponent):
 
-    @initOnce
     def __init__(self):
         super(TwinGunController, self).__init__()
         self.__afterShotDelay = 0.0
         self.__shootingEvents = TwinGunShootingEvents(self)
         TwinGunCustomIntegrations(self.entity, self).subscribe(self.__shootingEvents)
-        self._initMechanic()
+        self._initComponent()
 
     @property
     def shootingEvents(self):
@@ -38,6 +43,12 @@ class TwinGunController(VehicleMechanicGunPrefabComponent):
 
     def getAfterShotDelay(self):
         return self.__afterShotDelay
+
+    def getGunInstallationIndex(self):
+        return DEFAULT_GUN_INSTALLATION_INDEX
+
+    def getGunRootGameObject(self):
+        return self._prefabRoot
 
     def getNextGunIndexes(self):
         return tuple(self.nextGunIndexes or self.activeGunIndexes)
@@ -57,23 +68,23 @@ class TwinGunController(VehicleMechanicGunPrefabComponent):
         self.__shootingEvents.destroy()
         super(TwinGunController, self).onDestroy()
 
-    @ifAppearanceReady
     def onDiscreteShot(self, gunIndex):
         self.__shootingEvents.processDiscreteShot(gunIndex)
 
-    @ifAppearanceReady
     def onDoubleShot(self):
         self.__shootingEvents.processDoubleShot()
 
     def _onAppearanceReady(self):
-        typeDescriptor = self.entity.typeDescriptor
-        self.__afterShotDelay = typeDescriptor.gun.twinGun.afterShotDelay
-        self.__shootingEvents.processAppearanceReady()
         super(TwinGunController, self)._onAppearanceReady()
+        self.__shootingEvents.processAppearanceReady()
 
-    def _onMechanicAppearanceUpdate(self):
+    def _onComponentAppearanceUpdate(self):
         self.__updateActiveGunIndexes()
         self.__updateNextGunIndexes()
+
+    def _collectComponentParams(self, typeDescriptor):
+        super(TwinGunController, self)._collectComponentParams(typeDescriptor)
+        self.__afterShotDelay = typeDescriptor.gun.twinGun.afterShotDelay
 
     def __updateActiveGunIndexes(self):
         self.__shootingEvents.onActiveGunsUpdate(self.getActiveGunIndexes())

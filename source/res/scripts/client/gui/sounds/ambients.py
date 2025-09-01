@@ -536,10 +536,12 @@ class GuiAmbientsCtrl(object):
             customViews = []
             for layer in (WindowLayer.TOP_WINDOW, WindowLayer.WINDOW, WindowLayer.SUB_VIEW):
                 container = self.app.containerManager.getContainer(layer)
-                for viewAlias in self._customEnvs[layer].iterkeys():
+                for viewAlias in self._customEnvs[layer].keys():
                     view = container.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: viewAlias})
                     if view is not None:
                         customViews.append(view)
+                    self._clearSoundEnv(self._customEnvs[layer][viewAlias])
+                    del self._customEnvs[layer][viewAlias]
 
             for view in customViews:
                 self.__onViewDisposed(view)

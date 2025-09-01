@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/events_helpers.py
+import re
 import typing
 import operator
 import time
@@ -14,23 +15,31 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.server_events import formatters
+from gui.server_events.finders import FINAL_PT_TOKEN_PREFIX, PT_TOKEN_PREFIX, PM3_MILESTONE_QUEST_PREFIX, PM3_MILESTONE_QUEST_POSTFIX, PM3_PERSONAL_MISSION_HONOR_POSTFIX, isPM3Points, isPM3Milestone, isPMQuestRegExp, PM3_QUEST_PREFIX
 from gui.server_events.personal_missions_navigation import PersonalMissionsNavigation
 from gui.shared.gui_items.customization import C11nStyleProgressData
 from helpers import time_utils, i18n, dependency, isPlayerAccount
 from shared_utils import CONST_CONTAINER, findFirst, first
+from personal_missions import PM_BRANCH_TO_FREE_TOKEN_NAME
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from gui.server_events.events_constants import BATTLE_MATTERS_QUEST_ID, MARATHON_GROUP_PREFIX, PREMIUM_GROUP_PREFIX, DAILY_QUEST_ID_PREFIX, RANKED_DAILY_GROUP_ID, RANKED_PLATFORM_GROUP_ID, BATTLE_ROYALE_GROUPS_ID, EPIC_BATTLE_GROUPS_ID, MAPS_TRAINING_GROUPS_ID, MAPS_TRAINING_QUEST_PREFIX, FUN_RANDOM_GROUP_ID
+from gui.server_events.events_constants import BATTLE_MATTERS_QUEST_ID, MARATHON_GROUP_PREFIX, PREMIUM_GROUP_PREFIX, DAILY_QUEST_ID_PREFIX, RANKED_DAILY_GROUP_ID, RANKED_PLATFORM_GROUP_ID, BATTLE_ROYALE_GROUPS_ID, EPIC_BATTLE_GROUPS_ID, MAPS_TRAINING_GROUPS_ID, MAPS_TRAINING_QUEST_PREFIX, FUN_RANDOM_GROUP_ID, WEEKLY_QUEST_ID_PREFIX
 from helpers.i18n import makeString as _ms
+from weekly_quests_common.weekly_quests_schema import weeklyQuestsSchema
 if typing.TYPE_CHECKING:
     from gui.server_events.event_items import Quest
 FINISH_TIME_LEFT_TO_SHOW = time_utils.ONE_DAY
 START_TIME_LIMIT = 5 * time_utils.ONE_DAY
 AWARDS_PER_PAGE = 3
 AWARDS_PER_SINGLE_PAGE = 5
+_WQ_TOKEN_QUEST_ID_POS = 2
+_WQ_TOKEN_ITEMS_POS = _WQ_TOKEN_QUEST_ID_POS + 1
+_WQ_MAIN_SEPARATOR = '::'
+_WQ_CONDITION_HEAD = 'c:'
+_WQ_CONDITION_HEAD_LEN = len(_WQ_CONDITION_HEAD)
 
 class EventInfoModel(object):
     NO_BONUS_COUNT = -1
@@ -261,6 +270,27 @@ def isAllQuestsCompleted(quests):
     return all((quest.isCompleted() for quest in quests))
 
 
+def isSuitableForPM(diff):
+    if not diff:
+        return (False, True)
+    pmQuestsSet = {'potapovQuests', 'pm2_progress', 'pm3_progress'}
+    tokensSet = {'tokens'}
+    excludedSet = {'prevRev', 'rev', 'quests'}
+    diffKeys = set(diff.keys())
+    filteredPMTokenQuests = {qID for qID in diff.get('quests', {}).iterkeys() if qID.startswith(PM3_QUEST_PREFIX) and not isPM3Milestone(qID) or re.match(isPMQuestRegExp, qID)}
+    otherKeys = bool(diffKeys - pmQuestsSet - tokensSet - excludedSet) or bool(set(diff.get('quests', {}).keys()) - filteredPMTokenQuests)
+    hasPmQuests = bool(pmQuestsSet & diffKeys) or bool(filteredPMTokenQuests)
+    hasPMTokens = False
+    hasOtherTokens = False
+    if 'tokens' in diff:
+        tokens = set(diff['tokens'].keys())
+        freeTokens = set(PM_BRANCH_TO_FREE_TOKEN_NAME.values())
+        pmTokens = {token for token in tokens if token.startswith(PT_TOKEN_PREFIX) or token.startswith(FINAL_PT_TOKEN_PREFIX) or isPM3Points(token)}
+        hasPMTokens = bool(pmTokens or freeTokens & tokens)
+        hasOtherTokens = bool(tokens - freeTokens - pmTokens)
+    return (hasPMTokens or hasPmQuests, hasOtherTokens or otherKeys)
+
+
 def getMarathonPrefix(eventID):
     marathonsCtrl = dependency.instance(IMarathonEventsController)
     return marathonsCtrl.getPrefix(eventID)
@@ -310,8 +340,20 @@ def isDailyQuest(eventID):
     return eventID.startswith(DAILY_QUEST_ID_PREFIX) if eventID else False
 
 
+def isWeeklyQuest(eventID):
+    return eventID.startswith(WEEKLY_QUEST_ID_PREFIX) if eventID else False
+
+
 def isACEmailConfirmationQuest(eventID):
     return eventID == EMAIL_CONFIRMATION_QUEST_ID if eventID else False
+
+
+def isPM30MilestoneQuest(eventID):
+    return eventID.startswith(PM3_MILESTONE_QUEST_PREFIX) and PM3_MILESTONE_QUEST_POSTFIX in eventID
+
+
+def isPM30OperationFinishedQuest(eventID):
+    return eventID.startswith(FINAL_PT_TOKEN_PREFIX) and eventID.endswith(PM3_PERSONAL_MISSION_HONOR_POSTFIX)
 
 
 def isRegularQuest(eventID):
@@ -480,6 +522,16 @@ def isEpicQuestEnabled(lobbyContext=None):
     return lobbyContext.getServerSettings().getDailyQuestConfig().get('epicRewardEnabled', False)
 
 
+@dependency.replace_none_kwargs(eventsCache=IEventsCache, lobbyContext=ILobbyContext)
+def isWeeklyQuestsEnable(lobbyContext=None, eventsCache=None):
+    return lobbyContext.getServerSettings().getConfigModel(weeklyQuestsSchema).enabled
+
+
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def getWeeklyRerollTimeout(lobbyContext=None):
+    return lobbyContext.getServerSettings().getConfigModel(weeklyQuestsSchema).rerollTimeout
+
+
 def getEventsData(eventsTypeName):
     return BigWorld.player().getUnpackedEventsData(eventsTypeName) if isPlayerAccount() else {}
 
@@ -487,3 +539,26 @@ def getEventsData(eventsTypeName):
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def getC11nQuestsConfig(lobbyContext=None):
     return lobbyContext.getServerSettings().getCustomizationQuestsConfig()
+
+
+class WeeklyQuestInfo(object):
+
+    def __init__(self, token):
+        tokenItems = token.split(_WQ_MAIN_SEPARATOR)
+        self.id = int(tokenItems[_WQ_TOKEN_QUEST_ID_POS])
+        self.conditions = [ self._getCondition(item) for item in tokenItems[_WQ_TOKEN_ITEMS_POS:] if self._isCondition(item) ]
+
+    def getMainConditionId(self):
+        return self.conditions[-1]
+
+    def getSpecialConditionIds(self):
+        return self.conditions[:-1]
+
+    @staticmethod
+    def _isCondition(token):
+        return len(token) > _WQ_CONDITION_HEAD_LEN and token.startswith(_WQ_CONDITION_HEAD)
+
+    @staticmethod
+    def _getCondition(token):
+        valueStr = token[_WQ_CONDITION_HEAD_LEN:]
+        return int(valueStr)

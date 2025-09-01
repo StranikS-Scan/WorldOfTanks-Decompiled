@@ -7,6 +7,7 @@ from constants import DEATH_REASON_ALIVE
 from debug_utils import LOG_CURRENT_EXCEPTION
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui import achievements, layouts
+from dossiers2.ui.achievements import MARK_OF_MASTERY
 from gui.battle_results.reusable import sort_keys
 from gui.shared.crits_mask_parser import CRIT_MASK_SUB_TYPES, critsParserGenerator
 from gui.shared.gui_items import Vehicle
@@ -42,12 +43,12 @@ def makeAchievementFromPersonal(results):
 
 
 def makeMarkOfMasteryFromPersonal(results):
-    markOfMastery = results.get('markOfMastery', 0)
+    markOfMastery = results.get(MARK_OF_MASTERY, 0)
     achievement = None
     if not markOfMastery:
         return
     else:
-        factory = getAchievementFactory(('achievements', 'markOfMastery'))
+        factory = getAchievementFactory(('achievements', MARK_OF_MASTERY))
         if factory is not None:
             achievement = factory.create(value=markOfMastery)
             achievement.setPrevMarkOfMastery(results.get('prevMarkOfMastery', 0))
@@ -706,6 +707,10 @@ class VehicleDetailedInfo(_VehicleInfo):
         info._numDefended = vehicleRecords['numDefended']
         info._equipmentDamageAssisted = vehicleRecords.get('damageAssistedInspire', 0) + vehicleRecords.get('damageAssistedSmoke', 0)
         info._achievedLevel = vehicleRecords.get('achivedLevel', 0)
+        if vehicleRecords.get('details', 0):
+            for data in vehicleRecords['details'].values():
+                info._rickochetsReceived += data['rickochetsReceived']
+
         cls._setSharedRecords(info, vehicleRecords)
         return info
 

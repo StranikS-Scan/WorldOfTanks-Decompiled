@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/hangar/sub_views/vehicle_params_view.py
-from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
+from __future__ import absolute_import, division
+import json
+from future.utils import iteritems
 from account_helpers import AccountSettings
-from frameworks.wulf import ViewFlags, ViewSettings, ViewModel
 from gui import GUI_SETTINGS
-from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl import backport
 from gui.impl.gen import R
@@ -13,8 +13,8 @@ from gui.impl.gen.view_models.views.lobby.hangar.sub_views.vehicle_param_group_v
 from gui.impl.gen.view_models.views.lobby.hangar.sub_views.vehicle_param_view_model import VehicleParamViewModel
 from gui.impl.gen.view_models.views.lobby.hangar.sub_views.vehicle_params_view_model import VehicleParamsViewModel
 from gui.impl.lobby.hangar.sub_views.veh_param_helpers import getGroupIcon, formatParameterValue, formatAdditionalParameter, getMaxValue
-from gui.impl.pub import ViewImpl
-from gui.shared.gui_items import KPI, VEHICLE_ATTR_TO_KPI_NAME_MAP
+from gui.impl.pub.view_component import ViewComponent
+from gui.shared.gui_items import KPI, VEHICLE_ATTR_TO_KPI_NAME_MAP, GUI_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.items_parameters import RELATIVE_PARAMS, params_helper
 from gui.shared.items_parameters.comparator import PARAM_STATE
@@ -30,38 +30,34 @@ _HIGHLIGHT_TYPE_STATE_MAP = {PARAM_STATE.BETTER: HighlightType.INCREASE,
  PARAM_STATE.WORSE: HighlightType.DECREASE,
  PARAM_STATE.SITUATIONAL: HighlightType.SITUATIONAL}
 
-class VehicleParamsView(ViewImpl):
-    __slots__ = ('__vehIntCD', '__expandedGroups', '__params', '__extraParams', '__groups', '__context', '__comparator', '__stockParams')
+class _VehicleParamsPresenterBase(ViewComponent[VehicleParamsViewModel]):
     _DEFAULT_MIN_VALUE = 0
     _N_DIGITS = 2
-    _igrController = dependency.descriptor(IIGRController)
-    _itemsCache = dependency.descriptor(IItemsCache)
-    _appLoader = dependency.descriptor(IAppLoader)
+    __igrController = dependency.descriptor(IIGRController)
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __appLoader = dependency.descriptor(IAppLoader)
 
-    def __init__(self, vehIntCD=None, flags=ViewFlags.LOBBY_TOP_SUB_VIEW, layoutID=R.views.lobby.hangar.subViews.VehicleParams()):
-        settings = ViewSettings(layoutID)
-        settings.flags = flags
-        settings.model = VehicleParamsViewModel()
-        self.__vehIntCD = vehIntCD
+    def __init__(self, layoutID=R.views.lobby.hangar.subViews.VehicleParams(), applyFormatting=True):
         self.__context = HangarParamContext()
         self.__params = []
         self.__extraParams = []
         self.__expandedGroups = None
         self.__comparator = None
         self.__stockParams = None
-        super(VehicleParamsView, self).__init__(settings)
+        self._applyFormatting = applyFormatting
+        super(_VehicleParamsPresenterBase, self).__init__(layoutID, VehicleParamsViewModel)
         return
 
     def createToolTip(self, event):
         if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
             tooltipId = event.getArgument('tooltipId', None)
-            if tooltipId == self._getTooltipID():
+            if tooltipId in self._getParamTooltips():
                 paramId = event.getArgument('paramId', None)
-                toolTipMgr = self._appLoader.getApp().getToolTipMgr()
+                toolTipMgr = self.__appLoader.getApp().getToolTipMgr()
                 if toolTipMgr is not None:
                     toolTipMgr.onCreateWulfTooltip(tooltipId, (paramId, self.__context, True), event.mouse.positionX, event.mouse.positionY)
                     return tooltipId
-        return super(VehicleParamsView, self).createToolTip(event)
+        return super(_VehicleParamsPresenterBase, self).createToolTip(event)
 
     @property
     def comparator(self):
@@ -71,7 +67,7 @@ class VehicleParamsView(ViewImpl):
 
     @property
     def viewModel(self):
-        return super(VehicleParamsView, self).getViewModel()
+        return super(_VehicleParamsPresenterBase, self).getViewModel()
 
     @property
     def groups(self):
@@ -96,7 +92,7 @@ class VehicleParamsView(ViewImpl):
     def setExpandedGroups(self, value):
         self.__expandedGroups = value
 
-    def update(self):
+    def updateModel(self):
         if not GUI_SETTINGS.technicalInfo:
             return
         self._clearData()
@@ -113,33 +109,46 @@ class VehicleParamsView(ViewImpl):
         return params_helper.similarCrewComparator(self._getVehicle())
 
     def _getVehicle(self):
-        return self._itemsCache.items.getItemByCD(self.__vehIntCD) if self.__vehIntCD is not None else g_currentVehicle.item
+        raise NotImplementedError
+
+    def _getDefaultVehicle(self):
+        return self._getVehicle()
 
     def _onLoading(self, *args, **kwargs):
-        super(VehicleParamsView, self)._onLoading()
-        self.update()
+        super(_VehicleParamsPresenterBase, self)._onLoading(*args, **kwargs)
+        self.updateModel()
 
     def _getEvents(self):
-        return ((self._igrController.onIgrTypeChanged, self._onIgrTypeChanged),
-         (g_currentVehicle.onChanged, self._onCurrentVehicleChanged),
-         (self._itemsCache.onSyncCompleted, self._onCacheResync),
-         (self.viewModel.onGroupClick, self.__onGroupClick))
+        return ((self.__igrController.onIgrTypeChanged, self._onIgrTypeChanged), (self.__itemsCache.onSyncCompleted, self._onCacheResync), (self.viewModel.onGroupClick, self.__onGroupClick))
+
+    def _finalize(self):
+        super(_VehicleParamsPresenterBase, self)._finalize()
+        self.__context = None
+        self.__params = None
+        self.__extraParams = None
+        self.__expandedGroups = None
+        self.__comparator = None
+        self.__stockParams = None
+        return
 
     def _onIgrTypeChanged(self):
         self.__fillViewModel()
 
-    def _onCurrentVehicleChanged(self):
-        self.update()
-
-    def _onCacheResync(self, reason, _):
+    def _onCacheResync(self, reason, diff):
         if reason in (CACHE_SYNC_REASON.SHOP_RESYNC, CACHE_SYNC_REASON.CLIENT_UPDATE):
-            self.__fillViewModel()
+            vehicle = self._getVehicle()
+            if vehicle is not None and any((vehicle.intCD in diff.get(itemType, {}) for itemType in (GUI_ITEM_TYPE.VEH_POST_PROGRESSION, GUI_ITEM_TYPE.VEHICLE))):
+                self.updateModel()
+        return
 
     @property
     def _stockParams(self):
         if self.__stockParams is None:
-            self.__stockParams = params_helper.getParameters(self._itemsCache.items.getStockVehicle(self._getVehicle().intCD))
+            self._updateStockParams()
         return self.__stockParams
+
+    def _updateStockParams(self):
+        self.__stockParams = params_helper.getParameters(self.__itemsCache.items.getStockVehicle(self._getDefaultVehicle().intCD))
 
     def _clearData(self):
         self.__groups = []
@@ -147,9 +156,6 @@ class VehicleParamsView(ViewImpl):
         self.__extraParams = []
         self.__comparator = None
         return
-
-    def _getTooltipID(self):
-        return TOOLTIPS_CONSTANTS.VEHICLE_ADVANCED_PARAMETERS
 
     def _getGroupHighlight(self, _):
         return HighlightType.NONE
@@ -166,8 +172,14 @@ class VehicleParamsView(ViewImpl):
     def _getRoundNDigits(self):
         return self._N_DIGITS
 
-    def _getAdvancedParamTooltip(self, _):
+    def _getTooltipID(self):
         return TOOLTIPS_CONSTANTS.VEHICLE_ADVANCED_PARAMETERS
+
+    def _getAdvancedParamTooltip(self):
+        return TOOLTIPS_CONSTANTS.VEHICLE_ADVANCED_PARAMETERS
+
+    def _getParamTooltips(self):
+        return {self._getTooltipID(), self._getAdvancedParamTooltip()}
 
     def _isExtraParamEnabled(self):
         return False
@@ -178,14 +190,20 @@ class VehicleParamsView(ViewImpl):
     def _isAdditionalValueApproximately(self):
         return False
 
-    def _getLocalizedName(self, param):
+    def _getLocalizedName(self, param, applyFormatting=True):
+        if applyFormatting:
+            if KPI.Name.hasValue(param.name):
+                isPositive = param.value >= 0
+                paramName = VEHICLE_ATTR_TO_KPI_NAME_MAP.get(param.name, param.name)
+                name = getVehicleParameterText(paramName, isPositive=isPositive, isTTC=True)
+            else:
+                name = R.strings.menu.tank_params.dyn(param.name)()
+            return backport.text(name)
         if KPI.Name.hasValue(param.name):
-            isPositive = param.value >= 0
-            paramName = VEHICLE_ATTR_TO_KPI_NAME_MAP.get(param.name, param.name)
-            name = getVehicleParameterText(paramName, isPositive=isPositive, isTTC=True)
-        else:
-            name = R.strings.menu.tank_params.dyn(param.name)()
-        return backport.text(name)
+            key = 'positive' if param.value >= 0 else 'negative'
+            name = VEHICLE_ATTR_TO_KPI_NAME_MAP.get(param.name, param.name)
+            return json.dumps({'key': key,
+             'name': name})
 
     def _createGroupViewModel(self, groupName, comparator):
         param = comparator.getExtendedData(groupName)
@@ -197,7 +215,7 @@ class VehicleParamsView(ViewImpl):
          'IsSituational': hasSituationalEffect(param.name, self.comparator),
          'TooltipID': self._getTooltipID(),
          'BuffIconType': getGroupIcon(param, self.comparator),
-         'IsOpen': self.__getIsOpened(groupName=groupName),
+         'IsOpen': self._getIsOpened(groupName=groupName),
          'AdditionalValue': additionalValue if self._isAdditionalValueEnabled() else '',
          'Indicator': self._createIndicator(param)}
 
@@ -205,39 +223,45 @@ class VehicleParamsView(ViewImpl):
         state, delta = param.state
         if state == PARAM_STATE.WORSE:
             delta = -abs(delta)
+        maxValue = getMaxValue(param.value, delta)
         return {'Value': param.value,
          'Delta': delta,
          'MarkerValue': self._stockParams[param.name],
-         'MaxValue': getMaxValue(param.value, delta),
+         'MaxValue': maxValue,
          'MinValue': self._DEFAULT_MIN_VALUE,
-         'IsUseAnim': self._getUseAnim()}
+         'IsUseAnim': self._getUseAnim(),
+         'ModifiedPercent': int(param.value * 100 / (maxValue - self._DEFAULT_MIN_VALUE)),
+         'CurrentPercent': int(self._stockParams[param.name] * 100 / (maxValue - self._DEFAULT_MIN_VALUE))}
 
     def _createParam(self, param, groupName, highlight=HighlightType.NONE):
         return None if param.value is None else {'Id': param.name,
          'ParentID': groupName,
          'HighlightType': highlight,
          'IsEnabled': self._getParamEnabled(param, groupName),
-         'Value': formatParameterValue(param.name, param.value, param.state, allowSmartRound=False, nDigits=self._getRoundNDigits()),
-         'TooltipID': self._getAdvancedParamTooltip(param),
-         'LocalizedName': self._getLocalizedName(param)}
+         'Value': formatParameterValue(param.name, param.value, self._applyFormatting, param.state, allowSmartRound=False, nDigits=self._getRoundNDigits()),
+         'TooltipID': self._getAdvancedParamTooltip(),
+         'Name': self._getLocalizedName(param, self._applyFormatting)}
 
     def _prepareData(self, diffParams=None, concreteGroup=None):
-        diffParams = diffParams if diffParams is not None else {}
-        for _, groupName in enumerate(RELATIVE_PARAMS):
-            if concreteGroup is not None and concreteGroup != groupName:
-                continue
-            group = self._createGroupViewModel(groupName=groupName, comparator=self.comparator)
-            self.__groups.append(group)
-            if not self.__getIsOpened(groupName):
-                continue
-            for paramName in params_helper.PARAMS_GROUPS[groupName]:
-                self.__addParam(paramName, groupName, diffParams, self.__params)
+        if self._getVehicle() is None:
+            return
+        else:
+            diffParams = diffParams if diffParams is not None else {}
+            for _, groupName in enumerate(RELATIVE_PARAMS):
+                if concreteGroup is not None and concreteGroup != groupName:
+                    continue
+                group = self._createGroupViewModel(groupName=groupName, comparator=self.comparator)
+                self.__groups.append(group)
+                if not self._getIsOpened(groupName):
+                    continue
+                for paramName in params_helper.PARAMS_GROUPS[groupName]:
+                    self.__addParam(paramName, groupName, diffParams, self.__params)
 
-            if self._isExtraParamEnabled():
-                for paramName in params_helper.EXTRA_PARAMS_GROUP[groupName]:
-                    self.__addParam(paramName, groupName, diffParams, self.__extraParams, skipMissing=True)
+                if self._isExtraParamEnabled():
+                    for paramName in params_helper.EXTRA_PARAMS_GROUP[groupName]:
+                        self.__addParam(paramName, groupName, diffParams, self.__extraParams, skipMissing=True)
 
-        return
+            return
 
     def __addParam(self, paramName, groupName, diffParams, paramsContainer, skipMissing=False):
         param = self.comparator.getExtendedData(paramName)
@@ -263,38 +287,40 @@ class VehicleParamsView(ViewImpl):
                 stateType = paramState[0]
             return _HIGHLIGHT_TYPE_STATE_MAP.get(stateType, HighlightType.NONE)
 
-    def __getIsOpened(self, groupName):
+    def _getIsOpened(self, groupName):
         return self.expandedGroups is None or self.expandedGroups.get(groupName, False)
 
     def __fillViewModel(self):
-        if not self._getVehicle():
+        if self._getVehicle() is None:
             return
-        with self.viewModel.transaction() as model:
-            groups = model.getGroups()
-            groups.clear()
-            for group in self.__groups:
-                groupID = group.get('Id', '')
-                groupModel = self.__convertGroupToModel(group)
-                params = groupModel.getParams()
-                params.clear()
-                extraParams = groupModel.getExtraParams()
-                extraParams.clear()
-                for param in self.__params:
-                    paramID = param.get('ParentID', '')
-                    if paramID == groupID:
-                        params.addViewModel(self.__fillModel(VehicleParamViewModel(), param))
+        else:
+            with self.viewModel.transaction() as model:
+                groups = model.getGroups()
+                groups.clear()
+                for group in self.__groups:
+                    groupID = group.get('Id', '')
+                    groupModel = self.__convertGroupToModel(group)
+                    params = groupModel.getParams()
+                    params.clear()
+                    extraParams = groupModel.getExtraParams()
+                    extraParams.clear()
+                    for param in self.__params:
+                        paramID = param.get('ParentID', '')
+                        if paramID == groupID:
+                            params.addViewModel(self.__fillModel(VehicleParamViewModel(), param))
 
-                for extraParam in self.__extraParams:
-                    paramID = extraParam.get('ParentID', '')
-                    if paramID == groupID:
-                        extraParams.addViewModel(self.__fillModel(VehicleParamViewModel(), extraParam))
+                    for extraParam in self.__extraParams:
+                        paramID = extraParam.get('ParentID', '')
+                        if paramID == groupID:
+                            extraParams.addViewModel(self.__fillModel(VehicleParamViewModel(), extraParam))
 
-                groups.addViewModel(groupModel)
+                    groups.addViewModel(groupModel)
 
-            groups.invalidate()
+                groups.invalidate()
+            return
 
     def __fillModel(self, model, params):
-        for k, v in params.iteritems():
+        for k, v in iteritems(params):
             modelSetter = 'set' + k
             if hasattr(model, modelSetter):
                 getattr(model, modelSetter)(v)
@@ -321,36 +347,82 @@ class VehicleParamsView(ViewImpl):
                         AccountSettings.setSettings(groupName, isOpened)
 
             self.viewModel.getGroups().invalidate()
-            self.update()
+            self.updateModel()
             return
 
 
-class VehiclePreviewParamsView(VehicleParamsView):
+class CurrentVehicleParamsPresenter(_VehicleParamsPresenterBase):
+
+    def _getEvents(self):
+        from CurrentVehicle import g_currentVehicle
+        return super(CurrentVehicleParamsPresenter, self)._getEvents() + ((g_currentVehicle.onChanged, self.__onCurrentVehicleChanged),)
+
+    def _getVehicle(self):
+        from CurrentVehicle import g_currentVehicle
+        return g_currentVehicle.item
+
+    def __onCurrentVehicleChanged(self):
+        from CurrentVehicle import g_currentVehicle
+        if g_currentVehicle.isPresent():
+            self._updateStockParams()
+            self.updateModel()
+
+
+class PreviewVehicleParamsPresenter(_VehicleParamsPresenterBase):
+
+    def _getEvents(self):
+        from CurrentVehicle import g_currentPreviewVehicle
+        return super(PreviewVehicleParamsPresenter, self)._getEvents() + (g_currentPreviewVehicle.onChanged, self.__onPreviewVehicleChanged)
 
     def _getComparator(self):
         return params_helper.previewVehiclesComparator(self._getVehicle(), self._getVehicle())
 
     def _getVehicle(self):
+        from CurrentVehicle import g_currentPreviewVehicle
         return g_currentPreviewVehicle.item
 
+    def __onPreviewVehicleChanged(self):
+        from CurrentVehicle import g_currentPreviewVehicle
+        if g_currentPreviewVehicle.isPresent():
+            self._updateStockParams()
+            self.updateModel()
 
-class VehicleCompareParamsView(VehicleParamsView):
-    __slots__ = ('_baseVehicle', '_changedVehicle')
+
+class VehicleParamsPresenter(_VehicleParamsPresenterBase):
+    __itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, vehIntCD, layoutID=R.views.lobby.hangar.subViews.VehicleParams(), applyFormatting=True):
+        super(VehicleParamsPresenter, self).__init__(layoutID=layoutID, applyFormatting=applyFormatting)
+        self.__vehIntCD = vehIntCD
+
+    def setVehicle(self, vehIntCD):
+        if self.__vehIntCD != vehIntCD:
+            self.__vehIntCD = vehIntCD
+            self.__comparator = self._getComparator()
+            self._updateStockParams()
+            self.updateModel()
+
+    def _getVehicle(self):
+        return self.__itemsCache.items.getItemByCD(self.__vehIntCD)
+
+
+class VehicleCompareParamsPresenter(_VehicleParamsPresenterBase):
+    __appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self, baseVehicle, changedVehicle, *args, **kwargs):
         self._baseVehicle = baseVehicle
         self._changedVehicle = changedVehicle
-        super(VehicleCompareParamsView, self).__init__(*args, **kwargs)
+        super(VehicleCompareParamsPresenter, self).__init__(*args, **kwargs)
 
     def createToolTip(self, event):
         if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
             paramId = event.getArgument('paramId', None)
             tooltipId = self._getGroupTooltipID() if paramId in self.expandedGroups else self._getTooltipID()
-            toolTipMgr = self._appLoader.getApp().getToolTipMgr()
+            toolTipMgr = self.__appLoader.getApp().getToolTipMgr()
             if toolTipMgr is not None:
                 toolTipMgr.onCreateWulfTooltip(tooltipId, (paramId, self._getContext(), True), event.mouse.positionX, event.mouse.positionY)
                 return tooltipId
-        return super(VehicleCompareParamsView, self).createToolTip(event)
+        return super(VehicleCompareParamsPresenter, self).createToolTip(event)
 
     def _getComparator(self):
         return params_helper.previewVehiclesComparator(self._getChangedVehicle(), self._getVehicle(), withSituational=True)
@@ -361,7 +433,7 @@ class VehicleCompareParamsView(VehicleParamsView):
     def _finalize(self):
         self._baseVehicle = None
         self._changedVehicle = None
-        super(VehicleCompareParamsView, self)._finalize()
+        super(VehicleCompareParamsPresenter, self)._finalize()
         return
 
     def _onIgrTypeChanged(self):
@@ -379,7 +451,7 @@ class VehicleCompareParamsView(VehicleParamsView):
     def _getGroupTooltipID(self):
         return TOOLTIPS_CONSTANTS.VEHICLE_ADVANCED_PARAMETERS
 
-    def _getAdvancedParamTooltip(self, _):
+    def _getAdvancedParamTooltip(self):
         return TOOLTIPS_CONSTANTS.VEHICLE_ADVANCED_PARAMETERS
 
     def _getChangedVehicle(self):
@@ -392,22 +464,17 @@ class VehicleCompareParamsView(VehicleParamsView):
         return True
 
 
-class VehicleSkillPreviewParamsView(VehicleParamsView):
+class VehicleSkillPreviewParamsPresenter(CurrentVehicleParamsPresenter):
 
-    def __init__(self, *args, **kwargs):
-        super(VehicleSkillPreviewParamsView, self).__init__(*args, **kwargs)
-        self.__skillName = kwargs.get('skillName', '')
-        self.__highlightedSkills = kwargs.get('highlightedSkills', '')
-
-    def update(self):
-        if not self._getVehicle():
-            return
-        super(VehicleSkillPreviewParamsView, self).update()
+    def __init__(self):
+        super(VehicleSkillPreviewParamsPresenter, self).__init__()
+        self.__skillName = ''
+        self.__highlightedSkills = ''
 
     def updateForSkill(self, skillName, highlightedSkills=None):
         self.__skillName = skillName
         self.__highlightedSkills = highlightedSkills
-        self.update()
+        self.updateModel()
 
     def _getComparator(self):
         return params_helper.skillOnSimilarCrewComparator(self._getVehicle(), self.__skillName, self.__highlightedSkills)
@@ -419,23 +486,23 @@ class VehicleSkillPreviewParamsView(VehicleParamsView):
         return True
 
 
-class EasyTankEquipVehicleParamsView(VehicleParamsView):
+class EasyTankEquipParamsPresenter(_VehicleParamsPresenterBase):
 
-    def __init__(self, vehicle, changedVehicle, *args, **kwargs):
-        super(EasyTankEquipVehicleParamsView, self).__init__(*args, **kwargs)
+    def __init__(self, vehicle, changedVehicle):
+        super(EasyTankEquipParamsPresenter, self).__init__()
         self._vehicle = vehicle
         self._changedVehicle = changedVehicle
 
     def _getTooltipID(self):
         return TOOLTIPS_CONSTANTS.EASY_TANK_EQUIP_VEHICLE_ADVANCED_PARAMETERS
 
-    def _getAdvancedParamTooltip(self, _):
+    def _getAdvancedParamTooltip(self):
         return TOOLTIPS_CONSTANTS.EASY_TANK_EQUIP_VEHICLE_ADVANCED_PARAMETERS
 
     def _finalize(self):
         self._vehicle = None
         self._changedVehicle = None
-        super(EasyTankEquipVehicleParamsView, self)._finalize()
+        super(EasyTankEquipParamsPresenter, self)._finalize()
         return
 
     def _onCacheResync(self, *_):
@@ -458,26 +525,3 @@ class EasyTankEquipVehicleParamsView(VehicleParamsView):
 
     def _getComparator(self):
         return params_helper.previewVehiclesComparator(self._getChangedVehicle(), self._getVehicle(), withSituational=True)
-
-
-class VehicleParamsComponent(InjectComponentAdaptor):
-
-    def _makeInjectView(self):
-        self.__view = VehicleParamsComponentView(context=HangarParamContext())
-        return self.__view
-
-
-class VehicleParamsComponentView(ViewImpl):
-
-    def __init__(self, context):
-        settings = ViewSettings(R.views.lobby.hangar.VehicleParamsWidget())
-        settings.flags = ViewFlags.VIEW
-        settings.model = ViewModel()
-        super(VehicleParamsComponentView, self).__init__(settings)
-        view = VehicleParamsView()
-        view.setContext(context)
-        self.setChildView(resourceID=R.views.lobby.hangar.subViews.VehicleParams(), view=view)
-
-    @property
-    def viewModel(self):
-        return super(VehicleParamsComponentView, self).getViewModel()

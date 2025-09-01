@@ -1146,7 +1146,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	7000	</weight>
-      <maxLoad>	31000	</maxLoad>
       <terrainResistance>	0.5 0.7 2.2	</terrainResistance>
       <brakeForce>	43000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2295,7 +2294,7 @@
   <turrets0>
     <Turret_1_G154_Kpz_07_RH>
       <userString>	#germany_vehicles:Turret_1_G154_Kpz_07_RH	</userString>
-      <tags></tags>
+      <tags>	oscillating	</tags>
       <level>	8	</level>
       <price>	30000	</price>
       <notInShop>	true	</notInShop>

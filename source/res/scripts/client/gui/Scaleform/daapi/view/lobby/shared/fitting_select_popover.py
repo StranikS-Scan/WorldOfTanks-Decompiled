@@ -33,7 +33,7 @@ FITTING_MODULES = (GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.CHASSIS],
  GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.ENGINE],
  GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.RADIO])
 _PARAMS_LISTS = {GUI_ITEM_TYPE.RADIO: ('radioDistance',),
- GUI_ITEM_TYPE.CHASSIS: ('maxLoad', 'rotationSpeed', 'maxSteeringLockAngle', 'chassisRepairTime'),
+ GUI_ITEM_TYPE.CHASSIS: ('rotationSpeed', 'maxSteeringLockAngle', 'chassisRepairTime'),
  GUI_ITEM_TYPE.ENGINE: ('enginePower', 'fireStartingChance'),
  GUI_ITEM_TYPE.TURRET: ('armor', 'rotationSpeed', 'circularVisionRadius'),
  GUI_ITEM_TYPE.GUN: ('avgDamageList', 'avgPiercingPower', 'reloadTime')}

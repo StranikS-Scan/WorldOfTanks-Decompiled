@@ -4,7 +4,7 @@ import BigWorld
 import WWISE
 from ReservesEvents import randomReservesEvents
 from frontline.gui.Scaleform.daapi.view.meta.FrontlineBattleUpgradePanelMeta import FrontlineBattleUpgradePanelMeta
-from frontline.gui.frontline_helpers import getReserveIconPath, getHotKeyListByIndex, getHotKeyVkListByIndex
+from frontline.gui.frontline_helpers import getReserveIconPath, getHotKeyInfoListByIndex
 from aih_constants import CTRL_MODE_NAME
 from constants import UpgradeProhibitionReason
 from frontline.gui.sounds.sound_constants import FL_BATTLE_UPGRADE_PANEL_SOUND_EVENTS
@@ -239,8 +239,7 @@ class FrontlineBattleUpgradePanel(FrontlineBattleUpgradePanelMeta, IArenaVehicle
                     'level': level,
                     'available': True},
          'category': category,
-         'hotKeys': getHotKeyListByIndex(index),
-         'hotKeysVKeys': getHotKeyVkListByIndex(index)}
+         'hotKeys': getHotKeyInfoListByIndex(index)}
         return reserveInfo
 
     def __getDescription(self, firstEquipment, secondEquipment):

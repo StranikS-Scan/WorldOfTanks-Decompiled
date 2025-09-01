@@ -7,66 +7,66 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.battle_ability_by
 class BattleAbilitySlotModel(BaseSlotModel):
     __slots__ = ()
 
-    def __init__(self, properties=29, commands=0):
+    def __init__(self, properties=30, commands=0):
         super(BattleAbilitySlotModel, self).__init__(properties=properties, commands=commands)
 
     def getLevel(self):
-        return self._getNumber(20)
-
-    def setLevel(self, value):
-        self._setNumber(20, value)
-
-    def getCost(self):
         return self._getNumber(21)
 
-    def setCost(self, value):
+    def setLevel(self, value):
         self._setNumber(21, value)
 
-    def getTargetSlotId(self):
+    def getCost(self):
         return self._getNumber(22)
 
-    def setTargetSlotId(self, value):
+    def setCost(self, value):
         self._setNumber(22, value)
 
-    def getSkillId(self):
+    def getTargetSlotId(self):
         return self._getNumber(23)
 
-    def setSkillId(self, value):
+    def setTargetSlotId(self, value):
         self._setNumber(23, value)
 
+    def getSkillId(self):
+        return self._getNumber(24)
+
+    def setSkillId(self, value):
+        self._setNumber(24, value)
+
     def getKeyName(self):
-        return self._getString(24)
-
-    def setKeyName(self, value):
-        self._setString(24, value)
-
-    def getDescription(self):
         return self._getString(25)
 
-    def setDescription(self, value):
+    def setKeyName(self, value):
         self._setString(25, value)
 
-    def getCategory(self):
+    def getDescription(self):
         return self._getString(26)
 
-    def setCategory(self, value):
+    def setDescription(self, value):
         self._setString(26, value)
 
+    def getCategory(self):
+        return self._getString(27)
+
+    def setCategory(self, value):
+        self._setString(27, value)
+
     def getRanks(self):
-        return self._getArray(27)
+        return self._getArray(28)
 
     def setRanks(self, value):
-        self._setArray(27, value)
+        self._setArray(28, value)
 
     @staticmethod
     def getRanksType():
         return unicode
 
     def getAbilitiesByRank(self):
-        return self._getArray(28)
+        return self._getArray(29)
 
     def setAbilitiesByRank(self, value):
-        self._setArray(28, value)
+        self._setArray(29, value)
 
     @staticmethod
     def getAbilitiesByRankType():

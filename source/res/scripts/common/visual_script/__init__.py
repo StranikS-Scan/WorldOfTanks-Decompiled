@@ -18,6 +18,8 @@ import dictionary_blocks
 import debug_manager_blocks
 import cgf_blocks
 import commendations_common
+import vehicle_mechanics_blocks
+import command_flow
 g_blockRegistrar = VSBlockRegistrar(ASPECT.CLIENT, ASPECT.SERVER)
 g_blockRegistrar.regBlocksFromModule(example)
 g_blockRegistrar.regTypesFromModule(example)
@@ -46,3 +48,13 @@ g_blockRegistrar.regTypesFromModule(dictionary_blocks)
 g_blockRegistrar.regBlocksFromModule(debug_manager_blocks)
 g_blockRegistrar.regBlocksFromModule(cgf_blocks)
 g_blockRegistrar.regTypesFromModule(commendations_common)
+g_blockRegistrar.regBlocksFromModule(vehicle_mechanics_blocks)
+g_blockRegistrar.regType(vehicle_mechanics_blocks.ConcentrationModeStateEnum)
+g_blockRegistrar.regType(vehicle_mechanics_blocks.VehicleSiegeStateEnum)
+g_blockRegistrar.regType(vehicle_mechanics_blocks.PowerModeStateEnum)
+g_blockRegistrar.regType(vehicle_mechanics_blocks.SecondaryGunStateEnum)
+g_blockRegistrar.regType(vehicle_mechanics_blocks.OverheatGainStateEnum)
+g_blockRegistrar.regType(vehicle_mechanics_blocks.StationaryReloadEnum)
+g_blockRegistrar.regType(vehicle_mechanics_blocks.StationaryReloadLockEnum)
+g_blockRegistrar.regType(vehicle_mechanics_blocks.TargetDesignatorStateEnum)
+g_blockRegistrar.regBlocksFromModule(command_flow)

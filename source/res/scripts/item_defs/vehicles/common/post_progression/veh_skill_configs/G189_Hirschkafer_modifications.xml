@@ -1,0 +1,424 @@
+<G189_Hirschkafer_modifications.xml>
+  <g189_node1>
+    <id>	11501	</id>
+    <imgName>	gunStabilizationFromTurret	</imgName>
+    <locName>	gunStabilizationFromTurret	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/gun/shotDispersionFactors/turretRotation	</name>
+        <value>	0.95	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotDispersionTurretRotation	</name>
+        <value>	0.95	</value>
+      </mul>
+    </kpi>
+  </g189_node1>
+  <g189_node2>
+    <id>	11502	</id>
+    <imgName>	gunDispersion	</imgName>
+    <locName>	gunDispersion	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/gun/shotDispersionRadius	</name>
+        <value>	-0.01	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleGunShotFullDispersion	</name>
+        <value>	-0.01	</value>
+      </add>
+    </kpi>
+  </g189_node2>
+  <g189_node3>
+    <id>	11503	</id>
+    <imgName>	additionalShellAmmoCapacity	</imgName>
+    <locName>	additionalShellAmmoCapacity	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/gun/maxAmmo	</name>
+        <value>	10	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	additionalShellAmmoCapacity	</name>
+        <value>	10	</value>
+      </add>
+    </kpi>
+  </g189_node3>
+  <g189_node4>
+    <id>	11504	</id>
+    <imgName>	gunStabilizationFromHullMovement	</imgName>
+    <locName>	gunStabilizationFromHullMovement	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <mul>
+        <name>	descrAttrs/chassis/shotDispersionFactors/0	</name>
+        <value>	0.9	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotDispersionChassisMovement	</name>
+        <value>	0.9	</value>
+      </mul>
+    </kpi>
+  </g189_node4>
+  <g189_node5>
+    <id>	11505	</id>
+    <imgName>	enginePower	</imgName>
+    <locName>	enginePower	</locName>
+    <categories>	mobility	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/engine/power	</name>
+        <value>	50	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleEnginePower	</name>
+        <value>	50	</value>
+      </add>
+    </kpi>
+  </g189_node5>
+  <g189_node7>
+    <id>	11507	</id>
+    <imgName>	gunDepression	</imgName>
+    <locName>	gunDepression	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/gunPitchLimits/maxPitchDegrees	</name>
+        <value>	1	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	gunDepression	</name>
+        <value>	-1	</value>
+      </add>
+    </kpi>
+  </g189_node7>
+  <g189_node8>
+    <id>	11508	</id>
+    <imgName>	damagedGunDispersion	</imgName>
+    <locName>	damagedGunDispersion	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/gun/shotDispersionFactors/whileGunDamaged	</name>
+        <value>	0.8	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotDispersionWhileGunDamaged	</name>
+        <value>	0.8	</value>
+      </mul>
+    </kpi>
+  </g189_node8>
+  <g189_node9>
+    <id>	11509	</id>
+    <imgName>	g189_mechanic_0	</imgName>
+    <locName>	g189_mechanic_0	</locName>
+    <categories>	mechanics	</categories>
+    <modifiers>
+      <add>
+        <name>	miscAttrs/overheatStacks/gainMaxSpd	</name>
+        <value>	10.0	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	value	</name>
+        <value>	10.0	</value>
+      </add>
+    </kpi>
+  </g189_node9>
+  <g189_node10>
+    <id>	11510	</id>
+    <imgName>	hitPoints	</imgName>
+    <locName>	hitPoints	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/hull/maxHealth	</name>
+        <value>	50	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleStrength	</name>
+        <value>	50	</value>
+      </add>
+    </kpi>
+  </g189_node10>
+  <g189_node11>
+    <id>	11511	</id>
+    <imgName>	turretTraverse	</imgName>
+    <locName>	turretTraverse	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/gun/turretYawLimitsDegrees	</name>
+        <value>	5	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	turretTraverse	</name>
+        <value>	5	</value>
+      </add>
+    </kpi>
+  </g189_node11>
+  <g189_node13>
+    <id>	11513	</id>
+    <imgName>	g189_mechanic_2	</imgName>
+    <locName>	g189_mechanic_2	</locName>
+    <categories>	mechanics	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/overheatStacks/dmgBonusFactor	</name>
+        <value>	1.09	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	value	</name>
+        <value>	9	</value>
+      </add>
+    </kpi>
+  </g189_node13>
+  <g189_node14>
+    <id>	11514	</id>
+    <imgName>	hullTraverseSpeed	</imgName>
+    <locName>	hullTraverseSpeed	</locName>
+    <categories>	mobility	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/chassis/rotationSpeedDegrees	</name>
+        <value>	2	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleAllGroundRotationSpeed	</name>
+        <value>	2	</value>
+      </add>
+    </kpi>
+  </g189_node14>
+  <g189_node15>
+    <id>	11515	</id>
+    <imgName>	engineFireChance	</imgName>
+    <locName>	engineFireChance	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <mul>
+        <name>	descrAttrs/engine/fireStartingChance	</name>
+        <value>	0.8	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleFireChance	</name>
+        <value>	0.8	</value>
+      </mul>
+    </kpi>
+  </g189_node15>
+  <g189_node16>
+    <id>	11516	</id>
+    <imgName>	shellModuleDamage	</imgName>
+    <locName>	shellModuleDamage	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <mul>
+        <name>	descrAttrs/shell0/deviceDamage	</name>
+        <value>	1.1	</value>
+      </mul>
+      <mul>
+        <name>	descrAttrs/shell1/deviceDamage	</name>
+        <value>	1.1	</value>
+      </mul>
+      <mul>
+        <name>	descrAttrs/shell2/deviceDamage	</name>
+        <value>	1.1	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	shellModuleDamage	</name>
+        <value>	1.1	</value>
+      </mul>
+    </kpi>
+  </g189_node16>
+  <g189_node17>
+    <id>	11517	</id>
+    <imgName>	gunStabilizationFromHullRotation	</imgName>
+    <locName>	gunStabilizationFromHullRotation	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <mul>
+        <name>	descrAttrs/chassis/shotDispersionFactors/1	</name>
+        <value>	0.9	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotDispersionChassisRotation	</name>
+        <value>	0.9	</value>
+      </mul>
+    </kpi>
+  </g189_node17>
+  <g189_node18>
+    <id>	11518	</id>
+    <imgName>	turretTraverseSpeed	</imgName>
+    <locName>	turretTraverseSpeed	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/turret/rotationSpeedDegrees	</name>
+        <value>	2	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleTurretOrCuttingRotationSpeed	</name>
+        <value>	2	</value>
+      </add>
+    </kpi>
+  </g189_node18>
+  <g189_node19>
+    <id>	11519	</id>
+    <imgName>	g189_mechanic_1	</imgName>
+    <locName>	g189_mechanic_1	</locName>
+    <categories>	mechanics	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/overheatStacks/aimBonusFactor	</name>
+        <value>	1.05	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	value	</name>
+        <value>	5	</value>
+      </add>
+    </kpi>
+  </g189_node19>
+  <g189_node20>
+    <id>	11520	</id>
+    <imgName>	gunElevation	</imgName>
+    <locName>	gunElevation	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/gunPitchLimits/minPitchDegrees	</name>
+        <value>	-2	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	gunElevation	</name>
+        <value>	2	</value>
+      </add>
+    </kpi>
+  </g189_node20>
+  <g189_node21>
+    <id>	11521	</id>
+    <imgName>	standardShellPenetration	</imgName>
+    <locName>	standardShellPenetration	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shot0/piercingPower	</name>
+        <value>	5	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	standardShellPenetration	</name>
+        <value>	5	</value>
+      </add>
+    </kpi>
+  </g189_node21>
+  <g189_node23>
+    <id>	11523	</id>
+    <imgName>	specialShellPenetration	</imgName>
+    <locName>	specialShellPenetration	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shot1/piercingPower	</name>
+        <value>	5	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	specialShellPenetration	</name>
+        <value>	5	</value>
+      </add>
+    </kpi>
+  </g189_node23>
+  <g189_node24>
+    <id>	11524	</id>
+    <imgName>	g189_mechanic_3	</imgName>
+    <locName>	g189_mechanic_3	</locName>
+    <categories>	mechanics	</categories>
+    <modifiers>
+      <add>
+        <name>	miscAttrs/overheatStacks/totalTime	</name>
+        <value>	-4	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	value	</name>
+        <value>	4	</value>
+      </add>
+    </kpi>
+  </g189_node24>
+  <g189_node25>
+    <id>	11525	</id>
+    <imgName>	invisibilityWhenShooting	</imgName>
+    <locName>	invisibilityWhenShooting	</locName>
+    <categories>	concealment	</categories>
+    <modifiers>
+      <mul>
+        <name>	descrAttrs/gun/invisibilityFactorAtShot	</name>
+        <value>	1.1	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleInvisibilityAfterShot	</name>
+        <value>	1.1	</value>
+      </mul>
+    </kpi>
+  </g189_node25>
+  <g189_node26>
+    <id>	11526	</id>
+    <imgName>	gunStabilizationFromTurret	</imgName>
+    <locName>	gunStabilizationFromTurret	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/gun/shotDispersionFactors/turretRotation	</name>
+        <value>	0.95	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotDispersionTurretRotation	</name>
+        <value>	0.95	</value>
+      </mul>
+    </kpi>
+  </g189_node26>
+</G189_Hirschkafer_modifications.xml>

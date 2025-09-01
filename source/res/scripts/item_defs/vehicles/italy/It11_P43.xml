@@ -54,7 +54,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	16052	</weight>
-    <maxHealth>	480	</maxHealth>
+    <maxHealth>	528	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	150	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
@@ -1216,8 +1216,7 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	8000	</weight>
-      <maxLoad>	30000	</maxLoad>
-      <terrainResistance>	1.1 1.3 2.7	</terrainResistance>
+      <terrainResistance>	1 1.1 2.4	</terrainResistance>
       <brakeForce>	30000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	44	</rotationSpeed>
@@ -2053,7 +2052,6 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	8000	</weight>
-      <maxLoad>	32000	</maxLoad>
       <terrainResistance>	1 1.1 2.4	</terrainResistance>
       <brakeForce>	30000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -2921,6 +2919,10 @@
       <tags></tags>
       <level>	4	</level>
       <price>	4800	</price>
+      <unlocks>
+        <turret>	Turret_2_It11_P43	  <cost>	2450	</cost>
+        </turret>
+      </unlocks>
       <armor>
         <armor_1>	50	</armor_1>
         <armor_2>	48	</armor_2>
@@ -2932,7 +2934,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3000	</weight>
-      <maxHealth>	90	</maxHealth>
+      <maxHealth>	102	</maxHealth>
       <rotationSpeed>	38	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -2946,97 +2948,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <Cannone_da_75_34>	shared	  <maxAmmo>	95	</maxAmmo>
-          <unlocks>
-            <gun>	Cannone_da_75_46	  <cost>	3100	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <gun>	20	</gun>
-          </armor>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 1 10	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <reloadTime>	4.2	</reloadTime>
-          <aimingTime>	2.2	</aimingTime>
-          <shotDispersionRadius>	0.41	</shotDispersionRadius>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <models>
-            <undamaged>	vehicles/italy/It11_P43/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/italy/It11_P43/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/italy/It11_P43/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/italy/It11_P43/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/italy/It11_P43/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.002166 0.003853 0.989165	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.1382 0.138199	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.002166 0.003853 0.989165	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.005131 2.04847 1.33204	</position>
-              <rotation>	1.29647 0.001388 3.14068	</rotation>
-              <scale>	1.01554 0.918673 1.01554	</scale>
-              <showOn>	4352	</showOn>
-              <anchorShift>	0.462093	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.004331 0.007707 1.601	</rayStart>
-              <rayEnd>	-0.004331 0.007707 1.901	</rayEnd>
-              <rayUp>	0.051 0 0	</rayUp>
-              <size>	0.3	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	1.22892 0.795181 0.000000 0.000000	</tiling>
-            <density>	166.793 168.823	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </Cannone_da_75_34>
         <Cannone_da_75_46>	shared	  <maxAmmo>	75	</maxAmmo>
-          <unlocks>
-            <turret>	Turret_2_It11_P43	  <cost>	2450	</cost>
-            </turret>
-          </unlocks>
           <armor>
             <gun>	20	</gun>
           </armor>
@@ -3553,7 +3465,7 @@
       <level>	5	</level>
       <price>	10150	</price>
       <unlocks>
-        <gun>	Cannone_da_75_50_Skoda	  <cost>	3550	</cost>
+        <gun>	Cannone_da_75_50_Skoda_P43	  <cost>	3550	</cost>
         </gun>
       </unlocks>
       <armor>
@@ -3568,7 +3480,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3500	</weight>
-      <maxHealth>	120	</maxHealth>
+      <maxHealth>	132	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -3582,88 +3494,6 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <Cannone_da_75_34>	shared	  <maxAmmo>	95	</maxAmmo>
-          <armor>
-            <gun>	20	</gun>
-          </armor>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 1 10	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <reloadTime>	4.1	</reloadTime>
-          <aimingTime>	2.2	</aimingTime>
-          <shotDispersionRadius>	0.41	</shotDispersionRadius>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <models>
-            <undamaged>	vehicles/italy/It11_P43/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/italy/It11_P43/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/italy/It11_P43/crash/lod0/Gun_03.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/italy/It11_P43/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/italy/It11_P43/collision_client/Gun_03.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.002875 0.000302 0.997941	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.147862 0.147862	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.002875 0.000302 0.997941	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.003828 2.04852 1.33207	</position>
-              <rotation>	1.29646 -0.000054 3.14152	</rotation>
-              <scale>	1.06049 0.959333 1.06049	</scale>
-              <showOn>	4352	</showOn>
-              <anchorShift>	0.513345	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.005749 0.000603 1.58221	</rayStart>
-              <rayEnd>	-0.005749 0.000603 1.88221	</rayEnd>
-              <rayUp>	0.052 0 0	</rayUp>
-              <size>	0.3	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	1.3012 0.722892 0.000000 0.000000	</tiling>
-            <density>	166.793 168.823	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </Cannone_da_75_34>
         <Cannone_da_75_46>	shared	  <maxAmmo>	75	</maxAmmo>
           <armor>
             <gun>	20	</gun>
@@ -3746,7 +3576,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </Cannone_da_75_46>
-        <Cannone_da_75_50_Skoda>	shared	  <maxAmmo>	75	</maxAmmo>
+        <Cannone_da_75_50_Skoda_P43>	shared	  <maxAmmo>	75	</maxAmmo>
           <unlocks>
             <vehicle>	It10_P43_bis	  <cost>	25510	</cost>
             </vehicle>
@@ -3831,7 +3661,7 @@
             <density>	171.587 180.255	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </Cannone_da_75_50_Skoda>
+        </Cannone_da_75_50_Skoda_P43>
       </guns>
       <invisibilityFactor>	0.976	</invisibilityFactor>
       <models>
@@ -4223,11 +4053,6 @@
     </Turret_2_It11_P43>
   </turrets0>
   <engines>
-    <SPA_342>	shared	  <unlocks>
-        <engine>	Maybach_HL_120_evoluzione	  <cost>	1440	</cost>
-        </engine>
-      </unlocks>
-    </SPA_342>
     <Maybach_HL_120_evoluzione>	shared	  <unlocks>
         <engine>	SPA_242	  <cost>	1900	</cost>
         </engine>
@@ -4239,21 +4064,12 @@
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <R_F_2_C_A>	shared	  <unlocks>
-        <radio>	R_F_3_M_2	  <cost>	4080	</cost>
-        </radio>
-      </unlocks>
-    </R_F_2_C_A>
     <R_F_3_M_2>	shared	</R_F_3_M_2>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
   <physics>
     <detailed>
       <engines>
-        <SPA_342>
-          <smplEnginePower>	330	</smplEnginePower>
-          <smplFwMaxSpeed>	42	</smplFwMaxSpeed>
-        </SPA_342>
         <Maybach_HL_120_evoluzione>
           <smplEnginePower>	400	</smplEnginePower>
           <smplFwMaxSpeed>	42	</smplFwMaxSpeed>
@@ -4268,13 +4084,13 @@
           <axleCount>	5	</axleCount>
           <grounds>
             <soft>
-              <rollingFriction>	0.21735	</rollingFriction>
+              <rollingFriction>	0.1932	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
+              <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_It11_P43>

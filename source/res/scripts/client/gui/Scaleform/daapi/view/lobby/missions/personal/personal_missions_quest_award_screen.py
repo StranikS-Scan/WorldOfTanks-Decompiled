@@ -33,7 +33,7 @@ _OPERATION_ID_TO_UI_BACKGROUND = {1: RES_ICONS.MAPS_ICONS_PERSONALMISSIONS_QUEST
 
 def _getNextMissionInOperationByID(questID):
     eventsCache = dependency.instance(IEventsCache)
-    for branch in personal_missions.PM_BRANCH.ACTIVE_BRANCHES:
+    for branch in personal_missions.PM_BRANCH.V1_BRANCHES:
         quests = eventsCache.getPersonalMissions().getQuestsForBranch(branch)
         if questID in quests:
             questsInOperation = sorted(personal_missions.g_cache.questListByOperationIDChainID(quests[questID].getOperationID(), quests[questID].getChainID()))
@@ -134,7 +134,7 @@ class PersonalMissionsQuestAwardScreen(PersonalMissionsQuestAwardScreenMeta):
 
     @adisp_process('updating')
     def _processMission(self, quest):
-        result = yield quests_proc.PMQuestSelect(quest, self._eventsCache.getPersonalMissions(), quest.getQuestBranch()).request()
+        result = yield quests_proc.PMQuestSelect(quest.getQuestBranch(), personalMission=quest).request()
         if result and result.userMsg:
             SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
 

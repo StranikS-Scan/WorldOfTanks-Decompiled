@@ -7,7 +7,7 @@ from gui.shared.formatters import text_styles, icons
 
 class UseAwardSheetWindow(UseAwardSheetWindowMeta):
 
-    def __init__(self, meta, handler):
+    def __init__(self, meta, handler, **kwargs):
         super(UseAwardSheetWindow, self).__init__()
         self.meta = meta
         self.handler = handler

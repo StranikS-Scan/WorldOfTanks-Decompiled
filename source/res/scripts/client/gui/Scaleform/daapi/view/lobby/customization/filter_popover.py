@@ -276,7 +276,7 @@ class FilterPopover(CustomizationFiltersPopoverMeta):
             self.__filterChangeHandlers.append(self.setShowOnlyNonEditableStyles)
         _formsBtns = [ {'value': self.PROJECTION_DECAL_IMAGE_FORM_TAG[formType],
          'selected': value,
-         'tooltip': makeTooltip('{} {}'.format(backport.text(R.strings.vehicle_customization.popover.tooltip.form()), PROJECTION_DECAL_TEXT_FORM_TAG[formType]), backport.text(R.strings.vehicle_customization.popover.tooltip.form.body(), value=backport.text(R.strings.vehicle_customization.form.dyn(formType)())))} for formType, value in self._formfactorTypes.iteritems() ]
+         'tooltip': makeTooltip('{} {}'.format(backport.text(R.strings.vehicle_customization.popover.tooltip.form()), backport.text(PROJECTION_DECAL_TEXT_FORM_TAG[formType])), backport.text(R.strings.vehicle_customization.popover.tooltip.form.body(), value=backport.text(R.strings.vehicle_customization.form.dyn(formType)())))} for formType, value in self._formfactorTypes.iteritems() ]
         formsBtnsLbl = ''
         if self._formfactorTypes:
             formsBtnsLbl = text_styles.standard(backport.text(R.strings.vehicle_customization.filter.popover.formfilters.title()))

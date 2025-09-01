@@ -58,7 +58,7 @@ class CrewContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
         dialogs.showDismissTankmanDialog(int(self._tankmanID))
 
     def changeSpecialization(self):
-        event_dispatcher.showTankChange(int(self._tankmanID), self._previousViewID)
+        event_dispatcher.showTankChange(tankmanInvID=int(self._tankmanID), slotIDX=self._slotIdx, previousViewID=self._previousViewID)
 
     def _generateOptions(self, ctx=None):
         isNotLocked = not self._vehicle.isCrewLocked if self._vehicle else True

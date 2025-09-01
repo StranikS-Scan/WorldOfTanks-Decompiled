@@ -1,16 +1,22 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/uilogging/story_mode/loggers.py
+import json
 import typing
 from gui.game_loading import loading as gameLoading
 from helpers import dependency
+from skeletons.gui.shared import IItemsCache
 from story_mode.skeletons.story_mode_controller import IStoryModeController
-from story_mode.uilogging.story_mode.consts import Features, LogActions, LogWindows, LogButtons, LogBattleResultStats
-from story_mode_common.story_mode_constants import EXTENSION_NAME
+from story_mode.uilogging.story_mode.consts import Features, LogActions, LogWindows, LogButtons, LogBattleResultStats, TOOLTIP_MIN_VIEW_TIME
 from uilogging.base.logger import MetricsLogger
 from wotdecorators import noexcept
 if typing.TYPE_CHECKING:
     from uilogging.types import ItemType, ItemStateType, InfoType
-    from story_mode.gui.impl.lobby.consts import EntryPointStates
+
+def _getBattlesInfo():
+    itemsCache = dependency.instance(IItemsCache)
+    battlesCount = itemsCache.items.getAccountDossier().getRandomStats().getBattlesCount()
+    return json.dumps({'battle_cnt': battlesCount})
+
 
 class BaseMetricsLogger(MetricsLogger):
     __slots__ = ('_item',)
@@ -95,10 +101,6 @@ class SelectMissionWindow(MissionWindowLogger):
             self.log(LogActions.AUTO_SELECT, item=self._item, itemState=str(missionId))
 
     @noexcept
-    def logTooltipShown(self, missionId):
-        self.log(LogActions.TOOLTIP_SHOWN, item=self._item, itemState=str(missionId))
-
-    @noexcept
     def logTabChanged(self, missionId):
         self.logClick(LogButtons.TAB_SECTION, state=str(missionId))
 
@@ -109,11 +111,13 @@ class SelectorCardLogger(BaseMetricsLogger):
     def __init__(self):
         super(SelectorCardLogger, self).__init__(LogWindows.MODE_SELECTOR_CARD)
 
+    @noexcept
     def logSelfClick(self):
-        self.log(action=LogActions.CLICK, item=self._item)
+        self.log(action=LogActions.CLICK, item=self._item, info=_getBattlesInfo())
 
+    @noexcept
     def logInfoClick(self):
-        self.log(action=LogActions.CLICK, item=LogButtons.INFO, parentScreen=self._item)
+        self.log(action=LogActions.CLICK, item=LogButtons.INFO, parentScreen=self._item, info=_getBattlesInfo())
 
 
 class BaseVideoLogger(WindowLogger):
@@ -142,20 +146,50 @@ class EntryPointLogger(MetricsLogger):
     __slots__ = ()
 
     def __init__(self):
-        super(EntryPointLogger, self).__init__(EXTENSION_NAME)
+        super(EntryPointLogger, self).__init__(Features.STORY_MODE)
 
-    def logClick(self, state):
-        self.log(LogActions.CLICK, LogWindows.ENTRY_POINT_EVENT, itemState=state.name.lower())
+    @noexcept
+    def logClick(self):
+        self.log(LogActions.CLICK, LogWindows.ENTRY_POINT_EVENT, info=_getBattlesInfo())
 
 
 class NewbieEntryPointLogger(MetricsLogger):
     __slots__ = ()
 
     def __init__(self):
-        super(NewbieEntryPointLogger, self).__init__(EXTENSION_NAME)
+        super(NewbieEntryPointLogger, self).__init__(Features.STORY_MODE)
 
-    def logClick(self, state):
-        self.log(LogActions.CLICK, LogWindows.ENTRY_POINT, itemState=state.name.lower())
+    @noexcept
+    def logClick(self):
+        self.log(LogActions.CLICK, LogWindows.ENTRY_POINT, info=_getBattlesInfo())
+
+
+class EventEntryPointTooltipLogger(BaseMetricsLogger):
+    __slots__ = ()
+
+    def __init__(self):
+        super(EventEntryPointTooltipLogger, self).__init__(LogWindows.ENTRY_POINT_TOOLTIP_EVENT)
+
+    def start(self):
+        self.startAction(LogActions.WATCHED)
+
+    @noexcept
+    def stop(self):
+        self.stopAction(LogActions.WATCHED, self._item, info=_getBattlesInfo(), timeLimit=TOOLTIP_MIN_VIEW_TIME)
+
+
+class NewbieEntryPointTooltipLogger(BaseMetricsLogger):
+    __slots__ = ()
+
+    def __init__(self):
+        super(NewbieEntryPointTooltipLogger, self).__init__(LogWindows.ENTRY_POINT_TOOLTIP)
+
+    def start(self):
+        self.startAction(LogActions.WATCHED)
+
+    @noexcept
+    def stop(self):
+        self.stopAction(LogActions.WATCHED, self._item, info=_getBattlesInfo(), timeLimit=TOOLTIP_MIN_VIEW_TIME)
 
 
 class NewbieAdvertisingViewLogger(WindowLogger):

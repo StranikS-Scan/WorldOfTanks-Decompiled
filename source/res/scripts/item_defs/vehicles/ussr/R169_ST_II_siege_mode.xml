@@ -889,7 +889,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	12500	</weight>
-      <maxLoad>	71500	</maxLoad>
       <terrainResistance>	1.2 1.6 2.7	</terrainResistance>
       <brakeForce>	39500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -2140,7 +2139,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_122mm_M62-T2_dualgun>
+        <_122mm_M62_T2D>
           <maxAmmo>	40	</maxAmmo>
           <armor>
             <armor_1>	350	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -2179,7 +2178,7 @@
           </shotDispersionFactors>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 0.333333 8 0.419444 4 0.466667 4 0.480556 6 0.519445 6 0.533333 4 0.580556 4 0.666667 8 1 8	</maxPitch>
+            <maxPitch>	0.00000 8.00 0.38889 8.00 0.41944 4.00 0.46667 4.00 0.48056 6.00 0.51945 6.00 0.53333 4.00 0.58056 4.00 0.61111 8.00 1.00000 8.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.095	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
@@ -2308,7 +2307,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
             <tiling>	0.7 0.35 0.000000 0.000000	</tiling>
           </camouflage>
-        </_122mm_M62-T2_dualgun>
+        </_122mm_M62_T2D>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R169_ST_II/normal/lod0/Turret_01.model	</undamaged>
@@ -3302,7 +3301,7 @@
     </Turret_1_R169_ST_II>
   </turrets0>
   <engines>
-    <V-12_M>	shared	</V-12_M>
+    <V_12M>	shared	</V_12M>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
@@ -3313,10 +3312,10 @@
   <physics>
     <detailed>
       <engines>
-        <V-12_M>
+        <V_12M>
           <smplEnginePower>	840	</smplEnginePower>
           <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
-        </V-12_M>
+        </V_12M>
       </engines>
       <chassis>
         <Chassis_R169_ST_II>

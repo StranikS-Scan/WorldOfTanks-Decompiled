@@ -9,7 +9,7 @@ from skeletons.gui.app_loader import IWaitingWidget
 
 class WaitingView(WaitingViewMeta, IWaitingWidget):
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         super(WaitingView, self).__init__()
         InputHandler.g_instance.onKeyUp += self.handleKeyUpEvent
         self.__callback = None

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/consumables_panel.py
 from typing import TYPE_CHECKING
+from battle_modifiers_common import BattleParams
 from constants import DAMAGE_INTERPOLATION_DIST_FIRST, DAMAGE_INTERPOLATION_DIST_LAST
 from constants import SHELL_TYPES
 from gui import GUI_SETTINGS
@@ -22,6 +23,7 @@ if TYPE_CHECKING:
     from items.vehicle_items import Shell
     from gui.battle_control.controllers.consumables.ammo_ctrl import _GunSettings
     from gui.battle_control.arena_info.interfaces import IPrebattleSetupsController
+    from battle_modifiers_common import BattleModifiers
 ASTERISK = '*'
 TOOLTIP_FORMAT = '{{HEADER}}{0:>s}{{/HEADER}}\n/{{BODY}}{1:>s}{{/BODY}}'
 TOOLTIP_NO_BODY_FORMAT = '{{HEADER}}{0:>s}{{/HEADER}}'
@@ -85,20 +87,22 @@ GROUP_AND_LAYOUT = {TankSetupConstants.CONSUMABLES: (TankSetupLayouts.EQUIPMENT,
 @dependency.replace_none_kwargs(battleSessionProvider=IBattleSessionProvider)
 def buildEquipmentSlotTooltipTextBySlotInfo(slotType, slotId, battleSessionProvider=None):
     preBattleSetups = battleSessionProvider.shared.prebattleSetups
+    modifiers = battleSessionProvider.arenaVisitor.getArenaModifiers()
     item = None
     layout, group = GROUP_AND_LAYOUT.get(slotType, (None, None))
     if layout and group:
         intCD = preBattleSetups.getSlotItem(layout, group, slotId)
         if intCD:
             item = vehicles.getItemByCompactDescr(intCD)
-    return getEquipmentTooltipContent(item) if item else ('', '')
+    return getEquipmentTooltipContent(item, modifiers) if item else ('', '')
 
 
-def getEquipmentTooltipContent(item):
+def getEquipmentTooltipContent(item, modifiers):
     body = stripColorTagDescrTags(item.shortDescriptionSpecial)
     if isinstance(item, Equipment):
         if item.cooldownSeconds:
+            cooldown = modifiers(BattleParams.EQUIPMENT_COOLDOWN, item.cooldownSeconds)
             tooltipStr = R.strings.ingame_gui.consumables_panel.equipment.cooldownSeconds()
-            cooldownStr = backport.text(tooltipStr, cooldownSeconds=str(int(item.cooldownSeconds)))
+            cooldownStr = backport.text(tooltipStr, cooldownSeconds=str(int(cooldown)))
             body = '\n\n'.join((body, cooldownStr))
     return (item.userString, body)

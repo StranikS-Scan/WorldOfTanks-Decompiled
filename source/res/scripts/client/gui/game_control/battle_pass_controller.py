@@ -4,12 +4,13 @@ import bisect
 import logging
 from collections import namedtuple
 from copy import deepcopy
+from future.utils import iteritems
 from itertools import groupby
 import typing
 from Event import Event, EventManager
 from PlayerEvents import g_playerEvents
 from adisp import adisp_process
-from battle_pass_common import BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS, BATTLE_PASS_CONFIG_NAME, BATTLE_PASS_OFFER_TOKEN_PREFIX, BATTLE_PASS_PDATA_KEY, BATTLE_PASS_SELECT_BONUS_NAME, BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME, BP_TANKMAN_QUEST_CHAIN_TOKEN_POSTFIX, BP_TANKMEN_ENTITLEMENT_TAG_PREFIX, BattlePassConfig, BattlePassConsts, BattlePassState, getBattlePassPassTokenName, getMaxAvalable3DStyleProgressInChapter, isPostProgressionChapter, NON_CHAPTER_ID
+from battle_pass_common import BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS, BATTLE_PASS_CONFIG_NAME, BATTLE_PASS_OFFER_TOKEN_PREFIX, BATTLE_PASS_PDATA_KEY, BATTLE_PASS_SELECT_BONUS_NAME, BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME, BP_TANKMAN_QUEST_CHAIN_TOKEN_POSTFIX, BP_TANKMEN_ENTITLEMENT_TAG_PREFIX, BattlePassConfig, BattlePassConsts, BattlePassState, NON_CHAPTER_ID, getBattlePassPassTokenName, getMaxAvalable3DStyleProgressInChapter, isPostProgressionChapter, NON_VEH_CD
 from constants import ARENA_BONUS_TYPE, OFFERS_ENABLED_KEY, QUEUE_TYPE
 from gui.battle_pass.battle_pass_award import BattlePassAwardsManager, awardsFactory
 from gui.battle_pass.battle_pass_constants import ChapterState
@@ -35,7 +36,7 @@ TopPoints = namedtuple('TopPoints', ['label', 'winPoint', 'losePoint'])
 BattleRoyaleTopPoints = namedtuple('BattleRoyaleTopPoints', ['label', 'points'])
 PointsDifference = namedtuple('PointsDifference', ['bonus', 'top', 'textID'])
 if typing.TYPE_CHECKING:
-    from typing import Callable
+    from typing import Callable, Generator
 
 class BattlePassController(IBattlePassController, EventsHandler):
     __tankmenCache = TankmenEntitlementsCache()
@@ -58,6 +59,7 @@ class BattlePassController(IBattlePassController, EventsHandler):
         self.__seasonChangeNotifier = SimpleNotifier(self.__getTimeToNotifySeasonChanged, self.__onNotifySeasonChanged)
         self.__extraChapterNotifier = SimpleNotifier(self.__getTimeToExtraChapterExpired, self.__onNotifyExtraChapterExpired)
         self.onPointsUpdated = Event(self.__eventsManager)
+        self.onVehiclesPointsUpdated = Event(self.__eventsManager)
         self.onLevelUp = Event(self.__eventsManager)
         self.onBattlePassIsBought = Event(self.__eventsManager)
         self.onSelectTokenUpdated = Event(self.__eventsManager)
@@ -157,7 +159,11 @@ class BattlePassController(IBattlePassController, EventsHandler):
         return self.__getConfig().seasonFinish <= time_utils.getServerUTCTime()
 
     def isValidBattleType(self, prbEntity):
-        return prbEntity.getQueueType() in (QUEUE_TYPE.RANDOMS, QUEUE_TYPE.MAPBOX, QUEUE_TYPE.WINBACK)
+        return prbEntity.getQueueType() in (QUEUE_TYPE.RANDOMS,
+         QUEUE_TYPE.MAPBOX,
+         QUEUE_TYPE.WINBACK,
+         QUEUE_TYPE.COMP7,
+         QUEUE_TYPE.COMP7_LIGHT)
 
     def isGameModeEnabled(self, arenaBonusType):
         return self.__getConfig().isGameModeEnabled(arenaBonusType)
@@ -361,6 +367,13 @@ class BattlePassController(IBattlePassController, EventsHandler):
     def getCurrentLevel(self):
         return self.getLevelInChapter(self.getCurrentChapterID())
 
+    def getCurrentLevelWithPostProgress(self):
+        chapterID = self.getCurrentChapterID()
+        currentLevel = self.getCurrentLevel()
+        if isPostProgressionChapter(chapterID):
+            currentLevel = currentLevel % len(self.getLevelsConfig(chapterID))
+        return currentLevel
+
     def getCurrentChapterID(self):
         activeChapter = self.__itemsCache.items.battlePass.getActiveChapterID()
         if activeChapter not in self.getChapterIDs():
@@ -556,7 +569,19 @@ class BattlePassController(IBattlePassController, EventsHandler):
         return {chapterID:chapterInfo.get('styleId') for chapterID, chapterInfo in self.__getConfig().chapters.iteritems()}
 
     def getNotChosenRewardCount(self):
-        return sum((token.startswith(BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS) for token in self.__itemsCache.items.tokens.getTokens().iterkeys())) if not self.isOfferEnabled() else sum((token.startswith(BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS) for token in self.__itemsCache.items.tokens.getTokens().iterkeys() if self.__offersProvider.getOfferByToken(getOfferTokenByGift(token)) is not None))
+        return sum((1 for _ in self.getNotChosenRewardsIter()))
+
+    def getNotChosenRewardsIter(self):
+        isOfferEnabled = self.isOfferEnabled()
+        for token in self.__itemsCache.items.tokens.getTokens().iterkeys():
+            if not token.startswith(BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS):
+                continue
+            isReward = not isOfferEnabled
+            isReward |= self.__offersProvider.getOfferByToken(getOfferTokenByGift(token)) is not None
+            if isReward:
+                yield token
+
+        return
 
     def hasAnyOfferGiftToken(self):
         return any((token.startswith(BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS) for token in self.__itemsCache.items.tokens.getTokens().iterkeys()))
@@ -751,6 +776,8 @@ class BattlePassController(IBattlePassController, EventsHandler):
         isPointsUpdated = newPoints != self.__oldPoints
         if isPointsUpdated:
             self.onPointsUpdated()
+        if 'vehiclePoints' in data:
+            self.onVehiclesPointsUpdated({intCD:points for intCD, points in iteritems(data['vehiclePoints']) if NON_VEH_CD != intCD})
         if newLevel != self.__oldLevel or newLevel == 0 and isPointsUpdated:
             self.onLevelUp()
         self.__oldPoints = newPoints

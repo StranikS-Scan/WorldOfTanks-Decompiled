@@ -14,7 +14,7 @@ from skeletons.gui.shared import IItemsCache
 class ConfirmModuleDialog(ConfirmItemWindowMeta):
     itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, meta, handler):
+    def __init__(self, meta, handler, **kwargs):
         super(ConfirmModuleDialog, self).__init__()
         self.meta = meta
         self.handler = handler

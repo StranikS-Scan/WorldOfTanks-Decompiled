@@ -1644,7 +1644,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	10000	</weight>
-      <maxLoad>	80000	</maxLoad>
       <terrainResistance>	1.2 1.4 2.3	</terrainResistance>
       <brakeForce>	75000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2458,10 +2457,14 @@
       <price>	100	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	350	</armor_1>
-        <armor_2>	35	</armor_2>
-        <armor_3>	35	</armor_3>
-        <armor_4>	0	</armor_4>
+        <armor_1>	350	  <tags>	hull	</tags>
+        </armor_1>
+        <armor_2>	35	  <tags>	hull	</tags>
+        </armor_2>
+        <armor_3>	35	  <tags>	hull	</tags>
+        </armor_3>
+        <armor_4>	0	  <tags>	hull	</tags>
+        </armor_4>
       </armor>
       <weight>	100	</weight>
       <maxHealth>	400	</maxHealth>

@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/lootbox_system/submodels/multiple_boxes_rewards_view_model.py
-from frameworks.wulf import Array
-from frameworks.wulf import ViewModel
+from frameworks.wulf import Array, ViewModel
 from gui.impl.gen.view_models.views.lobby.lootbox_system.bonus_model import BonusModel
 
 class MultipleBoxesRewardsViewModel(ViewModel):
@@ -78,7 +77,7 @@ class MultipleBoxesRewardsViewModel(ViewModel):
 
     @staticmethod
     def getBonusesType():
-        return BonusModel
+        return Array[BonusModel]
 
     def _initialize(self):
         super(MultipleBoxesRewardsViewModel, self)._initialize()

@@ -61,7 +61,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	18775	</weight>
-    <maxHealth>	960	</maxHealth>
+    <maxHealth>	1120	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	190	</maxHealth>
       <maxRegenHealth>	130	</maxRegenHealth>
@@ -1268,14 +1268,14 @@
     </camouflage>
   </hull>
   <chassis>
-    <Pz-V_Standardketten>
-      <userString>	#germany_vehicles:Pz-V_Standardketten	</userString>
-      <shortUserString>	#germany_vehicles:Pz-V_Standardketten_short	</shortUserString>
+    <Chassis_G03_PzV_Panther>
+      <userString>	#germany_vehicles:Chassis_G03_PzV_Panther	</userString>
+      <shortUserString>	#germany_vehicles:Chassis_G03_PzV_Panther_short	</shortUserString>
       <tags></tags>
       <level>	6	</level>
       <price>	15000	</price>
       <unlocks>
-        <chassis>	Pz-V_Vetstaerktketten	  <cost>	8200	</cost>
+        <chassis>	Chassis_G03_PzV_Panther_2	  <cost>	8200	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1283,11 +1283,10 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	15000	</weight>
-      <maxLoad>	45000	</maxLoad>
-      <terrainResistance>	1.1 1.3 2.5	</terrainResistance>
+      <terrainResistance>	1 1.2 2.3	</terrainResistance>
       <brakeForce>	40000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	30	</rotationSpeed>
+      <rotationSpeed>	33	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.2	</vehicleMovement>
         <vehicleRotation>	0.2	</vehicleRotation>
@@ -2123,10 +2122,10 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	5.71428585	</repairTime>
-    </Pz-V_Standardketten>
-    <Pz-V_Vetstaerktketten>
-      <userString>	#germany_vehicles:Pz-V_Vetstaerktketten	</userString>
-      <shortUserString>	#germany_vehicles:Pz-V_Vetstaerktketten_short	</shortUserString>
+    </Chassis_G03_PzV_Panther>
+    <Chassis_G03_PzV_Panther_2>
+      <userString>	#germany_vehicles:Chassis_G03_PzV_Panther_2	</userString>
+      <shortUserString>	#germany_vehicles:Chassis_G03_PzV_Panther_2_short	</shortUserString>
       <tags></tags>
       <level>	7	</level>
       <price>	18200	</price>
@@ -2135,11 +2134,10 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	15000	</weight>
-      <maxLoad>	48000	</maxLoad>
       <terrainResistance>	1 1.2 2.3	</terrainResistance>
       <brakeForce>	45000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	32	</rotationSpeed>
+      <rotationSpeed>	36	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.18	</vehicleMovement>
         <vehicleRotation>	0.18	</vehicleRotation>
@@ -2975,12 +2973,12 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	5.71428585	</repairTime>
-    </Pz-V_Vetstaerktketten>
+    </Chassis_G03_PzV_Panther_2>
   </chassis>
   <turrets0>
-    <Pz-V_Standardturm>
-      <userString>	#germany_vehicles:Pz-V_Standardturm	</userString>
-      <shortUserString>	#germany_vehicles:Pz-V_Standardturm_short	</shortUserString>
+    <Turret_1_G03_PzV_Panther>
+      <userString>	#germany_vehicles:Turret_1_G03_PzV_Panther	</userString>
+      <shortUserString>	#germany_vehicles:Turret_1_G03_PzV_Panther_short	</shortUserString>
       <tags></tags>
       <level>	6	</level>
       <price>	13500	</price>
@@ -2997,7 +2995,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7760	</weight>
-      <maxHealth>	240	</maxHealth>
+      <maxHealth>	220	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -3011,25 +3009,21 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_KwK_L70>	shared	  <pitchLimits>
+        <_75mm_Kw_K_42_L_70_Ausf_A>	shared	  <unlocks>
+            <gun>	_75mm_Kw_K_42_L_70_Ausf_G	  <cost>	16100	</cost>
+            </gun>
+          </unlocks>
+          <pitchLimits>
             <minPitch>	0 -18 1 -18	</minPitch>
             <maxPitch>	0 8 0.353005 8 0.416667 5 0.583333 5 0.646995 8 1 8	</maxPitch>
           </pitchLimits>
           <maxAmmo>	95	</maxAmmo>
-          <reloadTime>	4.2	</reloadTime>
+          <reloadTime>	4	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <unlocks>
-            <turret>	Pz-V_Shmallturm	  <cost>	10100	</cost>
-            </turret>
-            <gun>	_105mm_StuH42_L28Pz	  <cost>	3800	</cost>
-            </gun>
-            <gun>	_75mm_KwK45_L100	  <cost>	16100	</cost>
-            </gun>
-          </unlocks>
           <armor>
             <armor_1>	110	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3127,11 +3121,20 @@
             <density>	90.3356 89.159	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_75mm_KwK_L70>
-        <_105mm_StuH42_L28Pz>	shared	  <maxAmmo>	50	</maxAmmo>
+        </_75mm_Kw_K_42_L_70_Ausf_A>
+        <_75mm_Kw_K_42_L_70_Ausf_G>	shared	  <unlocks>
+            <turret>	Turret_2_G03_PzV_Panther	  <cost>	10100	</cost>
+            </turret>
+          </unlocks>
+          <pitchLimits>
+            <minPitch>	0 -18 1 -18	</minPitch>
+            <maxPitch>	0 8 0.353005 8 0.416667 5 0.583333 5 0.646995 8 1 8	</maxPitch>
+          </pitchLimits>
+          <maxAmmo>	95	</maxAmmo>
+          <reloadTime>	4	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
@@ -3143,53 +3146,49 @@
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <gun>	40	</gun>
+            <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.55	</shotDispersionRadius>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
-          <pitchLimits>
-            <minPitch>	0 -18 1 -18	</minPitch>
-            <maxPitch>	0 8 0.353005 8 0.416667 3 0.583333 3 0.646995 8 1 8	</maxPitch>
-          </pitchLimits>
+          <shotDispersionRadius>	0.32	</shotDispersionRadius>
+          <aimingTime>	2.1	</aimingTime>
+          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
-            <undamaged>	vehicles/german/G03_PzV_Panther/normal/lod0/Gun_06.model	</undamaged>
-            <destroyed>	vehicles/german/G03_PzV_Panther/crash/lod0/Gun_06.model	</destroyed>
-            <exploded>	vehicles/german/G03_PzV_Panther/crash/lod0/Gun_06.model	</exploded>
+            <undamaged>	vehicles/german/G03_PzV_Panther/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G03_PzV_Panther/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G03_PzV_Panther/crash/lod0/Gun_01.model	</exploded>
             <sets>
               <G03_PzV_Panther_E_3DSt>
-                <undamaged>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/normal/lod0/Gun_06.model	</undamaged>
-                <destroyed>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Gun_06.model	</destroyed>
-                <exploded>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Gun_06.model	</exploded>
+                <undamaged>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Gun_01.model	</exploded>
               </G03_PzV_Panther_E_3DSt>
             </sets>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/german/G03_PzV_Panther/collision/Gun_06.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G03_PzV_Panther/collision_client/Gun_06.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/german/G03_PzV_Panther/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G03_PzV_Panther/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <effects>	shot_large_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
+          <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
               <slotId>	41000	</slotId>
-              <anchorPosition>	-0.004424 -0.00759 1.12229	</anchorPosition>
+              <anchorPosition>	-0.001649 0.003651 2.23247	</anchorPosition>
               <anchorDirection>	0 0 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
               <slotType>	paint	</slotType>
               <slotId>	41001	</slotId>
-              <anchorPosition>	-0.001634 0.242303 0.279212	</anchorPosition>
+              <anchorPosition>	-0.001633 0.242409 0.279217	</anchorPosition>
               <anchorDirection>	-0 0 1	</anchorDirection>
               <applyTo>	16384	</applyTo>
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
               <slotId>	42000	</slotId>
-              <anchorPosition>	-0.004424 -0.00759 1.12229	</anchorPosition>
+              <anchorPosition>	-0.001649 0.003651 2.23247	</anchorPosition>
               <anchorDirection>	0 0 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
@@ -3208,121 +3207,8 @@
               <slotType>	projectionDecal	</slotType>
               <slotId>	45001	</slotId>
               <tags>	formfactor_rect1x3	</tags>
-              <position>	-0.013806 2.62092 0.927383	</position>
-              <rotation>	0.777518 -0.000036 3.14154	</rotation>
-              <scale>	1.63026 0.4 1.63028	</scale>
-              <showOn>	4352	</showOn>
-              <clipAngle>	0.081348	</clipAngle>
-              <anchorShift>	0.132005	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.008847 -0.01718 1.50455	</rayStart>
-              <rayEnd>	-0.008847 -0.01718 1.96455	</rayEnd>
-              <rayUp>	0.1 0 0	</rayUp>
-              <size>	0.46	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.8 0.8 0.000000 0.000000	</tiling>
-            <density>	89.2772 89.395	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_105mm_StuH42_L28Pz>
-        <_75mm_KwK45_L100>	shared	  <unlocks>
-            <vehicle>	G64_Panther_II	  <cost>	88500	</cost>
-            </vehicle>
-          </unlocks>
-          <maxAmmo>	80	</maxAmmo>
-          <reloadTime>	4.2	</reloadTime>
-          <shotDispersionRadius>	0.32	</shotDispersionRadius>
-          <armor>
-            <armor_1>	110	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	55	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	45	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	20	</gun>
-          </armor>
-          <aimingTime>	2.5	</aimingTime>
-          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
-          <shotDispersionFactors>
-            <turretRotation>	0.2	</turretRotation>
-            <afterShot>	4	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <pitchLimits>
-            <minPitch>	0 -18 1 -18	</minPitch>
-            <maxPitch>	0 8 0.353005 8 0.416667 5 0.583333 5 0.646995 8 1 8	</maxPitch>
-          </pitchLimits>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <effects>	shot_medium_mb	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <models>
-            <undamaged>	vehicles/german/G03_PzV_Panther/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/german/G03_PzV_Panther/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/german/G03_PzV_Panther/crash/lod0/Gun_03.model	</exploded>
-            <sets>
-              <G03_PzV_Panther_E_3DSt>
-                <undamaged>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/normal/lod0/Gun_03.model	</undamaged>
-                <destroyed>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Gun_03.model	</destroyed>
-                <exploded>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Gun_03.model	</exploded>
-              </G03_PzV_Panther_E_3DSt>
-            </sets>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G03_PzV_Panther/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G03_PzV_Panther/collision_client/Gun_03.model	</collisionModelClient>
-          </hitTester>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.002575 0.002046 3.32937	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.001635 0.242303 0.279203	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.002575 0.002046 3.32937	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.013806 2.30788 0.692463	</position>
-              <rotation>	1.2583 -0.000126 3.14146	</rotation>
-              <scale>	1.41035 1.31979 1.41036	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.081348	</clipAngle>
-              <anchorShift>	0.822403	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x3	</tags>
               <position>	-0.013806 2.62093 0.927383	</position>
-              <rotation>	0.777544 -0.000042 3.14154	</rotation>
+              <rotation>	0.777544 -0.000044 3.14154	</rotation>
               <scale>	1.63026 0.4 1.63028	</scale>
               <showOn>	4352	</showOn>
               <clipAngle>	0.081348	</clipAngle>
@@ -3331,10 +3217,10 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	-0.004847 0.00482 5.79	</rayStart>
-              <rayEnd>	-0.004847 0.00482 6.288	</rayEnd>
-              <rayUp>	0.07 0 0	</rayUp>
-              <size>	0.498	</size>
+              <rayStart>	-0.003299 0.006302 3.6	</rayStart>
+              <rayEnd>	-0.003299 0.006302 4.26	</rayEnd>
+              <rayUp>	0.076 0 0	</rayUp>
+              <size>	0.66	</size>
             </slot>
           </customizationSlots>
           <customization>
@@ -3345,10 +3231,10 @@
           </customization>
           <camouflage>
             <tiling>	0.8 0.8 0.000000 0.000000	</tiling>
-            <density>	89.6498 89.3051	</density>
+            <density>	90.3356 89.159	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_75mm_KwK45_L100>
+        </_75mm_Kw_K_42_L_70_Ausf_G>
       </guns>
       <models>
         <undamaged>	vehicles/german/G03_PzV_Panther/normal/lod0/Turret_01.model	</undamaged>
@@ -3823,13 +3709,17 @@
         <density>	93.5917 93.6457	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Pz-V_Standardturm>
-    <Pz-V_Shmallturm>
-      <userString>	#germany_vehicles:Pz-V_Shmallturm	</userString>
-      <shortUserString>	#germany_vehicles:Pz-V_Shmallturm_short	</shortUserString>
+    </Turret_1_G03_PzV_Panther>
+    <Turret_2_G03_PzV_Panther>
+      <userString>	#germany_vehicles:Turret_2_G03_PzV_Panther	</userString>
+      <shortUserString>	#germany_vehicles:Turret_2_G03_PzV_Panther_short	</shortUserString>
       <tags></tags>
       <level>	7	</level>
       <price>	22300	</price>
+      <unlocks>
+        <vehicle>	G64_Panther_II	  <cost>	88500	</cost>
+        </vehicle>
+      </unlocks>
       <armor>
         <armor_1>	120	</armor_1>
         <armor_3>	60	</armor_3>
@@ -3844,7 +3734,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7745	</weight>
-      <maxHealth>	340	</maxHealth>
+      <maxHealth>	280	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -3859,7 +3749,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.991	</invisibilityFactor>
       <guns>
-        <_75mm_KwK_L70>	shared	  <maxAmmo>	95	</maxAmmo>
+        <_75mm_Kw_K_42_L_70_Ausf_A>	shared	  <maxAmmo>	95	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 0.353005 8 0.416667 3 0.583333 3 0.646995 8 1 8	</maxPitch>
@@ -3868,7 +3758,7 @@
           <reloadTime>	4	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
@@ -3884,8 +3774,8 @@
             </armor_5>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.35	</shotDispersionRadius>
-          <aimingTime>	2.3	</aimingTime>
+          <shotDispersionRadius>	0.33	</shotDispersionRadius>
+          <aimingTime>	2.1	</aimingTime>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <effects>	shot_medium	</effects>
           <reloadEffect>	reload50_75	</reloadEffect>
@@ -3947,98 +3837,19 @@
             <density>	90.3356 89.159	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_75mm_KwK_L70>
-        <_105mm_StuH42_L28Pz>	shared	  <maxAmmo>	50	</maxAmmo>
-          <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <armor>
-            <armor_1>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <gun>	40	</gun>
-          </armor>
-          <shotDispersionRadius>	0.55	</shotDispersionRadius>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
+        </_75mm_Kw_K_42_L_70_Ausf_A>
+        <_75mm_Kw_K_42_L_70_Ausf_G>	shared	  <maxAmmo>	95	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 0.353005 8 0.416667 4 0.583333 4 0.646995 8 1 8	</maxPitch>
+            <maxPitch>	0 8 0.353005 8 0.416667 3 0.583333 3 0.646995 8 1 8	</maxPitch>
           </pitchLimits>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <models>
-            <undamaged>	vehicles/german/G03_PzV_Panther/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/german/G03_PzV_Panther/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/german/G03_PzV_Panther/crash/lod0/Gun_05.model	</exploded>
-            <sets>
-              <G03_PzV_Panther_E_3DSt>
-                <undamaged>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/normal/lod0/Gun_05.model	</undamaged>
-                <destroyed>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Gun_05.model	</destroyed>
-                <exploded>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Gun_05.model	</exploded>
-              </G03_PzV_Panther_E_3DSt>
-            </sets>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G03_PzV_Panther/collision/Gun_05.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G03_PzV_Panther/collision_client/Gun_05.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_large_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.003804 -0.002388 0.957651	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.007436 0.249497 0.337813	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.003804 -0.002388 0.957651	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.007608 -0.004775 1.17786	</rayStart>
-              <rayEnd>	-0.007608 -0.004775 1.64286	</rayEnd>
-              <rayUp>	0.097 0 0	</rayUp>
-              <size>	0.465	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
-            <density>	89.2772 89.395	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_105mm_StuH42_L28Pz>
-        <_75mm_KwK45_L100>	shared	  <maxAmmo>	80	</maxAmmo>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <reloadTime>	4	</reloadTime>
-          <shotDispersionRadius>	0.32	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
           <armor>
             <armor_1>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -4052,65 +3863,56 @@
             </armor_5>
             <gun>	20	</gun>
           </armor>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
-          <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 0.353005 8 0.416667 3 0.583333 3 0.646995 8 1 8	</maxPitch>
-          </pitchLimits>
+          <shotDispersionRadius>	0.3	</shotDispersionRadius>
+          <aimingTime>	1.9	</aimingTime>
           <turretYawLimits>	-180 180	</turretYawLimits>
-          <effects>	shot_medium_mb	</effects>
+          <effects>	shot_medium	</effects>
           <reloadEffect>	reload50_75	</reloadEffect>
           <models>
-            <undamaged>	vehicles/german/G03_PzV_Panther/normal/lod0/Gun_04.model	</undamaged>
-            <destroyed>	vehicles/german/G03_PzV_Panther/crash/lod0/Gun_04.model	</destroyed>
-            <exploded>	vehicles/german/G03_PzV_Panther/crash/lod0/Gun_04.model	</exploded>
+            <undamaged>	vehicles/german/G03_PzV_Panther/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/german/G03_PzV_Panther/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/german/G03_PzV_Panther/crash/lod0/Gun_02.model	</exploded>
             <sets>
               <G03_PzV_Panther_E_3DSt>
-                <undamaged>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/normal/lod0/Gun_04.model	</undamaged>
-                <destroyed>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Gun_04.model	</destroyed>
-                <exploded>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Gun_04.model	</exploded>
+                <undamaged>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/german/G03_PzV_Panther/_skins/G03_PzV_Panther_E_3DSt/crash/lod0/Gun_02.model	</exploded>
               </G03_PzV_Panther_E_3DSt>
             </sets>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/german/G03_PzV_Panther/collision/Gun_04.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G03_PzV_Panther/collision_client/Gun_04.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/german/G03_PzV_Panther/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G03_PzV_Panther/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
               <slotId>	41000	</slotId>
-              <anchorPosition>	-0.006354 0.009357 3.39233	</anchorPosition>
+              <anchorPosition>	-0.005557 -0.002393 2.17114	</anchorPosition>
               <anchorDirection>	0 0 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
               <slotType>	paint	</slotType>
               <slotId>	41001	</slotId>
-              <anchorPosition>	-0.007435 0.262354 0.344973	</anchorPosition>
+              <anchorPosition>	-0.007435 0.262902 0.333139	</anchorPosition>
               <anchorDirection>	-0 0 1	</anchorDirection>
               <applyTo>	16384	</applyTo>
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
               <slotId>	42000	</slotId>
-              <anchorPosition>	-0.006354 0.009357 3.39233	</anchorPosition>
+              <anchorPosition>	-0.005557 -0.002393 2.17114	</anchorPosition>
               <anchorDirection>	0 0 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	-0.014151 0.018093 5.78628	</rayStart>
-              <rayEnd>	-0.014151 0.018093 6.28428	</rayEnd>
-              <rayUp>	0.1 0 0	</rayUp>
-              <size>	0.498	</size>
+              <rayStart>	-0.011113 -0.004786 3.71	</rayStart>
+              <rayEnd>	-0.011113 -0.004786 4.27	</rayEnd>
+              <rayUp>	0.089 0 0	</rayUp>
+              <size>	0.56	</size>
             </slot>
           </customizationSlots>
           <customization>
@@ -4120,11 +3922,11 @@
             </customizableVehicleAreas>
           </customization>
           <camouflage>
-            <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
-            <density>	89.6498 89.3051	</density>
+            <tiling>	0.8 0.8 0.000000 0.000000	</tiling>
+            <density>	90.3356 89.159	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_75mm_KwK45_L100>
+        </_75mm_Kw_K_42_L_70_Ausf_G>
       </guns>
       <models>
         <undamaged>	vehicles/german/G03_PzV_Panther/normal/lod0/Turret_02.model	</undamaged>
@@ -4550,59 +4352,36 @@
         <density>	104.902 104.023	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Pz-V_Shmallturm>
+    </Turret_2_G03_PzV_Panther>
   </turrets0>
   <engines>
-    <Maybach_HL_210_TRM_P30>	shared	  <unlocks>
-        <engine>	Maybach_HL_230_TRM_P30	  <cost>	15800	</cost>
+    <Maybach_HL_210_TRM_P30_G>	shared	  <unlocks>
+        <engine>	Maybach_HL_230_TRM_P30_G	  <cost>	15800	</cost>
         </engine>
       </unlocks>
-    </Maybach_HL_210_TRM_P30>
-    <Maybach_HL_230_TRM_P30>	shared	</Maybach_HL_230_TRM_P30>
+    </Maybach_HL_210_TRM_P30_G>
+    <Maybach_HL_230_TRM_P30_G>	shared	</Maybach_HL_230_TRM_P30_G>
   </engines>
   <fuelTanks>
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <FuG5>	shared	  <unlocks>
-        <radio>	FuG7	  <cost>	1360	</cost>
-        </radio>
-      </unlocks>
-    </FuG5>
-    <FuG7>	shared	  <unlocks>
-        <radio>	FuG12	  <cost>	7200	</cost>
-        </radio>
-      </unlocks>
-    </FuG7>
     <FuG12>	shared	</FuG12>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Maybach_HL_210_TRM_P30>
-          <smplEnginePower>	687.2327	</smplEnginePower>
+        <Maybach_HL_210_TRM_P30_G>
+          <smplEnginePower>	730	</smplEnginePower>
           <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
-        </Maybach_HL_210_TRM_P30>
-        <Maybach_HL_230_TRM_P30>
-          <smplEnginePower>	740.0968	</smplEnginePower>
+        </Maybach_HL_210_TRM_P30_G>
+        <Maybach_HL_230_TRM_P30_G>
+          <smplEnginePower>	780	</smplEnginePower>
           <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
-        </Maybach_HL_230_TRM_P30>
+        </Maybach_HL_230_TRM_P30_G>
       </engines>
       <chassis>
-        <Pz-V_Standardketten>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.20125	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.10465	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
-            </firm>
-          </grounds>
-        </Pz-V_Standardketten>
-        <Pz-V_Vetstaerktketten>
+        <Chassis_G03_PzV_Panther>
           <grounds>
             <soft>
               <rollingFriction>	0.18515	</rollingFriction>
@@ -4614,7 +4393,20 @@
               <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
-        </Pz-V_Vetstaerktketten>
+        </Chassis_G03_PzV_Panther>
+        <Chassis_G03_PzV_Panther_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.18515	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.0966	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0805	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_G03_PzV_Panther_2>
       </chassis>
     </detailed>
   </physics>

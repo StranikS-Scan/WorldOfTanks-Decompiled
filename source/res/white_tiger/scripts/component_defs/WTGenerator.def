@@ -1,0 +1,45 @@
+<WTGenerator.def>
+  <Properties>
+    <activationProgress>
+      <Type>	FIXED_DICT	  <Properties>
+          <progress>
+            <Type>	UINT8	</Type>
+          </progress>
+          <timeLeft>
+            <Type>	UINT8	</Type>
+          </timeLeft>
+          <invadersVehicleIDs>
+            <Type>	ARRAY	  <of>	OBJECT_ID	</of>
+            </Type>
+          </invadersVehicleIDs>
+        </Properties>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </activationProgress>
+    <state>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </state>
+    <blockedByMiniboss>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </blockedByMiniboss>
+    <sentinelData>
+      <Type>	ARRAY	  <of>	INT32	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </sentinelData>
+    <numInvaders>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </numInvaders>
+  </Properties>
+  <ClientMethods>
+    <updateMarkers></updateMarkers>
+    <invokeCaptureReset></invokeCaptureReset>
+  </ClientMethods>
+  <ofEntity>
+    <Entity></Entity>
+  </ofEntity>
+  <DefaultKeyName>	generator	</DefaultKeyName>
+</WTGenerator.def>

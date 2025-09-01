@@ -63,10 +63,10 @@ class ModeSelectorComp7WidgetModel(ModeSelectorBaseWidgetModel):
     def setRankInactivityCount(self, value):
         self._setNumber(8, value)
 
-    def getHasRankInactivityWarning(self):
+    def getHasRankInactivity(self):
         return self._getBool(9)
 
-    def setHasRankInactivityWarning(self, value):
+    def setHasRankInactivity(self, value):
         self._setBool(9, value)
 
     def _initialize(self):
@@ -79,5 +79,5 @@ class ModeSelectorComp7WidgetModel(ModeSelectorBaseWidgetModel):
         self._addNumberProperty('prevScore', 0)
         self._addNumberProperty('topPercentage', 0)
         self._addNumberProperty('rankInactivityCount', -1)
-        self._addBoolProperty('hasRankInactivityWarning', False)
+        self._addBoolProperty('hasRankInactivity', False)
         self.onOpenMeta = self._addCommand('onOpenMeta')

@@ -11,7 +11,7 @@ from frameworks.wulf import WindowLayer
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ScopeTemplates
-from gui.Scaleform.framework.managers.loaders import GuiImplViewLoadParams, SFViewLoadParams
+from gui.Scaleform.framework.managers.loaders import GuiImplViewLoadParams
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.app_loader import sf_lobby
 from gui.game_control import gc_constants
@@ -20,7 +20,7 @@ from gui.impl.lobby.common.browser_view import BrowserView, makeSettings
 from gui.impl.gen import R
 from gui.promo.promo_logger import PromoLogSourceType, PromoLogActions, PromoLogSubjectType
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showBubbleTooltip
+from gui.shared.event_dispatcher import showBubbleTooltip, showHangar
 from gui.shared.events import BrowserEvent
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.wgcg.promo_screens.contexts import PromoGetTeaserRequestCtx, PromoSendTeaserShownRequestCtx, PromoGetUnreadCountRequestCtx
@@ -31,6 +31,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IPromoController, IBrowserController, IEventsNotificationsController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.login_manager import ILoginManager
 from skeletons.gui.shared.promo import IPromoLogger
 from skeletons.gui.web import IWebController
 from web.web_client_api import webApiCollection, ui as ui_web_api, sound as sound_web_api
@@ -56,6 +57,7 @@ class PromoController(IPromoController):
     __settingsCore = dependency.descriptor(ISettingsCore)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __logger = dependency.descriptor(IPromoLogger)
+    __loginManager = dependency.descriptor(ILoginManager)
 
     def __init__(self):
         super(PromoController, self).__init__()
@@ -137,6 +139,7 @@ class PromoController(IPromoController):
         rowUrl = self.__promoData.get('url', '')
         loadingCallback = self.__logger.getLoggingFuture(self.__promoData, action=PromoLogActions.OPEN_FROM_TEASER, type=PromoLogSubjectType.PROMO_SCREEN, url=rowUrl)
         url = yield self.__addAuthParams(rowUrl)
+        url = self.__addSteamParams(url)
         self.__showBrowserView(url, loadingCallback)
 
     def setUnreadPromoCount(self, count):
@@ -355,12 +358,18 @@ class PromoController(IPromoController):
 
     def __onViewLoaded(self, pyView, _):
         if self.__isLobbyInited:
-            if pyView.alias == VIEW_ALIAS.LOBBY_HANGAR:
+            if pyView.alias in (VIEW_ALIAS.LOBBY_HANGAR, VIEW_ALIAS.LEGACY_LOBBY_HANGAR):
                 self.__isInHangar = True
                 if self.__hasPendingTeaser:
                     self.__tryToShowTeaser()
             elif pyView.layer == WindowLayer.SUB_VIEW:
                 self.__isInHangar = False
+
+    def __addSteamParams(self, url):
+        if not url:
+            return url
+        params = {'is_steam': int(self.__loginManager.isWgcSteam)}
+        return url_formatters.addParamsToUrlQuery(url, params)
 
 
 @dependency.replace_none_kwargs(guiLoader=IGuiLoader)
@@ -380,7 +389,7 @@ def _showBrowserView(url, returnClb, soundSpaceID=None, guiLoader=None):
 
     def _returnCallback(*args, **kwargs):
         if kwargs.pop('forceClosed', False):
-            g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), EVENT_BUS_SCOPE.LOBBY)
+            showHangar()
         if returnClb is not None:
             returnClb(*args, **kwargs)
         return

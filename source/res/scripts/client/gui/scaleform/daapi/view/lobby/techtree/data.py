@@ -16,7 +16,6 @@ from gui.game_control.veh_comparison_basket import getInstalledModulesCDs
 from gui.limited_ui.lui_rules_storage import LUI_RULES
 from gui.shop import canBuyGoldForItemThroughWeb
 from gui.prb_control import prbDispatcherProperty
-from gui.shared.economics import getGUIPrice
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
@@ -26,6 +25,8 @@ from skeletons.gui.game_control import ITradeInController, ILimitedUIController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
+if typing.TYPE_CHECKING:
+    from typing import Optional, Dict
 _logger = logging.getLogger(__name__)
 __all__ = ('ResearchItemsData', 'NationTreeData')
 
@@ -179,6 +180,7 @@ class _ItemsData(object):
                 NODE_STATE.addIfNot(state, NODE_STATE_FLAGS.BLUEPRINT)
             else:
                 NODE_STATE.removeIfHas(state, NODE_STATE_FLAGS.BLUEPRINT)
+            node.setState(state)
             result.append((nodeCD, state))
 
         return result
@@ -341,6 +343,12 @@ class _ItemsData(object):
         node.setState(state)
         return state
 
+    def _change2LastToBuy(self, node):
+        isLast2Buy = self._isLastUnlocked(node.getNodeCD())
+        state = NODE_STATE.changeLast2Buy(node.getState(), isLast2Buy)
+        node.setState(state)
+        return state
+
     def _mayObtainForMoney(self, nodeCD):
         item = self.getItem(nodeCD)
         money = self._stats.money
@@ -358,16 +366,20 @@ class _ItemsData(object):
         if self.getItem(nodeCD).isPremium:
             return False
         nextLevels = g_techTreeDP.getNextLevel(nodeCD)
-        isAvailable = lambda self, nextCD: self.getItem(nextCD).isUnlocked or g_techTreeDP.isVehicleAvailableToUnlock(nextCD)[0]
+        if not nextLevels:
+            return True
+        unlocks = self._stats.unlocks
+        xps = self._stats.vehiclesXPs
+        freeXP = self._stats.actualFreeXP
+        isAvailable = lambda self, nextCD: self.getItem(nextCD).isUnlocked or g_techTreeDP.isNext2Unlock(nextCD, unlocks, xps, freeXP)[0]
         isNextUnavailable = any((not isAvailable(self, nextCD) for nextCD in nextLevels))
-        return isNextUnavailable or not nextLevels
+        return isNextUnavailable
 
     def _invalidateMoney(self, nodes_):
         result = []
         for node in nodes_:
             state = node.getState()
             nodeID = node.getNodeCD()
-            node.setGuiPrice(getGUIPrice(self.getItem(nodeID), self._stats.money, self._items.shop.defaults.exchangeRate))
             if canBuyGoldForItemThroughWeb(nodeID) or self._mayObtainForMoney(nodeID):
                 state = NODE_STATE.add(state, NODE_STATE_FLAGS.ENOUGH_MONEY)
             else:
@@ -423,6 +435,17 @@ class ResearchItemsData(_ItemsData):
     def setRootCD(cls, cd):
         cls._rootCD = int(cd)
         cls._setModuleInstaller(cls._rootCD)
+
+    def invalidateItem(self, itemCD):
+        if self._topLevelCDs is not None and self._topLevel is not None:
+            idx = self._topLevelCDs.get(itemCD)
+            if idx is not None:
+                if 0 <= idx < len(self._topLevel):
+                    return self._dumper.invalidateCachedItemData('top', idx, self._topLevel[idx], self.getRootItem())
+            if self._nodesIdx is not None and self._nodes is not None:
+                idx = self._nodesIdx.get(itemCD)
+                return idx is not None and 0 <= idx < len(self._nodes) and self._dumper.invalidateCachedItemData('nodes', idx, self._nodes[idx], self.getRootItem())
+        return
 
     @classmethod
     def _setModuleInstaller(cls, vehicleCD):
@@ -497,6 +520,21 @@ class ResearchItemsData(_ItemsData):
                 prevUnlocks.append((nodeCD, state))
 
         return (next2Unlock, unlocked, prevUnlocks)
+
+    def getUrgentIds(self, nodeCD):
+        result = []
+        conflicted = self._moduleInstaller.updateConflicted(nodeCD, self.getRootItem())
+        moduleDependencies = [ moduleCD for moduleTypes in conflicted for moduleCD in moduleTypes ]
+        _logger.debug('[ModuleDependencies] nodeCD = %s, module dependencies %s', nodeCD, moduleDependencies)
+        for node in self._nodes:
+            nodeCD = node.getNodeCD()
+            if nodeCD not in moduleDependencies or getTypeOfCD(nodeCD) not in GUI_ITEM_TYPE.VEHICLE_MODULES:
+                continue
+            state = node.getState()
+            state = NODE_STATE.add(state, NODE_STATE_FLAGS.DASHED)
+            result.append((node.getNodeCD(), state))
+
+        return result
 
     def invalidateHovered(self, nodeCD):
         result = []
@@ -678,11 +716,10 @@ class ResearchItemsData(_ItemsData):
             renderer = 'root' if self._rootCD == nodeCD else 'vehicle'
         else:
             renderer = 'item'
-        price = getGUIPrice(guiItem, self._stats.money, self._items.shop.defaults.exchangeRate)
         displayInfo = {'path': path,
          'renderer': renderer,
          'level': level}
-        return nodes.RealNode(nodeCD, guiItem, unlockStats.getVehXP(nodeCD), state, displayInfo, unlockProps=unlockProps, bpfProps=bpfProps, price=price)
+        return nodes.RealNode(nodeCD, guiItem, unlockStats.getVehXP(nodeCD), state, displayInfo, unlockProps=unlockProps, bpfProps=bpfProps)
 
     def _getAnnouncementData(self, nodeCD, path, level):
         info = g_techTreeDP.getAnnouncementByCD(nodeCD)
@@ -868,12 +905,8 @@ class NationTreeData(_ItemsData):
         return state
 
     def _change2Unlocked(self, node):
-        state = super(NationTreeData, self)._change2Unlocked(node)
-        return NODE_STATE.changeLast2Buy(state, self._isLastUnlocked(node.getNodeCD()))
-
-    def _changePreviouslyUnlocked(self, node):
-        state = node.getState()
-        return NODE_STATE.changeLast2Buy(state, self._isLastUnlocked(node.getNodeCD()))
+        super(NationTreeData, self)._change2Unlocked(node)
+        return self._change2LastToBuy(node)
 
     def _change2UnlockedByCD(self, nodeCD):
         try:
@@ -891,7 +924,7 @@ class NationTreeData(_ItemsData):
             _logger.exception(e)
             return 0
 
-        return self._changePreviouslyUnlocked(node)
+        return self._change2LastToBuy(node)
 
     def _makeRealExposedNode(self, node, guiItem, unlockStats, displayInfo):
         nodeCD = node.nodeCD
@@ -938,8 +971,7 @@ class NationTreeData(_ItemsData):
         state = self._checkRentableState(state, guiItem)
         state = self._checkTradeInState(state, guiItem)
         state = self._checkTechTreeEvents(state, guiItem, unlockProps)
-        price = getGUIPrice(guiItem, self._stats.money, self._items.shop.defaults.exchangeRate)
-        return nodes.RealNode(node.nodeCD, guiItem, earnedXP, state, displayInfo, unlockProps=unlockProps, bpfProps=bpfProps, price=price)
+        return nodes.RealNode(node.nodeCD, guiItem, earnedXP, state, displayInfo, unlockProps=unlockProps, bpfProps=bpfProps)
 
     @staticmethod
     def _makeAnnouncementNode(node, displayInfo):

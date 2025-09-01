@@ -7,7 +7,9 @@ from script_component.DynamicScriptComponent import DynamicScriptComponent
 from Event import SafeEvent, EventManager
 
 class StoryModeLootableComponent(DynamicScriptComponent):
-    _PREFAB_URL = 'content/CGFPrefabs/Storymode/loot.prefab'
+    _PREFAB_URL_BY_STYLE = {'SM_LOOT_EQUIPMENT': 'content/CGFPrefabs/Storymode/loot.prefab',
+     'SM_LOOT_PLAN': 'content/CGFPrefabs/Storymode/loot.prefab',
+     'SM_LOOT_TANK': 'content/CGFPrefabs/Storymode/loot_yellow.prefab'}
 
     def __init__(self, *args, **kwargs):
         super(StoryModeLootableComponent, self).__init__(*args, **kwargs)
@@ -29,7 +31,8 @@ class StoryModeLootableComponent(DynamicScriptComponent):
         super(StoryModeLootableComponent, self).onDestroy()
 
     def _loadPrefab(self):
-        CGF.loadGameObjectIntoHierarchy(self._PREFAB_URL, self.entity.entityGameObject, Math.Vector3(), self._onPrefabLoaded)
+        if self.markerStyle in self._PREFAB_URL_BY_STYLE:
+            CGF.loadGameObjectIntoHierarchy(self._PREFAB_URL_BY_STYLE[self.markerStyle], self.entity.entityGameObject, Math.Vector3(), self._onPrefabLoaded)
 
     def _onPrefabLoaded(self, prefab):
         self._prefab = prefab

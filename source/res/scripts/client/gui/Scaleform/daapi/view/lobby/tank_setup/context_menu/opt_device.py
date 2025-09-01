@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/tank_setup/context_menu/opt_device.py
 import typing
+import SoundGroups
 from adisp import adisp_process, adisp_async
 from gui.Scaleform.daapi.view.lobby.shared.cm_handlers import option, CMLabel
 from gui.Scaleform.daapi.view.lobby.tank_setup.context_menu.base import TankSetupCMLabel
@@ -8,6 +9,7 @@ from gui.Scaleform.daapi.view.lobby.tank_setup.context_menu.base_equipment impor
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.base_setup_model import BaseSetupModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
 from gui.impl.lobby.tank_setup.tank_setup_helper import NONE_ID
+from gui.impl.lobby.tank_setup.tank_setup_sounds import TankSetupSoundEvents
 from gui.shared.gui_items.items_actions import factory as ActionsFactory
 from helpers import dependency
 from ids_generators import SequenceIDGenerator
@@ -140,11 +142,14 @@ class HangarOptDeviceSlotContextMenu(BaseHangarEquipmentSlotContextMenu):
         result = yield ActionsFactory.asyncDoAction(action)
         if result:
             if isDestroy:
+                SoundGroups.g_instance.playSound2D(TankSetupSoundEvents.EQUIPMENT_DESTROY)
                 actionType = BaseSetupModel.DESTROY_SLOT_ACTION
             elif everywhere:
+                SoundGroups.g_instance.playSound2D(TankSetupSoundEvents.EQUIPMENT_DEMOUNT_KIT)
                 actionType = BaseSetupModel.DEMOUNT_SLOT_FROM_SETUPS_ACTION
             else:
                 actionType = BaseSetupModel.DEMOUNT_SLOT_ACTION
+                SoundGroups.g_instance.playSound2D(TankSetupSoundEvents.EQUIPMENT_DEMOUNT_KIT)
             self._sendLastSlotAction(TankSetupConstants.OPT_DEVICES, actionType, {'intCD': item.intCD,
              'slotID': self._installedSlotId})
 

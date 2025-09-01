@@ -1,13 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/comp7_constants.py
+from comp7.gui.Scaleform.genConsts.COMP7_HANGAR_ALIASES import COMP7_HANGAR_ALIASES
 from constants_utils import ConstInjector
-from gui.limited_ui.lui_rules_storage import LUI_RULES
 from gui.prb_control import settings
 from messenger import m_constants
-from gui.battle_control import battle_constants
-ATTR_NAME = 'COMP7'
-_LUI_RULE_ENTRY_POINT = 'Comp7EntryPoint'
-_LUI_RULES = [_LUI_RULE_ENTRY_POINT]
+COMP7_HANGAR_ALIAS = COMP7_HANGAR_ALIASES.COMP7_LOBBY_HANGAR
+COMP7_ENTRY_POINT_ALIAS = 'Comp7EntryPoint'
 
 class FUNCTIONAL_FLAG(settings.FUNCTIONAL_FLAG, ConstInjector):
     COMP7 = 536870912
@@ -30,11 +28,3 @@ class REQUEST_TYPE(settings.REQUEST_TYPE, ConstInjector):
 
 class SCH_CLIENT_MSG_TYPE(m_constants.SCH_CLIENT_MSG_TYPE, ConstInjector):
     pass
-
-
-class BATTLE_CTRL_ID(battle_constants.BATTLE_CTRL_ID, ConstInjector):
-    COMP7_VOIP_CTRL = 102
-
-
-def initComp7LimitedUIIds():
-    LUI_RULES.inject(_LUI_RULES)

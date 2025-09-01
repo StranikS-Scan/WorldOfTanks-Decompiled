@@ -11,6 +11,7 @@ from dossiers2.ui import layouts
 from dossiers2.ui.achievements import ACHIEVEMENT_MODE, ACHIEVEMENT_SECTION, ACHIEVEMENT_SECTIONS_INDICES, makeAchievesStorageName, ACHIEVEMENT_SECTIONS_ORDER, getSection as getAchieveSection
 from gui.shared.gui_items.dossier.achievements import mark_of_mastery
 from gui.shared.gui_items.dossier.factories import getAchievementFactory, _SequenceAchieveFactory
+from gui.prestige.prestige_helpers import PrestigeVehiclesDossiersCut
 from items import vehicles
 from soft_exception import SoftException
 from dossiers2.custom.account_layout import VEHICLE_STATS
@@ -27,9 +28,8 @@ _EPIC_SECTION = ACHIEVEMENT_SECTIONS_INDICES[ACHIEVEMENT_SECTION.EPIC]
 _ACTION_SECTION = ACHIEVEMENT_SECTIONS_INDICES[ACHIEVEMENT_SECTION.ACTION]
 _NEAREST_ACHIEVEMENTS_COUNT = 5
 _TOP_ACHIEVEMENTS = 9
-_7X7_AVAILABLE_RANGE = range(6, 9)
-_FALLOUT_AVAILABLE_RANGE = range(8, constants.MAX_VEHICLE_LEVEL + 1)
-_RANKED_AVAILABLE_RANGE = (constants.MAX_VEHICLE_LEVEL,)
+_7X7_AVAILABLE_RANGE = (6, 7, 8)
+_FALLOUT_AVAILABLE_RANGE = (8, 9, 10)
 
 def _nearestComparator(x, y):
     if x.getLevelUpValue() == 1 or y.getLevelUpValue() == 1:
@@ -2098,13 +2098,12 @@ class VehRanked10x10StatsBlock(VehRankedStatsBlock):
 
 
 class AccountPrestigeStatsBlock(_VehiclesStatsBlock):
-    _PrestigeVehiclesDossiersCut = namedtuple('PrestigeVehiclesDossiersCut', ['currentLevel', 'remainingPoints'])
 
     def _getVehDossiersCut(self, dossier):
         return dossier.getDossierDescr()[VEHICLE_STATS.PRESTIGE_SYSTEM]
 
     def _packVehicle(self, currentLevel=0, remainingPoints=0):
-        return self._PrestigeVehiclesDossiersCut(currentLevel, remainingPoints)
+        return PrestigeVehiclesDossiersCut(currentLevel, remainingPoints)
 
 
 class AccountSTVehStatsBlock(_VehiclesStatsBlock):

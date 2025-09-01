@@ -55,7 +55,6 @@ class OptionalDevicesAssistantView(BaseSubModelView):
     def __init__(self, viewModel, queueType):
         super(OptionalDevicesAssistantView, self).__init__(viewModel)
         self._queueType = queueType
-        self.viewModel.setIsHintShown(AccountSettings.getSettings(OptionalDevicesAssistant.HINT_SHOWN))
 
     @property
     def viewModel(self):
@@ -65,13 +64,8 @@ class OptionalDevicesAssistantView(BaseSubModelView):
         super(OptionalDevicesAssistantView, self).onLoading(*args, **kwargs)
         self._fillModel()
 
-    def updateVehicle(self, _):
+    def updateVehicle(self, _=None):
         self._fillModel()
-
-    def __onHintShown(self, _):
-        if not AccountSettings.getSettings(OptionalDevicesAssistant.HINT_SHOWN):
-            AccountSettings.setSettings(OptionalDevicesAssistant.HINT_SHOWN, True)
-            self.viewModel.setIsHintShown(True)
 
     @args2params(int)
     def __onPresetSelected(self, presetType):
@@ -107,15 +101,16 @@ class OptionalDevicesAssistantView(BaseSubModelView):
     def showNoDataState(self):
         self.viewModel.setState(OptionalDevicesAssistantStateEnum.NODATAATALL)
 
+    def showHiddenState(self):
+        self.viewModel.setState(OptionalDevicesAssistantStateEnum.HIDDEN)
+
     def _addListeners(self):
         super(OptionalDevicesAssistantView, self)._addListeners()
-        self.viewModel.onHintShown += self.__onHintShown
         self.viewModel.onPresetSelected += self.__onPresetSelected
         g_eventBus.addListener(OptionalDevicesAssistantCtrl.OPT_DEVICE_ASSIST_DATA_CHANGED, self.__onDataChanged, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _removeListeners(self):
         super(OptionalDevicesAssistantView, self)._removeListeners()
-        self.viewModel.onHintShown -= self.__onHintShown
         self.viewModel.onPresetSelected -= self.__onPresetSelected
         g_eventBus.removeListener(OptionalDevicesAssistantCtrl.OPT_DEVICE_ASSIST_DATA_CHANGED, self.__onDataChanged, scope=EVENT_BUS_SCOPE.LOBBY)
 

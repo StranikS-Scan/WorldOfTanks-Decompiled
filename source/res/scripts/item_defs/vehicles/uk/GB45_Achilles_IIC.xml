@@ -1263,11 +1263,10 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	7000	</weight>
-      <maxLoad>	29820	</maxLoad>
-      <terrainResistance>	1.1 1.3 2	</terrainResistance>
+      <terrainResistance>	0.9 1.1 1.8	</terrainResistance>
       <brakeForce>	30000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	32	</rotationSpeed>
+      <rotationSpeed>	40	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.25	</vehicleMovement>
         <vehicleRotation>	0.25	</vehicleRotation>
@@ -2427,11 +2426,10 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	7000	</weight>
-      <maxLoad>	32500	</maxLoad>
       <terrainResistance>	0.9 1.1 1.8	</terrainResistance>
       <brakeForce>	33000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	34	</rotationSpeed>
+      <rotationSpeed>	42	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.22	</vehicleMovement>
         <vehicleRotation>	0.24	</vehicleRotation>
@@ -3588,6 +3586,10 @@
       <tags>	cannotDetach	</tags>
       <level>	5	</level>
       <price>	9000	</price>
+      <unlocks>
+        <turret>	Turret_2_GB45_Achilles_IIC	  <cost>	4600	</cost>
+        </turret>
+      </unlocks>
       <armor>
         <armor_1>	19.1	</armor_1>
         <armor_2>	0	</armor_2>
@@ -3619,117 +3621,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_76mm_AT_Gun_M7_L50>	shared	  <maxAmmo>	54	</maxAmmo>
-          <unlocks>
-            <gun>	_17pdr_OQF_AT_Mk_V	  <cost>	5700	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	57.2	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	25.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_4>	25.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <gun>	20	</gun>
-          </armor>
-          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <pitchLimits>
-            <minPitch>	0 -30 1 -30	</minPitch>
-            <maxPitch>	0 10 0.430556 10 0.444444 9 0.555556 9 0.569445 10 1 10	</maxPitch>
-          </pitchLimits>
-          <shotDispersionRadius>	0.33	</shotDispersionRadius>
-          <reloadTime>	3.2	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2.5	</aimingTime>
-          <models>
-            <undamaged>	vehicles/british/GB45_Achilles_IIC/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/british/GB45_Achilles_IIC/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/british/GB45_Achilles_IIC/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/british/GB45_Achilles_IIC/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB45_Achilles_IIC/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <shotOffset>	0.000000 0.000000 -0.656849	</shotOffset>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000007 -0.008541 1.45272	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.234886 0.234886	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000007 -0.008541 1.45272	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.000046 2.45495 1.28187	</position>
-              <rotation>	0.696484 -0.000015 3.14157	</rotation>
-              <scale>	0.9107 0.395963 0.910701	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	1.06227	</clipAngle>
-              <anchorShift>	-0.110061	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x3	</tags>
-              <position>	0.000044 2.35237 1.12544	</position>
-              <rotation>	0.696484 -0.000015 3.14157	</rotation>
-              <scale>	1.05785 0.2 1.05786	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	1.06227	</clipAngle>
-              <anchorShift>	0.065614	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.000014 -0.017082 1.88991	</rayStart>
-              <rayEnd>	-0.000014 -0.017082 2.16891	</rayEnd>
-              <rayUp>	0.073 0 0	</rayUp>
-              <size>	0.279	</size>
-              <hideIfDamaged>	true	</hideIfDamaged>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <density>	99.5798 98.1536	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_76mm_AT_Gun_M7_L50>
         <_17pdr_OQF_AT_Mk_V>	shared	  <maxAmmo>	50	</maxAmmo>
-          <unlocks>
-            <turret>	Turret_2_GB45_Achilles_IIC	  <cost>	4600	</cost>
-            </turret>
-          </unlocks>
           <armor>
             <armor_1>	57.2	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3747,13 +3639,14 @@
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
-          <reloadTime>	4.9	</reloadTime>
+          <reloadTime>	4.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.16	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.1	</aimingTime>
+          <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
             <undamaged>	vehicles/british/GB45_Achilles_IIC/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/british/GB45_Achilles_IIC/crash/lod0/Gun_03.model	</destroyed>
@@ -4267,10 +4160,8 @@
       <level>	6	</level>
       <price>	16100	</price>
       <unlocks>
-        <gun>	_17pdr_OQF_AT_1	  <cost>	15000	</cost>
+        <gun>	OQF_17_pdr_AT_Gun_Mk_VII_IIC	  <cost>	15000	</cost>
         </gun>
-        <vehicle>	GB41_Challenger	  <cost>	59100	</cost>
-        </vehicle>
       </unlocks>
       <armor>
         <armor_1>	19.1	</armor_1>
@@ -4305,108 +4196,6 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_76mm_AT_Gun_M7_L50>	shared	  <maxAmmo>	54	</maxAmmo>
-          <armor>
-            <armor_1>	57.2	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	25.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_4>	25.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <gun>	20	</gun>
-          </armor>
-          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <pitchLimits>
-            <minPitch>	0 -30 1 -30	</minPitch>
-            <maxPitch>	0 10 0.430556 10 0.444444 9 0.555556 9 0.569445 10 1 10	</maxPitch>
-          </pitchLimits>
-          <shotDispersionRadius>	0.33	</shotDispersionRadius>
-          <reloadTime>	3.2	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
-          <models>
-            <undamaged>	vehicles/british/GB45_Achilles_IIC/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/british/GB45_Achilles_IIC/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/british/GB45_Achilles_IIC/crash/lod0/Gun_02.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/british/GB45_Achilles_IIC/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB45_Achilles_IIC/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.000007 -0.008502 1.45272	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.234886 0.234886	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.000007 -0.008502 1.45272	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.000046 2.45495 1.28187	</position>
-              <rotation>	0.696484 -0.000015 3.14157	</rotation>
-              <scale>	0.9107 0.395963 0.910701	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	1.06227	</clipAngle>
-              <anchorShift>	-0.110253	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x3	</tags>
-              <position>	0.000044 2.35237 1.12544	</position>
-              <rotation>	0.696484 -0.000015 3.14157	</rotation>
-              <scale>	1.05785 0.2 1.05786	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	1.06227	</clipAngle>
-              <anchorShift>	0.065422	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.000014 -0.017003 2.11307	</rayStart>
-              <rayEnd>	0.000014 -0.017003 2.39307	</rayEnd>
-              <rayUp>	0.071 0 0	</rayUp>
-              <size>	0.28	</size>
-              <hideIfDamaged>	true	</hideIfDamaged>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <shotOffset>	0.004501 -0.000010 -0.644549	</shotOffset>
-          <camouflage>
-            <density>	99.5798 98.1536	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_76mm_AT_Gun_M7_L50>
         <_17pdr_OQF_AT_Mk_V>	shared	  <maxAmmo>	50	</maxAmmo>
           <armor>
             <armor_1>	57.2	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -4425,13 +4214,14 @@
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
-          <reloadTime>	4.8	</reloadTime>
+          <reloadTime>	4.4	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.1	</aimingTime>
+          <aimingTime>	1.9	</aimingTime>
+          <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
             <undamaged>	vehicles/british/GB45_Achilles_IIC/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/british/GB45_Achilles_IIC/crash/lod0/Gun_03.model	</destroyed>
@@ -4509,7 +4299,11 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_17pdr_OQF_AT_Mk_V>
-        <_17pdr_OQF_AT_1>	shared	  <maxAmmo>	60	</maxAmmo>
+        <OQF_17_pdr_AT_Gun_Mk_VII_IIC>	shared	  <maxAmmo>	60	</maxAmmo>
+          <unlocks>
+            <vehicle>	GB41_Challenger	  <cost>	59100	</cost>
+            </vehicle>
+          </unlocks>
           <armor>
             <armor_1>	57.2	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -4527,8 +4321,14 @@
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.32	</shotDispersionRadius>
-          <reloadTime>	4.4	</reloadTime>
-          <aimingTime>	1.9	</aimingTime>
+          <reloadTime>	4.2	</reloadTime>
+          <aimingTime>	1.7	</aimingTime>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <shotDispersionFactors>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+            <afterShot>	3	</afterShot>
+            <turretRotation>	0.12	</turretRotation>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/british/GB45_Achilles_IIC/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/british/GB45_Achilles_IIC/crash/lod0/Gun_03.model	</destroyed>
@@ -4605,7 +4405,7 @@
             <density>	103.629 104.932	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_17pdr_OQF_AT_1>
+        </OQF_17_pdr_AT_Gun_Mk_VII_IIC>
       </guns>
       <models>
         <undamaged>	vehicles/british/GB45_Achilles_IIC/normal/lod0/Turret_02.model	</undamaged>
@@ -4958,52 +4758,42 @@
     </Turret_2_GB45_Achilles_IIC>
   </turrets0>
   <engines>
-    <GMC_6046>	shared	  <unlocks>
-        <engine>	Ford_GAA	  <cost>	1400	</cost>
+    <General_Motors_6046_IIC>	shared	  <unlocks>
+        <engine>	Ford_GAA_IIC	  <cost>	1400	</cost>
         </engine>
       </unlocks>
-    </GMC_6046>
-    <Ford_GAA>	shared	</Ford_GAA>
+    </General_Motors_6046_IIC>
+    <Ford_GAA_IIC>	shared	</Ford_GAA_IIC>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <N19Mk1>	shared	  <unlocks>
-        <radio>	N19Mk2	  <cost>	3600	</cost>
-        </radio>
-      </unlocks>
-    </N19Mk1>
-    <N19Mk2>	shared	  <unlocks>
-        <radio>	N19Mk3	  <cost>	4000	</cost>
-        </radio>
-      </unlocks>
-    </N19Mk2>
     <N19Mk3>	shared	</N19Mk3>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <GMC_6046>
-          <smplEnginePower>	433.4853	</smplEnginePower>
+        <General_Motors_6046_IIC>
+          <smplEnginePower>	510	</smplEnginePower>
           <smplFwMaxSpeed>	48	</smplFwMaxSpeed>
-        </GMC_6046>
-        <Ford_GAA>
-          <smplEnginePower>	528.6406	</smplEnginePower>
+        </General_Motors_6046_IIC>
+        <Ford_GAA_IIC>
+          <smplEnginePower>	550	</smplEnginePower>
           <smplFwMaxSpeed>	48	</smplFwMaxSpeed>
-        </Ford_GAA>
+        </Ford_GAA_IIC>
       </engines>
       <chassis>
         <Chassis_GB45_Achilles_IIC>
           <grounds>
             <soft>
-              <rollingFriction>	0.161	</rollingFriction>
+              <rollingFriction>	0.1449	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
+              <rollingFriction>	0.07245	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_GB45_Achilles_IIC>

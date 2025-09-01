@@ -1,14 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_compare/cmp_configurator_view.py
+from __future__ import absolute_import
 from copy import deepcopy
 import typing
+from future.utils import itervalues, iteritems
 from adisp import adisp_process
 from debug_utils import LOG_WARNING, LOG_DEBUG, LOG_ERROR
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.shared.fitting_select_popover import FITTING_MODULES
 from gui.Scaleform.daapi.view.lobby.shared.fitting_slot_vo import FittingSlotVO
-from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers, VehicleCompareConfiguratorSkillsInject
+from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_configurator_base import VehicleCompareConfiguratorBaseView
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_configurator_parameters import VehicleCompareParameters
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_configurator_vehicle import g_cmpConfiguratorVehicle
@@ -36,6 +38,8 @@ from skeletons.gui.game_control import IVehicleComparisonBasket
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 from gui.impl.lobby.crew.crew_sounds import CREW_SOUND_OVERLAY_SPACE
+if typing.TYPE_CHECKING:
+    from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_configurator_skills_inject import VehicleCompareConfiguratorSkillsInject
 VEHICLE_FITTING_SLOTS = FITTING_MODULES
 _EMPTY_ID = -1
 
@@ -85,11 +89,6 @@ class _CmpOptDeviceRemover(ModuleProcessor):
         else:
             callback(self._errorHandler(0, reason))
 
-    def _errorHandler(self, code, errStr='', ctx=None):
-        if errStr == 'too heavy':
-            errStr = 'error_too_heavy'
-        return super(_CmpOptDeviceRemover, self)._errorHandler(code, errStr, ctx)
-
     def _getMsgCtx(self):
         return {'name': self.item.userName,
          'kind': self.item.userType,
@@ -119,7 +118,7 @@ class CrewSkillsManager(object):
 
     def updateSkills(self, skillsByTankman):
         tankmenToUpdate = {}
-        for idx, (role, skills) in self.__selectedSkills.iteritems():
+        for idx, (role, skills) in iteritems(self.__selectedSkills):
             _, newSkills = skillsByTankman.get(idx, (None, []))
             if skills != newSkills:
                 tankmenToUpdate[idx] = (role, list(newSkills))
@@ -177,7 +176,7 @@ class CrewSkillsManager(object):
         nationID, vehicleTypeID = vehicle.descriptor.type.id
         vehCrew = vehicle.crew
         skillsByIdx, bonusSkillsByIdx, bonusSkillNamesMaxLvl = cmp_helpers.splitSkills(tankmenToUpdate)
-        for slotIdx, (role, _) in tankmenToUpdate.iteritems():
+        for slotIdx, (role, _) in iteritems(tankmenToUpdate):
             listIdx, tman = vehicle.getTankmanBySlotIdx(slotIdx)
             if tman:
                 vehCrew[listIdx] = (slotIdx, cmp_helpers.createTankman(nationID, vehicleTypeID, role, tman.roleLevel, skillsByIdx.get(slotIdx, []), vehicle, slotIdx, bonusSkillsByIdx.get(slotIdx, {}), bonusSkillNamesMaxLvl))
@@ -200,7 +199,7 @@ class VehicleCompareConfiguratorView(VehicleCompareConfiguratorViewMeta):
         return
 
     def onCloseView(self):
-        self._container.closeView()
+        self._container.destroy()
 
     def onCamouflageUpdated(self):
         self.__ammoInject.updateCamouflage()
@@ -595,6 +594,7 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
 
     def installPostProgression(self, state):
         self.__installPostProgression(state)
+        vehicle_adjusters.changeShell(self.__vehicle, self.__selectedShellIndex)
         self.__recalculateCrewBonuses()
         self.__notifyViews('onPostProgressionUpdated')
 
@@ -606,6 +606,7 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
 
     def removePostProgression(self):
         self.__installPostProgression(VehicleState())
+        vehicle_adjusters.changeShell(self.__vehicle, self.__selectedShellIndex)
         self.__recalculateCrewBonuses()
         self.__notifyViews('onPostProgressionUpdated')
 
@@ -753,7 +754,8 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
 
     def __onBasketStateChanged(self):
         if not self.comparisonBasket.isEnabled():
-            self.closeView(VIEW_ALIAS.LOBBY_HANGAR)
+            from gui.shared.event_dispatcher import showHangar
+            showHangar()
 
     def __onBasketParametersChanged(self, data):
         if self.__vehIndex not in data:
@@ -764,7 +766,7 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
         if self.__views is None:
             return
         else:
-            for component in self.__views.itervalues():
+            for component in itervalues(self.__views):
                 notifier = getattr(component, event, None)
                 if notifier and callable(notifier):
                     notifier(*args, **kwargs)

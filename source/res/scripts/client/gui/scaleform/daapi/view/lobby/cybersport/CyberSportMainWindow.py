@@ -31,7 +31,7 @@ from skeletons.gui.shared import IItemsCache
 class CyberSportMainWindow(CyberSportMainWindowMeta):
     lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self, _=None):
+    def __init__(self, **kwargs):
         super(CyberSportMainWindow, self).__init__()
         self.__currentState = ''
         selectorUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.UNIT)

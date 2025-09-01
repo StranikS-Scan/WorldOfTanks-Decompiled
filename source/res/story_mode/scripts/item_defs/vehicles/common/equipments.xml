@@ -8,7 +8,7 @@
     <icon>	smokeSignal	</icon>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <tags>	notForSale avatar trigger permanentGlow hasNoBack	</tags>
+    <tags>	notForSale avatar trigger	</tags>
     <script>	AreaOfEffectEquipment	  <clientSelector>	story_mode.avatar_input_handler.map_case_mode.StrikeSelector	</clientSelector>
       <shortDescription>	#story_mode.artefacts.extend:battleship/shortDescr	</shortDescription>
       <longDescription>	#story_mode.artefacts.extend:battleship/shortDescr	</longDescription>
@@ -91,7 +91,7 @@
     <icon>	smokeSignal	</icon>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <tags>	notForSale avatar trigger permanentGlow hasNoBack	</tags>
+    <tags>	notForSale avatar trigger	</tags>
     <script>	AreaOfEffectEquipment	  <clientSelector>	story_mode.avatar_input_handler.map_case_mode.StrikeSelector	</clientSelector>
       <shortDescription>	#story_mode.artefacts.extend:battleship/shortDescr	</shortDescription>
       <longDescription>	#story_mode.artefacts.extend:battleship/shortDescr	</longDescription>
@@ -174,7 +174,7 @@
     <icon>	smokeSignal	</icon>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <tags>	notForSale avatar trigger permanentGlow hasNoBack	</tags>
+    <tags>	notForSale avatar trigger	</tags>
     <script>	AreaOfEffectEquipment	  <clientSelector>	story_mode.avatar_input_handler.map_case_mode.StrikeSelector	</clientSelector>
       <shortDescription>	#story_mode.artefacts.extend:battleship/shortDescr	</shortDescription>
       <longDescription>	#story_mode.artefacts.extend:battleship/shortDescr	</longDescription>
@@ -257,7 +257,7 @@
     <icon>	smokeSignal	</icon>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <tags>	notForSale avatar trigger permanentGlow hasNoBack	</tags>
+    <tags>	notForSale avatar trigger	</tags>
     <script>	AreaOfEffectEquipment	  <clientSelector>	story_mode.avatar_input_handler.map_case_mode.StrikeSelector	</clientSelector>
       <shortDescription>	#story_mode.artefacts.extend:battleship/shortDescr	</shortDescription>
       <longDescription>	#story_mode.artefacts.extend:battleship/longDescr	</longDescription>
@@ -340,7 +340,7 @@
     <icon>	smokeSignal	</icon>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <tags>	notForSale avatar trigger permanentGlow hasNoBack	</tags>
+    <tags>	notForSale avatar trigger	</tags>
     <script>	AreaOfEffectEquipment	  <clientSelector>	story_mode.avatar_input_handler.map_case_mode.StrikeSelector	</clientSelector>
       <shortDescription>	#story_mode.artefacts.extend:battleship/shortDescr	</shortDescription>
       <longDescription>	#story_mode.artefacts.extend:battleship/longDescr	</longDescription>
@@ -424,7 +424,7 @@
     <icon>	smokeSignal	</icon>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <tags>	notForSale avatar trigger permanentGlow hasNoBack	</tags>
+    <tags>	notForSale avatar trigger	</tags>
     <script>	AreaOfEffectEquipment	  <clientSelector>	story_mode.avatar_input_handler.map_case_mode.StrikeSelector	</clientSelector>
       <shortDescription>	#story_mode.artefacts.extend:battleship/shortDescr	</shortDescription>
       <longDescription>	#story_mode.artefacts.extend:battleship/longDescr	</longDescription>
@@ -794,7 +794,7 @@
         <areaSwitch>	content/Interface/TargetPoint/circle_dot_cross.visual	</areaSwitch>
         <areaColor>	0xFFFF0000	</areaColor>
       </arenaAimLimits>
-      <delay>	2.5	</delay>
+      <delay>	2.6	</delay>
       <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
       <duration>	3.0	</duration>
       <shotsNumber>	3	</shotsNumber>
@@ -868,7 +868,7 @@
         <areaSwitch>	content/Interface/TargetPoint/circle_dot_cross.visual	</areaSwitch>
         <areaColor>	0xFFFF0000	</areaColor>
       </arenaAimLimits>
-      <delay>	2.5	</delay>
+      <delay>	2.6	</delay>
       <duration>	3.0	</duration>
       <shotsNumber>	3	</shotsNumber>
       <explodeDestructible>	false	</explodeDestructible>
@@ -1077,7 +1077,7 @@
     <icon>	recon_ability	</icon>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <tags>	notForSale avatar trigger permanentGlow hasNoBack	</tags>
+    <tags>	notForSale avatar trigger	</tags>
     <script>	story_mode_common.items.sm_artefacts.ReconAbilityEquipment	  <clientSelector>	story_mode.avatar_input_handler.map_case_mode.ReconAbilitySelector	</clientSelector>
       <shortDescription>	#story_mode.artefacts.extend:recon_ability/shortDescr	</shortDescription>
       <longDescription>	#story_mode.artefacts.extend:recon_ability/shortDescr	</longDescription>
@@ -1120,7 +1120,7 @@
     <icon>	distraction_ability	</icon>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <tags>	notForSale avatar trigger permanentGlow hasNoBack	</tags>
+    <tags>	notForSale avatar trigger	</tags>
     <script>	story_mode_common.items.sm_artefacts.DistractionAbilityEquipment	  <clientSelector>	story_mode.avatar_input_handler.map_case_mode.DistractionAbilitySelector	</clientSelector>
       <shortDescription>	#story_mode.artefacts.extend:distraction_ability/shortDescr	</shortDescription>
       <longDescription>	#story_mode.artefacts.extend:distraction_ability/shortDescr	</longDescription>
@@ -1159,4 +1159,390 @@
       <detectSequence>	particles/eff_sequence/vdsm25/ability_false_target.seq	</detectSequence>
     </script>
   </smn_distraction_ability>
+  <sm_scc_airstrike>
+    <id>	14051	</id>
+    <type>	battleAbilities	</type>
+    <playerMessagesKey>	SCC_AIRSTRIKE_ABILITY	</playerMessagesKey>
+    <messagePostfix>	ARCADE	</messagePostfix>
+    <userString>	#story_mode.artefacts.extend:scc_airstrike_ability/name	</userString>
+    <description>	#story_mode.artefacts.extend:scc_airstrike_ability/shortDescr	</description>
+    <icon>	sm_scc_airstrike_ability	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <script>	story_mode_common.items.sm_artefacts.AOENavmeshEquipment	  <clientSelector>	story_mode.avatar_input_handler.map_case_mode.NavMeshCheckingSelector	</clientSelector>
+      <shortDescription>	#story_mode.artefacts.extend:scc_airstrike_ability/shortDescr	</shortDescription>
+      <longDescription>	#story_mode.artefacts.extend:scc_airstrike_ability/shortDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <reuseCount>	-1	</reuseCount>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTime>	40	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <prepareTime>	10	</prepareTime>
+      <minApplyRadius>	0	</minApplyRadius>
+      <maxApplyRadius>	225	</maxApplyRadius>
+      <applyRadiusVisible>	true	</applyRadiusVisible>
+      <navmeshGirth>	SCC_Ability	</navmeshGirth>
+      <navmeshHeightTolerance>	50.0	</navmeshHeightTolerance>
+      <markers>
+        <ally>
+          <name>	bomber	</name>
+          <textColor>	green	</textColor>
+        </ally>
+      </markers>
+      <arenaAimLimits>
+        <insetRadius>	5	</insetRadius>
+        <areaSwitch>	content/Interface/TargetPoint/circle_dot_cross_2.visual	</areaSwitch>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	3.45	</delay>
+      <duration>	5.0	</duration>
+      <lifetime>	5.0	</lifetime>
+      <areaVisual>	content/Interface/TargetPoint/circle_dot_cross_2.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Storymode/shot_area_air_strike.prefab	</areaUsedPrefab>
+      <areaColor>	0xFF00FD00	</areaColor>
+      <areaShow>	before	</areaShow>
+      <attackerType>	BOMBER_EQ	</attackerType>
+      <noOwner>	false	</noOwner>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	12	</areaRadius>
+      <shotsNumber>	1	</shotsNumber>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <effects>
+        <start>
+          <sequences>
+            <sequence>
+              <name>	particles/eff_sequence/Storymode/ability_airstrike_bomb.seq	</name>
+            </sequence>
+          </sequences>
+        </start>
+        <action>
+          <shotEffects>	storymodeAirbombStrike	</shotEffects>
+          <offsetDeviation>	3.45	</offsetDeviation>
+          <repeatCount>	1	</repeatCount>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	enemy_team	</applyTo>
+          <args>
+            <damage>	800	</damage>
+          </args>
+        </action>
+        <action>
+          <type>	actions.destructible.DamageDestructibleEntity	</type>
+          <args>
+            <damage>	4000	</damage>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </sm_scc_airstrike>
+  <sm_scc_airstrike_hard>
+    <id>	14052	</id>
+    <type>	battleAbilities	</type>
+    <playerMessagesKey>	SCC_AIRSTRIKE_ABILITY	</playerMessagesKey>
+    <messagePostfix>	ARCADE	</messagePostfix>
+    <userString>	#story_mode.artefacts.extend:scc_airstrike_ability/name	</userString>
+    <description>	#story_mode.artefacts.extend:scc_airstrike_ability/shortDescr	</description>
+    <icon>	sm_scc_airstrike_ability	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <script>	story_mode_common.items.sm_artefacts.AOENavmeshEquipment	  <clientSelector>	story_mode.avatar_input_handler.map_case_mode.NavMeshCheckingSelector	</clientSelector>
+      <shortDescription>	#story_mode.artefacts.extend:scc_airstrike_ability/shortDescr	</shortDescription>
+      <longDescription>	#story_mode.artefacts.extend:scc_airstrike_ability/shortDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <reuseCount>	-1	</reuseCount>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTime>	45	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <prepareTime>	10	</prepareTime>
+      <minApplyRadius>	0	</minApplyRadius>
+      <maxApplyRadius>	225	</maxApplyRadius>
+      <applyRadiusVisible>	true	</applyRadiusVisible>
+      <navmeshGirth>	SCC_Ability	</navmeshGirth>
+      <navmeshHeightTolerance>	50.0	</navmeshHeightTolerance>
+      <markers>
+        <ally>
+          <name>	bomber	</name>
+          <textColor>	green	</textColor>
+        </ally>
+      </markers>
+      <arenaAimLimits>
+        <insetRadius>	5	</insetRadius>
+        <areaSwitch>	content/Interface/TargetPoint/circle_dot_cross_2.visual	</areaSwitch>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <delay>	3.45	</delay>
+      <duration>	5.0	</duration>
+      <lifetime>	5.0	</lifetime>
+      <areaVisual>	content/Interface/TargetPoint/circle_dot_cross_2.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Storymode/shot_area_air_strike.prefab	</areaUsedPrefab>
+      <areaColor>	0xFF00FD00	</areaColor>
+      <areaShow>	before	</areaShow>
+      <attackerType>	BOMBER_EQ	</attackerType>
+      <noOwner>	false	</noOwner>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	12	</areaRadius>
+      <shotsNumber>	1	</shotsNumber>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <effects>
+        <start>
+          <sequences>
+            <sequence>
+              <name>	particles/eff_sequence/Storymode/ability_airstrike_bomb.seq	</name>
+            </sequence>
+          </sequences>
+        </start>
+        <action>
+          <shotEffects>	storymodeAirbombStrike	</shotEffects>
+          <offsetDeviation>	3.45	</offsetDeviation>
+          <repeatCount>	1	</repeatCount>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	enemy_team	</applyTo>
+          <args>
+            <damage>	700	</damage>
+          </args>
+        </action>
+        <action>
+          <type>	actions.destructible.DamageDestructibleEntity	</type>
+          <args>
+            <damage>	4000	</damage>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </sm_scc_airstrike_hard>
+  <artillery_spgzone_aoe_sm_scc>
+    <id>	14053	</id>
+    <userString>	#artefacts:artillery/name	</userString>
+    <description>	#artefacts:artillery/descr	</description>
+    <icon>	artillery	</icon>
+    <price>	0	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	story_mode_common.items.sm_artefacts.SPGZoneEquipment	  <shortDescription>	#artefacts:artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <cooldownTime>	5	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <delay>	6	</delay>
+      <duration>	3.5	</duration>
+      <shotsNumber>	12	</shotsNumber>
+      <minApplyRadius>	25	</minApplyRadius>
+      <maxApplyRadius>	500	</maxApplyRadius>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	18	</areaRadius>
+      <yawHitPrediction>	19	</yawHitPrediction>
+      <hitPredictionDuration>	2	</hitPredictionDuration>
+      <areaVisual>	content/Interface/TargetPoint/circle_fire_ring_outer.visual	</areaVisual>
+      <areaColor>	0xFFAA0000	</areaColor>
+      <areaColorBlind>	0xFF887EFF	</areaColorBlind>
+      <areaShow>	before	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <effects>
+        <action>
+          <shotEffects>	storymodeAirbombStrike	</shotEffects>
+          <offsetDeviation>	0	</offsetDeviation>
+          <repeatCount>	1	</repeatCount>
+          <repeatDelay>	0.3	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	enemy_team	</applyTo>
+          <args>
+            <damage>	210	</damage>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_spgzone_aoe_sm_scc>
+  <artillery_spgzone_aoe_sm_scc_hard>
+    <id>	14054	</id>
+    <userString>	#artefacts:artillery/name	</userString>
+    <description>	#artefacts:artillery/descr	</description>
+    <icon>	artillery	</icon>
+    <price>	0	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	story_mode_common.items.sm_artefacts.SPGZoneEquipment	  <shortDescription>	#artefacts:artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <cooldownTime>	5	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <delay>	6	</delay>
+      <duration>	3.5	</duration>
+      <shotsNumber>	15	</shotsNumber>
+      <minApplyRadius>	25	</minApplyRadius>
+      <maxApplyRadius>	500	</maxApplyRadius>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	20	</areaRadius>
+      <yawHitPrediction>	19	</yawHitPrediction>
+      <hitPredictionDuration>	2	</hitPredictionDuration>
+      <areaVisual>	content/Interface/TargetPoint/circle_fire_ring_outer.visual	</areaVisual>
+      <areaColor>	0xFFAA0000	</areaColor>
+      <areaColorBlind>	0xFF887EFF	</areaColorBlind>
+      <areaShow>	before	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <effects>
+        <action>
+          <shotEffects>	storymodeAirbombStrike	</shotEffects>
+          <offsetDeviation>	0	</offsetDeviation>
+          <repeatCount>	1	</repeatCount>
+          <repeatDelay>	0.3	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	enemy_team	</applyTo>
+          <args>
+            <damage>	240	</damage>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_spgzone_aoe_sm_scc_hard>
+  <artillery_spgzone_aoe_sm_scc_2>
+    <id>	14055	</id>
+    <userString>	#artefacts:artillery/name	</userString>
+    <description>	#artefacts:artillery/descr	</description>
+    <icon>	artillery	</icon>
+    <price>	0	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	story_mode_common.items.sm_artefacts.SPGZoneEquipment	  <shortDescription>	#artefacts:artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <cooldownTime>	5	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <delay>	6	</delay>
+      <duration>	3.5	</duration>
+      <shotsNumber>	12	</shotsNumber>
+      <minApplyRadius>	25	</minApplyRadius>
+      <maxApplyRadius>	500	</maxApplyRadius>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	18	</areaRadius>
+      <yawHitPrediction>	320	</yawHitPrediction>
+      <hitPredictionDuration>	2	</hitPredictionDuration>
+      <areaVisual>	content/Interface/TargetPoint/circle_fire_ring_outer.visual	</areaVisual>
+      <areaColor>	0xFFAA0000	</areaColor>
+      <areaColorBlind>	0xFF887EFF	</areaColorBlind>
+      <areaShow>	before	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <effects>
+        <action>
+          <shotEffects>	storymodeAirbombStrike	</shotEffects>
+          <offsetDeviation>	0	</offsetDeviation>
+          <repeatCount>	1	</repeatCount>
+          <repeatDelay>	0.3	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	enemy_team	</applyTo>
+          <args>
+            <damage>	210	</damage>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_spgzone_aoe_sm_scc_2>
+  <artillery_spgzone_aoe_sm_scc_hard_2>
+    <id>	14056	</id>
+    <userString>	#artefacts:artillery/name	</userString>
+    <description>	#artefacts:artillery/descr	</description>
+    <icon>	artillery	</icon>
+    <price>	0	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <script>	story_mode_common.items.sm_artefacts.SPGZoneEquipment	  <shortDescription>	#artefacts:artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <cooldownTime>	5	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <delay>	6	</delay>
+      <duration>	3.5	</duration>
+      <shotsNumber>	15	</shotsNumber>
+      <minApplyRadius>	25	</minApplyRadius>
+      <maxApplyRadius>	500	</maxApplyRadius>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	20	</areaRadius>
+      <yawHitPrediction>	320	</yawHitPrediction>
+      <hitPredictionDuration>	2	</hitPredictionDuration>
+      <areaVisual>	content/Interface/TargetPoint/circle_fire_ring_outer.visual	</areaVisual>
+      <areaColor>	0xFFAA0000	</areaColor>
+      <areaColorBlind>	0xFF887EFF	</areaColorBlind>
+      <areaShow>	before	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	ARTILLERY_EQ	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <effects>
+        <action>
+          <shotEffects>	storymodeAirbombStrike	</shotEffects>
+          <offsetDeviation>	0	</offsetDeviation>
+          <repeatCount>	1	</repeatCount>
+          <repeatDelay>	0.3	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	enemy_team	</applyTo>
+          <args>
+            <damage>	240	</damage>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_spgzone_aoe_sm_scc_hard_2>
 </equipments.xml>

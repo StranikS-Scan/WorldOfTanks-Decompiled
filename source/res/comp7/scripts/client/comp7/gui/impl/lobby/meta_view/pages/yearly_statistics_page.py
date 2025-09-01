@@ -3,14 +3,17 @@
 from shared_utils import findFirst
 from comp7.gui.impl.gen.view_models.views.lobby.constants import Constants
 from comp7.gui.impl.gen.view_models.views.lobby.enums import MetaRootViews
+from comp7.gui.impl.gen.view_models.views.lobby.enums import SeasonName
 from comp7.gui.impl.gen.view_models.views.lobby.meta_view.pages.yearly_statistics_model import YearlyStatisticsModel
 from comp7.gui.impl.gen.view_models.views.lobby.meta_view.pages.yearly_statistics_season_model import YearlyStatisticsSeasonModel
+from comp7.gui.impl.gen.view_models.views.lobby.season_model import SeasonState
 from comp7.gui.impl.lobby.comp7_helpers import comp7_shared
-from comp7.gui.impl.lobby.comp7_helpers.comp7_model_helpers import setSeasonInfo, SEASONS_NUMBERS_BY_NAME
+from comp7.gui.impl.lobby.comp7_helpers.comp7_model_helpers import SEASONS_NUMBERS_BY_NAME
 from comp7.gui.impl.lobby.meta_view.pages import PageSubModelPresenter
 from comp7.gui.shared.event_dispatcher import showComp7SeasonStatisticsScreen
 from comp7.gui.shared.gui_items.dossier.stats import getComp7DossierStats
 from comp7_common_const import seasonPointsCodeBySeasonNumber
+from comp7_core.gui.impl.lobby.comp7_core_helpers.comp7_core_model_helpers import setSeasonInfo
 from gui.ClientUpdateManager import g_clientUpdateManager
 from helpers import dependency, time_utils
 from skeletons.gui.game_control import IComp7Controller
@@ -29,8 +32,8 @@ class YearlyStatisticsPage(PageSubModelPresenter):
     def viewModel(self):
         return super(YearlyStatisticsPage, self).getViewModel()
 
-    def initialize(self, *args, **kwargs):
-        super(YearlyStatisticsPage, self).initialize(*args, **kwargs)
+    def initialize(self, **params):
+        super(YearlyStatisticsPage, self).initialize(**params)
         with self.viewModel.transaction() as tx:
             seasonCards = tx.getSeasonCards()
             seasonCards.clear()
@@ -49,7 +52,7 @@ class YearlyStatisticsPage(PageSubModelPresenter):
     def _getEvents(self):
         return ((self.viewModel.onGoToSeasonStatistics, self.__onGoToSeasonStatistics),
          (self.__comp7Controller.onRankUpdated, self.__onRatingUpdated),
-         (self.__comp7Controller.onComp7ConfigChanged, self.__updateSeasonModels),
+         (self.__comp7Controller.onModeConfigChanged, self.__updateSeasonModels),
          (self.__comp7Controller.onStatusUpdated, self.__updateSeasonModels),
          (self.__comp7Controller.onEntitlementsUpdated, self.__updateSeasonModels))
 
@@ -72,7 +75,7 @@ class YearlyStatisticsPage(PageSubModelPresenter):
             self.viewModel.getSeasonCards().invalidate()
 
     def __fillSeasonCard(self, seasonCard, season):
-        setSeasonInfo(seasonCard.season, season)
+        setSeasonInfo(seasonCard.season, self.__comp7Controller, SeasonState, SeasonName, season)
         self.__setPlayerStatistics(seasonCard, season)
 
     def __setPlayerStatistics(self, seasonStatisticsModel, season):

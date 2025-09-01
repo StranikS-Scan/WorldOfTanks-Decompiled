@@ -19,7 +19,7 @@ class AutoOpenView(ViewImpl):
     __goodiesCache = dependency.descriptor(IGoodiesCache)
 
     def __init__(self, eventName, rewards, boxes):
-        settings = ViewSettings(R.views.lobby.lootbox_system.AutoOpenView(), model=AutoOpenViewModel())
+        settings = ViewSettings(R.views.mono.lootbox.auto_open(), model=AutoOpenViewModel())
         super(AutoOpenView, self).__init__(settings)
         self.__eventName = eventName
         self.__rewards = self.__filterRewards(rewards)

@@ -4,6 +4,7 @@ import copy
 import logging
 import typing
 from shared_utils import makeTupleByDict
+import BattleReplay
 from Event import Event
 from Event import EventManager
 from comp7_common.comp7_constants import Configs
@@ -123,6 +124,8 @@ class Comp7ServerSettings(object):
 
     def __setInitValues(self):
         settings = self.__serverSettings.getSettings() if self.__serverSettings else {}
+        if not settings and BattleReplay.isPlaying() and not BattleReplay.isServerSideReplay():
+            settings = BattleReplay.g_replayCtrl.arenaInfo['serverSettings']
         if Configs.COMP7_CONFIG.value in settings:
             _logger.debug(Configs.COMP7_CONFIG.value, settings[Configs.COMP7_CONFIG.value])
             self.__comp7Config = makeTupleByDict(Comp7Config, settings[Configs.COMP7_CONFIG.value])

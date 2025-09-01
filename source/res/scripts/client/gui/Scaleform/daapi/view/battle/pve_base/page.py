@@ -51,7 +51,7 @@ _EXTENDED_CONFIG = _PVE_BASE_CONFIG + EXTENDED_CLASSIC_CONFIG
 
 class PveBaseBattlePage(ClassicPage):
 
-    def __init__(self, components=None, external=None, fullStatsAlias=BATTLE_VIEW_ALIASES.FULL_STATS):
+    def __init__(self, components=None, external=None, fullStatsAlias=BATTLE_VIEW_ALIASES.FULL_STATS, **kwargs):
         components = components if components is not None else (_COMMON_CONFIG if self.sessionProvider.isReplayPlaying else _EXTENDED_CONFIG)
         super(PveBaseBattlePage, self).__init__(components=components, external=external, fullStatsAlias=fullStatsAlias)
         self.__isFullMapVisible = False

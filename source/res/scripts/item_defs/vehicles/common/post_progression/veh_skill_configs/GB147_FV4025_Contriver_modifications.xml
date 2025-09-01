@@ -1,0 +1,449 @@
+<GB147_FV4025_Contriver_modifications.xml>
+  <gb147_node1>
+    <id>	10701	</id>
+    <imgName>	hitPoints	</imgName>
+    <locName>	hitPoints	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/hull/maxHealth	</name>
+        <value>	50	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleStrength	</name>
+        <value>	50	</value>
+      </add>
+    </kpi>
+  </gb147_node1>
+  <gb147_node2>
+    <id>	10702	</id>
+    <imgName>	gunStabilizationFromHullSalvo	</imgName>
+    <locName>	gunStabilizationFromHullSalvo	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <mul>
+        <filter>	default	</filter>
+        <name>	descrAttrs/chassis/shotDispersionFactors/0	</name>
+        <value>	0.9	</value>
+      </mul>
+      <mul>
+        <filter>	default	</filter>
+        <name>	descrAttrs/chassis/shotDispersionFactors/1	</name>
+        <value>	0.9	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotDispersionChassisMovement	</name>
+        <value>	0.9	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionChassisRotation	</name>
+        <value>	0.9	</value>
+      </mul>
+    </kpi>
+  </gb147_node2>
+  <gb147_node3>
+    <id>	10703	</id>
+    <imgName>	gunStabilizationFromTurretSalvo	</imgName>
+    <locName>	gunStabilizationFromTurretSalvo	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <mul>
+        <filter>	default	</filter>
+        <name>	miscAttrs/gun/shotDispersionFactors/turretRotation	</name>
+        <value>	0.9	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotDispersionTurretRotation	</name>
+        <value>	0.9	</value>
+      </mul>
+    </kpi>
+  </gb147_node3>
+  <gb147_node4>
+    <id>	10704	</id>
+    <imgName>	ammoRackHP	</imgName>
+    <locName>	ammoRackHP	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/ammoBayHealthFactor	</name>
+        <value>	1.2	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleAmmoBayStrength	</name>
+        <value>	1.2	</value>
+      </mul>
+    </kpi>
+  </gb147_node4>
+  <gb147_node5>
+    <id>	10705	</id>
+    <imgName>	engineFireChance	</imgName>
+    <locName>	engineFireChance	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <mul>
+        <name>	descrAttrs/engine/fireStartingChance	</name>
+        <value>	0.75	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleFireChance	</name>
+        <value>	0.75	</value>
+      </mul>
+    </kpi>
+  </gb147_node5>
+  <gb147_node7>
+    <id>	10707	</id>
+    <imgName>	gb147_mechanic_0	</imgName>
+    <locName>	gb147_mechanic_0	</locName>
+    <categories>	mechanics	</categories>
+    <modifiers>
+      <add>
+        <filter>	siege	</filter>
+        <name>	descrAttrs/gun/shotDispersionRadius	</name>
+        <value>	-0.1	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	value	</name>
+        <value>	-0.1	</value>
+      </add>
+    </kpi>
+  </gb147_node7>
+  <gb147_node8>
+    <id>	10708	</id>
+    <imgName>	chassisHP	</imgName>
+    <locName>	chassisHP	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/chassisHealthFactor	</name>
+        <value>	1.2	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleChassisStrength	</name>
+        <value>	1.2	</value>
+      </mul>
+    </kpi>
+  </gb147_node8>
+  <gb147_node9>
+    <id>	10709	</id>
+    <imgName>	enginePower	</imgName>
+    <locName>	enginePower	</locName>
+    <categories>	mobility	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/engine/power	</name>
+        <value>	50	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleEnginePower	</name>
+        <value>	50	</value>
+      </add>
+    </kpi>
+  </gb147_node9>
+  <gb147_node10>
+    <id>	10710	</id>
+    <imgName>	hullTraverseSpeed	</imgName>
+    <locName>	hullTraverseSpeed	</locName>
+    <categories>	mobility	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/chassis/rotationSpeedDegrees	</name>
+        <value>	2	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleAllGroundRotationSpeed	</name>
+        <value>	2	</value>
+      </add>
+    </kpi>
+  </gb147_node10>
+  <gb147_node11>
+    <id>	10711	</id>
+    <imgName>	hitPoints	</imgName>
+    <locName>	hitPoints	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/hull/maxHealth	</name>
+        <value>	50	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleStrength	</name>
+        <value>	50	</value>
+      </add>
+    </kpi>
+  </gb147_node11>
+  <gb147_node13>
+    <id>	10713	</id>
+    <imgName>	gb147_mechanic_1	</imgName>
+    <locName>	gb147_mechanic_1	</locName>
+    <categories>	mechanics	</categories>
+    <modifiers>
+      <add>
+        <filter>	siege	</filter>
+        <name>	descrAttrs/turret/rotationSpeedDegrees	</name>
+        <value>	5	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	value	</name>
+        <value>	5	</value>
+      </add>
+    </kpi>
+  </gb147_node13>
+  <gb147_node14>
+    <id>	10714	</id>
+    <imgName>	enginePower	</imgName>
+    <locName>	enginePower	</locName>
+    <categories>	mobility	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/engine/power	</name>
+        <value>	50	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleEnginePower	</name>
+        <value>	50	</value>
+      </add>
+    </kpi>
+  </gb147_node14>
+  <gb147_node15>
+    <id>	10715	</id>
+    <imgName>	specialShellPenetration	</imgName>
+    <locName>	specialShellPenetration	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shot1/piercingPower	</name>
+        <value>	5	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	specialShellPenetration	</name>
+        <value>	5	</value>
+      </add>
+    </kpi>
+  </gb147_node15>
+  <gb147_node16>
+    <id>	10716	</id>
+    <imgName>	additionalShellAmmoCapacity	</imgName>
+    <locName>	additionalShellAmmoCapacity	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/gun/maxAmmo	</name>
+        <value>	10	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	additionalShellAmmoCapacity	</name>
+        <value>	10	</value>
+      </add>
+    </kpi>
+  </gb147_node16>
+  <gb147_node17>
+    <id>	10717	</id>
+    <imgName>	standardShellVelocity	</imgName>
+    <locName>	standardShellVelocity	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shot0/speed	</name>
+        <value>	100	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	standardShellVelocity	</name>
+        <value>	100	</value>
+      </add>
+    </kpi>
+  </gb147_node17>
+  <gb147_node18>
+    <id>	10718	</id>
+    <imgName>	reloadTimeTwinGun	</imgName>
+    <locName>	reloadTimeTwinGun	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/gun/reloadTime	</name>
+        <value>	-0.5	</value>
+      </add>
+      <add>
+        <name>	descrAttrs/twinGun/twinGunReloadTime	</name>
+        <value>	-1	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	reloadTimeSingle	</name>
+        <value>	-0.5	</value>
+      </add>
+      <add>
+        <name>	reloadTimeSalvo	</name>
+        <value>	-1	</value>
+      </add>
+    </kpi>
+  </gb147_node18>
+  <gb147_node19>
+    <id>	10719	</id>
+    <imgName>	gb147_mechanic_2	</imgName>
+    <locName>	gb147_mechanic_2	</locName>
+    <categories>	mechanics	</categories>
+    <modifiers>
+      <add>
+        <filter>	siege	</filter>
+        <name>	descrAttrs/gun/aimingTime	</name>
+        <value>	-0.2	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	value	</name>
+        <value>	-0.2	</value>
+      </add>
+    </kpi>
+  </gb147_node19>
+  <gb147_node20>
+    <id>	10720	</id>
+    <imgName>	aimingTimeSalvo	</imgName>
+    <locName>	aimingTimeSalvo	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <filter>	default	</filter>
+        <name>	descrAttrs/gun/aimingTime	</name>
+        <value>	-0.1	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleGunAimSpeed	</name>
+        <value>	-0.1	</value>
+      </add>
+    </kpi>
+  </gb147_node20>
+  <gb147_node21>
+    <id>	10721	</id>
+    <imgName>	gunDispersionSalvo	</imgName>
+    <locName>	gunDispersionSalvo	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <filter>	default	</filter>
+        <name>	descrAttrs/gun/shotDispersionRadius	</name>
+        <value>	-0.01	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleGunShotFullDispersion	</name>
+        <value>	-0.01	</value>
+      </add>
+    </kpi>
+  </gb147_node21>
+  <gb147_node23>
+    <id>	10723	</id>
+    <imgName>	allShellDamage	</imgName>
+    <locName>	allShellDamage	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shell0/armorDamage	</name>
+        <value>	10	</value>
+      </add>
+      <add>
+        <name>	descrAttrs/shell1/armorDamage	</name>
+        <value>	10	</value>
+      </add>
+      <add>
+        <name>	descrAttrs/shell2/armorDamage	</name>
+        <value>	10	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	allShellDamage	</name>
+        <value>	10	</value>
+      </add>
+    </kpi>
+  </gb147_node23>
+  <gb147_node24>
+    <id>	10724	</id>
+    <imgName>	standardShellPenetration	</imgName>
+    <locName>	standardShellPenetration	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shot0/piercingPower	</name>
+        <value>	5	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	standardShellPenetration	</name>
+        <value>	5	</value>
+      </add>
+    </kpi>
+  </gb147_node24>
+  <gb147_node25>
+    <id>	10725	</id>
+    <imgName>	specialShellVelocity	</imgName>
+    <locName>	specialShellVelocity	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shot1/speed	</name>
+        <value>	100	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	specialShellVelocity	</name>
+        <value>	100	</value>
+      </add>
+    </kpi>
+  </gb147_node25>
+  <gb147_node26>
+    <id>	10726	</id>
+    <imgName>	gb147_mechanic_3	</imgName>
+    <locName>	gb147_mechanic_3	</locName>
+    <categories>	mechanics	</categories>
+    <modifiers>
+      <add>
+        <filter>	siege	</filter>
+        <name>	descrAttrs/engine/maxSpeedForward	</name>
+        <value>	5	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	value	</name>
+        <value>	5	</value>
+      </add>
+    </kpi>
+  </gb147_node26>
+</GB147_FV4025_Contriver_modifications.xml>

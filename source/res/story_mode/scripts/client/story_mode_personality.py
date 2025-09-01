@@ -8,18 +8,19 @@ from gui.battle_hints import battle_hints_overlap_controller
 from gui.battle_hints.battle_hints_overlap_controller import HintScope
 from gui.override_scaleform_views_manager import g_overrideScaleFormViewsConfig
 from gui.prb_control.prb_utils import initGuiTypes, initScaleformGuiTypes
-from gui.shared.system_factory import registerScaleformBattlePackages
+from gui.shared.system_factory import registerScaleformBattlePackages, registerScaleformLobbyPackages
 from schema_manager import getSchemaManager
 from story_mode import account_settings
 from story_mode.avatar_input_handler.control_modes import OnboardingArcadeControlMode, OnboardingSniperControlMode, StoryModeArcadeControlMode, StoryModeSniperControlMode, StoryModeArcadeMinefieldControlMode, SMStrategicMapCaseControlMode, SMEntityViewMode
+from story_mode.configs import sm_client_settings
 from story_mode.gui import story_mode_gui_constants
 from story_mode.gui.app_loader import observers
 from story_mode.gui.battle_control.controllers import equipments_items, equipment_ctrl
 from story_mode.gui.battle_control.controllers.repository import OnboardingRepository, StoryModeRepository, StoryModeSharedRepository
 from story_mode.gui.game_control.story_mode_controller import eventEntryPointValidator, newbieEntryPointValidator
 from story_mode.gui.game_control.story_mode_fading_controller import StoryModeFadingController
+from story_mode.gui.impl.lobby.story_mode_event_banner import StoryModeNewbieBanner, StoryModeEventBanner
 from story_mode.gui.scaleform.genConsts.STORY_MODE_BATTLE_VIEW_ALIASES import STORY_MODE_BATTLE_VIEW_ALIASES
-from story_mode.gui.story_mode_gui_constants import VIEW_ALIAS
 from story_mode.skeletons.story_mode_fading_controller import IStoryModeFadingController
 from story_mode_common import story_mode_constants, battle_mode, injectConsts
 from story_mode_common.configs.story_mode_battle_mgr_quotums import quotumsSchema
@@ -29,7 +30,7 @@ from story_mode_common.configs.story_mode_settings import settingsSchema
 class ClientStoryModeBattleMode(battle_mode.StoryModeBattleMode):
     _CLIENT_BATTLE_PAGE = story_mode_gui_constants.VIEW_ALIAS.STORY_MODE_BATTLE_PAGE
     _CLIENT_PRB_ACTION_NAME = story_mode_gui_constants.PREBATTLE_ACTION_NAME.STORY_MODE
-    _CLIENT_BANNER_ENTRY_POINT_ALIAS = VIEW_ALIAS.STORY_MODE_NEWBIE_ENTRY_POINT
+    _CLIENT_BANNER_ENTRY_POINT_ALIAS = StoryModeNewbieBanner.NAME
 
     @property
     def _client_bannerEntryPointValidatorMethod(self):
@@ -47,8 +48,8 @@ class ClientStoryModeBattleMode(battle_mode.StoryModeBattleMode):
 
     @property
     def _client_selectorColumn(self):
-        from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_columns import ModeSelectorColumns
-        return (ModeSelectorColumns.COLUMN_3, 40)
+        from gui.impl.lobby.mode_selector.items.items_constants import DEFAULT_COLUMN, DEFAULT_PRIORITY
+        return (DEFAULT_COLUMN, DEFAULT_PRIORITY)
 
     @property
     def _client_selectorItemsCreator(self):
@@ -114,6 +115,10 @@ class ClientStoryModeBattleMode(battle_mode.StoryModeBattleMode):
          CTRL_MODE_NAME.SM_STRATEGIC: (SMStrategicMapCaseControlMode, 'strategicMode', CTRL_TYPE.USUAL),
          CTRL_MODE_NAME.SM_ENTITY_VIEW: (SMEntityViewMode, 'postMortemMode', CTRL_TYPE.USUAL)}
 
+    @property
+    def _client_hangarEventBannerType(self):
+        return StoryModeNewbieBanner
+
 
 class ClientOnboardingBattleMode(ClientStoryModeBattleMode):
     _ARENA_BONUS_TYPE = ARENA_BONUS_TYPE.STORY_MODE_ONBOARDING
@@ -135,11 +140,15 @@ class ClientOnboardingBattleMode(ClientStoryModeBattleMode):
 
 
 class ClientEventBattleMode(ClientStoryModeBattleMode):
-    _CLIENT_BANNER_ENTRY_POINT_ALIAS = VIEW_ALIAS.STORY_MODE_EVENT_ENTRY_POINT
+    _CLIENT_BANNER_ENTRY_POINT_ALIAS = StoryModeEventBanner.NAME
 
     @property
     def _client_bannerEntryPointValidatorMethod(self):
         return eventEntryPointValidator
+
+    @property
+    def _client_hangarEventBannerType(self):
+        return StoryModeEventBanner
 
 
 def preInit():
@@ -151,6 +160,7 @@ def preInit():
     injectConsts(__name__)
     initGuiTypes(story_mode_gui_constants, __name__)
     initScaleformGuiTypes(story_mode_gui_constants, __name__)
+    sm_client_settings.initialize()
     battle_hints_overlap_controller.addSettings(ARENA_BONUS_TYPE.STORY_MODE_ONBOARDING, HintScope.STORY_MODE.value, {STORY_MODE_BATTLE_VIEW_ALIASES.STORY_MODE_TIMER})
     equipment_ctrl.register()
     equipments_items.register()
@@ -169,6 +179,7 @@ def preInit():
     battleMode.registerSharedControllersRepository()
     battleMode.registerBannerEntryPointValidatorMethod()
     battleMode.registerControlModes()
+    battleMode.registerHangarEventBanner()
     onboardingBattleMode = ClientOnboardingBattleMode(__name__)
     onboardingBattleMode.registerGuiType()
     onboardingBattleMode.registerScaleformRequiredLibraries()
@@ -179,6 +190,7 @@ def preInit():
     onboardingBattleMode.registerControlModes()
     eventBattleMode = ClientEventBattleMode(__name__)
     eventBattleMode.registerBannerEntryPointValidatorMethod()
+    eventBattleMode.registerHangarEventBanner()
     observers.preInit()
 
 
@@ -186,8 +198,10 @@ def init():
     LOG_DEBUG('init', __name__)
     account_settings.init()
     g_overrideScaleFormViewsConfig.initExtensionLobbyPackages(__name__, ['story_mode.gui.scaleform.daapi.view.lobby'])
-    registerScaleformBattlePackages(story_mode_constants.ARENA_GUI_TYPE.STORY_MODE_ONBOARDING, ('story_mode.gui.scaleform.daapi.view.battle',))
-    registerScaleformBattlePackages(story_mode_constants.ARENA_GUI_TYPE.STORY_MODE_REGULAR, ('story_mode.gui.scaleform.daapi.view.battle',))
+    registerScaleformLobbyPackages(('story_mode.gui.impl.lobby',))
+    battlePackages = ('gui.Scaleform.daapi.view.battle.shared.vehicle_mechanics', 'story_mode.gui.scaleform.daapi.view.battle')
+    registerScaleformBattlePackages(story_mode_constants.ARENA_GUI_TYPE.STORY_MODE_ONBOARDING, battlePackages)
+    registerScaleformBattlePackages(story_mode_constants.ARENA_GUI_TYPE.STORY_MODE_REGULAR, battlePackages)
     if HAS_DEV_RESOURCES:
         from story_mode.gui.development import prb_dev
         prb_dev.prbDevInit()

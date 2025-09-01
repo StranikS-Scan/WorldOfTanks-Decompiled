@@ -6,6 +6,7 @@ from constants import PREBATTLE_TYPE
 from gui.Scaleform.daapi.view.lobby.prb_windows.PrebattlesListWindow import PrebattlesListWindow
 from gui.Scaleform.daapi.view.meta.BattleSessionListMeta import BattleSessionListMeta
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
+from gui.Scaleform.genConsts.MESSENGER_CHANNEL_CAROUSEL_ITEM_TYPES import MESSENGER_CHANNEL_CAROUSEL_ITEM_TYPES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.managers.windows_stored_data import DATA_TYPE, TARGET_ID
 from gui.Scaleform.managers.windows_stored_data import stored_window
@@ -14,8 +15,8 @@ from gui.impl.gen import R
 from gui.prb_control import formatters
 from gui.prb_control.entities.battle_session.legacy.ctx import JoinBattleSessionCtx
 from gui.prb_control.entities.battle_session.legacy.requester import AutoInvitesRequester
-from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared.events import FocusEvent
+from gui.shared import events, EVENT_BUS_SCOPE, g_eventBus
+from gui.shared.events import FocusEvent, ChannelCarouselEvent
 from gui.shared.utils.functions import getArenaShortName
 from helpers import dependency
 from messenger.ext import channel_num_gen
@@ -52,10 +53,12 @@ class BattleSessionList(PrebattlesListWindow, BattleSessionListMeta):
         self.addListener(events.HideWindowEvent.HIDE_SPECIAL_BATTLE_WINDOW, self.__hideWindow, scope=EVENT_BUS_SCOPE.LOBBY)
         self.__listRequester.start(self.__onBSListReceived)
         self.__listRequester.request()
+        self.__updateWindowOpenState(True)
 
     def _dispose(self):
         self.__listRequester.stop()
         self.removeListener(events.HideWindowEvent.HIDE_SPECIAL_BATTLE_WINDOW, self.__hideWindow, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.__updateWindowOpenState(False)
         super(BattleSessionList, self)._dispose()
 
     def __hideWindow(self, _):
@@ -91,3 +94,6 @@ class BattleSessionList(PrebattlesListWindow, BattleSessionListMeta):
             peripheryName = ''
         startTimeString = formatters.getPrebattleStartTimeString(battleSession.startTime)
         return backport.text(R.strings.prebattle.title.battleSession.clanBattle.startTime(), startTime=startTimeString, peripheryName=peripheryName, arenaName=arenaName)
+
+    def __updateWindowOpenState(self, flag):
+        g_eventBus.handleEvent(ChannelCarouselEvent(self, ChannelCarouselEvent.ON_WINDOW_CHANGE_OPEN_STATE, self.getClientID(), MESSENGER_CHANNEL_CAROUSEL_ITEM_TYPES.CHANNEL_CAROUSEL_ITEM_TYPE_MESSENGER, flag), scope=EVENT_BUS_SCOPE.LOBBY)

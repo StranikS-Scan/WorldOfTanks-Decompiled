@@ -92,7 +92,7 @@ class DestructibleEntity(BigWorld.Entity):
             destructibleEntityComponent.updateDestructibleEntityHealth(self, self.health, attackerID, attackReasonID, hitFlags)
         return
 
-    def showDamageFromShot(self, attackerID, hitEffectCode, damage):
+    def showDamageFromShot(self, attackerID, hitEffectCode, damage, gunInstallationIndex):
         if hitEffectCode is None or not self.isAlive() or attackerID != BigWorld.player().playerVehicleID:
             return
         else:
@@ -107,16 +107,16 @@ class DestructibleEntity(BigWorld.Entity):
                 eventID = _FET.VEHICLE_HIT
             destructibleEntityComponent = BigWorld.player().arena.componentSystem.destructibleEntityComponent
             if destructibleEntityComponent is not None:
-                destructibleEntityComponent.updateDestructibleEntityFeedback(self, eventID, damage)
+                destructibleEntityComponent.updateDestructibleEntityFeedback(self, eventID, gunInstallationIndex, damage)
             return
 
-    def showDamageFromExplosion(self, attackerID, damage):
+    def showDamageFromExplosion(self, attackerID, damage, gunInstallationIndex):
         if not self.isAlive() or attackerID != BigWorld.player().playerVehicleID:
             return
         else:
             destructibleEntityComponent = BigWorld.player().arena.componentSystem.destructibleEntityComponent
             if destructibleEntityComponent is not None:
-                destructibleEntityComponent.updateDestructibleEntityFeedback(self, _FET.VEHICLE_ARMOR_PIERCED, damage)
+                destructibleEntityComponent.updateDestructibleEntityFeedback(self, _FET.VEHICLE_ARMOR_PIERCED, gunInstallationIndex, damage)
             return
 
     def set_health(self, oldValue):

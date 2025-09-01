@@ -1310,8 +1310,7 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	5350	</weight>
-      <maxLoad>	24000	</maxLoad>
-      <terrainResistance>	1.3 1.7 2.9	</terrainResistance>
+      <terrainResistance>	1.1 1.5 2.5	</terrainResistance>
       <brakeForce>	24000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	32	</rotationSpeed>
@@ -2441,7 +2440,6 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	5350	</weight>
-      <maxLoad>	26500	</maxLoad>
       <terrainResistance>	1.1 1.5 2.5	</terrainResistance>
       <brakeForce>	27000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -3876,11 +3874,6 @@
     <Medium>	shared	</Medium>
   </fuelTanks>
   <radios>
-    <FuG5>	shared	  <unlocks>
-        <radio>	FuG7	  <cost>	1360	</cost>
-        </radio>
-      </unlocks>
-    </FuG5>
     <FuG7>	shared	</FuG7>
   </radios>
   <physics>
@@ -3899,13 +3892,13 @@
         <Chassis_G101_StuG_III>
           <grounds>
             <soft>
-              <rollingFriction>	0.23345	</rollingFriction>
+              <rollingFriction>	0.20125	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.13685	</rollingFriction>
+              <rollingFriction>	0.12075	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

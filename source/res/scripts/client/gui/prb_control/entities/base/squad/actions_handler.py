@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/base/squad/actions_handler.py
+import typing
 from BWUtil import AsyncReturn
 from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
@@ -32,7 +33,7 @@ class SquadActionsHandler(AbstractActionsHandler):
             vInfos = unit.getMemberVehicles(pInfo.dbID)
             if vInfos is not None:
                 g_currentVehicle.selectVehicle(vInfos[0].vehInvID)
-            g_eventDispatcher.loadBattleQueue()
+            self._goToQueueUI()
         elif loadHangar:
             g_eventDispatcher.loadHangar()
         return
@@ -46,7 +47,7 @@ class SquadActionsHandler(AbstractActionsHandler):
     def executeInit(self, ctx):
         initResult = FUNCTIONAL_FLAG.UNDEFINED
         if self._entity.getPlayerInfo().isReady and self._entity.getFlags().isInQueue():
-            g_eventDispatcher.loadBattleQueue()
+            self._goToQueueUI()
             initResult = FUNCTIONAL_FLAG.LOAD_PAGE
         squadCtx = None
         if ctx is not None:
@@ -129,6 +130,9 @@ class SquadActionsHandler(AbstractActionsHandler):
         if accountsToInvite:
             self._entity.request(SendInvitesCtx(accountsToInvite, ''))
             self._showInviteSentMessage(accountsToInvite)
+
+    def _goToQueueUI(self):
+        g_eventDispatcher.loadBattleQueue()
 
     def _loadWindow(self, ctx):
         prbType = self._entity.getEntityType()

@@ -1,8 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: resource_well/scripts/client/resource_well/gui/impl/gen/view_models/views/lobby/resources_loading_confirm_model.py
 from enum import IntEnum
-from frameworks.wulf import Array
-from frameworks.wulf import ViewModel
+from frameworks.wulf import Array, ViewModel
 from resource_well.gui.impl.gen.view_models.views.lobby.loading_resource_model import LoadingResourceModel
 from resource_well.gui.impl.gen.view_models.views.lobby.vehicle_counter_model import VehicleCounterModel
 

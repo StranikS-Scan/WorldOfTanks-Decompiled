@@ -8,7 +8,7 @@ from gui.shared import events, EVENT_BUS_SCOPE, g_eventBus
 
 class ConfirmExchangeDialog(ConfirmExchangeDialogMeta):
 
-    def __init__(self, meta, handler):
+    def __init__(self, meta, handler, **kwargs):
         super(ConfirmExchangeDialog, self).__init__()
         self.handler = handler
         self.__selectedGold, self.__selectedResource = (0, 0)

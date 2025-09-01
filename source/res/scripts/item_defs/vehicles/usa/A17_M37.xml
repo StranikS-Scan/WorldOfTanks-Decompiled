@@ -1149,7 +1149,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	10000	</weight>
-      <maxLoad>	21000	</maxLoad>
       <terrainResistance>	1.2 1.4 2.3	</terrainResistance>
       <brakeForce>	19000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -1599,14 +1598,14 @@
           <snapWheels>
             <topFront>
               <wheelName>	WD_L0	</wheelName>
-              <basePos>	2.32928 0.793502	</basePos>
-              <shiftVec>	0.243674 0.083192	</shiftVec>
+              <basePos>	2.329283 0.793502	</basePos>
+              <shiftVec>	0.262546 0.043192	</shiftVec>
               <jointIdx>	20	</jointIdx>
             </topFront>
             <topBack>
               <wheelName>	WD_L5	</wheelName>
               <basePos>	-2.24506 0.762161	</basePos>
-              <shiftVec>	-0.301773 0.047653	</shiftVec>
+              <shiftVec>	-0.301773 0.087653	</shiftVec>
               <jointIdx>	102	</jointIdx>
             </topBack>
             <bottomBack>
@@ -1625,7 +1624,7 @@
           <radiusOverrides>
             <wheel>
               <name>	WD_L5	</name>
-              <radius>	0.304262	</radius>
+              <radius>	0.322	</radius>
             </wheel>
             <wheel>
               <name>	WD_L4	</name>
@@ -1645,7 +1644,7 @@
             </wheel>
             <wheel>
               <name>	WD_L0	</name>
-              <radius>	0.255999	</radius>
+              <radius>	0.278	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
@@ -1658,7 +1657,7 @@
             </sync>
             <sync>
               <name>	WD_L0	</name>
-              <startAngle>	23.557899	</startAngle>
+              <startAngle>	-0.244346	</startAngle>
               <teethCount>	13	</teethCount>
             </sync>
           </teethSyncs>
@@ -1974,14 +1973,14 @@
           <snapWheels>
             <topFront>
               <wheelName>	WD_R0	</wheelName>
-              <basePos>	2.32928 0.793502	</basePos>
-              <shiftVec>	0.263105 0.088583	</shiftVec>
+              <basePos>	2.329283 0.793502	</basePos>
+              <shiftVec>	0.262546 0.095627	</shiftVec>
               <jointIdx>	21	</jointIdx>
             </topFront>
             <topBack>
               <wheelName>	WD_R5	</wheelName>
               <basePos>	-2.24506 0.762161	</basePos>
-              <shiftVec>	-0.30353 0.045806	</shiftVec>
+              <shiftVec>	-0.301773 0.087653	</shiftVec>
               <jointIdx>	103	</jointIdx>
             </topBack>
             <bottomBack>
@@ -2000,7 +1999,7 @@
           <radiusOverrides>
             <wheel>
               <name>	WD_R5	</name>
-              <radius>	0.304262	</radius>
+              <radius>	0.322	</radius>
             </wheel>
             <wheel>
               <name>	WD_R4	</name>
@@ -2020,7 +2019,7 @@
             </wheel>
             <wheel>
               <name>	WD_R0	</name>
-              <radius>	0.255999	</radius>
+              <radius>	0.277908	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
@@ -2033,7 +2032,7 @@
             </sync>
             <sync>
               <name>	WD_R0	</name>
-              <startAngle>	23.7465	</startAngle>
+              <startAngle>	-6.108724	</startAngle>
               <teethCount>	13	</teethCount>
             </sync>
           </teethSyncs>
@@ -2259,7 +2258,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	10000	</weight>
-      <maxLoad>	23000	</maxLoad>
       <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
       <brakeForce>	21000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2511,7 +2509,7 @@
       <AODecals>
         <decal>
           <transform>
-            <row0>	4.093650 0.000000 0.000000	</row0>
+            <row0>	4.078960 0.000000 0.000000	</row0>
             <row1>	0.000000 1.371340 0.000000	</row1>
             <row2>	0.000000 0.000000 5.636580	</row2>
             <row3>	0.000000 0.000000 0.000001	</row3>
@@ -2709,14 +2707,14 @@
           <snapWheels>
             <topFront>
               <wheelName>	WD_L0	</wheelName>
-              <basePos>	2.32928 0.793502	</basePos>
-              <shiftVec>	0.243674 0.083192	</shiftVec>
+              <basePos>	2.329283 0.793502	</basePos>
+              <shiftVec>	0.262546 0.043192	</shiftVec>
               <jointIdx>	20	</jointIdx>
             </topFront>
             <topBack>
               <wheelName>	WD_L5	</wheelName>
               <basePos>	-2.24506 0.762161	</basePos>
-              <shiftVec>	-0.301773 0.047653	</shiftVec>
+              <shiftVec>	-0.301773 0.087653	</shiftVec>
               <jointIdx>	102	</jointIdx>
             </topBack>
             <bottomBack>
@@ -2735,7 +2733,7 @@
           <radiusOverrides>
             <wheel>
               <name>	WD_L5	</name>
-              <radius>	0.304262	</radius>
+              <radius>	0.322	</radius>
             </wheel>
             <wheel>
               <name>	WD_L4	</name>
@@ -2755,7 +2753,7 @@
             </wheel>
             <wheel>
               <name>	WD_L0	</name>
-              <radius>	0.255999	</radius>
+              <radius>	0.278	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
@@ -2768,7 +2766,7 @@
             </sync>
             <sync>
               <name>	WD_L0	</name>
-              <startAngle>	23.557899	</startAngle>
+              <startAngle>	-0.244346	</startAngle>
               <teethCount>	13	</teethCount>
             </sync>
           </teethSyncs>
@@ -3084,14 +3082,14 @@
           <snapWheels>
             <topFront>
               <wheelName>	WD_R0	</wheelName>
-              <basePos>	2.32928 0.793502	</basePos>
-              <shiftVec>	0.263105 0.088583	</shiftVec>
+              <basePos>	2.329283 0.793502	</basePos>
+              <shiftVec>	0.262546 0.095627	</shiftVec>
               <jointIdx>	21	</jointIdx>
             </topFront>
             <topBack>
               <wheelName>	WD_R5	</wheelName>
               <basePos>	-2.24506 0.762161	</basePos>
-              <shiftVec>	-0.30353 0.045806	</shiftVec>
+              <shiftVec>	-0.301773 0.087653	</shiftVec>
               <jointIdx>	103	</jointIdx>
             </topBack>
             <bottomBack>
@@ -3110,7 +3108,7 @@
           <radiusOverrides>
             <wheel>
               <name>	WD_R5	</name>
-              <radius>	0.304262	</radius>
+              <radius>	0.322	</radius>
             </wheel>
             <wheel>
               <name>	WD_R4	</name>
@@ -3130,7 +3128,7 @@
             </wheel>
             <wheel>
               <name>	WD_R0	</name>
-              <radius>	0.255999	</radius>
+              <radius>	0.277908	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
@@ -3143,7 +3141,7 @@
             </sync>
             <sync>
               <name>	WD_R0	</name>
-              <startAngle>	23.7465	</startAngle>
+              <startAngle>	-6.108724	</startAngle>
               <teethCount>	13	</teethCount>
             </sync>
           </teethSyncs>
@@ -3364,7 +3362,7 @@
     <M37D1>
       <ceilless>	true	</ceilless>
       <userString>	#usa_vehicles:M37D1	</userString>
-      <tags>	cannotDetach	</tags>
+      <tags>	cannotDetach turretless	</tags>
       <level>	4	</level>
       <price>	50	</price>
       <notInShop>	true	</notInShop>

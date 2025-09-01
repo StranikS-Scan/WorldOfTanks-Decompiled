@@ -11,7 +11,7 @@ from gui.prb_control.entities.listener import IGlobalListener
 
 class SquadTypeSelectPopover(BattleTypeSelectPopoverMeta, IGlobalListener):
 
-    def __init__(self, _=None):
+    def __init__(self, **kwargs):
         super(SquadTypeSelectPopover, self).__init__()
 
     def selectFight(self, actionName):

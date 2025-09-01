@@ -17,7 +17,7 @@
     <moving>	0.046	</moving>
     <still>	0.092	</still>
     <camouflageBonus>	0.02	</camouflageBonus>
-    <firePenalty>	0.251	</firePenalty>
+    <firePenalty>	0.138	</firePenalty>
   </invisibility>
   <optDevsOverrides>
     <camouflageNet>
@@ -45,7 +45,7 @@
   <hull>
     <primaryArmor>	armor_1 armor_3 armor_15	</primaryArmor>
     <weight>	26750	</weight>
-    <maxHealth>	840	</maxHealth>
+    <maxHealth>	880	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	160	</maxHealth>
       <maxRegenHealth>	110	</maxRegenHealth>
@@ -829,8 +829,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	9710	</weight>
-      <maxLoad>	51600	</maxLoad>
-      <terrainResistance>	1 1.5 2.9	</terrainResistance>
+      <terrainResistance>	0.9 1.5 2.3	</terrainResistance>
       <brakeForce>	50000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	28	</rotationSpeed>
@@ -1650,7 +1649,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	9710	</weight>
-      <maxLoad>	55000	</maxLoad>
       <terrainResistance>	0.9 1.5 2.3	</terrainResistance>
       <brakeForce>	50000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2547,12 +2545,12 @@
             <gun>	20	</gun>
           </armor>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <shotDispersionRadius>	0.37	</shotDispersionRadius>
-          <reloadTime>	4.8	</reloadTime>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <reloadTime>	4.4	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <customizationSlots>
@@ -3205,7 +3203,7 @@
         <armor_32>	50	</armor_32>
       </armor>
       <weight>	9000	</weight>
-      <maxHealth>	210	</maxHealth>
+      <maxHealth>	220	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -3249,11 +3247,11 @@
           </armor>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	4.6	</reloadTime>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <reloadTime>	4.4	</reloadTime>
           <aimingTime>	2.1	</aimingTime>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <customizationSlots>
@@ -3322,16 +3320,22 @@
             <armor_1>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_2>
             <armor_3>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_3>
             <armor_4>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_4>
             <armor_5>	45	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_5>
             <armor_6>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_6>
             <armor_7>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_7>
             <armor_8>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_8>
@@ -3977,13 +3981,13 @@
         <Chassis_J44_Type_3_Ju_Nu>
           <grounds>
             <soft>
-              <rollingFriction>	0.23345	</rollingFriction>
+              <rollingFriction>	0.18515	</rollingFriction>
             </soft>
             <medium>
               <rollingFriction>	0.12075	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0805	</rollingFriction>
+              <rollingFriction>	0.07245	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

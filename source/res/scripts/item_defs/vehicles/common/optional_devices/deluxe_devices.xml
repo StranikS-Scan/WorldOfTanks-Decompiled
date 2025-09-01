@@ -331,8 +331,7 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	ExtraHealthReserve	  <chassisMaxLoadFactor>	1.1 1.1	</chassisMaxLoadFactor>
-      <factors>
+    <script>	ExtraHealthReserve	  <factors>
         <factor>
           <attribute>	miscAttrs/healthFactor	</attribute>
           <type>	mul	</type>
@@ -369,10 +368,6 @@
         <value>	1.3	</value>
       </mul>
       <mul>
-        <name>	vehicleChassisLoad	</name>
-        <value>	1.1	</value>
-      </mul>
-      <mul>
         <name>	vehicleChassisFallDamage	</name>
         <value>	0.25	</value>
       </mul>
@@ -397,7 +392,7 @@
       <include>
         <vehicle>
           <minLevel>	5	</minLevel>
-          <maxLevel>	10	</maxLevel>
+          <maxLevel>	11	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -455,7 +450,7 @@
         <vehicle>
           <tags>	lightTank mediumTank heavyTank AT-SPG	</tags>
           <minLevel>	5	</minLevel>
-          <maxLevel>	10	</maxLevel>
+          <maxLevel>	11	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>

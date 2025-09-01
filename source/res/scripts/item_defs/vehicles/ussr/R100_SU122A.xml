@@ -67,9 +67,9 @@
     <weight>	5275	</weight>
     <maxHealth>	220	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	35	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	113	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
     </ammoBayHealth>
     <models>
       <undamaged>	vehicles/russian/R100_SU122A/normal/lod0/Hull.model	</undamaged>
@@ -1126,8 +1126,7 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	3000	</weight>
-      <maxLoad>	11000	</maxLoad>
-      <terrainResistance>	1.2 1.4 2.3	</terrainResistance>
+      <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
       <brakeForce>	10000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	24	</rotationSpeed>
@@ -2038,7 +2037,6 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	3000	</weight>
-      <maxLoad>	13000	</maxLoad>
       <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
       <brakeForce>	11000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2945,7 +2943,7 @@
     <Turret_1_R100_SU122A>
       <ceilless>	true	</ceilless>
       <userString>	#ussr_vehicles:Turret_1_R100_SU122A	</userString>
-      <tags>	cannotDetach	</tags>
+      <tags>	cannotDetach turretless	</tags>
       <level>	5	</level>
       <price>	500	</price>
       <notInShop>	true	</notInShop>
@@ -2967,13 +2965,13 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_122mm_M-30>	shared	  <maxAmmo>	24	</maxAmmo>
+        <_122mm_Howitzer_M_30>	shared	  <maxAmmo>	24	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -45 1 -45	</minPitch>
             <maxPitch>	0 3 1 3	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <gun>	_152mm_howitzer_D-1	  <cost>	6400	</cost>
+            <gun>	_152mm_Howitzer_D_1	  <cost>	6400	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -3049,8 +3047,8 @@
             <density>	94.368 91.6399	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_122mm_M-30>
-        <_152mm_howitzer_D-1>	shared	  <maxAmmo>	18	</maxAmmo>
+        </_122mm_Howitzer_M_30>
+        <_152mm_Howitzer_D_1>	shared	  <maxAmmo>	18	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -45 1 -45	</minPitch>
             <maxPitch>	0 3 1 3	</maxPitch>
@@ -3132,7 +3130,7 @@
             <density>	95.0447 94.6627	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_152mm_howitzer_D-1>
+        </_152mm_Howitzer_D_1>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R100_SU122A/normal/lod0/Turret_01.model	</undamaged>
@@ -3173,47 +3171,42 @@
     </Turret_1_R100_SU122A>
   </turrets0>
   <engines>
-    <GAZ-203>	shared	  <unlocks>
-        <engine>	M-80	  <cost>	240	</cost>
+    <GAZ_203_122A>	shared	  <unlocks>
+        <engine>	M_80_122A	  <cost>	240	</cost>
         </engine>
       </unlocks>
-    </GAZ-203>
-    <M-80>	shared	</M-80>
+    </GAZ_203_122A>
+    <M_80_122A>	shared	</M_80_122A>
   </engines>
   <fuelTanks>
     <Medium>	shared	</Medium>
   </fuelTanks>
   <radios>
-    <_10R>	shared	  <unlocks>
-        <radio>	_12RT	  <cost>	5600	</cost>
-        </radio>
-      </unlocks>
-    </_10R>
     <_12RT>	shared	</_12RT>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <GAZ-203>
+        <GAZ_203_122A>
           <smplEnginePower>	148.0194	</smplEnginePower>
           <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
-        </GAZ-203>
-        <M-80>
+        </GAZ_203_122A>
+        <M_80_122A>
           <smplEnginePower>	179.7378	</smplEnginePower>
           <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
-        </M-80>
+        </M_80_122A>
       </engines>
       <chassis>
         <Chassis_R100_SU122A>
           <grounds>
             <soft>
-              <rollingFriction>	0.18515	</rollingFriction>
+              <rollingFriction>	0.16905	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1127	</rollingFriction>
+              <rollingFriction>	0.10465	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0966	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_R100_SU122A>

@@ -4,8 +4,9 @@ import VOIP
 from comp7.gui.Scaleform.daapi.view.meta.Comp7BattleStatisticDataControllerMeta import Comp7BattleStatisticDataControllerMeta
 from comp7.gui.battle_control.arena_info import vos_collections
 from comp7.gui.battle_control.arena_info.arena_vos import Comp7Keys
-from comp7.gui.comp7_constants import BATTLE_CTRL_ID
 from comp7.gui.impl.lobby.comp7_helpers.comp7_i18n_helpers import RANK_MAP, DIVISION_MAP
+from comp7_core.gui.battle_control.arena_info.arena_vos import Comp7CoreKeys
+from comp7_core.gui.comp7_core_constants import BATTLE_CTRL_ID
 from constants import ROLE_TYPE_TO_LABEL
 from gui.Scaleform.daapi.view.battle.classic.stats_exchange import DynamicVehicleStatsComponent
 from gui.Scaleform.daapi.view.battle.shared.points_of_interest.stats_exchange import PointsOfInterestStatsController
@@ -25,7 +26,7 @@ class Comp7VehicleInfoComponent(vehicle.VehicleInfoComponent):
         rankName = RANK_MAP[rank] if rank > 0 else ''
         divisionName = DIVISION_MAP[division] if division > 0 else ''
         return self._data.update({'role': ROLE_TYPE_TO_LABEL.get(vInfoVO.vehicleType.role, ''),
-         'skillLevel': vInfoVO.gameModeSpecific.getValue(Comp7Keys.ROLE_SKILL_LEVEL, default=0),
+         'skillLevel': vInfoVO.gameModeSpecific.getValue(Comp7CoreKeys.ROLE_SKILL_LEVEL, default=0),
          'rank': rankName,
          'rankDivision': divisionName,
          'isQualification': vInfoVO.gameModeSpecific.getValue(Comp7Keys.IS_QUAL_ACTIVE, default=False),
@@ -38,7 +39,7 @@ class Comp7VehicleInfoComponent(vehicle.VehicleInfoComponent):
         if voipCtrl is None or not voipCtrl.isTeamVoipEnabled:
             return True
         else:
-            return True if vInfoVO.isEnemy() or not vInfoVO.isPlayer() else vInfoVO.gameModeSpecific.getValue(Comp7Keys.VOIP_CONNECTED, default=False)
+            return True if vInfoVO.isEnemy() or not vInfoVO.isPlayer() else vInfoVO.gameModeSpecific.getValue(Comp7CoreKeys.VOIP_CONNECTED, default=False)
 
     def __isSuperSquad(self, vInfoVO):
         superSquads = self.__sessionProvider.arenaVisitor.getArenaExtraData().get('superSquads', [])

@@ -45,6 +45,8 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         self.__backBtnDescrLabel = ctx.get('backBtnDescrLabel', backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.personalAwards()))
         self.__topPanelData = ctx.get('topPanelData') or {}
         self.__selectedVehicleEntityId = None
+        self.__showCloseButton = ctx.get('showCloseButton', _SHOW_CLOSE_BTN)
+        self.__showBackButton = ctx.get('showBackButton', _SHOW_BACK_BTN)
         g_currentPreviewVehicle.selectHeroTank(ctx.get('isHeroTank', False))
         self.__uiMetricsLogger = ShopVehicleStylePreviewMetricsLogger(self._style.intCD)
         self.__uiFlowLogger = ShopVehicleStylePreviewFlowLogger()
@@ -74,8 +76,8 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         self.as_setDataS({'closeBtnLabel': backport.text(R.strings.vehicle_preview.header.closeBtn.label()),
          'backBtnLabel': backport.text(R.strings.vehicle_preview.header.backBtn.label()),
          'backBtnDescrLabel': self.__backBtnDescrLabel,
-         'showCloseBtn': _SHOW_CLOSE_BTN,
-         'showBackButton': _SHOW_BACK_BTN})
+         'showCloseBtn': self.__showCloseButton,
+         'showBackButton': self.__showBackButton})
         self.as_setAdditionalInfoS(self._getAdditionalInfoVO())
         if self.__backPreviewAlias and self.__backPreviewAlias == VIEW_ALIAS.LOBBY_STORE:
             self.__uiFlowLogger.logOpenPreview()

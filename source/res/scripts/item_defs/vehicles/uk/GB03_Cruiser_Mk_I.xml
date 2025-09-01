@@ -88,7 +88,7 @@
     </armor>
     <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
     <weight>	7043	</weight>
-    <maxHealth>	204	</maxHealth>
+    <maxHealth>	208	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	60	</maxHealth>
       <maxRegenHealth>	40	</maxRegenHealth>
@@ -1124,7 +1124,6 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	3000	</weight>
-      <maxLoad>	13500	</maxLoad>
       <terrainResistance>	1.1 1.4 2	</terrainResistance>
       <brakeForce>	11500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -2032,7 +2031,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2000	</weight>
-      <maxHealth>	51	</maxHealth>
+      <maxHealth>	52	</maxHealth>
       <rotationSpeed>	32	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
@@ -2046,7 +2045,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_2pdr_Gun_Mk_IX_prot>	shared	  <maxAmmo>	120	</maxAmmo>
+        <QF_2_pdr_Mk_IX_prototype_I>	shared	  <maxAmmo>	120	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 14 0.069444 14 0.133106 15 0.866894 15 0.930556 14 1 14	</maxPitch>
@@ -2141,7 +2140,7 @@
             <density>	183.425 179.264	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_2pdr_Gun_Mk_IX_prot>
+        </QF_2_pdr_Mk_IX_prototype_I>
         <_40mm_Pom_Pom_prot>	shared	  <maxAmmo>	180	</maxAmmo>
           <unlocks>
             <vehicle>	GB69_Cruiser_Mk_II	  <cost>	220	</cost>
@@ -2746,7 +2745,7 @@
     </Turret_1_GB03_Cruiser_Mk_I>
   </turrets0>
   <engines>
-    <Rolls_Royse_Phantom>	shared	</Rolls_Royse_Phantom>
+    <Rolls_Royce_Phantom_I>	shared	</Rolls_Royce_Phantom_I>
   </engines>
   <fuelTanks>
     <Small>	shared	</Small>
@@ -2757,10 +2756,10 @@
   <physics>
     <detailed>
       <engines>
-        <Rolls_Royse_Phantom>
-          <smplEnginePower>	126.8737	</smplEnginePower>
+        <Rolls_Royce_Phantom_I>
+          <smplEnginePower>	135	</smplEnginePower>
           <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
-        </Rolls_Royse_Phantom>
+        </Rolls_Royce_Phantom_I>
       </engines>
       <chassis>
         <Chassis_GB03_Cruiser_Mk_I>

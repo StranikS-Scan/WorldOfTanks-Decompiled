@@ -1171,11 +1171,10 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	1880	</weight>
-      <maxLoad>	7500	</maxLoad>
-      <terrainResistance>	1.2 1.3 2.3	</terrainResistance>
+      <terrainResistance>	1.1 1.2 2.1	</terrainResistance>
       <brakeForce>	7500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	44	</rotationSpeed>
+      <rotationSpeed>	50	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.28	</vehicleMovement>
         <vehicleRotation>	0.28	</vehicleRotation>
@@ -2023,11 +2022,10 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	1880	</weight>
-      <maxLoad>	10000	</maxLoad>
       <terrainResistance>	1.1 1.2 2.1	</terrainResistance>
       <brakeForce>	8500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	48	</rotationSpeed>
+      <rotationSpeed>	54	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.26	</vehicleMovement>
         <vehicleRotation>	0.26	</vehicleRotation>
@@ -2900,7 +2898,7 @@
         <maxRegenHealth>	30	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	280	</circularVisionRadius>
+      <circularVisionRadius>	300	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	40	</maxHealth>
         <maxRegenHealth>	20	</maxRegenHealth>
@@ -2919,13 +2917,13 @@
             </armor_4>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.48	</shotDispersionRadius>
-          <reloadTime>	3.3	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
+          <shotDispersionRadius>	0.43	</shotDispersionRadius>
+          <reloadTime>	2.7	</reloadTime>
+          <aimingTime>	2.1	</aimingTime>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <models>
@@ -3385,8 +3383,6 @@
       <unlocks>
         <gun>	_40mm_Pom_Pom	  <cost>	500	</cost>
         </gun>
-        <gun>	_45mm_20K	  <cost>	125	</cost>
-        </gun>
       </unlocks>
       <armor>
         <armor_1>	30	</armor_1>
@@ -3433,14 +3429,14 @@
             </armor_2>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.48	</shotDispersionRadius>
-          <reloadTime>	3.3	</reloadTime>
+          <shotDispersionRadius>	0.43	</shotDispersionRadius>
+          <reloadTime>	2.7	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.1	</aimingTime>
+          <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/normal/lod0/Gun_04.model	</undamaged>
@@ -3488,78 +3484,11 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_47mm_QFSA>
-        <_45mm_20K>	shared	  <maxAmmo>	270	</maxAmmo>
+        <_40mm_Pom_Pom>	shared	  <maxAmmo>	320	</maxAmmo>
           <unlocks>
             <vehicle>	Ch08_Type97_Chi_Ha	  <cost>	1300	</cost>
             </vehicle>
           </unlocks>
-          <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 8 1 8	</maxPitch>
-          </pitchLimits>
-          <armor>
-            <armor_1>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <gun>	10	</gun>
-          </armor>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
-          <reloadTime>	2.3	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2.1	</aimingTime>
-          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/normal/lod0/Gun_07.model	</undamaged>
-            <destroyed>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/crash/lod0/Gun_07.model	</destroyed>
-            <exploded>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/crash/lod0/Gun_07.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/collision/Gun_07.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/collision_client/Gun_07.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_small	</effects>
-          <reloadEffect>	reload20_45	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0 0.037568 0.700503	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.137116 0.137116	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0 0.037568 0.700503	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	1.3 1.3 0.000000 0.000000	</tiling>
-            <density>	87.1117 89.0623	</density>
-            <aoTextureSize>	256 256	</aoTextureSize>
-          </camouflage>
-        </_45mm_20K>
-        <_40mm_Pom_Pom>	shared	  <maxAmmo>	320	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -23 1 -23	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
@@ -4013,11 +3942,11 @@
     <detailed>
       <engines>
         <Armstrong_Siddeley>
-          <smplEnginePower>	97.26987	</smplEnginePower>
+          <smplEnginePower>	105	</smplEnginePower>
           <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
         </Armstrong_Siddeley>
         <Franklin>
-          <smplEnginePower>	105.7281	</smplEnginePower>
+          <smplEnginePower>	115	</smplEnginePower>
           <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
         </Franklin>
       </engines>
@@ -4025,13 +3954,13 @@
         <Chassis_Ch07_Vickers_MkE_Type_BT26>
           <grounds>
             <soft>
-              <rollingFriction>	0.18515	</rollingFriction>
+              <rollingFriction>	0.16905	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.0966	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0966	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_Ch07_Vickers_MkE_Type_BT26>

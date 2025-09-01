@@ -1092,7 +1092,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	9000	</weight>
-      <maxLoad>	48000	</maxLoad>
       <terrainResistance>	1 1.2 2	</terrainResistance>
       <brakeForce>	45000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2127,7 +2126,7 @@
       </hitTester>
       <gunPosition>	0.000000 0.337651 1.10727	</gunPosition>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <physicsShape>	0.991 0.082 0.93 0 0.568 -0.273 0.528 0.369 0.214 0.5 0 0.5 0 0 0	</physicsShape>
+      <physicsShape>	0.991 -0.092 0.93 0 0.333 0.178 0.528 0.369 0.214 0.5 0 0.5 0 0 0	</physicsShape>
       <customizationSlots>
         <slot>
           <slotType>	paint	</slotType>

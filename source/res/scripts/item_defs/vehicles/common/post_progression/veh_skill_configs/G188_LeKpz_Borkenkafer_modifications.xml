@@ -1,0 +1,424 @@
+<G188_LeKpz_Borkenkafer_modifications.xml>
+  <g188_node1>
+    <id>	11701	</id>
+    <imgName>	chassisRepairSpeed	</imgName>
+    <locName>	chassisRepairSpeed	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/chassisRepairSpeedFactor	</name>
+        <value>	1.2	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleChassisRepairSpeed	</name>
+        <value>	1.2	</value>
+      </mul>
+    </kpi>
+  </g188_node1>
+  <g188_node2>
+    <id>	11702	</id>
+    <imgName>	spottingBonusFoliage	</imgName>
+    <locName>	spottingBonusFoliage	</locName>
+    <categories>	spotting	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/demaskFoliageFactor	</name>
+        <value>	0.97	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	demaskFoliageFactor	</name>
+        <value>	0.97	</value>
+      </mul>
+    </kpi>
+  </g188_node2>
+  <g188_node3>
+    <id>	11703	</id>
+    <imgName>	invisibilityWhenShooting	</imgName>
+    <locName>	invisibilityWhenShooting	</locName>
+    <categories>	concealment	</categories>
+    <modifiers>
+      <mul>
+        <name>	descrAttrs/gun/invisibilityFactorAtShot	</name>
+        <value>	1.05	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleInvisibilityAfterShot	</name>
+        <value>	1.05	</value>
+      </mul>
+    </kpi>
+  </g188_node3>
+  <g188_node4>
+    <id>	11704	</id>
+    <imgName>	enginePenalty	</imgName>
+    <locName>	enginePenalty	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/engineReduceFineFactor	</name>
+        <value>	0.8	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehPenaltyForDamagedEngine	</name>
+        <value>	0.8	</value>
+      </mul>
+    </kpi>
+  </g188_node4>
+  <g188_node5>
+    <id>	11705	</id>
+    <imgName>	reducedRammingDamage	</imgName>
+    <locName>	reducedRammingDamage	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/rammingFactor	</name>
+        <value>	0.9	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleRamDamageResistance	</name>
+        <value>	0.9	</value>
+      </mul>
+    </kpi>
+  </g188_node5>
+  <g188_node6>
+    <id>	11706	</id>
+    <imgName>	additionalShellAmmoCapacity	</imgName>
+    <locName>	additionalShellAmmoCapacity	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/gun/maxAmmo	</name>
+        <value>	5	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	additionalShellAmmoCapacity	</name>
+        <value>	5	</value>
+      </add>
+    </kpi>
+  </g188_node6>
+  <g188_node7>
+    <id>	11707	</id>
+    <imgName>	g188_mechanic_0	</imgName>
+    <locName>	g188_mechanic_0	</locName>
+    <categories>	mechanics	</categories>
+    <modifiers>
+      <add>
+        <name>	miscAttrs/targetDesignator/spottedMarkedTime	</name>
+        <value>	2.5	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	value	</name>
+        <value>	2.5	</value>
+      </add>
+    </kpi>
+  </g188_node7>
+  <g188_node8>
+    <id>	11708	</id>
+    <imgName>	turretTraverseSpeed	</imgName>
+    <locName>	turretTraverseSpeed	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/turret/rotationSpeedDegrees	</name>
+        <value>	2	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleTurretOrCuttingRotationSpeed	</name>
+        <value>	2	</value>
+      </add>
+    </kpi>
+  </g188_node8>
+  <g188_node9>
+    <id>	11709	</id>
+    <imgName>	hullTraverseSpeed	</imgName>
+    <locName>	hullTraverseSpeed	</locName>
+    <categories>	mobility	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/chassis/rotationSpeedDegrees	</name>
+        <value>	2	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleAllGroundRotationSpeed	</name>
+        <value>	2	</value>
+      </add>
+    </kpi>
+  </g188_node9>
+  <g188_node10>
+    <id>	11710	</id>
+    <imgName>	spottingBonusMovement	</imgName>
+    <locName>	spottingBonusMovement	</locName>
+    <categories>	spotting	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/demaskMovingFactor	</name>
+        <value>	0.97	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	demaskMovingFactor	</name>
+        <value>	0.97	</value>
+      </mul>
+    </kpi>
+  </g188_node10>
+  <g188_node11>
+    <id>	11711	</id>
+    <imgName>	allShellDamage	</imgName>
+    <locName>	allShellDamage	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shell0/armorDamage	</name>
+        <value>	10	</value>
+      </add>
+      <add>
+        <name>	descrAttrs/shell1/armorDamage	</name>
+        <value>	10	</value>
+      </add>
+      <add>
+        <name>	descrAttrs/shell2/armorDamage	</name>
+        <value>	10	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	allShellDamage	</name>
+        <value>	10	</value>
+      </add>
+    </kpi>
+  </g188_node11>
+  <g188_node13>
+    <id>	11713	</id>
+    <imgName>	g188_mechanic_1	</imgName>
+    <locName>	g188_mechanic_1	</locName>
+    <categories>	mechanics	</categories>
+    <modifiers>
+      <add>
+        <name>	miscAttrs/targetDesignator/cooldownTime	</name>
+        <value>	-5.0	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	value	</name>
+        <value>	5.0	</value>
+      </add>
+    </kpi>
+  </g188_node13>
+  <g188_node14>
+    <id>	11714	</id>
+    <imgName>	specialShellPenetration	</imgName>
+    <locName>	specialShellPenetration	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shot1/piercingPower	</name>
+        <value>	5	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	specialShellPenetration	</name>
+        <value>	5	</value>
+      </add>
+    </kpi>
+  </g188_node14>
+  <g188_node15>
+    <id>	11715	</id>
+    <imgName>	standardShellPenetration	</imgName>
+    <locName>	standardShellPenetration	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shot0/piercingPower	</name>
+        <value>	5	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	standardShellPenetration	</name>
+        <value>	5	</value>
+      </add>
+    </kpi>
+  </g188_node15>
+  <g188_node16>
+    <id>	11716	</id>
+    <imgName>	gunDispersion	</imgName>
+    <locName>	gunDispersion	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/gun/shotDispersionRadius	</name>
+        <value>	-0.01	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleGunShotFullDispersion	</name>
+        <value>	-0.01	</value>
+      </add>
+    </kpi>
+  </g188_node16>
+  <g188_node17>
+    <id>	11717	</id>
+    <imgName>	crewProtection	</imgName>
+    <locName>	crewProtection	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/crewChanceToHitFactor	</name>
+        <value>	0.8	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	crewHitChance	</name>
+        <value>	1.2	</value>
+      </mul>
+    </kpi>
+  </g188_node17>
+  <g188_node19>
+    <id>	11719	</id>
+    <imgName>	g188_mechanic_2	</imgName>
+    <locName>	g188_mechanic_2	</locName>
+    <categories>	mechanics	</categories>
+    <modifiers>
+      <add>
+        <name>	miscAttrs/targetDesignator/deployTime	</name>
+        <value>	-30.0	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	value	</name>
+        <value>	30.0	</value>
+      </add>
+    </kpi>
+  </g188_node19>
+  <g188_node20>
+    <id>	11720	</id>
+    <imgName>	gunElevation	</imgName>
+    <locName>	gunElevation	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/gunPitchLimits/minPitchDegrees	</name>
+        <value>	-2	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	gunElevation	</name>
+        <value>	2	</value>
+      </add>
+    </kpi>
+  </g188_node20>
+  <g188_node21>
+    <id>	11721	</id>
+    <imgName>	hitPoints	</imgName>
+    <locName>	hitPoints	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/hull/maxHealth	</name>
+        <value>	50	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleStrength	</name>
+        <value>	50	</value>
+      </add>
+    </kpi>
+  </g188_node21>
+  <g188_node22>
+    <id>	11722	</id>
+    <imgName>	gunDepression	</imgName>
+    <locName>	gunDepression	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/gunPitchLimits/maxPitchDegrees	</name>
+        <value>	1	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	gunDepression	</name>
+        <value>	-1	</value>
+      </add>
+    </kpi>
+  </g188_node22>
+  <g188_node24>
+    <id>	11724	</id>
+    <imgName>	g188_mechanic_3	</imgName>
+    <locName>	g188_mechanic_3	</locName>
+    <categories>	mechanics	</categories>
+    <modifiers>
+      <add>
+        <name>	miscAttrs/targetDesignator/damageIncome	</name>
+        <value>	0.05	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	value	</name>
+        <value>	5.0	</value>
+      </add>
+    </kpi>
+  </g188_node24>
+  <g188_node25>
+    <id>	11725	</id>
+    <imgName>	invisibilityWhenShooting	</imgName>
+    <locName>	invisibilityWhenShooting	</locName>
+    <categories>	concealment	</categories>
+    <modifiers>
+      <mul>
+        <name>	descrAttrs/gun/invisibilityFactorAtShot	</name>
+        <value>	1.05	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleInvisibilityAfterShot	</name>
+        <value>	1.05	</value>
+      </mul>
+    </kpi>
+  </g188_node25>
+  <g188_node26>
+    <id>	11726	</id>
+    <imgName>	gunDepression	</imgName>
+    <locName>	gunDepression	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/gunPitchLimits/maxPitchDegrees	</name>
+        <value>	1	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	gunDepression	</name>
+        <value>	-1	</value>
+      </add>
+    </kpi>
+  </g188_node26>
+</G188_LeKpz_Borkenkafer_modifications.xml>

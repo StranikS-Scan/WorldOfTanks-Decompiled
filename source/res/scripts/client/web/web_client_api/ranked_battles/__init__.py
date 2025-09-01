@@ -40,7 +40,8 @@ class RankedBattlesWebApi(OpenRankedPagesMixin):
 
     @w2c(W2CSchema, name='close_browser')
     def closeBrowser(self, _):
-        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), EVENT_BUS_SCOPE.LOBBY)
+        from gui.shared.event_dispatcher import showHangar
+        showHangar()
 
     @w2c(W2CSchema, name='get_gamemode_state')
     def getGamemodeState(self, _):

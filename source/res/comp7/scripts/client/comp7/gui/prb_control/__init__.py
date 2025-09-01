@@ -4,7 +4,7 @@
 
 def registerComp7OthersPrbParams():
     from comp7.gui.comp7_constants import PREBATTLE_ACTION_NAME
-    from comp7.gui.impl.lobby.tooltips.main_widget_tooltip import MainWidgetTooltip
+    from comp7.gui.impl.lobby.tooltips.progression_tooltip import ProgressionTooltip
     from comp7.gui.impl.lobby.tooltips.rank_inactivity_tooltip import RankInactivityTooltip
     from comp7.gui.prb_control.storages.comp7_storage import Comp7Storage
     from comp7_common.comp7_constants import PREBATTLE_TYPE
@@ -19,8 +19,8 @@ def registerComp7OthersPrbParams():
     from gui.prb_control.storages import makeQueueName
     from gui.shared.system_factory import registerModeSelectorTooltips, registerPrbStorage
     from UnitBase import UNIT_ERROR
-    registerModeSelectorTooltips([ModeSelectorTooltipsConstants.COMP7_CALENDAR_DAY_EXTENDED_INFO], {R.views.comp7.lobby.tooltips.MainWidgetTooltip(): MainWidgetTooltip,
-     R.views.comp7.lobby.tooltips.RankInactivityTooltip(): RankInactivityTooltip})
+    registerModeSelectorTooltips([ModeSelectorTooltipsConstants.COMP7_CALENDAR_DAY_EXTENDED_INFO], {R.views.comp7.mono.lobby.tooltips.progression_tooltip(): ProgressionTooltip,
+     R.views.comp7.mono.lobby.tooltips.rank_inactivity_tooltip(): RankInactivityTooltip})
     registerPrbStorage(makeQueueName(QUEUE_TYPE.COMP7), Comp7Storage())
     _PRB_TO_QUEUE.update({PREBATTLE_TYPE.COMP7: QUEUE_TYPE.COMP7})
     _arenaBonusTypeByModeName.update({PREBATTLE_ACTION_NAME.COMP7: ARENA_BONUS_TYPE.COMP7})

@@ -37,6 +37,22 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_13.2mm_AP>
+  <_13mm_Type_92_NC>
+    <id>	2024	</id>
+    <userString>	#japan_vehicles:_13mm_Type_92_NC	</userString>
+    <icon>	ap	</icon>
+    <price>	0	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	13.2	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	autoArmorPiercing	</effects>
+    <damage>
+      <armor>	8	</armor>
+      <devices>	18	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_13mm_Type_92_NC>
   <_13.2mm_Balle_T.P.>
     <id>	45	</id>
     <userString>	#japan_vehicles:_13.2mm_Balle_T.P.	</userString>
@@ -54,6 +70,23 @@
     <normalizationAngle>	2	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_13.2mm_Balle_T.P.>
+  <_13mm_Balle_T_P_NC>
+    <id>	2025	</id>
+    <userString>	#japan_vehicles:_13mm_Balle_T_P_NC	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	400	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	13.2	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	autoAPCR	</effects>
+    <damage>
+      <armor>	8	</armor>
+      <devices>	18	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_13mm_Balle_T_P_NC>
   <_20mm_AP>
     <id>	6	</id>
     <userString>	#japan_vehicles:_20mm_AP	</userString>
@@ -157,6 +190,23 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_37mm_APHE_Ichi_Go>
+  <_37mm_Ichi_Go_NC>
+    <id>	2027	</id>
+    <userString>	#japan_vehicles:_37mm_Ichi_Go_NC	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	37	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallArmorPiercing	</effects>
+    <damage>
+      <armor>	45	</armor>
+      <devices>	50	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_37mm_Ichi_Go_NC>
   <_37mm_HE_Type12>
     <id>	18	</id>
     <userString>	#japan_vehicles:_37mm_HE_Type12	</userString>
@@ -181,6 +231,30 @@
       </damage>
     </armorSpalls>
   </_37mm_HE_Type12>
+  <_37mm_Type_12_NC>
+    <id>	2028	</id>
+    <userString>	#japan_vehicles:_37mm_Type_12_NC	</userString>
+    <icon>	he_modern	</icon>
+    <price>	8	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	37	</caliber>
+    <explosionRadius>	0.31	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	smallHighExplosive	</effects>
+    <damage>
+      <armor>	55	</armor>
+      <devices>	50	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0.31	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	30	</armor>
+        <devices>	25	</devices>
+      </damage>
+    </armorSpalls>
+  </_37mm_Type_12_NC>
   <_37mm_APHE_Type94>
     <id>	14	</id>
     <userString>	#japan_vehicles:_37mm_APHE_Type94	</userString>
@@ -197,6 +271,38 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_37mm_APHE_Type94>
+  <_37mm_Type_94_95>
+    <id>	2029	</id>
+    <userString>	#japan_vehicles:_37mm_Type_94_95	</userString>
+    <icon>	ap	</icon>
+    <price>	14	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	37	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallArmorPiercing	</effects>
+    <damage>
+      <armor>	45	</armor>
+      <devices>	50	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_37mm_Type_94_95>
+  <_37mm_Type_94_NC>
+    <id>	2026	</id>
+    <userString>	#japan_vehicles:_37mm_Type_94_NC	</userString>
+    <icon>	ap	</icon>
+    <price>	14	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	37	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallArmorPiercing	</effects>
+    <damage>
+      <armor>	45	</armor>
+      <devices>	50	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_37mm_Type_94_NC>
   <_37mm_APHE_Type1>
     <id>	15	</id>
     <userString>	#japan_vehicles:_37mm_APHE_Type1	</userString>
@@ -214,6 +320,23 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_37mm_APHE_Type1>
+  <_37mm_Type_1_95>
+    <id>	2030	</id>
+    <userString>	#japan_vehicles:_37mm_Type_1_95	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	37	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallArmorPiercing	</effects>
+    <damage>
+      <armor>	45	</armor>
+      <devices>	50	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_37mm_Type_1_95>
   <_37mm_HE_Type4>
     <id>	16	</id>
     <userString>	#japan_vehicles:_37mm_HE_Type4	</userString>
@@ -238,6 +361,30 @@
       </damage>
     </armorSpalls>
   </_37mm_HE_Type4>
+  <_37mm_Type_4_95>
+    <id>	2031	</id>
+    <userString>	#japan_vehicles:_37mm_Type_4_95	</userString>
+    <icon>	he_modern	</icon>
+    <price>	10	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	37	</caliber>
+    <explosionRadius>	0.31	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	smallHighExplosive	</effects>
+    <damage>
+      <armor>	60	</armor>
+      <devices>	50	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0.31	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	30	</armor>
+        <devices>	25	</devices>
+      </damage>
+    </armorSpalls>
+  </_37mm_Type_4_95>
   <_37mm_APHE_Type1_Kai>
     <id>	22	</id>
     <userString>	#japan_vehicles:_37mm_APHE_Type1_Kai	</userString>
@@ -311,6 +458,38 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_47mm_APHE_Type1>
+  <_47mm_Type_1_2>
+    <id>	2041	</id>
+    <userString>	#japan_vehicles:_47mm_Type_1_2	</userString>
+    <icon>	ap	</icon>
+    <price>	20	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	47	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallArmorPiercing	</effects>
+    <damage>
+      <armor>	70	</armor>
+      <devices>	64	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_47mm_Type_1_2>
+  <_47mm_Type_1_Shin>
+    <id>	2038	</id>
+    <userString>	#japan_vehicles:_47mm_Type_1_Shin	</userString>
+    <icon>	ap	</icon>
+    <price>	20	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	47	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallArmorPiercing	</effects>
+    <damage>
+      <armor>	70	</armor>
+      <devices>	64	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_47mm_Type_1_Shin>
   <_47mm_APHE_Type1_TK>
     <id>	20	</id>
     <userString>	#japan_vehicles:_47mm_APHE_Type1_TK	</userString>
@@ -328,6 +507,40 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_47mm_APHE_Type1_TK>
+  <_47mm_Type_1_Toku_Kou_2>
+    <id>	2042	</id>
+    <userString>	#japan_vehicles:_47mm_Type_1_Toku_Kou_2	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	1600	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	47	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallArmorPiercing	</effects>
+    <damage>
+      <armor>	70	</armor>
+      <devices>	64	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_47mm_Type_1_Toku_Kou_2>
+  <_47mm_Type_1_Toku_Kou_Shin>
+    <id>	2039	</id>
+    <userString>	#japan_vehicles:_47mm_Type_1_Toku_Kou_Shin	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	1600	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	47	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallArmorPiercing	</effects>
+    <damage>
+      <armor>	70	</armor>
+      <devices>	64	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_47mm_Type_1_Toku_Kou_Shin>
   <_47mm_HE_Type94>
     <id>	21	</id>
     <userString>	#japan_vehicles:_47mm_HE_Type94	</userString>
@@ -352,6 +565,54 @@
       </damage>
     </armorSpalls>
   </_47mm_HE_Type94>
+  <_47mm_Type_94_2>
+    <id>	2043	</id>
+    <userString>	#japan_vehicles:_47mm_Type_94_2	</userString>
+    <icon>	he_modern	</icon>
+    <price>	20	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	47	</caliber>
+    <explosionRadius>	0.47	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	smallHighExplosive	</effects>
+    <damage>
+      <armor>	90	</armor>
+      <devices>	64	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0.47	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	45	</armor>
+        <devices>	30	</devices>
+      </damage>
+    </armorSpalls>
+  </_47mm_Type_94_2>
+  <_47mm_Type_94_Shin>
+    <id>	2040	</id>
+    <userString>	#japan_vehicles:_47mm_Type_94_Shin	</userString>
+    <icon>	he_modern	</icon>
+    <price>	20	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	47	</caliber>
+    <explosionRadius>	0.47	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	smallHighExplosive	</effects>
+    <damage>
+      <armor>	90	</armor>
+      <devices>	64	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0.47	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	45	</armor>
+        <devices>	30	</devices>
+      </damage>
+    </armorSpalls>
+  </_47mm_Type_94_Shin>
   <_57mm_AP_Type97>
     <id>	11	</id>
     <userString>	#japan_vehicles:_57mm_AP_Type97	</userString>
@@ -368,6 +629,38 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_57mm_AP_Type97>
+  <_57mm_Type_92_Shin>
+    <id>	2035	</id>
+    <userString>	#japan_vehicles:_57mm_Type_92_Shin	</userString>
+    <icon>	ap	</icon>
+    <price>	15	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	57	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	75	</armor>
+      <devices>	76	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_57mm_Type_92_Shin>
+  <_57mm_Type_92_95>
+    <id>	2032	</id>
+    <userString>	#japan_vehicles:_57mm_Type_92_95	</userString>
+    <icon>	ap	</icon>
+    <price>	15	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	57	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	75	</armor>
+      <devices>	76	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_57mm_Type_92_95>
   <_57mm_HEAT_Type97>
     <id>	12	</id>
     <userString>	#japan_vehicles:_57mm_HEAT_Type97	</userString>
@@ -385,6 +678,40 @@
     <ricochetAngle>	85	</ricochetAngle>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_57mm_HEAT_Type97>
+  <_57mm_Type_3_Shin>
+    <id>	2036	</id>
+    <userString>	#japan_vehicles:_57mm_Type_3_Shin	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	1200	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	57	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHollowCharge	</effects>
+    <damage>
+      <armor>	75	</armor>
+      <devices>	76	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_57mm_Type_3_Shin>
+  <_57mm_Type_3_95>
+    <id>	2033	</id>
+    <userString>	#japan_vehicles:_57mm_Type_3_95	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	1200	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	57	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHollowCharge	</effects>
+    <damage>
+      <armor>	75	</armor>
+      <devices>	76	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_57mm_Type_3_95>
   <_57mm_HE_Type97>
     <id>	13	</id>
     <userString>	#japan_vehicles:_57mm_HE_Type97	</userString>
@@ -409,6 +736,54 @@
       </damage>
     </armorSpalls>
   </_57mm_HE_Type97>
+  <_57mm_Type_90_Shin>
+    <id>	2037	</id>
+    <userString>	#japan_vehicles:_57mm_Type_90_Shin	</userString>
+    <icon>	he_modern	</icon>
+    <price>	20	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	57	</caliber>
+    <explosionRadius>	0.66	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	95	</armor>
+      <devices>	76	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0.66	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	50	</armor>
+        <devices>	40	</devices>
+      </damage>
+    </armorSpalls>
+  </_57mm_Type_90_Shin>
+  <_57mm_Type_90_95>
+    <id>	2034	</id>
+    <userString>	#japan_vehicles:_57mm_Type_90_95	</userString>
+    <icon>	he_modern	</icon>
+    <price>	20	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	57	</caliber>
+    <explosionRadius>	0.66	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	95	</armor>
+      <devices>	76	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0.66	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	50	</armor>
+        <devices>	40	</devices>
+      </damage>
+    </armorSpalls>
+  </_57mm_Type_90_95>
   <_57mm_APHE_Type1>
     <id>	28	</id>
     <userString>	#japan_vehicles:_57mm_APHE_Type1	</userString>
@@ -425,6 +800,38 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_57mm_APHE_Type1>
+  <_57mm_Type_1_Model_II>
+    <id>	2047	</id>
+    <userString>	#japan_vehicles:_57mm_Type_1_Model_II	</userString>
+    <icon>	ap	</icon>
+    <price>	40	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	57	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	90	</armor>
+      <devices>	76	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_57mm_Type_1_Model_II>
+  <_57mm_Type_1_2>
+    <id>	2044	</id>
+    <userString>	#japan_vehicles:_57mm_Type_1_2	</userString>
+    <icon>	ap	</icon>
+    <price>	40	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	57	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	85	</armor>
+      <devices>	76	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_57mm_Type_1_2>
   <_57mm_APHE_Type1_TK>
     <id>	29	</id>
     <userString>	#japan_vehicles:_57mm_APHE_Type1_TK	</userString>
@@ -442,6 +849,40 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_57mm_APHE_Type1_TK>
+  <_57mm_Type_1_Toku_Kou_Model_II>
+    <id>	2048	</id>
+    <userString>	#japan_vehicles:_57mm_Type_1_Toku_Kou_Model_II	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	2000	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	57	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	90	</armor>
+      <devices>	76	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_57mm_Type_1_Toku_Kou_Model_II>
+  <_57mm_Type_1_Toku_Kou_2>
+    <id>	2045	</id>
+    <userString>	#japan_vehicles:_57mm_Type_1_Toku_Kou_2	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	2000	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	57	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	85	</armor>
+      <devices>	76	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_57mm_Type_1_Toku_Kou_2>
   <_57mm_HE_Type2>
     <id>	30	</id>
     <userString>	#japan_vehicles:_57mm_HE_Type2	</userString>
@@ -466,6 +907,54 @@
       </damage>
     </armorSpalls>
   </_57mm_HE_Type2>
+  <_57mm_Type_2_Model_II>
+    <id>	2049	</id>
+    <userString>	#japan_vehicles:_57mm_Type_2_Model_II	</userString>
+    <icon>	he_modern	</icon>
+    <price>	26	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	57	</caliber>
+    <explosionRadius>	0.66	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	110	</armor>
+      <devices>	76	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0.66	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	55	</armor>
+        <devices>	40	</devices>
+      </damage>
+    </armorSpalls>
+  </_57mm_Type_2_Model_II>
+  <_57mm_Type_2_2>
+    <id>	2046	</id>
+    <userString>	#japan_vehicles:_57mm_Type_2_2	</userString>
+    <icon>	he_modern	</icon>
+    <price>	26	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	57	</caliber>
+    <explosionRadius>	0.66	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	100	</armor>
+      <devices>	76	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0.66	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	50	</armor>
+        <devices>	40	</devices>
+      </damage>
+    </armorSpalls>
+  </_57mm_Type_2_2>
   <_70mm_APHE_Type95>
     <id>	53	</id>
     <userString>	#japan_vehicles:_70mm_APHE_Type95	</userString>
@@ -596,6 +1085,22 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_75mm_AP_Type_1_424>
+  <_75mm_Type_1_II>
+    <id>	2021	</id>
+    <userString>	#japan_vehicles:_75mm_Type_1_II	</userString>
+    <icon>	ap	</icon>
+    <price>	82	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	125	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_75mm_Type_1_II>
   <_75mm_AP_Type_1_TK_424>
     <id>	32	</id>
     <userString>	#japan_vehicles:_75mm_AP_Type_1_TK_424	</userString>
@@ -613,6 +1118,23 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_75mm_AP_Type_1_TK_424>
+  <_75mm_Type_1_Toku_Kou_II>
+    <id>	2022	</id>
+    <userString>	#japan_vehicles:_75mm_Type_1_Toku_Kou_II	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	2800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	125	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_75mm_Type_1_Toku_Kou_II>
   <_75mm_HE_Type_94_424>
     <id>	33	</id>
     <userString>	#japan_vehicles:_75mm_HE_Type_94_424	</userString>
@@ -637,6 +1159,30 @@
       </damage>
     </armorSpalls>
   </_75mm_HE_Type_94_424>
+  <_75mm_Type_94_II>
+    <id>	2023	</id>
+    <userString>	#japan_vehicles:_75mm_Type_94_II	</userString>
+    <icon>	he_modern	</icon>
+    <price>	60	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	75	</caliber>
+    <explosionRadius>	1.06	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	175	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.06	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	90	</armor>
+        <devices>	50	</devices>
+      </damage>
+    </armorSpalls>
+  </_75mm_Type_94_II>
   <_75mm_AP_Type_1_604>
     <id>	1	</id>
     <userString>	#japan_vehicles:_75mm_AP_Type_1_604	</userString>
@@ -653,6 +1199,22 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_75mm_AP_Type_1_604>
+  <_75mm_Type_1_CT>
+    <id>	2018	</id>
+    <userString>	#japan_vehicles:_75mm_Type_1_CT	</userString>
+    <icon>	ap	</icon>
+    <price>	82	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	125	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_75mm_Type_1_CT>
   <_75mm_AP_Type_1_SK_604>
     <id>	2	</id>
     <userString>	#japan_vehicles:_75mm_AP_Type_1_SK_604	</userString>
@@ -670,6 +1232,23 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_75mm_AP_Type_1_SK_604>
+  <_75mm_Type_1_Toku_Kou_CT>
+    <id>	2019	</id>
+    <userString>	#japan_vehicles:_75mm_Type_1_Toku_Kou_CT	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	2800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	125	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_75mm_Type_1_Toku_Kou_CT>
   <_75mm_HE_Type_4_604>
     <id>	3	</id>
     <userString>	#japan_vehicles:_75mm_HE_Type_4_604	</userString>
@@ -694,6 +1273,30 @@
       </damage>
     </armorSpalls>
   </_75mm_HE_Type_4_604>
+  <_75mm_Type_4_CT>
+    <id>	2020	</id>
+    <userString>	#japan_vehicles:_75mm_Type_4_CT	</userString>
+    <icon>	he_modern	</icon>
+    <price>	60	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	75	</caliber>
+    <explosionRadius>	1.06	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	175	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.06	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	90	</armor>
+        <devices>	50	</devices>
+      </damage>
+    </armorSpalls>
+  </_75mm_Type_4_CT>
   <_75mm_AP_Type_1_TKK_604>
     <id>	34	</id>
     <userString>	#japan_vehicles:_75mm_AP_Type_1_TKK_604	</userString>
@@ -710,6 +1313,38 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_75mm_AP_Type_1_TKK_604>
+  <_75mm_Type_1_Toku_Kou_Kai_A>
+    <id>	2015	</id>
+    <userString>	#japan_vehicles:_75mm_Type_1_Toku_Kou_Kai_A	</userString>
+    <icon>	ap	</icon>
+    <price>	140	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	130	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_75mm_Type_1_Toku_Kou_Kai_A>
+  <_75mm_Type_1_Toku_Kou_Kai_CR>
+    <id>	2012	</id>
+    <userString>	#japan_vehicles:_75mm_Type_1_Toku_Kou_Kai_CR	</userString>
+    <icon>	ap	</icon>
+    <price>	140	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	130	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_75mm_Type_1_Toku_Kou_Kai_CR>
   <_75mm_AP_Type_1_TO_604>
     <id>	35	</id>
     <userString>	#japan_vehicles:_75mm_AP_Type_1_TO_604	</userString>
@@ -727,6 +1362,40 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_75mm_AP_Type_1_TO_604>
+  <_75mm_Type_1_Toku_Otsu_A>
+    <id>	2016	</id>
+    <userString>	#japan_vehicles:_75mm_Type_1_Toku_Otsu_A	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	3200	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	130	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_75mm_Type_1_Toku_Otsu_A>
+  <_75mm_Type_1_Toku_Otsu_CR>
+    <id>	2013	</id>
+    <userString>	#japan_vehicles:_75mm_Type_1_Toku_Otsu_CR	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	3200	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	130	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_75mm_Type_1_Toku_Otsu_CR>
   <_75mm_HE_Type_4_K_604>
     <id>	36	</id>
     <userString>	#japan_vehicles:_75mm_HE_Type_4_K_604	</userString>
@@ -751,6 +1420,54 @@
       </damage>
     </armorSpalls>
   </_75mm_HE_Type_4_K_604>
+  <_75mm_Type_4_Kai_A>
+    <id>	2017	</id>
+    <userString>	#japan_vehicles:_75mm_Type_4_Kai_A	</userString>
+    <icon>	he_modern	</icon>
+    <price>	68	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	75	</caliber>
+    <explosionRadius>	1.06	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	175	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.06	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	90	</armor>
+        <devices>	50	</devices>
+      </damage>
+    </armorSpalls>
+  </_75mm_Type_4_Kai_A>
+  <_75mm_Type_4_Kai_CR>
+    <id>	2014	</id>
+    <userString>	#japan_vehicles:_75mm_Type_4_Kai_CR	</userString>
+    <icon>	he_modern	</icon>
+    <price>	68	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	75	</caliber>
+    <explosionRadius>	1.06	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	175	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.06	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	90	</armor>
+        <devices>	50	</devices>
+      </damage>
+    </armorSpalls>
+  </_75mm_Type_4_Kai_CR>
   <_75mm_AP_Type_1_Ni>
     <id>	115	</id>
     <userString>	#japan_vehicles:_75mm_AP_Type_1_Ni	</userString>
@@ -978,7 +1695,7 @@
       <coneAngle>	90	</coneAngle>
       <damage>
         <armor>	90	</armor>
-        <devices>	60	</devices>
+        <devices>	50	</devices>
       </damage>
     </armorSpalls>
   </_75mm_HE_Type_1_604R>
@@ -1039,9 +1756,9 @@
       </damage>
     </armorSpalls>
   </_88mm_Sprg.18>
-  <_88mm_Pzgr39_3>
+  <_88mm_AP_Type_3>
     <id>	136	</id>
-    <userString>	#japan_vehicles:_88mm_Pzgr39_3	</userString>
+    <userString>	#japan_vehicles:_88mm_AP_Type_3	</userString>
     <icon>	ap	</icon>
     <price>	270	</price>
     <kind>	ARMOR_PIERCING	</kind>
@@ -1054,10 +1771,10 @@
     </damage>
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
-  </_88mm_Pzgr39_3>
-  <_88mm_Pzgr.40_3>
+  </_88mm_AP_Type_3>
+  <_88mm_APCR_Type_3>
     <id>	137	</id>
-    <userString>	#japan_vehicles:_88mm_Pzgr.40_3	</userString>
+    <userString>	#japan_vehicles:_88mm_APCR_Type_3	</userString>
     <icon>	ap_cr_premium	</icon>
     <price>	3200	</price>
     <improved>	true	</improved>
@@ -1071,10 +1788,10 @@
     </damage>
     <normalizationAngle>	2	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
-  </_88mm_Pzgr.40_3>
-  <_88mm_Sprg.18_3>
+  </_88mm_APCR_Type_3>
+  <_88mm_HE_Type_3>
     <id>	138	</id>
-    <userString>	#japan_vehicles:_88mm_Sprg.18_3	</userString>
+    <userString>	#japan_vehicles:_88mm_HE_Type_3	</userString>
     <icon>	he_modern	</icon>
     <price>	190	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
@@ -1091,11 +1808,11 @@
       <impactRadius>	1.4	</impactRadius>
       <coneAngle>	90	</coneAngle>
       <damage>
-        <armor>	135	</armor>
+        <armor>	140	</armor>
         <devices>	60	</devices>
       </damage>
     </armorSpalls>
-  </_88mm_Sprg.18_3>
+  </_88mm_HE_Type_3>
   <_88mm_Edelweiss_AP>
     <id>	80	</id>
     <userString>	#japan_vehicles:_88mm_Edelweiss_AP	</userString>
@@ -1671,6 +2388,7 @@
     <userString>	#japan_vehicles:_90mm_AP_M82_late	</userString>
     <icon>	ap	</icon>
     <price>	270	</price>
+    <notInShop>	true	</notInShop>
     <kind>	ARMOR_PIERCING	</kind>
     <caliber>	90	</caliber>
     <isTracer>	true	</isTracer>
@@ -1687,6 +2405,7 @@
     <userString>	#japan_vehicles:_90mm_HVAP_M304	</userString>
     <icon>	ap_cr_premium	</icon>
     <price>	4400	</price>
+    <notInShop>	true	</notInShop>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
     <caliber>	90	</caliber>
@@ -1723,6 +2442,78 @@
       </damage>
     </armorSpalls>
   </_90mm_HE_M71>
+  <_90mm_M71_STA_1>
+    <id>	2011	</id>
+    <userString>	#japan_vehicles:_90mm_M71_STA_1	</userString>
+    <icon>	he_modern	</icon>
+    <price>	240	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	90	</caliber>
+    <explosionRadius>	1.46	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.46	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	160	</armor>
+        <devices>	60	</devices>
+      </damage>
+    </armorSpalls>
+  </_90mm_M71_STA_1>
+  <_90mm_M71_RG>
+    <id>	2008	</id>
+    <userString>	#japan_vehicles:_90mm_M71_RG	</userString>
+    <icon>	he_modern	</icon>
+    <price>	240	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	90	</caliber>
+    <explosionRadius>	1.46	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.46	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	160	</armor>
+        <devices>	60	</devices>
+      </damage>
+    </armorSpalls>
+  </_90mm_M71_RG>
+  <_90mm_M71_61>
+    <id>	2002	</id>
+    <userString>	#japan_vehicles:_90mm_M71_61	</userString>
+    <icon>	he_modern	</icon>
+    <price>	240	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	90	</caliber>
+    <explosionRadius>	1.46	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.46	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	160	</armor>
+        <devices>	60	</devices>
+      </damage>
+    </armorSpalls>
+  </_90mm_M71_61>
   <_90mm_AP_M318A1>
     <id>	40	</id>
     <userString>	#japan_vehicles:_90mm_AP_M318A1	</userString>
@@ -1739,6 +2530,54 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_90mm_AP_M318A1>
+  <_90mm_M318A1_STA_1>
+    <id>	2009	</id>
+    <userString>	#japan_vehicles:_90mm_M318A1_STA_1	</userString>
+    <icon>	ap	</icon>
+    <price>	380	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_90mm_M318A1_STA_1>
+  <_90mm_M318A1_RG>
+    <id>	2006	</id>
+    <userString>	#japan_vehicles:_90mm_M318A1_RG	</userString>
+    <icon>	ap	</icon>
+    <price>	380	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_90mm_M318A1_RG>
+  <_90mm_M318A1_61>
+    <id>	2000	</id>
+    <userString>	#japan_vehicles:_90mm_M318A1_61	</userString>
+    <icon>	ap	</icon>
+    <price>	380	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_90mm_M318A1_61>
   <_90mm_HEAT_Type70>
     <id>	41	</id>
     <userString>	#japan_vehicles:_90mm_HEAT_Type70	</userString>
@@ -1756,6 +2595,57 @@
     <ricochetAngle>	85	</ricochetAngle>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_90mm_HEAT_Type70>
+  <_90mm_Type_70_STA_1>
+    <id>	2010	</id>
+    <userString>	#japan_vehicles:_90mm_Type_70_STA_1	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4400	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_90mm_Type_70_STA_1>
+  <_90mm_Type_70_RG>
+    <id>	2007	</id>
+    <userString>	#japan_vehicles:_90mm_Type_70_RG	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4400	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_90mm_Type_70_RG>
+  <_90mm_Type_70_61>
+    <id>	2001	</id>
+    <userString>	#japan_vehicles:_90mm_Type_70_61	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4400	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_90mm_Type_70_61>
   <_75mm_AP_Type_T4>
     <id>	166	</id>
     <userString>	#japan_vehicles:_75mm_AP_Type_T4	</userString>
@@ -1875,6 +2765,7 @@
     <userString>	#japan_vehicles:_105mm_APHE_Type95	</userString>
     <icon>	ap	</icon>
     <price>	250	</price>
+    <notInShop>	true	</notInShop>
     <kind>	ARMOR_PIERCING	</kind>
     <caliber>	105	</caliber>
     <isTracer>	true	</isTracer>
@@ -1886,9 +2777,76 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_105mm_APHE_Type95>
+  <_105mm_Type_95_O_Ni>
+    <id>	2056	</id>
+    <userString>	#japan_vehicles:_105mm_Type_95_O_Ni	</userString>
+    <icon>	ap	</icon>
+    <price>	250	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	340	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_Type_95_O_Ni>
+  <_105mm_Type_95_O_I>
+    <id>	2050	</id>
+    <userString>	#japan_vehicles:_105mm_Type_95_O_I	</userString>
+    <icon>	ap	</icon>
+    <price>	250	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	300	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_Type_95_O_I>
   <_105mm_APHE_Type95_TK>
     <id>	64	</id>
     <userString>	#japan_vehicles:_105mm_APHE_Type95_TK	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	3600	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	300	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_APHE_Type95_TK>
+  <_105mm_Type_95_Toku_Kou_O_Ni>
+    <id>	2057	</id>
+    <userString>	#japan_vehicles:_105mm_Type_95_Toku_Kou_O_Ni	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	3600	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	340	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_Type_95_Toku_Kou_O_Ni>
+  <_105mm_Type_95_Toku_Kou_O_I>
+    <id>	2051	</id>
+    <userString>	#japan_vehicles:_105mm_Type_95_Toku_Kou_O_I	</userString>
     <icon>	ap_premium	</icon>
     <price>	3600	</price>
     <improved>	true	</improved>
@@ -1902,7 +2860,7 @@
     </damage>
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
-  </_105mm_APHE_Type95_TK>
+  </_105mm_Type_95_Toku_Kou_O_I>
   <_105mm_HE_Type14>
     <id>	65	</id>
     <userString>	#japan_vehicles:_105mm_HE_Type14	</userString>
@@ -1924,6 +2882,7 @@
     <userString>	#japan_vehicles:_105mm_HE_Type92	</userString>
     <icon>	he_modern	</icon>
     <price>	190	</price>
+    <notInShop>	true	</notInShop>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <mechanics>	MODERN	</mechanics>
     <caliber>	105	</caliber>
@@ -1943,6 +2902,54 @@
       </damage>
     </armorSpalls>
   </_105mm_HE_Type92>
+  <_105mm_Type_92_O_Ni>
+    <id>	2058	</id>
+    <userString>	#japan_vehicles:_105mm_Type_92_O_Ni	</userString>
+    <icon>	he_modern	</icon>
+    <price>	190	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	210	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_Type_92_O_Ni>
+  <_105mm_Type_92_O_I>
+    <id>	2052	</id>
+    <userString>	#japan_vehicles:_105mm_Type_92_O_I	</userString>
+    <icon>	he_modern	</icon>
+    <price>	190	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	180	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_Type_92_O_I>
   <_105mm_AP_Experimental_Type2>
     <id>	58	</id>
     <userString>	#japan_vehicles:_105mm_AP_Experimental_Type2	</userString>
@@ -1953,7 +2960,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainArmorPiercing	</effects>
     <damage>
-      <armor>	330	</armor>
+      <armor>	370	</armor>
       <devices>	150	</devices>
     </damage>
     <normalizationAngle>	5	</normalizationAngle>
@@ -1970,7 +2977,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainArmorPiercing	</effects>
     <damage>
-      <armor>	330	</armor>
+      <armor>	370	</armor>
       <devices>	150	</devices>
     </damage>
     <normalizationAngle>	5	</normalizationAngle>
@@ -1986,7 +2993,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainArmorPiercing	</effects>
     <damage>
-      <armor>	330	</armor>
+      <armor>	370	</armor>
       <devices>	150	</devices>
     </damage>
     <normalizationAngle>	5	</normalizationAngle>
@@ -2003,7 +3010,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainArmorPiercing	</effects>
     <damage>
-      <armor>	330	</armor>
+      <armor>	370	</armor>
       <devices>	150	</devices>
     </damage>
     <normalizationAngle>	5	</normalizationAngle>
@@ -2021,14 +3028,14 @@
     <isTracer>	true	</isTracer>
     <effects>	mainHighExplosive	</effects>
     <damage>
-      <armor>	430	</armor>
+      <armor>	470	</armor>
       <devices>	150	</devices>
     </damage>
     <armorSpalls>
       <impactRadius>	1.91	</impactRadius>
       <coneAngle>	90	</coneAngle>
       <damage>
-        <armor>	215	</armor>
+        <armor>	235	</armor>
         <devices>	75	</devices>
       </damage>
     </armorSpalls>
@@ -2090,9 +3097,33 @@
       </damage>
     </armorSpalls>
   </_105mm_HE_Type93>
-  <_88mm_Pzgr39_3_L56>
+  <_105mm_Type_91_O_Ni>
+    <id>	2059	</id>
+    <userString>	#japan_vehicles:_105mm_Type_91_O_Ni	</userString>
+    <icon>	he_modern	</icon>
+    <price>	245	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	450	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	225	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_Type_91_O_Ni>
+  <_88mm_AP_Type_3T>
     <id>	142	</id>
-    <userString>	#japan_vehicles:_88mm_Pzgr39_3_L56	</userString>
+    <userString>	#japan_vehicles:_88mm_AP_Type_3T	</userString>
     <icon>	ap	</icon>
     <price>	325	</price>
     <kind>	ARMOR_PIERCING	</kind>
@@ -2105,10 +3136,10 @@
     </damage>
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
-  </_88mm_Pzgr39_3_L56>
-  <_88mm_Pzgr.40_3_L56>
+  </_88mm_AP_Type_3T>
+  <_88mm_APCR_Type_3T>
     <id>	143	</id>
-    <userString>	#japan_vehicles:_88mm_Pzgr.40_3_L56	</userString>
+    <userString>	#japan_vehicles:_88mm_APCR_Type_3T	</userString>
     <icon>	ap_cr_premium	</icon>
     <price>	3200	</price>
     <improved>	true	</improved>
@@ -2122,10 +3153,10 @@
     </damage>
     <normalizationAngle>	2	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
-  </_88mm_Pzgr.40_3_L56>
-  <_88mm_Sprg.18_3_L56>
+  </_88mm_APCR_Type_3T>
+  <_88mm_HE_Type_3T>
     <id>	144	</id>
-    <userString>	#japan_vehicles:_88mm_Sprg.18_3_L56	</userString>
+    <userString>	#japan_vehicles:_88mm_HE_Type_3T	</userString>
     <icon>	he_modern	</icon>
     <price>	200	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
@@ -2146,7 +3177,7 @@
         <devices>	60	</devices>
       </damage>
     </armorSpalls>
-  </_88mm_Sprg.18_3_L56>
+  </_88mm_HE_Type_3T>
   <_105mm_ap_92_L45>
     <id>	145	</id>
     <userString>	#japan_vehicles:_105mm_ap_92_L45	</userString>
@@ -2277,6 +3308,22 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_105mm_AP_M68>
+  <_105mm_AP_Common_Type_68_57>
+    <id>	2069	</id>
+    <userString>	#japan_vehicles:_105mm_AP_Common_Type_68_57	</userString>
+    <icon>	ap	</icon>
+    <price>	1000	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_AP_Common_Type_68_57>
   <_105mm_APCR_M68>
     <id>	152	</id>
     <userString>	#japan_vehicles:_105mm_APCR_M68	</userString>
@@ -2294,6 +3341,23 @@
     <normalizationAngle>	2	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_105mm_APCR_M68>
+  <_105mm_APCR_Common_Type_68_57>
+    <id>	2070	</id>
+    <userString>	#japan_vehicles:_105mm_APCR_Common_Type_68_57	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_APCR_Common_Type_68_57>
   <_105mm_HE_M68>
     <id>	153	</id>
     <userString>	#japan_vehicles:_105mm_HE_M68	</userString>
@@ -2318,6 +3382,30 @@
       </damage>
     </armorSpalls>
   </_105mm_HE_M68>
+  <_105mm_HE_Common_Type_68_57>
+    <id>	2071	</id>
+    <userString>	#japan_vehicles:_105mm_HE_Common_Type_68_57	</userString>
+    <icon>	he_modern	</icon>
+    <price>	680	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	220	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_HE_Common_Type_68_57>
   <_120mm_AP_M58>
     <id>	154	</id>
     <userString>	#japan_vehicles:_120mm_AP_M58	</userString>
@@ -2508,9 +3596,25 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_105mm_APDS_L28A1>
-  <_105mm_HEAT-T_T384E4>
+  <_105mm_M392XB_61>
+    <id>	2003	</id>
+    <userString>	#japan_vehicles:_105mm_M392XB_61	</userString>
+    <icon>	ap	</icon>
+    <price>	1200	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_M392XB_61>
+  <_105mm_M456>
     <id>	43	</id>
-    <userString>	#japan_vehicles:_105mm_HEAT-T_T384E4	</userString>
+    <userString>	#japan_vehicles:_105mm_M456	</userString>
     <icon>	hc_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
@@ -2524,7 +3628,24 @@
     </damage>
     <ricochetAngle>	85	</ricochetAngle>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
-  </_105mm_HEAT-T_T384E4>
+  </_105mm_M456>
+  <_105mm_M456_61>
+    <id>	2004	</id>
+    <userString>	#japan_vehicles:_105mm_M456_61	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_105mm_M456_61>
   <_105mm_HEPT_Type75>
     <id>	44	</id>
     <userString>	#japan_vehicles:_105mm_HEPT_Type75	</userString>
@@ -2549,6 +3670,30 @@
       </damage>
     </armorSpalls>
   </_105mm_HEPT_Type75>
+  <_105mm_Type_75_61>
+    <id>	2005	</id>
+    <userString>	#japan_vehicles:_105mm_Type_75_61	</userString>
+    <icon>	he_modern	</icon>
+    <price>	880	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	220	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_Type_75_61>
   <_105mm_AP_M736>
     <id>	127	</id>
     <userString>	#japan_vehicles:_105mm_AP_M736	</userString>
@@ -2730,8 +3875,8 @@
     <isTracer>	true	</isTracer>
     <effects>	largeArmorPiercing	</effects>
     <damage>
-      <armor>	450	</armor>
-      <devices>	178	</devices>
+      <armor>	550	</armor>
+      <devices>	171	</devices>
     </damage>
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
@@ -2747,8 +3892,8 @@
     <isTracer>	true	</isTracer>
     <effects>	largeArmorPiercing	</effects>
     <damage>
-      <armor>	450	</armor>
-      <devices>	178	</devices>
+      <armor>	550	</armor>
+      <devices>	171	</devices>
     </damage>
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
@@ -2765,18 +3910,75 @@
     <isTracer>	true	</isTracer>
     <effects>	largeHighExplosive	</effects>
     <damage>
-      <armor>	610	</armor>
-      <devices>	178	</devices>
+      <armor>	750	</armor>
+      <devices>	171	</devices>
     </damage>
     <armorSpalls>
       <impactRadius>	2.67	</impactRadius>
       <coneAngle>	90	</coneAngle>
       <damage>
-        <armor>	305	</armor>
-        <devices>	90	</devices>
+        <armor>	375	</armor>
+        <devices>	85	</devices>
       </damage>
     </armorSpalls>
   </_127mm_Common_Type_0_HE>
+  <_127mm_Capped_Common_Semi_AP_O_Ho>
+    <id>	2073	</id>
+    <userString>	#japan_vehicles:_127mm_Capped_Common_Semi_AP_O_Ho	</userString>
+    <icon>	ap	</icon>
+    <price>	790	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	127	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	460	</armor>
+      <devices>	171	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_127mm_Capped_Common_Semi_AP_O_Ho>
+  <_127mm_Capped_Common_O_Ho>
+    <id>	2074	</id>
+    <userString>	#japan_vehicles:_127mm_Capped_Common_O_Ho	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	127	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	460	</armor>
+      <devices>	171	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_127mm_Capped_Common_O_Ho>
+  <_127mm_Common_Type_0_HE_O_Ho>
+    <id>	2075	</id>
+    <userString>	#japan_vehicles:_127mm_Common_Type_0_HE_O_Ho	</userString>
+    <icon>	he_modern	</icon>
+    <price>	670	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	127	</caliber>
+    <explosionRadius>	2.67	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	640	</armor>
+      <devices>	171	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.67	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	320	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
+  </_127mm_Common_Type_0_HE_O_Ho>
   <_127mm_Capped_Common_Type_0>
     <id>	91	</id>
     <userString>	#japan_vehicles:_127mm_Capped_Common_Type_0	</userString>
@@ -2839,6 +4041,7 @@
     <userString>	#japan_vehicles:_140mm_Capped_Common_Semi_AP	</userString>
     <icon>	ap	</icon>
     <price>	1195	</price>
+    <notInShop>	true	</notInShop>
     <kind>	ARMOR_PIERCING	</kind>
     <caliber>	139.7	</caliber>
     <isTracer>	true	</isTracer>
@@ -2850,9 +4053,43 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_140mm_Capped_Common_Semi_AP>
+  <_140mm_Capped_Common_4>
+    <id>	2063	</id>
+    <userString>	#japan_vehicles:_140mm_Capped_Common_4	</userString>
+    <icon>	ap	</icon>
+    <price>	1195	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	139.7	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	600	</armor>
+      <devices>	191	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_140mm_Capped_Common_4>
   <_140mm_Capped_Common_Semi_AP_Kai>
     <id>	74	</id>
     <userString>	#japan_vehicles:_140mm_Capped_Common_Semi_AP_Kai	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	4800	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	139.7	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	600	</armor>
+      <devices>	191	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_140mm_Capped_Common_Semi_AP_Kai>
+  <_140mm_Capped_Common_Kai_4>
+    <id>	2064	</id>
+    <userString>	#japan_vehicles:_140mm_Capped_Common_Kai_4	</userString>
     <icon>	ap_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
@@ -2866,12 +4103,13 @@
     </damage>
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
-  </_140mm_Capped_Common_Semi_AP_Kai>
+  </_140mm_Capped_Common_Kai_4>
   <_140mm_Common_Type_0_HE>
     <id>	50	</id>
     <userString>	#japan_vehicles:_140mm_Common_Type_0_HE	</userString>
     <icon>	he_modern	</icon>
     <price>	905	</price>
+    <notInShop>	true	</notInShop>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <mechanics>	MODERN	</mechanics>
     <caliber>	139.7	</caliber>
@@ -2891,9 +4129,50 @@
       </damage>
     </armorSpalls>
   </_140mm_Common_Type_0_HE>
+  <_140mm_Common_Type_0_4>
+    <id>	2065	</id>
+    <userString>	#japan_vehicles:_140mm_Common_Type_0_4	</userString>
+    <icon>	he_modern	</icon>
+    <price>	905	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	139.7	</caliber>
+    <explosionRadius>	3.15	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	800	</armor>
+      <devices>	191	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	3.15	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	400	</armor>
+        <devices>	95	</devices>
+      </damage>
+    </armorSpalls>
+  </_140mm_Common_Type_0_4>
   <_150mm_APHE_Type1>
     <id>	60	</id>
     <userString>	#japan_vehicles:_150mm_APHE_Type1	</userString>
+    <icon>	ap	</icon>
+    <price>	540	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	149.1	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	700	</armor>
+      <devices>	203	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_150mm_APHE_Type1>
+  <_150mm_Type_1_O_I>
+    <id>	2053	</id>
+    <userString>	#japan_vehicles:_150mm_Type_1_O_I	</userString>
     <icon>	ap	</icon>
     <price>	540	</price>
     <kind>	ARMOR_PIERCING	</kind>
@@ -2906,10 +4185,28 @@
     </damage>
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
-  </_150mm_APHE_Type1>
+  </_150mm_Type_1_O_I>
   <_150mm_HEAT_Type3>
     <id>	67	</id>
     <userString>	#japan_vehicles:_150mm_HEAT_Type3	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4800	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	149.1	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	700	</armor>
+      <devices>	203	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_150mm_HEAT_Type3>
+  <_150mm_Type_3_O_I>
+    <id>	2054	</id>
+    <userString>	#japan_vehicles:_150mm_Type_3_O_I	</userString>
     <icon>	hc_premium	</icon>
     <price>	4800	</price>
     <improved>	true	</improved>
@@ -2923,12 +4220,13 @@
     </damage>
     <ricochetAngle>	85	</ricochetAngle>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
-  </_150mm_HEAT_Type3>
+  </_150mm_Type_3_O_I>
   <_150mm_HE_Type96>
     <id>	61	</id>
     <userString>	#japan_vehicles:_150mm_HE_Type96	</userString>
     <icon>	he_modern	</icon>
     <price>	660	</price>
+    <notInShop>	true	</notInShop>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <mechanics>	MODERN	</mechanics>
     <caliber>	149.1	</caliber>
@@ -2948,35 +4246,60 @@
       </damage>
     </armorSpalls>
   </_150mm_HE_Type96>
-  <_150mm_Common_Type_0_HE>
-    <id>	75	</id>
-    <userString>	#japan_vehicles:_150mm_Common_Type_0_HE	</userString>
+  <_150mm_Type_96_O_I>
+    <id>	2055	</id>
+    <userString>	#japan_vehicles:_150mm_Type_96_O_I	</userString>
     <icon>	he_modern	</icon>
-    <price>	1320	</price>
+    <price>	660	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <mechanics>	MODERN	</mechanics>
-    <caliber>	152.4	</caliber>
-    <explosionRadius>	3.66	</explosionRadius>
+    <caliber>	149.1	</caliber>
+    <explosionRadius>	3.53	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	largeHighExplosive	</effects>
     <damage>
-      <armor>	900	</armor>
+      <armor>	890	</armor>
       <devices>	203	</devices>
     </damage>
     <armorSpalls>
-      <impactRadius>	3.66	</impactRadius>
+      <impactRadius>	3.53	</impactRadius>
       <coneAngle>	90	</coneAngle>
       <damage>
-        <armor>	450	</armor>
+        <armor>	445	</armor>
         <devices>	100	</devices>
       </damage>
     </armorSpalls>
-  </_150mm_Common_Type_0_HE>
+  </_150mm_Type_96_O_I>
+  <_150mm_Common_Type_0>
+    <id>	75	</id>
+    <userString>	#japan_vehicles:_150mm_Common_Type_0	</userString>
+    <icon>	he_modern	</icon>
+    <price>	2860	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	152.4	</caliber>
+    <explosionRadius>	3.67	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	1100	</armor>
+      <devices>	203	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	3.67	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	550	</armor>
+        <devices>	100	</devices>
+      </damage>
+    </armorSpalls>
+  </_150mm_Common_Type_0>
   <_150mm_Common_Type_0_HE_Kai>
     <id>	76	</id>
     <userString>	#japan_vehicles:_150mm_Common_Type_0_HE_Kai	</userString>
     <icon>	he_modern_premium	</icon>
     <price>	6400	</price>
+    <notInShop>	true	</notInShop>
     <improved>	true	</improved>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <mechanics>	MODERN	</mechanics>
@@ -2997,22 +4320,39 @@
       </damage>
     </armorSpalls>
   </_150mm_Common_Type_0_HE_Kai>
-  <_150mm_Common_Type_91_AP>
+  <_150mm_Common_Type_91>
     <id>	90	</id>
-    <userString>	#japan_vehicles:_150mm_Common_Type_91_AP	</userString>
+    <userString>	#japan_vehicles:_150mm_Common_Type_91	</userString>
     <icon>	ap	</icon>
-    <price>	1200	</price>
+    <price>	1799	</price>
     <kind>	ARMOR_PIERCING	</kind>
     <caliber>	152.4	</caliber>
     <isTracer>	true	</isTracer>
     <effects>	largeArmorPiercing	</effects>
     <damage>
-      <armor>	680	</armor>
+      <armor>	700	</armor>
       <devices>	203	</devices>
     </damage>
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
-  </_150mm_Common_Type_91_AP>
+  </_150mm_Common_Type_91>
+  <_150mm_Common_Type_91_Kai>
+    <id>	2072	</id>
+    <userString>	#japan_vehicles:_150mm_Common_Type_91_Kai	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	6400	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	152.4	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	700	</armor>
+      <devices>	203	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_150mm_Common_Type_91_Kai>
   <_149mm_Capped_Semi_AP>
     <id>	94	</id>
     <userString>	#japan_vehicles:_149mm_Capped_Semi_AP	</userString>

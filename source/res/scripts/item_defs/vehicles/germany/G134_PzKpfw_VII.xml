@@ -901,7 +901,6 @@
         <rightTrack>	40	</rightTrack>
       </armor>
       <weight>	24000	</weight>
-      <maxLoad>	130000	</maxLoad>
       <terrainResistance>	1.1 1.2 2.3	</terrainResistance>
       <brakeForce>	120000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -1871,7 +1870,7 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_128mm_KwK46_L61>	shared	  <maxAmmo>	40	</maxAmmo>
+        <_128mm_Kw_K_L_61>	shared	  <maxAmmo>	40	</maxAmmo>
           <armor>
             <armor_1>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -1982,7 +1981,7 @@
             <density>	113.521 117.107	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_128mm_KwK46_L61>
+        </_128mm_Kw_K_L_61>
       </guns>
       <models>
         <undamaged>	vehicles/german/G134_PzKpfw_VII/normal/lod0/Turret_01.model	</undamaged>
@@ -2621,7 +2620,7 @@
     </Turret_1_G134_PzKpfw_VII>
   </turrets0>
   <engines>
-    <MB517P>	shared	</MB517P>
+    <MB_517>	shared	</MB_517>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
@@ -2632,10 +2631,10 @@
   <physics>
     <detailed>
       <engines>
-        <MB517P>
+        <MB_517>
           <smplEnginePower>	1350	</smplEnginePower>
           <smplFwMaxSpeed>	33	</smplFwMaxSpeed>
-        </MB517P>
+        </MB_517>
       </engines>
       <chassis>
         <Chassis_G134_PzKpfw_VII>

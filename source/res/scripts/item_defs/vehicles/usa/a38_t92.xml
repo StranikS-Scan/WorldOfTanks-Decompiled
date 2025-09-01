@@ -1092,8 +1092,8 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_T92>
-      <userString>	#usa_vehicles:Chassis_T92	</userString>
+    <Chassis_A38_T92>
+      <userString>	#usa_vehicles:Chassis_A38_T92	</userString>
       <tags></tags>
       <level>	10	</level>
       <price>	32000	</price>
@@ -1103,7 +1103,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	24000	</weight>
-      <maxLoad>	61000	</maxLoad>
       <terrainResistance>	1 1.2 1.9	</terrainResistance>
       <brakeForce>	58000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2136,13 +2135,13 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	7.03448296	</repairTime>
-    </Chassis_T92>
+    </Chassis_A38_T92>
   </chassis>
   <turrets0>
-    <Turret_1_T92>
+    <Turret_1_A38_T92>
       <ceilless>	true	</ceilless>
-      <userString>	#usa_vehicles:Turret_1_T92	</userString>
-      <tags>	cannotDetach	</tags>
+      <userString>	#usa_vehicles:Turret_1_A38_T92	</userString>
+      <tags>	cannotDetach turretless	</tags>
       <level>	10	</level>
       <price>	120	</price>
       <notInShop>	true	</notInShop>
@@ -2153,9 +2152,9 @@
       <maxHealth>	100	</maxHealth>
       <rotationSpeed>	8	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	185	</maxHealth>
+        <maxRegenHealth>	93	</maxRegenHealth>
+        <repairCost>	10	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	310	</circularVisionRadius>
       <surveyingDeviceHealth>
@@ -2274,7 +2273,7 @@
         <density>	50.0 50.0	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_1_T92>
+    </Turret_1_A38_T92>
   </turrets0>
   <engines>
     <Ford_GAF_R1>	shared	</Ford_GAF_R1>
@@ -2294,7 +2293,7 @@
         </Ford_GAF_R1>
       </engines>
       <chassis>
-        <Chassis_T92>
+        <Chassis_A38_T92>
           <grounds>
             <soft>
               <rollingFriction>	0.15295	</rollingFriction>
@@ -2306,7 +2305,7 @@
               <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_T92>
+        </Chassis_A38_T92>
       </chassis>
     </detailed>
   </physics>

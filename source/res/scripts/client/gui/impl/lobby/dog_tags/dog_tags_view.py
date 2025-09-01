@@ -6,14 +6,13 @@ from operator import attrgetter
 import typing
 import BigWorld
 import WWISE
-from BWUtil import AsyncReturn
 from constants import DOG_TAGS_CONFIG
 from dog_tags_common.components_config import componentConfigAdapter
 from dog_tags_common.config.common import ComponentViewType, ComponentPurpose
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
+from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.dog_tags.dedication_tooltip_model import DedicationTooltipModel
@@ -28,8 +27,7 @@ from gui.impl.pub import ViewImpl
 from gui.server_events import settings as userSettings
 from gui.shared import events
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.close_confiramtor_helper import CloseConfirmatorsHelper
-from gui.shared.event_dispatcher import showBrowserOverlayView, showDogTagCustomizationConfirmDialog
+from gui.shared.event_dispatcher import showBrowserOverlayView
 from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency
 from helpers.time_utils import getCurrentLocalServerTimestamp, getTimeStructInLocal
@@ -37,17 +35,15 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.web import IWebController
 from uilogging.dog_tags.logger import DogTagsViewLogger
 from uilogging.dog_tags.logging_constants import DogTagsViewKeys
-from wg_async import wg_async, wg_await
+from account_helpers.dog_tags import DogTags as DogTagsAccountHelper
 if typing.TYPE_CHECKING:
     from typing import Dict, Callable, Optional, Union
     from frameworks.wulf import View, ViewEvent
-    from account_helpers.dog_tags import DogTags as DogTagsAccountHelper
 _logger = logging.getLogger(__name__)
 DEFAULT_DOG_TAGS_TAB = ComponentViewType.ENGRAVING.getTabIdx()
 DOG_TAG_INFO_PAGE_KEY = 'infoPage'
 
 class DogTagsView(ViewImpl):
-    __slots__ = ('_dogTagsHelper', '_composer', '_tooltipModelFactories', '_animatedComposer', '__closeConfirmatorHelper', '__selectedEngraving', '__selectedBackground', '__uiLogging')
     _webCtrl = dependency.descriptor(IWebController)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
@@ -61,7 +57,6 @@ class DogTagsView(ViewImpl):
         self._dogTagsHelper = BigWorld.player().dogTags
         self._composer = DogTagComposerLobby(self._dogTagsHelper)
         self._animatedComposer = AnimatedDogTagComposer(self._dogTagsHelper)
-        self.__closeConfirmatorHelper = CloseConfirmatorsHelper()
         self.__selectedEngraving = None
         self.__selectedBackground = None
         self._tooltipModelFactories = {R.views.lobby.dog_tags.DedicationTooltip(): DedicationTooltip,
@@ -93,10 +88,25 @@ class DogTagsView(ViewImpl):
     def viewModel(self):
         return super(DogTagsView, self).getViewModel()
 
+    def getCurrentDogTag(self):
+        clanProfile = self._webCtrl.getAccountProfile()
+        dogTag = self._composer.getSelectedDogTag(clanProfile)
+        engraving = dogTag.getComponentByType(ComponentViewType.ENGRAVING).compId
+        background = dogTag.getComponentByType(ComponentViewType.BACKGROUND).compId
+        return (engraving, background)
+
+    @property
+    def selectedEngraving(self):
+        return self.__selectedEngraving
+
+    @property
+    def selectedBackground(self):
+        return self.__selectedBackground
+
     def _initialize(self, *args, **kwargs):
-        self.viewModel.onExit += self.__onExit
         self.viewModel.onEquip += self.__onEquip
         self.viewModel.onTabSelect += self.__onTabSelected
+        self.viewModel.onBack += self.__onBack
         self.viewModel.onInfoButtonClick += self.__onInfoButtonClicked
         self.viewModel.onPlayVideo += self.__onPlayVideo
         self.viewModel.onUpdateSelectedDT += self.__onUpdateSelectedDT
@@ -104,13 +114,12 @@ class DogTagsView(ViewImpl):
         self.viewModel.onOnboardingCloseClick += self.__onOnboardingCloseClick
         self.viewModel.onNewComponentHover += self.__onNewComponentHover
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
-        self.__closeConfirmatorHelper.start(self.__onExit)
 
     def _finalize(self):
         super(DogTagsView, self)._finalize()
-        self.viewModel.onExit -= self.__onExit
         self.viewModel.onEquip -= self.__onEquip
         self.viewModel.onTabSelect -= self.__onTabSelected
+        self.viewModel.onBack -= self.__onBack
         self.viewModel.onInfoButtonClick -= self.__onInfoButtonClicked
         self.viewModel.onPlayVideo -= self.__onPlayVideo
         self.viewModel.onUpdateSelectedDT -= self.__onUpdateSelectedDT
@@ -119,7 +128,6 @@ class DogTagsView(ViewImpl):
         self.viewModel.onNewComponentHover -= self.__onNewComponentHover
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
         self._soundsOnExit()
-        self.__closeConfirmatorHelper.stop()
 
     def _onLoading(self, highlightedComponentId=-1, makeTopView=False):
         _logger.debug('DogTags::_onLoading')
@@ -149,7 +157,7 @@ class DogTagsView(ViewImpl):
         _logger.debug('DogTags::__update')
         clanProfile = self._webCtrl.getAccountProfile()
         dogTag = self._composer.getSelectedDogTag(clanProfile)
-        engraving, background = self.__getCurrentDogTag()
+        engraving, background = self.getCurrentDogTag()
         with self.viewModel.transaction() as tx:
             self.__selectedBackground = background
             self.__selectedEngraving = engraving
@@ -181,6 +189,11 @@ class DogTagsView(ViewImpl):
             highComp = componentConfigAdapter.getComponentById(compId)
             return None if highComp is None else highComp.viewType.getTabIdx()
 
+    def __onBack(self):
+        state = getLobbyStateMachine().getStateFromView(self)
+        if state:
+            state.goBack()
+
     @args2params(int)
     def __onTabSelected(self, newTab):
         self.__switchTab(newTab)
@@ -210,9 +223,7 @@ class DogTagsView(ViewImpl):
         model.setNewEngravingSkillCount(counters[ComponentViewType.ENGRAVING][ComponentPurpose.SKILL])
 
     def __onEquip(self):
-        with userSettings.dogTagsSettings() as dt:
-            dt.setSelectedCustomizable([self.__selectedBackground, self.__selectedEngraving])
-        self._dogTagsHelper.updatePlayerDT(self.__selectedBackground, self.__selectedEngraving)
+        DogTagsAccountHelper.equipDT(self.__selectedBackground, self.__selectedEngraving)
 
     @args2params(str)
     def __onPlayVideo(self, urlKey):
@@ -234,24 +245,6 @@ class DogTagsView(ViewImpl):
     def __onNewComponentHover(self, compId):
         self._markComponentAsViewed(compId)
 
-    @wg_async
-    def __onExit(self):
-        canQuit = yield wg_await(self.__canQuit())
-        if not canQuit:
-            raise AsyncReturn(False)
-        if self.viewFlags == ViewFlags.LOBBY_TOP_SUB_VIEW:
-            self.destroyWindow()
-        else:
-            g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
-        raise AsyncReturn(canQuit)
-
-    def __getCurrentDogTag(self):
-        clanProfile = self._webCtrl.getAccountProfile()
-        dogTag = self._composer.getSelectedDogTag(clanProfile)
-        engraving = dogTag.getComponentByType(ComponentViewType.ENGRAVING).compId
-        background = dogTag.getComponentByType(ComponentViewType.BACKGROUND).compId
-        return (engraving, background)
-
     def __onDogTagDataChanged(self, diff):
         _logger.debug('DogTags::__onDogTagDataChanged: %s', diff)
         self.__update()
@@ -265,17 +258,6 @@ class DogTagsView(ViewImpl):
     def __onUpdateSelectedDT(self, background=None, engraving=None):
         self.__selectedBackground = background
         self.__selectedEngraving = engraving
-
-    @wg_async
-    def __canQuit(self):
-        engraving, background = self.__getCurrentDogTag()
-        if background == self.__selectedBackground and engraving == self.__selectedEngraving:
-            raise AsyncReturn(True)
-        result = yield wg_await(showDogTagCustomizationConfirmDialog(self.__selectedBackground, self.__selectedEngraving, self.getParentWindow()))
-        isOK, data = result.result
-        if isOK and data['saveChanges']:
-            self.__onEquip()
-        raise AsyncReturn(isOK)
 
 
 class GradesTooltip(ViewImpl):

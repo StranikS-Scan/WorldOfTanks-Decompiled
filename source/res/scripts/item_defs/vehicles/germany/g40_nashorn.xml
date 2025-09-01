@@ -1109,13 +1109,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_Nashorn>
-      <userString>	#germany_vehicles:Chassis_Nashorn	</userString>
+    <Chassis_G40_Nashorn>
+      <userString>	#germany_vehicles:Chassis_G40_Nashorn	</userString>
       <tags></tags>
       <level>	5	</level>
       <price>	9000	</price>
       <unlocks>
-        <chassis>	Chassis_Nashorn_2	  <cost>	4100	</cost>
+        <chassis>	Chassis_G40_Nashorn_2	  <cost>	4100	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1123,11 +1123,10 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	10000	</weight>
-      <maxLoad>	24000	</maxLoad>
-      <terrainResistance>	1.1 1.3 2.4	</terrainResistance>
+      <terrainResistance>	1 1.2 2.2	</terrainResistance>
       <brakeForce>	24000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	32	</rotationSpeed>
+      <rotationSpeed>	41	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.24	</vehicleMovement>
         <vehicleRotation>	0.24	</vehicleRotation>
@@ -2039,9 +2038,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_Nashorn>
-    <Chassis_Nashorn_2>
-      <userString>	#germany_vehicles:Chassis_Nashorn_2	</userString>
+    </Chassis_G40_Nashorn>
+    <Chassis_G40_Nashorn_2>
+      <userString>	#germany_vehicles:Chassis_G40_Nashorn_2	</userString>
       <tags></tags>
       <level>	6	</level>
       <price>	14500	</price>
@@ -2050,11 +2049,10 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	10000	</weight>
-      <maxLoad>	27000	</maxLoad>
       <terrainResistance>	1 1.2 2.2	</terrainResistance>
       <brakeForce>	26000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	36	</rotationSpeed>
+      <rotationSpeed>	45	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.22	</vehicleMovement>
         <vehicleRotation>	0.22	</vehicleRotation>
@@ -2966,13 +2964,13 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_Nashorn_2>
+    </Chassis_G40_Nashorn_2>
   </chassis>
   <turrets0>
-    <Turret_1_Nashorn>
+    <Turret_1_G40_Nashorn>
       <ceilless>	true	</ceilless>
-      <userString>	#germany_vehicles:Turret_1_Nashorn	</userString>
-      <tags>	cannotDetach	</tags>
+      <userString>	#germany_vehicles:Turret_1_G40_Nashorn	</userString>
+      <tags>	cannotDetach turretless	</tags>
       <level>	6	</level>
       <price>	100	</price>
       <notInShop>	true	</notInShop>
@@ -2996,130 +2994,20 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_StuK42_L70>	shared	  <maxAmmo>	70	</maxAmmo>
+        <_88mm_Pak_36_L_56_164>	shared	  <maxAmmo>	55	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <gun>	_88mm_PaK_36_L56	  <cost>	9500	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	15	</armor_1>
-            <gun>	20	</gun>
-          </armor>
-          <shotDispersionRadius>	0.33	</shotDispersionRadius>
-          <reloadTime>	3.6	</reloadTime>
-          <aimingTime>	1.7	</aimingTime>
-          <turretYawLimits>	-15 15	</turretYawLimits>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <models>
-            <undamaged>	vehicles/german/G40_Nashorn/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/german/G40_Nashorn/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/german/G40_Nashorn/crash/lod0/Gun_02.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G40_Nashorn/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G40_Nashorn/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.000034 -0.00381 2.17086	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.527708 0.527709	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.000034 -0.00381 2.17086	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	0.000372 2.00128 1.12233	</position>
-              <rotation>	0.846405 -0.001357 3.13906	</rotation>
-              <scale>	1.89417 0.938449 1.77811	</scale>
-              <showOn>	272	</showOn>
-              <clipAngle>	0.703342	</clipAngle>
-              <anchorShift>	0.6975	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x3	</tags>
-              <position>	0.000351 2.18762 0.472013	</position>
-              <rotation>	1.34785 -0.006901 3.13396	</rotation>
-              <scale>	2.42015 0.75 2.4201	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.935671	</clipAngle>
-              <anchorShift>	1.227045	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45002	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.00052 2.19913 0.729557	</position>
-              <rotation>	1.34786 -0.00694 3.13392	</rotation>
-              <scale>	1.8196 1.09439 1.81958	</scale>
-              <showOn>	272	</showOn>
-              <clipAngle>	0.923735	</clipAngle>
-              <anchorShift>	1.13703	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.000068 -0.007621 3.86004	</rayStart>
-              <rayEnd>	0.000068 -0.007621 4.26004	</rayEnd>
-              <rayUp>	0.065 0 0	</rayUp>
-              <size>	0.4	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.415 0.415 0.000000 0.000000	</tiling>
-            <density>	77.28 71.911	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_75mm_StuK42_L70>
-        <_88mm_PaK_36_L56>	shared	  <maxAmmo>	55	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 5 1 5	</maxPitch>
-          </pitchLimits>
-          <unlocks>
-            <gun>	_88mm_PaK_43_L71	  <cost>	16500	</cost>
+            <gun>	_88mm_Pak_43_L_71_164	  <cost>	16500	</cost>
             </gun>
           </unlocks>
           <armor>
             <armor_1>	15	</armor_1>
             <gun>	35	</gun>
           </armor>
-          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <shotDispersionRadius>	0.32	</shotDispersionRadius>
           <reloadTime>	5.6	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
@@ -3215,8 +3103,8 @@
             <density>	74.8565 75.1166	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_88mm_PaK_36_L56>
-        <_88mm_PaK_43_L71>	shared	  <maxAmmo>	40	</maxAmmo>
+        </_88mm_Pak_36_L_56_164>
+        <_88mm_Pak_43_L_71_164>	shared	  <maxAmmo>	40	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
@@ -3324,7 +3212,7 @@
             <density>	75.0795 74.1179	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_88mm_PaK_43_L71>
+        </_88mm_Pak_43_L_71_164>
       </guns>
       <models>
         <undamaged>	vehicles/german/G40_Nashorn/normal/lod0/Turret_01.model	</undamaged>
@@ -3441,14 +3329,9 @@
         <density>	100.264 99.5428	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_1_Nashorn>
+    </Turret_1_G40_Nashorn>
   </turrets0>
   <engines>
-    <Maybach_HL_108_TR_R>	shared	  <unlocks>
-        <engine>	Maybach_HL_120_TRM_112_R	  <cost>	910	</cost>
-        </engine>
-      </unlocks>
-    </Maybach_HL_108_TR_R>
     <Maybach_HL_120_TRM_112_R>	shared	  <unlocks>
         <engine>	Maybach_HL_120_TRM_R	  <cost>	1100	</cost>
         </engine>
@@ -3460,44 +3343,22 @@
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <FuG_F>	shared	  <unlocks>
-        <radio>	FuG8	  <cost>	4040	</cost>
-        </radio>
-      </unlocks>
-    </FuG_F>
     <FuG8>	shared	</FuG8>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Maybach_HL_108_TR_R>
-          <smplEnginePower>	264.3203	</smplEnginePower>
-          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
-        </Maybach_HL_108_TR_R>
         <Maybach_HL_120_TRM_112_R>
-          <smplEnginePower>	287.5805	</smplEnginePower>
+          <smplEnginePower>	340	</smplEnginePower>
           <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
         </Maybach_HL_120_TRM_112_R>
         <Maybach_HL_120_TRM_R>
-          <smplEnginePower>	317.1843	</smplEnginePower>
+          <smplEnginePower>	385	</smplEnginePower>
           <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
         </Maybach_HL_120_TRM_R>
       </engines>
       <chassis>
-        <Chassis_Nashorn>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.1932	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.10465	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
-            </firm>
-          </grounds>
-        </Chassis_Nashorn>
-        <Chassis_Nashorn_2>
+        <Chassis_G40_Nashorn>
           <grounds>
             <soft>
               <rollingFriction>	0.1771	</rollingFriction>
@@ -3509,15 +3370,28 @@
               <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_Nashorn_2>
+        </Chassis_G40_Nashorn>
+        <Chassis_G40_Nashorn_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.1771	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.0966	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0805	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_G40_Nashorn_2>
       </chassis>
     </detailed>
   </physics>
   <clientAdjustmentFactors>
     <guns>
-      <_88mm_PaK_36_L56>
+      <_88mm_Pak_36_L_56_164>
         <delta>	1.088888	</delta>
-      </_88mm_PaK_36_L56>
+      </_88mm_Pak_36_L_56_164>
     </guns>
     <armour>	0.634307731	</armour>
   </clientAdjustmentFactors>

@@ -186,7 +186,7 @@ class AppEntry(FlashComponentWrapper, ApplicationMeta):
         return result
 
     def active(self, state):
-        if state is not self.isActive:
+        if state != self.isActive:
             if state:
                 if self.component is not None:
                     self._setup()

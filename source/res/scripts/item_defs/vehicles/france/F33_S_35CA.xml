@@ -63,7 +63,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	11700	</weight>
-    <maxHealth>	344	</maxHealth>
+    <maxHealth>	400	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	160	</maxHealth>
       <maxRegenHealth>	110	</maxRegenHealth>
@@ -1609,13 +1609,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_S_35CA>
-      <userString>	#france_vehicles:Chassis_S_35CA	</userString>
+    <Chassis_F33_S_35CA>
+      <userString>	#france_vehicles:Chassis_F33_S_35CA	</userString>
       <tags></tags>
       <level>	4	</level>
       <price>	4660	</price>
       <unlocks>
-        <chassis>	Chassis_S_35CA_2	  <cost>	2115	</cost>
+        <chassis>	Chassis_F33_S_35CA_2	  <cost>	2115	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1623,11 +1623,10 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	5350	</weight>
-      <maxLoad>	19800	</maxLoad>
-      <terrainResistance>	1.5 1.8 3	</terrainResistance>
+      <terrainResistance>	1.4 1.6 2.7	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	26	</rotationSpeed>
+      <rotationSpeed>	33	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.26	</vehicleMovement>
         <vehicleRotation>	0.26	</vehicleRotation>
@@ -2611,26 +2610,21 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_S_35CA>
-    <Chassis_S_35CA_2>
-      <userString>	#france_vehicles:Chassis_S_35CA_2	</userString>
+    </Chassis_F33_S_35CA>
+    <Chassis_F33_S_35CA_2>
+      <userString>	#france_vehicles:Chassis_F33_S_35CA_2	</userString>
       <tags></tags>
       <level>	5	</level>
       <price>	7660	</price>
-      <unlocks>
-        <vehicle>	F34_ARL_V39	  <cost>	20000	</cost>
-        </vehicle>
-      </unlocks>
       <armor>
         <leftTrack>	15	</leftTrack>
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	5350	</weight>
-      <maxLoad>	22800	</maxLoad>
       <terrainResistance>	1.4 1.6 2.7	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	28	</rotationSpeed>
+      <rotationSpeed>	35	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.24	</vehicleMovement>
         <vehicleRotation>	0.24	</vehicleRotation>
@@ -3614,12 +3608,12 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_S_35CA_2>
+    </Chassis_F33_S_35CA_2>
   </chassis>
   <turrets0>
-    <Turret_1_S_35CA>
+    <Turret_1_F33_S_35CA>
       <ceilless>	true	</ceilless>
-      <userString>	#france_vehicles:Turret_1_S_35CA	</userString>
+      <userString>	#france_vehicles:Turret_1_F33_S_35CA	</userString>
       <tags>	cannotDetach	</tags>
       <level>	5	</level>
       <price>	120	</price>
@@ -3628,7 +3622,7 @@
         <armor_1>	55	</armor_1>
       </armor>
       <weight>	170	</weight>
-      <maxHealth>	86	</maxHealth>
+      <maxHealth>	100	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -3642,9 +3636,9 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_17_pdr_Gan_MK.II>	shared	  <maxAmmo>	105	</maxAmmo>
+        <_17_pdr_AT_Gun_Mk_II>	shared	  <maxAmmo>	105	</maxAmmo>
           <unlocks>
-            <gun>	_90mm_canon_DCA_30_CA	  <cost>	9300	</cost>
+            <gun>	_90mm_AC_canon_DCA_30_35CA	  <cost>	9300	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -3745,8 +3739,12 @@
             <density>	131.308 131.969	</density>
             <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
-        </_17_pdr_Gan_MK.II>
-        <_90mm_canon_DCA_30_CA>	shared	  <maxAmmo>	80	</maxAmmo>
+        </_17_pdr_AT_Gun_Mk_II>
+        <_90mm_AC_canon_DCA_30_35CA>	shared	  <maxAmmo>	80	</maxAmmo>
+          <unlocks>
+            <vehicle>	F34_ARL_V39	  <cost>	20000	</cost>
+            </vehicle>
+          </unlocks>
           <armor>
             <armor_1>	56	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3845,7 +3843,7 @@
             <density>	105.802 110.31	</density>
             <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
-        </_90mm_canon_DCA_30_CA>
+        </_90mm_AC_canon_DCA_30_35CA>
       </guns>
       <models>
         <undamaged>	vehicles/french/F33_S_35CA/normal/lod0/Turret_01.model	</undamaged>
@@ -3878,59 +3876,36 @@
         <density>	94.4667 95.5754	</density>
         <aoTextureSize>	256 256	</aoTextureSize>
       </camouflage>
-    </Turret_1_S_35CA>
+    </Turret_1_F33_S_35CA>
   </turrets0>
   <engines>
-    <Somua_S-40>	shared	  <unlocks>
-        <engine>	Somua_S-40Bis	  <cost>	1180	</cost>
+    <Somua_S40>	shared	  <unlocks>
+        <engine>	Somua_S40_Bis	  <cost>	1180	</cost>
         </engine>
       </unlocks>
-    </Somua_S-40>
-    <Somua_S-40Bis>	shared	</Somua_S-40Bis>
+    </Somua_S40>
+    <Somua_S40_Bis>	shared	</Somua_S40_Bis>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <ER_52>	shared	  <unlocks>
-        <radio>	ER_53	  <cost>	610	</cost>
-        </radio>
-      </unlocks>
-    </ER_52>
-    <ER_53>	shared	  <unlocks>
-        <radio>	ER_56	  <cost>	650	</cost>
-        </radio>
-      </unlocks>
-    </ER_53>
     <ER_56>	shared	</ER_56>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Somua_S-40>
-          <smplEnginePower>	232.6019	</smplEnginePower>
+        <Somua_S40>
+          <smplEnginePower>	250	</smplEnginePower>
           <smplFwMaxSpeed>	37	</smplFwMaxSpeed>
-        </Somua_S-40>
-        <Somua_S-40Bis>
-          <smplEnginePower>	274.8931	</smplEnginePower>
+        </Somua_S40>
+        <Somua_S40_Bis>
+          <smplEnginePower>	290	</smplEnginePower>
           <smplFwMaxSpeed>	37	</smplFwMaxSpeed>
-        </Somua_S-40Bis>
+        </Somua_S40_Bis>
       </engines>
       <chassis>
-        <Chassis_S_35CA>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.2415	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.1449	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.12075	</rollingFriction>
-            </firm>
-          </grounds>
-        </Chassis_S_35CA>
-        <Chassis_S_35CA_2>
+        <Chassis_F33_S_35CA>
           <grounds>
             <soft>
               <rollingFriction>	0.21735	</rollingFriction>
@@ -3942,15 +3917,28 @@
               <rollingFriction>	0.1127	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_S_35CA_2>
+        </Chassis_F33_S_35CA>
+        <Chassis_F33_S_35CA_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.21735	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.1288	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.1127	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_F33_S_35CA_2>
       </chassis>
     </detailed>
   </physics>
   <clientAdjustmentFactors>
     <guns>
-      <_17_pdr_Gan_MK.II>
+      <_17_pdr_AT_Gun_Mk_II>
         <delta>	0.7282608	</delta>
-      </_17_pdr_Gan_MK.II>
+      </_17_pdr_AT_Gun_Mk_II>
     </guns>
     <armour>	1.113536032	</armour>
   </clientAdjustmentFactors>

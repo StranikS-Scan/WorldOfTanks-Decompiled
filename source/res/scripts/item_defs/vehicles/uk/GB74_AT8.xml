@@ -1449,7 +1449,7 @@
     <Chassis_GB74_AT8>
       <userString>	#gb_vehicles:Chassis_GB74_AT8	</userString>
       <tags></tags>
-      <level>	6	</level>
+      <level>	5	</level>
       <price>	13000	</price>
       <unlocks>
         <chassis>	Chassis_GB74_AT8_2	  <cost>	5000	</cost>
@@ -1460,11 +1460,10 @@
         <rightTrack>	30	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	41500	</maxLoad>
-      <terrainResistance>	1.6 1.8 3	</terrainResistance>
+      <terrainResistance>	1.4 1.6 2.8	</terrainResistance>
       <brakeForce>	41000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	18	</rotationSpeed>
+      <rotationSpeed>	26	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.34	</vehicleMovement>
         <vehicleRotation>	0.34	</vehicleRotation>
@@ -2266,11 +2265,10 @@
         <rightTrack>	30	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	44500	</maxLoad>
       <terrainResistance>	1.4 1.6 2.8	</terrainResistance>
       <brakeForce>	45000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	20	</rotationSpeed>
+      <rotationSpeed>	28	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.32	</vehicleMovement>
         <vehicleRotation>	0.32	</vehicleRotation>
@@ -3064,10 +3062,10 @@
     </Chassis_GB74_AT8_2>
   </chassis>
   <turrets0>
-    <Turret_1_GB74_AT8_2>
-      <userString>	#gb_vehicles:Turret_1_GB74_AT8_2	</userString>
+    <Turret_1_GB74_AT8>
+      <userString>	#gb_vehicles:Turret_1_GB74_AT8	</userString>
       <tags>	cannotDetach	</tags>
-      <level>	7	</level>
+      <level>	6	</level>
       <price>	100	</price>
       <notInShop>	true	</notInShop>
       <armor>
@@ -3088,202 +3086,10 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <QF_6_pounder_Mk_V_AT>	shared	  <maxAmmo>	145	</maxAmmo>
-          <unlocks>
-            <gun>	_75mm_AT_Gun_Mk_V	  <cost>	4000	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	203.2	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_3>	101.6	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	25.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <gun>	15	</gun>
-          </armor>
-          <shotDispersionRadius>	0.37	</shotDispersionRadius>
-          <reloadTime>	2.3	</reloadTime>
-          <aimingTime>	1.7	</aimingTime>
-          <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <pitchLimits>
-            <minPitch>	0 -7.5 1 -7.5	</minPitch>
-            <maxPitch>	0 5 1 5	</maxPitch>
-          </pitchLimits>
-          <turretYawLimits>	-7.5 7.5	</turretYawLimits>
-          <models>
-            <undamaged>	vehicles/british/GB74_AT8/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/british/GB74_AT8/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/british/GB74_AT8/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/british/GB74_AT8/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB74_AT8/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000003 -0.000001 0.935084	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.242718 0.242718	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000003 -0.000001 0.935084	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	-0.187598 1.3044 1.90031	</position>
-              <rotation>	0.679552 -0.000009 3.14158	</rotation>
-              <scale>	1.35432 0.735913 1.35432	</scale>
-              <showOn>	4112	</showOn>
-              <clipAngle>	0.66103	</clipAngle>
-              <anchorShift>	0.386167	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.000004 -0.000001 1.1263	</rayStart>
-              <rayEnd>	-0.000004 -0.000001 1.4333	</rayEnd>
-              <rayUp>	0.066 0 0	</rayUp>
-              <size>	0.307	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.505 0.505 0.000000 0.000000	</tiling>
-            <density>	143.577 172.689	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </QF_6_pounder_Mk_V_AT>
-        <_75mm_AT_Gun_Mk_V>	shared	  <maxAmmo>	120	</maxAmmo>
-          <unlocks>
-            <gun>	OQF_77mm_AT_Gun_MkII	  <cost>	14500	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	203.2	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_3>	101.6	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	25.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <gun>	20	</gun>
-          </armor>
-          <shotDispersionRadius>	0.39	</shotDispersionRadius>
-          <reloadTime>	2.3	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	1.7	</aimingTime>
-          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
-          <pitchLimits>
-            <minPitch>	0 -7.5 1 -7.5	</minPitch>
-            <maxPitch>	0 5 1 5	</maxPitch>
-          </pitchLimits>
-          <turretYawLimits>	-7.5 7.5	</turretYawLimits>
-          <models>
-            <undamaged>	vehicles/british/GB74_AT8/normal/lod0/Gun_06.model	</undamaged>
-            <destroyed>	vehicles/british/GB74_AT8/crash/lod0/Gun_06.model	</destroyed>
-            <exploded>	vehicles/british/GB74_AT8/crash/lod0/Gun_06.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/british/GB74_AT8/collision/Gun_06.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB74_AT8/collision_client/Gun_06.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium_mb	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0 -0 0.947269	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.247405 0.247405	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0 -0 0.947269	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	-0.187598 1.3044 1.90031	</position>
-              <rotation>	0.679552 -0.000009 3.14158	</rotation>
-              <scale>	1.35432 0.735913 1.35432	</scale>
-              <showOn>	4112	</showOn>
-              <clipAngle>	0.66103	</clipAngle>
-              <anchorShift>	0.386167	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0 0 1.19742	</rayStart>
-              <rayEnd>	0 0 1.48242	</rayEnd>
-              <rayUp>	0.061 0 0	</rayUp>
-              <size>	0.285	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.385 0.385 0.000000 0.000000	</tiling>
-            <density>	173.721 154.517	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_75mm_AT_Gun_Mk_V>
         <OQF_77mm_AT_Gun_MkII>	shared	  <maxAmmo>	84	</maxAmmo>
           <unlocks>
-            <gun>	_17pdr_OQF_AT_1	  <cost>	15000	</cost>
+            <gun>	OQF_17_pdr_AT_Gun_Mk_VII_AT_8	  <cost>	15000	</cost>
             </gun>
-            <vehicle>	GB75_AT7	  <cost>	56000	</cost>
-            </vehicle>
           </unlocks>
           <armor>
             <armor_1>	203.2	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -3301,7 +3107,7 @@
           <aimingTime>	1.7	</aimingTime>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <pitchLimits>
-            <minPitch>	0 -7.5 1 -7.5	</minPitch>
+            <minPitch>	0 -18 1 -18	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
           <shotDispersionFactors>
@@ -3375,7 +3181,11 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </OQF_77mm_AT_Gun_MkII>
-        <_17pdr_OQF_AT_1>	shared	  <maxAmmo>	70	</maxAmmo>
+        <OQF_17_pdr_AT_Gun_Mk_VII_AT_8>	shared	  <maxAmmo>	70	</maxAmmo>
+          <unlocks>
+            <vehicle>	GB75_AT7	  <cost>	56000	</cost>
+            </vehicle>
+          </unlocks>
           <armor>
             <armor_1>	203.2	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3388,7 +3198,7 @@
             <gun>	30	</gun>
           </armor>
           <shotDispersionRadius>	0.32	</shotDispersionRadius>
-          <reloadTime>	4.3	</reloadTime>
+          <reloadTime>	4.6	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	3.5	</afterShot>
@@ -3397,7 +3207,7 @@
           <aimingTime>	1.7	</aimingTime>
           <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
           <pitchLimits>
-            <minPitch>	0 -7.5 1 -7.5	</minPitch>
+            <minPitch>	0 -18 1 -18	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
           <turretYawLimits>	-7.5 7.5	</turretYawLimits>
@@ -3465,7 +3275,7 @@
             <density>	156.327 161.523	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_17pdr_OQF_AT_1>
+        </OQF_17_pdr_AT_Gun_Mk_VII_AT_8>
       </guns>
       <models>
         <undamaged>	vehicles/british/GB74_AT8/normal/lod0/Turret_01.model	</undamaged>
@@ -3485,64 +3295,45 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-    </Turret_1_GB74_AT8_2>
+    </Turret_1_GB74_AT8>
   </turrets0>
   <engines>
-    <Nuffield_liberty_MKII>	shared	  <unlocks>
-        <engine>	Nuffield_liberty_MKIV	  <cost>	1100	</cost>
+    <Nuffield_Liberty_Mk_III_AT_8>	shared	  <unlocks>
+        <engine>	Nuffield_Liberty_Mk_V_AT_8	  <cost>	1000	</cost>
         </engine>
       </unlocks>
-    </Nuffield_liberty_MKII>
-    <Nuffield_liberty_MKIV>	shared	  <unlocks>
-        <engine>	Nuffield_liberty_MKV	  <cost>	1000	</cost>
-        </engine>
-      </unlocks>
-    </Nuffield_liberty_MKIV>
-    <Nuffield_liberty_MKV>	shared	</Nuffield_liberty_MKV>
+    </Nuffield_Liberty_Mk_III_AT_8>
+    <Nuffield_Liberty_Mk_V_AT_8>	shared	</Nuffield_Liberty_Mk_V_AT_8>
   </engines>
   <fuelTanks>
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <N19Mk1>	shared	  <unlocks>
-        <radio>	N19Mk2	  <cost>	3600	</cost>
-        </radio>
-      </unlocks>
-    </N19Mk1>
-    <N19Mk2>	shared	  <unlocks>
-        <radio>	N19Mk3	  <cost>	4000	</cost>
-        </radio>
-      </unlocks>
-    </N19Mk2>
     <N19Mk3>	shared	</N19Mk3>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Nuffield_liberty_MKII>
-          <smplEnginePower>	359.4756	</smplEnginePower>
+        <Nuffield_Liberty_Mk_III_AT_8>
+          <smplEnginePower>	425	</smplEnginePower>
           <smplFwMaxSpeed>	20	</smplFwMaxSpeed>
-        </Nuffield_liberty_MKII>
-        <Nuffield_liberty_MKIV>
-          <smplEnginePower>	417.626	</smplEnginePower>
+        </Nuffield_Liberty_Mk_III_AT_8>
+        <Nuffield_Liberty_Mk_V_AT_8>
+          <smplEnginePower>	450	</smplEnginePower>
           <smplFwMaxSpeed>	20	</smplFwMaxSpeed>
-        </Nuffield_liberty_MKIV>
-        <Nuffield_liberty_MKV>
-          <smplEnginePower>	433.4853	</smplEnginePower>
-          <smplFwMaxSpeed>	20	</smplFwMaxSpeed>
-        </Nuffield_liberty_MKV>
+        </Nuffield_Liberty_Mk_V_AT_8>
       </engines>
       <chassis>
         <Chassis_GB74_AT8>
           <grounds>
             <soft>
-              <rollingFriction>	0.2415	</rollingFriction>
+              <rollingFriction>	0.2254	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1449	</rollingFriction>
+              <rollingFriction>	0.1288	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.1288	</rollingFriction>
+              <rollingFriction>	0.1127	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_GB74_AT8>

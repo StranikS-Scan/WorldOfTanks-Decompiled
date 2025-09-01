@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/system_factory.py
-from collections import defaultdict, namedtuple
+from collections import defaultdict, namedtuple, OrderedDict
 BATTLE_REPO = 1
 EQUIPMENT_ITEMS = 2
 SCALEFORM_COMMON_PACKAGES = 3
@@ -68,6 +68,9 @@ GAME_MODE_ARENA_INFO_KEYS = 64
 AMMUNITION_SETUP_VIEW = 65
 GUI_ITEMS_CACHE_INVALIDATOR = 66
 IGNORED_MODE_FOR_AUTO_SELECTED_VEHICLE = 67
+HANGAR_MENU_ITEMS = 68
+BONUS_TOKENS = 69
+VIEWS_FOR_MONITORING = 70
 
 class _CollectEventsManager(object):
 
@@ -959,6 +962,18 @@ def collectLobbyHeaderTabs():
     return __collectEM.handleEvent(LOBBY_HEADER_TAB, {'tabs': {}})['tabs']
 
 
+def registerMenuItems(hangarMode, menuItems):
+
+    def onCollect(ctx):
+        ctx['menuItems'][hangarMode].update(menuItems)
+
+    __collectEM.addListener(HANGAR_MENU_ITEMS, onCollect)
+
+
+def collectMenuItems(hangarMode):
+    return __collectEM.handleEvent(HANGAR_MENU_ITEMS, {'menuItems': defaultdict(OrderedDict)})['menuItems'][hangarMode]
+
+
 def registerGamefaceNotifications(gamefaceNotifications):
 
     def onCollect(ctx):
@@ -1007,3 +1022,27 @@ def registerIgnoredModeForAutoSelectVehicle(modeFlags):
 
 def collectIgnoredModeForAutoSelectVehicle():
     return __collectEM.handleEvent(IGNORED_MODE_FOR_AUTO_SELECTED_VEHICLE, ctx=[])
+
+
+def registerBonusTokens(bonusTokens):
+
+    def onCollect(ctx):
+        ctx['bonusTokens'].extend(bonusTokens)
+
+    __collectEM.addListener(BONUS_TOKENS, onCollect)
+
+
+def registerViewsForMonitoring(viewsForMonitoring):
+
+    def onCollect(ctx):
+        ctx['viewsForMonitoring'].extend(viewsForMonitoring)
+
+    __collectEM.addListener(VIEWS_FOR_MONITORING, onCollect)
+
+
+def collectBonusTokens():
+    return __collectEM.handleEvent(BONUS_TOKENS, ctx={'bonusTokens': []})['bonusTokens']
+
+
+def collectViewsForMonitoring():
+    return __collectEM.handleEvent(VIEWS_FOR_MONITORING, ctx={'viewsForMonitoring': []})['viewsForMonitoring']

@@ -5,25 +5,26 @@ from collections import namedtuple
 from copy import copy
 import Windowing
 import typing
-from gui.shared import event_dispatcher as shared_events
 from shared_utils import first, findFirst
 import SoundGroups
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import COMP7_LAST_SEASON_WITH_SEEN_REWARD, COMP7_LAST_MASKOT_WITH_SEEN_REWARD
 from comp7.gui.game_control.comp7_shop_controller import ShopControllerStatus
 from comp7.gui.impl.gen.view_models.views.lobby.enums import MetaRootViews, Rank
+from comp7.gui.impl.gen.view_models.views.lobby.enums import SeasonName
 from comp7.gui.impl.gen.view_models.views.lobby.rewards_screen_model import Type, RewardsScreenModel, ShopInfoType, VideoState
 from comp7.gui.impl.gen.view_models.views.lobby.season_result import SeasonResult
 from comp7.gui.impl.lobby.comp7_helpers import comp7_shared, comp7_qualification_helpers
 from comp7.gui.impl.lobby.comp7_helpers.comp7_bonus_packer import packRanksRewardsQuestBonuses, packTokensRewardsQuestBonuses, packQualificationRewardsQuestBonuses, packYearlyRewardsBonuses, packYearlyRewardVehicleBonuses, packSelectedRewardsBonuses
-from comp7.gui.impl.lobby.comp7_helpers.comp7_model_helpers import getSeasonNameEnum, getYearlyRewardsRank
+from comp7.gui.impl.lobby.comp7_helpers.comp7_lobby_sounds import VehicleVideoSounds
+from comp7.gui.impl.lobby.comp7_helpers.comp7_model_helpers import getYearlyRewardsRank
 from comp7.gui.impl.lobby.comp7_helpers.comp7_quest_helpers import parseComp7RanksQuestID, getPeriodicQuestsByDivision
 from comp7.gui.prb_control.entities import comp7_prb_helpers
 from comp7.gui.selectable_reward.common import Comp7SelectableRewardManager
 from comp7.gui.shared import event_dispatcher
-from comp7.gui.impl.lobby.comp7_helpers.comp7_lobby_sounds import VehicleVideoSounds
 from comp7.skeletons.gui.game_control import IComp7ShopController
 from comp7_common_const import seasonPointsCodeBySeasonNumber, COMP7_MASKOT_ID
+from comp7_core.gui.impl.lobby.comp7_core_helpers.comp7_core_model_helpers import getSeasonNameEnum
 from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
 from frameworks.wulf.view.array import fillIntsArray, fillViewModelsArray
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -33,10 +34,12 @@ from gui.impl.gen import R
 from gui.impl.gui_decorators import args2params
 from gui.impl.lobby.common.vehicle_model_helpers import fillVehicleModel
 from gui.impl.lobby.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
+from gui.impl.lobby.tooltips.vehicle_role_descr_view import VehicleRolesTooltipView
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.selectable_reward.constants import SELECTABLE_BONUS_NAME
 from gui.server_events.bonuses import VehiclesBonus
+from gui.shared import event_dispatcher as shared_events
 from gui.sounds.filters import switchVideoOverlaySoundFilter
 from helpers import dependency
 from skeletons.gui.game_control import IComp7Controller, IHangarSpaceSwitchController
@@ -57,7 +60,7 @@ class _BaseRewardsView(ViewImpl):
     __slots__ = ('_bonusData',)
 
     def __init__(self, *args, **kwargs):
-        settings = ViewSettings(R.views.comp7.lobby.RewardsScreen())
+        settings = ViewSettings(R.views.comp7.mono.lobby.rewards_screen())
         settings.model = RewardsScreenModel()
         settings.args = args
         settings.kwargs = kwargs
@@ -84,6 +87,9 @@ class _BaseRewardsView(ViewImpl):
             showCount += self._getMainRewardsCount()
             bonuses = [ d.bonus for d in self._bonusData[showCount:] ]
             return AdditionalRewardsTooltip(bonuses)
+        elif contentID == R.views.lobby.ranked.tooltips.RankedBattlesRolesTooltipView():
+            vehicleCD = int(event.getArgument('vehicleCD'))
+            return VehicleRolesTooltipView(vehicleCD)
         else:
             return None
 
@@ -146,20 +152,20 @@ class _QuestRewardsView(_BaseRewardsView):
             self._setProductsData()
 
     def __onOpenShop(self):
-        if not self._comp7Controller.isComp7PrbActive():
+        if not self._comp7Controller.isModePrbActive():
             self._spaceSwitchController.onSpaceUpdated += self.__onSpaceUpdated
             comp7_prb_helpers.selectComp7()
             return
         self.__goToShop()
 
     def __onSpaceUpdated(self):
-        if not self._comp7Controller.isComp7PrbActive():
+        if not self._comp7Controller.isModePrbActive():
             return
         self._spaceSwitchController.onSpaceUpdated -= self.__onSpaceUpdated
         self.__goToShop()
 
     def __goToShop(self):
-        event_dispatcher.showComp7MetaRootView(tabId=MetaRootViews.SHOP)
+        event_dispatcher.showComp7MetaRootTab(tabId=MetaRootViews.SHOP)
         self.destroyWindow()
 
 
@@ -177,7 +183,7 @@ class RanksRewardsView(_QuestRewardsView):
         with self.viewModel.transaction() as vm:
             rankValue = comp7_shared.getRankEnumValue(self.__division)
             divisionValue = comp7_shared.getDivisionEnumValue(self.__division)
-            vm.setSeasonName(getSeasonNameEnum())
+            vm.setSeasonName(getSeasonNameEnum(self.__comp7Controller, SeasonName))
             vm.setType(self._getType())
             vm.setRank(rankValue)
             vm.setDivision(divisionValue)
@@ -223,7 +229,7 @@ class TokensRewardsView(_QuestRewardsView):
     def _onLoading(self, *args, **kwargs):
         super(TokensRewardsView, self)._onLoading(self, *args, **kwargs)
         with self.viewModel.transaction() as vm:
-            vm.setSeasonName(getSeasonNameEnum())
+            vm.setSeasonName(getSeasonNameEnum(self._comp7Controller, SeasonName))
             vm.setType(Type.TOKENSREWARDS)
             quest = first(kwargs['quests'])
             vm.setTokensCount(sum((token.getNeededCount() for token in quest.accountReqs.getTokens())))
@@ -276,7 +282,7 @@ class QualificationRewardsView(_QuestRewardsView):
             maxDivision = first(self.__divisions)
             rankEnumValues = self.__getRanks(self.__divisions)
             maxRankEnumValue = first(rankEnumValues)
-            vm.setSeasonName(getSeasonNameEnum())
+            vm.setSeasonName(getSeasonNameEnum(self._comp7Controller, SeasonName))
             vm.setType(Type.QUALIFICATIONRANK)
             vm.setRank(maxRankEnumValue)
             vm.setDivision(comp7_shared.getDivisionEnumValue(maxDivision))
@@ -288,7 +294,7 @@ class QualificationRewardsView(_QuestRewardsView):
         return packQualificationRewardsQuestBonuses(quests=kwargs['quests'])
 
     def _setProductsData(self):
-        if self.__hasShopProduct():
+        if self.__hasShopProduct() and self._comp7ShopController.isShopEnabled:
             self.viewModel.setShopInfoType(ShopInfoType.OPEN)
         else:
             self.viewModel.setShopInfoType(ShopInfoType.NONE)
@@ -393,7 +399,7 @@ class YearlyRewardsView(_BaseRewardsView):
             division = comp7_shared.getPlayerDivisionByRating(rating, seasonNumber)
             seasonResult = SeasonResult()
             seasonResult.setSeasonPointsCount(pointsCountInSeason)
-            seasonResult.setSeasonName(getSeasonNameEnum(season))
+            seasonResult.setSeasonName(getSeasonNameEnum(self.__comp7Controller, SeasonName, season))
             seasonResult.setRank(comp7_shared.getRankEnumValue(division))
             results.append(seasonResult)
 

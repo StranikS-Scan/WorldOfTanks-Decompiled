@@ -309,7 +309,8 @@ class BlueprintFragmentTooltipData(BlueprintTooltipData):
 
     def __packIntelFragmentBlocks(self):
         self._items.append(formatters.packImageTextBlockData(title=text_styles.highTitle(TOOLTIPS.BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_INTELFRAGMENT), img=RES_ICONS.getBlueprintFragment('small', 'intelligence'), imgPadding=formatters.packPadding(top=5), txtPadding=formatters.packPadding(top=5, left=19)))
-        descriptionBlock = formatters.packImageTextBlockData(desc=text_styles.main(TOOLTIPS.BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_INTELDESCRIPTION), img=RES_ICONS.MAPS_ICONS_BLUEPRINTS_PLUS, imgPadding=formatters.packPadding(top=0, right=5), padding=formatters.packPadding(left=40))
+        tier = text_styles.stats(TOOLTIPS.BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_INTELDESCRIPTIONTIER)
+        descriptionBlock = formatters.packImageTextBlockData(desc=text_styles.main(i18n.makeString(TOOLTIPS.BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_INTELDESCRIPTION, tier=tier)), img=RES_ICONS.MAPS_ICONS_BLUEPRINTS_PLUS, imgPadding=formatters.packPadding(top=0, right=5), padding=formatters.packPadding(left=40))
         self._items.append(formatters.packBuildUpBlockData(blocks=[descriptionBlock], linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=formatters.packPadding(bottom=-4)))
         fragmentsCount = self.context.getUniversalCount()
         self._items.append(self.__packInStorageBlock(fragmentsCount))
@@ -321,7 +322,8 @@ class BlueprintFragmentTooltipData(BlueprintTooltipData):
         self._items = [formatters.packBuildUpBlockData(blocks=items)]
         items = self._items
         nation = i18n.makeString(NATIONS.genetiveCase(self.__nationName))
-        descriptionBlock = formatters.packImageTextBlockData(desc=text_styles.main(i18n.makeString(TOOLTIPS.BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_NATIONALDESCRIPTION, nation=nation)), img=RES_ICONS.MAPS_ICONS_BLUEPRINTS_PLUS, imgPadding=formatters.packPadding(top=0, right=5), padding=formatters.packPadding(left=40))
+        tier = text_styles.stats(TOOLTIPS.BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_NATIONALDESCRIPTIONTIER)
+        descriptionBlock = formatters.packImageTextBlockData(desc=text_styles.main(i18n.makeString(TOOLTIPS.BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_NATIONALDESCRIPTION, nation=nation, tier=tier)), img=RES_ICONS.MAPS_ICONS_BLUEPRINTS_PLUS, imgPadding=formatters.packPadding(top=0, right=5), padding=formatters.packPadding(left=40))
         items.append(formatters.packBuildUpBlockData(blocks=[descriptionBlock, self.__packAdditionalInfoBlock()], gap=3, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=formatters.packPadding(bottom=-4)))
         fragmentsCount = self.context.getUniversalCount(self._fragmentCD)
         items.append(self.__packInStorageBlock(fragmentsCount))

@@ -40,9 +40,16 @@ class NetworkVehicleHierarchy(DynamicScriptComponent):
             return
 
     def __create(self):
+        ready = True
+        typeDescriptor = self.entity.typeDescriptor
+        if typeDescriptor is None:
+            ready = False
+        appearance = self.entity.appearance
+        if appearance is None or not appearance.isConstructed or appearance.isDestroyed:
+            ready = False
         gameObject = self.entity.entityGameObject
         if gameObject is None:
             return
         else:
-            createClientVehicleHierarchy(gameObject, self.hierarchyInfo)
+            createClientVehicleHierarchy(gameObject, self.hierarchyInfo, ready)
             return

@@ -90,7 +90,7 @@ class VehicleFactorsXmlReader(CommonXmlSectionReader):
     __readerImpl = None
 
     def __init__(self):
-        attrFactor = vehicles.vehicleAttributeFactors()
+        attrFactor = vehicles.defaultVehicleAttributeFactors()
         _vehicle_attribute_factor_tags = {name:name.replace('/', '-') for name in attrFactor.iterkeys()}
         super(VehicleFactorsXmlReader, self).__init__(_vehicle_attribute_factor_tags, attrFactor)
 
@@ -102,7 +102,7 @@ class VehicleFactorsXmlReader(CommonXmlSectionReader):
 
 
 class Artefact(BasicItem):
-    __slots__ = ('name', 'id', 'compactDescr', 'tags', 'i18n', 'icon', 'removable', 'price', 'showInShop', '_vehWeightFraction', '_weight', '_maxWeightChange', '_exportParams', '__archetype', '__vehicleFilter', '__artefactFilter', '__tooltipSection', 'isImproved', 'kpi', 'iconName', '_groupName', '__weakref__')
+    __slots__ = ('name', 'id', 'compactDescr', 'tags', 'i18n', 'icon', 'removable', 'price', 'showInShop', '_vehWeightFraction', '_weight', '_exportParams', '__archetype', '__vehicleFilter', '__artefactFilter', '__tooltipSection', 'isImproved', 'kpi', 'iconName', '_groupName', '__weakref__')
 
     def __init__(self, typeID, itemID, itemName, compactDescr):
         super(Artefact, self).__init__(typeID, itemID, itemName, compactDescr)
@@ -113,7 +113,6 @@ class Artefact(BasicItem):
         self.showInShop = False
         self._vehWeightFraction = component_constants.ZERO_FLOAT
         self._weight = component_constants.ZERO_FLOAT
-        self._maxWeightChange = component_constants.ZERO_FLOAT
         self._exportParams = {}
         self.__vehicleFilter = None
         self.__artefactFilter = None
@@ -170,10 +169,9 @@ class Artefact(BasicItem):
             self._weight = _xml.readNonNegativeFloat(xmlCtx, section, 'weight')
         else:
             self._weight = 0.0
-        self._maxWeightChange = 0.0
 
     def weightOnVehicle(self, vehicleDescr):
-        return (self._vehWeightFraction, self._weight, 0.0)
+        return (self._vehWeightFraction, self._weight)
 
     def checkCompatibilityWithVehicle(self, vehicleDescr):
         return (True, None) if self.__vehicleFilter is None else self.__vehicleFilter.checkCompatibility(vehicleDescr)
@@ -596,20 +594,10 @@ class EpicEmptySlot(Equipment):
 
 
 class ExtraHealthReserve(StaticOptionalDevice):
-    __slots__ = ('chassisMaxLoadFactor',)
-
-    def weightOnVehicle(self, vehicleDescr):
-        chassis = vehicleDescr.chassis
-        level = self.defineActiveLevel(vehicleDescr)
-        return super(ExtraHealthReserve, self).weightOnVehicle(vehicleDescr) if level is None else (self._vehWeightFraction, self._weight, chassis.maxLoad * (self.chassisMaxLoadFactor.getActiveValue(level) - 1.0))
 
     def updateVehicleDescrAttrs(self, vehicleDescr):
         super(ExtraHealthReserve, self).updateVehicleDescrAttrs(vehicleDescr)
         vehicleDescr.miscAttrs['isSetChassisMaxHealthAfterHysteresis'] = True
-
-    def _readConfig(self, xmlCtx, section):
-        super(ExtraHealthReserve, self)._readConfig(xmlCtx, section)
-        self.chassisMaxLoadFactor = LevelsFactor.readTypelessLevelsFactor(xmlCtx, section, 'chassisMaxLoadFactor')
 
 
 class Grousers(StaticOptionalDevice):
@@ -2216,219 +2204,6 @@ class LevelBasedVisualScriptEquipment(VisualScriptEquipment):
 
     def getRadiusBasedOnSkillLevel(self, skillLevel):
         return self.radius[skillLevel - 1]
-
-
-class Comp7AoeHealEquipment(VisualScriptEquipment):
-    __slots__ = ('duration', 'radius', 'heal', 'secondaryHealDebuff', 'tickInterval')
-
-    def _readConfig(self, xmlCtx, section):
-        super(Comp7AoeHealEquipment, self)._readConfig(xmlCtx, section)
-        self.duration = section.readFloat('duration')
-        self.radius = section.readFloat('radius')
-        self.heal = tuple(map(float, section.readString('heal').split()))
-        self.secondaryHealDebuff = section.readFloat('secondaryHealDebuff')
-        self.tickInterval = section.readFloat('tickInterval')
-        self.cooldownSeconds = section.readFloat('cooldownSeconds')
-        self._exportSlotsToVSE()
-
-
-class Comp7AllySupportEquipment(VisualScriptEquipment):
-    __slots__ = ('duration', 'crewBuff')
-
-    def _readConfig(self, xmlCtx, section):
-        super(Comp7AllySupportEquipment, self)._readConfig(xmlCtx, section)
-        self.duration = section.readFloat('duration')
-        self.crewBuff = tuple(map(float, section.readString('crewBuff').split()))
-        self.cooldownSeconds = section.readFloat('cooldownSeconds')
-        self._exportSlotsToVSE()
-
-
-class Comp7AllyHunterEquipment(VisualScriptEquipment):
-    __slots__ = ('duration', 'heal', 'gunReloadTimeBuff', 'tickInterval')
-
-    def _readConfig(self, xmlCtx, section):
-        super(Comp7AllyHunterEquipment, self)._readConfig(xmlCtx, section)
-        self.duration = section.readFloat('duration')
-        self.heal = tuple(map(float, section.readString('heal').split()))
-        self.gunReloadTimeBuff = section.readFloat('gunReloadTimeBuff')
-        self.tickInterval = section.readFloat('tickInterval')
-        self.cooldownSeconds = section.readFloat('cooldownSeconds')
-        self._exportSlotsToVSE()
-
-
-class Comp7ConcentrationEquipment(VisualScriptEquipment):
-    __slots__ = ('duration', 'aimingTimeBuff', 'shotDispersionFactors', 'clipReloadTimeBoost')
-
-    def _readConfig(self, xmlCtx, section):
-        super(Comp7ConcentrationEquipment, self)._readConfig(xmlCtx, section)
-        self.duration = section.readFloat('duration')
-        self.aimingTimeBuff = tuple(map(float, section.readString('aimingTimeBuff').split()))
-        self.shotDispersionFactors = tuple(map(float, section.readString('shotDispersionFactors').split()))
-        self.clipReloadTimeBoost = tuple(map(float, section.readString('clipReloadTimeBoost').split()))
-        self.cooldownSeconds = section.readFloat('cooldownSeconds')
-        self._exportSlotsToVSE()
-
-
-class Comp7BerserkEquipment(VisualScriptEquipment):
-    __slots__ = ('duration', 'gunReloadTimeBuff', 'damageDistance', 'shotDispersionFactors')
-
-    def _readConfig(self, xmlCtx, section):
-        super(Comp7BerserkEquipment, self)._readConfig(xmlCtx, section)
-        self.duration = section.readFloat('duration')
-        self.gunReloadTimeBuff = tuple(map(float, section.readString('gunReloadTimeBuff').split()))
-        self.damageDistance = section.readFloat('damageDistance')
-        self.cooldownSeconds = section.readFloat('cooldownSeconds')
-        self.shotDispersionFactors = tuple(map(float, section.readString('shotDispersionFactors').split()))
-        self._exportSlotsToVSE()
-
-
-class Comp7AoeInspireEquipment(VisualScriptEquipment):
-    __slots__ = ('duration', 'radius', 'crewBuff')
-
-    def _readConfig(self, xmlCtx, section):
-        super(Comp7AoeInspireEquipment, self)._readConfig(xmlCtx, section)
-        self.duration = section.readFloat('duration')
-        self.crewBuff = tuple(map(float, section.readString('crewBuff').split()))
-        self.cooldownSeconds = section.readFloat('cooldownSeconds')
-        self._exportSlotsToVSE()
-
-
-class Comp7RedlineEquipment(LevelBasedVisualScriptEquipment, BaseMarkerConfigReader, EffectsConfigReader):
-    __slots__ = LevelBasedVisualScriptEquipment._LEVEL_BASED_SLOTS + BaseMarkerConfigReader._MARKER_SLOTS_ + EffectsConfigReader._EFFECTS_SLOTS_ + ('delay', 'damage', 'stunDuration', 'areaShow', 'fraction', 'requireAssists')
-
-    def __init__(self):
-        super(Comp7RedlineEquipment, self).__init__()
-        self.initMarkerInformation()
-        self.initEffectsInformation()
-
-    def _readConfig(self, xmlCtx, section):
-        super(Comp7RedlineEquipment, self)._readConfig(xmlCtx, section)
-        self.delay = section.readFloat('delay')
-        self.cooldownSeconds = section.readFloat('cooldownSeconds')
-        self.damage = tuple(map(float, section.readString('damage').split()))
-        self.stunDuration = tuple(map(float, section.readString('stunDuration').split()))
-        self.areaShow = section.readString('areaShow').lower() or None
-        self.duration = section.readFloat('duration')
-        self.readMarkerConfig(xmlCtx, section)
-        self.readEffectConfig(xmlCtx, section)
-        self.fraction = section.readFloat('fraction')
-        self.requireAssists = section.readBool('requireAssists', False)
-        self._exportSlotsToVSE()
-        return
-
-
-class Comp7FastRechargeEquipment(VisualScriptEquipment):
-    __slots__ = ('gunReloadTimeBuff',)
-
-    def _readConfig(self, xmlCtx, section):
-        super(Comp7FastRechargeEquipment, self)._readConfig(xmlCtx, section)
-        self.gunReloadTimeBuff = tuple(map(float, section.readString('gunReloadTimeBuff').split()))
-        self.cooldownSeconds = section.readFloat('cooldownSeconds')
-        self._exportSlotsToVSE()
-
-
-class Comp7JuggernautEquipment(VisualScriptEquipment):
-    __slots__ = ('duration', 'enginePowerFactor', 'dmgAbsorb', 'fwMaxSpeedBonus', 'bkMaxSpeedBonus', 'rammingDamageBonus', 'vehicleRotationSpeedFactor')
-
-    def _readConfig(self, xmlCtx, section):
-        super(Comp7JuggernautEquipment, self)._readConfig(xmlCtx, section)
-        self.duration = tuple(map(float, section.readString('duration').split()))
-        self.enginePowerFactor = section.readFloat('enginePowerFactor')
-        self.cooldownSeconds = section.readFloat('cooldownSeconds')
-        self.dmgAbsorb = tuple(map(float, section.readString('dmgAbsorb').split()))
-        self.fwMaxSpeedBonus = section.readFloat('fwMaxSpeedBonus')
-        self.bkMaxSpeedBonus = section.readFloat('bkMaxSpeedBonus')
-        self.rammingDamageBonus = section.readFloat('rammingDamageBonus')
-        self.vehicleRotationSpeedFactor = section.readFloat('vehicleRotationSpeedFactor')
-        self._exportSlotsToVSE()
-
-
-class Comp7SureShotEquipment(VisualScriptEquipment):
-    __slots__ = ('duration', 'shotDispersionFactors', 'slvl', 'sdlvl')
-
-    def _readConfig(self, xmlCtx, section):
-        super(Comp7SureShotEquipment, self)._readConfig(xmlCtx, section)
-        self.duration = section.readFloat('duration')
-        self.shotDispersionFactors = tuple(map(float, section.readString('shotDispersionFactors').split()))
-        self.slvl = tuple(map(float, section.readString('slvl').split()))
-        self.sdlvl = tuple(map(float, section.readString('sdlvl').split()))
-        self.cooldownSeconds = section.readFloat('cooldownSeconds')
-        self._exportSlotsToVSE()
-
-
-class Comp7SniperEquipment(VisualScriptEquipment):
-    __slots__ = ('duration', 'dispersionFactor', 'damageDistance', 'damageFactors')
-
-    def _readConfig(self, xmlCtx, section):
-        super(Comp7SniperEquipment, self)._readConfig(xmlCtx, section)
-        self.duration = tuple(map(float, section.readString('duration').split()))
-        self.dispersionFactor = section.readFloat('dispersionFactor')
-        self.damageDistance = section.readFloat('damageDistance')
-        self.cooldownSeconds = section.readFloat('cooldownSeconds')
-        self.damageFactors = tuple(map(float, section.readString('damageFactors').split()))
-        self._exportSlotsToVSE()
-
-
-class Comp7RiskyAttackEquipment(VisualScriptEquipment):
-    __slots__ = ('duration', 'healDuration', 'baseHeal', 'extraHealFactor', 'fwdSpeedBoost', 'bkwSpeedBoost', 'enginePowerBuff')
-
-    def _readConfig(self, xmlCtx, section):
-        super(Comp7RiskyAttackEquipment, self)._readConfig(xmlCtx, section)
-        self.duration = section.readFloat('duration')
-        self.healDuration = section.readFloat('healDuration')
-        self.baseHeal = section.readFloat('baseHeal')
-        self.extraHealFactor = tuple(map(float, section.readString('extraHealFactor').split()))
-        self.fwdSpeedBoost = section.readFloat('fwdSpeedBoost')
-        self.bkwSpeedBoost = section.readFloat('bkwSpeedBoost')
-        self.enginePowerBuff = section.readFloat('enginePowerBuff')
-        self.cooldownSeconds = section.readFloat('cooldownSeconds')
-        self._exportSlotsToVSE()
-
-
-class Comp7ReconEquipment(LevelBasedVisualScriptEquipment, BaseMarkerConfigReader):
-    __slots__ = LevelBasedVisualScriptEquipment._LEVEL_BASED_SLOTS + BaseMarkerConfigReader._MARKER_SLOTS_ + ('duration', 'delay', 'startupDelay', 'radiusRoleOverride')
-
-    def __init__(self):
-        super(Comp7ReconEquipment, self).__init__()
-        self.initMarkerInformation()
-        self.radiusRoleOverride = None
-        return
-
-    def _readConfig(self, xmlCtx, section):
-        super(Comp7ReconEquipment, self)._readConfig(xmlCtx, section)
-        self.duration = tuple(map(float, section.readString('duration').split()))
-        self.delay = section.readFloat('delay')
-        self.startupDelay = section.readFloat('startupDelay')
-        self.readMarkerConfig(xmlCtx, section)
-        self.cooldownSeconds = section.readFloat('cooldownSeconds')
-        self._exportSlotsToVSE()
-
-    def getRadiusBasedOnSkillLevel(self, skillLevel):
-        return (self.radiusRoleOverride or self.radius)[skillLevel - 1]
-
-
-class Comp7AggressiveDetectionEquipment(VisualScriptEquipment):
-    __slots__ = ('duration', 'visionFactor')
-
-    def _readConfig(self, xmlCtx, section):
-        super(Comp7AggressiveDetectionEquipment, self)._readConfig(xmlCtx, section)
-        self.duration = section.readFloat('duration')
-        self.visionFactor = tuple(map(float, section.readString('visionFactor').split()))
-        self.cooldownSeconds = section.readFloat('cooldownSeconds')
-        self._exportSlotsToVSE()
-
-
-class Comp7MarchEquipment(VisualScriptEquipment):
-    __slots__ = ('duration', 'enginePowerBuff', 'fwdSpeedBoost', 'invisibilityFactor')
-
-    def _readConfig(self, xmlCtx, section):
-        super(Comp7MarchEquipment, self)._readConfig(xmlCtx, section)
-        self.duration = tuple(map(float, section.readString('duration').split()))
-        self.enginePowerBuff = section.readFloat('enginePowerBuff')
-        self.fwdSpeedBoost = section.readFloat('fwdSpeedBoost')
-        self.invisibilityFactor = section.readFloat('invisibilityFactor')
-        self.cooldownSeconds = section.readFloat('cooldownSeconds')
-        self._exportSlotsToVSE()
 
 
 class DynComponentsGroupEquipment(Equipment):

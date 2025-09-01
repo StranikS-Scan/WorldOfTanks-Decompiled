@@ -9,7 +9,6 @@ from skeletons.gui.shared.utils import IHangarSpace
 from .base_selectable_logic import BaseSelectableLogic
 
 class HangarSelectableLogic(BaseSelectableLogic):
-    __slots__ = ('__selected3DEntity', '__selected3DEntityUnderMouseDown')
     __hangarSpace = dependency.descriptor(IHangarSpace)
 
     def __init__(self):
@@ -20,11 +19,11 @@ class HangarSelectableLogic(BaseSelectableLogic):
 
     def init(self, callback=None):
         super(HangarSelectableLogic, self).init()
-        self._hangarSpace.setSelectionEnabled(True)
+        self._hangarSpace.lockVehicleSelectable(self)
         self._onNotifyCursorOver3dScene(self.__hangarSpace.isCursorOver3DScene)
 
     def fini(self):
-        self._hangarSpace.setSelectionEnabled(False)
+        self.__hangarSpace.unlockVehicleSelectable(self)
         self.__selected3DEntityUnderMouseDown = None
         if self.__selected3DEntity is not None:
             self.__fade3DEntity(self.__selected3DEntity)

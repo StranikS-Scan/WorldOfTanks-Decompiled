@@ -60,7 +60,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	11388	</weight>
-    <maxHealth>	800	</maxHealth>
+    <maxHealth>	960	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	240	</maxHealth>
       <maxRegenHealth>	160	</maxRegenHealth>
@@ -1000,14 +1000,13 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	6000	</weight>
-      <maxLoad>	21000	</maxLoad>
-      <terrainResistance>	1.4 1.5 2.6	</terrainResistance>
+      <terrainResistance>	1.3 1.4 2.4	</terrainResistance>
       <brakeForce>	20000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	26	</rotationSpeed>
+      <rotationSpeed>	37	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.3	</vehicleMovement>
-        <vehicleRotation>	0.2	</vehicleRotation>
+        <vehicleMovement>	0.4	</vehicleMovement>
+        <vehicleRotation>	0.1	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	200	</maxHealth>
@@ -1769,14 +1768,13 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	6000	</weight>
-      <maxLoad>	24000	</maxLoad>
       <terrainResistance>	1.3 1.4 2.4	</terrainResistance>
       <brakeForce>	20000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	28	</rotationSpeed>
+      <rotationSpeed>	40	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.3	</vehicleMovement>
-        <vehicleRotation>	0.2	</vehicleRotation>
+        <vehicleMovement>	0.4	</vehicleMovement>
+        <vehicleRotation>	0.1	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	220	</maxHealth>
@@ -2541,12 +2539,12 @@
       </armor>
       <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
       <weight>	100	</weight>
-      <maxHealth>	200	</maxHealth>
+      <maxHealth>	240	</maxHealth>
       <rotationSpeed>	16	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	155	</maxHealth>
+        <maxRegenHealth>	78	</maxRegenHealth>
+        <repairCost>	8	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	350	</circularVisionRadius>
       <surveyingDeviceHealth>
@@ -3136,16 +3134,6 @@
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <Ra_146>	shared	  <unlocks>
-        <radio>	Ra_400	  <cost>	7250	</cost>
-        </radio>
-      </unlocks>
-    </Ra_146>
-    <Ra_400>	shared	  <unlocks>
-        <radio>	Ra_421	  <cost>	9400	</cost>
-        </radio>
-      </unlocks>
-    </Ra_400>
     <Ra_421>	shared	</Ra_421>
   </radios>
   <clientAdjustmentFactors>
@@ -3168,13 +3156,13 @@
           <axleCount>	5	</axleCount>
           <grounds>
             <soft>
-              <rollingFriction>	0.261625	</rollingFriction>
+              <rollingFriction>	0.2415	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.150938	</rollingFriction>
+              <rollingFriction>	0.140875	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.140875	</rollingFriction>
+              <rollingFriction>	0.130813	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_S21_UDES_03>

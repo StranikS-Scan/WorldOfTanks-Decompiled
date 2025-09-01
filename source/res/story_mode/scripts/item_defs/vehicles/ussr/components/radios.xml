@@ -1,0 +1,71 @@
+<radios.xml>
+  <ids>
+    <R113_SM_SCC>	64004	</R113_SM_SCC>
+    <_10RK-26_SM_SCC__0>	64005	</_10RK-26_SM_SCC__0>
+    <R_123C_SM_SCC>	64006	</R_123C_SM_SCC>
+    <R_123B_SM_SCC>	64007	</R_123B_SM_SCC>
+    <R_123C_enemy_SM_SCC>	64008	</R_123C_enemy_SM_SCC>
+  </ids>
+  <shared>
+    <R113_SM_SCC>
+      <userString>	#ussr_vehicles:R113	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52200	</price>
+      <weight>	80	</weight>
+      <distance>	730	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <notInShop>	True	</notInShop>
+    </R113_SM_SCC>
+    <_10RK-26_SM_SCC__0>
+      <userString>	#ussr_vehicles:_10RK-26	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	51600	</price>
+      <weight>	160	</weight>
+      <distance>	720	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </_10RK-26_SM_SCC__0>
+    <R_123C_SM_SCC>
+      <userString>	#ussr_vehicles:R_123C	</userString>
+      <tags></tags>
+      <level>	11	</level>
+      <notInShop>	true	</notInShop>
+      <price>	80000	</price>
+      <weight>	80	</weight>
+      <distance>	800	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	125	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+    </R_123C_SM_SCC>
+    <R_123B_SM_SCC>
+      <userString>	#ussr_vehicles:R_123B	</userString>
+      <tags></tags>
+      <level>	11	</level>
+      <notInShop>	true	</notInShop>
+      <price>	80000	</price>
+      <weight>	80	</weight>
+      <distance>	800	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	125	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+    </R_123B_SM_SCC>
+    <R_123C_enemy_SM_SCC>
+      <userString>	#ussr_vehicles:R_123C	</userString>
+      <tags></tags>
+      <level>	11	</level>
+      <notInShop>	true	</notInShop>
+      <price>	80000	</price>
+      <weight>	80	</weight>
+      <distance>	800	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	125	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+    </R_123C_enemy_SM_SCC>
+  </shared>
+</radios.xml>

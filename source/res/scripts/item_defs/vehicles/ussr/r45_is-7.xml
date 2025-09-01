@@ -87,6 +87,11 @@
           <destroyed>	vehicles/russian/R45_IS-7/_skins/R45_IS_7_3DSt_HW_21/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/russian/R45_IS-7/_skins/R45_IS_7_3DSt_HW_21/crash/lod0/Hull.model	</exploded>
         </R45_IS_7_3DSt_HW_21>
+        <R45_IS-7_BPXVIII_3Dst>
+          <undamaged>	vehicles/russian/R45_IS-7/_skins/R45_IS-7_BPXVIII_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R45_IS-7/_skins/R45_IS-7_BPXVIII_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R45_IS-7/_skins/R45_IS-7_BPXVIII_3Dst/crash/lod0/Hull.model	</exploded>
+        </R45_IS-7_BPXVIII_3Dst>
       </sets>
     </models>
     <swinging>
@@ -115,6 +120,15 @@
         <rayEnd>	0.704621 0.29424 2.7116	</rayEnd>
         <rayUp>	0 0 -1	</rayUp>
         <size>	0.32	</size>
+      </slot>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	10001	</slotId>
+        <compatibleModels>	R45_IS-7_BPXVIII_3Dst	</compatibleModels>
+        <rayStart>	0.761019 0.508427 2.606088	</rayStart>
+        <rayEnd>	0.690127 0.331891 2.544358	</rayEnd>
+        <rayUp>	-0.279455 0.414985 -0.865848	</rayUp>
+        <size>	0.34	</size>
       </slot>
       <slot>
         <slotType>	paint	</slotType>
@@ -847,6 +861,30 @@
         <anchorShift>	0.043893	</anchorShift>
       </slot>
       <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15064	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	R45_IS-7_BPXVIII_3Dst	</compatibleModels>
+        <position>	-0.454502 1.19772 3.24088	</position>
+        <rotation>	0.419133 -0.163665 -2.91525	</rotation>
+        <scale>	0.45634 0.451892 0.455648	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.27583	</clipAngle>
+        <anchorShift>	0.073373	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15065	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	R45_IS-7_BPXVIII_3Dst	</compatibleModels>
+        <position>	0.00007 1.39587 -3.05087	</position>
+        <rotation>	2.53651 -0.000175 -0.00007	</rotation>
+        <scale>	0.692805 0.206076 0.6928	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.078843	</clipAngle>
+        <anchorShift>	0.076172	</anchorShift>
+      </slot>
+      <slot>
         <slotType>	sequence	</slotType>
         <slotId>	18000	</slotId>
         <position>	0.862 0.605 2.551	</position>
@@ -880,6 +918,14 @@
         <applyType>	universal	</applyType>
         <size>	medium	</size>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18004	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <scale>	1 1 1	</scale>
+        <hiddenForUser>	true	</hiddenForUser>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -893,8 +939,8 @@
     </camouflage>
   </hull>
   <chassis>
-    <IS-7>
-      <userString>	#ussr_vehicles:IS-7	</userString>
+    <Chassis_R45_IS-7>
+      <userString>	#ussr_vehicles:Chassis_R45_IS-7	</userString>
       <tags></tags>
       <level>	10	</level>
       <notInShop>	true	</notInShop>
@@ -904,7 +950,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	70950	</maxLoad>
       <terrainResistance>	1.3 1.8 3.1	</terrainResistance>
       <brakeForce>	39500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -932,6 +977,11 @@
             <destroyed>	vehicles/russian/R45_IS-7/_skins/R45_IS_7_3DSt_HW_21/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/russian/R45_IS-7/_skins/R45_IS_7_3DSt_HW_21/crash/lod0/Chassis.model	</exploded>
           </R45_IS_7_3DSt_HW_21>
+          <R45_IS-7_BPXVIII_3Dst>
+            <undamaged>	vehicles/russian/R45_IS-7/_skins/R45_IS-7_BPXVIII_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R45_IS-7/_skins/R45_IS-7_BPXVIII_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R45_IS-7/_skins/R45_IS-7_BPXVIII_3Dst/crash/lod0/Chassis.model	</exploded>
+          </R45_IS-7_BPXVIII_3Dst>
         </sets>
       </models>
       <traces>
@@ -1035,6 +1085,51 @@
                   <row3>	0.000000 1.165491 3.551021	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	R45_IS-7_BPXVIII_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	1.894941 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.000000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.934315	</row2>
+                  <row3>	0.000055 1.004861 0.007291	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.704645 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.789779	</row2>
+                  <row3>	0.000055 1.260141 0.007292	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.698029 -0.000001 0.000002	</row0>
+                  <row1>	0.000000 0.136392 -0.401863	</row1>
+                  <row2>	0.000000 0.284084 0.096418	</row2>
+                  <row3>	0.000000 1.188419 3.606596	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.665832 -0.000001 0.000001	</row0>
+                  <row1>	0.000000 0.379990 -0.188956	</row1>
+                  <row2>	0.000000 0.133577 0.268621	</row2>
+                  <row3>	0.000000 0.923319 3.941725	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.698030 -0.000001 0.000002	</row0>
+                  <row1>	0.000000 -0.159733 -0.393169	</row1>
+                  <row2>	0.000000 0.277938 -0.112918	</row2>
+                  <row3>	0.000006 1.212788 -3.620093	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.734106 -0.000002 0.000003	</row0>
+                  <row1>	0.000000 -0.355976 -0.231036	</row1>
+                  <row2>	0.000000 0.163324 -0.251645	</row2>
+                  <row3>	0.000005 0.946330 -3.994390	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.406899 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.843241	</row2>
+                  <row3>	-1.896379 0.945140 0.007292	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -1123,6 +1218,51 @@
                   <row1>	0.000000 0.241729 0.177672	</row1>
                   <row2>	0.000000 -0.271253 0.369049	</row2>
                   <row3>	0.000000 1.165491 3.551021	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	R45_IS-7_BPXVIII_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	1.894940 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.000000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.934310	</row2>
+                  <row3>	0.000055 1.004860 0.007291	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.704650 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.789780	</row2>
+                  <row3>	0.000055 1.260140 0.007292	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.698030 -0.000001 0.000002	</row0>
+                  <row1>	0.000000 0.136392 -0.401863	</row1>
+                  <row2>	0.000000 0.284084 0.096418	</row2>
+                  <row3>	0.000000 1.188420 3.606600	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.665830 -0.000001 0.000001	</row0>
+                  <row1>	0.000000 0.379990 -0.188956	</row1>
+                  <row2>	0.000000 0.133577 0.268621	</row2>
+                  <row3>	0.000000 0.923319 3.941730	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.698030 -0.000001 0.000002	</row0>
+                  <row1>	0.000000 -0.159733 -0.393169	</row1>
+                  <row2>	0.000000 0.277938 -0.112918	</row2>
+                  <row3>	0.000006 1.212790 -3.620090	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.734110 -0.000002 0.000003	</row0>
+                  <row1>	0.000000 -0.355976 -0.231036	</row1>
+                  <row2>	0.000000 0.163324 -0.251645	</row2>
+                  <row3>	0.000005 0.946330 -3.994390	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.406899 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.843240	</row2>
+                  <row3>	1.893954 0.945142 0.007292	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1572,7 +1712,6 @@
             </R45_IS_7_3DSt_HW_21>
           </modelSets>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.47366	</xStart>
@@ -1783,7 +1922,6 @@
             </R45_IS_7_3DSt_HW_21>
           </modelSets>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.52807	</xStart>
@@ -1984,11 +2122,11 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </IS-7>
+    </Chassis_R45_IS-7>
   </chassis>
   <turrets0>
-    <IS-7>
-      <userString>	#ussr_vehicles:IS-7	</userString>
+    <Turret_1_R45_IS-7>
+      <userString>	#ussr_vehicles:Turret_1_R45_IS-7	</userString>
       <tags></tags>
       <level>	10	</level>
       <notInShop>	true	</notInShop>
@@ -2023,8 +2161,12 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_130mm_S-70>	shared	  <reloadTime>	13.7	</reloadTime>
+        <_130mm_S_70>	shared	  <reloadTime>	13.7	</reloadTime>
           <maxAmmo>	30	</maxAmmo>
+          <unlocks>
+            <vehicle>	R228_KR_1	  <cost>	325000	</cost>
+            </vehicle>
+          </unlocks>
           <armor>
             <armor_1>	350	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -2060,6 +2202,11 @@
                 <destroyed>	vehicles/russian/R45_IS-7/_skins/R45_IS_7_3DSt_HW_21/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/russian/R45_IS-7/_skins/R45_IS_7_3DSt_HW_21/crash/lod0/Gun_01.model	</exploded>
               </R45_IS_7_3DSt_HW_21>
+              <R45_IS-7_BPXVIII_3Dst>
+                <undamaged>	vehicles/russian/R45_IS-7/_skins/R45_IS-7_BPXVIII_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R45_IS-7/_skins/R45_IS-7_BPXVIII_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R45_IS-7/_skins/R45_IS-7_BPXVIII_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </R45_IS-7_BPXVIII_3Dst>
             </sets>
           </models>
           <hitTester>
@@ -2165,7 +2312,7 @@
             <density>	107.854 102.965	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_130mm_S-70>
+        </_130mm_S_70>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R45_IS-7/normal/lod0/Turret_01.model	</undamaged>
@@ -2182,6 +2329,11 @@
             <destroyed>	vehicles/russian/R45_IS-7/_skins/R45_IS_7_3DSt_HW_21/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/russian/R45_IS-7/_skins/R45_IS_7_3DSt_HW_21/crash/lod0/Turret_01.model	</exploded>
           </R45_IS_7_3DSt_HW_21>
+          <R45_IS-7_BPXVIII_3Dst>
+            <undamaged>	vehicles/russian/R45_IS-7/_skins/R45_IS-7_BPXVIII_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R45_IS-7/_skins/R45_IS-7_BPXVIII_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R45_IS-7/_skins/R45_IS-7_BPXVIII_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </R45_IS-7_BPXVIII_3Dst>
         </sets>
       </models>
       <hitTester>
@@ -2905,6 +3057,30 @@
           <anchorShift>	0.037361	</anchorShift>
         </slot>
         <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35059	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	R45_IS-7_BPXVIII_3Dst	</compatibleModels>
+          <position>	-1.23177 1.94907 0.567208	</position>
+          <rotation>	0.784925 -1.56294 2.98639	</rotation>
+          <scale>	0.561623 0.32 0.561623	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.20016	</clipAngle>
+          <anchorShift>	0.081732	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35060	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	R45_IS-7_BPXVIII_3Dst	</compatibleModels>
+          <position>	1.2318 1.94905 0.567208	</position>
+          <rotation>	0.78494 1.56294 -2.98643	</rotation>
+          <scale>	0.561623 0.317918 0.561623	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.20016	</clipAngle>
+          <anchorShift>	0.081732	</anchorShift>
+        </slot>
+        <slot>
           <slotType>	sequence	</slotType>
           <slotId>	38000	</slotId>
           <position>	0.858 0.436 0.487	</position>
@@ -2932,7 +3108,7 @@
         <density>	93.9797 94.3027	</density>
         <aoTextureSize>	1024 512	</aoTextureSize>
       </camouflage>
-    </IS-7>
+    </Turret_1_R45_IS-7>
   </turrets0>
   <engines>
     <M_50TI>	shared	</M_50TI>
@@ -2952,7 +3128,7 @@
         </M_50TI>
       </engines>
       <chassis>
-        <IS-7>
+        <Chassis_R45_IS-7>
           <grounds>
             <soft>
               <rollingFriction>	0.24955	</rollingFriction>
@@ -2965,7 +3141,7 @@
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>
-        </IS-7>
+        </Chassis_R45_IS-7>
       </chassis>
     </detailed>
   </physics>

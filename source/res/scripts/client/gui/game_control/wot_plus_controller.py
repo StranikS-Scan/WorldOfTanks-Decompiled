@@ -7,7 +7,6 @@ import AccountCommands
 import BigWorld
 import constants
 from BWUtil import AsyncReturn
-from CurrentVehicle import g_currentVehicle
 from Event import Event
 from PlayerEvents import g_playerEvents
 from constants import RENEWABLE_SUBSCRIPTION_CONFIG
@@ -50,7 +49,7 @@ if typing.TYPE_CHECKING:
     from renewable_subscription_common.optional_devices_usage_config import VehicleLoadout
     from Account import Account
 _logger = logging.getLogger(__name__)
-_SECONDS_IN_DAY = 60 * 60 * 24
+_SECONDS_IN_DAY = 86400
 
 class NotificationTypeTemplate(Enum):
     PASSIVE_XP = ('PassiveXpEnabledMessage', 'PassiveXpDisabledMessage')
@@ -92,7 +91,6 @@ class WotPlusController(IWotPlusController, CallbackDelayer):
         self._assistant = WotPlusAssistant()
         self.onDataChanged = Event()
         self.onAttendanceUpdated = Event()
-        self.onIntroShown = Event()
         self.onPendingRentChanged = Event()
         self.onEnabledStatusChanged = Event()
         self._invalidationInProgress = False
@@ -203,6 +201,7 @@ class WotPlusController(IWotPlusController, CallbackDelayer):
 
     def getEnabledBonuses(self):
         serverSettings = self._lobbyContext.getServerSettings()
+        mapsConfig = serverSettings.getPreferredMapsConfig()
         enabledBonuses = []
         if serverSettings.isOptionalDevicesAssistantEnabled() or serverSettings.isCrewAssistantEnabled():
             enabledBonuses.append(WotPlusOptionalDevicesAssistant())
@@ -219,7 +218,7 @@ class WotPlusController(IWotPlusController, CallbackDelayer):
         if serverSettings.isWoTPlusExclusiveVehicleEnabled():
             enabledBonuses.append(WoTPlusExclusiveVehicle())
         if serverSettings.isWotPlusExcludedMapEnabled():
-            enabledBonuses.append(ExcludedMap())
+            enabledBonuses.append(ExcludedMap(mapsConfig['wotPlusSlots']))
         if serverSettings.isFreeEquipmentDemountingEnabled():
             enabledBonuses.append(FreeEquipmentDemounting())
         if serverSettings.isBadgesEnabled():
@@ -238,11 +237,14 @@ class WotPlusController(IWotPlusController, CallbackDelayer):
     def isCrewAssistEnabled(self):
         return self.isEnabled() and self._assistant.crewAssistant.isEnabled()
 
-    def hasCrewAssistOrderSets(self, vehicle, tankmanRole):
-        return self._assistant.crewAssistant.hasOrderSets(vehicle, tankmanRole) if self.isEnabled() else (False, False)
+    def hasCrewAssistOrderSets(self, vehIntCD, tankmanRole):
+        return self._assistant.crewAssistant.hasOrderSets(vehIntCD, tankmanRole) if self.isEnabled() else (False, False)
 
     def getCrewAssistOrderSets(self, vehicle, tankmanRole):
         return self._assistant.crewAssistant.getOrderSets(vehicle, tankmanRole) if self.isEnabled() else {}
+
+    def validateCrewAssistOrderSets(self, orderSets):
+        return self._assistant.crewAssistant.validateOrderSets(orderSets)
 
     @ifAccount
     def toggleWotPlusDev(self):
@@ -315,9 +317,6 @@ class WotPlusController(IWotPlusController, CallbackDelayer):
             hasSubscription = self.isEnabled()
             if not isWotPlusEnabled and not hasSubscription:
                 return
-            if hasSubscription and (isAdditionalXPEnabled or isBadgesEnabled or isBattleBonusesEnabled) and not dt.isOnboardingShown:
-                self._systemMessages.proto.serviceChannel.pushClientMessage({}, SCH_CLIENT_MSG_TYPE.WOTPLUS_SUBSCRIBERS_ONBOARDING)
-                dt.setOnboardingShown(True)
             if hasSubscription and not dt.isFirstTime:
                 if not isWotPlusEnabled:
                     self._systemMessages.proto.serviceChannel.pushClientMessage({}, SCH_CLIENT_MSG_TYPE.WOTPLUS_FEATURE_DISABLED)
@@ -435,13 +434,3 @@ class WotPlusController(IWotPlusController, CallbackDelayer):
             self._assistant.subscriptionValidated()
         else:
             self._assistant.clearWithCacheDelete()
-
-
-class WotPlusHintChecker(object):
-
-    def check(self, aliasId):
-        lobbyContext = dependency.instance(ILobbyContext)
-        if not lobbyContext.getServerSettings().isOptionalDevicesAssistantEnabled():
-            return False
-        wotPlusCtrl = dependency.instance(IWotPlusController)
-        return wotPlusCtrl.hasOptDeviceAssistLoadout(g_currentVehicle.item)

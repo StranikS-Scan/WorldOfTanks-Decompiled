@@ -8,6 +8,11 @@ from gui.impl.lobby.tank_setup.main_tank_setup.base import MainTankSetupView
 class HangarMainTankSetupView(MainTankSetupView):
     __slots__ = ()
 
+    @property
+    def currentInteractor(self):
+        selectedView = self.getCurrentSubView()
+        return selectedView.getInteractor() if selectedView else None
+
     @wg_async
     def _doSwitch(self, setupName, slotID):
         yield showIntro(setupName)

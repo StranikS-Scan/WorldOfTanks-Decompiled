@@ -1,0 +1,64 @@
+<pm3_10_1_14.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm3_10_1_14_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <vehicleDamage>
+            <directHitsReceived>	1	</directHitsReceived>
+            <greaterOrEqual>	6500	</greaterOrEqual>
+          </vehicleDamage>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	500000	</credits>
+        <freeXP>	9000	</freeXP>
+        <crystal>	1000	</crystal>
+        <token>
+          <id>	token:pt:final:s3:t10:main	</id>
+          <expires>	01.01.2050 00:01	</expires>
+          <count>	1	</count>
+          <limit>	45	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm3_10_1_14_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <not>
+              <or>
+                <token>
+                  <id>	token:pt:final:s3:t10:main	</id>
+                  <equal>	45	</equal>
+                </token>
+                <token>
+                  <id>	token:pt:s3:t10:finished:honor	</id>
+                  <equal>	1	</equal>
+                </token>
+              </or>
+            </not>
+          </account>
+        </preBattle>
+        <postBattle>
+          <vehicleDamage>
+            <directHitsReceived>	1	</directHitsReceived>
+            <greaterOrEqual>	6500	</greaterOrEqual>
+          </vehicleDamage>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	pm3:10:points	</id>
+          <expires>	01.12.2050 06:00	</expires>
+          <count>	420	</count>
+        </token>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</pm3_10_1_14.xml>

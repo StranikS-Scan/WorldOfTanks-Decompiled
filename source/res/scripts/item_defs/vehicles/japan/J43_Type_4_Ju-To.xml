@@ -72,7 +72,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	24000	</weight>
-    <maxHealth>	1000	</maxHealth>
+    <maxHealth>	1040	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
@@ -927,8 +927,7 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	12000	</weight>
-      <maxLoad>	60000	</maxLoad>
-      <terrainResistance>	1.3 1.4 2	</terrainResistance>
+      <terrainResistance>	1.2 1.3 1.9	</terrainResistance>
       <brakeForce>	55000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	28	</rotationSpeed>
@@ -1834,7 +1833,6 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	13000	</weight>
-      <maxLoad>	63000	</maxLoad>
       <terrainResistance>	1.2 1.3 1.9	</terrainResistance>
       <brakeForce>	55000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2793,18 +2791,24 @@
         <_88mm_Type3_Gun_L56>	shared	  <maxAmmo>	70	</maxAmmo>
           <armor>
             <armor_1>	115	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_1>
             <armor_2>	130	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_2>
             <armor_3>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_3>
             <armor_4>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
             <armor_5>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_5>
             <armor_6>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_6>
             <armor_7>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_7>
             <armor_8>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_8>
@@ -2824,11 +2828,11 @@
           </armor>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0.00000 10.00 0.25000 10.00 0.41667 9.00 0.50000 6.00 0.58333 9.00 0.75000 10.00 1.00000 10.00	</maxPitch>
+            <maxPitch>	0.00000 10.00 0.41667 10.00 0.50000 6.00 0.58333 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.37	</shotDispersionRadius>
-          <reloadTime>	10.2	</reloadTime>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <reloadTime>	9.3	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	4	</afterShot>
@@ -3471,7 +3475,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	12540	</weight>
-      <maxHealth>	250	</maxHealth>
+      <maxHealth>	260	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -3488,18 +3492,24 @@
         <_88mm_Type3_Gun_L56>	shared	  <maxAmmo>	70	</maxAmmo>
           <armor>
             <armor_1>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_1>
             <armor_2>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_2>
             <armor_3>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_3>
             <armor_4>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
             <armor_5>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_5>
             <armor_6>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_6>
             <armor_7>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_7>
             <armor_8>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_8>
@@ -3513,11 +3523,11 @@
           </armor>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0.00000 10.00 0.25000 10.00 0.41667 9.00 0.50000 6.00 0.58333 9.00 0.75000 10.00 1.00000 10.00	</maxPitch>
+            <maxPitch>	0.00000 10.00 0.41667 10.00 0.50000 6.00 0.58333 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	9.9	</reloadTime>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <reloadTime>	9.3	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	4	</afterShot>
@@ -3585,18 +3595,24 @@
           </unlocks>
           <armor>
             <armor_1>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_1>
             <armor_2>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_2>
             <armor_3>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_3>
             <armor_4>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
             <armor_5>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_5>
             <armor_6>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_6>
             <armor_7>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_7>
             <armor_8>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_8>
@@ -3610,13 +3626,13 @@
           </armor>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0.00000 10.00 0.25000 10.00 0.41667 9.00 0.50000 6.00 0.58333 9.00 0.75000 10.00 1.00000 10.00	</maxPitch>
+            <maxPitch>	0.00000 10.00 0.41667 10.00 0.50000 6.00 0.58333 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <reloadTime>	11.3	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -4247,13 +4263,13 @@
         <Chassis_J43_Type_4_Ju-To>
           <grounds>
             <soft>
-              <rollingFriction>	0.161	</rollingFriction>
+              <rollingFriction>	0.15295	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1127	</rollingFriction>
+              <rollingFriction>	0.10465	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.0966	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

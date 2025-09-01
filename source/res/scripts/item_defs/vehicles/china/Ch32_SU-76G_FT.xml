@@ -1518,8 +1518,7 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	3000	</weight>
-      <maxLoad>	12000	</maxLoad>
-      <terrainResistance>	1.3 1.5 2.3	</terrainResistance>
+      <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
       <brakeForce>	12000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	38	</rotationSpeed>
@@ -2427,7 +2426,6 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	3000	</weight>
-      <maxLoad>	14000	</maxLoad>
       <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
       <brakeForce>	12000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -3344,20 +3342,26 @@
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	300	</circularVisionRadius>
+      <circularVisionRadius>	310	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	60	</maxHealth>
         <maxRegenHealth>	30	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_57mm_ZiS_2>	shared	  <maxAmmo>	140	</maxAmmo>
+        <_57mm_ZiS_2_76G>	shared	  <maxAmmo>	140	</maxAmmo>
+          <unlocks>
+            <gun>	_85mm_56_85TG_FT	  <cost>	5200	</cost>
+            </gun>
+          </unlocks>
           <armor>
             <armor_1>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_1>
             <armor_2>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
             <armor_3>	7	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
@@ -3368,19 +3372,15 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <aimingTime>	2.3	</aimingTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <aimingTime>	1.8	</aimingTime>
           <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
-          <reloadTime>	3	</reloadTime>
+          <reloadTime>	2.8	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <unlocks>
-            <gun>	_76mm_ZiS_3	  <cost>	2850	</cost>
-            </gun>
-          </unlocks>
           <models>
             <undamaged>	vehicles/chinese/Ch32_SU-76G_FT/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch32_SU-76G_FT/crash/lod0/Gun_01.model	</destroyed>
@@ -3448,94 +3448,7 @@
             <density>	118.915 118.958	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_57mm_ZiS_2>
-        <_76mm_ZiS_3>	shared	  <maxAmmo>	105	</maxAmmo>
-          <unlocks>
-            <gun>	_85mm_56_85TG_FT	  <cost>	5200	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	7	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	10	</gun>
-          </armor>
-          <turretYawLimits>	-15 15	</turretYawLimits>
-          <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 5 1 5	</maxPitch>
-          </pitchLimits>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <aimingTime>	1.7	</aimingTime>
-          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
-          <reloadTime>	4.4	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <models>
-            <undamaged>	vehicles/chinese/Ch32_SU-76G_FT/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/chinese/Ch32_SU-76G_FT/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/chinese/Ch32_SU-76G_FT/crash/lod0/Gun_02.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/chinese/Ch32_SU-76G_FT/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/chinese/Ch32_SU-76G_FT/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium_mb	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.000197 0.199291 2.05974	</anchorPosition>
-              <anchorDirection>	-0 -0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0.000323 0.443397 0.442833	</anchorPosition>
-              <anchorDirection>	0.000124 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.000197 0.199291 2.05974	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.053418 2.19116 -0.412622	</position>
-              <rotation>	0.764366 0.019051 3.12807	</rotation>
-              <scale>	0.578392 0.430755 0.477908	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.499055	</clipAngle>
-              <anchorShift>	0.015613	</anchorShift>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <shotOffset>	0.000000 0.175980 0.000000	</shotOffset>
-          <camouflage>
-            <density>	118.766 118.797	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_76mm_ZiS_3>
+        </_57mm_ZiS_2_76G>
         <_85mm_56_85TG_FT>	shared	  <maxAmmo>	65	</maxAmmo>
           <unlocks>
             <vehicle>	Ch33_60G_FT	  <cost>	10300	</cost>
@@ -3686,11 +3599,6 @@
     <Medium>	shared	</Medium>
   </fuelTanks>
   <radios>
-    <_9RM_shop>	shared	  <unlocks>
-        <radio>	A-220_1	  <cost>	7000	</cost>
-        </radio>
-      </unlocks>
-    </_9RM_shop>
     <A-220_1>	shared	</A-220_1>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
@@ -3711,13 +3619,13 @@
           <axleCount>	5	</axleCount>
           <grounds>
             <soft>
-              <rollingFriction>	0.18515	</rollingFriction>
+              <rollingFriction>	0.16905	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.12075	</rollingFriction>
+              <rollingFriction>	0.10465	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_Ch32_SU-76G_FT>

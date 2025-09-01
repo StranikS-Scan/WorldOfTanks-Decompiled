@@ -3,6 +3,7 @@
 import typing
 from skeletons.gui.game_control import IGameController
 if typing.TYPE_CHECKING:
+    from typing import Callable
     from Event import Event
     from frameworks.wulf import ViewModel
     from frameworks.wulf.resource_manager import ResourceManager
@@ -38,7 +39,7 @@ class IGuiLoader(object):
     def scale(self):
         raise NotImplementedError
 
-    def init(self, tutorialModel, uiLoggerModel):
+    def init(self, tutorialModel, uiLoggerModel, serverTimeCallback):
         raise NotImplementedError
 
     def fini(self):
@@ -85,6 +86,9 @@ class INotificationWindowController(IGameController):
 
     @property
     def postponedCount(self):
+        raise NotImplementedError
+
+    def setFilterPredicate(self, predicate):
         raise NotImplementedError
 
 

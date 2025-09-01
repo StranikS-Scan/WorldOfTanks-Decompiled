@@ -7,10 +7,11 @@ from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import Curtailing
 from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionInfoData
 from gui.impl.gen.view_models.common.missions.conditions.preformatted_condition_model import PreformattedConditionModel
 from gui.impl.gen.view_models.common.missions.daily_quest_model import DailyQuestModel
+from gui.impl.gen.view_models.common.missions.weekly_quest_model import WeeklyQuestModel
 from gui.impl.gen.view_models.common.missions.event_model import EventStatus
 from gui.impl.gen.view_models.common.missions.quest_model import QuestModel
 from gui.server_events.awards_formatters import AWARDS_SIZES
-from gui.server_events.events_helpers import isPremium, isDailyQuest
+from gui.server_events.events_helpers import isPremium, isDailyQuest, isWeeklyQuest
 from gui.server_events.formatters import DECORATION_SIZES
 from gui.shared.missions.packers.bonus import getDefaultBonusPacker, packMissionsBonusModelAndTooltipData
 from gui.shared.missions.packers.conditions import BonusConditionPacker
@@ -129,10 +130,10 @@ class DailyQuestUIDataPacker(BattleQuestUIDataPacker):
         else:
             model = model if model is not None else DailyQuestModel()
             self._packModel(model)
-            self.__resolveQuestIcon(model)
+            self._resolveQuestIcon(model)
             return model
 
-    def __resolveQuestIcon(self, model):
+    def _resolveQuestIcon(self, model):
         iconId = self._event.getIconID()
         if iconId is not None and iconId > 0:
             prefetcher = self.eventsCache.prefetcher
@@ -151,14 +152,18 @@ class DailyQuestUIDataPacker(BattleQuestUIDataPacker):
         return
 
 
-def packQuestBonusModel(quest, packer, array):
+def packQuestBonusModel(quest, packer, array, sort=None):
     bonuses = quest.getBonuses()
+    if sort is not None and callable(sort):
+        bonuses = sorted(bonuses, cmp=sort)
     for bonus in bonuses:
         if bonus.isShowInGUI():
             bonusList = packer.pack(bonus)
             for idx, item in enumerate(bonusList):
                 item.setIndex(idx)
                 array.addViewModel(item)
+
+    return
 
 
 def packQuestBonusModelAndTooltipData(packer, array, quest, tooltipData=None, questBonuses=None):
@@ -172,6 +177,19 @@ def preformatEventBonuses(event, bonusFormatter=CurtailingAwardsComposer(DEFAULT
     return bonusFormatter.getFormattedBonuses(bonuses, size=AWARDS_SIZES.BIG)
 
 
+class WeeklyQuestUIDataPacker(BattleQuestUIDataPacker):
+    eventsCache = dependency.descriptor(IEventsCache)
+
+    def pack(self, model=None):
+        if model is not None and not isinstance(model, WeeklyQuestModel):
+            _logger.error('Provided model type is not matching quest type. Expected WeeklyQuestModel')
+            return
+        else:
+            model = model if model is not None else WeeklyQuestModel()
+            self._packModel(model)
+            return model
+
+
 def getEventUIDataPacker(event):
     if event.getType() == constants.EVENT_TYPE.TOKEN_QUEST:
         return TokenUIDataPacker(event)
@@ -179,6 +197,8 @@ def getEventUIDataPacker(event):
         return PrivateMissionUIDataPacker(event)
     elif isPremium(event.getID()) or isDailyQuest(event.getID()):
         return DailyQuestUIDataPacker(event)
+    elif isWeeklyQuest(event.getID()):
+        return WeeklyQuestUIDataPacker(event)
     else:
         return BattleQuestUIDataPacker(event) if event.getType() in constants.EVENT_TYPE.LIKE_BATTLE_QUESTS else None
 

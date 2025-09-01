@@ -2,13 +2,14 @@
 # Embedded file name: scripts/client/gui/impl/lobby/platoon/view/platoon_search_view.py
 import logging
 import time
+from gui.impl.gen.view_models.windows.pop_over_window_model import PopOverWindowModel
 from gui.prb_control import prb_getters
 from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.gui.game_control import IPlatoonController
 from helpers import dependency
 from gui.impl.gen.view_models.views.lobby.platoon.searching_dropdown_model import SearchingDropdownModel
 from gui.impl.lobby.platoon.view.subview.platoon_tiers_limit_subview import TiersLimitSubview
-from gui.impl.pub import ViewImpl
+from gui.impl.pub import ViewImpl, WindowView
 from frameworks.wulf import ViewSettings, WindowFlags
 from gui.impl.gen import R
 from gui.impl import backport
@@ -18,7 +19,7 @@ from gui.impl.lobby.premacc.squad_bonus_tooltip_content import SquadBonusTooltip
 from gui.impl.lobby.platoon.platoon_helpers import formatSearchEstimatedTime, getQueueInfoByQueueType, Position, getPlatoonBonusState, BonusState
 from PlayerEvents import g_playerEvents
 from UnitBase import UNDEFINED_ESTIMATED_TIME
-from frameworks.wulf.gui_constants import ViewStatus, WindowLayer
+from frameworks.wulf.gui_constants import ViewStatus, WindowLayer, ViewFlags
 from gui.impl.lobby.platoon.platoon_helpers import PreloadableWindow
 from constants import QUEUE_TYPE
 _logger = logging.getLogger(__name__)
@@ -130,19 +131,34 @@ class SearchView(ViewImpl, CallbackDelayer):
 
 
 class SearchWindow(PreloadableWindow):
-    previousPosition = None
+    __platoonCtrl = dependency.descriptor(IPlatoonController)
 
-    def __init__(self, initialPosition=None):
-        super(SearchWindow, self).__init__(wndFlags=WindowFlags.POP_OVER, content=SearchView(), layer=WindowLayer.WINDOW)
-        if initialPosition:
-            SearchWindow.previousPosition = initialPosition
-        if SearchWindow.previousPosition:
-            self.move(SearchWindow.previousPosition.x, SearchWindow.previousPosition.y)
+    def __init__(self):
+        popoverParams = self.__platoonCtrl.getPopoverParams()
+        decorator = WindowView(layoutID=0, flags=ViewFlags.POP_OVER_DECORATOR, viewModelClazz=PopOverWindowModel)
+        areaID = R.areas.pop_over()
+        super(SearchWindow, self).__init__(wndFlags=WindowFlags.POP_OVER, content=SearchView(), decorator=decorator, layer=WindowLayer.WINDOW, areaID=areaID)
+        if popoverParams is not None:
+            with self.popOverModel.transaction() as tx:
+                tx.setBoundX(popoverParams.bbox.positionX)
+                tx.setBoundY(popoverParams.bbox.positionY)
+                tx.setBoundWidth(popoverParams.bbox.width)
+                tx.setBoundHeight(popoverParams.bbox.height)
+                tx.setDirectionType(popoverParams.direction)
+                tx.setIsCloseBtnVisible(False)
+        else:
+            _logger.warning('Initializing window with empty popover parameters')
+        return
+
+    @property
+    def popOverModel(self):
+        return super(SearchWindow, self)._getDecoratorViewModel()
 
     def _finalize(self):
         if self.content.viewStatus > ViewStatus.LOADING:
             SearchWindow.previousPosition = Position(self.position[0], self.position[1])
         g_eventBus.handleEvent(PlatoonDropdownEvent(PlatoonDropdownEvent.NAME, ctx={'showing': False}))
+        super(SearchWindow, self)._finalize()
 
     def _onContentReady(self):
         if not self._isPreloading():

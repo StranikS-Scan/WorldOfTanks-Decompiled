@@ -8,6 +8,7 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.maps_training.maps_training_queue_model import MapsTrainingQueueModel
 from gui.prb_control import prbEntityProperty
 from helpers import dependency
+from helpers.time_utils import getCurrentTimestamp
 from skeletons.gui.game_control import IMapsTrainingController
 from skeletons.gui.shared import IItemsCache
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
@@ -29,7 +30,7 @@ class MapsTrainingQueueView(MapsTrainingBaseView):
         super(MapsTrainingQueueView, self).__init__(viewResource=R.views.lobby.maps_training.MapsTrainingQueue(), viewModel=MapsTrainingQueueModel())
         self.__timerCallback = None
         self.__queueCallback = None
-        self.__createTime = 0
+        self.__createTime = kwargs['ctx'].get('createTime', getCurrentTimestamp())
         self.__tipNum = random.randint(1, self._TIPS_OF_ALL)
         self.__status = MapsTrainingQueueModel.DELAY_DEFAULT
         return
@@ -47,7 +48,7 @@ class MapsTrainingQueueView(MapsTrainingBaseView):
 
     def _initialize(self, *args, **kwargs):
         super(MapsTrainingQueueView, self)._initialize(*args, **kwargs)
-        self.__timerCallback = BigWorld.callback(1, self.__updateTimer)
+        self.__updateTimer()
 
     def _finalize(self):
         self.__stopUpdateScreen()
@@ -80,16 +81,16 @@ class MapsTrainingQueueView(MapsTrainingBaseView):
 
     def __updateTimer(self):
         self.__timerCallback = BigWorld.callback(1, self.__updateTimer)
-        if self.__createTime > self._WAIT_TIME_AVG:
-            self.__status = MapsTrainingQueueModel.DELAY_NORMAL
-        if self.__createTime > self._WAIT_TIME_LONG:
+        elapsedTime = getCurrentTimestamp() - self.__createTime
+        if elapsedTime > self._WAIT_TIME_LONG:
             self.__status = MapsTrainingQueueModel.DELAY_LONG
+        elif elapsedTime > self._WAIT_TIME_AVG:
+            self.__status = MapsTrainingQueueModel.DELAY_NORMAL
         timeStr = '%d:%02d'
         if self.__status != MapsTrainingQueueModel.DELAY_DEFAULT:
             timeStr += '*'
         self.viewModel.setDelayStatus(self.__status)
-        self.viewModel.setTime(timeStr % divmod(self.__createTime, 60))
-        self.__createTime += 1
+        self.viewModel.setTime(timeStr % divmod(elapsedTime, 60))
 
     def __onArenaCreated(self):
         self.__stopUpdateScreen()

@@ -12,7 +12,7 @@ EXT_DATA_PROGRESSION_KEY = 'vehPostProgression'
 SETUPS_FEATURES = ('shells_consumables_switch', 'opt_dev_boosters_switch')
 ROLESLOT_FEATURE = 'roleSlot'
 FEATURES_NAMES = SETUPS_FEATURES + (ROLESLOT_FEATURE,)
-POST_PROGRESSION_UNLOCK_MODIFICATIONS_PRICES = ('unlockBaseModificationCost', 'unlockPairModificationCost')
+POST_PROGRESSION_UNLOCK_MODIFICATIONS_PRICES = ('unlockBaseModificationCost', 'unlockPairModificationCost', 'Modification10000xp', 'Modification20000xp', 'Modification25000xp', 'Modification30000xp', 'Modification40000xp')
 POST_PROGRESSION_BUY_MODIFICATIONS_PRICES = ('buyPairModificationCost',)
 CUSTOM_ROLE_SLOT_CHANGE_PRICE = 'customRoleSlotChangeCost'
 POST_PROGRESSION_UNLOCK_AND_BUY_MODIFICATIONS_PRICES = POST_PROGRESSION_UNLOCK_MODIFICATIONS_PRICES + POST_PROGRESSION_BUY_MODIFICATIONS_PRICES
@@ -20,12 +20,21 @@ POST_PROGRESSION_ALL_PRICES = POST_PROGRESSION_UNLOCK_AND_BUY_MODIFICATIONS_PRIC
 ALLOWED_CURRENCIES_FOR_TREE_STEP = {'xp'}
 ALLOWED_CURRENCIES_FOR_BUY_MODIFICATION_STEP = {'credits'}
 ALLOWED_CURRENCIES_FOR_CUSTOM_ROLE_SLOT_CHANGE = {'credits'}
+ALLOWED_ACTIONS_CATEGORIES = {'survivability',
+ 'mobility',
+ 'firepower',
+ 'spotting',
+ 'concealment',
+ 'special',
+ 'mechanics'}
 ID_THRESHOLD = 16384
+VEH_SKILL_TREE_ID_OFFSET = 10000
 
 class ACTION_TYPES:
     MODIFICATION = 1
     PAIR_MODIFICATION = 2
     FEATURE = 3
+    BIT_PACK = 4
 
 
 class PAIR_TYPES:
@@ -132,6 +141,98 @@ def getLayoutCapacity(invData, layout, vehDescr):
     return capacity
 
 
+def packPostProgression(unlocks, pairs, tree):
+    atPirModification = ACTION_TYPES.PAIR_MODIFICATION
+    result = []
+    packed = 0
+    pos = 0
+    for order, step in enumerate(tree.ppBattleIndex):
+        actionID, itemID = step.action
+        if actionID == atPirModification:
+            value = 0
+            if step.id in unlocks:
+                value = pairs.get(step.id, 0)
+            packed |= value << pos
+            pos += 2
+        if step.id in unlocks:
+            packed |= 1 << pos
+        pos += 1
+
+    mask = 268435455
+    while packed:
+        result.append((packed & mask) << 4 | ACTION_TYPES.BIT_PACK)
+        packed >>= 28
+
+    return result
+
+
+def combinePackedCDs(actionCDs):
+    packedCDs = [ actionCD >> 4 for actionCD in actionCDs if actionCD & 15 == ACTION_TYPES.BIT_PACK ]
+    if not packedCDs:
+        return 0
+    packed = 0
+    num_bits = 28
+    for i, value in enumerate(packedCDs):
+        packed |= value << num_bits * i
+
+    return packed
+
+
+def unpackActiveModifications(actionCDs, vppCache, treeID):
+    result = []
+    packed = combinePackedCDs(actionCDs)
+    if not packed:
+        return result
+    tree = vppCache.trees.get(treeID)
+    if not tree:
+        return result
+    atPairModification = ACTION_TYPES.PAIR_MODIFICATION
+    atModification = ACTION_TYPES.MODIFICATION
+    pos = 0
+    for order, step in enumerate(tree.ppBattleIndex):
+        actionID, itemID = step.action
+        if actionID == atPairModification:
+            value = packed >> pos & 3
+            pos += 2
+            if value == PAIR_TYPES.FIRST:
+                result.append(vppCache.pairs[itemID].first[0])
+            elif value == PAIR_TYPES.SECOND:
+                result.append(vppCache.pairs[itemID].second[0])
+        if actionID == atModification:
+            if packed >> pos & 1:
+                result.append(itemID)
+            pos += 1
+        pos += 1
+
+    return result
+
+
+def unpackActionCDs(actionCDs, vppCache, treeID):
+    result = [ actionCD for actionCD in actionCDs if actionCD & 15 != ACTION_TYPES.BIT_PACK ]
+    packed = combinePackedCDs(actionCDs)
+    if not packed:
+        return result
+    tree = vppCache.trees.get(treeID)
+    if not tree:
+        return result
+    atPairModification = ACTION_TYPES.PAIR_MODIFICATION
+    pos = 0
+    for order, step in enumerate(tree.ppBattleIndex):
+        actionID, itemID = step.action
+        if actionID == atPairModification:
+            value = packed >> pos & 3
+            pos += 2
+            if value:
+                result.append(makeActionCompDescr(actionID, itemID, value))
+        if packed >> pos & 1:
+            result.append(makeActionCompDescr(actionID, itemID, 0))
+        pos += 1
+
+    atBitPack = ACTION_TYPES.BIT_PACK
+    result.extend([ actionCD >> 4 for actionCD in actionCDs if actionCD & 15 != atBitPack ])
+    return result
+
+
 class VehicleState(object):
     __slots__ = ('_unlocks', '_pairs', '_features', '_disabledSwitches')
 
@@ -232,6 +333,9 @@ class VehicleState(object):
     def isEmpty(self):
         return not self.unlocks and not self.pairs and not self.features
 
+    def isResearchedTree(self, tree):
+        return self.unlocks == set(tree.steps.keys())
+
     def toActionCDs(self, tree):
         steps = tree.steps
         pairs = self._pairs
@@ -243,6 +347,9 @@ class VehicleState(object):
             result.append(makeActionCompDescr(actionID, itemID, pairs.get(stepID, notSet) if actionID == pairModification else 0))
 
         return result
+
+    def toBattleActionCDsPack(self, tree):
+        return packPostProgression(self._unlocks, self._pairs, tree)
 
     def toRawData(self):
         return [self._unlocks,

@@ -12,7 +12,7 @@ __all__ = ('getUnlockedItems', 'getItemByIntCD', 'getVehicleByIntCD', 'getItemSt
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def getUnlockedItems(itemsCache=None):
-    return itemsCache.items.stats.unlocks if itemsCache is not None else ()
+    return itemsCache.items.stats.unlocks if itemsCache is not None else set()
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)

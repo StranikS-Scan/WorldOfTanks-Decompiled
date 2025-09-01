@@ -14,6 +14,7 @@ from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_
 from gui.app_loader import settings as app_settings
 from gui.server_events.pm_constants import PM_TUTOR_FIELDS
 from gui.shared import EVENT_BUS_SCOPE
+from gui.shared.event_dispatcher import showPersonalMissionCampaignSelectorWindow
 from gui.shared.events import LoadViewEvent
 from helpers import dependency
 from shared_utils import findFirst
@@ -80,21 +81,7 @@ class PersonalMissionsPackageBusinessHandler(PackageBusinessHandler):
             Waiting.hide('loadPage')
 
     def loadPersonalMissionsView(self, event):
-        settingsCore = dependency.instance(ISettingsCore)
-        eventsCache = dependency.instance(IEventsCache)
-        uiStorage = settingsCore.serverSettings.getUIStorage()
-        goByDefault = True
-        if not uiStorage.get(PM_TUTOR_FIELDS.GREETING_SCREEN_SHOWN):
-            self.loadViewByCtxEvent(LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_VIEW_ALIAS), ctx=event.ctx))
-            goByDefault = False
-        elif not uiStorage.get(PM_TUTOR_FIELDS.FIRST_ENTRY_AWARDS_SHOWN):
-            if findFirst(methodcaller('isAwardAchieved'), eventsCache.getPersonalMissions().getAllOperations().values()):
-                self.loadViewByCtxEvent(LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_AWARD_VIEW_ALIAS), ctx=event.ctx))
-                goByDefault = False
-            else:
-                settingsCore.serverSettings.saveInUIStorage({PM_TUTOR_FIELDS.FIRST_ENTRY_AWARDS_SHOWN: True})
-        if goByDefault:
-            if event.alias == VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS:
-                self.loadViewByCtxEvent(LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS), ctx=event.ctx))
-            else:
-                self.loadViewByCtxEvent(event)
+        if event.alias == VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS:
+            showPersonalMissionCampaignSelectorWindow()
+        else:
+            self.loadViewByCtxEvent(event)

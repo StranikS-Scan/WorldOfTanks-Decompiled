@@ -57,7 +57,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	1200	</weight>
-    <maxHealth>	850	</maxHealth>
+    <maxHealth>	960	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
@@ -1025,13 +1025,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_GB102_LHMTV_Mk1>
-      <userString>	#gb_vehicles:Chassis_GB102_LHMTV_Mk1	</userString>
+    <Chassis_GB102_LHMTV>
+      <userString>	#gb_vehicles:Chassis_GB102_LHMTV	</userString>
       <tags></tags>
       <level>	7	</level>
       <price>	17000	</price>
       <unlocks>
-        <chassis>	Chassis_GB102_LHMTV_Mk2	  <cost>	16100	</cost>
+        <chassis>	Chassis_GB102_LHMTV_2	  <cost>	16100	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1039,11 +1039,10 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	800	</weight>
-      <maxLoad>	5000	</maxLoad>
-      <terrainResistance>	0.8 0.9 1.6	</terrainResistance>
+      <terrainResistance>	0.7 0.8 1.4	</terrainResistance>
       <brakeForce>	4500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	40	</rotationSpeed>
+      <rotationSpeed>	46	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.18	</vehicleMovement>
         <vehicleRotation>	0.18	</vehicleRotation>
@@ -1915,9 +1914,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	5.71428585	</repairTime>
-    </Chassis_GB102_LHMTV_Mk1>
-    <Chassis_GB102_LHMTV_Mk2>
-      <userString>	#gb_vehicles:Chassis_GB102_LHMTV_Mk2	</userString>
+    </Chassis_GB102_LHMTV>
+    <Chassis_GB102_LHMTV_2>
+      <userString>	#gb_vehicles:Chassis_GB102_LHMTV_2	</userString>
       <tags></tags>
       <level>	8	</level>
       <price>	31600	</price>
@@ -1926,11 +1925,10 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	800	</weight>
-      <maxLoad>	5500	</maxLoad>
       <terrainResistance>	0.7 0.8 1.4	</terrainResistance>
       <brakeForce>	5000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	42	</rotationSpeed>
+      <rotationSpeed>	50	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.16	</vehicleMovement>
         <vehicleRotation>	0.16	</vehicleRotation>
@@ -2802,12 +2800,12 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	5.71428585	</repairTime>
-    </Chassis_GB102_LHMTV_Mk2>
+    </Chassis_GB102_LHMTV_2>
   </chassis>
   <turrets0>
     <Turret_1_GB102_LHMTV>
       <userString>	#gb_vehicles:Turret_1_GB102_LHMTV	</userString>
-      <tags></tags>
+      <tags>	oscillating	</tags>
       <level>	7	</level>
       <price>	20000	</price>
       <unlocks>
@@ -2824,7 +2822,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	700	</weight>
-      <maxHealth>	150	</maxHealth>
+      <maxHealth>	180	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -2857,16 +2855,16 @@
             <armor_15>	15	</armor_15>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	5.8	</reloadTime>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <reloadTime>	4.8	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	1.9	</aimingTime>
           <pitchLimits>
-            <minPitch>	0 -15 0.179904 -15 0.232005 -10 0.259665 -6.60936 0.303602 -5.1896 0.347774 -3.76228 0.420948 -3.76228 0.500618 -3.76228 0.611138 -3.76217 0.68169 -4.97372 0.719114 -7.38288 0.758173 -10.7791 0.795529 -15 1 -15	</minPitch>
+            <minPitch>	0.00000 -15.00 0.10278 -15.00 0.19444 -4.00 0.80556 -4.00 0.89722 -15.00 1.00000 -15.00	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <turretYawLimits>	-180 180	</turretYawLimits>
@@ -3446,11 +3444,11 @@
     </Turret_1_GB102_LHMTV>
     <Turret_2_GB102_LHMTV>
       <userString>	#gb_vehicles:Turret_2_GB102_LHMTV	</userString>
-      <tags></tags>
+      <tags>	oscillating	</tags>
       <level>	8	</level>
       <price>	31300	</price>
       <unlocks>
-        <gun>	_85mm_HV_L40	  <cost>	22000	</cost>
+        <gun>	_85mm_HV_L40_LHMTV	  <cost>	22000	</cost>
         </gun>
       </unlocks>
       <armor>
@@ -3463,7 +3461,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	900	</weight>
-      <maxHealth>	200	</maxHealth>
+      <maxHealth>	240	</maxHealth>
       <rotationSpeed>	43	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -3497,16 +3495,16 @@
             <armor_16>	15	</armor_16>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	5.6	</reloadTime>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
+          <reloadTime>	4.7	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.1	</aimingTime>
+          <aimingTime>	1.8	</aimingTime>
           <pitchLimits>
-            <minPitch>	0 -15 0.101231 -15 0.151194 -10 0.263448 -5.88741 0.276478 -5.43673 0.307378 -4.36789 0.328458 -4.36789 0.458631 -4.36789 0.625547 -4.36789 0.675019 -4.36789 0.704307 -6.18241 0.730438 -6.18241 0.830467 -5.8794 0.848508 -7.22431 0.858297 -8.96702 0.889336 -11.9836 0.918645 -15 1 -15	</minPitch>
+            <minPitch>	0.00000 -15.00 0.10278 -15.00 0.19444 -5.00 0.80556 -5.00 0.89722 -15.00 1.00000 -15.00	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <turretYawLimits>	-180 180	</turretYawLimits>
@@ -4012,7 +4010,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_HV_L40>
-        <_85mm_HV_L40>	shared	  <maxAmmo>	25	</maxAmmo>
+        <_85mm_HV_L40_LHMTV>	shared	  <maxAmmo>	33	</maxAmmo>
           <unlocks>
             <vehicle>	GB103_GSOR3301_AVR_FS	  <cost>	164900	</cost>
             </vehicle>
@@ -4045,7 +4043,7 @@
           </shotDispersionFactors>
           <aimingTime>	2.2	</aimingTime>
           <pitchLimits>
-            <minPitch>	0 -15 0.101231 -15 0.151194 -10 0.263448 -5.88741 0.276478 -5.43673 0.307378 -4.36789 0.328458 -4.36789 0.458631 -4.36789 0.625547 -4.36789 0.675019 -4.36789 0.704307 -6.18241 0.730438 -6.18241 0.830467 -5.8794 0.848508 -7.22431 0.858297 -8.96702 0.889336 -11.9836 0.918645 -15 1 -15	</minPitch>
+            <minPitch>	0.00000 -15.00 0.10278 -15.00 0.19444 -5.00 0.80556 -5.00 0.89722 -15.00 1.00000 -15.00	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <turretYawLimits>	-180 180	</turretYawLimits>
@@ -4549,7 +4547,7 @@
             <density>	104.052 104.622	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_85mm_HV_L40>
+        </_85mm_HV_L40_LHMTV>
       </guns>
       <models>
         <undamaged>	vehicles/british/GB102_LHMTV/normal/lod0/Turret_02.model	</undamaged>
@@ -4625,21 +4623,16 @@
   </turrets0>
   <engines>
     <Jaguar_J_60>	shared	  <unlocks>
-        <engine>	Rolls_Royse_FB_60	  <cost>	16100	</cost>
+        <engine>	Rolls_Royce_FB60_LHMTV	  <cost>	16100	</cost>
         </engine>
       </unlocks>
     </Jaguar_J_60>
-    <Rolls_Royse_FB_60>	shared	</Rolls_Royse_FB_60>
+    <Rolls_Royce_FB60_LHMTV>	shared	</Rolls_Royce_FB60_LHMTV>
   </engines>
   <fuelTanks>
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <C13_B47>	shared	  <unlocks>
-        <radio>	N22_LT	  <cost>	7200	</cost>
-        </radio>
-      </unlocks>
-    </C13_B47>
     <N22_LT>	shared	</N22_LT>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
@@ -4650,27 +4643,13 @@
           <smplEnginePower>	140	</smplEnginePower>
           <smplFwMaxSpeed>	63	</smplFwMaxSpeed>
         </Jaguar_J_60>
-        <Rolls_Royse_FB_60>
+        <Rolls_Royce_FB60_LHMTV>
           <smplEnginePower>	160.	</smplEnginePower>
           <smplFwMaxSpeed>	63	</smplFwMaxSpeed>
-        </Rolls_Royse_FB_60>
+        </Rolls_Royce_FB60_LHMTV>
       </engines>
       <chassis>
-        <Chassis_GB102_LHMTV_Mk1>
-          <axleCount>	5	</axleCount>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.1288	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.07245	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.0644	</rollingFriction>
-            </firm>
-          </grounds>
-        </Chassis_GB102_LHMTV_Mk1>
-        <Chassis_GB102_LHMTV_Mk2>
+        <Chassis_GB102_LHMTV>
           <axleCount>	5	</axleCount>
           <grounds>
             <soft>
@@ -4683,7 +4662,21 @@
               <rollingFriction>	0.05635	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_GB102_LHMTV_Mk2>
+        </Chassis_GB102_LHMTV>
+        <Chassis_GB102_LHMTV_2>
+          <axleCount>	5	</axleCount>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.1127	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.0644	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.05635	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_GB102_LHMTV_2>
       </chassis>
     </detailed>
   </physics>

@@ -10,7 +10,7 @@ class Comp7DailyQuestsView(DailyQuestsView):
     def _getEvents(self):
         result = super(Comp7DailyQuestsView, self)._getEvents()
         result = list(result)
-        result.append((self.__comp7Controller.onComp7ConfigChanged, self.__updateComp7Data))
+        result.append((self.__comp7Controller.onModeConfigChanged, self.__updateComp7Data))
         return result
 
     def _updateCommonData(self, *_):

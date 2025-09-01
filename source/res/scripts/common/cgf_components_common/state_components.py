@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/cgf_components_common/state_components.py
 import CGF
 from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
+from GenericComponents import StateSwitcherComponent
 _DEFAULT_HEALTH = 300
 
 class DEATH_REASON(object):
@@ -40,14 +41,11 @@ class SpawnOnDeathComponent(object):
 
 
 @registerComponent
-class StateSwitcherComponent(object):
+class VehicleHealthObserverComponent(object):
     category = 'Common'
-    editorTitle = 'State Switcher'
+    editorTitle = 'Vehicle Health Observer Component'
     domain = CGF.DomainOption.DomainAll
-    normal = ComponentProperty(type=CGFMetaTypes.LINK, editorName='Normal', value=CGF.GameObject)
-    damaged = ComponentProperty(type=CGFMetaTypes.LINK, editorName='Damaged', value=CGF.GameObject)
-    critical = ComponentProperty(type=CGFMetaTypes.LINK, editorName='Critical', value=CGF.GameObject)
-
-    def __init__(self):
-        self.callback = None
-        return
+    state = ComponentProperty(type=CGFMetaTypes.INT, editorName='State', value=StateSwitcherComponent.NORMAL_STATE, annotations={'comboBox': {'None': str(StateSwitcherComponent.NONE_STATE),
+                  'Normal': str(StateSwitcherComponent.NORMAL_STATE),
+                  'Damaged': str(StateSwitcherComponent.DAMAGED_STATE),
+                  'Critical': str(StateSwitcherComponent.CRITICAL_STATE)}})

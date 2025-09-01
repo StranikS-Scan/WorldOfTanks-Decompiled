@@ -53,7 +53,7 @@
       <armor_5>	15	</armor_5>
       <armor_6>	25	</armor_6>
       <armor_7>	50	</armor_7>
-      <armor_8>	0	</armor_8>
+      <armor_8>	15	</armor_8>
       <armor_9>	45	</armor_9>
       <armor_10>	15	</armor_10>
       <armor_11>	15	</armor_11>
@@ -1461,8 +1461,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	1500	</weight>
-      <maxLoad>	15200	</maxLoad>
-      <terrainResistance>	1.2 1.4 2.5	</terrainResistance>
+      <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
       <brakeForce>	36000	</brakeForce>
       <rotationIsAroundCenter>	False	</rotationIsAroundCenter>
       <rotationSpeed>	42	</rotationSpeed>
@@ -2270,7 +2269,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	1540	</weight>
-      <maxLoad>	17000	</maxLoad>
       <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
       <brakeForce>	36000	</brakeForce>
       <rotationIsAroundCenter>	False	</rotationIsAroundCenter>
@@ -3095,93 +3093,18 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <Cannone_da_75_34_semovente>	shared	  <maxAmmo>	70	</maxAmmo>
-          <unlocks>
-            <gun>	_90mm_Cannone_da_90_53_semovente	  <cost>	13000	</cost>
-            </gun>
-          </unlocks>
-          <reloadTime>	3	</reloadTime>
-          <armor>
-            <gun>	35	</gun>
-          </armor>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <pitchLimits>
-            <minPitch>	0 -16 1 -16	</minPitch>
-            <maxPitch>	0 10 1 10	</maxPitch>
-          </pitchLimits>
-          <shotDispersionRadius>	0.35	</shotDispersionRadius>
-          <aimingTime>	1.7	</aimingTime>
-          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <turretYawLimits>	-18 18	</turretYawLimits>
-          <models>
-            <undamaged>	vehicles/italy/It27_M43_da_105_25_Bassoto/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/italy/It27_M43_da_105_25_Bassoto/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/italy/It27_M43_da_105_25_Bassoto/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/italy/It27_M43_da_105_25_Bassoto/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/italy/It27_M43_da_105_25_Bassoto/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0 0.000371 1.10611	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.163547 0.163546	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0 0.000371 1.10611	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0 0 1.7	</rayStart>
-              <rayEnd>	0 0 2.13	</rayEnd>
-              <rayUp>	0.1 0 0	</rayUp>
-              <size>	0.43	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <density>	99.967308 99.958199	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </Cannone_da_75_34_semovente>
         <_90mm_Cannone_da_90_53_semovente>	shared	  <maxAmmo>	65	</maxAmmo>
           <unlocks>
             <gun>	_102mm_Cannone_da_102_40	  <cost>	13500	</cost>
             </gun>
           </unlocks>
-          <reloadTime>	6.86	</reloadTime>
+          <reloadTime>	6.6	</reloadTime>
           <armor>
             <gun>	40	</gun>
           </armor>
           <rotationSpeed>	30	</rotationSpeed>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -3189,8 +3112,8 @@
             <minPitch>	0 -10 1 -10	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <aimingTime>	2.7	</aimingTime>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <turretYawLimits>	-11 11	</turretYawLimits>
           <models>
@@ -3250,10 +3173,8 @@
           <unlocks>
             <vehicle>	It26_CC_56	  <cost>	46300	</cost>
             </vehicle>
-            <gun>	_105mm_Cannone_da_105_25	  <cost>	14500	</cost>
-            </gun>
           </unlocks>
-          <reloadTime>	9.7	</reloadTime>
+          <reloadTime>	10.7	</reloadTime>
           <armor>
             <gun>	45	</gun>
           </armor>
@@ -3262,7 +3183,7 @@
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.7	</aimingTime>
           <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
           <turretYawLimits>	-11 11	</turretYawLimits>
           <models>
@@ -3317,71 +3238,6 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_102mm_Cannone_da_102_40>
-        <_105mm_Cannone_da_105_25>	shared	  <maxAmmo>	55	</maxAmmo>
-          <reloadTime>	8	</reloadTime>
-          <armor>
-            <gun>	45	</gun>
-          </armor>
-          <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 10 1 10	</maxPitch>
-          </pitchLimits>
-          <shotDispersionRadius>	0.44	</shotDispersionRadius>
-          <aimingTime>	3.7	</aimingTime>
-          <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
-          <turretYawLimits>	-17 17	</turretYawLimits>
-          <models>
-            <undamaged>	vehicles/italy/It27_M43_da_105_25_Bassoto/normal/lod0/Gun_04.model	</undamaged>
-            <destroyed>	vehicles/italy/It27_M43_da_105_25_Bassoto/crash/lod0/Gun_04.model	</destroyed>
-            <exploded>	vehicles/italy/It27_M43_da_105_25_Bassoto/crash/lod0/Gun_04.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/italy/It27_M43_da_105_25_Bassoto/collision/Gun_04.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/italy/It27_M43_da_105_25_Bassoto/collision_client/Gun_04.model	</collisionModelClient>
-          </hitTester>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0 0.000371 1.14364	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.138044 0.138044	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0 0.000371 1.14364	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0 0 1.7	</rayStart>
-              <rayEnd>	0 0 2.13	</rayEnd>
-              <rayUp>	0.1 0 0	</rayUp>
-              <size>	0.43	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <density>	99.197334 100.881279	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </_105mm_Cannone_da_105_25>
       </guns>
       <models>
         <undamaged>	vehicles/italy/It27_M43_da_105_25_Bassoto/normal/lod0/Turret_01.model	</undamaged>
@@ -3408,58 +3264,44 @@
     </Turret_1_It27_M43_da_105_25_Bassoto>
   </turrets0>
   <engines>
-    <SPA_15T>	shared	  <unlocks>
-        <engine>	SPA_19TB_mod_43	  <cost>	1150	</cost>
+    <SPA_15TB_M42_S>	shared	  <unlocks>
+        <engine>	SPA_15TB_M15_S	  <cost>	1600	</cost>
         </engine>
       </unlocks>
-    </SPA_15T>
-    <SPA_19TB_mod_43>	shared	  <unlocks>
-        <engine>	Maybach_HL_120_S	  <cost>	1600	</cost>
-        </engine>
-      </unlocks>
-    </SPA_19TB_mod_43>
-    <Maybach_HL_120_S>	shared	</Maybach_HL_120_S>
+    </SPA_15TB_M42_S>
+    <SPA_15TB_M15_S>	shared	</SPA_15TB_M15_S>
   </engines>
   <fuelTanks>
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <R_F_1_C_A>	shared	  <unlocks>
-        <radio>	R_F_2_C_A	  <cost>	1400	</cost>
-        </radio>
-      </unlocks>
-    </R_F_1_C_A>
     <R_F_2_C_A>	shared	</R_F_2_C_A>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
   <physics>
     <detailed>
       <engines>
-        <SPA_15T>
-          <smplEnginePower>	145	</smplEnginePower>
+        <SPA_15TB_M42_S>
+          <smplEnginePower>	270	</smplEnginePower>
           <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
-        </SPA_15T>
-        <SPA_19TB_mod_43>
-          <smplEnginePower>	250	</smplEnginePower>
-          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
-        </SPA_19TB_mod_43>
-        <Maybach_HL_120_S>
+        </SPA_15TB_M42_S>
+        <SPA_15TB_M15_S>
           <smplEnginePower>	300	</smplEnginePower>
           <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
-        </Maybach_HL_120_S>
+        </SPA_15TB_M15_S>
       </engines>
       <chassis>
         <Chassis_It27_M43_da_105_25_Bassoto>
           <axleCount>	5	</axleCount>
           <grounds>
             <soft>
-              <rollingFriction>	0.20125	</rollingFriction>
+              <rollingFriction>	0.18515	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1127	</rollingFriction>
+              <rollingFriction>	0.10465	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0966	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_It27_M43_da_105_25_Bassoto>

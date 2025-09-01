@@ -1165,13 +1165,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_FCM36_20t>
-      <userString>	#france_vehicles:Chassis_FCM36_20t	</userString>
+    <Chassis_F50_FCM36_20t>
+      <userString>	#france_vehicles:Chassis_F50_FCM36_20t	</userString>
       <tags></tags>
       <level>	1	</level>
       <price>	260	</price>
       <unlocks>
-        <chassis>	Chassis_FCM36_20t_2	  <cost>	90	</cost>
+        <chassis>	Chassis_F50_FCM36_20t_2	  <cost>	90	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1179,14 +1179,13 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	3000	</weight>
-      <maxLoad>	12800	</maxLoad>
-      <terrainResistance>	1.2 1.4 2.6	</terrainResistance>
+      <terrainResistance>	1.1 1.3 2.4	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	30	</rotationSpeed>
+      <rotationSpeed>	40	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.32	</vehicleMovement>
-        <vehicleRotation>	0.32	</vehicleRotation>
+        <vehicleMovement>	0.26	</vehicleMovement>
+        <vehicleRotation>	0.26	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	60	</maxHealth>
@@ -2189,9 +2188,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_FCM36_20t>
-    <Chassis_FCM36_20t_2>
-      <userString>	#france_vehicles:Chassis_FCM36_20t_2	</userString>
+    </Chassis_F50_FCM36_20t>
+    <Chassis_F50_FCM36_20t_2>
+      <userString>	#france_vehicles:Chassis_F50_FCM36_20t_2	</userString>
       <tags></tags>
       <level>	2	</level>
       <price>	570	</price>
@@ -2200,14 +2199,13 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	3000	</weight>
-      <maxLoad>	14250	</maxLoad>
       <terrainResistance>	1.1 1.3 2.4	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	34	</rotationSpeed>
+      <rotationSpeed>	42	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.3	</vehicleMovement>
-        <vehicleRotation>	0.3	</vehicleRotation>
+        <vehicleMovement>	0.24	</vehicleMovement>
+        <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	70	</maxHealth>
@@ -3210,11 +3208,11 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_FCM36_20t_2>
+    </Chassis_F50_FCM36_20t_2>
   </chassis>
   <turrets0>
-    <Turret_1_FCM36_20t>
-      <userString>	#france_vehicles:Turret_1_FCM36_20t	</userString>
+    <Turret_1_F50_FCM36_20t>
+      <userString>	#france_vehicles:Turret_1_F50_FCM36_20t	</userString>
       <tags></tags>
       <level>	2	</level>
       <price>	500	</price>
@@ -3244,26 +3242,26 @@
         <maxRegenHealth>	30	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	280	</circularVisionRadius>
+      <circularVisionRadius>	300	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	40	</maxHealth>
         <maxRegenHealth>	20	</maxRegenHealth>
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_37mm_APX_SA18>	shared	  <maxAmmo>	235	</maxAmmo>
+        <_37mm_SA38_FCM>	shared	  <maxAmmo>	205	</maxAmmo>
           <unlocks>
-            <gun>	_37mm_SA38	  <cost>	75	</cost>
-            </gun>
-            <gun>	_25mm_Canon_Raccourci_Mle.1934	  <cost>	150	</cost>
+            <gun>	_25mm_Canon_Raccourci_mle_1934_FCM	  <cost>	150	</cost>
             </gun>
           </unlocks>
           <armor>
             <armor_1>	8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_2>
             <armor_3>	8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
@@ -3271,145 +3269,18 @@
           </armor>
           <pitchLimits>
             <minPitch>	0 -10 1 -10	</minPitch>
-            <maxPitch>	0 17 0.347222 17 0.486111 -1 0.513889 -1 0.652778 17 1 17	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.5	</shotDispersionRadius>
-          <reloadTime>	2.6	</reloadTime>
-          <aimingTime>	2	</aimingTime>
-          <models>
-            <undamaged>	vehicles/french/F50_FCM36_20t/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/french/F50_FCM36_20t/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/french/F50_FCM36_20t/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/french/F50_FCM36_20t/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F50_FCM36_20t/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_small	</effects>
-          <reloadEffect>	reload20_45	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.048759 0.058406 0.418824	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.148054 0.148054	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.048918 0.006253 0.232129	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.79 0.43 0.000000 0.000000	</tiling>
-            <density>	107.238 106.871	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </_37mm_APX_SA18>
-        <_25mm_Canon_Raccourci_Mle.1934>	shared	  <maxAmmo>	300	</maxAmmo>
-          <armor>
-            <armor_1>	8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	10	</gun>
-          </armor>
-          <pitchLimits>
-            <minPitch>	0 -10 1 -10	</minPitch>
-            <maxPitch>	0 17 0.363889 17 0.438889 2 0.561111 2 0.636111 17 1 17	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.294	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.43	</shotDispersionRadius>
-          <reloadTime>	2.3	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	3	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	1.8	</aimingTime>
-          <models>
-            <undamaged>	vehicles/french/F50_FCM36_20t/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/french/F50_FCM36_20t/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/french/F50_FCM36_20t/crash/lod0/Gun_02.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/french/F50_FCM36_20t/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F50_FCM36_20t/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_small	</effects>
-          <reloadEffect>	reload20_45	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0 0.148055 0.148055	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.048394 0.005669 0.65361	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	1.72 0.835 0.000000 0.000000	</tiling>
-            <density>	103.294 100.698	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </_25mm_Canon_Raccourci_Mle.1934>
-        <_37mm_SA38>	shared	  <maxAmmo>	205	</maxAmmo>
-          <unlocks>
-            <vehicle>	F13_AMX38	  <cost>	1270	</cost>
-            </vehicle>
-          </unlocks>
-          <armor>
-            <armor_1>	8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	10	</gun>
-          </armor>
-          <pitchLimits>
-            <minPitch>	0 -10 1 -10	</minPitch>
-            <maxPitch>	0 9 0.083333 9 0.222222 17 0.272222 17 0.411111 -8 0.588889 -8 0.727778 17 0.777778 17 0.916667 9 1 9	</maxPitch>
+            <maxPitch>	0.00000 14.00 0.01944 14.00 0.06667 9.00 0.20556 17.00 0.27222 17.00 0.41111 -8.00 0.58889 -8.00 0.72778 17.00 0.78611 17.00 0.89722 9.00 0.94444 14.00 1.00000 14.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
           <reloadTime>	2.8	</reloadTime>
           <aimingTime>	2	</aimingTime>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <shotDispersionRadius>	0.44	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+            <turretRotation>	0.16	</turretRotation>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/french/F50_FCM36_20t/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/french/F50_FCM36_20t/crash/lod0/Gun_03.model	</destroyed>
@@ -3455,7 +3326,80 @@
             <density>	102.135 101.896	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_37mm_SA38>
+        </_37mm_SA38_FCM>
+        <_25mm_Canon_Raccourci_mle_1934_FCM>	shared	  <maxAmmo>	300	</maxAmmo>
+          <unlocks>
+            <vehicle>	F44_Somua_S35	  <cost>	1360	</cost>
+            </vehicle>
+            <vehicle>	F13_AMX38	  <cost>	1270	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
+            </armor_2>
+            <armor_3>	8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	10	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -10 1 -10	</minPitch>
+            <maxPitch>	0 17 0.363889 17 0.438889 2 0.561111 2 0.636111 17 1 17	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.294	</invisibilityFactorAtShot>
+          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <reloadTime>	2.3	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.8	</aimingTime>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/french/F50_FCM36_20t/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/french/F50_FCM36_20t/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/french/F50_FCM36_20t/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F50_FCM36_20t/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F50_FCM36_20t/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
+          <customizationSlots>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41000	</slotId>
+              <anchorPosition>	0 0.148055 0.148055	</anchorPosition>
+              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	42000	</slotId>
+              <anchorPosition>	0.048394 0.005669 0.65361	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <camouflage>
+            <tiling>	1.72 0.835 0.000000 0.000000	</tiling>
+            <density>	103.294 100.698	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
+          </camouflage>
+        </_25mm_Canon_Raccourci_mle_1934_FCM>
       </guns>
       <models>
         <undamaged>	vehicles/french/F50_FCM36_20t/normal/lod0/Turret_01.model	</undamaged>
@@ -3830,7 +3774,7 @@
         <density>	95.9453 95.2446	</density>
         <aoTextureSize>	256 256	</aoTextureSize>
       </camouflage>
-    </Turret_1_FCM36_20t>
+    </Turret_1_F50_FCM36_20t>
   </turrets0>
   <engines>
     <Berliet_MDPA>	shared	  <unlocks>
@@ -3838,11 +3782,7 @@
         </engine>
       </unlocks>
     </Berliet_MDPA>
-    <Berliet_Ricardo>	shared	  <unlocks>
-        <vehicle>	F44_Somua_S35	  <cost>	1360	</cost>
-        </vehicle>
-      </unlocks>
-    </Berliet_Ricardo>
+    <Berliet_Ricardo>	shared	</Berliet_Ricardo>
   </engines>
   <fuelTanks>
     <Small>	shared	</Small>
@@ -3854,29 +3794,16 @@
     <detailed>
       <engines>
         <Berliet_MDPA>
-          <smplEnginePower>	96.21259	</smplEnginePower>
+          <smplEnginePower>	110	</smplEnginePower>
           <smplFwMaxSpeed>	24	</smplFwMaxSpeed>
         </Berliet_MDPA>
         <Berliet_Ricardo>
-          <smplEnginePower>	111.0145	</smplEnginePower>
+          <smplEnginePower>	120	</smplEnginePower>
           <smplFwMaxSpeed>	24	</smplFwMaxSpeed>
         </Berliet_Ricardo>
       </engines>
       <chassis>
-        <Chassis_FCM36_20t>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.2093	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.1127	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.0966	</rollingFriction>
-            </firm>
-          </grounds>
-        </Chassis_FCM36_20t>
-        <Chassis_FCM36_20t_2>
+        <Chassis_F50_FCM36_20t>
           <grounds>
             <soft>
               <rollingFriction>	0.1932	</rollingFriction>
@@ -3888,7 +3815,20 @@
               <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_FCM36_20t_2>
+        </Chassis_F50_FCM36_20t>
+        <Chassis_F50_FCM36_20t_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.1932	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.10465	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.08855	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_F50_FCM36_20t_2>
       </chassis>
     </detailed>
   </physics>

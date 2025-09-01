@@ -17,4 +17,13 @@
       <overTerrainHeight>	0.5	</overTerrainHeight>
     </ally>
   </DistractionAimingCircleVisual>
+  <SMSccAirstrikeAimingCircleVisual>
+    <ally>
+      <visual>	content/Interface/TargetPoint/inspire_enemy.model	</visual>
+      <color>	0x5041604C	</color>
+      <enableAccurateCollision>	False	</enableAccurateCollision>
+      <maxUpdateInterval>	0.04	</maxUpdateInterval>
+      <overTerrainHeight>	17.0	</overTerrainHeight>
+    </ally>
+  </SMSccAirstrikeAimingCircleVisual>
 </dynamic_objects.xml>

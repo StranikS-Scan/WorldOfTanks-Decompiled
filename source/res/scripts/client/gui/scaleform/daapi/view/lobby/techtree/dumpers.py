@@ -37,6 +37,11 @@ class ResearchBaseDumper(_BaseDumper):
         if full:
             self._vClassInfo.clear()
 
+    def invalidateCachedItemData(self, sectionName, idx, node, rootItem):
+        newItem = self._getItemData(node, rootItem)
+        self._cache[sectionName][idx] = newItem
+        return newItem
+
     def dump(self, data):
         self.clear()
         rootItem = data.getRootItem()
@@ -172,7 +177,8 @@ class NationObjDumper(_BaseDumper):
          'buyPrice': node.getBuyPrices(),
          'isNationChangeAvailable': node.hasItemNationGroup(),
          'isTopActionNode': g_techTreeDP.isActionEndNode(node),
-         'actionMessage': self.__getTooltipString(node)}
+         'actionMessage': self.__getTooltipString(node),
+         'isPromoted': node.getLevel() > 10}
 
     def __getTooltipString(self, node):
         isActionNode = node.getState() & NODE_STATE_FLAGS.HAS_TECH_TREE_EVENT > 0

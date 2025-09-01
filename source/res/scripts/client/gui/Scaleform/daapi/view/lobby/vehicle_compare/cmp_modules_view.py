@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_compare/cmp_modules_view.py
+from __future__ import absolute_import
 import logging
+from future.utils import iteritems
 import BigWorld
 from adisp import adisp_process
 from gui.Scaleform.daapi.view.lobby.techtree import dumpers, nodes
@@ -233,7 +235,7 @@ class VehicleModulesView(VehicleModulesViewMeta, VehicleCompareConfiguratorBaseV
         self.__updateModulesData()
         newModulesData = __extractData(self.__nodes)
         changedSlots = []
-        for k, v in newModulesData.iteritems():
+        for k, v in iteritems(newModulesData):
             if v != oldModulesData[k]:
                 changedSlots.append((k, v))
 

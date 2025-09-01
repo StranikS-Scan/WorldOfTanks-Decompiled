@@ -60,7 +60,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	2100	</weight>
-    <maxHealth>	1000	</maxHealth>
+    <maxHealth>	1160	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -1035,13 +1035,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_GB103_GSOR3301_AVR_MK1>
-      <userString>	#gb_vehicles:Chassis_GB103_GSOR3301_AVR_MK1	</userString>
+    <Chassis_GB103_GSOR3301_AVR_FS>
+      <userString>	#gb_vehicles:Chassis_GB103_GSOR3301_AVR_FS	</userString>
       <tags></tags>
       <level>	8	</level>
       <price>	30500	</price>
       <unlocks>
-        <chassis>	Chassis_GB103_GSOR3301_AVR_MK2	  <cost>	24000	</cost>
+        <chassis>	Chassis_GB103_GSOR3301_AVR_FS_2	  <cost>	24000	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1049,8 +1049,7 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	1150	</weight>
-      <maxLoad>	7000	</maxLoad>
-      <terrainResistance>	0.9 1 1.6	</terrainResistance>
+      <terrainResistance>	0.8 0.9 1.4	</terrainResistance>
       <brakeForce>	7000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	40	</rotationSpeed>
@@ -2007,9 +2006,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	4.57142878	</repairTime>
-    </Chassis_GB103_GSOR3301_AVR_MK1>
-    <Chassis_GB103_GSOR3301_AVR_MK2>
-      <userString>	#gb_vehicles:Chassis_GB103_GSOR3301_AVR_MK2	</userString>
+    </Chassis_GB103_GSOR3301_AVR_FS>
+    <Chassis_GB103_GSOR3301_AVR_FS_2>
+      <userString>	#gb_vehicles:Chassis_GB103_GSOR3301_AVR_FS_2	</userString>
       <tags></tags>
       <level>	9	</level>
       <price>	59500	</price>
@@ -2018,7 +2017,6 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	1150	</weight>
-      <maxLoad>	7800	</maxLoad>
       <terrainResistance>	0.8 0.9 1.4	</terrainResistance>
       <brakeForce>	7800	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -2976,7 +2974,7 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	4.57142878	</repairTime>
-    </Chassis_GB103_GSOR3301_AVR_MK2>
+    </Chassis_GB103_GSOR3301_AVR_FS_2>
   </chassis>
   <turrets0>
     <Turret_1_GB103_GSOR3301_AVR_FS>
@@ -3004,7 +3002,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1200	</weight>
-      <maxHealth>	250	</maxHealth>
+      <maxHealth>	290	</maxHealth>
       <rotationSpeed>	43	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -3018,7 +3016,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_85mm_HV_L40>	shared	  <maxAmmo>	25	</maxAmmo>
+        <_85mm_HV_L40>	shared	  <maxAmmo>	38	</maxAmmo>
           <unlocks>
             <gun>	_90mm_Cockerill	  <cost>	48000	</cost>
             </gun>
@@ -3123,7 +3121,11 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_85mm_HV_L40>
-        <_90mm_Cockerill>	shared	  <maxAmmo>	25	</maxAmmo>
+        <_90mm_Cockerill>	shared	  <maxAmmo>	38	</maxAmmo>
+          <unlocks>
+            <vehicle>	GB100_Manticore	  <cost>	252500	</cost>
+            </vehicle>
+          </unlocks>
           <pitchLimits>
             <minPitch>	0 -35 1 -35	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -3634,57 +3636,34 @@
     </Turret_1_GB103_GSOR3301_AVR_FS>
   </turrets0>
   <engines>
-    <Rolls_Royse_FB_60>	shared	  <unlocks>
+    <Rolls_Royce_FB60>	shared	  <unlocks>
         <engine>	Daimler_D2458_V_8	  <cost>	25000	</cost>
         </engine>
       </unlocks>
-    </Rolls_Royse_FB_60>
+    </Rolls_Royce_FB60>
     <Daimler_D2458_V_8>	shared	</Daimler_D2458_V_8>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <C13_B47>	shared	  <unlocks>
-        <radio>	C42_VHF	  <cost>	9000	</cost>
-        </radio>
-      </unlocks>
-    </C13_B47>
-    <C42_VHF>	shared	  <unlocks>
-        <vehicle>	GB100_Manticore	  <cost>	252500	</cost>
-        </vehicle>
-      </unlocks>
-    </C42_VHF>
+    <C42_VHF>	shared	</C42_VHF>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
   <physics>
     <detailed>
       <engines>
-        <Rolls_Royse_FB_60>
-          <smplEnginePower>	160	</smplEnginePower>
+        <Rolls_Royce_FB60>
+          <smplEnginePower>	230	</smplEnginePower>
           <smplFwMaxSpeed>	65	</smplFwMaxSpeed>
-        </Rolls_Royse_FB_60>
+        </Rolls_Royce_FB60>
         <Daimler_D2458_V_8>
           <smplEnginePower>	265	</smplEnginePower>
           <smplFwMaxSpeed>	65	</smplFwMaxSpeed>
         </Daimler_D2458_V_8>
       </engines>
       <chassis>
-        <Chassis_GB103_GSOR3301_AVR_MK1>
-          <axleCount>	5	</axleCount>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.1288	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.0805	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.07245	</rollingFriction>
-            </firm>
-          </grounds>
-        </Chassis_GB103_GSOR3301_AVR_MK1>
-        <Chassis_GB103_GSOR3301_AVR_MK2>
+        <Chassis_GB103_GSOR3301_AVR_FS>
           <axleCount>	5	</axleCount>
           <grounds>
             <soft>
@@ -3697,7 +3676,21 @@
               <rollingFriction>	0.0644	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_GB103_GSOR3301_AVR_MK2>
+        </Chassis_GB103_GSOR3301_AVR_FS>
+        <Chassis_GB103_GSOR3301_AVR_FS_2>
+          <axleCount>	5	</axleCount>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.1127	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.07245	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0644	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_GB103_GSOR3301_AVR_FS_2>
       </chassis>
     </detailed>
   </physics>

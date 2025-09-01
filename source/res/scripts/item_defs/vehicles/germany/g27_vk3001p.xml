@@ -17,7 +17,7 @@
     <moving>	0.046	</moving>
     <still>	0.092	</still>
     <camouflageBonus>	0.02	</camouflageBonus>
-    <firePenalty>	0.251	</firePenalty>
+    <firePenalty>	0.138	</firePenalty>
   </invisibility>
   <optDevsOverrides>
     <camouflageNet>
@@ -59,7 +59,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	28000	</weight>
-    <maxHealth>	880	</maxHealth>
+    <maxHealth>	920	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	160	</maxHealth>
       <maxRegenHealth>	110	</maxRegenHealth>
@@ -67,7 +67,7 @@
     </ammoBayHealth>
     <variants>
       <hull2>
-        <turret0>	VK3001P_Porsche_turm	</turret0>
+        <turret0>	Turret_2_G27_VK3001P	</turret0>
         <turretPositions>
           <turret>	0.000000 0.730820 0.442179	</turret>
         </turretPositions>
@@ -1161,13 +1161,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <VK3001P>
-      <userString>	#germany_vehicles:VK3001P	</userString>
+    <Chassis_G27_VK3001P>
+      <userString>	#germany_vehicles:Chassis_G27_VK3001P	</userString>
       <tags></tags>
       <level>	5	</level>
       <price>	9380	</price>
       <unlocks>
-        <chassis>	VK3001P_ausf_B	  <cost>	4790	</cost>
+        <chassis>	Chassis_G27_VK3001P_2	  <cost>	4790	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1175,8 +1175,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	9050	</weight>
-      <maxLoad>	46600	</maxLoad>
-      <terrainResistance>	1 1.5 2.9	</terrainResistance>
+      <terrainResistance>	0.9 1.5 2.3	</terrainResistance>
       <brakeForce>	37000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	26	</rotationSpeed>
@@ -2013,10 +2012,10 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	8	</repairTime>
-    </VK3001P>
-    <VK3001P_ausf_B>
-      <userString>	#germany_vehicles:VK3001P_ausf_B	</userString>
-      <shortUserString>	#germany_vehicles:VK3001P_ausf_B_short	</shortUserString>
+    </Chassis_G27_VK3001P>
+    <Chassis_G27_VK3001P_2>
+      <userString>	#germany_vehicles:Chassis_G27_VK3001P_2	</userString>
+      <shortUserString>	#germany_vehicles:Chassis_G27_VK3001P_2_short	</shortUserString>
       <tags></tags>
       <level>	6	</level>
       <price>	15000	</price>
@@ -2025,7 +2024,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	9050	</weight>
-      <maxLoad>	50000	</maxLoad>
       <terrainResistance>	0.9 1.5 2.3	</terrainResistance>
       <brakeForce>	37000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2863,14 +2861,14 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	8	</repairTime>
-    </VK3001P_ausf_B>
+    </Chassis_G27_VK3001P_2>
   </chassis>
   <turrets0>
-    <VK3001P_Krupp_turm>
-      <userString>	#germany_vehicles:VK3001P_Krupp_turm	</userString>
-      <shortUserString>	#germany_vehicles:VK3001P_Krupp_turm_short	</shortUserString>
+    <Turret_1_G27_VK3001P>
+      <userString>	#germany_vehicles:Turret_1_G27_VK3001P	</userString>
+      <shortUserString>	#germany_vehicles:Turret_1_G27_VK3001P_short	</shortUserString>
       <tags></tags>
-      <level>	6	</level>
+      <level>	5	</level>
       <price>	16920	</price>
       <armor>
         <armor_1>	140	</armor_1>
@@ -2892,14 +2890,14 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	6000	</weight>
-      <maxHealth>	160	</maxHealth>
+      <maxHealth>	180	</maxHealth>
       <rotationSpeed>	28	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
         <maxRegenHealth>	60	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	350	</circularVisionRadius>
+      <circularVisionRadius>	360	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	80	</maxHealth>
         <maxRegenHealth>	40	</maxRegenHealth>
@@ -2915,10 +2913,10 @@
             <gun>	_88mm_Kw_K_36_L_56_Typ_100	  <cost>	9500	</cost>
             </gun>
           </unlocks>
-          <reloadTime>	3.6	</reloadTime>
+          <reloadTime>	3.2	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
@@ -2938,10 +2936,10 @@
             </armor_7>
             <gun>	20	</gun>
           </armor>
-          <aimingTime>	2.1	</aimingTime>
+          <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
-          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <models>
             <undamaged>	vehicles/german/G27_VK3001P/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G27_VK3001P/crash/lod0/Gun_01.model	</destroyed>
@@ -3002,13 +3000,13 @@
           </pitchLimits>
           <maxAmmo>	61	</maxAmmo>
           <unlocks>
-            <turret>	VK3001P_Porsche_turm	  <cost>	7400	</cost>
+            <turret>	Turret_2_G27_VK3001P	  <cost>	7400	</cost>
             </turret>
           </unlocks>
-          <reloadTime>	7.4	</reloadTime>
+          <reloadTime>	7.5	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <turretRotation>	0.15	</turretRotation>
+            <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
@@ -3621,10 +3619,10 @@
         <density>	109.024 108.948	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </VK3001P_Krupp_turm>
-    <VK3001P_Porsche_turm>
-      <userString>	#germany_vehicles:VK3001P_Porsche_turm	</userString>
-      <shortUserString>	#germany_vehicles:VK3001P_Porsche_turm_short	</shortUserString>
+    </Turret_1_G27_VK3001P>
+    <Turret_2_G27_VK3001P>
+      <userString>	#germany_vehicles:Turret_2_G27_VK3001P	</userString>
+      <shortUserString>	#germany_vehicles:Turret_2_G27_VK3001P_short	</shortUserString>
       <tags></tags>
       <level>	6	</level>
       <price>	21200	</price>
@@ -3648,7 +3646,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	8000	</weight>
-      <maxHealth>	220	</maxHealth>
+      <maxHealth>	230	</maxHealth>
       <rotationSpeed>	23	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -3668,10 +3666,10 @@
             <maxPitch>	0 8 0.353005 8 0.416667 7 0.583333 7 0.646995 8 1 8	</maxPitch>
           </pitchLimits>
           <maxAmmo>	96	</maxAmmo>
-          <reloadTime>	3.4	</reloadTime>
+          <reloadTime>	3.2	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
@@ -3781,7 +3779,7 @@
             <gun>	35	</gun>
           </armor>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	6.9	</reloadTime>
+          <reloadTime>	7.5	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
@@ -4398,7 +4396,7 @@
         <density>	98.899 99.5134	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </VK3001P_Porsche_turm>
+    </Turret_2_G27_VK3001P>
   </turrets0>
   <engines>
     <Porsche_Typ_100>	shared	  <unlocks>
@@ -4427,21 +4425,7 @@
         </Porsche_Typ_100_P>
       </engines>
       <chassis>
-        <VK3001P>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.23345	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.12075	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.0805	</rollingFriction>
-            </firm>
-          </grounds>
-          <axleCount>	5	</axleCount>
-        </VK3001P>
-        <VK3001P_ausf_B>
+        <Chassis_G27_VK3001P>
           <grounds>
             <soft>
               <rollingFriction>	0.2	</rollingFriction>
@@ -4454,7 +4438,21 @@
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>
-        </VK3001P_ausf_B>
+        </Chassis_G27_VK3001P>
+        <Chassis_G27_VK3001P_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.2	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.1	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.07245	</rollingFriction>
+            </firm>
+          </grounds>
+          <axleCount>	5	</axleCount>
+        </Chassis_G27_VK3001P_2>
       </chassis>
     </detailed>
   </physics>

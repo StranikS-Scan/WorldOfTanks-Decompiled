@@ -27,7 +27,7 @@ class PoiStateManager(CGF.ComponentManager):
 
         poiState.resetUpdatedFields()
 
-    @onProcessQuery(PoiStateComponent, tickGroup='PostHierarchy', updatePeriod=_UPDATE_PERIOD)
+    @onProcessQuery(PoiStateComponent, tickGroup='PostHierarchy', period=_UPDATE_PERIOD)
     def onProcess(self, poiState):
         for comp in self.listenersQuery:
             comp.listener.onProcessPoi(poiState)
@@ -90,7 +90,7 @@ class PoiViewStateManager(CGF.ComponentManager):
             self.__vehicleViewState = None
         return
 
-    @onProcessQuery(PoiCaptureBlockerStateComponent, PoiVehicleStateComponent, tickGroup='PostHierarchy', updatePeriod=_UPDATE_PERIOD)
+    @onProcessQuery(PoiCaptureBlockerStateComponent, PoiVehicleStateComponent, tickGroup='PostHierarchy', period=_UPDATE_PERIOD)
     def onProcess(self, captureBlockerState, vehicleState):
         if self.__pointViewState is not None:
             self.__pointViewState.update()
@@ -129,7 +129,7 @@ class PoiSoundManager(CGF.ComponentManager):
         self.__poiStates.pop(poiState, None)
         return
 
-    @onProcessQuery(PoiStateComponent, CGF.GameObject, updatePeriod=_UPDATE_PERIOD)
+    @onProcessQuery(PoiStateComponent, CGF.GameObject, period=_UPDATE_PERIOD)
     def onProcess(self, poiState, go):
         if poiState.updatedFields & (PoiStateUpdateMask.STATUS | PoiStateUpdateMask.INVADER):
             self.__update(poiState, go)

@@ -29,6 +29,10 @@ class RosterSlot10(BaseUnitRosterSlot):
     DEFAULT_LEVELS = (1, 10)
 
 
+class RosterSlot11(BaseUnitRosterSlot):
+    DEFAULT_LEVELS = (1, 11)
+
+
 class EpicSlot(BaseUnitRosterSlot):
     DEFAULT_LEVELS = (8, 9)
 
@@ -37,19 +41,23 @@ class Comp7Slot(BaseUnitRosterSlot):
     DEFAULT_LEVELS = (10, 10)
 
 
+class Comp7LightSlot(BaseUnitRosterSlot):
+    DEFAULT_LEVELS = (8, 8)
+
+
 class SquadRoster(BaseUnitRoster):
     MAX_SLOTS = 3
     MAX_EMPTY_SLOTS = 2
-    SLOT_TYPE = RosterSlot10
-    DEFAULT_SLOT_PACK = RosterSlot10().pack()
+    SLOT_TYPE = RosterSlot11
+    DEFAULT_SLOT_PACK = RosterSlot11().pack()
     LIMITS_TYPE = BaseUnitRosterLimits
 
 
 class SpecRoster(BaseUnitRoster):
     MAX_SLOTS = 15
     MAX_EMPTY_SLOTS = 14
-    SLOT_TYPE = RosterSlot10
-    DEFAULT_SLOT_PACK = RosterSlot10().pack()
+    SLOT_TYPE = RosterSlot11
+    DEFAULT_SLOT_PACK = RosterSlot11().pack()
     MAX_UNIT_POINTS_SUM = 150
     LIMITS_TYPE = BaseUnitRosterLimits
 
@@ -93,5 +101,14 @@ class Comp7Roster(BaseUnitRoster):
     MAX_EMPTY_SLOTS = 6
     SLOT_TYPE = Comp7Slot
     DEFAULT_SLOT_PACK = Comp7Slot().pack()
+    LIMITS_TYPE = BaseUnitRosterLimits
+    MAX_VEHICLES = 10000
+
+
+class Comp7LightRoster(BaseUnitRoster):
+    MAX_SLOTS = 7
+    MAX_EMPTY_SLOTS = 6
+    SLOT_TYPE = Comp7LightSlot
+    DEFAULT_SLOT_PACK = Comp7LightSlot().pack()
     LIMITS_TYPE = BaseUnitRosterLimits
     MAX_VEHICLES = 10000

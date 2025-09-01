@@ -4,13 +4,12 @@ import logging
 import typing
 from PlayerEvents import g_playerEvents
 from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
-from gui.battle_pass.sounds import BattlePassSounds, SOUNDS
 from gui.impl.backport import BackportTooltipWindow
 from gui.impl.backport.backport_tooltip import TooltipData
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.winback.winback_reward_view_model import RewardName
-from gui.impl.gen.view_models.views.lobby.winback.winback_reward_view_model import WinbackRewardViewModel, RewardWindowType
+from gui.impl.gen.view_models.views.lobby.winback.winback_reward_view_model import RewardName, RewardWindowType, WinbackRewardViewModel
 from gui.impl.lobby.missions.daily_quests_view import DailyTabs
+from gui.impl.lobby.winback.sounds import SOUNDS
 from gui.impl.lobby.winback.tooltips.selectable_reward_tooltip import SelectableRewardTooltip
 from gui.impl.lobby.winback.winback_bonus_packer import getWinbackBonusPacker, getWinbackBonuses
 from gui.impl.lobby.winback.winback_bonuses import WinbackVehicleBonus
@@ -57,7 +56,7 @@ class WinbackRewardView(ViewImpl):
     __slots__ = ('__selectedRewards', '__tooltipData', '__bonuses', '__questIDs', '__isOnlyDaily', '__isLastWindow')
     _itemsCache = dependency.descriptor(IItemsCache)
     _winbackController = dependency.descriptor(IWinbackController)
-    _COMMON_SOUND_SPACE = CommonSoundSpaceSettings(name=SOUNDS.ACTIVATE_CHAPTER_STATE, entranceStates={SOUNDS.ACTIVATE_CHAPTER_STATE: SOUNDS.ACTIVATE_CHAPTER_STATE_ON}, exitStates={SOUNDS.ACTIVATE_CHAPTER_STATE: SOUNDS.ACTIVATE_CHAPTER_STATE_OFF}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent=BattlePassSounds.REWARD_SCREEN, exitEvent='')
+    _COMMON_SOUND_SPACE = CommonSoundSpaceSettings(name=SOUNDS.ACTIVATE_CHAPTER_STATE, entranceStates={SOUNDS.ACTIVATE_CHAPTER_STATE: SOUNDS.ACTIVATE_CHAPTER_STATE_ON}, exitStates={SOUNDS.ACTIVATE_CHAPTER_STATE: SOUNDS.ACTIVATE_CHAPTER_STATE_OFF}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent=SOUNDS.REWARD_SCREEN, exitEvent='')
 
     def __init__(self, ctx=None):
         super(WinbackRewardView, self).__init__(ViewSettings(layoutID=R.views.lobby.winback.WinbackRewardView(), flags=ViewFlags.VIEW, model=WinbackRewardViewModel(), args=ctx))

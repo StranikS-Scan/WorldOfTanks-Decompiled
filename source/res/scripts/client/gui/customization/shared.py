@@ -27,6 +27,8 @@ from gui.impl import backport
 from gui.impl.gen import R
 from helpers import dependency
 from items import vehicles
+if typing.TYPE_CHECKING:
+    from gui.shared.gui_items.customization.c11n_items import Customization
 _logger = logging.getLogger(__name__)
 C11nId = namedtuple('C11nId', ('areaId', 'slotType', 'regionIdx'))
 C11nId.__new__.__defaults__ = (-1, -1, -1)
@@ -101,16 +103,16 @@ REGIONS_BY_AREA_ID = {Area.CHASSIS: ApplyArea.CHASSIS_REGIONS,
  Area.GUN: ApplyArea.GUN_REGIONS}
 AREA_ID_BY_REGION = {region:areaId for areaId, regions in REGIONS_BY_AREA_ID.iteritems() for region in regions}
 QUANTITY_LIMITED_CUSTOMIZATION_TYPES = {GUI_ITEM_TYPE.PROJECTION_DECAL: MAX_USERS_PROJECTION_DECALS}
-PROJECTION_DECAL_IMAGE_FORM_TAG = {ProjectionDecalFormTags.SQUARE: backport.image(R.images.gui.maps.icons.customization.icon_form_1()),
- ProjectionDecalFormTags.RECT1X2: backport.image(R.images.gui.maps.icons.customization.icon_form_2()),
- ProjectionDecalFormTags.RECT1X3: backport.image(R.images.gui.maps.icons.customization.icon_form_3()),
- ProjectionDecalFormTags.RECT1X4: backport.image(R.images.gui.maps.icons.customization.icon_form_4()),
- ProjectionDecalFormTags.RECT1X6: backport.image(R.images.gui.maps.icons.customization.icon_form_6())}
-PROJECTION_DECAL_TEXT_FORM_TAG = {ProjectionDecalFormTags.SQUARE: backport.text(R.strings.vehicle_customization.form.formfactor_square()),
- ProjectionDecalFormTags.RECT1X2: backport.text(R.strings.vehicle_customization.form.formfactor_rect1x2()),
- ProjectionDecalFormTags.RECT1X3: backport.text(R.strings.vehicle_customization.form.formfactor_rect1x3()),
- ProjectionDecalFormTags.RECT1X4: backport.text(R.strings.vehicle_customization.form.formfactor_rect1x4()),
- ProjectionDecalFormTags.RECT1X6: backport.text(R.strings.vehicle_customization.form.formfactor_rect1x6())}
+PROJECTION_DECAL_IMAGE_FORM_TAG = {ProjectionDecalFormTags.SQUARE: R.images.gui.maps.icons.customization.icon_form_1(),
+ ProjectionDecalFormTags.RECT1X2: R.images.gui.maps.icons.customization.icon_form_2(),
+ ProjectionDecalFormTags.RECT1X3: R.images.gui.maps.icons.customization.icon_form_3(),
+ ProjectionDecalFormTags.RECT1X4: R.images.gui.maps.icons.customization.icon_form_4(),
+ ProjectionDecalFormTags.RECT1X6: R.images.gui.maps.icons.customization.icon_form_6()}
+PROJECTION_DECAL_TEXT_FORM_TAG = {ProjectionDecalFormTags.SQUARE: R.strings.vehicle_customization.form.formfactor_square(),
+ ProjectionDecalFormTags.RECT1X2: R.strings.vehicle_customization.form.formfactor_rect1x2(),
+ ProjectionDecalFormTags.RECT1X3: R.strings.vehicle_customization.form.formfactor_rect1x3(),
+ ProjectionDecalFormTags.RECT1X4: R.strings.vehicle_customization.form.formfactor_rect1x4(),
+ ProjectionDecalFormTags.RECT1X6: R.strings.vehicle_customization.form.formfactor_rect1x6()}
 PROJECTION_DECAL_FORM_TO_UI_ID = {ProjectionDecalFormTags.SQUARE: 1,
  ProjectionDecalFormTags.RECT1X2: 2,
  ProjectionDecalFormTags.RECT1X3: 3,
@@ -498,7 +500,7 @@ class VehicleC11nFilterHintChecker(object):
     def check(self, _):
         container = self.__appLoader.getApp().containerManager.getContainer(WindowLayer.SUB_VIEW)
         view = container.getView()
-        return view.carouselComponent.hasCustomization() if view.alias == VIEW_ALIAS.LOBBY_HANGAR else False
+        return view.carouselComponent.hasCustomization() if view.alias in (VIEW_ALIAS.LOBBY_HANGAR, VIEW_ALIAS.LEGACY_LOBBY_HANGAR) else False
 
 
 class NewC11nSectionHintChecker(object):
@@ -573,4 +575,19 @@ def validateOutfitComponent(vehicleDescr, outfitComponent, service=None):
 
         setattr(outfitComponent, itemFieldName, validatedItems)
 
+    return
+
+
+def getSingleVehicleForCustomization(customization):
+    itemFilter = customization.descriptor.filter
+    if itemFilter is not None and itemFilter.include:
+        c11nVehicles = []
+        for node in itemFilter.include:
+            if node.nations or node.levels:
+                return
+            if node.vehicles:
+                c11nVehicles.extend(node.vehicles)
+
+        if len(c11nVehicles) == 1:
+            return c11nVehicles[0]
     return

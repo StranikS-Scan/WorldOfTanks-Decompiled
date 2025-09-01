@@ -4,12 +4,13 @@ import logging
 from collections import namedtuple
 import typing
 from enum import Enum
+from frameworks.state_machine import StateEvent
 from gui.shared.event_bus import SharedEvent
 from shared_utils import CONST_CONTAINER
 if typing.TYPE_CHECKING:
     from gui.Scaleform.framework.managers.loaders import GuiImplViewLoadParams
     from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
-__all__ = ('ArgsEvent', 'ComponentEvent', 'LoadViewEvent', 'LoadGuiImplViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent', 'GameEvent', 'ViewEventType', 'OpenLinkEvent', 'ChannelManagementEvent', 'PreBattleChannelEvent', 'AmmunitionSetupViewEvent', 'HasCtxEvent', 'DogTagsEvent', 'DeathCamEvent', 'FullscreenModeSelectorEvent', 'ModeSelectorPopoverEvent', 'ModeSubSelectorEvent')
+__all__ = ('ArgsEvent', 'ComponentEvent', 'LoadViewEvent', 'LoadGuiImplViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent', 'GameEvent', 'ViewEventType', 'OpenLinkEvent', 'ChannelManagementEvent', 'PreBattleChannelEvent', 'AmmunitionSetupViewEvent', 'HasCtxEvent', 'DogTagsEvent', 'DeathCamEvent', 'FullscreenModeSelectorEvent', 'ModeSelectorPopoverEvent', 'ModeSubSelectorEvent', 'NavigationEvent', 'BackNavigationEvent', 'PersonalMissionsEvent', 'UserMissionsEvent', 'GUICommonEvent')
 _logger = logging.getLogger(__name__)
 
 class HasCtxEvent(SharedEvent):
@@ -90,6 +91,7 @@ class GameEvent(HasCtxEvent):
 
 
 class GUICommonEvent(SharedEvent):
+    LOBBY_VIEW_LOADING = 'lobbyViewLoading'
     LOBBY_VIEW_LOADED = 'lobbyViewLoaded'
 
 
@@ -187,6 +189,28 @@ class DestroyGuiImplViewEvent(_ViewEvent):
 
     def __init__(self, layoutID):
         super(DestroyGuiImplViewEvent, self).__init__(ViewEventType.DESTROY_GUI_IMPL_VIEW, layoutID)
+
+
+class NavigationEvent(SharedEvent, StateEvent):
+    EVENT_ID = 'navigationEvent'
+
+    def __init__(self, targetStateID, params=None):
+        SharedEvent.__init__(self, eventType=self.EVENT_ID)
+        StateEvent.__init__(self)
+        self.targetStateID = targetStateID
+        self.params = params or {}
+
+    def __repr__(self):
+        return '{}(targetStateID={}, params={})'.format(self.__class__.__name__, self.targetStateID, self.params)
+
+
+class BackNavigationEvent(SharedEvent):
+    EVENT_ID = 'backNavigationEvent_DEPRECATED'
+
+    def __init__(self, requestingState=None):
+        super(BackNavigationEvent, self).__init__(eventType=self.EVENT_ID)
+        self.requestingState = requestingState
+        _logger.error('BackNavigationEvent is DEPRECATED! Please update the code to get the instance of state representing your view (most likely using LobbyStateMachine.getRelatedState) and call .goBack on it instead of issuing a BackNavigationEvent.')
 
 
 class BrowserEvent(HasCtxEvent):
@@ -342,6 +366,11 @@ class FightButtonEvent(LobbySimpleEvent):
     FIGHT_BUTTON_UPDATE = 'updateFightButton'
 
 
+class LobbyHeaderControlsEvent(LobbySimpleEvent):
+    DISABLE = 'disableLobbyHeaderControls'
+    ENABLE = 'enableLobbyHeaderControls'
+
+
 class LobbyHeaderMenuEvent(LobbySimpleEvent):
     UPDATE_PREBATTLE_CONTROLS = 'updateControlsHeaderMenu'
     TOGGLE_VISIBILITY = 'toggleVisibilityHeaderMenu'
@@ -419,6 +448,11 @@ class MessengerEvent(HasCtxEvent):
     LOBBY_CHANNEL_CTRL_DESTROYED = 'lobbyChannelCtrlDestroyed'
     BATTLE_CHANNEL_CTRL_INITED = 'battleChannelCtrlInited'
     BATTLE_CHANNEL_CTRL_DESTROY = 'battleChannelCtrlDestroyed'
+
+
+class ChannelWindowEvent(HasCtxEvent):
+    ON_WINDOW_POPULATE = 'channelWindowPopulate'
+    ON_WINDOW_MINIMIZE = 'channelWindowMinimize'
 
 
 class ChannelManagementEvent(HasCtxEvent):
@@ -527,6 +561,7 @@ class OpenLinkEvent(SharedEvent):
     WOT_PLUS_SHOP = 'wotPlusShopURL'
     STEAM_SUBSCRIPTION_MANAGEMENT = 'steamSubscriptionManagementURL'
     LOOT_BOXES_LIST = 'lootBoxesList'
+    REPORT_CONTENT = 'reportContent'
 
     def __init__(self, eventType, url='', title='', params=None):
         super(OpenLinkEvent, self).__init__(eventType)
@@ -660,7 +695,7 @@ class BattlePassEvent(HasCtxEvent):
     ON_PURCHASE_LEVELS = 'onPurchaseLevels'
     ON_PREVIEW_PROGRESSION_STYLE_CLOSE = 'onPreviewProgressionStyleClose'
     ON_FINISH_BATTLE_PASS_PURCHASE = 'onFinishBattlePassPurchase'
-    VIDEO_SHOWN = 'videoShown'
+    ON_PAUSE = 'onPause'
 
 
 class LootBoxSystemEvent(HasCtxEvent):
@@ -689,6 +724,7 @@ class RallyWindowEvent(HasCtxEvent):
 
 class CustomizationEvent(HasCtxEvent):
     SHOW = 'customizationEvent/show'
+    CLOSE = 'customizationEvent/close'
     ON_RARITY_REWARD_SCREEN_CLOSED = 'customizationEvent/onRarityRewardScreenClosed'
 
 
@@ -797,6 +833,7 @@ class ModeSubSelectorEvent(HasCtxEvent):
 
 class GunMarkerEvent(HasCtxEvent):
     UPDATE_PIERCING_DATA = 'onPiercingDataUpdated'
+    UPDATE_TRACKED_GUN = 'onTrackedGunUpdated'
 
 
 class PointOfInterestEvent(HasCtxEvent):
@@ -871,3 +908,19 @@ class ViewReadyEvent(SharedEvent):
     def __init__(self, viewID):
         super(ViewReadyEvent, self).__init__(self.VIEW_READY)
         self.viewID = viewID
+
+
+class UserMissionsEvent(SharedEvent):
+    CHANGE_TAB = 'changeTab'
+    CHANGE_CONTENT_LAYOUT = 'changeContentLayout'
+    TRANSITION_TO_MISSION = 'transitionToMission'
+
+    def __init__(self, eventType, tabID=None, questId=None, eventID=None, groupID=None, showMissionDetails=None, y=None, height=None):
+        super(UserMissionsEvent, self).__init__(eventType)
+        self.tabID = tabID
+        self.questId = questId
+        self.eventID = eventID
+        self.groupID = groupID
+        self.showMissionDetails = showMissionDetails
+        self.y = y
+        self.height = height

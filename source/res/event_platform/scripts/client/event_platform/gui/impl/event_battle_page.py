@@ -6,6 +6,6 @@ from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 
 class EventBattlePage(ClassicPage):
 
-    def __init__(self, components=None, external=None, fullStatsAlias=BATTLE_VIEW_ALIASES.FULL_STATS):
+    def __init__(self, components=None, external=None, fullStatsAlias=BATTLE_VIEW_ALIASES.FULL_STATS, **kwargs):
         LOG_ERROR('INIT --- EventBattlePage')
         super(EventBattlePage, self).__init__(components=components, external=external, fullStatsAlias=fullStatsAlias)

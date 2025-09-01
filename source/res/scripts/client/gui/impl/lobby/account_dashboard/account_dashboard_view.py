@@ -3,6 +3,7 @@
 import logging
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.Scaleform.Waiting import Waiting
+from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.impl.gen.view_models.views.lobby.account_dashboard.account_dashboard_model import AccountDashboardModel
 from gui.impl.lobby.account_dashboard.features.bonus_xp_feature import BonusXPFeature
 from gui.impl.lobby.account_dashboard.features.dog_tags_feature import DogTagsFeature
@@ -15,7 +16,6 @@ from gui.impl.lobby.account_dashboard.features.reserve_stock_feature import Rese
 from gui.impl.lobby.account_dashboard.features.subscriptions_feature import SubscriptionsFeature
 from gui.impl.lobby.account_dashboard.sound_constants import ACC_DASHBOARD_SOUND_SPACE
 from gui.impl.pub import ViewImpl
-from gui.shared.event_dispatcher import showHangar
 from helpers import dependency
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.lobby_context import ILobbyContext
@@ -55,7 +55,6 @@ class AccountDashboardView(ViewImpl):
          Feature.PARENTAL_CONTROL: ParentalControlFeature(self.viewModel)}
         self._wotPlusUILogger = WotPlusAccountDashboardLogger()
         self.modelDataControllers = {}
-        Waiting.show('loadPage')
 
     @property
     def viewModel(self):
@@ -78,6 +77,7 @@ class AccountDashboardView(ViewImpl):
 
     def _onLoading(self, *args, **kwargs):
         super(AccountDashboardView, self)._onLoading(*args, **kwargs)
+        Waiting.show('loadPage')
         with self.viewModel.transaction() as tx:
             for feature in self._features.values():
                 feature.fill(tx)
@@ -101,4 +101,5 @@ class AccountDashboardView(ViewImpl):
 
     def __onClose(self):
         self._wotPlusUILogger.logCloseEvent()
-        showHangar()
+        lsm = getLobbyStateMachine()
+        lsm.getStateFromView(self).goBack()

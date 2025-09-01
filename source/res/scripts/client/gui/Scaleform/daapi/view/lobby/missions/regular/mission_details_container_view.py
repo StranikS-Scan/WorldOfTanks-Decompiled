@@ -3,7 +3,7 @@
 from wg_async import wg_async, wg_await
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.view.lobby.missions import missions_helper
-from gui.Scaleform.daapi.view.lobby.missions.regular.group_packers import getGroupPackerByContextID
+from gui.Scaleform.daapi.view.lobby.user_missions.missions_group_packers import getGroupPackerByContextID
 from gui.Scaleform.daapi.view.meta.MissionDetailsContainerViewMeta import MissionDetailsContainerViewMeta
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.server_events.events_helpers import isDailyQuest, isPremium
@@ -60,6 +60,7 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
     def _populate(self):
         super(MissionDetailsContainerView, self)._populate()
         self.eventsCache.onSyncCompleted += self.__setData
+        self.eventsCache.onPMSyncCompleted += self.__setData
         self.__setData(needDemand=True)
 
     def _invalidate(self, ctx=None):
@@ -67,6 +68,7 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
         self.__setData(needDemand=False)
 
     def _dispose(self):
+        self.eventsCache.onPMSyncCompleted -= self.__setData
         self.eventsCache.onSyncCompleted -= self.__setData
         self.__quests = None
         if self.__groupPacker is not None:
@@ -76,7 +78,7 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
         return
 
     @wg_async
-    def __setData(self, needDemand=True):
+    def __setData(self, needDemand=True, *_):
         if needDemand:
             yield wg_await(self.eventsCache.prefetcher.demand())
         eventID = self.__ctx.get('eventID')

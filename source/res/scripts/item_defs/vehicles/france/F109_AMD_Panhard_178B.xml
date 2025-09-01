@@ -54,7 +54,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	4650	</weight>
-    <maxHealth>	512	</maxHealth>
+    <maxHealth>	560	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	180	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -992,8 +992,7 @@
         </armor_9>
       </armor>
       <weight>	1600	</weight>
-      <maxLoad>	9500	</maxLoad>
-      <terrainResistance>	1 1.1 2	</terrainResistance>
+      <terrainResistance>	0.9 1 1.8	</terrainResistance>
       <brakeForce>	14250	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	34	</rotationSpeed>
@@ -1271,7 +1270,6 @@
         </armor_9>
       </armor>
       <weight>	1600	</weight>
-      <maxLoad>	11000	</maxLoad>
       <terrainResistance>	0.9 1 1.8	</terrainResistance>
       <brakeForce>	14250	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -1558,7 +1556,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1700	</weight>
-      <maxHealth>	98	</maxHealth>
+      <maxHealth>	110	</maxHealth>
       <rotationSpeed>	47	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -1596,11 +1594,11 @@
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <reloadTime>	2.0	</reloadTime>
-          <aimingTime>	1.5	</aimingTime>
+          <aimingTime>	1.4	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.13	</turretRotation>
+            <turretRotation>	0.11	</turretRotation>
             <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2055,7 +2053,7 @@
       <level>	6	</level>
       <price>	16000	</price>
       <unlocks>
-        <gun>	_75mm_Gun_M6B	  <cost>	3050	</cost>
+        <gun>	_75mm_SA49_178B	  <cost>	4100	</cost>
         </gun>
       </unlocks>
       <armor>
@@ -2069,7 +2067,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1900	</weight>
-      <maxHealth>	128	</maxHealth>
+      <maxHealth>	140	</maxHealth>
       <rotationSpeed>	50	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -2108,7 +2106,7 @@
           <reloadTime>	1.9	</reloadTime>
           <aimingTime>	1.4	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2166,91 +2164,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_47mm_SA37B_ameliore>
-        <_75mm_Gun_M6B>	shared	  <maxAmmo>	45	</maxAmmo>
-          <unlocks>
-            <gun>	_75mm_SA49_EBR	  <cost>	4100	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_3>	13	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	9	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <gun>	10	</gun>
-          </armor>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <pitchLimits>
-            <minPitch>	0 -14 1 -14	</minPitch>
-            <maxPitch>	0 12 1 12	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.41	</shotDispersionRadius>
-          <reloadTime>	4.4	</reloadTime>
-          <aimingTime>	1.8	</aimingTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <models>
-            <undamaged>	vehicles/french/F109_AMD_Panhard_178B/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/french/F109_AMD_Panhard_178B/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/french/F109_AMD_Panhard_178B/crash/lod0/Gun_05.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/french/F109_AMD_Panhard_178B/collision/Gun_05.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F109_AMD_Panhard_178B/collision_client/Gun_05.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.044351 0.001051 1.22919	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.05019 0.23103 0.23103	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.044351 0.001051 1.22919	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.05 0 1.42748	</rayStart>
-              <rayEnd>	-0.05 0 1.82748	</rayEnd>
-              <rayUp>	0.0593 0 0	</rayUp>
-              <size>	0.4	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	2 1 0.000000 0.000000	</tiling>
-            <density>	124.777 125.719	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </_75mm_Gun_M6B>
-        <_75mm_SA49_EBR>	shared	  <maxAmmo>	45	</maxAmmo>
+        <_75mm_SA49_178B>	shared	  <maxAmmo>	45	</maxAmmo>
           <armor>
             <armor_1>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -2329,7 +2243,7 @@
             <density>	124.519 125.812	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_75mm_SA49_EBR>
+        </_75mm_SA49_178B>
       </guns>
       <models>
         <undamaged>	vehicles/french/F109_AMD_Panhard_178B/normal/lod0/Turret_02.model	</undamaged>
@@ -2759,16 +2673,6 @@
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <ER_29>	shared	  <unlocks>
-        <radio>	ER_26_ter	  <cost>	3100	</cost>
-        </radio>
-      </unlocks>
-    </ER_29>
-    <ER_26_ter>	shared	  <unlocks>
-        <radio>	EM3_R61	  <cost>	6600	</cost>
-        </radio>
-      </unlocks>
-    </ER_26_ter>
     <EM3_R61>	shared	</EM3_R61>
   </radios>
   <physics>

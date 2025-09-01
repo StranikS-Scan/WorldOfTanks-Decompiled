@@ -1232,7 +1232,6 @@
         <rightTrack>	5	</rightTrack>
       </armor>
       <weight>	2500	</weight>
-      <maxLoad>	10000	</maxLoad>
       <terrainResistance>	0.8 1 1.5	</terrainResistance>
       <brakeForce>	9000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -2100,6 +2099,7 @@
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <aimingTime>	1.7	</aimingTime>
           <models>
             <undamaged>	vehicles/sweden/S05_Strv_M21_29/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/sweden/S05_Strv_M21_29/crash/lod0/Gun_01.model	</destroyed>
@@ -2165,9 +2165,9 @@
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.1	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	1.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2175,6 +2175,12 @@
             <count>	10	</count>
             <rate>	200	</rate>
           </clip>
+          <shotDispersionRadius>	0.5	</shotDispersionRadius>
+          <burst>
+            <rate>	350	</rate>
+            <count>	2	</count>
+          </burst>
+          <reloadTime>	4.4	</reloadTime>
           <models>
             <undamaged>	vehicles/sweden/S05_Strv_M21_29/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/sweden/S05_Strv_M21_29/crash/lod0/Gun_02.model	</destroyed>
@@ -2548,7 +2554,7 @@
     <detailed>
       <engines>
         <Daimler_Benz_m_1910>
-          <smplEnginePower>	80	</smplEnginePower>
+          <smplEnginePower>	110	</smplEnginePower>
           <smplFwMaxSpeed>	25	</smplFwMaxSpeed>
         </Daimler_Benz_m_1910>
       </engines>

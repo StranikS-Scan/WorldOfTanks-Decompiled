@@ -58,9 +58,9 @@
     <weight>	9990	</weight>
     <maxHealth>	368	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	90	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	113	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
     </ammoBayHealth>
     <models>
       <undamaged>	vehicles/british/GB28_Bishop/normal/lod0/Hull.model	</undamaged>
@@ -1625,8 +1625,7 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	6000	</weight>
-      <maxLoad>	17700	</maxLoad>
-      <terrainResistance>	1.2 1.4 2.3	</terrainResistance>
+      <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
       <brakeForce>	16000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	20	</rotationSpeed>
@@ -2822,7 +2821,6 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	6000	</weight>
-      <maxLoad>	20000	</maxLoad>
       <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
       <brakeForce>	18000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -4035,9 +4033,9 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <OQF_25pdr_Gun_Mk_II>	shared	  <maxAmmo>	55	</maxAmmo>
+        <Q_F_25_Pr_Gun_How_Bishop>	shared	  <maxAmmo>	55	</maxAmmo>
           <unlocks>
-            <gun>	_4.5inch_SPG_Howitzer	  <cost>	4100	</cost>
+            <gun>	Q_F_4_5_in_Howitzer_Bishop	  <cost>	4100	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -4110,8 +4108,12 @@
             <density>	128.609 125.573	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </OQF_25pdr_Gun_Mk_II>
-        <_4.5inch_SPG_Howitzer>	shared	  <maxAmmo>	39	</maxAmmo>
+        </Q_F_25_Pr_Gun_How_Bishop>
+        <Q_F_4_5_in_Howitzer_Bishop>	shared	  <maxAmmo>	39	</maxAmmo>
+          <unlocks>
+            <vehicle>	GB77_FV304	  <cost>	31000	</cost>
+            </vehicle>
+          </unlocks>
           <armor>
             <gun>	20	</gun>
           </armor>
@@ -4119,8 +4121,8 @@
             <minPitch>	0 -45 1 -45	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.72	</shotDispersionRadius>
-          <reloadTime>	12.9	</reloadTime>
+          <shotDispersionRadius>	0.8	</shotDispersionRadius>
+          <reloadTime>	15	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.32	</turretRotation>
             <afterShot>	5	</afterShot>
@@ -4182,7 +4184,7 @@
             <density>	132.079 121.893	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_4.5inch_SPG_Howitzer>
+        </Q_F_4_5_in_Howitzer_Bishop>
       </guns>
       <models>
         <undamaged>	vehicles/british/GB28_Bishop/normal/lod0/Turret_01.model	</undamaged>
@@ -4205,72 +4207,42 @@
     </Turret_1_GB28_Bishop>
   </turrets0>
   <engines>
-    <AEC_A189>	shared	  <unlocks>
-        <engine>	AEC_A1909	  <cost>	180	</cost>
+    <AEC_A190_Bishop>	shared	  <unlocks>
+        <engine>	GMC_6004_6_71A_Bishop	  <cost>	800	</cost>
         </engine>
       </unlocks>
-    </AEC_A189>
-    <AEC_A1909>	shared	  <unlocks>
-        <engine>	GMC_6-71_Mk10	  <cost>	700	</cost>
-        </engine>
-      </unlocks>
-    </AEC_A1909>
-    <GMC_6-71_Mk10>	shared	  <unlocks>
-        <engine>	GMC_6-71_Mk11	  <cost>	800	</cost>
-        </engine>
-      </unlocks>
-    </GMC_6-71_Mk10>
-    <GMC_6-71_Mk11>	shared	</GMC_6-71_Mk11>
+    </AEC_A190_Bishop>
+    <GMC_6004_6_71A_Bishop>	shared	</GMC_6004_6_71A_Bishop>
   </engines>
   <fuelTanks>
     <Medium>	shared	</Medium>
   </fuelTanks>
   <radios>
-    <N19Mk1>	shared	  <unlocks>
-        <radio>	N19Mk2	  <cost>	3600	</cost>
-        </radio>
-      </unlocks>
-    </N19Mk1>
-    <N19Mk2>	shared	  <unlocks>
-        <radio>	N19Mk3	  <cost>	4000	</cost>
-        </radio>
-        <vehicle>	GB77_FV304	  <cost>	31000	</cost>
-        </vehicle>
-      </unlocks>
-    </N19Mk2>
     <N19Mk3>	shared	</N19Mk3>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <AEC_A189>
-          <smplEnginePower>	142.733	</smplEnginePower>
-          <smplFwMaxSpeed>	24	</smplFwMaxSpeed>
-        </AEC_A189>
-        <AEC_A1909>
+        <AEC_A190_Bishop>
           <smplEnginePower>	145	</smplEnginePower>
           <smplFwMaxSpeed>	24	</smplFwMaxSpeed>
-        </AEC_A1909>
-        <GMC_6-71_Mk10>
-          <smplEnginePower>	155	</smplEnginePower>
-          <smplFwMaxSpeed>	24	</smplFwMaxSpeed>
-        </GMC_6-71_Mk10>
-        <GMC_6-71_Mk11>
+        </AEC_A190_Bishop>
+        <GMC_6004_6_71A_Bishop>
           <smplEnginePower>	174.4514	</smplEnginePower>
           <smplFwMaxSpeed>	24	</smplFwMaxSpeed>
-        </GMC_6-71_Mk11>
+        </GMC_6004_6_71A_Bishop>
       </engines>
       <chassis>
         <Chassis_GB28_Bishop>
           <grounds>
             <soft>
-              <rollingFriction>	0.18515	</rollingFriction>
+              <rollingFriction>	0.16905	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1127	</rollingFriction>
+              <rollingFriction>	0.10465	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0966	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_GB28_Bishop>

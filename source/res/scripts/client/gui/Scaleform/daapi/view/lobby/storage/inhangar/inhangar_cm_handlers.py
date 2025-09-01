@@ -1,11 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/inhangar/inhangar_cm_handlers.py
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.shared.cm_handlers import ContextMenu, option, CMLabel
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import enoughCreditsForRestore, getVehicleRestoreInfo
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getTradeInVehiclesUrl
 from gui.Scaleform.framework.managers.context_menu import CM_BUY_COLOR
-from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.event_dispatcher import showShop
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
@@ -128,10 +126,6 @@ class VehiclesRestoreCMHandler(ContextMenu):
     @option(__sqGen.next(), CMLabel.ADD_TO_COMPARE)
     def addToCompare(self):
         self.__comparisonBasket.addVehicle(self._id)
-
-    @option(__sqGen.next(), CMLabel.PREVIEW)
-    def preview(self):
-        shared_events.showVehiclePreview(self._id, previewBackCb=lambda : shared_events.showStorage(STORAGE_CONSTANTS.IN_HANGAR, STORAGE_CONSTANTS.VEHICLES_TAB_RESTORE), previewAlias=VIEW_ALIAS.LOBBY_STORAGE)
 
     def _getOptionCustomData(self, label):
         optionData = super(VehiclesRestoreCMHandler, self)._getOptionCustomData(label)

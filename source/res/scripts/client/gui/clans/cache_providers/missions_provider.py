@@ -3,9 +3,6 @@
 import BigWorld
 from adisp import adisp_process
 from gui import DialogsInterface
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework import g_entitiesFactories
-from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.clans.cache_providers.base_provider import IBaseProvider
 from gui.prb_control.entities.listener import IGlobalListener
@@ -55,7 +52,8 @@ class ClientMissionsProvider(IBaseProvider, IGlobalListener):
     @adisp_process
     def __showElenPopupDlg(self):
         yield DialogsInterface.showI18nInfoDialog('elenDisabled')
-        g_eventBus.handleEvent(g_entitiesFactories.makeLoadEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
+        from gui.shared.event_dispatcher import showHangar
+        showHangar()
 
     def __onMissionsActivate(self, _):
         self.__formActive = True

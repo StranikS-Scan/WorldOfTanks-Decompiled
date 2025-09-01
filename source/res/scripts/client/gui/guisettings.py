@@ -138,7 +138,8 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'checkPromoFrequencyInBattles': 5,
  'vivoxLicense': '',
  'spgHitDirectionDelta': 10.0,
- 'vehicleDisclaimerURLs': {}}
+ 'vehicleDisclaimerURLs': {},
+ 'reportContentURL': ''}
 
 class GuiSettings(object):
 

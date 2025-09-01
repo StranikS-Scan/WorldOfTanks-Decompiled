@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/veh_post_progression/dialogs/destroy_pair_modification.py
+from __future__ import absolute_import
+from future.utils import iteritems
 from gui.impl import backport
 from gui.impl.dialogs.dialog_template import DialogTemplateView
 from gui.impl.dialogs.dialog_template_button import ConfirmButton, CancelButton
@@ -20,8 +22,8 @@ class DestroyPairModificationsDialog(DialogTemplateView):
     __itemsCache = dependency.descriptor(IItemsCache)
     __slots__ = ('__vehicle', '__stepIDs')
 
-    def __init__(self, layoutID=None, uniqueID=None, *args, **kwargs):
-        super(DestroyPairModificationsDialog, self).__init__(layoutID, uniqueID, *args, **kwargs)
+    def __init__(self, layoutID=None, uniqueID=None, **kwargs):
+        super(DestroyPairModificationsDialog, self).__init__(layoutID, uniqueID, **kwargs)
         self.__vehicle = kwargs.get('vehicle', None)
         self.__stepIDs = kwargs.get('stepIDs', ())
         return
@@ -54,7 +56,7 @@ class DestroyPairModificationsDialog(DialogTemplateView):
 
     def __getDescriptionText(self):
         action = self.__vehicle.postProgression.getStep(self.__stepIDs[0]).action
-        currency, _ = first(action.getPurchasedModification().getPrice().iteritems())
+        currency, _ = first(iteritems(action.getPurchasedModification().getPrice()))
         return _R_PATH.destroyOne.description.dyn(currency, _R_PATH.destroyOne.description.default) if len(self.__stepIDs) == 1 else _R_PATH.destroyAll.description.dyn(currency, _R_PATH.destroyAll.description.default)
 
     def __onInventoryResync(self, _, diff):

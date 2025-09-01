@@ -11,7 +11,7 @@ class RankInactivityTooltip(ViewImpl):
     __slots__ = ()
     __comp7Controller = dependency.descriptor(IComp7Controller)
 
-    def __init__(self, layoutID=R.views.comp7.lobby.tooltips.RankInactivityTooltip()):
+    def __init__(self, layoutID=R.views.comp7.mono.lobby.tooltips.rank_inactivity_tooltip()):
         settings = ViewSettings(layoutID)
         settings.model = RankInactivityTooltipModel()
         super(RankInactivityTooltip, self).__init__(settings)

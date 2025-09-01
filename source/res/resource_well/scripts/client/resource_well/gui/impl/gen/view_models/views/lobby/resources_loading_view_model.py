@@ -1,8 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: resource_well/scripts/client/resource_well/gui/impl/gen/view_models/views/lobby/resources_loading_view_model.py
 from enum import Enum
-from frameworks.wulf import Array
-from frameworks.wulf import ViewModel
+from frameworks.wulf import Array, ViewModel
 from gui.impl.gen.view_models.common.vehicle_info_model import VehicleInfoModel
 from resource_well.gui.impl.gen.view_models.views.lobby.resources_tab_model import ResourcesTabModel
 from resource_well.gui.impl.gen.view_models.views.lobby.vehicle_counter_model import VehicleCounterModel

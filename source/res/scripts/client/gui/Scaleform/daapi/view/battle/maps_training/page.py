@@ -40,7 +40,7 @@ _MAPS_TRAINING_EXTERNAL_COMPONENTS = (CrosshairPanelContainer, markers2d.MapsTra
 
 class MapsTrainingPage(ClassicPage):
 
-    def __init__(self, components=MAPS_TRAINING_CONFIG, external=_MAPS_TRAINING_EXTERNAL_COMPONENTS, fullStatsAlias=None):
+    def __init__(self, components=MAPS_TRAINING_CONFIG, external=_MAPS_TRAINING_EXTERNAL_COMPONENTS, fullStatsAlias=None, **kwargs):
         super(MapsTrainingPage, self).__init__(components=components, external=external, fullStatsAlias=fullStatsAlias)
 
     def _populate(self):

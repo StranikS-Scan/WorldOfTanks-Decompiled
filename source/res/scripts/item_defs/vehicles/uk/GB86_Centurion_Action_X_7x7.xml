@@ -1058,7 +1058,6 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	60000	</maxLoad>
       <terrainResistance>	0.6 0.7 1.5	</terrainResistance>
       <brakeForce>	50000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2135,7 +2134,7 @@
         <_105mm_Gun_L7_HEAT_7x7>	shared	  <maxAmmo>	68	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.391667 10 0.394444 8 0.397222 7 0.4 6 0.405556 5 0.411111 4 0.416667 3 0.419444 2 0.422222 1 0.436111 1 0.438889 0 0.439722 -0.3 0.441667 -0.3 0.444444 -0.5 0.447222 -0.5 0.45 0.5 0.469444 1 0.530556 1 0.55 0.5 0.552778 -0.5 0.555556 -0.5 0.558333 -0.3 0.560278 -0.3 0.561111 0 0.563889 1 0.577778 1 0.580556 2 0.583333 3 0.588889 4 0.594444 5 0.6 6 0.602778 7 0.605556 8 0.608333 10 1 10	</maxPitch>
+            <maxPitch>	0.00000 10.00 0.39444 10.00 0.42222 1.00 0.43333 1.00 0.44444 0.00 0.45556 1.00 0.54444 1.00 0.55556 0.00 0.56667 1.00 0.57778 1.00 0.60556 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
           <armor>
             <gun>	45	</gun>

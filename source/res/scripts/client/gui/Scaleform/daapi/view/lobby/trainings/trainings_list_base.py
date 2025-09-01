@@ -31,7 +31,7 @@ class TrainingsListBase(LobbySubView, TrainingFormMeta, ILegacyListener):
     _COMMON_SOUND_SPACE = TRAININGS_SOUND_SPACE
     _lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self, _=None):
+    def __init__(self, **kwargs):
         super(TrainingsListBase, self).__init__()
         self.__requester = None
         return

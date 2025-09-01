@@ -811,7 +811,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	58900	</maxLoad>
       <terrainResistance>	1 1.1 1.9	</terrainResistance>
       <brakeForce>	54000	</brakeForce>
       <rotationIsAroundCenter>	True	</rotationIsAroundCenter>
@@ -2349,11 +2348,9 @@
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>
   </effects>
-  <effectsPrefab>
-    <rocketAcceleration>
-      <prefab>	particles/Tank/rocket_accelerator/Ch54_BZ_72_1_Rocket.prefab	</prefab>
-    </rocketAcceleration>
-  </effectsPrefab>
+  <prefabs>
+    <mechanicEffects>	particles/Tank/rocket_accelerator/Ch54_BZ_72_1_Rocket.prefab	</mechanicEffects>
+  </prefabs>
   <emblems>
     <default>	15505	</default>
     <lodDist>	MEDIUM	</lodDist>

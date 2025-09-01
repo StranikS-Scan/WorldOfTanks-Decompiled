@@ -62,7 +62,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	11270	</weight>
-    <maxHealth>	504	</maxHealth>
+    <maxHealth>	560	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	150	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
@@ -1096,13 +1096,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_Pz_IV_AusfH>
-      <userString>	#germany_vehicles:Chassis_Pz_IV_AusfH	</userString>
+    <Chassis_G81_Pz_IV_AusfH>
+      <userString>	#germany_vehicles:Chassis_G81_Pz_IV_AusfH	</userString>
       <tags></tags>
       <level>	4	</level>
       <price>	4510	</price>
       <unlocks>
-        <chassis>	Chassis_Pz_IV_AusfH_2	  <cost>	1930	</cost>
+        <chassis>	Chassis_G81_Pz_IV_AusfH_2	  <cost>	1930	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1110,11 +1110,10 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	7800	</weight>
-      <maxLoad>	26000	</maxLoad>
-      <terrainResistance>	1.1 1.3 2.7	</terrainResistance>
+      <terrainResistance>	1 1.1 2.4	</terrainResistance>
       <brakeForce>	26000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	30	</rotationSpeed>
+      <rotationSpeed>	39	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.22	</vehicleMovement>
         <vehicleRotation>	0.22	</vehicleRotation>
@@ -1982,9 +1981,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_Pz_IV_AusfH>
-    <Chassis_Pz_IV_AusfH_2>
-      <userString>	#germany_vehicles:Chassis_Pz_IV_AusfH_2	</userString>
+    </Chassis_G81_Pz_IV_AusfH>
+    <Chassis_G81_Pz_IV_AusfH_2>
+      <userString>	#germany_vehicles:Chassis_G81_Pz_IV_AusfH_2	</userString>
       <tags></tags>
       <level>	5	</level>
       <price>	7910	</price>
@@ -1993,11 +1992,10 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	7800	</weight>
-      <maxLoad>	28000	</maxLoad>
       <terrainResistance>	1 1.1 2.4	</terrainResistance>
       <brakeForce>	28000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	32	</rotationSpeed>
+      <rotationSpeed>	43	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.2	</vehicleMovement>
         <vehicleRotation>	0.2	</vehicleRotation>
@@ -2865,16 +2863,16 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_Pz_IV_AusfH_2>
+    </Chassis_G81_Pz_IV_AusfH_2>
   </chassis>
   <turrets0>
-    <Turret_1_Pz_IV_AusfH>
-      <userString>	#germany_vehicles:Turret_1_Pz_IV_AusfH	</userString>
+    <Turret_1_G81_Pz_IV_AusfH>
+      <userString>	#germany_vehicles:Turret_1_G81_Pz_IV_AusfH	</userString>
       <tags></tags>
-      <level>	5	</level>
+      <level>	4	</level>
       <price>	8500	</price>
       <unlocks>
-        <turret>	Turret_2_Pz_IV_AusfH	  <cost>	4015	</cost>
+        <turret>	Turret_2_G81_Pz_IV_AusfH	  <cost>	4015	</cost>
         </turret>
       </unlocks>
       <armor>
@@ -2895,7 +2893,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3200	</weight>
-      <maxHealth>	96	</maxHealth>
+      <maxHealth>	110	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -2923,7 +2921,7 @@
             </armor_5>
             <gun>	20	</gun>
           </armor>
-          <reloadTime>	4.1	</reloadTime>
+          <reloadTime>	3.7	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
@@ -2931,9 +2929,9 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
-          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <shotDispersionFactors>
-            <afterShot>	4.0	</afterShot>
+            <afterShot>	3	</afterShot>
             <turretRotation>	0.12	</turretRotation>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -3405,14 +3403,14 @@
         <density>	98.5281 97.1669	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_1_Pz_IV_AusfH>
-    <Turret_2_Pz_IV_AusfH>
-      <userString>	#germany_vehicles:Turret_2_Pz_IV_AusfH	</userString>
+    </Turret_1_G81_Pz_IV_AusfH>
+    <Turret_2_G81_Pz_IV_AusfH>
+      <userString>	#germany_vehicles:Turret_2_G81_Pz_IV_AusfH	</userString>
       <tags></tags>
-      <level>	6	</level>
+      <level>	5	</level>
       <price>	13240	</price>
       <unlocks>
-        <gun>	_105mm_StuH42_L28Pz	  <cost>	3800	</cost>
+        <gun>	_105mm_Kw_K_L_28_Ausf_H	  <cost>	3800	</cost>
         </gun>
         <vehicle>	G27_VK3001P	  <cost>	26235	</cost>
         </vehicle>
@@ -3437,7 +3435,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3600	</weight>
-      <maxHealth>	126	</maxHealth>
+      <maxHealth>	140	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -3451,10 +3449,10 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_Kw_K_40_L_48_Ausf_H>	shared	  <reloadTime>	4	</reloadTime>
+        <_75mm_Kw_K_40_L_48_Ausf_H>	shared	  <reloadTime>	3.6	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <maxAmmo>	105	</maxAmmo>
@@ -3471,12 +3469,14 @@
             </armor_5>
             <gun>	20	</gun>
           </armor>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.1	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
             <undamaged>	vehicles/german/G81_Pz_IV_AusfH/normal/lod0/Gun_07.model	</undamaged>
             <destroyed>	vehicles/german/G81_Pz_IV_AusfH/crash/lod0/Gun_07.model	</destroyed>
@@ -3531,7 +3531,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_Kw_K_40_L_48_Ausf_H>
-        <_105mm_StuH42_L28Pz>	shared	  <armor>
+        <_105mm_Kw_K_L_28_Ausf_H>	shared	  <armor>
             <armor_1>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -3605,7 +3605,7 @@
             <density>	145.568 152.369	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_105mm_StuH42_L28Pz>
+        </_105mm_Kw_K_L_28_Ausf_H>
       </guns>
       <models>
         <undamaged>	vehicles/german/G81_Pz_IV_AusfH/normal/lod0/Turret_02.model	</undamaged>
@@ -4097,7 +4097,7 @@
         <density>	95.7583 96.954	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_2_Pz_IV_AusfH>
+    </Turret_2_G81_Pz_IV_AusfH>
   </turrets0>
   <engines>
     <Maybach_HL_120_TR_Ausf_H>	shared	  <unlocks>
@@ -4111,40 +4111,22 @@
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <FuG7>	shared	  <unlocks>
-        <radio>	FuG12	  <cost>	7200	</cost>
-        </radio>
-      </unlocks>
-    </FuG7>
     <FuG12>	shared	</FuG12>
   </radios>
   <physics>
     <detailed>
       <engines>
         <Maybach_HL_120_TR_Ausf_H>
-          <smplEnginePower>	400	</smplEnginePower>
+          <smplEnginePower>	450	</smplEnginePower>
           <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
         </Maybach_HL_120_TR_Ausf_H>
         <Maybach_HL_120_TRM_Ausf_H>
-          <smplEnginePower>	465.2037	</smplEnginePower>
+          <smplEnginePower>	480	</smplEnginePower>
           <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
         </Maybach_HL_120_TRM_Ausf_H>
       </engines>
       <chassis>
-        <Chassis_Pz_IV_AusfH>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.21735	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.10465	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
-            </firm>
-          </grounds>
-        </Chassis_Pz_IV_AusfH>
-        <Chassis_Pz_IV_AusfH_2>
+        <Chassis_G81_Pz_IV_AusfH>
           <grounds>
             <soft>
               <rollingFriction>	0.1932	</rollingFriction>
@@ -4156,7 +4138,20 @@
               <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_Pz_IV_AusfH_2>
+        </Chassis_G81_Pz_IV_AusfH>
+        <Chassis_G81_Pz_IV_AusfH_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.1932	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.08855	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0805	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_G81_Pz_IV_AusfH_2>
       </chassis>
     </detailed>
   </physics>

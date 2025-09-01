@@ -76,7 +76,7 @@
     </armor>
     <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
     <weight>	41500	</weight>
-    <maxHealth>	1200	</maxHealth>
+    <maxHealth>	1280	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
@@ -1472,8 +1472,7 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	20750	</weight>
-      <maxLoad>	67000	</maxLoad>
-      <terrainResistance>	1.1 1.9 3.4	</terrainResistance>
+      <terrainResistance>	1.1 1.7 2.9	</terrainResistance>
       <brakeForce>	34000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	28	</rotationSpeed>
@@ -2419,7 +2418,6 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	20550	</weight>
-      <maxLoad>	68950	</maxLoad>
       <terrainResistance>	1.1 1.7 2.9	</terrainResistance>
       <brakeForce>	34000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -3367,12 +3365,12 @@
         <armor_1>	0	</armor_1>
       </armor>
       <weight>	50	</weight>
-      <maxHealth>	300	</maxHealth>
+      <maxHealth>	320	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	155	</maxHealth>
+        <maxRegenHealth>	78	</maxRegenHealth>
+        <repairCost>	8	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	370	</circularVisionRadius>
       <surveyingDeviceHealth>
@@ -3663,10 +3661,10 @@
         <Chassis_G37_Ferdinand>
           <grounds>
             <soft>
-              <rollingFriction>	0.2737	</rollingFriction>
+              <rollingFriction>	0.23345	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.15295	</rollingFriction>
+              <rollingFriction>	0.13685	</rollingFriction>
             </medium>
             <firm>
               <rollingFriction>	0.08855	</rollingFriction>

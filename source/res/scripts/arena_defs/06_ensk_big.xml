@@ -24,6 +24,16 @@
     <wwmusicResultDefeat>	music_ensk_result_defeat	</wwmusicResultDefeat>
   </wwmusicSetup>
   <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	destructible_objects.bnk	</name>
+      </bank>
+      <bank>
+        <name>	destructible_objects.pck	</name>
+      </bank>
+    </loadBanks>
+  </soundRemapping>
   <gameplayTypes>
     <ctf>
       <teamBasePositions>

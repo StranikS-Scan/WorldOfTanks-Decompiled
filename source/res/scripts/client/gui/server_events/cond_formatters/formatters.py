@@ -20,6 +20,11 @@ if typing.TYPE_CHECKING:
     from gui.server_events.conditions import _Condition, _Cumulativable, _VehsListCondition
     from gui.server_events.event_items import ServerEventAbstract
     from gui.server_events.formatters import PreFormattedCondition, ProgressData
+VEHICLE_CLASSES_SIMPLIFIED = {'lightTank': QUESTS.DETAILS_CONDITIONS_CLASSES_LIGHTTANK,
+ 'mediumTank': QUESTS.DETAILS_CONDITIONS_CLASSES_MEDIUMTANK,
+ 'heavyTank': QUESTS.DETAILS_CONDITIONS_CLASSES_HEAVYTANK,
+ 'SPG': QUESTS.DETAILS_CONDITIONS_CLASSES_SPG,
+ 'AT-SPG': QUESTS.DETAILS_CONDITIONS_CLASSES_AT_SPG}
 
 class ConditionsFormatter(object):
 
@@ -155,7 +160,27 @@ class MissionsVehicleListFormatter(MissionFormatter):
             labelKey = '%s/all' % labelKey
         if condition.isNegative():
             labelKey = '%s/not' % labelKey
-        return packDescriptionField(labelKey)
+        if condition.getDirectHitsReceived():
+            directHitsReceived = condition.getDirectHitsReceived()
+            if directHitsReceived and directHitsReceived < 0:
+                labelKey = '%s/negative' % labelKey
+            return FormattableField(FORMATTER_IDS.DESCRIPTION, (i18n.makeString(labelKey, classes=cls._formatClassesEnumeration(condition), directHitsReceived=abs(directHitsReceived)),))
+        if condition.getDamageDealt():
+            return FormattableField(FORMATTER_IDS.DESCRIPTION, (i18n.makeString(labelKey, damage=int(condition.getDamageDealt()), classes=cls._formatClassesEnumeration(condition), amount=int(condition.relationValue)),))
+        if condition.getWhileMovingAtSpeed():
+            return FormattableField(FORMATTER_IDS.DESCRIPTION, (i18n.makeString(labelKey, amount=int(condition.relationValue), classes=cls._formatClassesEnumeration(condition), speed=int(condition.getWhileMovingAtSpeed())),))
+        if condition.getEnemyIsNotSpotted() or condition.getBeyondVisionRadius() or condition.getwhileEnemyInvisible():
+            return FormattableField(FORMATTER_IDS.DESCRIPTION, (i18n.makeString(labelKey, amount=int(condition.relationValue), classes=cls._formatClassesEnumeration(condition)),))
+        return FormattableField(FORMATTER_IDS.DESCRIPTION, (i18n.makeString(labelKey, amount=int(condition.relationValue), classes=cls._formatClassesEnumeration(condition)),)) if condition.getSpotEnemy() else packDescriptionField(labelKey)
+
+    @classmethod
+    def _formatClassesEnumeration(cls, condition):
+        allowedClasses = condition.parseClasses(condition.data)
+        allowedClassesEnumeration = ' %s ' % i18n.makeString(QUESTS.DETAILS_CONDITIONS_ENUMERATE_OR)
+        if not allowedClasses:
+            return ''
+        allowedClassesEnumeration = allowedClassesEnumeration.join([ i18n.makeString(VEHICLE_CLASSES_SIMPLIFIED.get(vehicleClass)) for vehicleClass in allowedClasses ])
+        return allowedClassesEnumeration
 
     def _getConditionData(self, condition):
         data = {'description': i18n.makeString(QUESTS.MISSIONDETAILS_VEHICLE_CONDITIONS_HEADER),
@@ -210,11 +235,11 @@ class MissionsVehicleListFormatter(MissionFormatter):
 
         return result
 
-    def _formatData(self, title, progressType, condition, current=None, total=None, progressData=None):
-        return self._packGui(title, progressType, self.getDescription(condition), current=current, total=total, conditionData=self._getConditionData(condition), progressData=progressData, condition=condition)
+    def _formatData(self, title, progressType, condition, current=None, total=None, progressData=None, earned=None):
+        return self._packGui(title, progressType, self.getDescription(condition), current=current, total=total, conditionData=self._getConditionData(condition), progressData=progressData, condition=condition, earned=earned)
 
-    def _packGui(self, title, progressType, label, current=None, total=None, conditionData=None, progressData=None, condition=None):
-        return packMissionIconCondition(title, progressType, label, self._getIconKey(condition), current=current, total=total, conditionData=conditionData, progressData=progressData, sortKey=self._getSortKey(condition), progressID=condition.progressID)
+    def _packGui(self, title, progressType, label, current=None, total=None, conditionData=None, progressData=None, condition=None, earned=None):
+        return packMissionIconCondition(title, progressType, label, self._getIconKey(condition), current=current, total=total, conditionData=conditionData, earned=earned, progressData=progressData, sortKey=self._getSortKey(condition), progressID=condition.progressID)
 
     @staticmethod
     def __makeVehicleVO(vehicle):

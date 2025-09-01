@@ -118,11 +118,9 @@ class SYSTEM_MESSAGES(object):
     CLIENTINSTALLERROR_NOT_FOR_THIS_VEHICLE_TYPE = '#system_messages:clientInstallError_not_for_this_vehicle_type'
     CLIENTINSTALLERROR_VEHICLEGUN_NOT_FOR_CURRENT_VEHICLE = '#system_messages:clientInstallError_vehicleGun_not_for_current_vehicle'
     CLIENTINSTALLERROR_WRONG_ITEM_TYPE = '#system_messages:clientInstallError_wrong_item_type'
-    CLIENTINSTALLERROR_TOO_HEAVY = '#system_messages:clientInstallError_too_heavy'
     CLIENTREMOVEERROR_WRONG_NATION = '#system_messages:clientRemoveError_wrong_nation'
     CLIENTREMOVEERROR_NOT_IN_LIST = '#system_messages:clientRemoveError_not_in_list'
     CLIENTREMOVEERROR_WRONG_ITEM_TYPE = '#system_messages:clientRemoveError_wrong_item_type'
-    CLIENTREMOVEERROR_TOO_HEAVY = '#system_messages:clientRemoveError_too_heavy'
     SERVERINSTALLERROR = '#system_messages:serverInstallError'
     SERVERREMOVEERROR = '#system_messages:serverRemoveError'
     BUY_VEHICLE_SLOT_ERROR = '#system_messages:buy_vehicle_slot_error'
@@ -573,8 +571,6 @@ class SYSTEM_MESSAGES(object):
     MODULE_BUY_ERROR_NOT_FOR_CURRENT_VEHICLE = '#system_messages:module_buy/error_not_for_current_vehicle'
     MODULE_BUY_ERROR_NO_GUN = '#system_messages:module_buy/error_no_gun'
     MODULE_BUY_ERROR_WRONG_ITEM_TYPE = '#system_messages:module_buy/error_wrong_item_type'
-    MODULE_BUY_ERROR_TOO_HEAVY = '#system_messages:module_buy/error_too_heavy'
-    MODULE_BUY_ERROR_TOO_HEAVY_CHASSIS = '#system_messages:module_buy/error_too_heavy_chassis'
     MODULE_BUY_ERROR_NEED_TURRET = '#system_messages:module_buy/error_need_turret'
     MODULE_BUY_ERROR_NEED_GUN = '#system_messages:module_buy/error_need_gun'
     MODULE_BUY_ERROR_IS_CURRENT = '#system_messages:module_buy/error_is_current'
@@ -588,7 +584,6 @@ class SYSTEM_MESSAGES(object):
     ARTEFACT_BUY_WALLET_NOT_AVAILABLE = '#system_messages:artefact_buy/wallet_not_available'
     ARTEFACT_BUY_SERVER_ERROR = '#system_messages:artefact_buy/server_error'
     ARTEFACT_BUY_SERVER_ERROR_CENTERDOWN = '#system_messages:artefact_buy/server_error_centerDown'
-    ARTEFACT_BUY_ERROR_TOO_HEAVY = '#system_messages:artefact_buy/error_too_heavy'
     ARTEFACT_BUY_VEHICLE_NEED_REPAIR = '#system_messages:artefact_buy/vehicle_need_repair'
     ARTEFACT_BUY_VEHICLE_LOCKED = '#system_messages:artefact_buy/vehicle_locked'
     ARTEFACT_BUY_INVALID_VEHICLE = '#system_messages:artefact_buy/invalid_vehicle'
@@ -607,7 +602,6 @@ class SYSTEM_MESSAGES(object):
     BATTLEBOOSTER_BUY_WALLET_NOT_AVAILABLE = '#system_messages:battleBooster_buy/wallet_not_available'
     BATTLEBOOSTER_BUY_SERVER_ERROR = '#system_messages:battleBooster_buy/server_error'
     BATTLEBOOSTER_BUY_SERVER_ERROR_CENTERDOWN = '#system_messages:battleBooster_buy/server_error_centerDown'
-    BATTLEBOOSTER_BUY_ERROR_TOO_HEAVY = '#system_messages:battleBooster_buy/error_too_heavy'
     BATTLEBOOSTER_BUY_VEHICLE_NEED_REPAIR = '#system_messages:battleBooster_buy/vehicle_need_repair'
     BATTLEBOOSTER_BUY_VEHICLE_LOCKED = '#system_messages:battleBooster_buy/vehicle_locked'
     BATTLEBOOSTER_BUY_INVALID_VEHICLE = '#system_messages:battleBooster_buy/invalid_vehicle'
@@ -639,8 +633,6 @@ class SYSTEM_MESSAGES(object):
     MODULE_APPLY_ERROR_NOT_FOR_CURRENT_VEHICLE = '#system_messages:module_apply/error_not_for_current_vehicle'
     MODULE_APPLY_ERROR_NO_GUN = '#system_messages:module_apply/error_no_gun'
     MODULE_APPLY_ERROR_WRONG_ITEM_TYPE = '#system_messages:module_apply/error_wrong_item_type'
-    MODULE_APPLY_ERROR_TOO_HEAVY = '#system_messages:module_apply/error_too_heavy'
-    MODULE_APPLY_ERROR_TOO_HEAVY_CHASSIS = '#system_messages:module_apply/error_too_heavy_chassis'
     MODULE_APPLY_ERROR_NEED_TURRET = '#system_messages:module_apply/error_need_turret'
     MODULE_APPLY_ERROR_NEED_GUN = '#system_messages:module_apply/error_need_gun'
     MODULE_APPLY_ERROR_IS_CURRENT = '#system_messages:module_apply/error_is_current'
@@ -667,8 +659,6 @@ class SYSTEM_MESSAGES(object):
     ARTEFACT_DESTROY_VEHICLE_LOCKED = '#system_messages:artefact_destroy/vehicle_locked'
     ARTEFACT_DESTROY_VEHICLE_NEED_REPAIR = '#system_messages:artefact_destroy/vehicle_need_repair'
     ARTEFACT_APPLY_ERROR_NOT_FOR_THIS_VEHICLE_TYPE = '#system_messages:artefact_apply/error_not_for_this_vehicle_type'
-    ARTEFACT_APPLY_ERROR_TOO_HEAVY = '#system_messages:artefact_apply/error_too_heavy'
-    ARTEFACT_REMOVE_ERROR_TOO_HEAVY = '#system_messages:artefact_remove/error_too_heavy'
     ARTEFACT_UPGRADE_SUCCESS = '#system_messages:artefact_upgrade/success'
     ARTEFACT_UPGRADE_SUCCESS_ANALOGWASDEMOUNTED = '#system_messages:artefact_upgrade/success/analogWasDemounted'
     ARTEFACT_UPGRADE_SERVER_ERROR = '#system_messages:artefact_upgrade/server_error'
@@ -695,11 +685,9 @@ class SYSTEM_MESSAGES(object):
     LAYOUT_APPLY_INVALID_VEHICLE = '#system_messages:layout_apply/invalid_vehicle'
     LAYOUT_APPLY_VEHICLE_LOCKED = '#system_messages:layout_apply/vehicle_locked'
     OPTIONALDEVICES_APPLY_ERROR = '#system_messages:optionalDevices_apply/error'
-    OPTIONALDEVICES_APPLY_ERROR_TOO_HEAVY = '#system_messages:optionalDevices_apply/error_too_heavy'
     OPTIONALDEVICES_APPLY_NOT_ENOUGH_MONEY = '#system_messages:optionalDevices_apply/not_enough_money'
     OPTIONALDEVICES_APPLY_WALLET_NOT_AVAILABLE = '#system_messages:optionalDevices_apply/wallet_not_available'
     OPTIONALDEVICES_REMOVE_ERROR = '#system_messages:optionalDevices_remove/error'
-    OPTIONALDEVICES_REMOVE_ERROR_TOO_HEAVY = '#system_messages:optionalDevices_remove/error_too_heavy'
     SHELLS_APPLY_SUCCESS_MONEY_SPENT = '#system_messages:shells_apply/success_money_spent'
     SHELLS_APPLY_ERROR = '#system_messages:shells_apply/error'
     SHELLS_APPLY_NOT_ENOUGH_MONEY = '#system_messages:shells_apply/not_enough_money'
@@ -836,6 +824,7 @@ class SYSTEM_MESSAGES(object):
     SENIORITY_AWARDS_SELECTION_TIMEOUT = '#system_messages:seniority_awards/selection_timeout'
     PERSONALMISSIONS_SELECT_SUCCESS = '#system_messages:personalMissions/select/success'
     PERSONALMISSIONS_SELECT_SERVER_ERROR = '#system_messages:personalMissions/select/server_error'
+    PERSONALMISSIONS_SELECT_SERVER_ERROR_INVALID_QUEST_ID = '#system_messages:personalMissions/select/server_error/INVALID_QUEST_ID'
     PERSONALMISSIONS_SELECT_SERVER_ERROR_WRONG_ARGS_TYPE = '#system_messages:personalMissions/select/server_error/WRONG_ARGS_TYPE'
     PERSONALMISSIONS_SELECT_SERVER_ERROR_WRONG_ARGS = '#system_messages:personalMissions/select/server_error/WRONG_ARGS'
     PERSONALMISSIONS_SELECT_SERVER_ERROR_NOT_ENOUGH_SLOTS = '#system_messages:personalMissions/select/server_error/NOT_ENOUGH_SLOTS'
@@ -848,6 +837,7 @@ class SYSTEM_MESSAGES(object):
     PERSONALMISSIONS_SELECT_SERVER_ERROR_SEASON_LIMIT_THE_SAME_CLASS = '#system_messages:personalMissions/select/server_error/SEASON_LIMIT_THE_SAME_CLASS'
     PERSONALMISSIONS_SELECT_SERVER_ERROR_DISABLED = '#system_messages:personalMissions/select/server_error/DISABLED'
     PERSONALMISSIONS_SELECT_SERVER_ERROR_FALLOUT_LOCKED_BY_VEHICLE_QUEST = '#system_messages:personalMissions/select/server_error/fallout/LOCKED_BY_VEHICLE_QUEST'
+    PERSONALMISSIONS30_SELECT_SERVER_ERROR = '#system_messages:personalMissions30/select/server_error'
     PERSONALMISSIONS_DISCARD_SUCCESS = '#system_messages:personalMissions/discard/success'
     PERSONALMISSIONS_DISCARD_SERVER_ERROR = '#system_messages:personalMissions/discard/server_error'
     PERSONALMISSIONS_DISCARD_SERVER_ERROR_LOCKED_BY_VEHICLE_QUEST = '#system_messages:personalMissions/discard/server_error/LOCKED_BY_VEHICLE_QUEST'
@@ -860,11 +850,14 @@ class SYSTEM_MESSAGES(object):
     PERSONALMISSIONS_PAUSE_SERVER_ERROR_LOCKED_BY_VEHICLE_QUEST = '#system_messages:personalMissions/pause/server_error/LOCKED_BY_VEHICLE_QUEST'
     PERSONALMISSIONS_PAUSE_SERVER_ERROR_INVALID_QUEST_ID = '#system_messages:personalMissions/pause/server_error/INVALID_QUEST_ID'
     PERSONALMISSIONS_PAUSE_SERVER_ERROR_DISABLED = '#system_messages:personalMissions/pause/server_error/DISABLED'
+    PERSONALMISSIONS_ACTIVATESEASON_SERVER_ERROR = '#system_messages:personalMissions/activateSeason/server_error'
     PERSONALMISSIONS_REWARD_REGULAR_SERVER_ERROR = '#system_messages:personalMissions/reward/regular/server_error'
     PERSONALMISSIONS_REWARD_REGULAR_SERVER_ERROR_WRONG_ARGS_TYPE = '#system_messages:personalMissions/reward/regular/server_error/WRONG_ARGS_TYPE'
     PERSONALMISSIONS_REWARD_REGULAR_SERVER_ERROR_NO_REWARD = '#system_messages:personalMissions/reward/regular/server_error/NO_REWARD'
     PERSONALMISSIONS_REWARD_REGULAR_SERVER_ERROR_INVALID_STATE = '#system_messages:personalMissions/reward/regular/server_error/INVALID_STATE'
     PERSONALMISSIONS_REWARD_REGULAR_SERVER_ERROR_DISABLED = '#system_messages:personalMissions/reward/regular/server_error/DISABLED'
+    PERSONALMISSIONS_REWARD_PM3_SERVER_ERROR = '#system_messages:personalMissions/reward/pm3/server_error'
+    PERSONALMISSIONS_REWARD_PM3_SUCCESS = '#system_messages:personalMissions/reward/pm3/success'
     PERSONALMISSIONS_REWARD_TANKWOMAN_SERVER_ERROR = '#system_messages:personalMissions/reward/tankwoman/server_error'
     PERSONALMISSIONS_REWARD_TANKWOMAN_SERVER_ERROR_WRONG_ARGS_TYPE = '#system_messages:personalMissions/reward/tankwoman/server_error/WRONG_ARGS_TYPE'
     PERSONALMISSIONS_REWARD_TANKWOMAN_SERVER_ERROR_NO_REWARD = '#system_messages:personalMissions/reward/tankwoman/server_error/NO_REWARD'
@@ -878,6 +871,24 @@ class SYSTEM_MESSAGES(object):
     PERSONALMISSIONS_BADGE = '#system_messages:personalMissions/badge'
     PERSONALMISSIONS_CAMOUFLAGEGIVEN = '#system_messages:personalMissions/camouflageGiven'
     PERSONALMISSIONS_CAMOUFLAGEUNLOCKED = '#system_messages:personalMissions/camouflageUnlocked'
+    PERSONALMISSIONS_DETAILINSTALLED_TITLE = '#system_messages:personalMissions/detailInstalled/title'
+    PERSONALMISSIONS_DETAILINSTALLED_BODY = '#system_messages:personalMissions/detailInstalled/body'
+    PERSONALMISSIONS_OPERATIONACTIVATION_TITLE = '#system_messages:personalMissions/operationActivation/title'
+    PERSONALMISSIONS_OPERATIONACTIVATION_BODY = '#system_messages:personalMissions/operationActivation/body'
+    PERSONALMISSIONS_OPERATIONPAUSED_TITLE = '#system_messages:personalMissions/operationPaused/title'
+    PERSONALMISSIONS_OPERATIONPAUSED_BODY = '#system_messages:personalMissions/operationPaused/body'
+    PERSONALMISSIONS_OPERATIONRESUMED_TITLE = '#system_messages:personalMissions/operationResumed/title'
+    PERSONALMISSIONS_OPERATIONRESUMED_BODY = '#system_messages:personalMissions/operationResumed/body'
+    PERSONALMISSIONS_CAMPAIGN3PAUSED_TITLE = '#system_messages:personalMissions/campaign3Paused/title'
+    PERSONALMISSIONS_CAMPAIGN3PAUSED_BODY = '#system_messages:personalMissions/campaign3Paused/body'
+    PERSONALMISSIONS_CAMPAIGN3RESUMED_TITLE = '#system_messages:personalMissions/campaign3Resumed/title'
+    PERSONALMISSIONS_CAMPAIGN3RESUMED_BODY = '#system_messages:personalMissions/campaign3Resumed/body'
+    PERSONALMISSIONS_CAMPAIGN12PAUSED_TITLE = '#system_messages:personalMissions/campaign12Paused/title'
+    PERSONALMISSIONS_CAMPAIGN12PAUSED_BODY = '#system_messages:personalMissions/campaign12Paused/body'
+    PERSONALMISSIONS_CAMPAIGN12RESUMED_TITLE = '#system_messages:personalMissions/campaign12Resumed/title'
+    PERSONALMISSIONS_CAMPAIGN12RESUMED_BODY = '#system_messages:personalMissions/campaign12Resumed/body'
+    PERSONALMISSIONS_OPERATIONCOMPLETE_TITLE = '#system_messages:personalMissions/operationComplete/title'
+    PERSONALMISSIONS_OPERATIONCOMPLETE_BODY = '#system_messages:personalMissions/operationComplete/body'
     UNIT_ERRORS_ALREADY_JOINED_UNIT = '#system_messages:unit/errors/ALREADY_JOINED_UNIT'
     UNIT_ERRORS_CANT_CHANGE_DIVISION = '#system_messages:unit/errors/CANT_CHANGE_DIVISION'
     UNIT_ERRORS_SORTIES_FORBIDDEN = '#system_messages:unit/errors/SORTIES_FORBIDDEN'
@@ -1249,6 +1260,14 @@ class SYSTEM_MESSAGES(object):
     DAILY_QUESTS_REROLL_REROLL_IN_COOLDOWN = '#system_messages:daily_quests/reroll/reroll_in_cooldown'
     DAILY_QUESTS_REROLL_QUEST_IS_ALREADY_COMPLETED = '#system_messages:daily_quests/reroll/quest_is_already_completed'
     DAILY_QUESTS_REROLL_UNKNOWN_ERROR = '#system_messages:daily_quests/reroll/unknown_error'
+    WEEKLY_QUESTS_SWITCH_OFF_BODY = '#system_messages:weekly_quests/switch_off/body'
+    WEEKLY_QUESTS_SWITCH_ON_BODY = '#system_messages:weekly_quests/switch_on/body'
+    WEEKLY_QUESTS_REROLL_SUCCESS = '#system_messages:weekly_quests/reroll/success'
+    WEEKLY_QUESTS_REROLL_WQ_NOT_ENABLED = '#system_messages:weekly_quests/reroll/WQ_NOT_ENABLED'
+    WEEKLY_QUESTS_REROLL_WQ_REROLL_TIMEOUT = '#system_messages:weekly_quests/reroll/WQ_REROLL_TIMEOUT'
+    WEEKLY_QUESTS_REROLL_WQ_QUEST_COMPLETED = '#system_messages:weekly_quests/reroll/WQ_QUEST_COMPLETED'
+    WEEKLY_QUESTS_REROLL_WQ_NO_SUCH_TOKEN = '#system_messages:weekly_quests/reroll/WQ_NO_SUCH_TOKEN'
+    WEEKLY_QUESTS_REROLL_UNKNOWN_ERROR = '#system_messages:weekly_quests/reroll/unknown_error'
     BATTLEPASS_BUY_SERVER_ERROR = '#system_messages:battlePass_buy/server_error'
     BATTLEPASSLEVELS_BUY_SERVER_ERROR = '#system_messages:battlePassLevels_buy/server_error'
     BATTLEPASS_SWITCH_STARTED_TITLE = '#system_messages:battlePass/switch_started/title'
@@ -1262,6 +1281,8 @@ class SYSTEM_MESSAGES(object):
     BATTLEPASS_SWITCH_DISABLE_EPICBATTLE_BODY = '#system_messages:battlePass/switch_disable/epicBattle/body'
     BATTLEPASS_SWITCH_ENABLED_COMP7_BODY = '#system_messages:battlePass/switch_enabled/comp7/body'
     BATTLEPASS_SWITCH_DISABLE_COMP7_BODY = '#system_messages:battlePass/switch_disable/comp7/body'
+    BATTLEPASS_SWITCH_ENABLED_COMP7LIGHT_BODY = '#system_messages:battlePass/switch_enabled/comp7Light/body'
+    BATTLEPASS_SWITCH_DISABLE_COMP7LIGHT_BODY = '#system_messages:battlePass/switch_disable/comp7Light/body'
     UPGRADETROPHYDEVICE_SWITCH_ON_BODY = '#system_messages:upgradeTrophyDevice/switch_on/body'
     UPGRADETROPHYDEVICE_SWITCH_OFF_BODY = '#system_messages:upgradeTrophyDevice/switch_off/body'
     BATTLEPASS_REWARDCHOICE_ERROR = '#system_messages:battlePass/rewardChoice/error'
@@ -1407,6 +1428,32 @@ class SYSTEM_MESSAGES(object):
     TRANSFERXP_SERVER_ERROR = '#system_messages:transferXP/server_error'
     EASYTANKEQUIP_SWITCH_PAUSE_ON_BODY = '#system_messages:easyTankEquip/switch_pause_on/body'
     EASYTANKEQUIP_SWITCH_PAUSE_OFF_BODY = '#system_messages:easyTankEquip/switch_pause_off/body'
+    PERSONALMISSION_AWARDSNOTIFICATION_OPERATION = '#system_messages:personalMission/awardsNotification/operation'
+    PERSONALMISSION_AWARDSNOTIFICATION_STATUS = '#system_messages:personalMission/awardsNotification/status'
+    PERSONALMISSION_AWARDSNOTIFICATION_STATUS_ALL = '#system_messages:personalMission/awardsNotification/status/all'
+    PERSONALMISSION_AWARDSNOTIFICATION_NOTCOMPLETEDFOOTER = '#system_messages:personalMission/awardsNotification/notCompletedFooter'
+    PERSONALMISSION_AWARDSNOTIFICATION_MISSIONCOMPLETED = '#system_messages:personalMission/awardsNotification/missionCompleted'
+    PERSONALMISSION_AWARDSNOTIFICATION_BUTTONLABEL = '#system_messages:personalMission/awardsNotification/buttonLabel'
+    PERSONALMISSION_SWITCHERNOTIFICATION_MISSIONOFF = '#system_messages:personalMission/switcherNotification/missionOff'
+    PERSONALMISSION_SWITCHERNOTIFICATION_MISSIONON = '#system_messages:personalMission/switcherNotification/missionOn'
+    PERSONALMISSION_SWITCHERNOTIFICATION_OPERATIONOFF = '#system_messages:personalMission/switcherNotification/operationOff'
+    PERSONALMISSION_SWITCHERNOTIFICATION_OPERATIONON = '#system_messages:personalMission/switcherNotification/operationOn'
+    PERSONALMISSION_SWITCHERNOTIFICATION_CAMPAIGNOFF = '#system_messages:personalMission/switcherNotification/campaignOff'
+    PERSONALMISSION_SWITCHERNOTIFICATION_CAMPAIGNON = '#system_messages:personalMission/switcherNotification/campaignOn'
+    PERSONALMISSION_SWITCHERNOTIFICATION_ALLCAMPAIGNSOFF = '#system_messages:personalMission/switcherNotification/allCampaignsOff'
+    PERSONALMISSION_SWITCHERNOTIFICATION_ALLCAMPAIGNSON = '#system_messages:personalMission/switcherNotification/allCampaignsOn'
+    PERSONALMISSION_OPERATIONCOMPLETE_TITLE = '#system_messages:personalMission/operationComplete/title'
+    PERSONALMISSION_OPERATIONCOMPLETEHONOR_TITLE = '#system_messages:personalMission/operationCompleteHonor/title'
+    PERSONALMISSION_CAMPAIGNCOMPLETEHONOR_TITLE = '#system_messages:personalMission/campaignCompleteHonor/title'
+    PERSONALMISSION_COMPLETIONNOTIFICATION_BODY = '#system_messages:personalMission/CompletionNotification/body'
+    VEHICLESKILLTREEPROGRESSION_RESEARCHSTEP_TITLE = '#system_messages:vehicleSkillTreeProgression/researchStep/title'
+    VEHICLESKILLTREEPROGRESSION_RESEARCHSTEPS_TITLE = '#system_messages:vehicleSkillTreeProgression/researchSteps/title'
+    VEHICLESKILLTREEPROGRESSION_RESEARCHSTEP_BODY = '#system_messages:vehicleSkillTreeProgression/researchStep/body'
+    VEHICLESKILLTREEPROGRESSION_RESEARCHSTEPS_BODY = '#system_messages:vehicleSkillTreeProgression/researchSteps/body'
+    VEHICLEMILESTONES_VANITYAVAILABLE_TITLE = '#system_messages:vehicleMilestones/vanityAvailable/title'
+    VEHICLEMILESTONES_VANITYAVAILABLE_TEXT = '#system_messages:vehicleMilestones/vanityAvailable/text'
+    VEHICLESKILLTREEPROGRESSION_PROCESSORERROR_TITLE = '#system_messages:vehicleSkillTreeProgression/processorError/title'
+    VEHICLESKILLTREEPROGRESSION_PROCESSORERROR_BODY = '#system_messages:vehicleSkillTreeProgression/processorError/body'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -1649,11 +1696,9 @@ class SYSTEM_MESSAGES(object):
      CLIENTINSTALLERROR_NOT_FOR_THIS_VEHICLE_TYPE,
      CLIENTINSTALLERROR_VEHICLEGUN_NOT_FOR_CURRENT_VEHICLE,
      CLIENTINSTALLERROR_WRONG_ITEM_TYPE,
-     CLIENTINSTALLERROR_TOO_HEAVY,
      CLIENTREMOVEERROR_WRONG_NATION,
      CLIENTREMOVEERROR_NOT_IN_LIST,
      CLIENTREMOVEERROR_WRONG_ITEM_TYPE,
-     CLIENTREMOVEERROR_TOO_HEAVY,
      SERVERINSTALLERROR,
      SERVERREMOVEERROR,
      BUY_VEHICLE_SLOT_ERROR,
@@ -2104,8 +2149,6 @@ class SYSTEM_MESSAGES(object):
      MODULE_BUY_ERROR_NOT_FOR_CURRENT_VEHICLE,
      MODULE_BUY_ERROR_NO_GUN,
      MODULE_BUY_ERROR_WRONG_ITEM_TYPE,
-     MODULE_BUY_ERROR_TOO_HEAVY,
-     MODULE_BUY_ERROR_TOO_HEAVY_CHASSIS,
      MODULE_BUY_ERROR_NEED_TURRET,
      MODULE_BUY_ERROR_NEED_GUN,
      MODULE_BUY_ERROR_IS_CURRENT,
@@ -2119,7 +2162,6 @@ class SYSTEM_MESSAGES(object):
      ARTEFACT_BUY_WALLET_NOT_AVAILABLE,
      ARTEFACT_BUY_SERVER_ERROR,
      ARTEFACT_BUY_SERVER_ERROR_CENTERDOWN,
-     ARTEFACT_BUY_ERROR_TOO_HEAVY,
      ARTEFACT_BUY_VEHICLE_NEED_REPAIR,
      ARTEFACT_BUY_VEHICLE_LOCKED,
      ARTEFACT_BUY_INVALID_VEHICLE,
@@ -2138,7 +2180,6 @@ class SYSTEM_MESSAGES(object):
      BATTLEBOOSTER_BUY_WALLET_NOT_AVAILABLE,
      BATTLEBOOSTER_BUY_SERVER_ERROR,
      BATTLEBOOSTER_BUY_SERVER_ERROR_CENTERDOWN,
-     BATTLEBOOSTER_BUY_ERROR_TOO_HEAVY,
      BATTLEBOOSTER_BUY_VEHICLE_NEED_REPAIR,
      BATTLEBOOSTER_BUY_VEHICLE_LOCKED,
      BATTLEBOOSTER_BUY_INVALID_VEHICLE,
@@ -2170,8 +2211,6 @@ class SYSTEM_MESSAGES(object):
      MODULE_APPLY_ERROR_NOT_FOR_CURRENT_VEHICLE,
      MODULE_APPLY_ERROR_NO_GUN,
      MODULE_APPLY_ERROR_WRONG_ITEM_TYPE,
-     MODULE_APPLY_ERROR_TOO_HEAVY,
-     MODULE_APPLY_ERROR_TOO_HEAVY_CHASSIS,
      MODULE_APPLY_ERROR_NEED_TURRET,
      MODULE_APPLY_ERROR_NEED_GUN,
      MODULE_APPLY_ERROR_IS_CURRENT,
@@ -2198,8 +2237,6 @@ class SYSTEM_MESSAGES(object):
      ARTEFACT_DESTROY_VEHICLE_LOCKED,
      ARTEFACT_DESTROY_VEHICLE_NEED_REPAIR,
      ARTEFACT_APPLY_ERROR_NOT_FOR_THIS_VEHICLE_TYPE,
-     ARTEFACT_APPLY_ERROR_TOO_HEAVY,
-     ARTEFACT_REMOVE_ERROR_TOO_HEAVY,
      ARTEFACT_UPGRADE_SUCCESS,
      ARTEFACT_UPGRADE_SUCCESS_ANALOGWASDEMOUNTED,
      ARTEFACT_UPGRADE_SERVER_ERROR,
@@ -2226,11 +2263,9 @@ class SYSTEM_MESSAGES(object):
      LAYOUT_APPLY_INVALID_VEHICLE,
      LAYOUT_APPLY_VEHICLE_LOCKED,
      OPTIONALDEVICES_APPLY_ERROR,
-     OPTIONALDEVICES_APPLY_ERROR_TOO_HEAVY,
      OPTIONALDEVICES_APPLY_NOT_ENOUGH_MONEY,
      OPTIONALDEVICES_APPLY_WALLET_NOT_AVAILABLE,
      OPTIONALDEVICES_REMOVE_ERROR,
-     OPTIONALDEVICES_REMOVE_ERROR_TOO_HEAVY,
      SHELLS_APPLY_SUCCESS_MONEY_SPENT,
      SHELLS_APPLY_ERROR,
      SHELLS_APPLY_NOT_ENOUGH_MONEY,
@@ -2367,6 +2402,7 @@ class SYSTEM_MESSAGES(object):
      SENIORITY_AWARDS_SELECTION_TIMEOUT,
      PERSONALMISSIONS_SELECT_SUCCESS,
      PERSONALMISSIONS_SELECT_SERVER_ERROR,
+     PERSONALMISSIONS_SELECT_SERVER_ERROR_INVALID_QUEST_ID,
      PERSONALMISSIONS_SELECT_SERVER_ERROR_WRONG_ARGS_TYPE,
      PERSONALMISSIONS_SELECT_SERVER_ERROR_WRONG_ARGS,
      PERSONALMISSIONS_SELECT_SERVER_ERROR_NOT_ENOUGH_SLOTS,
@@ -2379,6 +2415,7 @@ class SYSTEM_MESSAGES(object):
      PERSONALMISSIONS_SELECT_SERVER_ERROR_SEASON_LIMIT_THE_SAME_CLASS,
      PERSONALMISSIONS_SELECT_SERVER_ERROR_DISABLED,
      PERSONALMISSIONS_SELECT_SERVER_ERROR_FALLOUT_LOCKED_BY_VEHICLE_QUEST,
+     PERSONALMISSIONS30_SELECT_SERVER_ERROR,
      PERSONALMISSIONS_DISCARD_SUCCESS,
      PERSONALMISSIONS_DISCARD_SERVER_ERROR,
      PERSONALMISSIONS_DISCARD_SERVER_ERROR_LOCKED_BY_VEHICLE_QUEST,
@@ -2391,11 +2428,14 @@ class SYSTEM_MESSAGES(object):
      PERSONALMISSIONS_PAUSE_SERVER_ERROR_LOCKED_BY_VEHICLE_QUEST,
      PERSONALMISSIONS_PAUSE_SERVER_ERROR_INVALID_QUEST_ID,
      PERSONALMISSIONS_PAUSE_SERVER_ERROR_DISABLED,
+     PERSONALMISSIONS_ACTIVATESEASON_SERVER_ERROR,
      PERSONALMISSIONS_REWARD_REGULAR_SERVER_ERROR,
      PERSONALMISSIONS_REWARD_REGULAR_SERVER_ERROR_WRONG_ARGS_TYPE,
      PERSONALMISSIONS_REWARD_REGULAR_SERVER_ERROR_NO_REWARD,
      PERSONALMISSIONS_REWARD_REGULAR_SERVER_ERROR_INVALID_STATE,
      PERSONALMISSIONS_REWARD_REGULAR_SERVER_ERROR_DISABLED,
+     PERSONALMISSIONS_REWARD_PM3_SERVER_ERROR,
+     PERSONALMISSIONS_REWARD_PM3_SUCCESS,
      PERSONALMISSIONS_REWARD_TANKWOMAN_SERVER_ERROR,
      PERSONALMISSIONS_REWARD_TANKWOMAN_SERVER_ERROR_WRONG_ARGS_TYPE,
      PERSONALMISSIONS_REWARD_TANKWOMAN_SERVER_ERROR_NO_REWARD,
@@ -2409,6 +2449,24 @@ class SYSTEM_MESSAGES(object):
      PERSONALMISSIONS_BADGE,
      PERSONALMISSIONS_CAMOUFLAGEGIVEN,
      PERSONALMISSIONS_CAMOUFLAGEUNLOCKED,
+     PERSONALMISSIONS_DETAILINSTALLED_TITLE,
+     PERSONALMISSIONS_DETAILINSTALLED_BODY,
+     PERSONALMISSIONS_OPERATIONACTIVATION_TITLE,
+     PERSONALMISSIONS_OPERATIONACTIVATION_BODY,
+     PERSONALMISSIONS_OPERATIONPAUSED_TITLE,
+     PERSONALMISSIONS_OPERATIONPAUSED_BODY,
+     PERSONALMISSIONS_OPERATIONRESUMED_TITLE,
+     PERSONALMISSIONS_OPERATIONRESUMED_BODY,
+     PERSONALMISSIONS_CAMPAIGN3PAUSED_TITLE,
+     PERSONALMISSIONS_CAMPAIGN3PAUSED_BODY,
+     PERSONALMISSIONS_CAMPAIGN3RESUMED_TITLE,
+     PERSONALMISSIONS_CAMPAIGN3RESUMED_BODY,
+     PERSONALMISSIONS_CAMPAIGN12PAUSED_TITLE,
+     PERSONALMISSIONS_CAMPAIGN12PAUSED_BODY,
+     PERSONALMISSIONS_CAMPAIGN12RESUMED_TITLE,
+     PERSONALMISSIONS_CAMPAIGN12RESUMED_BODY,
+     PERSONALMISSIONS_OPERATIONCOMPLETE_TITLE,
+     PERSONALMISSIONS_OPERATIONCOMPLETE_BODY,
      UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
      UNIT_ERRORS_SORTIES_FORBIDDEN,
@@ -2780,6 +2838,14 @@ class SYSTEM_MESSAGES(object):
      DAILY_QUESTS_REROLL_REROLL_IN_COOLDOWN,
      DAILY_QUESTS_REROLL_QUEST_IS_ALREADY_COMPLETED,
      DAILY_QUESTS_REROLL_UNKNOWN_ERROR,
+     WEEKLY_QUESTS_SWITCH_OFF_BODY,
+     WEEKLY_QUESTS_SWITCH_ON_BODY,
+     WEEKLY_QUESTS_REROLL_SUCCESS,
+     WEEKLY_QUESTS_REROLL_WQ_NOT_ENABLED,
+     WEEKLY_QUESTS_REROLL_WQ_REROLL_TIMEOUT,
+     WEEKLY_QUESTS_REROLL_WQ_QUEST_COMPLETED,
+     WEEKLY_QUESTS_REROLL_WQ_NO_SUCH_TOKEN,
+     WEEKLY_QUESTS_REROLL_UNKNOWN_ERROR,
      BATTLEPASS_BUY_SERVER_ERROR,
      BATTLEPASSLEVELS_BUY_SERVER_ERROR,
      BATTLEPASS_SWITCH_STARTED_TITLE,
@@ -2793,6 +2859,8 @@ class SYSTEM_MESSAGES(object):
      BATTLEPASS_SWITCH_DISABLE_EPICBATTLE_BODY,
      BATTLEPASS_SWITCH_ENABLED_COMP7_BODY,
      BATTLEPASS_SWITCH_DISABLE_COMP7_BODY,
+     BATTLEPASS_SWITCH_ENABLED_COMP7LIGHT_BODY,
+     BATTLEPASS_SWITCH_DISABLE_COMP7LIGHT_BODY,
      UPGRADETROPHYDEVICE_SWITCH_ON_BODY,
      UPGRADETROPHYDEVICE_SWITCH_OFF_BODY,
      BATTLEPASS_REWARDCHOICE_ERROR,
@@ -2937,7 +3005,33 @@ class SYSTEM_MESSAGES(object):
      TANKMAN_TANKMANTOREMOVE,
      TRANSFERXP_SERVER_ERROR,
      EASYTANKEQUIP_SWITCH_PAUSE_ON_BODY,
-     EASYTANKEQUIP_SWITCH_PAUSE_OFF_BODY)
+     EASYTANKEQUIP_SWITCH_PAUSE_OFF_BODY,
+     PERSONALMISSION_AWARDSNOTIFICATION_OPERATION,
+     PERSONALMISSION_AWARDSNOTIFICATION_STATUS,
+     PERSONALMISSION_AWARDSNOTIFICATION_STATUS_ALL,
+     PERSONALMISSION_AWARDSNOTIFICATION_NOTCOMPLETEDFOOTER,
+     PERSONALMISSION_AWARDSNOTIFICATION_MISSIONCOMPLETED,
+     PERSONALMISSION_AWARDSNOTIFICATION_BUTTONLABEL,
+     PERSONALMISSION_SWITCHERNOTIFICATION_MISSIONOFF,
+     PERSONALMISSION_SWITCHERNOTIFICATION_MISSIONON,
+     PERSONALMISSION_SWITCHERNOTIFICATION_OPERATIONOFF,
+     PERSONALMISSION_SWITCHERNOTIFICATION_OPERATIONON,
+     PERSONALMISSION_SWITCHERNOTIFICATION_CAMPAIGNOFF,
+     PERSONALMISSION_SWITCHERNOTIFICATION_CAMPAIGNON,
+     PERSONALMISSION_SWITCHERNOTIFICATION_ALLCAMPAIGNSOFF,
+     PERSONALMISSION_SWITCHERNOTIFICATION_ALLCAMPAIGNSON,
+     PERSONALMISSION_OPERATIONCOMPLETE_TITLE,
+     PERSONALMISSION_OPERATIONCOMPLETEHONOR_TITLE,
+     PERSONALMISSION_CAMPAIGNCOMPLETEHONOR_TITLE,
+     PERSONALMISSION_COMPLETIONNOTIFICATION_BODY,
+     VEHICLESKILLTREEPROGRESSION_RESEARCHSTEP_TITLE,
+     VEHICLESKILLTREEPROGRESSION_RESEARCHSTEPS_TITLE,
+     VEHICLESKILLTREEPROGRESSION_RESEARCHSTEP_BODY,
+     VEHICLESKILLTREEPROGRESSION_RESEARCHSTEPS_BODY,
+     VEHICLEMILESTONES_VANITYAVAILABLE_TITLE,
+     VEHICLEMILESTONES_VANITYAVAILABLE_TEXT,
+     VEHICLESKILLTREEPROGRESSION_PROCESSORERROR_TITLE,
+     VEHICLESKILLTREEPROGRESSION_PROCESSORERROR_BODY)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):

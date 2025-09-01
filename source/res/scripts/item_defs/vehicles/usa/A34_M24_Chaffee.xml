@@ -9,7 +9,7 @@
   </crew>
   <supplySlots>	1 1 1 6 6 6 7 8 8 8	</supplySlots>
   <speedLimits>
-    <forward>	62	</forward>
+    <forward>	65	</forward>
     <backward>	21	</backward>
   </speedLimits>
   <invisibility>
@@ -57,7 +57,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	11405	</weight>
-    <maxHealth>	440	</maxHealth>
+    <maxHealth>	488	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	170	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -1177,13 +1177,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_M24_Chaffee>
-      <userString>	#usa_vehicles:Chassis_M24_Chaffee	</userString>
+    <Chassis_A34_M24_Chaffee>
+      <userString>	#usa_vehicles:Chassis_A34_M24_Chaffee	</userString>
       <tags></tags>
       <level>	4	</level>
       <price>	4450	</price>
       <unlocks>
-        <chassis>	Chassis_M24_Chaffee_2	  <cost>	2050	</cost>
+        <chassis>	Chassis_A34_M24_Chaffee_2	  <cost>	2050	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1191,8 +1191,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	4200	</weight>
-      <maxLoad>	18400	</maxLoad>
-      <terrainResistance>	0.9 1.1 1.9	</terrainResistance>
+      <terrainResistance>	0.8 1 1.7	</terrainResistance>
       <brakeForce>	18500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	40	</rotationSpeed>
@@ -2167,9 +2166,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_M24_Chaffee>
-    <Chassis_M24_Chaffee_2>
-      <userString>	#usa_vehicles:Chassis_M24_Chaffee_2	</userString>
+    </Chassis_A34_M24_Chaffee>
+    <Chassis_A34_M24_Chaffee_2>
+      <userString>	#usa_vehicles:Chassis_A34_M24_Chaffee_2	</userString>
       <tags></tags>
       <level>	5	</level>
       <price>	9750	</price>
@@ -2178,7 +2177,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	4200	</weight>
-      <maxLoad>	19500	</maxLoad>
       <terrainResistance>	0.8 1 1.7	</terrainResistance>
       <brakeForce>	20000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -3154,16 +3152,16 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_M24_Chaffee_2>
+    </Chassis_A34_M24_Chaffee_2>
   </chassis>
   <turrets0>
-    <Turret_1_M24_Chaffee>
-      <userString>	#usa_vehicles:Turret_1_M24_Chaffee	</userString>
+    <Turret_1_A34_M24_Chaffee>
+      <userString>	#usa_vehicles:Turret_1_A34_M24_Chaffee	</userString>
       <tags></tags>
       <level>	4	</level>
       <price>	4500	</price>
       <unlocks>
-        <turret>	Turret_2_M24_Chaffee	  <cost>	2600	</cost>
+        <turret>	Turret_2_A34_M24_Chaffee	  <cost>	2600	</cost>
         </turret>
       </unlocks>
       <armor>
@@ -3179,7 +3177,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1473	</weight>
-      <maxHealth>	80	</maxHealth>
+      <maxHealth>	92	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -3205,14 +3203,14 @@
             </armor_4>
             <gun>	20	</gun>
           </armor>
-          <aimingTime>	2.1	</aimingTime>
+          <aimingTime>	1.7	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <reloadTime>	5.2	</reloadTime>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <reloadTime>	4.3	</reloadTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	3.5	</afterShot>
@@ -3755,17 +3753,15 @@
         <density>	110.33 109.339	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_1_M24_Chaffee>
-    <Turret_2_M24_Chaffee>
-      <userString>	#usa_vehicles:Turret_2_M24_Chaffee	</userString>
+    </Turret_1_A34_M24_Chaffee>
+    <Turret_2_A34_M24_Chaffee>
+      <userString>	#usa_vehicles:Turret_2_A34_M24_Chaffee	</userString>
       <tags></tags>
       <level>	5	</level>
       <price>	12100	</price>
       <unlocks>
         <gun>	_75mm_Gun_M17	  <cost>	4100	</cost>
         </gun>
-        <vehicle>	A94_T37	  <cost>	28100	</cost>
-        </vehicle>
       </unlocks>
       <armor>
         <armor_1>	38.1	</armor_1>
@@ -3782,7 +3778,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1700	</weight>
-      <maxHealth>	110	</maxHealth>
+      <maxHealth>	122	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -3797,8 +3793,8 @@
       </surveyingDeviceHealth>
       <guns>
         <_75mm_Gun_M6>	shared	  <maxAmmo>	60	</maxAmmo>
-          <reloadTime>	4.8	</reloadTime>
-          <aimingTime>	2	</aimingTime>
+          <reloadTime>	4.1	</reloadTime>
+          <aimingTime>	1.7	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	3.5	</afterShot>
@@ -3820,7 +3816,7 @@
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <shotDispersionRadius>	0.39	</shotDispersionRadius>
           <models>
             <undamaged>	vehicles/american/A34_M24_Chaffee/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/american/A34_M24_Chaffee/crash/lod0/Gun_02.model	</destroyed>
@@ -3920,6 +3916,10 @@
           </camouflage>
         </_75mm_Gun_M6>
         <_75mm_Gun_M17>	shared	  <maxAmmo>	60	</maxAmmo>
+          <unlocks>
+            <vehicle>	A94_T37	  <cost>	28100	</cost>
+            </vehicle>
+          </unlocks>
           <armor>
             <armor_1>	38.1	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3931,8 +3931,8 @@
             </armor_4>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.44	</shotDispersionRadius>
-          <reloadTime>	4.4	</reloadTime>
+          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <reloadTime>	4.1	</reloadTime>
           <aimingTime>	1.6	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
@@ -4456,54 +4456,36 @@
         <density>	108.059 108.702	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_2_M24_Chaffee>
+    </Turret_2_A34_M24_Chaffee>
   </turrets0>
   <engines>
     <Twin_Cadillac_series_44T4L>	shared	  <unlocks>
-        <engine>	Wright_Continental_R-975C4L	  <cost>	1500	</cost>
+        <engine>	Wright_Continental_R_975C4L	  <cost>	1500	</cost>
         </engine>
       </unlocks>
     </Twin_Cadillac_series_44T4L>
-    <Wright_Continental_R-975C4L>	shared	</Wright_Continental_R-975C4L>
+    <Wright_Continental_R_975C4L>	shared	</Wright_Continental_R_975C4L>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <AN-GRC-3>	shared	  <unlocks>
-        <radio>	SCR_528	  <cost>	9000	</cost>
-        </radio>
-      </unlocks>
-    </AN-GRC-3>
     <SCR_528>	shared	</SCR_528>
   </radios>
   <physics>
     <detailed>
       <engines>
         <Twin_Cadillac_series_44T4L>
-          <smplEnginePower>	380	</smplEnginePower>
-          <smplFwMaxSpeed>	62	</smplFwMaxSpeed>
+          <smplEnginePower>	460	</smplEnginePower>
+          <smplFwMaxSpeed>	65	</smplFwMaxSpeed>
         </Twin_Cadillac_series_44T4L>
-        <Wright_Continental_R-975C4L>
+        <Wright_Continental_R_975C4L>
           <smplEnginePower>	500	</smplEnginePower>
-          <smplFwMaxSpeed>	62	</smplFwMaxSpeed>
-        </Wright_Continental_R-975C4L>
+          <smplFwMaxSpeed>	65	</smplFwMaxSpeed>
+        </Wright_Continental_R_975C4L>
       </engines>
       <chassis>
-        <Chassis_M24_Chaffee>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.15295	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.08855	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.07245	</rollingFriction>
-            </firm>
-          </grounds>
-        </Chassis_M24_Chaffee>
-        <Chassis_M24_Chaffee_2>
+        <Chassis_A34_M24_Chaffee>
           <grounds>
             <soft>
               <rollingFriction>	0.13685	</rollingFriction>
@@ -4515,7 +4497,20 @@
               <rollingFriction>	0.0644	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_M24_Chaffee_2>
+        </Chassis_A34_M24_Chaffee>
+        <Chassis_A34_M24_Chaffee_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.13685	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.0805	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0644	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_A34_M24_Chaffee_2>
       </chassis>
     </detailed>
   </physics>

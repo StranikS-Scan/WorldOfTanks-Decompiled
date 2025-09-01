@@ -1,13 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/common/personal_reserves/reserves_activation_view_model.py
-from frameworks.wulf import Array
-from frameworks.wulf import ViewModel
+from frameworks.wulf import Array, ViewModel
 from gui.impl.gen.view_models.common.personal_reserves.reserves_group_model import ReservesGroupModel
 
 class ReservesActivationViewModel(ViewModel):
-    __slots__ = ('onInformationClicked', 'onNavigateToStore', 'onClose', 'onBoosterActivate', 'onNavigateToDepot', 'onCardHover')
+    __slots__ = ('onNavigateToStore', 'onClose', 'onBoosterActivate', 'onNavigateToDepot', 'onCardHover')
 
-    def __init__(self, properties=5, commands=6):
+    def __init__(self, properties=5, commands=5):
         super(ReservesActivationViewModel, self).__init__(properties=properties, commands=commands)
 
     def getReserveGroups(self):
@@ -51,7 +50,6 @@ class ReservesActivationViewModel(ViewModel):
         self._addBoolProperty('canActivateClanReserves', False)
         self._addNumberProperty('nextExpirationTime', 0)
         self._addNumberProperty('nextExpirationAmount', 0)
-        self.onInformationClicked = self._addCommand('onInformationClicked')
         self.onNavigateToStore = self._addCommand('onNavigateToStore')
         self.onClose = self._addCommand('onClose')
         self.onBoosterActivate = self._addCommand('onBoosterActivate')

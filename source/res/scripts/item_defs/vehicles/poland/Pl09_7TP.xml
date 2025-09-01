@@ -1178,8 +1178,7 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	3300	</weight>
-      <maxLoad>	10150	</maxLoad>
-      <terrainResistance>	1.1 1.4 2.5	</terrainResistance>
+      <terrainResistance>	1 1.1 2.3	</terrainResistance>
       <brakeForce>	34500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	40	</rotationSpeed>
@@ -2071,7 +2070,6 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	3300	</weight>
-      <maxLoad>	10800	</maxLoad>
       <terrainResistance>	1 1.1 2.3	</terrainResistance>
       <brakeForce>	34500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -2997,7 +2995,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_37mm_Bofors_wz_37>	shared	  <maxAmmo>	140	</maxAmmo>
+        <_37mm_Bofors_wz_37_7TP>	shared	  <maxAmmo>	140	</maxAmmo>
           <armor>
             <armor_1>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3063,7 +3061,7 @@
             <density>	143.044 144.063	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_37mm_Bofors_wz_37>
+        </_37mm_Bofors_wz_37_7TP>
       </guns>
       <models>
         <undamaged>	vehicles/poland/Pl09_7TP/normal/lod0/Turret_01.model	</undamaged>
@@ -3492,7 +3490,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.905	</invisibilityFactor>
       <guns>
-        <_37mm_Bofors_wz_37>	shared	  <maxAmmo>	140	</maxAmmo>
+        <_37mm_Bofors_wz_37_7TP>	shared	  <maxAmmo>	140	</maxAmmo>
           <armor>
             <armor_1>	18	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3602,7 +3600,7 @@
             <density>	143.044 144.063	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_37mm_Bofors_wz_37>
+        </_37mm_Bofors_wz_37_7TP>
         <_40mm_DL55>	shared	  <maxAmmo>	120	</maxAmmo>
           <unlocks>
             <vehicle>	Pl06_10TP	  <cost>	950	</cost>
@@ -4127,13 +4125,13 @@
           <axleCount>	5	</axleCount>
           <grounds>
             <soft>
-              <rollingFriction>	0.20125	</rollingFriction>
+              <rollingFriction>	0.18515	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1127	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
+              <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_Pl09_7TP>

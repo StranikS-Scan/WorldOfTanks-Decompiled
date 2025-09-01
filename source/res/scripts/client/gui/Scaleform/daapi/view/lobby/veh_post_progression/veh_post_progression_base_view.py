@@ -1,12 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/veh_post_progression/veh_post_progression_base_view.py
+from __future__ import absolute_import
 import typing
+from future.utils import iterkeys, iteritems
 from gui.Scaleform.daapi.view.lobby.hangar.VehicleParameters import VehPostProgressionDataProvider
 from gui.Scaleform.daapi.view.lobby.veh_post_progression.veh_post_progression_vehicle import g_postProgressionVehicle
 from gui.Scaleform.daapi.view.meta.VehicleParametersWithHighlightMeta import VehicleParametersWithHighlightMeta
 from gui.Scaleform.daapi.view.meta.VehiclePostProgressionViewBaseMeta import VehiclePostProgressionViewBaseMeta
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from helpers import dependency
@@ -18,7 +21,7 @@ class VehPostProgressionVehicleParams(VehicleParametersWithHighlightMeta):
 
     def __init__(self):
         super(VehPostProgressionVehicleParams, self).__init__()
-        self._expandedGroups = {key:False for key in self._expandedGroups.iterkeys()}
+        self._expandedGroups = {key:False for key in iterkeys(self._expandedGroups)}
 
     def onParamClick(self, paramID):
         isOpened = not self._expandedGroups[paramID]
@@ -47,6 +50,9 @@ class VehiclePostProgressionBaseView(VehiclePostProgressionViewBaseMeta):
         self._parametersView = None
         self.__ctx = ctx
         return
+
+    def onClose(self):
+        self._onExit()
 
     def registerFlashComponent(self, component, alias, *args):
         if alias == self._PROGRESSION_INJECT_ALIAS:
@@ -92,7 +98,9 @@ class VehiclePostProgressionBaseView(VehiclePostProgressionViewBaseMeta):
             progressionInjectView.onCustomProgressionState -= self.__onCustomProgressionState
 
     def _onExit(self):
-        raise NotImplementedError
+        state = getLobbyStateMachine().getStateFromView(self)
+        if state:
+            state.goBack()
 
     def _getDiffVehicle(self):
         raise NotImplementedError
@@ -138,7 +146,7 @@ class VehiclePostProgressionBaseView(VehiclePostProgressionViewBaseMeta):
 
     def __createDiffVehicle(self, prevState, customState):
         diffState = g_postProgressionVehicle.defaultItem.postProgression.getState()
-        for stepID, pairType in customState.pairs.iteritems():
+        for stepID, pairType in iteritems(customState.pairs):
             if prevState.getPair(stepID) != pairType:
                 diffState.addUnlock(stepID)
                 diffState.setPair(stepID, pairType)

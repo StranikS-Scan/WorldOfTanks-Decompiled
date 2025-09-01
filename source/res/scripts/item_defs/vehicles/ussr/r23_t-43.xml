@@ -9,7 +9,7 @@
   <supplySlots>	2 1 1 6 6 6 7 8 8 8	</supplySlots>
   <postProgressionTree>	role_MT_universal	</postProgressionTree>
   <speedLimits>
-    <forward>	51	</forward>
+    <forward>	55	</forward>
     <backward>	20	</backward>
   </speedLimits>
   <invisibility>
@@ -56,7 +56,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	17100	</weight>
-    <maxHealth>	800	</maxHealth>
+    <maxHealth>	960	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	160	</maxHealth>
       <maxRegenHealth>	110	</maxRegenHealth>
@@ -980,13 +980,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <T-43>
-      <userString>	#ussr_vehicles:T-43	</userString>
+    <Chassis_R23_T-43>
+      <userString>	#ussr_vehicles:Chassis_R23_T-43	</userString>
       <tags></tags>
       <level>	6	</level>
       <price>	11690	</price>
       <unlocks>
-        <chassis>	T-43M	  <cost>	7960	</cost>
+        <chassis>	Chassis_R23_T-43_2	  <cost>	7960	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -994,14 +994,13 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	6400	</weight>
-      <maxLoad>	34000	</maxLoad>
-      <terrainResistance>	1.1 1.4 2.2	</terrainResistance>
+      <terrainResistance>	1 1.2 2	</terrainResistance>
       <brakeForce>	36500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	36	</rotationSpeed>
+      <rotationSpeed>	47	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.18	</vehicleMovement>
-        <vehicleRotation>	0.18	</vehicleRotation>
+        <vehicleMovement>	0.16	</vehicleMovement>
+        <vehicleRotation>	0.16	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	130	</maxHealth>
@@ -1795,9 +1794,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	5.71428585	</repairTime>
-    </T-43>
-    <T-43M>
-      <userString>	#ussr_vehicles:T-43M	</userString>
+    </Chassis_R23_T-43>
+    <Chassis_R23_T-43_2>
+      <userString>	#ussr_vehicles:Chassis_R23_T-43_2	</userString>
       <tags></tags>
       <level>	7	</level>
       <price>	17720	</price>
@@ -1806,14 +1805,13 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	6400	</weight>
-      <maxLoad>	37300	</maxLoad>
       <terrainResistance>	1 1.2 2	</terrainResistance>
       <brakeForce>	36500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	38	</rotationSpeed>
+      <rotationSpeed>	50	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.16	</vehicleMovement>
-        <vehicleRotation>	0.16	</vehicleRotation>
+        <vehicleMovement>	0.14	</vehicleMovement>
+        <vehicleRotation>	0.14	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	140	</maxHealth>
@@ -2607,16 +2605,16 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	5.71428585	</repairTime>
-    </T-43M>
+    </Chassis_R23_T-43_2>
   </chassis>
   <turrets0>
-    <T-43_mod_43>
-      <userString>	#ussr_vehicles:T-43_mod_43	</userString>
+    <Turret_1_R23_T-43>
+      <userString>	#ussr_vehicles:Turret_1_R23_T-43	</userString>
       <tags></tags>
       <level>	6	</level>
       <price>	12840	</price>
       <unlocks>
-        <turret>	T-43_mod_100	  <cost>	7105	</cost>
+        <turret>	Turret_2_R23_T-43	  <cost>	7105	</cost>
         </turret>
       </unlocks>
       <armor>
@@ -2632,7 +2630,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7000	</weight>
-      <maxHealth>	200	</maxHealth>
+      <maxHealth>	180	</maxHealth>
       <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -2646,15 +2644,11 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_85mm_ZiS_S-53>	shared	  <maxAmmo>	60	</maxAmmo>
+        <_85mm_ZiS_S_53_T_43>	shared	  <maxAmmo>	60	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -26 1 -26	</minPitch>
             <maxPitch>	0 8 0.394671 8 0.458333 3 0.541667 3 0.605329 8 1 8	</maxPitch>
           </pitchLimits>
-          <unlocks>
-            <gun>	_122mm_cannon_U-11	  <cost>	3750	</cost>
-            </gun>
-          </unlocks>
           <armor>
             <armor_1>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -2664,14 +2658,14 @@
             </armor_4>
             <gun>	30	</gun>
           </armor>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	5	</reloadTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	6.2	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
+            <turretRotation>	0.08	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.9	</aimingTime>
+          <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R23_T-43/normal/lod0/Gun_01.model	</undamaged>
@@ -2726,84 +2720,7 @@
             <density>	114.241 114.53	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_85mm_ZiS_S-53>
-        <_122mm_cannon_U-11>	shared	  <maxAmmo>	44	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -26 1 -26	</minPitch>
-            <maxPitch>	0 8 0.394671 8 0.458333 3 0.541667 3 0.605329 8 1 8	</maxPitch>
-          </pitchLimits>
-          <armor>
-            <armor_1>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_3>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	50	</gun>
-          </armor>
-          <shotDispersionRadius>	0.57	</shotDispersionRadius>
-          <reloadTime>	11.4	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2.9	</aimingTime>
-          <invisibilityFactorAtShot>	0.2	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/russian/R23_T-43/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/russian/R23_T-43/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/russian/R23_T-43/crash/lod0/Gun_02.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/russian/R23_T-43/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R23_T-43/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_large	</effects>
-          <reloadEffect>	reload115_152	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.000022 0.025254 1.11776	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.000821 0.251473 0.188805	</anchorPosition>
-              <anchorDirection>	-0 -0 1	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.000022 0.025254 1.11776	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.000031 0.011573 1.02275	</rayStart>
-              <rayEnd>	0.000031 0.011573 1.59175	</rayEnd>
-              <rayUp>	0.082 0 0	</rayUp>
-              <size>	0.569	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.52 0.52 0.000000 0.000000	</tiling>
-            <density>	112.868 127.585	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_122mm_cannon_U-11>
+        </_85mm_ZiS_S_53_T_43>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R23_T-43/normal/lod0/Turret_01.model	</undamaged>
@@ -3328,14 +3245,14 @@
         <density>	118.978 119.009	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </T-43_mod_43>
-    <T-43_mod_100>
-      <userString>	#ussr_vehicles:T-43_mod_100	</userString>
+    </Turret_1_R23_T-43>
+    <Turret_2_R23_T-43>
+      <userString>	#ussr_vehicles:Turret_2_R23_T-43	</userString>
       <tags></tags>
       <level>	7	</level>
       <price>	15300	</price>
       <unlocks>
-        <gun>	_85mm_D5T-85BM	  <cost>	15500	</cost>
+        <gun>	_85mm_D_5T_85BM_T_43	  <cost>	15500	</cost>
         </gun>
       </unlocks>
       <armor>
@@ -3351,7 +3268,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	8400	</weight>
-      <maxHealth>	300	</maxHealth>
+      <maxHealth>	240	</maxHealth>
       <rotationSpeed>	46	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -3366,7 +3283,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.981	</invisibilityFactor>
       <guns>
-        <_85mm_ZiS_S-53>	shared	  <maxAmmo>	60	</maxAmmo>
+        <_85mm_ZiS_S_53_T_43>	shared	  <maxAmmo>	60	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -26 1 -26	</minPitch>
             <maxPitch>	0 8 0.394671 8 0.458333 5 0.541667 5 0.605329 8 1 8	</maxPitch>
@@ -3380,11 +3297,11 @@
             </armor_4>
             <gun>	30	</gun>
           </armor>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	4.8	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <reloadTime>	6	</reloadTime>
+          <aimingTime>	2.2	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.08	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -3442,85 +3359,8 @@
             <density>	114.241 114.53	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_85mm_ZiS_S-53>
-        <_122mm_cannon_U-11>	shared	  <maxAmmo>	50	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -26 1 -26	</minPitch>
-            <maxPitch>	0 8 0.394671 8 0.458333 5 0.541667 5 0.605329 8 1 8	</maxPitch>
-          </pitchLimits>
-          <armor>
-            <armor_1>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_3>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	50	</gun>
-          </armor>
-          <shotDispersionRadius>	0.57	</shotDispersionRadius>
-          <reloadTime>	11.2	</reloadTime>
-          <aimingTime>	2.9	</aimingTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <invisibilityFactorAtShot>	0.2	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/russian/R23_T-43/normal/lod0/Gun_04.model	</undamaged>
-            <destroyed>	vehicles/russian/R23_T-43/crash/lod0/Gun_04.model	</destroyed>
-            <exploded>	vehicles/russian/R23_T-43/crash/lod0/Gun_04.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/russian/R23_T-43/collision/Gun_04.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R23_T-43/collision_client/Gun_04.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_large	</effects>
-          <reloadEffect>	reload115_152	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.002553 -0.000913 1.13039	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0.014261 0.242657 0.213477	</anchorPosition>
-              <anchorDirection>	-0 -0.00545 0.999985	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.002553 -0.000913 1.13039	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.005091 -0.001823 1.07083	</rayStart>
-              <rayEnd>	-0.005091 -0.001823 1.67083	</rayEnd>
-              <rayUp>	0.082 0 0	</rayUp>
-              <size>	0.6	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.55 0.55 0.000000 0.000000	</tiling>
-            <density>	112.868 127.585	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_122mm_cannon_U-11>
-        <_85mm_D5T-85BM>	shared	  <unlocks>
+        </_85mm_ZiS_S_53_T_43>
+        <_85mm_D_5T_85BM_T_43>	shared	  <unlocks>
             <vehicle>	R20_T-44	  <cost>	93653	</cost>
             </vehicle>
           </unlocks>
@@ -3538,9 +3378,9 @@
             </armor_4>
             <gun>	30	</gun>
           </armor>
-          <shotDispersionRadius>	0.37	</shotDispersionRadius>
-          <reloadTime>	5.4	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	6.6	</reloadTime>
+          <aimingTime>	2.2	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -3600,7 +3440,7 @@
             <density>	114.269 113.879	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_85mm_D5T-85BM>
+        </_85mm_D_5T_85BM_T_43>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R23_T-43/normal/lod0/Turret_02.model	</undamaged>
@@ -4225,63 +4065,36 @@
         <density>	107.302 107.044	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </T-43_mod_100>
+    </Turret_2_R23_T-43>
   </turrets0>
   <engines>
-    <V-2-34M>	shared	  <unlocks>
-        <engine>	V-2-44	  <cost>	17000	</cost>
+    <V_2_34M_T_43>	shared	  <unlocks>
+        <engine>	V_2_44_T_43	  <cost>	19000	</cost>
         </engine>
       </unlocks>
-    </V-2-34M>
-    <V-2-44>	shared	  <unlocks>
-        <engine>	V-54K	  <cost>	19000	</cost>
-        </engine>
-      </unlocks>
-    </V-2-44>
-    <V-54K>	shared	</V-54K>
+    </V_2_34M_T_43>
+    <V_2_44_T_43>	shared	</V_2_44_T_43>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <_9R>	shared	  <unlocks>
-        <radio>	_9RM	  <cost>	4040	</cost>
-        </radio>
-      </unlocks>
-    </_9R>
     <_9RM>	shared	</_9RM>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <V-2-34M>
-          <smplEnginePower>	549.7862	</smplEnginePower>
-          <smplFwMaxSpeed>	51	</smplFwMaxSpeed>
-        </V-2-34M>
-        <V-2-44>
-          <smplEnginePower>	592.0775	</smplEnginePower>
-          <smplFwMaxSpeed>	51	</smplFwMaxSpeed>
-        </V-2-44>
-        <V-54K>
-          <smplEnginePower>	634.3687	</smplEnginePower>
-          <smplFwMaxSpeed>	51	</smplFwMaxSpeed>
-        </V-54K>
+        <V_2_34M_T_43>
+          <smplEnginePower>	680	</smplEnginePower>
+          <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
+        </V_2_34M_T_43>
+        <V_2_44_T_43>
+          <smplEnginePower>	750	</smplEnginePower>
+          <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
+        </V_2_44_T_43>
       </engines>
       <chassis>
-        <T-43>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.1771	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.1127	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
-            </firm>
-          </grounds>
-        </T-43>
-        <T-43M>
+        <Chassis_R23_T-43>
           <grounds>
             <soft>
               <rollingFriction>	0.161	</rollingFriction>
@@ -4293,7 +4106,20 @@
               <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
-        </T-43M>
+        </Chassis_R23_T-43>
+        <Chassis_R23_T-43_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.161	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.0966	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0805	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_R23_T-43_2>
       </chassis>
     </detailed>
   </physics>

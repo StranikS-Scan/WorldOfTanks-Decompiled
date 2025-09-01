@@ -9,6 +9,7 @@ class _PlayerEvents(object):
         self.onPlayerEntityChangeCanceled = Event.Event()
         self.isPlayerEntityChanging = True
         self.onAvatarObserverVehicleChanged = Event.Event()
+        self.onAihControlModeChanged = Event.Event()
         self.onAccountBecomePlayer = Event.Event()
         self.onAccountBecomeNonPlayer = Event.Event()
         self.onAccountShowGUI = Event.Event()
@@ -65,6 +66,7 @@ class _PlayerEvents(object):
         self.onGuiCacheSyncCompleted = Event.Event()
         self.onPMLocksChanged = Event.Event()
         self.onDailyQuestsInfoChange = Event.Event()
+        self.onWeeklyQuestsInfoChange = Event.Event()
         self.onNotification = Event.Event()
         self.onTeamChanged = Event.Event()
         self.onDisconnected = Event.Event()

@@ -1,16 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/maps_training/maps_training_view_model.py
-from frameworks.wulf import Array
-from frameworks.wulf import ViewModel
+from frameworks.wulf import Array, ViewModel
+from gui.impl.gen.view_models.views.lobby.hangar.menu_item_model import MenuItemModel
 from gui.impl.gen.view_models.views.lobby.maps_training.maps_training_group_model import MapsTrainingGroupModel
 from gui.impl.gen.view_models.views.lobby.maps_training.maps_training_map_model import MapsTrainingMapModel
 from gui.impl.gen.view_models.views.lobby.maps_training.maps_training_selected_map_model import MapsTrainingSelectedMapModel
 from gui.impl.gen.view_models.views.lobby.maps_training.maps_training_vehicle_marker_model import MapsTrainingVehicleMarkerModel
 
 class MapsTrainingViewModel(ViewModel):
-    __slots__ = ('onBack', 'onSelect', 'onScenarioSelect', 'onFilteringChange', 'onBlurRectUpdated', 'onMoveSpace', 'onInfoClicked', 'onClose')
+    __slots__ = ('onBack', 'onSelect', 'onScenarioSelect', 'onFilteringChange', 'onBlurRectUpdated', 'onMoveSpace', 'onInfoClicked', 'onClose', 'onNavigate')
 
-    def __init__(self, properties=8, commands=8):
+    def __init__(self, properties=11, commands=9):
         super(MapsTrainingViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -73,6 +73,28 @@ class MapsTrainingViewModel(ViewModel):
     def getGroupsType():
         return MapsTrainingGroupModel
 
+    def getMenuItems(self):
+        return self._getArray(8)
+
+    def setMenuItems(self, value):
+        self._setArray(8, value)
+
+    @staticmethod
+    def getMenuItemsType():
+        return MenuItemModel
+
+    def getModeName(self):
+        return self._getString(9)
+
+    def setModeName(self, value):
+        self._setString(9, value)
+
+    def getModeId(self):
+        return self._getString(10)
+
+    def setModeId(self, value):
+        self._setString(10, value)
+
     def _initialize(self):
         super(MapsTrainingViewModel, self)._initialize()
         self._addViewModelProperty('selectedMapModel', MapsTrainingSelectedMapModel())
@@ -83,6 +105,9 @@ class MapsTrainingViewModel(ViewModel):
         self._addBoolProperty('isDataLoaded', False)
         self._addArrayProperty('maps', Array())
         self._addArrayProperty('groups', Array())
+        self._addArrayProperty('menuItems', Array())
+        self._addStringProperty('modeName', '')
+        self._addStringProperty('modeId', '')
         self.onBack = self._addCommand('onBack')
         self.onSelect = self._addCommand('onSelect')
         self.onScenarioSelect = self._addCommand('onScenarioSelect')
@@ -91,3 +116,4 @@ class MapsTrainingViewModel(ViewModel):
         self.onMoveSpace = self._addCommand('onMoveSpace')
         self.onInfoClicked = self._addCommand('onInfoClicked')
         self.onClose = self._addCommand('onClose')
+        self.onNavigate = self._addCommand('onNavigate')

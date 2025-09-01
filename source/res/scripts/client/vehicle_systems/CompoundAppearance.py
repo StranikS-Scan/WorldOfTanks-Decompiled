@@ -295,8 +295,6 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         model = self.compoundModel
         self.waterSensor.sensorPlaneLink = model.root
         self.dirtComponent = None
-        if self.tracks is not None:
-            self.tracks.reset()
         self.tracks = None
         if self.collisionObstaclesCollector is not None and not self.collisionObstaclesCollector.activePostmortem:
             self.collisionObstaclesCollector = None
@@ -540,7 +538,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         impulseDir = super(CompoundAppearance, self)._initiateRecoil(gunNodeName, gunFireNodeName, gunAnimator)
         node = self.compoundModel.node(gunFireNodeName)
         gunPos = Math.Matrix(node).translation
-        BigWorld.player().inputHandler.onVehicleShaken(self._vehicle, ShakeReason.OWN_SHOT_DELAYED, gunPos, impulseDir, self.typeDescriptor.shot.shell.caliber)
+        BigWorld.player().inputHandler.onVehicleShaken(self._vehicle, ShakeReason.OWN_SHOT_DELAYED, gunPos, impulseDir, self.typeDescriptor.gun.effectsCaliber)
         return impulseDir
 
     def __applyVehicleOutfit(self):
@@ -583,7 +581,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
                 BigWorld.setSpeedTreeCollisionBody(None)
                 self.__inSpeedTreeCollision = False
             self._compoundModel = newCompoundModel
-            self.removeComponentByType(GenericComponents.DynamicModelComponent)
+            self.removeComponent(GenericComponents.DynamicModelComponent)
             self.createComponent(GenericComponents.DynamicModelComponent, self._compoundModel)
             self.collisions = None
             self.collisions = self.createComponent(BigWorld.CollisionComponent, resourceList['collisionAssembler'])

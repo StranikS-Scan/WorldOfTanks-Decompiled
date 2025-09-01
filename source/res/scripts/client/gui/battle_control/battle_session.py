@@ -86,11 +86,14 @@ class BattleSessionProvider(IBattleSessionProvider):
         if ctrl is not None:
             if not isSetupsSelectionStarted:
                 ctrl.clearAmmo()
-                ctrl.setGunSettings(vDesc.gun)
+                ctrl.setGunSettings(vDesc)
         ctrl = self.__sharedRepo.equipments
         if ctrl is not None:
             ctrl.notifyPlayerVehicleSet(vID)
         ctrl = self.__sharedRepo.vehicleState
+        if ctrl is not None:
+            ctrl.setPlayerVehicle(vID)
+        ctrl = self.__sharedRepo.vehiclePassenger
         if ctrl is not None:
             ctrl.setPlayerVehicle(vID)
         ctrl = self.shared.prebattleSetups
@@ -117,7 +120,7 @@ class BattleSessionProvider(IBattleSessionProvider):
         ammoCtrl = self.__sharedRepo.ammo
         if ammoCtrl is not None:
             ammoCtrl.clear(False)
-            ammoCtrl.setGunSettings(vehicle.typeDescriptor.gun)
+            ammoCtrl.setGunSettings(vehicle.typeDescriptor)
         ctrl = self.__sharedRepo.equipments
         if ctrl is not None:
             ctrl.clear(False)
@@ -267,7 +270,7 @@ class BattleSessionProvider(IBattleSessionProvider):
         if ctrl is not None:
             ctrl.clear(False)
             if vehicle:
-                ctrl.setGunSettings(vehicle.typeDescriptor.gun)
+                ctrl.setGunSettings(vehicle.typeDescriptor)
         ctrl = self.__sharedRepo.equipments
         if ctrl is not None:
             ctrl.clear(False)

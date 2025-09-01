@@ -1379,4 +1379,65 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 1500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	czech:Cz21_Vz_60S_Dravec	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	1133	</id>
+      <texture>	gui/maps/vehicles/styles/pm3.png	</texture>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/pm3_cz21	</userString>
+      <description>	#vehicle_customization:special_style/pm3_cz21_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/pm3_cz21_desc/long	</longDescriptionSpecial>
+      <tags>	c11n2D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	976	</id>
+              <appliedTo>	16	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	977	</id>
+              <appliedTo>	256	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	978	</id>
+              <appliedTo>	4096	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	567	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <projection_decals>
+            <item>
+              <id>	1243	</id>
+              <tags>	safe formfactor_rect1x2 left	</tags>
+            </item>
+            <item>
+              <id>	1244	</id>
+              <tags>	formfactor_rect1x2 cover	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
 </czech.xml>

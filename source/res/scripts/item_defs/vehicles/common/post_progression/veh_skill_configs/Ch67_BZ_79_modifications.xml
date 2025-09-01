@@ -1,0 +1,426 @@
+<Ch67_BZ_79_modifications.xml>
+  <ch67_node1>
+    <id>	10201	</id>
+    <imgName>	damagedGunDispersion	</imgName>
+    <locName>	damagedGunDispersion	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/gun/shotDispersionFactors/whileGunDamaged	</name>
+        <value>	0.8	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotDispersionWhileGunDamaged	</name>
+        <value>	0.8	</value>
+      </mul>
+    </kpi>
+  </ch67_node1>
+  <ch67_node2>
+    <id>	10202	</id>
+    <imgName>	additionalShellAmmoCapacity	</imgName>
+    <locName>	additionalShellAmmoCapacity	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/gun/maxAmmo	</name>
+        <value>	5	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	additionalShellAmmoCapacity	</name>
+        <value>	5	</value>
+      </add>
+    </kpi>
+  </ch67_node2>
+  <ch67_node3>
+    <id>	10203	</id>
+    <imgName>	stunDuration	</imgName>
+    <locName>	stunDuration	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <add>
+        <name>	miscAttrs/stunResistanceDuration	</name>
+        <value>	0.05	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	crewStunDuration	</name>
+        <value>	0.95	</value>
+      </mul>
+    </kpi>
+  </ch67_node3>
+  <ch67_node4>
+    <id>	10204	</id>
+    <imgName>	ammoRackPenalty	</imgName>
+    <locName>	ammoRackPenalty	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/ammoBayReduceFineFactor	</name>
+        <value>	0.8	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehPenaltyForDamagedAmmorack	</name>
+        <value>	0.8	</value>
+      </mul>
+    </kpi>
+  </ch67_node4>
+  <ch67_node5>
+    <id>	10205	</id>
+    <imgName>	gunStabilizationFromTurret	</imgName>
+    <locName>	gunStabilizationFromTurret	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/gun/shotDispersionFactors/turretRotation	</name>
+        <value>	0.9	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotDispersionTurretRotation	</name>
+        <value>	0.9	</value>
+      </mul>
+    </kpi>
+  </ch67_node5>
+  <ch67_node6>
+    <id>	10206	</id>
+    <imgName>	hitPoints	</imgName>
+    <locName>	hitPoints	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/hull/maxHealth	</name>
+        <value>	40	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleStrength	</name>
+        <value>	40	</value>
+      </add>
+    </kpi>
+  </ch67_node6>
+  <ch67_node7>
+    <id>	10207	</id>
+    <imgName>	ch67_mechanic_1	</imgName>
+    <locName>	ch67_mechanic_1	</locName>
+    <categories>	mechanics	</categories>
+    <modifiers>
+      <mul>
+        <name>	dynAttrs/vehicle/maxSpeed/forward	</name>
+        <value>	1.107143	</value>
+        <filter>	rechargeableNitro	</filter>
+      </mul>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	value	</name>
+        <value>	15	</value>
+      </add>
+    </kpi>
+  </ch67_node7>
+  <ch67_node8>
+    <id>	10208	</id>
+    <imgName>	enginePenalty	</imgName>
+    <locName>	enginePenalty	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/engineReduceFineFactor	</name>
+        <value>	0.8	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehPenaltyForDamagedEngine	</name>
+        <value>	0.8	</value>
+      </mul>
+    </kpi>
+  </ch67_node8>
+  <ch67_node9>
+    <id>	10209	</id>
+    <imgName>	ch67_mechanic_0	</imgName>
+    <locName>	ch67_mechanic_0	</locName>
+    <categories>	mechanics	</categories>
+    <modifiers>
+      <mul>
+        <name>	dynAttrs/vehicle/rotationSpeed	</name>
+        <value>	1.5	</value>
+        <filter>	rechargeableNitro	</filter>
+      </mul>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	value	</name>
+        <value>	10	</value>
+      </add>
+    </kpi>
+  </ch67_node9>
+  <ch67_node10>
+    <id>	10210	</id>
+    <imgName>	hitPoints	</imgName>
+    <locName>	hitPoints	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/hull/maxHealth	</name>
+        <value>	40	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleStrength	</name>
+        <value>	40	</value>
+      </add>
+    </kpi>
+  </ch67_node10>
+  <ch67_node12>
+    <id>	10212	</id>
+    <imgName>	engineFireChance	</imgName>
+    <locName>	engineFireChance	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <mul>
+        <name>	descrAttrs/engine/fireStartingChance	</name>
+        <value>	0.85	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleFireChance	</name>
+        <value>	0.85	</value>
+      </mul>
+    </kpi>
+  </ch67_node12>
+  <ch67_node13>
+    <id>	10213	</id>
+    <imgName>	crewProtection	</imgName>
+    <locName>	crewProtection	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/crewChanceToHitFactor	</name>
+        <value>	0.8	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	crewHitChance	</name>
+        <value>	1.2	</value>
+      </mul>
+    </kpi>
+  </ch67_node13>
+  <ch67_node14>
+    <id>	10214	</id>
+    <imgName>	standardShellPenetration	</imgName>
+    <locName>	standardShellPenetration	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shot0/piercingPower	</name>
+        <value>	5	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	standardShellPenetration	</name>
+        <value>	5	</value>
+      </add>
+    </kpi>
+  </ch67_node14>
+  <ch67_node15>
+    <id>	10215	</id>
+    <imgName>	ch67_mechanic_2	</imgName>
+    <locName>	ch67_mechanic_2	</locName>
+    <categories>	mechanics	</categories>
+    <modifiers>
+      <add>
+        <name>	miscAttrs/rechargeableNitro/reloadTime	</name>
+        <value>	-5	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	value	</name>
+        <value>	5	</value>
+      </add>
+    </kpi>
+  </ch67_node15>
+  <ch67_node17>
+    <id>	10217	</id>
+    <imgName>	forwardSpeed	</imgName>
+    <locName>	forwardSpeed	</locName>
+    <categories>	mobility	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/engine/maxSpeedForward	</name>
+        <value>	2	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleForwardMaxSpeed	</name>
+        <value>	2	</value>
+      </add>
+    </kpi>
+  </ch67_node17>
+  <ch67_node18>
+    <id>	10218	</id>
+    <imgName>	gunDispersion	</imgName>
+    <locName>	gunDispersion	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/gun/shotDispersionRadius	</name>
+        <value>	-0.01	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleGunShotFullDispersion	</name>
+        <value>	-0.01	</value>
+      </add>
+    </kpi>
+  </ch67_node18>
+  <ch67_node19>
+    <id>	10219	</id>
+    <imgName>	allShellDamage	</imgName>
+    <locName>	allShellDamage	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shell0/armorDamage	</name>
+        <value>	10	</value>
+      </add>
+      <add>
+        <name>	descrAttrs/shell1/armorDamage	</name>
+        <value>	10	</value>
+      </add>
+      <add>
+        <name>	descrAttrs/shell2/armorDamage	</name>
+        <value>	10	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	allShellDamage	</name>
+        <value>	10	</value>
+      </add>
+    </kpi>
+  </ch67_node19>
+  <ch67_node21>
+    <id>	10221	</id>
+    <imgName>	reverseSpeed	</imgName>
+    <locName>	reverseSpeed	</locName>
+    <categories>	mobility	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/engine/maxSpeedBack	</name>
+        <value>	1	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleBackwardMaxSpeed	</name>
+        <value>	1	</value>
+      </add>
+    </kpi>
+  </ch67_node21>
+  <ch67_node22>
+    <id>	10222	</id>
+    <imgName>	ammoRackHP	</imgName>
+    <locName>	ammoRackHP	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/ammoBayHealthFactor	</name>
+        <value>	1.2	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleAmmoBayStrength	</name>
+        <value>	1.2	</value>
+      </mul>
+    </kpi>
+  </ch67_node22>
+  <ch67_node23>
+    <id>	10223	</id>
+    <imgName>	specialShellPenetration	</imgName>
+    <locName>	specialShellPenetration	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shot1/piercingPower	</name>
+        <value>	5	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	specialShellPenetration	</name>
+        <value>	5	</value>
+      </add>
+    </kpi>
+  </ch67_node23>
+  <ch67_node24>
+    <id>	10224	</id>
+    <imgName>	ch67_mechanic_3	</imgName>
+    <locName>	ch67_mechanic_3	</locName>
+    <categories>	mechanics	</categories>
+    <modifiers>
+      <add>
+        <name>	miscAttrs/rechargeableNitro/duration	</name>
+        <value>	2.5	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	value	</name>
+        <value>	2.5	</value>
+      </add>
+    </kpi>
+  </ch67_node24>
+  <ch67_node25>
+    <id>	10225	</id>
+    <imgName>	hitPoints	</imgName>
+    <locName>	hitPoints	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/hull/maxHealth	</name>
+        <value>	40	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleStrength	</name>
+        <value>	40	</value>
+      </add>
+    </kpi>
+  </ch67_node25>
+  <ch67_node26>
+    <id>	10226	</id>
+    <imgName>	hitPoints	</imgName>
+    <locName>	hitPoints	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/hull/maxHealth	</name>
+        <value>	40	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleStrength	</name>
+        <value>	40	</value>
+      </add>
+    </kpi>
+  </ch67_node26>
+</Ch67_BZ_79_modifications.xml>

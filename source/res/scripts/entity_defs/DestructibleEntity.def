@@ -86,10 +86,12 @@
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	UINT8	</Arg>
       <Arg>	INT32	</Arg>
+      <Arg>	UINT8	</Arg>
     </showDamageFromShot>
     <showDamageFromExplosion>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	INT32	</Arg>
+      <Arg>	UINT8	</Arg>
     </showDamageFromExplosion>
   </ClientMethods>
   <CellMethods>
@@ -103,6 +105,7 @@
       <Arg>	UINT8	</Arg>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
+      <Arg>	UINT8	</Arg>
     </onEnemyVehicleShot>
     <scheduleExtraCheck>
       <Arg>	OBJECT_ID	</Arg>

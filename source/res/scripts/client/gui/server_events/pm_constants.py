@@ -48,3 +48,8 @@ class PM_TUTOR_FIELDS(CONST_CONTAINER):
     MULTIPLE_FAL_SHOWN = 'pm_four_free_award_lists_shown'
     PM2_ONE_FAL_SHOWN = 'pm2_first_free_award_list_shown'
     PM2_MULTIPLE_FAL_SHOWN = 'pm2_four_free_award_lists_shown'
+
+
+PAUSABLE_OPERATIONS_IDS = (7,)
+DISCARDABLE_OPERATIONS_IDS = (7,)
+PM_SUIT_OP_PLUGIN_ERR_RESPONSE = 'WRONG_OPERATION'

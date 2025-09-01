@@ -33,14 +33,14 @@ class FreeSheetPopover(FreeSheetPopoverMeta):
 
     def _populate(self):
         super(FreeSheetPopover, self)._populate()
-        self.__eventsCache.onSyncCompleted += self.__update
+        self.__eventsCache.onPMSyncCompleted += self.__update
         self.__update()
 
     def _dispose(self):
-        self.__eventsCache.onSyncCompleted -= self.__update
+        self.__eventsCache.onPMSyncCompleted -= self.__update
         super(FreeSheetPopover, self)._dispose()
 
-    def __update(self):
+    def __update(self, *_):
         freeSheetsQuests = []
         pawnedSheets = 0
         for _, o in sorted(self.__eventsCache.getPersonalMissions().getOperationsForBranch(self.__branch).iteritems(), key=operator.itemgetter(0)):

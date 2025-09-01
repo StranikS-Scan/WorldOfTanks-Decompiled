@@ -1,17 +1,32 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/visual_script_client/cgf_blocks.py
+import logging
+import typing
 import weakref
 import BigWorld
-import logging
+from constants import IS_VS_EDITOR, ROCKET_ACCELERATION_STATE
 from debug_utils import LOG_WARNING
 from visual_script.block import Block
 from visual_script.slot_types import SLOT_TYPE
 from visual_script.misc import ASPECT, errorVScript
 from visual_script.dependency import dependencyImporter
 from visual_script.contexts.cgf_context import GameObjectWrapper
-from constants import ROCKET_ACCELERATION_STATE
 from visual_script.cgf_blocks import CGFMeta
-Vehicle, CGF, tankStructure, RAC, SimulatedVehicle = dependencyImporter('Vehicle', 'CGF', 'vehicle_systems.tankStructure', 'cgf_components.rocket_acceleration_component', 'SimulatedVehicle')
+Vehicle, CGF, tankStructure, RAC, SimulatedVehicle, cgf_helpers, battle_constants = dependencyImporter('Vehicle', 'CGF', 'vehicle_systems.tankStructure', 'cgf_components.rocket_acceleration_component', 'SimulatedVehicle', 'cgf_common.cgf_helpers', 'gui.battle_control.battle_constants')
+if not IS_VS_EDITOR:
+    from gui.battle_control.controllers.vehicle_passenger import hasVehiclePassengerCtrl, VehiclePassengerInfoWatcher
+else:
+
+    def hasVehiclePassengerCtrl(*_, **__):
+        return lambda method: method
+
+
+    class VehiclePassengerInfoWatcher(object):
+        pass
+
+
+if typing.TYPE_CHECKING:
+    from gui.battle_control.controllers.vehicle_passenger import IVehiclePassengerController
 _logger = logging.getLogger(__name__)
 
 class CGFClientMeta(CGFMeta):
@@ -116,12 +131,10 @@ class RocketAcceleratorEvents(Block, CGFClientMeta):
             if controller:
                 controller.unsubscribe(self.__onStateChange, self.__onTryActivate)
             self.__controllerLink = None
-        else:
-            LOG_WARNING('')
         self._deactivateOut.call()
         return
 
-    def __onStateChange(self, status):
+    def __onStateChange(self, status, _):
         self._duration.setValue(status.endTime - BigWorld.serverTime())
         self.__switcher.get(status.status, self.__onWrongState)(status)
 
@@ -169,3 +182,56 @@ def _extractRACComponent(gameObjectLink):
     else:
         provider = go.findComponentByType(RAC.RocketAccelerationController)
         return (None, None, 'No RocketAccelerationController can be found') if provider is None else (go, provider, None)
+
+
+class OnVehiclePassengerInfo(Block, CGFClientMeta, VehiclePassengerInfoWatcher):
+
+    def __init__(self, *args, **kwargs):
+        super(OnVehiclePassengerInfo, self).__init__(*args, **kwargs)
+        self._vehicleID = battle_constants.UNKNOWN_VEHICLE_ID
+        self._subscribe = self._makeEventInputSlot('subscribe', self.__subscribe)
+        self._unsubscribe = self._makeEventInputSlot('unsubscribe', self.__unsubscribe)
+        self._object = self._makeDataInputSlot('vehicleObject', SLOT_TYPE.GAME_OBJECT)
+        self._subscribeOut = self._makeEventOutputSlot('subscribeOut')
+        self._unsubscribeOut = self._makeEventOutputSlot('unsubscribeOut')
+        self._onVehicleInfoUpdating = self._makeEventOutputSlot('onVehicleInfoUpdating')
+        self._onVehicleInfoUpdate = self._makeEventOutputSlot('onVehicleInfoUpdate')
+        self._isPlayerVehicle = self._makeDataOutputSlot('isPlayerVehicle', SLOT_TYPE.BOOL, None)
+        self._isCurrentVehicle = self._makeDataOutputSlot('isCurrentVehicle', SLOT_TYPE.BOOL, None)
+        self._isCurrentVehicleFPV = self._makeDataOutputSlot('isCurrentVehicleFPV', SLOT_TYPE.BOOL, None)
+        return
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT]
+
+    def __subscribe(self):
+        vehicle = cgf_helpers.getVehicleEntityByVehicleGameObject(self._object.getValue())
+        if vehicle is not None:
+            self.__subscribeVehicle(vehicle)
+        return
+
+    def __subscribeVehicle(self, vehicle):
+        self._vehicleID = vehicle.id
+        self.startVehiclePassengerLateListening(self.__onVehiclePassengerUpdate, self.__onVehiclePassengerUpdating)
+        self._subscribeOut.call()
+
+    def __unsubscribe(self):
+        self._vehicleID = battle_constants.UNKNOWN_VEHICLE_ID
+        self.stopVehiclePassengerListening(self.__onVehiclePassengerUpdate, self.__onVehiclePassengerUpdating)
+        self._unsubscribeOut.call()
+
+    def __onVehiclePassengerUpdating(self, _):
+        self.__updateVehicleInfoByPassenger()
+        self._onVehicleInfoUpdating.call()
+
+    def __onVehiclePassengerUpdate(self, _):
+        self.__updateVehicleInfoByPassenger()
+        self._onVehicleInfoUpdate.call()
+
+    @hasVehiclePassengerCtrl()
+    def __updateVehicleInfoByPassenger(self, passengerCtrl=None):
+        isCurrentVehicle = self._vehicleID == passengerCtrl.currentVehicleID
+        self._isCurrentVehicle.setValue(isCurrentVehicle)
+        self._isCurrentVehicleFPV.setValue(isCurrentVehicle and passengerCtrl.isCurrentVehicleFPV)
+        self._isPlayerVehicle.setValue(self._vehicleID == passengerCtrl.playerVehicleID)

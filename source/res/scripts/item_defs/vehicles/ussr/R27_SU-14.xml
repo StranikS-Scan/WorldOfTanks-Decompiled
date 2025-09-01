@@ -16,7 +16,7 @@
     <backward>	8	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.03	</moving>
+    <moving>	0.031	</moving>
     <still>	0.061	</still>
     <camouflageBonus>	0.02	</camouflageBonus>
     <firePenalty>	0.092	</firePenalty>
@@ -71,9 +71,9 @@
     <weight>	42210	</weight>
     <maxHealth>	328	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	50	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	158	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
     </ammoBayHealth>
     <models>
       <undamaged>	vehicles/russian/R27_SU-14/normal/lod0/Hull.model	</undamaged>
@@ -1664,13 +1664,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <SU-14>
-      <userString>	#ussr_vehicles:SU-14	</userString>
+    <Chassis_R27_SU-14>
+      <userString>	#ussr_vehicles:Chassis_R27_SU-14	</userString>
       <tags></tags>
       <level>	7	</level>
       <price>	20000	</price>
       <unlocks>
-        <chassis>	SU-14Bis	  <cost>	15115	</cost>
+        <chassis>	Chassis_R27_SU-14_2	  <cost>	15115	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1678,8 +1678,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	15000	</weight>
-      <maxLoad>	64000	</maxLoad>
-      <terrainResistance>	1.5 1.7 2.9	</terrainResistance>
+      <terrainResistance>	1.4 1.6 2.7	</terrainResistance>
       <brakeForce>	58000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	14	</rotationSpeed>
@@ -2834,9 +2833,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	8.66666698	</repairTime>
-    </SU-14>
-    <SU-14Bis>
-      <userString>	#ussr_vehicles:SU-14Bis	</userString>
+    </Chassis_R27_SU-14>
+    <Chassis_R27_SU-14_2>
+      <userString>	#ussr_vehicles:Chassis_R27_SU-14_2	</userString>
       <tags></tags>
       <level>	8	</level>
       <price>	27310	</price>
@@ -2845,7 +2844,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	15000	</weight>
-      <maxLoad>	66000	</maxLoad>
       <terrainResistance>	1.4 1.6 2.7	</terrainResistance>
       <brakeForce>	64000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2855,8 +2853,8 @@
         <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	140	</maxHealth>
-      <maxRegenHealth>	105	</maxRegenHealth>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	165	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R27_SU-14/normal/lod0/Chassis.model	</undamaged>
@@ -4000,12 +3998,12 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	7.30434799	</repairTime>
-    </SU-14Bis>
+      <repairTime>	6.66666651	</repairTime>
+    </Chassis_R27_SU-14_2>
   </chassis>
   <turrets0>
-    <SU-14_1>
-      <userString>	#ussr_vehicles:SU-14_1	</userString>
+    <Turret_1_R27_SU-14>
+      <userString>	#ussr_vehicles:Turret_1_R27_SU-14	</userString>
       <tags>	cannotDetach	</tags>
       <level>	8	</level>
       <price>	1200	</price>
@@ -4017,9 +4015,9 @@
       <maxHealth>	82	</maxHealth>
       <rotationSpeed>	12	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	155	</maxHealth>
+        <maxRegenHealth>	78	</maxRegenHealth>
+        <repairCost>	8	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	260	</circularVisionRadius>
       <surveyingDeviceHealth>
@@ -4028,7 +4026,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_152mm_BR-2>	shared	  <maxAmmo>	32	</maxAmmo>
+        <_152mm_BR_2_SU_14>	shared	  <maxAmmo>	32	</maxAmmo>
           <reloadTime>	27	</reloadTime>
           <pitchLimits>
             <minPitch>	0 -60 1 -60	</minPitch>
@@ -4036,10 +4034,8 @@
           </pitchLimits>
           <shotDispersionRadius>	0.66	</shotDispersionRadius>
           <unlocks>
-            <gun>	_203mm_B-4	  <cost>	64000	</cost>
+            <gun>	_203mm_B_4_SU_14	  <cost>	64000	</cost>
             </gun>
-            <vehicle>	R51_Object_212	  <cost>	217500	</cost>
-            </vehicle>
           </unlocks>
           <shotDispersionFactors>
             <turretRotation>	0.38	</turretRotation>
@@ -4131,8 +4127,12 @@
             <density>	105.615 104.39	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_152mm_BR-2>
-        <_203mm_B-4>	shared	  <maxAmmo>	16	</maxAmmo>
+        </_152mm_BR_2_SU_14>
+        <_203mm_B_4_SU_14>	shared	  <maxAmmo>	16	</maxAmmo>
+          <unlocks>
+            <vehicle>	R51_Object_212	  <cost>	217500	</cost>
+            </vehicle>
+          </unlocks>
           <reloadTime>	44	</reloadTime>
           <pitchLimits>
             <minPitch>	0 -60 1 -60	</minPitch>
@@ -4229,7 +4229,7 @@
             <density>	104.389 104.142	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_203mm_B-4>
+        </_203mm_B_4_SU_14>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R27_SU-14/normal/lod0/Turret_01.model	</undamaged>
@@ -4249,54 +4249,36 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-    </SU-14_1>
+    </Turret_1_R27_SU-14>
   </turrets0>
   <engines>
-    <M-17F>	shared	  <unlocks>
-        <engine>	M-17F_R	  <cost>	10000	</cost>
+    <M_17T_SU_14>	shared	  <unlocks>
+        <engine>	M_17F_SU_14	  <cost>	10000	</cost>
         </engine>
       </unlocks>
-    </M-17F>
-    <M-17F_R>	shared	</M-17F_R>
+    </M_17T_SU_14>
+    <M_17F_SU_14>	shared	</M_17F_SU_14>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <_10R>	shared	  <unlocks>
-        <radio>	_12RT	  <cost>	5600	</cost>
-        </radio>
-      </unlocks>
-    </_10R>
     <_12RT>	shared	</_12RT>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <M-17F>
+        <M_17T_SU_14>
           <smplEnginePower>	528.6406	</smplEnginePower>
           <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
-        </M-17F>
-        <M-17F_R>
+        </M_17T_SU_14>
+        <M_17F_SU_14>
           <smplEnginePower>	740.0968	</smplEnginePower>
           <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
-        </M-17F_R>
+        </M_17F_SU_14>
       </engines>
       <chassis>
-        <SU-14>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.23345	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.13685	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.12075	</rollingFriction>
-            </firm>
-          </grounds>
-        </SU-14>
-        <SU-14Bis>
+        <Chassis_R27_SU-14>
           <grounds>
             <soft>
               <rollingFriction>	0.21735	</rollingFriction>
@@ -4308,15 +4290,28 @@
               <rollingFriction>	0.1127	</rollingFriction>
             </firm>
           </grounds>
-        </SU-14Bis>
+        </Chassis_R27_SU-14>
+        <Chassis_R27_SU-14_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.21735	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.1288	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.1127	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_R27_SU-14_2>
       </chassis>
     </detailed>
   </physics>
   <clientAdjustmentFactors>
     <guns>
-      <_203mm_B-4>
+      <_203mm_B_4_SU_14>
         <delta>	1.025	</delta>
-      </_203mm_B-4>
+      </_203mm_B_4_SU_14>
     </guns>
     <armour>	1.001327139	</armour>
   </clientAdjustmentFactors>

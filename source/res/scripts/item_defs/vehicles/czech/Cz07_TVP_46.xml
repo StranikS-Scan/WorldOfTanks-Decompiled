@@ -8,7 +8,7 @@
     <loader></loader>
   </crew>
   <supplySlots>	2 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_MT_sniper	</postProgressionTree>
+  <postProgressionTree>	role_MT_support	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
     <forward>	50	</forward>
@@ -62,7 +62,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_7 armor_4	</primaryArmor>
     <weight>	13175	</weight>
-    <maxHealth>	1080	</maxHealth>
+    <maxHealth>	1240	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
@@ -859,19 +859,18 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	11730	</weight>
-      <maxLoad>	34000	</maxLoad>
-      <terrainResistance>	1.2 1.5 2.1	</terrainResistance>
+      <terrainResistance>	1 1.3 1.9	</terrainResistance>
       <brakeForce>	30000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	40	</rotationSpeed>
+      <rotationSpeed>	49	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.18	</vehicleMovement>
-        <vehicleRotation>	0.18	</vehicleRotation>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	180	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
-      <repairCost>	7.5	</repairCost>
+      <repairCost>	5	</repairCost>
       <models>
         <undamaged>	vehicles/czech/Cz07_TVP_46/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/czech/Cz07_TVP_46/crash/lod0/Chassis.model	</destroyed>
@@ -1798,19 +1797,18 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	11730	</weight>
-      <maxLoad>	41500	</maxLoad>
       <terrainResistance>	1 1.3 1.9	</terrainResistance>
       <brakeForce>	30000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	44	</rotationSpeed>
+      <rotationSpeed>	53	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.16	</vehicleMovement>
-        <vehicleRotation>	0.16	</vehicleRotation>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	7.5	</repairCost>
+      <repairCost>	5	</repairCost>
       <models>
         <undamaged>	vehicles/czech/Cz07_TVP_46/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/czech/Cz07_TVP_46/crash/lod0/Chassis.model	</destroyed>
@@ -2748,7 +2746,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4700	</weight>
-      <maxHealth>	270	</maxHealth>
+      <maxHealth>	240	</maxHealth>
       <rotationSpeed>	38	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -2762,11 +2760,9 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_88mm_Vz_37N>	shared	  <maxAmmo>	80	</maxAmmo>
+        <_88mm_Vz_37N>	shared	  <maxAmmo>	60	</maxAmmo>
           <unlocks>
             <gun>	_88mm_vz_41N	  <cost>	17100	</cost>
-            </gun>
-            <gun>	_100mm_vz_44S	  <cost>	16550	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -2787,15 +2783,21 @@
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -30 1 -30	</minPitch>
-            <maxPitch>	0 12 0.375 12 0.377778 10 0.380556 8.5 0.383333 8 0.386111 7.5 0.513889 7.5 0.516667 7 0.519444 6.5 0.522222 6 0.525 6 0.527778 6.5 0.533333 7 0.536111 7.5 0.613889 7.5 0.616667 8.5 0.619444 10 0.622222 12 1 12	</maxPitch>
+            <maxPitch>	0.00000 8.00 1.00000 8.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <reloadTime>	6.2	</reloadTime>
+          <reloadTime>	25.5	</reloadTime>
+          <clip>
+            <count>	3	</count>
+            <rate>	33.4	</rate>
+          </clip>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <turretRotation>	0.11	</turretRotation>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <aimingTime>	2.3	</aimingTime>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <models>
             <undamaged>	vehicles/czech/Cz07_TVP_46/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/czech/Cz07_TVP_46/crash/lod0/Gun_01.model	</destroyed>
@@ -2806,7 +2808,7 @@
             <collisionModelClient>	vehicles/czech/Cz07_TVP_46/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_main_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -2870,10 +2872,10 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_88mm_Vz_37N>
-        <_88mm_vz_41N>	shared	  <maxAmmo>	53	</maxAmmo>
+        <_88mm_vz_41N>	shared	  <maxAmmo>	60	</maxAmmo>
           <unlocks>
-            <gun>	_105mm_vz_39N	  <cost>	17800	</cost>
-            </gun>
+            <turret>	Turret_2_Cz07_TVP_46	  <cost>	16200	</cost>
+            </turret>
           </unlocks>
           <armor>
             <armor_1>	65	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -2893,17 +2895,21 @@
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 8 0.383333 8 0.386111 7.5 0.513889 7.5 0.516667 7 0.519444 6.5 0.522222 6 0.525 6 0.527778 6.5 0.533333 7 0.536111 7.5 0.613889 7.5 0.616667 8 1 8	</maxPitch>
+            <maxPitch>	0.00000 8.00 1.00000 8.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.33	</shotDispersionRadius>
-          <reloadTime>	6.9	</reloadTime>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <reloadTime>	25.5	</reloadTime>
+          <clip>
+            <count>	3	</count>
+            <rate>	33.4	</rate>
+          </clip>
           <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
+            <turretRotation>	0.11	</turretRotation>
             <afterShot>	3.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	1.8	</aimingTime>
+          <aimingTime>	2.3	</aimingTime>
           <models>
             <undamaged>	vehicles/czech/Cz07_TVP_46/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/czech/Cz07_TVP_46/crash/lod0/Gun_02.model	</destroyed>
@@ -2914,7 +2920,7 @@
             <collisionModelClient>	vehicles/czech/Cz07_TVP_46/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_main	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -2978,217 +2984,6 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_88mm_vz_41N>
-        <_100mm_vz_44S>	shared	  <maxAmmo>	66	</maxAmmo>
-          <unlocks>
-            <turret>	Turret_2_Cz07_TVP_46	  <cost>	16200	</cost>
-            </turret>
-          </unlocks>
-          <armor>
-            <armor_1>	65	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <gun>	40	</gun>
-          </armor>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 8 0.383333 8 0.386111 7.5 0.513889 7.5 0.516667 7 0.519444 6.5 0.522222 6 0.525 6 0.527778 6.5 0.533333 7 0.536111 7.5 0.613889 7.5 0.616667 8 1 8	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	8.3	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2.4	</aimingTime>
-          <models>
-            <undamaged>	vehicles/czech/Cz07_TVP_46/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/czech/Cz07_TVP_46/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/czech/Cz07_TVP_46/crash/lod0/Gun_03.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/czech/Cz07_TVP_46/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/czech/Cz07_TVP_46/collision_client/Gun_03.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_mainext	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0 -0.000131 2.3917	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.220387 0.220388	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0 -0.000131 2.3917	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	-0.006503 1.84839 1.39606	</position>
-              <rotation>	0.726778 -0.004381 3.12494	</rotation>
-              <scale>	2.17281 1.87509 2.1728	</scale>
-              <showOn>	4368	</showOn>
-              <anchorShift>	0.875054	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.009162 1.68808 1.29552	</position>
-              <rotation>	0.919182 -0.009636 3.12107	</rotation>
-              <scale>	2.53393 2.18673 2.53392	</scale>
-              <showOn>	4368	</showOn>
-              <anchorShift>	1.152828	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0 -0.000261 2.92383	</rayStart>
-              <rayEnd>	0 -0.000261 3.37383	</rayEnd>
-              <rayUp>	0.09 0 0	</rayUp>
-              <size>	0.45	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.52 0.25 0.000000 0.000000	</tiling>
-            <density>	88.6185 84.2474	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </_100mm_vz_44S>
-        <_105mm_vz_39N>	shared	  <maxAmmo>	59	</maxAmmo>
-          <armor>
-            <armor_1>	65	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <gun>	40	</gun>
-          </armor>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 5 1 5	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
-          <reloadTime>	10.3	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2.2	</aimingTime>
-          <models>
-            <undamaged>	vehicles/czech/Cz07_TVP_46/normal/lod0/Gun_04.model	</undamaged>
-            <destroyed>	vehicles/czech/Cz07_TVP_46/crash/lod0/Gun_04.model	</destroyed>
-            <exploded>	vehicles/czech/Cz07_TVP_46/crash/lod0/Gun_04.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/czech/Cz07_TVP_46/collision/Gun_04.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/czech/Cz07_TVP_46/collision_client/Gun_04.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_large	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0 -0.00013 2.93164	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.220387 0.220388	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0 -0.00013 2.93164	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	-0.006503 1.84839 1.39606	</position>
-              <rotation>	0.726778 -0.004381 3.12494	</rotation>
-              <scale>	2.17281 1.87509 2.1728	</scale>
-              <showOn>	4368	</showOn>
-              <anchorShift>	0.875054	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.009164 1.68845 1.29553	</position>
-              <rotation>	0.919182 -0.009634 3.12107	</rotation>
-              <scale>	2.53393 2.18673 2.53392	</scale>
-              <showOn>	4368	</showOn>
-              <anchorShift>	1.152828	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0 -0.000261 3.40469	</rayStart>
-              <rayEnd>	-0 -0.000261 3.90469	</rayEnd>
-              <rayUp>	0.09 0 0	</rayUp>
-              <size>	0.5	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.58 0.25 0.000000 0.000000	</tiling>
-            <density>	78.3252 83.7556	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </_105mm_vz_39N>
       </guns>
       <models>
         <undamaged>	vehicles/czech/Cz07_TVP_46/normal/lod0/Turret_01.model	</undamaged>
@@ -3693,7 +3488,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	6200	</weight>
-      <maxHealth>	370	</maxHealth>
+      <maxHealth>	310	</maxHealth>
       <rotationSpeed>	42	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -3708,7 +3503,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.005	</invisibilityFactor>
       <guns>
-        <_88mm_Vz_37N>	shared	  <maxAmmo>	100	</maxAmmo>
+        <_88mm_Vz_37N>	shared	  <maxAmmo>	60	</maxAmmo>
           <armor>
             <armor_1>	65	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3725,15 +3520,21 @@
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 6 1 6	</maxPitch>
+            <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
-          <reloadTime>	5.8	</reloadTime>
+          <reloadTime>	25	</reloadTime>
+          <clip>
+            <count>	3	</count>
+            <rate>	33.4	</rate>
+          </clip>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <aimingTime>	2.2	</aimingTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <models>
             <undamaged>	vehicles/czech/Cz07_TVP_46/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/czech/Cz07_TVP_46/crash/lod0/Gun_05.model	</destroyed>
@@ -3744,7 +3545,7 @@
             <collisionModelClient>	vehicles/czech/Cz07_TVP_46/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_main	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -3798,7 +3599,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_88mm_Vz_37N>
-        <_88mm_vz_41N>	shared	  <maxAmmo>	67	</maxAmmo>
+        <_88mm_vz_41N>	shared	  <maxAmmo>	60	</maxAmmo>
           <armor>
             <armor_1>	65	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3815,17 +3616,21 @@
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 6 1 6	</maxPitch>
+            <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.33	</shotDispersionRadius>
-          <reloadTime>	6.6	</reloadTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	25	</reloadTime>
+          <clip>
+            <count>	3	</count>
+            <rate>	33.4	</rate>
+          </clip>
           <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	3.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	1.8	</aimingTime>
+          <aimingTime>	2.2	</aimingTime>
           <models>
             <undamaged>	vehicles/czech/Cz07_TVP_46/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/czech/Cz07_TVP_46/crash/lod0/Gun_06.model	</destroyed>
@@ -3836,7 +3641,7 @@
             <collisionModelClient>	vehicles/czech/Cz07_TVP_46/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_main	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -3890,189 +3695,6 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_88mm_vz_41N>
-        <_100mm_vz_44S>	shared	  <maxAmmo>	82	</maxAmmo>
-          <armor>
-            <armor_1>	65	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_5>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <gun>	40	</gun>
-          </armor>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 6 1 6	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	8	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2.4	</aimingTime>
-          <models>
-            <undamaged>	vehicles/czech/Cz07_TVP_46/normal/lod0/Gun_07.model	</undamaged>
-            <destroyed>	vehicles/czech/Cz07_TVP_46/crash/lod0/Gun_07.model	</destroyed>
-            <exploded>	vehicles/czech/Cz07_TVP_46/crash/lod0/Gun_07.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/czech/Cz07_TVP_46/collision/Gun_07.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/czech/Cz07_TVP_46/collision_client/Gun_07.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_mainext	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0 0 2.35105	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0 0.273229 0.273229	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0 0 2.35105	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.007695 1.71487 1.46453	</position>
-              <rotation>	0.919182 -0.009645 3.12106	</rotation>
-              <scale>	2.53392 2.18672 2.53391	</scale>
-              <showOn>	4368	</showOn>
-              <anchorShift>	1.305161	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0 -0.000001 2.76717	</rayStart>
-              <rayEnd>	0 -0.000001 3.21717	</rayEnd>
-              <rayUp>	0.088 0 0	</rayUp>
-              <size>	0.45	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.595 0.25 0.000000 0.000000	</tiling>
-            <density>	88.6185 84.2474	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </_100mm_vz_44S>
-        <_105mm_vz_39N>	shared	  <maxAmmo>	74	</maxAmmo>
-          <armor>
-            <armor_1>	65	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_5>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <gun>	40	</gun>
-          </armor>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 6 1 6	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
-          <reloadTime>	9.8	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	4	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2.2	</aimingTime>
-          <models>
-            <undamaged>	vehicles/czech/Cz07_TVP_46/normal/lod0/Gun_08.model	</undamaged>
-            <destroyed>	vehicles/czech/Cz07_TVP_46/crash/lod0/Gun_08.model	</destroyed>
-            <exploded>	vehicles/czech/Cz07_TVP_46/crash/lod0/Gun_08.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/czech/Cz07_TVP_46/collision/Gun_08.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/czech/Cz07_TVP_46/collision_client/Gun_08.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_large	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0 0 2.8869	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0 0.273227 0.273227	</anchorPosition>
-              <anchorDirection>	-0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0 0 2.8869	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.007697 1.71525 1.46454	</position>
-              <rotation>	0.919182 -0.009644 3.12106	</rotation>
-              <scale>	2.53392 2.18672 2.53391	</scale>
-              <showOn>	4368	</showOn>
-              <anchorShift>	1.305164	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0 0 3.07538	</rayStart>
-              <rayEnd>	-0 0 3.57538	</rayEnd>
-              <rayUp>	0.092 0 0	</rayUp>
-              <size>	0.5	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.55 0.43 0.000000 0.000000	</tiling>
-            <density>	78.3252 83.7556	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </_105mm_vz_39N>
       </guns>
       <models>
         <undamaged>	vehicles/czech/Cz07_TVP_46/normal/lod0/Turret_02.model	</undamaged>
@@ -4083,7 +3705,7 @@
         <collisionModelServer>	vehicles/czech/Cz07_TVP_46/collision/Turret_02.model	</collisionModelServer>
         <collisionModelClient>	vehicles/czech/Cz07_TVP_46/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.00885 0.37076 1.2606	</gunPosition>
+      <gunPosition>	0.009496 0.370758 1.397029	</gunPosition>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <physicsShape>	1 0 1.022 0 0.541 0.133 0.5 0.5 0.401 0.5 0.251 0.5 0 0 0	</physicsShape>
       <customizationSlots>
@@ -4591,55 +4213,41 @@
   </turrets0>
   <engines>
     <Skoda_V16_diesel_600>	shared	  <unlocks>
-        <engine>	Skoda_V16_diesel_660	  <cost>	11800	</cost>
+        <engine>	Skoda_16_ADH_140A_TVP	  <cost>	16100	</cost>
         </engine>
       </unlocks>
     </Skoda_V16_diesel_600>
-    <Skoda_V16_diesel_660>	shared	  <unlocks>
-        <engine>	Skoda_16_ADH_140_A	  <cost>	16100	</cost>
-        </engine>
-      </unlocks>
-    </Skoda_V16_diesel_660>
-    <Skoda_16_ADH_140_A>	shared	</Skoda_16_ADH_140_A>
+    <Skoda_16_ADH_140A_TVP>	shared	</Skoda_16_ADH_140A_TVP>
   </engines>
   <fuelTanks>
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <Radiostanice_Fu_7>	shared	  <unlocks>
-        <radio>	Radiostanice_RM_31T	  <cost>	9500	</cost>
-        </radio>
-      </unlocks>
-    </Radiostanice_Fu_7>
     <Radiostanice_RM_31T>	shared	</Radiostanice_RM_31T>
   </radios>
   <physics>
     <detailed>
       <engines>
         <Skoda_V16_diesel_600>
-          <smplEnginePower>	634.3687	</smplEnginePower>
+          <smplEnginePower>	700	</smplEnginePower>
           <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </Skoda_V16_diesel_600>
-        <Skoda_V16_diesel_660>
-          <smplEnginePower>	697.8055	</smplEnginePower>
+        <Skoda_16_ADH_140A_TVP>
+          <smplEnginePower>	770	</smplEnginePower>
           <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
-        </Skoda_V16_diesel_660>
-        <Skoda_16_ADH_140_A>
-          <smplEnginePower>	740.0968	</smplEnginePower>
-          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
-        </Skoda_16_ADH_140_A>
+        </Skoda_16_ADH_140A_TVP>
       </engines>
       <chassis>
         <Chassis_Cz07_TVP_46>
           <grounds>
             <soft>
-              <rollingFriction>	0.16905	</rollingFriction>
+              <rollingFriction>	0.15295	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.12075	</rollingFriction>
+              <rollingFriction>	0.10465	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0966	</rollingFriction>
+              <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_Cz07_TVP_46>
@@ -4660,14 +4268,6 @@
     </detailed>
   </physics>
   <clientAdjustmentFactors>
-    <guns>
-      <_88mm_Vz_37N>
-        <delta>	0.888059	</delta>
-      </_88mm_Vz_37N>
-      <_100mm_vz_44S>
-        <delta>	0.9227799	</delta>
-      </_100mm_vz_44S>
-    </guns>
     <armour>	0.770052973	</armour>
   </clientAdjustmentFactors>
   <effects>

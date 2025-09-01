@@ -151,7 +151,7 @@ class InventoryCategoryStorageView(StorageCategoryStorageViewMeta):
 
     def setActiveTab(self, tabId):
         self.__currentTabId = tabId
-        tabsData = self._getTabsData()
+        tabsData = self.getTabsData()
         activeIdx = 0
         for i, tab in enumerate(tabsData):
             if tab['id'] == self.__currentTabId:
@@ -161,6 +161,13 @@ class InventoryCategoryStorageView(StorageCategoryStorageViewMeta):
         tabsData[activeIdx]['selected'] = True
         self.as_setTabsDataS(tabsData)
 
+    def getTabsData(self):
+        tabsData = copy.deepcopy(_TABS_DATA)
+        for item in tabsData:
+            item['label'] = backport.text(item['label']())
+
+        return tuple(tabsData)
+
     def _populate(self):
         super(InventoryCategoryStorageView, self)._populate()
         self.__storageNovelty.onUpdated += self._updateTabCounters
@@ -169,13 +176,6 @@ class InventoryCategoryStorageView(StorageCategoryStorageViewMeta):
     def _destroy(self):
         super(InventoryCategoryStorageView, self)._destroy()
         self.__storageNovelty.onUpdated -= self._updateTabCounters
-
-    def _getTabsData(self):
-        tabsData = copy.deepcopy(_TABS_DATA)
-        for item in tabsData:
-            item['label'] = backport.text(item['label']())
-
-        return tuple(tabsData)
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         super(InventoryCategoryStorageView, self)._onRegisterFlashComponent(viewPy, alias)

@@ -4,7 +4,7 @@ import logging
 import math
 import random
 from collections import namedtuple, defaultdict
-from itertools import izip
+from itertools import izip, chain
 from operator import itemgetter
 import BigWorld
 import typing
@@ -33,6 +33,7 @@ from gui.shared.gui_items.fitting_item import FittingItem, RentalInfoProvider
 from gui.shared.gui_items.gui_item import HasStrCD
 from gui.shared.gui_items.gui_item_economics import ItemPrice, ItemPrices, ITEM_PRICE_EMPTY
 from gui.shared.gui_items.vehicle_equipment import VehicleEquipment, SUPPORT_EXT_DATA_FEATURES
+from gui.shared.gui_items.vehicle_mechanic_item import extendMechanics, VehicleMechanicItem, VEHICLE_MECHANICS_OVERRIDES
 from gui.shared.money import MONEY_UNDEFINED, Currency, Money
 from gui.shared.utils import makeSearchableString
 from gui.shared.utils.functions import replaceHyphenToUnderscore
@@ -52,9 +53,11 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
+from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicle_outfit.outfit import Area, REGIONS_BY_SLOT_TYPE, ANCHOR_TYPE_TO_SLOT_TYPE_MAP
 from constants import NEW_PERK_SYSTEM as NPS
 from dossiers2.custom.cache import getCache as getDossiersCache
+from forbidden_vehicles_to_battle_config import getForbiddenForBattleVehicles
 if typing.TYPE_CHECKING:
     from skeletons.gui.shared import IItemsRequester
     from items.customizations import CustomizationOutfit
@@ -214,7 +217,6 @@ class Vehicle(FittingItem):
         RENTABLE = 'rentable'
         RENTABLE_AGAIN = 'rentableAgain'
         DISABLED = 'disabled'
-        TOO_HEAVY = 'tooHeavy'
         SUBSCRIPTION_SUSPENDED = 'subscription_suspended'
         WOT_PLUS_EXCLUSIVE_VEHICLE_DISABLED = 'wot_plus_exclusive_vehicle_disabled'
 
@@ -226,7 +228,6 @@ class Vehicle(FittingItem):
      VEHICLE_STATE.UNSUITABLE_TO_UNIT,
      VEHICLE_STATE.ROTATION_GROUP_UNLOCKED,
      VEHICLE_STATE.ROTATION_GROUP_LOCKED,
-     VEHICLE_STATE.TOO_HEAVY,
      VEHICLE_STATE.WILL_BE_UNLOCKED_IN_BATTLE,
      VEHICLE_STATE.SUBSCRIPTION_SUSPENDED)
     TRADE_OFF_NOT_READY_STATES = (VEHICLE_STATE.DAMAGED,
@@ -300,7 +301,7 @@ class Vehicle(FittingItem):
             self._xp = self._proxy.stats.vehiclesXPs.get(self.intCD, self._xp)
             if self._proxy.shop.winXPFactorMode == WIN_XP_FACTOR_MODE.ALWAYS or self.intCD not in self._proxy.stats.multipliedVehicles and not self.isOnlyForEventBattles:
                 self._dailyXPFactor = self._proxy.shop.dailyXPFactor
-            self._isElite = not vehDescr.type.unlocksDescrs and vehDescr.type.compactDescr not in getDossiersCache()['vehiclesInTrees'] or self.intCD in self._proxy.stats.eliteVehicles
+            self._isElite = vehDescr.type.isEliteByDefault and vehDescr.type.compactDescr not in getDossiersCache()['vehiclesInTrees'] or self.intCD in self._proxy.stats.eliteVehicles
             self._isFullyElite = self.isElite and not any((data[1] not in self._proxy.stats.unlocks for data in vehDescr.type.unlocksDescrs))
             clanDamageLock = self._proxy.stats.vehicleTypeLocks.get(self.intCD, {}).get(CLAN_LOCK, 0)
             clanNewbieLock = self._proxy.stats.globalVehicleLocks.get(CLAN_LOCK, 0)
@@ -330,12 +331,7 @@ class Vehicle(FittingItem):
         self._extraSettings = self._invData.get('extraSettings', 0)
         self._lock = self._invData.get('lock', (0, 0))
         self._repairCost, self._health = self._invData.get('repair', (0, 0))
-        self._gun = self.itemsFactory.createVehicleGun(vehDescr.gun.compactDescr, self._proxy, vehDescr.gun)
-        self._turret = self.itemsFactory.createVehicleTurret(vehDescr.turret.compactDescr, self._proxy, vehDescr.turret)
-        self._engine = self.itemsFactory.createVehicleEngine(vehDescr.engine.compactDescr, self._proxy, vehDescr.engine)
-        self._chassis = self.itemsFactory.createVehicleChassis(vehDescr.chassis.compactDescr, self._proxy, vehDescr.chassis)
-        self._radio = self.itemsFactory.createVehicleRadio(vehDescr.radio.compactDescr, self._proxy, vehDescr.radio)
-        self._fuelTank = self.itemsFactory.createVehicleFuelTank(vehDescr.fuelTank.compactDescr, self._proxy, vehDescr.fuelTank)
+        self.__createModules(vehDescr)
         sellPrice = self._calcSellPrice(self._proxy)
         defaultSellPrice = self._calcDefaultSellPrice(self._proxy)
         self._sellPrices = ItemPrices(itemPrice=ItemPrice(price=sellPrice, defPrice=defaultSellPrice), itemAltPrice=ITEM_PRICE_EMPTY)
@@ -357,8 +353,27 @@ class Vehicle(FittingItem):
             self._equipment.optDevices.dynSlotType = None
         return
 
+    def __createModules(self, vehDescr):
+        self._gun = self.itemsFactory.createVehicleGun(vehDescr.gun.compactDescr, self._proxy, vehDescr.gun)
+        self._turret = self.itemsFactory.createVehicleTurret(vehDescr.turret.compactDescr, self._proxy, vehDescr.turret)
+        self._engine = self.itemsFactory.createVehicleEngine(vehDescr.engine.compactDescr, self._proxy, vehDescr.engine)
+        self._chassis = self.itemsFactory.createVehicleChassis(vehDescr.chassis.compactDescr, self._proxy, vehDescr.chassis)
+        self._radio = self.itemsFactory.createVehicleRadio(vehDescr.radio.compactDescr, self._proxy, vehDescr.radio)
+        self._fuelTank = self.itemsFactory.createVehicleFuelTank(vehDescr.fuelTank.compactDescr, self._proxy, vehDescr.fuelTank)
+
     def __deepcopy__(self, memo=None):
         raise SoftException('Deep copy of GUI Vehicle is not supported')
+
+    def copyCrew(self, otherVehicle):
+        if not isinstance(otherVehicle, Vehicle):
+            _logger.error('Crew can only be copied from an instance of Vehicle')
+            return
+        else:
+            defaultCrew = [None] * len(self._descriptor.type.crewRoles)
+            self._invData['crew'] = otherVehicle._invData.get('crew', defaultCrew)
+            self._invData['battleCrewCDs'] = otherVehicle._invData.get('battleCrewCDs')
+            self.initCrew()
+            return
 
     def initCrew(self):
         defaultCrew = [None] * len(self._descriptor.type.crewRoles)
@@ -521,6 +536,16 @@ class Vehicle(FittingItem):
                 return (idx, tman)
 
         return (None, None)
+
+    def getVehicleMechanicItems(self):
+        mechanics = set()
+        vehDescr = self.descriptor
+        vehicleType = vehDescr.type
+        modules = chain.from_iterable(((factory(descr.compactDescr, descriptor=descr) for descr in descriptors) for descriptors, factory in ((vehicleType.getGuns(), self.itemsFactory.createVehicleGun), (vehicleType.chassis, self.itemsFactory.createVehicleChassis), (vehDescr.type.engines, self.itemsFactory.createVehicleEngine))))
+        mechanics.update(chain.from_iterable((module.getVehicleMechanics(vehDescr) for module in modules)))
+        mechanicChecks = [(vehDescr.hasSiegeMode and not vehDescr.hasAutoSiegeMode, VehicleMechanic.SIEGE_MODE)]
+        extendMechanics(mechanics, vehicleType.mechanicsParams, mechanicChecks, VEHICLE_MECHANICS_OVERRIDES)
+        return [ self.itemsFactory.createVehicleMechanicItem(mechanic, self.intCD) for mechanic in mechanics ]
 
     def _calcSellPrice(self, proxy):
         return self.__calcSellPrice(proxy, self.sellPrices.itemPrice.price)
@@ -959,6 +984,10 @@ class Vehicle(FittingItem):
         return self.rentInfo.battlesLeft
 
     @property
+    def rentLeftWins(self):
+        return self.rentInfo.winsLeft
+
+    @property
     def isSeasonRent(self):
         return bool(self.rentInfo.seasonRent)
 
@@ -1023,10 +1052,6 @@ class Vehicle(FittingItem):
     @property
     def isAmmoCanSwitch(self):
         return self.isSetupSwitchActive(TankSetupGroupsId.EQUIPMENT_AND_SHELLS)
-
-    @property
-    def isTooHeavy(self):
-        return not self.descriptor.isWeightConsistent()
 
     @property
     def hasCrew(self):
@@ -1164,8 +1189,6 @@ class Vehicle(FittingItem):
         if state == Vehicle.VEHICLE_STATE.UNDAMAGED and isCurrnentPlayer:
             if self.isBroken:
                 return Vehicle.VEHICLE_STATE.DAMAGED
-            if self.isTooHeavy:
-                return Vehicle.VEHICLE_STATE.TOO_HEAVY
             if not self.isCrewFull:
                 return Vehicle.VEHICLE_STATE.CREW_NOT_FULL
             if not self.isAmmoFull:
@@ -1197,7 +1220,6 @@ class Vehicle(FittingItem):
          Vehicle.VEHICLE_STATE.SERVER_RESTRICTION,
          Vehicle.VEHICLE_STATE.RENTAL_IS_OVER,
          Vehicle.VEHICLE_STATE.IGR_RENTAL_IS_OVER,
-         Vehicle.VEHICLE_STATE.TOO_HEAVY,
          Vehicle.VEHICLE_STATE.AMMO_NOT_FULL,
          Vehicle.VEHICLE_STATE.AMMO_NOT_FULL_EVENTS,
          Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE,
@@ -1470,7 +1492,7 @@ class Vehicle(FittingItem):
             return False
         result = not self.hasLockMode()
         if result:
-            result = not self.isBroken and self.isCrewFull and not self.isTooHeavy and not self.isDisabledInPremIGR and not self.isInBattle and not self.isRotationGroupLocked and not self.isDisabled
+            result = not self.isBroken and self.isCrewFull and not self.isDisabledInPremIGR and not self.isInBattle and not self.isRotationGroupLocked and not self.isDisabled
         return result
 
     @property
@@ -1481,7 +1503,7 @@ class Vehicle(FittingItem):
             return False
         result = not self.hasLockMode()
         if result:
-            result = self.isAlive and self.isCrewFull and not self.isTooHeavy and not self.isDisabledInRoaming and not self.isDisabledInPremIGR and not self.isRotationGroupLocked
+            result = self.isAlive and self.isCrewFull and not self.isDisabledInRoaming and not self.isDisabledInPremIGR and not self.isRotationGroupLocked
         return result
 
     @property
@@ -1571,17 +1593,24 @@ class Vehicle(FittingItem):
 
     def clearPostProgression(self):
         self._postProgression = None
+        descrModifyAttrsWasApplied = self._descriptor.descrModifyAttrsApplied
         self._descriptor.installModifications(self.postProgression.getActiveModifications(self))
+        if descrModifyAttrsWasApplied:
+            self.__createModules(self._descriptor)
         return
 
     def installPostProgression(self, customState, ignoreDisabled=False, rebuildAttrs=True):
         self._postProgression = self.postProgression.clone()
         self._postProgression.setState(customState)
         self._descriptor.installModifications(self.postProgression.getActiveModifications(self, ignoreDisabled), rebuildAttrs=rebuildAttrs)
+        if self._descriptor.descrModifyAttrsApplied:
+            self.__createModules(self._descriptor)
 
     def installPostProgressionItem(self, postProgressionItem):
         self._postProgression = postProgressionItem
         self._descriptor.installModifications(self.postProgression.getActiveModifications(self))
+        if self._descriptor.descrModifyAttrsApplied:
+            self.__createModules(self._descriptor)
 
     def isSetupSwitchActive(self, groupID):
         return self.postProgression.isSetupSwitchActive(self, groupID)
@@ -1937,6 +1966,9 @@ class Vehicle(FittingItem):
     def isRecentlyRestored(self):
         return self.isPurchased and self.restoreInfo.isInCooldown() if self.restoreInfo is not None else False
 
+    def isForbiddenToBattle(self):
+        return self.compactDescr in getForbiddenForBattleVehicles()
+
     def __cmp__(self, other):
         if self.isRestorePossible() and not other.isRestorePossible():
             return -1
@@ -2210,7 +2242,6 @@ _VEHICLE_STATE_TO_ICON = {Vehicle.VEHICLE_STATE.BATTLE: RES_ICONS.MAPS_ICONS_VEH
  Vehicle.VEHICLE_STATE.UNSUITABLE_TO_UNIT: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT,
  Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT,
  Vehicle.VEHICLE_STATE.GROUP_IS_NOT_READY: RES_ICONS.MAPS_ICONS_VEHICLESTATES_GROUP_IS_NOT_READY,
- Vehicle.VEHICLE_STATE.TOO_HEAVY: backport.image(R.images.gui.maps.icons.vehicleStates.weight()),
  Vehicle.VEHICLE_STATE.AMMO_NOT_FULL: RES_ICONS.MAPS_ICONS_VEHICLESTATES_AMMONOTFULL,
  Vehicle.VEHICLE_STATE.SUBSCRIPTION_SUSPENDED: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT,
  Vehicle.VEHICLE_STATE.WOT_PLUS_EXCLUSIVE_VEHICLE_DISABLED: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT}
@@ -2248,3 +2279,7 @@ def getTankmanIndex(vehicle, slotIdx):
             return index
 
     return NO_SLOT
+
+
+def getLowEfficiencyTankmenIDs(vehicle):
+    return [ tankman.invID for _, tankman in vehicle.crew if tankman and not tankman.isMaxCurrentVehicleSkillsEfficiency ]

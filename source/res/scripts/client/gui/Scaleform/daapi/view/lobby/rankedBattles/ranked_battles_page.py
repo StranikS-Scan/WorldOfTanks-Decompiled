@@ -2,16 +2,13 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rankedBattles/ranked_battles_page.py
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import GUI_START_BEHAVIOR, RANKED_AWARDS_COUNTER, RANKED_INFO_COUNTER, RANKED_SHOP_COUNTER, RANKED_YEAR_RATING_COUNTER, RANKED_AWARDS_BUBBLE_YEAR_REACHED, RANKED_ENTITLEMENT_EVENTS_AMOUNT, RANKED_CURRENT_AWARDS_BUBBLE_YEAR_REACHED
-from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.ranked_battles.ranked_helpers.sound_manager import RANKED_MAIN_PAGE_SOUND_SPACE
 from gui.ranked_battles.constants import RankedDossierKeys
 from gui.ranked_battles.ranked_builders import main_page_vos
 from gui.Scaleform.daapi import LobbySubView
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.RankedBattlesPageMeta import RankedBattlesPageMeta
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
-from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.utils.scheduled_notifications import PeriodicNotifier
 from helpers import time_utils, dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -51,7 +48,8 @@ class RankedMainPage(LobbySubView, RankedBattlesPageMeta):
         self._processContext(ctx)
 
     def onClose(self):
-        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
+        from gui.shared.event_dispatcher import showHangar
+        showHangar()
 
     def onPageChanged(self, viewId):
         newSelectedID = _RANKED_BATTLES_VIEW_TO_ITEM_ID.get(viewId, self._selectedItemID)

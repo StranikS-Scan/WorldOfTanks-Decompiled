@@ -543,7 +543,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	10000	</weight>
-      <maxLoad>	48000	</maxLoad>
       <terrainResistance>	0.9 1.1 2.1	</terrainResistance>
       <brakeForce>	45000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2393,7 +2392,7 @@
   <turrets0>
     <Turret_1_F119_Char_Murat>
       <userString>	#france_vehicles:Turret_1_F119_Char_Murat	</userString>
-      <tags></tags>
+      <tags>	oscillating	</tags>
       <level>	9	</level>
       <price>	60000	</price>
       <notInShop>	true	</notInShop>

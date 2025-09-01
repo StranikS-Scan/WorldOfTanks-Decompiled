@@ -45,8 +45,8 @@ class WeeklyQuestsPage(PageSubModelPresenter):
     def viewModel(self):
         return super(WeeklyQuestsPage, self).getViewModel()
 
-    def initialize(self):
-        super(WeeklyQuestsPage, self).initialize()
+    def initialize(self, **params):
+        super(WeeklyQuestsPage, self).initialize(**params)
         self.__updateData(self.__comp7WeeklyQuestsCtrl.getQuests())
 
     def finalize(self):

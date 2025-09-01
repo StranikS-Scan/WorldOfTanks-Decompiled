@@ -2,23 +2,26 @@
 # Embedded file name: scripts/client/frameworks/state_machine/machine.py
 import logging
 import operator
+import typing
+from itertools import chain
 from . import states as _states
 from . import validator
 from . import visitor
 from .events import StateEvent
 from .exceptions import StateMachineError
-from .observers import BaseStateObserver
 from .observers import StateObserversContainer
-from .transitions import BaseTransition
+from .transitions import BaseTransition, TransitionType
+if typing.TYPE_CHECKING:
+    from .observers import BaseStateObserver
 _logger = logging.getLogger(__name__)
 
 class StateMachine(_states.State):
-    __slots__ = ('__isRunning', '__entered', '__history', '__observers')
+    __slots__ = ('__isRunning', '_entered', '__history', '__observers')
 
-    def __init__(self, stateID=''):
-        super(StateMachine, self).__init__(stateID=stateID)
+    def __init__(self, stateID='', flags=_states.StateFlags.UNDEFINED):
+        super(StateMachine, self).__init__(stateID=stateID, flags=flags)
+        self._entered = []
         self.__isRunning = False
-        self.__entered = []
         self.__history = {}
         self.__observers = StateObserversContainer()
 
@@ -34,9 +37,9 @@ class StateMachine(_states.State):
             return
         else:
             self.__isRunning = True
-            transition = _InitialTransition(target=self.getInitial())
+            transition = _InitialTransition(targets=self.getInitial())
             _logger.debug('%r: Machine is started by %r', self, transition)
-            entered = self.__enter((transition,))
+            entered = self.__enter((transition,), None)
             transition.clear()
             self.__notify(entered, True, None)
             self.__tick()
@@ -49,12 +52,12 @@ class StateMachine(_states.State):
         self.__isRunning = False
         self.__observers.clear()
         self.__history.clear()
-        del self.__entered[:]
+        del self._entered[:]
         self.clear()
         _logger.debug('%r: Machine is stopped', self)
 
     def isStateEntered(self, stateID):
-        for state in self.__entered:
+        for state in self._entered:
             if state.getStateID() == stateID:
                 return True
 
@@ -79,8 +82,9 @@ class StateMachine(_states.State):
 
     def connect(self, observer):
         self.__observers.addObserver(observer)
-        for state in self.__entered:
-            observer.onStateChanged(state.getStateID(), True)
+        for state in self._entered:
+            if observer.isObservingState(state):
+                observer.onStateChanged(state, True)
 
     def disconnect(self, observer):
         self.__observers.removeObserver(observer)
@@ -88,30 +92,30 @@ class StateMachine(_states.State):
     def __tick(self, event=None):
         transitions = self.__select(event)
         if transitions:
-            self.__process(transitions, event)
+            self._process(transitions, event)
 
-    def __process(self, transitions, event):
+    def _process(self, transitions, event):
         _logger.debug('%r: Start process, enabled transitions = %r', self, transitions)
-        _logger.debug('%r: Snapshot before exiting states = %r', self, self.__entered)
+        _logger.debug('%r: Snapshot before exiting states = %r', self, self._entered)
         exited = self.__exit(transitions)
-        _logger.debug('%r: Snapshot after exiting states = %r', self, self.__entered)
-        entered = self.__enter(transitions)
+        _logger.debug('%r: Snapshot after exiting states = %r', self, self._entered)
+        entered = self.__enter(transitions, event)
         self.__notify(exited, False, event)
         self.__notify(entered, True, event)
-        for state in self.__entered:
+        for state in self._entered:
             if state.isFinal() and state.getParent() == self:
                 self.stop()
                 break
 
-        _logger.debug('%r: Snapshot after entering states = %r', self, self.__entered)
+        _logger.debug('%r: Snapshot after entering states = %r', self, self._entered)
         _logger.debug('%r: Stop process', self)
 
     def __select(self, event):
         result = []
-        filtered = [ state for state in self.__entered if state.isAtomic() ]
+        filtered = (state for state in self._entered if state.isAtomic())
         for state in filtered:
-            states = visitor.getAncestors(state, upper=self.getParent())
-            states.insert(0, state)
+            ancestorsUpToParent = visitor.getAncestors(state, upper=self.getParent())
+            states = chain((state,), ancestorsUpToParent)
             transition = self.__execute(states, event)
             if transition is not None and transition not in result:
                 result.append(transition)
@@ -127,52 +131,67 @@ class StateMachine(_states.State):
                     _logger.debug('%r: %r has execution result is True', self, transition)
                     result.append(transition)
 
-            if result:
-                result.sort(key=operator.methodcaller('getPriority'), reverse=True)
-                transition = result[0]
-                _logger.debug('%r: %r is selected', self, transition)
-                return transition
-
-        return None
+        if result:
+            result.sort(key=operator.methodcaller('getPriority'), reverse=True)
+            transition = result[0]
+            _logger.debug('%r: %r is selected', self, transition)
+            return transition
+        else:
+            return None
 
     def __exit(self, transitions):
         result = []
         for transition in transitions:
-            domain = visitor.getTransitionDomain(transition, self.__history, upper=self.getParent())
-            for state in self.__entered:
-                if visitor.isDescendantOf(state, domain) and state not in result:
-                    result.append(state)
+            domain = visitor.getTransitionDomain(transition, self.__history, upper=self.getParent()) or self
+            for state in self._entered:
+                if state in result or not visitor.isDescendantOf(state, domain):
+                    continue
+                isLcaParallel = visitor.getLCA(transition.getTargets() + [state]).isParallel()
+                anyTargetStateRelations = any((visitor.isDescendantOf(t, state) or visitor.isDescendantOf(state, t) for t in transition.getTargets()))
+                inDifferentSubtrees = isLcaParallel and not anyTargetStateRelations
+                if inDifferentSubtrees:
+                    continue
+                if transition.getType() == TransitionType.INTERNAL:
+                    targets = visitor.getEffectiveTargetStates(transition, self.__history)
+                    areDescendants = (visitor.isDescendantOf(t, state) for t in targets)
+                    if state == transition.getSource() and any(areDescendants):
+                        continue
+                    if state in targets:
+                        continue
+                result.append(state)
 
         result.sort(key=_states.StateExitingSortKey)
         for state in result:
             for history in state.getHistoryStates():
                 historyFlag = history.getFlags() & _states.StateFlags.HISTORY_TYPE_MASK
                 if historyFlag == _states.StateFlags.DEEP_HISTORY:
-                    snapshot = [ entered for entered in self.__entered if entered.isAtomic() and visitor.isDescendantOf(entered, state) ]
+                    snapshot = [ entered for entered in self._entered if entered.isAtomic() and visitor.isDescendantOf(entered, state) ]
                 else:
-                    snapshot = [ entered for entered in self.__entered if entered.getParent() == state ]
+                    snapshot = [ entered for entered in self._entered if entered.getParent() == state ]
                 self.__history[history.getStateID()] = snapshot
                 _logger.debug('%r: snapshot is recorded to history for %r -> %r', self, state, snapshot)
 
         for state in result:
             _logger.debug('%r: %r is exiting', self, state)
             state.exit()
-            self.__entered.remove(state)
+            self._entered.remove(state)
 
         return result
 
-    def __enter(self, transitions):
-        result = []
+    def __enter(self, transitions, event):
+        statesToEnter = set()
         for transition in transitions:
-            self.__collect(transition, result)
+            transitionEnterStates = []
+            self.__collect(transition, transitionEnterStates)
+            statesToEnter.update((state for state in transitionEnterStates if not ((transition.getType() == TransitionType.INTERNAL or state.getParent().isParallel()) and state in self._entered)))
 
-        result.sort(key=_states.StateEnteringSortKey)
-        for state in result:
-            self.__entered.append(state)
+        sortedStatesToEnter = sorted(statesToEnter, key=_states.StateEnteringSortKey)
+        for state in sortedStatesToEnter:
+            self._entered.append(state)
             _logger.debug('%r: %r is entering', self, state)
-            state.enter()
+            state.enter(event)
 
-        return result
+        return sortedStatesToEnter
 
     def __collect(self, transition, accumulation):
         domain = visitor.getTransitionDomain(transition, self.__history, upper=self.getParent())
@@ -188,8 +207,8 @@ class StateMachine(_states.State):
         else:
             accumulation.append(state)
             if state.isCompound():
-                self.__dcollect(state.getInitial(), accumulation)
-                self.__acollect(state.getInitial(), state, accumulation)
+                self.__dcollect(state.getInitial()[0], accumulation)
+                self.__acollect(state.getInitial()[0], state, accumulation)
             elif state.isParallel():
                 self.__pcollect(state, accumulation)
 
@@ -236,15 +255,16 @@ class StateMachine(_states.State):
             if not stateID:
                 _logger.warn('%r: %r has no ID, can not notify observers', self, state)
                 continue
-            self.__observers.onStateChanged(stateID, flag, event=event)
+            self.__observers.onStateChanged(state, flag, event=event)
 
 
 class _InitialTransition(BaseTransition):
     __slots__ = ()
 
-    def __init__(self, target):
+    def __init__(self, targets):
         super(_InitialTransition, self).__init__()
-        self.setTarget(target)
+        for t in targets:
+            self.setTarget(t)
 
     def getSource(self):
         return _states.State()

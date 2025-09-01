@@ -1,16 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/impl/gen/view_models/views/lobby/feature/mode_selector/fun_random_sub_selector_model.py
-from frameworks.wulf import Array
-from frameworks.wulf import ViewModel
+from frameworks.wulf import Array, ViewModel
 from fun_random.gui.impl.gen.view_models.views.lobby.common.fun_random_progression_condition import FunRandomProgressionCondition
 from fun_random.gui.impl.gen.view_models.views.lobby.common.fun_random_progression_stage import FunRandomProgressionStage
 from fun_random.gui.impl.gen.view_models.views.lobby.common.fun_random_progression_state import FunRandomProgressionState
 from fun_random.gui.impl.gen.view_models.views.lobby.feature.mode_selector.fun_random_sub_selector_card_model import FunRandomSubSelectorCardModel
+from gui.impl.gen.view_models.views.lobby.hangar.menu_item_model import MenuItemModel
 
 class FunRandomSubSelectorModel(ViewModel):
-    __slots__ = ('onItemClicked', 'onInfoClicked', 'onBackBtnClicked', 'onClosed')
+    __slots__ = ('onItemClicked', 'onInfoClicked', 'onBackBtnClicked', 'onClosed', 'onNavigate')
 
-    def __init__(self, properties=5, commands=4):
+    def __init__(self, properties=8, commands=5):
         super(FunRandomSubSelectorModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -53,6 +53,28 @@ class FunRandomSubSelectorModel(ViewModel):
     def setAssetsPointer(self, value):
         self._setString(4, value)
 
+    def getMenuItems(self):
+        return self._getArray(5)
+
+    def setMenuItems(self, value):
+        self._setArray(5, value)
+
+    @staticmethod
+    def getMenuItemsType():
+        return MenuItemModel
+
+    def getModeName(self):
+        return self._getString(6)
+
+    def setModeName(self, value):
+        self._setString(6, value)
+
+    def getModeId(self):
+        return self._getString(7)
+
+    def setModeId(self, value):
+        self._setString(7, value)
+
     def _initialize(self):
         super(FunRandomSubSelectorModel, self)._initialize()
         self._addViewModelProperty('state', FunRandomProgressionState())
@@ -60,7 +82,11 @@ class FunRandomSubSelectorModel(ViewModel):
         self._addViewModelProperty('currentStage', FunRandomProgressionStage())
         self._addArrayProperty('cardList', Array())
         self._addStringProperty('assetsPointer', 'undefined')
+        self._addArrayProperty('menuItems', Array())
+        self._addStringProperty('modeName', '')
+        self._addStringProperty('modeId', '')
         self.onItemClicked = self._addCommand('onItemClicked')
         self.onInfoClicked = self._addCommand('onInfoClicked')
         self.onBackBtnClicked = self._addCommand('onBackBtnClicked')
         self.onClosed = self._addCommand('onClosed')
+        self.onNavigate = self._addCommand('onNavigate')

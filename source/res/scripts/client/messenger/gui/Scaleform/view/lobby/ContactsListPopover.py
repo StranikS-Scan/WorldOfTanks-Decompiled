@@ -45,8 +45,6 @@ class ContactsListPopover(ContactsListPopoverMeta, ContactsCMListener):
                 self.__moveToFriendProcess(contactDbID, contactName, targetGroup)
             elif targetGroup != excludeGroup:
                 self.__moveToGroupProcess(contactDbID, targetGroup, excludeGroup)
-            else:
-                LOG_WARNING('Action can not be resolved', contactDbID, targetGroup, excludeGroup, targetParentGroup)
         elif targetGroup == CONTACTS_ALIASES.IGNORED_GROUP_RESERVED_ID:
             if excludeGroup != CONTACTS_ALIASES.IGNORED_GROUP_RESERVED_ID:
                 self.addToIgnored(contactDbID, contactName)

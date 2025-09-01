@@ -60,7 +60,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_12	</primaryArmor>
     <weight>	11620	</weight>
-    <maxHealth>	1520	</maxHealth>
+    <maxHealth>	1560	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	210	</maxHealth>
       <maxRegenHealth>	140	</maxRegenHealth>
@@ -705,8 +705,8 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_Object_140>
-      <userString>	#ussr_vehicles:Chassis_Object_140	</userString>
+    <Chassis_R97_Object_140>
+      <userString>	#ussr_vehicles:Chassis_R97_Object_140	</userString>
       <tags></tags>
       <level>	10	</level>
       <price>	31700	</price>
@@ -716,7 +716,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	12000	</weight>
-      <maxLoad>	39000	</maxLoad>
       <terrainResistance>	0.55 0.65 1.5	</terrainResistance>
       <brakeForce>	36000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -1589,25 +1588,25 @@
         </right>
       </physicalTracks>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_Object_140>
+    </Chassis_R97_Object_140>
   </chassis>
   <turrets0>
-    <Turret_1_Object_140>
-      <userString>	#ussr_vehicles:Turret_1_Object_140	</userString>
+    <Turret_1_R97_Object_140>
+      <userString>	#ussr_vehicles:Turret_1_R97_Object_140	</userString>
       <tags></tags>
       <level>	10	</level>
       <price>	52000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	240	</armor_1>
+        <armor_1>	275	</armor_1>
         <armor_2>	227	</armor_2>
         <armor_3>	220	</armor_3>
         <armor_4>	65	</armor_4>
-        <armor_5>	196	</armor_5>
+        <armor_5>	135	</armor_5>
         <armor_6>	187	</armor_6>
         <armor_7>	160	</armor_7>
         <armor_8>	150	</armor_8>
-        <armor_9>	75	</armor_9>
+        <armor_9>	90	</armor_9>
         <armor_10>	120	</armor_10>
         <armor_11>	100	</armor_11>
         <armor_12>	88	</armor_12>
@@ -1615,10 +1614,25 @@
         <armor_14>	30	</armor_14>
         <armor_15>	45	</armor_15>
         <armor_16>	0	</armor_16>
+        <armor_17>	105	</armor_17>
+        <armor_18>	75	</armor_18>
+        <armor_19>	100	</armor_19>
+        <armor_20>	55	</armor_20>
+        <armor_21>	155	</armor_21>
+        <armor_22>	205	</armor_22>
+        <armor_23>	230	</armor_23>
+        <armor_24>	210	</armor_24>
+        <armor_25>	150	</armor_25>
+        <armor_26>	150	</armor_26>
+        <armor_28>	175	</armor_28>
+        <armor_29>	190	</armor_29>
+        <armor_30>	80	</armor_30>
+        <armor_31>	55	</armor_31>
+        <armor_32>	75	</armor_32>
       </armor>
       <primaryArmor>	armor_1 armor_6 armor_4	</primaryArmor>
       <weight>	8200	</weight>
-      <maxHealth>	380	</maxHealth>
+      <maxHealth>	390	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
@@ -1633,7 +1647,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.977	</invisibilityFactor>
       <guns>
-        <_100mm_D54_TS>	shared	  <maxAmmo>	50	</maxAmmo>
+        <_100mm_U_8TS_140>	shared	  <maxAmmo>	50	</maxAmmo>
           <armor>
             <armor_1>	240	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -1649,13 +1663,13 @@
           </pitchLimits>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
-          <reloadTime>	6.6	</reloadTime>
+          <reloadTime>	6.3	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.1	</aimingTime>
+          <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R97_Object_140/normal/lod0/Gun_03.model	</undamaged>
@@ -1758,7 +1772,7 @@
             <density>	145.46 142.249	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_100mm_D54_TS>
+        </_100mm_U_8TS_140>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R97_Object_140/normal/lod0/Turret_01.model	</undamaged>
@@ -2444,10 +2458,10 @@
         <density>	98.1538 97.4577	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_1_Object_140>
+    </Turret_1_R97_Object_140>
   </turrets0>
   <engines>
-    <TD-12>	shared	</TD-12>
+    <TD_12>	shared	</TD_12>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
@@ -2458,13 +2472,13 @@
   <physics>
     <detailed>
       <engines>
-        <TD-12>
-          <smplEnginePower>	613.2231	</smplEnginePower>
+        <TD_12>
+          <smplEnginePower>	700	</smplEnginePower>
           <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
-        </TD-12>
+        </TD_12>
       </engines>
       <chassis>
-        <Chassis_Object_140>
+        <Chassis_R97_Object_140>
           <grounds>
             <soft>
               <rollingFriction>	0.12075	</rollingFriction>
@@ -2476,7 +2490,7 @@
               <rollingFriction>	0.044275	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_Object_140>
+        </Chassis_R97_Object_140>
       </chassis>
     </detailed>
   </physics>

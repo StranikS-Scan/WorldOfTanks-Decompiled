@@ -469,7 +469,7 @@ class ElementTooltip(BlocksTooltipData):
         else:
             blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.main(backport.text(rCharacteristics.historicity.fantastical())), padding=formatters.packPadding(top=-2), icon=self.FANTASTICAL_ICON, isWideOffset=isWideOffset))
         if self._item.itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL:
-            blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.main(_ms(backport.text(rCharacteristics.form.text()), value=text_styles.stats(PROJECTION_DECAL_TEXT_FORM_TAG[self._item.formfactor]))), padding=formatters.packPadding(top=-2), icon='form_' + str(PROJECTION_DECAL_FORM_TO_UI_ID[self._item.formfactor]), isWideOffset=isWideOffset))
+            blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.main(_ms(backport.text(rCharacteristics.form.text()), value=text_styles.stats(backport.text(PROJECTION_DECAL_TEXT_FORM_TAG[self._item.formfactor])))), padding=formatters.packPadding(top=-2), icon='form_' + str(PROJECTION_DECAL_FORM_TO_UI_ID[self._item.formfactor]), isWideOffset=isWideOffset))
         if (self._item.isProgressive or self._item.isQuestsProgression) and self.__vehicle is not None:
             currentLevel = self._progressionLevel if self._progressionLevel > 0 else self._item.getLatestOpenedProgressionLevel(self.__vehicle)
             if self._item.isProgressionRewindEnabled:
@@ -609,7 +609,7 @@ class ElementTooltip(BlocksTooltipData):
         imageOffset = 100
         if self._item.itemTypeID == GUI_ITEM_TYPE.ATTACHMENT:
             imageOffset = 65
-        return formatters.packCustomizationRarityHeaderBlockData(img=img, imgOffset=imageOffset, rarity=rarity, width=width, height=height, videoSource=videoSource, padding=formatters.packPadding(top=-4, bottom=-70, left=2), rarityIcon=backport.image(R.images.gui.maps.icons.customization.rarity.sign.s40x40.dyn(rarity)()), rarityBackground=backport.image(R.images.gui.maps.icons.customization.rarity.glow.s360x270.dyn(rarity)()), title=self._item.userName, subTitle='{0} {1}'.format(backport.text(R.strings.vehicle_customization.customization.rarity.dyn(rarity)()), backport.text(self._item.userTypeID)))
+        return formatters.packCustomizationRarityHeaderBlockData(img=img, imgOffset=imageOffset, rarity=rarity, width=width, height=height, videoSource=videoSource, padding=formatters.packPadding(top=-4, bottom=-70, left=2), rarityIcon=backport.image(R.images.gui.maps.icons.customization.rarity.sign.s40x40.dyn(rarity)()), rarityBackground=backport.image(R.images.gui.maps.icons.customization.rarity.glow.s360x270.dyn(rarity)()), title=self._item.userName, subTitle=backport.text(R.strings.item_types.customization.attachment.rarity(), rarity=backport.text(R.strings.vehicle_customization.customization.rarity.dyn(rarity)())))
 
     def _packTitleBlock(self):
         title = self._item.userName

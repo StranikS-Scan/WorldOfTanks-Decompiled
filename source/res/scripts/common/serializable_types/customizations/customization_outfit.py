@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/serializable_types/customizations/customization_outfit.py
 from collections import OrderedDict, defaultdict
+from data_structures import OrderedSet
 from string import lower, upper
 from typing import TYPE_CHECKING
 from debug_utils import LOG_ERROR
@@ -188,7 +189,7 @@ class CustomizationOutfit(SerializableComponent):
 
     @staticmethod
     def slotIdToDict(components):
-        res = {}
+        res = OrderedDict()
         for c in components:
             cpy = c.copy()
             slotId = cpy.slotId
@@ -234,8 +235,8 @@ class CustomizationOutfit(SerializableComponent):
                 toDict = self.applyAreaBitmaskToDict if isAppliedTo else self.slotIdToDict
                 modifiedComponents = toDict(modifiedComponents)
                 baseComponents = toDict(baseComponents)
-                modifiedRegions = set(modifiedComponents)
-                baseRegions = set(baseComponents)
+                modifiedRegions = OrderedSet(modifiedComponents)
+                baseRegions = OrderedSet(baseComponents)
                 for region in baseRegions - modifiedRegions:
                     for component in baseComponents[region]:
                         component = component.copy()
@@ -285,8 +286,8 @@ class CustomizationOutfit(SerializableComponent):
                 toDict = self.applyAreaBitmaskToDict if isAppliedTo else self.slotIdToDict
                 modifiedComponents = toDict(modifiedComponents)
                 baseComponents = toDict(baseComponents)
-                modifiedRegions = set(modifiedComponents)
-                baseRegions = set(baseComponents)
+                modifiedRegions = OrderedSet(modifiedComponents)
+                baseRegions = OrderedSet(baseComponents)
                 for region in baseRegions - modifiedRegions:
                     component = baseComponents[region][0].copy()
                     if itemType == CustomizationType.PROJECTION_DECAL and component.matchingTag:

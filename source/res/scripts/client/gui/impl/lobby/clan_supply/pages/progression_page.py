@@ -2,25 +2,19 @@
 # Embedded file name: scripts/client/gui/impl/lobby/clan_supply/pages/progression_page.py
 import logging
 import typing
-import SoundGroups
 from adisp import adisp_process
 from frameworks.wulf.view.submodel_presenter import SubModelPresenter
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.clans.clan_cache import g_clanCache
 from gui.clans.data_wrapper.clan_supply import PointStatus, DataNames
-from gui.impl import backport
-from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.clan_supply.pages.progression_model import ScreenStatus as ProgressionScreenStatus
 from gui.impl.gen.view_models.views.lobby.clan_supply.pages.stage_model import StageModel, StageStatus
 from gui.impl.gen.view_models.views.lobby.clan_supply.stage_info_model import ScreenStatus as StageScreenStatus, StageInfoStatus
 from gui.impl.lobby.clan_supply.bonus_packers import composeBonuses, findVehicle, getClanSupplyBonusPacker, BONUSES_ORDER
-from gui.impl.lobby.clan_supply.clan_supply_helpers import showClanSupplyView
-from gui.impl.lobby.clan_supply.sound_helper import SOUNDS
 from gui.impl.lobby.common.vehicle_model_helpers import fillVehicleModel
 from gui.impl.lobby.common.view_helpers import packBonusModelAndTooltipData
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
-from gui.shared.event_dispatcher import showVehiclePreviewWithoutBottomPanel
+from gui.shared.event_dispatcher import showVehicleHubOverview
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import Currency
 from gui.wgcg.clan_supply.contexts import PurchaseProgressionStageCtx
@@ -197,12 +191,7 @@ class ProgressionPage(SubModelPresenter):
             if style is None:
                 _logger.error('Style is invalid, id=%s', self.__rewardStyleID)
                 return
-
-            def __onPreviewCallback():
-                SoundGroups.g_instance.setState(SOUNDS.STATE_HANGAR_PLACE, SOUNDS.STATE_HANGAR_PLACE_CLANS)
-                showClanSupplyView()
-
-            showVehiclePreviewWithoutBottomPanel(self.__rewardVehicleIntCD, style=style, backCallback=__onPreviewCallback, backBtnLabel=backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.clanSupply()), previewAlias=VIEW_ALIAS.LOBBY_STRONGHOLD)
+            showVehicleHubOverview(self.__rewardVehicleIntCD, style=style)
             return
 
     def __onRefresh(self):

@@ -716,7 +716,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	7700	</weight>
-      <maxLoad>	42000	</maxLoad>
       <terrainResistance>	0.7 0.8 1.6	</terrainResistance>
       <brakeForce>	50000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -1651,7 +1650,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_122-mm_60-122TG>	shared	  <maxAmmo>	40	</maxAmmo>
+        <_122mm_60_122TG>	shared	  <maxAmmo>	40	</maxAmmo>
           <armor>
             <armor_1>	240	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -1664,13 +1663,13 @@
             <gun>	60	</gun>
           </armor>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 5 0.366894 5 0.430556 1 0.569444 1 0.633106 5 1 5	</maxPitch>
           </pitchLimits>
-          <reloadTime>	9.6	</reloadTime>
+          <reloadTime>	9.4	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -1770,7 +1769,7 @@
             <density>	97.8966 103.019	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_122-mm_60-122TG>
+        </_122mm_60_122TG>
       </guns>
       <models>
         <undamaged>	vehicles/chinese/Ch19_121/normal/lod0/Turret_01.model	</undamaged>

@@ -1,6 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/aih_constants.py
-
+import typing
+from collections import namedtuple
+import Math
+if typing.TYPE_CHECKING:
+    from VehicleGunRotator import GunMarkerInfo
 
 class CTRL_TYPE(object):
     USUAL = 0
@@ -90,10 +94,11 @@ class GUN_MARKER_FLAG(int):
 
 
 class SHOT_RESULT(int):
-    UNDEFINED = 0
-    NOT_PIERCED = 1
-    LITTLE_PIERCED = 2
-    GREAT_PIERCED = 3
+    EMPTY = 0
+    UNDEFINED = 1
+    NOT_PIERCED = 2
+    LITTLE_PIERCED = 3
+    GREAT_PIERCED = 4
 
 
 class STRATEGIC_CAMERA(int):
@@ -115,3 +120,12 @@ MAP_CASE_MODES = (CTRL_MODE_NAME.MAP_CASE_ARCADE_EPIC_MINEFIELD,
  CTRL_MODE_NAME.MAP_CASE_ARCADE,
  CTRL_MODE_NAME.MAP_CASE_EPIC,
  CTRL_MODE_NAME.SM_STRATEGIC)
+
+class GunMarkerState(namedtuple('GunMarkerState', ('gunInstallationIndex', 'gunIndex', 'position', 'direction', 'size', 'collData'))):
+
+    @classmethod
+    def fromGunMarkerInfo(cls, gunMarkerInfo, size=None):
+        return cls(gunMarkerInfo.gunInstallationIndex, gunMarkerInfo.gunIndex, gunMarkerInfo.position, gunMarkerInfo.direction, size or gunMarkerInfo.size, gunMarkerInfo.collData)
+
+
+DEFAULT_GUN_MARKER_STATE = GunMarkerState(0, None, Math.Vector3(0.0, 0.0, 0.0), 0.0, 0.0, None)

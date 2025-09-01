@@ -46,7 +46,7 @@ class MainView(MainViewImpl):
     __lootBoxes = dependency.descriptor(ILootBoxSystemController)
 
     def __init__(self, subViewID=None, *args, **kwargs):
-        settings = ViewSettings(R.views.lobby.lootbox_system.MainView())
+        settings = ViewSettings(R.views.mono.lootbox.main())
         settings.model = MainViewModel()
         settings.args = (subViewID,) + args
         settings.kwargs = kwargs

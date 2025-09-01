@@ -1,0 +1,83 @@
+<pm3_8_1_6.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm3_8_1_6_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <or>
+            <vehicleBlockedByArmor>
+              <whileStill></whileStill>
+              <greaterOrEqual>	1500	</greaterOrEqual>
+            </vehicleBlockedByArmor>
+            <vehicleDamage>
+              <greaterOrEqual>	2500	</greaterOrEqual>
+            </vehicleDamage>
+          </or>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	100000	</credits>
+        <goodie>
+          <id>	121002	</id>
+          <count>	1	</count>
+        </goodie>
+        <customizations>
+          <item>
+            <value>	6	</value>
+            <custType>	decal	</custType>
+            <id>	1153	</id>
+          </item>
+        </customizations>
+        <token>
+          <id>	token:pt:final:s3:t8:main	</id>
+          <expires>	01.01.2050 00:01	</expires>
+          <count>	1	</count>
+          <limit>	45	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm3_8_1_6_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <not>
+              <or>
+                <token>
+                  <id>	token:pt:final:s3:t8:main	</id>
+                  <equal>	45	</equal>
+                </token>
+                <token>
+                  <id>	token:pt:s3:t8:finished:honor	</id>
+                  <equal>	1	</equal>
+                </token>
+              </or>
+            </not>
+          </account>
+        </preBattle>
+        <postBattle>
+          <or>
+            <vehicleBlockedByArmor>
+              <whileStill></whileStill>
+              <greaterOrEqual>	1500	</greaterOrEqual>
+            </vehicleBlockedByArmor>
+            <vehicleDamage>
+              <greaterOrEqual>	2500	</greaterOrEqual>
+            </vehicleDamage>
+          </or>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	pm3:8:points	</id>
+          <expires>	01.12.2050 06:00	</expires>
+          <count>	45	</count>
+        </token>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</pm3_8_1_6.xml>

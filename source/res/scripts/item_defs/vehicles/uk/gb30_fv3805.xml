@@ -1491,8 +1491,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	20000	</weight>
-      <maxLoad>	52000	</maxLoad>
-      <terrainResistance>	1.3 1.5 2.5	</terrainResistance>
+      <terrainResistance>	1.2 1.4 2.3	</terrainResistance>
       <brakeForce>	47000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	20	</rotationSpeed>
@@ -1501,9 +1500,9 @@
         <vehicleRotation>	0.34	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	140	</maxHealth>
-      <maxRegenHealth>	105	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	165	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB30_FV3805/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/british/GB30_FV3805/crash/lod0/Chassis.model	</destroyed>
@@ -2584,7 +2583,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	8.84210491	</repairTime>
+      <repairTime>	6.66666651	</repairTime>
     </Chassis_GB30_FV3805>
     <Chassis_GB30_FV3805_2>
       <userString>	#gb_vehicles:Chassis_GB30_FV3805_2	</userString>
@@ -2596,7 +2595,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	20000	</weight>
-      <maxLoad>	55000	</maxLoad>
       <terrainResistance>	1.2 1.4 2.3	</terrainResistance>
       <brakeForce>	52000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2606,9 +2604,9 @@
         <vehicleRotation>	0.3	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	150	</maxHealth>
-      <maxRegenHealth>	115	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB30_FV3805/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/british/GB30_FV3805/crash/lod0/Chassis.model	</destroyed>
@@ -3689,29 +3687,31 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	7.19999981	</repairTime>
+      <repairTime>	6.66666651	</repairTime>
     </Chassis_GB30_FV3805_2>
   </chassis>
   <turrets0>
     <Turret_1_GB30_FV3805>
       <userString>	#gb_vehicles:Turret_1_GB30_FV3805	</userString>
-      <tags>	cannotDetach	</tags>
+      <tags>	cannotDetach turretless	</tags>
       <level>	9	</level>
       <price>	100	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	50.8	</armor_1>
+        <armor_1>	50.8	  <tags>	hull	</tags>
+        </armor_1>
         <armor_2>	50.8	</armor_2>
-        <armor_3>	14	</armor_3>
+        <armor_3>	14	  <tags>	hull	</tags>
+        </armor_3>
         <armor_8>	0	</armor_8>
       </armor>
       <weight>	100	</weight>
       <maxHealth>	90	</maxHealth>
       <rotationSpeed>	12	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	170	</maxHealth>
+        <maxRegenHealth>	85	</maxRegenHealth>
+        <repairCost>	9	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	275	</circularVisionRadius>
       <surveyingDeviceHealth>
@@ -3720,9 +3720,9 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_5.5inch_SPG_Gun>	shared	  <maxAmmo>	76	</maxAmmo>
+        <B_L_5_5_in_Gun>	shared	  <maxAmmo>	76	</maxAmmo>
           <unlocks>
-            <gun>	_6inch_SPG_Gun	  <cost>	20800	</cost>
+            <gun>	B_L_7_2_in_Howitzer_Mk_6	  <cost>	60000	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -3842,131 +3842,8 @@
             <density>	92.6697 92.7664	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_5.5inch_SPG_Gun>
-        <_6inch_SPG_Gun>	shared	  <maxAmmo>	76	</maxAmmo>
-          <unlocks>
-            <gun>	_7.2inch_SPG_Howitzer	  <cost>	60000	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	50.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <gun>	25	</gun>
-          </armor>
-          <pitchLimits>
-            <minPitch>	0 -65 1 -65	</minPitch>
-            <maxPitch>	0 5 1 5	</maxPitch>
-          </pitchLimits>
-          <shotDispersionRadius>	0.65	</shotDispersionRadius>
-          <reloadTime>	28	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.44	</turretRotation>
-            <afterShot>	5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	4.5	</aimingTime>
-          <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
-          <turretYawLimits>	-25 25	</turretYawLimits>
-          <models>
-            <undamaged>	vehicles/british/GB30_FV3805/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/british/GB30_FV3805/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/british/GB30_FV3805/crash/lod0/Gun_02.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/british/GB30_FV3805/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB30_FV3805/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_huge	</effects>
-          <reloadEffect>	reload115_152	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000051 0.000003 1.66422	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.454272 0.454272	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000051 0.000003 1.66422	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.001099 2.41564 0.474634	</position>
-              <rotation>	1.41525 -0.011104 3.13036	</rotation>
-              <scale>	1.79951 0.959585 1.7995	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	1.00616	</clipAngle>
-              <anchorShift>	0.321542	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x3	</tags>
-              <position>	0.001394 2.58504 0.448069	</position>
-              <rotation>	1.41524 -0.011104 3.13036	</rotation>
-              <scale>	2.37834 1.26824 2.37833	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	1.00616	</clipAngle>
-              <anchorShift>	0.271542	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45002	</slotId>
-              <tags>	formfactor_rect1x4	</tags>
-              <position>	0.001473 2.63001 0.441017	</position>
-              <rotation>	1.41525 -0.011104 3.13036	</rotation>
-              <scale>	2.42356 1.29236 2.42355	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	1.00616	</clipAngle>
-              <anchorShift>	0.251543	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45003	</slotId>
-              <tags>	formfactor_rect1x6	</tags>
-              <position>	0.001654 2.7345 0.424631	</position>
-              <rotation>	1.41525 -0.011104 3.13036	</rotation>
-              <scale>	2.54704 1.3582 2.54703	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	1.00616	</clipAngle>
-              <anchorShift>	0.171543	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0 0 2.06604	</rayStart>
-              <rayEnd>	-0 0 2.59104	</rayEnd>
-              <rayUp>	0.125 0 0	</rayUp>
-              <size>	0.525	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <tiling>	1 0.7 0.000000 0.000000	</tiling>
-            <density>	92.6696 92.7688	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </_6inch_SPG_Gun>
-        <_7.2inch_SPG_Howitzer>	shared	  <maxAmmo>	48	</maxAmmo>
+        </B_L_5_5_in_Gun>
+        <B_L_7_2_in_Howitzer_Mk_6>	shared	  <maxAmmo>	48	</maxAmmo>
           <unlocks>
             <vehicle>	GB31_Conqueror_Gun	  <cost>	267000	</cost>
             </vehicle>
@@ -4088,7 +3965,7 @@
             <density>	91.5166 95.9686	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_7.2inch_SPG_Howitzer>
+        </B_L_7_2_in_Howitzer_Mk_6>
       </guns>
       <models>
         <undamaged>	vehicles/british/GB30_FV3805/normal/lod0/Turret_01.model	</undamaged>
@@ -4194,52 +4071,42 @@
     </Turret_1_GB30_FV3805>
   </turrets0>
   <engines>
-    <Rolls_Royse_Meteor_MkIV>	shared	  <unlocks>
-        <engine>	Rolls_Royse_Meteor_MkIVC	  <cost>	31000	</cost>
+    <Rolls_Royce_Meteor_Mk_IVB_3805>	shared	  <unlocks>
+        <engine>	Rolls_Royce_Meteor_Mk_IVC_3805	  <cost>	31000	</cost>
         </engine>
       </unlocks>
-    </Rolls_Royse_Meteor_MkIV>
-    <Rolls_Royse_Meteor_MkIVC>	shared	</Rolls_Royse_Meteor_MkIVC>
+    </Rolls_Royce_Meteor_Mk_IVB_3805>
+    <Rolls_Royce_Meteor_Mk_IVC_3805>	shared	</Rolls_Royce_Meteor_Mk_IVC_3805>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <N19Mk3>	shared	  <unlocks>
-        <radio>	N22	  <cost>	4500	</cost>
-        </radio>
-      </unlocks>
-    </N19Mk3>
-    <N22>	shared	  <unlocks>
-        <radio>	C42	  <cost>	9000	</cost>
-        </radio>
-      </unlocks>
-    </N22>
     <C42>	shared	</C42>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Rolls_Royse_Meteor_MkIV>
+        <Rolls_Royce_Meteor_Mk_IVB_3805>
           <smplEnginePower>	687.2327	</smplEnginePower>
           <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
-        </Rolls_Royse_Meteor_MkIV>
-        <Rolls_Royse_Meteor_MkIVC>
+        </Rolls_Royce_Meteor_Mk_IVB_3805>
+        <Rolls_Royce_Meteor_Mk_IVC_3805>
           <smplEnginePower>	792.9609	</smplEnginePower>
           <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
-        </Rolls_Royse_Meteor_MkIVC>
+        </Rolls_Royce_Meteor_Mk_IVC_3805>
       </engines>
       <chassis>
         <Chassis_GB30_FV3805>
           <grounds>
             <soft>
-              <rollingFriction>	0.20125	</rollingFriction>
+              <rollingFriction>	0.18515	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.12075	</rollingFriction>
+              <rollingFriction>	0.1127	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.0966	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_GB30_FV3805>
@@ -4261,9 +4128,9 @@
   </physics>
   <clientAdjustmentFactors>
     <guns>
-      <_7.2inch_SPG_Howitzer>
+      <B_L_7_2_in_Howitzer_Mk_6>
         <delta>	1.1363636	</delta>
-      </_7.2inch_SPG_Howitzer>
+      </B_L_7_2_in_Howitzer_Mk_6>
     </guns>
     <armour>	0.982933101	</armour>
   </clientAdjustmentFactors>

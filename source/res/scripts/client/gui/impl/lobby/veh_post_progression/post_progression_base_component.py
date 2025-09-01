@@ -1,6 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/veh_post_progression/post_progression_base_component.py
+from __future__ import absolute_import
 import typing
+from future.builtins import range
+from future.utils import iteritems
 from Event import Event, EventManager
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.impl.gen import R
@@ -67,7 +70,7 @@ class _SelectionProvider(object):
                 if progression.getStep(childStepID).action.isMultiAction():
                     stateCopy.addUnlock(childStepID)
 
-        for stepID, modID in self.__multiStepsSelection.iteritems():
+        for stepID, modID in iteritems(self.__multiStepsSelection):
             stateCopy.addUnlock(stepID)
             stepAction = progression.getStep(stepID).action
             stateCopy.setPair(stepID, stepAction.getInnerPairType(modID))
@@ -107,7 +110,7 @@ class _SelectionProvider(object):
         mainSteps -= invalidMainIds
         multiSteps = self.__multiStepsSelection
         invalidMultiIDs = []
-        for stepID, modID in multiSteps.iteritems():
+        for stepID, modID in iteritems(multiSteps):
             if progression.getStep(stepID).action.getPurchasedID() == modID:
                 invalidMultiIDs.append(stepID)
 
@@ -138,25 +141,33 @@ class _SelectionProvider(object):
         progression = self.__postProgression
         if modID == progression.getStep(stepID).action.getPurchasedID():
             return
-        multiSteps = self.__multiStepsSelection
-        if stepID in multiSteps and modID == multiSteps[stepID]:
-            multiSteps.pop(stepID)
+        else:
+            multiSteps = self.__multiStepsSelection
+            if stepID in multiSteps and modID == multiSteps[stepID]:
+                multiSteps.pop(stepID)
+                return
+            multiSteps[stepID] = modID
+            parentStepID = progression.getStep(stepID).getParentStepID()
+            if parentStepID is not None:
+                parentStep = progression.getStep(parentStepID)
+                if not parentStep.isReceived() and parentStep.stepID not in self.__mainStepsSelection:
+                    self.selectMainStep(parentStep.stepID, isInternal=True)
             return
-        multiSteps[stepID] = modID
-        parentStep = progression.getStep(progression.getStep(stepID).getParentStepID())
-        if not parentStep.isReceived() and parentStep.stepID not in self.__mainStepsSelection:
-            self.selectMainStep(parentStep.stepID, isInternal=True)
 
     def __invalidateRelations(self):
         invalidMultiIDs = []
         postProgression = self.__postProgression
         for stepID in self.__multiStepsSelection:
-            parentStep = postProgression.getStep(postProgression.getStep(stepID).getParentStepID())
-            if not parentStep.isReceived() and parentStep.stepID not in self.__mainStepsSelection:
-                invalidMultiIDs.append(stepID)
+            parentStepID = postProgression.getStep(stepID).getParentStepID()
+            if parentStepID is not None:
+                parentStep = postProgression.getStep(parentStepID)
+                if not parentStep.isReceived() and parentStep.stepID not in self.__mainStepsSelection:
+                    invalidMultiIDs.append(stepID)
 
         for invalidStepID in invalidMultiIDs:
             self.__multiStepsSelection.pop(invalidStepID)
+
+        return
 
 
 class PostProgressionBaseComponentView(ViewImpl):
@@ -212,8 +223,8 @@ class PostProgressionBaseComponentView(ViewImpl):
     def _onMultiStepActionClick(self, args):
         pass
 
-    def _updateAll(self, *args, **kwargs):
-        self._updateVehicle(*args, **kwargs)
+    def _updateAll(self, **kwargs):
+        self._updateVehicle(**kwargs)
         _, availabilityReason = self._vehicle.postProgressionAvailability()
         if availabilityReason is PostProgressionAvailability.NOT_EXISTS:
             return
@@ -225,7 +236,7 @@ class PostProgressionBaseComponentView(ViewImpl):
             self._fillPersistentBonuses(model.persistentBonuses, postProgression, completion)
             self._fillControlsModel(model, postProgression)
 
-    def _updateVehicle(self, *args, **kwargs):
+    def _updateVehicle(self, **kwargs):
         raise NotImplementedError
 
     def _updateViewModel(self, viewModel, availabilityReason, completion):
@@ -264,7 +275,9 @@ class PostProgressionBaseComponentView(ViewImpl):
         stepModel.setActionType(_ACTION_TYPE_MAP[action.actionType])
         stepModel.setActionState(_ACTION_STATE_MAP[action.getState()])
         stepModel.setIsDisabled(action.isDisabled())
-        stepModel.setParentId(step.getParentStepID())
+        parentStepID = step.getParentStepID()
+        if parentStepID is not None:
+            stepModel.setParentId(parentStepID)
         stepModel.setSelectedIdx(action.getInnerIdx(selectedModID) if selectedModID is not None else _NOT_SELECTED_IDX)
         self.__fillModificationsArray(stepModel.getModifications(), action.modifications)
         self.__fillRestrictionsModel(stepModel.restrictions, step.getRestrictions())
@@ -357,7 +370,7 @@ class PostProgressionBaseComponentView(ViewImpl):
             allowedLevels = restrictionsModel.getAllowedLevels()
             allowedLevels.clear()
             minLvl, maxLvl = restrictions.getLevelRange()
-            for level in xrange(minLvl, maxLvl + 1):
+            for level in range(minLvl, maxLvl + 1):
                 allowedLevels.addNumber(level)
 
             allowedLevels.invalidate()

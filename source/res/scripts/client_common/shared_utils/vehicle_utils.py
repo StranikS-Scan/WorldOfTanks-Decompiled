@@ -8,8 +8,9 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors.module import getPreviewInstallerProcessor
 from gui.shared.items_parameters.params_cache import g_paramsCache
 from helpers import dependency
-from items import getTypeOfCompactDescr
+from items import getTypeOfCompactDescr, vehicles
 from skeletons.gui.shared import IItemsCache
+from vehicle_systems.tankStructure import TankPartIndexes
 _MODULES_INSTALL_ORDER = (GUI_ITEM_TYPE.CHASSIS,
  GUI_ITEM_TYPE.TURRET,
  GUI_ITEM_TYPE.GUN,
@@ -66,25 +67,8 @@ class ModuleDependencies(object):
             isFit, reason = module.mayInstall(vehicle)
             if not isFit:
                 if reason == 'need turret':
-                    turretsCDs, chassisCDs = self.__getSuitableModulesForGun(moduleId, vehicle)
+                    turretsCDs = self.__getSuitableModulesForGun(moduleId, vehicle)
                     self.__addConflicted(GUI_ITEM_TYPE.TURRET, turretsCDs)
-                    self.__addConflicted(GUI_ITEM_TYPE.CHASSIS, chassisCDs)
-                elif reason == 'too heavy':
-                    chassis = []
-                    for _, _, nodeCD, _ in vehicle.getUnlocksDescrs():
-                        itemTypeID = getTypeOfCompactDescr(nodeCD)
-                        if itemTypeID == GUI_ITEM_TYPE.CHASSIS:
-                            chassisCand = self._getModule(nodeCD)
-                            if chassisCand.mayInstall(vehicle) and not chassisCand.isInstalled(vehicle):
-                                chassis.append(nodeCD)
-
-                    if chassis:
-                        self.__addConflicted(GUI_ITEM_TYPE.CHASSIS, chassis)
-                elif reason == 'too heavy chassis':
-                    for i, stockCD in enumerate(self.__stockModules):
-                        if stockCD is not None and not self._getModule(stockCD).isInstalled(vehicle):
-                            self.__addConflicted(GUI_ITEM_TYPE.VEHICLE_MODULES[i], (stockCD,))
-
                 elif reason == 'need gun':
                     stockGunCD = self.__stockModules[GUI_ITEM_TYPE.VEHICLE_MODULES.index(GUI_ITEM_TYPE.GUN)]
                     if stockGunCD is not None and not self._getModule(stockGunCD).isInstalled(vehicle):
@@ -101,24 +85,7 @@ class ModuleDependencies(object):
         self.__conflictedModulesCD[_MODULES_INSTALL_ORDER.index(moduleTypeID)].extend(moduleCDs)
 
     def __getSuitableModulesForGun(self, gunIntCD, vehicle):
-        chassisCDs = []
-        turretsCDs = g_paramsCache.getPrecachedParameters(gunIntCD).getTurretsForVehicle(vehicle.intCD)
-        for turretIntCD in turretsCDs:
-            suitableTurret = self._getModule(turretIntCD)
-            isFit, reason = suitableTurret.mayInstall(vehicle)
-            if not isFit:
-                if reason == 'too heavy':
-                    chassisCDs = [ ch.intCD for ch in self.getSuitableChassis(vehicle) ]
-            currentTurret = vehicle.turret
-            self._installModule(vehicle, suitableTurret)
-            gun = self._getModule(gunIntCD)
-            isFit, reason = gun.mayInstall(vehicle)
-            if not isFit:
-                if reason == 'too heavy':
-                    chassisCDs = [ ch.intCD for ch in self.getSuitableChassis(vehicle) ]
-            self._installModule(vehicle, currentTurret)
-
-        return (turretsCDs, chassisCDs)
+        return g_paramsCache.getPrecachedParameters(gunIntCD).getTurretsForVehicle(vehicle.intCD)
 
     def __initConflictedList(self):
         self.__hasConflicted = False
@@ -144,3 +111,27 @@ class ModuleDependencies(object):
                     chassis.append(chassisCand)
 
         return chassis
+
+
+def getMatinfo(vehicleEntity, partIndex, matKind, isWheeledVehicle):
+    matInfo = None
+    typeDescriptor = vehicleEntity.typeDescriptor
+    collisionComponent = vehicleEntity.appearance.collisions
+    if collisionComponent is not None and partIndex > collisionComponent.maxStaticPartIndex:
+        matInfo = BigWorld.getMaterialInfo(collisionComponent.getPartGameObject(partIndex), matKind)
+    elif partIndex == TankPartIndexes.CHASSIS or partIndex >= len(TankPartIndexes.ALL):
+        matInfo = typeDescriptor.chassis.materials.get(matKind)
+    elif partIndex == TankPartIndexes.HULL:
+        matInfo = typeDescriptor.hull.materials.get(matKind)
+    elif partIndex == TankPartIndexes.TURRET:
+        matInfo = typeDescriptor.turret.materials.get(matKind)
+    elif partIndex == TankPartIndexes.GUN:
+        matInfo = typeDescriptor.gun.materials.get(matKind)
+    elif isWheeledVehicle and collisionComponent is not None:
+        wheelName = collisionComponent.getPartName(partIndex)
+        if wheelName is not None:
+            matInfo = typeDescriptor.chassis.wheelsArmor.get(wheelName, None)
+    if matInfo is None:
+        commonMaterialsInfo = vehicles.g_cache.commonConfig['materials']
+        matInfo = commonMaterialsInfo.get(matKind)
+    return matInfo

@@ -13,7 +13,7 @@
     <backward>	12	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.071	</moving>
+    <moving>	0.072	</moving>
     <still>	0.143	</still>
     <camouflageBonus>	0.02	</camouflageBonus>
     <firePenalty>	0.215	</firePenalty>
@@ -59,7 +59,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	25745	</weight>
-    <maxHealth>	920	</maxHealth>
+    <maxHealth>	1040	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	180	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -615,8 +615,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	52000	</maxLoad>
-      <terrainResistance>	1.1 1.7 2.6	</terrainResistance>
+      <terrainResistance>	1.1 1.4 2.3	</terrainResistance>
       <brakeForce>	34500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	24	</rotationSpeed>
@@ -1507,7 +1506,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	54000	</maxLoad>
       <terrainResistance>	1.1 1.4 2.3	</terrainResistance>
       <brakeForce>	34500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -2430,7 +2428,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	11000	</weight>
-      <maxHealth>	230	</maxHealth>
+      <maxHealth>	200	</maxHealth>
       <rotationSpeed>	38	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -2481,9 +2479,9 @@
             <gun>	35	</gun>
           </armor>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	7.5	</reloadTime>
+          <reloadTime>	7	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
+            <turretRotation>	0.14	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2571,7 +2569,7 @@
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	13	</reloadTime>
+          <reloadTime>	12.5	</reloadTime>
           <aimingTime>	2.7	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
@@ -3259,7 +3257,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	11500	</weight>
-      <maxHealth>	330	</maxHealth>
+      <maxHealth>	260	</maxHealth>
       <rotationSpeed>	28	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -3324,7 +3322,7 @@
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	7	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
+            <turretRotation>	0.13	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -4076,15 +4074,10 @@
   </turrets0>
   <engines>
     <NORINCO_12150LM>	shared	  <unlocks>
-        <engine>	V_2_54SCG_2	  <cost>	13500	</cost>
-        </engine>
-      </unlocks>
-    </NORINCO_12150LM>
-    <V_2_54SCG_2>	shared	  <unlocks>
         <engine>	_8V135_M	  <cost>	19000	</cost>
         </engine>
       </unlocks>
-    </V_2_54SCG_2>
+    </NORINCO_12150LM>
     <_8V135_M>	shared	  <unlocks>
         <vehicle>	Ch50_BZ_166	  <cost>	96400	</cost>
         </vehicle>
@@ -4095,37 +4088,28 @@
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <_9RM_shop>	shared	  <unlocks>
-        <radio>	A-220_1	  <cost>	7000	</cost>
-        </radio>
-      </unlocks>
-    </_9RM_shop>
     <A-220_1>	shared	</A-220_1>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <V_2_54SCG_2>
-          <smplEnginePower>	650	</smplEnginePower>
+        <NORINCO_12150LM>
+          <smplEnginePower>	660	</smplEnginePower>
           <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
-        </V_2_54SCG_2>
+        </NORINCO_12150LM>
         <_8V135_M>
           <smplEnginePower>	700	</smplEnginePower>
           <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
         </_8V135_M>
-        <NORINCO_12150LM>
-          <smplEnginePower>	600	</smplEnginePower>
-          <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
-        </NORINCO_12150LM>
       </engines>
       <chassis>
         <Chassis_Ch51_BZ_58>
           <grounds>
             <soft>
-              <rollingFriction>	0.2093	</rollingFriction>
+              <rollingFriction>	0.18515	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.13685	</rollingFriction>
+              <rollingFriction>	0.1127	</rollingFriction>
             </medium>
             <firm>
               <rollingFriction>	0.08855	</rollingFriction>
@@ -4202,11 +4186,9 @@
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>
   </effects>
-  <effectsPrefab>
-    <rocketAcceleration>
-      <prefab>	particles/Tank/rocket_accelerator/Ch51_BZ_58_Rocket.prefab	</prefab>
-    </rocketAcceleration>
-  </effectsPrefab>
+  <prefabs>
+    <mechanicEffects>	particles/Tank/rocket_accelerator/Ch51_BZ_58_Rocket.prefab	</mechanicEffects>
+  </prefabs>
   <emblems>
     <default>	15505	</default>
     <lodDist>	MEDIUM	</lodDist>

@@ -154,6 +154,22 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
         timeLeft = self.__getTimeLeft(times)
         avatar.updateDualGunStatus(self.entity.id, dualGunStatus.status, (times.baseTime, timeLeft))
 
+    @noneAccepted
+    @noexcept
+    def update_fixAngles(self, fixAngles=None):
+        avatar = self._avatar()
+        if not avatar:
+            return
+        else:
+            gunRotator = avatar.gunRotator
+            if gunRotator is None:
+                return
+            if self.fixAngles:
+                gunRotator.fixShotPosition(fixAngles.turretYaw, fixAngles.gunPitch)
+            else:
+                gunRotator.unFixShotPosition()
+            return
+
     @noexcept
     def update_siegeStateStatus(self, siegeStateStatus):
         avatar = self._avatar()
@@ -220,7 +236,7 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
         avatar = self._avatar()
         if not avatar:
             return
-        avatar.updateTargetingInfo(self.entity.id, data.turretYaw, data.gunPitch, data.maxTurretRotationSpeed, data.maxGunRotationSpeed, data.shotDispMultiplierFactor, data.gunShotDispersionFactorsTurretRotation, data.chassisShotDispersionFactorsMovement, data.chassisShotDispersionFactorsRotation, data.aimingTime)
+        avatar.updateTargetingInfo(self.entity.id, data.turretYaw, data.gunPitch, data.maxTurretRotationSpeed, data.maxGunRotationSpeed, data.shotDispMultiplierFactor, data.gunShotDispersionFactorsTurretRotation, data.chassisShotDispersionFactorsMovement, data.chassisShotDispersionFactorsRotation, data.gunShotDispersionFactorsAfterShot, data.aimingTime)
 
     @noexcept
     def update_vehicleHealthInfo(self, data):
@@ -409,6 +425,7 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
         self.set_vehicleHealthInfo()
         self.set_welcomeToSector()
         self.set_siegeStateStatus()
+        self.set_fixAngles()
 
     def __getattr__(self, item):
         if _DO_LOG:

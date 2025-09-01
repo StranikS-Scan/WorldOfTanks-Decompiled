@@ -21,6 +21,10 @@ from gui.shared.gui_items.Vehicle import VEHICLE_TAGS, VEHICLE_CLASS_NAME
 from gui.shared.system_factory import registerGameModeArenaInfoKeys, collectGameModeArenaInfoKeys
 from helpers import dependency, i18n
 from skeletons.gui.server_events import IEventsCache
+from items.components.shared_components import ImprovedRammingParams
+from vehicles.mechanics.mechanic_info import getVehicleMechanics
+from vehicles.mechanics.mechanic_info import hasVehicleMechanic
+from vehicles.mechanics.mechanic_constants import VehicleMechanic
 _INVALIDATE_OP = settings.INVALIDATE_OP
 _VEHICLE_STATUS = settings.VEHICLE_STATUS
 _PLAYER_STATUS = settings.PLAYER_STATUS
@@ -205,7 +209,7 @@ class PlayerInfoVO(object):
 
 
 class VehicleTypeInfoVO(object):
-    __slots__ = ('compactDescr', 'shortName', 'name', 'level', 'iconName', 'iconPath', 'isObserver', 'isPremiumIGR', 'isDualGunVehicle', 'isTwinGunVehicle', 'hasDualAccuracy', 'isAutoShootGunVehicle', 'guiName', 'shortNameWithPrefix', 'classTag', 'nationID', 'turretYawLimits', 'maxHealth', 'strCompactDescr', 'isOnlyForBattleRoyaleBattles', 'tags', 'chassisType', 'role')
+    __slots__ = ('compactDescr', 'shortName', 'name', 'level', 'iconName', 'iconPath', 'isObserver', 'isPremiumIGR', 'isDualGunVehicle', 'isTwinGunVehicle', 'hasDualAccuracy', 'isAutoShootGunVehicle', 'guiName', 'shortNameWithPrefix', 'classTag', 'nationID', 'turretYawLimits', 'maxHealth', 'strCompactDescr', 'isOnlyForBattleRoyaleBattles', 'tags', 'chassisType', 'role', 'improvedRammingAnimationDamage', 'vehicleMechanics')
 
     def __init__(self, vehicleType=None, maxHealth=None, **kwargs):
         super(VehicleTypeInfoVO, self).__init__()
@@ -234,6 +238,7 @@ class VehicleTypeInfoVO(object):
         return invalidate
 
     def __setVehicleData(self, vehicleDescr=None, maxHealth=None):
+        self.improvedRammingAnimationDamage = -1
         if vehicleDescr is not None:
             vehicleType = vehicleDescr.type
             self.compactDescr = vehicleType.compactDescr
@@ -249,6 +254,7 @@ class VehicleTypeInfoVO(object):
             self.hasDualAccuracy = vehicleDescr.hasDualAccuracy
             self.isAutoShootGunVehicle = vehicleDescr.isAutoShootGunVehicle
             self.chassisType = vehicleDescr.chassis.chassisType
+            self.vehicleMechanics = getVehicleMechanics(vehicleDescr)
             self.shortName = vehicleType.shortUserString
             self.name = Vehicle.getUserName(vehicleType=vehicleType, textPrefix=True)
             self.shortNameWithPrefix = Vehicle.getShortUserName(vehicleType=vehicleType, textPrefix=True)
@@ -261,6 +267,8 @@ class VehicleTypeInfoVO(object):
             self.iconName = settings.makeVehicleIconName(vName)
             self.iconPath = settings.makeContourIconSFPath(vName)
             self.role = vehicleType.role
+            if hasVehicleMechanic(vehicleDescr, VehicleMechanic.IMPROVED_RAMMING):
+                self.improvedRammingAnimationDamage = vehicleDescr.mechanicsParams[ImprovedRammingParams.MECHANICS_NAME].damageValueToShowAnimation
         else:
             vehicleName = i18n.makeString(settings.UNKNOWN_VEHICLE_NAME)
             self.tags = frozenset()
@@ -276,6 +284,7 @@ class VehicleTypeInfoVO(object):
             self.hasDualAccuracy = False
             self.isAutoShootGunVehicle = False
             self.chassisType = 0
+            self.vehicleMechanics = []
             self.name = vehicleName
             self.guiName = vehicleName
             self.shortNameWithPrefix = vehicleName
@@ -543,6 +552,9 @@ class VehicleArenaInfoVO(object):
     def getDisplayedClassTag(self):
         defaultClassTag = self.vehicleType.getClassName()
         return self._applyBotDisplayStatus(defaultClassTag) if self.player.isBot else defaultClassTag
+
+    def getImprovedRammingAnimationDamage(self):
+        return self.vehicleType.improvedRammingAnimationDamage
 
     def _applyBotName(self, name):
         rSuffix = _BOT_SUFFIX_BY_STATUS.get(self.botDisplayStatus)

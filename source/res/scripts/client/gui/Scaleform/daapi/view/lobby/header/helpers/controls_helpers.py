@@ -3,13 +3,13 @@
 from __future__ import absolute_import
 import typing
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
-from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import TOOLTIP_TYPES
 from gui.Scaleform.daapi.view.lobby.header.helpers.fight_btn_tooltips import getEventTooltipData, getMapboxFightBtnTooltipData, getMapsTrainingTooltipData, getRandomTooltipData, getRankedFightBtnTooltipData
-from gui.impl import backport
 from gui.impl.gen import R
-from gui.shared.utils.functions import makeTooltip
+from gui.impl.lobby.page.lobby_footer import LobbyFooter
+from gui.impl.lobby.page.lobby_header import LobbyHeader
 if typing.TYPE_CHECKING:
     from gui.prb_control.items import ValidationResult
+    from gui.impl.pub.view_component import ViewComponent
 
 class ILobbyHeaderControlsHelper(object):
     __slots__ = ()
@@ -24,6 +24,14 @@ class ILobbyHeaderControlsHelper(object):
 
     @classmethod
     def getSquadControlTooltipData(cls, prbValidation, isInSquad):
+        raise NotImplementedError
+
+    @classmethod
+    def getHeaderType(cls):
+        raise NotImplementedError
+
+    @classmethod
+    def getFooterType(cls):
         raise NotImplementedError
 
 
@@ -44,6 +52,14 @@ class DefaultLobbyHeaderHelper(ILobbyHeaderControlsHelper):
         return tooltipBuilder(prbValidation, isInSquad)
 
     @classmethod
+    def getHeaderType(cls):
+        return LobbyHeader
+
+    @classmethod
+    def getFooterType(cls):
+        return LobbyFooter
+
+    @classmethod
     def _getCommonFightTooltipData(cls, _, __):
         return ('', False)
 
@@ -53,15 +69,13 @@ class DefaultLobbyHeaderHelper(ILobbyHeaderControlsHelper):
 
     @classmethod
     def _getInSquadTooltipData(cls, _):
-        header = backport.text(R.strings.platoon.headerButton.tooltips.dyn(cls._IN_SQUAD_TOOLTIP_KEY).header())
-        body = backport.text(R.strings.platoon.headerButton.tooltips.dyn(cls._IN_SQUAD_TOOLTIP_KEY).body())
-        return (makeTooltip(header, body), TOOLTIP_TYPES.COMPLEX)
+        tooltip = R.strings.platoon.headerButton.tooltips.dyn(cls._IN_SQUAD_TOOLTIP_KEY)
+        return (tooltip.header(), tooltip.body(), {})
 
     @classmethod
     def _getOutSquadTooltipData(cls, prbValidation):
-        header = backport.text(R.strings.platoon.headerButton.tooltips.dyn(cls._OUT_SQUAD_TOOLTIP_KEY).header())
-        body = backport.text(R.strings.platoon.headerButton.tooltips.dyn(cls._OUT_SQUAD_TOOLTIP_KEY).body())
-        return (makeTooltip(header, body), TOOLTIP_TYPES.COMPLEX)
+        tooltip = R.strings.platoon.headerButton.tooltips.dyn(cls._OUT_SQUAD_TOOLTIP_KEY)
+        return (tooltip.header(), tooltip.body(), {})
 
 
 class RankedLobbyHeaderHelper(DefaultLobbyHeaderHelper):

@@ -3,9 +3,16 @@
 import typing
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import STATS_REGULAR_SORTING
-from gui.shared.system_factory import collectBattleResultsStatsSorting
+from gui.shared.system_factory import collectBattleResultsStatsSorting, registerBattleResultsStatsSorting
 from soft_exception import SoftException
+from constants import ARENA_BONUS_TYPE
 __all__ = ('STATS_REGULAR_SORTING', 'writeStatsSorting', 'readStatsSorting')
+registerBattleResultsStatsSorting(ARENA_BONUS_TYPE.RANDOM_NP2, STATS_REGULAR_SORTING)
+registerBattleResultsStatsSorting(ARENA_BONUS_TYPE.REGULAR, STATS_REGULAR_SORTING)
+registerBattleResultsStatsSorting(ARENA_BONUS_TYPE.EPIC_RANDOM, STATS_REGULAR_SORTING)
+registerBattleResultsStatsSorting(ARENA_BONUS_TYPE.TRAINING, STATS_REGULAR_SORTING)
+registerBattleResultsStatsSorting(ARENA_BONUS_TYPE.TOURNAMENT_REGULAR, STATS_REGULAR_SORTING)
+registerBattleResultsStatsSorting(ARENA_BONUS_TYPE.WINBACK, STATS_REGULAR_SORTING)
 _DEFAULT_SORTING_KEY = STATS_REGULAR_SORTING
 
 def writeStatsSorting(bonusType, iconType, sortDirection):

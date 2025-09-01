@@ -1564,7 +1564,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	62000	</maxLoad>
       <terrainResistance>	1.2 1.4 2.3	</terrainResistance>
       <brakeForce>	60000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2543,7 +2542,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	65000	</maxLoad>
       <terrainResistance>	1.2 1.4 2.3	</terrainResistance>
       <brakeForce>	60000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -3517,7 +3515,7 @@
     <Turret_1_R93_Object263>
       <ceilless>	true	</ceilless>
       <userString>	#ussr_vehicles:Turret_1_R93_Object263	</userString>
-      <tags>	cannotDetach	</tags>
+      <tags>	cannotDetach turretless	</tags>
       <level>	9	</level>
       <price>	100	</price>
       <notInShop>	true	</notInShop>
@@ -3528,9 +3526,9 @@
       <maxHealth>	360	</maxHealth>
       <rotationSpeed>	28	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	170	</maxHealth>
+        <maxRegenHealth>	85	</maxRegenHealth>
+        <repairCost>	9	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	360	</circularVisionRadius>
       <surveyingDeviceHealth>
@@ -3539,9 +3537,9 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_122mm_M62-T2S>	shared	  <maxAmmo>	50	</maxAmmo>
+        <_122mm_M62_S2>	shared	  <maxAmmo>	50	</maxAmmo>
           <unlocks>
-            <gun>	_130mm_S-70A	  <cost>	64500	</cost>
+            <gun>	_130mm_S_70A	  <cost>	64500	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -3557,14 +3555,14 @@
             <minPitch>	0 -18 1 -18	</minPitch>
             <maxPitch>	0 4 1 4	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	12.3	</reloadTime>
+          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <reloadTime>	12	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.1	</aimingTime>
+          <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <turretYawLimits>	-12 12	</turretYawLimits>
           <models>
@@ -3629,8 +3627,8 @@
             <density>	111.527 111.984	</density>
             <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
-        </_122mm_M62-T2S>
-        <_130mm_S-70A>	shared	  <maxAmmo>	42	</maxAmmo>
+        </_122mm_M62_S2>
+        <_130mm_S_70A>	shared	  <maxAmmo>	42	</maxAmmo>
           <armor>
             <armor_1>	250	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3720,7 +3718,7 @@
             <density>	97.613 107.601	</density>
             <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
-        </_130mm_S-70A>
+        </_130mm_S_70A>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R93_Object263/normal/lod0/Turret_01.model	</undamaged>
@@ -3755,36 +3753,26 @@
     </Turret_1_R93_Object263>
   </turrets0>
   <engines>
-    <_2xV_16_1000_A>	shared	  <unlocks>
+    <_2xV_16_263>	shared	  <unlocks>
         <engine>	M_50TS	  <cost>	51500	</cost>
         </engine>
       </unlocks>
-    </_2xV_16_1000_A>
+    </_2xV_16_263>
     <M_50TS>	shared	</M_50TS>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <_9RM>	shared	  <unlocks>
-        <radio>	R113	  <cost>	8700	</cost>
-        </radio>
-      </unlocks>
-    </_9RM>
-    <R113>	shared	  <unlocks>
-        <radio>	_10RT-26E	  <cost>	9200	</cost>
-        </radio>
-      </unlocks>
-    </R113>
     <_10RT-26E>	shared	</_10RT-26E>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <_2xV_16_1000_A>
-          <smplEnginePower>	850	</smplEnginePower>
+        <_2xV_16_263>
+          <smplEnginePower>	1000	</smplEnginePower>
           <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
-        </_2xV_16_1000_A>
+        </_2xV_16_263>
         <M_50TS>
           <smplEnginePower>	1100	</smplEnginePower>
           <smplFwMaxSpeed>	55	</smplFwMaxSpeed>

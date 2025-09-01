@@ -4,7 +4,7 @@ import logging
 import weakref
 import typing
 from enum import Enum
-from frameworks.state_machine import State, StateFlags, StateMachine, StringEventTransition, StringEvent, BaseStateObserver
+from frameworks.state_machine import State, StateFlags, StateMachine, StringEventTransition, StringEvent, StateIdsObserver
 _logger = logging.getLogger(__name__)
 
 class BuyAndExchangeStateEnum(Enum):
@@ -28,26 +28,25 @@ class BuyAndExchangeEventEnum(Enum):
     CAN_NOT_BUY = 'canNotBuy'
 
 
-class BuyAndExchangeStateObserver(BaseStateObserver):
+class BuyAndExchangeStateObserver(StateIdsObserver):
     __slots__ = ('__proxy', '__currentState')
 
     def __init__(self, handler, startState):
+        super(BuyAndExchangeStateObserver, self).__init__([ e for e in BuyAndExchangeStateEnum ])
         self.__proxy = weakref.proxy(handler)
         self.__currentState = startState
-
-    def getStateIDs(self):
-        return tuple(BuyAndExchangeStateEnum)
 
     def getCurrentState(self):
         return self.__currentState
 
-    def onStateChanged(self, stateID, flag, event=None):
-        if flag:
+    def onStateChanged(self, state, stateEntered, event=None):
+        if stateEntered:
+            stateID = state.getStateID()
             self.__currentState = stateID
             try:
                 self.__proxy.stateChanged(stateID)
             except ReferenceError:
-                _logger.error('View already delete! Please stop state machine')
+                _logger.error('View already deleted! Please stop the state machine')
 
 
 class BuyAndExchangeStateMachine(object):

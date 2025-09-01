@@ -27,6 +27,7 @@ class ManualChapterView(ManualViewBase, ManualChapterViewMeta):
         return
 
     def closeView(self):
+        self.soundManager.stopSound(self.BC_GUIDE_ELEMENT_BUTTON_SOUND_ID)
         self._close()
         g_eventBus.handleEvent(events.ManualEvent(events.ManualEvent.CHAPTER_CLOSED), scope=EVENT_BUS_SCOPE.LOBBY)
 
@@ -62,6 +63,7 @@ class ManualChapterView(ManualViewBase, ManualChapterViewMeta):
     def onPageChanged(self, pageId):
         self.markPageAsRead(int(pageId))
         self.soundManager.playSound(self.BC_HANGAR_GUIDE_CARD_SWIPE_SOUND_ID)
+        self.soundManager.stopSound(self.BC_GUIDE_ELEMENT_BUTTON_SOUND_ID)
 
     def markPageAsRead(self, pageId):
         chapters = AccountSettings.getManualUnreadPages()

@@ -108,3 +108,20 @@ class OnShowMessage(BattleHUDEventMeta, Block):
         if self.active:
             self._key.setValue(code)
             self._onPlayerMessage.call()
+
+
+class ShowVehicleErrorMessage(Block, BattleHUDEventMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(ShowVehicleErrorMessage, self).__init__(*args, **kwargs)
+        self._in = self._makeEventInputSlot('in', self._execute)
+        self._keySlot = self._makeDataInputSlot('key', SLOT_TYPE.STR)
+        self._paramsSlot = self._makeDataInputSlot('params', SLOT_TYPE.DICTIONARY)
+        self._out = self._makeEventOutputSlot('out')
+
+    def _execute(self):
+        sessionProvider = dependency.instance(IBattleSessionProvider)
+        if sessionProvider is not None:
+            sessionProvider.shared.messages.showVehicleError(self._keySlot.getValue(), self._paramsSlot.getValue())
+        self._out.call()
+        return

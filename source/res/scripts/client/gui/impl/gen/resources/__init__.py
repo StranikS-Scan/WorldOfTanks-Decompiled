@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/resources/__init__.py
 from gui.impl.gen_utils import DynAccessor
+from .aliases import Aliases
 from .animations import Animations
 from .areas import Areas
 from .atlases import Atlases
@@ -16,6 +17,7 @@ from .views import Views
 class Resources(object):
     __slots__ = ()
     invalid = DynAccessor(0)
+    aliases = Aliases()
     animations = Animations()
     areas = Areas()
     atlases = Atlases()

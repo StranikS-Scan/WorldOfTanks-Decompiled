@@ -17,11 +17,12 @@ class UnorederdStepsIterator(object):
 
 
 class OrderedStepsIterator(UnorederdStepsIterator):
-    __slots__ = ('__fifo',)
+    __slots__ = ('__fifo', '__visited')
 
     def __init__(self, postProgression):
         super(OrderedStepsIterator, self).__init__(postProgression)
         self.__fifo = deque((self._tree.rootStep,))
+        self.__visited = set()
 
     def __iter__(self):
         return self
@@ -30,8 +31,9 @@ class OrderedStepsIterator(UnorederdStepsIterator):
         if not self.__fifo:
             raise StopIteration
         step = self._postProgression.getStep(self.__fifo.popleft())
+        self.__visited.add(step.stepID)
         self.__fifo.extend(self._getOrderedUnlocks(step.getNextStepIDs()))
         return step
 
     def _getOrderedUnlocks(self, unlocks):
-        return unlocks
+        return tuple(set(unlocks).difference(self.__visited))

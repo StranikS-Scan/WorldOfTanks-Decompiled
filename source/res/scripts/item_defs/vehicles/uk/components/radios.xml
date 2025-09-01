@@ -42,8 +42,11 @@
     <WS_No_19_Mk_IIB>	59	</WS_No_19_Mk_IIB>
     <SR_C42a>	60	</SR_C42a>
     <N19Mk3_G>	61	</N19Mk3_G>
+    <SR_C42O>	62	</SR_C42O>
+    <SR_C42_B>	63	</SR_C42_B>
     <C42_FL>	501	</C42_FL>
     <C45_7x7>	502	</C45_7x7>
+    <C13B42_7x7>	503	</C13B42_7x7>
     <C42_IGR>	60001	</C42_IGR>
     <N19Mk3_IGR>	60002	</N19Mk3_IGR>
     <N22_IGR>	60003	</N22_IGR>
@@ -119,6 +122,7 @@
       <tags></tags>
       <level>	6	</level>
       <price>	16000	</price>
+      <notInShop>	true	</notInShop>
       <weight>	40	</weight>
       <distance>	400	</distance>
       <maxHealth>	100	</maxHealth>
@@ -429,6 +433,18 @@
       <maxRegenHealth>	115	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </SR_C42H>
+    <SR_C42O>
+      <userString>	#gb_vehicles:SR_C42O	</userString>
+      <tags></tags>
+      <level>	11	</level>
+      <price>	80000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	800	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	125	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+    </SR_C42O>
     <C42_B47>
       <userString>	#gb_vehicles:C42_B47	</userString>
       <tags></tags>
@@ -477,6 +493,18 @@
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </C13B42>
+    <C13B42_7x7>
+      <userString>	#gb_vehicles:C13B42_7x7	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	55000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	80	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </C13B42_7x7>
     <C45>
       <userString>	#gb_vehicles:C45	</userString>
       <tags></tags>
@@ -561,6 +589,18 @@
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </C45A_Gonsalo>
+    <SR_C42_B>
+      <userString>	#gb_vehicles:SR_C42_B	</userString>
+      <tags></tags>
+      <level>	11	</level>
+      <price>	80000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	800	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	125	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+    </SR_C42_B>
     <C42_IGR>
       <userString>	#igr_vehicles:C42_IGR	</userString>
       <tags></tags>

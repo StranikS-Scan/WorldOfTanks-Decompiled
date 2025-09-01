@@ -9,8 +9,9 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.shared.event_dispatcher import showHangar
 from wg_async import wg_async, wg_await
-from gui import DialogsInterface
+from gui import DialogsInterface, GUI_SETTINGS
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.meta.LobbyMenuMeta import LobbyMenuMeta
 from gui.Scaleform.genConsts.MENU_CONSTANTS import MENU_CONSTANTS
@@ -94,22 +95,24 @@ class LobbyMenu(LobbyMenuMeta):
 
     def manualClick(self):
         if self.manualController.isActivated():
-            view = self.manualController.getView()
-            if view is not None:
-                self.destroy()
-            else:
-                self.manualController.show(backCallback=self.__showLobbyMenu)
-        return
+            self.manualController.show()
+            self.destroy()
 
     def showLegal(self):
         self.fireEvent(event_dispatcher.events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LEGAL_INFO_TOP_WINDOW)), EVENT_BUS_SCOPE.LOBBY)
+
+    def toReportContent(self):
+        g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.REPORT_CONTENT))
 
     def _populate(self):
         super(LobbyMenu, self)._populate()
         self.__addListeners()
         self.__updateUIState()
         self.as_setVersionMessageS(text_styles.main(getFullClientVersion()))
-        self.as_setCopyrightS(backport.text(R.strings.menu.copy()), backport.text(R.strings.menu.legal()))
+        reportContent = ''
+        if not GUI_SETTINGS.isEmpty('reportContentURL'):
+            reportContent = backport.text(R.strings.menu.report_content())
+        self.as_setCopyrightS(backport.text(R.strings.menu.copy()), reportContent, backport.text(R.strings.menu.legal()))
         self.__updateVersionState()
         self.__updateManualBtn()
         if self.__manualBtnIsVisible:
@@ -194,5 +197,5 @@ class LobbyMenu(LobbyMenuMeta):
 
     @staticmethod
     def __showLobbyMenu():
-        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), EVENT_BUS_SCOPE.LOBBY)
+        showHangar()
         g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_MENU)), EVENT_BUS_SCOPE.LOBBY)

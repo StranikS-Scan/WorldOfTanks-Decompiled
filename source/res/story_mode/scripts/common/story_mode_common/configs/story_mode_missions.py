@@ -86,9 +86,9 @@ class SoundsModel(models.Model):
 
 
 class MissionModel(models.Model):
-    __slots__ = ('missionId', 'vehicle', 'geometry', 'bonusType', 'displayName', 'missionType', 'difficulty', 'sounds', 'tasks', 'enabled', 'disabledTimer', 'reward', 'showRewardInBattleResults', 'unlockBattlesCount', 'newbieBattlesMin', 'newbieBattlesMax', 'spawnGroup', 'unlockMission', 'hasOutroVideo')
+    __slots__ = ('missionId', 'vehicle', 'geometry', 'bonusType', 'displayName', 'missionType', 'difficulty', 'sounds', 'tasks', 'enabled', 'disabledTimer', 'reward', 'showRewardInBattleResults', 'unlockBattlesCount', 'newbieBattlesMin', 'newbieBattlesMax', 'spawnGroup', 'unlockMission', 'hasOutroVideo', 'switchVehicles')
 
-    def __init__(self, missionId, vehicle, geometry, bonusType, displayName, missionType, difficulty, sounds, tasks, enabled, disabledTimer, reward, showRewardInBattleResults, unlockBattlesCount, newbieBattlesMin, newbieBattlesMax, spawnGroup, unlockMission, hasOutroVideo):
+    def __init__(self, missionId, vehicle, geometry, bonusType, displayName, missionType, difficulty, sounds, tasks, enabled, disabledTimer, reward, showRewardInBattleResults, unlockBattlesCount, newbieBattlesMin, newbieBattlesMax, spawnGroup, unlockMission, hasOutroVideo, switchVehicles):
         super(MissionModel, self).__init__()
         self.missionId = missionId
         self.vehicle = vehicle
@@ -109,6 +109,7 @@ class MissionModel(models.Model):
         self.spawnGroup = spawnGroup
         self.unlockMission = unlockMission
         self.hasOutroVideo = hasOutroVideo
+        self.switchVehicles = switchVehicles
 
     def getTask(self, taskId):
         return next((task for task in self.tasks if task.id == taskId), None)
@@ -147,7 +148,7 @@ class MissionModel(models.Model):
         return {task.id:{c.name:c.value for c in task.conditions} for task in self.tasks}
 
     def __repr__(self):
-        return '<MissionModel(id={}, vehicle={}, geometry={}, bonusType={}, displayName={}, missionType={}, difficulty={}, sounds={}, tasks={}, enabled={}, disabledTimer={}, bonus={}, showRewardInBattleResults={}, unlockBattlesCount={}, newbieBattlesMin={}, newbieBattlesMax={}, spawnGroup={}, unlockMission={}>, hasOutroVideo={}'.format(self.missionId, self.vehicle, self.geometry, self.bonusType, self.displayName, self.missionType, self.difficulty, self.sounds, self.tasks, self.enabled, self.disabledTimer, self.reward, self.showRewardInBattleResults, self.unlockBattlesCount, self.newbieBattlesMin, self.newbieBattlesMax, self.spawnGroup, self.unlockMission, self.hasOutroVideo)
+        return '<MissionModel(id={}, vehicle={}, geometry={}, bonusType={}, displayName={}, missionType={}, difficulty={}, sounds={}, tasks={}, enabled={}, disabledTimer={}, bonus={}, showRewardInBattleResults={}, unlockBattlesCount={}, newbieBattlesMin={}, newbieBattlesMax={}, spawnGroup={}, unlockMission={}>, hasOutroVideo={}, switchVehicles={}>'.format(self.missionId, self.vehicle, self.geometry, self.bonusType, self.displayName, self.missionType, self.difficulty, self.sounds, self.tasks, self.enabled, self.disabledTimer, self.reward, self.showRewardInBattleResults, self.unlockBattlesCount, self.newbieBattlesMin, self.newbieBattlesMax, self.spawnGroup, self.unlockMission, self.hasOutroVideo, self.switchVehicles)
 
 
 class OnboardingModel(models.Model):
@@ -285,6 +286,14 @@ def _validateMissionsEnabled(model):
         raise exceptions.ValidationError('At least one mission should be enabled')
 
 
+def _validateSwitchVehicles(switchVehicles):
+    names = set()
+    for vehicle in switchVehicles:
+        if vehicle.name in names:
+            raise exceptions.ValidationError('switchVehicles must have unique names')
+        names.add(vehicle.name)
+
+
 vehicleSchema = schemas.Schema(fields={'name': fields.String(required=True, deserializedValidators=validate.Length(minValue=1)),
  'styleId': fields.Integer(required=False, public=False, deserializedValidators=validate.Range(minValue=0), default=0)}, modelClass=VehicleModel, checkUnknown=True)
 _autoCompleteTaskSchema = schemas.Schema(fields={'missionId': fields.Integer(deserializedValidators=validate.Range(minValue=1)),
@@ -357,6 +366,7 @@ _soundsSchema = schemas.Schema(fields={'music': fields.Nested(schema=missionSoun
  'battleMusic': fields.Nested(schema=missionSoundSchema, required=False)}, modelClass=SoundsModel, checkUnknown=True)
 missionSchema = schemas.Schema[MissionModel](fields={'missionId': fields.Integer(required=True, deserializedValidators=validate.Range(minValue=1)),
  'vehicle': fields.Nested(schema=vehicleSchema, required=True),
+ 'switchVehicles': fields.UniCapList(fieldOrSchema=vehicleSchema, required=False, public=False, default=list, deserializedValidators=[_validateSwitchVehicles]),
  'geometry': fields.String(required=True, public=False, deserializedValidators=validate.Length(minValue=1)),
  'bonusType': fields.String(required=True, public=False, deserializedValidators=[validate.Length(minValue=1), validateBonusType]),
  'displayName': fields.String(required=False, default=''),

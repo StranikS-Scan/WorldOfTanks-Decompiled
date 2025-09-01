@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/crew/common/base_crew_view_model.py
-from gui.impl.gen import R
 from frameworks.wulf import ViewModel
+from gui.impl.gen import R
 
 class BaseCrewViewModel(ViewModel):
     __slots__ = ('onAbout', 'onClose', 'onBack', 'onHangar')

@@ -26,7 +26,8 @@ from helpers.i18n import makeString as _ms
 from items.components.supply_slot_categories import SlotCategories
 from shared_utils import first, CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IWotPlusController
+from skeletons.gui.game_control import IWotPlusController, ILoadoutController
+from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
@@ -195,7 +196,7 @@ class ModuleTooltipBlockConstructor(object):
     MUTABLE_DAMAGE_MODULE_PARAM = 'mutableDamage'
     TWIN_GUN_MODULE_PARAM = 'twinGun'
     DEFAULT_PARAM = 'default'
-    MODULE_PARAMS = {GUI_ITEM_TYPE.CHASSIS: ('maxLoad', 'rotationSpeed', 'maxSteeringLockAngle', 'vehicleChassisRepairSpeed', 'chassisRepairTime'),
+    MODULE_PARAMS = {GUI_ITEM_TYPE.CHASSIS: ('rotationSpeed', 'maxSteeringLockAngle', 'vehicleChassisRepairSpeed', 'chassisRepairTime'),
      GUI_ITEM_TYPE.TURRET: ('armor', 'rotationSpeed', 'circularVisionRadius'),
      GUI_ITEM_TYPE.GUN: ('avgDamageList',
                          'avgPiercingPower',
@@ -352,7 +353,7 @@ class HeaderBlockConstructor(ModuleTooltipBlockConstructor):
                 descList.append(text_styles.concatStylesToMultiLine(*descParts))
         block.append(formatters.packTitleDescBlock(title=text_styles.highTitle(title), desc='\n'.join(descList), gap=-3, padding=formatters.packPadding(top=-6)))
         if self.configuration.withSlots and module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
-            block.append(formatters.packBuildUpBlockData(OptDeviceSlotsHeaderBlockConstructor(module=None, configuration=self.configuration, leftPadding=_DEFAULT_PADDING, rightPadding=_DEFAULT_PADDING).construct(), padding=formatters.packPadding(top=5, bottom=5)))
+            block.append(formatters.packBuildUpBlockData(OptDeviceSlotsHeaderBlockConstructor(module=self.module, configuration=self.configuration, leftPadding=_DEFAULT_PADDING, rightPadding=_DEFAULT_PADDING).construct(), padding=formatters.packPadding(top=5, bottom=5)))
         else:
             imageBlocks = []
             overlayPath, overlayPadding, bottomOffset = self.__getOverlayData()
@@ -992,9 +993,6 @@ class StatusBlockConstructor(ModuleTooltipBlockConstructor):
                     tooltipHeader, tooltipText = self.__getInstalledVehiclesBlock(installedVehicles, module)
                 else:
                     tooltipHeader = None
-            elif reason == 'too_heavy':
-                titleFormatter = text_styles.critical
-                showAllInstalled = False
         if tooltipHeader is not None or tooltipText is not None:
             if showAllInstalled and len(totalInstalledVehicles) > self.MAX_INSTALLED_LIST_LEN:
                 hiddenVehicleCount = len(totalInstalledVehicles) - self.MAX_INSTALLED_LIST_LEN
@@ -1074,17 +1072,20 @@ class StatusBlockConstructor(ModuleTooltipBlockConstructor):
 
 
 class OptDeviceSlotsHeaderBlockConstructor(ModuleTooltipBlockConstructor):
+    __loadoutController = dependency.descriptor(ILoadoutController)
 
     def construct(self):
         block = []
         vehicle = self.configuration.vehicle
         slotIdx = self.configuration.slotIdx
+        module = self.module
         slotsBlocks = []
         hasSlotSpecs = False
         for idx in range(len(vehicle.optDevices.slots)):
             categories = vehicle.optDevices.getSlot(idx).item.categories
             selectedSlot = idx == slotIdx
-            moduleInSlot = vehicle.optDevices.installed[idx]
+            selectedModule = module if selectedSlot else None
+            moduleInSlot = selectedModule or self._getInstalledModule(vehicle, idx)
             hasModuleInSlot = moduleInSlot is not None
             if moduleInSlot:
                 moduleCategories = moduleInSlot.descriptor.categories
@@ -1129,6 +1130,10 @@ class OptDeviceSlotsHeaderBlockConstructor(ModuleTooltipBlockConstructor):
 
         block.append(formatters.packBuildUpBlockData(blocks=slotsBlocks, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, gap=5, padding=formatters.packPadding(bottom=0 if hasSlotSpecs else 20)))
         return block
+
+    def _getInstalledModule(self, vehicle, slotID):
+        interactor = self.__loadoutController.interactor
+        return interactor.getCurrentLayout()[slotID] if interactor and interactor.getName() == TankSetupConstants.OPT_DEVICES else vehicle.optDevices.installed[slotID]
 
     def _getIcon(self, module):
         moduleName = module.descriptor.iconName

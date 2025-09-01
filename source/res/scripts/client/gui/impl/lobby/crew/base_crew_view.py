@@ -6,6 +6,7 @@ from PlayerEvents import g_playerEvents
 from crew_sounds import CREW_SOUND_SPACE, CREW_SOUND_OVERLAY_SPACE
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crew.common.base_crew_view_model import BaseCrewViewModel
 from gui.impl.lobby.common.view_mixins import LobbyHeaderVisibility
@@ -33,7 +34,8 @@ class BaseCrewWidgetView(BaseCrewSoundView, LobbyHeaderVisibility, IGlobalListen
     __slots__ = ('_isHangar', '_crewWidget', '_currentViewID', '_previousViewID')
 
     def __init__(self, settings, **kwargs):
-        self._isHangar = bool(self.gui.windowsManager.findWindows(lambda window: getattr(window.content, 'alias', None) == VIEW_ALIAS.LOBBY_HANGAR))
+        hangarViewAliases = (VIEW_ALIAS.LOBBY_HANGAR, VIEW_ALIAS.LEGACY_LOBBY_HANGAR)
+        self._isHangar = bool(self.gui.windowsManager.findWindows(lambda window: getattr(window.content, 'alias', None) in hangarViewAliases))
         self._crewWidget = None
         self._currentViewID = settings.kwargs.get('currentViewID', settings.layoutID)
         self._previousViewID = settings.kwargs.get('previousViewID')
@@ -42,10 +44,6 @@ class BaseCrewWidgetView(BaseCrewSoundView, LobbyHeaderVisibility, IGlobalListen
 
     def onBringToFront(self, _):
         pass
-
-    @property
-    def isPersonalFileOpened(self):
-        return self.gui.windowsManager.getViewByLayoutID(R.views.lobby.crew.TankmanContainerView()) is not None
 
     @property
     def crewWidget(self):
@@ -66,8 +64,7 @@ class BaseCrewWidgetView(BaseCrewSoundView, LobbyHeaderVisibility, IGlobalListen
 
     def widgetAutoSelectSlot(self, **kwargs):
         slotIDX = kwargs.get('slotIDX', NO_SLOT)
-        tankman = kwargs.get('tankman')
-        tankmanID = tankman.invID if tankman else NO_TANKMAN
+        tankmanID = kwargs.get('tankmanInvId', NO_TANKMAN)
         tankmanID, slotIDX = self._findWidgetSlotNextIdx(tankmanID, slotIDX)
         self._crewWidget.updateSlotIdx(slotIDX)
         if slotIDX == NO_SLOT:
@@ -135,13 +132,12 @@ class BaseCrewWidgetView(BaseCrewSoundView, LobbyHeaderVisibility, IGlobalListen
 
     def _getEvents(self):
         eventsTuple = super(BaseCrewWidgetView, self)._getEvents()
+        if self._crewWidget is not None:
+            eventsTuple += ((self._crewWidget.onSlotClick, self._onWidgetSlotClick), (self._crewWidget.onChangeCrewClick, self._onWidgetChangeCrewClick), (self._crewWidget.onSlotTrySelect, self.widgetAutoSelectSlot))
         return eventsTuple + ((self.viewModel.onClose, self._onClose),
          (self.viewModel.onBack, self._onBack),
          (self.viewModel.onHangar, self._onHangar),
          (self.viewModel.onAbout, self._onAbout),
-         (self._crewWidget.onSlotClick, self._onWidgetSlotClick),
-         (self._crewWidget.onChangeCrewClick, self._onWidgetChangeCrewClick),
-         (self._crewWidget.onSlotTrySelect, self.widgetAutoSelectSlot),
          (g_playerEvents.onVehicleLockChanged, self._onVehicleLockChanged))
 
     def _getCrewTankmanIndex(self, slotIDX, crew):
@@ -186,18 +182,14 @@ class BaseCrewWidgetView(BaseCrewSoundView, LobbyHeaderVisibility, IGlobalListen
             self._onTankmanSlotClick(tankmanInvID, slotIdx)
 
     def _onClose(self, params=None):
-        self.destroyWindow()
+        self._onBack()
 
     def _onBack(self):
-        slotIDX, _, tankman = self._crewWidget.getWidgetData()
-        if tankman:
-            tankmanID = tankman.invID
+        viewState = getLobbyStateMachine().getStateFromView(self)
+        if viewState:
+            viewState.goBack()
         else:
-            tankmanID, _ = self._findWidgetSlotNextIdx(NO_TANKMAN, slotIDX)
-        if tankmanID == NO_TANKMAN and self.crew:
-            tankmanID = next((item[1].invID for item in self.crew if item and item[1]), NO_TANKMAN)
-        showPersonalCase(tankmanID, previousViewID=self._currentViewID)
-        self.destroyWindow()
+            self.destroyWindow()
 
     def _onHangar(self):
         if self._isHangar:

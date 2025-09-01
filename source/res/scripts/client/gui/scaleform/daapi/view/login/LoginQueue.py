@@ -9,7 +9,7 @@ from skeletons.connection_mgr import IConnectionManager
 class LoginQueue(LoginQueueWindowMeta):
     connectionMgr = dependency.descriptor(IConnectionManager)
 
-    def __init__(self, title, message, cancelLabel, showAutoLoginBtn):
+    def __init__(self, title, message, cancelLabel, showAutoLoginBtn, **kwargs):
         super(LoginQueue, self).__init__()
         self.__updateData(title, message, cancelLabel, showAutoLoginBtn)
 

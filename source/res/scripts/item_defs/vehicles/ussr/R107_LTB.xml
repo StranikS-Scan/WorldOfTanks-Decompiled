@@ -59,7 +59,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	8525	</weight>
-    <maxHealth>	840	</maxHealth>
+    <maxHealth>	960	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	180	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -1022,14 +1022,13 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	5500	</weight>
-      <maxLoad>	22500	</maxLoad>
-      <terrainResistance>	1 1.1 1.7	</terrainResistance>
+      <terrainResistance>	0.9 1 1.6	</terrainResistance>
       <brakeForce>	22500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	46	</rotationSpeed>
+      <rotationSpeed>	60	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.14	</vehicleMovement>
-        <vehicleRotation>	0.14	</vehicleRotation>
+        <vehicleMovement>	0.12	</vehicleMovement>
+        <vehicleRotation>	0.12	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	180	</maxHealth>
@@ -1983,14 +1982,13 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	5500	</weight>
-      <maxLoad>	24000	</maxLoad>
       <terrainResistance>	0.9 1 1.6	</terrainResistance>
       <brakeForce>	24000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	48	</rotationSpeed>
+      <rotationSpeed>	62	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.12	</vehicleMovement>
-        <vehicleRotation>	0.12	</vehicleRotation>
+        <vehicleMovement>	0.1	</vehicleMovement>
+        <vehicleRotation>	0.1	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	200	</maxHealth>
@@ -2958,7 +2956,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5450	</weight>
-      <maxHealth>	210	</maxHealth>
+      <maxHealth>	240	</maxHealth>
       <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -2972,9 +2970,9 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_85mm_D5T-85BMU>	shared	  <maxAmmo>	48	</maxAmmo>
+        <_85mm_D_5T_85BMU>	shared	  <maxAmmo>	48	</maxAmmo>
           <unlocks>
-            <gun>	_85mm_D10_85	  <cost>	17200	</cost>
+            <gun>	_85mm_D_10_85	  <cost>	17200	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -2990,14 +2988,14 @@
             </armor_5>
             <gun>	30	</gun>
           </armor>
-          <shotDispersionRadius>	0.37	</shotDispersionRadius>
-          <reloadTime>	5.5	</reloadTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	5.2	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.1	</aimingTime>
+          <aimingTime>	2	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
@@ -3090,8 +3088,12 @@
             <density>	133.331 152.839	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_85mm_D5T-85BMU>
-        <_85mm_D10_85>	shared	  <maxAmmo>	42	</maxAmmo>
+        </_85mm_D_5T_85BMU>
+        <_85mm_D_10_85>	shared	  <maxAmmo>	42	</maxAmmo>
+          <unlocks>
+            <vehicle>	R109_T54S	  <cost>	193200	</cost>
+            </vehicle>
+          </unlocks>
           <armor>
             <armor_1>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3105,14 +3107,14 @@
             </armor_5>
             <gun>	30	</gun>
           </armor>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	5.4	</reloadTime>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <reloadTime>	5.1	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.1	</aimingTime>
+          <aimingTime>	2	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
@@ -3205,7 +3207,7 @@
             <density>	108.445 115.761	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_85mm_D10_85>
+        </_85mm_D_10_85>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R107_LTB/normal/lod0/Turret_01.model	</undamaged>
@@ -3763,51 +3765,42 @@
     </Turret_1_R107_LTB>
   </turrets0>
   <engines>
-    <KZ-V8>	shared	  <unlocks>
-        <engine>	KZ-V16	  <cost>	17300	</cost>
+    <KZ_V8>	shared	  <unlocks>
+        <engine>	KZ_V16	  <cost>	17300	</cost>
         </engine>
       </unlocks>
-    </KZ-V8>
-    <KZ-V16>	shared	</KZ-V16>
+    </KZ_V8>
+    <KZ_V16>	shared	</KZ_V16>
   </engines>
   <fuelTanks>
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <_9RM>	shared	  <unlocks>
-        <radio>	R113	  <cost>	8700	</cost>
-        </radio>
-      </unlocks>
-    </_9RM>
-    <R113>	shared	  <unlocks>
-        <vehicle>	R109_T54S	  <cost>	193200	</cost>
-        </vehicle>
-      </unlocks>
-    </R113>
+    <R113>	shared	</R113>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <KZ-V8>
-          <smplEnginePower>	600	</smplEnginePower>
+        <KZ_V8>
+          <smplEnginePower>	700	</smplEnginePower>
           <smplFwMaxSpeed>	68	</smplFwMaxSpeed>
-        </KZ-V8>
-        <KZ-V16>
+        </KZ_V8>
+        <KZ_V16>
           <smplEnginePower>	770	</smplEnginePower>
           <smplFwMaxSpeed>	68	</smplFwMaxSpeed>
-        </KZ-V16>
+        </KZ_V16>
       </engines>
       <chassis>
         <Chassis_R107_LTB>
           <grounds>
             <soft>
-              <rollingFriction>	0.1428	</rollingFriction>
+              <rollingFriction>	0.1344	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.0924	</rollingFriction>
+              <rollingFriction>	0.084	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.084	</rollingFriction>
+              <rollingFriction>	0.0756	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_R107_LTB>

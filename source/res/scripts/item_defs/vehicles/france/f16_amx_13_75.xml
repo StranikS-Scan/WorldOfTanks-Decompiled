@@ -56,7 +56,7 @@
     </armor>
     <primaryArmor>	armor_10 armor_3 armor_4	</primaryArmor>
     <weight>	7955	</weight>
-    <maxHealth>	680	</maxHealth>
+    <maxHealth>	760	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -1160,13 +1160,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_AMX_13_75_2>
-      <userString>	#france_vehicles:Chassis_AMX_13_75_2	</userString>
+    <Chassis_F16_AMX_13_75>
+      <userString>	#france_vehicles:Chassis_F16_AMX_13_75	</userString>
       <tags></tags>
       <level>	6	</level>
       <price>	7350	</price>
       <unlocks>
-        <chassis>	Chassis_AMX_13_75_3	  <cost>	9030	</cost>
+        <chassis>	Chassis_F16_AMX_13_75_2	  <cost>	9030	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1174,8 +1174,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	1500	</weight>
-      <maxLoad>	14650	</maxLoad>
-      <terrainResistance>	0.8 0.9 1.6	</terrainResistance>
+      <terrainResistance>	0.7 0.8 1.4	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	40	</rotationSpeed>
@@ -2048,9 +2047,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	5.71428585	</repairTime>
-    </Chassis_AMX_13_75_2>
-    <Chassis_AMX_13_75_3>
-      <userString>	#france_vehicles:Chassis_AMX_13_75_3	</userString>
+    </Chassis_F16_AMX_13_75>
+    <Chassis_F16_AMX_13_75_2>
+      <userString>	#france_vehicles:Chassis_F16_AMX_13_75_2	</userString>
       <tags></tags>
       <level>	7	</level>
       <price>	19540	</price>
@@ -2059,7 +2058,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	1500	</weight>
-      <maxLoad>	16350	</maxLoad>
       <terrainResistance>	0.7 0.8 1.4	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -2933,12 +2931,12 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	5.71428585	</repairTime>
-    </Chassis_AMX_13_75_3>
+    </Chassis_F16_AMX_13_75_2>
   </chassis>
   <turrets0>
-    <Turret_1_AMX_13_75>
-      <userString>	#france_vehicles:Turret_1_AMX_13_75	</userString>
-      <tags></tags>
+    <Turret_1_F16_AMX_13_75>
+      <userString>	#france_vehicles:Turret_1_F16_AMX_13_75	</userString>
+      <tags>	oscillating	</tags>
       <level>	7	</level>
       <price>	10300	</price>
       <notInShop>	true	</notInShop>
@@ -2955,7 +2953,7 @@
       </armor>
       <primaryArmor>	armor_9 armor_3 armor_4	</primaryArmor>
       <weight>	2900	</weight>
-      <maxHealth>	170	</maxHealth>
+      <maxHealth>	190	</maxHealth>
       <rotationSpeed>	46	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -2969,14 +2967,14 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_SA49_L48>	shared	  <maxAmmo>	48	</maxAmmo>
+        <_75mm_SA49_13_75>	shared	  <maxAmmo>	48	</maxAmmo>
           <unlocks>
             <gun>	_75mm_SA50	  <cost>	5820	</cost>
             </gun>
           </unlocks>
           <pitchLimits>
-            <minPitch>	0 -9 0.255782 -9 0.319444 -6 0.680556 -6 0.744218 -9 1 -9	</minPitch>
-            <maxPitch>	0 6 0.255782 6 0.319444 8 0.680556 8 0.744218 6 1 6	</maxPitch>
+            <minPitch>	0.00000 -9.00 0.25000 -9.00 0.31944 -6.00 0.68056 -6.00 0.75000 -9.00 1.00000 -9.00	</minPitch>
+            <maxPitch>	0.00000 6.00 1.00000 6.00	</maxPitch>
           </pitchLimits>
           <armor>
             <armor_1>	40	</armor_1>
@@ -2991,7 +2989,7 @@
             <gun>	20	</gun>
           </armor>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	12	</reloadTime>
+          <reloadTime>	13.4	</reloadTime>
           <clip>
             <count>	4	</count>
             <rate>	30	</rate>
@@ -3521,14 +3519,14 @@
             <density>	85.8054 85.7785	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_75mm_SA49_L48>
+        </_75mm_SA49_13_75>
         <_75mm_SA50>	shared	  <maxAmmo>	48	</maxAmmo>
           <unlocks>
             <vehicle>	F87_Batignolles-Chatillon_12t	  <cost>	107000	</cost>
             </vehicle>
           </unlocks>
           <pitchLimits>
-            <minPitch>	0 -9 0.255783 -9 0.319444 -6 0.680556 -6 0.744218 -9 1 -9	</minPitch>
+            <minPitch>	0.00000 -9.00 0.25000 -9.00 0.31944 -6.00 0.68056 -6.00 0.75000 -9.00 1.00000 -9.00	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
           <armor>
@@ -4132,15 +4130,15 @@
         <density>	113.685 113.968	</density>
         <aoTextureSize>	512 256	</aoTextureSize>
       </camouflage>
-    </Turret_1_AMX_13_75>
+    </Turret_1_F16_AMX_13_75>
   </turrets0>
   <engines>
-    <_6F11SRYT>	shared	  <unlocks>
-        <engine>	Detroit_Diesel_6V53T	  <cost>	16200	</cost>
+    <Baudouin_6F_11_SRY_T>	shared	  <unlocks>
+        <engine>	Detroit_Diesel_6V53T_13_75	  <cost>	16200	</cost>
         </engine>
       </unlocks>
-    </_6F11SRYT>
-    <Detroit_Diesel_6V53T>	shared	</Detroit_Diesel_6V53T>
+    </Baudouin_6F_11_SRY_T>
+    <Detroit_Diesel_6V53T_13_75>	shared	</Detroit_Diesel_6V53T_13_75>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
@@ -4151,30 +4149,17 @@
   <physics>
     <detailed>
       <engines>
-        <_6F11SRYT>
-          <smplEnginePower>	350	</smplEnginePower>
+        <Baudouin_6F_11_SRY_T>
+          <smplEnginePower>	360	</smplEnginePower>
           <smplFwMaxSpeed>	61	</smplFwMaxSpeed>
-        </_6F11SRYT>
-        <Detroit_Diesel_6V53T>
+        </Baudouin_6F_11_SRY_T>
+        <Detroit_Diesel_6V53T_13_75>
           <smplEnginePower>	400	</smplEnginePower>
           <smplFwMaxSpeed>	61	</smplFwMaxSpeed>
-        </Detroit_Diesel_6V53T>
+        </Detroit_Diesel_6V53T_13_75>
       </engines>
       <chassis>
-        <Chassis_AMX_13_75_2>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.1288	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.07245	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.0644	</rollingFriction>
-            </firm>
-          </grounds>
-        </Chassis_AMX_13_75_2>
-        <Chassis_AMX_13_75_3>
+        <Chassis_F16_AMX_13_75>
           <grounds>
             <soft>
               <rollingFriction>	0.1127	</rollingFriction>
@@ -4186,7 +4171,20 @@
               <rollingFriction>	0.05635	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_AMX_13_75_3>
+        </Chassis_F16_AMX_13_75>
+        <Chassis_F16_AMX_13_75_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.1127	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.0644	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.05635	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_F16_AMX_13_75_2>
       </chassis>
     </detailed>
   </physics>

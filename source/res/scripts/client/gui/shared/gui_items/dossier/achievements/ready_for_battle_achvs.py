@@ -3,7 +3,7 @@
 from abstract import ClassProgressAchievement, getCompletedPersonalMissionsCount
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK as _AB
 from nations import Alliances
-from personal_missions import PM_BRANCH
+from personal_missions import PM_BRANCH, PM3QType
 
 class ReadyForBattleAchievement(ClassProgressAchievement):
     __slots__ = ('__name', '__classifier', '__branch', '__isCurrentUserAchievement')
@@ -26,7 +26,7 @@ class ReadyForBattleAchievement(ClassProgressAchievement):
         return getCompletedPersonalMissionsCount(self.__branch, {self.__classifier})
 
 
-class ReadyForBattleAchievementSeason2(ReadyForBattleAchievement):
+class ReadyForBattleAchievement3Steps(ReadyForBattleAchievement):
     __slots__ = ()
     MIN_LVL = 3
     NO_LVL = 4
@@ -42,28 +42,28 @@ class ReadyForBattleALLAchievement(ReadyForBattleAchievement):
         pass
 
 
-class ReadyForBattleAllianceFranceAchievement(ReadyForBattleAchievementSeason2):
+class ReadyForBattleAllianceFranceAchievement(ReadyForBattleAchievement3Steps):
     __slots__ = ()
 
     def __init__(self, dossier, value=None):
         super(ReadyForBattleAllianceFranceAchievement, self).__init__(name='readyForBattleAllianceFrance', classifier=Alliances.FRANCE, branch=PM_BRANCH.PERSONAL_MISSION_2, dossier=dossier, value=value)
 
 
-class ReadyForBattleAllianceGermanyAchievement(ReadyForBattleAchievementSeason2):
+class ReadyForBattleAllianceGermanyAchievement(ReadyForBattleAchievement3Steps):
     __slots__ = ()
 
     def __init__(self, dossier, value=None):
         super(ReadyForBattleAllianceGermanyAchievement, self).__init__(name='readyForBattleAllianceGermany', classifier=Alliances.GERMANY, branch=PM_BRANCH.PERSONAL_MISSION_2, dossier=dossier, value=value)
 
 
-class ReadyForBattleAllianceUSAAchievement(ReadyForBattleAchievementSeason2):
+class ReadyForBattleAllianceUSAAchievement(ReadyForBattleAchievement3Steps):
     __slots__ = ()
 
     def __init__(self, dossier, value=None):
         super(ReadyForBattleAllianceUSAAchievement, self).__init__(name='readyForBattleAllianceUSA', classifier=Alliances.USA, branch=PM_BRANCH.PERSONAL_MISSION_2, dossier=dossier, value=value)
 
 
-class ReadyForBattleAllianceUSSRAchievement(ReadyForBattleAchievementSeason2):
+class ReadyForBattleAllianceUSSRAchievement(ReadyForBattleAchievement3Steps):
     __slots__ = ()
 
     def __init__(self, dossier, value=None):
@@ -103,3 +103,24 @@ class ReadyForBattleSPGAchievement(ReadyForBattleAchievement):
 
     def __init__(self, dossier, value=None):
         super(ReadyForBattleSPGAchievement, self).__init__(name='readyForBattleSPG', classifier='SPG', branch=PM_BRANCH.REGULAR, dossier=dossier, value=value)
+
+
+class ReadyForBattleAssault(ReadyForBattleAchievement3Steps):
+    __slots__ = ()
+
+    def __init__(self, dossier, value=None):
+        super(ReadyForBattleAssault, self).__init__(name='readyForBattleAssault', classifier=PM3QType.ASSAULT, branch=PM_BRANCH.PERSONAL_MISSION_3, dossier=dossier, value=value)
+
+
+class ReadyForBattleSniper(ReadyForBattleAchievement3Steps):
+    __slots__ = ()
+
+    def __init__(self, dossier, value=None):
+        super(ReadyForBattleSniper, self).__init__(name='readyForBattleSniper', classifier=PM3QType.SNIPER, branch=PM_BRANCH.PERSONAL_MISSION_3, dossier=dossier, value=value)
+
+
+class ReadyForBattleSupport(ReadyForBattleAchievement3Steps):
+    __slots__ = ()
+
+    def __init__(self, dossier, value=None):
+        super(ReadyForBattleSupport, self).__init__(name='readyForBattleSupport', classifier=PM3QType.SUPPORT, branch=PM_BRANCH.PERSONAL_MISSION_3, dossier=dossier, value=value)

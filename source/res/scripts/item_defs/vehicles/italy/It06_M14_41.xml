@@ -811,8 +811,7 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	1532	</weight>
-      <maxLoad>	14000	</maxLoad>
-      <terrainResistance>	1.2 1.3 2.4	</terrainResistance>
+      <terrainResistance>	1.1 1.2 2.2	</terrainResistance>
       <brakeForce>	14000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	36	</rotationSpeed>
@@ -1656,7 +1655,6 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	1532	</weight>
-      <maxLoad>	15000	</maxLoad>
       <terrainResistance>	1.1 1.2 2.2	</terrainResistance>
       <brakeForce>	14000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -2530,9 +2528,9 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <Cannone_da_37_40>	shared	  <maxAmmo>	240	</maxAmmo>
+        <Cannone_da_37_40_M14>	shared	  <maxAmmo>	240	</maxAmmo>
           <unlocks>
-            <gun>	Cannone_da_47_32	  <cost>	140	</cost>
+            <gun>	Cannone_da_47_32_M14	  <cost>	140	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -2544,7 +2542,7 @@
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
-          <reloadTime>	2.2	</reloadTime>
+          <reloadTime>	2.9	</reloadTime>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
@@ -2607,8 +2605,8 @@
             <density>	131.007 130.253	</density>
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
-        </Cannone_da_37_40>
-        <Cannone_da_47_32>	shared	  <maxAmmo>	175	</maxAmmo>
+        </Cannone_da_37_40_M14>
+        <Cannone_da_47_32_M14>	shared	  <maxAmmo>	175	</maxAmmo>
           <armor>
             <gun>	10	</gun>
           </armor>
@@ -2622,7 +2620,7 @@
             <vehicle>	It03_M15_42	  <cost>	1230	</cost>
             </vehicle>
           </unlocks>
-          <reloadTime>	2.6	</reloadTime>
+          <reloadTime>	3.5	</reloadTime>
           <shotDispersionRadius>	0.43	</shotDispersionRadius>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
@@ -2684,7 +2682,7 @@
             <density>	128.95 133.647	</density>
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
-        </Cannone_da_47_32>
+        </Cannone_da_47_32_M14>
       </guns>
       <models>
         <undamaged>	vehicles/italy/It06_M14_41/normal/lod0/Turret_02.model	</undamaged>
@@ -3190,13 +3188,13 @@
           <axleCount>	5	</axleCount>
           <grounds>
             <soft>
-              <rollingFriction>	0.1932	</rollingFriction>
+              <rollingFriction>	0.1771	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.0966	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0966	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_It06_M14_41>

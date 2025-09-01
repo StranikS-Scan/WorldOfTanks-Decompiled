@@ -77,6 +77,6 @@ class PlayerLoadingState(BaseGroupTickingStates):
         self.progressState.setRetainMilestones(value)
         self.statusTextState.setRetainMilestones(value)
 
-    def _onEntered(self):
-        super(PlayerLoadingState, self)._onEntered()
+    def _onEntered(self, event):
+        super(PlayerLoadingState, self)._onEntered(event)
         game_loading_bindings.bringLoadingViewToTop()

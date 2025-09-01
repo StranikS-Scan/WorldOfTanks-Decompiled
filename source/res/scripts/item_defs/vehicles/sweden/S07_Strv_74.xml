@@ -57,7 +57,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	13770	</weight>
-    <maxHealth>	672	</maxHealth>
+    <maxHealth>	736	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	160	</maxHealth>
       <maxRegenHealth>	110	</maxRegenHealth>
@@ -661,8 +661,7 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	5500	</weight>
-      <maxLoad>	26000	</maxLoad>
-      <terrainResistance>	1.2 1.3 2.1	</terrainResistance>
+      <terrainResistance>	1 1.1 1.9	</terrainResistance>
       <brakeForce>	26000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	30	</rotationSpeed>
@@ -1652,7 +1651,6 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	5500	</weight>
-      <maxLoad>	29000	</maxLoad>
       <terrainResistance>	1 1.1 1.9	</terrainResistance>
       <brakeForce>	26000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -2652,8 +2650,8 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3965	</weight>
-      <maxHealth>	128	</maxHealth>
-      <rotationSpeed>	32	</rotationSpeed>
+      <maxHealth>	134	</maxHealth>
+      <rotationSpeed>	34	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
         <maxRegenHealth>	60	</maxRegenHealth>
@@ -2776,7 +2774,7 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.33	</shotDispersionRadius>
-          <reloadTime>	5.7	</reloadTime>
+          <reloadTime>	5.5	</reloadTime>
           <aimingTime>	2	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
@@ -3410,7 +3408,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4200	</weight>
-      <maxHealth>	168	</maxHealth>
+      <maxHealth>	184	</maxHealth>
       <rotationSpeed>	36	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -4189,27 +4187,17 @@
     </Turret_2_S07_Strv_74>
   </turrets0>
   <engines>
-    <_2_st_Scania_Vabis_L_603_1>	shared	  <unlocks>
+    <_2_st_Scania_Vabis_L_603_1_74>	shared	  <unlocks>
         <engine>	_2_st_Scania_Vabis_607	  <cost>	1350	</cost>
         </engine>
       </unlocks>
-    </_2_st_Scania_Vabis_L_603_1>
+    </_2_st_Scania_Vabis_L_603_1_74>
     <_2_st_Scania_Vabis_607>	shared	</_2_st_Scania_Vabis_607>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <_25_W_Sv_1_m_39_42>	shared	  <unlocks>
-        <radio>	_70_W_Sv_m_43	  <cost>	1380	</cost>
-        </radio>
-      </unlocks>
-    </_25_W_Sv_1_m_39_42>
-    <_70_W_Sv_m_43>	shared	  <unlocks>
-        <radio>	Ra_400	  <cost>	7250	</cost>
-        </radio>
-      </unlocks>
-    </_70_W_Sv_m_43>
     <Ra_400>	shared	</Ra_400>
   </radios>
   <clientAdjustmentFactors>
@@ -4222,9 +4210,9 @@
       </Chassis_S07_Strv_74_2>
     </chassis>
     <engines>
-      <_2_st_Scania_Vabis_L_603_1>
+      <_2_st_Scania_Vabis_L_603_1_74>
         <bravo>	85.63978	</bravo>
-      </_2_st_Scania_Vabis_L_603_1>
+      </_2_st_Scania_Vabis_L_603_1_74>
       <_2_st_Scania_Vabis_607>
         <bravo>	90	</bravo>
       </_2_st_Scania_Vabis_607>
@@ -4233,10 +4221,10 @@
   <physics>
     <detailed>
       <engines>
-        <_2_st_Scania_Vabis_L_603_1>
-          <smplEnginePower>	330	</smplEnginePower>
+        <_2_st_Scania_Vabis_L_603_1_74>
+          <smplEnginePower>	360	</smplEnginePower>
           <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
-        </_2_st_Scania_Vabis_L_603_1>
+        </_2_st_Scania_Vabis_L_603_1_74>
         <_2_st_Scania_Vabis_607>
           <smplEnginePower>	420	</smplEnginePower>
           <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
@@ -4246,13 +4234,13 @@
         <Chassis_S07_Strv_74>
           <grounds>
             <soft>
-              <rollingFriction>	0.211313	</rollingFriction>
+              <rollingFriction>	0.191188	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.130813	</rollingFriction>
+              <rollingFriction>	0.110688	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.12075	</rollingFriction>
+              <rollingFriction>	0.100625	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

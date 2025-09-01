@@ -29,7 +29,8 @@ class ShowWinMessage(Block, BattleHUDEventMeta):
 
 
 class SetAnimatedHintPenetrationMessage(Block, BattleHUDEventMeta):
-    _SHOT_RESULT_TO_PIERCING_CHANCE_HINT = {aih_constants.SHOT_RESULT.UNDEFINED: '',
+    _SHOT_RESULT_TO_PIERCING_CHANCE_HINT = {aih_constants.SHOT_RESULT.EMPTY: '',
+     aih_constants.SHOT_RESULT.UNDEFINED: '',
      aih_constants.SHOT_RESULT.NOT_PIERCED: 'low',
      aih_constants.SHOT_RESULT.LITTLE_PIERCED: 'medium',
      aih_constants.SHOT_RESULT.GREAT_PIERCED: 'high'}

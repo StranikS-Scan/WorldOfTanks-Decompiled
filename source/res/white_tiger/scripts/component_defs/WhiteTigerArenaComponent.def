@@ -1,0 +1,20 @@
+<WhiteTigerArenaComponent.def>
+  <BaseMethods>
+    <setGeneratorsCapturing>
+      <Arg>	BOOL	</Arg>
+    </setGeneratorsCapturing>
+    <setOvertimeLimit>
+      <Arg>	FLOAT32	</Arg>
+    </setOvertimeLimit>
+  </BaseMethods>
+  <CellMethods>
+    <setupArena>
+      <Args>
+        <config>	PYTHON	</config>
+      </Args>
+    </setupArena>
+  </CellMethods>
+  <ofEntity>
+    <Arena></Arena>
+  </ofEntity>
+</WhiteTigerArenaComponent.def>

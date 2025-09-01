@@ -57,7 +57,6 @@ class NavMeshCheckingSelector(MapCaseMode._ArenaBoundsAreaStrikeSelector):
         self._checkPosition = position
         self._prevCheckPosition = Vector3(0.0, 0.0, 0.0)
         self._avatarComponent.onPositionValidChanged += self._onPositionValidChanged
-        self._avatarComponent.setNavMeshGirth(equipment.navmeshGirth)
         self._updateFromServer()
         self._enableWaterCollision(True)
         return
@@ -68,6 +67,8 @@ class NavMeshCheckingSelector(MapCaseMode._ArenaBoundsAreaStrikeSelector):
         self._updateOutFromBoundsPosition(position)
 
     def processSelection(self, position, reset=False):
+        if reset:
+            return True
         result = super(NavMeshCheckingSelector, self).processSelection(position, reset)
         if not result:
             self._avatarComponent.onSMAbilityWrongPoint(position)
@@ -90,7 +91,8 @@ class NavMeshCheckingSelector(MapCaseMode._ArenaBoundsAreaStrikeSelector):
 
     def _updateFromServer(self):
         if not _vectorEqual(self._prevCheckPosition, self._checkPosition):
-            self._avatarComponent.checkPosition(self._checkPosition)
+            _, equipmentId = self.equipment.id
+            self._avatarComponent.checkPositionForEquipment(equipmentId, self._checkPosition)
             self._prevCheckPosition = Vector3(self._checkPosition)
         self._updateTimerID = BigWorld.callback(self._CHECK_SERVER_DELAY, self._updateFromServer)
 

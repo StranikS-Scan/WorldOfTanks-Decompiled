@@ -18,7 +18,7 @@ from gui.server_events.events_constants import BATTLE_MATTERS_QUEST_ID, BATTLE_M
 from gui.server_events.events_helpers import isAllQuestsCompleted, getIdxFromQuest
 from gui.shared.event_dispatcher import showBattleMattersReward
 from gui.impl.lobby.battle_matters.battle_matters_hints import BattleMattersHintsHelper
-from helpers import dependency, server_settings
+from helpers import dependency, server_settings, time_utils
 from shared_utils import first
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_matters import IBattleMattersController
@@ -198,7 +198,7 @@ class BattleMattersController(IBattleMattersController):
         return self.getBattleMattersQuests(filterFunc)
 
     def getBattleMattersQuests(self, filterFunc=None):
-        quests = self.__eventsCache.getHiddenQuests(BattleMattersController.isBattleMattersQuest).values()
+        quests = self.__eventsCache.getHiddenQuests(BattleMattersController.isBattleMattersQuest, makeRelations=False).values()
         quests = sorted(quests, key=lambda q: q.getOrder())
         if filterFunc:
             return [ quest for quest in quests if filterFunc(quest) ]
@@ -392,9 +392,11 @@ class BattleMattersController(IBattleMattersController):
         return cls.__lobbyContext.getServerSettings().battleMattersConfig
 
     def __saveRewards(self, questsData, clientCtx=None):
-        questIDs = []
+        questIDs = set()
         if questsData is not None:
-            questIDs = [ qID for qID in questsData.get('completedQuestIDs', set()) if self.isBattleMattersQuestID(qID) ]
+            questIDsFromData = (qID for qID in questsData.get('completedQuestIDs', set()) if self.isBattleMattersQuestID(qID))
+            questIDsFromSavedRewards = (qID for rewardsData in self.__savedRewards.values() for qID in rewardsData['quests'].keys())
+            questIDs = set(itertools.chain(questIDsFromData, questIDsFromSavedRewards))
         allIntermediateQuests = self.getIntermediateQuests()
         quests = [ q for q in self.getRegularBattleMattersQuests() + self.getCompensationBattleMattersQuests() if q.getID() in questIDs ] if questIDs else []
         intermediateQuests = [ q for q in allIntermediateQuests if q.getID() in questIDs ] if questIDs else []
@@ -417,7 +419,9 @@ class BattleMattersController(IBattleMattersController):
 
     def __addRewards(self, quest, questsData, isInPair, sequenceNumber=None):
         order = quest.getOrder()
-        self.__savedRewards.setdefault(order, {}).setdefault('quests', {}).update({quest.getID(): questsData.get('detailedRewards', {}).get(quest.getID(), {})})
+        questRewards = self.__savedRewards.setdefault(order, {}).setdefault('quests', {})
+        if quest.getID() not in questRewards:
+            questRewards.update({quest.getID(): questsData.get('detailedRewards', {}).get(quest.getID(), {})})
         self.__savedRewards[order].update({'isInPair': isInPair})
         if sequenceNumber:
             self.__savedRewards[order].update({'sequenceNumber': sequenceNumber})
@@ -491,8 +495,7 @@ class _BattleMattersProgressWatcher(object):
             needReset = currentProgress != AccountSettings.getBattleMattersSetting(BattleMatters.LAST_QUEST_PROGRESS)
         if needReset:
             AccountSettings.setBattleMattersSetting(BattleMatters.LAST_QUEST_PROGRESS, currentProgress)
-            AccountSettings.setBattleMattersSetting(BattleMatters.BATTLES_COUNT_WITHOUT_PROGRESS, 0)
-            self.__isFirstBattleWithoutProgressInSession = True
+            self.__resetBattlesCountWithoutProgress()
             self.onProgressReset()
 
     def onConnected(self):
@@ -502,10 +505,28 @@ class _BattleMattersProgressWatcher(object):
         self.__isFirstBattleWithoutProgressInSession = False
 
     def __onBackFromBattle(self):
-        if BigWorld.player().arenaBonusType in ARENA_BONUS_TYPE.RANDOM_RANGE or not self.__isFirstBattleWithoutProgressInSession:
+        if self.__isValidArenaBonusType() or not self.__isFirstBattleWithoutProgressInSession:
             self.__isJustBackFromBattle = True
             self.onBackFromBattle()
 
     def __onEnterInBattle(self):
-        if BigWorld.player().arenaBonusType in itertools.chain(ARENA_BONUS_TYPE.RANDOM_RANGE, (ARENA_BONUS_TYPE.WINBACK,)):
+        if self.__isValidArenaBonusType():
+            if not self.__wasBattlePlayedToday():
+                self.__resetBattlesCountWithoutProgress()
             AccountSettings.setBattleMattersSetting(BattleMatters.BATTLES_COUNT_WITHOUT_PROGRESS, self.getBattlesCountWithoutProgress() + 1)
+            AccountSettings.setBattleMattersSetting(BattleMatters.LAST_BATTLE_TIME, time_utils.getServerUTCTime())
+
+    def __resetBattlesCountWithoutProgress(self):
+        AccountSettings.setBattleMattersSetting(BattleMatters.BATTLES_COUNT_WITHOUT_PROGRESS, 0)
+        self.__isFirstBattleWithoutProgressInSession = True
+
+    @staticmethod
+    def __wasBattlePlayedToday():
+        lastBattleTime = AccountSettings.getBattleMattersSetting(BattleMatters.LAST_BATTLE_TIME)
+        todayStart, todayEnd = time_utils.getDayTimeBoundsForLocal(time_utils.getServerUTCTime())
+        return todayStart <= lastBattleTime <= todayEnd
+
+    @staticmethod
+    def __isValidArenaBonusType():
+        arenaBonusTypeForWatching = itertools.chain(ARENA_BONUS_TYPE.RANDOM_RANGE, (ARENA_BONUS_TYPE.WINBACK,))
+        return BigWorld.player().arenaBonusType in arenaBonusTypeForWatching

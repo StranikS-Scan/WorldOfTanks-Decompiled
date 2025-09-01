@@ -950,7 +950,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	8000	</weight>
-      <maxLoad>	38000	</maxLoad>
       <terrainResistance>	1.1 1.4 2.1	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -1897,7 +1896,7 @@
   <turrets0>
     <Turret_1_R202_SU_2_122>
       <userString>	#ussr_vehicles:Turret_1_R202_SU_2_122	</userString>
-      <tags>	cannotDetach	</tags>
+      <tags>	cannotDetach turretless	</tags>
       <level>	4	</level>
       <price>	100	</price>
       <notInShop>	true	</notInShop>
@@ -1926,14 +1925,19 @@
           <maxAmmo>	40	</maxAmmo>
           <armor>
             <armor_1>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_1>
             <armor_2>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_2>
             <armor_3>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_4>
             <armor_5>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_5>
             <gun>	50	</gun>
           </armor>

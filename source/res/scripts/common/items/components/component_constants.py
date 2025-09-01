@@ -10,10 +10,6 @@ Autoreload = collections.namedtuple('Autoreload', ['reloadTime',
  'boostResidueTime',
  'boostFraction'])
 AutoShoot = collections.namedtuple('AutoShoot', ['shotDispersionPerSec', 'maxShotDispersion', 'groupSize'])
-SpinGun = collections.namedtuple('SpinGun', ['spinUpTimeout',
- 'spinDownTimeout',
- 'isSpinUpShootingEnable',
- 'startFactor'])
 DualGun = reflectedNamedTuple('DualGun', ['chargeTime',
  'shootImpulse',
  'reloadLockTime',
@@ -28,8 +24,8 @@ TwinGun = collections.namedtuple('TwinGun', ['afterShotDelay',
  'gunMarkerOffset',
  'shootImpulse',
  'twinGunReloadTime'])
-MultiGunState = collections.namedtuple('MultiGunState', ['patterns', 'sequence'])
-MultiGunPattern = collections.namedtuple('MultiGunPattern', ['gunIndexes', 'sequence'])
+MultiGunState = collections.namedtuple('MultiGunState', ['gunIndexes', 'multiGun'])
+ControllableReload = collections.namedtuple('ControllableReload', ['allowToReloadAfterShot'])
 UNDEFINED_ITEM_TYPE_ID = 0
 ZERO_FLOAT = 0.0
 ZERO_INT = 0
@@ -63,8 +59,6 @@ DEFAULT_GUN_DUALGUN = DualGun(chargeTime=4.0, shootImpulse=100.0, reloadLockTime
 DEFAULT_GUN_DUAL_ACCURACY = DualAccuracy(afterShotDispersionAngle=1.0, coolingDelay=5.0)
 DEFAULT_GUN_AUTOSHOOT = AutoShoot(shotDispersionPerSec=0.0, maxShotDispersion=0.0, groupSize=1)
 DEFAULT_GUN_TWINGUN = TwinGun(afterShotDelay=0.5, gunMarkerOffset=0.0, shootImpulse=0, twinGunReloadTime=0.0)
-DEFAULT_SPIN_GUN = SpinGun(startFactor=0.0, spinUpTimeout=0.0, spinDownTimeout=0.0, isSpinUpShootingEnable=True)
-DEFAULT_TURRET_MULTI_GUN_STATE = MultiGunState(patterns={}, sequence=(0,))
 DEFAULT_FAKE_TURRETS = {'lobby': (),
  'battle': ()}
 DEFAULT_HULL_VARIANT_MATCH = (None, None)

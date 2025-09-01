@@ -70,9 +70,9 @@
     <weight>	16189	</weight>
     <maxHealth>	320	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	134	</maxHealth>
-      <maxRegenHealth>	67	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	158	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
     </ammoBayHealth>
     <models>
       <undamaged>	vehicles/american/A37_M40M43/normal/lod0/Hull.model	</undamaged>
@@ -1540,13 +1540,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_M40M43>
-      <userString>	#usa_vehicles:Chassis_M40M43	</userString>
+    <Chassis_A37_M40M43>
+      <userString>	#usa_vehicles:Chassis_A37_M40M43	</userString>
       <tags></tags>
       <level>	7	</level>
       <price>	19070	</price>
       <unlocks>
-        <chassis>	Chassis_M40M43_2	  <cost>	16300	</cost>
+        <chassis>	Chassis_A37_M40M43_2	  <cost>	16300	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1554,8 +1554,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	15000	</weight>
-      <maxLoad>	37000	</maxLoad>
-      <terrainResistance>	1.4 1.6 2.7	</terrainResistance>
+      <terrainResistance>	1.3 1.5 2.5	</terrainResistance>
       <brakeForce>	33000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	20	</rotationSpeed>
@@ -2613,9 +2612,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	9	</repairTime>
-    </Chassis_M40M43>
-    <Chassis_M40M43_2>
-      <userString>	#usa_vehicles:Chassis_M40M43_2	</userString>
+    </Chassis_A37_M40M43>
+    <Chassis_A37_M40M43_2>
+      <userString>	#usa_vehicles:Chassis_A37_M40M43_2	</userString>
       <tags></tags>
       <level>	8	</level>
       <price>	32000	</price>
@@ -2624,7 +2623,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	15000	</weight>
-      <maxLoad>	39500	</maxLoad>
       <terrainResistance>	1.3 1.5 2.5	</terrainResistance>
       <brakeForce>	37000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2634,8 +2632,8 @@
         <vehicleRotation>	0.34	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	130	</maxHealth>
-      <maxRegenHealth>	100	</maxRegenHealth>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	165	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/american/A37_M40M43/normal/lod0/Chassis.model	</undamaged>
@@ -3682,14 +3680,14 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	7.090909	</repairTime>
-    </Chassis_M40M43_2>
+      <repairTime>	6.66666651	</repairTime>
+    </Chassis_A37_M40M43_2>
   </chassis>
   <turrets0>
-    <Turret_1_M40M43>
+    <Turret_1_A37_M40M43>
       <ceilless>	true	</ceilless>
-      <userString>	#usa_vehicles:Turret_1_M40M43	</userString>
-      <tags>	cannotDetach	</tags>
+      <userString>	#usa_vehicles:Turret_1_A37_M40M43	</userString>
+      <tags>	cannotDetach turretless	</tags>
       <level>	8	</level>
       <price>	120	</price>
       <notInShop>	true	</notInShop>
@@ -3701,9 +3699,9 @@
       <maxHealth>	80	</maxHealth>
       <rotationSpeed>	10	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	155	</maxHealth>
+        <maxRegenHealth>	78	</maxRegenHealth>
+        <repairCost>	8	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	290	</circularVisionRadius>
       <surveyingDeviceHealth>
@@ -3978,68 +3976,36 @@
         <density>	107.342 107.375	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_1_M40M43>
+    </Turret_1_A37_M40M43>
   </turrets0>
   <engines>
-    <Wright_Continental_R-975C1>	shared	  <unlocks>
-        <engine>	Wright_Continental_R-975C4	  <cost>	1500	</cost>
+    <Wright_Continental_R_975C4_M40>	shared	  <unlocks>
+        <engine>	Ford_GAA_early_M43	  <cost>	5100	</cost>
         </engine>
       </unlocks>
-    </Wright_Continental_R-975C1>
-    <Wright_Continental_R-975C4>	shared	  <unlocks>
-        <engine>	Ford_GAA_R	  <cost>	5100	</cost>
-        </engine>
-      </unlocks>
-    </Wright_Continental_R-975C4>
-    <Ford_GAA_R>	shared	</Ford_GAA_R>
+    </Wright_Continental_R_975C4_M40>
+    <Ford_GAA_early_M43>	shared	</Ford_GAA_early_M43>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <SCR_510>	shared	  <unlocks>
-        <radio>	SCR_610	  <cost>	1480	</cost>
-        </radio>
-      </unlocks>
-    </SCR_510>
-    <SCR_610>	shared	  <unlocks>
-        <radio>	SCR_619	  <cost>	9000	</cost>
-        </radio>
-      </unlocks>
-    </SCR_610>
     <SCR_619>	shared	</SCR_619>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Wright_Continental_R-975C1>
-          <smplEnginePower>	422.9124	</smplEnginePower>
-          <smplFwMaxSpeed>	38.6	</smplFwMaxSpeed>
-        </Wright_Continental_R-975C1>
-        <Wright_Continental_R-975C4>
+        <Wright_Continental_R_975C4_M40>
           <smplEnginePower>	486.3493	</smplEnginePower>
           <smplFwMaxSpeed>	38.6	</smplFwMaxSpeed>
-        </Wright_Continental_R-975C4>
-        <Ford_GAA_R>
+        </Wright_Continental_R_975C4_M40>
+        <Ford_GAA_early_M43>
           <smplEnginePower>	528.6406	</smplEnginePower>
           <smplFwMaxSpeed>	38.6	</smplFwMaxSpeed>
-        </Ford_GAA_R>
+        </Ford_GAA_early_M43>
       </engines>
       <chassis>
-        <Chassis_M40M43>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.21735	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.1288	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.1127	</rollingFriction>
-            </firm>
-          </grounds>
-        </Chassis_M40M43>
-        <Chassis_M40M43_2>
+        <Chassis_A37_M40M43>
           <grounds>
             <soft>
               <rollingFriction>	0.20125	</rollingFriction>
@@ -4051,7 +4017,20 @@
               <rollingFriction>	0.10465	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_M40M43_2>
+        </Chassis_A37_M40M43>
+        <Chassis_A37_M40M43_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.20125	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.12075	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.10465	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_A37_M40M43_2>
       </chassis>
     </detailed>
   </physics>

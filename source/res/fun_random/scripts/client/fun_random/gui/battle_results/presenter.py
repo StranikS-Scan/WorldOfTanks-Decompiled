@@ -8,17 +8,16 @@ from fun_random.gui.battle_results.tooltips.total_efficiency_tooltips import Fun
 from fun_random.gui.feature.util.fun_mixins import FunSubModesWatcher
 from fun_random.gui.shared.event_dispatcher import showFunRandomBattleResults
 from fun_random.gui.shared.tooltips import TooltipType
+from fun_random.gui.impl.gen.view_models.views.lobby.feature.battle_results.fun_battle_results_view_model import FunBattleResultsViewModel
+from fun_random.gui.battle_results.base_presenter import BaseStatsPresenter
+from fun_random.gui.battle_results.base_constants import PresenterUpdateTypes, CommonTooltipType
 from gui.battle_results.pbs_helpers.common import pushNoBattleResultsDataMessage
-from gui.battle_results.presenters.base_presenter import BaseStatsPresenter
-from gui.battle_results.presenters.base_constants import PresenterUpdateTypes
 from gui.battle_results.presenters.packers.user_info import PersonalInfo
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
-if typing.TYPE_CHECKING:
-    from fun_random.gui.impl.gen.view_models.views.lobby.feature.battle_results.fun_battle_results_view_model import FunBattleResultsViewModel
 
 class FunRandomBattleResultsPresenter(BaseStatsPresenter, FunSubModesWatcher):
     __slots__ = ()
-    _TOOLTIPS_PACKERS = {TooltipType.FUN_EFFICIENCY_PARAMETER: FunEfficiencyTooltipsPacker,
+    _TOOLTIPS_PACKERS = {CommonTooltipType.EFFICIENCY_PARAMETER: FunEfficiencyTooltipsPacker,
      TooltipType.FUN_EARNED_CURRENCY: FunEarnedCurrencyTooltipsPacker}
     _CONTEXT_MENU_TYPE = CONTEXT_MENU_HANDLER_TYPE.BATTLE_RESULTS_USER
 
@@ -44,6 +43,9 @@ class FunRandomBattleResultsPresenter(BaseStatsPresenter, FunSubModesWatcher):
     @staticmethod
     def onShowResults(arenaUniqueID):
         return None
+
+    def getModelClass(self):
+        return FunBattleResultsViewModel
 
     def onResultsPosted(self, arenaUniqueID):
         if self._battleResults and self._funRandomCtrl.isEnabled():

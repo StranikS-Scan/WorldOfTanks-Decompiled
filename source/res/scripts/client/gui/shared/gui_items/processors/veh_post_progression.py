@@ -4,10 +4,11 @@ import typing
 import BigWorld
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.shared.event_dispatcher import showResearchConfirmDialog
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.processors import Processor, plugins, makeSuccess
 from gui.SystemMessages import pushMessage, SM_TYPE
-from gui.veh_post_progression.messages import makeModificationErrorMsg, makeDiscardPairsMsg, makeBuyPairMsg, makePurchaseStepsMsg, makeChangeSlotCategoryMsg, makeSetSlotCategoryMsg
+from gui.veh_post_progression.messages import makeModificationErrorMsg, makeDiscardPairsMsg, makeBuyPairMsg, makePurchaseStepsMsg, makeChangeSlotCategoryMsg, makeSetSlotCategoryMsg, makePurchasePerksMsg
 from gui.veh_post_progression.sounds import playSound
 from gui.veh_post_progression.sounds import Sounds
 from post_progression_common import ACTION_TYPES, FEATURE_BY_GROUP_ID
@@ -175,3 +176,36 @@ class SetEquipmentSlotTypeProcessor(PostProgressionProcessor):
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeModificationErrorMsg()
+
+
+class PurchaseVehSkillTreeStepsProcessor(PostProgressionProcessor):
+
+    def __init__(self, vehicle, stepIDs):
+        super(PurchaseVehSkillTreeStepsProcessor, self).__init__(vehicle)
+        self.__stepIDs = stepIDs
+        self.__price = self.__getPrice(self._getVehicle())
+        self.addPlugins([plugins.PostProgressionStepsValidator(vehicle, stepIDs, {ACTION_TYPES.FEATURE, ACTION_TYPES.MODIFICATION, ACTION_TYPES.PAIR_MODIFICATION}), plugins.PostProgressionPurchaseStepsValidator(vehicle, stepIDs), plugins.AsyncDialogConfirmator(showResearchConfirmDialog, self.__getResearchedPerksText(), self.__price.xp, self.__price.freeXP, isEnabled=self.__price.isXPCompound())])
+
+    def _request(self, callback):
+        BigWorld.player().inventory.purchasePostProgressionSteps(self._vehicleCD, self.__stepIDs, lambda code, ext: self._response(code, callback, ctx=ext))
+
+    def _successHandler(self, code, ctx=None):
+        return makePurchasePerksMsg(self._getVehicle(), ctx, self.__price)
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        msgKey = R.strings.system_messages.vehicleSkillTreeProgression.processorError
+        return makeModificationErrorMsg(msgKey)
+
+    def __getPrice(self, vehicle):
+        price = EXT_MONEY_ZERO
+        for stepID in self.__stepIDs:
+            price += vehicle.postProgression.getStep(stepID).getPrice()
+
+        return getFullXPFromXPPrice(self.itemsCache.items.stats.getMoneyExt(self._vehicleCD), price)
+
+    def __getResearchedPerksText(self):
+        stepsAmount = len(self.__stepIDs)
+        locName = self._getVehicle().postProgression.getStep(self.__stepIDs[0]).action.getLocName()
+        perkName = R.strings.veh_skill_tree.tooltips.title.dyn(locName)()
+        perkName = perkName or locName
+        return backport.ntext(R.strings.veh_skill_tree.dialog.confirmation.researchPerks(), stepsAmount, perks=backport.text(perkName) if stepsAmount == 1 else backport.getIntegralFormat(stepsAmount))

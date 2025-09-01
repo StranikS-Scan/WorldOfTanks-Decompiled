@@ -58,7 +58,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	6750	</weight>
-    <maxHealth>	640	</maxHealth>
+    <maxHealth>	720	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	180	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -627,8 +627,7 @@
         </armor_32>
       </armor>
       <weight>	2200	</weight>
-      <maxLoad>	14000	</maxLoad>
-      <terrainResistance>	1 1.2 2	</terrainResistance>
+      <terrainResistance>	0.9 1 1.8	</terrainResistance>
       <brakeForce>	7000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	28	</rotationSpeed>
@@ -902,7 +901,6 @@
         </armor_32>
       </armor>
       <weight>	2200	</weight>
-      <maxLoad>	15500	</maxLoad>
       <terrainResistance>	0.9 1 1.8	</terrainResistance>
       <brakeForce>	9000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -1195,7 +1193,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2700	</weight>
-      <maxHealth>	120	</maxHealth>
+      <maxHealth>	140	</maxHealth>
       <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -1229,8 +1227,8 @@
             </armor_6>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.39	</shotDispersionRadius>
-          <reloadTime>	2.7	</reloadTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	2.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	3	</afterShot>
@@ -1777,7 +1775,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2800	</weight>
-      <maxHealth>	160	</maxHealth>
+      <maxHealth>	180	</maxHealth>
       <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -1799,8 +1797,8 @@
           <armor>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.39	</shotDispersionRadius>
-          <reloadTime>	2.6	</reloadTime>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <reloadTime>	2.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	3	</afterShot>
@@ -1875,14 +1873,14 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 7 1 7	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	3.8	</reloadTime>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
+          <reloadTime>	3.3	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.2	</aimingTime>
+          <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <customizationSlots>
             <slot>
@@ -2407,16 +2405,6 @@
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <N19Mk1>	shared	  <unlocks>
-        <radio>	N19Mk2	  <cost>	3600	</cost>
-        </radio>
-      </unlocks>
-    </N19Mk1>
-    <N19Mk2>	shared	  <unlocks>
-        <radio>	N19Mk3	  <cost>	4000	</cost>
-        </radio>
-      </unlocks>
-    </N19Mk2>
     <N19Mk3>	shared	</N19Mk3>
   </radios>
   <physics>
@@ -2438,13 +2426,13 @@
           <axleSteeringAngles>	0 4	</axleSteeringAngles>
           <grounds>
             <soft>
-              <rollingFriction>	0.161	</rollingFriction>
+              <rollingFriction>	0.1449	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.0966	</rollingFriction>
+              <rollingFriction>	0.0805	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0805	</rollingFriction>
+              <rollingFriction>	0.07245	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_GB122_Staghound_Mk_III>

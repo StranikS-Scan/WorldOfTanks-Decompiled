@@ -57,7 +57,7 @@
     </armor>
     <primaryArmor>	armor_13 armor_3 armor_4	</primaryArmor>
     <weight>	17930	</weight>
-    <maxHealth>	800	</maxHealth>
+    <maxHealth>	960	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	160	</maxHealth>
       <maxRegenHealth>	110	</maxRegenHealth>
@@ -1125,13 +1125,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_A44>
-      <userString>	#ussr_vehicles:Chassis_A44	</userString>
+    <Chassis_R59_A44>
+      <userString>	#ussr_vehicles:Chassis_R59_A44	</userString>
       <tags></tags>
       <level>	6	</level>
       <price>	12700	</price>
       <unlocks>
-        <chassis>	Chassis_A44_2	  <cost>	7900	</cost>
+        <chassis>	Chassis_R59_A44_2	  <cost>	7900	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1139,11 +1139,10 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	12000	</weight>
-      <maxLoad>	37000	</maxLoad>
-      <terrainResistance>	0.8 0.9 1.8	</terrainResistance>
+      <terrainResistance>	0.7 0.8 1.6	</terrainResistance>
       <brakeForce>	32000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	42	</rotationSpeed>
+      <rotationSpeed>	51	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.18	</vehicleMovement>
         <vehicleRotation>	0.18	</vehicleRotation>
@@ -1993,9 +1992,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	5.71428585	</repairTime>
-    </Chassis_A44>
-    <Chassis_A44_2>
-      <userString>	#ussr_vehicles:Chassis_A44_2	</userString>
+    </Chassis_R59_A44>
+    <Chassis_R59_A44_2>
+      <userString>	#ussr_vehicles:Chassis_R59_A44_2	</userString>
       <tags></tags>
       <level>	7	</level>
       <price>	17700	</price>
@@ -2004,11 +2003,10 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	12000	</weight>
-      <maxLoad>	41000	</maxLoad>
       <terrainResistance>	0.7 0.8 1.6	</terrainResistance>
       <brakeForce>	36000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	44	</rotationSpeed>
+      <rotationSpeed>	55	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.16	</vehicleMovement>
         <vehicleRotation>	0.16	</vehicleRotation>
@@ -2858,11 +2856,11 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	5.71428585	</repairTime>
-    </Chassis_A44_2>
+    </Chassis_R59_A44_2>
   </chassis>
   <turrets0>
-    <Turret_1_A44>
-      <userString>	#ussr_vehicles:Turret_1_A44	</userString>
+    <Turret_1_R59_A44>
+      <userString>	#ussr_vehicles:Turret_1_R59_A44	</userString>
       <tags></tags>
       <level>	6	</level>
       <price>	12840	</price>
@@ -2880,7 +2878,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4250	</weight>
-      <maxHealth>	200	</maxHealth>
+      <maxHealth>	180	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -2896,7 +2894,7 @@
       <guns>
         <_57mm_ZiS_4_44>	shared	  <maxAmmo>	240	</maxAmmo>
           <unlocks>
-            <gun>	_107mm_ZiS-6	  <cost>	14400	</cost>
+            <gun>	_107mm_ZiS_6	  <cost>	14400	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -2911,13 +2909,13 @@
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <reloadTime>	2.3	</reloadTime>
+          <reloadTime>	2.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <afterShot>	2.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	1.9	</aimingTime>
+          <aimingTime>	1.7	</aimingTime>
           <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R59_A44/normal/lod0/Gun_02.model	</undamaged>
@@ -2973,9 +2971,9 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_57mm_ZiS_4_44>
-        <_107mm_ZiS-6>	shared	  <maxAmmo>	60	</maxAmmo>
+        <_107mm_ZiS_6>	shared	  <maxAmmo>	60	</maxAmmo>
           <unlocks>
-            <turret>	Turret_2_A44	  <cost>	8800	</cost>
+            <turret>	Turret_2_R59_A44	  <cost>	8800	</cost>
             </turret>
           </unlocks>
           <armor>
@@ -3051,7 +3049,7 @@
             <density>	126.298 133.828	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_107mm_ZiS-6>
+        </_107mm_ZiS_6>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R59_A44/normal/lod0/Turret_01.model	</undamaged>
@@ -3601,9 +3599,9 @@
         <density>	131.644 140.339	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_1_A44>
-    <Turret_2_A44>
-      <userString>	#ussr_vehicles:Turret_2_A44	</userString>
+    </Turret_1_R59_A44>
+    <Turret_2_R59_A44>
+      <userString>	#ussr_vehicles:Turret_2_R59_A44	</userString>
       <tags></tags>
       <level>	7	</level>
       <price>	17300	</price>
@@ -3626,7 +3624,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5170	</weight>
-      <maxHealth>	300	</maxHealth>
+      <maxHealth>	240	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -3652,14 +3650,14 @@
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <reloadTime>	2.2	</reloadTime>
+          <shotDispersionRadius>	0.32	</shotDispersionRadius>
+          <reloadTime>	2.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <afterShot>	2.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	1.9	</aimingTime>
+          <aimingTime>	1.7	</aimingTime>
           <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R59_A44/normal/lod0/Gun_06.model	</undamaged>
@@ -3715,7 +3713,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_57mm_ZiS_4_44>
-        <_107mm_ZiS-6>	shared	  <maxAmmo>	60	</maxAmmo>
+        <_107mm_ZiS_6>	shared	  <maxAmmo>	60	</maxAmmo>
           <armor>
             <armor_1>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3789,7 +3787,7 @@
             <density>	126.298 133.828	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_107mm_ZiS-6>
+        </_107mm_ZiS_6>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R59_A44/normal/lod0/Turret_02.model	</undamaged>
@@ -4338,15 +4336,15 @@
         <density>	116.424 119.466	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_2_A44>
+    </Turret_2_R59_A44>
   </turrets0>
   <engines>
     <V_2_34_43>	shared	  <unlocks>
-        <engine>	V-5	  <cost>	5500	</cost>
+        <engine>	V_5	  <cost>	5500	</cost>
         </engine>
       </unlocks>
     </V_2_34_43>
-    <V-5>	shared	</V-5>
+    <V_5>	shared	</V_5>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
@@ -4361,26 +4359,13 @@
           <smplEnginePower>	580	</smplEnginePower>
           <smplFwMaxSpeed>	59	</smplFwMaxSpeed>
         </V_2_34_43>
-        <V-5>
+        <V_5>
           <smplEnginePower>	640	</smplEnginePower>
           <smplFwMaxSpeed>	59	</smplFwMaxSpeed>
-        </V-5>
+        </V_5>
       </engines>
       <chassis>
-        <Chassis_A44>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.1449	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.07245	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.0644	</rollingFriction>
-            </firm>
-          </grounds>
-        </Chassis_A44>
-        <Chassis_A44_2>
+        <Chassis_R59_A44>
           <grounds>
             <soft>
               <rollingFriction>	0.1288	</rollingFriction>
@@ -4392,15 +4377,28 @@
               <rollingFriction>	0.05635	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_A44_2>
+        </Chassis_R59_A44>
+        <Chassis_R59_A44_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.1288	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.0644	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.05635	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_R59_A44_2>
       </chassis>
     </detailed>
   </physics>
   <clientAdjustmentFactors>
     <guns>
-      <_107mm_ZiS-6>
+      <_107mm_ZiS_6>
         <delta>	1.034	</delta>
-      </_107mm_ZiS-6>
+      </_107mm_ZiS_6>
     </guns>
     <armour>	0.951972301	</armour>
   </clientAdjustmentFactors>

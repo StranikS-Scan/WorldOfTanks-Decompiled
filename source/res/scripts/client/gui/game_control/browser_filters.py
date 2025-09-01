@@ -7,6 +7,7 @@ from gui.Scaleform.framework import g_entitiesFactories
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.shared import g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.event_dispatcher import showPersonalMissionCampaignSelectorWindow
 from gui.shared.events import OpenLinkEvent
 
 def getFilters():
@@ -30,7 +31,8 @@ def _onShowInExternalBrowser(url, tags):
 def _onGoToHangar(url, tags):
     if 'go_to_hangar' in tags:
         LOG_DEBUG('Browser url has been processed: going to hangar. Url: ', url)
-        g_eventBus.handleEvent(g_entitiesFactories.makeLoadEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
+        from gui.shared.event_dispatcher import showHangar
+        showHangar()
         return BrowserFilterResult(stopNavigation=True)
     return BrowserFilterResult()
 
@@ -46,6 +48,6 @@ def _onGoToMissions(url, tags):
 def _onGoToPersonalMissions(url, tags):
     if 'go_to_campaigns' in tags:
         LOG_DEBUG('Browser url has been processed: going to personal missions. Url: ', url)
-        g_eventBus.handleEvent(g_entitiesFactories.makeLoadEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS)), scope=EVENT_BUS_SCOPE.LOBBY)
+        showPersonalMissionCampaignSelectorWindow()
         return BrowserFilterResult(stopNavigation=True, closeBrowser=True)
     return BrowserFilterResult()

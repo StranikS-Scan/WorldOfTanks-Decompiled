@@ -57,7 +57,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_9 armor_4	</primaryArmor>
     <weight>	8298	</weight>
-    <maxHealth>	1120	</maxHealth>
+    <maxHealth>	1240	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
@@ -904,8 +904,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	6500	</weight>
-      <maxLoad>	21000	</maxLoad>
-      <terrainResistance>	1.3 1.5 2.9	</terrainResistance>
+      <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
       <brakeForce>	22000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	36	</rotationSpeed>
@@ -1642,7 +1641,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	6500	</weight>
-      <maxLoad>	24000	</maxLoad>
       <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
       <brakeForce>	22000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2396,7 +2394,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4000	</weight>
-      <maxHealth>	280	</maxHealth>
+      <maxHealth>	310	</maxHealth>
       <rotationSpeed>	34	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -2410,92 +2408,6 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_90mm_Bofors_strvkan_L_43>	shared	  <maxAmmo>	60	</maxAmmo>
-          <unlocks>
-            <gun>	_90mm_Bofors_strvkan_L_53	  <cost>	16000	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_3>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <gun>	15	</gun>
-          </armor>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 6 1 6	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <reloadTime>	7.5	</reloadTime>
-          <aimingTime>	2	</aimingTime>
-          <shotDispersionRadius>	0.37	</shotDispersionRadius>
-          <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	4	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <models>
-            <undamaged>	vehicles/sweden/S29_UDES_14_5/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/sweden/S29_UDES_14_5/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/sweden/S29_UDES_14_5/crash/lod0/Gun_01.model	</exploded>
-            <sets>
-              <UDES_14_5_3Dst>
-                <undamaged>	vehicles/sweden/S29_UDES_14_5/_skins/UDES_14_5_3Dst/normal/lod0/Gun_01.model	</undamaged>
-                <destroyed>	vehicles/sweden/S29_UDES_14_5/_skins/UDES_14_5_3Dst/crash/lod0/Gun_01.model	</destroyed>
-                <exploded>	vehicles/sweden/S29_UDES_14_5/_skins/UDES_14_5_3Dst/crash/lod0/Gun_01.model	</exploded>
-              </UDES_14_5_3Dst>
-            </sets>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/sweden/S29_UDES_14_5/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/sweden/S29_UDES_14_5/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000001 0.000594 1.7417	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.152408 0.152408	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000001 0.000594 1.7417	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0 0 2.07224	</rayStart>
-              <rayEnd>	0 0 2.55224	</rayEnd>
-              <rayUp>	0.121 0 0	</rayUp>
-              <size>	0.48	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <effects>	shot_main	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <camouflage>
-            <density>	134.763 135.084	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_90mm_Bofors_strvkan_L_43>
         <_90mm_Bofors_strvkan_L_53>	shared	  <maxAmmo>	60	</maxAmmo>
           <unlocks>
             <gun>	_105mm_strvkan_L_45	  <cost>	35000	</cost>
@@ -2514,11 +2426,11 @@
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <reloadTime>	7.2	</reloadTime>
+          <reloadTime>	7	</reloadTime>
           <aimingTime>	1.9	</aimingTime>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2583,6 +2495,10 @@
           </camouflage>
         </_90mm_Bofors_strvkan_L_53>
         <_105mm_strvkan_L_45>	shared	  <maxAmmo>	40	</maxAmmo>
+          <unlocks>
+            <vehicle>	S27_UDES_16	  <cost>	150350	</cost>
+            </vehicle>
+          </unlocks>
           <armor>
             <armor_1>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -2604,10 +2520,6 @@
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <unlocks>
-            <vehicle>	S27_UDES_16	  <cost>	150350	</cost>
-            </vehicle>
-          </unlocks>
           <models>
             <undamaged>	vehicles/sweden/S29_UDES_14_5/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/sweden/S29_UDES_14_5/crash/lod0/Gun_04.model	</destroyed>
@@ -3106,16 +3018,6 @@
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <Ra_146>	shared	  <unlocks>
-        <radio>	Ra_400	  <cost>	7250	</cost>
-        </radio>
-      </unlocks>
-    </Ra_146>
-    <Ra_400>	shared	  <unlocks>
-        <radio>	Ra_421	  <cost>	9400	</cost>
-        </radio>
-      </unlocks>
-    </Ra_400>
     <Ra_421>	shared	</Ra_421>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>

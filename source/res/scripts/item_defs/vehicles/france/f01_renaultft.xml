@@ -82,7 +82,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	2750	</weight>
-    <maxHealth>	196	</maxHealth>
+    <maxHealth>	200	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	65	</maxHealth>
       <maxRegenHealth>	45	</maxRegenHealth>
@@ -1034,8 +1034,8 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_RenaultFT2>
-      <userString>	#france_vehicles:Chassis_RenaultFT2	</userString>
+    <Chassis_F01_RenaultFT>
+      <userString>	#france_vehicles:Chassis_F01_RenaultFT	</userString>
       <tags></tags>
       <level>	1	</level>
       <price>	0	</price>
@@ -1045,14 +1045,13 @@
         <rightTrack>	5	</rightTrack>
       </armor>
       <weight>	1200	</weight>
-      <maxLoad>	6800	</maxLoad>
       <terrainResistance>	0.8 0.9 1.8	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	60	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.38	</vehicleMovement>
-        <vehicleRotation>	0.38	</vehicleRotation>
+        <vehicleMovement>	0.33	</vehicleMovement>
+        <vehicleRotation>	0.33	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	50	</maxHealth>
@@ -1923,11 +1922,11 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	3.41880345	</repairTime>
-    </Chassis_RenaultFT2>
+    </Chassis_F01_RenaultFT>
   </chassis>
   <turrets0>
-    <Turret_2_RenaultFT>
-      <userString>	#france_vehicles:Turret_2_RenaultFT	</userString>
+    <Turret_1_F01_RenaultFT>
+      <userString>	#france_vehicles:Turret_1_F01_RenaultFT	</userString>
       <tags></tags>
       <level>	1	</level>
       <price>	0	</price>
@@ -1950,32 +1949,32 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	200	</weight>
-      <maxHealth>	49	</maxHealth>
+      <maxHealth>	50	</maxHealth>
       <rotationSpeed>	34	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	50	</maxHealth>
         <maxRegenHealth>	25	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	280	</circularVisionRadius>
+      <circularVisionRadius>	300	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	30	</maxHealth>
         <maxRegenHealth>	15	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_37mm_APX_SA18>	shared	  <unlocks>
-            <gun>	_13.2mm_Hotchkiss_mle._1930	  <cost>	30	</cost>
+        <_37mm_APX_SA18_FT>	shared	  <unlocks>
+            <gun>	_13mm_Hotchkiss_mle_1930_FT	  <cost>	30	</cost>
             </gun>
           </unlocks>
           <pitchLimits>
             <minPitch>	0 -35 1 -35	</minPitch>
-            <maxPitch>	0 2 0.40856 2 0.472222 0 0.527778 0 0.59144 2 1 2	</maxPitch>
+            <maxPitch>	0 10 0.40856 10 0.472222 0 0.527778 0 0.59144 10 1 10	</maxPitch>
           </pitchLimits>
           <aimingTime>	2	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <maxAmmo>	545	</maxAmmo>
@@ -1986,8 +1985,8 @@
               <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
             </gun>
           </armor>
-          <shotDispersionRadius>	0.54	</shotDispersionRadius>
-          <reloadTime>	2.5	</reloadTime>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <reloadTime>	2.2	</reloadTime>
           <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/french/F01_RenaultFT/normal/lod0/Gun_03.model	</undamaged>
@@ -2049,8 +2048,8 @@
             <density>	140.052 139.325	</density>
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
-        </_37mm_APX_SA18>
-        <_13.2mm_Hotchkiss_mle._1930>	shared	  <unlocks>
+        </_37mm_APX_SA18_FT>
+        <_13mm_Hotchkiss_mle_1930_FT>	shared	  <unlocks>
             <vehicle>	F50_FCM36_20t	  <cost>	280	</cost>
             </vehicle>
           </unlocks>
@@ -2063,6 +2062,7 @@
             <armor_1>	16	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_2>
             <gun>	10	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
               <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
@@ -2073,9 +2073,9 @@
             <afterShot>	1.2	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2	</aimingTime>
+          <aimingTime>	1.6	</aimingTime>
           <reloadTime>	5.8	</reloadTime>
-          <shotDispersionRadius>	0.58	</shotDispersionRadius>
+          <shotDispersionRadius>	0.52	</shotDispersionRadius>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/french/F01_RenaultFT/normal/lod0/Gun_04.model	</undamaged>
@@ -2126,7 +2126,7 @@
             <density>	134.202 133.907	</density>
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
-        </_13.2mm_Hotchkiss_mle._1930>
+        </_13mm_Hotchkiss_mle_1930_FT>
       </guns>
       <models>
         <undamaged>	vehicles/french/F01_RenaultFT/normal/lod0/Turret_02.model	</undamaged>
@@ -2532,10 +2532,10 @@
         <density>	106.35 105.641	</density>
         <aoTextureSize>	256 256	</aoTextureSize>
       </camouflage>
-    </Turret_2_RenaultFT>
+    </Turret_1_F01_RenaultFT>
   </turrets0>
   <engines>
-    <Renault>	shared	</Renault>
+    <Renault_FT>	shared	</Renault_FT>
   </engines>
   <fuelTanks>
     <Small>	shared	</Small>
@@ -2546,13 +2546,13 @@
   <physics>
     <detailed>
       <engines>
-        <Renault>
-          <smplEnginePower>	41.23396	</smplEnginePower>
+        <Renault_FT>
+          <smplEnginePower>	50	</smplEnginePower>
           <smplFwMaxSpeed>	21	</smplFwMaxSpeed>
-        </Renault>
+        </Renault_FT>
       </engines>
       <chassis>
-        <Chassis_RenaultFT2>
+        <Chassis_F01_RenaultFT>
           <grounds>
             <soft>
               <rollingFriction>	0.1449	</rollingFriction>
@@ -2564,7 +2564,7 @@
               <rollingFriction>	0.0644	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_RenaultFT2>
+        </Chassis_F01_RenaultFT>
       </chassis>
     </detailed>
   </physics>

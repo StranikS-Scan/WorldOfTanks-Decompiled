@@ -896,8 +896,8 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_ST_B1>
-      <userString>	#japan_vehicles:Chassis_ST_B1	</userString>
+    <Chassis_J16_ST_B1>
+      <userString>	#japan_vehicles:Chassis_J16_ST_B1	</userString>
       <tags></tags>
       <level>	10	</level>
       <price>	82500	</price>
@@ -907,11 +907,10 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	12500	</weight>
-      <maxLoad>	40000	</maxLoad>
       <terrainResistance>	1 1.1 2.2	</terrainResistance>
       <brakeForce>	45000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	52	</rotationSpeed>
+      <rotationSpeed>	57	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.09	</vehicleMovement>
         <vehicleRotation>	0.09	</vehicleRotation>
@@ -1850,11 +1849,11 @@
         </right>
       </physicalTracks>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_ST_B1>
+    </Chassis_J16_ST_B1>
   </chassis>
   <turrets0>
-    <Turret_1_ST_B1>
-      <userString>	#japan_vehicles:Turret_1_ST_B1	</userString>
+    <Turret_1_J16_ST_B1>
+      <userString>	#japan_vehicles:Turret_1_J16_ST_B1	</userString>
       <tags></tags>
       <level>	10	</level>
       <price>	82500	</price>
@@ -1936,7 +1935,7 @@
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <reloadTime>	7.1	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.11	</turretRotation>
+            <turretRotation>	0.08	</turretRotation>
             <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2570,7 +2569,7 @@
         <density>	118.382 118.354	</density>
         <aoTextureSize>	1024 512	</aoTextureSize>
       </camouflage>
-    </Turret_1_ST_B1>
+    </Turret_1_J16_ST_B1>
   </turrets0>
   <engines>
     <_Mitsubishi_10ZF21WT>	shared	</_Mitsubishi_10ZF21WT>
@@ -2590,7 +2589,7 @@
         </_Mitsubishi_10ZF21WT>
       </engines>
       <chassis>
-        <Chassis_ST_B1>
+        <Chassis_J16_ST_B1>
           <grounds>
             <soft>
               <rollingFriction>	0.1771	</rollingFriction>
@@ -2602,7 +2601,7 @@
               <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_ST_B1>
+        </Chassis_J16_ST_B1>
       </chassis>
     </detailed>
   </physics>

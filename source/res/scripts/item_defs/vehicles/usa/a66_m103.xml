@@ -909,13 +909,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_M103>
-      <userString>	#usa_vehicles:Chassis_M103	</userString>
+    <Chassis_A66_M103>
+      <userString>	#usa_vehicles:Chassis_A66_M103	</userString>
       <tags></tags>
       <level>	8	</level>
       <price>	31500	</price>
       <unlocks>
-        <chassis>	Chassis_M103_2	  <cost>	24300	</cost>
+        <chassis>	Chassis_A66_M103_2	  <cost>	24300	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -923,8 +923,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	8000	</weight>
-      <maxLoad>	57500	</maxLoad>
-      <terrainResistance>	1.2 1.5 2.6	</terrainResistance>
+      <terrainResistance>	1.2 1.3 2.4	</terrainResistance>
       <brakeForce>	40500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	25	</rotationSpeed>
@@ -2081,9 +2080,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_M103>
-    <Chassis_M103_2>
-      <userString>	#usa_vehicles:Chassis_M103_2	</userString>
+    </Chassis_A66_M103>
+    <Chassis_A66_M103_2>
+      <userString>	#usa_vehicles:Chassis_A66_M103_2	</userString>
       <tags></tags>
       <level>	9	</level>
       <price>	61500	</price>
@@ -2092,7 +2091,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	8000	</weight>
-      <maxLoad>	62500	</maxLoad>
       <terrainResistance>	1.2 1.3 2.4	</terrainResistance>
       <brakeForce>	45500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -3250,14 +3248,18 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_M103_2>
+    </Chassis_A66_M103_2>
   </chassis>
   <turrets0>
-    <Turret_1_M103>
-      <userString>	#usa_vehicles:Turret_1_M103	</userString>
+    <Turret_1_A66_M103>
+      <userString>	#usa_vehicles:Turret_1_A66_M103	</userString>
       <tags></tags>
       <level>	8	</level>
       <price>	43500	</price>
+      <unlocks>
+        <turret>	Turret_2_A66_M103	  <cost>	23000	</cost>
+        </turret>
+      </unlocks>
       <armor>
         <armor_1>	254	</armor_1>
         <armor_2>	147.3	</armor_2>
@@ -3279,145 +3281,21 @@
       </armor>
       <primaryArmor>	armor_1 armor_7 armor_4	</primaryArmor>
       <weight>	12000	</weight>
-      <maxHealth>	350	</maxHealth>
-      <rotationSpeed>	24	</rotationSpeed>
+      <maxHealth>	300	</maxHealth>
+      <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	160	</maxHealth>
         <maxRegenHealth>	80	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	370	</circularVisionRadius>
+      <circularVisionRadius>	380	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	110	</maxHealth>
         <maxRegenHealth>	55	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_105mm_Gun_T5E1_32>	shared	  <maxAmmo>	60	</maxAmmo>
-          <unlocks>
-            <gun>	_120mm_Gun_T122	  <cost>	25000	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	266.7	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	190.5	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	101.6	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	45	</gun>
-          </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	9	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 8 0.380783 8 0.444444 7 0.555556 7 0.619218 8 1 8	</maxPitch>
-          </pitchLimits>
-          <aimingTime>	1.9	</aimingTime>
-          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <models>
-            <undamaged>	vehicles/american/A66_M103/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/american/A66_M103/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/american/A66_M103/crash/lod0/Gun_01.model	</exploded>
-            <sets>
-              <Helloween_3Dst>
-                <undamaged>	vehicles/american/A66_M103/_skins/Helloween_3Dst/normal/lod0/Gun_01.model	</undamaged>
-                <destroyed>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Gun_01.model	</destroyed>
-                <exploded>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Gun_01.model	</exploded>
-              </Helloween_3Dst>
-              <A66_M103_3Dst_HW20>
-                <undamaged>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/normal/lod0/Gun_01.model	</undamaged>
-                <destroyed>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/crash/lod0/Gun_01.model	</destroyed>
-                <exploded>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/crash/lod0/Gun_01.model	</exploded>
-              </A66_M103_3Dst_HW20>
-            </sets>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/american/A66_M103/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/american/A66_M103/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_large_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000051 0.000377 2.96223	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.318639 0.318639	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000051 0.000377 2.96223	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	-0.000316 1.62608 1.44876	</position>
-              <rotation>	0.502976 -0.000127 3.14117	</rotation>
-              <scale>	3.60832 2.1 3.60838	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.160643	</clipAngle>
-              <anchorShift>	1.037605	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_square	</tags>
-              <compatibleModels>	A66_M103_3Dst_HW20	</compatibleModels>
-              <position>	0.000016 2.40722 2.00009	</position>
-              <rotation>	0.502976 -0.000127 3.14117	</rotation>
-              <scale>	0.435631 0.253533 0.435638	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.160643	</clipAngle>
-              <anchorShift>	0.067112	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.000102 0.000754 3.13593	</rayStart>
-              <rayEnd>	-0.000102 0.000754 3.73593	</rayEnd>
-              <rayUp>	0.109 0.105 5	</rayUp>
-              <size>	0.6	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <tiling>	0.505 0.505 0.000000 0.000000	</tiling>
-            <density>	109.563 114.337	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_105mm_Gun_T5E1_32>
         <_120mm_Gun_T122>	shared	  <maxAmmo>	45	</maxAmmo>
-          <unlocks>
-            <turret>	Turret_2_M103	  <cost>	23000	</cost>
-            </turret>
-          </unlocks>
           <armor>
             <armor_1>	266.7	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3429,9 +3307,9 @@
             </armor_4>
             <gun>	50	</gun>
           </armor>
-          <reloadTime>	11.4	</reloadTime>
+          <reloadTime>	11	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -3439,9 +3317,10 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 8 0.380783 8 0.444444 7 0.555556 7 0.619218 8 1 8	</maxPitch>
           </pitchLimits>
-          <aimingTime>	2.6	</aimingTime>
+          <aimingTime>	2.5	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <effects>	shot_large_mb	</effects>
           <reloadEffect>	reload115_152	</reloadEffect>
           <models>
@@ -4313,14 +4192,14 @@
         <density>	85.1358 85.9807	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_1_M103>
-    <Turret_2_M103>
-      <userString>	#usa_vehicles:Turret_2_M103	</userString>
+    </Turret_1_A66_M103>
+    <Turret_2_A66_M103>
+      <userString>	#usa_vehicles:Turret_2_A66_M103	</userString>
       <tags></tags>
       <level>	9	</level>
       <price>	55000	</price>
       <unlocks>
-        <gun>	_120mm_Gun_M58	  <cost>	60000	</cost>
+        <gun>	_120mm_Gun_M58_M103	  <cost>	60000	</cost>
         </gun>
       </unlocks>
       <armor>
@@ -4369,103 +4248,6 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_105mm_Gun_T5E1_32>	shared	  <maxAmmo>	60	</maxAmmo>
-          <armor>
-            <armor_1>	254	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	190.5	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	101.6	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	45	</gun>
-          </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	9	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 8 0.380783 8 0.444444 7 0.555556 7 0.619218 8 1 8	</maxPitch>
-          </pitchLimits>
-          <aimingTime>	1.9	</aimingTime>
-          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <models>
-            <undamaged>	vehicles/american/A66_M103/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/american/A66_M103/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/american/A66_M103/crash/lod0/Gun_03.model	</exploded>
-            <sets>
-              <Helloween_3Dst>
-                <undamaged>	vehicles/american/A66_M103/_skins/Helloween_3Dst/normal/lod0/Gun_03.model	</undamaged>
-                <destroyed>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Gun_03.model	</destroyed>
-                <exploded>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Gun_03.model	</exploded>
-              </Helloween_3Dst>
-              <A66_M103_3Dst_HW20>
-                <undamaged>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/normal/lod0/Gun_03.model	</undamaged>
-                <destroyed>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/crash/lod0/Gun_03.model	</destroyed>
-                <exploded>	vehicles/american/A66_M103/_skins/A66_M103_3Dst_HW20/crash/lod0/Gun_03.model	</exploded>
-              </A66_M103_3Dst_HW20>
-            </sets>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/american/A66_M103/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/american/A66_M103/collision_client/Gun_03.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_large_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000051 0.000377 2.96223	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000051 0.000377 2.96223	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	-0.000316 1.62608 1.44876	</position>
-              <rotation>	0.502976 -0.000127 3.14117	</rotation>
-              <scale>	3.60832 2.1 3.60838	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.160643	</clipAngle>
-              <anchorShift>	1.067609	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0 0.000418 2.96992	</rayStart>
-              <rayEnd>	0 0.000418 3.61992	</rayEnd>
-              <rayUp>	0.108 0.106 5	</rayUp>
-              <size>	0.65	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <tiling>	0.52 0.52 0.000000 0.000000	</tiling>
-            <density>	109.563 114.337	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_105mm_Gun_T5E1_32>
         <_120mm_Gun_T122>	shared	  <maxAmmo>	45	</maxAmmo>
           <armor>
             <armor_1>	254	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -4491,6 +4273,7 @@
           <aimingTime>	2.5	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <effects>	shot_large_mb	</effects>
           <reloadEffect>	reload115_152	</reloadEffect>
           <models>
@@ -4562,7 +4345,11 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_120mm_Gun_T122>
-        <_120mm_Gun_M58>	shared	  <maxAmmo>	45	</maxAmmo>
+        <_120mm_Gun_M58_M103>	shared	  <maxAmmo>	45	</maxAmmo>
+          <unlocks>
+            <vehicle>	A69_T110E5	  <cost>	185000	</cost>
+            </vehicle>
+          </unlocks>
           <armor>
             <armor_1>	254	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -4658,7 +4445,7 @@
             <density>	118.578 116.068	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_120mm_Gun_M58>
+        </_120mm_Gun_M58_M103>
       </guns>
       <models>
         <undamaged>	vehicles/american/A66_M103/normal/lod0/Turret_02.model	</undamaged>
@@ -5375,58 +5162,36 @@
         <density>	102.522 102.928	</density>
         <aoTextureSize>	1024 512	</aoTextureSize>
       </camouflage>
-    </Turret_2_M103>
+    </Turret_2_A66_M103>
   </turrets0>
   <engines>
-    <Continental_AV-1790-5B>	shared	  <unlocks>
-        <engine>	Continental_AV-1790-7C	  <cost>	45000	</cost>
+    <Continental_AV_1790_5B_M103>	shared	  <unlocks>
+        <engine>	Continental_AV_1790_7C	  <cost>	45000	</cost>
         </engine>
       </unlocks>
-    </Continental_AV-1790-5B>
-    <Continental_AV-1790-7C>	shared	  <unlocks>
-        <vehicle>	A69_T110E5	  <cost>	185000	</cost>
-        </vehicle>
-      </unlocks>
-    </Continental_AV-1790-7C>
+    </Continental_AV_1790_5B_M103>
+    <Continental_AV_1790_7C>	shared	</Continental_AV_1790_7C>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <AN-GRC-3>	shared	  <unlocks>
-        <radio>	AN-ARC-27	  <cost>	9000	</cost>
-        </radio>
-      </unlocks>
-    </AN-GRC-3>
     <AN-ARC-27>	shared	</AN-ARC-27>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Continental_AV-1790-5B>
-          <smplEnginePower>	856.3977	</smplEnginePower>
+        <Continental_AV_1790_5B_M103>
+          <smplEnginePower>	870	</smplEnginePower>
           <smplFwMaxSpeed>	34	</smplFwMaxSpeed>
-        </Continental_AV-1790-5B>
-        <Continental_AV-1790-7C>
-          <smplEnginePower>	909.2618	</smplEnginePower>
+        </Continental_AV_1790_5B_M103>
+        <Continental_AV_1790_7C>
+          <smplEnginePower>	920	</smplEnginePower>
           <smplFwMaxSpeed>	34	</smplFwMaxSpeed>
-        </Continental_AV-1790-7C>
+        </Continental_AV_1790_7C>
       </engines>
       <chassis>
-        <Chassis_M103>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.2093	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.12075	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.0966	</rollingFriction>
-            </firm>
-          </grounds>
-        </Chassis_M103>
-        <Chassis_M103_2>
+        <Chassis_A66_M103>
           <grounds>
             <soft>
               <rollingFriction>	0.1932	</rollingFriction>
@@ -5438,7 +5203,20 @@
               <rollingFriction>	0.0966	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_M103_2>
+        </Chassis_A66_M103>
+        <Chassis_A66_M103_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.1932	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.10465	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0966	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_A66_M103_2>
       </chassis>
     </detailed>
   </physics>

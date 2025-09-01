@@ -14,6 +14,7 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.dialogs.dialog_template_generic_tooltip_view_model import TooltipType
 from gui.impl.gen.view_models.views.dialogs.sub_views.currency_view_model import CurrencyType, CurrencySize
 from gui.impl.gen.view_models.views.dialogs.sub_views.select_demount_kit_view_model import SelectDemountKitViewModel
+from gui.impl.gen.view_models.views.dialogs.sub_views.select_map_view_model import SelectMapViewModel
 from gui.impl.gen.view_models.views.dialogs.sub_views.select_money_view_model import SelectMoneyViewModel
 from gui.impl.gen.view_models.views.dialogs.sub_views.select_option_base_item_view_model import SelectOptionBaseItemViewModel, ComponentType
 from gui.impl.gen.view_models.views.dialogs.sub_views.select_option_view_model import SelectOptionViewModel
@@ -226,3 +227,31 @@ class DemountKitOption(SelectOptionBasePresenter):
 
     def _tooltipFactory(self):
         return createBackportTooltipContent(TOOLTIPS_CONSTANTS.AWARD_DEMOUNT_KIT, (self.__demountKit.goodieID,))
+
+
+class MapOption(SelectOptionBasePresenter):
+    _VIEW_MODEL = SelectMapViewModel
+
+    def __init__(self, mapId):
+        super(MapOption, self).__init__()
+        self._updateIcon(mapId)
+        self._updateText(mapId)
+        self.viewModel.setComponentType(ComponentType.MAP)
+
+    @property
+    def viewModel(self):
+        return super(MapOption, self).viewModel
+
+    def _updateIcon(self, mapId):
+        iconRes = R.images.gui.maps.icons.map.num(mapId)
+        if iconRes.isValid():
+            self.viewModel.setIcon(iconRes())
+        else:
+            raise SoftException('Icon is not found for map %s', mapId)
+
+    def _updateText(self, mapId):
+        nameRes = R.strings.arenas.num(mapId)
+        if nameRes.isValid():
+            self.viewModel.setText(backport.text(nameRes.name()))
+        else:
+            raise SoftException('Name is not found for map %s', mapId)

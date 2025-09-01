@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/veh_post_progression/tooltips/role_slot_tooltip_view.py
+from __future__ import absolute_import
 import typing
 from gui.Scaleform.daapi.view.lobby.veh_post_progression.veh_post_progression_vehicle import g_postProgressionVehicle
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.post_progression.tooltip.role_model import RoleModel
 from gui.impl.gen.view_models.views.lobby.post_progression.tooltip.role_slot_tooltip_view_model import RoleSlotTooltipViewModel
 from gui.impl.lobby.veh_post_progression.tooltips.base_feature_tooltip_view import BaseFeatureTooltipView
-from gui.impl.wrappers.user_compound_price_model import PriceModelBuilder
+from gui.impl.wrappers.user_compound_price_model import PriceModelBuilder, BuyPriceModelBuilder
 from helpers import dependency
 from shared_utils import first
 from skeletons.gui.shared import IItemsCache
@@ -31,7 +32,7 @@ class RoleSlotTooltipView(BaseFeatureTooltipView):
         moneyShortage = self._itemsCache.items.stats.money.getShortage(step.action.getPrice())
         with self.viewModel.transaction() as model:
             self.__fillRolesData(model)
-            PriceModelBuilder.fillPriceModel(model.price, step.action.getPrice())
+            BuyPriceModelBuilder.fillPriceModel(model.price, step.action.getPrice(), checkBalanceAvailability=True)
             PriceModelBuilder.fillPriceModel(model.moneyShortage, moneyShortage)
 
     def __fillRolesData(self, model):

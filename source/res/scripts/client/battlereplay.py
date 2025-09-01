@@ -619,13 +619,13 @@ class BattleReplay(object):
         self.__replayCtrl.gunMarkerPosition = pos
         self.__replayCtrl.gunMarkerDirection = direction
 
-    def setGunMarkerParams(self, diameter, dualAccDiameter, pos, direction):
+    def setGunMarkerParams(self, gunMarkerInfo):
         controlMode = self.getControlMode()
         if controlMode != 'mapcase':
-            self.__replayCtrl.gunMarkerDiameter = diameter
-            self.__replayCtrl.dualAccDiameter = dualAccDiameter
-            self.__replayCtrl.gunMarkerDirection = direction
-            self.__replayCtrl.gunMarkerPosition = pos
+            self.__replayCtrl.gunMarkerDiameter = gunMarkerInfo.size
+            self.__replayCtrl.dualAccDiameter = gunMarkerInfo.dualAccSize
+            self.__replayCtrl.gunMarkerPosition = gunMarkerInfo.position
+            self.__replayCtrl.gunMarkerDirection = gunMarkerInfo.direction
 
     def getGunMarkerParams(self, defaultPos, defaultDir):
         diameter = self.__replayCtrl.gunMarkerDiameter
@@ -739,6 +739,7 @@ class BattleReplay(object):
                     isPaused = False
                 self.__replayCtrl.playbackSpeed = newSpeed
                 g_replayEvents.onPause(isPaused)
+                g_replayEvents.onPlaybackSpeedChanged(newSpeed)
             return
 
     def resetPlaybackSpeedIdx(self, allowResetToZero=False):
@@ -1171,6 +1172,9 @@ class BattleReplay(object):
 
                     for currency in personal.get('currencies', {}).itervalues():
                         currency['replay'] = None
+
+                    if personal.get('outfit', ''):
+                        personal['outfit'] = None
 
             common = modifiedResults.get('common', None)
             if common is not None:

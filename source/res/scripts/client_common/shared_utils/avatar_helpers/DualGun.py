@@ -40,10 +40,8 @@ class DualGunHelper(object):
                 __callReloadTimeWrapper(0, cooldownTimes[activeGun].baseTime)
         else:
             debuff = cooldownTimes[DUAL_GUN.COOLDOWNS.DEBUFF]
-            error = None
-            if ammoCtrl is not None:
-                _, error = ammoCtrl.canShoot()
-            if debuff.leftTime > 0 and error is not None and error != 'no_ammo':
+            hasAmmo = False if ammoCtrl is None else ammoCtrl.getAllShellsQuantityLeft() > 0
+            if debuff.leftTime > 0 and hasAmmo:
                 self.__debuffTrigger = True
                 totalDebuffTime = cooldownTimes[activeGun].baseTime + debuff.leftTime
                 ammoCtrl.onDebuffStarted(debuff.leftTime)

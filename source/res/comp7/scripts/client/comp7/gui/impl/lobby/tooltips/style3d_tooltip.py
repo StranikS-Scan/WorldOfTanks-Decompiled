@@ -13,7 +13,7 @@ class Style3dTooltip(ViewImpl):
     __slots__ = ()
     __c11nService = dependency.descriptor(ICustomizationService)
 
-    def __init__(self, styleId, vehiclesStr=None, layoutID=R.views.comp7.lobby.tooltips.Style3dTooltip()):
+    def __init__(self, styleId, vehiclesStr=None, layoutID=R.views.comp7.mono.lobby.tooltips.style3d_tooltip()):
         settings = ViewSettings(layoutID)
         settings.model = Style3dTooltipModel()
         settings.args = [styleId, vehiclesStr]

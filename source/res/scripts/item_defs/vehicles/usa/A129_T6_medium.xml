@@ -62,7 +62,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	14200	</weight>
-    <maxHealth>	420	</maxHealth>
+    <maxHealth>	456	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	140	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
@@ -1155,11 +1155,10 @@
         <rightTrack>	5	</rightTrack>
       </armor>
       <weight>	5000	</weight>
-      <maxLoad>	27000	</maxLoad>
       <terrainResistance>	1.0 1.35 1.95	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	32	</rotationSpeed>
+      <rotationSpeed>	44	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.29	</vehicleMovement>
         <vehicleRotation>	0.29	</vehicleRotation>
@@ -2065,11 +2064,10 @@
         <rightTrack>	5	</rightTrack>
       </armor>
       <weight>	5000	</weight>
-      <maxLoad>	28500	</maxLoad>
       <terrainResistance>	1.0 1.35 1.95	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	34	</rotationSpeed>
+      <rotationSpeed>	47	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.27	</vehicleMovement>
         <vehicleRotation>	0.27	</vehicleRotation>
@@ -2972,10 +2970,6 @@
       <tags></tags>
       <level>	3	</level>
       <price>	1600	</price>
-      <unlocks>
-        <turret>	Turret_2_A129_T6_medium	  <cost>	1405	</cost>
-        </turret>
-      </unlocks>
       <armor>
         <armor_1>	65	</armor_1>
         <armor_2>	45	</armor_2>
@@ -2996,34 +2990,34 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4200	</weight>
-      <maxHealth>	90	</maxHealth>
-      <rotationSpeed>	34	</rotationSpeed>
+      <maxHealth>	84	</maxHealth>
+      <rotationSpeed>	37	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	50	</maxHealth>
-        <maxRegenHealth>	25	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	95	</maxHealth>
+        <maxRegenHealth>	48	</maxRegenHealth>
+        <repairCost>	4	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	320	</circularVisionRadius>
+      <circularVisionRadius>	330	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	40	</maxHealth>
         <maxRegenHealth>	19	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_Gun_M2_L28>	shared	  <maxAmmo>	75	</maxAmmo>
+        <_75mm_Gun_M2_T6>	shared	  <maxAmmo>	75	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 12 1 12	</maxPitch>
           </pitchLimits>
-          <reloadTime>	4.5	</reloadTime>
+          <reloadTime>	4.3	</reloadTime>
           <unlocks>
-            <gun>	_75mm_Gun_M3_L37	  <cost>	2100	</cost>
+            <gun>	_75mm_Gun_M3_T6	  <cost>	2100	</cost>
             </gun>
           </unlocks>
           <armor>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.47	</shotDispersionRadius>
+          <shotDispersionRadius>	0.44	</shotDispersionRadius>
           <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <shotDispersionFactors>
@@ -3088,22 +3082,22 @@
             <aoTextureSize>	512 256	</aoTextureSize>
             <tiling>	0.4 0.2 0.000000 0.000000	</tiling>
           </camouflage>
-        </_75mm_Gun_M2_L28>
-        <_75mm_Gun_M3_L37>	shared	  <maxAmmo>	75	</maxAmmo>
+        </_75mm_Gun_M2_T6>
+        <_75mm_Gun_M3_T6>	shared	  <maxAmmo>	75	</maxAmmo>
           <unlocks>
-            <vehicle>	A05_M4_Sherman	  <cost>	14055	</cost>
-            </vehicle>
+            <turret>	Turret_2_A129_T6_medium	  <cost>	1405	</cost>
+            </turret>
           </unlocks>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 12 1 12	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.47	</shotDispersionRadius>
-          <reloadTime>	4.3	</reloadTime>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <reloadTime>	4	</reloadTime>
           <armor>
             <gun>	20	</gun>
           </armor>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.17	</turretRotation>
@@ -3167,7 +3161,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
             <tiling>	0.4 0.2 0.000000 0.000000	</tiling>
           </camouflage>
-        </_75mm_Gun_M3_L37>
+        </_75mm_Gun_M3_T6>
       </guns>
       <models>
         <undamaged>	vehicles/american/A129_T6_medium/normal/lod0/Turret_01.model	</undamaged>
@@ -3684,8 +3678,10 @@
       <level>	4	</level>
       <price>	4150	</price>
       <unlocks>
-        <gun>	_75mm_Howitzer_M3T	  <cost>	350	</cost>
-        </gun>
+        <vehicle>	A09_T1_hvy	  <cost>	14055	</cost>
+        </vehicle>
+        <vehicle>	A05_M4_Sherman	  <cost>	14055	</cost>
+        </vehicle>
       </unlocks>
       <armor>
         <armor_1>	76.2	</armor_1>
@@ -3707,12 +3703,12 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4600	</weight>
-      <maxHealth>	120	</maxHealth>
+      <maxHealth>	114	</maxHealth>
       <rotationSpeed>	37	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	50	</maxHealth>
-        <maxRegenHealth>	25	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	95	</maxHealth>
+        <maxRegenHealth>	48	</maxRegenHealth>
+        <repairCost>	4	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	340	</circularVisionRadius>
       <surveyingDeviceHealth>
@@ -3722,7 +3718,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.211	</invisibilityFactor>
       <guns>
-        <_75mm_Gun_M2_L28>	shared	  <maxAmmo>	75	</maxAmmo>
+        <_75mm_Gun_M2_T6>	shared	  <maxAmmo>	75	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 12 1 12	</maxPitch>
@@ -3757,7 +3753,7 @@
             </armor_13>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <shotDispersionRadius>	0.43	</shotDispersionRadius>
           <aimingTime>	1.8	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <shotDispersionFactors>
@@ -3833,14 +3829,14 @@
             <aoTextureSize>	512 256	</aoTextureSize>
             <tiling>	0.4 0.2 0.000000 0.000000	</tiling>
           </camouflage>
-        </_75mm_Gun_M2_L28>
-        <_75mm_Gun_M3_L37>	shared	  <maxAmmo>	75	</maxAmmo>
+        </_75mm_Gun_M2_T6>
+        <_75mm_Gun_M3_T6>	shared	  <maxAmmo>	75	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 12 1 12	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	4.12	</reloadTime>
+          <reloadTime>	4	</reloadTime>
           <armor>
             <armor_1>	50.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3870,7 +3866,7 @@
             </armor_13>
             <gun>	20	</gun>
           </armor>
-          <aimingTime>	2.1	</aimingTime>
+          <aimingTime>	1.8	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.16	</turretRotation>
@@ -3945,237 +3941,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
             <tiling>	0.4 0.2 0.000000 0.000000	</tiling>
           </camouflage>
-        </_75mm_Gun_M3_L37>
-        <_75mm_Howitzer_M3T>	shared	  <maxAmmo>	70	</maxAmmo>
-          <unlocks>
-            <vehicle>	A57_M8A1	  <cost>	3350	</cost>
-            </vehicle>
-            <gun>	_105mm_SPH_M4_L23	  <cost>	1500	</cost>
-            </gun>
-          </unlocks>
-          <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 12 1 12	</maxPitch>
-          </pitchLimits>
-          <reloadTime>	4.6	</reloadTime>
-          <armor>
-            <armor_1>	50.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	43	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	18	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_7>
-            <armor_8>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_8>
-            <armor_9>	45	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_9>
-            <armor_10>	37	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_10>
-            <armor_11>	45	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_11>
-            <armor_12>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_12>
-            <armor_13>	45	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_13>
-            <gun>	20	</gun>
-          </armor>
-          <shotDispersionRadius>	0.53	</shotDispersionRadius>
-          <aimingTime>	3.2	</aimingTime>
-          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <shotDispersionFactors>
-            <turretRotation>	0.17	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <models>
-            <undamaged>	vehicles/american/A129_T6_medium/normal/lod0/Gun_07.model	</undamaged>
-            <destroyed>	vehicles/american/A129_T6_medium/crash/lod0/Gun_07.model	</destroyed>
-            <exploded>	vehicles/american/A129_T6_medium/crash/lod0/Gun_07.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/american/A129_T6_medium/collision/Gun_07.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/american/A129_T6_medium/collision_client/Gun_07.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0 0.000351 0.377714	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.247055 0.247055	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0 0.000351 0.377714	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.000131 1.86335 0.686444	</position>
-              <rotation>	0.82205 -0.000023 3.14156	</rotation>
-              <scale>	2.06458 1.2 2.06462	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.459839	</clipAngle>
-              <anchorShift>	0.749998	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	-0.00027 2.32512 0.713269	</position>
-              <rotation>	0.789238 -0.00037 3.14104	</rotation>
-              <scale>	1.24337 0.499997 1.24337	</scale>
-              <showOn>	4352	</showOn>
-              <clipAngle>	0.049149	</clipAngle>
-              <anchorShift>	0.279994	</anchorShift>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <density>	127.729 129.496	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-            <tiling>	0.4 0.2 0.000000 0.000000	</tiling>
-          </camouflage>
-        </_75mm_Howitzer_M3T>
-        <_105mm_SPH_M4_L23>	shared	  <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 12 1 12	</maxPitch>
-          </pitchLimits>
-          <maxAmmo>	70	</maxAmmo>
-          <armor>
-            <armor_1>	50.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	43	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	18	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_7>
-            <armor_8>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_8>
-            <armor_9>	45	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_9>
-            <armor_10>	37	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_10>
-            <armor_11>	45	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_11>
-            <armor_12>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_12>
-            <armor_13>	45	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_13>
-            <gun>	40	</gun>
-          </armor>
-          <shotDispersionRadius>	0.6	</shotDispersionRadius>
-          <aimingTime>	3.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
-          <reloadTime>	13.5	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.17	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <models>
-            <undamaged>	vehicles/american/A129_T6_medium/normal/lod0/Gun_08.model	</undamaged>
-            <destroyed>	vehicles/american/A129_T6_medium/crash/lod0/Gun_08.model	</destroyed>
-            <exploded>	vehicles/american/A129_T6_medium/crash/lod0/Gun_08.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/american/A129_T6_medium/collision/Gun_08.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/american/A129_T6_medium/collision_client/Gun_08.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_large	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0 0.000351 0.82869	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.247055 0.247055	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0 0.000351 0.82869	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.000131 1.86327 0.686435	</position>
-              <rotation>	0.822051 -0.000022 3.14156	</rotation>
-              <scale>	2.06459 1.2 2.06462	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.4695	</clipAngle>
-              <anchorShift>	0.730293	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	-0.00027 2.32504 0.713261	</position>
-              <rotation>	0.789237 -0.000368 3.14104	</rotation>
-              <scale>	1.24337 0.499995 1.24337	</scale>
-              <showOn>	4352	</showOn>
-              <clipAngle>	0.049149	</clipAngle>
-              <anchorShift>	0.289999	</anchorShift>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <density>	124.614 125.921	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-            <tiling>	0.4 0.2 0.000000 0.000000	</tiling>
-          </camouflage>
-        </_105mm_SPH_M4_L23>
+        </_75mm_Gun_M3_T6>
       </guns>
       <models>
         <undamaged>	vehicles/american/A129_T6_medium/normal/lod0/Turret_02.model	</undamaged>
@@ -4663,40 +4429,31 @@
     </Turret_2_A129_T6_medium>
   </turrets0>
   <engines>
-    <Wright_Continental_R-975EC2>	shared	  <unlocks>
-        <engine>	Wright_Continental_R-975C4	  <cost>	1500	</cost>
+    <Wright_Continental_R_975EC2_T6>	shared	  <unlocks>
+        <engine>	Wright_Continental_R_975C4_T6	  <cost>	1500	</cost>
         </engine>
       </unlocks>
-    </Wright_Continental_R-975EC2>
-    <Wright_Continental_R-975C4>	shared	  <unlocks>
-        <vehicle>	A09_T1_hvy	  <cost>	14055	</cost>
-        </vehicle>
-      </unlocks>
-    </Wright_Continental_R-975C4>
+    </Wright_Continental_R_975EC2_T6>
+    <Wright_Continental_R_975C4_T6>	shared	</Wright_Continental_R_975C4_T6>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <SCR_210>	shared	  <unlocks>
-        <radio>	SCR_506	  <cost>	5600	</cost>
-        </radio>
-      </unlocks>
-    </SCR_210>
     <SCR_506>	shared	</SCR_506>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
   <physics>
     <detailed>
       <engines>
-        <Wright_Continental_R-975EC2>
-          <smplEnginePower>	370.0484	</smplEnginePower>
+        <Wright_Continental_R_975EC2_T6>
+          <smplEnginePower>	450	</smplEnginePower>
           <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
-        </Wright_Continental_R-975EC2>
-        <Wright_Continental_R-975C4>
-          <smplEnginePower>	486.3493	</smplEnginePower>
+        </Wright_Continental_R_975EC2_T6>
+        <Wright_Continental_R_975C4_T6>
+          <smplEnginePower>	500	</smplEnginePower>
           <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
-        </Wright_Continental_R-975C4>
+        </Wright_Continental_R_975C4_T6>
       </engines>
       <chassis>
         <Chassis_A129_T6_medium>

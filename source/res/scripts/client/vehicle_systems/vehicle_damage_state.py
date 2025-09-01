@@ -6,6 +6,7 @@ class VehicleDamageState(object):
     MODEL_STATE_NAMES = ('undamaged', 'destroyed', 'exploded')
     __healthToStateMap = {0: 'destruction',
      constants.SPECIAL_VEHICLE_HEALTH.AMMO_BAY_DESTROYED: 'ammoBayBurnOff',
+     constants.SPECIAL_VEHICLE_HEALTH.AMMO_BAY_EXPLODED: 'ammoBayBurnOff',
      constants.SPECIAL_VEHICLE_HEALTH.TURRET_DETACHED: 'ammoBayExplosion',
      constants.SPECIAL_VEHICLE_HEALTH.FUEL_EXPLODED: 'fuelExplosion',
      constants.SPECIAL_VEHICLE_HEALTH.DESTR_BY_FALL_RAMMING: 'rammingDestruction'}

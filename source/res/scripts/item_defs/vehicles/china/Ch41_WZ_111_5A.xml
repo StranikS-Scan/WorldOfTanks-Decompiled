@@ -1023,7 +1023,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	10000	</weight>
-      <maxLoad>	55000	</maxLoad>
       <terrainResistance>	1.1 1.2 2.5	</terrainResistance>
       <brakeForce>	50000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -2906,7 +2905,7 @@
     </Turret_1_Ch41_WZ_111_5A>
   </turrets0>
   <engines>
-    <_V-2-54SC>	shared	</_V-2-54SC>
+    <V_2_54SC_111_5A>	shared	</V_2_54SC_111_5A>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
@@ -2918,10 +2917,10 @@
   <physics>
     <detailed>
       <engines>
-        <_V-2-54SC>
-          <smplEnginePower>	792.9609	</smplEnginePower>
+        <V_2_54SC_111_5A>
+          <smplEnginePower>	850	</smplEnginePower>
           <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
-        </_V-2-54SC>
+        </V_2_54SC_111_5A>
       </engines>
       <chassis>
         <Chassis_Ch41_WZ_111_5A>

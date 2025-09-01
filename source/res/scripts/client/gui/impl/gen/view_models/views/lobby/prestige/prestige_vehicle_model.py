@@ -6,12 +6,12 @@ from gui.impl.gen.view_models.views.lobby.prestige.prestige_emblem_model import 
 class PrestigeVehicleModel(VehicleModel):
     __slots__ = ()
 
-    def __init__(self, properties=10, commands=0):
+    def __init__(self, properties=11, commands=0):
         super(PrestigeVehicleModel, self).__init__(properties=properties, commands=commands)
 
     @property
     def emblem(self):
-        return self._getViewModel(9)
+        return self._getViewModel(10)
 
     @staticmethod
     def getEmblemType():

@@ -12,6 +12,8 @@ from story_mode.gui.impl.gen.view_models.views.common.badge_tooltip_view_model i
 
 class BadgeTooltip(ViewImpl):
     __itemsCache = dependency.descriptor(IItemsCache)
+    _DEFAULT_ICON = R.images.gui.maps.icons.vehicle.contour.ussr_R11_MS_1()
+    _DEFAULT_LEVEL = 'I'
 
     def __init__(self, badgeId):
         settings = ViewSettings(R.views.story_mode.common.BadgeTooltip(), model=BadgeTooltipViewModel())
@@ -29,10 +31,13 @@ class BadgeTooltip(ViewImpl):
         self.viewModel.setImage(badgeIcon)
         self.viewModel.setName(backport.text(R.strings.sm_common.badgeTooltip.title(), badge_name=badge.getUserName()))
         self.viewModel.setDescription(backport.text(R.strings.badge.dyn('badge_{}_descr'.format(self._badgeId))()))
+        badgeIcon = R.images.gui.maps.icons.library.badges.c_24x24.dyn('badge_{}'.format(self._badgeId))()
+        self.viewModel.setSmallBadgeIcon(badgeIcon)
+        self.viewModel.setPlayerName(getPlayerName())
         if g_currentVehicle.isPresent():
             vehicle = g_currentVehicle.item
-            badgeIcon = R.images.gui.maps.icons.library.badges.c_24x24.dyn('badge_{}'.format(self._badgeId))()
-            self.viewModel.setSmallBadgeIcon(badgeIcon)
             self.viewModel.setVehicleIcon(vehicle.iconContour)
             self.viewModel.setVehicleLevel(int2roman(vehicle.level))
-            self.viewModel.setPlayerName(getPlayerName())
+        else:
+            self.viewModel.setVehicleIcon(backport.image(self._DEFAULT_ICON))
+            self.viewModel.setVehicleLevel(self._DEFAULT_LEVEL)

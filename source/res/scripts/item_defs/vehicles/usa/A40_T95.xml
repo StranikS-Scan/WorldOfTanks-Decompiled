@@ -1751,13 +1751,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_T95>
-      <userString>	#usa_vehicles:Chassis_T95	</userString>
+    <Chassis_A40_T95>
+      <userString>	#usa_vehicles:Chassis_A40_T95	</userString>
       <tags></tags>
       <level>	8	</level>
       <price>	29300	</price>
       <unlocks>
-        <chassis>	Chassis_T95_2	  <cost>	23400	</cost>
+        <chassis>	Chassis_A40_T95_2	  <cost>	23400	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1765,14 +1765,13 @@
         <rightTrack>	40	</rightTrack>
       </armor>
       <weight>	18000	</weight>
-      <maxLoad>	86890	</maxLoad>
-      <terrainResistance>	1.4 1.7 2.9	</terrainResistance>
+      <terrainResistance>	1.3 1.4 2.3	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	20	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.2	</vehicleMovement>
-        <vehicleRotation>	0.2	</vehicleRotation>
+        <vehicleMovement>	0.19	</vehicleMovement>
+        <vehicleRotation>	0.19	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	220	</maxHealth>
@@ -3179,9 +3178,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_T95>
-    <Chassis_T95_2>
-      <userString>	#usa_vehicles:Chassis_T95_2	</userString>
+    </Chassis_A40_T95>
+    <Chassis_A40_T95_2>
+      <userString>	#usa_vehicles:Chassis_A40_T95_2	</userString>
       <tags></tags>
       <level>	9	</level>
       <price>	62500	</price>
@@ -3190,7 +3189,6 @@
         <rightTrack>	40	</rightTrack>
       </armor>
       <weight>	18000	</weight>
-      <maxLoad>	91890	</maxLoad>
       <terrainResistance>	1.3 1.4 2.3	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -4604,11 +4602,11 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_T95_2>
+    </Chassis_A40_T95_2>
   </chassis>
   <turrets0>
-    <Turret_1_T95>
-      <userString>	#usa_vehicles:Turret_1_T95	</userString>
+    <Turret_1_A40_T95>
+      <userString>	#usa_vehicles:Turret_1_A40_T95	</userString>
       <tags>	cannotDetach	</tags>
       <level>	9	</level>
       <price>	120	</price>
@@ -4620,9 +4618,9 @@
       <maxHealth>	360	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	170	</maxHealth>
+        <maxRegenHealth>	85	</maxRegenHealth>
+        <repairCost>	9	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	360	</circularVisionRadius>
       <surveyingDeviceHealth>
@@ -4631,14 +4629,14 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_105mm_AT_Gun_T5E1>	shared	  <maxAmmo>	62	</maxAmmo>
+        <_105mm_AT_Gun_T5E1_T95>	shared	  <maxAmmo>	65	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
           <reloadTime>	7.4	</reloadTime>
           <unlocks>
-            <gun>	_120mm_AT_Gun_T53	  <cost>	51000	</cost>
+            <gun>	_120mm_AT_Gun_T53_T95	  <cost>	51000	</cost>
             </gun>
           </unlocks>
           <shotDispersionFactors>
@@ -4655,7 +4653,7 @@
             </armor_3>
             <gun>	40	</gun>
           </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <aimingTime>	1.7	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <turretYawLimits>	-10 11	</turretYawLimits>
@@ -4719,18 +4717,16 @@
             <density>	75.5231 75.6219	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_105mm_AT_Gun_T5E1>
-        <_120mm_AT_Gun_T53>	shared	  <maxAmmo>	42	</maxAmmo>
+        </_105mm_AT_Gun_T5E1_T95>
+        <_120mm_AT_Gun_T53_T95>	shared	  <maxAmmo>	50	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
-          <reloadTime>	8.7	</reloadTime>
+          <reloadTime>	8	</reloadTime>
           <unlocks>
-            <gun>	_155mm_AT_Gun_T7	  <cost>	66500	</cost>
+            <gun>	_155mm_AT_Gun_T7_T95	  <cost>	66500	</cost>
             </gun>
-            <vehicle>	A85_T110E3	  <cost>	241000	</cost>
-            </vehicle>
           </unlocks>
           <armor>
             <armor_1>	292.1	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -4741,8 +4737,8 @@
             </armor_3>
             <gun>	50	</gun>
           </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <aimingTime>	2.1	</aimingTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <turretYawLimits>	-10 11	</turretYawLimits>
           <models>
@@ -4805,8 +4801,12 @@
             <density>	74.4224 77.0337	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_120mm_AT_Gun_T53>
-        <_155mm_AT_Gun_T7>	shared	  <maxAmmo>	30	</maxAmmo>
+        </_120mm_AT_Gun_T53_T95>
+        <_155mm_AT_Gun_T7_T95>	shared	  <maxAmmo>	30	</maxAmmo>
+          <unlocks>
+            <vehicle>	A85_T110E3	  <cost>	241000	</cost>
+            </vehicle>
+          </unlocks>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
@@ -4885,7 +4885,7 @@
             <density>	72.7729 76.1476	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_155mm_AT_Gun_T7>
+        </_155mm_AT_Gun_T7_T95>
       </guns>
       <models>
         <undamaged>	vehicles/american/A40_T95/normal/lod0/Turret_01.model	</undamaged>
@@ -4912,55 +4912,36 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-    </Turret_1_T95>
+    </Turret_1_A40_T95>
   </turrets0>
   <engines>
-    <Ford_GAF>	shared	  <unlocks>
-        <engine>	Ford_GAFM2	  <cost>	5250	</cost>
+    <Ford_GAF_T95>	shared	  <unlocks>
+        <engine>	Ford_GAFM2_T95	  <cost>	5250	</cost>
         </engine>
       </unlocks>
-    </Ford_GAF>
-    <Ford_GAFM2>	shared	</Ford_GAFM2>
+    </Ford_GAF_T95>
+    <Ford_GAFM2_T95>	shared	</Ford_GAFM2_T95>
   </engines>
   <fuelTanks>
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <SCR_508>	shared	  <unlocks>
-        <radio>	SCR_528	  <cost>	9000	</cost>
-        </radio>
-      </unlocks>
-    </SCR_508>
     <SCR_528>	shared	</SCR_528>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Ford_GAF>
+        <Ford_GAF_T95>
           <smplEnginePower>	670	</smplEnginePower>
           <smplFwMaxSpeed>	20	</smplFwMaxSpeed>
-        </Ford_GAF>
-        <Ford_GAFM2>
+        </Ford_GAF_T95>
+        <Ford_GAFM2_T95>
           <smplEnginePower>	780	</smplEnginePower>
           <smplFwMaxSpeed>	20	</smplFwMaxSpeed>
-        </Ford_GAFM2>
+        </Ford_GAFM2_T95>
       </engines>
       <chassis>
-        <Chassis_T95>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.23345	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.13685	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.1127	</rollingFriction>
-            </firm>
-          </grounds>
-          <axleCount>	5	</axleCount>
-        </Chassis_T95>
-        <Chassis_T95_2>
+        <Chassis_A40_T95>
           <grounds>
             <soft>
               <rollingFriction>	0.18515	</rollingFriction>
@@ -4973,15 +4954,29 @@
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>
-        </Chassis_T95_2>
+        </Chassis_A40_T95>
+        <Chassis_A40_T95_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.18515	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.1127	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.10465	</rollingFriction>
+            </firm>
+          </grounds>
+          <axleCount>	5	</axleCount>
+        </Chassis_A40_T95_2>
       </chassis>
     </detailed>
   </physics>
   <clientAdjustmentFactors>
     <guns>
-      <_155mm_AT_Gun_T7>
+      <_155mm_AT_Gun_T7_T95>
         <delta>	1.03325415	</delta>
-      </_155mm_AT_Gun_T7>
+      </_155mm_AT_Gun_T7_T95>
     </guns>
     <armour>	1.082695427	</armour>
   </clientAdjustmentFactors>

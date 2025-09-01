@@ -4,7 +4,7 @@ from gui.Scaleform.daapi.view.meta.IconDialogMeta import IconDialogMeta
 
 class IconDialog(IconDialogMeta):
 
-    def __init__(self, meta, handler):
+    def __init__(self, meta, handler, **kwargs):
         super(IconDialog, self).__init__(meta.getMessage(), meta.getTitle(), meta.getButtonLabels(), meta.getCallbackWrapper(handler))
         self._meta = meta
 

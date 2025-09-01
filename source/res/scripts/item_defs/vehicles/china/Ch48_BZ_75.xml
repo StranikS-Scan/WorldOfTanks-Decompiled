@@ -915,7 +915,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	12200	</weight>
-      <maxLoad>	65000	</maxLoad>
       <terrainResistance>	1.2 1.6 2.7	</terrainResistance>
       <brakeForce>	60000	</brakeForce>
       <rotationIsAroundCenter>	True	</rotationIsAroundCenter>
@@ -1926,6 +1925,10 @@
       </surveyingDeviceHealth>
       <guns>
         <_152_mm_64_152T>	shared	  <maxAmmo>	30	</maxAmmo>
+          <unlocks>
+            <vehicle>	Ch67_BZ_79	  <cost>	325000	</cost>
+            </vehicle>
+          </unlocks>
           <armor>
             <armor_1>	330	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -2713,16 +2716,14 @@
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>
   </effects>
-  <effectsPrefab>
-    <rocketAcceleration>
-      <prefab>	particles/Tank/rocket_accelerator/Ch48_BZ_75_Rocket.prefab	</prefab>
-      <sets>
-        <Ch48_BZ_75_BXI_3DSt>
-          <prefab>	particles/Tank/customization/Ch48_BZ_75_BXI_3DSt/Ch48_BZ_75_BXI_3DSt_empty.prefab	</prefab>
-        </Ch48_BZ_75_BXI_3DSt>
-      </sets>
-    </rocketAcceleration>
-  </effectsPrefab>
+  <prefabs>
+    <mechanicEffects>	particles/Tank/rocket_accelerator/Ch48_BZ_75_Rocket.prefab	</mechanicEffects>
+    <sets>
+      <Ch48_BZ_75_BXI_3DSt>
+        <mechanicEffects>	particles/Tank/customization/Ch48_BZ_75_BXI_3DSt/Ch48_BZ_75_BXI_3DSt_empty.prefab	</mechanicEffects>
+      </Ch48_BZ_75_BXI_3DSt>
+    </sets>
+  </prefabs>
   <emblems>
     <default>	15505	</default>
     <lodDist>	MEDIUM	</lodDist>

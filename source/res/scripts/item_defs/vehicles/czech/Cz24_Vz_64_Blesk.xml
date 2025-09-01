@@ -69,7 +69,7 @@
     </armor>
     <primaryArmor>	armor_9 armor_3 armor_4	</primaryArmor>
     <weight>	6274	</weight>
-    <maxHealth>	800	</maxHealth>
+    <maxHealth>	960	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
@@ -457,8 +457,7 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	4000	</weight>
-      <maxLoad>	17000	</maxLoad>
-      <terrainResistance>	0.6 0.7 1.2	</terrainResistance>
+      <terrainResistance>	0.5 0.6 1.1	</terrainResistance>
       <brakeForce>	15000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	38	</rotationSpeed>
@@ -1454,7 +1453,6 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	4000	</weight>
-      <maxLoad>	17000	</maxLoad>
       <terrainResistance>	0.5 0.6 1.1	</terrainResistance>
       <brakeForce>	15000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2444,10 +2442,6 @@
       <tags></tags>
       <level>	7	</level>
       <price>	17000	</price>
-      <unlocks>
-        <turret>	Turret_2_Cz24_Vz_64_Blesk	  <cost>	14500	</cost>
-        </turret>
-      </unlocks>
       <armor>
         <armor_1>	20	</armor_1>
         <armor_2>	20	</armor_2>
@@ -2465,7 +2459,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3000	</weight>
-      <maxHealth>	150	</maxHealth>
+      <maxHealth>	180	</maxHealth>
       <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -2479,7 +2473,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_30_mm_protiletadlovy_dvojkanon_vz_53>	shared	  <maxAmmo>	3200	</maxAmmo>
+        <_30_mm_protiletadlovy_dvojkanon_vz_53>	shared	  <maxAmmo>	2560	</maxAmmo>
           <unlocks>
             <gun>	_37_mm_automaticky_dvojkanon	  <cost>	16000	</cost>
             </gun>
@@ -2502,7 +2496,7 @@
           <reloadTime>	20	</reloadTime>
           <aimingTime>	2.5	</aimingTime>
           <clip>
-            <count>	200	</count>
+            <count>	160	</count>
             <rate>	3000	</rate>
           </clip>
           <autoShoot>
@@ -2565,10 +2559,10 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_30_mm_protiletadlovy_dvojkanon_vz_53>
-        <_37_mm_automaticky_dvojkanon>	shared	  <maxAmmo>	2240	</maxAmmo>
+        <_37_mm_automaticky_dvojkanon>	shared	  <maxAmmo>	1664	</maxAmmo>
           <unlocks>
-            <vehicle>	Cz28_LPT_67_Selma	  <cost>	185490	</cost>
-            </vehicle>
+            <turret>	Turret_2_Cz24_Vz_64_Blesk	  <cost>	14500	</cost>
+            </turret>
           </unlocks>
           <armor>
             <gun>	10	</gun>
@@ -2585,11 +2579,11 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <shotDispersionRadius>	0.43	</shotDispersionRadius>
-          <reloadTime>	20	</reloadTime>
+          <reloadTime>	22	</reloadTime>
           <aimingTime>	2.5	</aimingTime>
           <clip>
-            <count>	140	</count>
-            <rate>	2100	</rate>
+            <count>	104	</count>
+            <rate>	1950	</rate>
           </clip>
           <autoShoot>
             <shotDispersionPerSec>	1.25	</shotDispersionPerSec>
@@ -3224,6 +3218,10 @@
       <tags></tags>
       <level>	8	</level>
       <price>	34000	</price>
+      <unlocks>
+        <vehicle>	Cz28_LPT_67_Selma	  <cost>	185490	</cost>
+        </vehicle>
+      </unlocks>
       <armor>
         <armor_1>	20	</armor_1>
         <armor_2>	20	</armor_2>
@@ -3241,7 +3239,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3500	</weight>
-      <maxHealth>	200	</maxHealth>
+      <maxHealth>	240	</maxHealth>
       <rotationSpeed>	50	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -3255,7 +3253,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_30_mm_protiletadlovy_dvojkanon_vz_53>	shared	  <maxAmmo>	3200	</maxAmmo>
+        <_30_mm_protiletadlovy_dvojkanon_vz_53>	shared	  <maxAmmo>	2560	</maxAmmo>
           <armor>
             <armor_1>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3288,7 +3286,7 @@
           <reloadTime>	20	</reloadTime>
           <aimingTime>	2.4	</aimingTime>
           <clip>
-            <count>	200	</count>
+            <count>	160	</count>
             <rate>	3000	</rate>
           </clip>
           <autoShoot>
@@ -3360,7 +3358,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_30_mm_protiletadlovy_dvojkanon_vz_53>
-        <_37_mm_automaticky_dvojkanon>	shared	  <maxAmmo>	2240	</maxAmmo>
+        <_37_mm_automaticky_dvojkanon>	shared	  <maxAmmo>	1664	</maxAmmo>
           <armor>
             <armor_1>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3390,11 +3388,11 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	20	</reloadTime>
+          <reloadTime>	22	</reloadTime>
           <aimingTime>	2.4	</aimingTime>
           <clip>
-            <count>	140	</count>
-            <rate>	2100	</rate>
+            <count>	104	</count>
+            <rate>	1950	</rate>
           </clip>
           <autoShoot>
             <shotDispersionPerSec>	1.25	</shotDispersionPerSec>
@@ -3951,13 +3949,13 @@
         <Chassis_Cz24_Vz_64_Blesk>
           <grounds>
             <soft>
-              <rollingFriction>	0.0966	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.05635	</rollingFriction>
+              <rollingFriction>	0.0483	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0483	</rollingFriction>
+              <rollingFriction>	0.04025	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

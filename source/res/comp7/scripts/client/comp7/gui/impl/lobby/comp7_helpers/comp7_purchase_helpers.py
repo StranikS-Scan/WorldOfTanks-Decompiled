@@ -8,10 +8,8 @@ from comp7.gui.impl.gen.view_models.views.lobby.vehicle_product_model import Veh
 from comp7.gui.impl.lobby.comp7_helpers.comp7_c11n_helpers import getStylePreviewVehicle
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.impl.gen.view_models.common.price_item_model import PriceItemModel
 from gui.impl.lobby.common.vehicle_model_helpers import fillVehicleModel
 from gui.shared.economics import getGUIPrice
-from gui.shared.money import Currency
 from helpers import dependency
 from items import ITEM_TYPES, parseIntCompactDescr
 from skeletons.gui.game_control import ITradeInController
@@ -143,30 +141,3 @@ def getComp7ProductModel(itemCD, price):
 
 def getItemType(itemCD):
     return parseIntCompactDescr(itemCD)[0]
-
-
-@dependency.replace_none_kwargs(itemsCache=IItemsCache)
-def getComp7BalanceModel(itemsCache=None):
-    balance = []
-    for currency in (Currency.CRYSTAL,
-     Currency.GOLD,
-     Currency.CREDITS,
-     Currency.FREE_XP):
-        currencyModel = PriceItemModel()
-        currencyModel.setName(currency)
-        if currency == Currency.FREE_XP:
-            currencyModel.setValue(itemsCache.items.stats.actualFreeXP)
-        else:
-            currencyModel.setValue(itemsCache.items.stats.actualMoney.get(currency, 0))
-        balance.append(currencyModel)
-
-    return balance
-
-
-@dependency.replace_none_kwargs(itemsCache=IItemsCache)
-def updateComp7BalanceModel(balanceModel, itemsCache=None):
-    for currencyModel in balanceModel:
-        currency = currencyModel.getName()
-        if currency == Currency.FREE_XP:
-            currencyModel.setValue(itemsCache.items.stats.actualFreeXP)
-        currencyModel.setValue(itemsCache.items.stats.actualMoney.get(currency, 0))

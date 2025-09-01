@@ -1279,8 +1279,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	10500	</weight>
-      <maxLoad>	42500	</maxLoad>
-      <terrainResistance>	1.2 1.4 2.6	</terrainResistance>
+      <terrainResistance>	1.1 1.3 2.4	</terrainResistance>
       <brakeForce>	40000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	30	</rotationSpeed>
@@ -2110,7 +2109,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	10500	</weight>
-      <maxLoad>	44500	</maxLoad>
       <terrainResistance>	1.1 1.3 2.4	</terrainResistance>
       <brakeForce>	45000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2940,10 +2938,14 @@
       <price>	100	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	270	</armor_1>
-        <armor_3>	50	</armor_3>
-        <armor_5>	50	</armor_5>
-        <armor_6>	50	</armor_6>
+        <armor_1>	270	  <tags>	hull	</tags>
+        </armor_1>
+        <armor_3>	50	  <tags>	hull	</tags>
+        </armor_3>
+        <armor_5>	50	  <tags>	hull	</tags>
+        </armor_5>
+        <armor_6>	50	  <tags>	hull	</tags>
+        </armor_6>
       </armor>
       <weight>	9000	</weight>
       <maxHealth>	280	</maxHealth>
@@ -2975,16 +2977,22 @@
             <armor_1>	270	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	180	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_2>
             <armor_3>	180	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_3>
             <armor_5>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_5>
             <armor_6>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_6>
             <armor_7>	180	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_7>
             <armor_9>	170	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_9>
             <armor_10>	220	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_10>
@@ -3225,13 +3233,13 @@
         <Chassis_J33_Ho_Ri_2>
           <grounds>
             <soft>
-              <rollingFriction>	0.2093	</rollingFriction>
+              <rollingFriction>	0.1932	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1127	</rollingFriction>
+              <rollingFriction>	0.10465	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0966	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

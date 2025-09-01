@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/veh_post_progression/tooltips/pair_modification_tooltip_view.py
+from __future__ import absolute_import
 import typing
 from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
@@ -9,7 +10,7 @@ from gui.impl.gen.view_models.views.lobby.post_progression.modification_model im
 from gui.impl.gen.view_models.views.lobby.post_progression.step_model import StepState
 from gui.impl.gen.view_models.views.lobby.post_progression.tooltip.pair_modification_tooltip_view_model import PairModificationTooltipViewModel
 from gui.impl.pub import ViewImpl
-from gui.impl.wrappers.user_compound_price_model import PriceModelBuilder
+from gui.impl.wrappers.user_compound_price_model import PriceModelBuilder, BuyPriceModelBuilder
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
@@ -115,5 +116,5 @@ class CfgPairModificationTooltipView(BasePairModificationTooltipView):
         currentModification = vehicle.postProgression.getStep(stepID).action.getModificationByID(modificationId)
         moneyShortage = self._itemsCache.items.stats.money.getShortage(currentModification.getPrice())
         with self.viewModel.transaction() as model:
-            PriceModelBuilder.fillPriceModel(model.price, currentModification.getPrice())
+            BuyPriceModelBuilder.fillPriceModel(model.price, currentModification.getPrice(), checkBalanceAvailability=True)
             PriceModelBuilder.fillPriceModel(model.moneyShortage, moneyShortage)

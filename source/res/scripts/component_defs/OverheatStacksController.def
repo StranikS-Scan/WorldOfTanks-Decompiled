@@ -1,0 +1,40 @@
+<OverheatStacksController.def>
+  <Properties>
+    <vehTypeCD>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehTypeCD>
+    <gainState>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <SendLatestOnly>	true	</SendLatestOnly>
+    </gainState>
+    <curLevel>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <SendLatestOnly>	true	</SendLatestOnly>
+    </curLevel>
+    <delayTimerElapsed>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+      <SendLatestOnly>	true	</SendLatestOnly>
+    </delayTimerElapsed>
+    <timeElapsed>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+      <SendLatestOnly>	true	</SendLatestOnly>
+    </timeElapsed>
+    <timeNextGain>
+      <Type>	TIME_INTERVAL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+      <SendLatestOnly>	true	</SendLatestOnly>
+    </timeNextGain>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	overheatStacksController	</DefaultKeyName>
+</OverheatStacksController.def>

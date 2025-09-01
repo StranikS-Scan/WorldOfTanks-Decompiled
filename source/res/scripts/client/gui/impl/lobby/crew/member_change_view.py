@@ -18,7 +18,7 @@ from gui.impl.lobby.crew.filter.data_providers import CompoundDataProvider, Recr
 from gui.impl.lobby.crew.filter.filter_panel_widget import FilterPanelWidget
 from gui.impl.lobby.crew.filter.state import FilterState, Persistor
 from gui.impl.lobby.crew.utils import discountPercent
-from gui.impl.lobby.hangar.sub_views.vehicle_params_view import VehicleSkillPreviewParamsView
+from gui.impl.lobby.hangar.sub_views.vehicle_params_view import VehicleSkillPreviewParamsPresenter
 from gui.server_events.events_dispatcher import showRecruitWindow
 from gui.shared.gui_items.Tankman import NO_SLOT
 from gui.shared.gui_items.Vehicle import NO_VEHICLE_ID
@@ -111,7 +111,7 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
 
     def _setWidgets(self, **kwargs):
         super(MemberChangeView, self)._setWidgets(**kwargs)
-        self.__paramsView = VehicleSkillPreviewParamsView()
+        self.__paramsView = VehicleSkillPreviewParamsPresenter()
         self.setChildView(R.views.lobby.hangar.subViews.VehicleParams(), self.__paramsView)
         self.__filterPanelWidget = FilterPanelWidget(getTankmanLocationSettings(), self.__getPopoverGroupSettings(), R.strings.crew.filter.popup.default.title(), self.__filterState, title=R.strings.crew.tankmanList.filter.title(), panelType=FilterPanelType.MEMBERCHANGE, popoverTooltipHeader=R.strings.crew.tankmanList.tooltip.popover.header(), popoverTooltipBody=R.strings.crew.tankmanList.tooltip.popover.body(), hasDiscountAlert=self.__isChangeRoleDiscountAvailable)
         self.setChildView(FilterPanelWidget.LAYOUT_ID(), self.__filterPanelWidget)
@@ -183,7 +183,6 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
         self.__filterPanelWidget = None
         self.__paramsView = None
         self.__dataProviders = None
-        self.__paramsView = None
         return
 
     def _onItemsCacheSyncCompleted(self, reason, _):
@@ -202,7 +201,7 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
         self.__dataProviders.update()
 
     def _onClose(self, params=None):
-        if self.__currentVehicle.hasCrew and self.isPersonalFileOpened:
+        if self.__currentVehicle.hasCrew:
             self._onBack()
         else:
             self._destroySubViews()

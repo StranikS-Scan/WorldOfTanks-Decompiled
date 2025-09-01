@@ -9,7 +9,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 
 class PromoPremiumIgrWindow(PromoPremiumIgrWindowMeta):
 
-    def __init__(self, _=None):
+    def __init__(self, **kwargs):
         super(PromoPremiumIgrWindow, self).__init__()
 
     def _populate(self):

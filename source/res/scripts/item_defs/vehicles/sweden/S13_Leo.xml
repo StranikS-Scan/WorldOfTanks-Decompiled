@@ -56,7 +56,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	11815	</weight>
-    <maxHealth>	800	</maxHealth>
+    <maxHealth>	960	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -919,8 +919,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	6000	</weight>
-      <maxLoad>	25500	</maxLoad>
-      <terrainResistance>	1.1 1.7 2.3	</terrainResistance>
+      <terrainResistance>	1 1.1 1.7	</terrainResistance>
       <brakeForce>	25000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	34	</rotationSpeed>
@@ -1796,7 +1795,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	6000	</weight>
-      <maxLoad>	28000	</maxLoad>
       <terrainResistance>	1 1.1 1.7	</terrainResistance>
       <brakeForce>	25000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -2684,7 +2682,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5000	</weight>
-      <maxHealth>	200	</maxHealth>
+      <maxHealth>	180	</maxHealth>
       <rotationSpeed>	32	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -2698,9 +2696,9 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_kan_m_43_strv>	shared	  <maxAmmo>	60	</maxAmmo>
+        <_75mm_kan_m_43_strv_Leo>	shared	  <maxAmmo>	50	</maxAmmo>
           <unlocks>
-            <gun>	_75mm_kan_strv_74_R	  <cost>	5750	</cost>
+            <gun>	_105mm_kan_m_34	  <cost>	16700	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -2719,6 +2717,7 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.33	</shotDispersionRadius>
+          <reloadTime>	5	</reloadTime>
           <aimingTime>	1.8	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
@@ -2779,90 +2778,7 @@
             <density>	106.724 112.241	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_75mm_kan_m_43_strv>
-        <_75mm_kan_strv_74_R>	shared	  <maxAmmo>	50	</maxAmmo>
-          <unlocks>
-            <gun>	_105mm_kan_m_34	  <cost>	16700	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_3>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	20	</gun>
-          </armor>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 10 0.388889 10 0.416667 6 0.583333 6 0.611111 10 1 10	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.33	</shotDispersionRadius>
-          <reloadTime>	5	</reloadTime>
-          <aimingTime>	1.8	</aimingTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	3	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <models>
-            <undamaged>	vehicles/sweden/S13_Leo/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/sweden/S13_Leo/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/sweden/S13_Leo/crash/lod0/Gun_02.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/sweden/S13_Leo/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/sweden/S13_Leo/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000005 0.000025 1.66115	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.00002 0.19922 0.403298	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000005 0.000025 1.66115	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.00001 0.00005 1.96284	</rayStart>
-              <rayEnd>	-0.00001 0.00005 2.46284	</rayEnd>
-              <rayUp>	0.083 0 0	</rayUp>
-              <size>	0.5	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <tiling>	1 0.5 0.000000 0.000000	</tiling>
-            <density>	100.398 101.953	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </_75mm_kan_strv_74_R>
+        </_75mm_kan_m_43_strv_Leo>
         <_105mm_kan_m_34>	shared	  <maxAmmo>	35	</maxAmmo>
           <unlocks>
             <turret>	Turret_2_S13_Leo	  <cost>	8550	</cost>
@@ -3482,6 +3398,8 @@
       <unlocks>
         <vehicle>	S18_EMIL_1951_E1	  <cost>	95400	</cost>
         </vehicle>
+        <vehicle>	S29_UDES_14_5	  <cost>	92550	</cost>
+        </vehicle>
       </unlocks>
       <armor>
         <armor_1>	70	</armor_1>
@@ -3497,7 +3415,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5200	</weight>
-      <maxHealth>	300	</maxHealth>
+      <maxHealth>	240	</maxHealth>
       <rotationSpeed>	34	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -3511,7 +3429,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_kan_m_43_strv>	shared	  <maxAmmo>	60	</maxAmmo>
+        <_75mm_kan_m_43_strv_Leo>	shared	  <maxAmmo>	50	</maxAmmo>
           <armor>
             <armor_1>	55	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3589,86 +3507,7 @@
             <density>	106.724 112.241	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_75mm_kan_m_43_strv>
-        <_75mm_kan_strv_74_R>	shared	  <maxAmmo>	50	</maxAmmo>
-          <armor>
-            <armor_1>	55	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_3>	55	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	20	</gun>
-          </armor>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 10 0.388889 10 0.416667 6 0.583333 6 0.611111 10 1 10	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.33	</shotDispersionRadius>
-          <reloadTime>	4.5	</reloadTime>
-          <aimingTime>	1.8	</aimingTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	3	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <models>
-            <undamaged>	vehicles/sweden/S13_Leo/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/sweden/S13_Leo/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/sweden/S13_Leo/crash/lod0/Gun_05.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/sweden/S13_Leo/collision/Gun_05.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/sweden/S13_Leo/collision_client/Gun_05.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000005 -0.000044 1.6613	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.000019 0.199212 0.403182	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000005 -0.000044 1.6613	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.00001 -0.000088 1.96618	</rayStart>
-              <rayEnd>	-0.00001 -0.000088 2.46618	</rayEnd>
-              <rayUp>	0.082 0 0	</rayUp>
-              <size>	0.5	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <tiling>	1 0.5 0.000000 0.000000	</tiling>
-            <density>	100.398 101.953	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </_75mm_kan_strv_74_R>
+        </_75mm_kan_m_43_strv_Leo>
         <_105mm_kan_m_34>	shared	  <maxAmmo>	35	</maxAmmo>
           <armor>
             <armor_1>	55	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -4290,36 +4129,17 @@
     </Turret_2_S13_Leo>
   </turrets0>
   <engines>
-    <Volvo_A8B>	shared	  <unlocks>
-        <engine>	Meteor_Mark_IV_Mod_271	  <cost>	6100	</cost>
-        </engine>
-      </unlocks>
-    </Volvo_A8B>
-    <Meteor_Mark_IV_Mod_271>	shared	  <unlocks>
+    <Volvo_A8B_Leo>	shared	  <unlocks>
         <engine>	DB_605	  <cost>	11400	</cost>
         </engine>
       </unlocks>
-    </Meteor_Mark_IV_Mod_271>
-    <DB_605>	shared	  <unlocks>
-        <vehicle>	S29_UDES_14_5	  <cost>	92550	</cost>
-        </vehicle>
-      </unlocks>
-    </DB_605>
+    </Volvo_A8B_Leo>
+    <DB_605>	shared	</DB_605>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <_25_W_Sv_1_m_39_42>	shared	  <unlocks>
-        <radio>	_70_W_Sv_m_43	  <cost>	1380	</cost>
-        </radio>
-      </unlocks>
-    </_25_W_Sv_1_m_39_42>
-    <_70_W_Sv_m_43>	shared	  <unlocks>
-        <radio>	Ra_400	  <cost>	7250	</cost>
-        </radio>
-      </unlocks>
-    </_70_W_Sv_m_43>
     <Ra_400>	shared	</Ra_400>
   </radios>
   <clientAdjustmentFactors>
@@ -4332,12 +4152,9 @@
       </Chassis_S13_Leo_2>
     </chassis>
     <engines>
-      <Volvo_A8B>
+      <Volvo_A8B_Leo>
         <bravo>	108.3713	</bravo>
-      </Volvo_A8B>
-      <Meteor_Mark_IV_Mod_271>
-        <bravo>	155.949	</bravo>
-      </Meteor_Mark_IV_Mod_271>
+      </Volvo_A8B_Leo>
       <DB_605>
         <bravo>	175	</bravo>
       </DB_605>
@@ -4346,14 +4163,10 @@
   <physics>
     <detailed>
       <engines>
-        <Volvo_A8B>
+        <Volvo_A8B_Leo>
           <smplEnginePower>	410	</smplEnginePower>
           <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
-        </Volvo_A8B>
-        <Meteor_Mark_IV_Mod_271>
-          <smplEnginePower>	450	</smplEnginePower>
-          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
-        </Meteor_Mark_IV_Mod_271>
+        </Volvo_A8B_Leo>
         <DB_605>
           <smplEnginePower>	500	</smplEnginePower>
           <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
@@ -4363,13 +4176,13 @@
         <Chassis_S13_Leo>
           <grounds>
             <soft>
-              <rollingFriction>	0.231438	</rollingFriction>
+              <rollingFriction>	0.171063	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.171063	</rollingFriction>
+              <rollingFriction>	0.110688	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.110688	</rollingFriction>
+              <rollingFriction>	0.100625	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

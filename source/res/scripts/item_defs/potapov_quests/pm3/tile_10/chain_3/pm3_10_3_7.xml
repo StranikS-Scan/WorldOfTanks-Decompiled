@@ -1,0 +1,91 @@
+<pm3_10_3_7.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm3_10_3_7_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <or>
+            <vehicleKills>
+              <classes>	lightTank	</classes>
+              <greaterOrEqual>	2	</greaterOrEqual>
+            </vehicleKills>
+            <vehicleStun>
+              <classes>	lightTank	</classes>
+              <greaterOrEqual>	60	</greaterOrEqual>
+            </vehicleStun>
+          </or>
+        </postBattle>
+        <common>
+          <battles>
+            <uniqueVehicles></uniqueVehicles>
+            <count>	2	</count>
+          </battles>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	500000	</credits>
+        <crystal>	500	</crystal>
+        <goodie>
+          <id>	121005	</id>
+          <count>	3	</count>
+        </goodie>
+        <token>
+          <id>	token:pt:final:s3:t10:main	</id>
+          <expires>	01.01.2050 00:01	</expires>
+          <count>	1	</count>
+          <limit>	45	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm3_10_3_7_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <not>
+              <or>
+                <token>
+                  <id>	token:pt:final:s3:t10:main	</id>
+                  <equal>	45	</equal>
+                </token>
+                <token>
+                  <id>	token:pt:s3:t10:finished:honor	</id>
+                  <equal>	1	</equal>
+                </token>
+              </or>
+            </not>
+          </account>
+        </preBattle>
+        <postBattle>
+          <or>
+            <vehicleKills>
+              <classes>	lightTank	</classes>
+              <greaterOrEqual>	2	</greaterOrEqual>
+            </vehicleKills>
+            <vehicleStun>
+              <classes>	lightTank	</classes>
+              <greaterOrEqual>	60	</greaterOrEqual>
+            </vehicleStun>
+          </or>
+        </postBattle>
+        <common>
+          <battles>
+            <uniqueVehicles></uniqueVehicles>
+            <count>	2	</count>
+          </battles>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	pm3:10:points	</id>
+          <expires>	01.12.2050 06:00	</expires>
+          <count>	230	</count>
+        </token>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</pm3_10_3_7.xml>

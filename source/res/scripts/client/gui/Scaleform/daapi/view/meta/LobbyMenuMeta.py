@@ -34,6 +34,9 @@ class LobbyMenuMeta(View):
     def showLegal(self):
         self._printOverrideError('showLegal')
 
+    def toReportContent(self):
+        self._printOverrideError('toReportContent')
+
     def as_setVersionMessageS(self, message):
         return self.flashObject.as_setVersionMessage(message) if self._isDAAPIInited() else None
 
@@ -58,8 +61,8 @@ class LobbyMenuMeta(View):
     def as_setMenuStateS(self, state):
         return self.flashObject.as_setMenuState(state) if self._isDAAPIInited() else None
 
-    def as_setCopyrightS(self, copyrightVal, legalInfo):
-        return self.flashObject.as_setCopyright(copyrightVal, legalInfo) if self._isDAAPIInited() else None
+    def as_setCopyrightS(self, copyrightVal, reportContent, legalInfo):
+        return self.flashObject.as_setCopyright(copyrightVal, reportContent, legalInfo) if self._isDAAPIInited() else None
 
     def as_showVersionS(self, value):
         return self.flashObject.as_showVersion(value) if self._isDAAPIInited() else None

@@ -56,7 +56,6 @@
       <armor_10>	25	</armor_10>
       <armor_11>	130	</armor_11>
       <armor_12>	65	</armor_12>
-      <armor_13>	100	</armor_13>
       <armor_14>	85	</armor_14>
       <armor_15>	55	</armor_15>
       <armor_16>	75	</armor_16>
@@ -64,13 +63,10 @@
       <armor_18>	30	</armor_18>
       <armor_19>	20	</armor_19>
       <armor_20>	80	</armor_20>
-      <armor_21>	40	</armor_21>
-      <armor_22>	75	</armor_22>
-      <armor_23>	50	</armor_23>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	20015	</weight>
-    <maxHealth>	1120	</maxHealth>
+    <maxHealth>	1280	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -964,8 +960,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	48500	</maxLoad>
-      <terrainResistance>	1.1 1.7 2.5	</terrainResistance>
+      <terrainResistance>	1.1 1.2 2.3	</terrainResistance>
       <brakeForce>	34500	</brakeForce>
       <rotationIsAroundCenter>	True	</rotationIsAroundCenter>
       <rotationSpeed>	25	</rotationSpeed>
@@ -1881,7 +1876,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	50000	</maxLoad>
       <terrainResistance>	1.1 1.2 2.3	</terrainResistance>
       <brakeForce>	34500	</brakeForce>
       <rotationIsAroundCenter>	True	</rotationIsAroundCenter>
@@ -2795,13 +2789,9 @@
       <tags></tags>
       <level>	7	</level>
       <price>	25000	</price>
-      <unlocks>
-        <turret>	Turret_2_It17_Progetto_CC55_mod_54	  <cost>	16000	</cost>
-        </turret>
-      </unlocks>
       <armor>
         <armor_1>	200	</armor_1>
-        <armor_2>	100	</armor_2>
+        <armor_2>	115	</armor_2>
         <armor_3>	100	</armor_3>
         <armor_4>	100	</armor_4>
         <armor_5>	25	</armor_5>
@@ -2828,7 +2818,7 @@
       </armor>
       <primaryArmor>	armor_18 armor_3 armor_4	</primaryArmor>
       <weight>	11000	</weight>
-      <maxHealth>	280	</maxHealth>
+      <maxHealth>	240	</maxHealth>
       <rotationSpeed>	28	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -2869,14 +2859,14 @@
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 9 0.35 9 0.397222 4 0.466667 4 0.533333 4 0.602778 4 0.65 9 1 9	</maxPitch>
+            <maxPitch>	0.00000 9.00 0.42500 9.00 0.45278 4.00 0.54722 4.00 0.57500 9.00 1.00000 9.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <reloadTime>	15	</reloadTime>
-          <aimingTime>	2.7	</aimingTime>
+          <aimingTime>	2.5	</aimingTime>
           <shotDispersionRadius>	0.39	</shotDispersionRadius>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2885,7 +2875,7 @@
             <rate>	17.14	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	13 15 17	</reloadTime>
+            <reloadTime>	13 14 16	</reloadTime>
             <boostFraction>	0.5	</boostFraction>
             <boostStartTime>	1	</boostStartTime>
             <boostResidueTime>	2	</boostResidueTime>
@@ -2945,8 +2935,8 @@
         </_105mm_Cannone_Da_105_53>
         <_105mm_Cannone_Da_105_71>	shared	  <maxAmmo>	33	</maxAmmo>
           <unlocks>
-            <vehicle>	It19_Progetto_C50_mod_66	  <cost>	150190	</cost>
-            </vehicle>
+            <turret>	Turret_2_It17_Progetto_CC55_mod_54	  <cost>	16000	</cost>
+            </turret>
           </unlocks>
           <armor>
             <armor_1>	240	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -2970,14 +2960,14 @@
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 9 0.35 9 0.397222 4 0.466667 4 0.533333 4 0.602778 4 0.65 9 1 9	</maxPitch>
+            <maxPitch>	0.00000 9.00 0.42500 9.00 0.45278 4.00 0.54722 4.00 0.57500 9.00 1.00000 9.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <reloadTime>	15	</reloadTime>
-          <aimingTime>	2.7	</aimingTime>
+          <aimingTime>	2.5	</aimingTime>
           <shotDispersionRadius>	0.39	</shotDispersionRadius>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2986,7 +2976,7 @@
             <rate>	17.14	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	13 15 16	</reloadTime>
+            <reloadTime>	13 14 16	</reloadTime>
             <boostFraction>	0.5	</boostFraction>
             <boostStartTime>	1	</boostStartTime>
             <boostResidueTime>	2	</boostResidueTime>
@@ -3640,6 +3630,10 @@
       <tags></tags>
       <level>	8	</level>
       <price>	33900	</price>
+      <unlocks>
+        <vehicle>	It19_Progetto_C50_mod_66	  <cost>	150190	</cost>
+        </vehicle>
+      </unlocks>
       <armor>
         <armor_1>	180	</armor_1>
         <armor_2>	100	</armor_2>
@@ -3662,7 +3656,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	13000	</weight>
-      <maxHealth>	330	</maxHealth>
+      <maxHealth>	320	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -3698,14 +3692,14 @@
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 9 0.35 9 0.397222 4 0.466667 4 0.533333 4 0.602778 4 0.65 9 1 9	</maxPitch>
+            <maxPitch>	0.00000 9.00 0.42500 9.00 0.45278 4.00 0.54722 4.00 0.57500 9.00 1.00000 9.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <reloadTime>	14	</reloadTime>
           <aimingTime>	2.5	</aimingTime>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -3793,7 +3787,7 @@
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 9 0.35 9 0.397222 4 0.466667 4 0.533333 4 0.602778 4 0.65 9 1 9	</maxPitch>
+            <maxPitch>	0.00000 9.00 0.42500 9.00 0.45278 4.00 0.54722 4.00 0.57500 9.00 1.00000 9.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <reloadTime>	14	</reloadTime>
@@ -4456,11 +4450,6 @@
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <SEM_35>	shared	  <unlocks>
-        <radio>	SEM_80	  <cost>	7300	</cost>
-        </radio>
-      </unlocks>
-    </SEM_35>
     <SEM_80>	shared	</SEM_80>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
@@ -4468,7 +4457,7 @@
     <detailed>
       <engines>
         <Daimler_Benz_Typ_MB_837_A>
-          <smplEnginePower>	600	</smplEnginePower>
+          <smplEnginePower>	780	</smplEnginePower>
           <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </Daimler_Benz_Typ_MB_837_A>
         <Hanomag_D831_A>
@@ -4481,10 +4470,10 @@
           <axleCount>	5	</axleCount>
           <grounds>
             <soft>
-              <rollingFriction>	0.20125	</rollingFriction>
+              <rollingFriction>	0.18515	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.13685	</rollingFriction>
+              <rollingFriction>	0.0966	</rollingFriction>
             </medium>
             <firm>
               <rollingFriction>	0.08855	</rollingFriction>

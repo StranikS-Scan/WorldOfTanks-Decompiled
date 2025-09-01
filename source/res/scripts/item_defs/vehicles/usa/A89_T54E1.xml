@@ -17,7 +17,7 @@
     <moving>	0.039	</moving>
     <still>	0.078	</still>
     <camouflageBonus>	0.02	</camouflageBonus>
-    <firePenalty>	0.26	</firePenalty>
+    <firePenalty>	0.117	</firePenalty>
   </invisibility>
   <optDevsOverrides>
     <camouflageNet>
@@ -63,7 +63,7 @@
     </armor>
     <primaryArmor>	armor_14 armor_3 armor_4	</primaryArmor>
     <weight>	27765	</weight>
-    <maxHealth>	1400	</maxHealth>
+    <maxHealth>	1520	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	240	</maxHealth>
       <maxRegenHealth>	160	</maxRegenHealth>
@@ -928,13 +928,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_T54E1>
-      <userString>	#usa_vehicles:Chassis_T54E1	</userString>
+    <Chassis_A89_T54E1>
+      <userString>	#usa_vehicles:Chassis_A89_T54E1	</userString>
       <tags></tags>
       <level>	8	</level>
       <price>	31700	</price>
       <unlocks>
-        <chassis>	Chassis_T54E1_2	  <cost>	21000	</cost>
+        <chassis>	Chassis_A89_T54E1_2	  <cost>	21000	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -942,8 +942,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	10000	</weight>
-      <maxLoad>	54500	</maxLoad>
-      <terrainResistance>	1.2 1.4 2.5	</terrainResistance>
+      <terrainResistance>	1.1 1.2 2.3	</terrainResistance>
       <brakeForce>	55000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	38	</rotationSpeed>
@@ -2103,9 +2102,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.09523821	</repairTime>
-    </Chassis_T54E1>
-    <Chassis_T54E1_2>
-      <userString>	#usa_vehicles:Chassis_T54E1_2	</userString>
+    </Chassis_A89_T54E1>
+    <Chassis_A89_T54E1_2>
+      <userString>	#usa_vehicles:Chassis_A89_T54E1_2	</userString>
       <tags></tags>
       <level>	9	</level>
       <price>	61000	</price>
@@ -2114,7 +2113,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	10000	</weight>
-      <maxLoad>	57500	</maxLoad>
       <terrainResistance>	1.1 1.2 2.3	</terrainResistance>
       <brakeForce>	60000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -3268,12 +3266,12 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.09523821	</repairTime>
-    </Chassis_T54E1_2>
+    </Chassis_A89_T54E1_2>
   </chassis>
   <turrets0>
-    <Turret_1_T54E1>
-      <userString>	#usa_vehicles:Turret_1_T54E1	</userString>
-      <tags></tags>
+    <Turret_1_A89_T54E1>
+      <userString>	#usa_vehicles:Turret_1_A89_T54E1	</userString>
+      <tags>	oscillating	</tags>
       <level>	9	</level>
       <price>	66000	</price>
       <notInShop>	true	</notInShop>
@@ -3289,7 +3287,7 @@
       </armor>
       <primaryArmor>	armor_6 armor_3 armor_4	</primaryArmor>
       <weight>	13500	</weight>
-      <maxHealth>	450	</maxHealth>
+      <maxHealth>	380	</maxHealth>
       <rotationSpeed>	36	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -3303,7 +3301,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_90mm_Gun_T178>	shared	  <maxAmmo>	45	</maxAmmo>
+        <_90mm_Gun_T178>	shared	  <maxAmmo>	48	</maxAmmo>
           <unlocks>
             <gun>	_105mm_Gun_T140E2	  <cost>	43000	</cost>
             </gun>
@@ -3322,19 +3320,20 @@
             <armor_11>	50.8	</armor_11>
             <armor_12>	114.3	</armor_12>
             <armor_16>	25.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_16>
             <gun>	35	</gun>
           </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <reloadTime>	25	</reloadTime>
-          <aimingTime>	2.6	</aimingTime>
+          <aimingTime>	2.7	</aimingTime>
           <clip>
-            <count>	5	</count>
+            <count>	4	</count>
             <rate>	30	</rate>
           </clip>
           <pitchLimits>
             <minPitch>	0 -13 1 -13	</minPitch>
-            <maxPitch>	0 8 0.131592 8 0.160933 6 0.328519 6 0.380783 8 0.39357 7.49785 0.444444 5.5 0.466537 6.5 0.555556 6.5 0.570306 6.84754 0.581719 7.11646 0.619218 6 0.825725 6 0.868166 8 1 8	</maxPitch>
+            <maxPitch>	0.00000 8.00 0.12500 8.00 0.15278 6.00 0.31944 6.00 0.36111 7.00 0.63889 7.00 0.68056 6.00 0.84722 6.00 0.87500 8.00 1.00000 8.00	</maxPitch>
           </pitchLimits>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
@@ -3936,7 +3935,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_90mm_Gun_T178>
-        <_105mm_Gun_T140E2>	shared	  <maxAmmo>	36	</maxAmmo>
+        <_105mm_Gun_T140E2>	shared	  <maxAmmo>	40	</maxAmmo>
           <unlocks>
             <vehicle>	A67_T57_58	  <cost>	250000	</cost>
             </vehicle>
@@ -3955,24 +3954,25 @@
             <armor_11>	50.8	</armor_11>
             <armor_12>	114.3	</armor_12>
             <armor_16>	25.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_16>
             <gun>	40	</gun>
           </armor>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	36	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
+            <turretRotation>	0.16	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.9	</aimingTime>
           <clip>
             <count>	4	</count>
-            <rate>	27	</rate>
+            <rate>	30	</rate>
           </clip>
           <pitchLimits>
             <minPitch>	0 -13 1 -13	</minPitch>
-            <maxPitch>	0 8 0.131592 8 0.160933 6 0.328519 6 0.380783 8 0.39357 7.49785 0.444444 5.5 0.466537 6.5 0.555556 6.5 0.570306 6.84754 0.581719 7.11646 0.619218 6 0.825725 6 0.868166 8 1 8	</maxPitch>
+            <maxPitch>	0.00000 8.00 0.12500 8.00 0.15278 6.00 0.31944 6.00 0.36111 7.00 0.63889 7.00 0.68056 6.00 0.84722 6.00 0.87500 8.00 1.00000 8.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <models>
@@ -4741,63 +4741,36 @@
         <density>	93.6732 93.8398	</density>
         <aoTextureSize>	512 256	</aoTextureSize>
       </camouflage>
-    </Turret_1_T54E1>
+    </Turret_1_A89_T54E1>
   </turrets0>
   <engines>
-    <Continental_AV-1790-1>	shared	  <unlocks>
-        <engine>	Continental_AV-1790-3	  <cost>	19000	</cost>
+    <Continental_AV_1790_1_T54E1>	shared	  <unlocks>
+        <engine>	Continental_AV_1790_5B_T54E1	  <cost>	25000	</cost>
         </engine>
       </unlocks>
-    </Continental_AV-1790-1>
-    <Continental_AV-1790-3>	shared	  <unlocks>
-        <engine>	Continental_AV-1790-5B	  <cost>	25000	</cost>
-        </engine>
-      </unlocks>
-    </Continental_AV-1790-3>
-    <Continental_AV-1790-5B>	shared	</Continental_AV-1790-5B>
+    </Continental_AV_1790_1_T54E1>
+    <Continental_AV_1790_5B_T54E1>	shared	</Continental_AV_1790_5B_T54E1>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <AN-GRC-3>	shared	  <unlocks>
-        <radio>	AN-ARC-27	  <cost>	9000	</cost>
-        </radio>
-      </unlocks>
-    </AN-GRC-3>
     <AN-ARC-27>	shared	</AN-ARC-27>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Continental_AV-1790-1>
-          <smplEnginePower>	744.3259	</smplEnginePower>
+        <Continental_AV_1790_1_T54E1>
+          <smplEnginePower>	790	</smplEnginePower>
           <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
-        </Continental_AV-1790-1>
-        <Continental_AV-1790-3>
-          <smplEnginePower>	845.8249	</smplEnginePower>
+        </Continental_AV_1790_1_T54E1>
+        <Continental_AV_1790_5B_T54E1>
+          <smplEnginePower>	870	</smplEnginePower>
           <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
-        </Continental_AV-1790-3>
-        <Continental_AV-1790-5B>
-          <smplEnginePower>	856.3977	</smplEnginePower>
-          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
-        </Continental_AV-1790-5B>
+        </Continental_AV_1790_5B_T54E1>
       </engines>
       <chassis>
-        <Chassis_T54E1>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.20125	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.1127	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.0966	</rollingFriction>
-            </firm>
-          </grounds>
-        </Chassis_T54E1>
-        <Chassis_T54E1_2>
+        <Chassis_A89_T54E1>
           <grounds>
             <soft>
               <rollingFriction>	0.18515	</rollingFriction>
@@ -4809,7 +4782,20 @@
               <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_T54E1_2>
+        </Chassis_A89_T54E1>
+        <Chassis_A89_T54E1_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.18515	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.0966	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.08855	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_A89_T54E1_2>
       </chassis>
     </detailed>
   </physics>

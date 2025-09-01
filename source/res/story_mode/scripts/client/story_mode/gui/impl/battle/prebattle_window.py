@@ -8,6 +8,7 @@ import BattleReplay
 import BigWorld
 import SoundGroups
 from frameworks.wulf import ViewSettings, WindowFlags
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.app_loader import app_getter
 from gui.battle_control import avatar_getter
 from gui.battle_control.arena_info.interfaces import IArenaLoadController
@@ -15,6 +16,7 @@ from gui.game_loading import loading
 from gui.impl.gen import R
 from gui.impl.pub import WindowImpl
 from helpers import dependency
+from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.impl import IGuiLoader
 from story_mode.gui.fade_in_out import UseStoryModeFading
@@ -31,6 +33,12 @@ from story_mode_common.story_mode_constants import LOGGER_NAME
 if typing.TYPE_CHECKING:
     from gui.Scaleform.framework.application import AppEntry
 _logger = getLogger(LOGGER_NAME)
+
+def _hideCursor():
+    appLoader = dependency.instance(IAppLoader)
+    if not appLoader.getApp().hasGuiControlModeConsumers(VIEW_ALIAS.INGAME_MENU):
+        avatar_getter.setForcedGuiControlMode(False)
+
 
 class PrebattleView(BaseWaitQueueView, IArenaLoadController):
     __slots__ = ('missionId', '_uiLogger', '_missionLoreSettings')
@@ -64,7 +72,7 @@ class PrebattleView(BaseWaitQueueView, IArenaLoadController):
             self.viewModel.setIsLoading(False)
             self._uiLogger.logButtonShown(LogButtons.BATTLE)
 
-    @UseStoryModeFading(show=False, callback=lambda : avatar_getter.setForcedGuiControlMode(False))
+    @UseStoryModeFading(show=False, callback=_hideCursor)
     def arenaLoadCompleted(self):
         self.destroyWindow()
 

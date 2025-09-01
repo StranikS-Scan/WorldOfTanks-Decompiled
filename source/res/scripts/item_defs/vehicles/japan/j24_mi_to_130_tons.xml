@@ -11,7 +11,7 @@
   <supplySlots>	5 1 1 6 6 6 7 8 8 8	</supplySlots>
   <postProgressionTree>	role_HT_assault	</postProgressionTree>
   <speedLimits>
-    <forward>	29.4	</forward>
+    <forward>	25	</forward>
     <backward>	10	</backward>
   </speedLimits>
   <invisibility>
@@ -46,25 +46,41 @@
   <hull>
     <armor>
       <armor_1>	150	</armor_1>
-      <armor_2>	150	</armor_2>
+      <armor_2>	90	</armor_2>
       <armor_3>	70	</armor_3>
-      <armor_4>	105	</armor_4>
+      <armor_4>	50	</armor_4>
       <armor_5>	50	</armor_5>
       <armor_6>	30	</armor_6>
       <armor_7>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	35	</armor_9>
-      <armor_10>	150	</armor_10>
-      <armor_11>	150	</armor_11>
-      <armor_12>	150	</armor_12>
-      <armor_13>	150	</armor_13>
-      <armor_14>	150	</armor_14>
-      <armor_15>	70	</armor_15>
+      <armor_9>	100	</armor_9>
+      <armor_10>	40	</armor_10>
+      <armor_11>	35	</armor_11>
+      <armor_12>	25	</armor_12>
+      <armor_13>	140	</armor_13>
+      <armor_14>	130	</armor_14>
+      <armor_15>	130	</armor_15>
+      <armor_16>	130	</armor_16>
+      <armor_17>	100	</armor_17>
+      <armor_18>	50	</armor_18>
+      <armor_19>	150	</armor_19>
+      <armor_20>	120	</armor_20>
+      <armor_21>	120	</armor_21>
+      <armor_22>	120	</armor_22>
+      <armor_23>	70	</armor_23>
+      <armor_24>	50	</armor_24>
+      <armor_25>	40	</armor_25>
+      <armor_26>	45	</armor_26>
+      <armor_27>	50	</armor_27>
+      <armor_28>	50	</armor_28>
+      <armor_29>	40	</armor_29>
+      <armor_30>	40	</armor_30>
+      <armor_32>	30	</armor_32>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	110208	</weight>
-    <maxHealth>	848	</maxHealth>
+    <maxHealth>	880	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
@@ -1248,8 +1264,7 @@
         <rightTrack>	40	</rightTrack>
       </armor>
       <weight>	25000	</weight>
-      <maxLoad>	150500	</maxLoad>
-      <terrainResistance>	1.2 1.4 1.9	</terrainResistance>
+      <terrainResistance>	1.1 1.3 1.8	</terrainResistance>
       <brakeForce>	150000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	16	</rotationSpeed>
@@ -2183,14 +2198,13 @@
         <rightTrack>	40	</rightTrack>
       </armor>
       <weight>	25000	</weight>
-      <maxLoad>	155000	</maxLoad>
       <terrainResistance>	1.1 1.3 1.8	</terrainResistance>
       <brakeForce>	150000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	18	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.2	</vehicleMovement>
-        <vehicleRotation>	0.22	</vehicleRotation>
+        <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	210	</maxHealth>
@@ -3118,18 +3132,21 @@
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	150	</armor_1>
-        <armor_2>	70	</armor_2>
-        <armor_3>	150	</armor_3>
-        <armor_4>	105	</armor_4>
+        <armor_2>	150	</armor_2>
+        <armor_3>	120	</armor_3>
+        <armor_4>	60	</armor_4>
         <armor_5>	50	</armor_5>
-        <armor_6>	30	</armor_6>
-        <armor_7>	150	</armor_7>
+        <armor_7>	50	</armor_7>
         <armor_8>	0	</armor_8>
-        <armor_9>	150	</armor_9>
+        <armor_9>	110	</armor_9>
+        <armor_10>	110	</armor_10>
+        <armor_11>	90	</armor_11>
+        <armor_12>	50	</armor_12>
+        <armor_13>	30	</armor_13>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	12000	</weight>
-      <maxHealth>	212	</maxHealth>
+      <maxHealth>	220	</maxHealth>
       <rotationSpeed>	18	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -3143,34 +3160,47 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_105mm_Cannon_Type92>	shared	  <maxAmmo>	100	</maxAmmo>
+        <_105mm_Cannon_Type_92_O_I>	shared	  <maxAmmo>	100	</maxAmmo>
           <unlocks>
-            <gun>	_150mm_Howitzer_Type96	  <cost>	14750	</cost>
+            <gun>	_150mm_Howitzer_Type_96_O_I	  <cost>	14750	</cost>
             </gun>
           </unlocks>
           <armor>
-            <armor_1>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_1>
-            <armor_2>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_2>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_2>
             <armor_3>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_3>
-            <armor_4>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_4>
-            <armor_5>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_5>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_5>
+            <armor_6>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_7>
+            <armor_9>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_9>
+            <armor_10>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_10>
             <gun>	40	</gun>
           </armor>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.025 10 0.0277778 9 0.0583333 9 0.0611111 8 0.0638889 7 0.0666667 6 0.261111 6 0.263889 5 0.269444 4 0.319444 5 0.322222 6 0.677778 6 0.680556 5 0.730556 4 0.736111 5 0.738889 6 0.933333 6 0.936111 7 0.938889 8 0.941667 9 0.972222 9 0.975 10 1 10	</maxPitch>
+            <maxPitch>	0.00000 10.00 0.46667 10.00 0.50000 6.00 0.53333 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.43	</shotDispersionRadius>
           <reloadTime>	12	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
-            <afterShot>	3.0	</afterShot>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	3.2	</aimingTime>
@@ -3260,28 +3290,41 @@
             <density>	94.1907 99.139	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_105mm_Cannon_Type92>
-        <_150mm_Howitzer_Type96>	shared	  <maxAmmo>	60	</maxAmmo>
+        </_105mm_Cannon_Type_92_O_I>
+        <_150mm_Howitzer_Type_96_O_I>	shared	  <maxAmmo>	60	</maxAmmo>
           <unlocks>
             <vehicle>	J28_O_I_100	  <cost>	56320	</cost>
             </vehicle>
           </unlocks>
           <armor>
-            <armor_1>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_1>
-            <armor_2>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_2>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_2>
             <armor_3>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_3>
-            <armor_4>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_4>
-            <armor_5>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_5>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_5>
+            <armor_6>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_7>
+            <armor_9>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_9>
+            <armor_10>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_10>
             <gun>	60	</gun>
           </armor>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.025 10 0.0277778 9 0.0583333 9 0.0611111 8 0.0638889 7 0.0666667 6 0.261111 6 0.263889 5 0.269444 4 0.319444 5 0.322222 6 0.677778 6 0.680556 5 0.730556 4 0.736111 5 0.738889 6 0.933333 6 0.936111 7 0.938889 8 0.941667 9 0.972222 9 0.975 10 1 10	</maxPitch>
+            <maxPitch>	0.00000 10.00 0.46667 10.00 0.50000 6.00 0.53333 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.15	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.58	</shotDispersionRadius>
@@ -3378,7 +3421,7 @@
             <density>	98.2381 100.338	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_150mm_Howitzer_Type96>
+        </_150mm_Howitzer_Type_96_O_I>
       </guns>
       <models>
         <undamaged>	vehicles/japan/J24_Mi_To_130_tons/normal/lod0/Turret_01.model	</undamaged>
@@ -3811,52 +3854,42 @@
     </Turret_1_J24_Mi_To_130_tons>
   </turrets0>
   <engines>
-    <_Type98_V12_x2_1100>	shared	  <unlocks>
-        <engine>	_Type98_V12_x2_1200	  <cost>	27500	</cost>
+    <_2x_Kawasaki_Type_98_Kou_O_I>	shared	  <unlocks>
+        <engine>	_2x_Kawasaki_Type_98_Otsu_O_I	  <cost>	27500	</cost>
         </engine>
       </unlocks>
-    </_Type98_V12_x2_1100>
-    <_Type98_V12_x2_1200>	shared	</_Type98_V12_x2_1200>
+    </_2x_Kawasaki_Type_98_Kou_O_I>
+    <_2x_Kawasaki_Type_98_Otsu_O_I>	shared	</_2x_Kawasaki_Type_98_Otsu_O_I>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <_Type94_Otsu>	shared	  <unlocks>
-        <radio>	_Type94_Hei	  <cost>	430	</cost>
-        </radio>
-      </unlocks>
-    </_Type94_Otsu>
-    <_Type94_Hei>	shared	  <unlocks>
-        <radio>	_Type96_Bo	  <cost>	1400	</cost>
-        </radio>
-      </unlocks>
-    </_Type94_Hei>
     <_Type96_Bo>	shared	</_Type96_Bo>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <_Type98_V12_x2_1100>
-          <smplEnginePower>	1163.009	</smplEnginePower>
-          <smplFwMaxSpeed>	29.4	</smplFwMaxSpeed>
-        </_Type98_V12_x2_1100>
-        <_Type98_V12_x2_1200>
-          <smplEnginePower>	1268.737	</smplEnginePower>
-          <smplFwMaxSpeed>	29.4	</smplFwMaxSpeed>
-        </_Type98_V12_x2_1200>
+        <_2x_Kawasaki_Type_98_Kou_O_I>
+          <smplEnginePower>	1200	</smplEnginePower>
+          <smplFwMaxSpeed>	25	</smplFwMaxSpeed>
+        </_2x_Kawasaki_Type_98_Kou_O_I>
+        <_2x_Kawasaki_Type_98_Otsu_O_I>
+          <smplEnginePower>	1300	</smplEnginePower>
+          <smplFwMaxSpeed>	25	</smplFwMaxSpeed>
+        </_2x_Kawasaki_Type_98_Otsu_O_I>
       </engines>
       <chassis>
         <Chassis_J24_Mi_To_130_tons>
           <grounds>
             <soft>
-              <rollingFriction>	0.15295	</rollingFriction>
+              <rollingFriction>	0.1449	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1127	</rollingFriction>
+              <rollingFriction>	0.10465	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0966	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_J24_Mi_To_130_tons>

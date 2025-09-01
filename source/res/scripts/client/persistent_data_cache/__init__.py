@@ -49,7 +49,6 @@ def init(scriptsConfig, engineConfig, userPreferences, gameLoadingStep):
             BigWorld.quitWithExitCode(ExitCode.FAILED)
         return
     settings = configs.createPDCSettings(scriptsConfig, engineConfig)
-    _logger.debug('Settings: %s', settings)
     if not forceCreating:
         if not settings.enabled or constants.IS_DEVELOPMENT and not settings.devEnabled:
             _logger.info('Disabled in config.')
@@ -61,6 +60,7 @@ def init(scriptsConfig, engineConfig, userPreferences, gameLoadingStep):
         _logger.error("Can't use 'pdcCreate' and 'pdcOff' arguments simultaneously!")
         BigWorld.quitWithExitCode(ExitCode.FAILED)
         return
+    _logger.debug('Settings: %s', settings)
     _eventDispatcher = DefaultPDCEventsDispatcher()
     if not forceCreating:
         faultTolerance = fault_tolerance.init(clientVersion, userPreferences)

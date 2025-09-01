@@ -5,7 +5,7 @@ import CGF
 from constants import IS_CLIENT
 from cgf_script.managers_registrator import autoregister, onAddedQuery, onRemovedQuery
 from Vehicular import GunEffectsController
-from vehicle_systems.cgf_helpers import getVehicleEntityComponentByGameObject
+from cgf_common.cgf_helpers import getParentComponentByGameObject
 if IS_CLIENT:
     from AutoShootGunController import AutoShootGunController
 else:
@@ -15,15 +15,15 @@ else:
 
 
 if typing.TYPE_CHECKING:
-    from vehicle_systems.auto_shoot_guns.system_interfaces import IAutoShootingEvents
+    from vehicles.mechanics.auto_shoot_guns.mechanic_interfaces import IAutoShootingEvents
 
 @autoregister(presentInAllWorlds=True)
 class AutoShootingGunManager(CGF.ComponentManager):
 
     @onAddedQuery(CGF.GameObject, GunEffectsController, tickGroup='PreSimulation')
     def onGunEffectsControllerAdded(self, gameObject, gunEffectsController):
-        ctrl = getVehicleEntityComponentByGameObject(gameObject, AutoShootGunController)
-        if ctrl is not None and ctrl.shootingEvents is not None:
+        ctrl = getParentComponentByGameObject(gameObject, AutoShootGunController)
+        if ctrl is not None and ctrl.shootingEvents is not None and ctrl.isPrefabRoot(gameObject):
             events = ctrl.shootingEvents
             events.onShotRateUpdate.lateAdd(gunEffectsController.setShotsPerSec)
             events.onContinuousBurstActivation.lateAdd(gunEffectsController.startContinuousBurst)
@@ -33,7 +33,7 @@ class AutoShootingGunManager(CGF.ComponentManager):
 
     @onRemovedQuery(CGF.GameObject, GunEffectsController)
     def onGunEffectsControllerRemoved(self, gameObject, gunEffectsController):
-        ctrl = getVehicleEntityComponentByGameObject(gameObject, AutoShootGunController)
+        ctrl = getParentComponentByGameObject(gameObject, AutoShootGunController)
         if ctrl is not None and ctrl.shootingEvents is not None:
             events = ctrl.shootingEvents
             events.onDiscreteShot -= gunEffectsController.singleShot

@@ -16,6 +16,7 @@ from gui.impl.pub import ViewImpl
 from gui.shared.gui_items import KPI
 from gui.shared.items_parameters import formatters as param_formatter
 from gui.shared.items_parameters.bonus_helper import isSituationalBonus
+from gui.shared.items_parameters.comparator import addParameterValuesOfTheSameType
 from gui.shared.items_parameters.formatters import isRelativeParameter
 from gui.shared.items_parameters.param_name_helper import getVehicleParameterText
 from gui.shared.items_parameters.params import PIERCING_DISTANCES
@@ -89,6 +90,7 @@ _MULTI_KPI_PARAMS = frozenset([KPI.Name.VEHICLE_REPAIR_SPEED,
 AUTORELOAD_TIME = 'autoReloadTime'
 _PARAMS_WITH_AGGREGATED_PENALTIES = {DUAL_ACCURACY_COOLING_DELAY}
 _CREW_ICON = 'all'
+BonusCreationParams = collections.namedtuple('BonusCreationParams', ('bnsType', 'bnsId', 'pInfo', 'scheme', 'isSituational', 'vehPostProgressionBonusLevels'))
 
 def _optDeviceCmp(x, y):
 
@@ -121,7 +123,7 @@ def _getBonusID(bnsType, bnsId):
         return bnsId
 
 
-def _getBonusName(bnsType, bnsId, enabled=True, archetype=None):
+def _getBonusName(bnsType, bnsId, enabled=True, archetype=None, isVehSkillTree=False):
     itemStr = ''
     useArchetypeLocale = archetype is not None and enabled is False
     if bnsType in (constants.BonusTypes.EQUIPMENT, constants.BonusTypes.OPTIONAL_DEVICE):
@@ -158,9 +160,12 @@ def _getBonusName(bnsType, bnsId, enabled=True, archetype=None):
         if bnsR:
             itemStr = backport.text(R.strings.tooltips.vehicleParams.bonus.vehPostProgressionPairModification.template(), name=backport.text(bnsR.name()))
     elif bnsType == constants.BonusTypes.BASE_MODIFICATION:
-        bnsR = R.strings.artefacts.dyn(bnsId)
-        if bnsR:
-            itemStr = backport.text(R.strings.tooltips.vehicleParams.bonus.vehPostProgressionBaseModification.template(), name=backport.text(bnsR.name()))
+        if isVehSkillTree:
+            itemStr = backport.text(R.strings.tooltips.vehicleParams.bonus.vehSkillTreePostProgressionBaseModification.template())
+        else:
+            bnsR = R.strings.artefacts.dyn(bnsId)
+            if bnsR:
+                itemStr = backport.text(R.strings.tooltips.vehicleParams.bonus.vehPostProgressionBaseModification.template(), name=backport.text(bnsR.name()))
     return itemStr
 
 
@@ -231,10 +236,8 @@ class BaseVehicleAdvancedParamsTooltipView(BaseVehicleParamsTooltipView):
             desc = backport.text(R.strings.menu.extraParams.name.dyn(self._paramName, R.strings.menu.extraParams.desc)())
         else:
             titleParamName = param_formatter.getTitleParamName(vehicle, self._paramName)
-            measureParamName = param_formatter.getMeasureParamName(vehicle, self._paramName)
             title = self.__getTitleStr(titleParamName)
-            measureUnitLoc = param_formatter.MEASURE_UNITS.get(measureParamName, '')
-            model.setUnitOfMeasurement(i18n.makeString(measureUnitLoc) if i18n.isValidKey(measureUnitLoc) else '')
+            model.setUnitOfMeasurement(param_formatter.getMeasureUnitsForParameter(vehicle, self._paramName))
             if self._paramName == AUTORELOAD_TIME and self._hasExtendedInfo():
                 desc = self._getAutoReloadTimeDescription()
             elif self._paramName == CHASSIS_REPAIR_TIME and vehicle and vehicle.isTrackWithinTrack:
@@ -279,9 +282,8 @@ class BaseVehicleAdvancedParamsTooltipView(BaseVehicleParamsTooltipView):
         return backport.text(R.strings.tooltips.tank_params.desc.autoReloadTime.boost.shortDescription())
 
     def __getTitleStr(self, titleParamName):
-        strRootPath = R.strings.menu.tank_params.dyn(titleParamName)
-        strPath = strRootPath.extendedTitle if strRootPath.dyn('extendedTitle').exists() else strRootPath
-        return backport.text(strPath())
+        strPath = R.strings.menu.tank_params.dyn(titleParamName)
+        return backport.text(R.strings.menu.tank_params.extendedTitle.dyn(titleParamName, default=strPath)())
 
 
 class VehicleAdvancedParamsTooltipView(BaseVehicleAdvancedParamsTooltipView):
@@ -303,6 +305,10 @@ class VehicleAdvancedParamsTooltipView(BaseVehicleAdvancedParamsTooltipView):
         hasSituational = False
         appliedOptDeviceBonuses = []
         installedArchetypes = set()
+        isVehSkillTree = vehicle.postProgression.isVehSkillTree()
+        vehSkillTreeActiveBonusParams = None
+        vehSkillTreeActiveBonusValues = []
+        vehSkillTreeInactiveBonusShown = False
         for bnsType, bnsId, pInfo in bonusExtractor.getBonusInfo():
             tooltipSection, archetype = self._getTooltipGroupingForBonus(bnsType, bnsId)
             if archetype is not None:
@@ -312,19 +318,26 @@ class VehicleAdvancedParamsTooltipView(BaseVehicleAdvancedParamsTooltipView):
             scheme = situationalScheme if isSituational else extractedBonusScheme
             valueStr = param_formatter.formatParameterDelta(pInfo, scheme)
             if valueStr is not None:
-                hasSituational = hasSituational or isSituational
-                bonusName = _getBonusName(bnsType, formattedBnsID)
+                bonusCreationParams = BonusCreationParams(bnsType, bnsId, pInfo, scheme, isSituational, vehPostProgressionBonusLevels)
+                if isVehSkillTree and bnsType == constants.BonusTypes.BASE_MODIFICATION:
+                    vehSkillTreeActiveBonusValues.append(pInfo.getParamDiff())
+                    if vehSkillTreeActiveBonusParams is None:
+                        vehSkillTreeActiveBonusParams = bonusCreationParams
+                    continue
                 itemModel = VehicleParamsItem()
-                itemModel.setIsEnabled(True)
-                itemModel.setValue(valueStr)
-                itemModel.setTitle(bonusName)
-                if isSituational:
-                    itemModel.setAsteriskIcon(R.images.gui.maps.icons.tooltip.asterisk_optional())
-                levelIcon = self.__getLevelIcon(bnsId, bnsType, vehPostProgressionBonusLevels)
-                itemModel.setIcon(param_formatter.getBonusIconRes(formattedBnsID, bnsType) if levelIcon is None else levelIcon)
+                self._fillActiveVehicleParamItem(itemModel, bonusCreationParams)
                 appliedOptDeviceBonuses.append(bnsId)
                 result[tooltipSection].append(itemModel)
 
+        if isVehSkillTree and vehSkillTreeActiveBonusParams is not None and vehSkillTreeActiveBonusValues:
+            tooltipSection, _ = self._getTooltipGroupingForBonus(vehSkillTreeActiveBonusParams.bnsType, vehSkillTreeActiveBonusParams.bnsId)
+            valueStacked = vehSkillTreeActiveBonusValues[0]
+            for value in vehSkillTreeActiveBonusValues[1:]:
+                valueStacked = addParameterValuesOfTheSameType(valueStacked, value)
+
+            itemModel = VehicleParamsItem()
+            self._fillActiveVehicleParamItem(itemModel, vehSkillTreeActiveBonusParams, valueStacked)
+            result[tooltipSection].append(itemModel)
         for bnsId, bnsType in sorted(self._extendedData.possibleBonuses, cmp=_bonusCmp):
             if bnsType == constants.BonusTypes.PERK and not self._hasPerksBonuses:
                 continue
@@ -343,6 +356,10 @@ class VehicleAdvancedParamsTooltipView(BaseVehicleAdvancedParamsTooltipView):
                         continue
                     elif _isUpgradedInstanceOfInstalled(appliedOptDeviceBonuses, device) or _isDowngradedInstanceOfInstalled(appliedOptDeviceBonuses, device):
                         continue
+            if bnsType == constants.BonusTypes.BASE_MODIFICATION and isVehSkillTree:
+                if vehSkillTreeInactiveBonusShown or vehSkillTreeActiveBonusParams is not None:
+                    continue
+                vehSkillTreeInactiveBonusShown = True
             tooltipSection, archetype = self._getTooltipGroupingForBonus(bnsType, bnsId)
             if archetype is not None and archetype in installedArchetypes:
                 continue
@@ -356,8 +373,8 @@ class VehicleAdvancedParamsTooltipView(BaseVehicleAdvancedParamsTooltipView):
                 itemModel.setAsteriskIcon(R.images.gui.maps.icons.tooltip.asterisk_red())
             itemModel.setIsEnabled(False)
             bnsArchetype = None if isInactive else archetype
-            itemModel.setTitle(_getBonusName(bnsType, formattedBnsID, enabled=isEnabled, archetype=bnsArchetype))
-            levelIcon = self.__getLevelIcon(bnsId, bnsType, vehPostProgressionBonusLevels)
+            itemModel.setTitle(_getBonusName(bnsType, formattedBnsID, enabled=isEnabled, archetype=bnsArchetype, isVehSkillTree=isVehSkillTree))
+            levelIcon = self.__getBonusIcon(bnsId, bnsType, vehPostProgressionBonusLevels, isVehSkillTree=isVehSkillTree)
             itemModel.setIcon(levelIcon if levelIcon else param_formatter.getBonusIconRes(formattedBnsID, bnsType, bnsArchetype))
             result[tooltipSection].append(itemModel)
             if archetype is not None:
@@ -400,6 +417,21 @@ class VehicleAdvancedParamsTooltipView(BaseVehicleAdvancedParamsTooltipView):
 
         return
 
+    def _fillActiveVehicleParamItem(self, itemModel, bonusCreationParams, value=None):
+        bnsType, bnsId, pInfo, scheme, isSituational, vehPostProgressionBonusLevels = bonusCreationParams
+        isVehSkillTree = self.vehicle.postProgression.isVehSkillTree()
+        formattedBnsID = _getBonusID(bnsType, bnsId)
+        bonusName = _getBonusName(bnsType, formattedBnsID, isVehSkillTree=isVehSkillTree)
+        valueStr = param_formatter.formatParameterDelta(pInfo, scheme, diffReady=value)
+        itemModel.setIsEnabled(True)
+        itemModel.setValue(valueStr)
+        itemModel.setTitle(bonusName)
+        if isSituational:
+            itemModel.setAsteriskIcon(R.images.gui.maps.icons.tooltip.asterisk_optional())
+        levelIcon = self.__getBonusIcon(bnsId, bnsType, vehPostProgressionBonusLevels, isVehSkillTree=isVehSkillTree)
+        itemModel.setIcon(param_formatter.getBonusIconRes(formattedBnsID, bnsType) if levelIcon is None else levelIcon)
+        return
+
     def _getTooltipGroupingForBonus(self, bonusType, bonusName):
         if bonusType == constants.BonusTypes.EXTRA:
             return (constants.TTC_TOOLTIP_SECTIONS.EQUIPMENT, None)
@@ -428,12 +460,15 @@ class VehicleAdvancedParamsTooltipView(BaseVehicleAdvancedParamsTooltipView):
         return backport.text(R.strings.tooltips.tank_params.desc.autoReloadTime.boost.description())
 
     @staticmethod
-    def __getLevelIcon(bnsID, bnsType, vehPostProgressionBonusLevels):
+    def __getBonusIcon(bnsID, bnsType, vehPostProgressionBonusLevels, isVehSkillTree=False):
         if bnsType == constants.BonusTypes.BASE_MODIFICATION:
+            if isVehSkillTree:
+                return R.images.gui.maps.icons.vehPostProgression.tooltips.veh_skill_tree_bonus()
             level = vehPostProgressionBonusLevels.get(bnsID, None)
             numberFormat = 'arabic_number_{}' if isRomanNumberForbidden() else 'roman_number_{}'
+            stepLevelPath = numberFormat.format(level)
             if level is not None:
-                return R.images.gui.maps.icons.vehPostProgression.stepLevels.c_24x24.dyn(numberFormat.format(level))()
+                return R.images.gui.maps.icons.vehPostProgression.stepLevels.c_24x24.dyn(stepLevelPath)()
         return
 
 

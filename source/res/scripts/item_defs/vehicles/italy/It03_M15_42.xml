@@ -50,10 +50,11 @@
       <armor_6>	14	</armor_6>
       <armor_7>	14	</armor_7>
       <armor_8>	0	</armor_8>
+      <armor_9>	14	</armor_9>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	10925	</weight>
-    <maxHealth>	372	</maxHealth>
+    <maxHealth>	376	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	100	</maxHealth>
       <maxRegenHealth>	70	</maxRegenHealth>
@@ -1012,7 +1013,6 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	1540	</weight>
-      <maxLoad>	15500	</maxLoad>
       <terrainResistance>	1.0 1.35 1.95	</terrainResistance>
       <brakeForce>	15500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -2005,7 +2005,6 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	1540	</weight>
-      <maxLoad>	17000	</maxLoad>
       <terrainResistance>	1.0 1.35 1.95	</terrainResistance>
       <brakeForce>	15500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -3006,7 +3005,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1450	</weight>
-      <maxHealth>	68	</maxHealth>
+      <maxHealth>	69	</maxHealth>
       <rotationSpeed>	32	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -3034,12 +3033,12 @@
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
-          <reloadTime>	2.4	</reloadTime>
-          <aimingTime>	2.0	</aimingTime>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <reloadTime>	3	</reloadTime>
+          <aimingTime>	1.9	</aimingTime>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
-            <afterShot>	4	</afterShot>
+            <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <models>
@@ -3095,9 +3094,9 @@
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
-          <reloadTime>	2.3	</reloadTime>
+          <reloadTime>	2.9	</reloadTime>
           <aimingTime>	1.9	</aimingTime>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	3.5	</afterShot>
@@ -3658,7 +3657,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1500	</weight>
-      <maxHealth>	93	</maxHealth>
+      <maxHealth>	94	</maxHealth>
       <rotationSpeed>	34	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -3682,9 +3681,9 @@
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
-          <reloadTime>	2.2	</reloadTime>
+          <reloadTime>	2.9	</reloadTime>
           <aimingTime>	1.9	</aimingTime>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	3.5	</afterShot>
@@ -3739,7 +3738,7 @@
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
-          <reloadTime>	2.2	</reloadTime>
+          <reloadTime>	2.8	</reloadTime>
           <aimingTime>	1.8	</aimingTime>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <shotDispersionFactors>
@@ -4370,11 +4369,6 @@
     <Medium>	shared	</Medium>
   </fuelTanks>
   <radios>
-    <R_F_1_C_A>	shared	  <unlocks>
-        <radio>	R_F_2_C_A	  <cost>	1400	</cost>
-        </radio>
-      </unlocks>
-    </R_F_1_C_A>
     <R_F_2_C_A>	shared	</R_F_2_C_A>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
@@ -4382,7 +4376,7 @@
     <detailed>
       <engines>
         <SPA_15TB>
-          <smplEnginePower>	190	</smplEnginePower>
+          <smplEnginePower>	220	</smplEnginePower>
           <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
         </SPA_15TB>
         <SPA_19TB_mod_43>

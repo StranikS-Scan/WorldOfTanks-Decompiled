@@ -166,14 +166,15 @@ class _VehicleCumulativeFormatter(_CumulativableFormatter, MissionsVehicleListFo
             groupByKey = DEFAULT_GROUP_BY_KEY
             progressType = MISSIONS_ALIASES.CUMULATIVE
             if groupByKey in progress:
-                current, total, _, isGroupCompleted = progress[groupByKey]
+                current, total, earned, isGroupCompleted = progress[groupByKey]
                 if event.isCompleted() or isGroupCompleted:
                     current = total = condition.getTotalValue()
             else:
                 current = ZERO_COUNT
+                earned = ZERO_COUNT
                 total = condition.getTotalValue()
             title = self._getConditionTitle(condition, current, total)
-            result.append(self._formatData(title, progressType, condition, current, total))
+            result.append(self._formatData(title, progressType, condition, current, total, earned=earned))
         return result
 
     def _groupedByFormat(self, condition, event, progressData):

@@ -44,6 +44,10 @@ class ARENAS(object):
     TYPE_RTS_DESCRIPTION_TANKMAN = '#arenas:type/rts/description/tankman'
     TYPE_RTS_BOOTCAMP_NAME = '#arenas:type/rts_bootcamp/name'
     TYPE_RTS_BOOTCAMP_DESCRIPTION_COMMANDER = '#arenas:type/rts_bootcamp/description/commander'
+    TYPE_COMP7_NAME = '#arenas:type/comp7/name'
+    TYPE_COMP7_DESCRIPTION = '#arenas:type/comp7/description'
+    TYPE_COMP7_SHORT_DESCRIPTION = '#arenas:type/comp7/short_description'
+    INVALID_MAP_NAME = '#arenas:invalid_map/name'
     C_01_KARELIA_NAME = '#arenas:01_karelia/name'
     C_01_KARELIA_DESCRIPTION = '#arenas:01_karelia/description'
     C_02_MALINOVKA_NAME = '#arenas:02_malinovka/name'
@@ -109,8 +113,6 @@ class ARENAS(object):
     C_115_SWEDEN_DESCRIPTION = '#arenas:115_sweden/description'
     C_112_EIFFEL_TOWER_CTF_NAME = '#arenas:112_eiffel_tower_ctf/name'
     C_112_EIFFEL_TOWER_CTF_DESCRIPTION = '#arenas:112_eiffel_tower_ctf/description'
-    C_212_EPIC_RANDOM_VALLEY_NAME = '#arenas:212_epic_random_valley/name'
-    C_212_EPIC_RANDOM_VALLEY_DESCRIPTION = '#arenas:212_epic_random_valley/description'
     C_114_CZECH_DESCRIPTION = '#arenas:114_czech/description'
     C_115_SWEDEN_NAME = '#arenas:115_sweden/name'
     C_208_BF_EPIC_NORMANDY_NAME = '#arenas:208_bf_epic_normandy/name'
@@ -123,19 +125,13 @@ class ARENAS(object):
     C_03_CAMPANIA_BIG_DESCRIPTION = '#arenas:03_campania_big/description'
     C_217_ER_ALASKA_NAME = '#arenas:217_er_alaska/name'
     C_217_ER_ALASKA_DESCRIPTION = '#arenas:217_er_alaska/description'
-    C_90_MINSK_NAME = '#arenas:90_minsk/name'
-    C_90_MINSK_DESCRIPTION = '#arenas:90_minsk/description'
     C_114_CZECH_NAME = '#arenas:114_czech/name'
     C_99_POLAND_NAME = '#arenas:99_poland/name'
     C_99_POLAND_DESCRIPTION = '#arenas:99_poland/description'
-    C_222_ER_CLIME_NAME = '#arenas:222_er_clime/name'
-    C_222_ER_CLIME_DESCRIPTION = '#arenas:222_er_clime/description'
     C_250_BR_BATTLE_CITY2_1_NAME = '#arenas:250_br_battle_city2-1/name'
     C_250_BR_BATTLE_CITY2_1_DESCRIPTION = '#arenas:250_br_battle_city2-1/description'
     C_95_LOST_CITY_CTF_NAME = '#arenas:95_lost_city_ctf/name'
     C_95_LOST_CITY_CTF_DESCRIPTION = '#arenas:95_lost_city_ctf/description'
-    C_83_KHARKIV_NAME = '#arenas:83_kharkiv/name'
-    C_83_KHARKIV_DESCRIPTION = '#arenas:83_kharkiv/description'
     C_209_WG_EPIC_SUBURBIA_NAME = '#arenas:209_wg_epic_suburbia/name'
     C_209_WG_EPIC_SUBURBIA_DESCRIPTION = '#arenas:209_wg_epic_suburbia/description'
     C_105_GERMANY_SM24_NAME = '#arenas:105_germany_sm24/name'
@@ -170,6 +166,10 @@ class ARENAS(object):
     C_06_ENSK_BIG_DESCRIPTION = '#arenas:06_ensk_big/description'
     C_212_EPIC_RANDOM_VALLEY_SM25_NAME = '#arenas:212_epic_random_valley_sm25/name'
     C_212_EPIC_RANDOM_VALLEY_SM25_DESCRIPTION = '#arenas:212_epic_random_valley_sm25/description'
+    C_120_GRAF_ZEPPELIN_SCC_NAME = '#arenas:120_graf_zeppelin_scc/name'
+    C_120_GRAF_ZEPPELIN_SCC_DESCRIPTION = '#arenas:120_graf_zeppelin_scc/description'
+    C_120_GRAF_ZEPPELIN_NAME = '#arenas:120_graf_zeppelin/name'
+    C_120_GRAF_ZEPPELIN_DESCRIPTION = '#arenas:120_graf_zeppelin/description'
     ALL_ENUM = (TYPE_CTF_NAME,
      TYPE_CTF_DESCRIPTION,
      TYPE_DOMINATION_NAME,
@@ -211,6 +211,10 @@ class ARENAS(object):
      TYPE_RTS_DESCRIPTION_TANKMAN,
      TYPE_RTS_BOOTCAMP_NAME,
      TYPE_RTS_BOOTCAMP_DESCRIPTION_COMMANDER,
+     TYPE_COMP7_NAME,
+     TYPE_COMP7_DESCRIPTION,
+     TYPE_COMP7_SHORT_DESCRIPTION,
+     INVALID_MAP_NAME,
      C_01_KARELIA_NAME,
      C_01_KARELIA_DESCRIPTION,
      C_02_MALINOVKA_NAME,
@@ -276,8 +280,6 @@ class ARENAS(object):
      C_115_SWEDEN_DESCRIPTION,
      C_112_EIFFEL_TOWER_CTF_NAME,
      C_112_EIFFEL_TOWER_CTF_DESCRIPTION,
-     C_212_EPIC_RANDOM_VALLEY_NAME,
-     C_212_EPIC_RANDOM_VALLEY_DESCRIPTION,
      C_114_CZECH_DESCRIPTION,
      C_115_SWEDEN_NAME,
      C_208_BF_EPIC_NORMANDY_NAME,
@@ -290,19 +292,13 @@ class ARENAS(object):
      C_03_CAMPANIA_BIG_DESCRIPTION,
      C_217_ER_ALASKA_NAME,
      C_217_ER_ALASKA_DESCRIPTION,
-     C_90_MINSK_NAME,
-     C_90_MINSK_DESCRIPTION,
      C_114_CZECH_NAME,
      C_99_POLAND_NAME,
      C_99_POLAND_DESCRIPTION,
-     C_222_ER_CLIME_NAME,
-     C_222_ER_CLIME_DESCRIPTION,
      C_250_BR_BATTLE_CITY2_1_NAME,
      C_250_BR_BATTLE_CITY2_1_DESCRIPTION,
      C_95_LOST_CITY_CTF_NAME,
      C_95_LOST_CITY_CTF_DESCRIPTION,
-     C_83_KHARKIV_NAME,
-     C_83_KHARKIV_DESCRIPTION,
      C_209_WG_EPIC_SUBURBIA_NAME,
      C_209_WG_EPIC_SUBURBIA_DESCRIPTION,
      C_105_GERMANY_SM24_NAME,
@@ -336,7 +332,11 @@ class ARENAS(object):
      C_06_ENSK_BIG_NAME,
      C_06_ENSK_BIG_DESCRIPTION,
      C_212_EPIC_RANDOM_VALLEY_SM25_NAME,
-     C_212_EPIC_RANDOM_VALLEY_SM25_DESCRIPTION)
+     C_212_EPIC_RANDOM_VALLEY_SM25_DESCRIPTION,
+     C_120_GRAF_ZEPPELIN_SCC_NAME,
+     C_120_GRAF_ZEPPELIN_SCC_DESCRIPTION,
+     C_120_GRAF_ZEPPELIN_NAME,
+     C_120_GRAF_ZEPPELIN_DESCRIPTION)
 
     @classmethod
     def all(cls, key0):

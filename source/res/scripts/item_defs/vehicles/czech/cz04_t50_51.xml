@@ -57,7 +57,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	14838	</weight>
-    <maxHealth>	1440	</maxHealth>
+    <maxHealth>	1480	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	180	</maxRegenHealth>
@@ -930,7 +930,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	11500	</weight>
-      <maxLoad>	43000	</maxLoad>
       <terrainResistance>	0.8 1.1 1.8	</terrainResistance>
       <brakeForce>	40000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2040,7 +2039,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_7	</primaryArmor>
       <weight>	9000	</weight>
-      <maxHealth>	360	</maxHealth>
+      <maxHealth>	370	</maxHealth>
       <rotationSpeed>	36	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
@@ -2054,7 +2053,7 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_100mm_AK1>	shared	  <maxAmmo>	48	</maxAmmo>
+        <_100mm_AK1_50_51>	shared	  <maxAmmo>	48	</maxAmmo>
           <armor>
             <armor_1>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -2193,7 +2192,7 @@
             <density>	100.745 102.761	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_100mm_AK1>
+        </_100mm_AK1_50_51>
       </guns>
       <models>
         <undamaged>	vehicles/czech/Cz04_T50_51/normal/lod0/Turret_01.model	</undamaged>
@@ -2768,7 +2767,7 @@
     <detailed>
       <engines>
         <Praga_AXK>
-          <smplEnginePower>	1057.281	</smplEnginePower>
+          <smplEnginePower>	1120	</smplEnginePower>
           <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
         </Praga_AXK>
       </engines>

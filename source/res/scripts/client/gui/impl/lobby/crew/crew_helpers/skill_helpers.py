@@ -12,8 +12,12 @@ from items import tankmen
 from items.components import perks_constants
 from items.components.component_constants import EMPTY_STRING
 from items.components.skills_constants import ROLES_BY_SKILLS
-from items.tankmen import COMMON_SKILLS, MAX_SKILLS_EFFICIENCY, MAX_SKILLS_EFFICIENCY_XP, MAX_SKILL_LEVEL, generateCompactDescr
+from items.tankmen import COMMON_SKILLS, MAX_SKILLS_EFFICIENCY, MAX_SKILLS_EFFICIENCY_XP, MAX_SKILL_LEVEL, generateCompactDescr, SKILLS_BY_ROLES
 from skill_formatters import SkillLvlFormatter
+
+def isTankmanSkillIrrelevant(tankman, skill):
+    return not any([ skill.name in SKILLS_BY_ROLES.get(role) for role in tankman.roles() ])
+
 
 def getSkillsLevelsForXp(tankman, possibleXp=0):
     skillsCount, lastSkillLvl = tankman.descriptor.getTotalSkillsProgress(withFree=False, extraXP=possibleXp)

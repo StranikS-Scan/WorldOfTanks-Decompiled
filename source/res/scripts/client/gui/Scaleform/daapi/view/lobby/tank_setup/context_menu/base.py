@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/tank_setup/context_menu/base.py
+import typing
 from gui.Scaleform.daapi.view.lobby.shared.cm_handlers import ContextMenu, CMLabel
 from gui.Scaleform.framework.managers.context_menu import CM_BUY_COLOR
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.base_setup_model import BaseSetupModel
@@ -7,6 +8,8 @@ from gui.impl.lobby.tank_setup.tank_setup_helper import NONE_ID
 from helpers import dependency
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
+if typing.TYPE_CHECKING:
+    from gui.impl.lobby.tank_setup.interactors.base import BaseInteractor
 FIRST_SLOT = 0
 SECOND_SLOT = 1
 THIRD_SLOT = 2
@@ -23,6 +26,21 @@ class TankSetupCMLabel(object):
     TAKE_OFF = 'takeOff'
     UNLOAD = 'unload'
     PUT_ON_LIST = (PUT_ON_FIRST, PUT_ON_SECOND, PUT_ON_THIRD)
+
+
+class ITankSetupCMHandler(object):
+
+    def getSelectedSetup(self):
+        raise NotImplementedError
+
+    def getVehicleItem(self):
+        raise NotImplementedError
+
+    def setLastSlotAction(self, *args, **kwargs):
+        raise NotImplementedError
+
+    def sendSlotAction(self, args):
+        raise NotImplementedError
 
 
 class BaseTankSetupContextMenu(ContextMenu):

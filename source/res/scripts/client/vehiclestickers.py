@@ -876,7 +876,7 @@ class VehicleStickers(object):
                 if not gSlot.compatibleModels:
                     compatibleGunSlots.append(gSlot)
 
-        if vehicleDesc.turret.multiGun and len(vehicleDesc.turret.multiGun) == 2:
+        if vehicleDesc.gun.multiGun and len(vehicleDesc.gun.multiGun) == 2:
             slotsCount = len(compatibleGunSlots)
             if slotsCount >= 2:
                 midIndex = slotsCount / 2
@@ -946,7 +946,7 @@ class VehicleStickers(object):
         networkID = DamageFromShotDecoder.getNetworkIDFromEncodedHitPoint(code)
         childPartGO = cgf_network.getGameObjectByNetworkID(collisionComponent.spaceID, networkID)
         if not childPartGO.isValid():
-            _logger.warning('[DamageSticker] Cannot find game object for network ID %s', networkID)
+            _logger.info('[DamageSticker] Cannot find game object for network ID %s', networkID)
             return None
         else:
             childStickerGO = CGF.GameObject(childPartGO.spaceID)

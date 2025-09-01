@@ -10,10 +10,6 @@ class StoryModeFadingCover(DefaultFadingCover):
     def __init__(self):
         super(StoryModeFadingCover, self).__init__(fadeInDuration=STORY_MODE_FADE_IN_DURATION, fadeOutDuration=STORY_MODE_FADE_OUT_DURATION)
 
-    @property
-    def isModeSelectorAutoCloseDisabled(self):
-        return True
-
 
 class StoryModeFadingController(IStoryModeFadingController):
 

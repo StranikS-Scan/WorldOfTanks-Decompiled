@@ -593,7 +593,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	8000	</weight>
-      <maxLoad>	37000	</maxLoad>
       <terrainResistance>	1 1.1 1.9	</terrainResistance>
       <brakeForce>	34000	</brakeForce>
       <rotationIsAroundCenter>	True	</rotationIsAroundCenter>
@@ -1458,7 +1457,7 @@
   <turrets0>
     <Turret_1_A161_ARMT>
       <userString>	#usa_vehicles:Turret_1_A161_ARMT	</userString>
-      <tags></tags>
+      <tags>	oscillating	</tags>
       <level>	5	</level>
       <price>	8000	</price>
       <notInShop>	true	</notInShop>

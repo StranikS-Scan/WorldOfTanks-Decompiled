@@ -60,7 +60,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	10623	</weight>
-    <maxHealth>	1240	</maxHealth>
+    <maxHealth>	1360	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
@@ -937,14 +937,13 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	6500	</weight>
-      <maxLoad>	30500	</maxLoad>
-      <terrainResistance>	1.1 1.2 2.4	</terrainResistance>
+      <terrainResistance>	1 1.1 2.2	</terrainResistance>
       <brakeForce>	30000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	44	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.22	</vehicleMovement>
-        <vehicleRotation>	0.11	</vehicleRotation>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.08	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	230	</maxHealth>
@@ -1764,14 +1763,13 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	6500	</weight>
-      <maxLoad>	33000	</maxLoad>
       <terrainResistance>	1 1.1 2.2	</terrainResistance>
       <brakeForce>	30000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	46	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.2	</vehicleMovement>
-        <vehicleRotation>	0.1	</vehicleRotation>
+        <vehicleMovement>	0.16	</vehicleMovement>
+        <vehicleRotation>	0.07	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	240	</maxHealth>
@@ -2608,7 +2606,7 @@
       </armor>
       <primaryArmor>	armor_7 armor_3 armor_4	</primaryArmor>
       <weight>	9500	</weight>
-      <maxHealth>	310	</maxHealth>
+      <maxHealth>	260	</maxHealth>
       <rotationSpeed>	36	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -2622,7 +2620,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_105mm_strvkan_L_45>	shared	  <maxAmmo>	40	</maxAmmo>
+        <_105mm_strvkan_L_45_16>	shared	  <maxAmmo>	40	</maxAmmo>
           <unlocks>
             <gun>	_105mm_strvkan_L_51	  <cost>	59000	</cost>
             </gun>
@@ -2642,11 +2640,11 @@
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
-          <reloadTime>	11.6	</reloadTime>
-          <aimingTime>	2.4	</aimingTime>
+          <reloadTime>	10	</reloadTime>
+          <aimingTime>	2.1	</aimingTime>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2866,7 +2864,7 @@
             <density>	92.8012 94.6055	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_105mm_strvkan_L_45>
+        </_105mm_strvkan_L_45_16>
         <_105mm_strvkan_L_51>	shared	  <maxAmmo>	40	</maxAmmo>
           <unlocks>
             <turret>	Turret_2_S27_UDES_16	  <cost>	25800	</cost>
@@ -2888,10 +2886,10 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <reloadTime>	10.6	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.2	</aimingTime>
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -3647,7 +3645,7 @@
       </armor>
       <primaryArmor>	armor_5 armor_3 armor_4	</primaryArmor>
       <weight>	7500	</weight>
-      <maxHealth>	410	</maxHealth>
+      <maxHealth>	340	</maxHealth>
       <rotationSpeed>	37	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -3662,7 +3660,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.045	</invisibilityFactor>
       <guns>
-        <_105mm_strvkan_L_45>	shared	  <maxAmmo>	40	</maxAmmo>
+        <_105mm_strvkan_L_45_16>	shared	  <maxAmmo>	40	</maxAmmo>
           <armor>
             <armor_1>	250	</armor_1>
             <armor_2>	190	</armor_2>
@@ -3678,11 +3676,11 @@
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
-          <reloadTime>	11.1	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
+          <reloadTime>	9.8	</reloadTime>
+          <aimingTime>	2.1	</aimingTime>
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.10	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -3902,7 +3900,7 @@
             <density>	92.8012 94.6055	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_105mm_strvkan_L_45>
+        </_105mm_strvkan_L_45_16>
         <_105mm_strvkan_L_51>	shared	  <maxAmmo>	40	</maxAmmo>
           <armor>
             <armor_1>	250	</armor_1>
@@ -4697,16 +4695,6 @@
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <Ra_146>	shared	  <unlocks>
-        <radio>	Ra_400	  <cost>	7250	</cost>
-        </radio>
-      </unlocks>
-    </Ra_146>
-    <Ra_400>	shared	  <unlocks>
-        <radio>	Ra_421	  <cost>	9400	</cost>
-        </radio>
-      </unlocks>
-    </Ra_400>
     <Ra_421>	shared	</Ra_421>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
@@ -4727,13 +4715,13 @@
           <axleCount>	5	</axleCount>
           <grounds>
             <soft>
-              <rollingFriction>	0.1932	</rollingFriction>
+              <rollingFriction>	0.1771	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.0966	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
+              <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_S27_UDES_16>

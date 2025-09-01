@@ -5,7 +5,7 @@ from helpers import dependency
 from comp7_common_const import BattleStatuses
 from frameworks.wulf.view.array import fillViewModelsArray
 from skeletons.gui.game_control import IComp7Controller
-from comp7.gui.impl.gen.view_models.views.lobby.meta_view.qualification_battle import BattleState, QualificationBattle
+from comp7.gui.impl.gen.view_models.views.lobby.qualification_battle import BattleState, QualificationBattle
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Array
     from comp7.gui.impl.gen.view_models.views.lobby.qualification_model import QualificationModel

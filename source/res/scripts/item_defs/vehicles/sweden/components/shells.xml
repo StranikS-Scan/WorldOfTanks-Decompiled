@@ -37,6 +37,22 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_20mm_slpprj_m_Madsen>
+  <_20mm_slpprj_m_Madsen_21>
+    <id>	2065	</id>
+    <userString>	#sweden_vehicles:_20mm_slpprj_m_Madsen_21	</userString>
+    <icon>	ap	</icon>
+    <price>	2	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	20	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	autoArmorPiercing	</effects>
+    <damage>
+      <armor>	12	</armor>
+      <devices>	27	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_20mm_slpprj_m_Madsen_21>
   <_20mm_slpprj_m_40_M>
     <id>	4	</id>
     <userString>	#sweden_vehicles:_20mm_slpprj_m_40_M	</userString>
@@ -54,6 +70,23 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_20mm_slpprj_m_40_M>
+  <_20mm_slpprj_m_40_M_21>
+    <id>	2066	</id>
+    <userString>	#sweden_vehicles:_20mm_slpprj_m_40_M_21	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	400	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	20	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	autoArmorPiercing	</effects>
+    <damage>
+      <armor>	12	</armor>
+      <devices>	27	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_20mm_slpprj_m_40_M_21>
   <_20mm_slsgr_m_Madsen>
     <id>	5	</id>
     <userString>	#sweden_vehicles:_20mm_slsgr_m_Madsen	</userString>
@@ -78,6 +111,30 @@
       </damage>
     </armorSpalls>
   </_20mm_slsgr_m_Madsen>
+  <_20mm_slsgr_m_Madsen_21>
+    <id>	2067	</id>
+    <userString>	#sweden_vehicles:_20mm_slsgr_m_Madsen_21	</userString>
+    <icon>	he_modern	</icon>
+    <price>	2	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	20	</caliber>
+    <explosionRadius>	0.11	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	autoHighExplosive	</effects>
+    <damage>
+      <armor>	16	</armor>
+      <devices>	27	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0.11	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	10	</armor>
+        <devices>	15	</devices>
+      </damage>
+    </armorSpalls>
+  </_20mm_slsgr_m_Madsen_21>
   <_20mm_slpprj_m_40>
     <id>	6	</id>
     <userString>	#sweden_vehicles:_20mm_slpprj_m_40	</userString>
@@ -94,6 +151,22 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_20mm_slpprj_m_40>
+  <_20mm_slpprj_m_40_38>
+    <id>	2059	</id>
+    <userString>	#sweden_vehicles:_20mm_slpprj_m_40_38	</userString>
+    <icon>	ap	</icon>
+    <price>	3	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	20	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	autoArmorPiercing	</effects>
+    <damage>
+      <armor>	14	</armor>
+      <devices>	27	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_20mm_slpprj_m_40_38>
   <_20mm_slpprj_m_49>
     <id>	7	</id>
     <userString>	#sweden_vehicles:_20mm_slpprj_m_49	</userString>
@@ -111,6 +184,23 @@
     <normalizationAngle>	2	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_20mm_slpprj_m_49>
+  <_20mm_slpprj_m_49_38>
+    <id>	2060	</id>
+    <userString>	#sweden_vehicles:_20mm_slpprj_m_49_38	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	20	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	autoAPCR	</effects>
+    <damage>
+      <armor>	14	</armor>
+      <devices>	27	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_20mm_slpprj_m_49_38>
   <_20mm_slsgr_m_42>
     <id>	8	</id>
     <userString>	#sweden_vehicles:_20mm_slsgr_m_42	</userString>
@@ -135,6 +225,30 @@
       </damage>
     </armorSpalls>
   </_20mm_slsgr_m_42>
+  <_20mm_slsgr_m_42_38>
+    <id>	2061	</id>
+    <userString>	#sweden_vehicles:_20mm_slsgr_m_42_38	</userString>
+    <icon>	he_modern	</icon>
+    <price>	3	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	20	</caliber>
+    <explosionRadius>	0.11	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	autoHighExplosive	</effects>
+    <damage>
+      <armor>	18	</armor>
+      <devices>	27	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0.11	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	10	</armor>
+        <devices>	15	</devices>
+      </damage>
+    </armorSpalls>
+  </_20mm_slsgr_m_42_38>
   <_37mm_pgr_m_Skoda>
     <id>	17	</id>
     <userString>	#sweden_vehicles:_37mm_pgr_m_Skoda	</userString>
@@ -208,6 +322,38 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_37mm_slpprj_m_38>
+  <_37mm_slpprj_m_38_38>
+    <id>	2062	</id>
+    <userString>	#sweden_vehicles:_37mm_slpprj_m_38_38	</userString>
+    <icon>	ap	</icon>
+    <price>	12	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	37	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallArmorPiercing	</effects>
+    <damage>
+      <armor>	40	</armor>
+      <devices>	50	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_37mm_slpprj_m_38_38>
+  <_37mm_slpprj_m_38_40>
+    <id>	2055	</id>
+    <userString>	#sweden_vehicles:_37mm_slpprj_m_38_40	</userString>
+    <icon>	ap	</icon>
+    <price>	12	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	37	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallArmorPiercing	</effects>
+    <damage>
+      <armor>	40	</armor>
+      <devices>	50	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_37mm_slpprj_m_38_40>
   <_37mm_uprj_fm_47>
     <id>	10	</id>
     <userString>	#sweden_vehicles:_37mm_uprj_fm_47	</userString>
@@ -225,6 +371,40 @@
     <normalizationAngle>	2	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_37mm_uprj_fm_47>
+  <_37mm_uprj_fm_47_38>
+    <id>	2063	</id>
+    <userString>	#sweden_vehicles:_37mm_uprj_fm_47_38	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	37	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallAPCR	</effects>
+    <damage>
+      <armor>	40	</armor>
+      <devices>	50	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_37mm_uprj_fm_47_38>
+  <_37mm_uprj_fm_47_40>
+    <id>	2056	</id>
+    <userString>	#sweden_vehicles:_37mm_uprj_fm_47_40	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	37	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallAPCR	</effects>
+    <damage>
+      <armor>	40	</armor>
+      <devices>	50	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_37mm_uprj_fm_47_40>
   <_37mm_slpprj_fm_47>
     <id>	15	</id>
     <userString>	#sweden_vehicles:_37mm_slpprj_fm_47	</userString>
@@ -282,6 +462,78 @@
       </damage>
     </armorSpalls>
   </_37mm_sgr_m_34>
+  <_37mm_sgr_m_34_38>
+    <id>	2064	</id>
+    <userString>	#sweden_vehicles:_37mm_sgr_m_34_38	</userString>
+    <icon>	he_modern	</icon>
+    <price>	10	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	37	</caliber>
+    <explosionRadius>	0.31	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	smallHighExplosive	</effects>
+    <damage>
+      <armor>	50	</armor>
+      <devices>	50	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0.31	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	25	</armor>
+        <devices>	25	</devices>
+      </damage>
+    </armorSpalls>
+  </_37mm_sgr_m_34_38>
+  <_37mm_sgr_m_34_49_40>
+    <id>	2058	</id>
+    <userString>	#sweden_vehicles:_37mm_sgr_m_34_49_40	</userString>
+    <icon>	he_modern	</icon>
+    <price>	10	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	37	</caliber>
+    <explosionRadius>	0.31	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	smallHighExplosive	</effects>
+    <damage>
+      <armor>	50	</armor>
+      <devices>	50	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0.31	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	25	</armor>
+        <devices>	25	</devices>
+      </damage>
+    </armorSpalls>
+  </_37mm_sgr_m_34_49_40>
+  <_37mm_sgr_m_34_40>
+    <id>	2057	</id>
+    <userString>	#sweden_vehicles:_37mm_sgr_m_34_40	</userString>
+    <icon>	he_modern	</icon>
+    <price>	10	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	37	</caliber>
+    <explosionRadius>	0.31	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	smallHighExplosive	</effects>
+    <damage>
+      <armor>	50	</armor>
+      <devices>	50	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0.31	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	25	</armor>
+        <devices>	25	</devices>
+      </damage>
+    </armorSpalls>
+  </_37mm_sgr_m_34_40>
   <_47mm_slpprj_m_38>
     <id>	20	</id>
     <userString>	#sweden_vehicles:_47mm_slpprj_m_38	</userString>
@@ -406,7 +658,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mediumArmorPiercing	</effects>
     <damage>
-      <armor>	110	</armor>
+      <armor>	130	</armor>
       <devices>	100	</devices>
     </damage>
     <normalizationAngle>	5	</normalizationAngle>
@@ -428,6 +680,38 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_75mm_slpprj_m_40_B>
+  <_75mm_slpprj_m_40_B_I>
+    <id>	2052	</id>
+    <userString>	#sweden_vehicles:_75mm_slpprj_m_40_B_I	</userString>
+    <icon>	ap	</icon>
+    <price>	50	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	110	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_75mm_slpprj_m_40_B_I>
+  <_75mm_slpprj_m_40_B_42>
+    <id>	2048	</id>
+    <userString>	#sweden_vehicles:_75mm_slpprj_m_40_B_42	</userString>
+    <icon>	ap	</icon>
+    <price>	50	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	120	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_75mm_slpprj_m_40_B_42>
   <_75mm_slpsgr_fm_45>
     <id>	27	</id>
     <userString>	#sweden_vehicles:_75mm_slpsgr_fm_45	</userString>
@@ -445,6 +729,57 @@
     <ricochetAngle>	85	</ricochetAngle>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_75mm_slpsgr_fm_45>
+  <_75mm_slpsgr_fm_45_I>
+    <id>	2053	</id>
+    <userString>	#sweden_vehicles:_75mm_slpsgr_fm_45_I	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	2400	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHollowCharge	</effects>
+    <damage>
+      <armor>	110	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_75mm_slpsgr_fm_45_I>
+  <_75mm_slpsgr_fm_45_42>
+    <id>	2049	</id>
+    <userString>	#sweden_vehicles:_75mm_slpsgr_fm_45_42	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	2400	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHollowCharge	</effects>
+    <damage>
+      <armor>	120	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_75mm_slpsgr_fm_45_42>
+  <_75mm_slpsgr_fm_45_Sav>
+    <id>	2009	</id>
+    <userString>	#sweden_vehicles:_75mm_slpsgr_fm_45_Sav	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	2400	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHollowCharge	</effects>
+    <damage>
+      <armor>	130	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_75mm_slpsgr_fm_45_Sav>
   <_75mm_sgr_m_22_38>
     <id>	66	</id>
     <userString>	#sweden_vehicles:_75mm_sgr_m_22_38	</userString>
@@ -457,14 +792,14 @@
     <isTracer>	true	</isTracer>
     <effects>	mediumHighExplosive	</effects>
     <damage>
-      <armor>	175	</armor>
+      <armor>	190	</armor>
       <devices>	100	</devices>
     </damage>
     <armorSpalls>
       <impactRadius>	1.06	</impactRadius>
       <coneAngle>	90	</coneAngle>
       <damage>
-        <armor>	90	</armor>
+        <armor>	95	</armor>
         <devices>	50	</devices>
       </damage>
     </armorSpalls>
@@ -493,6 +828,78 @@
       </damage>
     </armorSpalls>
   </_75mm_sgr_m_40>
+  <_75mm_sgr_m_40_I>
+    <id>	2054	</id>
+    <userString>	#sweden_vehicles:_75mm_sgr_m_40_I	</userString>
+    <icon>	he_modern	</icon>
+    <price>	75	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	75	</caliber>
+    <explosionRadius>	1.06	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	175	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.06	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	90	</armor>
+        <devices>	50	</devices>
+      </damage>
+    </armorSpalls>
+  </_75mm_sgr_m_40_I>
+  <_75mm_sgr_m_40_42>
+    <id>	2050	</id>
+    <userString>	#sweden_vehicles:_75mm_sgr_m_40_42	</userString>
+    <icon>	he_modern	</icon>
+    <price>	75	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	75	</caliber>
+    <explosionRadius>	1.06	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	175	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.06	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	90	</armor>
+        <devices>	50	</devices>
+      </damage>
+    </armorSpalls>
+  </_75mm_sgr_m_40_42>
+  <_75mm_sgr_m_40_Sav>
+    <id>	2012	</id>
+    <userString>	#sweden_vehicles:_75mm_sgr_m_40_Sav	</userString>
+    <icon>	he_modern	</icon>
+    <price>	75	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	75	</caliber>
+    <explosionRadius>	1.06	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	190	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.06	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	95	</armor>
+        <devices>	50	</devices>
+      </damage>
+    </armorSpalls>
+  </_75mm_sgr_m_40_Sav>
   <_75mm_slpprj_m_40_C>
     <id>	29	</id>
     <userString>	#sweden_vehicles:_75mm_slpprj_m_40_C	</userString>
@@ -509,6 +916,22 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_75mm_slpprj_m_40_C>
+  <_75mm_slpprj_m_40_C_Sav>
+    <id>	2010	</id>
+    <userString>	#sweden_vehicles:_75mm_slpprj_m_40_C_Sav	</userString>
+    <icon>	ap	</icon>
+    <price>	66	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	130	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_75mm_slpprj_m_40_C_Sav>
   <_75mm_slpprj_m_40_N>
     <id>	64	</id>
     <userString>	#sweden_vehicles:_75mm_slpprj_m_40_N	</userString>
@@ -526,6 +949,23 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_75mm_slpprj_m_40_N>
+  <_75mm_slpprj_m_40_N_Sav>
+    <id>	2011	</id>
+    <userString>	#sweden_vehicles:_75mm_slpprj_m_40_N_Sav	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	2800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	130	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_75mm_slpprj_m_40_N_Sav>
   <_75mm_slpprj_m_41>
     <id>	30	</id>
     <userString>	#sweden_vehicles:_75mm_slpprj_m_41	</userString>
@@ -537,11 +977,27 @@
     <effects>	mediumArmorPiercing	</effects>
     <damage>
       <armor>	150	</armor>
-      <devices>	105	</devices>
+      <devices>	100	</devices>
     </damage>
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_75mm_slpprj_m_41>
+  <_75mm_slpprj_m_36_41_74>
+    <id>	2042	</id>
+    <userString>	#sweden_vehicles:_75mm_slpprj_m_36_41_74	</userString>
+    <icon>	ap	</icon>
+    <price>	115	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	150	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_75mm_slpprj_m_36_41_74>
   <_75mm_slpgr_fm_43>
     <id>	31	</id>
     <userString>	#sweden_vehicles:_75mm_slpgr_fm_43	</userString>
@@ -554,11 +1010,28 @@
     <effects>	mediumArmorPiercing	</effects>
     <damage>
       <armor>	150	</armor>
-      <devices>	105	</devices>
+      <devices>	100	</devices>
     </damage>
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_75mm_slpgr_fm_43>
+  <_75mm_slpgr_m_36_43_74>
+    <id>	2043	</id>
+    <userString>	#sweden_vehicles:_75mm_slpgr_m_36_43_74	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	2800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	150	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_75mm_slpgr_m_36_43_74>
   <_75mm_slpgr_m_43>
     <id>	0	</id>
     <userString>	#sweden_vehicles:_75mm_slpgr_m_43	</userString>
@@ -575,6 +1048,38 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_75mm_slpgr_m_43>
+  <_75mm_slpgr_m_43_74>
+    <id>	2045	</id>
+    <userString>	#sweden_vehicles:_75mm_slpgr_m_43_74	</userString>
+    <icon>	ap	</icon>
+    <price>	145	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	150	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_75mm_slpgr_m_43_74>
+  <_75mm_slpprj_m_41_Leo>
+    <id>	2033	</id>
+    <userString>	#sweden_vehicles:_75mm_slpprj_m_41_Leo	</userString>
+    <icon>	ap	</icon>
+    <price>	145	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	150	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_75mm_slpprj_m_41_Leo>
   <_75mm_slpprj_m_49>
     <id>	1	</id>
     <userString>	#sweden_vehicles:_75mm_slpprj_m_49	</userString>
@@ -592,6 +1097,40 @@
     <normalizationAngle>	2	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_75mm_slpprj_m_49>
+  <_75mm_slpprj_m_49_74>
+    <id>	2046	</id>
+    <userString>	#sweden_vehicles:_75mm_slpprj_m_49_74	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	2800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR	</effects>
+    <damage>
+      <armor>	150	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_75mm_slpprj_m_49_74>
+  <_75mm_slpgr_m_43_Leo>
+    <id>	2034	</id>
+    <userString>	#sweden_vehicles:_75mm_slpgr_m_43_Leo	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	2800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR	</effects>
+    <damage>
+      <armor>	150	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_75mm_slpgr_m_43_Leo>
   <_75mm_sgr_m_38>
     <id>	2	</id>
     <userString>	#sweden_vehicles:_75mm_sgr_m_38	</userString>
@@ -616,6 +1155,102 @@
       </damage>
     </armorSpalls>
   </_75mm_sgr_m_38>
+  <_75mm_sgr_m_38_42>
+    <id>	2051	</id>
+    <userString>	#sweden_vehicles:_75mm_sgr_m_38_42	</userString>
+    <icon>	he_modern	</icon>
+    <price>	90	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	75	</caliber>
+    <explosionRadius>	1.06	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	185	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.06	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	95	</armor>
+        <devices>	50	</devices>
+      </damage>
+    </armorSpalls>
+  </_75mm_sgr_m_38_42>
+  <_75mm_sgr_m_38_74>
+    <id>	2047	</id>
+    <userString>	#sweden_vehicles:_75mm_sgr_m_38_74	</userString>
+    <icon>	he_modern	</icon>
+    <price>	90	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	75	</caliber>
+    <explosionRadius>	1.06	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	185	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.06	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	95	</armor>
+        <devices>	50	</devices>
+      </damage>
+    </armorSpalls>
+  </_75mm_sgr_m_38_74>
+  <_75mm_sgr_m_36_38_74>
+    <id>	2044	</id>
+    <userString>	#sweden_vehicles:_75mm_sgr_m_36_38_74	</userString>
+    <icon>	he_modern	</icon>
+    <price>	90	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	75	</caliber>
+    <explosionRadius>	1.06	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	185	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.06	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	95	</armor>
+        <devices>	50	</devices>
+      </damage>
+    </armorSpalls>
+  </_75mm_sgr_m_36_38_74>
+  <_75mm_sgr_m_38_Leo>
+    <id>	2035	</id>
+    <userString>	#sweden_vehicles:_75mm_sgr_m_38_Leo	</userString>
+    <icon>	he_modern	</icon>
+    <price>	90	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	75	</caliber>
+    <explosionRadius>	1.06	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	185	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.06	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	95	</armor>
+        <devices>	50	</devices>
+      </damage>
+    </armorSpalls>
+  </_75mm_sgr_m_38_Leo>
   <_84mm_slpprj_m_53>
     <id>	71	</id>
     <userString>	#sweden_vehicles:_84mm_slpprj_m_53	</userString>
@@ -706,6 +1341,57 @@
     <ricochetAngle>	85	</ricochetAngle>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_90mm_slpsgr_typ_I>
+  <_90mm_slpsgr_typ_I_L_53_65>
+    <id>	2017	</id>
+    <userString>	#sweden_vehicles:_90mm_slpsgr_typ_I_L_53_65	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4000	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_90mm_slpsgr_typ_I_L_53_65>
+  <_90mm_slpsgr_typ_I_L_43_65>
+    <id>	2014	</id>
+    <userString>	#sweden_vehicles:_90mm_slpsgr_typ_I_L_43_65	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4000	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_90mm_slpsgr_typ_I_L_43_65>
+  <_90mm_slpsgr_typ_I_14>
+    <id>	2007	</id>
+    <userString>	#sweden_vehicles:_90mm_slpsgr_typ_I_14	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4000	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	250	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_90mm_slpsgr_typ_I_14>
   <_90mm_slsgr_m_72>
     <id>	37	</id>
     <userString>	#sweden_vehicles:_90mm_slsgr_m_72	</userString>
@@ -730,6 +1416,78 @@
       </damage>
     </armorSpalls>
   </_90mm_slsgr_m_72>
+  <_90mm_slsgr_m_72_L_53_65>
+    <id>	2018	</id>
+    <userString>	#sweden_vehicles:_90mm_slsgr_m_72_L_53_65	</userString>
+    <icon>	he_modern	</icon>
+    <price>	195	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	90	</caliber>
+    <explosionRadius>	1.46	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.46	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	160	</armor>
+        <devices>	60	</devices>
+      </damage>
+    </armorSpalls>
+  </_90mm_slsgr_m_72_L_53_65>
+  <_90mm_slsgr_m_72_L_43_65>
+    <id>	2015	</id>
+    <userString>	#sweden_vehicles:_90mm_slsgr_m_72_L_43_65	</userString>
+    <icon>	he_modern	</icon>
+    <price>	195	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	90	</caliber>
+    <explosionRadius>	1.46	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.46	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	160	</armor>
+        <devices>	60	</devices>
+      </damage>
+    </armorSpalls>
+  </_90mm_slsgr_m_72_L_43_65>
+  <_90mm_slsgr_m_72_14>
+    <id>	2008	</id>
+    <userString>	#sweden_vehicles:_90mm_slsgr_m_72_14	</userString>
+    <icon>	he_modern	</icon>
+    <price>	195	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	90	</caliber>
+    <explosionRadius>	1.46	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	330	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.46	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	165	</armor>
+        <devices>	60	</devices>
+      </damage>
+    </armorSpalls>
+  </_90mm_slsgr_m_72_14>
   <_90mm_slpprj_typ_II>
     <id>	38	</id>
     <userString>	#sweden_vehicles:_90mm_slpprj_typ_II	</userString>
@@ -746,9 +1504,57 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_90mm_slpprj_typ_II>
+  <_90mm_slpprj_typ_II_L_53_65>
+    <id>	2016	</id>
+    <userString>	#sweden_vehicles:_90mm_slpprj_typ_II_L_53_65	</userString>
+    <icon>	ap	</icon>
+    <price>	320	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_90mm_slpprj_typ_II_L_53_65>
+  <_90mm_slpprj_typ_II_14>
+    <id>	2006	</id>
+    <userString>	#sweden_vehicles:_90mm_slpprj_typ_II_14	</userString>
+    <icon>	ap	</icon>
+    <price>	320	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	250	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_90mm_slpprj_typ_II_14>
   <_90mm_slpprj_m_F>
     <id>	67	</id>
     <userString>	#sweden_vehicles:_90mm_slpprj_m_F	</userString>
+    <icon>	ap	</icon>
+    <price>	390	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	280	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_90mm_slpprj_m_F>
+  <_90mm_slpprj_m_F_90>
+    <id>	2019	</id>
+    <userString>	#sweden_vehicles:_90mm_slpprj_m_F_90	</userString>
     <icon>	ap	</icon>
     <price>	390	</price>
     <kind>	ARMOR_PIERCING	</kind>
@@ -761,10 +1567,27 @@
     </damage>
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
-  </_90mm_slpprj_m_F>
+  </_90mm_slpprj_m_F_90>
   <_90mm_slpsgr_m_F>
     <id>	68	</id>
     <userString>	#sweden_vehicles:_90mm_slpsgr_m_F	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4400	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	280	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_90mm_slpsgr_m_F>
+  <_90mm_slpsgr_m_F_90>
+    <id>	2020	</id>
+    <userString>	#sweden_vehicles:_90mm_slpsgr_m_F_90	</userString>
     <icon>	hc_premium	</icon>
     <price>	4400	</price>
     <improved>	true	</improved>
@@ -778,10 +1601,34 @@
     </damage>
     <ricochetAngle>	85	</ricochetAngle>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
-  </_90mm_slpsgr_m_F>
+  </_90mm_slpsgr_m_F_90>
   <_90mm_sgr_m_F>
     <id>	69	</id>
     <userString>	#sweden_vehicles:_90mm_sgr_m_F	</userString>
+    <icon>	he_modern	</icon>
+    <price>	210	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	90	</caliber>
+    <explosionRadius>	1.46	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.46	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	180	</armor>
+        <devices>	60	</devices>
+      </damage>
+    </armorSpalls>
+  </_90mm_sgr_m_F>
+  <_90mm_sgr_m_F_90>
+    <id>	2021	</id>
+    <userString>	#sweden_vehicles:_90mm_sgr_m_F_90	</userString>
     <icon>	he_modern	</icon>
     <price>	210	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
@@ -802,7 +1649,7 @@
         <devices>	60	</devices>
       </damage>
     </armorSpalls>
-  </_90mm_sgr_m_F>
+  </_90mm_sgr_m_F_90>
   <_105mm_lt_sgr_m_34>
     <id>	42	</id>
     <userString>	#sweden_vehicles:_105mm_lt_sgr_m_34	</userString>
@@ -827,6 +1674,54 @@
       </damage>
     </armorSpalls>
   </_105mm_lt_sgr_m_34>
+  <_105mm_lt_sgr_m_34_Sav>
+    <id>	2013	</id>
+    <userString>	#sweden_vehicles:_105mm_lt_sgr_m_34_Sav	</userString>
+    <icon>	he_modern	</icon>
+    <price>	240	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	370	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	185	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_lt_sgr_m_34_Sav>
+  <_105mm_lt_sgr_m_34_103>
+    <id>	2068	</id>
+    <userString>	#sweden_vehicles:_105mm_lt_sgr_m_34_103	</userString>
+    <icon>	he_modern	</icon>
+    <price>	240	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	370	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	185	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_lt_sgr_m_34_103>
   <_105mm_tung_sgr_m_34>
     <id>	70	</id>
     <userString>	#sweden_vehicles:_105mm_tung_sgr_m_34	</userString>
@@ -894,7 +1789,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainArmorPiercing	</effects>
     <damage>
-      <armor>	320	</armor>
+      <armor>	300	</armor>
       <devices>	150	</devices>
     </damage>
     <normalizationAngle>	5	</normalizationAngle>
@@ -1056,6 +1951,22 @@
     <normalizationAngle>	2	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_105mm_slpprj_m_52>
+  <_105mm_slpprj_m_52_52E2>
+    <id>	2036	</id>
+    <userString>	#sweden_vehicles:_105mm_slpprj_m_52_52E2	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	690	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_slpprj_m_52_52E2>
   <_105mm_slpprj_m_52_B>
     <id>	55	</id>
     <userString>	#sweden_vehicles:_105mm_slpprj_m_52_B	</userString>
@@ -1073,6 +1984,23 @@
     <normalizationAngle>	2	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_105mm_slpprj_m_52_B>
+  <_105mm_slpprj_m_52_B_52E2>
+    <id>	2037	</id>
+    <userString>	#sweden_vehicles:_105mm_slpprj_m_52_B_52E2	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4400	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_slpprj_m_52_B_52E2>
   <_105mm_sgr_m_52>
     <id>	56	</id>
     <userString>	#sweden_vehicles:_105mm_sgr_m_52	</userString>
@@ -1097,6 +2025,30 @@
       </damage>
     </armorSpalls>
   </_105mm_sgr_m_52>
+  <_105mm_sgr_m_52_52E2>
+    <id>	2038	</id>
+    <userString>	#sweden_vehicles:_105mm_sgr_m_52_52E2	</userString>
+    <icon>	he_modern	</icon>
+    <price>	440	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	460	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	230	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_sgr_m_52_52E2>
   <_105mm_slpprj_m_61>
     <id>	12	</id>
     <userString>	#sweden_vehicles:_105mm_slpprj_m_61	</userString>
@@ -1113,6 +2065,86 @@
     <normalizationAngle>	2	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_105mm_slpprj_m_61>
+  <_105mm_slpprj_m_61_L62_103B>
+    <id>	2030	</id>
+    <userString>	#sweden_vehicles:_105mm_slpprj_m_61_L62_103B	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1160	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_slpprj_m_61_L62_103B>
+  <_105mm_slpprj_m_61_L_62_103_0>
+    <id>	2027	</id>
+    <userString>	#sweden_vehicles:_105mm_slpprj_m_61_L_62_103_0	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1160	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_slpprj_m_61_L_62_103_0>
+  <_105mm_slpprj_m_61_L_51_103_0>
+    <id>	2024	</id>
+    <userString>	#sweden_vehicles:_105mm_slpprj_m_61_L_51_103_0	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1160	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_slpprj_m_61_L_51_103_0>
+  <_105mm_slpprj_m_61_03>
+    <id>	2022	</id>
+    <userString>	#sweden_vehicles:_105mm_slpprj_m_61_03	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1160	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_slpprj_m_61_03>
+  <_105mm_slpprj_m_61_16>
+    <id>	2003	</id>
+    <userString>	#sweden_vehicles:_105mm_slpprj_m_61_16	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1160	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_slpprj_m_61_16>
   <_105mm_slpgr_m_612>
     <id>	83	</id>
     <userString>	#sweden_vehicles:_105mm_slpgr_m_612	</userString>
@@ -1204,6 +2236,74 @@
     <normalizationAngle>	2	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_105mm_slpprj_m_66>
+  <_105mm_slpprj_m_66_L62_103B>
+    <id>	2031	</id>
+    <userString>	#sweden_vehicles:_105mm_slpprj_m_66_L62_103B	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_slpprj_m_66_L62_103B>
+  <_105mm_slpprj_m_66_L_62_103_0>
+    <id>	2028	</id>
+    <userString>	#sweden_vehicles:_105mm_slpprj_m_66_L_62_103_0	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_slpprj_m_66_L_62_103_0>
+  <_105mm_slpprj_m_66_L_51_103_0>
+    <id>	2025	</id>
+    <userString>	#sweden_vehicles:_105mm_slpprj_m_66_L_51_103_0	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_slpprj_m_66_L_51_103_0>
+  <_105mm_slpprj_m_66_16>
+    <id>	2004	</id>
+    <userString>	#sweden_vehicles:_105mm_slpprj_m_66_16	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_slpprj_m_66_16>
   <_105mm_slsgr_m_61A>
     <id>	14	</id>
     <userString>	#sweden_vehicles:_105mm_slsgr_m_61A	</userString>
@@ -1228,6 +2328,126 @@
       </damage>
     </armorSpalls>
   </_105mm_slsgr_m_61A>
+  <_105mm_slsgr_m_61A_L62_103B>
+    <id>	2032	</id>
+    <userString>	#sweden_vehicles:_105mm_slsgr_m_61A_L62_103B	</userString>
+    <icon>	he_modern	</icon>
+    <price>	810	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	480	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	240	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_slsgr_m_61A_L62_103B>
+  <_105mm_slsgr_m_61A_L_62_103_0>
+    <id>	2029	</id>
+    <userString>	#sweden_vehicles:_105mm_slsgr_m_61A_L_62_103_0	</userString>
+    <icon>	he_modern	</icon>
+    <price>	810	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	480	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	240	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_slsgr_m_61A_L_62_103_0>
+  <_105mm_slsgr_m_61A_L_51_103_0>
+    <id>	2026	</id>
+    <userString>	#sweden_vehicles:_105mm_slsgr_m_61A_L_51_103_0	</userString>
+    <icon>	he_modern	</icon>
+    <price>	810	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	480	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	240	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_slsgr_m_61A_L_51_103_0>
+  <_105mm_slsgr_m_61A_03>
+    <id>	2023	</id>
+    <userString>	#sweden_vehicles:_105mm_slsgr_m_61A_03	</userString>
+    <icon>	he_modern	</icon>
+    <price>	810	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	480	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	240	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_slsgr_m_61A_03>
+  <_105mm_slsgr_m_61A_16>
+    <id>	2005	</id>
+    <userString>	#sweden_vehicles:_105mm_slsgr_m_61A_16	</userString>
+    <icon>	he_modern	</icon>
+    <price>	810	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	480	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	240	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_slsgr_m_61A_16>
   <_105mm_slpprj_m_61B>
     <id>	80	</id>
     <userString>	#sweden_vehicles:_105mm_slpprj_m_61B	</userString>
@@ -1244,6 +2464,22 @@
     <normalizationAngle>	2	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_105mm_slpprj_m_61B>
+  <_105mm_slpprj_m_61B_16>
+    <id>	2000	</id>
+    <userString>	#sweden_vehicles:_105mm_slpprj_m_61B_16	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	705	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_slpprj_m_61B_16>
   <_105mm_slpprj_m_66B>
     <id>	81	</id>
     <userString>	#sweden_vehicles:_105mm_slpprj_m_66B	</userString>
@@ -1261,6 +2497,23 @@
     <normalizationAngle>	2	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_105mm_slpprj_m_66B>
+  <_105mm_slpprj_m_66B_16>
+    <id>	2001	</id>
+    <userString>	#sweden_vehicles:_105mm_slpprj_m_66B_16	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4000	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_slpprj_m_66B_16>
   <_105mm_slsgr_m_61B>
     <id>	82	</id>
     <userString>	#sweden_vehicles:_105mm_slsgr_m_61B	</userString>
@@ -1285,6 +2538,30 @@
       </damage>
     </armorSpalls>
   </_105mm_slsgr_m_61B>
+  <_105mm_slsgr_m_61B_16>
+    <id>	2002	</id>
+    <userString>	#sweden_vehicles:_105mm_slsgr_m_61B_16	</userString>
+    <icon>	he_modern	</icon>
+    <price>	430	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	460	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	230	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_slsgr_m_61B_16>
   <_105mm_slpprj_m_61D>
     <id>	93	</id>
     <userString>	#sweden_vehicles:_105mm_slpprj_m_61D	</userString>
@@ -1456,6 +2733,63 @@
       </damage>
     </armorSpalls>
   </_105mm_sgr_L_53>
+  <_105mm_slpprj_m_73>
+    <id>	96	</id>
+    <userString>	#sweden_vehicles:_105mm_slpprj_m_73	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1300	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_slpprj_m_73>
+  <_105mm_slpprj_m_78>
+    <id>	97	</id>
+    <userString>	#sweden_vehicles:_105mm_slpprj_m_78	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	5200	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_slpprj_m_78>
+  <_105mm_slsgr_m_73A>
+    <id>	98	</id>
+    <userString>	#sweden_vehicles:_105mm_slsgr_m_73A	</userString>
+    <icon>	he_modern	</icon>
+    <price>	877	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	480	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	240	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_slsgr_m_73A>
   <_120mm_slpprj_m_51>
     <id>	58	</id>
     <userString>	#sweden_vehicles:_120mm_slpprj_m_51	</userString>
@@ -1472,6 +2806,22 @@
     <normalizationAngle>	2	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_120mm_slpprj_m_51>
+  <_120mm_slpprj_m_51_52E2>
+    <id>	2039	</id>
+    <userString>	#sweden_vehicles:_120mm_slpprj_m_51_52E2	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1015	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_120mm_slpprj_m_51_52E2>
   <_120mm_psgr_m_51>
     <id>	59	</id>
     <userString>	#sweden_vehicles:_120mm_psgr_m_51	</userString>
@@ -1489,6 +2839,23 @@
     <ricochetAngle>	85	</ricochetAngle>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_120mm_psgr_m_51>
+  <_120mm_psgr_m_51_52E2>
+    <id>	2040	</id>
+    <userString>	#sweden_vehicles:_120mm_psgr_m_51_52E2	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_120mm_psgr_m_51_52E2>
   <_120mm_sgr_m_51>
     <id>	60	</id>
     <userString>	#sweden_vehicles:_120mm_sgr_m_51	</userString>
@@ -1513,11 +2880,36 @@
       </damage>
     </armorSpalls>
   </_120mm_sgr_m_51>
+  <_120mm_sgr_m_51_52E2>
+    <id>	2041	</id>
+    <userString>	#sweden_vehicles:_120mm_sgr_m_51_52E2	</userString>
+    <icon>	he_modern	</icon>
+    <price>	870	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	120	</caliber>
+    <explosionRadius>	2.42	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	530	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.42	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	265	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
+  </_120mm_sgr_m_51_52E2>
   <_120mm_psgr_m_71>
     <id>	89	</id>
     <userString>	#sweden_vehicles:_120mm_psgr_m_71	</userString>
     <icon>	hc_premium	</icon>
     <price>	4800	</price>
+    <notInShop>	true	</notInShop>
     <improved>	true	</improved>
     <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	120	</caliber>

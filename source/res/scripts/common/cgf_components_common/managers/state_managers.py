@@ -3,8 +3,7 @@
 import CGF
 import logging
 from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery, autoregister
-from GenericComponents import HealthGradationComponent, EHealthGradation
-from cgf_components_common.state_components import StateSwitcherComponent
+from GenericComponents import HealthGradationComponent, EHealthGradation, StateSwitcherComponent
 from functools import partial
 from HealthComponent import HealthComponent
 _logger = logging.getLogger(__name__)
@@ -12,65 +11,32 @@ _logger = logging.getLogger(__name__)
 @autoregister(presentInAllWorlds=True, domain=CGF.DomainOption.DomainClient | CGF.DomainOption.DomainServer)
 class StateSwitcherManager(CGF.ComponentManager):
 
+    def __init__(self):
+        super(StateSwitcherManager, self).__init__()
+        self.__switcherCallbacks = {}
+
     @onAddedQuery(CGF.GameObject, HealthComponent, StateSwitcherComponent, HealthGradationComponent)
-    def onAdded(self, go, health, switcher, *_):
-        stateLink = CGF.ComponentLink(go, StateSwitcherComponent)
+    def onAdded(self, go, health, *_):
+        switcherLink = CGF.ComponentLink(go, StateSwitcherComponent)
         gradationLink = CGF.ComponentLink(go, HealthGradationComponent)
-        self.__validateSettings(switcher)
-        switcher.callback = partial(self.__onHealthChanged, stateLink, gradationLink)
-        health.onHealthChanged += switcher.callback
-        self.__onHealthChanged(stateLink, gradationLink, health.health, health.health, health.maxHealth)
+        callback = partial(self.__onHealthChanged, switcherLink, gradationLink)
+        self.__switcherCallbacks[go.id] = callback
+        health.onHealthChanged += callback
+        self.__onHealthChanged(switcherLink, gradationLink, health.health, health.health, health.maxHealth)
 
-    @onRemovedQuery(StateSwitcherComponent, HealthComponent)
-    def onRemoved(self, switcher, health, *_):
+    @onRemovedQuery(CGF.GameObject, StateSwitcherComponent, HealthComponent)
+    def onRemoved(self, go, switcher, health, *_):
+        callback = self.__switcherCallbacks.pop(go.id, None)
         entity = health.entity
-        if entity is not None and not entity.isDestroyed:
-            health.onHealthChanged -= switcher.callback
-        self.__deactivateAll(switcher)
+        if callback is not None and entity is not None and not entity.isDestroyed:
+            health.onHealthChanged -= callback
+        switcher.requestState(StateSwitcherComponent.NONE_STATE)
         return
 
-    def __activateState(self, go):
-        if go is not None and go.isValid() and not go.isActive():
-            go.activate()
-        return
-
-    def __deactivateState(self, go):
-        if go is not None and go.isValid() and go.isActive():
-            go.deactivate()
-        return
-
-    def __activateNormalState(self, switcher):
-        self.__activateState(switcher.normal)
-        self.__deactivateState(switcher.damaged)
-        self.__deactivateState(switcher.critical)
-
-    def __activateDamagedState(self, switcher):
-        self.__deactivateState(switcher.normal)
-        self.__activateState(switcher.damaged)
-        self.__deactivateState(switcher.critical)
-
-    def __activateCriticalState(self, switcher):
-        self.__deactivateState(switcher.normal)
-        self.__deactivateState(switcher.damaged)
-        self.__activateState(switcher.critical)
-
-    def __deactivateAll(self, switcher):
-        self.__deactivateState(switcher.normal)
-        self.__deactivateState(switcher.damaged)
-        self.__deactivateState(switcher.critical)
-
-    def __validateSettings(self, switcher):
-        if not switcher.normal.isValid():
-            _logger.warning('Incorrect switcher setup, missing Normal state prefab')
-        if not switcher.damaged.isValid():
-            _logger.warning('Incorrect switcher setup, missing Damaged state prefab')
-        if not switcher.critical.isValid():
-            _logger.warning('Incorrect switcher setup, missing Critical state prefab')
-
-    def __onHealthChanged(self, stateLink, gradationLink, old, health, maxHealth):
-        state = stateLink()
+    def __onHealthChanged(self, switcherLink, gradationLink, old, health, maxHealth):
+        switcher = switcherLink()
         gradation = gradationLink()
-        if state is None:
+        if switcher is None:
             _logger.error('Failed to get StateSwitcherComponent, state is incorrect')
             return
         elif gradationLink is None:
@@ -78,13 +44,13 @@ class StateSwitcherManager(CGF.ComponentManager):
             return
         zone = gradation.getHealthZone(health, maxHealth)
         if zone == EHealthGradation.GREEN_ZONE:
-            self.__activateNormalState(state)
+            switcher.requestState(StateSwitcherComponent.NORMAL_STATE)
             return
         elif zone == EHealthGradation.YELLOW_ZONE:
-            self.__activateDamagedState(state)
+            switcher.requestState(StateSwitcherComponent.DAMAGED_STATE)
             return
         elif zone == EHealthGradation.RED_ZONE:
-            self.__activateCriticalState(state)
+            switcher.requestState(StateSwitcherComponent.CRITICAL_STATE)
             return
         else:
             return

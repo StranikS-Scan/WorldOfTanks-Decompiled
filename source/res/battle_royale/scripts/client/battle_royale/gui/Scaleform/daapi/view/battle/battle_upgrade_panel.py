@@ -265,8 +265,7 @@ class BattleUpgradePanel(BattleUpgradePanelMeta, IArenaVehiclesController, IProg
                     'intCD': moduleItem.intCD,
                     'available': True}}
         if not self.__textInited:
-            moduleInfo['hotKeys'] = br_helpers.getHotKeyListByIndex(index)
-            moduleInfo['hotKeysVKeys'] = br_helpers.getHotKeyVkListByIndex(index)
+            moduleInfo['hotKeys'] = br_helpers.getHotKeyInfoListByIndex(index)
         return moduleInfo
 
     def __getModuleItem(self, intCD):

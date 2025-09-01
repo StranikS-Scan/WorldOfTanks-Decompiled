@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/scaleform/daapi/view/lobby/__init__.py
 from frameworks.wulf import WindowLayer
-from gui.Scaleform.framework import ScopeTemplates, ViewSettings, ComponentSettings, getSwfExtensionUrl
+from gui.Scaleform.framework import ScopeTemplates, ViewSettings, getSwfExtensionUrl
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.app_loader import settings as app_settings
 from gui.shared import EVENT_BUS_SCOPE
@@ -13,13 +13,8 @@ def getContextMenuHandlers():
 
 
 def getViewSettings():
-    from story_mode.gui.scaleform.daapi.view.lobby.story_mode_event_entry_point_view import StoryModeEventEntryPointView
-    from story_mode.gui.scaleform.daapi.view.lobby.story_mode_newbie_entry_point_view import StoryModeNewbieEntryPointView
     from story_mode.gui.scaleform.daapi.view.lobby.outro_video import OutroVideo
-    return (ViewSettings(VIEW_ALIAS.STORY_MODE_WEB_VIEW_TRANSPARENT, StoryModeWebViewTransparent, 'browserScreen.swf', WindowLayer.FULLSCREEN_WINDOW, VIEW_ALIAS.STORY_MODE_WEB_VIEW_TRANSPARENT, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ViewSettings(VIEW_ALIAS.STORY_MODE_OUTRO_VIDEO_WINDOW, OutroVideo, getSwfExtensionUrl('story_mode', 'IntroVideo.swf'), WindowLayer.TOP_WINDOW, None, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(VIEW_ALIAS.STORY_MODE_EVENT_ENTRY_POINT, StoryModeEventEntryPointView, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(VIEW_ALIAS.STORY_MODE_NEWBIE_ENTRY_POINT, StoryModeNewbieEntryPointView, ScopeTemplates.DEFAULT_SCOPE))
+    return (ViewSettings(VIEW_ALIAS.STORY_MODE_WEB_VIEW_TRANSPARENT, StoryModeWebViewTransparent, 'browserScreen.swf', WindowLayer.FULLSCREEN_WINDOW, VIEW_ALIAS.STORY_MODE_WEB_VIEW_TRANSPARENT, ScopeTemplates.LOBBY_SUB_SCOPE), ViewSettings(VIEW_ALIAS.STORY_MODE_OUTRO_VIDEO_WINDOW, OutroVideo, getSwfExtensionUrl('story_mode', 'IntroVideo.swf'), WindowLayer.TOP_WINDOW, None, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

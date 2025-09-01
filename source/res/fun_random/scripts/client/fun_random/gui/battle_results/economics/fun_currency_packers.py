@@ -2,14 +2,14 @@
 # Embedded file name: fun_random/scripts/client/fun_random/gui/battle_results/economics/fun_currency_packers.py
 import typing
 from fun_random.gui.battle_results.pbs_helpers import isPremiumAdvertisingShown, getAdvertising
-from gui.battle_results.pbs_helpers.economics import getCreditsRecords
+from gui.battle_results.pbs_helpers.economics import getDirectMoneyRecords
 from gui.battle_results.presenters.packers.economics.crystals_packer import CrystalsPacker
 from gui.battle_results.presenters.packers.economics.credits_packer import CreditsPacker
 from gui.battle_results.presenters.packers.economics.gold_records import GOLD_EVENT_PAYMENTS
 from gui.battle_results.presenters.packers.economics.xp_packer import XpPacker
 from gui.impl.gen import R
 from gui.battle_results.settings import CurrenciesConstants
-from gui.battle_results.presenters.packers.economics.base_currency_packer import BaseCurrencyPacker, CurrencyGroup
+from gui.battle_results.presenters.packers.economics.currency_packers import CurrencyPacker, CurrencyGroup
 from shared_utils import first
 if typing.TYPE_CHECKING:
     from gui.battle_results.stats_ctrl import BattleResults
@@ -23,7 +23,7 @@ class FunCreditsPacker(CreditsPacker):
     def packModel(cls, model, currencyType, battleResults):
         super(FunCreditsPacker, cls).packModel(model, currencyType, battleResults)
         if isPremiumAdvertisingShown(currencyType, battleResults):
-            text = getAdvertising(getCreditsRecords, 'appliedPremiumCreditsFactor100', _STR_PATH.credits, battleResults)
+            text = getAdvertising(getDirectMoneyRecords, 'appliedPremiumCreditsFactor100', _STR_PATH.credits, battleResults)
             model.setPremiumAdvertising(text)
 
 
@@ -60,8 +60,7 @@ class FunCrystalsPacker(CrystalsPacker):
         model.setPremiumAdvertising('')
 
 
-class FunGoldPacker(BaseCurrencyPacker):
-    __slots__ = ()
+class FunGoldPacker(CurrencyPacker):
     _EARNED = CurrencyGroup(label=None, records=(GOLD_EVENT_PAYMENTS,))
 
     @classmethod
@@ -71,4 +70,4 @@ class FunGoldPacker(BaseCurrencyPacker):
 
     @classmethod
     def _getExtractors(cls, currencyType, battleResults):
-        return ((getCreditsRecords,), zip)
+        return ((getDirectMoneyRecords,), zip)

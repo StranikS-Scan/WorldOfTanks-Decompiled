@@ -71,6 +71,7 @@ class CompareShellsBlock(BaseBlock):
 
     def _updateSlotWithItem(self, model, idx, slotItem):
         model.setImageSource(R.images.gui.maps.icons.shell.small.dyn(slotItem.descriptor.iconName)())
+        model.setImageName(slotItem.descriptor.iconName)
         model.setIsSelected(self.__selectedIndex == idx)
 
 

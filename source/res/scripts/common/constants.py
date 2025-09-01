@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/constants.py
-from enum import IntEnum, Enum
+from enum import IntEnum
 import enum
 import calendar
 import time
@@ -295,6 +295,7 @@ class ARENA_BONUS_TYPE:
     RANDOM_NP2 = 46
     TOURNAMENT_COMP7 = 47
     TRAINING_COMP7 = 48
+    COMP7_LIGHT = 49
     STORY_MODE_ONBOARDING = 100
     STORY_MODE_REGULAR = 104
     RANGE = (UNKNOWN,
@@ -336,6 +337,7 @@ class ARENA_BONUS_TYPE:
      TOURNAMENT_COMP7,
      RANDOM_NP2,
      TRAINING_COMP7,
+     COMP7_LIGHT,
      STORY_MODE_ONBOARDING,
      STORY_MODE_REGULAR)
     RANDOM_RANGE = (REGULAR, EPIC_RANDOM, RANDOM_NP2)
@@ -932,6 +934,7 @@ class Configs(enum.Enum):
     NOVICE_MATCHMAKING_SYSTEM = 'novice_matchmaking_system'
     TRIGGER_SYSTEM_CONFIG = 'trigger_system_config'
     PRESTIGE_CONFIG = 'prestige_config'
+    PRESTIGE_MILESTONES_CONFIG = 'prestige_milestones_config'
     STEAM_SHADE_CONFIG = 'steam_shade_config'
     SYSTEM_CHANNELS = 'system_channels'
     REFERRAL_PROGRAM_CONFIG = 'referral_program_config'
@@ -944,9 +947,11 @@ class Configs(enum.Enum):
     EASY_TANK_EQUIP_CONFIG = 'easy_tank_equip_config'
     PLAYER_SATISFACTION_CONFIG = 'player_satisfaction_config'
     COMMENDATIONS_CONFIG = 'commendations_config'
+    VEH_PLAYLISTS_CONFIG = 'veh_playlists_config'
     SENIORITY_AWARDS_CONFIG = 'seniority_awards_config'
     WTR_CONFIG = 'wtr_config'
-    WOT_ANNIVERSARY_CONFIG = 'wot_anniversary_config'
+    WEEKLY_QUESTS_CONFIG = 'weekly_quests_config'
+    WEEKLY_QUESTS_CONFIGS = 'weekly_quests_configs'
 
 
 INBATTLE_CONFIGS = ['spgRedesignFeatures',
@@ -1138,6 +1143,7 @@ class VEHICLE_SETTING:
     SIEGE_MODE_ENABLED = 3
     ACTIVATE_EQUIPMENT = 16
     RELOAD_PARTIAL_CLIP = 17
+    RESET_FULL_CLIP = 18
 
 
 class VEHICLE_TTC_ASPECTS:
@@ -1253,7 +1259,8 @@ class SPECIAL_VEHICLE_HEALTH:
     DESTR_BY_FALL_RAMMING = -2
     FUEL_EXPLODED = -3
     AMMO_BAY_DESTROYED = -5
-    TURRET_DETACHED = -13
+    AMMO_BAY_EXPLODED = -1 ^ 12
+    TURRET_DETACHED = -1 ^ 28
 
     @staticmethod
     def IS_DESTR_BY_FALL_RAMMING(health):
@@ -1266,6 +1273,10 @@ class SPECIAL_VEHICLE_HEALTH:
     @staticmethod
     def IS_AMMO_BAY_DESTROYED(health):
         return health < 0 and health | SPECIAL_VEHICLE_HEALTH.AMMO_BAY_DESTROYED == SPECIAL_VEHICLE_HEALTH.AMMO_BAY_DESTROYED
+
+    @staticmethod
+    def IS_AMMO_BAY_EXPLODED(health):
+        return health < 0 and health | SPECIAL_VEHICLE_HEALTH.AMMO_BAY_EXPLODED == SPECIAL_VEHICLE_HEALTH.AMMO_BAY_EXPLODED
 
     @staticmethod
     def IS_TURRET_DETACHED(health):
@@ -1317,6 +1328,7 @@ class ATTACK_REASON(object):
     DESTROYER = 'destroyer'
     DAMAGE_ZONE = 'damage_zone'
     ULTIMATE = 'ultimate'
+    OVERHEAT_EXECUTE = 'overheat_execute'
     NONE = 'none'
 
     @classmethod
@@ -1364,7 +1376,8 @@ ATTACK_REASONS = [ATTACK_REASON.SHOT,
  ATTACK_REASON.BATTLESHIP,
  ATTACK_REASON.DESTROYER,
  ATTACK_REASON.DAMAGE_ZONE,
- ATTACK_REASON.ULTIMATE]
+ ATTACK_REASON.ULTIMATE,
+ ATTACK_REASON.OVERHEAT_EXECUTE]
 ATTACK_REASON_INDICES = {value:index for index, value in enumerate(ATTACK_REASONS)}
 BOT_RAM_REASONS = (ATTACK_REASON.BRANDER_RAM, ATTACK_REASON.CLING_BRANDER_RAM)
 WORLD_ATTACK_REASONS = (ATTACK_REASON.WORLD_COLLISION, ATTACK_REASON.CGF_WORLD)
@@ -1619,7 +1632,9 @@ EMAIL_CONFIRMATION_TOKEN_NAME = 'acc_completion:email_confirm'
 DEMO_ACCOUNT_ATTR = 'isDemoAccount'
 HAS_PM1_COMPLETED_TOKEN = 'has_completed_pm1'
 HAS_PM2_COMPLETED_TOKEN = 'has_completed_pm2'
+HAS_PM3_COMPLETED_TOKEN = 'has_completed_pm3'
 HAS_PM_BRANCH_COMPLETED_TOKEN = 'has_completed_pm_branch'
+PM3_FINISHED_OPERATION_TEMPLATE = 'token:pt:s3:t{}:finished:base'
 LINKED_SET_UNFINISHED_TOKEN = 'linkedset_unfinished'
 FREE_PREMIUM_CREW_LOG_EXT_PREFIX = 'free_premium_crew:level:'
 
@@ -1650,11 +1665,19 @@ class PROMO_CUTOUT:
     ON = 1
 
 
+class VEHICLE_CLASS:
+    LIGHT_TANK = 'lightTank'
+    MEDIUM_TANK = 'mediumTank'
+    HEAVY_TANK = 'heavyTank'
+    SPG = 'SPG'
+    AT_SPG = 'AT-SPG'
+
+
 VEHICLE_CLASSES = ('lightTank', 'mediumTank', 'heavyTank', 'SPG', 'AT-SPG')
 VEHICLE_CLASS_INDICES = dict(((x[1], x[0]) for x in enumerate(VEHICLE_CLASSES)))
 VEHICLE_CLASSES_DETECTED_BY_ENEMY_SHOT_PREDICTOR = {'SPG'}
 MIN_VEHICLE_LEVEL = 1
-MAX_VEHICLE_LEVEL = 10
+MAX_VEHICLE_LEVEL = 11
 VEHICLE_NO_INV_ID = -1
 
 class TEAMS_IN_ARENA:
@@ -1689,6 +1712,7 @@ class QUEUE_TYPE:
     COMP7 = 29
     WINBACK = 30
     RANDOM_NP2 = 32
+    COMP7_LIGHT = 33
     STORY_MODE = 100
     FALLOUT = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
     ALL = (RANDOMS,
@@ -1716,6 +1740,7 @@ class QUEUE_TYPE:
      COMP7,
      WINBACK,
      RANDOM_NP2,
+     COMP7_LIGHT,
      STORY_MODE)
     REMOVED = (COMPANIES,)
     BASE_ON_DEQUEUE = (RANDOMS,
@@ -1726,7 +1751,8 @@ class QUEUE_TYPE:
      MAPBOX,
      FUN_RANDOM,
      COMP7,
-     RANDOM_NP2)
+     RANDOM_NP2,
+     COMP7_LIGHT)
 
 
 QUEUE_TYPE_NAMES = {v:k for k, v in QUEUE_TYPE.__dict__.iteritems() if isinstance(v, int)}
@@ -2006,8 +2032,7 @@ class REQUEST_COOLDOWN:
     RESET_ALL_TANKMEN_SKILLS = 60.0
     FILL_ALL_TANKMEN_SKILLS = 60.0
     CMD_EASY_TANK_EQUIP_APPLY = 1.0
-    CMD_SELLING = 5.0
-    CMD_WOT_ANNIVERSARY_OPEN_ENVELOPE = 2.0
+    CMD_SELLING = 3.0
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -2058,8 +2083,7 @@ class OVERTURN_WARNING_LEVEL:
 
 class OVERTURN_CONDITION:
     IGNORING_DELAY = 0.3
-    WARNING_COSINE = cos(radians(70))
-    ONBOARD_COSINE = cos(radians(80))
+    ONBOARD_COSINE = cos(radians(70))
     OVERTURN_COSINE = cos(radians(120))
     HULL_PRESSURE = 0.1
 
@@ -2235,7 +2259,7 @@ class USER_SERVER_SETTINGS:
     SENIORITY_AWARDS = 113
     REFERRAL_PROGRAM = 114
     ADVANCED_ACHIEVEMENTS_STORAGE = 115
-    WOT_ANNIVERSARY = 124
+    PERSONAL_MISSION_3 = 124
     _ALL = (GAME,
      HIDE_MARKS_ON_GUN,
      EULA_VERSION,
@@ -2251,7 +2275,7 @@ class USER_SERVER_SETTINGS:
      SENIORITY_AWARDS,
      ADVANCED_ACHIEVEMENTS_STORAGE,
      BATTLE_COMM,
-     WOT_ANNIVERSARY)
+     PERSONAL_MISSION_3)
 
     @classmethod
     def isBattleInvitesForbidden(cls, settings):
@@ -2379,7 +2403,10 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  121: 'Competitive7x7 carousel filter 3',
  122: 'Fun Random carousel filter 3',
  123: 'Carousel filter 3',
- 124: USER_SERVER_SETTINGS.WOT_ANNIVERSARY}
+ USER_SERVER_SETTINGS.PERSONAL_MISSION_3: 'prsonal mission 3 settings',
+ 125: 'Competitive7x7 Light carousel filter 1',
+ 126: 'Competitive7x7 Light carousel filter 2',
+ 127: 'Competitive7x7 Light carousel filter 3'}
 
 class WG_GAMES:
     TANKS = 'wot'
@@ -2530,6 +2557,8 @@ class EVENT_CLIENT_DATA:
     DAILY_QUESTS_REV = 26
     OFFER = 27
     OFFER_REV = 28
+    WEEKLY_QUESTS = 29
+    WEEKLY_QUESTS_REV = 30
     NUMBER_OF_ANNOUNCED_ACTIONS_STEPS = 1
 
     @staticmethod
@@ -2679,9 +2708,11 @@ class VEHICLE_SIEGE_STATE:
     SWITCHING_ON = 1
     ENABLED = 2
     SWITCHING_OFF = 3
+    PILLBOX_ENABLED = 4
     SWITCHING = {SWITCHING_ON, SWITCHING_OFF}
+    PERSISTENT = {DISABLED, ENABLED, PILLBOX_ENABLED}
     DEFAULT_MODE = {DISABLED, SWITCHING_ON}
-    SIEGE_MODE = {ENABLED, SWITCHING_OFF}
+    SIEGE_MODE = {ENABLED, SWITCHING_OFF, PILLBOX_ENABLED}
 
     @classmethod
     def getMode(cls, siegeState):
@@ -2691,6 +2722,18 @@ class VEHICLE_SIEGE_STATE:
             return VEHICLE_MODE.SIEGE
         else:
             return VEHICLE_MODE.DEFAULT
+
+    @classmethod
+    def isEnabled(cls, siegeState):
+        return siegeState == VEHICLE_SIEGE_STATE.ENABLED or siegeState == VEHICLE_SIEGE_STATE.PILLBOX_ENABLED
+
+    @classmethod
+    def toString(cls, siegeState):
+        return {cls.DISABLED: 'disabled',
+         cls.SWITCHING_ON: 'switching_on',
+         cls.ENABLED: 'siege_enabled',
+         cls.SWITCHING_OFF: 'switching_off',
+         cls.PILLBOX_ENABLED: 'pillbox_enabled'}.get(siegeState, '')
 
 
 class ROCKET_ACCELERATION_STATE:
@@ -3035,6 +3078,11 @@ class QUEST_TYPE_OPERATION_FOR_KAFKA:
     COMPLETED_AFTER_REBALANCE = 8
 
 
+class BRANCH_TYPE_OPERATION_FOR_KAFKA:
+    ACTIVATE = 1
+    DEACTIVATE = 2
+
+
 class BotNamingType(object):
     CREW_MEMBER = 1
     VEHICLE_MODEL = 2
@@ -3110,7 +3158,7 @@ class CLIENT_COMMAND_SOURCES:
 
 
 EMPTY_GEOMETRY_ID = 0
-ROLE_LEVELS = range(6, 11)
+ROLE_LEVELS = range(6, MAX_VEHICLE_LEVEL + 1)
 
 class ROLE_TYPE:
     NOT_DEFINED = 0
@@ -3148,6 +3196,29 @@ ROLE_LABEL_TO_TYPE = {'NotDefined': ROLE_TYPE.NOT_DEFINED,
  'role_LT_universal': ROLE_TYPE.LT_UNIVERSAL,
  'role_LT_wheeled': ROLE_TYPE.LT_WHEELED}
 ROLE_TYPE_TO_LABEL = dict(((index, label) for label, index in ROLE_LABEL_TO_TYPE.items()))
+
+class COMMON_ROLE:
+    ASSAULT = 'Assault'
+    SNIPER = 'Sniper'
+    SUPPORT = 'Support'
+    ALL_ORDER = (ASSAULT, SNIPER, SUPPORT)
+    ALL = frozenset(ALL_ORDER)
+
+
+COMMON_ROLE_TO_ROLE_TYPE = {COMMON_ROLE.ASSAULT: frozenset((ROLE_TYPE.HT_ASSAULT,
+                       ROLE_TYPE.HT_BREAK,
+                       ROLE_TYPE.HT_UNIVERSAL,
+                       ROLE_TYPE.MT_ASSAULT,
+                       ROLE_TYPE.MT_UNIVERSAL,
+                       ROLE_TYPE.ATSPG_ASSAULT,
+                       ROLE_TYPE.ATSPG_UNIVERSAL)),
+ COMMON_ROLE.SNIPER: frozenset((ROLE_TYPE.HT_SUPPORT,
+                      ROLE_TYPE.MT_SUPPORT,
+                      ROLE_TYPE.MT_SNIPER,
+                      ROLE_TYPE.ATSPG_SNIPER,
+                      ROLE_TYPE.ATSPG_SUPPORT)),
+ COMMON_ROLE.SUPPORT: frozenset((ROLE_TYPE.LT_UNIVERSAL, ROLE_TYPE.LT_WHEELED, ROLE_TYPE.SPG))}
+ROLE_TYPE_TO_COMMON_ROLE = {role:common_role for common_role, roles in COMMON_ROLE_TO_ROLE_TYPE.iteritems() for role in roles}
 
 class ACTION_TYPE:
     BLOCK_AND_TAKE_DAMAGE = 1
@@ -3234,6 +3305,8 @@ class DUAL_GUN:
 
 DUPLET_GUN_INDEXES = [DUAL_GUN.ACTIVE_GUN.LEFT, DUAL_GUN.ACTIVE_GUN.RIGHT]
 DUPLET_GUN_INDEXES_TUPLE = tuple(DUPLET_GUN_INDEXES)
+UNKNOWN_GUN_INSTALLATION_INDEX = -1
+DEFAULT_GUN_INSTALLATION_INDEX = 0
 
 class MarathonConfig(object):
     EMPTY_PATH = ''
@@ -3370,7 +3443,7 @@ class GF_RES_PROTOCOL(object):
     CAMO = 'camo://'
     PNUM = 'pnum://'
     SWF = 'swf://'
-    VIDEO = 'video://'
+    CACHED_IMG = 'imgc://'
 
 
 class CollisionFlags(object):
@@ -3533,7 +3606,8 @@ BATTLE_MODE_VEHICLE_TAGS = {'event_battles',
  'battle_royale',
  'clanWarsBattles',
  'fun_random',
- 'comp7'}
+ 'comp7',
+ 'comp7_light'}
 BATTLE_MODE_VEH_TAGS_EXCEPT_EVENT = BATTLE_MODE_VEHICLE_TAGS - {'event_battles'}
 BATTLE_MODE_VEH_TAGS_EXCEPT_EPIC = BATTLE_MODE_VEHICLE_TAGS - {'epic_battles'}
 BATTLE_MODE_VEH_TAGS_EXCEPT_CLAN = BATTLE_MODE_VEHICLE_TAGS - {'clanWarsBattles'}
@@ -3693,6 +3767,7 @@ DEFAULT_HANGAR_SCENE = 'DEFAULT'
 BATTLE_ROYALE_SCENE = 'BATTLE_ROYALE'
 FESTIVAL_SCENE = 'FESTIVAL'
 COMP7_SCENE = 'COMP7'
+COMP7_LIGHT_SCENE = 'COMP7_LIGHT'
 VEHICLE_SELECTION_BLOCK_DELAY = 2
 CURFEW_PLAY_LIMIT = 'curfew'
 WEEKLY_PLAY_LIMIT = 'weeklyPlayLimit'
@@ -3726,6 +3801,7 @@ VEHICLE_NO_CREW_TRANSFER_PENALTY_TAG = 'noCrewTransferPenalty'
 VEHICLE_PREMIUM_TAG = 'premium'
 VEHICLE_WOT_PLUS_TAG = 'wotPlus'
 VEHICLE_BUNKER_TURRET_TAG = 'bunkerTurret'
+VEHICLE_SECRET_TAG = 'secret'
 
 class InitialVehsAdditionStrategy(object):
     REALM_AND_COUNTRY = 0
@@ -3768,6 +3844,7 @@ DEATH_ZONE_MASK_PATTERN = 'deathzone_mask_'
 
 class DamageResistanceReason(object):
     NONE = 0
+    NITRO = 1
 
 
 class ShootImpulseApplicationPoint(object):
@@ -3868,6 +3945,15 @@ class PlayerSatisfactionRating(IntEnum):
     WORSE = -1
 
 
+class SquadManStates(enum.Enum):
+    IN_BATTLE = 'inBattle'
+    READY = 'ready'
+    NOT_READY = 'notReady'
+    NOT_READY_PLAYER = 'notReadyPlayer'
+    SEARCHING = 'searching'
+    EMPTY = 'empty'
+
+
 class SPAWN_POINT_MODE:
     SPAWN = 0
     RESPAWN = 1
@@ -3929,3 +4015,201 @@ class VehiclePartName(object):
     @classmethod
     def getName(cls, idx):
         return cls._IDX_TO_NAME.get(idx)
+
+
+class VehicleArmorTags(str, enum.Enum):
+    HULL = 'hull'
+    TURRET = 'turret'
+    CHASSIS = 'chassis'
+    SCREEN = 'screen'
+    GUN = 'gun'
+    WHEELS = 'wheels'
+    SURVEYING = 'surveying'
+    GUN_MASK = 'gunMask'
+
+
+class VehicleTurretTags(str, enum.Enum):
+    CANNOT_DETACH = 'cannotDetach'
+    GUN_CARRIAGE = 'gunCarriage'
+    TURRETLESS = 'turretless'
+    OSCILLATING = 'oscillating'
+
+
+class DGVehicleRepairReason(object):
+    BASIC_REPAIR = 1
+
+
+class ModuleKind(object):
+    INTERNAL = 'internal'
+    EXTERNAL = 'external'
+    TANKMEN = 'tankmen'
+    ALL = (INTERNAL, EXTERNAL, TANKMEN)
+
+
+class CONCENTRATION_MODE_STATE:
+    IDLE = 0
+    DEPLOYING = 1
+    READY = 2
+    ACTIVE = 3
+    COOLDOWN = 4
+    DISABLED = 5
+
+    @classmethod
+    def toString(cls, value):
+        return {cls.ACTIVE: 'active',
+         cls.READY: 'ready',
+         cls.COOLDOWN: 'cooldown',
+         cls.IDLE: 'idle',
+         cls.DEPLOYING: 'deploying',
+         cls.DISABLED: 'disabled'}.get(value)
+
+
+class POWER_MODE_STATE:
+    NOT_ACTIVE = 0
+    PREPARING = 1
+    ACTIVE = 2
+    MAX_MODE = 3
+    ACTIVE_MODES = (ACTIVE, MAX_MODE)
+    STATIC_MODES = (NOT_ACTIVE, MAX_MODE)
+
+
+class ExtraShotClipStates(object):
+    NONE = 0
+    EXTRA_FULL_RELOAD = 1
+    FULL_RELOAD_WITH_EXTRA_TIME = 2
+
+
+RAMMING_EFFECT_THRESHOLD = 600
+IMPROVED_RAMMING_EFFECT_THRESHOLD = 100
+
+class SECONDARY_GUN_STATE:
+    IDLE = 0
+    READY = 1
+    ACTIVE = 2
+    COOLDOWN = 3
+    DISABLED = 4
+
+    @classmethod
+    def toString(cls, value):
+        return {cls.ACTIVE: 'active',
+         cls.READY: 'ready',
+         cls.COOLDOWN: 'cooldown',
+         cls.IDLE: 'idle',
+         cls.DISABLED: 'disabled'}.get(value)
+
+
+@enum.unique
+class OVERHEAT_GAIN_STATE(enum.IntEnum):
+    NULL_STATE = 1
+    NO_SHELL_IN_CHAMBER = 2
+    DT_GAIN = 4
+    DT_LOOSE = 8
+    STACK_GAIN = 16
+    STACK_LOOSE = 32
+    CHARGE_MIN = 64
+    CHARGE_MAX = 128
+    DT_PROGRESS_FULL = CHARGE_MAX | STACK_GAIN
+    DT_PROGRESS_ZERO = STACK_LOOSE | CHARGE_MIN | NO_SHELL_IN_CHAMBER | NULL_STATE
+
+
+class CHARGE_SHOT_FLAGS:
+    CHARGING = 1
+    SHOT_BLOCK = 2
+    UNDER_WATER = 4
+    GUN_DIVING = 8
+    OVERTURN = 16
+    UNDER_PRESSURE = 32
+    RELOADING = 64
+    GUN_DESTROYED = 128
+    LAST_SHELL_FIRED = 256
+    PUBLIC_MASK = SHOT_BLOCK | CHARGING | GUN_DESTROYED
+    PRIVATE_MASK = LAST_SHELL_FIRED | GUN_DESTROYED | RELOADING | UNDER_PRESSURE | OVERTURN | GUN_DIVING | UNDER_WATER
+    MUST_CANCEL_MASK = LAST_SHELL_FIRED | GUN_DESTROYED | RELOADING | SHOT_BLOCK
+    CANT_START_MASK = MUST_CANCEL_MASK | UNDER_PRESSURE | OVERTURN | GUN_DIVING | UNDER_WATER | CHARGING
+    RESPAWN_MASK = UNDER_PRESSURE | OVERTURN | GUN_DIVING | UNDER_WATER | SHOT_BLOCK | CHARGING
+
+
+class RECHARGEABLE_NITRO_STATE:
+    NOT_RUNNING = 0
+    DEPLOYING = 1
+    PREPARING = 2
+    READY = 3
+    ACTIVE = 4
+    DISABLED = 5
+    PRIMED = 7
+    DEPLETING = 8
+    ACTIVE_STATES = (ACTIVE, DEPLETING)
+    READY_STATES = (READY, PRIMED)
+
+    @classmethod
+    def toString(cls, value):
+        return {cls.NOT_RUNNING: 'not running',
+         cls.DEPLOYING: 'deploying',
+         cls.PREPARING: 'preparing',
+         cls.READY: 'ready',
+         cls.ACTIVE: 'active',
+         cls.DISABLED: 'disabled',
+         cls.PRIMED: 'primed',
+         cls.DEPLETING: 'depleting'}.get(value)
+
+
+class STANCE_DANCE_STATE:
+    STANCE_MASK = 1
+    STANCE_FIGHT = 0
+    STANCE_TURBO = 1
+    SWITCHING_STANCE = 2
+    ACTIVE_ABILITY_FIGHT = 4
+    ACTIVE_ABILITY_TURBO = 8
+    ENERGY_TIMER_ON = 16
+    ENERGY_SPD_BOOSTED = 32
+    ENGINE_DEAD = 64
+    ACTIVE_ABILITY_MASK = ACTIVE_ABILITY_FIGHT | ACTIVE_ABILITY_TURBO
+    FACTOR_BONUS_MASK = ACTIVE_ABILITY_FIGHT | ACTIVE_ABILITY_TURBO | STANCE_TURBO
+    TURBO_PASSIVE_BONUSES_MASK = ACTIVE_ABILITY_TURBO | STANCE_TURBO
+    ENERGY_GAIN_MASK = ENERGY_TIMER_ON | ENERGY_SPD_BOOSTED
+
+
+class STANCE_CMD_RESULT:
+    OK = 0
+    BATTLE_NOT_STARTED = 1
+    SWITCHING_STANCE = 2
+    NOT_ENOUGH_ENERGY = 3
+    WRONG_STANCE = 4
+    WRONG_SOURCE_ID = 5
+    DEAD_VEHICLE = 6
+    ENGINE_DESTROYED = 7
+
+
+class GUN_LOCK_REASONS:
+    NONE = 0
+    OVERTURN = 1
+    UNDER_WATER = 2
+    UNDER_PRESSURE = 4
+    DEATH_ZONE = 8
+    TELEPORTING = 16
+    TURRET_ROTATOR_DESTROYED = 32
+
+
+class STATIONARY_RELOAD_STATE:
+    IDLE = 0
+    FIXING_GUN = 1
+    PREPARING = 2
+    RELOADING = 3
+    FINISHING = 4
+    TO_RELOADING_STATES = (FIXING_GUN, PREPARING)
+    TRANSITION_STATES = (FIXING_GUN, PREPARING, FINISHING)
+
+    @classmethod
+    def toString(cls, value):
+        return {cls.FIXING_GUN: 'fixing gun',
+         cls.RELOADING: 'reloading',
+         cls.PREPARING: 'preparing',
+         cls.FINISHING: 'finishing',
+         cls.IDLE: 'idle'}.get(value)
+
+
+class TARGET_DESIGNATOR_STATE:
+    READY = 0
+    ACTIVE = 1
+    COOLDOWN = 2
+    PRE_BATTLE = 3

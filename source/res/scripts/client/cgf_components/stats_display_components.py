@@ -40,7 +40,9 @@ class DelayDisplayUpdater(object):
 
 
 def vehicleKillsStatsGetter(vehicle, arenaDP):
-    vStats = arenaDP.getVehicleStats(vehicle.id)
+    from SimulatedVehicle import SimulatedVehicle
+    vID = vehicle.id if not isinstance(vehicle, SimulatedVehicle) else vehicle.realVehicleID
+    vStats = arenaDP.getVehicleStats(vID)
     return vStats.enemyKills if vStats is not None else 0
 
 
@@ -95,8 +97,8 @@ class TrackedStatisticComponentManager(CGF.ComponentManager):
     def deactivate(self):
         if isPlayerAvatar() and BigWorld.player().arena:
             BigWorld.player().arena.onVehicleStatisticsUpdate -= self.__onVehicleStatisticsUpdate
-        elif isPlayerAccount():
-            g_playerEvents.onDossiersResync -= self.__onDossierResync
+        g_playerEvents.onDossiersResync -= self.__onDossierResync
+        g_playerEvents.onAvatarReady -= self.__onAvatarReady
 
     @onAddedQuery(StatisticDisplayComponent, DecalComponent, CGF.GameObject)
     def onAdded(self, statisticDisplay, decalComponent, gameObject):
@@ -182,7 +184,7 @@ class TrackedStatisticComponentManager(CGF.ComponentManager):
             enemyFrags = 0
             if BONUS_CAPS.checkAny(arena.bonusType, BONUS_CAPS.STAT_TRACKERS_STATS):
                 enemyFrags = vehicleKillsStatsGetter(vehicle, arenaDP)
-            value = vehicle.stFrags + enemyFrags
+            value = vehicle.publicInfo.stFrags + enemyFrags
         else:
             _logger.error('Unknown tracked statistics type: %s', statisticDisplay.trackedStatistic)
             return
@@ -192,7 +194,7 @@ class TrackedStatisticComponentManager(CGF.ComponentManager):
         vehCD = vehicle.typeDescriptor.type.compactDescr
         value = 0
         if statisticDisplay.trackedStatistic == StatTrackerStatistic.KILLS:
-            value = getStatTrackersVehicleStats(vehCD)
+            value = getStatTrackersVehicleStats(vehCD, vehicle)
         else:
             _logger.error('Unknown tracked statistics type: %s', statisticDisplay.trackedStatistic)
         self.updateCounterValue(value, statisticDisplay, decalComponent)

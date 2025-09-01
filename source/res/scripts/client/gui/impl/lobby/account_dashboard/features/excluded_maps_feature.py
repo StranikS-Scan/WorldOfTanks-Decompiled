@@ -7,6 +7,7 @@ from constants import PremiumConfigs, PREMIUM_TYPE, EMPTY_GEOMETRY_ID, RENEWABLE
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.impl.gen.view_models.views.lobby.account_dashboard.map_model import MapModel, SlotStateEnum
 from gui.impl.lobby.account_dashboard.features.base import FeatureItem
+from gui.impl.lobby.maps_blacklist.maps_blacklist_view import buildSlotsMap
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.shared.event_dispatcher import showMapsBlacklistView
 from helpers import dependency, time_utils
@@ -75,6 +76,7 @@ class ExcludedMapsFeature(FeatureItem):
         premiumSlots = mapsConfig['premiumSlots']
         wotPlusSlots = mapsConfig['wotPlusSlots'] if serverSettings.isWotPlusExcludedMapEnabled() else 0
         totalSlots = defaultSlots + premiumSlots + wotPlusSlots
+        slotsMap = buildSlotsMap()
         maps = [ (mapId, selectedTime) for mapId, selectedTime in self.__itemsCache.items.stats.getMapsBlackList() if mapId > 0 ]
         mapsLen = len(maps)
         isPremiumAcc = self.__itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS)
@@ -91,6 +93,7 @@ class ExcludedMapsFeature(FeatureItem):
 
         for i in range(totalSlots):
             slotModel = MapModel()
+            slotModel.setSlotType(slotsMap[i])
             if mapsLen > i:
                 geometryID, selectedTime = maps[i]
                 if geometryID == EMPTY_GEOMETRY_ID:

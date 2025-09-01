@@ -2,8 +2,12 @@
 # Embedded file name: scripts/client/skeletons/gui/battle_session.py
 import typing
 if typing.TYPE_CHECKING:
+    from gui.armor_flashlight.interfaces import IArmorFlashlightBattleController
     from gui.battle_control.arena_info.interfaces import IAppearanceCacheController, IPointsOfInterestController, IMapZonesController, IProgressionController, IRadarController, ISpawnController, IArenaVehiclesController, IVehicleCountController, IOverrideSettingsController, IVSEHUDSettingsController, IBattleSpamController, IPrebattleSetupController
+    from gui.battle_control.controllers.consumables.ammo_ctrl import AmmoController
     from gui.battle_control.controllers.consumables.equipment_ctrl import EquipmentsController
+    from gui.battle_control.controllers.vehicle_passenger import IVehiclePassengerController
+    from gui.battle_control.controllers.vehicle_state_ctrl import VehicleStateController
 
 class ISharedControllersLocator(object):
     __slots__ = ()
@@ -26,6 +30,10 @@ class ISharedControllersLocator(object):
 
     @property
     def vehicleState(self):
+        raise NotImplementedError
+
+    @property
+    def vehiclePassenger(self):
         raise NotImplementedError
 
     @property
@@ -122,6 +130,10 @@ class ISharedControllersLocator(object):
 
     @property
     def battleSpamCtrl(self):
+        raise NotImplementedError
+
+    @property
+    def armorFlashlight(self):
         raise NotImplementedError
 
 

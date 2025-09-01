@@ -50,7 +50,7 @@ class CmpShellTooltipBuilder(ShellTooltipBuilder):
     itemsCache = dependency.descriptor(IItemsCache)
 
     @classmethod
-    def getPanelSlotTooltip(cls, vehicle, slotID):
+    def getPanelSlotTooltip(cls, vehicle, slotID, *_):
         intCD = vehicle.descriptor.gun.shots[slotID].shell.compactDescr
         return cls.getTooltipData(vehicle, slotID, intCD)
 

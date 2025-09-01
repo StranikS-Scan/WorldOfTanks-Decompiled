@@ -1186,7 +1186,6 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	2000	</weight>
-      <maxLoad>	14600	</maxLoad>
       <terrainResistance>	1.26 1.49 3.43	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2118,7 +2117,7 @@
     <Turret_1_FCM_36Pak40>
       <ceilless>	true	</ceilless>
       <userString>	#france_vehicles:Turret_1_FCM_36Pak40	</userString>
-      <tags>	cannotDetach	</tags>
+      <tags>	cannotDetach turretless	</tags>
       <level>	3	</level>
       <price>	120	</price>
       <notInShop>	true	</notInShop>

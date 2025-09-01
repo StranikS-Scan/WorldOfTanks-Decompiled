@@ -62,9 +62,9 @@
     <weight>	10830	</weight>
     <maxHealth>	232	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	80	</maxHealth>
-      <maxRegenHealth>	40	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	113	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
     </ammoBayHealth>
     <models>
       <undamaged>	vehicles/french/F22_AMX_105AM/normal/lod0/Hull.model	</undamaged>
@@ -1074,13 +1074,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_AMX_105AM>
-      <userString>	#france_vehicles:Chassis_AMX_105AM	</userString>
+    <Chassis_F22_AMX_105AM>
+      <userString>	#france_vehicles:Chassis_F22_AMX_105AM	</userString>
       <tags></tags>
       <level>	4	</level>
       <price>	3600	</price>
       <unlocks>
-        <chassis>	Chassis_AMX_105AM_2	  <cost>	2200	</cost>
+        <chassis>	Chassis_F22_AMX_105AM_2	  <cost>	2200	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1088,8 +1088,7 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	4000	</weight>
-      <maxLoad>	16300	</maxLoad>
-      <terrainResistance>	1.2 1.4 2.3	</terrainResistance>
+      <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
       <brakeForce>	14000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	27	</rotationSpeed>
@@ -2108,9 +2107,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	9.33333302	</repairTime>
-    </Chassis_AMX_105AM>
-    <Chassis_AMX_105AM_2>
-      <userString>	#france_vehicles:Chassis_AMX_105AM_2	</userString>
+    </Chassis_F22_AMX_105AM>
+    <Chassis_F22_AMX_105AM_2>
+      <userString>	#france_vehicles:Chassis_F22_AMX_105AM_2	</userString>
       <tags></tags>
       <level>	5	</level>
       <price>	9000	</price>
@@ -2119,7 +2118,6 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	4000	</weight>
-      <maxLoad>	18300	</maxLoad>
       <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
       <brakeForce>	16000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -3139,13 +3137,13 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	7.38461542	</repairTime>
-    </Chassis_AMX_105AM_2>
+    </Chassis_F22_AMX_105AM_2>
   </chassis>
   <turrets0>
-    <Turret_1_AMX_105AM>
+    <Turret_1_F22_AMX_105AM>
       <ceilless>	true	</ceilless>
-      <userString>	#france_vehicles:Turret_1_AMX_105AM	</userString>
-      <tags>	cannotDetach	</tags>
+      <userString>	#france_vehicles:Turret_1_F22_AMX_105AM	</userString>
+      <tags>	cannotDetach turretless	</tags>
       <level>	5	</level>
       <price>	0	</price>
       <notInShop>	true	</notInShop>
@@ -3168,9 +3166,9 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <Canon_de_105_court_mle_1934S>	shared	  <maxAmmo>	60	</maxAmmo>
+        <_105mm_court_mle_1934_S_105_AM>	shared	  <maxAmmo>	60	</maxAmmo>
           <unlocks>
-            <gun>	Canon_de_105_mle_1930_Schneider_AM	  <cost>	4200	</cost>
+            <gun>	_105mm_obusier_mle_1950_105_AM	  <cost>	4200	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -3278,8 +3276,8 @@
             <density>	100.064 111.721	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </Canon_de_105_court_mle_1934S>
-        <Canon_de_105_mle_1930_Schneider_AM>	shared	  <maxAmmo>	50	</maxAmmo>
+        </_105mm_court_mle_1934_S_105_AM>
+        <_105mm_obusier_mle_1950_105_AM>	shared	  <maxAmmo>	50	</maxAmmo>
           <unlocks>
             <vehicle>	F23_AMX_13F3AM	  <cost>	31900	</cost>
             </vehicle>
@@ -3389,7 +3387,7 @@
             <density>	99.0156 111.318	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </Canon_de_105_mle_1930_Schneider_AM>
+        </_105mm_obusier_mle_1950_105_AM>
       </guns>
       <models>
         <undamaged>	vehicles/french/F22_AMX_105AM/normal/lod0/Turret_01.model	</undamaged>
@@ -3428,54 +3426,36 @@
         <density>	140.182 137.513	</density>
         <aoTextureSize>	512 256	</aoTextureSize>
       </camouflage>
-    </Turret_1_AMX_105AM>
+    </Turret_1_F22_AMX_105AM>
   </turrets0>
   <engines>
-    <SOFAM_8Gxb>	shared	  <unlocks>
-        <engine>	_6F11SRY	  <cost>	8000	</cost>
+    <SOFAM_8_Gxb_105_AM>	shared	  <unlocks>
+        <engine>	Baudouin_6F_11_SRY_105_AM	  <cost>	8000	</cost>
         </engine>
       </unlocks>
-    </SOFAM_8Gxb>
-    <_6F11SRY>	shared	</_6F11SRY>
+    </SOFAM_8_Gxb_105_AM>
+    <Baudouin_6F_11_SRY_105_AM>	shared	</Baudouin_6F_11_SRY_105_AM>
   </engines>
   <fuelTanks>
     <Medium>	shared	</Medium>
   </fuelTanks>
   <radios>
-    <SCR_508>	shared	  <unlocks>
-        <radio>	SCR_528	  <cost>	9000	</cost>
-        </radio>
-      </unlocks>
-    </SCR_508>
     <SCR_528>	shared	</SCR_528>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <SOFAM_8Gxb>
+        <SOFAM_8_Gxb_105_AM>
           <smplEnginePower>	264.3203	</smplEnginePower>
           <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
-        </SOFAM_8Gxb>
-        <_6F11SRY>
+        </SOFAM_8_Gxb_105_AM>
+        <Baudouin_6F_11_SRY_105_AM>
           <smplEnginePower>	296.0387	</smplEnginePower>
           <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
-        </_6F11SRY>
+        </Baudouin_6F_11_SRY_105_AM>
       </engines>
       <chassis>
-        <Chassis_AMX_105AM>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.18515	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.1127	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.0966	</rollingFriction>
-            </firm>
-          </grounds>
-        </Chassis_AMX_105AM>
-        <Chassis_AMX_105AM_2>
+        <Chassis_F22_AMX_105AM>
           <grounds>
             <soft>
               <rollingFriction>	0.16905	</rollingFriction>
@@ -3487,7 +3467,20 @@
               <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_AMX_105AM_2>
+        </Chassis_F22_AMX_105AM>
+        <Chassis_F22_AMX_105AM_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.16905	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.10465	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.08855	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_F22_AMX_105AM_2>
       </chassis>
     </detailed>
   </physics>

@@ -106,11 +106,14 @@ class VehicleBaseArrayProvider(BaseArrayProvider):
         return model
 
     def getItemsList(self):
-        items = self._itemsCache.items.getItems(self._getItemTypeID(), self._getItemCriteria()).values()
+        items = self.getUnfilteredItemsList()
         criteria = self._getCriteria()
         suitableItems = filter(criteria, items)
         self.__hasUnfitItems = len(items) != len(suitableItems)
         return suitableItems
+
+    def getUnfilteredItemsList(self):
+        return self._itemsCache.items.getItems(self._getItemTypeID(), self._getItemCriteria()).values()
 
     def updateSlot(self, model, item, ctx):
         model.setIsDisabled(False)

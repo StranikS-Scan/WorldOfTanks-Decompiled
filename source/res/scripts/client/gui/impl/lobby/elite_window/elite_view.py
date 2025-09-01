@@ -7,13 +7,13 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.impl import backport
 from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.elite_window.elite_view_model import EliteViewModel
+from gui.impl.gen.view_models.views.lobby.elite_window.elite_view_model import EliteViewModel, WindowType
 from gui.prestige.prestige_helpers import hasVehiclePrestige, fillPrestigeEmblemModel, getVehiclePrestige
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showVehPostProgressionView
+from gui.shared.event_dispatcher import showVehPostProgressionView, showVehicleHubVehSkillTreePrestige
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.veh_post_progression.sounds import Sounds
 from helpers import dependency
@@ -29,7 +29,7 @@ class EliteView(ViewImpl):
     __slots__ = ('__vehicle',)
 
     def __init__(self, *args, **kwargs):
-        settings = ViewSettings(R.views.lobby.elite_window.EliteView())
+        settings = ViewSettings(R.views.mono.lobby.elite_window())
         settings.model = EliteViewModel()
         settings.args = args
         settings.kwargs = kwargs
@@ -44,7 +44,7 @@ class EliteView(ViewImpl):
         with self.viewModel.transaction() as model:
             self.__vehicle = self.__itemsCache.items.getItemByCD(vehicleCD)
             fillVehicleInfo(model.vehicleInfo, self.__vehicle)
-            self.__updateVehPostProgression(model=model)
+            self.__updateWindowType(model=model)
             model.setIsPrestigeAvailable(hasVehiclePrestige(vehicleCD))
             fillPrestigeEmblemModel(model.prestigeEmblem, currentLevel, vehicleCD)
         super(EliteView, self)._onLoading(*args, **kwargs)
@@ -55,13 +55,16 @@ class EliteView(ViewImpl):
         SoundGroups.g_instance.playSound2D(Sounds.ENTER_ELITE_VIEW)
 
     def _getEvents(self):
-        return super(EliteView, self)._getEvents() + ((self.__itemsCache.onSyncCompleted, self.__onSyncCompleted), (self.viewModel.onClose, self.__onClose), (self.viewModel.onGoToPostProgression, self.__onGoToPostProgression))
+        return super(EliteView, self)._getEvents() + ((self.__itemsCache.onSyncCompleted, self.__onSyncCompleted), (self.viewModel.onClose, self.__onClose), (self.viewModel.onGoToProgression, self.__onGoToProgression))
+
+    def _finalize(self):
+        g_eventBus.handleEvent(events.CloseWindowEvent(events.CloseWindowEvent.ELITE_WINDOW_CLOSED))
+        super(EliteView, self)._finalize()
 
     def __onClose(self):
-        g_eventBus.handleEvent(events.CloseWindowEvent(events.CloseWindowEvent.ELITE_WINDOW_CLOSED))
         self.destroyWindow()
 
-    def __onGoToPostProgression(self):
+    def __onGoToProgression(self):
 
         def predicate(window):
             return window.content is not None and getattr(window.content, 'alias', None) == VIEW_ALIAS.LOBBY_RESEARCH
@@ -69,6 +72,9 @@ class EliteView(ViewImpl):
         window = first(self.__guiLoader.windowsManager.findWindows(predicate))
         if window is not None:
             window.content.goToPostProgression(self.__vehicle.intCD)
+        elif self.__isSkillTreeProgression():
+            self.destroyWindow()
+            showVehicleHubVehSkillTreePrestige(intCD=self.__vehicle.intCD)
         else:
             g_eventBus.handleEvent(events.DestroyViewEvent(VIEW_ALIAS.VEH_POST_PROGRESSION), scope=EVENT_BUS_SCOPE.LOBBY)
             showVehPostProgressionView(self.__vehicle.intCD)
@@ -80,11 +86,21 @@ class EliteView(ViewImpl):
 
     def __onSyncCompleted(self, reason, diff):
         if GUI_ITEM_TYPE.VEH_POST_PROGRESSION in diff:
-            self.__updateVehPostProgression()
+            with self.viewModel.transaction() as model:
+                self.__updateWindowType(model)
+
+    def __isSkillTreeProgression(self):
+        return self.__vehicle.postProgression.isVehSkillTree() if self.__vehicle.postProgressionAvailability(unlockOnly=True).result else False
 
     @replaceNoneKwargsModel
-    def __updateVehPostProgression(self, model=None):
-        model.setIsPostProgressionExists(self.__vehicle.postProgressionAvailability(unlockOnly=True).result)
+    def __updateWindowType(self, model=None):
+        windowType = WindowType.STANDARD
+        if self.__vehicle.postProgressionAvailability(unlockOnly=True).result:
+            if self.__isSkillTreeProgression():
+                windowType = WindowType.VEH_SKILL_TREE
+            else:
+                windowType = WindowType.POST_PROGRESSION
+        model.setType(windowType)
 
 
 class EliteWindow(LobbyNotificationWindow):

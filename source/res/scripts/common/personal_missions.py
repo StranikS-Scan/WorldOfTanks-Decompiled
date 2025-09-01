@@ -8,9 +8,11 @@ g_cache = None
 g_operationsCache = None
 g_campaignsCache = None
 PERSONAL_MISSIONS_XML_PATH = potapov_quests.POTAPOV_QUEST_XML_PATH
+REGULAR_OPERATION_SPEC_LVL_RESTRICTION = 1
+PERSONAL_MISSION_REGULAR_MIN_LEVEL = 6
 
 class PM_BRANCH(potapov_quests.PQ_BRANCH):
-    ACTIVE_BRANCHES = (potapov_quests.PQ_BRANCH.REGULAR, potapov_quests.PQ_BRANCH.PERSONAL_MISSION_2)
+    pass
 
 
 def isPersonalMissionsEnabled(gameParams, branch):
@@ -28,6 +30,12 @@ class PM_FLAG(potapov_quests.PQ_FLAG):
 PM_BRANCH_TO_FREE_TOKEN_NAME = potapov_quests.PM_BRANCH_TO_FREE_TOKEN_NAME
 PM_BRANCH_TO_FINAL_PAWN_COST = potapov_quests.PM_BRANCH_TO_FINAL_PAWN_COST
 PM_REWARD_BY_DEMAND = potapov_quests.PQ_REWARD_BY_DEMAND
+
+class PM3QType(object):
+    ASSAULT = 'Assault'
+    SNIPER = 'Sniper'
+    SUPPORT = 'Support'
+
 
 def _createPMCache():
     auxData = {}

@@ -18,7 +18,7 @@ from helpers import dependency
 from items import vehicles
 from items.components.post_progression_components import getActiveModifications
 from items.utils import getCircularVisionRadius, getFirstReloadTime
-from post_progression_common import EXT_DATA_PROGRESSION_KEY, EXT_DATA_SLOT_KEY, TANK_SETUP_GROUPS, TankSetupLayouts, TankSetups, VehicleState
+from post_progression_common import EXT_DATA_PROGRESSION_KEY, EXT_DATA_SLOT_KEY, TANK_SETUP_GROUPS, TankSetupLayouts, TankSetups, VehicleState, unpackActionCDs
 from shared_utils import CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -170,19 +170,18 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
     def setPostProgression(self, vehicleID, itemCDs):
         if self.__playerVehicleID != vehicleID or self.__isSelectionStopped() or self.__state & _States.PROGRESSION:
             return
-        self.__extData[_EXT_PROGRESSION_MODS] = getActiveModifications(itemCDs, vehicles.g_cache.postProgression())
-        state = self.__extData.get(EXT_DATA_PROGRESSION_KEY, VehicleState())
-        setFeatures(state, itemCDs)
-        self.__extData[EXT_DATA_PROGRESSION_KEY] = state
+        vppCache = vehicles.g_cache.postProgression()
+        treeID = self.__vehicle.typeDescr.postProgressionTree
+        actionCDs = unpackActionCDs(itemCDs, vppCache, treeID)
+        self.__extData[_EXT_PROGRESSION_MODS] = getActiveModifications(actionCDs, vppCache, treeID)
+        setFeatures(self.__postProgressionState, actionCDs)
         self.__onInitStepCompleted(_States.PROGRESSION)
 
     @MethodsRules.delayable('setPlayerVehicle')
     def setDisabledSwitches(self, vehicleID, groupIDs):
         if self.__playerVehicleID != vehicleID or self.__isSelectionStopped() or self.__state & _States.DISABLED_SWITCHES:
             return
-        state = self.__extData.get(EXT_DATA_PROGRESSION_KEY, VehicleState())
-        setDisabledSwitches(state, groupIDs)
-        self.__extData[EXT_DATA_PROGRESSION_KEY] = state
+        setDisabledSwitches(self.__postProgressionState, groupIDs)
         self.__onInitStepCompleted(_States.DISABLED_SWITCHES)
 
     @MethodsRules.delayable('setPlayerVehicle')
@@ -333,7 +332,7 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
             self.__updateState(_States.SELECTION_STARTED)
 
     def __updateAmmoCtrl(self):
-        self.__sessionProvider.shared.ammo.updateForNewSetup(self.__vehicle.descriptor.gun, self.__vehicle.shells.installed.getItems())
+        self.__sessionProvider.shared.ammo.updateForNewSetup(self.__vehicle.descriptor, self.__vehicle.shells.installed.getItems())
 
     def __updateAmmoCtrlParams(self, factors):
         ammoCtrl = self.__sessionProvider.shared.ammo
@@ -404,3 +403,10 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
         self.__updateFeedbackParams(newFactors)
         for component in self._viewComponents:
             component.updateVehicleParams(self.__vehicle, newFactors)
+
+    @property
+    def __postProgressionState(self):
+        state = self.__extData.get(EXT_DATA_PROGRESSION_KEY)
+        if state is None:
+            self.__extData[EXT_DATA_PROGRESSION_KEY] = state = VehicleState()
+        return state

@@ -56,7 +56,7 @@
     </armor>
     <primaryArmor>	armor_10 armor_3 armor_4	</primaryArmor>
     <weight>	9810	</weight>
-    <maxHealth>	1120	</maxHealth>
+    <maxHealth>	1280	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	180	</maxRegenHealth>
@@ -1304,7 +1304,7 @@
   </hull>
   <chassis>
     <Chassis_F88_AMX_13_105>
-      <userString>	#france_vehicles:Turret_1_F88_AMX_13_105	</userString>
+      <userString>	#france_vehicles:Chassis_F88_AMX_13_105	</userString>
       <tags></tags>
       <level>	10	</level>
       <price>	82500	</price>
@@ -1314,7 +1314,6 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	1400	</weight>
-      <maxLoad>	18000	</maxLoad>
       <terrainResistance>	0.9 1 1.6	</terrainResistance>
       <brakeForce>	16000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -2260,7 +2259,7 @@
   <turrets0>
     <Turret_1_F88_AMX_13_105>
       <userString>	#france_vehicles:Turret_1_F88_AMX_13_105	</userString>
-      <tags></tags>
+      <tags>	oscillating	</tags>
       <level>	10	</level>
       <price>	66000	</price>
       <notInShop>	true	</notInShop>
@@ -2277,7 +2276,7 @@
       </armor>
       <primaryArmor>	armor_9 armor_3 armor_4	</primaryArmor>
       <weight>	2800	</weight>
-      <maxHealth>	280	</maxHealth>
+      <maxHealth>	320	</maxHealth>
       <rotationSpeed>	38	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -2306,7 +2305,7 @@
           </armor>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
-            <minPitch>	0 -12 0.25 -12 0.319444 -5.5 0.680556 -5.5 0.75 -12 1 -12	</minPitch>
+            <minPitch>	0.00000 -12.00 0.25000 -12.00 0.31944 -7.00 0.68056 -7.00 0.75000 -12.00 1.00000 -12.00	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.42	</shotDispersionRadius>

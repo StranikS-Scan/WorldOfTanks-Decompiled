@@ -18,6 +18,9 @@ from gui.Scaleform.daapi.view.lobby.veh_post_progression.veh_post_progression_ve
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_configurator_vehicle import g_cmpConfiguratorVehicle
 from gui.battle_pass.battle_pass_helpers import getOfferTokenByGift
 from gui.battle_pass.rewards_sort import getRewardsComparator
+from gui.impl import backport
+from gui.impl.gen import R
+from gui.impl.gen.view_models.views.lobby.personal_missions_30.common.enums import ParamTooltipType
 from gui.impl.lobby.easy_tank_equip.easy_tank_equip_vehicle import g_easyTankEquipCopyVehicle
 from gui.server_events import recruit_helper
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -27,6 +30,7 @@ from gui.shared.items_parameters.formatters import NO_BONUS_SIMPLIFIED_SCHEME
 from gui.shared.tooltips import TOOLTIP_COMPONENT
 from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID
 from helpers import dependency
+from personal_missions import PM_BRANCH
 from rent_common import RENT_TYPE_TO_DURATION
 from shared_utils import first
 from skeletons.gui.game_control import IRankedBattlesController, IBattlePassController, IHangarGuiController
@@ -497,7 +501,7 @@ class PersonalMissionOperationContext(ToolTipContext):
         super(PersonalMissionOperationContext, self).__init__(TOOLTIP_COMPONENT.HANGAR, fieldsToExclude)
 
     def buildItem(self, tileID):
-        return self._eventsCache.getPersonalMissions().getAllOperations().get(tileID)
+        return self._eventsCache.getPersonalMissions().getAllOperations(branches=PM_BRANCH.ALL).get(tileID)
 
 
 class PersonalMissionCampaignContext(ToolTipContext):
@@ -550,8 +554,12 @@ class HangarParamContext(BaseHangarParamContext):
         super(HangarParamContext, self).__init__(True)
         self.formatters = NO_BONUS_SIMPLIFIED_SCHEME
 
+    def getComparator(self):
+        item = g_currentVehicle.item or g_currentPreviewVehicle.item
+        return params_helper.similarCrewComparator(item)
+
     def buildItem(self, *args, **kwargs):
-        return g_currentVehicle.item
+        return g_currentVehicle.item or g_currentPreviewVehicle.item
 
 
 class PreviewParamContext(HangarParamContext):
@@ -1369,3 +1377,23 @@ class BattlePassGiftTokenContext(ToolTipContext):
 
     def getParams(self):
         return {'isOfferEnabled': self.__battlePassController.isOfferEnabled() and self.__hasOffer}
+
+
+class PersonalMissionsPointsTooltipContext(ToolTipContext):
+
+    def getParams(self):
+        params = super(PersonalMissionsPointsTooltipContext, self).getParams()
+        params.update({'tooltipType': ParamTooltipType.PM3_POINTS.value,
+         'params': [],
+         'resId': R.views.mono.personal_missions_30.tooltips.param_tooltip()})
+        return params
+
+
+class PersonalMissionOperationDisabledTooltipContext(ToolTipContext):
+
+    def getParams(self):
+        params = super(PersonalMissionOperationDisabledTooltipContext, self).getParams()
+        params.update({'tooltipType': ParamTooltipType.CUSTOM_SIMPLE.value,
+         'params': {'body': backport.text(R.strings.personal_missions_30.campaignSelector.operation.tooltip.locked())},
+         'resId': R.views.mono.personal_missions_30.tooltips.param_tooltip()})
+        return params

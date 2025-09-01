@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/_WWISEStubs.py
+import typing
 import Math
 
 class Sound:
@@ -160,7 +161,7 @@ def WG_loadCommon(*args, **kwargs):
     pass
 
 
-def WW_setRTCPGlobal(*args, **kwargs):
+def WW_setRTCPGlobal(name, value, **kwargs):
     pass
 
 

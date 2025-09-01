@@ -124,7 +124,7 @@ class ProgressiveStylePopover(CustomizationProgressiveKitPopoverMeta):
         return
 
     def __setClearMessage(self):
-        if self.__style is None or len(self.__itemsList) <= len(SeasonType.COMMON_SEASONS):
+        if self.__style is None or not self.__itemsList:
             clearMsgResId = R.strings.vehicle_customization.customization.itemsPopover.message.clearFiltered
             clearMessage = text_styles.main(backport.text(clearMsgResId()))
         else:

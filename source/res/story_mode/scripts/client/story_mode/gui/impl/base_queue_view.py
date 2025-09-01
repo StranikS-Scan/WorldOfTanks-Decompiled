@@ -4,6 +4,7 @@ import BigWorld
 from PlayerEvents import g_playerEvents
 from helpers import dependency
 from gui.impl.pub import ViewImpl
+from shared_utils import safeCancelCallback
 from story_mode.skeletons.story_mode_controller import IStoryModeController
 
 class BaseWaitQueueView(ViewImpl):
@@ -34,7 +35,7 @@ class BaseWaitQueueView(ViewImpl):
 
     def _stopTimer(self):
         if self._timerCallback is not None:
-            BigWorld.cancelCallback(self._timerCallback)
+            safeCancelCallback(self._timerCallback)
             self._timerCallback = None
         return
 

@@ -944,8 +944,7 @@
         </chassis>
       </unlocks>
       <weight>	8000	</weight>
-      <maxLoad>	35000	</maxLoad>
-      <terrainResistance>	1.2 1.6 2.3	</terrainResistance>
+      <terrainResistance>	1.1 1.4 2.1	</terrainResistance>
       <brakeForce>	45500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	28	</rotationSpeed>
@@ -1791,7 +1790,6 @@
       <level>	6	</level>
       <price>	15800	</price>
       <weight>	8000	</weight>
-      <maxLoad>	38000	</maxLoad>
       <terrainResistance>	1.1 1.4 2.1	</terrainResistance>
       <brakeForce>	45500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2661,7 +2659,7 @@
       <guns>
         <_90mm_wz_39_90>	shared	  <maxAmmo>	44	</maxAmmo>
           <unlocks>
-            <gun>	_100mm_DAP	  <cost>	13500	</cost>
+            <gun>	_100mm_DAP_44	  <cost>	13500	</cost>
             </gun>
           </unlocks>
           <pitchLimits>
@@ -2670,7 +2668,7 @@
           </pitchLimits>
           <turretYawLimits>	-5 5	</turretYawLimits>
           <shotDispersionRadius>	0.39	</shotDispersionRadius>
-          <reloadTime>	8.3	</reloadTime>
+          <reloadTime>	7.6	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	4	</afterShot>
@@ -2773,7 +2771,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_90mm_wz_39_90>
-        <_100mm_DAP>	shared	  <maxAmmo>	44	</maxAmmo>
+        <_100mm_DAP_44>	shared	  <maxAmmo>	44	</maxAmmo>
           <unlocks>
             <vehicle>	Pl31_SDP_Wz_57D	  <cost>	54800	</cost>
             </vehicle>
@@ -2886,7 +2884,7 @@
             <density>	105.805191 98.628166	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_100mm_DAP>
+        </_100mm_DAP_44>
       </guns>
       <models>
         <undamaged>	vehicles/poland/Pl32_SDP_Wz_44/normal/lod0/Turret_01.model	</undamaged>
@@ -2938,11 +2936,6 @@
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <N2_C>	shared	  <unlocks>
-        <radio>	RKB_C	  <cost>	620	</cost>
-        </radio>
-      </unlocks>
-    </N2_C>
     <RKB_C>	shared	</RKB_C>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
@@ -2962,13 +2955,13 @@
         <Chassis_Pl32_SDP_Wz_44>
           <grounds>
             <soft>
-              <rollingFriction>	0.18515	</rollingFriction>
+              <rollingFriction>	0.16905	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1288	</rollingFriction>
+              <rollingFriction>	0.1127	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0966	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

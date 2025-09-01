@@ -882,7 +882,6 @@ def _migrateTo96(core, data, initialized):
      'favorite': False,
      'bonus': False,
      'crystals': False,
-     'comp7': True,
      'role_HT_assault': False,
      'role_HT_break': False,
      'role_HT_universal': False,
@@ -1003,8 +1002,7 @@ def _migrateTo111(core, data, initialized):
 
 
 def _migrateTo112(core, data, initialized):
-    from account_helpers.settings_core.ServerSettingsManager import GUI_START_BEHAVIOR
-    data[GUI_START_BEHAVIOR][GuiSettingsBehavior.COMP7_SEASON_STATISTICS_SHOWN] = False
+    pass
 
 
 def _migrateTo113(core, data, initialized):
@@ -1243,8 +1241,7 @@ def _migrateTo123(core, data, initialized):
 
 
 def _migrateTo124(core, data, initialized):
-    from account_helpers.settings_core.ServerSettingsManager import GUI_START_BEHAVIOR
-    data[GUI_START_BEHAVIOR][GuiSettingsBehavior.COMP7_SEASON_STATISTICS_SHOWN] = False
+    pass
 
 
 def _migrateTo125(core, data, initialized):
@@ -1279,14 +1276,7 @@ def _migrateTo129(core, data, initialized):
 
 def _migrateTo130(core, data, initialized):
     from account_helpers.settings_core.ServerSettingsManager import GUI_START_BEHAVIOR
-    from account_helpers.AccountSettings import AccountSettings, COMP7_UI_SECTION, COMP7_SHOP_SEEN_PRODUCTS, COMP7_LAST_SEASON
-    data[GUI_START_BEHAVIOR][GuiSettingsBehavior.COMP7_SEASON_STATISTICS_SHOWN] = False
     data[GUI_START_BEHAVIOR][GuiSettingsBehavior.COMP7_YEARLY_ANIMATION_SEEN] = False
-    settings = AccountSettings.getUIFlag(COMP7_UI_SECTION)
-    settings[COMP7_SHOP_SEEN_PRODUCTS] = set(settings.get(COMP7_SHOP_SEEN_PRODUCTS, ()))
-    settings[COMP7_LAST_SEASON] = None
-    AccountSettings.setUIFlag(COMP7_UI_SECTION, settings)
-    return
 
 
 def _migrateTo131(core, data, initialized):
@@ -1300,8 +1290,7 @@ def _migrateTo132(core, data, initialized):
 
 
 def _migrateTo133(core, data, initialized):
-    from account_helpers.settings_core.ServerSettingsManager import GUI_START_BEHAVIOR
-    data[GUI_START_BEHAVIOR][GuiSettingsBehavior.COMP7_SEASON_STATISTICS_SHOWN] = False
+    pass
 
 
 def _migrateTo134(core, data, initialized):
@@ -1317,7 +1306,7 @@ def _migrateTo135(core, data, initialized):
 
 
 def _migrateTo136(core, data, initialized):
-    data['onceOnlyHints2'][OnceOnlyHints.WOTPLUS_OPT_DEV_HINT] = False
+    pass
 
 
 def _migrateTo137(core, data, initialized):
@@ -1325,12 +1314,7 @@ def _migrateTo137(core, data, initialized):
 
 
 def _migrateTo138(core, data, initialized):
-    from account_helpers.settings_core.ServerSettingsManager import GUI_START_BEHAVIOR
-    from account_helpers.AccountSettings import AccountSettings, COMP7_UI_SECTION, COMP7_LAST_SEASON
-    settings = AccountSettings.getUIFlag(COMP7_UI_SECTION)
-    settings[COMP7_LAST_SEASON] = None
-    data[GUI_START_BEHAVIOR][GuiSettingsBehavior.COMP7_SEASON_STATISTICS_SHOWN] = False
-    return
+    pass
 
 
 def _migrateTo139(core, data, initialized):
@@ -1374,6 +1358,83 @@ def _migrateTo142(core, data, initialized):
         data['clear'][battlePassUpdateKey] = data['clear'].get(battlePassUpdateKey, 0) | introOffset
     elif battlePassSettings & extraOffset:
         data['clear'][battlePassUpdateKey] = data['clear'].get(battlePassUpdateKey, 0) | extraOffset
+
+
+def _migrateTo143(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    from account_helpers.AccountSettings import AccountSettings, PERSONAL_MISSION_3
+    settings = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.PERSONAL_MISSION_3, 0)
+    if settings:
+        clear = data['clear']
+        clear[SETTINGS_SECTIONS.PERSONAL_MISSION_3] = clear.get(SETTINGS_SECTIONS.PERSONAL_MISSION_3, 0) | settings
+    else:
+        data[SETTINGS_SECTIONS.PERSONAL_MISSION_3] = AccountSettings.getSettingsDefault(PERSONAL_MISSION_3)
+
+
+def _migrateTo144(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    clear = data['clear']
+    hintsToClear = {('onceOnlyHints2', _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.ONCE_ONLY_HINTS_2, 0)): (27, 28),
+     ('onceOnlyHints3', _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.ONCE_ONLY_HINTS_3, 0)): (8, 9)}
+    for sectionData, hintsPositions in hintsToClear.items():
+        section, sectionValue = sectionData
+        for bitPosition in hintsPositions:
+            settingOffset = 1 << bitPosition
+            if sectionValue & settingOffset:
+                clear[section] = clear.get(section, 0) | settingOffset
+
+
+def _migrateTo145(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    from account_helpers.settings_core.ServerSettingsManager import GUI_START_BEHAVIOR
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.GUI_START_BEHAVIOR, 0)
+    settingOffset = 4194304
+    if storedValue & settingOffset:
+        clear = data['clear']
+        clear[GUI_START_BEHAVIOR] = clear.get(GUI_START_BEHAVIOR, 0) | settingOffset
+
+
+def _migrateTo146(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    for serverSection in (SETTINGS_SECTIONS.COMP7_CAROUSEL_FILTER_2, SETTINGS_SECTIONS.COMP7_LIGHT_CAROUSEL_FILTER_2):
+        storedValue = _getSettingsCache().getSectionSettings(serverSection, 0)
+        settingOffset = 512
+        if storedValue & settingOffset:
+            clear = data['clear']
+            clear[serverSection] = clear.get(serverSection, 0) | settingOffset
+
+
+def _migrateTo147(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    from account_helpers.AccountSettings import AccountSettings
+    default = AccountSettings.getSettingsDefault(GAME.GAMEPLAY_MASK)
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.GAMEPLAY, default)
+    import ArenaType
+    newMask = storedValue & ~ArenaType.getGameplaysMask(('ctf30x30', 'domination30x30'))
+    data['gameplayData'][GAME.GAMEPLAY_MASK] = newMask & 65535
+    data['gameExtData2'][GAME.GAMEPLAY_DEV_MAPS] = True
+
+
+def _migrateTo148(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    hangarFiltersSections = ((SETTINGS_SECTIONS.CAROUSEL_FILTER_1, SETTINGS_SECTIONS.CAROUSEL_FILTER_1),
+     (SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_1, 'rankedCarouselFilter1'),
+     (SETTINGS_SECTIONS.EPICBATTLE_CAROUSEL_FILTER_1, SETTINGS_SECTIONS.EPICBATTLE_CAROUSEL_FILTER_1),
+     (SETTINGS_SECTIONS.COMP7_CAROUSEL_FILTER_1, 'comp7CarouselFilter1'),
+     (SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_1, SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_1),
+     (SETTINGS_SECTIONS.MAPBOX_CAROUSEL_FILTER_1, SETTINGS_SECTIONS.MAPBOX_CAROUSEL_FILTER_1),
+     (SETTINGS_SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_1, SETTINGS_SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_1),
+     (SETTINGS_SECTIONS.COMP7_LIGHT_CAROUSEL_FILTER_1, 'comp7LightCarouselFilter1'))
+    tier11Filter = 1073741824
+    for sectionName, dataName in hangarFiltersSections:
+        storedValue = _getSettingsCache().getSectionSettings(sectionName, 0)
+        if storedValue & tier11Filter:
+            data['clear'][dataName] = data['clear'].get(dataName, 0) | tier11Filter
+
+
+def _migrateTo149(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS, SETTINGS_SECTIONS
+    data[SETTINGS_SECTIONS.UI_STORAGE_2][UI_STORAGE_KEYS.ONE_TIME_GIFT_INTRO_SHOWN] = False
 
 
 _versions = ((1,
@@ -1938,6 +1999,34 @@ _versions = ((1,
   False),
  (142,
   _migrateTo142,
+  False,
+  False),
+ (143,
+  _migrateTo143,
+  False,
+  False),
+ (144,
+  _migrateTo144,
+  False,
+  False),
+ (145,
+  _migrateTo145,
+  False,
+  False),
+ (146,
+  _migrateTo146,
+  False,
+  False),
+ (147,
+  _migrateTo147,
+  False,
+  False),
+ (148,
+  _migrateTo148,
+  False,
+  False),
+ (149,
+  _migrateTo149,
   False,
   False))
 

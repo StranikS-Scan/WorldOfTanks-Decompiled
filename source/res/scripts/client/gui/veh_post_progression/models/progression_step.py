@@ -70,6 +70,9 @@ class PostProgressionStepItem(PurchaseProvider):
     def getParentStepID(self):
         return self.__descriptor.requiredUnlocks[0] if self.__descriptor.requiredUnlocks else None
 
+    def getParentStepIDs(self):
+        return self.__descriptor.requiredUnlocks
+
     def getPrice(self):
         return self.__price
 
@@ -78,6 +81,18 @@ class PostProgressionStepItem(PurchaseProvider):
 
     def getState(self):
         return self.__state
+
+    def getPosition(self):
+        return self.__descriptor.position
+
+    def getDirections(self):
+        return self.__descriptor.directions or ()
+
+    def getType(self):
+        return self.__descriptor.type
+
+    def getUnlockStrategy(self):
+        return self.__descriptor.unlockStrategy
 
     def mayPurchase(self, balance, ignoreState=False):
         stateCheck = VALID_CHECK_RESULT if ignoreState else self.__getStateCheckResult()
@@ -92,11 +107,7 @@ class PostProgressionStepItem(PurchaseProvider):
             return PostProgressionStepState.RESTRICTED
         if progressionState.isUnlocked(self.stepID):
             return PostProgressionStepState.RECEIVED
-        for stepID in self.__descriptor.requiredUnlocks:
-            if not progressionState.isUnlocked(stepID):
-                return PostProgressionStepState.LOCKED
-
-        return PostProgressionStepState.UNLOCKED
+        return PostProgressionStepState.LOCKED if not self.__descriptor.unlockStrategy([ progressionState.isUnlocked(stepID) for stepID in self.__descriptor.requiredUnlocks ]) else PostProgressionStepState.UNLOCKED
 
     def __getStateCheckResult(self):
         restriction = _STATE_TO_RESTRICTION[self.getState()]

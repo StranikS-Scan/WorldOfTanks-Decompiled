@@ -1,0 +1,14 @@
+<SMVehicleRespawnComponent.def>
+  <Parent>	VehicleRespawnComponent	</Parent>
+  <Properties>
+    <explodeVehicle>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	1	</Default>
+    </explodeVehicle>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	VehicleRespawnComponent	</DefaultKeyName>
+</SMVehicleRespawnComponent.def>

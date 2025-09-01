@@ -4,7 +4,6 @@ import typing
 import BattleReplay
 import BigWorld
 import SoundGroups
-import TriggersManager
 from constants import VEHICLE_HIT_FLAGS as VHF
 from Event import EventsSubscriber
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
@@ -260,8 +259,6 @@ class ShotsResultSoundController(IShotsResultSoundController):
             sound = self.ENEMY_DAMAGED_BY_DIRECT_EXPLOSION
         elif hitFlags & VHF.RICOCHET and not hitFlags & VHF.DEVICE_PIERCED_BY_PROJECTILE:
             sound = self.ENEMY_RICOCHET
-            if enemiesHitCount == 1:
-                TriggersManager.g_manager.fireTrigger(TriggersManager.TRIGGER_TYPE.PLAYER_SHOT_RICOCHET, targetId=enemyVehID)
         elif hitFlags & VHF.MATERIAL_WITH_POSITIVE_DF_NOT_PIERCED_BY_PROJECTILE:
             if hitFlags & (VHF.GUN_DAMAGED_BY_PROJECTILE | VHF.GUN_DAMAGED_BY_EXPLOSION):
                 sound = self.ENEMY_NOT_DAMAGED_ATTEMPT_AND_GUN_DAMAGED
@@ -269,19 +266,14 @@ class ShotsResultSoundController(IShotsResultSoundController):
                 sound = self.ENEMY_NOT_DAMAGED_ATTEMPT_AND_CHASSIS_DAMAGED
             else:
                 sound = self.ENEMY_NOT_DAMAGED_ATTEMPT
-                if enemiesHitCount == 1:
-                    TriggersManager.g_manager.fireTrigger(TriggersManager.TRIGGER_TYPE.PLAYER_SHOT_NOT_PIERCED, targetId=enemyVehID)
         elif hitFlags & (VHF.GUN_DAMAGED_BY_PROJECTILE | VHF.GUN_DAMAGED_BY_EXPLOSION):
             sound = self.ENEMY_NOT_DAMAGED_NO_ATTEMPT_AND_GUN_DAMAGED
         elif hitFlags & (VHF.CHASSIS_DAMAGED_BY_PROJECTILE | VHF.CHASSIS_DAMAGED_BY_EXPLOSION):
             sound = self.ENEMY_NOT_DAMAGED_NO_ATTEMPT_AND_CHASSIS_DAMAGED
+        elif hitFlags & VHF.IS_ANY_PIERCING_MASK and not hitFlags & self._ARMOR_SCREEN_FLAGS:
+            sound = self.ENEMY_NOT_DAMAGED_NO_ATTEMPT
         else:
-            if hitFlags & VHF.IS_ANY_PIERCING_MASK and not hitFlags & self._ARMOR_SCREEN_FLAGS:
-                sound = self.ENEMY_NOT_DAMAGED_NO_ATTEMPT
-            else:
-                sound = self.ENEMY_NOT_DAMAGED_AND_NOT_PIERCED
-            if enemiesHitCount == 1:
-                TriggersManager.g_manager.fireTrigger(TriggersManager.TRIGGER_TYPE.PLAYER_SHOT_NOT_PIERCED, targetId=enemyVehID)
+            sound = self.ENEMY_NOT_DAMAGED_AND_NOT_PIERCED
         return sound
 
     def __invalidateCurrentVehicle(self, vehicle):

@@ -60,7 +60,7 @@ def writeAnchorSlots(slotDS, slot):
 
 def writeEmblemSlots(slotDS, slot):
     if slot.type not in ('attachment', 'sequence', 'paint', 'camouflage', 'style', 'effect', 'projectionDecal', 'fixedProjectionDecal'):
-        _xml.rewriteBool(slotDS, 'isMirrored', slot.isMirrored, False)
+        _xml.rewriteBool(slotDS, 'isMirrored', slot.isMirrored, slot.type in ('insignia', 'insigniaOnGun'))
         slotDS.writeVector3('rayStart', slot.rayStart)
         slotDS.writeVector3('rayEnd', slot.rayEnd)
         slotDS.writeVector3('rayUp', slot.rayUp)

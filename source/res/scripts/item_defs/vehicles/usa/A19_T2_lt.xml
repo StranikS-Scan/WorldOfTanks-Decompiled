@@ -1148,7 +1148,6 @@
         <rightTrack>	6	</rightTrack>
       </armor>
       <weight>	1800	</weight>
-      <maxLoad>	8300	</maxLoad>
       <terrainResistance>	1.03 1.37 2.29	</terrainResistance>
       <brakeForce>	34500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -1628,11 +1627,11 @@
           <radiusOverrides>
             <wheel>
               <name>	WD_L3	</name>
-              <radius>	0.236322	</radius>
+              <radius>	0.248	</radius>
             </wheel>
             <wheel>
               <name>	WD_L0	</name>
-              <radius>	0.235395	</radius>
+              <radius>	0.235	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
@@ -1645,7 +1644,7 @@
             </sync>
             <sync>
               <name>	WD_L0	</name>
-              <startAngle>	59.697399	</startAngle>
+              <startAngle>	0.20944	</startAngle>
               <teethCount>	14	</teethCount>
             </sync>
           </teethSyncs>
@@ -1827,11 +1826,11 @@
           <radiusOverrides>
             <wheel>
               <name>	WD_R3	</name>
-              <radius>	0.236317	</radius>
+              <radius>	0.248	</radius>
             </wheel>
             <wheel>
               <name>	WD_R0	</name>
-              <radius>	0.2354	</radius>
+              <radius>	0.235	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
@@ -1844,7 +1843,7 @@
             </sync>
             <sync>
               <name>	WD_R0	</name>
-              <startAngle>	59.6973	</startAngle>
+              <startAngle>	0.20944	</startAngle>
               <teethCount>	14	</teethCount>
             </sync>
           </teethSyncs>

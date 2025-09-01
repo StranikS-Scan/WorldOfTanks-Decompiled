@@ -4,7 +4,7 @@ from gui.veh_post_progression.helpers import getInstalledShells, setFeatures, se
 from helpers import dependency
 from items import vehicles
 from battle_modifiers_common import EXT_DATA_MODIFIERS_KEY
-from post_progression_common import EXT_DATA_PROGRESSION_KEY, EXT_DATA_SLOT_KEY, VehicleState
+from post_progression_common import EXT_DATA_PROGRESSION_KEY, EXT_DATA_SLOT_KEY, VehicleState, unpackActionCDs
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 
 class VehicleBuilder(object):
@@ -51,7 +51,8 @@ class VehicleBuilder(object):
     def setPostProgressionState(self, vehPostProgression, disabledSwitchGroupIDs):
         self.__assertNotSet(self.__extData, EXT_DATA_PROGRESSION_KEY)
         vehState = VehicleState()
-        setFeatures(vehState, vehPostProgression)
+        actionCDs = self.__getUnpackedPostProgressionActionCDs(vehPostProgression)
+        setFeatures(vehState, actionCDs)
         setDisabledSwitches(vehState, disabledSwitchGroupIDs)
         self.__setExtData(EXT_DATA_PROGRESSION_KEY, vehState)
 
@@ -69,6 +70,11 @@ class VehicleBuilder(object):
         if self.__extData and EXT_DATA_PROGRESSION_KEY in self.__extData:
             vehicle.installPostProgressionItem(self.__itemsFactory.createVehPostProgression(vehicle.compactDescr, self.__extData[EXT_DATA_PROGRESSION_KEY], vehicle.typeDescr))
         return vehicle
+
+    def __getUnpackedPostProgressionActionCDs(self, packedCDs):
+        vppCache = vehicles.g_cache.postProgression()
+        vehType = vehicles.getVehicleType(self.__strCD)
+        return unpackActionCDs(packedCDs, vppCache, vehType.postProgressionTree)
 
     def __setInvData(self, key, value):
         if self.__invData is None:
@@ -91,24 +97,24 @@ class VehicleBuilder(object):
     @staticmethod
     def __assertNotSet--- This code section failed: ---
 
- 109       0	LOAD_FAST         'target'
+ 115       0	LOAD_FAST         'target'
            3	LOAD_CONST        ''
            6	COMPARE_OP        'is'
            9	POP_JUMP_IF_FALSE '16'
 
- 110      12	LOAD_CONST        ''
+ 116      12	LOAD_CONST        ''
           15	JUMP_FORWARD      37
 
- 112      16	LOAD_GLOBAL       'isinstance'
+ 118      16	LOAD_GLOBAL       'isinstance'
           19	LOAD_FAST         'keys'
           22	LOAD_GLOBAL       'set'
           25	CALL_FUNCTION_2   ''
           28	POP_JUMP_IF_FALSE '34'
 
- 113      31	JUMP_FORWARD      '34'
+ 119      31	JUMP_FORWARD      '34'
         34_0	COME_FROM         '31'
 
- 115      34	LOAD_CONST        ''
+ 121      34	LOAD_CONST        ''
         37_0	COME_FROM         '15'
           37	RETURN_VALUE      ''
 

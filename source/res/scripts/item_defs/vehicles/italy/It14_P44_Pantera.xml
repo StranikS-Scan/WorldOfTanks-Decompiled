@@ -56,7 +56,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	24015	</weight>
-    <maxHealth>	1040	</maxHealth>
+    <maxHealth>	1240	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -1243,8 +1243,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	10000	</weight>
-      <maxLoad>	46000	</maxLoad>
-      <terrainResistance>	0.9 1.1 2.3	</terrainResistance>
+      <terrainResistance>	0.8 1 2.1	</terrainResistance>
       <brakeForce>	45000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	50	</rotationSpeed>
@@ -2053,7 +2052,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	10000	</weight>
-      <maxLoad>	48000	</maxLoad>
       <terrainResistance>	0.8 1 2.1	</terrainResistance>
       <brakeForce>	45000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2873,7 +2871,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7000	</weight>
-      <maxHealth>	260	</maxHealth>
+      <maxHealth>	240	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -2903,18 +2901,18 @@
           <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <reloadTime>	9.6	</reloadTime>
           <aimingTime>	2.2	</aimingTime>
-          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <clip>
-            <count>	2	</count>
+            <count>	3	</count>
             <rate>	30	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	8 10	</reloadTime>
+            <reloadTime>	8 10 12	</reloadTime>
           </autoreload>
           <models>
             <undamaged>	vehicles/italy/It14_P44_Pantera/normal/lod0/Gun_01.model	</undamaged>
@@ -2996,19 +2994,19 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <reloadTime>	9.6	</reloadTime>
-          <aimingTime>	2.2	</aimingTime>
-          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <aimingTime>	2.1	</aimingTime>
+          <shotDispersionRadius>	0.33	</shotDispersionRadius>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <clip>
-            <count>	2	</count>
+            <count>	3	</count>
             <rate>	30	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	8 10	</reloadTime>
+            <reloadTime>	8 10 11	</reloadTime>
           </autoreload>
           <models>
             <undamaged>	vehicles/italy/It14_P44_Pantera/normal/lod0/Gun_02.model	</undamaged>
@@ -3582,7 +3580,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	8000	</weight>
-      <maxHealth>	360	</maxHealth>
+      <maxHealth>	310	</maxHealth>
       <rotationSpeed>	32	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -3617,7 +3615,7 @@
           </shotDispersionFactors>
           <clip>
             <count>	3	</count>
-            <rate>	24	</rate>
+            <rate>	30	</rate>
           </clip>
           <autoreload>
             <reloadTime>	8 10 12	</reloadTime>
@@ -3707,7 +3705,7 @@
           </shotDispersionFactors>
           <clip>
             <count>	3	</count>
-            <rate>	24	</rate>
+            <rate>	30	</rate>
           </clip>
           <autoreload>
             <reloadTime>	8 10 11	</reloadTime>
@@ -4279,11 +4277,6 @@
     </Turret_2_It14_P44_Pantera>
   </turrets0>
   <engines>
-    <SPA_344>	shared	  <unlocks>
-        <engine>	Alfa_RA1000I_C_A	  <cost>	17800	</cost>
-        </engine>
-      </unlocks>
-    </SPA_344>
     <Alfa_RA1000I_C_A>	shared	  <unlocks>
         <engine>	FIAT_RA1050I_C_A	  <cost>	22500	</cost>
         </engine>
@@ -4295,26 +4288,12 @@
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <R_F_2_C_A>	shared	  <unlocks>
-        <radio>	R_F_3_M_2	  <cost>	4080	</cost>
-        </radio>
-      </unlocks>
-    </R_F_2_C_A>
-    <R_F_3_M_2>	shared	  <unlocks>
-        <radio>	R_F_4_M	  <cost>	7300	</cost>
-        </radio>
-      </unlocks>
-    </R_F_3_M_2>
     <R_F_4_M>	shared	</R_F_4_M>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
   <physics>
     <detailed>
       <engines>
-        <SPA_344>
-          <smplEnginePower>	700	</smplEnginePower>
-          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
-        </SPA_344>
         <Alfa_RA1000I_C_A>
           <smplEnginePower>	850	</smplEnginePower>
           <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
@@ -4329,13 +4308,13 @@
           <axleCount>	5	</axleCount>
           <grounds>
             <soft>
-              <rollingFriction>	0.18515	</rollingFriction>
+              <rollingFriction>	0.16905	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.08855	</rollingFriction>
+              <rollingFriction>	0.0805	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.07245	</rollingFriction>
+              <rollingFriction>	0.0644	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_It14_P44_Pantera>

@@ -960,8 +960,8 @@
     </camouflage>
   </hull>
   <chassis>
-    <LeichtertaktorkettenB>
-      <userString>	#germany_vehicles:LeichtertaktorkettenB	</userString>
+    <Chassis_G12_Ltraktor>
+      <userString>	#germany_vehicles:Chassis_G12_Ltraktor	</userString>
       <tags></tags>
       <level>	1	</level>
       <price>	0	</price>
@@ -971,7 +971,6 @@
         <rightTrack>	5	</rightTrack>
       </armor>
       <weight>	2000	</weight>
-      <maxLoad>	9500	</maxLoad>
       <terrainResistance>	0.9 1.2 2.1	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -1851,11 +1850,11 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	3.41880345	</repairTime>
-    </LeichtertaktorkettenB>
+    </Chassis_G12_Ltraktor>
   </chassis>
   <turrets0>
-    <Swedish_Bofors>
-      <userString>	#germany_vehicles:Swedish_Bofors	</userString>
+    <Turret_1_G12_Ltraktor>
+      <userString>	#germany_vehicles:Turret_1_G12_Ltraktor	</userString>
       <tags></tags>
       <level>	1	</level>
       <price>	0	</price>
@@ -1901,12 +1900,12 @@
             <maxPitch>	0 7 1 7	</maxPitch>
           </pitchLimits>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.16	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <unlocks>
-            <gun>	_20mm_Breda	  <cost>	35	</cost>
+            <gun>	_20mm_Breda_i_LTr	  <cost>	35	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -1922,9 +1921,9 @@
               <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
             </gun>
           </armor>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <shotDispersionRadius>	0.49	</shotDispersionRadius>
           <reloadTime>	2.3	</reloadTime>
-          <aimingTime>	1.7	</aimingTime>
+          <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/german/G12_Ltraktor/normal/lod0/Gun_02.model	</undamaged>
@@ -1983,15 +1982,15 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_37mm_KwK_L46_f>
-        <_20mm_Breda>	shared	  <maxAmmo>	972	</maxAmmo>
+        <_20mm_Breda_i_LTr>	shared	  <maxAmmo>	972	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -30 1 -30	</minPitch>
             <maxPitch>	0 7 0.083333 7 0.146995 10 0.853005 10 0.916667 7 1 7	</maxPitch>
           </pitchLimits>
-          <reloadTime>	3.4	</reloadTime>
+          <reloadTime>	4.7	</reloadTime>
           <aimingTime>	1.8	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	1.4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2003,6 +2002,7 @@
             <armor_1>	14	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	12	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_2>
             <armor_3>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
@@ -2063,7 +2063,7 @@
             <density>	115.648 112.934	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_20mm_Breda>
+        </_20mm_Breda_i_LTr>
       </guns>
       <models>
         <undamaged>	vehicles/german/G12_Ltraktor/normal/lod0/Turret_01.model	</undamaged>
@@ -2486,10 +2486,10 @@
         <density>	198.407 188.432	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Swedish_Bofors>
+    </Turret_1_G12_Ltraktor>
   </turrets0>
   <engines>
-    <Krupp_M311>	shared	</Krupp_M311>
+    <Krupp_M311_LTr>	shared	</Krupp_M311_LTr>
   </engines>
   <fuelTanks>
     <Small>	shared	</Small>
@@ -2500,13 +2500,13 @@
   <physics>
     <detailed>
       <engines>
-        <Krupp_M311>
-          <smplEnginePower>	89.8689	</smplEnginePower>
+        <Krupp_M311_LTr>
+          <smplEnginePower>	95	</smplEnginePower>
           <smplFwMaxSpeed>	36	</smplFwMaxSpeed>
-        </Krupp_M311>
+        </Krupp_M311_LTr>
       </engines>
       <chassis>
-        <LeichtertaktorkettenB>
+        <Chassis_G12_Ltraktor>
           <grounds>
             <soft>
               <rollingFriction>	0.16905	</rollingFriction>
@@ -2518,7 +2518,7 @@
               <rollingFriction>	0.07245	</rollingFriction>
             </firm>
           </grounds>
-        </LeichtertaktorkettenB>
+        </Chassis_G12_Ltraktor>
       </chassis>
     </detailed>
   </physics>

@@ -6,6 +6,7 @@ from skeletons.gui.shared.utils import IItemsRequester, requesters
 class IItemsCache(requesters.IRequester):
     onSyncStarted = None
     onSyncCompleted = None
+    onPMSyncCompleted = None
 
     @property
     def waitForSync(self):

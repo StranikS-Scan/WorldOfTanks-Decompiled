@@ -30,6 +30,7 @@ from items import vehicles
 from personal_missions import PM_BRANCH
 from post_progression_common import FEATURE_BY_GROUP_ID, ROLESLOT_FEATURE
 from prestige_system.prestige_common import PrestigeConfig
+from prestige_system.prestige_milestones_common import PrestigeMilestonesConfig
 from ranked_common import SwitchState
 from renewable_subscription_common.settings_constants import GOLD_RESERVE_GAINS_SECTION, ADDITIONAL_BONUS_SECTION, ADDITIONAL_BONUS_APPLY_COUNT, ADDITIONAL_BONUS_ENABLED, ENABLE_BADGES
 from schema_manager import getSchemaManager
@@ -1307,71 +1308,6 @@ class _ExchangeRatesConfig(namedtuple('_ExchangeRatesConfig', ('isGoldExchangePe
         return self._replace(**dataToUpdate)
 
 
-class WotAnniversaryDayConfig(namedtuple('WotAnniversaryDayConfig', ('rewards',
- 'videoUrl',
- 'additionalInfoUrl',
- 'isSpecial'))):
-    __slots__ = ()
-
-    def __new__(cls, **kwargs):
-        defaults = dict(rewards=[], videoUrl='', additionalInfoUrl='', isSpecial=False)
-        defaults.update(kwargs)
-        return super(WotAnniversaryDayConfig, cls).__new__(cls, **defaults)
-
-
-class WotAnniversaryProgressionConfig(namedtuple('WotAnniversaryProgressionConfig', ('tokenCount', 'rewards'))):
-    __slots__ = ()
-
-    def __new__(cls, **kwargs):
-        defaults = dict(rewards=[], tokenCount=0)
-        defaults.update(kwargs)
-        return super(WotAnniversaryProgressionConfig, cls).__new__(cls, **defaults)
-
-
-class WotAnniversaryConfig(namedtuple('WotAnniversaryConfig', ('isEnabled',
- 'startDate',
- 'endDate',
- 'dayToken',
- 'progressionToken',
- 'infoPageUrl',
- 'days',
- 'progression',
- 'contentConfigUrl',
- 'firstDayLabel'))):
-    __slots__ = ()
-
-    def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, contentConfigUrl='', firstDayLabel=1, startDate=0, endDate=0, dayToken='', progressionToken='', infoPageUrl='', days=[], progression=[])
-        cls.__packDaysConfigs(kwargs)
-        cls.__packProgressionConfigs(kwargs)
-        defaults.update(kwargs)
-        return super(WotAnniversaryConfig, cls).__new__(cls, **defaults)
-
-    def asDict(self):
-        return self._asdict()
-
-    def replace(self, data):
-        allowedFields = self._fields
-        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
-        if 'progression' in dataToUpdate:
-            self.__packProgressionConfigs(dataToUpdate)
-        if 'days' in dataToUpdate:
-            self.__packDaysConfigs(dataToUpdate)
-        return self._replace(**dataToUpdate)
-
-    @classmethod
-    def defaults(cls):
-        return cls()
-
-    @classmethod
-    def __packDaysConfigs(cls, dataToUpdate):
-        dataToUpdate['days'] = [ WotAnniversaryDayConfig(**days) for days in dataToUpdate.get('days', []) ]
-
-    @classmethod
-    def __packProgressionConfigs(cls, dataToUpdate):
-        dataToUpdate['progression'] = [ WotAnniversaryProgressionConfig(**progression) for progression in dataToUpdate.get('progression', []) ]
-
-
 class ServerSettings(object):
 
     def __init__(self, serverSettings):
@@ -1417,6 +1353,7 @@ class ServerSettings(object):
         self.__winbackConfig = WinbackConfig()
         self.__limitedUIConfig = _LimitedUIConfig()
         self.__prestigeConfig = PrestigeConfig({})
+        self.__prestigeMilestonesConfig = PrestigeMilestonesConfig({})
         self.__steamShadeConfig = _SteamShadeConfig()
         self.__abFeatureTestConfig = _ABFeatureTestConfig()
         self.__referralProgramConfig = ReferralProgramConfig()
@@ -1425,7 +1362,6 @@ class ServerSettings(object):
         self.__schemaManager = getSchemaManager()
         self.__exchangeRatesConfig = _ExchangeRatesConfig()
         self.__easyTankEquipConfig = EasyTankEquipConfig()
-        self.__wotAnniversaryConfig = WotAnniversaryConfig()
         self.set(serverSettings)
 
     def set(self, serverSettings):
@@ -1564,6 +1500,10 @@ class ServerSettings(object):
             self.__prestigeConfig = PrestigeConfig(self.__serverSettings.get(Configs.PRESTIGE_CONFIG.value, {}))
         else:
             self.__prestigeConfig = PrestigeConfig({})
+        if Configs.PRESTIGE_MILESTONES_CONFIG.value in self.__serverSettings:
+            self.__prestigeMilestonesConfig = PrestigeMilestonesConfig(self.__serverSettings.get(Configs.PRESTIGE_MILESTONES_CONFIG.value, {}))
+        else:
+            self.__prestigeMilestonesConfig = PrestigeMilestonesConfig({})
         self.__schemaManager.set(self.__serverSettings)
         if Configs.STEAM_SHADE_CONFIG.value in self.__serverSettings:
             self.__steamShadeConfig = makeTupleByDict(_SteamShadeConfig, self.__serverSettings[Configs.STEAM_SHADE_CONFIG.value])
@@ -1581,14 +1521,11 @@ class ServerSettings(object):
             self.__liveOpsWebEventsConfig = makeTupleByDict(LiveOpsWebEventsConfig, self.__serverSettings[Configs.LIVE_OPS_EVENTS_CONFIG.value])
         else:
             self.__liveOpsWebEventsConfig = LiveOpsWebEventsConfig.defaults()
-        if Configs.WOT_ANNIVERSARY_CONFIG.value in self.__serverSettings:
-            self.__wotAnniversaryConfig = makeTupleByDict(WotAnniversaryConfig, self.__serverSettings[Configs.WOT_ANNIVERSARY_CONFIG.value])
-        else:
-            self.__wotAnniversaryConfig = WotAnniversaryConfig.defaults()
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
-        self.__serverSettings = updateDict(self.__serverSettings, serverSettingsDiff)
+        processedDiff = self.__schemaManager.updateSettings(self.__serverSettings, serverSettingsDiff)
+        self.__serverSettings = updateDict(self.__serverSettings, processedDiff)
         if 'clanProfile' in serverSettingsDiff:
             self.__updateClanProfile(serverSettingsDiff)
         if 'spgRedesignFeatures' in self.__serverSettings:
@@ -1694,6 +1631,7 @@ class ServerSettings(object):
         if Configs.PRESTIGE_CONFIG.value in serverSettingsDiff:
             self.__serverSettings[Configs.PRESTIGE_CONFIG.value] = serverSettingsDiff[Configs.PRESTIGE_CONFIG.value]
             self.__prestigeConfig = PrestigeConfig(self.__serverSettings.get(Configs.PRESTIGE_CONFIG.value, {}))
+        self.__updatePrestigeMilestonesConfig(serverSettingsDiff)
         self.__schemaManager.update(serverSettingsDiff)
         self.__updateSteamShadeConfig(serverSettingsDiff)
         self.__updateABFeatureTestConfig(serverSettingsDiff)
@@ -1701,8 +1639,6 @@ class ServerSettings(object):
             self.__updateReferralProgramConfig(serverSettingsDiff)
         if Configs.LIVE_OPS_EVENTS_CONFIG.value in serverSettingsDiff:
             self.__updateLiveOpsWebEventsConfig(serverSettingsDiff)
-        if Configs.WOT_ANNIVERSARY_CONFIG.value in serverSettingsDiff:
-            self.__updateWotAnniversaryConfig(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
 
     def clear(self):
@@ -1867,6 +1803,10 @@ class ServerSettings(object):
         return self.__prestigeConfig
 
     @property
+    def prestigeMilestonesConfig(self):
+        return self.__prestigeMilestonesConfig
+
+    @property
     def steamShadeConfig(self):
         return self.__steamShadeConfig
 
@@ -1886,17 +1826,15 @@ class ServerSettings(object):
     def advancedAchievementsConfig(self):
         return self.__advancedAchievementsConfig
 
-    @property
-    def wotAnniversaryConfig(self):
-        return self.__wotAnniversaryConfig
-
     def isEpicBattleEnabled(self):
         return self.epicBattles.isEnabled
 
     def isPersonalMissionsEnabled(self, branch=None):
         if branch == PM_BRANCH.REGULAR:
             return self.__getGlobalSetting('isRegularQuestEnabled', True)
-        return self.__getGlobalSetting('isPM2QuestEnabled', True) if branch == PM_BRANCH.PERSONAL_MISSION_2 else self.__getGlobalSetting('isRegularQuestEnabled', True) or self.__getGlobalSetting('isPM2QuestEnabled', True)
+        if branch == PM_BRANCH.PERSONAL_MISSION_2:
+            return self.__getGlobalSetting('isPM2QuestEnabled', True)
+        return self.__getGlobalSetting('isPM3QuestEnabled', True) if branch == PM_BRANCH.PERSONAL_MISSION_3 else self.__getGlobalSetting('isRegularQuestEnabled', True) or self.__getGlobalSetting('isPM2QuestEnabled', True) or self.__getGlobalSetting('isPM3QuestEnabled', True)
 
     def isPMBattleProgressEnabled(self):
         return self.__getGlobalSetting('isPMBattleProgressEnabled', True)
@@ -2002,6 +1940,12 @@ class ServerSettings(object):
 
     def isDogTagEnabled(self):
         return self.__getGlobalSetting(DOG_TAGS_CONFIG, {}).get('enabled', True)
+
+    def isHangarGeneralChatEnabled(self):
+        return not self.__getGlobalSetting(constants.Configs.SYSTEM_CHANNELS.value, {}).get('disableHangarGeneralChat', False)
+
+    def isChatEnabled(self):
+        return not self.__getGlobalSetting(constants.Configs.SYSTEM_CHANNELS.value, {}).get('disableAllChats', False)
 
     def isDogTagCustomizationScreenEnabled(self):
         return self.isDogTagEnabled() and self.__getGlobalSetting(DOG_TAGS_CONFIG, {}).get('enableDogTagsCustomizationScreen', True)
@@ -2395,6 +2339,12 @@ class ServerSettings(object):
         if Configs.STEAM_SHADE_CONFIG.value in serverSettingsDiff:
             self.__steamShadeConfig = self.__steamShadeConfig.replace(serverSettingsDiff[Configs.STEAM_SHADE_CONFIG.value])
 
+    def __updatePrestigeMilestonesConfig(self, serverSettingsDiff):
+        if Configs.PRESTIGE_MILESTONES_CONFIG.value in serverSettingsDiff:
+            self.__serverSettings[Configs.PRESTIGE_MILESTONES_CONFIG.value] = serverSettingsDiff[Configs.PRESTIGE_MILESTONES_CONFIG.value]
+            if Configs.PRESTIGE_MILESTONES_CONFIG.value in serverSettingsDiff:
+                self.__prestigeMilestonesConfig = PrestigeMilestonesConfig(self.__serverSettings.get(Configs.PRESTIGE_MILESTONES_CONFIG.value, {}))
+
     def __updateABFeatureTestConfig(self, serverSettingsDiff):
         if Configs.AB_FEATURE_TEST.value in serverSettingsDiff:
             self.__abFeatureTestConfig = self.__abFeatureTestConfig.replace(serverSettingsDiff[Configs.AB_FEATURE_TEST.value])
@@ -2408,9 +2358,6 @@ class ServerSettings(object):
     def __updateAdvancedAchievementsConfig(self, serverSettingsDiff):
         if Configs.ADVANCED_ACHIEVEMENTS_CONFIG.value in serverSettingsDiff:
             self.__advancedAchievementsConfig = self.__advancedAchievementsConfig.replace(serverSettingsDiff[Configs.ADVANCED_ACHIEVEMENTS_CONFIG.value])
-
-    def __updateWotAnniversaryConfig(self, serverSettingsDiff):
-        self.__wotAnniversaryConfig = self.__wotAnniversaryConfig.replace(serverSettingsDiff[Configs.WOT_ANNIVERSARY_CONFIG.value])
 
 
 def serverSettingsChangeListener(*configKeys):

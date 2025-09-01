@@ -13,8 +13,8 @@ from gui.impl.pub import ViewImpl
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.formatters.invites import getPreQueueName
-from gui.server_events.events_dispatcher import showMissionsBattlePass
 from gui.shared import EVENT_BUS_SCOPE, events
+from gui.shared.event_dispatcher import showBattlePass
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
 from helpers import dependency
 from helpers.events_handler import EventsHandler
@@ -105,10 +105,7 @@ class BaseBattlePassEntryPointView(IGlobalListener, EventsHandler):
 
     @property
     def level(self):
-        currentLevel = self.__battlePass.getCurrentLevel()
-        if isPostProgressionChapter(self.chapterID):
-            currentLevel = currentLevel % len(self.__battlePass.getLevelsConfig(self.chapterID))
-        return currentLevel
+        return self.__battlePass.getCurrentLevelWithPostProgress()
 
     @property
     def currentLevel(self):
@@ -187,12 +184,14 @@ class BaseBattlePassEntryPointView(IGlobalListener, EventsHandler):
     def _onPointsUpdated(self, *_):
         self._updateData()
 
+    def _onOffersUpdated(self, *_):
+        self._updateData()
+
     def _saveLastState(self, isNotChosenRewardCount):
         _g_entryLastState.update(False, self.isBought, self.hasExtra, self.isHoliday, self.chapterID, self.level, self.progress, self.battlePassState, isNotChosenRewardCount, self.currentLevel, self.cycle)
 
-    @staticmethod
-    def _onClick():
-        showMissionsBattlePass()
+    def _onClick(self):
+        showBattlePass()
 
     def _getListeners(self):
         return ((events.BattlePassEvent.AWARD_VIEW_CLOSE, self.__onAwardViewClose, EVENT_BUS_SCOPE.LOBBY),)
@@ -203,7 +202,8 @@ class BaseBattlePassEntryPointView(IGlobalListener, EventsHandler):
          (self.__battlePass.onSeasonStateChanged, self._updateData),
          (self.__battlePass.onExtraChapterExpired, self._updateData),
          (self.__battlePass.onBattlePassSettingsChange, self._updateData),
-         (self.__battlePass.onChapterChanged, self._onChapterChanged))
+         (self.__battlePass.onChapterChanged, self._onChapterChanged),
+         (self.__battlePass.onOffersUpdated, self._onOffersUpdated))
 
     def _addListeners(self):
         self.startGlobalListening()

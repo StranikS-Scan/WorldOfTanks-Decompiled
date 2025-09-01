@@ -3,9 +3,11 @@
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_DEBUG
 from gui import SystemMessages
+from gui.Scaleform.genConsts.MESSENGER_CHANNEL_CAROUSEL_ITEM_TYPES import MESSENGER_CHANNEL_CAROUSEL_ITEM_TYPES
 from gui.clans.clan_helpers import isLeaguesEnabled
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.shared.events import ChannelCarouselEvent
 from helpers import time_utils
 from gui.Scaleform.daapi.view.meta.FortBattleRoomWindowMeta import FortBattleRoomWindowMeta
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
@@ -16,7 +18,7 @@ from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.formatters import messages
 from gui.prb_control.entities.base.unit.listener import IStrongholdListener
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
-from gui.shared import events
+from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from helpers import i18n
@@ -150,11 +152,13 @@ class StrongholdBattleRoomWindow(FortBattleRoomWindowMeta, IStrongholdListener):
         super(StrongholdBattleRoomWindow, self)._populate()
         self.prbEntity.initEvents(self)
         g_eventDispatcher.hideUnitProgressInCarousel(self.getPrbType())
+        self.__updateWindowOpenState(True)
 
     def _dispose(self):
         self.removeListener(events.HideWindowEvent.HIDE_UNIT_WINDOW, self.__handleUnitWindowHide, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.RenameWindowEvent.RENAME_WINDOW, self.__handleWindowRename, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.StrongholdEvent.STRONGHOLD_ON_TIMER, self._onMatchmakingTimerChanged, scope=EVENT_BUS_SCOPE.STRONGHOLD)
+        self.__updateWindowOpenState(False)
         super(StrongholdBattleRoomWindow, self)._dispose()
 
     def _onMatchmakingTimerChanged(self, event):
@@ -246,3 +250,6 @@ class StrongholdBattleRoomWindow(FortBattleRoomWindowMeta, IStrongholdListener):
     def __addPlayerNotification(self, key, pInfo):
         if self.chat and not pInfo.isCurrentPlayer():
             self.chat.as_addMessageS(messages.getUnitPlayerNotification(key, pInfo))
+
+    def __updateWindowOpenState(self, flag):
+        g_eventBus.handleEvent(ChannelCarouselEvent(self, ChannelCarouselEvent.ON_WINDOW_CHANGE_OPEN_STATE, self.getClientID(), MESSENGER_CHANNEL_CAROUSEL_ITEM_TYPES.CHANNEL_CAROUSEL_ITEM_TYPE_PREBATTLE, flag), scope=EVENT_BUS_SCOPE.LOBBY)

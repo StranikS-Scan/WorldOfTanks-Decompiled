@@ -37,7 +37,7 @@ class BaseVehiclesWatcher(object):
         return self._getUnsuitableVehiclesBase()
 
     def _getUnsuitableVehiclesBase(self):
-        return self.__itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.HAS_ANY_TAG(self._BATTLE_MODE_VEHICLE_TAGS)).itervalues()
+        return self.__itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.HAS_ANY_TAG(self._BATTLE_MODE_VEHICLE_TAGS) ^ REQ_CRITERIA.VEHICLE.FORBIDDEN_VEHICLE_TO_BATTLE).itervalues()
 
     def _update(self, *_):
         if self._isWatching:

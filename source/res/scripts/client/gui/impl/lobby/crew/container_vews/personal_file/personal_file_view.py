@@ -61,12 +61,6 @@ class PersonalFileView(ContainerBase, IPersonalTab, ViewImpl):
     def showContent(self):
         self.getParentView().toggleContentVisibility(True)
 
-    def updateAnimationShowing(self, isShowing):
-        self.__isAnimationShowing = isShowing
-        if isShowing and self.__hasPendingRefresh:
-            self.__hasPendingRefresh = False
-            self.refresh()
-
     def refresh(self):
         if not self.__isAnimationShowing:
             self.__hasPendingRefresh = True

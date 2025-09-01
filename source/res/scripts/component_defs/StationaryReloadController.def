@@ -1,0 +1,17 @@
+<StationaryReloadController.def>
+  <DetailLevel>	MY_VEHICLE	</DetailLevel>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <Properties>
+    <vehTypeCD>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehTypeCD>
+    <status>
+      <Type>	STATIONARY_RELOAD_STATUS	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </status>
+  </Properties>
+  <DefaultKeyName>	stationaryReloadController	</DefaultKeyName>
+</StationaryReloadController.def>

@@ -10,14 +10,14 @@ from gui.impl.pub.window_view import WindowView
 class PopOverWindow(WindowImpl):
     __slots__ = ()
 
-    def __init__(self, event, content, parent, layer=WindowLayer.UNDEFINED):
+    def __init__(self, event, content, parent, layer=WindowLayer.UNDEFINED, direction=None):
         super(PopOverWindow, self).__init__(wndFlags=WindowFlags.POP_OVER, decorator=WindowView(layoutID=event.decoratorID, flags=ViewFlags.POP_OVER_DECORATOR, viewModelClazz=PopOverWindowModel), content=content, parent=parent, areaID=R.areas.pop_over(), layer=layer)
         with self.popOverModel.transaction() as tx:
             tx.setBoundX(event.bbox.positionX)
             tx.setBoundY(event.bbox.positionY)
             tx.setBoundWidth(event.bbox.width)
             tx.setBoundHeight(event.bbox.height)
-            tx.setDirectionType(event.direction)
+            tx.setDirectionType(direction or event.direction)
             tx.setIsCloseBtnVisible(content.isCloseBtnVisible)
 
     @property

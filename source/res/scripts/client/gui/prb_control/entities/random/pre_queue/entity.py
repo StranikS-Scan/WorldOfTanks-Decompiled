@@ -6,7 +6,6 @@ from CurrentVehicle import g_currentVehicle
 from account_helpers import gameplay_ctx
 from constants import QUEUE_TYPE
 from debug_utils import LOG_DEBUG
-from gui.prb_control.entities.stronghold.unit.entity import StrongholdBrowserEntity
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base import vehicleAmmoCheck
 from gui.prb_control.entities.base.pre_queue.entity import PreQueueEntryPoint, PreQueueEntity, PreQueueSubscriber
@@ -76,11 +75,6 @@ class RandomEntity(PreQueueEntity):
         else:
             arenaTypeID = 0
         return RandomQueueCtx(invID, arenaTypeID=arenaTypeID, gamePlayMask=gameplay_ctx.getMask(), randomFlags=gameplay_ctx.getRandomFlags(), waitingID='prebattle/join')
-
-    def _goToHangar(self):
-        if isinstance(self._previous, StrongholdBrowserEntity):
-            return
-        super(RandomEntity, self)._goToHangar()
 
     def _goToQueueUI(self):
         g_eventDispatcher.loadBattleQueue()

@@ -2,15 +2,16 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/timers_panel.py
 import logging
 import math
+import typing
 import weakref
 from collections import defaultdict
 import BigWorld
-from battle_royale.gui.constants import BattleRoyaleEquipments
 import BattleReplay
 import SoundGroups
 from AvatarInputHandler import AvatarInputHandler
 from ReplayEvents import g_replayEvents
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
+from battle_royale.gui.constants import BattleRoyaleEquipments
 from gui.Scaleform.daapi.view.battle.shared import destroy_times_mapping as _mapping
 from gui.Scaleform.daapi.view.battle.shared.timers_common import TimerComponent, PythonTimer
 from gui.Scaleform.daapi.view.meta.TimersPanelMeta import TimersPanelMeta
@@ -27,8 +28,14 @@ from gui.shared.items_parameters import isAutoReloadGun
 from gui.shared.utils.MethodsRules import MethodsRules
 from helpers import dependency
 from items import vehicles
+from math_utils import almostEqual
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
+from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from vehicles.mechanics.mechanic_info import hasVehicleMechanic
+if typing.TYPE_CHECKING:
+    from typing import List
+    from TargetDesignatorTargetController import TargetDesignatorTargetController
 _logger = logging.getLogger(__name__)
 _TIMERS_PRIORITY = {(_TIMER_STATES.FIRE, _TIMER_STATES.WARNING_VIEW): 1,
  (_TIMER_STATES.OVERTURNED, _TIMER_STATES.CRITICAL_VIEW): 2,
@@ -38,10 +45,11 @@ _TIMERS_PRIORITY = {(_TIMER_STATES.FIRE, _TIMER_STATES.WARNING_VIEW): 1,
  (_TIMER_STATES.MAP_DEATH_ZONE, _TIMER_STATES.WARNING_VIEW): 6,
  (_TIMER_STATES.WARNING_ZONE, _TIMER_STATES.WARNING_VIEW): 7,
  (_TIMER_STATES.DROWN, _TIMER_STATES.WARNING_VIEW): 8,
- (_TIMER_STATES.STUN, _TIMER_STATES.WARNING_VIEW): 9,
- (_TIMER_STATES.INSPIRE, _TIMER_STATES.WARNING_VIEW): 10,
- (_TIMER_STATES.INSPIRE_SOURCE, _TIMER_STATES.WARNING_VIEW): 10,
- (_TIMER_STATES.INSPIRE_INACTIVATION_SOURCE, _TIMER_STATES.WARNING_VIEW): 10}
+ (_TIMER_STATES.TARGET_DESIGNATOR_SPOTTED_MARKER, _TIMER_STATES.WARNING_VIEW): 9,
+ (_TIMER_STATES.STUN, _TIMER_STATES.WARNING_VIEW): 10,
+ (_TIMER_STATES.INSPIRE, _TIMER_STATES.WARNING_VIEW): 11,
+ (_TIMER_STATES.INSPIRE_SOURCE, _TIMER_STATES.WARNING_VIEW): 11,
+ (_TIMER_STATES.INSPIRE_INACTIVATION_SOURCE, _TIMER_STATES.WARNING_VIEW): 11}
 _SECONDARY_TIMERS = (_TIMER_STATES.STUN,
  _TIMER_STATES.CAPTURE_BLOCK,
  _TIMER_STATES.INSPIRE,
@@ -53,9 +61,22 @@ _SECONDARY_TIMERS = (_TIMER_STATES.STUN,
  _TIMER_STATES.ORANGE_ZONE,
  _TIMER_STATES.BERSERKER,
  _TIMER_STATES.REPAIRING,
- _TIMER_STATES.REPAIRING_CD)
+ _TIMER_STATES.REPAIRING_CD,
+ _TIMER_STATES.TARGET_DESIGNATOR_SPOTTED_MARKER)
+_ON_VEHICLE_CONTROLLING_UPDATE = (VEHICLE_VIEW_STATE.FIRE,
+ VEHICLE_VIEW_STATE.DESTROY_TIMER,
+ VEHICLE_VIEW_STATE.DEATHZONE_TIMER,
+ VEHICLE_VIEW_STATE.STUN,
+ VEHICLE_VIEW_STATE.CAPTURE_BLOCKED,
+ VEHICLE_VIEW_STATE.DANGER_ZONE,
+ VEHICLE_VIEW_STATE.WARNING_ZONE,
+ VEHICLE_VIEW_STATE.MAP_DEATH_ZONE,
+ VEHICLE_VIEW_STATE.SMOKE,
+ VEHICLE_VIEW_STATE.INSPIRE,
+ VEHICLE_VIEW_STATE.DOT_EFFECT,
+ VEHICLE_VIEW_STATE.TARGET_DESIGNATOR)
 _MAX_DISPLAYED_SECONDARY_STATUS_TIMERS = 2
-_VERTICAL_SHIFT_WITH_AUTOLOADER_IN_SNIPER_MODE = 42
+_VERTICAL_SHIFT_WITH_AUTOLOADER_IN_SNIPER_MODE = 60
 
 def _showTimerView(typeID, viewID, view, totalTime, isBubble, currentTime=0, secondInRow=False):
     if typeID in _SECONDARY_TIMERS:
@@ -280,7 +301,7 @@ class _StackTimersCollection(_BaseTimersCollection):
         return
 
     def __evaluateMultipleStatusStates(self, bubble=True):
-        activeTimers = self.__getActiveSecondaryTimers()
+        activeTimers = self.getActiveSecondaryTimerIDs()
         if not activeTimers or not self._currentSecondaryTimers:
             return
         for currTimer in self._currentSecondaryTimers:
@@ -288,9 +309,9 @@ class _StackTimersCollection(_BaseTimersCollection):
                 currTimer.hide()
             currTimer.show(bubble)
 
-    def __getActiveSecondaryTimers(self):
+    def getActiveSecondaryTimerIDs(self):
         if not self._timers:
-            return
+            return []
         activeTimers = []
         now = BigWorld.serverTime()
         timerIDs = set((key for key, value in self._timers.iteritems() if now < value.finishTime or value.totalTime == 0))
@@ -302,6 +323,9 @@ class _StackTimersCollection(_BaseTimersCollection):
                     activeTimers.append(activeTimerID)
 
         return activeTimers
+
+    def getTimer(self, timerID, default=None):
+        return self._timers.get(timerID, default)
 
     def __findNextPriorityByPriorityMap(self):
         if not self._timers:
@@ -434,7 +458,7 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
 
     def _generateSecondaryTimersData(self):
         link = BATTLE_NOTIFICATIONS_TIMER_LINKAGES.SECONDARY_TIMER_UI
-        data = [self._getNotificationTimerData(_TIMER_STATES.STUN, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.STUN_ICON, link, noiseVisible=True, text=INGAME_GUI.STUN_INDICATOR)]
+        data = [self._getNotificationTimerData(_TIMER_STATES.TARGET_DESIGNATOR_SPOTTED_MARKER, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.TARGET_DESIGNATOR_ICON, link, noiseVisible=False, text=INGAME_GUI.SPOTTED_INDICATOR), self._getNotificationTimerData(_TIMER_STATES.STUN, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.STUN_ICON, link, noiseVisible=True, text=INGAME_GUI.STUN_INDICATOR)]
         return data
 
     def _getNotificationTimerData(self, typeId, iconName, linkage, color=BATTLE_NOTIFICATIONS_TIMER_COLORS.ORANGE, noiseVisible=False, pulseVisible=False, text='', countdownVisible=True, isCanBeMainType=False, priority=10000, iconOffsetY=0, description=''):
@@ -658,18 +682,7 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
     @MethodsRules.delayable()
     def __onVehicleControlling(self, vehicle):
         ctrl = self.sessionProvider.shared.vehicleState
-        checkStatesIDs = (VEHICLE_VIEW_STATE.FIRE,
-         VEHICLE_VIEW_STATE.DESTROY_TIMER,
-         VEHICLE_VIEW_STATE.DEATHZONE_TIMER,
-         VEHICLE_VIEW_STATE.STUN,
-         VEHICLE_VIEW_STATE.CAPTURE_BLOCKED,
-         VEHICLE_VIEW_STATE.DANGER_ZONE,
-         VEHICLE_VIEW_STATE.WARNING_ZONE,
-         VEHICLE_VIEW_STATE.MAP_DEATH_ZONE,
-         VEHICLE_VIEW_STATE.SMOKE,
-         VEHICLE_VIEW_STATE.INSPIRE,
-         VEHICLE_VIEW_STATE.DOT_EFFECT)
-        for stateID in checkStatesIDs:
+        for stateID in _ON_VEHICLE_CONTROLLING_UPDATE:
             stateValue = ctrl.getStateValue(stateID)
             if stateValue:
                 self._onVehicleStateUpdated(stateID, stateValue)
@@ -690,12 +703,13 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
             return
         else:
             verticalOffset = 0
-            vTypeDescr = vehicle.typeDescriptor
-            hasAutoloaderInterface = vTypeDescr.isDualgunVehicle or isAutoReloadGun(vTypeDescr.gun)
-            if self.__viewID is CROSSHAIR_VIEW_ID.SNIPER and hasAutoloaderInterface:
+            if self.__viewID is CROSSHAIR_VIEW_ID.SNIPER and self.__hasOverlappingMechanic(vehicle.typeDescriptor):
                 verticalOffset = _VERTICAL_SHIFT_WITH_AUTOLOADER_IN_SNIPER_MODE
             self.as_setVerticalOffsetS(verticalOffset)
             return
+
+    def __hasOverlappingMechanic(self, vTypeDescr):
+        return vTypeDescr.isDualgunVehicle or isAutoReloadGun(vTypeDescr.gun) or hasVehicleMechanic(vTypeDescr, VehicleMechanic.CHARGEABLE_BURST)
 
     def _onVehicleStateUpdated(self, state, value):
         if state == VEHICLE_VIEW_STATE.SWITCHING:
@@ -724,8 +738,34 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
             self.__setVehicleInWaringZone(value)
         elif state == VEHICLE_VIEW_STATE.MAP_DEATH_ZONE:
             self.__setVehicleInMapDeathZone(value)
+        elif state == VEHICLE_VIEW_STATE.TARGET_DESIGNATOR:
+            self.__showTargetDesignatorSpottedWarningTimer(value)
         elif state in (VEHICLE_VIEW_STATE.DESTROYED, VEHICLE_VIEW_STATE.CREW_DEACTIVATED):
             self.__hideAll()
+
+    def __showTargetDesignatorSpottedWarningTimer(self, ctrl):
+        typeID = _TIMER_STATES.TARGET_DESIGNATOR_SPOTTED_MARKER
+        marker = ctrl.spottedMarker
+        timers = self._timers
+        if marker is None:
+            timers.removeSecondaryTimer(typeID)
+            return
+        else:
+            endTime = marker.endTime
+            timeLeft = endTime - BigWorld.serverTime()
+            totalTime = endTime - marker.startTime
+            if timeLeft <= 0:
+                timers.removeSecondaryTimer(typeID)
+                return
+            for timerID in timers.getActiveSecondaryTimerIDs():
+                timer = timers.getTimer(timerID)
+                if timer.typeID == typeID:
+                    if almostEqual(endTime, timer.finishTime, 0.1):
+                        return
+                    break
+
+            timers.addSecondaryTimer(typeID, _TIMER_STATES.WARNING_VIEW, totalTime, endTime, marker.startTime)
+            return
 
     def __onCameraChanged(self, ctrlMode, vehicleID=None):
         if ctrlMode == 'video':

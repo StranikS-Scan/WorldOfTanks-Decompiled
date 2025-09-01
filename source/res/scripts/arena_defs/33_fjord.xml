@@ -9,6 +9,18 @@
     <upperRight>	500.0 500.0	</upperRight>
   </boundingBox>
   <minimap>	spaces/33_fjord/mmap.dds	</minimap>
+  <minimapLayers>
+    <layer>
+      <layerId>	layer1	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/33_fjord/mmap_bunker_bombing_01_zone.dds	</path>
+    </layer>
+    <layer>
+      <layerId>	layer2	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/33_fjord/mmap_bunker_bombing_01_destroyed.dds	</path>
+    </layer>
+  </minimapLayers>
   <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
   <umbraEnabled>	1	</umbraEnabled>
   <wwmusicSetup>
@@ -22,6 +34,16 @@
     <wwmusicResultDefeat>	music_fjords_result_defeat	</wwmusicResultDefeat>
   </wwmusicSetup>
   <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	destructible_objects.bnk	</name>
+      </bank>
+      <bank>
+        <name>	destructible_objects.pck	</name>
+      </bank>
+    </loadBanks>
+  </soundRemapping>
   <water>
     <texScale>	0	</texScale>
     <freqX>	0	</freqX>
@@ -31,10 +53,10 @@
     <ctf>
       <teamBasePositions>
         <team1>
-          <position1>	399.095825 -42.143208	</position1>
+          <position1>	399.095856 -42.143211	</position1>
         </team1>
         <team2>
-          <position1>	-392.068298 127.515419	</position1>
+          <position1>	-392.068329 127.515427	</position1>
         </team2>
       </teamBasePositions>
     </ctf>

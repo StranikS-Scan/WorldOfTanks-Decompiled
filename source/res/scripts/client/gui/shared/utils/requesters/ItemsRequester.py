@@ -230,16 +230,20 @@ class VehsMultiNationSuitableCriteria(VehsSuitableCriteria):
                 self._selectAllSuitableItemsByVehicleDescr(self.itemsCache.items.getItemByCD(targetVehCD).descriptor, itemTypeID, outSuitableCompDescrs)
 
 
+def _hasSuitableC11n(vehicle, items):
+    return False if vehicle.isOutfitLocked else any((item.mayInstall(vehicle) for item in items))
+
+
 class VehicleCanInstallC11nCriteria(RequestCriteria):
     _itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, itemTypeID, criteria):
-        items = self._itemsCache.items.getItems(itemTypeID, criteria).values()
-        super(VehicleCanInstallC11nCriteria, self).__init__(PredicateCondition(lambda vehicle: self.hasSuitableC11n(vehicle, items)))
-
-    @staticmethod
-    def hasSuitableC11n(vehicle, items):
-        return False if vehicle.isOutfitLocked else any((item.mayInstall(vehicle) for item in items))
+    def __init__(self, itemTypeID, criteria, items):
+        if items is None:
+            items = self._itemsCache.items.getItems(itemTypeID, criteria).values()
+        else:
+            items = filter(criteria, items)
+        super(VehicleCanInstallC11nCriteria, self).__init__(PredicateCondition(lambda vehicle: _hasSuitableC11n(vehicle, items)))
+        return
 
 
 class REQ_CRITERIA(object):
@@ -319,15 +323,17 @@ class REQ_CRITERIA(object):
         CAN_NOT_BE_SOLD = RequestCriteria(PredicateCondition(lambda item: item.canNotBeSold))
         IS_IN_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isInBattle))
         SECRET = RequestCriteria(PredicateCondition(lambda item: item.isSecret))
+        FORBIDDEN_VEHICLE_TO_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isForbiddenToBattle()))
         NAME_VEHICLE = staticmethod(lambda nameVehicle: RequestCriteria(PredicateCondition(lambda item: nameVehicle in item.searchableUserName)))
         NAME_VEHICLE_WITH_SHORT = staticmethod(lambda nameVehicle: RequestCriteria(PredicateCondition(lambda item: nameVehicle in item.searchableShortUserName or nameVehicle in item.searchableUserName)))
         DISCOUNT_RENT_OR_BUY = RequestCriteria(PredicateCondition(lambda item: (item.buyPrices.itemPrice.isActionPrice() or item.getRentPackageActionPrc() != 0) and not item.isRestoreAvailable()))
         HAS_TAGS = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: item.tags.issuperset(tags))))
         HAS_ANY_TAG = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: bool(item.tags & tags))))
+        HAS_NO_TAG = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: not bool(item.tags & tags))))
         FOR_ITEM = staticmethod(lambda style: RequestCriteria(PredicateCondition(style.mayInstall)))
         HAS_ROLE = staticmethod(lambda roleName: RequestCriteria(PredicateCondition(lambda item: roleName in {roles[0] for roles in item.descriptor.type.crewRoles})))
         HAS_ROLES = staticmethod(lambda tankmanRoles: RequestCriteria(PredicateCondition(lambda item: any((roles[0] in tankmanRoles for roles in item.descriptor.type.crewRoles)))))
-        CAN_INSTALL_C11N = staticmethod(lambda itemTypeID, criteria=RequestCriteria(): VehicleCanInstallC11nCriteria(itemTypeID, criteria))
+        CAN_INSTALL_C11N = staticmethod(lambda itemTypeID, criteria=RequestCriteria(), items=None: VehicleCanInstallC11nCriteria(itemTypeID, criteria, items))
 
     class TANKMAN(object):
         IN_TANK = RequestCriteria(PredicateCondition(lambda item: item.isInTank))
@@ -882,7 +888,7 @@ class ItemsRequester(IItemsRequester):
         typeCompDescr = vehicles.makeIntCompactDescrByID(GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.CREW_SKINS], CrewSkinType.CREW_SKIN, skinID)
         return self.__makeSimpleItem(typeCompDescr)
 
-    def getItems(self, itemTypeID=None, criteria=REQ_CRITERIA.EMPTY, nationID=None, onlyWithPrices=True):
+    def getItems(self, itemTypeID=None, criteria=REQ_CRITERIA.EMPTY, nationID=None, onlyWithPrices=True, limit=None):
         result = ItemsCollection()
         if not isinstance(itemTypeID, tuple):
             itemTypeID = (itemTypeID,)
@@ -893,6 +899,8 @@ class ItemsRequester(IItemsRequester):
                     item = vehGetter(vehInvID)
                     if criteria(item):
                         result[item.intCD] = item
+                    if limit is not None and len(result) >= limit:
+                        return result
 
             itemGetter = self.getItemByCD
             protector = criteria.getIntCDProtector()
@@ -904,6 +912,8 @@ class ItemsRequester(IItemsRequester):
                 item = itemGetter(intCD)
                 if criteria(item):
                     result[intCD] = item
+                if limit is not None and len(result) >= limit:
+                    return result
 
         return result
 
@@ -939,13 +949,15 @@ class ItemsRequester(IItemsRequester):
         result.update(self.getDismissedTankmen(criteria))
         return result
 
-    def getInventoryTankmen(self, criteria=REQ_CRITERIA.TANKMAN.ACTIVE):
+    def getInventoryTankmen(self, criteria=REQ_CRITERIA.TANKMAN.ACTIVE, limit=None):
         result = ItemsCollection()
         activeTankmenInvData = self.__inventory.getItemsData(GUI_ITEM_TYPE.TANKMAN)
         for invID, tankmanInvData in activeTankmenInvData.iteritems():
             item = self.__makeTankman(invID, tankmanInvData)
             if criteria(item):
                 result[invID] = item
+            if limit is not None and len(result) >= limit:
+                return result
 
         return result
 

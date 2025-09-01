@@ -663,7 +663,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	10000	</weight>
-      <maxLoad>	53000	</maxLoad>
       <terrainResistance>	1.2 1.4 2.7	</terrainResistance>
       <brakeForce>	50000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -1525,10 +1524,13 @@
             <armor_3>	101.6	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	38	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_4>
             <armor_5>	88	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_5>
             <armor_6>	76	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_6>
             <armor_7>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_7>

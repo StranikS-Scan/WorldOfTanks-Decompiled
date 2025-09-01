@@ -9,7 +9,7 @@ from gui.impl.pub import ViewImpl
 class SixthRankTooltip(ViewImpl):
     __slots__ = ()
 
-    def __init__(self, layoutID=R.views.comp7.lobby.tooltips.SixthRankTooltip()):
+    def __init__(self, layoutID=R.views.comp7.mono.lobby.tooltips.sixth_rank_tooltip()):
         settings = ViewSettings(layoutID)
         settings.model = SixthRankTooltipModel()
         super(SixthRankTooltip, self).__init__(settings)

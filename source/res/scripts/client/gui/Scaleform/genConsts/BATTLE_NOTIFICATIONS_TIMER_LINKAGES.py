@@ -34,6 +34,7 @@ class BATTLE_NOTIFICATIONS_TIMER_LINKAGES(object):
     DROWN_ICON = 'destroyTimerDrownUI'
     GAS_DRAFT_ICON = 'destroyTimerGazDraftUI'
     STUN_ICON = 'secondaryStunIconUI'
+    TARGET_DESIGNATOR_ICON = 'secondaryTargetDesignatorIconUI'
     BLOCKED_ICON = 'secondaryBlockedIconUI'
     SMOKE_ICON = 'secondarySmokeIconUI'
     INSPIRE_ICON = 'secondaryInspireIconUI'

@@ -7,9 +7,7 @@ import typing
 from constants import PREMIUM_TYPE, PremiumConfigs, DAILY_QUESTS_CONFIG, OFFERS_ENABLED_KEY
 from frameworks.wulf import Array, ViewFlags, ViewSettings
 from gui import SystemMessages
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyPremiumUrl
-from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.impl.backport.backport_tooltip import BackportTooltipWindow, TooltipData
 from gui.impl.gen import R
@@ -20,7 +18,7 @@ from gui.impl.lobby.missions.missions_helpers import needToUpdateQuestsInModel, 
 from gui.impl.lobby.reroll_tooltip import RerollTooltip
 from gui.impl.lobby.winback.tooltips.main_reward_tooltip import MainRewardTooltip
 from gui.impl.lobby.winback.tooltips.selectable_reward_tooltip import SelectableRewardTooltip
-from gui.impl.lobby.winback.winback_bonus_packer import getWinbackBonusPacker, getWinbackBonuses, packWinBackBonusModelAndTooltipData, cutWinbackTokens
+from gui.impl.lobby.winback.winback_bonus_packer import getWinbackBonusPacker, getWinbackBonuses, packWinbackBonusModelAndTooltipData, cutWinbackTokens
 from gui.impl.lobby.winback.winback_helpers import WinbackQuestTypes, getWinbackCompletedQuestsCount
 from gui.impl.pub import ViewImpl
 from gui.selectable_reward.common import WinbackSelectableRewardManager
@@ -28,9 +26,7 @@ from gui.selectable_reward.constants import SELECTABLE_BONUS_NAME
 from gui.server_events import settings, daily_quests, conditions
 from gui.server_events.bonuses import mergeBonuses, getMergedBonusesFromDicts
 from gui.server_events.events_helpers import premMissionsSortFunc, dailyQuestsSortFunc, isPremiumQuestsEnable, isDailyQuestsEnable, isRerollEnabled, isEpicQuestEnabled, EventInfoModel, getRerollTimeout
-from gui.shared import events
-from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showShop, showWinbackSelectRewardView
+from gui.shared.event_dispatcher import showShop, showWinbackSelectRewardView, showHangar
 from gui.shared.missions.packers.bonus import getDailyMissionsBonusPacker
 from gui.shared.missions.packers.events import getEventUIDataPacker, packQuestBonusModelAndTooltipData
 from gui.shared.utils import decorators
@@ -396,7 +392,7 @@ class DailyQuestsView(ViewImpl):
             tx.setInfoVisible(not isVisible)
 
     def __onCloseView(self):
-        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), EVENT_BUS_SCOPE.LOBBY)
+        showHangar()
 
     def __setCurrentTab(self, tabIdx, model):
         model.setCurrentTabIdx(tabIdx)
@@ -569,7 +565,7 @@ class DailyQuestsView(ViewImpl):
         winbackQuestModel.setQuestNumber(questNumber)
         rewardsModel = winbackQuestModel.getRewards()
         rewardsModel.clear()
-        packWinBackBonusModelAndTooltipData(questData['bonuses'], packer, rewardsModel, self.__tooltipData)
+        packWinbackBonusModelAndTooltipData(questData['bonuses'], packer, rewardsModel, self.__tooltipData)
         rewardsModel.invalidate()
         return winbackQuestModel
 

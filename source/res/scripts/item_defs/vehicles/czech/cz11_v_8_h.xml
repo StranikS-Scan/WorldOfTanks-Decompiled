@@ -52,7 +52,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	9295	</weight>
-    <maxHealth>	432	</maxHealth>
+    <maxHealth>	456	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	130	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
@@ -1049,11 +1049,10 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	3500	</weight>
-      <maxLoad>	17000	</maxLoad>
-      <terrainResistance>	1.3 1.5 2.2	</terrainResistance>
+      <terrainResistance>	1.1 1.3 2	</terrainResistance>
       <brakeForce>	17000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	28	</rotationSpeed>
+      <rotationSpeed>	35	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.24	</vehicleMovement>
         <vehicleRotation>	0.24	</vehicleRotation>
@@ -2406,11 +2405,10 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	3500	</weight>
-      <maxLoad>	20000	</maxLoad>
       <terrainResistance>	1.1 1.3 2	</terrainResistance>
       <brakeForce>	17000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	33	</rotationSpeed>
+      <rotationSpeed>	40	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.22	</vehicleMovement>
         <vehicleRotation>	0.22	</vehicleRotation>
@@ -3760,6 +3758,10 @@
       <tags></tags>
       <level>	3	</level>
       <price>	2000	</price>
+      <unlocks>
+        <turret>	Turret_2_Cz11_V_8_H	  <cost>	1070	</cost>
+        </turret>
+      </unlocks>
       <armor>
         <armor_1>	32	</armor_1>
         <armor_2>	32	</armor_2>
@@ -3774,7 +3776,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2000	</weight>
-      <maxHealth>	78	</maxHealth>
+      <maxHealth>	84	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -3788,80 +3790,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_47mm_Skoda_A9>	shared	  <maxAmmo>	130	</maxAmmo>
-          <unlocks>
-            <gun>	_47mm_Skoda_A11	  <cost>	970	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	32	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	32	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <gun>	10	</gun>
-          </armor>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 10 1 10	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.290	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	3.5	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
-          <models>
-            <undamaged>	vehicles/czech/Cz11_V_8_H/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/czech/Cz11_V_8_H/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/czech/Cz11_V_8_H/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/czech/Cz11_V_8_H/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/czech/Cz11_V_8_H/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_small	</effects>
-          <reloadEffect>	reload20_45	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.001361 -0.009235 0.724671	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.000002 0.14401 0.235021	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.001361 -0.009232 0.72467	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.46 0.46 0.000000 0.000000	</tiling>
-            <density>	108.225 104.605	</density>
-            <aoTextureSize>	256 256	</aoTextureSize>
-          </camouflage>
-        </_47mm_Skoda_A9>
         <_47mm_Skoda_A11>	shared	  <maxAmmo>	130	</maxAmmo>
-          <unlocks>
-            <turret>	Turret_2_Cz11_V_8_H	  <cost>	1070	</cost>
-            </turret>
-          </unlocks>
           <armor>
             <armor_1>	32	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3878,8 +3807,13 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.290	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	3.5	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
+          <reloadTime>	2.9	</reloadTime>
+          <aimingTime>	2.2	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+            <afterShot>	4.0	</afterShot>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/czech/Cz11_V_8_H/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/czech/Cz11_V_8_H/crash/lod0/Gun_02.model	</destroyed>
@@ -4498,7 +4432,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2700	</weight>
-      <maxHealth>	108	</maxHealth>
+      <maxHealth>	114	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -4513,76 +4447,6 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.04	</invisibilityFactor>
       <guns>
-        <_47mm_Skoda_A9>	shared	  <maxAmmo>	90	</maxAmmo>
-          <armor>
-            <armor_1>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	10	</gun>
-          </armor>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 10 0.0638889 10 0.0666667 9.8 0.0722222 9.6 0.0777778 9.4 0.0833333 9 0.0861111 8.6 0.0944444 8.6 0.0972222 8.8 0.1 9 0.102778 9.3 0.108333 9.5 0.111111 10 0.388889 10 0.391667 9 0.608333 9 0.611111 10 0.888889 10 0.891667 9.7 0.894444 9.5 0.9 9.1 0.902778 8.7 0.905556 8.5 0.908333 8.4 0.927778 8.4 0.933333 8.6 0.936111 8.8 0.938889 9 0.944444 9.2 0.95 9.4 0.958333 9.6 0.966667 9.8 0.969444 10 1 10	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.290	</invisibilityFactorAtShot>
-          <reloadTime>	3.5	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2.2	</aimingTime>
-          <models>
-            <undamaged>	vehicles/czech/Cz11_V_8_H/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/czech/Cz11_V_8_H/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/czech/Cz11_V_8_H/crash/lod0/Gun_03.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/czech/Cz11_V_8_H/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/czech/Cz11_V_8_H/collision_client/Gun_03.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_small	</effects>
-          <reloadEffect>	reload20_45	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.002144 -0.025029 0.624927	</anchorPosition>
-              <anchorDirection>	-0.000001 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.148732 0.148732	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.002144 -0.025029 0.624927	</anchorPosition>
-              <anchorDirection>	-0.000001 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <density>	108.225 104.605	</density>
-            <aoTextureSize>	256 256	</aoTextureSize>
-          </camouflage>
-        </_47mm_Skoda_A9>
         <_47mm_Skoda_A11>	shared	  <maxAmmo>	90	</maxAmmo>
           <armor>
             <armor_1>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -4598,17 +4462,17 @@
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 10 0.0638889 10 0.0666667 9.8 0.0722222 9.6 0.0777778 9.4 0.0833333 9 0.0861111 8.6 0.0944444 8.6 0.0972222 8.8 0.1 9 0.102778 9.3 0.108333 9.5 0.111111 10 0.388889 10 0.391667 9 0.608333 9 0.611111 10 0.888889 10 0.891667 9.7 0.894444 9.5 0.9 9.1 0.902778 8.7 0.905556 8.5 0.908333 8.4 0.927778 8.4 0.933333 8.6 0.936111 8.8 0.938889 9 0.944444 9.2 0.95 9.4 0.958333 9.6 0.966667 9.8 0.969444 10 1 10	</maxPitch>
+            <maxPitch>	0.00000 10.00 0.06389 10.00 0.09167 8.50 0.11944 10.00 0.38889 10.00 0.39444 9.00 0.60556 9.00 0.61111 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.290	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	3	</reloadTime>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <reloadTime>	2.8	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.11	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.2	</aimingTime>
+          <aimingTime>	2.1	</aimingTime>
           <models>
             <undamaged>	vehicles/czech/Cz11_V_8_H/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/czech/Cz11_V_8_H/crash/lod0/Gun_04.model	</destroyed>
@@ -4673,13 +4537,13 @@
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 10 0.0638889 10 0.0666667 9.8 0.0722222 9.6 0.0777778 9.4 0.0833333 9 0.0861111 8.6 0.0944444 8.6 0.0972222 8.8 0.1 9 0.102778 9.3 0.108333 9.5 0.111111 10 0.388889 10 0.391667 9 0.608333 9 0.611111 10 0.888889 10 0.891667 9.7 0.894444 9.5 0.9 9.1 0.902778 8.7 0.905556 8.5 0.908333 8.4 0.927778 8.4 0.933333 8.6 0.936111 8.8 0.938889 9 0.944444 9.2 0.95 9.4 0.958333 9.6 0.966667 9.8 0.969444 10 1 10	</maxPitch>
+            <maxPitch>	0.00000 10.00 0.06389 10.00 0.09167 8.50 0.11944 10.00 0.38889 10.00 0.39444 9.00 0.60556 9.00 0.61111 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.290	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	2.5	</reloadTime>
+          <reloadTime>	2.7	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -5256,41 +5120,27 @@
   </turrets0>
   <engines>
     <Praga_NR>	shared	  <unlocks>
-        <engine>	Praga_V_8_H_Sv	  <cost>	870	</cost>
-        </engine>
-      </unlocks>
-    </Praga_NR>
-    <Praga_V_8_H_Sv>	shared	  <unlocks>
         <engine>	Praga_V_8_H	  <cost>	1050	</cost>
         </engine>
       </unlocks>
-    </Praga_V_8_H_Sv>
+    </Praga_NR>
     <Praga_V_8_H>	shared	</Praga_V_8_H>
   </engines>
   <fuelTanks>
     <Medium>	shared	</Medium>
   </fuelTanks>
   <radios>
-    <Radiostanice_vz_35>	shared	  <unlocks>
-        <radio>	Radiostanice_vz_37	  <cost>	370	</cost>
-        </radio>
-      </unlocks>
-    </Radiostanice_vz_35>
     <Radiostanice_vz_37>	shared	</Radiostanice_vz_37>
   </radios>
   <physics>
     <detailed>
       <engines>
         <Praga_NR>
-          <smplEnginePower>	237.8883	</smplEnginePower>
+          <smplEnginePower>	260	</smplEnginePower>
           <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </Praga_NR>
-        <Praga_V_8_H_Sv>
-          <smplEnginePower>	253.7475	</smplEnginePower>
-          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
-        </Praga_V_8_H_Sv>
         <Praga_V_8_H>
-          <smplEnginePower>	274.8931	</smplEnginePower>
+          <smplEnginePower>	290	</smplEnginePower>
           <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </Praga_V_8_H>
       </engines>
@@ -5298,13 +5148,13 @@
         <Chassis_Cz11_V_8_H>
           <grounds>
             <soft>
-              <rollingFriction>	0.1771	</rollingFriction>
+              <rollingFriction>	0.161	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.12075	</rollingFriction>
+              <rollingFriction>	0.10465	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_Cz11_V_8_H>

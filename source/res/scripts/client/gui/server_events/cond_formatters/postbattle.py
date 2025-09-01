@@ -7,6 +7,7 @@ from gui.Scaleform.genConsts.MISSIONS_ALIASES import MISSIONS_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.impl import backport
 from gui.server_events import formatters as events_fmts
 from gui.server_events.cond_formatters import POSSIBLE_BATTLE_RESUTLS_KEYS, BATTLE_RESULTS_KEYS, BATTLE_RESULTS_AGGREGATED_KEYS, FORMATTER_IDS, FormattableField, packDescriptionField, packSimpleTitle, TOP_RANGE_LOWEST, getResultsData
 from gui.server_events.cond_formatters.formatters import ConditionFormatter, SimpleMissionsFormatter, MissionsVehicleListFormatter, MissionsBattleConditionsFormatter, EmptyMissionsFormatter
@@ -55,7 +56,8 @@ class MissionsPostBattleConditionsFormatter(MissionsBattleConditionsFormatter):
          'unitResults': _UnitResultsFormatter(),
          'crits': _CritsFormatter(),
          'multiStunEvent': _MultiStunEventFormatter(),
-         'firstBlood': _FirstBloodFormatter()})
+         'firstBlood': _FirstBloodFormatter(),
+         'vehicleBlockedByArmor': _VehicleBlockedByArmorFormatter()})
 
 
 class _ClanKillsFormatter(SimpleMissionsFormatter):
@@ -159,6 +161,11 @@ class VehiclesKillFormatter(MissionsVehicleListFormatter):
 
 
 class VehiclesDamageFormatter(MissionsVehicleListFormatter):
+    UTILITY_DAMAGE_TAGS = {'directHitsReceived',
+     'whileMovingAtSpeed',
+     'whileEnemyInvisible',
+     'enemyIsNotSpotted',
+     'beyondVisionRadius'}
 
     @classmethod
     def _getIconKey(cls, condition=None):
@@ -166,7 +173,7 @@ class VehiclesDamageFormatter(MissionsVehicleListFormatter):
             return CONDITION_ICON.FIRE
         if condition.getAttackReason() == ATTACK_REASON.RAM:
             return CONDITION_ICON.RAM
-        return CONDITION_ICON.HURT_VEHICLES if 'classes' in condition.data or 'classesDiversity' in condition.data else CONDITION_ICON.DAMAGE
+        return CONDITION_ICON.HURT_VEHICLES if ('classes' in condition.data or 'classesDiversity' in condition.data) and not cls.UTILITY_DAMAGE_TAGS.intersection(condition.data) or 'eventCount' in condition.data and cls.UTILITY_DAMAGE_TAGS.intersection(condition.data) else CONDITION_ICON.DAMAGE
 
     @classmethod
     def _getTitleKey(cls, condition=None):
@@ -307,6 +314,28 @@ class _CritFormatter(SimpleMissionsFormatter):
     @classmethod
     def _getIconKey(cls, condition=None):
         return CONDITION_ICON.MODULE_CRIT
+
+
+class _VehicleBlockedByArmorFormatter(MissionsVehicleListFormatter):
+
+    @classmethod
+    def _getDescription(cls, condition=None):
+        labelKey = condition.getLabelKey()
+        if condition.isAnyVehicleAcceptable():
+            labelKey = labelKey.all
+        damage = ''
+        if condition.relationValue:
+            damage = '{} '.format(int(condition.relationValue))
+        return FormattableField(FORMATTER_IDS.DESCRIPTION, (backport.text(labelKey(), damage=damage, classes=cls._formatClassesEnumeration(condition)),))
+
+    @classmethod
+    def _getIconKey(cls, condition=None):
+        return CONDITION_ICON.DAMAGE_BLOCK
+
+    @classmethod
+    def _getTitleKey(cls, condition=None):
+        titleKey = QUESTS.DETAILS_CONDITIONS_VEHICLEBLOCKEDBYARMOR_TITLE
+        return _makeKeyNegativeIf(titleKey, condition.isNegative())
 
 
 class _CritsFormatter(ConditionFormatter):

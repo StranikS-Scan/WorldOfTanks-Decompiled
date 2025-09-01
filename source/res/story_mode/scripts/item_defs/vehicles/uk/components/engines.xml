@@ -1,0 +1,43 @@
+<engines.xml>
+  <ids>
+    <Rolls_Royse_Meteor_MkIVC_SM_SCC>	64004	</Rolls_Royse_Meteor_MkIVC_SM_SCC>
+    <Rolls_Royce_B81_SM_SCC>	64005	</Rolls_Royce_B81_SM_SCC>
+  </ids>
+  <shared>
+    <Rolls_Royse_Meteor_MkIVC_SM_SCC>
+      <userString>	#gb_vehicles:Rolls_Royse_Meteor_MkIVC	</userString>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	84000	</price>
+      <invulnerable>	True	</invulnerable>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	750	</power>
+      <weight>	744	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	497	</rpm_min>
+      <rpm_max>	2663	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Rolls_Royse_Meteor_MkIVC_SM_SCC>
+    <Rolls_Royce_B81_SM_SCC>
+      <userString>	#gb_vehicles:Rolls_Royce_B81	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	45000	</price>
+      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
+      <power>	310	</power>
+      <weight>	457	</weight>
+      <maxHealth>	247	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Rolls_Royce_B81_SM_SCC>
+  </shared>
+</engines.xml>

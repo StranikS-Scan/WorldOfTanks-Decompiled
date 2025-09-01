@@ -32,7 +32,9 @@ class MapsTrainingEntity(PreQueueEntity):
         self.storage.release()
         if ctx is not None:
             ctx.addFlags(FUNCTIONAL_FLAG.LOAD_PAGE)
-        return super(MapsTrainingEntity, self).init(ctx) | FUNCTIONAL_FLAG.LOAD_PAGE
+        result = super(MapsTrainingEntity, self).init(ctx) | FUNCTIONAL_FLAG.LOAD_PAGE
+        self.mapsTrainingController.onEnter()
+        return result
 
     def leave(self, ctx, callback=None):
         self.storage.suspend()
@@ -70,16 +72,10 @@ class MapsTrainingEntity(PreQueueEntity):
         return FUNCTIONAL_FLAG.LOAD_PAGE
 
     def _exitFromQueueUI(self):
-        if self.mapsTrainingController.isMapsTrainingEnabled:
-            self.mapsTrainingController.showMapsTrainingPage()
-        else:
-            self.mapsTrainingController.selectRandomMode()
+        g_eventDispatcher.loadHangar()
 
     def _createActionsValidator(self):
         return MapsTrainingActionsValidator(self)
 
     def _isNeedToShowSystemMessage(self):
         return self.mapsTrainingController.isMapsTrainingEnabled
-
-    def _goToHangar(self):
-        self.mapsTrainingController.onEnter()

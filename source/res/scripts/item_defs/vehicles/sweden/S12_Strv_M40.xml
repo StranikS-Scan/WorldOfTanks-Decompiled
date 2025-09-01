@@ -1083,7 +1083,6 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	2200	</weight>
-      <maxLoad>	10000	</maxLoad>
       <terrainResistance>	1.0 1.35 1.95	</terrainResistance>
       <brakeForce>	10000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -1872,16 +1871,11 @@
       <tags></tags>
       <level>	3	</level>
       <price>	1940	</price>
-      <unlocks>
-        <vehicle>	S19_Sav_M43	  <cost>	4170	</cost>
-        </vehicle>
-      </unlocks>
       <armor>
         <leftTrack>	10	</leftTrack>
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	2200	</weight>
-      <maxLoad>	12000	</maxLoad>
       <terrainResistance>	1.0 1.35 1.95	</terrainResistance>
       <brakeForce>	10000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -2703,7 +2697,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_37mm_kan_m_38_strv>	shared	  <maxAmmo>	200	</maxAmmo>
+        <_37mm_kan_m_38_strv_40>	shared	  <maxAmmo>	200	</maxAmmo>
           <unlocks>
             <gun>	_37mm_kan_m_38_49_strv	  <cost>	1050	</cost>
             </gun>
@@ -2726,12 +2720,13 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	2.4	</reloadTime>
+          <reloadTime>	2.1	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <aimingTime>	1.8	</aimingTime>
           <models>
             <undamaged>	vehicles/sweden/S12_Strv_M40/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/sweden/S12_Strv_M40/crash/lod0/Gun_02.model	</destroyed>
@@ -2770,7 +2765,7 @@
             <density>	246.013 250.853	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_37mm_kan_m_38_strv>
+        </_37mm_kan_m_38_strv_40>
         <_37mm_kan_m_38_49_strv>	shared	  <maxAmmo>	175	</maxAmmo>
           <unlocks>
             <turret>	Turret_2_S12_Strv_M40	  <cost>	380	</cost>
@@ -2794,8 +2789,8 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	2.2	</reloadTime>
-          <aimingTime>	1.8	</aimingTime>
+          <reloadTime>	2.1	</reloadTime>
+          <aimingTime>	1.7	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.06	</turretRotation>
             <afterShot>	3	</afterShot>
@@ -3329,6 +3324,8 @@
       <level>	3	</level>
       <price>	2200	</price>
       <unlocks>
+        <vehicle>	S19_Sav_M43	  <cost>	4170	</cost>
+        </vehicle>
         <vehicle>	S04_Lago_I	  <cost>	3690	</cost>
         </vehicle>
       </unlocks>
@@ -3361,7 +3358,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_37mm_kan_m_38_strv>	shared	  <maxAmmo>	200	</maxAmmo>
+        <_37mm_kan_m_38_strv_40>	shared	  <maxAmmo>	200	</maxAmmo>
           <armor>
             <armor_1>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3380,8 +3377,8 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	2.2	</reloadTime>
-          <aimingTime>	1.9	</aimingTime>
+          <reloadTime>	2.1	</reloadTime>
+          <aimingTime>	1.7	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -3425,7 +3422,7 @@
             <density>	246.013 250.853	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_37mm_kan_m_38_strv>
+        </_37mm_kan_m_38_strv_40>
         <_37mm_kan_m_38_49_strv>	shared	  <maxAmmo>	175	</maxAmmo>
           <armor>
             <armor_1>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -3952,27 +3949,17 @@
     </Turret_2_S12_Strv_M40>
   </turrets0>
   <engines>
-    <Scania_Vabis_1664>	shared	  <unlocks>
-        <engine>	Scania_Vabis_L_603	  <cost>	160	</cost>
+    <Scania_Vabis_1664_40>	shared	  <unlocks>
+        <engine>	Scania_Vabis_L_603	  <cost>	380	</cost>
         </engine>
       </unlocks>
-    </Scania_Vabis_1664>
-    <Scania_Vabis_L_603>	shared	  <unlocks>
-        <engine>	Ford_317	  <cost>	380	</cost>
-        </engine>
-      </unlocks>
-    </Scania_Vabis_L_603>
-    <Ford_317>	shared	</Ford_317>
+    </Scania_Vabis_1664_40>
+    <Scania_Vabis_L_603>	shared	</Scania_Vabis_L_603>
   </engines>
   <fuelTanks>
     <Medium>	shared	</Medium>
   </fuelTanks>
   <radios>
-    <_25_W_Sv_1_m_39>	shared	  <unlocks>
-        <radio>	_25_W_Sv_1_m_39_42	  <cost>	350	</cost>
-        </radio>
-      </unlocks>
-    </_25_W_Sv_1_m_39>
     <_25_W_Sv_1_m_39_42>	shared	</_25_W_Sv_1_m_39_42>
   </radios>
   <clientAdjustmentFactors>
@@ -3985,32 +3972,25 @@
       </Chassis_S12_Strv_M40_2>
     </chassis>
     <engines>
-      <Scania_Vabis_1664>
+      <Scania_Vabis_1664_40>
         <bravo>	37.53347	</bravo>
-      </Scania_Vabis_1664>
+      </Scania_Vabis_1664_40>
       <Scania_Vabis_L_603>
         <bravo>	37.53348	</bravo>
       </Scania_Vabis_L_603>
-      <Ford_317>
-        <bravo>	37.53348	</bravo>
-      </Ford_317>
     </engines>
   </clientAdjustmentFactors>
   <physics>
     <detailed>
       <engines>
-        <Scania_Vabis_1664>
-          <smplEnginePower>	150	</smplEnginePower>
+        <Scania_Vabis_1664_40>
+          <smplEnginePower>	200	</smplEnginePower>
           <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
-        </Scania_Vabis_1664>
+        </Scania_Vabis_1664_40>
         <Scania_Vabis_L_603>
-          <smplEnginePower>	180	</smplEnginePower>
-          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
-        </Scania_Vabis_L_603>
-        <Ford_317>
           <smplEnginePower>	220	</smplEnginePower>
           <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
-        </Ford_317>
+        </Scania_Vabis_L_603>
       </engines>
       <chassis>
         <Chassis_S12_Strv_M40>

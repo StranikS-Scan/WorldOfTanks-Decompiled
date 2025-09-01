@@ -12,6 +12,11 @@
                 <id>	winback:true_newbacker_reward_received	</id>
                 <equal>	0	</equal>
               </token>
+              <token>
+                <id>	winback:battle	</id>
+                <greaterOrEqual>	0	</greaterOrEqual>
+                <consume>	100	</consume>
+              </token>
               <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
               <lastLogout>
                 <greaterOrEqual>	90	</greaterOrEqual>
@@ -37,7 +42,7 @@
         <token>
           <id>	winback:battle	</id>
           <expires>	01.01.2050 00:00	</expires>
-          <count>	5	</count>
+          <count>	2	</count>
         </token>
         <token>
           <id>	winback:access	</id>
@@ -70,7 +75,7 @@
                 <less>	250	</less>
               </totalBattles>
               <vehiclesUnlocked>
-                <levels>	8 9 10	</levels>
+                <levels>	8 9 10 11	</levels>
                 <equal>	0	</equal>
               </vehiclesUnlocked>
             </and>
@@ -105,6 +110,11 @@
                 <id>	winback:newbacker_reward_received	</id>
                 <equal>	0	</equal>
               </token>
+              <token>
+                <id>	winback:battle	</id>
+                <greaterOrEqual>	0	</greaterOrEqual>
+                <consume>	100	</consume>
+              </token>
               <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
               <lastLogout>
                 <greaterOrEqual>	90	</greaterOrEqual>
@@ -133,7 +143,7 @@
         <token>
           <id>	winback:battle	</id>
           <expires>	01.01.2050 00:00	</expires>
-          <count>	5	</count>
+          <count>	2	</count>
         </token>
         <token>
           <id>	winback:access	</id>
@@ -154,6 +164,11 @@
               <token>
                 <id>	winback:early_winbacker_reward_received	</id>
                 <equal>	0	</equal>
+              </token>
+              <token>
+                <id>	winback:battle	</id>
+                <greaterOrEqual>	0	</greaterOrEqual>
+                <consume>	100	</consume>
               </token>
               <isWinbackQuestsEnabled>	true	</isWinbackQuestsEnabled>
               <lastLogout>
@@ -183,7 +198,7 @@
         <token>
           <id>	winback:battle	</id>
           <expires>	01.01.2050 00:00	</expires>
-          <count>	7	</count>
+          <count>	2	</count>
         </token>
         <token>
           <id>	winback:access	</id>
@@ -631,7 +646,7 @@
         <token>
           <id>	winback:battle	</id>
           <expires>	01.01.2050 00:00	</expires>
-          <count>	7	</count>
+          <count>	2	</count>
         </token>
         <token>
           <id>	winback:access	</id>

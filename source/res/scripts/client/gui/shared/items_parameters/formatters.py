@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/formatters.py
 import typing
+from typing import TYPE_CHECKING
 from collections import namedtuple
 from itertools import chain
 from constants import BonusTypes, DAMAGE_INTERPOLATION_DIST_LAST
@@ -17,9 +18,11 @@ from gui.shared.items_parameters import RELATIVE_PARAMS
 from gui.shared.items_parameters.comparator import PARAM_STATE
 from gui.shared.items_parameters.params_helper import hasGroupPenalties, getCommonParam, isValidEmptyValue, PARAMS_GROUPS
 from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME, DUAL_GUN_RATE_TIME, TURBOSHAFT_SPEED_MODE_SPEED, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_SWITCH_TIME, CHASSIS_REPAIR_TIME, CHASSIS_REPAIR_TIME_YOH, ROCKET_ACCELERATION_ENGINE_POWER, ROCKET_ACCELERATION_SPEED_LIMITS, ROCKET_ACCELERATION_REUSE_AND_DURATION, DUAL_ACCURACY_COOLING_DELAY, SHOT_DISPERSION_ANGLE, DISPERSION_RADIUS, BURST_FIRE_RATE, BURST_TIME_INTERVAL, BURST_SIZE, BURST_COUNT, AVG_DAMAGE_PER_SECOND, AUTO_SHOOT_CLIP_FIRE_RATE, CONTINUOUS_SHOTS_PER_MINUTE, CONTINUOUS_DAMAGE_PER_SECOND, TWIN_GUN_SWITCH_FIRE_MODE_TIME, TWIN_GUN_TOP_SPEED, TWIN_GUN_RELOAD_ONE_GUN_TIME, TWIN_GUN_RELOAD_TWO_GUN_TIME, TWIN_GUN_RELOAD_TIME
-from helpers.i18n import makeString
+from helpers.i18n import makeString, isValidKey
 from items import vehicles, artefacts, getTypeOfCompactDescr, ITEM_TYPES
 from web_stubs import i18n
+if TYPE_CHECKING:
+    from typing import Tuple, Dict, Optional
 ChangeCondition = namedtuple('ChangeCondition', ('predicate', 'alternativeParameter'))
 MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  'areaRadius': MENU.TANK_PARAMS_M,
@@ -59,7 +62,6 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  'explosionRadius': MENU.TANK_PARAMS_M,
  'gunYawLimits': MENU.TANK_PARAMS_GRADS,
  'hullArmor': MENU.TANK_PARAMS_FACEFRONTBOARDINMM,
- 'maxLoad': MENU.TANK_PARAMS_T,
  'piercingPower': MENU.TANK_PARAMS_MM,
  'maxPiercingPower': MENU.TANK_PARAMS_MM,
  'minPiercingPower': MENU.TANK_PARAMS_MM,
@@ -135,7 +137,59 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  TWIN_GUN_RELOAD_TWO_GUN_TIME: MENU.TANK_PARAMS_S,
  TWIN_GUN_TOP_SPEED: MENU.TANK_PARAMS_MPH,
  TWIN_GUN_SWITCH_FIRE_MODE_TIME: MENU.TANK_PARAMS_S,
- TWIN_GUN_RELOAD_TIME: MENU.TANK_PARAMS_S}
+ TWIN_GUN_RELOAD_TIME: MENU.TANK_PARAMS_S,
+ 'concentrationModeCooldown': MENU.TANK_PARAMS_S,
+ 'concentrationModeDuration': MENU.TANK_PARAMS_S,
+ 'extraShotClipReloadTime': MENU.TANK_PARAMS_S,
+ 'powerModeThreshold': MENU.TANK_PARAMS_S,
+ 'powerModeDuration': MENU.TANK_PARAMS_S,
+ 'secondaryReloadTimeSecs': MENU.TANK_PARAMS_S,
+ 'secondaryTotalBurstSize': MENU.TANK_PARAMS_PERACTIVATION,
+ 'secondaryAvgDamage': MENU.TANK_PARAMS_VAL,
+ 'secondaryAvgPiercingPower': MENU.TANK_PARAMS_MM,
+ 'pillboxHorizontalRotationSpeed': MENU.TANK_PARAMS_GPS,
+ 'pillboxVerticalRotationSpeed': MENU.TANK_PARAMS_GPS,
+ 'pillboxSwitchOnTime': MENU.TANK_PARAMS_S,
+ 'pillboxSwitchOffTime': MENU.TANK_PARAMS_S,
+ 'chargeableBurstPenetrationCount': MENU.TANK_PARAMS_QUANTITY,
+ 'chargeableBurstSize': MENU.TANK_PARAMS_QUANTITY,
+ 'chargeableBurstReload': MENU.TANK_PARAMS_S,
+ 'chargeableBurstDispersion': MENU.TANK_PARAMS_M,
+ 'stationaryReloadSwitchOnTime': MENU.TANK_PARAMS_S,
+ 'stationaryReloadSwitchOffTime': MENU.TANK_PARAMS_S,
+ 'furyMaxReloadEffAvgDpm': MENU.TANK_PARAMS_FACTOR,
+ 'furyReloadSpeedBonusPerEfficiencyLevel': MENU.TANK_PARAMS_FACTOR,
+ 'furyReloadEfficiencyLevelDuration': MENU.TANK_PARAMS_S,
+ 'accuracyDispersionCap': MENU.TANK_PARAMS_FACTOR,
+ 'accuracyWhileMovingDispersionCap': MENU.TANK_PARAMS_FACTOR,
+ 'accuracyDispersionPerLevel': MENU.TANK_PARAMS_FACTOR,
+ 'accuracySpeedLimit': MENU.TANK_PARAMS_MPH,
+ 'accuracyLevelGainTime': MENU.TANK_PARAMS_S,
+ 'preheatDmgCap': MENU.TANK_PARAMS_FACTOR,
+ 'preheatDispersionCap': MENU.TANK_PARAMS_FACTOR,
+ 'preheatTimeToFull': MENU.TANK_PARAMS_S,
+ 'preheatTimeToZero': MENU.TANK_PARAMS_S,
+ 'preheatSpeedLimit': MENU.TANK_PARAMS_MPH,
+ 'preheatTransitionDelay': MENU.TANK_PARAMS_S,
+ 'enginePowerWithBoosters': MENU.TANK_PARAMS_FACTOR,
+ 'topSpeedWithBoosters': MENU.TANK_PARAMS_FACTOR,
+ 'reverseSpeedReductionWithBoosters': MENU.TANK_PARAMS_FACTOR,
+ 'traverseSpeedReductionWithBoosters': MENU.TANK_PARAMS_FACTOR,
+ 'boosterDuration': MENU.TANK_PARAMS_S,
+ 'boosterCoolingTime': MENU.TANK_PARAMS_S,
+ 'reactivationLimit': MENU.TANK_PARAMS_FACTOR,
+ 'reactivationDelay': MENU.TANK_PARAMS_S,
+ 'heatAvgDmgPerLvl': MENU.TANK_PARAMS_FACTOR,
+ 'heatTimeToReachLevel': MENU.TANK_PARAMS_S,
+ 'heatTimeBeforeOverheat': MENU.TANK_PARAMS_S,
+ 'heatChargeOverheatDuration': MENU.TANK_PARAMS_S,
+ 'coincidenceElectromechanicalSightDuration': MENU.TANK_PARAMS_S,
+ 'switchEngineModeBothModes': MENU.TANK_PARAMS_S,
+ 'ionAfterburnerDuration': MENU.TANK_PARAMS_S,
+ 'designatorInitialCooldownS': MENU.TANK_PARAMS_S,
+ 'designatorCooldownS': MENU.TANK_PARAMS_S,
+ 'designatorMarkDurationS': MENU.TANK_PARAMS_S,
+ 'designatorMarkedEnemiesAdditionalDamage': MENU.TANK_PARAMS_FACTOR}
 MEASURE_UNITS_NO_BRACKETS = {'weight': MENU.TANK_PARAMS_NO_BRACKETS_KG,
  'cooldownSeconds': MENU.TANK_PARAMS_NO_BRACKETS_S,
  'reloadCooldownSeconds': MENU.TANK_PARAMS_NO_BRACKETS_S,
@@ -151,8 +205,7 @@ EXTRACTED_BONUS_SCHEME = (text_styles.error, text_styles.bonusAppliedText, text_
 SITUATIONAL_SCHEME = (text_styles.critical, text_styles.warning, text_styles.bonusPreviewText)
 VEHICLE_PARAMS = tuple(chain(*[ PARAMS_GROUPS[param] for param in RELATIVE_PARAMS ]))
 ITEMS_PARAMS_LIST = {ITEM_TYPES.vehicleRadio: ('radioDistance', 'weight'),
- ITEM_TYPES.vehicleChassis: ('maxLoad',
-                             'rotationSpeed',
+ ITEM_TYPES.vehicleChassis: ('rotationSpeed',
                              'weight',
                              MAX_STEERING_LOCK_ANGLE,
                              CHASSIS_REPAIR_TIME),
@@ -218,6 +271,12 @@ def getMeasureParamName(vehicleDescr, paramName):
     return paramName
 
 
+def getMeasureUnitsForParameter(vehicleDescr, paramName):
+    measureParamName = getMeasureParamName(vehicleDescr, paramName)
+    measureUnitLoc = MEASURE_UNITS.get(measureParamName, '')
+    return makeString(measureUnitLoc) if isValidKey(measureUnitLoc) else ''
+
+
 MULTIPLE_TITLES_PARAMS = {CHASSIS_REPAIR_TIME: ChangeCondition(needUseYohChassisRepairTime, CHASSIS_REPAIR_TIME_YOH)}
 
 def getTitleParamName(vehicleDescr, paramName):
@@ -253,7 +312,7 @@ def getParameterBigIconPath(parameter):
 
 
 def formatModuleParamName(paramName, vDescr=None):
-    builder = text_styles.builder(delimiter=_NBSP)
+    builder = text_styles.builder(delimiter=backport.text(_NBSP))
     hasBoost = vDescr and vDescr.gun.autoreloadHasBoost
     titleName = getTitleParamName(vDescr, paramName)
     if paramName == 'minAvgMutableDamageList':
@@ -271,14 +330,14 @@ def formatModuleParamName(paramName, vDescr=None):
 
 
 def formatNameColonValue(nameStr, valueStr):
-    builder = text_styles.builder(delimiter=_NBSP)
+    builder = text_styles.builder(delimiter=backport.text(_NBSP))
     builder.addStyledText(text_styles.main, '{}{}'.format(makeString(nameStr), _COLON))
     builder.addStyledText(text_styles.expText, makeString(valueStr))
     return builder.render()
 
 
 def formatParamNameColonValueUnits(paramName, paramValue):
-    builder = text_styles.builder(delimiter=_NBSP)
+    builder = text_styles.builder(delimiter=backport.text(_NBSP))
     resource = R.strings.menu.moduleInfo.params
     paramMsgId = backport.msgid(resource.dyn(paramName)()) if resource.dyn(paramName) else None
     builder.addStyledText(text_styles.main, '{}{}'.format(makeString(paramMsgId), _COLON))
@@ -291,7 +350,7 @@ def formatVehicleParamName(paramName, showMeasureUnit=True):
     if isRelativeParameter(paramName):
         return text_styles.middleTitle(MENU.tank_params(paramName))
     else:
-        builder = text_styles.builder(delimiter=_NBSP)
+        builder = text_styles.builder(delimiter=backport.text(_NBSP))
         builder.addStyledText(text_styles.main, MENU.tank_params(paramName))
         if showMeasureUnit:
             builder.addStyledText(text_styles.standard, MEASURE_UNITS.get(paramName, ''))
@@ -303,7 +362,7 @@ def getRelativeDiffParams(comparator):
     return sorted(relativeParams, cmp=lambda a, b: cmp(RELATIVE_PARAMS.index(a.name), RELATIVE_PARAMS.index(b.name)))
 
 
-_NBSP = backport.text(R.strings.common.common.nbsp())
+_NBSP = R.strings.common.common.nbsp()
 _DASH = '-'
 _SLASH = '/'
 _COLON = ':'
@@ -407,7 +466,7 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'hullArmor': _listFormat,
  'turretArmor': _listFormat,
  'relativeMobility': _integralFormat,
- 'vehicleWeight': _niceListFormat,
+ 'vehicleWeight': _niceFormat,
  'weight': _niceRangeFormat,
  'enginePower': _integralFormat,
  TURBOSHAFT_ENGINE_POWER: _integralFormat,
@@ -419,7 +478,6 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'relativeCamouflage': _integralFormat,
  'circularVisionRadius': _niceListFormat,
  'radioDistance': _niceFormat,
- 'maxLoad': _niceFormat,
  'rotationSpeed': _niceFormat,
  'fireStartingChance': _percentFormat,
  'armor': _listFormat,
@@ -587,7 +645,7 @@ def formatParameter(parameterName, paramValue, parameterState=None, colorScheme=
     preprocessor = settings.get('preprocessor')
     if KPI.Name.hasValue(parameterName):
         formatter = KPI_FORMATTERS.get(parameterName, kpiFormatValue)
-        values, separator = formatter(parameterName, round(paramValue, 3)), None
+        values, separator = formatter(parameterName, round(paramValue, 2)), None
     elif preprocessor:
         values, separator, parameterState = preprocessor(paramValue, parameterState)
     else:
@@ -614,8 +672,8 @@ def formatParameter(parameterName, paramValue, parameterState=None, colorScheme=
         return None if not showZeroDiff and values == 0 and not isValidEmptyValue(parameterName, paramValue) else _applyFormat(values, parameterState, settings, doSmartRound, colorScheme)
 
 
-def formatParameterDelta(pInfo, deltaScheme=None, formatSettings=None):
-    diff = pInfo.getParamDiff()
+def formatParameterDelta(pInfo, deltaScheme=None, formatSettings=None, diffReady=None):
+    diff = diffReady if diffReady is not None else pInfo.getParamDiff()
     return formatParameter(pInfo.name, diff, pInfo.state, deltaScheme or BASE_SCHEME, formatSettings or DELTA_PARAMS_SETTING, allowSmartRound=False, showZeroDiff=True) if diff is not None else None
 
 

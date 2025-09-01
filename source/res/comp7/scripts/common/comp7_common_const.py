@@ -5,8 +5,7 @@ import enum
 import typing
 if typing.TYPE_CHECKING:
     from typing import Tuple, Optional
-ROLE_EQUIPMENT_TAG = 'roleEquipment'
-COMP7_MASKOT_ID = '4'
+COMP7_MASKOT_ID = '5'
 SEASONS_IN_YEAR = 3
 __COMP7_QUALIFICATION_TOKEN_TEMPLATE = 'comp7_{maskot}_{season}:qualification'
 __COMP7_QUALIFICATION_QUEST_ID_TEMPLATE = 'comp7_{maskot}_{season}_ranks_65'

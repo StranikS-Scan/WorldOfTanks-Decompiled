@@ -11,9 +11,9 @@ LINKAGE_BACKGROUNDS = '{0}Page{1}UI'
 class EventLoadingPage(EventLoadingMeta, IArenaLoadController):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
-    def __init__(self, settings):
+    def __init__(self, ctx):
         super(EventLoadingPage, self).__init__()
-        self._tutorialPages = settings.get('tutorialPages', [])
+        self._tutorialPages = ctx.get('tutorialPages', [])
 
     def _populate(self):
         super(EventLoadingPage, self)._populate()

@@ -1,0 +1,18 @@
+<TargetDesignatorController.def>
+  <Properties>
+    <vehTypeCD>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehTypeCD>
+    <abilityState>
+      <Type>	TARGET_DESIGNATOR_STATE	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </abilityState>
+  </Properties>
+  <CellMethods>
+    <tryActivate>
+      <Exposed>	OWN_CLIENT	</Exposed>
+    </tryActivate>
+  </CellMethods>
+  <DefaultKeyName>	targetDesignatorController	</DefaultKeyName>
+</TargetDesignatorController.def>

@@ -9,7 +9,7 @@ from renewable_subscription_common.settings_constants import WotPlusState
 from skeletons.gui.game_control import IWotPlusController
 from skeletons.gui.shared import IItemsCache
 from uilogging.base.logger import MetricsLogger
-from uilogging.wot_plus.logging_constants import FEATURE, WotPlusLogActions, MIN_VIEW_TIME, RewardScreenTooltips, WotPlusKeys, WotPlusStateStr, HeaderAdditionalData, NotificationAdditionalData, AccountDashboardFeature, PremiumAccountStateStr, SubscriptionStateMixinKeys
+from uilogging.wot_plus.logging_constants import FEATURE, WotPlusLogActions, MIN_VIEW_TIME, RewardScreenTooltips, WotPlusKeys, WotPlusStateStr, AccountDashboardFeature, PremiumAccountStateStr, SubscriptionStateMixinKeys
 from wotdecorators import noexcept
 if TYPE_CHECKING:
     from typing import Optional
@@ -117,9 +117,8 @@ class WotPlusHeaderLogger(MetricsLogger):
         super(WotPlusHeaderLogger, self).__init__(FEATURE)
 
     @noexcept
-    def logClickEvent(self, state, isNewAttendanceReward=False):
-        self.log(action=WotPlusLogActions.CLICK, item=WotPlusKeys.HEADER_TOOLTIP, parentScreen=WotPlusKeys.HANGAR, itemState=WOT_PLUS_STATE_TO_LOG_STATE_MAP[state], info=HeaderAdditionalData.NEW_ATTENDANCE_REWARD if isNewAttendanceReward else None)
-        return
+    def logClickEvent(self, state):
+        self.log(action=WotPlusLogActions.CLICK, item=WotPlusKeys.HEADER_TOOLTIP, parentScreen=WotPlusKeys.HANGAR, itemState=WOT_PLUS_STATE_TO_LOG_STATE_MAP[state])
 
 
 class WotPlusHeaderTooltipLogger(WotPlusViewLogger):
@@ -130,22 +129,6 @@ class WotPlusHeaderTooltipLogger(WotPlusViewLogger):
     @noexcept
     def onViewFinalize(self, itemState):
         return super(WotPlusHeaderTooltipLogger, self).onViewFinalize(WOT_PLUS_STATE_TO_LOG_STATE_MAP[itemState])
-
-
-class WotPlusNotificationLogger(MetricsLogger):
-
-    def __init__(self):
-        super(WotPlusNotificationLogger, self).__init__(FEATURE)
-
-    @noexcept
-    def logDetailsButtonClickEvent(self, notificationType):
-        self.log(action=WotPlusLogActions.CLICK, item=WotPlusKeys.DETAILS_BUTTON, parentScreen=WotPlusKeys.NOTIFICATION_CENTER, info=notificationType)
-
-
-class WotPlusAttendanceRewardScreenLogger(WotPlusViewCloseLogger):
-
-    def __init__(self):
-        super(WotPlusAttendanceRewardScreenLogger, self).__init__(WotPlusKeys.HANGAR, WotPlusKeys.ATTENDANCE_REWARD_SCREEN)
 
 
 class WotPlusAccountDashboardLogger(WotPlusViewCloseLogger, SubscriptionsStateMixin):

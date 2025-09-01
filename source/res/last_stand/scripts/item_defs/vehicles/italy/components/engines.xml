@@ -1,0 +1,60 @@
+<engines.xml>
+  <ids>
+    <MB_838_LS_BOT>	6002	</MB_838_LS_BOT>
+    <SPA_343_LS_BOT>	6500	</SPA_343_LS_BOT>
+    <FIAT_RA1050I_C_A_LS_BOT>	6501	</FIAT_RA1050I_C_A_LS_BOT>
+  </ids>
+  <shared>
+    <MB_838_LS_BOT>
+      <userString>	#last_stand.italy_vehicles.extend:MB_838_LS_BOT	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	112000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	690	</power>
+      <weight>	1990	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.05	</fireStartingChance>
+      <rpm_min>	336	</rpm_min>
+      <rpm_max>	2192	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </MB_838_LS_BOT>
+    <SPA_343_LS_BOT>
+      <userString>	#last_stand.italy_vehicles.extend:SPA_343_LS_BOT	</userString>
+      <tags>	diesel	</tags>
+      <level>	6	</level>
+      <price>	25400	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	460	</power>
+      <weight>	1700	</weight>
+      <maxHealth>	145	</maxHealth>
+      <maxRegenHealth>	73	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	397	</rpm_min>
+      <rpm_max>	2008	</rpm_max>
+    </SPA_343_LS_BOT>
+    <FIAT_RA1050I_C_A_LS_BOT>
+      <userString>	#last_stand.italy_vehicles.extend:FIAT_RA1050I_C_A_LS_BOT	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	67000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1000	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	460	</rpm_min>
+      <rpm_max>	2125	</rpm_max>
+    </FIAT_RA1050I_C_A_LS_BOT>
+  </shared>
+</engines.xml>

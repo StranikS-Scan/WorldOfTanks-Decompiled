@@ -1381,7 +1381,7 @@
   </hull>
   <chassis>
     <Hummel_Ausf_1944_NewOnBoarding>
-      <userString>	#germany_vehicles:Hummel_Ausf_1944	</userString>
+      <userString>	#germany_vehicles:Chassis_G02_Hummel_2	</userString>
       <notInShop>	true	</notInShop>
       <tags></tags>
       <level>	6	</level>
@@ -1391,7 +1391,6 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	10000	</weight>
-      <maxLoad>	25000	</maxLoad>
       <terrainResistance>	1.2 1.4 2.3	</terrainResistance>
       <brakeForce>	23000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2209,8 +2208,8 @@
   <turrets0>
     <Hummel_1_NewOnBoarding>
       <ceilless>	true	</ceilless>
-      <userString>	#germany_vehicles:Hummel_0	</userString>
-      <tags>	cannotDetach	</tags>
+      <userString>	#germany_vehicles:Turret_2_G02_Hummel	</userString>
+      <tags>	cannotDetach turretless	</tags>
       <level>	6	</level>
       <price>	200	</price>
       <notInShop>	true	</notInShop>

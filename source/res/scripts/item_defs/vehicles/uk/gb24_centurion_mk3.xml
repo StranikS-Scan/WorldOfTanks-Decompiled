@@ -60,7 +60,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	27730	</weight>
-    <maxHealth>	1296	</maxHealth>
+    <maxHealth>	1440	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	240	</maxHealth>
       <maxRegenHealth>	160	</maxRegenHealth>
@@ -1352,8 +1352,7 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	51500	</maxLoad>
-      <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
+      <terrainResistance>	1 1.1 1.9	</terrainResistance>
       <brakeForce>	45000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	30	</rotationSpeed>
@@ -2359,7 +2358,6 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	54000	</maxLoad>
       <terrainResistance>	1 1.1 1.9	</terrainResistance>
       <brakeForce>	50000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -3363,6 +3361,10 @@
       <tags></tags>
       <level>	8	</level>
       <price>	50500	</price>
+      <unlocks>
+        <turret>	Turret_2_GB24_Centurion_Mk3	  <cost>	24000	</cost>
+        </turret>
+      </unlocks>
       <armor>
         <armor_1>	152.4	</armor_1>
         <armor_2>	254	</armor_2>
@@ -3380,7 +3382,7 @@
       </armor>
       <primaryArmor>	armor_2 armor_3 armor_10	</primaryArmor>
       <weight>	10400	</weight>
-      <maxHealth>	324	</maxHealth>
+      <maxHealth>	280	</maxHealth>
       <rotationSpeed>	36	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -3394,125 +3396,11 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_20pdr_Gun_Type_A>	shared	  <maxAmmo>	72	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -18 1 -18	</minPitch>
-            <maxPitch>	0 10 0.380783 10 0.444444 1 0.555556 1 0.619218 10 1 10	</maxPitch>
-          </pitchLimits>
-          <unlocks>
-            <gun>	_20pdr_Gun_Type_B	  <cost>	45000	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	235	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	88.9	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	101.6	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	203.2	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	152.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <gun>	40	</gun>
-          </armor>
-          <shotDispersionRadius>	0.33	</shotDispersionRadius>
-          <reloadTime>	6	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <models>
-            <undamaged>	vehicles/british/GB24_Centurion_Mk3/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Gun_01.model	</exploded>
-            <sets>
-              <halloween>
-                <undamaged>	vehicles/british/GB24_Centurion_Mk3/_skin/halloween/normal/lod0/Gun_01.model	</undamaged>
-                <destroyed>	vehicles/british/GB24_Centurion_Mk3/_skin/halloween/crash/lod0/Gun_01.model	</destroyed>
-                <exploded>	vehicles/british/GB24_Centurion_Mk3/_skin/halloween/crash/lod0/Gun_01.model	</exploded>
-              </halloween>
-              <GB24_Centurion_Mk3_3Dst_HW20>
-                <undamaged>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/normal/lod0/Gun_01.model	</undamaged>
-                <destroyed>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/crash/lod0/Gun_01.model	</destroyed>
-                <exploded>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/crash/lod0/Gun_01.model	</exploded>
-              </GB24_Centurion_Mk3_3Dst_HW20>
-            </sets>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/british/GB24_Centurion_Mk3/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB24_Centurion_Mk3/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.068482 0.009022 2.30919	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.191093 0.191094	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.068482 0.009022 2.30919	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	0.003684 1.64913 1.3392	</position>
-              <rotation>	0.731852 -0.001881 3.14153	</rotation>
-              <scale>	2.7422 1.99999 2.74217	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.764171	</clipAngle>
-              <anchorShift>	0.890536	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.070839 0.018214 3.14903	</rayStart>
-              <rayEnd>	0.070839 0.018214 3.78303	</rayEnd>
-              <rayUp>	0.081 0 0	</rayUp>
-              <size>	0.634	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.46 0.25 0.1 0.16	</tiling>
-            <density>	120.805 128.147	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_20pdr_Gun_Type_A>
         <_20pdr_Gun_Type_B>	shared	  <maxAmmo>	72	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -18 1 -18	</minPitch>
             <maxPitch>	0 10 0.380783 10 0.444444 1 0.555556 1 0.619218 10 1 10	</maxPitch>
           </pitchLimits>
-          <unlocks>
-            <turret>	Turret_2_GB24_Centurion_Mk3	  <cost>	24000	</cost>
-            </turret>
-          </unlocks>
           <armor>
             <armor_1>	235	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3529,12 +3417,12 @@
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.32	</shotDispersionRadius>
-          <reloadTime>	5.7	</reloadTime>
+          <reloadTime>	4.8	</reloadTime>
           <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <models>
@@ -4101,7 +3989,7 @@
       </armor>
       <primaryArmor>	armor_2 armor_3 armor_10	</primaryArmor>
       <weight>	10900	</weight>
-      <maxHealth>	424	</maxHealth>
+      <maxHealth>	360	</maxHealth>
       <rotationSpeed>	36	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -4115,112 +4003,6 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_20pdr_Gun_Type_A>	shared	  <maxAmmo>	72	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -18 1 -18	</minPitch>
-            <maxPitch>	0 10 0.380783 10 0.444444 1 0.555556 1 0.619218 10 1 10	</maxPitch>
-          </pitchLimits>
-          <armor>
-            <armor_1>	235	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	88.9	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	101.6	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	203.2	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	152.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <gun>	40	</gun>
-          </armor>
-          <shotDispersionRadius>	0.33	</shotDispersionRadius>
-          <reloadTime>	6	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/british/GB24_Centurion_Mk3/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Gun_03.model	</exploded>
-            <sets>
-              <halloween>
-                <undamaged>	vehicles/british/GB24_Centurion_Mk3/_skin/halloween/normal/lod0/Gun_03.model	</undamaged>
-                <destroyed>	vehicles/british/GB24_Centurion_Mk3/_skin/halloween/crash/lod0/Gun_03.model	</destroyed>
-                <exploded>	vehicles/british/GB24_Centurion_Mk3/_skin/halloween/crash/lod0/Gun_03.model	</exploded>
-              </halloween>
-              <GB24_Centurion_Mk3_3Dst_HW20>
-                <undamaged>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/normal/lod0/Gun_03.model	</undamaged>
-                <destroyed>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/crash/lod0/Gun_03.model	</destroyed>
-                <exploded>	vehicles/british/GB24_Centurion_Mk3/_skin/GB24_Centurion_Mk3_3Dst_HW20/crash/lod0/Gun_03.model	</exploded>
-              </GB24_Centurion_Mk3_3Dst_HW20>
-            </sets>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/british/GB24_Centurion_Mk3/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB24_Centurion_Mk3/collision_client/Gun_03.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.068704 0.009022 2.30919	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.191093 0.191094	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.068704 0.009022 2.30919	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	0.003809 1.589 1.26987	</position>
-              <rotation>	0.681286 -0.001877 3.14154	</rotation>
-              <scale>	2.7422 2 2.74217	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.764171	</clipAngle>
-              <anchorShift>	0.959421	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.070839 0.018214 3.2198	</rayStart>
-              <rayEnd>	0.070839 0.018214 3.8538	</rayEnd>
-              <rayUp>	0.08 0 0	</rayUp>
-              <size>	0.634	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.4 0.25 0.000000 0.000000	</tiling>
-            <density>	120.805 128.147	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_20pdr_Gun_Type_A>
         <_20pdr_Gun_Type_B>	shared	  <maxAmmo>	72	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -18 1 -18	</minPitch>
@@ -4242,10 +4024,10 @@
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.32	</shotDispersionRadius>
-          <reloadTime>	5.7	</reloadTime>
+          <reloadTime>	4.6	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.9	</aimingTime>
@@ -4913,47 +4695,28 @@
     </Turret_2_GB24_Centurion_Mk3>
   </turrets0>
   <engines>
-    <Rolls_Royse_Meteor_MkIV>	shared	  <unlocks>
-        <engine>	Rolls_Royse_Meteor_MkIVC	  <cost>	31000	</cost>
-        </engine>
-      </unlocks>
-    </Rolls_Royse_Meteor_MkIV>
-    <Rolls_Royse_Meteor_MkIVC>	shared	  <unlocks>
+    <Rolls_Royce_Meteor_MkIV>	shared	  <unlocks>
         <engine>	Rolls_Royce_Griffon	  <cost>	45000	</cost>
         </engine>
       </unlocks>
-    </Rolls_Royse_Meteor_MkIVC>
+    </Rolls_Royce_Meteor_MkIV>
     <Rolls_Royce_Griffon>	shared	</Rolls_Royce_Griffon>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <N19Mk3>	shared	  <unlocks>
-        <radio>	N22	  <cost>	4500	</cost>
-        </radio>
-      </unlocks>
-    </N19Mk3>
-    <N22>	shared	  <unlocks>
-        <radio>	C42	  <cost>	9000	</cost>
-        </radio>
-      </unlocks>
-    </N22>
     <C42>	shared	</C42>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Rolls_Royse_Meteor_MkIV>
-          <smplEnginePower>	687.2327	</smplEnginePower>
+        <Rolls_Royce_Meteor_MkIV>
+          <smplEnginePower>	890	</smplEnginePower>
           <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
-        </Rolls_Royse_Meteor_MkIV>
-        <Rolls_Royse_Meteor_MkIVC>
-          <smplEnginePower>	792.9609	</smplEnginePower>
-          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
-        </Rolls_Royse_Meteor_MkIVC>
+        </Rolls_Royce_Meteor_MkIV>
         <Rolls_Royce_Griffon>
-          <smplEnginePower>	1004.417	</smplEnginePower>
+          <smplEnginePower>	1040	</smplEnginePower>
           <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </Rolls_Royce_Griffon>
       </engines>
@@ -4961,13 +4724,13 @@
         <Chassis_GB24_Centurion_Mk3>
           <grounds>
             <soft>
-              <rollingFriction>	0.16905	</rollingFriction>
+              <rollingFriction>	0.15295	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
+              <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

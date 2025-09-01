@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/missions/widget/widget_quest_model.py
-from frameworks.wulf import ViewModel
+from frameworks.wulf import Array, ViewModel
+from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusModel
 
 class WidgetQuestModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=7, commands=0):
+    def __init__(self, properties=10, commands=0):
         super(WidgetQuestModel, self).__init__(properties=properties, commands=commands)
 
     def getId(self):
@@ -50,6 +51,28 @@ class WidgetQuestModel(ViewModel):
     def setDescription(self, value):
         self._setString(6, value)
 
+    def getCountdown(self):
+        return self._getNumber(7)
+
+    def setCountdown(self, value):
+        self._setNumber(7, value)
+
+    def getMissionType(self):
+        return self._getString(8)
+
+    def setMissionType(self, value):
+        self._setString(8, value)
+
+    def getBonuses(self):
+        return self._getArray(9)
+
+    def setBonuses(self, value):
+        self._setArray(9, value)
+
+    @staticmethod
+    def getBonusesType():
+        return BonusModel
+
     def _initialize(self):
         super(WidgetQuestModel, self)._initialize()
         self._addStringProperty('id', '')
@@ -59,3 +82,6 @@ class WidgetQuestModel(ViewModel):
         self._addNumberProperty('totalProgress', 0)
         self._addNumberProperty('earned', 0)
         self._addStringProperty('description', '')
+        self._addNumberProperty('countdown', 0)
+        self._addStringProperty('missionType', '')
+        self._addArrayProperty('bonuses', Array())

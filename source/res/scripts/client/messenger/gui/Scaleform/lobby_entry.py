@@ -35,6 +35,10 @@ class LobbyEntry(IGUIEntry):
     def channelsCtrl(self):
         return self.__channelsCtrl
 
+    @property
+    def carouselHandler(self):
+        return self.__carouselHandler
+
     def init(self):
         self.__channelsCtrl = channels.LobbyControllers()
         self.__channelsCtrl.init()
@@ -223,7 +227,6 @@ class LobbyEntry(IGUIEntry):
             if controller is None:
                 LOG_ERROR('Channel controller is not defined', ctx)
                 return
-            ctx.clear()
             self.__setView4Ctrl(controller)
             return
 

@@ -1396,7 +1396,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	62500	</maxLoad>
       <terrainResistance>	1.2 1.4 2.3	</terrainResistance>
       <brakeForce>	60000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2370,7 +2369,7 @@
     <Turret_1_Object263B>
       <ceilless>	true	</ceilless>
       <userString>	#ussr_vehicles:Turret_1_Object263B	</userString>
-      <tags>	cannotDetach	</tags>
+      <tags>	cannotDetach turretless	</tags>
       <level>	10	</level>
       <price>	100	</price>
       <notInShop>	true	</notInShop>

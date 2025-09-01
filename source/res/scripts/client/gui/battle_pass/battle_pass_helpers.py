@@ -3,13 +3,16 @@
 import itertools
 import logging
 from collections import namedtuple
-import typing
-from enum import Enum
 import nations
-from account_helpers.AccountSettings import AccountSettings, IS_BATTLE_PASS_COLLECTION_SEEN, IS_BATTLE_PASS_EXTRA_START_NOTIFICATION_SEEN, IS_BATTLE_PASS_START_NOTIFICATION_SEEN, LAST_BATTLE_PASS_POINTS_SEEN, LAST_BATTLE_PASS_CYCLES_SEEN, EXTRA_CHAPTERS_VIDEO_SHOWN, BUY_ANIMATIONS_WAS_SHOWN
-from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
+import typing
 from battle_pass_common import BattlePassConsts, BattlePassTankmenSource, HOLIDAY_SEASON_OFFSET, TANKMAN_QUEST_CHAIN_ENTITLEMENT_POSTFIX, isPostProgressionChapter
 from constants import ARENA_BONUS_TYPE, QUEUE_TYPE
+from enum import Enum
+from items.tankmen import getNationGroups
+from nations import INDICES
+from shared_utils import findFirst, first
+from account_helpers.AccountSettings import AccountSettings, IS_BATTLE_PASS_COLLECTION_SEEN, IS_BATTLE_PASS_EXTRA_START_NOTIFICATION_SEEN, EXTRA_CHAPTERS_VIDEO_SHOWN, BUY_ANIMATIONS_WAS_SHOWN, IS_BATTLE_PASS_START_ANIMATION_SEEN, IS_BATTLE_PASS_START_NOTIFICATION_SEEN, LAST_BATTLE_PASS_CYCLES_SEEN, LAST_BATTLE_PASS_POINTS_SEEN
+from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
 from gui import GUI_SETTINGS
 from gui.impl.gen import R
 from gui.impl.gen.view_models.common.price_model import PriceModel
@@ -22,16 +25,12 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import Currency
 from helpers import dependency, time_utils
 from helpers.dependency import replace_none_kwargs
-from items.tankmen import getNationGroups
-from nations import INDICES
-from shared_utils import findFirst, first
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IBattlePassController
 if typing.TYPE_CHECKING:
     from typing import Any, Dict, List, Set
     from gui.impl.wrappers.user_compound_price_model import UserCompoundPriceModel
     from gui.server_events.bonuses import TmanTemplateTokensBonus
-    from gui.shared.gui_items.customization.c11n_items import Customization
 _logger = logging.getLogger(__name__)
 _CUSTOMIZATION_BONUS_NAME = 'customizations'
 TANKMAN_BONUS_NAME = 'tmanToken'
@@ -70,7 +69,7 @@ def isBattlePassActiveSeason():
 
 def getPointsInfoStringID(gameMode=ARENA_BONUS_TYPE.REGULAR):
     points = R.strings.battle_pass.points.top()
-    if gameMode == ARENA_BONUS_TYPE.COMP7:
+    if gameMode in (ARENA_BONUS_TYPE.COMP7, ARENA_BONUS_TYPE.COMP7_LIGHT):
         points = R.strings.battle_pass.prestige.top()
     return points
 
@@ -92,23 +91,16 @@ def getInfoPageURL():
     return getBattlePassUrl('infoPage')
 
 
-def getExtraInfoPageURL(chapterID):
-    baseUrl = GUI_SETTINGS.baseUrls['webBridgeRootURL']
-    chapterUrl = (GUI_SETTINGS.battlePassUrls.get('extraInfoPage') or {}).get(str(chapterID), '')
-    return ''.join((baseUrl, chapterUrl))
+def getExtraInfoPageURL():
+    return getBattlePassUrl('extraInfoPage')
 
 
 def getIntroVideoURL():
     return getBattlePassUrl('introVideo')
 
 
-def getExtraIntroVideoURL():
-    videoUrl = GUI_SETTINGS.battlePassUrls.get('extraIntroVideo')
-    if videoUrl is None:
-        return ''
-    else:
-        baseUrl = GUI_SETTINGS.baseUrls['webBridgeRootURL']
-        return ''.join((baseUrl, videoUrl))
+def getExtraVideoURL():
+    return getBattlePassUrl('extraVideo')
 
 
 def getIntroSlidesNames():
@@ -157,6 +149,7 @@ def getSupportedArenaBonusTypeFor(queueType, isInUnit):
          QUEUE_TYPE.MAPBOX: ARENA_BONUS_TYPE.MAPBOX,
          QUEUE_TYPE.EPIC: ARENA_BONUS_TYPE.EPIC_BATTLE,
          QUEUE_TYPE.COMP7: ARENA_BONUS_TYPE.COMP7,
+         QUEUE_TYPE.COMP7_LIGHT: ARENA_BONUS_TYPE.COMP7_LIGHT,
          QUEUE_TYPE.WINBACK: ARENA_BONUS_TYPE.WINBACK}
         arenaBonusType = arenaBonusTypeByQueueType.get(queueType, ARENA_BONUS_TYPE.UNKNOWN)
     return arenaBonusType
@@ -249,21 +242,6 @@ def getVehicleInfoForChapter(chapter, battlePass=None, c11nService=None, awardSo
     return (None, None)
 
 
-def getSingleVehicleForCustomization(customization):
-    itemFilter = customization.descriptor.filter
-    if itemFilter is not None and itemFilter.include:
-        vehicles = []
-        for node in itemFilter.include:
-            if node.nations or node.levels:
-                return
-            if node.vehicles:
-                vehicles.extend(node.vehicles)
-
-        if len(vehicles) == 1:
-            return vehicles[0]
-    return
-
-
 def getRecruitNation(recruitInfo):
     nation = first(recruitInfo.getNations())
     return INDICES.get(nation, 0)
@@ -348,11 +326,6 @@ def getFinalTankmen(chapterID, awardType, battlePass=None):
     return [ getTankmanInfo(bonus) for bonus in characterBonuses ]
 
 
-@replace_none_kwargs(battlePass=IBattlePassController)
-def getDefaultChaptersView(battlePass=None):
-    return R.views.lobby.battle_pass.PostProgressionView() if battlePass.isPostProgressionActive() else R.views.lobby.battle_pass.ChapterChoiceView()
-
-
 def updateBuyAnimationFlag(chapterID):
     settings = AccountSettings.getSettings(BUY_ANIMATIONS_WAS_SHOWN)
     if chapterID not in settings:
@@ -385,6 +358,7 @@ def _updateClientSettings():
     AccountSettings.setSettings(LAST_BATTLE_PASS_CYCLES_SEEN, 0)
     AccountSettings.setSettings(EXTRA_CHAPTERS_VIDEO_SHOWN, set())
     AccountSettings.setSettings(BUY_ANIMATIONS_WAS_SHOWN, set())
+    AccountSettings.setSettings(IS_BATTLE_PASS_START_ANIMATION_SEEN, False)
 
 
 def _updateServerSettings(data):

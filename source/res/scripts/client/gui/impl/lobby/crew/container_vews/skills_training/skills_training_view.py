@@ -15,9 +15,10 @@ from gui.impl.lobby.crew.container_vews.skills_training import loadSortingOrderT
 from gui.impl.lobby.crew.container_vews.skills_training.components.skills_list_component import SkillsListComponent
 from gui.impl.lobby.crew.container_vews.skills_training.context import SkillsTrainingViewContext
 from gui.impl.lobby.crew.container_vews.skills_training.controller import SkillsTrainingInteractionController
+from gui.impl.lobby.crew.crew_helpers import tankmanHasCrewAssistOrderSets
 from gui.impl.lobby.crew.tooltips.sorting_dropdown_tooltip import SortingDropdownTooltip
 from gui.impl.lobby.crew.widget.crew_widget import CrewWidget, SkillsTrainingCrewWidget
-from gui.impl.lobby.hangar.sub_views.vehicle_params_view import VehicleSkillPreviewParamsView
+from gui.impl.lobby.hangar.sub_views.vehicle_params_view import VehicleSkillPreviewParamsPresenter
 from gui.impl.pub import ViewImpl, WindowImpl
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.event_bus import SharedEvent
@@ -28,7 +29,6 @@ from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from typing import List, Type
     from gui.impl.lobby.container_views.base.components import ComponentBase
-    from gui.shared.gui_items.Vehicle import Vehicle
 
 class SkillsTrainingView(ContainerBase, ViewImpl):
     __slots__ = ('_crewWidget', '_paramsView')
@@ -83,7 +83,7 @@ class SkillsTrainingView(ContainerBase, ViewImpl):
         slotIdx, _, __ = self._crewWidget.getWidgetData()
         self.setChildView(CrewWidget.LAYOUT_DYN_ACCESSOR(), self._crewWidget)
         self._crewWidget.updateSlotIdx(slotIdx)
-        self._paramsView = VehicleSkillPreviewParamsView()
+        self._paramsView = VehicleSkillPreviewParamsPresenter()
         self.setChildView(R.views.lobby.hangar.subViews.VehicleParams(), self._paramsView)
         super(SkillsTrainingView, self)._onLoading(**kwargs)
 
@@ -106,13 +106,13 @@ class SkillsTrainingView(ContainerBase, ViewImpl):
         vm.setAreAllSkillsLearned(self.context.areAllSkillsLearned)
         vm.setSkillsEfficiency(self.context.tankman.currentVehicleSkillsEfficiency)
         vm.setIsAnySkillSelected(self.context.isAnySkillSelected)
-        vehicle = self.itemsCache.items.getVehicle(self.context.tankman.vehicleInvID)
         if self.context.tankman.vehicleDescr:
+            vehicle = self.itemsCache.items.getVehicle(self.context.tankman.vehicleInvID)
             fillVehicleInfo(vm.vehicleInfo, vehicle, separateIGRTag=True)
             vm.setIsTankmanInVehicle(True)
         else:
             vm.setIsTankmanInVehicle(False)
-        self.__fillSortingDropDown(vm, vehicle, loadSortingOrderType())
+        self.__fillSortingDropDown(vm, loadSortingOrderType())
 
     def _finalize(self):
         super(SkillsTrainingView, self)._finalize()
@@ -133,7 +133,7 @@ class SkillsTrainingView(ContainerBase, ViewImpl):
 
     def __refreshSorting(self, sortingType):
         with self.viewModel.transaction() as vm:
-            self.__fillSortingDropDown(vm, self.itemsCache.items.getVehicle(self.context.tankman.vehicleInvID), sortingType)
+            self.__fillSortingDropDown(vm, sortingType)
             self.__refreshSkillsComponent(vm)
 
     def __onDisconnected(self):
@@ -156,11 +156,11 @@ class SkillsTrainingView(ContainerBase, ViewImpl):
         vm.setMType(mType)
         return vm
 
-    def __fillSortingDropDown(self, vm, vehicle, storedPresetVal):
+    def __fillSortingDropDown(self, vm, storedPresetVal):
         dropdownItems = vm.getSortingDropDownItems()
         dropdownItems.clear()
         if self.wotPlus.isCrewAssistEnabled():
-            hasCommonSet, hasLegendarySet = self.wotPlus.hasCrewAssistOrderSets(vehicle, self.context.role)
+            hasCommonSet, hasLegendarySet = tankmanHasCrewAssistOrderSets(self.context.tankman, self.context.role)
             showWarning = False
             dropdownItems.reserve(3)
             if storedPresetVal == SortingTypeEnum.COMMON.value:

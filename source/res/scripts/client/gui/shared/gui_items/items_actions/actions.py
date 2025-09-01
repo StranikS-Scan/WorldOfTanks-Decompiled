@@ -52,7 +52,7 @@ from gui.shared.gui_items.processors.module import ModuleUpgradeProcessor
 from gui.shared.gui_items.processors.module import MultipleModulesSeller
 from gui.shared.gui_items.processors.module import getInstallerProcessor
 from gui.shared.gui_items.processors.tankman import TankmanFreeToOwnXpConvertor, TankmanRetraining, TankmanUnload, TankmanEquip, TankmanChangePassport, TankmanDismiss, TankmanRestore, TankmanChangeRole, TankmenJunkConverter, TankmanAddSkills, ResetAllTankmenSkills, TransferTankmanXP, TankmanRecruitAndEquip
-from gui.shared.gui_items.processors.veh_post_progression import ChangeVehicleSetupEquipments, DiscardPairsProcessor, PurchasePairProcessor, PurchaseStepsProcessor, SetEquipmentSlotTypeProcessor, SwitchPrebattleAmmoPanelAvailability
+from gui.shared.gui_items.processors.veh_post_progression import ChangeVehicleSetupEquipments, DiscardPairsProcessor, PurchasePairProcessor, PurchaseStepsProcessor, SetEquipmentSlotTypeProcessor, SwitchPrebattleAmmoPanelAvailability, PurchaseVehSkillTreeStepsProcessor
 from gui.shared.gui_items.processors.vehicle import OptDevicesInstaller, BuyAndInstallConsumablesProcessor, AutoFillVehicleLayoutProcessor, BuyAndInstallBattleBoostersProcessor, BuyAndInstallShellsProcessor, VehicleRepairer, InstallBattleAbilitiesProcessor
 from gui.shared.gui_items.processors.vehicle import VehicleSlotBuyer
 from gui.shared.gui_items.processors.vehicle import tryToLoadDefaultShellsLayout
@@ -60,6 +60,7 @@ from gui.shared.money import ZERO_MONEY, Money, Currency
 from gui.shared.utils import decorators
 from gui.shared.utils.requesters import RequestCriteria, REQ_CRITERIA
 from gui.shop import showBuyGoldForPersonalReserves, showBuyGoldForSlot
+from gui.veh_post_progression.models.ext_money import EXT_MONEY_ZERO
 from helpers import dependency
 from items import vehicles, ITEM_TYPE_NAMES, parseIntCompactDescr
 from shared_utils import first, allEqual
@@ -69,6 +70,8 @@ from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
+from skeletons.gui.game_control import IExchangeRatesWithDiscountsProvider
+from exchange.personal_discounts_constants import EXCHANGE_RATE_FREE_XP_NAME
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
     from gui.goodies.goodie_items import Booster
@@ -279,9 +282,10 @@ class VehicleBuyAction(BuyAction):
                 if price is None:
                     showShopMsg('not_found', item)
                     return
+                isRestore = item.isRestoreAvailable()
                 if not self._mayObtainForMoney(item):
                     if self._mayObtainWithMoneyExchange(item):
-                        if item.isRestoreAvailable():
+                        if isRestore:
                             meta = RestoreExchangeCreditsMeta(self.__vehCD)
                         else:
                             meta = ExchangeCreditsSingleItemMeta(self.__vehCD)
@@ -289,11 +293,17 @@ class VehicleBuyAction(BuyAction):
                         if not isOk:
                             return
                     else:
+                        if item.isPremium:
+                            self._showVehicleBuyDialog(item)
+                            return
                         showShopMsg('common_rent_or_buy_error', item)
                 if self._mayObtainForMoney(item):
-                    shared_events.showVehicleBuyDialog(item, self.__actionType, self.__isTradeIn, self.__previousAlias, returnAlias=self.__returnAlias, returnCallback=self.__returnCallback)
+                    self._showVehicleBuyDialog(item)
                 yield lambda callback=None: callback
             return
+
+    def _showVehicleBuyDialog(self, item):
+        shared_events.showVehicleBuyDialog(item, self.__actionType, self.__isTradeIn, self.__previousAlias, returnAlias=self.__returnAlias, returnCallback=self.__returnCallback)
 
     def _mayObtainForMoney(self, item):
         money = self.tradeIn.addTradeInPriceIfNeeded(item, self._itemsCache.items.stats.money)
@@ -1522,3 +1532,36 @@ class SetEquipmentSlotType(AsyncGUIItemAction):
                 callback(True)
             else:
                 callback(False)
+
+
+class PurchaseVehSkillTreeSteps(AsyncGUIItemAction):
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __exchangeRatesProvider = dependency.descriptor(IExchangeRatesWithDiscountsProvider)
+
+    def __init__(self, vehicle, stepIDs):
+        super(PurchaseVehSkillTreeSteps, self).__init__()
+        self.__vehicle = vehicle
+        self.__stepIDs = stepIDs
+
+    @adisp_async
+    @decorators.adisp_process()
+    def _action(self, callback):
+        result = yield PurchaseVehSkillTreeStepsProcessor(self.__vehicle, self.__stepIDs).request()
+        callback(result)
+
+    @adisp_async
+    @future_async.wg_async
+    def _confirm(self, callback):
+        shortage = self.__getXPShortage()
+        if shortage > 0:
+            isOk, _, _ = yield future_async.wg_await(shared_events.showExchangeXPDialogWindow)(self.__formatValue(shortage))
+            callback(isOk and self.__getXPShortage() <= 0)
+        else:
+            callback(True)
+
+    def __getXPShortage(self):
+        price = sum([ self.__vehicle.postProgression.getStep(stepID).getPrice() for stepID in self.__stepIDs ], EXT_MONEY_ZERO)
+        return price.xp - (self.__itemsCache.items.stats.freeXP + self.__vehicle.xp)
+
+    def __formatValue(self, value):
+        return self.__exchangeRatesProvider.get(EXCHANGE_RATE_FREE_XP_NAME).calculateResourceToExchange(value)[1]

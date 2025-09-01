@@ -8049,14 +8049,14 @@
   </exampleAbility>
   <comp7_aoe_heal>
     <id>	9501	</id>
-    <userString>	#artefacts:comp7_aoe_heal/name	</userString>
+    <userString>	#comp7.artefacts.extend:comp7_aoe_heal/name	</userString>
     <icon>	comp7_aoe_heal 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
     <tags>	notForSale roleEquipment	</tags>
     <type>	battleAbilities	</type>
     <soundNotification>	comp_7_ability_ready	</soundNotification>
-    <script>	Comp7AoeHealEquipment	  <visualScript>
+    <script>	comp7_common.items.comp7_artefacts.Comp7AoeHealEquipment	  <visualScript>
         <server>
           <plan>	comp7Abilities/aoeHeal_server	</plan>
         </server>
@@ -8077,14 +8077,14 @@
   </comp7_aoe_heal>
   <comp7_ally_support>
     <id>	9502	</id>
-    <userString>	#artefacts:comp7_ally_support/name	</userString>
+    <userString>	#comp7.artefacts.extend:comp7_ally_support/name	</userString>
     <icon>	comp7_ally_support 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
     <tags>	notForSale roleEquipment	</tags>
     <type>	battleAbilities	</type>
     <soundNotification>	comp_7_ability_ready	</soundNotification>
-    <script>	Comp7AllySupportEquipment	  <visualScript>
+    <script>	comp7_common.items.comp7_artefacts.Comp7AllySupportEquipment	  <visualScript>
         <server>
           <plan>	comp7Abilities/allySupport_server	</plan>
         </server>
@@ -8099,14 +8099,14 @@
   </comp7_ally_support>
   <comp7_hunter>
     <id>	9503	</id>
-    <userString>	#artefacts:comp7_hunter/name	</userString>
+    <userString>	#comp7.artefacts.extend:comp7_hunter/name	</userString>
     <icon>	comp7_hunter 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
     <tags>	notForSale roleEquipment	</tags>
     <type>	battleAbilities	</type>
     <soundNotification>	comp_7_ability_ready	</soundNotification>
-    <script>	Comp7AllyHunterEquipment	  <visualScript>
+    <script>	comp7_common.items.comp7_artefacts.Comp7AllyHunterEquipment	  <visualScript>
         <server>
           <plan>	comp7Abilities/hunter_server	</plan>
         </server>
@@ -8128,21 +8128,21 @@
   </comp7_hunter>
   <comp7_concentration>
     <id>	9504	</id>
-    <userString>	#artefacts:comp7_concentration/name	</userString>
+    <userString>	#comp7.artefacts.extend:comp7_concentration/name	</userString>
     <icon>	comp7_concentration 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
     <tags>	notForSale roleEquipment	</tags>
     <type>	battleAbilities	</type>
     <soundNotification>	comp_7_ability_ready	</soundNotification>
-    <script>	Comp7ConcentrationEquipment	  <visualScript>
+    <script>	comp7_common.items.comp7_artefacts.Comp7ConcentrationEquipment	  <visualScript>
         <server>
           <plan>	comp7Abilities/concentration_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	5	  <exports>	vse	</exports>
+      <cooldownSeconds>	18	  <exports>	vse	</exports>
       </cooldownSeconds>
-      <duration>	15	  <exports>	vse tooltip	</exports>
+      <duration>	12	  <exports>	vse tooltip	</exports>
       </duration>
       <aimingTimeBuff>	0.55 0.475 0.3	  <exports>	vse	</exports>
       </aimingTimeBuff>
@@ -8154,14 +8154,14 @@
   </comp7_concentration>
   <comp7_berserk>
     <id>	9505	</id>
-    <userString>	#artefacts:comp7_berserk/name	</userString>
+    <userString>	#comp7.artefacts.extend:comp7_berserk/name	</userString>
     <icon>	comp7_berserk 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
     <tags>	notForSale roleEquipment	</tags>
     <type>	battleAbilities	</type>
     <soundNotification>	comp_7_ability_ready	</soundNotification>
-    <script>	Comp7BerserkEquipment	  <visualScript>
+    <script>	comp7_common.items.comp7_artefacts.Comp7BerserkEquipment	  <visualScript>
         <server>
           <plan>	comp7Abilities/berserk_server	</plan>
         </server>
@@ -8180,14 +8180,14 @@
   </comp7_berserk>
   <comp7_aoe_inspire>
     <id>	9506	</id>
-    <userString>	#artefacts:comp7_aoe_inspire/name	</userString>
+    <userString>	#comp7.artefacts.extend:comp7_aoe_inspire/name	</userString>
     <icon>	comp7_aoe_inspire 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
     <tags>	notForSale roleEquipment	</tags>
     <type>	battleAbilities	</type>
     <soundNotification>	comp_7_ability_ready	</soundNotification>
-    <script>	Comp7AoeInspireEquipment	  <visualScript>
+    <script>	comp7_common.items.comp7_artefacts.Comp7AoeInspireEquipment	  <visualScript>
         <server>
           <plan>	comp7Abilities/aoeInspire_server	</plan>
         </server>
@@ -8202,15 +8202,15 @@
   </comp7_aoe_inspire>
   <comp7_redline>
     <id>	9507	</id>
-    <userString>	#artefacts:comp7_redline/name	</userString>
+    <userString>	#comp7.artefacts.extend:comp7_redline/name	</userString>
     <icon>	comp7_redline 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
-    <tags>	notForSale roleEquipment	</tags>
+    <tags>	notForSale roleEquipment pointAbility	</tags>
     <type>	battleAbilities	</type>
     <soundNotification>	comp_7_ability_ready	</soundNotification>
     <messagePostfix>	artillery	</messagePostfix>
-    <script>	Comp7RedlineEquipment	  <visualScript>
+    <script>	comp7_common.items.comp7_artefacts.Comp7RedlineEquipment	  <visualScript>
         <server>
           <plan>	comp7Abilities/redline_server	</plan>
         </server>
@@ -8221,7 +8221,7 @@
       </delay>
       <radius>	10 12.5 15	  <exports>	vse tooltip	</exports>
       </radius>
-      <damage>	90 150 250	  <exports>	vse tooltip	</exports>
+      <damage>	100 150 250	  <exports>	vse tooltip	</exports>
       </damage>
       <stunDuration>	0 6 8	  <exports>	vse tooltip	</exports>
       </stunDuration>
@@ -8246,14 +8246,14 @@
   </comp7_redline>
   <comp7_fast_recharge>
     <id>	9508	</id>
-    <userString>	#artefacts:comp7_fast_recharge/name	</userString>
+    <userString>	#comp7.artefacts.extend:comp7_fast_recharge/name	</userString>
     <icon>	comp7_fast_recharge 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
     <tags>	notForSale roleEquipment	</tags>
     <type>	battleAbilities	</type>
     <soundNotification>	comp_7_ability_ready	</soundNotification>
-    <script>	Comp7FastRechargeEquipment	  <visualScript>
+    <script>	comp7_common.items.comp7_artefacts.Comp7FastRechargeEquipment	  <visualScript>
         <server>
           <plan>	comp7Abilities/fastRecharge_server	</plan>
         </server>
@@ -8269,14 +8269,14 @@
   </comp7_fast_recharge>
   <comp7_juggernaut>
     <id>	9509	</id>
-    <userString>	#artefacts:comp7_juggernaut/name	</userString>
+    <userString>	#comp7.artefacts.extend:comp7_juggernaut/name	</userString>
     <icon>	comp7_juggernaut 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
     <tags>	notForSale roleEquipment	</tags>
     <type>	battleAbilities	</type>
     <soundNotification>	comp_7_ability_ready	</soundNotification>
-    <script>	Comp7JuggernautEquipment	  <visualScript>
+    <script>	comp7_common.items.comp7_artefacts.Comp7JuggernautEquipment	  <visualScript>
         <server>
           <plan>	comp7Abilities/juggernaut_server	</plan>
         </server>
@@ -8301,14 +8301,14 @@
   </comp7_juggernaut>
   <comp7_sure_shot>
     <id>	9510	</id>
-    <userString>	#artefacts:comp7_sure_shot/name	</userString>
+    <userString>	#comp7.artefacts.extend:comp7_sure_shot/name	</userString>
     <icon>	comp7_sure_shot 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
     <tags>	notForSale roleEquipment	</tags>
     <type>	battleAbilities	</type>
     <soundNotification>	comp_7_ability_ready	</soundNotification>
-    <script>	Comp7SureShotEquipment	  <visualScript>
+    <script>	comp7_common.items.comp7_artefacts.Comp7SureShotEquipment	  <visualScript>
         <server>
           <plan>	comp7Abilities/sure_shot_server	</plan>
         </server>
@@ -8327,14 +8327,14 @@
   </comp7_sure_shot>
   <comp7_sniper>
     <id>	9511	</id>
-    <userString>	#artefacts:comp7_sniper/name	</userString>
+    <userString>	#comp7.artefacts.extend:comp7_sniper/name	</userString>
     <icon>	comp7_sniper 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
     <tags>	notForSale roleEquipment	</tags>
     <type>	battleAbilities	</type>
     <soundNotification>	comp_7_ability_ready	</soundNotification>
-    <script>	Comp7SniperEquipment	  <visualScript>
+    <script>	comp7_common.items.comp7_artefacts.Comp7SniperEquipment	  <visualScript>
         <server>
           <plan>	comp7Abilities/sniper_server	</plan>
         </server>
@@ -8353,14 +8353,14 @@
   </comp7_sniper>
   <comp7_risky_attack>
     <id>	9512	</id>
-    <userString>	#artefacts:comp7_risky_attack/name	</userString>
+    <userString>	#comp7.artefacts.extend:comp7_risky_attack/name	</userString>
     <icon>	comp7_risky_attack 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
     <tags>	notForSale roleEquipment	</tags>
     <type>	battleAbilities	</type>
     <soundNotification>	comp_7_ability_ready	</soundNotification>
-    <script>	Comp7RiskyAttackEquipment	  <visualScript>
+    <script>	comp7_common.items.comp7_artefacts.Comp7RiskyAttackEquipment	  <visualScript>
         <server>
           <plan>	comp7Abilities/riskyAttack_server	</plan>
         </server>
@@ -8385,14 +8385,14 @@
   </comp7_risky_attack>
   <comp7_recon>
     <id>	9513	</id>
-    <userString>	#artefacts:comp7_recon/name	</userString>
+    <userString>	#comp7.artefacts.extend:comp7_recon/name	</userString>
     <icon>	comp7_recon 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
-    <tags>	notForSale roleEquipment	</tags>
+    <tags>	notForSale roleEquipment pointAbility	</tags>
     <type>	battleAbilities	</type>
     <soundNotification>	comp_7_ability_ready	</soundNotification>
-    <script>	Comp7ReconEquipment	  <visualScript>
+    <script>	comp7_common.items.comp7_artefacts.Comp7ReconEquipment	  <visualScript>
         <server>
           <plan>	comp7Abilities/recon_server	</plan>
         </server>
@@ -8412,14 +8412,14 @@
   </comp7_recon>
   <comp7_aggressive_detection>
     <id>	9514	</id>
-    <userString>	#artefacts:comp7_aggressive_detection/name	</userString>
+    <userString>	#comp7.artefacts.extend:comp7_aggressive_detection/name	</userString>
     <icon>	comp7_aggressive_detection 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
     <tags>	notForSale roleEquipment	</tags>
     <type>	battleAbilities	</type>
     <soundNotification>	comp_7_ability_ready	</soundNotification>
-    <script>	Comp7AggressiveDetectionEquipment	  <visualScript>
+    <script>	comp7_common.items.comp7_artefacts.Comp7AggressiveDetectionEquipment	  <visualScript>
         <server>
           <plan>	comp7Abilities/aggressive_detection_server	</plan>
         </server>
@@ -8434,14 +8434,14 @@
   </comp7_aggressive_detection>
   <comp7_march>
     <id>	9515	</id>
-    <userString>	#artefacts:comp7_march/name	</userString>
+    <userString>	#comp7.artefacts.extend:comp7_march/name	</userString>
     <icon>	comp7_march 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
     <tags>	notForSale roleEquipment	</tags>
     <type>	battleAbilities	</type>
     <soundNotification>	comp_7_ability_ready	</soundNotification>
-    <script>	Comp7MarchEquipment	  <visualScript>
+    <script>	comp7_common.items.comp7_artefacts.Comp7MarchEquipment	  <visualScript>
         <server>
           <plan>	comp7Abilities/march_server	</plan>
         </server>
@@ -8458,4 +8458,415 @@
       </invisibilityFactor>
     </script>
   </comp7_march>
+  <comp7_light_aoe_heal>
+    <id>	9521	</id>
+    <userString>	#comp7_light.artefacts.extend:comp7_light_aoe_heal/name	</userString>
+    <icon>	comp7_light_aoe_heal 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale roleEquipment	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <script>	comp7_light_common.items.comp7_light_artefacts.Comp7LightAoeHealEquipment	  <visualScript>
+        <server>
+          <plan>	comp7Abilities/aoeHeal_server	</plan>
+        </server>
+      </visualScript>
+      <cooldownSeconds>	15	  <exports>	vse	</exports>
+      </cooldownSeconds>
+      <duration>	5	  <exports>	vse tooltip	</exports>
+      </duration>
+      <radius>	45	  <exports>	vse tooltip	</exports>
+      </radius>
+      <heal>	10 17 24	  <exports>	vse tooltip	</exports>
+      </heal>
+      <secondaryHealDebuff>	0	  <exports>	vse tooltip	</exports>
+      </secondaryHealDebuff>
+      <tickInterval>	1.0	  <exports>	vse tooltip	</exports>
+      </tickInterval>
+    </script>
+  </comp7_light_aoe_heal>
+  <comp7_light_ally_support>
+    <id>	9522	</id>
+    <userString>	#comp7_light.artefacts.extend:comp7_light_ally_support/name	</userString>
+    <icon>	comp7_light_ally_support 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale roleEquipment	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <script>	comp7_light_common.items.comp7_light_artefacts.Comp7LightAllySupportEquipment	  <visualScript>
+        <server>
+          <plan>	comp7Abilities/allySupport_server	</plan>
+        </server>
+      </visualScript>
+      <cooldownSeconds>	3	  <exports>	vse	</exports>
+      </cooldownSeconds>
+      <duration>	20	  <exports>	vse tooltip	</exports>
+      </duration>
+      <crewBuff>	4 7 10	  <exports>	vse tooltip	</exports>
+      </crewBuff>
+    </script>
+  </comp7_light_ally_support>
+  <comp7_light_hunter>
+    <id>	9523	</id>
+    <userString>	#comp7_light.artefacts.extend:comp7_light_hunter/name	</userString>
+    <icon>	comp7_light_hunter 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale roleEquipment	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <script>	comp7_light_common.items.comp7_light_artefacts.Comp7LightAllyHunterEquipment	  <visualScript>
+        <server>
+          <plan>	comp7Abilities/hunter_server	</plan>
+        </server>
+        <client>
+          <plan>	comp7Abilities/hunter_client	</plan>
+        </client>
+      </visualScript>
+      <cooldownSeconds>	15	  <exports>	vse	</exports>
+      </cooldownSeconds>
+      <duration>	5	  <exports>	vse tooltip	</exports>
+      </duration>
+      <heal>	4 5 7	  <exports>	vse tooltip	</exports>
+      </heal>
+      <gunReloadTimeBuff>	4	  <exports>	vse tooltip	</exports>
+      </gunReloadTimeBuff>
+      <tickInterval>	1.0	  <exports>	vse tooltip	</exports>
+      </tickInterval>
+    </script>
+  </comp7_light_hunter>
+  <comp7_light_concentration>
+    <id>	9524	</id>
+    <userString>	#comp7_light.artefacts.extend:comp7_light_concentration/name	</userString>
+    <icon>	comp7_light_concentration 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale roleEquipment	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <script>	comp7_light_common.items.comp7_light_artefacts.Comp7LightConcentrationEquipment	  <visualScript>
+        <server>
+          <plan>	comp7Abilities/concentration_server	</plan>
+        </server>
+      </visualScript>
+      <cooldownSeconds>	18	  <exports>	vse	</exports>
+      </cooldownSeconds>
+      <duration>	12	  <exports>	vse tooltip	</exports>
+      </duration>
+      <aimingTimeBuff>	0.55 0.475 0.3	  <exports>	vse	</exports>
+      </aimingTimeBuff>
+      <shotDispersionFactors>	0.55 0.475 0.3	  <exports>	vse tooltip	</exports>
+      </shotDispersionFactors>
+      <clipReloadTimeBoost>	0.6 0.75 0.9	  <exports>	vse tooltip	</exports>
+      </clipReloadTimeBoost>
+    </script>
+  </comp7_light_concentration>
+  <comp7_light_berserk>
+    <id>	9525	</id>
+    <userString>	#comp7_light.artefacts.extend:comp7_light_berserk/name	</userString>
+    <icon>	comp7_light_berserk 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale roleEquipment	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <script>	comp7_light_common.items.comp7_light_artefacts.Comp7LightBerserkEquipment	  <visualScript>
+        <server>
+          <plan>	comp7Abilities/berserk_server	</plan>
+        </server>
+      </visualScript>
+      <cooldownSeconds>	3	  <exports>	vse	</exports>
+      </cooldownSeconds>
+      <duration>	12	  <exports>	vse tooltip	</exports>
+      </duration>
+      <gunReloadTimeBuff>	0.75 0.7 0.65	  <exports>	vse tooltip	</exports>
+      </gunReloadTimeBuff>
+      <damageDistance>	150	  <exports>	vse tooltip	</exports>
+      </damageDistance>
+      <shotDispersionFactors>	0.8 0.675 0.55	  <exports>	vse tooltip	</exports>
+      </shotDispersionFactors>
+    </script>
+  </comp7_light_berserk>
+  <comp7_light_aoe_inspire>
+    <id>	9526	</id>
+    <userString>	#comp7_light.artefacts.extend:comp7_light_aoe_inspire/name	</userString>
+    <icon>	comp7_light_aoe_inspire 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale roleEquipment	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <script>	comp7_light_common.items.comp7_light_artefacts.Comp7LightAoeInspireEquipment	  <visualScript>
+        <server>
+          <plan>	comp7Abilities/aoeInspire_server	</plan>
+        </server>
+      </visualScript>
+      <cooldownSeconds>	3	  <exports>	vse	</exports>
+      </cooldownSeconds>
+      <duration>	20	  <exports>	vse tooltip	</exports>
+      </duration>
+      <crewBuff>	20 32.5 45	  <exports>	vse tooltip	</exports>
+      </crewBuff>
+    </script>
+  </comp7_light_aoe_inspire>
+  <comp7_light_redline>
+    <id>	9527	</id>
+    <userString>	#comp7_light.artefacts.extend:comp7_light_redline/name	</userString>
+    <icon>	comp7_light_redline 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale roleEquipment pointAbility	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <messagePostfix>	artillery	</messagePostfix>
+    <script>	comp7_light_common.items.comp7_light_artefacts.Comp7LightRedlineEquipment	  <visualScript>
+        <server>
+          <plan>	comp7Abilities/redline_server	</plan>
+        </server>
+      </visualScript>
+      <cooldownSeconds>	5	  <exports>	vse	</exports>
+      </cooldownSeconds>
+      <delay>	3	  <exports>	vse tooltip	</exports>
+      </delay>
+      <radius>	10 12.5 15	  <exports>	vse tooltip	</exports>
+      </radius>
+      <damage>	60 90 150	  <exports>	vse tooltip	</exports>
+      </damage>
+      <stunDuration>	0 6 8	  <exports>	vse tooltip	</exports>
+      </stunDuration>
+      <fraction>	0	  <exports>	vse tooltip	</exports>
+      </fraction>
+      <areaShow>	always	</areaShow>
+      <duration>	1.0	</duration>
+      <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaColor>	0xFF25FF25	</areaColor>
+      <requireAssists>	true	</requireAssists>
+      <effects>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	15	</offsetDeviation>
+          <repeatCount>	4	</repeatCount>
+          <repeatDelay>	0	</repeatDelay>
+          <repeatDelayDeviationPercent>	0	</repeatDelayDeviationPercent>
+        </action>
+      </effects>
+    </script>
+  </comp7_light_redline>
+  <comp7_light_fast_recharge>
+    <id>	9528	</id>
+    <userString>	#comp7_light.artefacts.extend:comp7_light_fast_recharge/name	</userString>
+    <icon>	comp7_light_fast_recharge 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale roleEquipment	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <script>	comp7_light_common.items.comp7_light_artefacts.Comp7LightFastRechargeEquipment	  <visualScript>
+        <server>
+          <plan>	comp7Abilities/fastRecharge_server	</plan>
+        </server>
+        <client>
+          <plan>	comp7Abilities/fastRecharge_client	</plan>
+        </client>
+      </visualScript>
+      <cooldownSeconds>	3	  <exports>	vse	</exports>
+      </cooldownSeconds>
+      <gunReloadTimeBuff>	0.7 0.6 0.5	  <exports>	vse tooltip	</exports>
+      </gunReloadTimeBuff>
+    </script>
+  </comp7_light_fast_recharge>
+  <comp7_light_juggernaut>
+    <id>	9529	</id>
+    <userString>	#comp7_light.artefacts.extend:comp7_light_juggernaut/name	</userString>
+    <icon>	comp7_light_juggernaut 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale roleEquipment	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <script>	comp7_light_common.items.comp7_light_artefacts.Comp7LightJuggernautEquipment	  <visualScript>
+        <server>
+          <plan>	comp7Abilities/juggernaut_server	</plan>
+        </server>
+      </visualScript>
+      <cooldownSeconds>	10	  <exports>	vse	</exports>
+      </cooldownSeconds>
+      <duration>	12 14 17	  <exports>	vse tooltip	</exports>
+      </duration>
+      <dmgAbsorb>	0.85 0.8 0.75	  <exports>	vse tooltip	</exports>
+      </dmgAbsorb>
+      <enginePowerFactor>	1.35	  <exports>	vse tooltip	</exports>
+      </enginePowerFactor>
+      <fwMaxSpeedBonus>	6	  <exports>	vse tooltip	</exports>
+      </fwMaxSpeedBonus>
+      <bkMaxSpeedBonus>	4	  <exports>	vse tooltip	</exports>
+      </bkMaxSpeedBonus>
+      <rammingDamageBonus>	1.30	  <exports>	vse tooltip	</exports>
+      </rammingDamageBonus>
+      <vehicleRotationSpeedFactor>	0.75	  <exports>	vse	</exports>
+      </vehicleRotationSpeedFactor>
+    </script>
+  </comp7_light_juggernaut>
+  <comp7_light_sure_shot>
+    <id>	9530	</id>
+    <userString>	#comp7_light.artefacts.extend:comp7_light_sure_shot/name	</userString>
+    <icon>	comp7_light_sure_shot 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale roleEquipment	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <script>	comp7_light_common.items.comp7_light_artefacts.Comp7LightSureShotEquipment	  <visualScript>
+        <server>
+          <plan>	comp7Abilities/sure_shot_server	</plan>
+        </server>
+      </visualScript>
+      <cooldownSeconds>	1	  <exports>	vse	</exports>
+      </cooldownSeconds>
+      <duration>	20	  <exports>	vse tooltip	</exports>
+      </duration>
+      <shotDispersionFactors>	0.8 0.7 0.6	  <exports>	vse tooltip	</exports>
+      </shotDispersionFactors>
+      <slvl>	1.0 1.2 1.45	  <exports>	vse tooltip	</exports>
+      </slvl>
+      <sdlvl>	0.6 0.8 0.95	  <exports>	vse tooltip	</exports>
+      </sdlvl>
+    </script>
+  </comp7_light_sure_shot>
+  <comp7_light_sniper>
+    <id>	9531	</id>
+    <userString>	#comp7_light.artefacts.extend:comp7_light_sniper/name	</userString>
+    <icon>	comp7_light_sniper 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale roleEquipment	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <script>	comp7_light_common.items.comp7_light_artefacts.Comp7LightSniperEquipment	  <visualScript>
+        <server>
+          <plan>	comp7Abilities/sniper_server	</plan>
+        </server>
+      </visualScript>
+      <cooldownSeconds>	3	  <exports>	vse	</exports>
+      </cooldownSeconds>
+      <duration>	10 15 20	  <exports>	vse tooltip	</exports>
+      </duration>
+      <dispersionFactor>	0.01	  <exports>	vse tooltip	</exports>
+      </dispersionFactor>
+      <damageDistance>	250	  <exports>	vse tooltip	</exports>
+      </damageDistance>
+      <damageFactors>	1.25 1.35 1.45	  <exports>	vse tooltip	</exports>
+      </damageFactors>
+    </script>
+  </comp7_light_sniper>
+  <comp7_light_risky_attack>
+    <id>	9532	</id>
+    <userString>	#comp7_light.artefacts.extend:comp7_light_risky_attack/name	</userString>
+    <icon>	comp7_light_risky_attack 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale roleEquipment	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <script>	comp7_light_common.items.comp7_light_artefacts.Comp7LightRiskyAttackEquipment	  <visualScript>
+        <server>
+          <plan>	comp7Abilities/riskyAttack_server	</plan>
+        </server>
+      </visualScript>
+      <cooldownSeconds>	10	  <exports>	vse	</exports>
+      </cooldownSeconds>
+      <duration>	7	  <exports>	vse tooltip	</exports>
+      </duration>
+      <healDuration>	10	  <exports>	vse tooltip	</exports>
+      </healDuration>
+      <baseHeal>	45.0	  <exports>	vse tooltip	</exports>
+      </baseHeal>
+      <extraHealFactor>	0.35 0.50 0.70	  <exports>	vse tooltip	</exports>
+      </extraHealFactor>
+      <fwdSpeedBoost>	10	  <exports>	vse tooltip	</exports>
+      </fwdSpeedBoost>
+      <bkwSpeedBoost>	10	  <exports>	vse tooltip	</exports>
+      </bkwSpeedBoost>
+      <enginePowerBuff>	15	  <exports>	vse tooltip	</exports>
+      </enginePowerBuff>
+    </script>
+  </comp7_light_risky_attack>
+  <comp7_light_recon>
+    <id>	9533	</id>
+    <userString>	#comp7_light.artefacts.extend:comp7_light_recon/name	</userString>
+    <icon>	comp7_light_recon 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale roleEquipment pointAbility	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <script>	comp7_light_common.items.comp7_light_artefacts.Comp7LightReconEquipment	  <visualScript>
+        <server>
+          <plan>	comp7Abilities/recon_server	</plan>
+        </server>
+      </visualScript>
+      <cooldownSeconds>	10	  <exports>	vse	</exports>
+      </cooldownSeconds>
+      <duration>	7 10 15	  <exports>	vse tooltip	</exports>
+      </duration>
+      <delay>	2	  <exports>	vse tooltip	</exports>
+      </delay>
+      <startupDelay>	4	  <exports>	vse tooltip	</exports>
+      </startupDelay>
+      <radius>	45 55 60	  <exports>	vse tooltip	</exports>
+      </radius>
+      <areaVisual>	content/Interface/TargetPoint/ReconFlight_02.visual	</areaVisual>
+    </script>
+  </comp7_light_recon>
+  <comp7_light_aggressive_detection>
+    <id>	9534	</id>
+    <userString>	#comp7_light.artefacts.extend:comp7_light_aggressive_detection/name	</userString>
+    <icon>	comp7_light_aggressive_detection 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale roleEquipment	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <script>	comp7_light_common.items.comp7_light_artefacts.Comp7LightAggressiveDetectionEquipment	  <visualScript>
+        <server>
+          <plan>	comp7Abilities/aggressive_detection_server	</plan>
+        </server>
+      </visualScript>
+      <cooldownSeconds>	3	  <exports>	vse	</exports>
+      </cooldownSeconds>
+      <duration>	15	  <exports>	vse tooltip	</exports>
+      </duration>
+      <visionFactor>	1.15 1.2 1.25	  <exports>	vse tooltip	</exports>
+      </visionFactor>
+    </script>
+  </comp7_light_aggressive_detection>
+  <comp7_light_march>
+    <id>	9535	</id>
+    <userString>	#comp7_light.artefacts.extend:comp7_light_march/name	</userString>
+    <icon>	comp7_light_march 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale roleEquipment	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <script>	comp7_light_common.items.comp7_light_artefacts.Comp7LightMarchEquipment	  <visualScript>
+        <server>
+          <plan>	comp7Abilities/march_server	</plan>
+        </server>
+      </visualScript>
+      <cooldownSeconds>	10	  <exports>	vse	</exports>
+      </cooldownSeconds>
+      <duration>	10 20 30	  <exports>	vse tooltip	</exports>
+      </duration>
+      <enginePowerBuff>	0.4	  <exports>	vse tooltip	</exports>
+      </enginePowerBuff>
+      <fwdSpeedBoost>	10	  <exports>	vse tooltip	</exports>
+      </fwdSpeedBoost>
+      <invisibilityFactor>	1.3	  <exports>	vse tooltip	</exports>
+      </invisibilityFactor>
+    </script>
+  </comp7_light_march>
 </equipments.xml>

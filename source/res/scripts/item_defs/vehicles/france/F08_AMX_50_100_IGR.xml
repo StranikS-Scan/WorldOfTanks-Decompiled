@@ -139,7 +139,6 @@
         <rightTrack>	30	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	57000	</maxLoad>
       <terrainResistance>	1.2 1.3 2.1	</terrainResistance>
       <brakeForce>	36500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -857,7 +856,7 @@
   <turrets0>
     <Turret_1_AMX_50_100_IGR>
       <userString>	#igr_vehicles:Turret_1_AMX_50_100_IGR	</userString>
-      <tags></tags>
+      <tags>	oscillating	</tags>
       <level>	8	</level>
       <price>	25000	</price>
       <notInShop>	true	</notInShop>

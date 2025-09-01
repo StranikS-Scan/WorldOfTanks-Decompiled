@@ -714,6 +714,8 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         result = self.settingsCore.getSetting(settingName)
         if settingName == DAMAGE_LOG.ASSIST_STUN and result:
             isSPG = self.__arenaDP.getVehicleInfo(self.__vehStateCtrl.getControllingVehicleID()).isSPG()
-            isComp7Battle = self.sessionProvider.arenaVisitor.getArenaBonusType() == ARENA_BONUS_TYPE.COMP7
-            result = (isSPG or isComp7Battle) and self.lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled()
+            comp7ArenaTypes = (ARENA_BONUS_TYPE.COMP7, ARENA_BONUS_TYPE.COMP7_LIGHT)
+            isComp7Battle = self.sessionProvider.arenaVisitor.getArenaBonusType() in comp7ArenaTypes
+            isStunEnabled = self.lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled()
+            result = (isSPG or isComp7Battle) and isStunEnabled
         return result

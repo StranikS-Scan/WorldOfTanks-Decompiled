@@ -30,7 +30,7 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
     __promoController = dependency.descriptor(IPromoController)
     __guiLoader = dependency.descriptor(IGuiLoader)
 
-    def __init__(self, _):
+    def __init__(self, **kwargs):
         super(NotificationListView, self).__init__()
         self.setModel(NotificationMVC.g_instance.getModel())
         self.__currentGroup = NotificationGroup.INFO
@@ -65,6 +65,7 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
         self.__updateWinbackPromo()
         self.__setNotificationList()
         self.__updateCounters()
+        self._model.setListDisplayState()
 
     def _dispose(self):
         if self._model.getDisplayState() == NOTIFICATION_STATE.LIST:

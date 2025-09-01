@@ -1,8 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/impl/gen/view_models/views/lobby/feature/battle_results/fun_battle_results_view_model.py
 from enum import IntEnum
-from frameworks.wulf import Array
-from frameworks.wulf import ViewModel
+from frameworks.wulf import Array, ViewModel
 from gui.impl.gen.view_models.common.user_name_model import UserNameModel
 from fun_random.gui.impl.gen.view_models.views.lobby.feature.battle_results.fun_random_battle_info_model import FunRandomBattleInfoModel
 from fun_random.gui.impl.gen.view_models.views.lobby.feature.battle_results.fun_random_progress_model import FunRandomProgressModel

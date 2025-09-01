@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/ui_kit/context_menu_sub_item_model.py
-from gui.impl.gen import R
 from frameworks.wulf import ViewModel
+from gui.impl.gen import R
 
 class ContextMenuSubItemModel(ViewModel):
     __slots__ = ()

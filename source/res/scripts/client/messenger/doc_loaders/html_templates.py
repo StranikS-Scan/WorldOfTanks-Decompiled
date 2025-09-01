@@ -135,6 +135,15 @@ class MessageTemplates(templates.XMLCollection):
             width = section.readInt('width')
             if width > 0:
                 result['width'] = width
+            textYPadding = section.readInt('textYPadding')
+            if textYPadding > 0:
+                result['textYPadding'] = textYPadding
+            paddingHorizontal = section.readInt('paddingHorizontal')
+            if paddingHorizontal > 0:
+                result['paddingHorizontal'] = paddingHorizontal
+            dynamicSizeByText = section.readBool('dynamicSizeByText')
+            if dynamicSizeByText > 0:
+                result['dynamicSizeByText'] = dynamicSizeByText
             return result
 
     def _makeBgIconsData(self, section):

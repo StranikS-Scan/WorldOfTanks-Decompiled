@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/mark_on_gun.py
 from gui.impl import backport
 from helpers import i18n
-from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK as _AB
+from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK as _AB, MARK_ON_GUN
 from gui import makeHtmlString
 from abstract import RegularAchievement
 from items import vehicles
@@ -13,7 +13,7 @@ class MarkOnGunAchievement(RegularAchievement):
     IT_95X85 = '95x85'
 
     def __init__(self, dossier, value=None):
-        super(MarkOnGunAchievement, self).__init__('marksOnGun', _AB.TOTAL, dossier, value)
+        super(MarkOnGunAchievement, self).__init__(MARK_ON_GUN, _AB.TOTAL, dossier, value)
         self.__nationId = self._readVehicleNationID(dossier)
         self.__damageRating = self._readDamageRating(dossier)
 

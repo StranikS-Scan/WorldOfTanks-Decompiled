@@ -23,8 +23,10 @@ _COLOR_TO_METHOD = {BATTLE_MESSAGES_CONSTS.COLOR_YELLOW: 'as_showYellowMessageS'
 class FadingMessages(BattleMessageListMeta):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     settingsCore = dependency.descriptor(ISettingsCore)
+    objs = {}
 
     def __init__(self, name, mFile):
+        self.objs[self.__class__.__name__] = self
         super(BattleMessageListMeta, self).__init__()
         self.__name = name
         self.__settingsFilePath = _MESSAGES_SETTINGS_PATH.format(mFile)
@@ -69,6 +71,7 @@ class FadingMessages(BattleMessageListMeta):
         self._addGameListeners()
 
     def _dispose(self):
+        self.objs.clear()
         self._messages = None
         self.__styles = None
         self.clear()

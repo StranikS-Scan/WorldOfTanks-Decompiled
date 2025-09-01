@@ -101,7 +101,6 @@ class _CachedVehicle(object):
         self._clearChangeCallback()
         if isPlayerAccount():
             self.onChanged()
-        Waiting.hide('updateCurrentVehicle')
 
     def _onInventoryUpdate(self, invDiff):
         raise NotImplementedError
@@ -231,8 +230,8 @@ class _CurrentVehicle(_CachedVehicle):
     def isCrewFull(self):
         return self.isPresent() and self.item.isCrewFull
 
-    def isTooHeavy(self):
-        return self.isPresent() and self.item.isTooHeavy
+    def hasCrew(self):
+        return self.isPresent() and self.item.hasCrew
 
     def isDisabledInRent(self):
         return self.isPresent() and self.item.rentalIsOver
@@ -385,7 +384,6 @@ class _CurrentVehicle(_CachedVehicle):
     def _selectVehicle(self, vehInvID, callback=None, waitingOverlapsUI=False):
         if vehInvID == self.__vehInvID:
             return
-        Waiting.show('updateCurrentVehicle', isSingle=True, overlapsUI=waitingOverlapsUI)
         self.onChangeStarted()
         self.__vehInvID = vehInvID
         if self.isOnlyForBattleRoyaleBattles():
@@ -543,8 +541,8 @@ class _CurrentPreviewVehicle(_CachedVehicle):
     def updateVehicleDescriptorInModel(self):
         pass
 
-    def selectVehicle(self, vehicleCD=None, vehicleStrCD=None, style=None, outfit=None):
-        self._selectVehicle(vehicleCD, vehicleStrCD, style, outfit)
+    def selectVehicle(self, vehicleCD=None, vehicleStrCD=None, style=None, season=None, outfit=None):
+        self._selectVehicle(vehicleCD, vehicleStrCD, style, season, outfit)
         self.onSelected()
 
     def selectNoVehicle(self):
@@ -657,11 +655,10 @@ class _CurrentPreviewVehicle(_CachedVehicle):
         super(_CurrentPreviewVehicle, self)._addListeners()
         g_clientUpdateManager.addCallbacks({'stats.unlocks': self._onUpdateUnlocks})
 
-    def _selectVehicle(self, vehicleCD, vehicleStrCD=None, style=None, outfit=None):
+    def _selectVehicle(self, vehicleCD, vehicleStrCD=None, style=None, season=None, outfit=None):
         if not self.__isNeedToRefreshVehicle(vehicleCD, style, outfit):
             return
         else:
-            Waiting.show('updateCurrentVehicle', isSingle=True, overlapsUI=False)
             self.onChangeStarted()
             self.__defaultItem = self.__getPreviewVehicle(vehicleCD)
             if vehicleStrCD is not None:
@@ -673,7 +670,7 @@ class _CurrentPreviewVehicle(_CachedVehicle):
                 criteria |= REQ_CRITERIA.CUSTOMIZATION.HAS_TAGS([ItemTags.LOCKED_ON_VEHICLE])
                 style = first(self.itemsCache.items.getStyles(criteria).values())
             if style is not None and outfit is None:
-                outfit = self.__getPreviewOutfitByStyle(style)
+                outfit = self.__getPreviewOutfitByStyle(style, season)
             if self.__vehAppearance is not None:
                 self.__vehAppearance.refreshVehicle(self.__item, outfit)
             self._setChangeCallback()
@@ -691,7 +688,7 @@ class _CurrentPreviewVehicle(_CachedVehicle):
         self.onPostProgressionChanged()
 
     def _onUpdateUnlocks(self, unlocks):
-        if self.isPresent() and self.item.intCD in list(unlocks):
+        if self.isPresent() and self.item.intCD in unlocks:
             self.item.isUnlocked = True
             self.onVehicleUnlocked()
 
@@ -715,8 +712,13 @@ class _CurrentPreviewVehicle(_CachedVehicle):
         else:
             return
 
-    def __getPreviewOutfitByStyle(self, style):
-        return style.getOutfit(first(style.seasons), vehicleCD=self.item.descriptor.makeCompactDescr()) if self.isPresent() and not (self.item.isOutfitLocked and not style.isLockedOnVehicle) and style.mayInstall(self.item) else None
+    def __getPreviewOutfitByStyle(self, style, season=None):
+        if self.isPresent() and not (self.item.isOutfitLocked and not style.isLockedOnVehicle) and style.mayInstall(self.item):
+            if season:
+                return style.getOutfit(season, vehicleCD=self.item.descriptor.makeCompactDescr())
+            return style.getOutfit(first(style.seasons), vehicleCD=self.item.descriptor.makeCompactDescr())
+        else:
+            return None
 
     def __makePreviewVehicleFromStrCD(self, vehicleCD, vehicleStrCD):
         items = self.itemsCache.items

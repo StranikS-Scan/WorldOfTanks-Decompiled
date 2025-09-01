@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/impl/gen/view_models/views/battle/onboarding_battle_result_view_model.py
-from gui.impl.gen import R
 from frameworks.wulf import ViewModel
+from gui.impl.gen import R
 
 class OnboardingBattleResultViewModel(ViewModel):
     __slots__ = ('onContinue', 'onLoaded')

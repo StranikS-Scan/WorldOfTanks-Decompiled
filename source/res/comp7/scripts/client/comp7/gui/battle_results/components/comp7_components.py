@@ -1,27 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/battle_results/components/comp7_components.py
 from comp7.gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS as COMP7_TOOLTIPS
-from comp7.gui.impl.gen.view_models.views.lobby.meta_view.qualification_battle import BattleState
-from comp7.gui.impl.lobby.comp7_helpers import comp7_shared, comp7_i18n_helpers, comp7_model_helpers
+from comp7.gui.impl.gen.view_models.views.lobby.enums import SeasonName
+from comp7.gui.impl.gen.view_models.views.lobby.qualification_battle import BattleState
+from comp7.gui.impl.lobby.comp7_helpers import comp7_shared, comp7_i18n_helpers
+from comp7_core.gui.impl.lobby.comp7_core_helpers import comp7_core_model_helpers
+from comp7_core.gui.battle_results.components.comp7_core_components import checkIfDeserter
 from comp7_ranks_common import EXTRA_RANK_TAG
-from constants import EntityCaptured
 from fairplay_violation_types import FairplayViolations
 from gui.Scaleform.genConsts.COMP7_CONSTS import COMP7_CONSTS
-from gui.battle_results.components import base, style
-from gui.battle_results.components.vehicles import RegularVehicleStatValuesBlock, RegularVehicleStatsBlock, TeamStatsBlock, _getStunFilter
+from gui.battle_results.components import base
 from gui.battle_results.settings import PLAYER_TEAM_RESULT
 from gui.impl import backport
 from gui.impl.gen.resources import R
 from gui.shared.formatters import text_styles
 from helpers import dependency
 from skeletons.gui.game_control import IComp7Controller
-
-def checkIfDeserter(reusable):
-    if not reusable.personal.avatar.hasPenalties():
-        return False
-    penaltyName, _ = reusable.personal.avatar.getPenaltyDetails()
-    return penaltyName == FairplayViolations.COMP7_DESERTER
-
 
 def isQualificationBattle(avatarResults):
     return avatarResults.get('comp7QualActive', False)
@@ -66,16 +60,10 @@ class TrainingRatingPointsBlock(PrestigePointsBlock):
         self.tooltip = COMP7_TOOLTIPS.TRAINING_COMP7_BATTLE_RESULTS_RATING_POINTS
 
 
-class EfficiencyTitleWithSkills(base.StatsItem):
-
-    def _convert(self, value, reusable):
-        return backport.text(R.strings.battle_results.common.battleEfficiencyWithSkills.title())
-
-
 class IsDeserterFlag(base.StatsItem):
 
     def _convert(self, result, reusable):
-        if checkIfDeserter(reusable):
+        if checkIfDeserter(reusable, FairplayViolations.COMP7_DESERTER):
             if isQualificationBattle(result.get('avatar', {})):
                 return backport.text(R.strings.comp7_ext.battleResult.header.deserterQualification())
             return backport.text(R.strings.comp7_ext.battleResult.header.deserter())
@@ -108,7 +96,7 @@ class Comp7RankBlock(base.StatsBlock):
 
     def __setQualificationData(self, avatarResults, reusable):
         teamResult = reusable.getPersonalTeamResult()
-        isDeserter = checkIfDeserter(reusable)
+        isDeserter = checkIfDeserter(reusable, FairplayViolations.COMP7_DESERTER)
         battleNumber = avatarResults.get('comp7QualBattleIndex', 0) + 1
         self.linkage = COMP7_CONSTS.COMP7_QUALIFICATION_SUB_TASK_UI
         self.title = self.__getQualificationTitle()
@@ -123,7 +111,7 @@ class Comp7RankBlock(base.StatsBlock):
         currentRating = max(prevRating + achievedRating, 0)
         currentDivision = comp7_shared.getPlayerDivisionByRating(currentRating)
         currentRankValue = comp7_shared.getRankEnumValue(currentDivision).value
-        seasonName = comp7_model_helpers.getSeasonNameEnum().value
+        seasonName = comp7_core_model_helpers.getSeasonNameEnum(self.__comp7Controller, SeasonName).value
         rankName = comp7_i18n_helpers.RANK_MAP[currentRankValue]
         self.linkage = COMP7_CONSTS.COMP7_RANK_SUB_TASK_UI
         self.icon = backport.image(R.images.comp7.gui.maps.icons.ranks.dyn(seasonName).c_64.dyn(rankName)())
@@ -187,67 +175,3 @@ class Comp7RankBlock(base.StatsBlock):
         else:
             battleState = BattleState.DEFEAT
         return backport.image(R.images.comp7.gui.maps.icons.icons.dyn('battle_{}'.format(battleState.value))())
-
-
-class Comp7VehicleStatsBlock(RegularVehicleStatsBlock):
-    __slots__ = ('prestigePoints', 'isSuperSquad')
-
-    def __init__(self, meta=None, field='', *path):
-        super(Comp7VehicleStatsBlock, self).__init__(meta, field, *path)
-        self.prestigePoints = 0
-        self.isSuperSquad = False
-
-    def setRecord(self, result, reusable):
-        super(Comp7VehicleStatsBlock, self).setRecord(result, reusable)
-        self.prestigePoints = result.prestigePoints
-        avatar = reusable.avatars.getAvatarInfo(result.player.dbID)
-        self.isSuperSquad = avatar.extensionInfo.get('isSuperSquad', False)
-
-
-class Comp7TeamStatsBlock(TeamStatsBlock):
-    __slots__ = ()
-
-    def __init__(self, meta=None, field='', *path):
-        super(Comp7TeamStatsBlock, self).__init__(Comp7VehicleStatsBlock, meta, field, *path)
-
-
-class Comp7VehicleStatValuesBlock(RegularVehicleStatValuesBlock):
-    __slots__ = ('damageDealtBySkills', 'healed', 'capturedPointsOfInterest', 'roleSkillUsed')
-
-    def setRecord(self, result, reusable):
-        super(Comp7VehicleStatValuesBlock, self).setRecord(result, reusable)
-        poiCaptured = result.entityCaptured
-        self.damageDealtBySkills = style.getIntegralFormatIfNoEmpty(result.equipmentDamageDealt)
-        self.healed = (result.healthRepair, result.alliedHealthRepair)
-        self.capturedPointsOfInterest = style.getIntegralFormatIfNoEmpty(poiCaptured.get(EntityCaptured.POI_CAPTURABLE, 0))
-        self.roleSkillUsed = style.getIntegralFormatIfNoEmpty(result.roleSkillUsed)
-
-
-class AllComp7VehicleStatValuesBlock(base.StatsBlock):
-    __slots__ = ()
-
-    def setRecord(self, result, reusable):
-        isPersonal, iterator = result
-        add = self.addNextComponent
-        stunFilter = _getStunFilter()
-        for vehicle in iterator:
-            block = Comp7VehicleStatValuesBlock()
-            block.setPersonal(isPersonal)
-            block.addFilters(stunFilter)
-            block.setRecord(vehicle, reusable)
-            add(block)
-
-
-class PersonalVehiclesComp7StatsBlock(base.StatsBlock):
-    __slots__ = ()
-
-    def setRecord(self, result, reusable):
-        info = reusable.getPersonalVehiclesInfo(result)
-        add = self.addNextComponent
-        stunFilter = _getStunFilter()
-        for data in info.getVehiclesIterator():
-            block = Comp7VehicleStatValuesBlock()
-            block.setPersonal(True)
-            block.addFilters(stunFilter)
-            block.setRecord(data, reusable)
-            add(block)

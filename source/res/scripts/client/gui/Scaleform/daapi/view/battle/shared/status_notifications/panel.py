@@ -19,7 +19,7 @@ _logger = logging.getLogger(__name__)
 class StatusNotificationTimerPanel(StatusNotificationsPanelMeta, MethodsRules):
     _sessionProvider = dependency.descriptor(IBattleSessionProvider)
     _DEFAULT_Y_SHIFT = 114
-    _VERTICAL_SHIFT_WITH_AUTOLOADER_IN_SNIPER_MODE = _DEFAULT_Y_SHIFT + 42
+    _VERTICAL_SHIFT_WITH_AUTOLOADER_IN_SNIPER_MODE = _DEFAULT_Y_SHIFT + 60
 
     def __init__(self):
         super(StatusNotificationTimerPanel, self).__init__()

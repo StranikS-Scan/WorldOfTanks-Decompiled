@@ -55,7 +55,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	17595	</weight>
-    <maxHealth>	920	</maxHealth>
+    <maxHealth>	1080	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	190	</maxHealth>
       <maxRegenHealth>	130	</maxRegenHealth>
@@ -63,7 +63,7 @@
     </ammoBayHealth>
     <variants>
       <hull2>
-        <turret0>	VK3002DB_Shmallturm	</turret0>
+        <turret0>	Turret_2_G24_VK3002DB	</turret0>
         <turretPositions>
           <turret>	0.000000 0.816729 0.108388	</turret>
         </turretPositions>
@@ -1089,14 +1089,14 @@
     </camouflage>
   </hull>
   <chassis>
-    <VK3002DB_Standardtketten>
-      <userString>	#germany_vehicles:VK3002DB_Standardtketten	</userString>
-      <shortUserString>	#germany_vehicles:VK3002DB_Standardtketten_short	</shortUserString>
+    <Chassis_G24_VK3002DB>
+      <userString>	#germany_vehicles:Chassis_G24_VK3002DB	</userString>
+      <shortUserString>	#germany_vehicles:Chassis_G24_VK3002DB_short	</shortUserString>
       <tags></tags>
-      <level>	7	</level>
+      <level>	6	</level>
       <price>	18000	</price>
       <unlocks>
-        <chassis>	VK3002DB_Vetstaerktketten	  <cost>	11315	</cost>
+        <chassis>	Chassis_G24_VK3002DB_2	  <cost>	11315	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1104,11 +1104,10 @@
         <rightTrack>	24	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	39000	</maxLoad>
-      <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
+      <terrainResistance>	1 1.1 2.1	</terrainResistance>
       <brakeForce>	38000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	39	</rotationSpeed>
+      <rotationSpeed>	55	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.21	</vehicleMovement>
         <vehicleRotation>	0.21	</vehicleRotation>
@@ -1940,23 +1939,22 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	5.71428585	</repairTime>
-    </VK3002DB_Standardtketten>
-    <VK3002DB_Vetstaerktketten>
-      <userString>	#germany_vehicles:VK3002DB_Vetstaerktketten	</userString>
-      <shortUserString>	#germany_vehicles:VK3002DB_Vetstaerktketten_short	</shortUserString>
+    </Chassis_G24_VK3002DB>
+    <Chassis_G24_VK3002DB_2>
+      <userString>	#germany_vehicles:Chassis_G24_VK3002DB_2	</userString>
+      <shortUserString>	#germany_vehicles:Chassis_G24_VK3002DB_2_short	</shortUserString>
       <tags></tags>
-      <level>	8	</level>
+      <level>	7	</level>
       <price>	33930	</price>
       <armor>
         <leftTrack>	24	</leftTrack>
         <rightTrack>	24	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	43000	</maxLoad>
       <terrainResistance>	1 1.1 2.1	</terrainResistance>
       <brakeForce>	42000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	43	</rotationSpeed>
+      <rotationSpeed>	60	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.2	</vehicleMovement>
         <vehicleRotation>	0.2	</vehicleRotation>
@@ -2788,14 +2786,18 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	5.71428585	</repairTime>
-    </VK3002DB_Vetstaerktketten>
+    </Chassis_G24_VK3002DB_2>
   </chassis>
   <turrets0>
-    <VK3002DB_turm>
-      <userString>	#germany_vehicles:VK3002DB_turm	</userString>
+    <Turret_1_G24_VK3002DB>
+      <userString>	#germany_vehicles:Turret_1_G24_VK3002DB	</userString>
       <tags></tags>
-      <level>	7	</level>
+      <level>	6	</level>
       <price>	19260	</price>
+      <unlocks>
+        <turret>	Turret_2_G24_VK3002DB	  <cost>	15120	</cost>
+        </turret>
+      </unlocks>
       <armor>
         <armor_1>	80	</armor_1>
         <armor_2>	60	</armor_2>
@@ -2810,7 +2812,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	6000	</weight>
-      <maxHealth>	230	</maxHealth>
+      <maxHealth>	200	</maxHealth>
       <rotationSpeed>	45	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -2824,96 +2826,12 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_KwK_40_L48>	shared	  <maxAmmo>	145	</maxAmmo>
+        <_75mm_Kw_K_42_L_70_3002D>	shared	  <maxAmmo>	95	</maxAmmo>
           <reloadTime>	4	</reloadTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 0.40856 8 0.472222 5 0.527778 5 0.59144 8 1 8	</maxPitch>
           </pitchLimits>
-          <unlocks>
-            <gun>	_75mm_KwK_L70	  <cost>	4600	</cost>
-            </gun>
-          </unlocks>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <armor>
-            <armor_1>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_3>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	20	</gun>
-          </armor>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/german/G24_VK3002DB/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/german/G24_VK3002DB/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/german/G24_VK3002DB/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G24_VK3002DB/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G24_VK3002DB/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium_mb	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000354 -0.064388 1.48561	</anchorPosition>
-              <anchorDirection>	0.000044 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.001086 0.296391 0.171333	</anchorPosition>
-              <anchorDirection>	0.000044 0 1	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000354 -0.064389 1.48556	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.000217 -0.0739 2.24	</rayStart>
-              <rayEnd>	-0.000217 -0.0739 2.64	</rayEnd>
-              <rayUp>	0.066 0 0	</rayUp>
-              <size>	0.4	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.5 0.5 0.000000 0.000000	</tiling>
-            <density>	98.9271 102.309	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_75mm_KwK_40_L48>
-        <_75mm_KwK_L70>	shared	  <maxAmmo>	95	</maxAmmo>
-          <reloadTime>	4.4	</reloadTime>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 0.40856 8 0.472222 5 0.527778 5 0.59144 8 1 8	</maxPitch>
-          </pitchLimits>
-          <unlocks>
-            <turret>	VK3002DB_Shmallturm	  <cost>	15120	</cost>
-            </turret>
-          </unlocks>
           <armor>
             <armor_1>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -2926,6 +2844,12 @@
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
+          <shotDispersionFactors>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+            <turretRotation>	0.12	</turretRotation>
+          </shotDispersionFactors>
+          <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
             <undamaged>	vehicles/german/G24_VK3002DB/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/german/G24_VK3002DB/crash/lod0/Gun_02.model	</destroyed>
@@ -2979,7 +2903,7 @@
             <density>	95.4303 106.374	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_75mm_KwK_L70>
+        </_75mm_Kw_K_42_L_70_3002D>
       </guns>
       <models>
         <undamaged>	vehicles/german/G24_VK3002DB/normal/lod0/Turret_01.model	</undamaged>
@@ -3449,16 +3373,14 @@
         <density>	105.787 105.616	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </VK3002DB_turm>
-    <VK3002DB_Shmallturm>
-      <userString>	#germany_vehicles:VK3002DB_Shmallturm	</userString>
+    </Turret_1_G24_VK3002DB>
+    <Turret_2_G24_VK3002DB>
+      <userString>	#germany_vehicles:Turret_2_G24_VK3002DB	</userString>
       <tags></tags>
-      <level>	8	</level>
+      <level>	7	</level>
       <price>	32570	</price>
       <unlocks>
-        <gun>	_88mm_KwK_36_L56	  <cost>	9500	</cost>
-        </gun>
-        <gun>	_105mm_StuH42_L28Pz	  <cost>	3800	</cost>
+        <gun>	_88mm_Kw_K_36_L_56	  <cost>	9500	</cost>
         </gun>
       </unlocks>
       <armor>
@@ -3475,7 +3397,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7745	</weight>
-      <maxHealth>	330	</maxHealth>
+      <maxHealth>	270	</maxHealth>
       <rotationSpeed>	45	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -3490,98 +3412,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.92	</invisibilityFactor>
       <guns>
-        <_75mm_KwK_40_L48>	shared	  <maxAmmo>	180	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 0.40856 8 0.472222 5 0.527778 5 0.59144 8 1 8	</maxPitch>
-          </pitchLimits>
-          <reloadTime>	3.6	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <armor>
-            <armor_1>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <gun>	20	</gun>
-          </armor>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/german/G24_VK3002DB/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/german/G24_VK3002DB/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/german/G24_VK3002DB/crash/lod0/Gun_03.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G24_VK3002DB/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G24_VK3002DB/collision_client/Gun_03.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium_mb	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000354 -0.010507 1.48556	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.001004 0.163825 0.328047	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000354 -0.010507 1.48556	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.002202 1.83789 1.19751	</position>
-              <rotation>	0.938996 -0.00209 3.14152	</rotation>
-              <scale>	1.98068 1.2 1.98073	</scale>
-              <showOn>	272	</showOn>
-              <clipAngle>	0.189813	</clipAngle>
-              <anchorShift>	0.89305	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.000708 -0.021014 2.27649	</rayStart>
-              <rayEnd>	-0.000708 -0.021014 2.67649	</rayEnd>
-              <rayUp>	0.066 0 0	</rayUp>
-              <size>	0.4	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.5 0.5 0.000000 0.000000	</tiling>
-            <density>	98.9271 102.309	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_75mm_KwK_40_L48>
-        <_75mm_KwK_L70>	shared	  <maxAmmo>	120	</maxAmmo>
+        <_75mm_Kw_K_42_L_70_3002D>	shared	  <maxAmmo>	120	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 0.40856 8 0.472222 5 0.527778 5 0.59144 8 1 8	</maxPitch>
@@ -3604,10 +3435,11 @@
             </armor_5>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <shotDispersionRadius>	0.33	</shotDispersionRadius>
           <reloadTime>	4	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
             <undamaged>	vehicles/german/G24_VK3002DB/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/german/G24_VK3002DB/crash/lod0/Gun_04.model	</destroyed>
@@ -3672,8 +3504,8 @@
             <density>	95.4303 106.374	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_75mm_KwK_L70>
-        <_88mm_KwK_36_L56>	shared	  <maxAmmo>	80	</maxAmmo>
+        </_75mm_Kw_K_42_L_70_3002D>
+        <_88mm_Kw_K_36_L_56>	shared	  <maxAmmo>	80	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 0.40856 8 0.472222 5 0.527778 5 0.59144 8 1 8	</maxPitch>
@@ -3768,99 +3600,7 @@
             <density>	83.0619 101.644	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_88mm_KwK_36_L56>
-        <_105mm_StuH42_L28Pz>	shared	  <maxAmmo>	60	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 0.40856 8 0.472222 5 0.527778 5 0.59144 8 1 8	</maxPitch>
-          </pitchLimits>
-          <armor>
-            <armor_1>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <gun>	20	</gun>
-          </armor>
-          <shotDispersionRadius>	0.55	</shotDispersionRadius>
-          <aimingTime>	2.3	</aimingTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
-          <reloadTime>	7.9	</reloadTime>
-          <models>
-            <undamaged>	vehicles/german/G24_VK3002DB/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/german/G24_VK3002DB/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/german/G24_VK3002DB/crash/lod0/Gun_05.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G24_VK3002DB/collision/Gun_05.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G24_VK3002DB/collision_client/Gun_05.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_large_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.001109 -0.019347 1.05644	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.001004 0.164934 0.328013	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.001109 -0.019347 1.05644	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.002204 1.83678 1.19754	</position>
-              <rotation>	0.938995 -0.002088 3.14152	</rotation>
-              <scale>	1.98068 1.2 1.98073	</scale>
-              <showOn>	272	</showOn>
-              <clipAngle>	0.189813	</clipAngle>
-              <anchorShift>	0.866147	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.002219 -0.023138 1.25543	</rayStart>
-              <rayEnd>	0.002219 -0.023138 1.65543	</rayEnd>
-              <rayUp>	0.096 0 0	</rayUp>
-              <size>	0.4	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.5 0.5 0.000000 0.000000	</tiling>
-            <density>	99.4359 102.71	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_105mm_StuH42_L28Pz>
+        </_88mm_Kw_K_36_L_56>
       </guns>
       <models>
         <undamaged>	vehicles/german/G24_VK3002DB/normal/lod0/Turret_02.model	</undamaged>
@@ -4318,69 +4058,36 @@
         <density>	104.9 104.054	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </VK3002DB_Shmallturm>
+    </Turret_2_G24_VK3002DB>
   </turrets0>
   <engines>
-    <Maybach_HL_210_TRM_P30>	shared	  <unlocks>
-        <engine>	Maybach_HL_230_TRM_P30	  <cost>	15800	</cost>
+    <Maybach_HL_230_TRM_P30_3002D>	shared	  <unlocks>
+        <engine>	MB_507	  <cost>	17000	</cost>
         </engine>
       </unlocks>
-    </Maybach_HL_210_TRM_P30>
-    <Maybach_HL_230_TRM_P30>	shared	  <unlocks>
-        <engine>	Daimler-Benz_DB-603A2	  <cost>	17000	</cost>
-        </engine>
-      </unlocks>
-    </Maybach_HL_230_TRM_P30>
-    <Daimler-Benz_DB-603A2>	shared	</Daimler-Benz_DB-603A2>
+    </Maybach_HL_230_TRM_P30_3002D>
+    <MB_507>	shared	</MB_507>
   </engines>
   <fuelTanks>
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <FuG5>	shared	  <unlocks>
-        <radio>	FuG7	  <cost>	1360	</cost>
-        </radio>
-      </unlocks>
-    </FuG5>
-    <FuG7>	shared	  <unlocks>
-        <radio>	FuG12	  <cost>	7200	</cost>
-        </radio>
-      </unlocks>
-    </FuG7>
     <FuG12>	shared	</FuG12>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Maybach_HL_210_TRM_P30>
-          <smplEnginePower>	687.2327	</smplEnginePower>
+        <Maybach_HL_230_TRM_P30_3002D>
+          <smplEnginePower>	780	</smplEnginePower>
           <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
-        </Maybach_HL_210_TRM_P30>
-        <Maybach_HL_230_TRM_P30>
-          <smplEnginePower>	740.0968	</smplEnginePower>
+        </Maybach_HL_230_TRM_P30_3002D>
+        <MB_507>
+          <smplEnginePower>	870	</smplEnginePower>
           <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
-        </Maybach_HL_230_TRM_P30>
-        <Daimler-Benz_DB-603A2>
-          <smplEnginePower>	850	</smplEnginePower>
-          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
-        </Daimler-Benz_DB-603A2>
+        </MB_507>
       </engines>
       <chassis>
-        <VK3002DB_Standardtketten>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.18515	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.10465	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
-            </firm>
-          </grounds>
-          <axleCount>	5	</axleCount>
-        </VK3002DB_Standardtketten>
-        <VK3002DB_Vetstaerktketten>
+        <Chassis_G24_VK3002DB>
           <grounds>
             <soft>
               <rollingFriction>	0.14	</rollingFriction>
@@ -4393,15 +4100,29 @@
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>
-        </VK3002DB_Vetstaerktketten>
+        </Chassis_G24_VK3002DB>
+        <Chassis_G24_VK3002DB_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.14	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.08	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.072	</rollingFriction>
+            </firm>
+          </grounds>
+          <axleCount>	5	</axleCount>
+        </Chassis_G24_VK3002DB_2>
       </chassis>
     </detailed>
   </physics>
   <clientAdjustmentFactors>
     <guns>
-      <_88mm_KwK_36_L56>
+      <_88mm_Kw_K_36_L_56>
         <delta>	1.11	</delta>
-      </_88mm_KwK_36_L56>
+      </_88mm_Kw_K_36_L_56>
     </guns>
     <armour>	1.071703757	</armour>
   </clientAdjustmentFactors>

@@ -3,9 +3,7 @@
 from adisp import adisp_process
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi import LobbySubView
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.PersonalMissionFirstEntryViewMeta import PersonalMissionFirstEntryViewMeta
-from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
@@ -13,8 +11,8 @@ from gui.impl.gen import R
 from gui.server_events.events_dispatcher import showPersonalMissionBrowserView
 from gui.game_control.links import URLMacros
 from gui.server_events.pm_constants import PERSONAL_MISSIONS_SOUND_SPACE, SOUNDS, PM_TUTOR_FIELDS
-from gui.shared import events
-from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.event_dispatcher import showHangar
+from gui.shared.event_dispatcher import showPersonalMissionCampaignSelectorWindow
 from gui.shared.formatters import text_styles, icons
 from helpers import i18n, dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -37,14 +35,14 @@ class PersonalMissionFirstEntryView(LobbySubView, PersonalMissionFirstEntryViewM
             self.__showVideo()
 
     def backBtnClicked(self):
-        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS)), scope=EVENT_BUS_SCOPE.LOBBY)
+        showPersonalMissionCampaignSelectorWindow()
 
     def onViewClose(self, isAcceptBtnClick=False):
         if isAcceptBtnClick:
             self.__settingsCore.serverSettings.saveInUIStorage({PM_TUTOR_FIELDS.GREETING_SCREEN_SHOWN: True})
-            self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS)), scope=EVENT_BUS_SCOPE.LOBBY)
+            showPersonalMissionCampaignSelectorWindow()
         else:
-            self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
+            showHangar()
 
     def onCardClick(self, cardIndex):
         self.__updateDetailedData(cardIndex)

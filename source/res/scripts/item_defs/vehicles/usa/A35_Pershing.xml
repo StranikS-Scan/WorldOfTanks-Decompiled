@@ -60,7 +60,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	20050	</weight>
-    <maxHealth>	1080	</maxHealth>
+    <maxHealth>	1280	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
@@ -776,13 +776,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <Pershingchassis1>
-      <userString>	#usa_vehicles:Pershingchassis1	</userString>
+    <Chassis_A35_Pershing>
+      <userString>	#usa_vehicles:Chassis_A35_Pershing	</userString>
       <tags></tags>
       <level>	7	</level>
       <price>	16300	</price>
       <unlocks>
-        <chassis>	Pershingchassis2	  <cost>	13500	</cost>
+        <chassis>	Chassis_A35_Pershing_2	  <cost>	13500	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -790,14 +790,13 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	10000	</weight>
-      <maxLoad>	42350	</maxLoad>
-      <terrainResistance>	1.3 1.5 2.9	</terrainResistance>
+      <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	36	</rotationSpeed>
+      <rotationSpeed>	47	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.17	</vehicleMovement>
-        <vehicleRotation>	0.17	</vehicleRotation>
+        <vehicleMovement>	0.14	</vehicleMovement>
+        <vehicleRotation>	0.14	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	180	</maxHealth>
@@ -1612,9 +1611,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	5.71428585	</repairTime>
-    </Pershingchassis1>
-    <Pershingchassis2>
-      <userString>	#usa_vehicles:Pershingchassis2	</userString>
+    </Chassis_A35_Pershing>
+    <Chassis_A35_Pershing_2>
+      <userString>	#usa_vehicles:Chassis_A35_Pershing_2	</userString>
       <tags></tags>
       <level>	8	</level>
       <price>	30250	</price>
@@ -1623,14 +1622,13 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	10000	</weight>
-      <maxLoad>	45050	</maxLoad>
       <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
       <brakeForce>	36500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	38	</rotationSpeed>
+      <rotationSpeed>	50	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.15	</vehicleMovement>
-        <vehicleRotation>	0.15	</vehicleRotation>
+        <vehicleMovement>	0.12	</vehicleMovement>
+        <vehicleRotation>	0.12	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	200	</maxHealth>
@@ -2445,11 +2443,11 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	5.71428585	</repairTime>
-    </Pershingchassis2>
+    </Chassis_A35_Pershing_2>
   </chassis>
   <turrets0>
-    <Turret_1_Pershing>
-      <userString>	#usa_vehicles:Turret_1_Pershing	</userString>
+    <Turret_1_A35_Pershing>
+      <userString>	#usa_vehicles:Turret_1_A35_Pershing	</userString>
       <tags></tags>
       <level>	7	</level>
       <price>	21800	</price>
@@ -2472,8 +2470,8 @@
       </armor>
       <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
       <weight>	8000	</weight>
-      <maxHealth>	270	</maxHealth>
-      <rotationSpeed>	36	</rotationSpeed>
+      <maxHealth>	240	</maxHealth>
+      <rotationSpeed>	38	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
         <maxRegenHealth>	70	</maxRegenHealth>
@@ -2487,10 +2485,10 @@
       </surveyingDeviceHealth>
       <guns>
         <_90mm_Gun_M3E26>	shared	  <maxAmmo>	70	</maxAmmo>
-          <reloadTime>	7.2	</reloadTime>
+          <reloadTime>	6.3	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <turretRotation>	0.11	</turretRotation>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <pitchLimits>
@@ -2596,13 +2594,13 @@
         </_90mm_Gun_M3E26>
         <_90mm_Gun_T15E2M2>	shared	  <maxAmmo>	70	</maxAmmo>
           <unlocks>
-            <turret>	Turret_2_Pershing	  <cost>	19500	</cost>
+            <turret>	Turret_2_A35_Pershing	  <cost>	19500	</cost>
             </turret>
           </unlocks>
-          <reloadTime>	8	</reloadTime>
+          <reloadTime>	7.6	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	3.2	</afterShot>
+            <turretRotation>	0.11	</turretRotation>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <pitchLimits>
@@ -3182,9 +3180,9 @@
         <density>	94.1857 93.9135	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_1_Pershing>
-    <Turret_2_Pershing>
-      <userString>	#usa_vehicles:Turret_2_Pershing	</userString>
+    </Turret_1_A35_Pershing>
+    <Turret_2_A35_Pershing>
+      <userString>	#usa_vehicles:Turret_2_A35_Pershing	</userString>
       <tags></tags>
       <level>	8	</level>
       <price>	46000	</price>
@@ -3211,7 +3209,7 @@
       </armor>
       <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
       <weight>	9700	</weight>
-      <maxHealth>	360	</maxHealth>
+      <maxHealth>	320	</maxHealth>
       <rotationSpeed>	38	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -3227,10 +3225,10 @@
       <invisibilityFactor>	1.008	</invisibilityFactor>
       <guns>
         <_90mm_Gun_M3E26>	shared	  <maxAmmo>	70	</maxAmmo>
-          <reloadTime>	6.9	</reloadTime>
+          <reloadTime>	6.3	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.11	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <pitchLimits>
@@ -3324,8 +3322,8 @@
         <_90mm_Gun_T15E2M2>	shared	  <maxAmmo>	70	</maxAmmo>
           <reloadTime>	7.6	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.11	</turretRotation>
-            <afterShot>	3.2	</afterShot>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <pitchLimits>
@@ -3884,15 +3882,15 @@
         <density>	85.4475 85.7369	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_2_Pershing>
+    </Turret_2_A35_Pershing>
   </turrets0>
   <engines>
     <Ford_GAN_M>	shared	  <unlocks>
-        <engine>	Continental_AV-1790-1	  <cost>	10500	</cost>
+        <engine>	Continental_AV_1790_1_M26	  <cost>	10500	</cost>
         </engine>
       </unlocks>
     </Ford_GAN_M>
-    <Continental_AV-1790-1>	shared	</Continental_AV-1790-1>
+    <Continental_AV_1790_1_M26>	shared	</Continental_AV_1790_1_M26>
   </engines>
   <fuelTanks>
     <Heavy>	shared	</Heavy>
@@ -3904,29 +3902,16 @@
     <detailed>
       <engines>
         <Ford_GAN_M>
-          <smplEnginePower>	650	</smplEnginePower>
+          <smplEnginePower>	700	</smplEnginePower>
           <smplFwMaxSpeed>	48	</smplFwMaxSpeed>
         </Ford_GAN_M>
-        <Continental_AV-1790-1>
-          <smplEnginePower>	744.3259	</smplEnginePower>
+        <Continental_AV_1790_1_M26>
+          <smplEnginePower>	770	</smplEnginePower>
           <smplFwMaxSpeed>	48	</smplFwMaxSpeed>
-        </Continental_AV-1790-1>
+        </Continental_AV_1790_1_M26>
       </engines>
       <chassis>
-        <Pershingchassis1>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.23345	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.12075	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.10465	</rollingFriction>
-            </firm>
-          </grounds>
-        </Pershingchassis1>
-        <Pershingchassis2>
+        <Chassis_A35_Pershing>
           <grounds>
             <soft>
               <rollingFriction>	0.16905	</rollingFriction>
@@ -3938,7 +3923,20 @@
               <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
-        </Pershingchassis2>
+        </Chassis_A35_Pershing>
+        <Chassis_A35_Pershing_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.16905	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.10465	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.08855	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_A35_Pershing_2>
       </chassis>
     </detailed>
   </physics>

@@ -19,7 +19,7 @@ def addComp7BattleType(items):
 
 
 def addComp7SquadType(items):
-    items.append(_Comp7SquadItem(text_styles.middleTitle(backport.text(R.strings.menu.headerButtons.battle.types.comp7Squad())), PREBATTLE_ACTION_NAME.COMP7_SQUAD, 1))
+    items.append(_Comp7SquadItem(backport.text(R.strings.menu.headerButtons.battle.types.comp7Squad()), PREBATTLE_ACTION_NAME.COMP7_SQUAD, 1))
 
 
 class _Comp7Item(SelectorItem):

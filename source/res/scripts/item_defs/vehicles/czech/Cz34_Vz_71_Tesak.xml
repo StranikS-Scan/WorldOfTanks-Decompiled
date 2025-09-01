@@ -60,7 +60,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	8112	</weight>
-    <maxHealth>	1120	</maxHealth>
+    <maxHealth>	1320	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	180	</maxRegenHealth>
@@ -1057,7 +1057,6 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	4000	</weight>
-      <maxLoad>	19000	</maxLoad>
       <terrainResistance>	0.8 0.9 1.8	</terrainResistance>
       <brakeForce>	17000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -1341,7 +1340,7 @@
         <slot>
           <slotType>	paint	</slotType>
           <slotId>	21000	</slotId>
-          <anchorPosition>	-1.586573 0.325764 0.053801	</anchorPosition>
+          <anchorPosition>	-1.586573 0.42800 0.053801	</anchorPosition>
           <anchorDirection>	-0.945614 0.3239 0.030048	</anchorDirection>
         </slot>
         <slot>
@@ -2154,7 +2153,7 @@
   <turrets0>
     <Turret_1_Cz34_Vz_71_Tesak>
       <userString>	#czech_vehicles:Turret_1_Cz34_Vz_71_Tesak	</userString>
-      <tags></tags>
+      <tags>	oscillating	</tags>
       <level>	10	</level>
       <price>	66000	</price>
       <notInShop>	true	</notInShop>
@@ -2178,7 +2177,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_17 armor_4	</primaryArmor>
       <weight>	2500	</weight>
-      <maxHealth>	280	</maxHealth>
+      <maxHealth>	330	</maxHealth>
       <rotationSpeed>	60	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -2192,7 +2191,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_57_mm_automaticky_dvojkanon_535T>	shared	  <maxAmmo>	1200	</maxAmmo>
+        <_57_mm_automaticky_dvojkanon_535T>	shared	  <maxAmmo>	1024	</maxAmmo>
           <armor>
             <armor_1>	30	</armor_1>
             <armor_2>	20	</armor_2>
@@ -2211,14 +2210,14 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2	</aimingTime>
-          <reloadTime>	15	</reloadTime>
+          <reloadTime>	17	</reloadTime>
           <pitchLimits>
             <minPitch>	0 -30 1 -30	</minPitch>
             <maxPitch>	0.00000 12.00 0.34167 12.00 0.39444 10.00 0.60556 10.00 0.65833 12.00 1.00000 12.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.126	</invisibilityFactorAtShot>
           <clip>
-            <count>	75	</count>
+            <count>	64	</count>
             <rate>	1200	</rate>
           </clip>
           <autoShoot>

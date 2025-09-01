@@ -14,7 +14,7 @@
     <backward>	12	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.04	</moving>
+    <moving>	0.041	</moving>
     <still>	0.081	</still>
     <camouflageBonus>	0.02	</camouflageBonus>
     <firePenalty>	0.122	</firePenalty>
@@ -964,7 +964,6 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	12000	</weight>
-      <maxLoad>	80000	</maxLoad>
       <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
       <brakeForce>	73000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2275,6 +2274,7 @@
             <armor_6>	50.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_6>
             <armor_7>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_7>
             <gun>	50	</gun>
           </armor>
@@ -3030,7 +3030,7 @@
     </Turret_1_GB91_Super_Conqueror>
   </turrets0>
   <engines>
-    <Rolls_Royce_Griffon>	shared	</Rolls_Royce_Griffon>
+    <Rolls_Royce_Griffon_SC>	shared	</Rolls_Royce_Griffon_SC>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
@@ -3042,10 +3042,10 @@
   <physics>
     <detailed>
       <engines>
-        <Rolls_Royce_Griffon>
-          <smplEnginePower>	1060	</smplEnginePower>
+        <Rolls_Royce_Griffon_SC>
+          <smplEnginePower>	1120	</smplEnginePower>
           <smplFwMaxSpeed>	34.3	</smplFwMaxSpeed>
-        </Rolls_Royce_Griffon>
+        </Rolls_Royce_Griffon_SC>
       </engines>
       <chassis>
         <Chassis_GB91_Super_Conqueror>

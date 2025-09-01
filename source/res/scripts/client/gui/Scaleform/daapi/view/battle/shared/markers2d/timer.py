@@ -17,6 +17,10 @@ class MarkerTimer(PythonTimer):
     def getStatusID(self):
         return self.__statusID
 
+    def remove(self):
+        self.hide()
+        self.clear()
+
     def _showView(self, isBubble=True):
         marker = self._viewObject
         marker.showMarkerTimer(self.__vehicleID, self._typeID, self.__statusID, self.totalTime, self.__animated, self.__isSourceVehicle)

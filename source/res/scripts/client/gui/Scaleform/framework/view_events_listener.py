@@ -8,29 +8,29 @@ from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.framework.managers.loaders import ViewLoadMode
 from gui.Scaleform.framework.managers.containers import ChainItem
 
-def _loadViewEventHandler(containerManager, e):
-    containerManager.load(e.loadParams, *e.args, **e.kwargs)
+def _loadViewEventHandler(app, e):
+    app.containerManager.load(e.loadParams, *e.args, **e.kwargs)
 
 
-def _loadGuiImplViewEventHandler(containerManager, e):
-    containerManager.load(e.loadParams, *e.args, **e.kwargs)
+def _loadGuiImplViewEventHandler(app, e):
+    app.loadView(e.loadParams, *e.args, **e.kwargs)
 
 
-def _preLoadViewEventHandler(containerManager, e):
-    containerManager.load(SFViewLoadParams(e.alias, e.name, loadMode=ViewLoadMode.PRELOAD), e.ctx)
+def _preLoadViewEventHandler(app, e):
+    app.containerManager.load(SFViewLoadParams(e.alias, e.name, loadMode=ViewLoadMode.PRELOAD), e.ctx)
 
 
-def _destroyViewEventHandler(containerManager, e):
-    containerManager.destroyViews(e.alias, e.name)
+def _destroyViewEventHandler(app, e):
+    app.containerManager.destroyViews(e.alias, e.name)
 
 
-def _destroyGuiImplViewEventHandler(containerManager, e):
-    containerManager.destroyViews(e.alias)
+def _destroyGuiImplViewEventHandler(app, e):
+    app.containerManager.destroyViews(e.alias)
 
 
-def _loadViewsChainEventHandler(containerManager, e):
+def _loadViewsChainEventHandler(app, e):
     items = [ ChainItem(event.loadParams, event.args, event.kwargs) for event in e.viewLoadEvents ]
-    containerManager.loadChain(items)
+    app.containerManager.loadChain(items)
 
 
 _EVENT_HANDLERS = {ViewEventType.LOAD_VIEW: _loadViewEventHandler,
@@ -91,6 +91,6 @@ class ViewEventsListener(EventSystemEntity):
         eventType = e.eventType
         if eventType in _EVENT_HANDLERS:
             handler = _EVENT_HANDLERS[eventType]
-            handler(self._app.containerManager, e)
+            handler(self._app, e)
         else:
             LOG_UNEXPECTED('Unsupported event:', eventType, e)

@@ -57,7 +57,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_5 armor_6	</primaryArmor>
     <weight>	10860	</weight>
-    <maxHealth>	356	</maxHealth>
+    <maxHealth>	360	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	100	</maxHealth>
       <maxRegenHealth>	70	</maxRegenHealth>
@@ -65,7 +65,7 @@
     </ammoBayHealth>
     <variants>
       <hull2>
-        <turret0>	Turret_2_Somua_S35	</turret0>
+        <turret0>	Turret_2_F44_Somua_S35	</turret0>
         <turretPositions>
           <turret>	-0.001300 0.977971 0.426200	</turret>
         </turretPositions>
@@ -1254,13 +1254,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_Somua_S35>
-      <userString>	#france_vehicles:Chassis_Somua_S35	</userString>
+    <Chassis_F44_Somua_S35>
+      <userString>	#france_vehicles:Chassis_F44_Somua_S35	</userString>
       <tags></tags>
       <level>	2	</level>
       <price>	600	</price>
       <unlocks>
-        <chassis>	Chassis_Somua_S35_2	  <cost>	320	</cost>
+        <chassis>	Chassis_F44_Somua_S35_2	  <cost>	320	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1268,11 +1268,10 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	6000	</weight>
-      <maxLoad>	20200	</maxLoad>
-      <terrainResistance>	1.3 1.5 2.5	</terrainResistance>
+      <terrainResistance>	1.2 1.4 2.4	</terrainResistance>
       <brakeForce>	20000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	35	</rotationSpeed>
+      <rotationSpeed>	45	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.25	</vehicleMovement>
         <vehicleRotation>	0.25	</vehicleRotation>
@@ -2328,9 +2327,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	5.71428585	</repairTime>
-    </Chassis_Somua_S35>
-    <Chassis_Somua_S35_2>
-      <userString>	#france_vehicles:Chassis_Somua_S35_2	</userString>
+    </Chassis_F44_Somua_S35>
+    <Chassis_F44_Somua_S35_2>
+      <userString>	#france_vehicles:Chassis_F44_Somua_S35_2	</userString>
       <tags></tags>
       <level>	3	</level>
       <price>	1900	</price>
@@ -2339,11 +2338,10 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	6000	</weight>
-      <maxLoad>	23500	</maxLoad>
       <terrainResistance>	1.2 1.4 2.4	</terrainResistance>
       <brakeForce>	23000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	38	</rotationSpeed>
+      <rotationSpeed>	50	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.23	</vehicleMovement>
         <vehicleRotation>	0.23	</vehicleRotation>
@@ -3399,14 +3397,18 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	5.71428585	</repairTime>
-    </Chassis_Somua_S35_2>
+    </Chassis_F44_Somua_S35_2>
   </chassis>
   <turrets0>
-    <Turret_1_Somua_S35>
-      <userString>	#france_vehicles:Turret_1_Somua_S35	</userString>
+    <Turret_1_F44_Somua_S35>
+      <userString>	#france_vehicles:Turret_1_F44_Somua_S35	</userString>
       <tags></tags>
       <level>	2	</level>
       <price>	600	</price>
+      <unlocks>
+        <turret>	Turret_2_F44_Somua_S35	  <cost>	350	</cost>
+        </turret>
+      </unlocks>
       <armor>
         <armor_1>	42	</armor_1>
         <armor_2>	42	</armor_2>
@@ -3421,7 +3423,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2000	</weight>
-      <maxHealth>	69	</maxHealth>
+      <maxHealth>	70	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -3435,88 +3437,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_47mm_SA34>	shared	  <maxAmmo>	235	</maxAmmo>
-          <unlocks>
-            <gun>	_47mm_SA35	  <cost>	265	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	42	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_3>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_6>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_10>	8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_10>
-            <gun>	10	</gun>
-          </armor>
-          <pitchLimits>
-            <minPitch>	0 -18 1 -18	</minPitch>
-            <maxPitch>	0 18 0.333333 18 0.388889 5 0.611111 5 0.666667 18 1 18	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.41	</shotDispersionRadius>
-          <reloadTime>	2.4	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	1.5	</aimingTime>
-          <models>
-            <undamaged>	vehicles/french/F44_Somua_S35/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/french/F44_Somua_S35/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/french/F44_Somua_S35/crash/lod0/Gun_03.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/french/F44_Somua_S35/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F44_Somua_S35/collision_client/Gun_03.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_small	</effects>
-          <reloadEffect>	reload20_45	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.224051 -0.032199 0.516882	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0.238144 0.206557 0.084462	</anchorPosition>
-              <anchorDirection>	-0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.224051 -0.032197 0.516885	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.49 0.25 0.000000 0.000000	</tiling>
-            <density>	133.589 132.475	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </_47mm_SA34>
-        <_47mm_SA35>	shared	  <maxAmmo>	205	</maxAmmo>
-          <unlocks>
-            <turret>	Turret_2_Somua_S35	  <cost>	350	</cost>
-            </turret>
-          </unlocks>
+        <_47mm_SA35_S35>	shared	  <maxAmmo>	205	</maxAmmo>
           <armor>
             <armor_1>	42	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3530,17 +3451,17 @@
           </armor>
           <pitchLimits>
             <minPitch>	0 -18 1 -18	</minPitch>
-            <maxPitch>	0 18 0.333333 18 0.388889 8 0.611111 8 0.666667 18 1 18	</maxPitch>
+            <maxPitch>	0.00000 18.00 0.31944 18.00 0.48333 8.00 0.58333 18.00 1.00000 18.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.39	</shotDispersionRadius>
-          <reloadTime>	2.6	</reloadTime>
+          <reloadTime>	2.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	1.4	</aimingTime>
+          <aimingTime>	1.3	</aimingTime>
           <models>
             <undamaged>	vehicles/french/F44_Somua_S35/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/french/F44_Somua_S35/crash/lod0/Gun_04.model	</destroyed>
@@ -3586,7 +3507,7 @@
             <density>	134.221 141.093	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_47mm_SA35>
+        </_47mm_SA35_S35>
       </guns>
       <models>
         <undamaged>	vehicles/french/F44_Somua_S35/normal/lod0/Turret_01.model	</undamaged>
@@ -3999,17 +3920,15 @@
         <density>	96.2141 96.4996	</density>
         <aoTextureSize>	256 256	</aoTextureSize>
       </camouflage>
-    </Turret_1_Somua_S35>
-    <Turret_2_Somua_S35>
-      <userString>	#france_vehicles:Turret_2_Somua_S35	</userString>
+    </Turret_1_F44_Somua_S35>
+    <Turret_2_F44_Somua_S35>
+      <userString>	#france_vehicles:Turret_2_F44_Somua_S35	</userString>
       <tags></tags>
       <level>	3	</level>
       <price>	1850	</price>
       <unlocks>
-        <gun>	_47mm_SA37	  <cost>	450	</cost>
+        <gun>	_47mm_SA37_S35	  <cost>	450	</cost>
         </gun>
-        <vehicle>	F04_B1	  <cost>	4200	</cost>
-        </vehicle>
       </unlocks>
       <armor>
         <armor_1>	40	</armor_1>
@@ -4028,7 +3947,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2340	</weight>
-      <maxHealth>	89	</maxHealth>
+      <maxHealth>	90	</maxHealth>
       <rotationSpeed>	42	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -4043,84 +3962,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.013	</invisibilityFactor>
       <guns>
-        <_47mm_SA34>	shared	  <maxAmmo>	235	</maxAmmo>
-          <armor>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_7>
-            <armor_8>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_8>
-            <armor_9>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_9>
-            <armor_10>	8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_10>
-            <gun>	10	</gun>
-          </armor>
-          <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 14 0.288889 14 0.388889 3 0.611111 3 0.711111 14 1 14	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	2.4	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	1.3	</aimingTime>
-          <models>
-            <undamaged>	vehicles/french/F44_Somua_S35/normal/lod0/Gun_07.model	</undamaged>
-            <destroyed>	vehicles/french/F44_Somua_S35/crash/lod0/Gun_07.model	</destroyed>
-            <exploded>	vehicles/french/F44_Somua_S35/crash/lod0/Gun_07.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/french/F44_Somua_S35/collision/Gun_07.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F44_Somua_S35/collision_client/Gun_07.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_small	</effects>
-          <reloadEffect>	reload20_45	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.044797 -0.019147 0.666009	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.206579 0.206579	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.044797 -0.019147 0.666004	</anchorPosition>
-              <anchorDirection>	-0 0.000001 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.52 0.25 0.000000 0.000000	</tiling>
-            <density>	133.589 132.475	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </_47mm_SA34>
-        <_47mm_SA35>	shared	  <maxAmmo>	205	</maxAmmo>
+        <_47mm_SA35_S35>	shared	  <maxAmmo>	205	</maxAmmo>
           <armor>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
@@ -4136,7 +3978,7 @@
           </armor>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 16 0.288889 16 0.388889 4 0.611111 4 0.711111 16 1 16	</maxPitch>
+            <maxPitch>	0.00000 16.00 0.29167 16.00 0.47500 4.00 0.58333 16.00 1.00000 16.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
@@ -4192,8 +4034,14 @@
             <density>	134.221 141.093	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_47mm_SA35>
-        <_47mm_SA37>	shared	  <maxAmmo>	120	</maxAmmo>
+        </_47mm_SA35_S35>
+        <_47mm_SA37_S35>	shared	  <maxAmmo>	120	</maxAmmo>
+          <unlocks>
+            <vehicle>	F32_Somua_Sau_40	  <cost>	3100	</cost>
+            </vehicle>
+            <vehicle>	F04_B1	  <cost>	4200	</cost>
+            </vehicle>
+          </unlocks>
           <armor>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
@@ -4211,7 +4059,7 @@
           </armor>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 11 0.438889 11 0.458333 4 0.541667 4 0.561111 11 1 11	</maxPitch>
+            <maxPitch>	0.00000 11.00 0.42778 11.00 0.48056 4.00 0.54444 11.00 1.00000 11.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
@@ -4267,7 +4115,7 @@
             <density>	130.564 146.351	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_47mm_SA37>
+        </_47mm_SA37_S35>
       </guns>
       <models>
         <undamaged>	vehicles/french/F44_Somua_S35/normal/lod0/Turret_02.model	</undamaged>
@@ -4631,77 +4479,36 @@
         <density>	87.5176 87.3423	</density>
         <aoTextureSize>	256 256	</aoTextureSize>
       </camouflage>
-    </Turret_2_Somua_S35>
+    </Turret_2_F44_Somua_S35>
   </turrets0>
   <engines>
     <Somua_190CV_V8>	shared	  <unlocks>
-        <engine>	Hispano_219CV_V8	  <cost>	820	</cost>
+        <engine>	Somua_V8_version_definitive_S35	  <cost>	1050	</cost>
         </engine>
       </unlocks>
     </Somua_190CV_V8>
-    <Hispano_219CV_V8>	shared	  <unlocks>
-        <engine>	Somua_230_V8	  <cost>	1050	</cost>
-        </engine>
-      </unlocks>
-    </Hispano_219CV_V8>
-    <Somua_230_V8>	shared	  <unlocks>
-        <vehicle>	F32_Somua_Sau_40	  <cost>	3100	</cost>
-        </vehicle>
-      </unlocks>
-    </Somua_230_V8>
+    <Somua_V8_version_definitive_S35>	shared	</Somua_V8_version_definitive_S35>
   </engines>
   <fuelTanks>
     <Medium>	shared	</Medium>
   </fuelTanks>
   <radios>
-    <ER_28>	shared	  <unlocks>
-        <radio>	ER_29	  <cost>	630	</cost>
-        </radio>
-      </unlocks>
-    </ER_28>
-    <ER_29>	shared	  <unlocks>
-        <radio>	ER_26_ter	  <cost>	3100	</cost>
-        </radio>
-      </unlocks>
-    </ER_29>
-    <ER_26_ter>	shared	  <unlocks>
-        <radio>	ER_27	  <cost>	7100	</cost>
-        </radio>
-      </unlocks>
-    </ER_26_ter>
     <ER_27>	shared	</ER_27>
   </radios>
   <physics>
     <detailed>
       <engines>
         <Somua_190CV_V8>
-          <smplEnginePower>	200.8834	</smplEnginePower>
+          <smplEnginePower>	240	</smplEnginePower>
           <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </Somua_190CV_V8>
-        <Hispano_219CV_V8>
-          <smplEnginePower>	231.5446	</smplEnginePower>
+        <Somua_V8_version_definitive_S35>
+          <smplEnginePower>	260	</smplEnginePower>
           <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
-        </Hispano_219CV_V8>
-        <Somua_230_V8>
-          <smplEnginePower>	243.1747	</smplEnginePower>
-          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
-        </Somua_230_V8>
+        </Somua_V8_version_definitive_S35>
       </engines>
       <chassis>
-        <Chassis_Somua_S35>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.20125	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.12075	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.10465	</rollingFriction>
-            </firm>
-          </grounds>
-        </Chassis_Somua_S35>
-        <Chassis_Somua_S35_2>
+        <Chassis_F44_Somua_S35>
           <grounds>
             <soft>
               <rollingFriction>	0.1932	</rollingFriction>
@@ -4713,7 +4520,20 @@
               <rollingFriction>	0.0966	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_Somua_S35_2>
+        </Chassis_F44_Somua_S35>
+        <Chassis_F44_Somua_S35_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.1932	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.1127	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0966	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_F44_Somua_S35_2>
       </chassis>
     </detailed>
   </physics>

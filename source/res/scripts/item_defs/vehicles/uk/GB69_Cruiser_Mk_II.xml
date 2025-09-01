@@ -1126,8 +1126,7 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	3000	</weight>
-      <maxLoad>	14500	</maxLoad>
-      <terrainResistance>	1.1 1.4 2	</terrainResistance>
+      <terrainResistance>	1 1.2 1.8	</terrainResistance>
       <brakeForce>	14000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	35	</rotationSpeed>
@@ -2277,16 +2276,11 @@
       <tags></tags>
       <level>	2	</level>
       <price>	610	</price>
-      <unlocks>
-        <vehicle>	GB04_Valentine	  <cost>	1500	</cost>
-        </vehicle>
-      </unlocks>
       <armor>
         <leftTrack>	10	</leftTrack>
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	3000	</weight>
-      <maxLoad>	16700	</maxLoad>
       <terrainResistance>	1 1.2 1.8	</terrainResistance>
       <brakeForce>	15500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -3437,12 +3431,8 @@
     <Turret_1_GB69_Cruiser_Mk_II>
       <userString>	#gb_vehicles:Turret_1_GB69_Cruiser_Mk_II	</userString>
       <tags></tags>
-      <level>	2	</level>
+      <level>	1	</level>
       <price>	730	</price>
-      <unlocks>
-        <turret>	Turret_2_GB69_Cruiser_Mk_II	  <cost>	115	</cost>
-        </turret>
-      </unlocks>
       <armor>
         <armor_1>	30	</armor_1>
         <armor_3>	26	</armor_3>
@@ -3466,7 +3456,7 @@
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2750	</weight>
       <maxHealth>	52	</maxHealth>
-      <rotationSpeed>	34	</rotationSpeed>
+      <rotationSpeed>	36	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
         <maxRegenHealth>	35	</maxRegenHealth>
@@ -3485,7 +3475,7 @@
             <maxPitch>	0 15 0.366894 15 0.430556 14 0.569444 14 0.633106 15 1 15	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <gun>	_40mm_Pom_Pom	  <cost>	1000	</cost>
+            <gun>	_40mm_Pom_Pom_II	  <cost>	1000	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -3493,14 +3483,14 @@
             </armor_1>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	3	</reloadTime>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	2.6	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	1.9	</aimingTime>
+          <aimingTime>	1.7	</aimingTime>
           <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB69_Cruiser_Mk_II/normal/lod0/Gun_01.model	</undamaged>
@@ -3548,7 +3538,11 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_2pdr_Gun_Mk_IX_prot>
-        <_40mm_Pom_Pom>	shared	  <maxAmmo>	240	</maxAmmo>
+        <_40mm_Pom_Pom_II>	shared	  <maxAmmo>	240	</maxAmmo>
+          <unlocks>
+            <turret>	Turret_2_GB69_Cruiser_Mk_II	  <cost>	115	</cost>
+            </turret>
+          </unlocks>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 15 0.366894 15 0.430556 13 0.569444 13 0.633106 15 1 15	</maxPitch>
@@ -3613,7 +3607,7 @@
             <density>	187.166 197.414	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_40mm_Pom_Pom>
+        </_40mm_Pom_Pom_II>
       </guns>
       <models>
         <undamaged>	vehicles/british/GB69_Cruiser_Mk_II/normal/lod0/Turret_01.model	</undamaged>
@@ -4104,9 +4098,11 @@
     <Turret_2_GB69_Cruiser_Mk_II>
       <userString>	#gb_vehicles:Turret_2_GB69_Cruiser_Mk_II	</userString>
       <tags></tags>
-      <level>	3	</level>
+      <level>	2	</level>
       <price>	1700	</price>
       <unlocks>
+        <vehicle>	GB04_Valentine	  <cost>	1500	</cost>
+        </vehicle>
         <vehicle>	GB58_Cruiser_Mk_III	  <cost>	1500	</cost>
         </vehicle>
       </unlocks>
@@ -4158,12 +4154,12 @@
             </armor_1>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	2.6	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
           <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -4213,7 +4209,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_2pdr_Gun_Mk_IX_prot>
-        <_40mm_Pom_Pom>	shared	  <maxAmmo>	240	</maxAmmo>
+        <_40mm_Pom_Pom_II>	shared	  <maxAmmo>	240	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 15 0.366894 15 0.430556 12 0.569444 12 0.633106 15 1 15	</maxPitch>
@@ -4278,7 +4274,7 @@
             <density>	187.166 197.414	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_40mm_Pom_Pom>
+        </_40mm_Pom_Pom_II>
       </guns>
       <models>
         <undamaged>	vehicles/british/GB69_Cruiser_Mk_II/normal/lod0/Turret_02.model	</undamaged>
@@ -4832,11 +4828,11 @@
     </Turret_2_GB69_Cruiser_Mk_II>
   </turrets0>
   <engines>
-    <Rolls_Royse_Phantom>	shared	  <unlocks>
+    <Rolls_Royce_Phantom>	shared	  <unlocks>
         <engine>	AEC_Type_179	  <cost>	80	</cost>
         </engine>
       </unlocks>
-    </Rolls_Royse_Phantom>
+    </Rolls_Royce_Phantom>
     <AEC_Type_179>	shared	</AEC_Type_179>
   </engines>
   <fuelTanks>
@@ -4848,12 +4844,12 @@
   <physics>
     <detailed>
       <engines>
-        <Rolls_Royse_Phantom>
-          <smplEnginePower>	126.8737	</smplEnginePower>
+        <Rolls_Royce_Phantom>
+          <smplEnginePower>	145	</smplEnginePower>
           <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
-        </Rolls_Royse_Phantom>
+        </Rolls_Royce_Phantom>
         <AEC_Type_179>
-          <smplEnginePower>	158.5922	</smplEnginePower>
+          <smplEnginePower>	170	</smplEnginePower>
           <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
         </AEC_Type_179>
       </engines>
@@ -4861,13 +4857,13 @@
         <Chassis_GB69_Cruiser_Mk_II>
           <grounds>
             <soft>
-              <rollingFriction>	0.161	</rollingFriction>
+              <rollingFriction>	0.1449	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1127	</rollingFriction>
+              <rollingFriction>	0.0966	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
+              <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_GB69_Cruiser_Mk_II>

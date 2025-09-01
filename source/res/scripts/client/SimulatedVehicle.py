@@ -2,23 +2,24 @@
 # Embedded file name: scripts/client/SimulatedVehicle.py
 import logging
 from copy import copy
+from functools import partial
 import BigWorld
 import Math
+import GenericComponents
 from cgf_network import C_INVALID_NETWORK_OBJECT_ID
-from functools import partial
 from Event import Event
 from VehicleEffects import DamageFromShotDecoder
 from cgf_obsolete_script.script_game_object import ScriptGameObject
 from common_tank_structure import VehicleAppearanceCacheInfo
-from constants import VEHICLE_SIEGE_STATE, SPECIAL_VEHICLE_HEALTH, VEHICLE_HIT_EFFECT
+from constants import DEFAULT_GUN_INSTALLATION_INDEX, VEHICLE_SIEGE_STATE, SPECIAL_VEHICLE_HEALTH, VEHICLE_HIT_EFFECT
 from gui.battle_control import vehicle_getter
+from gui.shared.items_parameters import isAutoShootGun
 from helpers import dependency
 from items import vehicles
 from shared_utils.vehicle_utils import createWheelFilters
 from skeletons.vehicle_appearance_cache import IAppearanceCache
 from vehicle_systems.tankStructure import TankPartIndexes
 from helpers_common import setEncodedSegmentContextData
-import GenericComponents
 _logger = logging.getLogger(__name__)
 _UNSPOTTED_CONE_WIDTH_SCALE = 1
 _UNSPOTTED_CONE_LENGTH_SCALE = 1
@@ -167,28 +168,23 @@ class SimulatedVehicle(BigWorld.Entity, VehicleBase, ScriptGameObject):
 
         return [ partial(getWheelAngle, wheelAngle) for wheelAngle in self.simulationData_wheelsSteering ]
 
-    @property
-    def gunFireMatrix(self, gunIndex=0):
-        typeDescriptor = self.typeDescriptor
-        multiGun = typeDescriptor.turret.multiGun
-        if multiGun and (typeDescriptor.isDualgunVehicle or typeDescriptor.isTwinGunVehicle):
-            gunFireHP = multiGun[gunIndex].gunFire
-            gunMatrix = self.appearance.compoundModel.node(gunFireHP)
+    def gunOriginMatrix(self, gunInstallationIndex=DEFAULT_GUN_INSTALLATION_INDEX, gunIndex=0):
+        gun = self.typeDescriptor.gunInstallations[gunInstallationIndex].gun
+        if not gun.multiGun or isAutoShootGun(gun):
+            gunOriginMatrix = self.appearance.compoundModel.node('HP_gunJoint')
         else:
-            gunMatrix = self.appearance.compoundModel.node('HP_gunFire')
-        return gunMatrix
+            gunNodeName = gun.multiGun[gunIndex].node
+            gunOriginMatrix = self.appearance.compoundModel.node(gunNodeName)
+        return gunOriginMatrix
 
-    @property
-    def gunFirePosition(self, gunIndex=0):
-        return Math.Matrix(self.gunFireMatrix).translation
-
-    @property
-    def gunJointMatrix(self):
-        return self.appearance.compoundModel.node('HP_gunJoint')
-
-    @property
-    def gunJointPosition(self):
-        return Math.Matrix(self.gunJointMatrix).translation
+    def gunFireMatrix(self, gunInstallationIndex=DEFAULT_GUN_INSTALLATION_INDEX, gunIndex=0):
+        gun = self.typeDescriptor.gunInstallations[gunInstallationIndex].gun
+        if not gun.multiGun or isAutoShootGun(gun):
+            gunFireMatrix = self.appearance.compoundModel.node('HP_gunFire')
+        else:
+            gunFireHP = gun.multiGun[gunIndex].gunFire
+            gunFireMatrix = self.appearance.compoundModel.node(gunFireHP)
+        return gunFireMatrix
 
     def onEnterWorld(self, prereqs):
         self._isEnteringWorld = True
@@ -266,6 +262,9 @@ class SimulatedVehicle(BigWorld.Entity, VehicleBase, ScriptGameObject):
         appearance = self.__appearanceCache.getAppearance(entityID, newInfo, self.__onAppearanceReady)
         appearance.setUseEngStartControlIdle(True)
         return appearance
+
+    def getDynAttachments(self):
+        return self.simulationData_dynAttachmentsInfo
 
     def __onAppearanceReady(self, appearance):
         _logger.info('__onAppearanceReady(%d)', self.id)

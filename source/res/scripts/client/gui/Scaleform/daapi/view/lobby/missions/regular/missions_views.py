@@ -31,7 +31,7 @@ from gui.server_events.events_helpers import isMarathon, isDailyQuest, isPremium
 from gui.shared import actions
 from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showTankPremiumAboutPage
+from gui.shared.event_dispatcher import showTankPremiumAboutPage, showHangar
 from gui.shared.formatters import text_styles, icons
 from helpers import dependency
 from helpers.i18n import makeString as _ms
@@ -101,7 +101,7 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
         return
 
     def closeView(self):
-        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
+        showHangar()
 
     def getSuitableEvents(self):
         return []

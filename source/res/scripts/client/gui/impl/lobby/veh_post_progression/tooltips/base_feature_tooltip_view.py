@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/veh_post_progression/tooltips/base_feature_tooltip_view.py
+from __future__ import absolute_import
 from frameworks.wulf import ViewSettings
 from gui.impl.gen.view_models.views.lobby.post_progression.tooltip.feature_tooltip_view_model import FeatureTooltipViewModel
 from gui.impl.pub import ViewImpl

@@ -25,7 +25,7 @@ from gui.impl.lobby.battle_matters.battle_matters_paused_view import BattleMatte
 from gui.impl.lobby.battle_matters.tooltips.battle_matters_token_tooltip_view import BattleMattersTokenTooltipView
 from gui.impl.lobby.battle_matters.battle_matters_rewards_view import BattleMattersRewardsViewWindow
 from gui.impl.pub import ViewImpl
-from gui.server_events.events_dispatcher import showBattleMatters, showBattleMattersMainReward
+from gui.server_events.events_dispatcher import showBattleMattersMainReward
 from gui.shared.event_dispatcher import showDelayedReward, showHangar
 from gui.impl.lobby.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
 from gui.shared.missions.packers.bonus import packMissionsBonusModelAndTooltipData
@@ -323,14 +323,14 @@ class BattleMattersMainView(ViewImpl):
         return quest.isCompleted() or self.__compensationQuestsStatus.get(quest.getOrder(), False)
 
     def __onShowManual(self):
-        self.__manualController.show(backCallback=showBattleMatters, descrLabelBackBtn=MENU.VIEWHEADER_BACKBTN_DESCRLABEL_BATTLEMATTERS)
+        self.__manualController.show(descrLabelBackBtn=MENU.VIEWHEADER_BACKBTN_DESCRLABEL_BATTLEMATTERS)
 
     def __onShowManualForQuest(self, args):
         questID = args.get(BattleMattersMainViewModel.ARG_QUEST_ID)
         if questID is not None:
             lessonID = self.__questCardsDescriptions.get(questID, {}).get(QuestCardSections.LESSON_ID)
             if lessonID is not None:
-                self.__manualController.show(lessonID, backCallback=showBattleMatters, descrLabelBackBtn=MENU.VIEWHEADER_BACKBTN_DESCRLABEL_BATTLEMATTERS)
+                self.__manualController.show(lessonID, descrLabelBackBtn=MENU.VIEWHEADER_BACKBTN_DESCRLABEL_BATTLEMATTERS)
             else:
                 _logger.warning('Quest id=%s does not have lessonId for manual', questID)
         else:

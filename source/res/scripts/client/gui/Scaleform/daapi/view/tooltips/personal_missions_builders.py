@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/tooltips/personal_missions_builders.py
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.shared.tooltips import contexts
+from gui.shared.tooltips import contexts, common
 from gui.shared.tooltips import personal_missions
-from gui.shared.tooltips.builders import DataBuilder
+from gui.shared.tooltips.builders import DataBuilder, TooltipWindowBuilder
 __all__ = ('getTooltipBuilders',)
 
 def getTooltipBuilders():
@@ -20,4 +20,6 @@ def getTooltipBuilders():
      DataBuilder(TOOLTIPS_CONSTANTS.PERSONAL_MISSION_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, personal_missions.PersonalMissionInfoTooltipData(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.PERSONAL_MISSIONS_MAP_REGION, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, personal_missions.PersonalMissionsMapRegionTooltipData(contexts.PersonalMissionContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.OPERATIONS_CHAIN_DETAILS, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, personal_missions.OperationsChainDetailsTooltipData(contexts.PersonalMissionContext())),
-     DataBuilder(TOOLTIPS_CONSTANTS.OPERATION_POSTPONED, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, personal_missions.OperationPostponedTooltipData(contexts.PersonalMissionOperationContext())))
+     DataBuilder(TOOLTIPS_CONSTANTS.OPERATION_POSTPONED, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, personal_missions.OperationPostponedTooltipData(contexts.PersonalMissionOperationContext())),
+     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.PERSONAL_MISSIONS_POINTS, None, common.ParamsTooltipContent(contexts.PersonalMissionsPointsTooltipContext(None), TOOLTIPS_CONSTANTS.PERSONAL_MISSIONS_POINTS)),
+     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.PERSONAL_MISSION_OPERATION_DISABLED, None, common.ParamsTooltipContent(contexts.PersonalMissionOperationDisabledTooltipContext(None), TOOLTIPS_CONSTANTS.PERSONAL_MISSION_OPERATION_DISABLED)))

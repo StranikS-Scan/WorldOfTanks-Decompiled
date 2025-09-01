@@ -5,10 +5,11 @@ import time
 import ResMgr
 import nations
 import quest_xml_source
-from constants import ITEM_DEFS_PATH, IS_CLIENT, IS_WEB, EVENT_TYPE, PERSONAL_MISSION_FREE_TOKEN_NAME, PERSONAL_MISSION_2_FREE_TOKEN_NAME, PERSONAL_MISSION_FINAL_PAWN_COST, PERSONAL_MISSION_2_FINAL_PAWN_COST
 from items import _xml, ItemsPrices, vehicles
 from items.vehicles import VEHICLE_CLASS_TAGS
+from constants import ITEM_DEFS_PATH, IS_CLIENT, IS_WEB, EVENT_TYPE, PERSONAL_MISSION_FREE_TOKEN_NAME, PERSONAL_MISSION_2_FREE_TOKEN_NAME, PERSONAL_MISSION_FINAL_PAWN_COST, PERSONAL_MISSION_2_FINAL_PAWN_COST, COMMON_ROLE_TO_ROLE_TYPE, COMMON_ROLE
 from nations import ALLIANCES_TAGS
+from personal_missions_constants import VEHICLE_RESTRICTION_MIN_LEVEL, VEHICLE_RESTRICTION_MAX_LEVEL
 from soft_exception import SoftException
 if IS_CLIENT:
     from helpers import i18n
@@ -16,7 +17,7 @@ elif IS_WEB:
     from web_stubs import *
 POTAPOV_QUEST_XML_PATH = ITEM_DEFS_PATH + 'potapov_quests/'
 _FALLOUT_BATTLE_TAGS = frozenset(('classic', 'multiteam'))
-_ALLOWED_TAG_NAMES = ('initial', 'final') + tuple(_FALLOUT_BATTLE_TAGS) + tuple(VEHICLE_CLASS_TAGS) + tuple(ALLIANCES_TAGS)
+_ALLOWED_TAG_NAMES = ('initial', 'final') + tuple(_FALLOUT_BATTLE_TAGS) + tuple(VEHICLE_CLASS_TAGS) + tuple(ALLIANCES_TAGS) + tuple(COMMON_ROLE.ALL)
 g_cache = None
 g_tileCache = None
 g_seasonCache = None
@@ -24,9 +25,15 @@ g_seasonCache = None
 class PQ_BRANCH():
     REGULAR = 0
     PERSONAL_MISSION_2 = 2
+    PERSONAL_MISSION_3 = 4
+    ALL = (REGULAR, PERSONAL_MISSION_2, PERSONAL_MISSION_3)
     NAME_TO_TYPE = {'regular': REGULAR,
-     'pm2': PERSONAL_MISSION_2}
+     'pm2': PERSONAL_MISSION_2,
+     'pm3': PERSONAL_MISSION_3}
     TYPE_TO_NAME = dict(zip(NAME_TO_TYPE.values(), NAME_TO_TYPE.keys()))
+    V1_BRANCHES = (REGULAR, PERSONAL_MISSION_2)
+    V2_BRANCHES = (PERSONAL_MISSION_3,)
+    BRANCH_GROUPS = [V1_BRANCHES, V2_BRANCHES]
 
 
 PM_BRANCH_TO_FREE_TOKEN_NAME = {PQ_BRANCH.REGULAR: PERSONAL_MISSION_FREE_TOKEN_NAME,
@@ -37,7 +44,9 @@ PM_BRANCH_TO_FINAL_PAWN_COST = {PQ_BRANCH.REGULAR: PERSONAL_MISSION_FINAL_PAWN_C
 def isPotapovQuestBranchEnabled(gameParams, branch):
     if branch == PQ_BRANCH.REGULAR:
         return gameParams['misc_settings']['isRegularQuestEnabled']
-    return gameParams['misc_settings']['isPM2QuestEnabled'] if branch == PQ_BRANCH.PERSONAL_MISSION_2 else False
+    if branch == PQ_BRANCH.PERSONAL_MISSION_2:
+        return gameParams['misc_settings']['isPM2QuestEnabled']
+    return gameParams['misc_settings']['isPM3QuestEnabled'] if branch == PQ_BRANCH.PERSONAL_MISSION_3 else False
 
 
 def isPotapovQuestTileEnabled(gameParams, pqType):
@@ -62,7 +71,7 @@ class PQ_STATE():
     ALL_REWARDS_GOTTEN = 6
     NEXT_STATE = {NONE: (UNLOCKED, NEED_GET_MAIN_REWARD, NEED_GET_ALL_REWARDS),
      UNLOCKED: (NEED_GET_MAIN_REWARD, NEED_GET_ALL_REWARDS),
-     NEED_GET_MAIN_REWARD: (MAIN_REWARD_GOTTEN,),
+     NEED_GET_MAIN_REWARD: (MAIN_REWARD_GOTTEN, ALL_REWARDS_GOTTEN),
      MAIN_REWARD_GOTTEN: (NEED_GET_ADD_REWARD,),
      NEED_GET_ADD_REWARD: (ALL_REWARDS_GOTTEN,),
      NEED_GET_ALL_REWARDS: (ALL_REWARDS_GOTTEN,)}
@@ -193,6 +202,7 @@ class PQCache(object):
         self.__tileIDchainIDToPotapovQuestID = {}
         self.__tileIDchainIDToFinalPotapovQuestID = {}
         self.__tileIDchainIDToInitialPotapovQuestID = {}
+        self.__potapovQuestNameToQuestId = {}
         self.__readQuestList(auxData=auxData)
 
     def questByPotapovQuestID(self, potapovQuestID):
@@ -229,6 +239,11 @@ class PQCache(object):
     def branchByPotapovQuestID(self, potapovQuestID):
         return PQ_BRANCH.TYPE_TO_NAME[self.questByPotapovQuestID(potapovQuestID).branch]
 
+    def getPotapovQuestIDByQuestName(self, questName):
+        if questName not in self.__potapovQuestNameToQuestId:
+            raise SoftException('Invalid potapov quest name (%s)' % (questName,))
+        return self.__potapovQuestNameToQuestId[questName]
+
     def __iter__(self):
         return self.__questUniqueIDToPotapovQuestID.iteritems()
 
@@ -242,7 +257,7 @@ class PQCache(object):
         self.__tileIDchainIDToPotapovQuestID = tileIDchainIDToPotapovQuestID = {}
         self.__tileIDchainIDToFinalPotapovQuestID = tileIDchainIDToFinalPotapovQuestID = {}
         self.__tileIDchainIDToInitialPotapovQuestID = tileIDchainIDToInitialPotapovQuestID = {}
-        ids = {}
+        self.__potapovQuestNameToQuestId = ids = {}
         curTime = int(time.time())
         xmlSource = quest_xml_source.Source()
         for qname, qsection in section.items():
@@ -254,13 +269,14 @@ class PQCache(object):
             if potapovQuestID in idToQuest:
                 _xml.raiseWrongXml(ctx, 'id', 'is not unique')
             questBranchName, tileID, chainID, internalID = splitted
+            isPM3 = questBranchName == 'pm3'
             tileInfo = g_tileCache.getTileInfo(int(tileID))
             if 1 <= chainID <= tileInfo['chainsCount']:
                 _xml.raiseWrongXml(ctx, '', 'quest chainID must be between 1 and %s' % tileInfo['chainsCount'])
             if 1 <= internalID <= tileInfo['questsInChain']:
                 _xml.raiseWrongXml(ctx, '', 'quest internalID must be between 1 and %s' % tileInfo['chainsCount'])
-            minLevel = _xml.readInt(ctx, qsection, 'minLevel', 1, 10)
-            maxLevel = _xml.readInt(ctx, qsection, 'maxLevel', minLevel, 10)
+            minLevel = _xml.readInt(ctx, qsection, 'minLevel', VEHICLE_RESTRICTION_MIN_LEVEL, VEHICLE_RESTRICTION_MAX_LEVEL)
+            maxLevel = _xml.readInt(ctx, qsection, 'maxLevel', minLevel, VEHICLE_RESTRICTION_MAX_LEVEL)
             basicInfo = {'name': qname,
              'id': potapovQuestID,
              'branch': PQ_BRANCH.NAME_TO_TYPE[questBranchName],
@@ -284,7 +300,10 @@ class PQCache(object):
                     _xml.raiseWrongXml(ctx, 'tags', 'quest fallout type is not specified')
             if questBranchName == 'pm2':
                 if 0 == len(tags & ALLIANCES_TAGS):
-                    _xml.raiseWrongXml(ctx, 'tags', 'quest vehicle class is not specified')
+                    _xml.raiseWrongXml(ctx, 'tags', 'quest vehicle alliance is not specified')
+            if isPM3:
+                if 0 == len(tags & COMMON_ROLE.ALL):
+                    _xml.raiseWrongXml(ctx, 'tags', 'quest vehicle role is not specified')
             if IS_CLIENT or IS_WEB:
                 basicInfo['userString'] = i18n.makeString(qsection.readString('userString'))
                 basicInfo['shortUserString'] = i18n.makeString(qsection.readString('shortUserString'))
@@ -305,7 +324,7 @@ class PQCache(object):
             nodes = nodes.get(EVENT_TYPE.POTAPOV_QUEST, None)
             if nodes is None:
                 _xml.raiseWrongXml(questCtx, 'potapovQuest', 'Potapov quests are not specified.')
-            if len(nodes) != 4:
+            if isPM3 and len(nodes) != 2 or not isPM3 and len(nodes) != 4:
                 _xml.raiseWrongXml(questCtx, 'potapovQuest', 'Main and additional quest should be presented.')
             qinfo = nodes[0].info
             if not qinfo['id'].endswith('main'):
@@ -316,16 +335,20 @@ class PQCache(object):
             basicInfo['mainQuestID'] = qinfo['id']
             if IS_CLIENT or IS_WEB:
                 basicInfo['mainQuestInfo'] = qinfo['questClientData']
-            qinfo = nodes[1].info
-            if not qinfo['id'].endswith('main_award_list'):
-                _xml.raiseWrongXml(questCtx, 'potapovQuest', 'Main award list quest must be second.')
-            if qinfo['id'] in questUniqueNameToPotapovQuestID:
-                _xml.raiseWrongXml(questCtx, 'potapovQuest', 'Duplicate name detected.')
-            questUniqueNameToPotapovQuestID[qinfo['id']] = potapovQuestID
-            basicInfo['mainAwardListQuestID'] = qinfo['id']
-            if IS_CLIENT or IS_WEB:
-                basicInfo['mainAwardListQuestInfo'] = qinfo['questClientData']
-            qinfo = nodes[2].info
+            if not isPM3:
+                qinfo = nodes[1].info
+                if not qinfo['id'].endswith('main_award_list'):
+                    _xml.raiseWrongXml(questCtx, 'potapovQuest', 'Main award list quest must be second.')
+                if qinfo['id'] in questUniqueNameToPotapovQuestID:
+                    _xml.raiseWrongXml(questCtx, 'potapovQuest', 'Duplicate name detected.')
+                questUniqueNameToPotapovQuestID[qinfo['id']] = potapovQuestID
+                basicInfo['mainAwardListQuestID'] = qinfo['id']
+                if IS_CLIENT or IS_WEB:
+                    basicInfo['mainAwardListQuestInfo'] = qinfo['questClientData']
+            else:
+                basicInfo['mainAwardListQuestID'] = None
+                basicInfo['mainAwardListQuestInfo'] = None
+            qinfo = nodes[1].info if isPM3 else nodes[2].info
             if not qinfo['id'].endswith('add'):
                 _xml.raiseWrongXml(questCtx, 'potapovQuest', 'Add quest must be third.')
             if qinfo['id'] in questUniqueNameToPotapovQuestID:
@@ -334,15 +357,19 @@ class PQCache(object):
             basicInfo['addQuestID'] = qinfo['id']
             if IS_CLIENT or IS_WEB:
                 basicInfo['addQuestInfo'] = qinfo['questClientData']
-            qinfo = nodes[3].info
-            if not qinfo['id'].endswith('add_award_list'):
-                _xml.raiseWrongXml(questCtx, 'potapovQuest', 'Add award list quest must be fourth.')
-            if qinfo['id'] in questUniqueNameToPotapovQuestID:
-                _xml.raiseWrongXml(questCtx, 'potapovQuest', 'Duplicate name detected.')
-            questUniqueNameToPotapovQuestID[qinfo['id']] = potapovQuestID
-            basicInfo['addAwardListQuestID'] = qinfo['id']
-            if IS_CLIENT or IS_WEB:
-                basicInfo['addAwardListQuestInfo'] = qinfo['questClientData']
+            if not isPM3:
+                qinfo = nodes[3].info
+                if not qinfo['id'].endswith('add_award_list'):
+                    _xml.raiseWrongXml(questCtx, 'potapovQuest', 'Add award list quest must be fourth.')
+                if qinfo['id'] in questUniqueNameToPotapovQuestID:
+                    _xml.raiseWrongXml(questCtx, 'potapovQuest', 'Duplicate name detected.')
+                questUniqueNameToPotapovQuestID[qinfo['id']] = potapovQuestID
+                basicInfo['addAwardListQuestID'] = qinfo['id']
+                if IS_CLIENT or IS_WEB:
+                    basicInfo['addAwardListQuestInfo'] = qinfo['questClientData']
+            else:
+                basicInfo['addAwardListQuestID'] = None
+                basicInfo['addAwardListQuestInfo'] = None
             idToQuest[potapovQuestID] = PQType(basicInfo)
             ids[qname] = potapovQuestID
             key = (int(tileID), int(chainID))
@@ -390,6 +417,23 @@ class ClassifierByAlliance(object):
         return nations.NAMES[nationID] in nations.ALLIANCE_TO_NATIONS[self.alliance]
 
 
+class ClassifierByRole(object):
+
+    def __init__(self, questTags):
+        commonRoles = COMMON_ROLE.ALL & questTags
+        if len(commonRoles) != 1:
+            raise SoftException('Potapov quest with tags %s must have exactly one common role' % str(questTags))
+        self.commonRole = commonRole = next(iter(commonRoles))
+        self.roles = COMMON_ROLE_TO_ROLE_TYPE[commonRole]
+
+    @property
+    def classificationAttr(self):
+        return self.commonRole
+
+    def matchVehicle(self, vehicleType):
+        return vehicleType.role in self.roles
+
+
 class PQType(object):
     __slots__ = ('id', 'tags', 'isInitial', 'isFinal', 'branch', 'classifier', 'tileID', 'chainID', 'internalID', 'requiredUnlocks', 'generalQuestID', 'mainQuestID', 'mainAwardListQuestID', 'addQuestID', 'addAwardListQuestID', 'mainQuestInfo', 'addQuestInfo', 'userString', 'shortUserString', 'description', 'advice', 'minLevel', 'maxLevel', 'rewardByDemand', 'mainAwardListQuestInfo', 'addAwardListQuestInfo')
 
@@ -415,6 +459,8 @@ class PQType(object):
             self.classifier = ClassifierByClass(self.tags)
         elif self.branch == PQ_BRANCH.PERSONAL_MISSION_2:
             self.classifier = ClassifierByAlliance(self.tags)
+        elif self.branch == PQ_BRANCH.PERSONAL_MISSION_3:
+            self.classifier = ClassifierByRole(self.tags)
         else:
             raise SoftException('wrong potapov quest branch: %i' % self.branch)
         if IS_CLIENT or IS_WEB:
@@ -463,6 +509,10 @@ class PQType(object):
                 toUnlock.add(finalQuestID)
 
         return (completedQuestsCount >= chainsCountToUnlockNext, toUnlock)
+
+    @property
+    def isPM3(self):
+        return self.branch == PQ_BRANCH.PERSONAL_MISSION_3
 
 
 class PQStorage(object):
@@ -543,3 +593,8 @@ def _readTags(xmlCtx, section, subsectionName):
         res.add(intern(tagName))
 
     return frozenset(res)
+
+
+def isPM3Quest(questID):
+    branch = questID.split('_', 1)[0]
+    return branch == PQ_BRANCH.TYPE_TO_NAME[PQ_BRANCH.PERSONAL_MISSION_3]

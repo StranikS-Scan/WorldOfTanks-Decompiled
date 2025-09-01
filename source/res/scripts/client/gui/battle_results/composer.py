@@ -5,6 +5,7 @@ from constants import ARENA_BONUS_TYPE
 from gui.battle_results import templates
 from gui.battle_results.components import base
 from gui.battle_results.stats_ctrl import IBattleResultStatsCtrl
+from gui.battle_results.random_stats_ctrl import RandomBattleResultStatsCtrl
 from gui.shared import event_dispatcher
 from gui.shared.system_factory import registerBattleResultStatsCtrl
 from helpers import dependency
@@ -149,3 +150,9 @@ registerBattleResultStatsCtrl(ARENA_BONUS_TYPE.FORT_BATTLE_2, StrongholdBattleSt
 registerBattleResultStatsCtrl(ARENA_BONUS_TYPE.SORTIE_2, StrongholdSortieBattleStatsComposer)
 registerBattleResultStatsCtrl(ARENA_BONUS_TYPE.RANKED, RankedBattlesStatsComposer)
 registerBattleResultStatsCtrl(ARENA_BONUS_TYPE.MAPS_TRAINING, MapsTrainingStatsComposer)
+registerBattleResultStatsCtrl(ARENA_BONUS_TYPE.REGULAR, RandomBattleResultStatsCtrl)
+registerBattleResultStatsCtrl(ARENA_BONUS_TYPE.TRAINING, RandomBattleResultStatsCtrl)
+registerBattleResultStatsCtrl(ARENA_BONUS_TYPE.TOURNAMENT_REGULAR, RandomBattleResultStatsCtrl)
+registerBattleResultStatsCtrl(ARENA_BONUS_TYPE.RANDOM_NP2, RandomBattleResultStatsCtrl)
+registerBattleResultStatsCtrl(ARENA_BONUS_TYPE.EPIC_RANDOM, RandomBattleResultStatsCtrl)
+registerBattleResultStatsCtrl(ARENA_BONUS_TYPE.WINBACK, RandomBattleResultStatsCtrl)

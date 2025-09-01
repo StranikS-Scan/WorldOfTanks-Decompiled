@@ -14,7 +14,7 @@ BTN_WIDTH = 120
 
 class GoldFishWindow(GoldFishWindowMeta):
 
-    def __init__(self, _=None):
+    def __init__(self, **kwargs):
         super(GoldFishWindow, self).__init__()
 
     def onBtnClick(self, action):

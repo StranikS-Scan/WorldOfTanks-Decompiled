@@ -3,9 +3,6 @@
 import logging
 from adisp import adisp_process
 from gui import DialogsInterface
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework import g_entitiesFactories
-from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.clans.cache_providers.base_provider import IBaseProvider
 from gui.clans.clan_helpers import isStrongholdsEnabled
 from gui.prb_control.entities.base.ctx import LeavePrbAction
@@ -72,7 +69,8 @@ class ClientStrongholdProvider(IBaseProvider, IGlobalListener):
             if not enabled:
                 if self.__tabActive or self.__entityActive:
                     if self.__tabActive:
-                        g_eventBus.handleEvent(g_entitiesFactories.makeLoadEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
+                        from gui.shared.event_dispatcher import showHangar
+                        showHangar()
                     if not self.__unitActive:
                         self.__leave()
                         self.__showPopupDlg()

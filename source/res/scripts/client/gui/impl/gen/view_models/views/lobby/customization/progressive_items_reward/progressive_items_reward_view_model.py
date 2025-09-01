@@ -1,8 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/customization/progressive_items_reward/progressive_items_reward_view_model.py
-from frameworks.wulf import Array
+from frameworks.wulf import Array, ViewModel
 from gui.impl.gen import R
-from frameworks.wulf import ViewModel
 
 class ProgressiveItemsRewardViewModel(ViewModel):
     __slots__ = ('onOkClick', 'onSecondaryClick')

@@ -105,6 +105,11 @@ class ITEM_TYPES(object):
     SHELL_KINDS_ARMOR_PIERCING_HE = '#item_types:shell/kinds/ARMOR_PIERCING_HE'
     SHELL_KINDS_HOLLOW_CHARGE = '#item_types:shell/kinds/HOLLOW_CHARGE'
     SHELL_KINDS_HIGH_EXPLOSIVE = '#item_types:shell/kinds/HIGH_EXPLOSIVE'
+    SHELL_KINDS_UPPERCASE_ARMOR_PIERCING = '#item_types:shell/kinds/upperCase/ARMOR_PIERCING'
+    SHELL_KINDS_UPPERCASE_ARMOR_PIERCING_CR = '#item_types:shell/kinds/upperCase/ARMOR_PIERCING_CR'
+    SHELL_KINDS_UPPERCASE_ARMOR_PIERCING_HE = '#item_types:shell/kinds/upperCase/ARMOR_PIERCING_HE'
+    SHELL_KINDS_UPPERCASE_HOLLOW_CHARGE = '#item_types:shell/kinds/upperCase/HOLLOW_CHARGE'
+    SHELL_KINDS_UPPERCASE_HIGH_EXPLOSIVE = '#item_types:shell/kinds/upperCase/HIGH_EXPLOSIVE'
     SHELL_KINDSABBREVIATION_ARMOR_PIERCING = '#item_types:shell/kindsAbbreviation/ARMOR_PIERCING'
     SHELL_KINDSABBREVIATION_ARMOR_PIERCING_CR = '#item_types:shell/kindsAbbreviation/ARMOR_PIERCING_CR'
     SHELL_KINDSABBREVIATION_ARMOR_PIERCING_HE = '#item_types:shell/kindsAbbreviation/ARMOR_PIERCING_HE'
@@ -127,6 +132,7 @@ class ITEM_TYPES(object):
     CUSTOMIZATION_PERSONALNUMBER_2 = '#item_types:customization/personalNumber_2'
     CUSTOMIZATION_PERSONALNUMBER_1 = '#item_types:customization/personalNumber_1'
     CUSTOMIZATION_ATTACHMENT = '#item_types:customization/attachment'
+    CUSTOMIZATION_ATTACHMENT_RARITY = '#item_types:customization/attachment/rarity'
     CUSTOMIZATION_STATTRACKER = '#item_types:customization/statTracker'
     CUSTOMIZATION_PLURAL_PAINT = '#item_types:customization/plural/paint'
     CUSTOMIZATION_PLURAL_CAMOUFLAGE = '#item_types:customization/plural/camouflage'
@@ -215,6 +221,7 @@ class ITEM_TYPES(object):
      CUSTOMIZATION_PERSONALNUMBER_2,
      CUSTOMIZATION_PERSONALNUMBER_1,
      CUSTOMIZATION_ATTACHMENT,
+     CUSTOMIZATION_ATTACHMENT_RARITY,
      CUSTOMIZATION_STATTRACKER,
      CUSTOMIZATION_PLURAL_PAINT,
      CUSTOMIZATION_PLURAL_CAMOUFLAGE,

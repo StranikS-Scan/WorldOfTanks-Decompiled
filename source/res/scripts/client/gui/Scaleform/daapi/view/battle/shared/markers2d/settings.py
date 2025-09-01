@@ -16,6 +16,7 @@ class MARKER_SYMBOL_NAME(object):
     SHOOTING_MARKER = 'AimMarkerUI'
     NAVIGATION_MARKER = 'NavigationMarkerUI'
     FLAG_MARKER = 'FlagMarkerUI'
+    UNSPOTTED_MARKER_HIT = 'UnspottedMarkerUI'
     SAFE_ZONE_MARKER = 'SafeZoneIndicatorUI'
     STATIC_OBJECT_MARKER = 'StaticObjectMarker'
     TARGET_POINT_MARKER = 'TargetPointMarkerUI'

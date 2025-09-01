@@ -6,9 +6,10 @@ from gui.battle_control.controllers.appearance_cache_ctrls.default_appearance_ca
 from helpers import uniprof
 from items.vehicles import VehicleDescriptor
 from vehicle_outfit.outfit import Outfit
-from vehicle_systems import model_assembler
+from vehicle_systems import model_assembler, camouflages
 from vehicle_systems.camouflages import getOutfitComponent
 from vehicle_systems.tankStructure import ModelsSetParams, ModelStates
+from vehicle_systems.vehicle_damage_state import VehicleDamageState
 _logger = logging.getLogger(__name__)
 
 class EventAppearanceCacheController(DefaultAppearanceCacheController):
@@ -45,14 +46,36 @@ class EventAppearanceCacheController(DefaultAppearanceCacheController):
         toRemove = self._spawnList.difference(spawnListData)
         for data in toAdd:
             vDesc = VehicleDescriptor(compactDescr=data.vehicleCD)
-            prereqs = set(vDesc.prerequisites())
             outfit = Outfit(component=getOutfitComponent(data.outfitCD), vehicleCD=data.vehicleCD)
-            modelsSetParams = ModelsSetParams(outfit.modelsSet, ModelStates.UNDAMAGED, [])
-            compoundAssembler = model_assembler.prepareCompoundAssembler(vDesc, modelsSetParams, BigWorld.camera().spaceID)
-            prereqs.add(compoundAssembler)
+            prereqs = set(self.collectPrerequisitesForEventBattle(vDesc, outfit, BigWorld.player().spaceID, False, ModelStates.UNDAMAGED))
             self._appearanceCache.loadResources(data.vehicleCD, list(prereqs))
 
         for data in toRemove:
             self._appearanceCache.unloadResources(data.vehicleCD)
 
         self._spawnList = spawnListData
+
+    @staticmethod
+    def collectPrerequisitesForEventBattle(typeDescriptor, outfit, spaceID, isTurretDetached, damageState):
+        isUndamaged = VehicleDamageState.isUndamagedModel(damageState)
+        prereqs = typeDescriptor.prerequisites(True)
+        attachments = camouflages.getAttachments(outfit, typeDescriptor) if isUndamaged else []
+        prereqs.extend(camouflages.getCamoPrereqs(outfit, typeDescriptor))
+        prereqs.extend(camouflages.getAttachmentsAnimatorsPrereqs(attachments, spaceID))
+        splineDesc = typeDescriptor.chassis.splineDesc
+        modelsSet = outfit.modelsSet
+        if splineDesc is not None:
+            for trackDesc in splineDesc.trackPairs.itervalues():
+                prereqs += trackDesc.prerequisites(modelsSet)
+
+        modelsSetParams = ModelsSetParams(outfit.modelsSet, damageState, attachments)
+        compoundAssembler = model_assembler.prepareCompoundAssembler(typeDescriptor, modelsSetParams, spaceID, isTurretDetached)
+        prereqs.append(compoundAssembler)
+        collisionAssembler = model_assembler.prepareCollisionAssembler(typeDescriptor, isTurretDetached, spaceID)
+        prereqs.append(collisionAssembler)
+        physicalTracksBuilders = typeDescriptor.chassis.physicalTracks
+        for name, builders in physicalTracksBuilders.iteritems():
+            for index, builder in enumerate(builders):
+                prereqs.append(builder.createLoader(spaceID, '{0}{1}PhysicalTrack'.format(name, index), modelsSetParams.skin))
+
+        return prereqs

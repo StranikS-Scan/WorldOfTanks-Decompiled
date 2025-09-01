@@ -77,7 +77,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	19565	</weight>
-    <maxHealth>	760	</maxHealth>
+    <maxHealth>	840	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -1234,11 +1234,10 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	8000	</weight>
-      <maxLoad>	37000	</maxLoad>
-      <terrainResistance>	1.3 1.4 2.5	</terrainResistance>
+      <terrainResistance>	1.2 1.3 2.4	</terrainResistance>
       <brakeForce>	37000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	30	</rotationSpeed>
+      <rotationSpeed>	35	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.26	</vehicleMovement>
         <vehicleRotation>	0.26	</vehicleRotation>
@@ -2379,11 +2378,10 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	8000	</weight>
-      <maxLoad>	40000	</maxLoad>
       <terrainResistance>	1.2 1.3 2.4	</terrainResistance>
       <brakeForce>	37000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	32	</rotationSpeed>
+      <rotationSpeed>	37	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.24	</vehicleMovement>
         <vehicleRotation>	0.24	</vehicleRotation>
@@ -3555,7 +3553,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4800	</weight>
-      <maxHealth>	140	</maxHealth>
+      <maxHealth>	160	</maxHealth>
       <rotationSpeed>	32	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -3572,9 +3570,9 @@
         <_76mm_Gun_T91E5>	shared	  <maxAmmo>	90	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 5 1 5	</maxPitch>
+            <maxPitch>	0 8 0.36111 8 0.38889 5 0.61111 5 0.63889 8 1 8.00	</maxPitch>
           </pitchLimits>
-          <reloadTime>	4.6	</reloadTime>
+          <reloadTime>	4.4	</reloadTime>
           <unlocks>
             <turret>	Turret_2_A142_Pawlack_Tank	  <cost>	5100	</cost>
             </turret>
@@ -3600,7 +3598,7 @@
           <shotDispersionRadius>	0.41	</shotDispersionRadius>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -4147,7 +4145,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5500	</weight>
-      <maxHealth>	190	</maxHealth>
+      <maxHealth>	210	</maxHealth>
       <rotationSpeed>	35	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -4165,7 +4163,7 @@
         <_76mm_Gun_T91E5>	shared	  <maxAmmo>	90	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 5 1 5	</maxPitch>
+            <maxPitch>	0 8 0.36111 8 0.38889 5 0.61111 5 0.63889 8 1 8	</maxPitch>
           </pitchLimits>
           <reloadTime>	4.4	</reloadTime>
           <armor>
@@ -4255,7 +4253,7 @@
           </unlocks>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 5 1 5	</maxPitch>
+            <maxPitch>	0 8 0.36111 8 0.38889 5 0.61111 5 0.63889 8 1 8	</maxPitch>
           </pitchLimits>
           <reloadTime>	9	</reloadTime>
           <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
@@ -4836,13 +4834,13 @@
         <Chassis_A142_Pawlack_Tank>
           <grounds>
             <soft>
-              <rollingFriction>	0.20125	</rollingFriction>
+              <rollingFriction>	0.1932	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1127	</rollingFriction>
+              <rollingFriction>	0.10465	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.0966	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

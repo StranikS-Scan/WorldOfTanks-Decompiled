@@ -78,6 +78,7 @@ class LootBoxSystemController(ILootBoxSystemController, EventsHandler):
         super(LootBoxSystemController, self).__init__()
         self.__em = Event.EventManager()
         self.__settings = _SettingsMgr()
+        self.__isInited = False
         self.__boxesCount = {}
         self.__boxesInfo = {}
         self.__statusChangeNotifiers = []
@@ -85,6 +86,7 @@ class LootBoxSystemController(ILootBoxSystemController, EventsHandler):
         self.onStatusChanged = Event.Event(self.__em)
         self.onBoxesCountChanged = Event.Event(self.__em)
         self.onBoxesUpdated = Event.Event(self.__em)
+        self.onBoxesInfoUpdated = Event.Event(self.__em)
 
     @property
     def eventNames(self):
@@ -143,20 +145,27 @@ class LootBoxSystemController(ILootBoxSystemController, EventsHandler):
 
     def onLobbyInited(self, event):
         self.__start()
+        self.__isInited = True
 
     def onAvatarBecomePlayer(self):
         self.__stop()
 
     def onDisconnected(self):
+        self.__isInited = False
         AwardsManager.finalize()
         for event in self.eventNames:
             self.setSetting(event, LOOT_BOXES_SELECTED_BOX, None)
 
         self.__stop()
+        self.__boxesInfo.clear()
+        self.__boxesCount.clear()
         return
 
     def fini(self):
+        self.__isInited = False
         self.__stop()
+        self.__boxesInfo.clear()
+        self.__boxesCount.clear()
 
     def getActiveTime(self, eventName):
         return self.__getEventConfig(eventName).getActiveTime()
@@ -214,6 +223,8 @@ class LootBoxSystemController(ILootBoxSystemController, EventsHandler):
         registerViewsLoaders()
         self.__updateBoxesCount()
         self.__updateBoxesInfo()
+        if not self.__isInited:
+            self.onBoxesInfoUpdated()
         self._subscribe()
 
     def __stop(self):
@@ -223,7 +234,6 @@ class LootBoxSystemController(ILootBoxSystemController, EventsHandler):
         del self.__statusChangeNotifiers[:]
         unregisterViewsLoaders()
         self._unsubscribe()
-        self.__boxesInfo.clear()
 
     def __onServerSettingsChanged(self, settings):
         if 'isLootBoxesEnabled' in settings:

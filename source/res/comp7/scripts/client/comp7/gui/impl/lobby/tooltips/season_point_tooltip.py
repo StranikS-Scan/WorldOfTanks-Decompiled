@@ -11,7 +11,7 @@ class SeasonPointTooltip(ViewImpl):
     __slots__ = ('__params',)
     __comp7Controller = dependency.descriptor(IComp7Controller)
 
-    def __init__(self, layoutID=R.views.comp7.lobby.tooltips.SeasonPointTooltip(), params=None):
+    def __init__(self, layoutID=R.views.comp7.mono.lobby.tooltips.season_point_tooltip(), params=None):
         settings = ViewSettings(layoutID)
         settings.model = SeasonPointTooltipModel()
         super(SeasonPointTooltip, self).__init__(settings)

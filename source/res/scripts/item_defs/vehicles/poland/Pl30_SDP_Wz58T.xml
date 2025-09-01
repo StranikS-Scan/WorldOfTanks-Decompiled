@@ -82,7 +82,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	29175	</weight>
-    <maxHealth>	1120	</maxHealth>
+    <maxHealth>	1160	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -845,8 +845,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	12000	</weight>
-      <maxLoad>	46000	</maxLoad>
-      <terrainResistance>	1.3 1.8 2.9	</terrainResistance>
+      <terrainResistance>	1.1 1.4 2.3	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	23	</rotationSpeed>
@@ -1780,7 +1779,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	12000	</weight>
-      <maxLoad>	48000	</maxLoad>
       <terrainResistance>	1.1 1.4 2.3	</terrainResistance>
       <brakeForce>	39500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2718,12 +2716,12 @@
       </armor>
       <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
       <weight>	100	</weight>
-      <maxHealth>	280	</maxHealth>
+      <maxHealth>	290	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	155	</maxHealth>
+        <maxRegenHealth>	78	</maxRegenHealth>
+        <repairCost>	8	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	350	</circularVisionRadius>
       <surveyingDeviceHealth>
@@ -2734,7 +2732,7 @@
       <guns>
         <GG_85_150_mm>	shared	  <maxAmmo>	52	</maxAmmo>
           <unlocks>
-            <gun>	GG_100_162_mm	  <cost>	44000	</cost>
+            <gun>	GG_100_162_mm_58	  <cost>	44000	</cost>
             </gun>
           </unlocks>
           <pitchLimits>
@@ -2749,7 +2747,7 @@
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.9	</aimingTime>
+          <aimingTime>	2.7	</aimingTime>
           <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
           <armor>
             <armor_1>	260	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -2827,7 +2825,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </GG_85_150_mm>
-        <GG_100_162_mm>	shared	  <maxAmmo>	45	</maxAmmo>
+        <GG_100_162_mm_58>	shared	  <maxAmmo>	45	</maxAmmo>
           <unlocks>
             <vehicle>	Pl28_SDP_Wz_60	  <cost>	163600	</cost>
             </vehicle>
@@ -2921,7 +2919,7 @@
             <density>	109.657425 109.975243	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </GG_100_162_mm>
+        </GG_100_162_mm_58>
       </guns>
       <models>
         <undamaged>	vehicles/poland/Pl30_SDP_Wz58T/normal/lod0/Turret_01.model	</undamaged>
@@ -2958,11 +2956,6 @@
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <RTU_Jesion_M>	shared	  <unlocks>
-        <radio>	R_113_P	  <cost>	7300	</cost>
-        </radio>
-      </unlocks>
-    </RTU_Jesion_M>
     <R_113_P>	shared	</R_113_P>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
@@ -2982,13 +2975,13 @@
         <Chassis_Pl30_SDP_Wz58T>
           <grounds>
             <soft>
-              <rollingFriction>	0.23345	</rollingFriction>
+              <rollingFriction>	0.18515	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1449	</rollingFriction>
+              <rollingFriction>	0.1127	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

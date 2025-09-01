@@ -1384,8 +1384,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	8500	</weight>
-      <maxLoad>	37400	</maxLoad>
-      <terrainResistance>	1.2 1.6 2.3	</terrainResistance>
+      <terrainResistance>	1.1 1.4 2.1	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	36	</rotationSpeed>
@@ -2264,7 +2263,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	8500	</weight>
-      <maxLoad>	38700	</maxLoad>
       <terrainResistance>	1.1 1.4 2.1	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -3137,7 +3135,7 @@
     <Turret_1_R17_SU-100>
       <userString>	#ussr_vehicles:Turret_1_R17_SU-100	</userString>
       <tags>	cannotDetach	</tags>
-      <level>	5	</level>
+      <level>	6	</level>
       <price>	100	</price>
       <notInShop>	true	</notInShop>
       <armor>
@@ -3266,9 +3264,9 @@
           <maxAmmo>	36	</maxAmmo>
           <reloadTime>	12.8	</reloadTime>
           <unlocks>
-            <vehicle>	R18_SU-152	  <cost>	31500	</cost>
-            </vehicle>
             <vehicle>	R74_SU100M1	  <cost>	48200	</cost>
+            </vehicle>
+            <vehicle>	R18_SU-152	  <cost>	31500	</cost>
             </vehicle>
           </unlocks>
           <armor>
@@ -3414,13 +3412,13 @@
         <Chassis_R17_SU-100>
           <grounds>
             <soft>
-              <rollingFriction>	0.18515	</rollingFriction>
+              <rollingFriction>	0.16905	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1288	</rollingFriction>
+              <rollingFriction>	0.1127	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0966	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

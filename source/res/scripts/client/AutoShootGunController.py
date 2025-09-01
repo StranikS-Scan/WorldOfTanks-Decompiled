@@ -3,26 +3,32 @@
 import typing
 import BigWorld
 from auto_shoot_guns.auto_shoot_guns_common import AutoShootGunState
-from vehicle_systems.entity_components.vehicle_mechanic_component import getPlayerVehicleMechanic, checkStateStatus, initOnce, VehicleMechanicGunPrefabComponent
-from vehicle_systems.auto_shoot_guns.shooting_events import AutoShootingEvents
-from vehicle_systems.auto_shoot_guns.custom_integrations import AutoShootCustomIntegrations
+from constants import DEFAULT_GUN_INSTALLATION_INDEX
+from vehicles.components.component_wrappers import checkStateStatus
+from vehicles.components.vehicle_component import VehicleGunPrefabDynamicComponent
+from vehicles.mechanics.auto_shoot_guns.custom_integrations import AutoShootCustomIntegrations
+from vehicles.mechanics.auto_shoot_guns.mechanic_events import AutoShootingEvents
+from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from vehicles.mechanics.mechanic_helpers import getPlayerVehicleMechanic
+from vehicles.parts.guns import IGunComponent
 if typing.TYPE_CHECKING:
-    from vehicle_systems.auto_shoot_guns.system_interfaces import IAutoShootingEvents
+    import CGF
+    from vehicles.mechanics.auto_shoot_guns.mechanic_interfaces import IAutoShootingEvents
 
 def getPlayerVehicleAutoShootGunController():
-    return getPlayerVehicleMechanic('autoShootGunController')
+    return getPlayerVehicleMechanic(VehicleMechanic.AUTO_SHOOT_GUN)
 
 
-class AutoShootGunController(VehicleMechanicGunPrefabComponent):
+class AutoShootGunController(VehicleGunPrefabDynamicComponent, IGunComponent):
 
-    @initOnce
     def __init__(self):
         super(AutoShootGunController, self).__init__()
         self.__gunsGroupSize = 0
-        self.__defaultShotRatePerSecond = 0.0
+        self.__groupRatePerSecond = 0.0
+        self.__shotRatePerSecond = 0.0
         self.__shootingEvents = AutoShootingEvents(self)
         AutoShootCustomIntegrations(self.entity, self).subscribe(self.__shootingEvents)
-        self._initMechanic()
+        self._initComponent()
 
     @property
     def shootingEvents(self):
@@ -37,25 +43,25 @@ class AutoShootGunController(VehicleMechanicGunPrefabComponent):
         currDispersionFactor = stateStatus.dispersionFactor + dt * stateStatus.shotDispersionPerSec
         return min(currDispersionFactor, stateStatus.maxShotDispersion)
 
-    def getDefaultShotRatePerSecond(self):
-        return self.__defaultShotRatePerSecond
-
     def getGroupShotInterval(self):
-        spinningRateFactor = self.__getSpinningRateFactor()
-        temperatureFactor = self.__getTemperatureFactor()
-        temperatureIntervalFactor = 1.0 / temperatureFactor if temperatureFactor > 0.0 else 1.0
-        spinningIntervalFactor = 1.0 / spinningRateFactor if spinningRateFactor > 0.0 else 1.0
-        return self.defaultShotRate * spinningIntervalFactor * temperatureIntervalFactor
+        return self.defaultShotRate
+
+    def getGunInstallationIndex(self):
+        return DEFAULT_GUN_INSTALLATION_INDEX
+
+    def getGunRootGameObject(self):
+        return self._prefabRoot
 
     def getShotRatePerSecond(self):
-        return self.__defaultShotRatePerSecond * self.__getSpinningRateFactor() * self.__getTemperatureFactor()
+        return self.__shotRatePerSecond
 
     def set_defaultShotRate(self, _=None):
+        self.__collectShootingRates()
         self.__updateShootingRates()
 
     def set_stateStatus(self, _=None):
-        self._updateMechanicAvatar()
-        self._updateMechanicAppearance()
+        self._updateComponentAvatar()
+        self._updateComponentAppearance()
 
     def onDestroy(self):
         self.__shootingEvents.destroy()
@@ -64,32 +70,30 @@ class AutoShootGunController(VehicleMechanicGunPrefabComponent):
     def onDiscreteShot(self):
         self.__shootingEvents.processDiscreteShot()
 
-    def _initMechanic(self):
-        self.__updateShootingRates()
-        super(AutoShootGunController, self)._initMechanic()
+    def _initComponent(self):
+        self.__collectShootingRates()
+        super(AutoShootGunController, self)._initComponent()
 
     def _onAppearanceReady(self):
-        typeDescriptor = self.entity.typeDescriptor
-        self.__gunsGroupSize = typeDescriptor.gun.autoShoot.groupSize
+        super(AutoShootGunController, self)._onAppearanceReady()
         self.__shootingEvents.processAppearanceReady()
         self.__updateShootingRates()
-        super(AutoShootGunController, self)._onAppearanceReady()
 
-    def _onMechanicAvatarUpdate(self, player):
+    def _onComponentAvatarUpdate(self, player):
         player.getOwnVehicleShotDispersionAngle(player.gunRotator.turretRotationSpeed)
 
-    def _onMechanicAppearanceUpdate(self):
+    def _onComponentAppearanceUpdate(self):
         self.__shootingEvents.updateAutoShootingStatus(self.stateStatus)
 
-    def __getSpinningRateFactor(self):
-        spinningCtrl = self.entity.dynamicComponents.get('spinGunController', None)
-        return spinningCtrl.getSpinningValue() if spinningCtrl is not None else 1.0
+    def _collectComponentParams(self, typeDescriptor):
+        super(AutoShootGunController, self)._collectComponentParams(typeDescriptor)
+        self.__gunsGroupSize = typeDescriptor.gun.autoShoot.groupSize
+        self.__collectShootingRates()
 
-    def __getTemperatureFactor(self):
-        temperatureCtrl = self.entity.dynamicComponents.get('temperatureGunController', None)
-        return temperatureCtrl.getAutoShootRateFactor() if temperatureCtrl is not None else 1.0
+    def __collectShootingRates(self):
+        defaultShotRate = self.defaultShotRate
+        self.__groupRatePerSecond = 1.0 / defaultShotRate if defaultShotRate else 0.0
+        self.__shotRatePerSecond = self.__groupRatePerSecond * self.__gunsGroupSize
 
     def __updateShootingRates(self):
-        defaultShotRate = self.defaultShotRate
-        self.__defaultShotRatePerSecond = self.__gunsGroupSize / defaultShotRate if defaultShotRate else 0.0
         self.__shootingEvents.onShotRateUpdate(self.getShotRatePerSecond())

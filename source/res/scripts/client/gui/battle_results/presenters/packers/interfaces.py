@@ -5,7 +5,6 @@ if typing.TYPE_CHECKING:
     from frameworks.wulf import ViewModel, Array
     from gui.battle_results.stats_ctrl import BattleResults
     from gui.battle_results.reusable.shared import VehicleSummarizeInfo
-    from gui.impl.gen.view_models.views.lobby.battle_results.financial_details_model import FinancialDetailsModel
     from gui.impl.gen.view_models.views.lobby.battle_results.simple_stats_parameter_model import SimpleStatsParameterModel
     BattleResultsComponentModelType = typing.TypeVar('BattleResultsComponentModelType', bound=ViewModel)
     TooltipModelType = typing.TypeVar('TooltipModelType', bound=ViewModel)

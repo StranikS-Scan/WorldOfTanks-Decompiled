@@ -59,7 +59,7 @@ class IntroView(ViewImpl, IGlobalListener):
         super(IntroView, self)._finalize()
 
     def __handleLoadView(self, event):
-        if event.alias == VIEW_ALIAS.LOBBY_HANGAR:
+        if event.alias in (VIEW_ALIAS.LOBBY_HANGAR, VIEW_ALIAS.LEGACY_LOBBY_HANGAR):
             self.__onClose()
 
     def __onClose(self):

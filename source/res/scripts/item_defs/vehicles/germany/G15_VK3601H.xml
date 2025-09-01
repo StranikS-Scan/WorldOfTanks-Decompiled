@@ -14,7 +14,7 @@
     <backward>	14	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.065	</moving>
+    <moving>	0.066	</moving>
     <still>	0.131	</still>
     <camouflageBonus>	0.02	</camouflageBonus>
     <firePenalty>	0.197	</firePenalty>
@@ -60,7 +60,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	17450	</weight>
-    <maxHealth>	960	</maxHealth>
+    <maxHealth>	1000	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	180	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -1009,11 +1009,10 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	13000	</weight>
-      <maxLoad>	41500	</maxLoad>
-      <terrainResistance>	1.3 1.5 3.1	</terrainResistance>
+      <terrainResistance>	1.2 1.4 2.9	</terrainResistance>
       <brakeForce>	36000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	22	</rotationSpeed>
+      <rotationSpeed>	30	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.24	</vehicleMovement>
         <vehicleRotation>	0.24	</vehicleRotation>
@@ -1905,11 +1904,10 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	13000	</weight>
-      <maxLoad>	45000	</maxLoad>
       <terrainResistance>	1.2 1.4 2.9	</terrainResistance>
       <brakeForce>	40000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	24	</rotationSpeed>
+      <rotationSpeed>	33	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.22	</vehicleMovement>
         <vehicleRotation>	0.22	</vehicleRotation>
@@ -2814,7 +2812,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7680	</weight>
-      <maxHealth>	140	</maxHealth>
+      <maxHealth>	180	</maxHealth>
       <rotationSpeed>	24	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -2828,8 +2826,8 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_KwK41_L58_conic>	shared	  <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
+        <_75_55_mm_Waffe_0725>	shared	  <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	3.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2843,8 +2841,8 @@
             <gun>	20	</gun>
           </armor>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <reloadTime>	4.4	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
+          <reloadTime>	4	</reloadTime>
+          <aimingTime>	2.1	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 0.458333 8 0.472222 4 0.527778 4 0.541667 8 1 8	</maxPitch>
@@ -2905,7 +2903,7 @@
             <density>	104.214 118.008	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_75mm_KwK41_L58_conic>
+        </_75_55_mm_Waffe_0725>
       </guns>
       <models>
         <undamaged>	vehicles/german/G15_VK3601H/normal/lod0/Turret_01.model	</undamaged>
@@ -3363,7 +3361,7 @@
       <level>	6	</level>
       <price>	14560	</price>
       <unlocks>
-        <gun>	_88mm_KwK_36_L56	  <cost>	9500	</cost>
+        <gun>	_88mm_Kw_K_36_L_56_3601	  <cost>	9500	</cost>
         </gun>
       </unlocks>
       <armor>
@@ -3384,7 +3382,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	8250	</weight>
-      <maxHealth>	240	</maxHealth>
+      <maxHealth>	250	</maxHealth>
       <rotationSpeed>	24	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -3399,7 +3397,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.866	</invisibilityFactor>
       <guns>
-        <_75mm_KwK41_L58_conic>	shared	  <armor>
+        <_75_55_mm_Waffe_0725>	shared	  <armor>
             <armor_1>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -3409,12 +3407,12 @@
             <gun>	20	</gun>
           </armor>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <reloadTime>	4.2	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
+          <reloadTime>	4	</reloadTime>
+          <aimingTime>	2.1	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <maxAmmo>	85	</maxAmmo>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	3.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -3476,8 +3474,8 @@
             <density>	104.214 118.008	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_75mm_KwK41_L58_conic>
-        <_88mm_KwK_36_L56>	shared	  <unlocks>
+        </_75_55_mm_Waffe_0725>
+        <_88mm_Kw_K_36_L_56_3601>	shared	  <unlocks>
             <vehicle>	G04_PzVI_Tiger_I	  <cost>	45050	</cost>
             </vehicle>
           </unlocks>
@@ -3558,7 +3556,7 @@
             <density>	115.771 105.836	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_88mm_KwK_36_L56>
+        </_88mm_Kw_K_36_L_56_3601>
       </guns>
       <models>
         <undamaged>	vehicles/german/G15_VK3601H/normal/lod0/Turret_02.model	</undamaged>
@@ -4059,11 +4057,11 @@
     <detailed>
       <engines>
         <Maybach_HL_174_V1>
-          <smplEnginePower>	450	</smplEnginePower>
+          <smplEnginePower>	510	</smplEnginePower>
           <smplFwMaxSpeed>	50.5	</smplFwMaxSpeed>
         </Maybach_HL_174_V1>
         <Maybach_HL_174>
-          <smplEnginePower>	528.6406	</smplEnginePower>
+          <smplEnginePower>	550	</smplEnginePower>
           <smplFwMaxSpeed>	50.5	</smplFwMaxSpeed>
         </Maybach_HL_174>
       </engines>
@@ -4071,13 +4069,13 @@
         <Chassis_G15_VK3601H>
           <grounds>
             <soft>
-              <rollingFriction>	0.24955	</rollingFriction>
+              <rollingFriction>	0.23345	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.12075	</rollingFriction>
+              <rollingFriction>	0.1127	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.0966	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_G15_VK3601H>

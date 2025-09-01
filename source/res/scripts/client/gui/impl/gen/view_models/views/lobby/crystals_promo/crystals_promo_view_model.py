@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/crystals_promo/crystals_promo_view_model.py
 from frameworks.wulf import ViewModel
-from gui.impl.wrappers.user_list_model import UserListModel
 from gui.impl.gen.view_models.views.lobby.crystals_promo.battle_type_model import BattleTypeModel
 
 class CrystalsPromoViewModel(ViewModel):
@@ -14,11 +13,11 @@ class CrystalsPromoViewModel(ViewModel):
         super(CrystalsPromoViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
-    def battleTypes(self):
+    def battleType(self):
         return self._getViewModel(0)
 
     @staticmethod
-    def getBattleTypesType():
+    def getBattleTypeType():
         return BattleTypeModel
 
     def getSelectedTab(self):
@@ -59,7 +58,7 @@ class CrystalsPromoViewModel(ViewModel):
 
     def _initialize(self):
         super(CrystalsPromoViewModel, self)._initialize()
-        self._addViewModelProperty('battleTypes', UserListModel())
+        self._addViewModelProperty('battleType', BattleTypeModel())
         self._addNumberProperty('selectedTab', 0)
         self._addStringProperty('instructionPrice', '')
         self._addStringProperty('vehiclePrice', '')

@@ -22,7 +22,7 @@ class FrontlineAimDamagePlugin(AimDamagePlugin):
 
     def __onDestructibleEntityFeedbackReceived(self, eventID, _, value):
         if eventID in self._DAMAGE_EVENTS:
-            self._invalidateAimDamage(value)
+            self._invalidateAimDamage(*value)
 
 
 class FrontlineCrosshairPanelContainer(CrosshairPanelContainer):

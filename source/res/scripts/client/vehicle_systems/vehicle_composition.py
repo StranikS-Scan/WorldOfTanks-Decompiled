@@ -42,7 +42,7 @@ class VehicleSlots(enum.Enum):
 
 
 def removeComposition(gameObject):
-    gameObject.removeComponentByType(Compound.CompoundBasedComposerComponent)
+    gameObject.removeComponent(Compound.CompoundBasedComposerComponent)
 
 
 def createVehicleComposition(gameObject, vehicleGameObject=CGF.GameObject.INVALID_GAME_OBJECT, prefabMap=None, followNodes=True, extraSlots=None, dynSlotNodes=None):

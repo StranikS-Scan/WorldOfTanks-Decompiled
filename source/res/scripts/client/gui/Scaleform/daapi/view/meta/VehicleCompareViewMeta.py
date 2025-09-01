@@ -4,9 +4,6 @@ from gui.Scaleform.daapi.view.meta.VehicleCompareCommonViewMeta import VehicleCo
 
 class VehicleCompareViewMeta(VehicleCompareCommonViewMeta):
 
-    def onBackClick(self):
-        self._printOverrideError('onBackClick')
-
     def onGoToPreviewClick(self, index):
         self._printOverrideError('onGoToPreviewClick')
 
@@ -30,9 +27,6 @@ class VehicleCompareViewMeta(VehicleCompareCommonViewMeta):
 
     def onRemoveAllVehicles(self):
         self._printOverrideError('onRemoveAllVehicles')
-
-    def as_setStaticDataS(self, data):
-        return self.flashObject.as_setStaticData(data) if self._isDAAPIInited() else None
 
     def as_setParamsDeltaS(self, data):
         return self.flashObject.as_setParamsDelta(data) if self._isDAAPIInited() else None

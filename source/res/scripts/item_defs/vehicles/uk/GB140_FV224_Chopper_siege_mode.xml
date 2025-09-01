@@ -622,8 +622,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	12500	</weight>
-      <maxLoad>	65000	</maxLoad>
-      <terrainResistance>	1.3 1.4 2	</terrainResistance>
+      <terrainResistance>	1.2 1.3 1.9	</terrainResistance>
       <brakeForce>	60000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	20	</rotationSpeed>
@@ -1400,7 +1399,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	13000	</weight>
-      <maxLoad>	65000	</maxLoad>
       <terrainResistance>	1.2 1.3 1.9	</terrainResistance>
       <brakeForce>	60000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -2215,7 +2213,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	13000	</weight>
-      <maxHealth>	160	</maxHealth>
+      <maxHealth>	200	</maxHealth>
       <rotationSpeed>	20	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	125	</maxHealth>
@@ -2257,7 +2255,7 @@
             <shootImpulse>	150	</shootImpulse>
           </twinGun>
           <prefabs>
-            <main>	content/CGFPrefabs/Vehicle/guns/uk/Twin_20pdr_Gun_MBC.prefab	</main>
+            <main>	content/CGFPrefabs/Vehicle/guns/uk/gun_Twin_20pdr_Gun_MBC.prefab	</main>
           </prefabs>
           <customizationSlots>
             <slot>
@@ -2845,7 +2843,7 @@
             <shootImpulse>	150	</shootImpulse>
           </twinGun>
           <prefabs>
-            <main>	content/CGFPrefabs/Vehicle/guns/uk/Twin_20pdr_Gun_MBC.prefab	</main>
+            <main>	content/CGFPrefabs/Vehicle/guns/uk/gun_Twin_20pdr_Gun_MBC.prefab	</main>
           </prefabs>
           <customizationSlots>
             <slot>
@@ -3337,13 +3335,13 @@
         <Chassis_GB140_FV224_Chopper>
           <grounds>
             <soft>
-              <rollingFriction>	0.161	</rollingFriction>
+              <rollingFriction>	0.15295	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1127	</rollingFriction>
+              <rollingFriction>	0.10465	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.0966	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

@@ -102,7 +102,7 @@ def updateVehicleBoughtListAchievements(dossierDescr, vehDescr):
     if vehDescr.type.isCollectorVehicle or vehDescr.type.isPremium:
         return
     level = vehDescr.level
-    if 5 <= level <= 10:
+    if 5 <= level <= 11:
         medalName = 'steamGetTankLevel{0}Medal'.format(level)
         if not dossierDescr['steamAchievements'][medalName]:
             dossierDescr['steamAchievements'][medalName] = True

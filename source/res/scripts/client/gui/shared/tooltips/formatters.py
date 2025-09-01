@@ -491,14 +491,15 @@ def packMissionVehiclesTypeBlockData(listData, linkage=BLOCKS_TOOLTIP_TYPES.TOOL
      'rowHeight': 70}, padding)
 
 
-def packAwardsExBlockData(listData, columnWidth, rowHeight, horizontalGap=0, renderersAlign=RENDERERS_ALIGN_LEFT, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TILE_LIST_BLOCK_LINKAGE, padding=None):
+def packAwardsExBlockData(listData, columnWidth, rowHeight, horizontalGap=0, verticalGap=0, renderersAlign=RENDERERS_ALIGN_LEFT, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TILE_LIST_BLOCK_LINKAGE, padding=None):
     return packBlockDataItem(linkage, {'dataType': 'net.wg.gui.lobby.components.data.AwardItemRendererExVO',
      'rendererType': 'AwardItemRendererExUI',
      'listIconSrc': listData,
      'columnWidth': columnWidth,
      'rowHeight': rowHeight,
      'renderersAlign': renderersAlign,
-     'horizontalGap': horizontalGap}, padding)
+     'horizontalGap': horizontalGap,
+     'verticalGap': verticalGap}, padding)
 
 
 def getActionPriceData(item):

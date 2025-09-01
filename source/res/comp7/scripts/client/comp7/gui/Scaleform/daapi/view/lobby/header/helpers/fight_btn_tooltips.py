@@ -53,6 +53,9 @@ def getComp7FightBtnTooltipData(result, isInSquad):
     elif state == PRE_QUEUE_RESTRICTION.MODE_IS_IN_PREANNOUNCE:
         header = backport.text(resShortCut.comp7Preannounce.header())
         body = backport.text(resShortCut.comp7Preannounce.body())
+    elif state == UNIT_RESTRICTION.VEHICLE_WRONG_MODE:
+        header = backport.text(R.strings.tooltips.redButton.disabled.vehicle.not_supported.header())
+        body = backport.text(R.strings.tooltips.redButton.disabled.vehicle.not_supported.body())
     else:
         return getRandomTooltipData(result, isInSquad)
     return makeTooltip(header, body)

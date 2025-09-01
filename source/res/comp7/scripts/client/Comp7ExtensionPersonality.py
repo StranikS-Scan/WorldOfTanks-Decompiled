@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/Comp7ExtensionPersonality.py
 from comp7.gui import comp7_constants
+from comp7_core.gui import initCoreGuiTypes
 from comp7.gui.Scaleform import registerComp7Scaleform
-from comp7.gui.comp7_constants import PREBATTLE_ACTION_NAME
+from comp7.gui.comp7_constants import PREBATTLE_ACTION_NAME, COMP7_ENTRY_POINT_ALIAS
 from comp7.gui.impl.battle import registerComp7Battle
 from comp7.gui.impl.lobby import registerComp7Lobby
 from comp7.gui.prb_control import registerComp7OthersPrbParams
@@ -10,20 +11,22 @@ from comp7_common import comp7_constants as comp7_common_constants
 from comp7_common import injectConsts, injectSquadConsts
 from comp7_common.comp7_battle_mode import Comp7BattleMode
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.game_control.wotlda.constants import SupportedWotldaLoadoutType
 from gui.override_scaleform_views_manager import g_overrideScaleFormViewsConfig
-from gui.prb_control.prb_utils import initGuiTypes, initRequestType, initBattleCtrlIDs
-_LOBBY_EXT_PACKAGES = ['comp7.gui.Scaleform.daapi.view.lobby.profile', 'comp7.gui.Scaleform.daapi.view.lobby.header', 'comp7.gui.Scaleform.daapi.view.lobby.missions.regular']
+from gui.prb_control.prb_utils import initGuiTypes, initRequestType
+_LOBBY_EXT_PACKAGES = ['comp7.gui.Scaleform.daapi.view.lobby.profile',
+ 'comp7.gui.Scaleform.daapi.view.lobby.header',
+ 'comp7.gui.Scaleform.daapi.view.lobby.missions.regular',
+ 'comp7.gui.impl.lobby.hangar']
 _BATTLE_EXT_PACKAGES = ['comp7.gui.Scaleform.daapi.view.battle.shared']
 
 class ClientComp7BattleMode(Comp7BattleMode):
     _CLIENT_BATTLE_PAGE = VIEW_ALIAS.COMP7_BATTLE_PAGE
     _CLIENT_PRB_ACTION_NAME = PREBATTLE_ACTION_NAME.COMP7
     _CLIENT_PRB_ACTION_NAME_SQUAD = PREBATTLE_ACTION_NAME.COMP7_SQUAD
-    _CLIENT_BANNER_ENTRY_POINT_ALIAS = HANGAR_ALIASES.COMP7_ENTRY_POINT
     _CLIENT_REPLAY_MODE_TAG = 'Onslaught'
     _CLIENT_GAME_SEASON_TYPE = comp7_common_constants.GameSeasonType.COMP7
+    _CLIENT_BANNER_ENTRY_POINT_ALIAS = COMP7_ENTRY_POINT_ALIAS
 
     @property
     def _client_prbEntityClass(self):
@@ -64,6 +67,16 @@ class ClientComp7BattleMode(Comp7BattleMode):
         return Comp7ModeSelectorItem
 
     @property
+    def _client_bannerEntryPointValidatorMethod(self):
+        from comp7.gui.impl.lobby.comp7_event_banner import Comp7EventBanner
+        return Comp7EventBanner.isEntryPointAvailable
+
+    @property
+    def _client_hangarEventBannerType(self):
+        from comp7.gui.impl.lobby.comp7_event_banner import Comp7EventBanner
+        return Comp7EventBanner
+
+    @property
     def _client_prbSquadEntityClass(self):
         from comp7.gui.prb_control.entities.squad.entity import Comp7SquadEntity
         return Comp7SquadEntity
@@ -87,16 +100,6 @@ class ClientComp7BattleMode(Comp7BattleMode):
     def _client_arenaDescrClass(self):
         from comp7.gui.battle_control.arena_info.arena_descrs import Comp7BattlesDescription
         return Comp7BattlesDescription
-
-    @property
-    def _client_bannerEntryPointLUIRule(self):
-        from gui.limited_ui.lui_rules_storage import LUI_RULES
-        return LUI_RULES.Comp7EntryPoint
-
-    @property
-    def _client_bannerEntryPointValidatorMethod(self):
-        from comp7.gui.Scaleform.daapi.view.lobby.comp7_entry_point import isComp7EntryPointAvailable
-        return isComp7EntryPointAvailable
 
     @property
     def _client_platoonLayouts(self):
@@ -142,9 +145,9 @@ class ClientComp7BattleMode(Comp7BattleMode):
     @property
     def _client_battleResultsReusables(self):
         from gui.battle_results.reusable.extension_utils import ReusableInfoFactory
-        from comp7.gui.battle_results.reusable.shared import Comp7VehicleDetailedInfo, Comp7VehicleSummarizeInfo
-        return {ReusableInfoFactory.Keys.VEHICLE_DETAILED: Comp7VehicleDetailedInfo,
-         ReusableInfoFactory.Keys.VEHICLE_SUMMARIZED: Comp7VehicleSummarizeInfo}
+        from comp7_core.gui.battle_results.reusable.shared import Comp7CoreVehicleDetailedInfo, Comp7CoreVehicleSummarizeInfo
+        return {ReusableInfoFactory.Keys.VEHICLE_DETAILED: Comp7CoreVehicleDetailedInfo,
+         ReusableInfoFactory.Keys.VEHICLE_SUMMARIZED: Comp7CoreVehicleSummarizeInfo}
 
     @property
     def _client_battleControllersRepository(self):
@@ -175,7 +178,7 @@ class ClientComp7BattleMode(Comp7BattleMode):
 
     @property
     def _client_DynamicObjectCacheClass(self):
-        from comp7.comp7_dyn_objects_cache import Comp7DynObjects
+        from comp7_core.comp7_dyn_objects_cache import Comp7DynObjects
         return Comp7DynObjects
 
     @property
@@ -185,11 +188,21 @@ class ClientComp7BattleMode(Comp7BattleMode):
 
     @property
     def _client_battleRequiredLibraries(self):
-        return ['comp7|comp7_battle.swf', 'comp7|minimapEntriesLibrary.swf']
+        return ['comp7|comp7_battle.swf', 'comp7_core|minimapEntriesLibrary.swf']
 
     @property
     def _client_lobbyRequiredLibraries(self):
         return ['comp7|comp7_lobby.swf']
+
+    @property
+    def _client_bonusTokens(self):
+        from comp7.gui.server_events.bonuses import isComp7WeeklyQuestToken, Comp7TokenWeeklyRewardBonus
+        return [(isComp7WeeklyQuestToken, Comp7TokenWeeklyRewardBonus)]
+
+    @property
+    def _client_viewsForMonitoring(self):
+        from comp7.gui.Scaleform.genConsts.COMP7_HANGAR_ALIASES import COMP7_HANGAR_ALIASES
+        return [COMP7_HANGAR_ALIASES.COMP7_LOBBY_HANGAR]
 
     def registerAdditionalScaleformRequiredLibraries(self):
         from comp7_common.comp7_constants import ARENA_GUI_TYPE
@@ -242,10 +255,9 @@ class ClientComp7BattleMode(Comp7BattleMode):
 def preInit():
     injectConsts(__name__)
     injectSquadConsts(__name__)
+    initCoreGuiTypes(__name__)
     initGuiTypes(comp7_constants, __name__)
     initRequestType(comp7_constants, __name__)
-    initBattleCtrlIDs(comp7_constants, __name__)
-    comp7_constants.initComp7LimitedUIIds()
     battleMode = ClientComp7BattleMode(__name__)
     battleMode.registerCommon()
     battleMode.registerClient()
@@ -253,8 +265,10 @@ def preInit():
     battleMode.registerClientSelector()
     battleMode.registerClientHangarPresets()
     battleMode.registerBannerEntryPointValidatorMethod()
-    battleMode.registerBannerEntryPointLUIRule()
+    battleMode.registerHangarEventBanner()
     battleMode.registerProviderBattleQueue()
+    battleMode.registerClientBonusTokens()
+    battleMode.registerClientViewsForMonitoring()
     battleMode.registerSquadTypes()
     battleMode.registerClientPlatoon()
     battleMode.registerClientSquadSelector()

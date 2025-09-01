@@ -80,7 +80,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	4923	</weight>
-    <maxHealth>	188	</maxHealth>
+    <maxHealth>	192	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	65	</maxHealth>
       <maxRegenHealth>	45	</maxRegenHealth>
@@ -1015,7 +1015,6 @@
         <rightTrack>	5	</rightTrack>
       </armor>
       <weight>	800	</weight>
-      <maxLoad>	8600	</maxLoad>
       <terrainResistance>	1 1.2 2.1	</terrainResistance>
       <brakeForce>	6600	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -1790,8 +1789,8 @@
               <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
             </gun>
           </armor>
-          <shotDispersionRadius>	0.54	</shotDispersionRadius>
-          <reloadTime>	2.5	</reloadTime>
+          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <reloadTime>	2	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	3.5	</afterShot>
@@ -1958,7 +1957,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_3	</primaryArmor>
       <weight>	200	</weight>
-      <maxHealth>	47	</maxHealth>
+      <maxHealth>	48	</maxHealth>
       <rotationSpeed>	34	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	50	</maxHealth>
@@ -2365,7 +2364,7 @@
     <detailed>
       <engines>
         <_Renault_NC>
-          <smplEnginePower>	79.29608	</smplEnginePower>
+          <smplEnginePower>	85	</smplEnginePower>
           <smplFwMaxSpeed>	25	</smplFwMaxSpeed>
         </_Renault_NC>
       </engines>

@@ -70,7 +70,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_5 armor_4	</primaryArmor>
     <weight>	22100	</weight>
-    <maxHealth>	880	</maxHealth>
+    <maxHealth>	1040	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	180	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -1153,13 +1153,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_SU-101>
-      <userString>	#ussr_vehicles:Chassis_SU-101	</userString>
+    <Chassis_R58_SU-101>
+      <userString>	#ussr_vehicles:Chassis_R58_SU-101	</userString>
       <tags></tags>
       <level>	7	</level>
       <price>	22200	</price>
       <unlocks>
-        <chassis>	Chassis_SU-101_2	  <cost>	16000	</cost>
+        <chassis>	Chassis_R58_SU-101_2	  <cost>	16000	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1167,8 +1167,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	8500	</weight>
-      <maxLoad>	34500	</maxLoad>
-      <terrainResistance>	1.1 1.4 2.2	</terrainResistance>
+      <terrainResistance>	1 1.2 2	</terrainResistance>
       <brakeForce>	33000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	23	</rotationSpeed>
@@ -2014,9 +2013,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	5.71428585	</repairTime>
-    </Chassis_SU-101>
-    <Chassis_SU-101_2>
-      <userString>	#ussr_vehicles:Chassis_SU-101_2	</userString>
+    </Chassis_R58_SU-101>
+    <Chassis_R58_SU-101_2>
+      <userString>	#ussr_vehicles:Chassis_R58_SU-101_2	</userString>
       <tags></tags>
       <level>	8	</level>
       <price>	35000	</price>
@@ -2025,7 +2024,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	8500	</weight>
-      <maxLoad>	37500	</maxLoad>
       <terrainResistance>	1 1.2 2	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2872,11 +2870,11 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	5.71428585	</repairTime>
-    </Chassis_SU-101_2>
+    </Chassis_R58_SU-101_2>
   </chassis>
   <turrets0>
-    <Turret_1_SU-101>
-      <userString>	#ussr_vehicles:Turret_1_SU-101	</userString>
+    <Turret_1_R58_SU-101>
+      <userString>	#ussr_vehicles:Turret_1_R58_SU-101	</userString>
       <tags>	cannotDetach	</tags>
       <level>	8	</level>
       <notInShop>	true	</notInShop>
@@ -2885,27 +2883,27 @@
         <armor_1>	0	</armor_1>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	220	</maxHealth>
+      <maxHealth>	260	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	155	</maxHealth>
+        <maxRegenHealth>	78	</maxRegenHealth>
+        <repairCost>	8	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	350	</circularVisionRadius>
+      <circularVisionRadius>	360	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_100mm_D10S_obr_44>	shared	  <maxAmmo>	36	</maxAmmo>
+        <_100mm_D_10S_mod_1944>	shared	  <maxAmmo>	36	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -18.5 1 -18.5	</minPitch>
             <maxPitch>	0 3 1 3	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <gun>	_100mm_D54S	  <cost>	19400	</cost>
+            <gun>	_122mm_M62_S2_SU_101	  <cost>	64000	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -2917,9 +2915,9 @@
             </armor_3>
             <gun>	40	</gun>
           </armor>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <aimingTime>	2.3	</aimingTime>
-          <reloadTime>	7.1	</reloadTime>
+          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <aimingTime>	2.1	</aimingTime>
+          <reloadTime>	8.7	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	3	</afterShot>
@@ -3002,218 +3000,8 @@
             <density>	119.72 139.251	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_100mm_D10S_obr_44>
-        <_100mm_D54S>	shared	  <maxAmmo>	36	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -18.5 1 -18.5	</minPitch>
-            <maxPitch>	0 3 1 3	</maxPitch>
-          </pitchLimits>
-          <unlocks>
-            <gun>	_122mm_D_25_SU_101	  <cost>	46200	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	260	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	240	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <gun>	40	</gun>
-          </armor>
-          <reloadTime>	9.1	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
-          <shotDispersionRadius>	0.39	</shotDispersionRadius>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	3	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <invisibilityFactorAtShot>	0.154	</invisibilityFactorAtShot>
-          <turretYawLimits>	-10 12	</turretYawLimits>
-          <models>
-            <undamaged>	vehicles/russian/R58_SU-101/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/russian/R58_SU-101/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/russian/R58_SU-101/crash/lod0/Gun_03.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/russian/R58_SU-101/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R58_SU-101/collision_client/Gun_03.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_mainext_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.073777 -0.101484 2.57648	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0.075601 0.253903 0.581836	</anchorPosition>
-              <anchorDirection>	0.000036 0.765618 0.643296	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.073777 -0.101484 2.57648	</anchorPosition>
-              <anchorDirection>	-0 -0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	-0.000221 1.5351 -0.448039	</position>
-              <rotation>	0.603335 -0.000116 3.14155	</rotation>
-              <scale>	2.01519 1.32737 2.0152	</scale>
-              <showOn>	4112	</showOn>
-              <clipAngle>	0.007222	</clipAngle>
-              <anchorShift>	0.704134	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.000058 1.76711 -0.405746	</position>
-              <rotation>	1.17759 -0.000188 3.14147	</rotation>
-              <scale>	1.00592 0.950444 1.00592	</scale>
-              <showOn>	4112	</showOn>
-              <clipAngle>	0.980206	</clipAngle>
-              <anchorShift>	0.486836	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.077088 -0.096678 1.37	</rayStart>
-              <rayEnd>	0.077088 -0.096678 1.939	</rayEnd>
-              <rayUp>	0.125 0 0	</rayUp>
-              <size>	0.569	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <shotOffset>	0.077089 -0.119590 0.000000	</shotOffset>
-          <camouflage>
-            <tiling>	0.895 0.895 0.000000 0.000000	</tiling>
-            <density>	123.632 124.935	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_100mm_D54S>
-        <_122mm_D_25_SU_101>	shared	  <maxAmmo>	28	</maxAmmo>
-          <unlocks>
-            <gun>	_122mm_M62-T2S	  <cost>	64000	</cost>
-            </gun>
-          </unlocks>
-          <pitchLimits>
-            <minPitch>	0 -18.3 1 -18.3	</minPitch>
-            <maxPitch>	0 3 1 3	</maxPitch>
-          </pitchLimits>
-          <armor>
-            <armor_1>	260	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	240	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <gun>	40	</gun>
-          </armor>
-          <shotDispersionRadius>	0.44	</shotDispersionRadius>
-          <reloadTime>	11.1	</reloadTime>
-          <aimingTime>	2.5	</aimingTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
-          <turretYawLimits>	-10 12	</turretYawLimits>
-          <models>
-            <undamaged>	vehicles/russian/R58_SU-101/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/russian/R58_SU-101/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/russian/R58_SU-101/crash/lod0/Gun_02.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/russian/R58_SU-101/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R58_SU-101/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_large_mb	</effects>
-          <reloadEffect>	reload115_152	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.074883 -0.100275 2.26118	</anchorPosition>
-              <anchorDirection>	-0 -0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0.071517 0.254631 0.581422	</anchorPosition>
-              <anchorDirection>	0.000036 0.770277 0.63771	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.074883 -0.100275 2.26118	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	-0.000221 1.5351 -0.448039	</position>
-              <rotation>	0.603335 -0.000116 3.14155	</rotation>
-              <scale>	2.01519 1.32737 2.0152	</scale>
-              <showOn>	4112	</showOn>
-              <clipAngle>	0.007222	</clipAngle>
-              <anchorShift>	0.704134	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.000058 1.76711 -0.405746	</position>
-              <rotation>	1.17759 -0.000188 3.14147	</rotation>
-              <scale>	1.00592 0.950444 1.00592	</scale>
-              <showOn>	4112	</showOn>
-              <clipAngle>	0.980206	</clipAngle>
-              <anchorShift>	0.486836	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.076606 -0.099412 1.43081	</rayStart>
-              <rayEnd>	0.076606 -0.099412 1.99981	</rayEnd>
-              <rayUp>	0.11 0 0	</rayUp>
-              <size>	0.569	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <shotOffset>	0.076622 -0.118698 0.000000	</shotOffset>
-          <camouflage>
-            <tiling>	0.985 0.985 0.000000 0.000000	</tiling>
-            <density>	131.443 127.826	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_122mm_D_25_SU_101>
-        <_122mm_M62-T2S>	shared	  <maxAmmo>	28	</maxAmmo>
+        </_100mm_D_10S_mod_1944>
+        <_122mm_M62_S2_SU_101>	shared	  <maxAmmo>	28	</maxAmmo>
           <unlocks>
             <vehicle>	R93_Object263	  <cost>	152800	</cost>
             </vehicle>
@@ -3317,7 +3105,7 @@
             <density>	107.7 130.605	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_122mm_M62-T2S>
+        </_122mm_M62_S2_SU_101>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R58_SU-101/normal/lod0/Turret_01.model	</undamaged>
@@ -3337,54 +3125,36 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-    </Turret_1_SU-101>
+    </Turret_1_R58_SU-101>
   </turrets0>
   <engines>
-    <V-2-44>	shared	  <unlocks>
-        <engine>	V-2-54	  <cost>	25200	</cost>
+    <V_2_44_SU_101>	shared	  <unlocks>
+        <engine>	V_2_54_SU_101	  <cost>	25200	</cost>
         </engine>
       </unlocks>
-    </V-2-44>
-    <V-2-54>	shared	</V-2-54>
+    </V_2_44_SU_101>
+    <V_2_54_SU_101>	shared	</V_2_54_SU_101>
   </engines>
   <fuelTanks>
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <_9RM>	shared	  <unlocks>
-        <radio>	R113	  <cost>	8700	</cost>
-        </radio>
-      </unlocks>
-    </_9RM>
     <R113>	shared	</R113>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <V-2-44>
+        <V_2_44_SU_101>
           <smplEnginePower>	560	</smplEnginePower>
           <smplFwMaxSpeed>	54	</smplFwMaxSpeed>
-        </V-2-44>
-        <V-2-54>
+        </V_2_44_SU_101>
+        <V_2_54_SU_101>
           <smplEnginePower>	620	</smplEnginePower>
           <smplFwMaxSpeed>	54	</smplFwMaxSpeed>
-        </V-2-54>
+        </V_2_54_SU_101>
       </engines>
       <chassis>
-        <Chassis_SU-101>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.1771	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.1127	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
-            </firm>
-          </grounds>
-        </Chassis_SU-101>
-        <Chassis_SU-101_2>
+        <Chassis_R58_SU-101>
           <grounds>
             <soft>
               <rollingFriction>	0.161	</rollingFriction>
@@ -3396,15 +3166,28 @@
               <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_SU-101_2>
+        </Chassis_R58_SU-101>
+        <Chassis_R58_SU-101_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.161	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.0966	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0805	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_R58_SU-101_2>
       </chassis>
     </detailed>
   </physics>
   <clientAdjustmentFactors>
     <guns>
-      <_122mm_M62-T2S>
+      <_122mm_M62_S2_SU_101>
         <delta>	1.2	</delta>
-      </_122mm_M62-T2S>
+      </_122mm_M62_S2_SU_101>
     </guns>
     <armour>	1.059376133	</armour>
   </clientAdjustmentFactors>

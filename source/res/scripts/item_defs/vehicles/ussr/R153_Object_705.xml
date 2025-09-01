@@ -14,7 +14,7 @@
     <backward>	15	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.054	</moving>
+    <moving>	0.055	</moving>
     <still>	0.109	</still>
     <camouflageBonus>	0.02	</camouflageBonus>
     <firePenalty>	0.164	</firePenalty>
@@ -64,7 +64,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_16 armor_4	</primaryArmor>
     <weight>	34610	</weight>
-    <maxHealth>	1520	</maxHealth>
+    <maxHealth>	1680	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	210	</maxHealth>
       <maxRegenHealth>	140	</maxRegenHealth>
@@ -1031,7 +1031,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	65000	</maxLoad>
       <terrainResistance>	1.3 1.8 3.1	</terrainResistance>
       <brakeForce>	65000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -2018,7 +2017,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	70000	</maxLoad>
       <terrainResistance>	1.3 1.8 3.1	</terrainResistance>
       <brakeForce>	65000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -3002,6 +3000,10 @@
       <tags></tags>
       <level>	8	</level>
       <price>	31000	</price>
+      <unlocks>
+        <turret>	Turret_2_R153_Object_705	  <cost>	26500	</cost>
+        </turret>
+      </unlocks>
       <armor>
         <armor_1>	270	</armor_1>
         <armor_2>	240	</armor_2>
@@ -3020,7 +3022,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_12 armor_3	</primaryArmor>
       <weight>	12000	</weight>
-      <maxHealth>	380	</maxHealth>
+      <maxHealth>	320	</maxHealth>
       <rotationSpeed>	24	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	160	</maxHealth>
@@ -3034,149 +3036,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_122mm_D_25BM>	shared	  <maxAmmo>	40	</maxAmmo>
-          <unlocks>
-            <gun>	_122mm_BL_13_1_A	  <cost>	56000	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	270	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	180	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <gun>	50	</gun>
-          </armor>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 5 1 5	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	4	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <models>
-            <undamaged>	vehicles/russian/R153_Object_705/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/russian/R153_Object_705/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/russian/R153_Object_705/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/russian/R153_Object_705/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R153_Object_705/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_large_mb	</effects>
-          <reloadEffect>	reload115_152	</reloadEffect>
-          <drivenJoints>
-            <master>
-              <node>	Gun	</node>
-              <table>
-                <row>	-20	</row>
-                <row>	-10	</row>
-                <row>	0	</row>
-                <row>	5	</row>
-              </table>
-              <slaves>
-                <slave>
-                  <node>	Static_T1	</node>
-                  <table>
-                    <row>	-6.471	</row>
-                    <row>	-2.607	</row>
-                    <row>	0	</row>
-                    <row>	3.76	</row>
-                  </table>
-                </slave>
-              </slaves>
-            </master>
-          </drivenJoints>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.017298 -0.013822 2.2992	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.247167 0.247168	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.017298 -0.013822 2.2992	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	-0.00025 1.56964 0.222988	</position>
-              <rotation>	0.47629 0.000091 3.14148	</rotation>
-              <scale>	3.68 2.00084 3.68008	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	1.00523	</clipAngle>
-              <anchorShift>	0.840347	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.00024 1.56745 0.475495	</position>
-              <rotation>	0.657111 0.000115 3.14148	</rotation>
-              <scale>	3.40295 1.85019 3.40299	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.869891	</clipAngle>
-              <anchorShift>	0.897722	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45002	</slotId>
-              <tags>	formfactor_rect1x3	</tags>
-              <position>	-0.000252 2.06494 0.600621	</position>
-              <rotation>	0.576229 0.000099 3.14148	</rotation>
-              <scale>	2.94026 1.59863 2.94031	</scale>
-              <showOn>	4352	</showOn>
-              <clipAngle>	0.869891	</clipAngle>
-              <anchorShift>	0.289064	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.034595 -0.027644 1.58	</rayStart>
-              <rayEnd>	0.034595 -0.027644 2.329	</rayEnd>
-              <rayUp>	0.11 0 0	</rayUp>
-              <size>	0.749	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.5 0.5 0.000000 0.000000	</tiling>
-            <density>	102.508 106.975	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_122mm_D_25BM>
-        <_122mm_BL_13_1_A>	shared	  <maxAmmo>	40	</maxAmmo>
-          <unlocks>
-            <turret>	Turret_2_R153_Object_705	  <cost>	26500	</cost>
-            </turret>
-          </unlocks>
+        <_122mm_BL_13_1_705>	shared	  <maxAmmo>	40	</maxAmmo>
           <armor>
             <armor_1>	270	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3309,7 +3169,7 @@
             <density>	92.4891 113.199	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_122mm_BL_13_1_A>
+        </_122mm_BL_13_1_705>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R153_Object_705/normal/lod0/Turret_01.model	</undamaged>
@@ -3963,7 +3823,7 @@
       <level>	9	</level>
       <price>	63500	</price>
       <unlocks>
-        <gun>	_130mm_S-70	  <cost>	61000	</cost>
+        <gun>	_130mm_S_70_705	  <cost>	61000	</cost>
         </gun>
       </unlocks>
       <armor>
@@ -3985,7 +3845,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_12 armor_3	</primaryArmor>
       <weight>	14000	</weight>
-      <maxHealth>	480	</maxHealth>
+      <maxHealth>	420	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	160	</maxHealth>
@@ -4000,153 +3860,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.014	</invisibilityFactor>
       <guns>
-        <_122mm_D_25BM>	shared	  <maxAmmo>	40	</maxAmmo>
-          <armor>
-            <armor_1>	300	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	180	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	240	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_7>
-            <armor_8>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_8>
-            <armor_9>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_9>
-            <armor_10>	270	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_10>
-            <armor_11>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_11>
-            <gun>	50	</gun>
-          </armor>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 5 1 5	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	4	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <models>
-            <undamaged>	vehicles/russian/R153_Object_705/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/russian/R153_Object_705/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/russian/R153_Object_705/crash/lod0/Gun_03.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/russian/R153_Object_705/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R153_Object_705/collision_client/Gun_03.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_large_mb	</effects>
-          <reloadEffect>	reload115_152	</reloadEffect>
-          <drivenJoints>
-            <master>
-              <node>	Gun	</node>
-              <table>
-                <row>	-20	</row>
-                <row>	-10	</row>
-                <row>	0	</row>
-                <row>	5	</row>
-              </table>
-              <slaves>
-                <slave>
-                  <node>	Static_T2	</node>
-                  <table>
-                    <row>	-17	</row>
-                    <row>	-9.3	</row>
-                    <row>	0	</row>
-                    <row>	4.9	</row>
-                  </table>
-                </slave>
-              </slaves>
-            </master>
-          </drivenJoints>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.007361 -0.002515 2.24862	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.275894 0.275894	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.007361 -0.002515 2.24862	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	-0.000215 1.44319 0.556306	</position>
-              <rotation>	0.47629 0.000091 3.14148	</rotation>
-              <scale>	3.68001 2.00084 3.68008	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.670181	</clipAngle>
-              <anchorShift>	0.940763	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.000205 1.48452 0.786272	</position>
-              <rotation>	0.657111 0.000107 3.14147	</rotation>
-              <scale>	3.50778 1.90719 3.50782	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.869891	</clipAngle>
-              <anchorShift>	0.924547	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45002	</slotId>
-              <tags>	formfactor_rect1x3	</tags>
-              <position>	-0.000239 1.97653 0.736674	</position>
-              <rotation>	0.576229 0.000099 3.14148	</rotation>
-              <scale>	3.21289 1.74687 3.21295	</scale>
-              <showOn>	4352	</showOn>
-              <clipAngle>	0.869891	</clipAngle>
-              <anchorShift>	0.369281	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.014722 -0.00503 1.58	</rayStart>
-              <rayEnd>	-0.014722 -0.00503 2.329	</rayEnd>
-              <rayUp>	0.111 0 0	</rayUp>
-              <size>	0.749	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.5 0.5 0.000000 0.000000	</tiling>
-            <density>	102.508 106.975	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_122mm_D_25BM>
-        <_122mm_BL_13_1_A>	shared	  <maxAmmo>	40	</maxAmmo>
+        <_122mm_BL_13_1_705>	shared	  <maxAmmo>	40	</maxAmmo>
           <armor>
             <armor_1>	300	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -4291,8 +4005,8 @@
             <density>	92.4891 113.199	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_122mm_BL_13_1_A>
-        <_130mm_S-70>	shared	  <maxAmmo>	30	</maxAmmo>
+        </_122mm_BL_13_1_705>
+        <_130mm_S_70_705>	shared	  <maxAmmo>	30	</maxAmmo>
           <unlocks>
             <vehicle>	R145_Object_705_A	  <cost>	162300	</cost>
             </vehicle>
@@ -4444,7 +4158,7 @@
             <density>	112.416 106.381	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_130mm_S-70>
+        </_130mm_S_70_705>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R153_Object_705/normal/lod0/Turret_02.model	</undamaged>
@@ -5159,11 +4873,6 @@
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <_10RK>	shared	  <unlocks>
-        <radio>	_12RT	  <cost>	5600	</cost>
-        </radio>
-      </unlocks>
-    </_10RK>
     <_12RT>	shared	</_12RT>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>

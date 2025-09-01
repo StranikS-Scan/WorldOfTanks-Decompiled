@@ -182,7 +182,7 @@ class BattleResultsWindow(BattleResultsMeta, IGlobalListener):
     def __loadViewHandler(self, event):
         if event.alias == VIEW_ALIAS.BATTLE_QUEUE:
             self.as_setIsInBattleQueueS(True)
-        elif event.alias == VIEW_ALIAS.LOBBY_HANGAR:
+        elif event.alias in (VIEW_ALIAS.LOBBY_HANGAR, VIEW_ALIAS.LEGACY_LOBBY_HANGAR):
             self.as_setIsInBattleQueueS(False)
 
     @adisp_process

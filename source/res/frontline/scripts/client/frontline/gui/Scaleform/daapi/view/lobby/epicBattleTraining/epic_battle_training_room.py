@@ -8,6 +8,7 @@ from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.trainings import formatters
 from gui.Scaleform.daapi.view.meta.EpicBattleTrainingRoomMeta import EpicBattleTrainingRoomMeta
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
+from gui.Scaleform.genConsts.MESSENGER_CHANNEL_CAROUSEL_ITEM_TYPES import MESSENGER_CHANNEL_CAROUSEL_ITEM_TYPES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.settings import ICONS_SIZES
 from gui.impl import backport
@@ -16,13 +17,16 @@ from gui.prb_control.entities.base.legacy.ctx import GroupAssignLegacyCtx, Group
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.items.prb_items import getPlayersComparator
 from gui.prb_control.settings import PREBATTLE_ROSTER, REQUEST_TYPE
-from gui.shared import events, EVENT_BUS_SCOPE
+from gui.shared import events, EVENT_BUS_SCOPE, g_eventBus
+from gui.shared.events import ChannelCarouselEvent
 from gui.shared.formatters import text_styles
 from helpers import int2roman
+from messenger.ext import channel_num_gen
+from messenger.ext.channel_num_gen import SPECIAL_CLIENT_WINDOWS
 
 class EpicBattleTrainingRoom(EpicBattleTrainingRoomMeta):
 
-    def __init__(self, _=None):
+    def __init__(self, **kwargs):
         super(EpicBattleTrainingRoom, self).__init__()
         self._firstTime = True
 
@@ -76,7 +80,12 @@ class EpicBattleTrainingRoom(EpicBattleTrainingRoomMeta):
             if not funcState.isInLegacy(PREBATTLE_TYPE.EPIC_TRAINING):
                 g_eventDispatcher.removeEpicTrainingFromCarousel(False)
                 return
+        self.__updateWindowOpenState(True)
         super(EpicBattleTrainingRoom, self)._populate()
+
+    def _dispose(self):
+        self.__updateWindowOpenState(False)
+        super(EpicBattleTrainingRoom, self)._dispose()
 
     def _addListeners(self):
         super(EpicBattleTrainingRoom, self)._addListeners()
@@ -172,3 +181,6 @@ class EpicBattleTrainingRoom(EpicBattleTrainingRoomMeta):
          'teamLabel': label,
          'lane': lane}
         return result
+
+    def __updateWindowOpenState(self, flag):
+        g_eventBus.handleEvent(ChannelCarouselEvent(self, ChannelCarouselEvent.ON_WINDOW_CHANGE_OPEN_STATE, channel_num_gen.getClientID4SpecialWindow(SPECIAL_CLIENT_WINDOWS.EPIC_TRAINING_ROOM), MESSENGER_CHANNEL_CAROUSEL_ITEM_TYPES.CHANNEL_CAROUSEL_ITEM_TYPE_PREBATTLE, flag), scope=EVENT_BUS_SCOPE.LOBBY)

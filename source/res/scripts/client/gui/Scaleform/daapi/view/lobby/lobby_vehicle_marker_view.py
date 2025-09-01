@@ -30,10 +30,11 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
     def __init__(self, ctx=None):
         super(LobbyVehicleMarkerView, self).__init__(ctx)
         self.__markersCache = defaultdict(lambda : None)
-        self.__isMarkerDisabled = False
+        self.__isMarkerDisabled = True
 
     def _populate(self):
         super(LobbyVehicleMarkerView, self)._populate()
+        self.__isMarkerDisabled = not self._canShowMarkers()
         self.addListener(events.HangarVehicleEvent.ON_HERO_TANK_LOADED, self.__onHeroTankLoaded, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.HangarVehicleEvent.ON_HERO_TANK_DESTROY, self._onHeroPlatoonTankDestroy, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__onCameraEntityUpdated, EVENT_BUS_SCOPE.DEFAULT)
@@ -105,7 +106,7 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
     def _canShowMarkers(self):
         windowsManager = self.guiLoader.windowsManager
         windows = windowsManager.findWindows(lambda w: w.layer in self.__LAYERS_WITHOUT_MARKERS)
-        hangarIsExist = len(windowsManager.findWindows(lambda w: isinstance(w, SFWindow) and w.loadParams.viewKey.alias == VIEW_ALIAS.LOBBY_HANGAR)) > 0
+        hangarIsExist = len(windowsManager.findWindows(lambda w: isinstance(w, SFWindow) and w.loadParams.viewKey.alias == VIEW_ALIAS.LEGACY_LOBBY_HANGAR)) > 0
         return len(windows) == 1 and hangarIsExist
 
     @staticmethod

@@ -38,7 +38,6 @@ from helpers.i18n import makeString
 import nations
 import CommandMapping
 from helpers import i18n
-from Event import Event
 from AvatarInputHandler import INPUT_HANDLER_CFG, AvatarInputHandler
 from AvatarInputHandler.DynamicCameras import ArcadeCamera, SniperCamera, StrategicCamera, ArtyCamera, DualGunCamera, kill_cam_camera, free_camera, twin_gun_camera
 from AvatarInputHandler.control_modes import SniperControlMode
@@ -46,10 +45,11 @@ from debug_utils import LOG_NOTE, LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION, L
 from gui.Scaleform.managers.windows_stored_data import g_windowsStoredData
 from messenger import g_settings as messenger_settings
 from account_helpers.AccountSettings import AccountSettings, SPEAKERS_DEVICE, COLOR_SETTINGS_TAB_IDX, APPLIED_COLOR_SETTINGS
-from account_helpers.settings_core.settings_constants import SOUND, SPGAimEntranceModeOptions, GRAPHICS, COLOR_GRADING_TECHNIQUE_DEFAULT
+from account_helpers.settings_core.settings_constants import SOUND, SPGAimEntranceModeOptions, GRAPHICS, COLOR_GRADING_TECHNIQUE_DEFAULT, POST_PROCESSING_QUALITY
 from messenger.storage import storage_getter
 from shared_utils import CONST_CONTAINER, forEach
 from gui import GUI_SETTINGS
+from gui.armor_flashlight.config import getConfig as getArmorFlashlightConfig, isFeatureEnabled as isArmorFlashlightEnabled
 from gui.shared.utils import graphics, functions, getPlayerDatabaseID
 from gui.shared.utils.monitor_settings import g_monitorSettings
 from gui.shared.utils.key_mapping import getScaleformKey, getBigworldKey, getBigworldNameFromKey
@@ -2030,8 +2030,10 @@ class KeyboardSettings(SettingsContainer):
        ('lock_target', 'CMD_CM_LOCK_TARGET'),
        ('lock_target_off', 'CMD_CM_LOCK_TARGET_OFF'),
        ('alternate_mode', 'CMD_CM_ALTERNATE_MODE'),
+       ('toggleFlashlight', 'CMD_TOGGLE_ARMOR_FLASHLIGHT'),
        ('trajectory_view', 'CMD_CM_TRAJECTORY_VIEW'),
-       ('reloadPartialClip', 'CMD_RELOAD_PARTIAL_CLIP'))),
+       ('reloadPartialClip', 'CMD_RELOAD_PARTIAL_CLIP'),
+       ('specialAbility', 'CMD_CM_SPECIAL_ABILITY'))),
      ('vehicle_other', (('showHUD', 'CMD_TOGGLE_GUI'),
        ('showQuestProgress', 'CMD_QUEST_PROGRESS_SHOW'),
        ('frontlineSelfDestruction', 'CMD_REQUEST_RECOVERY'),
@@ -2066,7 +2068,8 @@ class KeyboardSettings(SettingsContainer):
      'chargeFire': 'SettingsKeyChargeFire',
      'highlightLocation': 'SettingsKeyHighlightLocation',
      'highlightTarget': 'SettingsKeyHighlightTarget',
-     'showRadialMenu': 'SettingsKeyShowRadialMenu'}
+     'showRadialMenu': 'SettingsKeyShowRadialMenu',
+     'specialAbility': 'SettingKeySpecialAbility'}
     __hiddenGroups = set()
 
     def __init__(self):
@@ -2080,11 +2083,6 @@ class KeyboardSettings(SettingsContainer):
                 settings.append((setting['key'], KeyboardSetting(setting['cmd'])))
 
         super(KeyboardSettings, self).__init__(tuple(settings))
-        self.onKeyBindingsChanged = Event()
-
-    def fini(self):
-        self.onKeyBindingsChanged.clear()
-        super(KeyboardSettings, self).fini()
 
     @classmethod
     def _getLayout(cls, isFull=False):
@@ -2130,7 +2128,6 @@ class KeyboardSettings(SettingsContainer):
         super(KeyboardSettings, self).apply(values, names)
         CommandMapping.g_instance.onMappingChanged(values)
         CommandMapping.g_instance.save()
-        self.onKeyBindingsChanged()
 
     def getCurrentMapping(self):
         mapping = {}
@@ -2185,6 +2182,83 @@ class _BaseSoundPresetSetting(AccountDumpSetting):
     def _save(self, value):
         if value < len(self.__actionsMap):
             super(_BaseSoundPresetSetting, self)._save(value)
+
+
+class ArmorFlashlightEnabledSettings(AccountDumpSetting):
+
+    def pack(self):
+        return {'current': self._get(),
+         'extraData': self._getExtraData()}
+
+    @staticmethod
+    def _getExtraData():
+        localeFolder = R.strings.settings.aim.armorFlashlight.enabled
+        data = {'label': backport.text(localeFolder.label()),
+         'enabled': isArmorFlashlightEnabled(),
+         'tooltip': makeTooltip(header=backport.text(localeFolder.tooltip.header()), body=backport.text(localeFolder.tooltip.body()))}
+        return data
+
+
+class ArmorFlashlightColorSchemasSettings(AccountDumpSetting):
+
+    def pack(self):
+        return {'current': self._get(),
+         'options': self._getOptions(),
+         'extraData': {'enabled': isArmorFlashlightEnabled()}}
+
+    def _getOptions(self):
+        options = []
+        localeFolder = R.strings.settings.aim.armorFlashlight.colorSchema
+        config = getArmorFlashlightConfig()
+        for schema in config.colorSchemas:
+            optionR = localeFolder.dyn(schema.name)
+            options.append({'label': backport.text(optionR.label()),
+             'tooltip': makeTooltip(header=backport.text(optionR.tooltip.header()), body=backport.text(optionR.tooltip.body())),
+             'id': schema.name})
+
+        return options
+
+
+class ArmorFlashlightFillSettings(AccountDumpSetting):
+
+    def pack(self):
+        return {'current': self._get(),
+         'options': self._getOptions(),
+         'extraData': {'enabled': isArmorFlashlightEnabled()}}
+
+    def _getOptions(self):
+        localeFolder = R.strings.settings.aim.armorFlashlight.fill
+        return [ {'label': backport.text(localeFolder.dyn(pattern.name)()),
+         'id': pattern.name} for pattern in getArmorFlashlightConfig().patterns ]
+
+
+class ArmorFlashlightOpacity(AccountDumpSetting):
+
+    def pack(self):
+        return {'current': self._get(),
+         'extraData': {'enabled': isArmorFlashlightEnabled()}}
+
+
+class ArmorFlashlightResolutionSettings(AccountDumpSetting):
+    settingsCore = dependency.descriptor(ISettingsCore)
+
+    def pack(self):
+        return {'current': self._get(),
+         'options': self._getOptions(),
+         'extraData': {'enabled': isArmorFlashlightEnabled()}}
+
+    def _getOptions(self):
+        localeFolder = R.strings.settings.aim.armorFlashlight.resolution
+        return [ {'label': backport.text(localeFolder.dyn(resolution.name)()),
+         'name': resolution.name,
+         'data': index} for index, resolution in enumerate(getArmorFlashlightConfig().resolutions) ]
+
+    def getDefaultValue(self):
+        postProcessingSetting = self.settingsCore.getSetting(POST_PROCESSING_QUALITY)
+        defaultValue = getArmorFlashlightConfig().getResolutionIndexByPostProcessing(postProcessingSetting)
+        if not BattleReplay.isPlaying():
+            self._save(defaultValue)
+        return defaultValue
 
 
 _SPEAKER_PRESET_CONFIG = ((ACOUSTICS.TYPE_ACOUSTIC_20, SPEAKERS_CONFIG.SPEAKER_SETUP_2_0),

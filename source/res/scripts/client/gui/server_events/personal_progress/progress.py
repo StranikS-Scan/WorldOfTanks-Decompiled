@@ -16,7 +16,13 @@ from gui.server_events.personal_progress import ORDERED_ICON_IDS
 _logger = logging.getLogger(__name__)
 PARAMS_KEYS = {'vehicleHealthFactor': backport.getNiceNumberFormat,
  'stunSeveralTargets': backport.getIntegralFormat,
- 'distanceGreatOrEqual': backport.getIntegralFormat}
+ 'damageDealt': backport.getIntegralFormat,
+ 'distanceGreatOrEqual': backport.getIntegralFormat,
+ 'distanceShortOrEqual': backport.getIntegralFormat,
+ 'desiredPosition': backport.getIntegralFormat,
+ 'directHitsReceived': backport.getIntegralFormat,
+ 'attackerMovingSpeedGreaterOrEqual': backport.getIntegralFormat,
+ 'hits': backport.getIntegralFormat}
 UI_HEADER_TYPES = {DISPLAY_TYPE.BIATHLON: QUEST_PROGRESS_BASE.HEADER_PROGRESS_TYPE_BIATHLON,
  DISPLAY_TYPE.LIMITED: QUEST_PROGRESS_BASE.HEADER_PROGRESS_TYPE_LIMITED,
  DISPLAY_TYPE.SERIES: QUEST_PROGRESS_BASE.HEADER_PROGRESS_TYPE_SERIES,
@@ -174,6 +180,9 @@ class HeaderProgress(ClientProgress):
     def getBottomLabel(self):
         return self.__labelsGetter.getBottomLabel(self)
 
+    def getUniqueVehicles(self):
+        return self._commonProgress.getUniqueVehicles()
+
 
 class BiathlonProgress(HeaderProgress):
 
@@ -250,11 +259,14 @@ class BodyProgress(ClientProgress):
          'progressData': self.getProgress()}
 
     def getProgress(self):
-        return {'state': self.getState(),
+        progress = {'state': self.getState(),
          'goal': self.getGoal(),
          'current': self.getCurrent(),
          'metrics': self.__metricsWrapper.getMetrics(self),
          'isLocked': self.isLocked()}
+        if self.getUniqueVehicles() is not None:
+            progress.update({'uniqueVehicles': self.getUniqueVehicles()})
+        return progress
 
     def getTemplateID(self):
         return self.__templateID
@@ -270,6 +282,12 @@ class BodyProgress(ClientProgress):
 
     def getCountDown(self):
         return self._commonProgress.getCountDown()
+
+    def getUniqueVehicles(self):
+        return self._commonProgress.getUniqueVehicles()
+
+    def getUniqueBattlesCount(self):
+        return self._commonProgress.getUniqueBattlesCount()
 
     def getLocalizationValues(self):
         data = {'goal': backport.getNiceNumberFormat(self.getGoal())}

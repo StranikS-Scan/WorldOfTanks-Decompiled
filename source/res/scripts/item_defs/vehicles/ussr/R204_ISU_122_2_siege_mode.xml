@@ -910,7 +910,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	12000	</weight>
-      <maxLoad>	53000	</maxLoad>
       <terrainResistance>	1 1.1 1.9	</terrainResistance>
       <brakeForce>	50000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -1704,11 +1703,16 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <armor>
-        <armor_1>	200	</armor_1>
-        <armor_2>	130	</armor_2>
-        <armor_3>	35	</armor_3>
-        <armor_4>	0	</armor_4>
-        <armor_5>	20	</armor_5>
+        <armor_1>	200	  <tags>	hull	</tags>
+        </armor_1>
+        <armor_2>	130	  <tags>	hull	</tags>
+        </armor_2>
+        <armor_3>	35	  <tags>	hull	</tags>
+        </armor_3>
+        <armor_4>	0	  <tags>	hull	</tags>
+        </armor_4>
+        <armor_5>	20	  <tags>	hull	</tags>
+        </armor_5>
       </armor>
       <guns>
         <_122mm_BL-13C_dualgun>

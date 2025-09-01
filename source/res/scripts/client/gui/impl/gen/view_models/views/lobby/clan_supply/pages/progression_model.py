@@ -1,8 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/clan_supply/pages/progression_model.py
 from enum import IntEnum
-from frameworks.wulf import Array
-from frameworks.wulf import ViewModel
+from frameworks.wulf import Array, ViewModel
 from gui.impl.gen.view_models.views.lobby.clan_supply.clan_supply_vehicle_model import ClanSupplyVehicleModel
 from gui.impl.gen.view_models.views.lobby.clan_supply.pages.stage_model import StageModel
 from gui.impl.gen.view_models.views.lobby.clan_supply.stage_info_model import StageInfoModel

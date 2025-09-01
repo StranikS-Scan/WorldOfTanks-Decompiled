@@ -226,11 +226,12 @@ def getStorageItemIcon(item, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
     return icon
 
 
-def dummyFormatter(label, btnLabel='', btnTooltip=''):
-    return {'iconSource': RES_ICONS.MAPS_ICONS_LIBRARY_ALERTBIGICON,
+def dummyFormatter(label, iconSource=RES_ICONS.MAPS_ICONS_LIBRARY_ALERTBIGICON, btnLabel='', btnTooltip='', smallIcon=False):
+    return {'iconSource': iconSource,
      'htmlText': text_styles.main(_ms(label)),
      'alignCenter': True,
      'inlineIcon': True,
+     'smallIcon': smallIcon,
      'btnVisible': bool(btnLabel),
      'btnLabel': btnLabel,
      'btnTooltip': btnTooltip,

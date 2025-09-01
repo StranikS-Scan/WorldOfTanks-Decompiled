@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/account_helpers/settings_core/settings_constants.py
 from shared_utils import CONST_CONTAINER
 VERSION = 'VERSION'
+POST_PROCESSING_QUALITY = 'POST_PROCESSING_QUALITY'
 
 class GRAPHICS(CONST_CONTAINER):
     MONITOR = 'monitor'
@@ -112,11 +113,6 @@ class GAME(CONST_CONTAINER):
     EPIC_RANDOM_PLAYERS_PANELS_STATE = 'epicppState'
     GAMEPLAY_MASK = 'gameplayMask'
     GAMEPLAY_CTF = 'gameplay_ctf'
-    GAMEPLAY_DOMINATION = 'gameplay_domination'
-    GAMEPLAY_ASSAULT = 'gameplay_assault'
-    GAMEPLAY_NATIONS = 'gameplay_nations'
-    GAMEPLAY_EPIC_STANDARD = 'gameplay_epicStandard'
-    GAMEPLAY_EPIC_DOMINATION = 'gameplay_epicDomination'
     GAMEPLAY_DEV_MAPS = 'gameplay_devMaps'
     SHOW_VECTOR_ON_MAP = 'showVectorOnMap'
     SHOW_SECTOR_ON_MAP = 'showSectorOnMap'
@@ -200,6 +196,7 @@ class AIM(CONST_CONTAINER):
     SNIPER = 'sniper'
     SPG = 'spg'
     CONTOUR = 'contour'
+    ARMOR_FLASHLIGHT = 'armorFlashlight'
 
 
 class SPGAim(CONST_CONTAINER):
@@ -214,6 +211,14 @@ class CONTOUR(CONST_CONTAINER):
     ENHANCED_CONTOUR = 'contour'
     CONTOUR_PENETRABLE_ZONE = 'contourPenetrableZone'
     CONTOUR_IMPENETRABLE_ZONE = 'contourImpenetrableZone'
+
+
+class ArmorFlashlight(CONST_CONTAINER):
+    ENABLED = 'armorFlashlightEnabled'
+    COLOR_SCHEMA = 'armorFlashlightColorSchema'
+    FILL = 'armorFlashlightFill'
+    OPACITY = 'armorFlashlightOpacity'
+    RESOLUTION = 'armorFlashlightResolutionScaling'
 
 
 class SPGAimEntranceModeOptions(CONST_CONTAINER):
@@ -310,17 +315,14 @@ class GuiSettingsBehavior(CONST_CONTAINER):
     FREE_XP_INFO_DIALOG_SHOWED = 'isFreeXPInfoDialogShowed'
     RANKED_WELCOME_VIEW_SHOWED = 'isRankedWelcomeViewShowed'
     RANKED_WELCOME_VIEW_STARTED = 'isRankedWelcomeViewStarted'
-    EPIC_RANDOM_CHECKBOX_CLICKED = 'isEpicRandomCheckboxClicked'
     DISPLAY_PLATOON_MEMBER_CLICKED = 'isDisplayPlatoonMembersClicked'
     VEH_POST_PROGRESSION_UNLOCK_MSG_NEED_SHOW = 'vehPostProgressionUnlockMsgNeedShow'
     BIRTHDAY_CALENDAR_INTRO_SHOWED = 'birthdayCalendarIntroShowed'
     COMP7_YEARLY_ANIMATION_SEEN = 'isComp7YearlyAnimationSeen'
-    COMP7_SEASON_STATISTICS_SHOWN = 'isComp7SeasonStatisticsShown'
     CREW_22_WELCOME_SHOWN = 'crew22WelcomeShown'
     CREW_5075_WELCOME_SHOWN = 'crew5075WelcomeShown'
     CREW_NPS_WELCOME_SHOWN = 'crewNpsWelcomeShown'
     CREW_NPS_INTRO_SHOWN = 'crewNpsIntroShown'
-    WOT_ANNIVERSARY_15_WELCOME_SHOWN = 'wotAnniversary15WelcomeShown'
     IS_PRESTIGE_ONBOARDING_VIEWED = 'isPrestigeOnboardingViewed'
     PRESTIGE_FIRST_ENTRY_NOTIFICATION_SHOWN = 'prestigeFirstEntryNotificationShown'
     CLAN_SUPPLY_INTRO_SHOWN = 'clanSupplyIntroShown'
@@ -361,10 +363,6 @@ class OnceOnlyHints(CONST_CONTAINER):
     AMMUNITION_FILTER_HINT = 'FilterHintZoneHint'
     MODERNIZED_SETUP_TAB_HINT = 'ModernizedSetupTabHint'
     OPT_DEV_DRAG_AND_DROP_HINT = 'OptDevDragAndDropHint'
-    WOTPLUS_OPT_DEV_HINT = 'WotPlusOptDevHint'
-    WOTPLUS_CREW_WIDGET_TANKMAN_ASSIST_HINT = 'WotPlusCrewWidgetTankmanAssistHint'
-    WOTPLUS_CREW_SKILL_TRAINING_DROPDOWN_ASSIST_HINT = 'WotPlusCrewSkillTrainingDropDownAssistHint'
-    WOTPLUS_CREW_CONTAINER_TANKMAN_SKILL_ASSIST_HINT = 'WotPlusCrewContainerTankmanSkillAssistHint'
     HANGAR_MANUAL_HINT = 'HangarManualHint'
     DOGTAG_HANGAR_HINT = 'DogTagHangarHint'
     DOGTAG_PROFILE_HINT = 'DogTagProfileHint'
@@ -520,6 +518,16 @@ class SeniorityAwardsStorageKeys(CONST_CONTAINER):
 
 class ReferralProgram(CONST_CONTAINER):
     VIEWED_REFERRAL_PROGRAM_SEASON = 'viewedReferralProgramSeason'
+
+
+class PersonalMission3(CONST_CONTAINER):
+    INTRO = 'INTRO'
+    INTRO_OP_8 = 'INTRO_OP_8'
+    INTRO_OP_9 = 'INTRO_OP_9'
+    INTRO_OP_10 = 'INTRO_OP_10'
+    CHECKED_PM3_POINTS = 'DELTA_PM3_POINTS'
+    PM_BANNER_ANIMATION_KEY = 'PM_BANNER_ANIMATION'
+    PART_NO = 'PART_NO'
 
 
 COLOR_GRADING_TECHNIQUE_DEFAULT = 0

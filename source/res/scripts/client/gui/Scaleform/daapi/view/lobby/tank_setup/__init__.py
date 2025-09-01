@@ -50,3 +50,8 @@ class _TankSetupBusinessHandler(PackageBusinessHandler):
     def __init__(self):
         listeners = ((VIEW_ALIAS.AMMUNITION_SETUP_VIEW, self.loadViewByCtxEvent),)
         super(_TankSetupBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
+
+
+def getStateMachineRegistrators():
+    from gui.Scaleform.daapi.view.lobby.tank_setup.states import registerStates, registerTransitions
+    return (registerStates, registerTransitions)

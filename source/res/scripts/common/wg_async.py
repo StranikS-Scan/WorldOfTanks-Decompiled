@@ -28,6 +28,7 @@ def wg_async(func):
         executor.start()
         return promise.get_future()
 
+    setattr(wrapper, '__is_wg_async__', True)
     return wrapper
 
 
@@ -46,7 +47,12 @@ def prepare(func):
         executor = _AsyncExecutor(gen, promise)
         return (promise.get_future(), executor)
 
+    setattr(wrapper, '__is_wg_async__', True)
     return wrapper
+
+
+def isWgAsync(func):
+    return hasattr(func, '__is_wg_async__')
 
 
 def post(func):

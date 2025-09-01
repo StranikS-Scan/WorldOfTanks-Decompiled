@@ -6,7 +6,7 @@ from battle_pass_common import BATTLE_PASS_OFFER_TOKEN_PREFIX, BATTLE_PASS_TOKEN
 from gui.battle_pass.battle_pass_helpers import getOfferTokenByGift, getStyleInfoForChapter, makeChapterMediaName
 from gui.impl.gen import R
 from gui.impl.pub.notification_commands import EventNotificationCommand, NotificationEvent
-from gui.server_events.events_dispatcher import showMissionsBattlePass
+from gui.shared.event_dispatcher import showBattlePass
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.offers import IOffersDataProvider
@@ -94,7 +94,7 @@ def multipleBattlePassPurchasedEventMethod(rewards, data, packageRewards, battle
     else:
         currentChapterID = battlePass.getCurrentChapterID()
         chapterID = currentChapterID if not isPostProgressionChapter(currentChapterID) else None
-        showMissionsBattlePass(R.views.lobby.battle_pass.BattlePassProgressionsView() if chapterID else None, chapterID)
+        showBattlePass(R.aliases.battle_pass.Progression() if chapterID else None, chapterID)
         battlePass.getRewardLogic().startRewardFlow(rewards, data, packageRewards)
         return
 

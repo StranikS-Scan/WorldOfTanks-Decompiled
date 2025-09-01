@@ -10,7 +10,7 @@
   <postProgressionTree>	role_HT_support	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	51	</forward>
+    <forward>	55	</forward>
     <backward>	20	</backward>
   </speedLimits>
   <invisibility>
@@ -60,7 +60,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	22000	</weight>
-    <maxHealth>	1120	</maxHealth>
+    <maxHealth>	1280	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	240	</maxHealth>
       <maxRegenHealth>	160	</maxRegenHealth>
@@ -1110,13 +1110,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_AMX_50_100>
-      <userString>	#france_vehicles:Chassis_AMX_50_100	</userString>
+    <Chassis_F08_AMX_50_100>
+      <userString>	#france_vehicles:Chassis_F08_AMX_50_100	</userString>
       <tags></tags>
       <level>	7	</level>
       <price>	16450	</price>
       <unlocks>
-        <chassis>	Chassis_AMX_50_100_2	  <cost>	16800	</cost>
+        <chassis>	Chassis_F08_AMX_50_100_2	  <cost>	16800	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1124,11 +1124,10 @@
         <rightTrack>	30	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	50000	</maxLoad>
-      <terrainResistance>	1.3 1.4 2.3	</terrainResistance>
+      <terrainResistance>	1.2 1.3 2.1	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	30	</rotationSpeed>
+      <rotationSpeed>	48	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.24	</vehicleMovement>
         <vehicleRotation>	0.24	</vehicleRotation>
@@ -2001,9 +2000,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_AMX_50_100>
-    <Chassis_AMX_50_100_2>
-      <userString>	#france_vehicles:Chassis_AMX_50_100_2	</userString>
+    </Chassis_F08_AMX_50_100>
+    <Chassis_F08_AMX_50_100_2>
+      <userString>	#france_vehicles:Chassis_F08_AMX_50_100_2	</userString>
       <tags></tags>
       <level>	8	</level>
       <price>	37250	</price>
@@ -2012,11 +2011,10 @@
         <rightTrack>	30	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	57000	</maxLoad>
       <terrainResistance>	1.2 1.3 2.1	</terrainResistance>
       <brakeForce>	36500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	32	</rotationSpeed>
+      <rotationSpeed>	52	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.22	</vehicleMovement>
         <vehicleRotation>	0.22	</vehicleRotation>
@@ -2889,12 +2887,12 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_AMX_50_100_2>
+    </Chassis_F08_AMX_50_100_2>
   </chassis>
   <turrets0>
-    <Turret_1_AMX_50_100>
-      <userString>	#france_vehicles:Turret_1_AMX_50_100	</userString>
-      <tags></tags>
+    <Turret_1_F08_AMX_50_100>
+      <userString>	#france_vehicles:Turret_1_F08_AMX_50_100	</userString>
+      <tags>	oscillating	</tags>
       <level>	8	</level>
       <price>	25000	</price>
       <notInShop>	true	</notInShop>
@@ -2908,7 +2906,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_4 armor_5	</primaryArmor>
       <weight>	12800	</weight>
-      <maxHealth>	280	</maxHealth>
+      <maxHealth>	320	</maxHealth>
       <rotationSpeed>	32	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -2922,324 +2920,14 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_90mm_F3>	shared	  <maxAmmo>	72	</maxAmmo>
+        <_90mm_DCA_45_50_100>	shared	  <maxAmmo>	72	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -13 1 -13	</minPitch>
             <maxPitch>	0 9 0.397222 9 0.430556 4 0.569444 4 0.602778 9 1 9	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <gun>	_90mm_canon_DCA_45	  <cost>	18500	</cost>
+            <gun>	_100mm_SA47_50_100	  <cost>	34500	</cost>
             </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	90	</armor_1>
-            <armor_2>	60	</armor_2>
-            <armor_3>	30	</armor_3>
-            <armor_4>	30	</armor_4>
-            <armor_5>	90	</armor_5>
-            <armor_6>	20	</armor_6>
-            <armor_7>	20	</armor_7>
-            <armor_8>	0	</armor_8>
-            <armor_9>	90	</armor_9>
-            <armor_10>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_10>
-            <armor_11>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_11>
-            <armor_14>	20	</armor_14>
-            <gun>	35	</gun>
-          </armor>
-          <reloadTime>	35	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
-            <afterShot>	4	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	3	</aimingTime>
-          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <clip>
-            <count>	6	</count>
-            <rate>	22	</rate>
-          </clip>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <models>
-            <undamaged>	vehicles/french/F08_AMX_50_100/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/french/F08_AMX_50_100/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/french/F08_AMX_50_100/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/french/F08_AMX_50_100/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F08_AMX_50_100/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
-          <effects>	shot_main_mb	</effects>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.000113 -0.003473 2.31374	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.265502 0.265501	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.000113 -0.003473 2.31374	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	0 2.08229 1.08447	</position>
-              <rotation>	0.741384 -0.000038 3.14153	</rotation>
-              <scale>	2.66226 1.4 2.66227	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.66305	</clipAngle>
-              <anchorShift>	0.626589	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	0.000003 2.6381 -0.573327	</position>
-              <rotation>	3.14159 -0.000008 -0.000011	</rotation>
-              <scale>	1.63354 0.469483 1.63354	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.157686	</clipAngle>
-              <verticalMirror>	true	</verticalMirror>
-              <anchorShift>	0.065725	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45002	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	-0.000003 2.52236 0.190523	</position>
-              <rotation>	0.245492 -0.000001 3.14159	</rotation>
-              <scale>	2.1131 0.8 2.1131	</scale>
-              <showOn>	4352	</showOn>
-              <clipAngle>	0.811282	</clipAngle>
-              <anchorShift>	0.115723	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45003	</slotId>
-              <tags>	formfactor_square direction_left_to_right	</tags>
-              <position>	0.769398 2.28479 0.919796	</position>
-              <rotation>	0.850769 0.714886 -3.07305	</rotation>
-              <scale>	1.11681 0.999996 1.11681	</scale>
-              <showOn>	4352	</showOn>
-              <anchorShift>	0.06542	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45004	</slotId>
-              <tags>	formfactor_square direction_right_to_left	</tags>
-              <position>	-0.769393 2.28479 0.919797	</position>
-              <rotation>	0.850768 -0.714841 -3.07305	</rotation>
-              <scale>	1.11681 1 1.11681	</scale>
-              <showOn>	4352	</showOn>
-              <anchorShift>	0.065414	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45005	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.000013 2.38942 0.721116	</position>
-              <rotation>	0.245492 -0.000004 3.14158	</rotation>
-              <scale>	2.02861 0.768012 2.02861	</scale>
-              <showOn>	4352	</showOn>
-              <clipAngle>	0.811282	</clipAngle>
-              <anchorShift>	0.249409	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45006	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.000005 2.6381 -0.98022	</position>
-              <rotation>	3.14159 -0.000008 -0.000011	</rotation>
-              <scale>	1.63354 0.469483 1.63354	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	1.13628	</clipAngle>
-              <verticalMirror>	true	</verticalMirror>
-              <anchorShift>	0.045722	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45007	</slotId>
-              <tags>	formfactor_rect1x3	</tags>
-              <position>	0.000006 2.6381 -1.02483	</position>
-              <rotation>	3.14159 -0.000008 -0.000011	</rotation>
-              <scale>	1.63354 0.469483 1.63354	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	1.13628	</clipAngle>
-              <verticalMirror>	true	</verticalMirror>
-              <anchorShift>	0.045722	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45008	</slotId>
-              <tags>	formfactor_rect1x4	</tags>
-              <position>	0.000026 2.63809 -1.01112	</position>
-              <rotation>	3.14159 -0.000008 -0.000002	</rotation>
-              <scale>	1.69736 0.487824 1.69736	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	1.13628	</clipAngle>
-              <verticalMirror>	true	</verticalMirror>
-              <anchorShift>	0.045731	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45009	</slotId>
-              <tags>	formfactor_rect1x6	</tags>
-              <position>	0.000006 2.63809 -1.01111	</position>
-              <rotation>	3.14159 -0.000008 -0.000011	</rotation>
-              <scale>	1.68276 0.483629 1.68276	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	1.13628	</clipAngle>
-              <anchorShift>	0.045731	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45010	</slotId>
-              <tags>	formfactor_rect1x3	</tags>
-              <position>	-0.000004 2.40552 0.656858	</position>
-              <rotation>	0.245492 -0.000001 3.14159	</rotation>
-              <scale>	2.02861 0.768012 2.02861	</scale>
-              <showOn>	4352	</showOn>
-              <clipAngle>	0.811282	</clipAngle>
-              <anchorShift>	0.249411	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45011	</slotId>
-              <tags>	formfactor_rect1x4	</tags>
-              <position>	-0.000004 2.41857 0.604752	</position>
-              <rotation>	0.245492 -0.000001 3.14159	</rotation>
-              <scale>	2.0286 0.768012 2.02861	</scale>
-              <showOn>	4352	</showOn>
-              <clipAngle>	0.811282	</clipAngle>
-              <anchorShift>	0.219415	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45012	</slotId>
-              <tags>	formfactor_rect1x2 direction_right_to_left	</tags>
-              <position>	-0.000521 2.59185 0.007438	</position>
-              <rotation>	-3.13985 1.56905 -0.157079	</rotation>
-              <scale>	2.7491 1.04079 2.7491	</scale>
-              <showOn>	4352	</showOn>
-              <clipAngle>	0.781882	</clipAngle>
-              <verticalMirror>	true	</verticalMirror>
-              <anchorShift>	0.128989	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45013	</slotId>
-              <tags>	formfactor_rect1x3 direction_right_to_left	</tags>
-              <position>	-0.000521 2.59185 0.007438	</position>
-              <rotation>	-3.13985 1.56905 -0.157079	</rotation>
-              <scale>	2.7491 1.04079 2.7491	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.781882	</clipAngle>
-              <verticalMirror>	true	</verticalMirror>
-              <anchorShift>	0.128989	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45014	</slotId>
-              <tags>	formfactor_rect1x4 direction_right_to_left	</tags>
-              <position>	-0.000521 2.59185 0.007438	</position>
-              <rotation>	-3.13985 1.56905 -0.157079	</rotation>
-              <scale>	2.7491 1.04079 2.7491	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.781882	</clipAngle>
-              <verticalMirror>	true	</verticalMirror>
-              <anchorShift>	0.128987	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45015	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0 1.81995 1.35706	</position>
-              <rotation>	0.80035 -0.000053 3.14151	</rotation>
-              <scale>	2.49983 1.4 2.49985	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.66305	</clipAngle>
-              <anchorShift>	0.908894	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45016	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.000011 2.02757 1.18956	</position>
-              <rotation>	1.19772 -0.000138 3.14144	</rotation>
-              <scale>	2.28291 1.27852 2.28293	</scale>
-              <showOn>	4352	</showOn>
-              <clipAngle>	0.66305	</clipAngle>
-              <anchorShift>	1.162059	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45017	</slotId>
-              <tags>	formfactor_rect1x4	</tags>
-              <position>	0.000028 2.40828 -1.48133	</position>
-              <rotation>	1.56904 -0.005634 -0.005626	</rotation>
-              <scale>	1.36788 0.393133 1.36789	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	1.13628	</clipAngle>
-              <anchorShift>	-0.053482	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45018	</slotId>
-              <tags>	formfactor_rect1x6	</tags>
-              <position>	0.000028 2.40828 -1.48133	</position>
-              <rotation>	1.56904 -0.005632 -0.005624	</rotation>
-              <scale>	1.8042 0.518531 1.8042	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	1.13628	</clipAngle>
-              <anchorShift>	-0.053482	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.000233 -0.004181 3.33141	</rayStart>
-              <rayEnd>	0.000233 -0.004181 3.83141	</rayEnd>
-              <rayUp>	0.084 0 0	</rayUp>
-              <size>	0.5	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <tiling>	1.06 0.595 0.000000 0.000000	</tiling>
-            <density>	97.0011 97.4498	</density>
-            <aoTextureSize>	1024 512	</aoTextureSize>
-          </camouflage>
-        </_90mm_F3>
-        <_90mm_canon_DCA_45>	shared	  <maxAmmo>	72	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -13 1 -13	</minPitch>
-            <maxPitch>	0 9 0.397222 9 0.430556 4 0.569444 4 0.602778 9 1 9	</maxPitch>
-          </pitchLimits>
-          <unlocks>
-            <gun>	_100mm_SA_47	  <cost>	34500	</cost>
-            </gun>
-            <vehicle>	F09_AMX_50_120	  <cost>	185000	</cost>
-            </vehicle>
           </unlocks>
           <armor>
             <armor_1>	90	</armor_1>
@@ -3259,17 +2947,17 @@
             <gun>	35	</gun>
           </armor>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	35	</reloadTime>
+          <reloadTime>	43	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	3	</aimingTime>
+          <aimingTime>	2.7	</aimingTime>
           <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <clip>
             <count>	6	</count>
-            <rate>	22	</rate>
+            <rate>	24	</rate>
           </clip>
           <models>
             <undamaged>	vehicles/french/F08_AMX_50_100/normal/lod0/Gun_02.model	</undamaged>
@@ -3529,8 +3217,12 @@
             <density>	100.326 96.9782	</density>
             <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
-        </_90mm_canon_DCA_45>
-        <_100mm_SA_47>	shared	  <maxAmmo>	60	</maxAmmo>
+        </_90mm_DCA_45_50_100>
+        <_100mm_SA47_50_100>	shared	  <maxAmmo>	60	</maxAmmo>
+          <unlocks>
+            <vehicle>	F09_AMX_50_120	  <cost>	185000	</cost>
+            </vehicle>
+          </unlocks>
           <pitchLimits>
             <minPitch>	0 -13 1 -13	</minPitch>
             <maxPitch>	0 9 0.397222 9 0.430556 4 0.569444 4 0.602778 9 1 9	</maxPitch>
@@ -3553,17 +3245,17 @@
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	50	</reloadTime>
+          <reloadTime>	43	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	3	</aimingTime>
+          <aimingTime>	2.7	</aimingTime>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <clip>
             <count>	6	</count>
-            <rate>	22	</rate>
+            <rate>	24	</rate>
           </clip>
           <models>
             <undamaged>	vehicles/french/F08_AMX_50_100/normal/lod0/Gun_03.model	</undamaged>
@@ -3823,7 +3515,7 @@
             <density>	102.405 98.071	</density>
             <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
-        </_100mm_SA_47>
+        </_100mm_SA47_50_100>
       </guns>
       <models>
         <undamaged>	vehicles/french/F08_AMX_50_100/normal/lod0/Turret_01.model	</undamaged>
@@ -4014,63 +3706,36 @@
         <density>	104.809 104.392	</density>
         <aoTextureSize>	512 256	</aoTextureSize>
       </camouflage>
-    </Turret_1_AMX_50_100>
+    </Turret_1_F08_AMX_50_100>
   </turrets0>
   <engines>
-    <Maybach_HL_230>	shared	  <unlocks>
-        <engine>	Maybach_HL_230P45	  <cost>	18800	</cost>
+    <Maybach_HL_230_P45F_50_100>	shared	  <unlocks>
+        <engine>	Maybach_HL_295_50_100	  <cost>	24700	</cost>
         </engine>
       </unlocks>
-    </Maybach_HL_230>
-    <Maybach_HL_230P45>	shared	  <unlocks>
-        <engine>	Maybach_HL_295	  <cost>	24700	</cost>
-        </engine>
-      </unlocks>
-    </Maybach_HL_230P45>
-    <Maybach_HL_295>	shared	</Maybach_HL_295>
+    </Maybach_HL_230_P45F_50_100>
+    <Maybach_HL_295_50_100>	shared	</Maybach_HL_295_50_100>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <SCR_508>	shared	  <unlocks>
-        <radio>	SCR_528	  <cost>	9000	</cost>
-        </radio>
-      </unlocks>
-    </SCR_508>
     <SCR_528>	shared	</SCR_528>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Maybach_HL_230>
-          <smplEnginePower>	607.9366	</smplEnginePower>
-          <smplFwMaxSpeed>	51	</smplFwMaxSpeed>
-        </Maybach_HL_230>
-        <Maybach_HL_230P45>
-          <smplEnginePower>	792.9609	</smplEnginePower>
-          <smplFwMaxSpeed>	51	</smplFwMaxSpeed>
-        </Maybach_HL_230P45>
-        <Maybach_HL_295>
-          <smplEnginePower>	898.689	</smplEnginePower>
-          <smplFwMaxSpeed>	51	</smplFwMaxSpeed>
-        </Maybach_HL_295>
+        <Maybach_HL_230_P45F_50_100>
+          <smplEnginePower>	850	</smplEnginePower>
+          <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
+        </Maybach_HL_230_P45F_50_100>
+        <Maybach_HL_295_50_100>
+          <smplEnginePower>	920	</smplEnginePower>
+          <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
+        </Maybach_HL_295_50_100>
       </engines>
       <chassis>
-        <Chassis_AMX_50_100>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.18515	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.1127	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.10465	</rollingFriction>
-            </firm>
-          </grounds>
-        </Chassis_AMX_50_100>
-        <Chassis_AMX_50_100_2>
+        <Chassis_F08_AMX_50_100>
           <grounds>
             <soft>
               <rollingFriction>	0.16905	</rollingFriction>
@@ -4082,7 +3747,20 @@
               <rollingFriction>	0.0966	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_AMX_50_100_2>
+        </Chassis_F08_AMX_50_100>
+        <Chassis_F08_AMX_50_100_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.16905	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.10465	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0966	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_F08_AMX_50_100_2>
       </chassis>
     </detailed>
   </physics>

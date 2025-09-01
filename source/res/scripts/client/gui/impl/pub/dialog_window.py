@@ -74,7 +74,7 @@ class DialogDecorator(ViewImpl):
 
 class DialogWindow(Window):
     gui = dependency.descriptor(IGuiLoader)
-    __slots__ = ('__blur', '__scope', '__event', '__result')
+    __slots__ = ('__blur', '__scope', '__event', '__result', '__buttonToFocus', '__focusInited')
 
     def __init__(self, content=None, bottomContent=None, parent=None, balanceContent=None, enableBlur=True, flags=DialogFlags.TOP_WINDOW):
         if content is not None:
@@ -89,6 +89,8 @@ class DialogWindow(Window):
         self.__event = AsyncEvent(scope=self.__scope)
         self.__result = DialogButtons.CANCEL
         self.__blur = CachedBlur(enabled=enableBlur, ownLayer=self.layer, blurAnimRepeatCount=4)
+        self.__buttonToFocus = None
+        self.__focusInited = False
         return
 
     @wg_async
@@ -142,12 +144,13 @@ class DialogWindow(Window):
             button.setRawLabel(rawLabel)
         else:
             button.setLabel(label)
-        button.setDoSetFocus(isFocused)
         button.setIsEnabled(isEnabled)
         if soundDown is not None:
             button.setSoundDown(soundDown)
         button.setTooltipHeader(tooltipHeader)
         button.setTooltipBody(tooltipBody)
+        if isFocused:
+            self.__buttonToFocus = button
         self.viewModel.buttons.addViewModel(button, isSelected=isFocused)
         if invalidateAll:
             self.viewModel.buttons.invalidate()
@@ -188,6 +191,13 @@ class DialogWindow(Window):
 
     def _getResultData(self):
         return None
+
+    def _onFocus(self, focused):
+        super(DialogWindow, self)._onFocus(focused)
+        if focused and not self.__focusInited:
+            self.__focusInited = True
+            if self.__buttonToFocus:
+                self.__buttonToFocus.setDoSetFocus(True)
 
 
 class DialogViewMixin(object):

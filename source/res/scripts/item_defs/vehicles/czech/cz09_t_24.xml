@@ -57,7 +57,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	10090	</weight>
-    <maxHealth>	472	</maxHealth>
+    <maxHealth>	560	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	150	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
@@ -1147,11 +1147,10 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	4000	</weight>
-      <maxLoad>	19000	</maxLoad>
-      <terrainResistance>	1.5 1.7 2.3	</terrainResistance>
+      <terrainResistance>	1.3 1.5 2.1	</terrainResistance>
       <brakeForce>	19000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	35	</rotationSpeed>
+      <rotationSpeed>	43	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.22	</vehicleMovement>
         <vehicleRotation>	0.22	</vehicleRotation>
@@ -2028,11 +2027,10 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	4000	</weight>
-      <maxLoad>	23000	</maxLoad>
       <terrainResistance>	1.3 1.5 2.1	</terrainResistance>
       <brakeForce>	19000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	40	</rotationSpeed>
+      <rotationSpeed>	48	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.2	</vehicleMovement>
         <vehicleRotation>	0.2	</vehicleRotation>
@@ -2920,7 +2918,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3000	</weight>
-      <maxHealth>	88	</maxHealth>
+      <maxHealth>	110	</maxHealth>
       <rotationSpeed>	36	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -2936,7 +2934,7 @@
       <guns>
         <_75mm_Skoda_A13>	shared	  <maxAmmo>	60	</maxAmmo>
           <unlocks>
-            <gun>	_75mm_Skoda_A18	  <cost>	3600	</cost>
+            <gun>	_75mm_Skoda_A18_24	  <cost>	3600	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -2953,11 +2951,17 @@
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.4 10 0.402778 9.8 0.405556 9.5 0.408333 7 0.411111 6.6 0.422222 6.2 0.425 6 0.427778 5.7 0.436111 5.5 0.441667 5.3 0.444444 5 0.552778 5 0.555556 5.2 0.561111 5.4 0.563889 5.6 0.572222 5.8 0.575 6.2 0.577778 6.4 0.583333 7 0.586111 7.2 0.591667 7.7 0.594444 8 0.597222 8.6 0.605556 9 0.608333 9.7 0.611111 10 1 10	</maxPitch>
+            <maxPitch>	0.00000 10.00 0.38889 10.00 0.42778 5.50 0.57222 5.50 0.61111 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
-          <reloadTime>	6.4	</reloadTime>
-          <aimingTime>	2.7	</aimingTime>
+          <reloadTime>	4.9	</reloadTime>
+          <aimingTime>	2.5	</aimingTime>
+          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.13	</turretRotation>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+            <afterShot>	4.0	</afterShot>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/czech/Cz09_T_24/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/czech/Cz09_T_24/crash/lod0/Gun_01.model	</destroyed>
@@ -3012,7 +3016,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_75mm_Skoda_A13>
-        <_75mm_Skoda_A18>	shared	  <maxAmmo>	60	</maxAmmo>
+        <_75mm_Skoda_A18_24>	shared	  <maxAmmo>	60	</maxAmmo>
           <unlocks>
             <turret>	Turret_2_Cz09_T_24	  <cost>	2400	</cost>
             </turret>
@@ -3031,12 +3035,17 @@
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.397222 10 0.4 9.8 0.402778 9.4 0.405556 9 0.408333 6.5 0.411111 6.2 0.422222 5.8 0.427778 5.4 0.572222 5.4 0.575 5.8 0.577778 6 0.583333 6.6 0.586111 6.8 0.591667 7.4 0.594444 7.6 0.597222 8.2 0.605556 8.6 0.608333 9.2 0.616667 9.8 0.619444 10 1 10	</maxPitch>
+            <maxPitch>	0.00000 10.00 0.38889 10.00 0.42778 5.50 0.57222 5.50 0.61111 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	6	</reloadTime>
-          <aimingTime>	2.5	</aimingTime>
+          <reloadTime>	4.5	</reloadTime>
+          <aimingTime>	2.4	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.13	</turretRotation>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+            <afterShot>	4.0	</afterShot>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/czech/Cz09_T_24/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/czech/Cz09_T_24/crash/lod0/Gun_02.model	</destroyed>
@@ -3090,7 +3099,7 @@
             <density>	112.454 114.086	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_75mm_Skoda_A18>
+        </_75mm_Skoda_A18_24>
       </guns>
       <models>
         <undamaged>	vehicles/czech/Cz09_T_24/normal/lod0/Turret_01.model	</undamaged>
@@ -3640,17 +3649,17 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3300	</weight>
-      <maxHealth>	118	</maxHealth>
+      <maxHealth>	140	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	50	</maxHealth>
-        <maxRegenHealth>	25	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	110	</maxHealth>
+        <maxRegenHealth>	55	</maxRegenHealth>
+        <repairCost>	5	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	350	</circularVisionRadius>
       <surveyingDeviceHealth>
-        <maxHealth>	40	</maxHealth>
-        <maxRegenHealth>	19	</maxRegenHealth>
+        <maxHealth>	70	</maxHealth>
+        <maxRegenHealth>	35	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
@@ -3669,16 +3678,17 @@
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.4 10 0.402778 9.8 0.405556 9.5 0.408333 7 0.411111 6.6 0.422222 6.2 0.425 6 0.427778 5.7 0.436111 5.5 0.441667 5.3 0.444444 5 0.552778 5 0.555556 5.2 0.561111 5.4 0.563889 5.6 0.572222 5.8 0.575 6.2 0.577778 6.4 0.583333 7 0.586111 7.2 0.591667 7.7 0.594444 8 0.597222 8.6 0.605556 9 0.608333 9.7 0.611111 10 1 10	</maxPitch>
+            <maxPitch>	0.00000 10.00 0.38889 10.00 0.42778 5.50 0.57222 5.50 0.61111 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
-          <reloadTime>	5.8	</reloadTime>
+          <reloadTime>	4.7	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.4	</aimingTime>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <models>
             <undamaged>	vehicles/czech/Cz09_T_24/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/czech/Cz09_T_24/crash/lod0/Gun_03.model	</destroyed>
@@ -3733,7 +3743,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_75mm_Skoda_A13>
-        <_75mm_Skoda_A18>	shared	  <maxAmmo>	60	</maxAmmo>
+        <_75mm_Skoda_A18_24>	shared	  <maxAmmo>	60	</maxAmmo>
           <armor>
             <armor_1>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3748,13 +3758,13 @@
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.397222 10 0.4 9.8 0.402778 9.4 0.405556 9 0.408333 6.5 0.411111 6.2 0.422222 5.8 0.427778 5.4 0.572222 5.4 0.575 5.8 0.577778 6 0.583333 6.6 0.586111 6.8 0.591667 7.4 0.594444 7.6 0.597222 8.2 0.605556 8.6 0.608333 9.2 0.616667 9.8 0.619444 10 1 10	</maxPitch>
+            <maxPitch>	0.00000 10.00 0.38889 10.00 0.42778 5.50 0.57222 5.50 0.61111 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	5.3	</reloadTime>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <reloadTime>	4.4	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -3812,7 +3822,7 @@
             <density>	112.454 114.086	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_75mm_Skoda_A18>
+        </_75mm_Skoda_A18_24>
       </guns>
       <models>
         <undamaged>	vehicles/czech/Cz09_T_24/normal/lod0/Turret_02.model	</undamaged>
@@ -4300,51 +4310,41 @@
   </turrets0>
   <engines>
     <Skoda_V12_16_2_liter>	shared	  <unlocks>
-        <engine>	Skoda_V12_19_8_liter_450	  <cost>	1700	</cost>
+        <engine>	Skoda_V12_19_8_liter_24	  <cost>	1700	</cost>
         </engine>
       </unlocks>
     </Skoda_V12_16_2_liter>
-    <Skoda_V12_19_8_liter_450>	shared	</Skoda_V12_19_8_liter_450>
+    <Skoda_V12_19_8_liter_24>	shared	</Skoda_V12_19_8_liter_24>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <Radiostanice_vz_37>	shared	  <unlocks>
-        <radio>	Radiostanice_Fu_7	  <cost>	1360	</cost>
-        </radio>
-      </unlocks>
-    </Radiostanice_vz_37>
-    <Radiostanice_Fu_7>	shared	  <unlocks>
-        <radio>	Radiostanice_Fu_12	  <cost>	7200	</cost>
-        </radio>
-      </unlocks>
-    </Radiostanice_Fu_7>
     <Radiostanice_Fu_12>	shared	</Radiostanice_Fu_12>
   </radios>
   <physics>
     <detailed>
       <engines>
         <Skoda_V12_16_2_liter>
-          <smplEnginePower>	401.7668	</smplEnginePower>
+          <smplEnginePower>	440	</smplEnginePower>
           <smplFwMaxSpeed>	58	</smplFwMaxSpeed>
         </Skoda_V12_16_2_liter>
-        <Skoda_V12_19_8_liter_450>
-          <smplEnginePower>	475.7765	</smplEnginePower>
+        <Skoda_V12_19_8_liter_24>
+          <smplEnginePower>	490	</smplEnginePower>
           <smplFwMaxSpeed>	58	</smplFwMaxSpeed>
-        </Skoda_V12_19_8_liter_450>
+        </Skoda_V12_19_8_liter_24>
       </engines>
       <chassis>
         <Chassis_Cz09_T_24>
           <grounds>
             <soft>
-              <rollingFriction>	0.18515	</rollingFriction>
+              <rollingFriction>	0.16905	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.13685	</rollingFriction>
+              <rollingFriction>	0.12075	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.12075	</rollingFriction>
+              <rollingFriction>	0.10465	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_Cz09_T_24>

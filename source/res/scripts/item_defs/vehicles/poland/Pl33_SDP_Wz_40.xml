@@ -77,7 +77,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	21286	</weight>
-    <maxHealth>	384	</maxHealth>
+    <maxHealth>	400	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	150	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
@@ -983,14 +983,13 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	6000	</weight>
-      <maxLoad>	30000	</maxLoad>
-      <terrainResistance>	1.2 1.6 2.3	</terrainResistance>
+      <terrainResistance>	1.1 1.4 2.1	</terrainResistance>
       <brakeForce>	45500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	33	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.25	</vehicleMovement>
-        <vehicleRotation>	0.25	</vehicleRotation>
+        <vehicleMovement>	0.24	</vehicleMovement>
+        <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	90	</maxHealth>
@@ -1926,7 +1925,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	6000	</weight>
-      <maxLoad>	33000	</maxLoad>
       <terrainResistance>	1.1 1.4 2.1	</terrainResistance>
       <brakeForce>	45500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2872,7 +2870,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
       <weight>	100	</weight>
-      <maxHealth>	96	</maxHealth>
+      <maxHealth>	100	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -2888,7 +2886,7 @@
       <guns>
         <_75mm_wz_36_38>	shared	  <maxAmmo>	70	</maxAmmo>
           <unlocks>
-            <gun>	_90mm_wz_39_90	  <cost>	5800	</cost>
+            <gun>	_90mm_wz_39_90_40	  <cost>	5800	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -2975,7 +2973,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_75mm_wz_36_38>
-        <_90mm_wz_39_90>	shared	  <maxAmmo>	55	</maxAmmo>
+        <_90mm_wz_39_90_40>	shared	  <maxAmmo>	55	</maxAmmo>
           <unlocks>
             <vehicle>	Pl32_SDP_Wz_44	  <cost>	28130	</cost>
             </vehicle>
@@ -3063,7 +3061,7 @@
             <density>	116.917 114.204	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_90mm_wz_39_90>
+        </_90mm_wz_39_90_40>
       </guns>
       <models>
         <undamaged>	vehicles/poland/Pl33_SDP_Wz_40/normal/lod0/Turret_01.model	</undamaged>
@@ -3115,11 +3113,6 @@
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <N2_C>	shared	  <unlocks>
-        <radio>	RKB_C	  <cost>	620	</cost>
-        </radio>
-      </unlocks>
-    </N2_C>
     <RKB_C>	shared	</RKB_C>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
@@ -3139,13 +3132,13 @@
         <Chassis_Pl33_SDP_Wz_40>
           <grounds>
             <soft>
-              <rollingFriction>	0.18515	</rollingFriction>
+              <rollingFriction>	0.16905	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1288	</rollingFriction>
+              <rollingFriction>	0.1127	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0966	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

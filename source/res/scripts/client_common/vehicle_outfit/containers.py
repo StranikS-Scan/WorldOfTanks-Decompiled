@@ -367,6 +367,24 @@ class ProjectionDecalsMultiSlot(MultiSlot):
             self._order.remove(idx)
         super(ProjectionDecalsMultiSlot, self).remove(idx)
 
+    def reorder(self, order):
+        self._order = [ item for item in order if item in self._order ]
+
+    def diff(self, other):
+        result = super(ProjectionDecalsMultiSlot, self).diff(other)
+        result.reorder(self.order() + other.order())
+        return result
+
+    def discard(self, other):
+        result = super(ProjectionDecalsMultiSlot, self).discard(other)
+        result.reorder(self.order() + other.order())
+        return result
+
+    def adjust(self, other):
+        result = super(ProjectionDecalsMultiSlot, self).adjust(other)
+        result.reorder(self.order() + other.order())
+        return result
+
     def _cloneEmpty(self):
         return ProjectionDecalsMultiSlot(self.getTypes(), self.getRegions(), limit=self._limit)
 

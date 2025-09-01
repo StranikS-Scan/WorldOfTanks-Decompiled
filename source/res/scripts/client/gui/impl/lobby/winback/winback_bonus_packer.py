@@ -306,7 +306,7 @@ class WinbackDiscountBonusUIPacker(WinbackVehiclesBonusUIPacker):
         model.setNewExp(newXPPrice)
 
 
-def packWinBackBonusModelAndTooltipData(bonuses, packer, model, tooltipData=None, sort=None):
+def packWinbackBonusModelAndTooltipData(bonuses, packer, model, tooltipData=None, sort=None):
     bonusIndexTotal = 0
     bonusTooltipList = []
     if tooltipData is not None:

@@ -20,6 +20,7 @@ registerTokenQuestsSubFormatters((token_quest_subformatters.LootBoxTokenQuestFor
  token_quest_subformatters.RankedYearLeaderFormatter(),
  token_quest_subformatters.SeniorityAwardsFormatter(),
  token_quest_subformatters.SeniorityAwardsVehicleSelectedFormatter(),
+ token_quest_subformatters.PersonalMission3CompletionFormatter(),
  token_quest_subformatters.PersonalMissionsTokenQuestsFormatter(),
  token_quest_subformatters.BattlePassDefaultAwardsFormatter(),
  token_quest_subformatters.BattlePassAutoSelectRewardsFormatter(),
@@ -29,10 +30,9 @@ registerTokenQuestsSubFormatters((token_quest_subformatters.LootBoxTokenQuestFor
  token_quest_subformatters.WinbackRewardFormatter(),
  token_quest_subformatters.CrewPerksFormatter(),
  token_quest_subformatters.SteamCompletionFormatter(),
- token_quest_subformatters.SkipNotificationFormatter(),
- token_quest_subformatters.WotAnniversaryVeteranBadgeFormatter()))
+ token_quest_subformatters.SkipNotificationFormatter()))
 _HANGAR_QUESTS_SUB_FORMATTERS = (token_quest_subformatters.BattleMattersAwardsFormatter(),)
-_PERSONAL_MISSIONS_SUB_FORMATTERS = (token_quest_subformatters.PersonalMissionsFormatter(),)
+_PERSONAL_MISSIONS_SUB_FORMATTERS = (token_quest_subformatters.PersonalMission3CompletionFormatter(), token_quest_subformatters.PersonalMissionsFormatter())
 
 def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.serverReboot.index(), _sc.ServerRebootFormatter())
@@ -64,6 +64,7 @@ def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.vehicleRented.index(), _sc.VehicleRentedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.rentalsExpired.index(), _sc.RentalsExpiredFormatter())
     registerMessengerServerFormatter(_SM_TYPE.potapovQuestBonus.index(), _sc.TokenQuestsFormatter(subFormatters=_PERSONAL_MISSIONS_SUB_FORMATTERS))
+    registerMessengerServerFormatter(_SM_TYPE.personalMission3Quest.index(), token_quest_subformatters.PersonalMission3QuestFormatter())
     registerMessengerServerFormatter(_SM_TYPE.goodieRemoved.index(), _sc.GoodyRemovedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.goodiesExpired.index(), _sc.GoodiesExpiredFormatter())
     registerMessengerServerFormatter(_SM_TYPE.goodieDisabled.index(), _sc.GoodyDisabledFormatter())
@@ -150,7 +151,6 @@ def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.prestigeLevelChanged.index(), _sc.PrestigeFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.PERSONAL_RESERVES_FIRST_LOGIN, _prFormatters.ReleaseFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.PERSONAL_RESERVES_SOON_EXPIRATION, _prFormatters.PersonalReservesSoonExpirationFormatter())
-    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_SUBSCRIBERS_ONBOARDING, _wotPlusFormatters.WotPlusSubscribersOnboardingFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_SWITCH, _wotPlusFormatters.WotPlusSwitchFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.ACHIEVEMENTS20_EARNING_SM_TYPE, _sc.AchievementsEarningSMFormatter())
     registerMessengerServerFormatter(_SM_TYPE.prbVehicleKickFromSquad.index(), _sc.PrbVehicleMaxTypeKickFormatter())
@@ -165,4 +165,5 @@ def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.mentorAssignmentUsed.index(), _sc.MentorAssignmentUsedFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.GF_SM_TYPE, _sc.GFSMFormatter())
     registerMessengerServerFormatter(_SM_TYPE.resourceWellOperation.index(), _sc.ResourceWellOperationFormatter())
-    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOT_ANNIVERSARY_REWARD, _sc.WotAnniversaryRewardFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.prestigeMilestoneReward.index(), _sc.PrestigeMilestoneRewardFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.prestigeMilestoneRewardError.index(), _sc.PrestigeMilestoneErrorFormatter())

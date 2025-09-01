@@ -3,13 +3,21 @@
 import json
 import logging
 import time
+import uuid
 import weakref
 from abc import ABCMeta
 from collections import defaultdict
 from functools import partial
 import WWISE
-from account_helpers.AccountSettings import BattleMatters, INTEGRATED_AUCTION_NOTIFICATIONS, IS_BATTLE_PASS_EXTRA_START_NOTIFICATION_SEEN, IS_BATTLE_PASS_START_NOTIFICATION_SEEN, LOOT_BOXES_WAS_FINISHED, LOOT_BOXES_WAS_STARTED, PROGRESSIVE_REWARD_VISITED, RECRUITS_NOTIFICATIONS, SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP
+from account_helpers.AccountSettings import BattleMatters, INTEGRATED_AUCTION_NOTIFICATIONS, IS_BATTLE_PASS_EXTRA_START_NOTIFICATION_SEEN, IS_BATTLE_PASS_START_NOTIFICATION_SEEN, LOOT_BOXES_WAS_FINISHED, LOOT_BOXES_WAS_STARTED, PROGRESSIVE_REWARD_VISITED, RECRUITS_NOTIFICATIONS, SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP, VEH_SKILL_TREE_POPUP_SHOWN, VEH_SKILL_TREE_RECORDED_NOFITICATION_NODE
 from account_helpers.settings_core.settings_constants import SeniorityAwardsStorageKeys
+from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from gui.server_events.finders import PM_SWITCHER_CAMPAIGN, PM_CAMPAIGNS_IDS
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.framework.entities.View import ViewKey
+from gui.impl.lobby.gf_notifications import GFNotificationTemplates
+from gui.impl.lobby.gf_notifications.cache import getCache
+from gui.impl.lobby.vehicle_hub.sub_presenters.veh_skill_tree.utils import getCheapestAvailablePerk
 from helpers.events_handler import EventsHandler
 from helpers.time_utils import getTimestampByStrDate
 from typing import TYPE_CHECKING
@@ -18,7 +26,7 @@ from account_helpers import AccountSettings
 from adisp import adisp_process
 from chat_shared import SYS_MESSAGE_TYPE
 from collector_vehicle import CollectorVehicleConsts
-from constants import ARENA_BONUS_TYPE, AUTO_MAINTENANCE_RESULT, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG, MAPS_TRAINING_ENABLED_KEY, PLAYER_SUBSCRIPTIONS_CONFIG, PremiumConfigs, SwitchState
+from constants import ARENA_BONUS_TYPE, AUTO_MAINTENANCE_RESULT, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG, MAPS_TRAINING_ENABLED_KEY, PLAYER_SUBSCRIPTIONS_CONFIG, Configs, PremiumConfigs, SwitchState
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from exchange.personal_discounts_constants import EXCHANGE_RATE_FREE_XP_NAME, EXCHANGE_RATE_GOLD_NAME, ExchangeRateShowFormat
 from gui import SystemMessages
@@ -63,9 +71,12 @@ from messenger.m_constants import PROTO_TYPE, SCH_CLIENT_MSG_TYPE, USER_ACTION_I
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
-from notification.decorators import BattleMattersReminderDecorator, BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C11nProgressiveItemDecorator, C2DProgressionStyleDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionCustomMessageDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, ExchangeRateDiscountDecorator, FriendshipRequestDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, LootBoxSystemDecorator, LowPriorityDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PostProgressionDecorator, PrbInviteDecorator, PrestigeFirstEntryDecorator, PrestigeLvlUpDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, SeniorityAwardsDecorator, WGNCPopUpDecorator, WinbackSelectableRewardReminderDecorator
+from notification.decorators import BattleMattersReminderDecorator, BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C11nProgressiveItemDecorator, C2DProgressionStyleDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionCustomMessageDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, ExchangeRateDiscountDecorator, FriendshipRequestDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, LootBoxSystemDecorator, LowPriorityDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PostProgressionDecorator, PrbInviteDecorator, PrestigeFirstEntryDecorator, PrestigeLvlUpDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, SeniorityAwardsDecorator, WGNCPopUpDecorator, WinbackSelectableRewardReminderDecorator, PersonalMission3QuestDecorator, VehSkillTreePerkAvailableDecorator
 from notification.settings import NOTIFICATION_TYPE, NotificationData
+from personal_missions import PM_BRANCH
 from shared_utils import first
+from skeletons.account_helpers.settings_core import ISettingsCache
+from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController, IEasyTankEquipController, IEventsNotificationsController, IExchangeRatesWithDiscountsProvider, IGameSessionController, ILimitedUIController, ILootBoxSystemController, ISeniorityAwardsController, ISteamCompletionController, IWinbackController
 from skeletons.gui.goodies import IGoodiesCache
@@ -75,9 +86,9 @@ from skeletons.gui.login_manager import ILoginManager
 from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.wot_anniversary import IWotAnniversaryController
 from uilogging.seniority_awards.constants import SeniorityAwardsLogSpaces
 from uilogging.seniority_awards.loggers import CoinsNotificationLogger, RewardNotificationLogger, VehicleSelectionNotificationLogger
+from weekly_quests_common.weekly_quests_schema import weeklyQuestsSchema
 from wg_async import wg_async, wg_await
 if TYPE_CHECKING:
     from typing import List, Dict, Optional, Any, Type
@@ -124,6 +135,10 @@ class _StateExtractor(object):
         return cls.__lobbyContext.getServerSettings().getDailyQuestConfig().get('enabled', False)
 
     @classmethod
+    def getWeeklyQuestsState(cls):
+        return cls.__lobbyContext.getServerSettings().getConfigModel(weeklyQuestsSchema).enabled
+
+    @classmethod
     def getNDQState(cls):
         return cls.__lobbyContext.getServerSettings().getDailyQuestConfig().get('ndqSwitch', False)
 
@@ -162,6 +177,9 @@ _FEATURES_DATA = {PremiumConfigs.DAILY_BONUS: {_FeatureState.ON: (R.strings.syst
  DAILY_QUESTS_CONFIG: {_FeatureState.ON: (R.strings.system_messages.daily_quests.switch_on.title(), R.strings.system_messages.daily_quests.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
                        _FeatureState.OFF: (R.strings.system_messages.daily_quests.switch_off.title(), R.strings.system_messages.daily_quests.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
                        _FUNCTION: _StateExtractor.getDailyQuestsState},
+ Configs.WEEKLY_QUESTS_CONFIG.value: {_FeatureState.ON: (None, R.strings.system_messages.weekly_quests.switch_on.body(), SystemMessages.SM_TYPE.MediumInfo),
+                                      _FeatureState.OFF: (None, R.strings.system_messages.weekly_quests.switch_off.body(), SystemMessages.SM_TYPE.ErrorSimple),
+                                      _FUNCTION: _StateExtractor.getWeeklyQuestsState},
  CollectorVehicleConsts.CONFIG_NAME: {_FeatureState.ON: (R.strings.system_messages.collectorVehicle.switch_on.title(), R.strings.system_messages.collectorVehicle.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
                                       _FeatureState.OFF: (R.strings.system_messages.collectorVehicle.switch_off.title(), R.strings.system_messages.collectorVehicle.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
                                       _FUNCTION: _StateExtractor.getCollectorVehicleState},
@@ -248,7 +266,7 @@ class ServiceChannelListener(_NotificationListener):
 
     def __needToLowerPriority(self, messageType):
         excludedTypes = (SYS_MESSAGE_TYPE.premiumBought.index(), SYS_MESSAGE_TYPE.premiumExtended.index(), SYS_MESSAGE_TYPE.bonusExcludedMap.index())
-        return messageType in excludedTypes and findActiveWindow(R.views.lobby.lootbox_system.MainView()) is not None
+        return messageType in excludedTypes and findActiveWindow(R.views.mono.lootbox.main()) is not None
 
     def __getMessageDecorator(self, settings, messageType, messageSubtype):
         if settings.decorator is not None:
@@ -274,6 +292,8 @@ class ServiceChannelListener(_NotificationListener):
             return C2DProgressionStyleDecorator
         elif self.__isCollectionsSysMessageTypes(messageType) or self.__isCollectionsSMType(settings):
             return CollectionsLockButtonDecorator
+        elif messageType == SYS_MESSAGE_TYPE.personalMission3Quest.index():
+            return PersonalMission3QuestDecorator
         else:
             return LowPriorityDecorator if self.__needToLowerPriority(messageType) else MessageDecorator
 
@@ -970,14 +990,15 @@ class SwitcherListener(_NotificationListener):
             self.__currentStates[featureName] = value[_FUNCTION]()
 
     def __addMessage(self, featureName, newState):
-        if self.__currentStates[featureName] != newState:
+        if self.__currentStates[featureName] == newState:
+            return
+        else:
             msg = _FEATURES_DATA[featureName]
-            if newState:
-                msgTitle, msgBody, msgType = msg[_FeatureState.ON]
-                SystemMessages.pushMessage(type=msgType, text=backport.text(msgBody), messageData={'header': backport.text(msgTitle)})
-            else:
-                msgTitle, msgBody, msgType = msg[_FeatureState.OFF]
-                SystemMessages.pushMessage(type=msgType, text=backport.text(msgBody), messageData={'header': backport.text(msgTitle)})
+            featureState = _FeatureState.ON if newState else _FeatureState.OFF
+            msgTitle, msgBody, msgType = msg[featureState]
+            messageData = {'header': backport.text(msgTitle)} if msgTitle else None
+            SystemMessages.pushMessage(type=msgType, text=backport.text(msgBody), messageData=messageData)
+            return
 
 
 class NDQSwitcherListener(_NotificationListener):
@@ -1050,7 +1071,6 @@ class BattlePassListener(_NotificationListener):
     __battlePass = dependency.descriptor(IBattlePassController)
     __itemsCache = dependency.descriptor(IItemsCache)
     __notificationCtrl = dependency.descriptor(IEventsNotificationsController)
-    __luiController = dependency.descriptor(ILimitedUIController)
 
     def __init__(self):
         super(BattlePassListener, self).__init__()
@@ -1067,11 +1087,12 @@ class BattlePassListener(_NotificationListener):
         self.__arenaBonusTypesHandlers = {ARENA_BONUS_TYPE.RANKED: self.__pushEnableChangeRanked,
          ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO: self.__pushBattleRoyaleEnableChange,
          ARENA_BONUS_TYPE.EPIC_BATTLE: self.__pushEpicBattleModeChanged,
-         ARENA_BONUS_TYPE.COMP7: self.__pushComp7ModeChanged}
+         ARENA_BONUS_TYPE.COMP7: self.__pushComp7ModeChanged,
+         ARENA_BONUS_TYPE.COMP7_LIGHT: self.__pushComp7LightModeChanged}
         self.__battlePass.onSeasonStateChanged += self.__onSeasonStateChange
         self.__battlePass.onBattlePassSettingsChange += self.__onBattlePassSettingsChange
         self.__notificationCtrl.onEventNotificationsChanged += self.__onEventNotification
-        self.__luiController.startObserve(LUI_RULES.sysMsgCollectionStartBattlePass, self.__onLuiRuleCompleted)
+        g_eventBus.addListener(events.BattlePassEvent.ON_PAUSE, self.__pushPause)
         self.__checkAndNotify()
         self.__initArenaBonusTypeEnabledStates()
         return True
@@ -1080,7 +1101,7 @@ class BattlePassListener(_NotificationListener):
         self.__battlePass.onSeasonStateChanged -= self.__onSeasonStateChange
         self.__battlePass.onBattlePassSettingsChange -= self.__onBattlePassSettingsChange
         self.__notificationCtrl.onEventNotificationsChanged -= self.__onEventNotification
-        self.__luiController.stopObserve(LUI_RULES.sysMsgCollectionStartBattlePass, self.__onLuiRuleCompleted)
+        g_eventBus.removeListener(events.BattlePassEvent.ON_PAUSE, self.__pushPause)
         self.__arenaBonusTypesHandlers = None
         super(BattlePassListener, self).stop()
         return
@@ -1105,9 +1126,6 @@ class BattlePassListener(_NotificationListener):
     def __onSeasonStateChange(self):
         self.__checkAndNotify()
 
-    def __onLuiRuleCompleted(self, *_):
-        self.__checkAndNotify()
-
     def __notifyGamemodeEnabled(self, eventNotification):
         arenaBonusType = eventNotification.data
         if self.__battlePass.isHoliday():
@@ -1122,8 +1140,6 @@ class BattlePassListener(_NotificationListener):
         SystemMessages.pushMessage(text=text, type=SystemMessages.SM_TYPE.BattlePassGameModeEnabled, messageData={'header': header})
 
     def __notifyStartExtra(self, chapterID):
-        if not self.__luiController.isRuleCompleted(LUI_RULES.sysMsgCollectionStartBattlePass):
-            return
         settings = AccountSettings.getSettings(IS_BATTLE_PASS_EXTRA_START_NOTIFICATION_SEEN)
         settings.add(chapterID)
         AccountSettings.setSettings(IS_BATTLE_PASS_EXTRA_START_NOTIFICATION_SEEN, settings)
@@ -1132,8 +1148,6 @@ class BattlePassListener(_NotificationListener):
         SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.extraStarted.body(), name=chapterName), priority=NotificationPriorityLevel.HIGH, type=SM_TYPE.BattlePassExtraStart, messageData={'header': header})
 
     def __notifyFinishExtra(self, chapterID):
-        if not self.__luiController.isRuleCompleted(LUI_RULES.sysMsgCollectionStartBattlePass):
-            return
         chapterID = int(chapterID)
         textRes = R.strings.battle_pass.chapter.fullName.num(chapterID)
         if not textRes.exists():
@@ -1145,8 +1159,6 @@ class BattlePassListener(_NotificationListener):
         SystemMessages.pushMessage(text=text, type=SM_TYPE.BattlePassExtraFinish, messageData={'header': header})
 
     def __notifyExtraWillEndSoon(self, chapterID):
-        if not self.__luiController.isRuleCompleted(LUI_RULES.sysMsgCollectionStartBattlePass):
-            return
         chapterID = int(chapterID)
         textRes = R.strings.battle_pass.chapter.fullName.num(chapterID)
         if not textRes.exists() or not self.__battlePass.isChapterExists(chapterID):
@@ -1163,7 +1175,7 @@ class BattlePassListener(_NotificationListener):
             oldValue = self.__arenaBonusTypesEnabledState.get(arenaBonusType, False)
             newValue = self.__battlePass.isGameModeEnabled(arenaBonusType)
             self.__arenaBonusTypesEnabledState[arenaBonusType] = newValue
-            if oldValue != newValue and self.__luiController.isRuleCompleted(LUI_RULES.sysMsgCollectionStartBattlePass):
+            if oldValue != newValue:
                 self.__pushEnableChangedForArenaBonusType(arenaBonusType, newValue)
 
     def __checkAndNotify(self, oldMode=None, newMode=None):
@@ -1171,18 +1183,16 @@ class BattlePassListener(_NotificationListener):
         isFinished = self.__battlePass.isSeasonFinished()
         isModeChanged = oldMode is not None and newMode is not None and oldMode != newMode
         isReactivated = newMode == 'enabled' and oldMode == 'paused'
-        isEnabledByLUI = self.__luiController.isRuleCompleted(LUI_RULES.sysMsgCollectionStartBattlePass)
         needToPushStarted = isStarted and not AccountSettings.getSettings(IS_BATTLE_PASS_START_NOTIFICATION_SEEN)
-        if isEnabledByLUI:
-            if needToPushStarted:
-                self.__pushStarted()
-            elif self.__isFinished != isFinished and isFinished or isModeChanged and newMode == 'disabled':
-                self.__pushFinished()
-            if isModeChanged:
-                if newMode == 'paused':
-                    self.__pushPause()
-                elif isReactivated:
-                    self.__pushEnabled()
+        if needToPushStarted:
+            self.__pushStarted()
+        elif self.__isFinished != isFinished and isFinished or isModeChanged and newMode == 'disabled':
+            self.__pushFinished()
+        if isModeChanged:
+            if newMode == 'paused':
+                self.__pushPause()
+            elif isReactivated:
+                self.__pushEnabled()
         if needToPushStarted:
             self.__initArenaBonusTypeEnabledStates()
         if isStarted:
@@ -1194,8 +1204,7 @@ class BattlePassListener(_NotificationListener):
         self.__isFinished = isFinished
         return
 
-    @staticmethod
-    def __pushPause():
+    def __pushPause(self, *_):
         SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.switch_pause.body()), type=SystemMessages.SM_TYPE.ErrorSimple, priority=NotificationPriorityLevel.HIGH)
 
     def __pushFinished(self):
@@ -1268,10 +1277,19 @@ class BattlePassListener(_NotificationListener):
             msgType = SystemMessages.SM_TYPE.ErrorSimple
         SystemMessages.pushMessage(text=msg, type=msgType)
 
+    @staticmethod
+    def __pushComp7LightModeChanged(isEnabled):
+        if isEnabled:
+            msg = backport.text(R.strings.system_messages.battlePass.switch_enabled.comp7Light.body())
+            msgType = SystemMessages.SM_TYPE.Warning
+        else:
+            msg = backport.text(R.strings.system_messages.battlePass.switch_disable.comp7Light.body())
+            msgType = SystemMessages.SM_TYPE.ErrorSimple
+        SystemMessages.pushMessage(text=msg, type=msgType)
+
 
 class BattlePassSwitchChapterReminder(BaseReminderListener):
     __battlePassController = dependency.descriptor(IBattlePassController)
-    __luiController = dependency.descriptor(ILimitedUIController)
     __ENTITY_ID = 0
 
     def __init__(self):
@@ -1295,21 +1313,15 @@ class BattlePassSwitchChapterReminder(BaseReminderListener):
         self.__battlePassController.onChapterChanged += self.__tryNotify
         self.__battlePassController.onBattlePassSettingsChange += self.__tryNotify
         self.__battlePassController.onPointsUpdated += self.__tryNotify
-        self.__luiController.startObserve(LUI_RULES.BattlePassEntry, self.__updateBattlePassEntryVisibility)
 
     def __removeListeners(self):
         self.__battlePassController.onChapterChanged -= self.__tryNotify
         self.__battlePassController.onBattlePassSettingsChange -= self.__tryNotify
         self.__battlePassController.onPointsUpdated -= self.__tryNotify
-        self.__luiController.stopObserve(LUI_RULES.BattlePassEntry, self.__updateBattlePassEntryVisibility)
 
     def __tryNotify(self, *_):
         isAdding = not (self.__battlePassController.hasActiveChapter() or self.__battlePassController.isCompleted() or self.__battlePassController.isDisabled() or self.__battlePassController.isPaused())
-        isAdding &= self.__luiController.isRuleCompleted(LUI_RULES.BattlePassEntry)
         self._notifyOrRemove(isAdding)
-
-    def __updateBattlePassEntryVisibility(self, *_):
-        self.__tryNotify()
 
 
 class UpgradeTrophyDeviceListener(_NotificationListener):
@@ -1497,6 +1509,8 @@ class VehiclePostProgressionUnlockListener(_NotificationListener):
         msgKey = R.strings.system_messages.vehiclePostProgression.vehiclesUnlockPostProgression
         for intCD in vehicleIntCDs:
             vehicle = self.__itemsCache.items.getItemByCD(intCD)
+            if vehicle.typeDescr.eliteByProgression:
+                continue
             if vehicle is not None and vehicle.postProgressionAvailability(unlockOnly=True):
                 SystemMessages.pushMessage(text=backport.text(msgKey.single.body(), vehicle=vehicle.userName), type=SM_TYPE.InformationHeader, priority=NotificationPriorityLevel.HIGH, messageData={'header': backport.text(msgKey.title())})
 
@@ -1828,18 +1842,10 @@ class IntegratedAuctionListener(_NotificationListener):
 class CollectionsListener(_NotificationListener, EventsHandler):
     __collections = dependency.descriptor(ICollectionsSystemController)
     __eventNotifications = dependency.descriptor(IEventsNotificationsController)
-    __limitedUIController = dependency.descriptor(ILimitedUIController)
     __NOTIFICATIONS = R.strings.collections.notifications
-    __FEATURE_NAME_TO_LUI_ID = {'battle_pass_': LUI_RULES.sysMsgCollectionStartBattlePass}
     __COLLECTION_ENTRY_ENTITY_ID = 0
 
-    def __init__(self):
-        super(CollectionsListener, self).__init__()
-        self.__postponedNotifications = None
-        return
-
     def start(self, model):
-        self.__postponedNotifications = []
         result = super(CollectionsListener, self).start(model)
         if result:
             self._subscribe()
@@ -1848,39 +1854,16 @@ class CollectionsListener(_NotificationListener, EventsHandler):
 
     def stop(self):
         self._unsubscribe()
-        self.__postponedNotifications = None
         super(CollectionsListener, self).stop()
-        return
-
-    def _subscribe(self):
-        super(CollectionsListener, self)._subscribe()
-        self.__limitedUIController.startObserve(LUI_RULES.sysMsgCollectionStartBattlePass, self.__onLuiRuleCompleted)
-
-    def _unsubscribe(self):
-        self.__limitedUIController.stopObserve(LUI_RULES.sysMsgCollectionStartBattlePass, self.__onLuiRuleCompleted)
-        super(CollectionsListener, self)._unsubscribe()
 
     def _getEvents(self):
-        return ((self.__eventNotifications.onEventNotificationsChanged, self.__onEventNotification), (self.__collections.onAvailabilityChanged, self.__onAvailabilityChanged), (self.__limitedUIController.onConfigChanged, self.__onLuiConfigChanged))
-
-    def __onLuiConfigChanged(self):
-        self.__tryNotifyPostponed()
-
-    def __onLuiRuleCompleted(self, ruleID, *_):
-        if ruleID in self.__FEATURE_NAME_TO_LUI_ID.values():
-            self.__tryNotifyPostponed()
+        return ((self.__eventNotifications.onEventNotificationsChanged, self.__onEventNotification), (self.__collections.onAvailabilityChanged, self.__onAvailabilityChanged))
 
     def __onEventNotification(self, added, _):
         self.__tryNotify(added)
 
     def __onAvailabilityChanged(self, enabled):
         (self.__pushEnabled if enabled else self.__pushDisabled)()
-
-    def __tryNotifyPostponed(self):
-        if self.__postponedNotifications:
-            notifications = self.__postponedNotifications[:]
-            self.__postponedNotifications = []
-            self.__tryNotify(notifications)
 
     def __tryNotify(self, notifications):
         for notification in notifications:
@@ -1898,19 +1881,11 @@ class CollectionsListener(_NotificationListener, EventsHandler):
         notificationData = json.loads(notification.data)
         collectionID = int(notificationData['collectionId'])
         collection = self.__collections.getCollection(collectionID)
-        luiRuleID = self.__getLuiRuleIDByCollectionID(collection.name)
-        if not self.__isLuiApplicable(luiRuleID):
-            self.__postponeNotification(notification)
-            return
         if not isCollectionStartedSeen(collectionID):
             self.__pushStarted(collection)
             setCollectionStartedSeen(collectionID)
 
     def __onCollectionsUpdatedEntryEvent(self, notification):
-        luiRuleID = LUI_RULES.sysMsgCollectionsUpdatedEntry
-        if not self.__isLuiApplicable(luiRuleID):
-            self.__postponeNotification(notification)
-            return
         if not isCollectionsUpdatedEntrySeen():
             self.__pushCollectionsCustomMessage(backport.text(self.__NOTIFICATIONS.updatedEntry.title()), backport.text(self.__NOTIFICATIONS.updatedEntry.text()), 'CollectionsEntrySysMessage', NOTIFICATION_TYPE.COLLECTIONS_ENTRY, self.__COLLECTION_ENTRY_ENTITY_ID)
 
@@ -1920,20 +1895,6 @@ class CollectionsListener(_NotificationListener, EventsHandler):
         for collection in collections:
             if not isCollectionRenewSeen(collection.collectionId):
                 self.__pushCollectionsCustomMessage(backport.text(self.__NOTIFICATIONS.renew.title(), feature=backport.text(self.__NOTIFICATIONS.feature.dyn(collection.name)()), season=backport.text(self.__NOTIFICATIONS.season.dyn(collection.name)())), backport.text(self.__NOTIFICATIONS.renew.text()), 'CollectionRenewSysMessage', NOTIFICATION_TYPE.COLLECTIONS_RENEW, collection.collectionId, savedData={'collectionId': collection.collectionId})
-
-    def __getLuiRuleIDByCollectionID(self, collectionID):
-        for key in self.__FEATURE_NAME_TO_LUI_ID:
-            if key in collectionID:
-                return self.__FEATURE_NAME_TO_LUI_ID[key]
-
-        return None
-
-    def __isLuiApplicable(self, luiRuleID):
-        return self.__limitedUIController.isInited and not (luiRuleID and luiRuleID in LUI_RULES.all() and not self.__limitedUIController.isRuleCompleted(luiRuleID))
-
-    def __postponeNotification(self, notification):
-        if notification not in self.__postponedNotifications:
-            self.__postponedNotifications.append(notification)
 
     def __pushCollectionsCustomMessage(self, title, text, messageType, notificationType, entityID, savedData=None):
         model = self._model()
@@ -1999,7 +1960,7 @@ class BattleMattersTaskReminderListener(BaseReminderListener, EventsHandler):
     __TYPE = NOTIFICATION_TYPE.BATTLE_MATTERS_TASK_REMINDER
     __ENTITY_ID = 0
     __TEMPLATE = 'BattleMattersTaskReminder'
-    __MAX_BATTLES_WITHOUT_PROGRESS = 15
+    __BATTLES_WITHOUT_PROGRESS_PERIOD = 6
 
     def __init__(self):
         super(BattleMattersTaskReminderListener, self).__init__(self.__TYPE, self.__ENTITY_ID)
@@ -2036,22 +1997,22 @@ class BattleMattersTaskReminderListener(BaseReminderListener, EventsHandler):
         self.__tryNotify()
 
     def __tryNotify(self):
-        isAdding = self.__bmCtrl.progressWatcher.isJustBackFromBattle(reset=True) and self.__bmCtrl.isActive() and self.__bmCtrl.getCurrentQuest() is not None and self.__isLongTimeWithoutProgress() and not self.__isShowedToday()
+        isAdding = self.__bmCtrl.isActive() and self.__bmCtrl.getCurrentQuest() is not None
+        needToPopUp = self.__bmCtrl.progressWatcher.isJustBackFromBattle(reset=True) and (self.__isLongTimeWithoutProgress() or not self.__isShowedToday())
         priority = NotificationPriorityLevel.LOW
-        if isAdding:
-            if self.__bmCtrl.progressWatcher.isFirstBattleWithoutProgressInSession(reset=True):
-                priority = NotificationPriorityLevel.MEDIUM
+        if isAdding and needToPopUp:
+            priority = NotificationPriorityLevel.MEDIUM
             AccountSettings.setBattleMattersSetting(BattleMatters.REMINDER_LAST_DISPLAY_TIME, time_utils.getServerUTCTime())
         self._notifyOrRemove(isAdding, priority=priority)
         return
 
     def __isLongTimeWithoutProgress(self):
         battlesWithoutProgress = self.__bmCtrl.progressWatcher.getBattlesCountWithoutProgress()
-        return battlesWithoutProgress >= self.__MAX_BATTLES_WITHOUT_PROGRESS
+        return battlesWithoutProgress > 0 and battlesWithoutProgress % self.__BATTLES_WITHOUT_PROGRESS_PERIOD == 0
 
     def __isShowedToday(self):
         lastDisplayTime = AccountSettings.getBattleMattersSetting(BattleMatters.REMINDER_LAST_DISPLAY_TIME)
-        return self.__isToday(lastDisplayTime) and (self.__gameSession.sessionStartedAt > lastDisplayTime or self.__bmCtrl.progressWatcher.isFirstBattleWithoutProgressInSession())
+        return self.__isToday(lastDisplayTime)
 
     @staticmethod
     def __isToday(timestamp):
@@ -2068,12 +2029,14 @@ class PrestigeListener(_NotificationListener):
     def start(self, model):
         result = super(PrestigeListener, self).start(model)
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
+        g_playerEvents.onVehicleBecomeElite += self.__onVehicleBecomeElite
         if result:
             self.__tryNotify()
         return result
 
     def stop(self):
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
+        g_playerEvents.onVehicleBecomeElite -= self.__onVehicleBecomeElite
         super(PrestigeListener, self).stop()
 
     def __onServerSettingsChange(self, diff):
@@ -2084,6 +2047,19 @@ class PrestigeListener(_NotificationListener):
         config = self.__lobbyContext.getServerSettings().prestigeConfig
         if not config.isEnabled and model:
             model.removeNotification(NOTIFICATION_TYPE.PRESTIGE_FIRST_ENTRY, self.__START_ENTITY_ID)
+
+    def __onVehicleBecomeElite(self, *vehicleIntCDs):
+        msgKey = R.strings.system_messages.vehicleMilestones.vanityAvailable
+        config = self.__lobbyContext.getServerSettings().prestigeMilestonesConfig
+        for intCD in vehicleIntCDs:
+            vehicle = self.__itemsCache.items.getItemByCD(intCD)
+            if vehicle is None or not vehicle.postProgressionAvailability(unlockOnly=True):
+                continue
+            if intCD not in config.milestones:
+                continue
+            SystemMessages.pushMessage(text=backport.text(msgKey.text(), vehicle=vehicle.userName), type=SM_TYPE.InformationHeader, priority=NotificationPriorityLevel.HIGH, messageData={'header': backport.text(msgKey.title())})
+
+        return
 
     def __tryNotify(self):
         model = self._model()
@@ -2320,34 +2296,197 @@ class LootBoxSystemListener(_NotificationListener):
         SystemMessages.pushMessage(text=backport.text(getTextResource(res + [NotificationPathPart.TEXT], eventName)()), priority=NotificationPriorityLevel.HIGH, type=SystemMessages.SM_TYPE.LootBoxSystemDisabled, messageData={'header': backport.text(getTextResource(res + [NotificationPathPart.HEADER], eventName)())})
 
 
-class WotAnniversaryStateListener(_NotificationListener):
-    slots = ('__currentState',)
-    __wotAnniversaryController = dependency.descriptor(IWotAnniversaryController)
+class PM3NotificationListener(_NotificationListener):
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+    __settingsCache = dependency.descriptor(ISettingsCache)
+    __eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self):
-        super(WotAnniversaryStateListener, self).__init__()
-        self.__currentState = False
+        super(PM3NotificationListener, self).__init__()
+        self.__currentDisabledOperations = set()
+        self.__currentDisabledMissions = set()
 
     def start(self, model):
-        super(WotAnniversaryStateListener, self).start(model)
-        self.__currentState = self.__wotAnniversaryController.config.isEnabled
-        self.__wotAnniversaryController.onSettingsChanged += self.__onSettingsChanged
-        return True
+        result = super(PM3NotificationListener, self).start(model)
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
+        self.__settingsCache.onSyncCompleted += self.__onSettingsCacheSynced
+        self.__currentDisabledOperations = set(self.__eventsCache.getPersonalMissions().getDisabledPMOperations())
+        self.__currentDisabledMissions = set(self.__lobbyContext.getServerSettings().getDisabledPersonalMissions())
+        return result
 
     def stop(self):
-        self.__wotAnniversaryController.onSettingsChanged -= self.__onSettingsChanged
-        super(WotAnniversaryStateListener, self).stop()
+        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
+        self.__settingsCache.onSyncCompleted -= self.__onSettingsCacheSynced
+        super(PM3NotificationListener, self).stop()
 
-    def __onSettingsChanged(self):
-        isEnabled = self.__wotAnniversaryController.config.isEnabled
-        self.__addMessage(isEnabled)
-        self.__currentState = isEnabled
+    def __onSettingsCacheSynced(self):
+        self.__currentDisabledMissions = set(self.__lobbyContext.getServerSettings().getDisabledPersonalMissions())
 
-    def __addMessage(self, newState):
-        if self.__currentState != newState:
-            textsAccessor = R.strings.wot_anniversary.notifications
-            textResId = textsAccessor.switch_pause_on.description() if newState else textsAccessor.switch_pause_off.description()
-            SystemMessages.pushMessage(text=backport.text(textResId), type=SystemMessages.SM_TYPE.Warning, priority=NotificationPriorityLevel.MEDIUM)
+    def __onServerSettingsChange(self, diff):
+        if 'isPM3QuestEnabled' in diff and 'isPM2QuestEnabled' in diff and 'isRegularQuestEnabled' in diff:
+            self.__allCampaignsSwitcherNotify(diff)
+        else:
+            self.__campaignSwitcherNotify(diff)
+        if diff.get('disabledPMOperations') is not None:
+            self.__operationSwitcherNotify(diff)
+        if diff.get('disabledPersonalMissions') is not None:
+            self.__missionSwitcherNotify(diff)
+        return
+
+    @staticmethod
+    def __pushMessage(text, priority, messageType, title):
+        SystemMessages.pushMessage(text=text, type=messageType, priority=priority, messageData={'title': title})
+
+    def __allCampaignsSwitcherNotify(self, diff):
+        if all((diff['isPM3QuestEnabled'], diff['isPM2QuestEnabled'], diff['isRegularQuestEnabled'])):
+            SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.PERSONALMISSION_SWITCHERNOTIFICATION_ALLCAMPAIGNSON, type=SystemMessages.SM_TYPE.Information, priority=NotificationPriorityLevel.HIGH)
+        if not any((diff['isPM3QuestEnabled'], diff['isPM2QuestEnabled'], diff['isRegularQuestEnabled'])):
+            SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.PERSONALMISSION_SWITCHERNOTIFICATION_ALLCAMPAIGNSOFF, type=SystemMessages.SM_TYPE.ErrorSimple, priority=NotificationPriorityLevel.HIGH)
+
+    def __campaignSwitcherNotify(self, diff):
+        for campaignSwitcher in PM_SWITCHER_CAMPAIGN:
+            if campaignSwitcher in diff:
+                branch = PM_SWITCHER_CAMPAIGN[campaignSwitcher]
+                campaignName = self.__eventsCache.getPersonalMissions().getAllCampaigns(branches=PM_BRANCH.ALL)[PM_CAMPAIGNS_IDS[branch]].getUserName()
+                if not diff[campaignSwitcher]:
+                    message = SYSTEM_MESSAGES.PERSONALMISSION_SWITCHERNOTIFICATION_CAMPAIGNOFF
+                    iconType = SystemMessages.SM_TYPE.ErrorSimple
+                else:
+                    iconType = SystemMessages.SM_TYPE.Information
+                    message = SYSTEM_MESSAGES.PERSONALMISSION_SWITCHERNOTIFICATION_CAMPAIGNON
+                SystemMessages.pushI18nMessage(message, type=iconType, priority=NotificationPriorityLevel.HIGH, campaignName=campaignName)
+
+    def __getCampaignName(self, operation):
+        return self.__eventsCache.getPersonalMissions().getAllCampaigns(PM_BRANCH.ALL)[operation.getCampaignID()].getUserName()
+
+    def __operationSwitcherNotify(self, diff):
+        newDisabledOperations = set(self.__eventsCache.getPersonalMissions().getDisabledPMOperations())
+        disabledOperationsToNotify = newDisabledOperations - self.__currentDisabledOperations
+        newEnabledOperations = self.__currentDisabledOperations - newDisabledOperations
+        allOperations = self.__eventsCache.getPersonalMissions().getAllOperations(PM_BRANCH.ALL)
+        self.__currentDisabledOperations = newDisabledOperations
+        for operationID in disabledOperationsToNotify:
+            operation = allOperations.get(operationID)
+            if not operation:
+                _logger.error('Wrong disabled personal mission operationID "%s"', operationID)
+                continue
+            campaignName = self.__getCampaignName(operation)
+            SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.PERSONALMISSION_SWITCHERNOTIFICATION_OPERATIONOFF, type=SystemMessages.SM_TYPE.ErrorSimple, piority=NotificationPriorityLevel.MEDIUM, operationName=operation.getShortUserName(), campaignName=campaignName)
+
+        for operationID in newEnabledOperations:
+            operation = allOperations.get(operationID)
+            if operation is None:
+                _logger.error('Wrong enabled personal mission operationID "%s"', operationID)
+                continue
+            campaignName = self.__eventsCache.getPersonalMissions().getAllCampaigns(PM_BRANCH.ALL)[operation.getCampaignID()].getUserName()
+            SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.PERSONALMISSION_SWITCHERNOTIFICATION_OPERATIONON, type=SystemMessages.SM_TYPE.Information, priority=NotificationPriorityLevel.MEDIUM, operationName=operation.getShortUserName(), campaignName=campaignName)
+
+        return
+
+    def __missionSwitcherNotify(self, diff):
+        newDisabledMissions = set(diff.get('disabledPersonalMissions', {}))
+        newDisabledMissionsToNotify = newDisabledMissions - self.__currentDisabledMissions
+        newEnabledMissions = self.__currentDisabledMissions - newDisabledMissions
+        allMissions = self.__eventsCache.getPersonalMissions().getAllQuests(PM_BRANCH.ALL)
+        allOperations = self.__eventsCache.getPersonalMissions().getAllOperations(PM_BRANCH.ALL)
+        for missionID in newDisabledMissionsToNotify:
+            mission = allMissions.get(missionID)
+            if not mission:
+                _logger.error('Wrong disabled personal mission ID "%s"', missionID)
+                continue
+            operation = allOperations.get(mission.getOperationID())
+            SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.PERSONALMISSION_SWITCHERNOTIFICATION_MISSIONOFF, type=SystemMessages.SM_TYPE.ErrorSimple, priority=NotificationPriorityLevel.MEDIUM, operationName=operation.getShortUserName(), missionName=mission.getShortUserName())
+
+        for missionID in newEnabledMissions:
+            mission = allMissions.get(missionID)
+            if mission is None:
+                _logger.error('Wrong enabled personal mission ID "%s"', missionID)
+                continue
+            operation = allOperations.get(mission.getOperationID())
+            SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.PERSONALMISSION_SWITCHERNOTIFICATION_MISSIONON, type=SystemMessages.SM_TYPE.Information, priority=NotificationPriorityLevel.MEDIUM, operationName=operation.getShortUserName(), missionName=mission.getShortUserName())
+
+        self.__currentDisabledMissions = newDisabledMissions
+        return
+
+
+class SkillTreePerkAvailableListener(BaseReminderListener):
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __ENTITY_ID = 0
+
+    def __init__(self):
+        super(SkillTreePerkAvailableListener, self).__init__(NOTIFICATION_TYPE.VEH_SKILL_TREE_PERK_AVAILABLE, self.__ENTITY_ID)
+
+    def start(self, model):
+        result = super(SkillTreePerkAvailableListener, self).start(model)
+        if result:
+            g_clientUpdateManager.addCallbacks({'stats.vehTypeXP': self.__onVehicleXPUpdated})
+            self.__tryNotify()
+
+    def stop(self):
+        super(SkillTreePerkAvailableListener, self).stop()
+        g_clientUpdateManager.removeObjectCallbacks(self)
+
+    def _notifyOrRemove(self, isAdding, isStateChanged=False, **ctx):
+        if isAdding:
+            return super(SkillTreePerkAvailableListener, self)._notifyOrRemove(isAdding, isStateChanged, **ctx)
+        self._removeNotification(**ctx)
+        return False
+
+    def _removeNotification(self, **ctx):
+        model = self._model()
+        if model:
+            data = self._createNotificationData(**ctx)
+            notification = self._createDecorator(data)
+            model.removeNotification(self._getNotificationType(), notification.getID())
+
+    def _createNotificationData(self, priority, vehCD, nodeID, **ctx):
+        gfDataID = str(uuid.uuid4())
+        getCache().setPayload(gfDataID, {'vehCD': vehCD,
+         'nodeID': nodeID})
+        data = {'gfDataID': gfDataID}
+        return NotificationData(vehCD, data, priority, None)
+
+    def _createDecorator(self, data):
+        return VehSkillTreePerkAvailableDecorator(data.entityID, data.savedData, self._model(), GFNotificationTemplates.SKILL_TREE_PERK_AVAILABLE_NOTIFICATION, data.priorityLevel)
+
+    def __onVehicleXPUpdated(self, diff):
+        self.__processVehicles(diff)
+
+    def __tryNotify(self):
+        self.__processVehicles(self.__itemsCache.items.inventory.getIventoryVehiclesCDs())
+
+    def __processVehicles(self, vehCDs):
+        currentViewVehicleCD = self.__getCurrentViewVehicleCD()
+        for vehCD in vehCDs:
+            self.__processVehicle(vehCD, currentViewVehicleCD == vehCD)
+
+    def __processVehicle(self, vehCD, isCurrentViewVehicle):
+        vehicle = self.__itemsCache.items.getItemByCD(vehCD)
+        postProgression = vehicle.postProgression
+        if postProgression.isVehSkillTree():
+            isAdding = False
+            nodeID = None
+            priority = NotificationPriorityLevel.LOW
+            if not isCurrentViewVehicle:
+                cheapestPerk = getCheapestAvailablePerk(vehicle)
+                recordedCheapestNodeIDs = AccountSettings.getUIFlag(VEH_SKILL_TREE_RECORDED_NOFITICATION_NODE)
+                recordedCheapestNodeID = recordedCheapestNodeIDs.get(vehCD)
+                if cheapestPerk is not None and cheapestPerk.getPrice().xp <= vehicle.xp and (recordedCheapestNodeID is None or recordedCheapestNodeID == cheapestPerk.stepID):
+                    isAdding = True
+                    nodeID = cheapestPerk.stepID
+                    if recordedCheapestNodeID is None:
+                        recordedCheapestNodeIDs[vehCD] = nodeID
+                        AccountSettings.setUIFlag(VEH_SKILL_TREE_RECORDED_NOFITICATION_NODE, recordedCheapestNodeIDs)
+                    if vehCD not in AccountSettings.getUIFlag(VEH_SKILL_TREE_POPUP_SHOWN):
+                        priority = NotificationPriorityLevel.HIGH
+            self._notifyOrRemove(isAdding, priority=priority, vehCD=vehCD, nodeID=nodeID)
+        return
+
+    @staticmethod
+    def __getCurrentViewVehicleCD():
+        appLoader = dependency.instance(IAppLoader)
+        view = appLoader.getApp().containerManager.getViewByKey(ViewKey(VIEW_ALIAS.VEHICLE_HUB))
+        return view.content.vehicleCtx.intCD if view is not None else None
 
 
 registerNotificationsListeners((ServiceChannelListener,
@@ -2379,7 +2518,8 @@ registerNotificationsListeners((ServiceChannelListener,
  GoldExchangeRatesDiscountsListener,
  LootBoxSystemListener,
  EasyTankEquipStateListener,
- WotAnniversaryStateListener))
+ PM3NotificationListener,
+ SkillTreePerkAvailableListener))
 
 class NotificationsListeners(_NotificationListener):
 

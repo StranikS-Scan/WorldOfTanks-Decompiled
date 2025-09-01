@@ -242,7 +242,9 @@ class PostBattleConditions(ConditionsParser):
             return conditions.UnitResults(uniqueName, data, self.__preBattleCond)
         if name == 'multiStunEvent':
             return conditions.MultiStunEvent(uniqueName, data)
-        return conditions.FirstBlood(uniqueName, data) if name == 'isFirstBlood' else None
+        if name == 'isFirstBlood':
+            return conditions.FirstBlood(uniqueName, data)
+        return conditions.VehicleBlockedByArmor(uniqueName, data) if name == 'vehicleBlockedByArmor' else None
 
 
 class BonusConditions(ConditionsParser):

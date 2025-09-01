@@ -148,7 +148,7 @@ class PrebattleSetupController(IPrebattleSetupController):
             self._updatePreBattleSetup(vehicleInfo)
             if prevSetups != self.__guiVehicle.setupLayouts.groups or prevCD != self.__guiVehicle.intCD:
                 if prevCD == self.__guiVehicle.intCD:
-                    self.__sessionProvider.shared.ammo.updateForNewSetup(self.__guiVehicle.descriptor.gun, self.__guiVehicle.shells.installed.getItems())
+                    self.__sessionProvider.shared.ammo.updateForNewSetup(self.__guiVehicle.descriptor, self.__guiVehicle.shells.installed.getItems())
                     playSound(Sounds.GAMEPLAY_SETUP_SWITCH)
             BattleReplay.g_replayCtrl.updateArenaInfo(self.__guiVehicle.name)
             self.onVehicleChanged(self.__guiVehicle)

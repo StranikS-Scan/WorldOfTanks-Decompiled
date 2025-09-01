@@ -21,9 +21,10 @@ from skeletons.gui.app_loader import IAppLoader
 from story_mode.avatar_input_handler.control_modes import StoryModeArcadeMinefieldControlMode, SMStrategicMapCaseControlMode
 from story_mode.gui.story_mode_gui_constants import ABILITY_ON_COOLDOWN_ACTIVATION_ERROR_KEY
 from story_mode.gui.sound_constants import SMN_ARCADE_ARTILLERY_ACTIVATE_SOUND, SMN_ARCADE_ARTILLERY_DEACTIVATE_SOUND, SMN_ARCADE_ARTILLERY_SET_SOUND, SMN_ARCADE_ARTILLERY_STATE_GROUP, SMN_ARCADE_ARTILLERY_STATE_IN, SMN_ARCADE_ARTILLERY_STATE_OUT, SMN_ARCADE_ARTILLERY_DESTROYER_SOUND, DISTRACTION_ABILITY_ACTIVATE_SOUND, DISTRACTION_ABILITY_CANCEL_SOUND, DISTRACTION_ABILITY_SET_SOUND, RECON_ABILITY_ACTIVATE_SOUND, RECON_ABILITY_DEACTIVATE_SOUND, RECON_ABILITY_CANCEL_SOUND, RECON_ABILITY_SET_SOUND, RECON_ABILITY_ENGINE_STOP_SOUND, RECON_ABILITY_ENGINE_START_SOUND
-from story_mode_common.story_mode_constants import RECON_ABILITY, EQUIPMENT_STAGES as STAGES, DISTRACTION_ABILITY
+from story_mode_common.story_mode_constants import RECON_ABILITY, EQUIPMENT_STAGES as STAGES, DISTRACTION_ABILITY, SCC_AIRSTRIKE_ABILITY, SCC_AIRSTRIKE_ABILITY_HARD
 if typing.TYPE_CHECKING:
     from Avatar import Avatar
+    from items import artefacts
 _SMN_ARCADE_ARTILLERY_ITEMS = ('arcade_artillery_smn_battleship_lvl1', 'arcade_artillery_smn_battleship_lvl1_hard', 'arcade_artillery_smn_battleship_lvl2', 'arcade_artillery_smn_battleship_lvl2_hard', 'arcade_artillery_smn_battleship_lvl3', 'arcade_artillery_smn_battleship_lvl3_hard')
 _SMN_ARCADE_ARTILLERY_DESTROYER_ITEMS = {'arcade_artillery_smn_destroyer', 'arcade_artillery_smn_destroyer_hard'}
 _EQUIPMENT_STAGE_DESTROYER_SHOOTING = -1
@@ -101,7 +102,7 @@ class AbilityItem(equipment_ctrl._RefillEquipmentItem, equipment_ctrl._OrderItem
 
 
 class SMStrategicAbilityItem(AbilityItem):
-    _PREFAB_URL = 'content/CGFPrefabs/Storymode/tank_rectangle.prefab'
+    _PREFAB_URL = ''
 
     def __init__(self, descriptor, quantity, stage, timeRemaining, totalTime, tags):
         super(SMStrategicAbilityItem, self).__init__(descriptor, quantity, stage, timeRemaining, totalTime, tags)
@@ -129,7 +130,7 @@ class SMStrategicAbilityItem(AbilityItem):
         super(SMStrategicAbilityItem, self).clear()
 
     def _updateVisual(self, stage):
-        if stage == STAGES.PREPARING:
+        if stage == STAGES.PREPARING and self._PREFAB_URL:
             self._loadPrefab()
         elif stage in (STAGES.READY, STAGES.DEACTIVATING, STAGES.COOLDOWN):
             self._removePrefab()
@@ -154,6 +155,7 @@ class SMStrategicAbilityItem(AbilityItem):
 
 
 class DistractionAbilityItem(SMStrategicAbilityItem):
+    _PREFAB_URL = 'content/CGFPrefabs/Storymode/tank_rectangle.prefab'
 
     def update(self, quantity, stage, timeRemaining, totalTime):
         super(DistractionAbilityItem, self).update(quantity, stage, timeRemaining, totalTime)
@@ -166,6 +168,7 @@ class DistractionAbilityItem(SMStrategicAbilityItem):
 
 
 class ReconAbilityItem(SMStrategicAbilityItem):
+    _PREFAB_URL = 'content/CGFPrefabs/Storymode/tank_rectangle.prefab'
     appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self, *args, **kwargs):
@@ -257,6 +260,14 @@ class AbilityReplayItem(equipment_ctrl._ReplayOrderItem):
         return StoryModeArcadeMinefieldControlMode
 
 
+class SccAirstrikeAbilityItem(SMStrategicAbilityItem, _SmnRefillEquipmentItem):
+    pass
+
+
+class SccReplayAirstrikeAbilityItem(_SmnRefillEquipmentItem, equipment_ctrl._ReplayOrderItem):
+    pass
+
+
 def register():
     for name in _SMN_ARCADE_ARTILLERY_ITEMS:
         registerEquipmentItem(name, _SmnArcadeArtilleryItem, _SmnReplayArcadeArtilleryItem)
@@ -266,3 +277,5 @@ def register():
 
     registerEquipmentItem(RECON_ABILITY, ReconAbilityItem, AbilityReplayItem)
     registerEquipmentItem(DISTRACTION_ABILITY, DistractionAbilityItem, AbilityReplayItem)
+    registerEquipmentItem(SCC_AIRSTRIKE_ABILITY, SccAirstrikeAbilityItem, SccReplayAirstrikeAbilityItem)
+    registerEquipmentItem(SCC_AIRSTRIKE_ABILITY_HARD, SccAirstrikeAbilityItem, SccReplayAirstrikeAbilityItem)

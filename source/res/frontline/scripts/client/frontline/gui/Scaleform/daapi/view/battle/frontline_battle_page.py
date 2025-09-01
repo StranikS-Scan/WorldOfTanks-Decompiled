@@ -20,6 +20,8 @@ from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.controllers.sound_ctrls.epic_battle_sounds import EpicBattleSoundController
 from gui.shared import EVENT_BUS_SCOPE, events
 from shared_utils import CONST_CONTAINER
+from vehicles.mechanics.mechanic_info import hasVehicleMechanic
+from vehicles.mechanics.mechanic_constants import VehicleMechanic
 
 class DynamicAliases(CONST_CONTAINER):
     EPIC_FINISH_SOUND_PLAYER = 'epicFinishSoundPlayer'
@@ -88,7 +90,6 @@ _GAME_UI = {BATTLE_VIEW_ALIASES.VEHICLE_ERROR_MESSAGES,
  BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL,
  FRONTLINE_BATTLE_VIEW_ALIASES.FRONTLINE_RECOVERY_PANEL,
  BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR,
- BATTLE_VIEW_ALIASES.ROCKET_ACCELERATOR_INDICATOR,
  BATTLE_VIEW_ALIASES.STATUS_NOTIFICATIONS_PANEL,
  BATTLE_VIEW_ALIASES.BATTLE_DAMAGE_LOG_PANEL,
  FRONTLINE_BATTLE_VIEW_ALIASES.FRONTLINE_PLATOON_PANEL,
@@ -98,6 +99,7 @@ _GAME_UI = {BATTLE_VIEW_ALIASES.VEHICLE_ERROR_MESSAGES,
  BATTLE_VIEW_ALIASES.CALLOUT_PANEL,
  BATTLE_VIEW_ALIASES.SITUATION_INDICATORS,
  FRONTLINE_BATTLE_VIEW_ALIASES.FRONTLINE_MODIFICATION_PANEL}
+_GAME_UI |= set(BATTLE_VIEW_ALIASES.VEHICLE_MECHANICS_PANELS)
 _SPECTATOR_UI = {BATTLE_VIEW_ALIASES.SPECTATOR_VIEW,
  BATTLE_VIEW_ALIASES.DEBUG_PANEL,
  BATTLE_VIEW_ALIASES.PLAYER_MESSAGES,
@@ -159,8 +161,7 @@ _STATE_TO_UI = {PageStates.GAME: _GAME_UI.union({FRONTLINE_BATTLE_VIEW_ALIASES.F
                         FRONTLINE_BATTLE_VIEW_ALIASES.FRONTLINE_MISSIONS_PANEL,
                         BATTLE_VIEW_ALIASES.BATTLE_TIMER,
                         BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR,
-                        BATTLE_VIEW_ALIASES.ROCKET_ACCELERATOR_INDICATOR,
-                        BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL})}
+                        BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL} | set(BATTLE_VIEW_ALIASES.VEHICLE_MECHANICS_PANELS))}
 _FRONTLINE_EXTERNAL_COMPONENTS = (FrontlineCrosshairPanelContainer, FrontlineMarkersManager, KillCamMarkersManager)
 
 class FrontlineBattlePage(FrontlineBattlePageMeta, BattleGUIKeyHandler):
@@ -211,7 +212,8 @@ class FrontlineBattlePage(FrontlineBattlePageMeta, BattleGUIKeyHandler):
             ctrl = self.sessionProvider.shared.vehicleState
             vehicle = ctrl.getControllingVehicle()
             if vehicle is not None:
-                if vehicle.typeDescriptor.hasSiegeMode or vehicle.isTrackWithinTrack:
+                hasPillboxMode = hasVehicleMechanic(vehicle.typeDescriptor, VehicleMechanic.PILLBOX_SIEGE_MODE)
+                if (vehicle.typeDescriptor.hasSiegeMode or vehicle.isTrackWithinTrack) and not hasPillboxMode:
                     self._swapVisibleStates(visibleUI, hiddenUI, BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR)
                 else:
                     self._swapVisibleStates(visibleUI, hiddenUI, BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR, True)
@@ -219,10 +221,9 @@ class FrontlineBattlePage(FrontlineBattlePageMeta, BattleGUIKeyHandler):
                     self._swapVisibleStates(visibleUI, hiddenUI, BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL)
                 else:
                     self._swapVisibleStates(visibleUI, hiddenUI, BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL, True)
-                if vehicle.typeDescriptor.hasRocketAcceleration:
-                    self._swapVisibleStates(visibleUI, hiddenUI, BATTLE_VIEW_ALIASES.ROCKET_ACCELERATOR_INDICATOR)
-                else:
-                    self._swapVisibleStates(visibleUI, hiddenUI, BATTLE_VIEW_ALIASES.ROCKET_ACCELERATOR_INDICATOR, True)
+                for alias in BATTLE_VIEW_ALIASES.VEHICLE_MECHANICS_PANELS:
+                    self._swapVisibleStates(visibleUI, hiddenUI, alias)
+
             ctrl = self.sessionProvider.dynamic.maps
             if ctrl:
                 ctrl.setOverviewMapScreenVisibility(FRONTLINE_BATTLE_VIEW_ALIASES.FRONTLINE_OVERVIEW_MAP_SCREEN in visibleUI)

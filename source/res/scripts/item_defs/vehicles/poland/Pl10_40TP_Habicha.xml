@@ -55,7 +55,7 @@
     </armor>
     <primaryArmor>	armor_6 armor_3 armor_4	</primaryArmor>
     <weight>	22300	</weight>
-    <maxHealth>	672	</maxHealth>
+    <maxHealth>	736	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	140	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
@@ -1003,8 +1003,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	7800	</weight>
-      <maxLoad>	40000	</maxLoad>
-      <terrainResistance>	1.2 1.5 2.3	</terrainResistance>
+      <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
       <brakeForce>	41000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	36	</rotationSpeed>
@@ -1896,7 +1895,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	7800	</weight>
-      <maxLoad>	41350	</maxLoad>
       <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
       <brakeForce>	42000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -2803,7 +2801,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	6250	</weight>
-      <maxHealth>	128	</maxHealth>
+      <maxHealth>	134	</maxHealth>
       <rotationSpeed>	33	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -3438,7 +3436,7 @@
       <level>	6	</level>
       <price>	16600	</price>
       <unlocks>
-        <gun>	_90mm_wz_39_40	  <cost>	11300	</cost>
+        <gun>	_90mm_wz_39_40_40TP	  <cost>	11300	</cost>
         </gun>
       </unlocks>
       <armor>
@@ -3460,7 +3458,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7100	</weight>
-      <maxHealth>	168	</maxHealth>
+      <maxHealth>	184	</maxHealth>
       <rotationSpeed>	37	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -3547,7 +3545,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_wz_36_37M>
-        <_90mm_wz_39_40>	shared	  <maxAmmo>	74	</maxAmmo>
+        <_90mm_wz_39_40_40TP>	shared	  <maxAmmo>	74	</maxAmmo>
           <unlocks>
             <vehicle>	Pl11_45TP_Habicha	  <cost>	43550	</cost>
             </vehicle>
@@ -3622,7 +3620,7 @@
             <density>	184.011 196.486	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_90mm_wz_39_40>
+        </_90mm_wz_39_40_40TP>
       </guns>
       <models>
         <undamaged>	vehicles/poland/Pl10_40TP_Habicha/normal/lod0/Turret_02.model	</undamaged>
@@ -4217,13 +4215,13 @@
           <axleCount>	5	</axleCount>
           <grounds>
             <soft>
-              <rollingFriction>	0.18515	</rollingFriction>
+              <rollingFriction>	0.16905	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.12075	</rollingFriction>
+              <rollingFriction>	0.10465	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0966	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_Pl10_40TP_Habicha>

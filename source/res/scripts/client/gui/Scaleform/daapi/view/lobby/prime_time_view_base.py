@@ -6,18 +6,14 @@ import constants
 from adisp import adisp_process
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi import LobbySubView
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.prime_time_servers_data_provider import PrimeTimesServersDataProvider
 from gui.Scaleform.daapi.view.meta.PrimeTimeMeta import PrimeTimeMeta
-from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.base.pre_queue.listener import IPreQueueListener
 from gui.periodic_battles.models import PrimeTimeStatus
 from gui.shared import actions, event_dispatcher
-from gui.shared import events
-from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.servers import makePingStatusIcon
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
@@ -151,7 +147,7 @@ class PrimeTimeViewBase(LobbySubView, PrimeTimeMeta, Notifiable, IPreQueueListen
     _reloginController = dependency.descriptor(IReloginController)
     _connectionMgr = dependency.descriptor(IConnectionManager)
 
-    def __init__(self, *_):
+    def __init__(self, **kwargs):
         super(PrimeTimeViewBase, self).__init__()
         self.__serversDP = None
         self._allServers = {}
@@ -335,7 +331,8 @@ class PrimeTimeViewBase(LobbySubView, PrimeTimeMeta, Notifiable, IPreQueueListen
             self.__close()
 
     def __close(self):
-        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
+        from gui.shared.event_dispatcher import showHangar
+        showHangar()
 
     def __invalidateServersPing(self):
         for server in self._allServers.values():

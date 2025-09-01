@@ -54,7 +54,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	10000	</weight>
-    <maxHealth>	448	</maxHealth>
+    <maxHealth>	496	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	130	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
@@ -1041,13 +1041,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <A-20_mod_1938>
-      <userString>	#ussr_vehicles:A-20_mod_1938	</userString>
+    <Chassis_R12_A-20>
+      <userString>	#ussr_vehicles:Chassis_R12_A-20	</userString>
       <tags></tags>
       <level>	4	</level>
       <price>	2840	</price>
       <unlocks>
-        <chassis>	A-20_mod_1941	  <cost>	1840	</cost>
+        <chassis>	Chassis_R12_A-20_2	  <cost>	1840	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1055,8 +1055,7 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	5000	</weight>
-      <maxLoad>	19500	</maxLoad>
-      <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
+      <terrainResistance>	1 1.1 1.9	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	44	</rotationSpeed>
@@ -1973,9 +1972,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </A-20_mod_1938>
-    <A-20_mod_1941>
-      <userString>	#ussr_vehicles:A-20_mod_1941	</userString>
+    </Chassis_R12_A-20>
+    <Chassis_R12_A-20_2>
+      <userString>	#ussr_vehicles:Chassis_R12_A-20_2	</userString>
       <tags></tags>
       <level>	5	</level>
       <price>	7160	</price>
@@ -1984,7 +1983,6 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	5000	</weight>
-      <maxLoad>	19950	</maxLoad>
       <terrainResistance>	1 1.1 1.9	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -2902,16 +2900,16 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </A-20_mod_1941>
+    </Chassis_R12_A-20_2>
   </chassis>
   <turrets0>
-    <A-20_mod_1938>
-      <userString>	#ussr_vehicles:A-20_mod_1938	</userString>
+    <Turret_1_R12_A-20>
+      <userString>	#ussr_vehicles:Turret_1_R12_A-20	</userString>
       <tags></tags>
       <level>	4	</level>
       <price>	3760	</price>
       <unlocks>
-        <turret>	A-20bis	  <cost>	2215	</cost>
+        <turret>	Turret_2_R12_A-20	  <cost>	2215	</cost>
         </turret>
       </unlocks>
       <armor>
@@ -2925,7 +2923,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1200	</weight>
-      <maxHealth>	72	</maxHealth>
+      <maxHealth>	94	</maxHealth>
       <rotationSpeed>	45	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -2939,11 +2937,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_45mm_20K>	shared	  <maxAmmo>	160	</maxAmmo>
-          <unlocks>
-            <gun>	_37mm_ZiS-19	  <cost>	160	</cost>
-            </gun>
-          </unlocks>
+        <_45mm_20K_A_20>	shared	  <maxAmmo>	160	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 7 1 7	</maxPitch>
@@ -2957,12 +2951,12 @@
             </armor_4>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	2.3	</reloadTime>
+          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <reloadTime>	1.9	</reloadTime>
           <aimingTime>	1.9	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3	</afterShot>
+            <afterShot>	2	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
@@ -3021,165 +3015,7 @@
             <density>	108.577 103.306	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_45mm_20K>
-        <_37mm_ZiS-19>	shared	  <maxAmmo>	200	</maxAmmo>
-          <unlocks>
-            <gun>	_37mm_automatic_SH-37	  <cost>	2600	</cost>
-            </gun>
-          </unlocks>
-          <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 7 1 7	</maxPitch>
-          </pitchLimits>
-          <armor>
-            <armor_1>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	10	</gun>
-          </armor>
-          <shotDispersionRadius>	0.39	</shotDispersionRadius>
-          <reloadTime>	2.3	</reloadTime>
-          <aimingTime>	1.9	</aimingTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/russian/R12_A-20/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/russian/R12_A-20/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/russian/R12_A-20/crash/lod0/Gun_02.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/russian/R12_A-20/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R12_A-20/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_small	</effects>
-          <reloadEffect>	reload20_45	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.007574 0.004318 1.04074	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.186084 0.186084	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.007574 0.004318 1.04074	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.016 0.008 0.656069	</rayStart>
-              <rayEnd>	0.016 0.008 1.056069	</rayEnd>
-              <rayUp>	0.057312 0 0	</rayUp>
-              <size>	0.4	</size>
-              <hideIfDamaged>	true	</hideIfDamaged>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <tiling>	1.96 0.76 0.000000 0.000000	</tiling>
-            <density>	110.249 105.192	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </_37mm_ZiS-19>
-        <_37mm_automatic_SH-37>	shared	  <maxAmmo>	210	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 7 0.366894 7 0.430556 4 0.569444 4 0.633106 7 1 7	</maxPitch>
-          </pitchLimits>
-          <armor>
-            <armor_2>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <gun>	10	</gun>
-          </armor>
-          <reloadTime>	4.6	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	2	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <shotDispersionRadius>	0.45	</shotDispersionRadius>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/russian/R12_A-20/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/russian/R12_A-20/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/russian/R12_A-20/crash/lod0/Gun_03.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/russian/R12_A-20/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R12_A-20/collision_client/Gun_03.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_TNSH_auto	</effects>
-          <reloadEffect>	reload20_45	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.011801 0.002208 1.89665	</anchorPosition>
-              <anchorDirection>	-0 0.00021 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.173213 0.173213	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.011801 0.002204 1.89665	</anchorPosition>
-              <anchorDirection>	-0 0.000173 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.013 0.004 1.42326	</rayStart>
-              <rayEnd>	0.013 0.004 1.67326	</rayEnd>
-              <rayUp>	0.030714 0 0	</rayUp>
-              <size>	0.25	</size>
-              <hideIfDamaged>	true	</hideIfDamaged>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <tiling>	1.72 0.73 0.000000 0.000000	</tiling>
-            <density>	104.391 106.244	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </_37mm_automatic_SH-37>
+        </_45mm_20K_A_20>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R12_A-20/normal/lod0/Turret_01.model	</undamaged>
@@ -3728,16 +3564,14 @@
         <density>	106.432 106.459	</density>
         <aoTextureSize>	512 256	</aoTextureSize>
       </camouflage>
-    </A-20_mod_1938>
-    <A-20bis>
-      <userString>	#ussr_vehicles:A-20bis	</userString>
+    </Turret_1_R12_A-20>
+    <Turret_2_R12_A-20>
+      <userString>	#ussr_vehicles:Turret_2_R12_A-20	</userString>
       <tags></tags>
       <level>	5	</level>
       <price>	9170	</price>
       <unlocks>
-        <gun>	_76mm_L-11	  <cost>	450	</cost>
-        </gun>
-        <gun>	_45mm_VT-42	  <cost>	850	</cost>
+        <gun>	_45mm_VT_42_A_20	  <cost>	850	</cost>
         </gun>
       </unlocks>
       <armor>
@@ -3752,7 +3586,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1300	</weight>
-      <maxHealth>	112	</maxHealth>
+      <maxHealth>	124	</maxHealth>
       <rotationSpeed>	50	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -3767,7 +3601,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.006	</invisibilityFactor>
       <guns>
-        <_45mm_20K>	shared	  <maxAmmo>	160	</maxAmmo>
+        <_45mm_20K_A_20>	shared	  <maxAmmo>	160	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 7 1 7	</maxPitch>
@@ -3781,12 +3615,12 @@
             </armor_4>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	2.1	</reloadTime>
-          <aimingTime>	1.9	</aimingTime>
+          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <reloadTime>	1.9	</reloadTime>
+          <aimingTime>	1.7	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3	</afterShot>
+            <afterShot>	2	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
@@ -3845,238 +3679,8 @@
             <density>	108.577 103.306	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_45mm_20K>
-        <_37mm_ZiS-19>	shared	  <maxAmmo>	200	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 7 1 7	</maxPitch>
-          </pitchLimits>
-          <armor>
-            <armor_1>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	10	</gun>
-          </armor>
-          <shotDispersionRadius>	0.39	</shotDispersionRadius>
-          <reloadTime>	2.3	</reloadTime>
-          <aimingTime>	1.9	</aimingTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/russian/R12_A-20/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/russian/R12_A-20/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/russian/R12_A-20/crash/lod0/Gun_05.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/russian/R12_A-20/collision/Gun_05.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R12_A-20/collision_client/Gun_05.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_small	</effects>
-          <reloadEffect>	reload20_45	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.00142 0.01969 1.02284	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.181311 0.181312	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.00142 0.019693 1.02284	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0 0.024 0.656069	</rayStart>
-              <rayEnd>	0 0.024 1.056069	</rayEnd>
-              <rayUp>	0.057312 0 0	</rayUp>
-              <size>	0.4	</size>
-              <hideIfDamaged>	true	</hideIfDamaged>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <tiling>	2.14 0.805 0.000000 0.000000	</tiling>
-            <density>	110.249 105.192	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </_37mm_ZiS-19>
-        <_37mm_automatic_SH-37>	shared	  <maxAmmo>	210	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -27 1 -27	</minPitch>
-            <maxPitch>	0 7 0.366894 7 0.430556 5 0.569444 5 0.633106 7 1 7	</maxPitch>
-          </pitchLimits>
-          <armor>
-            <armor_1>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	10	</gun>
-          </armor>
-          <reloadTime>	4.2	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	2	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <shotDispersionRadius>	0.45	</shotDispersionRadius>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/russian/R12_A-20/normal/lod0/Gun_06.model	</undamaged>
-            <destroyed>	vehicles/russian/R12_A-20/crash/lod0/Gun_06.model	</destroyed>
-            <exploded>	vehicles/russian/R12_A-20/crash/lod0/Gun_06.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/russian/R12_A-20/collision/Gun_06.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R12_A-20/collision_client/Gun_06.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_TNSH_auto	</effects>
-          <reloadEffect>	reload20_45	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.011803 0.019431 1.96742	</anchorPosition>
-              <anchorDirection>	-0.000001 0.000173 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.181311 0.181312	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.011803 0.01943 1.96743	</anchorPosition>
-              <anchorDirection>	-0 0.000173 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0 0.022 1.42326	</rayStart>
-              <rayEnd>	0 0.022 1.67326	</rayEnd>
-              <rayUp>	0.030714 0 0	</rayUp>
-              <size>	0.25	</size>
-              <hideIfDamaged>	true	</hideIfDamaged>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <tiling>	2.08 0.79 0.000000 0.000000	</tiling>
-            <density>	104.391 106.244	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </_37mm_automatic_SH-37>
-        <_76mm_L-11>	shared	  <maxAmmo>	90	</maxAmmo>
-          <reloadTime>	5	</reloadTime>
-          <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 7 0.386338 7 0.45 3 0.55 3 0.613662 7 1 7	</maxPitch>
-          </pitchLimits>
-          <armor>
-            <armor_2>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	10	</gun>
-          </armor>
-          <shotDispersionRadius>	0.43	</shotDispersionRadius>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/russian/R12_A-20/normal/lod0/Gun_07.model	</undamaged>
-            <destroyed>	vehicles/russian/R12_A-20/crash/lod0/Gun_07.model	</destroyed>
-            <exploded>	vehicles/russian/R12_A-20/crash/lod0/Gun_07.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/russian/R12_A-20/collision/Gun_07.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R12_A-20/collision_client/Gun_07.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.004595 -0.092249 1.0821	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.17722 0.177219	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.004595 -0.092248 1.08209	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.007 -0.095 0.809974	</rayStart>
-              <rayEnd>	-0.007 -0.095 1.209974	</rayEnd>
-              <rayUp>	0.061519 0 0	</rayUp>
-              <size>	0.4	</size>
-              <hideIfDamaged>	true	</hideIfDamaged>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <tiling>	2.02 0.805 0.000000 0.000000	</tiling>
-            <density>	102.4 102.01	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </_76mm_L-11>
-        <_45mm_VT-42>	shared	  <maxAmmo>	145	</maxAmmo>
+        </_45mm_20K_A_20>
+        <_45mm_VT_42_A_20>	shared	  <maxAmmo>	145	</maxAmmo>
           <unlocks>
             <vehicle>	R101_MT25	  <cost>	32150	</cost>
             </vehicle>
@@ -4158,7 +3762,7 @@
             <density>	110.293 104.363	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_45mm_VT-42>
+        </_45mm_VT_42_A_20>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R12_A-20/normal/lod0/Turret_02.model	</undamaged>
@@ -4663,54 +4267,36 @@
         <density>	106.726 107.44	</density>
         <aoTextureSize>	512 256	</aoTextureSize>
       </camouflage>
-    </A-20bis>
+    </Turret_2_R12_A-20>
   </turrets0>
   <engines>
-    <V-2>	shared	  <unlocks>
-        <engine>	V-2-34	  <cost>	5000	</cost>
+    <V_2_A_20>	shared	  <unlocks>
+        <engine>	V_2_34_A_20	  <cost>	5000	</cost>
         </engine>
       </unlocks>
-    </V-2>
-    <V-2-34>	shared	</V-2-34>
+    </V_2_A_20>
+    <V_2_34_A_20>	shared	</V_2_34_A_20>
   </engines>
   <fuelTanks>
     <Medium>	shared	</Medium>
   </fuelTanks>
   <radios>
-    <_9R>	shared	  <unlocks>
-        <radio>	_12LL	  <cost>	5600	</cost>
-        </radio>
-      </unlocks>
-    </_9R>
     <_12LL>	shared	</_12LL>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <V-2>
-          <smplEnginePower>	507.4949	</smplEnginePower>
+        <V_2_A_20>
+          <smplEnginePower>	520	</smplEnginePower>
           <smplFwMaxSpeed>	72	</smplFwMaxSpeed>
-        </V-2>
-        <V-2-34>
-          <smplEnginePower>	528.6406	</smplEnginePower>
+        </V_2_A_20>
+        <V_2_34_A_20>
+          <smplEnginePower>	550	</smplEnginePower>
           <smplFwMaxSpeed>	72	</smplFwMaxSpeed>
-        </V-2-34>
+        </V_2_34_A_20>
       </engines>
       <chassis>
-        <A-20_mod_1938>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.18515	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.10465	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
-            </firm>
-          </grounds>
-        </A-20_mod_1938>
-        <A-20_mod_1941>
+        <Chassis_R12_A-20>
           <grounds>
             <soft>
               <rollingFriction>	0.15295	</rollingFriction>
@@ -4722,16 +4308,24 @@
               <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
-        </A-20_mod_1941>
+        </Chassis_R12_A-20>
+        <Chassis_R12_A-20_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.15295	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.08855	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0805	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_R12_A-20_2>
       </chassis>
     </detailed>
   </physics>
   <clientAdjustmentFactors>
-    <guns>
-      <_37mm_automatic_SH-37>
-        <delta>	2.209302	</delta>
-      </_37mm_automatic_SH-37>
-    </guns>
     <armour>	0.907828922	</armour>
   </clientAdjustmentFactors>
   <effects>

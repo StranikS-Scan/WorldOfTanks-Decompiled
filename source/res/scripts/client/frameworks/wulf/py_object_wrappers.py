@@ -5,7 +5,10 @@ if not (IS_EDITOR or IS_WEB):
     import _wulf as _py_objects
 else:
     import wulf_wrapper as _py_objects
+ValueType = _py_objects.ValueType
+Resource = _py_objects.Resource
 PyObjectArray = _py_objects.PyObjectArray
+PyObjectMap = _py_objects.PyObjectMap
 PyObjectCommand = _py_objects.PyObjectCommand
 PyGuiApplication = _py_objects.PyGuiApplication
 PyObjectViewSettings = _py_objects.PyObjectViewSettings
@@ -29,4 +32,4 @@ getRealFormat = _py_objects.getRealFormat
 getTimeFormat = _py_objects.getTimeFormat
 getDateFormat = _py_objects.getDateFormat
 caseMap = _py_objects.caseMap
-__all__ = ('PyObjectArray', 'PyObjectCommand', 'PyGuiApplication', 'PyObjectViewSettings', 'PyObjectView', 'PyObjectViewModel', 'PyObjectWindowSettings', 'PyObjectWindow', 'PyObjectWindowsArea', 'isTranslatedKeyValid', 'isTranslatedTextExisted', 'getTranslatedText', 'getTranslatedPluralText', 'getImagePath', 'getSoundEffectId', 'getLayoutPath', 'getTranslatedTextByResId', 'getTranslatedPluralTextByResId', 'getTranslatedKey', 'getNumberFormat', 'getRealFormat', 'getTimeFormat', 'getDateFormat', 'caseMap')
+__all__ = ('ValueType', 'Resource', 'PyObjectArray', 'PyObjectMap', 'PyObjectCommand', 'PyGuiApplication', 'PyObjectViewSettings', 'PyObjectView', 'PyObjectViewModel', 'PyObjectWindowSettings', 'PyObjectWindow', 'PyObjectWindowsArea', 'isTranslatedKeyValid', 'isTranslatedTextExisted', 'getTranslatedText', 'getTranslatedPluralText', 'getImagePath', 'getSoundEffectId', 'getLayoutPath', 'getTranslatedTextByResId', 'getTranslatedPluralTextByResId', 'getTranslatedKey', 'getNumberFormat', 'getRealFormat', 'getTimeFormat', 'getDateFormat', 'caseMap')

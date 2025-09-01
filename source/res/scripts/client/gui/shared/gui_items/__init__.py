@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 CLAN_LOCK = 1
 GUI_ITEM_TYPE_NAMES = tuple(ITEM_TYPE_NAMES) + tuple(['reserved'] * (16 - len(ITEM_TYPE_NAMES)))
-GUI_ITEM_TYPE_NAMES += ('dossierAccount', 'dossierVehicle', 'dossierTankman', 'achievement', 'tankmanSkill', 'battleBooster', 'badge', 'battleAbility', 'lootBox', 'demountKit', 'vehPostProgression', 'recertificationForm', 'mentoringLicense', 'paint', 'camouflage', 'modification', 'outfit', 'style', 'decal', 'emblem', 'inscription', 'projectionDecal', 'insignia', 'personalNumber', 'sequence', 'attachment', 'statTracker')
+GUI_ITEM_TYPE_NAMES += ('dossierAccount', 'dossierVehicle', 'dossierTankman', 'achievement', 'tankmanSkill', 'battleBooster', 'badge', 'battleAbility', 'lootBox', 'demountKit', 'vehPostProgression', 'recertificationForm', 'mentoringLicense', 'paint', 'camouflage', 'modification', 'outfit', 'style', 'decal', 'emblem', 'inscription', 'projectionDecal', 'insignia', 'personalNumber', 'sequence', 'attachment', 'statTracker', 'vehicleMechanic')
 GUI_ITEM_TYPE_INDICES = dict(((n, idx) for idx, n in enumerate(GUI_ITEM_TYPE_NAMES)))
 
 class GUI_ITEM_TYPE(CONST_CONTAINER):
@@ -32,6 +32,7 @@ class GUI_ITEM_TYPE(CONST_CONTAINER):
     SHELL = GUI_ITEM_TYPE_INDICES['shell']
     EQUIPMENT = GUI_ITEM_TYPE_INDICES['equipment']
     BATTLE_ABILITY = GUI_ITEM_TYPE_INDICES['battleAbility']
+    VEHICLE_MECHANIC = GUI_ITEM_TYPE_INDICES['vehicleMechanic']
     CUSTOMIZATION = GUI_ITEM_TYPE_INDICES['customizationItem']
     CREW_SKINS = GUI_ITEM_TYPE_INDICES['crewSkin']
     CREW_BOOKS = GUI_ITEM_TYPE_INDICES['crewBook']
@@ -316,7 +317,6 @@ class KPI(object):
         VEHICLE_ENGINE_STRENGTH = 'vehicleEngineStrength'
         VEHICLE_CHASSIS_STRENGTH = 'vehicleChassisStrength'
         VEHICLE_AMMO_BAY_ENGINE_FUEL_STRENGTH = 'vehicleAmmoBayEngineFuelStrength'
-        VEHICLE_CHASSIS_LOAD = 'vehicleChassisLoad'
         VEHICLE_CHASSIS_FALL_DAMAGE = 'vehicleChassisFallDamage'
         VEHICLE_RAM_DAMAGE_RESISTANCE = 'vehicleRamDamageResistance'
         VEHICLE_DAMAGE_ENEMIES_BY_RAMMING = 'damageEnemiesByRamming'
@@ -353,7 +353,30 @@ class KPI(object):
         VEHICLE_PENALTY_FOR_DAMAGED_ENGINE = 'vehPenaltyForDamagedEngine'
         VEHICLE_PENALTY_FOR_DAMAGED_AMMORACK = 'vehPenaltyForDamagedAmmorack'
         COMMANDER_LAMP_DELAY = 'commanderLampDelay'
+        GUN_STABILIZATION = 'gunStabilization'
+        HULL_ELEVATION_SPEED = 'hullElevationSpeed'
+        ENGINE_HP = 'engineHP'
+        FUEL_TANK_HP = 'fuelTankHP'
+        VEHICLE_SPEED = 'vehicleSpeed'
+        STANDARD_SHELL_PENETRATION = 'standardShellPenetration'
+        SPECIAL_SHELL_PENETRATION = 'specialShellPenetration'
+        ADDITIONAL_SHELL_AMMO_CAPACITY = 'additionalShellAmmoCapacity'
+        NON_HE_SHELL_DAMAGE = 'nonHEShellDamage'
+        HE_SHELL_DAMAGE = 'HEShellDamage'
+        ALL_SHELL_DAMAGE = 'allShellDamage'
+        HE_SHELL_PENETRATION = 'HEShellPenetration'
+        GUN_DEPRESSION = 'gunDepression'
+        GUN_TRAVERSE = 'gunTraverse'
+        TURRET_TRAVERSE = 'turretTraverse'
+        GUN_ELEVATION = 'gunElevation'
+        STANDARD_SHELL_VELOCITY = 'standardShellVelocity'
+        SPECIAL_SHELL_VELOCITY = 'specialShellVelocity'
+        RELOAD_TIME_SALVO = 'reloadTimeSalvo'
+        RELOAD_TIME_SINGLE = 'reloadTimeSingle'
+        RELOAD_TIME_IN_CLIP = 'reloadTimeInClip'
         SHELL_VELOCITY = 'shellVelocity'
+        ALL_SHELLS_VELOCITY = 'allShellsVelocity'
+        SHELL_MODULE_DAMAGE = 'shellModuleDamage'
         VEHICLE_CAMOUFLAGE_GROUP = 'vehicleCamouflageGroup'
         VEHICLE_STILL_CAMOUFLAGE_GROUP = 'vehicleStillCamouflageGroup'
         CREW_LEVEL = 'crewLevel'
@@ -382,6 +405,7 @@ class KPI(object):
         GAME_CREDITS = 'gameCredits'
         GAME_FL_XP = 'gameFlXp'
         GAME_FREE_XP_AND_CREW_XP = 'gameFreeXpAndCrewXp'
+        VALUE = 'value'
 
     class Type(CONST_CONTAINER):
         MUL = 'mul'

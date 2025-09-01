@@ -71,7 +71,7 @@ class Comp7RewardsSelectionView(SelectableRewardBase):
     @staticmethod
     @dependency.replace_none_kwargs(uiLoader=IGuiLoader)
     def __getSelectedMetaTabId(uiLoader=None):
-        contentResId = R.views.comp7.lobby.MetaRootView()
+        contentResId = R.views.comp7.mono.lobby.meta_root_view()
         metaView = uiLoader.windowsManager.getViewByLayoutID(contentResId)
         return metaView.tabId if metaView else None
 

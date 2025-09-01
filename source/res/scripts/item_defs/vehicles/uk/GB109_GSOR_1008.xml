@@ -1330,7 +1330,6 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	45500	</maxLoad>
       <terrainResistance>	1 1.1 1.9	</terrainResistance>
       <brakeForce>	55000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2162,7 +2161,7 @@
   <turrets0>
     <Turret_1_GB109_GSOR_1008>
       <userString>	#gb_vehicles:Turret_1_GB109_GSOR_1008	</userString>
-      <tags></tags>
+      <tags>	oscillating	</tags>
       <level>	8	</level>
       <price>	100	</price>
       <notInShop>	true	</notInShop>

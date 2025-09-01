@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/base/unit/actions_validator.py
 from constants import BATTLE_MODE_VEHICLE_TAGS
-from CurrentVehicle import g_currentPreviewVehicle, g_currentVehicle
+from CurrentVehicle import g_currentVehicle
 from gui.prb_control.entities.base.actions_validator import BaseActionsValidator, ActionsValidatorComposite
 from gui.prb_control.items import ValidationResult
 from gui.prb_control.settings import UNIT_RESTRICTION
@@ -33,9 +33,7 @@ class UnitVehiclesValidator(BaseActionsValidator):
     _BATTLE_MODE_VEHICLE_TAGS = BATTLE_MODE_VEHICLE_TAGS
 
     def _validate(self):
-        if g_currentPreviewVehicle.isPresent():
-            return ValidationResult(False, UNIT_RESTRICTION.PREVIEW_VEHICLE_IS_PRESENT)
-        elif not g_currentVehicle.isPresent():
+        if not g_currentVehicle.isPresent():
             return ValidationResult(False, UNIT_RESTRICTION.VEHICLE_NOT_SELECTED)
         else:
             vInfos = self._getVehiclesInfo()
@@ -50,8 +48,6 @@ class UnitVehiclesValidator(BaseActionsValidator):
                     if not vehicle.isReadyToPrebattle(checkForRent=self._isCheckForRent()):
                         if vehicle.isBroken:
                             return ValidationResult(False, UNIT_RESTRICTION.VEHICLE_BROKEN)
-                        if vehicle.isTooHeavy:
-                            return ValidationResult(False, UNIT_RESTRICTION.VEHICLE_TOO_HEAVY)
                         if not vehicle.isCrewFull:
                             return ValidationResult(False, UNIT_RESTRICTION.VEHICLE_CREW_NOT_FULL)
                         if vehicle.rentalIsOver:

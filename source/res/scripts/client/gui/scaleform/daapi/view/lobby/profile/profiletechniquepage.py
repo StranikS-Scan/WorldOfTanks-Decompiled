@@ -6,6 +6,7 @@ from gui.Scaleform.daapi.view.meta.ProfileTechniquePageMeta import ProfileTechni
 from gui.Scaleform.locale.PROFILE import PROFILE
 from helpers.i18n import makeString
 from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
+from gui.prestige.prestige_helpers import isOnboardingViewed, showPrestigeOnboardingWindow
 
 class ProfileTechniquePage(ProfileTechniquePageMeta):
 
@@ -83,3 +84,12 @@ class ProfileTechniquePage(ProfileTechniquePageMeta):
         if self._selectedVehicleIntCD is not None:
             self._receiveVehicleDossier(self._selectedVehicleIntCD, None)
         return
+
+    def setActive(self, value):
+        super(ProfileTechniquePage, self).setActive(value)
+        if not value:
+            return
+        config = self.lobbyContext.getServerSettings().prestigeConfig
+        if not isOnboardingViewed() and config.isEnabled:
+            if any(self.itemsCache.items.getAccountDossier().getPrestigeStats().getVehicles()):
+                showPrestigeOnboardingWindow()

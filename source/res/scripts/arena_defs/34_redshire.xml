@@ -9,6 +9,28 @@
   </boundingBox>
   <roundLength>	900	</roundLength>
   <minimap>	spaces/34_redshire/mmap.dds	</minimap>
+  <minimapLayers>
+    <layer>
+      <layerId>	layer1	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/34_redshire/mmap_airshipCrash_01_zone.dds	</path>
+    </layer>
+    <layer>
+      <layerId>	layer2	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/34_redshire/mmap_airshipCrash_01_destroyed.dds	</path>
+    </layer>
+    <layer>
+      <layerId>	layer3	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/34_redshire/mmap_airshipCrash_02_zone.dds	</path>
+    </layer>
+    <layer>
+      <layerId>	layer4	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/34_redshire/mmap_airshipCrash_02_destroyed.dds	</path>
+    </layer>
+  </minimapLayers>
   <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
   <maxPlayersInTeam>	15	</maxPlayersInTeam>
   <wwmusicSetup>
@@ -22,6 +44,16 @@
     <wwmusicResultDefeat>	music_redshire_result_defeat	</wwmusicResultDefeat>
   </wwmusicSetup>
   <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	destructible_objects.bnk	</name>
+      </bank>
+      <bank>
+        <name>	destructible_objects.pck	</name>
+      </bank>
+    </loadBanks>
+  </soundRemapping>
   <water>
     <texScale>	0	</texScale>
     <freqX>	0	</freqX>

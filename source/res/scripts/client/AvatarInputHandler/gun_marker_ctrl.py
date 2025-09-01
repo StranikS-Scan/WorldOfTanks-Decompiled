@@ -10,6 +10,7 @@ import GUI
 import Math
 import constants
 import aih_constants
+from aih_constants import GunMarkerState
 from Vehicle import Vehicle as VehicleEntity
 from DestructibleEntity import DestructibleEntity
 from AvatarInputHandler import AimingSystems
@@ -23,18 +24,29 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.shared import g_eventBus
 from gui.shared.events import GunMarkerEvent
 from gui.shared import EVENT_BUS_SCOPE
+if typing.TYPE_CHECKING:
+    from VehicleGunRotator import GunMarkerInfo
 _MARKER_TYPE = aih_constants.GUN_MARKER_TYPE
 _MARKER_FLAG = aih_constants.GUN_MARKER_FLAG
 _SHOT_RESULT = aih_constants.SHOT_RESULT
 _BINDING_ID = aih_global_binding.BINDING_ID
 _IS_EXTENDED_GUN_MARKER_ENABLED = True
+_USE_DEBUG_MARKERS_DECORATOR = False
 _BASE_PIERCING_PERCENT = 100.0
 _ENABLED_MAX_PROJECTION_CHECK = True
 _MAX_PROJECTION_ANGLE = math.radians(60.0)
 _MAX_PROJECTION_ANGLE_COS = math.cos(_MAX_PROJECTION_ANGLE)
+VEHICLE_TRACE_BACKWARD_LENGTH = 0.1
+VEHICLE_TRACE_FORWARD_LENGTH = 20.0
 _logger = logging.getLogger(__name__)
 
-def _computePiercingPowerAtDistImpl(dist, maxDist, val1, val2, arg1=constants.PIERCING_POWER_INTERPOLATION_DIST_FIRST, arg2=constants.PIERCING_POWER_INTERPOLATION_DIST_LAST):
+def computePiercingPowerAtDist(piercingPowerDescription, dist, maxDist, piercingMultiplier):
+    sessionProvider = dependency.instance(IBattleSessionProvider)
+    constantsModification = sessionProvider.arenaVisitor.modifiers.getConstantsModification()
+    arg1 = constantsModification.PIERCING_POWER_INTERPOLATION_DIST_FIRST
+    arg2 = constantsModification.PIERCING_POWER_INTERPOLATION_DIST_LAST
+    val1 = piercingPowerDescription[0] * piercingMultiplier
+    val2 = piercingPowerDescription[1] * piercingMultiplier
     if dist <= arg1:
         return val1
     if arg1 == arg2:
@@ -79,7 +91,10 @@ def createGunMarker(isStrategic):
         clientMarker = _DefaultGunMarkerController(_MARKER_TYPE.CLIENT, factory.getClientProvider())
         serverMarker = _DefaultGunMarkerController(_MARKER_TYPE.SERVER, factory.getServerProvider())
         dualAccMarker = _DualAccMarkerController(_MARKER_TYPE.DUAL_ACC, factory.getDualAccuracyProvider())
-    return _GunMarkersDecorator(clientMarker, serverMarker, dualAccMarker)
+    gunMarkersDecoratorCls = _GunMarkersDecorator
+    if _USE_DEBUG_MARKERS_DECORATOR:
+        gunMarkersDecoratorCls = _DebugGunMarkersDecorator
+    return gunMarkersDecoratorCls(clientMarker, serverMarker, dualAccMarker)
 
 
 def createArtyHit(artyEquipmentUDO, areaRadius):
@@ -108,7 +123,8 @@ class _StandardShotResult(object):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     @classmethod
-    def getShotResult(cls, hitPoint, collision, _, excludeTeam=0, piercingMultiplier=1):
+    def getShotResult(cls, gunMarker, excludeTeam=0, piercingMultiplier=1):
+        collision = gunMarker.collData
         if collision is None:
             return _SHOT_RESULT.UNDEFINED
         else:
@@ -119,11 +135,12 @@ class _StandardShotResult(object):
             if player is None:
                 return _SHOT_RESULT.UNDEFINED
             vDesc = player.getVehicleDescriptor()
-            ppDesc = vDesc.shot.piercingPower
-            maxDist = vDesc.shot.maxDistance
-            dist = (hitPoint - player.getOwnVehiclePosition()).length
-            constantsModification = cls.__sessionProvider.arenaVisitor.modifiers.getConstantsModification()
-            piercingPower = _computePiercingPowerAtDistImpl(dist, maxDist, ppDesc[0] * piercingMultiplier, ppDesc[1] * piercingMultiplier, constantsModification.PIERCING_POWER_INTERPOLATION_DIST_FIRST, constantsModification.PIERCING_POWER_INTERPOLATION_DIST_LAST)
+            gunInstallationSlot = vDesc.gunInstallations[gunMarker.gunInstallationIndex]
+            shot = vDesc.shot if gunInstallationSlot.isMainInstallation() else gunInstallationSlot.gun.shots[0]
+            ppDesc = shot.piercingPower
+            maxDist = shot.maxDistance
+            dist = (gunMarker.position - player.getOwnVehiclePosition()).length
+            piercingPower = computePiercingPowerAtDist(ppDesc, dist, maxDist, piercingMultiplier)
             piercingPercent = 1000.0
             if piercingPower > 0.0:
                 armor = collision.armor
@@ -142,8 +159,6 @@ class _CrosshairShotResults(object):
     _PP_RANDOM_ADJUSTMENT_MIN = 0.5
     _MAX_HIT_ANGLE_BOUND = math.pi / 2.0 - 1e-05
     _CRIT_ONLY_SHOT_RESULT = _SHOT_RESULT.NOT_PIERCED
-    _VEHICLE_TRACE_BACKWARD_LENGTH = 0.1
-    _VEHICLE_TRACE_FORWARD_LENGTH = 20.0
     shellExtraData = namedtuple('shellExtraData', ('hasNormalization', 'mayRicochet', 'checkCaliberForRicochet', 'jetLossPPByDist'))
     _SHELL_EXTRA_DATA = {constants.SHELL_TYPES.ARMOR_PIERCING: shellExtraData(True, True, True, 0.0),
      constants.SHELL_TYPES.ARMOR_PIERCING_CR: shellExtraData(True, True, True, 0.0),
@@ -154,14 +169,9 @@ class _CrosshairShotResults(object):
 
     @classmethod
     def _getAllCollisionDetails(cls, hitPoint, direction, entity):
-        startPoint = hitPoint - direction * cls._VEHICLE_TRACE_BACKWARD_LENGTH
-        endPoint = hitPoint + direction * cls._VEHICLE_TRACE_FORWARD_LENGTH
+        startPoint = hitPoint - direction * VEHICLE_TRACE_BACKWARD_LENGTH
+        endPoint = hitPoint + direction * VEHICLE_TRACE_FORWARD_LENGTH
         return entity.collideSegmentExt(startPoint, endPoint)
-
-    @classmethod
-    def _computePiercingPowerAtDist(cls, ppDesc, dist, maxDist, piercingMultiplier):
-        constantsModification = cls.__sessionProvider.arenaVisitor.modifiers.getConstantsModification()
-        return _computePiercingPowerAtDistImpl(dist, maxDist, ppDesc[0] * piercingMultiplier, ppDesc[1] * piercingMultiplier, constantsModification.PIERCING_POWER_INTERPOLATION_DIST_FIRST, constantsModification.PIERCING_POWER_INTERPOLATION_DIST_LAST)
 
     @classmethod
     def _computePiercingPowerRandomization(cls, shell):
@@ -212,38 +222,40 @@ class _CrosshairShotResults(object):
         return armor / hitAngleCos
 
     @classmethod
-    def getShotResult(cls, hitPoint, collision, direction, excludeTeam=0, piercingMultiplier=1):
+    def getShotResult(cls, gunMarker, excludeTeam=0, piercingMultiplier=1):
+        collision = gunMarker.collData
         if collision is None:
-            cls.__sendDebugInfo([])
+            cls.__sendDebugInfo(gunMarker, [])
             return _SHOT_RESULT.UNDEFINED
         else:
             entity = collision.entity
             if not isinstance(entity, (VehicleEntity, DestructibleEntity)):
-                cls.__sendDebugInfo([])
+                cls.__sendDebugInfo(gunMarker, [])
                 return _SHOT_RESULT.UNDEFINED
             if entity.health <= 0 or entity.publicInfo['team'] == excludeTeam:
-                cls.__sendDebugInfo([])
+                cls.__sendDebugInfo(gunMarker, [])
                 return _SHOT_RESULT.UNDEFINED
             player = BigWorld.player()
             if player is None:
-                cls.__sendDebugInfo([])
+                cls.__sendDebugInfo(gunMarker, [])
                 return _SHOT_RESULT.UNDEFINED
             vDesc = player.getVehicleDescriptor()
-            shell = vDesc.shot.shell
-            shellKind = shell.kind
-            ppDesc = vDesc.shot.piercingPower
-            maxDist = vDesc.shot.maxDistance
-            dist = (hitPoint - player.getOwnVehiclePosition()).length
-            fullPiercingPower = cls._computePiercingPowerAtDist(ppDesc, dist, maxDist, piercingMultiplier)
-            collisionsDetails = cls._getAllCollisionDetails(hitPoint, direction, entity)
+            gunInstallationSlot = vDesc.gunInstallations[gunMarker.gunInstallationIndex]
+            shot = vDesc.shot if gunInstallationSlot.isMainInstallation() else gunInstallationSlot.gun.shots[0]
+            shell = shot.shell
+            ppDesc = shot.piercingPower
+            maxDist = shot.maxDistance
+            dist = (gunMarker.position - player.getOwnVehiclePosition()).length
+            fullPPower = computePiercingPowerAtDist(ppDesc, dist, maxDist, piercingMultiplier)
+            collisionsDetails = cls._getAllCollisionDetails(gunMarker.position, gunMarker.direction, entity)
             if collisionsDetails is None:
-                cls.__sendDebugInfo([])
+                cls.__sendDebugInfo(gunMarker, [])
                 return _SHOT_RESULT.UNDEFINED
             minPP, maxPP = cls._computePiercingPowerRandomization(shell)
-            return cls.__shotResultModernHE(collisionsDetails, fullPiercingPower, shell, minPP, maxPP, entity) if shellKind == constants.SHELL_TYPES.HIGH_EXPLOSIVE and shell.type.mechanics == constants.SHELL_MECHANICS_TYPE.MODERN else cls.__shotResultDefault(collisionsDetails, fullPiercingPower, shell, minPP, maxPP, entity)
+            return cls.__shotResultModernHE(gunMarker, collisionsDetails, fullPPower, shell, minPP, maxPP, entity) if shell.kind == constants.SHELL_TYPES.HIGH_EXPLOSIVE and shell.type.mechanics == constants.SHELL_MECHANICS_TYPE.MODERN else cls.__shotResultDefault(gunMarker, collisionsDetails, fullPPower, shell, minPP, maxPP, entity)
 
     @classmethod
-    def __shotResultModernHE(cls, collisionsDetails, fullPiercingPower, shell, minPP, maxPP, entity):
+    def __shotResultModernHE(cls, gunMarker, collisionsDetails, fullPiercingPower, shell, minPP, maxPP, entity):
         result = _SHOT_RESULT.NOT_PIERCED
         ignoredMaterials = set()
         piercingPower = fullPiercingPower
@@ -272,7 +284,7 @@ class _CrosshairShotResults(object):
                     else:
                         result = _SHOT_RESULT.LITTLE_PIERCED
                     cls.__collectDebugPiercingData(debugPiercingsList, penetrationArmor, hitAngleCos, minPiercingPower, maxPiercingPower, piercingPercent, matInfo, result)
-                    cls.__sendDebugInfo(debugPiercingsList, minPP, maxPP, fullPiercingPower)
+                    cls.__sendDebugInfo(gunMarker, debugPiercingsList, minPP, maxPP, fullPiercingPower)
                     return result
                 if shell.type.shieldPenetration:
                     shieldPenetration = penetrationArmor * MODERN_HE_PIERCING_POWER_REDUCTION_FACTOR_FOR_SHIELDS
@@ -282,7 +294,7 @@ class _CrosshairShotResults(object):
                     explosionDamageAbsorption += penetrationArmor * MODERN_HE_DAMAGE_ABSORPTION_FACTOR
                 if piercingPercent > maxPP or not shell.type.shieldPenetration or explosionDamageAbsorption >= shell.type.maxDamage:
                     cls.__collectDebugPiercingData(debugPiercingsList, penetrationArmor, hitAngleCos, minPiercingPower, maxPiercingPower, piercingPercent, matInfo, _SHOT_RESULT.NOT_PIERCED)
-                    cls.__sendDebugInfo(debugPiercingsList, minPP, maxPP, fullPiercingPower)
+                    cls.__sendDebugInfo(gunMarker, debugPiercingsList, minPP, maxPP, fullPiercingPower)
                     return _SHOT_RESULT.NOT_PIERCED
                 if matInfo.extra and piercingPercent <= maxPP:
                     cls.__collectDebugPiercingData(debugPiercingsList, penetrationArmor, hitAngleCos, minPiercingPower, maxPiercingPower, piercingPercent, matInfo, cls._CRIT_ONLY_SHOT_RESULT)
@@ -290,11 +302,11 @@ class _CrosshairShotResults(object):
                 if matInfo.collideOnceOnly:
                     ignoredMaterials.add((cDetails.compName, matInfo.kind))
 
-        cls.__sendDebugInfo(debugPiercingsList, minPP, maxPP, fullPiercingPower)
+        cls.__sendDebugInfo(gunMarker, debugPiercingsList, minPP, maxPP, fullPiercingPower)
         return result
 
     @classmethod
-    def __shotResultDefault(cls, collisionsDetails, fullPiercingPower, shell, minPP, maxPP, entity):
+    def __shotResultDefault(cls, gunMarker, collisionsDetails, fullPiercingPower, shell, minPP, maxPP, entity):
         result = _SHOT_RESULT.NOT_PIERCED
         isJet = False
         jetStartDist = None
@@ -363,7 +375,7 @@ class _CrosshairShotResults(object):
                 armor = mInfo.armor if mInfo is not None else 0.0
                 jetStartDist = cDetails.dist + armor * 0.001
 
-        cls.__sendDebugInfo(debugPiercingsList, minPP, maxPP, fullPiercingPower)
+        cls.__sendDebugInfo(gunMarker, debugPiercingsList, minPP, maxPP, fullPiercingPower)
         return result
 
     @classmethod
@@ -382,9 +394,10 @@ class _CrosshairShotResults(object):
              'result': result})
 
     @classmethod
-    def __sendDebugInfo(cls, piercingData, minPP=None, maxPP=None, fullPP=None):
+    def __sendDebugInfo(cls, gunMarker, piercingData, minPP=None, maxPP=None, fullPP=None):
         if constants.IS_DEVELOPMENT:
-            g_eventBus.handleEvent(GunMarkerEvent(GunMarkerEvent.UPDATE_PIERCING_DATA, ctx={'piercingData': piercingData,
+            g_eventBus.handleEvent(GunMarkerEvent(GunMarkerEvent.UPDATE_PIERCING_DATA, ctx={'gunMarker': gunMarker,
+             'piercingData': piercingData,
              'minPP': minPP,
              'maxPP': maxPP,
              'fullPP': fullPP}), scope=EVENT_BUS_SCOPE.BATTLE)
@@ -416,7 +429,7 @@ class IGunMarkerController(object):
     def reset(self):
         raise NotImplementedError
 
-    def update(self, markerType, position, direction, size, sizeOffset, relaxTime, collData):
+    def update(self, markerType, gunMarkerInfo, supportMarkersInfo, relaxTime):
         raise NotImplementedError
 
     def setFlag(self, positive, bit):
@@ -516,11 +529,11 @@ class _GunMarkersDecorator(IGunMarkerController):
 
     def enable(self):
         self.__clientMarker.enable()
-        self.__clientMarker.setPosition(self.__clientState[0])
+        self.__clientMarker.setPosition(self.__clientState[0].position)
         self.__serverMarker.enable()
-        self.__serverMarker.setPosition(self.__serverState[0])
+        self.__serverMarker.setPosition(self.__serverState[0].position)
         self.__dualAccMarker.enable()
-        self.__dualAccMarker.setPosition(self.__dualAccState[0])
+        self.__dualAccMarker.setPosition(self.__dualAccState[0].position)
 
     def disable(self):
         self.__clientMarker.disable()
@@ -566,19 +579,23 @@ class _GunMarkersDecorator(IGunMarkerController):
         else:
             self.__gunMarkersFlags &= ~bit
 
-    def update(self, markerType, position, direction, size, sizeOffset, relaxTime, collData):
+    def update(self, markerType, gunMarkerInfo, supportMarkersInfo, relaxTime):
         if markerType == _MARKER_TYPE.CLIENT:
-            self.__clientState = (position, direction, collData)
+            size = gunMarkerInfo.size
             if self.__gunMarkersFlags & _MARKER_FLAG.CLIENT_MODE_ENABLED:
-                self.__clientMarker.update(markerType, position, direction, size, sizeOffset, relaxTime, collData)
+                self.__clientMarker.update(markerType, gunMarkerInfo, supportMarkersInfo, relaxTime)
+                size = self.__clientMarker.getSizes()[0]
+            self.__clientState = (GunMarkerState.fromGunMarkerInfo(gunMarkerInfo, size), supportMarkersInfo)
         elif markerType == _MARKER_TYPE.SERVER:
-            self.__serverState = (position, direction, collData)
+            size = gunMarkerInfo.size
             if self.__gunMarkersFlags & _MARKER_FLAG.SERVER_MODE_ENABLED:
-                self.__serverMarker.update(markerType, position, direction, size, sizeOffset, relaxTime, collData)
+                self.__serverMarker.update(markerType, gunMarkerInfo, supportMarkersInfo, relaxTime)
+                size = self.__serverMarker.getSizes()[0]
+            self.__serverState = (GunMarkerState.fromGunMarkerInfo(gunMarkerInfo, size), supportMarkersInfo)
         elif markerType == _MARKER_TYPE.DUAL_ACC:
-            self.__dualAccState = (position, direction, collData)
+            self.__dualAccState = (GunMarkerState.fromGunMarkerInfo(gunMarkerInfo), supportMarkersInfo)
             if self.__gunMarkersFlags & _MARKER_FLAG.CLIENT_MODE_ENABLED:
-                self.__dualAccMarker.update(markerType, position, direction, size, sizeOffset, relaxTime, collData)
+                self.__dualAccMarker.update(markerType, gunMarkerInfo, supportMarkersInfo, relaxTime)
         else:
             _logger.warning('Gun maker control is not found by type: %d', markerType)
 
@@ -590,6 +607,45 @@ class _GunMarkersDecorator(IGunMarkerController):
 
     def setSizes(self, newSizes):
         pass
+
+
+class _DebugGunMarkersDecorator(_GunMarkersDecorator):
+
+    def __init__(self, clientMarker, serverMarker, dualAccMarker):
+        super(_DebugGunMarkersDecorator, self).__init__(clientMarker, serverMarker, dualAccMarker)
+        self.__gunInstallationIndex = constants.DEFAULT_GUN_INSTALLATION_INDEX
+        self.__gunIndex = None
+        return
+
+    def create(self):
+        super(_DebugGunMarkersDecorator, self).create()
+        g_eventBus.addListener(GunMarkerEvent.UPDATE_TRACKED_GUN, self.__onTrackedGunUpdate, EVENT_BUS_SCOPE.BATTLE)
+
+    def destroy(self):
+        g_eventBus.removeListener(GunMarkerEvent.UPDATE_TRACKED_GUN, self.__onTrackedGunUpdate, EVENT_BUS_SCOPE.BATTLE)
+        super(_DebugGunMarkersDecorator, self).destroy()
+
+    def update(self, markerType, gunMarkerInfo, supportMarkersInfo, relaxTime):
+        if gunMarkerInfo.gunInstallationIndex != self.__gunInstallationIndex:
+            trackedInstallationInfo = [ info for info in supportMarkersInfo if info.gunInstallationIndex == self.__gunInstallationIndex ]
+            if trackedInstallationInfo:
+                supportMarkersInfo = ()
+                trackedGunInfo = [ info for info in trackedInstallationInfo if info.gunIndex == self.__gunIndex ]
+                if trackedGunInfo:
+                    gunMarkerInfo = trackedGunInfo[0]
+                else:
+                    gunMarkerInfo = trackedInstallationInfo[0]
+                    self.__gunIndex = gunMarkerInfo.gunIndex
+            else:
+                self.__gunInstallationIndex = gunMarkerInfo.gunInstallationIndex
+                self.__gunIndex = gunMarkerInfo.gunIndex
+        else:
+            self.__gunIndex = gunMarkerInfo.gunIndex
+        super(_DebugGunMarkersDecorator, self).update(markerType, gunMarkerInfo, supportMarkersInfo, relaxTime)
+
+    def __onTrackedGunUpdate(self, event):
+        self.__gunInstallationIndex = event.ctx.get('gunInstallationIndex', constants.DEFAULT_GUN_INSTALLATION_INDEX)
+        self.__gunIndex = event.ctx.get('gunIndex')
 
 
 class _GunMarkerController(IGunMarkerController):
@@ -620,9 +676,9 @@ class _GunMarkerController(IGunMarkerController):
     def reset(self):
         pass
 
-    def update(self, markerType, position, direction, size, sizeOffset, relaxTime, collData):
+    def update(self, markerType, gunMarkerInfo, supportMarkersInfo, relaxTime):
         if self._gunMarkerType == markerType:
-            self._position = position
+            self._position = gunMarkerInfo.position
         else:
             _logger.warning('Position can not be defined, type of marker does not equal: required = %d, received = %d', self._gunMarkerType, markerType)
 
@@ -664,7 +720,7 @@ class _EmptyGunMarkerController(_GunMarkerController):
     def setPosition(self, position):
         pass
 
-    def update(self, markerType, position, direction, size, sizeOffset, relaxTime, collData):
+    def update(self, markerType, gunMarkerInfo, supportMarkersInfo, relaxTime):
         pass
 
 
@@ -691,11 +747,12 @@ class _DefaultGunMarkerController(_GunMarkerController):
         self.__offsetInertness = self._OFFSET_DEFAULT_INERTNESS
         self.__updateScreenRatio()
 
-    def update(self, markerType, pos, direction, size, sizeOffset, relaxTime, collData):
-        super(_DefaultGunMarkerController, self).update(markerType, pos, direction, size, sizeOffset, relaxTime, collData)
+    def update(self, markerType, gunMarkerInfo, supportMarkersInfo, relaxTime):
+        super(_DefaultGunMarkerController, self).update(markerType, gunMarkerInfo, supportMarkersInfo, relaxTime)
         positionMatrix = Math.Matrix()
-        positionMatrix.setTranslate(pos)
+        positionMatrix.setTranslate(gunMarkerInfo.position)
         self._updateMatrixProvider(positionMatrix, relaxTime)
+        size = self._getMarkerSize(gunMarkerInfo)
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying and replayCtrl.isClientReady:
             s = self._replayReader(replayCtrl)()
@@ -708,8 +765,9 @@ class _DefaultGunMarkerController(_GunMarkerController):
                 self._replayWriter(replayCtrl)(size)
         positionMatrixForScale = BigWorld.checkAndRecalculateIfPositionInExtremeProjection(positionMatrix)
         worldMatrix = _makeWorldMatrix(positionMatrixForScale)
-        self.__currentSize = BigWorld.markerHelperScale(worldMatrix, size) * self.__screenRatio
-        self.__currentSizeOffset = BigWorld.markerHelperScale(worldMatrix, sizeOffset) * self.__screenRatio
+        helperScale = BigWorld.markerHelperScale
+        self.__currentSize = helperScale(worldMatrix, size) * self.__screenRatio
+        self.__currentSizeOffset = helperScale(worldMatrix, gunMarkerInfo.sizeOffset) * self.__screenRatio
         self._dataProvider.updateSizes(self.__currentSize, self.__currentSizeOffset, relaxTime, self.__offsetInertness)
         if self.__offsetInertness == self._OFFSET_DEFAULT_INERTNESS:
             self.__offsetInertness = self._OFFSET_SLOWDOWN_INERTNESS
@@ -723,6 +781,9 @@ class _DefaultGunMarkerController(_GunMarkerController):
 
     def onRecreateDevice(self):
         self.__updateScreenRatio()
+
+    def _getMarkerSize(self, gunMarkerInfo):
+        return gunMarkerInfo.size
 
     def _replayReader(self, replayCtrl):
         return replayCtrl.getArcadeGunMarkerSize
@@ -758,6 +819,9 @@ class _DefaultGunMarkerController(_GunMarkerController):
 
 
 class _DualAccMarkerController(_DefaultGunMarkerController):
+
+    def _getMarkerSize(self, gunMarkerInfo):
+        return gunMarkerInfo.dualAccSize
 
     def _replayReader(self, replayCtrl):
         return replayCtrl.getDualAccMarkerSize
@@ -801,11 +865,11 @@ class _SPGGunMarkerController(_GunMarkerController):
         super(_SPGGunMarkerController, self).disable()
         return
 
-    def update(self, markerType, position, direction, size, sizeOffset, relaxTime, collData):
-        super(_SPGGunMarkerController, self).update(markerType, position, direction, size, sizeOffset, relaxTime, collData)
-        positionMatrix = Math.createTranslationMatrix(position)
+    def update(self, markerType, gunMarkerInfo, supportMarkersInfo, relaxTime):
+        super(_SPGGunMarkerController, self).update(markerType, gunMarkerInfo, supportMarkersInfo, relaxTime)
+        positionMatrix = Math.createTranslationMatrix(gunMarkerInfo.position)
         self._updateMatrixProvider(positionMatrix, relaxTime)
-        self._size = size + sizeOffset
+        self._size = gunMarkerInfo.size + gunMarkerInfo.sizeOffset
         self._update()
 
     def reset(self):

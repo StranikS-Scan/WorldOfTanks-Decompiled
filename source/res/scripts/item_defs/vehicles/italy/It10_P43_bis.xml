@@ -55,7 +55,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	16714	</weight>
-    <maxHealth>	664	</maxHealth>
+    <maxHealth>	720	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	160	</maxHealth>
       <maxRegenHealth>	110	</maxRegenHealth>
@@ -1030,8 +1030,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	9000	</weight>
-      <maxLoad>	32000	</maxLoad>
-      <terrainResistance>	1 1.5 2.9	</terrainResistance>
+      <terrainResistance>	0.9 1.5 2.3	</terrainResistance>
       <brakeForce>	34000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	38	</rotationSpeed>
@@ -1939,7 +1938,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	9000	</weight>
-      <maxLoad>	36000	</maxLoad>
       <terrainResistance>	0.9 1.5 2.3	</terrainResistance>
       <brakeForce>	34000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -2857,7 +2855,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3500	</weight>
-      <maxHealth>	126	</maxHealth>
+      <maxHealth>	140	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -2885,9 +2883,9 @@
             <maxPitch>	0 10 0.388889 10 0.402778 7 0.597222 7 0.611111 10 1 10	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <reloadTime>	4	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	3.2	</reloadTime>
+          <aimingTime>	2	</aimingTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	4	</afterShot>
@@ -3390,7 +3388,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5000	</weight>
-      <maxHealth>	166	</maxHealth>
+      <maxHealth>	180	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -3411,12 +3409,12 @@
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 0.375 8 0.388889 6 0.402778 4 0.597222 4 0.611111 6 0.625 8 1 8	</maxPitch>
+            <maxPitch>	0.00000 8.00 0.38889 8.00 0.40278 4.00 0.59722 4.00 0.61111 8.00 1.00000 8.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <reloadTime>	3.8	</reloadTime>
-          <aimingTime>	2.2	</aimingTime>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	3.1	</reloadTime>
+          <aimingTime>	1.8	</aimingTime>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	4	</afterShot>
@@ -3481,6 +3479,8 @@
         </Cannone_da_75_50_Skoda>
         <Cannone_da_90_42>	shared	  <maxAmmo>	48	</maxAmmo>
           <unlocks>
+            <vehicle>	It16_Carro_d_assalto_P88	  <cost>	57750	</cost>
+            </vehicle>
             <vehicle>	It09_P43_ter	  <cost>	58370	</cost>
             </vehicle>
           </unlocks>
@@ -3490,10 +3490,10 @@
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 7 0.375 7 0.388889 6 0.402778 4 0.597222 4 0.611111 6 0.625 7 1 7	</maxPitch>
+            <maxPitch>	0.00000 7.00 0.38889 7.00 0.40278 4.00 0.59722 4.00 0.61111 7.00 1.00000 7.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
-          <reloadTime>	7.5	</reloadTime>
+          <reloadTime>	8	</reloadTime>
           <aimingTime>	2.4	</aimingTime>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <shotDispersionFactors>
@@ -4075,41 +4075,23 @@
     </Turret_2_It10_P43_bis>
   </turrets0>
   <engines>
-    <SPA_242>	shared	  <unlocks>
-        <engine>	SPA_343	  <cost>	5300	</cost>
-        </engine>
-      </unlocks>
-    </SPA_242>
     <SPA_343>	shared	  <unlocks>
         <engine>	V_2_34_modificato	  <cost>	6100	</cost>
         </engine>
       </unlocks>
     </SPA_343>
-    <V_2_34_modificato>	shared	  <unlocks>
-        <vehicle>	It16_Carro_d_assalto_P88	  <cost>	57750	</cost>
-        </vehicle>
-      </unlocks>
-    </V_2_34_modificato>
+    <V_2_34_modificato>	shared	</V_2_34_modificato>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <R_F_2_C_A>	shared	  <unlocks>
-        <radio>	R_F_3_M_2	  <cost>	4080	</cost>
-        </radio>
-      </unlocks>
-    </R_F_2_C_A>
     <R_F_3_M_2>	shared	</R_F_3_M_2>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
   <physics>
     <detailed>
       <engines>
-        <SPA_242>
-          <smplEnginePower>	430	</smplEnginePower>
-          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
-        </SPA_242>
         <SPA_343>
           <smplEnginePower>	460	</smplEnginePower>
           <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
@@ -4124,13 +4106,13 @@
           <axleCount>	5	</axleCount>
           <grounds>
             <soft>
-              <rollingFriction>	0.23345	</rollingFriction>
+              <rollingFriction>	0.18515	</rollingFriction>
             </soft>
             <medium>
               <rollingFriction>	0.12075	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0805	</rollingFriction>
+              <rollingFriction>	0.07245	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_It10_P43_bis>

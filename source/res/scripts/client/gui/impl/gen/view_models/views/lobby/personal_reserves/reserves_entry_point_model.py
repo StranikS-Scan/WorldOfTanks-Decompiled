@@ -1,14 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/personal_reserves/reserves_entry_point_model.py
-from frameworks.wulf import Array
-from frameworks.wulf import ViewModel
+from frameworks.wulf import Array, ViewModel
 from gui.impl.gen.view_models.common.personal_reserves.booster_model import BoosterModel
 from gui.impl.gen.view_models.views.lobby.personal_reserves.disabled_category import DisabledCategory
 
 class ReservesEntryPointModel(ViewModel):
-    __slots__ = ()
+    __slots__ = ('openBoosterNavigation',)
 
-    def __init__(self, properties=7, commands=0):
+    def __init__(self, properties=6, commands=1):
         super(ReservesEntryPointModel, self).__init__(properties=properties, commands=commands)
 
     def getReserves(self):
@@ -33,40 +32,34 @@ class ReservesEntryPointModel(ViewModel):
     def setTotalLimitedReserves(self, value):
         self._setNumber(2, value)
 
-    def getIsDisabled(self):
+    def getIsClanMember(self):
         return self._getBool(3)
 
-    def setIsDisabled(self, value):
+    def setIsClanMember(self, value):
         self._setBool(3, value)
 
-    def getIsClanMember(self):
-        return self._getBool(4)
-
-    def setIsClanMember(self, value):
-        self._setBool(4, value)
-
     def getDisabledCategories(self):
-        return self._getArray(5)
+        return self._getArray(4)
 
     def setDisabledCategories(self, value):
-        self._setArray(5, value)
+        self._setArray(4, value)
 
     @staticmethod
     def getDisabledCategoriesType():
         return DisabledCategory
 
     def getExpiringReserveWillExpireSoon(self):
-        return self._getBool(6)
+        return self._getBool(5)
 
     def setExpiringReserveWillExpireSoon(self, value):
-        self._setBool(6, value)
+        self._setBool(5, value)
 
     def _initialize(self):
         super(ReservesEntryPointModel, self)._initialize()
         self._addArrayProperty('reserves', Array())
         self._addNumberProperty('totalReserves', 0)
         self._addNumberProperty('totalLimitedReserves', 0)
-        self._addBoolProperty('isDisabled', False)
         self._addBoolProperty('isClanMember', False)
         self._addArrayProperty('disabledCategories', Array())
         self._addBoolProperty('expiringReserveWillExpireSoon', False)
+        self.openBoosterNavigation = self._addCommand('openBoosterNavigation')

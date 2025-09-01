@@ -11,11 +11,12 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.gui_decorators import args2params
 from gui.impl.pub import ViewImpl, WindowImpl
 from gui.impl.gen.view_models.views.lobby.achievements.views.catalog.catalog_view_model import CatalogViewModel
 from gui.impl.gen.view_models.views.lobby.achievements.views.catalog.breadcrumb_model import BreadcrumbModel
 from gui.impl.lobby.achievements.profile_utils import fillDetailsModel, fillBreadcrumbModel, fillAchievementCardModel, getTrophiesData, createBackportTooltipDecorator, createTooltipContentDecorator
-from gui.shared.event_dispatcher import showAdvancedAchievementsCatalogView, showAdvancedAchievementsView, showStylePreview, showResearchView, showAnimatedDogTags, showDashboardView
+from gui.shared.event_dispatcher import showAdvancedAchievementsCatalogView, showAdvancedAchievementsView, showStylePreview, showAnimatedDogTags, showVehicleHubModules
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency
 from skeletons.gui.game_control import IAchievementsController
@@ -88,6 +89,7 @@ class CatalogView(ViewImpl):
         super(CatalogView, self)._onLoaded(*args, **kwargs)
 
     def _finalize(self):
+        Waiting.hide('loadPage')
         self.__breadcrumbAchievementIDs = None
         super(CatalogView, self)._finalize()
         return
@@ -180,14 +182,10 @@ class CatalogView(ViewImpl):
         showStylePreview(styledVehicleCD, style, backCallback=_getPreviewCallback(self.__appLoader, self.__breadcrumbAchievementIDs, self.__achievementCategory, self.__closeCallback, AdvancedAchievementViewKey.CATALOG), backBtnDescrLabel=backport.text(R.strings.achievements_page.stylePreview.backBtnDescr()))
         self.destroyWindow()
 
-    def __onPurchaseVehicleClick(self, args):
-        containerManager = self.__appLoader.getApp().containerManager
-        researchView = containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY_RESEARCH))
-        if researchView is not None:
-            researchView.destroy()
-        showResearchView(int(args['intCD']))
+    @args2params(int)
+    def __onPurchaseVehicleClick(self, intCD):
+        showVehicleHubModules(intCD)
         self.destroyWindow()
-        return
 
     def __onCardClick(self, args):
         self.__uiLogging.logCardClick(int(args['achievementId']), args['category'])
@@ -212,15 +210,9 @@ class CatalogView(ViewImpl):
                 self.__updateAchievements(model)
 
     def __onDogTagPreview(self, args):
-        containerManager = self.__appLoader.getApp().containerManager
-        profileView = containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY_PROFILE))
-        Waiting.show('loadPage')
         self.__uiLogging.logClick(AdvancedAchievementButtons.DOG_TAG_PREVIEW)
-        showAnimatedDogTags(args['backgroundId'], args['engravingId'], closeCallback=showDashboardView)
-        if profileView is not None:
-            profileView.destroy()
+        showAnimatedDogTags(args['backgroundId'], args['engravingId'])
         self.destroyWindow()
-        return
 
 
 class CatalogViewWindow(WindowImpl):

@@ -7,7 +7,6 @@ from collections import namedtuple
 from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.impl.gen.view_models.views.lobby.achievements.views.achievements_main_view_model import AchievementsViews, AchievementsMainViewModel
@@ -102,7 +101,8 @@ class AchievementMainView(ViewImpl):
 
     def __onClose(self):
         if self.__ctx.userID is None:
-            g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
+            from gui.shared.event_dispatcher import showHangar
+            showHangar()
         else:
             g_eventBus.handleEvent(events.Achievements20Event(events.Achievements20Event.CLOSE_SUMMARY_VIEW, {'databaseID': self.__ctx.userID}), scope=EVENT_BUS_SCOPE.LOBBY)
         return

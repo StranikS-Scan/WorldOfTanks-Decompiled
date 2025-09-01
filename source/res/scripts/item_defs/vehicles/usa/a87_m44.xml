@@ -65,9 +65,9 @@
     <weight>	11550	</weight>
     <maxHealth>	252	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	50	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
+      <maxHealth>	170	</maxHealth>
+      <maxRegenHealth>	128	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
     </ammoBayHealth>
     <models>
       <undamaged>	vehicles/american/A87_M44/normal/lod0/Hull.model	</undamaged>
@@ -1150,13 +1150,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_M44>
-      <userString>	#usa_vehicles:Chassis_M44	</userString>
+    <Chassis_A87_M44>
+      <userString>	#usa_vehicles:Chassis_A87_M44	</userString>
       <tags></tags>
       <level>	5	</level>
       <price>	9750	</price>
       <unlocks>
-        <chassis>	Chassis_M44_2	  <cost>	4200	</cost>
+        <chassis>	Chassis_A87_M44_2	  <cost>	4200	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1164,8 +1164,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	15000	</weight>
-      <maxLoad>	29500	</maxLoad>
-      <terrainResistance>	1.4 1.6 2.7	</terrainResistance>
+      <terrainResistance>	1.3 1.5 2.5	</terrainResistance>
       <brakeForce>	26000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	20	</rotationSpeed>
@@ -1981,9 +1980,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	8.72727299	</repairTime>
-    </Chassis_M44>
-    <Chassis_M44_2>
-      <userString>	#usa_vehicles:Chassis_M44_2	</userString>
+    </Chassis_A87_M44>
+    <Chassis_A87_M44_2>
+      <userString>	#usa_vehicles:Chassis_A87_M44_2	</userString>
       <tags></tags>
       <level>	6	</level>
       <price>	16500	</price>
@@ -1992,7 +1991,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	15000	</weight>
-      <maxLoad>	32000	</maxLoad>
       <terrainResistance>	1.3 1.5 2.5	</terrainResistance>
       <brakeForce>	29000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2002,9 +2000,9 @@
         <vehicleRotation>	0.3	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	90	</maxHealth>
-      <maxRegenHealth>	70	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
+      <maxHealth>	145	</maxHealth>
+      <maxRegenHealth>	109	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
       <models>
         <undamaged>	vehicles/american/A87_M44/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/american/A87_M44/crash/lod0/Chassis.model	</destroyed>
@@ -2808,15 +2806,15 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	7.19999981	</repairTime>
-    </Chassis_M44_2>
+      <repairTime>	6.62068987	</repairTime>
+    </Chassis_A87_M44_2>
   </chassis>
   <turrets0>
-    <Turret_1_M44>
+    <Turret_1_A87_M44>
       <ceilless>	true	</ceilless>
-      <userString>	#usa_vehicles:Turret_1_M44	</userString>
-      <tags>	cannotDetach	</tags>
-      <level>	7	</level>
+      <userString>	#usa_vehicles:Turret_1_A87_M44	</userString>
+      <tags>	cannotDetach turretless	</tags>
+      <level>	5	</level>
       <price>	100	</price>
       <notInShop>	true	</notInShop>
       <armor>
@@ -2965,12 +2963,12 @@
         <density>	80.002 79.9247	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_1_M44>
-    <Turret_2_M44>
+    </Turret_1_A87_M44>
+    <Turret_2_A87_M44>
       <ceilless>	true	</ceilless>
-      <userString>	#usa_vehicles:Turret_2_M44	</userString>
-      <tags>	cannotDetach	</tags>
-      <level>	7	</level>
+      <userString>	#usa_vehicles:Turret_2_A87_M44	</userString>
+      <tags>	cannotDetach turretless	</tags>
+      <level>	6	</level>
       <price>	100	</price>
       <notInShop>	true	</notInShop>
       <armor>
@@ -3121,54 +3119,36 @@
         <density>	80.002 79.9247	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_2_M44>
+    </Turret_2_A87_M44>
   </turrets0>
   <engines>
-    <Continental_AOS-895-3>	shared	  <unlocks>
-        <engine>	Continental_AOSI-895-5	  <cost>	18000	</cost>
+    <Continental_AOS_895_3_M44>	shared	  <unlocks>
+        <engine>	Continental_AOSI_895_5_M44	  <cost>	18000	</cost>
         </engine>
       </unlocks>
-    </Continental_AOS-895-3>
-    <Continental_AOSI-895-5>	shared	</Continental_AOSI-895-5>
+    </Continental_AOS_895_3_M44>
+    <Continental_AOSI_895_5_M44>	shared	</Continental_AOSI_895_5_M44>
   </engines>
   <fuelTanks>
     <Medium>	shared	</Medium>
   </fuelTanks>
   <radios>
-    <AN_PRC_10>	shared	  <unlocks>
-        <radio>	AN_PRC_25	  <cost>	9000	</cost>
-        </radio>
-      </unlocks>
-    </AN_PRC_10>
     <AN_PRC_25>	shared	</AN_PRC_25>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Continental_AOS-895-3>
+        <Continental_AOS_895_3_M44>
           <smplEnginePower>	528.6406	</smplEnginePower>
           <smplFwMaxSpeed>	56.3	</smplFwMaxSpeed>
-        </Continental_AOS-895-3>
-        <Continental_AOSI-895-5>
+        </Continental_AOS_895_3_M44>
+        <Continental_AOSI_895_5_M44>
           <smplEnginePower>	581.5046	</smplEnginePower>
           <smplFwMaxSpeed>	56.3	</smplFwMaxSpeed>
-        </Continental_AOSI-895-5>
+        </Continental_AOSI_895_5_M44>
       </engines>
       <chassis>
-        <Chassis_M44>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.21735	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.1288	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.1127	</rollingFriction>
-            </firm>
-          </grounds>
-        </Chassis_M44>
-        <Chassis_M44_2>
+        <Chassis_A87_M44>
           <grounds>
             <soft>
               <rollingFriction>	0.20125	</rollingFriction>
@@ -3180,7 +3160,20 @@
               <rollingFriction>	0.10465	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_M44_2>
+        </Chassis_A87_M44>
+        <Chassis_A87_M44_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.20125	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.12075	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.10465	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_A87_M44_2>
       </chassis>
     </detailed>
   </physics>

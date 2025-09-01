@@ -3,7 +3,7 @@
 import logging
 import weakref
 import typing
-from frameworks.state_machine import SingleStateObserver
+from frameworks.state_machine.observers import StateIdsObserver
 from frameworks.wulf import WindowLayer, WindowStatus
 from gui.impl.gen import R
 from gui.shared.system_factory import collectLowPriorityWindows, registerLowPriorityWulfWindows
@@ -94,20 +94,20 @@ class FullscreenManager(IFullscreenManager):
         return True
 
 
-class _LobbyStateObserver(SingleStateObserver):
+class _LobbyStateObserver(StateIdsObserver):
     __slots__ = ('__manager', '__gui')
     __gui = dependency.descriptor(IGuiLoader)
 
     def __init__(self, manager):
-        super(_LobbyStateObserver, self).__init__(GameplayStateID.ACCOUNT)
+        super(_LobbyStateObserver, self).__init__([GameplayStateID.ACCOUNT])
         self.__manager = manager
 
-    def onEnterState(self, event=None):
-        super(_LobbyStateObserver, self).onEnterState(event)
+    def onEnterState(self, state, event):
+        super(_LobbyStateObserver, self).onEnterState(state, event)
         self.__gui.windowsManager.onWindowStatusChanged += self.__onWindowStatusChanged
 
-    def onExitState(self, event=None):
-        super(_LobbyStateObserver, self).onExitState(event)
+    def onExitState(self, state, event):
+        super(_LobbyStateObserver, self).onExitState(state, event)
         self.__gui.windowsManager.onWindowStatusChanged -= self.__onWindowStatusChanged
         self.__manager.setEnabled(False)
 

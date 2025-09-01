@@ -3,18 +3,20 @@
 import math
 import logging
 import typing
+from collections import namedtuple
 import Event
 import BigWorld
 import Math
 import SimulatedVehicle
 import math_utils
 import CGF
+from GenericComponents import Sequence, StateSwitcherComponent
 import AreaDestructibles
-from collections import namedtuple
 from avatar_components.avatar_postmortem_component import SimulatedVehicleType
 from avatar_components.CombatEquipmentManager import CombatEquipmentManager
 from battleground.kill_cam_visuals import EffectsController
 from cgf_components.sequence_components import SequencePauseComponent, SequenceSnapshotComponent
+from cgf_components_common.vehicle_mechanics import StationaryReloadSequenceParamsComponent
 from constants import SHELL_TYPES
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from helpers import dependency
@@ -196,6 +198,15 @@ class SimulatedScene(object):
         for animator in self.__vehicleAnimators.itervalues():
             animator.setTimeScale(timeScale)
 
+    def updateVehicleEntities(self):
+        for simVehID in self.__allSimulatedVehicles:
+            simVehicle = BigWorld.entity(simVehID)
+            dynAttachmentsInfo = simVehicle.getDynAttachments()
+            if dynAttachmentsInfo is not None:
+                _updateDynAttachments(simVehicle, dynAttachmentsInfo)
+
+        return
+
     def pauseOrResumeAnimations(self, isPause):
         self.updateParticlesTimeScale(isPause)
         for animator in self.__vehicleAnimators.itervalues():
@@ -263,6 +274,7 @@ class SimulatedScene(object):
              'isPlayerVehicle': isPlayerVehicle,
              'realVehicleID': simulatedData.get('vehicleID', None),
              'simulationData_position': simulatedData.get('position', (0, 0, 0)),
+             'simulationData_dynAttachmentsInfo': simulatedData.get('dynAttachmentsInfo', None),
              'simulationData_rotation': simulatedData.get('rotation', (0, 0, 0)),
              'simulationData_velocity': simulatedData.get('velocity', (0, 0, 0)),
              'simulationData_angVelocity': simulatedData.get('angVelocity', (0, 0, 0)),
@@ -648,3 +660,27 @@ def _calculateWorldHitPoint(vehicle, segments):
             pitchMatrix.setRotateX(Math.Matrix(vehicle.appearance.gunMatrix).pitch)
             decodedPointPosition = pitchMatrix.applyPoint(decodedPointPosition)
         return compoundMatrix.applyPoint(decodedPointPosition)
+
+
+def _updateDynAttachments(simulatedVehicle, dynAttachmentInfo):
+    hierarchy = CGF.HierarchyManager(simulatedVehicle.spaceID)
+    parentGameObject = simulatedVehicle.entityGameObject
+    result = hierarchy.findComponentsInHierarchy(parentGameObject, StationaryReloadSequenceParamsComponent)
+    if not result:
+        return
+    else:
+        for gameObject, _ in result:
+            if not gameObject.isValid():
+                continue
+            sequence = gameObject.findComponentByType(Sequence)
+            if sequence is None:
+                _logger.warning('Can not change position for a dynamic attachment')
+                continue
+            sequence.requestLayerChange(dynAttachmentInfo.activeSequenceLayer, 0.0)
+            sequence.requestTime(dynAttachmentInfo.sequenceTime)
+            stateSwitcher = gameObject.findComponentByType(StateSwitcherComponent)
+            if stateSwitcher is not None:
+                state = dynAttachmentInfo.attachmentState
+                stateSwitcher.requestState(StateSwitcherComponent.NONE_STATE if state == StateSwitcherComponent.CRITICAL_STATE else state)
+
+        return

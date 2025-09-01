@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/prb_control/entities/squad/entity.py
 import json
+from CurrentVehicle import g_currentPreviewVehicle
 from comp7.gui.comp7_constants import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME
 from comp7.gui.prb_control.entities.base.ctx import Comp7PrbAction
 from comp7.gui.prb_control.entities.comp7_prb_helpers import Comp7ViewPresenter
@@ -48,6 +49,7 @@ class Comp7SquadEntity(SquadEntity):
         self.__watcher = None
         self.__introPresenter = Comp7ViewPresenter()
         self.__validIntCDs = set()
+        self.__toggleAfterPreviewLeave = False
         self.storage = prequeue_storage_getter(QUEUE_TYPE.COMP7)()
         return
 
@@ -56,6 +58,7 @@ class Comp7SquadEntity(SquadEntity):
         self.__introPresenter.init()
         result = super(Comp7SquadEntity, self).init(ctx)
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
+        g_currentPreviewVehicle.onSelected += self.__onPreviewVehicleSelected
         self.__watcher = Comp7VehiclesWatcher()
         self.__watcher.start()
         return result
@@ -66,6 +69,7 @@ class Comp7SquadEntity(SquadEntity):
             self.__watcher.stop()
             self.__watcher = None
         g_prbCtrlEvents.onVehicleClientStateChanged -= self.__onVehicleClientStateChanged
+        g_currentPreviewVehicle.onSelected -= self.__onPreviewVehicleSelected
         return super(Comp7SquadEntity, self).fini(ctx, woEvents)
 
     def leave(self, ctx, callback=None):
@@ -106,8 +110,16 @@ class Comp7SquadEntity(SquadEntity):
         validIntCDs = allIntCDs - intCDs
         isReady = self.getPlayerInfo().isReady
         if isReady and self.__validIntCDs != validIntCDs:
-            self.togglePlayerReadyAction(True)
+            if not g_currentPreviewVehicle.isPresent():
+                self.togglePlayerReadyAction(True)
+            else:
+                self.__toggleAfterPreviewLeave = True
         self.__validIntCDs = validIntCDs
+
+    def __onPreviewVehicleSelected(self):
+        if self.__toggleAfterPreviewLeave and not g_currentPreviewVehicle.isPresent():
+            self.togglePlayerReadyAction(True)
+            self.__toggleAfterPreviewLeave = False
 
 
 class Comp7RosterSettings(DynamicRosterSettings):

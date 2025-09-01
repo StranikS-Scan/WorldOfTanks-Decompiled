@@ -71,7 +71,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	34700	</weight>
-    <maxHealth>	920	</maxHealth>
+    <maxHealth>	1040	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	240	</maxHealth>
       <maxRegenHealth>	160	</maxRegenHealth>
@@ -1280,13 +1280,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_AMX_AC_Mle1948>
-      <userString>	#france_vehicles:Chassis_AMX_AC_Mle1948	</userString>
+    <Chassis_F36_AMX_AC_Mle1948>
+      <userString>	#france_vehicles:Chassis_F36_AMX_AC_Mle1948	</userString>
       <tags></tags>
       <level>	7	</level>
       <price>	18860	</price>
       <unlocks>
-        <chassis>	Chassis_AMX_AC_Mle1948_2	  <cost>	17500	</cost>
+        <chassis>	Chassis_F36_AMX_AC_Mle1948_2	  <cost>	17500	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1294,11 +1294,10 @@
         <rightTrack>	30	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	56900	</maxLoad>
-      <terrainResistance>	1.4 1.5 2.6	</terrainResistance>
+      <terrainResistance>	1.3 1.4 2.4	</terrainResistance>
       <brakeForce>	36500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	26	</rotationSpeed>
+      <rotationSpeed>	42	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.19	</vehicleMovement>
         <vehicleRotation>	0.19	</vehicleRotation>
@@ -2248,9 +2247,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_AMX_AC_Mle1948>
-    <Chassis_AMX_AC_Mle1948_2>
-      <userString>	#france_vehicles:Chassis_AMX_AC_Mle1948_2	</userString>
+    </Chassis_F36_AMX_AC_Mle1948>
+    <Chassis_F36_AMX_AC_Mle1948_2>
+      <userString>	#france_vehicles:Chassis_F36_AMX_AC_Mle1948_2	</userString>
       <tags></tags>
       <level>	8	</level>
       <price>	29500	</price>
@@ -2259,11 +2258,10 @@
         <rightTrack>	30	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	59300	</maxLoad>
       <terrainResistance>	1.3 1.4 2.4	</terrainResistance>
       <brakeForce>	36500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	28	</rotationSpeed>
+      <rotationSpeed>	44	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.17	</vehicleMovement>
         <vehicleRotation>	0.17	</vehicleRotation>
@@ -3213,11 +3211,11 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_AMX_AC_Mle1948_2>
+    </Chassis_F36_AMX_AC_Mle1948_2>
   </chassis>
   <turrets0>
-    <Turret_1_AMX_AC_Mle1948>
-      <userString>	#france_vehicles:Turret_1_AMX_AC_Mle1948	</userString>
+    <Turret_1_F36_AMX_AC_Mle1948>
+      <userString>	#france_vehicles:Turret_1_F36_AMX_AC_Mle1948	</userString>
       <tags>	cannotDetach	</tags>
       <level>	8	</level>
       <price>	100	</price>
@@ -3226,12 +3224,12 @@
         <armor_1>	0	</armor_1>
       </armor>
       <weight>	170	</weight>
-      <maxHealth>	230	</maxHealth>
+      <maxHealth>	260	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	155	</maxHealth>
+        <maxRegenHealth>	78	</maxRegenHealth>
+        <repairCost>	8	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	370	</circularVisionRadius>
       <surveyingDeviceHealth>
@@ -3240,123 +3238,17 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_90mm_canon_DCA_45_AC>	shared	  <maxAmmo>	80	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -18 1 -18	</minPitch>
-            <maxPitch>	0 6 1 6	</maxPitch>
-          </pitchLimits>
-          <unlocks>
-            <gun>	_100mm_SA_47_AC	  <cost>	34500	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	250	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	5	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <gun>	30	</gun>
-          </armor>
-          <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <reloadTime>	6.3	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	3	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	1.7	</aimingTime>
-          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
-          <turretYawLimits>	-10 10	</turretYawLimits>
-          <models>
-            <undamaged>	vehicles/french/F36_AMX_AC_Mle1948/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/french/F36_AMX_AC_Mle1948/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/french/F36_AMX_AC_Mle1948/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/french/F36_AMX_AC_Mle1948/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F36_AMX_AC_Mle1948/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_main_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.001163 0.001133 3.17555	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0.000038 0.366277 0.609821	</anchorPosition>
-              <anchorDirection>	0.000019 0.642788 0.766044	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.001163 0.001133 3.17555	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.000049 1.87258 2.52775	</position>
-              <rotation>	0.664903 -0.000012 3.14158	</rotation>
-              <scale>	3.1943 1.18946 3.19431	</scale>
-              <showOn>	4112	</showOn>
-              <clipAngle>	0.357377	</clipAngle>
-              <anchorShift>	0.216516	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x3	</tags>
-              <position>	-0.000024 1.68448 2.38011	</position>
-              <rotation>	0.402996 -0.000005 3.14156	</rotation>
-              <scale>	3.22261 1.2 3.22261	</scale>
-              <showOn>	4112	</showOn>
-              <clipAngle>	0.357377	</clipAngle>
-              <anchorShift>	0.406521	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.002326 0.002266 3.68448	</rayStart>
-              <rayEnd>	-0.002326 0.002266 4.34048	</rayEnd>
-              <rayUp>	0.089 0 0	</rayUp>
-              <size>	0.656	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.49 0.49 0.000000 0.000000	</tiling>
-            <density>	98.931 89.0825	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_90mm_canon_DCA_45_AC>
         <_100mm_SA_47_AC>	shared	  <maxAmmo>	72	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -18 1 -18	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
+          <clip>
+            <count>	3	</count>
+            <rate>	24	</rate>
+          </clip>
           <unlocks>
-            <gun>	_120mm_SA_46_AC	  <cost>	63200	</cost>
+            <gun>	_120mm_SA46_AC_48	  <cost>	63200	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -3374,8 +3266,8 @@
             </armor_6>
             <gun>	40	</gun>
           </armor>
-          <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <reloadTime>	8	</reloadTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	22	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <shotDispersionFactors>
@@ -3394,7 +3286,7 @@
             <collisionModelClient>	vehicles/french/F36_AMX_AC_Mle1948/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_mainext_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -3460,7 +3352,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_100mm_SA_47_AC>
-        <_120mm_SA_46_AC>	shared	  <maxAmmo>	66	</maxAmmo>
+        <_120mm_SA46_AC_48>	shared	  <maxAmmo>	66	</maxAmmo>
           <unlocks>
             <vehicle>	F37_AMX50_Foch	  <cost>	178250	</cost>
             </vehicle>
@@ -3482,7 +3374,7 @@
           </armor>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	34	</reloadTime>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.6	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
@@ -3496,7 +3388,7 @@
           </pitchLimits>
           <clip>
             <count>	3	</count>
-            <rate>	22.2	</rate>
+            <rate>	24	</rate>
           </clip>
           <models>
             <undamaged>	vehicles/french/F36_AMX_AC_Mle1948/normal/lod0/Gun_03.model	</undamaged>
@@ -3573,7 +3465,7 @@
             <density>	97.4498 100.166	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_120mm_SA_46_AC>
+        </_120mm_SA46_AC_48>
       </guns>
       <models>
         <undamaged>	vehicles/french/F36_AMX_AC_Mle1948/normal/lod0/Turret_01.model	</undamaged>
@@ -3593,63 +3485,36 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-    </Turret_1_AMX_AC_Mle1948>
+    </Turret_1_F36_AMX_AC_Mle1948>
   </turrets0>
   <engines>
-    <Maybach_HL_230>	shared	  <unlocks>
-        <engine>	Maybach_HL_230P45	  <cost>	18800	</cost>
+    <Maybach_HL_230_P45_AC_48>	shared	  <unlocks>
+        <engine>	Maybach_HL_295_AC_48	  <cost>	24700	</cost>
         </engine>
       </unlocks>
-    </Maybach_HL_230>
-    <Maybach_HL_230P45>	shared	  <unlocks>
-        <engine>	Maybach_HL_295	  <cost>	24700	</cost>
-        </engine>
-      </unlocks>
-    </Maybach_HL_230P45>
-    <Maybach_HL_295>	shared	</Maybach_HL_295>
+    </Maybach_HL_230_P45_AC_48>
+    <Maybach_HL_295_AC_48>	shared	</Maybach_HL_295_AC_48>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <SCR_508>	shared	  <unlocks>
-        <radio>	SCR_528	  <cost>	9000	</cost>
-        </radio>
-      </unlocks>
-    </SCR_508>
     <SCR_528>	shared	</SCR_528>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Maybach_HL_230>
-          <smplEnginePower>	607.9366	</smplEnginePower>
+        <Maybach_HL_230_P45_AC_48>
+          <smplEnginePower>	870	</smplEnginePower>
           <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
-        </Maybach_HL_230>
-        <Maybach_HL_230P45>
-          <smplEnginePower>	792.9609	</smplEnginePower>
+        </Maybach_HL_230_P45_AC_48>
+        <Maybach_HL_295_AC_48>
+          <smplEnginePower>	930	</smplEnginePower>
           <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
-        </Maybach_HL_230P45>
-        <Maybach_HL_295>
-          <smplEnginePower>	898.689	</smplEnginePower>
-          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
-        </Maybach_HL_295>
+        </Maybach_HL_295_AC_48>
       </engines>
       <chassis>
-        <Chassis_AMX_AC_Mle1948>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.2093	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.12075	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.1127	</rollingFriction>
-            </firm>
-          </grounds>
-        </Chassis_AMX_AC_Mle1948>
-        <Chassis_AMX_AC_Mle1948_2>
+        <Chassis_F36_AMX_AC_Mle1948>
           <grounds>
             <soft>
               <rollingFriction>	0.1932	</rollingFriction>
@@ -3661,7 +3526,20 @@
               <rollingFriction>	0.10465	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_AMX_AC_Mle1948_2>
+        </Chassis_F36_AMX_AC_Mle1948>
+        <Chassis_F36_AMX_AC_Mle1948_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.1932	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.1127	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.10465	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_F36_AMX_AC_Mle1948_2>
       </chassis>
     </detailed>
   </physics>

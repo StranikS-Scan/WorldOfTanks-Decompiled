@@ -86,7 +86,7 @@ class StyleUnlockedView(ViewImpl):
         model.setTankLevel(int2roman(self.__vehicle.level))
 
     def __loadViewHandler(self, event):
-        if event.alias == VIEW_ALIAS.LOBBY_HANGAR:
+        if event.alias in (VIEW_ALIAS.LOBBY_HANGAR, VIEW_ALIAS.LEGACY_LOBBY_HANGAR):
             self._updateC11nButton()
         elif event.alias in (VIEW_ALIAS.HERO_VEHICLE_PREVIEW, VIEW_ALIAS.BATTLE_QUEUE):
             self.__updateC11nButton(lock=True)

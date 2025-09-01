@@ -3,12 +3,14 @@
 from constants import IS_CHINA
 from debug_utils import LOG_ERROR
 from gui.Scaleform.locale.MESSENGER import MESSENGER
-from gui.Scaleform.managers.windows_stored_data import DATA_TYPE, TARGET_ID
+from gui.Scaleform.managers.windows_stored_data import DATA_TYPE, TARGET_ID, g_windowsStoredData
 from gui.Scaleform.managers.windows_stored_data import stored_window
 from helpers import i18n
+from messenger import MessengerEntry
 from messenger.gui.Scaleform.data.search_data_providers import SearchChannelsDataProvider
+from messenger.gui.Scaleform.lobby_entry import LobbyEntry
 from messenger.gui.Scaleform.meta.ChannelsManagementWindowMeta import ChannelsManagementWindowMeta
-from messenger.m_constants import PROTO_TYPE
+from messenger.m_constants import PROTO_TYPE, MESSENGER_SCOPE
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.interfaces import ISearchHandler
@@ -16,7 +18,7 @@ from messenger.proto.interfaces import ISearchHandler
 @stored_window(DATA_TYPE.UNIQUE_WINDOW, TARGET_ID.CHAT_MANAGEMENT)
 class ChannelsManagementWindow(ChannelsManagementWindowMeta, ISearchHandler):
 
-    def __init__(self, _=None):
+    def __init__(self, **kwargs):
         super(ChannelsManagementWindow, self).__init__()
         self._searchDP = SearchChannelsDataProvider(self.proto.messages.getSearchUserRoomsProcessor())
 
@@ -71,10 +73,21 @@ class ChannelsManagementWindow(ChannelsManagementWindowMeta, ISearchHandler):
         super(ChannelsManagementWindow, self)._populate()
         self._searchDP.init(self.as_getDataProviderS(), (self,))
         self.as_hideChannelNameInputS(IS_CHINA)
+        self.__setInitialGeometry()
 
     def _dispose(self):
         if self._searchDP is not None:
             self._searchDP.fini()
             self._searchDP = None
         super(ChannelsManagementWindow, self)._dispose()
+        return
+
+    def __setInitialGeometry(self):
+        storedData = g_windowsStoredData.getData(TARGET_ID.CHAT_MANAGEMENT, self)
+        entry = MessengerEntry.g_instance.gui.getEntry(MESSENGER_SCOPE.LOBBY)
+        if isinstance(entry, LobbyEntry) and not storedData:
+            pos = entry.carouselHandler.getManagerWindowGeometry()
+            if pos is not None:
+                x, y, width, height = pos
+                self.as_setGeometryS(x, y, width, height)
         return

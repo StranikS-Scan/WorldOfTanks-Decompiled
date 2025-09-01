@@ -25,8 +25,8 @@ class ClientLoadingStubState(StaticSlideState):
         self._cancelMinDurationTimer()
         super(ClientLoadingStubState, self).clear()
 
-    def _onEntered(self):
-        super(ClientLoadingStubState, self)._onEntered()
+    def _onEntered(self, event):
+        super(ClientLoadingStubState, self)._onEntered(event)
         game_loading_bindings.bringLoadingViewToTop()
         self._minDurationTimerId = BigWorld.callback(self._image.transition / float(MS_IN_SECOND), self._fireMinimumDurationEvent)
 

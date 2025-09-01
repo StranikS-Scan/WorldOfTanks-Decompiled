@@ -8,6 +8,7 @@ from operator import itemgetter
 import BigWorld
 import typing
 from adisp import adisp_process
+from shared_utils import CONST_CONTAINER, first, makeTupleByDict, findFirst
 from battle_pass_common import BATTLE_PASS_OFFER_TOKEN_PREFIX, BATTLE_PASS_Q_CHAIN_BONUS_NAME, BATTLE_PASS_Q_CHAIN_TOKEN_PREFIX, BATTLE_PASS_RANDOM_QUEST_BONUS_NAME, BATTLE_PASS_RANDOM_QUEST_TOKEN_PREFIX, BATTLE_PASS_SELECT_BONUS_NAME, BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME, BATTLE_PASS_TOKEN_3D_STYLE, BATTLE_PASS_TOKEN_PREFIX
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
@@ -43,6 +44,7 @@ from gui.lootbox_system.base.common import LOOTBOX_RANDOM_NATIONAL_BLUEPRINT, LO
 from gui.selectable_reward.constants import FEATURE_TO_PREFIX, SELECTABLE_BONUS_NAME
 from gui.server_events.awards_formatters import AWARDS_SIZES, BATTLE_BONUS_X5_TOKEN, CREW_BONUS_X3_TOKEN
 from gui.server_events.events_helpers import parseC11nProgressToken
+from gui.server_events.finders import BRANCH_TO_OPERATION_IDS, isPM3Points
 from gui.server_events.formatters import parseComplexToken
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.formatters import text_styles
@@ -54,6 +56,7 @@ from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.gui_items.customization import CustomizationTooltipContext
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.money import Currency, Money, ZERO_MONEY
+from gui.shared.system_factory import collectBonusTokens
 from gui.shared.utils.functions import makeTooltip, stripColorTagDescrTags
 from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID, getVehicleCDForIntelligence, getVehicleCDForNational, makeIntelligenceCD, makeNationalCD
 from gui.shared.utils.role_presenter_helper import getRoleUserName
@@ -67,7 +70,6 @@ from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from nations import NAMES
 from optional_bonuses import BONUS_MERGERS
 from personal_missions import PM_BRANCH, PM_BRANCH_TO_FREE_TOKEN_NAME
-from shared_utils import CONST_CONTAINER, first, makeTupleByDict, findFirst
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import ICollectionsSystemController, ILootBoxSystemController, IWinbackController, IWotPlusController
@@ -963,6 +965,49 @@ class X3CrewTokensBonus(TokensBonus):
         return result
 
 
+class PersonalMissionsPointsTokensBonus(TokensBonus):
+
+    def __init__(self, value, isCompensation=False, ctx=None):
+        super(TokensBonus, self).__init__('tokens', value, isCompensation, ctx)
+
+    def _format(self, styleSubset):
+        return makeHtmlString('html_templates:lobby/quests/bonuses', 'personal_missions_points', {'value': self.formatValue()})
+
+    def getUserName(self):
+        pass
+
+    def formatValue(self):
+        return self.getValue().get(findFirst(isPM3Points, self.getValue(), '')).get('count', 0)
+
+    def getTooltip(self):
+        return TooltipData(tooltip=TOOLTIPS_CONSTANTS.PERSONAL_MISSIONS_POINTS, isSpecial=False, specialAlias=None, specialArgs=[], isWulfTooltip=True)
+
+    def isShowInGUI(self):
+        return self.formatValue() > 0
+
+
+class PersonalMissionsDailyPointsTokensBonus(PersonalMissionsPointsTokensBonus):
+    __eventsCache = dependency.descriptor(IEventsCache)
+
+    def isShowInGUI(self):
+        personalMissions = self.__eventsCache.getPersonalMissions()
+        if not personalMissions.isEnabled(PM_BRANCH.PERSONAL_MISSION_3):
+            return False
+        else:
+            isPM3CampaignSelected = personalMissions.isCampaignActive(PM_BRANCH.TYPE_TO_NAME[PM_BRANCH.PERSONAL_MISSION_3])
+            pm3ActiveOperations = personalMissions.getActiveOperations(PM_BRANCH.V2_BRANCHES)
+            isAnyPM3OperationActive = len(pm3ActiveOperations) > 0
+            if not isPM3CampaignSelected or not isAnyPM3OperationActive:
+                return False
+            currentOperation = first(pm3ActiveOperations)
+            isOperationCompleted = currentOperation.isCompleted() if currentOperation is not None else False
+            isProgressionCompleted = currentOperation.hasCollectedAllPoints() if currentOperation is not None else False
+            operationsPM3 = personalMissions.getAllOperations(PM_BRANCH.V2_BRANCHES)
+            isPM3AllOperationsCompleted = all((operation.isCompleted() for operation in operationsPM3.values()))
+            shouldBeVisible = isPM3CampaignSelected and isAnyPM3OperationActive and not isOperationCompleted and not isProgressionCompleted and not isPM3AllOperationsCompleted and not currentOperation.isDisabled()
+            return shouldBeVisible and super(PersonalMissionsDailyPointsTokensBonus, self).isShowInGUI()
+
+
 class SelectableBonus(TokensBonus):
 
     def __init__(self, value, isCompensation=False, ctx=None):
@@ -1162,13 +1207,17 @@ class CollectionEntitlementBonus(EntitlementBonus):
 
 def personalMissionsTokensFactory(name, value, isCompensation=False, ctx=None):
     from gui.server_events.finders import PERSONAL_MISSION_TOKEN
-    completionTokenID = PERSONAL_MISSION_TOKEN % (ctx['campaignID'], ctx['operationID'])
+    completionTokenID = PERSONAL_MISSION_TOKEN % (ctx['campaignID'], ctx['operationID']) if ctx['operationID'] not in BRANCH_TO_OPERATION_IDS[PM_BRANCH.PERSONAL_MISSION_3] else ''
     result = []
     for tID, tValue in value.iteritems():
         if tID in PM_BRANCH_TO_FREE_TOKEN_NAME.values():
             result.append(FreeTokensBonus({tID: tValue}, isCompensation, ctx))
+        if tID.startswith(RECRUIT_TMAN_TOKEN_PREFIX) and ctx['operationID'] in BRANCH_TO_OPERATION_IDS[PM_BRANCH.PERSONAL_MISSION_3]:
+            result.append(TmanTemplateTokensBonus({tID: tValue}, isCompensation, ctx))
         if tID == completionTokenID:
             result.append(CompletionTokensBonus({tID: tValue}, isCompensation, ctx))
+        if isPM3Points(tID):
+            result.append(PersonalMissionsPointsTokensBonus({tID: tValue}, isCompensation, ctx))
         result.append(TokensBonus(name, {tID: tValue}, isCompensation, ctx))
 
     return result
@@ -1192,6 +1241,8 @@ def tokensFactory(name, value, isCompensation=False, ctx=None):
             result.append(X5BattleTokensBonus({tID: tValue}, isCompensation, ctx))
         if tID.startswith(CREW_BONUS_X3_TOKEN):
             result.append(X3CrewTokensBonus({tID: tValue}, isCompensation, ctx))
+        if isPM3Points(tID):
+            result.append(PersonalMissionsDailyPointsTokensBonus({tID: tValue}, isCompensation, ctx))
         if tID.startswith(BATTLE_PASS_TOKEN_3D_STYLE):
             result.append(BattlePassStyleProgressTokenBonus({tID: tValue}, isCompensation, ctx))
         if tID.startswith(BATTLE_PASS_OFFER_TOKEN_PREFIX):
@@ -1220,7 +1271,15 @@ def tokensFactory(name, value, isCompensation=False, ctx=None):
             result.append(Style3DProgressRewardBonus(name, {tID: tValue}, isCompensation, ctx))
         if tID.startswith(LOOTBOX_COMPENSATION_TOKEN_PREFIX):
             result.append(LootboxCompensationTokenBonus(name, {tID: tValue}, isCompensation, ctx))
-        result.append(BattleTokensBonus(name, {tID: tValue}, isCompensation, ctx))
+        appropriateTokenFound = False
+        for checker, classBonus in collectBonusTokens():
+            if checker(tID):
+                result.append(classBonus(name, {tID: value}, isCompensation, ctx))
+                appropriateTokenFound = True
+                break
+
+        if not appropriateTokenFound:
+            result.append(BattleTokensBonus(name, {tID: tValue}, isCompensation, ctx))
 
     for tId, data in accumulatedRewards.items():
         if tId.startswith(EXCHANGE_RATE_GOLD_NAME):
@@ -2235,10 +2294,25 @@ class IdleCrewXP(WoTPlusBonus):
         super(IdleCrewXP, self).__init__(WoTPlusBonusType.IDLE_CREW_XP)
 
 
-class ExcludedMap(WoTPlusBonus):
+class ExcludedMap(SimpleBonus):
 
-    def __init__(self):
-        super(ExcludedMap, self).__init__(WoTPlusBonusType.EXCLUDED_MAP)
+    def __init__(self, mapCount):
+        super(ExcludedMap, self).__init__(WoTPlusBonusType.EXCLUDED_MAP, mapCount)
+
+    @property
+    def isPlural(self):
+        return self._value > 1
+
+    def getPluralName(self):
+        return '{}s'.format(self.getName())
+
+    def getTooltip(self):
+        if not self.isPlural:
+            return super(ExcludedMap, self).getTooltip()
+        headerData, bodyData = getSimpleTooltipData(self.getPluralName())
+        header = i18n.makeString(headerData)
+        body = i18n.makeString(bodyData, mapCount=self._value)
+        return makeTooltip(header, body)
 
 
 class FreeEquipmentDemounting(WoTPlusBonus):
@@ -3244,7 +3318,7 @@ def getMergedCompensatedBonuses(rewardsDicts):
     for currency in Currency.ALL:
         if compValue.get(currency, 0) > 0:
             currencyValue = rewards.pop(currency, None)
-            if currencyValue is not None:
+            if currency is not None:
                 newCurrencyValue = currencyValue - compValue.get(currency, 0)
                 if newCurrencyValue:
                     rewards[currency] = newCurrencyValue

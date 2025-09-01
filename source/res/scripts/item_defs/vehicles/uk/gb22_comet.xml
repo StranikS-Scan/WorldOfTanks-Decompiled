@@ -72,7 +72,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_7 armor_4	</primaryArmor>
     <weight>	16960	</weight>
-    <maxHealth>	840	</maxHealth>
+    <maxHealth>	1000	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -1089,11 +1089,10 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	7000	</weight>
-      <maxLoad>	32000	</maxLoad>
-      <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
+      <terrainResistance>	1 1.1 1.9	</terrainResistance>
       <brakeForce>	28000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	34	</rotationSpeed>
+      <rotationSpeed>	38	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.18	</vehicleMovement>
         <vehicleRotation>	0.18	</vehicleRotation>
@@ -2086,11 +2085,10 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	7000	</weight>
-      <maxLoad>	34000	</maxLoad>
       <terrainResistance>	1 1.1 1.9	</terrainResistance>
       <brakeForce>	35000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	36	</rotationSpeed>
+      <rotationSpeed>	40	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.16	</vehicleMovement>
         <vehicleRotation>	0.16	</vehicleRotation>
@@ -3099,7 +3097,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5000	</weight>
-      <maxHealth>	210	</maxHealth>
+      <maxHealth>	180	</maxHealth>
       <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -3113,13 +3111,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_Gun_Mk_V>	shared	  <maxAmmo>	75	</maxAmmo>
-          <unlocks>
-            <gun>	_3.7inch_Howitzer	  <cost>	2300	</cost>
-            </gun>
-            <gun>	_75mm_Gun_Vickers_HV	  <cost>	5000	</cost>
-            </gun>
-          </unlocks>
+        <_75mm_Gun_Mk_V_A34>	shared	  <maxAmmo>	75	</maxAmmo>
           <armor>
             <gun>	20	</gun>
           </armor>
@@ -3127,15 +3119,15 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 13 0.411111 13 0.430556 6 0.563889 6 0.583333 13 1 13	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.41	</shotDispersionRadius>
-          <reloadTime>	3	</reloadTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	3.9	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
+            <turretRotation>	0.14	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	1.9	</aimingTime>
-          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB22_Comet/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/british/GB22_Comet/crash/lod0/Gun_01.model	</destroyed>
@@ -3199,166 +3191,7 @@
             <density>	123.351 126.39	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_75mm_Gun_Mk_V>
-        <_3.7inch_Howitzer>	shared	  <maxAmmo>	60	</maxAmmo>
-          <armor>
-            <gun>	40	</gun>
-          </armor>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.405556 10 0.425 4 0.563889 4 0.583333 10 1 10	</maxPitch>
-          </pitchLimits>
-          <shotDispersionRadius>	0.53	</shotDispersionRadius>
-          <reloadTime>	7	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/british/GB22_Comet/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/british/GB22_Comet/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/british/GB22_Comet/crash/lod0/Gun_02.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/british/GB22_Comet/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB22_Comet/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_main	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.066993 -0.026935 0.678656	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.026788 0.033997 0.094211	</anchorPosition>
-              <anchorDirection>	0 -0 1	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.066993 -0.026935 0.678656	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.000261 1.96396 1.49224	</position>
-              <rotation>	1.34351 -0.001612 3.13974	</rotation>
-              <scale>	1.20166 0.159755 1.20166	</scale>
-              <showOn>	4352	</showOn>
-              <anchorShift>	0.507621	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.073567 -0.035091 0.667755	</rayStart>
-              <rayEnd>	0.073567 -0.035091 0.946755	</rayEnd>
-              <rayUp>	0.077 0 0	</rayUp>
-              <size>	0.279	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <shotOffset>	0.073765 -0.023834 0.000000	</shotOffset>
-          <camouflage>
-            <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
-            <density>	119.01 119.737	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_3.7inch_Howitzer>
-        <_75mm_Gun_Vickers_HV>	shared	  <maxAmmo>	75	</maxAmmo>
-          <armor>
-            <gun>	20	</gun>
-          </armor>
-          <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 8 0.411111 8 0.430556 5 0.563889 5 0.583333 8 1 8	</maxPitch>
-          </pitchLimits>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	3.9	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
-          <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <models>
-            <undamaged>	vehicles/british/GB22_Comet/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/british/GB22_Comet/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/british/GB22_Comet/crash/lod0/Gun_03.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/british/GB22_Comet/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB22_Comet/collision_client/Gun_03.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium_mb	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.073235 -0.037028 1.64874	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.026787 0.033943 0.094195	</anchorPosition>
-              <anchorDirection>	-0 -0 1	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.073235 -0.037028 1.64874	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.000251 1.95584 1.45713	</position>
-              <rotation>	1.46431 -0.003712 3.13767	</rotation>
-              <scale>	1.2321 0.163802 1.2321	</scale>
-              <showOn>	4352	</showOn>
-              <anchorShift>	0.507622	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.073765 -0.035178 1.87973	</rayStart>
-              <rayEnd>	0.073765 -0.035178 2.27973	</rayEnd>
-              <rayUp>	0.056 0 0	</rayUp>
-              <size>	0.4	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <shotOffset>	0.073765 -0.035645 0.000000	</shotOffset>
-          <camouflage>
-            <tiling>	0.775 0.775 0.000000 0.000000	</tiling>
-            <density>	117.816 147.016	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_75mm_Gun_Vickers_HV>
+        </_75mm_Gun_Mk_V_A34>
       </guns>
       <models>
         <undamaged>	vehicles/british/GB22_Comet/normal/lod0/Turret_01.model	</undamaged>
@@ -3867,7 +3700,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7000	</weight>
-      <maxHealth>	310	</maxHealth>
+      <maxHealth>	250	</maxHealth>
       <rotationSpeed>	46	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -3882,7 +3715,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.033	</invisibilityFactor>
       <guns>
-        <_75mm_Gun_Mk_V>	shared	  <maxAmmo>	75	</maxAmmo>
+        <_75mm_Gun_Mk_V_A34>	shared	  <maxAmmo>	75	</maxAmmo>
           <armor>
             <armor_1>	101.6	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3902,15 +3735,15 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 12 0.416667 12 0.427778 7.5 0.572222 7.5 0.583333 12 1 12	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.39	</shotDispersionRadius>
-          <reloadTime>	3	</reloadTime>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
+          <reloadTime>	3.9	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	1.5	</aimingTime>
-          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB22_Comet/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/british/GB22_Comet/crash/lod0/Gun_04.model	</destroyed>
@@ -3976,197 +3809,7 @@
             <density>	123.351 126.39	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_75mm_Gun_Mk_V>
-        <_3.7inch_Howitzer>	shared	  <maxAmmo>	60	</maxAmmo>
-          <armor>
-            <armor_1>	101.6	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	50.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	50.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	76.2	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <gun>	40	</gun>
-          </armor>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 0.416667 8 0.427778 6.5 0.572222 6.5 0.583333 8 1 8	</maxPitch>
-          </pitchLimits>
-          <shotDispersionRadius>	0.51	</shotDispersionRadius>
-          <reloadTime>	7	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/british/GB22_Comet/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/british/GB22_Comet/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/british/GB22_Comet/crash/lod0/Gun_05.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/british/GB22_Comet/collision/Gun_05.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB22_Comet/collision_client/Gun_05.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_main	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.017024 0.009365 0.710323	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.023298 0.219944 0.219126	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.017024 0.009365 0.710323	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	-0.019753 1.87442 0.981216	</position>
-              <rotation>	0.564015 -0.000009 3.14108	</rotation>
-              <scale>	2.20089 0.926383 2.2009	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.540447	</clipAngle>
-              <anchorShift>	0.551088	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.01867 0.01073 0.777435	</rayStart>
-              <rayEnd>	-0.01867 0.01073 1.097435	</rayEnd>
-              <rayUp>	0.077 0 0	</rayUp>
-              <size>	0.32	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <shotOffset>	-0.018472 0.021988 0.000000	</shotOffset>
-          <camouflage>
-            <tiling>	0.985 0.985 0.000000 0.000000	</tiling>
-            <density>	119.01 119.737	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_3.7inch_Howitzer>
-        <_75mm_Gun_Vickers_HV>	shared	  <maxAmmo>	75	</maxAmmo>
-          <armor>
-            <armor_1>	101.6	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	50.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	50.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	76.2	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <gun>	20	</gun>
-          </armor>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 12 0.416667 12 0.427778 5.5 0.572222 5.5 0.583333 12 1 12	</maxPitch>
-          </pitchLimits>
-          <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <reloadTime>	3.9	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <models>
-            <undamaged>	vehicles/british/GB22_Comet/normal/lod0/Gun_06.model	</undamaged>
-            <destroyed>	vehicles/british/GB22_Comet/crash/lod0/Gun_06.model	</destroyed>
-            <exploded>	vehicles/british/GB22_Comet/crash/lod0/Gun_06.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/british/GB22_Comet/collision/Gun_06.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB22_Comet/collision_client/Gun_06.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium_mb	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.020096 0.016745 1.64874	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.023295 0.219889 0.219095	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.020096 0.016745 1.64874	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	-0.019753 1.87436 0.981217	</position>
-              <rotation>	0.564015 -0.000009 3.14108	</rotation>
-              <scale>	2.20089 0.926381 2.2009	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.540447	</clipAngle>
-              <anchorShift>	0.55109	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.018299 0.01129 1.97397	</rayStart>
-              <rayEnd>	-0.018299 0.01129 2.37397	</rayEnd>
-              <rayUp>	0.056 0 0	</rayUp>
-              <size>	0.4	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <shotOffset>	-0.018299 0.010824 0.000000	</shotOffset>
-          <camouflage>
-            <tiling>	0.76 0.76 0.000000 0.000000	</tiling>
-            <density>	117.816 147.016	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_75mm_Gun_Vickers_HV>
+        </_75mm_Gun_Mk_V_A34>
         <OQF_77mm_Gun_MkII>	shared	  <maxAmmo>	61	</maxAmmo>
           <unlocks>
             <vehicle>	GB23_Centurion	  <cost>	100000	</cost>
@@ -4797,52 +4440,42 @@
     </Turret_2_GB22_Comet>
   </turrets0>
   <engines>
-    <Rolls_Royse_Meteor>	shared	  <unlocks>
-        <engine>	Rolls_Royse_Meteor_MkIV	  <cost>	1900	</cost>
+    <Rolls_Royce_Meteor>	shared	  <unlocks>
+        <engine>	Rolls_Royce_Meteor_Mk_IVB_A34	  <cost>	1900	</cost>
         </engine>
       </unlocks>
-    </Rolls_Royse_Meteor>
-    <Rolls_Royse_Meteor_MkIV>	shared	</Rolls_Royse_Meteor_MkIV>
+    </Rolls_Royce_Meteor>
+    <Rolls_Royce_Meteor_Mk_IVB_A34>	shared	</Rolls_Royce_Meteor_Mk_IVB_A34>
   </engines>
   <fuelTanks>
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <N19Mk2>	shared	  <unlocks>
-        <radio>	N19Mk3	  <cost>	4000	</cost>
-        </radio>
-      </unlocks>
-    </N19Mk2>
-    <N19Mk3>	shared	  <unlocks>
-        <radio>	N22	  <cost>	4500	</cost>
-        </radio>
-      </unlocks>
-    </N19Mk3>
     <N22>	shared	</N22>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Rolls_Royse_Meteor>
-          <smplEnginePower>	634.3687	</smplEnginePower>
+        <Rolls_Royce_Meteor>
+          <smplEnginePower>	660	</smplEnginePower>
           <smplFwMaxSpeed>	51.5	</smplFwMaxSpeed>
-        </Rolls_Royse_Meteor>
-        <Rolls_Royse_Meteor_MkIV>
-          <smplEnginePower>	687.2327	</smplEnginePower>
+        </Rolls_Royce_Meteor>
+        <Rolls_Royce_Meteor_Mk_IVB_A34>
+          <smplEnginePower>	700	</smplEnginePower>
           <smplFwMaxSpeed>	51.5	</smplFwMaxSpeed>
-        </Rolls_Royse_Meteor_MkIV>
+        </Rolls_Royce_Meteor_Mk_IVB_A34>
       </engines>
       <chassis>
         <Chassis_GB22_Comet>
           <grounds>
             <soft>
-              <rollingFriction>	0.16905	</rollingFriction>
+              <rollingFriction>	0.15295	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
+              <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_GB22_Comet>

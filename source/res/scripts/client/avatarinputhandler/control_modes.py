@@ -31,7 +31,7 @@ from DynamicCameras import SniperCamera, StrategicCamera, ArcadeCamera, ArtyCame
 from PostmortemDelay import PostmortemDelay
 from ProjectileMover import collideDynamicAndStatic
 from TriggersManager import TRIGGER_TYPE
-from Vehicle import Vehicle as VehicleEntity
+from Vehicle import Vehicle
 from account_helpers.AccountSettings import AccountSettings, LAST_ARTY_CTRL_MODE, FREE_CAM_USES_COUNT
 from account_helpers.settings_core.settings_constants import SPGAim, SPGAimEntranceModeOptions
 from aih_constants import CTRL_MODE_NAME, GUN_MARKER_FLAG, STRATEGIC_CAMERA, CTRL_MODES
@@ -80,7 +80,7 @@ class IControlMode(object):
     def setGunMarkerFlag(self, positive, bit):
         pass
 
-    def updateGunMarker(self, markerType, pos, direction, size, sizeOffset, relaxTime, collData):
+    def updateGunMarker(self, markerType, gunMarkerInfo, supportMarkersInfo, relaxTime):
         pass
 
     def updateTargetedEnemiesForGuns(self, collisions):
@@ -219,8 +219,8 @@ class _GunControlMode(IControlMode):
     def setGunMarkerFlag(self, positive, bit):
         self._gunMarker.setFlag(positive, bit)
 
-    def updateGunMarker(self, markerType, pos, direction, size, sizeOffset, relaxTime, collData):
-        self._gunMarker.update(markerType, pos, direction, size, sizeOffset, relaxTime, collData)
+    def updateGunMarker(self, markerType, gunMarkerInfo, supportMarkersInfo, relaxTime):
+        self._gunMarker.update(markerType, gunMarkerInfo, supportMarkersInfo, relaxTime)
 
     def setAimingMode(self, enable, mode):
         if enable:
@@ -657,7 +657,7 @@ class _TrajectoryControlMode(_GunControlMode):
         self._cam.enable(args['preferredPos'], args['saveDist'], args.get('switchToPos'), args.get('switchToPlace'))
         self.__trajectoryDrawer.visible = self._aih.isGuiVisible
         target = BigWorld.target()
-        self.__targetVehicleID = target.id if isinstance(target, VehicleEntity) else None
+        self.__targetVehicleID = target.id if isinstance(target, Vehicle) else None
         self.__updateIgnoredVehicleIDs()
         BigWorld.player().autoAim(None)
         replayCtrl = BattleReplay.g_replayCtrl
@@ -790,7 +790,7 @@ class _TrajectoryControlMode(_GunControlMode):
 
     def __updateTrajectoryDrawer(self, targetPoint, shotPos, shotVel, target):
         try:
-            if isinstance(target, VehicleEntity):
+            if isinstance(target, Vehicle):
                 targetVehicleID = target.id
             else:
                 targetVehicleID = None
@@ -850,7 +850,7 @@ class _TrajectoryControlMode(_GunControlMode):
                     if self.__needSPGIndicatorUpdate(shotDescr):
                         shotsIndicatorState[i] = self.__getShotIndicatorState(i, targetPoint, shotPos, shotVel, shotGravity, player, target, shotDescr)
                 if self.__needSPGIndicatorUpdate(shotDescr):
-                    shotPos, shotVel, shotGravity = player.gunRotator.getShotParams(targetPoint, ignoreYawLimits=True, overrideShotIdx=i)
+                    shotPos, shotVel, shotGravity = player.gunRotator.getShotParams(targetPoint, ignoreYawLimits=True, overrideShotDescr=shotDescr)
                     shotsIndicatorState[i] = self.__getShotIndicatorState(i, targetPoint, shotPos, shotVel, shotGravity, player, target, shotDescr)
 
             self.spgShotsIndicatorState = shotsIndicatorState
@@ -990,8 +990,8 @@ class SniperControlMode(_GunControlMode):
             TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.SNIPER_MODE)
         if BattleReplay.g_replayCtrl.isRecording:
             BattleReplay.g_replayCtrl.onSniperModeChanged(True)
-        if self._aih.siegeModeControl is not None:
-            self._aih.siegeModeControl.onSiegeStateChanged += self.__siegeModeStateChanged
+        if self._aih.siegeModeNotifier is not None:
+            self._aih.siegeModeNotifier.onSiegeStateChanged += self.onSiegeStateChanged
         return
 
     def disable(self, isDestroy=False):
@@ -1002,8 +1002,8 @@ class SniperControlMode(_GunControlMode):
         if not BattleReplay.g_replayCtrl.isPlaying:
             if TriggersManager.g_manager is not None:
                 TriggersManager.g_manager.deactivateTrigger(TRIGGER_TYPE.SNIPER_MODE)
-        if self._aih.siegeModeControl is not None:
-            self._aih.siegeModeControl.onSiegeStateChanged -= self.__siegeModeStateChanged
+        if self._aih.siegeModeNotifier is not None:
+            self._aih.siegeModeNotifier.onSiegeStateChanged -= self.onSiegeStateChanged
         if BattleReplay.g_replayCtrl.isRecording:
             BattleReplay.g_replayCtrl.onSniperModeChanged(False)
         return
@@ -1137,8 +1137,8 @@ class SniperControlMode(_GunControlMode):
         self._binoculars.setParams(modeDesc.greenOffset, modeDesc.blueOffset, modeDesc.aberrationRadius, modeDesc.distortionAmount)
         return
 
-    def __siegeModeStateChanged(self, _, newState, __):
-        if newState == VEHICLE_SIEGE_STATE.ENABLED or newState == VEHICLE_SIEGE_STATE.DISABLED:
+    def onSiegeStateChanged(self, _, newState, __):
+        if newState in VEHICLE_SIEGE_STATE.PERSISTENT:
             self._cam.aimingSystem.forceFullStabilization(self.__isFullStabilizationRequired())
             self._cam.aimingSystem.onSiegeStateChanged(newState)
 
@@ -1928,7 +1928,7 @@ class DeathFreeCamMode(VideoCameraControlMode, CallbackDelayer):
             if DeathFreeCamMode.markersManager is not None:
                 tID, _, _ = DeathFreeCamMode.markersManager.getCurrentlyAimedAtMarkerIDAndType()
                 target = BigWorld.entities.get(tID)
-                if target is not None and isinstance(target, VehicleEntity) and target.isAlive():
+                if target is not None and isinstance(target, Vehicle) and target.isAlive():
                     targetID = tID
             if targetID is None and player.target is not None:
                 targetID = player.target.id

@@ -7,6 +7,7 @@ import BigWorld
 from gui.shared.gui_items import KPI
 from gui.shared.gui_items.Tankman import crewMemberRealSkillLevel
 from items import utils, tankmen
+from items.vehicles import vehicleAttributeFactors
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
     from items.vehicles import VehicleDescriptor
@@ -148,7 +149,7 @@ def getRocketAccelerationKpiFactors(vehDescr):
 
 
 def getVehicleFactors(vehicle, situationalBonuses=None, isModifySkillProcessors=False):
-    factors = utils.makeDefaultVehicleAttributeFactors()
+    factors = vehicleAttributeFactors()
     vehicleDescr = vehicle.descriptor
     eqs = [ eq.descriptor for eq in vehicle.consumables.installed.getItems() ]
     for booster in vehicle.battleBoosters.installed.getItems():

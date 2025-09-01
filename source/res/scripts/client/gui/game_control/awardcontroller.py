@@ -11,7 +11,8 @@ from itertools import chain, ifilter
 import BigWorld
 import typing
 from adisp import adisp_process
-from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.impl.lobby.personal_missions_30.personal_mission_constants import REWARDS_VIEW_TYPES
+from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from items.components.c11n_constants import Rarity
 from shared_utils import first
 import ArenaType
@@ -38,7 +39,6 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.framework.managers.view_lifecycle_watcher import IViewLifecycleHandler, ViewLifecycleWatcher
-from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.awards.event_dispatcher import showDynamicAward
@@ -59,17 +59,17 @@ from gui.impl.lobby.winback.winback_reward_view import WinbackRewardWindow
 from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.limited_ui.lui_rules_storage import LUI_RULES
 from gui.prb_control.entities.listener import IGlobalListener
-from gui.prestige.prestige_helpers import hasVehiclePrestige, showPrestigeRewardWindow, needShowPrestigeRewardWindow
+from gui.prestige.prestige_helpers import hasVehiclePrestige, showPrestigeRewardWindow, needShowPrestigeRewardWindow, openRewardScreens, needShowPrestigeMilestonesRewardWindow
 from gui.ranked_battles import ranked_helpers
 from gui.ranked_battles.constants import YEAR_AWARD_SELECTABLE_OPT_DEVICE_PREFIX
 from gui.server_events import awards, events_dispatcher as quests_events, recruit_helper
 from gui.server_events.bonuses import getServiceBonuses, getMergedBonusesFromDicts, GoodiesBonus, VehiclesBonus
-from gui.server_events.events_dispatcher import showCurrencyReserveAwardWindow, showLootboxesAward, showMissionsBattlePass, showPiggyBankRewardWindow, showSubscriptionAwardWindow, showBanWindow, showPenaltyWindow, showWarningWindow
-from gui.server_events.events_helpers import isACEmailConfirmationQuest, isDailyQuest, getIdxFromQuestID
-from gui.server_events.finders import CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID, PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId
+from gui.server_events.events_dispatcher import showCurrencyReserveAwardWindow, showLootboxesAward, showPiggyBankRewardWindow, showSubscriptionAwardWindow, showBanWindow, showPenaltyWindow, showWarningWindow
+from gui.server_events.events_helpers import isACEmailConfirmationQuest, isDailyQuest, getIdxFromQuestID, isPM30OperationFinishedQuest, isPM30MilestoneQuest
+from gui.server_events.finders import CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID, PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId, PM3_PERSONAL_MISSION_HONOR_POSTFIX, PM3_CAMPAIGN_FINISHED_QUEST, BRANCH_TO_OPERATION_IDS
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared.account_settings_helper import AccountSettingsHelper
-from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showSeniorityRewardAwardWindow, showSteamEmailConfirmRewardsView, showSeniorityRewardVehiclesWindow, showCustomizationRarityAwardScreen
+from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePass, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showSeniorityRewardAwardWindow, showSteamEmailConfirmRewardsView, showSeniorityRewardVehiclesWindow, showCustomizationRarityAwardScreen, showPM30RewardsWindow
 from gui.shared.events import CustomizationEvent, PersonalMissionsEvent
 from gui.shared.formatters.time_formatters import getTillTimeByResource
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
@@ -84,6 +84,7 @@ from messenger.formatters.service_channel import TelecomReceivedInvoiceFormatter
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 from messenger.proto.events import g_messengerEvents
 from nations import NAMES
+from potapov_quests import isPM3Quest
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_matters import IBattleMattersController
@@ -98,7 +99,7 @@ from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.gui.sounds import ISoundsController
 from skeletons.gui.system_messages import ISystemMessages
 if typing.TYPE_CHECKING:
-    from typing import Tuple, Union, Dict, Literal
+    from typing import Tuple, Union, Dict, Literal, Optional
     from messenger.proto.bw.wrappers import _ServiceChannelData
     from gui.platform.catalog_service.controller import _PurchaseDescriptor
 _logger = logging.getLogger(__name__)
@@ -418,6 +419,20 @@ class PersonalMissionBonusHandler(ServiceChannelHandler):
     def __init__(self, awardCtrl):
         super(PersonalMissionBonusHandler, self).__init__(SYS_MESSAGE_TYPE.potapovQuestBonus.index(), awardCtrl)
 
+    def _needToShowAward(self, ctx):
+        if not super(PersonalMissionBonusHandler, self)._needToShowAward(ctx):
+            return False
+        else:
+            _, msg = ctx
+            if msg is None or not isinstance(msg.data, types.DictType):
+                return False
+            potapovQuestID = msg.data.get('potapovQuestID', 0)
+            if potapovQuestID:
+                branch = personal_missions.g_cache.branchByMissionID(potapovQuestID)
+                if personal_missions.PM_BRANCH.NAME_TO_TYPE[branch] in personal_missions.PM_BRANCH.V2_BRANCHES:
+                    return False
+            return True
+
     def _showAward(self, ctx):
         _logger.debug('Show personal mission bonus award! %s', ctx)
         data = ctx[1].data
@@ -438,6 +453,20 @@ class PersonalMissionWindowAfterBattleHandler(ServiceChannelHandler):
 
     def __init__(self, awardCtrl):
         super(PersonalMissionWindowAfterBattleHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
+
+    def _needToShowAward(self, ctx):
+        if not super(PersonalMissionWindowAfterBattleHandler, self)._needToShowAward(ctx):
+            return False
+        else:
+            _, msg = ctx
+            if msg is None or not isinstance(msg.data, types.DictType):
+                return False
+            potapovQuestID = msg.data.get('potapovQuestID', 0)
+            if potapovQuestID:
+                branch = personal_missions.g_cache.branchByMissionID(potapovQuestID)
+                if personal_missions.PM_BRANCH.NAME_TO_TYPE[branch] in personal_missions.PM_BRANCH.V2_BRANCHES:
+                    return False
+            return True
 
     def _showAward(self, ctx):
         achievements = []
@@ -600,6 +629,8 @@ class LootBoxByInvoiceHandler(ServiceChannelHandler):
             lootboxesCount = lootBoxInfo.get('count', 0)
             app = cls.appLoader.getApp()
             view = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY_HANGAR))
+            if view is None:
+                view = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LEGACY_LOBBY_HANGAR))
             if view is not None:
                 showLootboxesAward(lootboxId=lootBoxType, lootboxCount=lootboxesCount, isFree=lootBoxInfo['isFree'])
 
@@ -772,6 +803,9 @@ class CustomizationRewardHandler(MultiTypeServiceChannelHandler):
         self._hangarSpace.onSpaceCreate -= self.__show
         self._showRewardScreen()
 
+    def _isAllowedByQuest(self, questID):
+        return not (isPM3Quest(questID) or isPM30OperationFinishedQuest(questID))
+
     def _needToShowAward(self, ctx):
         if not super(CustomizationRewardHandler, self)._needToShowAward(ctx):
             return False
@@ -779,8 +813,15 @@ class CustomizationRewardHandler(MultiTypeServiceChannelHandler):
         return len(rareAttachments) > 0
 
     def _getAttachments(self, ctx):
-        message = ctx[1].data
-        items = message.get('customizations') or message.get('data', {}).get('customizations', {})
+        messageData = ctx[1].data
+        items = messageData['data'].get('customizations', []) if 'data' in messageData else []
+        detailedRewards = messageData.get('detailedRewards', {})
+        for questID in messageData.get('completedQuestIDs', set()):
+            if questID in detailedRewards and self._isAllowedByQuest(questID):
+                questDetailedRewards = detailedRewards[questID]
+                if 'customizations' in questDetailedRewards:
+                    items.extend(questDetailedRewards['customizations'])
+
         res = []
         for item in items:
             if item.get('custType', '') == 'attachment' and item.get('value', 0) > 0:
@@ -883,12 +924,72 @@ class PrestigeAwardWindowHandler(ServiceChannelHandler):
         showPrestigeRewardWindow(vehIntCD=vehCD, level=newLvl)
 
 
+class PrestigeMilestonesAwardWindowHandler(ServiceChannelHandler):
+    __service = dependency.descriptor(ICustomizationService)
+    __settingsCore = dependency.descriptor(ISettingsCore)
+
+    def __init__(self, awardCtrl):
+        super(PrestigeMilestonesAwardWindowHandler, self).__init__(SYS_MESSAGE_TYPE.prestigeMilestoneReward.index(), awardCtrl)
+
+    def _needToShowAward(self, ctx):
+        _, message = ctx
+        res = super(PrestigeMilestonesAwardWindowHandler, self)._needToShowAward(ctx)
+        if res:
+            parsed = self.__parseMessage(message)
+            if not parsed:
+                return False
+            vehCD, level = parsed
+            return needShowPrestigeMilestonesRewardWindow(vehCD, level)
+        return False
+
+    def _showAward(self, ctx):
+        _, message = ctx
+        messageParsed = self.__parseMessage(message)
+        rewardParsed = self.__parseReward(message)
+        attachment = None
+        showRarityAnimation = False
+        if not messageParsed or not rewardParsed:
+            return
+        else:
+            vehCD, level = messageParsed
+            styleID, custType = rewardParsed
+            if custType == GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.ATTACHMENT]:
+                attachment = self.__service.getItemByID(GUI_ITEM_TYPE.ATTACHMENT, styleID)
+                if attachment and attachment.rarity in Rarity.UI_EFFECT:
+                    showRarityAnimation = True
+            openRewardScreens(vehCD, level, showRarityAnimation, attachment)
+            return
+
+    @staticmethod
+    def __parseMessage(message):
+        reward = message.data.get('reward')
+        if not reward:
+            return None
+        else:
+            vehCD = reward.get('vehTypeCompDescr')
+            level = message.data.get('level')
+            return None if vehCD is None or level is None else (vehCD, level)
+
+    @staticmethod
+    def __parseReward(message):
+        reward = message.data.get('reward')
+        if not reward:
+            return None
+        else:
+            styleID = reward.get('id')
+            custType = reward.get('custType')
+            return None if styleID is None or custType is None else (styleID, custType)
+
+
 class BattleQuestsAutoWindowHandler(MultiTypeServiceChannelHandler):
     _BRANCHES_SHOW_ORDER = {personal_missions.PM_BRANCH.PERSONAL_MISSION_2: 1,
      personal_missions.PM_BRANCH.REGULAR: 2}
 
     def __init__(self, awardCtrl):
-        super(BattleQuestsAutoWindowHandler, self).__init__((SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.personalMissionRebalance.index()), awardCtrl)
+        super(BattleQuestsAutoWindowHandler, self).__init__(self._getSysMsgTypes(), awardCtrl)
+
+    def _getSysMsgTypes(self):
+        return (SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.personalMissionRebalance.index())
 
     def _showAward(self, ctx):
         _, message = ctx
@@ -945,6 +1046,20 @@ class PersonalMissionAutoWindowHandler(BattleQuestsAutoWindowHandler):
     def _showWindow(quest, context):
         quests_events.showPersonalMissionAward(quest, context)
 
+    def _needToShowAward(self, ctx):
+        if not super(PersonalMissionAutoWindowHandler, self)._needToShowAward(ctx):
+            return False
+        else:
+            _, msg = ctx
+            if msg is None or not isinstance(msg.data, types.DictType):
+                return False
+            potapovQuestID = msg.data.get('potapovQuestID', 0)
+            if potapovQuestID:
+                branch = personal_missions.g_cache.branchByMissionID(potapovQuestID)
+                if personal_missions.PM_BRANCH.NAME_TO_TYPE[branch] in personal_missions.PM_BRANCH.V2_BRANCHES:
+                    return False
+            return True
+
     @staticmethod
     def _isAppropriate(quest):
         return quest.getType() == EVENT_TYPE.PERSONAL_MISSION
@@ -966,13 +1081,17 @@ class PersonalMissionAutoWindowHandler(BattleQuestsAutoWindowHandler):
 
 class PersonalMissionByAwardListHandler(PersonalMissionAutoWindowHandler):
 
+    def _getSysMsgTypes(self):
+        return (SYS_MESSAGE_TYPE.potapovQuestBonus.index(),)
+
     def _needToShowAward(self, ctx):
+        if not super(PersonalMissionByAwardListHandler, self)._needToShowAward(ctx):
+            return False
         _, msg = ctx
-        if msg is not None and isinstance(msg.data, types.DictType):
-            completedQuestUniqueIDs = msg.data.get('completedQuestIDs', set())
-            for uniqueQuestID in completedQuestUniqueIDs:
-                if personal_missions.g_cache.isPersonalMission(uniqueQuestID) and uniqueQuestID.endswith('_main_award_list'):
-                    return True
+        completedQuestUniqueIDs = msg.data.get('completedQuestIDs', set())
+        for uniqueQuestID in completedQuestUniqueIDs:
+            if personal_missions.g_cache.isPersonalMission(uniqueQuestID) and uniqueQuestID.endswith('_main_award_list'):
+                return True
 
         return False
 
@@ -990,6 +1109,7 @@ class PersonalMissionByAwardListHandler(PersonalMissionAutoWindowHandler):
 
 class PersonalMissionOperationAwardHandler(BattleQuestsAutoWindowHandler):
     __CHAMPION_BADGES_IDS = CHAMPION_BADGES_BY_BRANCH.values()
+    __IGNORED_OPERATIONS = BRANCH_TO_OPERATION_IDS[personal_missions.PM_BRANCH.PERSONAL_MISSION_3]
 
     def __init__(self, awardCtrl):
         super(PersonalMissionOperationAwardHandler, self).__init__(awardCtrl)
@@ -1008,31 +1128,45 @@ class PersonalMissionOperationAwardHandler(BattleQuestsAutoWindowHandler):
         self.__postponedAwards = []
         self.__openedOperationsAwards.clear()
 
+    def _getSysMsgTypes(self):
+        return (SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index(), SYS_MESSAGE_TYPE.personalMissionRebalance.index())
+
     def _needToShowAward(self, ctx):
         _, msg = ctx
-        if msg is not None and isinstance(msg.data, types.DictType):
-            completedQuestUniqueIDs = msg.data.get('completedQuestIDs', set())
-            for uniqueQuestID in completedQuestUniqueIDs:
-                if personal_missions.g_cache.isPersonalMission(uniqueQuestID):
-                    pqType = personal_missions.g_cache.questByUniqueQuestID(uniqueQuestID)
-                    if pqType.isFinal:
-                        self.__openedOperationsAwards.add((pqType.id, pqType.tileID))
-                for operationID, prefix in self.__getFinalTokenQuestIdsByOperationId():
-                    if uniqueQuestID in self.__CHAMPION_BADGES_IDS:
-                        return True
-                    if uniqueQuestID.startswith(prefix):
-                        if operationID in CHAMPION_BADGE_AT_OPERATION_ID:
-                            pmCache = self.eventsCache.getPersonalMissions()
-                            operation = pmCache.getAllOperations()[operationID]
-                            operations = pmCache.getOperationsForBranch(operation.getBranch())
-                            if all([ op.isFullCompleted() for op in operations.itervalues() ]):
-                                self.__postponedAwards.append(uniqueQuestID)
+        if not super(PersonalMissionOperationAwardHandler, self)._needToShowAward(ctx):
+            return False
+        else:
+            if msg is not None and isinstance(msg.data, types.DictType):
+                completedQuestUniqueIDs = msg.data.get('completedQuestIDs', set())
+                potapovQuestID = msg.data.get('potapovQuestID', 0)
+                if potapovQuestID:
+                    branch = personal_missions.g_cache.branchByMissionID(potapovQuestID)
+                    if personal_missions.PM_BRANCH.NAME_TO_TYPE[branch] in personal_missions.PM_BRANCH.V2_BRANCHES:
+                        return False
+                for uniqueQuestID in completedQuestUniqueIDs:
+                    if personal_missions.g_cache.isPersonalMission(uniqueQuestID):
+                        pqType = personal_missions.g_cache.questByUniqueQuestID(uniqueQuestID)
+                        if pqType.isFinal:
+                            self.__openedOperationsAwards.add((pqType.id, pqType.tileID))
+                    for operationID, prefix in self.__getFinalTokenQuestIdsByOperationId():
+                        if uniqueQuestID in self.__CHAMPION_BADGES_IDS:
+                            return True
+                        if uniqueQuestID.startswith(prefix):
+                            isIgnoredOperation = any([ uniqueQuestID.endswith(str(operationID)) for operationID in self.__IGNORED_OPERATIONS ])
+                            if isIgnoredOperation or uniqueQuestID.endswith(PM3_PERSONAL_MISSION_HONOR_POSTFIX):
+                                return False
+                            if operationID in CHAMPION_BADGE_AT_OPERATION_ID:
+                                pmCache = self.eventsCache.getPersonalMissions()
+                                operation = pmCache.getAllOperations()[operationID]
+                                operations = pmCache.getOperationsForBranch(operation.getBranch())
+                                if all([ op.isFullCompleted() for op in operations.itervalues() ]):
+                                    self.__postponedAwards.append(uniqueQuestID)
+                                else:
+                                    return True
                             else:
                                 return True
-                        else:
-                            return True
 
-        return False
+            return False
 
     def _showAward(self, ctx):
         _, message = ctx
@@ -1087,15 +1221,21 @@ class PersonalMissionOperationUnlockedHandler(BattleQuestsAutoWindowHandler):
      'pt_final_s2_t6': 6,
      'pt_final_s2_t7': 7}
 
+    def _getSysMsgTypes(self):
+        return (SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index())
+
     def _needToShowAward(self, ctx):
         _, msg = ctx
-        if msg is not None and isinstance(msg.data, types.DictType):
-            completedQuestUniqueIDs = msg.data.get('completedQuestIDs', set())
-            for uniqueQuestID in completedQuestUniqueIDs:
-                if uniqueQuestID in self.OPERATION_COMPLETION_IDS:
-                    return True
+        if not super(PersonalMissionOperationUnlockedHandler, self)._needToShowAward(ctx):
+            return False
+        else:
+            if msg is not None and isinstance(msg.data, types.DictType):
+                completedQuestUniqueIDs = msg.data.get('completedQuestIDs', set())
+                for uniqueQuestID in completedQuestUniqueIDs:
+                    if uniqueQuestID in self.OPERATION_COMPLETION_IDS:
+                        return True
 
-        return False
+            return False
 
     def _showAward(self, ctx):
         _, message = ctx
@@ -1395,18 +1535,18 @@ class BattlePassRewardHandler(ServiceChannelHandler):
             return
 
 
-class BattlePassStyleRecievedHandler(ServiceChannelHandler):
+class BattlePassStyleReceivedHandler(ServiceChannelHandler):
     __battlePassController = dependency.descriptor(IBattlePassController)
     __itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, awardCtrl):
-        super(BattlePassStyleRecievedHandler, self).__init__(SYS_MESSAGE_TYPE.battlePassStyleRecieved.index(), awardCtrl)
+        super(BattlePassStyleReceivedHandler, self).__init__(SYS_MESSAGE_TYPE.battlePassStyleRecieved.index(), awardCtrl)
         self.__chapter = None
         return
 
     def fini(self):
         self.__itemsCache.onSyncCompleted -= self.__showAward
-        super(BattlePassStyleRecievedHandler, self).fini()
+        super(BattlePassStyleReceivedHandler, self).fini()
 
     def _showAward(self, ctx):
         _, message = ctx
@@ -1484,11 +1624,11 @@ class BattlePassBuyEmptyHandler(ServiceChannelHandler):
                     chapterID = self.__battlePass.getCurrentChapterID()
                 else:
                     return
-            showMissionsBattlePass(R.views.lobby.battle_pass.BattlePassProgressionsView() if chapterID else None, chapterID)
+            showBattlePass(R.aliases.battle_pass.Progression() if self.__battlePass.isChapterExists(chapterID) else None, chapterID)
             return
 
     def __isBattlePassOpen(self):
-        return self.__gui.windowsManager.findWindows(lambda w: w.content is not None and getattr(w.content, 'alias', None) == QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS)
+        return self.__gui.windowsManager.getViewByLayoutID(R.views.lobby.battle_pass.MainView()) is not None
 
 
 class BattlePassCapHandler(ServiceChannelHandler):
@@ -1935,6 +2075,61 @@ class EmailConfirmationQuestHandler(ServiceChannelHandler):
         return
 
 
+class PersonalMission3OperationAwardHandler(ServiceChannelHandler):
+
+    def __init__(self, awardCtrl):
+        super(PersonalMission3OperationAwardHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
+
+    def _showAward(self, ctx, clientCtx=None):
+        _, message = ctx
+        context = {'questID': None,
+         'rewards': {},
+         'type': REWARDS_VIEW_TYPES['operationWithHonor']}
+        completedQuests = message.data.get('completedQuestIDs', set())
+        context['questID'] = next(ifilter(isPM30OperationFinishedQuest, completedQuests), None)
+        if PM3_CAMPAIGN_FINISHED_QUEST in completedQuests:
+            context['type'] = REWARDS_VIEW_TYPES['campaignWithHonor']
+            context['rewards'][PM3_CAMPAIGN_FINISHED_QUEST] = message.data.get('detailedRewards', {}).get(PM3_CAMPAIGN_FINISHED_QUEST, {})
+        context['rewards'][context['questID']] = message.data.get('detailedRewards', {}).get(context['questID'], {})
+        showPM30RewardsWindow(context)
+        return
+
+    def _needToShowAward(self, ctx):
+        _, message = ctx
+        if not super(PersonalMission3OperationAwardHandler, self)._needToShowAward(ctx):
+            return False
+        else:
+            completedQuests = message.data.get('completedQuestIDs', set())
+            quest = next(ifilter(isPM30OperationFinishedQuest, completedQuests), None)
+            return quest
+
+
+class PersonalMission3VehicleDetailHandler(MultiTypeServiceChannelHandler):
+
+    def __init__(self, awardCtrl):
+        super(PersonalMission3VehicleDetailHandler, self).__init__((SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index()), awardCtrl)
+
+    def _showAward(self, ctx, clientCtx=None):
+        _, message = ctx
+        context = {'questID': None,
+         'rewards': {},
+         'type': REWARDS_VIEW_TYPES['vehicleDetail']}
+        completedQuests = message.data.get('completedQuestIDs', set())
+        context['questID'] = next(ifilter(isPM30MilestoneQuest, completedQuests), None)
+        context['rewards'][context['questID']] = message.data.get('detailedRewards', {}).get(context['questID'])
+        showPM30RewardsWindow(context)
+        return
+
+    def _needToShowAward(self, ctx):
+        _, message = ctx
+        if not super(PersonalMission3VehicleDetailHandler, self)._needToShowAward(ctx):
+            return False
+        else:
+            completedQuests = message.data.get('completedQuestIDs', set())
+            quest = next(ifilter(isPM30MilestoneQuest, completedQuests), None)
+            return quest
+
+
 registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,
  PunishWindowHandler,
  TokenQuestsWindowHandler,
@@ -1944,7 +2139,9 @@ registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,
  PersonalMissionAutoWindowHandler,
  PersonalMissionByAwardListHandler,
  PersonalMissionOperationAwardHandler,
+ PersonalMission3OperationAwardHandler,
  PersonalMissionOperationUnlockedHandler,
+ PersonalMission3VehicleDetailHandler,
  GoldFishHandler,
  TelecomHandler,
  MarkByInvoiceHandler,
@@ -1959,7 +2156,7 @@ registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,
  SeniorityAwardsWindowHandler,
  RankedQuestsHandler,
  BattlePassRewardHandler,
- BattlePassStyleRecievedHandler,
+ BattlePassStyleReceivedHandler,
  BattlePassBuyEmptyHandler,
  BattlePassCapHandler,
  VehicleCollectorAchievementHandler,
@@ -1974,6 +2171,7 @@ registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,
  DailyQuestHandler,
  WinbackQuestHandler,
  PrestigeAwardWindowHandler,
+ PrestigeMilestonesAwardWindowHandler,
  EmailConfirmationQuestHandler,
  ClanSupplyPurchaseHandler,
  CustomizationRewardHandler))

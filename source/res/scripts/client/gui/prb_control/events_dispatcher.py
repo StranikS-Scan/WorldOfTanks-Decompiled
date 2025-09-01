@@ -6,6 +6,7 @@ from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
@@ -19,14 +20,17 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from gui.shared.event_dispatcher import showHangar
 from gui.shared.events import ChannelManagementEvent, PreBattleChannelEvent, ChannelCarouselEvent
 from helpers import dependency
 from messenger.ext import channel_num_gen
 from messenger.ext.channel_num_gen import SPECIAL_CLIENT_WINDOWS
 from messenger.m_constants import LAZY_CHANNEL
 from skeletons.gui.app_loader import IAppLoader
+from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IGameSessionController
 from skeletons.gui.game_control import IPlatoonController
+from skeletons.gui.impl import IGuiLoader
 TOOLTIP_PRB_DATA = namedtuple('TOOLTIP_PRB_DATA', ('tooltipId', 'label'))
 _CarouselItemCtx = namedtuple('_CarouselItemCtx', ['label',
  'canClose',
@@ -45,6 +49,7 @@ _EPIC_SCREENS = (PREBATTLE_ALIASES.EPIC_TRAINING_ROOM_VIEW_PY, PREBATTLE_ALIASES
 class EventDispatcher(object):
     gameSession = dependency.descriptor(IGameSessionController)
     __appLoader = dependency.descriptor(IAppLoader)
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
     platoonCtrl = dependency.descriptor(IPlatoonController)
 
     def __init__(self):
@@ -90,10 +95,11 @@ class EventDispatcher(object):
         self.__invalidatePrbEntity(loadedAlias)
 
     def loadHangar(self):
-        self.__fireLoadEvent(VIEW_ALIAS.LOBBY_HANGAR)
+        showHangar()
 
     def loadBattleQueue(self):
-        self.__fireLoadEvent(VIEW_ALIAS.BATTLE_QUEUE)
+        from gui.Scaleform.daapi.view.lobby.battle_queue.states import CommonBattleQueueState
+        CommonBattleQueueState.goTo()
 
     def loadTrainingList(self):
         self.addTrainingToCarousel()
@@ -131,7 +137,10 @@ class EventDispatcher(object):
 
     def loadSquad(self, prbType, ctx=None, isTeamReady=False):
         self.__addSquadToCarousel(prbType, isTeamReady)
-        self.__showSquadWindow(prbType, ctx and ctx.get('showInvitesWindow', False), toggleUI=False)
+        battleCtx = self.sessionProvider.getCtx()
+        arenaUniqueID = battleCtx.lastArenaUniqueID
+        if not arenaUniqueID:
+            self.__showSquadWindow(prbType, ctx and ctx.get('showInvitesWindow', False), toggleUI=False)
 
     def loadRanked(self):
         self.__fireShowEvent(RANKEDBATTLES_ALIASES.RANKED_BATTLES_INTRO_ALIAS)
@@ -259,14 +268,20 @@ class EventDispatcher(object):
 
     def showStrongholdsWindow(self):
         from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
-        self.__fireShowEvent(FORTIFICATION_ALIASES.STRONGHOLD_BATTLE_ROOM_WINDOW_ALIAS)
+        guiLoader = dependency.instance(IGuiLoader)
+        if hasattr(R.views, 'one_time_gift') and guiLoader.windowsManager.getViewByLayoutID(R.views.one_time_gift.mono.lobby.one_time_gift_view()) is not None:
+            return
+        else:
+            self.__fireShowEvent(FORTIFICATION_ALIASES.STRONGHOLD_BATTLE_ROOM_WINDOW_ALIAS)
+            return
 
     def showTournamentWindow(self):
         pass
 
     def showStrongholdsBattleQueue(self):
+        from gui.Scaleform.daapi.view.lobby.battle_queue.states import StrongholdsBattleQueueState
         self.removeUnitFromCarousel(PREBATTLE_TYPE.STRONGHOLD)
-        self.__fireShowEvent(VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE)
+        StrongholdsBattleQueueState.goTo()
 
     def showTournamentQueue(self):
         pass
@@ -353,13 +368,19 @@ class EventDispatcher(object):
         self.platoonCtrl.evaluateVisibility(toggleUI=toggleUI)
 
     def __showTrainingRoom(self):
-        self.__fireLoadEvent(PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY)
+        from gui.Scaleform.daapi.view.lobby.trainings.states import TrainingRoomState
+        TrainingRoomState.goTo()
 
     def __returnToTrainingRoom(self, event=None):
         self.__prbDispatcher.doAction()
 
     def __showEpicTrainingRoom(self):
-        self.__fireLoadEvent(PREBATTLE_ALIASES.EPIC_TRAINING_ROOM_VIEW_PY)
+        from gui.Scaleform.lobby_entry import getLobbyStateMachine
+        lsm = getLobbyStateMachine()
+        state = lsm.getStateByViewKey(ViewKey(PREBATTLE_ALIASES.EPIC_TRAINING_ROOM_VIEW_PY))
+        if state is not None:
+            state.goTo()
+        return
 
     def __fireEvent(self, event, scope=EVENT_BUS_SCOPE.LOBBY):
         g_eventBus.handleEvent(event, scope)
@@ -409,10 +430,16 @@ class EventDispatcher(object):
         return
 
     def __showTrainingList(self, event=None):
-        self.__fireLoadEvent(PREBATTLE_ALIASES.TRAINING_LIST_VIEW_PY)
+        from gui.Scaleform.daapi.view.lobby.trainings.states import TrainingListState
+        TrainingListState.goTo()
 
     def __showEpicTrainingList(self, event=None):
-        self.__fireLoadEvent(PREBATTLE_ALIASES.EPICBATTLE_LIST_VIEW_PY)
+        from gui.Scaleform.lobby_entry import getLobbyStateMachine
+        lsm = getLobbyStateMachine()
+        state = lsm.getStateByViewKey(ViewKey(PREBATTLE_ALIASES.EPICBATTLE_LIST_VIEW_PY))
+        if state is not None:
+            state.goTo()
+        return
 
     def __getReadyPrbData(self, isReady):
         return {'isReady': isReady}
@@ -421,7 +448,8 @@ class EventDispatcher(object):
         return TOOLTIP_PRB_DATA(tooltipId=tooltipId, label=label)._asdict()
 
     def __invalidatePrbEntity(self, loadedAlias):
-        if loadedAlias == VIEW_ALIAS.LOBBY_HANGAR and self.__prbDispatcher is not None:
+        hangarViewAliases = (VIEW_ALIAS.LOBBY_HANGAR, VIEW_ALIAS.LEGACY_LOBBY_HANGAR)
+        if loadedAlias in hangarViewAliases and self.__prbDispatcher is not None:
             entity = self.__prbDispatcher.getEntity()
             if entity:
                 entity.invalidate()

@@ -18,6 +18,7 @@ from gui.impl.gen import R
 from gui.impl.gen_utils import INVALID_RES_ID
 from gui.lootbox_system.base.common import getTextResource
 from gui.ranked_battles.constants import YEAR_POINTS_TOKEN
+from gui.server_events.finders import isPM3Points
 from gui.server_events.formatters import parseComplexToken, TOKEN_SIZES
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.formatters import text_styles
@@ -66,6 +67,7 @@ class LABEL_ALIGN(CONST_CONTAINER):
 
 
 PACK_RENT_VEHICLES_BONUS = 'packRentVehicleBonus'
+PM_POINTS_TOKEN = 'pm:points'
 BATTLE_BONUS_X5_TOKEN = 'battle_bonus_x5'
 CREW_BONUS_X3_TOKEN = 'crew_bonus_x3'
 GOLD_MISSION = 'goldmission'
@@ -365,10 +367,20 @@ def getPersonalMissionAwardPacker():
     return AwardsPacker(mapping)
 
 
-def getOperationPacker():
+def getOperationPackerMapping():
     mapping = getDefaultFormattersMap()
     mapping.update({'customizations': OperationCustomizationsBonusFormatter(),
      'battleToken': CustomizationUnlockFormatter()})
+    return mapping
+
+
+def getOperationPacker():
+    return AwardsPacker(getOperationPackerMapping())
+
+
+def getPersonalMissionsOperationTooltipsPacker():
+    mapping = getOperationPackerMapping()
+    mapping.update({'vehicles': PersonalMissionsVehiclesFormatter()})
     return AwardsPacker(mapping)
 
 
@@ -469,6 +481,9 @@ class QuestsBonusComposer(object):
     def getFormattedBonuses(self, bonuses, size=AWARDS_SIZES.SMALL):
         preformattedBonuses = self.getPreformattedBonuses(bonuses)
         return self._packBonuses(preformattedBonuses, size)
+
+    def addFormatter(self, formatters):
+        self.__bonusFormatter.getFormatters().update(formatters)
 
     def _packBonuses(self, preformattedBonuses, size):
         result = []
@@ -669,7 +684,7 @@ class FreeTokensBonusFormatter(SimpleBonusFormatter):
     @classmethod
     def _getImages(cls, imageID):
         result = {}
-        for size in AWARDS_SIZES.ALL():
+        for size in (AWARDS_SIZES.BIG, AWARDS_SIZES.SMALL):
             result[size] = RES_ICONS.getBonusIcon(size, imageID)
 
         return result
@@ -774,6 +789,8 @@ class TokenBonusFormatter(SimpleBonusFormatter):
                 formatted = self._formatBonusToken(BATTLE_BONUS_X5_TOKEN, token, bonus)
             elif tokenID.startswith(CREW_BONUS_X3_TOKEN):
                 formatted = self._formatBonusToken(CREW_BONUS_X3_TOKEN, token, bonus)
+            elif isPM3Points(tokenID):
+                formatted = self._formatPMToken('personal_missions_points', token, bonus)
             elif tokenID.startswith(RESOURCE_TOKEN_PREFIX):
                 formatted = self._formatResource(token, bonus)
             elif tokenID.startswith(EXCHANGE_RATE_FREE_XP_NAME) or tokenID.startswith(EXCHANGE_RATE_GOLD_NAME):
@@ -857,6 +874,16 @@ class TokenBonusFormatter(SimpleBonusFormatter):
 
     def _formatBonusToken(self, name, token, bonus):
         return None if token.count <= 0 else PreformattedBonus(bonusName=bonus.getName(), label=self._formatBonusLabel(token.count), userName=bonus.getUserName(), labelFormatter=self._getLabelFormatter(bonus), images=self.__getBonusFactorImages(name), tooltip=self.getBonusFactorTooltip(name), align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus))
+
+    def _formatPMToken(self, name, token, bonus):
+        if token.count <= 0:
+            return None
+        else:
+
+            def formatPMCountLabel(count, defaultStr=''):
+                return '{}'.format(count) if count > 1 else defaultStr
+
+            return PreformattedBonus(bonusName=bonus.getName(), label=formatPMCountLabel(token.count), userName=bonus.getUserName(), labelFormatter=self._getLabelFormatter(bonus), images=self.__getBonusFactorImages(name), tooltip=TOOLTIPS_CONSTANTS.PERSONAL_MISSIONS_POINTS, align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus), isWulfTooltip=True, isSpecial=False, specialArgs=[])
 
     @staticmethod
     def __getBonusFactorImages(name):
@@ -1172,6 +1199,13 @@ class RentVehiclesBonusFormatter(VehiclesBonusFormatter):
             rentArgs.append(shortData)
 
         return rentArgs
+
+
+class PersonalMissionsVehiclesFormatter(VehiclesBonusFormatter):
+
+    @classmethod
+    def _getLabelFormatter(cls, bonus):
+        return text_styles.stats
 
 
 class DossierBonusFormatter(SimpleBonusFormatter):

@@ -147,7 +147,9 @@ class StoryModeVehicleMarkerPlugin(RespawnableVehicleMarkerPlugin, MarkerPluginW
         super(StoryModeVehicleMarkerPlugin, self).stop()
 
     def _getHitState(self, eventID):
-        return MARKER_EMPTY_HIT_STATE if self._storyModeCtrl.isSelectedMissionOnboarding and eventID in _MARKER_CRITICAL_HIT_STATES else super(StoryModeVehicleMarkerPlugin, self)._getHitState(eventID)
+        isOnboarding = self._storyModeCtrl.isOnboarding
+        isSelectedMissionOnboarding = self._storyModeCtrl.isSelectedMissionOnboarding
+        return MARKER_EMPTY_HIT_STATE if (isOnboarding or isSelectedMissionOnboarding) and eventID in _MARKER_CRITICAL_HIT_STATES else super(StoryModeVehicleMarkerPlugin, self)._getHitState(eventID)
 
     def _voiceoverHandler(self):
         ctx = self._voiceoverManager.currentCtx

@@ -2,15 +2,21 @@
 # Embedded file name: scripts/client/KillCamDataComponent.py
 import logging
 import BigWorld
+import CGF
 import Math
+from GenericComponents import Sequence, StateSwitcherComponent
+from cgf_components_common.vehicle_mechanics import StationaryReloadSequenceParamsComponent
 from avatar_components.avatar_postmortem_component import SimulatedVehicleType
 from constants import KILL_CAM_STATUS_CODE, BATTLE_LOG_SHELL_TYPES
 from gun_rotation_shared import decodeGunAngles
 from items.vehicles import getItemByCompactDescr
 from AvatarInputHandler.kill_cam_mode_helpers.kill_cam_helpers import calculateSPGTrajectory
+from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from shared_utils import first
 _logger = logging.getLogger(__name__)
 _UNSPOTTED_PIVOT_DISTANCE_FACTOR = 12
 _UNSPOTTED_MARKER_DISTANCE_FACTOR = 4
+_MECHANICS_WITH_DYN_ATTACHMENTS = (VehicleMechanic.STATIONARY_RELOAD,)
 
 class KillCamDataComponent(BigWorld.DynamicScriptComponent):
 
@@ -106,6 +112,7 @@ class KillCamDataComponent(BigWorld.DynamicScriptComponent):
             matrix = Math.Matrix(vehicle.matrix)
             return {'vehicleID': vehicle.id,
              'position': matrix.translation.tuple(),
+             'dynAttachmentsInfo': self.__getDynAttachmentsInfo(vehicle),
              'rotation': (matrix.roll, matrix.pitch, matrix.yaw),
              'health': vehicle.health,
              'gunAngles': self.__getGunAngles(vehicle),
@@ -125,6 +132,7 @@ class KillCamDataComponent(BigWorld.DynamicScriptComponent):
     def __captureUnspottedVehSimulationData(self, vehicleID):
         return {'vehicleID': vehicleID,
          'position': (0, 0, 0),
+         'dynAttachmentsInfo': [],
          'rotation': (0, 0, 0),
          'health': 0,
          'gunAngles': (0, 0),
@@ -148,6 +156,25 @@ class KillCamDataComponent(BigWorld.DynamicScriptComponent):
         else:
             turretVelocity = gunVelocity = 0.0
         return (turretVelocity, gunVelocity)
+
+    def __getDynAttachmentsInfo(self, vehicle):
+        parentGameObject = vehicle.entityGameObject
+        hierarchy = CGF.HierarchyManager(parentGameObject.spaceID)
+        result = hierarchy.findComponentsInHierarchy(parentGameObject, StationaryReloadSequenceParamsComponent)
+        if not result:
+            return None
+        elif len(result) > 1:
+            _logger.warning('Multiple StationaryReloadSequenceParamsComponent is not supported in death cam')
+            return None
+        else:
+            gameObject, _ = first(result)
+            if not gameObject.isValid():
+                return None
+            sequence = gameObject.findComponentByType(Sequence)
+            stateSwitcher = gameObject.findComponentByType(StateSwitcherComponent)
+            return None if sequence is None or stateSwitcher is None else {'activeSequenceLayer': sequence.activeLayerIdx,
+             'sequenceTime': sequence.time,
+             'attachmentState': stateSwitcher.getState()}
 
     def __unpackShellData(self, shellCompDescr):
         shellDescr = getItemByCompactDescr(shellCompDescr)

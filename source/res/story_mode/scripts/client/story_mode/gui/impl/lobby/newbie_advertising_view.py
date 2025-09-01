@@ -3,7 +3,8 @@
 from PlayerEvents import g_playerEvents
 from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
 from gui.impl.gen import R
-from gui.impl.pub import WindowImpl, ViewImpl
+from gui.impl.pub import ViewImpl
+from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from story_mode.account_settings import setNewbieAdvertisingScreenSeen
 from story_mode.gui.impl.gen.view_models.views.lobby.advertising_view_model import AdvertisingViewModel
 from story_mode.uilogging.story_mode.consts import LogButtons
@@ -49,7 +50,7 @@ class NewbieAdvertisingView(ViewImpl):
         self.destroyWindow()
 
 
-class NewbieAdvertisingWindow(WindowImpl):
+class NewbieAdvertisingWindow(LobbyNotificationWindow):
 
     def __init__(self, layoutID):
         super(NewbieAdvertisingWindow, self).__init__(wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=NewbieAdvertisingView(layoutID=layoutID))

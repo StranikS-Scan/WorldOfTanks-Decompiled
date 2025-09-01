@@ -1,8 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/impl/gen/view_models/views/lobby/battle_result_stat_tooltip_model.py
 from enum import Enum
-from frameworks.wulf import Array
-from frameworks.wulf import ViewModel
+from frameworks.wulf import Array, ViewModel
 from story_mode.gui.impl.gen.view_models.views.lobby.detailed_stat_model import DetailedStatModel
 
 class StatEnum(Enum):

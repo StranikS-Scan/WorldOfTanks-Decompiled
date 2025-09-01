@@ -4,8 +4,10 @@ import logging
 from collections import namedtuple
 from UnitBase import BitfieldHelper
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as _CAPS
+from constants import MAX_VEHICLE_LEVEL
 from frameworks.wulf import WindowFlags, WindowLayer
 from gui.Scaleform.locale.PLATOON import PLATOON
+from gui.impl.gen import R
 from gui.impl.pub import WindowImpl
 from helpers import dependency
 from helpers import i18n
@@ -18,8 +20,8 @@ Position = namedtuple('Position', ['x', 'y'])
 
 class PreloadableWindow(WindowImpl):
 
-    def __init__(self, wndFlags=WindowFlags.UNDEFINED, content=None, layer=WindowLayer.UNDEFINED):
-        super(PreloadableWindow, self).__init__(wndFlags, content=content, layer=layer)
+    def __init__(self, wndFlags=WindowFlags.UNDEFINED, content=None, decorator=None, layer=WindowLayer.UNDEFINED, areaID=R.areas.default()):
+        super(PreloadableWindow, self).__init__(wndFlags, content=content, decorator=decorator, layer=layer, areaID=areaID)
         self.__preload = False
 
     def preload(self):
@@ -51,7 +53,7 @@ def getNationFromTechName(string):
 def convertTierFilterToList(tierFilter):
     tierFilterArray = []
     unitFilter = BitfieldHelper(tierFilter)
-    for bit in range(1, 11):
+    for bit in range(1, MAX_VEHICLE_LEVEL + 1):
         if unitFilter.isSetBit(bit):
             tierFilterArray.append(bit)
 

@@ -50,11 +50,11 @@ class LeaderboardPage(PageSubModelPresenter):
         return super(LeaderboardPage, self).getViewModel()
 
     def createToolTipContent(self, event, contentID):
-        if contentID == R.views.comp7.lobby.tooltips.FifthRankTooltip():
+        if contentID == R.views.comp7.mono.lobby.tooltips.fifth_rank_tooltip():
             return FifthRankTooltip()
-        if contentID == R.views.comp7.lobby.tooltips.SixthRankTooltip():
+        if contentID == R.views.comp7.mono.lobby.tooltips.sixth_rank_tooltip():
             return SixthRankTooltip()
-        if contentID == R.views.comp7.lobby.tooltips.LastUpdateTooltip():
+        if contentID == R.views.comp7.mono.lobby.tooltips.last_update_tooltip():
             description = event.getArgument('description')
             return LastUpdateTooltip(description, updateTime=self.__lastUpdateTime)
 
@@ -67,8 +67,8 @@ class LeaderboardPage(PageSubModelPresenter):
                 return window
         return
 
-    def initialize(self, *args, **kwargs):
-        super(LeaderboardPage, self).initialize(*args, **kwargs)
+    def initialize(self, **params):
+        super(LeaderboardPage, self).initialize(**params)
         self.viewModel.setState(State.INITIAL)
         self.viewModel.setTopPercentage(self.__comp7Controller.leaderboard.getEliteRankPercent())
         self.viewModel.setOwnSpaID(self.__connectionMgr.databaseID)

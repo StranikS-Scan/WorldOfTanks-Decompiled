@@ -6,6 +6,7 @@ from gui import SystemMessages
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getDetailedMissionData, getMapRegionTooltipData
 from gui.Scaleform.daapi.view.meta.PersonalMissionDetailsContainerViewMeta import PersonalMissionDetailsContainerViewMeta
+from gui.server_events.pm_constants import PM_SUIT_OP_PLUGIN_ERR_RESPONSE
 from gui.shared import events, event_bus_handlers, EVENT_BUS_SCOPE
 from gui.shared.events import PersonalMissionsEvent
 from gui.shared.gui_items.processors import quests as quests_proc
@@ -71,28 +72,28 @@ class PersonalMissionDetailsContainerView(LobbySubView, PersonalMissionDetailsCo
     @decorators.adisp_process('updating')
     def _processMission(self, eventID):
         quest = self.__quests[int(eventID)]
-        result = yield quests_proc.PMQuestSelect(quest, self._eventsCache.getPersonalMissions(), self.__branch).request()
+        result = yield quests_proc.PMQuestSelect(self.__branch, personalMission=quest).request()
         if result and result.userMsg:
             SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
 
     @decorators.adisp_process('updating')
     def _discardMission(self, eventID):
         result = yield quests_proc.PMDiscard(self.__quests[int(eventID)], self.__branch).request()
-        if result.userMsg:
+        if result.userMsg and PM_SUIT_OP_PLUGIN_ERR_RESPONSE not in result.userMsg:
             SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
 
     @decorators.adisp_process('updating')
     def _pauseMission(self, eventID):
         quest = self.__quests[int(eventID)]
         result = yield quests_proc.PMPause(quest, not quest.isOnPause, self.__branch).request()
-        if result.userMsg:
+        if result.userMsg and PM_SUIT_OP_PLUGIN_ERR_RESPONSE not in result.userMsg:
             SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
 
     @decorators.adisp_process('updating')
     def _pawnMission(self, eventID):
         quest = self.__quests[int(eventID)]
         result = yield quests_proc.PMPawn(quest).request()
-        if result and result.userMsg:
+        if result and result.userMsg and PM_SUIT_OP_PLUGIN_ERR_RESPONSE not in result.userMsg:
             SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
 
     def _populate(self):

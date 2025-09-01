@@ -414,6 +414,20 @@ class BADGE(object):
     BADGE_182_DESCR = '#badge:badge_182_descr'
     BADGE_183 = '#badge:badge_183'
     BADGE_183_DESCR = '#badge:badge_183_descr'
+    BADGE_184 = '#badge:badge_184'
+    BADGE_184_DESCR = '#badge:badge_184_descr'
+    BADGE_185 = '#badge:badge_185'
+    BADGE_185_DESCR = '#badge:badge_185_descr'
+    BADGE_186 = '#badge:badge_186'
+    BADGE_186_DESCR = '#badge:badge_186_descr'
+    BADGE_187 = '#badge:badge_187'
+    BADGE_187_DESCR = '#badge:badge_187_descr'
+    BADGE_188 = '#badge:badge_188'
+    BADGE_188_DESCR = '#badge:badge_188_descr'
+    BADGE_189 = '#badge:badge_189'
+    BADGE_189_DESCR = '#badge:badge_189_descr'
+    BADGE_190 = '#badge:badge_190'
+    BADGE_190_DESCR = '#badge:badge_190_descr'
     BADGE_191 = '#badge:badge_191'
     BADGE_191_DESCR = '#badge:badge_191_descr'
     BADGE_192 = '#badge:badge_192'
@@ -432,6 +446,31 @@ class BADGE(object):
     BADGE_198_DESCR = '#badge:badge_198_descr'
     BADGE_199 = '#badge:badge_199'
     BADGE_199_DESCR = '#badge:badge_199_descr'
+    BADGE_200 = '#badge:badge_200'
+    BADGE_200_DESCR = '#badge:badge_200_descr'
+    BADGE_201 = '#badge:badge_201'
+    BADGE_201_DESCR = '#badge:badge_201_descr'
+    BADGE_202 = '#badge:badge_202'
+    BADGE_202_DESCR = '#badge:badge_202_descr'
+    SUFFIX_BADGE_202 = '#badge:suffix/badge_202'
+    BADGE_209 = '#badge:badge_209'
+    BADGE_209_DESCR = '#badge:badge_209_descr'
+    BADGE_210 = '#badge:badge_210'
+    BADGE_210_DESCR = '#badge:badge_210_descr'
+    BADGE_211 = '#badge:badge_211'
+    BADGE_211_DESCR = '#badge:badge_211_descr'
+    SUFFIX_BADGE_211 = '#badge:suffix/badge_211'
+    BADGE_212 = '#badge:badge_212'
+    BADGE_212_DESCR = '#badge:badge_212_descr'
+    BADGE_213 = '#badge:badge_213'
+    BADGE_213_DESCR = '#badge:badge_213_descr'
+    BADGE_214 = '#badge:badge_214'
+    BADGE_214_DESCR = '#badge:badge_214_descr'
+    BADGE_215 = '#badge:badge_215'
+    BADGE_215_DESCR = '#badge:badge_215_descr'
+    BADGE_216 = '#badge:badge_216'
+    BADGE_216_DESCR = '#badge:badge_216_descr'
+    SUFFIX_BADGE_216 = '#badge:suffix/badge_216'
     BADGE_ENUM = (BADGE_0,
      BADGE_0_DESCR,
      BADGE_1,
@@ -815,6 +854,20 @@ class BADGE(object):
      BADGE_182_DESCR,
      BADGE_183,
      BADGE_183_DESCR,
+     BADGE_184,
+     BADGE_184_DESCR,
+     BADGE_185,
+     BADGE_185_DESCR,
+     BADGE_186,
+     BADGE_186_DESCR,
+     BADGE_187,
+     BADGE_187_DESCR,
+     BADGE_188,
+     BADGE_188_DESCR,
+     BADGE_189,
+     BADGE_189_DESCR,
+     BADGE_190,
+     BADGE_190_DESCR,
      BADGE_191,
      BADGE_191_DESCR,
      BADGE_192,
@@ -832,7 +885,29 @@ class BADGE(object):
      BADGE_198,
      BADGE_198_DESCR,
      BADGE_199,
-     BADGE_199_DESCR)
+     BADGE_199_DESCR,
+     BADGE_200,
+     BADGE_200_DESCR,
+     BADGE_201,
+     BADGE_201_DESCR,
+     BADGE_202,
+     BADGE_202_DESCR,
+     BADGE_209,
+     BADGE_209_DESCR,
+     BADGE_210,
+     BADGE_210_DESCR,
+     BADGE_211,
+     BADGE_211_DESCR,
+     BADGE_212,
+     BADGE_212_DESCR,
+     BADGE_213,
+     BADGE_213_DESCR,
+     BADGE_214,
+     BADGE_214_DESCR,
+     BADGE_215,
+     BADGE_215_DESCR,
+     BADGE_216,
+     BADGE_216_DESCR)
     BADGE_ALL_SHORT_ENUM = (BADGE_10_SHORT,
      BADGE_11_SHORT,
      BADGE_12_SHORT,
@@ -1033,6 +1108,13 @@ class BADGE(object):
      BADGE_181_DESCR,
      BADGE_182_DESCR,
      BADGE_183_DESCR,
+     BADGE_184_DESCR,
+     BADGE_185_DESCR,
+     BADGE_186_DESCR,
+     BADGE_187_DESCR,
+     BADGE_188_DESCR,
+     BADGE_189_DESCR,
+     BADGE_190_DESCR,
      BADGE_191_DESCR,
      BADGE_192_DESCR,
      BADGE_193_DESCR,
@@ -1041,7 +1123,18 @@ class BADGE(object):
      BADGE_196_DESCR,
      BADGE_197_DESCR,
      BADGE_198_DESCR,
-     BADGE_199_DESCR)
+     BADGE_199_DESCR,
+     BADGE_200_DESCR,
+     BADGE_201_DESCR,
+     BADGE_202_DESCR,
+     BADGE_209_DESCR,
+     BADGE_210_DESCR,
+     BADGE_211_DESCR,
+     BADGE_212_DESCR,
+     BADGE_213_DESCR,
+     BADGE_214_DESCR,
+     BADGE_215_DESCR,
+     BADGE_216_DESCR)
     BADGE_ALL_DESCR_LONG_ENUM = (BADGE_102_DESCR_LONG,)
 
     @classmethod

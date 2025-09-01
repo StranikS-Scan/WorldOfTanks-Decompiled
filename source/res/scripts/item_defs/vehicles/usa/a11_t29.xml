@@ -59,7 +59,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	40550	</weight>
-    <maxHealth>	920	</maxHealth>
+    <maxHealth>	1040	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
@@ -881,13 +881,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <T84E1>
-      <userString>	#usa_vehicles:T84E1	</userString>
+    <Chassis_A11_T29>
+      <userString>	#usa_vehicles:Chassis_A11_T29	</userString>
       <tags></tags>
       <level>	6	</level>
       <price>	13400	</price>
       <unlocks>
-        <chassis>	T84E3	  <cost>	9800	</cost>
+        <chassis>	Chassis_A11_T29_2	  <cost>	9800	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -895,11 +895,10 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	11500	</weight>
-      <maxLoad>	63500	</maxLoad>
-      <terrainResistance>	1.1 1.9 2.6	</terrainResistance>
+      <terrainResistance>	1.1 1.5 2.6	</terrainResistance>
       <brakeForce>	34500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	20	</rotationSpeed>
+      <rotationSpeed>	23	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.24	</vehicleMovement>
         <vehicleRotation>	0.24	</vehicleRotation>
@@ -1915,9 +1914,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </T84E1>
-    <T84E3>
-      <userString>	#usa_vehicles:T84E3	</userString>
+    </Chassis_A11_T29>
+    <Chassis_A11_T29_2>
+      <userString>	#usa_vehicles:Chassis_A11_T29_2	</userString>
       <tags></tags>
       <level>	7	</level>
       <price>	22000	</price>
@@ -1926,11 +1925,10 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	11500	</weight>
-      <maxLoad>	66800	</maxLoad>
       <terrainResistance>	1.1 1.5 2.6	</terrainResistance>
       <brakeForce>	34500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	23	</rotationSpeed>
+      <rotationSpeed>	25	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.22	</vehicleMovement>
         <vehicleRotation>	0.22	</vehicleRotation>
@@ -2946,11 +2944,11 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </T84E3>
+    </Chassis_A11_T29_2>
   </chassis>
   <turrets0>
-    <T123>
-      <userString>	#usa_vehicles:T123	</userString>
+    <Turret_1_A11_T29>
+      <userString>	#usa_vehicles:Turret_1_A11_T29	</userString>
       <tags></tags>
       <level>	6	</level>
       <price>	15200	</price>
@@ -2974,106 +2972,29 @@
       </armor>
       <primaryArmor>	armor_16 armor_3 armor_4	</primaryArmor>
       <weight>	8400	</weight>
-      <maxHealth>	230	</maxHealth>
+      <maxHealth>	200	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
         <maxRegenHealth>	70	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	350	</circularVisionRadius>
+      <circularVisionRadius>	360	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	90	</maxHealth>
         <maxRegenHealth>	45	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_76mm_Gun_M1A2>	shared	  <maxAmmo>	126	</maxAmmo>
-          <reloadTime>	3.6	</reloadTime>
-          <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 10 0.366894 10 0.415762 10 0.430556 8.5 0.448591 5 0.468028 6.5 0.536874 6.5 0.551494 5 0.569444 10 0.633106 10 1 10	</maxPitch>
-          </pitchLimits>
-          <unlocks>
-            <gun>	_90mm_Gun_M3	  <cost>	14000	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	279	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	203	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	20	</gun>
-          </armor>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/american/A11_T29/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/american/A11_T29/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/american/A11_T29/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/american/A11_T29/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/american/A11_T29/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium_mb	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.002087 0.001159 1.63754	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0.002318 0.403215 0.329112	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.002087 0.001159 1.63754	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.004174 0.002319 1.68174	</rayStart>
-              <rayEnd>	0.004174 0.002319 2.13174	</rayEnd>
-              <rayUp>	0.082 0 0	</rayUp>
-              <size>	0.45	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.31 0.31 0.000000 0.000000	</tiling>
-            <density>	96.225 96.6102	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_76mm_Gun_M1A2>
-        <_90mm_Gun_M3>	shared	  <maxAmmo>	73	</maxAmmo>
+        <_90mm_Gun_M3_T29>	shared	  <maxAmmo>	73	</maxAmmo>
           <reloadTime>	7	</reloadTime>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 10 0.366894 10 0.415762 10 0.430556 8.5 0.448591 5 0.468028 7.5 0.536874 7.5 0.551494 5 0.569444 10 0.633106 10 1 10	</maxPitch>
+            <maxPitch>	0.00000 10.00 0.40833 10.00 0.45000 5.00 0.45833 7.00 0.54167 7.00 0.55000 5.00 0.59167 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
           <unlocks>
             <gun>	_105mm_Gun_T5E1	  <cost>	18100	</cost>
             </gun>
-            <turret>	T136	  <cost>	12100	</cost>
-            </turret>
           </unlocks>
           <armor>
             <armor_1>	279	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -3140,12 +3061,16 @@
             <density>	92.5071 98.6204	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_90mm_Gun_M3>
+        </_90mm_Gun_M3_T29>
         <_105mm_Gun_T5E1>	shared	  <maxAmmo>	63	</maxAmmo>
+          <unlocks>
+            <turret>	Turret_2_A11_T29	  <cost>	12100	</cost>
+            </turret>
+          </unlocks>
           <reloadTime>	13.7	</reloadTime>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 10 0.366894 10 0.415762 10 0.430556 7 0.435367 7 0.448591 5 0.468028 7 0.536874 7 0.551494 5 0.569303 7 0.569444 7 0.59711 10 0.633106 10 1 10	</maxPitch>
+            <maxPitch>	0.00000 10.00 0.40833 10.00 0.45000 5.00 0.45833 7.00 0.54167 7.00 0.55000 5.00 0.59167 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
           <shotDispersionFactors>
             <turretRotation>	0.18	</turretRotation>
@@ -3162,7 +3087,7 @@
             <gun>	45	</gun>
           </armor>
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.5	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A11_T29/normal/lod0/Gun_03.model	</undamaged>
@@ -3832,9 +3757,9 @@
         <density>	80.8545 80.7987	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </T123>
-    <T136>
-      <userString>	#usa_vehicles:T136	</userString>
+    </Turret_1_A11_T29>
+    <Turret_2_A11_T29>
+      <userString>	#usa_vehicles:Turret_2_A11_T29	</userString>
       <tags></tags>
       <level>	7	</level>
       <price>	25500	</price>
@@ -3863,7 +3788,7 @@
       </armor>
       <primaryArmor>	armor_7 armor_3 armor_4	</primaryArmor>
       <weight>	9100	</weight>
-      <maxHealth>	330	</maxHealth>
+      <maxHealth>	260	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -3877,82 +3802,11 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_76mm_Gun_M1A2>	shared	  <maxAmmo>	126	</maxAmmo>
-          <reloadTime>	3.6	</reloadTime>
-          <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 10 0.366894 10 0.415762 10 0.430556 8.5 0.448591 5 0.468028 6.5 0.536874 6.5 0.551494 5 0.569444 10 0.633106 10 1 10	</maxPitch>
-          </pitchLimits>
-          <armor>
-            <armor_1>	279	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	203	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	20	</gun>
-          </armor>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/american/A11_T29/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/american/A11_T29/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/american/A11_T29/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/american/A11_T29/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/american/A11_T29/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium_mb	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.002087 0.001159 1.63754	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0.002309 0.40522 0.329099	</anchorPosition>
-              <anchorDirection>	0 0.000001 1	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.002087 0.001159 1.63754	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.004174 0.002319 1.60909	</rayStart>
-              <rayEnd>	0.004174 0.002319 2.10909	</rayEnd>
-              <rayUp>	0.083 0 0	</rayUp>
-              <size>	0.5	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.445 0.445 0.000000 0.000000	</tiling>
-            <density>	96.225 96.6102	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_76mm_Gun_M1A2>
-        <_90mm_Gun_M3>	shared	  <maxAmmo>	73	</maxAmmo>
+        <_90mm_Gun_M3_T29>	shared	  <maxAmmo>	73	</maxAmmo>
           <reloadTime>	7	</reloadTime>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 10 0.366894 10 0.415762 10 0.430556 8.5 0.448591 5 0.468028 7.5 0.536874 7.5 0.551494 5 0.569444 10 0.633106 10 1 10	</maxPitch>
+            <maxPitch>	0.00000 10.00 0.40833 10.00 0.45000 5.00 0.45833 7.00 0.54167 7.00 0.55000 5.00 0.59167 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
           <armor>
             <armor_1>	279	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -4019,12 +3873,12 @@
             <density>	92.5071 98.6204	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_90mm_Gun_M3>
+        </_90mm_Gun_M3_T29>
         <_105mm_Gun_T5E1>	shared	  <maxAmmo>	63	</maxAmmo>
           <reloadTime>	13.2	</reloadTime>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 10 0.366894 10 0.415762 10 0.430556 7 0.435367 7 0.448591 5 0.468028 7 0.536874 7 0.551494 5 0.569303 7 0.569444 7 0.59711 10 0.633106 10 1 10	</maxPitch>
+            <maxPitch>	0.00000 10.00 0.40833 10.00 0.45000 5.00 0.45833 7.00 0.54167 7.00 0.55000 5.00 0.59167 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
           <shotDispersionFactors>
@@ -4042,7 +3896,7 @@
             <gun>	45	</gun>
           </armor>
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <aimingTime>	2.7	</aimingTime>
+          <aimingTime>	2.5	</aimingTime>
           <effects>	shot_large	</effects>
           <reloadEffect>	reload85_107	</reloadEffect>
           <models>
@@ -4714,63 +4568,36 @@
         <density>	84.2076 84.332	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </T136>
+    </Turret_2_A11_T29>
   </turrets0>
   <engines>
-    <Ford_GAC>	shared	  <unlocks>
-        <engine>	GMC_Allison_V1710-E32	  <cost>	12300	</cost>
+    <Ford_GAC_T29>	shared	  <unlocks>
+        <engine>	General_Motors_Allison_V_1710_E32	  <cost>	12300	</cost>
         </engine>
       </unlocks>
-    </Ford_GAC>
-    <GMC_Allison_V1710-E32>	shared	  <unlocks>
-        <engine>	Continental_AV-1790-3	  <cost>	19000	</cost>
-        </engine>
-      </unlocks>
-    </GMC_Allison_V1710-E32>
-    <Continental_AV-1790-3>	shared	</Continental_AV-1790-3>
+    </Ford_GAC_T29>
+    <General_Motors_Allison_V_1710_E32>	shared	</General_Motors_Allison_V_1710_E32>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <SCR_508>	shared	  <unlocks>
-        <radio>	SCR_528	  <cost>	9000	</cost>
-        </radio>
-      </unlocks>
-    </SCR_508>
     <SCR_528>	shared	</SCR_528>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Ford_GAC>
-          <smplEnginePower>	761.2424	</smplEnginePower>
+        <Ford_GAC_T29>
+          <smplEnginePower>	775	</smplEnginePower>
           <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
-        </Ford_GAC>
-        <GMC_Allison_V1710-E32>
-          <smplEnginePower>	803.5337	</smplEnginePower>
+        </Ford_GAC_T29>
+        <General_Motors_Allison_V_1710_E32>
+          <smplEnginePower>	850	</smplEnginePower>
           <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
-        </GMC_Allison_V1710-E32>
-        <Continental_AV-1790-3>
-          <smplEnginePower>	845.8249	</smplEnginePower>
-          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
-        </Continental_AV-1790-3>
+        </General_Motors_Allison_V_1710_E32>
       </engines>
       <chassis>
-        <T84E1>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.2093	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.15295	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
-            </firm>
-          </grounds>
-        </T84E1>
-        <T84E3>
+        <Chassis_A11_T29>
           <grounds>
             <soft>
               <rollingFriction>	0.2093	</rollingFriction>
@@ -4782,7 +4609,20 @@
               <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
-        </T84E3>
+        </Chassis_A11_T29>
+        <Chassis_A11_T29_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.2093	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.12075	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.08855	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_A11_T29_2>
       </chassis>
     </detailed>
   </physics>

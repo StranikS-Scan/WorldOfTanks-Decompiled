@@ -45,9 +45,9 @@ class StoryModeBattlePageObserver(BattlePageObserver):
     __slots__ = ()
     _storyModeCtrl = dependency.descriptor(IStoryModeController)
 
-    def onExitState(self, event=None):
+    def onExitState(self, state, event):
         if not self._storyModeCtrl.isOnboarding or self._storyModeCtrl.isQuittingBattle:
-            super(StoryModeBattlePageObserver, self).onExitState(event)
+            super(StoryModeBattlePageObserver, self).onExitState(state, event)
         else:
             battlePage = getStoryModeBattle()
             if battlePage is not None:

@@ -11,7 +11,6 @@ from skeletons.gui.game_control import IPlatoonController
 from skeletons.gui.lobby_context import ILobbyContext
 if typing.TYPE_CHECKING:
     from typing import Tuple, Dict, Optional
-    from gui.shared.gui_items.Vehicle import Vehicle
 _logger = logging.getLogger(__name__)
 
 class CrewAssistantCtrl(object):
@@ -60,8 +59,10 @@ class CrewAssistantCtrl(object):
     def isEnabled(self):
         return self.__isEnabled
 
-    def hasOrderSets(self, vehicle, tankmanRole):
-        orderSets = self.getOrderSets(vehicle, tankmanRole)
+    def hasOrderSets(self, vehIntCD, tankmanRole):
+        return self.validateOrderSets(self.getOrderSets(vehIntCD, tankmanRole))
+
+    def validateOrderSets(self, orderSets):
         hasCommonSet, hasLegendarySet = False, False
         for commonPercent, legendaryPercent in orderSets.itervalues():
             hasCommonSet |= commonPercent > 0.0
@@ -71,7 +72,7 @@ class CrewAssistantCtrl(object):
 
         return (hasCommonSet, hasLegendarySet)
 
-    def getOrderSets(self, vehicle, tankmanRole):
+    def getOrderSets(self, vehIntCD, tankmanRole):
         if not self.__isEnabled:
             return self._formEmptyResponse()
         if self._cache.isCacheEmpty():
@@ -79,7 +80,6 @@ class CrewAssistantCtrl(object):
             return self._formEmptyResponse()
         if self._platoonCtrl.getPrbEntityType() not in self._SUPPORTED_PREBATTLE_TYPES:
             return self._formEmptyResponse()
-        vehIntCD = vehicle.intCD
         crewData = self._cache.getLoadout(vehIntCD, role=tankmanRole)
         if crewData:
             _logger.debug('Requesting crew loadouts for vehicleID = %s and tankmanRole = %s, result = %s', vehIntCD, tankmanRole, crewData)

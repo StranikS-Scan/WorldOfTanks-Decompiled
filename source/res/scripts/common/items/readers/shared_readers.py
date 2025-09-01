@@ -21,7 +21,7 @@ _HANGERS_PATH = ITEM_DEFS_PATH + '/customization/attachments/hangers.xml'
 _logger = logging.getLogger(__name__)
 
 def _readEmblemSlot(ctx, subsection, slotType):
-    descr = shared_components.EmblemSlot(_xml.readVector3(ctx, subsection, 'rayStart'), _xml.readVector3(ctx, subsection, 'rayEnd'), _xml.readVector3(ctx, subsection, 'rayUp'), _xml.readPositiveFloat(ctx, subsection, 'size'), subsection.readBool('hideIfDamaged', False), slotType, subsection.readBool('isMirrored', False), subsection.readBool('isUVProportional', True), _xml.readIntOrNone(ctx, subsection, 'emblemId'), _xml.readInt(ctx, subsection, 'slotId'), subsection.readBool('applyToFabric', True), _readCompatibleModels(subsection, ctx))
+    descr = shared_components.EmblemSlot(_xml.readVector3(ctx, subsection, 'rayStart'), _xml.readVector3(ctx, subsection, 'rayEnd'), _xml.readVector3(ctx, subsection, 'rayUp'), _xml.readPositiveFloat(ctx, subsection, 'size'), subsection.readBool('hideIfDamaged', False), slotType, subsection.readBool('isMirrored', slotType in ('insignia', 'insigniaOnGun')), subsection.readBool('isUVProportional', True), _xml.readIntOrNone(ctx, subsection, 'emblemId'), _xml.readInt(ctx, subsection, 'slotId'), subsection.readBool('applyToFabric', True), _readCompatibleModels(subsection, ctx))
     _verifySlotId(ctx, slotType, descr.slotId)
     return descr
 

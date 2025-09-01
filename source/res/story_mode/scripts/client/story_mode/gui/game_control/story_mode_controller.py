@@ -14,7 +14,6 @@ from chat_shared import SYS_MESSAGE_TYPE
 from constants import ARENA_BONUS_TYPE, QUEUE_TYPE
 from frameworks.wulf import WindowLayer
 from gui import app_loader
-from gui.Scaleform.framework.managers.loaders import g_viewOverrider
 from gui.Scaleform.framework.view_overrider import OverrideData
 from gui.battle_results import RequestResultsContext
 from gui.battle_results.settings import PLAYER_TEAM_RESULT
@@ -40,20 +39,21 @@ from skeletons.gui.shared import IItemsCache
 from story_mode.account_settings import isNewbieAdvertisingScreenSeen, getMissionNewSeenId, setMissionNewSeenId
 from story_mode.gui.battle_control.arena_info.player_format import StoryModeNameFormatter
 from story_mode.gui.fade_in_out import UseStoryModeFading
-from story_mode.gui.impl.lobby.base_prb_view import BasePrbView
-from story_mode.gui.shared.event_dispatcher import showMissionSelectionView, showNewbieAdvertisingWindow
+from story_mode.gui.shared.event_dispatcher import showNewbieAdvertisingWindow
 from story_mode.gui.story_mode_gui_constants import PREBATTLE_ACTION_NAME, VIEW_ALIAS, INFO_PAGE_STORY_MODE, INFO_PAGE_STORY_MODE_EVENT
 from story_mode.gui.sound_constants import SOUND_REMAPPING, GAMEMODE_GROUP, GAMEMODE_DEFAULT
+from story_mode.configs.sm_client_settings import getClientSettings
 from story_mode.gui.game_control.sounds_controller import SoundsController
 from story_mode.skeletons.story_mode_controller import IStoryModeController
 from story_mode_common.configs.story_mode_missions import missionsSchema, MissionsModel, MissionModel
 from story_mode_common.configs.story_mode_settings import settingsSchema, SettingsModel
 from story_mode_common.helpers import isMissionCompleted, isTaskCompleted, isMissionDisabledByABGroup
-from story_mode_common.story_mode_constants import LOGGER_NAME, SM_CONGRATULATIONS_MESSAGE, STORY_MODE_BONUS_TYPES, UNDEFINED_MISSION_ID, STORY_MODE_PDATA_KEY, PROGRESS_PDATA_KEY, MissionType, STORY_MODE_AB_FEATURE
+from story_mode_common.story_mode_constants import LOGGER_NAME, SM_CONGRATULATIONS_MESSAGE, STORY_MODE_BONUS_TYPES, UNDEFINED_MISSION_ID, STORY_MODE_PDATA_KEY, PROGRESS_PDATA_KEY, MissionType, STORY_MODE_AB_FEATURE, EventMissionSelector
 from uilogging.performance.battle.loggers import BattleMetricsLogger
 if typing.TYPE_CHECKING:
     from messenger.proto.bw.wrappers import ServiceChannelMessage
     from gui.Scaleform.battle_entry import BattleEntry
+    from story_mode.configs.sm_client_settings import ClientSettingsModel
 _logger = getLogger(LOGGER_NAME)
 
 class StoryModeOverrideData(OverrideData):
@@ -79,13 +79,15 @@ class StoryModeController(IStoryModeController, IGlobalListener):
         self.__selectRandomBattle = False
         self.__isOnboarding = False
         self.__needToShowAwardData = None
-        self.__lobbyViewOverrideData = None
         self.__syncData = {}
         self.__isQuittingBattle = False
         self.__isNameFormatterSubstituted = False
         self.__missionsProgressDiff = {}
         self.__soundController = SoundsController()
         self._delayedBattleResultsID = None
+        self._eventMissionSelectorMap = {EventMissionSelector.DEFAULT: self.__getNotCompletedMissions,
+         EventMissionSelector.BATTLES_COUNT: self.__getMissionsByBattleCount,
+         EventMissionSelector.WITH_UNLOCK_MISSION: self.__getMissionsWithUnlockMission}
         self.onSyncDataUpdated = Event.Event()
         self.onMissionsConfigUpdated = Event.Event()
         self.onSettingsUpdated = Event.Event()
@@ -128,8 +130,13 @@ class StoryModeController(IStoryModeController, IGlobalListener):
         return INFO_PAGE_STORY_MODE_EVENT if self.missions.isEventEnabled else INFO_PAGE_STORY_MODE
 
     @property
-    def _serverSettings(self):
-        return self._lobbyContext.getServerSettings()
+    def newMissionIdForNewbies(self):
+        newMissionId = UNDEFINED_MISSION_ID
+        for mission in self.filterMissions(missionType=MissionType.REGULAR):
+            if self.isFirstTaskNotCompleted(mission) and mission.missionType == MissionType.REGULAR:
+                newMissionId = mission.missionId
+
+        return newMissionId
 
     @prbEntityProperty
     def prbEntity(self):
@@ -156,6 +163,7 @@ class StoryModeController(IStoryModeController, IGlobalListener):
         g_playerEvents.onAvatarBecomeNonPlayer -= self.__onAvatarBecomeNonPlayer
         g_playerEvents.onConfigModelUpdated -= self.__configModelUpdateHandler
         g_eventBus.removeListener(events.PrebattleEvent.NOT_SWITCHED, self.__unsuccessfulSwitchHandler, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.__clear()
 
     def onDisconnected(self):
         self.stopGlobalListening()
@@ -168,6 +176,7 @@ class StoryModeController(IStoryModeController, IGlobalListener):
         self.__missionsProgressDiff = {}
         self._delayedBattleResultsID = None
         self.__onExitPrb()
+        self.__clear()
         return
 
     def isEventEntryPointVisible(self):
@@ -175,9 +184,6 @@ class StoryModeController(IStoryModeController, IGlobalListener):
 
     def isShowActiveModeState(self):
         return self.isEnabled() and any((not isMissionCompleted(self.__progress, mission) for mission in self.filterMissions(missionType=MissionType.EVENT)))
-
-    def onAccountBecomeNonPlayer(self):
-        g_eventBus.removeListener(events.ViewEventType.LOAD_GUI_IMPL_VIEW, self.__guiImplViewLoaded, EVENT_BUS_SCOPE.LOBBY)
 
     def isEnabled(self):
         return self.settings.enabled
@@ -232,18 +238,12 @@ class StoryModeController(IStoryModeController, IGlobalListener):
         return isNewbieGuidanceNeeded and self.isEnabled()
 
     def isNewNeededForNewbies(self):
-        showNewMissionId = UNDEFINED_MISSION_ID
-        for mission in self.filterMissions(missionType=MissionType.REGULAR):
-            if self.isFirstTaskNotCompleted(mission) and mission.missionType == MissionType.REGULAR:
-                showNewMissionId = mission.missionId
-
-        return self.isNewbieGuidanceNeeded() and getMissionNewSeenId() < showNewMissionId
+        return self.isNewbieGuidanceNeeded() and getMissionNewSeenId() < self.newMissionIdForNewbies
 
     def setNewForNewbiesSeen(self):
-        lastCachedMissionId = getMissionNewSeenId()
-        for mission in self.filterMissions(missionType=MissionType.REGULAR):
-            if self.isFirstTaskNotCompleted(mission) and mission.missionType == MissionType.REGULAR and mission.missionId > lastCachedMissionId:
-                setMissionNewSeenId(mission.missionId)
+        newMissionIdForNewbies = self.newMissionIdForNewbies
+        if newMissionIdForNewbies > getMissionNewSeenId():
+            setMissionNewSeenId(newMissionIdForNewbies)
 
     def getFirstMission(self):
         return self.missions.missions[0]
@@ -348,10 +348,10 @@ class StoryModeController(IStoryModeController, IGlobalListener):
         if selectedMission and selectedMission.sounds.battleMusic:
             self.__soundController.stopBattleMusic(selectedMission.sounds.battleMusic)
 
-    @adisp_process
     def onLobbyInited(self, *_):
+        g_eventBus.addListener(events.HangarVehicleEvent.SELECT_VEHICLE_IN_HANGAR, self.__onSelectVehicleInHangar, scope=EVENT_BUS_SCOPE.LOBBY)
         if (self.__selectRandomBattle or not self.isEnabled()) and self.isInPrb():
-            yield self.prbDispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.RANDOM))
+            self._selectRandomMode()
         self.__selectRandomBattle = False
         self.__isOnboarding = False
         if self.isNewbieGuidanceNeeded() and not isNewbieAdvertisingScreenSeen() and self.settings.newbieAdvertisingEnabled:
@@ -370,7 +370,6 @@ class StoryModeController(IStoryModeController, IGlobalListener):
             self.__onEnterPrb()
             if self.__selectedMissionId == UNDEFINED_MISSION_ID:
                 self.__assignSelectedMission()
-            showMissionSelectionView()
         else:
             self.__selectedMissionId = UNDEFINED_MISSION_ID
 
@@ -381,6 +380,7 @@ class StoryModeController(IStoryModeController, IGlobalListener):
             self._sessionProvider.getCtx().setPlayerFullNameFormatter(StoryModeNameFormatter())
             self.__isNameFormatterSubstituted = True
             BigWorld.player().waitForPlayerChoice()
+        self.__clear()
 
     @adisp_process
     def onKickedFromQueue(self, queueType, *args):
@@ -392,10 +392,38 @@ class StoryModeController(IStoryModeController, IGlobalListener):
         missionId, defaultMissionId = chooser()
         return missionId if missionId != UNDEFINED_MISSION_ID else defaultMissionId
 
+    @property
+    def _serverSettings(self):
+        return self._lobbyContext.getServerSettings()
+
+    @property
+    def _clientSettings(self):
+        return getClientSettings()
+
+    @adisp_process
+    def _selectRandomMode(self):
+        dispatcher = self.prbDispatcher
+        if dispatcher is None:
+            return
+        else:
+            yield dispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.RANDOM))
+            return
+
     def _isMissionDisabledByABGroup(self, mission):
         group = self._itemsCache.items.stats.getABGroup(feature=STORY_MODE_AB_FEATURE)
         abConfig = self._lobbyContext.getServerSettings().abFeatureTestConfig
         return isMissionDisabledByABGroup(mission, group, getattr(abConfig, STORY_MODE_AB_FEATURE, None))
+
+    def __onSelectVehicleInHangar(self, event):
+        if not self.isInPrb():
+            return
+        vehicleInvID = event.ctx['vehicleInvID']
+        vehicle = self._itemsCache.items.getVehicle(vehicleInvID)
+        if vehicle:
+            self._selectRandomMode()
+
+    def __clear(self):
+        g_eventBus.removeListener(events.HangarVehicleEvent.SELECT_VEHICLE_IN_HANGAR, self.__onSelectVehicleInHangar, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __onAvatarBecomeNonPlayer(self):
         self.stopMusic(True)
@@ -406,16 +434,13 @@ class StoryModeController(IStoryModeController, IGlobalListener):
 
     def __configModelUpdateHandler(self, gpKey):
         if settingsSchema.gpKey == gpKey:
-            if not self.isEnabled():
-                self.__lobbyViewOverrideData = None
             self.onSettingsUpdated()
-        elif missionsSchema.gpKey == gpKey:
+        if missionsSchema.gpKey == gpKey:
             if self.__selectedMissionId != UNDEFINED_MISSION_ID:
                 mission = self.missions.getMission(self.__selectedMissionId)
                 if not mission or not mission.enabled:
                     self.__assignSelectedMission()
             self.onMissionsConfigUpdated()
-        return
 
     def __onPrbDispatcherCreated(self):
         self.startGlobalListening()
@@ -469,24 +494,11 @@ class StoryModeController(IStoryModeController, IGlobalListener):
 
     def __onEnterPrb(self):
         WWISE.activateRemapping(SOUND_REMAPPING)
-        g_viewOverrider.addOverride(VIEW_ALIAS.LOBBY_HANGAR, self.__viewOverrideDelegate)
-        g_eventBus.addListener(events.ViewEventType.LOAD_GUI_IMPL_VIEW, self.__guiImplViewLoaded, EVENT_BUS_SCOPE.LOBBY)
 
     def __onExitPrb(self):
         self.stopMusic()
         WWISE.deactivateRemapping(SOUND_REMAPPING)
         WWISE.WW_setState(GAMEMODE_GROUP, GAMEMODE_DEFAULT)
-        g_viewOverrider.removeOverride(VIEW_ALIAS.LOBBY_HANGAR, self.__viewOverrideDelegate)
-        self.__lobbyViewOverrideData = None
-        g_eventBus.removeListener(events.ViewEventType.LOAD_GUI_IMPL_VIEW, self.__guiImplViewLoaded, EVENT_BUS_SCOPE.LOBBY)
-        return
-
-    def __viewOverrideDelegate(self, *_, **__):
-        return self.__lobbyViewOverrideData
-
-    def __guiImplViewLoaded(self, event):
-        if issubclass(event.loadParams.viewClass, BasePrbView):
-            self.__lobbyViewOverrideData = StoryModeOverrideData(event.loadParams, *event.args, **event.kwargs)
 
     def __handleChatMessage(self, _, message):
         if message.type == SYS_MESSAGE_TYPE.lookup(SM_CONGRATULATIONS_MESSAGE).index():
@@ -522,7 +534,7 @@ class StoryModeController(IStoryModeController, IGlobalListener):
             containerManager.destroyViews(VIEW_ALIAS.INGAME_HELP)
             return
 
-    @UseStoryModeFading(layer=WindowLayer.TOP_SUB_VIEW, show=False)
+    @UseStoryModeFading(layer=WindowLayer.SUB_VIEW, show=False)
     def __unsuccessfulSwitchHandler(self, *_):
         pass
 
@@ -566,6 +578,23 @@ class StoryModeController(IStoryModeController, IGlobalListener):
         return self.__chooseLastUnlockedMissionIds()
 
     def __chooseEventSelectedMissionIds(self):
+        selectorType = self._clientSettings.event.missionSelectors.active
+        if selectorType not in self._eventMissionSelectorMap:
+            _logger.error('Unknown event mission selector type %s', selectorType)
+            selectorType = EventMissionSelector.DEFAULT
+        return self._eventMissionSelectorMap[selectorType]()
+
+    def __getNotCompletedMissions(self):
+        firstSuitable, lastEnabled = self.__chooseSelectedMissionsIds(missionType=MissionType.EVENT, condition=self.isEventMissionSuitable)
+        return (firstSuitable, lastEnabled)
+
+    def __getMissionsByBattleCount(self):
+        battlesCount = self._itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount() if self._itemsCache.isSynced() else 0
+        currentDifficulty = self._clientSettings.event.missionSelectors.battlesCount.getDifficulty(battlesCount)
+        firstSuitable, lastEnabled = self.__chooseSelectedMissionsIds(missionType=MissionType.EVENT, condition=lambda m: m.difficulty == currentDifficulty and any((not self.isMissionTaskCompleted(m.missionId, task.id) for task in m.getUnlockedTasks())))
+        return (firstSuitable, lastEnabled)
+
+    def __getMissionsWithUnlockMission(self):
         firstSuitable, lastEnabled = self.__chooseSelectedMissionsIds(missionType=MissionType.EVENT, precondition=lambda m: not (m.unlockMission > 0 and not self.isMissionCompleted(m.unlockMission)), condition=lambda m: not self.isMissionCompleted(m.missionId))
         if firstSuitable != UNDEFINED_MISSION_ID:
             mission = self.missions.getMission(firstSuitable)

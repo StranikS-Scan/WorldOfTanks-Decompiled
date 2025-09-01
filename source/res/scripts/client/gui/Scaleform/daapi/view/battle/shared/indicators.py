@@ -5,19 +5,19 @@ import BigWorld
 import GUI
 import SCALEFORM
 import SoundGroups
+from Event import Event
 from account_helpers.settings_core.settings_constants import SOUND, DAMAGE_INDICATOR, GRAPHICS
-from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, ROCKET_ACCELERATION_STATE, DIRECT_DETECTION_TYPE
+from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, DIRECT_DETECTION_TYPE
 from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV, LOG_WARNING
 from gui import DEPTH_OF_Aim, GUI_SETTINGS
-from gui.Scaleform.daapi.view.battle.shared.vehicles import siege_component
-from gui.Scaleform.daapi.view.meta.RocketAcceleratorIndicatorMeta import RocketAcceleratorIndicatorMeta
+from gui.Scaleform.daapi.view.battle.shared.legacy_mechanics import siege_component
 from gui.Scaleform.daapi.view.meta.SiegeModeIndicatorMeta import SiegeModeIndicatorMeta
 from gui.Scaleform.daapi.view.meta.SixthSenseMeta import SixthSenseMeta
 from gui.Scaleform.flash_wrapper import Flash, InputKeyMode
 from gui.Scaleform.genConsts.DAMAGEINDICATOR import DAMAGEINDICATOR
-from gui.Scaleform.genConsts.ROCKET_ACCELERATOR_INDICATOR import ROCKET_ACCELERATOR_INDICATOR
 from gui.Scaleform.genConsts.SIEGE_MODE_CONSTS import SIEGE_MODE_CONSTS
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
+from gui.battle_control.avatar_getter import getVehicleIDAttached
 from gui.battle_control.battle_constants import DEVICE_STATES_RANGE, DEVICE_STATE_NORMAL, DEVICE_STATE_CRITICAL, VEHICLE_DEVICE_IN_COMPLEX_ITEM, DEVICE_STATE_DESTROYED
 from gui.battle_control.battle_constants import HIT_INDICATOR_MAX_ON_SCREEN
 from gui.battle_control.battle_constants import PREDICTION_INDICATOR_MAX_ON_SCREEN
@@ -26,7 +26,6 @@ from gui.battle_control.controllers.hit_direction_ctrl import IHitIndicator, Hit
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.crits_mask_parser import critsParserGenerator
-from gui.shared.utils.TimeInterval import TimeInterval
 from helpers import dependency
 from helpers import i18n
 from shared_utils import CONST_CONTAINER
@@ -34,8 +33,11 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
 from gui.battle_control import avatar_getter
+from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from vehicles.mechanics.mechanic_info import hasVehicleMechanic
 if typing.TYPE_CHECKING:
     from items.vehicles import VehicleDescriptor
+    from TargetDesignatorTargetController import TargetDesignatorTargetController
 _DIRECT_INDICATOR_SWF = 'battleDirectionIndicatorApp.swf'
 _DIRECT_INDICATOR_COMPONENT = 'WGDirectionIndicatorFlash'
 _DIRECT_INDICATOR_MC_NAME = '_root.directionalIndicatorMc'
@@ -436,6 +438,7 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
 
 class SixthSenseIndicator(SixthSenseMeta):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    onSixthSensePreShow = Event()
 
     def __init__(self):
         super(SixthSenseIndicator, self).__init__()
@@ -453,6 +456,7 @@ class SixthSenseIndicator(SixthSenseMeta):
         self.__enabled = enabled
 
     def show(self):
+        self.onSixthSensePreShow()
         self.as_showS()
 
     def hide(self):
@@ -482,7 +486,7 @@ class SixthSenseIndicator(SixthSenseMeta):
         if not self.__enabled:
             return
         self.__sound.play()
-        self.as_showS()
+        self.show()
         self.__callbackID = BigWorld.callback(GUI_SETTINGS.sixthSenseDuration / 1000.0, self._hide)
 
     def _hide(self):
@@ -559,6 +563,64 @@ class SixthSenseSound(object):
         return
 
 
+class TargetDesignatorUnspottedIndicator(SixthSenseMeta):
+    session = dependency.descriptor(IBattleSessionProvider)
+
+    def __init__(self):
+        super(TargetDesignatorUnspottedIndicator, self).__init__()
+        self.enabled = True
+        self.__hasIndicator = False
+
+    def _populate(self):
+        super(TargetDesignatorUnspottedIndicator, self)._populate()
+        ctrl = self.session.shared.vehicleState
+        if ctrl is not None:
+            ctrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
+            ctrl.onVehicleControlling += self.__onVehicleControlling
+        SixthSenseIndicator.onSixthSensePreShow += self.__onSixthSensePreShow
+        return
+
+    def _dispose(self):
+        if self.session.isReplayPlaying and self._getPyReloading():
+            self.__asHideS(True)
+        ctrl = self.session.shared.vehicleState
+        if ctrl is not None:
+            ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
+            ctrl.onVehicleControlling -= self.__onVehicleControlling
+        SixthSenseIndicator.onSixthSensePreShow -= self.__onSixthSensePreShow
+        super(TargetDesignatorUnspottedIndicator, self)._dispose()
+        return
+
+    def __onVehicleControlling(self, vehicle):
+        ctrl = self.session.shared.vehicleState
+        state = VEHICLE_VIEW_STATE.TARGET_DESIGNATOR
+        value = ctrl.getStateValue(state)
+        if value is None:
+            return
+        else:
+            self.__onVehicleStateUpdated(state, value)
+            return
+
+    def __onVehicleStateUpdated(self, state, ctrl):
+        if state != VEHICLE_VIEW_STATE.TARGET_DESIGNATOR or not self.enabled:
+            return
+        if ctrl.hasUnspottedIndicator and ctrl.entity.id == getVehicleIDAttached():
+            if not self.__hasIndicator:
+                self.__hasIndicator = True
+                self.as_showS()
+        else:
+            self.__asHideS(False)
+
+    def __onSixthSensePreShow(self):
+        if self.enabled:
+            self.__asHideS(True)
+
+    def __asHideS(self, force=False):
+        if self.__hasIndicator:
+            self.__hasIndicator = False
+            self.as_hideS(force)
+
+
 class SiegeModeIndicator(SiegeModeIndicatorMeta):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     settingsCore = dependency.descriptor(ISettingsCore)
@@ -618,7 +680,7 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         return
 
     def __hasSiegeMode(self, vTypeDesc):
-        return vTypeDesc.hasTurboshaftEngine or vTypeDesc.isTwinGunVehicle or vTypeDesc.hasHydraulicChassis or vTypeDesc.hasAutoSiegeMode
+        return (vTypeDesc.hasTurboshaftEngine or vTypeDesc.isTwinGunVehicle or vTypeDesc.hasHydraulicChassis or vTypeDesc.hasAutoSiegeMode) and not hasVehicleMechanic(vTypeDesc, VehicleMechanic.PILLBOX_SIEGE_MODE)
 
     def __updateIndicatorView(self, isSmooth=False):
         if self._siegeState not in self._switchTimeTable:
@@ -1058,163 +1120,3 @@ class _PredictionIndicator(PredictionIndicatorMeta, IHitIndicator):
         width, height = GUI.screenResolution()
         self.as_setScreenSettingsS(scale, width, height)
         return
-
-
-UI_ROCKET_STATE_MAP = {ROCKET_ACCELERATION_STATE.NOT_RUNNING: ROCKET_ACCELERATOR_INDICATOR.PREPARING,
- ROCKET_ACCELERATION_STATE.DEPLOYING: ROCKET_ACCELERATOR_INDICATOR.PREPARING,
- ROCKET_ACCELERATION_STATE.PREPARING: ROCKET_ACCELERATOR_INDICATOR.PREPARING,
- ROCKET_ACCELERATION_STATE.READY: ROCKET_ACCELERATOR_INDICATOR.READY,
- ROCKET_ACCELERATION_STATE.ACTIVE: ROCKET_ACCELERATOR_INDICATOR.ACTIVE,
- ROCKET_ACCELERATION_STATE.DISABLED: ROCKET_ACCELERATOR_INDICATOR.DISABLE,
- ROCKET_ACCELERATION_STATE.EMPTY: ROCKET_ACCELERATOR_INDICATOR.PREPARING}
-
-class RocketIndicatorUpdater(object):
-
-    def __init__(self, indicator):
-        super(RocketIndicatorUpdater, self).__init__()
-        self.__indicator = indicator
-        self.__rocketCmp = None
-        self.__timeInterval = TimeInterval(0.1, self, '_updateProgress')
-        return
-
-    def clear(self):
-        self.__indicator = None
-        if self.__rocketCmp is not None:
-            self.__rocketCmp.unsubscribe(self.__onRocketAcceleratorStateChanged)
-        self.__rocketCmp = None
-        self.__timeInterval.stop()
-        self.__timeInterval = None
-        return
-
-    def setRocketCmp(self, rocketCmp):
-        self.removeRocketCmp()
-        self.__rocketCmp = rocketCmp
-        if self.__rocketCmp is not None:
-            self.__rocketCmp.subscribe(self.__onRocketAcceleratorStateChanged)
-            self.__timeInterval.start()
-        return
-
-    def removeRocketCmp(self):
-        if self.__rocketCmp is not None:
-            self.__rocketCmp.unsubscribe(self.__onRocketAcceleratorStateChanged)
-        self.__rocketCmp = None
-        self.__timeInterval.stop()
-        return
-
-    def _updateProgress(self):
-        if self.__rocketCmp:
-            stateStatus = self.__rocketCmp.stateStatus
-            status = stateStatus.status
-            leftTime = max(0, stateStatus.endTime - BigWorld.serverTime())
-            progress = 1.0 if status == ROCKET_ACCELERATION_STATE.READY else 0.0
-            duration = stateStatus.timeLeft
-            if duration:
-                if status == ROCKET_ACCELERATION_STATE.ACTIVE:
-                    progress = leftTime / duration
-                    self.__indicator.as_setActiveTimeS(leftTime)
-                else:
-                    progress = 1.0 - leftTime / duration
-            self.__indicator.as_setProgressS(progress)
-
-    def __onRocketAcceleratorStateChanged(self, stateStatus):
-        uiState = UI_ROCKET_STATE_MAP[stateStatus.status]
-        self.__indicator.as_setStateS(uiState)
-        self.__indicator.as_setCountS(stateStatus.reuseCount)
-        self._updateProgress()
-
-
-class RocketAcceleratorIndicator(RocketAcceleratorIndicatorMeta):
-    sessionProvider = dependency.descriptor(IBattleSessionProvider)
-
-    def __init__(self):
-        super(RocketAcceleratorIndicator, self).__init__()
-        self.__isEnabled = False
-        self.__isAllowedByContext = True
-        self.__updater = RocketIndicatorUpdater(self)
-
-    def _populate(self):
-        super(RocketAcceleratorIndicator, self)._populate()
-        crosshairCtrl = self.sessionProvider.shared.crosshair
-        if crosshairCtrl is not None:
-            crosshairCtrl.onCrosshairPositionChanged += self.__onCrosshairPositionChanged
-            crosshairCtrl.onCrosshairScaleChanged += self.__onCrosshairPositionChanged
-            crosshairCtrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
-        prbCtrl = self.sessionProvider.dynamic.prebattleSetup
-        if prbCtrl is not None:
-            prbCtrl.onBattleStarted += self.__onBattleStarted
-            self.__updateContextAvailability()
-        vStateCtrl = self.sessionProvider.shared.vehicleState
-        if vStateCtrl is not None:
-            vStateCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
-            vStateCtrl.onVehicleControlling += self.__onVehicleControlling
-            vehicle = vStateCtrl.getControllingVehicle()
-            if vehicle is not None:
-                self.__onVehicleControlling(vehicle)
-        self.__updateVisibility()
-        return
-
-    def _dispose(self):
-        self.__updater.clear()
-        self.__updater = None
-        crosshairCtrl = self.sessionProvider.shared.crosshair
-        if crosshairCtrl is not None:
-            crosshairCtrl.onCrosshairPositionChanged -= self.__onCrosshairPositionChanged
-            crosshairCtrl.onCrosshairScaleChanged -= self.__onCrosshairPositionChanged
-            crosshairCtrl.onCrosshairViewChanged -= self.__onCrosshairViewChanged
-        prbCtrl = self.sessionProvider.dynamic.prebattleSetup
-        if prbCtrl is not None:
-            prbCtrl.onBattleStarted -= self.__onBattleStarted
-        vStateCtrl = self.sessionProvider.shared.vehicleState
-        if vStateCtrl is not None:
-            vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
-            vStateCtrl.onVehicleControlling -= self.__onVehicleControlling
-        super(RocketAcceleratorIndicator, self)._dispose()
-        return
-
-    def __onBattleStarted(self):
-        self.__updateContextAvailability()
-        self.__updateVisibility()
-
-    def __updateContextAvailability(self):
-        prebattleCtrl = self.sessionProvider.dynamic.prebattleSetup
-        if prebattleCtrl is not None:
-            self.__isAllowedByContext = prebattleCtrl.isVehicleStateIndicatorAllowed()
-        else:
-            self.__isAllowedByContext = True
-        return
-
-    def __onVehicleControlling(self, vehicle):
-        self.__updater.removeRocketCmp()
-        self.__isEnabled = False
-        if vehicle.isAlive() and vehicle.typeDescriptor.hasRocketAcceleration and (vehicle.isPlayerVehicle or avatar_getter.getIsObserverFPV()):
-            rocketCmp = vehicle.dynamicComponents.get('rocketAccelerationController', None)
-            if rocketCmp is not None:
-                self.__updater.setRocketCmp(rocketCmp)
-                self.__isEnabled = True
-        self.__onCrosshairPositionChanged()
-        self.__updateVisibility()
-        return
-
-    def __onVehicleStateUpdated(self, state, value):
-        if state == VEHICLE_VIEW_STATE.DESTROYED:
-            self.__updateDestroyed(value)
-        elif state == VEHICLE_VIEW_STATE.CREW_DEACTIVATED:
-            self.__updateDestroyed(value)
-
-    def __updateDestroyed(self, _):
-        self.__isEnabled = False
-        self.__updateVisibility()
-
-    def __onCrosshairPositionChanged(self, *args):
-        if not self.__isEnabled:
-            return
-        self.as_updateLayoutS(*self.sessionProvider.shared.crosshair.getScaledPosition())
-
-    def __onCrosshairViewChanged(self, viewID):
-        if viewID == CROSSHAIR_VIEW_ID.UNDEFINED:
-            self.as_setVisibleS(False)
-        else:
-            self.__updateVisibility()
-
-    def __updateVisibility(self):
-        self.as_setVisibleS(self.__isEnabled and self.__isAllowedByContext)

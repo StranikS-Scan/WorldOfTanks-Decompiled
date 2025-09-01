@@ -207,4 +207,4 @@ class InfoPageWindow(WindowImpl):
     __slots__ = ()
 
     def __init__(self, eventName, previousWindow=None, category='', parent=None, backCallback=None):
-        super(InfoPageWindow, self).__init__(WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=InfoPage(R.views.lobby.lootbox_system.InfoPage(), previousWindow=previousWindow, category=category, eventName=eventName, backCallback=backCallback), parent=parent, layer=WindowLayer.TOP_WINDOW)
+        super(InfoPageWindow, self).__init__(WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=InfoPage(R.views.mono.lootbox.info_page(), previousWindow=previousWindow, category=category, eventName=eventName, backCallback=backCallback), parent=parent, layer=WindowLayer.TOP_WINDOW)

@@ -52,6 +52,10 @@ def almostZero(val, epsilon=0.0004):
     return -epsilon < val < epsilon
 
 
+def almostEqual(a, b, epsilon=0.0004):
+    return -epsilon < a - b < epsilon
+
+
 def lerp(a, b, t):
     return a + (b - a) * t
 

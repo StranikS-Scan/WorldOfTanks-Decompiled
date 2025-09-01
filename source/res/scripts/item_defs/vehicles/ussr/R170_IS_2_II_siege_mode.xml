@@ -11,8 +11,8 @@
   <postProgressionTree>	role_HT_break	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	34	</forward>
-    <backward>	12	</backward>
+    <forward>	38	</forward>
+    <backward>	15	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.056	</moving>
@@ -80,7 +80,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	25750	</weight>
-    <maxHealth>	1160	</maxHealth>
+    <maxHealth>	1320	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -1082,11 +1082,10 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	14000	</weight>
-      <maxLoad>	53560	</maxLoad>
-      <terrainResistance>	1.1 1.7 2.5	</terrainResistance>
+      <terrainResistance>	1 1.4 2.1	</terrainResistance>
       <brakeForce>	34500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	27	</rotationSpeed>
+      <rotationSpeed>	31	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.18	</vehicleMovement>
         <vehicleRotation>	0.18	</vehicleRotation>
@@ -1995,11 +1994,10 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	14000	</weight>
-      <maxLoad>	55500	</maxLoad>
       <terrainResistance>	1 1.4 2.1	</terrainResistance>
       <brakeForce>	34500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	30	</rotationSpeed>
+      <rotationSpeed>	34	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.16	</vehicleMovement>
         <vehicleRotation>	0.16	</vehicleRotation>
@@ -2905,10 +2903,6 @@
       <tags></tags>
       <level>	7	</level>
       <price>	22000	</price>
-      <unlocks>
-        <turret>	Turret_2_R170_IS_2_II	  <cost>	16600	</cost>
-        </turret>
-      </unlocks>
       <armor>
         <armor_1>	215	</armor_1>
         <armor_2>	205	</armor_2>
@@ -2942,24 +2936,24 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7500	</weight>
-      <maxHealth>	290	</maxHealth>
+      <maxHealth>	240	</maxHealth>
       <rotationSpeed>	24	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
         <maxRegenHealth>	75	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	330	</circularVisionRadius>
+      <circularVisionRadius>	340	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_85mm_D-5T_dualgun>
+        <_85mm_D_5TD>
           <maxAmmo>	68	</maxAmmo>
           <unlocks>
-            <gun>	_100mm_S34_dualgun	  <cost>	19600	</cost>
+            <gun>	_100mm_S_34D_IS_2_II	  <cost>	19600	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -2983,9 +2977,9 @@
             </armor_9>
             <gun>	30	</gun>
           </armor>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	6	</reloadTime>
-          <aimingTime>	2.4	</aimingTime>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	6.3	</reloadTime>
+          <aimingTime>	2.2	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 7 0.366894 7 0.430556 3 0.569444 3 0.633106 7 1 7	</maxPitch>
@@ -2996,12 +2990,18 @@
             <chargeTime>	2.5	</chargeTime>
             <shootImpulse>	200	</shootImpulse>
             <reloadLockTime>	3.0	</reloadLockTime>
-            <reloadTimes>	6 6	</reloadTimes>
+            <reloadTimes>	6.3 6.3	</reloadTimes>
             <rateTime>	2.5	</rateTime>
             <chargeThreshold>	0.5	</chargeThreshold>
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
           </dualGun>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+            <afterShot>	4.0	</afterShot>
+          </shotDispersionFactors>
+          <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
             <undamaged>	vehicles/russian/R170_IS_2_II/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R170_IS_2_II/crash/lod0/Gun_01.model	</destroyed>
@@ -3068,12 +3068,12 @@
             <density>	149.012 147.781	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_85mm_D-5T_dualgun>
-        <_100mm_S34_dualgun>
+        </_85mm_D_5TD>
+        <_100mm_S_34D_IS_2_II>
           <maxAmmo>	74	</maxAmmo>
           <unlocks>
-            <vehicle>	R171_IS_3_II	  <cost>	165400	</cost>
-            </vehicle>
+            <turret>	Turret_2_R170_IS_2_II	  <cost>	16600	</cost>
+            </turret>
           </unlocks>
           <armor>
             <armor_1>	220	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -3099,18 +3099,18 @@
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 7 0.333333 7 0.397222 4 0.444444 3 0.555556 3 0.602778 4 0.66667 7 1 7	</maxPitch>
+            <maxPitch>	0.00000 7.00 0.36689 7.00 0.43056 3.00 0.56944 3.00 0.63311 7.00 1.00000 7.00	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	9.2	</reloadTime>
-          <aimingTime>	2.7	</aimingTime>
+          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <reloadTime>	8.2	</reloadTime>
+          <aimingTime>	2.4	</aimingTime>
           <invisibilityFactorAtShot>	0.095	</invisibilityFactorAtShot>
           <multiGunEffects>	shot_dualgun_mainext_L shot_dualgun_mainext_R	</multiGunEffects>
           <dualGun>
             <chargeTime>	2.5	</chargeTime>
             <shootImpulse>	200	</shootImpulse>
             <reloadLockTime>	4.0	</reloadLockTime>
-            <reloadTimes>	9.5 9.5	</reloadTimes>
+            <reloadTimes>	8.2 8.2	</reloadTimes>
             <rateTime>	4	</rateTime>
             <chargeThreshold>	0.5	</chargeThreshold>
             <afterShotDelay>	1	</afterShotDelay>
@@ -3182,7 +3182,7 @@
             <density>	106.059 125.941	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_100mm_S34_dualgun>
+        </_100mm_S_34D_IS_2_II>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R170_IS_2_II/normal/lod0/Turret_01.model	</undamaged>
@@ -3985,6 +3985,10 @@
       <tags></tags>
       <level>	8	</level>
       <price>	32500	</price>
+      <unlocks>
+        <vehicle>	R171_IS_3_II	  <cost>	165400	</cost>
+        </vehicle>
+      </unlocks>
       <armor>
         <armor_1>	235	</armor_1>
         <armor_2>	220	</armor_2>
@@ -4018,7 +4022,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7500	</weight>
-      <maxHealth>	340	</maxHealth>
+      <maxHealth>	330	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -4032,7 +4036,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_85mm_D-5T_dualgun>
+        <_85mm_D_5TD>
           <maxAmmo>	68	</maxAmmo>
           <armor>
             <armor_1>	240	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -4070,7 +4074,7 @@
             <gun>	30	</gun>
           </armor>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	5.5	</reloadTime>
+          <reloadTime>	6.3	</reloadTime>
           <aimingTime>	2.2	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -22 1 -22	</minPitch>
@@ -4082,12 +4086,18 @@
             <chargeTime>	2	</chargeTime>
             <shootImpulse>	200	</shootImpulse>
             <reloadLockTime>	3.0	</reloadLockTime>
-            <reloadTimes>	5.5 5.5	</reloadTimes>
+            <reloadTimes>	6.3 6.3	</reloadTimes>
             <rateTime>	2.5	</rateTime>
             <chargeThreshold>	0.5	</chargeThreshold>
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
           </dualGun>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+            <afterShot>	4.0	</afterShot>
+          </shotDispersionFactors>
+          <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
             <undamaged>	vehicles/russian/R170_IS_2_II/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/russian/R170_IS_2_II/crash/lod0/Gun_03.model	</destroyed>
@@ -4154,8 +4164,8 @@
             <density>	149.012 147.781	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_85mm_D-5T_dualgun>
-        <_100mm_S34_dualgun>
+        </_85mm_D_5TD>
+        <_100mm_S_34D_IS_2_II>
           <maxAmmo>	74	</maxAmmo>
           <armor>
             <armor_1>	240	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -4195,18 +4205,18 @@
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 7 0.333333 7 0.397222 4 0.444444 3 0.555556 3 0.602778 4 0.66667 7 1 7	</maxPitch>
+            <maxPitch>	0.00000 7.00 0.36689 7.00 0.43056 3.00 0.56944 3.00 0.63311 7.00 1.00000 7.00	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	8.5	</reloadTime>
-          <aimingTime>	2.5	</aimingTime>
+          <reloadTime>	8	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.095	</invisibilityFactorAtShot>
           <multiGunEffects>	shot_dualgun_mainext_L shot_dualgun_mainext_R	</multiGunEffects>
           <dualGun>
             <chargeTime>	2	</chargeTime>
             <shootImpulse>	200	</shootImpulse>
             <reloadLockTime>	4.0	</reloadLockTime>
-            <reloadTimes>	8.5 8.5	</reloadTimes>
+            <reloadTimes>	8 8	</reloadTimes>
             <rateTime>	4	</rateTime>
             <chargeThreshold>	0.5	</chargeThreshold>
             <afterShotDelay>	1	</afterShotDelay>
@@ -4278,7 +4288,7 @@
             <density>	106.059 125.941	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_100mm_S34_dualgun>
+        </_100mm_S_34D_IS_2_II>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R170_IS_2_II/normal/lod0/Turret_02.model	</undamaged>
@@ -5056,47 +5066,42 @@
     </Turret_2_R170_IS_2_II>
   </turrets0>
   <engines>
-    <V-12-5M1>	shared	  <unlocks>
-        <engine>	V-12-6M1	  <cost>	25900	</cost>
+    <V_12_5M1>	shared	  <unlocks>
+        <engine>	V_12_6M1	  <cost>	25900	</cost>
         </engine>
       </unlocks>
-    </V-12-5M1>
-    <V-12-6M1>	shared	</V-12-6M1>
+    </V_12_5M1>
+    <V_12_6M1>	shared	</V_12_6M1>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <_10RK>	shared	  <unlocks>
-        <radio>	_12RT	  <cost>	5600	</cost>
-        </radio>
-      </unlocks>
-    </_10RK>
     <_12RT>	shared	</_12RT>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <V-12-5M1>
-          <smplEnginePower>	680	</smplEnginePower>
-          <smplFwMaxSpeed>	34	</smplFwMaxSpeed>
-        </V-12-5M1>
-        <V-12-6M1>
+        <V_12_5M1>
+          <smplEnginePower>	700	</smplEnginePower>
+          <smplFwMaxSpeed>	38	</smplFwMaxSpeed>
+        </V_12_5M1>
+        <V_12_6M1>
           <smplEnginePower>	750	</smplEnginePower>
-          <smplFwMaxSpeed>	34	</smplFwMaxSpeed>
-        </V-12-6M1>
+          <smplFwMaxSpeed>	38	</smplFwMaxSpeed>
+        </V_12_6M1>
       </engines>
       <chassis>
         <Chassis_R170_IS_2_II>
           <grounds>
             <soft>
-              <rollingFriction>	0.20125	</rollingFriction>
+              <rollingFriction>	0.16905	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.13685	</rollingFriction>
+              <rollingFriction>	0.1127	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
+              <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_R170_IS_2_II>

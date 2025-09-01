@@ -214,7 +214,6 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	15000	</weight>
-      <maxLoad>	45000	</maxLoad>
       <terrainResistance>	1.2 1.5 3	</terrainResistance>
       <brakeForce>	40000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -1053,7 +1052,8 @@
           <armor>
             <gun>	20	</gun>
           </armor>
-          <pitchLimits>	-90 90	  <minPitch>	0 -14 1 -14	</minPitch>
+          <pitchLimits>
+            <minPitch>	0 -14 1 -14	</minPitch>
             <maxPitch>	0 5.75 0.072222 5.75 0.086111 7 0.386111 7 0.4 2.9 0.6 2.9 0.613889 7 0.913889 7 0.927778 5.75 1 5.75	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>

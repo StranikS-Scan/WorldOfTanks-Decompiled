@@ -10,7 +10,7 @@ from helpers import dependency
 import BattleReplay
 from ReplayEvents import g_replayEvents
 from gui.Scaleform.daapi.view.common.battle_royale.params import getShortListParameters
-from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import getHotKeyListByIndex
+from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import getHotKeyInfoListByIndex
 from battle_royale.gui.Scaleform.daapi.view.common.veh_modules_config_cmp import VehicleModulesConfiguratorCmp
 from gui.Scaleform.daapi.view.meta.BattleVehicleConfiguratorMeta import BattleVehicleConfiguratorMeta
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
@@ -241,8 +241,7 @@ class BattleVehicleConfigurator(BattleVehicleConfiguratorMeta, IProgressionListe
         module = self.__getModuleItem(intCD)
         return {'header': getTreeModuleHeader(module),
          'parameters': getShortListParameters(module, self.__getProgressionVehicle(), self.__getInstalledOnVehicleAnalogByIntCD(intCD)),
-         'hotKeysVKeys': getHotKeyListByIndex(index),
-         'hotKeys': getHotKeyListByIndex(index),
+         'hotKeys': getHotKeyInfoListByIndex(index),
          'module': {'icon': icon,
                     'intCD': intCD,
                     'available': True}}

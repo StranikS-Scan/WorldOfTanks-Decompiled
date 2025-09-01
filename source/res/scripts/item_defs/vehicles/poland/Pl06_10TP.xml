@@ -15,7 +15,7 @@
     <moving>	0.28	</moving>
     <still>	0.28	</still>
     <camouflageBonus>	0.03	</camouflageBonus>
-    <firePenalty>	0.432	</firePenalty>
+    <firePenalty>	0.42	</firePenalty>
   </invisibility>
   <optDevsOverrides>
     <camouflageNet>
@@ -1226,8 +1226,7 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	4000	</weight>
-      <maxLoad>	12700	</maxLoad>
-      <terrainResistance>	0.9 1.1 2.7	</terrainResistance>
+      <terrainResistance>	0.8 1 2.3	</terrainResistance>
       <brakeForce>	31000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	50	</rotationSpeed>
@@ -2040,7 +2039,6 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	4000	</weight>
-      <maxLoad>	14000	</maxLoad>
       <terrainResistance>	0.8 1 2.3	</terrainResistance>
       <brakeForce>	31000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -3461,11 +3459,6 @@
     <Small>	shared	</Small>
   </fuelTanks>
   <radios>
-    <N2_M>	shared	  <unlocks>
-        <radio>	N2_S	  <cost>	100	</cost>
-        </radio>
-      </unlocks>
-    </N2_M>
     <N2_S>	shared	</N2_S>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
@@ -3486,13 +3479,13 @@
           <axleCount>	5	</axleCount>
           <grounds>
             <soft>
-              <rollingFriction>	0.21735	</rollingFriction>
+              <rollingFriction>	0.18515	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.08855	</rollingFriction>
+              <rollingFriction>	0.0805	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.07245	</rollingFriction>
+              <rollingFriction>	0.0644	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_Pl06_10TP>

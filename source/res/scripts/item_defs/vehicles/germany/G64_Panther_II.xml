@@ -8,7 +8,7 @@
     <loader></loader>
   </crew>
   <supplySlots>	2 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_MT_sniper	</postProgressionTree>
+  <postProgressionTree>	role_MT_assault	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
     <forward>	55	</forward>
@@ -45,23 +45,23 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	100	</armor_1>
-      <armor_2>	60	</armor_2>
-      <armor_3>	60	</armor_3>
+      <armor_1>	120	</armor_1>
+      <armor_2>	100	</armor_2>
+      <armor_3>	80	</armor_3>
       <armor_4>	40	</armor_4>
       <armor_5>	25	</armor_5>
       <armor_6>	30	</armor_6>
       <armor_7>	16	</armor_7>
       <armor_8>	0	</armor_8>
       <armor_10>	16	</armor_10>
-      <armor_11>	60	</armor_11>
+      <armor_11>	70	</armor_11>
       <armor_12>	25	</armor_12>
       <armor_13>	40	</armor_13>
       <armor_14>	25	</armor_14>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	25490	</weight>
-    <maxHealth>	1120	</maxHealth>
+    <maxHealth>	1320	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -1115,14 +1115,14 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_Panther_II>
-      <userString>	#germany_vehicles:Chassis_Panther_II	</userString>
-      <shortUserString>	#germany_vehicles:Chassis_Panther_II_short	</shortUserString>
+    <Chassis_G64_Panther_II>
+      <userString>	#germany_vehicles:Chassis_G64_Panther_II	</userString>
+      <shortUserString>	#germany_vehicles:Chassis_G64_Panther_II_short	</shortUserString>
       <tags></tags>
       <level>	7	</level>
       <price>	17400	</price>
       <unlocks>
-        <chassis>	Chassis_Panther_II_2	  <cost>	14100	</cost>
+        <chassis>	Chassis_G64_Panther_II_2	  <cost>	14100	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1130,11 +1130,10 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	16500	</weight>
-      <maxLoad>	53000	</maxLoad>
-      <terrainResistance>	0.9 1.1 2.3	</terrainResistance>
+      <terrainResistance>	0.8 1 2.1	</terrainResistance>
       <brakeForce>	48000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	32	</rotationSpeed>
+      <rotationSpeed>	35	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.18	</vehicleMovement>
         <vehicleRotation>	0.18	</vehicleRotation>
@@ -2082,10 +2081,10 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_Panther_II>
-    <Chassis_Panther_II_2>
-      <userString>	#germany_vehicles:Chassis_Panther_II_2	</userString>
-      <shortUserString>	#germany_vehicles:Chassis_Panther_II_2_short	</shortUserString>
+    </Chassis_G64_Panther_II>
+    <Chassis_G64_Panther_II_2>
+      <userString>	#germany_vehicles:Chassis_G64_Panther_II_2	</userString>
+      <shortUserString>	#germany_vehicles:Chassis_G64_Panther_II_2_short	</shortUserString>
       <tags></tags>
       <level>	8	</level>
       <price>	30350	</price>
@@ -2094,11 +2093,10 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	16500	</weight>
-      <maxLoad>	56000	</maxLoad>
       <terrainResistance>	0.8 1 2.1	</terrainResistance>
       <brakeForce>	53000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	36	</rotationSpeed>
+      <rotationSpeed>	40	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.16	</vehicleMovement>
         <vehicleRotation>	0.16	</vehicleRotation>
@@ -3044,17 +3042,21 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_Panther_II_2>
+    </Chassis_G64_Panther_II_2>
   </chassis>
   <turrets0>
-    <Turret_1_Panther_II>
-      <userString>	#germany_vehicles:Turret_1_Panther_II	</userString>
-      <shortUserString>	#germany_vehicles:Turret_1_Panther_II_short	</shortUserString>
+    <Turret_1_G64_Panther_II>
+      <userString>	#germany_vehicles:Turret_1_G64_Panther_II	</userString>
+      <shortUserString>	#germany_vehicles:Turret_1_G64_Panther_II_short	</shortUserString>
       <tags></tags>
       <level>	7	</level>
       <price>	22100	</price>
+      <unlocks>
+        <turret>	Turret_2_G64_Panther_II	  <cost>	15100	</cost>
+        </turret>
+      </unlocks>
       <armor>
-        <armor_1>	120	</armor_1>
+        <armor_1>	160	</armor_1>
         <armor_2>	60	</armor_2>
         <armor_3>	60	</armor_3>
         <armor_4>	60	</armor_4>
@@ -3069,7 +3071,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7500	</weight>
-      <maxHealth>	280	</maxHealth>
+      <maxHealth>	240	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -3083,37 +3085,37 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_KwK_L70>	shared	  <maxAmmo>	95	</maxAmmo>
-          <reloadTime>	4	</reloadTime>
-          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+        <_75mm_Kw_K_42_L_70_II>	shared	  <maxAmmo>	95	</maxAmmo>
+          <reloadTime>	3.2	</reloadTime>
+          <shotDispersionRadius>	0.3	</shotDispersionRadius>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <unlocks>
-            <turret>	Turret_2_Panther_II	  <cost>	15100	</cost>
-            </turret>
-            <gun>	_75mm_KwK45_L100	  <cost>	16100	</cost>
-            </gun>
-            <gun>	_105mm_StuH42_L28Pz	  <cost>	3800	</cost>
-            </gun>
-          </unlocks>
           <armor>
-            <armor_1>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_3>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
+            <armor_5>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	115	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_7>
+            <armor_8>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_8>
             <gun>	20	</gun>
           </armor>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.1	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 0.5 8 1 8	</maxPitch>
+            <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
@@ -3199,224 +3201,7 @@
             <density>	105.783 110.7	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_75mm_KwK_L70>
-        <_75mm_KwK45_L100>	shared	  <maxAmmo>	80	</maxAmmo>
-          <reloadTime>	4.4	</reloadTime>
-          <shotDispersionRadius>	0.32	</shotDispersionRadius>
-          <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <armor>
-            <armor_1>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	20	</gun>
-          </armor>
-          <aimingTime>	2.3	</aimingTime>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 0.5 8 1 8	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <models>
-            <undamaged>	vehicles/german/G64_Panther_II/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/german/G64_Panther_II/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/german/G64_Panther_II/crash/lod0/Gun_02.model	</exploded>
-            <sets>
-              <Halloween_3Dst>
-                <undamaged>	vehicles/german/G64_Panther_II/_skins/Halloween_3Dst/normal/lod0/Gun_02.model	</undamaged>
-                <destroyed>	vehicles/german/G64_Panther_II/_skins/Halloween_3Dst/crash/lod0/Gun_02.model	</destroyed>
-                <exploded>	vehicles/german/G64_Panther_II/_skins/Halloween_3Dst/crash/lod0/Gun_02.model	</exploded>
-              </Halloween_3Dst>
-            </sets>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G64_Panther_II/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G64_Panther_II/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.000001 -0.002056 3.32176	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.192154 0.192154	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.000001 -0.002056 3.32176	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	-0.02659 1.9997 0.426331	</position>
-              <rotation>	0.662876 -0.000031 3.14154	</rotation>
-              <scale>	2.27034 1.63214 2.27034	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.428237	</clipAngle>
-              <anchorShift>	0.745686	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.000044 2.26883 0.768014	</position>
-              <rotation>	1.34335 -0.000355 3.14123	</rotation>
-              <scale>	1.22521 0.837645 1.22521	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.739794	</clipAngle>
-              <anchorShift>	0.695184	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.000002 -0.005112 6.07261	</rayStart>
-              <rayEnd>	0.000002 -0.005112 6.50461	</rayEnd>
-              <rayUp>	0.07 0 0	</rayUp>
-              <size>	0.432	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.8 0.8 0.000000 0.000000	</tiling>
-            <density>	85.1214 102.595	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_75mm_KwK45_L100>
-        <_105mm_StuH42_L28Pz>	shared	  <maxAmmo>	50	</maxAmmo>
-          <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <armor>
-            <armor_1>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	35	</gun>
-          </armor>
-          <shotDispersionRadius>	0.55	</shotDispersionRadius>
-          <aimingTime>	2.3	</aimingTime>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 0.5 8 1 8	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <models>
-            <undamaged>	vehicles/german/G64_Panther_II/normal/lod0/Gun_11.model	</undamaged>
-            <destroyed>	vehicles/german/G64_Panther_II/crash/lod0/Gun_11.model	</destroyed>
-            <exploded>	vehicles/german/G64_Panther_II/crash/lod0/Gun_11.model	</exploded>
-            <sets>
-              <Halloween_3Dst>
-                <undamaged>	vehicles/german/G64_Panther_II/_skins/Halloween_3Dst/normal/lod0/Gun_11.model	</undamaged>
-                <destroyed>	vehicles/german/G64_Panther_II/_skins/Halloween_3Dst/crash/lod0/Gun_11.model	</destroyed>
-                <exploded>	vehicles/german/G64_Panther_II/_skins/Halloween_3Dst/crash/lod0/Gun_11.model	</exploded>
-              </Halloween_3Dst>
-            </sets>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G64_Panther_II/collision/Gun_11.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G64_Panther_II/collision_client/Gun_11.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_large_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000031 -0.009836 0.82513	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.192152 0.192152	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000031 -0.009836 0.82513	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	-0.02659 1.9997 0.426331	</position>
-              <rotation>	0.662876 -0.000031 3.14154	</rotation>
-              <scale>	2.27034 1.63214 2.27034	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.428237	</clipAngle>
-              <anchorShift>	0.745686	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.000044 2.26883 0.768014	</position>
-              <rotation>	1.34335 -0.000355 3.14123	</rotation>
-              <scale>	1.22521 0.837645 1.22521	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.739794	</clipAngle>
-              <anchorShift>	0.695184	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.000062 -0.019671 0.881506	</rayStart>
-              <rayEnd>	-0.000062 -0.019671 1.313506	</rayEnd>
-              <rayUp>	0.097 0 0	</rayUp>
-              <size>	0.432	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.8 0.8 0.000000 0.000000	</tiling>
-            <density>	95.8976 91.9221	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_105mm_StuH42_L28Pz>
+        </_75mm_Kw_K_42_L_70_II>
       </guns>
       <models>
         <undamaged>	vehicles/german/G64_Panther_II/normal/lod0/Turret_01.model	</undamaged>
@@ -3859,22 +3644,20 @@
         <density>	114.635 114.509	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_1_Panther_II>
-    <Turret_2_Panther_II>
-      <userString>	#germany_vehicles:Turret_2_Panther_II	</userString>
+    </Turret_1_G64_Panther_II>
+    <Turret_2_G64_Panther_II>
+      <userString>	#germany_vehicles:Turret_2_G64_Panther_II	</userString>
       <tags></tags>
       <level>	8	</level>
       <price>	28550	</price>
       <unlocks>
-        <vehicle>	G54_E-50	  <cost>	161790	</cost>
-        </vehicle>
-        <gun>	_88mm_KwK_43_L71	  <cost>	16500	</cost>
+        <gun>	_88mm_Kw_K_43_L_71_II	  <cost>	20000	</cost>
         </gun>
       </unlocks>
       <armor>
-        <armor_1>	120	</armor_1>
-        <armor_2>	100	</armor_2>
-        <armor_3>	60	</armor_3>
+        <armor_1>	180	</armor_1>
+        <armor_2>	120	</armor_2>
+        <armor_3>	80	</armor_3>
         <armor_4>	60	</armor_4>
         <armor_5>	40	</armor_5>
         <armor_6>	40	</armor_6>
@@ -3886,7 +3669,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_3	</primaryArmor>
       <weight>	7745	</weight>
-      <maxHealth>	380	</maxHealth>
+      <maxHealth>	330	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -3901,16 +3684,16 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.122	</invisibilityFactor>
       <guns>
-        <_75mm_KwK_L70>	shared	  <maxAmmo>	95	</maxAmmo>
-          <reloadTime>	3.8	</reloadTime>
-          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+        <_75mm_Kw_K_42_L_70_II>	shared	  <maxAmmo>	95	</maxAmmo>
+          <reloadTime>	3	</reloadTime>
+          <shotDispersionRadius>	0.3	</shotDispersionRadius>
           <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
-            <armor_1>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
@@ -3922,12 +3705,12 @@
             </armor_5>
             <gun>	20	</gun>
           </armor>
-          <aimingTime>	2.1	</aimingTime>
+          <aimingTime>	1.9	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 0.5 8 1 8	</maxPitch>
+            <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
-          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
             <undamaged>	vehicles/german/G64_Panther_II/normal/lod0/Gun_04.model	</undamaged>
@@ -3989,199 +3772,21 @@
             <density>	105.783 110.7	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_75mm_KwK_L70>
-        <_75mm_KwK45_L100>	shared	  <maxAmmo>	80	</maxAmmo>
-          <reloadTime>	4.2	</reloadTime>
-          <shotDispersionRadius>	0.32	</shotDispersionRadius>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <armor>
-            <armor_1>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <gun>	20	</gun>
-          </armor>
-          <aimingTime>	2.1	</aimingTime>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 0.5 8 1 8	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <models>
-            <undamaged>	vehicles/german/G64_Panther_II/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/german/G64_Panther_II/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/german/G64_Panther_II/crash/lod0/Gun_05.model	</exploded>
-            <sets>
-              <Halloween_3Dst>
-                <undamaged>	vehicles/german/G64_Panther_II/_skins/Halloween_3Dst/normal/lod0/Gun_05.model	</undamaged>
-                <destroyed>	vehicles/german/G64_Panther_II/_skins/Halloween_3Dst/crash/lod0/Gun_05.model	</destroyed>
-                <exploded>	vehicles/german/G64_Panther_II/_skins/Halloween_3Dst/crash/lod0/Gun_05.model	</exploded>
-              </Halloween_3Dst>
-            </sets>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G64_Panther_II/collision/Gun_05.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G64_Panther_II/collision_client/Gun_05.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.000032 -0.002056 3.76782	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.227492 0.227493	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.000032 -0.002056 3.76782	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.000064 -0.004113 7.0992	</rayStart>
-              <rayEnd>	0.000064 -0.004113 7.5152	</rayEnd>
-              <rayUp>	0.07 0 0	</rayUp>
-              <size>	0.416	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.8 0.8 0.000000 0.000000	</tiling>
-            <density>	85.1214 102.595	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_75mm_KwK45_L100>
-        <_105mm_StuH42_L28Pz>	shared	  <maxAmmo>	50	</maxAmmo>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <armor>
-            <armor_1>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <gun>	35	</gun>
-          </armor>
-          <shotDispersionRadius>	0.55	</shotDispersionRadius>
-          <aimingTime>	2.1	</aimingTime>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 0.5 8 1 8	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
-          <reloadTime>	7.6	</reloadTime>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <models>
-            <undamaged>	vehicles/german/G64_Panther_II/normal/lod0/Gun_12.model	</undamaged>
-            <destroyed>	vehicles/german/G64_Panther_II/crash/lod0/Gun_12.model	</destroyed>
-            <exploded>	vehicles/german/G64_Panther_II/crash/lod0/Gun_12.model	</exploded>
-            <sets>
-              <Halloween_3Dst>
-                <undamaged>	vehicles/german/G64_Panther_II/_skins/Halloween_3Dst/normal/lod0/Gun_12.model	</undamaged>
-                <destroyed>	vehicles/german/G64_Panther_II/_skins/Halloween_3Dst/crash/lod0/Gun_12.model	</destroyed>
-                <exploded>	vehicles/german/G64_Panther_II/_skins/Halloween_3Dst/crash/lod0/Gun_12.model	</exploded>
-              </Halloween_3Dst>
-            </sets>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G64_Panther_II/collision/Gun_12.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G64_Panther_II/collision_client/Gun_12.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_large_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.000533 -0.009836 1.70227	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.227491 0.227492	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.000533 -0.009836 1.27487	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.001066 -0.021671 1.81046	</rayStart>
-              <rayEnd>	0.001066 -0.021671 2.22646	</rayEnd>
-              <rayUp>	0.095 0 0	</rayUp>
-              <size>	0.416	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.8 0.8 0.000000 0.000000	</tiling>
-            <density>	95.8976 91.9221	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_105mm_StuH42_L28Pz>
-        <_88mm_KwK_43_L71>	shared	  <maxAmmo>	60	</maxAmmo>
+        </_75mm_Kw_K_42_L_70_II>
+        <_88mm_Kw_K_43_L_71_II>	shared	  <maxAmmo>	60	</maxAmmo>
           <unlocks>
-            <gun>	_88mm_KwK_L100	  <cost>	43500	</cost>
-            </gun>
+            <vehicle>	G54_E-50	  <cost>	161790	</cost>
+            </vehicle>
           </unlocks>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <reloadTime>	7.3	</reloadTime>
+          <reloadTime>	8	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
-            <armor_1>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
@@ -4193,11 +3798,11 @@
             </armor_5>
             <gun>	35	</gun>
           </armor>
-          <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <aimingTime>	2.7	</aimingTime>
+          <shotDispersionRadius>	0.3	</shotDispersionRadius>
+          <aimingTime>	2.2	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 0.5 8 1 8	</maxPitch>
+            <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <effects>	shot_main	</effects>
@@ -4260,95 +3865,7 @@
             <density>	129.476 101.926	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_88mm_KwK_43_L71>
-        <_88mm_KwK_L100>	shared	  <maxAmmo>	60	</maxAmmo>
-          <shotDispersionRadius>	0.3	</shotDispersionRadius>
-          <reloadTime>	8	</reloadTime>
-          <aimingTime>	2.2	</aimingTime>
-          <invisibilityFactorAtShot>	0.188	</invisibilityFactorAtShot>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 0.5 8 1 8	</maxPitch>
-          </pitchLimits>
-          <armor>
-            <armor_1>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <gun>	35	</gun>
-          </armor>
-          <models>
-            <undamaged>	vehicles/german/G64_Panther_II/normal/lod0/Gun_13.model	</undamaged>
-            <destroyed>	vehicles/german/G64_Panther_II/crash/lod0/Gun_13.model	</destroyed>
-            <exploded>	vehicles/german/G64_Panther_II/crash/lod0/Gun_13.model	</exploded>
-            <sets>
-              <Halloween_3Dst>
-                <undamaged>	vehicles/german/G64_Panther_II/_skins/Halloween_3Dst/normal/lod0/Gun_13.model	</undamaged>
-                <destroyed>	vehicles/german/G64_Panther_II/_skins/Halloween_3Dst/crash/lod0/Gun_13.model	</destroyed>
-                <exploded>	vehicles/german/G64_Panther_II/_skins/Halloween_3Dst/crash/lod0/Gun_13.model	</exploded>
-              </Halloween_3Dst>
-            </sets>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G64_Panther_II/collision/Gun_13.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G64_Panther_II/collision_client/Gun_13.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_main	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.000468 -0.010491 3.87867	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.227492 0.227493	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.000468 -0.010491 3.87867	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.000936 -0.020983 7.413	</rayStart>
-              <rayEnd>	0.000936 -0.020983 7.829	</rayEnd>
-              <rayUp>	0.078 0 0	</rayUp>
-              <size>	0.416	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.8 0.8 0.000000 0.000000	</tiling>
-            <density>	83.5948 84.5528	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_88mm_KwK_L100>
+        </_88mm_Kw_K_43_L_71_II>
       </guns>
       <models>
         <undamaged>	vehicles/german/G64_Panther_II/normal/lod0/Turret_02.model	</undamaged>
@@ -4813,59 +4330,36 @@
         <density>	106.26 105.786	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_2_Panther_II>
+    </Turret_2_G64_Panther_II>
   </turrets0>
   <engines>
-    <Maybach_HL_210_TRM_P30>	shared	  <unlocks>
-        <engine>	Maybach_HL_230_TRM_P30	  <cost>	15800	</cost>
+    <Maybach_HL_210_TRM_P30_II>	shared	  <unlocks>
+        <engine>	Maybach_HL_230_TRM_P30_II	  <cost>	15800	</cost>
         </engine>
       </unlocks>
-    </Maybach_HL_210_TRM_P30>
-    <Maybach_HL_230_TRM_P30>	shared	</Maybach_HL_230_TRM_P30>
+    </Maybach_HL_210_TRM_P30_II>
+    <Maybach_HL_230_TRM_P30_II>	shared	</Maybach_HL_230_TRM_P30_II>
   </engines>
   <fuelTanks>
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <FuG5>	shared	  <unlocks>
-        <radio>	FuG7	  <cost>	1360	</cost>
-        </radio>
-      </unlocks>
-    </FuG5>
-    <FuG7>	shared	  <unlocks>
-        <radio>	FuG12	  <cost>	7200	</cost>
-        </radio>
-      </unlocks>
-    </FuG7>
     <FuG12>	shared	</FuG12>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Maybach_HL_210_TRM_P30>
-          <smplEnginePower>	687.2327	</smplEnginePower>
+        <Maybach_HL_210_TRM_P30_II>
+          <smplEnginePower>	750	</smplEnginePower>
           <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
-        </Maybach_HL_210_TRM_P30>
-        <Maybach_HL_230_TRM_P30>
-          <smplEnginePower>	740.0968	</smplEnginePower>
+        </Maybach_HL_210_TRM_P30_II>
+        <Maybach_HL_230_TRM_P30_II>
+          <smplEnginePower>	800	</smplEnginePower>
           <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
-        </Maybach_HL_230_TRM_P30>
+        </Maybach_HL_230_TRM_P30_II>
       </engines>
       <chassis>
-        <Chassis_Panther_II>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.18515	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.08855	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.07245	</rollingFriction>
-            </firm>
-          </grounds>
-        </Chassis_Panther_II>
-        <Chassis_Panther_II_2>
+        <Chassis_G64_Panther_II>
           <grounds>
             <soft>
               <rollingFriction>	0.16905	</rollingFriction>
@@ -4877,7 +4371,20 @@
               <rollingFriction>	0.0644	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_Panther_II_2>
+        </Chassis_G64_Panther_II>
+        <Chassis_G64_Panther_II_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.16905	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.0805	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0644	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_G64_Panther_II_2>
       </chassis>
     </detailed>
   </physics>

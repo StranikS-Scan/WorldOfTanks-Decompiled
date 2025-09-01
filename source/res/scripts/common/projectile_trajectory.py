@@ -40,6 +40,6 @@ try:
 except AttributeError:
     pass
 
-def getShotAngles(vehTypeDescr, vehMatrix, point, overrideGunPosition=None, overrideShotIdx=None):
-    shot = vehTypeDescr.getShot(overrideShotIdx)
+def getShotAngles(vehTypeDescr, vehMatrix, point, overrideGunPosition=None, overrideShotDescr=None):
+    shot = overrideShotDescr or vehTypeDescr.shot
     return BigWorld.getAimingAngles(point, vehMatrix, vehTypeDescr.chassis.hullPosition + vehTypeDescr.hull.turretPositions[0], vehTypeDescr.activeGunShotPosition if overrideGunPosition is None else overrideGunPosition, shot.speed, shot.gravity)

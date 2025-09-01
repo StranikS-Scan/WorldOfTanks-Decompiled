@@ -14,7 +14,6 @@ class HANGAR_CONSTS(object):
     DAILY_QUEST = 'dailyQuest'
     ALERT_MESSAGE = 'alertMessage'
     CAROUSEL = 'carousel'
-    COMP7_MODIFIERS = 'comp7Modifiers'
     COMP7_TOURNAMENT_BANNER = 'comp7TournamentBanner'
     COMP7_GRAND_TOURNAMENT_BANNER = 'comp7GrandTournamentBanner'
     MINI_CLIENT = 'miniClient'
@@ -23,5 +22,3 @@ class HANGAR_CONSTS(object):
     BATTLE_ROYALE_TOURNAMENT_BANNER = 'battleRoyaleTournamentBanner'
     HEADER_WIDGET = 'headerWidget'
     HEADER_QUEST_FLAGS = 'headerQuestFlags'
-    STRENGTHS_WEAKNESSES = 'StrengthsWeaknesses'
-    EVENT_ENTRANCE_POINT = 'eventEntrancePoint'

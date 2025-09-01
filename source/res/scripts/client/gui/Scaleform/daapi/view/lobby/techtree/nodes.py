@@ -5,7 +5,6 @@ from gui.Scaleform.daapi.view.lobby.techtree.settings import DEFAULT_UNLOCK_PROP
 from gui.shared.formatters import text_styles
 from gui.shared.formatters import getItemPricesVO, getItemRestorePricesVO, getItemUnlockPricesVO
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
-from gui.shared.money import MONEY_UNDEFINED
 from helpers.time_utils import getCurrentTimestamp
 from helpers import i18n, dependency
 from skeletons.gui.game_control import ITradeInController
@@ -29,9 +28,9 @@ class BaseNode(object):
 
 
 class ExposedNode(object):
-    __slots__ = ('__nodeCD', '__earnedXP', '__state', '__unlockProps', '__bpfProps', '__guiPrice', '__displayInfo')
+    __slots__ = ('__nodeCD', '__earnedXP', '__state', '__unlockProps', '__bpfProps', '__displayInfo')
 
-    def __init__(self, nodeCD, earnedXP, state, displayInfo, unlockProps=None, bpfProps=None, price=None):
+    def __init__(self, nodeCD, earnedXP, state, displayInfo, unlockProps=None, bpfProps=None):
         super(ExposedNode, self).__init__()
         self.__nodeCD = nodeCD
         self.__earnedXP = earnedXP
@@ -39,13 +38,11 @@ class ExposedNode(object):
         self.__displayInfo = displayInfo
         self.__unlockProps = unlockProps or DEFAULT_UNLOCK_PROPS
         self.__bpfProps = bpfProps
-        self.__guiPrice = price or MONEY_UNDEFINED
 
     def clear(self):
         self.__displayInfo = None
         self.__unlockProps = DEFAULT_UNLOCK_PROPS
         self.__bpfProps = None
-        self.__guiPrice = MONEY_UNDEFINED
         return
 
     def getNodeCD(self):
@@ -53,6 +50,9 @@ class ExposedNode(object):
 
     def getEarnedXP(self):
         return self.__earnedXP
+
+    def setEarnedXP(self, xp):
+        self.__earnedXP = xp
 
     def getState(self):
         return self.__state
@@ -80,9 +80,6 @@ class ExposedNode(object):
 
     def setBpfProps(self, bpfProps):
         self.__bpfProps = bpfProps
-
-    def setGuiPrice(self, price):
-        self.__guiPrice = price
 
     def getTags(self):
         raise NotImplementedError
@@ -156,14 +153,17 @@ class RealNode(ExposedNode):
     __eventsCache = dependency.descriptor(IEventsCache)
     __tradeIn = dependency.descriptor(ITradeInController)
 
-    def __init__(self, nodeCD, item, earnedXP, state, displayInfo, unlockProps=None, bpfProps=None, price=None):
-        super(RealNode, self).__init__(nodeCD, earnedXP, state, displayInfo, unlockProps=unlockProps, bpfProps=bpfProps, price=price)
+    def __init__(self, nodeCD, item, earnedXP, state, displayInfo, unlockProps=None, bpfProps=None):
+        super(RealNode, self).__init__(nodeCD, earnedXP, state, displayInfo, unlockProps=unlockProps, bpfProps=bpfProps)
         self.__item = item
 
     def clear(self):
         super(RealNode, self).clear()
         self.__item = None
         return
+
+    def getItem(self):
+        return self.__item
 
     def getTags(self):
         return self.__item.tags
@@ -265,7 +265,7 @@ class AnnouncementNode(ExposedNode):
     __slots__ = ('__announcementInfo',)
 
     def __init__(self, nodeCD, info, state, displayInfo):
-        super(AnnouncementNode, self).__init__(nodeCD, 0, state, displayInfo, unlockProps=None, bpfProps=None, price=None)
+        super(AnnouncementNode, self).__init__(nodeCD, 0, state, displayInfo, unlockProps=None, bpfProps=None)
         self.__announcementInfo = info
         return
 

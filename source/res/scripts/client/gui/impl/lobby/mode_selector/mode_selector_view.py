@@ -5,7 +5,7 @@ from functools import partial
 import typing
 import adisp
 from constants import QUEUE_TYPE
-from frameworks.wulf import ViewSettings, ViewFlags, WindowLayer, WindowStatus, ViewStatus
+from frameworks.wulf import ViewSettings, ViewFlags, WindowLayer, ViewStatus
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
@@ -18,16 +18,13 @@ from gui.impl.gen.view_models.views.lobby.mode_selector.tooltips.mode_selector_t
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_completed_tooltip_view import BattlePassCompletedTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view import BattlePassInProgressTooltipView
 from gui.impl.lobby.common.view_mixins import LobbyHeaderVisibility
-from gui.impl.lobby.mode_selector.battle_session_view import BattleSessionView
 from gui.impl.lobby.mode_selector.items import saveBattlePassStateForItems
 from gui.impl.lobby.mode_selector.mode_selector_data_provider import ModeSelectorDataProvider
-from gui.impl.lobby.mode_selector.popovers.random_battle_popover import RandomBattlePopover
 from gui.impl.lobby.mode_selector.sound_constants import MODE_SELECTOR_SOUND_SPACE
 from gui.impl.lobby.mode_selector.tooltips.simply_format_tooltip import SimplyFormatTooltipView
 from gui.impl.lobby.winback.popovers.winback_leave_mode_popover_view import WinbackLeaveModePopoverView
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.tooltip_window import SimpleTooltipContent
-from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.events import FullscreenModeSelectorEvent, ModeSubSelectorEvent, LoadViewEvent
 from gui.shared.system_factory import registerModeSelectorTooltips, collectModeSelectorTooltips
@@ -49,7 +46,6 @@ _R_SIMPLE_TOOLTIP = R.views.common.tooltip_window.simple_tooltip_content.SimpleT
 _R_BACKPORT_TOOLTIP = R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent
 _SIMPLE_TOOLTIPS_KEY = 'simpleTooltipIds'
 _CONTENT_TOOLTIPS_KEY = 'contentTooltipsMap'
-_CLOSE_LAYERS = (WindowLayer.SUB_VIEW, WindowLayer.TOP_SUB_VIEW)
 _SIMPLE_TOOLTIP_IDS = [ModeSelectorTooltipsConstants.RANKED_CALENDAR_DAY_INFO_TOOLTIP,
  ModeSelectorTooltipsConstants.RANKED_STEP_TOOLTIP,
  ModeSelectorTooltipsConstants.RANKED_BATTLES_LEAGUE_TOOLTIP,
@@ -67,7 +63,6 @@ def _getTooltipByContentIdMap():
 registerModeSelectorTooltips(_SIMPLE_TOOLTIP_IDS, _getTooltipByContentIdMap())
 
 class ModeSelectorView(ViewImpl, LobbyHeaderVisibility):
-    __slots__ = ('__blur', '__dataProvider', '__prevAppBackgroundAlpha', '__isClickProcessing', '__isContentVisible', '__prevOptimizationEnabled', '__isGraphicsRestored', '__tooltipConstants', '__subSelectorCallback')
     _COMMON_SOUND_SPACE = MODE_SELECTOR_SOUND_SPACE
     __appLoader = dependency.descriptor(IAppLoader)
     __lobbyContext = dependency.descriptor(ILobbyContext)
@@ -81,7 +76,7 @@ class ModeSelectorView(ViewImpl, LobbyHeaderVisibility):
         self.__dataProvider = provider if provider else ModeSelectorDataProvider()
         self.__blur = None
         self.__prevOptimizationEnabled = False
-        self.__prevAppBackgroundAlpha = 0.0
+        self.__savedBackgroundAlpha = 0.0
         self.__isClickProcessing = False
         self.__isGraphicsRestored = False
         self.__subSelectorCallback = subSelectorCallback
@@ -146,11 +141,12 @@ class ModeSelectorView(ViewImpl, LobbyHeaderVisibility):
             return tooltipClass() if tooltipClass else None
 
     def createPopOverContent(self, event):
-        if event.contentID == R.views.lobby.mode_selector.popovers.RandomBattlePopover():
+        if event.contentID == R.views.lobby.winback.popovers.WinbackLeaveModePopoverView():
             if self.__winbackController.isModeAvailable():
                 return WinbackLeaveModePopoverView()
-            return RandomBattlePopover()
-        return super(ModeSelectorView, self).createPopOverContent(event)
+            return None
+        else:
+            return super(ModeSelectorView, self).createPopOverContent(event)
 
     def refresh(self):
         self.__dataProvider.forceRefresh()
@@ -159,10 +155,10 @@ class ModeSelectorView(ViewImpl, LobbyHeaderVisibility):
         g_eventBus.handleEvent(events.DestroyGuiImplViewEvent(self.layoutID))
 
     def _onLoading(self):
-        self.__gui.windowsManager.onWindowStatusChanged += self.__windowStatusChanged
         self.__lobbyContext.addHeaderNavigationConfirmator(self.__handleHeaderNavigation)
         g_eventBus.addListener(ModeSubSelectorEvent.CHANGE_VISIBILITY, self.__updateContentVisibility)
         g_eventBus.addListener(ModeSubSelectorEvent.CLICK_PROCESSING, self.__updateClickProcessing)
+        g_eventBus.addListener(events.GameEvent.ON_BACKGROUND_ALPHA_CHANGE, self.__onExternalBackgroundAlphaChange, EVENT_BUS_SCOPE.GLOBAL)
         self.viewModel.onItemClicked += self.__itemClickHandler
         self.viewModel.onShowMapSelectionClicked += self.__showMapSelectionClickHandler
         self.viewModel.onShowWidgetsClicked += self.__showWidgetsClickHandler
@@ -173,11 +169,12 @@ class ModeSelectorView(ViewImpl, LobbyHeaderVisibility):
         g_eventBus.handleEvent(events.GameEvent(events.GameEvent.HIDE_LOBBY_SUB_CONTAINER_ITEMS), scope=EVENT_BUS_SCOPE.GLOBAL)
         self.suspendLobbyHeader(self.uniqueID)
         app = self.__appLoader.getApp()
-        self.__prevAppBackgroundAlpha = app.getBackgroundAlpha()
-        app.setBackgroundAlpha(_BACKGROUND_ALPHA)
+        self.__savedBackgroundAlpha = app.getBackgroundAlpha()
+        app.setBackgroundAlpha(_BACKGROUND_ALPHA, False)
         self.__prevOptimizationEnabled = app.graphicsOptimizationManager.getEnable()
         if self.__prevOptimizationEnabled:
             app.graphicsOptimizationManager.switchOptimizationEnabled(False)
+        self.getParentWindow().isReady = True
 
     def _initialize(self):
         g_eventBus.handleEvent(FullscreenModeSelectorEvent(FullscreenModeSelectorEvent.NAME, ctx={'showing': True}))
@@ -190,10 +187,10 @@ class ModeSelectorView(ViewImpl, LobbyHeaderVisibility):
         return
 
     def _finalize(self):
-        self.__gui.windowsManager.onWindowStatusChanged -= self.__windowStatusChanged
         self.inputManager.removeEscapeListener(self.__handleEscape)
         g_eventBus.removeListener(ModeSubSelectorEvent.CLICK_PROCESSING, self.__updateClickProcessing)
         g_eventBus.removeListener(ModeSubSelectorEvent.CHANGE_VISIBILITY, self.__updateContentVisibility)
+        g_eventBus.removeListener(events.GameEvent.ON_BACKGROUND_ALPHA_CHANGE, self.__onExternalBackgroundAlphaChange, EVENT_BUS_SCOPE.GLOBAL)
         self.__lobbyContext.deleteHeaderNavigationConfirmator(self.__handleHeaderNavigation)
         self.viewModel.onItemClicked -= self.__itemClickHandler
         self.viewModel.onShowMapSelectionClicked -= self.__showMapSelectionClickHandler
@@ -221,7 +218,7 @@ class ModeSelectorView(ViewImpl, LobbyHeaderVisibility):
             app = self.__appLoader.getApp()
             if self.__prevOptimizationEnabled:
                 app.graphicsOptimizationManager.switchOptimizationEnabled(True)
-            app.setBackgroundAlpha(self.__prevAppBackgroundAlpha)
+            app.setBackgroundAlpha(self.__savedBackgroundAlpha)
             return
 
     def __dataProviderListChangeHandler(self):
@@ -250,6 +247,11 @@ class ModeSelectorView(ViewImpl, LobbyHeaderVisibility):
         self.__isClickProcessing = event.ctx.get('isClickProcessing', False) if event is not None else False
         return
 
+    def __onExternalBackgroundAlphaChange(self, event):
+        self.__savedBackgroundAlpha = event.ctx['alpha']
+        app = self.__appLoader.getApp()
+        app.setBackgroundAlpha(_BACKGROUND_ALPHA, notSilentChange=False)
+
     @wg_async
     def __itemClickHandler(self, event):
         self.__isClickProcessing = True
@@ -270,9 +272,6 @@ class ModeSelectorView(ViewImpl, LobbyHeaderVisibility):
                 _logger.debug('%s got BrokenPromiseError during __itemClickHandler.')
 
             if modeSelectorItem.isSelectable:
-                specView = self.__gui.windowsManager.getViewByLayoutID(BattleSessionView.layoutID)
-                if modeSelectorItem.modeName != PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST and specView is not None:
-                    specView.destroyWindow()
                 self.__dataProvider.select(modeSelectorItem.modeName)
             self.__isClickProcessing = False
             if self.__isContentVisible:
@@ -299,22 +298,6 @@ class ModeSelectorView(ViewImpl, LobbyHeaderVisibility):
         else:
             modeSelectorItem.handleInfoPageClick()
             return
-
-    def __windowStatusChanged(self, uniqueID, newStatus):
-        if newStatus == WindowStatus.LOADED:
-            window = self.__gui.windowsManager.getWindow(uniqueID)
-            parent = None
-            if window.parent is not None and window.parent.content is not None:
-                parent = window.parent.content
-            if window.content == self or parent is not None and parent == self:
-                return
-            if getattr(window.content, 'isModeSelectorAutoCloseDisabled', False):
-                return
-            if window.layer in _CLOSE_LAYERS:
-                self.__restoreGraphics()
-                if not self.__isClickProcessing:
-                    self.close()
-        return
 
     @adisp.adisp_async
     def __handleHeaderNavigation(self, callback):

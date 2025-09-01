@@ -4,7 +4,6 @@ import logging
 import typing
 from collections import namedtuple
 import BigWorld
-from BWUtil import AsyncReturn
 from CurrentVehicle import g_currentVehicle
 from Event import Event
 from Math import Matrix
@@ -22,9 +21,7 @@ from gui.Scaleform.daapi.view.lobby.customization.sound_constants import SOUNDS,
 from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getShowcaseUrl
 from gui.Scaleform.daapi.view.meta.CustomizationMainViewMeta import CustomizationMainViewMeta
-from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.entities.View import ViewKey, ViewKeyDynamic
-from gui.Scaleform.framework.managers.loaders import SFViewLoadParams, GuiImplViewLoadParams
 from gui.Scaleform.framework.managers.view_lifecycle_watcher import IViewLifecycleHandler, ViewLifecycleWatcher
 from gui.Scaleform.genConsts.CUSTOMIZATION_ALIASES import CUSTOMIZATION_ALIASES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -36,16 +33,13 @@ from gui.customization.shared import chooseMode, appliedToFromSlotsIds, C11nId, 
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui.impl import backport
 from gui.impl.dialogs import dialogs
-from gui.impl.dialogs.builders import ResPureDialogBuilder, ResSimpleDialogBuilder
+from gui.impl.dialogs.builders import ResSimpleDialogBuilder
 from gui.impl.gen import R
 from gui.impl.gen.view_models.constants.dialog_presets import DialogPresets
-from gui.impl.lobby.customization.customization_cart.customization_cart_view import CustomizationCartView
 from gui.impl.lobby.common.view_mixins import LobbyHeaderVisibility
-from gui.impl.pub.dialog_window import DialogButtons
 from gui.shared import events
-from gui.shared.close_confiramtor_helper import CloseConfirmatorsHelper
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showProgressiveItemsView, showOnboardingView, showShop
+from gui.shared.event_dispatcher import showProgressiveItemsView, showOnboardingView, showShop, showHangar
 from gui.shared.formatters import formatPrice, formatPurchaseItems, text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
@@ -86,10 +80,13 @@ class _ModalWindowsPopupHandler(IViewLifecycleHandler):
         self.__onViewDestroyedCallback = onViewDestroyedCallback
 
     def onViewCreated(self, view):
-        self.__onViewCreatedCallback()
-        self.__viewStack.append(view.key)
+        self.onViewWithKeyCreated(view.key)
 
-    def onViewDestroyed(self, _):
+    def onViewWithKeyCreated(self, key):
+        self.__onViewCreatedCallback()
+        self.__viewStack.append(key)
+
+    def onViewDestroyed(self, _=None):
         if self.__viewStack:
             self.__viewStack.pop()
             if not self.__viewStack:
@@ -166,25 +163,6 @@ class _VehicleSlotSelector(object):
         self.__ctx.mode.unselectSlot()
 
 
-class _CustomizationCloseConfirmatorsHelper(CloseConfirmatorsHelper):
-
-    def getRestrictedSfViews(self):
-        result = super(_CustomizationCloseConfirmatorsHelper, self).getRestrictedSfViews()
-        result.append(VIEW_ALIAS.LOBBY_HANGAR)
-        return result
-
-    def getRestrictedGuiImplViews(self):
-        return super(_CustomizationCloseConfirmatorsHelper, self).getRestrictedGuiImplViews() + [R.views.lobby.common.BrowserView(), R.views.lobby.personal_reserves.ReservesActivationView(), R.views.lobby.personal_reserves.ReservesIntroView()]
-
-    def start(self, closeConfirmator):
-        super(_CustomizationCloseConfirmatorsHelper, self).start(closeConfirmator)
-        self._addPlatoonCreationConfirmator()
-
-    def stop(self):
-        self._deletePlatoonCreationConfirmator()
-        super(_CustomizationCloseConfirmatorsHelper, self).stop()
-
-
 class MainView(LobbySubView, CustomizationMainViewMeta, LobbyHeaderVisibility):
     __background_alpha__ = 0.0
     _COMMON_SOUND_SPACE = C11N_SOUND_SPACE
@@ -202,6 +180,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta, LobbyHeaderVisibility):
     def __init__(self, ctx=None):
         super(MainView, self).__init__()
         self.__viewLifecycleWatcher = ViewLifecycleWatcher()
+        self.__modalWindowsPopupHandler = _ModalWindowsPopupHandler(self.__onViewCreatedCallback, self.__onViewDestroyedCallback)
         self.fadeAnchorsOut = False
         self.__propertiesSheet = None
         self.__styleInfo = None
@@ -218,7 +197,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta, LobbyHeaderVisibility):
         self.__dontPlayTabChangeSound = False
         self.__resetCameraDistance = False
         self.__itemsGrabMode = False
-        self.__closeConfirmatorHelper = _CustomizationCloseConfirmatorsHelper()
         self.__closed = False
         self.__exitingToShop = False
         self.__uiLogger = CustomizationMainViewLogger(CustomizationViewKeys.HANGAR)
@@ -257,7 +235,8 @@ class MainView(LobbySubView, CustomizationMainViewMeta, LobbyHeaderVisibility):
             _logger.info('Gameface customization cart is opened')
             ctx = ctx or {}
             ctx.update(c11nView=self)
-            self.fireEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.lobby.customization.CustomizationCart(), CustomizationCartView, ScopeTemplates.LOBBY_SUB_SCOPE), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+            from gui.Scaleform.daapi.view.lobby.customization.states import CustomizationCartState
+            CustomizationCartState.goTo(ctx=ctx)
 
     def onEntryPointClick(self, itemID):
         if itemID == CUSTOMIZATION_CONSTS.INNER_ENTRY_POINT_PROGRESSIVE:
@@ -269,12 +248,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta, LobbyHeaderVisibility):
     def onShopEntryPointClick(self):
         self.__exitingToShop = True
         showShop(getShowcaseUrl())
-
-    @adisp.adisp_async
-    @wg_async
-    def showCloseConfirmator(self, callback):
-        result = yield wg_await(self.__closeConfirmator())
-        callback(result)
 
     def __onVehicleChangeStarted(self):
         entity = self.hangarSpace.getVehicleEntity()
@@ -313,18 +286,21 @@ class MainView(LobbySubView, CustomizationMainViewMeta, LobbyHeaderVisibility):
             return
 
     def __initAnchorsPositions(self):
-        entity = self.__ctx.c11nCameraManager.vEntity
-        self.__initAnchorsPositionsCallback = None
-        if entity is not None:
-            if entity.isVehicleLoaded:
-                entity.appearance.updateAnchorsParams()
-            else:
-                self.__initAnchorsPositionsCallback = BigWorld.callback(0.0, self.__initAnchorsPositions)
-                return
-        self.__setAnchorsInitData()
-        if not self.__styleInfo.visible:
-            self.__resetCustomizationCamera()
-        return
+        if self.__ctx is None:
+            return
+        else:
+            entity = self.__ctx.c11nCameraManager.vEntity
+            self.__initAnchorsPositionsCallback = None
+            if entity is not None:
+                if entity.isVehicleLoaded:
+                    entity.appearance.updateAnchorsParams()
+                else:
+                    self.__initAnchorsPositionsCallback = BigWorld.callback(0.0, self.__initAnchorsPositions)
+                    return
+            self.__setAnchorsInitData()
+            if not self.__styleInfo.visible:
+                self.__resetCustomizationCamera()
+            return
 
     def onBuyConfirmed(self, isOk):
         if isOk:
@@ -526,7 +502,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta, LobbyHeaderVisibility):
         if force:
             self.__onCloseWindow()
         else:
-            self.__confirmClose()
+            self.fireEvent(events.CustomizationEvent(events.CustomizationEvent.CLOSE), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onLobbyClick(self):
         if self.__ctx.mode.isRegion:
@@ -791,7 +767,9 @@ class MainView(LobbySubView, CustomizationMainViewMeta, LobbyHeaderVisibility):
         g_currentVehicle.onChangeStarted += self.__onVehicleChangeStarted
         g_currentVehicle.onChanged += self.__onVehicleChanged
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
-        self.__viewLifecycleWatcher.start(self.app.containerManager, [_ModalWindowsPopupHandler(self.__onViewCreatedCallback, self.__onViewDestroyedCallback)])
+        self.__viewLifecycleWatcher.start(self.app.containerManager, [self.__modalWindowsPopupHandler])
+        self.__ctx.events.onCloseDialogShown += self.__modalWindowsPopupHandler.onViewWithKeyCreated
+        self.__ctx.events.onCloseDialogClosed += self.__modalWindowsPopupHandler.onViewDestroyed
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         self.hangarSpace.onSpaceCreate += self.__onSpaceCreateHandler
         self.hangarSpace.onSpaceDestroy += self.__onSpaceDestroyHandler
@@ -820,7 +798,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta, LobbyHeaderVisibility):
             highlightingMode = chooseMode(self.__ctx.mode.slotType, self.__ctx.modeId, g_currentVehicle.item)
             self.service.startHighlighter(highlightingMode)
         self.__updateInnerEntryPoints()
-        self.__closeConfirmatorHelper.start(self.__closeConfirmator)
         if not AccountSettings.getSettings(IS_CUSTOMIZATION_INTRO_VIEWED):
             questProgressionStyles = self.service.getStyles(criteria=REQ_CRITERIA.CUSTOMIZATION.ON_ACCOUNT | REQ_CRITERIA.CUSTOMIZATION.HAS_TAGS([ItemTags.QUESTS_PROGRESSION]))
             if questProgressionStyles:
@@ -856,7 +833,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta, LobbyHeaderVisibility):
             entity.appearance.loadState.unsubscribe(self.__onVehicleLoadFinished, self.__onVehicleLoadStarted)
             entity.appearance.turretRotator.onTurretRotated -= self.__onTurretAndGunRotated
         self.__onVehicleLoadFinishedEvent = None
-        self.fireEvent(events.HangarCustomizationEvent(events.HangarCustomizationEvent.RESET_VEHICLE_MODEL_TRANSFORM), scope=EVENT_BUS_SCOPE.LOBBY)
         self.resumeLobbyHeader(self.key)
         self.fireEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, ctx={'isDisable': False,
          'setIdle': True,
@@ -868,6 +844,9 @@ class MainView(LobbySubView, CustomizationMainViewMeta, LobbyHeaderVisibility):
         self.__resetEnvironment()
         self.__viewLifecycleWatcher.stop()
         self.__viewLifecycleWatcher = None
+        self.__ctx.events.onCloseDialogShown -= self.__modalWindowsPopupHandler.onViewWithKeyCreated
+        self.__ctx.events.onCloseDialogClosed -= self.__modalWindowsPopupHandler.onViewDestroyed
+        self.__modalWindowsPopupHandler = None
         self.service.stopHighlighter()
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         self.hangarSpace.onSpaceCreate -= self.__onSpaceCreateHandler
@@ -876,7 +855,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta, LobbyHeaderVisibility):
         self.service.onRegionHighlighted -= self.__onRegionHighlighted
         if g_currentVehicle.isPresent():
             g_tankActiveCamouflage[g_currentVehicle.item.intCD] = self.__ctx.season
-            g_currentVehicle.refreshModel()
         self.__propertiesSheet = None
         self.__styleInfo = None
         self.__bottomPanel = None
@@ -914,8 +892,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta, LobbyHeaderVisibility):
             self.__finishGrabMode()
         super(MainView, self)._dispose()
         self.__ctx = None
-        self.service.closeCustomization()
-        self.__closeConfirmatorHelper.stop()
         return
 
     def __setEnvironment(self):
@@ -978,7 +954,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta, LobbyHeaderVisibility):
 
     def __onSpaceDestroyHandler(self, _):
         Waiting.hide(_WAITING_MESSAGE)
-        self.__onCloseWindow(immediate=True)
 
     def __onSpaceRefreshHandler(self):
         Waiting.show(_WAITING_MESSAGE)
@@ -990,7 +965,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta, LobbyHeaderVisibility):
         if not immediate:
             self.__ctx.mode.unselectItem()
             self.__ctx.mode.unselectSlot()
-        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
+        showHangar()
 
     def __onCacheResync(self, *_):
         if not g_currentVehicle.isPresent():
@@ -1125,21 +1100,25 @@ class MainView(LobbySubView, CustomizationMainViewMeta, LobbyHeaderVisibility):
         return
 
     def __setNotificationCounters(self):
-        seasonCounters = {season:0 for season in SEASONS_ORDER}
-        if self.__ctx.modeId in CustomizationModes.BASE_STYLES:
-            itemTypes = (GUI_ITEM_TYPE.STYLE,)
+        if self.__ctx is None:
+            return
         else:
-            itemTypes = getItemTypesAvailableForVehicle() - {GUI_ITEM_TYPE.STYLE}
-        if self.__ctx.modeId == CustomizationModes.STYLE_2D_EDITABLE:
-            itemsFilter = lambda item: self.__ctx.mode.style.isItemInstallable(item) and not item.isAllSeason()
-        else:
-            itemsFilter = lambda item: not item.isAllSeason()
-        for season in SEASONS_ORDER:
-            if self.__ctx.season != season:
-                seasonCounters[season] = g_currentVehicle.item.getC11nItemsNoveltyCounter(g_currentVehicle.itemsCache.items, itemTypes, season, itemsFilter)
-            seasonCounters[season] = 0
+            seasonCounters = {season:0 for season in SEASONS_ORDER}
+            if self.__ctx.modeId in CustomizationModes.BASE_STYLES:
+                itemTypes = (GUI_ITEM_TYPE.STYLE,)
+            else:
+                itemTypes = getItemTypesAvailableForVehicle() - {GUI_ITEM_TYPE.STYLE}
+            if self.__ctx.modeId == CustomizationModes.STYLE_2D_EDITABLE:
+                itemsFilter = lambda item: self.__ctx.mode.style.isItemInstallable(item) and not item.isAllSeason()
+            else:
+                itemsFilter = lambda item: not item.isAllSeason()
+            for season in SEASONS_ORDER:
+                if self.__ctx.season != season:
+                    seasonCounters[season] = g_currentVehicle.item.getC11nItemsNoveltyCounter(g_currentVehicle.itemsCache.items, itemTypes, season, itemsFilter)
+                seasonCounters[season] = 0
 
-        self.as_setNotificationCountersS([ seasonCounters[season] for season in SEASONS_ORDER ])
+            self.as_setNotificationCountersS([ seasonCounters[season] for season in SEASONS_ORDER ])
+            return
 
     def __setAnchorsInitData(self, update=False):
         if not g_currentVehicle.isPresent():
@@ -1287,31 +1266,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta, LobbyHeaderVisibility):
 
     def __getProgressiveView(self):
         return self.guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.customization.progressive_items_view.ProgressiveItemsView())
-
-    @wg_async
-    def __confirmClose(self):
-        if self.__hasOpenedChildWindow() or self.__isGamefaceBuyViewOpened():
-            return
-        yield wg_await(self.__closeConfirmator())
-
-    @wg_async
-    def __closeConfirmator(self):
-        if self.__closed or not self.__ctx.isOutfitsModified():
-            result = True
-        else:
-            if self.__exitingToShop:
-                closeDialogStrings = R.strings.dialogs.customization.exitToShop
-                self.__exitingToShop = False
-            else:
-                closeDialogStrings = R.strings.dialogs.customization.close
-            builder = ResPureDialogBuilder()
-            builder.setMessagesAndButtons(closeDialogStrings, focused=DialogButtons.CANCEL)
-            self.__onViewCreatedCallback()
-            result = yield wg_await(dialogs.showSimple(builder.build(self)))
-            self.__onViewDestroyedCallback()
-        if result:
-            self.__onCloseWindow()
-        raise AsyncReturn(result)
 
     @adisp.adisp_process
     def __applyItems(self, purchaseItems):

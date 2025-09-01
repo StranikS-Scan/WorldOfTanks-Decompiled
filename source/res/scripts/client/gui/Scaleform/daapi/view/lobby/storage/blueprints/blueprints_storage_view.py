@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/blueprints/blueprints_storage_view.py
 import nations
+from constants import MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 from blueprints.BlueprintTypes import BlueprintTypes
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.storage.blueprints import BlueprintsStorageCarouselDataProvider, blueprintExitEvent
+from gui.Scaleform.daapi.view.lobby.storage.blueprints import BlueprintsStorageCarouselDataProvider
 from gui.Scaleform.daapi.view.lobby.storage.blueprints import BlueprintsStorageCarouselFilter
 from gui.Scaleform.daapi.view.lobby.storage.storage_carousel_environment import StorageCarouselEnvironment
 from gui.Scaleform.daapi.view.meta.StorageCategoryBlueprintsViewMeta import StorageCategoryBlueprintsViewMeta
@@ -32,7 +33,7 @@ class StorageCategoryBlueprintsView(StorageCategoryBlueprintsViewMeta, StorageCa
     def navigateToBlueprintScreen(self, itemId):
         self.filter.update({'scroll_to': itemId})
         self.__needToResetScrollTo = False
-        shared_events.showBlueprintView(itemId, blueprintExitEvent())
+        shared_events.showBlueprintView(itemId)
 
     def selectConvertible(self, value):
         self.filter.update({'can_convert': value})
@@ -118,9 +119,21 @@ class StorageCategoryBlueprintsView(StorageCategoryBlueprintsViewMeta, StorageCa
         hasNoFilterResults = self._dataProvider.getCurrentVehiclesCount() == 0
         filterWarningVO = None
         if hasNoFilterResults and not hasNoVehicles:
-            filterWarningVO = self._makeFilterWarningVO(STORAGE.FILTER_WARNINGMESSAGE, STORAGE.FILTER_NORESULTSBTN_LABEL, TOOLTIPS.STORAGE_FILTER_NORESULTSBTN)
+            if self.__areCertainLevelsChosenInFilter(('level_1', 'level_11')):
+                filterWarningVO = self._makeFilterWarningVOWithIcon(STORAGE.FILTER_SOMETIERSONLYMESSAGE, RES_ICONS.MAPS_ICONS_LIBRARY_INFORMATIONICON_1, STORAGE.FILTER_NORESULTSBTN_LABEL, TOOLTIPS.STORAGE_FILTER_NORESULTSBTN, True)
+            else:
+                filterWarningVO = self._makeFilterWarningVO(STORAGE.FILTER_WARNINGMESSAGE, STORAGE.FILTER_NORESULTSBTN_LABEL, TOOLTIPS.STORAGE_FILTER_NORESULTSBTN)
         self.as_showFilterWarningS(filterWarningVO)
         return
+
+    def __areCertainLevelsChosenInFilter(self, chosenKeys):
+        for level in range(MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL + 1):
+            key = 'level_{}'.format(level)
+            chosen = self.filter.get(key)
+            if chosen and key not in chosenKeys:
+                return False
+
+        return any((self.filter.get(key) for key in chosenKeys))
 
     def __restoreCarouselState(self):
         self.as_updateCanConvertS(self.filter.get('can_convert'))

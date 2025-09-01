@@ -4,12 +4,15 @@ import functools
 import logging
 import math
 import BigWorld
+import CGF
 import Keys
 import Math
 import ResMgr
 from AvatarInputHandler.AimingSystems import disableShotPointCache
+from AvatarInputHandler.commands.armor_flashlight_control import ArmorFlashlightControl
 from AvatarInputHandler.vehicles_selection_mode import VehiclesSelectionControlMode
 from AvatarInputHandler.commands.fl_random_reserves import FLRandomReserves
+from PlayerEvents import g_playerEvents
 from aih_constants import MAP_CASE_MODES
 from helpers.CallbackDelayer import CallbackDelayer
 import BattleReplay
@@ -34,17 +37,17 @@ from AvatarInputHandler import AimingSystems, keys_handlers
 from AvatarInputHandler import aih_global_binding, gun_marker_ctrl
 from AvatarInputHandler import steel_hunter_control_modes
 from BigWorld import SniperAimingSystem
-from AvatarInputHandler.commands.auto_shoot_gun_control import createAutoShootGunControl
 from AvatarInputHandler.commands.dualgun_control import DualGunController
+from AvatarInputHandler.commands.mechanic_controls import createMechanicControls
 from AvatarInputHandler.commands.prebattle_setups_control import PrebattleSetupsControl
 from AvatarInputHandler.commands.radar_control import RadarControl
 from AvatarInputHandler.commands.siege_mode_control import SiegeModeControl
-from AvatarInputHandler.commands.rocket_acceleration_control import RocketAccelerationControl
 from AvatarInputHandler.commands.vehicle_upgrade_control import VehicleUpdateControl
 from AvatarInputHandler.commands.vehicle_upgrade_control import VehicleUpgradePanelControl
+from AvatarInputHandler.commands.dev_commands_control import createDevCommandsControl
 from AvatarInputHandler.remote_camera_sender import RemoteCameraSender
-from AvatarInputHandler.siege_mode_player_notifications import SiegeModeSoundNotifications, TurboshaftModeSoundNotifications, TwinGunModeSoundNotifications, SiegeModeCameraShaker
 from Event import Event
+from Input import InputSingleton
 from TriggersManager import TRIGGER_TYPE
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from constants import ARENA_PERIOD, AIMING_MODE
@@ -53,9 +56,12 @@ from gui import g_guiResetters, GUI_CTRL_MODE_FLAG, GUI_SETTINGS
 from gui.app_loader import settings
 from gui.battle_control import event_dispatcher as gui_event_dispatcher
 from helpers import dependency
+from player_notifications.siege_mode.notifier import SiegeModeNotifier
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
 from cgf_obsolete_script.script_game_object import ScriptGameObject, ComponentDescriptor
+from vehicles.mechanics.mechanic_info import hasVehicleMechanic
+from vehicles.mechanics.mechanic_constants import VehicleMechanic
 INPUT_HANDLER_CFG = 'gui/avatar_input_handler.xml'
 _logger = logging.getLogger(__name__)
 _CTRL_TYPE = aih_constants.CTRL_TYPE
@@ -213,8 +219,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
 
     siegeModeControl = ComponentDescriptor()
     dualGunControl = ComponentDescriptor()
-    siegeModeSoundNotifications = ComponentDescriptor()
-    rocketAccelerationControl = ComponentDescriptor()
+    siegeModeNotifier = ComponentDescriptor()
     DEFAULT_AIH_WORLD_ID = -1
 
     def __init__(self, spaceID):
@@ -253,10 +258,11 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         self.__observerVehicle = None
         self.__commands = []
         self.__detachedCommands = []
-        self.__persistentCommands = [PrebattleSetupsControl()]
+        self.__persistentCommands = [createDevCommandsControl(), PrebattleSetupsControl()]
         self.__remoteCameraSender = None
         self.__isGUIVisible = False
         self.__lastSwitchTime = 0
+        self.__inputSingleton = None
         return
 
     def __constructComponents(self):
@@ -270,38 +276,22 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             return
         else:
             typeDescr = vehicle.typeDescriptor
-            notificationsCls = None
+            self.__inputSingleton = CGF.findSingleton(BigWorld.player().spaceID, InputSingleton)
+            if self.__inputSingleton is not None:
+                self.__inputSingleton.setCommandMappingImpl(CommandMapping.g_instance)
+            if self.siegeModeNotifier is not None:
+                self.siegeModeNotifier.stop()
             if typeDescr.hasSiegeMode:
-                if not self.siegeModeControl:
-                    self.siegeModeControl = SiegeModeControl()
-                self.__commands.append(self.siegeModeControl)
-                if typeDescr.hasHydraulicChassis or typeDescr.isWheeledVehicle:
-                    notificationsCls = SiegeModeSoundNotifications
-                elif typeDescr.hasTurboshaftEngine:
-                    notificationsCls = TurboshaftModeSoundNotifications
-                elif typeDescr.isTwinGunVehicle:
-                    notificationsCls = TwinGunModeSoundNotifications
-                self.siegeModeControl.onSiegeStateChanged += SiegeModeCameraShaker.shake
-            if typeDescr.hasRocketAcceleration:
-                if not self.rocketAccelerationControl:
-                    self.rocketAccelerationControl = RocketAccelerationControl()
-                self.__commands.append(self.rocketAccelerationControl)
-            if notificationsCls is None or not self.siegeModeSoundNotifications or notificationsCls.getModeType() != self.siegeModeSoundNotifications.getModeType() or self.siegeModeSoundNotifications.vehicleID != vehicle.id:
-                if self.siegeModeSoundNotifications:
-                    self.siegeModeControl.onSiegeStateChanged -= self.siegeModeSoundNotifications.onSiegeStateChanged
-                    self.siegeModeSoundNotifications.stop()
-                    self.siegeModeSoundNotifications = None
-                if notificationsCls is not None:
-                    notifications = notificationsCls(vehicle.id)
-                    self.siegeModeControl.onSiegeStateChanged += notifications.onSiegeStateChanged
-                    notifications.start()
-                    self.siegeModeSoundNotifications = notifications
+                self.siegeModeNotifier = SiegeModeNotifier()
+                self.siegeModeNotifier.construct(vehicle)
+                if not hasVehicleMechanic(typeDescr, VehicleMechanic.PILLBOX_SIEGE_MODE):
+                    self.siegeModeControl = SiegeModeControl(self.siegeModeNotifier)
+                    self.__commands.append(self.siegeModeControl)
             if typeDescr.isDualgunVehicle and not self.dualGunControl:
                 self.dualGunControl = DualGunController(typeDescr)
             elif not typeDescr.isDualgunVehicle:
                 self.dualGunControl = None
-            if typeDescr.isAutoShootGunVehicle:
-                self.__commands.append(createAutoShootGunControl())
+            self.__commands.extend(createMechanicControls(typeDescr))
             if player.hasBonusCap(ARENA_BONUS_TYPE_CAPS.RADAR):
                 self.__commands.append(RadarControl())
             if player.hasBonusCap(ARENA_BONUS_TYPE_CAPS.BATTLEROYALE):
@@ -310,6 +300,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                 self.__detachedCommands.append(VehicleUpgradePanelControl())
             if player.hasBonusCap(ARENA_BONUS_TYPE_CAPS.EPIC):
                 self.__detachedCommands.append(FLRandomReserves())
+            self.__persistentCommands.append(createDevCommandsControl())
             if player.hasBonusCap(ARENA_BONUS_TYPE_CAPS.SWITCH_SETUPS):
                 self.__persistentCommands.append(PrebattleSetupsControl())
             if vehicle.appearance:
@@ -318,6 +309,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             if player.inWorld:
                 player.entityGameObject.removeComponentByType(GenericComponents.ControlModeStatus)
                 player.entityGameObject.createComponent(GenericComponents.ControlModeStatus, _CTRL_MODES.index(self.__ctrlModeName))
+            self.__commands.append(ArmorFlashlightControl())
             return
 
     def prerequisites(self):
@@ -358,6 +350,9 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                 if command.handleKeyEvent(isDown, key, mods, event):
                     return True
 
+            if self.__inputSingleton is not None:
+                if self.__inputSingleton.handleKeyEvent(event):
+                    return True
             if isDown and BigWorld.isKeyDown(Keys.KEY_CAPSLOCK):
                 if self.__alwaysShowAimKey is not None and key == self.__alwaysShowAimKey:
                     gui_event_dispatcher.toggleCrosshairVisibility()
@@ -384,6 +379,8 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             self.__isDetached = detached
             self.__targeting.detach(self.__isDetached)
             if detached:
+                if self.__inputSingleton is not None:
+                    self.__inputSingleton.detach()
                 self.appLoader.attachCursor(settings.APP_NAME_SPACE.SF_BATTLE, flags=flags)
                 result = True
                 if flags & GUI_CTRL_MODE_FLAG.AIMING_ENABLED > 0:
@@ -421,14 +418,14 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             if gun_marker_ctrl.useDefaultGunMarkers():
                 self.__curCtrl.setGunMarkerFlag(not isShown, _GUN_MARKER_FLAG.CLIENT_MODE_ENABLED)
 
-    def updateClientGunMarker(self, pos, direction, size, sizeOffset, relaxTime, collData):
-        self.__curCtrl.updateGunMarker(_GUN_MARKER_TYPE.CLIENT, pos, direction, size, sizeOffset, relaxTime, collData)
+    def updateClientGunMarker(self, gunMarkerInfo, supportMarkersInfo, relaxTime):
+        self.__curCtrl.updateGunMarker(_GUN_MARKER_TYPE.CLIENT, gunMarkerInfo, supportMarkersInfo, relaxTime)
 
-    def updateServerGunMarker(self, pos, direction, size, sizeOffset, relaxTime, collData):
-        self.__curCtrl.updateGunMarker(_GUN_MARKER_TYPE.SERVER, pos, direction, size, sizeOffset, relaxTime, collData)
+    def updateServerGunMarker(self, gunMarkerInfo, supportMarkersInfo, relaxTime):
+        self.__curCtrl.updateGunMarker(_GUN_MARKER_TYPE.SERVER, gunMarkerInfo, supportMarkersInfo, relaxTime)
 
-    def updateDualAccGunMarker(self, pos, direction, size, sizeOffset, relaxTime, collData):
-        self.__curCtrl.updateGunMarker(_GUN_MARKER_TYPE.DUAL_ACC, pos, direction, size, sizeOffset, relaxTime, collData)
+    def updateDualAccGunMarker(self, gunMarkerInfo, supportMarkersInfo, relaxTime):
+        self.__curCtrl.updateGunMarker(_GUN_MARKER_TYPE.DUAL_ACC, gunMarkerInfo, supportMarkersInfo, relaxTime)
 
     def setAimingMode(self, enable, mode):
         self.__curCtrl.setAimingMode(enable, mode)
@@ -456,10 +453,8 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         self.setAutorotation(not self.__isAutorotation, triggeredByKey)
 
     def activatePostmortem(self):
-        if self.siegeModeSoundNotifications is not None:
-            self.siegeModeSoundNotifications.stop()
-            self.siegeModeControl.onSiegeStateChanged -= self.siegeModeSoundNotifications.onSiegeStateChanged
-            self.siegeModeSoundNotifications = None
+        if self.siegeModeNotifier is not None:
+            self.siegeModeNotifier.stop()
         avatar = BigWorld.player()
         avatar.autoAim(None)
         for ctlMode in self.__ctrls.itervalues():
@@ -561,14 +556,14 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         self.__targeting.enable(False)
         self.__killerVehicleID = None
         self.__deathReasonID = None
-        if self.siegeModeSoundNotifications is not None:
-            self.siegeModeSoundNotifications.stop()
-            self.siegeModeSoundNotifications = None
+        if self.siegeModeNotifier is not None:
+            self.siegeModeNotifier.stop()
         if self.__onRecreateDevice in g_guiResetters:
             g_guiResetters.remove(self.__onRecreateDevice)
         BigWorld.player().arena.onPeriodChange -= self.__onArenaStarted
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         BigWorld.player().consistentMatrices.onVehicleMatrixBindingChanged -= self.__onVehicleMatrixBindingChanged
+        self.__inputSingleton = None
         ScriptGameObject.destroy(self)
         CallbackDelayer.destroy(self)
         return
@@ -680,6 +675,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                 player.entityGameObject.removeComponentByType(GenericComponents.ControlModeStatus)
                 player.entityGameObject.createComponent(GenericComponents.ControlModeStatus, _CTRL_MODES.index(self.__ctrlModeName))
             BigWorld.setEdgeDrawerRenderMode(1 if eMode in aih_constants.MAP_CASE_MODES else 0)
+            g_playerEvents.onAihControlModeChanged(oldEmode=prevCtrlModeName, newEmode=eMode, validPlayer=player, attachedVeh=vehicle)
             return
 
     def onObserverControlModeChanged(self, eMode):
@@ -709,10 +705,11 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
     def onMinimapClicked(self, worldPos):
         return self.__curCtrl.onMinimapClicked(worldPos)
 
-    def onVehicleShaken(self, vehicle, shakeReason, impulsePosition, impulseDir, caliber, sensitivity=1.0):
-        self.OnVehicleShaked(vehicle.id, shakeReason)
+    def onVehicleShaken(self, vehicle, shakeReason, impulsePosition, impulseDir, caliber, sensitivity=1.0, withEvents=True):
+        if withEvents:
+            self.OnVehicleShaked(vehicle.id, shakeReason)
         if shakeReason == _ShakeReason.OWN_SHOT_DELAYED:
-            shakeFuncBound = functools.partial(self.onVehicleShaken, vehicle, _ShakeReason.OWN_SHOT, impulsePosition, impulseDir, caliber, sensitivity)
+            shakeFuncBound = functools.partial(self.onVehicleShaken, vehicle, _ShakeReason.OWN_SHOT, impulsePosition, impulseDir, caliber, sensitivity, withEvents)
             delayTime = self.__dynamicCameraSettings.settings['ownShotImpulseDelay']
             self.delayCallback(delayTime, shakeFuncBound)
             return

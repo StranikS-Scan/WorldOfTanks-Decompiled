@@ -5,6 +5,7 @@ from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crew.tooltips.crew_perks_additional_tooltip_model import CrewPerksAdditionalTooltipModel
 from gui.impl.gen.view_models.views.lobby.crew.tooltips.crew_perks_tooltip_model import BoosterType
+from gui.impl.lobby.crew.crew_helpers import getTankmanCrewAssistOrderSets
 from gui.impl.lobby.crew.crew_helpers.model_setters import setSkillProgressionModel
 from gui.impl.pub import ViewImpl
 from gui.shared.gui_items.Tankman import isSkillLearnt, SKILL_EFFICIENCY_UNTRAINED, getBattleBooster
@@ -77,9 +78,10 @@ class CrewPerksAdditionalTooltip(ViewImpl):
                                 tmanRoleForSkill = bonusRole
                                 break
 
-                    hasCommonSet, hasLegendarySet = self._wotPlusCtrl.hasCrewAssistOrderSets(self._tankmanVehicle, tmanRoleForSkill)
+                    orderSets = getTankmanCrewAssistOrderSets(self._tankman, tmanRoleForSkill)
+                    hasCommonSet, hasLegendarySet = self._wotPlusCtrl.validateCrewAssistOrderSets(orderSets)
                     hideDataGuiIndicator = -1
-                    commonSkillPopularity, legendSkillPopularity = self._wotPlusCtrl.getCrewAssistOrderSets(self._tankmanVehicle, tmanRoleForSkill).get(self._skillName, (hideDataGuiIndicator, hideDataGuiIndicator))
+                    commonSkillPopularity, legendSkillPopularity = orderSets.get(self._skillName, (hideDataGuiIndicator, hideDataGuiIndicator))
                     popularityListVM.addReal(commonSkillPopularity if hasCommonSet else hideDataGuiIndicator)
                     popularityListVM.addReal(legendSkillPopularity if hasLegendarySet else hideDataGuiIndicator)
                 popularityListVM.invalidate()

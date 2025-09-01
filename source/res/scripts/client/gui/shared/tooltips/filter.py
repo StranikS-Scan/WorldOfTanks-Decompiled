@@ -42,7 +42,7 @@ class VehicleFilterTooltip(BlocksTooltipData):
     def _packBlocks(self, *args):
         container = self.app.containerManager.getContainer(WindowLayer.SUB_VIEW)
         view = container.getView()
-        if view.alias == VIEW_ALIAS.LOBBY_HANGAR:
+        if view.alias == VIEW_ALIAS.LEGACY_LOBBY_HANGAR:
             tankCarousel = view.getComponent(HANGAR_ALIASES.TANK_CAROUSEL)
         elif view.alias == VIEW_ALIAS.LOBBY_MISSIONS:
             currentTab = view.getComponent(QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS)

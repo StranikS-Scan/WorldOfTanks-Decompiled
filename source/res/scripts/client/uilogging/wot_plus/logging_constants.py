@@ -21,8 +21,6 @@ class WotPlusKeys(Enum):
     CLOSE_BUTTON = 'close_button'
     DETAILS_BUTTON = 'details_button'
     INFO_BUTTON = 'info_button'
-    NOTIFICATION_CENTER = 'notification_center'
-    ATTENDANCE_REWARD_SCREEN = 'attendance_reward_screen'
     ACCOUNT_DASHBOARD = 'account_dashboard'
     SUBSCRIPTION_PAGE = 'subscription_page'
 
@@ -55,21 +53,11 @@ class PremiumAccountStateStr(Enum):
     INACTIVE = 'inactive'
 
 
-class HeaderAdditionalData(Enum):
-    NEW_ATTENDANCE_REWARD = 'new'
-
-
-class NotificationAdditionalData(Enum):
-    RELEASE_NOTIFICATION = 'release_notification'
-    SPECIAL_NOTIFICATION = 'special_notification'
-
-
 class WotPlusInfoPageSource(Enum):
     SHOP = InfoPageInfo('card_details_button', 'shop')
     REWARD_SCREEN = InfoPageInfo(WotPlusKeys.DETAILS_BUTTON, WotPlusKeys.REWARD_SCREEN)
     SUBSCRIPTION_PAGE = InfoPageInfo(WotPlusKeys.INFO_BUTTON, WotPlusKeys.SUBSCRIPTION_PAGE)
     GOLD_RESERVES = InfoPageInfo(ReservesKeys.GOLD_INFO, WotPlusKeys.RESERVE_VIEW)
-    ATTENDANCE_REWARDS_SCREEN = InfoPageInfo(WotPlusKeys.INFO_BUTTON, WotPlusKeys.ATTENDANCE_REWARD_SCREEN)
 
 
 class AccountDashboardFeature(Enum):

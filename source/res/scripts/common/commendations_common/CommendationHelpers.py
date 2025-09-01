@@ -3,7 +3,7 @@
 import typing
 from collections import namedtuple
 import BigWorld
-from constants import CommendationsState, IS_CLIENT
+from constants import CommendationsState, IS_CLIENT, ARENA_PERIOD
 AVATAR_COMPONENT_NAME = 'commendations'
 ARENA_COMPONENT_NAME = 'ArenaCommendationsMasterComponent'
 ARENA_CONTROLLER_NAME = 'commendationsController'
@@ -13,6 +13,10 @@ class CommendationsSource(object):
     EARS = 'ears'
     TAB_SCREEN = 'tab'
     CALLOUT = 'callout'
+
+
+def canCommendNow(period):
+    return period in (ARENA_PERIOD.PREBATTLE, ARENA_PERIOD.BATTLE)
 
 
 CommendationStatistics = namedtuple('CommendationStatistics', 'received, sent')

@@ -6,6 +6,7 @@ import BigWorld
 import Event
 import ResMgr
 from constants import DEFAULT_HANGAR_SCENE
+from gui.prb_control.settings import FUNCTIONAL_FLAG
 from soft_exception import SoftException
 from PlayerEvents import g_playerEvents
 from helpers import dependency
@@ -122,6 +123,8 @@ class HangarSpaceSwitchController(IHangarSpaceSwitchController, IGlobalListener)
             self.processPossibleSceneChange()
 
     def onPrbEntitySwitched(self):
+        if self.prbEntity.getFunctionalFlags() & FUNCTIONAL_FLAG.LEGACY_INIT:
+            return
         self.processPossibleSceneChange()
         g_eventBus.handleEvent(events.HangarSpacesSwitcherEvent(events.HangarSpacesSwitcherEvent.SWITCH_TO_HANGAR_SPACE), scope=EVENT_BUS_SCOPE.LOBBY)
 

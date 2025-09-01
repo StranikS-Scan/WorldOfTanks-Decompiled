@@ -1071,7 +1071,6 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	8000	</weight>
-      <maxLoad>	29000	</maxLoad>
       <terrainResistance>	0.8 0.9 2	</terrainResistance>
       <brakeForce>	26000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -1996,7 +1995,7 @@
   <turrets0>
     <Turret_1_S01_Strv_74_A2>
       <userString>	#sweden_vehicles:Turret_1_S01_Strv_74_A2	</userString>
-      <tags></tags>
+      <tags>	oscillating	</tags>
       <level>	6	</level>
       <price>	12000	</price>
       <notInShop>	true	</notInShop>

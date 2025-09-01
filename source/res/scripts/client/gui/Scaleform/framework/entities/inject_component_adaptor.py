@@ -108,7 +108,7 @@ class InjectComponentAdaptor(InjectComponentMeta):
 
     def __onViewStatusChanged(self, status):
         if status == ViewStatus.DESTROYED and self.__view is not None:
-            _logger.info('Inject component was destroyed: %s', self.getAlias())
+            _logger.info('Inject component was destroyed: %s (%r)', self.getAlias(), self.__view)
             self.__view = None
             self.as_setPlaceIdS(0)
         return

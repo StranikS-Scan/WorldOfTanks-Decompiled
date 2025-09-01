@@ -17,6 +17,7 @@ from gui.impl.lobby.crew.container_vews.quick_training.context import QuickTrain
 from gui.impl.lobby.crew.container_vews.quick_training.controller import QuickTrainingInteractionController
 from gui.impl.lobby.crew.crew_sounds import SOUNDS
 from gui.impl.lobby.crew.widget.crew_widget import QuickTrainingCrewWidget
+from gui.shared import event_dispatcher
 from gui.shared.gui_items.Tankman import NO_TANKMAN
 from gui.shared.gui_items.Vehicle import NO_VEHICLE_ID
 if typing.TYPE_CHECKING:
@@ -44,7 +45,7 @@ class QuickTrainingView(ContainerBase, BaseCrewWidgetView):
         return QuickTrainingInteractionController
 
     def _getEvents(self):
-        return super(QuickTrainingView, self)._getEvents() + ((self.viewModel.mouseLeave, self._onCardMouseLeave),)
+        return super(QuickTrainingView, self)._getEvents() + ((self.viewModel.mouseLeave, self._onCardMouseLeave), (self.viewModel.goToProfile, self._goToProfile))
 
     def _getCallbacks(self):
         return (('inventory', self._onInventoryChange),
@@ -92,7 +93,9 @@ class QuickTrainingView(ContainerBase, BaseCrewWidgetView):
 
     def _onEmptySlotClick(self, tankmanID, slotIdx):
         self.interactionCtrl.onEmptyWidgetSlotClick(tankmanID, slotIdx)
-        self.destroyWindow()
+
+    def _onTankmanSlotAutoSelect(self, tankmanID, slotIdx):
+        self.interactionCtrl.onChangeTankman(tankmanID, slotIdx)
 
     def _onInventoryChange(self, invDiff):
         self.interactionCtrl.onInventoryUpdate(invDiff)
@@ -108,6 +111,12 @@ class QuickTrainingView(ContainerBase, BaseCrewWidgetView):
 
     def _onCardMouseLeave(self):
         self.interactionCtrl.onCardMouseLeave()
+
+    def _goToProfile(self):
+        _, _, currentTankman = self.crewWidget.getWidgetData()
+        if currentTankman:
+            currentViewID = self.crewWidget.currentViewID
+            event_dispatcher.showPersonalCase(currentTankman.invID, previousViewID=currentViewID)
 
     def setSelectedTman(self, tankmanID, slotIdx):
         self.interactionCtrl.onChangeTankman(tankmanID, slotIdx)

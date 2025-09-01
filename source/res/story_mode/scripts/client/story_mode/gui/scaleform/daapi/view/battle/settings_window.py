@@ -20,7 +20,7 @@ class OnboardingSettingsWindow(SettingsWindow):
      SETTINGS_GROUP.MARKERS_SETTINGS: SettingsTabIndex.MARKERS,
      SETTINGS_GROUP.FEEDBACK_SETTINGS: SettingsTabIndex.FEEDBACK}
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         super(OnboardingSettingsWindow, self).__init__(ctx={'redefinedKeyMode': True,
          'isBattleSettings': True,
          'tabIndex': self.sessionProvider.dynamic.overrideSettingsController.defaultTab})

@@ -3,7 +3,7 @@
 from comp7.gui.impl.gen.view_models.views.lobby.enums import MetaRootViews
 from comp7.gui.prb_control.entities import comp7_prb_helpers
 from comp7.gui.shared.event_dispatcher import showComp7BanWindow
-from comp7.gui.shared.event_dispatcher import showComp7MetaRootView, showComp7AllRewardsSelectionWindow
+from comp7.gui.shared.event_dispatcher import showComp7MetaRootTab, showComp7AllRewardsSelectionWindow
 from constants import PENALTY_TYPES, FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA, ARENA_BONUS_TYPE
 from gui.shared import event_dispatcher as shared_events
 from helpers import dependency
@@ -26,7 +26,7 @@ class OpenComp7ShopHandler(NavigationDisabledActionHandler):
         pass
 
     def doAction(self, model, entityID, action):
-        if not self.__comp7Controller.isComp7PrbActive():
+        if not self.__comp7Controller.isModePrbActive():
             self.__spaceSwitchController.onSpaceUpdated += self.__onSpaceUpdated
             comp7_prb_helpers.selectComp7()
             return
@@ -44,13 +44,13 @@ class OpenComp7ShopHandler(NavigationDisabledActionHandler):
             self.__goToShop()
 
     def __onSpaceUpdated(self):
-        if not self.__comp7Controller.isComp7PrbActive():
+        if not self.__comp7Controller.isModePrbActive():
             return
         self.__spaceSwitchController.onSpaceUpdated -= self.__onSpaceUpdated
         self.__goToShop()
 
     def __goToShop(self):
-        showComp7MetaRootView(tabId=MetaRootViews.SHOP)
+        showComp7MetaRootTab(tabId=MetaRootViews.SHOP)
 
 
 class OpenBondEquipmentSelection(NavigationDisabledActionHandler):

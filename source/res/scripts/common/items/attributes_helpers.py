@@ -6,6 +6,7 @@ if TYPE_CHECKING:
     import ResMgr
 STATIC_ATTR_PREFIX = 'miscAttrs/'
 DYNAMIC_ATTR_PREFIX = 'dynAttrs/'
+DESCR_MODIFY_ATTR_PREFIX = 'descrAttrs/'
 AUTOSHOOT_ATTR_PREFIX = 'autoShootAttrs/'
 ALLOWED_STATIC_ATTRS = {'additiveShotDispersionFactor',
  'ammoBayHealthFactor',
@@ -46,7 +47,6 @@ ALLOWED_STATIC_ATTRS = {'additiveShotDispersionFactor',
  'invisibilityAdditiveTerm',
  'invisibilityMultFactor',
  'invisibilityFactorAtShot',
- 'maxWeight',
  'multShotDispersionFactor',
  'onMoveRotationSpeedFactor',
  'onStillRotationSpeedFactor',
@@ -85,7 +85,6 @@ ALLOWED_DYNAMIC_ATTRS = {'additiveShotDispersionFactor',
  'gun/shotDispersionFactors/turretRotation',
  'healthBurnPerSecLossFraction',
  'healthFactor',
- 'multShotDispersionFactor',
  'radio/distance',
  'ramming',
  'repairSpeed',
@@ -98,16 +97,41 @@ ALLOWED_DYNAMIC_ATTRS = {'additiveShotDispersionFactor',
  'vehicle/maxSpeed/backward',
  'vehicle/rotationSpeed',
  'vehicle/bkMaxSpeedBonus',
- 'vehicle/fwMaxSpeedBonus'}
+ 'vehicle/fwMaxSpeedBonus',
+ 'multShotDispersionFactor',
+ 'gun/shotDispersionFactors/afterShot',
+ 'hull_aiming/pitch/wheelsCorrectionSpeedFactor',
+ 'improvedRammingDamageBonus/basicFactor',
+ 'improvedRammingDamageBonus/changeFactor',
+ 'improvedRammingTrackDamageBonus/basicFactor',
+ 'improvedRammingTrackDamageBonus/changeFactor',
+ 'improvedRammingDamageReductionBonus/basicFactor',
+ 'improvedRammingDamageReductionBonus/changeFactor'}
 AUTOSHOOT_DYNAMIC_ATTRS = {'rate/multiplier', 'shotDispersionPerSecFactor', 'maxShotDispersionFactor'}
+
+class DescrModifyAttrsCheker(object):
+
+    def __contains__(self, item):
+        from descr_modify_attrs import checkAttrName
+        return checkAttrName(item)
+
+
 ALLOWED_ATTRS = {STATIC_ATTR_PREFIX: ALLOWED_STATIC_ATTRS,
  DYNAMIC_ATTR_PREFIX: ALLOWED_DYNAMIC_ATTRS,
- AUTOSHOOT_ATTR_PREFIX: AUTOSHOOT_DYNAMIC_ATTRS}
+ AUTOSHOOT_ATTR_PREFIX: AUTOSHOOT_DYNAMIC_ATTRS,
+ DESCR_MODIFY_ATTR_PREFIX: DescrModifyAttrsCheker()}
 ALLOWED_ATTR_PREFIXES = set(ALLOWED_ATTRS.keys())
 
 class MODIFIER_TYPE:
     MUL = 'mul'
     ADD = 'add'
+    SET = 'set'
+
+
+class MODIFIER_FILTER_TYPE:
+    COMMON = 'common'
+    DEFAULT = 'default'
+    SIEGE = 'siege'
 
 
 def _parseAttrName(complexName):
@@ -122,11 +146,14 @@ def readModifiers(xmlCtx, section):
     xmlCtx = (xmlCtx, section.name)
     modifiers = []
     for opType, data in section.items():
-        if opType not in (MODIFIER_TYPE.MUL, MODIFIER_TYPE.ADD):
+        if opType not in (MODIFIER_TYPE.MUL, MODIFIER_TYPE.ADD, MODIFIER_TYPE.SET):
             _xml.raiseWrongXml(xmlCtx, opType, 'Unknown operation type')
         name = data.readString('name')
+        filterName = data.readString('filter') or MODIFIER_FILTER_TYPE.COMMON
         attrType, attrName = _parseAttrName(name)
         names = ALLOWED_ATTRS.get(attrType)
+        if opType == MODIFIER_TYPE.SET and attrType != DESCR_MODIFY_ATTR_PREFIX:
+            _xml.raiseWrongXml(xmlCtx, opType, 'Set not supported just for {}'.format(attrType))
         if names is None:
             _xml.raiseWrongXml(xmlCtx, name, 'Unknown attribute type')
         if attrName not in names:
@@ -135,7 +162,8 @@ def readModifiers(xmlCtx, section):
         modifiers.append((opType,
          attrType,
          attrName,
-         value))
+         value,
+         filterName))
 
     return modifiers
 
@@ -155,16 +183,18 @@ class SingleCollectorHelper(object):
         return SingleCollectorHelper._EMPTY_CHECKER[opType](value)
 
     @staticmethod
-    def collect(total, modifiersList, attrPrefix):
+    def collect(total, modifiersList, attrPrefix, filter=None):
         isEmpty = SingleCollectorHelper.isEmpty
         appliers = SingleCollectorHelper._APPLIERS
         for modifiers in modifiersList:
-            for opType, attrType, attrName, value in modifiers:
+            for opType, attrType, attrName, value, modifierFilter in modifiers:
+                if filter and modifierFilter not in filter:
+                    continue
                 if attrType != attrPrefix:
                     continue
                 if isEmpty(opType, value):
                     continue
-                total[attrName] = appliers[opType](total[attrName], value)
+                total[attrName] = appliers[opType](total.get(attrName, 0), value)
 
 
 class AggregatedCollectorHelper(object):
@@ -180,11 +210,13 @@ class AggregatedCollectorHelper(object):
         return AggregatedCollectorHelper._EMPTY_CHECKER[opType](value)
 
     @staticmethod
-    def collect(total, modifiersList, attrPrefix):
+    def collect(total, modifiersList, attrPrefix, filter=None):
         uniqueAttrs = dict()
         mergers = AggregatedCollectorHelper._MERGERS
         for modifiers in modifiersList:
-            for opType, attrType, attrName, value in modifiers:
+            for opType, attrType, attrName, value, modifierFilter in modifiers:
+                if filter and modifierFilter not in filter:
+                    continue
                 if attrType != attrPrefix:
                     continue
                 key = (attrName, opType)
@@ -195,11 +227,11 @@ class AggregatedCollectorHelper(object):
         for (attrName, opType), value in uniqueAttrs.iteritems():
             if isEmpty(opType, value):
                 continue
-            total[attrName] = appliers[opType](total[attrName], value)
+            total[attrName] = appliers[opType](total.get(attrName, 0), value)
 
 
-def onCollectAttributes(total, modifiersList, attrPrefix, asAggregated):
+def onCollectAttributes(total, modifiersList, attrPrefix, asAggregated, filter=None):
     if asAggregated:
-        AggregatedCollectorHelper.collect(total, modifiersList, attrPrefix)
+        AggregatedCollectorHelper.collect(total, modifiersList, attrPrefix, filter)
     else:
-        SingleCollectorHelper.collect(total, modifiersList, attrPrefix)
+        SingleCollectorHelper.collect(total, modifiersList, attrPrefix, filter)

@@ -6,6 +6,7 @@
     <Heavy>	204	</Heavy>
     <Large>	205	</Large>
     <Large_SH>	206	</Large_SH>
+    <fuelTank_tier_11>	207	</fuelTank_tier_11>
   </ids>
   <shared>
     <Small>
@@ -57,5 +58,13 @@
       <maxRegenHealth>	135	</maxRegenHealth>
       <repairCost>	0	</repairCost>
     </Large_SH>
+    <fuelTank_tier_11>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	300	</weight>
+      <maxHealth>	225	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </fuelTank_tier_11>
   </shared>
 </fuelTanks.xml>

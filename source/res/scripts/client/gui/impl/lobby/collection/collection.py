@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/collection/collection.py
 import logging
 import typing
-from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
+from frameworks.wulf import ViewFlags, ViewSettings
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.profile.sound_constants import ACHIEVEMENTS_SOUND_SPACE
@@ -21,7 +21,6 @@ from gui.impl.lobby.collection.tooltips.collection_item_tooltip_view import Coll
 from gui.impl.lobby.common.view_helpers import packBonusModelAndTooltipData
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.impl.pub import ViewImpl
-from gui.impl.pub.lobby_window import LobbyWindow
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared.event_dispatcher import showCollectionItemPreviewWindow, showHangar
@@ -37,8 +36,8 @@ class CollectionView(ViewImpl):
     _COMMON_SOUND_SPACE = ACHIEVEMENTS_SOUND_SPACE
     __collectionsSystem = dependency.descriptor(ICollectionsSystemController)
 
-    def __init__(self, collectionId, backCallback, backBtnText, page):
-        settings = ViewSettings(R.views.lobby.collection.CollectionView())
+    def __init__(self, layoutID, collectionId, backCallback, backBtnText, page):
+        settings = ViewSettings(layoutID)
         settings.flags = ViewFlags.LOBBY_TOP_SUB_VIEW
         settings.model = CollectionViewModel()
         self.__backCallback = backCallback
@@ -317,13 +316,6 @@ class CollectionView(ViewImpl):
         return path
 
     def __onHeaderMenuClick(self, event):
-        if event.ctx.get('alias') == VIEW_ALIAS.LOBBY_HANGAR:
+        if event.ctx.get('alias') in (VIEW_ALIAS.LOBBY_HANGAR, VIEW_ALIAS.LEGACY_LOBBY_HANGAR):
             setHangarState()
         self.destroyWindow()
-
-
-class CollectionWindow(LobbyWindow):
-    __slots__ = ()
-
-    def __init__(self, collectionId, page, backCallback, backBtnText, parent=None):
-        super(CollectionWindow, self).__init__(WindowFlags.WINDOW, content=CollectionView(collectionId, backCallback, backBtnText, page), parent=parent)

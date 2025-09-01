@@ -10,8 +10,8 @@
   <supplySlots>	5 1 1 6 6 6 7 8 8 8	</supplySlots>
   <postProgressionTree>	role_HT_assault	</postProgressionTree>
   <speedLimits>
-    <forward>	25	</forward>
-    <backward>	14	</backward>
+    <forward>	30	</forward>
+    <backward>	15	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.062	</moving>
@@ -65,7 +65,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	28100	</weight>
-    <maxHealth>	1160	</maxHealth>
+    <maxHealth>	1200	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
@@ -1274,8 +1274,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	10000	</weight>
-      <maxLoad>	51000	</maxLoad>
-      <terrainResistance>	1.3 1.6 2.5	</terrainResistance>
+      <terrainResistance>	1.2 1.4 2.3	</terrainResistance>
       <brakeForce>	40000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	18	</rotationSpeed>
@@ -2303,7 +2302,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	10000	</weight>
-      <maxLoad>	53000	</maxLoad>
       <terrainResistance>	1.2 1.4 2.3	</terrainResistance>
       <brakeForce>	45000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -3324,8 +3322,8 @@
     </Chassis_GB10_Black_Prince_2>
   </chassis>
   <turrets0>
-    <Turret_2_GB10_Black_Prince>
-      <userString>	#gb_vehicles:Turret_2_GB10_Black_Prince	</userString>
+    <Turret_1_GB10_Black_Prince>
+      <userString>	#gb_vehicles:Turret_1_GB10_Black_Prince	</userString>
       <tags></tags>
       <level>	7	</level>
       <price>	26300	</price>
@@ -3349,7 +3347,7 @@
       </armor>
       <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
       <weight>	10000	</weight>
-      <maxHealth>	290	</maxHealth>
+      <maxHealth>	300	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -3363,12 +3361,13 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <OQF_77mm_Gun_MkII>	shared	  <maxAmmo>	140	</maxAmmo>
-          <pitchLimits>	-90 90	  <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 0.0421048 8 0.0910551 7.5 0.102656 6.5 0.115698 8 0.325227 8 0.3691 8 0.388889 6 0.394495 2 0.402057 0.5 0.459355 0.5 0.462234 1 0.466108 2.5 0.467742 4 0.498684 4 0.500326 2.3 0.503576 2.3 0.545964 0.500001 0.598047 0.5 0.602855 1 0.611111 6 0.614302 8 0.674773 8 0.872685 8 0.897145 6.5 0.910603 7.5 0.961171 8 1 8	</maxPitch>
+        <OQF_77mm_Gun_Mk_II_A43>	shared	  <maxAmmo>	140	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0.00000 8.00 0.38333 8.00 0.40000 0.50 0.46389 0.50 0.47222 4.00 0.49722 4.00 0.50278 2.00 0.53056 2.00 0.53611 0.50 0.60000 0.50 0.61667 8.00 1.00000 8.00	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <gun>	OQF_17pdr_Gun_Mk_VII	  <cost>	15000	</cost>
+            <gun>	OQF_17_pdr_Gun_Mk_VII_A43	  <cost>	15000	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -3381,13 +3380,13 @@
             <gun>	30	</gun>
           </armor>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <reloadTime>	4.2	</reloadTime>
+          <reloadTime>	4.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.1	</aimingTime>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB10_Black_Prince/normal/lod0/Gun_01.model	</undamaged>
@@ -3453,11 +3452,11 @@
             <density>	100.083 100.787	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </OQF_77mm_Gun_MkII>
-        <OQF_17pdr_Gun_Mk_VII>	shared	  <maxAmmo>	84	</maxAmmo>
+        </OQF_77mm_Gun_Mk_II_A43>
+        <OQF_17_pdr_Gun_Mk_VII_A43>	shared	  <maxAmmo>	84	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 0.0421048 8 0.0910551 7.5 0.102656 6.5 0.115698 8 0.325227 8 0.3691 8 0.388889 6 0.394495 2 0.402057 0.5 0.459355 0.5 0.462234 1 0.466108 2.5 0.467742 4 0.498684 4.5 0.503576 3 0.545964 0.500001 0.598047 0.5 0.602855 1 0.611111 6 0.614302 8 0.674773 8 0.872685 8 0.897145 6.5 0.910603 7.5 0.961171 8 1 8	</maxPitch>
+            <maxPitch>	0.00000 8.00 0.38333 8.00 0.40000 0.50 0.46389 0.50 0.47222 4.00 0.49722 4.00 0.50278 3.00 0.53056 3.00 0.53611 0.50 0.60000 0.50 0.61667 8.00 1.00000 8.00	</maxPitch>
           </pitchLimits>
           <unlocks>
             <vehicle>	GB11_Caernarvon	  <cost>	110000	</cost>
@@ -3545,7 +3544,7 @@
             <density>	96.5616 101.173	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </OQF_17pdr_Gun_Mk_VII>
+        </OQF_17_pdr_Gun_Mk_VII_A43>
       </guns>
       <models>
         <undamaged>	vehicles/british/GB10_Black_Prince/normal/lod0/Turret_01.model	</undamaged>
@@ -3984,55 +3983,45 @@
         <density>	94.4852 94.4854	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_2_GB10_Black_Prince>
+    </Turret_1_GB10_Black_Prince>
   </turrets0>
   <engines>
-    <Vauxhall_Bedford_Twin_Six>	shared	  <unlocks>
-        <engine>	Rolls_Royse_Meteor	  <cost>	1500	</cost>
+    <Bedford_Twin_Six_A43>	shared	  <unlocks>
+        <engine>	Rolls_Royce_Meteor_A43	  <cost>	1500	</cost>
         </engine>
       </unlocks>
-    </Vauxhall_Bedford_Twin_Six>
-    <Rolls_Royse_Meteor>	shared	</Rolls_Royse_Meteor>
+    </Bedford_Twin_Six_A43>
+    <Rolls_Royce_Meteor_A43>	shared	</Rolls_Royce_Meteor_A43>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <N19Mk2>	shared	  <unlocks>
-        <radio>	N19Mk3	  <cost>	4000	</cost>
-        </radio>
-      </unlocks>
-    </N19Mk2>
-    <N19Mk3>	shared	  <unlocks>
-        <radio>	N22	  <cost>	4500	</cost>
-        </radio>
-      </unlocks>
-    </N19Mk3>
     <N22>	shared	</N22>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Vauxhall_Bedford_Twin_Six>
-          <smplEnginePower>	370.0484	</smplEnginePower>
-          <smplFwMaxSpeed>	25	</smplFwMaxSpeed>
-        </Vauxhall_Bedford_Twin_Six>
-        <Rolls_Royse_Meteor>
-          <smplEnginePower>	634.3687	</smplEnginePower>
-          <smplFwMaxSpeed>	25	</smplFwMaxSpeed>
-        </Rolls_Royse_Meteor>
+        <Bedford_Twin_Six_A43>
+          <smplEnginePower>	600	</smplEnginePower>
+          <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
+        </Bedford_Twin_Six_A43>
+        <Rolls_Royce_Meteor_A43>
+          <smplEnginePower>	650	</smplEnginePower>
+          <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
+        </Rolls_Royce_Meteor_A43>
       </engines>
       <chassis>
         <Chassis_GB10_Black_Prince>
           <grounds>
             <soft>
-              <rollingFriction>	0.20125	</rollingFriction>
+              <rollingFriction>	0.18515	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1288	</rollingFriction>
+              <rollingFriction>	0.1127	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.0966	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_GB10_Black_Prince>

@@ -1,0 +1,57 @@
+<extension.xml>
+  <FeatureName>	white_tiger	</FeatureName>
+  <Personality>	white_tiger_personality	</Personality>
+  <EditorPersonality>	editor_white_tiger_personality	</EditorPersonality>
+  <IsEnabled>	true	</IsEnabled>
+  <Components>
+    <StaticComponents>
+      <WhiteTigerArenaComponent></WhiteTigerArenaComponent>
+      <WhiteTigerAccountComponent></WhiteTigerAccountComponent>
+      <WhiteTigerLoggingComponent></WhiteTigerLoggingComponent>
+    </StaticComponents>
+    <DynamicComponents>
+      <WTHealthTracker></WTHealthTracker>
+      <WTIndexPool></WTIndexPool>
+      <WTPrefabComponent></WTPrefabComponent>
+      <WTAlwaysVisible></WTAlwaysVisible>
+      <WTVehicleShellOverride></WTVehicleShellOverride>
+      <WTPlasmaBonusComponent></WTPlasmaBonusComponent>
+      <WTVFXComponent></WTVFXComponent>
+      <WTImpactZoneNotificationComponent></WTImpactZoneNotificationComponent>
+      <WTUdoOccupier></WTUdoOccupier>
+      <WTBspComponent></WTBspComponent>
+      <WTModulesImmunityComponent></WTModulesImmunityComponent>
+      <WTMapPointSelectorComponent></WTMapPointSelectorComponent>
+      <WTGenerator></WTGenerator>
+      <WTGeneratorActivation></WTGeneratorActivation>
+      <WTAfterburnerAccelerationComponent></WTAfterburnerAccelerationComponent>
+      <WTBattleStateComponent></WTBattleStateComponent>
+      <WTLightningTargetComponent></WTLightningTargetComponent>
+      <WTCircuitOverload></WTCircuitOverload>
+      <WTShotDamageBlocker></WTShotDamageBlocker>
+      <WTShieldImpact></WTShieldImpact>
+      <WTStatCollectorHarrier></WTStatCollectorHarrier>
+      <WTStatCollectorPlayer></WTStatCollectorPlayer>
+      <WTRespawnTimeInfo></WTRespawnTimeInfo>
+      <WTVisualScriptEquipment></WTVisualScriptEquipment>
+      <WTVehicleTeleportHelperComponent></WTVehicleTeleportHelperComponent>
+    </DynamicComponents>
+  </Components>
+  <Entities>
+    <ServerOnlyEntities>
+      <WhiteTigerBattlesMgr></WhiteTigerBattlesMgr>
+      <WhiteTigerUnitMgr></WhiteTigerUnitMgr>
+    </ServerOnlyEntities>
+  </Entities>
+  <cgf>
+    <script>
+      <module>	client.white_tiger.cgf_components.afterburning_ability	</module>
+      <module>	client.white_tiger.cgf_components.sound_components	</module>
+      <module>	client.white_tiger.cgf_components.sound_components_manager	</module>
+      <module>	client.white_tiger.cgf_components.sound_event_managers	</module>
+      <module>	client.white_tiger.cgf_components.arena_manager	</module>
+      <module>	client.white_tiger.cgf_components.sound_helper_components	</module>
+      <module>	client.white_tiger.cgf_components.collision_components	</module>
+    </script>
+  </cgf>
+</extension.xml>

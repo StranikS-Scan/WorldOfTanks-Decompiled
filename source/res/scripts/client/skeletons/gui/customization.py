@@ -25,13 +25,19 @@ class ICustomizationService(object):
     def fini(self):
         raise NotImplementedError
 
-    def showCustomization(self, vehInvID=None, callback=None, season=None, modeId=None, tabId=None, itemCD=None, prevVehicleInvID=None):
+    def showCustomization(self, vehInvID=None, callback=None, season=None, modeId=None, tabId=None, itemCD=None):
         raise NotImplementedError
 
     def closeCustomization(self):
         raise NotImplementedError
 
     def getCtx(self):
+        raise NotImplementedError
+
+    def createCtx(self, season=None, modeId=None, tabId=None, source=None, itemCD=None):
+        raise NotImplementedError
+
+    def destroyCtx(self):
         raise NotImplementedError
 
     def startHighlighter(self, mode):

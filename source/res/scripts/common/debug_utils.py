@@ -495,4 +495,8 @@ def traceMethodCalls(obj, *names):
         setattr(obj, name, traceCalls(func))
 
 
+def makeVehicleLogTag(vehicle):
+    return 'Vehicle(id=%s, name=%s)' % (vehicle.id, vehicle.typeDescriptor.name)
+
+
 init()

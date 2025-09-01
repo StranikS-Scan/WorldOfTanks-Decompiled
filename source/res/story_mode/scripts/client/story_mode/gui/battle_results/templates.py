@@ -26,7 +26,7 @@ STORY_MODE_RESULTS_BLOCK.addNextComponent(MissionIdItem('missionId', _RECORD.PER
 STORY_MODE_RESULTS_BLOCK.addNextComponent(IsForceOnboardingItem('isForceOnboarding', _RECORD.PERSONAL))
 STORY_MODE_RESULTS_BLOCK.addNextComponent(ArenaDurationItem('arenaDuration', _RECORD.COMMON, 'duration'))
 STORY_MODE_RESULTS_BLOCK.addNextComponent(ArenaDateTimeItem('arenaDateTime', _RECORD.COMMON, 'arenaCreateTime'))
-STORY_MODE_RESULTS_BLOCK.addNextComponent(VehicleNameItem('vehicleName'))
+STORY_MODE_RESULTS_BLOCK.addNextComponent(VehicleNameItem('vehicleName', _RECORD.PERSONAL))
 STORY_MODE_RESULTS_BLOCK.addNextComponent(VehicleBlock(_VEHICLE_VO_META, 'vehicle'))
 STORY_MODE_RESULTS_BLOCK.addNextComponent(RewardsBlock(base.ListMeta(), 'rewards'))
 STORY_MODE_RESULTS_BLOCK.addNextComponent(ProgressionInfoItem('progressionInfo', _RECORD.PERSONAL))

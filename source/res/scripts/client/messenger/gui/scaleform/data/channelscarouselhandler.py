@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/data/ChannelsCarouselHandler.py
+import typing
 from debug_utils import LOG_ERROR
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.view.meta.ChannelCarouselMeta import ChannelCarouselMeta
@@ -14,6 +15,8 @@ from messenger.gui.Scaleform.channels.xmpp.lobby_controllers import ChatSessionC
 from messenger.gui.Scaleform.data.ChannelsDataProvider import ChannelsDataProvider
 from skeletons.gui.game_control import IPlatoonController
 from helpers import dependency
+if typing.TYPE_CHECKING:
+    from typing import Optional
 
 class ChannelFindCriteria(ExternalCriteria):
 
@@ -32,11 +35,41 @@ class ChannelsCarouselHandler(object):
         self.__handlers = {}
         self.__showByReqs = {}
         self.__notifiedMessages = {}
+        self.__nextWindowPosition = None
+        self.__windowsPositions = {}
+        self.__managerWindowPosition = None
         return
 
     @sf_lobby
     def app(self):
         return None
+
+    @property
+    def handlers(self):
+        return self.__handlers
+
+    @property
+    def channelsDP(self):
+        return self.__channelsDP
+
+    @property
+    def preBattleChannelsDP(self):
+        return self.__preBattleChannelsDP
+
+    def getWindowGeometry(self, clientID):
+        return self.__windowsPositions.get(clientID, self.__nextWindowPosition)
+
+    def setWindowGeometry(self, clientID, value):
+        self.__windowsPositions[clientID] = value
+
+    def setNextWindowGeometry(self, value):
+        self.__nextWindowPosition = value
+
+    def getManagerWindowGeometry(self):
+        return self.__managerWindowPosition
+
+    def setManagerWindowGeometry(self, value):
+        self.__managerWindowPosition = value
 
     def init(self):
         self.__channelsDP = ChannelsDataProvider()
@@ -51,8 +84,11 @@ class ChannelsCarouselHandler(object):
 
     def clear(self):
         self.__guiEntry = None
+        self.__nextWindowPosition = None
+        self.__managerWindowPosition = None
         self.__handlers.clear()
         self.__notifiedMessages.clear()
+        self.__windowsPositions.clear()
         if self.__channelsDP is not None:
             self.__channelsDP.clear()
             self.__channelsDP.finiGUI()
@@ -121,6 +157,7 @@ class ChannelsCarouselHandler(object):
             if window is not None:
                 window.destroy()
         self.__channelsDP.removeItem(clientID)
+        self.__windowsPositions.pop(clientID, None)
         return
 
     def notifyChannel(self, channel, message):

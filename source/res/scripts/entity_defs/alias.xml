@@ -412,6 +412,9 @@
       <respawnID>
         <Type>	UINT32	</Type>
       </respawnID>
+      <stFrags>
+        <Type>	UINT32	</Type>
+      </stFrags>
     </Properties>
   </PUBLIC_VEHICLE_INFO>
   <ARENA_VEH_INFO>	FIXED_DICT	  <Properties>
@@ -1668,6 +1671,19 @@
       </segment>
     </Properties>
   </VEHICLE_HIT_POINT>
+  <DYN_ATTACHMENTS_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <activeSequenceLayer>
+        <Type>	UINT8	</Type>
+      </activeSequenceLayer>
+      <sequenceTime>
+        <Type>	FLOAT32	</Type>
+      </sequenceTime>
+      <attachmentState>
+        <Type>	UINT8	</Type>
+      </attachmentState>
+    </Properties>
+  </DYN_ATTACHMENTS_INFO>
   <KILL_CAM_ATTACKER_SPOTTED>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <position>
@@ -1809,6 +1825,12 @@
       <spallLinerProtectionHE>
         <Type>	FLOAT	</Type>
       </spallLinerProtectionHE>
+      <gunInstallationIndex>
+        <Type>	UINT8	</Type>
+      </gunInstallationIndex>
+      <gunIndex>
+        <Type>	UINT8	</Type>
+      </gunIndex>
       <velocity>
         <Type>	VECTOR3	</Type>
       </velocity>
@@ -2097,6 +2119,9 @@
       <aimingTime>
         <Type>	FLOAT32	</Type>
       </aimingTime>
+      <gunShotDispersionFactorsAfterShot>
+        <Type>	FLOAT32	</Type>
+      </gunShotDispersionFactorsAfterShot>
     </Properties>
   </TARGETING_INFO>
   <BATTLE_EVENTS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
@@ -2217,6 +2242,28 @@
       </reuseCount>
     </Properties>
   </ROCKET_ACCELERATION_STATE_STATUS>
+  <RECHARGEABLE_NITRO_STATE_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <status>
+        <Type>	UINT8	</Type>
+      </status>
+      <endTime>
+        <Type>	FLOAT32	</Type>
+      </endTime>
+      <remainingTime>
+        <Type>	FLOAT32	</Type>
+      </remainingTime>
+      <isCharged>
+        <Type>	BOOL	</Type>
+      </isCharged>
+      <isEmpty>
+        <Type>	BOOL	</Type>
+      </isEmpty>
+      <isBelowThreshold>
+        <Type>	BOOL	</Type>
+      </isBelowThreshold>
+    </Properties>
+  </RECHARGEABLE_NITRO_STATE_STATUS>
   <AUTO_SHOOT_GUN_STATE_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <state>
@@ -2239,19 +2286,32 @@
       </maxShotDispersion>
     </Properties>
   </AUTO_SHOOT_GUN_STATE_STATUS>
-  <SPIN_GUN_STATE_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+  <POWER_MODE_STATE_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <state>
         <Type>	UINT8	</Type>
       </state>
+      <powerProgress>
+        <Type>	FLOAT32	</Type>
+      </powerProgress>
       <stateActivationTime>
         <Type>	FLOAT32	</Type>
       </stateActivationTime>
-      <spinFactor>
+      <directionFactor>
         <Type>	FLOAT32	</Type>
-      </spinFactor>
+      </directionFactor>
     </Properties>
-  </SPIN_GUN_STATE_STATUS>
+  </POWER_MODE_STATE_STATUS>
+  <POWER_MODE_TIME_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <modeThreshold>
+        <Type>	FLOAT32	</Type>
+      </modeThreshold>
+      <modeDuration>
+        <Type>	FLOAT32	</Type>
+      </modeDuration>
+    </Properties>
+  </POWER_MODE_TIME_INFO>
   <GOODIE_RESOURCE>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <type>
@@ -2929,19 +2989,242 @@
       </networkID>
     </Properties>
   </VEHICLE_HIERARCHY_INFO>
-  <VETERAN_MESSAGE_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
-    <Properties>
-      <veterans>
-        <Type>	ARRAY	  <of>	OBJECT_ID	</of>
-        </Type>
-      </veterans>
-      <anonymVeterans>
-        <Type>	ARRAY	  <of>	OBJECT_ID	</of>
-        </Type>
-      </anonymVeterans>
-      <creditsBonus>
-        <Type>	FLOAT32	</Type>
-      </creditsBonus>
+  <BATTLE_FURY_STATE>	FIXED_DICT	  <Properties>
+      <currentLevel>
+        <Type>	UINT8	</Type>
+      </currentLevel>
+      <maxLevel>
+        <Type>	UINT8	</Type>
+      </maxLevel>
+      <timeInterval>
+        <Type>	TIME_INTERVAL	</Type>
+      </timeInterval>
     </Properties>
-  </VETERAN_MESSAGE_INFO>
+  </BATTLE_FURY_STATE>
+  <CONCENTRATION_MODE_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <state>
+        <Type>	UINT8	</Type>
+      </state>
+      <baseTime>
+        <Type>	FLOAT32	</Type>
+      </baseTime>
+      <endTime>
+        <Type>	FLOAT32	</Type>
+      </endTime>
+    </Properties>
+  </CONCENTRATION_MODE_STATUS>
+  <ACCURACY_STACKS_STATE>	FIXED_DICT	  <Properties>
+      <curLevel>
+        <Type>	UINT8	</Type>
+      </curLevel>
+      <maxLevel>
+        <Type>	UINT8	</Type>
+      </maxLevel>
+      <timeElapsed>
+        <Type>	FLOAT32	</Type>
+      </timeElapsed>
+      <timeNextGain>
+        <Type>	TIME_INTERVAL	</Type>
+      </timeNextGain>
+      <gainMaxSpdKmh>
+        <Type>	FLOAT32	</Type>
+      </gainMaxSpdKmh>
+      <gainTime>
+        <Type>	FLOAT32	</Type>
+      </gainTime>
+      <aimLevelBonus>
+        <Type>	FLOAT32	</Type>
+      </aimLevelBonus>
+    </Properties>
+  </ACCURACY_STACKS_STATE>
+  <SUPPORT_WEAPON_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <state>
+        <Type>	UINT8	</Type>
+      </state>
+      <baseTime>
+        <Type>	FLOAT32	</Type>
+      </baseTime>
+      <endTime>
+        <Type>	FLOAT32	</Type>
+      </endTime>
+      <gunInstallationIndex>
+        <Type>	UINT8	</Type>
+      </gunInstallationIndex>
+    </Properties>
+  </SUPPORT_WEAPON_STATUS>
+  <CLIENT_SHOT_RESULT_DATA>	FIXED_DICT	  <Properties>
+      <vehicleID>
+        <Type>	UINT32	</Type>
+      </vehicleID>
+      <hitFlags>
+        <Type>	UINT32	</Type>
+      </hitFlags>
+      <gunInstallationIndex>
+        <Type>	UINT8	</Type>
+      </gunInstallationIndex>
+    </Properties>
+  </CLIENT_SHOT_RESULT_DATA>
+  <PILLBOX_SIEGE_PUBLIC_STATUS>	FIXED_DICT	  <Properties>
+      <state>
+        <Type>	UINT8	</Type>
+      </state>
+      <nextState>
+        <Type>	UINT8	</Type>
+      </nextState>
+    </Properties>
+  </PILLBOX_SIEGE_PUBLIC_STATUS>
+  <PILLBOX_SIEGE_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <baseTime>
+        <Type>	FLOAT32	</Type>
+      </baseTime>
+      <endTime>
+        <Type>	FLOAT32	</Type>
+      </endTime>
+    </Properties>
+  </PILLBOX_SIEGE_STATUS>
+  <CHARGE_SHOT_PUBLIC_STATE>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <flags>
+        <Type>	UINT8	</Type>
+      </flags>
+      <level>
+        <Type>	UINT8	</Type>
+      </level>
+    </Properties>
+  </CHARGE_SHOT_PUBLIC_STATE>
+  <CHARGE_SHOT_PRIVATE_STATE>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <flags>
+        <Type>	UINT16	</Type>
+      </flags>
+      <level>
+        <Type>	UINT8	</Type>
+      </level>
+      <endTime>
+        <Type>	FLOAT32	</Type>
+      </endTime>
+    </Properties>
+  </CHARGE_SHOT_PRIVATE_STATE>
+  <STANCE_DANCE_STATE>	FIXED_DICT	  <Properties>
+      <state>
+        <Type>	UINT8	</Type>
+      </state>
+      <energyFight>
+        <Type>	FLOAT32	</Type>
+      </energyFight>
+      <energyTurbo>
+        <Type>	FLOAT32	</Type>
+      </energyTurbo>
+      <timePassive>
+        <Type>	TIME_INTERVAL	</Type>
+      </timePassive>
+      <timeSwitch>
+        <Type>	TIME_INTERVAL	</Type>
+      </timeSwitch>
+      <timeActiveTurbo>
+        <Type>	TIME_INTERVAL	</Type>
+      </timeActiveTurbo>
+      <timeActiveFight>
+        <Type>	TIME_INTERVAL	</Type>
+      </timeActiveFight>
+    </Properties>
+  </STANCE_DANCE_STATE>
+  <TARGET_DESIGNATOR_STATE>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <state>
+        <Type>	UINT8	</Type>
+      </state>
+      <startTime>
+        <Type>	FLOAT32	</Type>
+      </startTime>
+      <endTime>
+        <Type>	FLOAT32	</Type>
+      </endTime>
+    </Properties>
+  </TARGET_DESIGNATOR_STATE>
+  <TARGET_DESIGNATOR_SPOTTED_MARKER>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <creatorID>
+        <Type>	OBJECT_ID	</Type>
+      </creatorID>
+      <startTime>
+        <Type>	FLOAT32	</Type>
+      </startTime>
+      <endTime>
+        <Type>	FLOAT32	</Type>
+      </endTime>
+    </Properties>
+  </TARGET_DESIGNATOR_SPOTTED_MARKER>
+  <TARGET_DESIGNATOR_UNSPOTTED_MARKER>	FIXED_DICT	  <AllowNone>	false	</AllowNone>
+    <Properties>
+      <creatorID>
+        <Type>	OBJECT_ID	</Type>
+      </creatorID>
+      <targetID>
+        <Type>	OBJECT_ID	</Type>
+      </targetID>
+      <point>
+        <Type>	VECTOR4	</Type>
+      </point>
+    </Properties>
+  </TARGET_DESIGNATOR_UNSPOTTED_MARKER>
+  <GUN_ROTATOR_FIX_ANGLES>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <turretYaw>
+        <Type>	FLOAT32	</Type>
+      </turretYaw>
+      <gunPitch>
+        <Type>	FLOAT32	</Type>
+      </gunPitch>
+    </Properties>
+  </GUN_ROTATOR_FIX_ANGLES>
+  <STATIONARY_RELOAD_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <state>
+        <Type>	UINT8	</Type>
+      </state>
+      <baseTime>
+        <Type>	FLOAT32	</Type>
+      </baseTime>
+      <timeLeft>
+        <Type>	FLOAT32	</Type>
+      </timeLeft>
+      <gunLockMask>
+        <Type>	UINT8	</Type>
+      </gunLockMask>
+      <sequenceEndTime>
+        <Type>	FLOAT32	</Type>
+      </sequenceEndTime>
+    </Properties>
+  </STATIONARY_RELOAD_STATUS>
+  <GAME_OBJECT_STATE_INFO>	FIXED_DICT	  <Properties>
+      <prefabPath>
+        <Type>	STRING	</Type>
+      </prefabPath>
+      <recreateMethod>
+        <Type>	UINT8	</Type>
+      </recreateMethod>
+      <networkID>
+        <Type>	UINT32	</Type>
+      </networkID>
+      <parentID>
+        <Type>	UINT32	</Type>
+      </parentID>
+      <active>
+        <Type>	BOOL	</Type>
+      </active>
+    </Properties>
+  </GAME_OBJECT_STATE_INFO>
+  <VEHICLE_HIERARCHY_INFO>	FIXED_DICT	  <Properties>
+      <slotName>
+        <Type>	STRING	</Type>
+      </slotName>
+      <networkID>
+        <Type>	UINT32	</Type>
+      </networkID>
+    </Properties>
+  </VEHICLE_HIERARCHY_INFO>
 </alias.xml>

@@ -9,7 +9,7 @@
   <postProgressionTree>	role_LT_universal	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	64	</forward>
+    <forward>	68	</forward>
     <backward>	23	</backward>
   </speedLimits>
   <invisibility>
@@ -57,7 +57,7 @@
     </armor>
     <primaryArmor>	armor_10 armor_3 armor_4	</primaryArmor>
     <weight>	7475	</weight>
-    <maxHealth>	960	</maxHealth>
+    <maxHealth>	1120	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -1204,13 +1204,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_AMX_13_90>
-      <userString>	#france_vehicles:Chassis_AMX_13_90	</userString>
+    <Chassis_F17_AMX_13_90>
+      <userString>	#france_vehicles:Chassis_F17_AMX_13_90	</userString>
       <tags></tags>
       <level>	8	</level>
       <price>	18500	</price>
       <unlocks>
-        <chassis>	Chassis_AMX_13_90_2	  <cost>	23200	</cost>
+        <chassis>	Chassis_F17_AMX_13_90_2	  <cost>	23200	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1218,8 +1218,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	1400	</weight>
-      <maxLoad>	15610	</maxLoad>
-      <terrainResistance>	0.9 1 1.6	</terrainResistance>
+      <terrainResistance>	0.8 0.9 1.4	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	38	</rotationSpeed>
@@ -2302,9 +2301,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	4.57142878	</repairTime>
-    </Chassis_AMX_13_90>
-    <Chassis_AMX_13_90_2>
-      <userString>	#france_vehicles:Chassis_AMX_13_90_2	</userString>
+    </Chassis_F17_AMX_13_90>
+    <Chassis_F17_AMX_13_90_2>
+      <userString>	#france_vehicles:Chassis_F17_AMX_13_90_2	</userString>
       <tags></tags>
       <level>	9	</level>
       <price>	52000	</price>
@@ -2313,7 +2312,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	1400	</weight>
-      <maxLoad>	17840	</maxLoad>
       <terrainResistance>	0.8 0.9 1.4	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -3397,12 +3395,12 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	4.57142878	</repairTime>
-    </Chassis_AMX_13_90_2>
+    </Chassis_F17_AMX_13_90_2>
   </chassis>
   <turrets0>
-    <Turret_1_AMX_13_90>
-      <userString>	#france_vehicles:Turret_1_AMX_13_90	</userString>
-      <tags></tags>
+    <Turret_1_F17_AMX_13_90>
+      <userString>	#france_vehicles:Turret_1_F17_AMX_13_90	</userString>
+      <tags>	oscillating	</tags>
       <level>	9	</level>
       <price>	50000	</price>
       <notInShop>	true	</notInShop>
@@ -3419,7 +3417,7 @@
       </armor>
       <primaryArmor>	armor_9 armor_3 armor_4	</primaryArmor>
       <weight>	2670	</weight>
-      <maxHealth>	240	</maxHealth>
+      <maxHealth>	280	</maxHealth>
       <rotationSpeed>	46	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -3439,7 +3437,7 @@
             </gun>
           </unlocks>
           <pitchLimits>
-            <minPitch>	0 -12 0.194444 -12 0.202778 -9 0.213889 -9 0.222222 -7 0.777778 -7 0.786111 -9 0.797222 -9 0.805556 -12 1 -12	</minPitch>
+            <minPitch>	0.00000 -12.00 0.25000 -12.00 0.31944 -7.00 0.68056 -7.00 0.75000 -12.00 1.00000 -12.00	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
           <armor>
@@ -3462,11 +3460,11 @@
           </clip>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2	</aimingTime>
           <models>
             <undamaged>	vehicles/french/F17_AMX_13_90/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/french/F17_AMX_13_90/crash/lod0/Gun_01.model	</destroyed>
@@ -4021,7 +4019,7 @@
         </_75mm_SA50M>
         <_90mm_F3M>	shared	  <maxAmmo>	40	</maxAmmo>
           <pitchLimits>
-            <minPitch>	0 -12 0.194444 -12 0.202778 -9 0.213889 -9 0.222222 -7 0.777778 -7 0.786111 -9 0.797222 -9 0.805556 -12 1 -12	</minPitch>
+            <minPitch>	0.00000 -12.00 0.25000 -12.00 0.31944 -7.00 0.68056 -7.00 0.75000 -12.00 1.00000 -12.00	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
           <unlocks>
@@ -4040,7 +4038,7 @@
             <armor_9>	40	</armor_9>
             <gun>	35	</gun>
           </armor>
-          <reloadTime>	23	</reloadTime>
+          <reloadTime>	22	</reloadTime>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
@@ -4049,9 +4047,9 @@
           </shotDispersionFactors>
           <clip>
             <count>	4	</count>
-            <rate>	27.2	</rate>
+            <rate>	24	</rate>
           </clip>
-          <aimingTime>	2.7	</aimingTime>
+          <aimingTime>	2.5	</aimingTime>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <models>
             <undamaged>	vehicles/french/F17_AMX_13_90/normal/lod0/Gun_02.model	</undamaged>
@@ -4674,54 +4672,36 @@
         <density>	81.075 81.4218	</density>
         <aoTextureSize>	256 256	</aoTextureSize>
       </camouflage>
-    </Turret_1_AMX_13_90>
+    </Turret_1_F17_AMX_13_90>
   </turrets0>
   <engines>
     <Detroit_Diesel_6V53T>	shared	  <unlocks>
-        <engine>	Detroit_Diesel_6V53T-S	  <cost>	26100	</cost>
+        <engine>	Detroit_Diesel_6V53T_S	  <cost>	26100	</cost>
         </engine>
       </unlocks>
     </Detroit_Diesel_6V53T>
-    <Detroit_Diesel_6V53T-S>	shared	</Detroit_Diesel_6V53T-S>
+    <Detroit_Diesel_6V53T_S>	shared	</Detroit_Diesel_6V53T_S>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <SCR_508>	shared	  <unlocks>
-        <radio>	SCR_528	  <cost>	9000	</cost>
-        </radio>
-      </unlocks>
-    </SCR_508>
     <SCR_528>	shared	</SCR_528>
   </radios>
   <physics>
     <detailed>
       <engines>
         <Detroit_Diesel_6V53T>
-          <smplEnginePower>	400	</smplEnginePower>
-          <smplFwMaxSpeed>	64	</smplFwMaxSpeed>
+          <smplEnginePower>	430	</smplEnginePower>
+          <smplFwMaxSpeed>	68	</smplFwMaxSpeed>
         </Detroit_Diesel_6V53T>
-        <Detroit_Diesel_6V53T-S>
+        <Detroit_Diesel_6V53T_S>
           <smplEnginePower>	470	</smplEnginePower>
-          <smplFwMaxSpeed>	64	</smplFwMaxSpeed>
-        </Detroit_Diesel_6V53T-S>
+          <smplFwMaxSpeed>	68	</smplFwMaxSpeed>
+        </Detroit_Diesel_6V53T_S>
       </engines>
       <chassis>
-        <Chassis_AMX_13_90>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.1288	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.0805	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.07245	</rollingFriction>
-            </firm>
-          </grounds>
-        </Chassis_AMX_13_90>
-        <Chassis_AMX_13_90_2>
+        <Chassis_F17_AMX_13_90>
           <grounds>
             <soft>
               <rollingFriction>	0.1127	</rollingFriction>
@@ -4733,7 +4713,20 @@
               <rollingFriction>	0.0644	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_AMX_13_90_2>
+        </Chassis_F17_AMX_13_90>
+        <Chassis_F17_AMX_13_90_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.1127	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.07245	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0644	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_F17_AMX_13_90_2>
       </chassis>
     </detailed>
   </physics>

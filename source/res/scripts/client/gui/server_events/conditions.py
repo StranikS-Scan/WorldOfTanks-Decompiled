@@ -33,6 +33,12 @@ _AVAILABLE_GUI_TYPES_LABELS = {constants.ARENA_BONUS_TYPE.REGULAR: constants.ARE
 _AVAILABLE_BONUS_TYPES_LABELS = {constants.ARENA_BONUS_TYPE.CYBERSPORT: 'team7x7'}
 _RELATIONS = formatters.RELATIONS
 _RELATIONS_SCHEME = formatters.RELATIONS_SCHEME
+_RELATIONS_HANDLERS = {_RELATIONS.LS: lambda source, toCompare: source < toCompare,
+ _RELATIONS.LSQ: lambda source, toCompare: source <= toCompare,
+ _RELATIONS.EQ: lambda source, toCompare: source == toCompare,
+ _RELATIONS.NEQ: lambda source, toCompare: source != toCompare,
+ _RELATIONS.GT: lambda source, toCompare: source > toCompare,
+ _RELATIONS.GTQ: lambda source, toCompare: source >= toCompare}
 _ET = constants.EVENT_TYPE
 _TOKEN_REQUIREMENT_QUESTS = set(_ET.LIKE_BATTLE_QUESTS + _ET.LIKE_TOKEN_QUESTS)
 
@@ -66,18 +72,12 @@ _SORT_ORDER = ('igrType', 'premiumPlusAccount', 'premiumAccount', 'inClan', 'GR'
 _SORT_ORDER_INDICES = dict(((name, idx) for idx, name in enumerate(_SORT_ORDER)))
 
 def _handleRelation(relation, source, toCompare):
-    if relation == _RELATIONS.EQ:
-        return source == toCompare
-    if relation == _RELATIONS.GT:
-        return source > toCompare
-    if relation == _RELATIONS.GTQ:
-        return source >= toCompare
-    if relation == _RELATIONS.LS:
-        return source < toCompare
-    if relation == _RELATIONS.LSQ:
-        return source <= toCompare
-    LOG_WARNING('Unknown kind of values relation', relation, source, toCompare)
-    return False
+    handler = _RELATIONS_HANDLERS.get(relation, None)
+    if handler:
+        return handler(source, toCompare)
+    else:
+        LOG_WARNING('Unknown kind of values relation', relation, source, toCompare)
+        return False
 
 
 def _findRelation(condDataKeys):
@@ -360,6 +360,14 @@ class _VehsListParser(object):
     def _getVehiclesList(self, data):
         return self._getVehiclesCache(data).values()
 
+    @staticmethod
+    def parseClasses(data):
+        classes = []
+        if 'classes' in data:
+            acceptedClasses = _getNodeValue(data, 'classes')
+            classes = [ name for name, index in constants.VEHICLE_CLASS_INDICES.items() if index in acceptedClasses ]
+        return classes
+
     def _parseFilters(self, data):
         types, nations, levels, classes, roles = (None, None, None, None, None)
         if 'types' in data:
@@ -369,9 +377,7 @@ class _VehsListParser(object):
             nations = sorted(nations, key=GUI_NATIONS_ORDER_INDICES.get)
         if 'levels' in data:
             levels = _getNodeValue(data, 'levels')
-        if 'classes' in data:
-            acceptedClasses = _getNodeValue(data, 'classes')
-            classes = [ name for name, index in constants.VEHICLE_CLASS_INDICES.items() if index in acceptedClasses ]
+        classes = self.parseClasses(data)
         if 'roles' in data:
             acceptedRoles = _getNodeValue(data, 'roles')
             roles = [ constants.ROLE_TYPE_TO_LABEL[roleID] for roleID in acceptedRoles ]
@@ -429,6 +435,27 @@ class _VehsListCondition(_Condition, _VehsListParser):
 
     def getAttackReasonIdx(self):
         return _getNodeValue(self._data, 'attackReason', default=ATTACK_REASON.getIndex(ATTACK_REASON.SHOT))
+
+    def getDirectHitsReceived(self):
+        return _getNodeValue(self._data, 'directHitsReceived', default=0)
+
+    def getDamageDealt(self):
+        return _getNodeValue(self._data, 'damageDealt', default=0)
+
+    def getWhileMovingAtSpeed(self):
+        return _getNodeValue(self._data, 'whileMovingAtSpeed', default=0)
+
+    def getEnemyIsNotSpotted(self):
+        return _getNodeValue(self._data, 'enemyIsNotSpotted', default=False)
+
+    def getBeyondVisionRadius(self):
+        return _getNodeValue(self._data, 'beyondVisionRadius', default=False)
+
+    def getSpotEnemy(self):
+        return _getNodeValue(self._data, 'spotEnemy', default=False)
+
+    def getwhileEnemyInvisible(self):
+        return _getNodeValue(self._data, 'whileEnemyInvisible', default=False)
 
     def getAttackReason(self):
         return ATTACK_REASONS[self.getAttackReasonIdx()]
@@ -1433,6 +1460,12 @@ class CumulativeResult(_Cumulativable):
 
 
 class VehicleKills(_VehsListCondition):
+    SPECIAL_LABELS = {'damageDealt': QUESTS.DETAILS_CONDITIONS_DAMAGEDEALT,
+     'spotEnemy': QUESTS.DETAILS_CONDITIONS_SPOTENEMY,
+     'whileMovingAtSpeed': QUESTS.DETAILS_CONDITIONS_VEHICLEKILLS_WHILEMOVINGATSPEED,
+     'enemyIsNotSpotted': QUESTS.DETAILS_CONDITIONS_VEHICLEKILLS_ENEMYISNOTSPOTTED,
+     'beyondVisionRadius': QUESTS.DETAILS_CONDITIONS_VEHICLEKILLS_BEYONDVISIONRADIUS,
+     'whileEnemyInvisible': QUESTS.DETAILS_CONDITIONS_VEHICLEKILLS_WHILEENEMYINVISIBLE}
 
     def __init__(self, path, data):
         super(VehicleKills, self).__init__('vehicleKills', dict(data), path)
@@ -1443,10 +1476,18 @@ class VehicleKills(_VehsListCondition):
     def getLabelKey(self):
         if self.getFireStarted() or self.getAttackReason() == ATTACK_REASON.FIRE:
             return QUESTS.DETAILS_CONDITIONS_FIREKILLS
-        return QUESTS.DETAILS_CONDITIONS_RAMKILLS if self.getAttackReason() == ATTACK_REASON.RAM else QUESTS.DETAILS_CONDITIONS_VEHICLESKILLS
+        if self.getAttackReason() == ATTACK_REASON.RAM:
+            return QUESTS.DETAILS_CONDITIONS_RAMKILLS
+        specialConditions = set(self.data).intersection(self.SPECIAL_LABELS)
+        return self.SPECIAL_LABELS[specialConditions.pop()] if specialConditions else QUESTS.DETAILS_CONDITIONS_VEHICLESKILLS
 
     def __repr__(self):
         return 'VehicleKills<%s=%d>' % (self._relation, self._relationValue)
+
+    def negate(self):
+        super(VehicleKills, self).negate()
+        if self.getDamageDealt():
+            self._isNegative = True
 
 
 class VehicleKillsCumulative(VehicleKills, _Cumulativable):
@@ -1482,6 +1523,11 @@ class _CountOrTotalEventsCondition(_VehsListCondition):
 
 
 class VehicleDamage(_CountOrTotalEventsCondition):
+    SPECIAL_LABELS = {'directHitsReceived': QUESTS.DETAILS_CONDITIONS_DIRECTHITSRECEIVED,
+     'whileMovingAtSpeed': QUESTS.DETAILS_CONDITIONS_WHILEMOVINGATSPEED,
+     'enemyIsNotSpotted': QUESTS.DETAILS_CONDITIONS_ENEMYISNOTSPOTTED,
+     'beyondVisionRadius': QUESTS.DETAILS_CONDITIONS_BEYONDVISIONRADIUS,
+     'whileEnemyInvisible': QUESTS.DETAILS_CONDITIONS_WHILEENEMYINVISIBLE}
 
     def __init__(self, path, data):
         super(VehicleDamage, self).__init__('vehicleDamage', dict(data), path)
@@ -1493,10 +1539,13 @@ class VehicleDamage(_CountOrTotalEventsCondition):
         return _prepareVehData(self._getVehiclesList(self._data))
 
     def getLabelKey(self):
+        specialConditions = set(self.data).intersection(self.SPECIAL_LABELS)
         if self.getFireStarted() or self.getAttackReason() == ATTACK_REASON.FIRE:
             key = QUESTS.DETAILS_CONDITIONS_FIREDAMAGE
         elif self.getAttackReason() == ATTACK_REASON.RAM:
             key = QUESTS.DETAILS_CONDITIONS_RAMDAMAGE
+        elif specialConditions:
+            key = self.SPECIAL_LABELS[specialConditions.pop()]
         else:
             key = QUESTS.DETAILS_CONDITIONS_VEHICLEDAMAGE
         if self.isEventCount():
@@ -1619,6 +1668,21 @@ class FirstBlood(_Condition, _Negatable):
 
     def getValue(self):
         return self._isFirstBlood
+
+
+class VehicleBlockedByArmor(_CountOrTotalEventsCondition):
+
+    def __init__(self, path, data):
+        super(VehicleBlockedByArmor, self).__init__('vehicleBlockedByArmor', dict(data), path)
+
+    def __repr__(self):
+        return 'VehicleBlockedByArmor<%s=%d>' % (self._relation, self._relationValue)
+
+    def getVehiclesData(self):
+        return _prepareVehData(self._getVehiclesList(self._data))
+
+    def getLabelKey(self):
+        return R.strings.quests.details.conditions.vehicleBlockedByArmor.whileStill
 
 
 class CumulativeSum(_Cumulativable):

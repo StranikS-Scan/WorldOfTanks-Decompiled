@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/veh_post_progression/post_progression_intro.py
+from __future__ import absolute_import
 import typing
 from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
 from gui.impl.gen import R

@@ -54,7 +54,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	12110	</weight>
-    <maxHealth>	920	</maxHealth>
+    <maxHealth>	1000	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	160	</maxHealth>
       <maxRegenHealth>	110	</maxRegenHealth>
@@ -1086,11 +1086,10 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	7800	</weight>
-      <maxLoad>	32000	</maxLoad>
-      <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
+      <terrainResistance>	1 1.1 1.9	</terrainResistance>
       <brakeForce>	29000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	40	</rotationSpeed>
+      <rotationSpeed>	48	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.22	</vehicleMovement>
         <vehicleRotation>	0.22	</vehicleRotation>
@@ -1942,11 +1941,10 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	7800	</weight>
-      <maxLoad>	35000	</maxLoad>
       <terrainResistance>	1 1.1 1.9	</terrainResistance>
       <brakeForce>	32000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	42	</rotationSpeed>
+      <rotationSpeed>	50	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.2	</vehicleMovement>
         <vehicleRotation>	0.2	</vehicleRotation>
@@ -2795,6 +2793,10 @@
       <tags></tags>
       <level>	6	</level>
       <price>	10000	</price>
+      <unlocks>
+        <turret>	Turret_2_Ch04_T34_1	  <cost>	10500	</cost>
+        </turret>
+      </unlocks>
       <armor>
         <armor_1>	90	</armor_1>
         <armor_2>	75	</armor_2>
@@ -2808,7 +2810,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7000	</weight>
-      <maxHealth>	130	</maxHealth>
+      <maxHealth>	180	</maxHealth>
       <rotationSpeed>	46	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -2822,107 +2824,11 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_85mm_S-53>	shared	  <maxAmmo>	50	</maxAmmo>
+        <_85mm_56_85JT_34_1>	shared	  <maxAmmo>	50	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -22 1 -22	</minPitch>
-            <maxPitch>	0 5 0.353005 5 0.416667 1 0.583333 1 0.646995 5 1 5	</maxPitch>
+            <maxPitch>	0 5 0.297449 5 0.361111 0 0.638889 0 0.702551 5 1 5	</maxPitch>
           </pitchLimits>
-          <unlocks>
-            <gun>	_85mm_Tip_56-85JT	  <cost>	6100	</cost>
-            </gun>
-            <vehicle>	Ch05_T34_2	  <cost>	105000	</cost>
-            </vehicle>
-          </unlocks>
-          <armor>
-            <armor_1>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	75	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	30	</gun>
-          </armor>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	5	</reloadTime>
-          <aimingTime>	2.9	</aimingTime>
-          <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/chinese/Ch04_T34_1/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/chinese/Ch04_T34_1/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/chinese/Ch04_T34_1/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/chinese/Ch04_T34_1/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/chinese/Ch04_T34_1/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_main	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000017 -0.000393 1.58154	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0.000003 0.183847 0.258125	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000017 -0.000393 1.58154	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.000003 1.55627 1.55273	</position>
-              <rotation>	1.10909 -0.000053 3.14154	</rotation>
-              <scale>	1.12694 0.712376 1.12694	</scale>
-              <showOn>	4352	</showOn>
-              <clipAngle>	1.02869	</clipAngle>
-              <anchorShift>	0.505161	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.000034 -0.000786 1.08	</rayStart>
-              <rayEnd>	-0.000034 -0.000786 1.53	</rayEnd>
-              <rayUp>	0.07 0 0	</rayUp>
-              <size>	0.45	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <tiling>	0.5 0.25 0.000000 0.000000	</tiling>
-            <density>	90.324 97.1177	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </_85mm_S-53>
-        <_85mm_Tip_56-85JT>	shared	  <maxAmmo>	50	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -22 1 -22	</minPitch>
-            <maxPitch>	0 5 0.353005 5 0.416667 1 0.583333 1 0.646995 5 1 5	</maxPitch>
-          </pitchLimits>
-          <unlocks>
-            <turret>	Turret_2_Ch04_T34_1	  <cost>	10500	</cost>
-            </turret>
-          </unlocks>
           <armor>
             <armor_1>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -2935,9 +2841,15 @@
             <gun>	30	</gun>
           </armor>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	4.8	</reloadTime>
-          <aimingTime>	2	</aimingTime>
+          <reloadTime>	4.5	</reloadTime>
+          <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+            <afterShot>	4.0	</afterShot>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/chinese/Ch04_T34_1/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch04_T34_1/crash/lod0/Gun_02.model	</destroyed>
@@ -3003,7 +2915,7 @@
             <density>	90.6756 102.058	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_85mm_Tip_56-85JT>
+        </_85mm_56_85JT_34_1>
       </guns>
       <models>
         <undamaged>	vehicles/chinese/Ch04_T34_1/normal/lod0/Turret_01.model	</undamaged>
@@ -3596,7 +3508,7 @@
       <level>	7	</level>
       <price>	24000	</price>
       <unlocks>
-        <gun>	_100mm_44-100JT	  <cost>	17500	</cost>
+        <gun>	_100mm_44_100JT_34_1	  <cost>	17500	</cost>
         </gun>
       </unlocks>
       <armor>
@@ -3624,7 +3536,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	9300	</weight>
-      <maxHealth>	230	</maxHealth>
+      <maxHealth>	250	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -3639,138 +3551,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.981	</invisibilityFactor>
       <guns>
-        <_85mm_S-53>	shared	  <maxAmmo>	50	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 5 0.297449 5 0.361111 0 0.638889 0 0.702551 5 1 5	</maxPitch>
-          </pitchLimits>
-          <armor>
-            <armor_1>	170	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	170	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_10>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_10>
-            <armor_11>	110	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_11>
-            <armor_12>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_12>
-            <armor_13>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_13>
-            <armor_14>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_14>
-            <armor_15>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_15>
-            <armor_16>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_16>
-            <gun>	30	</gun>
-          </armor>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	4.5	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/chinese/Ch04_T34_1/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/chinese/Ch04_T34_1/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/chinese/Ch04_T34_1/crash/lod0/Gun_03.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/chinese/Ch04_T34_1/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/chinese/Ch04_T34_1/collision_client/Gun_03.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_main	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000017 -0.009456 1.56845	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0.000004 0.201327 0.218136	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000017 -0.009456 1.56845	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x3	</tags>
-              <position>	0.000006 1.67575 1.37597	</position>
-              <rotation>	0.988806 -0.000042 3.14155	</rotation>
-              <scale>	1.80092 1.13842 1.80091	</scale>
-              <showOn>	4352	</showOn>
-              <clipAngle>	0.287382	</clipAngle>
-              <anchorShift>	0.328752	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	-0.000002 1.33573 1.44502	</position>
-              <rotation>	0.676561 -0.000029 3.14156	</rotation>
-              <scale>	2.15265 1.2 2.15265	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.707226	</clipAngle>
-              <anchorShift>	0.572797	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45002	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.000013 1.37545 1.5542	</position>
-              <rotation>	0.836932 -0.000023 3.14158	</rotation>
-              <scale>	1.90934 1.2 1.90934	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.707226	</clipAngle>
-              <anchorShift>	0.510548	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.000034 -0.016912 1.08	</rayStart>
-              <rayEnd>	-0.000034 -0.016912 1.53	</rayEnd>
-              <rayUp>	0.083 0 0	</rayUp>
-              <size>	0.45	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <tiling>	0.5 0.25 0.000000 0.000000	</tiling>
-            <density>	90.324 97.1177	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </_85mm_S-53>
-        <_85mm_Tip_56-85JT>	shared	  <maxAmmo>	50	</maxAmmo>
+        <_85mm_56_85JT_34_1>	shared	  <maxAmmo>	50	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 5 0.297449 5 0.361111 0 0.638889 0 0.702551 5 1 5	</maxPitch>
@@ -3807,12 +3588,13 @@
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	4.5	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.08	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2	</aimingTime>
+          <aimingTime>	1.8	</aimingTime>
           <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
             <undamaged>	vehicles/chinese/Ch04_T34_1/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch04_T34_1/crash/lod0/Gun_04.model	</destroyed>
@@ -3900,8 +3682,12 @@
             <density>	90.6756 102.058	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_85mm_Tip_56-85JT>
-        <_100mm_44-100JT>	shared	  <maxAmmo>	34	</maxAmmo>
+        </_85mm_56_85JT_34_1>
+        <_100mm_44_100JT_34_1>	shared	  <maxAmmo>	34	</maxAmmo>
+          <unlocks>
+            <vehicle>	Ch05_T34_2	  <cost>	105000	</cost>
+            </vehicle>
+          </unlocks>
           <pitchLimits>
             <minPitch>	0 -18 1 -18	</minPitch>
             <maxPitch>	0 5 0.297449 5 0.361111 0 0.638889 0 0.702551 5 1 5	</maxPitch>
@@ -3944,6 +3730,7 @@
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
             <undamaged>	vehicles/chinese/Ch04_T34_1/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch04_T34_1/crash/lod0/Gun_05.model	</destroyed>
@@ -4031,7 +3818,7 @@
             <density>	90.9034 93.3528	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_100mm_44-100JT>
+        </_100mm_44_100JT_34_1>
       </guns>
       <models>
         <undamaged>	vehicles/chinese/Ch04_T34_1/normal/lod0/Turret_02.model	</undamaged>
@@ -4628,55 +4415,41 @@
   </turrets0>
   <engines>
     <_Type_102S>	shared	  <unlocks>
-        <engine>	_Type_102S1	  <cost>	11000	</cost>
+        <engine>	_12150L_34_1	  <cost>	16000	</cost>
         </engine>
       </unlocks>
     </_Type_102S>
-    <_Type_102S1>	shared	  <unlocks>
-        <engine>	_12150L	  <cost>	16000	</cost>
-        </engine>
-      </unlocks>
-    </_Type_102S1>
-    <_12150L>	shared	</_12150L>
+    <_12150L_34_1>	shared	</_12150L_34_1>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <A-220_1>	shared	  <unlocks>
-        <radio>	A-220B	  <cost>	9500	</cost>
-        </radio>
-      </unlocks>
-    </A-220_1>
     <A-220B>	shared	</A-220B>
   </radios>
   <physics>
     <detailed>
       <engines>
         <_Type_102S>
-          <smplEnginePower>	507.4949	</smplEnginePower>
+          <smplEnginePower>	530	</smplEnginePower>
           <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </_Type_102S>
-        <_Type_102S1>
-          <smplEnginePower>	528.6406	</smplEnginePower>
+        <_12150L_34_1>
+          <smplEnginePower>	570	</smplEnginePower>
           <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
-        </_Type_102S1>
-        <_12150L>
-          <smplEnginePower>	549.7862	</smplEnginePower>
-          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
-        </_12150L>
+        </_12150L_34_1>
       </engines>
       <chassis>
         <Chassis_Ch04_T34_1>
           <grounds>
             <soft>
-              <rollingFriction>	0.16905	</rollingFriction>
+              <rollingFriction>	0.15295	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
+              <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_Ch04_T34_1>
@@ -4698,9 +4471,9 @@
   </physics>
   <clientAdjustmentFactors>
     <guns>
-      <_85mm_Tip_56-85JT>
+      <_85mm_56_85JT_34_1>
         <delta>	0.907407407	</delta>
-      </_85mm_Tip_56-85JT>
+      </_85mm_56_85JT_34_1>
     </guns>
     <armour>	1.190270854	</armour>
   </clientAdjustmentFactors>

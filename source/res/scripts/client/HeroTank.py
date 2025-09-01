@@ -3,12 +3,9 @@
 import math
 import random
 from typing import TYPE_CHECKING
-import BigWorld
 from ClientSelectableCameraVehicle import ClientSelectableCameraVehicle
-from ClientSelectableCameraObject import ClientSelectableCameraObject
 from CurrentVehicle import g_currentPreviewVehicle
 from gui.hangar_vehicle_appearance import HangarVehicleAppearance
-from gui.hangar_cameras.hangar_camera_common import CameraMovementStates
 from gui.limited_ui.lui_rules_storage import LUI_RULES
 from gui.shared import events, EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -53,6 +50,7 @@ class _HeroTankAppearance(HangarVehicleAppearance):
 class HeroTank(ClientSelectableCameraVehicle):
     _heroTankCtrl = dependency.descriptor(IHeroTankController)
     _hangarSpace = dependency.descriptor(IHangarSpace)
+    __c11nService = dependency.descriptor(ICustomizationService)
     __limitedUIController = dependency.descriptor(ILimitedUIController)
 
     def __init__(self):
@@ -68,6 +66,7 @@ class HeroTank(ClientSelectableCameraVehicle):
         self.__limitedUIController.startObserve(LUI_RULES.HeroTank, self.__updateHeroTankVisibility)
 
     def onLeaveWorld(self):
+        self.removeModelFromScene()
         self._hangarSpace.onHeroTankReady -= self._updateHeroTank
         self._heroTankCtrl.onUpdated -= self._updateHeroTank
         self._heroTankCtrl.onInteractive -= self._updateInteractive
@@ -75,8 +74,13 @@ class HeroTank(ClientSelectableCameraVehicle):
         super(HeroTank, self).onLeaveWorld()
 
     def onMouseClick(self):
-        ClientSelectableCameraObject.switchCamera(self, 'HeroTank')
-        return self.state != CameraMovementStates.FROM_OBJECT
+        from gui.shared.event_dispatcher import showVehicleHubOverview
+        style = None
+        styleId = self._heroTankCtrl.getCurrentTankStyleId()
+        if styleId is not None:
+            style = self.__c11nService.getItemByID(GUI_ITEM_TYPE.STYLE, styleId)
+        showVehicleHubOverview(self.__heroTankCD, style=style)
+        return
 
     def removeModelFromScene(self):
         if self.isVehicleLoaded:
@@ -141,11 +145,12 @@ class HeroTank(ClientSelectableCameraVehicle):
         return g_currentPreviewVehicle.item and g_currentPreviewVehicle.isHeroTank
 
 
-def debugReloadHero(heroName):
+@dependency.replace_none_kwargs(heroTankCtrl=IHeroTankController)
+def debugReloadHero(heroName, heroTankCtrl=None):
     if not IS_DEVELOPMENT:
         return
-    for e in BigWorld.entities.values():
-        if isinstance(e, HeroTank):
-            heroDescriptor = vehicles.VehicleDescr(typeName=heroName)
-            e.recreateVehicle(heroDescriptor)
-            return
+    else:
+        if heroTankCtrl is not None:
+            heroCD = None if heroName == 'Reset' else vehicles.VehicleDescr(typeName=heroName).type.compactDescr
+            heroTankCtrl.setDebugTankCD(heroCD)
+        return

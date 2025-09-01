@@ -13,7 +13,12 @@ class GUN_MARKER_VIEW_CONSTANTS(object):
     GUN_MARKER_SPG_DEBUG_LINKAGE = 'GunMarkerSPGDebugUI'
     ARTY_HIT_MARKER_LINKAGE = 'ArtyHitMarkerUI'
     TWIN_GUN_MARKER_LINKAGE = 'TwinGunMarkerUI'
+    ACCURACY_GUN_MARKER_DEBUG_LINKAGE = 'AccuracyGunMarkerDebugUI'
+    ACCURACY_GUN_MARKER_LINKAGE = 'AccuracyGunMarkerUI'
+    CHARGE_GUN_MARKER_DEBUG_LINKAGE = 'ChargeGunMarkerDebugUI'
+    CHARGE_GUN_MARKER_LINKAGE = 'ChargeGunMarkerUI'
     TWIN_GUN_MARKER_DEBUG_LINKAGE = 'TwinGunMarkerDebugUI'
+    PENETRATION_FX_LINKAGE = 'PenetrationFxUI'
     ARCADE_GUN_MARKER_NAME = 'arcadeGunMarker'
     SNIPER_GUN_MARKER_NAME = 'sniperGunMarker'
     SPG_GUN_MARKER_NAME = 'spgGunMarker'
@@ -23,6 +28,14 @@ class GUN_MARKER_VIEW_CONSTANTS(object):
     TWIN_GUN_SNIPER_MARKER_NAME = 'sniperTwinGunMarker'
     ARCADE_DUAL_ACC_GUN_MARKER_NAME = 'arcadeDualAccGunMarker'
     SNIPER_DUAL_ACC_GUN_MARKER_NAME = 'sniperDualAccGunMarker'
+    ACCURACY_GUN_ARCADE_MARKER_NAME = 'arcadeAccuracyGunMarker'
+    ACCURACY_GUN_SNIPER_MARKER_NAME = 'sniperAccuracyGunMarker'
+    DEBUG_ACCURACY_GUN_ARCADE_MARKER_NAME = 'arcadeDebugAccuracyGunMarker'
+    DEBUG_ACCURACY_GUN_SNIPER_MARKER_NAME = 'sniperDebugAccuracyGunMarker'
+    CHARGE_GUN_ARCADE_MARKER_NAME = 'arcadeChargeGunMarker'
+    CHARGE_GUN_SNIPER_MARKER_NAME = 'sniperChargeGunMarker'
+    DEBUG_CHARGE_GUN_ARCADE_MARKER_NAME = 'arcadeDebugChargeGunMarker'
+    DEBUG_CHARGE_GUN_SNIPER_MARKER_NAME = 'sniperDebugChargeGunMarker'
     VIDEO_GUN_MARKER_NAME = 'videoGunMarker'
     ARTY_HIT_MARKER_NAME = 'artyHitGunMarker'
     DEBUG_ARCADE_GUN_MARKER_NAME = 'arcadeDebugGunMarker'
@@ -38,7 +51,6 @@ class GUN_MARKER_VIEW_CONSTANTS(object):
      10,
      13]
     GUN_TAG_SHOT_RESULT_TYPES = [0,
-     2,
      3,
      6,
      9,

@@ -3,22 +3,19 @@
 from functools import wraps
 from logging import getLogger
 import typing
-from frameworks.wulf import WindowLayer
-from gui.Scaleform.framework import ScopeTemplates
-from gui.Scaleform.framework.managers.loaders import GuiImplViewLoadParams, SFViewLoadParams
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.battle_control.arena_info.interfaces import IArenaLoadController
 from gui.impl.gen import R
+from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
-from skeletons.gui.impl import IGuiLoader
-from story_mode.gui.fade_in_out import UseStoryModeFading, UseHeaderNavigationImpossible
+from skeletons.gui.impl import IGuiLoader, INotificationWindowController
+from story_mode.gui.fade_in_out import UseStoryModeFading
 from story_mode.gui.scaleform.daapi.view.model.video_settings_model import getIntroVideoSettings
-from story_mode.gui.shared.utils import waitForLobby
 from story_mode.gui.story_mode_gui_constants import VIEW_ALIAS
 from story_mode.skeletons.story_mode_controller import IStoryModeController
 from story_mode_common.story_mode_constants import LOGGER_NAME, FIRST_MISSION_ID
-from wg_async import wg_async, wg_await
 _logger = getLogger(LOGGER_NAME)
 
 class _ArenaLoadedChecker(IArenaLoadController):
@@ -125,22 +122,6 @@ def showCongratulationsWindow(isCloseVisible=False, onClose=None, awardData=None
     window.load()
 
 
-@UseHeaderNavigationImpossible()
-@UseStoryModeFading(layer=WindowLayer.TOP_SUB_VIEW, waitForLayoutReady=R.views.story_mode.lobby.MissionSelectionView())
-@wg_async
-def showMissionSelectionView():
-    _logger.debug('showMissionSelectionView')
-    contentResId = R.views.story_mode.lobby.MissionSelectionView()
-    if dependency.instance(IGuiLoader).windowsManager.getViewByLayoutID(contentResId) is not None:
-        sendViewLoadedEvent(contentResId)
-        return
-    else:
-        yield wg_await(waitForLobby())
-        from story_mode.gui.impl.lobby.mission_selection_view import MissionSelectionView
-        g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(contentResId, MissionSelectionView, ScopeTemplates.DEFAULT_SCOPE)), scope=EVENT_BUS_SCOPE.LOBBY)
-        return
-
-
 def showBattleResultWindow(arenaUniqueId):
     from story_mode.gui.impl.lobby.battle_result_view import BattleResultWindow
     BattleResultWindow(arenaUniqueId).load()
@@ -155,6 +136,8 @@ def showEventWelcomeWindow():
     EventWelcomeWindow(R.views.story_mode.lobby.EventWelcomeView()).load()
 
 
-def showNewbieAdvertisingWindow():
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
+def showNewbieAdvertisingWindow(notificationMgr=None):
     from story_mode.gui.impl.lobby.newbie_advertising_view import NewbieAdvertisingWindow
-    NewbieAdvertisingWindow(R.views.story_mode.lobby.NewbieAdvertisingView()).load()
+    command = WindowNotificationCommand(NewbieAdvertisingWindow(R.views.story_mode.lobby.NewbieAdvertisingView()))
+    notificationMgr.append(command)

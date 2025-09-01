@@ -1344,11 +1344,10 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	12000	</weight>
-      <maxLoad>	70000	</maxLoad>
       <terrainResistance>	1.8 2 3	</terrainResistance>
       <brakeForce>	65000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	22	</rotationSpeed>
+      <rotationSpeed>	25	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.26	</vehicleMovement>
         <vehicleRotation>	0.26	</vehicleRotation>
@@ -2453,6 +2452,10 @@
       </surveyingDeviceHealth>
       <guns>
         <_123mm_OQF_Mk_1>	shared	  <maxAmmo>	60	</maxAmmo>
+          <unlocks>
+            <vehicle>	GB152_AT_FV230_Breaker	  <cost>	325000	</cost>
+            </vehicle>
+          </unlocks>
           <armor>
             <armor_1>	304.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -2623,7 +2626,7 @@
     </Turret_1_GB92_FV217>
   </turrets0>
   <engines>
-    <Rolls_Royce_Griffon>	shared	</Rolls_Royce_Griffon>
+    <Rolls_Royce_Griffon_217>	shared	</Rolls_Royce_Griffon_217>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
@@ -2635,10 +2638,10 @@
   <physics>
     <detailed>
       <engines>
-        <Rolls_Royce_Griffon>
-          <smplEnginePower>	1000	</smplEnginePower>
+        <Rolls_Royce_Griffon_217>
+          <smplEnginePower>	1050	</smplEnginePower>
           <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
-        </Rolls_Royce_Griffon>
+        </Rolls_Royce_Griffon_217>
       </engines>
       <chassis>
         <Chassis_GB92_FV217>

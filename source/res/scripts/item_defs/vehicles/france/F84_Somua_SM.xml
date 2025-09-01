@@ -931,7 +931,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	13000	</weight>
-      <maxLoad>	60000	</maxLoad>
       <terrainResistance>	1.2 1.3 2.1	</terrainResistance>
       <brakeForce>	35000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -1762,7 +1761,7 @@
   <turrets0>
     <Turret_1_F84_Somua_SM>
       <userString>	#france_vehicles:Turret_1_F84_Somua_SM	</userString>
-      <tags></tags>
+      <tags>	oscillating	</tags>
       <level>	8	</level>
       <price>	30000	</price>
       <notInShop>	true	</notInShop>

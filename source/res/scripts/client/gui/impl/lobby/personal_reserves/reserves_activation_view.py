@@ -23,7 +23,7 @@ from gui.impl.lobby.personal_reserves.reserves_constants import PERSONAL_RESERVE
 from gui.impl.pub import ViewImpl
 from gui.server_events.settings import getPersonalReservesSettings
 from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showPersonalReservesInfomationScreen, showStorage, showPersonalReservesIntro
+from gui.shared.event_dispatcher import showStorage, showPersonalReservesIntro
 from gui.shared.event_dispatcher import showShop
 from gui.shared.money import Currency
 from gui.shared.tooltips import contexts
@@ -115,9 +115,6 @@ class ReservesActivationView(ViewImpl, EventSystemEntity):
     def onPersonalReserveTick(self):
         self.fillViewModel()
 
-    def onInformationClicked(self, *args, **kwargs):
-        showPersonalReservesInfomationScreen()
-
     def onClose(self, *args, **kwargs):
         self.destroyWindow()
 
@@ -174,7 +171,6 @@ class ReservesActivationView(ViewImpl, EventSystemEntity):
         return ((self._epicController.onUpdated, self.__onEpicUpdate),
          (self._boosters.onPersonalReserveTick, self.onPersonalReserveTick),
          (self._boosters.onBoostersDataUpdate, self.onBoostersDataUpdate),
-         (self.viewModel.onInformationClicked, self.onInformationClicked),
          (self.viewModel.onClose, self.onClose),
          (self.viewModel.onBoosterActivate, self.onBoosterActivate),
          (self.viewModel.onNavigateToStore, self.onNavigateToStore),

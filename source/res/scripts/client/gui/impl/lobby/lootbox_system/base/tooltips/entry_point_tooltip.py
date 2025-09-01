@@ -13,7 +13,7 @@ class EntryPointTooltip(ViewImpl):
     __lootBoxes = dependency.descriptor(ILootBoxSystemController)
 
     def __init__(self, eventName):
-        settings = ViewSettings(R.views.lobby.lootbox_system.tooltips.EntryPointTooltip())
+        settings = ViewSettings(R.views.mono.lootbox.tooltips.entry_point())
         settings.model = EntryPointTooltipViewModel()
         super(EntryPointTooltip, self).__init__(settings)
         self.__eventName = eventName

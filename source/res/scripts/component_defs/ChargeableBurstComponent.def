@@ -1,0 +1,22 @@
+<ChargeableBurstComponent.def>
+  <DetailLevel>	MY_VEHICLE	</DetailLevel>
+  <Properties>
+    <vehTypeCD>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehTypeCD>
+    <charges>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </charges>
+    <shoots>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </shoots>
+    <isBurstActive>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </isBurstActive>
+  </Properties>
+  <DefaultKeyName>	chargeableBurstComponent	</DefaultKeyName>
+</ChargeableBurstComponent.def>

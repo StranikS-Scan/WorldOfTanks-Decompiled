@@ -1632,7 +1632,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	10000	</weight>
-      <maxLoad>	50000	</maxLoad>
       <terrainResistance>	1.3 1.8 2.9	</terrainResistance>
       <brakeForce>	50000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2670,7 +2669,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	10000	</weight>
-      <maxLoad>	53000	</maxLoad>
       <terrainResistance>	1.3 1.8 2.9	</terrainResistance>
       <brakeForce>	50000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -3695,9 +3693,9 @@
       <maxHealth>	360	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	170	</maxHealth>
+        <maxRegenHealth>	85	</maxRegenHealth>
+        <repairCost>	9	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	380	</circularVisionRadius>
       <surveyingDeviceHealth>
@@ -3706,7 +3704,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_130mm_59_130JG_FT>	shared	  <maxAmmo>	30	</maxAmmo>
+        <_130mm_59_130JG_FT_111>	shared	  <maxAmmo>	30	</maxAmmo>
           <armor>
             <armor_1>	270	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3728,8 +3726,8 @@
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	13.45	</reloadTime>
-          <aimingTime>	2.5	</aimingTime>
+          <reloadTime>	12.4	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.06	</turretRotation>
@@ -3737,7 +3735,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <unlocks>
-            <gun>	_152mm_59_152JG_FT	  <cost>	67000	</cost>
+            <gun>	_152mm_59_152JG_FT_111	  <cost>	67000	</cost>
             </gun>
           </unlocks>
           <models>
@@ -3804,8 +3802,8 @@
             <density>	80.826 80.9656	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_130mm_59_130JG_FT>
-        <_152mm_59_152JG_FT>	shared	  <maxAmmo>	30	</maxAmmo>
+        </_130mm_59_130JG_FT_111>
+        <_152mm_59_152JG_FT_111>	shared	  <maxAmmo>	30	</maxAmmo>
           <unlocks>
             <vehicle>	Ch38_WZ113G_FT	  <cost>	231000	</cost>
             </vehicle>
@@ -3830,12 +3828,12 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
-          <reloadTime>	17.5	</reloadTime>
+          <reloadTime>	19	</reloadTime>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <aimingTime>	2.5	</aimingTime>
           <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.06	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -3892,7 +3890,7 @@
             <density>	80.333 80.7359	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_152mm_59_152JG_FT>
+        </_152mm_59_152JG_FT_111>
       </guns>
       <models>
         <undamaged>	vehicles/chinese/Ch37_WZ111G_FT/normal/lod0/Turret_01.model	</undamaged>
@@ -3915,36 +3913,31 @@
     </Turret_1_Ch37_WZ111G_FT>
   </turrets0>
   <engines>
-    <_12150LSG>	shared	  <unlocks>
-        <engine>	_12150LTG	  <cost>	28000	</cost>
+    <_12150LSG_111>	shared	  <unlocks>
+        <engine>	_12150LTG_111	  <cost>	28000	</cost>
         </engine>
       </unlocks>
-    </_12150LSG>
-    <_12150LTG>	shared	</_12150LTG>
+    </_12150LSG_111>
+    <_12150LTG_111>	shared	</_12150LTG_111>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <A-220_1>	shared	  <unlocks>
-        <radio>	A-220B	  <cost>	9500	</cost>
-        </radio>
-      </unlocks>
-    </A-220_1>
     <A-220B>	shared	</A-220B>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
   <physics>
     <detailed>
       <engines>
-        <_12150LSG>
-          <smplEnginePower>	550	</smplEnginePower>
+        <_12150LSG_111>
+          <smplEnginePower>	650	</smplEnginePower>
           <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
-        </_12150LSG>
-        <_12150LTG>
+        </_12150LSG_111>
+        <_12150LTG_111>
           <smplEnginePower>	700	</smplEnginePower>
           <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
-        </_12150LTG>
+        </_12150LTG_111>
       </engines>
       <chassis>
         <Chassis_Ch37_WZ111G_FT>

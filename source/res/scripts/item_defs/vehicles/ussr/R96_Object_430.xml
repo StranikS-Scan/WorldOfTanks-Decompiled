@@ -886,11 +886,10 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	12000	</weight>
-      <maxLoad>	38000	</maxLoad>
       <terrainResistance>	0.6 0.7 1.6	</terrainResistance>
       <brakeForce>	36000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	52	</rotationSpeed>
+      <rotationSpeed>	57	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.16	</vehicleMovement>
         <vehicleRotation>	0.16	</vehicleRotation>
@@ -1652,11 +1651,10 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	12000	</weight>
-      <maxLoad>	39000	</maxLoad>
       <terrainResistance>	0.6 0.7 1.6	</terrainResistance>
       <brakeForce>	36000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	52	</rotationSpeed>
+      <rotationSpeed>	60	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.16	</vehicleMovement>
         <vehicleRotation>	0.16	</vehicleRotation>
@@ -2439,7 +2437,7 @@
         <maxRegenHealth>	75	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	380	</circularVisionRadius>
+      <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	110	</maxHealth>
         <maxRegenHealth>	55	</maxRegenHealth>
@@ -2469,7 +2467,7 @@
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -16.2 1 -16.2	</minPitch>
-            <maxPitch>	0 5 0.347222 5 0.361111 1 0.430556 1 0.444444 4 0.555556 4 0.569445 1 0.638889 1 0.652778 5 1 5	</maxPitch>
+            <maxPitch>	0.00000 5.00 0.43889 5.00 0.45000 4.00 0.55000 4.00 0.56111 5.00 1.00000 5.00	</maxPitch>
           </pitchLimits>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
@@ -3248,11 +3246,6 @@
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <_9RM>	shared	  <unlocks>
-        <radio>	R113	  <cost>	8700	</cost>
-        </radio>
-      </unlocks>
-    </_9RM>
     <R113>	shared	</R113>
   </radios>
   <physics>

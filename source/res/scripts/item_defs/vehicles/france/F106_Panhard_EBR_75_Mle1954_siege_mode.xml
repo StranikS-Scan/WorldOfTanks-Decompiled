@@ -677,7 +677,6 @@
         </armor_9>
       </armor>
       <weight>	3000	</weight>
-      <maxLoad>	17000	</maxLoad>
       <terrainResistance>	1.0 1.35 1.95	</terrainResistance>
       <brakeForce>	22500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -1096,7 +1095,7 @@
   <turrets0>
     <Turret_1_F106_Panhard_EBR_75_Mle1954>
       <userString>	#france_vehicles:Turret_1_F106_Panhard_EBR_75_Mle1954	</userString>
-      <tags></tags>
+      <tags>	oscillating	</tags>
       <level>	8	</level>
       <price>	30000	</price>
       <notInShop>	true	</notInShop>

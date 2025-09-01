@@ -1,0 +1,86 @@
+<pm3_8_3_9.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm3_8_3_9_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <isAlive></isAlive>
+            <or>
+              <results>
+                <key>	spotted	</key>
+                <greaterOrEqual>	4	</greaterOrEqual>
+              </results>
+              <multiStunEvent>
+                <stunnedByShot>	2	</stunnedByShot>
+                <greaterOrEqual>	2	</greaterOrEqual>
+              </multiStunEvent>
+            </or>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	125000	</credits>
+        <premium_plus>	1	</premium_plus>
+        <token>
+          <id>	tman_template:::men1:1470420:::::base:	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:final:s3:t8:main	</id>
+          <expires>	01.01.2050 00:01	</expires>
+          <count>	1	</count>
+          <limit>	45	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm3_8_3_9_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <not>
+              <or>
+                <token>
+                  <id>	token:pt:final:s3:t8:main	</id>
+                  <equal>	45	</equal>
+                </token>
+                <token>
+                  <id>	token:pt:s3:t8:finished:honor	</id>
+                  <equal>	1	</equal>
+                </token>
+              </or>
+            </not>
+          </account>
+        </preBattle>
+        <postBattle>
+          <and>
+            <isAlive></isAlive>
+            <or>
+              <results>
+                <key>	spotted	</key>
+                <greaterOrEqual>	4	</greaterOrEqual>
+              </results>
+              <multiStunEvent>
+                <stunnedByShot>	2	</stunnedByShot>
+                <greaterOrEqual>	2	</greaterOrEqual>
+              </multiStunEvent>
+            </or>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	pm3:8:points	</id>
+          <expires>	01.12.2050 06:00	</expires>
+          <count>	50	</count>
+        </token>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</pm3_8_3_9.xml>

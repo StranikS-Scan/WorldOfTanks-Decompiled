@@ -1,22 +1,27 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/frameworks/state_machine/states.py
+import typing
 from collections import namedtuple
+from past.builtins import cmp
 from . import visitor
 from .exceptions import StateError
 from .node import Node
 from .transitions import BaseTransition
+if typing.TYPE_CHECKING:
+    from . import StateEvent
+    from . import StateMachine
 
 class StateFlags(object):
     UNDEFINED = 0
     INITIAL = 1
     FINAL = 2
     HISTORY = 4
-    EFFECT_TYPE_MASK = 7
     SHALLOW_HISTORY = HISTORY | 8
     DEEP_HISTORY = HISTORY | 16
     HISTORY_TYPE_MASK = 28
     SINGULAR = 32
     PARALLEL = 64
+    MAX = PARALLEL
 
 
 def _filterState(child):
@@ -29,6 +34,10 @@ def _filterInitialState(child):
 
 def _filterHistoryState(child):
     return _filterState(child) and child.isHistory()
+
+
+def _filterEnteredState(child):
+    return _filterState(child) and child.isEntered()
 
 
 def _filterBaseTransition(child):
@@ -78,6 +87,9 @@ class State(Node):
     def isAtomic(self):
         return self.isFinal() or not self.isFinal() and not self.getChildrenStates()
 
+    def isEntered(self):
+        return self.__isEntered
+
     @staticmethod
     def isMachine():
         return False
@@ -92,13 +104,10 @@ class State(Node):
         return
 
     def getInitial(self):
-        children = self.getChildren(filter_=_filterInitialState)
-        if not children:
-            return None
-        else:
-            if len(children) > 1:
-                raise StateError('State {} should be have one initial state, found {}'.format(self, children))
-            return children[0]
+        initial = self.getChildren(filter_=_filterState if self.isParallel() else _filterInitialState)
+        if len(initial) > 1 and not self.isParallel():
+            raise StateError('State {} should be have one initial state, found {}'.format(self, initial))
+        return initial
 
     def addChildState(self, state):
         if not isinstance(state, State):
@@ -114,8 +123,19 @@ class State(Node):
             raise StateError('Sub-state can not be removed from final state')
         self._removeChild(state)
 
+    def getEnteredChildrenStates(self):
+        return self.getChildren(filter_=_filterEnteredState)
+
     def getChildrenStates(self):
         return self.getChildren(filter_=_filterState)
+
+    def getRecursiveChildrenStates(self):
+        children = self.getChildrenStates()
+        grandchildren = []
+        for child in children:
+            grandchildren.extend(child.getRecursiveChildrenStates())
+
+        return grandchildren + children
 
     def getHistoryStates(self):
         return self.getChildren(filter_=_filterHistoryState)
@@ -139,11 +159,11 @@ class State(Node):
     def configure(self, *args, **kwargs):
         pass
 
-    def enter(self):
+    def enter(self, event):
         if self.__isEntered:
             raise StateError('{} is already activated'.format(self))
         self.__isEntered = True
-        self._onEntered()
+        self._onEntered(event)
 
     def exit(self):
         if not self.__isEntered:
@@ -152,12 +172,12 @@ class State(Node):
         self._onExited()
 
     def addChild(self, child):
-        raise StateError('Routine is not allowed in {}', self.__class__.__name__)
+        raise StateError('Routine is not allowed in {}'.format(self.__class__.__name__))
 
     def removeChild(self, child):
-        raise StateError('Routine is not allowed in {}', self.__class__.__name__)
+        raise StateError('Routine is not allowed in {}'.format(self.__class__.__name__))
 
-    def _onEntered(self):
+    def _onEntered(self, event):
         pass
 
     def _onExited(self):
@@ -195,7 +215,7 @@ class _StateTogglingSortKey(object):
         return self._cmp(other) != 0
 
     def __hash__(self):
-        raise TypeError('hash not implemented')
+        raise NotImplementedError('__hash__ not implemented.')
 
     def _cmp(self, other):
         if self.state.getParent() == other.state.getParent():
@@ -205,7 +225,7 @@ class _StateTogglingSortKey(object):
             return self.direction.ancestor
         if visitor.isDescendantOf(other.state, self.state):
             return self.direction.descendant
-        lca = visitor.getLCA([self.state, other.state], upper=self.state.getMachine())
+        lca = visitor.getLCA([self.state, other.state], upper=self.state.getMachine()) or self.state.getMachine()
         return cmp(visitor.getDescendantIndex(self.state, lca, filter_=_filterState), visitor.getDescendantIndex(other.state, lca, filter_=_filterState))
 
 

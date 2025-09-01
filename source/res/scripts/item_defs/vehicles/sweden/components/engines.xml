@@ -46,9 +46,16 @@
     <AVS_1195A>	48	</AVS_1195A>
     <Volvo_TD_120V>	49	</Volvo_TD_120V>
     <_2_st_Scania_Vabis_1664_a>	50	</_2_st_Scania_Vabis_1664_a>
+    <Motoraggregat_10>	51	</Motoraggregat_10>
     <Motoraggregat_3_FL>	501	</Motoraggregat_3_FL>
-    <Saab_Scania_DSI_14C_7x7>	502	</Saab_Scania_DSI_14C_7x7>
     <_2_st_Scania_DS14>	52	</_2_st_Scania_DS14>
+    <Scania_Vabis_1664_Sav>	2000	</Scania_Vabis_1664_Sav>
+    <Scania_Vabis_L_603_Sav>	2001	</Scania_Vabis_L_603_Sav>
+    <Volvo_A8B_Leo>	2002	</Volvo_A8B_Leo>
+    <_2_st_Scania_Vabis_L_603_1_74>	2003	</_2_st_Scania_Vabis_L_603_1_74>
+    <_2_st_Scania_Vabis_L_603_1_42>	2004	</_2_st_Scania_Vabis_L_603_1_42>
+    <Scania_Vabis_1664_40>	2005	</Scania_Vabis_1664_40>
+    <Saab_Scania_DSI_14C_7x7>	502	</Saab_Scania_DSI_14C_7x7>
     <Development_Engine>	65000	</Development_Engine>
     <SFA_B42_SH>	1000	</SFA_B42_SH>
     <AVS_1195_SH>	1001	</AVS_1195_SH>
@@ -63,14 +70,14 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
       <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	55	</power>
+      <power>	110	</power>
       <weight>	400	</weight>
       <maxHealth>	25	</maxHealth>
       <maxRegenHealth>	17	</maxRegenHealth>
       <repairCost>	1	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	430	</rpm_min>
-      <rpm_max>	2221	</rpm_max>
+      <rpm_min>	361	</rpm_min>
+      <rpm_max>	2442	</rpm_max>
     </Daimler_Benz_m_1910>
     <Volvo_DC>
       <userString>	#sweden_vehicles:Volvo_DC	</userString>
@@ -107,35 +114,83 @@
     <Scania_Vabis_1664>
       <userString>	#sweden_vehicles:Scania_Vabis_1664	</userString>
       <tags>	gasoline	</tags>
-      <level>	2	</level>
+      <level>	1	</level>
       <price>	1050	</price>
       <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
       <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	142	</power>
+      <power>	170	</power>
       <weight>	485	</weight>
       <maxHealth>	55	</maxHealth>
       <maxRegenHealth>	27	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	321	</rpm_min>
-      <rpm_max>	2570	</rpm_max>
+      <rpm_min>	286	</rpm_min>
+      <rpm_max>	2683	</rpm_max>
     </Scania_Vabis_1664>
-    <Scania_Vabis_L_603>
-      <userString>	#sweden_vehicles:Scania_Vabis_L_603	</userString>
+    <Scania_Vabis_1664_40>
+      <userString>	#sweden_vehicles:Scania_Vabis_1664_40	</userString>
       <tags>	gasoline	</tags>
       <level>	2	</level>
-      <price>	1430	</price>
-      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	162	</power>
-      <weight>	540	</weight>
+      <price>	1050	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	200	</power>
+      <weight>	485	</weight>
       <maxHealth>	55	</maxHealth>
       <maxRegenHealth>	27	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	296	</rpm_min>
-      <rpm_max>	2651	</rpm_max>
+      <rpm_min>	500	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
+    </Scania_Vabis_1664_40>
+    <Scania_Vabis_1664_Sav>
+      <userString>	#sweden_vehicles:Scania_Vabis_1664_Sav	</userString>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	1050	</price>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
+      <power>	180	</power>
+      <weight>	485	</weight>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	273	</rpm_min>
+      <rpm_max>	2723	</rpm_max>
+    </Scania_Vabis_1664_Sav>
+    <Scania_Vabis_L_603>
+      <userString>	#sweden_vehicles:Scania_Vabis_L_603	</userString>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	1430	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	220	</power>
+      <weight>	540	</weight>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	487	</rpm_min>
+      <rpm_max>	2240	</rpm_max>
     </Scania_Vabis_L_603>
+    <Scania_Vabis_L_603_Sav>
+      <userString>	#sweden_vehicles:Scania_Vabis_L_603_Sav	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	1430	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	200	</power>
+      <weight>	540	</weight>
+      <maxHealth>	135	</maxHealth>
+      <maxRegenHealth>	68	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	500	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
+    </Scania_Vabis_L_603_Sav>
     <Volvo_FE>
       <userString>	#sweden_vehicles:Volvo_FE	</userString>
       <tags>	gasoline	</tags>
@@ -173,6 +228,7 @@
       <tags>	gasoline	</tags>
       <level>	3	</level>
       <price>	4300	</price>
+      <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	205	</power>
@@ -187,18 +243,18 @@
     <BNAG_L8V_36TR>
       <userString>	#sweden_vehicles:BNAG_L8V_36TR	</userString>
       <tags>	gasoline	</tags>
-      <level>	3	</level>
+      <level>	2	</level>
       <price>	4350	</price>
-      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	160	</power>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	200	</power>
       <weight>	600	</weight>
       <maxHealth>	55	</maxHealth>
       <maxRegenHealth>	27	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	298	</rpm_min>
-      <rpm_max>	2643	</rpm_max>
+      <rpm_min>	500	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
     </BNAG_L8V_36TR>
     <BNAG_L8V_36TR_A>
       <userString>	#sweden_vehicles:BNAG_L8V_36TR_A	</userString>
@@ -220,18 +276,18 @@
     <_2_st_Scania_Vabis_1664>
       <userString>	#sweden_vehicles:_2_st_Scania_Vabis_1664	</userString>
       <tags>	gasoline	</tags>
-      <level>	4	</level>
+      <level>	3	</level>
       <price>	9800	</price>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	284	</power>
+      <power>	340	</power>
       <weight>	970	</weight>
       <maxHealth>	123	</maxHealth>
       <maxRegenHealth>	58	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	447	</rpm_min>
-      <rpm_max>	2368	</rpm_max>
+      <rpm_min>	412	</rpm_min>
+      <rpm_max>	2480	</rpm_max>
     </_2_st_Scania_Vabis_1664>
     <_2_st_Scania_Vabis_1664_a>
       <userString>	#sweden_vehicles:_2_st_Scania_Vabis_1664_a	</userString>
@@ -257,15 +313,47 @@
       <price>	10300	</price>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	324	</power>
+      <power>	420	</power>
       <weight>	1080	</weight>
       <maxHealth>	123	</maxHealth>
       <maxRegenHealth>	58	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	422	</rpm_min>
-      <rpm_max>	2448	</rpm_max>
+      <rpm_min>	362	</rpm_min>
+      <rpm_max>	2641	</rpm_max>
     </_2_st_Scania_Vabis_L_603_1>
+    <_2_st_Scania_Vabis_L_603_1_42>
+      <userString>	#sweden_vehicles:_2_st_Scania_Vabis_L_603_1_42	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	10300	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	440	</power>
+      <weight>	1080	</weight>
+      <maxHealth>	123	</maxHealth>
+      <maxRegenHealth>	58	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	349	</rpm_min>
+      <rpm_max>	2681	</rpm_max>
+    </_2_st_Scania_Vabis_L_603_1_42>
+    <_2_st_Scania_Vabis_L_603_1_74>
+      <userString>	#sweden_vehicles:_2_st_Scania_Vabis_L_603_1_74	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	10300	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	360	</power>
+      <weight>	1080	</weight>
+      <maxHealth>	123	</maxHealth>
+      <maxRegenHealth>	58	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	399	</rpm_min>
+      <rpm_max>	2520	</rpm_max>
+    </_2_st_Scania_Vabis_L_603_1_74>
     <SFA_B42>
       <userString>	#sweden_vehicles:SFA_B42	</userString>
       <tags>	gasoline	</tags>
@@ -273,14 +361,14 @@
       <price>	9000	</price>
       <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
       <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	150	</power>
+      <power>	160	</power>
       <weight>	600	</weight>
       <maxHealth>	123	</maxHealth>
       <maxRegenHealth>	58	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	311	</rpm_min>
-      <rpm_max>	2603	</rpm_max>
+      <rpm_min>	298	</rpm_min>
+      <rpm_max>	2643	</rpm_max>
     </SFA_B42>
     <Ford_391>
       <userString>	#sweden_vehicles:Ford_391	</userString>
@@ -289,14 +377,14 @@
       <price>	11800	</price>
       <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
       <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	175	</power>
+      <power>	180	</power>
       <weight>	600	</weight>
       <maxHealth>	123	</maxHealth>
       <maxRegenHealth>	58	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	280	</rpm_min>
-      <rpm_max>	2703	</rpm_max>
+      <rpm_min>	273	</rpm_min>
+      <rpm_max>	2723	</rpm_max>
     </Ford_391>
     <Volvo_A8B>
       <userString>	#sweden_vehicles:Volvo_A8B	</userString>
@@ -305,27 +393,43 @@
       <price>	13600	</price>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	410	</power>
+      <power>	480	</power>
       <weight>	1050	</weight>
       <maxHealth>	123	</maxHealth>
       <maxRegenHealth>	58	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	324	</rpm_min>
+      <rpm_max>	2761	</rpm_max>
+    </Volvo_A8B>
+    <Volvo_A8B_Leo>
+      <userString>	#sweden_vehicles:Volvo_A8B_Leo	</userString>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	13600	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	410	</power>
+      <weight>	1050	</weight>
+      <maxHealth>	205	</maxHealth>
+      <maxRegenHealth>	103	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
       <rpm_min>	368	</rpm_min>
       <rpm_max>	2621	</rpm_max>
-    </Volvo_A8B>
+    </Volvo_A8B_Leo>
     <_2_st_Scania_Vabis_607>
       <userString>	#sweden_vehicles:_2_st_Scania_Vabis_607	</userString>
       <tags>	gasoline	</tags>
-      <level>	5	</level>
+      <level>	6	</level>
       <price>	13400	</price>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	420	</power>
       <weight>	1200	</weight>
-      <maxHealth>	123	</maxHealth>
-      <maxRegenHealth>	58	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
+      <maxHealth>	205	</maxHealth>
+      <maxRegenHealth>	103	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
       <rpm_min>	362	</rpm_min>
       <rpm_max>	2641	</rpm_max>
@@ -354,30 +458,30 @@
       <price>	12100	</price>
       <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
-      <power>	190	</power>
+      <power>	210	</power>
       <weight>	660	</weight>
       <maxHealth>	160	</maxHealth>
       <maxRegenHealth>	100	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	315	</rpm_min>
-      <rpm_max>	2069	</rpm_max>
+      <rpm_min>	306	</rpm_min>
+      <rpm_max>	2087	</rpm_max>
     </Volvo_TD_70_A>
     <GM_6V_53>
       <userString>	#sweden_vehicles:GM_6V_53	</userString>
       <tags>	diesel	</tags>
-      <level>	5	</level>
+      <level>	6	</level>
       <price>	15300	</price>
       <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
-      <power>	215	</power>
+      <power>	230	</power>
       <weight>	700	</weight>
       <maxHealth>	160	</maxHealth>
       <maxRegenHealth>	100	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	304	</rpm_min>
-      <rpm_max>	2091	</rpm_max>
+      <rpm_min>	297	</rpm_min>
+      <rpm_max>	2104	</rpm_max>
     </GM_6V_53>
     <Volvo_TD_100_A>
       <userString>	#sweden_vehicles:Volvo_TD_100_A	</userString>
@@ -386,36 +490,37 @@
       <price>	26600	</price>
       <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
-      <power>	270	</power>
+      <power>	230	</power>
       <weight>	940	</weight>
       <maxHealth>	160	</maxHealth>
       <maxRegenHealth>	100	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	279	</rpm_min>
-      <rpm_max>	2140	</rpm_max>
+      <rpm_min>	297	</rpm_min>
+      <rpm_max>	2104	</rpm_max>
     </Volvo_TD_100_A>
     <Volvo_THD_100_B>
       <userString>	#sweden_vehicles:Volvo_THD_100_B	</userString>
       <tags>	diesel	</tags>
-      <level>	6	</level>
+      <level>	7	</level>
       <price>	28000	</price>
       <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
-      <power>	310	</power>
+      <power>	260	</power>
       <weight>	940	</weight>
       <maxHealth>	160	</maxHealth>
       <maxRegenHealth>	100	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	261	</rpm_min>
-      <rpm_max>	2176	</rpm_max>
+      <rpm_min>	284	</rpm_min>
+      <rpm_max>	2131	</rpm_max>
     </Volvo_THD_100_B>
     <Meteor_Mark_IV_Mod_271>
       <userString>	#sweden_vehicles:Meteor_Mark_IV_Mod_271	</userString>
       <tags>	gasoline	</tags>
       <level>	6	</level>
       <price>	28800	</price>
+      <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	450	</power>
@@ -478,18 +583,18 @@
     <AV_1195>
       <userString>	#sweden_vehicles:AV_1195	</userString>
       <tags>	gasoline	</tags>
-      <level>	9	</level>
+      <level>	8	</level>
       <price>	75000	</price>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	420	</power>
+      <power>	480	</power>
       <weight>	845	</weight>
       <maxHealth>	285	</maxHealth>
       <maxRegenHealth>	142	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	362	</rpm_min>
-      <rpm_max>	2641	</rpm_max>
+      <rpm_min>	324	</rpm_min>
+      <rpm_max>	2761	</rpm_max>
     </AV_1195>
     <AVS_1195>
       <userString>	#sweden_vehicles:AVS_1195	</userString>
@@ -544,18 +649,18 @@
     <Saab_Scania_DS14>
       <userString>	#sweden_vehicles:Saab_Scania_DS14	</userString>
       <tags>	diesel	</tags>
-      <level>	8	</level>
+      <level>	7	</level>
       <price>	42500	</price>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	500	</power>
+      <power>	450	</power>
       <weight>	1230	</weight>
       <maxHealth>	234	</maxHealth>
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	386	</rpm_min>
-      <rpm_max>	2040	</rpm_max>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	2000	</rpm_max>
     </Saab_Scania_DS14>
     <_2_st_Scania_DS14>
       <userString>	#sweden_vehicles:_2_st_Scania_DS14	</userString>
@@ -579,16 +684,16 @@
       <tags>	diesel	</tags>
       <level>	8	</level>
       <price>	52000	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	550	</power>
+      <wwsoundPC>	eng_leyland_l60_PC	</wwsoundPC>
+      <wwsoundNPC>	eng_leyland_l60_NPC	</wwsoundNPC>
+      <power>	500	</power>
       <weight>	1400	</weight>
       <maxHealth>	360	</maxHealth>
       <maxRegenHealth>	170	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.1	</fireStartingChance>
-      <rpm_min>	373	</rpm_min>
-      <rpm_max>	2080	</rpm_max>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	2000	</rpm_max>
     </Leyland_L60>
     <Volvo_TD_120V>
       <userString>	#sweden_vehicles:Volvo_TD_120V	</userString>
@@ -610,18 +715,18 @@
     <Motoraggregat_1S>
       <userString>	#sweden_vehicles:Motoraggregat_1S	</userString>
       <tags>	diesel	</tags>
-      <level>	9	</level>
+      <level>	8	</level>
       <price>	70000	</price>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	540	</power>
+      <power>	700	</power>
       <weight>	700	</weight>
       <maxHealth>	400	</maxHealth>
       <maxRegenHealth>	200	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.10	</fireStartingChance>
-      <rpm_min>	376	</rpm_min>
-      <rpm_max>	2072	</rpm_max>
+      <rpm_min>	333	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
     </Motoraggregat_1S>
     <Motoraggregat_1S_A>
       <userString>	#sweden_vehicles:Motoraggregat_1S_A	</userString>
@@ -647,14 +752,14 @@
       <price>	81800	</price>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	600	</power>
+      <power>	750	</power>
       <weight>	700	</weight>
       <maxHealth>	400	</maxHealth>
       <maxRegenHealth>	200	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.10	</fireStartingChance>
-      <rpm_min>	360	</rpm_min>
-      <rpm_max>	2120	</rpm_max>
+      <rpm_min>	320	</rpm_min>
+      <rpm_max>	2240	</rpm_max>
     </Motoraggregat_3>
     <Motoraggregat_3_FL>
       <userString>	#sweden_vehicles:Motoraggregat_3	</userString>
@@ -664,14 +769,14 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	600	</power>
+      <power>	750	</power>
       <weight>	700	</weight>
       <maxHealth>	400	</maxHealth>
       <maxRegenHealth>	200	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.10	</fireStartingChance>
-      <rpm_min>	360	</rpm_min>
-      <rpm_max>	2120	</rpm_max>
+      <rpm_min>	320	</rpm_min>
+      <rpm_max>	2240	</rpm_max>
     </Motoraggregat_3_FL>
     <Motoraggregat_9>
       <userString>	#sweden_vehicles:Motoraggregat_9	</userString>
@@ -681,7 +786,7 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_ContinentalR_STRV_pc	</wwsoundPC>
       <wwsoundNPC>	eng_ContinentalR_STRV_npc	</wwsoundNPC>
-      <power>	730	</power>
+      <power>	900	</power>
       <weight>	700	</weight>
       <maxHealth>	400	</maxHealth>
       <maxRegenHealth>	200	</maxRegenHealth>
@@ -690,6 +795,23 @@
       <rpm_min>	325	</rpm_min>
       <rpm_max>	2224	</rpm_max>
     </Motoraggregat_9>
+    <Motoraggregat_10>
+      <userString>	#sweden_vehicles:Motoraggregat_10	</userString>
+      <tags>	diesel	</tags>
+      <level>	11	</level>
+      <price>	150000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_STRV_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_STRV_npc	</wwsoundNPC>
+      <power>	850	</power>
+      <weight>	700	</weight>
+      <maxHealth>	380	</maxHealth>
+      <maxRegenHealth>	190	</maxRegenHealth>
+      <repairCost>	11	</repairCost>
+      <fireStartingChance>	0.10	</fireStartingChance>
+      <rpm_min>	325	</rpm_min>
+      <rpm_max>	2224	</rpm_max>
+    </Motoraggregat_10>
     <Meteor_Mark_IVB>
       <userString>	#sweden_vehicles:Meteor_Mark_IVB	</userString>
       <tags>	gasoline	</tags>
@@ -776,7 +898,7 @@
     <Saab_Scania_DSI_14A>
       <userString>	#sweden_vehicles:Saab_Scania_DSI_14A	</userString>
       <tags>	diesel	</tags>
-      <level>	9	</level>
+      <level>	8	</level>
       <price>	70000	</price>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>

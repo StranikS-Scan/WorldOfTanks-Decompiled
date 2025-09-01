@@ -130,7 +130,7 @@ class BattlePassIntegrationBattleRoyale(BattlePassIntegrationRandom):
         return False if len(pointsValues) != thresholdTargetCount else True
 
 
-class BattlePassIntegrationComp7(BattlePassIntegrationRandom):
+class BattlePassIntegrationComp7Base(BattlePassIntegrationRandom):
 
     def calculatePointsSettings(self, storage):
         vehTypeCompDescr, results = storage['tempResults'].items()[0]
@@ -139,10 +139,19 @@ class BattlePassIntegrationComp7(BattlePassIntegrationRandom):
         return BpPointsSettings(vehTypeCompDescr, isWinner, rank)
 
 
+class BattlePassIntegrationComp7(BattlePassIntegrationComp7Base):
+    pass
+
+
+class BattlePassIntegrationComp7Light(BattlePassIntegrationComp7Base):
+    pass
+
+
 _BATTLEPASS_BY_GAMEMODE = {ARENA_BONUS_TYPE.REGULAR: BattlePassIntegrationRandom(teamSize=15, bonusTypeName='REGULAR'),
  ARENA_BONUS_TYPE.RANKED: BattlePassIntegrationRandom(teamSize=10, bonusTypeName='RANKED'),
  ARENA_BONUS_TYPE.MAPBOX: BattlePassIntegrationRandom(teamSize=15, bonusTypeName='MAPBOX'),
  ARENA_BONUS_TYPE.COMP7: BattlePassIntegrationComp7(teamSize=7, bonusTypeName='COMP7'),
+ ARENA_BONUS_TYPE.COMP7_LIGHT: BattlePassIntegrationComp7Light(teamSize=7, bonusTypeName='COMP7_LIGHT'),
  ARENA_BONUS_TYPE.WINBACK: BattlePassIntegrationRandom(teamSize=15, bonusTypeName='WINBACK'),
  ARENA_BONUS_TYPE.RANDOM_NP2: BattlePassIntegrationRandom(teamSize=15, bonusTypeName='RANDOM_NP2'),
  ARENA_BONUS_TYPE.EPIC_BATTLE: BattlePassIntegrationEpicBattle(teamSize=30, bonusTypeName='EPIC_BATTLE'),

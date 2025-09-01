@@ -63,6 +63,7 @@ class SettingsParams(object):
         settings = {settings_constants.AIM.SPG: self.settingsCore.packSettings(settings_constants.SPGAim.ALL())}
         settings.update(self.settingsCore.packSettings(settings_constants.AIM.ALL()))
         settings[settings_constants.CONTOUR.ENHANCED_CONTOUR] = self.settingsCore.packSettings(settings_constants.CONTOUR.ALL())
+        settings[settings_constants.AIM.ARMOR_FLASHLIGHT] = self.settingsCore.packSettings(settings_constants.ArmorFlashlight.ALL())
         return settings
 
     def getControlsSettings(self):

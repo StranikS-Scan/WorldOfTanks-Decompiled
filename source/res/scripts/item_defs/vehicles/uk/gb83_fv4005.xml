@@ -15,7 +15,7 @@
     <backward>	8	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.015	</moving>
+    <moving>	0.014	</moving>
     <still>	0.024	</still>
     <camouflageBonus>	0.04	</camouflageBonus>
     <firePenalty>	0.036	</firePenalty>
@@ -1055,7 +1055,6 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	54000	</maxLoad>
       <terrainResistance>	1 1.3 1.9	</terrainResistance>
       <brakeForce>	54000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -3270,7 +3269,7 @@
     </Turret_1_GB83_FV4005>
   </turrets0>
   <engines>
-    <Rolls_Royce_Griffon>	shared	</Rolls_Royce_Griffon>
+    <Rolls_Royce_Griffon_4005>	shared	</Rolls_Royce_Griffon_4005>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
@@ -3281,10 +3280,10 @@
   <physics>
     <detailed>
       <engines>
-        <Rolls_Royce_Griffon>
+        <Rolls_Royce_Griffon_4005>
           <smplEnginePower>	850	</smplEnginePower>
           <smplFwMaxSpeed>	32	</smplFwMaxSpeed>
-        </Rolls_Royce_Griffon>
+        </Rolls_Royce_Griffon_4005>
       </engines>
       <chassis>
         <Chassis_GB83_FV4005>

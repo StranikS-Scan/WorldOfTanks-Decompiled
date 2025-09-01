@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/vehicle_collector_helper.py
 import typing
+from backports.functools_lru_cache import lru_cache
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import MODULES_ANIMATION_SHOWN
 from constants import MIN_VEHICLE_LEVEL
@@ -45,6 +46,7 @@ def getCollectibleVehiclesInInventory(nationID=ALL_NATIONS_INDEX, itemsCache=Non
     return items
 
 
+@lru_cache()
 def hasCollectibleVehicles(nationID=ALL_NATIONS_INDEX):
     collectibleVehicles = getCollectibleVehicles(nationID)
     return len(collectibleVehicles) > 0

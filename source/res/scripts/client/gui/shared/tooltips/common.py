@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/common.py
 import cPickle
+import json
 import logging
 import math
 from collections import namedtuple, defaultdict
@@ -35,6 +36,7 @@ from gui.clans.data_wrapper.utils import formatField
 from gui.impl import backport
 from gui.impl.backport.backport_tooltip import DecoratedTooltipWindow
 from gui.impl.gen import R
+from gui.impl.common.param_tooltip_view import ParamTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_completed_tooltip_view import BattlePassCompletedTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view import BattlePassInProgressTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_no_chapter_tooltip_view import BattlePassNoChapterTooltipView
@@ -519,9 +521,6 @@ class SettingsControlTooltipData(ToolTipBaseData):
 
 
 class SettingsButtonTooltipData(BlocksTooltipData):
-    serverStats = dependency.descriptor(IServerStatsController)
-    settingsCore = dependency.descriptor(ISettingsCore)
-    connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self, context):
         super(SettingsButtonTooltipData, self).__init__(context, TOOLTIP_TYPE.CONTROL)
@@ -535,6 +534,25 @@ class SettingsButtonTooltipData(BlocksTooltipData):
         self.item = self.context.buildItem(*args, **kwargs)
         items = super(SettingsButtonTooltipData, self)._packBlocks(*args, **kwargs)
         items.append(formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.highTitle(backport.text(R.strings.tooltips.header.menu.header()))), formatters.packTextBlockData(text_styles.standard(backport.text(R.strings.tooltips.header.menu.description())))]))
+        return items
+
+
+class ServersInfoTooltipData(BlocksTooltipData):
+    serverStats = dependency.descriptor(IServerStatsController)
+    settingsCore = dependency.descriptor(ISettingsCore)
+    connectionMgr = dependency.descriptor(IConnectionManager)
+
+    def __init__(self, context):
+        super(ServersInfoTooltipData, self).__init__(context, TOOLTIP_TYPE.CONTROL)
+        self.item = None
+        self._setContentMargin(top=15, left=19, bottom=5, right=10)
+        self._setMargins(afterBlock=15, afterSeparator=15)
+        self._setWidth(295)
+        return
+
+    def _packBlocks(self, *args, **kwargs):
+        self.item = self.context.buildItem(*args, **kwargs)
+        items = super(ServersInfoTooltipData, self)._packBlocks(*args, **kwargs)
         serverBlocks = list()
         serverBlocks.append(formatters.packTextBlockData(text_styles.middleTitle(backport.text(R.strings.tooltips.header.menu.server())), padding=formatters.packPadding(0, 0, 4)))
         simpleHostList = g_preDefinedHosts.getSimpleHostsList(g_preDefinedHosts.hostsWithRoaming())
@@ -1207,6 +1225,17 @@ class SettingKeySwitchMode(BlocksTooltipData):
         return tooltipBlocks
 
 
+class SettingKeySpecialAbility(BlocksTooltipData):
+
+    def __init__(self, context):
+        super(SettingKeySpecialAbility, self).__init__(context, TOOLTIP_TYPE.CONTROL)
+
+    def _packBlocks(self, *args, **kwargs):
+        tooltipBlocks = super(SettingKeySpecialAbility, self)._packBlocks(*args, **kwargs)
+        tooltipBlocks.append(formatters.packTitleDescBlock(text_styles.highTitle(TOOLTIPS.SETTINGS_KEYSPECIALABILITY_TITLE), text_styles.main(TOOLTIPS.SETTINGS_KEYSPECIALABILITY_BODY)))
+        return tooltipBlocks
+
+
 class SettingsKeyHighlightLocation(BlocksTooltipData):
 
     def __init__(self, context):
@@ -1614,3 +1643,10 @@ class QuestBoosterTooltipContent(WulfTooltipData):
 
     def getTooltipContent(self, boosterID, *args, **kwargs):
         return QuestBoosterTooltip(boosterID)
+
+
+class ParamsTooltipContent(WulfTooltipData):
+
+    def getTooltipContent(self, *args, **kwargs):
+        params = self.context.getParams()
+        return ParamTooltipView(tooltipType=params.get('tooltipType', ''), params=json.dumps(params.get('params', {})), resId=params.get('resId', 0))

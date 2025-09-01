@@ -133,6 +133,7 @@ def getGuiServicesConfig(manager):
     from gui import hangar_cameras
     from gui import impl
     from gui import offers
+    from gui.impl.lobby.user_missions import hangar_widget as user_missions_widget
     from gui.platform import wgnp, catalog_service, products_fetcher, product_purchase
     from skeletons.gui.lobby_context import ILobbyContext
     import gui.prebattle_hints
@@ -165,6 +166,7 @@ def getGuiServicesConfig(manager):
     manager.addConfig(product_purchase.getProductPurchaseControllers)
     manager.addConfig(catalog_service.getPurchaseCache)
     manager.addConfig(gui.prebattle_hints.controllersConfig)
+    manager.addConfig(user_missions_widget.getUserMissionsConfig)
     manager.addInstance(IBattleHintsOverlapController, BattleHintsOverlapController(), finalizer='fini')
     manager.addInstance(INewbieBattleHintsController, NewbieBattleHintsController(), finalizer='fini')
     if HAS_DEV_RESOURCES:

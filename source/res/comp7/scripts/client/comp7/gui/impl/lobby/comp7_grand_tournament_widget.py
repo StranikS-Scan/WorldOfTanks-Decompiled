@@ -45,7 +45,7 @@ class Comp7GrandTournamentWidget(ViewImpl):
     __comp7Controller = dependency.descriptor(IComp7Controller)
 
     def __init__(self, flags=ViewFlags.VIEW):
-        settings = ViewSettings(R.views.comp7.lobby.GrandTournamentWidget())
+        settings = ViewSettings(R.views.comp7.mono.lobby.grand_tournament_widget())
         settings.flags = flags
         settings.model = Comp7GrandTournamentWidgetModel()
         self.__state = None

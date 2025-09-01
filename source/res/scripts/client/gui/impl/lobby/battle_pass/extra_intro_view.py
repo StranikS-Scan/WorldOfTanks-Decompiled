@@ -8,8 +8,7 @@ from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.extra_intro_view_model import ExtraIntroViewModel
 from gui.impl.pub import ViewImpl
-from gui.server_events.events_dispatcher import showMissionsBattlePass
-from gui.shared.event_dispatcher import showHangar
+from gui.shared.event_dispatcher import showBattlePass
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBattlePassController
@@ -37,34 +36,28 @@ class ExtraIntroView(ViewImpl):
     def deactivate(self):
         self._unsubscribe()
 
+    def onExtraChapterExpired(self):
+        showBattlePass(R.aliases.battle_pass.ChapterChoice())
+
     def _onLoading(self, *args, **kwargs):
         super(ExtraIntroView, self)._onLoading(*args, **kwargs)
         self.__fillModel()
 
     def _getEvents(self):
-        return ((self.viewModel.onClose, self.__onSubmit),
-         (self.__battlePassController.onExtraChapterExpired, self.__onExtraChapterExpired),
-         (self.__battlePassController.onBattlePassSettingsChange, self.__onBattlePassSettingsChanged),
-         (self.__battlePassController.onSeasonStateChanged, self.__onBattlePassSettingsChanged))
+        return ((self.viewModel.onClose, self.__onSubmit), (self.__battlePassController.onBattlePassSettingsChange, self.__onBattlePassSettingsChanged), (self.__battlePassController.onSeasonStateChanged, self.__onBattlePassSettingsChanged))
 
     def __onSubmit(self):
         self.__settingsCore.serverSettings.saveInBPStorage({BattlePassStorageKeys.EXTRA_CHAPTER_INTRO_SHOWN: True})
         if self.__chapterID in self.__battlePassController.getMainChapterIDs():
-            showMissionsBattlePass(R.views.lobby.battle_pass.BattlePassProgressionsView(), self.__chapterID)
+            showBattlePass(R.aliases.battle_pass.Progression(), self.__chapterID)
         else:
-            showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
-
-    @staticmethod
-    def __onExtraChapterExpired():
-        showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
+            showBattlePass(R.aliases.battle_pass.ChapterChoice())
 
     def __onBattlePassSettingsChanged(self, *_):
         if self.__battlePassController.isPaused():
-            showMissionsBattlePass()
-        elif not self.__battlePassController.isActive():
-            showHangar()
+            showBattlePass()
         elif not self.__battlePassController.isChapterExists(self.__chapterID):
-            showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
+            showBattlePass(R.aliases.battle_pass.ChapterChoice())
 
     def __fillModel(self):
         style = getStyleForChapter(self.__chapterID)

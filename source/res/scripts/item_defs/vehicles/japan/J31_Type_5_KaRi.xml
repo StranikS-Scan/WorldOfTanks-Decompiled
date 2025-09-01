@@ -1037,7 +1037,6 @@
       <price>	30000	</price>
       <notInShop>	true	</notInShop>
       <weight>	12000	</weight>
-      <maxLoad>	48900	</maxLoad>
       <terrainResistance>	1.2 1.5 3.0	</terrainResistance>
       <brakeForce>	45030	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -1868,23 +1867,31 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <armor>
-        <armor_1>	300	</armor_1>
-        <armor_2>	30	</armor_2>
-        <armor_3>	30	</armor_3>
-        <armor_4>	0	</armor_4>
+        <armor_1>	300	  <tags>	hull	</tags>
+        </armor_1>
+        <armor_2>	30	  <tags>	hull	</tags>
+        </armor_2>
+        <armor_3>	30	  <tags>	hull	</tags>
+        </armor_3>
+        <armor_4>	0	  <tags>	hull	</tags>
+        </armor_4>
       </armor>
       <guns>
         <_127mm_Gun_Type_89>	shared	  <maxAmmo>	40	</maxAmmo>
           <armor>
             <armor_1>	220	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_1>
             <armor_2>	220	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_2>
             <armor_3>	45	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
             <armor_5>	45	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_5>
             <armor_6>	300	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_6>

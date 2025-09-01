@@ -3,6 +3,7 @@
 import BigWorld
 import ResMgr
 from adisp import adisp_async
+from constants import GF_RES_PROTOCOL
 from debug_utils import LOG_WARNING, LOG_ERROR
 from gui.shared.utils import mapTextureToTheMemory, getImageSize, removeTextureFromMemory
 
@@ -11,8 +12,8 @@ def readLocalImage(path):
     return data.asBinary if data is not None else None
 
 
-def getTextureLinkByID(imageID):
-    return 'img://{}'.format(imageID)
+def getTextureLinkByID(imageID, prefix=GF_RES_PROTOCOL.IMG):
+    return '{}{}'.format(prefix, imageID)
 
 
 class ImageHelper(object):

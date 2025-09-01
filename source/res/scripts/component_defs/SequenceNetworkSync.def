@@ -7,22 +7,52 @@
       <Type>	FLOAT	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </syncTime>
+    <speed>
+      <Type>	FLOAT	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </speed>
     <state>
       <Type>	UINT8	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </state>
+    <activeLayerIdx>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </activeLayerIdx>
+    <transition>
+      <Type>	FIXED_DICT	  <Properties>
+          <layerIdx>
+            <Type>	INT8	</Type>
+          </layerIdx>
+          <time>
+            <Type>	FLOAT	</Type>
+          </time>
+        </Properties>
+        <AllowNone>	true	</AllowNone>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </transition>
   </Properties>
   <CellMethods>
-    <setState>
+    <requestState>
       <Exposed></Exposed>
       <Args>
         <state>	UINT8	</state>
+      </Args>
+    </requestState>
+    <requestTime>
+      <Exposed></Exposed>
+      <Args>
         <time>	FLOAT	</time>
       </Args>
-      <ReturnValues>
-        <result>	BOOL	</result>
-      </ReturnValues>
-    </setState>
+    </requestTime>
+    <requestLayerChange>
+      <Exposed></Exposed>
+      <Args>
+        <layerIdx>	UINT8	</layerIdx>
+        <time>	FLOAT	</time>
+      </Args>
+    </requestLayerChange>
   </CellMethods>
   <DefaultKeyName>	sequenceNetworkSync	</DefaultKeyName>
 </SequenceNetworkSync.def>

@@ -1,7 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/lobby_entry.py
+from collections import namedtuple
+import typing
 import BigWorld
+from PlayerEvents import g_playerEvents
+from frameworks.state_machine import BaseStateObserver
 from frameworks.wulf import WindowLayer
+from frameworks.wulf.gui_constants import ShowingStatus, ViewFlags
+from gui.Scaleform.framework import g_entitiesFactories, ScopeTemplates
+from gui.lobby_state_machine.lobby_state_machine import LobbyStateMachine
+from gui.lobby_state_machine.states import UntrackedState
+from gui.shared.events import NavigationEvent, GUICommonEvent
 from gui.shared.system_factory import collectLobbyTooltipsBuilders
 from gui.Scaleform import SCALEFORM_SWF_PATH_V3
 from gui.Scaleform.daapi.settings.config import ADVANCED_COMPLEX_TOOLTIPS
@@ -30,14 +39,59 @@ from gui.Scaleform.managers.TweenSystem import TweenManager
 from gui.Scaleform.managers.UtilsManager import UtilsManager
 from gui.Scaleform.managers.voice_chat import LobbyVoiceChatManager
 from gui.impl.gen import R
-from gui.shared import EVENT_BUS_SCOPE
-from helpers import uniprof
+from gui.shared import EVENT_BUS_SCOPE, g_eventBus
+from gui.subhangar.subhangar_observer import SubhangarObserver
+from helpers import uniprof, dependency
 from skeletons.gui.app_loader import GuiGlobalSpaceID
+from logging import getLogger
+_logger = getLogger(__name__)
+
+def getLobbyStateMachine():
+    from skeletons.gui.app_loader import IAppLoader
+    appLoader = dependency.instance(IAppLoader)
+    app = appLoader.getApp()
+    return app.stateMachine if app else None
+
+
+_UntrackedStateForwardedParams = namedtuple('_UntrackedStateForwardedParams', ['loadParams', 'args', 'kwargs'])
+
+class _UntrackedStateObserver(BaseStateObserver):
+
+    def isObservingState(self, state):
+        return isinstance(state, UntrackedState)
+
+    def onEnterState(self, state, event):
+        from skeletons.gui.app_loader import IAppLoader
+        from skeletons.gui.impl import IGuiLoader
+        app = dependency.instance(IAppLoader).getApp()
+        windowsManager = dependency.instance(IGuiLoader).windowsManager
+        viewKey = event.params[UntrackedState.LOAD_PARAMS_KEY].loadParams.viewKey
+        view = app.containerManager.getViewByKey(viewKey)
+        if view is None and isinstance(viewKey.alias, int):
+            view = windowsManager.getViewByLayoutID(viewKey.alias)
+        showingStatus = ShowingStatus.HIDDEN
+        if view is not None:
+            window = view.getParentWindow()
+            if window is not None:
+                showingStatus = window.showingStatus
+        viewAlreadyOpen = showingStatus in (ShowingStatus.SHOWING, ShowingStatus.SHOWN)
+        if not viewAlreadyOpen:
+            app.loadView(event.params[UntrackedState.LOAD_PARAMS_KEY])
+        return
+
 
 class LobbyEntry(AppEntry):
 
     def __init__(self, appNS, ctrlModeFlags):
         super(LobbyEntry, self).__init__(R.entries.lobby(), appNS, ctrlModeFlags)
+        self.__stateMachine = LobbyStateMachine()
+        self.__untrackedStateObserver = _UntrackedStateObserver()
+        self.__subhangarObserver = None
+        return
+
+    @property
+    def stateMachine(self):
+        return self.__stateMachine
 
     @property
     def waitingManager(self):
@@ -45,13 +99,58 @@ class LobbyEntry(AppEntry):
 
     @uniprof.regionDecorator(label='gui.lobby', scope='enter')
     def afterCreate(self):
+        g_eventBus.addListener(GUICommonEvent.LOBBY_VIEW_LOADING, self.__initLSM)
+        g_playerEvents.onAccountBecomeNonPlayer += self.__finiLSM
         super(LobbyEntry, self).afterCreate()
 
     @uniprof.regionDecorator(label='gui.lobby', scope='exit')
     def beforeDelete(self):
         from gui.Scaleform.Waiting import Waiting
         Waiting.close()
+        g_playerEvents.onAccountBecomeNonPlayer -= self.__finiLSM
+        g_eventBus.removeListener(GUICommonEvent.LOBBY_VIEW_LOADING, self.__initLSM)
         super(LobbyEntry, self).beforeDelete()
+
+    def loadView(self, loadParams, *args, **kwargs):
+
+        def getViewScopeAndLayer(loadParams, *args, **kwargs):
+            settings = g_entitiesFactories.getSettings(loadParams.viewKey.alias)
+            scope = settings.scope if settings else loadParams.scope
+            if settings:
+                layer = settings.layer
+            else:
+                _logger.info('Fake creating view of class %s for LSM to get the layer', loadParams.viewClass.__name__)
+                layoutID = loadParams.viewKey.alias
+                view = loadParams.viewClass(layoutID, *args, **kwargs)
+                layer = ViewFlags.getViewType(view.viewFlags)
+                view.destroyWindow()
+            if scope == ScopeTemplates.VIEW_SCOPE and layer == WindowLayer.SUB_VIEW:
+                scope = ScopeTemplates.LOBBY_SUB_SCOPE
+            return (scope, layer)
+
+        if isinstance(loadParams, _UntrackedStateForwardedParams):
+            super(LobbyEntry, self).loadView(loadParams.loadParams, *loadParams.args, **loadParams.kwargs)
+            return
+        matchingState = self.__stateMachine.getStateByViewKey(loadParams.viewKey)
+        if matchingState:
+            if not self.__stateMachine.isStateEntered(matchingState.getStateID()):
+                _logger.warning('View "%s" has a matching state %s, navigate to it instead of direct load. Attempting to extract params and navigate to the matching state.', loadParams.viewKey, matchingState)
+                params = dict(kwargs)
+                for arg in args:
+                    if isinstance(arg, dict):
+                        params.update(arg)
+
+                g_eventBus.handleEvent(NavigationEvent(matchingState.getStateID(), params), EVENT_BUS_SCOPE.LOBBY)
+                return
+        else:
+            scope, layer = getViewScopeAndLayer(loadParams, *args, **kwargs)
+            untrackedState = self.__stateMachine.getUntrackedStateFor(scope, layer)
+            if untrackedState:
+                _logger.info('No matching state for view "%s", navigating to untracked state', loadParams.viewKey)
+                params = {UntrackedState.LOAD_PARAMS_KEY: _UntrackedStateForwardedParams(loadParams, args, kwargs)}
+                self.__stateMachine.post(NavigationEvent(untrackedState.getStateID(), params=params))
+                return
+        super(LobbyEntry, self).loadView(loadParams, *args, **kwargs)
 
     def _createLoaderManager(self):
         return LoaderManager(self.proxy)
@@ -125,6 +224,20 @@ class LobbyEntry(AppEntry):
 
     def _getRequiredLibraries(self):
         return LOBBY_REQUIRED_LIBRARIES
+
+    def __initLSM(self, _):
+        if self.__stateMachine.isRunning():
+            return
+        self.__stateMachine.configure()
+        self.__stateMachine.connect(self.__untrackedStateObserver)
+        self.__stateMachine.start()
+        self.__subhangarObserver = SubhangarObserver(self.__stateMachine)
+        self.__stateMachine.connect(self.__subhangarObserver)
+
+    def __finiLSM(self):
+        self.__stateMachine.stop()
+        self.__subhangarObserver = None
+        return
 
     def __getWaitingFromContainer(self):
         return self._containerMgr.getView(WindowLayer.WAITING) if self._containerMgr is not None else None

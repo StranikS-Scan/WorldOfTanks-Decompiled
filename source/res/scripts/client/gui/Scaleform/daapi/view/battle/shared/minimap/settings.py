@@ -54,6 +54,7 @@ class ENTRY_SYMBOL_NAME(object):
     SHOOTING_POINT_MARKER = 'ShootingPointEntryUI'
     NAVIGATION_POINT_MARKER = 'NavigationPointEntryUI'
     FLAG_POINT_MARKER = 'FlagPointEntryUI'
+    UNSPOTTED_MARKER = 'UnspottedMarkerUI'
     EPIC_SECTOR_ENEMY_BASE = 'SectorBaseEnemyEntry'
     EPIC_SECTOR_ALLY_BASE = 'SectorBaseAllyEntry'
     EPIC_HQ_ENEMY = 'HeadquarterEnemyEntry'

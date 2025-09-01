@@ -54,7 +54,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	2505	</weight>
-    <maxHealth>	736	</maxHealth>
+    <maxHealth>	800	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
@@ -1101,7 +1101,6 @@
         </armor_9>
       </armor>
       <weight>	1500	</weight>
-      <maxLoad>	8300	</maxLoad>
       <terrainResistance>	1.0 1.35 1.95	</terrainResistance>
       <brakeForce>	10800	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -1470,7 +1469,6 @@
         </armor_9>
       </armor>
       <weight>	1500	</weight>
-      <maxLoad>	9500	</maxLoad>
       <terrainResistance>	1.0 1.35 1.95	</terrainResistance>
       <brakeForce>	10800	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -1849,7 +1847,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1850	</weight>
-      <maxHealth>	184	</maxHealth>
+      <maxHealth>	200	</maxHealth>
       <rotationSpeed>	60	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -1978,10 +1976,6 @@
           </camouflage>
         </_75mm_SA50L>
         <_90mm_D_921_F1>	shared	  <maxAmmo>	38	</maxAmmo>
-          <unlocks>
-            <gun>	_90mm_CN_90_F3	  <cost>	23400	</cost>
-            </gun>
-          </unlocks>
           <armor>
             <gun>	10	</gun>
           </armor>
@@ -1990,11 +1984,11 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 8 0.402778 8 0.422222 6 0.438889 6 0.45 8 0.55 8 0.561111 6 0.577778 6 0.597222 8 1 8	</maxPitch>
           </pitchLimits>
-          <aimingTime>	1.8	</aimingTime>
-          <reloadTime>	8.5	</reloadTime>
-          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <aimingTime>	1.6	</aimingTime>
+          <reloadTime>	8.23	</reloadTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <shotDispersionFactors>
-            <turretRotation>	0.06	</turretRotation>
+            <turretRotation>	0.05	</turretRotation>
             <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2090,115 +2084,6 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_90mm_D_921_F1>
-        <_90mm_CN_90_F3>	shared	  <maxAmmo>	38	</maxAmmo>
-          <armor>
-            <gun>	10	</gun>
-          </armor>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 8 0.402778 8 0.422222 6 0.438889 6 0.45 8 0.55 8 0.561111 6 0.577778 6 0.597222 8 1 8	</maxPitch>
-          </pitchLimits>
-          <aimingTime>	1.6	</aimingTime>
-          <reloadTime>	8.23	</reloadTime>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <shotDispersionFactors>
-            <turretRotation>	0.05	</turretRotation>
-            <afterShot>	3	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/french/F110_Lynx_6x6/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/french/F110_Lynx_6x6/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/french/F110_Lynx_6x6/crash/lod0/Gun_02.model	</exploded>
-            <sets>
-              <F110_Lynx_6x6_3Dst_HW23>
-                <undamaged>	vehicles/french/F110_Lynx_6x6/_skins/F110_Lynx_6x6_3Dst_HW23/normal/lod0/Gun_02.model	</undamaged>
-                <destroyed>	vehicles/french/F110_Lynx_6x6/_skins/F110_Lynx_6x6_3Dst_HW23/crash/lod0/Gun_02.model	</destroyed>
-                <exploded>	vehicles/french/F110_Lynx_6x6/_skins/F110_Lynx_6x6_3Dst_HW23/crash/lod0/Gun_02.model	</exploded>
-              </F110_Lynx_6x6_3Dst_HW23>
-            </sets>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/french/F110_Lynx_6x6/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F110_Lynx_6x6/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_main_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.04737 -0.008462 1.87926	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0.045305 0.124472 0.124472	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.04737 -0.008462 1.87926	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	0.008856 1.32052 0.447467	</position>
-              <rotation>	0.804256 -0.000056 3.14154	</rotation>
-              <scale>	2.42518 2 2.42521	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.005046	</clipAngle>
-              <anchorShift>	0.945978	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.008861 1.41303 0.358375	</position>
-              <rotation>	0.804256 -0.000056 3.14154	</rotation>
-              <scale>	1.67954 1.38509 1.67956	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.005046	</clipAngle>
-              <anchorShift>	0.802142	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	attachment	</slotType>
-              <slotId>	48000	</slotId>
-              <position>	0.042 0.157 0.315385	</position>
-              <rotation>	-0 0 0	</rotation>
-              <scale>	1 1 1	</scale>
-              <applyType>	gunMantlet	</applyType>
-              <size>	medium	</size>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.045 -0.017 2.68337	</rayStart>
-              <rayEnd>	0.045 -0.017 3.17037	</rayEnd>
-              <rayUp>	0.067 0 0	</rayUp>
-              <size>	0.487	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <density>	115.583 117.434	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </_90mm_CN_90_F3>
       </guns>
       <models>
         <undamaged>	vehicles/french/F110_Lynx_6x6/normal/lod0/Turret_01.model	</undamaged>
@@ -2658,11 +2543,6 @@
     </Turret_1_F110_Lynx_6x6>
   </turrets0>
   <engines>
-    <Peugeot_PRV_V6_F1>	shared	  <unlocks>
-        <engine>	Peugeot_PRV_V6_F2	  <cost>	17200	</cost>
-        </engine>
-      </unlocks>
-    </Peugeot_PRV_V6_F1>
     <Peugeot_PRV_V6_F2>	shared	  <unlocks>
         <engine>	Peugeot_PRV_V6_F3	  <cost>	17500	</cost>
         </engine>
@@ -2678,25 +2558,11 @@
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <SCR_508>	shared	  <unlocks>
-        <radio>	EM3_R61	  <cost>	6600	</cost>
-        </radio>
-      </unlocks>
-    </SCR_508>
-    <EM3_R61>	shared	  <unlocks>
-        <radio>	SCR_528_F	  <cost>	9300	</cost>
-        </radio>
-      </unlocks>
-    </EM3_R61>
     <SCR_528_F>	shared	</SCR_528_F>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Peugeot_PRV_V6_F1>
-          <smplEnginePower>	240	</smplEnginePower>
-          <smplFwMaxSpeed>	58	</smplFwMaxSpeed>
-        </Peugeot_PRV_V6_F1>
         <Peugeot_PRV_V6_F2>
           <smplEnginePower>	260	</smplEnginePower>
           <smplFwMaxSpeed>	58	</smplFwMaxSpeed>

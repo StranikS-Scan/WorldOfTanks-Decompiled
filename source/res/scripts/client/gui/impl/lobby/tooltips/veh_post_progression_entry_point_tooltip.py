@@ -30,7 +30,7 @@ class VehPostProgressionEntryPointTooltip(ViewImpl):
     def viewModel(self):
         return super(VehPostProgressionEntryPointTooltip, self).getViewModel()
 
-    def _onLoading(self, intCD, parentScreen):
+    def _onLoading(self, intCD, parentScreen=None):
         items = self.__itemsCache.items
         self.__vehicle = items.getItemByCD(intCD)
         eliteProgress = self.__vehicle.getEliteStatusProgress()

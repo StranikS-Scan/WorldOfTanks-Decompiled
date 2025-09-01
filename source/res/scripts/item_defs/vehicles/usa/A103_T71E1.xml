@@ -1250,7 +1250,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	4500	</weight>
-      <maxLoad>	18000	</maxLoad>
       <terrainResistance>	0.8 0.9 1.7	</terrainResistance>
       <brakeForce>	30000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2053,7 +2052,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	4500	</weight>
-      <maxLoad>	20000	</maxLoad>
       <terrainResistance>	0.7 0.8 1.5	</terrainResistance>
       <brakeForce>	34000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2850,7 +2848,7 @@
   <turrets0>
     <Turret_1_T71>
       <userString>	#usa_vehicles:Turret_1_T71	</userString>
-      <tags></tags>
+      <tags>	oscillating	</tags>
       <level>	7	</level>
       <price>	17400	</price>
       <notInShop>	true	</notInShop>

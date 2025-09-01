@@ -11,7 +11,7 @@ class SetupFeatureType(Enum):
 class SetupTooltipViewModel(FeatureTooltipViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=5, commands=0):
+    def __init__(self, properties=6, commands=0):
         super(SetupTooltipViewModel, self).__init__(properties=properties, commands=commands)
 
     def getIconName(self):
@@ -26,7 +26,14 @@ class SetupTooltipViewModel(FeatureTooltipViewModel):
     def setType(self, value):
         self._setString(4, value.value)
 
+    def getIsLevelShown(self):
+        return self._getBool(5)
+
+    def setIsLevelShown(self, value):
+        self._setBool(5, value)
+
     def _initialize(self):
         super(SetupTooltipViewModel, self)._initialize()
         self._addStringProperty('iconName', '')
         self._addStringProperty('type')
+        self._addBoolProperty('isLevelShown', True)

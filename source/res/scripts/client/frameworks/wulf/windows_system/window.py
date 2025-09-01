@@ -103,7 +103,7 @@ class WindowSettings(object):
 
 
 class Window(PyObjectEntity):
-    __slots__ = ('onStatusChanged', '__windowStatus', 'onShowingStatusChanged', 'onFocusChanged', 'onSizeChanged', 'onPositionChanged', '__showingStatus', '__isShown', '__isFocused', '__isReady', '__weakref__', '__em')
+    __slots__ = ('onStatusChanged', '__windowStatus', 'onShowingStatusChanged', 'onFocusChanged', 'onReady', 'onSizeChanged', 'onPositionChanged', '__showingStatus', '__isReady', '__isShown', '__isFocused', '__weakref__', '__em')
 
     def __init__(self, settings):
         if not settings.name:
@@ -115,11 +115,12 @@ class Window(PyObjectEntity):
         self.onShowingStatusChanged = Event.Event(self.__em)
         self.__showingStatus = ShowingStatus.HIDDEN
         self.__isShown = False
-        self.__isReady = False
         self.__isFocused = False
         self.onFocusChanged = Event.Event(self.__em)
         self.onSizeChanged = Event.Event(self.__em)
         self.onPositionChanged = Event.Event(self.__em)
+        self.__isReady = False
+        self.onReady = Event.Event(self.__em)
         _logger.debug('Creating %r with %r', self, settings)
         return
 
@@ -167,6 +168,20 @@ class Window(PyObjectEntity):
     @property
     def isFocused(self):
         return self.__isFocused
+
+    @property
+    def isReady(self):
+        return self.__isReady
+
+    @isReady.setter
+    def isReady(self, value):
+        oldIsReady = self.__isReady
+        if oldIsReady and not value:
+            _logger.error("Window's readiness cannot be reset: %r", self)
+            return
+        self.__isReady = value
+        if not oldIsReady and value:
+            self.onReady()
 
     @property
     def position(self):
@@ -315,8 +330,9 @@ class Window(PyObjectEntity):
         self.onShowingStatusChanged(newStatus)
 
     def _cReady(self):
-        self.__isReady = True
-        self._onReady()
+        self.isReady = True
+        if self.__windowStatus == WindowStatus.LOADED:
+            self._onReady()
 
     def _cFocusChanged(self, focused):
         self.__isFocused = focused

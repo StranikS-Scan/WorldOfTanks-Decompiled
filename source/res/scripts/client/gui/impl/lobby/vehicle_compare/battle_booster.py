@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/vehicle_compare/battle_booster.py
+from gui.impl.gen.view_models.constants.item_highlight_types import ItemHighlightTypes
 from gui.impl.lobby.tank_setup.array_providers.battle_booster import OptDeviceBattleBoosterProvider, CrewBattleBoosterProvider
 from gui.impl.lobby.tank_setup.configurations.battle_booster import BattleBoostersTabsController, BattleBoosterTabs
 from gui.impl.lobby.vehicle_compare.base_sub_view import CompareBaseSetupSubView
@@ -24,6 +25,11 @@ class _CompareCrewBattleBoosterProvider(CrewBattleBoosterProvider):
 
     def _fillBuyStatus(self, *args, **kwargs):
         pass
+
+    def _fillHighlights(self, model, item):
+        super(_CompareCrewBattleBoosterProvider, self)._fillHighlights(model, item)
+        if not item.isAffectedSkillLearnt(self._getVehicle()) and not item.isBuiltinPerkBooster():
+            model.setOverlayType(ItemHighlightTypes.BATTLE_BOOSTER_REPLACE)
 
 
 class _CompareBattleBoostersTabsController(BattleBoostersTabsController):

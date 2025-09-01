@@ -21,8 +21,10 @@ class LogWindows(str, Enum):
     ESCAPE_MENU = 'escape_menu'
     SETTINGS_MENU = 'settings_menu'
     INFO_PAGE = 'info_page'
-    ENTRY_POINT = 'entry_point'
-    ENTRY_POINT_EVENT = 'entry_point_vday'
+    ENTRY_POINT = 'newbie_banner'
+    ENTRY_POINT_TOOLTIP = 'newbie_banner_tooltip'
+    ENTRY_POINT_EVENT = 'event_banner'
+    ENTRY_POINT_TOOLTIP_EVENT = 'event_banner_tooltip'
     NEWBIE_ADVERTISING = 'newbie_advertising_view'
     EVENT_WELCOME = 'event_welcome_view'
     COMPLETED_TASKS_WARNING = 'completed_tasks_warning_window'
@@ -57,9 +59,11 @@ class LogActions(str, Enum):
     PLAY = 'play'
     WATCHED = 'watched'
     GAME_LOADING_CLOSE = 'game_loading_close'
-    TOOLTIP_SHOWN = 'tooltip_shown'
 
 
 class LogBattleResultStats(str, Enum):
     WIN = 'win'
     LOST = 'lost'
+
+
+TOOLTIP_MIN_VIEW_TIME = 2.0

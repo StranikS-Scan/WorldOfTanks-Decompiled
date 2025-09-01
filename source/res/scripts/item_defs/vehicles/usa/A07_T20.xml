@@ -58,7 +58,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	14000	</weight>
-    <maxHealth>	800	</maxHealth>
+    <maxHealth>	960	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -1176,13 +1176,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <HVSS_T48>
-      <userString>	#usa_vehicles:HVSS_T48	</userString>
+    <Chassis_A07_T20>
+      <userString>	#usa_vehicles:Chassis_A07_T20	</userString>
       <tags></tags>
       <level>	6	</level>
       <price>	11900	</price>
       <unlocks>
-        <chassis>	HVSS_T51	  <cost>	8000	</cost>
+        <chassis>	Chassis_A07_T20_2	  <cost>	8000	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1190,14 +1190,13 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	5400	</weight>
-      <maxLoad>	30000	</maxLoad>
-      <terrainResistance>	1.1 1.7 2.3	</terrainResistance>
+      <terrainResistance>	1 1.1 1.7	</terrainResistance>
       <brakeForce>	36500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	37	</rotationSpeed>
+      <rotationSpeed>	39	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.24	</vehicleMovement>
-        <vehicleRotation>	0.24	</vehicleRotation>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	130	</maxHealth>
@@ -2243,9 +2242,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	5.71428585	</repairTime>
-    </HVSS_T48>
-    <HVSS_T51>
-      <userString>	#usa_vehicles:HVSS_T51	</userString>
+    </Chassis_A07_T20>
+    <Chassis_A07_T20_2>
+      <userString>	#usa_vehicles:Chassis_A07_T20_2	</userString>
       <tags></tags>
       <level>	7	</level>
       <price>	17900	</price>
@@ -2254,11 +2253,10 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	5400	</weight>
-      <maxLoad>	34000	</maxLoad>
       <terrainResistance>	1 1.1 1.7	</terrainResistance>
       <brakeForce>	36500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	37	</rotationSpeed>
+      <rotationSpeed>	42	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.2	</vehicleMovement>
         <vehicleRotation>	0.2	</vehicleRotation>
@@ -3307,16 +3305,16 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	5.71428585	</repairTime>
-    </HVSS_T51>
+    </Chassis_A07_T20_2>
   </chassis>
   <turrets0>
-    <T20D1>
-      <userString>	#usa_vehicles:T20D1	</userString>
+    <Turret_1_A07_T20>
+      <userString>	#usa_vehicles:Turret_1_A07_T20	</userString>
       <tags></tags>
       <level>	6	</level>
       <price>	12900	</price>
       <unlocks>
-        <turret>	T20D2	  <cost>	8050	</cost>
+        <turret>	Turret_2_A07_T20	  <cost>	8050	</cost>
         </turret>
       </unlocks>
       <armor>
@@ -3329,14 +3327,14 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_3	</primaryArmor>
       <weight>	7000	</weight>
-      <maxHealth>	200	</maxHealth>
+      <maxHealth>	180	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
         <maxRegenHealth>	65	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	370	</circularVisionRadius>
+      <circularVisionRadius>	380	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	90	</maxHealth>
         <maxRegenHealth>	45	</maxRegenHealth>
@@ -3361,13 +3359,13 @@
             </armor_5>
             <gun>	20	</gun>
           </armor>
-          <reloadTime>	4.8	</reloadTime>
-          <aimingTime>	1.9	</aimingTime>
+          <reloadTime>	4.6	</reloadTime>
+          <aimingTime>	1.7	</aimingTime>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <shotDispersionFactors>
-            <afterShot>	3.5	</afterShot>
+            <afterShot>	3	</afterShot>
             <turretRotation>	0.1	</turretRotation>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -3933,9 +3931,9 @@
         <density>	121.061 121.394	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </T20D1>
-    <T20D2>
-      <userString>	#usa_vehicles:T20D2	</userString>
+    </Turret_1_A07_T20>
+    <Turret_2_A07_T20>
+      <userString>	#usa_vehicles:Turret_2_A07_T20	</userString>
       <tags></tags>
       <level>	7	</level>
       <price>	17400	</price>
@@ -3955,7 +3953,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_3	</primaryArmor>
       <weight>	8400	</weight>
-      <maxHealth>	300	</maxHealth>
+      <maxHealth>	240	</maxHealth>
       <rotationSpeed>	42	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -3986,13 +3984,13 @@
             </armor_4>
             <gun>	20	</gun>
           </armor>
-          <reloadTime>	4.7	</reloadTime>
+          <reloadTime>	4.6	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <shotDispersionFactors>
-            <afterShot>	3.5	</afterShot>
+            <afterShot>	3	</afterShot>
             <turretRotation>	0.08	</turretRotation>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -4076,6 +4074,8 @@
         <_90mm_Gun_M3>	shared	  <maxAmmo>	48	</maxAmmo>
           <unlocks>
             <vehicle>	A90_T69	  <cost>	118000	</cost>
+            </vehicle>
+            <vehicle>	A35_Pershing	  <cost>	98100	</cost>
             </vehicle>
           </unlocks>
           <pitchLimits>
@@ -4658,19 +4658,15 @@
         <density>	123.64 123.41	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </T20D2>
+    </Turret_2_A07_T20>
   </turrets0>
   <engines>
-    <Ford_GAA>	shared	  <unlocks>
-        <engine>	Ford_GAN	  <cost>	11500	</cost>
+    <Ford_GAA_T20>	shared	  <unlocks>
+        <engine>	Ford_GAN_T20	  <cost>	11500	</cost>
         </engine>
       </unlocks>
-    </Ford_GAA>
-    <Ford_GAN>	shared	  <unlocks>
-        <vehicle>	A35_Pershing	  <cost>	98100	</cost>
-        </vehicle>
-      </unlocks>
-    </Ford_GAN>
+    </Ford_GAA_T20>
+    <Ford_GAN_T20>	shared	</Ford_GAN_T20>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
@@ -4681,30 +4677,17 @@
   <physics>
     <detailed>
       <engines>
-        <Ford_GAA>
-          <smplEnginePower>	549.7862	</smplEnginePower>
+        <Ford_GAA_T20>
+          <smplEnginePower>	570	</smplEnginePower>
           <smplFwMaxSpeed>	56	</smplFwMaxSpeed>
-        </Ford_GAA>
-        <Ford_GAN>
-          <smplEnginePower>	592.0775	</smplEnginePower>
+        </Ford_GAA_T20>
+        <Ford_GAN_T20>
+          <smplEnginePower>	610	</smplEnginePower>
           <smplFwMaxSpeed>	56	</smplFwMaxSpeed>
-        </Ford_GAN>
+        </Ford_GAN_T20>
       </engines>
       <chassis>
-        <HVSS_T48>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.18515	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.13685	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
-            </firm>
-          </grounds>
-        </HVSS_T48>
-        <HVSS_T51>
+        <Chassis_A07_T20>
           <grounds>
             <soft>
               <rollingFriction>	0.13685	</rollingFriction>
@@ -4716,7 +4699,20 @@
               <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
-        </HVSS_T51>
+        </Chassis_A07_T20>
+        <Chassis_A07_T20_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.13685	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.08855	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0805	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_A07_T20_2>
       </chassis>
     </detailed>
   </physics>

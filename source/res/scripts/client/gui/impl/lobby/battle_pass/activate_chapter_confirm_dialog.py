@@ -8,7 +8,6 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.dialogs.default_dialog_place_holders import DefaultDialogPlaceHolders
 from gui.impl.gen.view_models.views.lobby.battle_pass.chapter_confirm_view_model import ChapterConfirmViewModel
 from gui.impl.pub import ViewImpl
-from gui.shared.event_dispatcher import showHangar
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 _CONFIRM_RES = R.strings.battle_pass.chapterChoice.confirmation
@@ -61,5 +60,5 @@ class ActivateChapterConfirmDialog(DialogTemplateView):
 
     def __onSeasonStateChanged(self):
         if not self.__battlePassController.isActive():
-            showHangar()
+            self.destroyWindow()
             self._closeClickHandler()

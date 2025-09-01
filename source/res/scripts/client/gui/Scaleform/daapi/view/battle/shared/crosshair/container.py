@@ -55,6 +55,8 @@ class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMet
         self.__viewID = CROSSHAIR_VIEW_ID.UNDEFINED
         self.__zoomFactor = 0.0
         self.__scale = 1.0
+        self.__width = 0.0
+        self.__height = 0.0
         self.__distance = 0
         self.__damage = 0
         self.__hasAmmo = True
@@ -79,6 +81,14 @@ class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMet
 
     def setPosition(self, x, y):
         self.as_recreateDeviceS(x, y)
+
+    def setSize(self, width, height):
+        if self.__width == width and self.__height == height:
+            return
+        self.__width = width
+        self.__height = height
+        self.as_setSizeS(width, height)
+        super(CrosshairPanelContainer, self).setSize(width, height)
 
     def getScale(self):
         return self.__scale

@@ -63,9 +63,9 @@
     <weight>	9175	</weight>
     <maxHealth>	240	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	90	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
+      <maxHealth>	170	</maxHealth>
+      <maxRegenHealth>	128	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
     </ammoBayHealth>
     <models>
       <undamaged>	vehicles/french/F23_AMX_13F3AM/normal/lod0/Hull.model	</undamaged>
@@ -904,13 +904,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_AMX_13F3AM>
-      <userString>	#france_vehicles:Chassis_AMX_13F3AM	</userString>
+    <Chassis_F23_AMX_13F3AM>
+      <userString>	#france_vehicles:Chassis_F23_AMX_13F3AM	</userString>
       <tags></tags>
       <level>	5	</level>
       <price>	8600	</price>
       <unlocks>
-        <chassis>	Chassis_AMX_13F3AM_2	  <cost>	4180	</cost>
+        <chassis>	Chassis_F23_AMX_13F3AM_2	  <cost>	4180	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -918,8 +918,7 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	3800	</weight>
-      <maxLoad>	16500	</maxLoad>
-      <terrainResistance>	1.2 1.4 2.3	</terrainResistance>
+      <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
       <brakeForce>	14500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	27	</rotationSpeed>
@@ -1701,9 +1700,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	8.72727299	</repairTime>
-    </Chassis_AMX_13F3AM>
-    <Chassis_AMX_13F3AM_2>
-      <userString>	#france_vehicles:Chassis_AMX_13F3AM_2	</userString>
+    </Chassis_F23_AMX_13F3AM>
+    <Chassis_F23_AMX_13F3AM_2>
+      <userString>	#france_vehicles:Chassis_F23_AMX_13F3AM_2	</userString>
       <tags></tags>
       <level>	6	</level>
       <price>	13300	</price>
@@ -1712,7 +1711,6 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	3800	</weight>
-      <maxLoad>	18500	</maxLoad>
       <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
       <brakeForce>	16500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -1722,9 +1720,9 @@
         <vehicleRotation>	0.3	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	90	</maxHealth>
-      <maxRegenHealth>	70	</maxRegenHealth>
-      <repairCost>	0.5	</repairCost>
+      <maxHealth>	145	</maxHealth>
+      <maxRegenHealth>	109	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
       <models>
         <undamaged>	vehicles/french/F23_AMX_13F3AM/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/french/F23_AMX_13F3AM/crash/lod0/Chassis.model	</destroyed>
@@ -2494,14 +2492,14 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	7.19999981	</repairTime>
-    </Chassis_AMX_13F3AM_2>
+      <repairTime>	6.62068987	</repairTime>
+    </Chassis_F23_AMX_13F3AM_2>
   </chassis>
   <turrets0>
-    <Turret_2_AMX_13F3AM>
+    <Turret_1_F23_AMX_13F3AM>
       <ceilless>	true	</ceilless>
-      <userString>	#france_vehicles:Turret_1_AMX_13F3AM	</userString>
-      <tags>	cannotDetach	</tags>
+      <userString>	#france_vehicles:Turret_1_F23_AMX_13F3AM	</userString>
+      <tags>	cannotDetach turretless	</tags>
       <level>	6	</level>
       <notInShop>	true	</notInShop>
       <price>	0	</price>
@@ -2523,9 +2521,9 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <Obusier_de_155mm_C_mle.1917>	shared	  <maxAmmo>	25	</maxAmmo>
+        <Obusier_de_155mm_C_mle_1917>	shared	  <maxAmmo>	25	</maxAmmo>
           <unlocks>
-            <gun>	Canon_de_155mm_de_33_calibres	  <cost>	6600	</cost>
+            <gun>	Canon_de_155mm_de_33_calibres_F3_AM	  <cost>	6600	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -2667,8 +2665,8 @@
             <density>	64.6392 64.112	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </Obusier_de_155mm_C_mle.1917>
-        <Canon_de_155mm_de_33_calibres>	shared	  <maxAmmo>	25	</maxAmmo>
+        </Obusier_de_155mm_C_mle_1917>
+        <Canon_de_155mm_de_33_calibres_F3_AM>	shared	  <maxAmmo>	25	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -45 1 -45	</minPitch>
             <maxPitch>	0 0 1 0	</maxPitch>
@@ -2680,7 +2678,7 @@
           <armor>
             <gun>	25	</gun>
           </armor>
-          <reloadTime>	31.9	</reloadTime>
+          <reloadTime>	33	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.4	</turretRotation>
             <afterShot>	6.0	</afterShot>
@@ -2688,7 +2686,7 @@
           </shotDispersionFactors>
           <aimingTime>	6	</aimingTime>
           <invisibilityFactorAtShot>	0.135	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.7	</shotDispersionRadius>
+          <shotDispersionRadius>	0.72	</shotDispersionRadius>
           <turretYawLimits>	-15 20	</turretYawLimits>
           <models>
             <undamaged>	vehicles/french/F23_AMX_13F3AM/normal/lod0/Gun_02.model	</undamaged>
@@ -2744,7 +2742,7 @@
             <density>	62.2993 65.3835	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </Canon_de_155mm_de_33_calibres>
+        </Canon_de_155mm_de_33_calibres_F3_AM>
       </guns>
       <models>
         <undamaged>	vehicles/french/F23_AMX_13F3AM/normal/lod0/Turret_01.model	</undamaged>
@@ -2777,7 +2775,7 @@
         <density>	50.0 25.0	</density>
         <aoTextureSize>	512 256	</aoTextureSize>
       </camouflage>
-    </Turret_2_AMX_13F3AM>
+    </Turret_1_F23_AMX_13F3AM>
   </turrets0>
   <engines>
     <SOFAM_8Gxb>	shared	  <unlocks>
@@ -2791,11 +2789,6 @@
     <Medium>	shared	</Medium>
   </fuelTanks>
   <radios>
-    <SCR_508>	shared	  <unlocks>
-        <radio>	SCR_528	  <cost>	9000	</cost>
-        </radio>
-      </unlocks>
-    </SCR_508>
     <SCR_528>	shared	</SCR_528>
   </radios>
   <physics>
@@ -2811,20 +2804,7 @@
         </_6F11SRY>
       </engines>
       <chassis>
-        <Chassis_AMX_13F3AM>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.18515	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.1127	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.0966	</rollingFriction>
-            </firm>
-          </grounds>
-        </Chassis_AMX_13F3AM>
-        <Chassis_AMX_13F3AM_2>
+        <Chassis_F23_AMX_13F3AM>
           <grounds>
             <soft>
               <rollingFriction>	0.16905	</rollingFriction>
@@ -2836,7 +2816,20 @@
               <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_AMX_13F3AM_2>
+        </Chassis_F23_AMX_13F3AM>
+        <Chassis_F23_AMX_13F3AM_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.16905	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.10465	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.08855	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_F23_AMX_13F3AM_2>
       </chassis>
     </detailed>
   </physics>

@@ -5,6 +5,7 @@ from frameworks.wulf import GuiApplication
 from gui.impl.optimization_manager import GraphicsOptimizationManager
 from skeletons.gui.impl import IGuiLoader
 if typing.TYPE_CHECKING:
+    from typing import Callable
     from frameworks.wulf import ViewModel
     from frameworks.wulf.tutorial import Tutorial
     from frameworks.wulf.ui_logger import UILogger
@@ -41,8 +42,8 @@ class GuiLoader(IGuiLoader):
     def scale(self):
         return self.__gui.scale
 
-    def init(self, tutorialModel, uiLoggerModel):
-        self.__gui.init(tutorialModel, uiLoggerModel)
+    def init(self, tutorialModel, uiLoggerModel, serverTimeCallback):
+        self.__gui.init(tutorialModel, uiLoggerModel, serverTimeCallback)
         self.__graphicsOptimizationManager.init(self.__gui.windowsManager, self.__gui.scale)
 
     def fini(self):

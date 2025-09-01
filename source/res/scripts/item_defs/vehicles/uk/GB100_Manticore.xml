@@ -57,7 +57,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	5834	</weight>
-    <maxHealth>	1120	</maxHealth>
+    <maxHealth>	1280	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	180	</maxRegenHealth>
@@ -670,7 +670,6 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	1400	</weight>
-      <maxLoad>	13000	</maxLoad>
       <terrainResistance>	0.9 1 1.6	</terrainResistance>
       <brakeForce>	13000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -1598,7 +1597,7 @@
   <turrets0>
     <Turret_1_GB100_Manticore>
       <userString>	#gb_vehicles:Turret_1_GB100_Manticore	</userString>
-      <tags></tags>
+      <tags>	oscillating	</tags>
       <level>	10	</level>
       <price>	66000	</price>
       <notInShop>	true	</notInShop>
@@ -1622,7 +1621,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_13	</primaryArmor>
       <weight>	2800	</weight>
-      <maxHealth>	280	</maxHealth>
+      <maxHealth>	320	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -1636,7 +1635,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <QF_105mm_LT_Gun>	shared	  <maxAmmo>	20	</maxAmmo>
+        <QF_105mm_LT_Gun>	shared	  <maxAmmo>	30	</maxAmmo>
           <armor>
             <armor_1>	85	</armor_1>
             <armor_2>	25	</armor_2>
@@ -1658,7 +1657,7 @@
           </armor>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
-            <minPitch>	0 -8 0.190126 -8 0.232778 -5.5 0.492935 -4.5 0.757214 -5 0.762901 -8 0.767131 -8 0.791448 -8 1 -8	</minPitch>
+            <minPitch>	0.00000 -8.00 0.19013 -8.00 0.23278 -5.00 0.75721 -5.00 0.76290 -8.00 1.00000 -8.00	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
@@ -2397,7 +2396,7 @@
     </Turret_1_GB100_Manticore>
   </turrets0>
   <engines>
-    <Rolls_Royse_B81>	shared	</Rolls_Royse_B81>
+    <Rolls_Royce_B81_1955>	shared	</Rolls_Royce_B81_1955>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
@@ -2409,10 +2408,10 @@
   <physics>
     <detailed>
       <engines>
-        <Rolls_Royse_B81>
+        <Rolls_Royce_B81_1955>
           <smplEnginePower>	530	</smplEnginePower>
           <smplFwMaxSpeed>	68	</smplFwMaxSpeed>
-        </Rolls_Royse_B81>
+        </Rolls_Royce_B81_1955>
       </engines>
       <chassis>
         <Chassis_GB100_Manticore>

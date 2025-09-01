@@ -798,8 +798,8 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_Leopard1>
-      <userString>	#germany_vehicles:Chassis_Leopard1	</userString>
+    <Chassis_G89_Leopard1>
+      <userString>	#germany_vehicles:Chassis_G89_Leopard1	</userString>
       <tags></tags>
       <level>	10	</level>
       <price>	82500	</price>
@@ -809,7 +809,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	10000	</weight>
-      <maxLoad>	42000	</maxLoad>
       <terrainResistance>	0.8 0.9 1.8	</terrainResistance>
       <brakeForce>	43000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2049,11 +2048,11 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_Leopard1>
+    </Chassis_G89_Leopard1>
   </chassis>
   <turrets0>
-    <Turret_1_Leopard1>
-      <userString>	#germany_vehicles:Turret_1_Leopard1	</userString>
+    <Turret_1_G89_Leopard1>
+      <userString>	#germany_vehicles:Turret_1_G89_Leopard1	</userString>
       <tags></tags>
       <level>	10	</level>
       <price>	66000	</price>
@@ -2092,7 +2091,11 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_105mm_BK_L7A3_L51>	shared	  <maxAmmo>	60	</maxAmmo>
+        <_105mm_Bordkanone_L7A3>	shared	  <maxAmmo>	60	</maxAmmo>
+          <unlocks>
+            <vehicle>	G185_Leopard_120_Verbessert	  <cost>	325000	</cost>
+            </vehicle>
+          </unlocks>
           <aimingTime>	1.7	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.07	</turretRotation>
@@ -2221,7 +2224,7 @@
             <density>	123.477 112.701	</density>
             <aoTextureSize>	256 512	</aoTextureSize>
           </camouflage>
-        </_105mm_BK_L7A3_L51>
+        </_105mm_Bordkanone_L7A3>
       </guns>
       <models>
         <undamaged>	vehicles/german/G89_Leopard1/normal/lod0/Turret_01.model	</undamaged>
@@ -2735,10 +2738,10 @@
         <density>	113.802 112.991	</density>
         <aoTextureSize>	1024 512	</aoTextureSize>
       </camouflage>
-    </Turret_1_Leopard1>
+    </Turret_1_G89_Leopard1>
   </turrets0>
   <engines>
-    <MB-838_CAM-500_1>	shared	</MB-838_CAM-500_1>
+    <MTU_MB_838_CaM_500A>	shared	</MTU_MB_838_CaM_500A>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
@@ -2749,13 +2752,13 @@
   <physics>
     <detailed>
       <engines>
-        <MB-838_CAM-500_1>
+        <MTU_MB_838_CaM_500A>
           <smplEnginePower>	830	</smplEnginePower>
           <smplFwMaxSpeed>	70	</smplFwMaxSpeed>
-        </MB-838_CAM-500_1>
+        </MTU_MB_838_CaM_500A>
       </engines>
       <chassis>
-        <Chassis_Leopard1>
+        <Chassis_G89_Leopard1>
           <grounds>
             <soft>
               <rollingFriction>	0.1449	</rollingFriction>
@@ -2767,7 +2770,7 @@
               <rollingFriction>	0.0644	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_Leopard1>
+        </Chassis_G89_Leopard1>
       </chassis>
     </detailed>
   </physics>

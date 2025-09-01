@@ -80,10 +80,10 @@ class LootMarkerComponent(World2DLocationMarkerComponent):
         gui = self._gui()
         if not gui:
             return
-        timeLeft = max(0, self._startTime + self._captureTime - BigWorld.serverTime())
+        timeLeft = round(max(0, self._startTime + self._captureTime - BigWorld.serverTime()))
         gui.invokeMarker(self.componentID, 'updateLootingTime', time_utils.getTimeLeftFormat(timeLeft))
         self._tickTimerId = BigWorld.callback(1.0, self._tick)
-        rtpcValue = round((1 - round(timeLeft) / self._captureTime) * 100)
+        rtpcValue = round((1 - timeLeft / self._captureTime) * 100)
         if rtpcValue != 0:
             SoundGroups.g_instance.playSound2D(VDAY_LOOT_CAPTURE_PROGRESS_SOUND)
             WWISE.WW_setRTCPGlobal(VDAY_LOOT_CAPTURE_RTPC, rtpcValue)

@@ -1,12 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/visual_script_client/sound_blocks.py
+import logging
 import BigWorld
 from visual_script import ASPECT
 from visual_script.block import Block, Meta
 from visual_script.dependency import dependencyImporter
 from visual_script.misc import errorVScript, EDITOR_TYPE
 from visual_script.slot_types import SLOT_TYPE, arrayOf
-BattleReplay, SoundGroups, MusicControllerWWISE, helpers = dependencyImporter('BattleReplay', 'SoundGroups', 'MusicControllerWWISE', 'helpers')
+BattleReplay, SoundGroups, MusicControllerWWISE, helpers, Vehicular, tankStructure = dependencyImporter('BattleReplay', 'SoundGroups', 'MusicControllerWWISE', 'helpers', 'Vehicular', 'vehicle_systems.tankStructure')
+_logger = logging.getLogger(__name__)
 
 class SoundMeta(Meta):
 
@@ -204,6 +206,20 @@ class SetSoundRTPC(Block, SoundMeta):
         self._out.call()
 
 
+class SetGlobalSoundRTPC(Block, SoundMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(SetGlobalSoundRTPC, self).__init__(*args, **kwargs)
+        self._in = self._makeEventInputSlot('in', self._setValue)
+        self._out = self._makeEventOutputSlot('out')
+        self._rtpcName = self._makeDataInputSlot('rtpcName', SLOT_TYPE.STR)
+        self._rtpcValue = self._makeDataInputSlot('rtpcValue', SLOT_TYPE.FLOAT)
+
+    def _setValue(self):
+        SoundGroups.g_instance.setGlobalRTPC(self._rtpcName.getValue(), self._rtpcValue.getValue())
+        self._out.call()
+
+
 class SetSoundSwitch(Block, SoundMeta):
 
     def __init__(self, *args, **kwargs):
@@ -293,3 +309,31 @@ class SetGlobalSoundState(Block, SoundMeta):
     def _setValue(self):
         SoundGroups.g_instance.setState(self._stateGroupName.getValue(), self._stateName.getValue())
         self._out.call()
+
+
+class TriggerSoundOnEngine(Block, SoundMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(TriggerSoundOnEngine, self).__init__(*args, **kwargs)
+        self._in = self._makeEventInputSlot('in', self._execute)
+        self._object = self._makeDataInputSlot('gameObjectLink', SLOT_TYPE.GAME_OBJECT)
+        self._eventName = self._makeDataInputSlot('soundToPlay', SLOT_TYPE.STR)
+        self._out = self._makeEventOutputSlot('out')
+
+    def _execute(self):
+        vehicleGameObject = self._object.getValue()
+        if vehicleGameObject is not None:
+            audition = vehicleGameObject.findComponentByType(Vehicular.VehicleAudition)
+            if audition is not None:
+                soundName = self._eventName.getValue()
+                soundObj = audition.getSoundObject(tankStructure.TankSoundObjectsIndexes.ENGINE)
+                if soundObj is not None:
+                    soundObj.play(soundName)
+                else:
+                    _logger.warning('Could not find audition sound object for %s', soundName)
+            else:
+                _logger.debug('Could not find vehicle audition component')
+        else:
+            _logger.debug('Vehicle game object is None')
+        self._out.call()
+        return

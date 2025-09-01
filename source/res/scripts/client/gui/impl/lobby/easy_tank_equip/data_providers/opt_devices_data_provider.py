@@ -162,11 +162,6 @@ class OptDevicesDataProvider(BaseDataProvider):
     def __getPresetsInfo(self):
         return [ self.__getOptDevicesPresetInfo(presetType, items) for presetType, items in self.__optDevicesPresets.items() ]
 
-    def __presetIsTooHeavy(self, presetType):
-        optDevsSequence = [ optDevice.intCD for optDevice in self.__optDevicesPresets[presetType] ]
-        installPossible, reason = self.vehicle.descriptor.mayInstallOptDevsSequence(optDevsSequence)
-        return True if not installPossible and 'too heavy' in reason else False
-
     def __isAdvancedPresetNeeded(self, optDevices):
         if len(optDevices) != self.__optDevicesCapacity or not all(optDevices):
             return False
@@ -201,8 +196,6 @@ class OptDevicesDataProvider(BaseDataProvider):
         if installed:
             return self.__getInstalledPresetInfo(presetType)
         presetItems = self.__getOptDevicesPresetItems(optDevices)
-        if self.__presetIsTooHeavy(presetType):
-            return self.__getIsTooHeavyPresetInfo(presetType, presetItems)
         demountKits, demountItemsPrice = self.__optDevicesForDemount[presetType].getDemountPrice()
         if self.__itemsCache.items.stats.money.getShortage(demountItemsPrice.price):
             return self.__getDemountNotPossiblePresetInfo(presetType, presetItems, demountItemsPrice, demountKits)
@@ -258,10 +251,6 @@ class OptDevicesDataProvider(BaseDataProvider):
     def __getInstalledPresetInfo(self, presetType):
         presetItems = self.__getOptDevicesPresetItems(self.__installedOptDevices.getItems())
         return OptionalDevicesPresetInfo(installed=True, installedItemsCount=len(presetItems), itemPrice=ITEM_PRICE_ZERO, presetType=presetType, items=presetItems)
-
-    @staticmethod
-    def __getIsTooHeavyPresetInfo(presetType, presetItems):
-        return OptionalDevicesPresetInfo(itemPrice=ITEM_PRICE_ZERO, presetType=presetType, items=presetItems, disableReason=PresetDisableReason.LOAD_CAPACITY_NOT_ENOUGH)
 
     @staticmethod
     def __getDemountNotPossiblePresetInfo(presetType, presetItems, demountItemsPrice, demountKits):

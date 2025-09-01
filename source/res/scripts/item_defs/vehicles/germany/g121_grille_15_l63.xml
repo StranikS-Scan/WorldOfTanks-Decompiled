@@ -925,11 +925,10 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	12000	</weight>
-      <maxLoad>	45000	</maxLoad>
       <terrainResistance>	1.1 1.2 2	</terrainResistance>
       <brakeForce>	40000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	24	</rotationSpeed>
+      <rotationSpeed>	28	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.26	</vehicleMovement>
         <vehicleRotation>	0.3	</vehicleRotation>
@@ -1918,9 +1917,9 @@
       <maxHealth>	360	</maxHealth>
       <rotationSpeed>	20	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	185	</maxHealth>
+        <maxRegenHealth>	93	</maxRegenHealth>
+        <repairCost>	10	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>
@@ -1929,7 +1928,11 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_150mm_Pak_L63>	shared	  <maxAmmo>	30	</maxAmmo>
+        <_150mm_Pak_L_63>	shared	  <maxAmmo>	30	</maxAmmo>
+          <unlocks>
+            <vehicle>	G189_Hirschkafer	  <cost>	325000	</cost>
+            </vehicle>
+          </unlocks>
           <armor>
             <gun>	25	</gun>
           </armor>
@@ -2022,7 +2025,7 @@
             <density>	89.0192 88.7173	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_150mm_Pak_L63>
+        </_150mm_Pak_L_63>
       </guns>
       <models>
         <undamaged>	vehicles/german/G121_Grille_15_L63/normal/lod0/Turret_01.model	</undamaged>

@@ -154,6 +154,7 @@
         <G70_PzIV_Hydro>	1.2 1.2 0.000000 5.8	</G70_PzIV_Hydro>
         <G71_JagdPantherII>	2 2 0.43 0.4	</G71_JagdPantherII>
         <G72_JagdPz_E100>	1.8 1.8 0.2 0.000000	</G72_JagdPz_E100>
+        <G72_JagdPz_E100_7x7>	1.8 1.8 0.2 0.000000	</G72_JagdPz_E100_7x7>
         <G73_E50_Ausf_M>	2.1 2.1 0.000000 0.000000	</G73_E50_Ausf_M>
         <G73_E50_Ausf_M_7x7>	2.1 2.1 0.000000 0.000000	</G73_E50_Ausf_M_7x7>
         <G76_Pz_Sfl_IVc>	2.7 2.7 0.000000 0.000000	</G76_Pz_Sfl_IVc>
@@ -341,6 +342,7 @@
         <G70_PzIV_Hydro>	1.5 1.5 0.000000 2.9	</G70_PzIV_Hydro>
         <G71_JagdPantherII>	3.2 3.2 0.000000 0.000000	</G71_JagdPantherII>
         <G72_JagdPz_E100>	1.8 1.8 0.3 0.000000	</G72_JagdPz_E100>
+        <G72_JagdPz_E100_7x7>	1.8 1.8 0.3 0.000000	</G72_JagdPz_E100_7x7>
         <G73_E50_Ausf_M>	3 3 0.000000 0.000000	</G73_E50_Ausf_M>
         <G73_E50_Ausf_M_7x7>	3 3 0.000000 0.000000	</G73_E50_Ausf_M_7x7>
         <G76_Pz_Sfl_IVc>	3.1 3.1 0.8 0.7	</G76_Pz_Sfl_IVc>
@@ -527,6 +529,7 @@
         <G70_PzIV_Hydro>	1.2 1.2 0.000000 0.000000	</G70_PzIV_Hydro>
         <G71_JagdPantherII>	2.1 2.1 0.4 0.000000	</G71_JagdPantherII>
         <G72_JagdPz_E100>	1.8 1.8 0.3 0.58	</G72_JagdPz_E100>
+        <G72_JagdPz_E100_7x7>	1.8 1.8 0.3 0.58	</G72_JagdPz_E100_7x7>
         <G73_E50_Ausf_M>	2.4 2.4 0.000000 0.000000	</G73_E50_Ausf_M>
         <G73_E50_Ausf_M_7x7>	2.4 2.4 0.000000 0.000000	</G73_E50_Ausf_M_7x7>
         <G76_Pz_Sfl_IVc>	2.7 2.7 0.000000 0.000000	</G76_Pz_Sfl_IVc>
@@ -709,6 +712,7 @@
         <G70_PzIV_Hydro>	0.8 0.8 0.000000 4.6	</G70_PzIV_Hydro>
         <G71_JagdPantherII>	2.8 2.8 0.000000 0.000000	</G71_JagdPantherII>
         <G72_JagdPz_E100>	2 2 0.74 0.000000	</G72_JagdPz_E100>
+        <G72_JagdPz_E100_7x7>	2 2 0.74 0.000000	</G72_JagdPz_E100_7x7>
         <G73_E50_Ausf_M>	2.1 2.1 0.2 0.000000	</G73_E50_Ausf_M>
         <G73_E50_Ausf_M_7x7>	2.1 2.1 0.2 0.000000	</G73_E50_Ausf_M_7x7>
         <G76_Pz_Sfl_IVc>	2 2 0.000000 0.000000	</G76_Pz_Sfl_IVc>
@@ -892,6 +896,7 @@
         <G70_PzIV_Hydro>	1.7 1.7 0.000000 3.5	</G70_PzIV_Hydro>
         <G71_JagdPantherII>	2.4 2.4 0.000000 0.000000	</G71_JagdPantherII>
         <G72_JagdPz_E100>	1.9 1.9 0.14 0.000000	</G72_JagdPz_E100>
+        <G72_JagdPz_E100_7x7>	1.9 1.9 0.14 0.000000	</G72_JagdPz_E100_7x7>
         <G73_E50_Ausf_M>	2.6 2.6 0.000000 0.000000	</G73_E50_Ausf_M>
         <G73_E50_Ausf_M_7x7>	2.6 2.6 0.000000 0.000000	</G73_E50_Ausf_M_7x7>
         <G76_Pz_Sfl_IVc>	3.8 3.8 1.5 1.9	</G76_Pz_Sfl_IVc>
@@ -933,6 +938,47 @@
         <type>	relative	</type>
         <factor>	2.768587  2.769468	</factor>
         <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	germany	</nations>
+      </include>
+      <exclude>
+        <vehicles>	germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	958	</id>
+      <texture>	vehicles/russian/Camouflage/pub_west_germany_reunification_2025.dds	</texture>
+      <description>	#vehicle_customization:camouflage/pub_west_germany_reunification_2025/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/pub_west_germany_reunification_2025/label	</userString>
+      <tags>	hiddenInUI fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.348542	</HULL>
+        <TURRET>	-0.348542	</TURRET>
+        <GUN>	-0.348542	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.4 2.4	</factor>
+        <offset>	-0.27 -0.95	</offset>
       </tilingSettings>
     </camouflage>
   </itemGroup>

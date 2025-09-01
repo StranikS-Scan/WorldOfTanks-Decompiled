@@ -112,6 +112,10 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
         return self.getCacheValue('multipliedXPVehs', list())
 
     @property
+    def prestigeMilestonesAchieved(self):
+        return self.getCacheValue('prestigeMilestonesAchieved', dict())
+
+    @property
     def applyAdditionalXPCount(self):
         maxCount = self.lobbyContext.getServerSettings().getAdditionalBonusConfig().get('applyCount', 0)
         return max(maxCount - self.getCacheValue('applyAdditionalXPCount', maxCount), 0)
@@ -131,7 +135,7 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
 
     @property
     def eliteVehicles(self):
-        return self.getCacheValue('eliteVehicles', list())
+        return self.getCacheValue('eliteVehicles', set())
 
     @property
     def vehicleTypeLocks(self):
@@ -183,11 +187,11 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
 
     @property
     def unlocks(self):
-        return self.getCacheValue('unlocks', list())
+        return self.getCacheValue('unlocks', set())
 
     @property
     def initialUnlocks(self):
-        return self.getCacheValue(('initial', 'unlocks'), list())
+        return self.getCacheValue(('initial', 'unlocks'), set())
 
     @property
     def vehicleSlots(self):

@@ -1,14 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/LobbyView.py
+import logging
+import typing
 import constants
 import gui
 from frameworks.wulf import WindowLayer
 from gui import SystemMessages
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.vehicle_preview import VEHICLE_PREVIEW_ALIASES
 from gui.Scaleform.daapi.view.meta.LobbyPageMeta import LobbyPageMeta
-from gui.Scaleform.framework.entities.View import View, ViewKey
+from gui.Scaleform.framework.entities.View import View, ViewKey, ViewKeyDynamic
+from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor
 from gui.Scaleform.framework.managers.view_lifecycle_watcher import IViewLifecycleHandler, ViewLifecycleWatcher
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
@@ -16,19 +20,25 @@ from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui.impl import backport
+from gui.impl.gen import R
+from gui.impl.pub.view_component import ViewComponent
 from gui.prb_control.dispatcher import g_prbLoader
+from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import EVENT_BUS_SCOPE, events
+from gui.shared.system_factory import collectViewsForMonitoring
 from helpers import dependency, i18n, uniprof
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from skeletons.gui.app_loader import IWaitingWidget
-from skeletons.gui.game_control import IIGRController, IMapsTrainingController
+from skeletons.gui.game_control import IIGRController, IMapsTrainingController, IWalletController, IHangarGuiController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+_logger = logging.getLogger(__name__)
 
 class _LobbySubViewsLifecycleHandler(IViewLifecycleHandler):
     __WAITING_LBL = 'loadPage'
     __SUB_VIEWS = (VIEW_ALIAS.LOBBY_HANGAR,
+     VIEW_ALIAS.LEGACY_LOBBY_HANGAR,
      VIEW_ALIAS.LOBBY_STORE,
      VIEW_ALIAS.LOBBY_STORAGE,
      VIEW_ALIAS.LOBBY_PROFILE,
@@ -50,10 +60,14 @@ class _LobbySubViewsLifecycleHandler(IViewLifecycleHandler):
      VIEW_ALIAS.LOBBY_TECHTREE,
      VIEW_ALIAS.BATTLE_QUEUE,
      VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE,
-     RANKEDBATTLES_ALIASES.RANKED_BATTLES_VIEW_ALIAS)
+     RANKEDBATTLES_ALIASES.RANKED_BATTLES_VIEW_ALIAS,
+     VIEW_ALIAS.VEHICLE_HUB,
+     VIEW_ALIAS.POST_BATTLE_RESULTS,
+     VIEW_ALIAS.USER_MISSIONS_HUB_CONTAINER)
+    __DYNAMIC_VIEWS = (R.views.lobby.dog_tags.AnimatedDogTagsView(),)
 
     def __init__(self):
-        super(_LobbySubViewsLifecycleHandler, self).__init__([ ViewKey(alias) for alias in self.__SUB_VIEWS ])
+        super(_LobbySubViewsLifecycleHandler, self).__init__([ ViewKey(alias) for alias in self.__SUB_VIEWS + tuple(collectViewsForMonitoring()) ] + [ ViewKeyDynamic(alias) for alias in self.__DYNAMIC_VIEWS ])
         self.__loadingSubViews = set()
         self.__isWaitingVisible = False
 
@@ -82,20 +96,72 @@ class _LobbySubViewsLifecycleHandler(IViewLifecycleHandler):
             Waiting.hide(self.__WAITING_LBL)
 
 
-class LobbyView(LobbyPageMeta, IWaitingWidget):
+class LobbyPanelInjector(InjectComponentAdaptor, IGlobalListener):
 
-    class COMPONENTS(object):
-        HEADER = 'lobbyHeader'
+    def __init__(self):
+        super(LobbyPanelInjector, self).__init__()
+        self._viewType = self._getViewType()
 
+    def onPrbEntitySwitched(self):
+        self._viewType = self._getViewType()
+        if self._injectView is None or type(self._injectView) is self._viewType:
+            return
+        else:
+            self._destroyInjected()
+            self._createInjectView()
+            return
+
+    def destroy(self):
+        self.stopGlobalListening()
+        super(LobbyPanelInjector, self).destroy()
+
+    def _populate(self):
+        super(LobbyPanelInjector, self)._populate()
+        self.startGlobalListening()
+
+    def _makeInjectView(self):
+        return self._viewType()
+
+    def _getViewType(self):
+        raise NotImplementedError
+
+
+class LobbyHeaderInject(LobbyPanelInjector):
+    _hangarGuiCtrl = dependency.descriptor(IHangarGuiController)
+
+    def _getViewType(self):
+        return self._hangarGuiCtrl.getLobbyHeaderHelper().getHeaderType()
+
+
+class LobbyFooterInject(LobbyPanelInjector):
+    _hangarGuiCtrl = dependency.descriptor(IHangarGuiController)
+
+    def _getViewType(self):
+        return self._hangarGuiCtrl.getLobbyHeaderHelper().getFooterType()
+
+
+class LobbyView(LobbyPageMeta, IWaitingWidget, IGlobalListener):
     itemsCache = dependency.descriptor(IItemsCache)
     igrCtrl = dependency.descriptor(IIGRController)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    wallet = dependency.descriptor(IWalletController)
     mapsTrainingController = dependency.descriptor(IMapsTrainingController)
 
     def __init__(self, ctx=None):
         super(LobbyView, self).__init__(ctx)
         self.__currIgrType = constants.IGR_TYPE.NONE
         self.__viewLifecycleWatcher = ViewLifecycleWatcher()
+        self.__oldStyleViewMode = False
+
+    def create(self):
+        super(LobbyView, self).create()
+        accAttrs = self.itemsCache.items.stats.attributes
+        battle_selector_items.create()
+        battle_selector_items.getItems().validateAccountAttrs(accAttrs)
+        self.startGlobalListening()
+        g_prbLoader.setEnabled(True)
+        self.fireEvent(events.GUICommonEvent(events.GUICommonEvent.LOBBY_VIEW_LOADED))
+        Waiting.hide('enter')
 
     @proto_getter(PROTO_TYPE.BW_CHAT2)
     def bwProto(self):
@@ -126,11 +192,24 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
     def notifyCursorDragging(self, isDragging):
         self.fireEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.NOTIFY_CURSOR_DRAGGING, ctx={'isDragging': isDragging}))
 
+    def setRequiresOldStyle(self, value):
+        if self.__oldStyleViewMode == value:
+            return
+        self.__oldStyleViewMode = value
+        self._updateRequiresOldStyle(VIEW_ALIAS.LOBBY_HEADER_OVERLAPPING)
+        self._updateRequiresOldStyle(VIEW_ALIAS.LOBBY_FOOTER_OVERLAPPING)
+
+    def _updateRequiresOldStyle(self, alias):
+        component = self.getComponent(alias)
+        if component is not None:
+            component.getInjectView().setOldStyleViewFlag(self.__oldStyleViewMode)
+        return
+
     @uniprof.regionDecorator(label='account.show_gui', scope='enter')
     def _populate(self):
-        View._populate(self)
+        self.fireEvent(events.GUICommonEvent(events.GUICommonEvent.LOBBY_VIEW_LOADING))
+        super(LobbyView, self)._populate()
         self.__currIgrType = self.igrCtrl.getRoomType()
-        g_prbLoader.setEnabled(True)
         self.addListener(events.LobbySimpleEvent.SHOW_HELPLAYOUT, self.__showHelpLayout, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.LobbySimpleEvent.CLOSE_HELPLAYOUT, self.__closeHelpLayout, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.GameEvent.SCREEN_SHOT_MADE, self.__handleScreenShotMade, EVENT_BUS_SCOPE.GLOBAL)
@@ -139,26 +218,43 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
         viewLifecycleHandler = _LobbySubViewsLifecycleHandler()
         self.__viewLifecycleWatcher.start(self.app.containerManager, [viewLifecycleHandler])
         self.igrCtrl.onIgrTypeChanged += self.__onIgrTypeChanged
+        self.wallet.onWalletStatusChanged += self.__onWalletChanged
         battlesCount = self.itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount()
         epicBattlesCount = self.itemsCache.items.getAccountDossier().getEpicBattleStats().getBattlesCount()
         self.lobbyContext.updateBattlesCount(battlesCount, epicBattlesCount)
-        self.fireEvent(events.GUICommonEvent(events.GUICommonEvent.LOBBY_VIEW_LOADED))
+        self.as_setWalletStatusS(self.wallet.componentsStatuses)
         self.bwProto.voipController.invalidateMicrophoneMute()
+        self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
 
-    def _invalidate(self, *args, **kwargs):
-        g_prbLoader.setEnabled(True)
-        super(LobbyView, self)._invalidate(*args, **kwargs)
+    def _onRegisterFlashComponent(self, viewPy, alias):
+        super(LobbyView, self)._onRegisterFlashComponent(viewPy, alias)
+        if alias in (VIEW_ALIAS.LOBBY_HEADER_OVERLAPPING, VIEW_ALIAS.LOBBY_FOOTER_OVERLAPPING):
+            self._updateRequiresOldStyle(alias)
 
     @uniprof.regionDecorator(label='account.show_gui', scope='exit')
     def _dispose(self):
+        self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
         self.igrCtrl.onIgrTypeChanged -= self.__onIgrTypeChanged
+        self.wallet.onWalletStatusChanged -= self.__onWalletChanged
         self.__viewLifecycleWatcher.stop()
         self.removeListener(events.LobbySimpleEvent.SHOW_HELPLAYOUT, self.__showHelpLayout, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.LobbySimpleEvent.CLOSE_HELPLAYOUT, self.__closeHelpLayout, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.GameEvent.SCREEN_SHOT_MADE, self.__handleScreenShotMade, EVENT_BUS_SCOPE.GLOBAL)
         self.removeListener(events.GameEvent.HIDE_LOBBY_SUB_CONTAINER_ITEMS, self.__hideSubContainerItems, EVENT_BUS_SCOPE.GLOBAL)
         self.removeListener(events.GameEvent.REVEAL_LOBBY_SUB_CONTAINER_ITEMS, self.__revealSubContainerItems, EVENT_BUS_SCOPE.GLOBAL)
-        View._dispose(self)
+        self.stopGlobalListening()
+        battle_selector_items.clear()
+        super(LobbyView, self)._dispose()
+
+    def onPrbEntitySwitched(self):
+        self.__updateBattleSelector()
+
+    def __onServerSettingsChange(self, _):
+        self.__updateBattleSelector()
+
+    def __updateBattleSelector(self):
+        state = g_prbLoader.getDispatcher().getFunctionalState()
+        battle_selector_items.getItems().update(state)
 
     def __showHelpLayout(self, _):
         self.as_showHelpLayoutS()
@@ -184,3 +280,6 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
         elif roomType in [constants.IGR_TYPE.BASE, constants.IGR_TYPE.NONE] and self.__currIgrType == constants.IGR_TYPE.PREMIUM:
             SystemMessages.pushMessage(i18n.makeString(SYSTEM_MESSAGES.IGR_CUSTOMIZATION_END, igrIcon=icon), type=SystemMessages.SM_TYPE.Information)
         self.__currIgrType = roomType
+
+    def __onWalletChanged(self, status):
+        self.as_setWalletStatusS(status)

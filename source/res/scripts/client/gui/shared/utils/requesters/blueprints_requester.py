@@ -108,7 +108,7 @@ class BlueprintsRequester(AbstractSyncDataRequester, IBlueprintsRequester):
 
     def getBlueprintDiscount(self, vehicleCD, vLevel, potentialFilledCount=0):
         _logger.debug('getBlueprintDiscount: vehicle=%s, level=%s ', vehicleCD, vLevel)
-        if not potentialFilledCount and (not self.__vehicleFragments or vehicleCD in self.__itemsCache.items.stats.unlocks or vehicleCD not in self.__vehicleFragments):
+        if not potentialFilledCount and (not self.__vehicleFragments or not self.isBlueprintsAvailable() or vehicleCD in self.__itemsCache.items.stats.unlocks or vehicleCD not in self.__vehicleFragments):
             return 0
         filledCount, totalCount = self.getBlueprintCount(vehicleCD, vLevel)
         filledCount = potentialFilledCount or filledCount

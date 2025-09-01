@@ -1,13 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/post_progression_components.py
 import ResMgr
-from constants import IS_CLIENT, IS_WEB, TTC_TOOLTIP_SECTIONS
+import constants
+from constants import IS_CLIENT, IS_WEB, TTC_TOOLTIP_SECTIONS, IS_LOAD_GLOSSARY
 from items import _xml
 from items.attributes_helpers import readModifiers
 from items.artefacts_helpers import VehicleFilter, readKpi
+from items.components.supply_slot_categories import SlotCategories
 from typing import Dict, Optional, Tuple, List, Union, Set
-from post_progression_common import ACTION_TYPES, FEATURES_NAMES, PAIR_TYPES, parseActionCompDescr, ID_THRESHOLD, POST_PROGRESSION_UNLOCK_MODIFICATIONS_PRICES, POST_PROGRESSION_BUY_MODIFICATIONS_PRICES, POST_PROGRESSION_UNLOCK_AND_BUY_MODIFICATIONS_PRICES, ALLOWED_CURRENCIES_FOR_TREE_STEP, ALLOWED_CURRENCIES_FOR_BUY_MODIFICATION_STEP
+from post_progression_common import ACTION_TYPES, FEATURES_NAMES, PAIR_TYPES, parseActionCompDescr, ID_THRESHOLD, POST_PROGRESSION_UNLOCK_MODIFICATIONS_PRICES, POST_PROGRESSION_BUY_MODIFICATIONS_PRICES, POST_PROGRESSION_UNLOCK_AND_BUY_MODIFICATIONS_PRICES, ALLOWED_CURRENCIES_FOR_TREE_STEP, ALLOWED_CURRENCIES_FOR_BUY_MODIFICATION_STEP, ALLOWED_ACTIONS_CATEGORIES, unpackActiveModifications
 from soft_exception import SoftException
+_XML_NAMESPACE = 'xmlns:xmlref'
 
 def getFeatures(actionCDs, vppCache):
     result = set()
@@ -20,8 +23,8 @@ def getFeatures(actionCDs, vppCache):
     return result
 
 
-def getActiveModifications(actionCDs, vppCache):
-    result = []
+def getActiveModifications(actionCDs, vppCache, postProgressionTree=0):
+    result = unpackActiveModifications(actionCDs, vppCache, postProgressionTree)
     for actionCD in actionCDs:
         actionType, itemID, subID = parseActionCompDescr(actionCD)
         if actionType == ACTION_TYPES.MODIFICATION:
@@ -48,7 +51,7 @@ class SimpleItem(object):
 
 
 class ActionItem(SimpleItem):
-    __slots__ = ('name', 'actionType', 'locName', 'imgName', 'tooltipSection')
+    __slots__ = ('name', 'actionType', 'locName', 'imgName', 'tooltipSection', 'categories')
 
     def __init__(self):
         super(ActionItem, self).__init__()
@@ -67,6 +70,19 @@ class ActionItem(SimpleItem):
             self.imgName = _xml.readStringWithDefaultValue(xmlCtx, section, 'imgName', self.name)
             self.locName = _xml.readStringWithDefaultValue(xmlCtx, section, 'locName', self.name)
             self.tooltipSection = _xml.readStringWithDefaultValue(xmlCtx, section, 'tooltipSection', TTC_TOOLTIP_SECTIONS.EQUIPMENT)
+        if IS_CLIENT or constants.IS_LOAD_GLOSSARY:
+            self.categories = self._readCategories(xmlCtx, section)
+
+    @staticmethod
+    def _readCategories(xmlCtx, section):
+        categories = set()
+        if section.has_key('categories'):
+            categories.update(_xml.readTupleOfStrings(xmlCtx, section, 'categories'))
+            for category in categories:
+                if category not in ALLOWED_ACTIONS_CATEGORIES:
+                    raise SoftException("Unknown category '{}'".format(category))
+
+        return categories
 
 
 class Modification(ActionItem):
@@ -76,6 +92,7 @@ class Modification(ActionItem):
         super(Modification, self).__init__()
         self.actionType = ACTION_TYPES.MODIFICATION
         self.modifiers = None
+        self.categories = set()
         self.kpi = []
         return
 
@@ -129,7 +146,7 @@ class ProgressionFeature(ActionItem):
 
 
 class TreeStep(SimpleItem):
-    __slots__ = ('priceTag', 'action', 'unlocks', 'requiredUnlocks', 'vehicleFilter', 'level')
+    __slots__ = ('priceTag', 'action', 'unlocks', 'requiredUnlocks', 'vehicleFilter', 'level', 'position', 'directions', 'type', 'unlockStrategy')
 
     def __init__(self):
         super(TreeStep, self).__init__()
@@ -139,6 +156,10 @@ class TreeStep(SimpleItem):
         self.requiredUnlocks = tuple()
         self.vehicleFilter = None
         self.level = None
+        self.position = None
+        self.directions = None
+        self.type = None
+        self.unlockStrategy = all
         return
 
     def readFromXML(self, xmlCtx, section, *args):
@@ -152,6 +173,15 @@ class TreeStep(SimpleItem):
             self.vehicleFilter = VehicleFilter.readVehicleFilter((xmlCtx, 'vehicleFilter'), section['vehicleFilter'])
         else:
             self.vehicleFilter = None
+        if section.has_key('unlockStrategyAny'):
+            self.unlockStrategy = any
+        if IS_CLIENT or IS_WEB or constants.IS_LOAD_GLOSSARY:
+            if section.has_key('position'):
+                self.position = _xml.readTupleOfInts(xmlCtx, section, 'position')
+            if section.has_key('directions'):
+                self.directions = _xml.readTupleOfStrings(xmlCtx, section, 'directions')
+            if section.has_key('type'):
+                self.type = _xml.readString(xmlCtx, section, 'type')
         return
 
     def addRequiredUnlock(self, stepID):
@@ -174,12 +204,13 @@ class TreeStep(SimpleItem):
 
 
 class ProgressionTree(SimpleItem):
-    __slots__ = ('steps', 'rootStep')
+    __slots__ = ('steps', 'rootStep', 'ppBattleIndex')
 
     def __init__(self):
         super(ProgressionTree, self).__init__()
         self.steps = None
         self.rootStep = None
+        self.ppBattleIndex = None
         return
 
     def readFromXML(self, xmlCtx, section, *args):
@@ -208,13 +239,21 @@ class ProgressionTree(SimpleItem):
         if self.rootStep not in self.steps or steps[self.rootStep].requiredUnlocks:
             _xml.raiseWrongXml(xmlCtx, None, 'Invalid root step id {}'.format(self.rootStep))
         self._validateLevels(xmlCtx)
+        self.ppBattleIndex = steps.values()
+        self.ppBattleIndex.sort(key=lambda step: step.id)
         return
 
     def _validateLevels(self, xmlCtx):
-        for stepID, step in self.steps.iteritems():
+        steps = self.steps
+        for stepID, step in steps.iteritems():
             for unlockID in step.unlocks:
-                if self.steps[unlockID].level < step.level:
-                    _xml.raiseWrongXml(xmlCtx, None, 'Invalid step level for step: {}'.format(stepID))
+                unlockerLevel = step.level
+                unlocksLevel = steps[unlockID].level
+                if unlocksLevel < unlockerLevel:
+                    _xml.raiseWrongXml(xmlCtx, None, 'Invalid step level for stepID=%s, unlocksID=%s, unlockerLevel=%s, unlocksLevel=%s' % (stepID,
+                     unlockID,
+                     unlockerLevel,
+                     unlocksLevel))
 
         return
 
@@ -285,6 +324,8 @@ class PostProgressionCache(object):
         ids = dict()
         names = dict()
         for name, data in section.items():
+            if name == _XML_NAMESPACE:
+                continue
             item = classObj()
             item.readFromXML(xmlCtx, data, *args)
             if item.id in ids:

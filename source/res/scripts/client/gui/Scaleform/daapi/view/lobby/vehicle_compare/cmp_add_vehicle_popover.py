@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_compare/cmp_add_vehicle_popover.py
+from __future__ import absolute_import
 from gui.Scaleform.daapi.view.lobby.popover.vehicle_select_popover_base import VehicleSelectPopoverBase
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import packHeaderColumnData
 from gui.Scaleform.daapi.view.lobby.vehicle_selector_base import VehicleSelectorBase

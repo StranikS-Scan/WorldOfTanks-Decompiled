@@ -30,9 +30,9 @@ from helpers.func_utils import CallParams, cooldownCallerDecorator
 from helpers.i18n import makeString as _ms
 from items import parseIntCompactDescr
 from items.components.c11n_components import getItemSlotType
-from items.components.c11n_constants import SeasonType, ProjectionDecalFormTags, CustomizationType, SLOT_DEFAULT_ALLOWED_MODEL
+from items.components.c11n_constants import SeasonType, ProjectionDecalFormTags, CustomizationType, SLOT_DEFAULT_ALLOWED_MODEL, EMPTY_ITEM_ID
 from items.customizations import CustomizationOutfit
-from items.vehicles import VEHICLE_CLASS_TAGS
+from items.vehicles import VEHICLE_CLASS_TAGS, getItemByCompactDescr
 from serializable_types.customizations.projection_decal import ProjectionDecalComponent
 from shared_utils import first
 from skeletons.gui.customization import ICustomizationService
@@ -810,6 +810,9 @@ def __getInventoryCounts(modifiedOutfits, vehicleCD, itemsCache=None, c11nServic
     removedCounts = Counter()
     for modifiedOutfit in modifiedOutfits.itervalues():
         for intCD in modifiedOutfit.items():
+            descriptor = getItemByCompactDescr(intCD)
+            if descriptor.id == EMPTY_ITEM_ID:
+                continue
             if intCD in inventoryCounts:
                 continue
             item = itemsCache.items.getItemByCD(intCD)
@@ -823,7 +826,11 @@ def __getInventoryCounts(modifiedOutfits, vehicleCD, itemsCache=None, c11nServic
             removed = baseOutfit.diff(removed)
         removedCounts += removed.itemsCounter
 
-    for intCD in removedCounts:
+    for intCD in removedCounts.copy():
+        descriptor = getItemByCompactDescr(intCD)
+        if descriptor.id == EMPTY_ITEM_ID:
+            del removedCounts[intCD]
+            continue
         item = itemsCache.items.getItemByCD(intCD)
         if item.isStyleOnly:
             removedCounts[intCD] = 0
@@ -866,7 +873,9 @@ def getStyledModeRequestData(requestData, style, vehicle, purchaseItems=None, st
         for season in SeasonType.COMMON_SEASONS:
             if style.isProgressive:
                 modifiedStyleOutfits[season] = customizationService.removeAdditionalProgressionData(outfit=modifiedStyleOutfits[season], style=style, vehCD=vehicleCD, season=season)
-            modifiedStyleOutfits[season] = removePartsFromOutfit(season, baseStyleOutfits[season]).diff(removePartsFromOutfit(season, modifiedStyleOutfits[season]))
+            baseComponent = removePartsFromOutfit(season, baseStyleOutfits[season]).pack()
+            modifiedComponent = removePartsFromOutfit(season, modifiedStyleOutfits[season]).pack()
+            modifiedStyleOutfits[season] = Outfit(vehicleCD=vehicleCD, component=modifiedComponent.getDiff(baseComponent))
 
         styleOutfitComponent = CustomizationOutfit(styleId=style.id, styleProgressionLevel=styleProgressionLevel, serial_number=style.serialNumber)
         styleOutfit = Outfit(vehicleCD=vehicleCD, component=styleOutfitComponent)

@@ -1520,13 +1520,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_AMX50_Foch>
-      <userString>	#france_vehicles:Chassis_AMX50_Foch	</userString>
+    <Chassis_F37_AMX50_Foch>
+      <userString>	#france_vehicles:Chassis_F37_AMX50_Foch	</userString>
       <tags></tags>
       <level>	8	</level>
       <price>	27650	</price>
       <unlocks>
-        <chassis>	Chassis_AMX50_Foch_2	  <cost>	24000	</cost>
+        <chassis>	Chassis_F37_AMX50_Foch_2	  <cost>	24000	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1534,11 +1534,10 @@
         <rightTrack>	30	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	59560	</maxLoad>
-      <terrainResistance>	1.4 1.5 2.6	</terrainResistance>
+      <terrainResistance>	1.3 1.4 2.4	</terrainResistance>
       <brakeForce>	37500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	26	</rotationSpeed>
+      <rotationSpeed>	32	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.17	</vehicleMovement>
         <vehicleRotation>	0.17	</vehicleRotation>
@@ -2438,9 +2437,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_AMX50_Foch>
-    <Chassis_AMX50_Foch_2>
-      <userString>	#france_vehicles:Chassis_AMX50_Foch_2	</userString>
+    </Chassis_F37_AMX50_Foch>
+    <Chassis_F37_AMX50_Foch_2>
+      <userString>	#france_vehicles:Chassis_F37_AMX50_Foch_2	</userString>
       <tags></tags>
       <level>	9	</level>
       <price>	64000	</price>
@@ -2449,11 +2448,10 @@
         <rightTrack>	30	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	62560	</maxLoad>
       <terrainResistance>	1.3 1.4 2.4	</terrainResistance>
       <brakeForce>	37500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	28	</rotationSpeed>
+      <rotationSpeed>	35	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.15	</vehicleMovement>
         <vehicleRotation>	0.15	</vehicleRotation>
@@ -3353,11 +3351,11 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_AMX50_Foch_2>
+    </Chassis_F37_AMX50_Foch_2>
   </chassis>
   <turrets0>
-    <Turret_1_AMX50_Foch>
-      <userString>	#france_vehicles:Turret_1_AMX50_Foch	</userString>
+    <Turret_1_F37_AMX50_Foch>
+      <userString>	#france_vehicles:Turret_1_F37_AMX50_Foch	</userString>
       <tags>	cannotDetach	</tags>
       <level>	9	</level>
       <price>	100	</price>
@@ -3369,9 +3367,9 @@
       <maxHealth>	310	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	170	</maxHealth>
+        <maxRegenHealth>	85	</maxRegenHealth>
+        <repairCost>	9	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	380	</circularVisionRadius>
       <surveyingDeviceHealth>
@@ -3380,11 +3378,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_120mm_SA_46_AC>	shared	  <maxAmmo>	68	</maxAmmo>
-          <unlocks>
-            <vehicle>	F64_AMX_50Fosh_B	  <cost>	290000	</cost>
-            </vehicle>
-          </unlocks>
+        <_120mm_SA46_Foch>	shared	  <maxAmmo>	68	</maxAmmo>
           <armor>
             <armor_1>	310	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3471,7 +3465,7 @@
             <density>	99.6945 101.93	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_120mm_SA_46_AC>
+        </_120mm_SA46_Foch>
       </guns>
       <models>
         <undamaged>	vehicles/french/F37_AMX50_Foch/normal/lod0/Turret_01.model	</undamaged>
@@ -3491,54 +3485,40 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-    </Turret_1_AMX50_Foch>
+    </Turret_1_F37_AMX50_Foch>
   </turrets0>
   <engines>
-    <Maybach_HL_295>	shared	  <unlocks>
-        <engine>	Saurer	  <cost>	25200	</cost>
+    <Maybach_HL_295_Foch>	shared	  <unlocks>
+        <engine>	Saurer_Foch	  <cost>	25200	</cost>
         </engine>
       </unlocks>
-    </Maybach_HL_295>
-    <Saurer>	shared	</Saurer>
+    </Maybach_HL_295_Foch>
+    <Saurer_Foch>	shared	  <unlocks>
+        <vehicle>	F64_AMX_50Fosh_B	  <cost>	290000	</cost>
+        </vehicle>
+      </unlocks>
+    </Saurer_Foch>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <SCR_508>	shared	  <unlocks>
-        <radio>	SCR_528	  <cost>	9000	</cost>
-        </radio>
-      </unlocks>
-    </SCR_508>
     <SCR_528>	shared	</SCR_528>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Maybach_HL_295>
-          <smplEnginePower>	898.689	</smplEnginePower>
+        <Maybach_HL_295_Foch>
+          <smplEnginePower>	970	</smplEnginePower>
           <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
-        </Maybach_HL_295>
-        <Saurer>
-          <smplEnginePower>	1057.281	</smplEnginePower>
+        </Maybach_HL_295_Foch>
+        <Saurer_Foch>
+          <smplEnginePower>	1070	</smplEnginePower>
           <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
-        </Saurer>
+        </Saurer_Foch>
       </engines>
       <chassis>
-        <Chassis_AMX50_Foch>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.2093	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.12075	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.1127	</rollingFriction>
-            </firm>
-          </grounds>
-        </Chassis_AMX50_Foch>
-        <Chassis_AMX50_Foch_2>
+        <Chassis_F37_AMX50_Foch>
           <grounds>
             <soft>
               <rollingFriction>	0.1932	</rollingFriction>
@@ -3550,7 +3530,20 @@
               <rollingFriction>	0.10465	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_AMX50_Foch_2>
+        </Chassis_F37_AMX50_Foch>
+        <Chassis_F37_AMX50_Foch_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.1932	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.1127	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.10465	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_F37_AMX50_Foch_2>
       </chassis>
     </detailed>
   </physics>

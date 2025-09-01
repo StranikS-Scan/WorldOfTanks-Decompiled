@@ -89,6 +89,8 @@ class DeathCamMarkerView(SubModelPresenter, IGlobalListener):
         elif killCamState in [DeathCamEvent.State.ENDING, DeathCamEvent.State.FINISHED]:
             self.viewModel.setIsMarkerVisible(False)
             self.viewModel.setIsAdvanced(False)
+            if killCamState is DeathCamEvent.State.FINISHED:
+                self.__positionController.remove(self.viewModel.marker.proxy)
 
     def __onMarkerDisplayChanged(self, markerType, ctx):
         if markerType is KillCamInfoMarkerType.HIDDEN:

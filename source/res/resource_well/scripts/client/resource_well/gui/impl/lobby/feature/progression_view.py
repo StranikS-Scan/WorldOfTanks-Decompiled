@@ -62,10 +62,12 @@ class ProgressionView(ViewImpl):
         self.__updateModel()
 
     def _finalize(self):
-        self.__notifier.stopNotification()
-        self.__notifier.clear()
-        self.__resourceWell.stopNumberRequesters()
+        if self.__notifier is not None:
+            self.__notifier.stopNotification()
+            self.__notifier.clear()
+            self.__resourceWell.stopNumberRequesters()
         super(ProgressionView, self)._finalize()
+        return
 
     def _getEvents(self):
         return ((self.viewModel.onAboutClick, self.__showEventInfo),

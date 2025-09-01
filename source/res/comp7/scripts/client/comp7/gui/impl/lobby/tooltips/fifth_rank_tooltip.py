@@ -12,7 +12,7 @@ class FifthRankTooltip(ViewImpl):
     __slots__ = ()
     __comp7Controller = dependency.descriptor(IComp7Controller)
 
-    def __init__(self, layoutID=R.views.comp7.lobby.tooltips.FifthRankTooltip()):
+    def __init__(self, layoutID=R.views.comp7.mono.lobby.tooltips.fifth_rank_tooltip()):
         settings = ViewSettings(layoutID)
         settings.model = FifthRankTooltipModel()
         super(FifthRankTooltip, self).__init__(settings)

@@ -57,7 +57,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	11950	</weight>
-    <maxHealth>	1280	</maxHealth>
+    <maxHealth>	1440	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	180	</maxRegenHealth>
@@ -1061,7 +1061,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	6500	</weight>
-      <maxLoad>	30000	</maxLoad>
       <terrainResistance>	0.8 0.9 1.8	</terrainResistance>
       <brakeForce>	25000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2170,7 +2169,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4500	</weight>
-      <maxHealth>	320	</maxHealth>
+      <maxHealth>	360	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
@@ -2185,6 +2184,10 @@
       </surveyingDeviceHealth>
       <guns>
         <_105mm_Kanone>	shared	  <maxAmmo>	35	</maxAmmo>
+          <unlocks>
+            <vehicle>	G188_LeKpz_Borkenkafer	  <cost>	325000	</cost>
+            </vehicle>
+          </unlocks>
           <armor>
             <armor_1>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -2623,7 +2626,7 @@
     </Turret_1_G125_Spz_57_Rh>
   </turrets0>
   <engines>
-    <MB_881>	shared	</MB_881>
+    <MTU_MB_881>	shared	</MTU_MB_881>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
@@ -2636,10 +2639,10 @@
   <physics>
     <detailed>
       <engines>
-        <MB_881>
+        <MTU_MB_881>
           <smplEnginePower>	1100	</smplEnginePower>
           <smplFwMaxSpeed>	75	</smplFwMaxSpeed>
-        </MB_881>
+        </MTU_MB_881>
       </engines>
       <chassis>
         <Chassis_G125_Spz_57_Rh>

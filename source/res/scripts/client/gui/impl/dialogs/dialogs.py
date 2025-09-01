@@ -13,7 +13,6 @@ from gui.impl.lobby.crew.free_skill_confirmation_dialog import FreeSkillConfirma
 from gui.impl.lobby.dialogs.exchange_with_items import ExchangeToBuyItems, ExchangeToUpgradeDevice
 from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindowWrapper
 from gui.impl.lobby.dialogs.quit_game_dialog import QuitGameDialogWindow
-from gui.impl.lobby.premacc.maps_blacklist_confirm_view import MapsBlacklistConfirmView
 from gui.impl.lobby.tank_setup.upgradable_device.UpgradeDeviceView import UpgradableDeviceUpgradeConfirmView
 from gui.impl.pub.dialog_window import DialogButtons, DialogWindow, SingleDialogResult
 from helpers import dependency
@@ -25,9 +24,11 @@ if typing.TYPE_CHECKING:
 @wg_async
 def show(dialog):
     dialog.load()
-    result = yield wg_await(dialog.wait())
-    dialog.destroy()
-    raise AsyncReturn(result)
+    try:
+        result = yield wg_await(dialog.wait())
+        raise AsyncReturn(result)
+    finally:
+        dialog.destroy()
 
 
 @wg_async
@@ -60,14 +61,6 @@ def quitGame(parent=None, guiLoader=None):
 def blueprintsConversion(vehicleCD, fragmentCount=1, parent=None):
     result = yield wg_await(showSingleDialogWithResultData(layoutID=R.views.lobby.blueprints.Confirm(), wrappedViewClass=BlueprintsConversionView, parent=parent, vehicleCD=vehicleCD, fragmentsCount=fragmentCount))
     raise AsyncReturn(result.result)
-
-
-@wg_async
-def mapsBlacklistConfirm(mapId, cooldownTime, disabledMaps=(), parent=None):
-    dialog = MapsBlacklistConfirmView(mapId=mapId, disabledMaps=disabledMaps, cooldownTime=cooldownTime, parent=parent.getParentWindow() if parent is not None else None)
-    result = yield wg_await(show(dialog))
-    raise AsyncReturn((result.result == DialogButtons.SUBMIT, result.data))
-    return
 
 
 @wg_async

@@ -4,52 +4,48 @@ import logging
 import typing
 from comp7.gui.impl.gen.view_models.views.lobby.enums import MetaRootViews
 from frameworks.wulf import Window
-from gui.Scaleform.framework import ScopeTemplates
-from gui.Scaleform.framework.managers.loaders import GuiImplViewLoadParams, SFViewLoadParams
-from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
-from gui.impl.gen import R
 from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.server_events.events_dispatcher import ifPrbNavigationEnabled
-from gui.shared import events, g_eventBus
-from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showHangar, getParentWindow
-from gui.shared.events import LobbyHeaderMenuEvent
 from helpers import dependency
-from skeletons.gui.game_control import ICollectionsSystemController, IComp7Controller
+from skeletons.gui.game_control import IComp7Controller
 from skeletons.gui.game_control import IHangarSpaceSwitchController
-from skeletons.gui.impl import IGuiLoader, INotificationWindowController
+from skeletons.gui.impl import INotificationWindowController
 if typing.TYPE_CHECKING:
     from enum import Enum
 _logger = logging.getLogger(__name__)
 
 def showComp7PrimeTimeWindow():
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(HANGAR_ALIASES.COMP7_PRIME_TIME_ALIAS), ctx={}), EVENT_BUS_SCOPE.LOBBY)
+    from comp7.gui.impl.lobby.hangar.states import Comp7PrimeTimeState
+    Comp7PrimeTimeState.goTo()
 
 
-def showComp7MetaRootView(tabId=None, *args, **kwargs):
-    from comp7.gui.impl.lobby.meta_view.meta_root_view import MetaRootView
-    uiLoader = dependency.instance(IGuiLoader)
-    contentResId = R.views.comp7.lobby.MetaRootView()
-    metaView = uiLoader.windowsManager.getViewByLayoutID(contentResId)
-    if metaView is None:
-        g_eventBus.handleEvent(LobbyHeaderMenuEvent(LobbyHeaderMenuEvent.DESELECT_HEADER_BUTTONS), scope=EVENT_BUS_SCOPE.LOBBY)
-        event = events.LoadGuiImplViewEvent(GuiImplViewLoadParams(contentResId, MetaRootView, ScopeTemplates.LOBBY_SUB_SCOPE), tabId=tabId, *args, **kwargs)
-        g_eventBus.handleEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
-    elif tabId is not None:
-        metaView.switchPage(tabId)
+def showComp7MetaRootTab(tabId=None, **params):
+    from comp7.gui.impl.lobby.hangar import states
+    if tabId == MetaRootViews.PROGRESSION or tabId is None:
+        states.Comp7MetaProgressionState.goTo(**params)
+    elif tabId == MetaRootViews.RANKREWARDS:
+        states.Comp7MetaRankRewardsState.goTo(**params)
+    elif tabId == MetaRootViews.YEARLYREWARDS:
+        states.Comp7MetaYearlyRewardsState.goTo(**params)
+    elif tabId == MetaRootViews.WEEKLYQUESTS:
+        states.Comp7MetaWeeklyQuestsState.goTo(**params)
+    elif tabId == MetaRootViews.SHOP:
+        states.Comp7MetaShopState.goTo(**params)
+    elif tabId == MetaRootViews.LEADERBOARD:
+        states.Comp7MetaLeaderboardState.goTo(**params)
+    elif tabId == MetaRootViews.YEARLYSTATISTICS:
+        states.Comp7MetaYearlyStatisticsState.goTo(**params)
     return
 
 
 def showComp7NoVehiclesScreen():
-    from comp7.gui.impl.lobby.no_vehicles_screen import NoVehiclesScreen
-    event = events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.comp7.lobby.NoVehiclesScreen(), NoVehiclesScreen, ScopeTemplates.LOBBY_SUB_SCOPE))
-    g_eventBus.handleEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
+    from comp7.gui.impl.lobby.hangar.states import Comp7NoVehiclesState
+    Comp7NoVehiclesState.goTo()
 
 
 def showComp7IntroScreen():
-    from comp7.gui.impl.lobby.intro_screen import IntroScreen
-    event = events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.comp7.lobby.IntroScreen(), IntroScreen, ScopeTemplates.LOBBY_SUB_SCOPE))
-    g_eventBus.handleEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
+    from comp7.gui.impl.lobby.hangar.states import Comp7IntroState
+    Comp7IntroState.goTo()
 
 
 @dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
@@ -134,35 +130,22 @@ def showComp7PurchaseDialog(productCode, parent=None):
         PurchaseDialogWindow(productCode, parent).load()
 
 
-@dependency.replace_none_kwargs(guiLoader=IGuiLoader, collections=ICollectionsSystemController)
-def showCollectionWindow(collectionId, page=None, backCallback=None, backBtnText='', parent=None, guiLoader=None, collections=None):
-    if not collections.isEnabled():
-        showHangar()
-        return
-    else:
-        from gui.impl.lobby.collection.collection import CollectionWindow
-        view = guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.collection.CollectionView())
-        if view is None:
-            window = CollectionWindow(collectionId, page, backCallback, backBtnText, parent or getParentWindow())
-            window.load()
-        return
-
-
 @dependency.replace_none_kwargs(comp7Ctrl=IComp7Controller, spaceSwitchController=IHangarSpaceSwitchController)
-def showComp7ShopPage(selectComp7Hangar=None, comp7Ctrl=None, spaceSwitchController=None):
-    if not comp7Ctrl.isComp7PrbActive():
+def showComp7ShopPage(comp7Ctrl=None, spaceSwitchController=None):
+    from comp7.gui.prb_control.entities import comp7_prb_helpers
+    if not comp7Ctrl.isModePrbActive():
         spaceSwitchController.onSpaceUpdated += checkSpaceAndShowShop
-        selectComp7Hangar()
+        comp7_prb_helpers.selectComp7()
         return
-    showComp7MetaRootView(tabId=MetaRootViews.SHOP)
+    showComp7MetaRootTab(tabId=MetaRootViews.SHOP)
 
 
 @dependency.replace_none_kwargs(comp7Ctrl=IComp7Controller, spaceSwitchController=IHangarSpaceSwitchController)
 def checkSpaceAndShowShop(comp7Ctrl, spaceSwitchController):
-    if not comp7Ctrl.isComp7PrbActive():
+    if not comp7Ctrl.isModePrbActive():
         return
     spaceSwitchController.onSpaceUpdated -= checkSpaceAndShowShop
-    showComp7MetaRootView(tabId=MetaRootViews.SHOP)
+    showComp7MetaRootTab(tabId=MetaRootViews.SHOP)
 
 
 @ifPrbNavigationEnabled
@@ -174,3 +157,32 @@ def showComp7BanWindow(arenaTypeID, time, duration, penalty, isQualification, no
         wnd.load()
     else:
         notificationMgr.append(WindowNotificationCommand(wnd))
+
+
+def showComp7InfoPage():
+    from comp7.gui.comp7_constants import SELECTOR_BATTLE_TYPES
+    from frameworks.wulf import WindowLayer
+    from gui import GUI_SETTINGS
+    from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+    from gui.impl.lobby.mode_selector.items.base_item import getInfoPageKey
+    from gui.shared.event_dispatcher import showBrowserOverlayView
+    url = GUI_SETTINGS.lookup(getInfoPageKey(SELECTOR_BATTLE_TYPES.COMP7))
+    showBrowserOverlayView(url, VIEW_ALIAS.WEB_VIEW_TRANSPARENT, hiddenLayers=(WindowLayer.MARKER, WindowLayer.VIEW, WindowLayer.WINDOW))
+
+
+def showComp7StylePreview(vehCD, style, **kwargs):
+    from comp7.gui.impl.lobby.hangar.states import Comp7StylePreviewState
+    kwargs.update({'itemCD': vehCD,
+     'style': style,
+     'showBackButton': False})
+    params = {'ctx': kwargs}
+    Comp7StylePreviewState.goTo(**params)
+
+
+def showComp7VehiclePreview(vehCD, **kwargs):
+    from comp7.gui.impl.lobby.hangar.states import Comp7VehiclePreviewState
+    kwargs.update({'itemCD': vehCD,
+     'showBackButton': False,
+     'showCloseButton': False})
+    params = {'ctx': kwargs}
+    Comp7VehiclePreviewState.goTo(**params)

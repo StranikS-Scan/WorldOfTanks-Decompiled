@@ -62,7 +62,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	30000	</weight>
-    <maxHealth>	1120	</maxHealth>
+    <maxHealth>	1320	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	240	</maxHealth>
       <maxRegenHealth>	160	</maxRegenHealth>
@@ -810,13 +810,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <T84E1A>
-      <userString>	#usa_vehicles:T84E1A	</userString>
+    <Chassis_A12_T32>
+      <userString>	#usa_vehicles:Chassis_A12_T32	</userString>
       <tags></tags>
       <level>	7	</level>
       <price>	20200	</price>
       <unlocks>
-        <chassis>	T84E3A	  <cost>	14500	</cost>
+        <chassis>	Chassis_A12_T32_2	  <cost>	14500	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -824,8 +824,7 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	12000	</weight>
-      <maxLoad>	54830	</maxLoad>
-      <terrainResistance>	1.1 1.8 3.4	</terrainResistance>
+      <terrainResistance>	1.1 1.5 2.7	</terrainResistance>
       <brakeForce>	36500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	25	</rotationSpeed>
@@ -1860,9 +1859,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </T84E1A>
-    <T84E3A>
-      <userString>	#usa_vehicles:T84E3A	</userString>
+    </Chassis_A12_T32>
+    <Chassis_A12_T32_2>
+      <userString>	#usa_vehicles:Chassis_A12_T32_2	</userString>
       <tags></tags>
       <level>	8	</level>
       <price>	38100	</price>
@@ -1871,7 +1870,6 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	12000	</weight>
-      <maxLoad>	60500	</maxLoad>
       <terrainResistance>	1.1 1.5 2.7	</terrainResistance>
       <brakeForce>	36500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2906,39 +2904,48 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </T84E3A>
+    </Chassis_A12_T32_2>
   </chassis>
   <turrets0>
-    <T99E2>
-      <userString>	#usa_vehicles:T99E2	</userString>
+    <Turret_1_A12_T32>
+      <userString>	#usa_vehicles:Turret_1_A12_T32	</userString>
       <tags></tags>
       <level>	7	</level>
       <price>	32500	</price>
-      <unlocks>
-        <turret>	T119	  <cost>	21400	</cost>
-        </turret>
-      </unlocks>
       <armor>
-        <armor_1>	114	</armor_1>
+        <armor_1>	196.9	</armor_1>
         <armor_2>	101.6	</armor_2>
         <armor_3>	76.2	</armor_3>
         <armor_4>	76.2	</armor_4>
-        <armor_5>	101.6	</armor_5>
+        <armor_5>	76.2	</armor_5>
         <armor_6>	56.2	</armor_6>
         <armor_7>	35	</armor_7>
         <armor_8>	25.4	</armor_8>
         <armor_9>	25	</armor_9>
         <armor_10>	0	</armor_10>
-        <armor_11>	76.2	</armor_11>
-        <armor_12>	101.6	</armor_12>
-        <armor_13>	35	</armor_13>
-        <armor_14>	56.2	</armor_14>
+        <armor_11>	101.6	</armor_11>
         <armor_15>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
         </armor_15>
+        <armor_16>	177.8	</armor_16>
+        <armor_17>	133.4	</armor_17>
+        <armor_18>	88.9	</armor_18>
+        <armor_19>	82.6	</armor_19>
+        <armor_20>	101.6	</armor_20>
+        <armor_21>	120.7	</armor_21>
+        <armor_22>	152.4	</armor_22>
+        <armor_23>	152.4	</armor_23>
+        <armor_24>	114.3	</armor_24>
+        <armor_25>	177.8	</armor_25>
+        <armor_26>	120.7	</armor_26>
+        <armor_27>	177.8	</armor_27>
+        <armor_28>	101.6	</armor_28>
+        <armor_29>	196.9	</armor_29>
+        <armor_30>	120.7	</armor_30>
+        <armor_31>	177.8	</armor_31>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	9500	</weight>
-      <maxHealth>	280	</maxHealth>
+      <maxHealth>	240	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -2962,20 +2969,30 @@
             </gun>
           </unlocks>
           <armor>
-            <armor_2>	114	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_2>	254	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	101	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_3>	196.9	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	56.2	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_4>	196.9	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
             <armor_5>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_5>
+            <armor_6>	120.7	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	82.6	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_7>
             <gun>	35	</gun>
           </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	7.6	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	6.7	</reloadTime>
+          <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <shotDispersionFactors>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/american/A12_T32/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A12_T32/crash/lod0/Gun_01.model	</destroyed>
@@ -3064,25 +3081,39 @@
           </camouflage>
         </_90mm_Gun_T15E2>
         <_105mm_Gun_T5E1_32>	shared	  <maxAmmo>	43	</maxAmmo>
+          <unlocks>
+            <turret>	Turret_2_A12_T32	  <cost>	21400	</cost>
+            </turret>
+          </unlocks>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.366894 10 0.430556 5 0.569444 5 0.633106 10 1 10	</maxPitch>
           </pitchLimits>
-          <reloadTime>	10	</reloadTime>
+          <reloadTime>	8.9	</reloadTime>
           <armor>
-            <armor_2>	114	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_2>	254	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	101	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_3>	196.9	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	56.2	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_4>	196.9	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
             <armor_5>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_5>
+            <armor_6>	120.7	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	82.6	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_7>
             <gun>	45	</gun>
           </armor>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <aimingTime>	2.1	</aimingTime>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <shotDispersionFactors>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/american/A12_T32/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/american/A12_T32/crash/lod0/Gun_02.model	</destroyed>
@@ -3752,11 +3783,11 @@
         <density>	91.5673 92.4293	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </T99E2>
-    <T119>
-      <userString>	#usa_vehicles:T119	</userString>
+    </Turret_1_A12_T32>
+    <Turret_2_A12_T32>
+      <userString>	#usa_vehicles:Turret_2_A12_T32	</userString>
       <tags></tags>
-      <level>	9	</level>
+      <level>	8	</level>
       <price>	50500	</price>
       <unlocks>
         <vehicle>	A66_M103	  <cost>	168500	</cost>
@@ -3782,7 +3813,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	12200	</weight>
-      <maxHealth>	430	</maxHealth>
+      <maxHealth>	330	</maxHealth>
       <rotationSpeed>	25	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -3814,10 +3845,16 @@
             </armor_9>
             <gun>	35	</gun>
           </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	7.6	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	6.7	</reloadTime>
+          <aimingTime>	1.8	</aimingTime>
           <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <shotDispersionFactors>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/american/A12_T32/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/american/A12_T32/crash/lod0/Gun_03.model	</destroyed>
@@ -4580,63 +4617,36 @@
         <density>	80.7733 81.1796	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </T119>
+    </Turret_2_A12_T32>
   </turrets0>
   <engines>
     <Ford_GAC>	shared	  <unlocks>
-        <engine>	GMC_Allison_V1710-E32	  <cost>	12300	</cost>
+        <engine>	Continental_AV_1790_3_T32	  <cost>	19000	</cost>
         </engine>
       </unlocks>
     </Ford_GAC>
-    <GMC_Allison_V1710-E32>	shared	  <unlocks>
-        <engine>	Continental_AV-1790-3	  <cost>	19000	</cost>
-        </engine>
-      </unlocks>
-    </GMC_Allison_V1710-E32>
-    <Continental_AV-1790-3>	shared	</Continental_AV-1790-3>
+    <Continental_AV_1790_3_T32>	shared	</Continental_AV_1790_3_T32>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <SCR_508>	shared	  <unlocks>
-        <radio>	SCR_528	  <cost>	9000	</cost>
-        </radio>
-      </unlocks>
-    </SCR_508>
     <SCR_528>	shared	</SCR_528>
   </radios>
   <physics>
     <detailed>
       <engines>
         <Ford_GAC>
-          <smplEnginePower>	761.2424	</smplEnginePower>
+          <smplEnginePower>	780	</smplEnginePower>
           <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
         </Ford_GAC>
-        <GMC_Allison_V1710-E32>
-          <smplEnginePower>	803.5337	</smplEnginePower>
+        <Continental_AV_1790_3_T32>
+          <smplEnginePower>	865	</smplEnginePower>
           <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
-        </GMC_Allison_V1710-E32>
-        <Continental_AV-1790-3>
-          <smplEnginePower>	845.8249	</smplEnginePower>
-          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
-        </Continental_AV-1790-3>
+        </Continental_AV_1790_3_T32>
       </engines>
       <chassis>
-        <T84E1A>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.2737	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.1449	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
-            </firm>
-          </grounds>
-        </T84E1A>
-        <T84E3A>
+        <Chassis_A12_T32>
           <grounds>
             <soft>
               <rollingFriction>	0.21735	</rollingFriction>
@@ -4648,7 +4658,20 @@
               <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
-        </T84E3A>
+        </Chassis_A12_T32>
+        <Chassis_A12_T32_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.21735	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.12075	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.08855	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_A12_T32_2>
       </chassis>
     </detailed>
   </physics>

@@ -78,6 +78,9 @@ class BaseCategoryView(BaseStorageCategoryViewMeta):
     def _makeFilterWarningVO(self, label, btnLabel, btnTooltip):
         return storage_helpers.dummyFormatter(label, btnLabel=btnLabel, btnTooltip=btnTooltip)
 
+    def _makeFilterWarningVOWithIcon(self, label, iconSource, btnLabel, btnTooltip, smallIcon):
+        return storage_helpers.dummyFormatter(label, iconSource, btnLabel, btnTooltip, smallIcon)
+
     def _formatCountString(self, currentItemsCount, totalItemsCount):
         style = text_styles.error if currentItemsCount == 0 else text_styles.stats
         return '{} / {}'.format(style(currentItemsCount), text_styles.main(totalItemsCount))

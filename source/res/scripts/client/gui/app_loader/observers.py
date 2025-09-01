@@ -6,9 +6,9 @@ import typing
 import BattleReplay
 from constants import ARENA_GUI_TYPE, ACCOUNT_KICK_REASONS
 from frameworks.state_machine import BaseStateObserver
-from frameworks.state_machine import SingleStateObserver
 from frameworks.state_machine import StateEvent
 from frameworks.state_machine import StateObserversContainer
+from frameworks.state_machine.observers import StateIdsObserver
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.app_loader import spaces
@@ -40,11 +40,11 @@ def makePredicatedObservers(predicate, *observers):
     return observers
 
 
-class PredicativeSingleStateObserver(SingleStateObserver):
+class PredicativeSingleStateObserver(StateIdsObserver):
     __slots__ = ('_predicates',)
 
     def __init__(self, stateID):
-        super(PredicativeSingleStateObserver, self).__init__(stateID)
+        super(PredicativeSingleStateObserver, self).__init__([stateID])
         self._predicates = set()
 
     def addPredicate(self, predicate):
@@ -53,10 +53,10 @@ class PredicativeSingleStateObserver(SingleStateObserver):
     def removePredicate(self, predicate):
         self._predicates.discard(predicate)
 
-    def onStateChanged(self, stateID, flag, event=None):
+    def onStateChanged(self, state, stateEntered, event=None):
         if not self._allPredicatesMatch():
             return
-        super(PredicativeSingleStateObserver, self).onStateChanged(stateID, flag, event)
+        super(PredicativeSingleStateObserver, self).onStateChanged(state, stateEntered, event)
 
     def _allPredicatesMatch(self):
         return all((p() for p in self._predicates))
@@ -78,13 +78,13 @@ class AppLoaderObserver(PredicativeSingleStateObserver):
 class BattleStateResetObserver(AppLoaderObserver):
 
     def getStateIDs(self):
-        return super(BattleStateResetObserver, self).getStateIDs() + (GameplayStateID.ACCOUNT,)
+        return super(BattleStateResetObserver, self).getStateIDs() + [GameplayStateID.ACCOUNT]
 
-    def onStateChanged(self, stateID, flag, event=None):
-        if stateID == GameplayStateID.ACCOUNT:
+    def onStateChanged(self, state, stateEntered, event=None):
+        if state.getStateID() == GameplayStateID.ACCOUNT:
             self.resetBattleState()
         else:
-            super(BattleStateResetObserver, self).onStateChanged(stateID, flag, event)
+            super(BattleStateResetObserver, self).onStateChanged(state, stateEntered, event)
 
     def resetBattleState(self):
         pass
@@ -93,14 +93,14 @@ class BattleStateResetObserver(AppLoaderObserver):
 class WaitingObserver(AppLoaderObserver):
     __slots__ = ()
 
-    def onEnterState(self, event=None):
+    def onEnterState(self, state, event):
         self._proxy.changeSpace(spaces.WaitingSpace())
 
 
 class CreateLobbyObserver(AppLoaderObserver):
     __slots__ = ()
 
-    def onEnterState(self, event=None):
+    def onEnterState(self, state, event):
         if self._proxy.getDefBattleApp() is not None:
             self._proxy.destroyBattle()
         if self._proxy.getDefLobbyApp() is None:
@@ -111,7 +111,7 @@ class CreateLobbyObserver(AppLoaderObserver):
 class LoginObserver(AppLoaderObserver):
     __slots__ = ()
 
-    def onEnterState(self, event=None):
+    def onEnterState(self, state, event):
         action = None
         if event is not None:
             disconnectReason = event.getArgument('disconnectReason', DisconnectReason.REQUEST)
@@ -126,7 +126,7 @@ class LoginObserver(AppLoaderObserver):
 class LobbyObserver(AppLoaderObserver):
     __slots__ = ()
 
-    def onEnterState(self, event=None):
+    def onEnterState(self, state, event):
         self._proxy.destroyBattle()
         self._proxy.createLobby()
         self._proxy.changeSpace(spaces.LobbySpace())
@@ -135,7 +135,7 @@ class LobbyObserver(AppLoaderObserver):
 class SwitchToBattleObserver(BattleStateResetObserver):
     __slots__ = ()
 
-    def onEnterState(self, event=None):
+    def onEnterState(self, state, event):
         self._destroyLobby()
         if event is not None:
             arenaGuiType = event.getArgument('arenaGuiType', ARENA_GUI_TYPE.UNKNOWN)
@@ -154,7 +154,7 @@ class SwitchToBattleObserver(BattleStateResetObserver):
 class BattleLoadingObserver(BattleStateResetObserver):
     __slots__ = ()
 
-    def onEnterState(self, event=None):
+    def onEnterState(self, state, event):
         if event is not None:
             arenaGuiType = event.getArgument('arenaGuiType', ARENA_GUI_TYPE.UNKNOWN)
         else:
@@ -166,7 +166,7 @@ class BattleLoadingObserver(BattleStateResetObserver):
 class BattlePageObserver(AppLoaderObserver):
     __slots__ = ()
 
-    def onEnterState(self, event=None):
+    def onEnterState(self, state, event):
         if event is not None:
             arenaGuiType = event.getArgument('arenaGuiType', ARENA_GUI_TYPE.UNKNOWN)
         else:
@@ -174,7 +174,7 @@ class BattlePageObserver(AppLoaderObserver):
         self._proxy.changeSpace(spaces.BattleSpace(arenaGuiType=arenaGuiType))
         return
 
-    def onExitState(self, event=None):
+    def onExitState(self, state, event):
         self._proxy.destroyBattle()
 
 
@@ -187,14 +187,15 @@ class SwitchToLobbyObserver(AppLoaderObserver):
         self._doCreate = False
 
     def getStateIDs(self):
-        return super(SwitchToLobbyObserver, self).getStateIDs() + (self._triggerID,)
+        return super(SwitchToLobbyObserver, self).getStateIDs() + [self._triggerID]
 
-    def onStateChanged(self, stateID, flag, event=None):
+    def onStateChanged(self, state, stateEntered, event=None):
         if not self._allPredicatesMatch():
             return
-        if self._triggerID == stateID and flag:
+        stateID = state.getStateID()
+        if self._triggerID == stateID and stateEntered:
             self._doCreate = True
-        if self._stateID == stateID and flag and self._doCreate:
+        if self.getStateIDs()[0] == stateID and stateEntered and self._doCreate:
             self._doCreate = False
             self._createLobby()
 
@@ -205,7 +206,7 @@ class SwitchToLobbyObserver(AppLoaderObserver):
 class ReplayEnteringOnlineObserver(AppLoaderObserver):
     __slots__ = ()
 
-    def onEnterState(self, event=None):
+    def onEnterState(self, state, event):
         print 'ReplayEnteringOnlineObserver.onEnterState: event=%s' % str(event)
         self._proxy.destroyLobby()
 
@@ -213,7 +214,7 @@ class ReplayEnteringOnlineObserver(AppLoaderObserver):
 class ReplayExitingOnlineObserver(AppLoaderObserver):
     __slots__ = ()
 
-    def onEnterState(self, event=None):
+    def onEnterState(self, state, event):
         print 'ReplayExitingOnlineObserver.onEnterState: event=%s' % str(event)
         self._proxy.destroyBattle()
 
@@ -221,7 +222,7 @@ class ReplayExitingOnlineObserver(AppLoaderObserver):
 class ReplayVersionDiffersObserver(AppLoaderObserver):
     __slots__ = ()
 
-    def onEnterState(self, event=None):
+    def onEnterState(self, state, event):
         self._proxy.createLobby()
         self._proxy.changeSpace(spaces.LoginSpace(action=spaces.ReplayVersionDiffersDialogAction()))
 
@@ -236,10 +237,10 @@ class ReplayCreateBattleObserver(SwitchToBattleObserver):
     def resetBattleState(self):
         self.__isInvoked = False
 
-    def onEnterState(self, event=None):
+    def onEnterState(self, state, event):
         if not self.__isInvoked:
             self.__isInvoked = True
-            super(ReplayCreateBattleObserver, self).onEnterState(event=event)
+            super(ReplayCreateBattleObserver, self).onEnterState(state, event)
 
 
 class ReplayBattleLoadingObserver(BattleLoadingObserver):
@@ -251,19 +252,19 @@ class ReplayBattleLoadingObserver(BattleLoadingObserver):
         self.__isToggled = False
 
     def getStateIDs(self):
-        return super(ReplayBattleLoadingObserver, self).getStateIDs() + (self.__toggleID,)
+        return super(ReplayBattleLoadingObserver, self).getStateIDs() + [self.__toggleID]
 
     def resetBattleState(self):
         self.__isToggled = False
 
-    def onStateChanged(self, stateID, flag, event=None):
-        if self.__toggleID == stateID:
-            if flag:
+    def onStateChanged(self, state, stateEntered, event=None):
+        if self.__toggleID == state.getStateID():
+            if stateEntered:
                 self.__isToggled = True
         else:
-            super(ReplayBattleLoadingObserver, self).onStateChanged(stateID, flag, event)
+            super(ReplayBattleLoadingObserver, self).onStateChanged(state, stateEntered, event)
 
-    def onEnterState(self, event=None):
+    def onEnterState(self, state, event):
         if event is not None:
             arenaGuiType = event.getArgument('arenaGuiType', ARENA_GUI_TYPE.UNKNOWN)
         else:
@@ -278,7 +279,7 @@ class ReplayBattleLoadingObserver(BattleLoadingObserver):
 class ReplayBattlePageObserver(AppLoaderObserver):
     __slots__ = ()
 
-    def onEnterState(self, event=None):
+    def onEnterState(self, state, event):
         if event is not None:
             arenaGuiType = event.getArgument('arenaGuiType', ARENA_GUI_TYPE.UNKNOWN)
         else:
@@ -290,7 +291,7 @@ class ReplayBattlePageObserver(AppLoaderObserver):
 class ReplayFinishObserver(PredicativeSingleStateObserver):
     __slots__ = ()
 
-    def onEnterState(self, event=None):
+    def onEnterState(self, state, event):
         action = spaces.ReplayFinishDialogAction()
         action.doAction()
 
@@ -298,7 +299,7 @@ class ReplayFinishObserver(PredicativeSingleStateObserver):
 class ReplayRewindObserver(AppLoaderObserver):
     __slots__ = ()
 
-    def onEnterState(self, event=None):
+    def onEnterState(self, state, event):
         app = self._proxy.getDefBattleApp()
         if app is not None:
             topWindowContainer = app.containerManager.getContainer(WindowLayer.TOP_WINDOW)
@@ -354,11 +355,14 @@ class GameplayStatesObserver(BaseStateObserver):
     def getStateIDs(self):
         return (GameplayStateID.OFFLINE, GameplayStateID.BATTLE_REPLAY)
 
-    def onStateChanged(self, stateID, flag, event=None):
-        if not flag or self.__tracker is not None:
+    def isObservingState(self, state):
+        return state.getStateID() in self.getStateIDs()
+
+    def onStateChanged(self, state, stateEntered, event=None):
+        if not stateEntered or self.__tracker is not None:
             return
         else:
-            if stateID == GameplayStateID.BATTLE_REPLAY:
+            if state.getStateID() == GameplayStateID.BATTLE_REPLAY:
                 self.__tracker = ReplayAppTracker(self.__proxy)
             else:
                 self.__tracker = NormalAppTracker(self.__proxy)

@@ -68,7 +68,7 @@ def createTooltipContentDecorator():
                 return BattlePassPointsTooltip()
             elif contentID == R.views.lobby.battle_pass.tooltips.BattlePassLockIconTooltipView():
                 return BattlePassLockIconTooltipView()
-            elif contentID == R.views.lobby.lootbox_system.tooltips.BoxTooltip():
+            elif contentID == R.views.mono.lootbox.tooltips.box_tooltip():
                 if tooltipData is None:
                     return
                 return BoxTooltip(*tooltipData.specialArgs)

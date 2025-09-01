@@ -85,7 +85,6 @@ class StoryModeEntity(PreQueueEntity):
             isSwitch = ctx.hasFlags(FUNCTIONAL_FLAG.SWITCH)
             isLoadPage = ctx.hasFlags(FUNCTIONAL_FLAG.LOAD_PAGE)
             if isExit or isSwitch and not isLoadPage:
-                self._loadHangar()
                 self.storage.queueType = QUEUE_TYPE.UNKNOWN
         return super(StoryModeEntity, self).fini(ctx=ctx, woEvents=woEvents)
 
@@ -94,9 +93,6 @@ class StoryModeEntity(PreQueueEntity):
 
     def getConfirmDialogMeta(self, ctx):
         return None
-
-    def hasSpecialVehicles(self):
-        return True
 
     @tasksAvailableCheck
     def queue(self, ctx, callback=None):
@@ -126,9 +122,6 @@ class StoryModeEntity(PreQueueEntity):
     def _doDequeue(self, ctx):
         self._accountComponent.dequeueBattle()
         LOG_DEBUG('Sends request on dequeuing from the Story Mode battles', self._queueType)
-
-    def _goToHangar(self):
-        pass
 
     def _goToQueueUI(self):
         prebattleWindow = getOpenedPrebattleView()

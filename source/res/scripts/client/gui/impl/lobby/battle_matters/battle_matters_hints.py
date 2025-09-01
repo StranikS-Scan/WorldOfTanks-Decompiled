@@ -1,17 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_matters/battle_matters_hints.py
+import typing
 import BigWorld
 from PlayerEvents import g_playerEvents
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
 from constants import QUEUE_TYPE, ARENA_BONUS_TYPE, IS_DEVELOPMENT
 from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
 from gui.Scaleform.genConsts.TUTORIAL_TRIGGER_TYPES import TUTORIAL_TRIGGER_TYPES
+from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from gui.shared.events import TutorialEvent
+from gui.shared.events import TutorialEvent, GUICommonEvent
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCache
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -19,10 +21,11 @@ from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.tutorial import ITutorialLoader
+if typing.TYPE_CHECKING:
+    from gui.lobby_state_machine.lobby_state_machine import VisibleRouteInfo
 
 class BattleMattersHintsHelper(object):
     __settingsCache = dependency.descriptor(ISettingsCache)
-    __slots__ = ('__hints', '__hasHintListeners', '__battleMattersController')
 
     def __init__(self, controller):
         super(BattleMattersHintsHelper, self).__init__()
@@ -109,7 +112,6 @@ class _BMManualTriggeredHint(object):
     _tutorialLoader = dependency.descriptor(ITutorialLoader)
     _HINT_NAME = None
     CONTROL_NAME = None
-    __slots__ = ('_isStarted', '_battleMattersController', '_isHintVisible', '_controlOnScene', '_controlIsEnabled')
 
     def __init__(self):
         super(_BMManualTriggeredHint, self).__init__()
@@ -218,11 +220,11 @@ class _BMManualTriggeredHint(object):
 class FightBtnMultiShowHint(_BMManualTriggeredHint, IGlobalListener):
     CONTROL_NAME = 'FightButton'
     _HINT_NAME = OnceOnlyHints.BATTLE_MATTERS_FIGHT_BUTTON_HINT
-    __slots__ = ('__waitingBattle',)
 
     def __init__(self):
         super(FightBtnMultiShowHint, self).__init__()
         self.__waitingBattle = False
+        self.__isInValidState = False
 
     def onPrbEntitySwitched(self):
         self.__waitingBattle = self.prbEntity.getQueueType() == QUEUE_TYPE.RANDOMS or self.__isDevBattle()
@@ -246,6 +248,11 @@ class FightBtnMultiShowHint(_BMManualTriggeredHint, IGlobalListener):
 
     def _onStart(self):
         super(FightBtnMultiShowHint, self)._onStart()
+        lsm = getLobbyStateMachine()
+        if lsm is None:
+            g_eventBus.addListener(GUICommonEvent.LOBBY_VIEW_LOADED, self.__subscribeToStateChanges)
+        else:
+            self.__subscribeToStateChanges()
         self.__waitingBattle = False
         if self.canBeShownInFuture():
             if self.prbDispatcher is None:
@@ -259,12 +266,16 @@ class FightBtnMultiShowHint(_BMManualTriggeredHint, IGlobalListener):
 
     def _onStop(self):
         super(FightBtnMultiShowHint, self)._onStop()
+        g_eventBus.removeListener(GUICommonEvent.LOBBY_VIEW_LOADED, self.__subscribeToStateChanges)
+        lsm = getLobbyStateMachine()
+        if lsm is not None:
+            lsm.onVisibleRouteChanged -= self.__visibleStateChanged
         if not self.__waitingBattle:
             g_playerEvents.onAvatarBecomePlayer -= self.__onAvatarBecomePlayer
         self.stopGlobalListening()
         g_playerEvents.onPrbDispatcherCreated -= self.__onPrbDispatcherCreated
         self._hide()
-        self.__resetTriggers()
+        return
 
     def _checkControlConditions(self, componentIsEnabled):
         self.__checkFightBtnHint()
@@ -273,13 +284,15 @@ class FightBtnMultiShowHint(_BMManualTriggeredHint, IGlobalListener):
         self.__checkFightBtnHint()
 
     def _isReadyToShow(self):
-        return super(FightBtnMultiShowHint, self)._isReadyToShow() and self.canBeShownInFuture() and self.__isReadyToFightInArena()
+        return super(FightBtnMultiShowHint, self)._isReadyToShow() and self.canBeShownInFuture() and self.__isReadyToFightInArena() and self.__isInValidState and self._controlOnScene
+
+    def __visibleStateChanged(self, routeInfo):
+        from gui.impl.lobby.hangar.states import AllVehiclesState, DefaultHangarState
+        self.__isInValidState = isinstance(routeInfo.state, (AllVehiclesState, DefaultHangarState))
+        self.__checkFightBtnHint()
 
     def __isDevBattle(self):
         return IS_DEVELOPMENT and self.prbEntity.getModeFlags() == FUNCTIONAL_FLAG.TRAINING
-
-    def __resetTriggers(self):
-        self._tutorialLoader.gui.setTriggers(self.CONTROL_NAME, [])
 
     def __onAvatarBecomePlayer(self):
         if BigWorld.player().arenaBonusType in ARENA_BONUS_TYPE.RANDOM_RANGE:
@@ -289,6 +302,12 @@ class FightBtnMultiShowHint(_BMManualTriggeredHint, IGlobalListener):
 
     def __onPrbDispatcherCreated(self):
         self.startGlobalListening()
+
+    def __subscribeToStateChanges(self, _=None):
+        lsm = getLobbyStateMachine()
+        if self.__visibleStateChanged not in lsm.onVisibleRouteChanged:
+            lsm.onVisibleRouteChanged += self.__visibleStateChanged
+        self.__visibleStateChanged(lsm.visibleRouteInfo)
 
     def __checkFightBtnHint(self):
         if self._isReadyToShow():
@@ -316,7 +335,6 @@ class EntryPointHint(_BMManualTriggeredHint):
     __itemsCache = dependency.descriptor(IItemsCache)
     CONTROL_NAME = 'BattleMattersEntryPoint'
     _HINT_NAME = OnceOnlyHints.BATTLE_MATTERS_ENTRY_POINT_BUTTON_HINT
-    __slots__ = ()
 
     @staticmethod
     def _getHintSettings():
@@ -348,11 +366,6 @@ class EntryPointHint(_BMManualTriggeredHint):
         super(EntryPointHint, self)._onItemFound(event)
         if event.targetID == self.CONTROL_NAME:
             self.__checkHint()
-
-    def _onItemLost(self, event):
-        if event.targetID == self.CONTROL_NAME:
-            self._hide()
-        super(EntryPointHint, self)._onItemLost(event)
 
     def _getTutorialTriggers(self):
         return []

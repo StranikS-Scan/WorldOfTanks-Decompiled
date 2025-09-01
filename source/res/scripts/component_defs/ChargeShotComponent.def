@@ -1,0 +1,23 @@
+<ChargeShotComponent.def>
+  <Properties>
+    <vehTypeCD>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehTypeCD>
+    <publicState>
+      <Type>	CHARGE_SHOT_PUBLIC_STATE	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </publicState>
+    <privateState>
+      <Type>	CHARGE_SHOT_PRIVATE_STATE	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </privateState>
+  </Properties>
+  <CellMethods>
+    <tryCharge>
+      <Exposed>	OWN_CLIENT	</Exposed>
+    </tryCharge>
+  </CellMethods>
+  <DefaultKeyName>	chargeShotComponent	</DefaultKeyName>
+</ChargeShotComponent.def>

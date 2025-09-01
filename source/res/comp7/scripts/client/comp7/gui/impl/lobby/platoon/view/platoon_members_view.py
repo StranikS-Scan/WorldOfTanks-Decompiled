@@ -5,8 +5,12 @@ from itertools import izip
 import typing
 from shared_utils import findFirst
 from comp7.gui.comp7_constants import SELECTOR_BATTLE_TYPES
+from comp7.gui.impl.gen.view_models.views.lobby.enums import Division, Rank
+from comp7.gui.impl.gen.view_models.views.lobby.enums import SeasonName
+from comp7.gui.impl.gen.view_models.views.lobby.platoon.comp7_slot_model import Comp7SlotModel
+from comp7.gui.impl.gen.view_models.views.lobby.platoon.comp7_window_model import Comp7WindowModel
+from comp7.gui.impl.gen.view_models.views.lobby.progression_item_base_model import ProgressionItemBaseModel
 from comp7.gui.impl.lobby.comp7_helpers import comp7_shared
-from comp7.gui.impl.lobby.comp7_helpers.comp7_model_helpers import getSeasonNameEnum
 from comp7.gui.impl.lobby.meta_view.meta_view_helper import setRankItemData
 from comp7.gui.impl.lobby.tooltips.division_tooltip import DivisionTooltip
 from comp7.gui.impl.lobby.tooltips.fifth_rank_tooltip import FifthRankTooltip
@@ -14,12 +18,9 @@ from comp7.gui.impl.lobby.tooltips.general_rank_tooltip import GeneralRankToolti
 from comp7.gui.impl.lobby.tooltips.rank_compatibility_tooltip import RankCompatibilityTooltip
 from comp7.gui.impl.lobby.tooltips.sixth_rank_tooltip import SixthRankTooltip
 from comp7_common.comp7_constants import CLIENT_UNIT_CMD
+from comp7_core.gui.impl.lobby.comp7_core_helpers.comp7_core_model_helpers import getSeasonNameEnum
 from gui.impl import backport
 from gui.impl.gen import R
-from comp7.gui.impl.gen.view_models.views.lobby.enums import Division, Rank
-from comp7.gui.impl.gen.view_models.views.lobby.progression_item_base_model import ProgressionItemBaseModel
-from comp7.gui.impl.gen.view_models.views.lobby.platoon.comp7_slot_model import Comp7SlotModel
-from comp7.gui.impl.gen.view_models.views.lobby.platoon.comp7_window_model import Comp7WindowModel
 from gui.impl.gen.view_models.views.lobby.platoon.dropdown_item import DropdownItem
 from gui.impl.gen.view_models.views.lobby.platoon.members_window_model import PrebattleTypes
 from gui.impl.gen.view_models.views.lobby.platoon.slot_model import ErrorType
@@ -29,6 +30,7 @@ from gui.impl.lobby.platoon.view.platoon_members_view import SquadMembersView, _
 from gui.impl.lobby.platoon.view.subview.platoon_chat_subview import ChatSubview
 from gui.impl.lobby.premacc.squad_bonus_tooltip_content import SquadBonusTooltipContent
 from gui.prb_control import prb_getters, prbEntityProperty
+from gui.prb_control.events_dispatcher import g_eventDispatcher
 from helpers import dependency
 from skeletons.gui.game_control import IComp7Controller
 from skeletons.gui.lobby_context import ILobbyContext
@@ -54,21 +56,21 @@ class Comp7MembersView(SquadMembersView):
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.lobby.premacc.tooltips.SquadBonusTooltip():
             return SquadBonusTooltipContent(battleType=SELECTOR_BATTLE_TYPES.COMP7, bonusState=getPlatoonBonusState(True))
-        if contentID == R.views.comp7.lobby.tooltips.GeneralRankTooltip():
+        if contentID == R.views.comp7.mono.lobby.tooltips.general_rank_tooltip():
             params = {'rank': Rank(event.getArgument('rank')),
              'divisions': event.getArgument('divisions'),
              'from': event.getArgument('from'),
              'to': event.getArgument('to')}
             return GeneralRankTooltip(params=params)
-        if contentID == R.views.comp7.lobby.tooltips.FifthRankTooltip():
+        if contentID == R.views.comp7.mono.lobby.tooltips.fifth_rank_tooltip():
             return FifthRankTooltip()
-        if contentID == R.views.comp7.lobby.tooltips.SixthRankTooltip():
+        if contentID == R.views.comp7.mono.lobby.tooltips.sixth_rank_tooltip():
             return SixthRankTooltip()
-        if contentID == R.views.comp7.lobby.tooltips.RankCompatibilityTooltip():
+        if contentID == R.views.comp7.mono.lobby.tooltips.rank_compatibility_tooltip():
             squadSize = self.__unitMgr.unit.getSquadSize()
             rankRangeRestriction = self._comp7Controller.getPlatoonRankRestriction(squadSize)
             return RankCompatibilityTooltip(squadSize, rankRangeRestriction)
-        if contentID == R.views.comp7.lobby.tooltips.DivisionTooltip():
+        if contentID == R.views.comp7.mono.lobby.tooltips.division_tooltip():
             params = {'rank': Rank(event.getArgument('rank')),
              'division': Division(event.getArgument('division')),
              'from': event.getArgument('from'),
@@ -113,7 +115,7 @@ class Comp7MembersView(SquadMembersView):
 
     def _initWindowModeSpecificData(self, model):
         model.setTopPercentage(self._comp7Controller.leaderboard.getEliteRankPercent())
-        model.setSeasonName(getSeasonNameEnum())
+        model.setSeasonName(getSeasonNameEnum(self._comp7Controller, SeasonName))
         model.header.memberCountDropdown.setMultiple(False)
         memberCountVariants = model.header.memberCountDropdown.getItems()
         for squadSize in self._comp7Controller.getModeSettings().squadSizes:
@@ -169,10 +171,16 @@ class Comp7MembersView(SquadMembersView):
     def _addListeners(self):
         super(Comp7MembersView, self)._addListeners()
         self.viewModel.header.memberCountDropdown.onChange += self.__onMemberCountDropdown
+        if self.__unitMgr is not None and self.__unitMgr.unit is not None:
+            self.__unitMgr.unit.onSquadSizeChanged += self.__updateEntityState
+        return
 
     def _removeListeners(self):
         super(Comp7MembersView, self)._removeListeners()
         self.viewModel.header.memberCountDropdown.onChange -= self.__onMemberCountDropdown
+        if self.__unitMgr is not None and self.__unitMgr.unit is not None:
+            self.__unitMgr.unit.onSquadSizeChanged -= self.__updateEntityState
+        return
 
     @args2params(int)
     def __onMemberCountDropdown(self, selectedIds):
@@ -207,6 +215,9 @@ class Comp7MembersView(SquadMembersView):
         else:
             item.setIsDisabled(False)
             item.meta.setTooltipText('')
+
+    def __updateEntityState(self):
+        g_eventDispatcher.updateUI()
 
     def __getDropDownTooltipText(self):
         return backport.text(R.strings.platoon.members.header.tooltip.comp7.dropdown())

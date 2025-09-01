@@ -312,6 +312,17 @@ class UniCapList(List):
         return super(UniCapList, self)._convert(incoming, onlyPublic, method)
 
 
+class HexColorCode(String):
+    COLOR_CODE_RE = '^#[A-Fa-f0-9]{6}$'
+    __slots__ = ()
+
+    def __init__(self, required=True, default=None, public=True, serializedValidators=None, deserializedValidators=None):
+        super(HexColorCode, self).__init__(required=required, default=default, public=public, serializedValidators=serializedValidators, deserializedValidators=deserializedValidators)
+        validator = [validate.Regexp(self.COLOR_CODE_RE)]
+        self._serializedValidators = validator + self._serializedValidators
+        self._deserializedValidators = validator + self._deserializedValidators
+
+
 class ListFromString(Field):
     __slots__ = ('_delimiter', '_listOfFields', '_stringField')
 

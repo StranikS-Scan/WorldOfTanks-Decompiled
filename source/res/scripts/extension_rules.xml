@@ -112,7 +112,8 @@
     </rule>
     <rule>
       <pattern>	.*/server_xml/deathzones_config\.xml$	</pattern>
-      <type>	include	</type>
+      <type>	includeByPath	</type>
+      <params>	zoneTypes zonesOnBattleStart	</params>
     </rule>
     <rule>
       <pattern>	.*/server_xml/postmortem_settings_config\.xml$	</pattern>

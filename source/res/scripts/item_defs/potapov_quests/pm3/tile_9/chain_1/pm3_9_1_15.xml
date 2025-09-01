@@ -1,0 +1,90 @@
+<pm3_9_1_15.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm3_9_1_15_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <results>
+            <plus>
+              <key>	damageDealt	</key>
+              <key>	damageReceived	</key>
+              <key>	damageBlockedByArmor	</key>
+            </plus>
+            <greaterOrEqual>	9000	</greaterOrEqual>
+          </results>
+        </postBattle>
+        <common>
+          <battles>
+            <uniqueVehicles></uniqueVehicles>
+            <count>	2	</count>
+          </battles>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	275000	</credits>
+        <freeXP>	4000	</freeXP>
+        <equipCoin>	500	</equipCoin>
+        <token>
+          <id>	token:pt:final:s3:t9:main	</id>
+          <expires>	01.01.2050 00:01	</expires>
+          <count>	1	</count>
+          <limit>	45	</limit>
+        </token>
+        <token>
+          <id>	token:pt:final:s3:t9	</id>
+          <expires>	01.01.2050 00:01	</expires>
+          <count>	1	</count>
+          <limit>	3	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm3_9_1_15_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <not>
+              <or>
+                <token>
+                  <id>	token:pt:final:s3:t9:main	</id>
+                  <equal>	45	</equal>
+                </token>
+                <token>
+                  <id>	token:pt:s3:t9:finished:honor	</id>
+                  <equal>	1	</equal>
+                </token>
+              </or>
+            </not>
+          </account>
+        </preBattle>
+        <postBattle>
+          <results>
+            <plus>
+              <key>	damageDealt	</key>
+              <key>	damageReceived	</key>
+              <key>	damageBlockedByArmor	</key>
+            </plus>
+            <greaterOrEqual>	9000	</greaterOrEqual>
+          </results>
+        </postBattle>
+        <common>
+          <battles>
+            <uniqueVehicles></uniqueVehicles>
+            <count>	2	</count>
+          </battles>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	pm3:9:points	</id>
+          <expires>	01.12.2050 06:00	</expires>
+          <count>	270	</count>
+        </token>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</pm3_9_1_15.xml>

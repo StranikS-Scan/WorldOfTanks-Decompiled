@@ -7,7 +7,7 @@ from gui.game_loading import loggers
 from gui.game_loading.resources.consts import InfoStyles
 from gui.game_loading.state_machine.const import TickingMode
 from gui.game_loading.state_machine.models import ImageViewSettingsModel
-from gui.game_loading.state_machine.states.base import BaseState, BaseViewResourcesTickingState
+from gui.game_loading.state_machine.states.base import BaseViewResourcesTickingState, BaseState
 from gui.impl.utils.path import normalizeGfImagePath
 if typing.TYPE_CHECKING:
     from frameworks.state_machine import StateEvent
@@ -58,8 +58,8 @@ class StaticSlideState(BaseState):
         self._image = image
         _logger.debug('[%s] image [%s] set.', self, image)
 
-    def _onEntered(self):
-        super(StaticSlideState, self)._onEntered()
+    def _onEntered(self, event):
+        super(StaticSlideState, self)._onEntered(event)
         self._image = self._image or self._images.get()
         _showImage(self._image, self._imageViewSettings)
 

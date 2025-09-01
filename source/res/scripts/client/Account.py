@@ -35,7 +35,6 @@ from account_helpers.spa_flags import SPAFlags
 from account_helpers.telecom_rentals import TelecomRentals
 from account_helpers.trade_in import TradeIn
 from account_helpers.winback import Winback
-from account_helpers.wot_anniversary import WotAnniversary
 from account_helpers import CrewAccountController
 from account_shared import NotificationItem, readClientServerVersion
 from constants import ARENA_BONUS_TYPE, QUEUE_TYPE, EVENT_CLIENT_DATA, ARENA_GUI_TYPE
@@ -55,6 +54,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.utils import IHangarSpace
 from soft_exception import SoftException
 from streamIDs import RangeStreamIDCallbacks, STREAM_ID_CHAT_MAX, STREAM_ID_CHAT_MIN
+from schema_manager import getSchemaManager
 StreamData = namedtuple('StreamData', ['data',
  'isCorrupted',
  'origPacketLen',
@@ -85,8 +85,7 @@ def _isStrList(l):
 
 
 class _ClientCommandProxy(object):
-    _COMMAND_SIGNATURES = (('doCmdNoArgs', lambda args: len(args) == 0),
-     ('doCmdStr', lambda args: len(args) == 1 and _isStr(args[0])),
+    _COMMAND_SIGNATURES = (('doCmdStr', lambda args: len(args) == 1 and _isStr(args[0])),
      ('doCmdIntStr', lambda args: len(args) == 2 and _isInt(args[0]) and _isStr(args[1])),
      ('doCmdInt', lambda args: len(args) == 1 and _isInt(args[0])),
      ('doCmdInt2', lambda args: len(args) == 2 and all([ _isInt(arg) for arg in args ])),
@@ -173,6 +172,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.spaFlags = g_accountRepository.spaFlags
         self.anonymizer = g_accountRepository.anonymizer
         self.dailyQuests = g_accountRepository.dailyQuests
+        self.weeklyQuests = g_accountRepository.weeklyQuests
         self.battlePass = g_accountRepository.battlePass
         self.offers = g_accountRepository.offers
         self.dogTags = g_accountRepository.dogTags
@@ -182,7 +182,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.giftSystem = g_accountRepository.giftSystem
         self.gameRestrictions = g_accountRepository.gameRestrictions
         self.winback = g_accountRepository.winback
-        self.wotAnniversary = g_accountRepository.wotAnniversary
         self.achievements20 = g_accountRepository.achievements20
         self.crewAccountController = g_accountRepository.crewAccountController
         self.customFilesCache = g_accountRepository.customFilesCache
@@ -897,6 +896,18 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         args.extend(personalMissionsIDs)
         self._doCmdIntArr(AccountCommands.CMD_PAUSE_POTAPOV_QUESTS, args, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
 
+    def activatePersonalMissionsSeason(self, branches, callback):
+        args = branches
+        self._doCmdIntArr(AccountCommands.CMD_ACTIVATE_POTAPOV_BRANCHES, args, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
+
+    def getPersonalMissionsQuestRewards(self, eventType, questID, callback=None):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorCode, rewards=None: callback(resultID, errorCode, rewards)
+        else:
+            proxy = None
+        self._doCmdIntStr(AccountCommands.CMD_APPLY_QUEST_DELAYED_REWARD, eventType, questID, proxy)
+        return
+
     def getPersonalMissionReward(self, personalMissionsIDs, questType, needTamkman=False, tmanNation=0, tmanInnation=0, roleID=1, callback=None):
         arr = [questType,
          personalMissionsIDs,
@@ -943,15 +954,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
     def flushArenaRelations(self, arenaUniqueID, callback=None):
         self._doCmdInt2(AccountCommands.CMD_FLUSH_ARENA_RELATIONS, arenaUniqueID, 0, callback)
-
-    def chooseQuestReward(self, eventType, questID, rewardID, callback=None):
-        if callback is not None:
-            proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
-        else:
-            proxy = None
-        strArr = [questID.encode('utf8'), rewardID.encode('utf8')]
-        self._doCmdIntStrArr(AccountCommands.CMD_CHOOSE_QUEST_REWARD, eventType, strArr, proxy)
-        return
 
     def changeEventEnqueueData(self, data, callback=None):
         if callback is not None:
@@ -1005,9 +1007,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def addBlueprintFragment(self, fragmentTypeCD, requestedCount, other=-1):
         LOG_DEBUG('Account.addBlueprintFragment: fragmentTypeCD={}, count={}'.format(fragmentTypeCD, requestedCount))
         self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_BPF_ADD_FRAGMENTS_DEV, requestedCount, fragmentTypeCD, other)
-
-    def getWishlist(self):
-        self._doCmdIntArr(AccountCommands.CMD_WISHLIST_GET_DEV, [], lambda *args: LOG_DEBUG_DEV(args[3]))
 
     def processInvitations(self, invitations):
         self.prebattleInvitations.processInvitations(invitations, ClientInvitations.InvitationScope.ACCOUNT)
@@ -1064,6 +1063,17 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
     def removeEquipment(self, deviceID, count=-1):
         self._doCmdInt2(AccountCommands.CMD_ADD_EQUIPMENT, int(deviceID), count, None)
+        return
+
+    def unlockPostProgressionTree(self, vehicleName=None, intCD=None):
+        if vehicleName is None and intCD is None:
+            from CurrentVehicle import g_currentVehicle
+            vehicleCD = g_currentVehicle.intCD
+        elif intCD is not None:
+            vehicleCD = intCD
+        elif vehicleName is not None:
+            vehicleCD = BigWorld.player().vehicles.VehicleDescr(typeName=vehicleName).type.compactDescr
+        self._doCmdIntArr(AccountCommands.CMD_VPP_UNLOCK_TREE, (vehicleCD,), None)
         return
 
     def doActions(self, doActionsData):
@@ -1167,6 +1177,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self._synchronizeCacheDict(self.eventsData, diff, 'eventsData', 'replace', events.onEventsDataChanged)
             self._synchronizeCacheDict(self.personalMissionsLock, diff.get('cache', None), 'potapovQuestIDs', 'replace', events.onPMLocksChanged)
             self._synchronizeCacheDict(self.dailyQuests, diff, 'dailyQuests', 'replace', events.onDailyQuestsInfoChange)
+            self._synchronizeCacheDict(self.weeklyQuests, diff, 'weeklyQuests', 'update', events.onWeeklyQuestsInfoChange)
             self._synchronizeCacheSimpleValue('globalRating', diff.get('account', None), 'globalRating', events.onAccountGlobalRatingChanged)
             self._synchronizeCacheDict(self.platformBlueprintsConvertSaleLimits, diff, 'platformBlueprintsConvertSaleLimits', 'replace', events.onPlatformBlueprintsConvertSaleLimits)
             self._synchronizeCacheDict(self.renewableSubscription, diff, 'renewableSub', 'replace', events.onRenewableSubscriptionStatusChanged)
@@ -1278,7 +1289,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             serverSettingsDiff = diffDict.get('serverSettings', None)
             if serverSettingsDiff is not None:
                 if isinstance(serverSettingsDiff, dict):
-                    for key, value in serverSettingsDiff.iteritems():
+                    schemaManager = getSchemaManager()
+                    processedDiff = schemaManager.updateSettings(serverSettings, serverSettingsDiff)
+                    for key, value in processedDiff.iteritems():
                         if value is None:
                             serverSettings.pop(key, None)
                             continue
@@ -1404,6 +1417,7 @@ class _AccountRepository(object):
         self.spaFlags = SPAFlags(self.syncData)
         self.anonymizer = client_anonymizer.ClientAnonymizer(self.syncData)
         self.dailyQuests = {}
+        self.weeklyQuests = {}
         self.battlePass = BattlePassManager(self.syncData, self.commandProxy)
         self.offers = OffersSyncData(self.syncData)
         self.dogTags = DogTags(self.syncData)
@@ -1411,7 +1425,6 @@ class _AccountRepository(object):
         self.telecomRentals = TelecomRentals(self.syncData)
         self.winback = Winback(self.commandProxy)
         self.achievements20 = Achievements20(self.syncData, self.commandProxy)
-        self.wotAnniversary = WotAnniversary(self.commandProxy)
         self.tradeIn = TradeIn()
         self.giftSystem = GiftSystem(self.syncData, self.commandProxy)
         self.gameRestrictions = GameRestrictions(self.syncData)

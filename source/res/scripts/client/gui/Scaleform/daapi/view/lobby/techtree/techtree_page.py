@@ -5,6 +5,8 @@ import Keys
 import nations
 from blueprints.BlueprintTypes import BlueprintTypes
 from constants import IS_DEVELOPMENT
+from gui.Scaleform.daapi.view.lobby.techtree.states import BlueprintTechtreeState, DefaultTechtreeState
+from gui.Scaleform.framework.entities.DisposableEntity import EntityState
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.go_back_helper import BackButtonContextKeys
@@ -15,7 +17,6 @@ from gui.Scaleform.daapi.view.lobby.techtree.settings import SelectedNation
 from gui.Scaleform.daapi.view.lobby.techtree.sound_constants import Sounds
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.meta.TechTreeMeta import TechTreeMeta
-from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.CONTACTS_ALIASES import CONTACTS_ALIASES
 from gui.Scaleform.genConsts.SESSION_STATS_CONSTANTS import SESSION_STATS_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -24,6 +25,7 @@ from gui.impl.gen.resources import R
 from gui.limited_ui.lui_rules_storage import LUI_RULES
 from gui.shared import event_dispatcher as shared_events
 from gui.shared import events, EVENT_BUS_SCOPE
+from gui.shared.event_dispatcher import showResearchView
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.utils.requesters.blueprints_requester import getNationalFragmentCD
@@ -43,12 +45,8 @@ class TechTree(TechTreeMeta):
     def __init__(self, ctx=None):
         super(TechTree, self).__init__(NationTreeData(dumpers.NationObjDumper()))
         self._resolveLoadCtx(ctx=ctx)
-        self.__blueprintMode = ctx.get(BackButtonContextKeys.BLUEPRINT_MODE, False)
         self.__intelligenceAmount = 0
         self.__nationalFragmentsData = {}
-
-    def __del__(self):
-        _logger.debug('TechTree deleted')
 
     def goToBlueprintView(self, vehicleCD):
         self.__stopTopOfTheTreeSounds()
@@ -117,27 +115,28 @@ class TechTree(TechTreeMeta):
         ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, int(itemCD))
 
     def goToNextVehicle(self, vehCD):
-        loadEvent = events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_RESEARCH), ctx={BackButtonContextKeys.ROOT_CD: vehCD,
-         BackButtonContextKeys.EXIT: self._createExitEvent()})
         self.soundManager.playInstantSound(Sounds.RESET)
         self.__stopTopOfTheTreeSounds()
         self.__removeReloadListener()
-        self.fireEvent(loadEvent, scope=EVENT_BUS_SCOPE.LOBBY)
+        showResearchView(vehCD)
 
     def onCloseTechTree(self):
-        if self._canBeClosed:
-            self.__stopTopOfTheTreeSounds()
-            shared_events.showHangar()
+        self.__stopTopOfTheTreeSounds()
+        shared_events.showHangar()
 
-    def onBlueprintModeSwitch(self, enabled):
-        if self.__blueprintMode == enabled:
-            return
-        self.__blueprintMode = enabled
+    def onBlueprintModeSwitchToggle(self, enabled):
+        playSounds = self.getState() == EntityState.CREATED
         if enabled:
-            self.soundManager.playInstantSound(Sounds.BLUEPRINT_VIEW_ON_SOUND_ID)
-            self.__playBlueprintPlusSound()
+            BlueprintTechtreeState.goTo()
+            self.as_setBlueprintModeS(True)
+            if playSounds:
+                self.soundManager.playInstantSound(Sounds.BLUEPRINT_VIEW_ON_SOUND_ID)
+                self.__playBlueprintPlusSound()
         else:
-            self.soundManager.playInstantSound(Sounds.BLUEPRINT_VIEW_OFF_SOUND_ID)
+            DefaultTechtreeState.goTo()
+            self.as_setBlueprintModeS(False)
+            if playSounds:
+                self.soundManager.playInstantSound(Sounds.BLUEPRINT_VIEW_OFF_SOUND_ID)
 
     def onGoToPremiumShop(self, nationName, level):
         self.__stopTopOfTheTreeSounds()
@@ -153,11 +152,20 @@ class TechTree(TechTreeMeta):
         else:
             self.soundManager.playInstantSound(Sounds.TOP_OF_THE_TREE_ANIMATION_OFF_SOUND_ID)
 
+    @staticmethod
+    def _inBlueprintMode():
+        from skeletons.gui.app_loader import IAppLoader
+        import typing
+        from gui.Scaleform.lobby_entry import LobbyEntry
+        appLoader = dependency.instance(IAppLoader)
+        app = typing.cast(LobbyEntry, appLoader.getApp())
+        stateMachine = app.stateMachine
+        return stateMachine.isStateEntered(BlueprintTechtreeState.STATE_ID)
+
     def invalidateBlueprintMode(self, isEnabled):
         if isEnabled:
-            self.as_setBlueprintsSwitchButtonStateS(enabled=True, selected=self.__blueprintMode, tooltip=TOOLTIPS.TECHTREEPAGE_BLUEPRINTSSWITCHTOOLTIP, visible=True)
+            self.as_setBlueprintsSwitchButtonStateS(enabled=True, selected=self._inBlueprintMode(), tooltip=TOOLTIPS.TECHTREEPAGE_BLUEPRINTSSWITCHTOOLTIP, visible=True)
         else:
-            self.__blueprintMode = False
             self.__disableBlueprintsSwitchButton(isEnabled)
             self.__stopTopOfTheTreeSounds()
             shared_events.showHangar()
@@ -214,7 +222,7 @@ class TechTree(TechTreeMeta):
         eventsListener = g_techTreeDP.techTreeEventsListener
         if eventsListener is not None:
             eventsListener.onSettingsChanged += self.__onSettingsChanged
-        if self.__blueprintMode:
+        if self._inBlueprintMode():
             self.as_setBlueprintModeS(True)
         isBlueprintsEnabled = self._lobbyContext.getServerSettings().blueprintsConfig.isBlueprintsAvailable()
         self.__disableBlueprintsSwitchButton(isBlueprintsEnabled)
@@ -225,10 +233,6 @@ class TechTree(TechTreeMeta):
     def _dispose(self):
         self.__removeListeners()
         super(TechTree, self)._dispose()
-
-    def _createExitEvent(self):
-        return events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_TECHTREE), ctx={BackButtonContextKeys.NATION: SelectedNation.getName(),
-         BackButtonContextKeys.BLUEPRINT_MODE: self.__blueprintMode})
 
     def __addListeners(self):
         self.addListener(MESSENGER_VIEW_ALIAS.CHANNEL_MANAGEMENT_WINDOW, self.__onClosePremiumPanel, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -279,12 +283,12 @@ class TechTree(TechTreeMeta):
         return False
 
     def __playBlueprintPlusSound(self):
-        if self.__blueprintMode and self.__hasConversionPlusesOnTree():
+        if self._inBlueprintMode() and self.__hasConversionPlusesOnTree():
             self.soundManager.playInstantSound(Sounds.BLUEPRINT_VIEW_PLUS_SOUND_ID)
 
     def __disableBlueprintsSwitchButton(self, isEnabled):
         if not isEnabled:
-            self.as_setBlueprintsSwitchButtonStateS(enabled=False, selected=self.__blueprintMode, tooltip=TOOLTIPS.TECHTREEPAGE_BLUEPRINTSSWITCHTOOLTIPDISABLED, visible=True)
+            self.as_setBlueprintsSwitchButtonStateS(enabled=False, selected=self._inBlueprintMode(), tooltip=TOOLTIPS.TECHTREEPAGE_BLUEPRINTSSWITCHTOOLTIPDISABLED, visible=True)
 
     def __formatBlueprintBalance(self):
         bpRequester = self._itemsCache.items.blueprints

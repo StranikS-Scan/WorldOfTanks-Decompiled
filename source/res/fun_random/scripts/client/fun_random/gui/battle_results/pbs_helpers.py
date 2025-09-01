@@ -5,7 +5,7 @@ from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as _CAPS
 from fun_random_common.fun_constants import UNKNOWN_EVENT_ID
 from fun_random.gui.impl.gen.view_models.views.lobby.feature.battle_results.fun_random_reward_item_model import FunRewardTypes
 from gui.impl import backport
-from gui.battle_results.pbs_helpers.economics import getCreditsRecords
+from gui.battle_results.pbs_helpers.economics import getDirectMoneyRecords
 from gui.battle_results.settings import CurrenciesConstants
 from gui.Scaleform.genConsts.BATTLE_RESULTS_PREMIUM_STATES import BATTLE_RESULTS_PREMIUM_STATES as BRPS
 from helpers import dependency
@@ -60,7 +60,7 @@ def isPremiumAdvertisingShown(currencyType, battleResults):
 
 
 def getAdvertising(extractor, record, label, battleResults):
-    records = extractor(battleResults.reusable).alternative
+    records = extractor(battleResults.reusable).premiumAccountValue
     premFactor = records.getFactor(record)
     return backport.text(label(), value=int((premFactor - 1.0) * 100))
 
@@ -80,7 +80,7 @@ def getTotalTMenXPToShow(reusable, _=None, __=None):
 
 
 def getTotalGoldToShow(reusable):
-    records = getCreditsRecords(reusable).extra
+    records = getDirectMoneyRecords(reusable).extraValue
     return sum([ records.findRecord(recordName) for recordName in ('eventGoldList_',) ])
 
 

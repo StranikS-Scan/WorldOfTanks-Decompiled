@@ -1,0 +1,58 @@
+<shells.xml>
+  <icons>
+    <ap>	ARMOR_PIERCING.png 0 0	</ap>
+    <ap_premium>	ARMOR_PIERCING_PREMIUM.png 0 0	</ap_premium>
+    <ap_cr>	ARMOR_PIERCING_CR.png 0 0	</ap_cr>
+    <ap_cr_premium>	ARMOR_PIERCING_CR_PREMIUM.png 0 0	</ap_cr_premium>
+    <ap_npd>	ARMOR_PIERCING_NPD.png 0 0	</ap_npd>
+    <ap_cr_npd>	ARMOR_PIERCING_CR_NPD.png 0 0	</ap_cr_npd>
+    <ap_cr_premium_npd>	ARMOR_PIERCING_CR_NPD_PREMIUM.png 0 0	</ap_cr_premium_npd>
+    <ap_tray>	ARMOR_PIERCING_TRAY.png 0 0	</ap_tray>
+    <ap_premium_tray>	ARMOR_PIERCING_PREMIUM_TRAY.png 0 0	</ap_premium_tray>
+    <ap_cr_tray>	ARMOR_PIERCING_CR_TRAY.png 0 0	</ap_cr_tray>
+    <ap_cr_premium_tray>	ARMOR_PIERCING_CR_PREMIUM_TRAY.png 0 0	</ap_cr_premium_tray>
+    <he>	HIGH_EXPLOSIVE.png 0 0	</he>
+    <he_premium>	HIGH_EXPLOSIVE_PREMIUM.png 0 0	</he_premium>
+    <he_modern>	HIGH_EXPLOSIVE_MODERN.png 0 0	</he_modern>
+    <he_modern_premium>	HIGH_EXPLOSIVE_MODERN_PREMIUM.png 0 0	</he_modern_premium>
+    <hc>	HOLLOW_CHARGE.png 0 0	</hc>
+    <hc_premium>	HOLLOW_CHARGE_PREMIUM.png 0 0	</hc_premium>
+    <he_spg>	HIGH_EXPLOSIVE_SPG.png 0 0	</he_spg>
+    <he_spg_stun>	HIGH_EXPLOSIVE_SPG_STUN.png 0 0	</he_spg_stun>
+    <he_zero_splash>	HIGH_EXPLOSIVE_ZERO_SPLASH.png 0 0	</he_zero_splash>
+  </icons>
+  <_20pdr_AP_Mk1_SM_SCC>
+    <id>	16	</id>
+    <userString>	#gb_vehicles:_20pdr_AP_Mk1	</userString>
+    <icon>	ap	</icon>
+    <price>	680	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	83.4	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	230	</armor>
+      <devices>	118	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+    <notInShop>	True	</notInShop>
+  </_20pdr_AP_Mk1_SM_SCC>
+  <_75mm_M6_AP_SM_SCC>
+    <id>	17	</id>
+    <userString>	#gb_vehicles:_75mm_M6_AP	</userString>
+    <icon>	ap	</icon>
+    <price>	215	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	150	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+    <notInShop>	True	</notInShop>
+  </_75mm_M6_AP_SM_SCC>
+</shells.xml>

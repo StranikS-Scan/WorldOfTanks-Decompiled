@@ -1404,7 +1404,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	31000	</maxLoad>
       <terrainResistance>	1.3 1.5 2.5	</terrainResistance>
       <brakeForce>	29500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2411,7 +2410,7 @@
     <Turret_1_Sexton_I>
       <ceilless>	true	</ceilless>
       <userString>	#gb_vehicles:Turret_1_Sexton_I	</userString>
-      <tags>	cannotDetach	</tags>
+      <tags>	cannotDetach turretless	</tags>
       <level>	5	</level>
       <price>	200	</price>
       <notInShop>	true	</notInShop>

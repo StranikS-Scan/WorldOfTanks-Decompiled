@@ -83,7 +83,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	4000	</weight>
-    <maxHealth>	196	</maxHealth>
+    <maxHealth>	200	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	70	</maxHealth>
       <maxRegenHealth>	48	</maxRegenHealth>
@@ -1109,8 +1109,8 @@
     </camouflage>
   </hull>
   <chassis>
-    <Cunningham_E2>
-      <userString>	#usa_vehicles:Cunningham_E2	</userString>
+    <Chassis_A01_T1_Cunningham>
+      <userString>	#usa_vehicles:Chassis_A01_T1_Cunningham	</userString>
       <tags></tags>
       <level>	1	</level>
       <price>	0	</price>
@@ -1120,7 +1120,6 @@
         <rightTrack>	5	</rightTrack>
       </armor>
       <weight>	2000	</weight>
-      <maxLoad>	8300	</maxLoad>
       <terrainResistance>	1 1.1 2.1	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -1867,10 +1866,10 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	3.41880345	</repairTime>
-    </Cunningham_E2>
+    </Chassis_A01_T1_Cunningham>
   </chassis>
   <turrets0>
-    <Cunningham_D2>
+    <Turret_1_A01_T1_Cunningham>
       <guns>
         <_37mm_Gun_M1916>	shared	  <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
@@ -1895,9 +1894,9 @@
               <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
             </gun>
           </armor>
-          <reloadTime>	2.5	</reloadTime>
-          <shotDispersionRadius>	0.54	</shotDispersionRadius>
-          <aimingTime>	2.5	</aimingTime>
+          <reloadTime>	2.2	</reloadTime>
+          <shotDispersionRadius>	0.48	</shotDispersionRadius>
+          <aimingTime>	2.2	</aimingTime>
           <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A01_T1_Cunningham/normal/lod0/Gun_03.model	</undamaged>
@@ -2019,7 +2018,7 @@
           </camouflage>
         </_37mm_semiautomatic_gun_M1924>
       </guns>
-      <userString>	#usa_vehicles:Cunningham_D2	</userString>
+      <userString>	#usa_vehicles:Turret_1_A01_T1_Cunningham	</userString>
       <tags></tags>
       <level>	1	</level>
       <price>	0	</price>
@@ -2040,7 +2039,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	950	</weight>
-      <maxHealth>	49	</maxHealth>
+      <maxHealth>	50	</maxHealth>
       <rotationSpeed>	35	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	50	</maxHealth>
@@ -2451,7 +2450,7 @@
         <density>	117.372 117.322	</density>
         <aoTextureSize>	512 256	</aoTextureSize>
       </camouflage>
-    </Cunningham_D2>
+    </Turret_1_A01_T1_Cunningham>
   </turrets0>
   <engines>
     <Cunningham_type_3>	shared	</Cunningham_type_3>
@@ -2466,12 +2465,12 @@
     <detailed>
       <engines>
         <Cunningham_type_3>
-          <smplEnginePower>	139.5611	</smplEnginePower>
+          <smplEnginePower>	150	</smplEnginePower>
           <smplFwMaxSpeed>	41	</smplFwMaxSpeed>
         </Cunningham_type_3>
       </engines>
       <chassis>
-        <Cunningham_E2>
+        <Chassis_A01_T1_Cunningham>
           <grounds>
             <soft>
               <rollingFriction>	0.16905	</rollingFriction>
@@ -2483,7 +2482,7 @@
               <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
-        </Cunningham_E2>
+        </Chassis_A01_T1_Cunningham>
       </chassis>
     </detailed>
   </physics>

@@ -8,7 +8,7 @@
   </crew>
   <supplySlots>	2 1 1 6 6 6 7 8 8 8	</supplySlots>
   <speedLimits>
-    <forward>	51	</forward>
+    <forward>	56	</forward>
     <backward>	23	</backward>
   </speedLimits>
   <invisibility>
@@ -41,7 +41,7 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	90	</armor_1>
+      <armor_1>	105	</armor_1>
       <armor_2>	90	</armor_2>
       <armor_3>	75	</armor_3>
       <armor_4>	45	</armor_4>
@@ -834,7 +834,7 @@
   </hull>
   <chassis>
     <T-44Bis_FL>
-      <userString>	#ussr_vehicles:T-44Bis	</userString>
+      <userString>	#ussr_vehicles:Chassis_R20_T-44_2	</userString>
       <tags></tags>
       <level>	8	</level>
       <price>	30200	</price>
@@ -844,14 +844,13 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	7700	</weight>
-      <maxLoad>	35300	</maxLoad>
       <terrainResistance>	1 1.2 2	</terrainResistance>
       <brakeForce>	38500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	44	</rotationSpeed>
+      <rotationSpeed>	56	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.14	</vehicleMovement>
-        <vehicleRotation>	0.14	</vehicleRotation>
+        <vehicleMovement>	0.12	</vehicleMovement>
+        <vehicleRotation>	0.12	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	200	</maxHealth>
@@ -1703,13 +1702,13 @@
   </chassis>
   <turrets0>
     <T-44-100_FL>
-      <userString>	#ussr_vehicles:T-44-100	</userString>
+      <userString>	#ussr_vehicles:Turret_2_R20_T-44	</userString>
       <tags></tags>
       <level>	9	</level>
       <price>	48000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	190	</armor_1>
+        <armor_1>	200	</armor_1>
         <armor_2>	170	</armor_2>
         <armor_3>	130	</armor_3>
         <armor_4>	100	</armor_4>
@@ -1746,23 +1745,23 @@
             <minPitch>	0 -23 1 -23	</minPitch>
             <maxPitch>	0 7 0.380783 7 0.444444 5 0.555556 5 0.619218 7 1 7	</maxPitch>
           </pitchLimits>
-          <reloadTime>	7.5	</reloadTime>
+          <reloadTime>	6.8	</reloadTime>
           <armor>
-            <armor_1>	190	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	220	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	180	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_2>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
             <armor_3>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_5>	180	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_5>
-            <armor_6>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_6>	155	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_6>
-            <armor_7>	110	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_7>	125	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_7>
-            <armor_8>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_8>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_8>
             <armor_9>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_9>
@@ -2462,8 +2461,8 @@
     <detailed>
       <engines>
         <V-54-6_FL>
-          <smplEnginePower>	760	</smplEnginePower>
-          <smplFwMaxSpeed>	51	</smplFwMaxSpeed>
+          <smplEnginePower>	730	</smplEnginePower>
+          <smplFwMaxSpeed>	56	</smplFwMaxSpeed>
         </V-54-6_FL>
       </engines>
       <chassis>

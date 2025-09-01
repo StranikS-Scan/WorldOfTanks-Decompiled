@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/data/ChannelsDataProvider.py
 import BigWorld
+import Event
 from debug_utils import LOG_ERROR
 from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider
 from gui.prb_control.events_dispatcher import TOOLTIP_PRB_DATA
@@ -23,6 +24,7 @@ class ChannelsDataProvider(DAAPIDataProvider):
         self.__data = {}
         self.__list = []
         self.__isInited = False
+        self.onDataUpdated = Event.Event()
 
     def initGUI(self, flashObj):
         if not self.__isInited:
@@ -38,6 +40,7 @@ class ChannelsDataProvider(DAAPIDataProvider):
     def clear(self):
         self.__data.clear()
         self.__list = []
+        self.onDataUpdated.clear()
 
     def addItem(self, clientID, data):
         label = data['label']
@@ -59,14 +62,12 @@ class ChannelsDataProvider(DAAPIDataProvider):
             self.__data[clientID].update(item)
         else:
             self.__data[clientID] = item
-        self.buildList()
         self.refresh()
         return
 
     def removeItem(self, clientID):
         if clientID in self.__data:
             self.__data.pop(clientID).clear()
-            self.buildList()
             self.refresh()
 
     def setItemField(self, clientID, key, value):
@@ -75,7 +76,6 @@ class ChannelsDataProvider(DAAPIDataProvider):
             item = self.__data[clientID]
             if key in item:
                 item[key] = value
-                self.buildList()
                 self.refresh()
                 result = True
             else:
@@ -87,7 +87,6 @@ class ChannelsDataProvider(DAAPIDataProvider):
         if clientID in self.__data and key in DEFAULT_FIELDS:
             item = self.__data[clientID]
             item[key] = DEFAULT_FIELDS[key]
-            self.buildList()
             self.refresh()
             result = True
         return result
@@ -97,7 +96,6 @@ class ChannelsDataProvider(DAAPIDataProvider):
         if clientID in self.__data:
             item = self.__data[clientID]
             item.update(fields)
-            self.buildList()
             self.refresh()
             result = True
         return result
@@ -113,5 +111,7 @@ class ChannelsDataProvider(DAAPIDataProvider):
         return DEFAULT_FIELDS
 
     def refresh(self):
+        self.buildList()
+        self.onDataUpdated()
         if self.flashObject:
             super(ChannelsDataProvider, self).refresh()

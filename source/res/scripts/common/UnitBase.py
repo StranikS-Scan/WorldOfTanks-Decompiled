@@ -18,7 +18,7 @@ from unit_roster_config import SquadRoster, UnitRoster, SpecRoster, EventRoster,
 if TYPE_CHECKING:
     from typing import List as TList, Tuple as TTuple, Dict as TDict
 UnitVehicle = namedtuple('UnitVehicle', ('vehInvID', 'vehTypeCompDescr', 'vehLevel', 'vehClassIdx'))
-ProfileVehicle = namedtuple('ProfileVehicle', ('vehCompDescr', 'vehOutfitCD', 'seasonType', 'marksOnGun', 'prestigeLevel'))
+ProfileVehicle = namedtuple('ProfileVehicle', ('vehCompDescr', 'vehOutfitCD', 'seasonType', 'marksOnGun', 'prestigeLevel', 'stFrags'))
 
 class UNIT_MGR_STATE:
     IDLE = 0
@@ -378,8 +378,9 @@ class UnitAssemblerSearchFlags(object):
     VEH_TIER_8 = 256
     VEH_TIER_9 = 512
     VEH_TIER_10 = 1024
-    DESTROY_UNIT_ON_ABORT = 2048
-    ALL_VEH_TIERS = VEH_TIER_1 | VEH_TIER_2 | VEH_TIER_3 | VEH_TIER_4 | VEH_TIER_5 | VEH_TIER_6 | VEH_TIER_7 | VEH_TIER_8 | VEH_TIER_9 | VEH_TIER_10
+    VEH_TIER_11 = 2048
+    DESTROY_UNIT_ON_ABORT = 4096
+    ALL_VEH_TIERS = VEH_TIER_1 | VEH_TIER_2 | VEH_TIER_3 | VEH_TIER_4 | VEH_TIER_5 | VEH_TIER_6 | VEH_TIER_7 | VEH_TIER_8 | VEH_TIER_9 | VEH_TIER_10 | VEH_TIER_11
 
 
 class UnitAssemblerImplType(object):
@@ -738,9 +739,9 @@ class UnitBase(OpsUnpacker):
     def _autoSelectProfileVehicle(self, accountDBID, vehicles):
         pass
 
-    def _setProfileVehicle(self, accountDBID, vehCompDescr, vehOutfitCD, seasonType, marksOnGun, prestigeLevel):
+    def _setProfileVehicle(self, accountDBID, vehCompDescr, vehOutfitCD, seasonType, marksOnGun, prestigeLevel, stFrags):
         LOG_DEBUG('_setProfileVehicle: accountDBID={}'.format(accountDBID))
-        newProfileVehicle = ProfileVehicle(vehCompDescr, vehOutfitCD, seasonType, marksOnGun, prestigeLevel)
+        newProfileVehicle = ProfileVehicle(vehCompDescr, vehOutfitCD, seasonType, marksOnGun, prestigeLevel, stFrags)
         if newProfileVehicle != self._playerProfileVehicles.get(accountDBID, None):
             self._playerProfileVehicles[accountDBID] = newProfileVehicle
             self._dirty = 1
@@ -825,7 +826,7 @@ class UnitBase(OpsUnpacker):
     _IDS = '<IBB'
     _VEHICLE_DICT_HEADER = '<Hq'
     _VEHICLE_DICT_ITEM = '<Ii'
-    _VEHICLE_PROFILE_HEADER = '<qBBI'
+    _VEHICLE_PROFILE_HEADER = '<qBBII'
     _PLAYER_SEARCH_FLAGS_TUPLE = '<qH'
     _HEADER_SIZE = struct.calcsize(_HEADER)
     _SLOT_PLAYERS_SIZE = struct.calcsize(_SLOT_PLAYERS)
@@ -1514,17 +1515,17 @@ class UnitBase(OpsUnpacker):
         return (cPickle.loads(strDict), offset - initialOffset)
 
     def __packProfileVehicle(self, accountDBID, profileVehicle):
-        packed = struct.pack(self._VEHICLE_PROFILE_HEADER, accountDBID, profileVehicle.seasonType, profileVehicle.marksOnGun, profileVehicle.prestigeLevel)
+        packed = struct.pack(self._VEHICLE_PROFILE_HEADER, accountDBID, profileVehicle.seasonType, profileVehicle.marksOnGun, profileVehicle.prestigeLevel, profileVehicle.stFrags)
         packed += packPascalString(profileVehicle.vehCompDescr)
         packed += packPascalString(profileVehicle.vehOutfitCD)
         return packed
 
     def __unpackProfileVehicle(self, packedData):
-        accountDBID, seasonType, marksOnGun, prestigeLevel = struct.unpack_from(self._VEHICLE_PROFILE_HEADER, packedData)
+        accountDBID, seasonType, marksOnGun, prestigeLevel, stFrags = struct.unpack_from(self._VEHICLE_PROFILE_HEADER, packedData)
         offset = self._VEHICLE_PROFILE_HEADER_SIZE
         profileVehCD, lenString = unpackPascalString(packedData, offset)
         offset += lenString
         profileOutfitCD, lenString = unpackPascalString(packedData, offset)
         offset += lenString
-        self._setProfileVehicle(accountDBID, profileVehCD, profileOutfitCD, seasonType, marksOnGun, prestigeLevel)
+        self._setProfileVehicle(accountDBID, profileVehCD, profileOutfitCD, seasonType, marksOnGun, prestigeLevel, stFrags)
         return offset

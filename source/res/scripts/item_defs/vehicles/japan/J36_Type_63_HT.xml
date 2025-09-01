@@ -448,7 +448,6 @@
         <rightTrack>	30	</rightTrack>
       </armor>
       <weight>	14080	</weight>
-      <maxLoad>	55000	</maxLoad>
       <terrainResistance>	1.1 1.2 2.3	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	True	</rotationIsAroundCenter>
@@ -1330,7 +1329,7 @@
   <turrets0>
     <Turret_1_J36_Type_63_HT>
       <userString>	#japan_vehicles:Turret_1_J36_Type_63_HT	</userString>
-      <tags></tags>
+      <tags>	oscillating	</tags>
       <level>	8	</level>
       <price>	30000	</price>
       <notInShop>	true	</notInShop>

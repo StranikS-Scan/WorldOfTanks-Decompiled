@@ -49,6 +49,11 @@ def getBusinessHandlers():
     return (ProfilePackageBusinessHandler(),)
 
 
+def getStateMachineRegistrators():
+    from gui.Scaleform.daapi.view.lobby.profile.states import registerStates, registerTransitions
+    return (registerStates, registerTransitions)
+
+
 class ProfilePackageBusinessHandler(PackageBusinessHandler):
 
     def __init__(self):

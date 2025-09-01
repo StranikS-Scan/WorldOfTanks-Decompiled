@@ -2,7 +2,9 @@
 # Embedded file name: scripts/client/messenger/formatters/service_channel_helpers.py
 import logging
 from collections import namedtuple
+from itertools import chain
 from typing import TYPE_CHECKING
+from dossiers2.custom.records import DB_ID_TO_RECORD
 from gui.collection.collections_constants import COLLECTION_ITEM_PREFIX_NAME
 from gui.server_events.bonuses import BattleTokensBonus
 from helpers import dependency
@@ -10,6 +12,8 @@ from items import makeIntCompactDescrByID
 from items.components.c11n_constants import CustomizationNamesToTypes
 from messenger import g_settings
 from optional_bonuses import BONUS_MERGERS
+from personal_missions import PM_BRANCH
+from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
 EOL = '\n'
@@ -105,3 +109,31 @@ def extractLockedStyle(data):
 
         data['customizations'] = newCustomizations
     return
+
+
+@dependency.replace_none_kwargs(eventsCache=IEventsCache)
+def getPMOperationAndQuest(operationID, chainID, questID, eventsCache=None):
+    branch = PM_BRANCH.PERSONAL_MISSION_3
+    operation = eventsCache.getPersonalMissions().getOperationsForBranch(branch).get(operationID)
+    if operation is None:
+        return (None, None)
+    elif chainID is None:
+        return (operation, operation.getQuestsByFilter(filterFunc=lambda q: q.getID() == questID).get(questID))
+    else:
+        quest = operation.getQuests().get(chainID, {}).get(questID)
+        return (None, None) if quest is None else (operation, quest)
+
+
+def getPotapovQuestPopUps(message, isQuestOfThisGroup):
+    data = message.data or {}
+    popUPs = set(data.get('popUpRecords', set()))
+    otherQuestsPopUP = set()
+    for achievesID, achievesCount in popUPs:
+        achievesRecord = DB_ID_TO_RECORD[achievesID]
+        for questID, questData in data.get('detailedRewards', {}).iteritems():
+            records = [ (r.keys() if isinstance(r, dict) else [ rec[0] for rec in r ]) for r in questData.get('dossier', {}).values() ]
+            for dossierRecord in chain.from_iterable(records):
+                if achievesRecord == dossierRecord and not isQuestOfThisGroup(questID):
+                    otherQuestsPopUP.add((achievesID, achievesCount))
+
+    return popUPs.difference(otherQuestsPopUP)

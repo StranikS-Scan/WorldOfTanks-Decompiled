@@ -43,6 +43,20 @@ class DQNotCompletedValidator(SyncValidator):
 
 
 class DQRerollConfirmator(AwaitConfirmator):
+    eventsCache = dependency.descriptor(IEventsCache)
+
+    def __init__(self, isEnabled=True):
+        self._dialog = None
+        self._callback = None
+        self._subscribe()
+        super(DQRerollConfirmator, self).__init__(isEnabled)
+        return
+
+    def _subscribe(self):
+        self.eventsCache.onSyncCompleted += self._onSyncCompleted
+
+    def _unsubscribe(self):
+        self.eventsCache.onSyncCompleted -= self._onSyncCompleted
 
     @wg_async.wg_async
     def _confirm(self, callback):
@@ -68,8 +82,24 @@ class DQRerollConfirmator(AwaitConfirmator):
             builder = ResSimpleDialogBuilder()
             builder.setMessagesAndButtons(dialogParams)
             builder.setMessageArgs(fmtArgs=[FmtArgs(timeLimitMsg, 'timeLimitMsg', R.styles.NeutralTextBigStyle())])
-        result = yield wg_async.wg_await(dialogs.showSimple(builder.build()))
+        self._dialog = builder.build()
+        self._callback = callback
+        result = yield wg_async.wg_await(dialogs.showSimple(self._dialog))
         callback(makeSuccess() if result else makeError())
+        self._destroy()
+
+    def _onSyncCompleted(self, *args, **kwargs):
+        if self._dialog:
+            self._dialog.destroy()
+        if self._callback:
+            self._callback(makeError())
+        self._destroy()
+
+    def _destroy(self):
+        self._unsubscribe()
+        self._dialog = None
+        self._callback = None
+        return
 
 
 class DailyQuestReroll(Processor):

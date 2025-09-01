@@ -7,6 +7,7 @@ from chat_shared import SYS_MESSAGE_TYPE
 from comp7.gui.impl.lobby.comp7_helpers.comp7_quest_helpers import isComp7VisibleQuest, getComp7QuestType, parseComp7RanksQuestID, getRequiredTokensCountToComplete
 from comp7.gui.shared import event_dispatcher as comp7_events
 from comp7.gui.shared.event_dispatcher import showComp7BanWindow
+from comp7.skeletons.gui.game_control import IComp7ShopController
 from comp7_common_const import Comp7QuestType, qualificationQuestIDBySeasonNumber, COMP7_YEARLY_REWARD_TOKEN
 from constants import INVOICE_ASSET, ARENA_BONUS_TYPE, PENALTY_TYPES
 from fairplay_violation_types import getFairplayViolationLocale, getPenaltyTypeAndViolationName, FAIRPLAY_EXCLUDED_ARENA_BONUS_TYPES
@@ -24,6 +25,7 @@ _logger = logging.getLogger(__name__)
 
 class Comp7QuestRewardHandler(MultiTypeServiceChannelHandler):
     __comp7Ctrl = dependency.descriptor(IComp7Controller)
+    __comp7ShopCtrl = dependency.descriptor(IComp7ShopController)
 
     def __init__(self, awardCtrl):
         handledTypes = (SYS_MESSAGE_TYPE.comp7BattleResults.index(), SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index())
@@ -49,6 +51,8 @@ class Comp7QuestRewardHandler(MultiTypeServiceChannelHandler):
     def __showAward(self):
         ranksQuests, tokensQuests, _, isQualification = self.__getComp7CompletedQuests()
         self.__completedQuestIDs.clear()
+        if ranksQuests:
+            self.__comp7ShopCtrl.validateCachedProducts()
         if isQualification:
             comp7_events.showComp7QualificationRewardsScreen(quests=ranksQuests)
         else:

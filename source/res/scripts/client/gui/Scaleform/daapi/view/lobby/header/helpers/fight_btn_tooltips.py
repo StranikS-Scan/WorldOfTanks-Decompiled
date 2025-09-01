@@ -17,21 +17,19 @@ from helpers import i18n
 if typing.TYPE_CHECKING:
     from gui.prb_control.items import ValidationResult
 _STR_PATH = R.strings.menu.headerButtons.fightBtn.tooltip
+_TOOLTIP_PATH = R.strings.tooltips
 
 def getSquadFightBtnTooltipData(result):
     state = result.restriction
     if state == UNIT_RESTRICTION.COMMANDER_VEHICLE_NOT_SELECTED:
-        header = backport.text(R.strings.tooltips.hangar.startBtn.squadNotReady.header())
-        body = backport.text(R.strings.tooltips.hangar.startBtn.squadNotReady.body())
+        header = backport.text(_TOOLTIP_PATH.redButton.disabled.vehicle.group_is_not_ready.header())
+        body = backport.text(_TOOLTIP_PATH.hangar.startBtn.squadNotReady.body())
     elif state == UNIT_RESTRICTION.VEHICLE_INVALID_LEVEL:
-        header = backport.text(R.strings.tooltips.hangar.tankCarusel.wrongSquadVehicle.header())
-        body = backport.text(R.strings.tooltips.hangar.tankCarusel.wrongSquadVehicle.body())
+        header = backport.text(_TOOLTIP_PATH.hangar.tankCarusel.wrongSquadVehicle.header())
+        body = backport.text(_TOOLTIP_PATH.hangar.tankCarusel.wrongSquadVehicle.body())
     elif state in UNIT_RESTRICTION.CLASSES_RESTRICTIONS:
-        header = backport.text(R.strings.tooltips.hangar.tankCarusel.wrongSquadTypeVehicle.header())
-        body = backport.text(R.strings.tooltips.hangar.tankCarusel.wrongSquadTypeVehicle.body())
-    elif state == UNIT_RESTRICTION.PREVIEW_VEHICLE_IS_PRESENT:
-        header = None
-        body = i18n.makeString(TOOLTIPS.HANGAR_STARTBTN_PREVIEW_BODY)
+        header = backport.text(_TOOLTIP_PATH.hangar.tankCarusel.wrongSquadTypeVehicle.header())
+        body = backport.text(_TOOLTIP_PATH.hangar.tankCarusel.wrongSquadTypeVehicle.body())
     else:
         return ''
     return makeTooltip(header, body)
@@ -69,6 +67,9 @@ def getEpicFightBtnTooltipData(result):
     if state == PRE_QUEUE_RESTRICTION.MODE_NOT_AVAILABLE:
         header = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.battleRoyaleDisabled.header())
         body = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.battleRoyaleDisabled.body())
+    elif state == PREBATTLE_RESTRICTION.VEHICLE_BROKEN:
+        header = backport.text(_STR_PATH.vehicleIsBroken.header())
+        body = backport.text(_STR_PATH.vehicleIsBroken.body())
     elif state == PRE_QUEUE_RESTRICTION.LIMIT_LEVEL:
         header = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.epicBattleVehLevel.header())
         body = text_styles.main(backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.epicBattleVehLevel.body(), requirements=text_styles.neutral(backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.epicBattleVehLevel.requirements(), level=toRomanRangeString(result.ctx['levels'])))))
@@ -77,29 +78,29 @@ def getEpicFightBtnTooltipData(result):
         header = backport.text(rStringShort.header())
         body = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.epicBattleSituationalVehicle.body(), forStartBattle=text_styles.neutral(backport.text(rStringShort.levels.forStartBattle(), levels=toRomanRangeString(result.ctx['vehicleLevelsForStartBattle']))), willBeUnlocked=text_styles.neutral(backport.text(rStringShort.levels.willBeUnlocked(), levels=toRomanRangeString(result.ctx['unlockableInBattleVehLevels']))))
     elif state == UNIT_RESTRICTION.UNSUITABLE_VEHICLE:
-        header = backport.text(R.strings.tooltips.hangar.startBtn.battleRoyaleSquadNotReady.wrongVehicle.header())
-        body = backport.text(R.strings.tooltips.hangar.startBtn.battleRoyaleSquadNotReady.wrongVehicle.body())
+        header = backport.text(_TOOLTIP_PATH.hangar.startBtn.battleRoyaleSquadNotReady.wrongVehicle.header())
+        body = backport.text(_TOOLTIP_PATH.hangar.startBtn.battleRoyaleSquadNotReady.wrongVehicle.body())
     elif state == UNIT_RESTRICTION.UNIT_NOT_FULL:
-        header = backport.text(R.strings.tooltips.hangar.startBtn.battleRoyaleSquadNotReady.wrongPlayers.header())
-        body = backport.text(R.strings.tooltips.hangar.startBtn.battleRoyaleSquadNotReady.wrongPlayers.body())
+        header = backport.text(_TOOLTIP_PATH.hangar.startBtn.battleRoyaleSquadNotReady.wrongPlayers.header())
+        body = backport.text(_TOOLTIP_PATH.hangar.startBtn.battleRoyaleSquadNotReady.wrongPlayers.body())
     elif state == UNIT_RESTRICTION.NOT_READY_IN_SLOTS:
-        header = backport.text(R.strings.tooltips.hangar.startBtn.battleRoyaleSquadNotReady.notReady.header())
-        body = backport.text(R.strings.tooltips.hangar.startBtn.battleRoyaleSquadNotReady.notReady.body())
+        header = backport.text(_TOOLTIP_PATH.hangar.startBtn.battleRoyaleSquadNotReady.notReady.header())
+        body = backport.text(_TOOLTIP_PATH.hangar.startBtn.battleRoyaleSquadNotReady.notReady.body())
     elif state == UNIT_RESTRICTION.CURFEW:
         header = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.battleRoyaleDisabled.header())
         body = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.battleRoyaleDisabled.body())
     elif state == PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED:
-        header = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.unsutableToBattleRoyale.header())
-        body = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.unsutableToBattleRoyale.body())
+        header = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.notSupported.header())
+        body = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.notSupported.body())
     elif state == UNIT_RESTRICTION.COMMANDER_VEHICLE_NOT_SELECTED:
-        header = backport.text(R.strings.tooltips.hangar.startBtn.squadNotReady.header())
-        body = backport.text(R.strings.tooltips.hangar.startBtn.squadNotReady.body())
+        header = backport.text(_TOOLTIP_PATH.hangar.startBtn.squadNotReady.header())
+        body = backport.text(_TOOLTIP_PATH.hangar.startBtn.squadNotReady.body())
     elif state == PREBATTLE_RESTRICTION.VEHICLE_RENTALS_IS_OVER:
-        header = backport.text(R.strings.tooltips.hangar.startBtn.battleRoyale.notRented.header())
-        body = backport.text(R.strings.tooltips.hangar.startBtn.battleRoyale.notRented.body())
+        header = backport.text(_TOOLTIP_PATH.hangar.startBtn.battleRoyale.notRented.header())
+        body = backport.text(_TOOLTIP_PATH.hangar.startBtn.battleRoyale.notRented.body())
     elif state == PREBATTLE_RESTRICTION.VEHICLE_TELECOM_RENTALS_IS_OVER:
-        header = backport.text(R.strings.tooltips.hangar.startBtn.battleRoyale.telecomRentalIsOver.header())
-        body = backport.text(R.strings.tooltips.hangar.startBtn.battleRoyale.telecomRentalIsOver.body())
+        header = backport.text(_TOOLTIP_PATH.hangar.startBtn.battleRoyale.telecomRentalIsOver.header())
+        body = backport.text(_TOOLTIP_PATH.hangar.startBtn.battleRoyale.telecomRentalIsOver.body())
     elif state == PREBATTLE_RESTRICTION.CREW_NOT_FULL:
         header = backport.text(_STR_PATH.crewNotFull.header())
         body = backport.text(_STR_PATH.crewNotFull.body(), crewList=getAbsenceCrewList())
@@ -114,8 +115,8 @@ def getEpicFightBtnTooltipData(result):
 getRoyaleFightBtnTooltipData = getEpicFightBtnTooltipData
 
 def getMapsTrainingTooltipData():
-    header = backport.text(R.strings.tooltips.hangar.startBtn.mapsTraining.notReady.header())
-    body = backport.text(R.strings.tooltips.hangar.startBtn.mapsTraining.notReady.body())
+    header = backport.text(_TOOLTIP_PATH.hangar.startBtn.mapsTraining.notReady.header())
+    body = backport.text(_TOOLTIP_PATH.hangar.startBtn.mapsTraining.notReady.body())
     return makeTooltip(header, body)
 
 
@@ -157,17 +158,20 @@ def getRandomTooltipData(result, isInSquad):
         header = backport.text(_STR_PATH.inPremiumIgrOnly.header(), icon=icons.premiumIgrSmall())
         body = backport.text(_STR_PATH.inPremiumIgrOnly.body())
     elif state == PREBATTLE_RESTRICTION.VEHICLE_NOT_PRESENT:
-        header = backport.text(_STR_PATH.noVehicle.header())
-        body = backport.text(_STR_PATH.noVehicle.body())
+        header = backport.text(_TOOLTIP_PATH.redButton.disabled.buyNeeded.header())
+        body = backport.text(_TOOLTIP_PATH.redButton.disabled.buyNeeded.body())
     elif state == PREBATTLE_RESTRICTION.VEHICLE_RENTALS_IS_OVER:
-        header = backport.text(_STR_PATH.rentalIsOver.header())
-        body = backport.text(_STR_PATH.rentalIsOver.body())
+        header = backport.text(_TOOLTIP_PATH.redButton.disabled.vehicle.rentalsIsOver.header())
+        body = backport.text(_TOOLTIP_PATH.redButton.disabled.vehicle.rentalsIsOver.body())
     elif state == PREBATTLE_RESTRICTION.VEHICLE_TELECOM_RENTALS_IS_OVER:
         header = backport.text(_STR_PATH.telecomRentalIsOver.header())
         body = backport.text(_STR_PATH.telecomRentalIsOver.body())
     elif state == PREBATTLE_RESTRICTION.VEHICLE_WOT_PLUS_EXCLUSIVE_UNAVAILABLE:
         header = backport.text(_STR_PATH.wotPlusExclusiveUnavailable.header())
         body = backport.text(_STR_PATH.wotPlusExclusiveUnavailable.body())
+    elif state == PREBATTLE_RESTRICTION.VEHICLE_IN_BATTLE:
+        header = backport.text(_TOOLTIP_PATH.redButton.disabled.vehicle.inBattle.header())
+        body = backport.text(_TOOLTIP_PATH.redButton.disabled.vehicle.inBattle.body())
     else:
         if isInSquad:
             return getSquadFightBtnTooltipData(result)

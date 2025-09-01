@@ -3,7 +3,7 @@
 from collections import Counter
 from itertools import izip
 from constants import QUEST_PROGRESS_STATE
-from personal_missions_constants import PROGRESS_TEMPLATE
+from personal_missions_constants import PROGRESS_TEMPLATE, CONFIG_KEYS
 
 class IProgress(object):
 
@@ -37,6 +37,7 @@ class Progress(IProgress):
         self.__visibleScope = None
         self.__isChanged = False
         self.__isCumulative = False
+        self.__uniqueVehicle = None
         self.__dependsOnProgressID = None
         self._setCfg(**config)
         return
@@ -77,7 +78,10 @@ class Progress(IProgress):
     def getState(self):
         return self.__state
 
-    def _setCfg(self, isMain=False, countdown=None, visibleScope=(), isCumulative=False, params=None, isAward=False, dependsOnProgressID=None):
+    def _setCfg(self, isMain=False, countdown=None, visibleScope=(), isCumulative=False, params=None, isAward=False, dependsOnProgressID=None, uniqueVehicle=None, uniqueBattlesCount=0, battlesUniqueVehicles=None):
+        self.__uniqueVehicle = uniqueVehicle
+        self.__uniqueBattlesCount = uniqueBattlesCount
+        self.__battlesUniqueVehicles = set() if battlesUniqueVehicles is None else battlesUniqueVehicles
         self.__isMain = isMain
         self.__isAward = isAward
         self.__countDown = countdown
@@ -85,6 +89,13 @@ class Progress(IProgress):
         self.__isCumulative = isCumulative
         self.__params = params or {}
         self.__dependsOnProgressID = dependsOnProgressID
+        return
+
+    def getUniqueVehicles(self):
+        return self.__uniqueVehicle
+
+    def getUniqueBattlesCount(self):
+        return self.__uniqueBattlesCount
 
     def getVisibleScope(self):
         return self.__visibleScope
@@ -401,7 +412,11 @@ class ProgressStorage(object):
         for builder in self._getBuilders():
             self.__addBuilder(builder)
 
+        battleUniqueVehicles = self.__tryToGetBattlesUniqueVehiclesFromProgresses(savedProgresses)
         for progressID, configData in questCfg.iteritems():
+            uniqueBattlesCount = len(battleUniqueVehicles)
+            configData['config'][CONFIG_KEYS.UNIQUE_BATTLES_COUNT] = uniqueBattlesCount
+            configData['config'][CONFIG_KEYS.BATTLES_UNIQUE_VEHICLES] = battleUniqueVehicles
             self.__progresses[progressID] = self._createProgress(progressID, configData)
             if hasattr(self.__progresses[progressID], 'isInOrGroup') and self.__progresses[progressID].isInOrGroup():
                 self._orProgresses[progressID] = self.__progresses[progressID].isCompleted()
@@ -463,6 +478,9 @@ class ProgressStorage(object):
                 progress = self.__progresses.get(progressID)
                 if hasattr(progress, 'isInOrGroup') and progress.isInOrGroup() and progressInfo['state'] == QUEST_PROGRESS_STATE.FAILED:
                     progress.setState(QUEST_PROGRESS_STATE.COMPLETED)
+
+    def __tryToGetBattlesUniqueVehiclesFromProgresses(self, savedProgresses):
+        return savedProgresses.get(CONFIG_KEYS.BATTLES_UNIQUE_VEHICLES, set()) if savedProgresses is not None else set()
 
 
 class BaseQuestProgress(object):

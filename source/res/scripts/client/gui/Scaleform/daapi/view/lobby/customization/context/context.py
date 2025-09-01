@@ -66,6 +66,8 @@ class _CustomizationEvents(object):
         self.onEditModeEnabled = Event.Event(self._eventsManager)
         self.onPersonalNumberCleared = Event.Event(self._eventsManager)
         self.onProlongStyleRent = Event.Event(self._eventsManager)
+        self.onCloseDialogShown = Event.Event(self._eventsManager)
+        self.onCloseDialogClosed = Event.Event(self._eventsManager)
 
     def fini(self):
         self._eventsManager.clear()
@@ -100,6 +102,7 @@ class CustomizationContext(object):
         self.updateCommonOutfits()
         self.__carouselItems = None
         self.__initialItemCD = None
+        self.__applyingItems = False
         return
 
     @property
@@ -188,6 +191,10 @@ class CustomizationContext(object):
     @property
     def isModeChangeInProgress(self):
         return self.__isModeChangeInProgress
+
+    @property
+    def applyingItems(self):
+        return self.__applyingItems
 
     def setIsItemsOnAnotherVeh(self, value):
         self.__isItemsOnAnotherVeh = value
@@ -388,7 +395,9 @@ class CustomizationContext(object):
     @adisp_process('customizationApply')
     def applyItems(self, purchaseItems, callback):
         self._itemsCache.onSyncCompleted -= self.__onCacheResync
+        self.__applyingItems = True
         yield self.mode.applyItems(purchaseItems)
+        self.__applyingItems = False
         self.__onCacheResync(-1, {})
         self._itemsCache.onSyncCompleted += self.__onCacheResync
         callback(None)
@@ -437,7 +446,8 @@ class CustomizationContext(object):
         return self.__styleModeId is not None and self.__styleModeId == styleModeId
 
     def __onCacheResync(self, reason, items):
-        self.events.onCacheResync(reason, items)
+        if self.events:
+            self.events.onCacheResync(reason, items)
 
     def __onVehicleChanged(self):
         if self._vehicle is None or not g_currentVehicle.isPresent():

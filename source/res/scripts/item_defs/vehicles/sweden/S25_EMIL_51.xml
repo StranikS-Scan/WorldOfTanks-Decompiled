@@ -1052,7 +1052,6 @@
         <rightTrack>	30	</rightTrack>
       </armor>
       <weight>	6360	</weight>
-      <maxLoad>	28000	</maxLoad>
       <terrainResistance>	1.2 1.3 2.1	</terrainResistance>
       <brakeForce>	29000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -1917,7 +1916,7 @@
   <turrets0>
     <Turret_1_S25_EMIL_51>
       <userString>	#sweden_vehicles:Turret_1_S25_EMIL_51	</userString>
-      <tags></tags>
+      <tags>	oscillating	</tags>
       <level>	8	</level>
       <price>	30000	</price>
       <notInShop>	true	</notInShop>
@@ -1955,8 +1954,10 @@
         <_105mm_lvkan_L_67>	shared	  <maxAmmo>	75	</maxAmmo>
           <notInShop>	true	</notInShop>
           <armor>
-            <armor_1>	250	</armor_1>
-            <armor_2>	50	</armor_2>
+            <armor_1>	250	  <tags>	gun	</tags>
+            </armor_1>
+            <armor_2>	50	  <tags>	gun	</tags>
+            </armor_2>
             <armor_3>	30	</armor_3>
             <armor_4>	30	</armor_4>
             <armor_5>	18	</armor_5>
@@ -1964,7 +1965,8 @@
             <armor_7>	110	</armor_7>
             <armor_8>	0	</armor_8>
             <armor_9>	180	</armor_9>
-            <armor_10>	130	</armor_10>
+            <armor_10>	130	  <tags>	gun	</tags>
+            </armor_10>
             <gun>	40	</gun>
           </armor>
           <turretYawLimits>	-180 180	</turretYawLimits>

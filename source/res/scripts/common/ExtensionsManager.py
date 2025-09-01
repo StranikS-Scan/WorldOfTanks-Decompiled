@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/ExtensionsManager.py
+from __future__ import absolute_import
 import BigWorld
 import ResMgr
 from collections import namedtuple
@@ -31,7 +32,7 @@ class ExtensionsManager(object):
 
     @property
     def extensions(self):
-        return self._extensions.values()
+        return [ value for _, value in sorted(self._extensions.items()) ]
 
     @property
     def activeExtensions(self):

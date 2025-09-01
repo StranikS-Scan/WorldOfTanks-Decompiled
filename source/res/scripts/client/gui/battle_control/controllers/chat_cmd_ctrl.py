@@ -13,6 +13,7 @@ from AvatarInputHandler.cameras import getWorldRayAndPoint
 from aih_constants import CTRL_MODE_NAME
 from arena_component_system.sector_base_arena_component import ID_TO_BASENAME
 from chat_commands_consts import MarkerType, DefaultMarkerSubType, ReplyState, BATTLE_CHAT_COMMAND_NAMES, INVALID_MARKER_SUBTYPE, _COMMAND_NAME_TRANSFORM_MARKER_TYPE, ONE_SHOT_COMMANDS_TO_REPLIES, COMMAND_RESPONDING_MAPPING
+from constants import STATIONARY_RELOAD_STATE
 from epic_constants import EPIC_BATTLE_TEAM_ID
 from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
@@ -355,12 +356,21 @@ class ChatCommandsController(IBattleController):
     def sendReloadingCommand(self):
         if not avatar_getter.isPlayerOnArena() or self.__isEnabled is False:
             return
-        state = self.__ammo.getGunReloadingState()
-        command = self.proto.battleCmd.create4Reload(self.__ammo.getGunSettings().isCassetteClip(), math.ceil(state.getTimeLeft()), self.__ammo.getShellsQuantityLeft())
-        if command:
-            self.__sendChatCommand(command)
         else:
-            _logger.error('Can not create reloading command')
+            gunSettings = self.__ammo.getGunSettings()
+            reloadingState = self.__ammo.getGunReloadingState()
+            timeLeft = reloadingState.getTimeLeft()
+            quantity = self.__ammo.getShellsQuantityLeft()
+            stationaryState = self.__ammo.getStationaryState()
+            if stationaryState is not None and stationaryState.state in STATIONARY_RELOAD_STATE.TO_RELOADING_STATES:
+                timeLeft = reloadingState.getActualValue()
+                quantity = 0 if quantity == gunSettings.clip.size else quantity
+            command = self.proto.battleCmd.create4Reload(gunSettings.isCassetteClip(), math.ceil(timeLeft), quantity)
+            if command:
+                self.__sendChatCommand(command)
+            else:
+                _logger.error('Can not create reloading command')
+            return
 
     def __isProhibitedToSendIfDeadOrObserver(self, name):
         return not avatar_getter.isVehicleAlive() and name in PROHIBITED_IF_DEAD or self.sessionProvider.getCtx().isPlayerObserver() and name in PROHIBITED_IF_SPECTATOR

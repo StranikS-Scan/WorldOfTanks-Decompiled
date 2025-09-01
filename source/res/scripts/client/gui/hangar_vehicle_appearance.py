@@ -127,6 +127,7 @@ class HangarVehicleAppearance(ScriptGameObject):
     attachments = property(lambda self: self.__attachments)
     typeDescriptor = property(lambda self: self.__vDesc)
     vehicleStickers = property(lambda self: self.__vehicleStickers)
+    vehicleState = property(lambda self: self.__vState)
 
     @property
     def filter(self):
@@ -352,28 +353,36 @@ class HangarVehicleAppearance(ScriptGameObject):
                 crashedBspModel = (partId, htManager.crashedModelHitTester.bspModelName)
                 crashedBspModels = crashedBspModels + (crashedBspModel,)
 
-        bspModels = bspModels + ((TankPartNames.getIdx(TankPartNames.GUN) + 1,
+        additionalChassisParts = ()
+        trackPairs = vDesc.chassis.trackPairs[1:]
+        for idx, trackPair in enumerate(trackPairs):
+            defaultPartLength = len(TankPartNames.ALL)
+            bspModel = (defaultPartLength + idx, trackPair.hitTester.bspModelName)
+            additionalChassisParts = additionalChassisParts + (bspModel,)
+
+        bspModels = bspModels + additionalChassisParts
+        bspModels = bspModels + ((self._cameraPartsIdx,
           vDesc.hull.hitTesterManager.modelHitTester.bspModelName,
           capsuleScale,
-          True), (TankPartNames.getIdx(TankPartNames.GUN) + 2,
+          True), (self._cameraPartsIdx + 1,
           vDesc.turret.hitTesterManager.modelHitTester.bspModelName,
           capsuleScale,
-          True), (TankPartNames.getIdx(TankPartNames.GUN) + 3,
+          True), (self._cameraPartsIdx + 2,
           vDesc.gun.hitTesterManager.modelHitTester.bspModelName,
           gunScale,
           True))
         if vDesc.hull.hitTesterManager.crashedModelHitTester:
-            crashedBspModels = crashedBspModels + ((TankPartNames.getIdx(TankPartNames.GUN) + 1,
+            crashedBspModels = crashedBspModels + ((self._cameraPartsIdx,
               vDesc.hull.hitTesterManager.crashedModelHitTester.bspModelName,
               capsuleScale,
               True),)
         if vDesc.turret.hitTesterManager.crashedModelHitTester:
-            crashedBspModels = crashedBspModels + ((TankPartNames.getIdx(TankPartNames.GUN) + 2,
+            crashedBspModels = crashedBspModels + ((self._cameraPartsIdx + 1,
               vDesc.turret.hitTesterManager.crashedModelHitTester.bspModelName,
               capsuleScale,
               True),)
         if vDesc.gun.hitTesterManager.crashedModelHitTester:
-            crashedBspModels = crashedBspModels + ((TankPartNames.getIdx(TankPartNames.GUN) + 3,
+            crashedBspModels = crashedBspModels + ((self._cameraPartsIdx + 2,
               vDesc.gun.hitTesterManager.crashedModelHitTester.bspModelName,
               gunScale,
               True),)
@@ -588,7 +597,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         wheelConfig = typeDescr.chassis.generalWheelsAnimatorConfig
         if self.wheelsAnimator is not None and wheelConfig is not None:
             self.wheelsAnimator.createCollision(wheelConfig, self.collisions)
-        gunColBox = self.collisions.getExtendedBoundingBox(TankPartNames.getIdx(TankPartNames.GUN) + 3)
+        gunColBox = self.collisions.getExtendedBoundingBox(self._cameraPartsIdx + 2)
         center = 0.5 * (gunColBox[1] - gunColBox[0])
         gunoffset = Math.Matrix()
         gunoffset.setTranslate((0.0, 0.0, center.z + gunColBox[0].z))
@@ -598,8 +607,18 @@ class HangarVehicleAppearance(ScriptGameObject):
          (TankPartNames.getIdx(TankPartNames.HULL), self.__vEntity.model.node(TankPartNames.HULL)),
          (TankPartNames.getIdx(TankPartNames.TURRET), self.__vEntity.model.node(TankPartNames.TURRET)),
          (TankPartNames.getIdx(TankPartNames.GUN), gunNode))
+        defaultPartLength = len(TankPartNames.ALL)
+        additionalChassisParts = []
+        trackPairs = self.typeDescriptor.chassis.trackPairs
+        if not trackPairs:
+            trackPairs = [None]
+        for x in xrange(len(trackPairs) - 1):
+            additionalChassisParts.append((defaultPartLength + x, self.compoundModel.matrix))
+
+        if additionalChassisParts:
+            collisionData += tuple(additionalChassisParts)
         self.collisions.connect(self.__vEntity.id, ColliderTypes.VEHICLE_COLLIDER, collisionData)
-        collisionData = ((TankPartNames.getIdx(TankPartNames.GUN) + 1, self.__vEntity.model.node(TankPartNames.HULL)), (TankPartNames.getIdx(TankPartNames.GUN) + 2, self.__vEntity.model.node(TankPartNames.TURRET)), (TankPartNames.getIdx(TankPartNames.GUN) + 3, gunLink))
+        collisionData = ((self._cameraPartsIdx, self.__vEntity.model.node(TankPartNames.HULL)), (self._cameraPartsIdx + 1, self.__vEntity.model.node(TankPartNames.TURRET)), (self._cameraPartsIdx + 2, gunLink))
         self.collisions.connect(self.__vEntity.id, self._getColliderType(), collisionData)
         self._reloadColliderType(self.__vEntity.state)
         self.__reloadShadowManagerTarget(self.__vEntity.state)
@@ -1105,3 +1124,7 @@ class HangarVehicleAppearance(ScriptGameObject):
             if progressionOutfit:
                 return progressionOutfit
         return outfit
+
+    @property
+    def _cameraPartsIdx(self):
+        return TankPartNames.getIdx(TankPartNames.GUN) + len(self.__vDesc.chassis.trackPairs) + 1

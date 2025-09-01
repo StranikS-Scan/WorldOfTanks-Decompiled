@@ -67,7 +67,7 @@
     </armor>
     <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
     <weight>	18850	</weight>
-    <maxHealth>	368	</maxHealth>
+    <maxHealth>	400	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	130	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
@@ -1485,8 +1485,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	7600	</weight>
-      <maxLoad>	31400	</maxLoad>
-      <terrainResistance>	1.2 1.6 2.3	</terrainResistance>
+      <terrainResistance>	1.1 1.4 2.1	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	36	</rotationSpeed>
@@ -2336,7 +2335,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	7600	</weight>
-      <maxLoad>	32400	</maxLoad>
       <terrainResistance>	1.1 1.4 2.1	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -3181,14 +3179,14 @@
     <Turret_1_R02_SU-85>
       <userString>	#ussr_vehicles:Turret_1_R02_SU-85	</userString>
       <tags>	cannotDetach	</tags>
-      <level>	4	</level>
+      <level>	5	</level>
       <price>	100	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	0	</armor_1>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	92	</maxHealth>
+      <maxHealth>	100	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -3437,11 +3435,6 @@
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <_9R>	shared	  <unlocks>
-        <radio>	_9RM	  <cost>	4040	</cost>
-        </radio>
-      </unlocks>
-    </_9R>
     <_9RM>	shared	</_9RM>
   </radios>
   <physics>
@@ -3460,13 +3453,13 @@
         <Chassis_R02_SU-85>
           <grounds>
             <soft>
-              <rollingFriction>	0.18515	</rollingFriction>
+              <rollingFriction>	0.16905	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1288	</rollingFriction>
+              <rollingFriction>	0.1127	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0966	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

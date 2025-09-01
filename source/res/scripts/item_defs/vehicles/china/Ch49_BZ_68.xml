@@ -61,7 +61,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	29300	</weight>
-    <maxHealth>	1500	</maxHealth>
+    <maxHealth>	1600	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	210	</maxHealth>
       <maxRegenHealth>	140	</maxRegenHealth>
@@ -777,8 +777,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	60000	</maxLoad>
-      <terrainResistance>	1.1 1.4 2.3	</terrainResistance>
+      <terrainResistance>	1 1.1 1.9	</terrainResistance>
       <brakeForce>	50000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	26	</rotationSpeed>
@@ -1692,7 +1691,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	12036	</weight>
-      <maxLoad>	63000	</maxLoad>
       <terrainResistance>	1 1.1 1.9	</terrainResistance>
       <brakeForce>	50000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -2658,7 +2656,7 @@
         <_130mm_M_65_Type_70>	shared	  <maxAmmo>	30	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 0.055 8 0.065 4.5 0.09 4.5 0.11 8 0.389 8 0.411 0 0.589 0 0.611 8 0.89 8 0.91 4.5 0.935 4.5 0.945 8 1 8	</maxPitch>
+            <maxPitch>	0.00000 8.00 0.06111 8.00 0.06667 6.00 0.09444 6.00 0.10000 8.00 0.38889 8.00 0.40833 0.00 0.59167 0.00 0.61111 8.00 0.90000 8.00 0.90556 6.00 0.93333 6.00 0.93889 8.00 1.00000 8.00	</maxPitch>
           </pitchLimits>
           <armor>
             <armor_1>	330	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -2676,13 +2674,13 @@
             <gun>	55	</gun>
           </armor>
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	16	</reloadTime>
+          <reloadTime>	15.7	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	3.2	</aimingTime>
+          <aimingTime>	3.1	</aimingTime>
           <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <customizationSlots>
@@ -3287,7 +3285,7 @@
         <_130mm_M_65_Type_70>	shared	  <maxAmmo>	30	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 0.055 8 0.065 4.5 0.09 4.5 0.11 8 0.389 8 0.411 0 0.589 0 0.611 8 0.89 8 0.91 4.5 0.935 4.5 0.945 8 1 8	</maxPitch>
+            <maxPitch>	0.00000 8.00 0.06111 8.00 0.06667 6.00 0.09444 6.00 0.10000 8.00 0.38889 8.00 0.40833 0.00 0.59167 0.00 0.61111 8.00 0.90000 8.00 0.90556 6.00 0.93333 6.00 0.93889 8.00 1.00000 8.00	</maxPitch>
           </pitchLimits>
           <armor>
             <armor_1>	330	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -3333,8 +3331,8 @@
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <reloadTime>	15.5	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	3	</aimingTime>
@@ -3997,11 +3995,6 @@
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <A-220_1>	shared	  <unlocks>
-        <radio>	A-220B	  <cost>	9500	</cost>
-        </radio>
-      </unlocks>
-    </A-220_1>
     <A-220B>	shared	</A-220B>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
@@ -4009,7 +4002,7 @@
     <detailed>
       <engines>
         <_12150LTM>
-          <smplEnginePower>	600	</smplEnginePower>
+          <smplEnginePower>	720	</smplEnginePower>
           <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
         </_12150LTM>
         <V_2_54SCH>
@@ -4021,13 +4014,13 @@
         <Chassis_Ch49_BZ_68>
           <grounds>
             <soft>
-              <rollingFriction>	0.18515	</rollingFriction>
+              <rollingFriction>	0.15295	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1127	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
+              <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>
@@ -4100,11 +4093,9 @@
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>
   </effects>
-  <effectsPrefab>
-    <rocketAcceleration>
-      <prefab>	particles/Tank/rocket_accelerator/Ch49_BZ_68_Rocket.prefab	</prefab>
-    </rocketAcceleration>
-  </effectsPrefab>
+  <prefabs>
+    <mechanicEffects>	particles/Tank/rocket_accelerator/Ch49_BZ_68_Rocket.prefab	</mechanicEffects>
+  </prefabs>
   <emblems>
     <default>	15505	</default>
     <lodDist>	MEDIUM	</lodDist>

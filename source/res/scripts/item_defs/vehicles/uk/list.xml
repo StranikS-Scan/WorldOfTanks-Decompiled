@@ -210,7 +210,7 @@
   <GB69_Cruiser_Mk_II>
     <id>	27	</id>
     <userString>	#gb_vehicles:GB69_Cruiser_Mk_II	</userString>
-    <description>	#gb_vehicles:GB69_Cruiser_Mk_III_descr	</description>
+    <description>	#gb_vehicles:GB69_Cruiser_Mk_II_descr	</description>
     <shortUserString>	#gb_vehicles:GB69_Cruiser_Mk_II_short	</shortUserString>
     <price>	3100	</price>
     <tags>	lightTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
@@ -499,7 +499,7 @@
     <shortUserString>	#gb_vehicles:GB87_Chieftain_T95_turret_short	</shortUserString>
     <shortDescriptionSpecial>	#gb_vehicles:GB87_Chieftain_T95_turret_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#gb_vehicles:GB87_Chieftain_T95_turret_long_special	</longDescriptionSpecial>
-    <price>	6400	  <gold></gold>
+    <price>	6300	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
     <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
@@ -586,6 +586,16 @@
     <tags>	mediumTank role_MT_sniper HD wheeledVehicle improvedVentilation_class2_user aimingStabilizer_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	7	</level>
   </GB126_FSV_Scheme_A>
+  <GB152_AT_FV230_Breaker>
+    <id>	95	</id>
+    <userString>	#gb_vehicles:GB152_AT_FV230_Breaker	</userString>
+    <description>	#gb_vehicles:GB152_AT_FV230_Breaker_descr	</description>
+    <shortUserString>	#gb_vehicles:GB152_AT_FV230_Breaker_short	</shortUserString>
+    <longDescriptionSpecial>	#gb_vehicles:GB152_AT_FV230_Breaker_long_special	</longDescriptionSpecial>
+    <price>	7400000	</price>
+    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
+    <level>	11	</level>
+  </GB152_AT_FV230_Breaker>
   <GB19_Sherman_Firefly_MapsTraining_Dummy_MT_2>
     <id>	110	</id>
     <userString>	#maps_training:botVehicleType/mediumTank	</userString>
@@ -700,7 +710,7 @@
     <shortUserString>	#gb_vehicles:GB112_Caliban_short	</shortUserString>
     <shortDescriptionSpecial>	#gb_vehicles:GB112_Caliban_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#gb_vehicles:GB112_Caliban_long_special	</longDescriptionSpecial>
-    <price>	9450	  <gold></gold>
+    <price>	8500	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
     <tags>	heavyTank role_HT_support HD improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
@@ -713,7 +723,7 @@
     <description>	#gb_vehicles:GB110_FV4201_Chieftain_Prototype_descr	</description>
     <shortDescriptionSpecial>	#gb_vehicles:GB110_FV4201_Chieftain_Prototype_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#gb_vehicles:GB110_FV4201_Chieftain_Prototype_long_special	</longDescriptionSpecial>
-    <price>	13000	  <gold></gold>
+    <price>	11100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
     <tags>	heavyTank HD role_HT_universal improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
@@ -726,7 +736,7 @@
     <description>	#gb_vehicles:GB111_Charlemagne_descr	</description>
     <shortDescriptionSpecial>	#gb_vehicles:GB111_Charlemagne_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#gb_vehicles:GB111_Charlemagne_long_special	</longDescriptionSpecial>
-    <price>	9750	  <gold></gold>
+    <price>	8700	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
     <tags>	heavyTank role_HT_break HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
@@ -739,7 +749,7 @@
     <shortUserString>	#gb_vehicles:GB109_GSOR_1008_short	</shortUserString>
     <shortDescriptionSpecial>	#gb_vehicles:GB109_GSOR_1008_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#gb_vehicles:GB109_GSOR_1008_long_special	</longDescriptionSpecial>
-    <price>	9000	  <gold></gold>
+    <price>	8000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
     <tags>	AT-SPG role_ATSPG_support mediumAT-SPG AT-SPG2 improvedVentilation_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user HD	</tags>
@@ -893,7 +903,7 @@
     <shortUserString>	#gb_vehicles:GB70_N_FV4202_105_short	</shortUserString>
     <shortDescriptionSpecial>	#gb_vehicles:GB70_N_FV4202_105_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#gb_vehicles:GB70_N_FV4202_105_long_special	</longDescriptionSpecial>
-    <price>	6500	  <gold></gold>
+    <price>	6400	  <gold></gold>
     </price>
     <tags>	mediumTank role_MT_universal HD mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
@@ -943,7 +953,7 @@
     <shortUserString>	#gb_vehicles:GB93_Caernarvon_AX_short	</shortUserString>
     <shortDescriptionSpecial>	#gb_vehicles:GB93_Caernarvon_AX_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#gb_vehicles:GB93_Caernarvon_AX_long_special	</longDescriptionSpecial>
-    <price>	9400	  <gold></gold>
+    <price>	8500	  <gold></gold>
     </price>
     <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
@@ -955,7 +965,7 @@
     <shortUserString>	#gb_vehicles:GB94_Centurion_Mk5-1_RAAC_short	</shortUserString>
     <shortDescriptionSpecial>	#gb_vehicles:GB94_Centurion_Mk5-1_RAAC_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#gb_vehicles:GB94_Centurion_Mk5-1_RAAC_long_special	</longDescriptionSpecial>
-    <price>	6500	  <gold></gold>
+    <price>	6400	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
     <tags>	mediumTank role_MT_assault HD mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
@@ -1033,7 +1043,7 @@
     <shortUserString>	#gb_vehicles:GB101_FV1066_Senlac_short	</shortUserString>
     <shortDescriptionSpecial>	#gb_vehicles:GB101_FV1066_Senlac_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#gb_vehicles:GB101_FV1066_Senlac_long_special	</longDescriptionSpecial>
-    <price>	5800	  <gold></gold>
+    <price>	5700	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
     <tags>	lightTank role_LT_universal HD scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
@@ -1095,7 +1105,7 @@
     <description>	#gb_vehicles:GB99_Turtle_Mk1_descr	</description>
     <shortDescriptionSpecial>	#gb_vehicles:GB99_Turtle_Mk1_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#gb_vehicles:GB99_Turtle_Mk1_long_special	</longDescriptionSpecial>
-    <price>	8700	  <gold></gold>
+    <price>	7900	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
     <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
@@ -1134,7 +1144,7 @@
     <shortUserString>	#gb_vehicles:GB115_Gonsalo_short	</shortUserString>
     <shortDescriptionSpecial>	#gb_vehicles:GB115_Gonsalo_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#gb_vehicles:GB115_Gonsalo_long_special	</longDescriptionSpecial>
-    <price>	12000	  <gold></gold>
+    <price>	10200	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
     <tags>	heavyTank role_HT_support HD tankRammer_class1_user improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
@@ -1160,7 +1170,7 @@
     <description>	#gb_vehicles:GB121_GSOR_1010_FB_descr	</description>
     <shortDescriptionSpecial>	#gb_vehicles:GB121_GSOR_1010_FB_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#gb_vehicles:GB121_GSOR_1010_FB_long_special	</longDescriptionSpecial>
-    <price>	8850	  <gold></gold>
+    <price>	7900	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
     <tags>	mediumTank role_MT_sniper HD wheeledVehicle improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
@@ -1173,7 +1183,7 @@
     <shortUserString>	#gb_vehicles:GB128_Nemesis_short	</shortUserString>
     <shortDescriptionSpecial>	#gb_vehicles:GB128_Nemesis_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#gb_vehicles:GB128_Nemesis_long_special	</longDescriptionSpecial>
-    <price>	9150	  <gold></gold>
+    <price>	8100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
     <tags>	mediumTank role_MT_universal HD mediumTank3 improvedVentilation_class2_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
@@ -1199,7 +1209,7 @@
     <shortUserString>	#gb_vehicles:GB133_Charioteer_MkVII_short	</shortUserString>
     <shortDescriptionSpecial>	#gb_vehicles:GB133_Charioteer_MkVII_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#gb_vehicles:GB133_Charioteer_MkVII_long_special	</longDescriptionSpecial>
-    <price>	8900	  <gold></gold>
+    <price>	8000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
     <tags>	AT-SPG role_ATSPG_sniper HD mediumAT-SPG AT-SPG1 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user	</tags>
@@ -1225,7 +1235,7 @@
     <description>	#gb_vehicles:GB139_FV226_Contradictious_descr	</description>
     <shortDescriptionSpecial>	#gb_vehicles:GB139_FV226_Contradictious_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#gb_vehicles:GB139_FV226_Contradictious_long_special	</longDescriptionSpecial>
-    <price>	10200	  <gold></gold>
+    <price>	8900	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
     <tags>	heavyTank role_HT_universal HD siegeMode twinGun heavyTank1 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
@@ -1294,7 +1304,7 @@
     <shortUserString>	#gb_vehicles:GB131_Crusher_short	</shortUserString>
     <shortDescriptionSpecial>	#gb_vehicles:GB131_Crusher_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#gb_vehicles:GB131_Crusher_long_special	</longDescriptionSpecial>
-    <price>	10400	  <gold></gold>
+    <price>	9000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
     <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user	</tags>
@@ -1359,7 +1369,7 @@
     <shortUserString>	#gb_vehicles:GB145_Crusher_ASE_4_short	</shortUserString>
     <shortDescriptionSpecial>	#gb_vehicles:GB145_Crusher_ASE_4_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#gb_vehicles:GB145_Crusher_ASE_4_long_special	</longDescriptionSpecial>
-    <price>	10400	  <gold></gold>
+    <price>	9000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
     <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user lockOutfit restoreWithStyle	</tags>
@@ -1378,4 +1388,26 @@
     <tags>	heavyTank role_HT_assault HD heavyTank1 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user lockOutfit restoreWithStyle	</tags>
     <level>	6	</level>
   </GB150_Churchill_VII_A>
+  <GB147_FV4025_Contriver>
+    <id>	93	</id>
+    <userString>	#gb_vehicles:GB147_FV4025_Contriver	</userString>
+    <description>	#gb_vehicles:GB147_FV4025_Contriver_descr	</description>
+    <shortUserString>	#gb_vehicles:GB147_FV4025_Contriver_short	</shortUserString>
+    <longDescriptionSpecial>	#gb_vehicles:GB147_FV4025_Contriver_long_special	</longDescriptionSpecial>
+    <price>	7400000	</price>
+    <tags>	heavyTank role_HT_universal HD siegeMode twinGun improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals	</tags>
+    <level>	11	</level>
+  </GB147_FV4025_Contriver>
+  <GB120_Concept_No_5_7x7>
+    <id>	94	</id>
+    <userString>	#gb_vehicles:GB120_Concept_No_5_7x7	</userString>
+    <shortUserString>	#gb_vehicles:GB120_Concept_No_5_7x7_short	</shortUserString>
+    <description>	#gb_vehicles:GB120_Concept_No_5_7x7_descr	</description>
+    <level>	10	</level>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	mediumTank role_MT_sniper HD wheeledVehicle improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals private secret cannot_be_sold comp7 special	</tags>
+  </GB120_Concept_No_5_7x7>
 </list.xml>

@@ -244,8 +244,8 @@ class ClientUnit(UnitBase):
         UnitBase._clearVehicle(self, accountDBID)
         self.onUnitVehicleChanged(accountDBID, 0, 0)
 
-    def _setProfileVehicle(self, accountDBID, vehCompDescr, vehOutfitCD, seasonType, marksOnGun, prestigeLevel):
-        UnitBase._setProfileVehicle(self, accountDBID, vehCompDescr, vehOutfitCD, seasonType, marksOnGun, prestigeLevel)
+    def _setProfileVehicle(self, accountDBID, vehCompDescr, vehOutfitCD, seasonType, marksOnGun, prestigeLevel, stFrags):
+        UnitBase._setProfileVehicle(self, accountDBID, vehCompDescr, vehOutfitCD, seasonType, marksOnGun, prestigeLevel, stFrags)
         self.onUnitPlayerProfileVehicleChanged(accountDBID)
 
     def _delProfileVehicle(self, accountDBID):

@@ -226,7 +226,7 @@ class LobbyContext(ILobbyContext):
     @adisp_async
     @adisp_process
     def isPlatoonCreationPossible(self, callback=None):
-        for confirmator in self.__platoonCreationConfirmators:
+        for confirmator in self.__platoonCreationConfirmators.copy():
             confirmed = yield confirmator()
             if not confirmed:
                 callback(False)

@@ -64,3 +64,4 @@ class BATTLE_NOTIFICATIONS_TIMER_TYPES(object):
     COMP7_POINT_RECON = 'pointRecon'
     WARNING_VIEW = 'warningView'
     CRITICAL_VIEW = 'criticalView'
+    TARGET_DESIGNATOR_SPOTTED_MARKER = 'targetDesignator'

@@ -1205,11 +1205,10 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	7000	</weight>
-      <maxLoad>	16800	</maxLoad>
-      <terrainResistance>	1.1 1.5 2.5	</terrainResistance>
+      <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
       <brakeForce>	33000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	40	</rotationSpeed>
+      <rotationSpeed>	50	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.28	</vehicleMovement>
         <vehicleRotation>	0.28	</vehicleRotation>
@@ -2071,11 +2070,10 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	7000	</weight>
-      <maxLoad>	19350	</maxLoad>
       <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
       <brakeForce>	33000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	44	</rotationSpeed>
+      <rotationSpeed>	55	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.26	</vehicleMovement>
         <vehicleRotation>	0.26	</vehicleRotation>
@@ -2955,7 +2953,7 @@
         <maxRegenHealth>	35	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	320	</circularVisionRadius>
+      <circularVisionRadius>	330	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	50	</maxHealth>
         <maxRegenHealth>	25	</maxRegenHealth>
@@ -2981,10 +2979,10 @@
             <gun>	10	</gun>
           </armor>
           <reloadTime>	2.7	</reloadTime>
-          <aimingTime>	2.4	</aimingTime>
+          <aimingTime>	2.2	</aimingTime>
           <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
-          <shotDispersionRadius>	0.45	</shotDispersionRadius>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <shotDispersionFactors>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
@@ -3059,10 +3057,10 @@
             <gun>	10	</gun>
           </armor>
           <reloadTime>	2.5	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.1	</aimingTime>
           <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
-          <shotDispersionRadius>	0.44	</shotDispersionRadius>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <shotDispersionFactors>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
@@ -3542,22 +3540,17 @@
     <Medium>	shared	</Medium>
   </fuelTanks>
   <radios>
-    <FuG5>	shared	  <unlocks>
-        <radio>	FuG7	  <cost>	1360	</cost>
-        </radio>
-      </unlocks>
-    </FuG5>
     <FuG7>	shared	</FuG7>
   </radios>
   <physics>
     <detailed>
       <engines>
         <Maybach_HL_120_TR_E>
-          <smplEnginePower>	400	</smplEnginePower>
+          <smplEnginePower>	450	</smplEnginePower>
           <smplFwMaxSpeed>	68	</smplFwMaxSpeed>
         </Maybach_HL_120_TR_E>
         <Maybach_HL_120_TRM_G>
-          <smplEnginePower>	465.2037	</smplEnginePower>
+          <smplEnginePower>	480	</smplEnginePower>
           <smplFwMaxSpeed>	68	</smplFwMaxSpeed>
         </Maybach_HL_120_TRM_G>
       </engines>
@@ -3565,10 +3558,10 @@
         <Chassis_G102_Pz_III>
           <grounds>
             <soft>
-              <rollingFriction>	0.20125	</rollingFriction>
+              <rollingFriction>	0.18515	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.12075	</rollingFriction>
+              <rollingFriction>	0.10465	</rollingFriction>
             </medium>
             <firm>
               <rollingFriction>	0.08855	</rollingFriction>

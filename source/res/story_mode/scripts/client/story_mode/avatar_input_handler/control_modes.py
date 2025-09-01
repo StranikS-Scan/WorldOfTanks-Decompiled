@@ -53,7 +53,21 @@ class StoryModeArcadeControlModeStartCamera(ArcadeControlMode):
         self._cam = StoryModeArcadeCamera(dataSection['camera'], defaultOffset=self._defaultOffset)
 
 
-class OnboardingArcadeControlMode(StoryModeArcadeControlModeStartCamera):
+class LockTargetDisabler(IControlMode):
+
+    def handleKeyEvent(self, isDown, key, mods, event=None):
+        cmdMap = CommandMapping.g_instance
+        if cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key) and self._isLockTargetDisabled():
+            if cmdMap.isFired(CommandMapping.CMD_CM_FREE_CAMERA, key):
+                self.setAimingMode(isDown, AIMING_MODE.USER_DISABLED)
+            return False
+        return super(LockTargetDisabler, self).handleKeyEvent(isDown, key, mods, event)
+
+    def _isLockTargetDisabled(self):
+        return True
+
+
+class OnboardingArcadeControlMode(LockTargetDisabler, StoryModeArcadeControlModeStartCamera):
     _storyModeCtrl = dependency.descriptor(IStoryModeController)
 
     @property
@@ -62,37 +76,34 @@ class OnboardingArcadeControlMode(StoryModeArcadeControlModeStartCamera):
         return battlePage is not None and battlePage.isWinMessageShown
 
     def handleKeyEvent(self, isDown, key, mods, event=None):
-        cmdMap = CommandMapping.g_instance
-        if cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key) and self._storyModeCtrl.isOnboarding:
-            isFiredFreeCamera = cmdMap.isFired(CommandMapping.CMD_CM_FREE_CAMERA, key)
-            if isFiredFreeCamera:
-                self.setAimingMode(isDown, AIMING_MODE.USER_DISABLED)
-            return False
-        return False if cmdMap.isFired(CommandMapping.CMD_CM_ALTERNATE_MODE, key) and self.isWinMessageShown else super(OnboardingArcadeControlMode, self).handleKeyEvent(isDown, key, mods, event)
+        return False if CommandMapping.g_instance.isFired(CommandMapping.CMD_CM_ALTERNATE_MODE, key) and self.isWinMessageShown else super(OnboardingArcadeControlMode, self).handleKeyEvent(isDown, key, mods, event)
 
     def onChangeControlModeByScroll(self):
         if self.isWinMessageShown:
             return
         super(OnboardingArcadeControlMode, self).onChangeControlModeByScroll()
 
+    def _isLockTargetDisabled(self):
+        return self._storyModeCtrl.isOnboarding
 
-class OnboardingSniperControlMode(SniperControlMode):
+
+class OnboardingSniperControlMode(LockTargetDisabler, SniperControlMode):
     _storyModeCtrl = dependency.descriptor(IStoryModeController)
 
-    def handleKeyEvent(self, isDown, key, mods, event=None):
-        return False if CommandMapping.g_instance.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key) and self._storyModeCtrl.isOnboarding else super(OnboardingSniperControlMode, self).handleKeyEvent(isDown, key, mods, event)
+    def _isLockTargetDisabled(self):
+        return self._storyModeCtrl.isOnboarding
 
 
-class StoryModeArcadeControlMode(StoryModeArcadeControlModeStartCamera):
+class StoryModeArcadeControlMode(LockTargetDisabler, StoryModeArcadeControlModeStartCamera):
 
-    def handleKeyEvent(self, isDown, key, mods, event=None):
-        return False if CommandMapping.g_instance.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key) and targetIsBunker() else super(StoryModeArcadeControlMode, self).handleKeyEvent(isDown, key, mods, event)
+    def _isLockTargetDisabled(self):
+        return targetIsBunker()
 
 
-class StoryModeSniperControlMode(SniperControlMode):
+class StoryModeSniperControlMode(LockTargetDisabler, SniperControlMode):
 
-    def handleKeyEvent(self, isDown, key, mods, event=None):
-        return False if CommandMapping.g_instance.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key) and targetIsBunker() else super(StoryModeSniperControlMode, self).handleKeyEvent(isDown, key, mods, event)
+    def _isLockTargetDisabled(self):
+        return targetIsBunker()
 
 
 class StoryModeArcadeMinefieldControlMode(AracdeMinefieldControleMode):

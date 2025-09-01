@@ -13,7 +13,7 @@ from gui.impl.gen.view_models.views.lobby.crew.common.tooltip_constants import T
 from gui.impl.gen.view_models.views.lobby.vehicle_compare.skill_select_item_model import SkillSelectItemModel, SkillState, SkillType
 from gui.impl.gen.view_models.views.lobby.vehicle_compare.skill_select_row_model import SkillSelectRowModel
 from gui.impl.gen.view_models.views.lobby.vehicle_compare.skill_select_view_model import SkillSelectViewModel
-from gui.impl.lobby.hangar.sub_views.vehicle_params_view import VehicleCompareParamsView
+from gui.impl.lobby.hangar.sub_views.vehicle_params_view import VehicleCompareParamsPresenter
 from gui.impl.lobby.vehicle_compare.crew_roles_tooltip_view import CrewRolesTooltipView
 from gui.impl.pub import ViewImpl
 from gui.impl.pub import WindowImpl
@@ -130,7 +130,7 @@ class SkillSelectView(ViewImpl):
         super(SkillSelectView, self)._onLoading(*args, **kwargs)
         initVehicle, _ = self.__cmpConf.getInitialVehicleData()
         changedVehicle = self.__skillsManager.getVehicle()
-        self.__paramsView = VehicleCompareParamsView(initVehicle, changedVehicle)
+        self.__paramsView = VehicleCompareParamsPresenter(initVehicle, changedVehicle)
         self.setChildView(R.views.lobby.hangar.subViews.VehicleParams(), self.__paramsView)
         self._fillModel()
 
@@ -224,7 +224,7 @@ class SkillSelectView(ViewImpl):
             elif skillState == SkillState.DEFAULT:
                 selectedSkills.append(skillName)
             self.__skillsManager.updateSkills(self.__selectedSkills)
-            self.__paramsView.update()
+            self.__paramsView.updateModel()
             _updateRow(rowVM, selectedSkills, skillType)
             self.__updateActionButtons(vm)
 

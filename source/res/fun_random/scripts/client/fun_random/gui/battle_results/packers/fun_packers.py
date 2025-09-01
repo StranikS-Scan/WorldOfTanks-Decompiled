@@ -14,7 +14,7 @@ from gui.battle_results.pbs_helpers.economics import getTotalCreditsToShow, getT
 from gui.battle_results.presenters.packers.battle_info import BattleInfo
 from gui.battle_results.presenters.packers.personal_efficiency import PersonalEfficiency
 from gui.battle_results.presenters.packers.personal_rewards import PersonalRewards
-from gui.battle_results.presenters.packers.premium_plus import PremiumPlus
+from gui.battle_results.presenters.packers.manageable_xp_multiplier import ManageableXpMultiplier
 from gui.battle_results.presenters.packers.team.team_stats_packer import TeamStats
 from gui.impl.gen.view_models.views.lobby.battle_results.efficiency_param_constants import EfficiencyParamConstants
 from gui.impl.gen.view_models.views.lobby.battle_results.team_stats_model import SortingOrder
@@ -83,7 +83,7 @@ class FunRandomPersonalRewards(PersonalRewards):
      FunRewardTypes.TANKMEN_XP: isTmenXpShown}
 
 
-class FunRandomPremiumPlus(PremiumPlus):
+class FunRandomPremiumPlus(ManageableXpMultiplier):
     __slots__ = ()
 
     @classmethod

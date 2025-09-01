@@ -44,7 +44,7 @@ def buildCustomizationItemDataVO(item, count=None, isApplied=False, isDarked=Fal
         count = None
     if item.itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL:
         formFactor = PROJECTION_DECAL_FORM_TO_UI_ID[item.formfactor]
-        formIconSource = PROJECTION_DECAL_IMAGE_FORM_TAG[item.formfactor]
+        formIconSource = backport.image(PROJECTION_DECAL_IMAGE_FORM_TAG[item.formfactor])
         scale = _PROJECTION_DECAL_FORM_TO_IMAGE_SCALE[item.formfactor]
     else:
         formFactor = -1

@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/commands/siege_mode_control.py
 import BigWorld
+from weakref import ref
 from constants import ARENA_PERIOD, VEHICLE_SIEGE_STATE, VEHICLE_SETTING
 import CommandMapping
 from AvatarInputHandler.commands.input_handler_command import InputHandlerCommand
-from AvatarInputHandler.siege_mode_player_notifications import playTriggerSound, playUnavailableSound
+from AvatarInputHandler.player_notifications.siege_mode.sound_notifications import playUnavailableSound, playTriggerSound
 from debug_utils import LOG_DEBUG
-from Event import Event
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 
@@ -15,12 +15,17 @@ class SiegeModeControl(InputHandlerCommand):
     __CANT_SWITCH_ERRORS = {'gun': 'cantSwitchGunDestroyed',
      'engine': 'cantSwitchEngineDestroyed'}
 
-    def __init__(self):
-        self.onSiegeStateChanged = Event()
+    def __init__(self, notifier):
         self.__currentState = VEHICLE_SIEGE_STATE.DISABLED
+        self.__notifier = ref(notifier)
+        notifier.onSiegeStateChanged += self.__onSiegeStateChanged
 
     def destroy(self):
-        self.onSiegeStateChanged.clear()
+        notifier = self.__notifier()
+        if notifier is not None:
+            notifier.onSiegeStateChanged -= self.__onSiegeStateChanged
+        self.__notifier = None
+        return
 
     def handleKeyEvent(self, isDown, key, mods, event=None):
         cmdMap = CommandMapping.g_instance
@@ -41,13 +46,15 @@ class SiegeModeControl(InputHandlerCommand):
                 self.__switchSiegeMode(vehicle)
             return True
 
-    def notifySiegeModeChanged(self, vehicle, newState, timeToNextMode):
+    def __onSiegeStateChanged(self, vehicleID, newState, timeToNextMode):
         avatar = BigWorld.player()
-        if not (vehicle.isPlayerVehicle or vehicle.id == avatar.observedVehicleID):
+        vehicle = BigWorld.entities.get(vehicleID)
+        if vehicle is None or not (vehicle.isPlayerVehicle or vehicleID == avatar.observedVehicleID):
             return
-        LOG_DEBUG('SiegeMode: new state received: {}'.format((newState, timeToNextMode)))
-        self.onSiegeStateChanged(vehicle.id, newState, timeToNextMode)
-        self.__currentState = newState
+        else:
+            LOG_DEBUG('SiegeMode: new state received: {}'.format((newState, timeToNextMode)))
+            self.__currentState = newState
+            return
 
     def __switchSiegeMode(self, vehicle):
         player = BigWorld.player()

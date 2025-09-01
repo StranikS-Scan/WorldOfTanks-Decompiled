@@ -108,7 +108,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	8000	</weight>
-      <maxLoad>	40000	</maxLoad>
       <terrainResistance>	0.5 0.7 1.4	</terrainResistance>
       <brakeForce>	35000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -1165,7 +1164,7 @@
   <postProgressionTree>	role_MT_sniper	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	50	</forward>
+    <forward>	55	</forward>
     <backward>	20	</backward>
   </speedLimits>
   <invisibility>
@@ -1207,8 +1206,8 @@
     <detailed>
       <engines>
         <MB-837-Ba-600>
-          <smplEnginePower>	634.3687	</smplEnginePower>
-          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
+          <smplEnginePower>	700	</smplEnginePower>
+          <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
         </MB-837-Ba-600>
       </engines>
       <chassis>

@@ -9,7 +9,7 @@
   <postProgressionTree>	role_MT_sniper	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	60	</forward>
+    <forward>	65	</forward>
     <backward>	30	</backward>
   </speedLimits>
   <invisibility>
@@ -44,7 +44,7 @@
   <hull>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	7740	</weight>
-    <maxHealth>	960	</maxHealth>
+    <maxHealth>	1160	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
@@ -758,8 +758,7 @@
         </chassis>
       </unlocks>
       <weight>	1000	</weight>
-      <maxLoad>	12000	</maxLoad>
-      <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
+      <terrainResistance>	1 1.1 1.9	</terrainResistance>
       <brakeForce>	7000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	28	</rotationSpeed>
@@ -1114,7 +1113,6 @@
       <level>	8	</level>
       <price>	33400	</price>
       <weight>	1000	</weight>
-      <maxLoad>	14000	</maxLoad>
       <terrainResistance>	1 1.1 1.9	</terrainResistance>
       <brakeForce>	9000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -1471,21 +1469,10 @@
       <tags></tags>
       <level>	7	</level>
       <price>	22000	</price>
-      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-      <weight>	1500	</weight>
-      <maxHealth>	190	</maxHealth>
-      <rotationSpeed>	50	</rotationSpeed>
-      <turretRotatorHealth>
-        <maxHealth>	140	</maxHealth>
-        <maxRegenHealth>	70	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
-      </turretRotatorHealth>
-      <circularVisionRadius>	370	</circularVisionRadius>
-      <surveyingDeviceHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	2.0	</repairCost>
-      </surveyingDeviceHealth>
+      <unlocks>
+        <turret>	Turret_2_GB125_Saladin	  <cost>	17400	</cost>
+        </turret>
+      </unlocks>
       <armor>
         <armor_1>	31.8	</armor_1>
         <armor_2>	31.8	</armor_2>
@@ -1503,12 +1490,23 @@
         <armor_15>	31.8	</armor_15>
         <armor_16>	12.7	</armor_16>
       </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	1500	</weight>
+      <maxHealth>	220	</maxHealth>
+      <rotationSpeed>	50	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	140	</maxHealth>
+        <maxRegenHealth>	70	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	370	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	2.0	</repairCost>
+      </surveyingDeviceHealth>
       <guns>
         <_76mm_L5A3>	shared	  <maxAmmo>	60	</maxAmmo>
-          <unlocks>
-            <gun>	_75mm_M6	  <cost>	17700	</cost>
-            </gun>
-          </unlocks>
           <armor>
             <armor_1>	31.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -1522,14 +1520,14 @@
             </armor_6>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.37	</shotDispersionRadius>
-          <reloadTime>	4.7	</reloadTime>
+          <shotDispersionRadius>	0.33	</shotDispersionRadius>
+          <reloadTime>	3.6	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <turretRotation>	0.06	</turretRotation>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.2	</aimingTime>
+          <aimingTime>	1.6	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -20  1 -20	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
@@ -1608,110 +1606,6 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_76mm_L5A3>
-        <_75mm_M6>	shared	  <maxAmmo>	60	</maxAmmo>
-          <unlocks>
-            <turret>	Turret_2_GB125_Saladin	  <cost>	17400	</cost>
-            </turret>
-          </unlocks>
-          <armor>
-            <armor_1>	31.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_3>	12.7	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	12.7	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	12.7	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <gun>	10	</gun>
-          </armor>
-          <shotDispersionRadius>	0.33	</shotDispersionRadius>
-          <reloadTime>	4.7	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.06	</turretRotation>
-            <afterShot>	3	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	1.8	</aimingTime>
-          <pitchLimits>
-            <minPitch>	0 -20  1 -20	</minPitch>
-            <maxPitch>	0 8 1 8	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
-          <shootImpulse>
-            <magnitude>	5	</magnitude>
-            <applicationPoint>	shootPoint	</applicationPoint>
-            <isStillSafe>	True	</isStillSafe>
-          </shootImpulse>
-          <shootImpulse>
-            <magnitude>	15	</magnitude>
-            <applicationPoint>	vehicleCOM	</applicationPoint>
-            <isStillSafe>	True	</isStillSafe>
-          </shootImpulse>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.00007 0.01164 1.712382	</anchorPosition>
-              <anchorDirection>	0 1 0	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.000005 0.175928 0.127528	</anchorPosition>
-              <anchorDirection>	0 1 0	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000005 0.175928 0.111491	</anchorPosition>
-              <anchorDirection>	0 1 0	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	attachment	</slotType>
-              <slotId>	48000	</slotId>
-              <position>	0 0.286452 0.373542	</position>
-              <rotation>	-0 0 0	</rotation>
-              <scale>	1 1 1	</scale>
-              <applyType>	gunMantlet	</applyType>
-              <size>	medium	</size>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0 0 2.01	</rayStart>
-              <rayEnd>	0 0 2.5	</rayEnd>
-              <rayUp>	0.09 0 0	</rayUp>
-              <applyToFabric>	false	</applyToFabric>
-              <size>	0.49	</size>
-              <isUVProportional>	false	</isUVProportional>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <models>
-            <undamaged>	vehicles/british/GB125_Saladin/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/british/GB125_Saladin/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/british/GB125_Saladin/crash/lod0/Gun_02.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/british/GB125_Saladin/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB125_Saladin/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <density>	129.331604 129.347137	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_75mm_M6>
       </guns>
       <models>
         <undamaged>	vehicles/british/GB125_Saladin/normal/lod0/Turret_01.model	</undamaged>
@@ -2197,24 +2091,9 @@
       <level>	8	</level>
       <price>	38500	</price>
       <unlocks>
-        <gun>	_90mm_Kenerga_Mk8	  <cost>	23900	</cost>
+        <gun>	_90mm_Kenerga_Mk_8_601	  <cost>	23900	</cost>
         </gun>
       </unlocks>
-      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-      <weight>	2000	</weight>
-      <maxHealth>	240	</maxHealth>
-      <rotationSpeed>	50	</rotationSpeed>
-      <turretRotatorHealth>
-        <maxHealth>	140	</maxHealth>
-        <maxRegenHealth>	70	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
-      </turretRotatorHealth>
-      <circularVisionRadius>	380	</circularVisionRadius>
-      <surveyingDeviceHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	2.0	</repairCost>
-      </surveyingDeviceHealth>
       <armor>
         <armor_1>	31.8	</armor_1>
         <armor_2>	31.8	</armor_2>
@@ -2230,6 +2109,21 @@
         <armor_15>	31.8	</armor_15>
         <armor_16>	12.7	</armor_16>
       </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	2000	</weight>
+      <maxHealth>	290	</maxHealth>
+      <rotationSpeed>	50	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	140	</maxHealth>
+        <maxRegenHealth>	70	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	380	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	2.0	</repairCost>
+      </surveyingDeviceHealth>
       <guns>
         <_76mm_L5A3>	shared	  <maxAmmo>	60	</maxAmmo>
           <armor>
@@ -2245,14 +2139,14 @@
             </armor_6>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	4.5	</reloadTime>
+          <shotDispersionRadius>	0.33	</shotDispersionRadius>
+          <reloadTime>	3.6	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <turretRotation>	0.06	</turretRotation>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2	</aimingTime>
+          <aimingTime>	1.5	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -20  1 -20	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
@@ -2331,107 +2225,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_76mm_L5A3>
-        <_75mm_M6>	shared	  <maxAmmo>	60	</maxAmmo>
-          <armor>
-            <armor_1>	31.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_3>	12.7	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	12.7	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	12.7	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <gun>	10	</gun>
-          </armor>
-          <shotDispersionRadius>	0.33	</shotDispersionRadius>
-          <reloadTime>	4.5	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.06	</turretRotation>
-            <afterShot>	3	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	1.8	</aimingTime>
-          <pitchLimits>
-            <minPitch>	0 -20  1 -20	</minPitch>
-            <maxPitch>	0 8 1 8	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
-          <shootImpulse>
-            <magnitude>	5	</magnitude>
-            <applicationPoint>	shootPoint	</applicationPoint>
-            <isStillSafe>	True	</isStillSafe>
-          </shootImpulse>
-          <shootImpulse>
-            <magnitude>	15	</magnitude>
-            <applicationPoint>	vehicleCOM	</applicationPoint>
-            <isStillSafe>	True	</isStillSafe>
-          </shootImpulse>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.00007 0.01164 1.71238	</anchorPosition>
-              <anchorDirection>	0 1 0	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.000005 0.175928 0.127528	</anchorPosition>
-              <anchorDirection>	0 1 0	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000005 0.175928 0.111491	</anchorPosition>
-              <anchorDirection>	0 1 0	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	attachment	</slotType>
-              <slotId>	48000	</slotId>
-              <position>	0 0.155 0.364	</position>
-              <rotation>	-0 0 0	</rotation>
-              <scale>	1 1 1	</scale>
-              <applyType>	gunMantlet	</applyType>
-              <size>	medium	</size>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0 0 2.01	</rayStart>
-              <rayEnd>	0 0 2.5	</rayEnd>
-              <rayUp>	0.09 0 0	</rayUp>
-              <applyToFabric>	false	</applyToFabric>
-              <size>	0.49	</size>
-              <isUVProportional>	false	</isUVProportional>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <models>
-            <undamaged>	vehicles/british/GB125_Saladin/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/british/GB125_Saladin/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/british/GB125_Saladin/crash/lod0/Gun_05.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/british/GB125_Saladin/collision/Gun_05.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB125_Saladin/collision_client/Gun_05.model	</collisionModelClient>
-          </hitTester>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <density>	129.321335 129.346786	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_75mm_M6>
-        <_90mm_Kenerga_Mk8>	shared	  <maxAmmo>	50	</maxAmmo>
+        <_90mm_Kenerga_Mk_8_601>	shared	  <maxAmmo>	50	</maxAmmo>
           <unlocks>
             <vehicle>	GB123_GSOR_1006_v7	  <cost>	149400	</cost>
             </vehicle>
@@ -2449,7 +2243,7 @@
             </armor_6>
             <gun>	15	</gun>
           </armor>
-          <reloadTime>	8	</reloadTime>
+          <reloadTime>	8.4	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.06	</turretRotation>
             <afterShot>	3	</afterShot>
@@ -2534,7 +2328,7 @@
             <density>	129.243546 129.242035	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_90mm_Kenerga_Mk8>
+        </_90mm_Kenerga_Mk_8_601>
       </guns>
       <models>
         <undamaged>	vehicles/british/GB125_Saladin/normal/lod0/Turret_02.model	</undamaged>
@@ -3061,16 +2855,6 @@
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <N19Mk1>	shared	  <unlocks>
-        <radio>	N19Mk2	  <cost>	3600	</cost>
-        </radio>
-      </unlocks>
-    </N19Mk1>
-    <N19Mk2>	shared	  <unlocks>
-        <radio>	N19Mk3	  <cost>	4000	</cost>
-        </radio>
-      </unlocks>
-    </N19Mk2>
     <N19Mk3>	shared	</N19Mk3>
   </radios>
   <physics>
@@ -3078,11 +2862,11 @@
       <engines>
         <Rolls_Royce_B80>
           <smplEnginePower>	290	</smplEnginePower>
-          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	65	</smplFwMaxSpeed>
         </Rolls_Royce_B80>
         <Rolls_Royce_B81>
           <smplEnginePower>	310	</smplEnginePower>
-          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	65	</smplFwMaxSpeed>
         </Rolls_Royce_B81>
       </engines>
       <chassis>
@@ -3092,13 +2876,13 @@
           <axleSteeringAngles>	0 0 4	</axleSteeringAngles>
           <grounds>
             <soft>
-              <rollingFriction>	0.16905	</rollingFriction>
+              <rollingFriction>	0.15295	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
+              <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_GB125_Saladin>

@@ -67,7 +67,7 @@ class ViewSettings(typing.Generic[TViewModel]):
 
 
 class View(PyObjectEntity, typing.Generic[TViewModel]):
-    __slots__ = ('__viewStatus', '__showingStatus', '__viewModel', '__args', '__kwargs', 'onStatusChanged', '__isReady', 'onShowingStatusChanged', 'onFocusChanged', '__soundExtension', '__isShown', '__isFocused', '__weakref__')
+    __slots__ = ('__viewStatus', '__showingStatus', '__viewModel', '__args', '__kwargs', 'onStatusChanged', 'onShowingStatusChanged', 'onFocusChanged', '__soundExtension', '__isShown', '__isFocused', '__weakref__')
     _COMMON_SOUND_SPACE = None
 
     def __init__(self, settings, wsFlags=ViewFlags.VIEW, viewModelClazz=ViewModel, *args, **kwargs):
@@ -87,7 +87,6 @@ class View(PyObjectEntity, typing.Generic[TViewModel]):
         self.__viewStatus = ViewStatus.UNDEFINED if self.proxy is None else self.proxy.viewStatus
         self.__showingStatus = ShowingStatus.HIDDEN
         self.__isShown = False
-        self.__isReady = False
         self.onShowingStatusChanged = Event.Event()
         self.__isFocused = False
         self.onFocusChanged = Event.Event()
@@ -268,7 +267,6 @@ class View(PyObjectEntity, typing.Generic[TViewModel]):
         self.onShowingStatusChanged(newStatus)
 
     def _cReady(self):
-        self.__isReady = True
         self._onReady()
 
     def _cFocusChanged(self, focused):

@@ -24,8 +24,6 @@ class VIEW_ALIAS(views.VIEW_ALIAS, ConstInjector):
     ONBOARDING_BATTLE_PAGE = 'OnboardingBattlePage'
     ONBOARDING_SETTINGS_WINDOW = 'onboardingSettingsWindow'
     STORY_MODE_INTRO_VIDEO_WINDOW = 'storyModeIntroVideoWindow'
-    STORY_MODE_EVENT_ENTRY_POINT = 'StoryModeEventEntryPoint'
-    STORY_MODE_NEWBIE_ENTRY_POINT = 'StoryModeNewbieEntryPoint'
     STORY_MODE_WEB_VIEW_TRANSPARENT = 'StoryModeWebViewTransparent'
     STORY_MODE_OUTRO_VIDEO_WINDOW = 'storyModeOutroVideoWindow'
 

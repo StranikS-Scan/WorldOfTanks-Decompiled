@@ -21,8 +21,8 @@ from shared_utils import findFirst, first
 from skeletons.gui.game_control import ILootBoxSystemController
 from skeletons.gui.shared import IItemsCache
 if TYPE_CHECKING:
-    from typing import Callable, List, Optional, Tuple
-    from gui.shared.gui_items.customization.c11n_items import Customization, Style
+    from typing import Callable, List, Tuple
+    from gui.shared.gui_items.customization.c11n_items import Style
     from gui.shared.gui_items.loot_box import LootBox
     from gui.server_events.bonuses import SimpleBonus
     from gui.shared.gui_items.Vehicle import Vehicle
@@ -114,21 +114,6 @@ def getIsAnimationActive(eventName, lootBoxes=None):
 @dependency.replace_none_kwargs(lootBoxes=ILootBoxSystemController)
 def setIsAnimationActive(eventName, value, lootBoxes=None):
     lootBoxes.setSetting(eventName, LOOT_BOXES_OPEN_ANIMATION_ENABLED, value)
-
-
-def getSingleVehicleCDForCustomization(customization):
-    itemFilter = customization.descriptor.filter
-    if itemFilter is not None and itemFilter.include:
-        vehicles = []
-        for node in itemFilter.include:
-            if node.nations or node.levels:
-                return
-            if node.vehicles:
-                vehicles.extend(node.vehicles)
-
-        if len(vehicles) == 1:
-            return vehicles[0]
-    return
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)

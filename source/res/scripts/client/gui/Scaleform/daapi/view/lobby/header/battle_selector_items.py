@@ -15,7 +15,6 @@ from adisp import adisp_process
 from constants import PREBATTLE_TYPE, QUEUE_TYPE, ACCOUNT_ATTR
 from gui import GUI_SETTINGS
 from gui.mapbox import mapbox_helpers
-from gui.Scaleform.locale.MENU import MENU
 from gui.clans.clan_helpers import isStrongholdsEnabled
 from gui.game_control.epic_meta_game_ctrl import EPIC_PERF_GROUP
 from gui.impl import backport
@@ -209,7 +208,6 @@ class _MapsTrainingItem(SelectorItem):
         if isSuccess:
             if self._isNew:
                 selectorUtils.setBattleTypeAsKnown(self._selectorType)
-            self.mapsTrainingController.showMapsTrainingPage()
 
 
 class _DisabledSelectorItem(SelectorItem):
@@ -370,6 +368,7 @@ class _EventBattlesItem(SelectorItem):
 
 class _BattleSelectorItems(object):
     _winbackController = dependency.descriptor(IWinbackController)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, items, extraItems=None):
         super(_BattleSelectorItems, self).__init__()
@@ -391,18 +390,28 @@ class _BattleSelectorItems(object):
     def allItems(self):
         return chain(viewvalues(self.__items), viewvalues(self.__extraItems))
 
-    def update(self, state):
+    def getSelected(self):
         selected = self.__items[self._getDefaultPAN()]
         for item in viewvalues(self.__items):
-            item.update(state)
             if item.isSelected():
                 selected = item
+                break
+
+        for item in viewvalues(self.__extraItems):
+            if item.isSelected():
+                selected = item
+                break
+
+        return selected
+
+    def update(self, state):
+        for item in viewvalues(self.__items):
+            item.update(state)
 
         for item in viewvalues(self.__extraItems):
             item.update(state)
-            if item.isSelected():
-                selected = item
 
+        selected = self.getSelected()
         if self.__isDemonstrator:
             if not g_currentVehicle.item:
                 self.__isDemoButtonEnabled = False
@@ -699,12 +708,9 @@ class _BattleRoyaleItem(SelectorItem):
             return
 
     def _update(self, state):
-        isNow = self.__battleRoyaleController.isInPrimeTime()
         isEnabled = self.__battleRoyaleController.isEnabled()
         self.__isFrozen = self.__battleRoyaleController.isFrozen() or not isEnabled
         self._isVisible = self.__getIsVisible()
-        if not isEnabled or not isNow:
-            self._isLocked = True
         self._isDisabled = state.hasLockedState or not isEnabled
         self._isSelected = state.isQueueSelected(QUEUE_TYPE.BATTLE_ROYALE)
 
@@ -777,12 +783,9 @@ class _MapboxItem(SelectorItem):
         return
 
     def _update(self, state):
-        isNow = self.__mapboxCtrl.isInPrimeTime()
         isEnabled = self.__mapboxCtrl.isEnabled()
         self.__isFrozen = self.__mapboxCtrl.isFrozen() or not isEnabled
         self._isVisible = self.__getIsVisible()
-        if not isEnabled or not isNow:
-            self._isLocked = True
         self._isDisabled = state.hasLockedState or not isEnabled or self.__mapboxCtrl.getCurrentCycleID() is None
         self._isSelected = state.isQueueSelected(QUEUE_TYPE.MAPBOX)
         return
@@ -832,7 +835,6 @@ class EpicBattleItem(SelectorItem):
         self.__epicController.storeCycle()
         if self._selectorType is not None:
             self._isNew = not selectorUtils.isKnownBattleType(self._selectorType)
-        self._isLocked = not self.__epicController.isEnabled()
         return
 
     def __getScheduleStr(self):
@@ -892,7 +894,7 @@ def _addRankedBattleType(items, lobbyContext=None):
 
 
 def _addRoyaleBattleType(items):
-    items.append(_BattleRoyaleItem(MENU.HEADERBUTTONS_BATTLE_TYPES_BATTLEROYALE, PREBATTLE_ACTION_NAME.BATTLE_ROYALE, 3, SELECTOR_BATTLE_TYPES.BATTLE_ROYALE))
+    items.append(_BattleRoyaleItem(backport.text(_R_BATTLE_TYPES.battleRoyale()), PREBATTLE_ACTION_NAME.BATTLE_ROYALE, 3, SELECTOR_BATTLE_TYPES.BATTLE_ROYALE))
 
 
 def _addMapboxBattleType(items):
@@ -916,7 +918,7 @@ def _addStrongholdsBattleType(items, lobbyContext=None):
 
 
 def _addEpicBattleType(items):
-    items.append(EpicBattleItem(MENU.HEADERBUTTONS_BATTLE_TYPES_EPIC, PREBATTLE_ACTION_NAME.EPIC, 6, SELECTOR_BATTLE_TYPES.EPIC))
+    items.append(EpicBattleItem(backport.text(_R_BATTLE_TYPES.epic()), PREBATTLE_ACTION_NAME.EPIC, 6, SELECTOR_BATTLE_TYPES.EPIC))
 
 
 def _addSpecialBattleType(items):
@@ -948,7 +950,7 @@ def _addWinbackBattleType(items):
 
 
 def _addEventBattlesType(items):
-    items.append(_EventBattlesItem('Event Battle', PREBATTLE_ACTION_NAME.EVENT_BATTLE, 2, SELECTOR_BATTLE_TYPES.EVENT))
+    items.append(_EventBattlesItem(backport.text(_R_BATTLE_TYPES.event()), PREBATTLE_ACTION_NAME.EVENT_BATTLE, 2, SELECTOR_BATTLE_TYPES.EVENT))
 
 
 BATTLES_SELECTOR_ITEMS = {PREBATTLE_ACTION_NAME.RANDOM: _addRandomBattleType,
@@ -975,20 +977,19 @@ def _createItems():
 
 
 def _addSimpleSquadType(items):
-    items.append(_SimpleSquadItem(text_styles.middleTitle(backport.text(_R_BATTLE_TYPES.simpleSquad())), PREBATTLE_ACTION_NAME.SQUAD, 0))
+    items.append(_SimpleSquadItem(backport.text(_R_BATTLE_TYPES.simpleSquad()), PREBATTLE_ACTION_NAME.SQUAD, 0))
 
 
 def _addBattleRoyaleSquadType(items):
-    label = text_styles.middleTitle(backport.text(R.strings.menu.headerButtons.battle.types.battleRoyaleSquad()))
-    items.append(_BattleRoyaleSquadItem(label, PREBATTLE_ACTION_NAME.BATTLE_ROYALE_SQUAD, 2))
+    items.append(_BattleRoyaleSquadItem(backport.text(_R_BATTLE_TYPES.battleRoyaleSquad()), PREBATTLE_ACTION_NAME.BATTLE_ROYALE_SQUAD, 2))
 
 
 def _addEventSquadType(items):
-    items.append(_EventSquadItem(text_styles.middleTitle(backport.text(_R_BATTLE_TYPES.eventSquad())), PREBATTLE_ACTION_NAME.EVENT_SQUAD, 2))
+    items.append(_EventSquadItem(backport.text(_R_BATTLE_TYPES.eventSquad()), PREBATTLE_ACTION_NAME.EVENT_SQUAD, 2))
 
 
 def _addMapboxSquadType(items):
-    items.append(_MapboxSquadItem(text_styles.middleTitle(backport.text(_R_BATTLE_TYPES.mapboxSquad())), PREBATTLE_ACTION_NAME.MAPBOX_SQUAD, 2))
+    items.append(_MapboxSquadItem(backport.text(_R_BATTLE_TYPES.mapboxSquad()), PREBATTLE_ACTION_NAME.MAPBOX_SQUAD, 2))
 
 
 BATTLES_SELECTOR_SQUAD_ITEMS = {PREBATTLE_ACTION_NAME.SQUAD: _addSimpleSquadType,

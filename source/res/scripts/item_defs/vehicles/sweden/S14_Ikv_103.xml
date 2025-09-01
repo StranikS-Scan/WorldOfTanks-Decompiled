@@ -60,7 +60,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	4792	</weight>
-    <maxHealth>	368	</maxHealth>
+    <maxHealth>	400	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	170	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -1094,8 +1094,7 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	2500	</weight>
-      <maxLoad>	9000	</maxLoad>
-      <terrainResistance>	1.1 1.4 2.3	</terrainResistance>
+      <terrainResistance>	1 1.1 2.1	</terrainResistance>
       <brakeForce>	9000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	30	</rotationSpeed>
@@ -1996,7 +1995,6 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	2500	</weight>
-      <maxLoad>	10000	</maxLoad>
       <terrainResistance>	1 1.1 2.1	</terrainResistance>
       <brakeForce>	9000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2901,7 +2899,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
       <weight>	100	</weight>
-      <maxHealth>	92	</maxHealth>
+      <maxHealth>	100	</maxHealth>
       <rotationSpeed>	18	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -2930,11 +2928,11 @@
             <maxPitch>	0 12 1 12	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.54	</shotDispersionRadius>
+          <shotDispersionRadius>	0.45	</shotDispersionRadius>
           <reloadTime>	12	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.18	</turretRotation>
+            <turretRotation>	0.14	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -3010,6 +3008,11 @@
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <reloadTime>	11.1	</reloadTime>
           <aimingTime>	2.1	</aimingTime>
+          <shotDispersionFactors>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/sweden/S14_Ikv_103/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/sweden/S14_Ikv_103/crash/lod0/Gun_02.model	</destroyed>
@@ -3097,11 +3100,6 @@
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <Ra_100>	shared	  <unlocks>
-        <radio>	Ra_105	  <cost>	4100	</cost>
-        </radio>
-      </unlocks>
-    </Ra_100>
     <Ra_105>	shared	</Ra_105>
   </radios>
   <clientAdjustmentFactors>
@@ -3126,11 +3124,11 @@
     <detailed>
       <engines>
         <SFA_B42>
-          <smplEnginePower>	110	</smplEnginePower>
+          <smplEnginePower>	160	</smplEnginePower>
           <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
         </SFA_B42>
         <Ford_391>
-          <smplEnginePower>	140	</smplEnginePower>
+          <smplEnginePower>	180	</smplEnginePower>
           <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
         </Ford_391>
       </engines>
@@ -3138,13 +3136,13 @@
         <Chassis_S14_Ikv_103>
           <grounds>
             <soft>
-              <rollingFriction>	0.231438	</rollingFriction>
+              <rollingFriction>	0.211313	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.140875	</rollingFriction>
+              <rollingFriction>	0.110688	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.110688	</rollingFriction>
+              <rollingFriction>	0.100625	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_S14_Ikv_103>

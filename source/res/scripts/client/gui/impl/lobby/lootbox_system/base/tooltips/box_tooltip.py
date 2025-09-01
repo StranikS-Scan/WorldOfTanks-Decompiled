@@ -34,10 +34,10 @@ class BoxTooltipBase(ViewImpl):
 class BoxTooltip(BoxTooltipBase):
 
     def __init__(self, boxCategory, eventName):
-        super(BoxTooltip, self).__init__(boxCategory, eventName, R.views.lobby.lootbox_system.tooltips.BoxTooltip(), BoxTooltipModel())
+        super(BoxTooltip, self).__init__(boxCategory, eventName, R.views.mono.lootbox.tooltips.box_tooltip(), BoxTooltipModel())
 
 
 class BoxCompensationTooltip(BoxTooltipBase):
 
     def __init__(self, boxCategory, eventName):
-        super(BoxCompensationTooltip, self).__init__(boxCategory, eventName, R.views.lobby.lootbox_system.tooltips.BoxCompensationTooltip(), BoxCompensationTooltipModel())
+        super(BoxCompensationTooltip, self).__init__(boxCategory, eventName, R.views.mono.lootbox.tooltips.box_compensation(), BoxCompensationTooltipModel())

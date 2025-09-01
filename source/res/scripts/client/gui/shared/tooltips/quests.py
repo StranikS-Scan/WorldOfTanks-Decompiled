@@ -73,7 +73,7 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
         items = super(QuestsPreviewTooltipData, self)._packBlocks()
         vehicle = g_currentVehicle.item
         quests = self._getQuests(vehicle)
-        if self.__comp7Controller.isComp7PrbActive():
+        if self.__comp7Controller.isModePrbActive():
             quests = [ quest for quest in quests if quest.hasBonusType(constants.ARENA_BONUS_TYPE.COMP7) ]
         if quests:
             items.append(self._getHeader(len(quests), vehicle.shortUserName, R.strings.tooltips.hangar.header.quests.description.vehicle()))

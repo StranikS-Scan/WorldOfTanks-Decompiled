@@ -2,8 +2,9 @@
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/lobby/mode_selector/items/comp7_mode_selector_item.py
 import typing
 from comp7.gui.impl.lobby.comp7_helpers import comp7_model_helpers, comp7_shared, comp7_qualification_helpers
-from comp7.gui.impl.lobby.comp7_helpers.comp7_model_helpers import getSeasonNameEnum
-from comp7.gui.impl.lobby.tooltips.main_widget_tooltip import MainWidgetTooltip
+from comp7_core.gui.impl.lobby.comp7_core_helpers.comp7_core_model_helpers import getSeasonNameEnum
+from comp7.gui.impl.gen.view_models.views.lobby.enums import SeasonName
+from comp7.gui.impl.lobby.tooltips.progression_tooltip import ProgressionTooltip
 from comp7.gui.impl.lobby.tooltips.rank_inactivity_tooltip import RankInactivityTooltip
 from gui.impl import backport
 from gui.impl.gen import R
@@ -32,22 +33,36 @@ class Comp7ModeSelectorItem(ModeSelectorLegacyItem):
     def viewModel(self):
         return super(Comp7ModeSelectorItem, self).viewModel
 
-    def createToolTipContent(self, contentID):
-        return RankInactivityTooltip() if contentID == R.views.comp7.lobby.tooltips.RankInactivityTooltip() else MainWidgetTooltip()
+    def createToolTipContent(self, event, contentID):
+        if contentID == R.views.comp7.mono.lobby.tooltips.rank_inactivity_tooltip():
+            return RankInactivityTooltip()
+        return ProgressionTooltip() if contentID == R.views.comp7.mono.lobby.tooltips.progression_tooltip() else super(Comp7ModeSelectorItem, self).createToolTipContent(event, contentID)
 
     def _onInitializing(self):
         super(Comp7ModeSelectorItem, self)._onInitializing()
         self.__updateComp7Data()
         setBattlePassState(self.viewModel)
         self.__comp7Controller.onStatusTick += self.__onDataChange
-        self.__comp7Controller.onComp7ConfigChanged += self.__onDataChange
+        self.__comp7Controller.onRankUpdated += self.__onDataChange
+        self.__comp7Controller.onComp7RanksConfigChanged += self.__onDataChange
+        self.__comp7Controller.onOfflineStatusUpdated += self.__onDataChange
+        self.__comp7Controller.onQualificationBattlesUpdated += self.__onDataChange
+        self.__comp7Controller.onQualificationStateUpdated += self.__onDataChange
+        self.__comp7Controller.onEntitlementsUpdated += self.__onDataChange
+        self.__comp7Controller.onModeConfigChanged += self.__onDataChange
 
     def _onDisposing(self):
         self.__comp7Controller.onStatusTick -= self.__onDataChange
-        self.__comp7Controller.onComp7ConfigChanged -= self.__onDataChange
+        self.__comp7Controller.onRankUpdated -= self.__onDataChange
+        self.__comp7Controller.onComp7RanksConfigChanged -= self.__onDataChange
+        self.__comp7Controller.onOfflineStatusUpdated -= self.__onDataChange
+        self.__comp7Controller.onQualificationBattlesUpdated -= self.__onDataChange
+        self.__comp7Controller.onQualificationStateUpdated -= self.__onDataChange
+        self.__comp7Controller.onEntitlementsUpdated -= self.__onDataChange
+        self.__comp7Controller.onModeConfigChanged -= self.__onDataChange
         super(Comp7ModeSelectorItem, self)._onDisposing()
 
-    def __onDataChange(self):
+    def __onDataChange(self, *_, **__):
         self.__updateComp7Data()
         self.onCardChange()
 
@@ -70,13 +85,15 @@ class Comp7ModeSelectorItem(ModeSelectorLegacyItem):
                 self._addReward(ModeSelectorRewardID.BONES)
             elif isInPreannounce:
                 preannouncedSeason = self.__comp7Controller.getPreannouncedSeason()
-                vm.setStatusNotActive(backport.text(R.strings.mode_selector.mode.comp7.seasonStart.dyn(getSeasonNameEnum().value)(), date=backport.getShortDateFormat(preannouncedSeason.getStartDate())))
+                season = getSeasonNameEnum(self.__comp7Controller, SeasonName)
+                vm.setStatusNotActive(backport.text(R.strings.mode_selector.mode.comp7.seasonStart.dyn(season.value)(), date=backport.getShortDateFormat(preannouncedSeason.getStartDate())))
             elif isBeforeSeasons:
                 vm.setStatusNotActive(backport.text(R.strings.mode_selector.mode.comp7.seasonStart(), date=backport.getShortDateFormat(nextSeason.getStartDate())))
             elif isAfterLastSeason:
                 vm.setStatusNotActive(backport.text(R.strings.mode_selector.mode.comp7.yearEnd()))
             else:
-                vm.setStatusNotActive(backport.text(R.strings.mode_selector.mode.comp7.seasonEnd.dyn(getSeasonNameEnum().value)()))
+                season = getSeasonNameEnum(self.__comp7Controller, SeasonName)
+                vm.setStatusNotActive(backport.text(R.strings.mode_selector.mode.comp7.seasonEnd.dyn(season.value)()))
             vm.setExternalPath(R.views.comp7.lobby.Comp7BattleCard())
 
     def __getSeasonTimeLeft(self):
@@ -84,12 +101,14 @@ class Comp7ModeSelectorItem(ModeSelectorLegacyItem):
 
     def __fillWidgetData(self):
         division = comp7_shared.getPlayerDivision()
+        rank = comp7_shared.getRankEnumValue(division)
         with self.viewModel.widget.transaction() as vm:
-            vm.setSeasonName(getSeasonNameEnum())
-            vm.setRank(comp7_shared.getRankEnumValue(division))
+            vm.setSeasonName(getSeasonNameEnum(self.__comp7Controller, SeasonName))
+            vm.setRank(rank)
             vm.setCurrentScore(self.__comp7Controller.rating)
             vm.setIsEnabled(self.__comp7Controller.isAvailable() and not self.__comp7Controller.isOffline)
             comp7_model_helpers.setDivisionInfo(model=vm.divisionInfo, division=division)
-            comp7_model_helpers.setRanksInactivityInfo(vm)
+            vm.setHasRankInactivity(comp7_shared.hasRankInactivity(rank))
+            vm.setRankInactivityCount(self.__comp7Controller.activityPoints)
             comp7_model_helpers.setElitePercentage(vm)
             comp7_qualification_helpers.setQualificationInfo(vm.qualificationModel)

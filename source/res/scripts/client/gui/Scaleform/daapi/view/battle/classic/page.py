@@ -10,6 +10,8 @@ from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.battle_constants import TabsAliases
 from shared_utils import CONST_CONTAINER
+from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from vehicles.mechanics.mechanic_info import hasVehicleMechanic
 
 class DynamicAliases(CONST_CONTAINER):
     PREBATTLE_TIMER_SOUND_PLAYER = 'prebattleTimerSoundPlayer'
@@ -47,7 +49,7 @@ EXTENDED_CLASSIC_CONFIG = COMMON_CLASSIC_CONFIG + ComponentsConfig(config=((BATT
 
 class ClassicPage(SharedPage):
 
-    def __init__(self, components=None, external=None, fullStatsAlias=BATTLE_VIEW_ALIASES.FULL_STATS):
+    def __init__(self, components=None, external=None, fullStatsAlias=BATTLE_VIEW_ALIASES.FULL_STATS, **kwargs):
         self._fullStatsAlias = fullStatsAlias
         if components is None:
             components = COMMON_CLASSIC_CONFIG if self.sessionProvider.isReplayPlaying else EXTENDED_CLASSIC_CONFIG
@@ -240,7 +242,7 @@ class ClassicPage(SharedPage):
 
         def invalidateSiegeVehicle(vehicleDescriptor):
             vehicleType = vehicleDescriptor.type
-            return (vehicleType.hasSiegeMode or vehicleDescriptor.isTrackWithinTrack) and not vehicleType.isWheeledVehicle and not vehicleDescriptor.isDualgunVehicle
+            return (vehicleType.hasSiegeMode or vehicleDescriptor.isTrackWithinTrack) and not vehicleType.isWheeledVehicle and not vehicleDescriptor.isDualgunVehicle and not hasVehicleMechanic(vehicleDescriptor, VehicleMechanic.PILLBOX_SIEGE_MODE)
 
         if ctrlMode == CTRL_MODE_NAME.DEATH_FREE_CAM:
             components = {BATTLE_VIEW_ALIASES.SPECTATOR_VIEW}
@@ -251,12 +253,12 @@ class ClassicPage(SharedPage):
         if ctrlMode not in CTRL_MODE_NAME.POSTMORTEM_CONTROL_MODES:
             ctrl = self.sessionProvider.shared.vehicleState
             vehicle = ctrl.getControllingVehicle()
-            if vehicle is None:
+            if vehicle is not None:
+                components |= {p for p in BATTLE_VIEW_ALIASES.VEHICLE_MECHANICS_PANELS if p in self.components}
+                if invalidateSiegeVehicle(vehicle.typeDescriptor):
+                    components.add(BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR)
+            else:
                 LOG_ERROR('classic/page.py _changeCtrlMode vehicle is None in replay!')
-            if vehicle is not None and invalidateSiegeVehicle(vehicle.typeDescriptor):
-                components.add(BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR)
-            if vehicle and vehicle.typeDescriptor.hasRocketAcceleration:
-                components.add(BATTLE_VIEW_ALIASES.ROCKET_ACCELERATOR_INDICATOR)
         battleCtx = self.sessionProvider.getCtx()
         if battleCtx.isPlayerObserver():
             components.discard(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL)

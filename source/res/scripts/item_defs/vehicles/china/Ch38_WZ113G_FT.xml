@@ -1091,7 +1091,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	10000	</weight>
-      <maxLoad>	60000	</maxLoad>
       <terrainResistance>	1.1 1.3 2	</terrainResistance>
       <brakeForce>	55000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2044,9 +2043,9 @@
       <maxHealth>	420	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	185	</maxHealth>
+        <maxRegenHealth>	93	</maxRegenHealth>
+        <repairCost>	10	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>

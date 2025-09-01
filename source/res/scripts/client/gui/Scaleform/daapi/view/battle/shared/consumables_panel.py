@@ -42,8 +42,6 @@ ASTERISK = '*'
 R_AMMO_ICON = R.images.gui.maps.icons.ammopanel.battle_ammo
 NO_AMMO_ICON = 'NO_{}'
 COMMAND_AMMO_CHOICE_MASK = 'CMD_AMMO_CHOICE_{0:d}'
-PERMANENT_GLOW_TAG = 'permanentGlow'
-HAS_NO_BACK_TAG = 'hasNoBack'
 TOOLTIP_FORMAT = '{{HEADER}}{0:>s}{{/HEADER}}\n/{{BODY}}{1:>s}{{/BODY}}'
 TOOLTIP_NO_BODY_FORMAT = '{{HEADER}}{0:>s}{{/HEADER}}'
 EMPTY_EQUIPMENT_TOOLTIP = backport.text(R.strings.ingame_gui.consumables_panel.equipment.tooltip.empty())
@@ -296,47 +294,23 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
         self._updateEquipmentSlotTooltipText(idx, item)
 
     def _updateEquipmentGlow(self, idx, item):
-        if item.isReusable or item.isAvatar():
-            isPermanentGlow = PERMANENT_GLOW_TAG in item.getTags()
-            if item.getStage() != EQUIPMENT_STAGES.PREPARING:
-                if self._canApplyingGlowEquipment(item):
-                    self._showEquipmentGlow(idx)
-                elif item.wasPreparationCanceled and isPermanentGlow:
-                    glowType = CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN_ESPECIAL_NO_ANIM
-                    self._showEquipmentGlow(idx, glowType, isPermanentGlow)
-                elif item.becomeReady or isPermanentGlow and item.alreadyReady:
-                    glowType = self._getActiveItemGlowType(item)
-                    self._showEquipmentGlow(idx, glowType, isPermanentGlow)
-                elif isPermanentGlow and item.getStage() == EQUIPMENT_STAGES.ACTIVE:
-                    self._showEquipmentGlow(idx, CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN_USAGE, isPermanentGlow)
-                elif isPermanentGlow and item.isInCooldown():
-                    self.as_hideGlowS(idx)
-                elif idx in self._equipmentsGlowCallbacks:
-                    self.__clearEquipmentGlow(idx)
-            elif isPermanentGlow:
-                self.as_hideGlowS(idx)
-
-    @staticmethod
-    def _getActiveItemGlowType(item):
-        isPermanentGlow = PERMANENT_GLOW_TAG in item.getTags()
-        if item.isAvatar():
-            if isPermanentGlow:
-                glowType = CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN_ESPECIAL
-            else:
-                glowType = CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN_SPECIAL
-        else:
-            glowType = CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN
-        return glowType
+        if item.isReusable or self._isAvatarEquipment(item) and item.getStage() != EQUIPMENT_STAGES.PREPARING:
+            if self._canApplyingGlowEquipment(item):
+                self._showEquipmentGlow(idx)
+            elif item.becomeReady:
+                glowType = CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN_SPECIAL if self._isAvatarEquipment(item) else CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN
+                self._showEquipmentGlow(idx, glowType)
+            elif idx in self._equipmentsGlowCallbacks:
+                self.__clearEquipmentGlow(idx)
 
     def _updateActivatedSlot(self, idx, item):
-        hasNoBack = HAS_NO_BACK_TAG in item.getTags()
         if item.getStage() == EQUIPMENT_STAGES.PREPARING:
             self.__currentActivatedSlotIdx = idx
-            self.as_setEquipmentActivatedS(idx, True, isNoBack=hasNoBack)
+            self.as_setEquipmentActivatedS(idx, True)
         elif item.getStage() != EQUIPMENT_STAGES.PREPARING and self.__currentActivatedSlotIdx == idx:
             self.__currentActivatedSlotIdx = -1
         elif item.getStage() != EQUIPMENT_STAGES.PREPARING:
-            self.as_setEquipmentActivatedS(idx, False, isNoBack=hasNoBack)
+            self.as_setEquipmentActivatedS(idx, False)
 
     def _setEquipmentKeyHandler(self, item, bwKey, idx):
         if item.getQuantity() > 0 and bwKey not in self._keys:
@@ -359,16 +333,15 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
             self._keys.pop(bwKey)
         self._updateEquipmentSlot(idx, item)
 
-    def _showEquipmentGlow(self, equipmentIndex, glowType=CONSUMABLES_PANEL_SETTINGS.GLOW_ID_ORANGE, isPermanentGlow=False):
+    def _showEquipmentGlow(self, idx, glowType=CONSUMABLES_PANEL_SETTINGS.GLOW_ID_ORANGE):
         if BigWorld.player().isObserver():
             return
-        if equipmentIndex in self._equipmentsGlowCallbacks:
-            BigWorld.cancelCallback(self._equipmentsGlowCallbacks[equipmentIndex])
-            del self._equipmentsGlowCallbacks[equipmentIndex]
+        if idx in self._equipmentsGlowCallbacks:
+            BigWorld.cancelCallback(self._equipmentsGlowCallbacks[idx])
+            del self._equipmentsGlowCallbacks[idx]
         else:
-            self.as_setGlowS(equipmentIndex, glowID=glowType)
-        if not isPermanentGlow:
-            self._equipmentsGlowCallbacks[equipmentIndex] = BigWorld.callback(self._EQUIPMENT_GLOW_TIME, partial(self._hideEquipmentGlowCallback, equipmentIndex))
+            self.as_setGlowS(idx, glowID=glowType)
+        self._equipmentsGlowCallbacks[idx] = BigWorld.callback(self._EQUIPMENT_GLOW_TIME, partial(self._hideEquipmentGlowCallback, idx))
 
     def _onShellsAdded(self, intCD, descriptor, quantity, _, gunSettings, isInfinite):
         idx = self.__genNextIdx(self.__ammoFullMask, self._AMMO_START_IDX)
@@ -738,7 +711,9 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
         else:
             actualValue = state.getActualValue()
             reloadingFinished = state.isReloadingFinished()
-            if actualValue > 0 or reloadingFinished and not self.ammoReloadingStatus.get(shellIndex):
+            if actualValue > 0 and not state.isReloading():
+                self.as_setCoolDownPosAsPercentS(shellIndex, (1 - float(actualValue) / state.getBaseValue()) * 100)
+            elif actualValue > 0 or reloadingFinished and not self.ammoReloadingStatus.get(shellIndex):
                 self.ammoReloadingStatus[shellIndex] = reloadingFinished
                 self.as_setCoolDownTimeS(shellIndex, actualValue, state.getBaseValue(), state.getTimePassed())
 
@@ -823,7 +798,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
         if 'extinguisher' in equipmentTags or 'regenerationKit' in equipmentTags:
             correction = True
             entityName = None
-        elif equipment.isAvatar():
+        elif self._isAvatarEquipment(equipment):
             correction = False
             entityName = None
         else:

@@ -21,10 +21,13 @@ class VehicleModel(ViewModel):
     SPG = 'SPG'
     AT_SPG = 'AT-SPG'
     PREMIUM_TAG = 'premium'
+    SPECIAL = 'special'
+    EARN_CRYSTALS = 'earn_crystals'
     PREMIUM_IGR_TAG = 'premiumIGR'
     WOT_PLUS_TAG = 'wotPlus'
+    COLLECTOR_VEHICLES_TAG = 'collectorVehicle'
 
-    def __init__(self, properties=9, commands=0):
+    def __init__(self, properties=10, commands=0):
         super(VehicleModel, self).__init__(properties=properties, commands=commands)
 
     def getName(self):
@@ -33,57 +36,64 @@ class VehicleModel(ViewModel):
     def setName(self, value):
         self._setString(0, value)
 
-    def getTechName(self):
+    def getLongName(self):
         return self._getString(1)
 
-    def setTechName(self, value):
+    def setLongName(self, value):
         self._setString(1, value)
 
+    def getTechName(self):
+        return self._getString(2)
+
+    def setTechName(self, value):
+        self._setString(2, value)
+
     def getTier(self):
-        return self._getNumber(2)
+        return self._getNumber(3)
 
     def setTier(self, value):
-        self._setNumber(2, value)
+        self._setNumber(3, value)
 
     def getType(self):
-        return self._getString(3)
+        return self._getString(4)
 
     def setType(self, value):
-        self._setString(3, value)
+        self._setString(4, value)
 
     def getIsPremium(self):
-        return self._getBool(4)
+        return self._getBool(5)
 
     def setIsPremium(self, value):
-        self._setBool(4, value)
+        self._setBool(5, value)
 
     def getTags(self):
-        return self._getString(5)
-
-    def setTags(self, value):
-        self._setString(5, value)
-
-    def getNation(self):
         return self._getString(6)
 
-    def setNation(self, value):
+    def setTags(self, value):
         self._setString(6, value)
 
-    def getRoleKey(self):
+    def getNation(self):
         return self._getString(7)
 
-    def setRoleKey(self, value):
+    def setNation(self, value):
         self._setString(7, value)
 
+    def getRoleKey(self):
+        return self._getString(8)
+
+    def setRoleKey(self, value):
+        self._setString(8, value)
+
     def getVehicleCD(self):
-        return self._getNumber(8)
+        return self._getNumber(9)
 
     def setVehicleCD(self, value):
-        self._setNumber(8, value)
+        self._setNumber(9, value)
 
     def _initialize(self):
         super(VehicleModel, self)._initialize()
         self._addStringProperty('name', '')
+        self._addStringProperty('longName', '')
         self._addStringProperty('techName', '')
         self._addNumberProperty('tier', 0)
         self._addStringProperty('type', '')

@@ -15,6 +15,3 @@ class Comp7TankCarousel(BattlePassTankCarousel):
         filtersVO = super(Comp7TankCarousel, self)._getInitialFilterVO(contexts)
         filtersVO['isComp7'] = True
         return filtersVO
-
-    def _getFilters(self):
-        return super(Comp7TankCarousel, self)._getFilters() + ('comp7',)

@@ -3,9 +3,13 @@
 import typing
 import SoundGroups
 from comp7.gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS as COMP7_TOOLTIPS
+from comp7.gui.impl.gen.view_models.views.lobby.enums import SeasonName
+from comp7.gui.impl.gen.view_models.views.lobby.season_model import SeasonState
 from comp7.gui.impl.gen.view_models.views.lobby.whats_new_view_model import WhatsNewViewModel
+from comp7.gui.impl.gen.view_models.views.lobby.year_model import YearState
 from comp7.gui.impl.lobby.comp7_helpers import comp7_model_helpers
 from comp7.gui.impl.lobby.comp7_helpers.comp7_gui_helpers import updateComp7LastSeason
+from comp7_core.gui.impl.lobby.comp7_core_helpers import comp7_core_model_helpers
 from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -28,7 +32,8 @@ from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
 SOUND_NAME = 'comp_7_whatsnew_appear'
-RENT_VEHICLES_CDS = [55649, 67393, 67329]
+RENT_VEHICLES_CDS = [67841, 38161, 24145]
+NEW_VEHICLES_CDS = [65569, 9297]
 
 class WhatsNewView(ViewImpl, IGlobalListener):
     __slots__ = ()
@@ -46,10 +51,14 @@ class WhatsNewView(ViewImpl, IGlobalListener):
     def viewModel(self):
         return super(WhatsNewView, self).getViewModel()
 
+    @property
+    def _calendarDayTooltipID(self):
+        return COMP7_TOOLTIPS.COMP7_CALENDAR_DAY_INFO
+
     def createToolTip(self, event):
         if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
             tooltipId = event.getArgument('tooltipId')
-            if tooltipId == COMP7_TOOLTIPS.COMP7_CALENDAR_DAY_INFO:
+            if tooltipId == self._calendarDayTooltipID:
                 tooltipData = createTooltipData(isSpecial=True, specialAlias=tooltipId, specialArgs=(None,))
             elif tooltipId == TOOLTIPS_CONSTANTS.SHOP_VEHICLE:
                 vehicleCD = int(event.getArgument('vehicleCD'))
@@ -58,8 +67,6 @@ class WhatsNewView(ViewImpl, IGlobalListener):
                 tooltipData = None
             if tooltipData:
                 window = BackportTooltipWindow(tooltipData, self.getParentWindow())
-                if window is None:
-                    return
                 window.load()
                 return window
         return super(WhatsNewView, self).createToolTip(event)
@@ -72,7 +79,7 @@ class WhatsNewView(ViewImpl, IGlobalListener):
             return None
 
     def onPrbEntitySwitched(self):
-        if not self.__comp7Controller.isComp7PrbActive():
+        if not self.__comp7Controller.isModePrbActive():
             self.destroyWindow()
 
     def _finalize(self):
@@ -91,7 +98,7 @@ class WhatsNewView(ViewImpl, IGlobalListener):
         self.viewModel.onVideoOpen += self.__onVideoOpen
         self.viewModel.scheduleInfo.season.pollServerTime += self.__onPollServerTime
         self.__comp7Controller.onStatusUpdated += self.__onStatusUpdated
-        self.__comp7Controller.onComp7ConfigChanged += self.__onConfigChanged
+        self.__comp7Controller.onModeConfigChanged += self.__onConfigChanged
         self.__eventsCache.onSyncCompleted += self.__onEventsSyncCompleted
         self.startGlobalListening()
 
@@ -100,12 +107,12 @@ class WhatsNewView(ViewImpl, IGlobalListener):
         self.viewModel.onVideoOpen -= self.__onVideoOpen
         self.viewModel.scheduleInfo.season.pollServerTime -= self.__onPollServerTime
         self.__comp7Controller.onStatusUpdated -= self.__onStatusUpdated
-        self.__comp7Controller.onComp7ConfigChanged -= self.__onConfigChanged
+        self.__comp7Controller.onModeConfigChanged -= self.__onConfigChanged
         self.__eventsCache.onSyncCompleted -= self.__onEventsSyncCompleted
         self.stopGlobalListening()
 
     def __onStatusUpdated(self, status):
-        if comp7_model_helpers.isModeForcedDisabled(status):
+        if comp7_core_model_helpers.isModeForcedDisabled(status, self.__comp7Controller):
             self.destroyWindow()
         else:
             self.__updateData()
@@ -118,6 +125,7 @@ class WhatsNewView(ViewImpl, IGlobalListener):
     def __onEventsSyncCompleted(self):
         with self.viewModel.transaction() as vm:
             self.__setVehicles(vm)
+            self.__setNewAvailableVehicles(vm)
 
     def __onPollServerTime(self):
         self.__updateData()
@@ -125,8 +133,9 @@ class WhatsNewView(ViewImpl, IGlobalListener):
     def __updateData(self):
         with self.viewModel.transaction() as vm:
             comp7_model_helpers.setElitePercentage(vm)
-            comp7_model_helpers.setScheduleInfo(vm.scheduleInfo)
+            comp7_core_model_helpers.setScheduleInfo(vm.scheduleInfo, self.__comp7Controller, self._calendarDayTooltipID, SeasonState, YearState, SeasonName)
             self.__setVehicles(vm)
+            self.__setNewAvailableVehicles(vm)
 
     def __setVehicles(self, viewModel):
         vehiclesList = viewModel.getVehicles()
@@ -138,6 +147,17 @@ class WhatsNewView(ViewImpl, IGlobalListener):
             vehiclesList.addViewModel(vehicleModel)
 
         vehiclesList.invalidate()
+
+    def __setNewAvailableVehicles(self, viewModel):
+        newVehiclesList = viewModel.getNewAvailableVehicles()
+        newVehiclesList.clear()
+        for vehicleCD in NEW_VEHICLES_CDS:
+            vehicleItem = self.__itemsCache.items.getItemByCD(vehicleCD)
+            vehicleModel = VehicleModel()
+            fillVehicleModel(vehicleModel, vehicleItem)
+            newVehiclesList.addViewModel(vehicleModel)
+
+        newVehiclesList.invalidate()
 
     def __onClose(self):
         self.destroyWindow()
@@ -159,4 +179,4 @@ class WhatsNewViewWindow(LobbyNotificationWindow):
     __slots__ = ()
 
     def __init__(self, parent=None):
-        super(WhatsNewViewWindow, self).__init__(wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=WhatsNewView(R.views.comp7.lobby.WhatsNewView()), parent=parent)
+        super(WhatsNewViewWindow, self).__init__(wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=WhatsNewView(R.views.comp7.mono.lobby.whats_new_view()), parent=parent)

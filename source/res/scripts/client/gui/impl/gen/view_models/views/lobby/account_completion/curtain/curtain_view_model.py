@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/account_completion/curtain/curtain_view_model.py
 from enum import IntEnum
-from gui.impl.gen import R
 from frameworks.wulf import ViewModel
+from gui.impl.gen import R
 
 class CurtainStateEnum(IntEnum):
     CLOSED = 0

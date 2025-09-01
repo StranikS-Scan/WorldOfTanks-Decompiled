@@ -5,7 +5,7 @@ import CGF
 from constants import IS_CLIENT
 from cgf_script.managers_registrator import autoregister, onAddedQuery, onRemovedQuery
 from Vehicular import GunEffectsController
-from vehicle_systems.cgf_helpers import getVehicleEntityComponentByGameObject
+from cgf_common.cgf_helpers import getParentComponentByGameObject
 if IS_CLIENT:
     from TwinGunController import TwinGunController
 else:
@@ -15,15 +15,15 @@ else:
 
 
 if typing.TYPE_CHECKING:
-    from vehicle_systems.twin_guns.system_interfaces import ITwinGunShootingEvents
+    from vehicles.mechanics.twin_guns.mechanic_interfaces import ITwinGunShootingEvents
 
 @autoregister(presentInAllWorlds=True)
 class TwinGunManager(CGF.ComponentManager):
 
     @onAddedQuery(CGF.GameObject, GunEffectsController, tickGroup='PreSimulation')
     def onGunEffectsControllerAdded(self, gameObject, gunEffectsController):
-        ctrl = getVehicleEntityComponentByGameObject(gameObject, TwinGunController)
-        if ctrl is not None and ctrl.shootingEvents is not None:
+        ctrl = getParentComponentByGameObject(gameObject, TwinGunController)
+        if ctrl is not None and ctrl.shootingEvents is not None and ctrl.isPrefabRoot(gameObject):
             events = ctrl.shootingEvents
             events.onDiscreteShot += gunEffectsController.singleShot
             events.onDoubleShot += gunEffectsController.multiShot
@@ -31,7 +31,7 @@ class TwinGunManager(CGF.ComponentManager):
 
     @onRemovedQuery(CGF.GameObject, GunEffectsController)
     def onGunEffectsControllerRemoved(self, gameObject, gunEffectsController):
-        ctrl = getVehicleEntityComponentByGameObject(gameObject, TwinGunController)
+        ctrl = getParentComponentByGameObject(gameObject, TwinGunController)
         if ctrl is not None and ctrl.shootingEvents is not None:
             events = ctrl.shootingEvents
             events.onDoubleShot -= gunEffectsController.multiShot

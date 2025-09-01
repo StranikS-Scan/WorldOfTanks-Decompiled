@@ -25,6 +25,6 @@ def showComp7LeaverAliveWindow():
     builder.setConfirmButtonLabel(R.strings.dialogs.comp7.deserter.submit())
     builder.setFocusedButtonID(DialogButtons.CANCEL)
     builder.setDescriptionMsg(R.strings.dialogs.comp7.deserter.message())
-    builder.setIcon(R.images.comp7.gui.maps.icons.battle.comp7DeserterLeaveBattle())
+    builder.setIcon(R.images.comp7_core.gui.maps.icons.battle.comp7DeserterLeaveBattle())
     result = yield wg_await(dialogs.show(builder.build()))
     raise AsyncReturn(result.result == DialogButtons.SUBMIT)

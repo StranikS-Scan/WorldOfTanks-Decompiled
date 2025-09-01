@@ -8,10 +8,10 @@ class VehicleParamViewModel(VehicleParamBaseViewModel):
     def __init__(self, properties=7, commands=0):
         super(VehicleParamViewModel, self).__init__(properties=properties, commands=commands)
 
-    def getLocalizedName(self):
+    def getName(self):
         return self._getString(5)
 
-    def setLocalizedName(self, value):
+    def setName(self, value):
         self._setString(5, value)
 
     def getParentID(self):
@@ -22,5 +22,5 @@ class VehicleParamViewModel(VehicleParamBaseViewModel):
 
     def _initialize(self):
         super(VehicleParamViewModel, self)._initialize()
-        self._addStringProperty('localizedName', '')
+        self._addStringProperty('name', '')
         self._addStringProperty('parentID', '')

@@ -178,7 +178,7 @@ class DevAutoShootController(AutoShootController):
         if ctrl is None:
             return
         else:
-            currentRate = int(round(ctrl.getDefaultShotRatePerSecond() * 60.0))
+            currentRate = int(round(ctrl.getShotRatePerSecond() * 60.0))
             if isAlmostEqual(currentRate, self.__desiredRate, epsilon=0.5):
                 self.__desiredRateInited = True
                 return

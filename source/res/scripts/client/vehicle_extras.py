@@ -19,8 +19,8 @@ from helpers import i18n
 from helpers.EffectsList import EffectsListPlayer
 from helpers.EntityExtra import EntityExtra
 from helpers.laser_sight_matrix_provider import LaserSightMatrixProvider
-from vehicle_systems.instant_status_helpers import invokeShotsDoneStatus
-from constants import IS_EDITOR, CollisionFlags
+from vehicle_systems.shooting_helpers import processVehicleDiscreteShots
+from constants import IS_EDITOR, CollisionFlags, DEFAULT_GUN_INSTALLATION_INDEX, IS_UE_EDITOR
 from vehicle_systems.vehicle_composition import VehicleSlots
 _logger = logging.getLogger(__name__)
 
@@ -48,8 +48,10 @@ class ShowShooting(EntityExtra):
     def _start(self, data, args):
         burstCount, _, shellType = args
         vehicle = data['entity']
-        gunDescr = vehicle.typeDescriptor.gun
+        gunInstallationSlot = vehicle.typeDescriptor.gunInstallations[DEFAULT_GUN_INSTALLATION_INDEX]
+        data['_gunInstallationSlot'] = gunInstallationSlot
         data['_effectsListPlayer'] = None
+        gunDescr = gunInstallationSlot.gun
         if gunDescr.effects is not None:
             stages, effects, _ = gunDescr.effects
             data['_effectsListPlayer'] = EffectsListPlayer(effects, stages, **data)
@@ -76,7 +78,7 @@ class ShowShooting(EntityExtra):
             if not vehicle.isAlive():
                 self.stop(data)
                 return
-            invokeShotsDoneStatus(vehicle)
+            processVehicleDiscreteShots(vehicle, data['_gunInstallationSlot'])
             self.__postVehicleShotEvent(vehicle, data['_shellType'])
             burstCount, burstInterval = data['_burst']
             gunModel = data['_gunModel']
@@ -116,6 +118,8 @@ class ShowShooting(EntityExtra):
 
     def __postVehicleShotEvent(self, vehicle, shellType):
         gunGo = findSlot(vehicle.entityGameObject, VehicleSlots.GUN.value)
+        if IS_UE_EDITOR and not gunGo.isValid():
+            gunGo = findSlot(vehicle.appearance.gameObject, VehicleSlots.GUN.value)
         if gunGo.isValid():
             shot_event.postVehicleShotEvent(vehicle.entityGameObject, gunGo, vehicle.typeDescriptor.gun, 0, shellType)
         else:
@@ -157,21 +161,19 @@ class ShowShootingMultiGun(ShowShooting):
     def _start(self, data, args):
         burstCount, currentGuns, _ = args
         vehicle = data['entity']
+        gunInstallationSlot = vehicle.typeDescriptor.gunInstallations[DEFAULT_GUN_INSTALLATION_INDEX]
+        data['_gunInstallationSlot'] = gunInstallationSlot
         gunDescr = vehicle.typeDescriptor.gun
-        turretDescr = vehicle.typeDescriptor.turret
         if currentGuns == self._SHOT_ALL_GUNS:
             data['_gunIndex'] = range(0, len(gunDescr.effects))
             data['_gunSequence'] = [data['_gunIndex']] * burstCount
-        elif currentGuns < 0:
-            data['_gunIndex'] = turretDescr.multiGunState.patterns[currentGuns].gunIndexes
-            data['_gunSequence'] = turretDescr.multiGunState.patterns[currentGuns].sequence
         else:
             data['_gunIndex'] = [currentGuns]
             data['_gunSequence'] = [data['_gunIndex']] * burstCount
         if vehicle.typeDescriptor.isDualgunVehicle:
-            positions = [None] * len(turretDescr.multiGun)
+            positions = [None] * len(gunDescr.multiGun)
         else:
-            positions = [ (multiGunInstance.gunFire,) for multiGunInstance in turretDescr.multiGun ]
+            positions = [ (multiGunInstance.gunFire,) for multiGunInstance in gunDescr.multiGun ]
         data['entity_id'] = vehicle.id
         effectPlayers = {}
         for gunIndex in data['_gunIndex']:
@@ -206,7 +208,7 @@ class ShowShootingMultiGun(ShowShooting):
             if not vehicle.isAlive():
                 self.stop(data)
                 return
-            invokeShotsDoneStatus(vehicle)
+            processVehicleDiscreteShots(vehicle, data['_gunInstallationSlot'])
             burstSize, burstCount, burstInterval = data['_burst']
             burstNumber = burstSize - burstCount
             if burstCount == 1:
@@ -229,12 +231,10 @@ class ShowShootingMultiGun(ShowShooting):
         return
 
     def __doGunEffect(self, data, burstNumber, isLastEffect):
-        gunModel = data['_gunModel']
-        vehicle = data['entity']
-        multiGun = vehicle.typeDescriptor.turret.multiGun
         for gunIndex, effPlayer in data['_effectsListPlayers'].items():
             effPlayer.stop()
 
+        gunModel = data['_gunModel']
         for gunIndex in data['_gunSequence'][burstNumber]:
             effPlayer = data['_effectsListPlayers'][gunIndex]
             if isLastEffect:
@@ -244,6 +244,7 @@ class ShowShootingMultiGun(ShowShooting):
             if not IS_EDITOR:
                 groundWaveEff = effPlayer.effectsList.relatedEffects.get('groundWave')
                 if groundWaveEff is not None:
+                    vehicle, multiGun = data['entity'], data['_gunInstallationSlot'].gun.multiGun
                     self._doGroundWaveEffect(vehicle, groundWaveEff, gunModel, gunNode=multiGun[gunIndex].gunFire)
 
         return
@@ -262,17 +263,23 @@ class DamageMarker(EntityExtra):
         self.deviceUserString = dataSection.readString('deviceUserString')
         if not self.deviceUserString:
             self._raiseWrongConfig('deviceUserString', containerName)
-        deviceUserString = self._getDeviceUserString(dataSection, containerName)
-        self.deviceUserString = deviceUserString
-        soundSection = dataSection['sounds']
-        self.sounds = {}
-        for state in ('critical', 'destroyed', 'functional', 'fixed'):
-            sound = soundSection.readString(state)
-            if sound:
-                self.sounds[state] = sound
+        self.deviceUserString = self._getDeviceUserString(dataSection, containerName)
+        self.sounds = self._getSounds(dataSection['sounds'])
 
     def _getDeviceUserString(self, dataSection, containerName):
         return i18n.makeString(dataSection.readString('deviceUserString'))
+
+    def _getSounds(self, soundSection):
+        sounds = {}
+        if soundSection is None:
+            return sounds
+        else:
+            for state in ('critical', 'destroyed', 'functional', 'fixed'):
+                sound = soundSection.readString(state)
+                if sound:
+                    sounds[state] = sound
+
+            return sounds
 
     @property
     def isTankman(self):

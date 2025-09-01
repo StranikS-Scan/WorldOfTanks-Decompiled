@@ -50,6 +50,7 @@ class ResearchItemContextMenuHandler(AbstractContextMenuHandler, EventSystemEnti
     def _initFlashValues(self, ctx):
         self._nodeCD = int(ctx.nodeCD)
         self._rootCD = int(ctx.rootCD)
+        self._hasUrgent = bool(ctx.hasUrgent)
         self._nodeState = int(ctx.nodeState)
 
     def _clearFlashValues(self):
@@ -70,7 +71,7 @@ class ResearchItemContextMenuHandler(AbstractContextMenuHandler, EventSystemEnti
         return options
 
     def _isAvailable2Install(self):
-        return not NODE_STATE.isInstalled(self._nodeState) and NODE_STATE.inInventory(self._nodeState) and self._canInstallItems()
+        return not NODE_STATE.isInstalled(self._nodeState) and NODE_STATE.inInventory(self._nodeState) and self._canInstallItems() and not self._hasUrgent
 
     def _isAvailable2Buy(self):
         return not NODE_STATE.isInstalled(self._nodeState) and NODE_STATE.isAvailable2Buy(self._nodeState) and self._canInstallItems()
@@ -86,7 +87,6 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
 
     def __init__(self, cmProxy, ctx=None):
         super(ResearchVehicleContextMenuHandler, self).__init__(cmProxy, ctx, {VEHICLE.INFO: 'showVehicleInfo',
-         VEHICLE.PREVIEW: 'showVehiclePreview',
          VEHICLE.UNLOCK: 'unlockVehicle',
          VEHICLE.BUY: 'buyVehicle',
          VEHICLE.SELL: 'sellVehicle',
@@ -106,9 +106,6 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
         level = self.itemsCache.items.getItemByCD(vehicleCD).level
         unlockProps = g_techTreeDP.getUnlockProps(vehicleCD, level)
         ItemsActionsFactory.doAction(ItemsActionsFactory.UNLOCK_ITEM, vehicleCD, unlockProps)
-
-    def showVehiclePreview(self):
-        shared_events.showVehiclePreview(self._nodeCD, self._previewAlias)
 
     def selectVehicle(self):
         shared_events.selectVehicleInHangar(self._nodeCD)
@@ -130,21 +127,34 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
         self._nodeCD = int(ctx.vehCD)
         self._nodeState = int(ctx.nodeState)
         vehicle = self.itemsCache.items.getItemByCD(self._nodeCD)
-        self._previewAlias = getattr(ctx, 'previewAlias', VIEW_ALIAS.LOBBY_TECHTREE)
         self._nodeInvID = vehicle.invID if vehicle is not None else None
+        self._previewAlias = getattr(ctx, 'previewAlias', VIEW_ALIAS.LOBBY_TECHTREE)
+        self._newCM = getattr(ctx, 'newCM', False)
         return
 
     def _clearFlashValues(self):
         self._nodeCD = None
         self._nodeState = None
         self._nodeInvID = None
+        self._previewAlias = None
+        self._newCM = None
         return
 
     def _generateOptions(self, ctx=None):
+        return self.__generateOptionsForNewCM(ctx) if self._newCM else self.__generateOptionsOldCM(ctx)
+
+    def __generateOptionsForNewCM(self, ctx=None):
         vehicle = self.itemsCache.items.getItemByCD(self._nodeCD)
         options = [self._makeItem(VEHICLE.INFO, MENU.CONTEXTMENU_VEHICLEINFOEX)]
-        if vehicle.isPreviewAllowed():
-            options.append(self._makeItem(VEHICLE.PREVIEW, MENU.CONTEXTMENU_SHOWVEHICLEPREVIEW, {'enabled': self._hangarSpace.spaceInited}))
+        if NODE_STATE.isWasInBattle(self._nodeState):
+            options.append(self._makeItem(VEHICLE.STATS, MENU.CONTEXTMENU_SHOWVEHICLESTATISTICS))
+        self._manageVehCompareItem(options, vehicle)
+        options.append(self._makeItem(VEHICLE.SELECT, MENU.CONTEXTMENU_SELECTVEHICLEINHANGAR, {'enabled': NODE_STATE.inInventory(self._nodeState) or NODE_STATE.isRentalOver(self._nodeState)}))
+        return options
+
+    def __generateOptionsOldCM(self, ctx=None):
+        vehicle = self.itemsCache.items.getItemByCD(self._nodeCD)
+        options = [self._makeItem(VEHICLE.INFO, MENU.CONTEXTMENU_VEHICLEINFOEX)]
         if NODE_STATE.isWasInBattle(self._nodeState):
             options.append(self._makeItem(VEHICLE.STATS, MENU.CONTEXTMENU_SHOWVEHICLESTATISTICS))
         self._manageVehCompareItem(options, vehicle)

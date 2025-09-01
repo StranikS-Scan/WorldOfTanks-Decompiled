@@ -270,7 +270,7 @@ class CommonTankAppearance(ScriptGameObject):
     def construct(self, isPlayer, resourceRefs):
         self.__isObserver = 'observer' in self.typeDescriptor.type.tags
         self._compoundModel = resourceRefs[self.typeDescriptor.name]
-        self.removeComponentByType(GenericComponents.DynamicModelComponent)
+        self.removeComponent(GenericComponents.DynamicModelComponent)
         self.createComponent(GenericComponents.DynamicModelComponent, self._compoundModel)
         if not self._compoundModel.isValid():
             _logger.error('compoundModel is not valid')
@@ -485,8 +485,8 @@ class CommonTankAppearance(ScriptGameObject):
             return
         for index in indexes:
             typeDescr = self.typeDescriptor
-            gunNodeName = typeDescr.turret.multiGun[index].node
-            gunFireNodeName = typeDescr.turret.multiGun[index].gunFire
+            gunNodeName = typeDescr.gun.multiGun[index].node
+            gunFireNodeName = typeDescr.gun.multiGun[index].gunFire
             self._initiateRecoil(gunNodeName, gunFireNodeName, self.gunAnimators.get(index))
 
     def computeFullVehicleLength(self):
@@ -695,8 +695,8 @@ class CommonTankAppearance(ScriptGameObject):
             return
 
     def __assembleNonDamagedOnly(self, resourceRefs, isPlayer, lodLink, lodStateLink):
-        multiGun = self.typeDescriptor.turret.multiGun
-        self._gunAnimators.setup(len(multiGun) if multiGun is not None else 0)
+        multiGun = self.typeDescriptor.gun.multiGun
+        self._gunAnimators.setup(len(multiGun) if multiGun else 0)
         model_assembler.assembleTerrainMatKindSensor(self, lodStateLink, self.spaceID)
         model_assembler.assembleGunLinkedNodesAnimator(self)
         model_assembler.assembleCollisionObstaclesCollector(self, lodStateLink, self.typeDescriptor)
@@ -847,7 +847,7 @@ class CommonTankAppearance(ScriptGameObject):
             self.suspensionSound.vehicleState = newState
         if self.siegeEffects is not None:
             self.siegeEffects.onSiegeStateChanged(newState, timeToNextMode)
-        enabled = newState == VEHICLE_SIEGE_STATE.ENABLED or newState == VEHICLE_SIEGE_STATE.SWITCHING_ON
+        enabled = newState in VEHICLE_SIEGE_STATE.SIEGE_MODE
         if self.suspension is not None:
             self.suspension.setLiftMode(enabled)
         if self.leveredSuspension is not None:

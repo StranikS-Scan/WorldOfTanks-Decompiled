@@ -5,8 +5,6 @@ from constants import PlayerSatisfactionRating as RatingEnum
 from gui.Scaleform.daapi.view.meta.PlayerSatisfactionWidgetMeta import PlayerSatisfactionWidgetMeta
 from gui.Scaleform.genConsts.PLAYER_SATISFACTION_RATING import PLAYER_SATISFACTION_RATING
 from gui.Scaleform.daapi.view.battle_results_window import IBattleResultsComponent
-from gui.impl.common.player_satisfaction_rating.player_satisfaction_sound import playSoundForRating
-from gui.impl.common.player_satisfaction_rating.randomize_feedback import SELECTION_ORDER, getFeedbackMsgID
 from helpers import dependency
 from skeletons.gui.battle_results import IBattleResultsService
 _logger = logging.getLogger(__name__)
@@ -26,29 +24,6 @@ class PlayerSatisfactionWidget(PlayerSatisfactionWidgetMeta, IBattleResultsCompo
 
     def setArenaUniqueID(self, arenaUniqueID):
         self._arenaUniqueID = arenaUniqueID
-        self.updateChoiceState()
-
-    def updateChoiceState(self):
-        ratingFromBattle = self.__battleResults.getPlayerSatisfactionRating(self._arenaUniqueID)
-        choices, feedback = buildChoiceAndFeedbackData(SELECTION_ORDER, self._arenaUniqueID)
-        self.as_setInitDataS(choices, feedback, _RATING_TO_CHOICE_MAP[ratingFromBattle])
 
     def selectedChoice(self, choice):
-        if self._arenaUniqueID is None:
-            _logger.error('arenaUniqueID was not received when component was registered.')
-            return
-        else:
-            rating = _CHOICE_TO_RATING_MAP[choice]
-            self.__battleResults.submitPlayerSatisfactionRating(self._arenaUniqueID, rating)
-            playSoundForRating(rating)
-            return
-
-
-def buildChoiceAndFeedbackData(ratingOrder, arenaUniqueID):
-    choices = []
-    feedback = []
-    for ratingVariant in ratingOrder:
-        choices.append(_RATING_TO_CHOICE_MAP[ratingVariant])
-        feedback.append(getFeedbackMsgID(ratingVariant, arenaUniqueID))
-
-    return (choices, feedback)
+        pass

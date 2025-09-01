@@ -4,7 +4,7 @@ from gui.Scaleform.daapi.view.meta.SystemMessageDialogMeta import SystemMessageD
 
 class SystemMessageDialog(SystemMessageDialogMeta):
 
-    def __init__(self, meta, handler):
+    def __init__(self, meta, handler, **kwargs):
         super(SystemMessageDialog, self).__init__()
         self.__meta = meta
         self.__handler = handler

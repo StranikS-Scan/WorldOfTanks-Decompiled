@@ -945,7 +945,6 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	7000	</weight>
-      <maxLoad>	33700	</maxLoad>
       <terrainResistance>	1 1.1 1.9	</terrainResistance>
       <brakeForce>	50000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -1793,7 +1792,7 @@
   <turrets0>
     <Turret_1_GB106_Cobra>
       <userString>	#gb_vehicles:Turret_1_GB106_Cobra	</userString>
-      <tags></tags>
+      <tags>	oscillating	</tags>
       <level>	9	</level>
       <price>	61000	</price>
       <notInShop>	true	</notInShop>
@@ -1848,6 +1847,7 @@
             <armor_14>	35	</armor_14>
             <armor_15>	30	</armor_15>
             <armor_16>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_16>
             <gun>	45	</gun>
           </armor>

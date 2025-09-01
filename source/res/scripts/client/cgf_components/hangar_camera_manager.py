@@ -11,6 +11,7 @@ import CGF
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui.shared import g_eventBus
 from helpers import dependency
+from math_common import isAlmostEqual
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared.utils import IHangarSpace
 from GenericComponents import TransformComponent
@@ -136,10 +137,12 @@ class HangarCameraManager(CGF.ComponentManager):
             self.__cameraFlyby = HangarCameraFlyby(self.__cam)
             self.__customizationHelper = BigWorld.PyCustomizationHelper(None, 0, False, None)
             g_eventBus.addListener(CameraRelatedEvents.LOBBY_VIEW_MOUSE_MOVE, self.__handleLobbyViewMouseEvent)
-            FovExtended.instance().onSetFovSettingEvent += self.__onSetFovSetting
+            fovInstance = FovExtended.instance()
+            fovInstance.onSetFovSettingEvent += self.__onSetFovSetting
+            fovInstance.refreshFov()
             self.__prevDOFParams = _DOFParams()
             self.__currentDOFParams = _DOFParams()
-            self.__currentHorizontalFov = FovExtended.instance().horizontalFov
+            self.__currentHorizontalFov = fovInstance.horizontalFov
             self.__isActive = True
             _logger.info('HangarCameraManager::activate')
             return
@@ -194,7 +197,30 @@ class HangarCameraManager(CGF.ComponentManager):
     def switchToTank(self, instantly=True, resetTransform=True):
         self.switchByCameraName(self.__cameraMode, instantly, resetTransform)
 
-    def switchByCameraName(self, name, instantly=True, resetTransform=True):
+    def clearCurrentCameraComponents(self):
+        cameraQuery = CGF.Query(self._hangarSpace.spaceID, (CGF.GameObject, CurrentCameraObject))
+        for go, _ in cameraQuery:
+            go.removeComponentByType(CurrentCameraObject)
+
+    def cameraExists(self, cameraName):
+        cameraQuery = CGF.Query(self._hangarSpace.spaceID, (CGF.GameObject, CameraComponent))
+        for _, cameraComponent in cameraQuery:
+            if cameraComponent.name == cameraName:
+                return True
+
+        return False
+
+    def findCameraGameObjectByName(self, name):
+        cameraQuery = CGF.Query(self._hangarSpace.spaceID, (CGF.GameObject, CameraComponent))
+        gameObject = None
+        for go, cameraComponent in cameraQuery:
+            if cameraComponent.name == name:
+                gameObject = go
+                break
+
+        return gameObject
+
+    def switchByCameraName(self, name, instantly=True, resetTransform=True, forceUpdate=True):
         cameraQuery = CGF.Query(self._hangarSpace.spaceID, (CGF.GameObject, CameraComponent))
         gameObject = None
         prevCameraName = None
@@ -222,7 +248,7 @@ class HangarCameraManager(CGF.ComponentManager):
             self.__cameraName = name
             self.__cam.stop()
             if instantly:
-                self.__setupCamera(gameObject, resetTransform)
+                self.__setupCamera(gameObject, resetTransform, forceUpdate)
                 BigWorld.camera(self.__cam)
                 self.__onCameraSwitched()
             else:
@@ -230,7 +256,7 @@ class HangarCameraManager(CGF.ComponentManager):
                 tempCam = BigWorld.FreeCamera()
                 tempCam.set(matrix)
                 BigWorld.camera(tempCam)
-                self.__setupCamera(gameObject, resetTransform)
+                self.__setupCamera(gameObject, resetTransform, forceUpdate)
                 self.__setupFlightParams(gameObject, prevCameraName)
                 self.__customizationHelper.setMotionBlurAmount(self.__flightParams.motionBlur)
                 self.__startFlight(matrix, Math.Matrix(self.__cam.matrix))
@@ -407,7 +433,7 @@ class HangarCameraManager(CGF.ComponentManager):
             return angle - 2 * math.pi
         return angle + 2 * math.pi if angle < -math.pi - eps else angle
 
-    def __setupCamera(self, gameObject, resetTransform=True):
+    def __setupCamera(self, gameObject, resetTransform=True, forceUpdate=True):
         hierarchy = CGF.HierarchyManager(self._hangarSpace.spaceID)
         cameraComponent = gameObject.findComponentByType(CameraComponent)
         parent = hierarchy.getParent(gameObject)
@@ -443,11 +469,12 @@ class HangarCameraManager(CGF.ComponentManager):
             sourceMatrix = Math.Matrix()
             sourceMatrix.setRotateYPR(Math.Vector3(yaw, pitch, 0.0))
             self.__cam.source = sourceMatrix
-            self.__cam.pivotMaxDist = distance
             self.__cam.maxDistHalfLife = cameraComponent.fluency
             self.__cam.turningHalfLife = cameraComponent.fluency
             self.__cam.movementHalfLife = cameraComponent.fluency
-            self.__cam.forceUpdate()
+            self.__cam.pivotMaxDist = distance
+            if forceUpdate:
+                self.__cam.forceUpdate()
             self.__prevHorizontalFov = FovExtended.instance().getFovAbsoluteValue()
             fovComponent = gameObject.findComponentByType(FovComponent)
             if fovComponent:
@@ -551,7 +578,6 @@ class HangarCameraManager(CGF.ComponentManager):
     def __onCameraSwitched(self):
         self.onCameraSwitched(self.__cameraName)
         self.__customizationHelper.setMotionBlurAmount(_DEFAULT_MOTION_BLUR_)
-        FovExtended.instance().setFovByAbsoluteValue(self.__currentHorizontalFov)
         self.__activateDOF()
         self.__cameraIdle.activate()
         self.__cameraParallax.activate()
@@ -563,23 +589,41 @@ class HangarCameraManager(CGF.ComponentManager):
     @tickGroup(groupName='Simulation')
     def tick(self):
         if not self.__flightCam:
-            dynamicFov = self.__calculateDynamicFov()
-            if dynamicFov:
-                self.__currentHorizontalFov = dynamicFov
-                FovExtended.instance().setFovByAbsoluteValue(dynamicFov, 0.1)
+            if self.__cam and self.__cam.isInTransition():
+                progress = self.__cam.easingProgress()
+                self.__interpolateFOV(progress)
+                self.__interpolateDOF(progress)
+            else:
+                dynamicFov = self.__calculateDynamicFov()
+                fovInstance = FovExtended.instance()
+                if dynamicFov:
+                    self.__currentHorizontalFov = dynamicFov
+                    fovInstance.setFovByAbsoluteValue(dynamicFov, 0.1)
+                elif not isAlmostEqual(fovInstance.getFovAbsoluteValue(), self.__currentHorizontalFov, epsilon=0.1):
+                    self.__interpolateFOV(1.0)
             return
-        if BigWorld.camera() != self.__cam and not self.isCameraSwitching():
+        if BigWorld.camera() == self.__cam:
+            return
+        if self.isCameraSwitching():
+            progress = self.__flightCam.easingProgress()
+            self.__interpolateFOV(progress)
+            self.__interpolateDOF(progress)
+        else:
             BigWorld.camera(self.__cam)
             self.__onCameraSwitched()
-        elif self.isCameraSwitching():
-            progress = self.__flightCam.easingProgress()
-            if self.__prevHorizontalFov != self.__currentHorizontalFov:
-                newFov = self.__prevHorizontalFov + progress * (self.__currentHorizontalFov - self.__prevHorizontalFov)
-                FovExtended.instance().setFovByAbsoluteValue(newFov)
-            if self.__currentDOFParams.active and (self.__prevDOFParams.active or progress > _DOF_START_PROGRESS_):
-                nearStart = self.__prevDOFParams.nearStart + progress * (self.__currentDOFParams.nearStart - self.__prevDOFParams.nearStart)
-                nearDist = self.__prevDOFParams.nearDist + progress * (self.__currentDOFParams.nearDist - self.__prevDOFParams.nearDist)
-                farStart = self.__prevDOFParams.farStart + progress * (self.__currentDOFParams.farStart - self.__prevDOFParams.farStart)
-                farDist = self.__prevDOFParams.farDist + progress * (self.__currentDOFParams.farDist - self.__prevDOFParams.farDist)
-                self.__customizationHelper.setDOFenabled(True)
-                self.__customizationHelper.setDOFparams(nearStart, nearDist, farStart, farDist)
+
+    def __interpolateFOV(self, progress):
+        if self.__prevHorizontalFov != self.__currentHorizontalFov:
+            newFov = self.__prevHorizontalFov + progress * (self.__currentHorizontalFov - self.__prevHorizontalFov)
+            FovExtended.instance().setFovByAbsoluteValue(newFov)
+            if isAlmostEqual(newFov, self.__currentHorizontalFov, epsilon=0.01):
+                self.__prevHorizontalFov = self.__currentHorizontalFov
+
+    def __interpolateDOF(self, progress):
+        if self.__currentDOFParams.active and (self.__prevDOFParams.active or progress > _DOF_START_PROGRESS_):
+            nearStart = self.__prevDOFParams.nearStart + progress * (self.__currentDOFParams.nearStart - self.__prevDOFParams.nearStart)
+            nearDist = self.__prevDOFParams.nearDist + progress * (self.__currentDOFParams.nearDist - self.__prevDOFParams.nearDist)
+            farStart = self.__prevDOFParams.farStart + progress * (self.__currentDOFParams.farStart - self.__prevDOFParams.farStart)
+            farDist = self.__prevDOFParams.farDist + progress * (self.__currentDOFParams.farDist - self.__prevDOFParams.farDist)
+            self.__customizationHelper.setDOFenabled(True)
+            self.__customizationHelper.setDOFparams(nearStart, nearDist, farStart, farDist)

@@ -36,7 +36,7 @@ def showFunRandomSubSelector(parent=None):
         if parent is None:
             modeSelectorView = guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.mode_selector.ModeSelectorView())
             parent = modeSelectorView.getParentWindow()
-        g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(layoutID, FunModeSubSelectorView, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, parent=parent)), scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(layoutID, FunModeSubSelectorView, ScopeTemplates.LOBBY_SUB_SCOPE, parent=parent)), scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
 

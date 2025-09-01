@@ -2,9 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/personal/personal_missions_first_entry_award_view.py
 from operator import attrgetter
 from gui.Scaleform.daapi import LobbySubView
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.PersonalMissionFirstEntryAwardViewMeta import PersonalMissionFirstEntryAwardViewMeta
-from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
@@ -13,7 +11,8 @@ from gui.Scaleform.settings import BADGES_ICONS, getBadgeIconPath
 from gui.server_events.finders import getQuestsByTokenAndBonus, pmTokenDetector, badgeBonusFinder
 from gui.server_events.personal_missions_navigation import PersonalMissionsNavigation
 from gui.server_events.pm_constants import SOUNDS, PERSONAL_MISSIONS_SOUND_SPACE, PM_TUTOR_FIELDS
-from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from gui.shared.event_dispatcher import showHangar
+from gui.shared.event_dispatcher import showPersonalMissionCampaignSelectorWindow
 from helpers import dependency
 from helpers.i18n import makeString
 from shared_utils import first
@@ -38,13 +37,13 @@ class PersonalMissionFirstEntryAwardView(LobbySubView, PersonalMissionsNavigatio
     def bigBtnClicked(self):
         settingsCore = dependency.instance(ISettingsCore)
         settingsCore.serverSettings.saveInUIStorage({PM_TUTOR_FIELDS.FIRST_ENTRY_AWARDS_SHOWN: True})
-        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS)), scope=EVENT_BUS_SCOPE.LOBBY)
+        showPersonalMissionCampaignSelectorWindow()
 
     def onEscapePress(self):
         self.closeView()
 
     def closeView(self):
-        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
+        showHangar()
 
     def _populate(self):
         super(PersonalMissionFirstEntryAwardView, self)._populate()

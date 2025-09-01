@@ -1,0 +1,51 @@
+<WTMapPointSelectorComponent.def>
+  <ClientMethods>
+    <updateSelector></updateSelector>
+    <hideSelector></hideSelector>
+  </ClientMethods>
+  <CellMethods>
+    <choosePoint>
+      <Exposed></Exposed>
+      <Arg>	STRING	</Arg>
+    </choosePoint>
+  </CellMethods>
+  <Properties>
+    <spawnGroups>
+      <Type>	ARRAY	  <of>	SPAWNGROUP_INFO	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </spawnGroups>
+    <points>
+      <Type>	ARRAY	  <of>	FIXED_DICT	  <Properties>
+            <name>
+              <Type>	STRING	</Type>
+            </name>
+            <position>
+              <Type>	VECTOR2	</Type>
+            </position>
+          </Properties>
+        </of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </points>
+    <selectedPoint>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </selectedPoint>
+    <duration>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </duration>
+    <endTime>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </endTime>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	WTMapPointSelectorComponent	</DefaultKeyName>
+</WTMapPointSelectorComponent.def>

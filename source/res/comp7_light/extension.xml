@@ -1,0 +1,20 @@
+<extension.xml>
+  <FeatureName>	comp7_light	</FeatureName>
+  <IsEnabled>	true	</IsEnabled>
+  <Personality>	Comp7LightPersonality	</Personality>
+  <Components>
+    <StaticComponents>
+      <AccountComp7LightComponent></AccountComp7LightComponent>
+      <ArenaComp7LightComponent></ArenaComp7LightComponent>
+    </StaticComponents>
+    <DynamicComponents>
+      <VehicleComp7LightComponent></VehicleComp7LightComponent>
+    </DynamicComponents>
+  </Components>
+  <Entities>
+    <ServerOnlyEntities>
+      <Comp7LightMgr></Comp7LightMgr>
+      <Comp7LightUnitMgr></Comp7LightUnitMgr>
+    </ServerOnlyEntities>
+  </Entities>
+</extension.xml>

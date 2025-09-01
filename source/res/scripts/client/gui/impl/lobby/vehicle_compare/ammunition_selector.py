@@ -22,7 +22,11 @@ class CompareAmmunitionSelectorView(ViewImpl):
         settings.model = VehicleCompareAmmunitionSetupModel()
         settings.flags = ViewFlags.LOBBY_TOP_SUB_VIEW
         settings.kwargs = kwargs.get('ctx', {})
+        self._vehItem = None
+        self._selectedSlotID = None
+        self._tankSetup = None
         super(CompareAmmunitionSelectorView, self).__init__(settings)
+        return
 
     @property
     def viewModel(self):
@@ -65,11 +69,13 @@ class CompareAmmunitionSelectorView(ViewImpl):
         self._tankSetup.initialize()
 
     def _finalize(self):
-        self._vehItem.onSelected -= self.__onItemSelected
+        if self._vehItem is not None:
+            self._vehItem.onSelected -= self.__onItemSelected
         self.viewModel.onClose -= self.__onClose
         self.viewModel.onViewRendered -= self.__onViewRendered
         self.viewModel.onAnimationEnd -= self.__onAnimationEnd
-        self._tankSetup.finalize()
+        if self._tankSetup is not None:
+            self._tankSetup.finalize()
         self._tankSetup = None
         self._vehItem = None
         super(CompareAmmunitionSelectorView, self)._finalize()

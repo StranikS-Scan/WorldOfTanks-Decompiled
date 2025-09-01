@@ -55,7 +55,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	10713	</weight>
-    <maxHealth>	544	</maxHealth>
+    <maxHealth>	624	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	160	</maxHealth>
       <maxRegenHealth>	110	</maxRegenHealth>
@@ -1096,14 +1096,14 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_VK2801>
-      <userString>	#germany_vehicles:Chassis_VK2801	</userString>
-      <shortUserString>	#germany_vehicles:Chassis_VK2801_short	</shortUserString>
+    <Chassis_G66_VK2801>
+      <userString>	#germany_vehicles:Chassis_G66_VK2801	</userString>
+      <shortUserString>	#germany_vehicles:Chassis_G66_VK2801_short	</shortUserString>
       <tags></tags>
       <level>	5	</level>
       <price>	4450	</price>
       <unlocks>
-        <chassis>	Chassis_VK2801_2	  <cost>	5600	</cost>
+        <chassis>	Chassis_G66_VK2801_2	  <cost>	5600	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1111,11 +1111,10 @@
         <rightTrack>	24	</rightTrack>
       </armor>
       <weight>	7200	</weight>
-      <maxLoad>	26500	</maxLoad>
-      <terrainResistance>	0.8 0.9 1.9	</terrainResistance>
+      <terrainResistance>	0.7 0.8 1.7	</terrainResistance>
       <brakeForce>	27000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	42	</rotationSpeed>
+      <rotationSpeed>	52	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.15	</vehicleMovement>
         <vehicleRotation>	0.15	</vehicleRotation>
@@ -1978,10 +1977,10 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_VK2801>
-    <Chassis_VK2801_2>
-      <userString>	#germany_vehicles:Chassis_VK2801_2	</userString>
-      <shortUserString>	#germany_vehicles:Chassis_VK2801_2_short	</shortUserString>
+    </Chassis_G66_VK2801>
+    <Chassis_G66_VK2801_2>
+      <userString>	#germany_vehicles:Chassis_G66_VK2801_2	</userString>
+      <shortUserString>	#germany_vehicles:Chassis_G66_VK2801_2_short	</shortUserString>
       <tags></tags>
       <level>	6	</level>
       <price>	15000	</price>
@@ -1990,11 +1989,10 @@
         <rightTrack>	24	</rightTrack>
       </armor>
       <weight>	7200	</weight>
-      <maxLoad>	29000	</maxLoad>
       <terrainResistance>	0.7 0.8 1.7	</terrainResistance>
       <brakeForce>	30000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	46	</rotationSpeed>
+      <rotationSpeed>	58	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.14	</vehicleMovement>
         <vehicleRotation>	0.14	</vehicleRotation>
@@ -2857,18 +2855,14 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_VK2801_2>
+    </Chassis_G66_VK2801_2>
   </chassis>
   <turrets0>
-    <Turret_1_VK2801>
-      <userString>	#germany_vehicles:Turret_1_VK2801	</userString>
+    <Turret_1_G66_VK2801>
+      <userString>	#germany_vehicles:Turret_1_G66_VK2801	</userString>
       <tags></tags>
       <level>	5	</level>
       <price>	4500	</price>
-      <unlocks>
-        <turret>	Turret_2_VK2801	  <cost>	5340	</cost>
-        </turret>
-      </unlocks>
       <armor>
         <armor_1>	50	</armor_1>
         <armor_3>	30	</armor_3>
@@ -2879,33 +2873,33 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5300	</weight>
-      <maxHealth>	106	</maxHealth>
+      <maxHealth>	116	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
         <maxRegenHealth>	60	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	360	</circularVisionRadius>
+      <circularVisionRadius>	370	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	80	</maxHealth>
         <maxRegenHealth>	40	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_50mm_KwK_39_L60L>	shared	  <pitchLimits>
+        <_50mm_Kw_K_39_L_60_2801>	shared	  <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.371313 10 0.416513 6 0.430556 5 0.460012 5 0.469831 9 0.52543 9 0.535358 5 0.569444 5 0.578854 6 0.633106 10 1 10	</maxPitch>
+            <maxPitch>	0.00000 10.00 0.40278 10.00 0.44722 4.00 0.47222 9.00 0.52778 9.00 0.55278 4.00 0.59722 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <gun>	_75mm_KwK_40_L48L	  <cost>	4100	</cost>
+            <gun>	_75mm_Kw_K_40_L_48_2801	  <cost>	4100	</cost>
             </gun>
           </unlocks>
-          <shotDispersionRadius>	0.39	</shotDispersionRadius>
-          <reloadTime>	2.6	</reloadTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	2.2	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.7	</aimingTime>
@@ -2975,18 +2969,22 @@
             <density>	98.6832 98.16	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_50mm_KwK_39_L60L>
-        <_75mm_KwK_40_L48L>	shared	  <pitchLimits>
+        </_50mm_Kw_K_39_L_60_2801>
+        <_75mm_Kw_K_40_L_48_2801>	shared	  <unlocks>
+            <turret>	Turret_2_G66_VK2801	  <cost>	5340	</cost>
+            </turret>
+          </unlocks>
+          <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.371313 10 0.416513 6 0.430556 4 0.460012 4 0.469831 6 0.52543 6 0.535358 3.985 0.569444 5 0.578854 6 0.633106 10 1 10	</maxPitch>
+            <maxPitch>	0.00000 10.00 0.40278 10.00 0.44444 4.00 0.45000 4.00 0.47222 9.00 0.52778 9.00 0.55000 4.00 0.55556 4.00 0.59722 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
-          <reloadTime>	4.3	</reloadTime>
+          <reloadTime>	4	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.1	</aimingTime>
+          <aimingTime>	2	</aimingTime>
           <armor>
             <armor_1>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -2999,7 +2997,7 @@
             <gun>	20	</gun>
           </armor>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <models>
             <undamaged>	vehicles/german/G66_VK2801/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/german/G66_VK2801/crash/lod0/Gun_04.model	</destroyed>
@@ -3052,7 +3050,7 @@
             <density>	96.8212 95.963	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_75mm_KwK_40_L48L>
+        </_75mm_Kw_K_40_L_48_2801>
       </guns>
       <models>
         <undamaged>	vehicles/german/G66_VK2801/normal/lod0/Turret_01.model	</undamaged>
@@ -3558,12 +3556,16 @@
         <density>	93.9557 93.4706	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_1_VK2801>
-    <Turret_2_VK2801>
-      <userString>	#germany_vehicles:Turret_2_VK2801	</userString>
+    </Turret_1_G66_VK2801>
+    <Turret_2_G66_VK2801>
+      <userString>	#germany_vehicles:Turret_2_G66_VK2801	</userString>
       <tags></tags>
       <level>	6	</level>
       <price>	17500	</price>
+      <unlocks>
+        <vehicle>	G113_SP_I_C	  <cost>	53200	</cost>
+        </vehicle>
+      </unlocks>
       <armor>
         <armor_1>	50	</armor_1>
         <armor_2>	50	</armor_2>
@@ -3575,7 +3577,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5500	</weight>
-      <maxHealth>	136	</maxHealth>
+      <maxHealth>	156	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -3589,15 +3591,15 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_50mm_KwK_39_L60L>	shared	  <pitchLimits>
+        <_50mm_Kw_K_39_L_60_2801>	shared	  <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.371313 10 0.416513 6 0.430556 5 0.460012 5 0.469831 9 0.52543 9 0.535358 5 0.569444 5 0.578854 6 0.633106 10 1 10	</maxPitch>
+            <maxPitch>	0.00000 10.00 0.40278 10.00 0.44722 4.00 0.47222 9.00 0.52778 9.00 0.55278 4.00 0.59722 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.39	</shotDispersionRadius>
-          <reloadTime>	2.3	</reloadTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	2.1	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.7	</aimingTime>
@@ -3666,10 +3668,10 @@
             <density>	98.6832 98.16	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_50mm_KwK_39_L60L>
-        <_75mm_KwK_40_L48L>	shared	  <pitchLimits>
+        </_50mm_Kw_K_39_L_60_2801>
+        <_75mm_Kw_K_40_L_48_2801>	shared	  <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.371313 10 0.416513 6 0.430556 4 0.460012 4 0.469831 6 0.52543 6 0.535358 3.985 0.569444 5 0.578854 6 0.633106 10 1 10	</maxPitch>
+            <maxPitch>	0.00000 10.00 0.40278 10.00 0.44444 4.00 0.45000 4.00 0.47222 9.00 0.52778 9.00 0.55000 4.00 0.55556 4.00 0.59722 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
           <reloadTime>	4	</reloadTime>
           <shotDispersionFactors>
@@ -3743,7 +3745,7 @@
             <density>	96.8212 95.963	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_75mm_KwK_40_L48L>
+        </_75mm_Kw_K_40_L_48_2801>
       </guns>
       <models>
         <undamaged>	vehicles/german/G66_VK2801/normal/lod0/Turret_02.model	</undamaged>
@@ -4221,29 +4223,20 @@
         <density>	93.6315 93.1523	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_2_VK2801>
+    </Turret_2_G66_VK2801>
   </turrets0>
   <engines>
     <Argus_12LD330H>	shared	  <unlocks>
-        <engine>	Maybach_HL_210_TRM_P30L	  <cost>	11250	</cost>
+        <engine>	Argus_12LD330HL	  <cost>	11250	</cost>
         </engine>
       </unlocks>
     </Argus_12LD330H>
-    <Maybach_HL_210_TRM_P30L>	shared	  <unlocks>
-        <vehicle>	G113_SP_I_C	  <cost>	53200	</cost>
-        </vehicle>
-      </unlocks>
-    </Maybach_HL_210_TRM_P30L>
+    <Argus_12LD330HL>	shared	</Argus_12LD330HL>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <FuG7>	shared	  <unlocks>
-        <radio>	FuG12	  <cost>	7200	</cost>
-        </radio>
-      </unlocks>
-    </FuG7>
     <FuG12>	shared	</FuG12>
   </radios>
   <physics>
@@ -4253,26 +4246,13 @@
           <smplEnginePower>	580	</smplEnginePower>
           <smplFwMaxSpeed>	64	</smplFwMaxSpeed>
         </Argus_12LD330H>
-        <Maybach_HL_210_TRM_P30L>
+        <Argus_12LD330HL>
           <smplEnginePower>	700	</smplEnginePower>
           <smplFwMaxSpeed>	64	</smplFwMaxSpeed>
-        </Maybach_HL_210_TRM_P30L>
+        </Argus_12LD330HL>
       </engines>
       <chassis>
-        <Chassis_VK2801>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.15295	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.07245	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.0644	</rollingFriction>
-            </firm>
-          </grounds>
-        </Chassis_VK2801>
-        <Chassis_VK2801_2>
+        <Chassis_G66_VK2801>
           <grounds>
             <soft>
               <rollingFriction>	0.13685	</rollingFriction>
@@ -4284,7 +4264,20 @@
               <rollingFriction>	0.05635	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_VK2801_2>
+        </Chassis_G66_VK2801>
+        <Chassis_G66_VK2801_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.13685	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.0644	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.05635	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_G66_VK2801_2>
       </chassis>
     </detailed>
   </physics>

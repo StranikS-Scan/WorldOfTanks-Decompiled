@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/ammunition_panel/base_view.py
 import logging
 from CurrentVehicle import g_currentVehicle
+from PlayerEvents import g_playerEvents
 from gui.prb_control import prbDispatcherProperty
 from Event import Event
 from frameworks.wulf import ViewFlags, ViewSettings, ViewStatus
@@ -28,10 +29,10 @@ class BaseAmmunitionPanelView(ViewImpl):
     _hangarSpace = dependency.descriptor(IHangarSpace)
     __slots__ = ('_ammunitionPanel', '_wasVehicleOnLoading', 'onPanelSectionResized', 'onVehicleChanged')
 
-    def __init__(self, layoutID=R.views.lobby.tanksetup.AmmunitionPanel(), flags=ViewFlags.VIEW, model=None):
+    def __init__(self, flags=ViewFlags.VIEW):
         settings = ViewSettings(R.views.lobby.tanksetup.AmmunitionPanel())
         settings.flags = flags
-        settings = ViewSettings(layoutID=layoutID, flags=flags, model=model or self._VIEW_MODEL())
+        settings.model = self._VIEW_MODEL()
         super(BaseAmmunitionPanelView, self).__init__(settings)
         self._ammunitionPanel = None
         self._wasVehicleOnLoading = False
@@ -127,6 +128,9 @@ class BaseAmmunitionPanelView(ViewImpl):
         g_currentVehicle.onChangeStarted += self.__onVehicleChangeStarted
         g_currentVehicle.onChanged += self._currentVehicleChanged
         self._itemsCache.onSyncCompleted += self.__itemCacheChanged
+        g_playerEvents.onDequeued += self._onDequeued
+        g_playerEvents.onKickedFromArena += self._onDequeued
+        g_playerEvents.onEnqueueFailure += self._onDequeued
 
     def _removeListeners(self):
         self.viewModel.ammunitionPanel.onSectionSelect -= self._onPanelSectionSelected
@@ -134,6 +138,9 @@ class BaseAmmunitionPanelView(ViewImpl):
         g_currentVehicle.onChangeStarted -= self.__onVehicleChangeStarted
         g_currentVehicle.onChanged -= self._currentVehicleChanged
         self._itemsCache.onSyncCompleted -= self.__itemCacheChanged
+        g_playerEvents.onDequeued -= self._onDequeued
+        g_playerEvents.onKickedFromArena -= self._onDequeued
+        g_playerEvents.onEnqueueFailure -= self._onDequeued
 
     def _onPanelSectionSelected(self, args):
         if not self._getIsDisabled() and self.__canChangeVehicle():
@@ -146,6 +153,9 @@ class BaseAmmunitionPanelView(ViewImpl):
     def _currentVehicleChanged(self):
         self.update()
         self.viewModel.setIsReady(self._getIsReady())
+
+    def _onDequeued(self, *args, **kwargs):
+        self.update()
 
     def __onVehicleChangeStarted(self):
         self.viewModel.setIsReady(False)

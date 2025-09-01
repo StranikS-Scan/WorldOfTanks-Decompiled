@@ -1,0 +1,43 @@
+<dyn_components_groups.xml>
+  <sm_artillery_strike_channel>
+    <DGRemovableDynGroupComponent>
+      <server>
+        <events>	onSMAbilitiesInterrupt onDeath onResurrect	</events>
+      </server>
+    </DGRemovableDynGroupComponent>
+    <SMAbilitiesInterruptComponent>
+      <server>
+        <immediately>	false	</immediately>
+        <byEvents>	onDamageReceived	</byEvents>
+        <rechargeDuration>	0.5	</rechargeDuration>
+      </server>
+    </SMAbilitiesInterruptComponent>
+    <DGSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/Storymode/ability_artillery_strike.seq	</sequence>
+            <bindNode>	turret	</bindNode>
+            <loopCount>	-1	</loopCount>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </DGSequencesComponent>
+    <DGSound3DComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <playTo>	ALL	</playTo>
+            <activation>	eb_achieved_rank	</activation>
+          </item>
+          <item>
+            <playTo>	ALL	</playTo>
+            <activation>	sm_gp_dday_ability_active	</activation>
+            <deactivation>	sm_gp_dday_ability_deactive	</deactivation>
+          </item>
+        </soundEvents>
+      </client>
+    </DGSound3DComponent>
+  </sm_artillery_strike_channel>
+</dyn_components_groups.xml>

@@ -54,7 +54,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	8800	</weight>
-    <maxHealth>	512	</maxHealth>
+    <maxHealth>	520	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	180	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -1188,8 +1188,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	4000	</weight>
-      <maxLoad>	17950	</maxLoad>
-      <terrainResistance>	1.2 1.6 2.5	</terrainResistance>
+      <terrainResistance>	1.1 1.4 2.3	</terrainResistance>
       <brakeForce>	39500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	35	</rotationSpeed>
@@ -2014,7 +2013,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	4000	</weight>
-      <maxLoad>	21800	</maxLoad>
       <terrainResistance>	1.1 1.4 2.3	</terrainResistance>
       <brakeForce>	39500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2854,7 +2852,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2300	</weight>
-      <maxHealth>	98	</maxHealth>
+      <maxHealth>	100	</maxHealth>
       <rotationSpeed>	16	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -3408,7 +3406,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_7	</primaryArmor>
       <weight>	4500	</weight>
-      <maxHealth>	128	</maxHealth>
+      <maxHealth>	130	</maxHealth>
       <rotationSpeed>	16	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -3971,13 +3969,13 @@
         <Chassis_A41_M18_Hellcat>
           <grounds>
             <soft>
-              <rollingFriction>	0.20125	</rollingFriction>
+              <rollingFriction>	0.18515	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1288	</rollingFriction>
+              <rollingFriction>	0.1127	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0966	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

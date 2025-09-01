@@ -20,6 +20,10 @@ class BaseOptDeviceInteractor(BaseInteractor):
     def getName(self):
         return TankSetupConstants.OPT_DEVICES
 
+    @property
+    def affectsTTC(self):
+        return True
+
     def getInstalledLayout(self):
         return self.getItem().optDevices.installed
 
@@ -128,7 +132,7 @@ class OptDeviceInteractor(BaseOptDeviceInteractor):
             self.setItemInCurrentLayout(slotID, optDevice)
 
         self.onSlotAction(actionType=BaseSetupModel.REVERT_SLOT_ACTION)
-        self.itemUpdated()
+        self.onRevert()
         return
 
     @adisp.adisp_process

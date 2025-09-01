@@ -794,7 +794,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	11080	</weight>
-      <maxLoad>	57000	</maxLoad>
       <terrainResistance>	1.1 1.2 2.3	</terrainResistance>
       <brakeForce>	39500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -1824,196 +1823,11 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_130mm_vz_54>	shared	  <unlocks>
-            <gun>	_130mm_vz_54_2A	  <cost>	62500	</cost>
+        <_130mm_vz_54_2A>	shared	  <unlocks>
+            <gun>	_130mm_vz_54	  <cost>	62500	</cost>
             </gun>
           </unlocks>
           <maxAmmo>	40	</maxAmmo>
-          <armor>
-            <armor_1>	380	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	135	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_7>
-            <armor_8>	85	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_8>
-            <armor_9>	260	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_9>
-            <armor_10>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_10>
-            <armor_11>	230	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_11>
-            <armor_12>	175	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_12>
-            <armor_13>	205	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_13>
-            <armor_14>	130	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_14>
-            <armor_15>	130	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_15>
-            <armor_16>	190	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_16>
-            <armor_17>	190	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_17>
-            <armor_18>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_18>
-            <armor_19>	230	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_19>
-            <armor_20>	300	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_20>
-            <armor_21>	240	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_21>
-            <gun>	60	</gun>
-          </armor>
-          <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 8 0.400556 8 0.424444 4 0.575556 4 0.599444 8 1 8	</maxPitch>
-          </pitchLimits>
-          <reloadTime>	11.2	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
-          <shotDispersionRadius>	0.35	</shotDispersionRadius>
-          <invisibilityFactorAtShot>	0.162	</invisibilityFactorAtShot>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	4	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <prefabs>
-            <sets>
-              <Cz17_Vz_55_NY2025_3Dst>
-                <custom>	particles/Tank/customization/Cz17_Vz_55_NY2025_3Dst/Cz17_Vz_55_NY2025_3Dst_Gun_02.prefab	</custom>
-              </Cz17_Vz_55_NY2025_3Dst>
-            </sets>
-          </prefabs>
-          <models>
-            <undamaged>	vehicles/czech/Cz17_Vz_55/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/czech/Cz17_Vz_55/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/czech/Cz17_Vz_55/crash/lod0/Gun_02.model	</exploded>
-            <sets>
-              <Cz17_Vz_55_3DSt_MD_21_XXII>
-                <undamaged>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_3DSt_MD_21_XXII/normal/lod0/Gun_02.model	</undamaged>
-                <destroyed>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_3DSt_MD_21_XXII/crash/lod0/Gun_02.model	</destroyed>
-                <exploded>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_3DSt_MD_21_XXII/crash/lod0/Gun_02.model	</exploded>
-              </Cz17_Vz_55_3DSt_MD_21_XXII>
-              <Cz17_Vz_55_NY2025_3Dst>
-                <undamaged>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_NY2025_3Dst/normal/lod0/Gun_02.model	</undamaged>
-                <destroyed>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_NY2025_3Dst/crash/lod0/Gun_02.model	</destroyed>
-                <exploded>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_NY2025_3Dst/crash/lod0/Gun_02.model	</exploded>
-              </Cz17_Vz_55_NY2025_3Dst>
-            </sets>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/czech/Cz17_Vz_55/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/czech/Cz17_Vz_55/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_largeext	</effects>
-          <reloadEffect>	reload115_152	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.001562 0.0005 2.81224	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.232421 0.232421	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.001562 0.0005 2.81224	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	0.002519 1.52547 2.06545	</position>
-              <rotation>	0.488271 -0.001751 3.14158	</rotation>
-              <scale>	3.17935 1.26263 3.17935	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	1.01648	</clipAngle>
-              <anchorShift>	0.613951	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.0048 -0.0032 3.46474	</rayStart>
-              <rayEnd>	-0.0048 -0.0032 4.16474	</rayEnd>
-              <rayUp>	0.113618 0 0	</rayUp>
-              <size>	0.7	</size>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49001	</slotId>
-              <rayStart>	-0.0048 -0.0032 4.17	</rayStart>
-              <rayEnd>	-0.0048 -0.0032 4.82	</rayEnd>
-              <rayUp>	0.113618 0 0	</rayUp>
-              <compatibleModels>	Cz17_Vz_55_NY2025_3Dst	</compatibleModels>
-              <size>	0.55	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <drivenJoints>
-            <master>
-              <node>	Gun	</node>
-              <table>
-                <row>	-20	</row>
-                <row>	-10	</row>
-                <row>	0	</row>
-                <row>	4	</row>
-                <row>	8	</row>
-              </table>
-              <slaves>
-                <slave>
-                  <node>	joint1	</node>
-                  <table>
-                    <row>	20.251	</row>
-                    <row>	9.604	</row>
-                    <row>	0	</row>
-                    <row>	-4.408	</row>
-                    <row>	-8.504	</row>
-                  </table>
-                </slave>
-                <slave>
-                  <node>	joint2	</node>
-                  <table>
-                    <row>	-18.414	</row>
-                    <row>	-9.252	</row>
-                    <row>	0	</row>
-                    <row>	4.284	</row>
-                    <row>	7.981	</row>
-                  </table>
-                </slave>
-              </slaves>
-            </master>
-          </drivenJoints>
-          <camouflage>
-            <density>	89.577 90.9536	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </_130mm_vz_54>
-        <_130mm_vz_54_2A>	shared	  <maxAmmo>	40	</maxAmmo>
           <armor>
             <armor_1>	380	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -2202,6 +2016,191 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_130mm_vz_54_2A>
+        <_130mm_vz_54>	shared	  <maxAmmo>	40	</maxAmmo>
+          <armor>
+            <armor_1>	380	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	135	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_7>
+            <armor_8>	85	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_8>
+            <armor_9>	260	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_9>
+            <armor_10>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_10>
+            <armor_11>	230	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_11>
+            <armor_12>	175	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_12>
+            <armor_13>	205	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_13>
+            <armor_14>	130	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_14>
+            <armor_15>	130	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_15>
+            <armor_16>	190	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_16>
+            <armor_17>	190	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_17>
+            <armor_18>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_18>
+            <armor_19>	230	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_19>
+            <armor_20>	300	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_20>
+            <armor_21>	240	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_21>
+            <gun>	60	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -15 1 -15	</minPitch>
+            <maxPitch>	0 8 0.400556 8 0.424444 4 0.575556 4 0.599444 8 1 8	</maxPitch>
+          </pitchLimits>
+          <reloadTime>	12	</reloadTime>
+          <aimingTime>	2	</aimingTime>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <invisibilityFactorAtShot>	0.162	</invisibilityFactorAtShot>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <prefabs>
+            <sets>
+              <Cz17_Vz_55_NY2025_3Dst>
+                <custom>	particles/Tank/customization/Cz17_Vz_55_NY2025_3Dst/Cz17_Vz_55_NY2025_3Dst_Gun_02.prefab	</custom>
+              </Cz17_Vz_55_NY2025_3Dst>
+            </sets>
+          </prefabs>
+          <models>
+            <undamaged>	vehicles/czech/Cz17_Vz_55/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/czech/Cz17_Vz_55/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/czech/Cz17_Vz_55/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <Cz17_Vz_55_3DSt_MD_21_XXII>
+                <undamaged>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_3DSt_MD_21_XXII/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_3DSt_MD_21_XXII/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_3DSt_MD_21_XXII/crash/lod0/Gun_02.model	</exploded>
+              </Cz17_Vz_55_3DSt_MD_21_XXII>
+              <Cz17_Vz_55_NY2025_3Dst>
+                <undamaged>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_NY2025_3Dst/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_NY2025_3Dst/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/czech/Cz17_Vz_55/_skins/Cz17_Vz_55_NY2025_3Dst/crash/lod0/Gun_02.model	</exploded>
+              </Cz17_Vz_55_NY2025_3Dst>
+            </sets>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/czech/Cz17_Vz_55/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/czech/Cz17_Vz_55/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+          <effects>	shot_largeext	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
+          <customizationSlots>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41000	</slotId>
+              <anchorPosition>	-0.001562 0.0005 2.81224	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41001	</slotId>
+              <anchorPosition>	0 0.232421 0.232421	</anchorPosition>
+              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	42000	</slotId>
+              <anchorPosition>	-0.001562 0.0005 2.81224	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45000	</slotId>
+              <tags>	formfactor_square	</tags>
+              <position>	0.002519 1.52547 2.06545	</position>
+              <rotation>	0.488271 -0.001751 3.14158	</rotation>
+              <scale>	3.17935 1.26263 3.17935	</scale>
+              <showOn>	4368	</showOn>
+              <clipAngle>	1.01648	</clipAngle>
+              <anchorShift>	0.613951	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49000	</slotId>
+              <rayStart>	-0.0048 -0.0032 3.46474	</rayStart>
+              <rayEnd>	-0.0048 -0.0032 4.16474	</rayEnd>
+              <rayUp>	0.113618 0 0	</rayUp>
+              <size>	0.7	</size>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	-0.0048 -0.0032 4.17	</rayStart>
+              <rayEnd>	-0.0048 -0.0032 4.82	</rayEnd>
+              <rayUp>	0.113618 0 0	</rayUp>
+              <compatibleModels>	Cz17_Vz_55_NY2025_3Dst	</compatibleModels>
+              <size>	0.55	</size>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <drivenJoints>
+            <master>
+              <node>	Gun	</node>
+              <table>
+                <row>	-20	</row>
+                <row>	-10	</row>
+                <row>	0	</row>
+                <row>	4	</row>
+                <row>	8	</row>
+              </table>
+              <slaves>
+                <slave>
+                  <node>	joint1	</node>
+                  <table>
+                    <row>	20.251	</row>
+                    <row>	9.604	</row>
+                    <row>	0	</row>
+                    <row>	-4.408	</row>
+                    <row>	-8.504	</row>
+                  </table>
+                </slave>
+                <slave>
+                  <node>	joint2	</node>
+                  <table>
+                    <row>	-18.414	</row>
+                    <row>	-9.252	</row>
+                    <row>	0	</row>
+                    <row>	4.284	</row>
+                    <row>	7.981	</row>
+                  </table>
+                </slave>
+              </slaves>
+            </master>
+          </drivenJoints>
+          <camouflage>
+            <density>	89.577 90.9536	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
+          </camouflage>
+        </_130mm_vz_54>
       </guns>
       <models>
         <undamaged>	vehicles/czech/Cz17_Vz_55/normal/lod0/Turret_01.model	</undamaged>

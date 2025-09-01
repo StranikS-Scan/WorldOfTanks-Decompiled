@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/HangarSpace.py
+import weakref
 from Queue import Queue
 from functools import wraps, partial
 import BigWorld
@@ -31,7 +32,6 @@ from AvatarInputHandler.VideoCamera import VideoCamera
 from gui.app_loader import settings as app_settings
 from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates
-from gui.prb_control.events_dispatcher import g_eventDispatcher
 from uilogging.performance.hangar.loggers import HangarMetricsLogger
 from uilogging.performance.battle.loggers import BattleMetricsLogger
 from cgf_components.hangar_camera_manager import HangarCameraManager
@@ -77,6 +77,7 @@ class HangarVideoCameraController(object):
     def __init__(self):
         self.__videoCamera = None
         self.__enabled = False
+        self.__lastCameraName = None
         self.__videoCamera = None
         return
 
@@ -127,12 +128,12 @@ class HangarVideoCameraController(object):
         else:
             cameraManager = CGF.getManager(self.hangarSpace.spaceID, HangarCameraManager)
             if cameraManager:
+                self.__lastCameraName = cameraManager.getCurrentCameraName()
                 cameraManager.deactivate()
             self.__videoCamera.enable()
             self.appLoader.detachCursor(app_settings.APP_NAME_SPACE.SF_LOBBY)
             BigWorld.player().objectsSelectionEnabled(False)
             self.hangarSpace.setSelectionEnabled(False)
-            g_eventDispatcher.loadHangar()
             return
 
     def __disableVideoCamera(self):
@@ -140,7 +141,7 @@ class HangarVideoCameraController(object):
         cameraManager = CGF.getManager(self.hangarSpace.spaceID, HangarCameraManager)
         if cameraManager:
             cameraManager.activate()
-            cameraManager.switchToTank()
+            cameraManager.switchByCameraName(self.__lastCameraName)
         self.appLoader.attachCursor(app_settings.APP_NAME_SPACE.SF_LOBBY, _CTRL_FLAG.GUI_ENABLED)
         BigWorld.player().objectsSelectionEnabled(True)
         self.hangarSpace.setSelectionEnabled(True)
@@ -175,6 +176,7 @@ class HangarSpace(IHangarSpace):
         self.__lastUpdatedVehicle = None
         self.__vehicleUpdateRequested = False
         self.__logStatisticsPostponed = False
+        self.__selectableVehicleFlags = set()
         self.onSpaceRefresh = Event.Event()
         self.onSpaceRefreshCompleted = Event.Event()
         self.onSpaceCreating = Event.Event()
@@ -192,6 +194,7 @@ class HangarSpace(IHangarSpace):
         self.onNotifyCursorOver3dScene = Event.Event()
         self.__isCursorOver3DScene = False
         self.__isSelectionEnabledCounter = 0
+        self.__selectionLocks = set()
         self._performanceMetricsLogger = HangarMetricsLogger()
         self._statisticsLogger = BattleMetricsLogger()
         return
@@ -218,7 +221,7 @@ class HangarSpace(IHangarSpace):
 
     @property
     def isSelectionEnabled(self):
-        return self.__isSelectionEnabledCounter > 0
+        return bool(self.__selectionLocks)
 
     @property
     def isModelLoaded(self):
@@ -398,8 +401,17 @@ class HangarSpace(IHangarSpace):
             self.__lastUpdatedVehicle = None
         return
 
-    def setVehicleSelectable(self, flag):
-        self.__space.setVehicleSelectable(flag)
+    def lockVehicleSelectable(self, consumer):
+        self.__selectionLocks.add(weakref.ref(consumer, self.__unlockVehicleOnDel))
+        self.__space.setVehicleSelectable(True)
+
+    def unlockVehicleSelectable(self, consumer):
+        for ref in self.__selectionLocks:
+            if ref() is consumer:
+                self.__selectionLocks.remove(ref)
+                break
+
+        self.__space.setVehicleSelectable(bool(self.__selectionLocks))
 
     def onPremiumChanged(self, isPremium, attrs, premiumExpiryTime):
         self.__isSpacePremium = isPremium
@@ -438,6 +450,10 @@ class HangarSpace(IHangarSpace):
             self.__logStatistics()
         self.__logStatisticsPostponed = False
         uniprof.exitFromRegion('client.loading')
+
+    def __unlockVehicleOnDel(self, consumer):
+        self.__selectionLocks.discard(consumer)
+        self.__space.setVehicleSelectable(bool(self.__selectionLocks))
 
     def __logStatistics(self):
         self._statisticsLogger.log()

@@ -55,6 +55,7 @@ def getDefaultViewSettings(battlePageAlias, battlePageClass, swfUrl='pveBaseBatt
     from gui.Scaleform.daapi.view.battle.pve_base import players_panel
     from gui.Scaleform.daapi.view.battle.pve_base.pve_prebattle_timer import PvePrebattleTimer
     from gui.Scaleform.daapi.view.battle.pve_base.hint_panel import PveBattleHintPanel
+    from gui.Scaleform.daapi.view.battle.pve_base.messenger_view import PveBattleMessengerView
     from gui.Scaleform.daapi.view.battle.pve_base.status_notifications import panel as sn_panel
     from gui.Scaleform.daapi.view.battle.pve_base.damage_log_panel import PveDamageLogPanel
     from gui.Scaleform.daapi.view.battle.pve_base.ribbons_panel import PveRibbonsPanel
@@ -72,7 +73,8 @@ def getDefaultViewSettings(battlePageAlias, battlePageClass, swfUrl='pveBaseBatt
      ComponentSettings(BATTLE_VIEW_ALIASES.PLAYERS_PANEL, players_panel.PvePlayersPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.STATUS_NOTIFICATIONS_PANEL, sn_panel.PveStatusNotificationTimerPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_DAMAGE_LOG_PANEL, PveDamageLogPanel, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.RIBBONS_PANEL, PveRibbonsPanel, ScopeTemplates.DEFAULT_SCOPE)))
+     ComponentSettings(BATTLE_VIEW_ALIASES.RIBBONS_PANEL, PveRibbonsPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_MESSENGER, PveBattleMessengerView, ScopeTemplates.DEFAULT_SCOPE)))
 
 
 def getDefaultContextMenuHandler():

@@ -52,6 +52,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__ctx = None
         self._carouselDP = None
         self._selectedItem = None
+        self.__cachedTabData = None
         self.__uiLogger = CustomizationBottomPanelLogger(CustomizationViewKeys.CUSTOMIZATION_BOTTOM_PANEL)
         return
 
@@ -59,7 +60,6 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         super(CustomizationBottomPanel, self)._populate()
         self.__isInited = False
         self.__isEscHelpSeen = False
-        self.__isEscHelpVisible = False
         self.__ctx = self.service.getCtx()
         self._carouselDP = CustomizationCarouselDataProvider(self._carouseItemWrapper)
         self._carouselDP.setFlashObject(self.getDp())
@@ -118,8 +118,8 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__serverSettings = None
         self.__isInited = False
         self.__isEscHelpSeen = False
-        self.__isEscHelpVisible = False
         self.__uiLogger = None
+        self.__cachedTabData = None
         super(CustomizationBottomPanel, self)._dispose()
         return
 
@@ -276,10 +276,11 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
          'selectedTab': -1})
 
     def __updateTabs(self):
-        tabsData = self.__getItemTabsData()
-        selectedTab = self.__ctx.mode.tabId
-        self.as_setBottomPanelTabsDataS({'tabsDP': tabsData,
-         'selectedTab': selectedTab})
+        tabData = {'tabsDP': self.__getItemTabsData(),
+         'selectedTab': self.__ctx.mode.tabId}
+        if self.__cachedTabData != tabData:
+            self.as_setBottomPanelTabsDataS(tabData)
+            self.__cachedTabData = tabData
 
     def __setFooterInitData(self):
         self.as_setBottomPanelInitDataS({'filtersVO': {'popoverAlias': VIEW_ALIAS.CUSTOMIZATION_FILTER_POPOVER,
@@ -567,15 +568,16 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
 
     def __updateHelpMessage(self):
         tabId = self.__ctx.mode.tabId
+        isEscHelpVisible = False
         if self.__ctx.mode.prevTabId == CustomizationTabs.STAT_TRACKERS:
-            self.__isEscHelpVisible = False
+            pass
         elif self.__ctx.modeId == CustomizationModes.STYLE_2D_EDITABLE or tabId == CustomizationTabs.STAT_TRACKERS:
             if not self.__isEscHelpSeen:
                 self.__isEscHelpSeen = True
-                self.__isEscHelpVisible = True
-        else:
-            self.__isEscHelpVisible = False
-        self.as_updateEscHelpMessageS(self.__isEscHelpVisible)
+                isEscHelpVisible = True
+            else:
+                return
+        self.as_updateEscHelpMessageS(isEscHelpVisible)
 
     def __updatePopoverBtn(self):
         itemsPopoverBtnEnabled = False

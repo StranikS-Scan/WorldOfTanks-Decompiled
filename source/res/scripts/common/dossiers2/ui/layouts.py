@@ -62,7 +62,11 @@ PERSONAL_MISSIONS_GROUP = [_single('firstMerit'),
  _single('mapboxSeason2'),
  _single('mapboxSeason3'),
  _total('mapboxUniversal'),
- _total('mapboxClimateExpert')]
+ _total('mapboxClimateExpert'),
+ _single('meritPM3'),
+ _total('readyForBattleAssault'),
+ _total('readyForBattleSniper'),
+ _total('readyForBattleSupport')]
 CHRISTMAS_QUESTS_GROUP = [_single('xmasTreeBronze'), _single('xmasTreeSilver'), _single('xmasTreeGold')]
 HE17_QUESTS_GROUP = [_single('HE17A1'), _single('HE17A2'), _single('HE17A3')]
 NY18_QUESTS_GROUP = [_single('NY18A1'), _single('NY18A2'), _single('NY18A3')]
@@ -153,7 +157,10 @@ NEAREST_ACHIEVEMENTS = TANK_EXPERT_GROUP + MECH_ENGINEER_GROUP + VEHICLE_COLLECT
  _total('readyForBattleAllianceUSA'),
  _total('readyForBattleAllianceFrance'),
  _total('rankedDivisionFighter'),
- _total('rankedStayingPower')]
+ _total('rankedStayingPower'),
+ _total('readyForBattleAssault'),
+ _total('readyForBattleSniper'),
+ _total('readyForBattleSupport')]
 
 def init():
     global _EXCLUDED_ACHIEVES

@@ -2,30 +2,48 @@
 # Embedded file name: story_mode/scripts/client/story_mode/account_settings.py
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import KEY_NOTIFICATIONS
-from story_mode.gui.impl.lobby.consts import EntryPointStates
 from story_mode_common.story_mode_constants import EVENT_NAME, EXTENSION_NAME, UNDEFINED_MISSION_ID
-_ENTRY_POINT_SHOWN_STATE_KEY = 'entry_point_shown'
-_EVENT_ENTRY_POINT_SHOWN_STATE_KEY = 'event_entry_point_shown'
+_ENTRY_POINT_ANIMATION_SEEN_ID_KEY = 'entry_point_animation_seen_id'
+_EVENT_ENTRY_POINT_SHOWN_KEY = 'event_entry_point_shown'
+_EVENT_VISITED_KEY = 'event_visited'
 _UNLOCKED_TASKS_SHOWN_KEY = 'unlocked_tasks_shown'
 _WELCOME_SCREEN_SEEN_KEY = 'welcome_screen_seen'
 _NEWBIE_ADVERTISING_SCREEN_SEEN_KEY = 'newbie_advertising_screen_seen'
 _NEW_MISSION_SEEN_ID_KEY = 'new_mission_seen_id'
-_DEFAULT_SETTINGS = {EVENT_NAME: {_EVENT_ENTRY_POINT_SHOWN_STATE_KEY: EntryPointStates.UNKNOWN.value,
+_DEFAULT_SETTINGS = {EVENT_NAME: {_EVENT_ENTRY_POINT_SHOWN_KEY: False,
+              _EVENT_VISITED_KEY: False,
               _UNLOCKED_TASKS_SHOWN_KEY: {},
               _WELCOME_SCREEN_SEEN_KEY: False},
  EXTENSION_NAME: {_NEWBIE_ADVERTISING_SCREEN_SEEN_KEY: False,
-                  _NEW_MISSION_SEEN_ID_KEY: UNDEFINED_MISSION_ID}}
+                  _NEW_MISSION_SEEN_ID_KEY: UNDEFINED_MISSION_ID,
+                  _ENTRY_POINT_ANIMATION_SEEN_ID_KEY: UNDEFINED_MISSION_ID}}
 
 def init():
     AccountSettings.overrideDefaultSettings(KEY_NOTIFICATIONS, _DEFAULT_SETTINGS)
 
 
-def getEventEntryPointShownState():
-    return EntryPointStates(AccountSettings.getNotifications(EVENT_NAME)[_EVENT_ENTRY_POINT_SHOWN_STATE_KEY])
+def getEventEntryPointShown():
+    return AccountSettings.getNotifications(EVENT_NAME)[_EVENT_ENTRY_POINT_SHOWN_KEY]
 
 
-def setEventEntryPointShownState(state):
-    _setEventSettings(_EVENT_ENTRY_POINT_SHOWN_STATE_KEY, state.value)
+def setEventEntryPointShown():
+    _setEventSettings(_EVENT_ENTRY_POINT_SHOWN_KEY, True)
+
+
+def getEventVisited():
+    return AccountSettings.getNotifications(EVENT_NAME)[_EVENT_VISITED_KEY]
+
+
+def setEventVisited():
+    _setEventSettings(_EVENT_VISITED_KEY, True)
+
+
+def getNewbieEntryPointAnimationSeenId():
+    return AccountSettings.getNotifications(EXTENSION_NAME).get(_ENTRY_POINT_ANIMATION_SEEN_ID_KEY, UNDEFINED_MISSION_ID)
+
+
+def setNewbieEntryPointAnimationSeenId(missionId):
+    _setExtensionSettings(_ENTRY_POINT_ANIMATION_SEEN_ID_KEY, missionId)
 
 
 def isUnlockedTaskShown(missionId, taskId):

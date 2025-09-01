@@ -41,11 +41,14 @@ class Comp7VehicleValidator(BaseActionsValidator):
     __comp7Ctrl = dependency.descriptor(IComp7Controller)
 
     def _validate(self):
-        if g_currentVehicle.isPresent():
-            restriction = self.__comp7Ctrl.isSuitableVehicle(g_currentVehicle.item)
-            if restriction is not None:
-                return restriction
-        return ValidationResult(False, PRE_QUEUE_RESTRICTION.LIMIT_NO_SUITABLE_VEHICLES, ctx={'levels': self.__comp7Ctrl.getModeSettings().levels}) if not self.__comp7Ctrl.hasSuitableVehicles() else None
+        if not self.__comp7Ctrl.hasSuitableVehicles():
+            return ValidationResult(False, PRE_QUEUE_RESTRICTION.LIMIT_NO_SUITABLE_VEHICLES, ctx={'levels': self.__comp7Ctrl.getModeSettings().levels})
+        else:
+            if g_currentVehicle.isPresent():
+                restriction = self.__comp7Ctrl.isSuitableVehicle(g_currentVehicle.item)
+                if restriction is not None:
+                    return restriction
+            return
 
 
 class Comp7ShopValidator(BaseActionsValidator):
@@ -53,7 +56,7 @@ class Comp7ShopValidator(BaseActionsValidator):
 
     def _validate(self):
         uiLoader = dependency.instance(IGuiLoader)
-        contentResId = R.views.comp7.lobby.MetaRootView()
+        contentResId = R.views.comp7.mono.lobby.meta_root_view()
         metaView = uiLoader.windowsManager.getViewByLayoutID(contentResId)
         if not metaView:
             return

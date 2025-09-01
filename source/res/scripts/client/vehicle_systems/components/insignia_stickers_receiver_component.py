@@ -50,6 +50,8 @@ class InsigniaStickersReceiverManager(CGF.ComponentManager):
         appearance = findParentVehicleAppearance(gameobject)
         if appearance is not None and gpuDecalsReceiver.blockIdx != GpuDecals.INVALID_BLOCK_IDX:
             gunGo = GenericComponents.findSlot(appearance.gameObject, VehicleSlots.GUN.value)
+            if not gunGo.isValid():
+                return
             gunWorldTransform = gunGo.findComponentByType(GenericComponents.TransformComponent).worldTransform
             offsetToRootMatrix = transformComponent.worldTransform
             offsetToRootMatrix.invert()

@@ -57,7 +57,7 @@ class PackageBusinessHandler(object):
         self._app.loadView(event.loadParams)
 
     def loadViewByCtxEvent(self, event):
-        self._app.loadView(event.loadParams, event.ctx)
+        self._app.loadView(event.loadParams, ctx=event.ctx)
 
     def loadView(self, event):
         self._app.loadView(event.loadParams, *event.args, **event.kwargs)
@@ -95,13 +95,14 @@ class PackageBusinessHandler(object):
 
 
 class PackageImporter(object):
-    __slots__ = ('_aliases', '_handlers', '_contextMenuTypes')
+    __slots__ = ('_aliases', '_handlers', '_contextMenuTypes', '_stateMachineConfigurators')
 
     def __init__(self):
         super(PackageImporter, self).__init__()
         self._aliases = {}
         self._handlers = {}
         self._contextMenuTypes = {}
+        self._stateMachineConfigurators = []
 
     def isPackageLoaded(self, path):
         return path in self._handlers
@@ -123,6 +124,11 @@ class PackageImporter(object):
                 required = handler.getAppNS()
                 if required is None or required == appNS:
                     handler.setApp(app)
+
+        if hasattr(app, 'stateMachine'):
+            for stateConfigurator, transitionConfigurator in self._stateMachineConfigurators:
+                app.stateMachine.addStateConfigurator(stateConfigurator)
+                app.stateMachine.addTransitionConfigurator(transitionConfigurator)
 
         return
 
@@ -170,6 +176,12 @@ class PackageImporter(object):
 
         contextMenuTypes = context_menu.registerHandlers(*handlers)
         self._contextMenuTypes[path] = contextMenuTypes
+        try:
+            configurators = imported.getStateMachineRegistrators()
+            self._stateMachineConfigurators.append(configurators)
+        except AttributeError:
+            pass
+
         try:
             handlers = imported.getBusinessHandlers()
         except AttributeError:

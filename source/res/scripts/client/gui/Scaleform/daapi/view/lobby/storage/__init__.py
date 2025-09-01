@@ -111,6 +111,11 @@ def getBusinessHandlers():
     return (StoragePackageBusinessHandler(),)
 
 
+def getStateMachineRegistrators():
+    from gui.Scaleform.daapi.view.lobby.storage.states import registerStates, registerTransitions
+    return (registerStates, registerTransitions)
+
+
 class StoragePackageBusinessHandler(PackageBusinessHandler):
 
     def __init__(self):

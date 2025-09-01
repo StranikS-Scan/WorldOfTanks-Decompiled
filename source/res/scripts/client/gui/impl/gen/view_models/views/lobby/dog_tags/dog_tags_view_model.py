@@ -1,12 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/dog_tags/dog_tags_view_model.py
-from frameworks.wulf import Array
-from frameworks.wulf import ViewModel
+from frameworks.wulf import Array, ViewModel
 from gui.impl.gen.view_models.views.lobby.dog_tags.dt_dog_tag import DtDogTag
 from gui.impl.gen.view_models.views.lobby.dog_tags.dt_grid_section import DtGridSection
 
 class DogTagsViewModel(ViewModel):
-    __slots__ = ('onExit', 'onEquip', 'onReset', 'onTabSelect', 'onInfoButtonClick', 'onPlayVideo', 'onUpdateSelectedDT', 'onOnboardingCloseClick', 'onNewComponentHover')
+    __slots__ = ('onEquip', 'onReset', 'onTabSelect', 'onInfoButtonClick', 'onPlayVideo', 'onUpdateSelectedDT', 'onOnboardingCloseClick', 'onNewComponentHover', 'onBack')
 
     def __init__(self, properties=12, commands=9):
         super(DogTagsViewModel, self).__init__(properties=properties, commands=commands)
@@ -107,7 +106,6 @@ class DogTagsViewModel(ViewModel):
         self._addBoolProperty('onboardingEnabled', False)
         self._addBoolProperty('isTopView', False)
         self._addBoolProperty('isAnimatedDogTagSelected', False)
-        self.onExit = self._addCommand('onExit')
         self.onEquip = self._addCommand('onEquip')
         self.onReset = self._addCommand('onReset')
         self.onTabSelect = self._addCommand('onTabSelect')
@@ -116,3 +114,4 @@ class DogTagsViewModel(ViewModel):
         self.onUpdateSelectedDT = self._addCommand('onUpdateSelectedDT')
         self.onOnboardingCloseClick = self._addCommand('onOnboardingCloseClick')
         self.onNewComponentHover = self._addCommand('onNewComponentHover')
+        self.onBack = self._addCommand('onBack')

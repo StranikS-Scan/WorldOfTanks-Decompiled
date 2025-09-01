@@ -21,7 +21,7 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
     __rankedController = dependency.descriptor(IRankedBattlesController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self, _=None):
+    def __init__(self, **kwargs):
         super(BattleTypeSelectPopover, self).__init__()
         self._tooltip = None
         return

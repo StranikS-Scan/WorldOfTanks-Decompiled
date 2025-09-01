@@ -17,7 +17,8 @@ class SOUNDS(CONST_CONTAINER):
 
 
 def getMainSoundSpace():
-    return CommonSoundSpaceSettings(name='clan_supply_main_view', entranceStates={SOUNDS.STATE_HP_CLANS_INSIDE: SOUNDS.STATE_HP_CLANS_INSIDE_SUPPLY}, exitStates={SOUNDS.STATE_HP_CLANS_INSIDE: SOUNDS.STATE_HP_CLANS_INSIDE_MAIN}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent=SOUNDS.ENTER_EVENT, exitEvent=SOUNDS.EXIT_EVENT)
+    return CommonSoundSpaceSettings(name='clan_supply_main_view', entranceStates={SOUNDS.STATE_HANGAR_PLACE: SOUNDS.STATE_HANGAR_PLACE_CLANS,
+     SOUNDS.STATE_HP_CLANS_INSIDE: SOUNDS.STATE_HP_CLANS_INSIDE_SUPPLY}, exitStates={SOUNDS.STATE_HP_CLANS_INSIDE: SOUNDS.STATE_HP_CLANS_INSIDE_MAIN}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent=SOUNDS.ENTER_EVENT, exitEvent=SOUNDS.EXIT_EVENT)
 
 
 def getInfoPageSoundSpace():

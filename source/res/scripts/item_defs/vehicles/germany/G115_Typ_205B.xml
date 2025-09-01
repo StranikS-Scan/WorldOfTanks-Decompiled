@@ -69,7 +69,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	69550	</weight>
-    <maxHealth>	1360	</maxHealth>
+    <maxHealth>	1440	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
@@ -1178,7 +1178,6 @@
         <rightTrack>	40	</rightTrack>
       </armor>
       <weight>	25000	</weight>
-      <maxLoad>	120250	</maxLoad>
       <terrainResistance>	0.8 0.9 2	</terrainResistance>
       <brakeForce>	130000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2010,7 +2009,6 @@
         <rightTrack>	40	</rightTrack>
       </armor>
       <weight>	25000	</weight>
-      <maxLoad>	130000	</maxLoad>
       <terrainResistance>	0.8 0.9 2	</terrainResistance>
       <brakeForce>	130000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2859,7 +2857,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_7 armor_4	</primaryArmor>
       <weight>	19800	</weight>
-      <maxHealth>	340	</maxHealth>
+      <maxHealth>	360	</maxHealth>
       <rotationSpeed>	15	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -2873,11 +2871,11 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_105mm_KwK45_L52>	shared	  <maxAmmo>	120	</maxAmmo>
+        <_105mm_Kw_K_L_52>	shared	  <maxAmmo>	120	</maxAmmo>
           <reloadTime>	9.8	</reloadTime>
           <pitchLimits>
             <minPitch>	0 -30 1 -30	</minPitch>
-            <maxPitch>	0 8 0.605329 8 1 8	</maxPitch>
+            <maxPitch>	0.00000 8.00 1.00000 8.00	</maxPitch>
           </pitchLimits>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
@@ -2885,7 +2883,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <unlocks>
-            <gun>	_128mm_L50A	  <cost>	55000	</cost>
+            <gun>	_128mm_Kw_K_L_50_100	  <cost>	55000	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -2961,8 +2959,8 @@
             <density>	143.877 147.142	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_105mm_KwK45_L52>
-        <_128mm_L50A>	shared	  <maxAmmo>	50	</maxAmmo>
+        </_105mm_Kw_K_L_52>
+        <_128mm_Kw_K_L_50_100>	shared	  <maxAmmo>	50	</maxAmmo>
           <unlocks>
             <vehicle>	G110_Typ_205	  <cost>	169200	</cost>
             </vehicle>
@@ -3050,7 +3048,7 @@
             <density>	126.531 128.25	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_128mm_L50A>
+        </_128mm_Kw_K_L_50_100>
       </guns>
       <models>
         <undamaged>	vehicles/german/G115_Typ_205_4_Jun/normal/lod0/Turret_01.model	</undamaged>
@@ -3559,40 +3557,30 @@
     </Turret_1_G115_Typ_205B>
   </turrets0>
   <engines>
-    <Porsche_16_Cyl_Y1>	shared	  <unlocks>
-        <engine>	Porsche_16_Cyl_Y2	  <cost>	27500	</cost>
+    <Porsche_16_Cyl>	shared	  <unlocks>
+        <engine>	Porsche_Typ_212_NL	  <cost>	27500	</cost>
         </engine>
       </unlocks>
-    </Porsche_16_Cyl_Y1>
-    <Porsche_16_Cyl_Y2>	shared	</Porsche_16_Cyl_Y2>
+    </Porsche_16_Cyl>
+    <Porsche_Typ_212_NL>	shared	</Porsche_Typ_212_NL>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <FuG5>	shared	  <unlocks>
-        <radio>	FuG7	  <cost>	1360	</cost>
-        </radio>
-      </unlocks>
-    </FuG5>
-    <FuG7>	shared	  <unlocks>
-        <radio>	FuG12	  <cost>	7200	</cost>
-        </radio>
-      </unlocks>
-    </FuG7>
     <FuG12>	shared	</FuG12>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Porsche_16_Cyl_Y1>
-          <smplEnginePower>	1000	</smplEnginePower>
+        <Porsche_16_Cyl>
+          <smplEnginePower>	1100	</smplEnginePower>
           <smplFwMaxSpeed>	20	</smplFwMaxSpeed>
-        </Porsche_16_Cyl_Y1>
-        <Porsche_16_Cyl_Y2>
+        </Porsche_16_Cyl>
+        <Porsche_Typ_212_NL>
           <smplEnginePower>	1200	</smplEnginePower>
           <smplFwMaxSpeed>	20	</smplFwMaxSpeed>
-        </Porsche_16_Cyl_Y2>
+        </Porsche_Typ_212_NL>
       </engines>
       <chassis>
         <Chassis_G115_Typ_205B>
@@ -3628,9 +3616,9 @@
   </physics>
   <clientAdjustmentFactors>
     <guns>
-      <_128mm_L50A>
+      <_128mm_Kw_K_L_50_100>
         <delta>	1.22201408	</delta>
-      </_128mm_L50A>
+      </_128mm_Kw_K_L_50_100>
     </guns>
     <armour>	1.115460878	</armour>
   </clientAdjustmentFactors>

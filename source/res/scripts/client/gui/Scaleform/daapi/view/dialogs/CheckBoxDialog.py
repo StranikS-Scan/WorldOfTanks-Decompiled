@@ -4,7 +4,7 @@ from gui.Scaleform.daapi.view.meta.ConfirmDialogMeta import ConfirmDialogMeta
 
 class CheckBoxDialog(ConfirmDialogMeta):
 
-    def __init__(self, meta, handler):
+    def __init__(self, meta, handler, **kwargs):
         super(CheckBoxDialog, self).__init__()
         self.meta = meta
         self.handler = handler

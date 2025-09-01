@@ -7,11 +7,11 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS as _TO
 from gui.Scaleform.required_libraries_config import addBattleRequiredLibraries
 
 def registerBRBattlePackages():
-    registerScaleformBattlePackages(ARENA_GUI_TYPE.BATTLE_ROYALE, ('battle_royale.gui.Scaleform.daapi.view.battle', 'battle_royale.gui.Scaleform.daapi.view.battle.shared', 'messenger.gui.Scaleform.view.battle'))
+    registerScaleformBattlePackages(ARENA_GUI_TYPE.BATTLE_ROYALE, ('battle_royale.gui.Scaleform.daapi.view.battle', 'battle_royale.gui.Scaleform.daapi.view.battle.shared', 'messenger.gui.Scaleform.view.battle', 'gui.Scaleform.daapi.view.battle.shared.vehicle_mechanics'))
 
 
 def registerBRLobbyPackages():
-    registerScaleformLobbyPackages(['battle_royale.gui.Scaleform.daapi.view.lobby'])
+    registerScaleformLobbyPackages(['battle_royale.gui.Scaleform.daapi.view.lobby', 'battle_royale.gui.impl.lobby.views'])
 
 
 def registerBRTooltipsBuilders():

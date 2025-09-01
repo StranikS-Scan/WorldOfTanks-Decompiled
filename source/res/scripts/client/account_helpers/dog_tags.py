@@ -133,6 +133,12 @@ class DogTags(object):
         return bool(self.__cache)
 
     @staticmethod
+    def equipDT(background, engraving):
+        with userSettings.dogTagsSettings() as dt:
+            dt.setSelectedCustomizable([background, engraving])
+        BigWorld.player().dogTags.updatePlayerDT(background, engraving)
+
+    @staticmethod
     def _makeDisplayableDT(clanProfile, playerDT):
         clanTag = clanProfile.getClanAbbrev() if clanProfile and clanProfile.isInClan() else ''
         return DisplayableDogTag(playerDT, BigWorld.player().name, clanTag)

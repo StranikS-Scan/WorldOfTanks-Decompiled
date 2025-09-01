@@ -903,7 +903,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	12000	</weight>
-      <maxLoad>	45000	</maxLoad>
       <terrainResistance>	0.6 0.7 1.6	</terrainResistance>
       <brakeForce>	42000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -1980,7 +1979,11 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_122mm_M62_T2>	shared	  <maxAmmo>	50	</maxAmmo>
+        <_122mm_M62_T2U>	shared	  <maxAmmo>	50	</maxAmmo>
+          <unlocks>
+            <vehicle>	R230_Object_432U	  <cost>	325000	</cost>
+            </vehicle>
+          </unlocks>
           <armor>
             <armor_1>	300	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -2114,7 +2117,7 @@
             <density>	125.471 136.418	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_122mm_M62_T2>
+        </_122mm_M62_T2U>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R148_Object_430_U/normal/lod0/Turret_01.model	</undamaged>
@@ -2743,7 +2746,7 @@
     <detailed>
       <engines>
         <_4TPD>
-          <smplEnginePower>	620	</smplEnginePower>
+          <smplEnginePower>	640	</smplEnginePower>
           <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </_4TPD>
       </engines>

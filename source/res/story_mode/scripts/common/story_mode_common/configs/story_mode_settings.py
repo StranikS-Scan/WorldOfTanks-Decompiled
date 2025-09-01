@@ -19,9 +19,9 @@ class EntryPointSettingsModel(models.Model):
 
 
 class SettingsModel(models.Model):
-    __slots__ = ('enabled', 'waitTimeQueue', 'hideGameLoadingTimeout', 'joinToQueueFromLogin', 'afk', 'entryPoint', 'isModeSelectorCardBig', 'newbieBannerEnabled', 'newbieAdvertisingEnabled', 'parallaxEnabled')
+    __slots__ = ('enabled', 'waitTimeQueue', 'hideGameLoadingTimeout', 'joinToQueueFromLogin', 'afk', 'entryPoint', 'modeSelectorCardColumn', 'modeSelectorCardPriority', 'newbieBannerEnabled', 'newbieAdvertisingEnabled', 'parallaxEnabled')
 
-    def __init__(self, enabled, waitTimeQueue, hideGameLoadingTimeout, joinToQueueFromLogin, afk, entryPoint, isModeSelectorCardBig, newbieBannerEnabled, newbieAdvertisingEnabled, parallaxEnabled):
+    def __init__(self, enabled, waitTimeQueue, hideGameLoadingTimeout, joinToQueueFromLogin, afk, entryPoint, modeSelectorCardColumn, modeSelectorCardPriority, newbieBannerEnabled, newbieAdvertisingEnabled, parallaxEnabled):
         super(SettingsModel, self).__init__()
         self.enabled = enabled
         self.waitTimeQueue = waitTimeQueue
@@ -29,13 +29,14 @@ class SettingsModel(models.Model):
         self.joinToQueueFromLogin = joinToQueueFromLogin
         self.afk = afk
         self.entryPoint = entryPoint
-        self.isModeSelectorCardBig = isModeSelectorCardBig
+        self.modeSelectorCardColumn = modeSelectorCardColumn
+        self.modeSelectorCardPriority = modeSelectorCardPriority
         self.newbieBannerEnabled = newbieBannerEnabled
         self.newbieAdvertisingEnabled = newbieAdvertisingEnabled
         self.parallaxEnabled = parallaxEnabled
 
     def __repr__(self):
-        return '<SettingsModel(enabled={}, waitTimeQueue={}, hideGameLoadingTimeout={}, joinToQueueFromLogin={}, afk={}, entryPoint={}, isModeSelectorCardBig={}, newbieBannerEnabled={}>, newbieAdvertisingEnabled={}, parallaxEnabled={}'.format(self.enabled, self.waitTimeQueue, self.hideGameLoadingTimeout, self.joinToQueueFromLogin, self.afk, self.entryPoint, self.isModeSelectorCardBig, self.newbieBannerEnabled, self.newbieAdvertisingEnabled, self.parallaxEnabled)
+        return '<SettingsModel(enabled={}, waitTimeQueue={}, hideGameLoadingTimeout={}, joinToQueueFromLogin={}, afk={}, entryPoint={}, modeSelectorCardColumn={}, modeSelectorCardPriority={}, newbieBannerEnabled={}>, newbieAdvertisingEnabled={}, parallaxEnabled={}'.format(self.enabled, self.waitTimeQueue, self.hideGameLoadingTimeout, self.joinToQueueFromLogin, self.afk, self.entryPoint, self.modeSelectorCardColumn, self.modeSelectorCardPriority, self.newbieBannerEnabled, self.newbieAdvertisingEnabled, self.parallaxEnabled)
 
 
 class AfkModel(models.Model):
@@ -72,7 +73,8 @@ settingsSchema = GameParamsSchema[SettingsModel](gameParamsKey='story_mode_setti
  'waitTimeQueue': fields.Integer(required=True, deserializedValidators=validate.Range(minValue=1)),
  'hideGameLoadingTimeout': fields.Integer(required=True, deserializedValidators=validate.Range(minValue=1)),
  'joinToQueueFromLogin': fields.Boolean(required=True, public=False),
- 'isModeSelectorCardBig': fields.Boolean(required=True),
+ 'modeSelectorCardColumn': fields.Integer(required=True, deserializedValidators=validate.Range(minValue=1, maxValue=3)),
+ 'modeSelectorCardPriority': fields.Integer(required=True),
  'afk': fields.Nested(schema=afkModesSchema, required=True, public=False),
  'entryPoint': fields.Nested(schema=_bannerSettingsSchema),
  'newbieBannerEnabled': fields.Boolean(required=True),

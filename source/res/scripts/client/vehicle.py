@@ -31,7 +31,7 @@ from debug_utils import LOG_DEBUG_DEV
 from shared_utils import nextTick
 from visual_script.misc import ASPECT
 from DamageComponents import DamageZoneType
-from Event import Event, SafeEvent
+from Event import SafeEvent
 from common_tank_structure import VehicleAppearanceCacheInfo
 from gui.battle_control import vehicle_getter, avatar_getter
 from gui.battle_control.avatar_getter import getSoundNotifications
@@ -41,7 +41,7 @@ from helpers import dependency
 from helpers.EffectMaterialCalculation import calcSurfaceMaterialNearPoint
 from helpers.EffectsList import SoundStartParam
 from items import vehicles
-from items.components.component_constants import DEFAULT_TRACK_HIT_VECTOR, INVALID_EFFECT_INDEX
+from items.components.component_constants import DEFAULT_TRACK_HIT_VECTOR, DEFAULT_GUN_BURST, INVALID_EFFECT_INDEX
 from material_kinds import EFFECT_MATERIAL_INDEXES_BY_NAMES, EFFECT_MATERIALS
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -49,15 +49,15 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.game_control import ISpecialSoundCtrl
 from skeletons.vehicle_appearance_cache import IAppearanceCache
 from soft_exception import SoftException
+from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from vehicles.mechanics.mechanic_helpers import getVehicleMechanic, getVehicleMechanicParams
 from vehicle_systems.components.shot_damage_components import ShotDamageComponent
 from vehicle_systems.components import vehicle_variable_storage as var_storage
 from vehicle_systems.entity_components.battle_abilities_component import BattleAbilitiesComponent
-from vehicle_systems.entity_components.vehicle_mechanic_component import getVehicleMechanic
 from vehicle_systems.components.vehicle_pickup_component import VehiclePickupComponent
-from vehicle_systems.model_assembler import collisionIdxToTrackPairIdx
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes, TankSoundObjectsIndexes
 from vehicle_systems.instant_status_helpers import invokeInstantStatusForVehicle
-from shared_utils.vehicle_utils import createWheelFilters
+from shared_utils.vehicle_utils import createWheelFilters, getMatinfo
 import GenericComponents
 import InstantStatuses
 import CGF
@@ -130,7 +130,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
 
     @property
     def twinGunIndexes(self):
-        ctrl = self.getVehicleMechanic('twinGunController')
+        ctrl = self.getVehicleMechanic(VehicleMechanic.TWIN_GUN)
         return ctrl.getActiveGunIndexes() if ctrl is not None else ()
 
     @property
@@ -154,8 +154,8 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         return self.typeDescriptor is not None and self.typeDescriptor.isTrackWithinTrack
 
     @property
-    def isMultiGun(self):
-        return self.typeDescriptor is not None and self.typeDescriptor.turret.multiGun
+    def isMainMultiGun(self):
+        return self.typeDescriptor is not None and self.typeDescriptor.gun.multiGun
 
     @property
     def wheelsScrollSmoothed(self):
@@ -243,7 +243,8 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         self.__isInDebuff = False
         self.__cameraTargetMatrix = Math.WGAdaptiveMatrixProvider()
         self.set_postmortemViewPointName()
-        self.onShowDamageFromShot = Event()
+        self.onShowDamageFromShot = SafeEvent()
+        self.onVehicleHealthChanged = SafeEvent()
         return
 
     def reload(self):
@@ -300,6 +301,8 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             _logger.error('Failed to load vehicle appearance. Missing AppearanceCache controller. vId=%s; vInfo=%s; strCD=%s', self.id, newInfo._asdict(), strCD)
         self.respawnCompactDescr = None
         var_storage.createForRoot(self)
+        self.set_vehPostProgression(self.vehPostProgression)
+        self.set_customRoleSlotTypeId(self.customRoleSlotTypeId)
         return
 
     def getDescr(self, respawnCompactDescr):
@@ -398,7 +401,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         BigWorld.player().vehicle_onLeaveWorld(self)
 
     def showShooting(self, burstCount, currentGuns, shellType, isPredictedShot=False):
-        blockShooting = self.siegeState is not None and self.siegeState != VEHICLE_SIEGE_STATE.ENABLED and self.siegeState != VEHICLE_SIEGE_STATE.DISABLED and not self.typeDescriptor.hasAutoSiegeMode
+        blockShooting = self.siegeState is not None and self.siegeState in VEHICLE_SIEGE_STATE.SWITCHING and not self.typeDescriptor.hasAutoSiegeMode
         if not self.isStarted or blockShooting:
             return
         else:
@@ -408,11 +411,9 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             extra = self.typeDescriptor.extrasDict[self.typeDescriptor.shootExtraName]
             extra.stopFor(self)
             extra.startFor(self, (burstCount, currentGuns, shellType))
-            if not isPredictedShot and self.isPlayerVehicle:
-                ctrl = self.guiSessionProvider.shared.feedback
-                if ctrl is not None:
-                    ctrl.onDiscreteShotDone()
-                BigWorld.player().cancelWaitingForShot()
+            if self.isPlayerVehicle:
+                if not isPredictedShot:
+                    BigWorld.player().cancelWaitingForShot()
             return
 
     def calcMaxComponentIdx(self):
@@ -425,7 +426,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             maxComponentIdx = maxComponentIdx + wheelsConfig.getNonTrackWheelsCount()
         return maxComponentIdx
 
-    def showDamageFromShot(self, attackerID, hitPoints, effectsIndex, prefabEffIndex, damage, damageFactor, lastMaterialIsShield, shellTypeIdx, shellCaliber, shellVelocity):
+    def showDamageFromShot(self, attackerID, hitPoints, effectsIndex, prefabEffIndex, damage, damageFactor, lastMaterialIsShield, shellTypeIdx, shellCaliber, shellVelocity, gunInstallationIndex):
         if not self.isStarted:
             return
         else:
@@ -498,14 +499,14 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             if isAttacker or isObserverFPV:
                 ctrl = sessionProvider.shared.feedback
                 if ctrl is not None:
-                    ctrl.updateMarkerHitState(self.id, None, maxPriorityHitPoint.componentName, maxHitEffectCode, damage, damageFactor, lastMaterialIsShield, hasPiercedHit)
+                    ctrl.updateMarkerHitState(self.id, None, maxPriorityHitPoint.componentName, maxHitEffectCode, gunInstallationIndex, damage, damageFactor, lastMaterialIsShield, hasPiercedHit)
                 if needArmorScreenNotDamageSound:
                     soundNotifications.play('ui_armor_screen_not_damage_PC_NPC')
             elif self.id == controllingVehicleID and attackerID != self.id and needArmorScreenNotDamageSound:
                 soundNotifications.play('ui_armor_screen_not_damage_NPC_PC')
             return
 
-    def showDamageFromExplosion(self, attackerID, center, effectsIndex, damage, damageFactor):
+    def showDamageFromExplosion(self, attackerID, center, effectsIndex, damage, damageFactor, gunInstallationIndex):
         if not self.isStarted:
             return
         else:
@@ -523,7 +524,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             if attackerID == player.playerVehicleID:
                 ctrl = self.guiSessionProvider.shared.feedback
                 if ctrl is not None:
-                    ctrl.updateMarkerHitState(self.id, _FET.VEHICLE_ARMOR_PIERCED, damage=damage)
+                    ctrl.updateMarkerHitState(self.id, _FET.VEHICLE_ARMOR_PIERCED, gunInstallationIndex=gunInstallationIndex, damage=damage)
             return
 
     def showVehicleCollisionEffect(self, pos, delta_spd, energy=0):
@@ -829,6 +830,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             player = BigWorld.player()
             attachedVehicle = player.getVehicleAttached()
             player.arena.onVehicleHealthChanged(self.id, attackerID, oldHealth - newHealth)
+            self.onVehicleHealthChanged(self.id, newHealth, oldHealth)
             if not self.appearance.damageState.isCurrentModelDamaged:
                 self.appearance.onVehicleHealthChanged()
             if self.health <= 0:
@@ -906,13 +908,19 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         except Exception:
             pass
 
-    def showRammingEffect(self, energy, point):
+    def showRammingEffect(self, energy, speedDiff, point):
         if not self.isStarted:
             return
-        if energy < 600:
-            self.showCollisionEffect(point, 'rammingCollisionLight')
         else:
-            self.showCollisionEffect(point, 'rammingCollisionHeavy')
+            effectName = 'rammingCollisionLight'
+            improvedRammingParams = getVehicleMechanicParams(VehicleMechanic.IMPROVED_RAMMING, self.typeDescriptor)
+            if improvedRammingParams is not None:
+                if speedDiff > improvedRammingParams.effectSpeedThreshold:
+                    effectName = 'rammingCollisionHeavy'
+            elif energy >= constants.RAMMING_EFFECT_THRESHOLD:
+                effectName = 'rammingCollisionHeavy'
+            self.showCollisionEffect(point, effectName)
+            return
 
     def onStaticCollision(self, energy, point, normal, miscFlags, damage, destrEffectIdx, destrMaxHealth):
         if not self.isStarted:
@@ -953,14 +961,14 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             if self.typeDescriptor is not None and self.typeDescriptor.hasSiegeMode:
                 self.typeDescriptor.onSiegeStateChanged(newState)
                 self.appearance.onSiegeStateChanged(newState, timeToNextMode)
-                siegeComponents = ('dualAccuracy',)
+                siegeComponents = (VehicleMechanic.DUAL_ACCURACY,)
                 for mechanicComponent in filter(None, map(self.getVehicleMechanic, siegeComponents)):
                     mechanicComponent.onSiegeStateUpdated(self.typeDescriptor)
 
                 if self.isPlayerVehicle or self.id == BigWorld.player().observedVehicleID:
                     inputHandler = BigWorld.player().inputHandler
-                    if inputHandler.siegeModeControl:
-                        inputHandler.siegeModeControl.notifySiegeModeChanged(self, newState, timeToNextMode)
+                    if inputHandler.siegeModeNotifier:
+                        inputHandler.siegeModeNotifier.notifySiegeModeChanged(self.id, newState, timeToNextMode)
             else:
                 _logger.error('Wrong usage! Should be called only on vehicle with valid typeDescriptor and siege mode')
             return
@@ -1003,30 +1011,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         return
 
     def getMatinfo(self, partIndex, matKind):
-        matInfo = None
-        collisionComponent = self.appearance.collisions
-        if collisionComponent is not None and partIndex > collisionComponent.maxStaticPartIndex:
-            matInfo = BigWorld.getMaterialInfo(collisionComponent.getPartGameObject(partIndex), matKind)
-        elif partIndex == TankPartIndexes.CHASSIS:
-            matInfo = self.typeDescriptor.chassis.materials.get(matKind)
-        elif partIndex == TankPartIndexes.HULL:
-            matInfo = self.typeDescriptor.hull.materials.get(matKind)
-        elif partIndex == TankPartIndexes.TURRET:
-            matInfo = self.typeDescriptor.turret.materials.get(matKind)
-        elif partIndex == TankPartIndexes.GUN:
-            matInfo = self.typeDescriptor.gun.materials.get(matKind)
-        elif partIndex > len(TankPartIndexes.ALL):
-            trackPairIdx = collisionIdxToTrackPairIdx(partIndex, self.typeDescriptor)
-            if trackPairIdx is not None:
-                matInfo = self.typeDescriptor.chassis.tracks[trackPairIdx].materials.get(matKind)
-        elif self.isWheeledTech and collisionComponent is not None:
-            wheelName = collisionComponent.getPartName(partIndex)
-            if wheelName is not None:
-                matInfo = self.typeDescriptor.chassis.wheelsArmor.get(wheelName, None)
-        if matInfo is None:
-            commonMaterialsInfo = vehicles.g_cache.commonConfig['materials']
-            matInfo = commonMaterialsInfo.get(matKind)
-        return matInfo
+        return getMatinfo(self, partIndex, matKind, self.isWheeledTech)
 
     def isAlive(self):
         return self.isCrewActive and self.health > 0
@@ -1392,6 +1377,10 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
                 return CGFGameObjectContext(self.entityGameObject, ASPECT.CLIENT)
             _logger.error('Could not create CGFGameObjectContext because self.entityGameObject is None')
         return BigWorld.player().arena.getVseContextInstance(contextName)
+
+    def getGunBurstParams(self, gunDescr):
+        chargeableBurst = self.getVehicleMechanic(VehicleMechanic.CHARGEABLE_BURST)
+        return DEFAULT_GUN_BURST if chargeableBurst is not None and not chargeableBurst.isBurstActive else gunDescr.burst
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)

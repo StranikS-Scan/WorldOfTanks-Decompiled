@@ -40,7 +40,7 @@ class SiegeEffectsController(cgf_obsolete_script.py_component.Component):
                 self.__siegeInProgress = 1
                 self.__siegeTimeOut = switchingTime
                 self.__shake()
-            elif newState == VEHICLE_SIEGE_STATE.ENABLED:
+            elif VEHICLE_SIEGE_STATE.isEnabled(newState):
                 self.__siegeInProgress = 0
             elif newState == VEHICLE_SIEGE_STATE.SWITCHING_OFF:
                 self.__siegeInProgress = 1

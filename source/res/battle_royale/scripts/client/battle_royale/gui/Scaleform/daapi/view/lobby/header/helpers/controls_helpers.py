@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/lobby/header/helpers/controls_helpers.py
 from __future__ import absolute_import
-from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import TOOLTIP_TYPES
+from gui.impl.gen import R
 from gui.Scaleform.daapi.view.lobby.header.helpers.controls_helpers import DefaultLobbyHeaderHelper
 from gui.Scaleform.daapi.view.lobby.header.helpers.fight_btn_tooltips import getRoyaleFightBtnTooltipData
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -28,4 +28,4 @@ class BRTournamentLobbyHeaderHelper(DefaultLobbyHeaderHelper):
 
     @classmethod
     def getSquadControlTooltipData(cls, prbValidation, isInSquad):
-        return ('', TOOLTIP_TYPES.COMPLEX)
+        return (R.invalid(), R.invalid(), {})

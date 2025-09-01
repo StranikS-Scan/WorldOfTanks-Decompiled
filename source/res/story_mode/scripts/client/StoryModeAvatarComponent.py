@@ -13,8 +13,5 @@ class StoryModeAvatarComponent(ScriptComponent):
     def set_isPositionValid(self, prevValue):
         self.onPositionValidChanged()
 
-    def setNavMeshGirth(self, girth):
-        self.cell.setNavMeshGirth(girth)
-
-    def checkPosition(self, position):
-        self.cell.checkPosition(position)
+    def checkPositionForEquipment(self, equipmentId, position):
+        self.cell.checkPositionForEquipment(equipmentId, position)

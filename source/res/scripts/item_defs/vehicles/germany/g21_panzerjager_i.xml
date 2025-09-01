@@ -1392,7 +1392,6 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	2000	</weight>
-      <maxLoad>	6400	</maxLoad>
       <terrainResistance>	1.2 1.4 2.5	</terrainResistance>
       <brakeForce>	6500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2254,7 +2253,6 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	2000	</weight>
-      <maxLoad>	8400	</maxLoad>
       <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
       <brakeForce>	7000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -3111,7 +3109,7 @@
     <PanzerJager>
       <ceilless>	true	</ceilless>
       <userString>	#germany_vehicles:PanzerJager	</userString>
-      <tags>	cannotDetach	</tags>
+      <tags>	cannotDetach turretless	</tags>
       <level>	2	</level>
       <price>	100	</price>
       <notInShop>	true	</notInShop>

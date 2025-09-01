@@ -62,6 +62,11 @@ class SerialNumberComponentManager(CGF.ComponentManager):
         serialNumber = gameObject.findComponentByType(SerialNumberComponent)
         if serialNumber is not None:
             serialNumber.counterValue = counterValue
+            if serialNumber.decalComponent is not None:
+                decalGO = serialNumber.decalComponent.gameObject
+                if decalGO.isValid():
+                    decalGO.deactivate()
+                    decalGO.activate()
         return
 
     def __getVehicle(self, gameObject):

@@ -8,7 +8,7 @@ from gui.impl.pub import ViewImpl
 class DivisionTooltip(ViewImpl):
     __slots__ = ('__params',)
 
-    def __init__(self, layoutID=R.views.comp7.lobby.tooltips.DivisionTooltip(), params=None):
+    def __init__(self, layoutID=R.views.comp7.mono.lobby.tooltips.division_tooltip(), params=None):
         settings = ViewSettings(layoutID)
         settings.model = DivisionTooltipModel()
         super(DivisionTooltip, self).__init__(settings)

@@ -1,0 +1,75 @@
+<pm3_8_2_8.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm3_8_2_8_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <results>
+            <key>	damageDealt	</key>
+            <greaterOrEqual>	2	</greaterOrEqual>
+            <compareWithMaxHealth></compareWithMaxHealth>
+          </results>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	125000	</credits>
+        <goodie>
+          <id>	121002	</id>
+          <count>	1	</count>
+        </goodie>
+        <customizations>
+          <item>
+            <value>	3	</value>
+            <custType>	projection_decal	</custType>
+            <id>	1205	</id>
+          </item>
+        </customizations>
+        <token>
+          <id>	token:pt:final:s3:t8:main	</id>
+          <expires>	01.01.2050 00:01	</expires>
+          <count>	1	</count>
+          <limit>	45	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm3_8_2_8_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <not>
+              <or>
+                <token>
+                  <id>	token:pt:final:s3:t8:main	</id>
+                  <equal>	45	</equal>
+                </token>
+                <token>
+                  <id>	token:pt:s3:t8:finished:honor	</id>
+                  <equal>	1	</equal>
+                </token>
+              </or>
+            </not>
+          </account>
+        </preBattle>
+        <postBattle>
+          <results>
+            <key>	damageDealt	</key>
+            <greaterOrEqual>	2	</greaterOrEqual>
+            <compareWithMaxHealth></compareWithMaxHealth>
+          </results>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	pm3:8:points	</id>
+          <expires>	01.12.2050 06:00	</expires>
+          <count>	50	</count>
+        </token>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</pm3_8_2_8.xml>

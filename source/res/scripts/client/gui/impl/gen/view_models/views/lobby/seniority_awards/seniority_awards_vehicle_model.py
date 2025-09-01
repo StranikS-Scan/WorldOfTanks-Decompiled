@@ -5,20 +5,20 @@ from gui.impl.gen.view_models.views.lobby.common.vehicle_model import VehicleMod
 class SeniorityAwardsVehicleModel(VehicleModel):
     __slots__ = ()
 
-    def __init__(self, properties=11, commands=0):
+    def __init__(self, properties=12, commands=0):
         super(SeniorityAwardsVehicleModel, self).__init__(properties=properties, commands=commands)
 
     def getDescription(self):
-        return self._getString(9)
-
-    def setDescription(self, value):
-        self._setString(9, value)
-
-    def getVehicleId(self):
         return self._getString(10)
 
-    def setVehicleId(self, value):
+    def setDescription(self, value):
         self._setString(10, value)
+
+    def getVehicleId(self):
+        return self._getString(11)
+
+    def setVehicleId(self, value):
+        self._setString(11, value)
 
     def _initialize(self):
         super(SeniorityAwardsVehicleModel, self)._initialize()

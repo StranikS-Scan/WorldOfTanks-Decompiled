@@ -123,9 +123,7 @@ class Highlighter(cgf_obsolete_script.py_component.Component):
             return
 
     def __doHighlightOperation(self, status, args):
-        if status & self.HIGHLIGHT_ON:
-            BigWorld.wgAddEdgeDetectEntity(self.__vehicle, self.__collisions, args[0], args[1], args[2], args[3])
-        else:
+        if not status & self.HIGHLIGHT_ON:
             BigWorld.wgDelEdgeDetectEntity(self.__vehicle)
         self.__updateHighlightComponent(status, args)
 

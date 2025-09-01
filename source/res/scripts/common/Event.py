@@ -38,7 +38,21 @@ class Event(list):
         return 'Event(%s)(%s):%s' % (self.__class__.__name__, len(self), repr(self[:]))
 
 
-class LateEvent(Event):
+class SafeEvent(Event):
+    __slots__ = ()
+
+    def __init__(self, manager=None):
+        super(SafeEvent, self).__init__(manager)
+
+    def __call__(self, *args, **kwargs):
+        for delegate in self[:]:
+            try:
+                delegate(*args, **kwargs)
+            except:
+                LOG_CURRENT_EXCEPTION()
+
+
+class LateEvent(SafeEvent):
     __slots__ = ('__lateCallback',)
 
     def __init__(self, lateCallback, manager=None):
@@ -53,20 +67,6 @@ class LateEvent(Event):
         self.__lateCallback = None
         super(LateEvent, self).clear()
         return
-
-
-class SafeEvent(Event):
-    __slots__ = ()
-
-    def __init__(self, manager=None):
-        super(SafeEvent, self).__init__(manager)
-
-    def __call__(self, *args, **kwargs):
-        for delegate in self[:]:
-            try:
-                delegate(*args, **kwargs)
-            except:
-                LOG_CURRENT_EXCEPTION()
 
 
 class Handler(object):

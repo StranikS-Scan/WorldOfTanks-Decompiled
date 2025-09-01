@@ -5,8 +5,7 @@ import BigWorld
 import typing
 import SoundGroups
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import GUI_START_BEHAVIOR
-from account_helpers.settings_core.settings_constants import GuiSettingsBehavior
+from account_helpers.AccountSettings import COMP7_UI_SECTION, COMP7_LAST_SEASON_WHERE_STATISTICS_SHOWN
 from comp7.gui.impl.gen.view_models.views.lobby.constants import Constants
 from comp7.gui.impl.gen.view_models.views.lobby.enums import SeasonName, SeasonPointState
 from comp7.gui.impl.gen.view_models.views.lobby.season_statistics_model import SeasonStatisticsModel, SummaryStatisticsModel, VehicleStatisticsModel
@@ -14,7 +13,7 @@ from comp7.gui.impl.gen.view_models.views.lobby.summary_statistics_model import 
 from comp7.gui.impl.lobby.comp7_helpers import comp7_shared
 from comp7.gui.impl.lobby.tooltips.season_point_tooltip import SeasonPointTooltip
 from comp7.gui.shared.gui_items.dossier.stats import getComp7DossierStats
-from comp7_common_const import seasonPointsCodeBySeasonNumber
+from comp7_common_const import seasonPointsCodeBySeasonNumber, seasonNameBySeasonNumber
 from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
 from frameworks.wulf.view.array import fillViewModelsArray
 from gui.impl.gen import R
@@ -66,7 +65,7 @@ class _SeasonStatistics(ViewImpl):
         self.__removeListeners()
 
     def createToolTipContent(self, event, contentID):
-        if contentID == R.views.comp7.lobby.tooltips.SeasonPointTooltip():
+        if contentID == R.views.comp7.mono.lobby.tooltips.season_point_tooltip():
             params = {'state': SeasonPointState(event.getArgument('state')),
              'ignoreState': event.getArgument('ignoreState')}
             return SeasonPointTooltip(params=params)
@@ -82,10 +81,12 @@ class _SeasonStatistics(ViewImpl):
         self.__comp7Controller.onEntitlementsUpdated -= self.__updateData
 
     def __setComp7SeasonStasisticsShown(self):
-        defaults = AccountSettings.getFilterDefault(GUI_START_BEHAVIOR)
-        stateFlags = self.__settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
-        stateFlags[GuiSettingsBehavior.COMP7_SEASON_STATISTICS_SHOWN] = True
-        self.__settingsCore.serverSettings.setSectionSettings(GUI_START_BEHAVIOR, stateFlags)
+        previousSeason = self.__comp7Controller.getPreviousSeason()
+        if previousSeason is not None:
+            settings = AccountSettings.getUIFlag(COMP7_UI_SECTION)
+            settings[COMP7_LAST_SEASON_WHERE_STATISTICS_SHOWN] = seasonNameBySeasonNumber(previousSeason.getNumber())
+            AccountSettings.setUIFlag(COMP7_UI_SECTION, settings)
+        return
 
     def __updateData(self):
         with self.viewModel.transaction() as tx:
@@ -241,4 +242,4 @@ class SeasonStatisticsWindow(LobbyNotificationWindow):
     __slots__ = ()
 
     def __init__(self, seasonNumber, saveViewing, parent=None):
-        super(SeasonStatisticsWindow, self).__init__(wndFlags=WindowFlags.WINDOW_FULLSCREEN | WindowFlags.WINDOW, content=_SeasonStatistics(layoutID=R.views.comp7.lobby.SeasonStatistics(), seasonNumber=seasonNumber, saveViewing=saveViewing), parent=parent)
+        super(SeasonStatisticsWindow, self).__init__(wndFlags=WindowFlags.WINDOW_FULLSCREEN | WindowFlags.WINDOW, content=_SeasonStatistics(layoutID=R.views.comp7.mono.lobby.season_statistics(), seasonNumber=seasonNumber, saveViewing=saveViewing), parent=parent)

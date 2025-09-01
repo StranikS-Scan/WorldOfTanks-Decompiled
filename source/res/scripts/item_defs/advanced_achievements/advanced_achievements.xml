@@ -7,7 +7,6 @@
           <type>	subcategory	</type>
           <stringKey>	vehicles	</stringKey>
           <background>	vehicles	</background>
-          <order>	359 361 364 360 362 363 404	</order>
         </UI>
         <stages>
           <stage>
@@ -25,7 +24,7 @@
           <type>	subcategory	</type>
           <stringKey>	nations	</stringKey>
           <background>	nations	</background>
-          <order>	3 4 5 6 7 8 9 10 11 12 13	</order>
+          <order>	3 4 5 9 8 7 6 10 11 13 12	</order>
         </UI>
         <stages>
           <stage>
@@ -435,8 +434,8 @@
       <achievement>
         <id>	26	</id>
         <UI>
-          <stringKey>	branch_germany_G121_Grille_15_L63	</stringKey>
-          <vehicle>	germany:G121_Grille_15_L63	</vehicle>
+          <stringKey>	branch_germany_G189_Hirschkafer	</stringKey>
+          <vehicle>	germany:G189_Hirschkafer	</vehicle>
           <background>	germany_branch	</background>
           <iconPosition>	bottom	</iconPosition>
         </UI>
@@ -447,7 +446,7 @@
           </stage>
         </stages>
         <conditions>
-          <requiredAchievementIDs>	27 28 29 30 31	</requiredAchievementIDs>
+          <requiredAchievementIDs>	27 28 29 30 31 458	</requiredAchievementIDs>
         </conditions>
       </achievement>
       <achievement>
@@ -651,8 +650,8 @@
       <achievement>
         <id>	38	</id>
         <UI>
-          <stringKey>	branch_germany_G42_Maus	</stringKey>
-          <vehicle>	germany:G42_Maus	</vehicle>
+          <stringKey>	branch_germany_G187_Taschenratte	</stringKey>
+          <vehicle>	germany:G187_Taschenratte	</vehicle>
           <background>	germany_branch	</background>
           <iconPosition>	bottom	</iconPosition>
         </UI>
@@ -663,7 +662,7 @@
           </stage>
         </stages>
         <conditions>
-          <requiredAchievementIDs>	33 34 39 40 41	</requiredAchievementIDs>
+          <requiredAchievementIDs>	33 34 39 40 41 462	</requiredAchievementIDs>
         </conditions>
       </achievement>
       <achievement>
@@ -939,8 +938,8 @@
       <achievement>
         <id>	54	</id>
         <UI>
-          <stringKey>	branch_germany_G89_Leopard1	</stringKey>
-          <vehicle>	germany:G89_Leopard1	</vehicle>
+          <stringKey>	branch_germany_G185_Leopard_120_Verbessert	</stringKey>
+          <vehicle>	germany:G185_Leopard_120_Verbessert	</vehicle>
           <background>	germany_branch	</background>
           <iconPosition>	bottom	</iconPosition>
         </UI>
@@ -951,7 +950,7 @@
           </stage>
         </stages>
         <conditions>
-          <requiredAchievementIDs>	49 55 56 57 58	</requiredAchievementIDs>
+          <requiredAchievementIDs>	49 55 56 57 58 471	</requiredAchievementIDs>
         </conditions>
       </achievement>
       <achievement>
@@ -1029,8 +1028,8 @@
       <achievement>
         <id>	59	</id>
         <UI>
-          <stringKey>	branch_germany_G125_Spz_57_Rh	</stringKey>
-          <vehicle>	germany:G125_Spz_57_Rh	</vehicle>
+          <stringKey>	branch_germany_G188_LeKpz_Borkenkafer	</stringKey>
+          <vehicle>	germany:G188_LeKpz_Borkenkafer	</vehicle>
           <background>	germany_branch	</background>
           <iconPosition>	bottom	</iconPosition>
         </UI>
@@ -1041,7 +1040,7 @@
           </stage>
         </stages>
         <conditions>
-          <requiredAchievementIDs>	60 61 62 63 64	</requiredAchievementIDs>
+          <requiredAchievementIDs>	60 61 62 63 64 457	</requiredAchievementIDs>
         </conditions>
       </achievement>
       <achievement>
@@ -1551,8 +1550,8 @@
       <achievement>
         <id>	88	</id>
         <UI>
-          <stringKey>	branch_ussr_R45_IS_7	</stringKey>
-          <vehicle>	ussr:R45_IS-7	</vehicle>
+          <stringKey>	branch_ussr_R228_KR_1	</stringKey>
+          <vehicle>	ussr:R228_KR_1	</vehicle>
           <background>	ussr_branch	</background>
           <iconPosition>	bottom	</iconPosition>
         </UI>
@@ -1563,7 +1562,7 @@
           </stage>
         </stages>
         <conditions>
-          <requiredAchievementIDs>	83 84 85 89 90	</requiredAchievementIDs>
+          <requiredAchievementIDs>	83 84 85 89 90 460	</requiredAchievementIDs>
         </conditions>
       </achievement>
       <achievement>
@@ -1857,8 +1856,8 @@
       <achievement>
         <id>	105	</id>
         <UI>
-          <stringKey>	branch_ussr_R148_Object_430_U	</stringKey>
-          <vehicle>	ussr:R148_Object_430_U	</vehicle>
+          <stringKey>	branch_ussr_R230_Object_432U	</stringKey>
+          <vehicle>	ussr:R230_Object_432U	</vehicle>
           <background>	ussr_branch	</background>
           <iconPosition>	bottom	</iconPosition>
         </UI>
@@ -1869,7 +1868,7 @@
           </stage>
         </stages>
         <conditions>
-          <requiredAchievementIDs>	106 107 108 109 110	</requiredAchievementIDs>
+          <requiredAchievementIDs>	106 107 108 109 110 465	</requiredAchievementIDs>
         </conditions>
       </achievement>
       <achievement>
@@ -2559,8 +2558,8 @@
       <achievement>
         <id>	144	</id>
         <UI>
-          <stringKey>	branch_usa_A69_T110E5	</stringKey>
-          <vehicle>	usa:A69_T110E5	</vehicle>
+          <stringKey>	branch_usa_A182_T803	</stringKey>
+          <vehicle>	usa:A182_T803	</vehicle>
           <background>	usa_branch	</background>
           <iconPosition>	bottom	</iconPosition>
         </UI>
@@ -2571,7 +2570,7 @@
           </stage>
         </stages>
         <conditions>
-          <requiredAchievementIDs>	145 146 147 148 149	</requiredAchievementIDs>
+          <requiredAchievementIDs>	145 146 147 148 149 466	</requiredAchievementIDs>
         </conditions>
       </achievement>
       <achievement>
@@ -2883,8 +2882,8 @@
       <achievement>
         <id>	162	</id>
         <UI>
-          <stringKey>	branch_usa_A120_M48A5	</stringKey>
-          <vehicle>	usa:A120_M48A5	</vehicle>
+          <stringKey>	branch_usa_A183_XM69_Hacker	</stringKey>
+          <vehicle>	usa:A183_XM69_Hacker	</vehicle>
           <background>	usa_branch	</background>
           <iconPosition>	bottom	</iconPosition>
         </UI>
@@ -2895,7 +2894,7 @@
           </stage>
         </stages>
         <conditions>
-          <requiredAchievementIDs>	157 158 163 164 165	</requiredAchievementIDs>
+          <requiredAchievementIDs>	157 158 163 164 165 463	</requiredAchievementIDs>
         </conditions>
       </achievement>
       <achievement>
@@ -3279,8 +3278,8 @@
       <achievement>
         <id>	184	</id>
         <UI>
-          <stringKey>	branch_france_F10_AMX_50B	</stringKey>
-          <vehicle>	france:F10_AMX_50B	</vehicle>
+          <stringKey>	branch_france_F136_AMX_67_Imbattable	</stringKey>
+          <vehicle>	france:F136_AMX_67_Imbattable	</vehicle>
           <background>	france_branch	</background>
           <iconPosition>	bottom	</iconPosition>
         </UI>
@@ -3291,7 +3290,7 @@
           </stage>
         </stages>
         <conditions>
-          <requiredAchievementIDs>	185 186 187 188 189	</requiredAchievementIDs>
+          <requiredAchievementIDs>	185 186 187 188 189 470	</requiredAchievementIDs>
         </conditions>
       </achievement>
       <achievement>
@@ -3459,8 +3458,8 @@
       <achievement>
         <id>	194	</id>
         <UI>
-          <stringKey>	branch_france_F18_Bat_Chatillon25t	</stringKey>
-          <vehicle>	france:F18_Bat_Chatillon25t	</vehicle>
+          <stringKey>	branch_france_F135_AS_XX_40_t	</stringKey>
+          <vehicle>	france:F135_AS_XX_40_t	</vehicle>
           <background>	france_branch	</background>
           <iconPosition>	bottom	</iconPosition>
         </UI>
@@ -3471,7 +3470,7 @@
           </stage>
         </stages>
         <conditions>
-          <requiredAchievementIDs>	195 196 197 198 199	</requiredAchievementIDs>
+          <requiredAchievementIDs>	195 196 197 198 199 469	</requiredAchievementIDs>
         </conditions>
       </achievement>
       <achievement>
@@ -3945,10 +3944,11 @@
       <achievement>
         <id>	221	</id>
         <UI>
-          <stringKey>	branch_uk_GB92_FV217	</stringKey>
-          <vehicle>	uk:GB92_FV217	</vehicle>
+          <stringKey>	branch_uk_GB147_FV4025_Contriver	</stringKey>
+          <vehicle>	uk:GB147_FV4025_Contriver	</vehicle>
           <background>	uk_branch	</background>
           <iconPosition>	bottom	</iconPosition>
+          <order>	228 444 445 446 443 459	</order>
         </UI>
         <stages>
           <stage>
@@ -3957,7 +3957,7 @@
           </stage>
         </stages>
         <conditions>
-          <requiredAchievementIDs>	222 223 224 225 226	</requiredAchievementIDs>
+          <requiredAchievementIDs>	228 444 445 446 443 459	</requiredAchievementIDs>
         </conditions>
       </achievement>
       <achievement>
@@ -4593,8 +4593,8 @@
       <achievement>
         <id>	257	</id>
         <UI>
-          <stringKey>	branch_china_Ch48_BZ_75	</stringKey>
-          <vehicle>	china:Ch48_BZ_75	</vehicle>
+          <stringKey>	branch_china_Ch67_BZ_79	</stringKey>
+          <vehicle>	china:Ch67_BZ_79	</vehicle>
           <background>	china_branch	</background>
           <iconPosition>	bottom	</iconPosition>
         </UI>
@@ -4605,7 +4605,7 @@
           </stage>
         </stages>
         <conditions>
-          <requiredAchievementIDs>	258 259 260 261 262	</requiredAchievementIDs>
+          <requiredAchievementIDs>	258 259 260 261 262 467	</requiredAchievementIDs>
         </conditions>
       </achievement>
       <achievement>
@@ -5727,8 +5727,8 @@
       <achievement>
         <id>	320	</id>
         <UI>
-          <stringKey>	branch_poland_Pl21_CS_63	</stringKey>
-          <vehicle>	poland:Pl21_CS_63	</vehicle>
+          <stringKey>	branch_poland_Pl37_CS_67_Szakal	</stringKey>
+          <vehicle>	poland:Pl37_CS_67_Szakal	</vehicle>
           <background>	poland_branch	</background>
           <iconPosition>	bottom	</iconPosition>
         </UI>
@@ -5739,7 +5739,7 @@
           </stage>
         </stages>
         <conditions>
-          <requiredAchievementIDs>	321 322 323 324 325	</requiredAchievementIDs>
+          <requiredAchievementIDs>	321 322 323 324 325 468	</requiredAchievementIDs>
         </conditions>
       </achievement>
       <achievement>
@@ -5835,8 +5835,8 @@
       <achievement>
         <id>	326	</id>
         <UI>
-          <stringKey>	branch_sweden_S11_Strv_103B	</stringKey>
-          <vehicle>	sweden:S11_Strv_103B	</vehicle>
+          <stringKey>	branch_sweden_S36_Strv_107_12	</stringKey>
+          <vehicle>	sweden:S36_Strv_107_12	</vehicle>
           <background>	sweden_branch	</background>
           <iconPosition>	bottom	</iconPosition>
         </UI>
@@ -5847,7 +5847,7 @@
           </stage>
         </stages>
         <conditions>
-          <requiredAchievementIDs>	327 328 329 330 331	</requiredAchievementIDs>
+          <requiredAchievementIDs>	327 328 329 330 331 461	</requiredAchievementIDs>
         </conditions>
       </achievement>
       <achievement>
@@ -7368,7 +7368,7 @@
           </stage>
         </stages>
         <conditions>
-          <requiredAchievementIDs>	403 399	</requiredAchievementIDs>
+          <requiredAchievementIDs>	403 399 455	</requiredAchievementIDs>
         </conditions>
       </achievement>
       <achievement>
@@ -7689,22 +7689,6 @@
         </stages>
         <conditions>
           <vehicle>	ussr:R75_SU122_54	</vehicle>
-        </conditions>
-      </achievement>
-      <achievement>
-        <id>	425	</id>
-        <deprecated>	true	</deprecated>
-        <UI>
-          <stringKey>	A44_M4A2E4	</stringKey>
-          <background>	vehicles	</background>
-        </UI>
-        <stages>
-          <stage>
-            <value>	1	</value>
-          </stage>
-        </stages>
-        <conditions>
-          <vehicle>	usa:A44_M4A2E4	</vehicle>
         </conditions>
       </achievement>
       <achievement>
@@ -8079,11 +8063,11 @@
       <achievement>
         <id>	447	</id>
         <UI>
-          <stringKey>	branch_uk_GB142_FV230_Canopener	</stringKey>
-          <vehicle>	uk:GB142_FV230_Canopener	</vehicle>
+          <stringKey>	branch_uk_GB152_AT_FV230_Breaker	</stringKey>
+          <vehicle>	uk:GB152_AT_FV230_Breaker	</vehicle>
           <background>	uk_branch	</background>
           <iconPosition>	bottom	</iconPosition>
-          <order>	228 444 445 446 443	</order>
+          <order>	222 223 224 225 226 464	</order>
         </UI>
         <stages>
           <stage>
@@ -8092,7 +8076,7 @@
           </stage>
         </stages>
         <conditions>
-          <requiredAchievementIDs>	228 444 445 446 443	</requiredAchievementIDs>
+          <requiredAchievementIDs>	222 223 224 225 226 464	</requiredAchievementIDs>
         </conditions>
       </achievement>
       <achievement>
@@ -8157,6 +8141,357 @@
         </stages>
         <conditions>
           <vehicle>	france:F127_AMX_ELC_901	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	452	</id>
+        <UI>
+          <stringKey>	third_campaign_first_operation	</stringKey>
+          <background>	third_campaign	</background>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <conditions>
+          <vehicle>	germany:G184_Windhund	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	453	</id>
+        <UI>
+          <stringKey>	third_campaign_second_operation	</stringKey>
+          <background>	third_campaign	</background>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <conditions>
+          <vehicle>	czech:Cz21_Vz_60S_Dravec	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	454	</id>
+        <UI>
+          <stringKey>	third_campaign_third_operation	</stringKey>
+          <background>	third_campaign	</background>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <conditions>
+          <vehicle>	usa:A179_Black_Rock	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	455	</id>
+        <UI>
+          <stringKey>	third_campaign	</stringKey>
+          <background>	third_campaign	</background>
+          <iconSizeMap>	personal_missions	</iconSizeMap>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	50	</points>
+          </stage>
+        </stages>
+        <conditions>
+          <requiredAchievementIDs>	452 453 454	</requiredAchievementIDs>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	456	</id>
+        <deprecated>	true	</deprecated>
+        <UI>
+          <stringKey>	Pl15_60TP_Lewandowskiego_CFE_A	</stringKey>
+          <background>	vehicles	</background>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+          </stage>
+        </stages>
+        <conditions>
+          <vehicle>	poland:Pl15_60TP_Lewandowskiego_CFE_A	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	457	</id>
+        <UI>
+          <stringKey>	G188_LeKpz_Borkenkafer	</stringKey>
+          <background>	germany	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	germany:G188_LeKpz_Borkenkafer	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	458	</id>
+        <UI>
+          <stringKey>	G189_Hirschkafer	</stringKey>
+          <background>	germany	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	germany:G189_Hirschkafer	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	459	</id>
+        <UI>
+          <stringKey>	GB147_FV4025_Contriver	</stringKey>
+          <background>	uk	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	uk:GB147_FV4025_Contriver	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	460	</id>
+        <UI>
+          <stringKey>	R228_KR_1	</stringKey>
+          <background>	ussr	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	ussr:R228_KR_1	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	461	</id>
+        <UI>
+          <stringKey>	S36_Strv_107_12	</stringKey>
+          <background>	sweden	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	sweden:S36_Strv_107_12	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	462	</id>
+        <UI>
+          <stringKey>	G187_Taschenratte	</stringKey>
+          <background>	germany	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	germany:G187_Taschenratte	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	463	</id>
+        <UI>
+          <stringKey>	A183_XM69_Hacker	</stringKey>
+          <background>	usa	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	usa:A183_XM69_Hacker	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	464	</id>
+        <UI>
+          <stringKey>	GB152_AT_FV230_Breaker	</stringKey>
+          <background>	uk	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	uk:GB152_AT_FV230_Breaker	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	465	</id>
+        <UI>
+          <stringKey>	R230_Object_432U	</stringKey>
+          <background>	ussr	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	ussr:R230_Object_432U	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	466	</id>
+        <UI>
+          <stringKey>	A182_T803	</stringKey>
+          <background>	usa	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	usa:A182_T803	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	467	</id>
+        <UI>
+          <stringKey>	Ch67_BZ_79	</stringKey>
+          <background>	china	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	china:Ch67_BZ_79	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	468	</id>
+        <UI>
+          <stringKey>	Pl37_CS_67_Szakal	</stringKey>
+          <background>	poland	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	poland:Pl37_CS_67_Szakal	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	469	</id>
+        <UI>
+          <stringKey>	F135_AS_XX_40_t	</stringKey>
+          <background>	france	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	france:F135_AS_XX_40_t	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	470	</id>
+        <UI>
+          <stringKey>	F136_AMX_67_Imbattable	</stringKey>
+          <background>	france	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	france:F136_AMX_67_Imbattable	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	471	</id>
+        <UI>
+          <stringKey>	G185_Leopard_120_Verbessert	</stringKey>
+          <background>	germany	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	germany:G185_Leopard_120_Verbessert	</vehicle>
         </conditions>
       </achievement>
     </vehicleAchievements>

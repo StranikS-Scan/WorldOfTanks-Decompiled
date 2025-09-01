@@ -6,7 +6,6 @@ from items import _xml
 from items.components import chassis_components
 from items.components import component_constants
 from items.components.chassis_components import SplineTrackPairDesc
-from items.components.shared_components import LodSettings
 from items.readers import shared_readers
 from debug_utils import LOG_ERROR
 from constants import IS_EDITOR, IS_CLIENT, IS_UE_EDITOR

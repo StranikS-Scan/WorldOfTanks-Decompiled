@@ -11,8 +11,6 @@
     <ArenaFairplayKafkaLoggingComponent></ArenaFairplayKafkaLoggingComponent>
     <AccountFairplayComponent></AccountFairplayComponent>
     <ArenaCommendationsMasterComponent></ArenaCommendationsMasterComponent>
-    <ArenaVeteranComponent></ArenaVeteranComponent>
-    <AccountVeteranComponent></AccountVeteranComponent>
   </StaticComponents>
   <DynamicComponents>
     <OwnVehicle></OwnVehicle>
@@ -30,12 +28,11 @@
     <BattleHintsComponent></BattleHintsComponent>
     <Fire></Fire>
     <RocketAccelerationController></RocketAccelerationController>
+    <RechargeableNitroController></RechargeableNitroController>
     <KillCamDataComponent></KillCamDataComponent>
     <AutoShootGunController></AutoShootGunController>
     <TwinGunController></TwinGunController>
-    <SpinGunController></SpinGunController>
-    <TemperatureGunController></TemperatureGunController>
-    <MultiGunState></MultiGunState>
+    <SecondaryGunComponent></SecondaryGunComponent>
     <RocketAcceleration></RocketAcceleration>
     <VisualScriptEquipment></VisualScriptEquipment>
     <VisualScriptCache></VisualScriptCache>
@@ -62,6 +59,21 @@
     <PoiVehicleComponent></PoiVehicleComponent>
     <DynComponentsGroup></DynComponentsGroup>
     <DynComponentsGroupHelper></DynComponentsGroupHelper>
+    <DGAddDynGroupComponent></DGAddDynGroupComponent>
+    <DGRemovableDynGroupComponent></DGRemovableDynGroupComponent>
+    <DGSequencesComponent></DGSequencesComponent>
+    <DGSound2DComponent></DGSound2DComponent>
+    <DGSound3DComponent></DGSound3DComponent>
+    <DGSound3DObjectComponent></DGSound3DObjectComponent>
+    <DGVehicleChargedShotComponent></DGVehicleChargedShotComponent>
+    <DGVehicleShotChargerComponent></DGVehicleShotChargerComponent>
+    <DGVehicleFactorsComponent></DGVehicleFactorsComponent>
+    <DGVehicleGenericRepairComponent></DGVehicleGenericRepairComponent>
+    <DGVehicleRepairComponent></DGVehicleRepairComponent>
+    <DGVehiclePeriodicRepairComponent></DGVehiclePeriodicRepairComponent>
+    <DGVehicleDamageResistsComponent></DGVehicleDamageResistsComponent>
+    <DGVehicleNitroAccelerationComponent></DGVehicleNitroAccelerationComponent>
+    <DGVehicleNitroEffectComponent></DGVehicleNitroEffectComponent>
     <LootableComponent></LootableComponent>
     <SpamProtectionComponent></SpamProtectionComponent>
     <TestReplicableComponent></TestReplicableComponent>
@@ -89,6 +101,24 @@
     <AvatarFairplayMessageComponent></AvatarFairplayMessageComponent>
     <NetworkReplicationPointComponent></NetworkReplicationPointComponent>
     <NetworkVehicleHierarchy></NetworkVehicleHierarchy>
-    <VeteranInfo></VeteranInfo>
+    <ConcentrationModeComponent></ConcentrationModeComponent>
+    <OverheatStacksController></OverheatStacksController>
+    <ImprovedRammingController></ImprovedRammingController>
+    <PowerModeController></PowerModeController>
+    <ExtraShotClipComponent></ExtraShotClipComponent>
+    <BattleFuryController></BattleFuryController>
+    <AccuracyStacksController></AccuracyStacksController>
+    <SupportWeaponComponent></SupportWeaponComponent>
+    <SecondaryGunComponent></SecondaryGunComponent>
+    <PillboxSiegeComponent></PillboxSiegeComponent>
+    <StationaryReloadController></StationaryReloadController>
+    <NetworkReplicationPointComponent></NetworkReplicationPointComponent>
+    <NetworkVehicleHierarchy></NetworkVehicleHierarchy>
+    <ChargeShotComponent></ChargeShotComponent>
+    <TargetDesignatorController></TargetDesignatorController>
+    <TargetDesignatorTargetController></TargetDesignatorTargetController>
+    <TargetDesignatorTeamController></TargetDesignatorTeamController>
+    <StanceDanceController></StanceDanceController>
+    <ChargeableBurstComponent></ChargeableBurstComponent>
   </DynamicComponents>
 </components.xml>

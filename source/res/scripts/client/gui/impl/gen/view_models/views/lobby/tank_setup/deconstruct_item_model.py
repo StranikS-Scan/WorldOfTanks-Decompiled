@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/tank_setup/deconstruct_item_model.py
-from gui.impl.gen import R
 from frameworks.wulf import ViewModel
+from gui.impl.gen import R
 from gui.impl.gen.view_models.common.bonuses_model import BonusesModel
-from gui.impl.gen.view_models.views.lobby.tank_setup.slot_vehicle_info_model import SlotVehicleInfoModel
+from gui.impl.gen.view_models.common.vehicle_info_model import VehicleInfoModel
 
 class DeconstructItemModel(ViewModel):
     __slots__ = ()
@@ -17,7 +17,7 @@ class DeconstructItemModel(ViewModel):
 
     @staticmethod
     def getVehicleInfoType():
-        return SlotVehicleInfoModel
+        return VehicleInfoModel
 
     @property
     def bonuses(self):
@@ -77,7 +77,7 @@ class DeconstructItemModel(ViewModel):
 
     def _initialize(self):
         super(DeconstructItemModel, self)._initialize()
-        self._addViewModelProperty('vehicleInfo', SlotVehicleInfoModel())
+        self._addViewModelProperty('vehicleInfo', VehicleInfoModel())
         self._addViewModelProperty('bonuses', BonusesModel())
         self._addNumberProperty('deviceID', 0)
         self._addStringProperty('deviceName', '')

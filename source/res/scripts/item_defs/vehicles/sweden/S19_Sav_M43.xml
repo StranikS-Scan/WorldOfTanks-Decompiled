@@ -8,7 +8,7 @@
   </crew>
   <supplySlots>	1 1 1 6 6 6 8 8 8	</supplySlots>
   <speedLimits>
-    <forward>	43	</forward>
+    <forward>	45	</forward>
     <backward>	20	</backward>
   </speedLimits>
   <invisibility>
@@ -55,7 +55,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	7831	</weight>
-    <maxHealth>	332	</maxHealth>
+    <maxHealth>	344	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	140	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
@@ -1257,11 +1257,10 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	3200	</weight>
-      <maxLoad>	12500	</maxLoad>
-      <terrainResistance>	1.3 1.7 2.5	</terrainResistance>
+      <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
       <brakeForce>	12000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	30	</rotationSpeed>
+      <rotationSpeed>	35	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.24	</vehicleMovement>
         <vehicleRotation>	0.24	</vehicleRotation>
@@ -2047,11 +2046,10 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	3200	</weight>
-      <maxLoad>	14000	</maxLoad>
       <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
       <brakeForce>	12000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	32	</rotationSpeed>
+      <rotationSpeed>	38	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.22	</vehicleMovement>
         <vehicleRotation>	0.22	</vehicleRotation>
@@ -2840,7 +2838,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
       <weight>	100	</weight>
-      <maxHealth>	83	</maxHealth>
+      <maxHealth>	86	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -2870,7 +2868,14 @@
             <maxPitch>	0 14 1 14	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <reloadTime>	4.2	</reloadTime>
+          <reloadTime>	5.2	</reloadTime>
+          <aimingTime>	2	</aimingTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/sweden/S19_Sav_M43/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/sweden/S19_Sav_M43/crash/lod0/Gun_01.model	</destroyed>
@@ -2974,6 +2979,8 @@
         </_75mm_kan_m_02>
         <_75mm_kan_m_41_ikv_L_50_neglkrut>	shared	  <maxAmmo>	90	</maxAmmo>
           <unlocks>
+            <vehicle>	S14_Ikv_103	  <cost>	10830	</cost>
+            </vehicle>
             <gun>	_105mm_kan_m_44_sav	  <cost>	3800	</cost>
             </gun>
           </unlocks>
@@ -2989,8 +2996,13 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	4.4	</reloadTime>
+          <reloadTime>	4.9	</reloadTime>
           <aimingTime>	1.9	</aimingTime>
+          <shotDispersionFactors>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/sweden/S19_Sav_M43/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/sweden/S19_Sav_M43/crash/lod0/Gun_04.model	</destroyed>
@@ -3038,10 +3050,6 @@
           </camouflage>
         </_75mm_kan_m_41_ikv_L_50_neglkrut>
         <_105mm_kan_m_44_sav>	shared	  <maxAmmo>	60	</maxAmmo>
-          <unlocks>
-            <vehicle>	S14_Ikv_103	  <cost>	10830	</cost>
-            </vehicle>
-          </unlocks>
           <armor>
             <armor_1>	50	</armor_1>
             <armor_4>	0	</armor_4>
@@ -3053,9 +3061,9 @@
             <maxPitch>	0 14 1 14	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.56	</shotDispersionRadius>
+          <shotDispersionRadius>	0.5	</shotDispersionRadius>
           <reloadTime>	9.8	</reloadTime>
-          <aimingTime>	3.5	</aimingTime>
+          <aimingTime>	3	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.22	</turretRotation>
             <afterShot>	5	</afterShot>
@@ -3129,27 +3137,17 @@
     </Turret_1_S19_Sav_M43>
   </turrets0>
   <engines>
-    <Scania_Vabis_1664>	shared	  <unlocks>
-        <engine>	Scania_Vabis_L_603	  <cost>	160	</cost>
+    <Scania_Vabis_1664_Sav>	shared	  <unlocks>
+        <engine>	Scania_Vabis_L_603_Sav	  <cost>	160	</cost>
         </engine>
       </unlocks>
-    </Scania_Vabis_1664>
-    <Scania_Vabis_L_603>	shared	</Scania_Vabis_L_603>
+    </Scania_Vabis_1664_Sav>
+    <Scania_Vabis_L_603_Sav>	shared	</Scania_Vabis_L_603_Sav>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <_25_W_Sv_1_m_39>	shared	  <unlocks>
-        <radio>	_25_W_Sv_1_m_39_42	  <cost>	350	</cost>
-        </radio>
-      </unlocks>
-    </_25_W_Sv_1_m_39>
-    <_25_W_Sv_1_m_39_42>	shared	  <unlocks>
-        <radio>	Ra_100	  <cost>	3200	</cost>
-        </radio>
-      </unlocks>
-    </_25_W_Sv_1_m_39_42>
     <Ra_100>	shared	</Ra_100>
   </radios>
   <clientAdjustmentFactors>
@@ -3162,37 +3160,37 @@
       </Chassis_S19_Sav_M43_2>
     </chassis>
     <engines>
-      <Scania_Vabis_1664>
+      <Scania_Vabis_1664_Sav>
         <bravo>	37.53347	</bravo>
-      </Scania_Vabis_1664>
-      <Scania_Vabis_L_603>
+      </Scania_Vabis_1664_Sav>
+      <Scania_Vabis_L_603_Sav>
         <bravo>	42.81989	</bravo>
-      </Scania_Vabis_L_603>
+      </Scania_Vabis_L_603_Sav>
     </engines>
   </clientAdjustmentFactors>
   <physics>
     <detailed>
       <engines>
-        <Scania_Vabis_1664>
-          <smplEnginePower>	150	</smplEnginePower>
-          <smplFwMaxSpeed>	43	</smplFwMaxSpeed>
-        </Scania_Vabis_1664>
-        <Scania_Vabis_L_603>
-          <smplEnginePower>	170	</smplEnginePower>
-          <smplFwMaxSpeed>	43	</smplFwMaxSpeed>
-        </Scania_Vabis_L_603>
+        <Scania_Vabis_1664_Sav>
+          <smplEnginePower>	180	</smplEnginePower>
+          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
+        </Scania_Vabis_1664_Sav>
+        <Scania_Vabis_L_603_Sav>
+          <smplEnginePower>	200	</smplEnginePower>
+          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
+        </Scania_Vabis_L_603_Sav>
       </engines>
       <chassis>
         <Chassis_S19_Sav_M43>
           <grounds>
             <soft>
-              <rollingFriction>	0.251563	</rollingFriction>
+              <rollingFriction>	0.231438	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.171063	</rollingFriction>
+              <rollingFriction>	0.130813	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.130813	</rollingFriction>
+              <rollingFriction>	0.110688	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_S19_Sav_M43>

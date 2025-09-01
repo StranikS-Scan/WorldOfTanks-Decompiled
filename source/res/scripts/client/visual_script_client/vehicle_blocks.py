@@ -1,20 +1,59 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/visual_script_client/vehicle_blocks.py
+import typing
 import random
 import weakref
 import BigWorld
 import GenericComponents
-from constants import IS_VS_EDITOR, VEHICLE_CLASSES
+from constants import IS_VS_EDITOR, VEHICLE_CLASSES, OVERTURN_WARNING_LEVEL, DROWN_WARNING_LEVEL
+from debug_utils import LOG_DEBUG_DEV
 from visual_script.block import Block, InitParam, buildStrKeysValue
+from visual_script.dependency import dependencyImporter
 from visual_script.misc import ASPECT, EDITOR_TYPE, errorVScript
 from visual_script.slot_types import SLOT_TYPE
 from visual_script.tunable_event_block import TunableEventBlock
+from visual_script.type import VScriptEnum
 from visual_script.vehicle_blocks import VehicleMeta
 from visual_script.vehicle_blocks_bases import NoCrewCriticalBase, OptionalDevicesBase, VehicleClassBase, GunTypeInfoBase, VehicleForwardSpeedBase, VehicleCooldownEquipmentBase, VehicleClipFullAndReadyBase, GetTankOptDevicesHPModBase, IsInHangarBase, VehicleRadioDistanceBase, NoInnerDeviceDamagedBase
 if not IS_VS_EDITOR:
     from helpers import dependency, isPlayerAccount, isPlayerAvatar
     from skeletons.gui.shared import IItemsCache
     from VehicleRespawnComponent import VehicleRespawnComponent
+if typing.TYPE_CHECKING:
+    from typing import Optional
+    from Vehicle import Vehicle
+    from items.components.gun_installation_components import GunInstallationSlot
+OwnVehicle = dependencyImporter('OwnVehicle')
+
+class OverturnWarningLevelEnum(VScriptEnum):
+
+    @classmethod
+    def slotType(cls):
+        pass
+
+    @classmethod
+    def vs_enum(cls):
+        return OVERTURN_WARNING_LEVEL
+
+    @classmethod
+    def vs_aspects(cls):
+        return [ASPECT.CLIENT]
+
+
+class DrownWarningLevelEnum(VScriptEnum):
+
+    @classmethod
+    def slotType(cls):
+        pass
+
+    @classmethod
+    def vs_enum(cls):
+        return DROWN_WARNING_LEVEL
+
+    @classmethod
+    def vs_aspects(cls):
+        return [ASPECT.CLIENT]
+
 
 class GetVehicleLabel(Block, VehicleMeta):
 
@@ -355,9 +394,16 @@ class GameObjectToVehicle(Block, VehicleMeta):
         else:
             goSyncComponent = go.findComponentByType(GenericComponents.EntityGOSync)
             if goSyncComponent is None:
-                errorVScript(self, "Can't find associated entity. Please check input game object")
+                LOG_DEBUG_DEV("Can't find associated entity. Please check input game object")
+                self._vehicle.setValue(None)
                 return
-            self._vehicle.setValue(weakref.proxy(goSyncComponent.entity))
+            try:
+                entity = weakref.proxy(goSyncComponent.entity)
+            except TypeError:
+                LOG_DEBUG_DEV('Cannot find associated entity. Input GO might be partially destroyed.')
+                entity = None
+
+            self._vehicle.setValue(entity)
             return
 
     @classmethod
@@ -492,6 +538,81 @@ class OnVehicleShaked(Block, VehicleMeta):
         self._vehicle.setValue(weakref.proxy(BigWorld.entity(vehicleId)))
         self._shakeReason.setValue(shakeReason)
         self._out.call()
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT]
+
+
+class GetVehicleOverturnLevel(Block, VehicleMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(GetVehicleOverturnLevel, self).__init__(*args, **kwargs)
+        self._vehicleGO = self._makeDataInputSlot('vehicleGameObject', SLOT_TYPE.GAME_OBJECT)
+        self._overturnLevel = self._makeDataOutputSlot('overturnLevel', OverturnWarningLevelEnum.slotType(), self._getData)
+
+    def _getData(self):
+        vehicleGO = self._vehicleGO.getValue()
+        if vehicleGO.isValid():
+            ownVehicle = vehicleGO.findComponentByType(OwnVehicle.OwnVehicle)
+            if ownVehicle is not None:
+                overturnLevel = ownVehicle.overturnLevel
+                if overturnLevel is not None:
+                    self._overturnLevel.setValue(overturnLevel.level)
+                    return
+        self._overturnLevel.setValue(OVERTURN_WARNING_LEVEL.SAFE)
+        return
+
+
+class GetVehicleDrownLevel(Block, VehicleMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(GetVehicleDrownLevel, self).__init__(*args, **kwargs)
+        self._vehicleGO = self._makeDataInputSlot('vehicleGameObject', SLOT_TYPE.GAME_OBJECT)
+        self._drownLevel = self._makeDataOutputSlot('drownLevel', DrownWarningLevelEnum.slotType(), self._getData)
+
+    def _getData(self):
+        vehicleGO = self._vehicleGO.getValue()
+        if vehicleGO.isValid():
+            ownVehicle = vehicleGO.findComponentByType(OwnVehicle.OwnVehicle)
+            if ownVehicle is not None:
+                drownLevel = ownVehicle.drownLevel
+                if drownLevel is not None:
+                    self._drownLevel.setValue(drownLevel.level)
+                    return
+        self._drownLevel.setValue(DROWN_WARNING_LEVEL.SAFE)
+        return
+
+
+class OnDiscreteShotDone(Block, VehicleMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(OnDiscreteShotDone, self).__init__(*args, **kwargs)
+        self._subscribe = self._makeEventInputSlot('subscribe', self.__subscribe)
+        self._unsubscribe = self._makeEventInputSlot('unsubscribe', self.__unsubscribe)
+        self._vehicle = self._makeDataInputSlot('vehicle', SLOT_TYPE.VEHICLE)
+        self._onDiscreteShotDoneSlot = self._makeEventOutputSlot('onDiscreteShotDone')
+
+    def __subscribe(self):
+        vehicle = self._vehicle.getValue()
+        if vehicle is None:
+            errorVScript(self, 'vehicle not found')
+            return
+        else:
+            vehicle.onDiscreteShotDone += self.__onDiscreteShotDone
+            return
+
+    def __unsubscribe(self):
+        vehicle = self._vehicle.getValue()
+        if vehicle is None:
+            return
+        else:
+            vehicle.onDiscreteShotDone -= self.__onDiscreteShotDone
+            return
+
+    def __onDiscreteShotDone(self, gunInstallationSlot):
+        if gunInstallationSlot.isMainInstallation():
+            self._onDiscreteShotDoneSlot.call()
 
     @classmethod
     def blockAspects(cls):

@@ -9,7 +9,7 @@ class RandomNationalBonusTooltipView(ViewImpl):
     __slots__ = ('__name', '__value', '__icon')
 
     def __init__(self, name, value, icon):
-        settings = ViewSettings(R.views.lobby.lootbox_system.tooltips.RandomNationalBonusTooltipView())
+        settings = ViewSettings(R.views.mono.lootbox.tooltips.random_national_bonus())
         settings.model = RandomNationalBonusTooltipViewModel()
         super(RandomNationalBonusTooltipView, self).__init__(settings)
         self.__name = name

@@ -177,7 +177,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	1400	</weight>
-      <maxLoad>	16450	</maxLoad>
       <terrainResistance>	0.6 0.7 1.4	</terrainResistance>
       <brakeForce>	16000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -1069,7 +1068,7 @@
   <turrets0>
     <Turret_1_AMX13_57_100_GrandFinal>
       <userString>	#france_vehicles:Turret_1_AMX13_57_100_GrandFinal	</userString>
-      <tags></tags>
+      <tags>	oscillating	</tags>
       <level>	7	</level>
       <price>	20000	</price>
       <notInShop>	true	</notInShop>

@@ -61,7 +61,7 @@
     </ammoBayHealth>
     <variants>
       <hull2>
-        <turret0>	BT-7_conic	</turret0>
+        <turret0>	Turret_2_R03_BT-7	</turret0>
         <turretPositions>
           <turret>	0.000000 0.719528 0.532883	</turret>
         </turretPositions>
@@ -959,13 +959,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <BT-5>
-      <userString>	#ussr_vehicles:BT-5	</userString>
+    <Chassis_R03_BT-7>
+      <userString>	#ussr_vehicles:Chassis_R03_BT-7	</userString>
       <tags></tags>
       <level>	3	</level>
       <price>	1200	</price>
       <unlocks>
-        <chassis>	BT-7	  <cost>	815	</cost>
+        <chassis>	Chassis_R03_BT-7_2	  <cost>	815	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -973,14 +973,13 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	4000	</weight>
-      <maxLoad>	14200	</maxLoad>
-      <terrainResistance>	0.9 1.1 2.7	</terrainResistance>
+      <terrainResistance>	0.8 1 2.3	</terrainResistance>
       <brakeForce>	31000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	48	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.2	</vehicleMovement>
-        <vehicleRotation>	0.2	</vehicleRotation>
+        <vehicleMovement>	0.16	</vehicleMovement>
+        <vehicleRotation>	0.16	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	70	</maxHealth>
@@ -1794,9 +1793,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	4.57142878	</repairTime>
-    </BT-5>
-    <BT-7>
-      <userString>	#ussr_vehicles:BT-7	</userString>
+    </Chassis_R03_BT-7>
+    <Chassis_R03_BT-7_2>
+      <userString>	#ussr_vehicles:Chassis_R03_BT-7_2	</userString>
       <tags></tags>
       <level>	4	</level>
       <price>	3400	</price>
@@ -1805,14 +1804,13 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	4000	</weight>
-      <maxLoad>	15500	</maxLoad>
       <terrainResistance>	0.8 1 2.3	</terrainResistance>
       <brakeForce>	31000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	52	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.16	</vehicleMovement>
-        <vehicleRotation>	0.16	</vehicleRotation>
+        <vehicleMovement>	0.14	</vehicleMovement>
+        <vehicleRotation>	0.14	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	80	</maxHealth>
@@ -2626,17 +2624,17 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	4.57142878	</repairTime>
-    </BT-7>
+    </Chassis_R03_BT-7_2>
   </chassis>
   <turrets0>
-    <BT-5_cylindrical>
-      <userString>	#ussr_vehicles:BT-5_cylindrical	</userString>
-      <shortUserString>	#ussr_vehicles:BT-5_cylindrical_short	</shortUserString>
+    <Turret_1_R03_BT-7>
+      <userString>	#ussr_vehicles:Turret_1_R03_BT-7	</userString>
+      <shortUserString>	#ussr_vehicles:Turret_1_R03_BT-7_short	</shortUserString>
       <tags></tags>
       <level>	3	</level>
       <price>	1500	</price>
       <unlocks>
-        <turret>	BT-7_conic	  <cost>	925	</cost>
+        <turret>	Turret_2_R03_BT-7	  <cost>	925	</cost>
         </turret>
       </unlocks>
       <armor>
@@ -2660,14 +2658,14 @@
         <maxRegenHealth>	40	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	330	</circularVisionRadius>
+      <circularVisionRadius>	340	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	60	</maxHealth>
         <maxRegenHealth>	30	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_45mm_20K>	shared	  <maxAmmo>	160	</maxAmmo>
+        <_45mm_20K_BT_7>	shared	  <maxAmmo>	160	</maxAmmo>
           <armor>
             <armor_1>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -2677,9 +2675,9 @@
             </armor_4>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.44	</shotDispersionRadius>
-          <reloadTime>	2.1	</reloadTime>
-          <aimingTime>	1.9	</aimingTime>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <reloadTime>	1.8	</reloadTime>
+          <aimingTime>	1.7	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	2	</afterShot>
@@ -2736,7 +2734,7 @@
             <density>	139.126 137.816	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_45mm_20K>
+        </_45mm_20K_BT_7>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R03_BT-7/normal/lod0/Turret_01.model	</undamaged>
@@ -3219,15 +3217,15 @@
         <density>	96.1176 96.0319	</density>
         <aoTextureSize>	512 256	</aoTextureSize>
       </camouflage>
-    </BT-5_cylindrical>
-    <BT-7_conic>
-      <userString>	#ussr_vehicles:BT-7_conic	</userString>
-      <shortUserString>	#ussr_vehicles:BT-7_conic_short	</shortUserString>
+    </Turret_1_R03_BT-7>
+    <Turret_2_R03_BT-7>
+      <userString>	#ussr_vehicles:Turret_2_R03_BT-7	</userString>
+      <shortUserString>	#ussr_vehicles:Turret_2_R03_BT-7_short	</shortUserString>
       <tags></tags>
       <level>	4	</level>
       <price>	3460	</price>
       <unlocks>
-        <gun>	_37mm_ZiS-19	  <cost>	160	</cost>
+        <gun>	_37mm_ZiS_19_BT_7	  <cost>	160	</cost>
         </gun>
       </unlocks>
       <armor>
@@ -3256,7 +3254,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_45mm_20K>	shared	  <maxAmmo>	160	</maxAmmo>
+        <_45mm_20K_BT_7>	shared	  <maxAmmo>	160	</maxAmmo>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	2	</afterShot>
@@ -3271,8 +3269,8 @@
             </armor_4>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	1.9	</reloadTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	1.8	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
@@ -3325,11 +3323,17 @@
             <density>	139.126 137.816	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_45mm_20K>
-        <_37mm_ZiS-19>	shared	  <maxAmmo>	200	</maxAmmo>
+        </_45mm_20K_BT_7>
+        <_37mm_ZiS_19_BT_7>	shared	  <maxAmmo>	200	</maxAmmo>
+          <unlocks>
+            <vehicle>	R04_T-34	  <cost>	11500	</cost>
+            </vehicle>
+            <vehicle>	R12_A-20	  <cost>	10200	</cost>
+            </vehicle>
+          </unlocks>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3	</afterShot>
+            <afterShot>	2	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
@@ -3341,9 +3345,9 @@
             </armor_4>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.37	</shotDispersionRadius>
-          <reloadTime>	1.8	</reloadTime>
-          <aimingTime>	1.7	</aimingTime>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <reloadTime>	1.7	</reloadTime>
+          <aimingTime>	1.5	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 8 0.380783 8 0.444444 5 0.555556 5 0.619218 8 1 8	</maxPitch>
@@ -3395,7 +3399,7 @@
             <density>	161.267 161.139	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_37mm_ZiS-19>
+        </_37mm_ZiS_19_BT_7>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R03_BT-7/normal/lod0/Turret_02.model	</undamaged>
@@ -3922,69 +3926,36 @@
         <density>	99.6971 96.202	</density>
         <aoTextureSize>	512 256	</aoTextureSize>
       </camouflage>
-    </BT-7_conic>
+    </Turret_2_R03_BT-7>
   </turrets0>
   <engines>
-    <M-17T>	shared	  <unlocks>
-        <engine>	M-17F	  <cost>	850	</cost>
+    <M_17T_BT_7>	shared	  <unlocks>
+        <engine>	V_2_BT_7	  <cost>	1250	</cost>
         </engine>
       </unlocks>
-    </M-17T>
-    <M-17F>	shared	  <unlocks>
-        <engine>	V-2	  <cost>	1250	</cost>
-        </engine>
-      </unlocks>
-    </M-17F>
-    <V-2>	shared	  <unlocks>
-        <vehicle>	R04_T-34	  <cost>	11500	</cost>
-        </vehicle>
-        <vehicle>	R12_A-20	  <cost>	10200	</cost>
-        </vehicle>
-      </unlocks>
-    </V-2>
+    </M_17T_BT_7>
+    <V_2_BT_7>	shared	</V_2_BT_7>
   </engines>
   <fuelTanks>
     <Small>	shared	</Small>
   </fuelTanks>
   <radios>
-    <_71-TK-3>	shared	  <unlocks>
-        <radio>	_12LL	  <cost>	5600	</cost>
-        </radio>
-      </unlocks>
-    </_71-TK-3>
     <_12LL>	shared	</_12LL>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <M-17T>
-          <smplEnginePower>	475.7765	</smplEnginePower>
+        <M_17T_BT_7>
+          <smplEnginePower>	510	</smplEnginePower>
           <smplFwMaxSpeed>	65.4	</smplFwMaxSpeed>
-        </M-17T>
-        <M-17F>
-          <smplEnginePower>	528.6406	</smplEnginePower>
+        </M_17T_BT_7>
+        <V_2_BT_7>
+          <smplEnginePower>	550	</smplEnginePower>
           <smplFwMaxSpeed>	65.4	</smplFwMaxSpeed>
-        </M-17F>
-        <V-2>
-          <smplEnginePower>	507.4949	</smplEnginePower>
-          <smplFwMaxSpeed>	65.4	</smplFwMaxSpeed>
-        </V-2>
+        </V_2_BT_7>
       </engines>
       <chassis>
-        <BT-5>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.21735	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.08855	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.07245	</rollingFriction>
-            </firm>
-          </grounds>
-        </BT-5>
-        <BT-7>
+        <Chassis_R03_BT-7>
           <grounds>
             <soft>
               <rollingFriction>	0.18515	</rollingFriction>
@@ -3996,7 +3967,20 @@
               <rollingFriction>	0.0644	</rollingFriction>
             </firm>
           </grounds>
-        </BT-7>
+        </Chassis_R03_BT-7>
+        <Chassis_R03_BT-7_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.18515	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.0805	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0644	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_R03_BT-7_2>
       </chassis>
     </detailed>
   </physics>

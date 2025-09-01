@@ -81,7 +81,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	36255	</weight>
-    <maxHealth>	1200	</maxHealth>
+    <maxHealth>	1360	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	210	</maxHealth>
       <maxRegenHealth>	158	</maxRegenHealth>
@@ -767,8 +767,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	12900	</weight>
-      <maxLoad>	73000	</maxLoad>
-      <terrainResistance>	1.2 1.5 2.5	</terrainResistance>
+      <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
       <brakeForce>	67400	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	22	</rotationSpeed>
@@ -1708,7 +1707,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	13500	</weight>
-      <maxLoad>	73000	</maxLoad>
       <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
       <brakeForce>	68000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2682,7 +2680,7 @@
       </armor>
       <primaryArmor>	armor_9 armor_3 armor_4	</primaryArmor>
       <weight>	13500	</weight>
-      <maxHealth>	300	</maxHealth>
+      <maxHealth>	260	</maxHealth>
       <rotationSpeed>	20	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -2754,7 +2752,7 @@
             <gun>	30	</gun>
           </armor>
           <shotDispersionRadius>	1.2	</shotDispersionRadius>
-          <reloadTime>	6.9	</reloadTime>
+          <reloadTime>	6.3	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.01	</turretRotation>
             <afterShot>	6.0	</afterShot>
@@ -2765,7 +2763,7 @@
           <multiGunEffects>	shot_dualgun_main_L shot_dualgun_main_R	</multiGunEffects>
           <twinGun>
             <afterShotDelay>	1	</afterShotDelay>
-            <twinGunReloadTime>	13.8	</twinGunReloadTime>
+            <twinGunReloadTime>	12.6	</twinGunReloadTime>
             <gunMarkerOffset>	0.213	</gunMarkerOffset>
             <shootImpulse>	250	</shootImpulse>
           </twinGun>
@@ -2892,7 +2890,7 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.112	</invisibilityFactorAtShot>
           <shotDispersionRadius>	1.2	</shotDispersionRadius>
-          <reloadTime>	7.7	</reloadTime>
+          <reloadTime>	7.6	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.01	</turretRotation>
             <afterShot>	8.0	</afterShot>
@@ -2902,7 +2900,7 @@
           <multiGunEffects>	shot_dualgun_main_mb_L shot_dualgun_main_mb_R	</multiGunEffects>
           <twinGun>
             <afterShotDelay>	1	</afterShotDelay>
-            <twinGunReloadTime>	15.4	</twinGunReloadTime>
+            <twinGunReloadTime>	15.2	</twinGunReloadTime>
             <gunMarkerOffset>	0.213	</gunMarkerOffset>
             <shootImpulse>	250	</shootImpulse>
           </twinGun>
@@ -3447,16 +3445,16 @@
         <armor_13>	160	</armor_13>
         <armor_14>	220	</armor_14>
         <armor_15>	205	</armor_15>
-        <armor_16>	130	</armor_16>
-        <armor_17>	160	</armor_17>
-        <armor_18>	135	</armor_18>
-        <armor_19>	80	</armor_19>
+        <armor_16>	160	</armor_16>
+        <armor_17>	195	</armor_17>
+        <armor_18>	165	</armor_18>
+        <armor_19>	95	</armor_19>
         <armor_21>	40	</armor_21>
-        <armor_22>	125	</armor_22>
-        <armor_23>	115	</armor_23>
+        <armor_22>	150	</armor_22>
+        <armor_23>	155	</armor_23>
         <armor_24>	90	</armor_24>
-        <armor_25>	105	</armor_25>
-        <armor_26>	55	</armor_26>
+        <armor_25>	125	</armor_25>
+        <armor_26>	60	</armor_26>
         <armor_27>	140	</armor_27>
         <armor_28>	100	</armor_28>
         <armor_29>	85	</armor_29>
@@ -3466,7 +3464,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	14100	</weight>
-      <maxHealth>	400	</maxHealth>
+      <maxHealth>	340	</maxHealth>
       <rotationSpeed>	20	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	155	</maxHealth>
@@ -3490,7 +3488,7 @@
             <gun>	30	</gun>
           </armor>
           <shotDispersionRadius>	1.2	</shotDispersionRadius>
-          <reloadTime>	6.6	</reloadTime>
+          <reloadTime>	6.3	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.01	</turretRotation>
             <afterShot>	6.0	</afterShot>
@@ -3501,7 +3499,7 @@
           <multiGunEffects>	shot_dualgun_main_L shot_dualgun_main_R	</multiGunEffects>
           <twinGun>
             <afterShotDelay>	1	</afterShotDelay>
-            <twinGunReloadTime>	13.2	</twinGunReloadTime>
+            <twinGunReloadTime>	12.6	</twinGunReloadTime>
             <gunMarkerOffset>	0.213	</gunMarkerOffset>
             <shootImpulse>	250	</shootImpulse>
           </twinGun>
@@ -4162,13 +4160,13 @@
         <Chassis_GB148_FV227_Conceiver>
           <grounds>
             <soft>
-              <rollingFriction>	0.20125	</rollingFriction>
+              <rollingFriction>	0.18515	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.12075	</rollingFriction>
+              <rollingFriction>	0.10465	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0966	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

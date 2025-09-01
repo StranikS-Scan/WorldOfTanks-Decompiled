@@ -1124,7 +1124,6 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	1200	</weight>
-      <maxLoad>	12190	</maxLoad>
       <terrainResistance>	1 1.1 2.2	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -1966,7 +1965,6 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	1200	</weight>
-      <maxLoad>	14250	</maxLoad>
       <terrainResistance>	1 1 2	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -3426,6 +3424,7 @@
           </shotDispersionFactors>
           <armor>
             <armor_1>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_1>
             <gun>	10	</gun>
           </armor>
@@ -3534,6 +3533,7 @@
         <_47mm_SA34>	shared	  <maxAmmo>	225	</maxAmmo>
           <armor>
             <armor_1>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_1>
             <gun>	10	</gun>
           </armor>

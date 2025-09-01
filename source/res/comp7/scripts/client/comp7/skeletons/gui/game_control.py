@@ -28,12 +28,12 @@ class IComp7ShopController(IGameController):
     def hasNewDiscounts(self, rank):
         raise NotImplementedError
 
+    def validateCachedProducts(self):
+        raise NotImplementedError
+
 
 class IComp7WeeklyQuestsController(IGameController):
     onWeeklyQuestsUpdated = None
 
     def getQuests(self):
-        raise NotImplementedError()
-
-    def isInHideState(self):
         raise NotImplementedError()

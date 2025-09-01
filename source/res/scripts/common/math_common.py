@@ -16,6 +16,10 @@ def isAlmostEqual(first, second, epsilon=0.0004):
     return second - epsilon <= first <= second + epsilon
 
 
+def almostZero(val, epsilon=0.0004):
+    return -epsilon < val < epsilon
+
+
 def trim(v, min, max):
     if v < min:
         v = min

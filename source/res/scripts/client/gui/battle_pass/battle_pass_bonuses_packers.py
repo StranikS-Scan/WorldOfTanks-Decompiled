@@ -5,7 +5,8 @@ from contextlib import contextmanager
 from typing import TYPE_CHECKING
 from battle_pass_common import BATTLE_PASS_Q_CHAIN_BONUS_NAME, BATTLE_PASS_RANDOM_QUEST_BONUS_NAME, BATTLE_PASS_SELECT_BONUS_NAME, BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME, CurrencyBP
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.battle_pass.battle_pass_helpers import getOfferTokenByGift, getSingleVehicleForCustomization, getStyleForChapter
+from gui.battle_pass.battle_pass_helpers import getOfferTokenByGift, getStyleForChapter
+from gui.customization.shared import getSingleVehicleForCustomization
 from gui.impl import backport
 from gui.impl.backport import TooltipData
 from gui.impl.gen import R
@@ -572,7 +573,7 @@ class BattlePassVehiclesBonusUIPacker(VehiclesBonusUIPacker):
 
     @classmethod
     def __fillVehicle(cls, model, vehicle):
-        model.setIsElite(not vehicle.getEliteStatusProgress().toUnlock or vehicle.isElite)
+        model.setIsElite(vehicle.isElite)
         model.setVehicleLvl(vehicle.level)
         model.setVehicleName(vehicle.userName)
         model.setVehicleType(vehicle.type)
@@ -666,6 +667,7 @@ class BattlePassTokenBonusPacker(TokenBonusUIPacker):
     def __packCrewBonusX3Token(cls, model, bonus, *args):
         model.setName(CREW_BONUS_X3_TOKEN)
         model.setValue(str(bonus.getCount()))
+        model.setUserName(backport.text(R.strings.battle_pass.crewBonusX3()))
         model.setBigIcon(CREW_BONUS_X3_TOKEN)
         return model
 
@@ -708,7 +710,7 @@ class BattlePassLootBoxBonusPacker(SimpleBonusUIPacker):
 
     @classmethod
     def _getContentId(cls, _):
-        return [R.views.lobby.lootbox_system.tooltips.BoxTooltip()]
+        return [R.views.mono.lootbox.tooltips.box_tooltip()]
 
     @classmethod
     def _getToolTip(cls, bonus):

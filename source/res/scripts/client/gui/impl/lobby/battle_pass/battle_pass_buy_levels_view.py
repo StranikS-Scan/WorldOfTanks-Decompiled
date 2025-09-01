@@ -3,23 +3,18 @@
 import logging
 import SoundGroups
 from battle_pass_common import BattlePassState
-from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData
 from gui.battle_pass.battle_pass_buyer import BattlePassBuyer
 from gui.battle_pass.battle_pass_constants import ChapterState
-from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator
-from gui.battle_pass.battle_pass_helpers import getDefaultChaptersView
 from gui.battle_pass.battle_pass_package import PackageAnyLevels
 from gui.battle_pass.sounds import BattlePassSounds
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_buy_level_view_model import BattlePassBuyLevelViewModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.package_item import PackageType
-from gui.impl.pub import ViewImpl
-from gui.impl.pub.lobby_window import LobbyWindow
-from gui.server_events.events_dispatcher import showMissionsBattlePass
+from gui.impl.pub.view_component import ViewComponent
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
-from gui.shared.event_dispatcher import showHangar
+from gui.shared.event_dispatcher import showBattlePass
 from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController, IWalletController
@@ -27,42 +22,57 @@ from skeletons.gui.shared import IItemsCache
 _rBattlePass = R.strings.battle_pass
 _logger = logging.getLogger(__name__)
 
-class BattlePassBuyLevelView(ViewImpl):
-    __slots__ = ('__package', '__tooltipItems', '__backCallback', '__backBtnDescrLabel', '__tooltipWindow', '__chapterID')
+class BuyLevelsPresenter(ViewComponent[BattlePassBuyLevelViewModel]):
     __battlePass = dependency.descriptor(IBattlePassController)
     __wallet = dependency.descriptor(IWalletController)
     __itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, ctx):
-        settings = ViewSettings(R.views.lobby.battle_pass.BattlePassBuyLevelView())
-        settings.flags = ViewFlags.LOBBY_TOP_SUB_VIEW
-        settings.model = BattlePassBuyLevelViewModel()
-        self.__backCallback = ctx.get('backCallback')
+    def __init__(self, *args, **kwargs):
+        super(BuyLevelsPresenter, self).__init__(R.aliases.battle_pass.BuyLevels(), BattlePassBuyLevelViewModel)
+        self.__backCallback = None
         self.__tooltipItems = {}
         self.__tooltipWindow = None
-        self.__chapterID = ctx.get('chapterID')
-        self.__package = PackageAnyLevels(self.__chapterID)
-        super(BattlePassBuyLevelView, self).__init__(settings)
+        self.__chapterID = None
+        self.__package = None
+        self.updateInitialData(**kwargs)
         return
 
     @property
     def viewModel(self):
-        return super(BattlePassBuyLevelView, self).getViewModel()
-
-    @createBackportTooltipDecorator()
-    def createToolTip(self, event):
-        return super(BattlePassBuyLevelView, self).createToolTip(event)
-
-    @createTooltipContentDecorator()
-    def createToolTipContent(self, event, contentID):
-        return None
+        return super(BuyLevelsPresenter, self).getViewModel()
 
     def getTooltipData(self, event):
         tooltipId = event.getArgument('tooltipId')
         return None if tooltipId is None else self.__tooltipItems.get(tooltipId)
 
+    def updateInitialData(self, **kwargs):
+        self.__backCallback = kwargs.get('backCallback')
+        newChapterID = kwargs.get('chapterID')
+        if newChapterID is not None and (newChapterID != self.__chapterID or kwargs.get('reset', False)):
+            self.__chapterID = newChapterID
+            self.__package = PackageAnyLevels(self.__chapterID)
+        self.viewModel.setIsWalletAvailable(self.__wallet.isAvailable)
+        switchHangarOverlaySoundFilter(on=True)
+        childStateID = kwargs.get('childStateID')
+        if childStateID == R.aliases.battle_pass.BuyLevelsRewards():
+            self.__showRewards()
+        else:
+            self.__showConfirmAny()
+        return
+
+    def activate(self):
+        self.__battlePass.onLevelUp += self.__onLevelUp
+
+    def deactivate(self):
+        self.__battlePass.onLevelUp -= self.__onLevelUp
+        g_eventBus.removeListener(events.BattlePassEvent.AWARD_VIEW_CLOSE, self.__onAwardViewClose, EVENT_BUS_SCOPE.LOBBY)
+
+    def onExtraChapterExpired(self):
+        if self.__battlePass.isExtraChapter(self.__chapterID):
+            showBattlePass()
+
     def _onLoading(self, *args, **kwargs):
-        super(BattlePassBuyLevelView, self)._onLoading(*args, **kwargs)
+        super(BuyLevelsPresenter, self)._onLoading(*args, **kwargs)
         with self.viewModel.transaction() as tx:
             tx.setIsWalletAvailable(self.__wallet.isAvailable)
             if self.__backCallback:
@@ -74,7 +84,7 @@ class BattlePassBuyLevelView(ViewImpl):
         self.__showConfirmAny()
 
     def _finalize(self):
-        super(BattlePassBuyLevelView, self)._finalize()
+        super(BuyLevelsPresenter, self)._finalize()
         self.__clearTooltips()
         self.__tooltipItems = None
         self.__package = None
@@ -89,9 +99,6 @@ class BattlePassBuyLevelView(ViewImpl):
             self.__tooltipWindow = None
         return
 
-    def __onBackClick(self):
-        self.destroyWindow()
-
     def __showConfirmAny(self):
         with self.viewModel.transaction() as model:
             self.__setConfirmAnyNumberModel(model=model.confirmAnyNumber)
@@ -105,23 +112,20 @@ class BattlePassBuyLevelView(ViewImpl):
         return ((events.BattlePassEvent.BUYING_THINGS, self.__onBuying, EVENT_BUS_SCOPE.LOBBY),)
 
     def _getEvents(self):
-        return ((self.viewModel.onBackClick, self.__onBackClick),
-         (self.viewModel.showConfirmAny, self.__showConfirmAny),
+        return ((self.viewModel.showConfirmAny, self.__showConfirmAny),
          (self.viewModel.confirmAnyNumber.onChangeSelectedLevels, self.__onChangeSelectedLevels),
          (self.viewModel.confirmAnyNumber.onBuyClick, self.__onBuyBattlePassClick),
          (self.viewModel.confirmAnyNumber.onShowRewardsClick, self.__showRewards),
          (self.__battlePass.onLevelUp, self.__onLevelUp),
          (self.__battlePass.onBattlePassSettingsChange, self.__onSettingsChanged),
          (self.__battlePass.onSeasonStateChanged, self.__onSettingsChanged),
-         (self.__battlePass.onExtraChapterExpired, self.__onExtraChapterExpired),
-         (self.__battlePass.onBattlePassSettingsChange, self.__onBattlePassSettingsChange),
          (self.__wallet.onWalletStatusChanged, self.__onWalletChanged))
 
     def __onBuying(self, _):
         self.__battlePass.onLevelUp += self.__onLevelUp
 
     def __onAwardViewClose(self, _):
-        self.__onBackClick()
+        showBattlePass(R.aliases.battle_pass.ChapterChoice() if self.__battlePass.isChapterCompleted(self.__chapterID) else R.invalid())
 
     def __onChangeSelectedLevels(self, args):
         self.__updateConfirmAnyNumberModel(args.get('count'))
@@ -130,12 +134,8 @@ class BattlePassBuyLevelView(ViewImpl):
         self.__updateState()
 
     def __onSettingsChanged(self, *_):
-        if self.__battlePass.isPaused():
-            showMissionsBattlePass()
-        elif self.__battlePass.isVisible():
+        if self.__battlePass.isVisible():
             self.__updateState()
-        else:
-            showHangar()
 
     def __onWalletChanged(self, _):
         with self.viewModel.transaction() as model:
@@ -143,7 +143,7 @@ class BattlePassBuyLevelView(ViewImpl):
 
     def __updateState(self):
         if self.__isFinishedProgression() or self.__isChapterCompleted():
-            self.destroyWindow()
+            showBattlePass()
             return
         model = self.viewModel
         if model.getState() == model.CONFIRM_ANY_NUMBER_STATE:
@@ -202,22 +202,3 @@ class BattlePassBuyLevelView(ViewImpl):
 
     def __isChapterCompleted(self):
         return self.__package.getChapterState() == ChapterState.COMPLETED
-
-    def __onExtraChapterExpired(self):
-        if self.__battlePass.isExtraChapter(self.__chapterID):
-            showMissionsBattlePass(getDefaultChaptersView(battlePass=self.__battlePass))
-            self.destroyWindow()
-
-    def __onBattlePassSettingsChange(self, *_):
-        ctrl = self.__battlePass
-        if not (ctrl.isEnabled() and ctrl.isVisible() and ctrl.isChapterExists(self.__chapterID)):
-            showMissionsBattlePass(getDefaultChaptersView(battlePass=self.__battlePass))
-            self.destroyWindow()
-
-
-class BattlePassBuyLevelWindow(LobbyWindow):
-    __slots__ = ()
-
-    def __init__(self, ctx, parent):
-        super(BattlePassBuyLevelWindow, self).__init__(content=BattlePassBuyLevelView(ctx=ctx), wndFlags=WindowFlags.WINDOW, decorator=None, parent=parent)
-        return

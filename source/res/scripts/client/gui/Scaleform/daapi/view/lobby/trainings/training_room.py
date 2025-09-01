@@ -3,16 +3,20 @@
 from constants import PREBATTLE_TYPE
 from gui.Scaleform.daapi.view.lobby.trainings.TrainingRoomBase import TrainingRoomBase
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
+from gui.Scaleform.genConsts.MESSENGER_CHANNEL_CAROUSEL_ITEM_TYPES import MESSENGER_CHANNEL_CAROUSEL_ITEM_TYPES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.training.legacy.ctx import TrainingSettingsCtx
 from gui.prb_control.settings import PREBATTLE_ROSTER, REQUEST_TYPE
-from gui.shared import events, EVENT_BUS_SCOPE
+from gui.shared import events, EVENT_BUS_SCOPE, g_eventBus
 from gui.impl.gen import R
+from gui.shared.events import ChannelCarouselEvent
+from messenger.ext import channel_num_gen
+from messenger.ext.channel_num_gen import SPECIAL_CLIENT_WINDOWS
 
 class TrainingRoom(TrainingRoomBase):
 
-    def __init__(self, _=None):
+    def __init__(self, **kwargs):
         super(TrainingRoom, self).__init__()
 
     def _populate(self):
@@ -21,7 +25,12 @@ class TrainingRoom(TrainingRoomBase):
             if not funcState.isInLegacy(PREBATTLE_TYPE.TRAINING):
                 g_eventDispatcher.removeTrainingFromCarousel(False)
                 return
+        self.__updateWindowOpenState(True)
         super(TrainingRoom, self)._populate()
+
+    def _dispose(self):
+        self.__updateWindowOpenState(False)
+        super(TrainingRoom, self)._dispose()
 
     def _addListeners(self):
         super(TrainingRoom, self)._addListeners()
@@ -66,3 +75,6 @@ class TrainingRoom(TrainingRoomBase):
     def _updateTrainingRoom(self, event):
         self._closeWindow(PREBATTLE_ALIASES.TRAINING_SETTINGS_WINDOW_PY)
         super(TrainingRoom, self)._updateTrainingRoom(event)
+
+    def __updateWindowOpenState(self, flag):
+        g_eventBus.handleEvent(ChannelCarouselEvent(self, ChannelCarouselEvent.ON_WINDOW_CHANGE_OPEN_STATE, channel_num_gen.getClientID4SpecialWindow(SPECIAL_CLIENT_WINDOWS.TRAINING_ROOM), MESSENGER_CHANNEL_CAROUSEL_ITEM_TYPES.CHANNEL_CAROUSEL_ITEM_TYPE_PREBATTLE, flag), scope=EVENT_BUS_SCOPE.LOBBY)

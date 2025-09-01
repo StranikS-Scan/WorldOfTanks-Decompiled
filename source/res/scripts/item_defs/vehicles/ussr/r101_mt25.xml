@@ -57,7 +57,7 @@
     </armor>
     <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
     <weight>	12400	</weight>
-    <maxHealth>	528	</maxHealth>
+    <maxHealth>	608	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	140	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
@@ -1095,8 +1095,7 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	8000	</weight>
-      <maxLoad>	26000	</maxLoad>
-      <terrainResistance>	0.7 0.8 1.7	</terrainResistance>
+      <terrainResistance>	0.6 0.7 1.5	</terrainResistance>
       <brakeForce>	27000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	44	</rotationSpeed>
@@ -1314,7 +1313,6 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	8000	</weight>
-      <maxLoad>	28000	</maxLoad>
       <terrainResistance>	0.6 0.7 1.5	</terrainResistance>
       <brakeForce>	30000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -1542,7 +1540,7 @@
       </armor>
       <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
       <weight>	3250	</weight>
-      <maxHealth>	132	</maxHealth>
+      <maxHealth>	152	</maxHealth>
       <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -1556,101 +1554,9 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_45mm_VT-43M>	shared	  <maxAmmo>	360	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 7 0.394671 7 0.458333 6 0.541667 6 0.605329 7 1 7	</maxPitch>
-          </pitchLimits>
-          <reloadTime>	2	</reloadTime>
-          <aimingTime>	2	</aimingTime>
+        <_57mm_ZiS_4M>	shared	  <maxAmmo>	100	</maxAmmo>
           <unlocks>
-            <gun>	_57mm_ZiS-4M	  <cost>	2900	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	45	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_3>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	45	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	10	</gun>
-          </armor>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <invisibilityFactorAtShot>	0.276	</invisibilityFactorAtShot>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <models>
-            <undamaged>	vehicles/russian/R101_MT25/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/russian/R101_MT25/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/russian/R101_MT25/crash/lod0/Gun_02.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/russian/R101_MT25/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R101_MT25/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_small	</effects>
-          <reloadEffect>	reload20_45	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0 0.025726 1.33485	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.198622 0.198622	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0 0.025726 1.33485	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.000233 1.49392 0.762695	</position>
-              <rotation>	0.954362 -0.001615 3.1388	</rotation>
-              <scale>	2.23913 1.8662 2.23912	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.351413	</clipAngle>
-              <anchorShift>	0.965772	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0 0.030429 0.9	</rayStart>
-              <rayEnd>	0 0.030429 1.2	</rayEnd>
-              <rayUp>	0.052 0 0	</rayUp>
-              <size>	0.3	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	1 0.6 0.000000 0.000000	</tiling>
-            <density>	101.546 120.062	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </_45mm_VT-43M>
-        <_57mm_ZiS-4M>	shared	  <maxAmmo>	100	</maxAmmo>
-          <unlocks>
-            <gun>	_76mm_S-54M	  <cost>	4300	</cost>
+            <gun>	_76mm_S_54M	  <cost>	4300	</cost>
             </gun>
           </unlocks>
           <reloadTime>	3	</reloadTime>
@@ -1739,8 +1645,8 @@
             <density>	98.3083 107.095	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_57mm_ZiS-4M>
-        <_76mm_S-54M>	shared	  <maxAmmo>	70	</maxAmmo>
+        </_57mm_ZiS_4M>
+        <_76mm_S_54M>	shared	  <maxAmmo>	70	</maxAmmo>
           <reloadTime>	4.5	</reloadTime>
           <unlocks>
             <vehicle>	R131_Tank_Gavalov	  <cost>	56200	</cost>
@@ -1831,7 +1737,7 @@
             <density>	104.535 94.4275	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_76mm_S-54M>
+        </_76mm_S_54M>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R101_MT25/normal/lod0/Turret_01.model	</undamaged>
@@ -2298,46 +2204,41 @@
   </turrets0>
   <engines>
     <V_2_10M>	shared	  <unlocks>
-        <engine>	V-16M	  <cost>	11200	</cost>
+        <engine>	V_16M	  <cost>	11200	</cost>
         </engine>
       </unlocks>
     </V_2_10M>
-    <V-16M>	shared	</V-16M>
+    <V_16M>	shared	</V_16M>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <_9RM>	shared	  <unlocks>
-        <radio>	R113	  <cost>	8700	</cost>
-        </radio>
-      </unlocks>
-    </_9RM>
     <R113>	shared	</R113>
   </radios>
   <physics>
     <detailed>
       <engines>
         <V_2_10M>
-          <smplEnginePower>	600	</smplEnginePower>
+          <smplEnginePower>	650	</smplEnginePower>
           <smplFwMaxSpeed>	62	</smplFwMaxSpeed>
         </V_2_10M>
-        <V-16M>
+        <V_16M>
           <smplEnginePower>	740	</smplEnginePower>
           <smplFwMaxSpeed>	62	</smplFwMaxSpeed>
-        </V-16M>
+        </V_16M>
       </engines>
       <chassis>
         <Chassis_R101_MT25>
           <grounds>
             <soft>
-              <rollingFriction>	0.13685	</rollingFriction>
+              <rollingFriction>	0.12075	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.0644	</rollingFriction>
+              <rollingFriction>	0.05635	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.05635	</rollingFriction>
+              <rollingFriction>	0.0483	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_R101_MT25>

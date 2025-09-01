@@ -3,7 +3,6 @@
 import logging
 from typing import TYPE_CHECKING
 from ClientSelectableCameraObject import ClientSelectableCameraObject
-from CurrentVehicle import g_currentVehicle
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.context.styled_mode import StyledMode
 from gui.customization.constants import CustomizationModes
@@ -31,7 +30,7 @@ def showIntro(eventName):
 
 def showMain(eventName, subViewID=None, *args, **kwargs):
     from gui.impl.lobby.lootbox_system.base.main_view import MainWindow
-    window = findActiveWindow(R.views.lobby.lootbox_system.MainView())
+    window = findActiveWindow(R.views.mono.lootbox.main())
     if window is not None:
         window.switchToSubView(subViewID, eventName=eventName, *args, **kwargs)
         return
@@ -62,7 +61,7 @@ def showItemPreview(itemType, itemID, styleID, eventName, backCallback=None, cus
     if itemType == 'vehicles':
         vehicle = itemsCache.items.getItemByCD(itemID)
         if vehicle.isInInventory:
-            window = findActiveWindow(R.views.lobby.lootbox_system.MainView())
+            window = findActiveWindow(R.views.mono.lootbox.main())
             if window is not None:
                 window.destroyWindow()
             selectVehicleInHangar(itemID, loadHangar=True)
@@ -101,7 +100,7 @@ def showCustomizationHangar(style, previewBackCb=None, backBtnLabel=None, itemsC
     vehicles = itemsCache.items.getVehicles(REQ_CRITERIA.CUSTOM(style.mayInstall))
     vehicle = first(vehicles.itervalues()) if vehicles else None
     if style.isInInventory and vehicle is not None and vehicle.isInInventory and vehicle.isCustomizationEnabled():
-        customization.showCustomization(vehicle.invID, callback=_callback, prevVehicleInvID=g_currentVehicle.invID)
+        customization.showCustomization(vehicle.invID, callback=_callback)
     else:
         showVehicleStylePreview(style, previewBackCb=previewBackCb, backBtnLabel=backBtnLabel)
     return

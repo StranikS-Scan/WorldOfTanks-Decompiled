@@ -921,7 +921,6 @@
         <rightTrack>	30	</rightTrack>
       </armor>
       <weight>	22500	</weight>
-      <maxLoad>	93000	</maxLoad>
       <terrainResistance>	1 1.2 2	</terrainResistance>
       <brakeForce>	90000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -1791,8 +1790,10 @@
             </armor_29>
             <armor_30>	210	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_30>
-            <armor_31>	145	</armor_31>
-            <armor_32>	130	</armor_32>
+            <armor_31>	145	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_31>
+            <armor_32>	130	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_32>
             <gun>	60	</gun>
           </armor>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
@@ -2380,11 +2381,9 @@
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>
   </effects>
-  <effectsPrefab>
-    <rocketAcceleration>
-      <prefab>	particles/Tank/rocket_accelerator/G186_Schwertwal_Rocket.prefab	</prefab>
-    </rocketAcceleration>
-  </effectsPrefab>
+  <prefabs>
+    <mechanicEffects>	particles/Tank/rocket_accelerator/G186_Schwertwal_Rocket.prefab	</mechanicEffects>
+  </prefabs>
   <emblems>
     <default>	15502	</default>
     <lodDist>	MEDIUM	</lodDist>

@@ -157,7 +157,6 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	8050	</weight>
-      <maxLoad>	34000	</maxLoad>
       <terrainResistance>	1.3 1.4 2.1	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -779,7 +778,7 @@
     <Turret_1_105_leFH18B2_IGR>
       <ceilless>	true	</ceilless>
       <userString>	#igr_vehicles:Turret_1_105_leFH18B2_IGR	</userString>
-      <tags>	cannotDetach	</tags>
+      <tags>	cannotDetach turretless	</tags>
       <level>	5	</level>
       <price>	120	</price>
       <notInShop>	true	</notInShop>

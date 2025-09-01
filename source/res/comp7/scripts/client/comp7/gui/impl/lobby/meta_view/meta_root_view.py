@@ -4,12 +4,13 @@ import logging
 import typing
 from shared_utils import findFirst
 from comp7.gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS as COMP7_TOOLTIPS
-from comp7.gui.comp7_constants import SELECTOR_BATTLE_TYPES
 from comp7.gui.game_control.comp7_shop_controller import ShopControllerStatus
 from comp7.gui.impl.gen.view_models.views.lobby.enums import MetaRootViews
+from comp7.gui.impl.gen.view_models.views.lobby.enums import SeasonName
 from comp7.gui.impl.gen.view_models.views.lobby.meta_view.root_view_model import RootViewModel
 from comp7.gui.impl.gen.view_models.views.lobby.meta_view.tab_model import TabModel
-from comp7.gui.impl.lobby.comp7_helpers import comp7_model_helpers
+from comp7.gui.impl.gen.view_models.views.lobby.season_model import SeasonState
+from comp7.gui.impl.gen.view_models.views.lobby.year_model import YearState
 from comp7.gui.impl.lobby.comp7_helpers.comp7_lobby_sounds import getComp7MetaSoundSpace, playComp7MetaViewTabSound
 from comp7.gui.impl.lobby.meta_view.pages.leaderboard_page import LeaderboardPage
 from comp7.gui.impl.lobby.meta_view.pages.progression_page import ProgressionPage
@@ -20,30 +21,33 @@ from comp7.gui.impl.lobby.meta_view.pages.yearly_rewards_page import YearlyRewar
 from comp7.gui.impl.lobby.meta_view.pages.yearly_statistics_page import YearlyStatisticsPage
 from comp7.gui.impl.lobby.meta_view.products_helper import hasUnseenProduct
 from comp7.gui.selectable_reward.common import Comp7SelectableRewardManager
-from comp7.gui.shared.event_dispatcher import showComp7AllRewardsSelectionWindow, showComp7WhatsNewScreen
+from comp7.gui.shared.event_dispatcher import showComp7AllRewardsSelectionWindow, showComp7MetaRootTab
 from comp7.skeletons.gui.game_control import IComp7ShopController
-from frameworks.wulf import ViewFlags, ViewSettings, ViewStatus, WindowLayer
-from gui import GUI_SETTINGS
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from comp7_core.gui.impl.lobby.comp7_core_helpers import comp7_core_model_helpers
+from frameworks.state_machine import BaseStateObserver, visitor
+from frameworks.wulf import ViewFlags, ViewSettings, ViewStatus
+from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.impl.backport import BackportTooltipWindow
 from gui.impl.backport.backport_tooltip import createTooltipData
 from gui.impl.gen import R
 from gui.impl.gui_decorators import args2params
-from gui.impl.lobby.mode_selector.items.base_item import getInfoPageKey
 from gui.impl.pub import ViewImpl
 from gui.prb_control.events_dispatcher import g_eventDispatcher
-from gui.shared.event_dispatcher import showBrowserOverlayView, showHangar
+from gui.shared.event_dispatcher import showHangar
 from helpers import dependency
 from skeletons.gui.game_control import IComp7Controller
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.offers import IOffersDataProvider
 if typing.TYPE_CHECKING:
     from comp7.gui.impl.lobby.meta_view.pages import PageSubModelPresenter
+    from comp7.gui.impl.lobby.hangar.meta_tab_state import IMetaTabState
     from gui.offers import OffersDataProvider
+    from gui.shared.events import NavigationEvent
+    from frameworks.state_machine import State
 _logger = logging.getLogger(__name__)
 
-class MetaRootView(ViewImpl):
-    __slots__ = ('__pages', '__tabId', '__products')
+class MetaRootView(ViewImpl, BaseStateObserver):
+    __slots__ = ('__pages', '__tabId', '__products', '__onLoadingParams')
     __comp7Controller = dependency.descriptor(IComp7Controller)
     __comp7ShopController = dependency.descriptor(IComp7ShopController)
     __guiLoader = dependency.descriptor(IGuiLoader)
@@ -58,8 +62,10 @@ class MetaRootView(ViewImpl):
         settings.kwargs = kwargs
         super(MetaRootView, self).__init__(settings)
         self.__pages = {}
-        self.__tabId = MetaRootViews.PROGRESSION
+        self.__tabId = None
         self.__products = None
+        self.__onLoadingParams = None
+        self.__initPages()
         return
 
     @property
@@ -69,6 +75,9 @@ class MetaRootView(ViewImpl):
     @property
     def tabId(self):
         return self.__tabId
+
+    def getPageById(self, tabId):
+        return self.__pages.get(tabId)
 
     def createToolTip(self, event):
         if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
@@ -92,21 +101,22 @@ class MetaRootView(ViewImpl):
         return super(MetaRootView, self).createToolTipContent(event, contentID)
 
     def createContextMenu(self, event):
-        if self.__currentPage.isLoaded:
+        if self.__currentPage is not None and self.__currentPage.isLoaded:
             window = self.__currentPage.createContextMenu(event)
             if window is not None:
                 return window
         return super(MetaRootView, self).createContextMenu(event)
 
-    def switchPage(self, tabId, *args, **kwargs):
-        if self.__currentPage.isLoaded:
+    def switchPage(self, tabId, **params):
+        if self.__currentPage is not None and self.__currentPage.isLoaded:
             self.__currentPage.finalize()
         page = self.__pages[tabId]
-        page.initialize(*args, **kwargs)
+        page.initialize(**params)
         self.viewModel.setPageViewId(page.pageId)
         playComp7MetaViewTabSound(tabId, self.__tabId)
         self.__tabId = tabId
         g_eventDispatcher.updateUI()
+        return
 
     def updateTabNotifications(self):
         shopTab = findFirst(lambda tab: tab.getId() == MetaRootViews.SHOP, self.viewModel.sidebar.getItems())
@@ -115,45 +125,53 @@ class MetaRootView(ViewImpl):
         else:
             shopTab.setHasNotification(False)
 
+    def isObservingState(self, state):
+        from comp7.gui.impl.lobby.hangar.states import Comp7MetaState
+        lsm = getLobbyStateMachine()
+        return visitor.isDescendantOf(state, lsm.getStateByCls(Comp7MetaState)) if lsm is not None else False
+
+    def onEnterState(self, state, event):
+        params = self.__onLoadingParams or {}
+        if event is not None:
+            params.update(event.params)
+        self.switchPage(state.tabId, **params)
+        self.__onLoadingParams = None
+        return
+
     def _finalize(self):
+        lsm = getLobbyStateMachine()
+        if lsm is not None:
+            lsm.disconnect(self)
         self.__removeListeners()
         self.__clearPages()
         self.__products = None
+        self.__onLoadingParams = None
         return
 
     def _onLoading(self, *args, **kwargs):
-        tabId = kwargs.pop('tabId', None)
-        if tabId is not None:
-            if tabId in tuple(MetaRootViews):
-                self.__tabId = tabId
-            else:
-                _logger.error('Wrong tabId: %s', tabId)
-        self.__initPages()
+        self.__onLoadingParams = kwargs
+        lsm = getLobbyStateMachine()
+        if lsm is not None:
+            lsm.connect(self)
+        else:
+            _logger.error('Lobby state machine is None when MetaRootView is loading')
         self.__updateTabs()
         self.__products = self.__comp7ShopController.getProducts()
         self.updateTabNotifications()
-        page = self.__pages[self.__tabId]
-        page.initialize(*args, **kwargs)
-        self.viewModel.setPageViewId(page.pageId)
-        comp7_model_helpers.setScheduleInfo(model=self.viewModel.scheduleInfo)
+        comp7_core_model_helpers.setScheduleInfo(self.viewModel.scheduleInfo, self.__comp7Controller, COMP7_TOOLTIPS.COMP7_CALENDAR_DAY_INFO, SeasonState, YearState, SeasonName)
         self.__updateWeeklyQuestsClaimRewardsModel()
         self.__addListeners()
         return
 
-    def _onLoaded(self, *args, **kwargs):
-        playComp7MetaViewTabSound(self.__tabId)
-
     @property
     def __currentPage(self):
-        return self.__pages[self.__tabId]
+        return self.__pages[self.__tabId] if self.__pages and self.__tabId is not None else None
 
     def __addListeners(self):
         self.viewModel.onClose += self.__onClose
-        self.viewModel.onInfoPageOpen += self.__onInfoPageOpen
-        self.viewModel.onWhatsNewScreenOpen += self.__onWhatsNewScreenOpen
         self.viewModel.sidebar.onSideBarTabChange += self.__onSideBarTabChanged
         self.viewModel.scheduleInfo.season.pollServerTime += self.__onScheduleUpdated
-        self.__comp7Controller.onComp7ConfigChanged += self.__onScheduleUpdated
+        self.__comp7Controller.onModeConfigChanged += self.__onScheduleUpdated
         self.__comp7Controller.onStatusUpdated += self.__onStatusUpdated
         self.__comp7Controller.onOfflineStatusUpdated += self.__onOfflineStatusUpdated
         self.__comp7ShopController.onShopStateChanged += self.__onShopStateChanged
@@ -166,11 +184,9 @@ class MetaRootView(ViewImpl):
 
     def __removeListeners(self):
         self.viewModel.onClose -= self.__onClose
-        self.viewModel.onInfoPageOpen -= self.__onInfoPageOpen
-        self.viewModel.onWhatsNewScreenOpen -= self.__onWhatsNewScreenOpen
         self.viewModel.sidebar.onSideBarTabChange -= self.__onSideBarTabChanged
         self.viewModel.scheduleInfo.season.pollServerTime -= self.__onScheduleUpdated
-        self.__comp7Controller.onComp7ConfigChanged -= self.__onScheduleUpdated
+        self.__comp7Controller.onModeConfigChanged -= self.__onScheduleUpdated
         self.__comp7Controller.onStatusUpdated -= self.__onStatusUpdated
         self.__comp7Controller.onOfflineStatusUpdated -= self.__onOfflineStatusUpdated
         self.__comp7ShopController.onShopStateChanged -= self.__onShopStateChanged
@@ -191,13 +207,13 @@ class MetaRootView(ViewImpl):
         self.updateTabNotifications()
 
     def __onScheduleUpdated(self):
-        comp7_model_helpers.setScheduleInfo(model=self.viewModel.scheduleInfo)
+        comp7_core_model_helpers.setScheduleInfo(self.viewModel.scheduleInfo, self.__comp7Controller, COMP7_TOOLTIPS.COMP7_CALENDAR_DAY_INFO, SeasonState, YearState, SeasonName)
 
     def __onStatusUpdated(self, _):
         if not self.__comp7Controller.isEnabled() or self.__comp7Controller.isFrozen():
             showHangar()
         else:
-            comp7_model_helpers.setScheduleInfo(model=self.viewModel.scheduleInfo)
+            comp7_core_model_helpers.setScheduleInfo(self.viewModel.scheduleInfo, self.__comp7Controller, COMP7_TOOLTIPS.COMP7_CALENDAR_DAY_INFO, SeasonState, YearState, SeasonName)
 
     def __onOfflineStatusUpdated(self):
         if self.__comp7Controller.isOffline:
@@ -219,7 +235,9 @@ class MetaRootView(ViewImpl):
         self.__pages = {p.pageId:p for p in pages}
 
     def __clearPages(self):
-        if self.__currentPage.isLoaded:
+        if not self.__pages:
+            return
+        if self.__currentPage and self.__currentPage.isLoaded:
             self.__currentPage.finalize()
         self.__pages.clear()
 
@@ -239,7 +257,7 @@ class MetaRootView(ViewImpl):
 
     def __onViewStatusChanged(self, viewID, status):
         view = self.__guiLoader.windowsManager.getView(viewID)
-        if view and view.layoutID == R.views.comp7.lobby.dialogs.PurchaseDialog():
+        if view and view.layoutID == R.views.comp7.mono.lobby.dialogs.purchase_dialog():
             if status == ViewStatus.LOADING:
                 if self.__currentPage.isLoaded:
                     self.__currentPage.finalize()
@@ -253,13 +271,4 @@ class MetaRootView(ViewImpl):
         if tabId not in self.__pages:
             _logger.error('Wrong tabId: %s', tabId)
             return
-        self.switchPage(tabId)
-
-    @staticmethod
-    def __onInfoPageOpen():
-        url = GUI_SETTINGS.lookup(getInfoPageKey(SELECTOR_BATTLE_TYPES.COMP7))
-        showBrowserOverlayView(url, VIEW_ALIAS.WEB_VIEW_TRANSPARENT, hiddenLayers=(WindowLayer.MARKER, WindowLayer.VIEW, WindowLayer.WINDOW))
-
-    @staticmethod
-    def __onWhatsNewScreenOpen():
-        showComp7WhatsNewScreen()
+        showComp7MetaRootTab(tabId)

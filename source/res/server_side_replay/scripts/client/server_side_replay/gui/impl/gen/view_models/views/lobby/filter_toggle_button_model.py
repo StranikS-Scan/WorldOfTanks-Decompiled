@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: server_side_replay/scripts/client/server_side_replay/gui/impl/gen/view_models/views/lobby/filter_toggle_button_model.py
-from gui.impl.gen import R
 from frameworks.wulf import ViewModel
+from gui.impl.gen import R
 from server_side_replay.gui.impl.gen.view_models.views.lobby.dynamic_tooltip_model import DynamicTooltipModel
 
 class FilterToggleButtonModel(ViewModel):

@@ -43,7 +43,7 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	150	</armor_1>
+      <armor_1>	160	</armor_1>
       <armor_2>	120	</armor_2>
       <armor_3>	80	</armor_3>
       <armor_4>	80	</armor_4>
@@ -878,7 +878,7 @@
   </hull>
   <chassis>
     <Chassis_E50_Ausf_M_7x7>
-      <userString>	#germany_vehicles:Chassis_E50_Ausf_M	</userString>
+      <userString>	#germany_vehicles:Chassis_G73_E50_Ausf_M	</userString>
       <tags></tags>
       <level>	10	</level>
       <price>	82500	</price>
@@ -888,7 +888,6 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	9000	</weight>
-      <maxLoad>	67000	</maxLoad>
       <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
       <brakeForce>	65000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -1827,7 +1826,7 @@
   </chassis>
   <turrets0>
     <Turret_1_E50_Ausf_M_7x7>
-      <userString>	#germany_vehicles:Turret_1_E50_Ausf_M	</userString>
+      <userString>	#germany_vehicles:Turret_1_G73_E50_Ausf_M	</userString>
       <tags></tags>
       <level>	10	</level>
       <price>	66000	</price>
@@ -1886,7 +1885,7 @@
           </shotDispersionFactors>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 0.069444 8 0.083333 8 0.402778 8 0.416667 7 0.583333 7 0.597222 8 0.916667 8 0.930556 8 1 8	</maxPitch>
+            <maxPitch>	0.00000 8.00 0.40278 8.00 0.41667 7.00 0.58333 7.00 0.59722 8.00 1.00000 8.00	</maxPitch>
           </pitchLimits>
           <armor>
             <armor_1>	270	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -1920,7 +1919,7 @@
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.3	</shotDispersionRadius>
-          <reloadTime>	9.6	</reloadTime>
+          <reloadTime>	9.2	</reloadTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/german/G73_E50_Ausf_M/normal/lod0/Gun_01.model	</undamaged>
@@ -2515,7 +2514,7 @@
     <detailed>
       <engines>
         <Maybach_HL_235_7x7>
-          <smplEnginePower>	1268.737	</smplEnginePower>
+          <smplEnginePower>	1300	</smplEnginePower>
           <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
         </Maybach_HL_235_7x7>
       </engines>

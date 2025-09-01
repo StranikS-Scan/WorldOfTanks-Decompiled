@@ -11,7 +11,7 @@ from BattleReplay import CallbackDataNames
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.battle_control import avatar_getter
 from gui.battle_control.controllers.interfaces import IBattleController
-from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, VEHICLE_WAINING_INTERVAL, VEHICLE_UPDATE_INTERVAL, BATTLE_CTRL_ID, DEVICE_STATE_NORMAL
+from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, VEHICLE_WAINING_INTERVAL, VEHICLE_UPDATE_INTERVAL, BATTLE_CTRL_ID, DEVICE_STATE_NORMAL, UNKNOWN_VEHICLE_ID
 from gui.shared.utils.TimeInterval import TimeInterval
 from shared_utils import first
 
@@ -203,7 +203,7 @@ class VehicleStateController(IBattleController):
         self.__cachedStateValues = {}
         self.__cachedRepairingCallbackID = None
         self.__waitingTI = TimeInterval(VEHICLE_WAINING_INTERVAL, self, '_waiting')
-        self.__vehicleID = 0
+        self.__vehicleID = UNKNOWN_VEHICLE_ID
         self.__updater = None
         self.__isRqToSwitch = False
         self.__isInPostmortem = False
@@ -223,7 +223,7 @@ class VehicleStateController(IBattleController):
         if self.__updater is not None:
             self.__updater.clear()
             self.__updater = None
-        self.__vehicleID = 0
+        self.__vehicleID = UNKNOWN_VEHICLE_ID
         self.__isRqToSwitch = False
         self.__isInPostmortem = False
         self.__eManager.clear()

@@ -15,4 +15,5 @@ RANKED_PLATFORM_GROUP_ID = 'ranked_platform'
 FUN_RANDOM_GROUP_ID = 'fun_random'
 DAILY_QUEST_ID_PREFIX = DailyQuestsTokensPrefixes.QUEST_TOKEN
 DAILY_QUEST_TOKEN_PREFIX = DailyQuestsTokensPrefixes.QUEST_TICKET
+WEEKLY_QUEST_ID_PREFIX = 'wq::'
 TECH_TREE_ACTION_POSTFIX = '_techtree'

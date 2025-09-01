@@ -1003,7 +1003,7 @@
   </hull>
   <chassis>
     <Chassis_Nashorn_2_MapsTraining_Dummy_ATSPG_2>
-      <userString>	#germany_vehicles:Chassis_Nashorn_2	</userString>
+      <userString>	#germany_vehicles:Chassis_G40_Nashorn_2	</userString>
       <tags></tags>
       <notInShop>	true	</notInShop>
       <level>	6	</level>
@@ -1013,7 +1013,6 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	10000	</weight>
-      <maxLoad>	27000	</maxLoad>
       <terrainResistance>	1 1.2 2.2	</terrainResistance>
       <brakeForce>	26000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -1934,8 +1933,8 @@
   <turrets0>
     <Turret_1_Nashorn_MapsTraining_Dummy_ATSPG_2>
       <ceilless>	true	</ceilless>
-      <userString>	#germany_vehicles:Turret_1_Nashorn	</userString>
-      <tags>	cannotDetach	</tags>
+      <userString>	#germany_vehicles:Turret_1_G40_Nashorn	</userString>
+      <tags>	cannotDetach turretless	</tags>
       <level>	6	</level>
       <price>	100	</price>
       <notInShop>	true	</notInShop>
@@ -2205,11 +2204,6 @@
     </detailed>
   </physics>
   <clientAdjustmentFactors>
-    <guns>
-      <_88mm_PaK_36_L56>
-        <delta>	1.088888	</delta>
-      </_88mm_PaK_36_L56>
-    </guns>
     <armour>	0.634307731	</armour>
   </clientAdjustmentFactors>
   <effects>

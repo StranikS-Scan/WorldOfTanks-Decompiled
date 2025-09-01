@@ -56,7 +56,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	12292	</weight>
-    <maxHealth>	472	</maxHealth>
+    <maxHealth>	520	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	150	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
@@ -1002,7 +1002,6 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	5064	</weight>
-      <maxLoad>	23000	</maxLoad>
       <terrainResistance>	1.5 1.7 2.3	</terrainResistance>
       <brakeForce>	22000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -2220,7 +2219,6 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	5064	</weight>
-      <maxLoad>	25000	</maxLoad>
       <terrainResistance>	1.5 1.7 2.3	</terrainResistance>
       <brakeForce>	22000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -3448,7 +3446,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2400	</weight>
-      <maxHealth>	88	</maxHealth>
+      <maxHealth>	100	</maxHealth>
       <rotationSpeed>	36	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -3462,7 +3460,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_kan_m_41_strv>	shared	  <maxAmmo>	90	</maxAmmo>
+        <_75mm_kan_m_41_strv_42>	shared	  <maxAmmo>	90	</maxAmmo>
           <unlocks>
             <turret>	Turret_2_S02_Strv_M42	  <cost>	2300	</cost>
             </turret>
@@ -3536,7 +3534,7 @@
             <density>	151.949 151.181	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_75mm_kan_m_41_strv>
+        </_75mm_kan_m_41_strv_42>
       </guns>
       <models>
         <undamaged>	vehicles/sweden/S02_Strv_M42/normal/lod0/Turret_01.model	</undamaged>
@@ -4097,21 +4095,21 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2925	</weight>
-      <maxHealth>	118	</maxHealth>
+      <maxHealth>	130	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	50	</maxHealth>
-        <maxRegenHealth>	25	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	110	</maxHealth>
+        <maxRegenHealth>	55	</maxRegenHealth>
+        <repairCost>	5	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	350	</circularVisionRadius>
       <surveyingDeviceHealth>
-        <maxHealth>	40	</maxHealth>
-        <maxRegenHealth>	19	</maxRegenHealth>
+        <maxHealth>	70	</maxHealth>
+        <maxRegenHealth>	35	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_kan_m_41_strv>	shared	  <maxAmmo>	90	</maxAmmo>
+        <_75mm_kan_m_41_strv_42>	shared	  <maxAmmo>	90	</maxAmmo>
           <armor>
             <armor_1>	55	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -4131,8 +4129,8 @@
             <maxPitch>	0 15 1 15	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	4.4	</reloadTime>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <reloadTime>	4.5	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
@@ -4192,7 +4190,7 @@
             <density>	151.949 151.181	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_75mm_kan_m_41_strv>
+        </_75mm_kan_m_41_strv_42>
         <_75mm_kan_m_43_strv>	shared	  <maxAmmo>	50	</maxAmmo>
           <unlocks>
             <vehicle>	S07_Strv_74	  <cost>	28300	</cost>
@@ -4770,22 +4768,17 @@
     </Turret_2_S02_Strv_M42>
   </turrets0>
   <engines>
-    <_2_st_Scania_Vabis_L_603_1>	shared	  <unlocks>
+    <_2_st_Scania_Vabis_L_603_1_42>	shared	  <unlocks>
         <engine>	Volvo_A8B	  <cost>	1420	</cost>
         </engine>
       </unlocks>
-    </_2_st_Scania_Vabis_L_603_1>
+    </_2_st_Scania_Vabis_L_603_1_42>
     <Volvo_A8B>	shared	</Volvo_A8B>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <_25_W_Sv_1_m_39_42>	shared	  <unlocks>
-        <radio>	_70_W_Sv_m_43	  <cost>	1380	</cost>
-        </radio>
-      </unlocks>
-    </_25_W_Sv_1_m_39_42>
     <_70_W_Sv_m_43>	shared	</_70_W_Sv_m_43>
   </radios>
   <clientAdjustmentFactors>
@@ -4798,9 +4791,9 @@
       </Chassis_S02_Strv_M42_2>
     </chassis>
     <engines>
-      <_2_st_Scania_Vabis_L_603_1>
+      <_2_st_Scania_Vabis_L_603_1_42>
         <bravo>	85.63978	</bravo>
-      </_2_st_Scania_Vabis_L_603_1>
+      </_2_st_Scania_Vabis_L_603_1_42>
       <Volvo_A8B>
         <bravo>	108.3713	</bravo>
       </Volvo_A8B>
@@ -4809,12 +4802,12 @@
   <physics>
     <detailed>
       <engines>
-        <_2_st_Scania_Vabis_L_603_1>
-          <smplEnginePower>	360	</smplEnginePower>
+        <_2_st_Scania_Vabis_L_603_1_42>
+          <smplEnginePower>	440	</smplEnginePower>
           <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
-        </_2_st_Scania_Vabis_L_603_1>
+        </_2_st_Scania_Vabis_L_603_1_42>
         <Volvo_A8B>
-          <smplEnginePower>	460	</smplEnginePower>
+          <smplEnginePower>	480	</smplEnginePower>
           <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </Volvo_A8B>
       </engines>

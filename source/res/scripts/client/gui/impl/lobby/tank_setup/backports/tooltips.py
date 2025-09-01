@@ -9,15 +9,19 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_fields import Ta
 from gui.shared.gui_items.Vehicle import Vehicle
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.game_control import ILoadoutController
 _PanelSlotTooltip = namedtuple('_PanelSlotTooltip', 'tooltip, emptyTooltip')
 
 class HangarModuleTooltipBuilder(object):
     itemsCache = dependency.descriptor(IItemsCache)
 
     @classmethod
-    def getPanelSlotTooltip(cls, vehicle, slotID):
-        item = cls._getSlotItem(vehicle, slotID)
-        return cls.getEmptyTooltip(vehicle, slotID, None) if item is None else cls.getInSlotTooltipData(vehicle, slotID, item.intCD)
+    def getPanelSlotTooltip(cls, vehicle, slotID, intCD=None):
+        if intCD is not None and intCD > 0:
+            return cls.getInSlotTooltipData(vehicle, slotID, intCD)
+        else:
+            item = cls._getSlotItem(vehicle, slotID)
+            return cls.getInSlotTooltipData(vehicle, slotID, item.intCD) if item is not None else cls.getEmptyTooltip(vehicle, slotID, None)
 
     @classmethod
     def getInSlotTooltipData(cls, vehicle, slotID, intCD):
@@ -59,6 +63,7 @@ class HangarModuleTooltipBuilder(object):
 
 
 class OptDeviceTooltipBuilder(HangarModuleTooltipBuilder):
+    __loadoutController = dependency.descriptor(ILoadoutController)
 
     @classmethod
     def getEmptyTooltip(cls, vehicle, slotID, intCD):
@@ -80,10 +85,12 @@ class OptDeviceTooltipBuilder(HangarModuleTooltipBuilder):
 
     @classmethod
     def _getSlotItem(cls, vehicle, slotID):
-        return vehicle.optDevices.installed[int(slotID)]
+        interactor = cls.__loadoutController.interactor
+        return interactor.getCurrentLayout()[int(slotID)] if interactor and interactor.getName() == TankSetupConstants.OPT_DEVICES else vehicle.optDevices.installed[int(slotID)]
 
 
 class ConsumableToolitpBuilder(HangarModuleTooltipBuilder):
+    __loadoutController = dependency.descriptor(ILoadoutController)
 
     @classmethod
     def getEmptyTooltip(cls, *args):
@@ -100,11 +107,13 @@ class ConsumableToolitpBuilder(HangarModuleTooltipBuilder):
 
     @classmethod
     def _getSlotItem(cls, vehicle, slotID):
-        return vehicle.consumables.installed[int(slotID)]
+        interactor = cls.__loadoutController.interactor
+        return interactor.getCurrentLayout()[int(slotID)] if interactor and interactor.getName() == TankSetupConstants.CONSUMABLES else vehicle.consumables.installed[int(slotID)]
 
 
 class BattleBoostersTooltipBuilder(HangarModuleTooltipBuilder):
     itemsCache = dependency.descriptor(IItemsCache)
+    __loadoutController = dependency.descriptor(ILoadoutController)
 
     @classmethod
     def getEmptyTooltip(cls, *_):
@@ -129,7 +138,8 @@ class BattleBoostersTooltipBuilder(HangarModuleTooltipBuilder):
 
     @classmethod
     def _getSlotItem(cls, vehicle, slotID):
-        return vehicle.battleBoosters.installed[int(slotID)]
+        interactor = cls.__loadoutController.interactor
+        return interactor.getCurrentLayout()[int(slotID)] if interactor and interactor.getName() == TankSetupConstants.BATTLE_BOOSTERS else vehicle.battleBoosters.installed[int(slotID)]
 
 
 class VehModuleTooltipBuilder(HangarModuleTooltipBuilder):
@@ -138,10 +148,12 @@ class VehModuleTooltipBuilder(HangarModuleTooltipBuilder):
 
 class ShellTooltipBuilder(HangarModuleTooltipBuilder):
     itemsCache = dependency.descriptor(IItemsCache)
+    __loadoutController = dependency.descriptor(ILoadoutController)
 
     @classmethod
     def _getSlotItem(cls, vehicle, slotID):
-        return vehicle.shells.installed[int(slotID)]
+        interactor = cls.__loadoutController.interactor
+        return interactor.getCurrentLayout()[int(slotID)] if interactor and interactor.getName() == TankSetupConstants.SHELLS else vehicle.shells.installed[int(slotID)]
 
     @classmethod
     def _getInSlotTooltipAlias(cls):
@@ -215,7 +227,7 @@ def getSlotTooltipData(event, vehicle, currentSlotID, currentSection=None, toolt
             if slotType != currentSection:
                 return
             return tooltipBuilder.getTooltipData(copyVehicle, currentSlotID, int(intCD))
-        return tooltipBuilder.getSpecialInfoSlotTooltip(copyVehicle, currentSlotID, copyVehicle.intCD) if tooltipId == TankSetupConstants.SPECIAL_SETUP_INFO_SLOT_TOOLTIP else tooltipBuilder.getPanelSlotTooltip(copyVehicle, int(slotID))
+        return tooltipBuilder.getSpecialInfoSlotTooltip(copyVehicle, currentSlotID, copyVehicle.intCD) if tooltipId == TankSetupConstants.SPECIAL_SETUP_INFO_SLOT_TOOLTIP else tooltipBuilder.getPanelSlotTooltip(copyVehicle, int(slotID), int(intCD) if intCD else None)
 
 
 def getSlotSpecTooltipData(event, tooltipId):

@@ -1,8 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/impl/gen/view_models/views/lobby/battle_result_view_model.py
-from frameworks.wulf import Array
+from frameworks.wulf import Array, ViewModel
 from gui.impl.gen import R
-from frameworks.wulf import ViewModel
 from story_mode.gui.impl.gen.view_models.views.lobby.mission_progress_level_model import MissionProgressLevelModel
 from story_mode.gui.impl.gen.view_models.views.lobby.progress_level_model import ProgressLevelModel
 from story_mode.gui.impl.gen.view_models.views.lobby.reward_model import RewardModel

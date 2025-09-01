@@ -1,11 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/factories.py
-from soft_exception import SoftException
+from constants import IS_DEVELOPMENT
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 from gui.Scaleform.framework.entities.View import View
+from gui.Scaleform.framework.entities.wulf_adapter import WulfPackageLayoutAdapter
 from gui.shared.events import LoadViewEvent
+from soft_exception import SoftException
 
 class EntityFactory(object):
 
@@ -28,13 +30,19 @@ class EntityFactory(object):
     def create(self, settings, *args, **kwargs):
         clazz = settings.clazz
         pyEntity = None
-        try:
-            pyEntity = clazz(*args, **kwargs)
-        except Exception:
-            LOG_ERROR('There is error while daapi python-side class initialization:', clazz)
-            LOG_CURRENT_EXCEPTION()
+        if WulfPackageLayoutAdapter.shoudBeWrapped(settings.clazz):
+            kwargs.update({'layer': settings.layer})
+            adapter = WulfPackageLayoutAdapter()
+            adapter.initWindow(settings.clazz, *args, **kwargs)
+            return adapter
+        else:
+            try:
+                pyEntity = clazz(*args, **kwargs)
+            except Exception:
+                LOG_ERROR('There is error while daapi python-side class initialization:', clazz)
+                LOG_CURRENT_EXCEPTION()
 
-        return pyEntity
+            return pyEntity
 
     def initialize(self, pyEntity, gfxEntity, extra=None):
         return pyEntity
@@ -47,7 +55,7 @@ class DAAPIModuleFactory(EntityFactory):
 
     def validate(self, settings):
         super(DAAPIModuleFactory, self).validate(settings)
-        if BaseDAAPIModule not in getattr(settings.clazz, '__mro__', tuple()):
+        if not issubclass(settings.clazz, BaseDAAPIModule):
             raise SoftException('Class does not extend BaseDAAPIModule in settings {0}'.format(settings))
 
     def castType(self, clazz):
@@ -67,11 +75,22 @@ class DAAPIModuleFactory(EntityFactory):
 class ViewFactory(DAAPIModuleFactory):
 
     def validate(self, settings):
-        super(ViewFactory, self).validate(settings)
+        if hasattr(settings.clazz, 'isValid'):
+            isValid, errorMessage = getattr(settings.clazz, 'isValid')()
+            if not isValid:
+                raise SoftException('Class is not valid. {}'.format(errorMessage))
+        if WulfPackageLayoutAdapter.shoudBeWrapped(settings.clazz):
+            if IS_DEVELOPMENT:
+                import inspect
+                argsData = inspect.getargspec(settings.clazz.__init__)
+                if 'layer' not in argsData.args:
+                    raise SoftException('Constructor of {} must contain "layer" argument'.format(settings.clazz))
+            return
         url = settings.url
         if not url:
             raise SoftException('Invalid url in settings {0}'.format(settings))
-        if View not in getattr(settings.clazz, '__mro__', tuple()):
+        super(ViewFactory, self).validate(settings)
+        if not issubclass(settings.clazz, View):
             raise SoftException('Class does not extend View in settings {0}'.format(settings))
 
     def create(self, settings, *args, **kwargs):

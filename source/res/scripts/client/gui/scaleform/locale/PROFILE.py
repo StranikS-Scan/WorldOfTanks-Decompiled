@@ -634,6 +634,7 @@ class PROFILE(object):
     PROFILE_DROPDOWN_LABELS_COMP7 = '#profile:profile/dropdown/labels/comp7'
     PROFILE_DROPDOWN_LABELS_COMP7_ARCHIVE_GRIFFIN = '#profile:profile/dropdown/labels/comp7_archive_Griffin'
     PROFILE_DROPDOWN_LABELS_COMP7_ARCHIVE_PEGASUS = '#profile:profile/dropdown/labels/comp7_archive_Pegasus'
+    PROFILE_DROPDOWN_LABELS_COMP7_ARCHIVE_MANTICORE = '#profile:profile/dropdown/labels/comp7_archive_Manticore'
     PROFILE_DROPDOWN_LABELS_COMP7_SEASON_1 = '#profile:profile/dropdown/labels/comp7_season_1'
     PROFILE_DROPDOWN_LABELS_COMP7_SEASON_2 = '#profile:profile/dropdown/labels/comp7_season_2'
     PROFILE_DROPDOWN_LABELS_COMP7_SEASON_3 = '#profile:profile/dropdown/labels/comp7_season_3'
@@ -709,6 +710,7 @@ class PROFILE(object):
      PROFILE_DROPDOWN_LABELS_COMP7,
      PROFILE_DROPDOWN_LABELS_COMP7_ARCHIVE_GRIFFIN,
      PROFILE_DROPDOWN_LABELS_COMP7_ARCHIVE_PEGASUS,
+     PROFILE_DROPDOWN_LABELS_COMP7_ARCHIVE_MANTICORE,
      PROFILE_DROPDOWN_LABELS_COMP7_SEASON_1,
      PROFILE_DROPDOWN_LABELS_COMP7_SEASON_2,
      PROFILE_DROPDOWN_LABELS_COMP7_SEASON_3)

@@ -67,7 +67,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	19875	</weight>
-    <maxHealth>	680	</maxHealth>
+    <maxHealth>	720	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	160	</maxHealth>
       <maxRegenHealth>	110	</maxRegenHealth>
@@ -1468,13 +1468,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_SU100M1>
-      <userString>	#ussr_vehicles:Chassis_SU100M1	</userString>
+    <Chassis_R74_SU100M1>
+      <userString>	#ussr_vehicles:Chassis_R74_SU100M1	</userString>
       <tags></tags>
-      <level>	7	</level>
+      <level>	6	</level>
       <price>	9000	</price>
       <unlocks>
-        <chassis>	Chassis_SU100M1_2	  <cost>	14500	</cost>
+        <chassis>	Chassis_R74_SU100M1_2	  <cost>	14500	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1482,8 +1482,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	8500	</weight>
-      <maxLoad>	32200	</maxLoad>
-      <terrainResistance>	1.2 1.6 2.3	</terrainResistance>
+      <terrainResistance>	1.1 1.4 2.1	</terrainResistance>
       <brakeForce>	29000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	23	</rotationSpeed>
@@ -2303,18 +2302,17 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	5.71428585	</repairTime>
-    </Chassis_SU100M1>
-    <Chassis_SU100M1_2>
-      <userString>	#ussr_vehicles:Chassis_SU100M1_2	</userString>
+    </Chassis_R74_SU100M1>
+    <Chassis_R74_SU100M1_2>
+      <userString>	#ussr_vehicles:Chassis_R74_SU100M1_2	</userString>
       <tags></tags>
-      <level>	8	</level>
+      <level>	7	</level>
       <price>	31000	</price>
       <armor>
         <leftTrack>	20	</leftTrack>
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	8500	</weight>
-      <maxLoad>	34000	</maxLoad>
       <terrainResistance>	1.1 1.4 2.1	</terrainResistance>
       <brakeForce>	33000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -3135,11 +3133,11 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	5.71428585	</repairTime>
-    </Chassis_SU100M1_2>
+    </Chassis_R74_SU100M1_2>
   </chassis>
   <turrets0>
-    <Turret_1_SU100M1>
-      <userString>	#ussr_vehicles:Turret_1_SU100M1	</userString>
+    <Turret_1_R74_SU100M1>
+      <userString>	#ussr_vehicles:Turret_1_R74_SU100M1	</userString>
       <tags>	cannotDetach	</tags>
       <level>	7	</level>
       <price>	1200	</price>
@@ -3148,7 +3146,7 @@
         <armor_1>	0	</armor_1>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	170	</maxHealth>
+      <maxHealth>	180	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -3162,9 +3160,9 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_100mm_D10S_obr_44>	shared	  <maxAmmo>	44	</maxAmmo>
+        <_100mm_D_10S_mod_1944_SU_100M1>	shared	  <maxAmmo>	44	</maxAmmo>
           <unlocks>
-            <gun>	_100mm_LB-1S	  <cost>	16500	</cost>
+            <gun>	_100mm_LB_1S	  <cost>	16500	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -3251,8 +3249,8 @@
             <density>	100.225 116.665	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_100mm_D10S_obr_44>
-        <_100mm_LB-1S>	shared	  <maxAmmo>	44	</maxAmmo>
+        </_100mm_D_10S_mod_1944_SU_100M1>
+        <_100mm_LB_1S>	shared	  <maxAmmo>	44	</maxAmmo>
           <unlocks>
             <vehicle>	R58_SU-101	  <cost>	91000	</cost>
             </vehicle>
@@ -3341,7 +3339,7 @@
             <density>	110.774 102.551	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_100mm_LB-1S>
+        </_100mm_LB_1S>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R74_SU100M1/normal/lod0/Turret_01.model	</undamaged>
@@ -3361,54 +3359,36 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-    </Turret_1_SU100M1>
+    </Turret_1_R74_SU100M1>
   </turrets0>
   <engines>
-    <V-2-34>	shared	  <unlocks>
-        <engine>	V-2-34M	  <cost>	6200	</cost>
+    <V_2_34_SU_100M1>	shared	  <unlocks>
+        <engine>	V_2_34M_SU_100M1	  <cost>	6200	</cost>
         </engine>
       </unlocks>
-    </V-2-34>
-    <V-2-34M>	shared	</V-2-34M>
+    </V_2_34_SU_100M1>
+    <V_2_34M_SU_100M1>	shared	</V_2_34M_SU_100M1>
   </engines>
   <fuelTanks>
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <_9R>	shared	  <unlocks>
-        <radio>	_9RM	  <cost>	4040	</cost>
-        </radio>
-      </unlocks>
-    </_9R>
     <_9RM>	shared	</_9RM>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <V-2-34>
+        <V_2_34_SU_100M1>
           <smplEnginePower>	500	</smplEnginePower>
           <smplFwMaxSpeed>	54	</smplFwMaxSpeed>
-        </V-2-34>
-        <V-2-34M>
+        </V_2_34_SU_100M1>
+        <V_2_34M_SU_100M1>
           <smplEnginePower>	520	</smplEnginePower>
           <smplFwMaxSpeed>	54	</smplFwMaxSpeed>
-        </V-2-34M>
+        </V_2_34M_SU_100M1>
       </engines>
       <chassis>
-        <Chassis_SU100M1>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.18515	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.1288	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.0966	</rollingFriction>
-            </firm>
-          </grounds>
-        </Chassis_SU100M1>
-        <Chassis_SU100M1_2>
+        <Chassis_R74_SU100M1>
           <grounds>
             <soft>
               <rollingFriction>	0.16905	</rollingFriction>
@@ -3420,7 +3400,20 @@
               <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_SU100M1_2>
+        </Chassis_R74_SU100M1>
+        <Chassis_R74_SU100M1_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.16905	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.1127	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.08855	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_R74_SU100M1_2>
       </chassis>
     </detailed>
   </physics>

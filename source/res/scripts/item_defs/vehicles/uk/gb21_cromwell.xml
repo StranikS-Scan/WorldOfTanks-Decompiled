@@ -63,7 +63,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_7 armor_4	</primaryArmor>
     <weight>	14900	</weight>
-    <maxHealth>	672	</maxHealth>
+    <maxHealth>	760	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	180	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -1120,8 +1120,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	6500	</weight>
-      <maxLoad>	28000	</maxLoad>
-      <terrainResistance>	1 1.2 2	</terrainResistance>
+      <terrainResistance>	0.9 1 1.8	</terrainResistance>
       <brakeForce>	28000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	34	</rotationSpeed>
@@ -2071,7 +2070,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	6500	</weight>
-      <maxLoad>	29500	</maxLoad>
       <terrainResistance>	0.9 1 1.8	</terrainResistance>
       <brakeForce>	31000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -3017,8 +3015,12 @@
     <Turret_1_GB21_Cromwell>
       <userString>	#gb_vehicles:Turret_1_GB21_Cromwell	</userString>
       <tags></tags>
-      <level>	6	</level>
+      <level>	5	</level>
       <price>	12500	</price>
+      <unlocks>
+        <turret>	Turret_2_GB21_Cromwell	  <cost>	4200	</cost>
+        </turret>
+      </unlocks>
       <armor>
         <armor_1>	76.2	</armor_1>
         <armor_2>	76.2	</armor_2>
@@ -3034,7 +3036,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5000	</weight>
-      <maxHealth>	128	</maxHealth>
+      <maxHealth>	140	</maxHealth>
       <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -3048,100 +3050,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <QF_6_pounder_Mk_III>	shared	  <maxAmmo>	130	</maxAmmo>
-          <unlocks>
-            <gun>	QF_6_pounder_Mk_V	  <cost>	3700	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <gun>	10	</gun>
-          </armor>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 13 0.380783 13 0.444444 0 0.555556 0 0.619218 13 1 13	</maxPitch>
-          </pitchLimits>
-          <shotDispersionRadius>	0.41	</shotDispersionRadius>
-          <reloadTime>	2.3	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	1.9	</aimingTime>
-          <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/british/GB21_Cromwell/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/british/GB21_Cromwell/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/british/GB21_Cromwell/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/british/GB21_Cromwell/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB21_Cromwell/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.075456 -0.009368 0.623673	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.053024 0.053024	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.075456 -0.009368 0.623673	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.000017 1.81697 1.52118	</position>
-              <rotation>	1.55646 -3.11023 0.031208	</rotation>
-              <scale>	1.23588 0.276086 1.23588	</scale>
-              <showOn>	4352	</showOn>
-              <clipAngle>	0.293287	</clipAngle>
-              <anchorShift>	0.00032	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.073767 -0.018736 0.858437	</rayStart>
-              <rayEnd>	0.073767 -0.018736 1.137437	</rayEnd>
-              <rayUp>	0.05 0 0	</rayUp>
-              <size>	0.279	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <shotOffset>	0.073767 -0.018736 0.000000	</shotOffset>
-          <camouflage>
-            <tiling>	0.88 0.88 0.000000 0.000000	</tiling>
-            <density>	119.643 123.478	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </QF_6_pounder_Mk_III>
-        <QF_6_pounder_Mk_V>	shared	  <maxAmmo>	130	</maxAmmo>
-          <unlocks>
-            <turret>	Turret_2_GB21_Cromwell	  <cost>	4200	</cost>
-            </turret>
-            <gun>	_3.7inch_Howitzer	  <cost>	2300	</cost>
-            </gun>
-          </unlocks>
+        <QF_6_pdr_Gun_Mk_V_A27M>	shared	  <maxAmmo>	130	</maxAmmo>
           <armor>
             <gun>	10	</gun>
           </armor>
@@ -3152,12 +3061,13 @@
           <shotDispersionRadius>	0.39	</shotDispersionRadius>
           <reloadTime>	2.3	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	1.9	</aimingTime>
+          <aimingTime>	1.7	</aimingTime>
           <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
             <undamaged>	vehicles/british/GB21_Cromwell/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/british/GB21_Cromwell/crash/lod0/Gun_02.model	</destroyed>
@@ -3223,90 +3133,7 @@
             <density>	119.269 123.198	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </QF_6_pounder_Mk_V>
-        <_3.7inch_Howitzer>	shared	  <maxAmmo>	48	</maxAmmo>
-          <armor>
-            <gun>	40	</gun>
-          </armor>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.380783 10 0.444444 0 0.555556 0 0.619218 10 1 10	</maxPitch>
-          </pitchLimits>
-          <shotDispersionRadius>	0.53	</shotDispersionRadius>
-          <reloadTime>	7	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/british/GB21_Cromwell/normal/lod0/Gun_06.model	</undamaged>
-            <destroyed>	vehicles/british/GB21_Cromwell/crash/lod0/Gun_06.model	</destroyed>
-            <exploded>	vehicles/british/GB21_Cromwell/crash/lod0/Gun_06.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/british/GB21_Cromwell/collision/Gun_06.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB21_Cromwell/collision_client/Gun_06.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_main	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.081011 -0.005426 0.59407	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.053024 0.053024	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.081011 -0.005426 0.59407	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.000017 1.81697 1.52118	</position>
-              <rotation>	1.55646 -3.11023 0.031208	</rotation>
-              <scale>	1.23588 0.276086 1.23588	</scale>
-              <showOn>	4352	</showOn>
-              <clipAngle>	0.293287	</clipAngle>
-              <anchorShift>	0.103532	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.073569 -0.018852 0.567407	</rayStart>
-              <rayEnd>	0.073569 -0.018852 0.846407	</rayEnd>
-              <rayUp>	0.077 0 0	</rayUp>
-              <size>	0.279	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <shotOffset>	0.073767 -0.007597 0.000000	</shotOffset>
-          <camouflage>
-            <tiling>	0.655 0.655 0.000000 0.000000	</tiling>
-            <density>	114.474 120.617	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_3.7inch_Howitzer>
+        </QF_6_pdr_Gun_Mk_V_A27M>
       </guns>
       <models>
         <undamaged>	vehicles/british/GB21_Cromwell/normal/lod0/Turret_01.model	</undamaged>
@@ -3802,7 +3629,7 @@
       <level>	6	</level>
       <price>	17500	</price>
       <unlocks>
-        <gun>	_75mm_Gun_Mk_V	  <cost>	4000	</cost>
+        <gun>	_75mm_Gun_Mk_V_A27M	  <cost>	4000	</cost>
         </gun>
       </unlocks>
       <armor>
@@ -3820,7 +3647,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5000	</weight>
-      <maxHealth>	168	</maxHealth>
+      <maxHealth>	190	</maxHealth>
       <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -3834,85 +3661,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <QF_6_pounder_Mk_III>	shared	  <maxAmmo>	130	</maxAmmo>
-          <armor>
-            <gun>	10	</gun>
-          </armor>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 13 0.380783 13 0.444444 0 0.555556 0 0.619218 13 1 13	</maxPitch>
-          </pitchLimits>
-          <shotDispersionRadius>	0.41	</shotDispersionRadius>
-          <reloadTime>	2.3	</reloadTime>
-          <aimingTime>	1.9	</aimingTime>
-          <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/british/GB21_Cromwell/normal/lod0/Gun_04.model	</undamaged>
-            <destroyed>	vehicles/british/GB21_Cromwell/crash/lod0/Gun_04.model	</destroyed>
-            <exploded>	vehicles/british/GB21_Cromwell/crash/lod0/Gun_04.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/british/GB21_Cromwell/collision/Gun_04.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB21_Cromwell/collision_client/Gun_04.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.072193 -0.009368 0.623673	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.053024 0.053024	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.072193 -0.009368 0.623673	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.000017 1.81697 1.52118	</position>
-              <rotation>	1.56891 3.13205 0.015216	</rotation>
-              <scale>	1.23427 0.275727 1.23427	</scale>
-              <showOn>	4352	</showOn>
-              <clipAngle>	0.263835	</clipAngle>
-              <anchorShift>	0.07532	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.073767 -0.018736 0.760919	</rayStart>
-              <rayEnd>	0.073767 -0.018736 1.045919	</rayEnd>
-              <rayUp>	0.05 0 0	</rayUp>
-              <size>	0.285	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <shotOffset>	0.073767 -0.018736 0.000000	</shotOffset>
-          <camouflage>
-            <tiling>	0.76 0.76 0.000000 0.000000	</tiling>
-            <density>	119.643 123.478	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </QF_6_pounder_Mk_III>
-        <QF_6_pounder_Mk_V>	shared	  <maxAmmo>	130	</maxAmmo>
+        <QF_6_pdr_Gun_Mk_V_A27M>	shared	  <maxAmmo>	130	</maxAmmo>
           <armor>
             <gun>	10	</gun>
           </armor>
@@ -3922,8 +3671,14 @@
           </pitchLimits>
           <shotDispersionRadius>	0.39	</shotDispersionRadius>
           <reloadTime>	2.3	</reloadTime>
-          <aimingTime>	1.9	</aimingTime>
+          <aimingTime>	1.7	</aimingTime>
           <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <shotDispersionFactors>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3	</afterShot>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/british/GB21_Cromwell/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/british/GB21_Cromwell/crash/lod0/Gun_05.model	</destroyed>
@@ -3989,89 +3744,11 @@
             <density>	119.269 123.198	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </QF_6_pounder_Mk_V>
-        <_3.7inch_Howitzer>	shared	  <maxAmmo>	48	</maxAmmo>
-          <armor>
-            <gun>	40	</gun>
-          </armor>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.380783 10 0.444444 0 0.555556 0 0.619218 10 1 10	</maxPitch>
-          </pitchLimits>
-          <shotDispersionRadius>	0.53	</shotDispersionRadius>
-          <reloadTime>	7	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/british/GB21_Cromwell/normal/lod0/Gun_06.model	</undamaged>
-            <destroyed>	vehicles/british/GB21_Cromwell/crash/lod0/Gun_06.model	</destroyed>
-            <exploded>	vehicles/british/GB21_Cromwell/crash/lod0/Gun_06.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/british/GB21_Cromwell/collision/Gun_06.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB21_Cromwell/collision_client/Gun_06.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_main	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.074069 -0.012908 0.59407	</anchorPosition>
-              <anchorDirection>	0 -0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.053024 0.053024	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.074069 -0.012908 0.59407	</anchorPosition>
-              <anchorDirection>	-0 0.000001 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.000017 1.81697 1.52118	</position>
-              <rotation>	1.56894 3.13205 0.015216	</rotation>
-              <scale>	1.23427 0.275727 1.23427	</scale>
-              <showOn>	4352	</showOn>
-              <clipAngle>	0.263835	</clipAngle>
-              <anchorShift>	0.07532	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.073569 -0.017852 0.548182	</rayStart>
-              <rayEnd>	0.073569 -0.017852 0.827182	</rayEnd>
-              <rayUp>	0.077 0 0	</rayUp>
-              <size>	0.279	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <shotOffset>	0.073767 -0.007597 0.000000	</shotOffset>
-          <camouflage>
-            <tiling>	0.73 0.73 0.000000 0.000000	</tiling>
-            <density>	114.474 120.617	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_3.7inch_Howitzer>
-        <_75mm_Gun_Mk_V>	shared	  <maxAmmo>	75	</maxAmmo>
+        </QF_6_pdr_Gun_Mk_V_A27M>
+        <_75mm_Gun_Mk_V_A27M>	shared	  <maxAmmo>	75	</maxAmmo>
           <unlocks>
-            <gun>	_75mm_Gun_Vickers_HV	  <cost>	5000	</cost>
-            </gun>
+            <vehicle>	GB22_Comet	  <cost>	58000	</cost>
+            </vehicle>
           </unlocks>
           <armor>
             <gun>	20	</gun>
@@ -4080,15 +3757,15 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 13 0.380783 13 0.444444 0 0.555556 0 0.619218 13 1 13	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.41	</shotDispersionRadius>
-          <reloadTime>	3	</reloadTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	3.9	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
+            <turretRotation>	0.14	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	1.9	</aimingTime>
-          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB21_Cromwell/normal/lod0/Gun_07.model	</undamaged>
             <destroyed>	vehicles/british/GB21_Cromwell/crash/lod0/Gun_07.model	</destroyed>
@@ -4154,94 +3831,7 @@
             <density>	118.267 126.063	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_75mm_Gun_Mk_V>
-        <_75mm_Gun_Vickers_HV>	shared	  <maxAmmo>	75	</maxAmmo>
-          <unlocks>
-            <vehicle>	GB22_Comet	  <cost>	58000	</cost>
-            </vehicle>
-          </unlocks>
-          <armor>
-            <gun>	20	</gun>
-          </armor>
-          <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 8 0.380783 8 0.444444 -2 0.555556 -2 0.619218 8 1 8	</maxPitch>
-          </pitchLimits>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	3.9	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
-          <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <models>
-            <undamaged>	vehicles/british/GB21_Cromwell/normal/lod0/Gun_08.model	</undamaged>
-            <destroyed>	vehicles/british/GB21_Cromwell/crash/lod0/Gun_08.model	</destroyed>
-            <exploded>	vehicles/british/GB21_Cromwell/crash/lod0/Gun_08.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/british/GB21_Cromwell/collision/Gun_08.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB21_Cromwell/collision_client/Gun_08.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium_mb	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.070841 -0.017714 1.53421	</anchorPosition>
-              <anchorDirection>	-0 -0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.053024 0.053024	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.070841 -0.017715 1.53421	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.000017 1.81697 1.52118	</position>
-              <rotation>	1.56887 3.13205 0.015215	</rotation>
-              <scale>	1.23427 0.275727 1.23427	</scale>
-              <showOn>	4352	</showOn>
-              <clipAngle>	0.263835	</clipAngle>
-              <anchorShift>	0.07532	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.07377 -0.019613 1.67725	</rayStart>
-              <rayEnd>	0.07377 -0.019613 2.12025	</rayEnd>
-              <rayUp>	0.055 0 0	</rayUp>
-              <size>	0.443	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <shotOffset>	0.07377 -0.019914 0.000000	</shotOffset>
-          <camouflage>
-            <tiling>	0.82 0.82 0.000000 0.000000	</tiling>
-            <density>	118.322 124.644	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_75mm_Gun_Vickers_HV>
+        </_75mm_Gun_Mk_V_A27M>
       </guns>
       <models>
         <undamaged>	vehicles/british/GB21_Cromwell/normal/lod0/Turret_02.model	</undamaged>
@@ -4744,61 +4334,42 @@
     </Turret_2_GB21_Cromwell>
   </turrets0>
   <engines>
-    <Nuffield_liberty_MKV>	shared	  <unlocks>
-        <engine>	Rolls_Royse_Meteor	  <cost>	1500	</cost>
+    <Rolls_Royce_Meteor_A27M>	shared	  <unlocks>
+        <engine>	Rolls_Royce_Meteor_Mk_IVB_A27M	  <cost>	1900	</cost>
         </engine>
       </unlocks>
-    </Nuffield_liberty_MKV>
-    <Rolls_Royse_Meteor>	shared	  <unlocks>
-        <engine>	Rolls_Royse_Meteor_MkIV	  <cost>	1900	</cost>
-        </engine>
-      </unlocks>
-    </Rolls_Royse_Meteor>
-    <Rolls_Royse_Meteor_MkIV>	shared	</Rolls_Royse_Meteor_MkIV>
+    </Rolls_Royce_Meteor_A27M>
+    <Rolls_Royce_Meteor_Mk_IVB_A27M>	shared	</Rolls_Royce_Meteor_Mk_IVB_A27M>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <N19Mk1>	shared	  <unlocks>
-        <radio>	N19Mk2	  <cost>	3600	</cost>
-        </radio>
-      </unlocks>
-    </N19Mk1>
-    <N19Mk2>	shared	  <unlocks>
-        <radio>	N19Mk3	  <cost>	4000	</cost>
-        </radio>
-      </unlocks>
-    </N19Mk2>
     <N19Mk3>	shared	</N19Mk3>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Nuffield_liberty_MKV>
-          <smplEnginePower>	433.4853	</smplEnginePower>
+        <Rolls_Royce_Meteor_A27M>
+          <smplEnginePower>	650	</smplEnginePower>
           <smplFwMaxSpeed>	64	</smplFwMaxSpeed>
-        </Nuffield_liberty_MKV>
-        <Rolls_Royse_Meteor>
-          <smplEnginePower>	634.3687	</smplEnginePower>
+        </Rolls_Royce_Meteor_A27M>
+        <Rolls_Royce_Meteor_Mk_IVB_A27M>
+          <smplEnginePower>	700	</smplEnginePower>
           <smplFwMaxSpeed>	64	</smplFwMaxSpeed>
-        </Rolls_Royse_Meteor>
-        <Rolls_Royse_Meteor_MkIV>
-          <smplEnginePower>	687.2327	</smplEnginePower>
-          <smplFwMaxSpeed>	64	</smplFwMaxSpeed>
-        </Rolls_Royse_Meteor_MkIV>
+        </Rolls_Royce_Meteor_Mk_IVB_A27M>
       </engines>
       <chassis>
         <Chassis_GB21_Cromwell>
           <grounds>
             <soft>
-              <rollingFriction>	0.161	</rollingFriction>
+              <rollingFriction>	0.1449	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.0966	</rollingFriction>
+              <rollingFriction>	0.0805	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0805	</rollingFriction>
+              <rollingFriction>	0.07245	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_GB21_Cromwell>

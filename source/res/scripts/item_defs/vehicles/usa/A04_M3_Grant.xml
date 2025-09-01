@@ -1632,7 +1632,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	5000	</weight>
-      <maxLoad>	28700	</maxLoad>
       <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2575,7 +2574,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	5000	</weight>
-      <maxLoad>	29900	</maxLoad>
       <terrainResistance>	1 1.1 2.3	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -3529,7 +3527,7 @@
   <turrets0>
     <M3_S>
       <userString>	#usa_vehicles:M3_S	</userString>
-      <tags>	cannotDetach	</tags>
+      <tags>	cannotDetach turretless	</tags>
       <level>	3	</level>
       <price>	2880	</price>
       <notInShop>	true	</notInShop>

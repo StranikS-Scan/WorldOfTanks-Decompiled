@@ -76,13 +76,13 @@ class PersonalMissionsAwardsView(LobbySubView, PersonalMissionsAwardsViewMeta, P
 
     def _populate(self):
         super(PersonalMissionsAwardsView, self)._populate()
-        self._eventsCache.onSyncCompleted += self.__onQuestsUpdated
+        self._eventsCache.onPMSyncCompleted += self.__onQuestsUpdated
         self._eventsCache.onProgressUpdated += self.__onQuestsUpdated
         self.refresh()
         self.__updateHeader()
 
     def _dispose(self):
-        self._eventsCache.onSyncCompleted -= self.__onQuestsUpdated
+        self._eventsCache.onPMSyncCompleted -= self.__onQuestsUpdated
         self._eventsCache.onProgressUpdated -= self.__onQuestsUpdated
         self.__mainAwardsFormatter = None
         self.__addAwardsFormatter = None

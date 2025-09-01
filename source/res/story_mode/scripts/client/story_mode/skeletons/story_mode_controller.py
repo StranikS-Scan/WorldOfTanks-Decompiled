@@ -64,6 +64,10 @@ class IStoryModeController(IGameController):
     def needToShowAward(self):
         raise NotImplementedError
 
+    @property
+    def newMissionIdForNewbies(self):
+        raise NotImplementedError
+
     def popMissionProgressDiff(self, missionId):
         raise NotImplementedError
 

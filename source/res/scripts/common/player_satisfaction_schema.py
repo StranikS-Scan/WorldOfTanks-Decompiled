@@ -21,18 +21,16 @@ _interfacesSchema = Schema[_InterfacesModel](fields={'postbattle': fields.Boolea
  'spectatorMode': fields.Boolean(required=False, default=False)}, modelClass=_InterfacesModel, checkUnknown=True)
 
 class PlayerSatisfactionConfigModel(models.Model):
-    __slots__ = ('enabled', 'enabledInterfaces', 'randomizedFeedbackText')
+    __slots__ = ('enabled', 'enabledInterfaces')
 
-    def __init__(self, enabled, enabledInterfaces, randomizedFeedbackText):
+    def __init__(self, enabled, enabledInterfaces):
         super(PlayerSatisfactionConfigModel, self).__init__()
         self.enabled = enabled
         self.enabledInterfaces = enabledInterfaces
-        self.randomizedFeedbackText = randomizedFeedbackText
 
     def _reprArgs(self):
-        return 'enabled={}, enabledInterfaces={}, randomizedFeedbackText={}'.format(self.enabled, self.enabledInterfaces, self.randomizedFeedbackText)
+        return 'enabled={}, enabledInterfaces={}'.format(self.enabled, self.enabledInterfaces)
 
 
 playerSatisfactionSchema = GameParamsSchema[PlayerSatisfactionConfigModel](gameParamsKey=Configs.PLAYER_SATISFACTION_CONFIG.value, fields={'enabled': fields.Boolean(required=True),
- 'enabledInterfaces': fields.Nested(_interfacesSchema, required=True),
- 'randomizedFeedbackText': fields.Boolean(required=True)}, modelClass=PlayerSatisfactionConfigModel, checkUnknown=True)
+ 'enabledInterfaces': fields.Nested(_interfacesSchema, required=True)}, modelClass=PlayerSatisfactionConfigModel, checkUnknown=True)

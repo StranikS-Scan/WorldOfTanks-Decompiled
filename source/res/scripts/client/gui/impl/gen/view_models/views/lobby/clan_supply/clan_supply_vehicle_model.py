@@ -5,14 +5,14 @@ from gui.impl.gen.view_models.views.lobby.common.vehicle_model import VehicleMod
 class ClanSupplyVehicleModel(VehicleModel):
     __slots__ = ()
 
-    def __init__(self, properties=10, commands=0):
+    def __init__(self, properties=11, commands=0):
         super(ClanSupplyVehicleModel, self).__init__(properties=properties, commands=commands)
 
     def getFullName(self):
-        return self._getString(9)
+        return self._getString(10)
 
     def setFullName(self, value):
-        self._setString(9, value)
+        self._setString(10, value)
 
     def _initialize(self):
         super(ClanSupplyVehicleModel, self)._initialize()

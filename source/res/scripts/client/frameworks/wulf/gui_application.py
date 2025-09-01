@@ -8,6 +8,7 @@ from .windows_system.windows_manager import WindowsManager
 from .tutorial import Tutorial
 from .ui_logger import UILogger
 if typing.TYPE_CHECKING:
+    from typing import Callable
     from frameworks.wulf import ViewModel
 
 class GuiApplication(object):
@@ -47,13 +48,14 @@ class GuiApplication(object):
     def scale(self):
         return self.__impl.scale
 
-    def init(self, tutorialModel, uiLoggerModel):
+    def init(self, tutorialModel, uiLoggerModel, serverTimeCallback):
         self.__impl.initialize()
         self.__resourceManager = ResourceManager.create(self.__impl.resourceManager)
         self.__windowsManager = WindowsManager.create(self.__impl.windowsManager)
         self.__systemLocale = SystemLocale.create(self.__impl.systemLocale)
         self.__tutorial = Tutorial.create(self.__impl.tutorial, tutorialModel)
         self.__uiLogger = UILogger.create(self.__impl.uiLogger, uiLoggerModel)
+        self._setServerTimeCallback(serverTimeCallback)
 
     def destroy(self):
         if self.__resourceManager is not None:
@@ -75,3 +77,6 @@ class GuiApplication(object):
             self.__impl.destroy()
             self.__impl = None
         return
+
+    def _setServerTimeCallback(self, callback):
+        self.__impl.setServerTimeCallback(callback)

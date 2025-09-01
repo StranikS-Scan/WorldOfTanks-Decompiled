@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/impl/gen/view_models/views/lobby/mission_selection_view_model.py
 from enum import IntEnum
-from frameworks.wulf import Array
-from frameworks.wulf import ViewModel
+from frameworks.wulf import Array, ViewModel
 from story_mode.gui.impl.gen.view_models.views.lobby.mission_model import MissionModel
 from story_mode.gui.impl.gen.view_models.views.lobby.parallax_model import ParallaxModel
 from story_mode.gui.impl.gen.view_models.views.lobby.selected_mission_model import SelectedMissionModel
 from story_mode.gui.impl.gen.view_models.views.lobby.task_model import TaskModel
+from gui.impl.gen.view_models.views.lobby.hangar.menu_item_model import MenuItemModel
 
 class TabsEnum(IntEnum):
     NEWBIES = 0
@@ -14,9 +14,9 @@ class TabsEnum(IntEnum):
 
 
 class MissionSelectionViewModel(ViewModel):
-    __slots__ = ('onQuit', 'onMissionSelect', 'onLoaded', 'onChangeTab', 'onSelectedMissionTaskUnlocked', 'onAboutClick')
+    __slots__ = ('onQuit', 'onMissionSelect', 'onLoaded', 'onChangeTab', 'onSelectedMissionTaskUnlocked', 'onAboutClick', 'onNavigate')
 
-    def __init__(self, properties=7, commands=6):
+    def __init__(self, properties=10, commands=7):
         super(MissionSelectionViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -73,6 +73,28 @@ class MissionSelectionViewModel(ViewModel):
     def getTasksType():
         return TaskModel
 
+    def getMenuItems(self):
+        return self._getArray(7)
+
+    def setMenuItems(self, value):
+        self._setArray(7, value)
+
+    @staticmethod
+    def getMenuItemsType():
+        return MenuItemModel
+
+    def getModeName(self):
+        return self._getString(8)
+
+    def setModeName(self, value):
+        self._setString(8, value)
+
+    def getModeId(self):
+        return self._getString(9)
+
+    def setModeId(self, value):
+        self._setString(9, value)
+
     def _initialize(self):
         super(MissionSelectionViewModel, self)._initialize()
         self._addViewModelProperty('selectedMission', SelectedMissionModel())
@@ -82,9 +104,13 @@ class MissionSelectionViewModel(ViewModel):
         self._addBoolProperty('isTabsVisible', False)
         self._addArrayProperty('missions', Array())
         self._addArrayProperty('tasks', Array())
+        self._addArrayProperty('menuItems', Array())
+        self._addStringProperty('modeName', '')
+        self._addStringProperty('modeId', '')
         self.onQuit = self._addCommand('onQuit')
         self.onMissionSelect = self._addCommand('onMissionSelect')
         self.onLoaded = self._addCommand('onLoaded')
         self.onChangeTab = self._addCommand('onChangeTab')
         self.onSelectedMissionTaskUnlocked = self._addCommand('onSelectedMissionTaskUnlocked')
         self.onAboutClick = self._addCommand('onAboutClick')
+        self.onNavigate = self._addCommand('onNavigate')

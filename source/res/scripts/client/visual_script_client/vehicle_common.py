@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/visual_script_client/vehicle_common.py
 import BigWorld
+from constants import DEFAULT_GUN_INSTALLATION_INDEX
 from visual_script import ASPECT
 from visual_script.dependency import dependencyImporter
 from visual_script.tunable_event_block import TunableEventBlock
@@ -51,21 +52,25 @@ class TriggerListener(TriggersManager.ITriggerListener):
         if triggerType == TriggersManager.TRIGGER_TYPE.PLAYER_VEHICLE_OBSERVED:
             self.onPlayerDetected(True)
         elif triggerType == TriggersManager.TRIGGER_TYPE.PLAYER_DISCRETE_SHOOT:
-            aimingInfo = params['aimingInfo']
-            self.onPlayerDiscreteShoot(aimingInfo)
+            gunInstallationIndex = params.get('gunInstallationIndex', DEFAULT_GUN_INSTALLATION_INDEX)
+            self.onPlayerDiscreteShoot(gunInstallationIndex)
         elif triggerType == TriggersManager.TRIGGER_TYPE.PLAYER_SHOT_MISSED:
-            self.onPlayerShotMissed()
+            gunInstallationIndex = params['gunInstallationIndex']
+            self.onPlayerShotMissed(gunInstallationIndex)
         elif triggerType == TriggersManager.TRIGGER_TYPE.PLAYER_SHOT_HIT:
             targetId = params['targetId']
             target = BigWorld.entities.get(targetId)
             flags = params['flags']
-            self.onPlayerShotHit(target, flags)
+            gunInstallationIndex = params['gunInstallationIndex']
+            self.onPlayerShotHit(target, flags, gunInstallationIndex)
         elif triggerType == TriggersManager.TRIGGER_TYPE.PLAYER_VEHICLE_IN_FIRE:
             self.onPlayerVehicleFireEvent(True)
         elif triggerType == TriggersManager.TRIGGER_TYPE.PLAYER_CONTINUOUS_BURST_START:
-            self.onPlayerContinuousBurstStart()
+            gunInstallationIndex = params.get('gunInstallationIndex', DEFAULT_GUN_INSTALLATION_INDEX)
+            self.onPlayerContinuousBurstStart(gunInstallationIndex)
         elif triggerType == TriggersManager.TRIGGER_TYPE.PLAYER_CONTINUOUS_BURST_STOP:
-            self.onPlayerContinuousBurstStop()
+            gunInstallationIndex = params.get('gunInstallationIndex', DEFAULT_GUN_INSTALLATION_INDEX)
+            self.onPlayerContinuousBurstStop(gunInstallationIndex)
         elif triggerType == TriggersManager.TRIGGER_TYPE.PLAYER_TANKMAN_SHOOTED:
             tankmanName = params['tankmanName']
             isHealed = params['isHealed']
@@ -96,7 +101,8 @@ class TriggerListener(TriggersManager.ITriggerListener):
             velocity = params['velocity']
             gravity = params['gravity']
             maxShotDist = params['maxShotDist']
-            self.onShowTracer(attacker, isRicochet, startPoint, velocity, gravity, maxShotDist)
+            gunInstallationIndex = params['gunInstallationIndex']
+            self.onShowTracer(attacker, isRicochet, startPoint, velocity, gravity, maxShotDist, gunInstallationIndex)
         elif triggerType == TriggersManager.TRIGGER_TYPE.STUN:
             self.onStunInfoUpdated(params['stunInfo'])
         elif triggerType == TriggersManager.TRIGGER_TYPE.SIXTH_SENSE:
@@ -114,13 +120,13 @@ class TriggerListener(TriggersManager.ITriggerListener):
         elif triggerType == TriggersManager.TRIGGER_TYPE.AREA:
             self.onPlayerEnterTrigger(params['name'], False)
 
-    def onPlayerDiscreteShoot(self, aimInfo):
+    def onPlayerDiscreteShoot(self, gunInstallationIndex):
         pass
 
-    def onPlayerShotMissed(self):
+    def onPlayerShotMissed(self, gunInstallationIndex):
         pass
 
-    def onPlayerShotHit(self, target, flags):
+    def onPlayerShotHit(self, target, flags, gunInstallationIndex):
         pass
 
     def onPlayerDetectEnemy(self, new, lost):
@@ -144,16 +150,16 @@ class TriggerListener(TriggersManager.ITriggerListener):
     def onPlayerMove(self, modeCommands):
         pass
 
-    def onPlayerContinuousBurstStart(self):
+    def onPlayerContinuousBurstStart(self, gunInstallationIndex):
         pass
 
-    def onPlayerContinuousBurstStop(self):
+    def onPlayerContinuousBurstStop(self, gunInstallationIndex):
         pass
 
     def onAutoAim(self, isOn):
         pass
 
-    def onShowTracer(self, attacker, isRicochet, startPoint, velocity, gravity, maxShotDist):
+    def onShowTracer(self, attacker, isRicochet, startPoint, velocity, gravity, maxShotDist, gunInstallationIndex):
         pass
 
     def onStunInfoUpdated(self, stunInfo):

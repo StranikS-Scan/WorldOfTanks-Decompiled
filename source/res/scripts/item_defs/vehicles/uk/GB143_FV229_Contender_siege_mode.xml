@@ -929,8 +929,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	13800	</weight>
-      <maxLoad>	82000	</maxLoad>
-      <terrainResistance>	1.2 1.5 2.5	</terrainResistance>
+      <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
       <brakeForce>	77000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	22	</rotationSpeed>
@@ -1718,7 +1717,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	14000	</weight>
-      <maxLoad>	83000	</maxLoad>
       <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
       <brakeForce>	77000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2585,7 +2583,7 @@
             <maxPitch>	0 10 0.36 10 0.37 3 0.5 3 0.63 3 0.64 10 1 10	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	1.2	</shotDispersionRadius>
-          <reloadTime>	7.6	</reloadTime>
+          <reloadTime>	6.3	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.01	</turretRotation>
             <afterShot>	6.0	</afterShot>
@@ -2596,7 +2594,7 @@
           <multiGunEffects>	shot_dualgun_main_mb_L shot_dualgun_main_mb_R	</multiGunEffects>
           <twinGun>
             <afterShotDelay>	1	</afterShotDelay>
-            <twinGunReloadTime>	15.2	</twinGunReloadTime>
+            <twinGunReloadTime>	12.6	</twinGunReloadTime>
             <gunMarkerOffset>	0.213	</gunMarkerOffset>
             <shootImpulse>	300	</shootImpulse>
           </twinGun>
@@ -3349,7 +3347,7 @@
             <maxPitch>	0 10 0.36 10 0.37 3 0.5 3 0.63 3 0.64 10 1 10	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	1.2	</shotDispersionRadius>
-          <reloadTime>	7.3	</reloadTime>
+          <reloadTime>	6.3	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.01	</turretRotation>
             <afterShot>	6.0	</afterShot>
@@ -3360,7 +3358,7 @@
           <multiGunEffects>	shot_dualgun_main_mb_L shot_dualgun_main_mb_R	</multiGunEffects>
           <twinGun>
             <afterShotDelay>	1	</afterShotDelay>
-            <twinGunReloadTime>	14.6	</twinGunReloadTime>
+            <twinGunReloadTime>	12.6	</twinGunReloadTime>
             <gunMarkerOffset>	0.213	</gunMarkerOffset>
             <shootImpulse>	300	</shootImpulse>
           </twinGun>
@@ -3953,13 +3951,13 @@
         <Chassis_GB143_FV229_Contender>
           <grounds>
             <soft>
-              <rollingFriction>	0.20125	</rollingFriction>
+              <rollingFriction>	0.18515	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.12075	</rollingFriction>
+              <rollingFriction>	0.10465	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0966	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

@@ -2,7 +2,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/events_helpers.py
 import operator
 from collections import defaultdict, namedtuple
-import typing
+from copy import deepcopy
+from typing import TYPE_CHECKING, NamedTuple
 from gui.Scaleform.daapi.view.lobby.customization.progression_helpers import getC11n2dProgressionLinkBtnParams
 from gui.shared.gui_items import GUI_ITEM_TYPE
 import constants
@@ -36,14 +37,27 @@ from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
     from typing import Dict, Iterable, Union
     from gui.server_events.bonuses import BattlePassStyleProgressTokenBonus, TokensBonus
     from gui.server_events.event_items import Quest
 FINISH_TIME_LEFT_TO_SHOW = time_utils.ONE_DAY
 START_TIME_LIMIT = 5 * time_utils.ONE_DAY
 _AWARDS_PER_PAGE = 3
-_ChapterProgress = namedtuple('_ChapterProgress', ('previousPoints', 'currentPoints', 'previousLevel', 'currentLevel', 'currentLevelPoints', 'maxLevelPoints'))
+_ChapterProgress = namedtuple('_ChapterProgress', ('previousPoints',
+ 'currentPoints',
+ 'previousLevel',
+ 'currentLevel',
+ 'currentLevelPoints',
+ 'maxLevelPoints'))
+
+class TokenConvertionData(NamedTuple('TokenConvertionData', [('tokenTo', str), ('limit', int), ('rate', float)])):
+
+    def __new__(cls, **kwargs):
+        defaults = dict(tokenTo='', limit=0, rate=1.0)
+        defaults.update({k:kwargs[k] for k in defaults.viewkeys() & kwargs.viewkeys()})
+        return super(TokenConvertionData, cls).__new__(cls, **defaults)
+
 
 class BattlePassProgress(object):
     __battlePassController = dependency.descriptor(IBattlePassController)
@@ -208,7 +222,7 @@ class EventPostBattleInfo(EventInfoModel):
          'isAvailable': isAvailable,
          'linkTooltip': TOOLTIPS.QUESTS_LINKBTN_TASK}
 
-    def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData):
+    def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted, **kwargs):
         progresses = []
         if not isProgressReset and not isCompleted:
             progresses = self._getProgresses(pCur, pPrev)
@@ -219,7 +233,9 @@ class EventPostBattleInfo(EventInfoModel):
             alertMsg = i18n.makeString('#quests:postBattle/progressReset')
         _, awards = ('', None)
         if not isProgressReset and isCompleted:
-            awards = self._getBonuses(svrEvents, pCur=pCur)
+            questTokensConvertion = kwargs.get('questTokensConvertion', {})
+            questTokensCount = kwargs.get('questTokensCount', {})
+            awards = self._getBonuses(svrEvents, pCur=pCur, questTokensConvertion=questTokensConvertion, questTokensCount=questTokensCount)
         return {'title': self.event.getUserName(),
          'descr': self.event.getDescription(),
          'awards': awards,
@@ -246,8 +262,11 @@ class EventPostBattleInfo(EventInfoModel):
          formatters.PROGRESS_BAR_TYPE.NONE,
          None)
 
-    def _getBonuses(self, svrEvents, pCur=None, bonuses=None):
+    def _getBonuses(self, svrEvents, pCur=None, bonuses=None, **kwargs):
         return []
+
+    def _filterBonuses(self, bonuses):
+        return bonuses
 
     def _getProgresses(self, pCur, pPrev):
         index = 0
@@ -329,9 +348,59 @@ class QuestPostBattleInfo(EventPostBattleInfo, QuestInfoModel):
                 trackReplay.walkBonuses(bonusData, trackResult)
         return trackResult
 
-    def _getBonuses(self, svrEvents, pCur=None, bonuses=None):
+    def _convertTokensInBonusData(self, bonusData, questTokensConvertion, questTokensCount):
+        bonusData = deepcopy(bonusData or self.event.getRawBonuses())
+        tokens = bonusData.get('tokens', {})
+        if not tokens:
+            return bonusData
+        tokensForConvertion = set(tokens).intersection(questTokensConvertion.keys())
+        for token in tokensForConvertion:
+            usedConverters = []
+            tokenConvertionData = questTokensConvertion[token]
+            for index, convertionData in enumerate(tokenConvertionData):
+                wasUsed = self._convertTokens(token, tokens, convertionData)
+                if wasUsed:
+                    usedConverters.append(index)
+                break
+
+            questTokensConvertion[token] = [ convertionData for index, convertionData in enumerate(tokenConvertionData) if index not in usedConverters ]
+            if not questTokensConvertion[token]:
+                questTokensConvertion.pop(token)
+
+        for token in set(tokens).difference(questTokensCount.keys()):
+            tokens.pop(token)
+
+        return bonusData
+
+    def _convertTokens(self, token, bonusTokens, convertionData):
+        convertion = TokenConvertionData(**convertionData)
+        wasUsed = False
+        if not convertion.tokenTo or token not in bonusTokens:
+            return wasUsed
+        tokenBonusData = bonusTokens[token]
+        count = tokenBonusData['count']
+        if convertion.limit:
+            convertCount = min(convertion.limit, count)
+            if convertion.limit <= count:
+                wasUsed = True
+            else:
+                convertionData['limit'] -= count
+        else:
+            convertCount = count
+        if convertCount == count:
+            bonusTokens.pop(token)
+        else:
+            tokenBonusData['count'] -= convertCount
+        newCount = bonusTokens.get(convertion.tokenTo, {}).get('count', 0) + int(round(convertCount * convertion.rate))
+        bonusTokens.setdefault(convertion.tokenTo, deepcopy(tokenBonusData))['count'] = newCount
+        return wasUsed
+
+    def _getBonuses(self, svrEvents, pCur=None, bonuses=None, **kwargs):
+        questTokensConvertion = kwargs.get('questTokensConvertion', {})
+        questTokensCount = kwargs.get('questTokensCount', {})
         bonusData = self._getBonusDataFromOneOfBonuses(pCur)
-        bonuses = bonuses or self.event.getBonuses(bonusData=bonusData)
+        bonusData = self._convertTokensInBonusData(bonusData=bonusData, questTokensConvertion=questTokensConvertion, questTokensCount=questTokensCount)
+        bonuses = self._filterBonuses(bonuses or self.event.getBonuses(bonusData=bonusData))
         result = OldStyleBonusesFormatter(self.event).getFormattedBonuses(bonuses)
         if result:
             return [ award.getDict() for award in result ]
@@ -410,8 +479,9 @@ class QuestPostBattleInfo(EventPostBattleInfo, QuestInfoModel):
 
 class PersonalMissionPostBattleInfo(EventPostBattleInfo):
 
-    def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData):
-        info = super(PersonalMissionPostBattleInfo, self).getPostBattleInfo(svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData)
+    def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted, **kwargs):
+        info = super(PersonalMissionPostBattleInfo, self).getPostBattleInfo(svrEvents, pCur, pPrev, isProgressReset, isCompleted, **kwargs)
+        progressData = kwargs.get('progressData', None)
         condFormatter = PostBattleConditionsFormatter(self.event, progressData)
         if isCompleted.isMainComplete or isCompleted.isAddComplete:
             failedDescr = ''
@@ -447,21 +517,15 @@ class PersonalMissionPostBattleInfo(EventPostBattleInfo):
 
 class _BattlePassRandomQuestPostBattleInfo(QuestPostBattleInfo):
 
-    def _getBonuses(self, svrEvents, pCur=None, bonuses=None):
-        bonusData = self._getBonusDataFromOneOfBonuses(pCur)
-        bonuses = bonuses or self.event.getBonuses(bonusData=bonusData)
-        postBattleBonuses = [ bonus for bonus in bonuses if not isinstance(bonus, BattleTokensBonus) ]
-        result = OldStyleBonusesFormatter(self.event).getFormattedBonuses(postBattleBonuses)
-        if result:
-            return [ award.getDict() for award in result ]
-        return [formatters.packTextBlock(text_styles.alert(backport.text(R.strings.quests.bonuses.notAvailable()))).getDict()]
+    def _filterBonuses(self, bonuses):
+        return [ bonus for bonus in bonuses if not isinstance(bonus, BattleTokensBonus) ]
 
 
 class MotiveQuestPostBattleInfo(QuestPostBattleInfo):
 
-    def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData):
+    def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted, **kwargs):
         motiveQuests = [ q for q in svrEvents.values() if q.getType() == EVENT_TYPE.MOTIVE_QUEST and not q.isCompleted() ]
-        info = super(MotiveQuestPostBattleInfo, self).getPostBattleInfo(svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData)
+        info = super(MotiveQuestPostBattleInfo, self).getPostBattleInfo(svrEvents, pCur, pPrev, isProgressReset, isCompleted, **kwargs)
         info.update({'isLinkBtnVisible': len(motiveQuests) > 0})
         return info
 
@@ -510,8 +574,8 @@ def _getEventInfoData(event):
     return EventPostBattleInfo(event)
 
 
-def getEventPostBattleInfo(event, svrEvents=None, pCur=None, pPrev=None, isProgressReset=False, isCompleted=False, progressData=None):
-    return _getEventInfoData(event).getPostBattleInfo(svrEvents, pCur or {}, pPrev or {}, isProgressReset, isCompleted, progressData)
+def getEventPostBattleInfo(event, svrEvents=None, pCur=None, pPrev=None, isProgressReset=False, isCompleted=False, **kwargs):
+    return _getEventInfoData(event).getPostBattleInfo(svrEvents, (pCur or {}), (pPrev or {}), isProgressReset, isCompleted, **kwargs)
 
 
 class Progression2dStyleFormater(object):

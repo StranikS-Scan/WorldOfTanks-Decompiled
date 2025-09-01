@@ -7538,4 +7538,99 @@
       </tilingSettings>
     </camouflage>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A179_Black_Rock	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	1200	</id>
+      <texture>	vehicles/russian/Camouflage/pm3.dds	</texture>
+      <description>	#vehicle_customization:camouflage/pm3_a179/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/pm3_a179/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	1.4 1.4	</factor>
+        <offset>	0 0	</offset>
+      </tilingSettings>
+      <palettes>
+        <palette>
+          <c0>	74 74 74 255	</c0>
+          <c1>	43 120 76 255	</c1>
+          <c2>	15 15 15 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <gloss>	0.51 0.65 0.29 0.21	</gloss>
+      <metallic>	0.25 0.34 0.17 0.16	</metallic>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A179_Black_Rock usa:A182_T803 usa:A183_XM69_Hacker	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	1262	</id>
+      <texture>	vehicles/american/Camouflage/2_0_progression_a.dds	</texture>
+      <description>	#vehicle_customization:camouflage/2_0_progression/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <userString>	#vehicle_customization:special_style/2_0_progression_a	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	3.5 3.5	</factor>
+        <offset>	1.69 0.11	</offset>
+      </tilingSettings>
+      <glossMetallicMap>	vehicles/american/Camouflage/2_0_progression_a_GMM.dds	</glossMetallicMap>
+      <normal>
+        <normalMap>	vehicles/american/Camouflage/2_0_progression_a_NM.dds	</normalMap>
+        <normalStrength>	1	</normalStrength>
+      </normal>
+    </camouflage>
+    <camouflage>
+      <id>	1263	</id>
+      <texture>	vehicles/american/Camouflage/2_0_progression_a_gun.dds	</texture>
+      <description>	#vehicle_customization:camouflage/2_0_progression/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <userString>	#vehicle_customization:special_style/2_0_progression_a	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	3.5 3.5	</factor>
+        <offset>	0 0	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
 </usa.xml>

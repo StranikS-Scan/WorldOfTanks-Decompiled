@@ -1,0 +1,335 @@
+<vehicle_mechanics.xml>
+  <vehicle>
+    <vehicleType>	china:Ch67_BZ_79	</vehicleType>
+    <mechanics>
+      <rechargeableNitro>
+        <param>	250%	  <name>	enginePowerWithBoosters	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	155%	  <name>	topSpeedWithBoosters	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	-90%	  <name>	reverseSpeedReductionWithBoosters	</name>
+        </param>
+        <param>	-70%	  <name>	traverseSpeedReductionWithBoosters	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	12.5	  <name>	boosterDuration	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	40	  <name>	boosterCoolingTime	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	70%	  <name>	reactivationLimit	</name>
+        </param>
+        <param>	5	  <name>	reactivationDelay	</name>
+        </param>
+      </rechargeableNitro>
+    </mechanics>
+  </vehicle>
+  <vehicle>
+    <vehicleType>	france:F135_AS_XX_40_t	</vehicleType>
+    <mechanics>
+      <stationaryReload>
+        <param>	2.5	  <name>	stationaryReloadSwitchOnTime	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	1.5	  <name>	stationaryReloadSwitchOffTime	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+      </stationaryReload>
+    </mechanics>
+  </vehicle>
+  <vehicle>
+    <vehicleType>	france:F136_AMX_67_Imbattable	</vehicleType>
+    <mechanics>
+      <extraShotClip>
+        <param>	2.5	  <name>	extraShotClipReloadTime	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+      </extraShotClip>
+    </mechanics>
+  </vehicle>
+  <vehicle>
+    <vehicleType>	germany:G185_Leopard_120_Verbessert	</vehicleType>
+    <mechanics>
+      <accuracyStacks>
+        <param>	-20%	  <name>	accuracyDispersionCap	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	-40%	  <name>	accuracyWhileMovingDispersionCap	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	4	  <name>	maxAccuracyLevel	</name>
+        </param>
+        <param>	-5%	  <name>	accuracyDispersionPerLevel	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	30	  <name>	accuracySpeedLimit	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	4	  <name>	accuracyLevelGainTime	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+      </accuracyStacks>
+    </mechanics>
+  </vehicle>
+  <vehicle>
+    <vehicleType>	germany:G187_Taschenratte	</vehicleType>
+    <mechanics>
+      <supportWeapon>
+        <param>	50	  <name>	secondaryReloadTimeSecs	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	2	  <name>	secondaryTotalBurstSize	</name>
+        </param>
+        <param>	250	  <name>	secondaryAvgDamage	</name>
+        </param>
+        <param>	80	  <name>	secondaryAvgPiercingPower	</name>
+        </param>
+      </supportWeapon>
+    </mechanics>
+  </vehicle>
+  <vehicle>
+    <vehicleType>	germany:G188_LeKpz_Borkenkafer	</vehicleType>
+    <mechanics>
+      <targetDesignator>
+        <param>	30	  <name>	designatorInitialCooldownS	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	20	  <name>	designatorCooldownS	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	12.5	  <name>	designatorMarkDurationS	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	15%	  <name>	designatorMarkedEnemiesAdditionalDamage	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+      </targetDesignator>
+    </mechanics>
+  </vehicle>
+  <vehicle>
+    <vehicleType>	germany:G189_Hirschkafer	</vehicleType>
+    <mechanics>
+      <overheatStacks>
+        <param>	45.5%	  <name>	preheatDmgCap	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	-18.5%	  <name>	preheatDispersionCap	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	10	  <name>	preheatTimeToFull	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	10	  <name>	preheatTimeToZero	</name>
+        </param>
+        <param>	20	  <name>	preheatSpeedLimit	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	2	  <name>	preheatTransitionDelay	</name>
+        </param>
+      </overheatStacks>
+    </mechanics>
+  </vehicle>
+  <vehicle>
+    <vehicleType>	poland:Pl37_CS_67_Szakal	</vehicleType>
+    <mechanics>
+      <stanceDance>
+        <param>	0.75%	  <name>	passiveCoincideceShootingCharge	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	15%	  <name>	activeCoincideceShootingCharge	</name>
+        </param>
+        <param>	18	  <name>	coincidenceElectromechanicalSightDuration	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	-25%	  <name>	aimingTimeCoincidenceElectromechanicalSight	</name>
+        </param>
+        <param>	-20%	  <name>	dispersionAt100mCoincidenceElectromechanicalSight	</name>
+        </param>
+        <param>	-20%	  <name>	reloadTimeCoincidence	</name>
+        </param>
+        <param>	1	  <name>	switchEngineModeBothModes	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	+15/+5	  <name>	turboSpeedCap	</name>
+        </param>
+        <param>	+25%	  <name>	engineTurboPowerCap	</name>
+        </param>
+        <param>	+90%	  <name>	aimingTimeTurbo	</name>
+        </param>
+        <param>	+90%	  <name>	movementTraverseDispersionTurbo	</name>
+        </param>
+        <param>	+90%	  <name>	hullTraverseDispersionTurbo	</name>
+        </param>
+        <param>	+90%	  <name>	gunTraverseDispersionTurbo	</name>
+        </param>
+        <param>	0.75%	  <name>	ionAfterburnerPassiveTurboCharge	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	4%	  <name>	ionAfterburnerActiveTurboCharge	</name>
+        </param>
+        <param>	10	  <name>	ionAfterburnerDuration	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	+10/+5	  <name>	ionAfterburnerDurationSpeedCap	</name>
+        </param>
+        <param>	+10%	  <name>	ionAfterburnerDurationEnginePower	</name>
+        </param>
+      </stanceDance>
+    </mechanics>
+  </vehicle>
+  <vehicle>
+    <vehicleType>	sweden:S36_Strv_107_12	</vehicleType>
+    <mechanics>
+      <pillboxSiegeMode>
+        <param>	-10%	  <name>	reloadTimeSecs	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	-20%	  <name>	shotDispersionAngle	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	1/1	  <name>	speedLimits	</name>
+        </param>
+        <param>	-60%	  <name>	pillboxHorizontalRotationSpeed	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	-40%	  <name>	pillboxVerticalRotationSpeed	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	8	  <name>	pillboxSwitchOnTime	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	4	  <name>	pillboxSwitchOffTime	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+      </pillboxSiegeMode>
+    </mechanics>
+  </vehicle>
+  <vehicle>
+    <vehicleType>	uk:GB147_FV4025_Contriver	</vehicleType>
+    <mechanics>
+      <twinGun></twinGun>
+    </mechanics>
+  </vehicle>
+  <vehicle>
+    <vehicleType>	uk:GB152_AT_FV230_Breaker	</vehicleType>
+    <mechanics>
+      <powerMode>
+        <param>	+70%	  <name>	enginePower	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	+50%	  <name>	forwardMaxSpeed	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	-30%	  <name>	chassisRotationSpeed	</name>
+        </param>
+        <param>	15	  <name>	powerModeThreshold	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	1	  <name>	powerModeDuration	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+      </powerMode>
+    </mechanics>
+  </vehicle>
+  <vehicle>
+    <vehicleType>	usa:A179_Black_Rock	</vehicleType>
+    <mechanics>
+      <chargeableBurst>
+        <param>	2	  <name>	chargeableBurstPenetrationCount	</name>
+        </param>
+        <param>	2	  <name>	chargeableBurstSize	</name>
+        </param>
+        <param>	1	  <name>	chargeableBurstReload	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	70%	  <name>	chargeableBurstDispersion	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+      </chargeableBurst>
+    </mechanics>
+  </vehicle>
+  <vehicle>
+    <vehicleType>	usa:A182_T803	</vehicleType>
+    <mechanics>
+      <battleFury>
+        <param>	15%	  <name>	furyMaxReloadEffAvgDpm	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	5	  <name>	furyMaxReloadEfficiencyLevel	</name>
+        </param>
+        <param>	3%	  <name>	furyReloadSpeedBonusPerEfficiencyLevel	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	11	  <name>	furyReloadEfficiencyLevelDuration	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	1	  <name>	furyReloadEfficiencyLevelPerHit	</name>
+        </param>
+        <param>	2	  <name>	furyReloadEfficiencyLevelPerDestruction	</name>
+        </param>
+      </battleFury>
+    </mechanics>
+  </vehicle>
+  <vehicle>
+    <vehicleType>	usa:A183_XM69_Hacker	</vehicleType>
+    <mechanics>
+      <concentrationMode>
+        <param>	30	  <name>	concentrationModeCooldown	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	15	  <name>	concentrationModeDuration	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	-100%	  <name>	vehicleGunShotDispersionChassisMovement	</name>
+          <kpiSign>	negative	</kpiSign>
+        </param>
+        <param>	-100%	  <name>	vehicleGunShotDispersionChassisRotation	</name>
+          <kpiSign>	negative	</kpiSign>
+        </param>
+        <param>	-100%	  <name>	vehicleGunShotDispersionTurretRotation	</name>
+          <kpiSign>	negative	</kpiSign>
+        </param>
+        <param>	-6%	  <name>	shotDispersionAngle	</name>
+        </param>
+        <param>	+10%	  <name>	chassisRotationSpeed	</name>
+        </param>
+        <param>	+10%	  <name>	enginePower	</name>
+        </param>
+      </concentrationMode>
+    </mechanics>
+  </vehicle>
+  <vehicle>
+    <vehicleType>	ussr:R228_KR_1	</vehicleType>
+    <mechanics>
+      <improvedRamming>
+        <param>	+60%	  <name>	improvedDamageEnemiesByRamming	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	+20%	  <name>	improvedDamageEnemiesChassisByRamming	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+      </improvedRamming>
+    </mechanics>
+  </vehicle>
+  <vehicle>
+    <vehicleType>	ussr:R230_Object_432U	</vehicleType>
+    <mechanics>
+      <chargeShot>
+        <param>	6.5/21.75/30.5%	  <name>	heatAvgDmgPerLvl	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	1.5/3.5/5	  <name>	heatTimeToReachLevel	</name>
+        </param>
+        <param>	4	  <name>	heatTimeBeforeOverheat	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+        <param>	4	  <name>	heatChargeOverheatDuration	</name>
+          <template>	vehicle_hub.characteristics.templates.upTo	</template>
+        </param>
+      </chargeShot>
+    </mechanics>
+  </vehicle>
+</vehicle_mechanics.xml>

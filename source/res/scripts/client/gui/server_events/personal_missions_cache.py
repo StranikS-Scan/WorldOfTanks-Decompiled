@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/personal_missions_cache.py
+from typing import Any
 import typing
 import operator
 from collections import defaultdict
@@ -7,6 +8,7 @@ import BigWorld
 import personal_missions
 from constants import BATTLE_MODE_VEHICLE_TAGS, MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 from gui.server_events import event_items
+from gui.server_events.event_items import PersonalMission, PMOperation
 from gui.server_events.finders import BRANCH_TO_OPERATION_IDS
 from gui.server_events.pm_constants import PM_TUTOR_FIELDS
 from gui.shared.gui_items import checkForTags
@@ -14,7 +16,7 @@ from gui.shared.utils.requesters.QuestsProgressRequester import PersonalMissions
 from helpers import dependency
 from items import tankmen
 from items import vehicles
-from personal_missions import PM_BRANCH, PM_BRANCH_TO_FREE_TOKEN_NAME
+from personal_missions import PM_BRANCH, PM_BRANCH_TO_FREE_TOKEN_NAME, PERSONAL_MISSION_REGULAR_MIN_LEVEL, REGULAR_OPERATION_SPEC_LVL_RESTRICTION
 from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore, ISettingsCache
 from skeletons.gui.lobby_context import ILobbyContext
@@ -26,14 +28,19 @@ _ALL_SYNCED = _SETTINGS_SYNCED | _EVENTS_CACHE_UPDATED
 if typing.TYPE_CHECKING:
     from skeletons.gui.server_events import IEventsCache
 
-def vehicleRequirementsCheck(quest, invVehicles, vehGetter):
-    level = quest.getVehMinLevel()
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def vehicleRequirementsCheck(quest, operation, invVehicles, vehGetter, itemsCache=None):
+    if operation.getID() == REGULAR_OPERATION_SPEC_LVL_RESTRICTION and not operation.isStarted():
+        level = PERSONAL_MISSION_REGULAR_MIN_LEVEL
+    else:
+        level = quest.getVehMinLevel()
     classifier = quest.getQuestClassifier()
     for vehCD in invVehicles:
         _, nationID, vehicleTypeID = vehicles.parseIntCompactDescr(vehCD)
         vehType = vehicles.g_cache.vehicle(nationID, vehicleTypeID)
+        vehicle = itemsCache.items.getItemByCD(vehType.compactDescr)
         if vehType.level >= level and classifier.matchVehicle(vehType):
-            if not checkForTags(vehType.tags, BATTLE_MODE_VEHICLE_TAGS):
+            if not checkForTags(vehType.tags, BATTLE_MODE_VEHICLE_TAGS) and not vehicle.isRented:
                 return vehGetter(vehCD).activeInNationGroup and True
 
     return False
@@ -80,7 +87,7 @@ class PersonalMissionsCache(object):
     __settingsCache = dependency.descriptor(ISettingsCache)
 
     def __init__(self):
-        self.__questsData = {k:_PMBranch(PM_BRANCH.TYPE_TO_NAME[k]) for k in PM_BRANCH.ACTIVE_BRANCHES}
+        self.__questsData = {k:_PMBranch(PM_BRANCH.TYPE_TO_NAME[k]) for k in PM_BRANCH.ALL}
         self.__clearCaches()
         self.__syncStatus = 0
         self.__vehLevelsRestrictions = defaultdict(lambda : (MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL))
@@ -91,7 +98,7 @@ class PersonalMissionsCache(object):
         invVehicles = self.itemsCache.items.inventory.getIventoryVehiclesCDs()
         for _, personalMissionID in personal_missions.g_cache:
             branch = personal_missions.g_cache.questByPotapovQuestID(personalMissionID).branch
-            if branch in PM_BRANCH.ACTIVE_BRANCHES:
+            if branch in PM_BRANCH.ALL:
                 questData = personal_missions.g_cache.questByPersonalMissionID(personalMissionID)
                 operation = self.__makeOperation(branch, questData.tileID)
                 campaign = self.__makeCampaign(branch, operation.getCampaignID())
@@ -99,7 +106,6 @@ class PersonalMissionsCache(object):
                 operation.addQuest(quest)
                 campaign.addOperation(operation)
                 self.__cacheQuestRequirement(branch, quest, invVehicles)
-                self.__updateVehLevelRestrictions(quest)
 
     def fini(self):
         self.__settingsCache.onSyncCompleted -= self.__onSettingsCacheSynced
@@ -116,13 +122,28 @@ class PersonalMissionsCache(object):
         questData = self.__questsData.get(branch)
         return questData.questsProgress if questData else None
 
+    def isCampaignActive(self, branch):
+        return branch in self.getActiveCampaigns()
+
+    def getActiveCampaigns(self):
+        questData = first(self.__questsData.itervalues())
+        return questData.questsProgress.getCacheValue('potapovQuests', {}).get('activeCampaigns', [])
+
+    def getActiveOperations(self, branches=PM_BRANCH.V1_BRANCHES):
+        allOperations = self.getAllOperations(branches)
+        return [ operation for operation in allOperations.values() if operation.isInProgress() ]
+
+    def getStartedOperations(self, branches=PM_BRANCH.V1_BRANCHES):
+        allOperations = self.getAllOperations(branches)
+        return [ operation for operation in allOperations.values() if operation.isStarted() ]
+
     def getNextTankwomanIDs(self, branch, nationID, isPremium, fnGroup, lnGroup, iGroupID):
         lastFirstNameID, lastLastNameID, lastIconID = self.getQuestsProgress(branch).getTankmanLastIDs(nationID)
         return map(operator.itemgetter(1), tankmen.getNextUniqueIDs(BigWorld.player().databaseID, lastFirstNameID, lastLastNameID, lastIconID, nationID, isPremium, fnGroup, lnGroup, iGroupID))
 
-    def getAllQuests(self):
+    def getAllQuests(self, branches=PM_BRANCH.V1_BRANCHES):
         result = {}
-        for branch in PM_BRANCH.ACTIVE_BRANCHES:
+        for branch in branches:
             result.update(self.getQuestsForBranch(branch))
 
         return result
@@ -131,9 +152,9 @@ class PersonalMissionsCache(object):
         questData = self.__questsData.get(branch)
         return questData.quests if questData else {}
 
-    def getAllOperations(self):
+    def getAllOperations(self, branches=PM_BRANCH.V1_BRANCHES):
         result = {}
-        for branch in PM_BRANCH.ACTIVE_BRANCHES:
+        for branch in branches:
             result.update(self.getOperationsForBranch(branch))
 
         return result
@@ -142,9 +163,9 @@ class PersonalMissionsCache(object):
         questData = self.__questsData.get(branch, None)
         return questData.operations if questData else {}
 
-    def getAllCampaigns(self):
+    def getAllCampaigns(self, branches=PM_BRANCH.V1_BRANCHES):
         result = {}
-        for branch in PM_BRANCH.ACTIVE_BRANCHES:
+        for branch in branches:
             result.update(self.getCampaignsForBranch(branch))
 
         return result
@@ -155,7 +176,7 @@ class PersonalMissionsCache(object):
 
     def getAllSelectedQuests(self):
         result = {}
-        for branch in PM_BRANCH.ACTIVE_BRANCHES:
+        for branch in PM_BRANCH.ALL:
             result.update(self.getSelectedQuestsForBranch(branch))
 
         return result
@@ -176,6 +197,32 @@ class PersonalMissionsCache(object):
         questData = self.__questsData.get(branch, None)
         return questData.freeTokensCount if questData else 0
 
+    def getOperationPmPointsData(self, branch, operation):
+        branchData = self.__questsData.get(branch, None)
+        operationData = branchData.operations.get(operation) if branchData else None
+        if operationData is not None:
+            maxPmPointsCount = operationData.getMaxPmPointsCount()
+            return (min(operationData.getTotalPmPointsCount(), maxPmPointsCount), maxPmPointsCount)
+        else:
+            return (0, 0)
+
+    def getActualQuests(self, branch, operationNumber, withCompleted=True):
+        actualQuests = []
+        operation = self.getOperationsForBranch(branch).get(operationNumber)
+        for chain in range(1, operation.getChainsCount() + 1):
+            lastQuestIsCompleted = True
+            quests = sorted(operation.getQuestsInChainByFilter(chain).values(), key=lambda quest: quest.getInternalID())
+            for quest in quests:
+                if not quest.isFullCompleted():
+                    lastQuestIsCompleted = False
+                    actualQuests.append(quest)
+                    break
+
+            if lastQuestIsCompleted and quests and withCompleted:
+                actualQuests.append(quests[-1])
+
+        return actualQuests
+
     def getPawnedTokensCount(self, branch):
         questData = self.__questsData.get(branch, None)
         return questData.pawnedTokensCount if questData else 0
@@ -185,16 +232,16 @@ class PersonalMissionsCache(object):
         return self.getFreeTokensCount(branch) >= quest.getPawnCost() and quest.canBePawned()
 
     def getAllTokens(self):
-        result = {}
-        for branch in PM_BRANCH.ACTIVE_BRANCHES:
-            result.update(self.getTokensForPmType(branch))
+        result = []
+        for branch in PM_BRANCH.ALL:
+            result += self.getTokensForBranch(branch)
 
         return result
 
     def getTokensForBranch(self, branch):
-        result = set()
+        result = []
         for operation in self.getOperationsForBranch(branch).itervalues():
-            result |= operation.getTokens().keys()
+            result += operation.getTokens().keys()
 
         return result
 
@@ -215,7 +262,7 @@ class PersonalMissionsCache(object):
 
     @wg_async
     def questsProgressRequest(self):
-        for branch in PM_BRANCH.ACTIVE_BRANCHES:
+        for branch in PM_BRANCH.ALL:
             qp = self.getQuestsProgress(branch)
             if qp:
                 yield wg_await(qp.request())
@@ -230,9 +277,9 @@ class PersonalMissionsCache(object):
     def isEnabled(self, branch=None):
         return self.__lobbyContext.getServerSettings().isPersonalMissionsEnabled(branch)
 
-    def getDisabledPMOperations(self):
+    def getDisabledPMOperations(self, branches=PM_BRANCH.V1_BRANCHES):
         disabledOpIds = {}
-        for branch in PM_BRANCH.ACTIVE_BRANCHES:
+        for branch in branches:
             if not self.__lobbyContext.getServerSettings().isPersonalMissionsEnabled(branch):
                 disabledOpIds.update({opId:None for opId in BRANCH_TO_OPERATION_IDS[branch]})
 
@@ -242,19 +289,11 @@ class PersonalMissionsCache(object):
     def updateDisabledStateForQuests(self):
         if not self.__lobbyContext:
             return
-        processDisabledFlag(self.getAllOperations(), self.getDisabledPMOperations())
-        processDisabledFlag(self.getAllQuests(), self.__lobbyContext.getServerSettings().getDisabledPersonalMissions())
-
-    def __isDiffSuitable(self, diff):
-        if not diff:
-            return True
-        if 'potapovQuests' in diff or 'pm2_progress' in diff:
-            return True
-        return True if 'tokens' in diff and any([ t for t in PM_BRANCH_TO_FREE_TOKEN_NAME.values() if t in diff['tokens'] ]) else False
+        processDisabledFlag(self.getAllOperations(PM_BRANCH.ALL), self.getDisabledPMOperations(PM_BRANCH.ALL))
+        processDisabledFlag(self.getAllQuests(PM_BRANCH.ALL), self.__lobbyContext.getServerSettings().getDisabledPersonalMissions())
 
     def update(self, eventsCache, diff=None):
-        if not self.__isDiffSuitable(diff):
-            return
+        hiddenQuests = eventsCache.getHiddenQuests()
         for branch, questsData in self.__questsData.iteritems():
             qp = questsData.questsProgress
             quests = questsData.quests
@@ -280,22 +319,25 @@ class PersonalMissionsCache(object):
 
             questsData.pawnedTokensCount = 0
             for operation in questsData.operations.itervalues():
-                operation.updateProgress(eventsCache)
+                operation.updateProgress(eventsCache, hiddenQuests=hiddenQuests)
                 questsData.pawnedTokensCount += operation.getTokensPawnedCount()
                 canBePawned = operation.isUnlocked()
                 for chain in operation.getQuests().itervalues():
                     for quest in chain.itervalues():
                         quest.setCanBePawned(canBePawned)
 
-            questsData.freeTokensCount = eventsCache.questsProgress.getTokenCount(PM_BRANCH_TO_FREE_TOKEN_NAME[branch])
             self.__syncStatus |= _EVENTS_CACHE_UPDATED
-            self.__tryToPreserveInitialFreeAwardSheetsCount()
+            if branch != PM_BRANCH.PERSONAL_MISSION_3:
+                questsData.freeTokensCount = eventsCache.questsProgress.getTokenCount(PM_BRANCH_TO_FREE_TOKEN_NAME[branch])
+                self.__tryToPreserveInitialFreeAwardSheetsCount()
             for campaign in questsData.campaigns.itervalues():
-                campaign.updateProgress()
+                campaign.updateProgress(hiddenQuests)
 
             eventsCache.onProgressUpdated(branch)
 
         self.updateDisabledStateForQuests()
+        self.__updateVehRequirementsCache()
+        eventsCache.onPMSyncCompleted(diff)
 
     def getIncompleteOperation(self, branch):
         operations = self.getOperationsForBranch(branch)
@@ -342,8 +384,9 @@ class PersonalMissionsCache(object):
         chainID = q.getChainID()
         key = (operationID, chainID)
         if key not in qd.vehRequirementsCache:
+            operation = qd.operations[operationID]
             vehGetter = self.itemsCache.items.getItemByCD
-            hasRequiredVehicle = vehicleRequirementsCheck(q, invVehicles, vehGetter)
+            hasRequiredVehicle = vehicleRequirementsCheck(q, operation, invVehicles, vehGetter)
             qd.vehRequirementsCache[key] = hasRequiredVehicle
         else:
             hasRequiredVehicle = qd.vehRequirementsCache[key]
@@ -354,15 +397,18 @@ class PersonalMissionsCache(object):
         vehGetter = self.itemsCache.items.getItemByCD
         for qd in self.__questsData.itervalues():
             items = qd.vehRequirementsCache.items()
-            for key, value in items:
-                operationID, chainID = key
-                quests = qd.operations[operationID].getQuests()[chainID]
+            for operationData, hadRequiredVehicle in items:
+                operationID, chainID = operationData
+                operation = qd.operations[operationID]
+                quests = operation.getQuests()[chainID]
                 firstQuest = first(quests.itervalues())
-                newValue = vehicleRequirementsCheck(firstQuest, invVehicles, vehGetter)
-                if value != newValue:
-                    qd.vehRequirementsCache[key] = newValue
+                hasRequiredVehicle = vehicleRequirementsCheck(firstQuest, operation, invVehicles, vehGetter)
+                self.__updateVehLevelRestrictions(firstQuest)
+                qd.operations[operationID].setRequiredVehicleLevel(firstQuest.getVehMinLevel())
+                if hadRequiredVehicle != hasRequiredVehicle:
+                    qd.vehRequirementsCache[operationData] = hasRequiredVehicle
                     for q in quests.itervalues():
-                        q.setRequiredVehiclesPresence(newValue)
+                        q.setRequiredVehiclesPresence(hasRequiredVehicle)
 
     def __onSettingsCacheSynced(self):
         self.__syncStatus |= _SETTINGS_SYNCED
@@ -380,5 +426,12 @@ class PersonalMissionsCache(object):
 
     def __updateVehLevelRestrictions(self, quest):
         operationID = quest.getOperationID()
+        branchID = quest.getQuestBranch()
+        branch = self.__questsData[branchID]
+        operation = branch.operations[operationID]
         currMin, currMax = self.__vehLevelsRestrictions[operationID]
-        self.__vehLevelsRestrictions[operationID] = (min(currMin, quest.getVehMinLevel()), max(currMax, quest.getVehMaxLevel()))
+        if operation.getID() == REGULAR_OPERATION_SPEC_LVL_RESTRICTION and not operation.isStarted():
+            minLevel = PERSONAL_MISSION_REGULAR_MIN_LEVEL
+        else:
+            minLevel = min(currMin, quest.getVehMinLevel())
+        self.__vehLevelsRestrictions[operationID] = (minLevel, max(currMax, quest.getVehMaxLevel()))

@@ -593,11 +593,13 @@ class OptionalDevice(RemovableDevice):
 
     def mayRemove(self, vehicle):
         try:
-            slotIdx = vehicle.optDevices.layout.index(self)
-            return vehicle.descriptor.mayRemoveOptionalDevice(slotIdx)
+            vehicle.optDevices.layout.index(self)
+            return (True, None)
         except Exception:
             LOG_CURRENT_EXCEPTION()
             return (False, 'not installed on vehicle')
+
+        return None
 
     def getInstalledVehicles(self, vehicles):
         result = set()

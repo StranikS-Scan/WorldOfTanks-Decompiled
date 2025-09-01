@@ -6,7 +6,6 @@ from functools import partial
 from Event import Event, EventManager
 from PlayerEvents import g_playerEvents
 from comp7_common_const import Comp7QuestType
-from comp7.gui.impl.gen.view_models.views.lobby.missions.comp7_widget_quest_model import State
 from comp7.gui.impl.lobby.comp7_helpers.comp7_quest_helpers import Comp7ParsedQuestID, isWeeklyRewardClaimed
 from comp7.skeletons.gui.game_control import IComp7WeeklyQuestsController
 from gui.prb_control.entities.listener import IGlobalListener
@@ -53,9 +52,6 @@ class Comp7WeeklyQuestsController(IComp7WeeklyQuestsController, IGlobalListener)
             self.__setNewQuestsCallback()
         return self.__quests
 
-    def isInHideState(self):
-        return self.getQuests().newQuestState == State.HIDE
-
     def onConnected(self):
         g_playerEvents.onPrbDispatcherCreated += self.__onPrbDispatcherCreated
 
@@ -67,7 +63,7 @@ class Comp7WeeklyQuestsController(IComp7WeeklyQuestsController, IGlobalListener)
         return
 
     def onPrbEntitySwitched(self):
-        if self.__comp7Controller.isComp7PrbActive():
+        if self.__comp7Controller.isModePrbActive():
             self.__addListeners()
         else:
             self.__quests = None
@@ -77,7 +73,7 @@ class Comp7WeeklyQuestsController(IComp7WeeklyQuestsController, IGlobalListener)
 
     def __onPrbDispatcherCreated(self):
         self.startGlobalListening()
-        if self.__comp7Controller.isComp7PrbActive():
+        if self.__comp7Controller.isModePrbActive():
             self.__addListeners()
 
     def __addListeners(self):
@@ -99,7 +95,6 @@ class Comp7WeeklyQuestsController(IComp7WeeklyQuestsController, IGlobalListener)
     def __onOffersUpdated(self):
         if isWeeklyRewardClaimed():
             quests = self.__quests
-            quests.newQuestState = State.HIDE
             self.onWeeklyQuestsUpdated(quests)
 
     def __updateQuests(self):
@@ -117,14 +112,13 @@ class Comp7WeeklyQuestsController(IComp7WeeklyQuestsController, IGlobalListener)
             _logger.error('Events cache failed to provide quests to the Comp7WeeklyQuestsController.')
             return _Comp7WeeklyQuestsInErrorState()
         else:
-            completedCnt, oldQuest, newQuest, newQuestState = (0, None, None, None)
+            completedCnt, oldQuest, newQuest = (0, None, None)
             for _, quest in battleQuests:
                 if quest.isCompleted():
                     completedCnt += 1
                     oldQuest = quest
                 if not newQuest:
                     newQuest = quest
-                    newQuestState = State.ACTIVE if quest.isStarted() else State.WAITING
                 if not quest.isStarted():
                     timeOfNewQuests = quest.getStartTime()
                     break
@@ -132,9 +126,7 @@ class Comp7WeeklyQuestsController(IComp7WeeklyQuestsController, IGlobalListener)
                 timeOfNewQuests = None
 
             numBattleQuests = len(battleQuests)
-            if numBattleQuests == completedCnt:
-                newQuestState = State.HIDE if isWeeklyRewardClaimed() else State.REWARD
-            return _Comp7WeeklyQuests(battleQuests, tokenQuests, oldQuest, newQuest, newQuestState, numBattleQuests, completedCnt, timeOfNewQuests)
+            return _Comp7WeeklyQuests(battleQuests, tokenQuests, oldQuest, newQuest, numBattleQuests, completedCnt, timeOfNewQuests)
 
     def __setNewQuestsCallback(self):
         self.__timer.clearCallbacks()
@@ -144,21 +136,20 @@ class Comp7WeeklyQuestsController(IComp7WeeklyQuestsController, IGlobalListener)
 
 
 class _Comp7WeeklyQuests(object):
-    __slots__ = ('sortedBattleQuests', 'sortedTokenQuests', 'oldQuest', 'newQuest', 'newQuestState', 'numBattleQuests', 'numCompletedBattleQuests', 'numBattleQuestsToCompleteByTokenQuestIdx', '__timeOfNewQuests')
+    __slots__ = ('sortedBattleQuests', 'sortedTokenQuests', 'oldQuest', 'newQuest', 'numBattleQuests', 'numCompletedBattleQuests', 'numBattleQuestsToCompleteByTokenQuestIdx', 'timeOfNewQuests')
 
-    def __init__(self, battleQuests, tokenQuests, oldQuest, newQuest, newQuestState, numBattleQuests, numCompletedBattleQuests, timeOfNewQuests):
+    def __init__(self, battleQuests, tokenQuests, oldQuest, newQuest, numBattleQuests, numCompletedBattleQuests, timeOfNewQuests):
         self.sortedBattleQuests = battleQuests
         self.sortedTokenQuests = tokenQuests
         self.oldQuest = oldQuest
         self.newQuest = newQuest
-        self.newQuestState = newQuestState
         self.numBattleQuests = numBattleQuests
         self.numCompletedBattleQuests = numCompletedBattleQuests
         self.numBattleQuestsToCompleteByTokenQuestIdx = tuple((quest.accountReqs.getConditions().find('token').getNeededCount() for _, quest in tokenQuests))
-        self.__timeOfNewQuests = timeOfNewQuests
+        self.timeOfNewQuests = timeOfNewQuests
 
     def getTimeToNewQuests(self):
-        timeOfNewQuests = self.__timeOfNewQuests
+        timeOfNewQuests = self.timeOfNewQuests
         if timeOfNewQuests is None:
             return -1
         else:
@@ -172,7 +163,7 @@ class _Comp7WeeklyQuests(object):
 class _Comp7WeeklyQuestsInErrorState(_Comp7WeeklyQuests):
 
     def __init__(self):
-        super(_Comp7WeeklyQuestsInErrorState, self).__init__([], [], None, None, State.HIDE, 0, 0, None)
+        super(_Comp7WeeklyQuestsInErrorState, self).__init__([], [], None, None, 0, 0, None)
         return
 
 

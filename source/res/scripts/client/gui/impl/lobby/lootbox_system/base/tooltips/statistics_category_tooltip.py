@@ -3,6 +3,7 @@
 import logging
 from typing import TYPE_CHECKING
 from frameworks.wulf import Array, ViewSettings
+from gui.customization.shared import getSingleVehicleForCustomization
 from gui.goodies.goodie_items import Booster, DemountKit, RecertificationForm, MentoringLicense
 from gui.impl import backport
 from gui.impl.gen import R
@@ -12,7 +13,6 @@ from gui.impl.gen.view_models.views.lobby.lootbox_system.tooltips.statistics_cat
 from gui.impl.pub import ViewImpl
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.lootbox_system.base.common import LOOTBOX_RANDOM_NATIONAL_BLUEPRINT
-from gui.lootbox_system.base.utils import getSingleVehicleCDForCustomization
 from gui.server_events.bonuses import BlueprintsBonusSubtypes, blueprintBonusFactory, LootBoxRandomNationalBonus
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES, getItemTypeID
@@ -38,7 +38,7 @@ class StatisticsCategoryTooltipView(ViewImpl):
     __lootBoxes = dependency.descriptor(ILootBoxSystemController)
 
     def __init__(self, bonusesCategory, eventName):
-        settings = ViewSettings(R.views.lobby.lootbox_system.tooltips.StatisticsCategoryTooltipView())
+        settings = ViewSettings(R.views.mono.lootbox.tooltips.statistics_category())
         settings.model = StatisticsCategoryTooltipViewModel()
         super(StatisticsCategoryTooltipView, self).__init__(settings)
         self.__bonusesCategory = Type(bonusesCategory)
@@ -101,7 +101,7 @@ def _pack3DStyles(rewards, model, itemsCache=None):
     suitable = []
     for style, compensatedCount in _iter3DStyles(rewards):
         if not compensatedCount:
-            vehicleCD = getSingleVehicleCDForCustomization(style)
+            vehicleCD = getSingleVehicleForCustomization(style)
             if vehicleCD is not None:
                 vehicle = itemsCache.items.getItemByCD(vehicleCD)
                 suitable.append((style, vehicle))

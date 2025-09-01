@@ -11,7 +11,7 @@ from soft_exception import SoftException
 from copy import deepcopy
 from pprint import pformat
 from bonus_readers import readBonusSection, readUTC, timeDataToUTC, checkLogExtInfoLen
-from constants import VEHICLE_CLASS_INDICES, ARENA_BONUS_TYPE, EVENT_TYPE, IGR_TYPE, ATTACK_REASONS, QUEST_RUN_FLAGS, DEFAULT_QUEST_START_TIME, DEFAULT_QUEST_FINISH_TIME, ROLE_LABEL_TO_TYPE, ACCOUNT_ATTR, QUESTS_SUPPORTED_EXCLUDE_TAGS
+from constants import VEHICLE_CLASS_INDICES, ARENA_BONUS_TYPE, EVENT_TYPE, IGR_TYPE, ATTACK_REASONS, QUEST_RUN_FLAGS, DEFAULT_QUEST_START_TIME, DEFAULT_QUEST_FINISH_TIME, ROLE_LABEL_TO_TYPE, ACCOUNT_ATTR, QUESTS_SUPPORTED_EXCLUDE_TAGS, MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 from debug_utils import LOG_WARNING
 from dossiers2.custom.layouts import accountDossierLayout, vehicleDossierLayout, StaticSizeBlockBuilder, BinarySetDossierBlockBuilder
 from dossiers2.custom.records import RECORD_DB_IDS
@@ -356,6 +356,10 @@ class Source(object):
          'token': self.__readBattleResultsConditionList,
          'id': self.__readCondition_string,
          'consume': self.__readCondition_consume,
+         'convert': self.__readBattleResultsConditionList,
+         'expires': self.__readCondition_DateTimeOrFloat,
+         'limit': self.__readCondition_int,
+         'rate': self.__readCondition_float,
          'inClan': self.__readListOfInts,
          'vehiclesUnlocked': self.__readBattleResultsConditionList,
          'vehiclesLocked': self.__readBattleResultsConditionList,
@@ -385,6 +389,7 @@ class Source(object):
          'isBattleMattersEnabled': self.__readCondition_bool,
          'isWinbackQuestsEnabled': self.__readCondition_bool,
          'isDailyQuestsEnabled': self.__readCondition_bool,
+         'isWeeklyQuestsEnabled': self.__readCondition_bool,
          'isSteamAllowed': self.__readCondition_bool,
          'isFirstLogin': self.__readCondition_bool,
          'totalBattles': self.__readBattleResultsConditionList,
@@ -401,7 +406,8 @@ class Source(object):
          'mapsTraining': self.__readBattleResultsConditionList,
          'mapsCompleted': self.__readBattleResultsConditionList,
          'scenariosCompleted': self.__readBattleResultsConditionList,
-         'difficulty': self.__readCondition_int}
+         'difficulty': self.__readCondition_int,
+         'pmActiveOperation': self.__readCondition_int}
         if eventType in EVENT_TYPE.LIKE_BATTLE_QUESTS:
             condition_readers.update({'value': self.__readCondition_bool,
              'win': self.__readConditionComplex_true,
@@ -424,6 +430,7 @@ class Source(object):
              'vehicleDamage': self.__readBattleResultsConditionList,
              'vehicleStun': self.__readBattleResultsConditionList,
              'vehicleKills': self.__readBattleResultsConditionList,
+             'vehicleBlockedByArmor': self.__readBattleResultsConditionList,
              'vehicleDescr': self.__readBattleResultsConditionList,
              'clanKills': self.__readBattleResultsConditionList,
              'lvlDiff': self.__readCondition_int,
@@ -431,7 +438,9 @@ class Source(object):
              'limittedTime': self.__readCondition_int,
              'rammingInfo': self.__readCondition_rammingInfo,
              'distance': self.__readCondition_int,
+             'beyondVisionRadius': self.__readCondition_true,
              'whileMoving': self.__readCondition_true,
+             'whileMovingAtSpeed': self.__readCondition_int,
              'whileEnemyMoving': self.__readCondition_int,
              'soloAssist': self.__readCondition_true,
              'fireStarted': self.__readCondition_true,
@@ -445,6 +454,10 @@ class Source(object):
              'whileEnemyFullHealth': self.__readCondition_true,
              'allInSpecifiedClasses': self.__readCondition_true,
              'enemyIsNotSpotted': self.__readCondition_true,
+             'damageDealt': self.__readCondition_int,
+             'spotEnemy': self.__readCondition_true,
+             'directHitsReceived': self.__readCondition_int,
+             'whileStill': self.__readCondition_true,
              'installedModules': self.__readBattleResultsConditionList,
              'guns': self.__readCondition_installedModules,
              'engines': self.__readCondition_installedModules,
@@ -483,6 +496,7 @@ class Source(object):
              'battles': self.__readBattleResultsConditionList,
              'count': self.__readCondition_int,
              'upperLimit': self.__readCondition_true,
+             'uniqueVehicles': self.__readCondition_true,
              'inrow': self.__readCondition_true,
              'groupBy': self.__readBattleResultsConditionList,
              'groupName': self.__readCondition_groupBy,
@@ -841,7 +855,7 @@ class Source(object):
     def __readVehicleFilter_levels(self, _, section, node):
         res = set()
         for level in section.asString.split():
-            if 1 <= int(level) <= 10:
+            if MIN_VEHICLE_LEVEL <= int(level) <= MAX_VEHICLE_LEVEL:
                 res.add(int(level))
             raise SoftException('Unsupported vehicle level %s' % level)
 

@@ -15,6 +15,7 @@ from gui.shared.gui_items.Tankman import CrewTypes
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
+from gui.veh_post_progression.models.progression import PostProgressionCompletion, PostProgressionItem
 from helpers import dependency
 from items import ITEM_TYPE_NAMES, vehicles, EQUIPMENT_TYPES, ITEM_TYPES
 from items.vehicles import VehicleDescr
@@ -798,6 +799,9 @@ class VehComparisonBasket(IVehicleComparisonBasket):
         vehCmpData.setInvDynSlotType(invDynSlotType)
         progressState = progressState if progressState is not None else vehCmpData.getPostProgressionState()
         progressState = progressState if progressState is not None else invState
+        progression = PostProgressionItem(progressState, vehicle.typeDescr)
+        if progression.isVehSkillTree() and progression.getCompletion() == PostProgressionCompletion.PARTIAL:
+            progressState = invState
         dynSlotType = dynSlotType if dynSlotType is not None else vehCmpData.getDynSlotType()
         dynSlotType = dynSlotType if dynSlotType is not None else invDynSlotType
         postProgressionState = progressState if vehicle.isPostProgressionExists else VehicleState()

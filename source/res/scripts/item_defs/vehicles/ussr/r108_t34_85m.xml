@@ -1101,7 +1101,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	7800	</weight>
-      <maxLoad>	35000	</maxLoad>
       <terrainResistance>	1.2 1.5 2.3	</terrainResistance>
       <brakeForce>	36500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -2008,7 +2007,8 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.2	</aimingTime>
-          <pitchLimits>	-90 90	  <minPitch>	0 -25 1 -25	</minPitch>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 7 1 7	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>

@@ -10,11 +10,9 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.common.filter_contexts import getFilterSetupContexts
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.basic.carousel_data_provider import HangarCarouselDataProvider
 from gui.Scaleform.daapi.view.meta.TankCarouselMeta import TankCarouselMeta
-from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.Scaleform.locale.TANK_CAROUSEL_FILTER import TANK_CAROUSEL_FILTER
-from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showStorage, showTelecomRentalPage
+from gui.shared.event_dispatcher import showStorage, showTelecomRentalPage, showTechTree
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.items_actions import factory as ActionsFactory
 from helpers import dependency, server_settings
@@ -59,7 +57,7 @@ class TankCarousel(TankCarouselMeta):
         ActionsFactory.doAction(ActionsFactory.BUY_VEHICLE_SLOT)
 
     def buyTank(self):
-        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_TECHTREE)), EVENT_BUS_SCOPE.LOBBY)
+        showTechTree()
 
     def restoreTank(self):
         showStorage(STORAGE_CONSTANTS.IN_HANGAR, STORAGE_CONSTANTS.VEHICLES_TAB_RESTORE)

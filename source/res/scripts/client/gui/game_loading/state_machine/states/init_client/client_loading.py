@@ -72,6 +72,6 @@ class ClientLoadingState(BaseGroupTickingStates):
         self.addChildState(clientLoadingProgressComponent)
         self.addChildState(clientLoadingStatusTextComponent)
 
-    def _onEntered(self):
-        super(ClientLoadingState, self)._onEntered()
+    def _onEntered(self, event):
+        super(ClientLoadingState, self)._onEntered(event)
         game_loading_bindings.bringLoadingViewToTop()

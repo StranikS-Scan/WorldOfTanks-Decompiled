@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/InventoryRequester.py
 import typing
+from future.utils import iteritems, iterkeys
 from itertools import imap
 from collections import namedtuple, defaultdict
 import BigWorld
@@ -375,26 +376,13 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
         vehItemsData = self.__getItemsData(vehicles._VEHICLE)
         if vehItemsData is None:
             return
+        elif 'compDescr' not in vehItemsData:
+            return {}
         elif inventoryID is not None:
-            return self.__getVehicleData(vehItemsData, inventoryID)
+            return {key:values[inventoryID] for key, values in iteritems(vehItemsData) if inventoryID in values}
         else:
-            result = dict()
-            for invID in vehItemsData.get('compDescr', dict()).iterkeys():
-                result[invID] = self.__getVehicleData(vehItemsData, invID)
-
-            return result
-
-    def __getVehicleData(self, vehItemsData, invID):
-        if invID not in vehItemsData['compDescr'].keys():
-            return
-        else:
-            result = {}
-            for key, values in vehItemsData.iteritems():
-                value = values.get(invID)
-                if value is not None:
-                    result[key] = value
-
-            return result
+            ids = iterkeys(vehItemsData['compDescr'])
+            return {invID:{key:values[invID] for key, values in iteritems(vehItemsData) if invID in values} for invID in ids}
 
     def __getCustomizationsData(self, intCD):
         _, cType, idx = parseIntCompactDescr(intCD)

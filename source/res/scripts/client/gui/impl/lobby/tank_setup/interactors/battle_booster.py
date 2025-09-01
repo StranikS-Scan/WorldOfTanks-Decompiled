@@ -55,7 +55,7 @@ class BattleBoosterInteractor(BaseBattleBoosterInteractor):
     def revert(self):
         self.getItem().battleBoosters.setLayout(*self.getInstalledLayout())
         self.onSlotAction(actionType=BaseSetupModel.REVERT_SLOT_ACTION)
-        self.itemUpdated()
+        self.onRevert()
 
     @wg_async
     def applyQuit(self, callback, skipApplyAutoRenewal):

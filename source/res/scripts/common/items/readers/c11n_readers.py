@@ -496,7 +496,7 @@ class InsigniaXmlReader(BaseCustomizationItemXmlReader):
             target.alphabet = section.readString('alphabet')
         if section.has_key('texture'):
             target.texture = section.readString('texture')
-        target.canBeMirrored = section.readBool('canBeMirrored', False)
+        target.canBeMirrored = section.readBool('canBeMirrored', True)
 
 
 def readCustomizationCacheFromXml(cache, folder):

@@ -6,7 +6,7 @@ from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.go_back_helper import BackButtonContextKeys, getBackBtnDescription
+from gui.Scaleform.daapi.view.lobby.go_back_helper import BackButtonContextKeys
 from gui.Scaleform.daapi.view.lobby.techtree import dumpers
 from gui.Scaleform.daapi.view.lobby.techtree.data import ResearchItemsData
 from gui.Scaleform.daapi.view.lobby.techtree.settings import SelectedNation, NODE_STATE
@@ -19,15 +19,14 @@ from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDL
 from gui.Scaleform.genConsts.RESEARCH_ALIASES import RESEARCH_ALIASES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
+from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
 from gui.impl.gen.resources import R
 from gui.impl.lobby.hangar.buy_vehicle_view import VehicleBuyActionTypes
-from gui.shared import EVENT_BUS_SCOPE
 from gui.shared import event_dispatcher as shared_events
 from gui.shared import events
 from gui.shared.event_dispatcher import showVehPostProgressionView
-from gui.shared.events import LoadViewEvent
 from gui.shared.formatters import text_styles, icons, getRoleTextWithIcon
 from gui.shared.formatters.time_formatters import getDueDateOrTimeStr, RentLeftFormatter
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -158,10 +157,7 @@ class Research(ResearchMeta):
 
     def goToPostProgression(self, itemCD):
         vehicle = self._itemsCache.items.getItemByCD(int(itemCD))
-        showVehPostProgressionView(vehicle.intCD, self._createExitEvent())
-
-    def __del__(self):
-        _logger.debug('ResearchPage deleted')
+        showVehPostProgressionView(vehicle.intCD)
 
     def goToVehicleView(self, itemCD):
         vehicle = self._itemsCache.items.getItemByCD(int(itemCD))
@@ -241,8 +237,7 @@ class Research(ResearchMeta):
             ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, itemCD, False, VehicleBuyActionTypes.RESTORE, skipConfirm=self._skipConfirm)
 
     def exitFromResearch(self):
-        if self._canBeClosed:
-            self.fireEvent(LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.EXIT_FROM_RESEARCH)), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.getParentWindow().destroy()
 
     def invalidateVehCompare(self):
         super(Research, self).invalidateVehCompare()
@@ -471,7 +466,7 @@ class Research(ResearchMeta):
 
     def __getBackBtnData(self):
         result = {'backBtnLabel': backport.text(R.strings.menu.viewHeader.backBtn.label()),
-         'backBtnDescrLabel': getBackBtnDescription(self._exitEvent, self._previewAlias)}
+         'backBtnDescrLabel': getLobbyStateMachine().backNavigationDescription}
         return result
 
     def __redrawPageAfterNationWasChanged(self):

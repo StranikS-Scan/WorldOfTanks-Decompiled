@@ -104,7 +104,7 @@ class ProgressiveItemsUpgradeView(ViewImpl):
         g_clientUpdateManager.removeObjectCallbacks(self)
 
     def __loadViewHandler(self, event):
-        if event.alias == VIEW_ALIAS.LOBBY_HANGAR:
+        if event.alias in (VIEW_ALIAS.LOBBY_HANGAR, VIEW_ALIAS.LEGACY_LOBBY_HANGAR):
             self._updateButtons()
         elif event.alias in (VIEW_ALIAS.HERO_VEHICLE_PREVIEW, VIEW_ALIAS.BATTLE_QUEUE):
             self.__updateButtons(lock=True)

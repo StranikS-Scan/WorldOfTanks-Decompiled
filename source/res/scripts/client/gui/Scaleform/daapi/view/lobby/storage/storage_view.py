@@ -5,20 +5,18 @@ from helpers.time_utils import getCurrentTimestamp
 from account_helpers import AccountSettings
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi import LobbySubView
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.storage import getSectionsList
 from gui.Scaleform.daapi.view.lobby.storage.sound_constants import STORAGE_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getStorageShellsData
 from gui.Scaleform.daapi.view.meta.StorageViewMeta import StorageViewMeta
-from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showHangar
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
+from shared_utils import first
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersNovelty, IOffersDataProvider
 from skeletons.gui.shared import IItemsCache
@@ -46,10 +44,26 @@ class StorageView(LobbySubView, StorageViewMeta):
         return
 
     def onClose(self):
-        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
+        showHangar()
 
     def navigateToHangar(self):
         showHangar()
+
+    def findActiveSectionAndTabId(self):
+        sectionsList = getSectionsList()
+        for section in self.components.values():
+            if not section or not section.getActive():
+                continue
+            sectionId = first((s['id'] for s in sectionsList if s['linkage'] == section.getAlias()))
+            tabs = section.getTabsData() if hasattr(section, 'getTabsData') else []
+            activeTabLinkage = first((tabLinkage for tabLinkage, tabComponent in section.components.items() if tabComponent.getActive()))
+            for tab in tabs:
+                if tab['linkage'] == activeTabLinkage:
+                    return (sectionId, tab['id'])
+
+            return (sectionId, None)
+
+        return (None, None)
 
     def _populate(self):
         super(StorageView, self)._populate()

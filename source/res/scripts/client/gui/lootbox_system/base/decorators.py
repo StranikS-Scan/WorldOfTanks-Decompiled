@@ -29,11 +29,11 @@ def createTooltipContentDecorator():
     def decorator(func):
 
         def wrapper(self, event, contentID):
-            if contentID == R.views.lobby.lootbox_system.tooltips.GuaranteedRewardInfoTooltip():
+            if contentID == R.views.mono.lootbox.tooltips.guaranteed_reward_info():
                 return GuaranteedRewardInfoTooltip(event.getArgument('category'), event.getArgument('eventName'))
-            elif contentID == R.views.lobby.lootbox_system.tooltips.BoxTooltip():
+            elif contentID == R.views.mono.lootbox.tooltips.box_tooltip():
                 return BoxTooltip(event.getArgument('boxCategory'), event.getArgument('eventName'))
-            elif contentID == R.views.lobby.lootbox_system.tooltips.StatisticsCategoryTooltipView():
+            elif contentID == R.views.mono.lootbox.tooltips.statistics_category():
                 return StatisticsCategoryTooltipView(event.getArgument('bonusesCategory'), event.getArgument('eventName'))
             elif contentID == R.views.lobby.battle_pass.tooltips.BattlePassCoinTooltipView():
                 return BattlePassCoinTooltipView()
@@ -52,9 +52,9 @@ def createTooltipContentDecorator():
                     compTooltipData.update(tooltipData.specialArgs)
                     settings = ViewSettings(R.views.lobby.awards.tooltips.RewardCompensationTooltip(), model=LootBoxVehicleCompensationTooltipModel(), kwargs=compTooltipData)
                     return VehicleCompensationTooltipContent(settings)
-                if contentID == R.views.lobby.lootbox_system.tooltips.RandomNationalBonusTooltipView():
+                if contentID == R.views.mono.lootbox.tooltips.random_national_bonus():
                     return RandomNationalBonusTooltipView(*tooltipData.specialArgs)
-            if contentID == R.views.lobby.lootbox_system.tooltips.BoxCompensationTooltip():
+            if contentID == R.views.mono.lootbox.tooltips.box_compensation():
                 if tooltipData is None:
                     return
                 return BoxCompensationTooltip(*tooltipData.specialArgs)

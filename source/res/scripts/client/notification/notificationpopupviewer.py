@@ -14,6 +14,7 @@ from notification import NotificationMVC
 from notification.BaseNotificationView import BaseNotificationView
 from notification.settings import NOTIFICATION_STATE
 from notification.utils import dynamicNotificationRegister
+from shared_utils import nextTick
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.shared.utils import IHangarSpace
 _logger = logging.getLogger(__name__)
@@ -195,7 +196,7 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
             mvcInstance.getAlertController().onAllAlertsClosed += self.__allAlertsMessageCloseHandler
             g_messengerEvents.onLockPopUpMessages += self.__onLockPopUpMessages
             g_messengerEvents.onUnlockPopUpMessages += self.__onUnlockPopUpMessages
-            self._model.setup()
+            nextTick(self._model.setup)()
         else:
             g_playerEvents.onLoadingMilestoneReached += self._onLoadingMilestoneReached
 

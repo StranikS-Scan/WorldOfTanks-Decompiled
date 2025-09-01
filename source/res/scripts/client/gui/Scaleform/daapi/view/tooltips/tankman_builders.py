@@ -137,7 +137,7 @@ class TankmanTooltipAdditional(ToolTipBaseData):
 
     def getDisplayableData(self, tankmanID=None, *args, **kwargs):
         parent = kwargs.pop('parent', None)
-        item = self.context.buildItem(tankmanID, **kwargs)
+        item = self.context.buildItem(tankmanID)
         return DecoratedTooltipWindow(AdvancedTooltipView(TANKMAN_MOVIES[item.role], item.roleUserName, backport.text(R.strings.tooltips.advanced.dyn(item.role)())), parent, useDecorator=False)
 
 

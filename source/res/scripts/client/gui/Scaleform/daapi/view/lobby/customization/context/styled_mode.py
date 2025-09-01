@@ -279,7 +279,7 @@ class StyledMode(CustomizationMode):
             if not isInstalled:
                 return True
         isStyleChanged = any((not self._originalOutfits[season].isEqual(self._modifiedOutfits[season]) for season in SeasonType.COMMON_SEASONS))
-        isAutoRentChanged = self.__autoRentEnabled != g_currentVehicle.item.isAutoRentStyle
+        isAutoRentChanged = False if not g_currentVehicle.item else self.__autoRentEnabled != g_currentVehicle.item.isAutoRentStyle
         return isStyleChanged or isAutoRentChanged
 
     def _getAnchorVOs(self):

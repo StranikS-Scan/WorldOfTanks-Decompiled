@@ -8,6 +8,11 @@ from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.app_loader import settings as app_settings
 from gui.shared import EVENT_BUS_SCOPE
 
+def getStateMachineRegistrators():
+    from gui.Scaleform.daapi.view.lobby.trainings.states import registerStates, registerTransitions
+    return (registerStates, registerTransitions)
+
+
 def getContextMenuHandlers():
     pass
 

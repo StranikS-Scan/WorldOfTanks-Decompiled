@@ -7,7 +7,7 @@ class PersonalMissionsPageMeta(View):
     def onBarClick(self, chainID, operationIdx):
         self._printOverrideError('onBarClick')
 
-    def onSkipTaskClick(self):
+    def onSkipTaskClick(self, btnID):
         self._printOverrideError('onSkipTaskClick')
 
     def onBackBtnClick(self):

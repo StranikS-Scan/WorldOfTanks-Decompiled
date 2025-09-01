@@ -16,7 +16,7 @@
     <backward>	15	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.012	</moving>
+    <moving>	0.013	</moving>
     <still>	0.025	</still>
     <camouflageBonus>	0.02	</camouflageBonus>
     <firePenalty>	0.038	</firePenalty>
@@ -92,6 +92,11 @@
           <destroyed>	vehicles/german/G42_Maus/_skins/G42_Maus_BXI_3DSt/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/german/G42_Maus/_skins/G42_Maus_BXI_3DSt/crash/lod0/Hull.model	</exploded>
         </G42_Maus_BXI_3DSt>
+        <G42_Maus_BPXVIII_3Dst>
+          <undamaged>	vehicles/german/G42_Maus/_skins/G42_Maus_BPXVIII_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/german/G42_Maus/_skins/G42_Maus_BPXVIII_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/german/G42_Maus/_skins/G42_Maus_BPXVIII_3Dst/crash/lod0/Hull.model	</exploded>
+        </G42_Maus_BPXVIII_3Dst>
         <G42_Maus_SFV_3Dst>
           <undamaged>	vehicles/german/G42_Maus/_skins/G42_Maus_SFV_3Dst/normal/lod0/Hull.model	</undamaged>
           <destroyed>	vehicles/german/G42_Maus/_skins/G42_Maus_SFV_3Dst/crash/lod0/Hull.model	</destroyed>
@@ -125,6 +130,16 @@
         <rayEnd>	-1.202814 0.373784 3.90366	</rayEnd>
         <rayUp>	0.000283 0.577923 -0.816091	</rayUp>
         <size>	0.32	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </slot>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	10001	</slotId>
+        <rayStart>	-1.188242 0.700221 4.224372	</rayStart>
+        <rayEnd>	-1.188402 0.373784 3.993203	</rayEnd>
+        <rayUp>	0.000283 0.577923 -0.816091	</rayUp>
+        <compatibleModels>	G42_Maus_BPXVIII_3Dst	</compatibleModels>
+        <size>	0.37	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </slot>
       <slot>
@@ -996,6 +1011,53 @@
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
+        <slotId>	15076	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G42_Maus_BPXVIII_3Dst	</compatibleModels>
+        <position>	-0.153405 1.77045 3.87487	</position>
+        <rotation>	0.628696 -0.000009 3.14159	</rotation>
+        <scale>	0.738394 0.166663 0.738369	</scale>
+        <showOn>	16	</showOn>
+        <anchorShift>	0.097962	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15077	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G42_Maus_BPXVIII_3Dst	</compatibleModels>
+        <position>	-1.27579 1.98153 2.91118	</position>
+        <rotation>	-0 -0.000002 3.14158	</rotation>
+        <scale>	0.810979 0.493419 0.835537	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.917481	</clipAngle>
+        <anchorShift>	0.176547	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15078	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G42_Maus_BPXVIII_3Dst	</compatibleModels>
+        <position>	-1.84762 1.69046 2.64589	</position>
+        <rotation>	1.56126 -0.23775 -1.79719	</rotation>
+        <scale>	0.632716 0.03336 0.63272	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.19076	</clipAngle>
+        <anchorShift>	0.060134	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15079	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G42_Maus_BPXVIII_3Dst	</compatibleModels>
+        <position>	1.93265 0.995708 -2.34781	</position>
+        <rotation>	1.56131 0.237074 1.79661	</rotation>
+        <scale>	0.662968 0.198644 0.662971	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.951567	</clipAngle>
+        <anchorShift>	-0.063734	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
         <slotId>	15080	</slotId>
         <tags>	formfactor_square	</tags>
         <compatibleModels>	G42_Maus_SFV_3Dst	</compatibleModels>
@@ -1046,8 +1108,8 @@
     </camouflage>
   </hull>
   <chassis>
-    <Mausketten>
-      <userString>	#germany_vehicles:Mausketten	</userString>
+    <Chassis_G42_Maus>
+      <userString>	#germany_vehicles:Chassis_G42_Maus	</userString>
       <tags></tags>
       <level>	10	</level>
       <price>	82500	</price>
@@ -1057,7 +1119,6 @@
         <rightTrack>	50	</rightTrack>
       </armor>
       <weight>	37250	</weight>
-      <maxLoad>	192900	</maxLoad>
       <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
       <brakeForce>	37800	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -1085,6 +1146,11 @@
             <destroyed>	vehicles/german/G42_Maus/_skins/G42_Maus_BXI_3DSt/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/german/G42_Maus/_skins/G42_Maus_BXI_3DSt/crash/lod0/Chassis.model	</exploded>
           </G42_Maus_BXI_3DSt>
+          <G42_Maus_BPXVIII_3Dst>
+            <undamaged>	vehicles/german/G42_Maus/_skins/G42_Maus_BPXVIII_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G42_Maus/_skins/G42_Maus_BPXVIII_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G42_Maus/_skins/G42_Maus_BPXVIII_3Dst/crash/lod0/Chassis.model	</exploded>
+          </G42_Maus_BPXVIII_3Dst>
           <G42_Maus_SFV_3Dst>
             <undamaged>	vehicles/german/G42_Maus/_skins/G42_Maus_SFV_3Dst/normal/lod0/Chassis.model	</undamaged>
             <destroyed>	vehicles/german/G42_Maus/_skins/G42_Maus_SFV_3Dst/crash/lod0/Chassis.model	</destroyed>
@@ -2357,11 +2423,11 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	8	</repairTime>
-    </Mausketten>
+    </Chassis_G42_Maus>
   </chassis>
   <turrets0>
-    <Mausturm>
-      <userString>	#germany_vehicles:Mausturm	</userString>
+    <Turret_1_G42_Maus>
+      <userString>	#germany_vehicles:Turret_1_G42_Maus	</userString>
       <tags></tags>
       <level>	10	</level>
       <price>	66000	</price>
@@ -2392,7 +2458,11 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_128mm_KwK44_L55>	shared	  <reloadTime>	13.3	</reloadTime>
+        <_128mm_Kw_K_44_L_55>	shared	  <reloadTime>	13.3	</reloadTime>
+          <unlocks>
+            <vehicle>	G187_Taschenratte	  <cost>	325000	</cost>
+            </vehicle>
+          </unlocks>
           <maxAmmo>	68	</maxAmmo>
           <armor>
             <armor_1>	260	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -2432,6 +2502,11 @@
                 <destroyed>	vehicles/german/G42_Maus/_skins/G42_Maus_BXI_3DSt/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/german/G42_Maus/_skins/G42_Maus_BXI_3DSt/crash/lod0/Gun_01.model	</exploded>
               </G42_Maus_BXI_3DSt>
+              <G42_Maus_BPXVIII_3Dst>
+                <undamaged>	vehicles/german/G42_Maus/_skins/G42_Maus_BPXVIII_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/german/G42_Maus/_skins/G42_Maus_BPXVIII_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/german/G42_Maus/_skins/G42_Maus_BPXVIII_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </G42_Maus_BPXVIII_3Dst>
               <G42_Maus_SFV_3Dst>
                 <undamaged>	vehicles/german/G42_Maus/_skins/G42_Maus_SFV_3Dst/normal/lod0/Gun_01.model	</undamaged>
                 <destroyed>	vehicles/german/G42_Maus/_skins/G42_Maus_SFV_3Dst/crash/lod0/Gun_01.model	</destroyed>
@@ -2506,7 +2581,7 @@
             <density>	105.569 103.782	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_128mm_KwK44_L55>
+        </_128mm_Kw_K_44_L_55>
       </guns>
       <models>
         <undamaged>	vehicles/german/G42_Maus/normal/lod0/Turret_01.model	</undamaged>
@@ -2523,6 +2598,11 @@
             <destroyed>	vehicles/german/G42_Maus/_skins/G42_Maus_BXI_3DSt/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/german/G42_Maus/_skins/G42_Maus_BXI_3DSt/crash/lod0/Turret_01.model	</exploded>
           </G42_Maus_BXI_3DSt>
+          <G42_Maus_BPXVIII_3Dst>
+            <undamaged>	vehicles/german/G42_Maus/_skins/G42_Maus_BPXVIII_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/german/G42_Maus/_skins/G42_Maus_BPXVIII_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/german/G42_Maus/_skins/G42_Maus_BPXVIII_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </G42_Maus_BPXVIII_3Dst>
           <G42_Maus_SFV_3Dst>
             <undamaged>	vehicles/german/G42_Maus/_skins/G42_Maus_SFV_3Dst/normal/lod0/Turret_01.model	</undamaged>
             <destroyed>	vehicles/german/G42_Maus/_skins/G42_Maus_SFV_3Dst/crash/lod0/Turret_01.model	</destroyed>
@@ -3041,6 +3121,54 @@
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
+          <slotId>	35040	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G42_Maus_BPXVIII_3Dst	</compatibleModels>
+          <position>	-1.4582 2.53057 0.072535	</position>
+          <rotation>	1.10679 -1.56364 3.121	</rotation>
+          <scale>	0.568051 0.449996 0.584833	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.931683	</clipAngle>
+          <anchorShift>	-0.037463	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35041	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G42_Maus_BPXVIII_3Dst	</compatibleModels>
+          <position>	1.48427 2.48811 -0.060475	</position>
+          <rotation>	1.10683 1.5636 3.121	</rotation>
+          <scale>	0.443908 0.351654 0.457023	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.931683	</clipAngle>
+          <anchorShift>	-0.067467	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35042	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G42_Maus_BPXVIII_3Dst	</compatibleModels>
+          <position>	0.207572 3.48943 -0.1427	</position>
+          <rotation>	-0.000001 -0.000003 3.14159	</rotation>
+          <scale>	0.878856 0.064542 0.891793	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.4535	</clipAngle>
+          <anchorShift>	0.04674	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35043	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G42_Maus_BPXVIII_3Dst	</compatibleModels>
+          <position>	0.431615 3.38259 -2.82436	</position>
+          <rotation>	-3.11535 -0.000006 -0.000046	</rotation>
+          <scale>	0.526227 0.32 0.533974	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.006419	</clipAngle>
+          <anchorShift>	0.166136	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
           <slotId>	35044	</slotId>
           <tags>	formfactor_square	</tags>
           <compatibleModels>	G42_Maus_SFV_3Dst	</compatibleModels>
@@ -3117,10 +3245,10 @@
         <density>	106.865 106.714	</density>
         <aoTextureSize>	1024 512	</aoTextureSize>
       </camouflage>
-    </Mausturm>
+    </Turret_1_G42_Maus>
   </turrets0>
   <engines>
-    <MB507>	shared	</MB507>
+    <DB_603_A2>	shared	</DB_603_A2>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
@@ -3131,13 +3259,13 @@
   <physics>
     <detailed>
       <engines>
-        <MB507>
-          <smplEnginePower>	1850.242	</smplEnginePower>
+        <DB_603_A2>
+          <smplEnginePower>	1950	</smplEnginePower>
           <smplFwMaxSpeed>	20	</smplFwMaxSpeed>
-        </MB507>
+        </DB_603_A2>
       </engines>
       <chassis>
-        <Mausketten>
+        <Chassis_G42_Maus>
           <grounds>
             <soft>
               <rollingFriction>	0.16905	</rollingFriction>
@@ -3149,7 +3277,7 @@
               <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
-        </Mausketten>
+        </Chassis_G42_Maus>
       </chassis>
     </detailed>
   </physics>

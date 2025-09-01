@@ -84,7 +84,7 @@ class BarracksWebApiMixin(object):
             nationID, location = None, _LOCATION.get(location)
             tankType = cmd.tank_type
             role = cmd.role
-        shared_events.showBarracks(location, nationID, tankType, role)
+        shared_events.showBarracks(location=location, nationID=nationID, tankType=tankType, role=role)
         return
 
 

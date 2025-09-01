@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/veh_post_progression/tooltips/level_tooltip_view.py
+from __future__ import absolute_import
 import typing
 from frameworks.wulf import ViewSettings
 from gui.impl.gen import R

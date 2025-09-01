@@ -611,3 +611,12 @@ class IBattleSpamController(IBattleController):
 
     def filterMarkersHitState(self, targetID, stateKey):
         raise NotImplementedError
+
+
+class INitroController(IBattleController):
+
+    def startControl(self, *_):
+        raise NotImplementedError
+
+    def processNitroCmd(self):
+        raise NotImplementedError

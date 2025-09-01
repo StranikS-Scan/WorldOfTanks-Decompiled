@@ -1,0 +1,79 @@
+<engines.xml>
+  <ids>
+    <V-55_LS_BOT>	6000	</V-55_LS_BOT>
+    <V-12-6M_LS_BOT>	6001	</V-12-6M_LS_BOT>
+    <Engine_R77_KV2_Mosquito_LS_BOT>	6004	</Engine_R77_KV2_Mosquito_LS_BOT>
+    <V-54-6_LS_PLAYER>	6005	</V-54-6_LS_PLAYER>
+  </ids>
+  <shared>
+    <V-55_LS_BOT>
+      <userString>	#last_stand.ussr_vehicles.extend:V-55_LS_BOT	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	82300	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	700	</power>
+      <weight>	700	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.001	</fireStartingChance>
+      <rpm_min>	333	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
+      <invulnerable>	True	</invulnerable>
+    </V-55_LS_BOT>
+    <V-12-6M_LS_BOT>
+      <userString>	#last_stand.ussr_vehicles.extend:V-12-6M_LS_BOT	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	84600	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	780	</power>
+      <weight>	1024	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.05	</fireStartingChance>
+      <rpm_min>	312	</rpm_min>
+      <rpm_max>	2264	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </V-12-6M_LS_BOT>
+    <Engine_R77_KV2_Mosquito_LS_BOT>
+      <userString>	#last_stand.ussr_vehicles.extend:Engine_R77_KV2_Mosquito_LS_BOT	</userString>
+      <tags>	diesel	</tags>
+      <level>	6	</level>
+      <price>	27860	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	ev_halloween_2020_turret_eng	</wwsoundPC>
+      <wwsoundNPC>	ev_halloween_2020_turret_eng	</wwsoundNPC>
+      <power>	600	</power>
+      <weight>	750	</weight>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	360	</rpm_min>
+      <rpm_max>	2120	</rpm_max>
+    </Engine_R77_KV2_Mosquito_LS_BOT>
+    <V-54-6_LS_PLAYER>
+      <userString>	#last_stand.ussr_vehicles.extend:V-54-6_LS_PLAYER	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	82300	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	760	</power>
+      <weight>	700	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	317	</rpm_min>
+      <rpm_max>	2248	</rpm_max>
+    </V-54-6_LS_PLAYER>
+  </shared>
+</engines.xml>

@@ -1,0 +1,428 @@
+<GB152_AT_FV230_Breaker_modifications.xml>
+  <gb152_node1>
+    <id>	11601	</id>
+    <imgName>	damagedGunDispersion	</imgName>
+    <locName>	damagedGunDispersion	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/gun/shotDispersionFactors/whileGunDamaged	</name>
+        <value>	0.8	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotDispersionWhileGunDamaged	</name>
+        <value>	0.8	</value>
+      </mul>
+    </kpi>
+  </gb152_node1>
+  <gb152_node2>
+    <id>	11602	</id>
+    <imgName>	chassisRepairSpeed	</imgName>
+    <locName>	chassisRepairSpeed	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/chassisRepairSpeedFactor	</name>
+        <value>	1.1	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleChassisRepairSpeed	</name>
+        <value>	1.1	</value>
+      </mul>
+    </kpi>
+  </gb152_node2>
+  <gb152_node3>
+    <id>	11603	</id>
+    <imgName>	ammoRackPenalty	</imgName>
+    <locName>	ammoRackPenalty	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/ammoBayReduceFineFactor	</name>
+        <value>	0.8	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehPenaltyForDamagedAmmorack	</name>
+        <value>	0.8	</value>
+      </mul>
+    </kpi>
+  </gb152_node3>
+  <gb152_node4>
+    <id>	11604	</id>
+    <imgName>	chassisRepairSpeed	</imgName>
+    <locName>	chassisRepairSpeed	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/chassisRepairSpeedFactor	</name>
+        <value>	1.1	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleChassisRepairSpeed	</name>
+        <value>	1.1	</value>
+      </mul>
+    </kpi>
+  </gb152_node4>
+  <gb152_node5>
+    <id>	11605	</id>
+    <imgName>	additionalShellAmmoCapacity	</imgName>
+    <locName>	additionalShellAmmoCapacity	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/gun/maxAmmo	</name>
+        <value>	10	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	additionalShellAmmoCapacity	</name>
+        <value>	10	</value>
+      </add>
+    </kpi>
+  </gb152_node5>
+  <gb152_node6>
+    <id>	11606	</id>
+    <imgName>	chassisHP	</imgName>
+    <locName>	chassisHP	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/chassisHealthFactor	</name>
+        <value>	1.1	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleChassisStrength	</name>
+        <value>	1.1	</value>
+      </mul>
+    </kpi>
+  </gb152_node6>
+  <gb152_node8>
+    <id>	11608	</id>
+    <imgName>	gb152_mechanic_0	</imgName>
+    <locName>	gb152_mechanic_0	</locName>
+    <categories>	mechanics	</categories>
+    <modifiers>
+      <add>
+        <name>	miscAttrs/powerMode/modeThreshold	</name>
+        <value>	-3	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	value	</name>
+        <value>	-3	</value>
+      </add>
+    </kpi>
+  </gb152_node8>
+  <gb152_node9>
+    <id>	11609	</id>
+    <imgName>	gb152_mechanic_1	</imgName>
+    <locName>	gb152_mechanic_1	</locName>
+    <categories>	mechanics	</categories>
+    <modifiers>
+      <add>
+        <name>	miscAttrs/powerMode/modeDuration	</name>
+        <value>	-2	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	value	</name>
+        <value>	-2	</value>
+      </add>
+    </kpi>
+  </gb152_node9>
+  <gb152_node10>
+    <id>	11610	</id>
+    <imgName>	engineFireChance	</imgName>
+    <locName>	engineFireChance	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <mul>
+        <name>	descrAttrs/engine/fireStartingChance	</name>
+        <value>	0.75	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleFireChance	</name>
+        <value>	0.75	</value>
+      </mul>
+    </kpi>
+  </gb152_node10>
+  <gb152_node11>
+    <id>	11611	</id>
+    <imgName>	standardShellPenetration	</imgName>
+    <locName>	standardShellPenetration	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shot0/piercingPower	</name>
+        <value>	5	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	standardShellPenetration	</name>
+        <value>	5	</value>
+      </add>
+    </kpi>
+  </gb152_node11>
+  <gb152_node12>
+    <id>	11612	</id>
+    <imgName>	enginePower	</imgName>
+    <locName>	enginePower	</locName>
+    <categories>	mobility	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/engine/power	</name>
+        <value>	50	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleEnginePower	</name>
+        <value>	50	</value>
+      </add>
+    </kpi>
+  </gb152_node12>
+  <gb152_node14>
+    <id>	11614	</id>
+    <imgName>	aimingTime	</imgName>
+    <locName>	aimingTime	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/gun/aimingTime	</name>
+        <value>	-0.1	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleGunAimSpeed	</name>
+        <value>	-0.1	</value>
+      </add>
+    </kpi>
+  </gb152_node14>
+  <gb152_node15>
+    <id>	11615	</id>
+    <imgName>	allShellsVelocity	</imgName>
+    <locName>	allShellsVelocity	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shot0/speed	</name>
+        <value>	50	</value>
+      </add>
+      <add>
+        <name>	descrAttrs/shot1/speed	</name>
+        <value>	50	</value>
+      </add>
+      <add>
+        <name>	descrAttrs/shot2/speed	</name>
+        <value>	50	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	allShellsVelocity	</name>
+        <value>	50	</value>
+      </add>
+    </kpi>
+  </gb152_node15>
+  <gb152_node16>
+    <id>	11616	</id>
+    <imgName>	hitPoints	</imgName>
+    <locName>	hitPoints	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/hull/maxHealth	</name>
+        <value>	50	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	vehicleStrength	</name>
+        <value>	50	</value>
+      </add>
+    </kpi>
+  </gb152_node16>
+  <gb152_node17>
+    <id>	11617	</id>
+    <imgName>	gb152_mechanic_2	</imgName>
+    <locName>	gb152_mechanic_2	</locName>
+    <categories>	mechanics	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/powerMode/enginePower	</name>
+        <value>	1.25	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	value	</name>
+        <value>	1.25	</value>
+      </mul>
+    </kpi>
+  </gb152_node17>
+  <gb152_node18>
+    <id>	11618	</id>
+    <imgName>	gunTraverse	</imgName>
+    <locName>	gunTraverse	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/gun/turretYawLimitsDegrees	</name>
+        <value>	2	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	gunTraverse	</name>
+        <value>	2	</value>
+      </add>
+    </kpi>
+  </gb152_node18>
+  <gb152_node19>
+    <id>	11619	</id>
+    <imgName>	specialShellPenetration	</imgName>
+    <locName>	specialShellPenetration	</locName>
+    <categories>	firepower	</categories>
+    <modifiers>
+      <add>
+        <name>	descrAttrs/shot1/piercingPower	</name>
+        <value>	5	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <add>
+        <name>	specialShellPenetration	</name>
+        <value>	5	</value>
+      </add>
+    </kpi>
+  </gb152_node19>
+  <gb152_node21>
+    <id>	11621	</id>
+    <imgName>	crewProtection	</imgName>
+    <locName>	crewProtection	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/crewChanceToHitFactor	</name>
+        <value>	0.8	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	crewHitChance	</name>
+        <value>	1.2	</value>
+      </mul>
+    </kpi>
+  </gb152_node21>
+  <gb152_node22>
+    <id>	11622	</id>
+    <imgName>	stunDuration	</imgName>
+    <locName>	stunDuration	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <add>
+        <name>	miscAttrs/stunResistanceDuration	</name>
+        <value>	0.05	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	crewStunDuration	</name>
+        <value>	0.95	</value>
+      </mul>
+    </kpi>
+  </gb152_node22>
+  <gb152_node23>
+    <id>	11623	</id>
+    <imgName>	HEDamageAbsorption	</imgName>
+    <locName>	HEDamageAbsorption	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/antifragmentationLiningFactor	</name>
+        <value>	1.2	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleHEShellDamageResistance	</name>
+        <value>	0.8	</value>
+      </mul>
+      <mul>
+        <name>	vehicleRamDamageResistance	</name>
+        <value>	0.8	</value>
+      </mul>
+    </kpi>
+  </gb152_node23>
+  <gb152_node24>
+    <id>	11624	</id>
+    <imgName>	enginePenalty	</imgName>
+    <locName>	enginePenalty	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/engineReduceFineFactor	</name>
+        <value>	0.8	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehPenaltyForDamagedEngine	</name>
+        <value>	0.8	</value>
+      </mul>
+    </kpi>
+  </gb152_node24>
+  <gb152_node25>
+    <id>	11625	</id>
+    <imgName>	gb152_mechanic_3	</imgName>
+    <locName>	gb152_mechanic_3	</locName>
+    <categories>	mechanics	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/powerMode/vehicleSpeed	</name>
+        <value>	1.115	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	value	</name>
+        <value>	1.115	</value>
+      </mul>
+    </kpi>
+  </gb152_node25>
+  <gb152_node26>
+    <id>	11626	</id>
+    <imgName>	chassisHP	</imgName>
+    <locName>	chassisHP	</locName>
+    <categories>	survivability	</categories>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/chassisHealthFactor	</name>
+        <value>	1.1	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleChassisStrength	</name>
+        <value>	1.1	</value>
+      </mul>
+    </kpi>
+  </gb152_node26>
+</GB152_AT_FV230_Breaker_modifications.xml>

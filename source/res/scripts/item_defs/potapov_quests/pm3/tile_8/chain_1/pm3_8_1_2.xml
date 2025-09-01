@@ -1,0 +1,76 @@
+<pm3_8_1_2.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm3_8_1_2_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <results>
+            <plus>
+              <key>	damageDealt	</key>
+              <key>	damageBlockedByArmor	</key>
+            </plus>
+            <greaterOrEqual>	2	</greaterOrEqual>
+            <compareWithMaxHealth></compareWithMaxHealth>
+          </results>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	75000	</credits>
+        <goodie>
+          <id>	121001	</id>
+          <count>	1	</count>
+        </goodie>
+        <item>	21241	  <count>	1	</count>
+        </item>
+        <token>
+          <id>	token:pt:final:s3:t8:main	</id>
+          <expires>	01.01.2050 00:01	</expires>
+          <count>	1	</count>
+          <limit>	45	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm3_8_1_2_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <not>
+              <or>
+                <token>
+                  <id>	token:pt:final:s3:t8:main	</id>
+                  <equal>	45	</equal>
+                </token>
+                <token>
+                  <id>	token:pt:s3:t8:finished:honor	</id>
+                  <equal>	1	</equal>
+                </token>
+              </or>
+            </not>
+          </account>
+        </preBattle>
+        <postBattle>
+          <results>
+            <plus>
+              <key>	damageDealt	</key>
+              <key>	damageBlockedByArmor	</key>
+            </plus>
+            <greaterOrEqual>	2	</greaterOrEqual>
+            <compareWithMaxHealth></compareWithMaxHealth>
+          </results>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	pm3:8:points	</id>
+          <expires>	01.12.2050 06:00	</expires>
+          <count>	40	</count>
+        </token>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</pm3_8_1_2.xml>

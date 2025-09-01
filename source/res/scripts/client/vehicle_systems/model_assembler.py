@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/model_assembler.py
+from functools import partial
 import math
 from collections import namedtuple
 import logging
+import weakref
 import Vehicular
 import DataLinks
 import WWISE
@@ -824,20 +826,21 @@ def __assembleAnimationFlagComponent(appearance, attachment, attachments, modelA
 
 
 def loadAppearancePrefab(prefab, appearance, posloadCallback=None):
-
-    def _onLoaded(gameObject):
-        appearance.customizationGameObjects.append(gameObject)
-        if IS_UE_EDITOR:
-            gameObject.removeComponentByType(GenericComponents.DynamicModelComponent)
-        gameObject.createComponent(GenericComponents.RedirectorComponent, appearance.gameObject)
-        gameObject.createComponent(GenericComponents.DynamicModelComponent, appearance.compoundModel)
-        if posloadCallback:
-            posloadCallback(gameObject)
-
+    onLoadedCallback = partial(__onAppearancePrefabLoaded, weakref.proxy(appearance), posloadCallback)
     if appearance.compoundModel:
-        CGF.loadGameObjectIntoHierarchy(prefab, appearance.gameObject, Math.Vector3(0, 0, 0), _onLoaded)
+        CGF.loadGameObjectIntoHierarchy(prefab, appearance.gameObject, Math.Vector3(0, 0, 0), onLoadedCallback)
     else:
-        appearance.pushToLoadingQueue(prefab, appearance.gameObject, Math.Vector3(0, 0, 0), _onLoaded)
+        appearance.pushToLoadingQueue(prefab, appearance.gameObject, Math.Vector3(0, 0, 0), onLoadedCallback)
+
+
+def __onAppearancePrefabLoaded(appearance, posloadCallback, gameObject):
+    appearance.customizationGameObjects.append(gameObject)
+    if IS_UE_EDITOR:
+        gameObject.removeComponentByType(GenericComponents.DynamicModelComponent)
+    gameObject.createComponent(GenericComponents.RedirectorComponent, appearance.gameObject)
+    gameObject.createComponent(GenericComponents.DynamicModelComponent, appearance.compoundModel)
+    if posloadCallback:
+        posloadCallback(gameObject)
 
 
 def __assemblePrefabComponent(appearance, attachment, _, __):

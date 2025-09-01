@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/hangar/notifications/punishment_notification_view.py
+from __future__ import absolute_import
 from enum import Enum
+from past.types import basestring
 from frameworks.wulf import WindowFlags, ViewSettings
 from gui.impl import backport
 from gui.impl.dialogs.dialog_template_button import ConfirmButton

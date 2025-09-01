@@ -19,6 +19,25 @@
       </effects>
     </variant1>
   </groundCollisionLight>
+  <blacksandCollisionLight>
+    <variant1>
+      <timeline>
+        <impactEnd>	5.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_light_blacksand.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <collisionSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	collision_static_object_hull_ground ; collision_static_object_suspension_ground	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
+        </collisionSound>
+      </effects>
+    </variant1>
+  </blacksandCollisionLight>
   <collisionDamage>
     <variant1>
       <timeline>
@@ -51,6 +70,25 @@
       </effects>
     </variant1>
   </groundCollisionHeavy>
+  <blacksandCollisionHeavy>
+    <variant1>
+      <timeline>
+        <impactEnd>	5.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_blacksand.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <collisionSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	collision_static_object_hull_ground ; collision_static_object_suspension_ground	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
+        </collisionSound>
+      </effects>
+    </variant1>
+  </blacksandCollisionHeavy>
   <oilCollisionLight>
     <variant1>
       <timeline>
@@ -374,6 +412,25 @@
       </effects>
     </variant1>
   </groundCollisionWheeledLight>
+  <blacksandCollisionWheeledLight>
+    <variant1>
+      <timeline>
+        <impactEnd>	5.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_light_blacksand.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <collisionSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	collision_static_object_wheel_tech_hull_ground ; collision_static_object_wheel_tech_suspension_ground	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
+        </collisionSound>
+      </effects>
+    </variant1>
+  </blacksandCollisionWheeledLight>
   <oilCollisionWheeledLight>
     <variant1>
       <timeline>
@@ -431,6 +488,25 @@
       </effects>
     </variant1>
   </groundCollisionWheeledHeavy>
+  <blacksandCollisionWheeledHeavy>
+    <variant1>
+      <timeline>
+        <impactEnd>	5.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_blacksand.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <collisionSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	collision_static_object_wheel_tech_hull_ground ; collision_static_object_wheel_tech_suspension_ground	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
+        </collisionSound>
+      </effects>
+    </variant1>
+  </blacksandCollisionWheeledHeavy>
   <oilCollisionWheeledHeavy>
     <variant1>
       <timeline>

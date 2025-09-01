@@ -775,8 +775,8 @@
     </camouflage>
   </hull>
   <chassis>
-    <IS-4>
-      <userString>	#ussr_vehicles:Chassis_IS4	</userString>
+    <Chassis_R90_IS_4M>
+      <userString>	#ussr_vehicles:Chassis_R90_IS_4M	</userString>
       <tags></tags>
       <level>	10	</level>
       <price>	61350	</price>
@@ -786,7 +786,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	66300	</maxLoad>
       <terrainResistance>	1.2 1.6 2.7	</terrainResistance>
       <brakeForce>	39500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -1676,19 +1675,15 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </IS-4>
+    </Chassis_R90_IS_4M>
   </chassis>
   <turrets0>
-    <Turret_710_mod_5>
-      <userString>	#ussr_vehicles:Turret_710_mod_5	</userString>
+    <Turret_1_R90_IS_4M>
+      <userString>	#ussr_vehicles:Turret_1_R90_IS_4M	</userString>
       <tags></tags>
       <level>	10	</level>
       <price>	61100	</price>
       <notInShop>	true	</notInShop>
-      <unlocks>
-        <gun>	_122mm_M62-T2	  <cost>	59300	</cost>
-        </gun>
-      </unlocks>
       <armor>
         <armor_1>	250	</armor_1>
         <armor_2>	230	</armor_2>
@@ -1721,102 +1716,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_122-mm_D-25T_with_wedges_shutter_KV4>	shared	  <maxAmmo>	30	</maxAmmo>
-          <armor>
-            <armor_1>	300	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <gun>	50	</gun>
-          </armor>
-          <shotDispersionRadius>	0.44	</shotDispersionRadius>
-          <reloadTime>	11	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2.9	</aimingTime>
-          <pitchLimits>
-            <minPitch>	0 -16 1 -16	</minPitch>
-            <maxPitch>	0 6 0.405556 6 0.419444 2.9 0.463889 2.9 0.477778 6 0.522222 6 0.536111 2.9 0.580556 2.9 0.594444 6 1 6	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <models>
-            <undamaged>	vehicles/russian/R90_IS_4M/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/russian/R90_IS_4M/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/russian/R90_IS_4M/crash/lod0/Gun_01.model	</exploded>
-            <sets>
-              <R90_IS_4M_3Dst_BP>
-                <undamaged>	vehicles/russian/R90_IS_4M/_skins/R90_IS_4M_3Dst_BP/normal/lod0/Gun_01.model	</undamaged>
-                <destroyed>	vehicles/russian/R90_IS_4M/_skins/R90_IS_4M_3Dst_BP/crash/lod0/Gun_01.model	</destroyed>
-                <exploded>	vehicles/russian/R90_IS_4M/_skins/R90_IS_4M_3Dst_BP/crash/lod0/Gun_01.model	</exploded>
-              </R90_IS_4M_3Dst_BP>
-              <R90_IS_4M_3DSt_TIR>
-                <undamaged>	vehicles/russian/R90_IS_4M/_skins/R90_IS_4M_3DSt_TIR/normal/lod0/Gun_01.model	</undamaged>
-                <destroyed>	vehicles/russian/R90_IS_4M/_skins/R90_IS_4M_3DSt_TIR/crash/lod0/Gun_01.model	</destroyed>
-                <exploded>	vehicles/russian/R90_IS_4M/_skins/R90_IS_4M_3DSt_TIR/crash/lod0/Gun_01.model	</exploded>
-              </R90_IS_4M_3DSt_TIR>
-            </sets>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/russian/R90_IS_4M/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R90_IS_4M/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_large_mb	</effects>
-          <reloadEffect>	reload115_152	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0 -0.006826 2.17469	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.27715 0.27715	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0 -0.006826 2.17469	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0 -0.013652 1.31542	</rayStart>
-              <rayEnd>	0 -0.013652 1.96542	</rayEnd>
-              <rayUp>	0.11 0 0	</rayUp>
-              <size>	0.65	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <tiling>	0.475 0.475 0.000000 0.000000	</tiling>
-            <density>	116.654 139.905	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_122-mm_D-25T_with_wedges_shutter_KV4>
-        <_122mm_M62-T2>	shared	  <maxAmmo>	30	</maxAmmo>
+        <_122mm_M62_T2>	shared	  <maxAmmo>	40	</maxAmmo>
           <armor>
             <armor_1>	300	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -1910,7 +1810,7 @@
             <density>	127.065 148.379	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_122mm_M62-T2>
+        </_122mm_M62_T2>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R90_IS_4M/normal/lod0/Turret_01.model	</undamaged>
@@ -2615,10 +2515,10 @@
         <density>	93.447 93.8924	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_710_mod_5>
+    </Turret_1_R90_IS_4M>
   </turrets0>
   <engines>
-    <V-12>	shared	</V-12>
+    <V_12>	shared	</V_12>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
@@ -2629,13 +2529,13 @@
   <physics>
     <detailed>
       <engines>
-        <V-12>
-          <smplEnginePower>	792.9609	</smplEnginePower>
+        <V_12>
+          <smplEnginePower>	850	</smplEnginePower>
           <smplFwMaxSpeed>	43	</smplFwMaxSpeed>
-        </V-12>
+        </V_12>
       </engines>
       <chassis>
-        <IS-4>
+        <Chassis_R90_IS_4M>
           <grounds>
             <soft>
               <rollingFriction>	0.21735	</rollingFriction>
@@ -2647,7 +2547,7 @@
               <rollingFriction>	0.0966	</rollingFriction>
             </firm>
           </grounds>
-        </IS-4>
+        </Chassis_R90_IS_4M>
       </chassis>
     </detailed>
   </physics>

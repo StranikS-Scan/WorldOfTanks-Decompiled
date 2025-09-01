@@ -931,6 +931,11 @@
       <wwsound>	ambient_trees_green_bush_few_foliage_01	</wwsound>
     </model>
     <model>
+      <modelName>	vegetation/Broadleaves/Shrubs/Bush_Wild_Autumn_Semidry/Bush_Wild_Autumn_Semidry_5m.srt	</modelName>
+      <offset>	0.000000 1.500000 0.000000	</offset>
+      <wwsound>	ambient_trees_green_bush_few_foliage_01	</wwsound>
+    </model>
+    <model>
       <modelName>	vegetation/Misc/Dune_Grass/Dune_Grass_02.srt	</modelName>
       <offset>	0.000000 0.700000 0.000000	</offset>
       <wwsoundName></wwsoundName>
@@ -1187,6 +1192,11 @@
     </model>
     <model>
       <modelName>	vegetation/Broadleaves/Shrubs/Bush_Wild_Autumn/Bush_Wild_Autumn_7m.srt	</modelName>
+      <offset>	0.000000 1.000000 0.000000	</offset>
+      <wwsound>	ambient_bush_yellow_dry_small_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Shrubs/Bush_Wild_Autumn_Semidry/Bush_Wild_Autumn_Semidry_7m.srt	</modelName>
       <offset>	0.000000 1.000000 0.000000	</offset>
       <wwsound>	ambient_bush_yellow_dry_small_01	</wwsound>
     </model>
@@ -1561,6 +1571,11 @@
       <wwsound>	ambient_trees_yellow_dry_comb_small_01	</wwsound>
     </model>
     <model>
+      <modelName>	vegetation/Broadleaves/Shrubs/Bush_Wild_Autumn_Semidry/Bush_Wild_Autumn_Semidry_2m.srt	</modelName>
+      <offset>	0.000000 0.500000 0.000000	</offset>
+      <wwsound>	ambient_trees_yellow_dry_comb_small_01	</wwsound>
+    </model>
+    <model>
       <modelName>	vegetation/Misc/Dune_Grass/Dune_Grass_01.srt	</modelName>
       <offset>	0.000000 0.500000 0.000000	</offset>
       <wwsoundName></wwsoundName>
@@ -1628,6 +1643,11 @@
     <model>
       <modelName>	vegetation/Broadleaves/Shrubs/Bush_Wild_Autumn/Bush_Wild_Autumn_10m_Bend.srt	</modelName>
       <offset>	0.000000 2.000000 0.000000	</offset>
+      <wwsound>	ambient_bush_yellow_dry_big_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Shrubs/Bush_Wild_Autumn_Semidry/Bush_Wild_Autumn_Semidry_10m_Bend.srt	</modelName>
+      <offset>	0.000000 5.000000 0.000000	</offset>
       <wwsound>	ambient_bush_yellow_dry_big_01	</wwsound>
     </model>
     <model>
@@ -1716,29 +1736,9 @@
       <wwsound>	ambient_trees_without_foliage_bush_big_01	</wwsound>
     </model>
     <model>
-      <modelName>	vegetation/Conifers/Scots_Pine/Scots_Pine_hv3_3.srt	</modelName>
-      <offset>	0.000000 20.000000 0.000000	</offset>
-      <wwsound>	ambient_trees_coniferous_01	</wwsound>
-    </model>
-    <model>
       <modelName>	content/Decor/hd_env403_TownEnv_StreetLamp6/normal/lod0/hd_env403_TownEnv_StreetLamp6_anim.model	</modelName>
       <offset>	0.000000 8.000000 0.000000	</offset>
       <wwsound>	amb_map_95_streetlamp	</wwsound>
-    </model>
-    <model>
-      <modelName>	particles/Environment/interior/83_kharkiv_firesmoke.eff	</modelName>
-      <offset>	0 0.5 0	</offset>
-      <wwsound>	ambient_burn_static_big	</wwsound>
-    </model>
-    <model>
-      <modelName>	vegetation/Broadleaves/Linden_Town_Dry_Snow/Linden_Town_Dry_Snow_16m.srt	</modelName>
-      <offset>	0.000000 8.000000 0.000000	</offset>
-      <wwsound>	ambient_trees_without_foliage_tree_big_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	vegetation/Broadleaves/Linden_Town_Dry_Snow/Linden_Town_Dry_Snow_17m.srt	</modelName>
-      <offset>	0.000000 9.000000 0.000000	</offset>
-      <wwsound>	ambient_trees_without_foliage_tree_big_01	</wwsound>
     </model>
     <model>
       <modelName>	vegetation/Broadleaves/Linden_High_Bald_Snow/Linden_High_Bald_Snow_16m.srt	</modelName>
@@ -1748,11 +1748,6 @@
     <model>
       <modelName>	vegetation/Broadleaves/Linden_High_Bald_Snow/Linden_High_Bald_Snow_17m.srt	</modelName>
       <offset>	0.000000 13.000000 0.000000	</offset>
-      <wwsound>	ambient_trees_without_foliage_tree_big_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	vegetation/Broadleaves/DryTree_Snow/DryTree_Snow_6m.srt	</modelName>
-      <offset>	0.000000 4.000000 0.000000	</offset>
       <wwsound>	ambient_trees_without_foliage_tree_big_01	</wwsound>
     </model>
     <model>
@@ -1849,11 +1844,6 @@
       <modelName>	vegetation/Conifers/Pine_Young_Snow/Pine_Young_Snow_2m.srt	</modelName>
       <offset>	0.000000 1.000000 0.000000	</offset>
       <wwsound>	ambient_trees_coniferous_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	vegetation/Broadleaves/Shrubs/Bush_Wild_Dry_Frost/Bush_Wild_Dry_Frost_5m.srt	</modelName>
-      <offset>	0.000000 2.000000 0.000000	</offset>
-      <wwsound>	ambient_trees_without_foliage_bush_big_01	</wwsound>
     </model>
     <model>
       <modelName>	vegetation/Broadleaves/Linden_High_Bald/Linden_High_Bald_17m.srt	</modelName>
@@ -2026,61 +2016,6 @@
       <wwsound>	ambient_bush_yellow_dry_small_01	</wwsound>
     </model>
     <model>
-      <modelName>	vegetation/Broadleaves/DryTree_Autumn/DryTree_Autumn_01.srt	</modelName>
-      <offset>	0.000000 5.000000 0.000000	</offset>
-      <wwsound>	ambient_trees_yellow_soft_comb_mid_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	vegetation/Broadleaves/DryTree_Autumn/DryTree_Autumn_6m.srt	</modelName>
-      <offset>	0.000000 3.000000 0.000000	</offset>
-      <wwsound>	ambient_trees_yellow_dry_comb_small_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	vegetation/Broadleaves/Maple_Autumn_Fallen/Maple_Autumn_Fallen_2m.srt	</modelName>
-      <offset>	0.000000 1.700000 0.000000	</offset>
-      <wwsound>	ambient_trees_yellow_soft_comb_small_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	vegetation/Broadleaves/Maple_Autumn_Fallen/Maple_Autumn_Fallen_4-5m_dry.srt	</modelName>
-      <offset>	0.000000 2.000000 0.000000	</offset>
-      <wwsound>	ambient_trees_without_foliage_bush_big_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	vegetation/Broadleaves/Maple_Autumn_Fallen/Maple_Autumn_Fallen_4m_dry.srt	</modelName>
-      <offset>	0.000000 2.000000 0.000000	</offset>
-      <wwsound>	ambient_trees_without_foliage_bush_big_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	vegetation/Broadleaves/Maple_Autumn_Fallen/Maple_Autumn_Fallen_12m.srt	</modelName>
-      <offset>	0.000000 4.000000 0.000000	</offset>
-      <wwsound>	ambient_trees_yellow_soft_comb_big_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	vegetation/Broadleaves/Maple_Autumn_Fallen/Maple_Autumn_Fallen_21m.srt	</modelName>
-      <offset>	0.000000 5.000000 0.000000	</offset>
-      <wwsound>	ambient_trees_yellow_soft_comb_big_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	vegetation/Broadleaves/Shrubs/Bush_Wild_Autumn_Fallen/Bush_Wild_Autumn_Fallen_5m.srt	</modelName>
-      <offset>	0.000000 1.000000 0.000000	</offset>
-      <wwsound>	ambient_trees_yellow_dry_comb_small_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	vegetation/Broadleaves/Shrubs/Bush_Wild_Autumn_Fallen/Bush_Wild_Autumn_Fallen_7m.srt	</modelName>
-      <offset>	0.000000 1.000000 0.000000	</offset>
-      <wwsound>	ambient_trees_yellow_dry_comb_small_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	vegetation/Broadleaves/Shrubs/Hawthorn_Autumn_Fallen/Hawthorn_Autumn_Fallen_01.srt	</modelName>
-      <offset>	0.000000 2.000000 0.000000	</offset>
-      <wwsound>	ambient_bush_yellow_dry_big_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	vegetation/Broadleaves/Shrubs/Hawthorn_Autumn_Fallen/Hawthorn_Autumn_Fallen_05.srt	</modelName>
-      <offset>	0.000000 1.500000 0.000000	</offset>
-      <wwsound>	ambient_bush_yellow_dry_big_01	</wwsound>
-    </model>
-    <model>
       <modelName>	vegetation/Broadleaves/Shrubs/Aucuba/Aucuba_5m.srt	</modelName>
       <offset>	0.000000 0.000000 0.000000	</offset>
       <wwsound>	ambient_trees_green_comb_mid_01	</wwsound>
@@ -2098,26 +2033,6 @@
     <model>
       <modelName>	vegetation/Broadleaves/Neolitsea_Aciculata/Neolitsea_Aciculata_15m.srt	</modelName>
       <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ambient_trees_large_leaves_comb_mid_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	speedtree/31_airfield/BananaTree.spt	</modelName>
-      <offset>	0 9 0	</offset>
-      <wwsound>	ambient_trees_large_leaves_comb_small_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	speedtree/31_airfield/DatePalm_01.spt	</modelName>
-      <offset>	0 10.5 0	</offset>
-      <wwsound>	ambient_trees_large_leaves_comb_mid_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	speedtree/31_airfield/DatePalm_02.spt	</modelName>
-      <offset>	0 5.5 0	</offset>
-      <wwsound>	ambient_trees_large_leaves_comb_small_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	speedtree/31_airfield/DatePalmDry.spt	</modelName>
-      <offset>	0 10 0	</offset>
       <wwsound>	ambient_trees_large_leaves_comb_mid_01	</wwsound>
     </model>
     <model>
@@ -3190,490 +3105,6 @@
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
     </cliff_bomber_clin_5>
-    <minsk_helic_1>
-      <channel0>
-        <modelName>	particles/content_deferred/GFX_models/environment/90_minsk/helicopter_03.model	</modelName>
-        <rollMagnitude>	1.000000	</rollMagnitude>
-        <rollRelaxation>	1.000000	</rollRelaxation>
-        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
-        <tesselationFactor>	40	</tesselationFactor>
-        <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
-        <wwsoundName>	amb_map_90_minsk_helicopter	</wwsoundName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/90_minsk_helicopter_fly.eff	</effectName>
-      </channel0>
-      <point>
-        <position>	-2141.129883 58.696899 -2206.830078	</position>
-        <speed0>	60.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	Animation_helicopter_03	</animAction>
-      </point>
-      <point>
-        <position>	-448.307007 58.108501 -110.783997	</position>
-        <speed0>	60.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	Animation_helicopter_03	</animAction>
-      </point>
-      <point>
-        <position>	-300.174988 58.125702 318.316986	</position>
-        <speed0>	60.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	Animation_helicopter_03	</animAction>
-      </point>
-      <point>
-        <position>	-527.280334 38.624496 2048.029785	</position>
-        <speed0>	60.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	Animation_helicopter_03	</animAction>
-      </point>
-    </minsk_helic_1>
-    <minsk_helic_2>
-      <channel0>
-        <modelName>	particles/content_deferred/GFX_models/environment/90_minsk/helicopter_03.model	</modelName>
-        <rollMagnitude>	1.000000	</rollMagnitude>
-        <rollRelaxation>	1.000000	</rollRelaxation>
-        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
-        <tesselationFactor>	40	</tesselationFactor>
-        <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
-        <wwsoundName>	amb_map_90_minsk_helicopter	</wwsoundName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/90_minsk_helicopter_fly.eff	</effectName>
-      </channel0>
-      <point>
-        <position>	-2142.411621 67.702728 -2254.549316	</position>
-        <speed0>	60.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	Animation_helicopter_03	</animAction>
-      </point>
-      <point>
-        <position>	-459.267792 64.709229 -156.319809	</position>
-        <speed0>	60.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	Animation_helicopter_03	</animAction>
-      </point>
-      <point>
-        <position>	-306.243805 65.209503 297.317139	</position>
-        <speed0>	60.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	Animation_helicopter_03	</animAction>
-      </point>
-      <point>
-        <position>	-520.360901 43.470276 2000.118896	</position>
-        <speed0>	60.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	Animation_helicopter_03	</animAction>
-      </point>
-    </minsk_helic_2>
-    <minsk_helic_3>
-      <channel0>
-        <modelName>	particles/content_deferred/GFX_models/environment/90_minsk/helicopter_03.model	</modelName>
-        <rollMagnitude>	1.000000	</rollMagnitude>
-        <rollRelaxation>	1.000000	</rollRelaxation>
-        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
-        <tesselationFactor>	40	</tesselationFactor>
-        <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
-        <wwsoundName>	amb_map_90_minsk_helicopter	</wwsoundName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/90_minsk_helicopter_fly.eff	</effectName>
-      </channel0>
-      <point>
-        <position>	1191.682739 81.293282 -2335.610352	</position>
-        <speed0>	60.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	Animation_helicopter_03	</animAction>
-      </point>
-      <point>
-        <position>	250.677933 72.701408 -706.963867	</position>
-        <speed0>	60.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	Animation_helicopter_03	</animAction>
-      </point>
-      <point>
-        <position>	-126.288948 39.887993 -71.769180	</position>
-        <speed0>	60.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	Animation_helicopter_03	</animAction>
-      </point>
-      <point>
-        <position>	-223.927994 66.467552 324.538910	</position>
-        <speed0>	60.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	Animation_helicopter_03	</animAction>
-      </point>
-      <point>
-        <position>	-426.451996 23.700800 2074.090088	</position>
-        <speed0>	50.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	Animation_helicopter_03	</animAction>
-      </point>
-    </minsk_helic_3>
-    <minsk_helic_4>
-      <channel0>
-        <modelName>	particles/content_deferred/GFX_models/environment/90_minsk/helicopter_03.model	</modelName>
-        <rollMagnitude>	1.000000	</rollMagnitude>
-        <rollRelaxation>	1.000000	</rollRelaxation>
-        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
-        <tesselationFactor>	40	</tesselationFactor>
-        <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
-        <wwsoundName>	amb_map_90_minsk_helicopter	</wwsoundName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/90_minsk_helicopter_fly.eff	</effectName>
-      </channel0>
-      <point>
-        <position>	1214.666748 90.960815 -2409.489258	</position>
-        <speed0>	60.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	Animation_helicopter_03	</animAction>
-      </point>
-      <point>
-        <position>	257.377533 80.783592 -741.273743	</position>
-        <speed0>	60.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	Animation_helicopter_03	</animAction>
-      </point>
-      <point>
-        <position>	-128.252808 42.829346 -105.556366	</position>
-        <speed0>	60.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	Animation_helicopter_03	</animAction>
-      </point>
-      <point>
-        <position>	-211.796280 69.358246 309.610046	</position>
-        <speed0>	60.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	Animation_helicopter_03	</animAction>
-      </point>
-      <point>
-        <position>	-409.163025 34.947521 2017.548462	</position>
-        <speed0>	60.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	Animation_helicopter_03	</animAction>
-      </point>
-    </minsk_helic_4>
-    <minsk_helic_5>
-      <channel0>
-        <modelName>	particles/content_deferred/GFX_models/environment/90_minsk/helicopter_03.model	</modelName>
-        <rollMagnitude>	1.000000	</rollMagnitude>
-        <rollRelaxation>	1.000000	</rollRelaxation>
-        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
-        <wwsoundName>	amb_map_90_minsk_helicopter	</wwsoundName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/90_minsk_helicopter_fly.eff	</effectName>
-      </channel0>
-      <point>
-        <position>	3137.806885 107.385643 42.440277	</position>
-        <speed0>	60.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	Animation_helicopter_03	</animAction>
-      </point>
-      <point>
-        <position>	103.365173 57.134830 4.605158	</position>
-        <speed0>	60.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	Animation_helicopter_03	</animAction>
-      </point>
-      <point>
-        <position>	-168.106918 59.067730 400.374725	</position>
-        <speed0>	60.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	Animation_helicopter_03	</animAction>
-      </point>
-      <point>
-        <position>	-316.175446 44.768360 2025.102051	</position>
-        <speed0>	60.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	Animation_helicopter_03	</animAction>
-      </point>
-    </minsk_helic_5>
-    <minsk_helic_6>
-      <channel0>
-        <modelName>	particles/content_deferred/GFX_models/environment/90_minsk/helicopter_03.model	</modelName>
-        <rollMagnitude>	1.000000	</rollMagnitude>
-        <rollRelaxation>	1.000000	</rollRelaxation>
-        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
-        <wwsoundName>	amb_map_90_minsk_helicopter	</wwsoundName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/90_minsk_helicopter_fly.eff	</effectName>
-      </channel0>
-      <point>
-        <position>	3225.398682 80.428421 17.182159	</position>
-        <speed0>	60.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	Animation_helicopter_03	</animAction>
-      </point>
-      <point>
-        <position>	147.646027 55.606850 6.049060	</position>
-        <speed0>	60.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	Animation_helicopter_03	</animAction>
-      </point>
-      <point>
-        <position>	-177.821381 69.789009 393.626923	</position>
-        <speed0>	55.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	Animation_helicopter_03	</animAction>
-      </point>
-      <point>
-        <position>	-339.453339 44.930393 1969.338623	</position>
-        <speed0>	60.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	Animation_helicopter_03	</animAction>
-      </point>
-    </minsk_helic_6>
-    <minsk_aircraft_1>
-      <channel0>
-        <modelName>	content/MilitaryEnvironment/hd_mle_SU_007_Mig21/normal/lod0/hd_mle_SU_007_Mig21.model	</modelName>
-        <rollMagnitude>	1.000000	</rollMagnitude>
-        <rollRelaxation>	1.000000	</rollRelaxation>
-        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
-        <wwsoundName>	amb_map_90_minsk_aircraft_fast	</wwsoundName>
-        <effectHardpoint>	HP_module0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/90_minsk_aircraft_smoke.eff	</effectName>
-      </channel0>
-      <point>
-        <position>	-478.351746 34.708214 -1757.071167	</position>
-        <speed0>	200.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-0.477630 85.095055 -705.694092	</position>
-        <speed0>	200.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	138.528305 122.887886 324.071808	</position>
-        <speed0>	200.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	199.646622 602.947998 1565.912231	</position>
-        <speed0>	200.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	587.283508 280.114410 2687.702148	</position>
-        <speed0>	200.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	1266.007690 123.013924 4013.351807	</position>
-        <speed0>	200.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-    </minsk_aircraft_1>
-    <minsk_aircraft_21>
-      <channel0>
-        <modelName>	content/MilitaryEnvironment/hd_mle_SU_007_Mig21/normal/lod0/hd_mle_SU_007_Mig21.model	</modelName>
-        <rollMagnitude>	1.000000	</rollMagnitude>
-        <rollRelaxation>	1.000000	</rollRelaxation>
-        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
-        <wwsoundName>	amb_map_90_minsk_aircraft_fast	</wwsoundName>
-        <effectHardpoint>	HP_module0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/90_minsk_aircraft_smoke.eff	</effectName>
-      </channel0>
-      <point>
-        <position>	537.468262 68.312111 -1764.076904	</position>
-        <speed0>	200.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	381.355621 81.876884 -881.873169	</position>
-        <speed0>	200.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	345.927124 81.753357 169.466309	</position>
-        <speed0>	200.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	531.104492 388.654724 1378.106079	</position>
-        <speed0>	200.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	668.115967 200.258896 2619.501953	</position>
-        <speed0>	200.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	1380.705566 104.126213 4083.327148	</position>
-        <speed0>	200.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-    </minsk_aircraft_21>
-    <minsk_aircraft_22>
-      <channel0>
-        <modelName>	content/MilitaryEnvironment/hd_mle_SU_007_Mig21/normal/lod0/hd_mle_SU_007_Mig21.model	</modelName>
-        <rollMagnitude>	1.000000	</rollMagnitude>
-        <rollRelaxation>	1.000000	</rollRelaxation>
-        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
-        <wwsoundName>	amb_map_90_minsk_aircraft_fast	</wwsoundName>
-        <effectHardpoint>	HP_module0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/90_minsk_aircraft_smoke.eff	</effectName>
-      </channel0>
-      <point>
-        <position>	556.956604 73.017227 -1928.031860	</position>
-        <speed0>	200.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	369.716675 100.615234 -1033.690430	</position>
-        <speed0>	200.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	175.263184 90.344513 -42.325977	</position>
-        <speed0>	200.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	78.446930 470.464661 1064.521362	</position>
-        <speed0>	200.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	412.242889 268.185150 2374.863525	</position>
-        <speed0>	200.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	1067.302979 125.571556 3879.318848	</position>
-        <speed0>	200.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-    </minsk_aircraft_22>
-    <minsk_aircraft_31>
-      <channel0>
-        <modelName>	content/MilitaryEnvironment/hd_mle_SU_007_Mig21/normal/lod0/hd_mle_SU_007_Mig21.model	</modelName>
-        <rollMagnitude>	1.000000	</rollMagnitude>
-        <rollRelaxation>	1.000000	</rollRelaxation>
-        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
-        <wwsoundName>	amb_map_90_minsk_aircraft_med	</wwsoundName>
-        <effectHardpoint>	HP_module0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/90_minsk_aircraft_smoke.eff	</effectName>
-      </channel0>
-      <point>
-        <position>	-2877.725586 85.350212 566.972595	</position>
-        <speed0>	200.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-652.286621 121.945457 26.256445	</position>
-        <speed0>	200.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	49.121014 78.652611 322.048584	</position>
-        <speed0>	180.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	1000.711792 112.556335 532.494202	</position>
-        <speed0>	200.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	3648.547852 67.133354 608.060852	</position>
-        <speed0>	200.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-    </minsk_aircraft_31>
-    <minsk_aircraft_32>
-      <channel0>
-        <modelName>	content/MilitaryEnvironment/hd_mle_SU_007_Mig21/normal/lod0/hd_mle_SU_007_Mig21.model	</modelName>
-        <rollMagnitude>	1.000000	</rollMagnitude>
-        <rollRelaxation>	1.000000	</rollRelaxation>
-        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	1000.000000 1000.000000	</alphaFadeDistances>
-        <wwsoundName>	amb_map_90_minsk_aircraft_med	</wwsoundName>
-        <effectHardpoint>	HP_module0	</effectHardpoint>
-        <effectName>	particles/Environment/scenarios/90_minsk_aircraft_smoke.eff	</effectName>
-      </channel0>
-      <point>
-        <position>	2091.699951 63.516106 -458.988831	</position>
-        <speed0>	200.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	809.354980 94.162300 64.738602	</position>
-        <speed0>	200.000000	</speed0>
-        <oscillation0>	0.500000 1.000000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	56.867100 86.118301 58.781700	</position>
-        <speed0>	200.000000	</speed0>
-        <oscillation0>	2.000000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-220.270004 114.990997 -155.235001	</position>
-        <speed0>	200.000000	</speed0>
-        <oscillation0>	1.000000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-588.612976 235.292007 -574.281006	</position>
-        <speed0>	200.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-2475.649902 60.919201 -1145.829956	</position>
-        <speed0>	200.000000	</speed0>
-        <oscillation0>	0.500000 1.000000	</oscillation0>
-        <animAction></animAction>
-      </point>
-    </minsk_aircraft_32>
     <ensk_airplane_fly>
       <channel0>
         <modelName>	content/Environment/env713_BF109G/normal/lod0/env713_BF109G.model	</modelName>

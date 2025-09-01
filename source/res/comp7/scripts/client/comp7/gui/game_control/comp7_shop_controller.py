@@ -48,6 +48,7 @@ class Comp7ShopController(IComp7ShopController):
         self.__categoriesToRanks = None
         self.__ranksToCategories = None
         self.__notifiedRanks = None
+        self.__cachedProductsRankNumber = None
         self.__status = None
         self.__isShopEnabled = None
         self.__eventsManager = Event.EventManager()
@@ -67,8 +68,10 @@ class Comp7ShopController(IComp7ShopController):
         self.__categoriesToRanks = {}
         self.__ranksToCategories = {}
         self.__notifiedRanks = set()
+        self.__cachedProductsRankNumber = None
         self.__status = ShopControllerStatus.IDLE
         self.__isShopEnabled = False
+        return
 
     def fini(self):
         super(Comp7ShopController, self).fini()
@@ -78,17 +81,18 @@ class Comp7ShopController(IComp7ShopController):
         self.__categoriesToRanks = None
         self.__ranksToCategories = None
         self.__notifiedRanks = None
+        self.__cachedProductsRankNumber = None
         self.__status = None
         self.__isShopEnabled = None
         return
 
     def onConnected(self):
         self.__comp7Controller.onNewMaxRank += self.__onNewMaxRank
-        self.__comp7Controller.onComp7ConfigChanged += self.__onConfigChanged
+        self.__comp7Controller.onModeConfigChanged += self.__onConfigChanged
 
     def onDisconnected(self):
         self.__comp7Controller.onNewMaxRank -= self.__onNewMaxRank
-        self.__comp7Controller.onComp7ConfigChanged -= self.__onConfigChanged
+        self.__comp7Controller.onModeConfigChanged -= self.__onConfigChanged
         self.__status = None
         self.__products.clear()
         self.__ranksToCategories.clear()
@@ -96,6 +100,7 @@ class Comp7ShopController(IComp7ShopController):
         self.__categoriesDiscounts.clear()
         self.__ranksDiscounts.clear()
         self.__notifiedRanks.clear()
+        self.__cachedProductsRankNumber = None
         self.__isShopEnabled = None
         return
 
@@ -104,6 +109,7 @@ class Comp7ShopController(IComp7ShopController):
         if self.__status in (ShopControllerStatus.PENDING, ShopControllerStatus.DATA_READY) and not force:
             return
         self.__setStatus(ShopControllerStatus.PENDING)
+        self.__cachedProductsRankNumber = self.__comp7Controller.getMaxRankNumberForSeason()
         response = yield wg_await(self.__shopController.fetchProducts(self.__PRODUCTS_STOREFRONT, force))
         if not self.__isResponseReadyToProcess(response):
             self.__resetCache()
@@ -162,6 +168,16 @@ class Comp7ShopController(IComp7ShopController):
         currentRankDiscounts = {k:v for k, v in currentRankDiscounts.iteritems() if v > 0}
         return prevRankDiscounts != currentRankDiscounts
 
+    def validateCachedProducts(self):
+        if self.__cachedProductsRankNumber is None:
+            return
+        else:
+            maxAchievedRankNumber = self.__comp7Controller.getMaxRankNumberForSeason()
+            if not maxAchievedRankNumber or self.__cachedProductsRankNumber == maxAchievedRankNumber:
+                return
+            self.__requestProducts(force=True)
+            return
+
     @wg_async
     def __onNewMaxRank(self, newMaxRank):
         if not self.__isShopEnabled or newMaxRank in self.__notifiedRanks:
@@ -193,6 +209,8 @@ class Comp7ShopController(IComp7ShopController):
         self.__categoriesToRanks.clear()
         self.__categoriesDiscounts.clear()
         self.__ranksDiscounts.clear()
+        self.__cachedProductsRankNumber = None
+        return
 
     def __setStatus(self, status):
         self.__status = status

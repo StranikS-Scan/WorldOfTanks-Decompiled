@@ -8,21 +8,13 @@ if typing.TYPE_CHECKING:
     from typing import Optional
 _logger = logging.getLogger(__name__)
 
-def _normalizeGfPath(resourcePath, protocol):
-    if not isinstance(resourcePath, (str, unicode)) or not resourcePath:
-        _logger.warning('Wrong resource path: %s.', resourcePath)
+def normalizeGfImagePath(imgPath):
+    if not isinstance(imgPath, (str, unicode)) or not imgPath:
+        _logger.warning('Wrong image path: %s.', imgPath)
         return None
     else:
-        newPath = getAbsoluteUrl(str(resourcePath))
+        newPath = getAbsoluteUrl(str(imgPath))
         newPath = newPath.replace('\\', '/')
-        if not newPath.startswith(protocol):
-            newPath = ''.join((protocol, newPath))
+        if not newPath.startswith(GF_RES_PROTOCOL.IMG):
+            newPath = ''.join((GF_RES_PROTOCOL.IMG, newPath))
         return newPath
-
-
-def normalizeGfImagePath(imgPath):
-    return _normalizeGfPath(imgPath, GF_RES_PROTOCOL.IMG)
-
-
-def normalizeGfVideoPath(videoPath):
-    return _normalizeGfPath(videoPath, GF_RES_PROTOCOL.VIDEO)

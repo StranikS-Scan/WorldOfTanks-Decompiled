@@ -1,0 +1,25 @@
+<SupportWeaponComponent.def>
+  <DetailLevel>	MY_VEHICLE	</DetailLevel>
+  <Properties>
+    <vehTypeCD>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehTypeCD>
+    <status>
+      <Type>	SUPPORT_WEAPON_STATUS	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </status>
+  </Properties>
+  <CellMethods>
+    <onSecondaryGunUpdate>
+      <Arg>	UINT8	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+    </onSecondaryGunUpdate>
+    <tryActivate>
+      <Exposed>	OWN_CLIENT	</Exposed>
+    </tryActivate>
+  </CellMethods>
+  <ClientMethods></ClientMethods>
+  <DefaultKeyName>	supportWeaponComponent	</DefaultKeyName>
+</SupportWeaponComponent.def>

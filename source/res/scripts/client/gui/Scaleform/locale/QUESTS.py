@@ -9,7 +9,6 @@ class QUESTS(object):
     MISSIONS_TAB_EVENTBOARDS = '#quests:missions/tab/eventBoards'
     MISSIONS_TAB_CATEGORIES = '#quests:missions/tab/categories'
     MISSIONS_TAB_CURRENTVEHICLE = '#quests:missions/tab/currentVehicle'
-    MISSIONS_TAB_BATTLE_PASS = '#quests:missions/tab/battle_pass'
     MISSIONS_TAB_DAILY = '#quests:missions/tab/daily'
     MISSIONS_TAB_MAPBOX = '#quests:missions/tab/mapbox'
     MISSIONS_TAB_MAY21_MARATHON = '#quests:missions/tab/may21_marathon'
@@ -305,6 +304,7 @@ class QUESTS(object):
     DETAILS_CONDITIONS_VEHICLESKILLS_TITLE = '#quests:details/conditions/vehiclesKills/title'
     DETAILS_CONDITIONS_VEHICLESKILLS_TITLE_NOT = '#quests:details/conditions/vehiclesKills/title/not'
     DETAILS_CONDITIONS_VEHICLEDAMAGE_TITLE = '#quests:details/conditions/vehicleDamage/title'
+    DETAILS_CONDITIONS_VEHICLEBLOCKEDBYARMOR_TITLE = '#quests:details/conditions/vehicleBlockedByArmor/title'
     DETAILS_CONDITIONS_ADDITIONAL_TITLE = '#quests:details/conditions/additional/title'
     DETAILS_CONDITIONS_INSTALLEDCAMOUFLAGE_TITLE = '#quests:details/conditions/installedCamouflage/title'
     DETAILS_CONDITIONS_VEHICLEDAMAGE_TITLE_NOT = '#quests:details/conditions/vehicleDamage/title/not'
@@ -561,6 +561,52 @@ class QUESTS(object):
     DETAILS_CONDITIONS_RAMDAMAGE_EVENTCOUNT_TYPE_LEVEL_NOT = '#quests:details/conditions/ramDamage/eventCount/type_level/not'
     DETAILS_CONDITIONS_RAMDAMAGE_EVENTCOUNT_NATION_TYPE_LEVEL = '#quests:details/conditions/ramDamage/eventCount/nation_type_level'
     DETAILS_CONDITIONS_RAMDAMAGE_EVENTCOUNT_NATION_TYPE_LEVEL_NOT = '#quests:details/conditions/ramDamage/eventCount/nation_type_level/not'
+    DETAILS_CONDITIONS_DIRECTHITSRECEIVED = '#quests:details/conditions/directHitsReceived'
+    DETAILS_CONDITIONS_DIRECTHITSRECEIVED_NEGATIVE = '#quests:details/conditions/directHitsReceived/negative'
+    DETAILS_CONDITIONS_DIRECTHITSRECEIVED_ALL = '#quests:details/conditions/directHitsReceived/all'
+    DETAILS_CONDITIONS_DIRECTHITSRECEIVED_ALL_NEGATIVE = '#quests:details/conditions/directHitsReceived/all/negative'
+    DETAILS_CONDITIONS_DIRECTHITSRECEIVED_EVENTCOUNT = '#quests:details/conditions/directHitsReceived/eventCount'
+    DETAILS_CONDITIONS_DIRECTHITSRECEIVED_EVENTCOUNT_NEGATIVE = '#quests:details/conditions/directHitsReceived/eventCount/negative'
+    DETAILS_CONDITIONS_DIRECTHITSRECEIVED_EVENTCOUNT_ALL = '#quests:details/conditions/directHitsReceived/eventCount/all'
+    DETAILS_CONDITIONS_DIRECTHITSRECEIVED_EVENTCOUNT_ALL_NEGATIVE = '#quests:details/conditions/directHitsReceived/eventCount/all/negative'
+    DETAILS_CONDITIONS_DAMAGEDEALT = '#quests:details/conditions/damageDealt'
+    DETAILS_CONDITIONS_DAMAGEDEALT_NOT = '#quests:details/conditions/damageDealt/not'
+    DETAILS_CONDITIONS_DAMAGEDEALT_ALL = '#quests:details/conditions/damageDealt/all'
+    DETAILS_CONDITIONS_DAMAGEDEALT_ALL_NOT = '#quests:details/conditions/damageDealt/all/not'
+    DETAILS_CONDITIONS_WHILEMOVINGATSPEED = '#quests:details/conditions/whileMovingAtSpeed'
+    DETAILS_CONDITIONS_WHILEMOVINGATSPEED_ALL = '#quests:details/conditions/whileMovingAtSpeed/all'
+    DETAILS_CONDITIONS_WHILEMOVINGATSPEED_EVENTCOUNT = '#quests:details/conditions/whileMovingAtSpeed/eventCount'
+    DETAILS_CONDITIONS_WHILEMOVINGATSPEED_EVENTCOUNT_ALL = '#quests:details/conditions/whileMovingAtSpeed/eventCount/all'
+    DETAILS_CONDITIONS_VEHICLEKILLS_WHILEMOVINGATSPEED = '#quests:details/conditions/vehicleKills/whileMovingAtSpeed'
+    DETAILS_CONDITIONS_VEHICLEKILLS_WHILEMOVINGATSPEED_ALL = '#quests:details/conditions/vehicleKills/whileMovingAtSpeed/all'
+    DETAILS_CONDITIONS_WHILEENEMYINVISIBLE = '#quests:details/conditions/whileEnemyInvisible'
+    DETAILS_CONDITIONS_WHILEENEMYINVISIBLE_ALL = '#quests:details/conditions/whileEnemyInvisible/all'
+    DETAILS_CONDITIONS_WHILEENEMYINVISIBLE_EVENTCOUNT = '#quests:details/conditions/whileEnemyInvisible/eventCount'
+    DETAILS_CONDITIONS_WHILEENEMYINVISIBLE_EVENTCOUNT_ALL = '#quests:details/conditions/whileEnemyInvisible/eventCount/all'
+    DETAILS_CONDITIONS_VEHICLEKILLS_WHILEENEMYINVISIBLE = '#quests:details/conditions/vehicleKills/whileEnemyInvisible'
+    DETAILS_CONDITIONS_VEHICLEKILLS_WHILEENEMYINVISIBLE_ALL = '#quests:details/conditions/vehicleKills/whileEnemyInvisible/all'
+    DETAILS_CONDITIONS_ENEMYISNOTSPOTTED = '#quests:details/conditions/enemyIsNotSpotted'
+    DETAILS_CONDITIONS_ENEMYISNOTSPOTTED_ALL = '#quests:details/conditions/enemyIsNotSpotted/all'
+    DETAILS_CONDITIONS_ENEMYISNOTSPOTTED_EVENTCOUNT = '#quests:details/conditions/enemyIsNotSpotted/eventCount'
+    DETAILS_CONDITIONS_ENEMYISNOTSPOTTED_EVENTCOUNT_ALL = '#quests:details/conditions/enemyIsNotSpotted/eventCount/all'
+    DETAILS_CONDITIONS_VEHICLEKILLS_ENEMYISNOTSPOTTED = '#quests:details/conditions/vehicleKills/enemyIsNotSpotted'
+    DETAILS_CONDITIONS_VEHICLEKILLS_ENEMYISNOTSPOTTED_ALL = '#quests:details/conditions/vehicleKills/enemyIsNotSpotted/all'
+    DETAILS_CONDITIONS_BEYONDVISIONRADIUS = '#quests:details/conditions/beyondVisionRadius'
+    DETAILS_CONDITIONS_BEYONDVISIONRADIUS_ALL = '#quests:details/conditions/beyondVisionRadius/all'
+    DETAILS_CONDITIONS_BEYONDVISIONRADIUS_EVENTCOUNT = '#quests:details/conditions/beyondVisionRadius/eventCount'
+    DETAILS_CONDITIONS_BEYONDVISIONRADIUS_EVENTCOUNT_ALL = '#quests:details/conditions/beyondVisionRadius/eventCount/all'
+    DETAILS_CONDITIONS_VEHICLEKILLS_BEYONDVISIONRADIUS = '#quests:details/conditions/vehicleKills/beyondVisionRadius'
+    DETAILS_CONDITIONS_VEHICLEKILLS_BEYONDVISIONRADIUS_ALL = '#quests:details/conditions/vehicleKills/beyondVisionRadius/all'
+    DETAILS_CONDITIONS_SPOTENEMY = '#quests:details/conditions/spotEnemy'
+    DETAILS_CONDITIONS_SPOTENEMY_ALL = '#quests:details/conditions/spotEnemy/all'
+    DETAILS_CONDITIONS_VEHICLEBLOCKEDBYARMOR_WHILESTILL = '#quests:details/conditions/vehicleBlockedByArmor/whileStill'
+    DETAILS_CONDITIONS_VEHICLEBLOCKEDBYARMOR_WHILESTILL_ALL = '#quests:details/conditions/vehicleBlockedByArmor/whileStill/all'
+    DETAILS_CONDITIONS_CLASSES_LIGHTTANK = '#quests:details/conditions/classes/lightTank'
+    DETAILS_CONDITIONS_CLASSES_MEDIUMTANK = '#quests:details/conditions/classes/mediumTank'
+    DETAILS_CONDITIONS_CLASSES_HEAVYTANK = '#quests:details/conditions/classes/heavyTank'
+    DETAILS_CONDITIONS_CLASSES_SPG = '#quests:details/conditions/classes/SPG'
+    DETAILS_CONDITIONS_CLASSES_AT_SPG = '#quests:details/conditions/classes/AT-SPG'
+    DETAILS_CONDITIONS_ENUMERATE_OR = '#quests:details/conditions/enumerate/or'
     DETAILS_CONDITIONS_CRITS_DESTROYED_TRACK = '#quests:details/conditions/crits/destroyed/track'
     DETAILS_CONDITIONS_CRITS_DESTROYED_TRACK_NOT = '#quests:details/conditions/crits/destroyed/track/not'
     DETAILS_CONDITIONS_CRITS_DESTROYED_ENGINE = '#quests:details/conditions/crits/destroyed/engine'
@@ -961,6 +1007,8 @@ class QUESTS(object):
     DETAILS_DOSSIER_39_BATTLESCOUNT = '#quests:details/dossier/39/battlesCount'
     DETAILS_DOSSIER_42_BATTLESCOUNT = '#quests:details/dossier/42/battlesCount'
     DETAILS_DOSSIER_43_BATTLESCOUNT = '#quests:details/dossier/43/battlesCount'
+    DETAILS_DOSSIER_44_BATTLESCOUNT = '#quests:details/dossier/44/battlesCount'
+    DETAILS_DOSSIER_49_BATTLESCOUNT = '#quests:details/dossier/49/battlesCount'
     DETAILS_MODIFIERS_TITLE_DISCOUNT = '#quests:details/modifiers/title/discount'
     DETAILS_MODIFIERS_TITLE_SELLING = '#quests:details/modifiers/title/selling'
     DETAILS_MODIFIERS_TITLE_AVAILABILITY = '#quests:details/modifiers/title/availability'
@@ -1061,8 +1109,6 @@ class QUESTS(object):
     MISSIONS_TAB_DAILY_BODY = '#quests:missions/tab/daily/body'
     MISSIONS_TAB_WINBACK_HEADER = '#quests:missions/tab/winback/header'
     MISSIONS_TAB_WINBACK_BODY = '#quests:missions/tab/winback/body'
-    MISSIONS_TAB_BATTLE_PASS_BODY = '#quests:missions/tab/battle_pass/body'
-    MISSIONS_TAB_BATTLE_PASS_HEADER = '#quests:missions/tab/battle_pass/header'
     MISSIONS_TAB_LIVE_OPS_WEB_EVENTS_BODY = '#quests:missions/tab/live_ops_web_events/body'
     MISSIONS_TAB_LIVE_OPS_WEB_EVENTS_HEADER = '#quests:missions/tab/live_ops_web_events/header'
     MISSIONS_TAB_MAPBOX_HEADER = '#quests:missions/tab/mapbox/header'
@@ -1202,6 +1248,7 @@ class QUESTS(object):
     TOKEN_DEFAULT_BOX = '#quests:token/default/box'
     TOKEN_DEFAULT_TANKREWARDS = '#quests:token/default/tankrewards'
     TOKEN_DEFAULT_BATTLE_ROYALE = '#quests:token/default/battle_royale'
+    TOKEN_DEFAULT_COMP7_LIGHT = '#quests:token/default/comp7_light'
     BONUSNAME_CREDITS = '#quests:bonusName/credits'
     BONUSNAME_GOLD = '#quests:bonusName/gold'
     BONUSNAME_CRYSTAL = '#quests:bonusName/crystal'
@@ -1230,6 +1277,7 @@ class QUESTS(object):
     BONUSNAME_STYLE = '#quests:bonusName/style'
     BONUSNAME_MODIFICATION = '#quests:bonusName/modification'
     BONUSNAME_ATTACHMENT = '#quests:bonusName/attachment'
+    BONUSNAME_STATTRACKER = '#quests:bonusName/statTracker'
     BONUSNAME_FREETOKENS = '#quests:bonusName/freeTokens'
     BONUSNAME_COMPLETIONTOKENS = '#quests:bonusName/completionTokens'
     BONUSNAME_COMPLETIONTOKENS_1_1 = '#quests:bonusName/completionTokens_1_1'
@@ -1275,10 +1323,12 @@ class QUESTS(object):
     BONUSNAME_CREW_BONUS_X3 = '#quests:bonusName/crew_bonus_x3'
     BONUSNAME_BATTLEPASSPOINTS = '#quests:bonusName/battlePassPoints'
     BONUSNAME_BATTLEPASSPOINTS_PREVIEW = '#quests:bonusName/battlePassPoints/preview'
+    BONUSNAME_PERSONAL_MISSIONS_POINTS_PREVIEW = '#quests:bonusName/personal_missions_points/preview'
     BONUSNAME_BRCOIN = '#quests:bonusName/brcoin'
     BONUSNAME_GOLD_BANK = '#quests:bonusName/gold_bank'
     BONUSNAME_IDLE_CREW_XP = '#quests:bonusName/idle_crew_xp'
     BONUSNAME_EXCLUDED_MAP = '#quests:bonusName/excluded_map'
+    BONUSNAME_EXCLUDED_MAPS = '#quests:bonusName/excluded_maps'
     BONUSNAME_FREE_EQUIPMENT_DEMOUNTING = '#quests:bonusName/free_equipment_demounting'
     BONUSNAME_EXCLUSIVE_VEHICLE = '#quests:bonusName/exclusive_vehicle'
     BONUSNAME_ATTENDANCE_REWARD = '#quests:bonusName/attendance_reward'
@@ -1560,6 +1610,7 @@ class QUESTS(object):
     PERSONALMISSION_STATUS_SHEETRECOVERYINPROGRESS = '#quests:personalMission/status/sheetRecoveryInProgress'
     PERSONALMISSION_STATUS_ADDBOTTOMLOCKED_REGULAR = '#quests:personalMission/status/addBottomLocked/regular'
     PERSONALMISSION_STATUS_ADDBOTTOMLOCKED_PM2 = '#quests:personalMission/status/addBottomLocked/pm2'
+    PERSONALMISSION_STATUS_NOTSTARTEDREQUIRED = '#quests:personalMission/status/notStartedRequired'
     PERSONALMISSION_STATUS_ADDBOTTOMINFO_REGULAR = '#quests:personalMission/status/addBottomInfo/regular'
     PERSONALMISSION_STATUS_ADDBOTTOMINFO_PM2 = '#quests:personalMission/status/addBottomInfo/pm2'
     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_USSR = '#quests:personalMission/status/addBottom/vehicleType/Alliance-USSR'
@@ -1666,7 +1717,7 @@ class QUESTS(object):
     GENERAL_COUNTDOWN_TIMER_MIN = '#quests:general/countdown/timer_min'
     GENERAL_COUNTDOWN_TIMER_SEC = '#quests:general/countdown/timer_sec'
     DAILYQUESTS_POSTBATTLE_GENERICAMPERSAND = '#quests:dailyQuests/postBattle/genericAmpersand'
-    DAILYQUESTS_POSTBATTLE_AND = '#quests:dailyQuests/postBattle/and'
+    DAILYQUESTS_POSTBATTLE_CONDITIONTYPEAND = '#quests:dailyQuests/postBattle/conditionTypeAnd'
     DAILYQUESTS_TAKEREWARDSBUTTON_TEXT = '#quests:dailyQuests/takeRewardsButton/text'
     DAILYQUESTS_TAKEREWARDSBUTTON_COUNTDOWN = '#quests:dailyQuests/takeRewardsButton/countdown'
     DAILYQUESTS_TAKEREWARDSBUTTON_TOOLTIP = '#quests:dailyQuests/takeRewardsButton/tooltip'
@@ -1758,7 +1809,8 @@ class QUESTS(object):
      TOKEN_DEFAULT_WHEEL,
      TOKEN_DEFAULT_BOX,
      TOKEN_DEFAULT_TANKREWARDS,
-     TOKEN_DEFAULT_BATTLE_ROYALE)
+     TOKEN_DEFAULT_BATTLE_ROYALE,
+     TOKEN_DEFAULT_COMP7_LIGHT)
     BONUSNAME_ENUM = (BONUSNAME_BLUEPRINTS_ANY,
      BONUSNAME_BLUEPRINTS_VEHICLE,
      BONUSNAME_BLUEPRINTS_VEHICLE_ANY,
@@ -1794,6 +1846,7 @@ class QUESTS(object):
      BONUSNAME_STYLE,
      BONUSNAME_MODIFICATION,
      BONUSNAME_ATTACHMENT,
+     BONUSNAME_STATTRACKER,
      BONUSNAME_FREETOKENS,
      BONUSNAME_COMPLETIONTOKENS,
      BONUSNAME_COMPLETIONTOKENS_1_1,
@@ -1839,10 +1892,12 @@ class QUESTS(object):
      BONUSNAME_CREW_BONUS_X3,
      BONUSNAME_BATTLEPASSPOINTS,
      BONUSNAME_BATTLEPASSPOINTS_PREVIEW,
+     BONUSNAME_PERSONAL_MISSIONS_POINTS_PREVIEW,
      BONUSNAME_BRCOIN,
      BONUSNAME_GOLD_BANK,
      BONUSNAME_IDLE_CREW_XP,
      BONUSNAME_EXCLUDED_MAP,
+     BONUSNAME_EXCLUDED_MAPS,
      BONUSNAME_FREE_EQUIPMENT_DEMOUNTING,
      BONUSNAME_EXCLUSIVE_VEHICLE,
      BONUSNAME_ATTENDANCE_REWARD,
@@ -2243,7 +2298,9 @@ class QUESTS(object):
      DETAILS_DOSSIER_37_BATTLESCOUNT,
      DETAILS_DOSSIER_39_BATTLESCOUNT,
      DETAILS_DOSSIER_42_BATTLESCOUNT,
-     DETAILS_DOSSIER_43_BATTLESCOUNT)
+     DETAILS_DOSSIER_43_BATTLESCOUNT,
+     DETAILS_DOSSIER_44_BATTLESCOUNT,
+     DETAILS_DOSSIER_49_BATTLESCOUNT)
     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ENUM = (PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_USSR,
      PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_GERMANY,
      PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_USA,

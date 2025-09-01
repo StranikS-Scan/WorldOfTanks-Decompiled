@@ -12,7 +12,7 @@ class LastUpdateTooltip(ViewImpl):
     __comp7Controller = dependency.descriptor(IComp7Controller)
 
     def __init__(self, *args, **kwargs):
-        settings = ViewSettings(R.views.comp7.lobby.tooltips.LastUpdateTooltip())
+        settings = ViewSettings(R.views.comp7.mono.lobby.tooltips.last_update_tooltip())
         settings.model = LastUpdateTooltipModel()
         settings.args = args
         settings.kwargs = kwargs

@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 import BigWorld
 from adisp import adisp_process
 from debug_utils import LOG_ERROR
-from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
+from gui.shared.event_dispatcher import showHangar
 from helpers import dependency
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.clans.clan_helpers import getStrongholdUrl
@@ -75,7 +75,7 @@ class StrongholdView(LobbySubView, StrongholdViewMeta):
         self.fireEvent(events.StrongholdEvent(events.StrongholdEvent.STRONGHOLD_DEACTIVATED), scope=EVENT_BUS_SCOPE.STRONGHOLD)
 
     def __close(self):
-        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
+        showHangar()
 
     def __updateSkipEscape(self, skipEscape):
         if self.__browser is not None:

@@ -41,8 +41,8 @@ class WaitingMainLoopState(State):
         self._cancelWaiting()
         super(WaitingMainLoopState, self).clear()
 
-    def _onEntered(self):
-        super(WaitingMainLoopState, self)._onEntered()
+    def _onEntered(self, event):
+        super(WaitingMainLoopState, self)._onEntered(event)
         self._initWaiting()
 
     def _onExited(self):
@@ -93,8 +93,8 @@ class SynchronizationState(State):
         g_playerEvents.onLoadingMilestoneReached(Milestones.SAVING_PDC)
 
     @wg_async.wg_async
-    def _onEntered(self):
-        super(SynchronizationState, self)._onEntered()
+    def _onEntered(self, event):
+        super(SynchronizationState, self)._onEntered(event)
         if self._syncProgress == SyncingProgress.NOT_STARTED:
             canceled = yield wg_async.wg_await(self._sync())
             if canceled:
@@ -300,8 +300,8 @@ class BattleReplayLoadingState(State):
     def __init__(self):
         super(BattleReplayLoadingState, self).__init__(stateID=GameplayStateID.BATTLE_REPLAY_LOADING, flags=StateFlags.SINGULAR)
 
-    def enter(self):
-        super(BattleReplayLoadingState, self).enter()
+    def enter(self, event):
+        super(BattleReplayLoadingState, self).enter(event)
         BattleReplay.g_replayCtrl.autoStartBattleReplay()
 
 

@@ -2,8 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/easy_tank_equip/common/proposal_model.py
 import typing
 from enum import Enum
-from frameworks.wulf import Array
-from frameworks.wulf import ViewModel
+from frameworks.wulf import Array, ViewModel
 T = typing.TypeVar('T')
 
 class ProposalDisableReason(Enum):

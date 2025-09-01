@@ -2,7 +2,10 @@
 # Embedded file name: scripts/client/gui/battle_control/controllers/quest_progress/quest_progress_ctrl.py
 import logging
 import BigWorld
+import personal_missions
 from Event import EventManager, Event
+from gui.impl import backport
+from gui.impl.gen import R
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import LAST_SELECTED_PM_BRANCH
 from constants import ARENA_PERIOD
@@ -17,11 +20,13 @@ from personal_missions import PM_STATE
 from shared_utils import first
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.battle_session import IBattleSessionProvider
 _logger = logging.getLogger(__name__)
 
 class QuestProgressController(IArenaPeriodController, IArenaVehiclesController):
     eventsCache = dependency.descriptor(IEventsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         super(QuestProgressController, self).__init__()
@@ -71,7 +76,7 @@ class QuestProgressController(IArenaPeriodController, IArenaVehiclesController):
             selectedMissionsIDs = self.__battleCtx.getSelectedQuestIDs()
             selectedMissionsInfo = self.__battleCtx.getSelectedQuestInfo() or {}
             if selectedMissionsIDs:
-                missions = personalMissions.getAllQuests()
+                missions = personalMissions.getAllQuests(personal_missions.PM_BRANCH.ALL)
                 for missionID in selectedMissionsIDs:
                     mission = missions.get(missionID)
                     if mission and not mission.isDisabled() and isPersonalMissionsEnabled(mission.getQuestBranch()):
@@ -117,27 +122,47 @@ class QuestProgressController(IArenaPeriodController, IArenaVehiclesController):
     def invalidatePeriodInfo(self, period, endTime, length, additionalInfo):
         self.__updatePeriodInfo(period, endTime, length)
 
-    def getQuestFullData(self):
+    def getQuestFullData(self, vehCmpDescr):
         selectedQuest = self.__selectedQuest
         if selectedQuest:
             formatter = self.__getFormatter(selectedQuest)
+            hasAdditionalCondition = selectedQuest.hasAdditionalConditions()
+            isMainQuest = True if not hasAdditionalCondition else None
+            isPM3Quest = selectedQuest.getPMType().isPM3
             return {'questName': selectedQuest.getUserName(),
              'questID': selectedQuest.getID(),
              'questIndexStr': str(selectedQuest.getInternalID()),
              'questIcon': RES_ICONS.getAllianceGoldIcon(selectedQuest.getMajorTag()),
-             'headerProgress': formatter.headerFormat(),
-             'bodyProgress': formatter.bodyFormat()}
-        return {}
+             'headerProgress': formatter.headerFormat(isMain=isMainQuest, isCompleted=False, isPM3Quest=isPM3Quest),
+             'bodyProgress': formatter.bodyFormat(isMain=isMainQuest)}
+        else:
+            return {}
 
     def getQuestShortInfoData(self):
         selectedQuest = self.__selectedQuest
-        return {'questName': selectedQuest.getUserName(),
-         'questIndexStr': str(selectedQuest.getInternalID()),
-         'questIcon': RES_ICONS.getAllianceGoldIcon(selectedQuest.getMajorTag())} if selectedQuest else {}
+        if selectedQuest:
+            vehCmpDescr = self.sessionProvider.getArenaDP().getVehicleInfo().vehicleType.compactDescr
+            isUniqueVehicle = not self.__selectedQuest.isAmongUsedQuestVehicle(vehCmpDescr)
+            questStatus = '' if isUniqueVehicle else backport.text(R.strings.personal_missions.questStatus.tankCondition())
+            return {'questName': selectedQuest.getUserName(),
+             'questIndexStr': str(selectedQuest.getInternalID()),
+             'questIcon': RES_ICONS.getAllianceGoldIcon(selectedQuest.getMajorTag()),
+             'isProgressAvailable': isUniqueVehicle,
+             'canBeDisabled': selectedQuest.getPMType().isPM3,
+             'questStatus': questStatus}
+        return {}
 
-    def getQuestHeaderProgresses(self):
-        formatter = self.__getFormatter(self.__selectedQuest)
-        return formatter.headerFormat()
+    def getQuestHeaderProgresses(self, vehCmpDescr):
+        selectedQuest = self.__selectedQuest
+        if selectedQuest:
+            hasAdditionalCondition = selectedQuest.hasAdditionalConditions()
+            isMainQuest = True if not hasAdditionalCondition else None
+            isQuestCompleted = selectedQuest.hasCompletedAllMissionConditions(vehCmpDescr)
+            isPM3Quest = selectedQuest.getPMType().isPM3
+            formatter = self.__getFormatter(selectedQuest)
+            return formatter.headerFormat(isMain=isMainQuest, isCompleted=isQuestCompleted, isPM3Quest=isPM3Quest)
+        else:
+            return []
 
     def updateQuestProgress(self, questID, info):
         if questID in self.__storage:
@@ -153,12 +178,16 @@ class QuestProgressController(IArenaPeriodController, IArenaVehiclesController):
                     needHeaderResync = True
                     headerProgress.markAsVisited()
 
-            if needHeaderResync:
-                self.onHeaderProgressesUpdate()
+            for headerProgress in storage.getUniqueCompletionRequirement().itervalues():
+                if headerProgress.isChanged():
+                    needHeaderResync = True
+
             for changedCondition in storage.sortProgresses(storage.getChangedConditions().itervalues()):
                 changedCondition.markAsVisited()
                 self.onConditionProgressUpdate(changedCondition.getProgressID(), changedCondition.getProgress())
 
+            if needHeaderResync:
+                self.onHeaderProgressesUpdate()
         return
 
     def getControllerID(self):

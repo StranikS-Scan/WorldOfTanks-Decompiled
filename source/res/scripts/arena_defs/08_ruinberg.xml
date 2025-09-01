@@ -97,5 +97,48 @@
         </team2>
       </teamBasePositions>
     </maps_training>
+    <comp7>
+      <boundingBox>
+        <bottomLeft>	-600.000000 -400.000000	</bottomLeft>
+        <upperRight>	250.000000 450.000000	</upperRight>
+      </boundingBox>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <minimap>	spaces/08_ruinberg/mmap_comp7.dds	</minimap>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	47.239559 23.958782	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	-385.628876 -38.539406	</position>
+          <type>	1	</type>
+        </point>
+      </pointsOfInterestUDO>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-82.755348 333.961578	</position>
+        </team1>
+        <team2>
+          <position>	0.512566 -325.228516	</position>
+        </team2>
+      </teamSpawnPoints>
+      <controlPoint>	-165.999924 -13.446991	</controlPoint>
+    </comp7>
   </gameplayTypes>
 </08_ruinberg.xml>

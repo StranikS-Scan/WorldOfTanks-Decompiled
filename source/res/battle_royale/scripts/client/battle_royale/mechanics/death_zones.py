@@ -34,7 +34,7 @@ DeathZoneWallParameters = namedtuple('DeathZoneWallParameters', ['enableCenter',
 
 class DeathZoneUpdaterManager(CGF.ComponentManager):
 
-    @onProcessQuery(ArenaInfoDeathZonesComponent, tickGroup='Simulation', updatePeriod=_UPDATE_PERIOD)
+    @onProcessQuery(ArenaInfoDeathZonesComponent, tickGroup='Simulation', period=_UPDATE_PERIOD)
     def onProcess(self, deathZones):
         if deathZones.updatedZones:
             g_eventBus.handleEvent(DeathZoneEvent(DeathZoneEvent.UPDATE_DEATH_ZONE, ctx={'deathZones': deathZones}), scope=EVENT_BUS_SCOPE.BATTLE)

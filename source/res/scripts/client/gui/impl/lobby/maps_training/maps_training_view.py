@@ -6,8 +6,11 @@ import Math
 from AvatarInputHandler.cameras import getViewProjectionMatrix
 from ClientSelectableCameraObject import ClientSelectableCameraObject
 from CurrentVehicle import g_currentPreviewVehicle
+from Event import Event
+from frameworks.state_machine import StateIdsObserver
 from gui import GUI_SETTINGS
 from gui.Scaleform.Waiting import Waiting
+from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates
 from gui.impl import backport
 from gui.impl.gen import R
@@ -19,7 +22,9 @@ from gui.impl.gen.view_models.views.lobby.maps_training.maps_training_minimap_po
 from gui.impl.lobby.maps_training.maps_training_tactical_maps_config import TacticalMapsConfigReader, Scenario, Team, Point
 from gui.impl.lobby.maps_training.scenario_tooltip import ScenarioTooltip
 from gui.prb_control.entities.listener import IGlobalListener
+from gui.impl.lobby.hangar.presenters.utils import fillMenuSharedItems, navigateTo
 from gui.server_events.bonuses import getNonQuestBonuses
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.missions.packers.bonus import getDefaultBonusPacker
 from gui.shared.view_helpers.blur_manager import CachedBlur
@@ -33,7 +38,26 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from skeletons.gui.shared.utils import IHangarSpace
 from gui.impl.lobby.maps_training.maps_training_base_view import MapsTrainingBaseView
 from vehicle_systems.tankStructure import TankNodeNames
-from gui.impl.lobby.maps_training.sound_constants import MapsTrainingSound, MAPS_TRAINING_SOUND_SPACE
+from gui.impl.lobby.maps_training.sound_constants import MAPS_TRAINING_SOUND_SPACE
+
+class _MapsTrainingStatesObserver(StateIdsObserver):
+    __mapsTrainingCtrl = dependency.descriptor(IMapsTrainingController)
+
+    def __init__(self):
+        from gui.impl.lobby.maps_training.states import EntryState
+        from gui.impl.lobby.maps_training.states import SelectedState
+        super(_MapsTrainingStatesObserver, self).__init__([EntryState.STATE_ID, SelectedState.STATE_ID])
+        self.onNavigationChanged = Event()
+
+    def onEnterState(self, state, event):
+        from gui.impl.lobby.maps_training.states import SelectedState
+        selectedMap = None
+        if state.getStateID() == SelectedState.STATE_ID:
+            params = event.params if event is not None else self.__mapsTrainingCtrl.getPageCtx()
+            selectedMap = params.get('map', '')
+        self.onNavigationChanged(selectedMap)
+        return
+
 
 class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
     __slots__ = ('__selectedMap', '__selectedScenario', '__ctxVehicleType', '__ctxSide', '__ctxShowAnimation', '__tooltipData', '__account', '__mapsConfig', '__isDataLoaded', '__blur', '__blurRectId', '__packer', '__tickCallback', '__preferences', '__markerPosOffset', '__finalizationInProgress')
@@ -69,13 +93,8 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
         self.__markerPosOffset = 0.0
         self.__finalizationInProgress = False
         self.__initFromCtx(kwargs.get('ctx', {}))
+        self.__lsmObserver = _MapsTrainingStatesObserver()
         return
-
-    def showByCtx(self, ctx):
-        self.__initFromCtx(ctx)
-        if self.__isDataLoaded and self.__selectedMap:
-            with self.viewModel.transaction() as model:
-                self.__updateAllSelections(model)
 
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.lobby.maps_training.ScenarioTooltip():
@@ -95,23 +114,40 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
         window.load()
         return window
 
+    def _getEvents(self):
+        return super(MapsTrainingView, self)._getEvents() + ((self.__lsmObserver.onNavigationChanged, self.__onNavigationChanged),
+         (self.viewModel.onNavigate, navigateTo),
+         (self.viewModel.onBack, self.__onBack),
+         (self.viewModel.onSelect, self.__onSelect),
+         (self.viewModel.onScenarioSelect, self.__onScenarioSelect),
+         (self.viewModel.onBlurRectUpdated, self.__onBlurRectUpdated),
+         (self.viewModel.onFilteringChange, self.__filterChangeHandler),
+         (self.viewModel.onInfoClicked, self.__clickInfoHandler),
+         (g_currentPreviewVehicle.onChangeStarted, self.__onPreviewVehicleChangeStarted),
+         (g_currentPreviewVehicle.onChanged, self.__onPreviewVehicleChanged))
+
     def _onLoading(self, *args, **kwargs):
         super(MapsTrainingView, self)._onLoading(*args, **kwargs)
-        self.__finalizationInProgress = False
+        lsm = getLobbyStateMachine()
+        lsm.connect(self.__lsmObserver)
         Waiting.show('loadPage')
+        self.__finalizationInProgress = False
         self.mapsTrainingController.requestInitialDataFromServer(self.__fillData)
 
     def _onLoaded(self, *args, **kwargs):
         super(MapsTrainingView, self)._onLoaded(*args, **kwargs)
         self.__checkCamera()
+        self.__updateMenuItems()
 
     def _finalize(self):
+        super(MapsTrainingView, self)._finalize()
+        lsm = getLobbyStateMachine()
+        lsm.disconnect(self.__lsmObserver)
+        self.__lsmObserver = None
         self.__finalizationInProgress = True
         self.__blur.fini()
         if self.__tickCallback is not None:
             BigWorld.cancelCallback(self.__tickCallback)
-        self.mapsTrainingController.setExitSoundState()
-        super(MapsTrainingView, self)._finalize()
         return
 
     def __initFromCtx(self, ctx):
@@ -119,56 +155,30 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
         self.__ctxVehicleType = ctx.get('vehicleType', '')
         self.__ctxSide = ctx.get('side', 0)
         self.__ctxShowAnimation = ctx.get('showAnimation', False)
-        if self.__selectedMap != selectedMap and not selectedMap:
-            MapsTrainingSound.onSelectedMap(False)
         self.__selectedMap = selectedMap
-
-    def _addListeners(self):
-        super(MapsTrainingView, self)._addListeners()
-        self.viewModel.onSelect += self.__onSelect
-        self.viewModel.onScenarioSelect += self.__onScenarioSelect
-        self.viewModel.onBack += self.__onBack
-        self.viewModel.onBlurRectUpdated += self.__onBlurRectUpdated
-        self.startGlobalListening()
-        self.viewModel.onFilteringChange += self.__filterChangeHandler
-        self.viewModel.onInfoClicked += self.__clickInfoHandler
-        self.viewModel.onClose += self.__clickCloseHandler
-        g_currentPreviewVehicle.onChangeStarted += self.__onPreviewVehicleChangeStarted
-        g_currentPreviewVehicle.onChanged += self.__onPreviewVehicleChanged
 
     def _removeListeners(self):
         super(MapsTrainingView, self)._removeListeners()
         self.stopGlobalListening()
-        self.viewModel.onSelect -= self.__onSelect
-        self.viewModel.onScenarioSelect -= self.__onScenarioSelect
-        self.viewModel.onBack -= self.__onBack
-        self.viewModel.onBlurRectUpdated -= self.__onBlurRectUpdated
-        self.viewModel.onFilteringChange -= self.__filterChangeHandler
-        self.viewModel.onInfoClicked -= self.__clickInfoHandler
-        self.viewModel.onClose -= self.__clickCloseHandler
-        g_currentPreviewVehicle.onChangeStarted -= self.__onPreviewVehicleChangeStarted
-        g_currentPreviewVehicle.onChanged -= self.__onPreviewVehicleChanged
+
+    def __onNavigationChanged(self, selectedMap):
+        self.__blur.disable()
+        self.__selectedMap = selectedMap
+        self.__selectedScenario = 0
+        with self.viewModel.transaction() as model:
+            self.__updateAllSelections(model)
+        if not selectedMap:
+            self.mapsTrainingController.reset()
+        g_eventBus.handleEvent(events.FightButtonEvent(events.FightButtonEvent.FIGHT_BUTTON_UPDATE), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __onBack(self):
-        self.__selectedMap = ''
-        self.__selectedScenario = 0
-        self.__blur.disable()
-        with self.viewModel.transaction() as model:
-            model.setIsMapSelected(False)
-            model.setIncompleteFilter(self.__preferences.incompleteFilter)
-            model.setTitleFilter(self.__preferences.titleFilter)
-        MapsTrainingSound.onSelectedMap(False)
-        self.mapsTrainingController.reset()
-
-    def __clickCloseHandler(self):
-        self.mapsTrainingController.selectRandomMode()
+        state = getLobbyStateMachine().getStateFromView(self)
+        if state:
+            state.goBack()
 
     def __onSelect(self, args):
-        self.__selectedMap = str(args.get('id'))
-        with self.viewModel.transaction() as model:
-            model.setIsMapSelected(True)
-            MapsTrainingSound.onSelectedMap(True)
-            self.__updateAllSelections(model)
+        from gui.impl.lobby.maps_training.states import SelectedState
+        SelectedState.goTo(map=str(args.get('id')))
 
     def __onScenarioSelect(self, args):
         self.__selectedScenario = int(args.get('id'))
@@ -230,6 +240,8 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
                 self.__tooltipData[tooltipId] = bonusTooltipList[bonusIndex]
 
     def __updateSelectedScenario(self, model):
+        if not self.__selectedMap:
+            return
         mapConfig = self.__mapsConfig.getMapConfig(self.__selectedMap)
         scenario = mapConfig.scenarios[self.__selectedScenario]
         if scenario.team != self.mapsTrainingController.getSelectedTeam():
@@ -444,3 +456,7 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
             g_currentPreviewVehicle.resetAppearance()
             g_currentPreviewVehicle.selectNoVehicle()
             self.mapsTrainingController.updateSelectedVehicle()
+
+    def __updateMenuItems(self):
+        with self.viewModel.transaction() as model:
+            fillMenuSharedItems(model)

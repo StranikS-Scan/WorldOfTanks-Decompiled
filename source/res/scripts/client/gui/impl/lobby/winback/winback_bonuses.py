@@ -15,6 +15,7 @@ from gui.shared.tooltips import getUnlockPrice
 from helpers import dependency
 from helpers.time_utils import getServerUTCTime, ONE_DAY
 from shared_utils import first
+from skeletons.gui.game_control import IWinbackController
 from skeletons.gui.goodies import IGoodiesCache
 from gui.shared.gui_items.Vehicle import Vehicle
 
@@ -183,3 +184,13 @@ class WinbackVehicleDiscountBonus(WinbackVehicleBonus):
          self.getPrices(vehicleCD)[1],
          True,
          True], specialAlias=TOOLTIPS_CONSTANTS.WINBACK_DISCOUNT_AWARD_VEHICLE)
+
+
+@dependency.replace_none_kwargs(winbackController=IWinbackController)
+def getWinbackRewardsTimeLeft(winbackController=None):
+    selectableBonus = first(WinbackSelectableRewardManager.getAvailableSelectableBonuses())
+    if selectableBonus is None:
+        return 0
+    else:
+        winbackOffer = WinbackSelectableRewardManager.getBonusOffer(selectableBonus)
+        return max(0, min(winbackOffer.expiration - getServerUTCTime(), 30 * ONE_DAY)) if winbackOffer and winbackController.isEnabled() and not winbackController.isProgressionAvailable() else 0

@@ -1,8 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/lobby/comp7_helpers/comp7_gui_helpers.py
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import GUI_START_BEHAVIOR, COMP7_UI_SECTION, COMP7_LAST_SEASON
-from account_helpers.settings_core.settings_constants import GuiSettingsBehavior
+from account_helpers.AccountSettings import GUI_START_BEHAVIOR, COMP7_UI_SECTION, COMP7_LAST_SEASON, COMP7_LAST_SEASON_WHERE_STATISTICS_SHOWN
 from comp7_common_const import seasonNameBySeasonNumber
 from comp7_common_const import seasonPointsCodeBySeasonNumber
 from helpers import dependency
@@ -18,7 +17,8 @@ def isSeasonStatisticsShouldBeShown(comp7Controller=None):
     previousSeason = comp7Controller.getPreviousSeason()
     if not previousSeason:
         return False
-    if isViewShown(GuiSettingsBehavior.COMP7_SEASON_STATISTICS_SHOWN):
+    settings = AccountSettings.getUIFlag(COMP7_UI_SECTION)
+    if settings.get(COMP7_LAST_SEASON_WHERE_STATISTICS_SHOWN) == seasonNameBySeasonNumber(previousSeason.getNumber()):
         return False
     seasonPointsCode = seasonPointsCodeBySeasonNumber(previousSeason.getNumber())
     receivedSeasonPoints = comp7Controller.getReceivedSeasonPoints().get(seasonPointsCode)
@@ -33,9 +33,9 @@ def isComp7WhatsNewShouldBeShown():
     return _needToShowComp7Intro() and _hasParticipantToken()
 
 
-@dependency.replace_none_kwargs(comp7Controller=IComp7Controller)
-def updateComp7LastSeason(comp7Controller=None):
-    season = comp7Controller.getCurrentSeason(includePreannounced=True)
+@dependency.replace_none_kwargs(comp7Ctrl=IComp7Controller)
+def updateComp7LastSeason(comp7Ctrl=None):
+    season = comp7Ctrl.getCurrentSeason(includePreannounced=True) or comp7Ctrl.getNextSeason()
     if not season:
         return
     settings = AccountSettings.getUIFlag(COMP7_UI_SECTION)
@@ -49,11 +49,11 @@ def isViewShown(key, settingsCore=None):
     return section.get(key)
 
 
-@dependency.replace_none_kwargs(comp7Controller=IComp7Controller)
-def _needToShowComp7Intro(comp7Controller=None, includePreannounced=False):
-    if not comp7Controller.isAvailable():
+@dependency.replace_none_kwargs(comp7Ctrl=IComp7Controller)
+def _needToShowComp7Intro(comp7Ctrl=None, includePreannounced=False):
+    if not comp7Ctrl.isAvailable():
         return False
-    season = comp7Controller.getCurrentSeason(includePreannounced=includePreannounced)
+    season = comp7Ctrl.getCurrentSeason(includePreannounced=includePreannounced) or comp7Ctrl.getNextSeason()
     if not season:
         return False
     settings = AccountSettings.getUIFlag(COMP7_UI_SECTION)
@@ -66,7 +66,7 @@ def _hasParticipantToken(comp7Controller=None, itemsCache=None):
         tokenInfo = itemsCache.items.tokens.getTokens().get(participantToken)
         if tokenInfo is not None:
             _, count = tokenInfo
-            return count > 0 and True
-        continue
+            if count > 0:
+                return True
 
     return False

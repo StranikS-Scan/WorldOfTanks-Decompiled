@@ -7,7 +7,6 @@ from gui.impl.gen.view_models.common.price_model import PriceModel
 class PresetDisableReason(Enum):
     NONE = 'none'
     DEMOUNT_NOT_POSSIBLE = 'demountNotPossible'
-    LOAD_CAPACITY_NOT_ENOUGH = 'loadCapacityNotEnough'
     NOT_ENOUGH_BUNKS = 'notEnoughBunks'
 
 

@@ -63,7 +63,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	10955	</weight>
-    <maxHealth>	1080	</maxHealth>
+    <maxHealth>	1280	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
@@ -850,13 +850,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_STA_1>
-      <userString>	#japan_vehicles:Chassis_STA_1	</userString>
+    <Chassis_J13_STA_1>
+      <userString>	#japan_vehicles:Chassis_J13_STA_1	</userString>
       <tags></tags>
       <level>	7	</level>
       <price>	17000	</price>
       <unlocks>
-        <chassis>	Chassis_STA_1_2	  <cost>	15500	</cost>
+        <chassis>	Chassis_J13_STA_1_2	  <cost>	15500	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -864,11 +864,10 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	11300	</weight>
-      <maxLoad>	34000	</maxLoad>
-      <terrainResistance>	1.1 1.2 2.4	</terrainResistance>
+      <terrainResistance>	1 1.1 2.2	</terrainResistance>
       <brakeForce>	34000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	40	</rotationSpeed>
+      <rotationSpeed>	50	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.16	</vehicleMovement>
         <vehicleRotation>	0.16	</vehicleRotation>
@@ -2023,9 +2022,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	5.71428585	</repairTime>
-    </Chassis_STA_1>
-    <Chassis_STA_1_2>
-      <userString>	#japan_vehicles:Chassis_STA_1_2	</userString>
+    </Chassis_J13_STA_1>
+    <Chassis_J13_STA_1_2>
+      <userString>	#japan_vehicles:Chassis_J13_STA_1_2	</userString>
       <tags></tags>
       <level>	8	</level>
       <price>	31000	</price>
@@ -2034,11 +2033,10 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	11300	</weight>
-      <maxLoad>	37000	</maxLoad>
       <terrainResistance>	1 1.1 2.2	</terrainResistance>
       <brakeForce>	37500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	44	</rotationSpeed>
+      <rotationSpeed>	53	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.14	</vehicleMovement>
         <vehicleRotation>	0.14	</vehicleRotation>
@@ -3193,16 +3191,16 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	5.71428585	</repairTime>
-    </Chassis_STA_1_2>
+    </Chassis_J13_STA_1_2>
   </chassis>
   <turrets0>
-    <Turret_1_STA_1>
-      <userString>	#japan_vehicles:Turret_1_STA_1	</userString>
+    <Turret_1_J13_STA_1>
+      <userString>	#japan_vehicles:Turret_1_J13_STA_1	</userString>
       <tags></tags>
       <level>	7	</level>
       <price>	18000	</price>
       <unlocks>
-        <turret>	Turret_2_STA_1	  <cost>	17000	</cost>
+        <turret>	Turret_2_J13_STA_1	  <cost>	17000	</cost>
         </turret>
       </unlocks>
       <armor>
@@ -3224,7 +3222,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7850	</weight>
-      <maxHealth>	270	</maxHealth>
+      <maxHealth>	240	</maxHealth>
       <rotationSpeed>	42	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -3238,131 +3236,6 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_90mm_Gun_M3A1>	shared	  <maxAmmo>	50	</maxAmmo>
-          <unlocks>
-            <gun>	_90mm_Rifled_Gun	  <cost>	19000	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	124	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <gun>	35	</gun>
-          </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	8.2	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
-          <pitchLimits>
-            <minPitch>	0 -13 1 -13	</minPitch>
-            <maxPitch>	0 10 0.361111 10 0.387053 5 0.403256 5 0.445117 0 0.555646 4.47035e-06 0.597222 5 0.604223 5 0.638889 10 1 10	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/japan/J13_STA_1/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/japan/J13_STA_1/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/japan/J13_STA_1/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/japan/J13_STA_1/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/japan/J13_STA_1/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_main_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000065 0.000067 1.84019	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0 0.255126 0.255126	</anchorPosition>
-              <anchorDirection>	-0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000065 0.000067 1.84019	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	0.00262 1.56836 1.49822	</position>
-              <rotation>	0.687356 -0.000056 3.14151	</rotation>
-              <scale>	1.99227 1.2 1.9923	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.328515	</clipAngle>
-              <anchorShift>	0.551659	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.002607 1.37389 1.43933	</position>
-              <rotation>	0.938439 -0.000092 3.14148	</rotation>
-              <scale>	2.34438 1.5 2.34442	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.081953	</clipAngle>
-              <anchorShift>	0.848625	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45002	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.002641 1.8737 1.61487	</position>
-              <rotation>	0.67804 -0.000054 3.14151	</rotation>
-              <scale>	1.16635 0.479475 1.16636	</scale>
-              <showOn>	4352	</showOn>
-              <clipAngle>	1.08433	</clipAngle>
-              <anchorShift>	0.208669	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45003	</slotId>
-              <tags>	formfactor_rect1x3	</tags>
-              <position>	0.002634 1.77788 1.73384	</position>
-              <rotation>	0.67804 -0.000054 3.14151	</rotation>
-              <scale>	1.16635 0.479475 1.16636	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	1.08433	</clipAngle>
-              <anchorShift>	0.248637	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.000129 0.000133 1.39	</rayStart>
-              <rayEnd>	-0.000129 0.000133 1.89	</rayEnd>
-              <rayUp>	0.077 0 0	</rayUp>
-              <size>	0.5	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.865 0.865 0.000000 0.000000	</tiling>
-            <density>	119.557 120.159	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_90mm_Gun_M3A1>
         <_90mm_Rifled_Gun>	shared	  <maxAmmo>	50	</maxAmmo>
           <armor>
             <armor_1>	124	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -3374,16 +3247,16 @@
             <gun>	35	</gun>
           </armor>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	8.2	</reloadTime>
+          <reloadTime>	7.6	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	3.25	</afterShot>
+            <turretRotation>	0.11	</turretRotation>
+            <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -13 1 -13	</minPitch>
-            <maxPitch>	0 10 0.361111 10 0.387053 5 0.403256 5 0.445117 0 0.555646 4.47035e-06 0.597222 5 0.604223 5 0.638889 10 1 10	</maxPitch>
+            <maxPitch>	0.00000 10.00 0.37222 10.00 0.40278 0.00 0.59722 0.00 0.62778 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <models>
@@ -4041,9 +3914,9 @@
         <density>	109.016 108.916	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_1_STA_1>
-    <Turret_2_STA_1>
-      <userString>	#japan_vehicles:Turret_2_STA_1	</userString>
+    </Turret_1_J13_STA_1>
+    <Turret_2_J13_STA_1>
+      <userString>	#japan_vehicles:Turret_2_J13_STA_1	</userString>
       <tags></tags>
       <level>	8	</level>
       <price>	32000	</price>
@@ -4071,7 +3944,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7850	</weight>
-      <maxHealth>	370	</maxHealth>
+      <maxHealth>	320	</maxHealth>
       <rotationSpeed>	42	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -4086,105 +3959,6 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.976	</invisibilityFactor>
       <guns>
-        <_90mm_Gun_M3A1>	shared	  <maxAmmo>	50	</maxAmmo>
-          <armor>
-            <armor_1>	124	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <gun>	35	</gun>
-          </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	7.5	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
-          <pitchLimits>
-            <minPitch>	0 -13 1 -13	</minPitch>
-            <maxPitch>	0 10 0.361111 10 0.387053 5 0.403256 5 0.445117 0 0.555646 4.47035e-06 0.597222 5 0.604223 5 0.638889 10 1 10	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/japan/J13_STA_1/normal/lod0/Gun_04.model	</undamaged>
-            <destroyed>	vehicles/japan/J13_STA_1/crash/lod0/Gun_04.model	</destroyed>
-            <exploded>	vehicles/japan/J13_STA_1/crash/lod0/Gun_04.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/japan/J13_STA_1/collision/Gun_04.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/japan/J13_STA_1/collision_client/Gun_04.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_main_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000064 0.000037 1.75538	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.266924 0.266924	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000064 0.000037 1.75538	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	0.002629 1.60216 1.60863	</position>
-              <rotation>	0.508552 -0.000041 3.14152	</rotation>
-              <scale>	2.45912 1.1 2.45917	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.61838	</clipAngle>
-              <anchorShift>	0.572735	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.00261 1.4108 1.48971	</position>
-              <rotation>	0.938439 -0.000092 3.14148	</rotation>
-              <scale>	2.34438 1.6 2.34442	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.081953	</clipAngle>
-              <anchorShift>	0.849487	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.000128 0.000074 1.34964	</rayStart>
-              <rayEnd>	-0.000128 0.000074 1.84964	</rayEnd>
-              <rayUp>	0.077 0 0	</rayUp>
-              <size>	0.5	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.97 0.97 0.000000 0.000000	</tiling>
-            <density>	119.557 120.159	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_90mm_Gun_M3A1>
         <_90mm_Rifled_Gun>	shared	  <maxAmmo>	50	</maxAmmo>
           <armor>
             <armor_1>	124	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -4200,12 +3974,12 @@
           <aimingTime>	2.3	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
-            <afterShot>	3.25	</afterShot>
+            <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <pitchLimits>
             <minPitch>	0 -13 1 -13	</minPitch>
-            <maxPitch>	0 10 0.361111 10 0.387053 5 0.403256 5 0.445117 0 0.555646 4.47035e-06 0.597222 5 0.604223 5 0.638889 10 1 10	</maxPitch>
+            <maxPitch>	0.00000 10.00 0.37222 10.00 0.44444 0.00 0.55556 0.00 0.62778 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <models>
@@ -4297,7 +4071,7 @@
             </armor_3>
             <gun>	35	</gun>
           </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <reloadTime>	6.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
@@ -4307,7 +4081,7 @@
           <aimingTime>	2.2	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -13 1 -13	</minPitch>
-            <maxPitch>	0 10 0.361111 10 0.387053 5 0.403256 5 0.445117 0 0.555646 4.47035e-06 0.597222 5 0.604223 5 0.638889 10 1 10	</maxPitch>
+            <maxPitch>	0.00000 10.00 0.37222 10.00 0.44444 0.00 0.55556 0.00 0.62778 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <models>
@@ -4997,7 +4771,7 @@
         <density>	98.6252 98.9672	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_2_STA_1>
+    </Turret_2_J13_STA_1>
   </turrets0>
   <engines>
     <_Mitsubishi_DL10T>	shared	  <unlocks>
@@ -5011,18 +4785,13 @@
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <JAN-GRC-3Z>	shared	  <unlocks>
-        <radio>	JAN-GRC-4Z	  <cost>	9500	</cost>
-        </radio>
-      </unlocks>
-    </JAN-GRC-3Z>
     <JAN-GRC-4Z>	shared	</JAN-GRC-4Z>
   </radios>
   <physics>
     <detailed>
       <engines>
         <_Mitsubishi_DL10T>
-          <smplEnginePower>	528.6406	</smplEnginePower>
+          <smplEnginePower>	580	</smplEnginePower>
           <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </_Mitsubishi_DL10T>
         <_Mitsubishi_12HM20WT>
@@ -5031,20 +4800,7 @@
         </_Mitsubishi_12HM20WT>
       </engines>
       <chassis>
-        <Chassis_STA_1>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.1932	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.0966	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
-            </firm>
-          </grounds>
-        </Chassis_STA_1>
-        <Chassis_STA_1_2>
+        <Chassis_J13_STA_1>
           <grounds>
             <soft>
               <rollingFriction>	0.1771	</rollingFriction>
@@ -5056,7 +4812,20 @@
               <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_STA_1_2>
+        </Chassis_J13_STA_1>
+        <Chassis_J13_STA_1_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.1771	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.08855	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0805	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_J13_STA_1_2>
       </chassis>
     </detailed>
   </physics>

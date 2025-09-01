@@ -413,4 +413,52 @@
       <fx>	ob_main_tips_activity_start	</fx>
     </sound>
   </hint>
+  <hint>
+    <props>
+      <name>	Zeppelin_Use430	</name>
+      <scope>	story_mode	</scope>
+    </props>
+    <text>
+      <key>	#story_mode.sm_battle:zeppelin/hint01	</key>
+      <highlight>	img://story_mode/gui/maps/icons/hints/highlight_blue.png	</highlight>
+    </text>
+    <visual>
+      <image>	img://story_mode/gui/maps/icons/hints/scc_x.png	</image>
+    </visual>
+    <sound>
+      <fx>	ob_main_tips_activity_start	</fx>
+    </sound>
+  </hint>
+  <hint>
+    <props>
+      <name>	Zeppelin_UseLeo	</name>
+      <scope>	story_mode	</scope>
+    </props>
+    <text>
+      <key>	#story_mode.sm_battle:zeppelin/hint02	</key>
+      <highlight>	img://story_mode/gui/maps/icons/hints/highlight_blue.png	</highlight>
+    </text>
+    <visual>
+      <image>	img://story_mode/gui/maps/icons/hints/scc_question.png	</image>
+    </visual>
+    <sound>
+      <fx>	ob_main_tips_activity_start	</fx>
+    </sound>
+  </hint>
+  <hint>
+    <props>
+      <name>	Zeppelin_UseMaus	</name>
+      <scope>	story_mode	</scope>
+    </props>
+    <text>
+      <key>	#story_mode.sm_battle:zeppelin/hint03	</key>
+      <highlight>	img://story_mode/gui/maps/icons/hints/highlight_blue.png	</highlight>
+    </text>
+    <visual>
+      <image>	img://story_mode/gui/maps/icons/hints/scc_x.png	</image>
+    </visual>
+    <sound>
+      <fx>	ob_main_tips_activity_start	</fx>
+    </sound>
+  </hint>
 </battle_hints.xml>

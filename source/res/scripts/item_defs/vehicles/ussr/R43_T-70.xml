@@ -984,8 +984,7 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	2400	</weight>
-      <maxLoad>	9500	</maxLoad>
-      <terrainResistance>	1.2 1.3 2.3	</terrainResistance>
+      <terrainResistance>	1.1 1.2 2.1	</terrainResistance>
       <brakeForce>	9500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	60	</rotationSpeed>
@@ -1798,7 +1797,6 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	2400	</weight>
-      <maxLoad>	12500	</maxLoad>
       <terrainResistance>	1.1 1.2 2.1	</terrainResistance>
       <brakeForce>	11000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -3997,11 +3995,6 @@
     <Medium>	shared	</Medium>
   </fuelTanks>
   <radios>
-    <_9R>	shared	  <unlocks>
-        <radio>	_9RM	  <cost>	4040	</cost>
-        </radio>
-      </unlocks>
-    </_9R>
     <_9RM>	shared	</_9RM>
   </radios>
   <physics>
@@ -4020,13 +4013,13 @@
         <Chassis_R43_T-70>
           <grounds>
             <soft>
-              <rollingFriction>	0.18515	</rollingFriction>
+              <rollingFriction>	0.16905	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.0966	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0966	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

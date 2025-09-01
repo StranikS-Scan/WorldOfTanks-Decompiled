@@ -1,19 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/prb_control/entities/tournament/pre_queue/entity.py
 import logging
+from battle_royale.gui.impl.lobby.views.states import BattleRoyaleTournamentQueueState
 from constants import PREBATTLE_TYPE
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from constants import QUEUE_TYPE
-from gui.shared import EVENT_BUS_SCOPE
-from gui.shared import g_eventBus
-from gui.shared import events
-from gui.impl.gen import R
 from helpers import dependency
 from gui.periodic_battles.models import PrimeTimeStatus
 from skeletons.gui.game_control import IBattleRoyaleTournamentController
 from skeletons.gui.impl import IGuiLoader
-from gui.Scaleform.framework.managers.loaders import GuiImplViewLoadParams
-from gui.Scaleform.framework import ScopeTemplates
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.base.pre_queue.entity import PreQueueEntity, PreQueueEntryPoint, PreQueueSubscriber
 from battle_royale.gui.prb_control.entities.tournament.pre_queue.action_validator import BattleRoyaleTournamentActionsValidator
@@ -109,10 +104,8 @@ class BattleRoyaleTournamentEntity(PreQueueEntity):
         _logger.debug('Sends request on dequeuing from the Battle Royale')
 
     def _goToQueueUI(self):
-        if not self.__prebatleWindow:
-            from battle_royale.gui.impl.lobby.views.pre_battle import PreBattleView
-            g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.battle_royale.lobby.views.PreBattleView(), PreBattleView, ScopeTemplates.LOBBY_TOP_SUB_SCOPE)), scope=EVENT_BUS_SCOPE.LOBBY)
-            self.__prebatleWindow = True
+        BattleRoyaleTournamentQueueState.goTo()
+        self.__prebatleWindow = True
         return FUNCTIONAL_FLAG.LOAD_PAGE
 
     def _exitFromQueueUI(self):

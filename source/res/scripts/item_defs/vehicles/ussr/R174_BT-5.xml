@@ -14,7 +14,7 @@
     <moving>	0.29	</moving>
     <still>	0.29	</still>
     <camouflageBonus>	0.03	</camouflageBonus>
-    <firePenalty>	0.449	</firePenalty>
+    <firePenalty>	0.435	</firePenalty>
   </invisibility>
   <optDevsOverrides>
     <camouflageNet>
@@ -1171,14 +1171,13 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	3300	</weight>
-      <maxLoad>	10800	</maxLoad>
-      <terrainResistance>	0.9 1.1 2.7	</terrainResistance>
+      <terrainResistance>	0.8 1 2.3	</terrainResistance>
       <brakeForce>	31000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	40	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.22	</vehicleMovement>
-        <vehicleRotation>	0.22	</vehicleRotation>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	70	</maxHealth>
@@ -1907,14 +1906,13 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	3300	</weight>
-      <maxLoad>	11800	</maxLoad>
       <terrainResistance>	0.8 1 2.3	</terrainResistance>
       <brakeForce>	31000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	50	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.2	</vehicleMovement>
-        <vehicleRotation>	0.2	</vehicleRotation>
+        <vehicleMovement>	0.16	</vehicleMovement>
+        <vehicleRotation>	0.16	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	80	</maxHealth>
@@ -2663,29 +2661,25 @@
         <maxRegenHealth>	35	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	280	</circularVisionRadius>
+      <circularVisionRadius>	290	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	50	</maxHealth>
         <maxRegenHealth>	25	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_45mm_20K>	shared	  <maxAmmo>	170	</maxAmmo>
-          <unlocks>
-            <gun>	_37mm_automatic_OKB2	  <cost>	35	</cost>
-            </gun>
-          </unlocks>
+        <_45mm_20K_BT_5>	shared	  <maxAmmo>	170	</maxAmmo>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
-          <reloadTime>	2.3	</reloadTime>
-          <aimingTime>	2.2	</aimingTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	2	</reloadTime>
+          <aimingTime>	1.8	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 8 0.380783 8 0.444444 5 0.555556 5 0.619218 8 1 8	</maxPitch>
@@ -2737,80 +2731,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
             <tiling>	2 1 0.000000 0.000000	</tiling>
           </camouflage>
-        </_45mm_20K>
-        <_37mm_automatic_OKB2>	shared	  <maxAmmo>	168	</maxAmmo>
-          <reloadTime>	7	</reloadTime>
-          <aimingTime>	2	</aimingTime>
-          <armor>
-            <gun>	10	</gun>
-          </armor>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 8 0.380783 8 0.444444 2 0.555556 2 0.619218 8 1 8	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
-          <shotDispersionFactors>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	1.5	</afterShot>
-          </shotDispersionFactors>
-          <clip>
-            <rate>	180	</rate>
-            <count>	6	</count>
-          </clip>
-          <burst>
-            <rate>	180	</rate>
-            <count>	3	</count>
-          </burst>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <models>
-            <undamaged>	vehicles/russian/R174_BT-5/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/russian/R174_BT-5/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/russian/R174_BT-5/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/russian/R174_BT-5/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R174_BT-5/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_small_auto	</effects>
-          <reloadEffect>	reload20_45	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.015712 0.012282 0.848284	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.119181 0.11918	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.015712 0.012282 0.848284	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <shotOffset>	-0.031076 0.024564 0.000000	</shotOffset>
-          <camouflage>
-            <density>	129.102 128.791	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-            <tiling>	2 1 0.000000 0.000000	</tiling>
-          </camouflage>
-        </_37mm_automatic_OKB2>
+        </_45mm_20K_BT_5>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R174_BT-5/normal/lod0/Turret_01.model	</undamaged>
@@ -3261,7 +3182,7 @@
       <level>	3	</level>
       <price>	1730	</price>
       <unlocks>
-        <gun>	_45mm_21KMT	  <cost>	160	</cost>
+        <gun>	_45mm_21_KMT	  <cost>	160	</cost>
         </gun>
       </unlocks>
       <armor>
@@ -3290,21 +3211,21 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_45mm_20K>	shared	  <maxAmmo>	185	</maxAmmo>
-          <reloadTime>	2.3	</reloadTime>
-          <aimingTime>	2.2	</aimingTime>
+        <_45mm_20K_BT_5>	shared	  <maxAmmo>	185	</maxAmmo>
+          <reloadTime>	2	</reloadTime>
+          <aimingTime>	1.8	</aimingTime>
           <armor>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.45	</shotDispersionRadius>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 8 0.380783 8 0.444444 2 0.555556 2 0.619218 8 1 8	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <models>
@@ -3353,8 +3274,80 @@
             <aoTextureSize>	512 256	</aoTextureSize>
             <tiling>	2 1 0.000000 0.000000	</tiling>
           </camouflage>
-        </_45mm_20K>
-        <_37mm_automatic_OKB2>	shared	  <maxAmmo>	150	</maxAmmo>
+        </_45mm_20K_BT_5>
+        <_45mm_21_KMT>	shared	  <maxAmmo>	145	</maxAmmo>
+          <unlocks>
+            <vehicle>	R06_T-28	  <cost>	3200	</cost>
+            </vehicle>
+            <vehicle>	R03_BT-7	  <cost>	3200	</cost>
+            </vehicle>
+            <gun>	_37mm_automatic_OKB_2	  <cost>	35	</cost>
+            </gun>
+          </unlocks>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <armor>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	2	</reloadTime>
+          <aimingTime>	1.7	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 8 0.380783 8 0.444444 5 0.555556 5 0.619218 8 1 8	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/russian/R174_BT-5/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/russian/R174_BT-5/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/russian/R174_BT-5/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R174_BT-5/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R174_BT-5/collision_client/Gun_05.model	</collisionModelClient>
+          </hitTester>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
+          <customizationSlots>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41000	</slotId>
+              <anchorPosition>	-0.024712 0.022565 1.18984	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41001	</slotId>
+              <anchorPosition>	0 0.150395 0.150395	</anchorPosition>
+              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	42000	</slotId>
+              <anchorPosition>	-0.024712 0.022565 1.18984	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <shotOffset>	-0.049424 0.045130 0.000000	</shotOffset>
+          <camouflage>
+            <density>	130.046 128.265	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
+            <tiling>	2 1 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_45mm_21_KMT>
+        <_37mm_automatic_OKB_2>	shared	  <maxAmmo>	150	</maxAmmo>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	1.5	</afterShot>
@@ -3426,75 +3419,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
             <tiling>	2 1 0.000000 0.000000	</tiling>
           </camouflage>
-        </_37mm_automatic_OKB2>
-        <_45mm_21KMT>	shared	  <maxAmmo>	145	</maxAmmo>
-          <unlocks>
-            <vehicle>	R06_T-28	  <cost>	3200	</cost>
-            </vehicle>
-          </unlocks>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	3	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <armor>
-            <gun>	10	</gun>
-          </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	2.3	</reloadTime>
-          <aimingTime>	2	</aimingTime>
-          <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 8 0.380783 8 0.444444 5 0.555556 5 0.619218 8 1 8	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/russian/R174_BT-5/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/russian/R174_BT-5/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/russian/R174_BT-5/crash/lod0/Gun_05.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/russian/R174_BT-5/collision/Gun_05.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R174_BT-5/collision_client/Gun_05.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_small	</effects>
-          <reloadEffect>	reload20_45	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.024712 0.022565 1.18984	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.150395 0.150395	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.024712 0.022565 1.18984	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <shotOffset>	-0.049424 0.045130 0.000000	</shotOffset>
-          <camouflage>
-            <density>	130.046 128.265	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-            <tiling>	2 1 0.000000 0.000000	</tiling>
-          </camouflage>
-        </_45mm_21KMT>
+        </_37mm_automatic_OKB_2>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R174_BT-5/normal/lod0/Turret_02.model	</undamaged>
@@ -3952,38 +3877,29 @@
     </Turret_2_R174_BT-5>
   </turrets0>
   <engines>
-    <M-5-400>	shared	  <unlocks>
+    <M_5_400_BT_5>	shared	  <unlocks>
         <engine>	V_3BT	  <cost>	200	</cost>
         </engine>
       </unlocks>
-    </M-5-400>
-    <V_3BT>	shared	  <unlocks>
-        <vehicle>	R03_BT-7	  <cost>	3200	</cost>
-        </vehicle>
-      </unlocks>
-    </V_3BT>
+    </M_5_400_BT_5>
+    <V_3BT>	shared	</V_3BT>
   </engines>
   <fuelTanks>
     <Small>	shared	</Small>
   </fuelTanks>
   <radios>
-    <_71-TK-3>	shared	  <unlocks>
-        <radio>	_10R	  <cost>	610	</cost>
-        </radio>
-      </unlocks>
-    </_71-TK-3>
     <_10R>	shared	</_10R>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
   <physics>
     <detailed>
       <engines>
-        <M-5-400>
-          <smplEnginePower>	422.9124	</smplEnginePower>
+        <M_5_400_BT_5>
+          <smplEnginePower>	430	</smplEnginePower>
           <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
-        </M-5-400>
+        </M_5_400_BT_5>
         <V_3BT>
-          <smplEnginePower>	444.0581	</smplEnginePower>
+          <smplEnginePower>	460	</smplEnginePower>
           <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
         </V_3BT>
       </engines>
@@ -3992,13 +3908,13 @@
           <axleCount>	5	</axleCount>
           <grounds>
             <soft>
-              <rollingFriction>	0.21735	</rollingFriction>
+              <rollingFriction>	0.18515	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.08855	</rollingFriction>
+              <rollingFriction>	0.0805	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.07245	</rollingFriction>
+              <rollingFriction>	0.0644	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_R174_BT-5>

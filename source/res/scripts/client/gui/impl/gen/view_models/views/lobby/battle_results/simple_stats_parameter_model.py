@@ -1,9 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/battle_results/simple_stats_parameter_model.py
 from enum import Enum, IntEnum
-from frameworks.wulf import Array
+from frameworks.wulf import Array, ViewModel
 from gui.impl.gen import R
-from frameworks.wulf import ViewModel
 
 class ValueType(IntEnum):
     INTEGER = 0
@@ -38,7 +37,7 @@ class RegularParamType(Enum):
 class SimpleStatsParameterModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=3, commands=0):
+    def __init__(self, properties=4, commands=0):
         super(SimpleStatsParameterModel, self).__init__(properties=properties, commands=commands)
 
     def getLabel(self):
@@ -47,24 +46,31 @@ class SimpleStatsParameterModel(ViewModel):
     def setLabel(self, value):
         self._setResource(0, value)
 
+    def getLabelKey(self):
+        return self._getString(1)
+
+    def setLabelKey(self, value):
+        self._setString(1, value)
+
     def getValue(self):
-        return self._getArray(1)
+        return self._getArray(2)
 
     def setValue(self, value):
-        self._setArray(1, value)
+        self._setArray(2, value)
 
     @staticmethod
     def getValueType():
         return float
 
     def getParamValueType(self):
-        return ValueType(self._getNumber(2))
+        return ValueType(self._getNumber(3))
 
     def setParamValueType(self, value):
-        self._setNumber(2, value.value)
+        self._setNumber(3, value.value)
 
     def _initialize(self):
         super(SimpleStatsParameterModel, self)._initialize()
         self._addResourceProperty('label', R.invalid())
+        self._addStringProperty('labelKey', '')
         self._addArrayProperty('value', Array())
         self._addNumberProperty('paramValueType')

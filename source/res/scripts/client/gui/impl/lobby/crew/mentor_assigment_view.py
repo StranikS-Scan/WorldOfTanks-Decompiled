@@ -245,6 +245,9 @@ class MentorAssigmentView(BaseCrewView, BaseTankmanListView):
         with self.viewModel.transaction():
             self.__fillTips()
 
+    def _onClose(self, params=None):
+        self.destroyWindow()
+
     def _onBack(self):
         self._destroyParentView()
         self._destroySubViews()

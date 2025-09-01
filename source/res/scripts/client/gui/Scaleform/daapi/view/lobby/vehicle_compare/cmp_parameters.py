@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_compare/cmp_parameters.py
+from __future__ import absolute_import
 from copy import copy
 import typing
+from future.utils import iteritems
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.game_control.veh_comparison_basket import CONFIGURATION_TYPES
@@ -59,7 +61,7 @@ class _BestParamsDict(dict):
 
     def toDict(self):
         res = dict(self)
-        for k, valuableLength in self.__lengths.iteritems():
+        for k, valuableLength in iteritems(self.__lengths):
             res[k] = self[k][:valuableLength]
 
         return res
@@ -87,7 +89,7 @@ def _reCalcBestParameters(targetCache):
     hasNormalization = _hasNormalizeParameters(targetCache)
     for vcParamData in targetCache:
         params = vcParamData.getParams()
-        for pKey, pVal in params.iteritems():
+        for pKey, pVal in iteritems(params):
             if hasNormalization and pKey in PARAMS_NORMALIZATION_MAP:
                 func = PARAMS_NORMALIZATION_MAP[pKey]
                 pVal = func(pVal)
@@ -246,7 +248,7 @@ class _VehCompareParametersData(object):
             self.__hasCamouflage = hasCamouflage
             isDifferent = True
         if shellInvalid:
-            self.__vehicle.descriptor.activeGunShotIndex = selectedShellIdx
+            vehicle_adjusters.changeShell(self.__vehicle, selectedShellIdx)
             self.__selectedShellIdx = selectedShellIdx
             isDifferent = True
         if dynSlotsInvalid:
@@ -257,6 +259,7 @@ class _VehCompareParametersData(object):
         if postProgressionInvalid:
             self.__postProgressionState = postProgressionState
             self.__vehicle.installPostProgression(postProgressionState, True)
+            vehicle_adjusters.changeShell(self.__vehicle, self.__selectedShellIdx)
             self.__isCurrVehParamsInvalid = True
             isDifferent = True
         return isDifferent
@@ -391,11 +394,11 @@ class VehCompareBasketParamsCache(object):
         outcome = []
         if paramName in targetParams:
             targetVal = targetParams[paramName]
-            for i in range(0, len(self.__cache)):
+            for i, value in enumerate(self.__cache):
                 if i == index:
                     outcome.append(None)
                 hasNormalization = _hasNormalizeParameters(self.__cache)
-                outcome.append(self.__cache[i].getDeltaParams(paramName=paramName, paramValue=targetVal, hasNormalization=hasNormalization))
+                outcome.append(value.getDeltaParams(paramName=paramName, paramValue=targetVal, hasNormalization=hasNormalization))
 
         return outcome
 

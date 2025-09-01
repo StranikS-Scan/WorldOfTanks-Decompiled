@@ -56,7 +56,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	3739	</weight>
-    <maxHealth>	648	</maxHealth>
+    <maxHealth>	800	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	190	</maxHealth>
       <maxRegenHealth>	130	</maxRegenHealth>
@@ -900,11 +900,10 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	2500	</weight>
-      <maxLoad>	9330	</maxLoad>
-      <terrainResistance>	1 1.1 2	</terrainResistance>
+      <terrainResistance>	0.8 0.9 1.8	</terrainResistance>
       <brakeForce>	9000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	40	</rotationSpeed>
+      <rotationSpeed>	60	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.18	</vehicleMovement>
         <vehicleRotation>	0.18	</vehicleRotation>
@@ -1751,11 +1750,10 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	2500	</weight>
-      <maxLoad>	10900	</maxLoad>
       <terrainResistance>	0.8 0.9 1.8	</terrainResistance>
       <brakeForce>	11000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	44	</rotationSpeed>
+      <rotationSpeed>	64	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.16	</vehicleMovement>
         <vehicleRotation>	0.16	</vehicleRotation>
@@ -2603,14 +2601,14 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1500	</weight>
-      <maxHealth>	162	</maxHealth>
+      <maxHealth>	150	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
         <maxRegenHealth>	65	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	370	</circularVisionRadius>
+      <circularVisionRadius>	380	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	90	</maxHealth>
         <maxRegenHealth>	45	</maxRegenHealth>
@@ -2632,14 +2630,15 @@
             <maxPitch>	0 2.7 0.061111 2.7 0.088889 8 0.375 8 0.402778 6 0.597222 6 0.625 8 0.911111 8 0.938888 2.7 1 2.7	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	8.5	</reloadTime>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <reloadTime>	7.7	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.10	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.3	</aimingTime>
+          <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
             <undamaged>	vehicles/german/G113_SP_I_C/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G113_SP_I_C/crash/lod0/Gun_01.model	</destroyed>
@@ -3353,7 +3352,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2000	</weight>
-      <maxHealth>	232	</maxHealth>
+      <maxHealth>	200	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -3389,13 +3388,15 @@
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <reloadTime>	8	</reloadTime>
+          <reloadTime>	7.6	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.10	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.3	</aimingTime>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <models>
             <undamaged>	vehicles/german/G113_SP_I_C/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/german/G113_SP_I_C/crash/lod0/Gun_02.model	</destroyed>
@@ -3651,6 +3652,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.2	</aimingTime>
+          <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
             <undamaged>	vehicles/german/G113_SP_I_C/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/german/G113_SP_I_C/crash/lod0/Gun_03.model	</destroyed>
@@ -4332,47 +4334,42 @@
     </Turret_2_G113_SP_I_C>
   </turrets0>
   <engines>
-    <Hotchkiss_6_Zyl_Benzin_164_PS>	shared	  <unlocks>
-        <engine>	Hotchkiss_6_Zyl_Benzin_195_PS	  <cost>	10200	</cost>
+    <Hotchkiss_6_Zyl_Benzin_PT_I>	shared	  <unlocks>
+        <engine>	Hotchkiss_6_Zyl_Benzin_PT_II	  <cost>	10200	</cost>
         </engine>
       </unlocks>
-    </Hotchkiss_6_Zyl_Benzin_164_PS>
-    <Hotchkiss_6_Zyl_Benzin_195_PS>	shared	</Hotchkiss_6_Zyl_Benzin_195_PS>
+    </Hotchkiss_6_Zyl_Benzin_PT_I>
+    <Hotchkiss_6_Zyl_Benzin_PT_II>	shared	</Hotchkiss_6_Zyl_Benzin_PT_II>
   </engines>
   <fuelTanks>
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <AN-GRC-4>	shared	  <unlocks>
-        <radio>	AN-GRC-7	  <cost>	9100	</cost>
-        </radio>
-      </unlocks>
-    </AN-GRC-4>
     <AN-GRC-7>	shared	</AN-GRC-7>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Hotchkiss_6_Zyl_Benzin_164_PS>
+        <Hotchkiss_6_Zyl_Benzin_PT_I>
           <smplEnginePower>	190	</smplEnginePower>
           <smplFwMaxSpeed>	58	</smplFwMaxSpeed>
-        </Hotchkiss_6_Zyl_Benzin_164_PS>
-        <Hotchkiss_6_Zyl_Benzin_195_PS>
+        </Hotchkiss_6_Zyl_Benzin_PT_I>
+        <Hotchkiss_6_Zyl_Benzin_PT_II>
           <smplEnginePower>	230	</smplEnginePower>
           <smplFwMaxSpeed>	58	</smplFwMaxSpeed>
-        </Hotchkiss_6_Zyl_Benzin_195_PS>
+        </Hotchkiss_6_Zyl_Benzin_PT_II>
       </engines>
       <chassis>
         <Chassis_G113_SP_I_C>
           <grounds>
             <soft>
-              <rollingFriction>	0.161	</rollingFriction>
+              <rollingFriction>	0.1449	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.08855	</rollingFriction>
+              <rollingFriction>	0.07245	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0805	</rollingFriction>
+              <rollingFriction>	0.0644	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_G113_SP_I_C>

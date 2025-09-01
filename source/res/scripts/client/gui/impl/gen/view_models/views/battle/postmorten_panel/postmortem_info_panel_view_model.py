@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/battle/postmorten_panel/postmortem_info_panel_view_model.py
-from frameworks.wulf import Array
-from frameworks.wulf import ViewModel
+from frameworks.wulf import Array, ViewModel
 from gui.impl.gen.view_models.views.battle.postmorten_panel.rating_button_model import RatingButtonModel
 
 class PostmortemInfoPanelViewModel(ViewModel):

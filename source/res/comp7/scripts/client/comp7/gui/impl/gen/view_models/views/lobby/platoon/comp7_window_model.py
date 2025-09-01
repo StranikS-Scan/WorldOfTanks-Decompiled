@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/gen/view_models/views/lobby/platoon/comp7_window_model.py
-from frameworks.wulf import Array
 from comp7.gui.impl.gen.view_models.views.lobby.enums import SeasonName
+from frameworks.wulf import Array
 from comp7.gui.impl.gen.view_models.views.lobby.platoon.comp7_header_model import Comp7HeaderModel
 from comp7.gui.impl.gen.view_models.views.lobby.platoon.comp7_slot_model import Comp7SlotModel
 from comp7.gui.impl.gen.view_models.views.lobby.progression_item_base_model import ProgressionItemBaseModel

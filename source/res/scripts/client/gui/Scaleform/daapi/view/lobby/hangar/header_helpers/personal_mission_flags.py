@@ -175,7 +175,7 @@ class PersonalMissionsFlag(IQuestsFlag):
             states = []
             if vehicle.isOnlyForBattleRoyaleBattles:
                 return []
-            for branch in reversed(PM_BRANCH.ACTIVE_BRANCHES):
+            for branch in reversed(PM_BRANCH.V1_BRANCHES):
                 questType = QUEST_TYPE_BY_PM_BRANCH[branch]
                 if not cls.__lobbyContext.getServerSettings().isPersonalMissionsEnabled(branch):
                     result.append(headerQuestFormatterVo(False, _getPersonalMissionsIcon(vehicle, branch, False), _ms(MENU.hangarHeaderPersonalMissionsLabel(LabelState.EMPTY)), questType, tooltip=_getPersonalMissionsTooltip(branch, WIDGET_PM_STATE.BRANCH_DISABLED)))

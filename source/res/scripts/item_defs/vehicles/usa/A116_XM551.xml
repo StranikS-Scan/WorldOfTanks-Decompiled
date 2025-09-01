@@ -11,7 +11,7 @@
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
     <forward>	65	</forward>
-    <backward>	22	</backward>
+    <backward>	25	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.254	</moving>
@@ -60,7 +60,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	6250	</weight>
-    <maxHealth>	1280	</maxHealth>
+    <maxHealth>	1480	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	180	</maxRegenHealth>
@@ -1137,7 +1137,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	3500	</weight>
-      <maxLoad>	20000	</maxLoad>
       <terrainResistance>	0.8 0.9 1.8	</terrainResistance>
       <brakeForce>	15000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2096,7 +2095,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4000	</weight>
-      <maxHealth>	320	</maxHealth>
+      <maxHealth>	370	</maxHealth>
       <rotationSpeed>	43	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
@@ -2212,9 +2211,9 @@
             </armor_4>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.51	</shotDispersionRadius>
+          <shotDispersionRadius>	0.48	</shotDispersionRadius>
           <reloadTime>	20	</reloadTime>
-          <aimingTime>	3.3	</aimingTime>
+          <aimingTime>	3	</aimingTime>
           <invisibilityFactorAtShot>	0.15	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
@@ -2222,7 +2221,7 @@
           </pitchLimits>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <shotDispersionFactors>
-            <turretRotation>	0.35	</turretRotation>
+            <turretRotation>	0.2	</turretRotation>
             <afterShot>	6.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>

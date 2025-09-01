@@ -1662,7 +1662,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	5000	</weight>
-      <maxLoad>	28600	</maxLoad>
       <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
       <brakeForce>	29000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2606,7 +2605,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	5000	</weight>
-      <maxLoad>	33500	</maxLoad>
       <terrainResistance>	1 1.1 2.3	</terrainResistance>
       <brakeForce>	34000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -3544,7 +3542,7 @@
   <turrets0>
     <Turret_3_GB17_Grant_I>
       <userString>	#gb_vehicles:Turret_3_GB17_Grant_I	</userString>
-      <tags>	cannotDetach	</tags>
+      <tags>	cannotDetach turretless	</tags>
       <level>	4	</level>
       <price>	4000	</price>
       <notInShop>	true	</notInShop>

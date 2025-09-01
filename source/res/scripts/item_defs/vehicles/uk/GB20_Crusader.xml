@@ -8,7 +8,7 @@
   <supplySlots>	3 1 1 6 6 6 7 8 8 8	</supplySlots>
   <postProgressionTree>	role_LT_universal	</postProgressionTree>
   <speedLimits>
-    <forward>	58	</forward>
+    <forward>	63	</forward>
     <backward>	22	</backward>
   </speedLimits>
   <invisibility>
@@ -57,7 +57,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_3	</primaryArmor>
     <weight>	9040	</weight>
-    <maxHealth>	544	</maxHealth>
+    <maxHealth>	640	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	170	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -1044,8 +1044,7 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	6200	</weight>
-      <maxLoad>	19300	</maxLoad>
-      <terrainResistance>	1 1.2 2	</terrainResistance>
+      <terrainResistance>	0.9 1 1.8	</terrainResistance>
       <brakeForce>	17000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	40	</rotationSpeed>
@@ -2015,7 +2014,6 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	6200	</weight>
-      <maxLoad>	21000	</maxLoad>
       <terrainResistance>	0.9 1 1.8	</terrainResistance>
       <brakeForce>	20000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -2999,7 +2997,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2953	</weight>
-      <maxHealth>	106	</maxHealth>
+      <maxHealth>	120	</maxHealth>
       <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -3016,22 +3014,18 @@
         <_2pdr_Gun_Mk_X>	shared	  <maxAmmo>	260	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.097222 10 0.160884 15 0.325227 15 0.388889 1 0.611111 1 0.674773 15 0.839116 15 0.902778 10 1 10	</maxPitch>
+            <maxPitch>	0.00000 15.00 0.08333 10.00 0.13889 15.00 0.33333 15.00 0.45833 1.00 0.54167 1.00 0.66667 15.00 1.00000 15.00	</maxPitch>
           </pitchLimits>
-          <unlocks>
-            <gun>	_76mm_Howitzer_MkI	  <cost>	2100	</cost>
-            </gun>
-          </unlocks>
           <armor>
             <gun>	10	</gun>
           </armor>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
-          <reloadTime>	2.1	</reloadTime>
-          <aimingTime>	1.7	</aimingTime>
+          <reloadTime>	2	</reloadTime>
+          <aimingTime>	1.6	</aimingTime>
           <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3	</afterShot>
+            <afterShot>	2	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <models>
@@ -3081,70 +3075,6 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_2pdr_Gun_Mk_X>
-        <_76mm_Howitzer_MkI>	shared	  <maxAmmo>	100	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.097222 10 0.160884 15 0.325227 15 0.388889 1 0.611111 1 0.674773 15 0.839116 15 0.902778 10 1 10	</maxPitch>
-          </pitchLimits>
-          <armor>
-            <gun>	20	</gun>
-          </armor>
-          <shotDispersionRadius>	0.49	</shotDispersionRadius>
-          <reloadTime>	4.1	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	3	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/british/GB20_Crusader/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/british/GB20_Crusader/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/british/GB20_Crusader/crash/lod0/Gun_02.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/british/GB20_Crusader/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB20_Crusader/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.004251 -0.008483 0.710403	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.004251 -0.008483 0.710403	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.008501 -0.016966 1.00709	</rayStart>
-              <rayEnd>	-0.008501 -0.016966 1.26709	</rayEnd>
-              <rayUp>	0.049 0 0	</rayUp>
-              <size>	0.26	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
-            <density>	199.677 199.68	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_76mm_Howitzer_MkI>
       </guns>
       <models>
         <undamaged>	vehicles/british/GB20_Crusader/normal/lod0/Turret_01.model	</undamaged>
@@ -3728,7 +3658,7 @@
       <level>	6	</level>
       <price>	21000	</price>
       <unlocks>
-        <gun>	QF_6_pounder_Mk_III	  <cost>	1500	</cost>
+        <gun>	QF_6_pdr_Mk_V_A15	  <cost>	3700	</cost>
         </gun>
       </unlocks>
       <armor>
@@ -3745,7 +3675,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3390	</weight>
-      <maxHealth>	136	</maxHealth>
+      <maxHealth>	160	</maxHealth>
       <rotationSpeed>	46	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -3762,18 +3692,18 @@
         <_2pdr_Gun_Mk_X>	shared	  <maxAmmo>	260	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 7 0.111111 7 0.174773 12 0.325227 12 0.388889 1 0.611111 1 0.674773 12 0.825227 12 0.888889 7 1 7	</maxPitch>
+            <maxPitch>	0.00000 12.00 0.08333 7.00 0.13889 12.00 0.33333 12.00 0.45833 1.00 0.54167 1.00 0.66667 12.00 1.00000 12.00	</maxPitch>
           </pitchLimits>
           <armor>
             <gun>	10	</gun>
           </armor>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
-          <reloadTime>	2.1	</reloadTime>
+          <reloadTime>	2	</reloadTime>
           <aimingTime>	1.5	</aimingTime>
           <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3	</afterShot>
+            <afterShot>	2	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <models>
@@ -3830,160 +3760,14 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_2pdr_Gun_Mk_X>
-        <_76mm_Howitzer_MkI>	shared	  <maxAmmo>	100	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 7 0.111111 7 0.174773 12 0.325227 12 0.388889 1 0.611111 1 0.674773 12 0.825227 12 0.888889 7 1 7	</maxPitch>
-          </pitchLimits>
-          <armor>
-            <gun>	20	</gun>
-          </armor>
-          <shotDispersionRadius>	0.49	</shotDispersionRadius>
-          <reloadTime>	4	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	3	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	1.9	</aimingTime>
-          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/british/GB20_Crusader/normal/lod0/Gun_04.model	</undamaged>
-            <destroyed>	vehicles/british/GB20_Crusader/crash/lod0/Gun_04.model	</destroyed>
-            <exploded>	vehicles/british/GB20_Crusader/crash/lod0/Gun_04.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/british/GB20_Crusader/collision/Gun_04.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB20_Crusader/collision_client/Gun_04.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000001 -0.080686 0.718905	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.071172 0.05546 0.110305	</anchorPosition>
-              <anchorDirection>	-0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000001 -0.080686 0.718905	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0 -0.086085 0.915306	</rayStart>
-              <rayEnd>	-0 -0.086085 1.200306	</rayEnd>
-              <rayUp>	0.049 0 0	</rayUp>
-              <size>	0.285	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.385 0.385 0.000000 0.000000	</tiling>
-            <density>	199.677 199.68	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_76mm_Howitzer_MkI>
-        <QF_6_pounder_Mk_III>	shared	  <maxAmmo>	130	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 7 0.111111 7 0.174773 12 0.325227 12 0.388889 1 0.611111 1 0.674773 12 0.825227 12 0.888889 7 1 7	</maxPitch>
-          </pitchLimits>
-          <unlocks>
-            <gun>	QF_6_pounder_Mk_V	  <cost>	3700	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <gun>	10	</gun>
-          </armor>
-          <shotDispersionRadius>	0.43	</shotDispersionRadius>
-          <reloadTime>	2.2	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/british/GB20_Crusader/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/british/GB20_Crusader/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/british/GB20_Crusader/crash/lod0/Gun_05.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/british/GB20_Crusader/collision/Gun_05.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB20_Crusader/collision_client/Gun_05.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.000001 -0.080743 0.718874	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.07117 0.055402 0.110274	</anchorPosition>
-              <anchorDirection>	-0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.000001 -0.080743 0.718874	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0 -0.086277 1.022	</rayStart>
-              <rayEnd>	-0 -0.086277 1.312	</rayEnd>
-              <rayUp>	0.054 0 0	</rayUp>
-              <size>	0.29	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.37 0.37 0.000000 0.000000	</tiling>
-            <density>	216.292 216.567	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </QF_6_pounder_Mk_III>
-        <QF_6_pounder_Mk_V>	shared	  <maxAmmo>	130	</maxAmmo>
+        <QF_6_pdr_Mk_V_A15>	shared	  <maxAmmo>	130	</maxAmmo>
           <unlocks>
             <vehicle>	GB104_GSR_3301_Setter	  <cost>	63000	</cost>
             </vehicle>
           </unlocks>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 7 0.111111 7 0.174773 12 0.325227 12 0.388889 1 0.611111 1 0.674773 12 0.825227 12 0.888889 7 1 7	</maxPitch>
+            <maxPitch>	0.00000 12.00 0.01667 10.00 0.08333 7.00 0.13889 12.00 0.33333 12.00 0.45833 1.00 0.54167 1.00 0.66667 12.00 1.00000 12.00	</maxPitch>
           </pitchLimits>
           <armor>
             <gun>	10	</gun>
@@ -4050,7 +3834,7 @@
             <density>	215.404 214.592	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </QF_6_pounder_Mk_V>
+        </QF_6_pdr_Mk_V_A15>
       </guns>
       <models>
         <undamaged>	vehicles/british/GB20_Crusader/normal/lod0/Turret_02.model	</undamaged>
@@ -4630,46 +4414,31 @@
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <N9>	shared	  <unlocks>
-        <radio>	N19Mk1	  <cost>	1480	</cost>
-        </radio>
-      </unlocks>
-    </N9>
-    <N19Mk1>	shared	  <unlocks>
-        <radio>	N19Mk2	  <cost>	3600	</cost>
-        </radio>
-      </unlocks>
-    </N19Mk1>
-    <N19Mk2>	shared	  <unlocks>
-        <radio>	N19Mk3	  <cost>	4000	</cost>
-        </radio>
-      </unlocks>
-    </N19Mk2>
     <N19Mk3>	shared	</N19Mk3>
   </radios>
   <physics>
     <detailed>
       <engines>
         <Nuffield_liberty_MKIV>
-          <smplEnginePower>	417.626	</smplEnginePower>
-          <smplFwMaxSpeed>	58	</smplFwMaxSpeed>
+          <smplEnginePower>	470	</smplEnginePower>
+          <smplFwMaxSpeed>	63	</smplFwMaxSpeed>
         </Nuffield_liberty_MKIV>
         <Nuffield_liberty_MKV>
-          <smplEnginePower>	433.4853	</smplEnginePower>
-          <smplFwMaxSpeed>	58	</smplFwMaxSpeed>
+          <smplEnginePower>	520	</smplEnginePower>
+          <smplFwMaxSpeed>	63	</smplFwMaxSpeed>
         </Nuffield_liberty_MKV>
       </engines>
       <chassis>
         <Chassis_GB20_Crusader>
           <grounds>
             <soft>
-              <rollingFriction>	0.161	</rollingFriction>
+              <rollingFriction>	0.1449	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.0966	</rollingFriction>
+              <rollingFriction>	0.0805	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0805	</rollingFriction>
+              <rollingFriction>	0.07245	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_GB20_Crusader>

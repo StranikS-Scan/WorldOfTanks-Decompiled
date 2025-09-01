@@ -62,7 +62,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	15000	</weight>
-    <maxHealth>	1440	</maxHealth>
+    <maxHealth>	1480	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -1093,8 +1093,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	7700	</weight>
-      <maxLoad>	37100	</maxLoad>
-      <terrainResistance>	1.3 1.4 2.3	</terrainResistance>
+      <terrainResistance>	1 1.3 2.2	</terrainResistance>
       <brakeForce>	37800	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	42	</rotationSpeed>
@@ -1944,7 +1943,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	9700	</weight>
-      <maxLoad>	40000	</maxLoad>
       <terrainResistance>	1 1.3 2.2	</terrainResistance>
       <brakeForce>	42500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -2822,7 +2820,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7500	</weight>
-      <maxHealth>	310	</maxHealth>
+      <maxHealth>	280	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -2836,114 +2834,6 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_100mm_armata_wz_58>	shared	  <unlocks>
-            <gun>	_100mm_armata_wz_62	  <cost>	51700	</cost>
-            </gun>
-          </unlocks>
-          <maxAmmo>	40	</maxAmmo>
-          <armor>
-            <armor_1>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	135	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	115	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	130	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_7>
-            <armor_8>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_8>
-            <armor_9>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_9>
-            <armor_10>	45	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_10>
-            <armor_11>	75	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_11>
-            <armor_12>	65	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_12>
-            <armor_13>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_13>
-            <armor_14>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_14>
-            <armor_15>	45	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_15>
-            <armor_16>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_16>
-            <gun>	30	</gun>
-          </armor>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	8.4	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	4	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2.5	</aimingTime>
-          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 9 0.375 9 0.388889 6 0.422222 6 0.577778 6 0.611111 6 0.625 9 1 9	</maxPitch>
-          </pitchLimits>
-          <models>
-            <undamaged>	vehicles/poland/Pl22_CS_59/normal/lod0/Gun_04.model	</undamaged>
-            <destroyed>	vehicles/poland/Pl22_CS_59/crash/lod0/Gun_04.model	</destroyed>
-            <exploded>	vehicles/poland/Pl22_CS_59/crash/lod0/Gun_04.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/poland/Pl22_CS_59/collision/Gun_04.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/poland/Pl22_CS_59/collision_client/Gun_04.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_mainext_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.003457 0.079405 2.66663	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0.000001 0.209594 0.394775	</anchorPosition>
-              <anchorDirection>	-0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.003457 0.079407 2.66663	</anchorPosition>
-              <anchorDirection>	-0 0.000001 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0 -0.004 3.5425	</rayStart>
-              <rayEnd>	-0 -0.004 4.034298	</rayEnd>
-              <rayUp>	0.090923 0 0	</rayUp>
-              <size>	0.491798	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <density>	151.149 163.654	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-            <tiling>	1.21 1.21 0.000000 0.000000	</tiling>
-          </camouflage>
-        </_100mm_armata_wz_58>
         <_100mm_armata_wz_62>	shared	  <maxAmmo>	40	</maxAmmo>
           <armor>
             <armor_1>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -2980,10 +2870,10 @@
             </armor_16>
             <gun>	30	</gun>
           </armor>
-          <shotDispersionRadius>	0.39	</shotDispersionRadius>
-          <reloadTime>	8.4	</reloadTime>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <reloadTime>	8.1	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2992,7 +2882,7 @@
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 9 0.375 9 0.388889 6 0.422222 6 0.577778 6 0.611111 6 0.625 9 1 9	</maxPitch>
+            <maxPitch>	0.00000 9.00 0.40278 9.00 0.43056 7.00 0.56944 7.00 0.59722 9.00 1.00000 9.00	</maxPitch>
           </pitchLimits>
           <models>
             <undamaged>	vehicles/poland/Pl22_CS_59/normal/lod0/Gun_06.model	</undamaged>
@@ -3601,7 +3491,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	9500	</weight>
-      <maxHealth>	360	</maxHealth>
+      <maxHealth>	370	</maxHealth>
       <rotationSpeed>	47	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -3616,102 +3506,6 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.996	</invisibilityFactor>
       <guns>
-        <_100mm_armata_wz_58>	shared	  <maxAmmo>	40	</maxAmmo>
-          <armor>
-            <armor_1>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	85	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	65	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	110	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_7>
-            <armor_8>	115	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_8>
-            <armor_9>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_9>
-            <armor_10>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_10>
-            <armor_11>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_11>
-            <armor_12>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_12>
-            <gun>	30	</gun>
-          </armor>
-          <shotDispersionRadius>	0.39	</shotDispersionRadius>
-          <reloadTime>	8.1	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	4	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2.5	</aimingTime>
-          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 9 0.375 9 0.388889 6 0.422222 6 0.577778 6 0.611111 6 0.625 9 1 9	</maxPitch>
-          </pitchLimits>
-          <models>
-            <undamaged>	vehicles/poland/Pl22_CS_59/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/poland/Pl22_CS_59/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/poland/Pl22_CS_59/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/poland/Pl22_CS_59/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/poland/Pl22_CS_59/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_mainext_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.003458 0.058201 2.6394	</anchorPosition>
-              <anchorDirection>	0 -0.000002 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.189889 0.376879	</anchorPosition>
-              <anchorDirection>	-0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.003458 0.058201 2.6394	</anchorPosition>
-              <anchorDirection>	-0.000001 0.000001 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0 -0.011 3.5	</rayStart>
-              <rayEnd>	-0 -0.011 3.991798	</rayEnd>
-              <rayUp>	0.087295 0 0	</rayUp>
-              <size>	0.491798	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <density>	151.149 163.654	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-            <tiling>	1.17 1.17 0.000000 0.000000	</tiling>
-          </camouflage>
-        </_100mm_armata_wz_58>
         <_100mm_armata_wz_62>	shared	  <maxAmmo>	40	</maxAmmo>
           <armor>
             <armor_1>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -3740,19 +3534,19 @@
             </armor_12>
             <gun>	30	</gun>
           </armor>
-          <shotDispersionRadius>	0.39	</shotDispersionRadius>
-          <reloadTime>	8.1	</reloadTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	7.8	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.1	</aimingTime>
+          <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 9 0.375 9 0.388889 6 0.422222 6 0.577778 6 0.611111 6 0.625 9 1 9	</maxPitch>
+            <maxPitch>	0.00000 9.00 0.40278 9.00 0.43056 7.00 0.56944 7.00 0.59722 9.00 1.00000 9.00	</maxPitch>
           </pitchLimits>
           <models>
             <undamaged>	vehicles/poland/Pl22_CS_59/normal/lod0/Gun_03.model	</undamaged>
@@ -3852,7 +3646,7 @@
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 9 0.375 9 0.388889 6 0.422222 4 0.577778 4 0.611111 6 0.625 9 1 9	</maxPitch>
+            <maxPitch>	0.00000 9.00 0.40278 9.00 0.43056 7.00 0.56944 7.00 0.59722 9.00 1.00000 9.00	</maxPitch>
           </pitchLimits>
           <models>
             <undamaged>	vehicles/poland/Pl22_CS_59/normal/lod0/Gun_02.model	</undamaged>
@@ -4444,11 +4238,6 @@
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <R_123P>	shared	  <unlocks>
-        <radio>	R_123_1	  <cost>	9200	</cost>
-        </radio>
-      </unlocks>
-    </R_123P>
     <R_123_1>	shared	</R_123_1>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
@@ -4469,13 +4258,13 @@
           <axleCount>	5	</axleCount>
           <grounds>
             <soft>
-              <rollingFriction>	0.18515	</rollingFriction>
+              <rollingFriction>	0.1771	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1127	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
+              <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_Pl22_CS_59>

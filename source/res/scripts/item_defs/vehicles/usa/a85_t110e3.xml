@@ -1165,8 +1165,8 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_T110E3>
-      <userString>	#usa_vehicles:Chassis_T110E3	</userString>
+    <Chassis_A85_T110E3>
+      <userString>	#usa_vehicles:Chassis_A85_T110E3	</userString>
       <tags></tags>
       <level>	10	</level>
       <price>	82500	</price>
@@ -1176,7 +1176,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	8000	</weight>
-      <maxLoad>	78000	</maxLoad>
       <terrainResistance>	1.5 1.7 3	</terrainResistance>
       <brakeForce>	39500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2170,11 +2169,11 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_T110E3>
+    </Chassis_A85_T110E3>
   </chassis>
   <turrets0>
-    <Turret_1_T110E3>
-      <userString>	#usa_vehicles:Turret_1_T110E3	</userString>
+    <Turret_1_A85_T110E3>
+      <userString>	#usa_vehicles:Turret_1_A85_T110E3	</userString>
       <tags>	cannotDetach	</tags>
       <level>	10	</level>
       <price>	66000	</price>
@@ -2186,9 +2185,9 @@
       <maxHealth>	390	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	185	</maxHealth>
+        <maxRegenHealth>	93	</maxRegenHealth>
+        <repairCost>	10	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	370	</circularVisionRadius>
       <surveyingDeviceHealth>
@@ -2197,7 +2196,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_155mm_AT_Gun_T7E2>	shared	  <maxAmmo>	27	</maxAmmo>
+        <_155mm_AT_Gun_T7E3>	shared	  <maxAmmo>	27	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -16 1 -16	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
@@ -2281,7 +2280,7 @@
             <density>	87.2327 88.8946	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_155mm_AT_Gun_T7E2>
+        </_155mm_AT_Gun_T7E3>
       </guns>
       <models>
         <undamaged>	vehicles/american/A85_T110E3/normal/lod0/Turret_01.model	</undamaged>
@@ -2308,10 +2307,10 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-    </Turret_1_T110E3>
+    </Turret_1_A85_T110E3>
   </turrets0>
   <engines>
-    <AOI-1490>	shared	</AOI-1490>
+    <Continental_AOI_1490E3>	shared	</Continental_AOI_1490E3>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
@@ -2322,13 +2321,13 @@
   <physics>
     <detailed>
       <engines>
-        <AOI-1490>
+        <Continental_AOI_1490E3>
           <smplEnginePower>	925.121	</smplEnginePower>
           <smplFwMaxSpeed>	24	</smplFwMaxSpeed>
-        </AOI-1490>
+        </Continental_AOI_1490E3>
       </engines>
       <chassis>
-        <Chassis_T110E3>
+        <Chassis_A85_T110E3>
           <grounds>
             <soft>
               <rollingFriction>	0.2415	</rollingFriction>
@@ -2340,7 +2339,7 @@
               <rollingFriction>	0.12075	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_T110E3>
+        </Chassis_A85_T110E3>
       </chassis>
     </detailed>
   </physics>

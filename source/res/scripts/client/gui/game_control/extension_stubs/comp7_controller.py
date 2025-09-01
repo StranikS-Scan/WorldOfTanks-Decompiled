@@ -12,7 +12,7 @@ class Comp7Controller(IComp7Controller):
         self.onStatusUpdated = Event.Event(em)
         self.onStatusTick = Event.Event(em)
         self.onRankUpdated = Event.Event(em)
-        self.onComp7ConfigChanged = Event.Event(em)
+        self.onModeConfigChanged = Event.Event(em)
         self.onComp7RanksConfigChanged = Event.Event(em)
         self.onBanUpdated = Event.Event(em)
         self.onOfflineStatusUpdated = Event.Event(em)
@@ -113,6 +113,9 @@ class Comp7Controller(IComp7Controller):
         return False
 
     def hasPrimeTimesLeftForCurrentCycle(self):
+        return False
+
+    def hasPrimeTimesPassedForCurrentCycle(self):
         return False
 
     def getClosestStateChangeTime(self, now=None):
@@ -238,7 +241,7 @@ class Comp7Controller(IComp7Controller):
     def hasPlayableVehicle(self):
         return False
 
-    def isComp7PrbActive(self):
+    def isModePrbActive(self):
         return False
 
     def isBattleModifiersAvailable(self):

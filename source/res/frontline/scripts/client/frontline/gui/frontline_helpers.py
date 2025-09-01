@@ -5,7 +5,7 @@ import typing
 from frontline.gui.impl.gen.view_models.views.lobby.views.frontline_const import FrontlineState
 from frontline.gui.impl.gen.view_models.views.lobby.views.frontline_container_tab_model import TabType
 from frontline_common.frontline_constants import RESERVES_MODIFIER_NAMES
-from gui.Scaleform.daapi.view.common.keybord_helpers import getHotKeyVkList, getHotKeyList
+from gui.Scaleform.daapi.view.common.keybord_helpers import getHotKeysInfo
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.periodic_battles.models import PrimeTimeStatus
@@ -47,14 +47,9 @@ def getHotKeyListCommands():
     return [CommandMapping.CMD_CM_VEHICLE_UPGRADE_PANEL_LEFT, CommandMapping.CMD_CM_VEHICLE_UPGRADE_PANEL_RIGHT]
 
 
-def getHotKeyListByIndex(index):
+def getHotKeyInfoListByIndex(index):
     commands = getHotKeyListCommands()
-    return getHotKeyList(commands[index])
-
-
-def getHotKeyVkListByIndex(index):
-    commands = getHotKeyListCommands()
-    return getHotKeyVkList(commands[index])
+    return [ keyInfo.asDict() for keyInfo in getHotKeysInfo(commands[index]) ]
 
 
 def isHangarAvailable():

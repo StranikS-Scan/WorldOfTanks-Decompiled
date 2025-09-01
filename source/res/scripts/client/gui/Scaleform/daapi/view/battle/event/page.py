@@ -28,7 +28,7 @@ _EVENT_EXTERNAL_COMPONENTS = (CrosshairPanelContainer, EventMarkersManager, Kill
 
 class EventBattlePage(ClassicPage):
 
-    def __init__(self, components=None, external=_EVENT_EXTERNAL_COMPONENTS, fullStatsAlias=None):
+    def __init__(self, components=None, external=_EVENT_EXTERNAL_COMPONENTS, fullStatsAlias=None, **kwargs):
         components = EVENT_CONFIG if not components else components + EVENT_CONFIG
         self.__isRadialMenuShown = False
         super(EventBattlePage, self).__init__(components=components, external=external, fullStatsAlias=fullStatsAlias)

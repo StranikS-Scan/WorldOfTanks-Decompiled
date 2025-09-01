@@ -6,7 +6,7 @@ from gui.server_events.bonuses import DogTagComponentBonus
 from gui.shared.event_dispatcher import showAdvancedAchievementsRewardView, showAdvancedAchievementsView
 from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
 from gui.impl.gen import R
-from gui.shared.event_dispatcher import showAdvancedAchievementsCatalogView, showAnimatedDogTags, showDashboardView
+from gui.shared.event_dispatcher import showAdvancedAchievementsCatalogView, showAnimatedDogTags
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from gui.impl.lobby.achievements.profile_utils import createAdvancedAchievementsCatalogInitAchievementIDs, fillAdvancedAchievementModel, createBackportTooltipDecorator, createTooltipContentDecorator, getRewardViewBonusPacker
 from gui.impl.gen.view_models.views.lobby.achievements.views.reward_view_model import RewardViewModel
@@ -120,7 +120,7 @@ class RewardView(ViewImpl):
 
     def __goToDogTag(self, args):
         self.__uiLogger.logRewardClick(AdvancedAchievementButtons.TO_RECEIVED, len(self.__getBonusTuples()))
-        showAnimatedDogTags(args['backgroundId'], args['engravingId'], closeCallback=showDashboardView, makeTopView=False)
+        showAnimatedDogTags(args['backgroundId'], args['engravingId'])
         self.destroyWindow()
 
     def __onOpenAchievement(self, args):

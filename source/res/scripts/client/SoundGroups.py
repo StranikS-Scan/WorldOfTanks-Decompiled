@@ -638,3 +638,6 @@ class SoundGroups(object):
 
     def setState(self, stateName, stateValue):
         WWISE.WW_setState(stateName, stateValue)
+
+    def setGlobalRTPC(self, rtpcName, rtpcValue):
+        return WWISE.WW_setRTCPGlobal(rtpcName, rtpcValue)

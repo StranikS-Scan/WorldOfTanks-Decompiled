@@ -2,8 +2,8 @@
 # Embedded file name: scripts/client/gui/prb_control/prb_getters.py
 from typing import TYPE_CHECKING
 import BigWorld
-from constants import QUEUE_TYPE, PREBATTLE_TYPE_NAMES, ARENA_GUI_TYPE, PREBATTLE_TYPE, DEFAULT_LANGUAGE, ACCOUNT_ATTR, PREBATTLE_ROLE, IS_DEVELOPMENT
-from gui.prb_control.settings import makePrebattleSettings, VEHICLE_MAX_LEVEL
+from constants import QUEUE_TYPE, PREBATTLE_TYPE_NAMES, ARENA_GUI_TYPE, PREBATTLE_TYPE, DEFAULT_LANGUAGE, ACCOUNT_ATTR, PREBATTLE_ROLE, IS_DEVELOPMENT, MAX_VEHICLE_LEVEL
+from gui.prb_control.settings import makePrebattleSettings
 from helpers import dependency
 from skeletons.gui.game_control import IGameSessionController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -130,7 +130,7 @@ def getTotalLevelLimits(teamLimits):
 
 def getLevelLimits(teamLimits):
     limit = teamLimits['level']
-    return (limit[0], min(limit[1], VEHICLE_MAX_LEVEL))
+    return (limit[0], min(limit[1], MAX_VEHICLE_LEVEL))
 
 
 def getNationsLimits(teamLimits):
@@ -151,7 +151,7 @@ def getClassLevelLimits(teamLimits, classType):
             limit = teamLimits['classLevel'][classType]
         else:
             limit = getLevelLimits(teamLimits)
-        return (limit[0], min(limit[1], VEHICLE_MAX_LEVEL))
+        return (limit[0], min(limit[1], MAX_VEHICLE_LEVEL))
 
 
 def getPrebattleLocalizedData(extraData=None):

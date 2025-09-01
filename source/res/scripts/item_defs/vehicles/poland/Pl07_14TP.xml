@@ -1186,8 +1186,7 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	4200	</weight>
-      <maxLoad>	14600	</maxLoad>
-      <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
+      <terrainResistance>	1 1.1 1.9	</terrainResistance>
       <brakeForce>	32500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	45	</rotationSpeed>
@@ -1992,11 +1991,10 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	4200	</weight>
-      <maxLoad>	15300	</maxLoad>
       <terrainResistance>	1 1.1 1.9	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	50	</rotationSpeed>
+      <rotationSpeed>	52	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.22	</vehicleMovement>
         <vehicleRotation>	0.22	</vehicleRotation>
@@ -2913,6 +2911,8 @@
             </vehicle>
             <vehicle>	Pl12_25TP_KSUST_II	  <cost>	11930	</cost>
             </vehicle>
+            <vehicle>	Pl17_DS_PZlnz	  <cost>	13230	</cost>
+            </vehicle>
           </unlocks>
           <armor>
             <armor_1>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -3493,21 +3493,12 @@
         </engine>
       </unlocks>
     </J_V12_M>
-    <PLInz_RWA>	shared	  <unlocks>
-        <vehicle>	Pl17_DS_PZlnz	  <cost>	13230	</cost>
-        </vehicle>
-      </unlocks>
-    </PLInz_RWA>
+    <PLInz_RWA>	shared	</PLInz_RWA>
   </engines>
   <fuelTanks>
     <Medium>	shared	</Medium>
   </fuelTanks>
   <radios>
-    <N2_M>	shared	  <unlocks>
-        <radio>	N2_S	  <cost>	100	</cost>
-        </radio>
-      </unlocks>
-    </N2_M>
     <N2_S>	shared	</N2_S>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
@@ -3528,13 +3519,13 @@
           <axleCount>	5	</axleCount>
           <grounds>
             <soft>
-              <rollingFriction>	0.18515	</rollingFriction>
+              <rollingFriction>	0.15295	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
+              <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_Pl07_14TP>

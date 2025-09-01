@@ -4,5 +4,5 @@ from gui.Scaleform.daapi.view.dialogs.SimpleDialog import SimpleDialog
 
 class CyberSportDialog(SimpleDialog):
 
-    def __init__(self, meta, handler):
+    def __init__(self, meta, handler, **kwargs):
         super(CyberSportDialog, self).__init__(meta.getMessage(), meta.getTitle(), meta.getButtonLabels(), handler, meta.getViewScopeType())

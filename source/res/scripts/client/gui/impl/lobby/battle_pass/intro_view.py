@@ -1,16 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/intro_view.py
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
-from frameworks.wulf import ViewFlags, ViewSettings
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.battle_pass.battle_pass_helpers import getIntroSlidesNames, getIntroVideoURL
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_intro_view_model import BattlePassIntroViewModel
 from gui.impl.gen.view_models.views.lobby.common.intro_slide_model import IntroSlideModel
-from gui.impl.pub import ViewImpl
-from gui.server_events.events_dispatcher import showMissionsBattlePass
-from gui.shared.event_dispatcher import showBrowserOverlayView, showHangar
+from gui.impl.lobby.battle_pass.common import isExtraChapterSeen, setExtraChapterSeen
+from gui.impl.pub.view_component import ViewComponent
+from gui.shared.event_dispatcher import showBattlePass, showBrowserOverlayView
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBattlePassController
@@ -19,35 +18,30 @@ _IMAGES = R.images.gui.maps.icons.battlePass.intro
 _TEXTS = R.strings.battle_pass.intro
 _BG = R.images.gui.maps.icons.battlePass.backgrounds
 
-class IntroView(ViewImpl):
+class IntroPresenter(ViewComponent[BattlePassIntroViewModel]):
     __battlePass = dependency.descriptor(IBattlePassController)
     __settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, *args, **kwargs):
-        settings = ViewSettings(R.views.lobby.battle_pass.BattlePassIntroView())
-        settings.flags = ViewFlags.VIEW
-        settings.model = BattlePassIntroViewModel()
-        super(IntroView, self).__init__(settings)
+        super(IntroPresenter, self).__init__(R.aliases.battle_pass.Intro(), BattlePassIntroViewModel)
 
     @property
     def viewModel(self):
-        return super(IntroView, self).getViewModel()
+        return super(IntroPresenter, self).getViewModel()
 
     def activate(self):
         self._subscribe()
-        self.__updateBattlePassState()
-        self.__updateViewModel()
 
     def deactivate(self):
         self._unsubscribe()
 
     def _onLoading(self, *args, **kwargs):
-        super(IntroView, self)._onLoading(*args, **kwargs)
+        super(IntroPresenter, self)._onLoading(*args, **kwargs)
         self.__updateBattlePassState()
         self.__updateViewModel()
 
     def _getEvents(self):
-        return ((self.viewModel.onClose, self.__close),
+        return ((self.viewModel.onClose, self.__setIntroShown),
          (self.viewModel.onVideo, self.__showVideo),
          (self.__battlePass.onBattlePassSettingsChange, self.__updateBattlePassState),
          (self.__battlePass.onSeasonStateChanged, self.__updateBattlePassState))
@@ -72,9 +66,10 @@ class IntroView(ViewImpl):
         slide.setDescription(backport.text(_TEXTS.dyn(slideName).text(), **kwargs))
         return slide
 
-    def __close(self):
+    def __setIntroShown(self):
         self.__settingsCore.serverSettings.saveInBPStorage({BattlePassStorageKeys.INTRO_SHOWN: True})
-        showMissionsBattlePass()
+        if self.__battlePass.hasExtra() and not isExtraChapterSeen():
+            setExtraChapterSeen()
 
     @staticmethod
     def __showVideo():
@@ -92,6 +87,4 @@ class IntroView(ViewImpl):
 
     def __updateBattlePassState(self, *_):
         if self.__battlePass.isPaused():
-            showMissionsBattlePass()
-        elif not self.__battlePass.isActive():
-            showHangar()
+            showBattlePass()

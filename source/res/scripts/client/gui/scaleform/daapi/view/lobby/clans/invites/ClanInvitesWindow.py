@@ -31,7 +31,7 @@ from skeletons.gui.web import IWebController
 class ClanInvitesWindow(ClanInvitesWindowMeta, ClanListener, ClanEmblemsHelper):
     __coolDownRequests = [WebRequestDataType.CLAN_APPLICATIONS, WebRequestDataType.CLAN_INVITES]
 
-    def __init__(self, *args):
+    def __init__(self, *args, **kwargs):
         super(ClanInvitesWindow, self).__init__()
         self.__actualRequestsCount = '0'
         self.__processedInvitesCount = '0'

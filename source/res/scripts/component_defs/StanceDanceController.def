@@ -1,0 +1,25 @@
+<StanceDanceController.def>
+  <Properties>
+    <vehTypeCD>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehTypeCD>
+    <abilityState>
+      <Type>	STANCE_DANCE_STATE	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </abilityState>
+  </Properties>
+  <CellMethods>
+    <useActiveAbility>
+      <Exposed>	OWN_CLIENT	</Exposed>
+      <Arg>	UINT8	</Arg>
+    </useActiveAbility>
+    <switchStance>
+      <Exposed>	OWN_CLIENT	</Exposed>
+    </switchStance>
+  </CellMethods>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	stanceDanceController	</DefaultKeyName>
+</StanceDanceController.def>

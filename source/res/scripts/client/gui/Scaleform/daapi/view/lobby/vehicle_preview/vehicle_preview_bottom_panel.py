@@ -556,7 +556,7 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
         nodeCD = vehicle.intCD
         _, isXpEnough = g_techTreeDP.isVehicleAvailableToUnlock(nodeCD, self._vehicleLevel)
         unlocks = self._itemsCache.items.stats.unlocks
-        isNext2Unlock, unlockProps = g_techTreeDP.isNext2Unlock(nodeCD, unlocked=set(unlocks), xps=stats.vehiclesXPs, freeXP=stats.freeXP, level=self._vehicleLevel)
+        isNext2Unlock, unlockProps = g_techTreeDP.isNext2Unlock(nodeCD, unlocked=unlocks, xps=stats.vehiclesXPs, freeXP=stats.freeXP, level=self._vehicleLevel)
         walletAvailable = self.__walletAvailableForCurrency('freeXP')
         isAvailableToUnlock = isXpEnough and isNext2Unlock and walletAvailable
         if not isAvailableToUnlock:

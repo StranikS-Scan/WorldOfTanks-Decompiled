@@ -109,6 +109,7 @@ class EpicBattleTrainingIntroEntity(LegacyIntroEntity):
 
 class EpicBattleTrainingEntity(LegacyEntity):
     __loadEvents = (VIEW_ALIAS.LOBBY_HANGAR,
+     VIEW_ALIAS.LEGACY_LOBBY_HANGAR,
      VIEW_ALIAS.LOBBY_STORE,
      VIEW_ALIAS.LOBBY_STORAGE,
      VIEW_ALIAS.LOBBY_TECHTREE,

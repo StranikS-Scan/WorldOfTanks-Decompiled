@@ -31,7 +31,7 @@ from gui.impl.lobby.easy_tank_equip.data_providers.shells_data_provider import S
 from gui.impl.lobby.easy_tank_equip.data_providers.styles_data_provider import StylesDataProvider
 from gui.impl.lobby.easy_tank_equip.easy_tank_equip_deal_panel import EasyTankEquipBottomContent
 from gui.impl.lobby.easy_tank_equip.easy_tank_equip_vehicle import g_easyTankEquipCopyVehicle
-from gui.impl.lobby.hangar.sub_views.vehicle_params_view import EasyTankEquipVehicleParamsView
+from gui.impl.lobby.hangar.sub_views.vehicle_params_view import EasyTankEquipParamsPresenter
 from gui.impl.pub import ViewImpl
 from gui.sounds.filters import States, StatesGroup
 from gui.shared import event_dispatcher as shared_events
@@ -87,7 +87,7 @@ class EasyTankEquipView(ViewImpl):
     _COMMON_SOUND_SPACE = CommonSoundSpaceSettings(name='easy_tank_equip', entranceStates={StatesGroup.OVERLAY_HANGAR_GENERAL: States.OVERLAY_HANGAR_GENERAL_ON}, exitStates={StatesGroup.OVERLAY_HANGAR_GENERAL: States.OVERLAY_HANGAR_GENERAL_OFF}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='', parentSpace='')
 
     def __init__(self, layoutID, *args, **kwargs):
-        settings = ViewSettings(layoutID, flags=ViewFlags.LOBBY_TOP_SUB_VIEW, model=EasyTankEquipViewModel(), args=args, kwargs=kwargs)
+        settings = ViewSettings(layoutID, flags=ViewFlags.LOBBY_SUB_VIEW, model=EasyTankEquipViewModel(), args=args, kwargs=kwargs)
         super(EasyTankEquipView, self).__init__(settings)
         self.__blur = CachedBlur()
         self.__closeConfirmatorHelper = _EasyTankEquipCloseConfirmatorsHelper()
@@ -183,7 +183,7 @@ class EasyTankEquipView(ViewImpl):
 
     def _setTTC(self):
         currentVehicle = g_currentVehicle.item
-        self.__vehicleParamsView = EasyTankEquipVehicleParamsView(currentVehicle, self.copyVehicle)
+        self.__vehicleParamsView = EasyTankEquipParamsPresenter(currentVehicle, self.copyVehicle)
         self.__vehicleParamsView.setContext(EasyTankEquipParamContext())
         self.setChildView(R.views.lobby.hangar.subViews.VehicleParams(), self.__vehicleParamsView)
 
@@ -290,7 +290,7 @@ class EasyTankEquipView(ViewImpl):
         self.__bottomContent.updatePrices()
 
     def __updateTTC(self):
-        self.__vehicleParamsView.update()
+        self.__vehicleParamsView.updateModel()
 
     def __onClose(self, isApplyBtnClicked=False):
         if self.__isApplyInProcess:

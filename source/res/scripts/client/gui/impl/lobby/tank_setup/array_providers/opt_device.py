@@ -94,7 +94,7 @@ class ArrayOptDeviceProvider(BaseArrayProvider):
         if not vehicle:
             _logger.warning('There is invalid vehicle compact descriptor %s', vehCD)
             return
-        model.vehicleInfo.setVehicleID(vehCD)
+        model.vehicleInfo.setVehicleId(vehCD)
         fillVehicleInfo(model.vehicleInfo, vehicle)
 
 

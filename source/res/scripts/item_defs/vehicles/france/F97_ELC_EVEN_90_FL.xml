@@ -716,7 +716,6 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	1750	</weight>
-      <maxLoad>	8000	</maxLoad>
       <terrainResistance>	0.7 0.8 1.4	</terrainResistance>
       <brakeForce>	6700	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -1971,7 +1970,7 @@
   <turrets0>
     <Turret_1_F97_ELC_EVEN_90_FL>
       <userString>	#france_vehicles:Turret_1_F97_ELC_EVEN_90	</userString>
-      <tags>	cannotDetach	</tags>
+      <tags>	cannotDetach oscillating	</tags>
       <level>	8	</level>
       <price>	30000	</price>
       <notInShop>	true	</notInShop>

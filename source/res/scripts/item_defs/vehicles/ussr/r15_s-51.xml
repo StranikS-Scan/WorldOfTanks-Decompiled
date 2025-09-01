@@ -65,9 +65,9 @@
     <weight>	30800	</weight>
     <maxHealth>	280	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	90	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	143	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
     </ammoBayHealth>
     <models>
       <undamaged>	vehicles/russian/R15_S-51/normal/lod0/Hull.model	</undamaged>
@@ -1388,13 +1388,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <S-51>
-      <userString>	#ussr_vehicles:S-51	</userString>
+    <Chassis_R15_S-51>
+      <userString>	#ussr_vehicles:Chassis_R15_S-51	</userString>
       <tags></tags>
       <level>	6	</level>
       <price>	14600	</price>
       <unlocks>
-        <chassis>	S-51bis	  <cost>	7965	</cost>
+        <chassis>	Chassis_R15_S-51_2	  <cost>	7965	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1402,8 +1402,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	12500	</weight>
-      <maxLoad>	52000	</maxLoad>
-      <terrainResistance>	1.4 1.6 2.7	</terrainResistance>
+      <terrainResistance>	1.3 1.5 2.5	</terrainResistance>
       <brakeForce>	45000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	18	</rotationSpeed>
@@ -2176,22 +2175,17 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	8.80000019	</repairTime>
-    </S-51>
-    <S-51bis>
-      <userString>	#ussr_vehicles:S-51bis	</userString>
+    </Chassis_R15_S-51>
+    <Chassis_R15_S-51_2>
+      <userString>	#ussr_vehicles:Chassis_R15_S-51_2	</userString>
       <tags></tags>
       <level>	7	</level>
       <price>	19800	</price>
-      <unlocks>
-        <vehicle>	R27_SU-14	  <cost>	127700	</cost>
-        </vehicle>
-      </unlocks>
       <armor>
         <leftTrack>	20	</leftTrack>
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	12500	</weight>
-      <maxLoad>	52500	</maxLoad>
       <terrainResistance>	1.3 1.5 2.5	</terrainResistance>
       <brakeForce>	50000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2957,13 +2951,13 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	7.19999981	</repairTime>
-    </S-51bis>
+    </Chassis_R15_S-51_2>
   </chassis>
   <turrets0>
-    <S-51_01>
+    <Turret_1_R15_S-51>
       <ceilless>	true	</ceilless>
-      <userString>	#ussr_vehicles:S-51_01	</userString>
-      <tags>	cannotDetach	</tags>
+      <userString>	#ussr_vehicles:Turret_1_R15_S-51	</userString>
+      <tags>	cannotDetach turretless	</tags>
       <level>	7	</level>
       <price>	1200	</price>
       <notInShop>	true	</notInShop>
@@ -2986,10 +2980,10 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_152mm_BR-2>	shared	  <maxAmmo>	30	</maxAmmo>
+        <_152mm_BR_2_S_51>	shared	  <maxAmmo>	30	</maxAmmo>
           <reloadTime>	25	</reloadTime>
           <unlocks>
-            <gun>	_203mm_B-4	  <cost>	64000	</cost>
+            <gun>	_203mm_B_4_S_51	  <cost>	64000	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -3116,8 +3110,12 @@
             <density>	81.7898 82.3119	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_152mm_BR-2>
-        <_203mm_B-4>	shared	  <maxAmmo>	12	</maxAmmo>
+        </_152mm_BR_2_S_51>
+        <_203mm_B_4_S_51>	shared	  <maxAmmo>	12	</maxAmmo>
+          <unlocks>
+            <vehicle>	R27_SU-14	  <cost>	127700	</cost>
+            </vehicle>
+          </unlocks>
           <reloadTime>	52.3	</reloadTime>
           <armor>
             <gun>	30	</gun>
@@ -3243,7 +3241,7 @@
             <density>	80.6889 83.6789	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_203mm_B-4>
+        </_203mm_B_4_S_51>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R15_S-51/normal/lod0/Turret_01.model	</undamaged>
@@ -3338,63 +3336,36 @@
         <density>	103.68 103.141	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </S-51_01>
+    </Turret_1_R15_S-51>
   </turrets0>
   <engines>
-    <V-2K>	shared	  <unlocks>
-        <engine>	V-2IS_R	  <cost>	6100	</cost>
+    <V_2K_S_51>	shared	  <unlocks>
+        <engine>	V_16	  <cost>	11200	</cost>
         </engine>
       </unlocks>
-    </V-2K>
-    <V-2IS_R>	shared	  <unlocks>
-        <engine>	V-16	  <cost>	11200	</cost>
-        </engine>
-      </unlocks>
-    </V-2IS_R>
-    <V-16>	shared	</V-16>
+    </V_2K_S_51>
+    <V_16>	shared	</V_16>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <_10R>	shared	  <unlocks>
-        <radio>	_12RT	  <cost>	5600	</cost>
-        </radio>
-      </unlocks>
-    </_10R>
     <_12RT>	shared	</_12RT>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <V-2K>
+        <V_2K_S_51>
           <smplEnginePower>	528.6406	</smplEnginePower>
           <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
-        </V-2K>
-        <V-2IS_R>
-          <smplEnginePower>	549.7862	</smplEnginePower>
-          <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
-        </V-2IS_R>
-        <V-16>
+        </V_2K_S_51>
+        <V_16>
           <smplEnginePower>	634.3687	</smplEnginePower>
           <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
-        </V-16>
+        </V_16>
       </engines>
       <chassis>
-        <S-51>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.21735	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.1288	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.1127	</rollingFriction>
-            </firm>
-          </grounds>
-        </S-51>
-        <S-51bis>
+        <Chassis_R15_S-51>
           <grounds>
             <soft>
               <rollingFriction>	0.20125	</rollingFriction>
@@ -3406,15 +3377,28 @@
               <rollingFriction>	0.10465	</rollingFriction>
             </firm>
           </grounds>
-        </S-51bis>
+        </Chassis_R15_S-51>
+        <Chassis_R15_S-51_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.20125	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.12075	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.10465	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_R15_S-51_2>
       </chassis>
     </detailed>
   </physics>
   <clientAdjustmentFactors>
     <guns>
-      <_203mm_B-4>
+      <_203mm_B_4_S_51>
         <delta>	1.05	</delta>
-      </_203mm_B-4>
+      </_203mm_B_4_S_51>
     </guns>
     <armour>	0.684481834	</armour>
   </clientAdjustmentFactors>

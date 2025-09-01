@@ -3,18 +3,17 @@
 import logging
 from itertools import chain
 from gui.impl.gen import R
-from gui.server_events.events_dispatcher import showMissionsBattlePass
-from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showBattlePassTankmenVoiceover
+from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
+from gui.shared.event_dispatcher import showBattlePass, showBattlePassTankmenVoiceover
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 from web.common import formatBattlePassInfo
 from web.web_client_api import Field, W2CSchema, WebCommandException, w2c, w2capi
 _logger = logging.getLogger(__name__)
-_R_VIEWS = R.views.lobby.battle_pass
-_VIEWS_IDS = {'intro': _R_VIEWS.BattlePassIntroView(),
- 'chapter_choice': _R_VIEWS.ChapterChoiceView(),
- 'progression': _R_VIEWS.BattlePassProgressionsView()}
+_R_VIEWS = R.aliases.battle_pass
+_VIEWS_IDS = {'intro': _R_VIEWS.Intro(),
+ 'chapter_choice': _R_VIEWS.ChapterChoice(),
+ 'progression': _R_VIEWS.Progression()}
 _VIEWS_COMMANDS = {'voiceover': showBattlePassTankmenVoiceover}
 
 def _isValidViewID(_, data):
@@ -56,7 +55,7 @@ class BattlePassWebApi(W2CSchema):
             showView = _VIEWS_COMMANDS[cmd.id]
             showView(self.__getTankmenScreenID(cmd.tankman))
         else:
-            showMissionsBattlePass(_VIEWS_IDS.get(cmd.id), cmd.chapter_id)
+            showBattlePass(_VIEWS_IDS.get(cmd.id), cmd.chapter_id)
 
     @w2c(W2CSchema, name='get_info')
     def handleGetInfo(self, _):

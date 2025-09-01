@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/VehicleGunRotator.py
 import math
 import weakref
+from collections import namedtuple
 from functools import partial
 from math import pi, fmod
 import BattleReplay
@@ -9,14 +10,23 @@ import BigWorld
 import Math
 import math_utils
 from AvatarInputHandler import AimingSystems
-from constants import SERVER_TICK_LENGTH, AIMING_MODE, VEHICLE_SIEGE_STATE
+from constants import SERVER_TICK_LENGTH, AIMING_MODE, VEHICLE_SIEGE_STATE, DEFAULT_GUN_INSTALLATION_INDEX
+from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
 from gun_rotation_shared import calcPitchLimitsFromDesc, calcGunPitchCorrection, getLocalAimPoint
 from helpers import dependency
 from projectile_trajectory import getShotAngles
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
+from SupportWeaponComponent import getVehicleSupportWeaponComponent
 from TwinGunController import getVehicleTwinGunController
-from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
+GunMarkerInfo = namedtuple('GunMarkerInfo', ('gunInstallationIndex',
+ 'gunIndex',
+ 'position',
+ 'direction',
+ 'size',
+ 'dualAccSize',
+ 'sizeOffset',
+ 'collData'))
 
 class VehicleGunRotator(object):
     __INSUFFICIENT_TIME_DIFF = 0.02
@@ -59,7 +69,9 @@ class VehicleGunRotator(object):
         self.estimatedTurretRotationTime = 0
         self.__aimingPerfectionStartTime = None
         self.__gunPosition = None
+        self.__gunIndex = None
         self.__transitionCallbackID = None
+        self.__fixedShotAngles = None
         self.ignoreAimingMode = False
         return
 
@@ -76,22 +88,22 @@ class VehicleGunRotator(object):
         def multiGunCurrentShotPosition():
             player = BigWorld.player()
             if player is None:
-                return
+                return (None, None)
             else:
                 vehicle = player.getVehicleAttached()
                 if vehicle is None:
-                    return
+                    return (None, None)
                 activeGuns = ()
                 if vehicle.typeDescriptor.isDualgunVehicle:
                     activeGuns = (vehicle.dualGunIndex,)
                 twinGun = getVehicleTwinGunController(vehicle)
                 if twinGun is not None:
                     activeGuns = twinGun.getActiveGunIndexes()
-                multiGun = vehicle.typeDescriptor.turret.multiGun
+                multiGun = vehicle.typeDescriptor.gun.multiGun
                 if multiGun is None or not activeGuns or len(activeGuns) > 1:
-                    return
+                    return (None, None)
                 gunIdx = activeGuns[0]
-                return None if gunIdx < 0 or len(multiGun) <= gunIdx else multiGun[gunIdx].shotPosition
+                return (None, None) if gunIdx < 0 or len(multiGun) <= gunIdx else (gunIdx, multiGun[gunIdx].shotPosition)
 
         if self.__isStarted or not self.__speedsInitialized:
             return
@@ -103,7 +115,7 @@ class VehicleGunRotator(object):
             ctrl = self.__sessionProvider.shared.feedback
             if ctrl is not None:
                 ctrl.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
-            self.__gunPosition = multiGunCurrentShotPosition()
+            self.__gunIndex, self.__gunPosition = multiGunCurrentShotPosition()
             self.__isStarted = True
             self.__updateGunMarker()
             self.__timerID = BigWorld.callback(self.__ROTATION_TICK_LENGTH, self.__onTick)
@@ -172,6 +184,13 @@ class VehicleGunRotator(object):
          0.0]
         self.__updateGunMarker(0.001)
 
+    def fixShotPosition(self, turretYaw, gunPitch):
+        self.__fixedShotAngles = (turretYaw, gunPitch)
+
+    def unFixShotPosition(self):
+        self.__fixedShotAngles = None
+        return
+
     def setShotPosition(self, vehicleID, shotPos, shotVec, dispersionAngle, forceValueRefresh=False):
         if self.__clientMode and not self.__showServerMarker and not forceValueRefresh:
             return
@@ -189,16 +208,17 @@ class VehicleGunRotator(object):
                     shotDir.normalise()
                     if shotDir.dot(dirToTarget) > 0.0:
                         return
-            markerPosition = self.__getGunMarkerPosition(shotPos, shotVec, self.__dispersionAngles)
-            mPos, mDir, mSize, dualAccSize, mSizeOffset, collData = markerPosition
+            gunMarkerInfo = self.__getGunMarkerInfo(shotPos, shotVec, self.__dispersionAngles, self.__gunIndex)
+            supportMarkersInfo = self.__getSupportMarkersInfo()
             replayCtrl = BattleReplay.g_replayCtrl
             if replayCtrl.isRecording:
-                replayCtrl.setGunMarkerParams(mSize, dualAccSize, mPos, mDir)
+                replayCtrl.setGunMarkerParams(gunMarkerInfo)
             if self.__clientMode and self.__showServerMarker:
-                self._avatar.inputHandler.updateServerGunMarker(mPos, mDir, mSize, mSizeOffset, SERVER_TICK_LENGTH, collData)
+                self._avatar.inputHandler.updateServerGunMarker(gunMarkerInfo, supportMarkersInfo, SERVER_TICK_LENGTH)
             if not self.__clientMode or forceValueRefresh:
+                mPos = gunMarkerInfo.position
                 self.__lastShotPoint = mPos
-                self._avatar.inputHandler.updateClientGunMarker(mPos, mDir, mSize, mSizeOffset, SERVER_TICK_LENGTH, collData)
+                self._avatar.inputHandler.updateClientGunMarker(gunMarkerInfo, supportMarkersInfo, SERVER_TICK_LENGTH)
                 self.__turretYaw, self.__gunPitch = getShotAngles(self._avatar.getVehicleDescriptor(), self._avatar.getOwnVehicleStabilisedMatrix(), mPos, overrideGunPosition=self.__gunPosition)
                 turretYawLimits = self.__getTurretYawLimits()
                 closestLimit = self.__isOutOfLimits(self.__turretYaw, turretYawLimits)
@@ -206,7 +226,7 @@ class VehicleGunRotator(object):
                     self.__turretYaw = closestLimit
                 self.__updateTurretMatrix(self.__turretYaw, SERVER_TICK_LENGTH)
                 self.__updateGunMatrix(self.__gunPitch, SERVER_TICK_LENGTH)
-                self.__markerInfo = (mPos, mDir, mSize)
+                self.__markerInfo = (mPos, gunMarkerInfo.direction, gunMarkerInfo.size)
             return
 
     def predictLockedTargetShotPoint(self):
@@ -219,9 +239,10 @@ class VehicleGunRotator(object):
         else:
             return
 
-    def getShotParams(self, targetPoint, ignoreYawLimits=False, overrideShotIdx=None):
+    def getShotParams(self, targetPoint, ignoreYawLimits=False, overrideShotDescr=None):
         descr = self._avatar.getVehicleAttached().typeDescriptor
-        shotTurretYaw, shotGunPitch = getShotAngles(descr, self._avatar.getOwnVehicleStabilisedMatrix(), targetPoint, overrideGunPosition=self.__gunPosition, overrideShotIdx=overrideShotIdx)
+        shot = overrideShotDescr or descr.shot
+        shotTurretYaw, shotGunPitch = getShotAngles(descr, self._avatar.getOwnVehicleStabilisedMatrix(), targetPoint, overrideGunPosition=self.__gunPosition, overrideShotDescr=overrideShotDescr)
         gunPitchLimits = calcPitchLimitsFromDesc(shotTurretYaw, self.__getGunPitchLimits(), descr.hull.turretPitches[0], descr.turret.gunJointPitch)
         closestLimit = self.__isOutOfLimits(shotGunPitch, gunPitchLimits)
         if closestLimit is not None:
@@ -231,8 +252,8 @@ class VehicleGunRotator(object):
             closestLimit = self.__isOutOfLimits(shotTurretYaw, turretYawLimits)
             if closestLimit is not None:
                 shotTurretYaw = closestLimit
-        pos, vel = self.__getShotPosition(shotTurretYaw, shotGunPitch, shotIdx=overrideShotIdx)
-        grav = Math.Vector3(0.0, -descr.getShot(shotIdx=overrideShotIdx).gravity, 0.0)
+        pos, vel = self.__getShotPosition(shotTurretYaw, shotGunPitch, shotDescr=overrideShotDescr)
+        grav = Math.Vector3(0.0, -shot.gravity, 0.0)
         return (pos, vel, grav)
 
     def getCurShotPosition(self):
@@ -311,6 +332,8 @@ class VehicleGunRotator(object):
             replayCtrl = BattleReplay.g_replayCtrl
             if replayCtrl.isPlaying:
                 shotPoint = replayCtrl.getGunRotatorTargetPoint()
+            elif self.__fixedShotAngles is not None:
+                shotPoint = self.__getShotPosition(*self.__fixedShotAngles)[0]
             else:
                 predictedLockShotPoint = self.predictLockedTargetShotPoint() if usePredictedLockShotPoint else None
                 shotPoint = self.__shotPointSourceFunctor() if predictedLockShotPoint is None else predictedLockShotPoint
@@ -408,7 +431,10 @@ class VehicleGunRotator(object):
             maxTurretRotationSpeed = self.__maxTurretRotationSpeed
             prevTurretYaw = self.__turretYaw
             vehicleMatrix = self.getAvatarOwnVehicleStabilisedMatrix()
-            shotTurretYaw, shotGunPitch = getShotAngles(descr, vehicleMatrix, targetPoint, overrideGunPosition=self.__gunPosition)
+            if self.__fixedShotAngles is not None:
+                shotTurretYaw, shotGunPitch = self.__fixedShotAngles
+            else:
+                shotTurretYaw, shotGunPitch = getShotAngles(descr, vehicleMatrix, targetPoint, overrideGunPosition=self.__gunPosition)
             estimatedTurretYaw = self.getNextTurretYaw(prevTurretYaw, shotTurretYaw, maxTurretRotationSpeed * timeDiff, turretYawLimits)
             if not replayCtrl.isPlaying:
                 self.__turretYaw = turretYaw = self.__syncWithServerTurretYaw(estimatedTurretYaw)
@@ -439,22 +465,23 @@ class VehicleGunRotator(object):
             return
         else:
             shotPos, shotVec = self.getCurShotPosition()
-            markerPosition = self.__getGunMarkerPosition(shotPos, shotVec, self.__dispersionAngles)
-            mPos, mDir, mSize, dualAccSize, mSizeOffset, collData = markerPosition
-            hasDualAccuracy = vehicle and vehicle.typeDescriptor and vehicle.typeDescriptor.hasDualAccuracy
+            gunMarkerInfo = self.__getGunMarkerInfo(shotPos, shotVec, self.__dispersionAngles, self.__gunIndex)
+            supportMarkersInfo = self.__getSupportMarkersInfo()
             replayCtrl = BattleReplay.g_replayCtrl
             if replayCtrl.isRecording and not replayCtrl.isServerAim:
-                replayCtrl.setGunMarkerParams(mSize, dualAccSize, mPos, mDir)
+                replayCtrl.setGunMarkerParams(gunMarkerInfo)
+            mPos = gunMarkerInfo.position
             if not self.__targetLastShotPoint:
                 self.__lastShotPoint = mPos
             relaxTime = 0.001
             if not (BattleReplay.g_replayCtrl.isPlaying and BattleReplay.g_replayCtrl.isUpdateGunOnTimeWarp):
                 relaxTime = self.__ROTATION_TICK_LENGTH if forceRelaxTime is None else forceRelaxTime
             inputHandler = self._avatar.inputHandler
-            inputHandler.updateClientGunMarker(mPos, mDir, mSize, mSizeOffset, relaxTime, collData)
+            inputHandler.updateClientGunMarker(gunMarkerInfo, supportMarkersInfo, relaxTime)
+            hasDualAccuracy = vehicle and vehicle.typeDescriptor and vehicle.typeDescriptor.hasDualAccuracy
             if hasDualAccuracy:
-                inputHandler.updateDualAccGunMarker(mPos, mDir, dualAccSize, mSizeOffset, relaxTime, collData)
-            self.__markerInfo = (mPos, mDir, mSize)
+                inputHandler.updateDualAccGunMarker(gunMarkerInfo, supportMarkersInfo, relaxTime)
+            self.__markerInfo = (mPos, gunMarkerInfo.direction, gunMarkerInfo.size)
             self.updateMultiGunCollisionData()
             return
 
@@ -566,12 +593,12 @@ class VehicleGunRotator(object):
             speedLimit = min(speedLimit, idealYawSpeed * timeDiff)
         return curAngle + min(shotDiff, speedLimit) if shotDiff > 0.0 else curAngle + max(shotDiff, -speedLimit)
 
-    def __getShotPosition(self, turretYaw, gunPitch, gunOffset=None, shotIdx=None):
+    def __getShotPosition(self, turretYaw, gunPitch, gunOffset=None, shotDescr=None):
         descr = self._avatar.getVehicleDescriptor()
         turretOffs = descr.hull.turretPositions[0] + descr.chassis.hullPosition
         if gunOffset is None:
             gunOffset = descr.activeGunShotPosition if self.__gunPosition is None else self.__gunPosition
-        shotSpeed = descr.getShot(shotIdx).speed
+        shotSpeed = (shotDescr or descr.shot).speed
         turretWorldMatrix = Math.Matrix()
         turretWorldMatrix.setRotateY(turretYaw)
         turretWorldMatrix.translation = turretOffs
@@ -586,27 +613,6 @@ class VehicleGunRotator(object):
     def getAttachedVehicleID(self):
         return self._avatar.playerVehicleID
 
-    def __getGunMarkerPosition(self, shotPos, shotVec, dispersionAngles):
-        vehDescr = self._avatar.getVehicleDescriptor()
-        shotDescr = vehDescr.shot
-        gravity = Math.Vector3(0.0, -shotDescr.gravity, 0.0)
-        testVehicleID = self.getAttachedVehicleID()
-        collisionStrategy = AimingSystems.CollisionStrategy.COLLIDE_DYNAMIC_AND_STATIC
-        minBounds, maxBounds = BigWorld.player().arena.getSpaceBB()
-        endPos, direction, collData, usedMaxDistance = AimingSystems.getCappedShotTargetInfos(shotPos, shotVec, gravity, shotDescr, testVehicleID, minBounds, maxBounds, collisionStrategy)
-        diameterOffset = 2.0 * vehDescr.gun.twinGun.gunMarkerOffset
-        doubleDistance = 2.0 * (shotDescr.maxDistance if usedMaxDistance else (endPos - shotPos).length)
-        diameter, dualAccDiameter = doubleDistance * dispersionAngles[0], doubleDistance * dispersionAngles[2]
-        replayCtrl = BattleReplay.g_replayCtrl
-        if replayCtrl.isPlaying and replayCtrl.isClientReady:
-            diameter, dualAccDiameter, endPos, direction = replayCtrl.getGunMarkerParams(endPos, direction)
-        return (endPos,
-         direction,
-         diameter,
-         dualAccDiameter,
-         diameterOffset,
-         collData)
-
     def updateMultiGunCollisionData(self):
         playerVehicle = self._avatar.getVehicleAttached()
         if playerVehicle is None:
@@ -615,7 +621,7 @@ class VehicleGunRotator(object):
             twinGun = getVehicleTwinGunController(playerVehicle)
             if not self._avatar.inCharge and twinGun is None:
                 return
-            multiGun = playerVehicle.typeDescriptor.turret.multiGun
+            multiGun = playerVehicle.typeDescriptor.gun.multiGun
             if not multiGun:
                 return
             activeGuns = range(len(multiGun)) if twinGun is None else twinGun.getActiveGunIndexes()
@@ -626,19 +632,65 @@ class VehicleGunRotator(object):
             self._avatar.inputHandler.ctrl.updateTargetedEnemiesForGuns(collisions)
             return
 
+    def __getGunMarkerInfo(self, shotPos, shotVec, dispersionAngles, gunIndex):
+        vehDescr = self._avatar.getVehicleDescriptor()
+        endPos, direction, collData, usedMaxDistance = self.__getCappedShotTargetInfo(shotPos, shotVec, vehDescr.shot)
+        diameterOffset = 2.0 * vehDescr.gun.twinGun.gunMarkerOffset
+        doubleDistance = 2.0 * (vehDescr.shot.maxDistance if usedMaxDistance else (endPos - shotPos).length)
+        diameter, dualAccDiameter = doubleDistance * dispersionAngles[0], doubleDistance * dispersionAngles[2]
+        replayCtrl = BattleReplay.g_replayCtrl
+        if replayCtrl.isPlaying and replayCtrl.isClientReady:
+            diameter, dualAccDiameter, endPos, direction = replayCtrl.getGunMarkerParams(endPos, direction)
+        return GunMarkerInfo(DEFAULT_GUN_INSTALLATION_INDEX, gunIndex, endPos, direction, diameter, dualAccDiameter, diameterOffset, collData)
+
+    def __getSupportMarkersInfo(self):
+        playerVehicle = self._avatar.getVehicleAttached()
+        if playerVehicle is None:
+            return ()
+        else:
+            supportWeaponComponent = getVehicleSupportWeaponComponent(playerVehicle)
+            if supportWeaponComponent is None:
+                return ()
+            supportInstallationIndex = supportWeaponComponent.getSupportInstallationIndex()
+            supportGunsShotsInfo = self.__getGunInstallationShotsInfo(supportInstallationIndex)
+            if not supportGunsShotsInfo:
+                return ()
+            markersInfo = []
+            for gunInstallationIndex, gunIndex, shotDescr, (shotPos, shotVec) in supportGunsShotsInfo:
+                mPos, mDir, collData, _ = self.__getCappedShotTargetInfo(shotPos, shotVec, shotDescr)
+                markersInfo.append(GunMarkerInfo(gunInstallationIndex, gunIndex, mPos, mDir, 0.0, 0.0, 0.0, collData))
+
+            return tuple(markersInfo)
+
     def __getTargetedEnemyForGun(self, gunShotPosition, excludeTeam):
         shotPos, shotVec = self.__getShotPosition(self.__turretYaw, self.__gunPitch, gunShotPosition)
-        shotDescr = self._avatar.getVehicleDescriptor().shot
-        gravity = Math.Vector3(0.0, -shotDescr.gravity, 0.0)
-        testVehicleID = self.getAttachedVehicleID()
-        collisionStrategy = AimingSystems.CollisionStrategy.COLLIDE_DYNAMIC_AND_STATIC
-        minBounds, maxBounds = BigWorld.player().arena.getSpaceBB()
-        _, _, collision, _ = AimingSystems.getCappedShotTargetInfos(shotPos, shotVec, gravity, shotDescr, testVehicleID, minBounds, maxBounds, collisionStrategy)
+        _, _, collision, _ = self.__getCappedShotTargetInfo(shotPos, shotVec, self._avatar.getVehicleDescriptor().shot)
         if collision is not None:
             entity = collision.entity
             if entity is not None and entity.publicInfo and entity.publicInfo['team'] is not excludeTeam and entity.health > 0:
                 return entity
         return
+
+    def __getGunInstallationShotsInfo(self, gunInstallationIndex):
+        vehDescr = self._avatar.getVehicleDescriptor()
+        gunInstallations = vehDescr.gunInstallations
+        if gunInstallationIndex < 0 or len(gunInstallations) <= gunInstallationIndex:
+            return ()
+        gunInstallationSlot = gunInstallations[gunInstallationIndex]
+        if gunInstallationSlot.isMainInstallation():
+            return ((gunInstallationIndex,
+              self.__gunIndex,
+              vehDescr.shot,
+              self.__getShotPosition(self.__turretYaw, self.__gunPitch)),)
+        shotDescr = gunInstallationSlot.gun.shots[0]
+        return tuple(((gunInstallationIndex,
+         gunIndex,
+         shotDescr,
+         self.__getShotPosition(self.__turretYaw, self.__gunPitch, multiGunInstance.shotPosition, shotDescr)) for gunIndex, multiGunInstance in enumerate(gunInstallationSlot.gun.multiGun)))
+
+    def __getCappedShotTargetInfo(self, shotPos, shotVec, shotDescr):
+        minBounds, maxBounds = BigWorld.player().arena.getSpaceBB()
+        return AimingSystems.getCappedShotTargetInfos(shotPos, shotVec, Math.Vector3(0.0, -shotDescr.gravity, 0.0), shotDescr, self.getAttachedVehicleID(), minBounds, maxBounds, AimingSystems.CollisionStrategy.COLLIDE_DYNAMIC_AND_STATIC)
 
     def __updateTurretMatrix(self, yaw, time):
         if not self.__isStarted:
@@ -688,15 +740,16 @@ class VehicleGunRotator(object):
         self.__transitionCallbackID = None
         playerVehicle = self._avatar.getVehicleAttached()
         if playerVehicle is None or not activeGuns or len(activeGuns) > 1:
-            self.__gunPosition = None
+            self.__gunIndex = self.__gunPosition = None
             return
         else:
             vehDescr = playerVehicle.typeDescriptor
-            turret = vehDescr.turret
-            if turret.multiGun is not None and (vehDescr.isDualgunVehicle or vehDescr.isTwinGunVehicle):
-                self.__gunPosition = turret.multiGun[activeGuns[0]].shotPosition
+            multiGun = vehDescr.gun.multiGun
+            if multiGun is not None and (vehDescr.isDualgunVehicle or vehDescr.isTwinGunVehicle):
+                self.__gunIndex = activeGuns[0]
+                self.__gunPosition = multiGun[self.__gunIndex].shotPosition
             else:
-                self.__gunPosition = vehDescr.activeGunShotPosition
+                self.__gunIndex = self.__gunPosition = None
             return
 
     def __onVehicleFeedbackReceived(self, eventID, vehicleID, value):

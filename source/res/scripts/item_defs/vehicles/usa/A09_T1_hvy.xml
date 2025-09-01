@@ -10,7 +10,7 @@
   </crew>
   <supplySlots>	1 1 1 6 6 6 7 8 8 8	</supplySlots>
   <speedLimits>
-    <forward>	35.4	</forward>
+    <forward>	35	</forward>
     <backward>	14	</backward>
   </speedLimits>
   <invisibility>
@@ -1306,13 +1306,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <HVSST31>
-      <userString>	#usa_vehicles:HVSST31	</userString>
+    <Chassis_A09_T1_hvy>
+      <userString>	#usa_vehicles:Chassis_A09_T1_hvy	</userString>
       <tags></tags>
       <level>	4	</level>
       <price>	4050	</price>
       <unlocks>
-        <chassis>	HVSST35	  <cost>	2450	</cost>
+        <chassis>	Chassis_A09_T1_hvy_2	  <cost>	2450	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1320,14 +1320,13 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	10600	</weight>
-      <maxLoad>	57880	</maxLoad>
-      <terrainResistance>	1.1 1.7 3.1	</terrainResistance>
+      <terrainResistance>	1.1 1.4 2.1	</terrainResistance>
       <brakeForce>	37500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	20	</rotationSpeed>
+      <rotationSpeed>	32	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.26	</vehicleMovement>
-        <vehicleRotation>	0.26	</vehicleRotation>
+        <vehicleMovement>	0.24	</vehicleMovement>
+        <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	130	</maxHealth>
@@ -2407,9 +2406,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </HVSST31>
-    <HVSST35>
-      <userString>	#usa_vehicles:HVSST35	</userString>
+    </Chassis_A09_T1_hvy>
+    <Chassis_A09_T1_hvy_2>
+      <userString>	#usa_vehicles:Chassis_A09_T1_hvy_2	</userString>
       <tags></tags>
       <level>	5	</level>
       <price>	9600	</price>
@@ -2418,14 +2417,13 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	10600	</weight>
-      <maxLoad>	61500	</maxLoad>
       <terrainResistance>	1.1 1.4 2.1	</terrainResistance>
       <brakeForce>	37500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	25	</rotationSpeed>
+      <rotationSpeed>	36	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.24	</vehicleMovement>
-        <vehicleRotation>	0.24	</vehicleRotation>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	140	</maxHealth>
@@ -3505,14 +3503,18 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </HVSST35>
+    </Chassis_A09_T1_hvy_2>
   </chassis>
   <turrets0>
-    <T1D5>
-      <userString>	#usa_vehicles:T1D5	</userString>
+    <Turret_1_A09_T1_hvy>
+      <userString>	#usa_vehicles:Turret_1_A09_T1_hvy	</userString>
       <tags></tags>
       <level>	4	</level>
       <price>	4300	</price>
+      <unlocks>
+        <turret>	Turret_2_A09_T1_hvy	  <cost>	2650	</cost>
+        </turret>
+      </unlocks>
       <armor>
         <armor_1>	101.6	</armor_1>
         <armor_2>	63.5	</armor_2>
@@ -3535,29 +3537,31 @@
         <maxRegenHealth>	60	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	320	</circularVisionRadius>
+      <circularVisionRadius>	340	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	70	</maxHealth>
         <maxRegenHealth>	35	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_Gun_M7_L50>	shared	  <maxAmmo>	90	</maxAmmo>
+        <_3_inch_Gun_M7_T1>	shared	  <maxAmmo>	90	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -30 1 -30	</minPitch>
             <maxPitch>	0 10 0.366894 10 0.430556 7 0.569444 7 0.633106 10 1 10	</maxPitch>
           </pitchLimits>
-          <unlocks>
-            <turret>	T1D6	  <cost>	2650	</cost>
-            </turret>
-          </unlocks>
           <armor>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
-          <reloadTime>	4.3	</reloadTime>
+          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <reloadTime>	3.7	</reloadTime>
           <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <shotDispersionFactors>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+          </shotDispersionFactors>
           <effects>	shot_medium	</effects>
           <reloadEffect>	reload50_75	</reloadEffect>
           <models>
@@ -3611,7 +3615,7 @@
             <density>	181.753 188.411	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_75mm_Gun_M7_L50>
+        </_3_inch_Gun_M7_T1>
       </guns>
       <models>
         <undamaged>	vehicles/american/A09_T1_hvy/normal/lod0/Turret_01.model	</undamaged>
@@ -3937,14 +3941,14 @@
         <density>	116.99 116.857	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </T1D5>
-    <T1D6>
-      <userString>	#usa_vehicles:T1D6	</userString>
+    </Turret_1_A09_T1_hvy>
+    <Turret_2_A09_T1_hvy>
+      <userString>	#usa_vehicles:Turret_2_A09_T1_hvy	</userString>
       <tags></tags>
       <level>	5	</level>
       <price>	11300	</price>
       <unlocks>
-        <gun>	_76mm_Gun_M1A1	  <cost>	4600	</cost>
+        <gun>	_76mm_Gun_M1A1_T1	  <cost>	4600	</cost>
         </gun>
       </unlocks>
       <armor>
@@ -3990,7 +3994,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.959	</invisibilityFactor>
       <guns>
-        <_75mm_Gun_M7_L50>	shared	  <maxAmmo>	90	</maxAmmo>
+        <_3_inch_Gun_M7_T1>	shared	  <maxAmmo>	90	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -30 1 -30	</minPitch>
             <maxPitch>	0 10 0.366894 10 0.430556 7 0.569444 7 0.633106 10 1 10	</maxPitch>
@@ -3998,10 +4002,16 @@
           <armor>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
-          <reloadTime>	4.3	</reloadTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	3.7	</reloadTime>
           <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <shotDispersionFactors>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+          </shotDispersionFactors>
           <effects>	shot_medium	</effects>
           <reloadEffect>	reload50_75	</reloadEffect>
           <models>
@@ -4055,8 +4065,10 @@
             <density>	181.753 188.411	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_75mm_Gun_M7_L50>
-        <_76mm_Gun_M1A1>	shared	  <unlocks>
+        </_3_inch_Gun_M7_T1>
+        <_76mm_Gun_M1A1_T1>	shared	  <unlocks>
+            <vehicle>	A10_M6	  <cost>	27850	</cost>
+            </vehicle>
             <vehicle>	A142_Pawlack_Tank	  <cost>	28550	</cost>
             </vehicle>
           </unlocks>
@@ -4077,6 +4089,7 @@
           <shotDispersionRadius>	0.43	</shotDispersionRadius>
           <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
             <undamaged>	vehicles/american/A09_T1_hvy/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/american/A09_T1_hvy/crash/lod0/Gun_04.model	</destroyed>
@@ -4130,7 +4143,7 @@
             <density>	180.92 182.19	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_76mm_Gun_M1A1>
+        </_76mm_Gun_M1A1_T1>
       </guns>
       <models>
         <undamaged>	vehicles/american/A09_T1_hvy/normal/lod0/Turret_02.model	</undamaged>
@@ -4478,65 +4491,36 @@
         <density>	114.931 114.526	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </T1D6>
+    </Turret_2_A09_T1_hvy>
   </turrets0>
   <engines>
-    <Wright_G200_m_795C9GC1>	shared	  <unlocks>
-        <engine>	Wright_G2X_m_781C9GC1	  <cost>	5300	</cost>
+    <Wright_G_200_Model_795C9GC1_T1>	shared	  <unlocks>
+        <engine>	Wright_G_200_Model_781C9GC1_T1	  <cost>	15100	</cost>
         </engine>
       </unlocks>
-    </Wright_G200_m_795C9GC1>
-    <Wright_G2X_m_781C9GC1>	shared	  <unlocks>
-        <engine>	Wright_G200_m_781C9GC1	  <cost>	15100	</cost>
-        </engine>
-        <vehicle>	A10_M6	  <cost>	27850	</cost>
-        </vehicle>
-      </unlocks>
-    </Wright_G2X_m_781C9GC1>
-    <Wright_G200_m_781C9GC1>	shared	</Wright_G200_m_781C9GC1>
+    </Wright_G_200_Model_795C9GC1_T1>
+    <Wright_G_200_Model_781C9GC1_T1>	shared	</Wright_G_200_Model_781C9GC1_T1>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <SCR_508>	shared	  <unlocks>
-        <radio>	SCR_538	  <cost>	3800	</cost>
-        </radio>
-      </unlocks>
-    </SCR_508>
     <SCR_538>	shared	</SCR_538>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Wright_G200_m_795C9GC1>
-          <smplEnginePower>	740.0968	</smplEnginePower>
-          <smplFwMaxSpeed>	35.4	</smplFwMaxSpeed>
-        </Wright_G200_m_795C9GC1>
-        <Wright_G2X_m_781C9GC1>
-          <smplEnginePower>	872.257	</smplEnginePower>
-          <smplFwMaxSpeed>	35.4	</smplFwMaxSpeed>
-        </Wright_G2X_m_781C9GC1>
-        <Wright_G200_m_781C9GC1>
-          <smplEnginePower>	1014.99	</smplEnginePower>
-          <smplFwMaxSpeed>	35.4	</smplFwMaxSpeed>
-        </Wright_G200_m_781C9GC1>
+        <Wright_G_200_Model_795C9GC1_T1>
+          <smplEnginePower>	800	</smplEnginePower>
+          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
+        </Wright_G_200_Model_795C9GC1_T1>
+        <Wright_G_200_Model_781C9GC1_T1>
+          <smplEnginePower>	900	</smplEnginePower>
+          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
+        </Wright_G_200_Model_781C9GC1_T1>
       </engines>
       <chassis>
-        <HVSST31>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.24955	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.13685	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
-            </firm>
-          </grounds>
-        </HVSST31>
-        <HVSST35>
+        <Chassis_A09_T1_hvy>
           <grounds>
             <soft>
               <rollingFriction>	0.16905	</rollingFriction>
@@ -4548,7 +4532,20 @@
               <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
-        </HVSST35>
+        </Chassis_A09_T1_hvy>
+        <Chassis_A09_T1_hvy_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.16905	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.1127	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.08855	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_A09_T1_hvy_2>
       </chassis>
     </detailed>
   </physics>

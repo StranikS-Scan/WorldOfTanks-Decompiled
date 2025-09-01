@@ -54,7 +54,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	6670	</weight>
-    <maxHealth>	600	</maxHealth>
+    <maxHealth>	640	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -1005,7 +1005,6 @@
         </armor_9>
       </armor>
       <weight>	3000	</weight>
-      <maxLoad>	15100	</maxLoad>
       <terrainResistance>	1.0 1.35 1.95	</terrainResistance>
       <brakeForce>	22500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -1352,7 +1351,6 @@
         </armor_9>
       </armor>
       <weight>	3000	</weight>
-      <maxLoad>	18000	</maxLoad>
       <terrainResistance>	1.0 1.35 1.95	</terrainResistance>
       <brakeForce>	22500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -1709,7 +1707,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3200	</weight>
-      <maxHealth>	150	</maxHealth>
+      <maxHealth>	160	</maxHealth>
       <rotationSpeed>	55	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -1725,7 +1723,7 @@
       <guns>
         <_75mm_SA49_EBR>	shared	  <maxAmmo>	60	</maxAmmo>
           <unlocks>
-            <gun>	Canon_de_75mm_Vo_920_m_s_EBR	  <cost>	5700	</cost>
+            <gun>	Canon_de_75mm_Vo_1000_m_s_EBR	  <cost>	12200	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -1742,10 +1740,10 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	4.12	</reloadTime>
+          <reloadTime>	6.6	</reloadTime>
           <aimingTime>	1.8	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -1824,107 +1822,6 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_SA49_EBR>
-        <Canon_de_75mm_Vo_920_m_s_EBR>	shared	  <maxAmmo>	60	</maxAmmo>
-          <unlocks>
-            <gun>	Canon_de_75mm_Vo_1000_m_s_EBR	  <cost>	12200	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	20	</gun>
-          </armor>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 1 10	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.41	</shotDispersionRadius>
-          <reloadTime>	6.6	</reloadTime>
-          <aimingTime>	1.8	</aimingTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <models>
-            <undamaged>	vehicles/french/F107_Hotchkiss_EBR/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/french/F107_Hotchkiss_EBR/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/french/F107_Hotchkiss_EBR/crash/lod0/Gun_02.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/french/F107_Hotchkiss_EBR/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F107_Hotchkiss_EBR/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.000055 0.001455 2.09926	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.174792 0.174792	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.00029 0.009816 1.83899	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.009562 2.02265 0.307184	</position>
-              <rotation>	1.06778 -0.000028 3.14154	</rotation>
-              <scale>	1.09089 0.487677 1.0909	</scale>
-              <showOn>	4352	</showOn>
-              <clipAngle>	0.917174	</clipAngle>
-              <anchorShift>	0.141971	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x3	</tags>
-              <position>	-0.009562 1.976 0.358696	</position>
-              <rotation>	0.54828 0.000001 3.14156	</rotation>
-              <scale>	0.809708 0.361976 0.809714	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	1.01889	</clipAngle>
-              <anchorShift>	0.151969	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0 0 2.68583	</rayStart>
-              <rayEnd>	-0 0 3.18583	</rayEnd>
-              <rayUp>	0.079138 0 0	</rayUp>
-              <size>	0.5	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <effects>	shot_medium_mb	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <camouflage>
-            <density>	103.84 103.802	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </Canon_de_75mm_Vo_920_m_s_EBR>
         <Canon_de_75mm_Vo_1000_m_s_EBR>	shared	  <maxAmmo>	60	</maxAmmo>
           <armor>
             <armor_1>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -2537,15 +2434,10 @@
   </turrets0>
   <engines>
     <Hotchkiss_V6_mle_48>	shared	  <unlocks>
-        <engine>	Hotchkiss_V6_mle_49	  <cost>	10600	</cost>
-        </engine>
-      </unlocks>
-    </Hotchkiss_V6_mle_48>
-    <Hotchkiss_V6_mle_49>	shared	  <unlocks>
         <engine>	Hotchkiss_V6_mle_50	  <cost>	17000	</cost>
         </engine>
       </unlocks>
-    </Hotchkiss_V6_mle_49>
+    </Hotchkiss_V6_mle_48>
     <Hotchkiss_V6_mle_50>	shared	  <unlocks>
         <vehicle>	F110_Lynx_6x6	  <cost>	104400	</cost>
         </vehicle>
@@ -2556,16 +2448,6 @@
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <SCR_508>	shared	  <unlocks>
-        <radio>	EM3_R61	  <cost>	6600	</cost>
-        </radio>
-      </unlocks>
-    </SCR_508>
-    <EM3_R61>	shared	  <unlocks>
-        <radio>	SCR_528_F	  <cost>	9300	</cost>
-        </radio>
-      </unlocks>
-    </EM3_R61>
     <SCR_528_F>	shared	</SCR_528_F>
   </radios>
   <physics>
@@ -2575,10 +2457,6 @@
           <smplEnginePower>	440	</smplEnginePower>
           <smplFwMaxSpeed>	70	</smplFwMaxSpeed>
         </Hotchkiss_V6_mle_48>
-        <Hotchkiss_V6_mle_49>
-          <smplEnginePower>	500	</smplEnginePower>
-          <smplFwMaxSpeed>	70	</smplFwMaxSpeed>
-        </Hotchkiss_V6_mle_49>
         <Hotchkiss_V6_mle_50>
           <smplEnginePower>	525	</smplEnginePower>
           <smplFwMaxSpeed>	70	</smplFwMaxSpeed>

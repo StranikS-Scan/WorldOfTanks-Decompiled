@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_compare/cmp_view.py
+from __future__ import absolute_import
+from future.builtins import range
 from gui import SystemMessages
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -12,7 +14,7 @@ from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.game_control.veh_comparison_basket import MAX_VEHICLES_TO_COMPARE_COUNT
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import selectVehicleInHangar, showVehiclePreview
+from gui.shared.event_dispatcher import selectVehicleInHangar, showVehiclePreview, showHangar
 from gui.shared.formatters import text_styles
 from gui.shared.items_parameters.formatters import getAllParametersTitles
 from helpers import dependency
@@ -22,10 +24,6 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.account_helpers.settings_core import ISettingsCore
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
 from tutorial.hints_manager import HINT_SHOWN_STATUS
-_BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
- VIEW_ALIAS.LOBBY_STORE: 'shop',
- VIEW_ALIAS.LOBBY_RESEARCH: 'researchTree',
- VIEW_ALIAS.LOBBY_TECHTREE: 'researchTree'}
 
 @dependency.replace_none_kwargs(settingsCore=ISettingsCore)
 def _updateVehicleConfigHint(settingsCore=None):
@@ -52,8 +50,8 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
 
     def onSelectModulesClick(self, vehicleID, index):
         _updateVehicleConfigHint()
-        event = g_entitiesFactories.makeLoadEvent(SFViewLoadParams(VIEW_ALIAS.VEHICLE_COMPARE_MAIN_CONFIGURATOR), ctx={'index': int(index)})
-        self.fireEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
+        from gui.Scaleform.daapi.view.lobby.vehicle_compare.states import VehicleCompareConfiguratorState
+        VehicleCompareConfiguratorState.goTo(index=int(index))
 
     def onRemoveAllVehicles(self):
         self.comparisonBasket.removeAllVehicles()
@@ -84,12 +82,14 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
         self.__updateDifferenceAttention()
 
     def onBackClick(self):
-        event = g_entitiesFactories.makeLoadEvent(SFViewLoadParams(self.__backAlias))
-        self.fireEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
+        if self.__backAlias in (VIEW_ALIAS.LOBBY_HANGAR, VIEW_ALIAS.LEGACY_LOBBY_HANGAR):
+            showHangar()
+        else:
+            event = g_entitiesFactories.makeLoadEvent(SFViewLoadParams(self.__backAlias))
+            self.fireEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _populate(self):
         super(VehicleCompareView, self)._populate()
-        self.as_setStaticDataS({'header': self.__getHeaderData()})
         self.as_setVehicleParamsDataS(getAllParametersTitles(CMP_HIDDEN_PARAMETERS))
         self._setViewData()
         self.comparisonBasket.onChange += self.__updateUI
@@ -129,14 +129,6 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
     def __onVehCmpBasketStateChanged(self):
         if not self.comparisonBasket.isEnabled():
             self.destroy()
-
-    def __getHeaderData(self):
-        key = _BACK_BTN_LABELS.get(self.__backAlias, 'hangar')
-        backBtnDescrLabel = '#veh_compare:header/backBtn/descrLabel/{}'.format(key)
-        return {'closeBtnLabel': VEH_COMPARE.HEADER_CLOSEBTN_LABEL,
-         'backBtnLabel': VEH_COMPARE.HEADER_BACKBTN_LABEL,
-         'backBtnDescrLabel': backBtnDescrLabel,
-         'titleText': text_styles.promoSubTitle(VEH_COMPARE.VEHICLECOMPAREVIEW_HEADER)}
 
     def __updateDifferenceAttention(self):
         vehiclesCount = self.comparisonBasket.getVehiclesCount()
@@ -180,7 +172,7 @@ class VehiclesDataProvider(ListDAAPIDataProvider, IVehCompareView):
 
     def updateItems(self, *args):
         data = args[0]
-        self.refreshRandomItems(range(0, len(data)), data)
+        self.refreshRandomItems(list(range(0, len(data))), data)
 
     def clear(self):
         self.__list = []

@@ -13,7 +13,7 @@ import GUI
 import CommandMapping as CM
 from PlayerEvents import g_playerEvents
 from battleground.simulated_scene import SimulatedScene, ANIMATION_DURATION_BEFORE_SHOT
-from constants import ATTACK_REASON, ATTACK_REASONS, ARENA_PERIOD, POSTMORTEM_MODIFIERS
+from constants import ATTACK_REASON, ATTACK_REASONS, ARENA_PERIOD, DEFAULT_GUN_INSTALLATION_INDEX, POSTMORTEM_MODIFIERS
 from gui.battle_control.arena_info.interfaces import IBattleFieldController
 from gui.shared.events import DeathCamEvent
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -589,6 +589,7 @@ class KillCamMode(KillModeBase):
             self._leaveMode()
             return
         self.killCamCtrl.simulationSceneActive(True)
+        self.__simulatedScene.updateVehicleEntities()
         self.__fadeScreen(False, _SHOW_KILLER_VISION_FADE_TIME)
         projectileData = self._rawSimulationData['projectile']
         self._cam.projectileTriNorm = self._rawSimulationData['projectile']['triNormal']
@@ -619,7 +620,9 @@ class KillCamMode(KillModeBase):
         causeOfDeath = self._rawSimulationData['player']['causeOfDeath']
         simulatedKiller = BigWorld.entity(self.__simulatedKillerID) if self.__simulatedKillerID else None
         if simulatedKiller:
-            simulatedKillerGunInfo = (simulatedKiller.gunJointMatrix, simulatedKiller.gunFireMatrix)
+            gunInstallationIndex = projectileData.get('gunInstallationIndex', DEFAULT_GUN_INSTALLATION_INDEX)
+            gunIndex = projectileData.get('gunIndex', 0)
+            simulatedKillerGunInfo = (simulatedKiller.gunOriginMatrix(gunInstallationIndex, gunIndex), simulatedKiller.gunFireMatrix(gunInstallationIndex, gunIndex))
         else:
             simulatedKillerGunInfo = None
         self.killCamCtrl.killCamModeActive(self.__unspottedOrigin, simulatedKillerGunInfo, projectileData, phaseDurations, hasSpottedData, simulatedKiller is not None, playerRelativeArmor, playerIsSpotted, totalSceneDuration - _START_VISION_DELAY, causeOfDeath)

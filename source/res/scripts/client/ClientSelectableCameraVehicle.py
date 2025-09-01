@@ -24,8 +24,9 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
         self.__shadowModelFashion = None
         self._isVehicleLoaded = False
         self.__vehicleTransform = None
-        self.__defaultPos = Math.Vector3(0, 0, 0)
-        self.__defaultYPR = Math.Vector3(0, 0, 0)
+        cfg = hangarCFG()
+        shadowModelYOffset = cfg['shadow_forward_y_offset'] if BigWorld.getGraphicsSetting('RENDER_PIPELINE') == 1 else cfg['shadow_deferred_y_offset']
+        self.__defaultTransform = _VehicleTransformParams(Math.Vector3(0, 0, 0), Math.Vector3(0, 0, 0), shadowModelYOffset)
         return
 
     def prerequisites(self):
@@ -36,8 +37,7 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
 
     def onEnterWorld(self, prereqs):
         super(ClientSelectableCameraVehicle, self).onEnterWorld(prereqs)
-        self.__defaultPos = self.position
-        self.__defaultYPR = Math.Vector3(self.yaw, self.pitch, self.roll)
+        self.__defaultTransform = _VehicleTransformParams(self.position, Math.Vector3(self.yaw, self.pitch, self.roll), self.__defaultTransform.shadowModelYOffset)
         cfg = hangarCFG()
         if 'shadow_model_name' in cfg:
             shadowName = cfg['shadow_model_name']
@@ -137,17 +137,11 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
 
     def _setVehicleModelTransform(self, targetPos, rotateYPR, shadowModelYOffset=None):
         self.__vehicleTransform = _VehicleTransformParams(targetPos, rotateYPR, shadowModelYOffset)
-        m = Math.Matrix()
-        m.setRotateYPR(rotateYPR)
-        m.translation = Math.Vector3(targetPos)
-        self.model.setWorldTransform(m)
-        self.model.matrix = m
-        self.teleport(targetPos, rotateYPR)
-        self.__setFakeShadowModelTransform(targetPos, rotateYPR[0], shadowModelYOffset)
+        self.__setVehicleModelTransformImpl(targetPos, rotateYPR, shadowModelYOffset)
 
     def _resetVehicleModelTransform(self):
         self.__vehicleTransform = None
-        self.teleport(self.__defaultPos, self.__defaultYPR)
+        self.__setVehicleModelTransformImpl(self.__defaultTransform.targetPos, self.__defaultTransform.rotateYPR, self.__defaultTransform.shadowModelYOffset)
         return
 
     def _addEdgeDetect(self):
@@ -194,11 +188,18 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
             return
         else:
             if shadowModelYOffset is None:
-                cfg = hangarCFG()
-                shadowModelYOffset = cfg['shadow_forward_y_offset'] if BigWorld.getGraphicsSetting('RENDER_PIPELINE') == 1 else cfg['shadow_deferred_y_offset']
+                shadowModelYOffset = self.__defaultTransform.shadowModelYOffset
             self.__fakeShadowModel.position = Math.Vector3(position.x, position.y + shadowModelYOffset, position.z)
             self.__fakeShadowModel.yaw = yaw
             return
+
+    def __setVehicleModelTransformImpl(self, targetPos, rotateYPR, shadowModelYOffset):
+        super(ClientSelectableCameraVehicle, self).teleport(targetPos, rotateYPR)
+        if self.model:
+            m = Math.createRTMatrix(rotateYPR, targetPos)
+            self.model.setWorldTransform(m)
+            self.model.matrix = m
+        self.__setFakeShadowModelTransform(targetPos, rotateYPR[0], shadowModelYOffset)
 
     def __restoreTransform(self):
         if self.__vehicleTransform is None:

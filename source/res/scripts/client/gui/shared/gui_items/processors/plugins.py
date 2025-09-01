@@ -20,6 +20,8 @@ from gui.SystemMessages import SM_TYPE
 from gui.goodies.demount_kit import getDemountKitForOptDevice
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.server_events.pm_constants import PM_SUIT_OP_PLUGIN_ERR_RESPONSE, PAUSABLE_OPERATIONS_IDS
+from gui.server_events.finders import BRANCH_TO_OPERATION_IDS
 from gui.shared.formatters.tankmen import formatDeletedTankmanStr
 from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE, GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
@@ -34,6 +36,7 @@ from helpers import dependency
 from items import tankmen
 from items.components import skills_constants
 from items.components.c11n_constants import SeasonType
+from personal_missions import PM_BRANCH
 from skeletons.gui.game_control import IEpicBattleMetaGameController, IWotPlusController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
@@ -690,6 +693,23 @@ class PMLockedByVehicle(_EventsCacheValidator):
         return makeSuccess()
 
 
+class PMLockedByOperation(_EventsCacheValidator):
+
+    def __init__(self, operation, messageKeyPrefix='', isEnabled=True):
+        super(PMLockedByOperation, self).__init__(isEnabled)
+        self._messageKeyPrefix = messageKeyPrefix
+        self.operation = operation
+        self._lockedChains = self.eventsCache.getLockedPersonalMissions()
+
+    def _validate(self):
+        if self.operation in BRANCH_TO_OPERATION_IDS[PM_BRANCH.PERSONAL_MISSION_3]:
+            for lockedPM in self._lockedChains:
+                if lockedPM.getOperationID in BRANCH_TO_OPERATION_IDS[PM_BRANCH.PERSONAL_MISSION_3]:
+                    return makeError(self._messageKeyPrefix + 'LOCKED_BY_VEHICLE_QUEST')
+
+        return makeSuccess()
+
+
 class PMSlotsValidator(SyncValidator):
 
     def __init__(self, questsProgress, isEnabled=True, removedCount=0):
@@ -719,7 +739,36 @@ class PMFreeTokensValidator(_EventsCacheValidator):
         self._branch = quest.getPMType().branch
 
     def _validate(self):
-        return makeError('NOT_ENOUGH_FREE_TOKENS') if self.eventsCache.getPersonalMissions().getFreeTokensCount(self._branch) < self.quest.getPawnCost() else makeSuccess()
+        if self.eventsCache.getPersonalMissions().getFreeTokensCount(self._branch) < self.quest.getPawnCost():
+            logging.warning('WARNING: There are not enough free tokens')
+            return makeError('NOT_ENOUGH_FREE_TOKENS')
+        return makeSuccess()
+
+
+class PMActiveCampaignValidator(_EventsCacheValidator):
+
+    def __init__(self, quest, isEnabled=True):
+        super(PMActiveCampaignValidator, self).__init__(isEnabled)
+        self._branch = quest.getPMType().branch
+
+    def _validate(self):
+        activeCampaigns = self.eventsCache.getPersonalMissions().getActiveCampaigns()
+        namePM3 = PM_BRANCH.TYPE_TO_NAME[PM_BRANCH.PERSONAL_MISSION_3]
+        if namePM3 in activeCampaigns:
+            logging.warning('WARNING: You are trying to activate the operation which not suitable for this branch')
+            return makeError(PM_SUIT_OP_PLUGIN_ERR_RESPONSE)
+        return makeSuccess()
+
+
+class PMActivateSameCampaignValidator(_EventsCacheValidator):
+
+    def __init__(self, branch, isEnabled=True):
+        super(PMActivateSameCampaignValidator, self).__init__(isEnabled)
+        self._branch = branch
+
+    def _validate(self):
+        activeCampaigns = self.eventsCache.getPersonalMissions().getActiveCampaigns()
+        return makeError(PM_SUIT_OP_PLUGIN_ERR_RESPONSE) if PM_BRANCH.TYPE_TO_NAME[self._branch] in activeCampaigns else makeSuccess()
 
 
 class CheckBoxConfirmator(DialogAbstractConfirmator):
@@ -830,6 +879,33 @@ class PMPawnConfirmator(DialogAbstractConfirmator):
 
     def _makeMeta(self):
         return UseAwardSheetDialogMeta(self.quest, self.eventsCache.getPersonalMissions().getFreeTokensCount(self._branch))
+
+
+class DiscardSuitableOperationValidator(SyncValidator):
+
+    def __init__(self, isSuitableOperation, operationID):
+        super(DiscardSuitableOperationValidator, self).__init__()
+        self.isSuitableOperation = isSuitableOperation
+        self.operationID = operationID
+
+    def _validate(self):
+        if not self.isSuitableOperation:
+            logging.warning('WARNING: Trying to discard an operation %s that is not suitable for this', str(self.operationID))
+            return makeError(PM_SUIT_OP_PLUGIN_ERR_RESPONSE)
+        return makeSuccess()
+
+
+class PauseSuitableOperationValidator(SyncValidator):
+
+    def __init__(self, curQuest):
+        super(PauseSuitableOperationValidator, self).__init__()
+        self.curQuest = curQuest
+
+    def _validate(self):
+        if self.curQuest.getOperationID() not in PAUSABLE_OPERATIONS_IDS:
+            logging.warning('WARNING: Trying to pause an operation %s that is not suitable for this', str(self.curQuest.getOperationID()))
+            return makeError(PM_SUIT_OP_PLUGIN_ERR_RESPONSE)
+        return makeSuccess()
 
 
 class BoosterActivateValidator(SyncValidator):
@@ -1219,8 +1295,8 @@ class PostProgressionPurchaseStepsValidator(SyncValidator):
             step = progression.getStep(stepID)
             if step.isRestricted():
                 return makeError(ExtendedGuiItemEconomyCode.STEP_RESTRICTED)
-            parentStep = progression.getStep(step.getParentStepID() or stepID)
-            if parentStep.isLocked() and parentStep.stepID not in stepIDs:
+            parentSteps = [ progression.getStep(parentStepID) for parentStepID in step.getParentStepIDs() or [stepID] ]
+            if not step.getUnlockStrategy()([ not parentStep.isLocked() or parentStep.stepID in stepIDs for parentStep in parentSteps ]):
                 return makeError(ExtendedGuiItemEconomyCode.STEP_LOCKED)
             totalPrice += step.getPrice()
 
@@ -1246,7 +1322,7 @@ class PostProgressionSetSlotTypeValidator(SyncValidator):
 class AsyncDialogConfirmator(AsyncConfirmator):
 
     def __init__(self, dialogMethod, *args, **kwargs):
-        super(AsyncDialogConfirmator, self).__init__()
+        super(AsyncDialogConfirmator, self).__init__(isEnabled=kwargs.pop('isEnabled', True))
         self.__dialogMethod = dialogMethod
         self.__dialogArgs = args
         self.__dialogKwargs = kwargs

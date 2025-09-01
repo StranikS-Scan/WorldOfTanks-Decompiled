@@ -33,7 +33,7 @@ def getResourceRoot(component):
     return res
 
 
-LANGUAGE_CODE = backport.text(R.strings.settings.LANGUAGE_CODE())
+LANGUAGE_CODE = R.strings.settings.LANGUAGE_CODE()
 SUPPORTED_LANGUAGES = ['de',
  'es',
  'fr',
@@ -48,7 +48,7 @@ SUPPORTED_LANGUAGES = ['de',
  'cs']
 
 def getLocalizePostfix():
-    return '_{}'.format(LANGUAGE_CODE) if LANGUAGE_CODE in SUPPORTED_LANGUAGES else ''
+    return '_{}'.format(backport.text(LANGUAGE_CODE)) if backport.text(LANGUAGE_CODE) in SUPPORTED_LANGUAGES else ''
 
 
 class DogTagComposerClient(object):

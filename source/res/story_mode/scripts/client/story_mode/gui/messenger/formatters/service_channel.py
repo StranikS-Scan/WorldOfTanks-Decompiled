@@ -58,6 +58,7 @@ class StoryModeResultsFormatter(BattleResultsFormatter):
         ctx['crystalStr'] = ''
         ctx['creditsStr'] = ''
         ctx['rewardsStr'] = ''
+        ctx['equipCoinStr'] = ''
         progressionInfo = message.data.get('progressionInfo', {})
         rewardList = getRewardList(progressionInfo, self._battlePass.isActive())
         completedTasksCount, tasksToCompleteCount = getTasksCount(progressionInfo)
@@ -73,6 +74,7 @@ class StoryModeResultsFormatter(BattleResultsFormatter):
         items = {}
         vehicles = []
         slots = 0
+        equipCoin = 0
         for reward in rewardList:
             credits += reward.get('credits', 0)
             freeXP += reward.get('freeXP', 0)
@@ -81,6 +83,7 @@ class StoryModeResultsFormatter(BattleResultsFormatter):
             customizations += reward.get('customizations', [])
             premium += reward.get('premium_plus', 0)
             slots += reward.get('slots', 0)
+            equipCoin += reward.get('equipCoin', 0)
             if 'items' in reward:
                 for itemKey, amount in reward['items'].iteritems():
                     items[itemKey] = items.get(itemKey, 0) + amount
@@ -93,6 +96,8 @@ class StoryModeResultsFormatter(BattleResultsFormatter):
             ctx['bpPointsStr'] = g_settings.htmlTemplates.format('bpPointsEarned', {'bpPoints': bpPoints})
         if crystal:
             ctx['crystalStr'] = g_settings.htmlTemplates.format('crystalEarned', {'crystal': crystal})
+        if equipCoin:
+            ctx['equipCoinStr'] = g_settings.htmlTemplates.format('equipCoinEarned', {'equipCoin': equipCoin})
         if credits:
             ctx['creditsStr'] = g_settings.htmlTemplates.format('creditEarned', {'credits': credits})
         haveRewardsStr = bool(premium or vehicles or items or customizations)

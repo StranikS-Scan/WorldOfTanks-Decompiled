@@ -69,7 +69,7 @@ class SquadEntity(UnitEntity):
         else:
             criteria = REQ_CRITERIA.INVENTORY
         vehicles = self.itemsCache.items.getVehicles(criteria)
-        updatedVehicles = [ intCD for intCD, v in vehicles.iteritems() if self._updateVehicleState(v, state) ]
+        updatedVehicles = [ intCD for intCD, v in vehicles.iteritems() if v.getCustomState() != Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE and self._updateVehicleState(v, state) ]
         if updatedVehicles:
             g_prbCtrlEvents.onVehicleClientStateChanged(updatedVehicles)
 

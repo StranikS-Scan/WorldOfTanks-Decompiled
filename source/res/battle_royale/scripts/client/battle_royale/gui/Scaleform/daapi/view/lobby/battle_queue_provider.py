@@ -4,7 +4,7 @@ from battle_royale.gui.constants import BattleRoyaleSubMode
 import constants
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.Scaleform.daapi.view.lobby.battle_queue import RandomQueueProvider
+from gui.Scaleform.daapi.view.lobby.battle_queue.battle_queue import RandomQueueProvider
 from gui.impl.gen.view_models.views.battle_royale.battle_results.player_battle_type_status_model import BattleType
 from helpers import dependency
 from skeletons.gui.game_control import IBattleRoyaleController

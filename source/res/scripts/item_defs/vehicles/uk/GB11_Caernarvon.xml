@@ -60,7 +60,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	35270	</weight>
-    <maxHealth>	1200	</maxHealth>
+    <maxHealth>	1400	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	240	</maxHealth>
       <maxRegenHealth>	160	</maxRegenHealth>
@@ -1139,14 +1139,13 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	12000	</weight>
-      <maxLoad>	60000	</maxLoad>
-      <terrainResistance>	1.2 1.5 2.5	</terrainResistance>
+      <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
       <brakeForce>	48000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	22	</rotationSpeed>
+      <rotationSpeed>	26	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.18	</vehicleMovement>
-        <vehicleRotation>	0.18	</vehicleRotation>
+        <vehicleMovement>	0.16	</vehicleMovement>
+        <vehicleRotation>	0.16	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	200	</maxHealth>
@@ -2242,11 +2241,10 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	12000	</weight>
-      <maxLoad>	64000	</maxLoad>
       <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
       <brakeForce>	48000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	24	</rotationSpeed>
+      <rotationSpeed>	30	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.16	</vehicleMovement>
         <vehicleRotation>	0.16	</vehicleRotation>
@@ -3363,24 +3361,24 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	10000	</weight>
-      <maxHealth>	300	</maxHealth>
-      <rotationSpeed>	26	</rotationSpeed>
+      <maxHealth>	260	</maxHealth>
+      <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
         <maxRegenHealth>	75	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	370	</circularVisionRadius>
+      <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <OQF_17pdr_Gun_Mk_VII>	shared	  <maxAmmo>	70	</maxAmmo>
+        <OQF_17_pdr_Gun_Mk_VII_221>	shared	  <maxAmmo>	70	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -18 1 -18	</minPitch>
-            <maxPitch>	0 10 0.422222 10 0.444444 6 0.5 6 0.555556 6 0.577778 10 1 10	</maxPitch>
+            <maxPitch>	0.00000 10.00 0.42222 10.00 0.44444 6.00 0.55556 6.00 0.57778 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
           <armor>
             <armor_1>	152.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -3404,13 +3402,13 @@
             <gun>	20	</gun>
           </armor>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <reloadTime>	4.5	</reloadTime>
+          <reloadTime>	3.4	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4	</afterShot>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.1	</aimingTime>
           <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB11_Caernarvon/normal/lod0/Gun_01.model	</undamaged>
@@ -3476,7 +3474,7 @@
             <density>	99.8115 121.147	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </OQF_17pdr_Gun_Mk_VII>
+        </OQF_17_pdr_Gun_Mk_VII_221>
       </guns>
       <models>
         <undamaged>	vehicles/british/GB11_Caernarvon/normal/lod0/Turret_01.model	</undamaged>
@@ -3818,7 +3816,7 @@
       <level>	8	</level>
       <price>	31000	</price>
       <unlocks>
-        <gun>	_32_pounder_Gun_OQF	  <cost>	16400	</cost>
+        <gun>	OQF_32_pdr_Gun_Mk_II_221	  <cost>	16400	</cost>
         </gun>
       </unlocks>
       <armor>
@@ -3838,7 +3836,7 @@
       </armor>
       <primaryArmor>	armor_2 armor_3 armor_10	</primaryArmor>
       <weight>	10400	</weight>
-      <maxHealth>	400	</maxHealth>
+      <maxHealth>	350	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -3852,10 +3850,10 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <OQF_17pdr_Gun_Mk_VII>	shared	  <maxAmmo>	70	</maxAmmo>
+        <OQF_17_pdr_Gun_Mk_VII_221>	shared	  <maxAmmo>	70	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -18 1 -18	</minPitch>
-            <maxPitch>	0 10 0.408333 10 0.444444 6 0.5 6 0.555556 6 0.577778 10 1 10	</maxPitch>
+            <maxPitch>	0.00000 10.00 0.41667 10.00 0.43889 6.00 0.55556 6.00 0.57778 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
           <armor>
             <armor_1>	269.9	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -3870,11 +3868,11 @@
             </armor_6>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <reloadTime>	4.2	</reloadTime>
+          <shotDispersionRadius>	0.32	</shotDispersionRadius>
+          <reloadTime>	3.4	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.9	</aimingTime>
@@ -3943,11 +3941,11 @@
             <density>	99.8115 121.147	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </OQF_17pdr_Gun_Mk_VII>
-        <_32_pounder_Gun_OQF>	shared	  <maxAmmo>	50	</maxAmmo>
+        </OQF_17_pdr_Gun_Mk_VII_221>
+        <OQF_32_pdr_Gun_Mk_II_221>	shared	  <maxAmmo>	50	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -18 1 -18	</minPitch>
-            <maxPitch>	0 10 0.408333 10 0.444444 6 0.5 6 0.555556 6 0.577778 10 1 10	</maxPitch>
+            <maxPitch>	0.00000 10.00 0.41667 10.00 0.43889 6.00 0.55556 6.00 0.57778 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
           <unlocks>
             <vehicle>	GB12_Conqueror	  <cost>	110000	</cost>
@@ -3968,10 +3966,10 @@
           </armor>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <reloadTime>	6.5	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.1	</aimingTime>
           <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -4039,7 +4037,7 @@
             <density>	110.77 112.879	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_32_pounder_Gun_OQF>
+        </OQF_32_pdr_Gun_Mk_II_221>
       </guns>
       <models>
         <undamaged>	vehicles/british/GB11_Caernarvon/normal/lod0/Turret_02.model	</undamaged>
@@ -4377,61 +4375,42 @@
     </Turret_2_GB11_Caernarvon>
   </turrets0>
   <engines>
-    <Rolls_Royse_Meteor_MkIV>	shared	  <unlocks>
-        <engine>	Rolls_Royse_Meteor_MkIVC	  <cost>	31000	</cost>
+    <Rolls_Royce_Meteor_Mk_IVC_221>	shared	  <unlocks>
+        <engine>	Rolls_Royce_Meteor_M120_221	  <cost>	27000	</cost>
         </engine>
       </unlocks>
-    </Rolls_Royse_Meteor_MkIV>
-    <Rolls_Royse_Meteor_MkIVC>	shared	  <unlocks>
-        <engine>	Rolls_Royse_Meteor_M120	  <cost>	27000	</cost>
-        </engine>
-      </unlocks>
-    </Rolls_Royse_Meteor_MkIVC>
-    <Rolls_Royse_Meteor_M120>	shared	</Rolls_Royse_Meteor_M120>
+    </Rolls_Royce_Meteor_Mk_IVC_221>
+    <Rolls_Royce_Meteor_M120_221>	shared	</Rolls_Royce_Meteor_M120_221>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <N19Mk3>	shared	  <unlocks>
-        <radio>	N22	  <cost>	4500	</cost>
-        </radio>
-      </unlocks>
-    </N19Mk3>
-    <N22>	shared	  <unlocks>
-        <radio>	C42	  <cost>	9000	</cost>
-        </radio>
-      </unlocks>
-    </N22>
     <C42>	shared	</C42>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Rolls_Royse_Meteor_MkIV>
-          <smplEnginePower>	687.2327	</smplEnginePower>
+        <Rolls_Royce_Meteor_Mk_IVC_221>
+          <smplEnginePower>	830	</smplEnginePower>
           <smplFwMaxSpeed>	34.3	</smplFwMaxSpeed>
-        </Rolls_Royse_Meteor_MkIV>
-        <Rolls_Royse_Meteor_MkIVC>
-          <smplEnginePower>	792.9609	</smplEnginePower>
+        </Rolls_Royce_Meteor_Mk_IVC_221>
+        <Rolls_Royce_Meteor_M120_221>
+          <smplEnginePower>	900	</smplEnginePower>
           <smplFwMaxSpeed>	34.3	</smplFwMaxSpeed>
-        </Rolls_Royse_Meteor_MkIVC>
-        <Rolls_Royse_Meteor_M120>
-          <smplEnginePower>	856.3977	</smplEnginePower>
-          <smplFwMaxSpeed>	34.3	</smplFwMaxSpeed>
-        </Rolls_Royse_Meteor_M120>
+        </Rolls_Royce_Meteor_M120_221>
       </engines>
       <chassis>
         <Chassis_GB11_Caernarvon>
           <grounds>
             <soft>
-              <rollingFriction>	0.20125	</rollingFriction>
+              <rollingFriction>	0.18515	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.12075	</rollingFriction>
+              <rollingFriction>	0.10465	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0966	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

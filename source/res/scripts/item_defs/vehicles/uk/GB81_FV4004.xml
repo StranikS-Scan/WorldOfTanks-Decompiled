@@ -10,8 +10,8 @@
   <postProgressionTree>	role_ATSPG_sniper	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	40	</forward>
-    <backward>	15	</backward>
+    <forward>	50	</forward>
+    <backward>	20	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.091	</moving>
@@ -62,7 +62,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	25868	</weight>
-    <maxHealth>	1200	</maxHealth>
+    <maxHealth>	1280	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	240	</maxHealth>
       <maxRegenHealth>	160	</maxRegenHealth>
@@ -1280,14 +1280,13 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	52500	</maxLoad>
-      <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
+      <terrainResistance>	1 1.1 1.9	</terrainResistance>
       <brakeForce>	53000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	26	</rotationSpeed>
+      <rotationSpeed>	40	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.32	</vehicleMovement>
-        <vehicleRotation>	0.32	</vehicleRotation>
+        <vehicleMovement>	0.3	</vehicleMovement>
+        <vehicleRotation>	0.3	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	230	</maxHealth>
@@ -2541,14 +2540,13 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	55000	</maxLoad>
       <terrainResistance>	1 1.1 1.9	</terrainResistance>
       <brakeForce>	55000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	28	</rotationSpeed>
+      <rotationSpeed>	44	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.3	</vehicleMovement>
-        <vehicleRotation>	0.3	</vehicleRotation>
+        <vehicleMovement>	0.27	</vehicleMovement>
+        <vehicleRotation>	0.27	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	240	</maxHealth>
@@ -3817,7 +3815,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	10000	</weight>
-      <maxHealth>	300	</maxHealth>
+      <maxHealth>	320	</maxHealth>
       <rotationSpeed>	18	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -3831,7 +3829,7 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_120mm_AT_Gun_L1A1>	shared	  <maxAmmo>	35	</maxAmmo>
+        <_120mm_AT_Gun_L1A1_4004>	shared	  <maxAmmo>	35	</maxAmmo>
           <unlocks>
             <gun>	_5_5inch_AT_Gun	  <cost>	64000	</cost>
             </gun>
@@ -3852,7 +3850,7 @@
             <gun>	50	</gun>
           </armor>
           <pitchLimits>
-            <minPitch>	0 -10 1 -10	</minPitch>
+            <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
@@ -3937,7 +3935,7 @@
             <density>	97.1797 100.79	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_120mm_AT_Gun_L1A1>
+        </_120mm_AT_Gun_L1A1_4004>
         <_5_5inch_AT_Gun>	shared	  <maxAmmo>	30	</maxAmmo>
           <unlocks>
             <vehicle>	GB83_FV4005	  <cost>	195000	</cost>
@@ -3959,7 +3957,7 @@
             <gun>	60	</gun>
           </armor>
           <pitchLimits>
-            <minPitch>	0 -10 1 -10	</minPitch>
+            <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <turretYawLimits>	-90 90	</turretYawLimits>
@@ -4496,61 +4494,42 @@
     </Turret_1_GB81_FV4004>
   </turrets0>
   <engines>
-    <Rolls_Royse_Meteor_MkIV>	shared	  <unlocks>
-        <engine>	Rolls_Royse_Meteor_MkIVC	  <cost>	31000	</cost>
+    <Rolls_Royce_Meteor_Mk_IVC_4004>	shared	  <unlocks>
+        <engine>	Rolls_Royce_Griffon_4004	  <cost>	45000	</cost>
         </engine>
       </unlocks>
-    </Rolls_Royse_Meteor_MkIV>
-    <Rolls_Royse_Meteor_MkIVC>	shared	  <unlocks>
-        <engine>	Rolls_Royce_Griffon	  <cost>	45000	</cost>
-        </engine>
-      </unlocks>
-    </Rolls_Royse_Meteor_MkIVC>
-    <Rolls_Royce_Griffon>	shared	</Rolls_Royce_Griffon>
+    </Rolls_Royce_Meteor_Mk_IVC_4004>
+    <Rolls_Royce_Griffon_4004>	shared	</Rolls_Royce_Griffon_4004>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <N19Mk3>	shared	  <unlocks>
-        <radio>	N22	  <cost>	4500	</cost>
-        </radio>
-      </unlocks>
-    </N19Mk3>
-    <N22>	shared	  <unlocks>
-        <radio>	C42	  <cost>	9000	</cost>
-        </radio>
-      </unlocks>
-    </N22>
     <C42>	shared	</C42>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Rolls_Royse_Meteor_MkIV>
-          <smplEnginePower>	687.2327	</smplEnginePower>
-          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
-        </Rolls_Royse_Meteor_MkIV>
-        <Rolls_Royse_Meteor_MkIVC>
-          <smplEnginePower>	792.9609	</smplEnginePower>
-          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
-        </Rolls_Royse_Meteor_MkIVC>
-        <Rolls_Royce_Griffon>
+        <Rolls_Royce_Meteor_Mk_IVC_4004>
+          <smplEnginePower>	850	</smplEnginePower>
+          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
+        </Rolls_Royce_Meteor_Mk_IVC_4004>
+        <Rolls_Royce_Griffon_4004>
           <smplEnginePower>	950	</smplEnginePower>
-          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
-        </Rolls_Royce_Griffon>
+          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
+        </Rolls_Royce_Griffon_4004>
       </engines>
       <chassis>
         <Chassis_GB81_FV4004>
           <grounds>
             <soft>
-              <rollingFriction>	0.16905	</rollingFriction>
+              <rollingFriction>	0.15295	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
+              <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

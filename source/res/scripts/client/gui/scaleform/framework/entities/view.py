@@ -17,6 +17,7 @@ from sound_gui_manager import ViewSoundExtension
 from helpers import dependency, uniprof
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Window
+    from gui.sounds.ViewSoundManager import _ViewSoundsManager
 _logger = logging.getLogger(__name__)
 _view_id_generator = SequenceIDGenerator()
 _ViewKey = namedtuple('_ViewKey', ['alias', 'name'])

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/veh_post_progression/tooltips/setup_tooltip_view.py
+from __future__ import absolute_import
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.post_progression.tooltip.setup_tooltip_view_model import SetupTooltipViewModel, SetupFeatureType
 from gui.impl.lobby.veh_post_progression.tooltips.base_feature_tooltip_view import BaseFeatureTooltipView
@@ -16,7 +17,11 @@ class SetupTooltipView(BaseFeatureTooltipView):
 
     def _onLoading(self, step, *args, **kwargs):
         super(SetupTooltipView, self)._onLoading(step, *args, **kwargs)
-        feature = step.action
-        with self.viewModel.transaction() as model:
-            model.setIconName(feature.getImageName())
-            model.setType(SetupFeatureType(feature.getTechName()))
+        feature = kwargs.get('feature')
+        isLevelShown = kwargs.get('isLevelShown', True)
+        if feature is not None:
+            with self.viewModel.transaction() as model:
+                model.setIconName(feature.imgName)
+                model.setType(SetupFeatureType(feature.name))
+                model.setIsLevelShown(isLevelShown)
+        return

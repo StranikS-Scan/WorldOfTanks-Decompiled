@@ -6,6 +6,17 @@ from gui.Scaleform.framework.entities.abstract.BaseDAAPIComponentMeta import Bas
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
 _logger = logging.getLogger(__name__)
 
+def _registerReloadedComponent(viewPy, componentsSnapshot):
+    if viewPy is None or not componentsSnapshot:
+        return
+    else:
+        for flashObject, alias, snapshot in componentsSnapshot:
+            viewPy.registerFlashComponent(flashObject, alias)
+            _registerReloadedComponent(viewPy.getComponent(alias), snapshot)
+
+        return
+
+
 class BaseDAAPIComponent(BaseDAAPIComponentMeta):
 
     def __init__(self):
@@ -18,6 +29,10 @@ class BaseDAAPIComponent(BaseDAAPIComponentMeta):
     @property
     def components(self):
         return self.__components
+
+    @property
+    def componentsSnapshot(self):
+        return [ (viewPy.flashObject, viewAlias, getattr(viewPy, 'componentsSnapshot', [])) for viewAlias, viewPy in self.__components.iteritems() ]
 
     def getComponent(self, alias):
         if alias in self.__components:
@@ -39,10 +54,9 @@ class BaseDAAPIComponent(BaseDAAPIComponentMeta):
         return self.__isActive
 
     def reloadComponents(self):
-        snapshot = [ (viewPy.flashObject, viewAlias) for viewAlias, viewPy in self.__components.iteritems() ]
+        componentsSnapshot = self.componentsSnapshot
         self.__destroyPythonComponents(pyReloading=True)
-        for flashObject, alias in snapshot:
-            self.registerFlashComponent(flashObject, alias)
+        _registerReloadedComponent(self, componentsSnapshot)
 
     def registerFlashComponent(self, component, alias, *args):
         from gui.Scaleform.framework import g_entitiesFactories
@@ -62,7 +76,11 @@ class BaseDAAPIComponent(BaseDAAPIComponentMeta):
             componentPy.setEnvironment(self.app)
             componentPy.create()
             self.__fireRegisteringEvent(events.ComponentEvent.COMPONENT_REGISTERED, componentPy, alias)
-            self._onRegisterFlashComponent(componentPy, alias)
+            try:
+                self._onRegisterFlashComponent(componentPy, alias)
+            except Exception as ex:
+                _logger.exception(ex)
+
             return
 
     def isFlashComponentRegistered(self, alias):
@@ -102,15 +120,26 @@ class BaseDAAPIComponent(BaseDAAPIComponentMeta):
         if viewPy not in self.__components.values():
             _logger.warning('There is no flash object registered in %r: %r', self, viewPy)
             return
-        self._onUnregisterFlashComponent(viewPy, alias)
+        try:
+            self._onUnregisterFlashComponent(viewPy, alias)
+        except Exception as ex:
+            _logger.exception(ex)
+
         del self.__components[alias]
         self.__fireRegisteringEvent(events.ComponentEvent.COMPONENT_UNREGISTERED, viewPy, alias)
-        viewPy.destroy()
+        try:
+            viewPy.destroy()
+        except Exception as ex:
+            _logger.exception(ex)
 
     def __destroyPythonComponents(self, pyReloading=False):
         while self.__components:
             alias, viewPy = self.__components.popitem()
-            self._onUnregisterFlashComponent(viewPy, alias)
+            try:
+                self._onUnregisterFlashComponent(viewPy, alias)
+            except Exception as ex:
+                _logger.exception(ex)
+
             self.__fireRegisteringEvent(events.ComponentEvent.COMPONENT_UNREGISTERED, viewPy, alias)
             viewPy.setPyReloading(pyReloading)
             try:

@@ -1,0 +1,100 @@
+<pm3_9_2_15.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm3_9_2_15_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <key>	percentFromTotalTeamDamage	</key>
+              <greaterOrEqual>	25	</greaterOrEqual>
+            </results>
+            <results>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	6000	</greaterOrEqual>
+            </results>
+          </and>
+        </postBattle>
+        <common>
+          <battles>
+            <uniqueVehicles></uniqueVehicles>
+            <count>	2	</count>
+          </battles>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	275000	</credits>
+        <freeXP>	4000	</freeXP>
+        <customizations>
+          <item>
+            <value>	1	</value>
+            <custType>	attachment	</custType>
+            <id>	1066	</id>
+          </item>
+        </customizations>
+        <token>
+          <id>	token:pt:final:s3:t9:main	</id>
+          <expires>	01.01.2050 00:01	</expires>
+          <count>	1	</count>
+          <limit>	45	</limit>
+        </token>
+        <token>
+          <id>	token:pt:final:s3:t9	</id>
+          <expires>	01.01.2050 00:01	</expires>
+          <count>	1	</count>
+          <limit>	3	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm3_9_2_15_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <not>
+              <or>
+                <token>
+                  <id>	token:pt:final:s3:t9:main	</id>
+                  <equal>	45	</equal>
+                </token>
+                <token>
+                  <id>	token:pt:s3:t9:finished:honor	</id>
+                  <equal>	1	</equal>
+                </token>
+              </or>
+            </not>
+          </account>
+        </preBattle>
+        <postBattle>
+          <and>
+            <results>
+              <key>	percentFromTotalTeamDamage	</key>
+              <greaterOrEqual>	25	</greaterOrEqual>
+            </results>
+            <results>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	6000	</greaterOrEqual>
+            </results>
+          </and>
+        </postBattle>
+        <common>
+          <battles>
+            <uniqueVehicles></uniqueVehicles>
+            <count>	2	</count>
+          </battles>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	pm3:9:points	</id>
+          <expires>	01.12.2050 06:00	</expires>
+          <count>	270	</count>
+        </token>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</pm3_9_2_15.xml>

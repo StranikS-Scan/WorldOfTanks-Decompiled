@@ -765,8 +765,7 @@
         </chassis>
       </unlocks>
       <weight>	11000	</weight>
-      <maxLoad>	46000	</maxLoad>
-      <terrainResistance>	1.3 1.4 2.5	</terrainResistance>
+      <terrainResistance>	1.2 1.3 2.4	</terrainResistance>
       <brakeForce>	46000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	26	</rotationSpeed>
@@ -2442,7 +2441,6 @@
       <level>	9	</level>
       <price>	63400	</price>
       <weight>	11000	</weight>
-      <maxLoad>	50000	</maxLoad>
       <terrainResistance>	1.2 1.3 2.4	</terrainResistance>
       <brakeForce>	46000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -4117,7 +4115,7 @@
   <turrets0>
     <Turret_1_A144_M_VI_Y>
       <userString>	#usa_vehicles:Turret_1_A144_M_VI_Y	</userString>
-      <tags></tags>
+      <tags>	oscillating	</tags>
       <level>	8	</level>
       <price>	40000	</price>
       <armor>
@@ -4159,7 +4157,7 @@
         <maxRegenHealth>	80	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	370	</circularVisionRadius>
+      <circularVisionRadius>	380	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	110	</maxHealth>
         <maxRegenHealth>	55	</maxRegenHealth>
@@ -4201,15 +4199,14 @@
             <armor_27>	255	</armor_27>
             <armor_28>	130	</armor_28>
             <armor_29>	230	</armor_29>
-            <armor_30>	25.4	</armor_30>
             <armor_31>	100	</armor_31>
             <armor_32>	85	</armor_32>
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
-          <reloadTime>	8	</reloadTime>
+          <reloadTime>	7.7	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
+            <turretRotation>	0.08	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -4217,7 +4214,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.402778 10 0.444444 8 0.555556 8 0.597222 10 1 10	</maxPitch>
           </pitchLimits>
-          <aimingTime>	2.2	</aimingTime>
+          <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
@@ -4950,7 +4947,7 @@
     </Turret_1_A144_M_VI_Y>
     <Turret_2_A144_M_VI_Y>
       <userString>	#usa_vehicles:Turret_2_A144_M_VI_Y	</userString>
-      <tags></tags>
+      <tags>	oscillating	</tags>
       <level>	9	</level>
       <price>	58800	</price>
       <unlocks>
@@ -5033,11 +5030,11 @@
             <armor_24>	25.4	</armor_24>
             <armor_25>	190	</armor_25>
             <armor_26>	50.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_26>
             <armor_27>	125	</armor_27>
             <armor_28>	130	</armor_28>
             <armor_29>	155	</armor_29>
-            <armor_30>	110	</armor_30>
             <armor_31>	105	</armor_31>
             <gun>	40	</gun>
           </armor>
@@ -5647,11 +5644,11 @@
             <armor_24>	25.4	</armor_24>
             <armor_25>	190	</armor_25>
             <armor_26>	50.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_26>
             <armor_27>	125	</armor_27>
             <armor_28>	130	</armor_28>
             <armor_29>	155	</armor_29>
-            <armor_30>	110	</armor_30>
             <armor_31>	105	</armor_31>
             <gun>	50	</gun>
           </armor>
@@ -6460,13 +6457,13 @@
         <Chassis_A144_M_VI_Y>
           <grounds>
             <soft>
-              <rollingFriction>	0.20125	</rollingFriction>
+              <rollingFriction>	0.1932	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1127	</rollingFriction>
+              <rollingFriction>	0.10465	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.0966	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

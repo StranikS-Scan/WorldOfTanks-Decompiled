@@ -38,7 +38,7 @@ class StorageCategoryInHangarView(StorageCategoryInHangarViewMeta):
         self.setActive(isActive)
 
     def setActiveTab(self, tabId):
-        tabsData = self.__getTabsData()
+        tabsData = self.getTabsData()
         if tabId:
             for i, tab in enumerate(tabsData):
                 tabsData[i]['selected'] = False
@@ -51,7 +51,7 @@ class StorageCategoryInHangarView(StorageCategoryInHangarViewMeta):
         super(StorageCategoryInHangarView, self)._populate()
         self.setActiveTab(STORAGE_CONSTANTS.VEHICLES_TAB_ALL)
 
-    def __getTabsData(self):
+    def getTabsData(self):
         return _TABS_DATA + (_RENT_TAB_DATA,) if self.__canShowRentTab() else _TABS_DATA
 
     def __canShowRentTab(self):

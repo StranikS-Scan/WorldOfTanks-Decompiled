@@ -55,7 +55,7 @@ class FrontlineInteractor(BaseEquipmentInteractor):
         self.getItem().battleAbilities.setLayout(*self.getPlayerLayout())
         self._resetInstalledIndices()
         self.onSlotAction(actionType=BaseSetupModel.REVERT_SLOT_ACTION)
-        self.itemUpdated()
+        self.onRevert()
 
     def updateFrom(self, vehicle, onlyInstalled=True):
         super(FrontlineInteractor, self).updateFrom(vehicle, onlyInstalled)

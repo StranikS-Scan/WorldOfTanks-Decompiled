@@ -2712,4 +2712,296 @@
       </itemFilters>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 1500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G184_Windhund	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	1134	</id>
+      <texture>	gui/maps/vehicles/styles/pm3.png	</texture>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/pm3_g184	</userString>
+      <description>	#vehicle_customization:special_style/pm3_g184_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/pm3_g184_desc/long	</longDescriptionSpecial>
+      <tags>	c11n2D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	979	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	568	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <projection_decals>
+            <item>
+              <id>	1245	</id>
+              <tags>	left mimic formfactor_rect1x2	</tags>
+              <scaleFactorId>	2	</scaleFactorId>
+            </item>
+            <item>
+              <id>	1246	</id>
+              <tags>	formfactor_rect1x2 cover	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G42_Maus	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	1138	</id>
+      <maxNumber>	1	</maxNumber>
+      <texture>	gui/maps/vehicles/styles/G42_Maus_BPXVIII_3Dst.png	</texture>
+      <modelsSet>	G42_Maus_BPXVIII_3Dst	</modelsSet>
+      <userString>	#vehicle_customization:special_style/G42_Maus_BPXVIII_3Dst	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/G42_Maus_BPXVIII_3Dst_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required c11n3D	</tags>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <id>	154	</id>
+              <slotId>	18000	</slotId>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G185_Leopard_120_Verbessert	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	1251	</id>
+      <texture>	gui/maps/vehicles/styles/2_0_progression_g.png	</texture>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/2_0_progression_g	</userString>
+      <description>	#vehicle_customization:special_style/2_0_progression_g_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/2_0_progression_g_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required c11n2D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1252	</id>
+              <appliedTo>	272	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	1253	</id>
+              <appliedTo>	4096	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	7	</item>
+          </modifications>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G187_Taschenratte	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	1259	</id>
+      <texture>	gui/maps/vehicles/styles/2_0_progression_g.png	</texture>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/2_0_progression_g	</userString>
+      <description>	#vehicle_customization:special_style/2_0_progression_g_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/2_0_progression_g_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required c11n2D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1252	</id>
+              <appliedTo>	272	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	1253	</id>
+              <appliedTo>	4096	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	7	</item>
+          </modifications>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G188_LeKpz_Borkenkafer	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	1260	</id>
+      <texture>	gui/maps/vehicles/styles/2_0_progression_g.png	</texture>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/2_0_progression_g	</userString>
+      <description>	#vehicle_customization:special_style/2_0_progression_g_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/2_0_progression_g_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required c11n2D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1252	</id>
+              <appliedTo>	272	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	1253	</id>
+              <appliedTo>	4096	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	7	</item>
+          </modifications>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G189_Hirschkafer	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	1261	</id>
+      <texture>	gui/maps/vehicles/styles/2_0_progression_g.png	</texture>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/2_0_progression_g	</userString>
+      <description>	#vehicle_customization:special_style/2_0_progression_g_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/2_0_progression_g_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required c11n2D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1252	</id>
+              <appliedTo>	272	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	1253	</id>
+              <appliedTo>	4096	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	7	</item>
+          </modifications>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
 </germany.xml>

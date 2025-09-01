@@ -1189,11 +1189,10 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	2050	</weight>
-      <maxLoad>	9000	</maxLoad>
       <terrainResistance>	1.0 1.35 1.95	</terrainResistance>
       <brakeForce>	9000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	38	</rotationSpeed>
+      <rotationSpeed>	40	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.3	</vehicleMovement>
         <vehicleRotation>	0.3	</vehicleRotation>
@@ -2043,7 +2042,6 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	2050	</weight>
-      <maxLoad>	10000	</maxLoad>
       <terrainResistance>	1.0 1.35 1.95	</terrainResistance>
       <brakeForce>	9000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -2953,12 +2951,12 @@
             <count>	2	</count>
             <rate>	350	</rate>
           </burst>
-          <shotDispersionRadius>	0.48	</shotDispersionRadius>
+          <shotDispersionRadius>	0.44	</shotDispersionRadius>
           <reloadTime>	5	</reloadTime>
-          <aimingTime>	2	</aimingTime>
+          <aimingTime>	1.6	</aimingTime>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.08	</turretRotation>
             <afterShot>	1.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -3056,7 +3054,7 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	2.65	</reloadTime>
+          <reloadTime>	2.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.06	</turretRotation>
             <afterShot>	3	</afterShot>
@@ -3610,12 +3608,12 @@
             <count>	2	</count>
             <rate>	350	</rate>
           </burst>
-          <shotDispersionRadius>	0.48	</shotDispersionRadius>
+          <shotDispersionRadius>	0.44	</shotDispersionRadius>
           <reloadTime>	5	</reloadTime>
-          <aimingTime>	2	</aimingTime>
+          <aimingTime>	1.5	</aimingTime>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.08	</turretRotation>
             <afterShot>	1.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -4224,11 +4222,11 @@
     <detailed>
       <engines>
         <Scania_Vabis_1664>
-          <smplEnginePower>	150	</smplEnginePower>
+          <smplEnginePower>	170	</smplEnginePower>
           <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </Scania_Vabis_1664>
         <BNAG_L8V_36TR>
-          <smplEnginePower>	180	</smplEnginePower>
+          <smplEnginePower>	200	</smplEnginePower>
           <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </BNAG_L8V_36TR>
       </engines>

@@ -68,12 +68,12 @@
       <armor_16>	65	</armor_16>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-    <weight>	18570	</weight>
+    <weight>	26795	</weight>
     <maxHealth>	408	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	130	</maxHealth>
-      <maxRegenHealth>	65	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	188	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
       <chanceToHit>	0.50	</chanceToHit>
     </ammoBayHealth>
     <models>
@@ -1318,8 +1318,8 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_Object_261>
-      <userString>	#ussr_vehicles:Chassis_Object_261	</userString>
+    <Chassis_R52_Object_261>
+      <userString>	#ussr_vehicles:Chassis_R52_Object_261	</userString>
       <tags></tags>
       <level>	10	</level>
       <price>	36000	</price>
@@ -1329,7 +1329,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	22000	</weight>
-      <maxLoad>	62200	</maxLoad>
       <terrainResistance>	1.3 1.5 2.5	</terrainResistance>
       <brakeForce>	65000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2378,13 +2377,13 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	7.19999981	</repairTime>
-    </Chassis_Object_261>
+    </Chassis_R52_Object_261>
   </chassis>
   <turrets0>
-    <Turret_1_Object_261>
+    <Turret_1_R52_Object_261>
       <ceilless>	true	</ceilless>
-      <userString>	#ussr_vehicles:Turret_1_Object_261	</userString>
-      <tags>	cannotDetach	</tags>
+      <userString>	#ussr_vehicles:Turret_1_R52_Object_261	</userString>
+      <tags>	cannotDetach turretless	</tags>
       <level>	10	</level>
       <price>	120	</price>
       <notInShop>	true	</notInShop>
@@ -2395,9 +2394,9 @@
       <maxHealth>	102	</maxHealth>
       <rotationSpeed>	12	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	185	</maxHealth>
+        <maxRegenHealth>	93	</maxRegenHealth>
+        <repairCost>	10	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	300	</circularVisionRadius>
       <surveyingDeviceHealth>
@@ -2406,7 +2405,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_180mm_B-1-P>	shared	  <maxAmmo>	20	</maxAmmo>
+        <_180mm_B_1_P>	shared	  <maxAmmo>	20	</maxAmmo>
           <armor>
             <armor_1>	20	</armor_1>
             <gun>	30	</gun>
@@ -2674,7 +2673,7 @@
             <density>	122.563 124.139	</density>
             <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
-        </_180mm_B-1-P>
+        </_180mm_B_1_P>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R52_Object_261/normal/lod0/Turret_01.model	</undamaged>
@@ -2713,10 +2712,10 @@
         <density>	50.0 25.0	</density>
         <aoTextureSize>	512 256	</aoTextureSize>
       </camouflage>
-    </Turret_1_Object_261>
+    </Turret_1_R52_Object_261>
   </turrets0>
   <engines>
-    <M-50T>	shared	</M-50T>
+    <M_50T>	shared	</M_50T>
   </engines>
   <fuelTanks>
     <Heavy>	shared	</Heavy>
@@ -2727,13 +2726,13 @@
   <physics>
     <detailed>
       <engines>
-        <M-50T>
+        <M_50T>
           <smplEnginePower>	1110.145	</smplEnginePower>
           <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
-        </M-50T>
+        </M_50T>
       </engines>
       <chassis>
-        <Chassis_Object_261>
+        <Chassis_R52_Object_261>
           <grounds>
             <soft>
               <rollingFriction>	0.20125	</rollingFriction>
@@ -2745,7 +2744,7 @@
               <rollingFriction>	0.10465	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_Object_261>
+        </Chassis_R52_Object_261>
       </chassis>
     </detailed>
   </physics>

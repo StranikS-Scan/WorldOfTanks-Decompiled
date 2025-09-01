@@ -13,8 +13,8 @@ class IdleState(BaseState):
     def __init__(self, flags=StateFlags.UNDEFINED):
         super(IdleState, self).__init__(stateID=GameLoadingStates.IDLE.value, flags=flags)
 
-    def _onEntered(self):
-        super(IdleState, self)._onEntered()
+    def _onEntered(self, event):
+        super(IdleState, self)._onEntered(event)
         if game_loading_bindings.isViewOpened():
             _logger.debug('[%s] closing GF view.', self)
             game_loading_bindings.destroyLoadingView(LOADING_VIEW_FADE_OUT_DURATION)

@@ -29,6 +29,11 @@ class HangarCameraYawFilter(object):
             targetYaw = currentYaw
         self.__prevDirection = delta
         nextYaw = targetYaw + delta * self.__camSens
+        nextYaw2pi = math_utils.reduceTo2PI(nextYaw)
+        currentYaw2pi = math_utils.reduceTo2PI(currentYaw)
+        angleDiff = math_utils.reduceToPI(nextYaw2pi - currentYaw2pi)
+        if delta * angleDiff < 0.0:
+            return currentYaw
         if delta > 0.0:
             if nextYaw >= currentYaw:
                 deltaYaw = nextYaw - currentYaw

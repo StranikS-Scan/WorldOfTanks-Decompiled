@@ -22,7 +22,7 @@ from skeletons.gui.game_control import IVehicleComparisonBasket, IEpicBattleMeta
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
+from account_helpers.AccountSettings import NATION_CHANGE_VIEWED, BECOME_ELITE_VEHICLES_WATCHED
 _logger = getLogger(__name__)
 if TYPE_CHECKING:
     from typing import Optional
@@ -58,6 +58,7 @@ class VEHICLE(object):
     NATION_CHANGE = 'nationChange'
     GO_TO_COLLECTION = 'goToCollection'
     TELECOM_RENT = 'telecomRent'
+    VEH_SKILL_TREE = 'vehSkillTree'
 
 
 class TechnicalMaintenanceCMHandler(AbstractContextMenuHandler, EventSystemEntity):
@@ -144,7 +145,8 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
          VEHICLE.COMPARE: 'compareVehicle',
          VEHICLE.NATION_CHANGE: 'changeVehicleNation',
          VEHICLE.GO_TO_COLLECTION: 'goToCollection',
-         VEHICLE.TELECOM_RENT: 'showTelecomRent'})
+         VEHICLE.TELECOM_RENT: 'showTelecomRent',
+         VEHICLE.VEH_SKILL_TREE: 'showVehSkillTree'})
 
     @prbDispatcherProperty
     def prbDispatcher(self):
@@ -159,7 +161,7 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
     def toResearch(self):
         vehicle = self.itemsCache.items.getVehicle(self.getVehInvID())
         if vehicle is not None:
-            shared_events.showResearchView(vehicle.intCD)
+            shared_events.showVehicleHubModules(vehicle.intCD)
         else:
             _logger.error('Can not go to Research because id for current vehicle is None')
         return
@@ -167,6 +169,14 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
     def showPostProgression(self):
         vehicle = self.itemsCache.items.getVehicle(self.getVehInvID())
         shared_events.showVehPostProgressionView(vehicle.intCD)
+        eliteWatchedList = AccountSettings.getSettings(BECOME_ELITE_VEHICLES_WATCHED)
+        if vehicle.intCD not in eliteWatchedList:
+            eliteWatchedList.add(vehicle.intCD)
+            AccountSettings.setSettings(BECOME_ELITE_VEHICLES_WATCHED, eliteWatchedList)
+
+    def showVehSkillTree(self):
+        vehicle = self.itemsCache.items.getVehicle(self.getVehInvID())
+        shared_events.showVehicleHubVehSkillTree(vehicle.intCD)
 
     def showVehicleExchange(self):
         oldSellVeh = self._tradeInController.getSelectedVehicleToSell()
@@ -210,7 +220,7 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
         vehicle = self.itemsCache.items.getVehicle(self.getVehInvID())
         vehicleWasInBattle = False
         accDossier = self.itemsCache.items.getAccountDossier(None)
-        if vehicle is None or vehicle.isOnlyForFunRandomBattles:
+        if vehicle is None:
             return options
         else:
             isEventVehicle = vehicle.isOnlyForEventBattles
@@ -232,7 +242,10 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
                 if not vehicle.isOnlyForEpicBattles:
                     options.append(self._makeItem(VEHICLE.RESEARCH, MENU.contextmenu(VEHICLE.RESEARCH), {'enabled': isNavigationEnabled}))
                 if vehicle.isPostProgressionExists:
-                    options.append(self._makeItem(VEHICLE.POST_PROGRESSION, MENU.contextmenu(VEHICLE.POST_PROGRESSION), {'enabled': isNavigationEnabled}))
+                    if vehicle.postProgression.isVehSkillTree():
+                        options.append(self._makeItem(VEHICLE.VEH_SKILL_TREE, MENU.contextmenu(VEHICLE.VEH_SKILL_TREE), {'enabled': isNavigationEnabled}))
+                    else:
+                        options.append(self._makeItem(VEHICLE.POST_PROGRESSION, MENU.contextmenu(VEHICLE.POST_PROGRESSION), {'enabled': isNavigationEnabled}))
                 if vehicle.isCollectible:
                     options.append(self._makeItem(VEHICLE.GO_TO_COLLECTION, MENU.contextmenu(VEHICLE.GO_TO_COLLECTION), {'enabled': self._lobbyContext.getServerSettings().isCollectorVehicleEnabled()}))
                 if vehicle.hasNationGroup:

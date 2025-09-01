@@ -1,0 +1,16 @@
+<AccuracyStacksController.def>
+  <Properties>
+    <vehTypeCD>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehTypeCD>
+    <abilityState>
+      <Type>	ACCURACY_STACKS_STATE	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </abilityState>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	accuracyStacksController	</DefaultKeyName>
+</AccuracyStacksController.def>

@@ -1,0 +1,99 @@
+<engines.xml>
+  <ids>
+    <V-54-6_SM_SCC>	64004	</V-54-6_SM_SCC>
+    <V-11-IS-3_SM_SCC>	64005	</V-11-IS-3_SM_SCC>
+    <_5TD_2_SM_SCC>	64006	</_5TD_2_SM_SCC>
+    <GTD_3T_SM_SCC>	64007	</GTD_3T_SM_SCC>
+    <_5TD_2_enemy_SM_SCC>	64008	</_5TD_2_enemy_SM_SCC>
+  </ids>
+  <shared>
+    <V-54-6_SM_SCC>
+      <userString>	#ussr_vehicles:V-54-6	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	82300	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	760	</power>
+      <weight>	700	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	317	</rpm_min>
+      <rpm_max>	2248	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </V-54-6_SM_SCC>
+    <V-11-IS-3_SM_SCC>
+      <userString>	#ussr_vehicles:V-11-IS-3	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	55000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	520	</power>
+      <weight>	750	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	381	</rpm_min>
+      <rpm_max>	2056	</rpm_max>
+    </V-11-IS-3_SM_SCC>
+    <_5TD_2_SM_SCC>
+      <userString>	#ussr_vehicles:_5TD_2	</userString>
+      <tags>	diesel	</tags>
+      <level>	11	</level>
+      <price>	150000	</price>
+      <notInShop>	true	</notInShop>
+      <invulnerable>	True	</invulnerable>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	700	</power>
+      <weight>	1040	</weight>
+      <maxHealth>	380	</maxHealth>
+      <maxRegenHealth>	190	</maxRegenHealth>
+      <repairCost>	11	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	333	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
+    </_5TD_2_SM_SCC>
+    <GTD_3T_SM_SCC>
+      <userString>	#ussr_vehicles:GTD_3T	</userString>
+      <tags>	diesel	</tags>
+      <level>	11	</level>
+      <price>	150000	</price>
+      <notInShop>	true	</notInShop>
+      <invulnerable>	True	</invulnerable>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	1520	</power>
+      <weight>	1500	</weight>
+      <maxHealth>	380	</maxHealth>
+      <maxRegenHealth>	190	</maxRegenHealth>
+      <repairCost>	11	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	280	</rpm_min>
+      <rpm_max>	2360	</rpm_max>
+    </GTD_3T_SM_SCC>
+    <_5TD_2_enemy_SM_SCC>
+      <userString>	#ussr_vehicles:_5TD_2	</userString>
+      <tags>	diesel	</tags>
+      <level>	11	</level>
+      <price>	150000	</price>
+      <notInShop>	true	</notInShop>
+      <invulnerable>	True	</invulnerable>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	700	</power>
+      <weight>	1040	</weight>
+      <maxHealth>	380	</maxHealth>
+      <maxRegenHealth>	190	</maxRegenHealth>
+      <repairCost>	11	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	333	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
+    </_5TD_2_enemy_SM_SCC>
+  </shared>
+</engines.xml>

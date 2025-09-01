@@ -58,6 +58,15 @@ class SeasonProvider(ISeasonProvider):
         currentTime = time_utils.getCurrentLocalServerTimestamp()
         return findFirst(lambda primeTime: primeTime.getNextPeriodStart(currentTime, currentCycleEndTime), primeTimes.values(), default=False)
 
+    def hasPrimeTimesPassedForCurrentCycle(self):
+        _, isCycleActive = self.getCurrentCycleInfo()
+        if not isCycleActive:
+            return False
+        startDate = self.getCurrentSeason().getStartDate()
+        primeTimes = self.getPrimeTimes()
+        currentTime = time_utils.getCurrentLocalServerTimestamp()
+        return findFirst(lambda primeTime: bool(primeTime.getPeriodsBetween(startDate, currentTime, includeEnd=False)), primeTimes.values(), default=False)
+
     def getClosestStateChangeTime(self, now=None):
         now = now or self.__getNow()
         season = self.getCurrentSeason(now)

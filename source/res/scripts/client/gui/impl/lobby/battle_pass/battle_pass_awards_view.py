@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/battle_pass_awards_view.py
 import SoundGroups
 from battle_pass_common import BattlePassRewardReason, FinalReward
-from frameworks.wulf import ViewSettings, WindowFlags, ViewStatus
+from frameworks.wulf import ViewSettings, ViewStatus, WindowFlags
 from gui.battle_pass.battle_pass_award import BattlePassAwardsManager
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData, useBigAwardInjection
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator
@@ -12,8 +12,8 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_awards_view_model import BattlePassAwardsViewModel, RewardReason
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
-from gui.server_events.events_dispatcher import showMissionsBattlePass
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
+from gui.shared.event_dispatcher import showBattlePass
 from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
@@ -177,9 +177,9 @@ class BattlePassAwardsView(ViewImpl):
         return
 
     def __showPostProgression(self):
-        showMissionsBattlePass(R.views.lobby.battle_pass.PostProgressionView())
         if self.viewStatus not in (ViewStatus.DESTROYING, ViewStatus.DESTROYED):
             self.destroyWindow()
+        showBattlePass(R.aliases.battle_pass.PostProgression())
 
 
 class BattlePassAwardWindow(LobbyNotificationWindow):

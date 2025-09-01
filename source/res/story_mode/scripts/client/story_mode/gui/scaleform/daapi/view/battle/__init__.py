@@ -47,12 +47,10 @@ def getViewSettings():
     from story_mode.gui.scaleform.genConsts.STORY_MODE_BATTLE_VIEW_ALIASES import STORY_MODE_BATTLE_VIEW_ALIASES
     from story_mode.gui.scaleform.daapi.view.battle.status_notifications.panel import StoryModeStatusNotificationTimerPanel
     from gui.Scaleform.daapi.view.battle.pve_base.pve_prebattle_timer import PvePrebattleTimer
-    from messenger.gui.Scaleform.view.battle import messenger_view
     from gui.Scaleform.daapi.view.battle.shared.messages import VehicleMessages, VehicleErrorMessages
     from gui.Scaleform.daapi.view.battle.shared.situation_indicators import SituationIndicators
-    from gui.Scaleform.daapi.view.battle.shared.indicators import RocketAcceleratorIndicator
     from gui.Scaleform.daapi.view.battle.shared.indicators import SiegeModeIndicator
-    from gui.Scaleform.daapi.view.battle.shared.vehicles import DualGunComponent
+    from gui.Scaleform.daapi.view.battle.shared.legacy_mechanics import dualgun_component
     from gui.Scaleform.daapi.view.battle.shared.damage_info_panel import DamageInfoPanel
     from gui.Scaleform.daapi.view.battle.classic.map_info_tip import MapInfoTip
     from gui.Scaleform.daapi.view.battle.shared.battle_timers import BattleTimer
@@ -62,6 +60,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.shared.callout_panel import CalloutPanel
     from gui.Scaleform.daapi.view.battle.pve_base.hint_panel import PveBattleHintPanel
     from gui.Scaleform.daapi.view.battle.pve_base.pve_player_lives import PvePlayerLives
+    from gui.Scaleform.daapi.view.battle.pve_base.messenger_view import PveBattleMessengerView
     from gui.Scaleform.daapi.view.battle.pve_base.secondary_objectives.secondary_objectives import PveSecondaryObjectives
     from gui.Scaleform.daapi.view.battle.pve_base.primary_objective.primary_objective import PvePrimaryObjective
     from gui.Scaleform.daapi.view.battle.pve_base.progress_counter.progress_counter import PveProgressCounter
@@ -97,6 +96,7 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.PVE_PRIMARY_OBJECTIVE, PvePrimaryObjective, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.PVE_PROGRESS_COUNTER, PveProgressCounter, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_STATISTIC_DATA_CONTROLLER, PveStatisticsDataController, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_MESSENGER, PveBattleMessengerView, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL, TeamBasesPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.DAMAGE_PANEL, DamagePanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_TIMER, BattleTimer, ScopeTemplates.DEFAULT_SCOPE),
@@ -106,15 +106,13 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.PLAYER_MESSAGES, PlayerMessages, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.PREBATTLE_AMMUNITION_PANEL, PrebattleAmmunitionPanelInject, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.DAMAGE_INFO_PANEL, DamageInfoPanel, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL, DualGunComponent, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL, dualgun_component.DualGunComponent, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR, SiegeModeIndicator, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.ROCKET_ACCELERATOR_INDICATOR, RocketAcceleratorIndicator, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.DEBUG_PANEL, DebugPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.CALLOUT_PANEL, CalloutPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.SITUATION_INDICATORS, SituationIndicators, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.VEHICLE_MESSAGES, VehicleMessages, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.VEHICLE_ERROR_MESSAGES, VehicleErrorMessages, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_MESSENGER, messenger_view.BattleMessengerView, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.POSTMORTEM_INFO_PAGE, PostmortemInfoPanel, ScopeTemplates.DEFAULT_SCOPE),
      ConditionalStoryModeViewSettings(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL, PostmortemPanel, StoryModePostmortemPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(STORY_MODE_BATTLE_VIEW_ALIASES.DELAYED_SIXTH_SENSE, DelayedSixthSenseIndicator, ScopeTemplates.DEFAULT_SCOPE),

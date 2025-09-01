@@ -14,7 +14,7 @@
     <backward>	12	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.062	</moving>
+    <moving>	0.063	</moving>
     <still>	0.125	</still>
     <camouflageBonus>	0.02	</camouflageBonus>
     <firePenalty>	0.188	</firePenalty>
@@ -58,11 +58,10 @@
       <armor_13>	20	</armor_13>
       <armor_14>	100	</armor_14>
       <armor_15>	120	</armor_15>
-      <armor_16>	140	</armor_16>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	21118	</weight>
-    <maxHealth>	1400	</maxHealth>
+    <maxHealth>	1520	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	180	</maxRegenHealth>
@@ -1026,12 +1025,11 @@
         </chassis>
       </unlocks>
       <armor>
-        <leftTrack>	30	</leftTrack>
-        <rightTrack>	30	</rightTrack>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	10000	</weight>
-      <maxLoad>	49750	</maxLoad>
-      <terrainResistance>	1.1 1.7 2.5	</terrainResistance>
+      <terrainResistance>	1.1 1.2 2.3	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	True	</rotationIsAroundCenter>
       <rotationSpeed>	26	</rotationSpeed>
@@ -2010,11 +2008,10 @@
       <level>	9	</level>
       <price>	62500	</price>
       <armor>
-        <leftTrack>	30	</leftTrack>
-        <rightTrack>	30	</rightTrack>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	10650	</weight>
-      <maxLoad>	52000	</maxLoad>
       <terrainResistance>	1.1 1.2 2.3	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	True	</rotationIsAroundCenter>
@@ -3000,8 +2997,8 @@
         </turret>
       </unlocks>
       <armor>
-        <armor_1>	210	</armor_1>
-        <armor_2>	175	</armor_2>
+        <armor_1>	240	</armor_1>
+        <armor_2>	255	</armor_2>
         <armor_3>	100	</armor_3>
         <armor_4>	100	</armor_4>
         <armor_5>	30	</armor_5>
@@ -3022,7 +3019,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	10500	</weight>
-      <maxHealth>	350	</maxHealth>
+      <maxHealth>	280	</maxHealth>
       <rotationSpeed>	25	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -3036,100 +3033,14 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_105mm_Cannone_Da_105_71>	shared	  <maxAmmo>	39	</maxAmmo>
-          <unlocks>
-            <gun>	_105mm_Cannone_Da_105_76	  <cost>	55000	</cost>
-            </gun>
-          </unlocks>
+        <_105mm_Cannone_Da_105_76>	shared	  <maxAmmo>	42	</maxAmmo>
           <armor>
             <gun>	45	</gun>
           </armor>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 9 0.35 9 0.397222 4 0.466667 4 0.533333 4 0.602778 4 0.65 9 1 9	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
-          <reloadTime>	14	</reloadTime>
-          <aimingTime>	2.4	</aimingTime>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <clip>
-            <count>	3	</count>
-            <rate>	20	</rate>
-          </clip>
-          <autoreload>
-            <reloadTime>	12 14 16	</reloadTime>
-            <boostFraction>	0.5	</boostFraction>
-            <boostStartTime>	1	</boostStartTime>
-            <boostResidueTime>	2	</boostResidueTime>
-          </autoreload>
-          <models>
-            <undamaged>	vehicles/italy/It19_Progetto_C50_mod_66/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/italy/It19_Progetto_C50_mod_66/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/italy/It19_Progetto_C50_mod_66/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/italy/It19_Progetto_C50_mod_66/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/italy/It19_Progetto_C50_mod_66/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_large_mb	</effects>
-          <reloadEffect>	autoloader_reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000001 0.000004 2.75926	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0 0.188872 0.232179	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000001 0.000004 2.21772	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0 0.006 5.49745	</rayStart>
-              <rayEnd>	0 0.006 6.09745	</rayEnd>
-              <rayUp>	0.100704 0 0	</rayUp>
-              <size>	0.6	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <density>	95.5686 93.2455	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-            <tiling>	0.9 0.9 0.000000 0.000000	</tiling>
-          </camouflage>
-        </_105mm_Cannone_Da_105_71>
-        <_105mm_Cannone_Da_105_76>	shared	  <maxAmmo>	39	</maxAmmo>
-          <armor>
-            <gun>	45	</gun>
-          </armor>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 9 0.35 9 0.397222 4 0.466667 4 0.533333 4 0.602778 4 0.65 9 1 9	</maxPitch>
+            <maxPitch>	0.00000 9.00 0.38333 9.00 0.41111 4.00 0.58889 4.00 0.61667 9.00 1.00000 9.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <reloadTime>	13	</reloadTime>
@@ -3141,11 +3052,11 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <clip>
-            <count>	3	</count>
+            <count>	4	</count>
             <rate>	20	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	12 13 14	</reloadTime>
+            <reloadTime>	12 13 14 15	</reloadTime>
             <boostFraction>	0.5	</boostFraction>
             <boostStartTime>	1	</boostStartTime>
             <boostResidueTime>	2	</boostResidueTime>
@@ -3895,7 +3806,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	14000	</weight>
-      <maxHealth>	450	</maxHealth>
+      <maxHealth>	380	</maxHealth>
       <rotationSpeed>	25	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -3910,130 +3821,6 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.002	</invisibilityFactor>
       <guns>
-        <_105mm_Cannone_Da_105_71>	shared	  <maxAmmo>	42	</maxAmmo>
-          <armor>
-            <armor_1>	275	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	145	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	185	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	190	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_7>
-            <armor_8>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_8>
-            <armor_9>	170	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_9>
-            <armor_10>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_10>
-            <gun>	45	</gun>
-          </armor>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 9 0.35 9 0.397222 4 0.466667 4 0.533333 4 0.602778 4 0.65 9 1 9	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
-          <reloadTime>	13	</reloadTime>
-          <aimingTime>	2.4	</aimingTime>
-          <shotDispersionRadius>	0.37	</shotDispersionRadius>
-          <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <clip>
-            <count>	3	</count>
-            <rate>	20	</rate>
-          </clip>
-          <autoreload>
-            <reloadTime>	12 13 14	</reloadTime>
-            <boostFraction>	0.5	</boostFraction>
-            <boostStartTime>	1	</boostStartTime>
-            <boostResidueTime>	2	</boostResidueTime>
-          </autoreload>
-          <models>
-            <undamaged>	vehicles/italy/It19_Progetto_C50_mod_66/normal/lod0/Gun_04.model	</undamaged>
-            <destroyed>	vehicles/italy/It19_Progetto_C50_mod_66/crash/lod0/Gun_04.model	</destroyed>
-            <exploded>	vehicles/italy/It19_Progetto_C50_mod_66/crash/lod0/Gun_04.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/italy/It19_Progetto_C50_mod_66/collision/Gun_04.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/italy/It19_Progetto_C50_mod_66/collision_client/Gun_04.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_large_mb	</effects>
-          <reloadEffect>	autoloader_reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.000002 0.000005 2.21541	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.191837 0.191893	</anchorPosition>
-              <anchorDirection>	-0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.000002 0.000005 2.21541	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	-0.002199 1.43791 1.24816	</position>
-              <rotation>	0.524887 -0.000006 3.12956	</rotation>
-              <scale>	3.09942 1.90497 3.09944	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.796153	</clipAngle>
-              <anchorShift>	0.79403	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.012127 1.765 1.28143	</position>
-              <rotation>	0.718354 -0.003079 3.12776	</rotation>
-              <scale>	2.84136 1.73917 2.84136	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.469131	</clipAngle>
-              <anchorShift>	0.521763	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0 -0 5.48613	</rayStart>
-              <rayEnd>	0 -0 6.08613	</rayEnd>
-              <rayUp>	0.111429 0 0	</rayUp>
-              <size>	0.6	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <density>	95.5686 93.2455	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-            <tiling>	0.91 0.91 0.000000 0.000000	</tiling>
-          </camouflage>
-        </_105mm_Cannone_Da_105_71>
         <_105mm_Cannone_Da_105_76>	shared	  <maxAmmo>	42	</maxAmmo>
           <armor>
             <armor_1>	275	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -4061,11 +3848,11 @@
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 9 0.35 9 0.397222 4 0.466667 4 0.533333 4 0.602778 4 0.65 9 1 9	</maxPitch>
+            <maxPitch>	0.00000 9.00 0.38333 9.00 0.41111 4.00 0.58889 4.00 0.61667 9.00 1.00000 9.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <reloadTime>	13.5	</reloadTime>
-          <aimingTime>	3.1	</aimingTime>
+          <aimingTime>	2.4	</aimingTime>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
@@ -4189,7 +3976,7 @@
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 9 0.35 9 0.397222 4 0.533333 4 0.602778 9 0.65 9 1 9	</maxPitch>
+            <maxPitch>	0.00000 9.00 0.38333 9.00 0.41111 4.00 0.58889 4.00 0.61667 9.00 1.00000 9.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <reloadTime>	14	</reloadTime>
@@ -4864,26 +4651,16 @@
   </turrets0>
   <engines>
     <HS_110>	shared	  <unlocks>
-        <engine>	AVDS_1790	  <cost>	27300	</cost>
-        </engine>
-      </unlocks>
-    </HS_110>
-    <AVDS_1790>	shared	  <unlocks>
         <engine>	MB_838	  <cost>	47000	</cost>
         </engine>
       </unlocks>
-    </AVDS_1790>
+    </HS_110>
     <MB_838>	shared	</MB_838>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <SEM_24>	shared	  <unlocks>
-        <radio>	Selex_STR_70	  <cost>	9400	</cost>
-        </radio>
-      </unlocks>
-    </SEM_24>
     <Selex_STR_70>	shared	</Selex_STR_70>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
@@ -4894,10 +4671,6 @@
           <smplEnginePower>	600	</smplEnginePower>
           <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </HS_110>
-        <AVDS_1790>
-          <smplEnginePower>	640	</smplEnginePower>
-          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
-        </AVDS_1790>
         <MB_838>
           <smplEnginePower>	690	</smplEnginePower>
           <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
@@ -4908,13 +4681,13 @@
           <axleCount>	5	</axleCount>
           <grounds>
             <soft>
-              <rollingFriction>	0.20125	</rollingFriction>
+              <rollingFriction>	0.18515	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.13685	</rollingFriction>
+              <rollingFriction>	0.0966	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0885	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_It19_Progetto_C50_mod_66>

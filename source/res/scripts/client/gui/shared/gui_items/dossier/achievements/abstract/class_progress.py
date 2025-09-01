@@ -42,6 +42,9 @@ class ClassProgressAchievement(SimpleProgressAchievement):
         notificationKey = '#achievements:%s_notification%d' % (self._getActualName(), self._value)
         return i18n.makeString(notificationKey) if i18n.doesTextExist(notificationKey) else ''
 
+    def getIconName(self):
+        return '%s%d' % (self._name, self._value or self.MIN_LVL)
+
     def _getUserNameCtx(self):
         return {'rank': i18n.makeString('#achievements:achievement/rank%d' % (self._value or self.MIN_LVL))}
 
@@ -68,6 +71,3 @@ class ClassProgressAchievement(SimpleProgressAchievement):
 
     def _readCurrentProgressValue(self, dossier):
         pass
-
-    def _getIconName(self):
-        return '%s%d' % (self._name, self._value or self.MIN_LVL)

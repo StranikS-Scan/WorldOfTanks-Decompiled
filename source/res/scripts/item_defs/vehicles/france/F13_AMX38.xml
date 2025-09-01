@@ -8,7 +8,7 @@
   </crew>
   <supplySlots>	1 1 6 6 8 8 8	</supplySlots>
   <speedLimits>
-    <forward>	25	</forward>
+    <forward>	28	</forward>
     <backward>	10	</backward>
   </speedLimits>
   <invisibility>
@@ -1348,13 +1348,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_AMX38>
-      <userString>	#france_vehicles:Chassis_AMX38	</userString>
+    <Chassis_F13_AMX38>
+      <userString>	#france_vehicles:Chassis_F13_AMX38	</userString>
       <tags></tags>
       <level>	2	</level>
       <price>	500	</price>
       <unlocks>
-        <chassis>	Chassis_AMX38_2	  <cost>	315	</cost>
+        <chassis>	Chassis_F13_AMX38_2	  <cost>	315	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1362,14 +1362,13 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	3000	</weight>
-      <maxLoad>	16000	</maxLoad>
-      <terrainResistance>	1.4 1.6 2.7	</terrainResistance>
+      <terrainResistance>	1.3 1.4 2.5	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	30	</rotationSpeed>
+      <rotationSpeed>	33	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.38	</vehicleMovement>
-        <vehicleRotation>	0.38	</vehicleRotation>
+        <vehicleMovement>	0.24	</vehicleMovement>
+        <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	70	</maxHealth>
@@ -2377,9 +2376,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_AMX38>
-    <Chassis_AMX38_2>
-      <userString>	#france_vehicles:Chassis_AMX38_2	</userString>
+    </Chassis_F13_AMX38>
+    <Chassis_F13_AMX38_2>
+      <userString>	#france_vehicles:Chassis_F13_AMX38_2	</userString>
       <tags></tags>
       <level>	3	</level>
       <price>	1850	</price>
@@ -2388,14 +2387,13 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	3000	</weight>
-      <maxLoad>	18000	</maxLoad>
       <terrainResistance>	1.3 1.4 2.5	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	32	</rotationSpeed>
+      <rotationSpeed>	36	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.36	</vehicleMovement>
-        <vehicleRotation>	0.36	</vehicleRotation>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	80	</maxHealth>
@@ -3403,13 +3401,13 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_AMX38_2>
+    </Chassis_F13_AMX38_2>
   </chassis>
   <turrets0>
-    <Turret_1_AMX38>
-      <userString>	#france_vehicles:Turret_1_AMX38	</userString>
+    <Turret_1_F13_AMX38>
+      <userString>	#france_vehicles:Turret_1_F13_AMX38	</userString>
       <tags></tags>
-      <level>	2	</level>
+      <level>	3	</level>
       <price>	600	</price>
       <notInShop>	true	</notInShop>
       <armor>
@@ -3430,20 +3428,18 @@
         <maxRegenHealth>	35	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	310	</circularVisionRadius>
+      <circularVisionRadius>	320	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	50	</maxHealth>
         <maxRegenHealth>	25	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_37mm_SA38>	shared	  <maxAmmo>	325	</maxAmmo>
-          <reloadTime>	2.4	</reloadTime>
+        <_37mm_SA38_38>	shared	  <maxAmmo>	325	</maxAmmo>
+          <reloadTime>	2.1	</reloadTime>
           <aimingTime>	2	</aimingTime>
           <unlocks>
-            <gun>	_25mm_Canon_Raccourci_Mle.1934	  <cost>	150	</cost>
-            </gun>
-            <gun>	_47mm_SA34	  <cost>	95	</cost>
+            <gun>	_47mm_SA35_38	  <cost>	265	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -3456,10 +3452,17 @@
             <gun>	10	</gun>
           </armor>
           <pitchLimits>
-            <minPitch>	0 -17 1 -17	</minPitch>
-            <maxPitch>	0 6 0.353005 6 0.416667 2 0.583333 2 0.646995 6 1 6	</maxPitch>
+            <minPitch>	0 -18 1 -18	</minPitch>
+            <maxPitch>	0 14 0.353005 14 0.416667 2 0.583333 2 0.646995 14 1 14	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.16	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/french/F13_AMX38/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/french/F13_AMX38/crash/lod0/Gun_01.model	</destroyed>
@@ -3504,72 +3507,9 @@
             <density>	203.236 201.347	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_37mm_SA38>
-        <_25mm_Canon_Raccourci_Mle.1934>	shared	  <maxAmmo>	515	</maxAmmo>
-          <reloadTime>	1.8	</reloadTime>
-          <aimingTime>	1.7	</aimingTime>
-          <armor>
-            <armor_1>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <gun>	10	</gun>
-          </armor>
-          <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 2 1 2	</maxPitch>
-          </pitchLimits>
-          <shotDispersionRadius>	0.45	</shotDispersionRadius>
-          <invisibilityFactorAtShot>	0.336	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/french/F13_AMX38/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/french/F13_AMX38/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/french/F13_AMX38/crash/lod0/Gun_02.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/french/F13_AMX38/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F13_AMX38/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_small	</effects>
-          <reloadEffect>	reload20_45	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0 0.060395 0.060395	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.104933 -0.070864 0.572853	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <density>	260.008 259.796	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_25mm_Canon_Raccourci_Mle.1934>
-        <_47mm_SA34>	shared	  <maxAmmo>	295	</maxAmmo>
-          <reloadTime>	3.2	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.18	</turretRotation>
-            <afterShot>	4	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
+        </_37mm_SA38_38>
+        <_47mm_SA35_38>	shared	  <maxAmmo>	210	</maxAmmo>
           <unlocks>
-            <gun>	_47mm_SA35	  <cost>	265	</cost>
-            </gun>
             <vehicle>	F14_AMX40	  <cost>	4610	</cost>
             </vehicle>
           </unlocks>
@@ -3582,80 +3522,20 @@
             </armor_3>
             <gun>	10	</gun>
           </armor>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 6 0.353005 6 0.416667 2 0.583333 2 0.646995 6 1 6	</maxPitch>
-          </pitchLimits>
-          <shotDispersionRadius>	0.53	</shotDispersionRadius>
-          <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/french/F13_AMX38/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/french/F13_AMX38/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/french/F13_AMX38/crash/lod0/Gun_03.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/french/F13_AMX38/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F13_AMX38/collision_client/Gun_03.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_small	</effects>
-          <reloadEffect>	reload20_45	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.002311 -0.041237 0.447307	</anchorPosition>
-              <anchorDirection>	-0.000038 0.000365 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.000004 0.060845 0.154751	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.002311 -0.041237 0.447303	</anchorPosition>
-              <anchorDirection>	0 0.000362 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <density>	212.43 210.519	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_47mm_SA34>
-        <_47mm_SA35>	shared	  <maxAmmo>	210	</maxAmmo>
-          <armor>
-            <armor_1>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <gun>	10	</gun>
-          </armor>
-          <reloadTime>	3.2	</reloadTime>
+          <reloadTime>	3.1	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.2	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.2	</aimingTime>
           <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 6 0.353005 6 0.416667 2 0.583333 2 0.646995 6 1 6	</maxPitch>
+            <minPitch>	0 -18 1 -18	</minPitch>
+            <maxPitch>	0 14 0.353005 14 0.416667 2 0.583333 2 0.646995 14 1 14	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.47	</shotDispersionRadius>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
             <undamaged>	vehicles/french/F13_AMX38/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/french/F13_AMX38/crash/lod0/Gun_04.model	</destroyed>
@@ -3700,7 +3580,7 @@
             <density>	203.925 214.263	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_47mm_SA35>
+        </_47mm_SA35_38>
       </guns>
       <models>
         <undamaged>	vehicles/french/F13_AMX38/normal/lod0/Turret_01.model	</undamaged>
@@ -4025,54 +3905,36 @@
         <density>	104.61 104.222	</density>
         <aoTextureSize>	256 256	</aoTextureSize>
       </camouflage>
-    </Turret_1_AMX38>
+    </Turret_1_F13_AMX38>
   </turrets0>
   <engines>
-    <Aster>	shared	  <unlocks>
+    <Aster_38>	shared	  <unlocks>
         <engine>	Aster_M	  <cost>	340	</cost>
         </engine>
       </unlocks>
-    </Aster>
+    </Aster_38>
     <Aster_M>	shared	</Aster_M>
   </engines>
   <fuelTanks>
     <Medium>	shared	</Medium>
   </fuelTanks>
   <radios>
-    <ER_52>	shared	  <unlocks>
-        <radio>	ER_53	  <cost>	610	</cost>
-        </radio>
-      </unlocks>
-    </ER_52>
     <ER_53>	shared	</ER_53>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Aster>
-          <smplEnginePower>	158.5922	</smplEnginePower>
-          <smplFwMaxSpeed>	25	</smplFwMaxSpeed>
-        </Aster>
+        <Aster_38>
+          <smplEnginePower>	175	</smplEnginePower>
+          <smplFwMaxSpeed>	28	</smplFwMaxSpeed>
+        </Aster_38>
         <Aster_M>
-          <smplEnginePower>	169.165	</smplEnginePower>
-          <smplFwMaxSpeed>	25	</smplFwMaxSpeed>
+          <smplEnginePower>	195	</smplEnginePower>
+          <smplFwMaxSpeed>	28	</smplFwMaxSpeed>
         </Aster_M>
       </engines>
       <chassis>
-        <Chassis_AMX38>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.21735	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.1288	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.1127	</rollingFriction>
-            </firm>
-          </grounds>
-        </Chassis_AMX38>
-        <Chassis_AMX38_2>
+        <Chassis_F13_AMX38>
           <grounds>
             <soft>
               <rollingFriction>	0.20125	</rollingFriction>
@@ -4084,7 +3946,20 @@
               <rollingFriction>	0.10465	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_AMX38_2>
+        </Chassis_F13_AMX38>
+        <Chassis_F13_AMX38_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.20125	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.1127	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.10465	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_F13_AMX38_2>
       </chassis>
     </detailed>
   </physics>

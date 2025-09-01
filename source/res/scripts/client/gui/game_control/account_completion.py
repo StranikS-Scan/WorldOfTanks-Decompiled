@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/account_completion.py
+import logging
 import BigWorld
 import constants
 from PlayerEvents import g_playerEvents
@@ -21,6 +22,7 @@ from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestControll
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from wg_async import wg_async, wg_await
+_logger = logging.getLogger(__name__)
 
 class SteamCompletionController(ISteamCompletionController):
     _loginManager = dependency.descriptor(ILoginManager)
@@ -35,6 +37,7 @@ class SteamCompletionController(ISteamCompletionController):
     def __init__(self):
         super(SteamCompletionController, self).__init__()
         self.__isLobbyInited = False
+        self.__locks = set()
 
     @property
     def isSteamAccount(self):
@@ -49,6 +52,11 @@ class SteamCompletionController(ISteamCompletionController):
     def isConfirmEmailOverlayAllowed(self):
         uiStorage = self.__settingsCore.serverSettings.getUIStorage2()
         return uiStorage.get(UI_STORAGE_KEYS.IS_CONFIRM_EMAIL_OVERLAY_ALLOWED)
+
+    def fini(self):
+        self.__locks = None
+        super(SteamCompletionController, self).fini()
+        return
 
     def onLobbyStarted(self, ctx):
         if not self.__isLobbyInited:
@@ -71,6 +79,16 @@ class SteamCompletionController(ISteamCompletionController):
     def onDisconnected(self):
         self.__clear()
 
+    def lock(self, key):
+        self.__locks.add(key)
+
+    def unlock(self, key):
+        if key in self.__locks:
+            self.__locks.remove(key)
+
+    def hasLock(self, key):
+        return key in self.__locks
+
     def __subscribe(self):
         self._hangarSpace.onSpaceCreate += self.__onSpaceCreate
 
@@ -79,6 +97,7 @@ class SteamCompletionController(ISteamCompletionController):
 
     def __clear(self):
         self.__unsubscribe()
+        self.__locks.clear()
         self.__isLobbyInited = False
 
     @wg_async
@@ -99,6 +118,9 @@ class SteamCompletionController(ISteamCompletionController):
         lockNotificationManager(lock=False, releasePostponed=True)
 
     def __canSteamShadeShow(self):
+        if self.__locks:
+            _logger.info('Steam shade is locked, keys: %s', self.__locks)
+            return False
         steamShadeConfig = self._lobbyContext.getServerSettings().steamShadeConfig
         if steamShadeConfig.battlesPlayed < 0 and steamShadeConfig.sessions < 0:
             return False

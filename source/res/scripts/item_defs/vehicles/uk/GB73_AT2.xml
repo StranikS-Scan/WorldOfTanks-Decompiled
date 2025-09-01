@@ -63,7 +63,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	28777	</weight>
-    <maxHealth>	472	</maxHealth>
+    <maxHealth>	520	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	185	</maxHealth>
       <maxRegenHealth>	125	</maxRegenHealth>
@@ -1657,11 +1657,10 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	41000	</maxLoad>
-      <terrainResistance>	1.6 1.8 3	</terrainResistance>
+      <terrainResistance>	1.4 1.6 2.8	</terrainResistance>
       <brakeForce>	37000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	18	</rotationSpeed>
+      <rotationSpeed>	24	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.36	</vehicleMovement>
         <vehicleRotation>	0.36	</vehicleRotation>
@@ -2510,11 +2509,10 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	44000	</maxLoad>
       <terrainResistance>	1.4 1.6 2.8	</terrainResistance>
       <brakeForce>	41000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	20	</rotationSpeed>
+      <rotationSpeed>	26	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.34	</vehicleMovement>
         <vehicleRotation>	0.34	</vehicleRotation>
@@ -3365,14 +3363,14 @@
         <armor_1>	0	</armor_1>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	118	</maxHealth>
+      <maxHealth>	130	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	310	</circularVisionRadius>
+      <circularVisionRadius>	330	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	70	</maxHealth>
         <maxRegenHealth>	35	</maxRegenHealth>
@@ -3385,8 +3383,6 @@
             <maxPitch>	0 7 1 7	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <gun>	_3.7inch_AT_Howitzer	  <cost>	2300	</cost>
-            </gun>
             <gun>	QF_6_pounder_Mk_V_AT	  <cost>	3700	</cost>
             </gun>
           </unlocks>
@@ -3405,7 +3401,7 @@
             </armor_6>
             <gun>	15	</gun>
           </armor>
-          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	2.3	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
           <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
@@ -3489,126 +3485,14 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </QF_6_pounder_Mk_III_AT>
-        <_3.7inch_AT_Howitzer>	shared	  <maxAmmo>	65	</maxAmmo>
-          <unlocks>
-            <vehicle>	GB45_Achilles_IIC	  <cost>	29700	</cost>
-            </vehicle>
-          </unlocks>
-          <pitchLimits>
-            <minPitch>	0 -13 1 -13	</minPitch>
-            <maxPitch>	0 5 1 5	</maxPitch>
-          </pitchLimits>
-          <armor>
-            <armor_1>	152.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	139.7	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	76.2	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	38.1	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	38.1	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	127	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_7>
-            <armor_8>	38.1	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_8>
-            <armor_9>	101.6	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_9>
-            <gun>	30	</gun>
-          </armor>
-          <shotDispersionRadius>	0.49	</shotDispersionRadius>
-          <reloadTime>	7.5	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <turretYawLimits>	-13 13	</turretYawLimits>
-          <models>
-            <undamaged>	vehicles/british/GB73_AT2/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/british/GB73_AT2/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/british/GB73_AT2/crash/lod0/Gun_03.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelClient>	vehicles/british/GB73_AT2/collision_client/Gun_03.model	</collisionModelClient>
-            <collisionModelServer>	vehicles/british/GB73_AT2/collision/Gun_03.model	</collisionModelServer>
-          </hitTester>
-          <effects>	shot_main	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.000159 -0.005952 0.653655	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0.00002 0.203586 0.504516	</anchorPosition>
-              <anchorDirection>	-0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.000159 -0.005952 0.653655	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.000006 1.62403 0.958669	</position>
-              <rotation>	0.759629 0.000007 3.14158	</rotation>
-              <scale>	1.8449 1.38885 1.8449	</scale>
-              <showOn>	4112	</showOn>
-              <anchorShift>	0.386822	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.000011 1.74204 0.527124	</position>
-              <rotation>	1.26994 -0.000009 3.14157	</rotation>
-              <scale>	1.69602 1.27677 1.69602	</scale>
-              <showOn>	4112	</showOn>
-              <anchorShift>	0.697199	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.000318 -0.019904 0.78381	</rayStart>
-              <rayEnd>	0.000318 -0.019904 1.01381	</rayEnd>
-              <rayUp>	0.075 0 0	</rayUp>
-              <size>	0.23	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.9 0.4 0.000000 0.000000	</tiling>
-            <density>	184.807 158.705	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </_3.7inch_AT_Howitzer>
         <QF_6_pounder_Mk_V_AT>	shared	  <maxAmmo>	115	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -13 1 -13	</minPitch>
             <maxPitch>	0 7 1 7	</maxPitch>
           </pitchLimits>
           <unlocks>
+            <vehicle>	GB45_Achilles_IIC	  <cost>	29700	</cost>
+            </vehicle>
             <vehicle>	GB74_AT8	  <cost>	29000	</cost>
             </vehicle>
           </unlocks>
@@ -3627,7 +3511,7 @@
             </armor_6>
             <gun>	15	</gun>
           </armor>
-          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <shotDispersionRadius>	0.32	</shotDispersionRadius>
           <reloadTime>	2.3	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
           <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
@@ -3733,52 +3617,42 @@
     </Turret_1_GB73_AT2>
   </turrets0>
   <engines>
-    <Nuffield_liberty_MKII>	shared	  <unlocks>
-        <engine>	Nuffield_liberty_MKIV	  <cost>	1100	</cost>
+    <Nuffield_Liberty_Mk_II_AT_2>	shared	  <unlocks>
+        <engine>	Nuffield_Liberty_Mk_III_AT_2	  <cost>	1100	</cost>
         </engine>
       </unlocks>
-    </Nuffield_liberty_MKII>
-    <Nuffield_liberty_MKIV>	shared	</Nuffield_liberty_MKIV>
+    </Nuffield_Liberty_Mk_II_AT_2>
+    <Nuffield_Liberty_Mk_III_AT_2>	shared	</Nuffield_Liberty_Mk_III_AT_2>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <N19Mk1>	shared	  <unlocks>
-        <radio>	N19Mk2	  <cost>	3600	</cost>
-        </radio>
-      </unlocks>
-    </N19Mk1>
-    <N19Mk2>	shared	  <unlocks>
-        <radio>	N19Mk3	  <cost>	4000	</cost>
-        </radio>
-      </unlocks>
-    </N19Mk2>
     <N19Mk3>	shared	</N19Mk3>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Nuffield_liberty_MKII>
-          <smplEnginePower>	359.4756	</smplEnginePower>
+        <Nuffield_Liberty_Mk_II_AT_2>
+          <smplEnginePower>	380	</smplEnginePower>
           <smplFwMaxSpeed>	20	</smplFwMaxSpeed>
-        </Nuffield_liberty_MKII>
-        <Nuffield_liberty_MKIV>
-          <smplEnginePower>	417.626	</smplEnginePower>
+        </Nuffield_Liberty_Mk_II_AT_2>
+        <Nuffield_Liberty_Mk_III_AT_2>
+          <smplEnginePower>	425	</smplEnginePower>
           <smplFwMaxSpeed>	20	</smplFwMaxSpeed>
-        </Nuffield_liberty_MKIV>
+        </Nuffield_Liberty_Mk_III_AT_2>
       </engines>
       <chassis>
         <Chassis_GB73_AT2>
           <grounds>
             <soft>
-              <rollingFriction>	0.2415	</rollingFriction>
+              <rollingFriction>	0.2254	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1449	</rollingFriction>
+              <rollingFriction>	0.1288	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.1288	</rollingFriction>
+              <rollingFriction>	0.1127	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_GB73_AT2>

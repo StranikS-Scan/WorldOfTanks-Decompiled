@@ -908,7 +908,6 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	4240	</weight>
-      <maxLoad>	22000	</maxLoad>
       <terrainResistance>	0.7 0.8 1.4	</terrainResistance>
       <brakeForce>	20000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -1703,7 +1702,7 @@
   <turrets0>
     <Turret_1_GB101_FV1066_Senlac>
       <userString>	#gb_vehicles:Turret_1_GB101_FV1066_Senlac	</userString>
-      <tags></tags>
+      <tags>	oscillating	</tags>
       <level>	8	</level>
       <price>	30000	</price>
       <notInShop>	true	</notInShop>

@@ -8,6 +8,9 @@
       <include>
         <nations>	poland	</nations>
       </include>
+      <exclude>
+        <vehicles>	poland:Pl15_60TP_Lewandowskiego_CFE_A	</vehicles>
+      </exclude>
     </vehicleFilter>
     <style>
       <id>	187	</id>
@@ -65,6 +68,9 @@
       <include>
         <nations>	poland	</nations>
       </include>
+      <exclude>
+        <vehicles>	poland:Pl15_60TP_Lewandowskiego_CFE_A	</vehicles>
+      </exclude>
     </vehicleFilter>
     <style>
       <id>	185	</id>
@@ -209,6 +215,9 @@
       <include>
         <nations>	poland	</nations>
       </include>
+      <exclude>
+        <vehicles>	poland:Pl15_60TP_Lewandowskiego_CFE_A	</vehicles>
+      </exclude>
     </vehicleFilter>
     <style>
       <id>	186	</id>
@@ -312,6 +321,9 @@
       <include>
         <nations>	poland	</nations>
       </include>
+      <exclude>
+        <vehicles>	poland:Pl15_60TP_Lewandowskiego_CFE_A	</vehicles>
+      </exclude>
     </vehicleFilter>
     <style>
       <id>	28	</id>
@@ -393,6 +405,9 @@
       <include>
         <nations>	poland	</nations>
       </include>
+      <exclude>
+        <vehicles>	poland:Pl15_60TP_Lewandowskiego_CFE_A	</vehicles>
+      </exclude>
     </vehicleFilter>
     <style>
       <id>	71	</id>
@@ -885,12 +900,162 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	poland:Pl15_60TP_Lewandowskiego_CFE_A	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	1078	</id>
+      <texture>	gui/maps/vehicles/styles/Pl15_60TP_Lewandowskiego_2025_OSD_3Dst_1.png	</texture>
+      <modelsSet>	Pl15_60TP_Lewandowskiego_2025_OSD_3Dst_1	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/Pl15_60TP_Lewandowskiego_2025_OSD_3Dst_desc/long	</longDescriptionSpecial>
+      <tags>	c11n3D	</tags>
+      <userString>	#vehicle_customization:special_style/Pl15_60TP_Lewandowskiego_2025_OSD_3Dst_1	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	59	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+          <attachments>
+            <item>
+              <slotId>	18000	</slotId>
+              <id>	148	</id>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	1079	</id>
+      <texture>	gui/maps/vehicles/styles/Pl15_60TP_Lewandowskiego_2025_OSD_3Dst_2.png	</texture>
+      <modelsSet>	Pl15_60TP_Lewandowskiego_2025_OSD_3Dst_2	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/Pl15_60TP_Lewandowskiego_2025_OSD_3Dst_desc/long	</longDescriptionSpecial>
+      <tags>	c11n3D	</tags>
+      <userString>	#vehicle_customization:special_style/Pl15_60TP_Lewandowskiego_2025_OSD_3Dst_2	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	59	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+          <attachments>
+            <item>
+              <slotId>	18000	</slotId>
+              <id>	149	</id>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	1080	</id>
+      <texture>	gui/maps/vehicles/styles/Pl15_60TP_Lewandowskiego_2025_OSD_3Dst_3.png	</texture>
+      <modelsSet>	Pl15_60TP_Lewandowskiego_2025_OSD_3Dst_3	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/Pl15_60TP_Lewandowskiego_2025_OSD_3Dst_desc/long	</longDescriptionSpecial>
+      <tags>	c11n3D	</tags>
+      <userString>	#vehicle_customization:special_style/Pl15_60TP_Lewandowskiego_2025_OSD_3Dst_3	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	59	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+          <attachments>
+            <item>
+              <slotId>	18000	</slotId>
+              <id>	150	</id>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	1081	</id>
+      <texture>	gui/maps/vehicles/styles/Pl15_60TP_Lewandowskiego_2025_OSD_3Dst_4.png	</texture>
+      <modelsSet>	Pl15_60TP_Lewandowskiego_2025_OSD_3Dst_4	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/Pl15_60TP_Lewandowskiego_2025_OSD_3Dst_desc/long	</longDescriptionSpecial>
+      <tags>	c11n3D	</tags>
+      <userString>	#vehicle_customization:special_style/Pl15_60TP_Lewandowskiego_2025_OSD_3Dst_4	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	59	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+          <attachments>
+            <item>
+              <slotId>	18000	</slotId>
+              <id>	151	</id>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
     <historical>	1	</historical>
     <priceGroup>	styles 1500g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	poland	</nations>
       </include>
+      <exclude>
+        <vehicles>	poland:Pl15_60TP_Lewandowskiego_CFE_A	</vehicles>
+      </exclude>
     </vehicleFilter>
     <style>
       <id>	1105	</id>
@@ -920,6 +1085,55 @@
               <appliedTo>	20752	</appliedTo>
             </item>
           </paints>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	poland:Pl37_CS_67_Szakal	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	1253	</id>
+      <texture>	gui/maps/vehicles/styles/2_0_progression_pl.png	</texture>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/2_0_progression_pl	</userString>
+      <description>	#vehicle_customization:special_style/2_0_progression_pl_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/2_0_progression_pl_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required c11n2D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1256	</id>
+              <appliedTo>	272	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	1257	</id>
+              <appliedTo>	4096	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	7	</item>
+          </modifications>
         </outfit>
       </outfits>
       <itemFilters>

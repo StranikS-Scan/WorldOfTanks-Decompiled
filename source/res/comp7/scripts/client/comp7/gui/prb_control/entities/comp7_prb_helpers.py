@@ -4,12 +4,11 @@ import logging
 import adisp
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import GUI_START_BEHAVIOR
-from comp7.gui.comp7_constants import PREBATTLE_ACTION_NAME
+from comp7.gui.comp7_constants import PREBATTLE_ACTION_NAME, COMP7_HANGAR_ALIAS
 from comp7.gui.impl.lobby.comp7_helpers.comp7_gui_helpers import isComp7OnboardingShouldBeShown, isComp7WhatsNewShouldBeShown
 from comp7.gui.prb_control.entities.base.ctx import Comp7PrbAction
 from comp7.gui.shared import event_dispatcher as comp7_events
 from frameworks.wulf import WindowLayer
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.app_loader import sf_lobby
 from gui.prb_control.entities.base.ctx import PrbAction
 from helpers import dependency
@@ -24,14 +23,9 @@ def selectComp7(comp7Controller=None):
     if not comp7Controller.isEnabled():
         return
     else:
-        season = comp7Controller.getCurrentSeason()
-        prevSeason = comp7Controller.getPreviousSeason()
-        if season is not None or prevSeason is not None:
-            prbDispatcher = g_prbLoader.getDispatcher()
-            if prbDispatcher is not None:
-                yield prbDispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.COMP7))
-        else:
-            comp7_events.showComp7IntroScreen()
+        prbDispatcher = g_prbLoader.getDispatcher()
+        if prbDispatcher is not None:
+            yield prbDispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.COMP7))
         return
 
 
@@ -69,7 +63,7 @@ class Comp7ViewPresenter(object):
 
     def __onViewLoaded(self, view, *_, **__):
         self.__unsubscribe()
-        if view.alias == VIEW_ALIAS.LOBBY_HANGAR:
+        if view.alias == COMP7_HANGAR_ALIAS:
             self.__showView()
 
     def __showView(self):
@@ -84,7 +78,7 @@ class Comp7ViewPresenter(object):
         if container is not None:
             view = container.getView()
             if hasattr(view, 'alias'):
-                return view.alias == VIEW_ALIAS.LOBBY_HANGAR
+                return view.alias == COMP7_HANGAR_ALIAS
         return False
 
     @classmethod

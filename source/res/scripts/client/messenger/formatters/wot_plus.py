@@ -9,9 +9,7 @@ from gui.shared.gui_items.Vehicle import getUserName
 from items.vehicles import getVehicleType
 from messenger.formatters.service_channel import GeneralFormatter
 from messenger import g_settings
-from helpers import dependency
-from skeletons.gui.lobby_context import ILobbyContext
-from messenger.formatters.service_channel import SimpleFormatter, ServiceChannelFormatter
+from messenger.formatters.service_channel import ServiceChannelFormatter
 from messenger.formatters.service_channel_helpers import MessageData
 if typing.TYPE_CHECKING:
     from messenger.proto.bw.wrappers import ServiceChannelMessage
@@ -132,23 +130,3 @@ class WotPlusSwitchFormatter(ServiceChannelFormatter):
             return [MessageData(formatted, self._getGuiSettings(None, template))]
         else:
             return []
-
-
-class WotPlusSubscribersOnboardingFormatter(SimpleFormatter):
-    __lobbyContext = dependency.descriptor(ILobbyContext)
-
-    def __init__(self):
-        super(WotPlusSubscribersOnboardingFormatter, self).__init__('WotPlusSubscribersOnboarding')
-
-    def format(self, message, *args):
-        messages = R.strings.messenger.serviceChannelMessages.wotPlus.subscribersBenefitsOnboarding
-        enabledFeatures = []
-        serverSettings = self.__lobbyContext.getServerSettings()
-        if serverSettings.isAdditionalWoTPlusEnabled():
-            enabledFeatures.append(backport.text(messages.additionalBonuses()))
-        if serverSettings.isWotPlusBattleBonusesEnabled():
-            enabledFeatures.append(backport.text(messages.battleBonuses(), creditsFactor=serverSettings.getWotPlusBattleBonusesConfig().get('creditsFactor', 0.0) * 100))
-        if serverSettings.isBadgesEnabled():
-            enabledFeatures.append(backport.text(messages.badges()))
-        formatted = g_settings.msgTemplates.format(self._template, ctx={'bonuses': '\n'.join(enabledFeatures)})
-        return [MessageData(formatted, self._getGuiSettings(None, self._template))]

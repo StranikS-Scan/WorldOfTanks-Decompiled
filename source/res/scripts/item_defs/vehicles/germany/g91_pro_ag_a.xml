@@ -63,7 +63,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	18620	</weight>
-    <maxHealth>	1240	</maxHealth>
+    <maxHealth>	1360	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
@@ -1125,13 +1125,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_Pro_Ag_A>
-      <userString>	#germany_vehicles:Chassis_Pro_Ag_A	</userString>
+    <Chassis_G91_Pro_Ag_A>
+      <userString>	#germany_vehicles:Chassis_G91_Pro_Ag_A	</userString>
       <tags></tags>
       <level>	8	</level>
       <price>	32200	</price>
       <unlocks>
-        <chassis>	Chassis_Pro_Ag_A_2	  <cost>	23100	</cost>
+        <chassis>	Chassis_G91_Pro_Ag_A_2	  <cost>	23100	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1139,8 +1139,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	10000	</weight>
-      <maxLoad>	39500	</maxLoad>
-      <terrainResistance>	1.1 1.2 2.4	</terrainResistance>
+      <terrainResistance>	1 1.1 2.2	</terrainResistance>
       <brakeForce>	39000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	39	</rotationSpeed>
@@ -2106,9 +2105,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	4.57142878	</repairTime>
-    </Chassis_Pro_Ag_A>
-    <Chassis_Pro_Ag_A_2>
-      <userString>	#germany_vehicles:Chassis_Pro_Ag_A_2	</userString>
+    </Chassis_G91_Pro_Ag_A>
+    <Chassis_G91_Pro_Ag_A_2>
+      <userString>	#germany_vehicles:Chassis_G91_Pro_Ag_A_2	</userString>
       <tags></tags>
       <level>	9	</level>
       <price>	61750	</price>
@@ -2117,7 +2116,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	10000	</weight>
-      <maxLoad>	42000	</maxLoad>
       <terrainResistance>	1 1.1 2.2	</terrainResistance>
       <brakeForce>	43000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -3084,18 +3082,14 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	4.57142878	</repairTime>
-    </Chassis_Pro_Ag_A_2>
+    </Chassis_G91_Pro_Ag_A_2>
   </chassis>
   <turrets0>
-    <Turret_1_Pro_Ag_A>
-      <userString>	#germany_vehicles:Turret_1_Pro_Ag_A	</userString>
+    <Turret_1_G91_Pro_Ag_A>
+      <userString>	#germany_vehicles:Turret_1_G91_Pro_Ag_A	</userString>
       <tags></tags>
       <level>	8	</level>
       <price>	32700	</price>
-      <unlocks>
-        <turret>	Turret_2_Pro_Ag_A	  <cost>	24150	</cost>
-        </turret>
-      </unlocks>
       <armor>
         <armor_1>	52	</armor_1>
         <armor_2>	40	</armor_2>
@@ -3112,7 +3106,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7018	</weight>
-      <maxHealth>	310	</maxHealth>
+      <maxHealth>	260	</maxHealth>
       <rotationSpeed>	33	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -3126,12 +3120,12 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_9cm_KwK_51_L71>	shared	  <unlocks>
+        <_9cm_Kanone>	shared	  <unlocks>
             <gun>	_105mm_L7A1	  <cost>	62000	</cost>
             </gun>
           </unlocks>
           <maxAmmo>	90	</maxAmmo>
-          <reloadTime>	7	</reloadTime>
+          <reloadTime>	6.7	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	3.5	</afterShot>
@@ -3152,8 +3146,8 @@
             </armor_6>
             <gun>	35	</gun>
           </armor>
-          <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <aimingTime>	2.5	</aimingTime>
+          <shotDispersionRadius>	0.32	</shotDispersionRadius>
+          <aimingTime>	1.7	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 0.375 8 0.388889 0 0.611111 0 0.625 8 1 8	</maxPitch>
@@ -3243,15 +3237,15 @@
             <density>	76.6969 85.5063	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_9cm_KwK_51_L71>
+        </_9cm_Kanone>
         <_105mm_L7A1>	shared	  <unlocks>
-            <vehicle>	G89_Leopard1	  <cost>	216000	</cost>
-            </vehicle>
+            <turret>	Turret_2_G91_Pro_Ag_A	  <cost>	24150	</cost>
+            </turret>
           </unlocks>
           <maxAmmo>	58	</maxAmmo>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.1	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -3274,8 +3268,8 @@
             </armor_6>
             <gun>	40	</gun>
           </armor>
-          <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <reloadTime>	12	</reloadTime>
+          <shotDispersionRadius>	0.31	</shotDispersionRadius>
+          <reloadTime>	10.7	</reloadTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/german/G91_Pro_Ag_A/normal/lod0/Gun_03.model	</undamaged>
@@ -3907,12 +3901,16 @@
         <density>	112.844 114.808	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_1_Pro_Ag_A>
-    <Turret_2_Pro_Ag_A>
-      <userString>	#germany_vehicles:Turret_2_Pro_Ag_A	</userString>
+    </Turret_1_G91_Pro_Ag_A>
+    <Turret_2_G91_Pro_Ag_A>
+      <userString>	#germany_vehicles:Turret_2_G91_Pro_Ag_A	</userString>
       <tags></tags>
       <level>	9	</level>
       <price>	51500	</price>
+      <unlocks>
+        <vehicle>	G89_Leopard1	  <cost>	216000	</cost>
+        </vehicle>
+      </unlocks>
       <armor>
         <armor_1>	52	</armor_1>
         <armor_2>	40	</armor_2>
@@ -3931,7 +3929,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7218	</weight>
-      <maxHealth>	460	</maxHealth>
+      <maxHealth>	340	</maxHealth>
       <rotationSpeed>	35	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -3945,8 +3943,8 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_9cm_KwK_51_L71>	shared	  <maxAmmo>	90	</maxAmmo>
-          <reloadTime>	6	</reloadTime>
+        <_9cm_Kanone>	shared	  <maxAmmo>	90	</maxAmmo>
+          <reloadTime>	6.7	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	3.5	</afterShot>
@@ -3968,7 +3966,7 @@
             <gun>	35	</gun>
           </armor>
           <shotDispersionRadius>	0.32	</shotDispersionRadius>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	1.6	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 0.375 8 0.388889 0 0.611111 0 0.625 8 1 8	</maxPitch>
@@ -4058,7 +4056,7 @@
             <density>	76.6969 85.5063	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_9cm_KwK_51_L71>
+        </_9cm_Kanone>
         <_105mm_L7A1>	shared	  <maxAmmo>	58	</maxAmmo>
           <aimingTime>	2	</aimingTime>
           <shotDispersionFactors>
@@ -4731,55 +4729,36 @@
         <density>	109.348 110.897	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_2_Pro_Ag_A>
+    </Turret_2_G91_Pro_Ag_A>
   </turrets0>
   <engines>
-    <MB-837A>	shared	  <unlocks>
-        <engine>	MB-838_CAM-500	  <cost>	33600	</cost>
+    <MTU_MB_837_Ba_500>	shared	  <unlocks>
+        <engine>	MTU_MB_838_CaM_500	  <cost>	33600	</cost>
         </engine>
       </unlocks>
-    </MB-837A>
-    <MB-838_CAM-500>	shared	</MB-838_CAM-500>
+    </MTU_MB_837_Ba_500>
+    <MTU_MB_838_CaM_500>	shared	</MTU_MB_838_CaM_500>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <AN-GRC-4>	shared	  <unlocks>
-        <radio>	SEM25	  <cost>	9100	</cost>
-        </radio>
-      </unlocks>
-    </AN-GRC-4>
     <SEM25>	shared	</SEM25>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <MB-837A>
+        <MTU_MB_837_Ba_500>
           <smplEnginePower>	670	</smplEnginePower>
           <smplFwMaxSpeed>	65	</smplFwMaxSpeed>
-        </MB-837A>
-        <MB-838_CAM-500>
+        </MTU_MB_837_Ba_500>
+        <MTU_MB_838_CaM_500>
           <smplEnginePower>	800	</smplEnginePower>
           <smplFwMaxSpeed>	65	</smplFwMaxSpeed>
-        </MB-838_CAM-500>
+        </MTU_MB_838_CaM_500>
       </engines>
       <chassis>
-        <Chassis_Pro_Ag_A>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.1932	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.0966	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
-            </firm>
-          </grounds>
-          <axleCount>	5	</axleCount>
-        </Chassis_Pro_Ag_A>
-        <Chassis_Pro_Ag_A_2>
+        <Chassis_G91_Pro_Ag_A>
           <grounds>
             <soft>
               <rollingFriction>	0.1771	</rollingFriction>
@@ -4792,7 +4771,21 @@
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>
-        </Chassis_Pro_Ag_A_2>
+        </Chassis_G91_Pro_Ag_A>
+        <Chassis_G91_Pro_Ag_A_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.1771	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.08855	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0805	</rollingFriction>
+            </firm>
+          </grounds>
+          <axleCount>	5	</axleCount>
+        </Chassis_G91_Pro_Ag_A_2>
       </chassis>
     </detailed>
   </physics>

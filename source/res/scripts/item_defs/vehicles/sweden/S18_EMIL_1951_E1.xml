@@ -13,7 +13,7 @@
     <backward>	16	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.057	</moving>
+    <moving>	0.058	</moving>
     <still>	0.115	</still>
     <camouflageBonus>	0.02	</camouflageBonus>
     <firePenalty>	0.173	</firePenalty>
@@ -58,7 +58,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	9948	</weight>
-    <maxHealth>	1120	</maxHealth>
+    <maxHealth>	1240	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	240	</maxHealth>
       <maxRegenHealth>	160	</maxRegenHealth>
@@ -764,8 +764,7 @@
         <rightTrack>	30	</rightTrack>
       </armor>
       <weight>	6360	</weight>
-      <maxLoad>	29000	</maxLoad>
-      <terrainResistance>	1.3 1.4 2.3	</terrainResistance>
+      <terrainResistance>	1.2 1.3 2.1	</terrainResistance>
       <brakeForce>	29000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	24	</rotationSpeed>
@@ -1608,7 +1607,6 @@
         <rightTrack>	30	</rightTrack>
       </armor>
       <weight>	6360	</weight>
-      <maxLoad>	32000	</maxLoad>
       <terrainResistance>	1.2 1.3 2.1	</terrainResistance>
       <brakeForce>	29000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -2446,7 +2444,7 @@
   <turrets0>
     <Turret_1_S18_EMIL_1951_E1>
       <userString>	#sweden_vehicles:Turret_1_S18_EMIL_1951_E1	</userString>
-      <tags></tags>
+      <tags>	oscillating	</tags>
       <level>	8	</level>
       <price>	30000	</price>
       <notInShop>	true	</notInShop>
@@ -2468,7 +2466,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	9000	</weight>
-      <maxHealth>	280	</maxHealth>
+      <maxHealth>	310	</maxHealth>
       <rotationSpeed>	20	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -2488,8 +2486,10 @@
             </gun>
           </unlocks>
           <armor>
-            <armor_1>	250	</armor_1>
-            <armor_2>	50	</armor_2>
+            <armor_1>	250	  <tags>	gun	</tags>
+            </armor_1>
+            <armor_2>	50	  <tags>	gun	</tags>
+            </armor_2>
             <armor_3>	30	</armor_3>
             <armor_4>	30	</armor_4>
             <armor_5>	18	</armor_5>
@@ -2501,16 +2501,21 @@
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 12 0.402778 12 0.436111 9.5 0.563889 9.5 0.597222 12 1 12	</maxPitch>
+            <maxPitch>	0.00000 12.00 0.42222 12.00 0.44444 9.50 0.46667 9.50 0.47778 11.50 0.52222 11.50 0.53333 9.50 0.55556 9.50 0.57778 12.00 1.00000 12.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <clip>
             <count>	3	</count>
             <rate>	20	</rate>
           </clip>
-          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <reloadTime>	22.7	</reloadTime>
-          <aimingTime>	3.2	</aimingTime>
+          <aimingTime>	3	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.16	</turretRotation>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+            <afterShot>	3.5	</afterShot>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/sweden/S18_EMIL_1951_E1/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/sweden/S18_EMIL_1951_E1/crash/lod0/Gun_01.model	</destroyed>
@@ -2875,8 +2880,10 @@
             </vehicle>
           </unlocks>
           <armor>
-            <armor_1>	250	</armor_1>
-            <armor_2>	50	</armor_2>
+            <armor_1>	250	  <tags>	gun	</tags>
+            </armor_1>
+            <armor_2>	50	  <tags>	gun	</tags>
+            </armor_2>
             <armor_3>	30	</armor_3>
             <armor_4>	30	</armor_4>
             <armor_5>	18	</armor_5>
@@ -2888,7 +2895,7 @@
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 12 0.402778 12 0.436111 9.5 0.563889 9.5 0.597222 12 1 12	</maxPitch>
+            <maxPitch>	0.00000 12.00 0.42222 12.00 0.44444 9.50 0.46667 9.50 0.47778 11.50 0.52222 11.50 0.53333 9.50 0.55556 9.50 0.57778 12.00 1.00000 12.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <clip>
@@ -2900,7 +2907,7 @@
           <aimingTime>	3.2	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.16	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <models>
@@ -3885,11 +3892,6 @@
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <Ra_400>	shared	  <unlocks>
-        <radio>	Ra_421	  <cost>	9400	</cost>
-        </radio>
-      </unlocks>
-    </Ra_400>
     <Ra_421>	shared	</Ra_421>
   </radios>
   <clientAdjustmentFactors>
@@ -3926,13 +3928,13 @@
         <Chassis_S18_EMIL_1951_E1>
           <grounds>
             <soft>
-              <rollingFriction>	0.231438	</rollingFriction>
+              <rollingFriction>	0.211313	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.140875	</rollingFriction>
+              <rollingFriction>	0.130813	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.130813	</rollingFriction>
+              <rollingFriction>	0.12075	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

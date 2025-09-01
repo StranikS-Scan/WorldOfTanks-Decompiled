@@ -49,7 +49,7 @@ class TrophyDeviceUpgradeConfirmView(DialogWindow):
         self.__setUpgradeCost()
         canUpgrade = self.__canPurchaseUpgrade()
         self._addButton(DialogButtons.SUBMIT, R.strings.battle_pass.trophyDeviceUpgradeConfim.submit(), isFocused=True, isEnabled=canUpgrade, tooltipBody=self.__getSubmitBtnTooltip(canUpgrade))
-        self._addButton(DialogButtons.CANCEL, R.strings.battle_pass.trophyDeviceUpgradeConfim.cancel(), invalidateAll=True)
+        self._addButton(DialogButtons.CANCEL, R.strings.battle_pass.trophyDeviceUpgradeConfim.cancel(), invalidateAll=True, soundDown=R.sounds.cancelcloseno())
 
     def _finalize(self):
         self.__wallet.onWalletStatusChanged -= self.__onWalletStatusChanged

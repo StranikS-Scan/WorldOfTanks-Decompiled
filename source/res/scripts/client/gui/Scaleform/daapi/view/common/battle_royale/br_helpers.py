@@ -7,7 +7,7 @@ import CommandMapping
 from constants import BATTLE_ROYALE_SCENE
 from helpers import dependency
 from items import vehicles, parseIntCompactDescr, ITEM_TYPES
-from gui.Scaleform.daapi.view.common.keybord_helpers import getHotKeyList, getHotKeyVkList
+from gui.Scaleform.daapi.view.common.keybord_helpers import getHotKeyList, getHotKeysInfo
 from skeletons.gui.game_control import IHangarSpaceSwitchController
 from skeletons.gui.lobby_context import ILobbyContext
 _logger = logging.getLogger(__name__)
@@ -53,20 +53,12 @@ def getHotKeyString(command):
     return ' +'.join(getHotKeyList(command))
 
 
-def getHotKeyListByIndex(index):
+def getHotKeyInfoListByIndex(index):
     if index == 0:
         command = CommandMapping.CMD_CM_VEHICLE_UPGRADE_PANEL_LEFT
     else:
         command = CommandMapping.CMD_CM_VEHICLE_UPGRADE_PANEL_RIGHT
-    return getHotKeyList(command)
-
-
-def getHotKeyVkListByIndex(index):
-    if index == 0:
-        command = CommandMapping.CMD_CM_VEHICLE_UPGRADE_PANEL_LEFT
-    else:
-        command = CommandMapping.CMD_CM_VEHICLE_UPGRADE_PANEL_RIGHT
-    return getHotKeyVkList(command)
+    return [ keyInfo.asDict() for keyInfo in getHotKeysInfo(command) ]
 
 
 def isIncorrectVehicle(vehicle):

@@ -20,6 +20,6 @@ class LoginScreenState(StaticSlideState):
     def nextSlideDuration(self):
         return self._nextSlideDuration
 
-    def _onEntered(self):
-        super(LoginScreenState, self)._onEntered()
+    def _onEntered(self, event):
+        super(LoginScreenState, self)._onEntered(event)
         game_loading_bindings.bringLoadingViewToBottom()

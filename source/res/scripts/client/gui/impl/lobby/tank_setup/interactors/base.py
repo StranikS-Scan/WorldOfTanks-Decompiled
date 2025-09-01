@@ -11,13 +11,14 @@ if typing.TYPE_CHECKING:
 
 class InteractingItem(object):
     _itemsCache = dependency.descriptor(IItemsCache)
-    __slots__ = ('__item', 'onItemUpdated', 'onSlotAction', 'onAcceptComplete')
+    __slots__ = ('__item', 'onItemUpdated', 'onSlotAction', 'onAcceptComplete', 'onRevert')
 
     def __init__(self, item):
         self.__item = item
         self.onItemUpdated = Event.Event()
         self.onSlotAction = Event.Event()
         self.onAcceptComplete = Event.Event()
+        self.onRevert = Event.Event()
 
     def setItem(self, item):
         self.__item = item
@@ -30,6 +31,7 @@ class InteractingItem(object):
         self.onItemUpdated.clear()
         self.onSlotAction.clear()
         self.onAcceptComplete.clear()
+        self.onRevert.clear()
         return
 
 
@@ -91,6 +93,17 @@ class BaseInteractor(object):
     def getItem(self):
         return self._item.getItem()
 
+    @property
+    def hasItem(self):
+        return self._item is not None and self._item.getItem() is not None
+
+    @property
+    def affectsTTC(self):
+        return False
+
+    def getInteractingItem(self):
+        return self._item
+
     def setItem(self, item):
         self._item = item
         if self.__autoRenewal is not None:
@@ -123,6 +136,9 @@ class BaseInteractor(object):
 
     def onAcceptComplete(self):
         self._item.onAcceptComplete()
+
+    def onRevert(self):
+        self._item.onRevert(self.getName())
 
     def revert(self):
         pass

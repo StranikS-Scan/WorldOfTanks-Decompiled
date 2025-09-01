@@ -114,7 +114,7 @@ class StaticDeathZone(LimitedVisibilityEntity):
         if effects:
             effects = random.choice(effects)
             for vehicle in BigWorld.player().vehicles:
-                if vehicle.id == vehicleId:
+                if vehicleId == vehicle.id and vehicle.isStarted:
                     self.__functionOnLeaveDeathZone = functools.partial(self._onLeaveDeathZone, vehicle.appearance.playEffectWithStopCallback(effects))
 
         else:

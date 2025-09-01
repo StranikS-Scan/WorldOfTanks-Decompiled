@@ -13,6 +13,7 @@ class ClientUnitMgr(UnitClientAPI):
     def __init__(self, account):
         self.__eManager = Event.EventManager()
         self.onUnitJoined = Event.Event(self.__eManager)
+        self.onUnitJoining = Event.Event(self.__eManager)
         self.onUnitLeft = Event.Event(self.__eManager)
         self.onUnitRestored = Event.Event(self.__eManager)
         self.onUnitErrorReceived = Event.Event(self.__eManager)
@@ -56,6 +57,7 @@ class ClientUnitMgr(UnitClientAPI):
             self.__unit = unit
             if 'battleID' in unit._extras:
                 self.battleID = unit._extras['battleID']
+            self.onUnitJoining(self.id, unit.getPrebattleType())
             self.onUnitJoined(self.id, unit.getPrebattleType())
         if packedOps:
             unit = self.__unit

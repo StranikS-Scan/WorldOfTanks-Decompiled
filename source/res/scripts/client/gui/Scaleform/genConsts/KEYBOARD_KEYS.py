@@ -24,3 +24,4 @@ class KEYBOARD_KEYS(object):
     SHOW_EX_PLAYER_INFO = 'showExPlayerInfo'
     TOGGLE_PLAYER_PANEL_MODES = 'togglePlayerPanelModes'
     STOP_FIRE = 'stop_fire'
+    TOGGLE_FLASHLIGHT = 'toggleFlashlight'

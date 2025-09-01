@@ -56,6 +56,7 @@ class STORAGE(object):
     INHANGAR_TABS_RESTORE = '#storage:inhangar/tabs/restore'
     INHANGAR_TABS_RENT = '#storage:inhangar/tabs/rent'
     FILTER_WARNINGMESSAGE = '#storage:filter/warningMessage'
+    FILTER_SOMETIERSONLYMESSAGE = '#storage:filter/someTiersOnlyMessage'
     FILTER_NORESULTSBTN_LABEL = '#storage:filter/noResultsBtn/label'
     PERSONALRESERVES_FILTERTITLE = '#storage:personalreserves/filterTitle'
     PERSONALRESERVES_DURATIONFILTER_LABEL = '#storage:personalreserves/durationFilter/label'

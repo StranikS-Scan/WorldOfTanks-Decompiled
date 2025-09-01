@@ -6,6 +6,7 @@ from collections import namedtuple
 import typing
 import constants
 from debug_utils import LOG_WARNING
+from gui import SystemMessages
 from gui.ranked_battles.ranked_helpers import isRankedQuestID
 from gui.Scaleform.daapi.view.lobby.missions import cards_formatters
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import CurtailingAwardsComposer, AwardsWindowComposer, DetailedCardAwardComposer, PersonalMissionsAwardComposer
@@ -18,6 +19,7 @@ from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from adisp import adisp_process, adisp_async
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.server_events.awards_formatters import AWARDS_SIZES, getEpicAwardFormatter, EPIC_AWARD_SIZE, getMissionsDefaultAwardFormatter
@@ -25,17 +27,19 @@ from gui.server_events.bonuses import SimpleBonus
 from gui.server_events.cond_formatters.prebattle import MissionsPreBattleConditionsFormatter
 from gui.server_events.cond_formatters.requirements import AccountRequirementsFormatter, TQAccountRequirementsFormatter
 from gui.server_events.conditions import GROUP_TYPE
+from gui.server_events.event_items import PersonalMission
 from gui.server_events.events_constants import BATTLE_ROYALE_GROUPS_ID, EPIC_BATTLE_GROUPS_ID, FUN_RANDOM_GROUP_ID
 from gui.server_events.events_helpers import MISSIONS_STATES, QuestInfoModel, AWARDS_PER_SINGLE_PAGE, isMarathon, AwardSheetPresenter, isPremium
 from gui.server_events.formatters import DECORATION_SIZES
 from gui.server_events.personal_progress import formatters
+from gui.server_events.pm_constants import PAUSABLE_OPERATIONS_IDS, DISCARDABLE_OPERATIONS_IDS
 from gui.shared.formatters import text_styles, icons, time_formatters
+from gui.shared.gui_items.processors.quests import PMActivateSeason, PM3OperationSelect, PMQuestSelect
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency, int2roman, time_utils, i18n
 from helpers.i18n import makeString as _ms
-from personal_missions import PM_BRANCH
-from potapov_quests import PM_BRANCH_TO_FREE_TOKEN_NAME
+from personal_missions import PM_BRANCH, PM_BRANCH_TO_FREE_TOKEN_NAME, PERSONAL_MISSION_REGULAR_MIN_LEVEL
 from quest_xml_source import MAX_BONUS_LIMIT
 from shared_utils import first
 from skeletons.gui.server_events import IEventsCache
@@ -153,6 +157,8 @@ def getOperations(branch, currOperationID):
         state = PERSONAL_MISSIONS_ALIASES.OPERATION_UNLOCKED_STATE
         descr = text_styles.stats(PERSONAL_MISSIONS.OPERATIONS_UNLOCKED_DESC)
         title = text_styles.highTitle(o.getShortUserName())
+        isWulfTooltip = False
+        iconStateSource = None
         if o.isDisabled():
             state, _ = getPostponedOperationState(oID)
             descr = text_styles.error(PERSONAL_MISSIONS.OPERATIONS_LOCKED_DESC)
@@ -162,19 +168,17 @@ def getOperations(branch, currOperationID):
         elif o.isFullCompleted():
             state = PERSONAL_MISSIONS_ALIASES.OPERATION_COMPLETE_FULL_STATE
             descr = text_styles.bonusAppliedText(PERSONAL_MISSIONS.OPERATIONS_FULLYCOMPLETED_DESC)
+        elif not o.hasRequiredVehicles():
+            state = PERSONAL_MISSIONS_ALIASES.OPERATION_LOCKED_STATE
+            descr = text_styles.error(PERSONAL_MISSIONS.OPERATIONS_LOCKED_DESC)
         elif o.isAwardAchieved():
             state = PERSONAL_MISSIONS_ALIASES.OPERATION_COMPLETE_STATE
             descr = text_styles.bonusAppliedText(PERSONAL_MISSIONS.OPERATIONS_COMPLETED_DESC)
         elif o.isInProgress():
             state = PERSONAL_MISSIONS_ALIASES.OPERATION_CURRENT_STATE
             descr = text_styles.neutral(PERSONAL_MISSIONS.OPERATIONS_CURRENT_DESC)
-        elif not o.hasRequiredVehicles():
-            state = PERSONAL_MISSIONS_ALIASES.OPERATION_LOCKED_STATE
-            descr = text_styles.error(PERSONAL_MISSIONS.OPERATIONS_LOCKED_DESC)
-        if state != PERSONAL_MISSIONS_ALIASES.OPERATION_UNLOCKED_STATE:
+        if iconStateSource is None and state != PERSONAL_MISSIONS_ALIASES.OPERATION_UNLOCKED_STATE:
             iconStateSource = RES_ICONS.getPersonalMissionOperationState(state)
-        else:
-            iconStateSource = None
         freeSheetIcon = ''
         freeSheetCounter = ''
         tokensPawned = o.getTokensPawnedCount()
@@ -183,6 +187,9 @@ def getOperations(branch, currOperationID):
             freeSheetCounter = text_styles.counter('x%d' % tokensPawned)
         if state == PERSONAL_MISSIONS_ALIASES.OPERATION_POSTPONED_STATE:
             tooltipAlias = TOOLTIPS_CONSTANTS.OPERATION_POSTPONED
+        elif state == PERSONAL_MISSIONS_ALIASES.OPERATION_DISABLED_STATE:
+            tooltipAlias = TOOLTIPS_CONSTANTS.PERSONAL_MISSION_OPERATION_DISABLED
+            isWulfTooltip = True
         else:
             tooltipAlias = TOOLTIPS_CONSTANTS.OPERATION
         operationVO = {'title': title,
@@ -194,7 +201,8 @@ def getOperations(branch, currOperationID):
          'state': state,
          'isSelected': oID == currOperationID,
          'id': oID,
-         'tooltipAlias': tooltipAlias}
+         'tooltipAlias': tooltipAlias,
+         'isWulfTooltip': isWulfTooltip}
         operations.append(operationVO)
 
     return operations
@@ -202,7 +210,7 @@ def getOperations(branch, currOperationID):
 
 def getPostponedOperationState(operationID):
     _eventsCache = dependency.instance(IEventsCache)
-    disabledOperations = _eventsCache.getPersonalMissions().getDisabledPMOperations()
+    disabledOperations = _eventsCache.getPersonalMissions().getDisabledPMOperations(branches=PM_BRANCH.ALL)
     state = None
     postponeTime = ''
     if operationID in disabledOperations:
@@ -261,8 +269,12 @@ class _MissionInfo(QuestInfoModel):
 
     def _getInfo(self, statusData, isAvailable, errorMsg, mainQuest=None):
         status = statusData['status']
+        if isinstance(self.event, PersonalMission) and self.event.getQuestBranch() == PM_BRANCH.PERSONAL_MISSION_3:
+            title = self._getEventTitle()
+        else:
+            title = self._getTitle(self._getEventTitle())
         data = {'eventID': self._getEventID(),
-         'title': self._getTitle(self._getEventTitle()),
+         'title': title,
          'isAvailable': isAvailable,
          'statusLabel': statusData.get('statusLabel'),
          'statusTooltipData': statusData.get('statusTooltipData', ''),
@@ -980,8 +992,6 @@ class _DetailedTokenMissionInfo(_DetailedMissionInfo):
 
 class _DetailedPersonalMissionInfo(_MissionInfo):
     _eventsCache = dependency.descriptor(IEventsCache)
-    DISCARDABLE_OPERATIONS_IDS = (7,)
-    PAUSABLE_OPERATIONS_IDS = (7,)
 
     def __init__(self, event):
         super(_DetailedPersonalMissionInfo, self).__init__(event)
@@ -1000,6 +1010,18 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
     def getAwards(self, extended=False):
         return self._getAwards(extended=extended)
 
+    def getInfo(self, mainQuest=None):
+        isAvailable, errorMsg = self.event.isAvailable()
+        if errorMsg != 'isLocked' and self.event.getQuestBranch() in PM_BRANCH.V1_BRANCHES:
+            if not isBranchesStarted(*PM_BRANCH.V1_BRANCHES) and not getSuitableVehicles():
+                isAvailable = False
+                errorMsg = 'branchNotStarted'
+            elif isBranchesStarted(*PM_BRANCH.V1_BRANCHES) and self.event.getQuestBranchName() not in self.eventsCache.getPersonalMissions().getActiveCampaigns():
+                isAvailable = False
+                errorMsg = 'branchInactive'
+        statusData = self._getStatusFields(isAvailable, errorMsg)
+        return self._getInfo(statusData, isAvailable, errorMsg, mainQuest)
+
     def _getStatusFields(self, isAvailable, errorMsg):
         if not isAvailable:
             return self._getUnavailableStatusFields(errorMsg)
@@ -1012,9 +1034,36 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
              'statusTooltipData': None}
 
     def _getUnavailableStatusFields(self, errorMsg):
+        if errorMsg == 'branchNotStarted':
+            return self._getBranchNotStartedStatusFields()
+        if errorMsg == 'branchInactive':
+            return self._getBranchIsInactiveStatusFields()
         if errorMsg == 'noVehicle':
             return self._getNoVehicleStatusFields()
         return self._getDisabledStatusFields() if errorMsg == 'disabled' else self._getUnlockedStatusFields()
+
+    def _getBranchIsInactiveStatusFields(self):
+        quest = self.event
+        campaignID = quest.getCampaignID()
+        pm = self.eventsCache.getPersonalMissions()
+        campaign = pm.getAllCampaigns().get(campaignID)
+        campaignName = campaign.getUserName()
+        infoIcon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_INFO_YELLOW, 24, 24, -6)
+        label = backport.text(R.strings.personal_missions.statusPanel.status.suspended(), campaignName=campaignName, infoIcon=infoIcon)
+        opPause = icons.makeImageTag(RES_ICONS.MAPS_ICONS_PERSONALMISSIONS_OPERATIONS_STATES_PAUSED, 24, 24, -6, 8)
+        statusText = text_styles.concatStylesWithSpace(opPause, text_styles.neutral(label))
+        bottomStatusTooltipData = {'tooltip': makeTooltip(header=TOOLTIPS.PERSONALMISSIONS_OPERATION_FOOTER_ACTIVATECAMPAIGN_HEADER, body=TOOLTIPS.PERSONALMISSIONS_OPERATION_FOOTER_ACTIVATECAMPAIGN_BODY)}
+        return {'showIcon': False,
+         'addBottomStatusText': statusText,
+         'status': MISSIONS_STATES.IS_ON_PAUSE,
+         'bottomStatusTooltipData': bottomStatusTooltipData}
+
+    def _getBranchNotStartedStatusFields(self):
+        statusText = text_styles.error(backport.text(R.strings.quests.personalMission.status.notStartedRequired(), minLevel=int2roman(PERSONAL_MISSION_REGULAR_MIN_LEVEL)))
+        return {'showIcon': True,
+         'addBottomStatusText': statusText,
+         'status': MISSIONS_STATES.NOT_AVAILABLE,
+         'bottomStatusTooltipData': None}
 
     def _getDisabledStatusFields(self):
         statusLabel = text_styles.error(QUESTS.PERSONALMISSION_STATUS_MISSIONDISABLED)
@@ -1023,11 +1072,12 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
          'status': MISSIONS_STATES.DISABLED}
 
     def _getNoVehicleStatusFields(self):
-        addBottomStatusText = self.__getAddBottomLocked()
+        vehType, minLevel, maxLevel = self.__getChainVehTypeAndLevelRestrictions()
+        addBottomStatusText = self.__getAddBottomLocked(vehType, minLevel, maxLevel)
         bodyTooltip = TOOLTIPS.PERSONALMISSIONS_STATUS_LOCKEDBYVEHICLETYPE_BODY
         if self.event.getQuestBranch() == PM_BRANCH.PERSONAL_MISSION_2:
             bodyTooltip = TOOLTIPS.PERSONALMISSIONS_STATUS_LOCKEDBYVEHICLEALLIANCE_BODY
-        bottomStatusTooltipData = {'tooltip': makeTooltip(header=TOOLTIPS.PERSONALMISSIONS_STATUS_LOCKEDBYVEHICLE_HEADER, body=_ms(bodyTooltip, vehType=_ms(MENU.classesShort(self.event.getQuestClassifier().classificationAttr)), minLevel=int2roman(self.event.getVehMinLevel()), maxLevel=int2roman(self.event.getVehMaxLevel())))}
+        bottomStatusTooltipData = {'tooltip': makeTooltip(header=TOOLTIPS.PERSONALMISSIONS_STATUS_LOCKEDBYVEHICLE_HEADER, body=_ms(bodyTooltip, vehType=_ms(MENU.classesShort(self.event.getQuestClassifier().classificationAttr)), minLevel=minLevel, maxLevel=maxLevel))}
         statusData = self._getQuestCompletionStatusFields()
         if statusData:
             statusData.update(addBottomStatusText=addBottomStatusText)
@@ -1180,22 +1230,21 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
         return data
 
     def __getAddBottomInfo(self):
-        quest = self.event
-        pmCache = self._eventsCache.getPersonalMissions()
-        curOperation = pmCache.getAllOperations().get(quest.getOperationID())
-        vehType, minLevel, maxLevel = getChainVehTypeAndLevelRestrictions(curOperation, quest.getChainID())
-        if quest.getQuestBranch() == PM_BRANCH.REGULAR:
+        vehType, minLevel, maxLevel = self.__getChainVehTypeAndLevelRestrictions()
+        if self.event.getQuestBranch() == PM_BRANCH.REGULAR:
             return text_styles.standard(_ms(QUESTS.PERSONALMISSION_STATUS_ADDBOTTOMINFO_REGULAR, vehType=vehType, minLevel=minLevel, maxLevel=maxLevel))
-        return text_styles.standard(_ms(QUESTS.PERSONALMISSION_STATUS_ADDBOTTOMINFO_PM2, vehType=vehType, minLevel=minLevel, maxLevel=maxLevel)) if quest.getQuestBranch() == PM_BRANCH.PERSONAL_MISSION_2 else ''
+        return text_styles.standard(_ms(QUESTS.PERSONALMISSION_STATUS_ADDBOTTOMINFO_PM2, vehType=vehType, minLevel=minLevel, maxLevel=maxLevel)) if self.event.getQuestBranch() == PM_BRANCH.PERSONAL_MISSION_2 else ''
 
-    def __getAddBottomLocked(self):
+    def __getChainVehTypeAndLevelRestrictions(self):
         quest = self.event
         pmCache = self._eventsCache.getPersonalMissions()
         curOperation = pmCache.getAllOperations().get(quest.getOperationID())
-        vehType, minLevel, maxLevel = getChainVehTypeAndLevelRestrictions(curOperation, quest.getChainID())
-        if quest.getQuestBranch() == PM_BRANCH.REGULAR:
-            return text_styles.error(_ms(QUESTS.PERSONALMISSION_STATUS_ADDBOTTOMLOCKED_REGULAR, vehType=vehType, minLevel=minLevel, maxLevel=maxLevel))
-        return text_styles.error(_ms(QUESTS.PERSONALMISSION_STATUS_ADDBOTTOMLOCKED_PM2, vehType=vehType, minLevel=minLevel, maxLevel=maxLevel)) if quest.getQuestBranch() == PM_BRANCH.PERSONAL_MISSION_2 else ''
+        return getChainVehTypeAndLevelRestrictions(curOperation, quest.getChainID())
+
+    def __getAddBottomLocked(self, vehType, minLevel, maxLevel):
+        if self.event.getQuestBranch() == PM_BRANCH.REGULAR:
+            return text_styles.error(backport.text(R.strings.quests.personalMission.status.addBottomLocked.regular(), vehType=vehType, minLevel=minLevel, maxLevel=maxLevel))
+        return text_styles.error(backport.text(R.strings.quests.personalMission.status.addBottomLocked.pm2(), vehType=vehType, minLevel=minLevel, maxLevel=maxLevel)) if self.event.getQuestBranch() == PM_BRANCH.PERSONAL_MISSION_2 else ''
 
     def __getHoldAwardSheetBtnTooltipData(self):
         if self.__isPawnAvailable(self.event):
@@ -1216,10 +1265,11 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
     def __getRetryBtnTooltip(self, isAvailable):
         tooltip = PERSONAL_MISSIONS.DETAILEDVIEW_TOOLTIPS_RETRYBTN
         if not isAvailable:
+            _, minLevel, maxLevel = self.__getChainVehTypeAndLevelRestrictions()
             tooltipBody = TOOLTIPS.PERSONALMISSIONS_STATUS_LOCKEDBYVEHICLETYPE_BODY
             if self.event.getQuestBranch() == PM_BRANCH.PERSONAL_MISSION_2:
                 tooltipBody = TOOLTIPS.PERSONALMISSIONS_STATUS_LOCKEDBYVEHICLEALLIANCE_BODY
-            tooltip = makeTooltip(header=TOOLTIPS.PERSONALMISSIONS_STATUS_LOCKEDBYVEHICLE_HEADER, body=_ms(tooltipBody, vehType=_ms(MENU.classesShort(self.event.getQuestClassifier().classificationAttr)), minLevel=int2roman(self.event.getVehMinLevel()), maxLevel=int2roman(self.event.getVehMaxLevel())))
+            tooltip = makeTooltip(header=TOOLTIPS.PERSONALMISSIONS_STATUS_LOCKEDBYVEHICLE_HEADER, body=_ms(tooltipBody, vehType=_ms(MENU.classesShort(self.event.getQuestClassifier().classificationAttr)), minLevel=minLevel, maxLevel=maxLevel))
         elif self.event.areTokensPawned():
             tooltip = PERSONAL_MISSIONS.DETAILEDVIEW_TOOLTIPS_RETURNAWARDLISTBTN
         return tooltip
@@ -1232,16 +1282,18 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
         quest = self.event
         isPawnAvailable = self.__isPawnAvailable(quest)
         states = PERSONAL_MISSIONS_BUTTONS.NO_BUTTONS
+        namePM3 = PM_BRANCH.TYPE_TO_NAME[PM_BRANCH.PERSONAL_MISSION_3]
+        isPM3Active = namePM3 in self.eventsCache.getPersonalMissions().getActiveCampaigns()
         if not quest.isUnlocked():
             states |= PERSONAL_MISSIONS_BUTTONS.START_BTN_VISIBLE
         elif quest.isInProgress() and isAvailable:
-            if quest.getOperationID() in self.PAUSABLE_OPERATIONS_IDS:
+            if quest.getOperationID() in PAUSABLE_OPERATIONS_IDS and not isPM3Active:
                 states |= PERSONAL_MISSIONS_BUTTONS.PAUSE_BTN_VISIBLE
-            if quest.getOperationID() in self.DISCARDABLE_OPERATIONS_IDS:
+            if quest.getOperationID() in DISCARDABLE_OPERATIONS_IDS and not isPM3Active:
                 states |= PERSONAL_MISSIONS_BUTTONS.DISCARD_BTN_VISIBLE
                 if self.__anyProgress:
                     states |= PERSONAL_MISSIONS_BUTTONS.DISCARD_BTN_ENABLED
-            if not quest.isMainCompleted():
+            if not quest.isMainCompleted() and not isPM3Active:
                 states |= PERSONAL_MISSIONS_BUTTONS.HOLD_AWARD_SHEET_BTN_VISIBLE
                 if not quest.areTokensPawned() and isPawnAvailable:
                     states |= PERSONAL_MISSIONS_BUTTONS.HOLD_AWARD_SHEET_BTN_ENABLED
@@ -1251,19 +1303,19 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
             states |= PERSONAL_MISSIONS_BUTTONS.RETRY_BTN_VISIBLE
             if isAvailable:
                 states |= PERSONAL_MISSIONS_BUTTONS.RETRY_BTN_ENABLED
-        else:
+        elif not quest.isInProgress():
             states |= PERSONAL_MISSIONS_BUTTONS.START_BTN_VISIBLE
             if isAvailable:
                 states |= PERSONAL_MISSIONS_BUTTONS.START_BTN_ENABLED
         if quest.canBePawned():
             states |= PERSONAL_MISSIONS_BUTTONS.HOLD_AWARD_SHEET_BTN_VISIBLE
-            if isPawnAvailable:
+            if isPawnAvailable and not isPM3Active:
                 states |= PERSONAL_MISSIONS_BUTTONS.HOLD_AWARD_SHEET_BTN_ENABLED
         return states
 
     def __getPauseBtnIcon(self):
         quest = self.event
-        if quest.getOperationID() in self.PAUSABLE_OPERATIONS_IDS:
+        if quest.getOperationID() in PAUSABLE_OPERATIONS_IDS:
             if quest.isOnPause:
                 return RES_ICONS.MAPS_ICONS_PERSONALMISSIONS_BTN_ICON_PLAY
             return RES_ICONS.MAPS_ICONS_PERSONALMISSIONS_BTN_ICON_PAUSE
@@ -1351,3 +1403,63 @@ def getMapRegionTooltipData(state, quest):
          'isSpecial': True,
          'specialArgs': [quest.getID(), state]}
     return tooltipData
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def getSuitableVehicles(itemsCache=None):
+    suitableVehs = itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS(list(range(PERSONAL_MISSION_REGULAR_MIN_LEVEL, constants.MAX_VEHICLE_LEVEL + 1))) | REQ_CRITERIA.IN_OWNERSHIP)
+    return suitableVehs
+
+
+@dependency.replace_none_kwargs(eventsCache=IEventsCache)
+def getStartedBranches(eventsCache=None):
+    startedBranches = set()
+    personalMissions = eventsCache.getPersonalMissions()
+    for branch in PM_BRANCH.ALL:
+        if branch in startedBranches:
+            continue
+        operations = personalMissions.getAllOperations((branch,))
+        for operation in operations.values():
+            if operation.isStarted():
+                startedBranches.add(branch)
+
+    return startedBranches
+
+
+def isBranchesStarted(*branches):
+    startedBranches = getStartedBranches()
+    return bool(startedBranches.intersection(branches))
+
+
+@adisp_async
+@adisp_process
+def switchCampaign(campaignToActive, isFirstTimeEntrance=False, callback=None):
+    eventsCache = dependency.instance(IEventsCache)
+    result = yield PMActivateSeason(eventsCache.getPersonalMissions(), campaignToActive, isFirstTimeEntrance=isFirstTimeEntrance).request()
+    if result.userMsg:
+        SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
+    if callback is not None:
+        callback(result)
+    return
+
+
+@adisp_async
+@adisp_process
+def processOperation(branch, mission, callback=None):
+    result = yield PMQuestSelect(branch, mission).request()
+    if result and result.userMsg:
+        SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
+    if callback is not None:
+        callback(result)
+    return
+
+
+@adisp_async
+@adisp_process
+def processPM3Operation(branch, operation, isFirstTimeEntrance=False, callback=None):
+    result = yield PM3OperationSelect(branch, operation, isFirstTimeEntrance=isFirstTimeEntrance).request()
+    if result and result.userMsg:
+        SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
+    if callback is not None:
+        callback(result)
+    return

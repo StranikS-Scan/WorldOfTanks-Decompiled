@@ -101,6 +101,9 @@ class PostProgressionActionItem(PurchaseProvider):
     def getKpi(self, vehicle=None):
         return []
 
+    def getCategories(self):
+        return self._descriptor.categories
+
     def getImageName(self):
         return self._descriptor.imgName
 

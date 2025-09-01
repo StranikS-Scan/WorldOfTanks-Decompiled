@@ -6,6 +6,7 @@ from account_helpers.settings_core.settings_constants import GRAPHICS
 from gui.Scaleform.daapi.view.battle.shared.stats_exchange import broker
 from gui.Scaleform.daapi.view.meta.BattleStatisticDataControllerMeta import BattleStatisticDataControllerMeta
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
+from gui.Scaleform.locale.PERSONAL_MISSIONS_30 import PERSONAL_MISSIONS_30
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.battle_control.arena_info import team_overrides
 from gui.battle_control.arena_info import vos_collections
@@ -66,6 +67,7 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
         self.__avatarTeam = None
         self.__isPMBattleProgressEnabled = False
         self.__isDogTagInBattleEnabled = False
+        self.__isInited = False
         return
 
     def getControllerID(self):
@@ -105,6 +107,7 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
     def invalidateVehiclesInfo(self, arenaDP):
         self.__updatePersonalPrebattleID(arenaDP)
         self.__updateSquadRestrictions()
+        self.__clearMissionConditionState()
         exchange = self._exchangeBroker.getVehiclesInfoExchange()
         collection = vos_collections.VehiclesInfoCollection()
         for vInfoVO in collection.iterator(arenaDP):
@@ -118,6 +121,7 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
         data = exchange.get()
         if data:
             self.as_setVehiclesDataS(data)
+        self.__doFullQuestUIUpdate()
 
     def invalidateVehiclesStats(self, arenaDP):
         exchange = self._exchangeBroker.getVehiclesStatsExchange()
@@ -313,9 +317,11 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
             battleFieldCtrl.onSpottedStatusChanged += self.updateVehiclesStats
         if self._battleCtx is not None:
             self.__setPersonalStatus()
+        self.__isInited = True
         return
 
     def _dispose(self):
+        self.__isInited = False
         g_messengerEvents.voip.onChannelEntered -= self.__onVOIPChannelStateToggled
         g_messengerEvents.voip.onChannelLeft -= self.__onVOIPChannelStateToggled
         ctrl = self.sessionProvider.shared.vehicleState
@@ -384,20 +390,38 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
             self.as_setQuestStatusS(self.__getStatusData(selectedQuest))
 
     def __getStatusData(self, selectedQuest):
-        if selectedQuest.isOnPause:
-            status = MISSIONS_STATES.IS_ON_PAUSE
-            icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ONPAUSE, 16, 16, -3, 8)
-            text = text_styles.playerOnline(INGAME_GUI.STATISTICS_TAB_QUESTS_STATUS_ONPAUSE)
+        if not self.__canDisplayPMMission(self.sessionProvider.getArenaDP()):
+            return
         else:
-            status = MISSIONS_STATES.IN_PROGRESS
-            icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_INPROGRESSICON, 16, 16, -2, 8)
-            if selectedQuest.isMainCompleted():
-                text = text_styles.neutral(INGAME_GUI.STATISTICS_TAB_QUESTS_STATUS_INCREASERESULT)
+            vehCmpDescr = self.__getCurrentPlayerVehicleCmpDescr(self.sessionProvider.getArenaDP())
+            if vehCmpDescr is None:
+                return
+            if selectedQuest.isOnPause:
+                status = MISSIONS_STATES.IS_ON_PAUSE
+                icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ONPAUSE, 16, 16, -3, 8)
+                text = text_styles.playerOnline(INGAME_GUI.STATISTICS_TAB_QUESTS_STATUS_ONPAUSE)
+            elif selectedQuest.isAmongUsedQuestVehicle(vehCmpDescr):
+                status = MISSIONS_STATES.NOT_AVAILABLE
+                icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_CANCELICON_1, 16, 16, -3, 8)
+                text = text_styles.error(PERSONAL_MISSIONS_30.QUESTSTATUS_TOPLABELALREADYUSEDVEHICLE)
+            elif selectedQuest.hasCompletedUniqueBattleConditions(vehCmpDescr):
+                status = MISSIONS_STATES.FULL_COMPLETED
+                icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_DONE, 16, 16, -6, 8)
+                text = text_styles.successBright(PERSONAL_MISSIONS_30.QUESTSTATUS_TOPLABELCOMPLETED)
+            elif selectedQuest.hasCompletedAllMissionConditions(vehCmpDescr):
+                status = MISSIONS_STATES.FULL_COMPLETED
+                icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_DONE, 16, 16, -6, 8)
+                text = text_styles.successBright(PERSONAL_MISSIONS_30.QUESTSTATUS_TOPLABELCOMPLETEDFORBATTLE)
             else:
-                text = text_styles.neutral(INGAME_GUI.STATISTICS_TAB_QUESTS_STATUS_INPROGRESS)
-        statusLabel = text_styles.concatStylesToSingleLine(icon, text)
-        return {'statusLabel': statusLabel,
-         'status': status}
+                status = MISSIONS_STATES.IN_PROGRESS
+                icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_INPROGRESSICON, 16, 16, -2, 8)
+                if selectedQuest.isMainCompleted():
+                    text = text_styles.neutral(INGAME_GUI.STATISTICS_TAB_QUESTS_STATUS_INCREASERESULT)
+                else:
+                    text = text_styles.neutral(INGAME_GUI.STATISTICS_TAB_QUESTS_STATUS_INPROGRESS)
+            statusLabel = text_styles.concatStylesToSingleLine(icon, text)
+            return {'statusLabel': statusLabel,
+             'status': status}
 
     def __getTeamOverrides(self, vo, arenaDP):
         team = vo.team
@@ -439,13 +463,51 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
 
     def __onQuestProgressUpdate(self, progressID, conditionVO):
         self.as_updateQuestProgressS(progressID, conditionVO)
+        self.__updateQuestStatus(progressID, conditionVO)
 
     def __onFullConditionsUpdate(self, *args):
+        self.__updateQuestStatus()
+
+    def __updateQuestStatus(self, progressID=None, conditionVO=None):
+        if not self.__canDisplayPMMission(self.sessionProvider.getArenaDP()):
+            return
+        else:
+            vehCmpDescr = self.__getCurrentPlayerVehicleCmpDescr(self.sessionProvider.getArenaDP())
+            if vehCmpDescr is None:
+                return
+            questProgress = self.sessionProvider.shared.questProgress
+            selectedQuest = questProgress.getSelectedQuest()
+            if selectedQuest:
+                if progressID and conditionVO:
+                    selectedQuest.setMissionConditionState(vehCmpDescr, progressID, conditionVO.get('state', 0))
+                self.as_setQuestStatusS(self.__getStatusData(selectedQuest))
+            self.as_setQuestsInfoS(questProgress.getQuestFullData(vehCmpDescr), self.sessionProvider.isReplayPlaying)
+            return
+
+    def __onHeaderProgressesUpdate(self, *args):
+        if not self.__canDisplayPMMission(self.sessionProvider.getArenaDP()):
+            return
+        else:
+            vehCmpDescr = self.__getCurrentPlayerVehicleCmpDescr(self.sessionProvider.getArenaDP())
+            if vehCmpDescr is None:
+                return
+            self.as_updateQuestHeaderProgressS(self.sessionProvider.shared.questProgress.getQuestHeaderProgresses(vehCmpDescr))
+            return
+
+    def __clearMissionConditionState(self):
         questProgress = self.sessionProvider.shared.questProgress
         selectedQuest = questProgress.getSelectedQuest()
         if selectedQuest:
-            self.as_setQuestStatusS(self.__getStatusData(selectedQuest))
-        self.as_setQuestsInfoS(questProgress.getQuestFullData(), self.sessionProvider.isReplayPlaying)
+            selectedQuest.clearConditionState()
 
-    def __onHeaderProgressesUpdate(self, *args):
-        self.as_updateQuestHeaderProgressS(self.sessionProvider.shared.questProgress.getQuestHeaderProgresses())
+    def __doFullQuestUIUpdate(self):
+        if self.__isInited:
+            self.__setArenaDescription()
+            self.__updateQuestStatus()
+            self.__onHeaderProgressesUpdate()
+
+    def __getCurrentPlayerVehicleCmpDescr(self, arenaDP):
+        return arenaDP.getVehicleInfo().vehicleType.compactDescr if arenaDP else None
+
+    def __canDisplayPMMission(self, arenaDP):
+        return arenaDP.getPersonalDescription().isQuestEnabled() if arenaDP else False

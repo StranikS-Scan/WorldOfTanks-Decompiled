@@ -178,6 +178,10 @@
     <runTimeDeltaTwinGun>	2.0	</runTimeDeltaTwinGun>
     <caliber>	SWITCH_ext_rld_autoloader_caliber_85_107mm	</caliber>
   </twingun_reload85_107>
+  <stationary_reloading_85_107>
+    <type>	StationaryReloadReload	</type>
+    <barrel_reload>	reload_automat_reloading_85_107	</barrel_reload>
+  </stationary_reloading_85_107>
   <reload115_152>
     <type>	SimpleReload	</type>
     <duration>	2150.0	</duration>
@@ -226,6 +230,30 @@
     <runTimeDeltaTwinGun>	2.0	</runTimeDeltaTwinGun>
     <caliber>	SWITCH_ext_rld_autoloader_caliber_115_152mm	</caliber>
   </twingun_reload115_152>
+  <extra_shell_automat_reloading_115_152>
+    <type>	ExtraShotClipReload	</type>
+    <extraShellStart>	gui_abl_lastrld_start	</extraShellStart>
+    <extraShellFinish>	gui_abl_lastrld_finish	</extraShellFinish>
+    <extraShellFinishDt>	3.7	</extraShellFinishDt>
+    <extraShellduration>	8650	</extraShellduration>
+    <extraShellCancel>	gui_abl_lastrld_cancel	</extraShellCancel>
+    <extraShellStopUtility>	gui_abl_lastrld_stop_utility	</extraShellStopUtility>
+    <barrel_reload>	reload_automat_reloading_115_152	</barrel_reload>
+  </extra_shell_automat_reloading_115_152>
+  <chargeable_burst_reload115_152>
+    <type>	ChargeableBurstReload	</type>
+    <duration>	2150.0	</duration>
+    <sound>	gun_rld_115_152mm	</sound>
+    <burstReady>	gui_abl_chargeable_burst_ready	</burstReady>
+    <burstOneShellOffset>	1000.0	</burstOneShellOffset>
+    <burstOneShell>	gui_abl_chargeable_burst_load_oneshell	</burstOneShell>
+    <burstLastShellOffset>	300.0	</burstLastShellOffset>
+    <burstLastShell>	gui_abl_chargeable_burst_load_lastshell	</burstLastShell>
+    <intuition_overrides>
+      <duration>	1000.0	</duration>
+      <sound>	gun_rld_intuition_115_152mm	</sound>
+    </intuition_overrides>
+  </chargeable_burst_reload115_152>
   <reload155_170>
     <type>	SimpleReload	</type>
     <duration>	2100.0	</duration>

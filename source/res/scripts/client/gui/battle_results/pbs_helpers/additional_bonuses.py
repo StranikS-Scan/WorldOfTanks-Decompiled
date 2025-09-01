@@ -3,8 +3,9 @@
 import typing
 from constants import PREMIUM_TYPE
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as _CAPS
-from gui.impl.gen.view_models.views.lobby.battle_results.premium_plus_model import PremiumXpBonusRestriction
+from gui.impl.gen.view_models.views.lobby.battle_results.additional_bonus_model import PremiumXpBonusRestriction
 from gui.Scaleform.genConsts.BATTLE_RESULTS_PREMIUM_STATES import BATTLE_RESULTS_PREMIUM_STATES as BRPS
+from gui.battle_results.settings import FACTOR_VALUE
 from helpers import dependency
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.game_control import IWotPlusController
@@ -117,8 +118,8 @@ def getAdditionalXpBonusDiff(arenaUniqueID, battleResults=None):
 def getAdditionalXPFactor10FromResult(result, reusable):
     vehicleId = reusable.vehicles.getVehicleID(reusable.getPlayerInfo().dbID)
     vehicleInfo = reusable.vehicles.getVehicleInfo(vehicleId)
-    additionalXPFactor10 = result.get(vehicleInfo.intCD, {}).get('additionalXPFactor10', 1)
-    return int(additionalXPFactor10 / 10) if additionalXPFactor10 else 1
+    additionalXPFactor10 = result.get(vehicleInfo.intCD, {}).get('additionalXPFactor10', FACTOR_VALUE.ADDITIONAL_BONUS_ONE_FACTOR)
+    return int(additionalXPFactor10 / 10)
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext, itemsCache=IItemsCache)

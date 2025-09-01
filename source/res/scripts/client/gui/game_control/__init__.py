@@ -47,7 +47,6 @@ def getGameControllersConfig(manager):
     from gui.game_control.quests_controller import QuestsController as _Quests
     from gui.game_control.ranked_battles_controller import RankedBattlesController as _Ranked
     from gui.game_control.hangar_loading_controller import HangarLoadingController as _HangarLoading
-    from gui.game_control.epic_mode_controller import EpicModeController as _Epic
     from gui.game_control.hero_tank_controller import HeroTankController as _HeroTankController
     from gui.game_control.platoon_controller import PlatoonController as _PlatoonController
     from gui.game_control.epic_meta_game_ctrl import EpicBattleMetaGameController as _EpicMeta
@@ -77,6 +76,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.extension_stubs.resource_well_controller import ResourceWellController
     from gui.game_control.extension_stubs.fun_random_controller import FunRandomController
     from gui.game_control.extension_stubs.comp7_controller import Comp7Controller
+    from gui.game_control.extension_stubs.comp7_light_controller import Comp7LightController
     from gui.game_control.hangar_switch_controller import HangarSpaceSwitchController
     from gui.game_control.lootbox_system_controller import LootBoxSystemController
     from gui.entitlements.entitlements_controller import EntitlementsController
@@ -92,9 +92,11 @@ def getGameControllersConfig(manager):
     from gui.game_control.exchange_rates_with_discounts import ExchangeRatesWithDiscountsProvider
     from gui.game_control.fading_controller import FadingController
     from gui.game_control.easy_tank_equip_controller import EasyTankEquipController as _EasyTankEquipController
+    from gui.game_control.loadout_controller import LoadoutController
+    from gui.game_control.blur_controller import BlurController
     from gui.game_control.commendations_controller import CommendationsController
-    from gui.game_control.wot_anniversary_controller import WotAnniversaryController
-    from skeletons.gui.wot_anniversary import IWotAnniversaryController
+    from gui.game_control.vehicle_playlists_controller import VehiclePlaylistsController
+    from gui.game_control.crew_controller import CrewController
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -132,7 +134,6 @@ def getGameControllersConfig(manager):
     _config(_interface.IQuestsController, _Quests())
     _config(_interface.IHangarSpaceSwitchController, HangarSpaceSwitchController())
     _config(_interface.IRankedBattlesController, _Ranked())
-    _config(_interface.IEpicModeController, _Epic())
     _config(_interface.IHeroTankController, _HeroTankController())
     _config(_interface.IPlatoonController, _PlatoonController())
     _config(_interface.IMarathonEventsController, _MarathonEventsController())
@@ -151,6 +152,7 @@ def getGameControllersConfig(manager):
     _config(_interface.IEventBattlesController, EventBattlesController())
     _config(_interface.IFunRandomController, FunRandomController())
     _config(_interface.IComp7Controller, Comp7Controller())
+    _config(_interface.IComp7LightController, Comp7LightController())
     _config(_interface.ISeasonsController, _Seasons())
     _config(_interface.IBadgesController, _Badges())
     _config(_interface.IAnonymizerController, _Anonymizer())
@@ -182,6 +184,9 @@ def getGameControllersConfig(manager):
     _config(_interface.IAchievements20EarningController, Achievements20EarningController())
     _config(_interface.IExchangeRatesWithDiscountsProvider, ExchangeRatesWithDiscountsProvider())
     _config(_interface.IFadingController, FadingController())
+    _config(_interface.ILoadoutController, LoadoutController())
+    _config(_interface.IBlurController, BlurController())
     _config(_interface.ICommendationsController, CommendationsController())
-    _config(IWotAnniversaryController, WotAnniversaryController())
+    _config(_interface.IVehiclePlaylistsController, VehiclePlaylistsController())
+    _config(_interface.ICrewController, CrewController())
     collectGameControllers(_config)

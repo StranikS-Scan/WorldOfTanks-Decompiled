@@ -1,8 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/battle_royale/select_respawn_view_model.py
-from frameworks.wulf import Array
+from frameworks.wulf import Array, ViewModel
 from gui.impl.gen import R
-from frameworks.wulf import ViewModel
 
 class SelectRespawnViewModel(ViewModel):
     __slots__ = ('onCompleteBtnClick', 'onSelectPoint')

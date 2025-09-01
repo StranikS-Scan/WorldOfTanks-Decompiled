@@ -42,6 +42,14 @@ class SchemaManager(BaseSchemaManager):
             _logger.debug('No such schema: %s.', schema.gpKey)
         return model
 
+    def updateSettings(self, serverSettings, diff):
+        diffCopy = dict(diff)
+        for key in diff:
+            if key in self._models:
+                serverSettings[key] = diffCopy.pop(key)
+
+        return diffCopy
+
     def clear(self):
         self._models.clear()
 

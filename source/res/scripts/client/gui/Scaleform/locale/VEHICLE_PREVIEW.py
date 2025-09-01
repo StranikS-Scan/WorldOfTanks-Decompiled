@@ -19,7 +19,7 @@ class VEHICLE_PREVIEW(object):
     HEADER_BACKBTN_DESCRLABEL_LUNAR_MARATHON_POST = '#vehicle_preview:header/backBtn/descrLabel/lunar_marathon_post'
     HEADER_BACKBTN_DESCRLABEL_MARATHON = '#vehicle_preview:header/backBtn/descrLabel/marathon'
     HEADER_BACKBTN_DESCRLABEL_RANKED = '#vehicle_preview:header/backBtn/descrLabel/ranked'
-    HEADER_BACKBTN_DESCRLABEL_VEHPOSTPROGRESSION = '#vehicle_preview:header/backBtn/descrLabel/vehPostProgression'
+    HEADER_BACKBTN_DESCRLABEL_SKILLTREEPRESTIGE = '#vehicle_preview:header/backBtn/descrLabel/skillTreePrestige'
     HEADER_BACKBTN_DESCRLABEL_BLUEPRINTSEXCHANGE = '#vehicle_preview:header/backBtn/descrLabel/blueprintsExchange'
     HEADER_BACKBTN_DESCRLABEL_RESOURCEWELL = '#vehicle_preview:header/backBtn/descrLabel/resourceWell'
     HEADER_BACKBTN_DESCRLABEL_BATTLEMATTERS = '#vehicle_preview:header/backBtn/descrLabel/battleMatters'
@@ -146,7 +146,7 @@ class VEHICLE_PREVIEW(object):
      HEADER_BACKBTN_DESCRLABEL_LUNAR_MARATHON_POST,
      HEADER_BACKBTN_DESCRLABEL_MARATHON,
      HEADER_BACKBTN_DESCRLABEL_RANKED,
-     HEADER_BACKBTN_DESCRLABEL_VEHPOSTPROGRESSION,
+     HEADER_BACKBTN_DESCRLABEL_SKILLTREEPRESTIGE,
      HEADER_BACKBTN_DESCRLABEL_BLUEPRINTSEXCHANGE,
      HEADER_BACKBTN_DESCRLABEL_RESOURCEWELL,
      HEADER_BACKBTN_DESCRLABEL_BATTLEMATTERS,

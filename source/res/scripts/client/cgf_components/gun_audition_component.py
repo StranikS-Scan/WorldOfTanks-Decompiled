@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/cgf_components/gun_audition_component.py
 import CGF
 from cgf_script.managers_registrator import autoregister, onAddedQuery
-from vehicle_systems.cgf_helpers import getVehicleEntityByGameObject
+from cgf_common.cgf_helpers import getVehicleEntityByGameObject
 from Vehicular import GunAudition
 
 @autoregister(presentInAllWorlds=True)

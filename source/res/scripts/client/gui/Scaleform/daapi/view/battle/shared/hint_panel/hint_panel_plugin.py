@@ -18,6 +18,7 @@ class HintPriority(object):
     RESERVES = 7
     RADAR = 8
     SIEGE = 9
+    PILLBOX = 10
 
 
 class HelpHintContext(object):
@@ -30,9 +31,10 @@ class HelpHintContext(object):
     COMMANDER_CAMERA = 'commanderCamera'
 
 
-HintData = namedtuple('HintData', ('vKey', 'key', 'messageLeft', 'messageRight', 'offsetX', 'offsetY', 'priority', 'reducedPanning', 'hintCtx', 'centeredMessage'))
+HintData = namedtuple('HintData', ('vKey', 'key', 'isKeyLong', 'messageLeft', 'messageRight', 'offsetX', 'offsetY', 'priority', 'reducedPanning', 'hintCtx', 'centeredMessage'))
 HintData.__new__.__defaults__ = ('',
  '',
+ False,
  '',
  '',
  0,

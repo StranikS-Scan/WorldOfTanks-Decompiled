@@ -12,7 +12,7 @@ from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery, onProc
 from constants import IS_CLIENT, IS_CGF_DUMP
 from helpers import dependency
 from hints.battle import manager as battleHintsModelsMgr
-from vehicle_systems.cgf_helpers import getVehicleEntityByGameObject
+from cgf_common.cgf_helpers import getVehicleEntityByGameObject
 from PlayerEvents import g_playerEvents
 from helpers import isPlayerAvatar
 if IS_CLIENT:

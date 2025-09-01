@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/battle_results/templates/comp7_templates.py
 from comp7.gui.battle_results.components import comp7_components
-from comp7.gui.battle_results.components import progress
-from comp7.gui.battle_results.components import shared as comp7_shared
+from comp7_core.gui.battle_results.components import comp7_core_components
+from comp7_core.gui.battle_results.components import progress
+from comp7_core.gui.battle_results.components import shared as comp7_shared
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_results.components import base, vehicles, shared, style
 from gui.battle_results.settings import BATTLE_RESULTS_RECORD as _RECORD
@@ -30,7 +31,7 @@ _COMMON_VO_META.addMeta({'comp7Rating': None})
 STATS_COMPONENT_NUMBER = 8
 COMPONENTS_TO_EXCLUDE = (STATS_COMPONENT_NUMBER,)
 COMP7_PERSONAL_STATS_BLOCK = REGULAR_PERSONAL_STATS_BLOCK.clone(*COMPONENTS_TO_EXCLUDE)
-COMP7_PERSONAL_STATS_BLOCK.addComponent(STATS_COMPONENT_NUMBER, comp7_components.PersonalVehiclesComp7StatsBlock(base.ListMeta(), 'statValues', _RECORD.PERSONAL))
+COMP7_PERSONAL_STATS_BLOCK.addComponent(STATS_COMPONENT_NUMBER, comp7_core_components.PersonalVehiclesComp7CoreStatsBlock(base.ListMeta(), 'statValues', _RECORD.PERSONAL))
 RATING_POINTS_BLOCK_NUMBER = COMP7_PERSONAL_STATS_BLOCK.getNextComponentIndex()
 COMP7_PERSONAL_STATS_BLOCK.addComponent(RATING_POINTS_BLOCK_NUMBER, comp7_components.PrestigePointsBlock(_PRESTIGE_POINTS_VO_META, 'prestigePoints', _RECORD.PERSONAL))
 COMP7_PERSONAL_STATS_BLOCK.addNextComponent(comp7_components.IsDeserterFlag('deserterStr', _RECORD.PERSONAL))
@@ -44,9 +45,9 @@ COMPONENTS_TO_EXCLUDE = (SORTING_COMPONENT_NUMBER,)
 COMP7_COMMON_STATS_BLOCK = REGULAR_COMMON_STATS_BLOCK.clone(*COMPONENTS_TO_EXCLUDE)
 TOURNAMENT_COMP7_COMMON_STATS_BLOCK = REGULAR_COMMON_STATS_BLOCK.clone(*COMPONENTS_TO_EXCLUDE)
 TRAINING_COMP7_COMMON_STATS_BLOCK = REGULAR_COMMON_STATS_BLOCK.clone(*COMPONENTS_TO_EXCLUDE)
-COMP7_COMMON_STATS_BLOCK.addComponent(SORTING_COMPONENT_NUMBER, comp7_shared.Comp7SortingBlock())
+COMP7_COMMON_STATS_BLOCK.addComponent(SORTING_COMPONENT_NUMBER, comp7_shared.Comp7CoreSortingBlock())
 COMP7_COMMON_STATS_BLOCK.addNextComponent(comp7_components.Comp7RankBlock(_RANK_COMMON_VO_META, 'comp7Rating', _RECORD.PERSONAL))
-COMP7_BATTLE_PASS_PROGRESS_STATS_BLOCK = progress.Comp7BattlePassProgressBlock(base.ListMeta(), 'battlePass', _RECORD.PERSONAL)
+COMP7_BATTLE_PASS_PROGRESS_STATS_BLOCK = progress.Comp7CoreBattlePassProgressBlock(base.ListMeta(), 'battlePass', _RECORD.PERSONAL)
 VEHICLE_STATS_BLOCK_VO_META = base.PropertyMeta((('shots', 0, 'shots'),
  ('hits', style.SlashedValuesBlock('hits'), 'hits'),
  ('explosionHits', 0, 'explosionHits'),
@@ -70,7 +71,7 @@ VEHICLE_STATS_BLOCK_VO_META = base.PropertyMeta((('shots', 0, 'shots'),
  ('healed', style.SlashedValuesBlock('healed'), 'healed'),
  ('capturedPointsOfInterest', 0, 'capturedPointsOfInterest'),
  ('roleSkillUsed', 0, 'roleSkillUsed')))
-VEHICLE_STATS_BLOCK_VO_META.bind(comp7_components.Comp7VehicleStatValuesBlock)
+VEHICLE_STATS_BLOCK_VO_META.bind(comp7_core_components.Comp7CoreVehicleStatValuesBlock)
 COMP7_TEAM_ITEM_VO_META = base.PropertyMeta((('achievements', shared.AchievementsBlock(base.ListMeta(), 'achievements'), 'achievements'),
  ('medalsCount', 0, 'achievementsCount'),
  ('vehicleStateStr', '', 'vehicleState'),
@@ -98,7 +99,7 @@ COMP7_TEAM_ITEM_VO_META = base.PropertyMeta((('achievements', shared.Achievement
  ('isOwnSquad', False, 'isPersonalSquad'),
  ('isTeamKiller', False, 'isTeamKiller'),
  ('isKilledByTeamKiller', False, 'isKilledByTeamKiller'),
- ('statValues', comp7_components.AllComp7VehicleStatValuesBlock(base.ListMeta(), 'statValues'), 'statValues'),
+ ('statValues', comp7_core_components.AllComp7CoreVehicleStatValuesBlock(base.ListMeta(), 'statValues'), 'statValues'),
  ('resourceCount', 0, 'fortResource'),
  ('rank', 0, 'rank'),
  ('rankIcon', '', 'rankIcon'),
@@ -110,8 +111,8 @@ COMP7_TEAM_ITEM_VO_META = base.PropertyMeta((('achievements', shared.Achievement
  ('suffixBadgeStripIcon', '', 'suffixBadgeStripIcon'),
  ('prestigePoints', 0, 'prestigePoints'),
  ('isSuperSquad', False, 'isSuperSquad')))
-COMP7_TEAM_ITEM_VO_META.bind(comp7_components.Comp7VehicleStatsBlock)
+COMP7_TEAM_ITEM_VO_META.bind(comp7_core_components.Comp7CoreVehicleStatsBlock)
 COMP7_TEAMS_STATS_BLOCK = vehicles.TwoTeamsStatsBlock(TEAMS_VO_META, '', _RECORD.VEHICLES)
-COMP7_TEAMS_STATS_BLOCK.addNextComponent(comp7_components.Comp7TeamStatsBlock(meta=base.ListMeta(), field='team1'))
-COMP7_TEAMS_STATS_BLOCK.addNextComponent(comp7_components.Comp7TeamStatsBlock(meta=base.ListMeta(), field='team2'))
-EFFICIENCY_TITLE_WITH_SKILLS_VO = comp7_components.EfficiencyTitleWithSkills('efficiencyTitle')
+COMP7_TEAMS_STATS_BLOCK.addNextComponent(comp7_core_components.Comp7CoreTeamStatsBlock(meta=base.ListMeta(), field='team1'))
+COMP7_TEAMS_STATS_BLOCK.addNextComponent(comp7_core_components.Comp7CoreTeamStatsBlock(meta=base.ListMeta(), field='team2'))
+EFFICIENCY_TITLE_WITH_SKILLS_VO = comp7_core_components.EfficiencyTitleWithSkills('efficiencyTitle')

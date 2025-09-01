@@ -148,6 +148,9 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.r
  (_AB.TOTAL, 'readyForBattleAllianceGermany'): _CustomAchieveFactory.get(_as.ready_for_battle.ReadyForBattleAllianceGermanyAchievement),
  (_AB.TOTAL, 'readyForBattleAllianceUSA'): _CustomAchieveFactory.get(_as.ready_for_battle.ReadyForBattleAllianceUSAAchievement),
  (_AB.TOTAL, 'readyForBattleAllianceFrance'): _CustomAchieveFactory.get(_as.ready_for_battle.ReadyForBattleAllianceFranceAchievement),
+ (_AB.TOTAL, 'readyForBattleAssault'): _CustomAchieveFactory.get(_as.ready_for_battle.ReadyForBattleAssault),
+ (_AB.TOTAL, 'readyForBattleSniper'): _CustomAchieveFactory.get(_as.ready_for_battle.ReadyForBattleSniper),
+ (_AB.TOTAL, 'readyForBattleSupport'): _CustomAchieveFactory.get(_as.ready_for_battle.ReadyForBattleSupport),
  (_AB.TOTAL, 'testartilleryman'): _AchieveFactory.get(_as.regular.Achieved),
  (_AB.TOTAL, 'EFC2016Goleador'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
  (_AB.TOTAL, 'markIBomberman'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
@@ -389,7 +392,7 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.r
  (_AB.SINGLE, 'BattlePassCommonPr_17extra_1'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'BattlePassCommonPr_17extra_2'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'BattlePassCommonPr_17extra_3'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
- (_AB.SINGLE, 'BPReserveAchievement_5'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'BattlePassCommonPr_18'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'BPReserveAchievement_6'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'BPReserveAchievement_7'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'BPReserveAchievement_8'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
@@ -499,8 +502,22 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.r
  (_AB.SINGLE, 'NY25_CelebChallenge'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'vDayHero'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'ls2025Medal'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'comp7_5_1'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'comp7_5_2'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'comp7_5_3'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'comp7_5_yearly_iron'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'comp7_5_yearly_bronze'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'comp7_5_yearly_silver'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'comp7_5_yearly_gold'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'comp7_5_yearly_champion'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'comp7_5_yearly_legend'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'ls2_0Medal'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'sccHero'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'wot15thAnniversary'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
- (_AB.SINGLE, 'wot15thAnniversaryElite'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement)}
+ (_AB.SINGLE, 'wot15thAnniversaryElite'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'wt2025progression'): _AchieveFactory.get(_abstract_achievements.RegularAchievement),
+ (_AB.SINGLE, 'twoPointZeroMedal'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'twoPointZeroCollectorMedal'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement)}
 for _nID, _ in enumerate(nations.NAMES):
     _ACHIEVEMENTS_BY_NAME[_AB.TOTAL, 'tankExpert%d' % _nID] = _NationAchieveFactory.get(_as.nation_specific.TankExpertAchievement, _nID)
     _ACHIEVEMENTS_BY_NAME[_AB.TOTAL, 'mechanicEngineer%d' % _nID] = _NationAchieveFactory.get(_as.nation_specific.MechEngineerAchievement, _nID)

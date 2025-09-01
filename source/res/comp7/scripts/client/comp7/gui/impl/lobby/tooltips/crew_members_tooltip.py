@@ -8,7 +8,7 @@ from gui.impl.pub import ViewImpl
 class CrewMembersTooltip(ViewImpl):
     __slots__ = ()
 
-    def __init__(self, layoutID=R.views.comp7.lobby.tooltips.CrewMembersTooltip()):
+    def __init__(self, layoutID=R.views.comp7.mono.lobby.tooltips.crew_members_tooltip()):
         settings = ViewSettings(layoutID)
         settings.model = CrewMembersTooltipModel()
         super(CrewMembersTooltip, self).__init__(settings)

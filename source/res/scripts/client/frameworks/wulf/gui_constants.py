@@ -99,18 +99,6 @@ class WindowLayer(CONST_CONTAINER):
     WAITING = 16
 
 
-class PropertyType(CONST_CONTAINER):
-    NONE = 0
-    NUMBER = 1
-    REAL = 2
-    BOOL = 3
-    STRING = 4
-    VIEW_MODEL = 5
-    VIEW = 6
-    RESOURCE = 7
-    ARRAY = 8
-
-
 class PositionAnchor(CONST_CONTAINER):
     LEFT = 0
     RIGHT = 1

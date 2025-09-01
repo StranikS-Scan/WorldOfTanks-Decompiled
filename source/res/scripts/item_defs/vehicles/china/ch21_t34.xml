@@ -59,7 +59,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	15000	</weight>
-    <maxHealth>	472	</maxHealth>
+    <maxHealth>	520	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	130	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
@@ -1075,11 +1075,10 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	7800	</weight>
-      <maxLoad>	29000	</maxLoad>
-      <terrainResistance>	1.2 1.5 2.3	</terrainResistance>
+      <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
       <brakeForce>	33000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	40	</rotationSpeed>
+      <rotationSpeed>	45	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.24	</vehicleMovement>
         <vehicleRotation>	0.24	</vehicleRotation>
@@ -1958,11 +1957,10 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	7800	</weight>
-      <maxLoad>	32000	</maxLoad>
       <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
       <brakeForce>	36500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	42	</rotationSpeed>
+      <rotationSpeed>	47	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.22	</vehicleMovement>
         <vehicleRotation>	0.22	</vehicleRotation>
@@ -2855,21 +2853,21 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4300	</weight>
-      <maxHealth>	88	</maxHealth>
+      <maxHealth>	100	</maxHealth>
       <rotationSpeed>	46	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	320	</circularVisionRadius>
+      <circularVisionRadius>	340	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	70	</maxHealth>
         <maxRegenHealth>	35	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_76mm_F-34>	shared	  <maxAmmo>	120	</maxAmmo>
+        <_76mm_F_34>	shared	  <maxAmmo>	120	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
@@ -2883,11 +2881,11 @@
             </armor_6>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <reloadTime>	3.8	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
+            <turretRotation>	0.14	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2945,7 +2943,7 @@
             <density>	142.644 149.806	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_76mm_F-34>
+        </_76mm_F_34>
       </guns>
       <models>
         <undamaged>	vehicles/chinese/Ch21_T34/normal/lod0/Turret_01.model	</undamaged>
@@ -3438,10 +3436,8 @@
       <level>	5	</level>
       <price>	10000	</price>
       <unlocks>
-        <gun>	_57mm_55-57FG	  <cost>	2400	</cost>
+        <gun>	_57mm_55_57FG	  <cost>	2400	</cost>
         </gun>
-        <vehicle>	Ch20_Type58	  <cost>	33000	</cost>
-        </vehicle>
       </unlocks>
       <armor>
         <armor_1>	52	</armor_1>
@@ -3459,7 +3455,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4500	</weight>
-      <maxHealth>	118	</maxHealth>
+      <maxHealth>	130	</maxHealth>
       <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -3473,7 +3469,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_76mm_F-34>	shared	  <maxAmmo>	120	</maxAmmo>
+        <_76mm_F_34>	shared	  <maxAmmo>	120	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
@@ -3487,14 +3483,14 @@
             </armor_6>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <reloadTime>	3.8	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.2	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/chinese/Ch21_T34/normal/lod0/Gun_02.model	</undamaged>
@@ -3549,13 +3545,15 @@
             <density>	142.644 149.806	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_76mm_F-34>
-        <_57mm_55-57FG>	shared	  <maxAmmo>	120	</maxAmmo>
+        </_76mm_F_34>
+        <_57mm_55_57FG>	shared	  <maxAmmo>	120	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
           <unlocks>
+            <vehicle>	Ch20_Type58	  <cost>	33000	</cost>
+            </vehicle>
             <vehicle>	Ch15_59_16	  <cost>	31000	</cost>
             </vehicle>
           </unlocks>
@@ -3630,7 +3628,7 @@
             <density>	144.459 162.531	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_57mm_55-57FG>
+        </_57mm_55_57FG>
       </guns>
       <models>
         <undamaged>	vehicles/chinese/Ch21_T34/normal/lod0/Turret_02.model	</undamaged>
@@ -4110,47 +4108,42 @@
     </Turret_2_Ch21_T34>
   </turrets0>
   <engines>
-    <V-2>	shared	  <unlocks>
-        <engine>	V-2-34	  <cost>	5000	</cost>
+    <V_2>	shared	  <unlocks>
+        <engine>	V_2_34	  <cost>	5000	</cost>
         </engine>
       </unlocks>
-    </V-2>
-    <V-2-34>	shared	</V-2-34>
+    </V_2>
+    <V_2_34>	shared	</V_2_34>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <_9R>	shared	  <unlocks>
-        <radio>	_9RM_shop	  <cost>	4040	</cost>
-        </radio>
-      </unlocks>
-    </_9R>
     <_9RM_shop>	shared	</_9RM_shop>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <V-2>
-          <smplEnginePower>	507.4949	</smplEnginePower>
+        <V_2>
+          <smplEnginePower>	520	</smplEnginePower>
           <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
-        </V-2>
-        <V-2-34>
-          <smplEnginePower>	528.6406	</smplEnginePower>
+        </V_2>
+        <V_2_34>
+          <smplEnginePower>	540	</smplEnginePower>
           <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
-        </V-2-34>
+        </V_2_34>
       </engines>
       <chassis>
         <Chassis_Ch21_T34>
           <grounds>
             <soft>
-              <rollingFriction>	0.18515	</rollingFriction>
+              <rollingFriction>	0.16905	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.12075	</rollingFriction>
+              <rollingFriction>	0.10465	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0966	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_Ch21_T34>

@@ -3,10 +3,11 @@
 import logging
 from constants import ARENA_GUI_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG
+from gui.armor_flashlight.battle_controller import ArmorFlashlightBattleController
 from gui.battle_control.arena_info.interfaces import IArenaController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID, REUSABLE_BATTLE_CTRL_IDS, getBattleCtrlName
 from gui.battle_control.controllers import aiming_sounds_ctrl
-from gui.battle_control.controllers import arena_border_ctrl, arena_load_ctrl, battle_field_ctrl, avatar_stats_ctrl, chat_cmd_ctrl, consumables, debug_ctrl, drr_scale_ctrl, dyn_squad_functional, feedback_adaptor, game_messages_ctrl, hit_direction_ctrl, interfaces, msgs_ctrl, period_ctrl, personal_efficiency_ctrl, respawn_ctrl, team_bases_ctrl, vehicle_state_ctrl, view_points_ctrl, ingame_help_ctrl, spectator_ctrl, default_maps_ctrl, anonymizer_fakes_ctrl, game_restrictions_msgs_ctrl, callout_ctrl, deathzones_ctrl, dog_tags_ctrl, team_health_bar_ctrl, battle_notifier_ctrl, prebattle_setups_ctrl, perk_ctrl, kill_cam_ctrl, commendations_messages_ctrl, wot_anniversary_veteran_ctrl
+from gui.battle_control.controllers import arena_border_ctrl, arena_load_ctrl, battle_field_ctrl, avatar_stats_ctrl, chat_cmd_ctrl, consumables, debug_ctrl, drr_scale_ctrl, dyn_squad_functional, feedback_adaptor, game_messages_ctrl, hit_direction_ctrl, interfaces, msgs_ctrl, period_ctrl, personal_efficiency_ctrl, respawn_ctrl, team_bases_ctrl, vehicle_state_ctrl, view_points_ctrl, ingame_help_ctrl, spectator_ctrl, vehicle_passenger, default_maps_ctrl, anonymizer_fakes_ctrl, game_restrictions_msgs_ctrl, callout_ctrl, deathzones_ctrl, dog_tags_ctrl, team_health_bar_ctrl, battle_notifier_ctrl, prebattle_setups_ctrl, perk_ctrl, kill_cam_ctrl, commendations_messages_ctrl
 from gui.battle_control.controllers import map_zones_ctrl
 from gui.battle_control.controllers import points_of_interest_ctrl
 from gui.battle_control.controllers.appearance_cache_ctrls.default_appearance_cache_ctrl import DefaultAppearanceCacheController
@@ -110,6 +111,10 @@ class SharedControllersLocator(_ControllersLocator, ISharedControllersLocator):
         return self._repository.getController(BATTLE_CTRL_ID.OBSERVED_VEHICLE_STATE)
 
     @property
+    def vehiclePassenger(self):
+        return self._repository.getController(BATTLE_CTRL_ID.VEHICLE_PASSENGER_CTRL)
+
+    @property
     def hitDirection(self):
         return self._repository.getController(BATTLE_CTRL_ID.HIT_DIRECTION)
 
@@ -204,6 +209,10 @@ class SharedControllersLocator(_ControllersLocator, ISharedControllersLocator):
     @property
     def battleSpamCtrl(self):
         return self._repository.getController(BATTLE_CTRL_ID.BATTLE_SPAM_CTRL)
+
+    @property
+    def armorFlashlight(self):
+        return self._repository.getController(BATTLE_CTRL_ID.ARMOR_FLASHLIGHT)
 
 
 class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator):
@@ -406,6 +415,7 @@ class SharedControllersRepository(_ControllersRepository):
         repository.addController(cls.getOptionalDevicesController(setup))
         state = vehicle_state_ctrl.createCtrl(setup)
         repository.addController(state)
+        repository.addController(vehicle_passenger.createVehiclePassengerController(state))
         repository.addController(avatar_stats_ctrl.AvatarStatsController())
         messages = cls.getMessagesController(setup)
         feedback = feedback_adaptor.createFeedbackAdaptor(setup)
@@ -433,12 +443,12 @@ class SharedControllersRepository(_ControllersRepository):
         repository.addViewController(spectator_ctrl.SpectatorViewController(), setup)
         repository.addArenaController(cls.getAreaMarkersController(), setup)
         repository.addArenaController(deathzones_ctrl.DeathZonesController(), setup)
-        repository.addArenaController(wot_anniversary_veteran_ctrl.createWotAnniversaryVeteranController(), setup)
         repository.addController(AutoShootControllerFactory.createAutoShootController(setup))
         repository.addController(ingame_help_ctrl.IngameHelpController(setup))
         repository.addController(map_zones_ctrl.MapZonesController(setup))
         repository.addController(battle_spam_ctrl.BattleSpamController())
         repository.addController(aiming_sounds_ctrl.AimingSoundsCtrl())
+        repository.addArenaController(ArmorFlashlightBattleController(), setup)
         return repository
 
     @classmethod

@@ -1,17 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/feedback_adaptor.py
+import typing
 import weakref
 from collections import namedtuple
 import BigWorld
 import Event
 import TriggersManager
 import feedback_events
-from constants import VEHICLE_HIT_EFFECT
+from constants import DEFAULT_GUN_INSTALLATION_INDEX, VEHICLE_HIT_EFFECT
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _FET, BATTLE_CTRL_ID
 from gui.battle_control.controllers.interfaces import IBattleController
 from vehicle_systems.tankStructure import TankPartNames
+if typing.TYPE_CHECKING:
+    from chat_commands_consts import MarkerType
 FEEDBACK_TO_TRIGGER_ID = {_FET.VEHICLE_VISIBILITY_CHANGED: TriggersManager.TRIGGER_TYPE.PLAYER_DETECT_ENEMY}
 EntityInFocusData = namedtuple('EntityInFocusData', ['isInFocus', 'entityTypeInFocus'])
 _CELL_BLINKING_DURATION = 3.0
@@ -43,7 +46,7 @@ class _DamagedDevicesExtraFetcher(object):
 
 
 class BattleFeedbackAdaptor(IBattleController):
-    __slots__ = ('onPlayerFeedbackReceived', 'onPlayerSummaryFeedbackReceived', 'onPostmortemSummaryReceived', 'onVehicleMarkerAdded', 'onVehicleMarkerRemoved', 'onVehicleFeedbackReceived', 'onMinimapVehicleAdded', 'onMinimapVehicleRemoved', 'onRoundFinished', 'onDevelopmentInfoSet', 'onStaticMarkerAdded', 'onStaticMarkerRemoved', 'onReplyFeedbackReceived', 'onRemoveCommandReceived', 'setInFocusForPlayer', 'onMinimapFeedbackReceived', 'onVehicleDetected', 'onActionAddedToMarkerReceived', 'onDiscreteShotDone', 'onAddCommandReceived', 'setGoals', 'destroyGoal', 'onLocalKillGoalsUpdated', 'onEnemySPGShotReceived', '__arenaDP', '__visible', '__pending', '__attrs', '__weakref__', '__arenaVisitor', '__devInfo', '__eventsCache', '__eManager')
+    __slots__ = ('onPlayerFeedbackReceived', 'onPlayerSummaryFeedbackReceived', 'onPostmortemSummaryReceived', 'onVehicleMarkerAdded', 'onVehicleMarkerRemoved', 'onVehicleFeedbackReceived', 'onMinimapVehicleAdded', 'onMinimapVehicleRemoved', 'onRoundFinished', 'onDevelopmentInfoSet', 'onStaticMarkerAdded', 'onStaticMarkerRemoved', 'onReplyFeedbackReceived', 'onRemoveCommandReceived', 'setInFocusForPlayer', 'onMinimapFeedbackReceived', 'onVehicleDetected', 'onActionAddedToMarkerReceived', 'onDiscreteShotsDone', 'onAddCommandReceived', 'setGoals', 'destroyGoal', 'onLocalKillGoalsUpdated', 'onEnemySPGShotReceived', '__arenaDP', '__visible', '__pending', '__attrs', '__weakref__', '__arenaVisitor', '__devInfo', '__eventsCache', '__eManager')
 
     def __init__(self, setup):
         super(BattleFeedbackAdaptor, self).__init__()
@@ -69,7 +72,7 @@ class BattleFeedbackAdaptor(IBattleController):
         self.onStaticMarkerAdded = Event.Event(self.__eManager)
         self.onStaticMarkerRemoved = Event.Event(self.__eManager)
         self.onRoundFinished = Event.Event(self.__eManager)
-        self.onDiscreteShotDone = Event.Event(self.__eManager)
+        self.onDiscreteShotsDone = Event.Event(self.__eManager)
         self.onReplyFeedbackReceived = Event.Event(self.__eManager)
         self.onRemoveCommandReceived = Event.Event(self.__eManager)
         self.onAddCommandReceived = Event.Event(self.__eManager)
@@ -299,13 +302,13 @@ class BattleFeedbackAdaptor(IBattleController):
         self.onVehicleFeedbackReceived(_FET.VEHICLE_RECOVERY_KEY_PRESSED, vehicleID, None)
         return
 
-    def updateMarkerHitState(self, vehicleID, eventID=None, maxDamagedComponent=0, maxHitEffectCode=0, damage=0, damageFactor=0, lastMaterialIsArmorScreen=False, hasPiercedHit=False):
+    def updateMarkerHitState(self, vehicleID, eventID=None, maxDamagedComponent=0, maxHitEffectCode=0, gunInstallationIndex=DEFAULT_GUN_INSTALLATION_INDEX, damage=0, damageFactor=0, lastMaterialIsArmorScreen=False, hasPiercedHit=False):
         if lastMaterialIsArmorScreen and not damageFactor and maxHitEffectCode not in VEHICLE_HIT_EFFECT.RICOCHETS:
             eventID = self.__getArmorScreenHitResultEventID(vehicleID, maxDamagedComponent, hasPiercedHit)
         elif eventID is None:
             eventID = self.__getHitResultEventID(maxDamagedComponent, maxHitEffectCode, hasPiercedHit, damageFactor)
         if vehicleID != avatar_getter.getPlayerVehicleID():
-            self.onVehicleFeedbackReceived(eventID, vehicleID, damage)
+            self.onVehicleFeedbackReceived(eventID, vehicleID, (gunInstallationIndex, damage))
         return
 
     def showVehicleMarker(self, showVehicleID):

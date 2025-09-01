@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/array_providers/battle_booster.py
+from CurrentVehicle import g_currentVehicle
 from gui.impl.gen.view_models.constants.item_highlight_types import ItemHighlightTypes
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.base_slot_model import BaseSlotModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.battle_booster_slot_model import BattleBoosterSlotModel
@@ -81,7 +82,9 @@ class CrewBattleBoosterProvider(BaseBattleBoosterProvider):
 
     def _fillHighlights(self, model, item):
         super(CrewBattleBoosterProvider, self)._fillHighlights(model, item)
-        if not item.isAffectedSkillLearnt(self._getVehicle()) and not item.isBuiltinPerkBooster():
+        if not g_currentVehicle.isPresent():
+            return
+        if not item.isAffectedSkillLearnt(g_currentVehicle.item) and not item.isBuiltinPerkBooster():
             model.setOverlayType(ItemHighlightTypes.BATTLE_BOOSTER_REPLACE)
 
     def _fillDescription(self, model, item):

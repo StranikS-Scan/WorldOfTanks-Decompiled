@@ -7,10 +7,8 @@ import adisp
 from BattleReplay import g_replayCtrl, CallbackDataNames
 import BigWorld
 import Event
-import WWISE
 from CurrentVehicle import g_currentPreviewVehicle
-from PlayerEvents import g_playerEvents
-from constants import ARENA_BONUS_TYPE, REQUEST_COOLDOWN
+from constants import REQUEST_COOLDOWN
 from gui.impl.lobby.maps_training.maps_training_client_settings import MapsTrainingClientSettings
 from gui.impl.lobby.maps_training.sound_constants import MapsTrainingSound
 from gui.prb_control.entities.base.ctx import PrbAction
@@ -21,21 +19,21 @@ from maps_training_common.helpers import unpackMapsTrainingScenarios, unpackMaps
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
 from wotdecorators import condition
 from AccountCommands import isCodeValid
 from debug_utils import LOG_ERROR
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME
-from gui.shared import events, EVENT_BUS_SCOPE, g_eventBus
 from items import vehicles
-from gui.shared import event_dispatcher
+from gui.shared import event_dispatcher, g_eventBus, events, EVENT_BUS_SCOPE
 from skeletons.gui.game_control import IMapsTrainingController
 
 class MapsTrainingController(IMapsTrainingController, IGlobalListener):
     lobbyContext = dependency.descriptor(ILobbyContext)
     c11nService = dependency.descriptor(ICustomizationService)
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    __itemsCache = dependency.descriptor(IItemsCache)
     ifEnabled = condition('isMapsTrainingEnabled')
     ifMapsTrainingPrbActive = condition('isMapsTrainingPrbActive')
     _UNDEFINED_VALUE = -1
@@ -67,16 +65,6 @@ class MapsTrainingController(IMapsTrainingController, IGlobalListener):
 
     @ifEnabled
     @ifMapsTrainingPrbActive
-    def showMapsTrainingPage(self, ctx=None):
-        if ctx is None:
-            ctx = self.getPageCtx()
-        event_dispatcher.showMapsTrainingPage(ctx)
-        self.__exitSoundStateSet = False
-        WWISE.WW_setState(MapsTrainingSound.GAMEMODE_GROUP, MapsTrainingSound.GAMEMODE_STATE)
-        return
-
-    @ifEnabled
-    @ifMapsTrainingPrbActive
     def showMapsTrainingQueue(self):
         event_dispatcher.showMapsTrainingQueue()
 
@@ -86,9 +74,7 @@ class MapsTrainingController(IMapsTrainingController, IGlobalListener):
         if dispatcher is None:
             return
         else:
-            isSuccess = yield dispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.MAPS_TRAINING))
-            if isSuccess:
-                self.showMapsTrainingPage()
+            yield dispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.MAPS_TRAINING))
             return
 
     @adisp.adisp_process
@@ -155,6 +141,7 @@ class MapsTrainingController(IMapsTrainingController, IGlobalListener):
         g_replayCtrl.setDataCallback(CallbackDataNames.MT_CONFIG_CALLBACK, self.__restoreConfigFromReplay)
 
     def fini(self):
+        self.__clear()
         g_replayCtrl.delDataCallback(CallbackDataNames.MT_CONFIG_CALLBACK, self.__restoreConfigFromReplay)
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         super(MapsTrainingController, self).fini()
@@ -162,23 +149,23 @@ class MapsTrainingController(IMapsTrainingController, IGlobalListener):
     def onEnter(self):
         self.__preferences.load()
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
-        g_playerEvents.onDisconnected += self.__onDisconnected
         self.c11nService.onVisibilityChanged += self.__onC11nVisibilityChanged
-        if self.__isAfterBattle():
-            battleCtx = self.sessionProvider.getCtx()
-            event_dispatcher.showMapsTrainingResultsWindow(battleCtx.lastArenaUniqueID, False)
-        else:
-            g_eventBus.addListener(events.ViewEventType.LOAD_VIEW, self.__viewLoaded, EVENT_BUS_SCOPE.LOBBY)
-            self.showMapsTrainingPage()
 
     def onExit(self):
         self.setExitSoundState()
         self.reset()
         self.__preferences.resetSessionFilters()
         g_currentPreviewVehicle.resetAppearance()
-        g_playerEvents.onDisconnected -= self.__onDisconnected
-        g_eventBus.removeListener(events.ViewEventType.LOAD_VIEW, self.__viewLoaded, EVENT_BUS_SCOPE.LOBBY)
         self.c11nService.onVisibilityChanged -= self.__onC11nVisibilityChanged
+
+    def onDisconnected(self):
+        self.__clear()
+        self.__preferences.resetSessionFilters()
+        self.reset()
+
+    def onLobbyInited(self, event):
+        super(MapsTrainingController, self).onLobbyInited(event)
+        g_eventBus.addListener(events.HangarVehicleEvent.SELECT_VEHICLE_IN_HANGAR, self.__onSelectVehicleInHangar, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def getConfig(self):
         return self.__config
@@ -186,12 +173,14 @@ class MapsTrainingController(IMapsTrainingController, IGlobalListener):
     def onAccountBecomeNonPlayer(self):
         self.__replayConfigStored = False
 
+    def onAvatarBecomePlayer(self):
+        self.__clear()
+
     def setExitSoundState(self):
         if not self.__exitSoundStateSet:
             if self.__mapGeometryID == self._UNDEFINED_VALUE:
                 MapsTrainingSound.onSelectedMap(True)
             self.__exitSoundStateSet = True
-            WWISE.WW_setState(MapsTrainingSound.GAMEMODE_GROUP, MapsTrainingSound.GAMEMODE_DEFAULT)
 
     def requestInitialDataFromServer(self, callback=None):
         if g_replayCtrl.isRecording and not self.__replayConfigStored:
@@ -212,15 +201,16 @@ class MapsTrainingController(IMapsTrainingController, IGlobalListener):
          'vehicleType': getVehicleClass(self.__vehCompDescr) if self.__vehCompDescr != self._UNDEFINED_VALUE else '',
          'side': self.__team}
 
-    def __isAfterBattle(self):
-        battleCtx = self.sessionProvider.getCtx()
-        return bool(battleCtx.lastArenaUniqueID) and battleCtx.lastArenaBonusType == ARENA_BONUS_TYPE.MAPS_TRAINING
+    def __clear(self):
+        g_eventBus.removeListener(events.HangarVehicleEvent.SELECT_VEHICLE_IN_HANGAR, self.__onSelectVehicleInHangar, scope=EVENT_BUS_SCOPE.LOBBY)
 
-    @ifEnabled
-    @ifMapsTrainingPrbActive
-    def __viewLoaded(self, event):
-        if event.alias == VIEW_ALIAS.LOBBY_HANGAR and not self.__isAfterBattle():
-            self.showMapsTrainingPage()
+    def __onSelectVehicleInHangar(self, event):
+        if not self.isMapsTrainingPrbActive:
+            return
+        vehicleInvID = event.ctx['vehicleInvID']
+        vehicle = self.__itemsCache.items.getVehicle(vehicleInvID)
+        if vehicle:
+            self.selectRandomMode()
 
     def __processConfiguration(self, callback, code, errStr, value):
         if not isCodeValid(code):
@@ -270,10 +260,6 @@ class MapsTrainingController(IMapsTrainingController, IGlobalListener):
         if not diff.get('isMapsTrainingEnabled', True):
             if self.isMapsTrainingPrbActive and not self.prbEntity.isInQueue():
                 BigWorld.callback(0, self.selectRandomMode)
-
-    def __onDisconnected(self):
-        self.__preferences.resetSessionFilters()
-        self.reset()
 
     def __onC11nVisibilityChanged(self, inCustomisation):
         if inCustomisation and g_currentPreviewVehicle.isPresent():

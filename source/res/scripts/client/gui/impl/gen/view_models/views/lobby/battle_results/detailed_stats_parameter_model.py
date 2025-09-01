@@ -6,14 +6,14 @@ from gui.impl.gen.view_models.views.lobby.battle_results.simple_stats_parameter_
 class DetailedStatsParameterModel(SimpleStatsParameterModel):
     __slots__ = ()
 
-    def __init__(self, properties=4, commands=0):
+    def __init__(self, properties=5, commands=0):
         super(DetailedStatsParameterModel, self).__init__(properties=properties, commands=commands)
 
     def getDetails(self):
-        return self._getArray(3)
+        return self._getArray(4)
 
     def setDetails(self, value):
-        self._setArray(3, value)
+        self._setArray(4, value)
 
     @staticmethod
     def getDetailsType():

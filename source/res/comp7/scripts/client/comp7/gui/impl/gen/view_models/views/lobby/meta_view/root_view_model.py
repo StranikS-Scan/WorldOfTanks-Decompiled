@@ -14,9 +14,9 @@ from comp7.gui.impl.gen.view_models.views.lobby.meta_view.sidebar_model import S
 from comp7.gui.impl.gen.view_models.views.lobby.schedule_info_model import ScheduleInfoModel
 
 class RootViewModel(ViewModel):
-    __slots__ = ('onClose', 'onInfoPageOpen', 'onWhatsNewScreenOpen')
+    __slots__ = ('onClose',)
 
-    def __init__(self, properties=11, commands=3):
+    def __init__(self, properties=11, commands=1):
         super(RootViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -119,5 +119,3 @@ class RootViewModel(ViewModel):
         self._addViewModelProperty('claimRewardsModel', ClaimRewardsModel())
         self._addNumberProperty('pageViewId')
         self.onClose = self._addCommand('onClose')
-        self.onInfoPageOpen = self._addCommand('onInfoPageOpen')
-        self.onWhatsNewScreenOpen = self._addCommand('onWhatsNewScreenOpen')

@@ -66,20 +66,14 @@ class _StateWaiting(object):
 
 
 class BaseState(State):
-    __slots__ = ('_entered', '_waiting')
+    __slots__ = ('_waiting',)
 
     def __init__(self, stateID, flags=StateFlags.UNDEFINED):
         super(BaseState, self).__init__(stateID=stateID, flags=flags)
-        self._entered = False
         self._waiting = None
         return
 
-    @property
-    def isEntered(self):
-        return self._entered
-
     def clear(self):
-        self._entered = False
         if self._waiting is not None:
             self._waiting.onStateClear()
             self._waiting = None
@@ -112,15 +106,13 @@ class BaseState(State):
             self._waiting.reset()
         return
 
-    def _onEntered(self):
-        super(BaseState, self)._onEntered()
-        self._entered = True
+    def _onEntered(self, event):
+        super(BaseState, self)._onEntered(event)
         if self._waiting is not None:
             self._waiting.onStateEnter()
         return
 
     def _onExited(self):
-        self._entered = False
         if self._waiting is not None:
             self._waiting.onStateExit()
         super(BaseState, self)._onExited()
@@ -150,7 +142,7 @@ class BaseTickingState(BaseState):
         super(BaseTickingState, self).clear()
 
     def manualTick(self, stepNumber=0):
-        if self._stopped or not self._entered:
+        if self._stopped or not self.isEntered():
             return
         if self._tickingMode == TickingMode.SELF_TICKING:
             _logger.warning('[%s] Manual tick on self ticking state.', self)
@@ -159,7 +151,7 @@ class BaseTickingState(BaseState):
         self._runTick()
 
     def _start(self, *args, **kwargs):
-        if not self._entered:
+        if not self.isEntered():
             _logger.debug('[%s] can not start not entered state.', self)
             return
         elif not self._stopped:
@@ -202,8 +194,8 @@ class BaseTickingState(BaseState):
             self._nextTickTime = time.time() + nextTickDelay
             return nextTickDelay
 
-    def _onEntered(self):
-        super(BaseTickingState, self)._onEntered()
+    def _onEntered(self, event):
+        super(BaseTickingState, self)._onEntered(event)
         self._start()
 
     def _onExited(self):
@@ -289,5 +281,5 @@ class BaseGroupTickingStates(BaseState):
 
     def manualTick(self, stepNumber=0):
         for state in self.getChildrenStates():
-            if isinstance(state, (BaseTickingState, BaseGroupTickingStates)) and state.isEntered:
+            if isinstance(state, (BaseTickingState, BaseGroupTickingStates)) and state.isEntered():
                 state.manualTick(stepNumber)

@@ -1,8 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/gen/view_models/views/lobby/season_statistics_model.py
-from frameworks.wulf import Array
 from comp7.gui.impl.gen.view_models.views.lobby.enums import Division, Rank, SeasonName
-from frameworks.wulf import ViewModel
+from frameworks.wulf import Array, ViewModel
 from comp7.gui.impl.gen.view_models.views.lobby.summary_statistics_model import SummaryStatisticsModel
 from comp7.gui.impl.gen.view_models.views.lobby.vehicle_statistics_model import VehicleStatisticsModel
 

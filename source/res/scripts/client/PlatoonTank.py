@@ -24,7 +24,7 @@ if TYPE_CHECKING:
     from vehicle_outfit.outfit import Outfit as TOutfit
     from items.vehicles import VehicleDescrType
 _logger = logging.getLogger(__name__)
-PlatoonTankInfo = namedtuple('PlatoonTankInfo', ('canDisplayModel', 'vehCompDescr', 'vehOutfitCD', 'seasonType', 'marksOnGun', 'clanDBID', 'playerName'))
+PlatoonTankInfo = namedtuple('PlatoonTankInfo', ('canDisplayModel', 'vehCompDescr', 'vehOutfitCD', 'seasonType', 'marksOnGun', 'clanDBID', 'playerName', 'stFrags'))
 
 class _PlatoonTankAppearance(HangarVehicleAppearance):
     _c11nService = dependency.descriptor(ICustomizationService)
@@ -118,6 +118,9 @@ class PlatoonTank(ClientSelectableCameraVehicle):
             self.appearance.updateTankInfo(self.__tankInfo)
         super(PlatoonTank, self).recreateVehicle(typeDescriptor, state, callback, outfit)
         return
+
+    def getStFrags(self):
+        return self.__tankInfo.stFrags if self.__tankInfo else 0
 
     if IS_DEVELOPMENT:
 

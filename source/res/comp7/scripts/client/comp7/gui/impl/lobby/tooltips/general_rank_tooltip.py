@@ -8,7 +8,7 @@ from gui.impl.pub import ViewImpl
 class GeneralRankTooltip(ViewImpl):
     __slots__ = ('__params',)
 
-    def __init__(self, layoutID=R.views.comp7.lobby.tooltips.GeneralRankTooltip(), params=None):
+    def __init__(self, layoutID=R.views.comp7.mono.lobby.tooltips.general_rank_tooltip(), params=None):
         settings = ViewSettings(layoutID)
         settings.model = GeneralRankTooltipModel()
         super(GeneralRankTooltip, self).__init__(settings)

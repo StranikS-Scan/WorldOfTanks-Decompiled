@@ -61,8 +61,8 @@ class _DogTagsRootSettings(utils.SettingRootRecord):
 
 class _WotPlusSettings(utils.SettingRootRecord):
 
-    def __init__(self, isFirstTime=True, isWotPlusEnabled=False, isGoldReserveEnabled=False, isPassiveXpEnabled=False, isFreeDemountingEnabled=False, isExcludedMapEnabled=False, isDailyAttendancesEnabled=False, amountOfDailyAttendance=0, isBattleBonusesEnabled=False, isBadgesEnabled=False, isAdditionalXPEnabled=False, isOnboardingShown=False, isOptionalDevicesAssistantEnabled=False, isCrewAssistantEnabled=False, **_):
-        super(_WotPlusSettings, self).__init__(isFirstTime=isFirstTime, isWotPlusEnabled=isWotPlusEnabled, isGoldReserveEnabled=isGoldReserveEnabled, isPassiveXpEnabled=isPassiveXpEnabled, isFreeDemountingEnabled=isFreeDemountingEnabled, isExcludedMapEnabled=isExcludedMapEnabled, isDailyAttendancesEnabled=isDailyAttendancesEnabled, amountOfDailyAttendance=amountOfDailyAttendance, isBattleBonusesEnabled=isBattleBonusesEnabled, isBadgesEnabled=isBadgesEnabled, isAdditionalXPEnabled=isAdditionalXPEnabled, isOnboardingShown=isOnboardingShown, isOptionalDevicesAssistantEnabled=isOptionalDevicesAssistantEnabled, isCrewAssistantEnabled=isCrewAssistantEnabled)
+    def __init__(self, isFirstTime=True, isWotPlusEnabled=False, isGoldReserveEnabled=False, isPassiveXpEnabled=False, isFreeDemountingEnabled=False, isExcludedMapEnabled=False, isDailyAttendancesEnabled=False, amountOfDailyAttendance=0, isBattleBonusesEnabled=False, isBadgesEnabled=False, isAdditionalXPEnabled=False, isOptionalDevicesAssistantEnabled=False, isCrewAssistantEnabled=False, **_):
+        super(_WotPlusSettings, self).__init__(isFirstTime=isFirstTime, isWotPlusEnabled=isWotPlusEnabled, isGoldReserveEnabled=isGoldReserveEnabled, isPassiveXpEnabled=isPassiveXpEnabled, isFreeDemountingEnabled=isFreeDemountingEnabled, isExcludedMapEnabled=isExcludedMapEnabled, isDailyAttendancesEnabled=isDailyAttendancesEnabled, amountOfDailyAttendance=amountOfDailyAttendance, isBattleBonusesEnabled=isBattleBonusesEnabled, isBadgesEnabled=isBadgesEnabled, isAdditionalXPEnabled=isAdditionalXPEnabled, isOptionalDevicesAssistantEnabled=isOptionalDevicesAssistantEnabled, isCrewAssistantEnabled=isCrewAssistantEnabled)
 
     def setIsFirstTime(self, isFirstTime):
         self.update(isFirstTime=isFirstTime)
@@ -99,9 +99,6 @@ class _WotPlusSettings(utils.SettingRootRecord):
 
     def setAdditionalXPEnabled(self, isEnabled):
         self.update(isAdditionalXPEnabled=isEnabled)
-
-    def setOnboardingShown(self, onboardingShown=True):
-        self.update(isOnboardingShown=onboardingShown)
 
     def setOptionalDevicesAssistantEnabled(self, isEnabled):
         self.update(isOptionalDevicesAssistantEnabled=isEnabled)

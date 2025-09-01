@@ -30,7 +30,7 @@ STORY_MODE_CONFIG = ComponentsConfig(((BATTLE_CTRL_ID.ARENA_PERIOD, (BATTLE_VIEW
 
 class StoryModeBattlePage(StoryModeBattlePageBase, PveBaseBattlePage):
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         super(StoryModeBattlePage, self).__init__(components=STORY_MODE_CONFIG, external=STORY_MODE_EXTERNAL_COMPONENTS, fullStatsAlias=None)
         return
 

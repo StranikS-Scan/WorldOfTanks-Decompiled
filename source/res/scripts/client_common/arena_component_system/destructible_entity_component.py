@@ -33,8 +33,8 @@ class DestructibleEntitiesComponent(ClientArenaComponent):
     def updateDestructibleEntityDestructionState(self, destEntity):
         self.onDestructibleEntityStateChanged(destEntity.destructibleEntityID)
 
-    def updateDestructibleEntityFeedback(self, destEntity, eventID, value):
-        self.onDestructibleEntityFeedbackReceived(eventID, destEntity.destructibleEntityID, value)
+    def updateDestructibleEntityFeedback(self, destEntity, eventID, gunInstallationIndex, damage):
+        self.onDestructibleEntityFeedbackReceived(eventID, destEntity.destructibleEntityID, (gunInstallationIndex, damage))
 
     def removeDestructibleEntity(self, destEntity):
         if destEntity.destructibleEntityID in self.__destructibleEntities:

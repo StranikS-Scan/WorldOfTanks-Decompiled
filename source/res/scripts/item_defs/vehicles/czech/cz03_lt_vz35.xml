@@ -8,7 +8,7 @@
   </crew>
   <supplySlots>	1 6 8 8 8	</supplySlots>
   <speedLimits>
-    <forward>	34	</forward>
+    <forward>	40	</forward>
     <backward>	15	</backward>
   </speedLimits>
   <invisibility>
@@ -1202,14 +1202,13 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	3200	</weight>
-      <maxLoad>	11000	</maxLoad>
-      <terrainResistance>	1.1 1.4 2.2	</terrainResistance>
+      <terrainResistance>	1 1.2 2	</terrainResistance>
       <brakeForce>	10500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	40	</rotationSpeed>
+      <rotationSpeed>	47	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.36	</vehicleMovement>
-        <vehicleRotation>	0.36	</vehicleRotation>
+        <vehicleMovement>	0.3	</vehicleMovement>
+        <vehicleRotation>	0.3	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	50	</maxHealth>
@@ -2425,14 +2424,13 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	3200	</weight>
-      <maxLoad>	13000	</maxLoad>
       <terrainResistance>	1 1.2 2	</terrainResistance>
       <brakeForce>	10500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	45	</rotationSpeed>
+      <rotationSpeed>	52	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.34	</vehicleMovement>
-        <vehicleRotation>	0.34	</vehicleRotation>
+        <vehicleMovement>	0.28	</vehicleMovement>
+        <vehicleRotation>	0.28	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	60	</maxHealth>
@@ -3645,10 +3643,6 @@
       <tags></tags>
       <level>	1	</level>
       <price>	300	</price>
-      <unlocks>
-        <turret>	Turret_2_Cz03_LT_vz35	  <cost>	130	</cost>
-        </turret>
-      </unlocks>
       <armor>
         <armor_1>	25	</armor_1>
         <armor_2>	20	</armor_2>
@@ -3657,6 +3651,7 @@
         <armor_5>	8	</armor_5>
         <armor_6>	8	</armor_6>
         <armor_7>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+          <tags>	gunMask	</tags>
         </armor_7>
         <armor_8>	0	</armor_8>
         <armor_9>	20	</armor_9>
@@ -3667,13 +3662,13 @@
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1000	</weight>
       <maxHealth>	52	</maxHealth>
-      <rotationSpeed>	26	</rotationSpeed>
+      <rotationSpeed>	28	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
         <maxRegenHealth>	30	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	290	</circularVisionRadius>
+      <circularVisionRadius>	300	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	40	</maxHealth>
         <maxRegenHealth>	20	</maxRegenHealth>
@@ -3706,8 +3701,14 @@
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.240	</invisibilityFactorAtShot>
-          <reloadTime>	3.2	</reloadTime>
-          <aimingTime>	1.9	</aimingTime>
+          <reloadTime>	2.7	</reloadTime>
+          <aimingTime>	1.8	</aimingTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+            <afterShot>	4.0	</afterShot>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/czech/Cz03_LT_vz35/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/czech/Cz03_LT_vz35/crash/lod0/Gun_01.model	</destroyed>
@@ -3755,6 +3756,10 @@
           </camouflage>
         </_37mm_Skoda_A3>
         <_37mm_Skoda_A8>	shared	  <maxAmmo>	150	</maxAmmo>
+          <unlocks>
+            <turret>	Turret_2_Cz03_LT_vz35	  <cost>	130	</cost>
+            </turret>
+          </unlocks>
           <armor>
             <armor_1>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3773,8 +3778,13 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	3	</reloadTime>
+          <reloadTime>	2.5	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+            <afterShot>	4.0	</afterShot>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/czech/Cz03_LT_vz35/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/czech/Cz03_LT_vz35/crash/lod0/Gun_02.model	</destroyed>
@@ -4251,6 +4261,7 @@
         <armor_5>	8	</armor_5>
         <armor_6>	8	</armor_6>
         <armor_7>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+          <tags>	gunMask	</tags>
         </armor_7>
         <armor_8>	0	</armor_8>
         <armor_9>	20	</armor_9>
@@ -4296,13 +4307,14 @@
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.240	</invisibilityFactorAtShot>
-          <reloadTime>	2.8	</reloadTime>
+          <reloadTime>	2.6	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.11	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	1.9	</aimingTime>
+          <aimingTime>	1.8	</aimingTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <models>
             <undamaged>	vehicles/czech/Cz03_LT_vz35/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/czech/Cz03_LT_vz35/crash/lod0/Gun_01.model	</destroyed>
@@ -4368,9 +4380,9 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	2.6	</reloadTime>
+          <reloadTime>	2.4	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.11	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -4863,25 +4875,25 @@
     <detailed>
       <engines>
         <Skoda_T_11_0>
-          <smplEnginePower>	126.8737	</smplEnginePower>
-          <smplFwMaxSpeed>	34	</smplFwMaxSpeed>
+          <smplEnginePower>	180	</smplEnginePower>
+          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
         </Skoda_T_11_0>
         <Skoda_T_11_2>
-          <smplEnginePower>	142.733	</smplEnginePower>
-          <smplFwMaxSpeed>	34	</smplFwMaxSpeed>
+          <smplEnginePower>	200	</smplEnginePower>
+          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
         </Skoda_T_11_2>
       </engines>
       <chassis>
         <Chassis_Cz03_LT_vz35>
           <grounds>
             <soft>
-              <rollingFriction>	0.1771	</rollingFriction>
+              <rollingFriction>	0.161	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1127	</rollingFriction>
+              <rollingFriction>	0.0966	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
+              <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_Cz03_LT_vz35>

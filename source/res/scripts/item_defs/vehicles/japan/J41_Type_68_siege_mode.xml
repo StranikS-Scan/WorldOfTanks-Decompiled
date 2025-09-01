@@ -68,7 +68,7 @@
     </armor>
     <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
     <weight>	28550	</weight>
-    <maxHealth>	1480	</maxHealth>
+    <maxHealth>	1560	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	180	</maxRegenHealth>
@@ -558,8 +558,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	62000	</maxLoad>
-      <terrainResistance>	1.2 1.5 2.5	</terrainResistance>
+      <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
       <brakeForce>	45000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	28	</rotationSpeed>
@@ -1570,7 +1569,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	12000	</weight>
-      <maxLoad>	67000	</maxLoad>
       <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
       <brakeForce>	48000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2612,14 +2610,13 @@
         <armor_26>	135	</armor_26>
         <armor_27>	150	</armor_27>
         <armor_28>	80	</armor_28>
-        <armor_29>	75	</armor_29>
         <armor_30>	160	</armor_30>
         <armor_31>	140	</armor_31>
         <armor_32>	140	</armor_32>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	12000	</weight>
-      <maxHealth>	370	</maxHealth>
+      <maxHealth>	300	</maxHealth>
       <rotationSpeed>	35	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	160	</maxHealth>
@@ -2648,6 +2645,7 @@
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
             <armor_5>	6	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_5>
             <armor_7>	230	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_7>
@@ -2674,11 +2672,11 @@
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.24	</shotDispersionRadius>
-          <reloadTime>	10.3	</reloadTime>
+          <reloadTime>	8.5	</reloadTime>
           <aimingTime>	2.1	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
+            <turretRotation>	0.08	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -3273,7 +3271,7 @@
       </armor>
       <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
       <weight>	13000	</weight>
-      <maxHealth>	470	</maxHealth>
+      <maxHealth>	390	</maxHealth>
       <rotationSpeed>	35	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -3302,6 +3300,7 @@
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
             <armor_5>	280	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
             </armor_5>
             <armor_6>	260	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_6>
@@ -3326,7 +3325,7 @@
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.24	</shotDispersionRadius>
-          <reloadTime>	9.8	</reloadTime>
+          <reloadTime>	8.5	</reloadTime>
           <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionFactors>
@@ -4075,13 +4074,13 @@
         <Chassis_J41_Type_68>
           <grounds>
             <soft>
-              <rollingFriction>	0.20125	</rollingFriction>
+              <rollingFriction>	0.18515	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.12075	</rollingFriction>
+              <rollingFriction>	0.10465	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0966	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

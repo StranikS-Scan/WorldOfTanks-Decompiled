@@ -57,7 +57,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	2450	</weight>
-    <maxHealth>	392	</maxHealth>
+    <maxHealth>	400	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	130	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
@@ -1081,13 +1081,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_ELC_AMX>
-      <userString>	#france_vehicles:Chassis_ELC_AMX	</userString>
+    <Chassis_F62_ELC_AMX>
+      <userString>	#france_vehicles:Chassis_F62_ELC_AMX	</userString>
       <tags></tags>
       <level>	4	</level>
       <price>	4200	</price>
       <unlocks>
-        <chassis>	Chassis_ELC_AMX_2	  <cost>	2420	</cost>
+        <chassis>	Chassis_F62_ELC_AMX_2	  <cost>	2420	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1095,8 +1095,7 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	1500	</weight>
-      <maxLoad>	7300	</maxLoad>
-      <terrainResistance>	1.3 1.6 2.6	</terrainResistance>
+      <terrainResistance>	1.2 1.4 2.4	</terrainResistance>
       <brakeForce>	25000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	36	</rotationSpeed>
@@ -1836,9 +1835,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_ELC_AMX>
-    <Chassis_ELC_AMX_2>
-      <userString>	#france_vehicles:Chassis_ELC_AMX_2	</userString>
+    </Chassis_F62_ELC_AMX>
+    <Chassis_F62_ELC_AMX_2>
+      <userString>	#france_vehicles:Chassis_F62_ELC_AMX_2	</userString>
       <tags></tags>
       <level>	5	</level>
       <price>	9510	</price>
@@ -1847,7 +1846,6 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	1500	</weight>
-      <maxLoad>	7950	</maxLoad>
       <terrainResistance>	1.2 1.4 2.4	</terrainResistance>
       <brakeForce>	25000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -2588,11 +2586,11 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_ELC_AMX_2>
+    </Chassis_F62_ELC_AMX_2>
   </chassis>
   <turrets0>
-    <Turret_1_ELC_AMX>
-      <userString>	#france_vehicles:Turret_1_ELC_AMX	</userString>
+    <Turret_1_F62_ELC_AMX>
+      <userString>	#france_vehicles:Turret_1_F62_ELC_AMX	</userString>
       <tags></tags>
       <level>	5	</level>
       <price>	4800	</price>
@@ -2615,7 +2613,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	500	</weight>
-      <maxHealth>	98	</maxHealth>
+      <maxHealth>	100	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -3270,7 +3268,7 @@
         <density>	106.383 108.288	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_1_ELC_AMX>
+    </Turret_1_F62_ELC_AMX>
   </turrets0>
   <engines>
     <Sovam_de_150cv>	shared	  <unlocks>
@@ -3288,18 +3286,13 @@
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <ER_52>	shared	  <unlocks>
-        <radio>	SCR_508	  <cost>	1460	</cost>
-        </radio>
-      </unlocks>
-    </ER_52>
     <SCR_508>	shared	</SCR_508>
   </radios>
   <physics>
     <detailed>
       <engines>
         <Sovam_de_150cv>
-          <smplEnginePower>	150	</smplEnginePower>
+          <smplEnginePower>	160	</smplEnginePower>
           <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
         </Sovam_de_150cv>
         <Sovam_de_250cv>
@@ -3308,21 +3301,7 @@
         </Sovam_de_250cv>
       </engines>
       <chassis>
-        <Chassis_ELC_AMX>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.2093	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.1288	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.10465	</rollingFriction>
-            </firm>
-          </grounds>
-          <axleCount>	5	</axleCount>
-        </Chassis_ELC_AMX>
-        <Chassis_ELC_AMX_2>
+        <Chassis_F62_ELC_AMX>
           <grounds>
             <soft>
               <rollingFriction>	0.1932	</rollingFriction>
@@ -3335,7 +3314,21 @@
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>
-        </Chassis_ELC_AMX_2>
+        </Chassis_F62_ELC_AMX>
+        <Chassis_F62_ELC_AMX_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.1932	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.1127	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0966	</rollingFriction>
+            </firm>
+          </grounds>
+          <axleCount>	5	</axleCount>
+        </Chassis_F62_ELC_AMX_2>
       </chassis>
     </detailed>
   </physics>

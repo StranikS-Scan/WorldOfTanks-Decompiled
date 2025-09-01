@@ -2,9 +2,11 @@
 # Embedded file name: scripts/client/gui/server_events/personal_progress/formatters.py
 import typing
 from collections import namedtuple
+import personal_missions
 from constants import QUEST_PROGRESS_STATE
 from gui.Scaleform.genConsts.QUEST_PROGRESS_BASE import QUEST_PROGRESS_BASE
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
+from gui.Scaleform.locale.PERSONAL_MISSIONS_30 import PERSONAL_MISSIONS_30
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
@@ -26,13 +28,16 @@ class ProgressesFormatter(object):
     def bodyFormat(self, isMain=None):
         return self._bodyFormat(True) + self._bodyFormat(False) if isMain is None else self._bodyFormat(isMain)
 
-    def headerFormat(self, isMain=None):
+    def headerFormat(self, isMain=None, isCompleted=False, isPM3Quest=False):
         result = []
         if self._storage:
             if isMain is not None:
                 progresses = self._storage.getHeaderProgresses(isMain)
+                uniqueConditionHeader = self._storage.getUniqueCompletionRequirement()
                 if progresses:
                     result.append(first(progresses.values()).getHeaderData())
+                elif isPM3Quest:
+                    result.append(self.__addUniqueHeaderProgress(isCompleted, uniqueConditionHeader))
                 else:
                     result.append(self.__addDummyHeaderProgress(isMain))
             else:
@@ -67,6 +72,26 @@ class ProgressesFormatter(object):
             result.append(self._makeBodyProgressData(progress, index == lastProgressIdx))
 
         return result
+
+    def __addUniqueHeaderProgress(self, isCompleted, data):
+        orderType = QUEST_PROGRESS_BASE.MAIN_ORDER_TYPE
+        if data:
+            firstCondition = data[first(data)]
+            currentProgress = firstCondition.getUniqueBattlesCount()
+            currentProgress += isCompleted
+            maxProgress = firstCondition.getUniqueVehicles()
+            key = PERSONAL_MISSIONS_30.CONDITIONS_REQUIREDVEHICLE_BOTTOMLABEL
+            headerString = i18n.makeString(key, count='%s' % maxProgress)
+            repetitionProgress = text_styles.successBright(currentProgress) if currentProgress == maxProgress else text_styles.stats(currentProgress)
+            return {'progressType': DISPLAY_TYPE.LIMITED,
+             'orderType': orderType,
+             'header': headerString,
+             'valueTitle': i18n.makeString(PERSONAL_MISSIONS.CONDITIONS_CURRENTPROGRESS_BOTTOMLABEL, currentProgress='%s / %s' % (repetitionProgress, maxProgress)),
+             'value': currentProgress,
+             'goal': maxProgress,
+             'state': firstCondition.getState()}
+        return {'progressType': DISPLAY_TYPE.NONE,
+         'orderType': orderType}
 
     def __addDummyHeaderProgress(self, isMain):
         orderType = QUEST_PROGRESS_BASE.ADD_ORDER_TYPE
@@ -169,6 +194,8 @@ class PMTooltipConditionsFormatters(object):
 
     def format(self, event, isMain=None):
         storage = LobbyProgressStorage(event.getGeneralQuestID(), event.getConditionsConfig(), event.getConditionsProgress(), event.isOneBattleQuest())
+        if event.getPMType().branch in personal_missions.PM_BRANCH.V2_BRANCHES:
+            return [ self._CONDITION(RES_ICONS.get90ConditionIcon(c.getIconID()), c.getDescription(), c.isInOrGroup()) for c in storage.sortProgresses(storage.getBodyProgresses(isMain).itervalues()) ]
         return [ self._CONDITION(RES_ICONS.get90ConditionIcon(c.getIconID()), text_styles.main(c.getDescription()), c.isInOrGroup()) for c in storage.sortProgresses(storage.getBodyProgresses(isMain).itervalues()) ]
 
 

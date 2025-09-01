@@ -166,7 +166,7 @@ class DemonstratorWindow(DemonstratorWindowMeta, IGlobalListener):
             self.__disableBattleButton()
 
     def __setGameplayTabs(self):
-        self.__availableGameplayTypes = [(GAMEPLAY.CTF, self.__settingsCore.getSetting(GAME.GAMEPLAY_CTF)), (GAMEPLAY.ASSAULT, self.__settingsCore.getSetting(GAME.GAMEPLAY_ASSAULT)), (GAMEPLAY.DOMINATION, self.__settingsCore.getSetting(GAME.GAMEPLAY_DOMINATION))]
+        self.__availableGameplayTypes = [(GAMEPLAY.CTF, self.__settingsCore.getSetting(GAME.GAMEPLAY_CTF))]
         gameplayTabs = list(({'label': backport.text(R.strings.arenas.type.dyn(battleType).name()),
          'enabled': isEnabled} for battleType, isEnabled in self.__availableGameplayTypes))
         self.as_setGameplayTabsS(gameplayTabs, self.__gameplaySelected)

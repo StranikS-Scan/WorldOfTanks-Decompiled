@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/backport/backport_tooltip.py
 from collections import namedtuple
 from typing import TYPE_CHECKING
-from frameworks.wulf import ViewModel, Window, WindowFlags, ViewSettings
+from frameworks.wulf import ViewModel, Window, WindowFlags, ViewSettings, PositionAnchor
 from gui.impl.gen import R
 from gui.impl.pub import ViewImpl, WindowImpl
 from gui.impl.pub.window_view import WindowView
@@ -80,9 +80,20 @@ class BackportTooltipWindow(WindowImpl):
 
 
 class DecoratedTooltipWindow(WindowImpl):
-    __slots__ = ()
+    __slots__ = ('_posX', '_posY')
 
-    def __init__(self, content, parent=None, useDecorator=True):
+    def __init__(self, content, parent=None, useDecorator=True, ownerViewID=None):
+        self._posX = 0
+        self._posY = 0
         decorator = WindowView(layoutID=R.views.common.tooltip_window.tooltip_window.TooltipWindow()) if useDecorator else None
-        super(DecoratedTooltipWindow, self).__init__(wndFlags=WindowFlags.TOOLTIP, decorator=decorator, content=content, parent=parent, areaID=R.areas.specific())
+        super(DecoratedTooltipWindow, self).__init__(wndFlags=WindowFlags.TOOLTIP, decorator=decorator, content=content, parent=parent, areaID=R.areas.specific(), ownerViewID=ownerViewID)
         return
+
+    def move(self, x, y, xAnchor=PositionAnchor.LEFT, yAnchor=PositionAnchor.TOP):
+        self._posX = x
+        self._posY = y
+        return super(DecoratedTooltipWindow, self).move(x, y, xAnchor, yAnchor)
+
+    def _onReady(self):
+        self.move(self._posX, self._posY)
+        super(DecoratedTooltipWindow, self)._onReady()

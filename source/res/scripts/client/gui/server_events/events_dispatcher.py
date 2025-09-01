@@ -9,13 +9,15 @@ from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionIn
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
+from gui.impl.gen.view_models.views.lobby.user_missions.hub.tabs.tab_id import TabId
 from gui.impl.lobby.reward_window import GiveAwayRewardWindow, PiggyBankRewardWindow, TwitchRewardWindow
 from gui.impl.pub.notification_commands import WindowNotificationCommand, EventNotificationCommand, NotificationEvent
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.server_events import anniversary_helper, awards, events_helpers, recruit_helper
 from gui.server_events.events_helpers import getLootboxesFromBonuses, isC11nQuest
+from gui.server_events.finders import getBranchByOperationId
 from gui.shared import EVENT_BUS_SCOPE, event_dispatcher as shared_events, events, g_eventBus
-from gui.shared.event_dispatcher import showProgressiveItemsView, hideWebBrowserOverlay, showBrowserOverlayView
+from gui.shared.event_dispatcher import showProgressiveItemsView, hideWebBrowserOverlay, showBrowserOverlayView, showPersonalMissionMainWindow, showPersonalMissionChain
 from gui.shared.events import PersonalMissionsEvent
 from helpers import dependency
 from shared_utils import first
@@ -102,12 +104,18 @@ def canOpenPMPage(branchID=None, operationID=None, missionID=None):
         return int(idx) not in disabledMissionsIds
 
     if missionID is not None:
-        mission = eventsCache.getPersonalMissions().getAllQuests()[int(missionID)]
+        from personal_missions import PM_BRANCH
+        mission = eventsCache.getPersonalMissions().getAllQuests(branches=PM_BRANCH.ALL).get(int(missionID))
+        if mission is None:
+            return False
         operationID = mission.getOperationID()
         branchID = mission.getPMType().branch
         return checkBranch(branchID) and checkOperation(operationID) and checkMission(missionID)
     elif operationID is not None:
-        operation = eventsCache.getPersonalMissions().getAllOperations()[int(operationID)]
+        from personal_missions import PM_BRANCH
+        operation = eventsCache.getPersonalMissions().getAllOperations(branches=PM_BRANCH.ALL).get(int(operationID))
+        if operation is None:
+            return False
         return checkBranch(operation.getBranch()) and checkOperation(operationID)
     else:
         return checkBranch(branchID) if branchID is not None else False
@@ -119,16 +127,24 @@ def showPersonalMission(missionID=None):
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS), ctx={'eventID': missionID}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showPersonalMissionsChain(operationID, chainID):
+def showPersonalMissionsChain(operationID, chainID, missionCategory=None):
     if not canOpenPMPage(operationID=operationID):
+        return
+    from personal_missions import PM_BRANCH
+    if PM_BRANCH.PERSONAL_MISSION_3 in [getBranchByOperationId(operationID)]:
+        showPersonalMissionChain(operationID, missionCategory)
         return
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS), ctx={'operationID': operationID,
      'chainID': chainID}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showPersonalMissionOperationsPage(branchID, operationID):
+    from personal_missions import PM_BRANCH
     if not canOpenPMPage(branchID, operationID):
         showPersonalMissionsOperationsMap()
+        return
+    if PM_BRANCH.PERSONAL_MISSION_3 in [branchID, getBranchByOperationId(operationID)]:
+        showPersonalMissionMainWindow(operationID)
         return
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS), ctx={'branch': branchID,
      'operationID': operationID}), EVENT_BUS_SCOPE.LOBBY)
@@ -160,8 +176,8 @@ def showMissionsElen(eventQuestsID=None):
     showMissions(tab=QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS, missionID=eventQuestsID, groupID=eventQuestsID, showDetails=False)
 
 
-def showDailyQuests(subTab):
-    showMissions(tab=QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS, subTab=subTab)
+def showDailyQuests(subTab=None, questId=''):
+    showMissions(tab=QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS, subTab=subTab, questId=questId)
 
 
 def showMissionsMapboxProgression():
@@ -180,17 +196,6 @@ def showBattleMattersMainReward():
     _showMissions(tab=QUESTS_ALIASES.BATTLE_MATTERS_VIEW_PY_ALIAS, openMainRewardView=True)
 
 
-def showMissionsBattlePass(layoutID=None, chapterID=0):
-
-    def __battleQueueViewPredicate(window):
-        return window.content is not None and getattr(window.content, 'alias', None) == VIEW_ALIAS.BATTLE_QUEUE
-
-    guiLoader = dependency.instance(IGuiLoader)
-    if guiLoader.windowsManager.findWindows(__battleQueueViewPredicate):
-        return
-    _showMissions(tab=QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS, layoutID=layoutID, chapterID=chapterID)
-
-
 def showMissionsLiveOpsWebEvents():
 
     def __battleQueueViewPredicate(window):
@@ -202,14 +207,15 @@ def showMissionsLiveOpsWebEvents():
     _showMissions(tab=QUESTS_ALIASES.LIVE_OPS_WEB_EVENTS_VIEW_PY_ALIAS)
 
 
-def showMissions(tab=None, missionID=None, groupID=None, marathonPrefix=None, anchor=None, showDetails=True, subTab=None):
+def showMissions(tab=None, missionID=None, groupID=None, marathonPrefix=None, anchor=None, showDetails=True, subTab=None, questId=''):
     _showMissions(**{'tab': tab,
      'subTab': subTab,
      'eventID': missionID,
      'groupID': groupID,
      'marathonPrefix': marathonPrefix,
      'anchor': anchor,
-     'showMissionDetails': showDetails})
+     'showMissionDetails': showDetails,
+     'questId': questId})
 
 
 def showMissionDetails(missionID, groupID):
@@ -265,7 +271,7 @@ def showMission(eventID, eventType=None):
         quest = quests.get(eventID)
         if eventID == BattlePassConsts.FAKE_QUEST_ID:
             hideWebBrowserOverlay()
-            showMissionsBattlePass()
+            shared_events.showBattlePass()
             return
         if quest is None or quest.isHidden():
             prefix = events_helpers.getMarathonPrefix(eventID)
@@ -425,7 +431,20 @@ def showActions(tab=None, anchor=None):
 
 
 def _showMissions(**kwargs):
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_MISSIONS), ctx=kwargs), scope=EVENT_BUS_SCOPE.LOBBY)
+    tab = kwargs.get('tab')
+    tabId = None
+    if tab is None or tab == QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS:
+        tabId = TabId.BASIC
+    elif tab == QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS:
+        tabId = TabId.COMMON
+    if tabId is None:
+        from gui.Scaleform.daapi.view.lobby.missions.regular.states import MissionsState
+        MissionsState.goTo(ctx=kwargs)
+    else:
+        kwargs['tab'] = tabId
+        from gui.Scaleform.daapi.view.lobby.user_missions.states import UserMissionsState
+        UserMissionsState.goTo(**kwargs)
+    return
 
 
 def ifPrbNavigationEnabled(callback):

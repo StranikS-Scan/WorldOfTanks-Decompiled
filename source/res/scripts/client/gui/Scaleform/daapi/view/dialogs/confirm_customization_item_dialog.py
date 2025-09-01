@@ -16,7 +16,7 @@ class CustomizationItemIconWidth(object):
 
 class ConfirmCustomizationItemDialog(ConfirmItemWindowMeta):
 
-    def __init__(self, meta, handler):
+    def __init__(self, meta, handler, **kwargs):
         super(ConfirmCustomizationItemDialog, self).__init__()
         self.meta = meta
         self.handler = handler

@@ -64,7 +64,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	5565	</weight>
-    <maxHealth>	324	</maxHealth>
+    <maxHealth>	328	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	90	</maxHealth>
       <maxRegenHealth>	60	</maxRegenHealth>
@@ -1250,8 +1250,7 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	3000	</weight>
-      <maxLoad>	10800	</maxLoad>
-      <terrainResistance>	1.2 1.4 2.3	</terrainResistance>
+      <terrainResistance>	1.1 1.2 2.1	</terrainResistance>
       <brakeForce>	10800	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	50	</rotationSpeed>
@@ -2287,7 +2286,6 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	3000	</weight>
-      <maxLoad>	13500	</maxLoad>
       <terrainResistance>	1.1 1.2 2.1	</terrainResistance>
       <brakeForce>	12000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -3317,7 +3315,7 @@
     <Turret_1_R24_SU-76>
       <ceilless>	true	</ceilless>
       <userString>	#ussr_vehicles:Turret_1_R24_SU-76	</userString>
-      <tags>	cannotDetach	</tags>
+      <tags>	cannotDetach turretless	</tags>
       <level>	4	</level>
       <price>	100	</price>
       <notInShop>	true	</notInShop>
@@ -3326,7 +3324,7 @@
         <armor_8>	0	</armor_8>
       </armor>
       <weight>	83	</weight>
-      <maxHealth>	81	</maxHealth>
+      <maxHealth>	82	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -3490,9 +3488,9 @@
           </pitchLimits>
           <maxAmmo>	95	</maxAmmo>
           <unlocks>
-            <vehicle>	R02_SU-85	  <cost>	12500	</cost>
-            </vehicle>
             <vehicle>	R100_SU122A	  <cost>	12570	</cost>
+            </vehicle>
+            <vehicle>	R02_SU-85	  <cost>	12500	</cost>
             </vehicle>
           </unlocks>
           <armor>
@@ -3681,11 +3679,6 @@
     <Medium>	shared	</Medium>
   </fuelTanks>
   <radios>
-    <_9R>	shared	  <unlocks>
-        <radio>	_9RM	  <cost>	4040	</cost>
-        </radio>
-      </unlocks>
-    </_9R>
     <_9RM>	shared	</_9RM>
   </radios>
   <physics>
@@ -3704,13 +3697,13 @@
         <Chassis_R24_SU-76>
           <grounds>
             <soft>
-              <rollingFriction>	0.18515	</rollingFriction>
+              <rollingFriction>	0.16905	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1127	</rollingFriction>
+              <rollingFriction>	0.0966	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0966	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

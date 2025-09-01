@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/tank_setup/context_menu/battle_booster.py
+import SoundGroups
 from adisp import adisp_process, adisp_async
 from gui import shop
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -8,6 +9,7 @@ from gui.Scaleform.daapi.view.lobby.tank_setup.context_menu.base import BaseItem
 from gui.Scaleform.daapi.view.lobby.tank_setup.context_menu.base_equipment import BaseHangarEquipmentSlotContextMenu
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.base_setup_model import BaseSetupModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
+from gui.impl.lobby.tank_setup.tank_setup_sounds import TankSetupSoundEvents
 from gui.shared.gui_items.items_actions import factory as ActionsFactory
 from ids_generators import SequenceIDGenerator
 
@@ -38,11 +40,13 @@ class BattleBoosterSlotContextMenu(BaseSlotContextMenu):
 
     @option(__sqGen.next(), TankSetupCMLabel.UNLOAD)
     def unload(self):
+        SoundGroups.g_instance.playSound2D(TankSetupSoundEvents.INSTRUCTIONS_DEMOUNT)
         self._sendSlotAction(BaseSetupModel.SELECT_SLOT_ACTION, intCD=None, currentSlotId=self._installedSlotId)
         return
 
     @option(__sqGen.next(), TankSetupCMLabel.TAKE_OFF)
     def takeOff(self):
+        SoundGroups.g_instance.playSound2D(TankSetupSoundEvents.INSTRUCTIONS_DEMOUNT)
         self._sendSlotAction(BaseSetupModel.REVERT_SLOT_ACTION)
 
     def _isVisible(self, label):
@@ -88,5 +92,6 @@ class HangarBattleBoosterSlotContextMenu(BaseHangarEquipmentSlotContextMenu):
         copyVehicle.battleBoosters.layout[self._installedSlotId] = None
         result = yield self._doPutOnAction(copyVehicle)
         if result:
+            SoundGroups.g_instance.playSound2D(TankSetupSoundEvents.INSTRUCTIONS_DEMOUNT)
             self._sendLastSlotAction(TankSetupConstants.BATTLE_BOOSTERS, BaseSetupModel.REVERT_SLOT_ACTION, {'slotID': self._installedSlotId})
         return

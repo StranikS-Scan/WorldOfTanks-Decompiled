@@ -47,6 +47,10 @@ class ShellInteractor(BaseInteractor):
     def getName(self):
         return TankSetupConstants.SHELLS
 
+    @property
+    def affectsTTC(self):
+        return False
+
     def setItem(self, item):
         super(ShellInteractor, self).setItem(item)
         self._resetPlayerLayout()
@@ -111,7 +115,7 @@ class ShellInteractor(BaseInteractor):
     def revert(self):
         self.getItem().shells.setLayout(*self.getInstalledLayout())
         self.onSlotAction(actionType=BaseSetupModel.REVERT_SLOT_ACTION)
-        self.itemUpdated()
+        self.onRevert()
 
     @adisp.adisp_process
     def confirm(self, callback, skipDialog=False):
@@ -134,6 +138,16 @@ class ShellInteractor(BaseInteractor):
         self._playerLayout = vehicle.shells.layout.copy()
         if not onlyInstalled:
             self.getItem().shells.setLayout(*vehicle.shells.layout)
+
+    def changeSlotsOrderByIntCD(self, newShellIntCDsOrder):
+        currentIntCDsSet = {shellData.intCD for shellData in self.getCurrentLayout()}
+        if currentIntCDsSet != set(newShellIntCDsOrder):
+            return
+        layoutLen = len(self.getCurrentLayout())
+        for i in range(0, layoutLen - 1):
+            currIntCD = newShellIntCDsOrder[i]
+            currPos = self.getCurrentShellSlotID(currIntCD)
+            self.swapSlots(i, currPos)
 
     @wg_async
     def showExitConfirmDialog(self):

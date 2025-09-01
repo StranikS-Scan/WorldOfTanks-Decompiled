@@ -1,8 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/exchange/exchange_rate_all_personal_discounts_model.py
 from enum import Enum
-from frameworks.wulf import Array
-from frameworks.wulf import ViewModel
+from frameworks.wulf import Array, ViewModel
 from gui.impl.gen.view_models.views.lobby.exchange.discount_presentation import DiscountPresentation
 from gui.impl.gen.view_models.views.lobby.exchange.exchange_rate_model import ExchangeRateModel
 

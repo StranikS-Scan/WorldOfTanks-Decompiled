@@ -119,6 +119,7 @@
       <lockShells></lockShells>
       <hideStorage></hideStorage>
       <rocketAcceleration></rocketAcceleration>
+      <rechargeableNitro></rechargeableNitro>
       <autocannon></autocannon>
       <twinGun></twinGun>
       <fr_hidden></fr_hidden>
@@ -167,6 +168,8 @@
     <tags>
       <cannotDetach></cannotDetach>
       <gunCarriage></gunCarriage>
+      <turretless></turretless>
+      <oscillating></oscillating>
     </tags>
   </vehicleTurret>
   <vehicleGun>
@@ -174,6 +177,7 @@
     <description>	#item_types:gun/desc	</description>
     <tags>
       <clip></clip>
+      <secondaryGun></secondaryGun>
     </tags>
   </vehicleGun>
   <vehicleEngine>
@@ -274,6 +278,10 @@
       <mobility></mobility>
       <premium_equipment></premium_equipment>
       <builtin></builtin>
+      <builtin_priority_1></builtin_priority_1>
+      <builtin_priority_2></builtin_priority_2>
+      <builtin_priority_3></builtin_priority_3>
+      <builtin_priority_4></builtin_priority_4>
       <trophyUpgraded></trophyUpgraded>
       <turbocharger></turbocharger>
       <healthReserve></healthReserve>
@@ -292,9 +300,8 @@
       <poiEquipment></poiEquipment>
       <public></public>
       <stopOutsideBattle></stopOutsideBattle>
-      <permanentGlow></permanentGlow>
-      <hasNoBack></hasNoBack>
       <notForRegularSlot></notForRegularSlot>
+      <pointAbility></pointAbility>
     </tags>
   </equipment>
   <customizationItem>

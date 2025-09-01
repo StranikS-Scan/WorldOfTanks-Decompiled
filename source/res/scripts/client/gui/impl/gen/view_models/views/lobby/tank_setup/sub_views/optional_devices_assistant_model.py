@@ -1,8 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/tank_setup/sub_views/optional_devices_assistant_model.py
 from enum import Enum
-from frameworks.wulf import Array
-from frameworks.wulf import ViewModel
+from frameworks.wulf import Array, ViewModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.optional_devices_assistant_preset import OptionalDevicesAssistantPreset
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.optional_devices_assistant_preset_model_type import OptionalDevicesAssistantPresetModelType
 
@@ -39,9 +38,9 @@ class OptionalDevicesAssistantStateEnum(Enum):
 
 
 class OptionalDevicesAssistantModel(ViewModel):
-    __slots__ = ('onHintShown', 'onPresetSelected')
+    __slots__ = ('onPresetSelected',)
 
-    def __init__(self, properties=4, commands=2):
+    def __init__(self, properties=3, commands=1):
         super(OptionalDevicesAssistantModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -62,23 +61,15 @@ class OptionalDevicesAssistantModel(ViewModel):
     def getOptionalDevicesAssistantPresetsType():
         return OptionalDevicesAssistantPreset
 
-    def getIsHintShown(self):
-        return self._getBool(2)
-
-    def setIsHintShown(self, value):
-        self._setBool(2, value)
-
     def getState(self):
-        return OptionalDevicesAssistantStateEnum(self._getString(3))
+        return OptionalDevicesAssistantStateEnum(self._getString(2))
 
     def setState(self, value):
-        self._setString(3, value.value)
+        self._setString(2, value.value)
 
     def _initialize(self):
         super(OptionalDevicesAssistantModel, self)._initialize()
         self._addViewModelProperty('selectedPreset', OptionalDevicesAssistantPresetModelType())
         self._addArrayProperty('optionalDevicesAssistantPresets', Array())
-        self._addBoolProperty('isHintShown', False)
         self._addStringProperty('state', OptionalDevicesAssistantStateEnum.HIDDEN.value)
-        self.onHintShown = self._addCommand('onHintShown')
         self.onPresetSelected = self._addCommand('onPresetSelected')

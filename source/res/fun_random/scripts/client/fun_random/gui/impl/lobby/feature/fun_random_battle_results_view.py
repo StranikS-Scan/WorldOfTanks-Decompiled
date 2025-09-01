@@ -4,16 +4,16 @@ import logging
 from collections import namedtuple
 from constants import ARENA_BONUS_TYPE, PremiumConfigs
 from frameworks.wulf import ViewFlags, ViewSettings
+from fun_random.gui.battle_results.base_constants import PresenterUpdateTypes
 from fun_random.gui.feature.fun_sounds import FUN_BATTLE_RESULTS_SOUND_SPACE
-from fun_random.gui.impl.lobby.common.fun_view_helpers import packBonuses
 from fun_random.gui.impl.gen.view_models.views.lobby.feature.battle_results.fun_battle_results_view_model import FunBattleResultsViewModel, Tab
+from fun_random.gui.impl.lobby.tooltips.fun_random_battle_results_efficiency_tooltip_view import PersonalEfficiencyParamTooltip
+from fun_random.gui.impl.lobby.common.fun_view_helpers import packBonuses
 from fun_random.gui.impl.lobby.feature import FUN_RANDOM_LOCK_SOURCE_NAME
-from fun_random.gui.impl.lobby.tooltips.fun_random_efficiency_parameter_tooltip_view import BattleResultsStatsTooltipView
 from fun_random.gui.impl.lobby.tooltips.fun_random_battle_results_economic_tooltip_view import FunRandomBattleResultsEconomicTooltipView
 from fun_random.gui.impl.lobby.tooltips.fun_random_loot_box_tooltip_view import FunRandomLootBoxTooltipView
 from fun_random.gui.sounds.ambients import FunRandomBattleResultsEnv
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.battle_results.presenters.base_constants import PresenterUpdateTypes
 from gui.battle_results.presenters.wrappers import ifPresenterAvailable
 from gui.impl.backport import BackportContextMenuWindow
 from gui.impl.gen import R
@@ -42,13 +42,14 @@ class FunRandomBattleResultsView(ViewImpl, LobbyHeaderVisibility):
     __wotPlusController = dependency.descriptor(IWotPlusController)
 
     def __init__(self, layoutID, *args, **kwargs):
-        settings = ViewSettings(layoutID, flags=ViewFlags.LOBBY_TOP_SUB_VIEW, model=FunBattleResultsViewModel())
-        super(FunRandomBattleResultsView, self).__init__(settings)
         arenaUniqueID = kwargs.get('arenaUniqueID', None)
-        if not arenaUniqueID:
-            _logger.error('[FunRandomBattleResultsView] Value of arenaUniqueID is invalid')
         self.__arenaUniqueID = arenaUniqueID
         self.__presenter = self.__battleResults.getPresenter(self.__arenaUniqueID)
+        modelClass = self.__presenter.getModelClass()
+        settings = ViewSettings(layoutID, flags=ViewFlags.LOBBY_TOP_SUB_VIEW, model=modelClass())
+        super(FunRandomBattleResultsView, self).__init__(settings)
+        if not arenaUniqueID:
+            _logger.error('[FunRandomBattleResultsView] Value of arenaUniqueID is invalid')
         self.__rewardsData = _RewardsData(tooltips={}, bonuses=[])
         return
 
@@ -81,7 +82,7 @@ class FunRandomBattleResultsView(ViewImpl, LobbyHeaderVisibility):
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.lobby.tooltips.BattleResultsStatsTooltipView():
             paramType = event.getArgument('paramType')
-            return BattleResultsStatsTooltipView(self.__arenaUniqueID, paramType)
+            return PersonalEfficiencyParamTooltip(self.__arenaUniqueID, paramType)
         elif contentID == R.views.fun_random.lobby.tooltips.FunRandomBattleResultsEconomicTooltipView():
             currencyType = event.getArgument('currencyType')
             return FunRandomBattleResultsEconomicTooltipView(self.__arenaUniqueID, currencyType)

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/pub/tooltip_window.py
-from frameworks.wulf import WindowFlags, View, ViewSettings
+import typing
+from frameworks.wulf import WindowFlags, View, ViewSettings, PositionAnchor
 from gui.impl.gen import R
 from gui.impl.gen.view_models.windows.advanced_animated_tooltip_content_model import AdvancedAnimatedTooltipContentModel
 from gui.impl.gen.view_models.windows.advanced_tooltip_content_model import AdvancedTooltipContentModel
@@ -10,17 +11,33 @@ from gui.impl.pub.window_view import WindowView
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.impl import IGuiLoader
+if typing.TYPE_CHECKING:
+    from typing import Optional
+    from frameworks.wulf import ViewEvent, Window
 
 class ToolTipWindow(WindowImpl):
-    __slots__ = ()
+    __slots__ = ('_posX', '_posY')
 
     def __init__(self, event, content, parent):
         if event is not None and event.decoratorID:
             decorator = WindowView(layoutID=event.decoratorID)
         else:
             decorator = None
+        if event is not None:
+            self._posX, self._posY = event.mouse.positionX, event.mouse.positionY
+        else:
+            self._posX, self._posY = (0, 0)
         super(ToolTipWindow, self).__init__(wndFlags=WindowFlags.TOOLTIP, decorator=decorator, content=content, parent=parent, areaID=R.areas.specific(), ownerViewID=event.targetViewID if event is not None else 0)
         return
+
+    def move(self, x, y, xAnchor=PositionAnchor.LEFT, yAnchor=PositionAnchor.TOP):
+        self._posX = x
+        self._posY = y
+        return super(ToolTipWindow, self).move(x, y, xAnchor, yAnchor)
+
+    def _onReady(self):
+        self.move(self._posX, self._posY)
+        super(ToolTipWindow, self)._onReady()
 
 
 class SimpleToolTipWindow(ToolTipWindow):

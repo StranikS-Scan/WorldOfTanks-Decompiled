@@ -11,7 +11,7 @@ class GuaranteedRewardInfoTooltip(ViewImpl):
     __lootBoxes = dependency.descriptor(ILootBoxSystemController)
 
     def __init__(self, category, eventName):
-        settings = ViewSettings(R.views.lobby.lootbox_system.tooltips.GuaranteedRewardInfoTooltip())
+        settings = ViewSettings(R.views.mono.lootbox.tooltips.guaranteed_reward_info())
         settings.model = GuaranteedRewardInfoTooltipViewModel()
         super(GuaranteedRewardInfoTooltip, self).__init__(settings)
         self.__category = category

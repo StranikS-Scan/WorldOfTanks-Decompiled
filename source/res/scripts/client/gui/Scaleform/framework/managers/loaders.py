@@ -2,14 +2,15 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/managers/loaders.py
 import logging
 import typing
+import BigWorld
 import Event
 import constants
-import BigWorld
 from gui.Scaleform.framework import g_entitiesFactories, ViewSettings, ScopeTemplates
 from gui.Scaleform.framework.entities.View import View, ViewKey
 from gui.Scaleform.framework.entities.abstract.LoaderManagerMeta import LoaderManagerMeta
 from gui.Scaleform.framework.entities.sf_window import SFWindow
 from gui.Scaleform.framework.entities.view_impl_adaptor import ViewImplAdaptor
+from gui.Scaleform.framework.entities.wulf_adapter import WulfPackageLayoutAdapter
 from gui.Scaleform.framework.settings import UIFrameworkImpl
 from gui.Scaleform.framework.view_overrider import ViewOverrider
 from gui.impl.common.fade_manager import UseFading
@@ -167,7 +168,7 @@ class LoaderManager(LoaderManagerMeta):
                 item.isCancelled = True
                 self.as_cancelLoadViewS(key.name)
                 self.onViewLoadCanceled(key, item)
-                if item.uid != -1:
+                if item.uid != -1 and not isinstance(item.pyEntity, WulfPackageLayoutAdapter):
                     uniprof.exitFromRegion('Loading {} {}'.format(key.name, item.uid))
                     BigWorld.notify(BigWorld.EventType.VIEW_LOADED, key.alias, item.uid, key.name)
                 if not item.pyEntity.isDisposed():
@@ -307,24 +308,77 @@ class LoaderManager(LoaderManagerMeta):
             self.as_loadViewS(viewDict)
         else:
             pyEntity, factoryIdx = g_entitiesFactories.factory(key.alias, *args, **kwargs)
-            if pyEntity is not None:
-                pyEntity.setUniqueName(key.name)
-                pyEntity.setEnvironment(self.__app)
-                pyEntity.onDispose += self.__handleViewDispose
-                pyEntity.setParentWindow(window)
-                window.setContent(pyEntity)
-                config = pyEntity.settings.getDAAPIObject()
-                self.__loadingItems[key] = _LoadingItem(loadParams, uid, pyEntity, factoryIdx, args, kwargs, config.get('isModal', False))
-                self.onViewLoadInit(pyEntity)
+            if pyEntity is None:
+                _logger.warning('PyEntity for alias %s is None', key.alias)
+                window.destroy()
+                uniprof.exitFromRegion('Loading ' + name)
+                BigWorld.notify(BigWorld.EventType.LOAD_FAILED, key.alias, uid, key.name)
+                uniprof.exitFromRegion('Scaleform ' + name)
+                BigWorld.notify(BigWorld.EventType.VIEW_DESTROYED, key.alias, uid, key.name)
+                return
+            closeRegions = False
+            pyEntity.setUniqueName(key.name)
+            pyEntity.setEnvironment(self.__app)
+            pyEntity.onDispose += self.__handleViewDispose
+            if isinstance(pyEntity, WulfPackageLayoutAdapter):
+                closeRegions = True
+            pyEntity.setParentWindow(window)
+            window.setContent(pyEntity)
+            config = pyEntity.settings.getDAAPIObject()
+            self.__loadingItems[key] = _LoadingItem(loadParams, uid, pyEntity, factoryIdx, args, kwargs, config.get('isModal', False))
+            self.onViewLoadInit(pyEntity)
+            if isinstance(pyEntity, WulfPackageLayoutAdapter):
+                pyEntity.onWulfViewLoaded += self.__onWulfViewLoaded
+                pyEntity.onWulfViewLoadError += self.__onWulfViewLoadError
+                pyEntity.load()
+            else:
                 viewDict = {'config': config,
                  'alias': key.alias,
                  'name': key.name,
                  'viewTutorialId': viewTutorialID}
                 self.as_loadViewS(viewDict)
-            else:
-                _logger.warning('PyEntity for alias %s is None', key.alias)
-                window.destroy()
+            if closeRegions:
+                uniprof.exitFromRegion('Loading ' + name)
+                BigWorld.notify(BigWorld.EventType.VIEW_LOADED, key.alias, uid, key.name)
+                uniprof.exitFromRegion('Scaleform ' + name)
+                BigWorld.notify(BigWorld.EventType.VIEW_DESTROYED, key.alias, uid, key.name)
         return pyEntity
+
+    def __onWulfViewLoaded(self, pyEntity):
+        pyEntity.onWulfViewLoaded -= self.__onWulfViewLoaded
+        pyEntity.onWulfViewLoadError -= self.__onWulfViewLoadError
+        viewKey = pyEntity.key
+        if viewKey not in self.__loadingItems:
+            _logger.error('View loading for key has no associated data: %r', viewKey)
+            return
+        else:
+            item = self.__loadingItems.pop(viewKey)
+            if item.isCancelled or item.pyEntity.isDisposed():
+                self.onViewLoadCanceled(viewKey, item)
+                return
+            item.pyEntity.onDispose -= self.__handleViewDispose
+            if pyEntity is not None:
+                self.onViewLoaded(pyEntity, item.loadParams)
+                return
+            _logger.error('An error occurred before view initialization. View %r will be destroyed.', item.pyEntity)
+            if not item.pyEntity.isDisposed():
+                item.pyEntity.destroy()
+            self.onViewLoadError(viewKey, 'An error occurred before view initialization', item)
+            return
+
+    def __onWulfViewLoadError(self, pyEntity):
+        pyEntity.onWulfViewLoaded -= self.__onWulfViewLoaded
+        pyEntity.onWulfViewLoadError -= self.__onWulfViewLoadError
+        viewKey = pyEntity.key
+        _logger.error('Error occurred during view %s loading.', viewKey)
+        if viewKey not in self.__loadingItems:
+            _logger.warning('View loading for name has no associated data: %s', viewKey.name)
+            return
+        item = self.__loadingItems.pop(viewKey)
+        if item.isCancelled:
+            self.onViewLoadCanceled(viewKey, item)
+        else:
+            self.onViewLoadError(viewKey, 'Error occurred during view loading', item)
 
     def __doLoadGuiImplView(self, loadParams, fadeParams, *args, **kwargs):
         key = loadParams.viewKey

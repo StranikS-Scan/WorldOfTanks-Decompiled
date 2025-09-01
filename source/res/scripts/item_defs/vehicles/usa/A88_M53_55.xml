@@ -873,13 +873,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_M53_55>
-      <userString>	#usa_vehicles:Chassis_M53_55	</userString>
+    <Chassis_A88_M53_55>
+      <userString>	#usa_vehicles:Chassis_A88_M53_55	</userString>
       <tags></tags>
       <level>	8	</level>
       <price>	31000	</price>
       <unlocks>
-        <chassis>	Chassis_M53_55_2	  <cost>	24000	</cost>
+        <chassis>	Chassis_A88_M53_55_2	  <cost>	24000	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -887,8 +887,7 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	23000	</weight>
-      <maxLoad>	44700	</maxLoad>
-      <terrainResistance>	1.3 1.5 2.5	</terrainResistance>
+      <terrainResistance>	1.2 1.4 2.3	</terrainResistance>
       <brakeForce>	40000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	22	</rotationSpeed>
@@ -897,9 +896,9 @@
         <vehicleRotation>	0.38	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	140	</maxHealth>
-      <maxRegenHealth>	105	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	165	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
       <models>
         <undamaged>	vehicles/american/A88_M53_55/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/american/A88_M53_55/crash/lod0/Chassis.model	</destroyed>
@@ -1707,10 +1706,10 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	8.84210491	</repairTime>
-    </Chassis_M53_55>
-    <Chassis_M53_55_2>
-      <userString>	#usa_vehicles:Chassis_M53_55_2	</userString>
+      <repairTime>	6.66666651	</repairTime>
+    </Chassis_A88_M53_55>
+    <Chassis_A88_M53_55_2>
+      <userString>	#usa_vehicles:Chassis_A88_M53_55_2	</userString>
       <tags></tags>
       <level>	9	</level>
       <price>	64000	</price>
@@ -1719,7 +1718,6 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	23000	</weight>
-      <maxLoad>	48000	</maxLoad>
       <terrainResistance>	1.2 1.4 2.3	</terrainResistance>
       <brakeForce>	45000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -1729,9 +1727,9 @@
         <vehicleRotation>	0.34	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	150	</maxHealth>
-      <maxRegenHealth>	115	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
       <models>
         <undamaged>	vehicles/american/A88_M53_55/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/american/A88_M53_55/crash/lod0/Chassis.model	</destroyed>
@@ -2542,12 +2540,12 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	7.19999981	</repairTime>
-    </Chassis_M53_55_2>
+      <repairTime>	6.66666651	</repairTime>
+    </Chassis_A88_M53_55_2>
   </chassis>
   <turrets0>
-    <Turret_1_M53_55>
-      <userString>	#usa_vehicles:Turret_1_M53_55	</userString>
+    <Turret_1_A88_M53_55>
+      <userString>	#usa_vehicles:Turret_1_A88_M53_55	</userString>
       <tags></tags>
       <level>	9	</level>
       <price>	100	</price>
@@ -2566,9 +2564,9 @@
       <maxHealth>	90	</maxHealth>
       <rotationSpeed>	10	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	170	</maxHealth>
+        <maxRegenHealth>	85	</maxRegenHealth>
+        <repairCost>	9	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	300	</circularVisionRadius>
       <surveyingDeviceHealth>
@@ -2760,7 +2758,7 @@
         </_155mm_Gun_M46>
         <_203mm_Howitzer_M47>	shared	  <maxAmmo>	20	</maxAmmo>
           <reloadTime>	42	</reloadTime>
-          <shotDispersionRadius>	0.75	</shotDispersionRadius>
+          <shotDispersionRadius>	0.77	</shotDispersionRadius>
           <unlocks>
             <vehicle>	A38_T92	  <cost>	271000	</cost>
             </vehicle>
@@ -3745,25 +3743,20 @@
         <density>	50.2519 50.2685	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_1_M53_55>
+    </Turret_1_A88_M53_55>
   </turrets0>
   <engines>
     <Ford_GAC_R>	shared	  <unlocks>
-        <engine>	Continental_AV-1790-7B	  <cost>	31000	</cost>
+        <engine>	Continental_AV_1790_7B	  <cost>	31000	</cost>
         </engine>
       </unlocks>
     </Ford_GAC_R>
-    <Continental_AV-1790-7B>	shared	</Continental_AV-1790-7B>
+    <Continental_AV_1790_7B>	shared	</Continental_AV_1790_7B>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <AN_PRC_10>	shared	  <unlocks>
-        <radio>	AN_PRC_25	  <cost>	9000	</cost>
-        </radio>
-      </unlocks>
-    </AN_PRC_10>
     <AN_PRC_25>	shared	</AN_PRC_25>
   </radios>
   <physics>
@@ -3773,26 +3766,13 @@
           <smplEnginePower>	814.1064	</smplEnginePower>
           <smplFwMaxSpeed>	56.3	</smplFwMaxSpeed>
         </Ford_GAC_R>
-        <Continental_AV-1790-7B>
+        <Continental_AV_1790_7B>
           <smplEnginePower>	856.3977	</smplEnginePower>
           <smplFwMaxSpeed>	56.3	</smplFwMaxSpeed>
-        </Continental_AV-1790-7B>
+        </Continental_AV_1790_7B>
       </engines>
       <chassis>
-        <Chassis_M53_55>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.20125	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.12075	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.10465	</rollingFriction>
-            </firm>
-          </grounds>
-        </Chassis_M53_55>
-        <Chassis_M53_55_2>
+        <Chassis_A88_M53_55>
           <grounds>
             <soft>
               <rollingFriction>	0.18515	</rollingFriction>
@@ -3804,7 +3784,20 @@
               <rollingFriction>	0.0966	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_M53_55_2>
+        </Chassis_A88_M53_55>
+        <Chassis_A88_M53_55_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.18515	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.1127	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0966	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_A88_M53_55_2>
       </chassis>
     </detailed>
   </physics>

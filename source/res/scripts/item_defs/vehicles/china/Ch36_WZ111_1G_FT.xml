@@ -69,7 +69,7 @@
     </armor>
     <primaryArmor>	armor_13 armor_3 armor_4	</primaryArmor>
     <weight>	30720	</weight>
-    <maxHealth>	1000	</maxHealth>
+    <maxHealth>	1040	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -1531,11 +1531,10 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	10000	</weight>
-      <maxLoad>	45000	</maxLoad>
-      <terrainResistance>	1.3 1.8 2.9	</terrainResistance>
+      <terrainResistance>	1.1 1.4 2.3	</terrainResistance>
       <brakeForce>	45000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	22	</rotationSpeed>
+      <rotationSpeed>	27	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.23	</vehicleMovement>
         <vehicleRotation>	0.23	</vehicleRotation>
@@ -2565,11 +2564,10 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	10000	</weight>
-      <maxLoad>	48000	</maxLoad>
       <terrainResistance>	1.1 1.4 2.3	</terrainResistance>
       <brakeForce>	45000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	25	</rotationSpeed>
+      <rotationSpeed>	30	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.24	</vehicleMovement>
         <vehicleRotation>	0.24	</vehicleRotation>
@@ -3597,12 +3595,12 @@
         <armor_1>	0	</armor_1>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	250	</maxHealth>
+      <maxHealth>	260	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	155	</maxHealth>
+        <maxRegenHealth>	78	</maxRegenHealth>
+        <repairCost>	8	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	370	</circularVisionRadius>
       <surveyingDeviceHealth>
@@ -3611,121 +3609,6 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_122mm_D25_TG_FT>	shared	  <maxAmmo>	30	</maxAmmo>
-          <armor>
-            <armor_1>	240	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	230	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	175	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	130	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_7>
-            <armor_8>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_8>
-            <armor_9>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_9>
-            <gun>	50	</gun>
-          </armor>
-          <turretYawLimits>	-12 12	</turretYawLimits>
-          <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 6 1 6	</maxPitch>
-          </pitchLimits>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	8.5	</reloadTime>
-          <aimingTime>	2.9	</aimingTime>
-          <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <unlocks>
-            <gun>	_122mm_60_122TG_FT	  <cost>	44000	</cost>
-            </gun>
-          </unlocks>
-          <models>
-            <undamaged>	vehicles/chinese/Ch36_WZ111_1G_FT/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/chinese/Ch36_WZ111_1G_FT/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/chinese/Ch36_WZ111_1G_FT/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/chinese/Ch36_WZ111_1G_FT/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/chinese/Ch36_WZ111_1G_FT/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_large_mb	</effects>
-          <reloadEffect>	reload115_152	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.003886 0.004733 2.19254	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.265252 0.265252	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.003886 0.004733 2.19254	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	-0.000014 1.3241 2.02486	</position>
-              <rotation>	0.512255 -0.000009 3.14157	</rotation>
-              <scale>	3.29014 1.8 3.29016	</scale>
-              <showOn>	4112	</showOn>
-              <clipAngle>	0.021766	</clipAngle>
-              <anchorShift>	0.881318	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.000007 1.68119 2.20273	</position>
-              <rotation>	0.589681 -0.000011 3.14157	</rotation>
-              <scale>	2.87329 0.999999 2.87331	</scale>
-              <showOn>	4112	</showOn>
-              <clipAngle>	0.021766	</clipAngle>
-              <anchorShift>	0.496584	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.007772 0.009465 1.4	</rayStart>
-              <rayEnd>	-0.007772 0.009465 2	</rayEnd>
-              <rayUp>	0.109 0 0	</rayUp>
-              <size>	0.6	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <density>	83.3177 82.9189	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_122mm_D25_TG_FT>
         <_122mm_60_122TG_FT>	shared	  <maxAmmo>	30	</maxAmmo>
           <unlocks>
             <gun>	_130mm_59_130JG_FT	  <cost>	66500	</cost>
@@ -3758,8 +3641,8 @@
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	12.1	</reloadTime>
-          <aimingTime>	2.9	</aimingTime>
+          <reloadTime>	11.6	</reloadTime>
+          <aimingTime>	2.6	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
@@ -3989,11 +3872,6 @@
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <A-220_1>	shared	  <unlocks>
-        <radio>	A-220B	  <cost>	9500	</cost>
-        </radio>
-      </unlocks>
-    </A-220_1>
     <A-220B>	shared	</A-220B>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
@@ -4001,7 +3879,7 @@
     <detailed>
       <engines>
         <_12150LSG>
-          <smplEnginePower>	550	</smplEnginePower>
+          <smplEnginePower>	650	</smplEnginePower>
           <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
         </_12150LSG>
         <_12150LTG>
@@ -4014,13 +3892,13 @@
           <axleCount>	5	</axleCount>
           <grounds>
             <soft>
-              <rollingFriction>	0.23345	</rollingFriction>
+              <rollingFriction>	0.18515	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1449	</rollingFriction>
+              <rollingFriction>	0.1127	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_Ch36_WZ111_1G_FT>

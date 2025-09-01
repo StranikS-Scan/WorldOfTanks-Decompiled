@@ -82,6 +82,7 @@
       <water>	turret_touchdown_medium_water	</water>
       <dirt>	turret_touchdown_medium	</dirt>
       <oil>	turret_touchdown_medium	</oil>
+      <blacksand>	turret_touchdown_medium	</blacksand>
     </collision>
     <pull>
       <ground>	turret_pull_ground	</ground>
@@ -93,6 +94,7 @@
       <water>	turret_pull_water	</water>
       <dirt>	turret_pull_dirt	</dirt>
       <oil>	turret_pull_oil	</oil>
+      <blacksand>	turret_pull_blacksand	</blacksand>
     </pull>
   </defaultTurretDetachmentEffects>
   <extras>
@@ -119,7 +121,9 @@
     <shoot>	ShowShooting : Shoot	</shoot>
     <noAmmo>	NoneExtra : NoAmmo	</noAmmo>
     <gunReload>	NoneExtra : GunReload	</gunReload>
+    <gunReloadBetweenShots>	NoneExtra : GunReloadBetweenShots	</gunReloadBetweenShots>
     <clipReload>	NoneExtra : ClipReload	</clipReload>
+    <controllableClipReload>	NoneExtra : ControllableClipReload	</controllableClipReload>
     <trackInstantRepairDelay>	NoneExtra : TrackInstantRepairDelay	  <delay>	0.3	</delay>
     </trackInstantRepairDelay>
     <stun>	NoneExtra : Stun	</stun>
@@ -311,7 +315,6 @@
       <beamLength>	10.0	</beamLength>
       <bindNode>	HP_gunFire	</bindNode>
     </laserSight>
-    <multiShoot>	ShowShootingMultiGun : MultiShoot	</multiShoot>
     <comp7_aoe_heal>	NoneExtra : VisualScriptEquipmentExtra	</comp7_aoe_heal>
     <comp7_ally_support>	NoneExtra : VisualScriptEquipmentExtra	</comp7_ally_support>
     <comp7_juggernaut>	NoneExtra : VisualScriptEquipmentExtra	</comp7_juggernaut>
@@ -327,6 +330,21 @@
     <comp7_aggressive_detection>	NoneExtra : VisualScriptEquipmentExtra	</comp7_aggressive_detection>
     <comp7_recon>	NoneExtra : VisualScriptEquipmentExtra	</comp7_recon>
     <comp7_redline>	NoneExtra : VisualScriptEquipmentExtra	</comp7_redline>
+    <comp7_light_aoe_heal>	NoneExtra : VisualScriptEquipmentExtra	</comp7_light_aoe_heal>
+    <comp7_light_ally_support>	NoneExtra : VisualScriptEquipmentExtra	</comp7_light_ally_support>
+    <comp7_light_juggernaut>	NoneExtra : VisualScriptEquipmentExtra	</comp7_light_juggernaut>
+    <comp7_light_hunter>	NoneExtra : VisualScriptEquipmentExtra	</comp7_light_hunter>
+    <comp7_light_fast_recharge>	NoneExtra : VisualScriptEquipmentExtra	</comp7_light_fast_recharge>
+    <comp7_light_aoe_inspire>	NoneExtra : VisualScriptEquipmentExtra	</comp7_light_aoe_inspire>
+    <comp7_light_risky_attack>	NoneExtra : VisualScriptEquipmentExtra	</comp7_light_risky_attack>
+    <comp7_light_berserk>	NoneExtra : VisualScriptEquipmentExtra	</comp7_light_berserk>
+    <comp7_light_sniper>	NoneExtra : VisualScriptEquipmentExtra	</comp7_light_sniper>
+    <comp7_light_sure_shot>	NoneExtra : VisualScriptEquipmentExtra	</comp7_light_sure_shot>
+    <comp7_light_concentration>	NoneExtra : VisualScriptEquipmentExtra	</comp7_light_concentration>
+    <comp7_light_march>	NoneExtra : VisualScriptEquipmentExtra	</comp7_light_march>
+    <comp7_light_aggressive_detection>	NoneExtra : VisualScriptEquipmentExtra	</comp7_light_aggressive_detection>
+    <comp7_light_recon>	NoneExtra : VisualScriptEquipmentExtra	</comp7_light_recon>
+    <comp7_light_redline>	NoneExtra : VisualScriptEquipmentExtra	</comp7_light_redline>
   </extras>
   <deviceExtras>
     <devices>

@@ -1,9 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/maps_training/maps_training_result_model.py
 from enum import IntEnum
-from frameworks.wulf import Array
+from frameworks.wulf import Array, ViewModel
 from gui.impl.gen import R
-from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusModel
 
 class DoneValueEnum(IntEnum):
@@ -15,7 +14,7 @@ class DoneValueEnum(IntEnum):
 class MapsTrainingResultModel(ViewModel):
     __slots__ = ('onClose',)
 
-    def __init__(self, properties=12, commands=1):
+    def __init__(self, properties=13, commands=1):
         super(MapsTrainingResultModel, self).__init__(properties=properties, commands=commands)
 
     def getDoneValue(self):
@@ -36,59 +35,65 @@ class MapsTrainingResultModel(ViewModel):
     def setMapName(self, value):
         self._setResource(2, value)
 
-    def getSelectedScenario(self):
+    def getModeId(self):
         return self._getString(3)
 
-    def setSelectedScenario(self, value):
+    def setModeId(self, value):
         self._setString(3, value)
 
+    def getSelectedScenario(self):
+        return self._getString(4)
+
+    def setSelectedScenario(self, value):
+        self._setString(4, value)
+
     def getSelectedVehicleType(self):
-        return self._getResource(4)
+        return self._getResource(5)
 
     def setSelectedVehicleType(self, value):
-        self._setResource(4, value)
+        self._setResource(5, value)
 
     def getKills(self):
-        return self._getNumber(5)
-
-    def setKills(self, value):
-        self._setNumber(5, value)
-
-    def getAllTargets(self):
         return self._getNumber(6)
 
-    def setAllTargets(self, value):
+    def setKills(self, value):
         self._setNumber(6, value)
 
+    def getAllTargets(self):
+        return self._getNumber(7)
+
+    def setAllTargets(self, value):
+        self._setNumber(7, value)
+
     def getTime(self):
-        return self._getString(7)
+        return self._getString(8)
 
     def setTime(self, value):
-        self._setString(7, value)
+        self._setString(8, value)
 
     def getVehicleImage(self):
-        return self._getResource(8)
+        return self._getResource(9)
 
     def setVehicleImage(self, value):
-        self._setResource(8, value)
+        self._setResource(9, value)
 
     def getWasDone(self):
-        return self._getBool(9)
-
-    def setWasDone(self, value):
-        self._setBool(9, value)
-
-    def getHangarReady(self):
         return self._getBool(10)
 
-    def setHangarReady(self, value):
+    def setWasDone(self, value):
         self._setBool(10, value)
 
+    def getHangarReady(self):
+        return self._getBool(11)
+
+    def setHangarReady(self, value):
+        self._setBool(11, value)
+
     def getRewards(self):
-        return self._getArray(11)
+        return self._getArray(12)
 
     def setRewards(self, value):
-        self._setArray(11, value)
+        self._setArray(12, value)
 
     @staticmethod
     def getRewardsType():
@@ -99,6 +104,7 @@ class MapsTrainingResultModel(ViewModel):
         self._addNumberProperty('doneValue')
         self._addStringProperty('mapID', '')
         self._addResourceProperty('mapName', R.invalid())
+        self._addStringProperty('modeId', '')
         self._addStringProperty('selectedScenario', '')
         self._addResourceProperty('selectedVehicleType', R.invalid())
         self._addNumberProperty('kills', 0)

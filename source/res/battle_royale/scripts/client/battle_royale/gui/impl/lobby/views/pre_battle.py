@@ -40,7 +40,6 @@ class PreBattleView(ViewImpl, LobbySubView, LobbyHeaderVisibility):
         self.__isSolo = True
         self.__countOfReady = 0
         self.__maps = []
-        Waiting.show('loadPage')
 
     @prbEntityProperty
     def prbEntity(self):
@@ -56,7 +55,6 @@ class PreBattleView(ViewImpl, LobbySubView, LobbyHeaderVisibility):
         self.__battleRoyaleTournamentController.onUpdatedParticipants += self.__updateParticipants
         super(PreBattleView, self)._initialize(*args, **kwargs)
         self.suspendLobbyHeader(self.uniqueID)
-        Waiting.hide('loadPage')
 
     def _finalize(self):
         self.viewModel.onBattleClick -= self.__onBattleClick
@@ -67,6 +65,7 @@ class PreBattleView(ViewImpl, LobbySubView, LobbyHeaderVisibility):
 
     def _onLoading(self, *args, **kwargs):
         super(PreBattleView, self)._onLoading(*args, **kwargs)
+        Waiting.show('loadPage')
         token = self.__battleRoyaleTournamentController.getSelectedToken()
         if token.isValid:
             self.__isObserver = token.isObserver
@@ -76,6 +75,7 @@ class PreBattleView(ViewImpl, LobbySubView, LobbyHeaderVisibility):
 
     def _onLoaded(self, *args, **kwargs):
         self.__updateParticipants()
+        Waiting.hide('loadPage')
 
     def __onClose(self):
         self.prbEntity.exitFromQueue()

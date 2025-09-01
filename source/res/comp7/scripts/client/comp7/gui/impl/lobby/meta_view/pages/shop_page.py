@@ -3,6 +3,8 @@
 import logging
 from functools import partial
 import typing
+from comp7.gui.Scaleform.genConsts.COMP7_HANGAR_ALIASES import COMP7_HANGAR_ALIASES
+from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from shared_utils import first, findFirst
 from CurrentVehicle import g_currentPreviewVehicle, g_currentVehicle
 from comp7.gui.game_control.comp7_shop_controller import ShopControllerStatus
@@ -18,19 +20,18 @@ from comp7.gui.impl.lobby.meta_view.rotatable_view_helper import RotatableViewHe
 from comp7.gui.impl.lobby.tooltips.fifth_rank_tooltip import FifthRankTooltip
 from comp7.gui.impl.lobby.tooltips.general_rank_tooltip import GeneralRankTooltip
 from comp7.gui.impl.lobby.tooltips.sixth_rank_tooltip import SixthRankTooltip
-from comp7.gui.shared.event_dispatcher import showComp7MetaRootView
-from comp7.gui.shared.event_dispatcher import showComp7PurchaseDialog
+from comp7.gui.shared import event_dispatcher as comp7_events
 from comp7.skeletons.gui.game_control import IComp7ShopController
 from frameworks.wulf.view.array import fillViewModelsArray
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import resolveStateTooltip
+from gui.Scaleform.daapi.view.lobby.vehicle_preview.configurable_vehicle_preview import OptionalBlocks
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.customization.constants import CustomizationModes
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
-from gui.impl import backport
 from gui.impl.backport import BackportTooltipWindow
 from gui.impl.backport.backport_tooltip import TooltipData
 from gui.impl.gen import R
@@ -38,7 +39,7 @@ from gui.impl.gui_decorators import args2params
 from gui.impl.lobby.tooltips.vehicle_role_descr_view import VehicleRolesTooltipView
 from gui.platform.products_fetcher.fetch_result import ResponseStatus
 from gui.shared import g_eventBus
-from gui.shared.event_dispatcher import showVehiclePreviewWithoutBottomPanel, showStylePreview, showStorage
+from gui.shared.event_dispatcher import showStorage
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.view_helpers.blur_manager import CachedBlur
@@ -72,8 +73,8 @@ def _onCustomizationLoadedCallback(styleCD, service=None, hangarSpace=None):
     if isVehicleLoaded:
         ctx.selectItem(styleCD)
     else:
-        slyleSlotItem = ctx.mode.getItemFromSlot(ctx.mode.STYLE_SLOT)
-        if not slyleSlotItem or slyleSlotItem.intCD != styleCD:
+        styleSlotItem = ctx.mode.getItemFromSlot(ctx.mode.STYLE_SLOT)
+        if not styleSlotItem or styleSlotItem.intCD != styleCD:
             ctx.mode.installItem(styleCD, ctx.mode.STYLE_SLOT)
         g_eventBus.addListener(CameraRelatedEvents.VEHICLE_LOADING, __onVehicleLoadFinished)
 
@@ -131,6 +132,10 @@ class ShopPage(PageSubModelPresenter):
     def ranksConfig(self):
         return self.__comp7Controller.getRanksConfig()
 
+    @property
+    def currentItemCD(self):
+        return self.__currentItemCD
+
     def createToolTip(self, event):
         if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
             tooltipId = event.getArgument('tooltipId', None)
@@ -140,22 +145,20 @@ class ShopPage(PageSubModelPresenter):
                 tooltipData = TooltipData(tooltip=tooltipId, isSpecial=True, specialAlias=tooltipId, specialArgs=[itemCD])
             if tooltipData:
                 window = BackportTooltipWindow(tooltipData, self.getParentWindow())
-                if window is None:
-                    return
                 window.load()
                 return window
         return
 
     def createToolTipContent(self, event, contentID):
-        if contentID == R.views.comp7.lobby.tooltips.GeneralRankTooltip():
+        if contentID == R.views.comp7.mono.lobby.tooltips.general_rank_tooltip():
             params = {'rank': Rank(event.getArgument('rank')),
              'divisions': event.getArgument('divisions'),
              'from': event.getArgument('from'),
              'to': event.getArgument('to')}
             return GeneralRankTooltip(params=params)
-        elif contentID == R.views.comp7.lobby.tooltips.FifthRankTooltip():
+        elif contentID == R.views.comp7.mono.lobby.tooltips.fifth_rank_tooltip():
             return FifthRankTooltip()
-        elif contentID == R.views.comp7.lobby.tooltips.SixthRankTooltip():
+        elif contentID == R.views.comp7.mono.lobby.tooltips.sixth_rank_tooltip():
             return SixthRankTooltip()
         elif contentID == R.views.lobby.ranked.tooltips.RankedBattlesRolesTooltipView():
             vehicleCD = int(event.getArgument('vehicleCD'))
@@ -163,18 +166,18 @@ class ShopPage(PageSubModelPresenter):
         else:
             return None
 
-    def initialize(self, *args, **kwargs):
+    def initialize(self, **params):
         self.__rotationHelper = RotatableViewHelper()
         self.__switchCameraToDefault = True
         self.__switchVehicleToDefault = True
         self.__rotationHelper.switchCamera(Comp7Cameras.SHOP.value, False)
         self.__disableBackgroundAlpha()
-        super(ShopPage, self).initialize(*args, **kwargs)
+        super(ShopPage, self).initialize(**params)
         self.__productSelectorMethods = {GUI_ITEM_TYPE.VEHICLE: self.__selectVehicle,
          GUI_ITEM_TYPE.STYLE: self.__selectStyle,
          GUI_ITEM_TYPE.OPTIONALDEVICE: self.__selectEquipment}
-        if 'productCD' in kwargs:
-            self.__currentItemCD = kwargs['productCD']
+        if 'productCD' in params:
+            self.__currentItemCD = params['productCD']
         self.__blur = CachedBlur(blurRadius=self.__BLUR_INTENSITY)
         if self.__hangarVehId is None:
             self.__hangarVehId = g_currentVehicle.invID
@@ -190,7 +193,10 @@ class ShopPage(PageSubModelPresenter):
             g_currentVehicle.selectVehicle(self.__hangarVehId)
         self.__productSelectorMethods = {}
         self.__productCdToCode = {}
-        if self.__switchCameraToDefault:
+        from comp7.gui.impl.lobby.hangar.states import Comp7ModeState
+        lsm = getLobbyStateMachine()
+        isComp7State = lsm.getStateByCls(Comp7ModeState).isEntered()
+        if self.__switchCameraToDefault and isComp7State:
             self.__rotationHelper.switchCamera(Comp7Cameras.DEFAULT.value, False)
         self.__rotationHelper = None
         if self.__blur is not None:
@@ -211,7 +217,7 @@ class ShopPage(PageSubModelPresenter):
          (self.__itemsCache.onSyncCompleted, self.__onSyncCompleted),
          (self.__comp7ShopController.onShopStateChanged, self.__onShopStateChanged),
          (self.__comp7ShopController.onDataUpdated, self.__onDataUpdated),
-         (self.__comparisonBasket.onChange, self.__switchComparisonBacketState)])
+         (self.__comparisonBasket.onChange, self.__switchComparisonBasketState)])
         return events
 
     def __disableBackgroundAlpha(self):
@@ -257,7 +263,7 @@ class ShopPage(PageSubModelPresenter):
         g_currentVehicle.selectNoVehicle()
         self.viewModel.setShopState(ShopState.ERROR)
         self.__currentItemCD = None
-        self.__enableBlur()
+        self.__blur.enable()
         self.__hideWaiting()
         return
 
@@ -333,13 +339,19 @@ class ShopPage(PageSubModelPresenter):
 
     def __goToPreview(self):
         itemType = getItemType(self.__currentItemCD)
-        backCallback = partial(showComp7MetaRootView, self.pageId, productCD=self.__currentItemCD)
-        backBtnLabel = backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.comp7())
+        backCallback = partial(comp7_events.showComp7MetaRootTab, self.pageId, productCD=self.__currentItemCD)
         if itemType == GUI_ITEM_TYPE.VEHICLE:
-            showVehiclePreviewWithoutBottomPanel(self.__currentItemCD, backBtnLabel=backBtnLabel, backCallback=backCallback, resetAppearance=False, heroInteractive=False)
+            params = {'resetAppearance': False,
+             'heroInteractive': False,
+             'hiddenBlocks': (OptionalBlocks.CLOSE_BUTTON, OptionalBlocks.BUYING_PANEL),
+             'previewAlias': COMP7_HANGAR_ALIASES.COMP7_CONFIGURABLE_VEHICLE_PREVIEW,
+             'previewBackCb': backCallback}
+            comp7_events.showComp7VehiclePreview(self.__currentItemCD, **params)
         elif itemType == GUI_ITEM_TYPE.STYLE:
             vehCD, style = getVehicleCDAndStyle(self.__currentItemCD)
-            showStylePreview(vehCD, style, backBtnDescrLabel=backBtnLabel, backCallback=backCallback, resetAppearance=False)
+            params = {'resetAppearance': False,
+             'backCallback': backCallback}
+            comp7_events.showComp7StylePreview(vehCD, style, **params)
 
     def __goToVehicle(self):
         self.__hangarVehId = self.__itemsCache.items.getItemByCD(self.__currentItemCD).invID
@@ -358,7 +370,7 @@ class ShopPage(PageSubModelPresenter):
     def __openPurchaseView(self):
         self.__switchVehicleToDefault = False
         productCode = self.__productCdToCode[self.__currentItemCD]
-        showComp7PurchaseDialog(productCode, self.getParentWindow())
+        comp7_events.showComp7PurchaseDialog(productCode, self.getParentWindow())
 
     def __openRestoreView(self):
         showStorage(STORAGE_CONSTANTS.IN_HANGAR, STORAGE_CONSTANTS.VEHICLES_TAB_RESTORE)
@@ -381,9 +393,9 @@ class ShopPage(PageSubModelPresenter):
     def __onAddToVehicleCompare(self):
         self.__comparisonBasket.addVehicle(self.__currentItemCD)
 
-    def __switchComparisonBacketState(self, _):
+    def __switchComparisonBasketState(self, _):
         with self.viewModel.transaction() as tx:
-            self.__checkComparisonBacketState(tx)
+            self.__checkComparisonBasketState(tx)
 
     def __getStartProductCD(self, products):
         if self.__currentItemCD:
@@ -417,8 +429,8 @@ class ShopPage(PageSubModelPresenter):
         else:
             g_currentPreviewVehicle.onHeroStateUpdated += self.__onHeroStateChanged
         with self.viewModel.transaction() as tx:
-            self.__checkComparisonBacketState(tx)
-        self.__disableBlur()
+            self.__checkComparisonBasketState(tx)
+        self.__blur.disable()
 
     def __onHeroStateChanged(self):
         itemType = getItemType(self.__currentItemCD)
@@ -428,7 +440,7 @@ class ShopPage(PageSubModelPresenter):
             self.__selectStyle()
         g_currentPreviewVehicle.onHeroStateUpdated -= self.__onHeroStateChanged
 
-    def __checkComparisonBacketState(self, model):
+    def __checkComparisonBasketState(self, model):
         state, tooltip = resolveStateTooltip(self.__comparisonBasket, g_currentPreviewVehicle.item, enabledTooltip=VEH_COMPARE.VEHPREVIEW_COMPAREVEHICLEBTN_TOOLTIPS_ADDTOCOMPARE, fullTooltip=VEH_COMPARE.VEHPREVIEW_COMPAREVEHICLEBTN_TOOLTIPS_DISABLED)
         model.setIsVehiclesCompareEnabled(state)
         model.setVehicleCompareTooltipId(tooltip)
@@ -445,21 +457,11 @@ class ShopPage(PageSubModelPresenter):
             if not outfit:
                 return
             self.__hangarSpace.updateVehicleOutfit(outfit)
-        self.__disableBlur()
+        self.__blur.disable()
 
     def __selectEquipment(self):
-        self.__enableBlur()
+        self.__blur.enable()
         if g_currentPreviewVehicle.item:
             g_currentPreviewVehicle.selectNoVehicle()
         if g_currentVehicle.item:
             g_currentVehicle.selectNoVehicle()
-
-    def __enableBlur(self):
-        if self.__blur.enabled:
-            return
-        self.__blur.enable()
-
-    def __disableBlur(self):
-        if not self.__blur.enabled:
-            return
-        self.__blur.disable()

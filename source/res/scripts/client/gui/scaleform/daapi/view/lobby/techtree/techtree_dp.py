@@ -43,7 +43,8 @@ def _makeLines():
 
 DISPLAY_SETTINGS = {'hasRoot': 'readBool',
  'isLevelDisplayed': 'readBool',
- 'nodeRendererName': 'readString'}
+ 'nodeRendererName': 'readString',
+ 'firstLevelToHighlight': 'readInt'}
 _VEHICLE = GUI_ITEM_TYPE.VEHICLE
 _VEHICLE_TYPE_NAME = GUI_ITEM_TYPE_NAMES[_VEHICLE]
 _AnnouncementInfo = namedtuple('_AnnouncementInfo', ('userString',

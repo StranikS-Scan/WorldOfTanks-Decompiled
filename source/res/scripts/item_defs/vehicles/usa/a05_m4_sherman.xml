@@ -61,7 +61,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	14600	</weight>
-    <maxHealth>	480	</maxHealth>
+    <maxHealth>	520	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	170	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -1090,13 +1090,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <T41>
-      <userString>	#usa_vehicles:T41	</userString>
+    <Chassis_A05_M4_Sherman>
+      <userString>	#usa_vehicles:Chassis_A05_M4_Sherman	</userString>
       <tags></tags>
       <level>	4	</level>
       <price>	4450	</price>
       <unlocks>
-        <chassis>	T42	  <cost>	2100	</cost>
+        <chassis>	Chassis_A05_M4_Sherman_2	  <cost>	2100	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1104,14 +1104,13 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	8000	</weight>
-      <maxLoad>	30000	</maxLoad>
-      <terrainResistance>	0.9 1.5 2.3	</terrainResistance>
+      <terrainResistance>	1 1.1 1.7	</terrainResistance>
       <brakeForce>	46500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	35	</rotationSpeed>
+      <rotationSpeed>	48	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.22	</vehicleMovement>
-        <vehicleRotation>	0.22	</vehicleRotation>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	90	</maxHealth>
@@ -2292,9 +2291,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </T41>
-    <T42>
-      <userString>	#usa_vehicles:T42	</userString>
+    </Chassis_A05_M4_Sherman>
+    <Chassis_A05_M4_Sherman_2>
+      <userString>	#usa_vehicles:Chassis_A05_M4_Sherman_2	</userString>
       <tags></tags>
       <level>	5	</level>
       <price>	8300	</price>
@@ -2303,14 +2302,13 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	8000	</weight>
-      <maxLoad>	32300	</maxLoad>
       <terrainResistance>	1 1.1 1.7	</terrainResistance>
       <brakeForce>	46500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	37	</rotationSpeed>
+      <rotationSpeed>	50	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.2	</vehicleMovement>
-        <vehicleRotation>	0.2	</vehicleRotation>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	100	</maxHealth>
@@ -3491,16 +3489,16 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </T42>
+    </Chassis_A05_M4_Sherman_2>
   </chassis>
   <turrets0>
-    <D51066>
-      <userString>	#usa_vehicles:D51066	</userString>
+    <Turret_1_A05_M4_Sherman>
+      <userString>	#usa_vehicles:Turret_1_A05_M4_Sherman	</userString>
       <tags></tags>
       <level>	4	</level>
       <price>	4800	</price>
       <unlocks>
-        <turret>	D51072	  <cost>	2700	</cost>
+        <turret>	Turret_2_A05_M4_Sherman	  <cost>	2700	</cost>
         </turret>
       </unlocks>
       <armor>
@@ -3516,14 +3514,14 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4800	</weight>
-      <maxHealth>	90	</maxHealth>
+      <maxHealth>	100	</maxHealth>
       <rotationSpeed>	39	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	330	</circularVisionRadius>
+      <circularVisionRadius>	360	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	70	</maxHealth>
         <maxRegenHealth>	35	</maxRegenHealth>
@@ -3544,10 +3542,16 @@
             </armor_8>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.45	</shotDispersionRadius>
-          <reloadTime>	3.8	</reloadTime>
+          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <reloadTime>	3.4	</reloadTime>
           <aimingTime>	2.1	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <shotDispersionFactors>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+            <afterShot>	3	</afterShot>
+            <turretRotation>	0.16	</turretRotation>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/american/A05_M4_Sherman/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A05_M4_Sherman/crash/lod0/Gun_01.model	</destroyed>
@@ -4111,16 +4115,14 @@
         <density>	138.314 146.469	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </D51066>
-    <D51072>
-      <userString>	#usa_vehicles:D51072	</userString>
+    </Turret_1_A05_M4_Sherman>
+    <Turret_2_A05_M4_Sherman>
+      <userString>	#usa_vehicles:Turret_2_A05_M4_Sherman	</userString>
       <tags></tags>
       <level>	5	</level>
       <price>	11500	</price>
       <unlocks>
-        <gun>	_105mm_SPH_M4_L23	  <cost>	1500	</cost>
-        </gun>
-        <gun>	_76mm_Gun_M1A1	  <cost>	4600	</cost>
+        <gun>	_76mm_Gun_M1A1_M4A1	  <cost>	4600	</cost>
         </gun>
       </unlocks>
       <armor>
@@ -4137,7 +4139,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5000	</weight>
-      <maxHealth>	120	</maxHealth>
+      <maxHealth>	130	</maxHealth>
       <rotationSpeed>	37	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -4168,10 +4170,16 @@
             </armor_8>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.44	</shotDispersionRadius>
-          <reloadTime>	3.8	</reloadTime>
-          <aimingTime>	2.1	</aimingTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	3.4	</reloadTime>
+          <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <shotDispersionFactors>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+            <afterShot>	3	</afterShot>
+            <turretRotation>	0.14	</turretRotation>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/american/A05_M4_Sherman/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/american/A05_M4_Sherman/crash/lod0/Gun_03.model	</destroyed>
@@ -4247,7 +4255,114 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_Gun_M3_L37A1>
-        <_105mm_SPH_M4_L23>	shared	  <pitchLimits>
+        <_76mm_Gun_M1A1_M4A1>	shared	  <maxAmmo>	110	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 12 1 12	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <gun>	_105mm_M4_M4A1	  <cost>	1500	</cost>
+            </gun>
+            <vehicle>	A06_M4A3E8_Sherman	  <cost>	30500	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_3>	25.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_5>	88.9	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	44.5	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_8>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_8>
+            <gun>	20	</gun>
+          </armor>
+          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <reloadTime>	3.8	</reloadTime>
+          <aimingTime>	2	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/american/A05_M4_Sherman/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/american/A05_M4_Sherman/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/american/A05_M4_Sherman/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/american/A05_M4_Sherman/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A05_M4_Sherman/collision_client/Gun_05.model	</collisionModelClient>
+          </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
+          <customizationSlots>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41000	</slotId>
+              <anchorPosition>	-0.000001 0.008049 1.52224	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41001	</slotId>
+              <anchorPosition>	0 0.197792 0.197791	</anchorPosition>
+              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	42000	</slotId>
+              <anchorPosition>	-0.000001 0.008049 1.52224	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45000	</slotId>
+              <tags>	formfactor_rect1x2	</tags>
+              <position>	-0.000024 1.93444 0.691921	</position>
+              <rotation>	0.82202 -0.000051 3.14148	</rotation>
+              <scale>	2.06461 1.4 2.06462	</scale>
+              <showOn>	4368	</showOn>
+              <anchorShift>	0.70232	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45001	</slotId>
+              <tags>	formfactor_rect1x3	</tags>
+              <position>	0.000085 2.37452 0.950575	</position>
+              <rotation>	1.54755 3.1397 0.003236	</rotation>
+              <scale>	1.28865 0.213154 1.28863	</scale>
+              <showOn>	4096	</showOn>
+              <clipAngle>	0.9766	</clipAngle>
+              <anchorShift>	0.322472	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49000	</slotId>
+              <rayStart>	-0.000001 0.016098 1.8	</rayStart>
+              <rayEnd>	-0.000001 0.016098 2.27	</rayEnd>
+              <rayUp>	0.073 0 0	</rayUp>
+              <size>	0.47	</size>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <camouflage>
+            <tiling>	0.25 0.25 0.000000 0.000000	</tiling>
+            <density>	110.308 123.631	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
+        </_76mm_Gun_M1A1_M4A1>
+        <_105mm_M4_M4A1>	shared	  <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 12 1 12	</maxPitch>
           </pitchLimits>
@@ -4341,111 +4456,7 @@
             <density>	121.331 119.863	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_105mm_SPH_M4_L23>
-        <_76mm_Gun_M1A1>	shared	  <maxAmmo>	110	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 12 1 12	</maxPitch>
-          </pitchLimits>
-          <unlocks>
-            <vehicle>	A06_M4A3E8_Sherman	  <cost>	30500	</cost>
-            </vehicle>
-          </unlocks>
-          <armor>
-            <armor_3>	25.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_5>	88.9	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	44.5	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_8>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_8>
-            <gun>	20	</gun>
-          </armor>
-          <shotDispersionRadius>	0.43	</shotDispersionRadius>
-          <reloadTime>	4.3	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <models>
-            <undamaged>	vehicles/american/A05_M4_Sherman/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/american/A05_M4_Sherman/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/american/A05_M4_Sherman/crash/lod0/Gun_05.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/american/A05_M4_Sherman/collision/Gun_05.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/american/A05_M4_Sherman/collision_client/Gun_05.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000001 0.008049 1.52224	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.197792 0.197791	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000001 0.008049 1.52224	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.000024 1.93444 0.691921	</position>
-              <rotation>	0.82202 -0.000051 3.14148	</rotation>
-              <scale>	2.06461 1.4 2.06462	</scale>
-              <showOn>	4368	</showOn>
-              <anchorShift>	0.70232	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x3	</tags>
-              <position>	0.000085 2.37452 0.950575	</position>
-              <rotation>	1.54755 3.1397 0.003236	</rotation>
-              <scale>	1.28865 0.213154 1.28863	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.9766	</clipAngle>
-              <anchorShift>	0.322472	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.000001 0.016098 1.8	</rayStart>
-              <rayEnd>	-0.000001 0.016098 2.27	</rayEnd>
-              <rayUp>	0.073 0 0	</rayUp>
-              <size>	0.47	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.25 0.25 0.000000 0.000000	</tiling>
-            <density>	110.308 123.631	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_76mm_Gun_M1A1>
+        </_105mm_M4_M4A1>
       </guns>
       <models>
         <undamaged>	vehicles/american/A05_M4_Sherman/normal/lod0/Turret_02.model	</undamaged>
@@ -4957,54 +4968,36 @@
         <density>	125.06 122.96	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </D51072>
+    </Turret_2_A05_M4_Sherman>
   </turrets0>
   <engines>
     <Wright_Continental_R_975EC2A1>	shared	  <unlocks>
-        <engine>	Wright_Continental_R-975C4	  <cost>	1500	</cost>
+        <engine>	Wright_Continental_R_975C4_M4A1	  <cost>	1500	</cost>
         </engine>
       </unlocks>
     </Wright_Continental_R_975EC2A1>
-    <Wright_Continental_R-975C4>	shared	</Wright_Continental_R-975C4>
+    <Wright_Continental_R_975C4_M4A1>	shared	</Wright_Continental_R_975C4_M4A1>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <SCR_508>	shared	  <unlocks>
-        <radio>	SCR_506	  <cost>	5600	</cost>
-        </radio>
-      </unlocks>
-    </SCR_508>
     <SCR_506>	shared	</SCR_506>
   </radios>
   <physics>
     <detailed>
       <engines>
         <Wright_Continental_R_975EC2A1>
-          <smplEnginePower>	400	</smplEnginePower>
+          <smplEnginePower>	450	</smplEnginePower>
           <smplFwMaxSpeed>	48	</smplFwMaxSpeed>
         </Wright_Continental_R_975EC2A1>
-        <Wright_Continental_R-975C4>
-          <smplEnginePower>	486.3493	</smplEnginePower>
+        <Wright_Continental_R_975C4_M4A1>
+          <smplEnginePower>	500	</smplEnginePower>
           <smplFwMaxSpeed>	48	</smplFwMaxSpeed>
-        </Wright_Continental_R-975C4>
+        </Wright_Continental_R_975C4_M4A1>
       </engines>
       <chassis>
-        <T41>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.18515	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.12075	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.07245	</rollingFriction>
-            </firm>
-          </grounds>
-        </T41>
-        <T42>
+        <Chassis_A05_M4_Sherman>
           <grounds>
             <soft>
               <rollingFriction>	0.13685	</rollingFriction>
@@ -5016,7 +5009,20 @@
               <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
-        </T42>
+        </Chassis_A05_M4_Sherman>
+        <Chassis_A05_M4_Sherman_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.13685	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.08855	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0805	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_A05_M4_Sherman_2>
       </chassis>
     </detailed>
   </physics>

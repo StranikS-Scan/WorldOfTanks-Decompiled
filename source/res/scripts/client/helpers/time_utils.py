@@ -311,6 +311,26 @@ def getDaysLeftDueDate(timestamp):
     return int((rentDate - currentDate).days)
 
 
+def secondsToDays(seconds):
+    return int(seconds / ONE_MINUTE / MINUTES_IN_HOUR / HOURS_IN_DAY)
+
+
+def secondsToHours(seconds):
+    return int(seconds / ONE_MINUTE / MINUTES_IN_HOUR)
+
+
+def secondsToHoursNoDays(seconds):
+    return int(seconds % (ONE_MINUTE * MINUTES_IN_HOUR * HOURS_IN_DAY) / ONE_MINUTE / MINUTES_IN_HOUR)
+
+
+def secondsToMinutes(seconds):
+    return int(seconds / ONE_MINUTE)
+
+
+def secondsToMinutesNoHours(seconds):
+    return int(seconds % (ONE_MINUTE * MINUTES_IN_HOUR) / ONE_MINUTE)
+
+
 class ActivityIntervalsIterator(object):
 
     def __init__(self, currentTime, currentDay, weekDays=None, timeIntervals=None):

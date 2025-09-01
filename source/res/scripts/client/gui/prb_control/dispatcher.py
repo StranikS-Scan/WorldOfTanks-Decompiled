@@ -283,7 +283,7 @@ class _PreBattleDispatcher(ListenersCollection):
         return factory.createPlayerInfo(self.__entity) if factory is not None else PlayerDecorator()
 
     def doAction(self, action=None):
-        if not (g_currentVehicle.isPresent() or g_currentPreviewVehicle.isPresent() or self.__entity.canDoActionWithoutVehicle() or self.__entity.hasSpecialVehicles()):
+        if not (g_currentVehicle.isPresent() or g_currentPreviewVehicle.isPresent() or self.__entity.canDoActionWithoutVehicle()):
             SystemMessages.pushMessage(messages.getInvalidVehicleMessage(PREBATTLE_RESTRICTION.VEHICLE_NOT_PRESENT), type=SystemMessages.SM_TYPE.Error)
             return False
         LOG_DEBUG('Do GUI action', action)
@@ -458,7 +458,7 @@ class _PreBattleDispatcher(ListenersCollection):
         if flags & FUNCTIONAL_FLAG.SWITCH == 0:
             self.__setDefault()
 
-    def unitMgr_onUnitJoined(self, unitMgrID, prbType):
+    def unitMgr_onUnitJoining(self, unitMgrID, prbType):
         entity = self.__entity
         ctx = JoinUnitCtx(unitMgrID, prbType)
         if entity.isPlayerJoined(ctx):
@@ -565,7 +565,7 @@ class _PreBattleDispatcher(ListenersCollection):
         self.igrCtrl.onIgrTypeChanged += self.igr_onRoomChange
         unitMgr = prb_getters.getClientUnitMgr()
         if unitMgr:
-            unitMgr.onUnitJoined += self.unitMgr_onUnitJoined
+            unitMgr.onUnitJoining += self.unitMgr_onUnitJoining
             unitMgr.onUnitLeft += self.unitMgr_onUnitLeft
             unitMgr.onUnitRestored += self.unitMgr_onUnitRestored
             unitMgr.onUnitErrorReceived += self.unitMgr_onUnitErrorReceived
@@ -608,7 +608,7 @@ class _PreBattleDispatcher(ListenersCollection):
         self.igrCtrl.onIgrTypeChanged -= self.igr_onRoomChange
         unitMgr = prb_getters.getClientUnitMgr()
         if unitMgr:
-            unitMgr.onUnitJoined -= self.unitMgr_onUnitJoined
+            unitMgr.onUnitJoining -= self.unitMgr_onUnitJoining
             unitMgr.onUnitLeft -= self.unitMgr_onUnitLeft
             unitMgr.onUnitRestored -= self.unitMgr_onUnitRestored
             unitMgr.onUnitErrorReceived -= self.unitMgr_onUnitErrorReceived
@@ -682,9 +682,9 @@ class _PreBattleDispatcher(ListenersCollection):
             self.__entity = created
             if self.__prevEntity is not None and self.__prevEntity.isActive():
                 self.__prevEntity.fini()
-            self.__entity.setPreviousEntity(self.__prevEntity)
             self.__prevEntity = NotSupportedEntity()
             flag = self.__entity.init(ctx=ctx)
+            self.__entity._goToHangar()
             self.notifyPrbEntitySwitched()
             ctx.clearFlags()
             ctx.addFlags(flag | created.getFunctionalFlags())

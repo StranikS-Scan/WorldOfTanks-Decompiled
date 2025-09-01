@@ -47,25 +47,40 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	200	</armor_1>
-      <armor_2>	125	</armor_2>
-      <armor_3>	105	</armor_3>
-      <armor_4>	150	</armor_4>
+      <armor_1>	250	</armor_1>
+      <armor_2>	190	</armor_2>
+      <armor_3>	125	</armor_3>
+      <armor_4>	100	</armor_4>
       <armor_5>	60	</armor_5>
       <armor_6>	30	</armor_6>
       <armor_7>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	70	</armor_9>
-      <armor_10>	200	</armor_10>
-      <armor_11>	70	</armor_11>
-      <armor_12>	200	</armor_12>
-      <armor_13>	70	</armor_13>
+      <armor_9>	100	</armor_9>
+      <armor_10>	120	</armor_10>
+      <armor_11>	50	</armor_11>
+      <armor_12>	100	</armor_12>
+      <armor_13>	65	</armor_13>
       <armor_14>	17.5	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_14>
-      <armor_15>	105	</armor_15>
-      <armor_16>	55	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-      </armor_16>
+      <armor_15>	200	</armor_15>
+      <armor_16>	197	</armor_16>
+      <armor_17>	270	</armor_17>
+      <armor_18>	240	</armor_18>
+      <armor_19>	220	</armor_19>
+      <armor_20>	160	</armor_20>
+      <armor_21>	70	</armor_21>
+      <armor_22>	70	</armor_22>
+      <armor_23>	150	</armor_23>
+      <armor_24>	100	</armor_24>
+      <armor_25>	100	</armor_25>
+      <armor_27>	120	</armor_27>
+      <armor_28>	100	</armor_28>
+      <armor_29>	100	</armor_29>
+      <armor_30>	100	</armor_30>
+      <armor_31>	50	</armor_31>
+      <armor_32>	17.5	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+      </armor_32>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	65838	</weight>
@@ -1286,7 +1301,6 @@
         <rightTrack>	40	</rightTrack>
       </armor>
       <weight>	28000	</weight>
-      <maxLoad>	130000	</maxLoad>
       <terrainResistance>	1.1 1.2 2	</terrainResistance>
       <brakeForce>	72000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -2134,22 +2148,33 @@
       <price>	30000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	200	</armor_1>
-        <armor_2>	220	</armor_2>
+        <armor_1>	250	</armor_1>
+        <armor_2>	270	</armor_2>
         <armor_3>	200	</armor_3>
-        <armor_4>	200	</armor_4>
+        <armor_4>	150	</armor_4>
         <armor_5>	60	</armor_5>
         <armor_6>	30	</armor_6>
-        <armor_7>	200	</armor_7>
+        <armor_7>	170	</armor_7>
         <armor_8>	0	</armor_8>
-        <armor_9>	200	</armor_9>
-        <armor_10>	200	</armor_10>
+        <armor_9>	250	</armor_9>
+        <armor_10>	260	</armor_10>
         <armor_11>	200	</armor_11>
-        <armor_12>	80	</armor_12>
+        <armor_12>	60	</armor_12>
         <armor_13>	80	</armor_13>
         <armor_14>	80	</armor_14>
-        <armor_15>	200	</armor_15>
-        <armor_16>	220	</armor_16>
+        <armor_15>	170	</armor_15>
+        <armor_16>	120	</armor_16>
+        <armor_17>	80	</armor_17>
+        <armor_18>	170	</armor_18>
+        <armor_19>	120	</armor_19>
+        <armor_20>	170	</armor_20>
+        <armor_21>	150	</armor_21>
+        <armor_22>	150	</armor_22>
+        <armor_23>	150	</armor_23>
+        <armor_24>	40	</armor_24>
+        <armor_25>	80	</armor_25>
+        <armor_26>	240	</armor_26>
+        <armor_27>	150	</armor_27>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	23000	</weight>
@@ -2169,14 +2194,36 @@
       <guns>
         <_105mm_Experimental_Tank_Gun_Kai_BP>	shared	  <maxAmmo>	100	</maxAmmo>
           <armor>
-            <armor_1>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	260	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_2>	210	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_3>	110	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
+            <armor_5>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	170	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_7>
+            <armor_8>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_8>
+            <armor_9>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_9>
+            <armor_10>	170	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_10>
+            <armor_11>	170	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_11>
+            <armor_12>	170	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_12>
+            <armor_13>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_13>
+            <armor_14>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_14>
+            <armor_15>	210	</armor_15>
+            <armor_16>	180	</armor_16>
             <gun>	40	</gun>
           </armor>
           <pitchLimits>

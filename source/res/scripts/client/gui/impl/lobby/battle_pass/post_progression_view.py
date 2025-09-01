@@ -4,29 +4,26 @@ from functools import partial
 from enum import IntEnum, unique
 from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import IS_BATTLE_PASS_COLLECTION_SEEN, LAST_BATTLE_PASS_POINTS_SEEN, LAST_BATTLE_PASS_CYCLES_SEEN
+from account_helpers.AccountSettings import IS_BATTLE_PASS_COLLECTION_SEEN, LAST_BATTLE_PASS_CYCLES_SEEN, LAST_BATTLE_PASS_POINTS_SEEN
 from battle_pass_common import BATTLE_PASS_TICKETS_EVENT, BattlePassConsts, CurrencyBP
-from frameworks.wulf import ViewFlags, ViewSettings
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBattlePassCoinProductsUrl, getBattlePassTalerProductsUrl
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData
 from gui.battle_pass.battle_pass_constants import ChapterState
-from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator
 from gui.battle_pass.battle_pass_helpers import getInfoPageURL
 from gui.collection.collections_helpers import loadCollectionsFromBattlePass
 from gui.impl.auxiliary.collections_helper import fillCollectionModel
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.chapter_simple_model import ChapterSimpleModel, ChapterStatus
 from gui.impl.gen.view_models.views.lobby.battle_pass.level_model import LevelModel
-from gui.impl.gen.view_models.views.lobby.battle_pass.post_progression_view_model import PostProgressionViewModel, PostProgressionStatus
-from gui.impl.pub import ViewImpl
+from gui.impl.gen.view_models.views.lobby.battle_pass.post_progression_view_model import PostProgressionStatus, PostProgressionViewModel
+from gui.impl.pub.view_component import ViewComponent
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
-from gui.lootbox_system.base.common import Views, ViewID
-from gui.server_events.events_dispatcher import showMissionsBattlePass
-from gui.shared.event_dispatcher import showBattlePassHowToEarnPointsView, showBrowserOverlayView, showShop, showBattlePassBuyWindow, showBattlePassTankmenVoiceover, showHangar
+from gui.lootbox_system.base.common import ViewID, Views
+from gui.shared.event_dispatcher import showBattlePass, showBattlePassHowToEarnPointsView, showBattlePassTankmenVoiceover, showBrowserOverlayView, showHangar, showShop
 from helpers import dependency, time_utils
 from shared_utils import first
-from skeletons.gui.game_control import IBattlePassController, ILootBoxSystemController, ICollectionsSystemController
+from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController, ILootBoxSystemController
 from skeletons.gui.shared import IItemsCache
 _CHAPTER_STATUSES = {ChapterState.ACTIVE: ChapterStatus.ACTIVE,
  ChapterState.COMPLETED: ChapterStatus.COMPLETED,
@@ -40,30 +37,23 @@ class _AnimationState(IntEnum):
     NEW_CYCLE_STATE = 2
 
 
-class PostProgressionView(ViewImpl):
+class PostProgressionPresenter(ViewComponent[PostProgressionViewModel]):
     __battlePass = dependency.descriptor(IBattlePassController)
     __collectionsSystem = dependency.descriptor(ICollectionsSystemController)
     __itemsCache = dependency.descriptor(IItemsCache)
     __lootBoxes = dependency.descriptor(ILootBoxSystemController)
 
     def __init__(self, *args, **kwargs):
-        settings = ViewSettings(R.views.lobby.battle_pass.PostProgressionView())
-        settings.flags = ViewFlags.VIEW
-        settings.model = PostProgressionViewModel()
-        super(PostProgressionView, self).__init__(settings)
+        super(PostProgressionPresenter, self).__init__(R.aliases.battle_pass.PostProgression(), PostProgressionViewModel)
         self.__chapterID = self.__battlePass.getPostProgressionChapterID()
         self.__tankmenScreen = None
         self.__tooltipItems = {}
         self.__animationState = _AnimationState.NORMAL_STATE
         return
 
-    @createBackportTooltipDecorator()
-    def createToolTip(self, event):
-        return super(PostProgressionView, self).createToolTip(event)
-
-    @createTooltipContentDecorator()
-    def createToolTipContent(self, event, contentID):
-        return super(PostProgressionView, self).createToolTipContent(event, contentID)
+    @property
+    def viewModel(self):
+        return super(PostProgressionPresenter, self).getViewModel()
 
     def getTooltipData(self, event):
         tooltipId = event.getArgument('tooltipId')
@@ -73,28 +63,25 @@ class PostProgressionView(ViewImpl):
             tooltipData = self.__tooltipItems.get(tooltipId)
             return tooltipData
 
-    @property
-    def viewModel(self):
-        return super(PostProgressionView, self).getViewModel()
-
     def activate(self):
         self._subscribe()
-        self.__fillModel()
 
     def deactivate(self):
         self._unsubscribe()
 
+    def updateInitialData(self, **kwargs):
+        self.__fillModel()
+
+    def onExtraChapterExpired(self):
+        self.__checkBattlePassState()
+
     def _onLoading(self, *args, **kwargs):
-        super(PostProgressionView, self)._onLoading(*args, **kwargs)
+        super(PostProgressionPresenter, self)._onLoading(*args, **kwargs)
         self.__fillModel()
 
     def _getEvents(self):
         return ((self.viewModel.onOpenInfoPage, self.__showInfoPage),
          (self.viewModel.onOpenPointsInfo, self.__showPointsInfo),
-         (self.viewModel.onOpenChaptersSelection, self.__showChaptersChoice),
-         (self.viewModel.onOpenProgressionView, self.__showChapterProgression),
-         (self.viewModel.onOpenChaptersBuyView, self.__showChapterPurchase),
-         (self.viewModel.onClose, self.__close),
          (self.viewModel.onProgressAchieved, self.__onProgressAchieved),
          (self.viewModel.onCycleCompleted, self.__onCycleCompleted),
          (self.viewModel.awardsWidget.onTakeRewardsClick, self.__claimRewards),
@@ -107,7 +94,6 @@ class PostProgressionView(ViewImpl):
          (self.__battlePass.onSelectTokenUpdated, self.__updateRewardChoice),
          (self.__battlePass.onOffersUpdated, self.__updateRewardChoice),
          (self.__battlePass.onPointsUpdated, self.__onPointsUpdated),
-         (self.__battlePass.onExtraChapterExpired, self.__checkBattlePassState),
          (self.__battlePass.onSeasonStateChanged, self.__checkBattlePassState),
          (self.__battlePass.onBattlePassIsBought, self.__onBattlePassBought),
          (self.__collectionsSystem.onBalanceUpdated, self.__updateCollections),
@@ -248,39 +234,16 @@ class PostProgressionView(ViewImpl):
 
     def __checkBattlePassState(self, *_):
         if self.__battlePass.isPaused():
-            showMissionsBattlePass()
-            return
-        if not (self.__battlePass.isEnabled() and self.__battlePass.isActive()):
-            showHangar()
+            showBattlePass()
             return
         self.__fillModel()
 
     @staticmethod
-    def __close():
-        showHangar()
-
-    @staticmethod
     def __showInfoPage():
-        showBrowserOverlayView(getInfoPageURL(), VIEW_ALIAS.BATTLE_PASS_BROWSER_VIEW)
+        showBrowserOverlayView(getInfoPageURL(), VIEW_ALIAS.BATTLE_PASS_BROWSER)
 
     def __showPointsInfo(self):
-        showBattlePassHowToEarnPointsView(parent=self.getParentWindow())
-
-    @staticmethod
-    def __showChaptersChoice():
-        showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
-
-    @staticmethod
-    def __showChapterProgression(args):
-        chapterID = int(args.get('chapterID', 0))
-        showMissionsBattlePass(R.views.lobby.battle_pass.BattlePassProgressionsView(), chapterID)
-
-    def __showChapterPurchase(self):
-        ctx = {'backCallback': partial(showMissionsBattlePass, R.views.lobby.battle_pass.PostProgressionView())}
-        notPurchasedChapters = [ chapterID for chapterID in self.__battlePass.getMainChapterIDs() if not self.__battlePass.isBought(chapterID) ]
-        if len(notPurchasedChapters) == 1:
-            ctx['selectedChapterID'] = first(notPurchasedChapters)
-        showBattlePassBuyWindow(ctx=ctx)
+        showBattlePassHowToEarnPointsView()
 
     @staticmethod
     def __showCoinsShop():
@@ -288,7 +251,7 @@ class PostProgressionView(ViewImpl):
 
     def __showTickets(self):
         showHangar()
-        Views.load(ViewID.MAIN, eventName=BATTLE_PASS_TICKETS_EVENT, backCallback=partial(showMissionsBattlePass, R.views.lobby.battle_pass.PostProgressionView()))
+        Views.load(ViewID.MAIN, eventName=BATTLE_PASS_TICKETS_EVENT, backCallback=partial(showBattlePass, R.aliases.battle_pass.PostProgression()))
 
     def __showTankmen(self):
         showBattlePassTankmenVoiceover(self.__tankmenScreen)

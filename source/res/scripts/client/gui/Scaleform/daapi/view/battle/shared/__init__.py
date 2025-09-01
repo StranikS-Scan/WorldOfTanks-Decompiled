@@ -27,7 +27,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.shared import radial_menu
     from gui.Scaleform.daapi.view.battle.shared import damage_log_panel
     from gui.Scaleform.daapi.view.battle.shared import battle_loading_minimap
-    from gui.Scaleform.daapi.view.battle.shared.vehicles import dualgun_component
+    from gui.Scaleform.daapi.view.battle.shared.legacy_mechanics import dualgun_component
     from gui.Scaleform.daapi.view.battle.shared import callout_panel
     from gui.Scaleform.daapi.view.battle.shared import battle_notifier
     from gui.Scaleform.daapi.view.battle.shared import personal_reserves_tab
@@ -45,6 +45,7 @@ def getViewSettings():
      ViewSettings(BATTLE_VIEW_ALIASES.RADIAL_MENU, radial_menu.RadialMenu, None, WindowLayer.UNDEFINED, None, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.DAMAGE_INFO_PANEL, damage_info_panel.DamageInfoPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.SIXTH_SENSE, indicators.SixthSenseIndicator, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.TARGET_DESIGNATOR_UNSPOTTED_MARKER, indicators.TargetDesignatorUnspottedIndicator, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.MINIMAP_ON_BATTLE_LOADING, battle_loading_minimap.BattleLoadingMinimapComponent, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR, indicators.SiegeModeIndicator, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL, dualgun_component.DualGunComponent, ScopeTemplates.DEFAULT_SCOPE),
@@ -52,7 +53,6 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_NOTIFIER, battle_notifier.BattleNotifier, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.DEATH_CAM_HUD, death_cam_ui.DeathCamUI, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.POSTMORTEM_INFO_PAGE, postmortem_info_panel.PostmortemInfoPanel, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.ROCKET_ACCELERATOR_INDICATOR, indicators.RocketAcceleratorIndicator, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.PERSONAL_RESERVES_TAB, personal_reserves_tab.PersonalReservesTab, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.TAB_CONTENT, tab_content.TabContent, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.SPECTATOR_VIEW, spectator_view.SpectatorView, ScopeTemplates.DEFAULT_SCOPE))

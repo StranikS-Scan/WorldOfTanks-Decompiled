@@ -43,16 +43,16 @@ class ChangeModelOnColorBlindComponentManager(CGF.ComponentManager):
     @onAddedQuery(CGF.GameObject, ChangeModelOnColorBlindComponent)
     def onAdded(self, gameObject, component):
         dynamicModelComponent = gameObject.findComponentByType(GenericComponents.DynamicModelComponent)
-        if dynamicModelComponent:
+        if dynamicModelComponent and component.normalModel is None:
             component.normalModel = dynamicModelComponent.getModelName()
         self._gameObjects.append(gameObject)
         setModel(gameObject, self._settingsCore.getSetting(GRAPHICS.COLOR_BLIND), component)
         if len(self._gameObjects) == 1:
             self._settingsCore.onSettingsChanged += self._clientColorSettingsChanged
+        return
 
     @onRemovedQuery(CGF.GameObject, ChangeModelOnColorBlindComponent)
     def onRemoved(self, gameObject, component):
-        setModel(gameObject, False, component)
         self._gameObjects.remove(gameObject)
         if not self._gameObjects:
             self._settingsCore.onSettingsChanged -= self._clientColorSettingsChanged

@@ -11,7 +11,7 @@ from gui.veh_post_progression.models.progression_step import PostProgressionStep
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 from items import vehicles
-from post_progression_common import FEATURE_BY_GROUP_ID, ROLESLOT_FEATURE, VehicleState
+from post_progression_common import FEATURE_BY_GROUP_ID, ROLESLOT_FEATURE, VEH_SKILL_TREE_ID_OFFSET, VehicleState
 from skeletons.gui.game_control import IVehiclePostProgressionController
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
@@ -88,7 +88,7 @@ class PostProgressionItem(object):
             result = PostProgressionAvailability.VEH_IS_RENTED
         elif veh.rentalIsOver and veh.intCD in enabledRentedVehicles and not unlockOnly:
             result = PostProgressionAvailability.VEH_IS_RENT_OVER
-        elif not veh.isElite:
+        elif not veh.isElite and not veh.typeDescr.eliteByProgression:
             result = PostProgressionAvailability.VEH_NOT_ELITE
         elif not veh.isInInventory:
             result = PostProgressionAvailability.VEH_NOT_IN_INVENTORY
@@ -125,6 +125,9 @@ class PostProgressionItem(object):
 
     def isPrebattleSwitchDisabled(self, groupID):
         return self.__state.isSwitchDisabled(groupID)
+
+    def isVehSkillTree(self):
+        return self.isDefined() and self.__tree.id >= VEH_SKILL_TREE_ID_OFFSET
 
     def getFirstPurchasableStep(self, balance):
         for stepItem in self.iterOrderedSteps():

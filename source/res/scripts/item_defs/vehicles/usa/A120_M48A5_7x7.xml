@@ -588,14 +588,13 @@
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	8000	</weight>
-      <maxLoad>	50350	</maxLoad>
       <terrainResistance>	0.8 0.9 1.8	</terrainResistance>
       <brakeForce>	39500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	50	</rotationSpeed>
+      <rotationSpeed>	55	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.1	</vehicleMovement>
-        <vehicleRotation>	0.1	</vehicleRotation>
+        <vehicleMovement>	0.07	</vehicleMovement>
+        <vehicleRotation>	0.07	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	250	</maxHealth>
@@ -1916,7 +1915,7 @@
         <_105mm_Gun_M68_7x7>	shared	  <maxAmmo>	57	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -19 1 -19	</minPitch>
-            <maxPitch>	0 9 0.333333 9 0.361111 4 0.402778 0 0.463889 -2 0.536111 -2 0.638889 5 0.666667 9 1 9	</maxPitch>
+            <maxPitch>	0.00000 9.00 0.33333 9.00 0.36111 5.00 0.46389 -2.00 0.53611 -2.00 0.63889 5.00 0.66667 9.00 1.00000 9.00	</maxPitch>
           </pitchLimits>
           <armor>
             <armor_1>	241.3	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -1933,8 +1932,8 @@
           <reloadTime>	8.35	</reloadTime>
           <aimingTime>	1.8	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	4	</afterShot>
+            <turretRotation>	0.06	</turretRotation>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>

@@ -68,7 +68,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	21459	</weight>
-    <maxHealth>	1200	</maxHealth>
+    <maxHealth>	1320	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	240	</maxHealth>
       <maxRegenHealth>	160	</maxRegenHealth>
@@ -841,11 +841,10 @@
         </chassis>
       </unlocks>
       <weight>	11000	</weight>
-      <maxLoad>	45000	</maxLoad>
-      <terrainResistance>	1.3 1.4 2.5	</terrainResistance>
+      <terrainResistance>	1.2 1.3 2.4	</terrainResistance>
       <brakeForce>	50000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	26	</rotationSpeed>
+      <rotationSpeed>	31	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.22	</vehicleMovement>
         <vehicleRotation>	0.22	</vehicleRotation>
@@ -2369,11 +2368,10 @@
       <level>	8	</level>
       <price>	33800	</price>
       <weight>	11000	</weight>
-      <maxLoad>	50000	</maxLoad>
       <terrainResistance>	1.2 1.3 2.4	</terrainResistance>
       <brakeForce>	50000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	28	</rotationSpeed>
+      <rotationSpeed>	33	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.2	</vehicleMovement>
         <vehicleRotation>	0.2	</vehicleRotation>
@@ -3934,7 +3932,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	9000	</weight>
-      <maxHealth>	200	</maxHealth>
+      <maxHealth>	240	</maxHealth>
       <rotationSpeed>	28	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -3973,11 +3971,11 @@
             <gun>	35	</gun>
           </armor>
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
-          <reloadTime>	6.9	</reloadTime>
-          <aimingTime>	2.1	</aimingTime>
+          <reloadTime>	6.4	</reloadTime>
+          <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.11	</turretRotation>
+            <turretRotation>	0.09	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -4642,7 +4640,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	10000	</weight>
-      <maxHealth>	300	</maxHealth>
+      <maxHealth>	330	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -5477,13 +5475,13 @@
         <Chassis_A139_M_III_Y>
           <grounds>
             <soft>
-              <rollingFriction>	0.20125	</rollingFriction>
+              <rollingFriction>	0.1932	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1127	</rollingFriction>
+              <rollingFriction>	0.10465	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.0966	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

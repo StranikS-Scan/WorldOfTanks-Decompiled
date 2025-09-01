@@ -862,10 +862,10 @@ class InsigniaXmlWriter(BaseCustomizationItemXmlWriter):
 
     def write(self, item, section, group=None):
         changed = self.writeBase(item, section)
+        changed |= rewriteBool(section, 'canBeMirrored', item, 'canBeMirrored', True)
         if group:
             changed |= rewriteString(section, 'atlas', item, 'atlas', '')
             changed |= rewriteString(section, 'alphabet', item, 'alphabet', '')
-            changed |= rewriteBool(section, 'canBeMirrored', item, 'canBeMirrored', False)
         changed |= self.writeBaseGroup(item, section)
         return changed
 

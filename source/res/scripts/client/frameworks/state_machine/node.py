@@ -41,10 +41,15 @@ class Node(object):
         self._removeChild(child)
 
     def visitInOrder(self, filter_=None):
-        yield self
+        if filter_ is None:
+            yield self
+        elif filter_(self):
+            yield self
         for child in self.getChildren(filter_=filter_):
             for item in child.visitInOrder(filter_=filter_):
                 yield item
+
+        return
 
     def _addChild(self, child):
         if child is None:

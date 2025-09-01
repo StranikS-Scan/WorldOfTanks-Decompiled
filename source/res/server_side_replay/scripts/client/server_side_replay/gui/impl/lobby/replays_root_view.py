@@ -116,7 +116,7 @@ class ReplaysRootView(ViewImpl, IGlobalListener):
         self.__pages = {p.pageId:p for p in pages}
 
     def __clearPages(self):
-        if self.__currentPage.isLoaded:
+        if self.__pages and self.__currentPage.isLoaded:
             self.__currentPage.finalize()
         self.__pages.clear()
 

@@ -1,14 +1,15 @@
 <streaming_config.xml>
   <enabled>	true	</enabled>
-  <nolimits>	3000	</nolimits>
+  <nolimits>	4100	</nolimits>
+  <flatteningFactor>	4	</flatteningFactor>
   <loadrate>	5	</loadrate>
   <textures>
-    <content>	300	</content>
+    <content>	500	</content>
     <buildingTiles>	0	</buildingTiles>
-    <tanks>	300	</tanks>
+    <tanks>	700	</tanks>
   </textures>
   <geometry>
     <static>	0	</static>
-    <tanks>	140	</tanks>
+    <tanks>	170	</tanks>
   </geometry>
 </streaming_config.xml>

@@ -4,6 +4,7 @@ import logging
 import math
 import operator
 from collections import namedtuple
+from copy import deepcopy
 import typing
 import BigWorld
 import personal_missions
@@ -470,6 +471,8 @@ class QuestsProgressBlock(base.StatsBlock):
         allCommonQuests.update(self.eventsCache.getHiddenQuests(lambda q: q.isShowedPostBattle()))
         battleMattersProgressData = []
         questsProgress = reusable.personal.getQuestsProgress()
+        questTokensConvertion = deepcopy(reusable.personal.getQuestTokensConvertion())
+        questTokensCount = reusable.personal.getQuestTokensCount()
         if questsProgress:
             for qID, qProgress in questsProgress.iteritems():
                 pGroupBy, pPrev, pCur = qProgress
@@ -492,12 +495,12 @@ class QuestsProgressBlock(base.StatsBlock):
                 if personal_missions.g_cache.isPersonalMission(qID):
                     pqID = personal_missions.g_cache.getPersonalMissionIDByUniqueID(qID)
                     questsCache = self.eventsCache.getPersonalMissions()
-                    quest = questsCache.getAllQuests()[pqID]
+                    quest = questsCache.getAllQuests(personal_missions.PM_BRANCH.ALL)[pqID]
                     progress = personalMissions.setdefault(quest, {})
                     progress.update({qID: isCompleted})
 
         for e, pCur, pPrev, reset, complete in battleMattersProgressData:
-            info = getEventPostBattleInfo(e, allCommonQuests, pCur, pPrev, reset, complete)
+            info = getEventPostBattleInfo(e, allCommonQuests, pCur, pPrev, reset, complete, questTokensConvertion=questTokensConvertion, questTokensCount=questTokensCount)
             if info is not None:
                 self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem('', info))
 
@@ -518,7 +521,7 @@ class QuestsProgressBlock(base.StatsBlock):
                 complete = PMComplete(True, False)
             else:
                 complete = PMComplete(False, False)
-            info = getEventPostBattleInfo(quest, None, None, None, False, complete, progressData=data)
+            info = getEventPostBattleInfo(quest, None, None, None, False, complete, progressData=data, questTokensConvertion=questTokensConvertion, questTokensCount=questTokensCount)
             if info is not None:
                 self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem('', info))
 
@@ -546,7 +549,7 @@ class QuestsProgressBlock(base.StatsBlock):
                 self.addComponent(self.getNextComponentIndex(), QuestProgressiveCustomizationVO('', info))
 
         for e, pCur, pPrev, reset, complete in sorted(commonQuests, cmp=self.__sortCommonQuestsFunc):
-            info = getEventPostBattleInfo(e, allCommonQuests, pCur, pPrev, reset, complete)
+            info = getEventPostBattleInfo(e, allCommonQuests, pCur, pPrev, reset, complete, questTokensConvertion=questTokensConvertion, questTokensCount=questTokensCount)
             if info is not None:
                 self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem('', info))
 

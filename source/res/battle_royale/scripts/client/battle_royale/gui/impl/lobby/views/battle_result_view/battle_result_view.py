@@ -35,7 +35,6 @@ from soft_exception import SoftException
 from gui.sounds.ambients import BattleResultsEnv
 from battle_royale.gui.battle_control.controllers.br_battle_sounds import BREvents
 from battle_royale.gui.constants import BattleRoyaleSubMode
-from gui.server_events import events_dispatcher
 from gui.impl.backport.backport_context_menu import BackportContextMenuWindow
 from gui.impl.backport.backport_context_menu import createContextMenuData
 from battle_royale.gui.impl.lobby.views.battle_result_view import BATTLE_ROYALE_LOCK_SOURCE_NAME
@@ -180,7 +179,7 @@ class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility, IPrbListener):
 
     def __onBattlePassClick(self):
         self.destroyWindow()
-        events_dispatcher.showMissionsBattlePass()
+        event_dispatcher.showBattlePass()
 
     def __updateBattlePass(self):
         self.__setBattleRewards(self.viewModel.personalResults)

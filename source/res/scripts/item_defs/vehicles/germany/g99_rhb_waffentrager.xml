@@ -62,7 +62,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	5065	</weight>
-    <maxHealth>	880	</maxHealth>
+    <maxHealth>	920	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -1297,13 +1297,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_RhB_Waffentrager>
-      <userString>	#germany_vehicles:Chassis_RhB_Waffentrager	</userString>
+    <Chassis_G99_RhB_Waffentrager>
+      <userString>	#germany_vehicles:Chassis_G99_RhB_Waffentrager	</userString>
       <tags></tags>
       <level>	7	</level>
       <price>	20000	</price>
       <unlocks>
-        <chassis>	Chassis_RhB_Waffentrager_2	  <cost>	14500	</cost>
+        <chassis>	Chassis_G99_RhB_Waffentrager_2	  <cost>	14500	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1311,11 +1311,10 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	6000	</weight>
-      <maxLoad>	21000	</maxLoad>
-      <terrainResistance>	1 1.2 2.3	</terrainResistance>
+      <terrainResistance>	0.9 1.1 2.1	</terrainResistance>
       <brakeForce>	21000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	34	</rotationSpeed>
+      <rotationSpeed>	41	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.24	</vehicleMovement>
         <vehicleRotation>	0.24	</vehicleRotation>
@@ -2302,9 +2301,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	5.71428585	</repairTime>
-    </Chassis_RhB_Waffentrager>
-    <Chassis_RhB_Waffentrager_2>
-      <userString>	#germany_vehicles:Chassis_RhB_Waffentrager_2	</userString>
+    </Chassis_G99_RhB_Waffentrager>
+    <Chassis_G99_RhB_Waffentrager_2>
+      <userString>	#germany_vehicles:Chassis_G99_RhB_Waffentrager_2	</userString>
       <tags></tags>
       <level>	8	</level>
       <price>	31000	</price>
@@ -2313,11 +2312,10 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	6000	</weight>
-      <maxLoad>	23000	</maxLoad>
       <terrainResistance>	0.9 1.1 2.1	</terrainResistance>
       <brakeForce>	23000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	38	</rotationSpeed>
+      <rotationSpeed>	45	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.22	</vehicleMovement>
         <vehicleRotation>	0.22	</vehicleRotation>
@@ -3304,12 +3302,12 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	5.71428585	</repairTime>
-    </Chassis_RhB_Waffentrager_2>
+    </Chassis_G99_RhB_Waffentrager_2>
   </chassis>
   <turrets0>
-    <Turret_1_RhB_Waffentrager>
+    <Turret_1_G99_RhB_Waffentrager>
       <ceilless>	true	</ceilless>
-      <userString>	#germany_vehicles:Turret_1_RhB_Waffentrager	</userString>
+      <userString>	#germany_vehicles:Turret_1_G99_RhB_Waffentrager	</userString>
       <tags>	cannotDetach	</tags>
       <level>	8	</level>
       <price>	100	</price>
@@ -3322,12 +3320,12 @@
         <armor_7>	5	</armor_7>
       </armor>
       <weight>	850	</weight>
-      <maxHealth>	220	</maxHealth>
+      <maxHealth>	230	</maxHealth>
       <rotationSpeed>	18	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	155	</maxHealth>
+        <maxRegenHealth>	78	</maxRegenHealth>
+        <repairCost>	8	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	360	</circularVisionRadius>
       <surveyingDeviceHealth>
@@ -3336,9 +3334,9 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_128mm_K44_L55>	shared	  <maxAmmo>	30	</maxAmmo>
+        <_128mm_Kanone_44_L_55_Rhm>	shared	  <maxAmmo>	30	</maxAmmo>
           <unlocks>
-            <gun>	_150mm_Rohr_L29_5	  <cost>	63500	</cost>
+            <gun>	_150mm_Pak_L_29_5	  <cost>	63500	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -3432,8 +3430,8 @@
             <density>	92.055 102.461	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_128mm_K44_L55>
-        <_150mm_Rohr_L29_5>	shared	  <maxAmmo>	30	</maxAmmo>
+        </_128mm_Kanone_44_L_55_Rhm>
+        <_150mm_Pak_L_29_5>	shared	  <maxAmmo>	30	</maxAmmo>
           <unlocks>
             <vehicle>	G97_Waffentrager_IV	  <cost>	163500	</cost>
             </vehicle>
@@ -3529,7 +3527,7 @@
             <density>	102.869 103.952	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_150mm_Rohr_L29_5>
+        </_150mm_Pak_L_29_5>
       </guns>
       <models>
         <undamaged>	vehicles/german/G99_RhB_Waffentrager/normal/lod0/Turret_01.model	</undamaged>
@@ -4021,59 +4019,36 @@
         <density>	100 100.001	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_1_RhB_Waffentrager>
+    </Turret_1_G99_RhB_Waffentrager>
   </turrets0>
   <engines>
-    <Praga_AusfIV>	shared	  <unlocks>
-        <engine>	Tatra_V-103_R	  <cost>	1050	</cost>
+    <Praga_Ausf_IV_Rhm>	shared	  <unlocks>
+        <engine>	Tatra_Typ_TD_103_P	  <cost>	1050	</cost>
         </engine>
       </unlocks>
-    </Praga_AusfIV>
-    <Tatra_V-103_R>	shared	</Tatra_V-103_R>
+    </Praga_Ausf_IV_Rhm>
+    <Tatra_Typ_TD_103_P>	shared	</Tatra_Typ_TD_103_P>
   </engines>
   <fuelTanks>
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <FuG_F>	shared	  <unlocks>
-        <radio>	FuG8	  <cost>	4040	</cost>
-        </radio>
-      </unlocks>
-    </FuG_F>
-    <FuG8>	shared	  <unlocks>
-        <radio>	FuG_Spr.A	  <cost>	4500	</cost>
-        </radio>
-      </unlocks>
-    </FuG8>
     <FuG_Spr.A>	shared	</FuG_Spr.A>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Praga_AusfIV>
-          <smplEnginePower>	190.3106	</smplEnginePower>
+        <Praga_Ausf_IV_Rhm>
+          <smplEnginePower>	210	</smplEnginePower>
           <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
-        </Praga_AusfIV>
-        <Tatra_V-103_R>
-          <smplEnginePower>	218.8572	</smplEnginePower>
+        </Praga_Ausf_IV_Rhm>
+        <Tatra_Typ_TD_103_P>
+          <smplEnginePower>	230	</smplEnginePower>
           <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
-        </Tatra_V-103_R>
+        </Tatra_Typ_TD_103_P>
       </engines>
       <chassis>
-        <Chassis_RhB_Waffentrager>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.18515	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.0966	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.0805	</rollingFriction>
-            </firm>
-          </grounds>
-        </Chassis_RhB_Waffentrager>
-        <Chassis_RhB_Waffentrager_2>
+        <Chassis_G99_RhB_Waffentrager>
           <grounds>
             <soft>
               <rollingFriction>	0.16905	</rollingFriction>
@@ -4085,15 +4060,28 @@
               <rollingFriction>	0.07245	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_RhB_Waffentrager_2>
+        </Chassis_G99_RhB_Waffentrager>
+        <Chassis_G99_RhB_Waffentrager_2>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.16905	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.08855	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.07245	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_G99_RhB_Waffentrager_2>
       </chassis>
     </detailed>
   </physics>
   <clientAdjustmentFactors>
     <guns>
-      <_150mm_Rohr_L29_5>
+      <_150mm_Pak_L_29_5>
         <delta>	1.4	</delta>
-      </_150mm_Rohr_L29_5>
+      </_150mm_Pak_L_29_5>
     </guns>
     <armour>	1.073900038	</armour>
   </clientAdjustmentFactors>

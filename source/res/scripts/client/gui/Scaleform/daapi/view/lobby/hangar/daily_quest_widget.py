@@ -7,7 +7,6 @@ from constants import DAILY_QUESTS_CONFIG
 from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor
 from gui.limited_ui.lui_rules_storage import LUI_RULES
 from gui.prb_control.entities.listener import IGlobalListener
-from gui.server_events.events_helpers import isDailyQuestsEnable
 from gui.impl.lobby.missions.daily_quests_widget_view import DailyQuestsWidgetView
 from gui.Scaleform.daapi.view.meta.DailyQuestMeta import DailyQuestMeta
 from gui.Scaleform.managers import UtilsManager
@@ -74,16 +73,20 @@ class BaseQuestsWidgetComponent(object):
 
     def _executeShowOrHide(self):
         injector = self._injector
-        isEnabled = False
-        if self._shouldHide():
-            injector.destroyQuestsWidgetView()
-        elif self._hasIncompleteQuests() or self.__hasQuestStatusChanged():
-            isEnabled = True
-            self._injectAndSetVisibilityOfWidgetView()
-        injector.as_setEnabledS(isEnabled)
+        if injector is None:
+            return
+        else:
+            isEnabled = False
+            if self._shouldHide():
+                injector.destroyQuestsWidgetView()
+            elif self._hasIncompleteQuests() or self.__hasQuestStatusChanged():
+                isEnabled = True
+                self._injectAndSetVisibilityOfWidgetView()
+            injector.as_setEnabledS(isEnabled)
+            return
 
     def _shouldHide(self):
-        return not isDailyQuestsEnable() or self.__promoController.isTeaserOpen() or not self.__isQueueEnabled() or not self.__isLimitedUiRuleCompleted()
+        return True
 
     def _onSyncCompleted(self):
         self.__showOrHide()

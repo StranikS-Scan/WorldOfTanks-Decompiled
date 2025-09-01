@@ -1,0 +1,26 @@
+<PillboxSiegeComponent.def>
+  <Properties>
+    <vehTypeCD>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehTypeCD>
+    <status>
+      <Type>	PILLBOX_SIEGE_STATUS	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </status>
+    <publicStatus>
+      <Type>	PILLBOX_SIEGE_PUBLIC_STATUS	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </publicStatus>
+  </Properties>
+  <CellMethods>
+    <handleShortKeyEvent>
+      <Exposed>	OWN_CLIENT	</Exposed>
+    </handleShortKeyEvent>
+    <handleLongKeyEvent>
+      <Exposed>	OWN_CLIENT	</Exposed>
+    </handleLongKeyEvent>
+  </CellMethods>
+  <DefaultKeyName>	pillboxSiegeComponent	</DefaultKeyName>
+</PillboxSiegeComponent.def>

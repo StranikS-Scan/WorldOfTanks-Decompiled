@@ -56,7 +56,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	9736	</weight>
-    <maxHealth>	432	</maxHealth>
+    <maxHealth>	456	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	130	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
@@ -998,7 +998,6 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	4500	</weight>
-      <maxLoad>	18500	</maxLoad>
       <terrainResistance>	1.3 1.5 2.2	</terrainResistance>
       <brakeForce>	18000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -2092,7 +2091,6 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	4500	</weight>
-      <maxLoad>	21000	</maxLoad>
       <terrainResistance>	1.3 1.5 2.2	</terrainResistance>
       <brakeForce>	18000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -3183,6 +3181,10 @@
       <tags></tags>
       <level>	3	</level>
       <price>	2000	</price>
+      <unlocks>
+        <turret>	Turret_2_S04_Lago_I	  <cost>	1170	</cost>
+        </turret>
+      </unlocks>
       <armor>
         <armor_1>	28	</armor_1>
         <armor_2>	15	</armor_2>
@@ -3196,7 +3198,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2000	</weight>
-      <maxHealth>	78	</maxHealth>
+      <maxHealth>	84	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -3210,69 +3212,6 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_47mm_kan_m_38_strv>	shared	  <maxAmmo>	120	</maxAmmo>
-          <unlocks>
-            <turret>	Turret_2_S04_Lago_I	  <cost>	1170	</cost>
-            </turret>
-            <gun>	_57mm_pvkan_m_43	  <cost>	3750	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <gun>	10	</gun>
-          </armor>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 10 0.430556 10 0.444444 8 0.555556 8 0.569444 10 1 10	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.276	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	2.45	</reloadTime>
-          <models>
-            <undamaged>	vehicles/sweden/S04_Lago_I/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/sweden/S04_Lago_I/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/sweden/S04_Lago_I/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/sweden/S04_Lago_I/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/sweden/S04_Lago_I/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_small	</effects>
-          <reloadEffect>	reload20_45	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.001315 -0.003715 0.644781	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.001313 0.057851 0.138434	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.001315 -0.003717 0.644778	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <density>	146.669 156.061	</density>
-            <aoTextureSize>	256 256	</aoTextureSize>
-          </camouflage>
-        </_47mm_kan_m_38_strv>
         <_57mm_pvkan_m_43>	shared	  <maxAmmo>	105	</maxAmmo>
           <armor>
             <gun>	15	</gun>
@@ -3285,7 +3224,7 @@
           <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	2.85	</reloadTime>
-          <aimingTime>	2.6	</aimingTime>
+          <aimingTime>	2.4	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -3889,7 +3828,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2400	</weight>
-      <maxHealth>	108	</maxHealth>
+      <maxHealth>	114	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -3902,77 +3841,8 @@
         <maxRegenHealth>	30	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
+      <invisibilityFactor>	0.992	</invisibilityFactor>
       <guns>
-        <_47mm_kan_m_38_strv>	shared	  <maxAmmo>	120	</maxAmmo>
-          <armor>
-            <armor_1>	13	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_3>	13	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	10	</gun>
-          </armor>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 10 0.430556 10 0.444444 8 0.555556 8 0.569444 10 1 10	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.276	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	2.3	</reloadTime>
-          <aimingTime>	2	</aimingTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <models>
-            <undamaged>	vehicles/sweden/S04_Lago_I/normal/lod0/Gun_04.model	</undamaged>
-            <destroyed>	vehicles/sweden/S04_Lago_I/crash/lod0/Gun_04.model	</destroyed>
-            <exploded>	vehicles/sweden/S04_Lago_I/crash/lod0/Gun_04.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/sweden/S04_Lago_I/collision/Gun_04.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/sweden/S04_Lago_I/collision_client/Gun_04.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_small	</effects>
-          <reloadEffect>	reload20_45	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.018593 0.043986 0.774778	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.032358 0.194818 0.194815	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.018592 0.043984 0.774781	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.6 0.6 0.000000 0.000000	</tiling>
-            <density>	146.669 156.061	</density>
-            <aoTextureSize>	256 256	</aoTextureSize>
-          </camouflage>
-        </_47mm_kan_m_38_strv>
         <_57mm_pvkan_m_43>	shared	  <maxAmmo>	105	</maxAmmo>
           <armor>
             <armor_1>	13	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -3991,7 +3861,7 @@
           <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	2.65	</reloadTime>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.3	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	3.5	</afterShot>
@@ -4043,6 +3913,10 @@
           </camouflage>
         </_57mm_pvkan_m_43>
         <_75mm_kan_m_41_strv>	shared	  <maxAmmo>	90	</maxAmmo>
+          <unlocks>
+            <vehicle>	S02_Strv_M42	  <cost>	13740	</cost>
+            </vehicle>
+          </unlocks>
           <armor>
             <armor_1>	13	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -4057,13 +3931,9 @@
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 0.430556 10 0.444444 8 0.555556 8 0.569444 10 1 10	</maxPitch>
           </pitchLimits>
-          <unlocks>
-            <vehicle>	S02_Strv_M42	  <cost>	13740	</cost>
-            </vehicle>
-          </unlocks>
           <invisibilityFactorAtShot>	0.260	</invisibilityFactorAtShot>
           <reloadTime>	4.45	</reloadTime>
-          <aimingTime>	2.7	</aimingTime>
+          <aimingTime>	2.3	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -4115,7 +3985,6 @@
           </camouflage>
         </_75mm_kan_m_41_strv>
       </guns>
-      <invisibilityFactor>	0.992	</invisibilityFactor>
       <models>
         <undamaged>	vehicles/sweden/S04_Lago_I/normal/lod0/Turret_02.model	</undamaged>
         <destroyed>	vehicles/sweden/S04_Lago_I/crash/lod0/Turret_02.model	</destroyed>
@@ -4681,11 +4550,6 @@
     <Medium>	shared	</Medium>
   </fuelTanks>
   <radios>
-    <_25_W_Sv_1_m_39>	shared	  <unlocks>
-        <radio>	_25_W_Sv_1_m_39_42	  <cost>	350	</cost>
-        </radio>
-      </unlocks>
-    </_25_W_Sv_1_m_39>
     <_25_W_Sv_1_m_39_42>	shared	</_25_W_Sv_1_m_39_42>
   </radios>
   <clientAdjustmentFactors>
@@ -4710,11 +4574,11 @@
     <detailed>
       <engines>
         <_2_st_Scania_Vabis_1664>
-          <smplEnginePower>	300	</smplEnginePower>
+          <smplEnginePower>	340	</smplEnginePower>
           <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </_2_st_Scania_Vabis_1664>
         <_2_st_Scania_Vabis_L_603_1>
-          <smplEnginePower>	400	</smplEnginePower>
+          <smplEnginePower>	420	</smplEnginePower>
           <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </_2_st_Scania_Vabis_L_603_1>
       </engines>

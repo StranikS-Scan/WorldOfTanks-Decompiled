@@ -3,28 +3,29 @@
 import typing
 import Event
 from constants import DUAL_ACCURACY_STATE
-from vehicle_systems.entity_components.vehicle_mechanic_component import getVehicleMechanic, getPlayerVehicleMechanic, initOnce, VehicleMechanicComponent
+from vehicles.components.vehicle_component import VehicleDynamicComponent
+from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from vehicles.mechanics.mechanic_helpers import getVehicleMechanic, getPlayerVehicleMechanic
 if typing.TYPE_CHECKING:
     from Vehicle import Vehicle
 _DEFAULT_ACCURACY_FACTOR = 1.0
 
 def getVehicleDualAccuracy(vehicle):
-    return getVehicleMechanic('dualAccuracy', vehicle)
+    return getVehicleMechanic(VehicleMechanic.DUAL_ACCURACY, vehicle)
 
 
 def getPlayerVehicleDualAccuracy():
-    return getPlayerVehicleMechanic('dualAccuracy')
+    return getPlayerVehicleMechanic(VehicleMechanic.DUAL_ACCURACY)
 
 
-class DualAccuracy(VehicleMechanicComponent):
+class DualAccuracy(VehicleDynamicComponent):
 
-    @initOnce
     def __init__(self):
         super(DualAccuracy, self).__init__()
         self.__dualAccuracyFactor = _DEFAULT_ACCURACY_FACTOR
         self.__eManager = Event.EventManager()
         self.onSetDualAccState = Event.Event(self.__eManager)
-        self._initMechanic()
+        self._initComponent()
 
     def isActive(self):
         return self.state == DUAL_ACCURACY_STATE.ACTIVE
@@ -36,26 +37,19 @@ class DualAccuracy(VehicleMechanicComponent):
         return self.__dualAccuracyFactor if self.isActive() else _DEFAULT_ACCURACY_FACTOR
 
     def set_state(self, _=None):
-        self._updateMechanicAvatar()
-        self._updateMechanicAppearance()
+        self._updateComponentAvatar()
+        self._updateComponentAppearance()
 
     def onDestroy(self):
         self.__eManager.clear()
         super(DualAccuracy, self).onDestroy()
 
-    def _onAppearanceReady(self):
-        self.__collectDualAccuracyParams()
-
-    def _onMechanicAvatarUpdate(self, player):
+    def _onComponentAvatarUpdate(self, player):
         player.getOwnVehicleShotDispersionAngle(player.gunRotator.turretRotationSpeed)
 
-    def _onMechanicAppearanceUpdate(self):
+    def _onComponentAppearanceUpdate(self):
         self.onSetDualAccState(self.isActive())
 
-    def _onSiegeStateUpdate(self, typeDescriptor):
-        self.__collectDualAccuracyParams(typeDescriptor)
-
-    def __collectDualAccuracyParams(self, typeDescriptor=None):
-        typeDescriptor = typeDescriptor or self.entity.typeDescriptor
+    def _collectComponentParams(self, typeDescriptor):
         params = typeDescriptor.gun
         self.__dualAccuracyFactor = params.dualAccuracy.afterShotDispersionAngle / params.shotDispersionAngle

@@ -18,14 +18,11 @@
     </setDevelopmentFeature>
   </BaseMethods>
   <CellMethods>
-    <setNavMeshGirth>
+    <checkPositionForEquipment>
       <Exposed>	OWN_CLIENT	</Exposed>
-      <Arg>	STRING	</Arg>
-    </setNavMeshGirth>
-    <checkPosition>
-      <Exposed>	OWN_CLIENT	</Exposed>
+      <Arg>	INT32	</Arg>
       <Arg>	VECTOR3	</Arg>
-    </checkPosition>
+    </checkPositionForEquipment>
   </CellMethods>
   <ofEntity>
     <Avatar></Avatar>

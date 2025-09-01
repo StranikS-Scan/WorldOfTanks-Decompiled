@@ -1,8 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/battle_pass/post_progression_view_model.py
 from enum import IntEnum
-from frameworks.wulf import Array
-from frameworks.wulf import ViewModel
+from frameworks.wulf import Array, ViewModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.awards_widget_model import AwardsWidgetModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.chapter_simple_model import ChapterSimpleModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.level_model import LevelModel
@@ -14,9 +13,9 @@ class PostProgressionStatus(IntEnum):
 
 
 class PostProgressionViewModel(ViewModel):
-    __slots__ = ('onOpenPointsInfo', 'onOpenInfoPage', 'onOpenChaptersSelection', 'onOpenChaptersBuyView', 'onOpenProgressionView', 'onClose', 'onProgressAchieved', 'onCycleCompleted')
+    __slots__ = ('onOpenPointsInfo', 'onOpenInfoPage', 'onOpenChaptersBuyView', 'onClose', 'onProgressAchieved', 'onCycleCompleted')
 
-    def __init__(self, properties=12, commands=8):
+    def __init__(self, properties=12, commands=6):
         super(PostProgressionViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -117,9 +116,7 @@ class PostProgressionViewModel(ViewModel):
         self._addNumberProperty('postProgressionStatus')
         self.onOpenPointsInfo = self._addCommand('onOpenPointsInfo')
         self.onOpenInfoPage = self._addCommand('onOpenInfoPage')
-        self.onOpenChaptersSelection = self._addCommand('onOpenChaptersSelection')
         self.onOpenChaptersBuyView = self._addCommand('onOpenChaptersBuyView')
-        self.onOpenProgressionView = self._addCommand('onOpenProgressionView')
         self.onClose = self._addCommand('onClose')
         self.onProgressAchieved = self._addCommand('onProgressAchieved')
         self.onCycleCompleted = self._addCommand('onCycleCompleted')

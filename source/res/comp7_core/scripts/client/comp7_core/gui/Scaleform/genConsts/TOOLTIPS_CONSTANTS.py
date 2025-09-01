@@ -1,0 +1,24 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
+# Embedded file name: comp7_core/scripts/client/comp7_core/gui/Scaleform/genConsts/TOOLTIPS_CONSTANTS.py
+
+
+class TOOLTIPS_CONSTANTS(object):
+    COMP7_SELECTABLE_REWARD = 'comp7SelectableReward'
+    COMP7_SELECTOR_INFO = 'comp7SelectorInfo'
+    COMP7_SELECTOR_UNAVAILABLE_INFO = 'comp7SelectorUnavailableInfo'
+    COMP7_ROLE_SKILL_LOBBY_TOOLTIP = 'comp7RoleSkillLobbyTooltip'
+    COMP7_CALENDAR_DAY_INFO = 'comp7CalendarDayInfo'
+    COMP7_CALENDAR_DAY_EXTENDED_INFO = 'comp7CalendarDayExtendedInfo'
+    COMP7_BATTLE_RESULTS_RATING_POINTS = 'comp7BattleResultsRatingPoints'
+    TOURNAMENT_COMP7_BATTLE_RESULTS_RATING_POINTS = 'tournamentComp7BattleResultsRatingPoints'
+    TRAINING_COMP7_BATTLE_RESULTS_RATING_POINTS = 'trainingComp7BattleResultsRatingPoints'
+    COMP7_GIFT_TOKEN = 'comp7GiftToken'
+    COMP7_LOBBY_SET = [COMP7_SELECTOR_INFO,
+     COMP7_SELECTOR_UNAVAILABLE_INFO,
+     COMP7_CALENDAR_DAY_INFO,
+     COMP7_CALENDAR_DAY_EXTENDED_INFO,
+     COMP7_ROLE_SKILL_LOBBY_TOOLTIP,
+     COMP7_SELECTABLE_REWARD,
+     COMP7_BATTLE_RESULTS_RATING_POINTS,
+     TOURNAMENT_COMP7_BATTLE_RESULTS_RATING_POINTS,
+     TRAINING_COMP7_BATTLE_RESULTS_RATING_POINTS]

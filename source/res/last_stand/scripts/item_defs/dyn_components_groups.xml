@@ -1,0 +1,1624 @@
+<dyn_components_groups.xml>
+  <LS_lootSoulsSmall>
+    <EntityMarkerComponent>
+      <server>
+        <style>	LS_SOUL	</style>
+      </server>
+    </EntityMarkerComponent>
+    <LSLootVisualComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	last_stand/content/sequences/loot_souls_small.ssm	</sequence>
+          </item>
+        </sequences>
+      </client>
+    </LSLootVisualComponent>
+  </LS_lootSoulsSmall>
+  <LS_lootSoulsMedium>
+    <EntityMarkerComponent>
+      <server>
+        <style>	LS_SOUL	</style>
+      </server>
+    </EntityMarkerComponent>
+    <LSLootVisualComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	last_stand/content/sequences/loot_souls_medium.ssm	</sequence>
+          </item>
+        </sequences>
+      </client>
+    </LSLootVisualComponent>
+  </LS_lootSoulsMedium>
+  <LS_lootSoulsBig>
+    <EntityMarkerComponent>
+      <server>
+        <style>	LS_SOUL	</style>
+      </server>
+    </EntityMarkerComponent>
+    <LSLootVisualComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	last_stand/content/sequences/loot_souls_big.ssm	</sequence>
+          </item>
+        </sequences>
+      </client>
+    </LSLootVisualComponent>
+  </LS_lootSoulsBig>
+  <LS_lootShells>
+    <EntityMarkerComponent>
+      <server>
+        <style>	LS_SHELL	</style>
+      </server>
+    </EntityMarkerComponent>
+    <LSLootVisualComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	last_stand/content/sequences/loot_shells.ssm	</sequence>
+          </item>
+        </sequences>
+      </client>
+    </LSLootVisualComponent>
+  </LS_lootShells>
+  <LS_nitro>
+    <LSBuffNitroAccelerationComponent>
+      <server>
+        <normalSettings>
+          <enginePowerRatio>	160	</enginePowerRatio>
+          <maxSpeedForward>	70	</maxSpeedForward>
+          <maxSpeedBackward>	40	</maxSpeedBackward>
+          <terrainResistance>	16 16 16	</terrainResistance>
+        </normalSettings>
+        <normalCombinedSettings>
+          <enginePowerRatio>	200	</enginePowerRatio>
+          <maxSpeedForward>	90	</maxSpeedForward>
+          <maxSpeedBackward>	50	</maxSpeedBackward>
+          <terrainResistance>	18 18 18	</terrainResistance>
+        </normalCombinedSettings>
+        <siegeSettings>
+          <enginePowerRatio>	160	</enginePowerRatio>
+          <maxSpeedForward>	70	</maxSpeedForward>
+          <maxSpeedBackward>	40	</maxSpeedBackward>
+          <terrainResistance>	16 16 16	</terrainResistance>
+        </siegeSettings>
+        <siegeCombinedSettings>
+          <enginePowerRatio>	200	</enginePowerRatio>
+          <maxSpeedForward>	90	</maxSpeedForward>
+          <maxSpeedBackward>	50	</maxSpeedBackward>
+          <terrainResistance>	18 18 18	</terrainResistance>
+        </siegeCombinedSettings>
+      </server>
+    </LSBuffNitroAccelerationComponent>
+    <LSBuffRepairComponent>
+      <server>
+        <healDevices>	engine	</healDevices>
+      </server>
+    </LSBuffRepairComponent>
+    <LSBuffDamageResistsComponent>
+      <server>
+        <resistReason>	LS_NITRO	</resistReason>
+        <resists>
+          <item>
+            <target>	ENGINE	</target>
+            <attackReason>	ALL	</attackReason>
+            <value>	1.0	</value>
+          </item>
+        </resists>
+      </server>
+    </LSBuffDamageResistsComponent>
+    <LSBuffNitroComponent>
+      <client>
+        <nitro>	2	</nitro>
+      </client>
+    </LSBuffNitroComponent>
+    <LSBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound3D>	ev_last_stand_ability_nitro_activation	</activationSound3D>
+            <deactivationSound3D>	ev_last_stand_ability_nitro_deactivation	</deactivationSound3D>
+            <playTo>	self	</playTo>
+          </item>
+          <item>
+            <activationSound3D>	ev_last_stand_ability_nitro_activation_npc	</activationSound3D>
+            <deactivationSound3D>	ev_last_stand_ability_nitro_deactivation_npc	</deactivationSound3D>
+            <playTo>	others	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </LSBuffSoundComponent>
+  </LS_nitro>
+  <LS_nitro_siege>
+    <LSBuffNitroAccelerationComponent>
+      <server>
+        <normalSettings>
+          <enginePowerRatio>	160	</enginePowerRatio>
+          <maxSpeedForward>	70	</maxSpeedForward>
+          <maxSpeedBackward>	40	</maxSpeedBackward>
+          <terrainResistance>	16 16 16	</terrainResistance>
+        </normalSettings>
+        <normalCombinedSettings>
+          <enginePowerRatio>	200	</enginePowerRatio>
+          <maxSpeedForward>	90	</maxSpeedForward>
+          <maxSpeedBackward>	50	</maxSpeedBackward>
+          <terrainResistance>	18 18 18	</terrainResistance>
+        </normalCombinedSettings>
+        <siegeSettings>
+          <enginePowerRatio>	160	</enginePowerRatio>
+          <maxSpeedForward>	30	</maxSpeedForward>
+          <maxSpeedBackward>	20	</maxSpeedBackward>
+          <terrainResistance>	16 16 16	</terrainResistance>
+        </siegeSettings>
+        <siegeCombinedSettings>
+          <enginePowerRatio>	200	</enginePowerRatio>
+          <maxSpeedForward>	40	</maxSpeedForward>
+          <maxSpeedBackward>	25	</maxSpeedBackward>
+          <terrainResistance>	16 16 16	</terrainResistance>
+        </siegeCombinedSettings>
+      </server>
+    </LSBuffNitroAccelerationComponent>
+    <LSBuffRepairComponent>
+      <server>
+        <healDevices>	engine	</healDevices>
+      </server>
+    </LSBuffRepairComponent>
+    <LSBuffDamageResistsComponent>
+      <server>
+        <resistReason>	LS_NITRO	</resistReason>
+        <resists>
+          <item>
+            <target>	ENGINE	</target>
+            <attackReason>	ALL	</attackReason>
+            <value>	1.0	</value>
+          </item>
+        </resists>
+      </server>
+    </LSBuffDamageResistsComponent>
+    <LSBuffNitroComponent>
+      <client>
+        <nitro>	2	</nitro>
+      </client>
+    </LSBuffNitroComponent>
+    <LSBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound3D>	ev_halloween_2019_ability_nitro_activation	</activationSound3D>
+            <deactivationSound3D>	ev_halloween_2019_ability_nitro_deactivation	</deactivationSound3D>
+            <playTo>	self	</playTo>
+          </item>
+          <item>
+            <activationSound3D>	ev_hw_mirny13_gameplay_ability_nitro_activation_npc	</activationSound3D>
+            <deactivationSound3D>	ev_hw_mirny13_gameplay_ability_nitro_deactivation_npc	</deactivationSound3D>
+            <playTo>	others	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </LSBuffSoundComponent>
+  </LS_nitro_siege>
+  <LS_healVehicleBeforeNextPhase>
+    <LSBuffRepairComponent>
+      <server>
+        <healAmount>	0	</healAmount>
+        <healFactor>	0.5	</healFactor>
+        <stopFire>	true	</stopFire>
+        <healCrew>	true	</healCrew>
+        <healDevices>	all	</healDevices>
+        <replenishRocketAccelerator>	true	</replenishRocketAccelerator>
+      </server>
+    </LSBuffRepairComponent>
+  </LS_healVehicleBeforeNextPhase>
+  <LS_ignitePlayerVehiclesInRadius>
+    <LSBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_fire.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+            <loopCount>	1	</loopCount>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </LSBuffSequencesComponent>
+    <LSBuffRadiusAoEComponent>
+      <server>
+        <radius>	25	</radius>
+        <team>	1	</team>
+        <maxVehicles>	10	</maxVehicles>
+        <buffName>	LS_igniteVehicle	</buffName>
+        <duration>	0.1	</duration>
+      </server>
+    </LSBuffRadiusAoEComponent>
+    <LSBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound3D>	ev_gp_bot_detonator_ignition	</activationSound3D>
+            <playTo>	others	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </LSBuffSoundComponent>
+  </LS_ignitePlayerVehiclesInRadius>
+  <LS_igniteVehicle>
+    <LSBuffIgniteVehicleComponent>
+      <server>
+        <time>	10	</time>
+        <damagePerSecond>	30	</damagePerSecond>
+        <maxHealthDamageFactorPerSecond>	0.0	</maxHealthDamageFactorPerSecond>
+        <attackReason>	LS_ABILITY_IGNITE	</attackReason>
+      </server>
+    </LSBuffIgniteVehicleComponent>
+  </LS_igniteVehicle>
+  <LS_drainPlayerHpInRadius>
+    <LSBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_vampiric.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+            <loopCount>	1	</loopCount>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </LSBuffSequencesComponent>
+    <LSBuffRadiusAoEComponent>
+      <server>
+        <radius>	25	</radius>
+        <team>	1	</team>
+        <maxVehicles>	10	</maxVehicles>
+        <buffName>	LS_drainHealth	</buffName>
+        <duration>	0.1	</duration>
+      </server>
+    </LSBuffRadiusAoEComponent>
+  </LS_drainPlayerHpInRadius>
+  <LS_drainHealth>
+    <LSBuffDrainHealthComponent>
+      <server>
+        <damage>	150	</damage>
+        <maxHealthDamageFactor>	0.0	</maxHealthDamageFactor>
+        <healAmount>	0	</healAmount>
+        <healFactor>	0.0	</healFactor>
+        <damageHealFactor>	1.0	</damageHealFactor>
+        <stopFire>	true	</stopFire>
+        <repairReason>	REPAIR_BY_AOE_ABILITY_VAMPIRE	</repairReason>
+        <attackReason>	LS_ABILITY_VAMPIRE	</attackReason>
+      </server>
+    </LSBuffDrainHealthComponent>
+  </LS_drainHealth>
+  <LS_damagePlayerInRadius>
+    <LSBuffRadiusAoEComponent>
+      <server>
+        <radius>	25	</radius>
+        <team>	1	</team>
+        <maxVehicles>	10	</maxVehicles>
+        <buffName>	LS_damageVehicle	</buffName>
+        <duration>	0.1	</duration>
+      </server>
+    </LSBuffRadiusAoEComponent>
+    <LSBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_damage.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+            <loopCount>	1	</loopCount>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </LSBuffSequencesComponent>
+  </LS_damagePlayerInRadius>
+  <LS_damageVehicle>
+    <LSBuffDamageVehicleComponent>
+      <server>
+        <damage>	300	</damage>
+      </server>
+    </LSBuffDamageVehicleComponent>
+  </LS_damageVehicle>
+  <LS_instantReload>
+    <LSBuffRepairComponent>
+      <server>
+        <reloadGun>	true	</reloadGun>
+      </server>
+    </LSBuffRepairComponent>
+    <LSBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_halloween_2019_ability_instant_reload	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </LSBuffSoundComponent>
+  </LS_instantReload>
+  <LS_reloadVehicleBeforeNextWave>
+    <LSBuffRepairComponent>
+      <server>
+        <reloadGun>	true	</reloadGun>
+      </server>
+    </LSBuffRepairComponent>
+  </LS_reloadVehicleBeforeNextWave>
+  <LS_miriumIdle>
+    <LSBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	last_stand/content/sequences/mirium/mirium_exhaust.seq	</sequence>
+            <bindNode>	HP_Track_Exhaus_1	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+            <checkNodeExists>	true	</checkNodeExists>
+          </item>
+          <item>
+            <sequence>	last_stand/content/sequences/mirium/mirium_exhaust.seq	</sequence>
+            <bindNode>	HP_Track_Exhaus_2	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+            <checkNodeExists>	true	</checkNodeExists>
+          </item>
+          <item>
+            <sequence>	last_stand/content/sequences/mirium/mirium_exhaust.seq	</sequence>
+            <bindNode>	HP_Track_Exhaus_3	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+            <checkNodeExists>	true	</checkNodeExists>
+          </item>
+          <item>
+            <sequence>	last_stand/content/sequences/mirium/mirium_exhaust.seq	</sequence>
+            <bindNode>	HP_Track_Exhaus_4	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+            <checkNodeExists>	true	</checkNodeExists>
+          </item>
+        </sequences>
+      </client>
+    </LSBuffSequencesComponent>
+  </LS_miriumIdle>
+  <LS_miriumIncome>
+    <LSBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	last_stand/content/sequences/mirium/mirium_income.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+            <loopCount>	1	</loopCount>
+            <visibleTo>	self	</visibleTo>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+          </item>
+        </sequences>
+      </client>
+    </LSBuffSequencesComponent>
+  </LS_miriumIncome>
+  <LS_miriumOutcome>
+    <LSBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	last_stand/content/sequences/mirium/mirium_outcome.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+            <loopCount>	1	</loopCount>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+          </item>
+        </sequences>
+      </client>
+    </LSBuffSequencesComponent>
+  </LS_miriumOutcome>
+  <LS_modulesInvulnerability>
+    <LSBuffDamageResistsComponent>
+      <server>
+        <resists>
+          <item>
+            <target>	ENGINE	</target>
+            <attackReason>	ALL	</attackReason>
+            <value>	1.0	</value>
+          </item>
+          <item>
+            <target>	AMMO_BAY	</target>
+            <attackReason>	ALL	</attackReason>
+            <value>	1.0	</value>
+          </item>
+        </resists>
+      </server>
+    </LSBuffDamageResistsComponent>
+  </LS_modulesInvulnerability>
+  <LS_botIgniteOnShot>
+    <LSBuffAddBuffOnShotComponent>
+      <server>
+        <buffName>	LS_botIgniteMakeDamageFromShot	</buffName>
+        <duration>	0.1	</duration>
+        <chance>	100	</chance>
+      </server>
+    </LSBuffAddBuffOnShotComponent>
+    <LSBuffVehicleIconComponent>
+      <client>
+        <icon>	firestarter	</icon>
+      </client>
+    </LSBuffVehicleIconComponent>
+  </LS_botIgniteOnShot>
+  <LS_botIgniteMakeDamageFromShot>
+    <LSBuffIgniteVehicleComponent>
+      <server>
+        <time>	4	</time>
+        <damagePerSecond>	25	</damagePerSecond>
+        <maxHealthDamageFactorPerSecond>	0.0	</maxHealthDamageFactorPerSecond>
+        <attackReason>	LS_PASSIVE_IGNITE	</attackReason>
+      </server>
+    </LSBuffIgniteVehicleComponent>
+  </LS_botIgniteMakeDamageFromShot>
+  <LS_botShootingSpeed>
+    <LSBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	gun/reloadTime	</key>
+            <add>	-0.5	</add>
+            <max>	0.1	</max>
+          </item>
+        </factors>
+      </server>
+    </LSBuffFactorsComponent>
+    <LSBuffVehicleIconComponent>
+      <client>
+        <icon>	rapid_fire	</icon>
+      </client>
+    </LSBuffVehicleIconComponent>
+  </LS_botShootingSpeed>
+  <LS_botIncreaseDamage>
+    <LSBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	damageFactor	</key>
+            <add>	0.1	</add>
+            <max>	0.1	</max>
+          </item>
+        </factors>
+      </server>
+    </LSBuffFactorsComponent>
+    <LSBuffVehicleIconComponent>
+      <client>
+        <icon>	damage_dealer	</icon>
+      </client>
+    </LSBuffVehicleIconComponent>
+  </LS_botIncreaseDamage>
+  <LS_botCasterBuff>
+    <LSBuffVehicleIconComponent>
+      <client>
+        <icon>	death_zone	</icon>
+      </client>
+    </LSBuffVehicleIconComponent>
+  </LS_botCasterBuff>
+  <LS_laserSight>
+    <LSBuffInterruptibleComponent>
+      <server>
+        <events>	onDeath	</events>
+      </server>
+    </LSBuffInterruptibleComponent>
+    <LSBuffLaserSightComponent>
+      <client>
+        <bindNode>	HP_laser	</bindNode>
+        <sightMaxDistance>	500.0	</sightMaxDistance>
+        <beamModel>	particles/content_deferred/GFX_models/environment/halloween/hell_sight.model	</beamModel>
+        <beamModelFwd>	particles/content_deferred/GFX_models/environment/halloween/hell_sight_fwd.model	</beamModelFwd>
+        <modelLength>	10.0	</modelLength>
+      </client>
+    </LSBuffLaserSightComponent>
+  </LS_laserSight>
+  <LS_spawnReloadBoost>
+    <LSBuffInterruptibleComponent>
+      <server>
+        <events>	onGunReload	</events>
+      </server>
+    </LSBuffInterruptibleComponent>
+    <LSBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	gun/reloadTime	</key>
+            <add>	-0.5	</add>
+            <max>	0.1	</max>
+          </item>
+        </factors>
+      </server>
+    </LSBuffFactorsComponent>
+  </LS_spawnReloadBoost>
+  <LS_deathZoneVisual>
+    <LSBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/limit_zone.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+        </sequences>
+      </client>
+    </LSBuffSequencesComponent>
+  </LS_deathZoneVisual>
+  <LS_selfRepair>
+    <LSBuffRepairComponent>
+      <server>
+        <healAmount>	250	</healAmount>
+        <healFactor>	0	</healFactor>
+        <stopFire>	true	</stopFire>
+        <removeStun>	true	</removeStun>
+        <healCrew>	true	</healCrew>
+        <healDevices>	all	</healDevices>
+      </server>
+    </LSBuffRepairComponent>
+    <LSBuffPeriodicHealComponent>
+      <server>
+        <healAmount>	20	</healAmount>
+        <healFactor>	0	</healFactor>
+        <timeCycle>	1	</timeCycle>
+      </server>
+    </LSBuffPeriodicHealComponent>
+    <LSBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/healing_tank_sparks.seq	</sequence>
+            <bindNode>	HP_effect	</bindNode>
+          </item>
+        </sequences>
+      </client>
+    </LSBuffSequencesComponent>
+    <LSBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_halloween_2019_ability_hp_repair	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </LSBuffSoundComponent>
+  </LS_selfRepair>
+  <LS_teamRepairFX>
+    <LSBuffInterruptibleComponent>
+      <server>
+        <events>	onDeath	</events>
+      </server>
+    </LSBuffInterruptibleComponent>
+    <LSBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/our_tank_demolitiy/tank_bubble_healing_all.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+            <loopCount>	1	</loopCount>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </LSBuffSequencesComponent>
+  </LS_teamRepairFX>
+  <LS_teamRepair>
+    <LSBuffAddDynGroupComponent>
+      <server>
+        <groups>
+          <item>
+            <groupName>	LS_teamRepairFX	</groupName>
+            <duration>	1.1	</duration>
+            <removeOnDestroy>	False	</removeOnDestroy>
+            <replaceExisting>	True	</replaceExisting>
+          </item>
+          <item>
+            <groupName>	LS_healOther	</groupName>
+            <removeOnDestroy>	True	</removeOnDestroy>
+          </item>
+        </groups>
+      </server>
+    </LSBuffAddDynGroupComponent>
+    <LSBuffRadiusAoEComponent>
+      <server>
+        <radius>	50	</radius>
+        <team>	1	</team>
+        <maxVehicles>	10	</maxVehicles>
+        <buffName>	LS_healOther	</buffName>
+        <duration>	0.1	</duration>
+      </server>
+    </LSBuffRadiusAoEComponent>
+  </LS_teamRepair>
+  <LS_healOther>
+    <LSBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/healing_tank_sparks.seq	</sequence>
+            <bindNode>	HP_effect	</bindNode>
+          </item>
+        </sequences>
+      </client>
+    </LSBuffSequencesComponent>
+    <LSBuffRepairComponent>
+      <server>
+        <healAmount>	500	</healAmount>
+        <stopFire>	true	</stopFire>
+        <removeStun>	true	</removeStun>
+        <healCrew>	true	</healCrew>
+        <healDevices>	all	</healDevices>
+        <repairReason>	REPAIR_BY_AOE_TEAM_REPAIR_KIT	</repairReason>
+      </server>
+    </LSBuffRepairComponent>
+  </LS_healOther>
+  <LS_damageShield>
+    <LSBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	stunResistanceEffect	</key>
+            <max>	1.0	</max>
+          </item>
+        </factors>
+      </server>
+    </LSBuffFactorsComponent>
+    <LSBuffDamageResistsComponent>
+      <server>
+        <resistReason>	LS_DAMAGE_SHIELD	</resistReason>
+        <resists>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	ALL	</attackReason>
+            <value>	1.0	</value>
+          </item>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	RAM	</attackReason>
+            <value>	-1.0	</value>
+          </item>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	DROWNING	</attackReason>
+            <value>	-1.0	</value>
+          </item>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	WORLD_COLLISION	</attackReason>
+            <value>	-1.0	</value>
+          </item>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	LS_PHASE_TIMER	</attackReason>
+            <value>	-1.0	</value>
+          </item>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	LS_DEATH_PIT	</attackReason>
+            <value>	-1.0	</value>
+          </item>
+        </resists>
+      </server>
+    </LSBuffDamageResistsComponent>
+    <LSBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/last_stand/our_tank_demolitiy/tank_bubble_defense.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+        </sequences>
+      </client>
+    </LSBuffSequencesComponent>
+    <LSBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound3D>	ev_halloween_2019_ability_shield_activation	</activationSound3D>
+            <deactivationSound3D>	ev_halloween_2019_ability_shield_deactivation	</deactivationSound3D>
+            <playTo>	self	</playTo>
+          </item>
+          <item>
+            <activationSound3D>	ev_hw_mirny13_gameplay_ability_shield_activation_npc	</activationSound3D>
+            <deactivationSound3D>	ev_hw_mirny13_gameplay_ability_shield_deactivation_npc	</deactivationSound3D>
+            <playTo>	others	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </LSBuffSoundComponent>
+  </LS_damageShield>
+  <LS_fastReload>
+    <LSBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_mirny13_gameplay_ability_adrenalin	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </LSBuffSoundComponent>
+    <LSBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	gun/reloadTime	</key>
+            <add>	-0.8	</add>
+            <max>	0.2	</max>
+          </item>
+        </factors>
+      </server>
+    </LSBuffFactorsComponent>
+  </LS_fastReload>
+  <LS_aoeDamageInstantShot_FX>
+    <LSBuffInterruptibleComponent>
+      <server>
+        <events>	onDeath	</events>
+      </server>
+    </LSBuffInterruptibleComponent>
+    <LSBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_damage.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+            <loopCount>	1	</loopCount>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </LSBuffSequencesComponent>
+  </LS_aoeDamageInstantShot_FX>
+  <LS_aoeDamageInstantShot_damage>
+    <LSBuffDamageVehicleComponent>
+      <server>
+        <damage>	300	</damage>
+        <attackReason>	LS_SHOT_AOE_DAMAGE	</attackReason>
+      </server>
+    </LSBuffDamageVehicleComponent>
+  </LS_aoeDamageInstantShot_damage>
+  <LS_aoeDamageInstantShot_damageInRadius>
+    <LSBuffAddDynGroupComponent>
+      <server>
+        <groups>
+          <item>
+            <groupName>	LS_aoeDamageInstantShot_FX	</groupName>
+            <duration>	3.0	</duration>
+            <removeOnDestroy>	False	</removeOnDestroy>
+            <replaceExisting>	True	</replaceExisting>
+          </item>
+        </groups>
+      </server>
+    </LSBuffAddDynGroupComponent>
+    <LSBuffRadiusAoEComponent>
+      <server>
+        <radius>	35	</radius>
+        <team>	2	</team>
+        <maxVehicles>	10	</maxVehicles>
+        <buffName>	LS_aoeDamageInstantShot_damage	</buffName>
+        <duration>	0.1	</duration>
+      </server>
+    </LSBuffRadiusAoEComponent>
+  </LS_aoeDamageInstantShot_damageInRadius>
+  <LS_aoeDamageInstantShot>
+    <LSBuffShootComponent>
+      <server>
+        <shotDescr>
+          <shell>	usa:_LS_AOE_DAMAGE_INSTANT_SHOT	</shell>
+          <piercingPower>	99999 99999	</piercingPower>
+          <speed>	200	</speed>
+          <gravity>	0.1	</gravity>
+          <maxDistance>	782	</maxDistance>
+          <maxHeight>	280	</maxHeight>
+        </shotDescr>
+        <damageFactor>	0.0	</damageFactor>
+        <groups>
+          <group>
+            <target>	VICTIM	</target>
+            <groupName>	LS_aoeDamageInstantShot_damage	</groupName>
+            <duration>	0.1	</duration>
+          </group>
+          <group>
+            <target>	VICTIM	</target>
+            <groupName>	LS_aoeDamageInstantShot_damageInRadius	</groupName>
+            <duration>	0.1	</duration>
+          </group>
+        </groups>
+      </server>
+    </LSBuffShootComponent>
+    <LSBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_last_stand_ability_energy_shot	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </LSBuffSoundComponent>
+  </LS_aoeDamageInstantShot>
+  <LS_aoeDrainEnemyHpInstantShot_FX>
+    <LSBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/AoE_Vampiric_01_Shot.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+            <loopCount>	1	</loopCount>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </LSBuffSequencesComponent>
+  </LS_aoeDrainEnemyHpInstantShot_FX>
+  <LS_aoeDrainEnemyHpInstantShot_selfFX>
+    <LSBuffInterruptibleComponent>
+      <server>
+        <events>	onDeath	</events>
+      </server>
+    </LSBuffInterruptibleComponent>
+    <LSBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/AoE_Vampiric_02_healing.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+            <loopCount>	1	</loopCount>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </LSBuffSequencesComponent>
+  </LS_aoeDrainEnemyHpInstantShot_selfFX>
+  <LS_aoeDrainEnemyHpInstantShot_drainHealth>
+    <LSBuffDrainHealthComponent>
+      <server>
+        <damage>	150	</damage>
+        <maxHealthDamageFactor>	0.0	</maxHealthDamageFactor>
+        <healAmount>	0	</healAmount>
+        <healFactor>	0.0	</healFactor>
+        <damageHealFactor>	1.0	</damageHealFactor>
+        <stopFire>	true	</stopFire>
+        <removeStun>	true	</removeStun>
+        <healDevices>	all	</healDevices>
+        <repairReason>	REPAIR_BY_AOE_ABILITY_VAMPIRE	</repairReason>
+        <attackReason>	LS_SHOT_AOE_DRAIN_ENEMY_HP	</attackReason>
+      </server>
+    </LSBuffDrainHealthComponent>
+  </LS_aoeDrainEnemyHpInstantShot_drainHealth>
+  <LS_aoeDrainEnemyHpInstantShot_drainHealthInRadius>
+    <LSBuffAddDynGroupComponent>
+      <server>
+        <groups>
+          <item>
+            <groupName>	LS_aoeDrainEnemyHpInstantShot_FX	</groupName>
+            <duration>	2.0	</duration>
+            <removeOnDestroy>	False	</removeOnDestroy>
+            <replaceExisting>	True	</replaceExisting>
+          </item>
+        </groups>
+      </server>
+    </LSBuffAddDynGroupComponent>
+    <LSBuffRadiusAoEComponent>
+      <server>
+        <radius>	35	</radius>
+        <team>	2	</team>
+        <maxVehicles>	10	</maxVehicles>
+        <buffName>	LS_aoeDrainEnemyHpInstantShot_drainHealth	</buffName>
+        <duration>	0.1	</duration>
+      </server>
+    </LSBuffRadiusAoEComponent>
+  </LS_aoeDrainEnemyHpInstantShot_drainHealthInRadius>
+  <LS_aoeDrainEnemyHpInstantShot>
+    <LSBuffShootComponent>
+      <server>
+        <shotDescr>
+          <shell>	usa:_LS_AOE_DRAIN_ENEMY_HP_INSTANT_SHOT	</shell>
+          <piercingPower>	99999 99999	</piercingPower>
+          <speed>	200	</speed>
+          <gravity>	0.1	</gravity>
+          <maxDistance>	782	</maxDistance>
+          <maxHeight>	280	</maxHeight>
+        </shotDescr>
+        <damageFactor>	0.0	</damageFactor>
+        <groups>
+          <group>
+            <target>	VICTIM	</target>
+            <groupName>	LS_aoeDrainEnemyHpInstantShot_drainHealthInRadius	</groupName>
+            <duration>	0.1	</duration>
+          </group>
+          <group>
+            <target>	VICTIM	</target>
+            <groupName>	LS_aoeDrainEnemyHpInstantShot_drainHealth	</groupName>
+            <duration>	0.1	</duration>
+          </group>
+          <group>
+            <target>	SELF	</target>
+            <groupName>	LS_aoeDrainEnemyHpInstantShot_selfFX	</groupName>
+            <duration>	1.1	</duration>
+          </group>
+        </groups>
+      </server>
+    </LSBuffShootComponent>
+    <LSBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_last_stand_ability_vampiric_shot	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </LSBuffSoundComponent>
+  </LS_aoeDrainEnemyHpInstantShot>
+  <LS_aoeStunInstantShot_FX>
+    <LSBuffInterruptibleComponent>
+      <server>
+        <events>	onDeath	</events>
+      </server>
+    </LSBuffInterruptibleComponent>
+    <LSBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_stun_shot.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+            <loopCount>	1	</loopCount>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </LSBuffSequencesComponent>
+  </LS_aoeStunInstantShot_FX>
+  <LS_aoeStunInstantShot_stun>
+    <LSBuffAddDynGroupComponent>
+      <server>
+        <groups>
+          <item>
+            <groupName>	LS_aoeStunInstantShot_debuff	</groupName>
+          </item>
+        </groups>
+      </server>
+    </LSBuffAddDynGroupComponent>
+    <LSBuffStunVehicleComponent>
+      <server>
+        <stunDuration>	7	</stunDuration>
+        <guaranteedStunDuration>	1.0	</guaranteedStunDuration>
+      </server>
+    </LSBuffStunVehicleComponent>
+  </LS_aoeStunInstantShot_stun>
+  <LS_aoeStunInstantShot_debuff>
+    <LSBuffInterruptibleComponent>
+      <server>
+        <events>	onStunOff	</events>
+      </server>
+    </LSBuffInterruptibleComponent>
+    <LSBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	engine/power	</key>
+            <add>	-0.9	</add>
+            <max>	0.1	</max>
+          </item>
+          <item>
+            <key>	vehicle/maxSpeed	</key>
+            <add>	-0.9	</add>
+            <max>	0.1	</max>
+          </item>
+          <item>
+            <key>	turret/rotationSpeed	</key>
+            <add>	-0.7	</add>
+            <max>	0.1	</max>
+          </item>
+          <item>
+            <key>	gun/reloadTime	</key>
+            <add>	1.0	</add>
+          </item>
+          <item>
+            <key>	gun/aimingTime	</key>
+            <add>	1.0	</add>
+          </item>
+          <item>
+            <key>	chassis/shotDispersionFactors/movement	</key>
+            <add>	1.0	</add>
+          </item>
+          <item>
+            <key>	chassis/shotDispersionFactors/rotation	</key>
+            <add>	1.0	</add>
+          </item>
+          <item>
+            <key>	gun/shotDispersionFactors/turretRotation	</key>
+            <add>	1.0	</add>
+          </item>
+        </factors>
+      </server>
+    </LSBuffFactorsComponent>
+  </LS_aoeStunInstantShot_debuff>
+  <LS_aoeStunInstantShot_stunInRadius>
+    <LSBuffAddDynGroupComponent>
+      <server>
+        <groups>
+          <item>
+            <groupName>	LS_aoeStunInstantShot_FX	</groupName>
+            <duration>	3.0	</duration>
+            <removeOnDestroy>	False	</removeOnDestroy>
+            <replaceExisting>	True	</replaceExisting>
+          </item>
+        </groups>
+      </server>
+    </LSBuffAddDynGroupComponent>
+    <LSBuffRadiusAoEComponent>
+      <server>
+        <radius>	35	</radius>
+        <team>	2	</team>
+        <maxVehicles>	10	</maxVehicles>
+        <buffName>	LS_aoeStunInstantShot_stun	</buffName>
+        <duration>	0.1	</duration>
+      </server>
+    </LSBuffRadiusAoEComponent>
+  </LS_aoeStunInstantShot_stunInRadius>
+  <LS_aoeStunInstantShot>
+    <LSBuffShootComponent>
+      <server>
+        <shotDescr>
+          <shell>	usa:_LS_AOE_STUN_INSTANT_SHOT	</shell>
+          <piercingPower>	99999 99999	</piercingPower>
+          <speed>	200	</speed>
+          <gravity>	0.1	</gravity>
+          <maxDistance>	782	</maxDistance>
+          <maxHeight>	280	</maxHeight>
+        </shotDescr>
+        <damageFactor>	0.0	</damageFactor>
+        <groups>
+          <group>
+            <target>	VICTIM	</target>
+            <groupName>	LS_aoeStunInstantShot_stun	</groupName>
+            <duration>	0.1	</duration>
+          </group>
+          <group>
+            <target>	VICTIM	</target>
+            <groupName>	LS_aoeStunInstantShot_stunInRadius	</groupName>
+            <duration>	0.1	</duration>
+          </group>
+        </groups>
+      </server>
+    </LSBuffShootComponent>
+    <LSBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_last_stand_ability_stun_shot	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </LSBuffSoundComponent>
+  </LS_aoeStunInstantShot>
+  <LS_invisibility>
+    <LSBuffRepairComponent>
+      <server>
+        <healAmount>	0	</healAmount>
+        <healFactor>	0	</healFactor>
+        <stopFire>	true	</stopFire>
+        <removeStun>	true	</removeStun>
+        <healCrew>	true	</healCrew>
+        <healDevices>	all	</healDevices>
+      </server>
+    </LSBuffRepairComponent>
+    <LSBuffPeriodicHealComponent>
+      <server>
+        <healAmount>	35	</healAmount>
+        <healFactor>	0	</healFactor>
+        <timeCycle>	1	</timeCycle>
+        <isInterruptOnMaxHealth>	False	</isInterruptOnMaxHealth>
+      </server>
+    </LSBuffPeriodicHealComponent>
+    <LSBuffInterruptibleComponent>
+      <server>
+        <events>	onShot	</events>
+      </server>
+    </LSBuffInterruptibleComponent>
+    <LSBuffInvisibilityForAIComponent></LSBuffInvisibilityForAIComponent>
+    <LSBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/last_stand/ability_invisibility_and_healing.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+        </sequences>
+      </client>
+    </LSBuffSequencesComponent>
+    <LSBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_mirny13_gameplay_ability_invisibility_on	</activationSound2D>
+            <deactivationSound2D>	ev_hw_mirny13_gameplay_ability_invisibility_off	</deactivationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </LSBuffSoundComponent>
+  </LS_invisibility>
+  <LS_doubleDamage_FX>
+    <LSBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_double_damage.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+            <loopCount>	1	</loopCount>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </LSBuffSequencesComponent>
+    <LSBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_last_stand_ability_double_damage_shot	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </LSBuffSoundComponent>
+  </LS_doubleDamage_FX>
+  <LS_doubleDamage>
+    <LSBuffOnShotComponent>
+      <server>
+        <groupName>	LS_doubleDamage_FX	</groupName>
+        <duration>	3.0	</duration>
+      </server>
+    </LSBuffOnShotComponent>
+    <LSBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	damageFactor	</key>
+            <add>	1.0	</add>
+          </item>
+        </factors>
+      </server>
+    </LSBuffFactorsComponent>
+    <LSBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_last_stand_ability_double_damage_activate	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </LSBuffSoundComponent>
+  </LS_doubleDamage>
+  <LS_alphaCharger>
+    <LSBuffInterruptibleComponent>
+      <server>
+        <events>	onDeath	</events>
+      </server>
+    </LSBuffInterruptibleComponent>
+    <LSBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed	</key>
+            <add>	0.45	</add>
+          </item>
+          <item>
+            <key>	engine/power	</key>
+            <add>	16.0	</add>
+          </item>
+          <item>
+            <key>	chassis/terrainResistance	</key>
+            <add>	[16.0, 16.0, 16.0]	</add>
+          </item>
+          <item>
+            <key>	ramming	</key>
+            <add>	0.3	</add>
+          </item>
+        </factors>
+      </server>
+    </LSBuffFactorsComponent>
+    <LSBuffRepairComponent>
+      <server>
+        <healDevices>	engine	</healDevices>
+      </server>
+    </LSBuffRepairComponent>
+    <LSBuffDamageResistsComponent>
+      <server>
+        <resistReason>	LS_NITRO	</resistReason>
+        <resists>
+          <item>
+            <target>	ENGINE	</target>
+            <attackReason>	ALL	</attackReason>
+            <value>	1.0	</value>
+          </item>
+        </resists>
+      </server>
+    </LSBuffDamageResistsComponent>
+    <LSBuffNitroComponent>
+      <client>
+        <nitro>	2	</nitro>
+      </client>
+    </LSBuffNitroComponent>
+    <LSBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/R171_IS_3_II_HW_BOT_charge.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+        </sequences>
+      </client>
+    </LSBuffSequencesComponent>
+  </LS_alphaCharger>
+  <LS_magnus>
+    <LSBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/last_stand/volot/bomber_zone.seq	</sequence>
+          </item>
+        </sequences>
+      </client>
+    </LSBuffSequencesComponent>
+  </LS_magnus>
+  <LS_vehicleInvulnerableMarker>
+    <LSVehicleInvulnerableMarkerComponent></LSVehicleInvulnerableMarkerComponent>
+  </LS_vehicleInvulnerableMarker>
+  <LS_healSituational>
+    <LSBuffAddDynGroupOnEventComponent>
+      <server>
+        <events>	onKilledEnemyVehicle	</events>
+        <baseChance>	50.0	</baseChance>
+        <chancePerFail>	5.0	</chancePerFail>
+        <interruptOnActivation>	True	</interruptOnActivation>
+        <groups>
+          <item>
+            <groupName>	LS_selfRepairForHealSituational	</groupName>
+            <replaceExisting>	false	</replaceExisting>
+            <duration>	-1.0	</duration>
+            <target>	SELF	</target>
+          </item>
+        </groups>
+      </server>
+    </LSBuffAddDynGroupOnEventComponent>
+  </LS_healSituational>
+  <LS_selfRepairForHealSituational>
+    <LSBuffRepairComponent>
+      <server>
+        <healAmount>	500	</healAmount>
+        <healFactor>	0	</healFactor>
+        <stopFire>	true	</stopFire>
+        <removeStun>	true	</removeStun>
+        <healCrew>	false	</healCrew>
+        <healDevices>	all	</healDevices>
+        <repairReason>	REPAIR_BY_SELF_SITUATIONAL	</repairReason>
+      </server>
+    </LSBuffRepairComponent>
+    <LSBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/healing_tank_sparks.seq	</sequence>
+            <bindNode>	HP_effect	</bindNode>
+          </item>
+        </sequences>
+      </client>
+    </LSBuffSequencesComponent>
+    <LSBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_halloween_2019_ability_hp_repair	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </LSBuffSoundComponent>
+  </LS_selfRepairForHealSituational>
+  <LS_nitroSituational>
+    <LSBuffAddDynGroupOnEventComponent>
+      <server>
+        <events>	onAnyDamageTaken	</events>
+        <baseChance>	50.0	</baseChance>
+        <chancePerFail>	5.0	</chancePerFail>
+        <interruptOnActivation>	True	</interruptOnActivation>
+        <groups>
+          <item>
+            <groupName>	LS_nitroSituational_buff	</groupName>
+            <replaceExisting>	false	</replaceExisting>
+            <duration>	-1.0	</duration>
+            <target>	SELF	</target>
+          </item>
+        </groups>
+      </server>
+    </LSBuffAddDynGroupOnEventComponent>
+  </LS_nitroSituational>
+  <LS_nitroSituational_buff>
+    <LSBuffNitroAccelerationComponent>
+      <server>
+        <normalSettings>
+          <enginePowerRatio>	160	</enginePowerRatio>
+          <maxSpeedForward>	70	</maxSpeedForward>
+          <maxSpeedBackward>	40	</maxSpeedBackward>
+          <terrainResistance>	16 16 16	</terrainResistance>
+        </normalSettings>
+        <normalCombinedSettings>
+          <enginePowerRatio>	200	</enginePowerRatio>
+          <maxSpeedForward>	90	</maxSpeedForward>
+          <maxSpeedBackward>	50	</maxSpeedBackward>
+          <terrainResistance>	18 18 18	</terrainResistance>
+        </normalCombinedSettings>
+        <siegeSettings>
+          <enginePowerRatio>	160	</enginePowerRatio>
+          <maxSpeedForward>	70	</maxSpeedForward>
+          <maxSpeedBackward>	40	</maxSpeedBackward>
+          <terrainResistance>	16 16 16	</terrainResistance>
+        </siegeSettings>
+        <siegeCombinedSettings>
+          <enginePowerRatio>	200	</enginePowerRatio>
+          <maxSpeedForward>	90	</maxSpeedForward>
+          <maxSpeedBackward>	50	</maxSpeedBackward>
+          <terrainResistance>	18 18 18	</terrainResistance>
+        </siegeCombinedSettings>
+      </server>
+    </LSBuffNitroAccelerationComponent>
+    <LSBuffRepairComponent>
+      <server>
+        <healDevices>	engine	</healDevices>
+      </server>
+    </LSBuffRepairComponent>
+    <LSBuffDamageResistsComponent>
+      <server>
+        <resistReason>	LS_NITRO	</resistReason>
+        <resists>
+          <item>
+            <target>	ENGINE	</target>
+            <attackReason>	ALL	</attackReason>
+            <value>	1.0	</value>
+          </item>
+        </resists>
+      </server>
+    </LSBuffDamageResistsComponent>
+    <LSBuffNitroComponent>
+      <client>
+        <nitro>	2	</nitro>
+      </client>
+    </LSBuffNitroComponent>
+    <LSBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound3D>	ev_last_stand_ability_nitro_activation	</activationSound3D>
+            <deactivationSound3D>	ev_last_stand_ability_nitro_deactivation	</deactivationSound3D>
+            <playTo>	self	</playTo>
+          </item>
+          <item>
+            <activationSound3D>	ev_last_stand_ability_nitro_activation_npc	</activationSound3D>
+            <deactivationSound3D>	ev_last_stand_ability_nitro_deactivation_npc	</deactivationSound3D>
+            <playTo>	others	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </LSBuffSoundComponent>
+  </LS_nitroSituational_buff>
+  <LS_nitroSituational_siege>
+    <LSBuffAddDynGroupOnEventComponent>
+      <server>
+        <events>	onAnyDamageTaken	</events>
+        <baseChance>	50.0	</baseChance>
+        <chancePerFail>	5.0	</chancePerFail>
+        <interruptOnActivation>	True	</interruptOnActivation>
+        <groups>
+          <item>
+            <groupName>	LS_nitroSituational_siege_buff	</groupName>
+            <replaceExisting>	false	</replaceExisting>
+            <duration>	-1.0	</duration>
+            <target>	SELF	</target>
+          </item>
+        </groups>
+      </server>
+    </LSBuffAddDynGroupOnEventComponent>
+  </LS_nitroSituational_siege>
+  <LS_nitroSituational_siege_buff>
+    <LSBuffNitroAccelerationComponent>
+      <server>
+        <normalSettings>
+          <enginePowerRatio>	160	</enginePowerRatio>
+          <maxSpeedForward>	70	</maxSpeedForward>
+          <maxSpeedBackward>	40	</maxSpeedBackward>
+          <terrainResistance>	16 16 16	</terrainResistance>
+        </normalSettings>
+        <normalCombinedSettings>
+          <enginePowerRatio>	200	</enginePowerRatio>
+          <maxSpeedForward>	90	</maxSpeedForward>
+          <maxSpeedBackward>	50	</maxSpeedBackward>
+          <terrainResistance>	18 18 18	</terrainResistance>
+        </normalCombinedSettings>
+        <siegeSettings>
+          <enginePowerRatio>	160	</enginePowerRatio>
+          <maxSpeedForward>	30	</maxSpeedForward>
+          <maxSpeedBackward>	20	</maxSpeedBackward>
+          <terrainResistance>	16 16 16	</terrainResistance>
+        </siegeSettings>
+        <siegeCombinedSettings>
+          <enginePowerRatio>	200	</enginePowerRatio>
+          <maxSpeedForward>	40	</maxSpeedForward>
+          <maxSpeedBackward>	25	</maxSpeedBackward>
+          <terrainResistance>	16 16 16	</terrainResistance>
+        </siegeCombinedSettings>
+      </server>
+    </LSBuffNitroAccelerationComponent>
+    <LSBuffRepairComponent>
+      <server>
+        <healDevices>	engine	</healDevices>
+      </server>
+    </LSBuffRepairComponent>
+    <LSBuffDamageResistsComponent>
+      <server>
+        <resistReason>	LS_NITRO	</resistReason>
+        <resists>
+          <item>
+            <target>	ENGINE	</target>
+            <attackReason>	ALL	</attackReason>
+            <value>	1.0	</value>
+          </item>
+        </resists>
+      </server>
+    </LSBuffDamageResistsComponent>
+    <LSBuffNitroComponent>
+      <client>
+        <nitro>	2	</nitro>
+      </client>
+    </LSBuffNitroComponent>
+    <LSBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound3D>	ev_halloween_2019_ability_nitro_activation	</activationSound3D>
+            <deactivationSound3D>	ev_halloween_2019_ability_nitro_deactivation	</deactivationSound3D>
+            <playTo>	self	</playTo>
+          </item>
+          <item>
+            <activationSound3D>	ev_hw_mirny13_gameplay_ability_nitro_activation_npc	</activationSound3D>
+            <deactivationSound3D>	ev_hw_mirny13_gameplay_ability_nitro_deactivation_npc	</deactivationSound3D>
+            <playTo>	others	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </LSBuffSoundComponent>
+  </LS_nitroSituational_siege_buff>
+  <LS_extraDamageSituational>
+    <LSBuffAddDynGroupOnEventComponent>
+      <server>
+        <events>	onDamagedEnemyVehicleNotLethal	</events>
+        <baseChance>	50.0	</baseChance>
+        <chancePerFail>	5.0	</chancePerFail>
+        <interruptOnActivation>	True	</interruptOnActivation>
+        <groups>
+          <item>
+            <groupName>	LS_extraDamage	</groupName>
+            <replaceExisting>	false	</replaceExisting>
+            <duration>	0.1	</duration>
+            <target>	OTHER	</target>
+          </item>
+          <item>
+            <groupName>	LS_extraDamageVisual	</groupName>
+            <replaceExisting>	false	</replaceExisting>
+            <duration>	2	</duration>
+            <target>	OTHER	</target>
+          </item>
+        </groups>
+      </server>
+    </LSBuffAddDynGroupOnEventComponent>
+  </LS_extraDamageSituational>
+  <LS_extraDamage>
+    <LSBuffDamageVehicleComponent>
+      <server>
+        <damage>	100	</damage>
+        <shellBaseDamageRatio>	0.1	</shellBaseDamageRatio>
+        <attackReason>	LS_EXTRA_DAMAGE_SITUATIONAL	</attackReason>
+      </server>
+    </LSBuffDamageVehicleComponent>
+  </LS_extraDamage>
+  <LS_extraDamageVisual>
+    <LSBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_damage.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+            <loopCount>	1	</loopCount>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </LSBuffSequencesComponent>
+  </LS_extraDamageVisual>
+  <LS_boss_slowbuff>
+    <LSBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed	</key>
+            <add>	-0.85	</add>
+          </item>
+          <item>
+            <key>	ramming	</key>
+            <add>	100000000000.0	</add>
+          </item>
+          <item>
+            <key>	engine/power	</key>
+            <add>	1.0	</add>
+          </item>
+        </factors>
+        <resists>
+          <item>
+            <target>	CHASSIS	</target>
+            <attackReason>	ALL	</attackReason>
+            <value>	1.0	</value>
+          </item>
+        </resists>
+      </server>
+    </LSBuffFactorsComponent>
+    <LSBuffDamageResistsComponent>
+      <server>
+        <resistReason>	LS_DAMAGE_SHIELD	</resistReason>
+        <resists>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	RAM	</attackReason>
+            <value>	1.0	</value>
+          </item>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	WORLD_COLLISION	</attackReason>
+            <value>	1.0	</value>
+          </item>
+        </resists>
+      </server>
+    </LSBuffDamageResistsComponent>
+    <LSBuffAddDynGroupOnEventComponent>
+      <server>
+        <events>	onDamageTaken	</events>
+        <baseChance>	100.0	</baseChance>
+        <chancePerFail>	0.0	</chancePerFail>
+        <interruptOnActivation>	False	</interruptOnActivation>
+        <groups>
+          <item>
+            <groupName>	LS_boss_hitSound3D	</groupName>
+            <replaceExisting>	true	</replaceExisting>
+            <duration>	0.1	</duration>
+            <target>	SELF	</target>
+          </item>
+          <item>
+            <groupName>	LS_boss_hitSound2D	</groupName>
+            <replaceExisting>	true	</replaceExisting>
+            <duration>	0.1	</duration>
+            <target>	OTHER	</target>
+          </item>
+        </groups>
+      </server>
+    </LSBuffAddDynGroupOnEventComponent>
+  </LS_boss_slowbuff>
+  <LS_boss_hitSound3D>
+    <LSBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound3D>	ev_gp_bot_boss_bomber_weak_zone_hit_3d	</activationSound3D>
+            <playTo>	all	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </LSBuffSoundComponent>
+  </LS_boss_hitSound3D>
+  <LS_boss_hitSound2D>
+    <LSBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_gp_bot_boss_bomber_weak_zone_hit_2d	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </LSBuffSoundComponent>
+  </LS_boss_hitSound2D>
+</dyn_components_groups.xml>

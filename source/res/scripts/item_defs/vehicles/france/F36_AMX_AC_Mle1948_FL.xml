@@ -1279,7 +1279,7 @@
   </hull>
   <chassis>
     <Chassis_AMX_AC_Mle1948_2_FL>
-      <userString>	#france_vehicles:Chassis_AMX_AC_Mle1948_2	</userString>
+      <userString>	#france_vehicles:Chassis_F36_AMX_AC_Mle1948_2	</userString>
       <tags></tags>
       <level>	8	</level>
       <price>	29500	</price>
@@ -1289,11 +1289,10 @@
         <rightTrack>	30	</rightTrack>
       </armor>
       <weight>	11000	</weight>
-      <maxLoad>	59300	</maxLoad>
       <terrainResistance>	1.3 1.4 2.4	</terrainResistance>
       <brakeForce>	36500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	28	</rotationSpeed>
+      <rotationSpeed>	44	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.17	</vehicleMovement>
         <vehicleRotation>	0.17	</vehicleRotation>
@@ -2247,7 +2246,7 @@
   </chassis>
   <turrets0>
     <Turret_1_AMX_AC_Mle1948_FL>
-      <userString>	#france_vehicles:Turret_1_AMX_AC_Mle1948	</userString>
+      <userString>	#france_vehicles:Turret_1_F36_AMX_AC_Mle1948	</userString>
       <tags>	cannotDetach	</tags>
       <level>	8	</level>
       <price>	100	</price>
@@ -2288,7 +2287,7 @@
           </armor>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	34	</reloadTime>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.6	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
@@ -2302,7 +2301,7 @@
           </pitchLimits>
           <clip>
             <count>	3	</count>
-            <rate>	22.2	</rate>
+            <rate>	24	</rate>
           </clip>
           <models>
             <undamaged>	vehicles/french/F36_AMX_AC_Mle1948/normal/lod0/Gun_03.model	</undamaged>
@@ -2414,7 +2413,7 @@
     <detailed>
       <engines>
         <Maybach_HL_295_FL>
-          <smplEnginePower>	898.689	</smplEnginePower>
+          <smplEnginePower>	930	</smplEnginePower>
           <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </Maybach_HL_295_FL>
       </engines>

@@ -1063,6 +1063,10 @@
                   <id>	has_completed_pm2	</id>
                   <greaterOrEqual>	1	</greaterOrEqual>
                 </token>
+                <token>
+                  <id>	has_completed_pm3	</id>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </token>
               </or>
             </and>
           </account>
@@ -1816,33 +1820,6 @@
           <expires>
             <after>	4320	</after>
           </expires>
-        </token>
-      </bonus>
-    </tokenQuest>
-    <tokenQuest>
-      <enabled>	true	</enabled>
-      <id>	ndq_pass_init	</id>
-      <serverOnly>	true	</serverOnly>
-      <conditions>
-        <preBattle>
-          <account>
-            <and>
-              <totalBattles>
-                <lessOrEqual>	0	</lessOrEqual>
-              </totalBattles>
-              <accountPrimaryTypes>	1 10	</accountPrimaryTypes>
-            </and>
-          </account>
-        </preBattle>
-        <common>
-          <bonusLimit>	1	</bonusLimit>
-        </common>
-      </conditions>
-      <bonus>
-        <token>
-          <id>	ndq_pass	</id>
-          <expires>	01.02.2050 00:00	</expires>
-          <count>	6	</count>
         </token>
       </bonus>
     </tokenQuest>

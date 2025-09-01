@@ -1,14 +1,14 @@
 <comp7_equipments.xml>
   <comp7_aoe_heal>
     <id>	9501	</id>
-    <userString>	#artefacts:comp7_aoe_heal/name	</userString>
+    <userString>	#comp7.artefacts.extend:comp7_aoe_heal/name	</userString>
     <icon>	comp7_aoe_heal 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
     <tags>	notForSale roleEquipment	</tags>
     <type>	battleAbilities	</type>
     <soundNotification>	comp_7_ability_ready	</soundNotification>
-    <script>	Comp7AoeHealEquipment	  <visualScript>
+    <script>	comp7_common.items.comp7_artefacts.Comp7AoeHealEquipment	  <visualScript>
         <server>
           <plan>	comp7Abilities/aoeHeal_server	</plan>
         </server>
@@ -29,14 +29,14 @@
   </comp7_aoe_heal>
   <comp7_ally_support>
     <id>	9502	</id>
-    <userString>	#artefacts:comp7_ally_support/name	</userString>
+    <userString>	#comp7.artefacts.extend:comp7_ally_support/name	</userString>
     <icon>	comp7_ally_support 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
     <tags>	notForSale roleEquipment	</tags>
     <type>	battleAbilities	</type>
     <soundNotification>	comp_7_ability_ready	</soundNotification>
-    <script>	Comp7AllySupportEquipment	  <visualScript>
+    <script>	comp7_common.items.comp7_artefacts.Comp7AllySupportEquipment	  <visualScript>
         <server>
           <plan>	comp7Abilities/allySupport_server	</plan>
         </server>
@@ -51,14 +51,14 @@
   </comp7_ally_support>
   <comp7_hunter>
     <id>	9503	</id>
-    <userString>	#artefacts:comp7_hunter/name	</userString>
+    <userString>	#comp7.artefacts.extend:comp7_hunter/name	</userString>
     <icon>	comp7_hunter 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
     <tags>	notForSale roleEquipment	</tags>
     <type>	battleAbilities	</type>
     <soundNotification>	comp_7_ability_ready	</soundNotification>
-    <script>	Comp7AllyHunterEquipment	  <visualScript>
+    <script>	comp7_common.items.comp7_artefacts.Comp7AllyHunterEquipment	  <visualScript>
         <server>
           <plan>	comp7Abilities/hunter_server	</plan>
         </server>
@@ -80,21 +80,21 @@
   </comp7_hunter>
   <comp7_concentration>
     <id>	9504	</id>
-    <userString>	#artefacts:comp7_concentration/name	</userString>
+    <userString>	#comp7.artefacts.extend:comp7_concentration/name	</userString>
     <icon>	comp7_concentration 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
     <tags>	notForSale roleEquipment	</tags>
     <type>	battleAbilities	</type>
     <soundNotification>	comp_7_ability_ready	</soundNotification>
-    <script>	Comp7ConcentrationEquipment	  <visualScript>
+    <script>	comp7_common.items.comp7_artefacts.Comp7ConcentrationEquipment	  <visualScript>
         <server>
           <plan>	comp7Abilities/concentration_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	5	  <exports>	vse	</exports>
+      <cooldownSeconds>	18	  <exports>	vse	</exports>
       </cooldownSeconds>
-      <duration>	15	  <exports>	vse tooltip	</exports>
+      <duration>	12	  <exports>	vse tooltip	</exports>
       </duration>
       <aimingTimeBuff>	0.55 0.475 0.3	  <exports>	vse	</exports>
       </aimingTimeBuff>
@@ -106,14 +106,14 @@
   </comp7_concentration>
   <comp7_berserk>
     <id>	9505	</id>
-    <userString>	#artefacts:comp7_berserk/name	</userString>
+    <userString>	#comp7.artefacts.extend:comp7_berserk/name	</userString>
     <icon>	comp7_berserk 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
     <tags>	notForSale roleEquipment	</tags>
     <type>	battleAbilities	</type>
     <soundNotification>	comp_7_ability_ready	</soundNotification>
-    <script>	Comp7BerserkEquipment	  <visualScript>
+    <script>	comp7_common.items.comp7_artefacts.Comp7BerserkEquipment	  <visualScript>
         <server>
           <plan>	comp7Abilities/berserk_server	</plan>
         </server>
@@ -132,14 +132,14 @@
   </comp7_berserk>
   <comp7_aoe_inspire>
     <id>	9506	</id>
-    <userString>	#artefacts:comp7_aoe_inspire/name	</userString>
+    <userString>	#comp7.artefacts.extend:comp7_aoe_inspire/name	</userString>
     <icon>	comp7_aoe_inspire 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
     <tags>	notForSale roleEquipment	</tags>
     <type>	battleAbilities	</type>
     <soundNotification>	comp_7_ability_ready	</soundNotification>
-    <script>	Comp7AoeInspireEquipment	  <visualScript>
+    <script>	comp7_common.items.comp7_artefacts.Comp7AoeInspireEquipment	  <visualScript>
         <server>
           <plan>	comp7Abilities/aoeInspire_server	</plan>
         </server>
@@ -154,15 +154,15 @@
   </comp7_aoe_inspire>
   <comp7_redline>
     <id>	9507	</id>
-    <userString>	#artefacts:comp7_redline/name	</userString>
+    <userString>	#comp7.artefacts.extend:comp7_redline/name	</userString>
     <icon>	comp7_redline 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
-    <tags>	notForSale roleEquipment	</tags>
+    <tags>	notForSale roleEquipment pointAbility	</tags>
     <type>	battleAbilities	</type>
     <soundNotification>	comp_7_ability_ready	</soundNotification>
     <messagePostfix>	artillery	</messagePostfix>
-    <script>	Comp7RedlineEquipment	  <visualScript>
+    <script>	comp7_common.items.comp7_artefacts.Comp7RedlineEquipment	  <visualScript>
         <server>
           <plan>	comp7Abilities/redline_server	</plan>
         </server>
@@ -173,7 +173,7 @@
       </delay>
       <radius>	10 12.5 15	  <exports>	vse tooltip	</exports>
       </radius>
-      <damage>	90 150 250	  <exports>	vse tooltip	</exports>
+      <damage>	100 150 250	  <exports>	vse tooltip	</exports>
       </damage>
       <stunDuration>	0 6 8	  <exports>	vse tooltip	</exports>
       </stunDuration>
@@ -198,14 +198,14 @@
   </comp7_redline>
   <comp7_fast_recharge>
     <id>	9508	</id>
-    <userString>	#artefacts:comp7_fast_recharge/name	</userString>
+    <userString>	#comp7.artefacts.extend:comp7_fast_recharge/name	</userString>
     <icon>	comp7_fast_recharge 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
     <tags>	notForSale roleEquipment	</tags>
     <type>	battleAbilities	</type>
     <soundNotification>	comp_7_ability_ready	</soundNotification>
-    <script>	Comp7FastRechargeEquipment	  <visualScript>
+    <script>	comp7_common.items.comp7_artefacts.Comp7FastRechargeEquipment	  <visualScript>
         <server>
           <plan>	comp7Abilities/fastRecharge_server	</plan>
         </server>
@@ -221,14 +221,14 @@
   </comp7_fast_recharge>
   <comp7_juggernaut>
     <id>	9509	</id>
-    <userString>	#artefacts:comp7_juggernaut/name	</userString>
+    <userString>	#comp7.artefacts.extend:comp7_juggernaut/name	</userString>
     <icon>	comp7_juggernaut 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
     <tags>	notForSale roleEquipment	</tags>
     <type>	battleAbilities	</type>
     <soundNotification>	comp_7_ability_ready	</soundNotification>
-    <script>	Comp7JuggernautEquipment	  <visualScript>
+    <script>	comp7_common.items.comp7_artefacts.Comp7JuggernautEquipment	  <visualScript>
         <server>
           <plan>	comp7Abilities/juggernaut_server	</plan>
         </server>
@@ -253,14 +253,14 @@
   </comp7_juggernaut>
   <comp7_sure_shot>
     <id>	9510	</id>
-    <userString>	#artefacts:comp7_sure_shot/name	</userString>
+    <userString>	#comp7.artefacts.extend:comp7_sure_shot/name	</userString>
     <icon>	comp7_sure_shot 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
     <tags>	notForSale roleEquipment	</tags>
     <type>	battleAbilities	</type>
     <soundNotification>	comp_7_ability_ready	</soundNotification>
-    <script>	Comp7SureShotEquipment	  <visualScript>
+    <script>	comp7_common.items.comp7_artefacts.Comp7SureShotEquipment	  <visualScript>
         <server>
           <plan>	comp7Abilities/sure_shot_server	</plan>
         </server>
@@ -279,14 +279,14 @@
   </comp7_sure_shot>
   <comp7_sniper>
     <id>	9511	</id>
-    <userString>	#artefacts:comp7_sniper/name	</userString>
+    <userString>	#comp7.artefacts.extend:comp7_sniper/name	</userString>
     <icon>	comp7_sniper 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
     <tags>	notForSale roleEquipment	</tags>
     <type>	battleAbilities	</type>
     <soundNotification>	comp_7_ability_ready	</soundNotification>
-    <script>	Comp7SniperEquipment	  <visualScript>
+    <script>	comp7_common.items.comp7_artefacts.Comp7SniperEquipment	  <visualScript>
         <server>
           <plan>	comp7Abilities/sniper_server	</plan>
         </server>
@@ -305,14 +305,14 @@
   </comp7_sniper>
   <comp7_risky_attack>
     <id>	9512	</id>
-    <userString>	#artefacts:comp7_risky_attack/name	</userString>
+    <userString>	#comp7.artefacts.extend:comp7_risky_attack/name	</userString>
     <icon>	comp7_risky_attack 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
     <tags>	notForSale roleEquipment	</tags>
     <type>	battleAbilities	</type>
     <soundNotification>	comp_7_ability_ready	</soundNotification>
-    <script>	Comp7RiskyAttackEquipment	  <visualScript>
+    <script>	comp7_common.items.comp7_artefacts.Comp7RiskyAttackEquipment	  <visualScript>
         <server>
           <plan>	comp7Abilities/riskyAttack_server	</plan>
         </server>
@@ -337,14 +337,14 @@
   </comp7_risky_attack>
   <comp7_recon>
     <id>	9513	</id>
-    <userString>	#artefacts:comp7_recon/name	</userString>
+    <userString>	#comp7.artefacts.extend:comp7_recon/name	</userString>
     <icon>	comp7_recon 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
-    <tags>	notForSale roleEquipment	</tags>
+    <tags>	notForSale roleEquipment pointAbility	</tags>
     <type>	battleAbilities	</type>
     <soundNotification>	comp_7_ability_ready	</soundNotification>
-    <script>	Comp7ReconEquipment	  <visualScript>
+    <script>	comp7_common.items.comp7_artefacts.Comp7ReconEquipment	  <visualScript>
         <server>
           <plan>	comp7Abilities/recon_server	</plan>
         </server>
@@ -364,14 +364,14 @@
   </comp7_recon>
   <comp7_aggressive_detection>
     <id>	9514	</id>
-    <userString>	#artefacts:comp7_aggressive_detection/name	</userString>
+    <userString>	#comp7.artefacts.extend:comp7_aggressive_detection/name	</userString>
     <icon>	comp7_aggressive_detection 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
     <tags>	notForSale roleEquipment	</tags>
     <type>	battleAbilities	</type>
     <soundNotification>	comp_7_ability_ready	</soundNotification>
-    <script>	Comp7AggressiveDetectionEquipment	  <visualScript>
+    <script>	comp7_common.items.comp7_artefacts.Comp7AggressiveDetectionEquipment	  <visualScript>
         <server>
           <plan>	comp7Abilities/aggressive_detection_server	</plan>
         </server>
@@ -386,14 +386,14 @@
   </comp7_aggressive_detection>
   <comp7_march>
     <id>	9515	</id>
-    <userString>	#artefacts:comp7_march/name	</userString>
+    <userString>	#comp7.artefacts.extend:comp7_march/name	</userString>
     <icon>	comp7_march 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
     <tags>	notForSale roleEquipment	</tags>
     <type>	battleAbilities	</type>
     <soundNotification>	comp_7_ability_ready	</soundNotification>
-    <script>	Comp7MarchEquipment	  <visualScript>
+    <script>	comp7_common.items.comp7_artefacts.Comp7MarchEquipment	  <visualScript>
         <server>
           <plan>	comp7Abilities/march_server	</plan>
         </server>

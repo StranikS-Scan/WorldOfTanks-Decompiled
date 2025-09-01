@@ -1,6 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/hangar/sub_views/veh_param_helpers.py
+from __future__ import absolute_import
+import json
+from future.builtins import round
+from past.types import basestring
 from gui.impl import backport
+from gui.impl.gen.view_models.views.lobby.hangar.sub_views.vehicle_param_base_view_model import HighlightType
 from gui.impl.gen.view_models.views.lobby.hangar.sub_views.vehicle_param_group_view_model import BuffIconType
 from gui.shared.gui_items import KPI, kpiFormatValue
 from gui.shared.items_parameters import MAX_RELATIVE_VALUE
@@ -35,7 +40,7 @@ def getMaxValue(value, delta):
 def _applyFormat(value, state, settings, doSmartRound, isColorize, nDigits=_NUMBER_DIGITS):
     if doSmartRound:
         value = _cutDigits(value, nDigits)
-    if isinstance(value, (str, unicode)):
+    if isinstance(value, basestring):
         paramStr = value
     elif value is None:
         paramStr = '--'
@@ -70,35 +75,53 @@ def _cutDigits(value, nDigits=_NUMBER_DIGITS):
     return round(value, 1) if abs(value) > 9 else round(value, nDigits)
 
 
-def formatParameterValue(parameterName, paramValue, parameterState=None, formatSettings=None, allowSmartRound=True, showZeroDiff=False, isColorize=True, nDigits=_NUMBER_DIGITS):
-    _listFormat = {'rounder': lambda v: backport.getIntegralFormat(int(v)),
-     'separator': '/'}
-    formatSettings = formatSettings or FORMAT_SETTINGS
-    settings = formatSettings.get(parameterName, _listFormat)
-    doSmartRound = allowSmartRound and parameterName in SMART_ROUND_PARAMS
-    preprocessor = settings.get('preprocessor')
-    if KPI.Name.hasValue(parameterName):
-        formatter = KPI_FORMATTERS.get(parameterName, kpiFormatValue)
-        values, separator = formatter(parameterName, round(paramValue, 3)), None
-    elif preprocessor:
-        values, separator, parameterState = preprocessor(paramValue, parameterState)
-    else:
-        values = paramValue
-        separator = None
-    if values is None:
-        return
-    elif isinstance(values, (tuple, list)):
-        if parameterState is None:
-            parameterState = [None] * len(values)
-        if doSmartRound and len(set(values)) == 1:
-            if values[0] > 0:
-                return _applyFormat(values[0], parameterState[0], settings, doSmartRound, isColorize, nDigits)
+def _mapStateToHighlight(state):
+    mapping = {'better': HighlightType.INCREASE,
+     'worse': HighlightType.DECREASE,
+     'normal': HighlightType.NONE}
+    return mapping.get(state, HighlightType.SITUATIONAL)
+
+
+def formatParameterValue(parameterName, paramValue, applyFormatting=True, parameterState=None, formatSettings=None, allowSmartRound=True, showZeroDiff=False, isColorize=True, nDigits=_NUMBER_DIGITS):
+    if applyFormatting:
+        _listFormat = {'rounder': lambda v: backport.getIntegralFormat(int(v)),
+         'separator': '/'}
+        formatSettings = formatSettings or FORMAT_SETTINGS
+        settings = formatSettings.get(parameterName, _listFormat)
+        doSmartRound = allowSmartRound and parameterName in SMART_ROUND_PARAMS
+        preprocessor = settings.get('preprocessor')
+        if KPI.Name.hasValue(parameterName):
+            formatter = KPI_FORMATTERS.get(parameterName, kpiFormatValue)
+            values, separator = formatter(parameterName, round(paramValue, 2)), None
+        elif preprocessor:
+            values, separator, parameterState = preprocessor(paramValue, parameterState)
+        else:
+            values = paramValue
+            separator = None
+        if values is None:
             return
-        separator = separator or settings.get('separator', '')
-        paramsList = [ _applyFormat(val, state, settings, doSmartRound, isColorize, nDigits) for val, state in zip(values, parameterState) ]
-        return separator.join(paramsList)
+        if isinstance(values, (tuple, list)):
+            if parameterState is None:
+                parameterState = [None] * len(values)
+            if doSmartRound and len(set(values)) == 1:
+                if values[0] > 0:
+                    return _applyFormat(values[0], parameterState[0], settings, doSmartRound, isColorize, nDigits)
+                return
+            separator = separator or settings.get('separator', '')
+            paramsList = [ _applyFormat(val, state, settings, doSmartRound, isColorize, nDigits) for val, state in zip(values, parameterState) ]
+            return separator.join(paramsList)
+        if not showZeroDiff and values == 0:
+            return
+        return _applyFormat(values, parameterState, settings, doSmartRound, isColorize, nDigits)
     else:
-        return None if not showZeroDiff and values == 0 else _applyFormat(values, parameterState, settings, doSmartRound, isColorize, nDigits)
+        if not isinstance(paramValue, (list, tuple)):
+            paramValue = [paramValue]
+        if isinstance(parameterState, tuple) and len(parameterState) == 1 and isinstance(parameterState[0], tuple):
+            parameterState = parameterState[0]
+        extractedStates = ((state[0] if isinstance(state, tuple) else state) for state in parameterState)
+        return json.dumps([ {'value': v,
+         'state': _mapStateToHighlight(s).value} for v, s in zip(paramValue, extractedStates) ])
+        return
 
 
 def formatAdditionalParameter(parameter, isApproximately=False):

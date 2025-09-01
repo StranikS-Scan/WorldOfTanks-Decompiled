@@ -10,6 +10,9 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
     def as_setSettingsS(self, data):
         return self.flashObject.as_setSettings(data) if self._isDAAPIInited() else None
 
+    def as_setSizeS(self, width, height):
+        return self.flashObject.as_setSize(width, height) if self._isDAAPIInited() else None
+
     def as_setScaleS(self, scale):
         return self.flashObject.as_setScale(scale) if self._isDAAPIInited() else None
 
@@ -22,11 +25,14 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
     def as_setReloadingCounterShownS(self, visible):
         return self.flashObject.as_setReloadingCounterShown(visible) if self._isDAAPIInited() else None
 
-    def as_setReloadingS(self, duration, baseTime, startTime, isReloading):
-        return self.flashObject.as_setReloading(duration, baseTime, startTime, isReloading) if self._isDAAPIInited() else None
+    def as_setReloadingS(self, duration, baseTime, startTime, isReloading, isShotAvailable=False):
+        return self.flashObject.as_setReloading(duration, baseTime, startTime, isReloading, isShotAvailable) if self._isDAAPIInited() else None
 
-    def as_setReloadingAsPercentS(self, percent, isReloading):
-        return self.flashObject.as_setReloadingAsPercent(percent, isReloading) if self._isDAAPIInited() else None
+    def as_setReloadingAsPercentS(self, time, percent, isReloading, isShotAvailable=False):
+        return self.flashObject.as_setReloadingAsPercent(time, percent, isReloading, isShotAvailable) if self._isDAAPIInited() else None
+
+    def as_setIsInControllableReloadS(self, value):
+        return self.flashObject.as_setIsInControllableReload(value) if self._isDAAPIInited() else None
 
     def as_setBoostAsPercentS(self, percent, duration):
         return self.flashObject.as_setBoostAsPercent(percent, duration) if self._isDAAPIInited() else None
@@ -37,8 +43,8 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
     def as_setAmmoStockS(self, quantity, quantityInClip, clipState, clipReloaded=False):
         return self.flashObject.as_setAmmoStock(quantity, quantityInClip, clipState, clipReloaded) if self._isDAAPIInited() else None
 
-    def as_setClipParamsS(self, clipCapacity, burst, isAutoloader=False):
-        return self.flashObject.as_setClipParams(clipCapacity, burst, isAutoloader) if self._isDAAPIInited() else None
+    def as_setClipParamsS(self, clipCapacity, burst, reloadingType):
+        return self.flashObject.as_setClipParams(clipCapacity, burst, reloadingType) if self._isDAAPIInited() else None
 
     def as_setDistanceS(self, dist):
         return self.flashObject.as_setDistance(dist) if self._isDAAPIInited() else None
@@ -79,8 +85,8 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
     def as_setNetTypeS(self, netType):
         return self.flashObject.as_setNetType(netType) if self._isDAAPIInited() else None
 
-    def as_autoloaderUpdateS(self, timeLeft, baseTime, isPause=False, isStun=False, isTimerOn=False, isRedText=False):
-        return self.flashObject.as_autoloaderUpdate(timeLeft, baseTime, isPause, isStun, isTimerOn, isRedText) if self._isDAAPIInited() else None
+    def as_autoloaderUpdateS(self, timeLeft, baseTime, isCritical=False, isTimerOn=False, isRedText=False):
+        return self.flashObject.as_autoloaderUpdate(timeLeft, baseTime, isCritical, isTimerOn, isRedText) if self._isDAAPIInited() else None
 
     def as_setAutoloaderReloadingS(self, duration, baseTime):
         return self.flashObject.as_setAutoloaderReloading(duration, baseTime) if self._isDAAPIInited() else None
@@ -97,8 +103,8 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
     def as_setAutoloaderReloadasPercentS(self, percent):
         return self.flashObject.as_setAutoloaderReloadasPercent(percent) if self._isDAAPIInited() else None
 
-    def as_setAutoloaderPercentS(self, percent, sec, isTimerOn, isTimerRed):
-        return self.flashObject.as_setAutoloaderPercent(percent, sec, isTimerOn, isTimerRed) if self._isDAAPIInited() else None
+    def as_setAutoloaderPercentS(self, percent, sec, isCritical, isTimerOn, isTimerRed):
+        return self.flashObject.as_setAutoloaderPercent(percent, sec, isCritical, isTimerOn, isTimerRed) if self._isDAAPIInited() else None
 
     def as_setSpeedModeS(self, value):
         return self.flashObject.as_setSpeedMode(value) if self._isDAAPIInited() else None
@@ -142,6 +148,9 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
     def as_setTwinGunMarkerStateS(self, value):
         return self.flashObject.as_setTwinGunMarkerState(value) if self._isDAAPIInited() else None
 
+    def as_showPenetrationFxS(self):
+        return self.flashObject.as_showPenetrationFx() if self._isDAAPIInited() else None
+
     def as_runCameraTransitionFxS(self, direction, duration):
         return self.flashObject.as_runCameraTransitionFx(direction, duration) if self._isDAAPIInited() else None
 
@@ -169,11 +178,26 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
     def as_setAimDamageStageS(self, value):
         return self.flashObject.as_setAimDamageStage(value) if self._isDAAPIInited() else None
 
-    def as_setOverheatProgressS(self, value, isOverheated):
-        return self.flashObject.as_setOverheatProgress(value, isOverheated) if self._isDAAPIInited() else None
+    def as_setOverheatVisibleS(self, value):
+        return self.flashObject.as_setOverheatVisible(value) if self._isDAAPIInited() else None
 
-    def as_addOverheatS(self, overheatMark):
-        return self.flashObject.as_addOverheat(overheatMark) if self._isDAAPIInited() else None
+    def as_setAccuracyStacksProgressS(self, count):
+        return self.flashObject.as_setAccuracyStacksProgress(count) if self._isDAAPIInited() else None
 
-    def as_removeOverheatS(self):
-        return self.flashObject.as_removeOverheat() if self._isDAAPIInited() else None
+    def as_setChargeGunActiveS(self, value):
+        return self.flashObject.as_setChargeGunActive(value) if self._isDAAPIInited() else None
+
+    def as_setChargeGunStateS(self, progress, stacks, isShootBlock):
+        return self.flashObject.as_setChargeGunState(progress, stacks, isShootBlock) if self._isDAAPIInited() else None
+
+    def as_setReloadBoostS(self, value):
+        return self.flashObject.as_setReloadBoost(value) if self._isDAAPIInited() else None
+
+    def as_setReloadBoostBorderS(self, boostVisible, active):
+        return self.flashObject.as_setReloadBoostBorder(boostVisible, active) if self._isDAAPIInited() else None
+
+    def as_setReloadBoostBorderBlinkS(self):
+        return self.flashObject.as_setReloadBoostBorderBlink() if self._isDAAPIInited() else None
+
+    def as_setNetSeparatorTypeS(self, netSeparatorType):
+        return self.flashObject.as_setNetSeparatorType(netSeparatorType) if self._isDAAPIInited() else None

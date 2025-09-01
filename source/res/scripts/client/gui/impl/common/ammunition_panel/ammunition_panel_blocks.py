@@ -107,6 +107,7 @@ class BaseBlock(object):
         model.setItemInstalledSetupIdx(NONE_ID)
         model.setIsMountedMoreThanOne(False)
         model.setIntCD(NONE_ID)
+        model.setImageName('')
 
     def _updateSlotWithItem(self, model, idx, slotItem):
         model.setIsInstalled(slotItem in self._getInstalled())
@@ -158,6 +159,7 @@ class OptDeviceBlock(BaseBlock):
     def _updateSlotWithItem(self, model, idx, slotItem):
         super(OptDeviceBlock, self)._updateSlotWithItem(model, idx, slotItem)
         model.setImageSource(R.images.gui.maps.icons.artefact.dyn(slotItem.descriptor.iconName)())
+        model.setImageName(slotItem.descriptor.iconName)
         self._updateOverlayAspects(model, slotItem)
         self._updateSpecializations(model, slotItem, idx)
 
@@ -215,6 +217,9 @@ class ShellsBlock(BaseBlock):
     def createBlock(self, viewModel):
         super(ShellsBlock, self).createBlock(viewModel)
         viewModel.setType(self._getSectionName())
+        layoutIndex = self._vehicle.shells.setupLayouts.layoutIndex
+        isWarning = not self._vehicle.shells.setupLayouts.isAmmoFull(layoutIndex, self._vehicle.ammoMinSize)
+        viewModel.setIsWarning(isWarning)
 
     def _getSectionName(self):
         return TankSetupConstants.SHELLS
@@ -236,6 +241,7 @@ class ShellsBlock(BaseBlock):
 
     def _updateSlotWithItem(self, model, idx, slotItem):
         model.setImageSource(R.images.gui.maps.icons.shell.small.dyn(slotItem.descriptor.iconName)())
+        model.setImageName(slotItem.descriptor.iconName)
         model.setCount(slotItem.count)
         model.setIntCD(slotItem.intCD)
 
@@ -264,6 +270,7 @@ class ConsumablesBlock(BaseBlock):
     def _updateSlotWithItem(self, model, idx, slotItem):
         super(ConsumablesBlock, self)._updateSlotWithItem(model, idx, slotItem)
         model.setImageSource(R.images.gui.maps.icons.artefact.dyn(slotItem.descriptor.iconName)())
+        model.setImageName(slotItem.descriptor.iconName)
         self._updateOverlayAspects(model, slotItem)
 
     def _updateOverlayAspects(self, slotModel, slotItem):
@@ -293,6 +300,7 @@ class BattleBoostersBlock(BaseBlock):
 
     def _updateSlotWithItem(self, model, idx, slotItem):
         super(BattleBoostersBlock, self)._updateSlotWithItem(model, idx, slotItem)
+        model.setImageName(slotItem.descriptor.iconName)
         model.setImageSource(R.images.gui.maps.icons.artefact.dyn(slotItem.descriptor.iconName)())
         self._updateOverlayAspects(model, slotItem)
 
@@ -342,6 +350,7 @@ class BattleAbilitiesBlock(BaseBlock):
     def _updateSlotWithItem(self, model, idx, slotItem):
         super(BattleAbilitiesBlock, self)._updateSlotWithItem(model, idx, slotItem)
         model.setImageSource(R.images.gui.maps.icons.epicBattles.skills.c_48x48.dyn(slotItem.descriptor.iconName)())
+        model.setImageName(slotItem.descriptor.iconName)
         categoryName = self._getSlotCategoryName(idx)
         model.setIsInstalled(slotItem in self._getInstalled())
         arenaDP = self.__sessionProvider.getArenaDP()

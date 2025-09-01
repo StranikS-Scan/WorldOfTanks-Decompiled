@@ -158,3 +158,53 @@ class DESCRIPTIONS(object):
     REGULAR = RegularDescription
     AVERAGE = AverageDescription
     HEADER = HeaderDescription
+
+
+class PROCESSOR_PARAMETERS:
+    ATTACK_REASONS = 'attackReasons'
+    UNIQUE_TARGET = 'uniqueTarget'
+    UNIQUE_ATTACKER = 'uniqueAttacker'
+    TARGET_NATIONS = 'targetNations'
+    TARGET_ALLIANCE = 'targetAlliance'
+    TARGET_CLASSES = 'targetClasses'
+    TARGET_IMMOBILIZED = 'targetImmobilized'
+    TARGET_LEVEL_GREATER_OR_EQUAL = 'targetLevelGreaterOrEqual'
+    TARGET_LEVEL_DIFF = 'targetLevelDiff'
+    STUN_SEVERAL_TARGETS = 'stunSeveralTargets'
+    DISTANCE_GREATER_OR_EQUAL = 'distanceGreatOrEqual'
+    DISTANCE_SHORTER_OR_EQUAL = 'distanceShortOrEqual'
+    ATTACKER_UNHARMED = 'attackerUnharmed'
+    DISTANCE_IN_VISION_RADIUS = 'distanceInVisionRadius'
+    ATTACKER_STAY_ALIVE = 'attackerStayAlive'
+    ATTACKER_WAS_INVISIBLE = 'attackerWasInvisible'
+    ATTACKER_DEALT_MORE_DAMAGE = 'attackerDealtMoreDamage'
+    DIRECT_HITS_RECEIVED = 'directHitsReceived'
+    ATTACKER_CLASSES = 'attackerClasses'
+    ATTACKER_MOVING_SPEED_GREATER_OR_EQUAL = 'attackerMovingSpeedGreaterOrEqual'
+    TARGET_IS_STATIONARY = 'targetIsStationary'
+    DAMAGE_DEALT = 'damageDealt'
+    TARGET_IS_NOT_SPOTTED = 'targetIsNotSpotted'
+    DESIRED_POSITION = 'desiredPosition'
+    MEDAL = 'medal'
+    VEHICLE_HEALTH_FACTOR = 'vehicleHealthFactor'
+    ASSIST_TYPES = 'assistTypes'
+    SHOULD_BE_UNSPOTTED = 'shouldBeUnspotted'
+    SHOULD_BE_INVISIBLE = 'shouldBeInvisible'
+    MARK_OF_MASTERY = 'markOfMastery'
+    CRIT_TYPES = 'critTypes'
+    HITS = 'hits'
+
+
+class CONFIG_KEYS:
+    PARAMS = 'params'
+    UNIQUE_VEHICLE = 'uniqueVehicle'
+    GOAL = 'goal'
+    IS_MAIN = 'isMain'
+    IS_AWARD = 'isAward'
+    VISIBLE_SCOPE = 'visibleScope'
+    BATTLES_UNIQUE_VEHICLES = 'battlesUniqueVehicles'
+    UNIQUE_BATTLES_COUNT = 'uniqueBattlesCount'
+
+
+VEHICLE_RESTRICTION_MIN_LEVEL = 1
+VEHICLE_RESTRICTION_MAX_LEVEL = 11

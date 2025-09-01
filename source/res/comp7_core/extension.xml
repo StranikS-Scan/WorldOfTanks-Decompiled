@@ -1,0 +1,22 @@
+<extension.xml>
+  <FeatureName>	comp7_core	</FeatureName>
+  <IsEnabled>	true	</IsEnabled>
+  <Personality></Personality>
+  <Components>
+    <StaticComponents></StaticComponents>
+    <DynamicComponents>
+      <TeamInfoComp7Component></TeamInfoComp7Component>
+      <ArenaObserverInfoComp7Component></ArenaObserverInfoComp7Component>
+      <VehiclePrestigePoint></VehiclePrestigePoint>
+      <VehicleRoleSkill></VehicleRoleSkill>
+      <VehicleInspireController></VehicleInspireController>
+      <VehicleHealController></VehicleHealController>
+    </DynamicComponents>
+  </Components>
+  <Entities>
+    <ClientServerEntities>
+      <ApplicationPoint></ApplicationPoint>
+    </ClientServerEntities>
+  </Entities>
+  <ExternalComponents></ExternalComponents>
+</extension.xml>

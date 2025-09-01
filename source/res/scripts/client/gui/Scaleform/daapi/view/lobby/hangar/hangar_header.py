@@ -57,7 +57,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     __hangarGuiCtrl = dependency.descriptor(IHangarGuiController)
     __limitedUIController = dependency.descriptor(ILimitedUIController)
     __liveOpsWebEventsController = dependency.descriptor(ILiveOpsWebEventsController)
-    _lobbyContext = dependency.descriptor(ILobbyContext)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
     __mapboxCtrl = dependency.descriptor(IMapboxController)
     _marathonsCtrl = dependency.descriptor(IMarathonEventsController)
     __rankedController = dependency.descriptor(IRankedBattlesController)
@@ -84,6 +84,8 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self.__updateBattleMattersEntryPoint()
 
     def update(self, *_):
+        if self.isDisposed():
+            return
         headerVO = self._makeHeaderVO()
         self.as_setDataS(headerVO)
         self.__updateWidget()
@@ -118,7 +120,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         if self._eventsController:
             self._eventsController.addListener(self)
         self._marathonsCtrl.onFlagUpdateNotify += self.update
-        self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         g_guiResetters.add(self.__onChangeScreenResolution)
         self.startGlobalListening()
 
@@ -144,14 +146,14 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self.__limitedUIController.stopObserve(LUI_RULES.BattleMattersFlag, self.__updateBattleMattersEntryPoint)
         self.__limitedUIController.stopObserve(LUI_RULES.PersonalMissions, self.__updateVOHeader)
         self.__limitedUIController.stopObserve(LUI_RULES.LiveOpsWebEventsEntryPoint, self.__updateRightWidget)
+        if self._eventsController:
+            self._eventsController.removeListener(self)
+        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
+        g_guiResetters.remove(self.__onChangeScreenResolution)
+        self.stopGlobalListening()
         self._currentVehicle = None
         self.__screenWidth = None
         self.__activeWidgets = None
-        if self._eventsController:
-            self._eventsController.removeListener(self)
-        self._lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
-        g_guiResetters.remove(self.__onChangeScreenResolution)
-        self.stopGlobalListening()
         super(HangarHeader, self)._dispose()
         return
 

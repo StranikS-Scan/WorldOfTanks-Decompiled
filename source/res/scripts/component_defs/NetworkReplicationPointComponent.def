@@ -6,6 +6,12 @@
       <Flags>	ALL_CLIENTS	</Flags>
       <IsReliable>	true	</IsReliable>
     </status>
+    <removed>
+      <Type>	ARRAY	  <of>	UINT32	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <IsReliable>	true	</IsReliable>
+    </removed>
   </Properties>
   <CellMethods></CellMethods>
   <ClientMethods></ClientMethods>

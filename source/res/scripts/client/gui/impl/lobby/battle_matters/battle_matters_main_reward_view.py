@@ -3,19 +3,17 @@
 import logging
 import typing
 from frameworks.wulf import ViewFlags, ViewSettings
-from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_matters.battle_matters_main_reward_view_model import BattleMattersMainRewardViewModel
 from gui.impl.pub import ViewImpl
-from gui.server_events.events_dispatcher import showBattleMatters, showBattleMattersMainReward
+from gui.server_events.events_dispatcher import showBattleMatters
 from gui.server_events.bonuses import VehiclesBonus
-from gui.shared.event_dispatcher import showVehiclePreviewWithoutBottomPanel, showHangar, selectVehicleInHangar
+from gui.shared.event_dispatcher import showHangar, selectVehicleInHangar, showVehicleHubOverview
 from gui.impl.lobby.battle_matters.battle_matters_bonus_packer import BattleMattersVehiclesBonusUIPacker
 from helpers import dependency
 from shared_utils import findFirst
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.server_events import IEventsCache
-from web.web_client_api.common import ItemPackEntry, ItemPackType
 _logger = logging.getLogger(__name__)
 if typing.TYPE_CHECKING:
     from typing import Tuple, Sequence, Callable, Optional
@@ -57,13 +55,7 @@ class BattleMattersMainRewardView(ViewImpl):
         if findFirst(lambda v: v.getVehCD() == vehCD, self.viewModel.getVehicles()).getIsInHangar():
             selectVehicleInHangar(vehCD)
         else:
-
-            def subscriptionFunc():
-                controller = dependency.instance(IBattleMattersController)
-                if not controller.isEnabled() or controller.isPaused():
-                    showHangar()
-
-            showVehiclePreviewWithoutBottomPanel(vehCD, backCallback=showBattleMattersMainReward, itemsPack=[ItemPackEntry(type=ItemPackType.CREW_100, count=1, groupID=1)], backBtnLabel=VEHICLE_PREVIEW.HEADER_BACKBTN_DESCRLABEL_BATTLEMATTERSMAINREWARD, subscriptions=[[self.__battleMattersController.onStateChanged, subscriptionFunc]])
+            showVehicleHubOverview(vehCD)
 
     @staticmethod
     def onBack():

@@ -98,7 +98,7 @@ class DynSquadHintPlugin(HintPanelPlugin):
         key = getVirtualKey(CommandMapping.CMD_VOICECHAT_ENABLE)
         hintTextLeft = backport.text(R.strings.ingame_gui.dynamicSquad.hint.voipToggleKeyLeft())
         hintTextRight = backport.text(R.strings.ingame_gui.dynamicSquad.hint.voipToggleKeyRight())
-        return HintData(key, keyName, hintTextLeft, hintTextRight, 0, 0, HintPriority.DYN_SQUAD, False)
+        return HintData(key, keyName, False, hintTextLeft, hintTextRight, 0, 0, HintPriority.DYN_SQUAD, False)
 
     def __onToggleVoipChannel(self, *args, **kwargs):
         self._updateCounterOnUsed(self.__settings)

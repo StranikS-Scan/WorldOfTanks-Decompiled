@@ -20,7 +20,6 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.battle_control import avatar_getter
 from gui.impl.common.player_satisfaction_rating.player_satisfaction_sound import playSoundForRating
 from player_satisfaction_schema import playerSatisfactionSchema
-from gui.impl.common.player_satisfaction_rating.randomize_feedback import SELECTION_ORDER, getFeedbackResID
 if typing.TYPE_CHECKING:
     from typing import Tuple, Optional, Callable
     from Event import Event
@@ -30,6 +29,10 @@ _MODEL_TO_COMMON_ENUM_MAP = {RateButtonEnum.WORSE: PlayerSatisfactionRating.WORS
  RateButtonEnum.USUAL: PlayerSatisfactionRating.USUAL,
  RateButtonEnum.BETTER: PlayerSatisfactionRating.BETTER,
  RateButtonEnum.UNSET: PlayerSatisfactionRating.NONE}
+SELECTION_ORDER = (PlayerSatisfactionRating.NONE,
+ PlayerSatisfactionRating.WORSE,
+ PlayerSatisfactionRating.USUAL,
+ PlayerSatisfactionRating.BETTER)
 _COMMON_TO_MODEL_ENUM_MAP = {v:k for k, v in _MODEL_TO_COMMON_ENUM_MAP.iteritems()}
 
 class PostmortemPanelView(ViewImpl, CallbackDelayer):
@@ -104,14 +107,12 @@ class PostmortemPanelView(ViewImpl, CallbackDelayer):
         self.viewModel.setIsRatingWidgetVisible(False)
 
     def _setButtonConfig(self, model):
-        arenaUniqueID = self.sessionProvider.arenaVisitor.getArenaUniqueID()
         buttonArray = model.getRatingButtons()
         buttonArray.clear()
         buttonArray.reserve(len(RateButtonEnum))
         for rating in SELECTION_ORDER:
             buttonModel = model.getRatingButtonsType()()
             buttonModel.setButtonVariant(_COMMON_TO_MODEL_ENUM_MAP[rating])
-            buttonModel.setFeedbackString(getFeedbackResID(rating, arenaUniqueID))
             buttonArray.addViewModel(buttonModel)
 
         buttonArray.invalidate()

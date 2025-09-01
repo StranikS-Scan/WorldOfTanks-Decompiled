@@ -123,7 +123,7 @@ if IS_DEVELOPMENT:
             for updater in self.__texts.values():
                 updater()
 
-        def onStateUpdate(self, root, link, status):
+        def onStateUpdate(self, root, link, status, _):
             self.__updateState(root, link, ROCKET_ACCELERATION_STATE.toString(status.status).upper(), status)
 
         def __updateState(self, root, link, value, status):

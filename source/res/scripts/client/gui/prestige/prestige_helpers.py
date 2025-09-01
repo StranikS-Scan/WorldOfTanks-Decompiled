@@ -2,12 +2,13 @@
 # Embedded file name: scripts/client/gui/prestige/prestige_helpers.py
 import logging
 import typing
+from collections import namedtuple
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import GUI_START_BEHAVIOR
 from account_helpers.settings_core.settings_constants import GuiSettingsBehavior
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.impl.gen.view_models.views.lobby.prestige.prestige_emblem_model import PrestigeLevelGrade
-from gui.impl.pub.notification_commands import WindowNotificationCommand
+from gui.impl.pub.notification_commands import WindowNotificationCommand, NotificationEvent, EventNotificationCommand
 from helpers import dependency
 from prestige_system.prestige_common import PrestigeGrade
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -16,8 +17,10 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
 if typing.TYPE_CHECKING:
-    from typing import Tuple, List
+    from typing import Tuple, List, Dict, Set
+    from prestige_system.prestige_milestones_common import PrestigeLevelType, MilestonesType
     from gui.impl.gen.view_models.views.lobby.prestige.prestige_emblem_model import PrestigeEmblemModel
+PrestigeVehiclesDossiersCut = namedtuple('PrestigeVehiclesDossiersCut', ['currentLevel', 'remainingPoints'])
 _MIN_SUB_GRADE_NUMBER = 1
 _MAX_SUB_GRADE_NUMBER = 4
 _INVALID_GRADE_NUMBER = -1
@@ -28,17 +31,24 @@ _COMPLEX_GRADES = (PrestigeLevelGrade.IRON,
  PrestigeLevelGrade.ENAMEL)
 _SIMPLE_GRADES = (PrestigeLevelGrade.UNDEFINED, PrestigeLevelGrade.MAXIMUM)
 _gradeIDtoGradeUIMap = dict(((index, value) for index, value in enumerate([ (s, g) for s in _COMPLEX_GRADES for g in range(_MIN_SUB_GRADE_NUMBER, _MAX_SUB_GRADE_NUMBER + 1) ] + [(PrestigeLevelGrade.MAXIMUM, _INVALID_GRADE_NUMBER)], 1)))
+EMPTY_GRADE_ID = 0
 MAX_GRADE_ID = max(_gradeIDtoGradeUIMap.keys())
-DEFAULT_PRESTIGE = (0, 0)
+DEFAULT_PRESTIGE = PrestigeVehiclesDossiersCut(0, 0)
 
 def mapGradeIDToUI(gradeID):
     return _gradeIDtoGradeUIMap.get(gradeID, (PrestigeLevelGrade.UNDEFINED, _INVALID_GRADE_NUMBER))
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
-def getVehiclePrestige(vehCD, databaseID=None, itemsCache=None):
+def getVehiclePrestigeMap(databaseID=None, itemsCache=None):
     accDossier = itemsCache.items.getAccountDossier(databaseID=databaseID)
-    return accDossier.getPrestigeStats().getVehicles().get(vehCD, DEFAULT_PRESTIGE)
+    return accDossier.getPrestigeStats().getVehicles()
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def getVehiclePrestige(vehCD, databaseID=None, itemsCache=None):
+    vehicles = getVehiclePrestigeMap(databaseID=databaseID, itemsCache=itemsCache)
+    return vehicles.get(vehCD, DEFAULT_PRESTIGE)
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
@@ -58,6 +68,12 @@ def getCurrentProgress(vehCD, currentLevel, remainingPts, lobbyContext=None):
     if currentXP == nextLvlXP:
         currentXP -= 1
     return (currentXP, nextLvlXP)
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def getVehicleAchievedMilestones(vehCD, itemsCache=None):
+    vehiclesAchievedMilestones = itemsCache.items.stats.prestigeMilestonesAchieved
+    return vehiclesAchievedMilestones.get(vehCD, set())
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
@@ -84,7 +100,7 @@ def hasVehiclePrestige(vehCD, checkElite=False, lobbyContext=None, itemsCache=No
 
 
 def getCurrentGrade(currentLvl, vehCD):
-    gradeID = 0
+    gradeID = EMPTY_GRADE_ID
     for grade in getSortedGrades(vehCD):
         if currentLvl < grade.level:
             break
@@ -116,6 +132,12 @@ def getSortedGrades(vehCD, onlyMain=False, lobbyContext=None):
     return grades + [PrestigeGrade(level=maxLevel, prestigeMarkID=MAX_GRADE_ID, main=True)]
 
 
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def getMilestones(vehCD, lobbyContext=None):
+    config = lobbyContext.getServerSettings().prestigeMilestonesConfig
+    return config.milestones.get(vehCD, {})
+
+
 def fillPrestigeEmblemModel(model, level, vehCD):
     model.setLevel(level)
     gradeType, grade = mapGradeIDToUI(getCurrentGrade(level, vehCD))
@@ -129,6 +151,12 @@ def needShowPrestigeRewardWindow(vehCD, oldLvl, newLvl):
             return True
 
     return False
+
+
+def needShowPrestigeMilestonesRewardWindow(vehCD, level):
+    hasPrestige = hasVehiclePrestige(vehCD)
+    milestones = getMilestones(vehCD)
+    return hasPrestige and milestones and level in milestones
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
@@ -147,6 +175,24 @@ def showPrestigeRewardWindow(vehIntCD, level, notificationMgr=None):
     from gui.impl.lobby.prestige.prestige_reward_view import PrestigeRewardViewWindow
     window = PrestigeRewardViewWindow(vehIntCD, level)
     notificationMgr.append(WindowNotificationCommand(window))
+
+
+def showPrestigeMilestoneAchivedWindow(vehCD, level):
+    from gui.impl.lobby.veh_skill_tree.rewards.prestige_milestone_achived_view import PrestigeMilestoneAchivedWindow
+    window = PrestigeMilestoneAchivedWindow(vehCD, level)
+    window.load()
+
+
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
+def openRewardScreens(vehCD, level, showRarityAnimation=False, attachment=None, notificationMgr=None):
+
+    def fn():
+        showPrestigeMilestoneAchivedWindow(vehCD, level)
+        if showRarityAnimation:
+            from gui.shared.event_dispatcher import showVanityRarityAwardScreen
+            showVanityRarityAwardScreen(attachment)
+
+    notificationMgr.append(EventNotificationCommand(NotificationEvent(fn)))
 
 
 @dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)

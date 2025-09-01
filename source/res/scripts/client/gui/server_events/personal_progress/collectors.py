@@ -30,6 +30,13 @@ class BodyProgressCollector(ClientProgressCollector):
         return progress.getContainerType() == CONTAINER.BODY
 
 
+class UniqueProgressCollector(ClientProgressCollector):
+
+    @classmethod
+    def validate(cls, progress):
+        return True if progress.getUniqueVehicles() else False
+
+
 class LobbyProgressCollector(ClientProgressCollector):
 
     @classmethod
@@ -85,6 +92,13 @@ class BattleBodyProgressCollector(SubQuestProgressCollector):
     def validate(self, progress):
         result = super(BattleBodyProgressCollector, self).validate(progress)
         return result and BattleProgressCollector.validate(progress) and BodyProgressCollector.validate(progress)
+
+
+class BattleUniqueProgressCollector(SubQuestProgressCollector):
+
+    def validate(self, progress):
+        result = super(BattleUniqueProgressCollector, self).validate(progress)
+        return result and BattleProgressCollector.validate(progress) and UniqueProgressCollector.validate(progress)
 
 
 class ChangedProgressCollector(BattleBodyProgressCollector):

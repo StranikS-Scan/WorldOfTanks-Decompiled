@@ -19,7 +19,7 @@
     <moving>	0.048	</moving>
     <still>	0.096	</still>
     <camouflageBonus>	0.02	</camouflageBonus>
-    <firePenalty>	0.114	</firePenalty>
+    <firePenalty>	0.144	</firePenalty>
   </invisibility>
   <optDevsOverrides>
     <camouflageNet>
@@ -70,9 +70,9 @@
     <weight>	37265	</weight>
     <maxHealth>	440	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	150	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	188	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
       <chanceToHit>	0.50	</chanceToHit>
     </ammoBayHealth>
     <models>
@@ -1300,8 +1300,8 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_G_E>
-      <userString>	#germany_vehicles:Chassis_G_E	</userString>
+    <Chassis_G61_G_E>
+      <userString>	#germany_vehicles:Chassis_G61_G_E	</userString>
       <tags></tags>
       <level>	10	</level>
       <price>	36000	</price>
@@ -1311,7 +1311,6 @@
         <rightTrack>	40	</rightTrack>
       </armor>
       <weight>	42000	</weight>
-      <maxLoad>	100000	</maxLoad>
       <terrainResistance>	1.3 1.5 2.5	</terrainResistance>
       <brakeForce>	87000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2191,13 +2190,13 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	7.74193525	</repairTime>
-    </Chassis_G_E>
+    </Chassis_G61_G_E>
   </chassis>
   <turrets0>
-    <Turret_1_G_E>
+    <Turret_1_G61_G_E>
       <ceilless>	true	</ceilless>
-      <userString>	#germany_vehicles:Turret_1_G_E	</userString>
-      <tags>	cannotDetach	</tags>
+      <userString>	#germany_vehicles:Turret_1_G61_G_E	</userString>
+      <tags>	cannotDetach turretless	</tags>
       <level>	10	</level>
       <price>	120	</price>
       <notInShop>	true	</notInShop>
@@ -2208,9 +2207,9 @@
       <maxHealth>	110	</maxHealth>
       <rotationSpeed>	12	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	185	</maxHealth>
+        <maxRegenHealth>	93	</maxRegenHealth>
+        <repairCost>	10	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	310	</circularVisionRadius>
       <surveyingDeviceHealth>
@@ -2219,7 +2218,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_210mm_Morser_18>	shared	  <maxAmmo>	30	</maxAmmo>
+        <_210mm_Morser_21>	shared	  <maxAmmo>	30	</maxAmmo>
           <armor>
             <gun>	30	</gun>
           </armor>
@@ -2306,7 +2305,7 @@
             <density>	51.123 49.3301	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_210mm_Morser_18>
+        </_210mm_Morser_21>
       </guns>
       <models>
         <undamaged>	vehicles/german/G61_G_E/normal/lod0/Turret_01.model	</undamaged>
@@ -2346,10 +2345,10 @@
         <density>	50.0 50.0	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_1_G_E>
+    </Turret_1_G61_G_E>
   </turrets0>
   <engines>
-    <Maybach_HL_234_TRM_P45_1>	shared	</Maybach_HL_234_TRM_P45_1>
+    <Maybach_Neues_Projekt_GW_E>	shared	</Maybach_Neues_Projekt_GW_E>
   </engines>
   <fuelTanks>
     <Heavy>	shared	</Heavy>
@@ -2360,13 +2359,13 @@
   <physics>
     <detailed>
       <engines>
-        <Maybach_HL_234_TRM_P45_1>
+        <Maybach_Neues_Projekt_GW_E>
           <smplEnginePower>	951.553	</smplEnginePower>
           <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
-        </Maybach_HL_234_TRM_P45_1>
+        </Maybach_Neues_Projekt_GW_E>
       </engines>
       <chassis>
-        <Chassis_G_E>
+        <Chassis_G61_G_E>
           <grounds>
             <soft>
               <rollingFriction>	0.20125	</rollingFriction>
@@ -2378,7 +2377,7 @@
               <rollingFriction>	0.10465	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_G_E>
+        </Chassis_G61_G_E>
       </chassis>
     </detailed>
   </physics>

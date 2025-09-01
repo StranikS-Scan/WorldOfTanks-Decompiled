@@ -4,7 +4,7 @@ import typing
 if typing.TYPE_CHECKING:
     from typing import Optional, Dict, Callable, Union
     from Event import Event
-    from gui.server_events.event_items import DailyEpicTokenQuest, Quest, DailyQuest, PremiumQuest
+    from gui.server_events.event_items import DailyEpicTokenQuest, Quest, DailyQuest, PremiumQuest, WeeklyQuest
 
 class IEventsCache(object):
     onSyncStarted = None
@@ -13,6 +13,7 @@ class IEventsCache(object):
     onEventsVisited = None
     onProfileVisited = None
     onPersonalQuestsVisited = None
+    onPMSyncCompleted = None
 
     def init(self):
         raise NotImplementedError
@@ -55,6 +56,9 @@ class IEventsCache(object):
     def getLockedQuestTypes(self, branch):
         raise NotImplementedError
 
+    def getLockedPersonalMissions(self):
+        raise NotImplementedError
+
     def update(self, diff=None, callback=None):
         raise NotImplementedError
 
@@ -73,13 +77,16 @@ class IEventsCache(object):
     def getDailyEpicQuest(self):
         raise NotImplementedError
 
+    def getWeeklyQuests(self, filterFunc=None):
+        raise NotImplementedError
+
     def getBattleQuests(self, filterFunc=None):
         raise NotImplementedError
 
     def getGroups(self, filterFunc=None):
         raise NotImplementedError
 
-    def getHiddenQuests(self, filterFunc=None):
+    def getHiddenQuests(self, filterFunc=None, makeRelations=True):
         raise NotImplementedError
 
     def getRankedQuests(self, filterFunc=None):
@@ -98,6 +105,9 @@ class IEventsCache(object):
         raise NotImplementedError
 
     def getEvents(self, filterFunc=None):
+        raise NotImplementedError
+
+    def getAllEvents(self, filterFunc=None):
         raise NotImplementedError
 
     def getCurrentEvents(self):

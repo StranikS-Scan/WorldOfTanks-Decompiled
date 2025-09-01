@@ -5,6 +5,7 @@ import typing
 from shared_utils import first
 from CurrentVehicle import g_currentVehicle
 from comp7.gui.shared.gui_items.dossier.stats import getComp7DossierStats
+from comp7.gui.impl.lobby.comp7_helpers.comp7_shared import getComp7Criteria
 from customization_quests_common import serializeToken
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
@@ -41,20 +42,21 @@ def getStylePreviewVehicle(style, defaultVehicle=None, itemsCache=None, comp7Con
     if g_currentVehicle.isPresent() and style.mayInstall(g_currentVehicle.item):
         return g_currentVehicle.item.intCD
     else:
-        accDossier = itemsCache.items.getAccountDossier()
         comp7Season = comp7Controller.getActualSeasonNumber()
-        stats = getComp7DossierStats(accDossier, season=comp7Season)
-        vehicles = stats.getVehicles() or accDossier.getRandomStats().getVehicles()
-        if vehicles:
-            sortedVehicles = sorted(vehicles.items(), key=lambda vStat: vStat[1].battlesCount, reverse=True)
-            for vehicleCD, _ in sortedVehicles:
-                vehicle = itemsCache.items.getItemByCD(vehicleCD)
-                if style.mayInstall(vehicle):
-                    return vehicleCD
+        if comp7Season is not None:
+            accDossier = itemsCache.items.getAccountDossier()
+            stats = getComp7DossierStats(accDossier, season=comp7Season)
+            vehicles = stats.getVehicles() or accDossier.getRandomStats().getVehicles()
+            if vehicles:
+                sortedVehicles = sorted(vehicles.items(), key=lambda vStat: vStat[1].battlesCount, reverse=True)
+                for vehicleCD, _ in sortedVehicles:
+                    vehicle = itemsCache.items.getItemByCD(vehicleCD)
+                    if style.mayInstall(vehicle):
+                        return vehicleCD
 
         styleCriteria = REQ_CRITERIA.CUSTOM(style.mayInstall)
-        invVehicles = itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | styleCriteria).values()
-        vehicles = sorted([ v for v in invVehicles if 'battle_royale' not in v.tags ], key=lambda v: v.level, reverse=True)
+        invVehicles = itemsCache.items.getVehicles(getComp7Criteria() | styleCriteria).values()
+        vehicles = sorted([ v for v in invVehicles ], key=lambda v: v.level, reverse=True)
         if vehicles:
             return first(vehicles).intCD
         if defaultVehicle is not None:

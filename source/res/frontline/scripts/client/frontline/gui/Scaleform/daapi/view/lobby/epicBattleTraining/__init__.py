@@ -8,6 +8,12 @@ from gui.app_loader.settings import APP_NAME_SPACE
 from gui.shared import EVENT_BUS_SCOPE
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 
+def getStateMachineRegistrators():
+    from frontline.gui.Scaleform.daapi.view.lobby.epicBattleTraining.states import registerStates
+    from frontline.gui.Scaleform.daapi.view.lobby.epicBattleTraining.states import registerTransitions
+    return (registerStates, registerTransitions)
+
+
 def getContextMenuHandlers():
     pass
 

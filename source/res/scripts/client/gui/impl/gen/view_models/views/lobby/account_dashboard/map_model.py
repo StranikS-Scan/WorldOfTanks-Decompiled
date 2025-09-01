@@ -9,10 +9,16 @@ class SlotStateEnum(Enum):
     DISABLED = 'disabled'
 
 
+class SlotTypeEnum(Enum):
+    NONE = 'none'
+    PREMIUM = 'premium'
+    WOTPLUS = 'wotplus'
+
+
 class MapModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=3, commands=0):
+    def __init__(self, properties=4, commands=0):
         super(MapModel, self).__init__(properties=properties, commands=commands)
 
     def getCooldownEndTimeInSecs(self):
@@ -33,8 +39,15 @@ class MapModel(ViewModel):
     def setSlotState(self, value):
         self._setString(2, value.value)
 
+    def getSlotType(self):
+        return SlotTypeEnum(self._getString(3))
+
+    def setSlotType(self, value):
+        self._setString(3, value.value)
+
     def _initialize(self):
         super(MapModel, self)._initialize()
         self._addNumberProperty('cooldownEndTimeInSecs', 0)
         self._addStringProperty('mapId', '')
         self._addStringProperty('slotState')
+        self._addStringProperty('slotType', SlotTypeEnum.NONE.value)

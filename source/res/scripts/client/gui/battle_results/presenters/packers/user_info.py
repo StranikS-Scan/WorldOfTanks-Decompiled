@@ -8,19 +8,7 @@ from gui.battle_results.presenters.packers.interfaces import IBattleResultsPacke
 from gui.impl.gen.view_models.common.user_name_model import UserNameModel
 if typing.TYPE_CHECKING:
     from gui.battle_results.stats_ctrl import BattleResults
-    from gui.battle_results.reusable import _ReusableInfo
     from gui.battle_results.reusable.shared import VehicleSummarizeInfo
-
-def packUserStatus(model, battleResults, vehicleSumInfo):
-    reusable = battleResults.reusable
-    model.setDeathReason(vehicleSumInfo.deathReason)
-    model.setIsLeftBattle(reusable.personal.avatar.isPrematureLeave)
-    killerVehicleID = vehicleSumInfo.killerID
-    if killerVehicleID:
-        killerInfo = reusable.getPlayerInfoByVehicleID(killerVehicleID)
-        killerVehicleInfo = reusable.vehicles.getVehicleInfo(killerVehicleID)
-        UserNames.packBaseUserNames(model.killer, killerInfo, killerVehicleInfo, battleResults)
-
 
 class PersonalInfo(IBattleResultsPacker):
     __slots__ = ()
@@ -30,7 +18,7 @@ class PersonalInfo(IBattleResultsPacker):
         reusable, results = battleResults.reusable, battleResults.results
         vehicleSumInfo = reusable.getPersonalVehiclesInfo(results[_RECORD.PERSONAL])
         UserNames.packBaseUserNames(model.userNames, reusable.getPlayerInfo(), vehicleSumInfo, battleResults)
-        packUserStatus(model.userStatus, battleResults, vehicleSumInfo)
+        UserStatus.packUserStatus(model.userStatus, battleResults, vehicleSumInfo)
 
 
 class UserNames(object):
@@ -38,11 +26,7 @@ class UserNames(object):
 
     @classmethod
     def packBaseUserNames(cls, model, playerInfo, vehicleInfo, battleResults):
-        isRealNameShown = isRealNameVisible(battleResults.reusable, playerInfo)
-        userNames = getUserNames(playerInfo, isRealNameShown)
-        model.setUserName(userNames.displayedName)
-        model.setHiddenUserName(userNames.hiddenName)
-        model.setIsFakeNameVisible(userNames.isFakeNameVisible)
+        cls._packNames(model, playerInfo, battleResults)
         model.setClanAbbrev(playerInfo.clanAbbrev)
         model.setIsTeamKiller(vehicleInfo.isTeamKiller)
         model.setIsKilled(vehicleInfo.deathReason > DEATH_REASON_ALIVE)
@@ -56,6 +40,14 @@ class UserNames(object):
             cls._setBadges(model, battleResults.reusable, playerInfo.dbID)
 
     @classmethod
+    def _packNames(cls, model, playerInfo, battleResults):
+        isRealNameShown = isRealNameVisible(battleResults.reusable, playerInfo)
+        userNames = getUserNames(playerInfo, isRealNameShown)
+        model.setUserName(userNames.displayedName)
+        model.setHiddenUserName(userNames.hiddenName)
+        model.setIsFakeNameVisible(userNames.isFakeNameVisible)
+
+    @classmethod
     def _setBadges(cls, model, reusable, playerDbID):
         if not playerDbID:
             return
@@ -64,13 +56,50 @@ class UserNames(object):
             if avatarInfo is None:
                 return
             badgeInfo = avatarInfo.getFullBadgeInfo()
-            if badgeInfo is not None:
-                model.badge.setBadgeID(badgeInfo.getIconPostfix())
-                level = badgeInfo.getDynamicContent()
-                model.badge.setLevel(level if level is not None else '')
             suffixBadge = avatarInfo.suffixBadge
-            model.suffixBadge.setBadgeID(str(suffixBadge) if suffixBadge else '')
+            cls._packBadges(model, badgeInfo, suffixBadge)
             return
+
+    @classmethod
+    def _packBadges(cls, model, badgeInfo, suffixBadge):
+        if badgeInfo is not None:
+            model.badge.setBadgeID(badgeInfo.getIconPostfix())
+            level = badgeInfo.getDynamicContent()
+            model.badge.setLevel(level if level is not None else '')
+        model.suffixBadge.setBadgeID(str(suffixBadge) if suffixBadge else '')
+        return
+
+
+class AccountInfo(UserNames):
+    __slots__ = ()
+
+    @classmethod
+    def _packNames(cls, model, playerInfo, battleResults):
+        model.setUserName(playerInfo.realName)
+        model.setFakeUserName(playerInfo.fakeName)
+        model.setAnonymizer(playerInfo.isAnonymized())
+
+    @classmethod
+    def _packBadges(cls, model, badgeInfo, suffixBadge):
+        if badgeInfo is not None:
+            model.setBadge(badgeInfo.getIconPostfix())
+        model.setSuffixBadge(str(suffixBadge) if suffixBadge else '')
+        return
+
+
+class UserStatus(object):
+    _USER_INFO_PACKER = UserNames
+
+    @classmethod
+    def packUserStatus(cls, model, battleResults, vehicleSumInfo):
+        reusable = battleResults.reusable
+        model.setDeathReason(vehicleSumInfo.deathReason)
+        model.setIsLeftBattle(reusable.personal.avatar.isPrematureLeave)
+        killerVehicleID = vehicleSumInfo.killerID
+        if killerVehicleID:
+            killerInfo = reusable.getPlayerInfoByVehicleID(killerVehicleID)
+            killerVehicleInfo = reusable.vehicles.getVehicleInfo(killerVehicleID)
+            cls._USER_INFO_PACKER.packBaseUserNames(model.killer, killerInfo, killerVehicleInfo, battleResults)
 
 
 class PlayerInfo(object):
@@ -82,5 +111,9 @@ class PlayerInfo(object):
         model.setSquadIndex(playerInfo.squadIndex)
         model.setDatabaseID(playerInfo.dbID)
         model.setIsPersonal(isPersonalBattleResult(vehicleSumInfo, battleResults))
+        cls._packAccountInfo(model, battleResults, vehicleSumInfo)
+
+    @classmethod
+    def _packAccountInfo(cls, model, battleResults, vehicleSumInfo):
         UserNames.packFullUserNames(model.userNames, vehicleSumInfo, battleResults)
-        packUserStatus(model.userStatus, battleResults, vehicleSumInfo)
+        UserStatus.packUserStatus(model.userStatus, battleResults, vehicleSumInfo)

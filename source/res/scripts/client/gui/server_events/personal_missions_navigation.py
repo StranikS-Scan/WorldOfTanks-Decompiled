@@ -2,11 +2,8 @@
 # Embedded file name: scripts/client/gui/server_events/personal_missions_navigation.py
 from operator import methodcaller
 import WWISE
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
-from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.server_events.pm_constants import SOUNDS
-from gui.shared import EVENT_BUS_SCOPE, events
 from helpers import dependency
 from personal_missions import PM_BRANCH
 from skeletons.gui.lobby_context import ILobbyContext
@@ -18,7 +15,7 @@ class _PMNavigationInfo(object):
 
     def __init__(self):
         self.__operationIDs = self._DEFAULT_OPERATIONS.copy()
-        self.__chainIDs = {q:1 for q in PM_BRANCH.ACTIVE_BRANCHES}
+        self.__chainIDs = {q:1 for q in PM_BRANCH.V1_BRANCHES}
         self.__branch = PM_BRANCH.REGULAR
 
     def getOperationID(self, branchID=None):
@@ -89,7 +86,8 @@ class PersonalMissionsNavigation(EventSystemEntity):
         if 'disabledPMOperations' in diff and diff['disabledPMOperations']:
             disabledOp = self.getOperationID() in diff['disabledPMOperations'].keys()
         if 'isRegularQuestEnabled' in diff and not diff['isRegularQuestEnabled'] or 'isPM2QuestEnabled' in diff and not diff['isPM2QuestEnabled'] or disabledOp:
-            self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
+            from gui.shared.event_dispatcher import showHangar
+            showHangar()
 
     def __setWWISEGlobal(self):
         operation = self.getOperation()

@@ -7,6 +7,7 @@
           <type>	subcategory	</type>
           <stringKey>	vehicles	</stringKey>
           <background>	vehicles	</background>
+          <order>	359 361 364 360 362 363 404	</order>
         </UI>
         <stages>
           <stage>
@@ -24,7 +25,7 @@
           <type>	subcategory	</type>
           <stringKey>	nations	</stringKey>
           <background>	nations	</background>
-          <order>	3 4 5 9 8 7 6 10 11 13 12	</order>
+          <order>	3 4 5 6 7 8 9 10 11 12 13	</order>
         </UI>
         <stages>
           <stage>
@@ -7689,6 +7690,22 @@
         </stages>
         <conditions>
           <vehicle>	ussr:R75_SU122_54	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	425	</id>
+        <deprecated>	true	</deprecated>
+        <UI>
+          <stringKey>	A44_M4A2E4	</stringKey>
+          <background>	vehicles	</background>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+          </stage>
+        </stages>
+        <conditions>
+          <vehicle>	usa:A44_M4A2E4	</vehicle>
         </conditions>
       </achievement>
       <achievement>

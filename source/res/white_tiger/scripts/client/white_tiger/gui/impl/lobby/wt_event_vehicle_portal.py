@@ -14,6 +14,7 @@ from white_tiger.gui.wt_event_models_helper import setLootBoxesCount, fillVehicl
 from gui.shared import events, EVENT_BUS_SCOPE, g_eventBus, event_dispatcher
 from shared_utils import CONST_CONTAINER
 from white_tiger.gui.impl.lobby.wt_event_sound import WhiteTigerVehicleAwardViewSoundControl, playLootboxVehicleRewardsLoopStopped, playLootboxVehicleRewardsLoopStarted
+from white_tiger.gui.impl.lobby.wt_event_constants import WhiteTigerLootBoxes
 _logger = logging.getLogger(__name__)
 
 class WtEventVehiclePortal(WtEventBasePortalAwards):
@@ -80,9 +81,14 @@ class WtEventVehiclePortal(WtEventBasePortalAwards):
         with self.viewModel.transaction() as model:
             self._tooltipItems.clear()
             setLootBoxesCount(model.portalAvailability, self._getBoxType())
-            model.setIsFirstLaunch(not self._boxesCtrl.isEngineerReroll())
             extra = self._boxesCtrl.getExtraRewards(self._getBoxType(), count=0)
-            model.setFirstLaunchReward(extra.get('gold', 0) if extra else 0)
+            setFirstLaunch = False
+            setFirstLaunchReward = False
+            if self._getBoxType() != WhiteTigerLootBoxes.WT_TANK:
+                setFirstLaunch = not self._boxesCtrl.isEngineerReroll()
+                setFirstLaunchReward = extra.get('gold', 0) if extra else 0
+            model.setIsFirstLaunch(setFirstLaunch)
+            model.setFirstLaunchReward(setFirstLaunchReward)
             if self.__vehicleData:
                 vehicle, customData = self.__vehicleData
                 if customData:

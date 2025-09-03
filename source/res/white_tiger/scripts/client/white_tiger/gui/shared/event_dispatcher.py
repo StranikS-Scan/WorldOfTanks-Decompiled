@@ -78,9 +78,9 @@ def showAwardWindow(boxType, awards=None, openedCount=1, parent=None, callback=N
     receivedVehicles = getReceivedVehiclesData(awards, boxType)
     if receivedVehicles:
         if len(receivedVehicles) == 2:
-            showVehicleReceivedVideo(receivedVehicles[1], onVideoClose=lambda : showVehicleAwardWindow(awards=awards, parent=parent, vehicle=receivedVehicles[0]))
+            showVehicleReceivedVideo(receivedVehicles[1], onVideoClose=lambda : showVehicleAwardWindow(boxType=boxType, awards=awards, parent=parent, vehicle=receivedVehicles[0]))
         else:
-            showVehicleAwardWindow(awards=awards, parent=parent, vehicle=receivedVehicles[0])
+            showVehicleAwardWindow(boxType=boxType, awards=awards, parent=parent, vehicle=receivedVehicles[0])
     else:
         if callback:
             callback({'awards': awards})

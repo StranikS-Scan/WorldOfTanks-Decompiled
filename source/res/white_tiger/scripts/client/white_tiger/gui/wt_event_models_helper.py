@@ -42,6 +42,8 @@ def setBonusVehicles(model, isShortName=False, boxesCtrl=None):
         vehicles = getVehiclesFromAwards(vehicleGroup.bonuses)
         model.clearItems()
         for vehicle in vehicles:
+            if vehicle.name in ('poland:Pl26_Czolg_P_Wz_46_Verbesserter', 'france:F133_Projet_57_Ampere'):
+                continue
             item = PortalPremiumTanks()
             item.setName(vehicle.shortUserName if isShortName else vehicle.userName)
             model.addViewModel(item)

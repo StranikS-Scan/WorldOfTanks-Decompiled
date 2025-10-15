@@ -747,11 +747,6 @@ class QUESTS(object):
     DETAILS_CONDITIONS_CUMULATIVE_AGGREGATED = '#quests:details/conditions/cumulative/aggregated'
     DETAILS_CONDITIONS_CUMULATIVE_RANKCHANGE = '#quests:details/conditions/cumulative/rankChange'
     DETAILS_CONDITIONS_CUMULATIVE_XP_OTHER = '#quests:details/conditions/cumulative/xp/other'
-    DETAILS_CONDITIONS_CUMULATIVE_WTBOSSVULNERABLEDAMAGE = '#quests:details/conditions/cumulative/wtBossVulnerableDamage'
-    DETAILS_CONDITIONS_CUMULATIVE_MAXWTPLASMABONUS = '#quests:details/conditions/cumulative/maxWtPlasmaBonus'
-    DETAILS_CONDITIONS_CUMULATIVE_WTGENERATORSCAPTURED = '#quests:details/conditions/cumulative/wtGeneratorsCaptured'
-    DETAILS_CONDITIONS_CUMULATIVE_WTTOTALGENERATORSCAPTURED = '#quests:details/conditions/cumulative/wtTotalGeneratorsCaptured'
-    DETAILS_CONDITIONS_CUMULATIVE_WTDEATHCOUNT = '#quests:details/conditions/cumulative/wtDeathCount'
     DETAILS_DOSSIER_SNIPERSERIES = '#quests:details/dossier/sniperSeries'
     DETAILS_DOSSIER_MAXSNIPERSERIES = '#quests:details/dossier/maxSniperSeries'
     DETAILS_DOSSIER_INVINCIBLESERIES = '#quests:details/dossier/invincibleSeries'
@@ -1217,6 +1212,7 @@ class QUESTS(object):
     BONUSNAME_CRYSTAL = '#quests:bonusName/crystal'
     BONUSNAME_EVENTCOIN = '#quests:bonusName/eventCoin'
     BONUSNAME_BPCOIN = '#quests:bonusName/bpcoin'
+    BONUSNAME_SACOIN = '#quests:bonusName/sacoin'
     BONUSNAME_EQUIPCOIN = '#quests:bonusName/equipCoin'
     BONUSNAME_XP = '#quests:bonusName/xp'
     BONUSNAME_FREEXP = '#quests:bonusName/freeXP'
@@ -1831,6 +1827,7 @@ class QUESTS(object):
     SWITCH_ISDAILYREGULARENABLED = '#quests:switch/isDailyRegularEnabled'
     SWITCH_ISWEEKLYENABLED = '#quests:switch/isWeeklyEnabled'
     SWITCH_ISWEEKLYENABLEDTITLE = '#quests:switch/isWeeklyEnabledTitle'
+    BONUSNAME_RAZLOM_COIN = '#quests:bonusName/razlom_coin'
     TOKEN_DEFAULT_ENUM = (TOKEN_DEFAULT_USSR,
      TOKEN_DEFAULT_GERMANY,
      TOKEN_DEFAULT_USA,
@@ -1879,6 +1876,7 @@ class QUESTS(object):
      BONUSNAME_CRYSTAL,
      BONUSNAME_EVENTCOIN,
      BONUSNAME_BPCOIN,
+     BONUSNAME_SACOIN,
      BONUSNAME_EQUIPCOIN,
      BONUSNAME_XP,
      BONUSNAME_FREEXP,
@@ -1956,7 +1954,8 @@ class QUESTS(object):
      BONUSNAME_ATTENDANCE_REWARD,
      BONUSNAME_TEAM_CREDITS_BONUS,
      BONUSNAME_DAILY_QUESTS_REWARDS,
-     BONUSNAME_QUESTS)
+     BONUSNAME_QUESTS,
+     BONUSNAME_RAZLOM_COIN)
     ACTION_ENUM = (ACTION_AUTO_CALENDAR,
      ACTION_FULL_CALENDAR,
      ACTION_HERO_FULL_CALENDAR,

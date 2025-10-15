@@ -404,7 +404,7 @@ class PunishWindowHandler(ServiceChannelHandler):
 class PersonalMissionBonusHandler(ServiceChannelHandler):
 
     def __init__(self, awardCtrl):
-        super(PersonalMissionBonusHandler, self).__init__(SYS_MESSAGE_TYPE.potapovQuestBonus.index(), awardCtrl)
+        super(PersonalMissionBonusHandler, self).__init__(SYS_MESSAGE_TYPE.pmQuestBonus.index(), awardCtrl)
 
     def _showAward(self, ctx):
         _logger.debug('Show personal mission bonus award! %s', ctx)
@@ -522,6 +522,7 @@ class SeniorityAwardsWindowHandler(ServiceChannelHandler):
     def _showAward(self, ctx=None):
         if self.__mergedRewards:
             self.seniorityAwardCtrl.markRewardReceived()
+            self.__mergedRewards = self.seniorityAwardCtrl.replaceCompTokens(self.__mergedRewards)
             showSeniorityRewardAwardWindow(self.__completedQuests, self.__mergedRewards)
             self.__mergedRewards = None
             self.__questsData = None
@@ -849,7 +850,7 @@ class BattleQuestsAutoWindowHandler(MultiTypeServiceChannelHandler):
         questId = quest.getID()
         missionsCache = personal_missions.g_cache
         if missionsCache.hasMission(questId):
-            branchType = missionsCache.questByPotapovQuestID(questId).branch
+            branchType = missionsCache.questByPMQuestID(questId).branch
             return self._BRANCHES_SHOW_ORDER.get(branchType, questId)
         return questId
 
@@ -891,14 +892,14 @@ class PersonalMissionAutoWindowHandler(BattleQuestsAutoWindowHandler):
     @staticmethod
     def _getContext(uniqueQuestID, completedQuests, completedQuestUniqueIDs):
         if personal_missions.g_cache.isPersonalMission(uniqueQuestID):
-            pqType = personal_missions.g_cache.questByUniqueQuestID(uniqueQuestID)
-            if pqType.id not in completedQuests:
-                ctx = {'isMainReward': pqType.mainQuestID in completedQuestUniqueIDs,
-                 'isAddReward': pqType.addQuestID in completedQuestUniqueIDs,
+            pmQuestType = personal_missions.g_cache.questByUniqueQuestID(uniqueQuestID)
+            if pmQuestType.id not in completedQuests:
+                ctx = {'isMainReward': pmQuestType.mainQuestID in completedQuestUniqueIDs,
+                 'isAddReward': pmQuestType.addQuestID in completedQuestUniqueIDs,
                  'awardListReturned': uniqueQuestID.endswith('_add_award_list')}
-                return (pqType.id, ctx)
+                return (pmQuestType.id, ctx)
             if uniqueQuestID.endswith('_add_award_list'):
-                _, ctx = completedQuests[pqType.id]
+                _, ctx = completedQuests[pmQuestType.id]
                 ctx.update(awardListReturned=True)
         return (None, {})
 
@@ -1007,12 +1008,12 @@ class PersonalMissionByAwardListHandler(PersonalMissionAutoWindowHandler):
     @staticmethod
     def _getContext(uniqueQuestID, completedQuests, completedQuestUniqueIDs):
         if personal_missions.g_cache.isPersonalMission(uniqueQuestID):
-            pqType = personal_missions.g_cache.questByUniqueQuestID(uniqueQuestID)
-            if pqType.id not in completedQuests:
+            pmQuestType = personal_missions.g_cache.questByUniqueQuestID(uniqueQuestID)
+            if pmQuestType.id not in completedQuests:
                 ctx = {'isMainReward': True,
                  'isAddReward': False,
                  'isAwardListUsed': True}
-                return (pqType.id, ctx)
+                return (pmQuestType.id, ctx)
         return (None, {})
 
 
@@ -1043,9 +1044,9 @@ class PersonalMissionOperationAwardHandler(BattleQuestsAutoWindowHandler):
             completedQuestUniqueIDs = msg.data.get('completedQuestIDs', set())
             for uniqueQuestID in completedQuestUniqueIDs:
                 if personal_missions.g_cache.isPersonalMission(uniqueQuestID):
-                    pqType = personal_missions.g_cache.questByUniqueQuestID(uniqueQuestID)
-                    if pqType.isFinal:
-                        self.__openedOperationsAwards.add((pqType.id, pqType.tileID))
+                    pmQuestType = personal_missions.g_cache.questByUniqueQuestID(uniqueQuestID)
+                    if pmQuestType.isFinal:
+                        self.__openedOperationsAwards.add((pmQuestType.id, pmQuestType.tileID))
                 for operationID, prefix in self.__getFinalTokenQuestIdsByOperationId():
                     if uniqueQuestID == CHAMPION_BADGES_BY_BRANCH[PM_BRANCH.PERSONAL_MISSION_3]:
                         return False

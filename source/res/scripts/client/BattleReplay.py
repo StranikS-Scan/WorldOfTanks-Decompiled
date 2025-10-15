@@ -26,7 +26,7 @@ from gui import GUI_CTRL_MODE_FLAG
 from helpers import EffectsList, isPlayerAvatar, isPlayerAccount, getFullClientVersion
 from PlayerEvents import g_playerEvents
 from ReplayEvents import g_replayEvents
-from constants import ARENA_PERIOD, ARENA_BONUS_TYPE, ARENA_GUI_TYPE, INBATTLE_CONFIGS, NULL_ENTITY_ID, IS_DEVELOPMENT
+from constants import ARENA_PERIOD, ARENA_BONUS_TYPE, ARENA_GUI_TYPE, INBATTLE_CONFIGS, NULL_ENTITY_ID
 from helpers import dependency
 from gui.app_loader import settings
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -64,10 +64,6 @@ _IGNORED_SWITCHING_CTRL_MODES = (CTRL_MODE_NAME.SNIPER,
  CTRL_MODE_NAME.MAP_CASE_ARCADE,
  CTRL_MODE_NAME.MAP_CASE_EPIC,
  CTRL_MODE_NAME.MAP_CASE_ARCADE_EPIC_MINEFIELD)
-if not IS_DEVELOPMENT:
-    _BONUS_TYPES_WITHOUT_REPlAY = ()
-else:
-    _BONUS_TYPES_WITHOUT_REPlAY = ()
 
 class CallbackDataNames(object):
     APPLY_ZOOM = 'applyZoom'
@@ -251,7 +247,7 @@ class BattleReplay(object):
         self.__wasVideoBeforeRewind = False
         self.__videoCameraMatrix = Math.Matrix()
         self.__replayDir = './replays'
-        self.__replayCtrl.clientVersion = BigWorld.wg_getProductVersion()
+        self.__replayCtrl.clientVersion = BigWorld.getProductVersion()
         self.__enableTimeWarp = False
         self.__isChatPlaybackEnabled = True
         self.__warpTime = -1.0
@@ -290,7 +286,6 @@ class BattleReplay(object):
     def subscribe(self):
         g_playerEvents.onBattleResultsReceived += self.__onBattleResultsReceived
         g_playerEvents.onAccountBecomePlayer += self.__onAccountBecomePlayer
-        g_playerEvents.onAvatarBecomePlayer += self.__onAvatarBecomePlayer
         g_playerEvents.onArenaPeriodChange += self.__onArenaPeriodChange
         g_playerEvents.onBootcampAccountMigrationComplete += self.__onBootcampAccountMigrationComplete
         g_playerEvents.onAvatarObserverVehicleChanged += self.__onAvatarObserverVehicleChanged
@@ -299,7 +294,6 @@ class BattleReplay(object):
     def unsubscribe(self):
         g_playerEvents.onBattleResultsReceived -= self.__onBattleResultsReceived
         g_playerEvents.onAccountBecomePlayer -= self.__onAccountBecomePlayer
-        g_playerEvents.onAvatarBecomePlayer -= self.__onAvatarBecomePlayer
         g_playerEvents.onArenaPeriodChange -= self.__onArenaPeriodChange
         g_playerEvents.onBootcampAccountMigrationComplete -= self.__onBootcampAccountMigrationComplete
         g_playerEvents.onAvatarObserverVehicleChanged -= self.__onAvatarObserverVehicleChanged
@@ -809,7 +803,7 @@ class BattleReplay(object):
             vehicles = self.__getArenaVehiclesInfo()
             gameplayID = player.arenaTypeID >> 16
             clientVersionFromXml = getFullClientVersion()
-            clientVersionFromExe = BigWorld.wg_getProductVersion()
+            clientVersionFromExe = BigWorld.getProductVersion()
             arenaInfo = {'dateTime': now,
              'playerName': player.name,
              'playerID': self.__playerDatabaseID,
@@ -857,7 +851,7 @@ class BattleReplay(object):
         return self.playbackSpeed == 1.0
 
     def __getBranchAndRevision(self):
-        from wot_svn import svn
+        from vcs import svn
         svnInstance = svn()
         if not svnInstance.enabled():
             return ('undefined', 'undefined')
@@ -1147,10 +1141,6 @@ class BattleReplay(object):
             else:
                 self.__playerDatabaseID = player.databaseID
             return
-
-    def __onAvatarBecomePlayer(self):
-        if self.sessionProvider.arenaVisitor.getArenaBonusType() in _BONUS_TYPES_WITHOUT_REPlAY:
-            self.enableAutoRecordingBattles(False, True)
 
     def __onSettingsChanging(self, *_):
         if not self.isPlaying:

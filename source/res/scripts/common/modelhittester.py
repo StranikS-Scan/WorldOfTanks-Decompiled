@@ -129,7 +129,7 @@ class ModelHitTester(object):
             _logger.error('Can not load bsp model, bspModelName is None')
             return
         else:
-            bspModel = BigWorld.WGBspCollisionModel()
+            bspModel = BigWorld.BspCollisionModel()
             if not bspModel.setModelName(self.bspModelName):
                 raise SoftException("wrong collision model '%s'" % self.bspModelName)
             self.__bspModel = bspModel
@@ -137,13 +137,13 @@ class ModelHitTester(object):
             if not self.bbox:
                 _logger.error("Couldn't find bounding box for the part the name '%s'", self.bspModelName)
             if self.__bspModelNameDown:
-                bspModel = BigWorld.WGBspCollisionModel()
+                bspModel = BigWorld.BspCollisionModel()
                 if not bspModel.setModelName(self.__bspModelNameDown):
                     raise SoftException("wrong collision model '%s'" % self.__bspModelNameDown)
                 self.__bspModelDown = bspModel
                 self.bboxDown = bspModel.getBoundingBox()
             if self.__bspModelNameUp:
-                bspModel = BigWorld.WGBspCollisionModel()
+                bspModel = BigWorld.BspCollisionModel()
                 if not bspModel.setModelName(self.__bspModelNameUp):
                     raise SoftException("wrong collision model '%s'" % self.__bspModelNameUp)
                 self.__bspModelUp = bspModel
@@ -316,7 +316,7 @@ def createBBoxManagerForModels(hitTesterManagers):
 
 
 SegmentCollisionResult = namedtuple('SegmentCollisionResult', ('dist', 'hitAngleCos', 'armor'))
-if hasattr(BigWorld, 'wg_segmentMayHitVolume'):
-    segmentMayHitVolume = BigWorld.wg_segmentMayHitVolume
-if hasattr(BigWorld, 'wg_coneMayHitVolume'):
-    coneMayHitVolume = BigWorld.wg_coneMayHitVolume
+if hasattr(BigWorld, 'segmentMayHitVolume'):
+    segmentMayHitVolume = BigWorld.segmentMayHitVolume
+if hasattr(BigWorld, 'coneMayHitVolume'):
+    coneMayHitVolume = BigWorld.coneMayHitVolume

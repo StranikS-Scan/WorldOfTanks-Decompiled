@@ -29,14 +29,15 @@ class BattleMattersEntryTooltipView(ViewImpl):
         super(BattleMattersEntryTooltipView, self)._onLoading()
         currentQuest = self.__battleMattersController.getCurrentQuest()
         questsCount = self.__battleMattersController.getCountBattleMattersQuests()
-        isWithToken = self.__battleMattersController.hasDelayedRewards()
+        isWithToken = self.__battleMattersController.hasUnobtainedDelayedRewards()
         with self.viewModel.transaction() as tx:
             tx.setIsPaused(self.__battleMattersController.isPaused())
             tx.setHasToken(isWithToken)
             tx.setCurrentQuest(currentQuest.getOrder() if currentQuest else questsCount + 1)
             tx.setQuestsCount(questsCount)
+            tx.setUnobtainedRewardsCount(len(self.__battleMattersController.getDelayedRewardCurrencyTokens()))
             if isWithToken and self.__battleMattersController.isFinished():
-                tx.setEndDate(self.__itemsCache.items.tokens.getTokenInfo(self.__battleMattersController.getDelayedRewardCurrencyToken())[0])
+                tx.setEndDate(self.__battleMattersController.getDelayedRewardExpirationTime())
             if currentQuest is not None:
                 tx.setTitle(currentQuest.getUserName())
                 tx.setCondition(currentQuest.getConditionLbl())

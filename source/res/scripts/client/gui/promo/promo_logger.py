@@ -15,7 +15,7 @@ from skeletons.gui.web import IWebController
 _logger = logging.getLogger(__name__)
 
 class PromoLogActions(CONST_CONTAINER):
-    RECEIVED_WGNC = 'ReceivedWGNC'
+    RECEIVED_NOTIFY_CENTER = 'ReceivedNotifyCenter'
     GET_MOST_IMPORTANT = 'GetMostImportant'
     OPEN_FROM_TEASER = 'OpenFromTeaser'
     CLOSED_BY_USER = 'ClosedByUser'
@@ -32,7 +32,7 @@ class PromoLogSubjectType(CONST_CONTAINER):
 
 
 class PromoLogSourceType(CONST_CONTAINER):
-    WGNC = 'WGNC'
+    NOTIFY_CENTER = 'NotifyCenter'
     FIRST_LOGIN = 'Firstlogin'
     AFTER_BATTLE = '10stBattle'
     PRMP = 'PRMP'

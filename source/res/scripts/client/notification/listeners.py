@@ -12,7 +12,7 @@ import typing
 import WWISE
 from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import INTEGRATED_AUCTION_NOTIFICATIONS, IS_BATTLE_PASS_MARATHON_STARTED, TRADING_CARAVAN_NOTIFICATIONS, PROGRESSIVE_REWARD_VISITED, RESOURCE_WELL_END_SHOWN, RESOURCE_WELL_NOTIFICATIONS, RESOURCE_WELL_START_SHOWN, SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP, ArmoryYard, REFERRAL_PROGRAM_PGB_FULL, SUBSCRIPTION_LAST_EXPIRATION_NOTIFICATION, BattleMatters, EarlyAccess, Paragons, PREMIUM_QUESTS_NOTIFICATION, CUSTOM_NOTIFICATIONS
+from account_helpers.AccountSettings import INTEGRATED_AUCTION_NOTIFICATIONS, IS_BATTLE_PASS_MARATHON_STARTED, TRADING_CARAVAN_NOTIFICATIONS, PROGRESSIVE_REWARD_VISITED, RESOURCE_WELL_END_SHOWN, RESOURCE_WELL_NOTIFICATIONS, RESOURCE_WELL_START_SHOWN, SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP, ArmoryYard, REFERRAL_PROGRAM_PGB_FULL, SUBSCRIPTION_LAST_EXPIRATION_NOTIFICATION, BattleMatters, EarlyAccess, Paragons, PREMIUM_QUESTS_NOTIFICATION, CUSTOM_NOTIFICATIONS, BLACK_MARKET_AUCTION_NOTIFICATIONS
 from adisp import adisp_process
 from armory_yard.gui.shared.formatters import formatSpentCurrencies, formatPurchaseItems, formatBundlePurchase
 from armory_yard_constants import State
@@ -23,7 +23,7 @@ from early_access_common import EARLY_ACCESS_POSTPR_KEY
 from battle_pass_common import FinalReward
 from chat_shared import SYS_MESSAGE_TYPE
 from collector_vehicle import CollectorVehicleConsts
-from constants import ARENA_BONUS_TYPE, AUTO_MAINTENANCE_RESULT, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG, MAPS_TRAINING_ENABLED_KEY, PremiumConfigs, SwitchState, DailyQuestsLevels
+from constants import ARENA_BONUS_TYPE, AUTO_MAINTENANCE_RESULT, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG, MAPS_TRAINING_ENABLED_KEY, PremiumConfigs, SwitchState, DailyQuestsLevels, SENIORITY_AWARDS_VEHICLE_OFFER
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -42,6 +42,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.premacc.premacc_helpers import PiggyBankConstants, getDeltaTimeHelper
 from gui.integrated_auction.constants import AUCTION_FINISH_EVENT_TYPE, AUCTION_FINISH_STAGE_SEEN, AUCTION_STAGE_START_SEEN, AUCTION_START_EVENT_TYPE
+from gui.black_market.constants import BLACK_MARKET_VEHICLE_START_EVENT_TYPE, BLACK_MARKET_VEHICLE_FINISH_EVENT_TYPE, BLACK_MARKET_FINISH_EVENT_TYPE, BLACK_MARKET_VEHICLE_STAGE_START_SEEN, BLACK_MARKET_VEHICLE_FINISH_STAGE_SEEN, BLACK_MARKET_START_EVENT_TYPE, BLACK_MARKET_STAGE_START_SEEN, BLACK_MARKET_FINISH_STAGE_SEEN
 from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.platform.base.statuses.constants import StatusTypes
 from gui.prb_control import prbInvitesProperty
@@ -60,19 +61,19 @@ from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
 from gui.shop_sales_event.constants import TRADING_CARAVAN_REFILL_SEEN, TRADING_CARAVAN_REFILL_EVENT_TYPE
 from gui.custom_notifications.constants import CUSTOM_NOTIFICATIONS_SEEN, CUSTOM_NOTIFICATIONS_EVENT_TYPE
 from gui.clientgw.clan.contexts import GetClanInfoCtx
-from gui.wgnc import g_wgncEvents, g_wgncProvider, wgnc_settings
-from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
+from gui.notify_center import g_notifyCenterEvents, g_notifyCenterProvider, notify_center_settings
+from gui.notify_center.settings import NOTIFY_CENTER_DATA_PROXY_TYPE
 from helpers import dependency, i18n, time_utils, int2roman
 from helpers.events_handler import EventsHandler
 from helpers.time_utils import getTimestampByStrDate
 from messenger import MessengerEntry
 from messenger.formatters import TimeFormatter
-from messenger.m_constants import PROTO_TYPE, SCH_CLIENT_MSG_TYPE, USER_ACTION_ID
+from messenger.m_constants import PROTO_TYPE, SCH_CLIENT_MSG_TYPE, USER_ACTION_ID, GFNotificationTemplates
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from nations import AVAILABLE_NAMES
-from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C2DProgressionStyleDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, FriendshipRequestDecorator, CustomNotificationsStartDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, SeniorityAwardsDecorator, WGNCPopUpDecorator, WotPlusIntroViewMessageDecorator, BattleMattersReminderDecorator, C11nProgressiveItemDecorator, TradingCaravanRefillDecorator, EarlyAccessDecorator
+from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C2DProgressionStyleDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, FriendshipRequestDecorator, CustomNotificationsStartDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, SeniorityAwardsDecorator, NotifyCenterPopUpDecorator, WotPlusIntroViewMessageDecorator, BattleMattersReminderDecorator, C11nProgressiveItemDecorator, TradingCaravanRefillDecorator, EarlyAccessDecorator, BlackMarketVehicleAuctionStageStartDecorator, BlackMarketVehicleAuctionStageFinishDecorator, BlackMarketAuctionStageStartDecorator, BlackMarketAuctionStageFinishDecorator
 from notification.settings import NOTIFICATION_TYPE, NotificationData
 from shared_utils import first
 from skeletons.gui.battle_matters import IBattleMattersController
@@ -210,7 +211,7 @@ class _NotificationListener(object):
         pass
 
 
-class _WGNCNotificationListener(_NotificationListener):
+class _NotifyCenterNotificationListener(_NotificationListener):
 
     def onProviderEnabled(self):
         pass
@@ -530,7 +531,7 @@ class FriendshipRqsListener(_NotificationListener):
             self.__updateRequests()
 
 
-class _ClanNotificationsCommonListener(_WGNCNotificationListener, ClanListener):
+class _ClanNotificationsCommonListener(_NotifyCenterNotificationListener, ClanListener):
 
     def __init__(self):
         super(_ClanNotificationsCommonListener, self).__init__()
@@ -540,13 +541,13 @@ class _ClanNotificationsCommonListener(_WGNCNotificationListener, ClanListener):
     def start(self, model):
         result = super(_ClanNotificationsCommonListener, self).start(model)
         self.startClanListening()
-        g_wgncEvents.onProxyDataItemShowByDefault += self._onProxyDataItemShow
+        g_notifyCenterEvents.onProxyDataItemShowByDefault += self._onProxyDataItemShow
         self.__startTime = time_utils.getCurrentTimestamp()
         if not self._canBeShown():
             return
         storedItems = self._getStoredReceivedItems()
         itemsByTypeCount = len(storedItems)
-        LOG_DEBUG('Clan WGNC new notifications count with type "%d": %d' % (self._getNewReceivedItemType(), itemsByTypeCount))
+        LOG_DEBUG('Clan NotifyCenter new notifications count with type "%d": %d' % (self._getNewReceivedItemType(), itemsByTypeCount))
         if itemsByTypeCount:
             if itemsByTypeCount > 1:
                 self._addMultiNotification(storedItems)
@@ -556,7 +557,7 @@ class _ClanNotificationsCommonListener(_WGNCNotificationListener, ClanListener):
 
     def stop(self):
         self.stopClanListening()
-        g_wgncEvents.onProxyDataItemShowByDefault -= self._onProxyDataItemShow
+        g_notifyCenterEvents.onProxyDataItemShowByDefault -= self._onProxyDataItemShow
         super(_ClanNotificationsCommonListener, self).stop()
 
     def onAccountClanProfileChanged(self, profile):
@@ -597,7 +598,7 @@ class _ClanNotificationsCommonListener(_WGNCNotificationListener, ClanListener):
 
     def _getNotMarkedItemsByType(self, itemType):
         itemsByType = []
-        for notification in g_wgncProvider.getNotMarkedNots():
+        for notification in g_notifyCenterProvider.getNotMarkedNots():
             proxyDataItem = notification.getProxyItemByType(itemType)
             if proxyDataItem is None:
                 continue
@@ -670,27 +671,27 @@ class _ClanAppsListener(_ClanNotificationsCommonListener, UsersInfoHelper):
         isProcessed = super(_ClanAppsListener, self)._onProxyDataItemShow(notID, item)
         if not isProcessed:
             itemType = item.getType()
-            if itemType == WGNC_DATA_PROXY_TYPE.CLAN_INVITE_ACCEPTED:
+            if itemType == NOTIFY_CENTER_DATA_PROXY_TYPE.CLAN_INVITE_ACCEPTED:
                 self.__addUserNotification(ClanInvitesActionDecorator, (item.getID(), 'inviteAccepted'), item)
                 isProcessed = True
-            elif itemType == WGNC_DATA_PROXY_TYPE.CLAN_INVITE_DECLINED:
+            elif itemType == NOTIFY_CENTER_DATA_PROXY_TYPE.CLAN_INVITE_DECLINED:
                 self.__addUserNotification(ClanInvitesActionDecorator, (item.getID(), 'inviteDeclined'), item)
                 isProcessed = True
-            elif itemType == WGNC_DATA_PROXY_TYPE.CLAN_APP_ACCEPTED_FOR_MEMBERS:
+            elif itemType == NOTIFY_CENTER_DATA_PROXY_TYPE.CLAN_APP_ACCEPTED_FOR_MEMBERS:
                 self.__updateNotificationState(item.getApplicationID(), CLAN_APPLICATION_STATES.ACCEPTED)
                 isProcessed = True
-            elif itemType == WGNC_DATA_PROXY_TYPE.CLAN_APP_DECLINED_FOR_MEMBERS:
+            elif itemType == NOTIFY_CENTER_DATA_PROXY_TYPE.CLAN_APP_DECLINED_FOR_MEMBERS:
                 self.__updateNotificationState(item.getApplicationID(), CLAN_APPLICATION_STATES.DECLINED)
                 isProcessed = True
         return isProcessed
 
     def _getNewReceivedItemType(self):
-        return wgnc_settings.WGNC_DATA_PROXY_TYPE.CLAN_APP
+        return notify_center_settings.NOTIFY_CENTER_DATA_PROXY_TYPE.CLAN_APP
 
     def _getStoredReceivedItems(self):
         storedClanAPPs = super(_ClanAppsListener, self)._getStoredReceivedItems()
-        processedClamAPPs = self._getNotMarkedItemsByType(wgnc_settings.WGNC_DATA_PROXY_TYPE.CLAN_APP_ACCEPTED_FOR_MEMBERS)
-        processedClamAPPs.extend(self._getNotMarkedItemsByType(wgnc_settings.WGNC_DATA_PROXY_TYPE.CLAN_APP_DECLINED_FOR_MEMBERS))
+        processedClamAPPs = self._getNotMarkedItemsByType(notify_center_settings.NOTIFY_CENTER_DATA_PROXY_TYPE.CLAN_APP_ACCEPTED_FOR_MEMBERS)
+        processedClamAPPs.extend(self._getNotMarkedItemsByType(notify_center_settings.NOTIFY_CENTER_DATA_PROXY_TYPE.CLAN_APP_DECLINED_FOR_MEMBERS))
         for processedAPP in processedClamAPPs:
             for i in xrange(len(storedClanAPPs) - 1, -1, -1):
                 storedAPP = storedClanAPPs[i]
@@ -786,16 +787,16 @@ class _ClanPersonalInvitesListener(_ClanNotificationsCommonListener):
         isProcessed = super(_ClanPersonalInvitesListener, self)._onProxyDataItemShow(notID, item)
         if not isProcessed:
             itemType = item.getType()
-            if itemType == WGNC_DATA_PROXY_TYPE.CLAN_APP_DECLINED:
+            if itemType == NOTIFY_CENTER_DATA_PROXY_TYPE.CLAN_APP_DECLINED:
                 self._model().addNotification(ClanAppActionDecorator(item.getApplicationId(), 'appDeclined', (item.getClanName(), item.getClanTag())))
                 isProcessed = True
-            elif itemType == WGNC_DATA_PROXY_TYPE.CLAN_APP_ACCEPTED:
+            elif itemType == NOTIFY_CENTER_DATA_PROXY_TYPE.CLAN_APP_ACCEPTED:
                 self._model().addNotification(ClanAppActionDecorator(item.getApplicationId(), 'appAccepted', (item.getClanName(), item.getClanTag())))
                 isProcessed = True
         return isProcessed
 
     def _getNewReceivedItemType(self):
-        return wgnc_settings.WGNC_DATA_PROXY_TYPE.CLAN_INVITE
+        return notify_center_settings.NOTIFY_CENTER_DATA_PROXY_TYPE.CLAN_INVITE
 
     def _addSingleNotification(self, item):
         self._model().addNotification(ClanSingleInviteDecorator(item.getID(), item))
@@ -824,23 +825,23 @@ class _ClanPersonalInvitesListener(_ClanNotificationsCommonListener):
         return isCtrlrEnabled and not profile.isInClan()
 
 
-class _WGNCListener(_WGNCNotificationListener):
+class _NotifyCenterListener(_NotifyCenterNotificationListener):
 
     def __init__(self):
-        super(_WGNCListener, self).__init__()
+        super(_NotifyCenterListener, self).__init__()
         self.__offset = 0
 
     def start(self, model):
-        result = super(_WGNCListener, self).start(model)
-        g_wgncEvents.onItemShowByDefault += self.__onItemShowByDefault
-        g_wgncEvents.onItemShowByAction += self.__onItemShowByAction
-        g_wgncEvents.onItemUpdatedByAction += self.__onItemUpdatedByAction
+        result = super(_NotifyCenterListener, self).start(model)
+        g_notifyCenterEvents.onItemShowByDefault += self.__onItemShowByDefault
+        g_notifyCenterEvents.onItemShowByAction += self.__onItemShowByAction
+        g_notifyCenterEvents.onItemUpdatedByAction += self.__onItemUpdatedByAction
         addNotification = model.collection.addItem
-        for notification in g_wgncProvider.getMarkedNots():
-            popUp = notification.getItemByType(wgnc_settings.WGNC_GUI_TYPE.POP_UP)
+        for notification in g_notifyCenterProvider.getMarkedNots():
+            popUp = notification.getItemByType(notify_center_settings.NOTIFY_CENTER_GUI_TYPE.POP_UP)
             if popUp is None:
                 continue
-            addNotification(WGNCPopUpDecorator(notification.notID, popUp, receivedAt=notification.order))
+            addNotification(NotifyCenterPopUpDecorator(notification.notID, popUp, receivedAt=notification.order))
 
         self.__offset = 0.1
         return result
@@ -849,50 +850,50 @@ class _WGNCListener(_WGNCNotificationListener):
         self.__offset = 0
 
     def stop(self):
-        g_wgncEvents.onItemShowByDefault -= self.__onItemShowByDefault
-        g_wgncEvents.onItemShowByAction -= self.__onItemShowByAction
-        g_wgncEvents.onItemUpdatedByAction -= self.__onItemUpdatedByAction
-        super(_WGNCListener, self).stop()
+        g_notifyCenterEvents.onItemShowByDefault -= self.__onItemShowByDefault
+        g_notifyCenterEvents.onItemShowByAction -= self.__onItemShowByAction
+        g_notifyCenterEvents.onItemUpdatedByAction -= self.__onItemUpdatedByAction
+        super(_NotifyCenterListener, self).stop()
 
     def __onItemShowByDefault(self, notID, item):
         model = self._model()
-        if model and item.getType() == wgnc_settings.WGNC_GUI_TYPE.POP_UP:
-            model.addNotification(WGNCPopUpDecorator(notID, item, self.__offset))
+        if model and item.getType() == notify_center_settings.NOTIFY_CENTER_GUI_TYPE.POP_UP:
+            model.addNotification(NotifyCenterPopUpDecorator(notID, item, self.__offset))
 
     def __onItemShowByAction(self, notID, target):
-        g_wgncProvider.showNotItemByName(notID, target)
+        g_notifyCenterProvider.showNotItemByName(notID, target)
 
     def __onItemUpdatedByAction(self, notID, item):
         model = self._model()
-        if model and item.getType() == wgnc_settings.WGNC_GUI_TYPE.POP_UP:
-            model.updateNotification(NOTIFICATION_TYPE.WGNC_POP_UP, notID, item, False)
+        if model and item.getType() == notify_center_settings.NOTIFY_CENTER_GUI_TYPE.POP_UP:
+            model.updateNotification(NOTIFICATION_TYPE.NOTIFY_CENTER_POP_UP, notID, item, False)
 
 
-class _WGNCListenersContainer(_NotificationListener):
+class _NotifyCenterListenersContainer(_NotificationListener):
 
     def __init__(self):
-        super(_WGNCListenersContainer, self).__init__()
-        self.__wgncListener = _WGNCListener()
+        super(_NotifyCenterListenersContainer, self).__init__()
+        self.__notifycenterListener = _NotifyCenterListener()
         self.__clanListeners = (_ClanAppsListener(), _ClanPersonalInvitesListener())
 
     def start(self, model):
-        self.__wgncListener.start(model)
-        g_wgncProvider.showNoMarkedNots()
-        g_wgncProvider.setEnabled(True)
+        self.__notifycenterListener.start(model)
+        g_notifyCenterProvider.showNoMarkedNots()
+        g_notifyCenterProvider.setEnabled(True)
         for listener in self.__clanListeners:
             listener.start(model)
 
-        self.__wgncListener.onProviderEnabled()
-        return super(_WGNCListenersContainer, self).start(model)
+        self.__notifycenterListener.onProviderEnabled()
+        return super(_NotifyCenterListenersContainer, self).start(model)
 
     def stop(self):
-        self.__wgncListener.stop()
+        self.__notifycenterListener.stop()
         for listener in self.__clanListeners:
             listener.stop()
 
-        g_wgncProvider.setEnabled(False)
-        g_wgncProvider.setNotsAsMarked()
-        super(_WGNCListenersContainer, self).stop()
+        g_notifyCenterProvider.setEnabled(False)
+        g_notifyCenterProvider.setNotsAsMarked()
+        super(_NotifyCenterListenersContainer, self).stop()
 
 
 class ProgressiveRewardListener(_NotificationListener):
@@ -1591,6 +1592,47 @@ class SeniorityAwardsQuestListener(_NotificationListener):
             return
 
 
+class SeniorityAwardsOfferListener(_NotificationListener):
+    __TYPE = NOTIFICATION_TYPE.SENIORITY_AWARDS_OFFER
+    __TEMPLATE = GFNotificationTemplates.SENIORITY_VEHICLE_OFFER
+    __ENTITY_ID = 1
+    __seniorityAwardCtrl = dependency.descriptor(ISeniorityAwardsController)
+
+    def start(self, model):
+        result = super(SeniorityAwardsOfferListener, self).start(model)
+        self.__seniorityAwardCtrl.onUpdated += self.__onEventUpdated
+        if self.__seniorityAwardCtrl.isEnabled:
+            g_clientUpdateManager.addCallback('tokens', self.__onTokensUpdate)
+            self.__tryNotify()
+        return result
+
+    def stop(self):
+        super(SeniorityAwardsOfferListener, self).stop()
+        g_clientUpdateManager.removeCallback('tokens', self.__onTokensUpdate)
+        self.__seniorityAwardCtrl.onUpdated -= self.__onEventUpdated
+
+    def __onEventUpdated(self):
+        g_clientUpdateManager.removeCallback('tokens', self.__onTokensUpdate)
+        if self.__seniorityAwardCtrl.isEnabled:
+            g_clientUpdateManager.addCallback('tokens', self.__onTokensUpdate)
+            self.__tryNotify()
+
+    def __tryNotify(self):
+        model = self._model()
+        if not model:
+            return
+        if self.__seniorityAwardCtrl.isNeedToShowOfferNotification:
+            if not model.hasNotification(self.__TYPE, self.__ENTITY_ID):
+                model.addNotification(SeniorityAwardsDecorator(self.__ENTITY_ID, self.__TYPE, {'giftToken': SENIORITY_AWARDS_VEHICLE_OFFER}, model, self.__TEMPLATE, NotificationPriorityLevel.MEDIUM, useCounterOnce=False))
+                WWISE.WW_eventGlobal(backport.sound(R.sounds.wdr_hangar_notification()))
+        else:
+            model.removeNotification(self.__TYPE, self.__ENTITY_ID)
+
+    def __onTokensUpdate(self, diff):
+        if SENIORITY_AWARDS_VEHICLE_OFFER in diff:
+            self.__tryNotify()
+
+
 class ResourceWellListener(_NotificationListener):
     __RESOURCE_WELL_MESSAGES = R.strings.messenger.serviceChannelMessages.resourceWell
     __START_ENTITY_ID = 0
@@ -1775,6 +1817,123 @@ class IntegratedAuctionListener(_NotificationListener):
 
     def __isNotificationNeeded(self, eventType):
         return eventType == AUCTION_START_EVENT_TYPE and not self.__isFinishNotificationActive() or eventType == AUCTION_FINISH_EVENT_TYPE
+
+
+class BlackMarketListener(_NotificationListener):
+    __slots__ = ('__startNotifiers', '__finishNotifiers')
+    __eventNotifications = dependency.descriptor(IEventsNotificationsController)
+    __EVENT_TYPE_TO_SETTING = {BLACK_MARKET_VEHICLE_START_EVENT_TYPE: BLACK_MARKET_VEHICLE_STAGE_START_SEEN,
+     BLACK_MARKET_VEHICLE_FINISH_EVENT_TYPE: BLACK_MARKET_VEHICLE_FINISH_STAGE_SEEN,
+     BLACK_MARKET_START_EVENT_TYPE: BLACK_MARKET_STAGE_START_SEEN,
+     BLACK_MARKET_FINISH_EVENT_TYPE: BLACK_MARKET_FINISH_STAGE_SEEN}
+    __EVENT_TYPE_TO_DECORATOR = {BLACK_MARKET_VEHICLE_START_EVENT_TYPE: BlackMarketVehicleAuctionStageStartDecorator,
+     BLACK_MARKET_VEHICLE_FINISH_EVENT_TYPE: BlackMarketVehicleAuctionStageFinishDecorator,
+     BLACK_MARKET_START_EVENT_TYPE: BlackMarketAuctionStageStartDecorator,
+     BLACK_MARKET_FINISH_EVENT_TYPE: BlackMarketAuctionStageFinishDecorator}
+    __luiController = dependency.descriptor(ILimitedUIController)
+    __TIME_TO_SHOW_SOON = 2
+
+    def __init__(self):
+        self.__startNotifiers = {}
+        self.__finishNotifiers = {}
+        super(BlackMarketListener, self).__init__()
+
+    def start(self, model):
+        result = super(BlackMarketListener, self).start(model)
+        if result:
+            self.__eventNotifications.onEventNotificationsChanged += self.__onEventNotification
+            self.__tryNotify(self.__eventNotifications.getEventsNotifications())
+        return True
+
+    def stop(self):
+        self.__clearNotifiers()
+        self.__eventNotifications.onEventNotificationsChanged -= self.__onEventNotification
+        super(BlackMarketListener, self).stop()
+
+    def __clearNotifiers(self):
+        for notifier in self.__startNotifiers.itervalues():
+            notifier.stopNotification()
+            notifier.clear()
+
+        self.__startNotifiers.clear()
+        for notifier in self.__finishNotifiers.itervalues():
+            notifier.stopNotification()
+            notifier.clear()
+
+        self.__finishNotifiers.clear()
+
+    def __onEventNotification(self, added, _):
+        self.__tryNotify(added)
+
+    def __tryNotify(self, notifications):
+        for notification in notifications:
+            if notification.eventType in self.__EVENT_TYPE_TO_SETTING.keys() and self.__luiController.isRuleCompleted(LuiRules.BLACK_MARKET_ENTRY_POINT):
+                notificationData = json.loads(notification.data)
+                self.__addNotification(notificationData, notification.eventType)
+
+    def __addNotification(self, data, eventType):
+        model = self._model()
+        if model is None:
+            return
+        else:
+            settings = AccountSettings.getNotifications(BLACK_MARKET_AUCTION_NOTIFICATIONS)
+            settingName = self.__EVENT_TYPE_TO_SETTING[eventType]
+            notificationID = str(data['id'])
+            if notificationID not in settings[settingName]:
+                startDate = getTimestampByStrDate(str(data['startDate']))
+                endDate = getTimestampByStrDate(str(data['endDate']))
+                if startDate <= time_utils.getServerUTCTime() < endDate and self.__isNotificationNeeded(eventType):
+                    decorator = self.__EVENT_TYPE_TO_DECORATOR.get(eventType)
+                    if callable(decorator):
+                        model.addNotification(decorator(entityID=int(notificationID)))
+                        self.__setNotificationShown(settings, settingName, notificationID)
+                        self.__removeNotifier(notificationID, eventType)
+                elif startDate > time_utils.getServerUTCTime():
+                    self.__addNotifier(notificationID, eventType, startDate)
+            return
+
+    def __addNotifier(self, notificationID, eventType, startDate):
+        if eventType in (BLACK_MARKET_VEHICLE_START_EVENT_TYPE, BLACK_MARKET_START_EVENT_TYPE):
+            notifiers = self.__startNotifiers
+        else:
+            notifiers = self.__finishNotifiers
+        if notificationID not in notifiers:
+            notifiers[notificationID] = SimpleNotifier(partial(self.__getTimeToStart, startDate), self.__onNotifierUpdate)
+            notifiers[notificationID].startNotification()
+
+    def __removeNotifier(self, notificationID, eventType):
+        if eventType in (BLACK_MARKET_VEHICLE_START_EVENT_TYPE, BLACK_MARKET_START_EVENT_TYPE):
+            notifiers = self.__startNotifiers
+        else:
+            notifiers = self.__finishNotifiers
+        if notificationID in notifiers:
+            notifiers[notificationID].stopNotification()
+            notifiers[notificationID].clear()
+            notifiers.pop(notificationID)
+
+    def __onNotifierUpdate(self):
+        self.__tryNotify(self.__eventNotifications.getEventsNotifications())
+
+    def __getTimeToStart(self, startDate):
+        return startDate - time_utils.getServerUTCTime()
+
+    def __setNotificationShown(self, settings, settingName, notificationID):
+        settings[settingName].add(notificationID)
+        AccountSettings.setNotifications(BLACK_MARKET_AUCTION_NOTIFICATIONS, settings)
+
+    def __isFinishNotificationActive(self):
+        for notification in self.__eventNotifications.getEventsNotifications():
+            if notification.eventType in (BLACK_MARKET_VEHICLE_FINISH_EVENT_TYPE, BLACK_MARKET_FINISH_EVENT_TYPE):
+                data = json.loads(notification.data)
+                startDate = getTimestampByStrDate(str(data['startDate']))
+                endDate = getTimestampByStrDate(str(data['endDate']))
+                if startDate - self.__TIME_TO_SHOW_SOON <= time_utils.getServerUTCTime() < endDate:
+                    return True
+
+        return False
+
+    def __isNotificationNeeded(self, eventType):
+        return eventType in (BLACK_MARKET_VEHICLE_START_EVENT_TYPE, BLACK_MARKET_START_EVENT_TYPE) and not self.__isFinishNotificationActive() or eventType in (BLACK_MARKET_VEHICLE_FINISH_EVENT_TYPE, BLACK_MARKET_FINISH_EVENT_TYPE)
 
 
 class TradingCaravanListener(_NotificationListener):
@@ -2803,7 +2962,7 @@ registerNotificationsListeners((ServiceChannelListener,
  MissingEventsListener,
  PrbInvitesListener,
  FriendshipRqsListener,
- _WGNCListenersContainer,
+ _NotifyCenterListenersContainer,
  ProgressiveRewardListener,
  SwitcherListener,
  TankPremiumListener,
@@ -2816,6 +2975,7 @@ registerNotificationsListeners((ServiceChannelListener,
  BattlePassSwitchChapterReminder,
  ResourceWellListener,
  IntegratedAuctionListener,
+ BlackMarketListener,
  SeniorityAwardsQuestListener,
  SeniorityAwardsTokenListener,
  CollectionsListener,
@@ -2828,7 +2988,8 @@ registerNotificationsListeners((ServiceChannelListener,
  EarlyAccessListener,
  PersonalMissionsListener,
  ParagonsListener,
- DailyBonusQuestListener))
+ DailyBonusQuestListener,
+ SeniorityAwardsOfferListener))
 
 class NotificationsListeners(_NotificationListener):
 

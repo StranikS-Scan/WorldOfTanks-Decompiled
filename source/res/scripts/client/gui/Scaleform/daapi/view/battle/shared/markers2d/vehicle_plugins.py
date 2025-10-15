@@ -31,11 +31,17 @@ from gui.shared import g_eventBus
 from gui.shared.events import GameEvent
 from gui.shared.utils.TimeInterval import TimeInterval
 from items.battle_royale import isSpawnedBot, isHunterBot
+from items.components.c11n_constants import STAT_TRACK_MAX_FRAGS_SUPPORTED, STAT_TRACK_PROHIBITED_VALUES, STAT_TRACK_FRAGS_NOT_SUPPORTED
 from helpers import dependency
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.battle_session import IBattleSessionProvider
+from constants import ARENA_PERIOD
+from th_async import th_async, th_await, delay
+if typing.TYPE_CHECKING:
+    from Vehicle import Vehicle
 _STATUS_EFFECTS_PRIORITY = (BATTLE_MARKER_STATES.REPAIRING_STATE,
  BATTLE_MARKER_STATES.ENGINEER_STATE,
  BATTLE_MARKER_STATES.HEALING_STATE,
@@ -54,7 +60,7 @@ _DELAYABLE_MARKERS = {_EVENT_ID.DETECTED_BY_THERMAL_VISION}
 MarkerState = namedtuple('MarkerState', ['statusID', 'isSourceVehicle'])
 
 class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehiclesController):
-    __slots__ = ('_markers', '_markersStates', '_clazz', '_isSquadIndicatorEnabled', '_markerTimers', '__callbackIDs', '__playerVehicleID', '__showDamageIcon', '_hiddenEvents', '__targetedTankMarkerID', '__targetedMarkerFromCppID', '__followingIgnoredTank', '__distanceUpdater', '__delayedMarkers')
+    __slots__ = ('_markers', '_markersStates', '_clazz', '_isSquadIndicatorEnabled', '_markerTimers', '__callbackIDs', '__playerVehicleID', '__showDamageIcon', '_hiddenEvents', '__targetedTankMarkerID', '__targetedMarkerFromCppID', '__followingIgnoredTank', '__distanceUpdater', '__delayedMarkers', '__statTrackMarkers')
 
     def __init__(self, parentObj, clazz=markers.VehicleMarker):
         super(VehicleMarkerPlugin, self).__init__(parentObj)
@@ -71,6 +77,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         self.__targetedMarkerFromCppID = -1
         self.__followingIgnoredTank = 0
         self.__distanceUpdater = None
+        self.__statTrackMarkers = None
         self.__delayedMarkers = dict()
         return
 
@@ -104,7 +111,9 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         g_playerEvents.onTeamChanged += self.__onTeamChanged
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         self.__distanceUpdater = MarkerDistanceUpdater(self._markers, self._invokeMarker)
+        self.__statTrackMarkers = StatTrackMarker(self._markers, self._invokeMarker)
         self.__distanceUpdater.start()
+        self.__statTrackMarkers.start()
         return
 
     def stop(self):
@@ -142,13 +151,40 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self.__distanceUpdater.stop()
         self.__distanceUpdater = None
+        self.__statTrackMarkers.stop()
+        self.__statTrackMarkers = None
         super(VehicleMarkerPlugin, self).stop()
         return
 
     def invalidateArenaInfo(self):
         self.invalidateVehiclesInfo(self.sessionProvider.getArenaDP())
 
-    def invalidateVehiclesInfo(self, arenaDP):
+    @th_async
+    def __invalidateVehiclesInfoPortal(self, arenaDP):
+        getProps = arenaDP.getPlayerGuiProps
+        getParts = self.sessionProvider.getCtx().getPlayerFullNameParts
+        feedback = self.sessionProvider.shared.feedback
+        vInfoList = [ vInfo for vInfo in arenaDP.getVehiclesInfoIterator() ]
+        for vInfo in vInfoList:
+            vehicleID = vInfo.vehicleID
+            if vehicleID == self._playerVehicleID or vInfo.isObserver():
+                continue
+            if not vInfo.isAlive() and vInfo.isBot:
+                continue
+            if vehicleID not in self._markers:
+                marker = self.__addMarkerToPool(vehicleID, vInfo=vInfo, vProxy=feedback.getVehicleProxy(vehicleID))
+                if marker is None:
+                    continue
+            else:
+                marker = self._markers[vehicleID]
+            self.__setVehicleInfo(marker, vInfo, getProps(vehicleID, vInfo.team), getParts(vehicleID))
+            self._setMarkerInitialState(marker, vInfo=vInfo)
+            self._processDelayedMarkers(vehicleID)
+            yield th_await(delay(0))
+
+        return
+
+    def __invalidateVehiclesInfoDefault(self, arenaDP):
         getProps = arenaDP.getPlayerGuiProps
         getParts = self.sessionProvider.getCtx().getPlayerFullNameParts
         feedback = self.sessionProvider.shared.feedback
@@ -162,11 +198,19 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
                     continue
             else:
                 marker = self._markers[vehicleID]
-            self._setVehicleInfo(marker, vInfo, getProps(vehicleID, vInfo.team), getParts(vehicleID))
+            self.__setVehicleInfo(marker, vInfo, getProps(vehicleID, vInfo.team), getParts(vehicleID))
             self._setMarkerInitialState(marker, vInfo=vInfo)
             self._processDelayedMarkers(vehicleID)
 
         return
+
+    def invalidateVehiclesInfo(self, arenaDP):
+        from gui.battle_control.avatar_getter import getArena
+        arena = getArena()
+        if arena and arena.bonusType == getattr(constants.ARENA_BONUS_TYPE, 'PORTAL', -1):
+            self.__invalidateVehiclesInfoPortal(self.sessionProvider.getArenaDP())
+        else:
+            self.__invalidateVehiclesInfoDefault(self.sessionProvider.getArenaDP())
 
     def addVehicleInfo(self, vInfo, arenaDP):
         if vInfo.isObserver():
@@ -180,7 +224,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
             marker = self.__addMarkerToPool(vehicleID, vInfo=vInfo, vProxy=feedback.getVehicleProxy(vehicleID))
             if marker is None:
                 return
-            self._setVehicleInfo(marker, vInfo, ctx.getPlayerGuiProps(vehicleID, vInfo.team), ctx.getPlayerFullNameParts(vehicleID))
+            self.__setVehicleInfo(marker, vInfo, ctx.getPlayerGuiProps(vehicleID, vInfo.team), ctx.getPlayerFullNameParts(vehicleID))
             self._setMarkerInitialState(marker, vInfo=vInfo)
             self._processDelayedMarkers(vehicleID)
             return
@@ -193,7 +237,11 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
             if vehicleID not in self._markers:
                 continue
             marker = self._markers[vehicleID]
-            self._setVehicleInfo(marker, vInfo, getProps(vehicleID, vInfo.team), getParts(vehicleID))
+            self.__setVehicleInfo(marker, vInfo, getProps(vehicleID, vInfo.team), getParts(vehicleID))
+
+        if self.__statTrackMarkers is not None:
+            self.__statTrackMarkers.updateVehicleInfo(updated)
+        return
 
     def invalidatePlayerStatus(self, flags, vInfo, arenaDP):
         self.__setEntityName(vInfo, arenaDP)
@@ -437,7 +485,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
     def __canUpdateStatus(self, handle):
         return any((marker.getMarkerID() == handle for marker in self._markers.itervalues()))
 
-    def _setVehicleInfo(self, marker, vInfo, guiProps, nameParts):
+    def __setVehicleInfo(self, marker, vInfo, guiProps, nameParts):
         markerID = marker.getMarkerID()
         vType = vInfo.vehicleType
         guiPropsName = 'team{}'.format(vInfo.team) if avatar_getter.isVehiclesColorized() else guiProps.name()
@@ -607,7 +655,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
                 marker = self.__addMarkerToPool(vehicleID, vInfo=vInfo, vProxy=vProxy)
                 if marker is None:
                     return
-                self._setVehicleInfo(marker, vInfo, guiProps, self.sessionProvider.getCtx().getPlayerFullNameParts(vehicleID))
+                self.__setVehicleInfo(marker, vInfo, guiProps, self.sessionProvider.getCtx().getPlayerFullNameParts(vehicleID))
                 self._setMarkerInitialState(marker, vInfo=vInfo)
                 self._processDelayedMarkers(vehicleID)
             return
@@ -946,3 +994,123 @@ class MarkerDistanceUpdater(object):
 
     def __handleShowExtendedInfo(self, event):
         self.__updateInterval(event.ctx['isDown'])
+
+
+class StatTrackMarker(object):
+    __battleSession = dependency.descriptor(IBattleSessionProvider)
+    __MIN_DISTANCE = 10.0
+    __MAX_DISTANCE = 150.0
+    __MIN_SCALE = 0.6
+    __MAX_SCALE = 1.0
+    __SHOW_MARKER = 'showStatTrackMarker'
+    __HIDE_MARKER = 'hideStatTrackMarker'
+    __MARKER_TYPE = 'kill'
+    __SECONDS_LEFT_TO_SHOW = 11.0
+    __UPDATE_DELAY = 0.5
+    _ANIM_END_DURATION = 1.2
+    _TIME_TO_SHOW_IMMEDIATELY = 8.0
+    _PERIOD_ANIM = (ARENA_PERIOD.IDLE, ARENA_PERIOD.WAITING, ARENA_PERIOD.PREBATTLE)
+    __slots__ = ('__markers', '__invokeMarker', '__callbackDelayer', '__callbacks')
+
+    def __init__(self, vehMarkers, invokeMarker):
+        self.__markers = vehMarkers
+        self.__invokeMarker = invokeMarker
+        self.__callbacks = {}
+
+    def start(self):
+        self.__update()
+
+    def stop(self):
+        self.__markers = None
+        self.__invokeMarker = None
+        for callback in self.__callbacks:
+            BigWorld.cancelCallback(callback)
+
+        self.__callbacks = None
+        return
+
+    def updateVehicleInfo(self, updatedMarkers):
+        arenaVehicles = self.__battleSession.arenaVisitor.getArenaVehicles()
+        for _, vInfo in updatedMarkers:
+            vehicleID = vInfo.vehicleID
+            if vehicleID not in self.__markers:
+                continue
+            marker = self.__markers[vehicleID]
+            arenaVehInfo = arenaVehicles[vehicleID]
+            if arenaVehInfo is not None:
+                if arenaVehInfo.get('statTrackFrags', STAT_TRACK_FRAGS_NOT_SUPPORTED) > STAT_TRACK_FRAGS_NOT_SUPPORTED:
+                    markerID = marker.getMarkerID()
+                    callbackDelay = self.__getTimeUntilHideMarker()
+                    isImmediately = False
+                    if callbackDelay < self.__SECONDS_LEFT_TO_SHOW:
+                        isImmediately = callbackDelay < self._TIME_TO_SHOW_IMMEDIATELY
+                        callbackDelay = 0.0
+                    self.__callbacks[markerID] = BigWorld.callback(callbackDelay, partial(self.__showStatTrackMarker, marker, arenaVehInfo, BigWorld.entities.get(vehicleID), isImmediately=isImmediately))
+                else:
+                    self.__hideStatTrackMarker(marker, True)
+
+        return
+
+    def _showMarkers(self, isImmediately=False):
+        arenaVehicles = self.__battleSession.arenaVisitor.getArenaVehicles()
+        for marker in self.__markers.itervalues():
+            targetVeh = marker.getVehicleEntity()
+            if targetVeh is None or not targetVeh.isStatTrack:
+                continue
+            targetVehInfo = arenaVehicles[targetVeh.id]
+            self.__showStatTrackMarker(marker, targetVehInfo, targetVeh, isImmediately)
+
+        return
+
+    def __showStatTrackMarker(self, marker, vInfo, target, isImmediately=False):
+        ownPosition = avatar_getter.getAvatarPosition()
+        frags = self.__getFormattedVehicleFrags(vInfo)
+        distance = (target.position - ownPosition).length
+        scale = self.__getScale(distance=distance)
+        self.__invokeMarker(marker.getMarkerID(), self.__SHOW_MARKER, self.__MARKER_TYPE, frags, scale, isImmediately)
+        markerID = marker.getMarkerID()
+        self.__callbacks[markerID] = BigWorld.callback(self.__getTimeUntilHideMarker(), partial(self.__hideStatTrackMarker, marker, False))
+
+    def __hideStatTrackMarker(self, marker, isImmediately):
+        markerID = marker.getMarkerID()
+        callback = self.__callbacks.pop(markerID, None)
+        if callback is not None:
+            BigWorld.cancelCallback(callback)
+        self.__invokeMarker(marker.getMarkerID(), self.__HIDE_MARKER, isImmediately)
+        return
+
+    def __update(self):
+        period, timeLeft = self.__updateTime()
+        if period not in self._PERIOD_ANIM:
+            return
+        if period != ARENA_PERIOD.PREBATTLE:
+            BigWorld.callback(self.__UPDATE_DELAY, self.__update)
+        else:
+            waitTime = timeLeft - self.__SECONDS_LEFT_TO_SHOW
+            if timeLeft < self._TIME_TO_SHOW_IMMEDIATELY:
+                self._showMarkers(isImmediately=True)
+            else:
+                BigWorld.callback(waitTime, self._showMarkers)
+
+    def __getScale(self, distance=0.0, minDist=__MIN_DISTANCE, minScale=__MIN_SCALE, maxDist=__MAX_DISTANCE, maxScale=__MAX_SCALE):
+        dist = max(minDist, min(maxDist, distance))
+        scale = minScale + (maxScale - minScale) * (dist - minDist) / (maxDist - minDist)
+        return scale
+
+    def __updateTime(self):
+        serverTime = BigWorld.serverTime()
+        period = self.__battleSession.arenaVisitor.getArenaPeriod()
+        if period in self._PERIOD_ANIM:
+            endTime = self.__battleSession.arenaVisitor.getArenaPeriodEndTime()
+            resultTime = max(endTime - serverTime, self._ANIM_END_DURATION)
+            return (period, resultTime)
+        return (period, 0)
+
+    def __getFormattedVehicleFrags(self, vehicle):
+        frags = vehicle['statTrackFrags']
+        frags = STAT_TRACK_PROHIBITED_VALUES.get(frags, frags)
+        return '{:04}'.format(min(frags, STAT_TRACK_MAX_FRAGS_SUPPORTED))
+
+    def __getTimeUntilHideMarker(self):
+        _, timeLeft = self.__updateTime()
+        return timeLeft - self._ANIM_END_DURATION

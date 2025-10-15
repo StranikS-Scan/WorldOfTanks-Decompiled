@@ -21,4 +21,3 @@ class CameraRelatedEvents(HasCtxEvent):
     LOBBY_VIEW_MOUSE_MOVE = 'MouseMove'
     FORCE_DISABLE_IDLE_PARALAX_MOVEMENT = 'cameraRelatedEvents/forceDisableIdleParalaxMovement'
     FORCE_DISABLE_CAMERA_MOVEMENT = 'cameraRelatedEvents/forceDisableCameraMovement'
-    CAMERA_MOVEMENT_SWITCHED = 'CameraMovementSwitched'

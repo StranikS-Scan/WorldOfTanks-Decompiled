@@ -83,6 +83,12 @@ def secondaryHangarCFG():
     return _CFG.get(_SECONDARY_HANGAR_SETTINGS_SEC)
 
 
+def initializeHangarsCFG():
+    global _HANGAR_CFGS
+    if isinstance(_HANGAR_CFGS, HangarConfig):
+        _HANGAR_CFGS = _readHangarSettings()
+
+
 def _readHangarSettings():
     hangarsXml = ResMgr.openSection('gui/hangars.xml')
     paths = [ path for path, _ in ResMgr.openSection(_DEFAULT_SPACES_PATH).items() ]
@@ -141,7 +147,6 @@ class ClientHangarSpace(object):
     epicController = dependency.descriptor(IEpicBattleMetaGameController)
 
     def __init__(self, onVehicleLoadedCallback):
-        global _HANGAR_CFGS
         self.__spaceId = None
         self.__waitCallback = None
         self.__loadingStatus = 0.0
@@ -156,7 +161,7 @@ class ClientHangarSpace(object):
         self.__spaceVisibilityMask = None
         self.__geometryID = None
         self._vsePlans = makeMultiPlanProvider(ASPECT.HANGAR, CallableProviderType.HANGAR)
-        _HANGAR_CFGS = _readHangarSettings()
+        initializeHangarsCFG()
         return
 
     def create(self, isPremium, onSpaceLoadedCallback=None):

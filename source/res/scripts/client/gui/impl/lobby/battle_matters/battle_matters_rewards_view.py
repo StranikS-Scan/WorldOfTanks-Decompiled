@@ -7,12 +7,13 @@ from frameworks.wulf import ViewSettings, WindowFlags
 from gui.impl.backport import BackportTooltipWindow
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_matters.battle_matters_rewards_view_model import BattleMattersRewardsViewModel, State, RewardType
+from gui.impl.gen.view_models.views.lobby.battle_matters.tooltips.battle_matters_token_tooltip_view_model import BattleMattersTokenTooltipViewModel
 from gui.impl.lobby.battle_matters.battle_matters_constants import SequenceNumber
 from gui.impl.lobby.battle_matters.tooltips.battle_matters_token_tooltip_view import BattleMattersTokenTooltipView
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.server_events.bonuses import getNonQuestBonuses, getMergedBonusesFromDicts
-from gui.server_events.events_dispatcher import showBattleMatters
+from gui.server_events.events_dispatcher import showBattleMattersMainView
 from gui.shared.event_dispatcher import showDelayedReward, selectVehicleInHangar, showHangar
 from gui.shared.missions.packers.bonus import packMissionsBonusModelAndTooltipData
 from gui.impl.lobby.battle_matters.battle_matters_bonus_packer import getBattleMattersBonusPacker, bonusesSort, blueprintsCmp, battleMattersSort
@@ -66,7 +67,10 @@ class BattleMattersRewardsView(ViewImpl):
         return super(BattleMattersRewardsView, self).getViewModel()
 
     def createToolTipContent(self, event, contentID):
-        return BattleMattersTokenTooltipView() if contentID == R.views.lobby.battle_matters.tooltips.BattleMattersTokenTooltipView() else super(BattleMattersRewardsView, self).createToolTipContent(event, contentID)
+        if contentID == R.views.lobby.battle_matters.tooltips.BattleMattersTokenTooltipView():
+            rewardToken = event.getArgument(BattleMattersTokenTooltipViewModel.ARG_REWARD_TOKEN)
+            return BattleMattersTokenTooltipView(rewardToken)
+        return super(BattleMattersRewardsView, self).createToolTipContent(event, contentID)
 
     def createToolTip(self, event):
         if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
@@ -78,8 +82,9 @@ class BattleMattersRewardsView(ViewImpl):
         else:
             return super(BattleMattersRewardsView, self).createToolTip(event)
 
-    def onChooseVehicle(self):
-        showDelayedReward()
+    def onChooseVehicle(self, args):
+        rewardToken = args.get(BattleMattersRewardsViewModel.ARG_REWARD_TOKEN)
+        showDelayedReward(rewardToken)
         self.destroyWindow()
 
     def onShowVehicle(self):
@@ -88,11 +93,14 @@ class BattleMattersRewardsView(ViewImpl):
 
     def onClose(self):
         if self.__getState() == State.TOKENVEHICLE:
-            showHangar()
+            if not self.__battleMattersController.isFinished() or self.__battleMattersController.hasUnobtainedDelayedRewards():
+                showBattleMattersMainView()
+            else:
+                showHangar()
         self.destroyWindow()
 
     def onNextTask(self):
-        showBattleMatters()
+        showBattleMattersMainView()
         self.destroyWindow()
 
     def _onLoading(self, *args, **kwargs):

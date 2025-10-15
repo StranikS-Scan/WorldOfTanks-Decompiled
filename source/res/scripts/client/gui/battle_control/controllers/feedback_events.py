@@ -49,8 +49,7 @@ _BATTLE_EVENT_TO_PLAYER_FEEDBACK_EVENT = {_BET.KILL: _FET.PLAYER_KILLED_ENEMY,
  _BET.SMOKE_ASSIST: _FET.SMOKE_ASSIST,
  _BET.INSPIRE_ASSIST: _FET.INSPIRE_ASSIST,
  _BET.MULTI_STUN: _FET.PLAYER_STUN_ENEMIES,
- _BET.EQUIPMENT_TIMER_EXPIRED: _FET.EQUIPMENT_TIMER_EXPIRED,
- _BET.VEHICLE_HEALTH_ADDED: _FET.VEHICLE_HEALTH_ADDED}
+ _BET.EQUIPMENT_TIMER_EXPIRED: _FET.EQUIPMENT_TIMER_EXPIRED}
 _PLAYER_FEEDBACK_EXTRA_DATA_CONVERTERS = {_FET.PLAYER_DAMAGED_HP_ENEMY: _unpackDamage,
  _FET.PLAYER_ASSIST_TO_KILL_ENEMY: _unpackDamage,
  _FET.PLAYER_CAPTURED_BASE: _unpackInteger,
@@ -68,8 +67,7 @@ _PLAYER_FEEDBACK_EXTRA_DATA_CONVERTERS = {_FET.PLAYER_DAMAGED_HP_ENEMY: _unpackD
  _FET.SMOKE_ASSIST: _unpackDamage,
  _FET.INSPIRE_ASSIST: _unpackDamage,
  _FET.PLAYER_SPOTTED_ENEMY: _unpackVisibility,
- _FET.PLAYER_STUN_ENEMIES: _unpackMultiStun,
- _FET.VEHICLE_HEALTH_ADDED: _unpackInteger}
+ _FET.PLAYER_STUN_ENEMIES: _unpackMultiStun}
 
 def _getShellType(shellTypeID):
     return None if shellTypeID == NONE_SHELL_TYPE else BATTLE_LOG_SHELL_TYPES(shellTypeID)
@@ -143,9 +141,6 @@ class _DamageExtra(object):
     def isFortArtilleryEq(self, primary=True):
         return self.isAttackReason(ATTACK_REASON.FORT_ARTILLERY_EQ) if primary else self.isSecondaryAttackReason(ATTACK_REASON.FORT_ARTILLERY_EQ)
 
-    def isCircuitOverload(self, primary=True):
-        return self.isAttackReason(ATTACK_REASON.CIRCUIT_OVERLOAD) if primary else self.isSecondaryAttackReason(ATTACK_REASON.CIRCUIT_OVERLOAD)
-
     def isBomberEq(self, primary=True):
         return self.isAttackReason(ATTACK_REASON.BOMBER_EQ) if primary else self.isSecondaryAttackReason(ATTACK_REASON.BOMBER_EQ)
 
@@ -166,6 +161,15 @@ class _DamageExtra(object):
 
     def isThunderStrike(self, primary=True):
         return self.isAttackReason(ATTACK_REASON.THUNDER_STRIKE) if primary else self.isSecondaryAttackReason(ATTACK_REASON.THUNDER_STRIKE)
+
+    def isGuidedMissile(self, primary=True):
+        return self.isAttackReason(ATTACK_REASON.GUIDED_MISSILE) if primary else self.isSecondaryAttackReason(ATTACK_REASON.GUIDED_MISSILE)
+
+    def isSuperBossAura(self, primary=True):
+        return self.isAttackReason(ATTACK_REASON.SUPER_BOSS_AURA) if primary else self.isSecondaryAttackReason(ATTACK_REASON.SUPER_BOSS_AURA)
+
+    def isSentinelAttack(self, primary=True):
+        return self.isAttackReason(ATTACK_REASON.SENTINEL_ATTACK) if primary else self.isSecondaryAttackReason(ATTACK_REASON.SENTINEL_ATTACK)
 
     def isAttackReason(self, attackReason):
         return ATTACK_REASONS[self.__attackReasonID] == attackReason
@@ -267,9 +271,6 @@ class _CritsExtra(object):
 
     def isThunderStrike(self):
         return self.isAttackReason(ATTACK_REASON.THUNDER_STRIKE)
-
-    def isCircuitOverload(self):
-        return self.isAttackReason(ATTACK_REASON.CIRCUIT_OVERLOAD)
 
     def isRam(self):
         return self.isAttackReason(ATTACK_REASON.RAM)

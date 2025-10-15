@@ -1083,13 +1083,9 @@
     <id>	1031	</id>
     <imgName>	improvedSpallingResistance	</imgName>
     <modifiers>
-      <add>
-        <name>	miscAttrs/stunResistanceDuration	</name>
-        <value>	0.1	</value>
-      </add>
       <mul>
-        <name>	miscAttrs/repeatedStunDurationFactor	</name>
-        <value>	0.85	</value>
+        <name>	miscAttrs/crewChanceToHitFactor	</name>
+        <value>	1.1	</value>
       </mul>
       <mul>
         <name>	miscAttrs/circularVisionRadiusBaseFactor	</name>
@@ -1098,8 +1094,8 @@
     </modifiers>
     <kpi>
       <mul>
-        <name>	crewStunDuration	</name>
-        <value>	0.9	</value>
+        <name>	crewHitChance	</name>
+        <value>	1.1	</value>
       </mul>
       <mul>
         <name>	vehicleCircularVisionRadius	</name>
@@ -1115,13 +1111,9 @@
         <name>	miscAttrs/circularVisionRadiusBaseFactor	</name>
         <value>	1.03	</value>
       </mul>
-      <add>
-        <name>	miscAttrs/stunResistanceDuration	</name>
-        <value>	-0.1	</value>
-      </add>
       <mul>
-        <name>	miscAttrs/repeatedStunDurationFactor	</name>
-        <value>	1.15	</value>
+        <name>	miscAttrs/crewChanceToHitFactor	</name>
+        <value>	0.9	</value>
       </mul>
     </modifiers>
     <kpi>
@@ -1130,8 +1122,8 @@
         <value>	1.03	</value>
       </mul>
       <mul>
-        <name>	crewStunDuration	</name>
-        <value>	1.1	</value>
+        <name>	crewHitChance	</name>
+        <value>	0.9	</value>
       </mul>
     </kpi>
   </role_heavyTank_pair_3_2>
@@ -1143,13 +1135,9 @@
         <name>	miscAttrs/antifragmentationLiningFactor	</name>
         <value>	1.15	</value>
       </mul>
-      <add>
-        <name>	miscAttrs/stunResistanceDuration	</name>
-        <value>	0.08	</value>
-      </add>
       <mul>
         <name>	miscAttrs/crewChanceToHitFactor	</name>
-        <value>	0.8	</value>
+        <value>	0.75	</value>
       </mul>
       <mul>
         <name>	miscAttrs/onStillRotationSpeedFactor	</name>
@@ -1170,12 +1158,8 @@
         <value>	0.85	</value>
       </mul>
       <mul>
-        <name>	crewStunDuration	</name>
-        <value>	0.92	</value>
-      </mul>
-      <mul>
         <name>	crewHitChance	</name>
-        <value>	1.2	</value>
+        <value>	1.25	</value>
       </mul>
       <mul>
         <name>	vehicleAllGroundRotationSpeed	</name>
@@ -1207,13 +1191,9 @@
         <name>	miscAttrs/antifragmentationLiningFactor	</name>
         <value>	0.85	</value>
       </mul>
-      <add>
-        <name>	miscAttrs/stunResistanceDuration	</name>
-        <value>	-0.08	</value>
-      </add>
       <mul>
         <name>	miscAttrs/crewChanceToHitFactor	</name>
-        <value>	1.2	</value>
+        <value>	1.25	</value>
       </mul>
     </modifiers>
     <kpi>
@@ -1230,12 +1210,8 @@
         <value>	1.15	</value>
       </mul>
       <mul>
-        <name>	crewStunDuration	</name>
-        <value>	1.08	</value>
-      </mul>
-      <mul>
         <name>	crewHitChance	</name>
-        <value>	0.8	</value>
+        <value>	0.75	</value>
       </mul>
     </kpi>
   </role_HT_assault_pair_4_2>
@@ -1519,13 +1495,9 @@
         <name>	miscAttrs/antifragmentationLiningFactor	</name>
         <value>	1.15	</value>
       </mul>
-      <add>
-        <name>	miscAttrs/stunResistanceDuration	</name>
-        <value>	0.08	</value>
-      </add>
       <mul>
         <name>	miscAttrs/crewChanceToHitFactor	</name>
-        <value>	0.8	</value>
+        <value>	0.75	</value>
       </mul>
       <mul>
         <name>	miscAttrs/chassis/shotDispersionFactors/movement	</name>
@@ -1542,12 +1514,8 @@
         <value>	0.85	</value>
       </mul>
       <mul>
-        <name>	crewStunDuration	</name>
-        <value>	0.92	</value>
-      </mul>
-      <mul>
         <name>	crewHitChance	</name>
-        <value>	1.2	</value>
+        <value>	1.25	</value>
       </mul>
       <mul>
         <name>	vehicleGunShotDispersionChassisMovement	</name>
@@ -1575,13 +1543,9 @@
         <name>	miscAttrs/antifragmentationLiningFactor	</name>
         <value>	0.85	</value>
       </mul>
-      <add>
-        <name>	miscAttrs/stunResistanceDuration	</name>
-        <value>	-0.08	</value>
-      </add>
       <mul>
         <name>	miscAttrs/crewChanceToHitFactor	</name>
-        <value>	1.2	</value>
+        <value>	1.25	</value>
       </mul>
     </modifiers>
     <kpi>
@@ -1598,12 +1562,8 @@
         <value>	1.15	</value>
       </mul>
       <mul>
-        <name>	crewStunDuration	</name>
-        <value>	1.08	</value>
-      </mul>
-      <mul>
         <name>	crewHitChance	</name>
-        <value>	0.8	</value>
+        <value>	0.75	</value>
       </mul>
     </kpi>
   </role_HT_universal_pair_5_2>
@@ -3127,13 +3087,9 @@
         <name>	miscAttrs/antifragmentationLiningFactor	</name>
         <value>	1.15	</value>
       </mul>
-      <add>
-        <name>	miscAttrs/stunResistanceDuration	</name>
-        <value>	0.08	</value>
-      </add>
       <mul>
         <name>	miscAttrs/crewChanceToHitFactor	</name>
-        <value>	0.8	</value>
+        <value>	0.75	</value>
       </mul>
       <add>
         <name>	miscAttrs/backwardMaxSpeedKMHTerm	</name>
@@ -3146,12 +3102,8 @@
         <value>	0.85	</value>
       </mul>
       <mul>
-        <name>	crewStunDuration	</name>
-        <value>	0.92	</value>
-      </mul>
-      <mul>
         <name>	crewHitChance	</name>
-        <value>	1.2	</value>
+        <value>	1.25	</value>
       </mul>
       <add>
         <name>	vehicleBackwardMaxSpeed	</name>
@@ -3171,13 +3123,9 @@
         <name>	miscAttrs/antifragmentationLiningFactor	</name>
         <value>	0.85	</value>
       </mul>
-      <add>
-        <name>	miscAttrs/stunResistanceDuration	</name>
-        <value>	-0.08	</value>
-      </add>
       <mul>
         <name>	miscAttrs/crewChanceToHitFactor	</name>
-        <value>	1.2	</value>
+        <value>	1.25	</value>
       </mul>
     </modifiers>
     <kpi>
@@ -3190,12 +3138,8 @@
         <value>	1.15	</value>
       </mul>
       <mul>
-        <name>	crewStunDuration	</name>
-        <value>	1.08	</value>
-      </mul>
-      <mul>
         <name>	crewHitChance	</name>
-        <value>	0.8	</value>
+        <value>	0.75	</value>
       </mul>
     </kpi>
   </role_lightTank_pair_3_2>
@@ -3647,13 +3591,9 @@
         <name>	miscAttrs/healthFactor	</name>
         <value>	1.1	</value>
       </mul>
-      <add>
-        <name>	miscAttrs/stunResistanceDuration	</name>
-        <value>	0.08	</value>
-      </add>
       <mul>
         <name>	miscAttrs/crewChanceToHitFactor	</name>
-        <value>	0.8	</value>
+        <value>	0.75	</value>
       </mul>
       <mul>
         <name>	miscAttrs/gunAimingTimeFactor	</name>
@@ -3666,12 +3606,8 @@
         <value>	1.1	</value>
       </mul>
       <mul>
-        <name>	crewStunDuration	</name>
-        <value>	0.92	</value>
-      </mul>
-      <mul>
         <name>	crewHitChance	</name>
-        <value>	1.2	</value>
+        <value>	1.25	</value>
       </mul>
       <mul>
         <name>	vehicleGunAimSpeed	</name>
@@ -3691,13 +3627,9 @@
         <name>	miscAttrs/healthFactor	</name>
         <value>	0.9	</value>
       </mul>
-      <add>
-        <name>	miscAttrs/stunResistanceDuration	</name>
-        <value>	-0.08	</value>
-      </add>
       <mul>
         <name>	miscAttrs/crewChanceToHitFactor	</name>
-        <value>	1.2	</value>
+        <value>	1.25	</value>
       </mul>
     </modifiers>
     <kpi>
@@ -3710,12 +3642,8 @@
         <value>	0.9	</value>
       </mul>
       <mul>
-        <name>	crewStunDuration	</name>
-        <value>	1.08	</value>
-      </mul>
-      <mul>
         <name>	crewHitChance	</name>
-        <value>	0.8	</value>
+        <value>	0.75	</value>
       </mul>
     </kpi>
   </role_SPG_pair_5_2>

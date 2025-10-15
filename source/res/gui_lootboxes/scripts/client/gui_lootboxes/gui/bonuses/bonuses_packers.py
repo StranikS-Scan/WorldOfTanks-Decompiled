@@ -430,6 +430,7 @@ class LootBoxVehiclesBonusUIPacker(VehiclesBonusUIPacker):
         model.setIsRent(vehicle.isRented)
         model.setInInventory(vehicle.isInInventory)
         model.setWasSold(vehicle.restoreInfo is not None)
+        model.setIntCD(vehicle.intCD)
         if isRent:
             model.setRentDays(bonus.getRentDays(vehInfo) or 0)
             model.setRentBattles(bonus.getRentBattles(vehInfo) or 0)

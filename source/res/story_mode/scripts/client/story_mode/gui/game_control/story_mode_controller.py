@@ -118,6 +118,7 @@ class StoryModeController(IStoryModeController, IGlobalListener):
         g_playerEvents.onClientUpdated += self.__onClientUpdated
         g_playerEvents.onAvatarBecomeNonPlayer += self.__onAvatarBecomeNonPlayer
         g_playerEvents.onConfigModelUpdated += self.__configModelUpdateHandler
+        g_playerEvents.onBattleResultsReceived += self.__onBattleResultsReceived
         g_eventBus.addListener(events.PrebattleEvent.NOT_SWITCHED, self.__unsuccessfulSwitchHandler, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def fini(self):
@@ -127,6 +128,7 @@ class StoryModeController(IStoryModeController, IGlobalListener):
         g_playerEvents.onClientUpdated -= self.__onClientUpdated
         g_playerEvents.onAvatarBecomeNonPlayer -= self.__onAvatarBecomeNonPlayer
         g_playerEvents.onConfigModelUpdated -= self.__configModelUpdateHandler
+        g_playerEvents.onBattleResultsReceived -= self.__onBattleResultsReceived
         g_eventBus.removeListener(events.PrebattleEvent.NOT_SWITCHED, self.__unsuccessfulSwitchHandler, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onDisconnected(self):
@@ -253,6 +255,9 @@ class StoryModeController(IStoryModeController, IGlobalListener):
             self.__isNameFormatterSubstituted = False
             self._sessionProvider.getCtx().resetPlayerFullNameFormatter()
 
+    def __onBattleResultsReceived(self, *args):
+        self.__closeExcessiveWindows()
+
     def __configModelUpdateHandler(self, schemaName):
         if schemaName == STORY_MODE_GAME_PARAMS_KEY:
             if not self.isEnabled():
@@ -292,7 +297,6 @@ class StoryModeController(IStoryModeController, IGlobalListener):
         self._appLoader.getWaitingWorker().hide(R.strings.waiting.exit_battle())
         if app is not None and app.initialized:
             self.__requestBattleResults(lastArenaUniqueId)
-            self.__closeExcessiveWindows()
         else:
 
             def _onAppInitialized(event):

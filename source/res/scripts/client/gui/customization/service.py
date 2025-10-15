@@ -37,7 +37,7 @@ from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from skeletons.gui.shared.utils import IHangarSpace
-from items.components.c11n_constants import SeasonType, ApplyArea, CUSTOM_STYLE_POOL_ID, OUTFIT_POOL_EMPTY_STUB
+from items.components.c11n_constants import SeasonType, ApplyArea, CUSTOM_STYLE_POOL_ID, OUTFIT_POOL_EMPTY_STUB, CustomizationType
 from vehicle_systems.stricted_loading import makeCallbackWeak
 from vehicle_systems.camouflages import getStyleProgressionOutfit
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -91,7 +91,9 @@ class _ServiceHelpersMixin(object):
         return self.itemsFactory.createOutfit(component=component, vehicleCD=vehicleCD)
 
     def getOutfitByStyleId(self, vehicleCD, styleId):
-        component = CustomizationOutfit(styleId=styleId)
+        styleIntCD = vehicles.makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, styleId)
+        style = vehicles.getItemByCompactDescr(styleIntCD)
+        component = style.outfits[1]
         return self.itemsFactory.createOutfit(component=component, vehicleCD=vehicleCD)
 
     def tryOnOutfit(self, outfit):

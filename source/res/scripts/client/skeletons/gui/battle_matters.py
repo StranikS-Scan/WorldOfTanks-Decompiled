@@ -67,11 +67,17 @@ class IBattleMattersController(object):
     def isActive(self):
         raise NotImplementedError
 
+    def isValidConfiguration(self):
+        raise NotImplementedError
+
     @property
     def progressWatcher(self):
         raise NotImplementedError
 
-    def hasDelayedRewards(self):
+    def hasUnobtainedDelayedRewards(self):
+        raise NotImplementedError
+
+    def hasDelayedRewardToken(self, delayedRewardToken):
         raise NotImplementedError
 
     def hasDelayedRewardsInQuest(self, quest):
@@ -125,14 +131,29 @@ class IBattleMattersController(object):
     def getQuestProgress(self, quest):
         raise NotImplementedError
 
-    def getSelectedVehicle(self):
+    def getSelectedVehicle(self, delayedRewardToken):
         raise NotImplementedError
 
     def hasAccessToken(self):
         raise NotImplementedError
 
-    def getDelayedRewardCurrencyToken(self):
+    def getDelayedRewardCurrencyTokens(self):
         raise NotImplementedError
 
-    def getDelayedRewardToken(self):
+    def getDelayedRewardExpirationTime(self):
+        raise NotImplementedError
+
+    def isDelayedRewardToken(self, token):
+        raise NotImplementedError
+
+    def isDelayedRewardObtained(self, delayedRewardToken):
+        raise NotImplementedError
+
+    def getDelayedRewardProperties(self, delayedRewardToken):
+        raise NotImplementedError
+
+    def getDelayedRewardVehiclesLevel(self, delayedRewardToken):
+        raise NotImplementedError
+
+    def getABTestConfiguration(self):
         raise NotImplementedError

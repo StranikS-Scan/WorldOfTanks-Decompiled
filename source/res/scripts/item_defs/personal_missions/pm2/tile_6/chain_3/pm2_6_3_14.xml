@@ -1,0 +1,112 @@
+<pm2_6_3_14.xml>
+  <quests>
+    <personalMissionQuest>
+      <enabled>	true	</enabled>
+      <id>	pm2_6_3_14_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <key>	damageAssistedTrack	</key>
+              <greaterOrEqual>	800	</greaterOrEqual>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <premium_plus>	1	</premium_plus>
+        <freeXP>	2500	</freeXP>
+        <token>
+          <id>	token:pt:final:s2:t6:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </personalMissionQuest>
+    <personalMissionQuest>
+      <enabled>	true	</enabled>
+      <id>	pm2_6_3_14_main_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	pm2_6_3_14_main_award_list	</id>
+              <equal>	1	</equal>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <premium_plus>	1	</premium_plus>
+        <freeXP>	2500	</freeXP>
+        <token>
+          <id>	token:pt:final:s2:t6:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </personalMissionQuest>
+    <personalMissionQuest>
+      <enabled>	true	</enabled>
+      <id>	pm2_6_3_14_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <key>	damageAssistedTrack	</key>
+              <greaterOrEqual>	800	</greaterOrEqual>
+            </results>
+            <win></win>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <premium_plus>	1	</premium_plus>
+        <token>
+          <id>	token:pt:final:s2:t6:add	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </personalMissionQuest>
+    <personalMissionQuest>
+      <enabled>	true	</enabled>
+      <id>	pm2_6_3_14_add_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	pm2_6_3_14_main_award_list	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+        <postBattle>
+          <and>
+            <results>
+              <key>	damageAssistedTrack	</key>
+              <greaterOrEqual>	800	</greaterOrEqual>
+            </results>
+            <win></win>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	free_award_list_2	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </personalMissionQuest>
+  </quests>
+</pm2_6_3_14.xml>

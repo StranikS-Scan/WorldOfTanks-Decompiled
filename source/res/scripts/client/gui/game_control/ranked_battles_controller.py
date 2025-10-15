@@ -356,6 +356,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     def vehicleIsAvailableForBuy(self):
         criteria = self.__filterEnabledVehiclesCriteria(REQ_CRITERIA.UNLOCKED)
         criteria |= ~REQ_CRITERIA.VEHICLE.SECRET | ~REQ_CRITERIA.HIDDEN
+        criteria |= ~REQ_CRITERIA.VEHICLE.PREMIUM | ~REQ_CRITERIA.COLLECTIBLE
         vUnlocked = self.__itemsCache.items.getVehicles(criteria)
         return len(vUnlocked) > 0
 

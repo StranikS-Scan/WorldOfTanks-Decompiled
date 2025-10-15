@@ -26,7 +26,6 @@ from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.MAPBOX_ALIASES import MAPBOX_ALIASES
-from gui.Scaleform.genConsts.EVENT_BATTLES_ALIASES import EVENT_BATTLES_ALIASES
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
@@ -76,7 +75,6 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 from th_async import th_async, th_await
-from skeletons.gui.game_control import IWhiteTigerController
 if typing.TYPE_CHECKING:
     from typing import Callable, Dict, Generator, Iterable, List, Union, Tuple, Optional
     from gui.marathon.marathon_event import MarathonEvent
@@ -94,19 +92,6 @@ class SettingsTabIndex(object):
     AIM = 4
     MARKERS = 5
     FEEDBACK = 6
-
-
-def closePostbattleWindow():
-
-    def filterFunc(window):
-        if window.content is None:
-            return False
-        else:
-            return True if window.content.layoutID == R.views.white_tiger.lobby.postbattle.PostbattleScreen() else None
-
-    uiLoader = dependency.instance(IGuiLoader)
-    for window in uiLoader.windowsManager.findWindows(filterFunc):
-        window.destroy()
 
 
 def showBattleResultsWindow(arenaUniqueID):
@@ -147,10 +132,6 @@ def showRankedBattleIntro():
 
 def showEpicBattlesPrimeTimeWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(EPICBATTLES_ALIASES.EPIC_BATTLES_PRIME_TIME_ALIAS), ctx={}), EVENT_BUS_SCOPE.LOBBY)
-
-
-def showEventBattlesPrimeTimeWindow():
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(EVENT_BATTLES_ALIASES.EVENT_PRIME_TIME_VIEW), ctx={}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showEpicBattlesAfterBattleWindow(levelUpInfo, parent=None):
@@ -201,7 +182,7 @@ def showBattleRoyaleResultsInfo(ctx):
             return
         battleResultView.destroyWindow()
     view = BrBattleResultsViewInLobby(ctx=ctx)
-    window = LobbyNotificationWindow(WindowFlags.WINDOW_FULLSCREEN, content=view, layer=view.layer)
+    window = LobbyNotificationWindow(content=view)
     window.load()
     return
 
@@ -569,6 +550,8 @@ def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, v
             viewAlias = VIEW_ALIAS.RENTAL_VEHICLE_PREVIEW
         elif vehicle.isEarlyAccess:
             viewAlias = VIEW_ALIAS.EARLY_ACCESS_VEHICLE_PREVIEW
+        elif vehicle.isStatTrack:
+            viewAlias = VIEW_ALIAS.STAT_TRACK_VEHICLE_PREVIEW
         else:
             viewAlias = VIEW_ALIAS.VEHICLE_PREVIEW
         app = dependency.instance(IAppLoader).getApp()
@@ -605,9 +588,11 @@ def showVehiclePreviewWithoutBottomPanel(vehCD, backCallback=None, **kwargs):
      'subscriptions': kwargs.get('subscriptions')}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showDelayedReward():
+def showDelayedReward(delayedRewardToken=None, forceCreate=False):
     kwargs = {'tab': QUESTS_ALIASES.BATTLE_MATTERS_VIEW_PY_ALIAS,
-     'openVehicleSelection': True}
+     'openVehicleSelection': True,
+     'tokenID': delayedRewardToken,
+     'forceCreate': forceCreate}
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_MISSIONS), ctx=kwargs), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
@@ -734,17 +719,14 @@ def showClanSendInviteWindow(clanDbID):
 def selectVehicleInHangar(itemCD, loadHangar=True):
     from CurrentVehicle import g_currentVehicle
     itemsCache = dependency.instance(IItemsCache)
-    wtController = dependency.instance(IWhiteTigerController)
     veh = itemsCache.items.getItemByCD(int(itemCD))
     if not veh.isInInventory:
         raise SoftException('Vehicle (itemCD={}) must be in inventory.'.format(itemCD))
     g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.SELECT_VEHICLE_IN_HANGAR, ctx={'vehicleInvID': veh.invID,
      'prevVehicleInvID': g_currentVehicle.invID}), scope=EVENT_BUS_SCOPE.LOBBY)
-    if loadHangar:
-        if wtController.isEventPrbActive():
-            wtController.doLeaveEventPrb()
-        showHangar()
     g_currentVehicle.selectVehicle(veh.invID)
+    if loadHangar:
+        showHangar()
 
 
 def showCrewAboutView(navigateFrom=None):
@@ -937,7 +919,6 @@ def showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, params=N
     if url:
         if browserParams is None:
             browserParams = {}
-        url = GUI_SETTINGS.checkAndReplaceWebBridgeMacros(url)
         url = yield URLMacros().parse(url, params=params)
         g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(alias, parent=parent), ctx={'url': url,
          'allowRightClick': False,
@@ -976,6 +957,12 @@ def showSeniorityRewardAwardWindow(completedQuests, data, notificationMgr=None):
     from gui.impl.lobby.seniority_awards.seniority_reward_award_view import SeniorityRewardAwardWindow
     window = SeniorityRewardAwardWindow(completedQuests, data, R.views.lobby.seniority_awards.SeniorityAwardsView())
     notificationMgr.append(WindowNotificationCommand(window))
+
+
+def showSeniorityVehicleSelectorWindow(giftToken):
+    from gui.impl.lobby.seniority_awards.vehicle_selector import VehicleSelectorWindow
+    window = VehicleSelectorWindow(giftToken)
+    window.load()
 
 
 @dependency.replace_none_kwargs(battlePassController=IBattlePassController)
@@ -1031,25 +1018,6 @@ def showStylePreview(vehCD, style, descr='', backCallback=None, backBtnDescrLabe
      'topPanelData': kwargs.get('topPanelData'),
      'itemsPack': kwargs.get('itemsPack'),
      'outfit': kwargs.get('outfit')}), scope=EVENT_BUS_SCOPE.LOBBY)
-
-
-def showEventStorageWindow(parent=None):
-    from white_tiger.gui.impl.lobby.wt_event_storage import WtEventStorageWindow
-    uiLoader = dependency.instance(IGuiLoader)
-    contentResId = R.views.white_tiger.lobby.PortalView()
-    if uiLoader.windowsManager.getViewByLayoutID(contentResId) is None:
-        window = WtEventStorageWindow(parent=parent)
-        window.load()
-    return
-
-
-def isViewLoaded(layoutID):
-    uiLoader = dependency.instance(IGuiLoader)
-    if not uiLoader or not uiLoader.windowsManager:
-        return False
-    else:
-        view = uiLoader.windowsManager.getViewByLayoutID(layoutID)
-        return view is not None
 
 
 def showStyleProgressionPreview(vehCD, style, descr, backCallback, backBtnDescrLabel='', *args, **kwargs):
@@ -1175,7 +1143,6 @@ def showDynamicButtonInfoDialogBuilder(resources, icon, formattedMessage, parent
     builder.setIcon(icon)
     builder.setFormattedMessage(formattedMessage)
     result = yield th_await(dialogs.showSimple(builder.build(parent)))
-    g_eventBus.handleEvent(events.LobbySimpleEvent(events.HangarSimpleEvent.CLOSE_CONFIRM_DIALOG), scope=EVENT_BUS_SCOPE.LOBBY)
     raise AsyncReturn(result)
 
 
@@ -1344,13 +1311,13 @@ def showOfferGiftDialog(offerID, giftID, cdnTitle='', callback=None):
 
 
 @th_async
-def showBonusDelayedConfirmationDialog(vehicle, callback=None):
+def showBonusDelayedConfirmationDialog(vehicle, delayedRewardToken, callback=None):
     from gui.impl.dialogs import dialogs
     from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindowWrapper
     from gui.impl.lobby.battle_matters.battle_matters_exchange_rewards import BattleMattersExchangeRewards
     vehicleUserName = vehicle.userName
     vehicleName = getNationLessName(vehicle.name)
-    result = yield th_await(dialogs.showSimple(FullScreenDialogWindowWrapper(BattleMattersExchangeRewards(vehicleName, vehicleUserName))))
+    result = yield th_await(dialogs.showSimple(FullScreenDialogWindowWrapper(BattleMattersExchangeRewards(vehicleName, vehicleUserName, delayedRewardToken))))
     callback(result)
 
 

@@ -45,10 +45,9 @@ class OptDeviceInteractor(BaseOptDeviceInteractor):
     def getChangedList(self):
         setOfPrevLayout = set((item.intCD for item in self.getInstalledLayout() if item is not None))
         currentItems = []
-        vehicle = self.getItem()
         for slotID, item in enumerate(self.getCurrentLayout()):
             if item and item.intCD not in setOfPrevLayout:
-                if self.__canInstall(item, vehicle):
+                if self.__canInstall(item):
                     currentItems.append(item)
                 else:
                     self.setItemInCurrentLayout(slotID, None)
@@ -201,10 +200,5 @@ class OptDeviceInteractor(BaseOptDeviceInteractor):
         raise AsyncReturn(result)
         return
 
-    def __canInstall(self, item, vehicle):
-        if item.isHidden and not item.isRegular:
-            isInInventory = item.isInInventory
-            if vehicle.isPostProgressionExists:
-                return isInInventory or self.getSetupLayout().getIntCDs().count(item.intCD) > 0
-            return isInInventory
-        return True
+    def __canInstall(self, item):
+        return item.isInInventory or self.getSetupLayout().isInSetup(item) if item.isHidden and not item.isRegular else True

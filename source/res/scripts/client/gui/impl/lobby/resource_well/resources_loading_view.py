@@ -29,7 +29,8 @@ from skeletons.gui.shared import IItemsCache
 _FULL_PROGRESS = 100
 _PROGRESSION_STATE_MAPPING = {resource_well_constants.ProgressionState.ACTIVE: ProgressionState.ACTIVE,
  resource_well_constants.ProgressionState.NO_PROGRESS: ProgressionState.NOPROGRESS,
- resource_well_constants.ProgressionState.NO_VEHICLES: ProgressionState.NOVEHICLES}
+ resource_well_constants.ProgressionState.NO_VEHICLES: ProgressionState.NOVEHICLES,
+ resource_well_constants.ProgressionState.BEFORE_EVENT: ProgressionState.BEFOREEVENT}
 
 class ResourcesLoadingView(ViewImpl):
     __slots__ = ('__resources', '__tooltips')

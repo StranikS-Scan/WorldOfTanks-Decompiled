@@ -2,13 +2,15 @@
 # Embedded file name: scripts/client/messenger/formatters/collections_by_type.py
 from chat_shared import SYS_MESSAGE_TYPE as _SM_TYPE
 from gui.gift_system.proxy import GiftSystemMessagesProxy
-from gui.shared.system_factory import registerMessengerClientFormatter, registerTokenQuestsSubFormatters, registerMessengerServerFormatter, registerConvertersSubFormatter
+from gui.shared.system_factory import registerMessengerClientFormatter, registerTokenQuestsSubFormatters, registerMessengerServerFormatter, registerConvertersSubFormatter, registerServiceChannelSubformatter
 from messenger.formatters import service_channel as _sc
 from messenger.formatters import wot_plus as _wotPlusFormatters
 from messenger.formatters import token_quest_subformatters
 from messenger.formatters.new_year_post_event.converter_formatters import NewYearMandarinsConverterFormatter
 from messenger.formatters.daily_quests_initial_event.converter_formatters import DailyQuestsEpicCompensationFormatter
+from messenger.formatters.service_channel import QuestAchievesFormatter, SeniorityAwardsCompensationExtQuestAchievesSubFormatter, IQuestAchievesSubformatter
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
+registerServiceChannelSubformatter((QuestAchievesFormatter, IQuestAchievesSubformatter), SeniorityAwardsCompensationExtQuestAchievesSubFormatter)
 registerTokenQuestsSubFormatters((token_quest_subformatters.LootBoxTokenQuestFormatter(),
  token_quest_subformatters.RecruitQuestsFormatter(),
  token_quest_subformatters.RankedSeasonTokenQuestFormatter(),
@@ -21,7 +23,6 @@ registerTokenQuestsSubFormatters((token_quest_subformatters.LootBoxTokenQuestFor
  token_quest_subformatters.WotPlusAttendanceRewardsFormatterTestSMViewer(),
  token_quest_subformatters.BattleMattersAwardsFormatter(),
  token_quest_subformatters.Comp7RewardsFormatter(),
- token_quest_subformatters.WtEventProgressionQuestFormatter(),
  token_quest_subformatters.CrewPerksFormatter(),
  token_quest_subformatters.ParagonsTokenQuestsSubformatter()))
 registerConvertersSubFormatter('newYear25', NewYearMandarinsConverterFormatter)
@@ -56,7 +57,7 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.fortEvent.index(): _sc.StrongholdMessageFormatter(),
  _SM_TYPE.vehicleRented.index(): _sc.VehicleRentedFormatter(),
  _SM_TYPE.rentalsExpired.index(): _sc.RentalsExpiredFormatter(),
- _SM_TYPE.potapovQuestBonus.index(): _sc.TokenQuestsFormatter(subFormatters=_PERSONAL_MISSIONS_SUB_FORMATTERS),
+ _SM_TYPE.pmQuestBonus.index(): _sc.TokenQuestsFormatter(subFormatters=_PERSONAL_MISSIONS_SUB_FORMATTERS),
  _SM_TYPE.goodieRemoved.index(): _sc.GoodyRemovedFormatter(),
  _SM_TYPE.goodieDisabled.index(): _sc.GoodyDisabledFormatter(),
  _SM_TYPE.goodieEnabled.index(): _sc.GoodieEnabledFormatter(),
@@ -165,7 +166,7 @@ def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.fortEvent.index(), _sc.StrongholdMessageFormatter())
     registerMessengerServerFormatter(_SM_TYPE.vehicleRented.index(), _sc.VehicleRentedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.rentalsExpired.index(), _sc.RentalsExpiredFormatter())
-    registerMessengerServerFormatter(_SM_TYPE.potapovQuestBonus.index(), _sc.TokenQuestsFormatter(subFormatters=_PERSONAL_MISSIONS_SUB_FORMATTERS))
+    registerMessengerServerFormatter(_SM_TYPE.pmQuestBonus.index(), _sc.TokenQuestsFormatter(subFormatters=_PERSONAL_MISSIONS_SUB_FORMATTERS))
     registerMessengerServerFormatter(_SM_TYPE.goodieRemoved.index(), _sc.GoodyRemovedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.goodieDisabled.index(), _sc.GoodyDisabledFormatter())
     registerMessengerServerFormatter(_SM_TYPE.goodieEnabled.index(), _sc.GoodieEnabledFormatter())

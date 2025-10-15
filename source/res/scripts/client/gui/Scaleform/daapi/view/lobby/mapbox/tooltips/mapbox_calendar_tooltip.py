@@ -8,7 +8,6 @@ from gui.shared.tooltips.common import BlocksTooltipData
 from helpers import dependency, time_utils
 from skeletons.gui.game_control import IMapboxController
 from gui.shared.formatters import text_styles
-from gui.shared.formatters.time_formatters import getShortFormatDate
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 
 class MapboxCalendarTooltip(BlocksTooltipData):
@@ -28,7 +27,11 @@ class MapboxCalendarTooltip(BlocksTooltipData):
 
     def __getCurrentSeasonDate(self):
         currentSeason = self.__mapboxCtrl.getCurrentSeason()
-        return getShortFormatDate(currentSeason.getEndDate()) if currentSeason is not None else ''
+        return self.__getDate(currentSeason.getEndDate()) if currentSeason is not None else ''
+
+    def __getDate(self, date):
+        timeStamp = time_utils.makeLocalServerTime(date)
+        return backport.getShortDateFormat(timeStamp)
 
     def __packTimeTableHeaderBlock(self):
         return formatters.packImageTextBlockData(title=text_styles.highTitle(backport.text(R.strings.mapbox.selector.tooltip.title())), img=backport.image(R.images.gui.maps.icons.buttons.calendar()), imgPadding=formatters.packPadding(top=5), txtPadding=formatters.packPadding(left=10))

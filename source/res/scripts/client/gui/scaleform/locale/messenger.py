@@ -494,8 +494,6 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_OFFERTOKENBONUS_TITLE = '#messenger:serviceChannelMessages/offerTokenBonus/title'
     SERVICECHANNELMESSAGES_OFFERTOKENBONUS_ALTERNATIVETITLE = '#messenger:serviceChannelMessages/offerTokenBonus/alternativeTitle'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_LBKEYSACCRUED = '#messenger:serviceChannelMessages/invoiceReceived/lbKeysAccrued'
-    SERVICECHANNELMESSAGES_EVENT_LOOTBOXES = '#messenger:serviceChannelMessages/event/lootboxes'
-    SERVICECHANNELMESSAGES_EVENT_TICKETS = '#messenger:serviceChannelMessages/event/tickets'
     SERVICECHANNELMESSAGES_DURATIONOFPREMIUMACCOUNTEXPIRES = '#messenger:serviceChannelMessages/durationOfPremiumAccountExpires'
     SERVICECHANNELMESSAGES_PREMIUMBOUGHT = '#messenger:serviceChannelMessages/premiumBought'
     SERVICECHANNELMESSAGES_PREMIUMEXTENDED = '#messenger:serviceChannelMessages/premiumExtended'
@@ -1240,6 +1238,8 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_PLAYSTREAKFREEZES_BODY = '#messenger:serviceChannelMessages/playStreakFreezes/body'
     SERVICECHANNELMESSAGES_PLAYSTREAKFREEZESINPROGRESS_BODY = '#messenger:serviceChannelMessages/playStreakFreezesInProgress/body'
     SERVICECHANNELMESSAGES_PLAYSTREAKFREEZESEND_BODY = '#messenger:serviceChannelMessages/playStreakFreezesEnd/body'
+    PLATFORMCURRENCYMSG_RECEIVED_RAZLOM_COIN = '#messenger:platformCurrencyMsg/received/razlom_coin'
+    PLATFORMCURRENCYMSG_DEBITED_RAZLOM_COIN = '#messenger:platformCurrencyMsg/debited/razlom_coin'
     CLIENT_ERROR_SHARED_ENUM = (CLIENT_ERROR_SHARED_TRY_LATER,
      CLIENT_ERROR_SHARED_GENERIC,
      CLIENT_ERROR_SHARED_LOCKED,

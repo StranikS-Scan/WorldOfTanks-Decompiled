@@ -88,7 +88,7 @@ class SettingsParams(object):
         diff = self.__settingsDiffPreprocessing(diff)
         applyMethod = self.getApplyMethod(diff)
         self.settingsCore.applySettings(diff)
-        confirmators = self.settingsCore.applyStorages(restartApproved, force=False)
+        confirmators = self.settingsCore.applyStorages(restartApproved)
         self.settingsCore.confirmChanges(confirmators)
         if set(graphics.GRAPHICS_SETTINGS.ALL()) & set(diff.keys()):
             BigWorld.commitPendingGraphicsSettings()
@@ -102,7 +102,7 @@ class SettingsParams(object):
         havokSetting = diff.get('HAVOK_ENABLED', None)
         if havokSetting is not None:
             if havokSetting:
-                requiresNextBattle = not BigWorld.wg_isDestrCanBeActivated()
+                requiresNextBattle = not BigWorld.isDestrCanBeActivated()
         restartNeeded = nextVideoMode == BigWorld.WindowModeExclusiveFullscreen and newMonitorIndex != g_monitorSettings.noRestartExclusiveFullscreenMonitorIndex
         if restartNeeded:
             method = options.APPLY_METHOD.RESTART

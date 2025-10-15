@@ -39,8 +39,6 @@ try:
 except locale.Error:
     LOG_CURRENT_EXCEPTION()
 
-sys.setrecursionlimit(sys.getrecursionlimit() + 1000)
-
 class ServiceLocator(object):
     connectionMgr = dependency.descriptor(IConnectionManager)
     gameplay = dependency.descriptor(IGameplayLogic)
@@ -68,7 +66,7 @@ def init(scriptConfig, engineConfig, userPreferences):
             autoFlushPythonLog()
             from development_features import initDevBonusTypes
             initDevBonusTypes()
-        BigWorld.wg_initCustomSettings()
+        BigWorld.initCustomSettings()
         Settings.g_instance = Settings.Settings(scriptConfig, engineConfig, userPreferences)
         CommandMapping.g_instance = CommandMapping.CommandMapping()
         gameLoading.step()
@@ -241,8 +239,6 @@ def fini():
     ServiceLocator.connectionMgr.onConnected -= onConnected
     ServiceLocator.connectionMgr.onDisconnected -= onDisconnected
     MessengerEntry.g_instance.fini()
-    from helpers import ValueTracker
-    ValueTracker.ValueTracker.fini()
     from helpers import EdgeDetectColorController
     if EdgeDetectColorController.g_instance is not None:
         EdgeDetectColorController.g_instance.destroy()
@@ -391,7 +387,7 @@ def handleKeyEvent(event):
         if inputHandler is not None:
             if inputHandler.handleKeyEvent(event):
                 return True
-        for handler in g_keyEventHandlers.copy():
+        for handler in g_keyEventHandlers:
             try:
                 if handler(event):
                     return True

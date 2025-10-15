@@ -8,7 +8,7 @@
     <price>	4500	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <tags>	heavyTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user preferential	</tags>
     <level>	5	</level>
   </A21_T14>
   <A03_M3_Stuart>
@@ -398,7 +398,7 @@
     <price>	8000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_sniper HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <tags>	mediumTank role_MT_sniper HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user preferential	</tags>
     <level>	7	</level>
   </A86_T23E3>
   <A78_M4_Improved>
@@ -432,7 +432,7 @@
     <price>	11000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_assault HD mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <tags>	mediumTank role_MT_assault HD mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user preferential	</tags>
     <level>	8	</level>
   </A80_T26_E4_SuperPershing>
   <A85_T110E3>
@@ -1001,7 +1001,6 @@
     <longDescriptionSpecial>	#usa_vehicles:A136_T42_long_special	</longDescriptionSpecial>
     <price>	11000	  <gold></gold>
     </price>
-    <notInShop>	true	</notInShop>
     <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </A136_T42>
@@ -1077,7 +1076,7 @@
     <price>	4500	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank HD disabledInRoaming improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <tags>	mediumTank HD disabledInRoaming improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user preferential	</tags>
     <level>	5	</level>
   </A44_M4A2E4>
   <A45_M6A2E1>
@@ -1089,7 +1088,7 @@
     <notInShop>	true	</notInShop>
     <price>	11000	  <gold></gold>
     </price>
-    <tags>	heavyTank role_HT_assault HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <tags>	heavyTank role_HT_assault HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user preferential	</tags>
     <level>	8	</level>
   </A45_M6A2E1>
   <A43_M22_Locust>
@@ -1139,7 +1138,7 @@
     <price>	2500	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
+    <tags>	lightTank HD improvedVentilation_class3_user extraHealthReserve_class3_user preferential	</tags>
     <level>	2	</level>
   </A93_T7_Combat_Car>
   <A83_T110E4_7x7>
@@ -1375,6 +1374,7 @@
     <longDescriptionSpecial>	#usa_vehicles:A115_Chrysler_K_long_special	</longDescriptionSpecial>
     <price>	11000	  <gold></gold>
     </price>
+    <notInShop>	true	</notInShop>
     <tags>	heavyTank role_HT_assault HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </A115_Chrysler_K>
@@ -1806,20 +1806,9 @@
     <price>	6000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	AT-SPG role_ATSPG_universal HD mediumAT-SPG tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank	</tags>
+    <tags>	AT-SPG role_ATSPG_sniper HD mediumAT-SPG tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	6	</level>
   </A174_M36B1_GMC>
-  <A120_M48A5_hound_TLXXL>
-    <id>	254	</id>
-    <userString>	#usa_vehicles:A120_M48A5_hound_TLXXL	</userString>
-    <description>	#usa_vehicles:A120_M48A5_hound_TLXXL_descr	</description>
-    <shortUserString>	#usa_vehicles:A120_M48A5_hound_TLXXL_short	</shortUserString>
-    <shortDescriptionSpecial>	#usa_vehicles:A120_M48A5_hound_TLXXL_short_special	</shortDescriptionSpecial>
-    <price>	6100000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_universal wt_hunter event_battles special secret HD lockCrew lockCrewSkills lockOutfit lockShells lockDevices cannot_be_sold unrecoverable earn_crystals builtinSelfRepair_wt_user builtinStronghold_wt_user builtinRepairkit_wt_user builtinLargeMedkit_wt_user builtinUnionStrength_wt_user mode_hidden hideStorage hideCrew noSortBuiltinEquipment	</tags>
-    <level>	10	</level>
-  </A120_M48A5_hound_TLXXL>
   <A164_TS_6>
     <id>	31012	</id>
     <userString>	#usa_vehicles:A164_TS_6	</userString>
@@ -1861,6 +1850,32 @@
     <tags>	mediumTank role_MT_universal private epic_battles HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </A35_Pershing_FL>
+  <A175_OTAC_MT_58>
+    <id>	31015	</id>
+    <userString>	#usa_vehicles:A175_OTAC_MT_58	</userString>
+    <shortUserString>	#usa_vehicles:A175_OTAC_MT_58_short	</shortUserString>
+    <description>	#usa_vehicles:A175_OTAC_MT_58_descr	</description>
+    <shortDescriptionSpecial>	#usa_vehicles:A175_OTAC_MT_58_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:A175_OTAC_MT_58_long_special	</longDescriptionSpecial>
+    <price>	25000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_universal HD special improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user earn_crystals secret testTank lockOutfit	</tags>
+    <level>	10	</level>
+  </A175_OTAC_MT_58>
+  <A23_M7_med_02>
+    <id>	31016	</id>
+    <userString>	#usa_vehicles:A23_M7_med_02	</userString>
+    <shortUserString>	#usa_vehicles:A23_M7_med_02_short	</shortUserString>
+    <description>	#usa_vehicles:A23_M7_med_02_descr	</description>
+    <shortDescriptionSpecial>	#usa_vehicles:A23_M7_med_02_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:A23_M7_med_02_long_special	</longDescriptionSpecial>
+    <price>	4500	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank HD scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_light_user restoreWithStyle lockOutfit	</tags>
+    <level>	5	</level>
+  </A23_M7_med_02>
   <A150_MBT_B_T>
     <id>	35001	</id>
     <userString>	#usa_vehicles:A150_MBT_B_T	</userString>
@@ -1874,4 +1889,56 @@
     <tags>	heavyTank role_HT_support HD improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user special earn_crystals secret testTank lockOutfit	</tags>
     <level>	11	</level>
   </A150_MBT_B_T>
+  <A1001_OTAC_MT_58_T>
+    <id>	35002	</id>
+    <userString>	#usa_vehicles:A1001_OTAC_MT_58_T	</userString>
+    <shortUserString>	#usa_vehicles:A1001_OTAC_MT_58_T_short	</shortUserString>
+    <description>	#usa_vehicles:A1001_OTAC_MT_58_T_descr	</description>
+    <shortDescriptionSpecial>	#usa_vehicles:A1001_OTAC_MT_58_T_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:A1001_OTAC_MT_58_T_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_universal HD special improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user earn_crystals secret testTank lockOutfit	</tags>
+    <level>	10	</level>
+  </A1001_OTAC_MT_58_T>
+  <A67_T57_58_ISP>
+    <id>	37000	</id>
+    <userString>	#usa_vehicles:T57_58_ISP	</userString>
+    <shortUserString>	#usa_vehicles:T57_58_ISP_short	</shortUserString>
+    <description>	#usa_vehicles:T57_58_ISP_descr	</description>
+    <shortDescriptionSpecial>	#usa_vehicles:T57_58_ISP_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:T57_58_ISP_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_support HD heavyTank2 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals private special secret lockCrew lockCrewSkills lockOutfit cannot_be_sold testTank fun_random	</tags>
+    <level>	10	</level>
+  </A67_T57_58_ISP>
+  <A83_T110E4_ISP>
+    <id>	37001	</id>
+    <userString>	#usa_vehicles:T110E4_ISP	</userString>
+    <shortUserString>	#usa_vehicles:T110E4_ISP_short	</shortUserString>
+    <description>	#usa_vehicles:T110E4_ISP_descr	</description>
+    <shortDescriptionSpecial>	#usa_vehicles:T110E4_ISP_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:T110E4_ISP_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals private special secret lockCrew lockCrewSkills lockOutfit cannot_be_sold testTank fun_random	</tags>
+    <level>	10	</level>
+  </A83_T110E4_ISP>
+  <A85_T110E3_ISP>
+    <id>	37002	</id>
+    <userString>	#usa_vehicles:T110E3_ISP	</userString>
+    <shortUserString>	#usa_vehicles:T110E3_ISP_short	</shortUserString>
+    <description>	#usa_vehicles:T110E3_ISP_descr	</description>
+    <shortDescriptionSpecial>	#usa_vehicles:T110E3_ISP_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:T110E3_ISP_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals private special secret lockCrew lockCrewSkills lockOutfit cannot_be_sold testTank fun_random	</tags>
+    <level>	10	</level>
+  </A85_T110E3_ISP>
 </list.xml>

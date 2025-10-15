@@ -8,7 +8,7 @@ class BattleMattersVehicleSelectionViewModel(ViewModel):
     __slots__ = ('onGoBack', 'onShowVehicle', 'onCompareVehicle', 'onResetFilter')
     ARG_VEHICLE_ID = 'vehCD'
 
-    def __init__(self, properties=3, commands=4):
+    def __init__(self, properties=4, commands=4):
         super(BattleMattersVehicleSelectionViewModel, self).__init__(properties=properties, commands=commands)
 
     def getEndDate(self):
@@ -23,11 +23,17 @@ class BattleMattersVehicleSelectionViewModel(ViewModel):
     def setTotalVehiclesCount(self, value):
         self._setNumber(1, value)
 
+    def getLevel(self):
+        return self._getNumber(2)
+
+    def setLevel(self, value):
+        self._setNumber(2, value)
+
     def getVehicles(self):
-        return self._getArray(2)
+        return self._getArray(3)
 
     def setVehicles(self, value):
-        self._setArray(2, value)
+        self._setArray(3, value)
 
     @staticmethod
     def getVehiclesType():
@@ -37,6 +43,7 @@ class BattleMattersVehicleSelectionViewModel(ViewModel):
         super(BattleMattersVehicleSelectionViewModel, self)._initialize()
         self._addNumberProperty('endDate', 0)
         self._addNumberProperty('totalVehiclesCount', 0)
+        self._addNumberProperty('level', 0)
         self._addArrayProperty('vehicles', Array())
         self.onGoBack = self._addCommand('onGoBack')
         self.onShowVehicle = self._addCommand('onShowVehicle')

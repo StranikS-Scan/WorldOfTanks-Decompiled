@@ -16,6 +16,7 @@ from AvatarInputHandler import AimingSystems
 from AvatarInputHandler import aih_global_binding
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
+from helpers_common import computeDistanceFactor
 from math_utils import almostZero
 from items.components.component_constants import MODERN_HE_PIERCING_POWER_REDUCTION_FACTOR_FOR_SHIELDS, MODERN_HE_DAMAGE_ABSORPTION_FACTOR
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -255,6 +256,7 @@ class _CrosshairShotResults(object):
             maxDist = vDesc.shot.maxDistance
             dist = (hitPoint - player.getOwnVehiclePosition()).length
             fullPiercingPower = cls._computePiercingPowerAtDist(ppDesc, dist, maxDist, piercingMultiplier)
+            fullPiercingPower *= computeDistanceFactor(shell, dist, 'pierceFactor')
             collisionsDetails = cls._getAllCollisionDetails(hitPoint, direction, entity)
             if collisionsDetails is None:
                 cls.__sendDebugInfo([])

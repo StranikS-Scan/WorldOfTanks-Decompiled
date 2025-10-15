@@ -1,0 +1,116 @@
+<regular_3_3_13.xml>
+  <quests>
+    <personalMissionQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_3_3_13_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <vehicleDamage>
+              <greaterOrEqual>	4500	</greaterOrEqual>
+            </vehicleDamage>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <premium_plus>	1	</premium_plus>
+        <freeXP>	2000	</freeXP>
+        <token>
+          <id>	token:pt:final:s1:t3:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </personalMissionQuest>
+    <personalMissionQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_3_3_13_main_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_3_3_13_main_award_list	</id>
+              <equal>	1	</equal>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <premium_plus>	1	</premium_plus>
+        <freeXP>	2000	</freeXP>
+        <token>
+          <id>	token:pt:final:s1:t3:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </personalMissionQuest>
+    <personalMissionQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_3_3_13_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <vehicleDamage>
+              <greaterOrEqual>	4500	</greaterOrEqual>
+            </vehicleDamage>
+            <results>
+              <key>	xp	</key>
+              <max>	3	</max>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <premium_plus>	1	</premium_plus>
+        <token>
+          <id>	token:pt:final:s1:t3:add	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </personalMissionQuest>
+    <personalMissionQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_3_3_13_add_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_3_3_13_main_award_list	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+        <postBattle>
+          <and>
+            <vehicleDamage>
+              <hideInGui></hideInGui>
+              <greaterOrEqual>	4500	</greaterOrEqual>
+            </vehicleDamage>
+            <results>
+              <key>	xp	</key>
+              <max>	3	</max>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	free_award_list	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </personalMissionQuest>
+  </quests>
+</regular_3_3_13.xml>

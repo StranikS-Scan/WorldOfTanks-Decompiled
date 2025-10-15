@@ -1,10 +1,6 @@
 <extension_rules.xml>
   <xml_whitelist>
     <rule>
-      <pattern>	.*/server_xml/fairplay.xml$	</pattern>
-      <type>	include	</type>
-    </rule>
-    <rule>
       <pattern>	.*/item_defs/.*\.xml$	</pattern>
       <type>	merge	</type>
     </rule>

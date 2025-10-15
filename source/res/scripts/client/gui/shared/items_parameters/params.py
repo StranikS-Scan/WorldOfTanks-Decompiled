@@ -623,6 +623,9 @@ class VehicleParams(_ParameterBase):
             damageMulKpi = self.vehicleGunDamage / 100.0 + 1
             minDamage *= damageMulKpi
             maxDamage *= damageMulKpi
+        if self.__vehicle.isOnlyForPortalBattlesVehicle:
+            minDamage *= self._itemDescr.miscAttrs['damageFactor']
+            maxDamage *= self._itemDescr.miscAttrs['damageFactor']
         return (int(floor(minDamage - minDamage * lowerBoundRandomization)), int(ceil(maxDamage + maxDamage * upperBoundRandomization)))
 
     @property

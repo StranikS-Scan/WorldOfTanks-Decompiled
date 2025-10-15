@@ -15,6 +15,7 @@ from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
 from gui.shared.gui_items.Vehicle import getIconResourceName
 from helpers import dependency
 from items import vehicles
+from items.components.c11n_constants import STAT_TRACK_FRAGS_NOT_SUPPORTED
 from nations import INDICES as NATIONS_INDICES, MAP as NATIONS_MAP
 from skeletons.gui.game_control import IPlatoonController
 from skeletons.gui.shared import IItemsCache
@@ -134,7 +135,7 @@ class BootcampNationView(TutorialWulfWindowView):
                     self.hangarSpace.startToUpdateVehicle(vehicle)
                     self.__vehicleSecondName = vehicleDescr.type.userString
                 g_bootcamp.installModules(nationData, sectionName, vehicleDescr)
-                platoonTanks[index] = PlatoonTankInfo(True, vehicleDescr.makeCompactDescr(), '', None, 0, 0, vehicleDescr.type.userString)
+                platoonTanks[index] = PlatoonTankInfo(True, vehicleDescr.makeCompactDescr(), '', None, 0, 0, vehicleDescr.type.userString, STAT_TRACK_FRAGS_NOT_SUPPORTED)
 
             self.__loadingTanksNum = len(platoonTanks)
             Waiting.show('updateVehicle')

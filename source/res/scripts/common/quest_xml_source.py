@@ -188,14 +188,14 @@ class Source(object):
                     raise SoftException('tokenQuest: daily or weekly should be used with bonusLimit tag')
             mainNode.bonus = readBonusSection(availableBonuses, questSection['bonus'], eventType)
             mainNode.bonusDelayed = readBonusSection(availableBonuses, questSection['bonusDelayed'], eventType)
-            if eventType in (EVENT_TYPE.NT_QUEST, EVENT_TYPE.POTAPOV_QUEST):
+            if eventType in (EVENT_TYPE.NT_QUEST, EVENT_TYPE.PERSONAL_MISSION):
                 mainNode.scripts = questSection['scripts'].asString if questSection.has_key('scripts') else ''
             questClientData = dict(info)
             questClientData['bonus'] = deepcopy(mainNode.bonus)
             if mainNode.bonusDelayed is not None:
                 questClientData['bonus'].update(mainNode.bonusDelayed)
             questClientData['bonusDelayed'] = deepcopy(mainNode.bonusDelayed)
-            if eventType != EVENT_TYPE.POTAPOV_QUEST:
+            if eventType != EVENT_TYPE.PERSONAL_MISSION:
                 questClientData['conditions'] = mainNode.questClientConditions
             if mainNode.groupContent:
                 questClientData['groupContent'] = mainNode.groupContent
@@ -483,12 +483,7 @@ class Source(object):
              'unregularAmmo': self.__readCondition_true,
              'isNotLeaver': self.__readCondition_true,
              'isFirstBlood': self.__readConditionComplex_true,
-             'winAloneAgainstVehicleCount': self.__readCondition_int,
-             'maxWtPlasmaBonus': self.__readCondition_int,
-             'wtBossVulnerableDamage': self.__readCondition_int,
-             'wtGeneratorsCaptured': self.__readCondition_int,
-             'wtTotalGeneratorsCaptured': self.__readCondition_int,
-             'wtDeathCount': self.__readCondition_int})
+             'winAloneAgainstVehicleCount': self.__readCondition_int})
         if eventType in (EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.PERSONAL_QUEST):
             condition_readers.update({'red': self.__readListOfInts,
              'silver': self.__readListOfInts,
@@ -892,9 +887,9 @@ class Source(object):
 
 def collectSections(root):
     sections = []
-    pqSection = ResMgr.openSection(root)
-    if pqSection is not None:
-        for k, s in pqSection.items():
+    pmQuestSection = ResMgr.openSection(root)
+    if pmQuestSection is not None:
+        for k, s in pmQuestSection.items():
             sectionPath = root + '/' + k
             if k.endswith('.xml'):
                 sections.append(sectionPath)

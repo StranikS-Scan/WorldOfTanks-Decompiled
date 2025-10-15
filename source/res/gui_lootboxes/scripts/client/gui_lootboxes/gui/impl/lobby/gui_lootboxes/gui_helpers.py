@@ -19,16 +19,20 @@ _VideoRewardData = namedtuple('_VideoRewardData', ('bonus', 'video', 'isGuarante
 
 def detectBonusType(bonuses):
     isVehicleBonus = any((bonus.getName() == VEHICLES_BONUS_NAME for bonus in bonuses))
+    bonusType = BonusType.DEFAULT
     if isVehicleBonus:
+        bonusType = BonusType.VEHICLE
         for bonus in bonuses:
             if bonus.getName() == VEHICLES_BONUS_NAME:
-                _, vehInfo = bonus.getVehicles()[0]
-                isRentedVehicle = bonus.isRentVehicle(vehInfo)
-                if isRentedVehicle:
-                    return BonusType.RENTEDVEHICLE
-                return BonusType.VEHICLE
+                vehicle, vehInfo = bonus.getVehicles()[0]
+                if bonus.isRentVehicle(vehInfo):
+                    bonusType = BonusType.RENTEDVEHICLE
+                    break
+                elif vehicle.isStatTrack:
+                    bonusType = BonusType.STATTRACKVEHICLE
+                    break
 
-    return BonusType.DEFAULT
+    return bonusType
 
 
 def getVideoResForVehicle(vehicle):

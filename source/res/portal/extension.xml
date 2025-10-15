@@ -1,0 +1,118 @@
+<extension.xml>
+  <FeatureName>	portal	</FeatureName>
+  <IsEnabled>	True	</IsEnabled>
+  <Personality>	portal_personality	</Personality>
+  <EditorPersonality>	editor_portal_personality	</EditorPersonality>
+  <Entities>
+    <ServerOnlyEntities>
+      <PortalBattlesMgr></PortalBattlesMgr>
+      <PortalUnitMgr></PortalUnitMgr>
+    </ServerOnlyEntities>
+  </Entities>
+  <Components>
+    <StaticComponents>
+      <PortalComponent></PortalComponent>
+      <PortalAccountComponent></PortalAccountComponent>
+      <PortalAccountBattleResultComponent></PortalAccountBattleResultComponent>
+      <PortalArenaBattleResultComponent></PortalArenaBattleResultComponent>
+    </StaticComponents>
+    <DynamicComponents>
+      <PortalArenaBattleComponent></PortalArenaBattleComponent>
+      <PortalSentryGunPlacementComponent></PortalSentryGunPlacementComponent>
+      <PortalVehicleController></PortalVehicleController>
+      <PortalVehicleChangeShotComponent></PortalVehicleChangeShotComponent>
+      <GuidedMissileReplicableComponent></GuidedMissileReplicableComponent>
+      <CampReplicableComponent></CampReplicableComponent>
+      <PortalGuidedMissileAbilityComponent></PortalGuidedMissileAbilityComponent>
+      <PortalBerserkComponent></PortalBerserkComponent>
+      <PortalBattleStateComponent></PortalBattleStateComponent>
+      <PortalArenaMinefieldComponent></PortalArenaMinefieldComponent>
+      <PortalVehicleShieldComponent></PortalVehicleShieldComponent>
+      <TeleportReplicableComponent></TeleportReplicableComponent>
+      <PortalCombatEntitiesCtrlComponent></PortalCombatEntitiesCtrlComponent>
+      <PortalVehicleAbilitiesManager></PortalVehicleAbilitiesManager>
+      <PortalVehicleFireShotComponent></PortalVehicleFireShotComponent>
+      <PortalVehicleFrozenShotComponent></PortalVehicleFrozenShotComponent>
+      <PortalVehicleFrozenShotDebuffComponent></PortalVehicleFrozenShotDebuffComponent>
+      <PortalVehicleLaughShotComponent></PortalVehicleLaughShotComponent>
+      <PortalVehicleLaughShotDebuffComponent></PortalVehicleLaughShotDebuffComponent>
+      <PortalVehicleCurseShotComponent></PortalVehicleCurseShotComponent>
+      <PortalVehicleInfluenceZoneComponent></PortalVehicleInfluenceZoneComponent>
+      <PortalVehicleInfluenceZoneBuffComponent></PortalVehicleInfluenceZoneBuffComponent>
+      <VehicleNodeEffect></VehicleNodeEffect>
+      <VehiclePrefabEffect></VehiclePrefabEffect>
+      <PortalReplicableMarkerStatesComponent></PortalReplicableMarkerStatesComponent>
+      <PortalTeamInfoComponent></PortalTeamInfoComponent>
+    </DynamicComponents>
+  </Components>
+  <cgf>
+    <script>
+      <module>	common.portal_common_cgf.portal_rules	</module>
+      <module>	common.portal_common_cgf.portal_components	</module>
+      <module>	common.portal_common_cgf.portal_managers	</module>
+      <module>	client.portal_client_cgf.portal_components	</module>
+      <module>	client.portal_client_cgf.portal_managers	</module>
+      <module>	cell.portal_cell_cgf.portal_components	</module>
+      <module>	cell.portal_cell_cgf.portal_managers	</module>
+      <module>	common.portal_common_cgf.guided_missile.components	</module>
+      <module>	common.portal_common_cgf.guided_missile.managers	</module>
+      <module>	client.portal_client_cgf.guided_missile.components	</module>
+      <module>	client.portal_client_cgf.guided_missile.managers	</module>
+      <module>	cell.portal_cell_cgf.guided_missile.components	</module>
+      <module>	cell.portal_cell_cgf.guided_missile.managers	</module>
+      <module>	common.portal_common_cgf.camp.components	</module>
+      <module>	common.portal_common_cgf.camp.managers	</module>
+      <module>	client.portal_client_cgf.camp.components	</module>
+      <module>	client.portal_client_cgf.camp.managers	</module>
+      <module>	cell.portal_cell_cgf.camp.components	</module>
+      <module>	cell.portal_cell_cgf.camp.managers	</module>
+      <module>	common.portal_common_cgf.trigger_damage.components	</module>
+      <module>	common.portal_common_cgf.trigger_damage.managers	</module>
+      <module>	client.portal_client_cgf.trigger_damage.components	</module>
+      <module>	client.portal_client_cgf.trigger_damage.managers	</module>
+      <module>	cell.portal_cell_cgf.trigger_damage.components	</module>
+      <module>	cell.portal_cell_cgf.trigger_damage.managers	</module>
+      <module>	common.portal_common_cgf.vehicle_buffs.components	</module>
+      <module>	common.portal_common_cgf.vehicle_buffs.managers	</module>
+      <module>	client.portal_client_cgf.vehicle_buffs.components	</module>
+      <module>	client.portal_client_cgf.vehicle_buffs.managers	</module>
+      <module>	cell.portal_cell_cgf.vehicle_buffs.components	</module>
+      <module>	cell.portal_cell_cgf.vehicle_buffs.managers	</module>
+      <module>	cell.portal_cell_cgf.teleport.managers	</module>
+      <module>	cell.portal_cell_cgf.teleport.components	</module>
+      <module>	client.portal_client_cgf.teleport.managers	</module>
+      <module>	client.portal_client_cgf.teleport.components	</module>
+      <module>	common.portal_common_cgf.teleport.managers	</module>
+      <module>	common.portal_common_cgf.teleport.components	</module>
+      <module>	cell.portal_cell_cgf.anomaly.managers	</module>
+      <module>	cell.portal_cell_cgf.anomaly.components	</module>
+      <module>	client.portal_client_cgf.anomaly.managers	</module>
+      <module>	client.portal_client_cgf.anomaly.components	</module>
+      <module>	common.portal_common_cgf.anomaly.managers	</module>
+      <module>	common.portal_common_cgf.anomaly.components	</module>
+      <module>	client.portal_client_cgf.hangar_enty_point.managers	</module>
+      <module>	client.portal_client_cgf.hangar_enty_point.components	</module>
+      <module>	cell.portal_cell_cgf.force_field.managers	</module>
+      <module>	cell.portal_cell_cgf.force_field.components	</module>
+      <module>	client.portal_client_cgf.force_field.managers	</module>
+      <module>	client.portal_client_cgf.force_field.components	</module>
+      <module>	common.portal_common_cgf.force_field.managers	</module>
+      <module>	common.portal_common_cgf.force_field.components	</module>
+      <module>	client.portal_client_cgf.effects.managers	</module>
+      <module>	client.portal_client_cgf.effects.components	</module>
+      <module>	cell.portal_cell_cgf.portal_2d_markers.managers	</module>
+      <module>	cell.portal_cell_cgf.portal_2d_markers.components	</module>
+      <module>	client.portal_client_cgf.portal_2d_markers.managers	</module>
+      <module>	client.portal_client_cgf.portal_2d_markers.components	</module>
+      <module>	common.portal_common_cgf.portal_2d_markers.managers	</module>
+      <module>	common.portal_common_cgf.portal_2d_markers.components	</module>
+      <module>	client.portal_client_cgf.vehicle_statuses.components	</module>
+      <module>	client.portal_client_cgf.vehicle_statuses.managers	</module>
+      <module>	client.portal_client_cgf.edge_drawer.components	</module>
+      <module>	client.portal_client_cgf.edge_drawer.managers	</module>
+    </script>
+    <prefabFolders>
+      <path>	content/CGFPrefabs/portal	</path>
+    </prefabFolders>
+  </cgf>
+</extension.xml>

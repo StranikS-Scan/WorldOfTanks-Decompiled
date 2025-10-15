@@ -1049,10 +1049,6 @@ class DIALOGS(object):
     EQUIPMENTDECONSTRUCTION_CONFIRMBUTTON = '#dialogs:equipmentDeconstruction/confirmButton'
     EQUIPMENTDECONSTRUCTION_CONFIRMANDUPGRADEBUTTON = '#dialogs:equipmentDeconstruction/confirmAndUpgradeButton'
     EQUIPMENTDECONSTRUCTION_CANCELBUTTON = '#dialogs:equipmentDeconstruction/cancelButton'
-    WHITE_TIGER_DESERTER_TITLE = '#dialogs:white_tiger/deserter/title'
-    WHITE_TIGER_DESERTER_MESSAGE = '#dialogs:white_tiger/deserter/message'
-    WHITE_TIGER_DESERTER_SUBMIT = '#dialogs:white_tiger/deserter/submit'
-    WHITE_TIGER_DESERTER_CANCEL = '#dialogs:white_tiger/deserter/cancel'
     PRICECARD_FREE_TITLE = '#dialogs:priceCard/free/title'
     PRICECARD_CREDITS_TITLE = '#dialogs:priceCard/credits/title'
     PRICECARD_GOLD_TITLE = '#dialogs:priceCard/gold/title'
@@ -1146,14 +1142,6 @@ class DIALOGS(object):
     BUYBERTHSNOTENOUGH_CREDITS_MESSAGE = '#dialogs:buyBerthsNotEnough/credits/message'
     BUYBERTHSNOTENOUGH_CREDITS_CANCEL = '#dialogs:buyBerthsNotEnough/credits/cancel'
     BUYBERTHS_HANGARBERTHS_HEADER = '#dialogs:buyBerths/hangarBerths/header'
-    CONFIRMREWARD_TITLE = '#dialogs:confirmReward/title'
-    CONFIRMREWARD_MESSAGE = '#dialogs:confirmReward/message'
-    CONFIRMREWARD_SUBMIT = '#dialogs:confirmReward/submit'
-    CONFIRMREWARD_CANCEL = '#dialogs:confirmReward/cancel'
-    REROLLREWARD_TITLE = '#dialogs:rerollReward/title'
-    REROLLREWARD_MESSAGE = '#dialogs:rerollReward/message'
-    REROLLREWARD_CONFIRM = '#dialogs:rerollReward/confirm'
-    REROLLREWARD_CANCEL = '#dialogs:rerollReward/cancel'
     VEHICLESELLDIALOG_VEHICLETYPE_ENUM = (VEHICLESELLDIALOG_VEHICLETYPE_LIGHTTANK,
      VEHICLESELLDIALOG_VEHICLETYPE_MEDIUMTANK,
      VEHICLESELLDIALOG_VEHICLETYPE_HEAVYTANK,
@@ -2192,10 +2180,6 @@ class DIALOGS(object):
      EQUIPMENTDECONSTRUCTION_CONFIRMBUTTON,
      EQUIPMENTDECONSTRUCTION_CONFIRMANDUPGRADEBUTTON,
      EQUIPMENTDECONSTRUCTION_CANCELBUTTON,
-     WHITE_TIGER_DESERTER_TITLE,
-     WHITE_TIGER_DESERTER_MESSAGE,
-     WHITE_TIGER_DESERTER_SUBMIT,
-     WHITE_TIGER_DESERTER_CANCEL,
      PRICECARD_FREE_TITLE,
      PRICECARD_CREDITS_TITLE,
      PRICECARD_GOLD_TITLE,
@@ -2288,15 +2272,7 @@ class DIALOGS(object):
      BUYBERTHSNOTENOUGH_CREDITS_TITLE,
      BUYBERTHSNOTENOUGH_CREDITS_MESSAGE,
      BUYBERTHSNOTENOUGH_CREDITS_CANCEL,
-     BUYBERTHS_HANGARBERTHS_HEADER,
-     CONFIRMREWARD_TITLE,
-     CONFIRMREWARD_MESSAGE,
-     CONFIRMREWARD_SUBMIT,
-     CONFIRMREWARD_CANCEL,
-     REROLLREWARD_TITLE,
-     REROLLREWARD_MESSAGE,
-     REROLLREWARD_CONFIRM,
-     REROLLREWARD_CANCEL)
+     BUYBERTHS_HANGARBERTHS_HEADER)
 
     @classmethod
     def vehicleselldialog_vehicletype(cls, key0):

@@ -1,0 +1,23 @@
+<shells.xml>
+  <_240mm_HE_M146_portal_ability_shell>
+    <id>	40005	</id>
+    <userString>	#usa_vehicles:_240mm_HE_M146	</userString>
+    <icon>	he_spg_stun	</icon>
+    <price>	2500	</price>
+    <notInShop>	True	</notInShop>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	240	</caliber>
+    <explosionRadius>	12.4	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	20.5	</stunDuration>
+    <isTracer>	true	</isTracer>
+    <effects>	hugeSH	</effects>
+    <damage>
+      <armor>	1100	</armor>
+      <devices>	160	</devices>
+    </damage>
+    <deviceDamagePossibility>
+      <protectFromIndirectHits>	internal tankmen	</protectFromIndirectHits>
+    </deviceDamagePossibility>
+  </_240mm_HE_M146_portal_ability_shell>
+</shells.xml>

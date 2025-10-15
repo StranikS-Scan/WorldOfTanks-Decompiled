@@ -2,6 +2,7 @@
   <icons>
     <ap>	ARMOR_PIERCING.png 0 0	</ap>
     <ap_premium>	ARMOR_PIERCING_PREMIUM.png 0 0	</ap_premium>
+    <ap_portal>	ARMOR_PIERCING_PORTAL.png 0 0	</ap_portal>
     <ap_cr>	ARMOR_PIERCING_CR.png 0 0	</ap_cr>
     <ap_cr_premium>	ARMOR_PIERCING_CR_PREMIUM.png 0 0	</ap_cr_premium>
     <he>	HIGH_EXPLOSIVE.png 0 0	</he>
@@ -1475,6 +1476,59 @@
       </damage>
     </armorSpalls>
   </_105mm_POB_6M_02>
+  <_105mm_PP_15_ISP>
+    <id>	37003	</id>
+    <userString>	#poland_vehicles:_105mm_PP_15_ISP	</userString>
+    <icon>	ap	</icon>
+    <price>	1120	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_PP_15_ISP>
+  <_105mm_3PPod_21_ISP>
+    <id>	37004	</id>
+    <userString>	#poland_vehicles:_105mm_3PPod_21_ISP	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_3PPod_21_ISP>
+  <_105mm_POB_6M_ISP>
+    <id>	37005	</id>
+    <userString>	#poland_vehicles:_105mm_POB_6M_ISP	</userString>
+    <icon>	he_modern	</icon>
+    <price>	745	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	510	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	255	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_POB_6M_ISP>
   <_122mm_UBR-471_PB>
     <id>	5	</id>
     <userString>	#poland_vehicles:_122mm_UBR-471_PB	</userString>
@@ -1901,6 +1955,60 @@
       </damage>
     </armorSpalls>
   </_152mm_pocisk_wybuchowy>
+  <_152mm_pocisk_przeciwpancerny_ISP>
+    <id>	37000	</id>
+    <userString>	#poland_vehicles:_152mm_pocisk_przeciwpancerny_ISP	</userString>
+    <icon>	ap	</icon>
+    <price>	1620	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	152.4	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	750	</armor>
+      <devices>	203	</devices>
+    </damage>
+  </_152mm_pocisk_przeciwpancerny_ISP>
+  <_152mm_pocisk_kumulacyjny_ISP>
+    <id>	37001	</id>
+    <userString>	#poland_vehicles:_152mm_pocisk_kumulacyjny_ISP	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	6400	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	152.4	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	750	</armor>
+      <devices>	203	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_152mm_pocisk_kumulacyjny_ISP>
+  <_152mm_pocisk_wybuchowy_ISP>
+    <id>	37002	</id>
+    <userString>	#poland_vehicles:_152mm_pocisk_wybuchowy_ISP	</userString>
+    <icon>	he_modern	</icon>
+    <price>	1370	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	152.4	</caliber>
+    <explosionRadius>	3.66	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	950	</armor>
+      <devices>	203	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	3.66	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	475	</armor>
+        <devices>	100	</devices>
+      </damage>
+    </armorSpalls>
+  </_152mm_pocisk_wybuchowy_ISP>
   <_130mm_WZ_PB_46>
     <id>	106	</id>
     <userString>	#poland_vehicles:_130mm_WZ_PB_46	</userString>
@@ -2320,4 +2428,196 @@
       <devices>	36	</devices>
     </damage>
   </_122mm_wz_43_50_G6_APCR_SH>
+  <_105mm_wz_22_24_G1_HEAT_H>
+    <id>	20001	</id>
+    <userString>	#poland_vehicles:_105mm_wz_22_24_G1_HEAT_H	</userString>
+    <icon>	ap_portal	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRmainArmorPiercing	</effects>
+    <damage>
+      <armor>	210	</armor>
+      <devices>	17	</devices>
+    </damage>
+  </_105mm_wz_22_24_G1_HEAT_H>
+  <_105mm_wz_22_24_G1_APCR_H>
+    <id>	20002	</id>
+    <userString>	#poland_vehicles:_105mm_wz_22_24_G1_APCR_H	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRmainAPCR	</effects>
+    <damage>
+      <armor>	170	</armor>
+      <devices>	17	</devices>
+    </damage>
+  </_105mm_wz_22_24_G1_APCR_H>
+  <_75mm_wz_36_37_G2_HEAT_H>
+    <id>	20003	</id>
+    <userString>	#poland_vehicles:_75mm_wz_36_37_G2_HEAT_H	</userString>
+    <icon>	ap_portal	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRmainArmorPiercing	</effects>
+    <damage>
+      <armor>	190	</armor>
+      <devices>	20	</devices>
+    </damage>
+  </_75mm_wz_36_37_G2_HEAT_H>
+  <_75mm_wz_36_37_G2_APCR_H>
+    <id>	20004	</id>
+    <userString>	#poland_vehicles:_75mm_wz_36_37_G2_APCR_H	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRlargeAPCR	</effects>
+    <damage>
+      <armor>	150	</armor>
+      <devices>	21	</devices>
+    </damage>
+  </_75mm_wz_36_37_G2_APCR_H>
+  <_90mm_armata_wz_46_G3_HEAT_H>
+    <id>	20005	</id>
+    <userString>	#poland_vehicles:_90mm_armata_wz_46_G3_HEAT_H	</userString>
+    <icon>	ap_portal	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRmainArmorPiercing	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	23	</devices>
+    </damage>
+  </_90mm_armata_wz_46_G3_HEAT_H>
+  <_90mm_armata_wz_46_G3_APCR_H>
+    <id>	20006	</id>
+    <userString>	#poland_vehicles:_90mm_armata_wz_46_G3_APCR_H	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRmainAPCR	</effects>
+    <damage>
+      <armor>	190	</armor>
+      <devices>	23	</devices>
+    </damage>
+  </_90mm_armata_wz_46_G3_APCR_H>
+  <_100mm_armata_wz_62_G4_HEAT_H>
+    <id>	20007	</id>
+    <userString>	#poland_vehicles:_100mm_armata_wz_62_G4_HEAT_H	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRmainArmorPiercing	</effects>
+    <damage>
+      <armor>	245	</armor>
+      <devices>	24	</devices>
+    </damage>
+  </_100mm_armata_wz_62_G4_HEAT_H>
+  <_100mm_armata_wz_62_G4_APCR_H>
+    <id>	20008	</id>
+    <userString>	#poland_vehicles:_100mm_armata_wz_62_G4_APCR_H	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	True	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRmainAPCR	</effects>
+    <damage>
+      <armor>	200	</armor>
+      <devices>	24	</devices>
+    </damage>
+  </_100mm_armata_wz_62_G4_APCR_H>
+  <_100mm_armata_wz_58_G5_HEAT_H>
+    <id>	20009	</id>
+    <userString>	#poland_vehicles:_100mm_armata_wz_58_G5_HEAT_H	</userString>
+    <icon>	ap_portal	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRmainArmorPiercing	</effects>
+    <damage>
+      <armor>	365	</armor>
+      <devices>	39	</devices>
+    </damage>
+  </_100mm_armata_wz_58_G5_HEAT_H>
+  <_100mm_armata_wz_58_G5_APCR_H>
+    <id>	20010	</id>
+    <userString>	#poland_vehicles:_100mm_armata_wz_58_G5_APCR_H	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRmainAPCR	</effects>
+    <damage>
+      <armor>	290	</armor>
+      <devices>	39	</devices>
+    </damage>
+  </_100mm_armata_wz_58_G5_APCR_H>
+  <_122mm_wz_43_50_G6_HEAT_H>
+    <id>	20011	</id>
+    <userString>	#poland_vehicles:_122mm_wz_43_50_G6_HEAT_H	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	122	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRlargeArmorPiercing	</effects>
+    <damage>
+      <armor>	340	</armor>
+      <devices>	36	</devices>
+    </damage>
+  </_122mm_wz_43_50_G6_HEAT_H>
+  <_122mm_wz_43_50_G6_APCR_H>
+    <id>	20012	</id>
+    <userString>	#poland_vehicles:_122mm_wz_43_50_G6_APCR_H	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	122	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRlargeAPCR	</effects>
+    <damage>
+      <armor>	270	</armor>
+      <devices>	36	</devices>
+    </damage>
+  </_122mm_wz_43_50_G6_APCR_H>
 </shells.xml>

@@ -15,7 +15,8 @@ from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.utils.hangar_space_reloader import ErrorFlags
 from shared_utils import nextTick
 from skeletons.gui.shared.utils import IHangarSpaceReloader, IHangarSpace
-from gui.ClientHangarSpace import SERVER_CMD_CHANGE_HANGAR, SERVER_CMD_CHANGE_HANGAR_PREM, getDefaultHangarPath, SERVER_CMD_CHANGE_HANGAR_ALT, getHangarFullVisibilityMask, g_clientHangarSpaceOverride
+from gui.shared.utils.HangarSpace import g_execute_after_hangar_space_inited
+from gui.ClientHangarSpace import SERVER_CMD_CHANGE_HANGAR, SERVER_CMD_CHANGE_HANGAR_PREM, getDefaultHangarPath, SERVER_CMD_CHANGE_HANGAR_ALT, getHangarFullVisibilityMask, g_clientHangarSpaceOverride, initializeHangarsCFG
 _logger = logging.getLogger(__name__)
 
 class DefaultHangarSpaceConfig(object):
@@ -168,6 +169,14 @@ class HangarSpaceSwitchController(IHangarSpaceSwitchController, IGlobalListener)
         self.hangarSpace.onSpaceCreate -= self._delayedProcessChange
         nextTick(self.processPossibleSceneChange)()
 
+    @g_execute_after_hangar_space_inited
+    def _delayedReloadSpace(self, spaceId, visibilityMask, waitingMessage=None, backgroundImage=None):
+        success, err = self.hangarSpaceReloader.changeHangarSpace(spaceId, visibilityMask, waitingMessage, backgroundImage)
+        if success:
+            self.hangarSpace.onSpaceCreate += self._onSpaceCreatedCallback
+        else:
+            raise SoftException('Could not perform space reload, see hangar_space_reloader.py error flag {}.'.format(err))
+
     def processPossibleSceneChange(self):
         self.hangarSpaceUpdated = False
         prevSceneName = self.currentSceneName
@@ -293,34 +302,35 @@ class HangarSpaceSwitchController(IHangarSpaceSwitchController, IGlobalListener)
                         if self.currentSceneName == DEFAULT_HANGAR_SCENE:
                             currentSceneChanged = True
 
-            if currentSceneChanged:
-                if self.currentSceneName == DEFAULT_HANGAR_SCENE:
-                    spaceId = self._defaultHangarSpaceConfig.getHangarSpaceId(self.hangarSpace.isPremium)
-                    visibilityMask = self._defaultHangarSpaceConfig.getVisibilityMask(self.hangarSpace.isPremium)
-                    if not self.hangarSpace.inited:
-                        g_clientHangarSpaceOverride.setPath(spaceId, visibilityMask, isPremium=self.hangarSpace.isPremium, isReload=False)
-                        spaceId = self._defaultHangarSpaceConfig.getHangarSpaceId(not self.hangarSpace.isPremium)
-                        visibilityMask = self._defaultHangarSpaceConfig.getVisibilityMask(not self.hangarSpace.isPremium)
-                        g_clientHangarSpaceOverride.setPath(spaceId, visibilityMask, isPremium=not self.hangarSpace.isPremium, isReload=False)
-                        return
-                    success, err = self.hangarSpaceReloader.changeHangarSpace(spaceId, visibilityMask)
-                else:
-                    currentSceneConfig = self._sceneSpaceParams[self.currentSceneName]
-                    spaceId = currentSceneConfig.getHangarSpaceId()
-                    visibilityMask = currentSceneConfig.getVisibilityMask()
-                    if not self.hangarSpace.inited:
-                        g_clientHangarSpaceOverride.setPath(spaceId, visibilityMask, isReload=False)
-                        return
-                    success, err = self.hangarSpaceReloader.changeHangarSpace(spaceId, visibilityMask, currentSceneConfig.waitingMessage, currentSceneConfig.waitingBackground)
-                if success:
-                    self.hangarSpace.onSpaceCreate += self._onSpaceCreatedCallback
-                else:
-                    raise SoftException('Could not perform space reload, see hangar_space_reloader.py error flag {}.'.format(err))
+            if not currentSceneChanged and not currentSceneMaskChanged:
                 return
-            if currentSceneMaskChanged and self.hangarSpace.inited:
-                if self.currentSceneName == DEFAULT_HANGAR_SCENE:
-                    visibilityMask = self._defaultHangarSpaceConfig.getVisibilityMask(self.hangarSpace.isPremium)
-                else:
-                    visibilityMask = self._sceneSpaceParams[self.currentSceneName].getVisibilityMask()
-                BigWorld.setSpaceItemsVisibilityMask(self.hangarSpace.space.spaceId, visibilityMask)
+            initializeHangarsCFG()
+            if self.currentSceneName == DEFAULT_HANGAR_SCENE:
+                spaceId = self._defaultHangarSpaceConfig.getHangarSpaceId(self.hangarSpace.isPremium)
+                visibilityMask = self._defaultHangarSpaceConfig.getVisibilityMask(self.hangarSpace.isPremium)
+                if not self.hangarSpace.inited:
+                    g_clientHangarSpaceOverride.setPath(spaceId, visibilityMask, isPremium=self.hangarSpace.isPremium, isReload=False)
+                    spaceId = self._defaultHangarSpaceConfig.getHangarSpaceId(not self.hangarSpace.isPremium)
+                    visibilityMask = self._defaultHangarSpaceConfig.getVisibilityMask(not self.hangarSpace.isPremium)
+                    g_clientHangarSpaceOverride.setPath(spaceId, visibilityMask, isPremium=not self.hangarSpace.isPremium, isReload=False)
+                    return
+                buildedOldSpacePath = self.hangarSpaceReloader.buildHangarSpacePath(self.hangarSpace.spacePath)
+                buildedNewSpacePath = self.hangarSpaceReloader.buildHangarSpacePath(spaceId)
+                if currentSceneChanged and buildedOldSpacePath != buildedNewSpacePath:
+                    self._delayedReloadSpace(spaceId, visibilityMask)
+                    return
+            else:
+                currentSceneConfig = self._sceneSpaceParams[self.currentSceneName]
+                spaceId = currentSceneConfig.getHangarSpaceId()
+                visibilityMask = currentSceneConfig.getVisibilityMask()
+                if not self.hangarSpace.inited:
+                    g_clientHangarSpaceOverride.setPath(spaceId, visibilityMask, isReload=False)
+                    return
+                buildedOldSpacePath = self.hangarSpaceReloader.buildHangarSpacePath(self.hangarSpace.spacePath)
+                buildedNewSpacePath = self.hangarSpaceReloader.buildHangarSpacePath(spaceId)
+                if currentSceneChanged and buildedOldSpacePath != buildedNewSpacePath:
+                    self._delayedReloadSpace(spaceId, visibilityMask, currentSceneConfig.waitingMessage, currentSceneConfig.waitingBackground)
+                    return
+            if currentSceneMaskChanged:
+                BigWorld.setSpaceItemsVisibilityMask(self.hangarSpace.spaceID, visibilityMask)
             return

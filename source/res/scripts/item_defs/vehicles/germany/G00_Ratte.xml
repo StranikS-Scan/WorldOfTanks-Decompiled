@@ -1,0 +1,508 @@
+<G00_Ratte.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <crew>
+    <commander>	gunner
+			radioman
+			loader
+			driver	</commander>
+  </crew>
+  <supplySlots>	8 8 8	</supplySlots>
+  <speedLimits>
+    <forward>	40	</forward>
+    <backward>	15	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.001	</moving>
+    <still>	0.001	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <firePenalty>	0.001	</firePenalty>
+  </invisibility>
+  <optDevsOverrides>
+    <camouflageNet>
+      <invisibilityBonus>	0.05 0.075	</invisibilityBonus>
+    </camouflageNet>
+    <additionalInvisibilityDevice>
+      <invisibilityBonus>	0.03 0.04	</invisibilityBonus>
+    </additionalInvisibilityDevice>
+    <trophyBasicAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.03	</invisibilityBonus>
+    </trophyBasicAdditionalInvisibilityDevice>
+    <trophyUpgradedAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.05	</invisibilityBonus>
+    </trophyUpgradedAdditionalInvisibilityDevice>
+  </optDevsOverrides>
+  <repairCost>	10	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.2	</priceFactor>
+    <density>	3.808688 3.808688	</density>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	350	</armor_1>
+      <armor_2>	500	</armor_2>
+      <armor_3>	350	</armor_3>
+      <armor_4>	200	</armor_4>
+      <armor_5>	250	</armor_5>
+      <armor_6>	350	</armor_6>
+      <armor_7>	200	</armor_7>
+      <armor_8>	150	</armor_8>
+      <armor_9>	100	</armor_9>
+      <armor_10>	70	</armor_10>
+      <armor_11>	170	</armor_11>
+      <armor_12>	100	</armor_12>
+      <armor_13>	100	</armor_13>
+      <armor_14>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+      </armor_14>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	403040	</weight>
+    <maxHealth>	22500	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	280	</maxHealth>
+      <maxRegenHealth>	190	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/german/G00_Ratte/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G00_Ratte/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G00_Ratte/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.34 38 0.36 1 0.05 0.34	</pitchParams>
+      <rollParams>	1 0.34 38 0.36 1 0.06 0.4	</rollParams>
+      <sensitivityToImpulse>	0.01	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	diesel_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.002543 4.884503 7.772855	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/german/G00_Ratte/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G00_Ratte/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <customizationSlots>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	11000	</slotId>
+        <anchorPosition>	0 0 0	</anchorPosition>
+        <anchorDirection>	0 1 0	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	12000	</slotId>
+        <anchorPosition>	0 0 0	</anchorPosition>
+        <anchorDirection>	0 1 0	</anchorDirection>
+      </slot>
+    </customizationSlots>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <hangarShadowTexture>	vehicles/german/G00_Ratte/Ratte_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <density>	47.845551 47.738094	</density>
+      <aoTextureSize>	512 512	</aoTextureSize>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_G00_Ratte>
+      <userString>	#germany_vehicles:Chassis_G00_Ratte	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	82500	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	500	</leftTrack>
+        <rightTrack>	500	</rightTrack>
+      </armor>
+      <weight>	200000	</weight>
+      <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
+      <brakeForce>	1000000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	15	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0	</vehicleMovement>
+        <vehicleRotation>	0	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	1.0	</bulkHealthFactor>
+      <maxHealth>	30000	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G00_Ratte/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G00_Ratte/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G00_Ratte/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	MEDIUM	</lodDist>
+        <activePostmortem>	false	</activePostmortem>
+        <tracesParams>
+          <trackPairIdx>	0	</trackPairIdx>
+          <bufferPrefs>	largeTank	</bufferPrefs>
+          <textureSet>	ussr_01	</textureSet>
+          <size>	1 5	</size>
+          <offset>	0 -4	</offset>
+          <centerOffsetFactor>	1 1	</centerOffsetFactor>
+        </tracesParams>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <trackPair>
+          <trackPairIdx>	0	</trackPairIdx>
+          <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+          <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+          <textureScale>	-1.1	</textureScale>
+        </trackPair>
+      </tracks>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	14.257010 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.342020 0.000000	</row1>
+            <row2>	0.000000 0.000000 35.174099	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <geometry>
+            <radius>	0.905118	</radius>
+          </geometry>
+          <isLeading>	true	</isLeading>
+          <trackPairIdx>	0	</trackPairIdx>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L1	</name>
+          <geometry>
+            <radius>	1.220837	</radius>
+          </geometry>
+          <isLeading>	true	</isLeading>
+          <trackPairIdx>	0	</trackPairIdx>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <geometry>
+            <radius>	1.023771	</radius>
+          </geometry>
+          <startIndex>	0	</startIndex>
+          <count>	13	</count>
+          <trackPairIdx>	0	</trackPairIdx>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <name>	W_L13	</name>
+          <geometry>
+            <radius>	1.023467	</radius>
+          </geometry>
+          <trackPairIdx>	0	</trackPairIdx>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <geometry>
+            <radius>	0.905118	</radius>
+          </geometry>
+          <isLeading>	true	</isLeading>
+          <trackPairIdx>	0	</trackPairIdx>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R1	</name>
+          <geometry>
+            <radius>	1.215256	</radius>
+          </geometry>
+          <isLeading>	true	</isLeading>
+          <trackPairIdx>	0	</trackPairIdx>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <geometry>
+            <radius>	1.023771	</radius>
+          </geometry>
+          <startIndex>	0	</startIndex>
+          <count>	13	</count>
+          <trackPairIdx>	0	</trackPairIdx>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	W_R13	</name>
+          <geometry>
+            <radius>	1.042862	</radius>
+          </geometry>
+          <trackPairIdx>	0	</trackPairIdx>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 2.782292 0.000000	</hullPosition>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	21000	</slotId>
+          <anchorPosition>	0 0 0	</anchorPosition>
+          <anchorDirection>	0 1 0	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	29000	</slotId>
+          <anchorPosition>	0 0 0	</anchorPosition>
+          <anchorDirection>	0 1 0	</anchorDirection>
+        </slot>
+      </customizationSlots>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <hitTester>
+        <trackPairIdx>	0	</trackPairIdx>
+        <collisionModelServer>	vehicles/german/G00_Ratte/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G00_Ratte/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	5.095627 14.542769	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <camouflage>
+        <density>	47.845551 47.738094	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
+      <repairTime>	0.100000001	</repairTime>
+    </Chassis_G00_Ratte>
+  </chassis>
+  <turrets0>
+    <Turret_1_G00_Ratte>
+      <userString>	#germany_vehicles:Turret_1_G00_Ratte	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	10	</level>
+      <price>	66000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	500	</armor_1>
+        <armor_2>	350	</armor_2>
+        <armor_3>	350	</armor_3>
+        <armor_4>	200	</armor_4>
+        <armor_5>	250	</armor_5>
+        <armor_6>	350	</armor_6>
+        <armor_7>	200	</armor_7>
+        <armor_8>	200	</armor_8>
+        <armor_9>	100	</armor_9>
+        <armor_10>	70	</armor_10>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	160000	</weight>
+      <maxHealth>	7500	</maxHealth>
+      <rotationSpeed>	16	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	180	</maxHealth>
+        <maxRegenHealth>	90	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	400	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	120	</maxHealth>
+        <maxRegenHealth>	60	</maxRegenHealth>
+        <repairCost>	2.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_283mm_SKC_34>	shared	  <maxAmmo>	5000	</maxAmmo>
+          <armor>
+            <gun>	500	</gun>
+          </armor>
+          <reloadTime>	10	</reloadTime>
+          <shotDispersionRadius>	0.05	</shotDispersionRadius>
+          <aimingTime>	0.5	</aimingTime>
+          <invisibilityFactorAtShot>	0.044	</invisibilityFactorAtShot>
+          <shotDispersionFactors>
+            <turretRotation>	0.05	</turretRotation>
+            <afterShot>	3.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.34 10 0.44 0 0.56 0 0.66 10 1 10	</maxPitch>
+          </pitchLimits>
+          <multiGunEffects>	shot_dualgun1_large_mb_L_Ratte shot_dualgun1_large_mb_R_Ratte	</multiGunEffects>
+          <dualGun>
+            <chargeTime>	2.5	</chargeTime>
+            <shootImpulse>	150	</shootImpulse>
+            <reloadLockTime>	2	</reloadLockTime>
+            <reloadTimes>	6 6	</reloadTimes>
+            <rateTime>	4	</rateTime>
+            <chargeThreshold>	0.5	</chargeThreshold>
+            <afterShotDelay>	1	</afterShotDelay>
+            <preChargeIndication>	0.25	</preChargeIndication>
+          </dualGun>
+          <customizationSlots>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41000	</slotId>
+              <anchorPosition>	0 0 0	</anchorPosition>
+              <anchorDirection>	0 1 0	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41001	</slotId>
+              <anchorPosition>	0 0 0	</anchorPosition>
+              <anchorDirection>	0 1 0	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	42000	</slotId>
+              <anchorPosition>	0 0 0	</anchorPosition>
+              <anchorDirection>	0 1 0	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <models>
+            <undamaged>	vehicles/german/G00_Ratte/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G00_Ratte/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G00_Ratte/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G00_Ratte/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G00_Ratte/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
+          <effects>	shot_superhuge	</effects>
+          <camouflage>
+            <density>	128.908859 128.98317	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
+        </_283mm_SKC_34>
+      </guns>
+      <models>
+        <undamaged>	vehicles/german/G00_Ratte/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G00_Ratte/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G00_Ratte/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G00_Ratte/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G00_Ratte/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	-0.002789 1.216314 2.963276	</gunPosition>
+      <multiGun>
+        <gun>
+          <gunNode>	G_L	</gunNode>
+          <gunFire>	HP_gunFire_L	</gunFire>
+          <position>	-2.64 1.3 3.3	</position>
+        </gun>
+        <gun>
+          <gunNode>	G_R	</gunNode>
+          <gunFire>	HP_gunFire_R	</gunFire>
+          <position>	2.64 1.3 3.3	</position>
+        </gun>
+      </multiGun>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	31000	</slotId>
+          <anchorPosition>	0 0 0	</anchorPosition>
+          <anchorDirection>	0 1 0	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	32000	</slotId>
+          <anchorPosition>	0 0 0	</anchorPosition>
+          <anchorDirection>	0 1 0	</anchorDirection>
+        </slot>
+      </customizationSlots>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <physicsShape>	1.088 0.586 1.051 0 1 0 0.241 0.531 0.165 0.5 0.211 0.5 0.258 0 0	</physicsShape>
+      <camouflage>
+        <density>	47.845551 47.738094	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
+    </Turret_1_G00_Ratte>
+  </turrets0>
+  <engines>
+    <MAN_V12Z32_44>	shared	</MAN_V12Z32_44>
+  </engines>
+  <fuelTanks>
+    <Large>	shared	</Large>
+  </fuelTanks>
+  <radios>
+    <Ratte_Radio>	shared	</Ratte_Radio>
+  </radios>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <MAN_V12Z32_44>
+          <smplEnginePower>	24000	</smplEnginePower>
+          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
+        </MAN_V12Z32_44>
+      </engines>
+      <chassis>
+        <Chassis_G00_Ratte>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.16905	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.10465	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.08855	</rollingFriction>
+            </firm>
+          </grounds>
+          <axleCount>	5	</axleCount>
+        </Chassis_G00_Ratte>
+      </chassis>
+    </detailed>
+  </physics>
+  <siege_mode>
+    <switchOnTime>	0	</switchOnTime>
+    <switchOffTime>	0	</switchOffTime>
+    <engineDamageCoeff>	1	</engineDamageCoeff>
+    <switchCancelEnabled>	true	</switchCancelEnabled>
+  </siege_mode>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	15502	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	1.0	</alpha>
+  </emblems>
+  <prefabAttachments>
+    <G00_Ratte_anim>
+      <attachmentId>	31080	</attachmentId>
+    </G00_Ratte_anim>
+  </prefabAttachments>
+  <customDefaultCamouflage>	true	</customDefaultCamouflage>
+</G00_Ratte.xml>

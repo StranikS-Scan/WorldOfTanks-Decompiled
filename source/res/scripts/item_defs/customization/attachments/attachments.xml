@@ -450,6 +450,7 @@
       <modelName>	vehicles/poland/Pl34_CS_63_02/Pl34_CS_63_02_anim.prefab	</modelName>
       <attachmentLogic>	prefab	</attachmentLogic>
       <initialVisibility>	true	</initialVisibility>
+      <hangarModelName>	vehicles/poland/Pl34_CS_63_02/Pl34_CS_63_02_anim_hangar.prefab	</hangarModelName>
     </attachment>
     <attachment>
       <id>	31029	</id>
@@ -734,6 +735,14 @@
       <hangarModelName>	vehicles/german/G178_Sturmtiger_V1/_skin/G178_Sturmtiger_V1_3Dst_01/G178_Sturmtiger_V1_3Dst_01_static.prefab	</hangarModelName>
     </attachment>
     <attachment>
+      <id>	31072	</id>
+      <name>	SleeveEjection	</name>
+      <modelName>	vehicles/russian/R226_Object_757A/SleeveEjection.prefab	</modelName>
+      <hangarModelName>	vehicles/russian/R226_Object_757A/Hangar_sleeve.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
       <id>	31073	</id>
       <name>	SleeveEjection_SAT	</name>
       <modelName>	vehicles/czech/Cz38_Projekt_SAT/SleeveEjection.prefab	</modelName>
@@ -806,19 +815,42 @@
       <initialVisibility>	true	</initialVisibility>
     </attachment>
     <attachment>
-      <id>	32000	</id>
-      <name>	R232_IS-7W	</name>
-      <modelName>	vehicles/russian/R232_IS-7W/R232_IS-7W_anim.prefab	</modelName>
-      <hangarModelName>	vehicles/russian/R232_IS-7W/R232_IS-7W_anim_hangar.prefab	</hangarModelName>
+      <id>	31086	</id>
+      <name>	R229_Object_718B_3Dst_01	</name>
+      <modelName>	vehicles/russian/R229_Object_718B/_skins/R229_Object_718B_3Dst_01/lamp_switcher.prefab	</modelName>
       <attachmentLogic>	prefab	</attachmentLogic>
       <initialVisibility>	true	</initialVisibility>
     </attachment>
     <attachment>
-      <id>	32001	</id>
-      <name>	R232_IS-7W_idle	</name>
-      <initialVisibility>	true	</initialVisibility>
-      <modelName>	content/WtPrefabs/Boss2025Idle.prefab	</modelName>
+      <id>	31087	</id>
+      <name>	R229_Object_718B_3Dst_01_gun	</name>
+      <modelName>	vehicles/russian/R229_Object_718B/_skins/R229_Object_718B_3Dst_01/gun_number_switcher.prefab	</modelName>
       <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	31088	</id>
+      <name>	GB139_Vulcan_anim	</name>
+      <modelName>	vehicles/british/GB139_Vulcan/GB139_Vulcan_anim.prefab	</modelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+      <hangarModelName>	vehicles/british/GB139_Vulcan/GB139_Vulcan_hangar.prefab	</hangarModelName>
+    </attachment>
+    <attachment>
+      <id>	31090	</id>
+      <modelName>	vehicles/czech/Cz39_SD_122_49_Sekera/SleeveEjection.prefab	</modelName>
+      <hangarModelName>	vehicles/czech/Cz39_SD_122_49_Sekera/Sleeve_hangar.prefab	</hangarModelName>
+      <initialVisibility>	true	</initialVisibility>
+      <name>	Cz39_SD_122_49_Sekera	</name>
+      <texture>	gui/maps/vehicles/styles/czech.png	</texture>
+    </attachment>
+    <attachment>
+      <id>	31080	</id>
+      <name>	G00_Ratte_anim	</name>
+      <modelName>	vehicles/german/G00_Ratte/G00_Ratte_anim.prefab	</modelName>
+      <hangarModelName>	vehicles/german/G00_Ratte/G00_Ratte_anim.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
     </attachment>
   </itemGroup>
 </attachments.xml>

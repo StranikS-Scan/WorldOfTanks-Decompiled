@@ -384,14 +384,16 @@ class ClientArena(object):
          'maxHealth': info[24],
          'vehPostProgression': info[25],
          'customRoleSlotTypeId': info[26],
-         'botDisplayStatus': info[27]}
+         'botDisplayStatus': info[27],
+         'statTrackFrags': info[28]}
         return (info[0], infoAsDict)
 
     def __getVehicleType(self, compactDescr, extData):
         return None if compactDescr is None else vehicles.VehicleDescr(compactDescr=compactDescr, extData=extData)
 
     def __vehicleStatisticsAsDict(self, stats):
-        return (stats[0], {'frags': stats[1]})
+        return (stats[0], {'frags': stats[1],
+          'teamKillFrags': stats[2]})
 
     def runVsePlan(self, planName, params, key='', context=None):
         if self._vsePlans is not None:

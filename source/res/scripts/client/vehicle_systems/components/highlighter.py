@@ -65,14 +65,14 @@ class Highlighter(cgf_obsolete_script.py_component.Component):
     def activate(self):
         self.__highlightStatus &= ~self.HIGHLIGHT_DISABLED
         if self.__isPlayersVehicle and self.__vehicle is not None:
-            BigWorld.wgAddIgnoredCollisionEntity(self.__vehicle, self.__collisions)
+            BigWorld.addIgnoredCollisionEntity(self.__vehicle, self.__collisions)
         return
 
     def deactivate(self):
         self.removeHighlight()
         self.__highlightStatus |= self.HIGHLIGHT_DISABLED
         if self.__isPlayersVehicle and self.__vehicle is not None:
-            BigWorld.wgDelIgnoredCollisionEntity(self.__vehicle)
+            BigWorld.delIgnoredCollisionEntity(self.__vehicle)
         return
 
     def destroy(self):

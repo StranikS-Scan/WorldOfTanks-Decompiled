@@ -40,7 +40,7 @@ class IClanListener(object):
     def onClanInvitesStateChanged(self, inviteIds, state):
         pass
 
-    def onWgncNotificationReceived(self, notifID, item):
+    def onNotifyCenterNotificationReceived(self, notifID, item):
         pass
 
     def onMembersListChanged(self, members):

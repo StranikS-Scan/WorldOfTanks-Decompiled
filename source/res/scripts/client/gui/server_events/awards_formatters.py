@@ -34,7 +34,6 @@ from personal_missions import PM_BRANCH
 from shared_utils import CONST_CONTAINER, findFirst, first
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.offers import IOffersDataProvider
-from skeletons.gui.game_control import IEventBattlesController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 if TYPE_CHECKING:
@@ -196,9 +195,7 @@ def getDefaultFormattersMap():
      'rankedBonusBattles': countableIntegralBonusFormatter,
      'tmanToken': TmanTemplateBonusFormatter(),
      'battlePassPoints': BattlePassBonusFormatter(),
-     'currencies': CurrenciesBonusFormatter(),
-     'ticket': tokenBonusFormatter,
-     'stamp': tokenBonusFormatter}
+     'currencies': CurrenciesBonusFormatter()}
 
 
 def getEpicFormattersMap():
@@ -307,12 +304,6 @@ def getMarathonRewardScrenFormatterMap():
     return mapping
 
 
-def getEventFormattersMap():
-    mapping = getDefaultFormattersMap()
-    mapping.update({'groups': EventGroupsFormatter()})
-    return mapping
-
-
 def getDefaultAwardFormatter():
     return AwardsPacker(getDefaultFormattersMap())
 
@@ -355,10 +346,6 @@ def getRankedAwardsPacker(context=None):
 
 def getRoyaleAwardsPacker():
     return AwardsPacker(getRoyaleFormatterMap())
-
-
-def getEventAwardFormatter():
-    return AwardsPacker(getEventFormattersMap())
 
 
 def getPersonalMissionAwardPacker():
@@ -1877,23 +1864,3 @@ class EpicSelectTokenFormatter(SimpleBonusFormatter):
         result = {AWARDS_SIZES.SMALL: backport.image(R.images.gui.maps.icons.epicBattles.awards.c_48x48.abilityToken()),
          AWARDS_SIZES.BIG: backport.image(R.images.gui.maps.icons.epicBattles.awards.c_80x80.abilityToken())}
         return result
-
-
-class EventGroupsFormatter(SimpleBonusFormatter):
-    __gameEventCtrl = dependency.descriptor(IEventBattlesController)
-
-    def _format(self, bonus):
-        if bonus.getName() != 'groups':
-            return []
-        value = bonus.getValue()
-        return [] if not value or 'oneof' not in value[0] else [PreformattedBonus(label='', images=self._getImages(), tooltip=self._makeTooltip())]
-
-    @classmethod
-    def _getImages(cls):
-        return {AWARDS_SIZES.SMALL: RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_COLLECTION_HUNTER,
-         AWARDS_SIZES.BIG: RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_COLLECTION_HUNTER}
-
-    @staticmethod
-    def _makeTooltip():
-        collectionRes = R.strings.event.bonuses.random_collection_element_WT
-        return makeTooltip(backport.text(collectionRes.tooltip.header()), backport.text(collectionRes.tooltip.body()))

@@ -14,7 +14,6 @@ def getTooltipBuilders():
      DataBuilder(TOOLTIPS_CONSTANTS.AWARD_VEHICLE, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, vehicle.VehicleInfoTooltipData(contexts.AwardContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.EXTENDED_AWARD_VEHICLE, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, vehicle.ExtendedVehicleInfoTooltipData(contexts.ExtendedAwardContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.SENIORITY_AWARD_VEHICLE, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, vehicle.ExtendedVehicleInfoTooltipData(contexts.SeniorityAwardContext())),
-     DataBuilder(TOOLTIPS_CONSTANTS.WT_PORTAL_VEHICLE, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, vehicle.VehicleInfoTooltipData(contexts.WtEventPortalContext())),
      DefaultFormatBuilder(TOOLTIPS_CONSTANTS.TRADE_IN, TOOLTIPS_CONSTANTS.COMPLEX_UI, vehicle.VehicleTradeInTooltipData(contexts.HangarContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.TRADE_IN_PRICE, TOOLTIPS_CONSTANTS.TRADE_IN_PRICE, vehicle.VehicleTradeInPriceTooltipData(contexts.HangarContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.HISTORICAL_VEHICLE, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, vehicle.VehicleInfoTooltipData(contexts.HangarContext())),
@@ -29,7 +28,8 @@ def getTooltipBuilders():
      AdvancedDataBuilder(TOOLTIPS_CONSTANTS.DEFAULT_CREW_MEMBER, TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_CREW_MEMBER_UI, vehicle.DefaultCrewMemberTooltipData(contexts.PreviewContext()), advanced.TankmanPreviewTooltipAdvanced(contexts.PreviewContext())),
      AdvancedDataBuilder(TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_CREW_MEMBER, TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_CREW_MEMBER_UI, vehicle.VehiclePreviewCrewMemberTooltipData(contexts.PreviewContext()), advanced.TankmanPreviewTooltipAdvanced(contexts.PreviewContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.TECHTREE_VEHICLE_ANNOUNCEMENT, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, vehicle.VehicleAnnouncementParametersTooltipData(contexts.VehicleAnnouncementContext())),
-     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.VEHICLE_ROLES, None, vehicle_roles.VehicleRolesTooltipContentWindowData(contexts.ToolTipContext(None))))
+     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.VEHICLE_ROLES, None, vehicle_roles.VehicleRolesTooltipContentWindowData(contexts.ToolTipContext(None))),
+     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.VEHICLE_STAT_TRACK, None, vehicle.StatTrackTooltipData(contexts.ToolTipContext(None))))
 
 
 class InventoryVehicleBuilder(DataBuilder):

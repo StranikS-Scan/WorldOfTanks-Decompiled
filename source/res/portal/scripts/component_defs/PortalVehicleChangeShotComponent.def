@@ -1,0 +1,22 @@
+<PortalVehicleChangeShotComponent.def>
+  <Properties>
+    <vehicleChangeShotState>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </vehicleChangeShotState>
+    <equipmentID>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </equipmentID>
+    <possessedVehicleID>
+      <Type>	OBJECT_ID	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </possessedVehicleID>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+</PortalVehicleChangeShotComponent.def>

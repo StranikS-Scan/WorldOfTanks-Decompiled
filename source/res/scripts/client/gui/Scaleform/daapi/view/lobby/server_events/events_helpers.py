@@ -28,7 +28,7 @@ from helpers import dependency, i18n, int2roman, time_utils
 from nations import ALLIANCE_TO_NATIONS
 from optional_bonuses import TrackVisitor
 from personal_missions import PM_BRANCH
-from potapov_quests import ClassifierByAlliance, ClassifierByClass
+from pm_quests import ClassifierByAlliance, ClassifierByClass
 from quest_xml_source import MAX_BONUS_LIMIT
 from shared_utils import first
 from skeletons.gui.customization import ICustomizationService

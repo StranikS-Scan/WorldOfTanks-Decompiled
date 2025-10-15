@@ -9,7 +9,7 @@ if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.common.missions.event_model import EventModel
     from gui.server_events.event_items import Quest, DailyQuest
     from frameworks.wulf.view.array import Array
-__all__ = ('needToUpdateQuestsInModel', 'modifyPostbattleConditions')
+__all__ = ('needToUpdateQuestsInModel', 'modifyPostbattleConditions', 'isRegularQuestsStateChanged')
 NUM_OF_COMMON_DAILY_QUESTS = 3
 
 def areCommonQuestsCompleted(quests):
@@ -58,3 +58,7 @@ def modifyPostbattleConditions(quest, questModel):
         else:
             postBattleModel.setTotal(1)
             postBattleModel.setCurrent(1 if quest.isCompleted() else 0)
+
+
+def isRegularQuestsStateChanged(state, diff):
+    return any((diff[stateVariable] != state for stateVariable in ('enabled', 'regularQuestsEnabled')))

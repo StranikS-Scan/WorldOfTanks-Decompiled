@@ -56,6 +56,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.hangar.entry_points.craftmachine_entry_point import CraftMachineEntryPoint
     from gui.Scaleform.daapi.view.lobby.hangar.entry_points.shop_sales_entry_point import ShopSalesEntryPoint
     from gui.Scaleform.daapi.view.lobby.hangar.entry_points.mapbox_entry_point import MapBoxEntryPoint
+    from gui.Scaleform.daapi.view.lobby.hangar.entry_points.black_market_entry_point import BlackMarketEntryPoint
     from gui.Scaleform.daapi.view.lobby.hangar.entry_points.marathon_entry_point import MarathonEntryPoint
     from gui.Scaleform.daapi.view.lobby.hangar.battle_matters_entry_point import BattleMattersEntryPoint
     from gui.Scaleform.daapi.view.lobby.hangar.TournamentsView import TournamentsView
@@ -111,6 +112,7 @@ def getViewSettings():
      ComponentSettings(HANGAR_ALIASES.SHOP_SALES_ENTRY_POINT, ShopSalesEntryPoint, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.STRONGHOLD_ENTRY_POINT, StrongholdEntryPoint, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.MAPBOX_ENTRY_POINT, MapBoxEntryPoint, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(HANGAR_ALIASES.BLACK_MARKET_ENTRY_POINT, BlackMarketEntryPoint, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.MARATHON_ENTRY_POINT, MarathonEntryPoint, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.RESOURCE_WELL_ENTRY_POINT, ResourceWellEntryPointComponent, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.COLLECTIVE_GOAL_ENTRY_POINT, CollectiveGoalEntryPointComponent, ScopeTemplates.DEFAULT_SCOPE),

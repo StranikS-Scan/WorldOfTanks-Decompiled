@@ -42,11 +42,12 @@
     <globalVBSize>	12582912	</globalVBSize>
     <globalIBSize>	131072	</globalIBSize>
     <streaming>
-      <MAX>	1	</MAX>
+      <ULTRA>	1.0	</ULTRA>
+      <MAX>	0.6	</MAX>
       <HIGH>	0.5	</HIGH>
-      <MEDIUM>	0.25	</MEDIUM>
-      <LOW>	0.25	</LOW>
-      <MIN>	0.25	</MIN>
+      <MEDIUM>	0.4	</MEDIUM>
+      <LOW>	0.3	</LOW>
+      <MIN>	0.2	</MIN>
     </streaming>
     <ObjectsFarPlaneManager>
       <cullVolume>	2800	</cullVolume>
@@ -402,6 +403,12 @@
         </bank>
         <bank>
           <name>	field_modernization.bnk	</name>
+        </bank>
+        <bank>
+          <name>	ev_portal_music.bnk	</name>
+        </bank>
+        <bank>
+          <name>	ev_portal_music.pck	</name>
         </bank>
       </SFX_soundbanks_loadonce>
       <SFX_soundbanks_hangar>
@@ -770,16 +777,6 @@
           <name>	style_3D_F133_Projet_57_Ampere.bnk	</name>
         </bank>
       </SFX_soundbanks_arena>
-      <SFX_soundbanks_custom>
-        <white_tiger_2022>
-          <bank>
-            <name>	ev_white_tiger_2021_voiceover.bnk	</name>
-          </bank>
-          <bank>
-            <name>	ev_white_tiger_2021_voiceover.pck	</name>
-          </bank>
-        </white_tiger_2022>
-      </SFX_soundbanks_custom>
       <SFX_soundbanks_editor>
         <bank>
           <name>	fort_area.bnk	</name>

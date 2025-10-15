@@ -314,6 +314,7 @@ class TankmanChangeAndRecruitView(ViewImpl):
             self.__selectedSpecialty = None
             vm.futureTankman.setSpecialty(str(_INVALID_IDX))
             vm.setSpecialtyGold(0)
+            self.setBlockedRetraining(vm)
             self.__setMoneyState(vm)
         for name in rolesList:
             if self.__isFemale:
@@ -418,7 +419,7 @@ class TankmanChangeAndRecruitView(ViewImpl):
             if not self.__retrain and not self.__isSpecialtyChanged:
                 self.setInitialRetraining(vm)
             if self.initialVehicle == self.vehicle:
-                self.setBlockedRetraining(vm, _EMPTY_VALUE)
+                self.setBlockedRetraining(vm)
                 self.__setMoneyState(vm)
 
     @args2params(str)
@@ -504,25 +505,31 @@ class TankmanChangeAndRecruitView(ViewImpl):
             if self.__isSpecialtyChanged:
                 vm.setSpecialtyGold(self.itemsCache.items.shop.changeRoleCost)
                 self.__isSpecialtyChanged = True
-                self.setBlockedRetraining(vm, _RETRAINING_TYPES[-1])
+                self.setBlockedRetraining(vm, isAcademy=True)
             else:
-                self.setInitialRetraining(vm)
+                vm.setSpecialtyGold(0)
+                self.setInitialRetraining(vm, firstType=False)
             self.__selectedSpecialty = specialty
             vm.futureTankman.setSpecialty(specialty)
             vm.setIsShowCheckBox(self.__tmanCanTransferToVehicle())
             self.__setMoneyState(vm)
         return
 
-    def setInitialRetraining(self, vm):
-        self.__retrain = first(_RETRAINING_TYPES)
-        self.__retrainKey = _RETRAINING_TYPES.index(self.__retrain)
-        vm.setRetraining(self.__retrain)
-        vm.setCanChangeRetraining(True)
+    def setInitialRetraining(self, vm, firstType=True):
+        if firstType or self.__initialVehicle and self.vehicle and self.__initialVehicle != self.vehicle:
+            self.__retrain = first(_RETRAINING_TYPES)
+            self.__retrainKey = _RETRAINING_TYPES.index(self.__retrain)
+            vm.setRetraining(self.__retrain)
+            vm.setCanChangeRetraining(True)
+            vm.setRetrainingGold(0)
+            vm.setCredits(0)
+        else:
+            self.setBlockedRetraining(vm, isAcademy=False)
 
-    def setBlockedRetraining(self, vm, value):
+    def setBlockedRetraining(self, vm, isAcademy=False):
         self.__retrain = None
         self.__retrainKey = None
-        vm.setRetraining(value)
+        vm.setRetraining(_RETRAINING_TYPES[-1] if isAcademy else _EMPTY_VALUE)
         vm.setRetrainingGold(0)
         vm.setCredits(0)
         vm.setCanChangeRetraining(False)

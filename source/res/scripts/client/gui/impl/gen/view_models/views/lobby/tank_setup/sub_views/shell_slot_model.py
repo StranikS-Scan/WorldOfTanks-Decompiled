@@ -8,7 +8,7 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.shell_specificati
 class ShellSlotModel(BaseSlotModel):
     __slots__ = ()
 
-    def __init__(self, properties=26, commands=0):
+    def __init__(self, properties=28, commands=0):
         super(ShellSlotModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -25,23 +25,35 @@ class ShellSlotModel(BaseSlotModel):
     def setCount(self, value):
         self._setNumber(22, value)
 
-    def getBuyCount(self):
+    def getMaxCount(self):
         return self._getNumber(23)
 
-    def setBuyCount(self, value):
+    def setMaxCount(self, value):
         self._setNumber(23, value)
 
+    def getAvailableCount(self):
+        return self._getNumber(24)
+
+    def setAvailableCount(self, value):
+        self._setNumber(24, value)
+
+    def getBuyCount(self):
+        return self._getNumber(25)
+
+    def setBuyCount(self, value):
+        self._setNumber(25, value)
+
     def getType(self):
-        return self._getString(24)
+        return self._getString(26)
 
     def setType(self, value):
-        self._setString(24, value)
+        self._setString(26, value)
 
     def getSpecifications(self):
-        return self._getArray(25)
+        return self._getArray(27)
 
     def setSpecifications(self, value):
-        self._setArray(25, value)
+        self._setArray(27, value)
 
     @staticmethod
     def getSpecificationsType():
@@ -51,6 +63,8 @@ class ShellSlotModel(BaseSlotModel):
         super(ShellSlotModel, self)._initialize()
         self._addViewModelProperty('totalPrice', PriceModel())
         self._addNumberProperty('count', 0)
+        self._addNumberProperty('maxCount', 0)
+        self._addNumberProperty('availableCount', 0)
         self._addNumberProperty('buyCount', 0)
         self._addStringProperty('type', '')
         self._addArrayProperty('specifications', Array())

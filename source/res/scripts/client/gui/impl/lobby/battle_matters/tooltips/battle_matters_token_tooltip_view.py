@@ -13,16 +13,21 @@ class BattleMattersTokenTooltipView(ViewImpl):
     __battleMattersController = dependency.descriptor(IBattleMattersController)
     __itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         settings = ViewSettings(R.views.lobby.battle_matters.tooltips.BattleMattersTokenTooltipView())
         settings.model = BattleMattersTokenTooltipViewModel()
+        settings.args = args
+        settings.kwargs = kwargs
         super(BattleMattersTokenTooltipView, self).__init__(settings)
 
     @property
     def viewModel(self):
         return super(BattleMattersTokenTooltipView, self).getViewModel()
 
-    def _onLoading(self):
+    def _onLoading(self, rewardToken):
         super(BattleMattersTokenTooltipView, self)._onLoading()
-        if self.__battleMattersController.isFinished():
-            self.viewModel.setEndDate(self.__itemsCache.items.tokens.getTokenInfo(self.__battleMattersController.getDelayedRewardCurrencyToken())[0])
+        with self.viewModel.transaction() as model:
+            level = self.__battleMattersController.getDelayedRewardVehiclesLevel(rewardToken)
+            model.setVehiclesLevel(level)
+            if self.__battleMattersController.isFinished():
+                model.setEndDate(self.__battleMattersController.getDelayedRewardExpirationTime())

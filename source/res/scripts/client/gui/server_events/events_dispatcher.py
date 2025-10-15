@@ -15,6 +15,7 @@ from gui.impl.lobby.reward_window import GiveAwayRewardWindow, PiggyBankRewardWi
 from gui.impl.pub.notification_commands import WindowNotificationCommand, EventNotificationCommand, NotificationEvent
 from gui.paragons.paragons_constants import PARAGONS_POST_BATTLE_FAKE_QUEST_ID
 from gui.prb_control.dispatcher import g_prbLoader
+from gui.selectable_reward.common import BattleMattersSelectableRewardManager
 from gui.server_events import anniversary_helper, awards, events_helpers, recruit_helper
 from gui.server_events.events_helpers import getLootboxesFromBonuses, isC11nQuest
 from gui.server_events.finders import BRANCH_TO_OPERATION_IDS
@@ -24,6 +25,7 @@ from gui.shared.events import PersonalMissionsEvent
 from helpers import dependency
 from personal_missions import PM_BRANCH
 from shared_utils import first
+from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IMarathonEventsController, IArmoryYardController, IDebutBoxesController
 from skeletons.gui.impl import INotificationWindowController, IGuiLoader
@@ -179,16 +181,23 @@ def showMissionsMapboxProgression():
     showMissions(tab=QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS)
 
 
-def showBattleMatters():
-    _showMissions(tab=QUESTS_ALIASES.BATTLE_MATTERS_VIEW_PY_ALIAS, openMainRewardView=False)
-
-
 def showBattleMattersMainView():
     _showMissions(tab=QUESTS_ALIASES.BATTLE_MATTERS_VIEW_PY_ALIAS, openMainView=True)
 
 
 def showBattleMattersMainReward():
     _showMissions(tab=QUESTS_ALIASES.BATTLE_MATTERS_VIEW_PY_ALIAS, openMainRewardView=True)
+
+
+def showBattleMatters():
+    battleMattersController = dependency.instance(IBattleMattersController)
+    delayedRewardCurrencyTokens = battleMattersController.getDelayedRewardCurrencyTokens()
+    if battleMattersController.isFinished() and len(delayedRewardCurrencyTokens) == 1:
+        delayedRewardCurrencyToken = first(delayedRewardCurrencyTokens)
+        delayedRewardToken = BattleMattersSelectableRewardManager.getTokenByGiftToken(delayedRewardCurrencyToken)
+        shared_events.showDelayedReward(delayedRewardToken=delayedRewardToken)
+    else:
+        showBattleMattersMainView()
 
 
 def showMissionsBattlePass(layoutID=None, chapterID=0):
@@ -271,7 +280,7 @@ def showMission(eventID, eventType=None):
             if prefix is not None:
                 return showMissionsMarathon(marathonPrefix=prefix)
             if events_helpers.isBattleMattersQuestID(eventID):
-                return showBattleMatters()
+                return showBattleMattersMainView()
             if events_helpers.isArmoryYardQuest(eventID):
                 return goToArmoryYardQuests()
             if events_helpers.isActiveEarlyAccessQuest(eventID):

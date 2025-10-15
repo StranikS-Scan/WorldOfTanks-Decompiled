@@ -13,6 +13,7 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.helpers.statistics import IStatisticsCollector
+from ExtensionsManager import g_extensionsManager
 STATISTICS_VERSION = '0.0.2'
 
 class _STATISTICS_STATE(object):
@@ -188,7 +189,7 @@ class StatisticsCollector(IStatisticsCollector):
         self.__lastArenaTypeID = arenaTypeID
         self.__lastArenaUniqueID = arenaUniqueID
         self.__lastArenaTeam = arenaTeam
-        if not self.__hangarWasLoadedOnce and not self.bootcampController.isInBootcamp():
+        if not self.__hangarWasLoadedOnce and not self.bootcampController.isInBootcamp() and not self.__isInStoryMode():
             self.__invalidStats |= INVALID_CLIENT_STATS.CLIENT_STRAIGHT_INTO_BATTLE
             self.__sendFullStat = True
 
@@ -312,3 +313,11 @@ class StatisticsCollector(IStatisticsCollector):
 
     def __updateBattle(self):
         pass
+
+    @staticmethod
+    def __isInStoryMode():
+        if not g_extensionsManager.isExtensionEnabled('story_mode'):
+            return False
+        from story_mode.skeletons.story_mode_controller import IStoryModeController
+        storyModeCtrl = dependency.instance(IStoryModeController)
+        return storyModeCtrl.isEnabled() and storyModeCtrl.isOnboarding

@@ -46,6 +46,10 @@ class StoryModeEntity(PreQueueEntity):
     def storage(self):
         return None
 
+    @property
+    def needsCheckVehicleForBattle(self):
+        return False
+
     def init(self, ctx=None):
         self.storage.queueType = self.getQueueType()
         if self._skippedShowGUI:

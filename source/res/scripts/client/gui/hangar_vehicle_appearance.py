@@ -13,7 +13,7 @@ import VehicleStickers
 import Vehicular
 import math_utils
 from dossiers2.ui.achievements import MARK_ON_GUN_RECORD
-from items.components.c11n_constants import EASING_TRANSITION_DURATION
+from items.components.c11n_constants import EASING_TRANSITION_DURATION, STAT_TRACK_FRAGS_NOT_SUPPORTED
 from gui import g_tankActiveCamouflage
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.simple_turret_rotator import SimpleTurretRotator
@@ -129,7 +129,6 @@ class HangarVehicleAppearance(ScriptGameObject):
         return None
 
     isVehicleDestroyed = property(lambda self: self.__isVehicleDestroyed)
-    typeDescriptor = property(lambda self: self.__vDesc if self.__vEntity is None else self.__vEntity.typeDescriptor)
 
     def __init__(self, spaceId, vEntity):
         ScriptGameObject.__init__(self, vEntity.spaceID, 'HangarVehicleAppearance')
@@ -155,6 +154,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.__anchorsHelpers = None
         self.__anchorsParams = None
         self.__attachments = []
+        self.__installedAttachments = []
         self.__modelAnimators = []
         self._modelCollisions = None
         self._crashedModelCollisions = None
@@ -177,6 +177,7 @@ class HangarVehicleAppearance(ScriptGameObject):
 
     def remove(self):
         self.__clearModelAnimators()
+        self.__clearAllPrefabAttachments()
         self.__loadState.unload()
         if self.shadowManager is not None:
             self.shadowManager.updatePlayerTarget(None)
@@ -209,6 +210,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         if self.shadowManager is not None and self.__vEntity.model is not None:
             self.shadowManager.unregisterCompoundModel(self.__vEntity.model)
         self.__clearModelAnimators()
+        self.__clearAllPrefabAttachments()
         self.__vehicleStickers = None
         ScriptGameObject.deactivate(self)
         ScriptGameObject.destroy(self)
@@ -223,6 +225,8 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.__onLoadedAfterRefreshCallback = None
         self.turretRotator = None
         self.undamagedStateChildren = []
+        self.__attachments = []
+        self.__installedAttachments = []
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self.itemsCache.onSyncCompleted -= self.__onItemsCacheSyncCompleted
         g_eventBus.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__handleEntityUpdated)
@@ -284,6 +288,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         return self.turretAndGunAngles.getGunPitch()
 
     def __reload(self, vDesc, vState, outfit):
+        _logger.info('HangarVehicleAppearance::__reload vehicle(%s), style(%s)', vDesc.name, outfit.style.userString if outfit.style else 'None')
         self.__clearModelAnimators()
         self.__loadState.unload()
         if self.fashion is not None:
@@ -456,12 +461,13 @@ class HangarVehicleAppearance(ScriptGameObject):
 
         if not self.__isVehicleDestroyed:
             self.__modelAnimators.extend(camouflages.getAttachmentsAnimators(self.__attachments, self.__spaceId, resourceRefs, self.compoundModel))
-        from vehicle_systems import model_assembler
-        model_assembler.assembleCustomLogicComponents(self, self.__vEntity.typeDescriptor, self.__attachments, self.__modelAnimators)
+        if self.__attachments != self.__installedAttachments:
+            self.__clearStylePrefabAttachments()
+            from vehicle_systems import model_assembler
+            model_assembler.assembleCustomLogicComponents(self, self.__vEntity.typeDescriptor, self.__attachments, self.__modelAnimators)
+            self.__installedAttachments = list(self.__attachments)
         for modelAnimator in self.__modelAnimators:
             modelAnimator.animator.start()
-
-        self._onOutfitReady()
 
     def __onSettingsChanged(self, diff):
         if 'showMarksOnGun' in diff:
@@ -536,8 +542,7 @@ class HangarVehicleAppearance(ScriptGameObject):
             self.flagComponent = None
         self.__staticTurretYaw = self.__vDesc.gun.staticTurretYaw
         self.__staticGunPitch = self.__vDesc.gun.staticPitch
-        applyGunAndTurretDir = 'wt_boss' in self.__vDesc.type.tags
-        if applyGunAndTurretDir or not ('AT-SPG' in self.__vDesc.type.tags or 'SPG' in self.__vDesc.type.tags):
+        if not ('AT-SPG' in self.__vDesc.type.tags or 'SPG' in self.__vDesc.type.tags):
             if self.__staticTurretYaw is None:
                 self.__staticTurretYaw = self._getTurretYaw()
                 turretYawLimits = self.__vDesc.gun.turretYawLimits
@@ -565,6 +570,12 @@ class HangarVehicleAppearance(ScriptGameObject):
         if self.__vDesc and self.__showMarksOnGun:
             vehicleDossier = self.itemsCache.items.getVehicleDossier(self.__vDesc.type.compactDescr)
             return vehicleDossier.getRandomStats().getAchievement(MARK_ON_GUN_RECORD).getValue()
+
+    def getThisVehicleDossierStatTrackFrags(self):
+        if self.__vDesc:
+            vehicleDossier = self.itemsCache.items.getVehicleDossier(self.__vDesc.type.compactDescr)
+            return vehicleDossier.getRandomStats().getFragsCount()
+        return STAT_TRACK_FRAGS_NOT_SUPPORTED
 
     def _requestClanDBIDForStickers(self, callback):
         BigWorld.player().stats.get('clanDBID', callback)
@@ -832,11 +843,13 @@ class HangarVehicleAppearance(ScriptGameObject):
     def __updateSequences(self, outfit):
         resources = camouflages.getModelAnimatorsPrereqs(outfit, self.__spaceId)
         resources.extend(camouflages.getAttachmentsAnimatorsPrereqs(self.__attachments, self.__spaceId))
-        if not resources and not self.__attachments:
+        if not resources and self.__attachments != self.__installedAttachments:
             self.__clearModelAnimators()
+            self.__clearStylePrefabAttachments()
             if not self.__isVehicleDestroyed:
                 from vehicle_systems import model_assembler
                 model_assembler.assembleCustomLogicComponents(self, self.__vEntity.typeDescriptor, self.__attachments, self.__modelAnimators)
+            self.__installedAttachments = list(self.__attachments)
             return
         BigWorld.loadResourceListBG(tuple(resources), makeCallbackWeak(self.__onAnimatorsLoaded, self.__curBuildInd, outfit))
 
@@ -849,13 +862,23 @@ class HangarVehicleAppearance(ScriptGameObject):
             modelAnimator.animator.stop()
 
         self.__modelAnimators = []
+        return
+
+    def __clearStylePrefabAttachments(self):
         from cgf_components.prefab_attachment_component import PrefabAttachmentComponent
+        newChildren = []
         for go in self.undamagedStateChildren:
             if not go.findComponentByType(PrefabAttachmentComponent):
                 CGF.removeGameObject(go)
+            newChildren.append(go)
+
+        self.undamagedStateChildren = newChildren
+
+    def __clearAllPrefabAttachments(self):
+        for go in self.undamagedStateChildren:
+            CGF.removeGameObject(go)
 
         self.undamagedStateChildren = []
-        return
 
     def __onVehicleChanged(self):
         self.__anchorsParams = None
@@ -1063,6 +1086,3 @@ class HangarVehicleAppearance(ScriptGameObject):
             return outfit
         vehicleCD = g_currentPreviewVehicle.item.descriptor.makeCompactDescr()
         return self.customizationService.getOutfitByStyleId(styleId=styleId, vehicleCD=vehicleCD) if vehicle.isOutfitLocked and styleId > 0 else self.customizationService.getEmptyOutfitWithNationalEmblems(vehicleCD=vehicleCD)
-
-    def _onOutfitReady(self):
-        pass

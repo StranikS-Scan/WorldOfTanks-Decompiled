@@ -188,28 +188,28 @@ def updateTankmanDossier(dossierDescr, battleResults):
     __updateTankmanDossierImpl(dossierDescr, battleResults)
 
 
-def updatePotapovQuestAchievements(accDossierDescr, progress):
-    import potapov_quests
+def updatePMQuestAchievements(accDossierDescr, progress):
+    import pm_quests
     achievementCounters = dict()
     completedCounters = dict()
-    tileCache = potapov_quests.g_tileCache
+    tileCache = pm_quests.g_tileCache
     for questID, (flags, state) in progress.iteritems():
-        if state < potapov_quests.PQ_STATE.NEED_GET_MAIN_REWARD:
+        if state < pm_quests.PM_STATE.NEED_GET_MAIN_REWARD:
             continue
-        pqType = potapov_quests.g_cache.questByPotapovQuestID(questID)
-        tileInfo = tileCache.getTileInfo(pqType.tileID)
+        pmQuestType = pm_quests.g_cache.questByPMQuestID(questID)
+        tileInfo = tileCache.getTileInfo(pmQuestType.tileID)
         seasonID = tileInfo['seasonID']
         completedCounters[seasonID] = completedCounters.get(seasonID, 0) + 1
-        if state >= potapov_quests.PQ_STATE.NEED_GET_ADD_REWARD:
-            pqAchievements = tileInfo['achievements'] or {}
-            chainAchievement = pqAchievements.get(pqType.chainID, None)
+        if state >= pm_quests.PM_STATE.NEED_GET_ADD_REWARD:
+            pmQuestsAchievements = tileInfo['achievements'] or {}
+            chainAchievement = pmQuestsAchievements.get(pmQuestType.chainID, None)
             if chainAchievement:
                 achievementCounters[chainAchievement] = achievementCounters.get(chainAchievement, 0) + 1
 
     for seasonID, minCounter, dossierBlockName, achievementName in ((1, 1, 'singleAchievements', 'firstMerit'),
-     (1, 1, 'steamAchievements', 'steamDoPotapovQuestMedal'),
+     (1, 1, 'steamAchievements', 'steamDoPersonalMissionQuestMedal'),
      (2, 5, 'singleAchievements', 'newMeritPM2'),
-     (2, 1, 'steamAchievements', 'steamDoPotapovQuestMedal')):
+     (2, 1, 'steamAchievements', 'steamDoPersonalMissionQuestMedal')):
         needToAward = completedCounters.get(seasonID, 0) >= minCounter
         if needToAward and not accDossierDescr[dossierBlockName][achievementName]:
             accDossierDescr[dossierBlockName][achievementName] = True

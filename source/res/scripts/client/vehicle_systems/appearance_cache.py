@@ -153,7 +153,6 @@ class AppearanceCache(IAppearanceCache):
         return CompoundAppearance()
 
     def __load(self, key, info, onLoadedCallback=None):
-        _logger.debug('__load(%d)', key[0])
         loadInfo = self.__loadingAssemblerQueue.get(key)
         if loadInfo is not None:
             if onLoadedCallback is not None:
@@ -162,6 +161,9 @@ class AppearanceCache(IAppearanceCache):
         else:
             appearance = self.createAppearanceInstance()
             prereqs = appearance.prerequisites(info.typeDescr, key[0], info.health, info.isCrewActive, info.isTurretDetached, info.outfitCD)
+            style = appearance.outfit.style if hasattr(appearance, 'outfit') else None
+            styleString = style.userString if style else 'None'
+            _logger.info('AppearanceCache::__load: vehicleId(%d), vehicle(%s), style(%s)', key[0], info.typeDescr.name, styleString)
             taskId = BigWorld.loadResourceListBG(prereqs, functools.partial(self.__onAppearanceLoaded, key), loadingPriority(key[0]))
             _logger.debug('loadResourceListBG vehicle = (%d), task = (%d)', key[0], taskId)
             self.__loadingAssemblerQueue[key] = _LoadInfo(appearance, taskId, info.typeDescr, onLoadedCallback)

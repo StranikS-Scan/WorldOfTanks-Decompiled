@@ -189,13 +189,14 @@ class BaseCustomizationItem(object):
 class PaintItem(BaseCustomizationItem):
     __metaclass__ = ReflectionMetaclass
     itemType = CustomizationType.PAINT
-    __slots__ = ('color', 'usageCosts', 'gloss', 'metallic')
+    __slots__ = ('color', 'usageCosts', 'gloss', 'metallic', 'colorGroup')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
     def __init__(self, parentGroup = None):
         self.color = 0
         self.usageCosts = {area : 1 for area in ApplyArea.RANGE}
         self.gloss = 0.0
         self.metallic = 0.0
+        self.colorGroup = 'color_group_05'
         super(PaintItem, self).__init__(parentGroup)
 
     def getAmount(self, parts):
@@ -212,23 +213,25 @@ class PaintItem(BaseCustomizationItem):
 class DecalItem(BaseCustomizationItem):
     __metaclass__ = ReflectionMetaclass
     itemType = CustomizationType.DECAL
-    __slots__ = ('type', 'canBeMirrored')
+    __slots__ = ('type', 'canBeMirrored', 'decalGroup')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
     def __init__(self, parentGroup = None):
         self.type = 0
         self.canBeMirrored = False
+        self.decalGroup = 'special'
         super(DecalItem, self).__init__(parentGroup)
 
 class ProjectionDecalItem(BaseCustomizationItem):
     __metaclass__ = ReflectionMetaclass
     itemType = CustomizationType.PROJECTION_DECAL
-    __slots__ = ('canBeMirroredHorizontally', 'glossTexture', 'scaleFactorId', 'emissionSettings')
+    __slots__ = ('canBeMirroredHorizontally', 'glossTexture', 'scaleFactorId', 'emissionSettings', 'projectionDecalGroup')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
     def __init__(self, parentGroup = None):
         self.canBeMirroredHorizontally = False
         self.glossTexture = ''
         self.scaleFactorId = DEFAULT_SCALE_FACTOR_ID
         self.emissionSettings = {'emissionAnimationSpeed': DEFAULT_EMISSION_ANIMATION_SPEED, 'deferredEmissionBrightness': DEFAULT_DEFERRED_EMISSION, 'forwardEmissionBrightness': DEFAULT_FORWARD_EMISSION, 'emissionMap': '', 'emissionPatternMap': ''}
+        self.projectionDecalGroup = 'special'
         super(ProjectionDecalItem, self).__init__(parentGroup)
 
     @property
@@ -357,7 +360,7 @@ class ModificationItem(BaseCustomizationItem):
 class StyleItem(BaseCustomizationItem):
     __metaclass__ = ReflectionMetaclass
     itemType = CustomizationType.STYLE
-    __slots__ = ('outfits', 'isRent', 'rentCount', 'modelsSet', 'isEditable', 'alternateItems', 'itemsFilters', '_changeableSlotTypes', 'styleProgressions', 'questsProgression', 'dependencies', 'dependenciesAncestors', 'nonTankMaterials')
+    __slots__ = ('outfits', 'isRent', 'rentCount', 'modelsSet', 'isEditable', 'alternateItems', 'itemsFilters', '_changeableSlotTypes', 'styleProgressions', 'questsProgression', 'dependencies', 'dependenciesAncestors', 'nonTankMaterials', 'styleGroup')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
     def __init__(self, parentGroup = None):
         self.outfits = {}
@@ -373,6 +376,7 @@ class StyleItem(BaseCustomizationItem):
         self.styleProgressions = {}
         self.questsProgression = None
         self.nonTankMaterials = ['PBS_ext.fx', 'PBS_ext_skinned.fx']
+        self.styleGroup = 'special_styles'
         super(StyleItem, self).__init__(parentGroup)
 
     def isVictim(self, color):
@@ -425,6 +429,10 @@ class StyleItem(BaseCustomizationItem):
     @property
     def isProgressionRewindEnabled(self):
         return ItemTags.PROGRESSION_REWIND_ENABLED in self.tags
+
+    @property
+    def isStatTrackStyle(self):
+        return ItemTags.STYLE_STAT_TRACK_FRAGS in self.tags
 
     @property
     def hasDependent(self):
@@ -486,13 +494,14 @@ class StyleItem(BaseCustomizationItem):
 class InsigniaItem(BaseCustomizationItem):
     __metaclass__ = ReflectionMetaclass
     itemType = CustomizationType.INSIGNIA
-    __slots__ = ('atlas', 'alphabet', 'canBeMirrored', 'emissionSettings')
+    __slots__ = ('atlas', 'alphabet', 'canBeMirrored', 'emissionSettings', 'insigniaGroup')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
     def __init__(self, parentGroup = None):
         self.atlas = ''
         self.alphabet = ''
         self.canBeMirrored = False
         self.emissionSettings = {'emissionAnimationSpeed': DEFAULT_EMISSION_ANIMATION_SPEED, 'deferredEmissionBrightness': DEFAULT_DEFERRED_EMISSION, 'forwardEmissionBrightness': DEFAULT_FORWARD_EMISSION, 'emissionMap': '', 'emissionPatternMap': ''}
+        self.insigniaGroup = 'special'
         super(InsigniaItem, self).__init__(parentGroup)
 
 class ItemGroup(object):
@@ -545,7 +554,7 @@ class Font(object):
         return items.makeIntCompactDescrByID('customizationItem', self.itemType, self.id)
 
 if IS_EDITOR:
-    CUSTOMIZATION_TYPES = {CustomizationType.PERSONAL_NUMBER: PersonalNumberItem, CustomizationType.PROJECTION_DECAL: ProjectionDecalItem, CustomizationType.FONT: Font, CustomizationType.CAMOUFLAGE: CamouflageItem, CustomizationType.DECAL: DecalItem, CustomizationType.STYLE: StyleItem, CustomizationType.SEQUENCE: SequenceItem, CustomizationType.PAINT: PaintItem, CustomizationType.MODIFICATION: ModificationItem, CustomizationType.ATTACHMENT: AttachmentItem, CustomizationType.INSIGNIA: InsigniaItem}
+    CUSTOMIZATION_TYPES = {CustomizationType.DECAL: DecalItem, CustomizationType.PERSONAL_NUMBER: PersonalNumberItem, CustomizationType.PROJECTION_DECAL: ProjectionDecalItem, CustomizationType.STYLE: StyleItem, CustomizationType.SEQUENCE: SequenceItem, CustomizationType.MODIFICATION: ModificationItem, CustomizationType.PAINT: PaintItem, CustomizationType.ATTACHMENT: AttachmentItem, CustomizationType.INSIGNIA: InsigniaItem, CustomizationType.CAMOUFLAGE: CamouflageItem, CustomizationType.FONT: Font}
     CUSTOMIZATION_CLASSES = {v : k for k, v in CUSTOMIZATION_TYPES.items()}
 class _Filter(object):
     __slots__ = ('include', 'exclude')
@@ -777,7 +786,7 @@ class CustomizationCache(object):
         self.itemGroupByProgressionBonusType = {arenaTypeID : list() for arenaTypeID in ARENA_BONUS_TYPE_NAMES.values() if ARENA_BONUS_TYPE_CAPS.checkAny(arenaTypeID, ARENA_BONUS_TYPE_CAPS.CUSTOMIZATION_PROGRESSION)}
         self._CustomizationCache__vehicleCanMayIncludeCustomization = {}
         self.topVehiclesByNation = {}
-        self.itemTypes = {CustomizationType.MODIFICATION: self.modifications, CustomizationType.STYLE: self.styles, CustomizationType.PERSONAL_NUMBER: self.personal_numbers, CustomizationType.PAINT: self.paints, CustomizationType.PROJECTION_DECAL: self.projection_decals, CustomizationType.INSIGNIA: self.insignias, CustomizationType.SEQUENCE: self.sequences, CustomizationType.DECAL: self.decals, CustomizationType.ATTACHMENT: self.attachments, CustomizationType.CAMOUFLAGE: self.camouflages}
+        self.itemTypes = {CustomizationType.CAMOUFLAGE: self.camouflages, CustomizationType.PAINT: self.paints, CustomizationType.SEQUENCE: self.sequences, CustomizationType.MODIFICATION: self.modifications, CustomizationType.ATTACHMENT: self.attachments, CustomizationType.PERSONAL_NUMBER: self.personal_numbers, CustomizationType.STYLE: self.styles, CustomizationType.DECAL: self.decals, CustomizationType.PROJECTION_DECAL: self.projection_decals, CustomizationType.INSIGNIA: self.insignias}
         super(CustomizationCache, self).__init__()
 
     def getQuestProgressionStyles(self):
@@ -1181,7 +1190,7 @@ def _validateDependencies(outfit, usedStyle, vehDescr, season):
         emblemRegions, inscriptionRegions = getAvailableDecalRegions(vehDescr)
         decalRegions = emblemRegions | inscriptionRegions
         modifiedOutfit = baseSeasonOutfit.applyDiff(outfit)
-        outfitToCheckDependencies = {CustomizationType.MODIFICATION: set(modifiedOutfit.modifications), CustomizationType.PAINT: {paint.id for paint in modifiedOutfit.paints if paint.appliedTo & paintRegions}, CustomizationType.DECAL: {decal.id for decal in modifiedOutfit.decals if decal.appliedTo & decalRegions}, CustomizationType.PROJECTION_DECAL: {projectionDecal.id for projectionDecal in modifiedOutfit.projection_decals}, CustomizationType.PERSONAL_NUMBER: {number.id for number in modifiedOutfit.personal_numbers if number.appliedTo & inscriptionRegions}}
+        outfitToCheckDependencies = {CustomizationType.MODIFICATION: set(modifiedOutfit.modifications), CustomizationType.PAINT: {paint.id for paint in modifiedOutfit.paints if paint.appliedTo & paintRegions}, CustomizationType.PERSONAL_NUMBER: {number.id for number in modifiedOutfit.personal_numbers if number.appliedTo & inscriptionRegions}, CustomizationType.PROJECTION_DECAL: {projectionDecal.id for projectionDecal in modifiedOutfit.projection_decals}, CustomizationType.DECAL: {decal.id for decal in modifiedOutfit.decals if decal.appliedTo & decalRegions}}
         for itemType, itemIDs in outfitToCheckDependencies.iteritems():
             camouflageItemTypeDependencies = usedStyle.dependencies.get(camouflageID, {}).get(itemType, {})
             alternateItems = usedStyle.alternateItems.get(itemType, ())

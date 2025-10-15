@@ -10,10 +10,10 @@ SpinEffect = namedtuple('SpinEffect', ('activationSound', 'deactivationSound'))
 DEFAULT_TEMPERATURE_SEGMENT_SIZE = 5
 
 class GunShot(legacy_stuff.LegacyStuff):
-    __slots__ = ('shell', 'defaultPortion', 'piercingPower', 'speed', 'gravity', 'maxDistance', 'maxHeight')
+    __slots__ = ('shell', 'defaultPortion', 'piercingPower', 'speed', 'gravity', 'maxDistance', 'maxHeight', 'acceleration', 'ignoreDispersion', 'ammoWeight')
     __metaclass__ = ReflectionMetaclass
 
-    def __init__(self, shell, defaultPortion, piercingPower, speed, gravity, maxDistance, maxHeight):
+    def __init__(self, shell, defaultPortion, piercingPower, speed, gravity, maxDistance, maxHeight, acceleration, ignoreDispersion, ammoWeight):
         super(GunShot, self).__init__()
         self.shell = shell
         self.defaultPortion = defaultPortion
@@ -22,9 +22,13 @@ class GunShot(legacy_stuff.LegacyStuff):
         self.gravity = gravity
         self.maxDistance = maxDistance
         self.maxHeight = maxHeight
+        self.acceleration = acceleration
+        self.ignoreDispersion = ignoreDispersion
+        self.ammoWeight = ammoWeight
 
     def __repr__(self):
-        return 'GunShot(shell = {}, ppower = {}, speed = {}, gravity = {}, maxDistance = {}, maxHeight = {}))'.format(self.shell, self.piercingPower, self.speed, self.gravity, self.maxDistance, self.maxHeight)
+        res = '{}(' + ', '.join((aName + '=' + str(getattr(self, aName)) for aName in self.__slots__)) + ')'
+        return res.format(self.__class__.__name__)
 
     def copy(self):
         raise SoftException('Operation "GunShot.copy" is not allowed')

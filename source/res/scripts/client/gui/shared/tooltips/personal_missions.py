@@ -35,7 +35,7 @@ from helpers.i18n import makeString as _ms
 from helpers.i18n import doesTextExist
 from nations import ALLIANCES_TAGS_ORDER, ALLIANCE_IDS
 from personal_missions import PM_BRANCH
-from potapov_quests import PM_BRANCH_TO_FREE_TOKEN_NAME
+from pm_quests import PM_BRANCH_TO_FREE_TOKEN_NAME
 from shared_utils import first, findFirst
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -68,7 +68,7 @@ class BasicFreeSheetTooltip(BlocksTooltipData):
     def _packBlocks(self, *args, **kwargs):
         blocks = super(BasicFreeSheetTooltip, self)._packBlocks(*args, **kwargs)
         campaign = self.context.buildItem(*args, **kwargs)
-        topItems = [formatters.packTextBlockData(text_styles.highTitle(_ms(TOOLTIPS.PERSONALMISSIONS_FREESHEET_TITLE, campaignName=campaign.getUserName()))), formatters.packImageBlockData(AwardSheetPresenter.getIcon(AwardSheetPresenter.Size.BIG), BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(top=-5, bottom=11))]
+        topItems = [formatters.packTextBlockData(text_styles.highTitle(_ms(TOOLTIPS.PERSONALMISSIONS_FREESHEET_TITLE, campaignName=campaign.getUserName()))), formatters.packImageBlockData(AwardSheetPresenter.getIcon(AwardSheetPresenter.Size.BIG, branch=campaign.getID()), BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(top=-5, bottom=11))]
         blocks.append(formatters.packBuildUpBlockData(topItems))
         infoBlock = self._getInfoBlock()
         if infoBlock is not None:

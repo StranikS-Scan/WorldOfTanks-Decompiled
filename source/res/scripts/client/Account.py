@@ -16,7 +16,7 @@ from ClientUnitMgr import ClientUnitMgr, ClientUnitBrowser
 from ContactInfo import ContactInfo
 from OfflineMapCreator import g_offlineMapCreator
 from PlayerEvents import g_playerEvents as events
-from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_blueprints, client_recycle_bin, AccountSettings, client_anonymizer, ClientBattleRoyale, ArmoryYard
+from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_blueprints, client_recycle_bin, AccountSettings, client_anonymizer, ClientBattleRoyale, ArmoryYard, portal
 from account_helpers.dog_tags import DogTags
 from account_helpers.maps_training import MapsTraining
 from account_helpers.offers.sync_data import OffersSyncData
@@ -50,7 +50,7 @@ from constants import PREBATTLE_INVITE_STATUS, PREBATTLE_TYPE, ARENA_GAMEPLAY_MA
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG_DEV, LOG_WARNING
 from gui.Scaleform.Waiting import Waiting
 from gui.clans.clan_cache import g_clanCache
-from gui.wgnc import g_wgncProvider
+from gui.notify_center import g_notifyCenterProvider
 from helpers import dependency, uniprof, clientVersionGetter
 from messenger import MessengerEntry
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -193,6 +193,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.referralProgram = g_accountRepository.referralProgram
         self.playStreak = g_accountRepository.playStreak
         self.paragons = g_accountRepository.paragons
+        self.portal = g_accountRepository.portal
         self.customFilesCache = g_accountRepository.customFilesCache
         self.commandProxy = g_accountRepository.commandProxy
         self.syncData.setAccount(self)
@@ -575,7 +576,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
     def receiveNotification(self, notification):
         LOG_DEBUG('receiveNotification', notification)
-        g_wgncProvider.fromXmlString(notification)
+        g_notifyCenterProvider.fromXmlString(notification)
         events.onNotification(notification)
 
     def sendNotificationReply(self, notificationID, purge, actionName):
@@ -973,17 +974,17 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def selectPersonalMissions(self, personalMissionsIDs, questType, callback):
         args = [questType]
         args.extend(personalMissionsIDs)
-        self._doCmdIntArr(AccountCommands.CMD_SELECT_POTAPOV_QUESTS, args, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
+        self._doCmdIntArr(AccountCommands.CMD_SELECT_PM_QUESTS, args, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
 
     def resetPersonalMissions(self, personalMissionsIDs, questType, callback):
         args = [questType]
         args.extend(personalMissionsIDs)
-        self._doCmdIntArr(AccountCommands.CMD_RESET_POTAPOV_QUESTS, args, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
+        self._doCmdIntArr(AccountCommands.CMD_RESET_PM_QUESTS, args, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
 
     def pausePersonalMissions(self, personalMissionsIDs, questType, enable, callback):
         args = [questType, enable]
         args.extend(personalMissionsIDs)
-        self._doCmdIntArr(AccountCommands.CMD_PAUSE_POTAPOV_QUESTS, args, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
+        self._doCmdIntArr(AccountCommands.CMD_PAUSE_PM_QUESTS, args, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
 
     def getPersonalMissionReward(self, personalMissionsIDs, questType, needTamkman=False, tmanNation=0, tmanInnation=0, roleID=1, callback=None):
         arr = [questType,
@@ -996,7 +997,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
         else:
             proxy = None
-        self._doCmdIntArr(AccountCommands.CMD_GET_POTAPOV_QUEST_REWARD, arr, proxy)
+        self._doCmdIntArr(AccountCommands.CMD_GET_PM_QUEST_REWARD, arr, proxy)
         return
 
     def activateGoodie(self, goodieID, callback):
@@ -1260,6 +1261,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.referralProgram.synchronize(isFullSync, diff)
             self.playStreak.synchronize(isFullSync, diff)
             self.paragons.synchronize(isFullSync, diff)
+            self.portal.synchronize(isFullSync, diff)
             self._synchronizeServerSettings(diff)
             self._synchronizeDisabledPersonalMissions(diff)
             self._synchronizeEventNotifications(diff)
@@ -1267,7 +1269,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self._synchronizeCacheDict(self.prebattleInvites, diff, 'prebattleInvites', 'update', lambda : events.onPrebattleInvitesChanged(diff))
             self._synchronizeCacheDict(self.clanMembers, diff.get('cache', None), 'clanMembers', 'replace', events.onClanMembersListChanged)
             self._synchronizeCacheDict(self.eventsData, diff, 'eventsData', 'replace', events.onEventsDataChanged)
-            self._synchronizeCacheDict(self.personalMissionsLock, diff.get('cache', None), 'potapovQuestIDs', 'replace', events.onPMLocksChanged)
+            self._synchronizeCacheDict(self.personalMissionsLock, diff.get('cache', None), 'pmQuestsIDs', 'replace', events.onPMLocksChanged)
             self._synchronizeCacheDict(self.dailyQuests, diff, 'dailyQuests', 'replace', events.onDailyQuestsInfoChange)
             self._synchronizeCacheSimpleValue('globalRating', diff.get('account', None), 'globalRating', events.onAccountGlobalRatingChanged)
             self._synchronizeCacheDict(self.platformBlueprintsConvertSaleLimits, diff, 'platformBlueprintsConvertSaleLimits', 'replace', events.onPlatformBlueprintsConvertSaleLimits)
@@ -1522,6 +1524,7 @@ class _AccountRepository(object):
         self.freePremiumCrew = {}
         self.referralProgram = ReferralProgram(self.syncData)
         self.playStreak = PlayStreak(self.syncData)
+        self.portal = portal.Portal()
         self.gMap = ClientGlobalMap()
         self.onTokenReceived = Event.Event()
         self.requestID = AccountCommands.REQUEST_ID_UNRESERVED_MIN
@@ -1541,6 +1544,7 @@ def delAccountRepository():
         g_accountRepository.onTokenReceived.clear()
         g_accountRepository.prebattleInvitations.clear()
         g_accountRepository.paragons.clear()
+        g_accountRepository.portal.clear()
         g_accountRepository = None
         return
 

@@ -286,7 +286,8 @@ class VehicleGun(VehicleModule):
         result = []
         shells = veh_core.getDefaultAmmoForGun(self.descriptor)
         for i in range(0, len(shells), 2):
-            result.append(Shell(shells[i], count=shells[i + 1], proxy=proxy))
+            weight = veh_core.getShellWeightForGun(shells[i], self.descriptor)
+            result.append(Shell(shells[i], count=shells[i + 1], proxy=proxy, weight=weight))
 
         return result
 
@@ -385,11 +386,12 @@ class VehicleRadio(VehicleModule):
 
 
 class Shell(FittingItem):
-    __slots__ = ('_count',)
+    __slots__ = ('_count', '_weight')
 
-    def __init__(self, intCompactDescr, count=0, proxy=None, isBoughtForCredits=False):
+    def __init__(self, intCompactDescr, count=0, proxy=None, isBoughtForCredits=False, weight=1):
         FittingItem.__init__(self, intCompactDescr, proxy, isBoughtForCredits)
         self._count = count
+        self._weight = weight
 
     @property
     def level(self):
@@ -433,6 +435,10 @@ class Shell(FittingItem):
     @property
     def type(self):
         return self.descriptor.kind
+
+    @property
+    def ammoWeight(self):
+        return self._weight
 
     @property
     def longUserName(self):

@@ -1,24 +1,36 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/seniority_awards_controller.py
+import copy
 import typing
 import BigWorld
 import Event
+from constants import SENIORITY_AWARDS_COMP_TOKEN_PREFIX, SENIORITY_AWARDS_COMPENSATION_BONUS, SENIORITY_AWARDS_COMP_QUEST_PREFIX, SENIORITY_AWARDS_VEHICLE_OFFER
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
+from gui.server_events.finders import getFinalTokensQuestIdBySeasonId
+from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency, time_utils
 from skeletons.gui.game_control import ISeniorityAwardsController
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.offers import IOffersDataProvider
+from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from helpers.server_settings import SeniorityAwardsConfig
+if typing.TYPE_CHECKING:
+    from gui.server_events.event_items import Quest
 SACOIN = 'sacoin'
 CLAIM_REWARD_TIMEOUT = 10
+_OFFER_COMPENSATION_TOKEN_NAME = SENIORITY_AWARDS_COMPENSATION_BONUS + ':offer'
+_BLANK_COMPENSATION_TOKEN_NAME = SENIORITY_AWARDS_COMPENSATION_BONUS + ':blank'
 
 class SeniorityAwardsController(ISeniorityAwardsController):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __itemsCache = dependency.descriptor(IItemsCache)
     __hangarSpace = dependency.descriptor(IHangarSpace)
+    __eventsCache = dependency.descriptor(IEventsCache)
+    __offersProvider = dependency.descriptor(IOffersDataProvider)
 
     def __init__(self):
         super(SeniorityAwardsController, self).__init__()
@@ -51,11 +63,90 @@ class SeniorityAwardsController(ISeniorityAwardsController):
         return self.isEnabled and self.__hangarSpace.spaceInited and self._config.showRewardNotification and self.isEligibleToReward and not self.isRewardReceived
 
     @property
+    def isNeedToShowOfferNotification(self):
+        if not (self.isEnabled and self.__hangarSpace.spaceInited and self.__itemsCache.items.tokens.isTokenAvailable(SENIORITY_AWARDS_VEHICLE_OFFER)):
+            return False
+        else:
+            offer = self.__offersProvider.getOfferByGiftToken(SENIORITY_AWARDS_VEHICLE_OFFER)
+            return offer is not None and offer.isOfferAvailable
+
+    @property
     def clockOnNotification(self):
         return self._config.clockOnNotification
 
     def getSACoin(self):
         return self.__itemsCache.items.stats.dynamicCurrencies.get(SACOIN, 0)
+
+    def replaceCompTokens(self, rewards):
+        result = {}
+        rewards.setdefault('tokens', {})
+        for key, section in rewards.iteritems():
+            if key != 'tokens':
+                result[key] = section
+
+        result['tokens'] = newTokens = {}
+        oldTokens = rewards['tokens']
+        for tokenId, value in oldTokens.iteritems():
+            if tokenId == 'offer:seniority:vehicle_10:1':
+                continue
+            if not tokenId.startswith(SENIORITY_AWARDS_COMP_TOKEN_PREFIX):
+                newTokens[tokenId] = value
+                continue
+            self.__replaceCompensationToken(tokenId, value, result)
+
+        return result
+
+    def __replaceCompensationToken(self, tokenId, value, result):
+        if tokenId.startswith('wdr25_check_comp_quests:pm'):
+            self.__checkAndReplaceFreeList(tokenId, value, result)
+        elif tokenId == 'wdr25_check_comp_quests:vehicle_offer':
+            self.__checkAndReplaceVehicleOffer(value, result)
+
+    def __checkAndReplaceFreeList(self, tokenId, value, result):
+        seasonId = int(tokenId[-1])
+        finalPmTokens = getFinalTokensQuestIdBySeasonId(seasonId)
+        pmCompleteTokens = []
+        for pmToken in finalPmTokens:
+            pmCompleteTokens.append(self.__itemsCache.items.tokens.getTokenCount(pmToken))
+
+        if all(pmCompleteTokens):
+            questID = '%spm_%d:1' % (SENIORITY_AWARDS_COMP_QUEST_PREFIX, seasonId)
+            quest = self.__eventsCache.getQuestByID(questID)
+            bonuses = quest.getBonuses()
+            compensationCount = bonuses[0].getValue()
+            valueCopy = copy.copy(value)
+            valueCopy['count'] = compensationCount
+            valueCopy['bonus'] = {'currency': SACOIN,
+             'amount': compensationCount,
+             'campaignID': seasonId}
+            result.setdefault('meta', {})
+            result['meta']['%s_%d' % (_BLANK_COMPENSATION_TOKEN_NAME, seasonId)] = valueCopy
+        else:
+            questID = '%spm_%d:2' % (SENIORITY_AWARDS_COMP_QUEST_PREFIX, seasonId)
+            quest = self.__eventsCache.getQuestByID(questID)
+            bonus = quest.getBonuses()[0]
+            result['tokens'].update(bonus.getValue())
+
+    def __checkAndReplaceVehicleOffer(self, value, result):
+        criteria = REQ_CRITERIA.VEHICLE.LEVEL(10) | ~REQ_CRITERIA.INVENTORY
+        criteria |= ~REQ_CRITERIA.VEHICLE.SECRET | ~REQ_CRITERIA.HIDDEN
+        criteria |= ~REQ_CRITERIA.VEHICLE.PREMIUM | ~REQ_CRITERIA.COLLECTIBLE
+        criteria |= ~REQ_CRITERIA.VEHICLE.HIDDEN_IN_HANGAR | ~REQ_CRITERIA.VEHICLE.ROLES(['role_SPG_assault'])
+        vUnlocked = self.__itemsCache.items.getVehicles(criteria)
+        selectableCount = len(vUnlocked)
+        tokenCount = value.get('count', 1)
+        offerCount = min(tokenCount, selectableCount)
+        compensationCount = tokenCount - offerCount
+        offerCreditsCompensation = self._config.offerCreditsCompensation
+        if offerCount:
+            valueCopy = copy.deepcopy(value)
+            valueCopy['count'] = offerCount
+            result['tokens'][SENIORITY_AWARDS_VEHICLE_OFFER] = valueCopy
+        if compensationCount and offerCreditsCompensation:
+            valueCopy = copy.deepcopy(value)
+            valueCopy['count'] = compensationCount
+            valueCopy.update({'extItems': [{'bonus': {'amount': offerCreditsCompensation}}]})
+            result['tokens'][_OFFER_COMPENSATION_TOKEN_NAME] = valueCopy
 
     @property
     def pendingReminderTimestamp(self):

@@ -7,6 +7,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.formatters import text_styles, getRoleIcon
 from helpers import dependency
+from items.components.c11n_constants import STAT_TRACK_MAX_FRAGS_SUPPORTED, STAT_TRACK_PROHIBITED_VALUES
 from skeletons.gui.shared import IItemsCache
 
 def getRoleMessage(role):
@@ -27,3 +28,11 @@ def removeNationFromTechName(string):
     if len(result) > 1:
         return result[1]
     return result[0] if result else ''
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def getVehicleStatTrackFrags(intCD, itemsCache=None):
+    dossier = itemsCache.items.getVehicleDossier(intCD)
+    frags = dossier.getRandomStats().getFragsCount()
+    frags = STAT_TRACK_PROHIBITED_VALUES.get(frags, frags)
+    return min(frags, STAT_TRACK_MAX_FRAGS_SUPPORTED)

@@ -12,20 +12,13 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from visual_script.vehicle_blocks import VehicleMeta
 from visual_script.vehicle_blocks_bases import NoCrewCriticalBase, OptionalDevicesBase, VehicleClassBase, GunTypeInfoBase, VehicleForwardSpeedBase, VehicleCooldownEquipmentBase, VehicleClipFullAndReadyBase, GetTankOptDevicesHPModBase, IsInHangarBase, VehicleRadioDistanceBase, NoInnerDeviceDamagedBase
 from visual_script_client.vehicle_common import TunableVehicleEventBlock
-from contexts.cgf_context import GameObjectWrapper
 from constants import IS_VS_EDITOR
 from PlayerEvents import g_playerEvents
 from visual_script.dependency import dependencyImporter
-from soft_exception import SoftException
 helpers, dependency = dependencyImporter('helpers', 'helpers.dependency')
 if not IS_VS_EDITOR:
     from helpers import dependency, isPlayerAccount
     from skeletons.gui.shared import IItemsCache
-CGF, tankStructure = dependencyImporter('CGF', 'vehicle_systems.tankStructure')
-
-class InputSlotError(SoftException):
-    pass
-
 
 class GetVehicleLabel(Block, VehicleMeta):
 
@@ -41,25 +34,6 @@ class GetVehicleLabel(Block, VehicleMeta):
             label = ''
         self._label.setValue(label)
         return
-
-    @classmethod
-    def blockAspects(cls):
-        return [ASPECT.CLIENT]
-
-
-class GetVehicleName(Block, VehicleMeta):
-
-    def __init__(self, *args, **kwargs):
-        super(GetVehicleName, self).__init__(*args, **kwargs)
-        self._vehicle = self._makeDataInputSlot('vehicle', SLOT_TYPE.VEHICLE)
-        self._name = self._makeDataOutputSlot('name', SLOT_TYPE.STR, self._getName)
-
-    def _getName(self):
-        vehicle = self._vehicle.getValue()
-        name = ''
-        if vehicle.typeDescriptor:
-            name = vehicle.typeDescriptor.name
-        self._name.setValue(name)
 
     @classmethod
     def blockAspects(cls):
@@ -310,11 +284,14 @@ class GetGunReloadTime(Block, VehicleMeta):
         super(GetGunReloadTime, self).__init__(*args, **kwargs)
         self._gunReloadTime = self._makeDataOutputSlot('gunReloadTime', SLOT_TYPE.FLOAT, self._exec)
         self._baseGunReloadTime = self._makeDataOutputSlot('baseGunReloadTime', SLOT_TYPE.FLOAT, self._exec)
+        self._clipInterval = self._makeDataOutputSlot('clipInterval', SLOT_TYPE.FLOAT, self._exec)
 
     def _exec(self):
-        reloadState = self.__sessionProvider.shared.ammo.getGunReloadingState()
+        ammoCtrl = self.__sessionProvider.shared.ammo
+        reloadState = ammoCtrl.getGunReloadingState()
         self._gunReloadTime.setValue(reloadState.getTimeLeft())
         self._baseGunReloadTime.setValue(reloadState.getBaseValue())
+        self._clipInterval.setValue(ammoCtrl.getGunSettings().getClipInterval())
 
     @classmethod
     def blockAspects(cls):
@@ -545,61 +522,6 @@ class GameObjectToVehicle(Block, VehicleMeta):
                 return
             self._vehicle.setValue(weakref.proxy(goSyncComponent.entity))
             return
-
-    @classmethod
-    def blockAspects(cls):
-        return [ASPECT.CLIENT]
-
-
-class GetGameObjectOfVehicle(Block, VehicleMeta):
-    components = {'EntityGameObject': 'EntityGO',
-     'TankRootGameObject': tankStructure.CgfTankNodes.TANK_ROOT,
-     'HullGameObject': 'HullGO',
-     'TurretGameObject': tankStructure.CgfTankNodes.TURRET_ROOT,
-     'GunGameObject': tankStructure.CgfTankNodes.GUN_ROOT}
-
-    def __init__(self, *args, **kwargs):
-        super(GetGameObjectOfVehicle, self).__init__(*args, **kwargs)
-        self._goToGet = self._getInitParams()
-        self._vehicle = self._makeDataInputSlot('vehicle', SLOT_TYPE.VEHICLE)
-        self._go = self._makeDataOutputSlot('gameObject', SLOT_TYPE.GAME_OBJECT, self._exec)
-
-    def _exec(self):
-        vehicle = self._vehicle.getValue()
-        if vehicle is None:
-            errorVScript(self, 'Please check input vehicle entity.')
-            return
-        elif vehicle.entityGameObject is None:
-            errorVScript(self, 'Vehicle has no gameObject assigned to it.')
-            return
-        else:
-            entityGameObject = vehicle.entityGameObject
-            hierarchy = CGF.HierarchyManager(entityGameObject.spaceID)
-            topGO = hierarchy.getTopMostParent(entityGameObject)
-            requestedGOName = self.components[self._goToGet]
-            requestedGO = entityGameObject
-            if requestedGOName == 'HullGO':
-                try:
-                    requestedGO = hierarchy.getChildren(topGO)[0]
-                except IndexError:
-                    raise InputSlotError('Entity {0} has no {1}'.format(entityGameObject.name, self._goToGet))
-
-            elif requestedGOName != 'EntityGO':
-                tempGO = hierarchy.findFirstNode(topGO, requestedGOName)
-                if tempGO:
-                    requestedGO = tempGO
-                else:
-                    raise InputSlotError('Entity {0} has no {1}'.format(entityGameObject.name, self._goToGet))
-            goWrapper = GameObjectWrapper(requestedGO)
-            self._go.setValue(weakref.proxy(goWrapper))
-            return
-
-    @classmethod
-    def initParams(cls):
-        return [InitParam('GO to get', SLOT_TYPE.STR, buildStrKeysValue(*cls.components.keys()), EDITOR_TYPE.STR_KEY_SELECTOR)]
-
-    def captionText(self):
-        return 'Get {}'.format(self._goToGet)
 
     @classmethod
     def blockAspects(cls):

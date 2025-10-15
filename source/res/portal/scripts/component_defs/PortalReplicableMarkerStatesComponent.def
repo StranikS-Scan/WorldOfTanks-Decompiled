@@ -1,0 +1,31 @@
+<PortalReplicableMarkerStatesComponent.def>
+  <Properties>
+    <markerID>
+      <Type>	INT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	-1	</Default>
+    </markerID>
+    <maxProgress>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	-1	</Default>
+    </maxProgress>
+    <currentProgress>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	-1	</Default>
+    </currentProgress>
+    <autoProgressDuration>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	-1	</Default>
+    </autoProgressDuration>
+    <autoProgressStartTime>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	-1	</Default>
+    </autoProgressStartTime>
+  </Properties>
+  <CellMethods></CellMethods>
+  <DefaultKeyName>	portalReplicableMarkerStatesComponent	</DefaultKeyName>
+</PortalReplicableMarkerStatesComponent.def>

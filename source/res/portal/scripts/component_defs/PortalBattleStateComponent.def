@@ -1,0 +1,83 @@
+<PortalBattleStateComponent.def>
+  <Properties>
+    <bossInfo>
+      <Type>	ARRAY	  <of>	FIXED_DICT	  <Properties>
+            <bossID>
+              <Type>	UINT32	</Type>
+            </bossID>
+            <currentHealth>
+              <Type>	UINT32	</Type>
+            </currentHealth>
+            <maxHealth>
+              <Type>	UINT32	</Type>
+            </maxHealth>
+          </Properties>
+        </of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </bossInfo>
+    <campInfo>
+      <Type>	ARRAY	  <of>	FIXED_DICT	  <Properties>
+            <campName>
+              <Type>	STRING	</Type>
+            </campName>
+            <allDefenders>
+              <Type>	UINT8	</Type>
+            </allDefenders>
+            <aliveDefenders>
+              <Type>	UINT8	</Type>
+            </aliveDefenders>
+            <status>
+              <Type>	BOOL	</Type>
+            </status>
+          </Properties>
+        </of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </campInfo>
+    <battleState>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </battleState>
+    <battleFinishTime>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </battleFinishTime>
+    <currentWave>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </currentWave>
+    <wavesCount>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </wavesCount>
+    <wavesBuffed>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <default>	FALSE	</default>
+    </wavesBuffed>
+    <lanesInfo>
+      <Type>	ARRAY	  <of>	ARRAY	  <of>	OBJECT_ID	</of>
+        </of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </lanesInfo>
+    <battleEvent>
+      <Type>	FIXED_DICT	  <Properties>
+          <eventName>
+            <Type>	STRING	</Type>
+          </eventName>
+          <kwargs>
+            <Type>	PYTHON	</Type>
+          </kwargs>
+        </Properties>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </battleEvent>
+  </Properties>
+  <CellMethods></CellMethods>
+  <ofEntity>
+    <ArenaInfo></ArenaInfo>
+  </ofEntity>
+  <DefaultKeyName>	portalBattleStateComponent	</DefaultKeyName>
+</PortalBattleStateComponent.def>

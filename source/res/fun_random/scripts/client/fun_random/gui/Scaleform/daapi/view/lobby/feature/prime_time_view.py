@@ -9,6 +9,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from helpers import dependency
 from skeletons.connection_mgr import IConnectionManager
+from skeletons.gui.game_control import IFunRandomController
 
 class FunRandomServerPresenter(ServerListItemPresenter):
     _RES_ROOT = R.strings.fun_random.primeTimes.serverTooltip
@@ -23,6 +24,7 @@ class FunRandomServerPresenter(ServerListItemPresenter):
 class FunRandomPrimeTimeView(RankedPrimeTimeMeta, FunAssetPacksMixin, FunSubModeHolder):
     _RES_ROOT = R.strings.fun_random.primeTimes
     _serverPresenterClass = FunRandomServerPresenter
+    __funRandomCtrl = dependency.descriptor(IFunRandomController)
 
     def __init__(self, ctx):
         super(FunRandomPrimeTimeView, self).__init__(ctx)
@@ -42,6 +44,11 @@ class FunRandomPrimeTimeView(RankedPrimeTimeMeta, FunAssetPacksMixin, FunSubMode
     @hasHoldingSubMode()
     def _clearView(self):
         super(FunRandomPrimeTimeView, self)._clearView()
+
+    def apply(self):
+        if self._getSelectedDPID() != self._connectionMgr.peripheryID:
+            self.__funRandomCtrl.isRelogin = True
+        super(FunRandomPrimeTimeView, self).apply()
 
     def _isAlertBGVisible(self):
         return False

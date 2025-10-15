@@ -107,6 +107,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         self.__subTab = None
         self.__ctx = ctx or {}
         self._initialize(ctx)
+        self._updateVoicedTabs()
         return
 
     def onTabSelected(self, alias, prefix):
@@ -252,6 +253,8 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         if alias == QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS:
             viewPy.updateState(**self.__ctx)
         if alias == QUESTS_ALIASES.BATTLE_MATTERS_VIEW_PY_ALIAS:
+            if not self.__ctx:
+                self.__ctx['openMainView'] = True
             viewPy.updateState(**self.__ctx)
         self.__fireTabChangedEvent()
         return
@@ -284,6 +287,12 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         caches.getNavInfo().setMissionsTab(self.__currentTabAlias)
         caches.getNavInfo().setMarathonPrefix(self.__marathonPrefix)
         self.__fireTabChangedEvent()
+        return
+
+    def _updateVoicedTabs(self):
+        collectiveGoalMarathon = self.marathonsCtrl.getMarathon(COLLECTIVE_GOAL_MARATHON_PREFIX)
+        if collectiveGoalMarathon is not None and collectiveGoalMarathon.isEnabled():
+            self.__VOICED_TABS.update({QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS: (backport.sound(R.sounds.black_market_enter()), backport.sound(R.sounds.black_market_exit()))})
         return
 
     def __onCollectiveGoalMarathonUpdated(self):
@@ -456,7 +465,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
 
     def __battleMattersTabIsEnabled(self):
         bm = self.__battleMattersController
-        return bm.isEnabled() and (not bm.isFinished() or bm.hasDelayedRewards())
+        return bm.isEnabled() and (not bm.isFinished() or bm.hasUnobtainedDelayedRewards()) and bm.isValidConfiguration()
 
     @staticmethod
     def __getSuitableEvents(tab):

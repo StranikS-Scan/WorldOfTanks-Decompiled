@@ -82,17 +82,6 @@ def showComp7LeaverAliveWindow():
 
 
 @th_async
-def showWhiteTigerLeaverAliveWindow():
-    title = R.strings.dialogs.white_tiger.deserter.title
-    confirm = R.strings.dialogs.white_tiger.deserter.submit()
-    cancel = R.strings.dialogs.white_tiger.deserter.cancel()
-    description = R.strings.dialogs.white_tiger.deserter.message()
-    icon = R.images.gui.maps.icons.battle.deserterLeaveBattle()
-    result = yield th_await(showResDialogWindow(title, confirm=confirm, cancel=cancel, description=description, icon=icon))
-    raise AsyncReturn(result)
-
-
-@th_async
 def showLeaverReplayWindow():
     result = yield th_await(showResDialogWindow(R.strings.dialogs.quitBattle.replay.title(), confirm=R.strings.dialogs.quitBattle.replay.submit(), cancel=R.strings.dialogs.quitBattle.replay.cancel()))
     raise AsyncReturn(result)

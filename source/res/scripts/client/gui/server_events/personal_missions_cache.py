@@ -88,7 +88,7 @@ class PersonalMissionsCache(object):
         self.__settingsCache.onSyncCompleted += self.__onSettingsCacheSynced
         invVehicles = self.itemsCache.items.inventory.getIventoryVehiclesCDs()
         for _, personalMissionID in personal_missions.g_cache:
-            branch = personal_missions.g_cache.questByPotapovQuestID(personalMissionID).branch
+            branch = personal_missions.g_cache.questByPersonalMissionID(personalMissionID).branch
             if branch in PM_BRANCH.ACTIVE_BRANCHES:
                 questData = personal_missions.g_cache.questByPersonalMissionID(personalMissionID)
                 operation = self.__makeOperation(branch, questData.tileID)

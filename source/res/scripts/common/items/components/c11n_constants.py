@@ -36,6 +36,9 @@ DEFAULT_DEFERRED_EMISSION = 1.0
 DEFAULT_EMISSION_ANIMATION_SPEED = 1.0
 DEFAULT_NORMAL_MAP_FACTOR = 1.0
 DEFAULT_NORMAL_MAX_LOD = 1
+STAT_TRACK_FRAGS_NOT_SUPPORTED = -1
+STAT_TRACK_MAX_FRAGS_SUPPORTED = 9999
+STAT_TRACK_PROHIBITED_VALUES = {1488: 1487}
 
 class CustomizationType(object):
     PAINT = 1
@@ -114,6 +117,7 @@ class ItemTags(object):
     HIDE_IF_INCOMPATIBLE = 'hideIfIncompatible'
     STYLE_SERIAL_NUMBER = 'styleSerialNumber'
     LOCKED_ON_VEHICLE = 'lockedOnVehicle'
+    STYLE_STAT_TRACK_FRAGS = 'styleStatTrackFrags'
 
 
 class ProjectionDecalType(object):
@@ -324,6 +328,39 @@ class DecalType(object):
 
 
 DecalTypeNames = {getattr(DecalType, k):k for k in dir(DecalType) if not k.startswith('_')}
+DecalGroups = {DecalType.EMBLEM: ['special',
+                    'clan_content',
+                    'signs',
+                    'cool',
+                    'auto',
+                    'animals',
+                    'battle'],
+ DecalType.INSCRIPTION: ['special',
+                         'clan_content',
+                         'other',
+                         'historical']}
+ProjectionDecalGroups = ['animals',
+ 'armor',
+ 'cool',
+ 'damage',
+ 'flags',
+ 'game',
+ 'holiday',
+ 'identity_signs',
+ 'landscape',
+ 'mythology',
+ 'pin_up',
+ 'progression',
+ 'signs',
+ 'special']
+ColorGroupsMap = (('national', 'color_group_02'),
+ ('base', 'color_group_03'),
+ ('special', 'color_group_04'),
+ ('unhistoric', 'color_group_05'))
+StylesGroups = ['special_styles',
+ 'rented_styles',
+ 'historical_styles',
+ 'main_styles']
 
 class StyleFlags(object):
     ENABLED = 1

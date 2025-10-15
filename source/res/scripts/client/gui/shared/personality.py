@@ -30,7 +30,7 @@ from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.items_parameters.params_cache import g_paramsCache
 from gui.shared.utils import requesters
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
-from gui.wgnc import g_wgncProvider
+from gui.notify_center import g_notifyCenterProvider
 from helpers import isPlayerAccount, time_utils, dependency, uniprof
 from helpers.blueprint_generator import g_blueprintGenerator
 from helpers.statistics import HANGAR_LOADING_STATE
@@ -339,7 +339,7 @@ def onDisconnected():
     ServicesLocator.gameState.onDisconnected()
     ServicesLocator.webCtrl.stop()
     ServicesLocator.eventsCache.getPersonalMissions().stop()
-    g_wgncProvider.clear()
+    g_notifyCenterProvider.clear()
     ServicesLocator.onDisconnected()
     UsersInfoHelper.clear()
     Waiting.rollback()

@@ -199,6 +199,7 @@ class VehicleStateController(IBattleController):
         self.onPostMortemSwitched = Event.Event(self.__eManager)
         self.onRespawnBaseMoving = Event.Event(self.__eManager)
         self.onEquipmentComponentUpdated = Event.ContextEvent(self.__eManager)
+        self.onVehiclePossessed = Event.Event(self.__eManager)
         self.__cachedStateValues = {}
         self.__cachedRepairingCallbackID = None
         self.__waitingTI = TimeInterval(VEHICLE_WAINING_INTERVAL, self, '_waiting')
@@ -207,6 +208,7 @@ class VehicleStateController(IBattleController):
         self.__isRqToSwitch = False
         self.__isInPostmortem = False
         self.__needInvalidate = False
+        self.__possessedVehicleID = None
         return
 
     def getControllerID(self):
@@ -249,6 +251,13 @@ class VehicleStateController(IBattleController):
 
     def getControllingVehicleID(self):
         return self.__vehicleID
+
+    def setPossessedVehicleID(self, possessedVehicleID):
+        self.__possessedVehicleID = possessedVehicleID
+        self.onVehiclePossessed()
+
+    def getPossessedVehicleID(self):
+        return self.__possessedVehicleID
 
     def notifyStateChanged(self, stateID, value):
         if stateID == VEHICLE_VIEW_STATE.DEVICES:

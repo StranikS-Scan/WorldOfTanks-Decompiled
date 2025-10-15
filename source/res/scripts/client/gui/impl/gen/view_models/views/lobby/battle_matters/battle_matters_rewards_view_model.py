@@ -31,6 +31,7 @@ class BattleMattersRewardsViewModel(ViewModel):
     __slots__ = ('onClose', 'onNextTask', 'onShowVehicle', 'onChooseVehicle')
     ARG_REWARD_TYPE = 'type'
     ARG_REWARD_INDEX = 'tooltipId'
+    ARG_REWARD_TOKEN = 'rewardToken'
 
     def __init__(self, properties=6, commands=4):
         super(BattleMattersRewardsViewModel, self).__init__(properties=properties, commands=commands)

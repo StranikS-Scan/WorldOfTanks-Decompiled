@@ -1,0 +1,56 @@
+<pm3_8_2_12.xml>
+  <quests>
+    <personalMissionQuest>
+      <enabled>	true	</enabled>
+      <id>	pm3_8_2_12_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions></conditions>
+      <scripts>	
+QUEST_EVENT_TYPE = globals().get('QUEST_EVENT_TYPE')
+""":type: quest_definitions.QUEST_EVENT_TYPE"""
+
+quest_progress = globals().get('quest_progress')
+""":type: quest_progress"""
+
+filter = globals().get('BattleResults')
+""":type: battle_result_filters"""
+
+MAIN_PROGRESS_DAMAGE = 'damage'
+
+def onInit(eventType, eventData, quest, processor):
+    for event in events.iterkeys():
+        processor.subscribe(event, quest)
+    return True
+
+def onFinishBattle(eventType, eventData, quest, processor):
+    questProgress = quest_progress.BaseQuestProgress(quest.config, processor.getQuestProgress(quest.progressID))
+
+    brfilter = filter.BattleResultsFilter(eventData)
+    damage = brfilter.filterDamageTo(attackerFlags=['invisible'])
+    damage = brfilter.sumDamage(damage)
+
+    questProgress.increaseUntilComplete(MAIN_PROGRESS_DAMAGE, damage)
+    eventData['results'].update(processor.checkComplete(questProgress, quest.progressID))
+    processor.setQuestProgress(quest.progressID, questProgress.save())
+
+events = {
+    QUEST_EVENT_TYPE.INIT: onInit,
+    QUEST_EVENT_TYPE.FINISH_BATTLE: onFinishBattle,
+}
+
+def quest(eventType, eventData, quest, processor):
+    LOG('QUEST EVENT:', eventType, quest.id)
+    return events.get(eventType, lambda *args: False)(eventType, eventData, quest, processor)
+         	</scripts>
+      <bonus>
+        <freeXP>	500	</freeXP>
+        <credits>	100000	</credits>
+        <token>
+          <id>	token:pt:final:s3:t8:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </personalMissionQuest>
+  </quests>
+</pm3_8_2_12.xml>

@@ -1,0 +1,62 @@
+<pm3_10_3_20.xml>
+  <quests>
+    <personalMissionQuest>
+      <enabled>	true	</enabled>
+      <id>	pm3_10_3_20_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <key>	spottedBeforeWeBecameSpotted	</key>
+              <greaterOrEqual>	10	</greaterOrEqual>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <premium_plus>	2	</premium_plus>
+        <crystal>	200	</crystal>
+        <token>
+          <id>	token:pt:final:s3:t10:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	offer:pm3:expequipments_gift:700	</id>
+          <expires>	01.02.2050 00:00	</expires>
+          <count>	2	</count>
+        </token>
+      </bonus>
+    </personalMissionQuest>
+    <personalMissionQuest>
+      <enabled>	true	</enabled>
+      <id>	pm3_10_3_20_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <key>	spottedBeforeWeBecameSpotted	</key>
+              <greaterOrEqual>	10	</greaterOrEqual>
+            </results>
+            <isAlive></isAlive>
+            <win></win>
+            <results>
+              <key>	originalXP	</key>
+              <greaterOrEqual>	1200	</greaterOrEqual>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	15000	</freeXP>
+        <token>
+          <id>	token:pt:final:s3:t10:add	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </personalMissionQuest>
+  </quests>
+</pm3_10_3_20.xml>

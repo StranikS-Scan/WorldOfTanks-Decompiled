@@ -518,9 +518,9 @@ class QuestsProgressBlock(base.StatsBlock):
                         if quest.getLevel() in DailyQuestsLevels.DAILY_QUESTS_WITHOUT_EPIC:
                             dqCounter += 1
                 if personal_missions.g_cache.isPersonalMission(qID):
-                    pqID = personal_missions.g_cache.getPersonalMissionIDByUniqueID(qID)
+                    pmQuestID = personal_missions.g_cache.getPersonalMissionIDByUniqueID(qID)
                     questsCache = self.eventsCache.getPersonalMissions()
-                    quest = questsCache.getAllQuests()[pqID]
+                    quest = questsCache.getAllQuests()[pmQuestID]
                     progress = personalMissions.setdefault(quest, {})
                     progress.update({qID: isCompleted})
 

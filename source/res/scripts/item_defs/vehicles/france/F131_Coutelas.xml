@@ -10,8 +10,8 @@
   <postProgressionTree>	role_ATSPG_support	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	45	</forward>
-    <backward>	15	</backward>
+    <forward>	33	</forward>
+    <backward>	12	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.226	</moving>
@@ -2101,9 +2101,9 @@
             </armor_21>
             <gun>	50	</gun>
           </armor>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	33	</reloadTime>
-          <aimingTime>	2.9	</aimingTime>
+          <aimingTime>	2.6	</aimingTime>
           <clip>
             <count>	3	</count>
             <rate>	20	</rate>
@@ -2111,7 +2111,7 @@
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.15	</turretRotation>
-            <afterShot>	4	</afterShot>
+            <afterShot>	5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <turretYawLimits>	-30 30	</turretYawLimits>
@@ -2629,8 +2629,8 @@
     <detailed>
       <engines>
         <Maybach_HL_275>
-          <smplEnginePower>	800	</smplEnginePower>
-          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
+          <smplEnginePower>	580	</smplEnginePower>
+          <smplFwMaxSpeed>	33	</smplFwMaxSpeed>
         </Maybach_HL_275>
       </engines>
       <chassis>

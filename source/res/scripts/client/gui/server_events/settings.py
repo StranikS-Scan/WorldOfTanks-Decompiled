@@ -245,9 +245,9 @@ def _updatePMSettings(**kwargs):
     settings.save()
 
 
-def isPMOperationNew(operationID, pmSettings=None):
-    pqSettings = pmSettings or get()
-    return operationID not in pqSettings.personalMissions.operationsVisited
+def isPMOperationNew(operationID, pmQuestsSettings=None):
+    settings = pmQuestsSettings or get()
+    return operationID not in settings.personalMissions.operationsVisited
 
 
 def isNeedToShowHeaderAlert():

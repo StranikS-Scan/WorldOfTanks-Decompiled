@@ -7,7 +7,7 @@ from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_matters.battle_matters_main_reward_view_model import BattleMattersMainRewardViewModel
 from gui.impl.pub import ViewImpl
-from gui.server_events.events_dispatcher import showBattleMatters, showBattleMattersMainReward
+from gui.server_events.events_dispatcher import showBattleMattersMainView, showBattleMattersMainReward
 from gui.server_events.bonuses import VehiclesBonus
 from gui.shared.event_dispatcher import showVehiclePreviewWithoutBottomPanel, showHangar, selectVehicleInHangar
 from gui.impl.lobby.battle_matters.battle_matters_bonus_packer import BattleMattersVehiclesBonusUIPacker
@@ -67,7 +67,7 @@ class BattleMattersMainRewardView(ViewImpl):
 
     @staticmethod
     def onBack():
-        showBattleMatters()
+        showBattleMattersMainView()
 
     @staticmethod
     def onClose():

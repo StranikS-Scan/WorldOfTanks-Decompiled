@@ -4,7 +4,7 @@ from frameworks.wulf import ViewFlags, ViewSettings
 from gui.impl.gen.view_models.views.lobby.poll.poll_view_model import PollViewModel
 from gui.impl.pub import ViewImpl
 from gui.shared import events, EVENT_BUS_SCOPE
-from gui.wgnc import g_wgncProvider
+from gui.notify_center import g_notifyCenterProvider
 
 class PollView(ViewImpl):
     __slots__ = ('__notID', '__target', '__show')
@@ -23,7 +23,7 @@ class PollView(ViewImpl):
 
     def _onLoading(self, *args, **kwargs):
         super(PollView, self)._onLoading(*args, **kwargs)
-        item = g_wgncProvider.getNotItemByName(self.__notID, self.__target.value)
+        item = g_notifyCenterProvider.getNotItemByName(self.__notID, self.__target.value)
         if not item:
             return
         submitButton = item.getSubmitButton()
@@ -41,26 +41,26 @@ class PollView(ViewImpl):
         return ((self.viewModel.onGoToPoll, self.__onGoToPoll), (self.viewModel.onWindowClose, self.__onWindowClose))
 
     def _getListeners(self):
-        return ((events.WGNCShowItemEvent.CLOSE_POLL_WINDOW, self.__handlePollWindowClose, EVENT_BUS_SCOPE.LOBBY),)
+        return ((events.NotifyCenterShowItemEvent.CLOSE_POLL_WINDOW, self.__handlePollWindowClose, EVENT_BUS_SCOPE.LOBBY),)
 
     def __onGoToPoll(self):
-        item = g_wgncProvider.getNotItemByName(self.__notID, self.__target.value)
+        item = g_notifyCenterProvider.getNotItemByName(self.__notID, self.__target.value)
         if not item:
             self.destroy()
             return
         button = item.getSubmitButton()
         if button:
-            g_wgncProvider.doAction(self.__notID, button.action, self.__target.value)
+            g_notifyCenterProvider.doAction(self.__notID, button.action, self.__target.value)
         self.destroy()
 
     def __onWindowClose(self):
-        item = g_wgncProvider.getNotItemByName(self.__notID, self.__target.value)
+        item = g_notifyCenterProvider.getNotItemByName(self.__notID, self.__target.value)
         if not item:
             self.destroy()
             return
         button = item.getCancelButton()
         if button:
-            g_wgncProvider.doAction(self.__notID, button.action, self.__target.value)
+            g_notifyCenterProvider.doAction(self.__notID, button.action, self.__target.value)
         self.destroy()
 
     def __handlePollWindowClose(self, event):

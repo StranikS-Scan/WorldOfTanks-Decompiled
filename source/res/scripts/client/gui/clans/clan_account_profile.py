@@ -13,7 +13,7 @@ from gui.clans.restrictions import ClanMemberPermissions, DefaultClanMemberPermi
 from gui.clans.settings import CLAN_INVITE_STATES, INVITE_LIMITS_LIFE_TIME
 from gui.clientgw.clan.contexts import GetClanInfoCtx
 from gui.clientgw.settings import WebRequestDataType
-from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
+from gui.notify_center.settings import NOTIFY_CENTER_DATA_PROXY_TYPE
 from helpers import dependency
 from messenger.ext import passCensor
 from shared_utils import CONST_CONTAINER
@@ -261,7 +261,7 @@ class ClanAccountProfile(object):
             self.getClanDossier().processRequestResponse(ctx, response)
         return
 
-    def processWgncNotification(self, notifID, item):
+    def processNotifyCenterNotification(self, notifID, item):
 
         def __updateAfterAction():
             apps = self._cache[_CACHE_KEYS.APPS] or set()
@@ -271,7 +271,7 @@ class ClanAccountProfile(object):
             if count:
                 self.__changeWebInfo(SYNC_KEYS.APPS, count - 1, 'onAccountAppsReceived')
 
-        if item.getType() == WGNC_DATA_PROXY_TYPE.CLAN_INVITE:
+        if item.getType() == NOTIFY_CENTER_DATA_PROXY_TYPE.CLAN_INVITE:
             invites = self._cache[_CACHE_KEYS.INVITES] or set()
             invites.add(item.getClanId())
             self._cache[_CACHE_KEYS.INVITES] = invites
@@ -279,14 +279,14 @@ class ClanAccountProfile(object):
             if count != self._vitalWebInfo[SYNC_KEYS.INVITES]:
                 self.__changeWebInfo(SYNC_KEYS.INVITES, count, 'onAccountInvitesReceived')
             self._syncState |= SYNC_KEYS.INVITES
-        elif item.getType() == WGNC_DATA_PROXY_TYPE.CLAN_APP_ACCEPTED:
+        elif item.getType() == NOTIFY_CENTER_DATA_PROXY_TYPE.CLAN_APP_ACCEPTED:
             __updateAfterAction()
             if self.isInClan():
                 showClanJoinAward(self.getClanAbbrev(), self.getClanName(), self.getClanDbID())
-        elif item.getType() == WGNC_DATA_PROXY_TYPE.CLAN_APP_DECLINED:
+        elif item.getType() == NOTIFY_CENTER_DATA_PROXY_TYPE.CLAN_APP_DECLINED:
             __updateAfterAction()
         if self.isInClan():
-            self.getClanDossier().processWgncNotification(notifID, item)
+            self.getClanDossier().processNotifyCenterNotification(notifID, item)
 
     def processClanMembersListChange(self, memberIDs):
         if self.isInClan():

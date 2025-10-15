@@ -21,7 +21,7 @@ from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.impl.lobby.common.sound_constants import SUBVIEW_SOUND_SPACE
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from gui.wgnc.custom_actions_keeper import CustomActionsKeeper
+from gui.notify_center.custom_actions_keeper import CustomActionsKeeper
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared import IItemsCache
@@ -90,6 +90,9 @@ class ReferralProgramController(GameWindowController, IReferralProgramController
         points = self.__itemsCache.items.stats.entitlements.get(RP_PGB_POINT, 0)
         freePoints = self.__itemsCache.items.refProgram.getRPPgbPoints()
         return 0 <= freePoints <= points
+
+    def isShouldIndicate(self):
+        return self.isScoresLimitReached() and self.__itemsCache.items.refProgram.getRPPgbPoints() > 0
 
     def _openWindow(self, url, _=None):
         browserView = self.__getBrowserView()

@@ -5682,6 +5682,49 @@
         </effects>
       </variant1>
     </hd_env_EU_483_MoabitBridge_04>
+    <hd_env_evt_p25_0013_mushrooms>
+      <variant1>
+        <stages>
+          <base>	35.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/environment/objects/hd_env_evt_p25_0013_mushrooms.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	ev_portal_amb_map_mashroom_smash	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_evt_p25_0013_mushrooms>
+    <hd_env_EVT_P25_0027_BigBoard>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/environment/buildings/inf_env_am_016_advertisingbigboard_02.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <debrisAmount>	60.000000	</debrisAmount>
+              <weight>	7000.000000	</weight>
+              <metal_1>	50.000000	</metal_1>
+              <glass>	20.000000	</glass>
+              <metal_2>	25.000000	</metal_2>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_EVT_P25_0027_BigBoard>
     <hd_env_SU_002_YoungLenin>
       <variant1>
         <stages>

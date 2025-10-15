@@ -1,81 +1,81 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/personal_missions.py
-import potapov_quests
+import pm_quests
 g_cache = None
 g_operationsCache = None
 g_campaignsCache = None
-PERSONAL_MISSIONS_XML_PATH = potapov_quests.POTAPOV_QUEST_XML_PATH
+PERSONAL_MISSIONS_XML_PATH = pm_quests.PM_QUEST_XML_PATH
 
-class PM_BRANCH(potapov_quests.PQ_BRANCH):
-    ACTIVE_BRANCHES = (potapov_quests.PQ_BRANCH.REGULAR, potapov_quests.PQ_BRANCH.PERSONAL_MISSION_2, potapov_quests.PQ_BRANCH.PERSONAL_MISSION_3)
-    OLD_BRANCHES = (potapov_quests.PQ_BRANCH.REGULAR, potapov_quests.PQ_BRANCH.PERSONAL_MISSION_2)
+class PM_BRANCH(pm_quests.PM_BRANCH):
+    ACTIVE_BRANCHES = (pm_quests.PM_BRANCH.REGULAR, pm_quests.PM_BRANCH.PERSONAL_MISSION_2, pm_quests.PM_BRANCH.PERSONAL_MISSION_3)
+    OLD_BRANCHES = (pm_quests.PM_BRANCH.REGULAR, pm_quests.PM_BRANCH.PERSONAL_MISSION_2)
 
 
 def isPersonalMissionsEnabled(gameParams, branch):
-    return not potapov_quests.isPotapovQuestBranchEnabled(gameParams, branch)
+    return not pm_quests.isPMQuestBranchEnabled(gameParams, branch)
 
 
-class PM_STATE(potapov_quests.PQ_STATE):
+class PM_STATE(pm_quests.PM_STATE):
     pass
 
 
-class PM_FLAG(potapov_quests.PQ_FLAG):
+class PM_FLAG(pm_quests.PM_FLAG):
     pass
 
 
-PM_BRANCH_TO_FREE_TOKEN_NAME = potapov_quests.PM_BRANCH_TO_FREE_TOKEN_NAME
-PM_BRANCH_TO_FINAL_PAWN_COST = potapov_quests.PM_BRANCH_TO_FINAL_PAWN_COST
-PM_REWARD_BY_DEMAND = potapov_quests.PQ_REWARD_BY_DEMAND
+PM_BRANCH_TO_FREE_TOKEN_NAME = pm_quests.PM_BRANCH_TO_FREE_TOKEN_NAME
+PM_BRANCH_TO_FINAL_PAWN_COST = pm_quests.PM_BRANCH_TO_FINAL_PAWN_COST
+PM_REWARD_BY_DEMAND = pm_quests.PM_REWARD_BY_DEMAND
 
 def init():
     global g_cache
     global g_campaignsCache
     global g_operationsCache
-    potapov_quests.g_seasonCache = potapov_quests.SeasonCache()
-    potapov_quests.g_tileCache = potapov_quests.TileCache()
+    pm_quests.g_seasonCache = pm_quests.SeasonCache()
+    pm_quests.g_tileCache = pm_quests.TileCache()
     g_campaignsCache = CampaignsCache()
     g_operationsCache = OperationsCache()
     g_cache = PMCache()
 
 
-class CampaignsCache(potapov_quests.SeasonCache):
+class CampaignsCache(pm_quests.SeasonCache):
 
     def getCampaignInfo(self, campaignID):
         return self.getSeasonInfo(campaignID)
 
 
-class OperationsCache(potapov_quests.TileCache):
+class OperationsCache(pm_quests.TileCache):
 
     def getOperationInfo(self, operationID):
         return self.getTileInfo(operationID)
 
 
-class PMCache(potapov_quests.PQCache):
+class PMCache(pm_quests.PMCache):
 
     def questByPersonalMissionID(self, missionID):
-        return self.questByPotapovQuestID(missionID)
+        return self.questByPMQuestID(missionID)
 
     def hasMission(self, missionID):
-        return self.hasPotapovQuest(missionID)
+        return self.hasPMQuest(missionID)
 
     def isPersonalMission(self, uniqueQuestID):
-        return self.isPotapovQuest(uniqueQuestID)
+        return self.isPMQuest(uniqueQuestID)
 
     def questListByOperationIDChainID(self, tileID, chainID):
         return self.questListByTileIDChainID(tileID, chainID)
 
     def finalMissionIDsByOperationIDChainID(self, tileID, chainID):
-        return self.finalPotapovQuestIDsByTileIDChainID(tileID, chainID)
+        return self.finalpmQuestsIDsByTileIDChainID(tileID, chainID)
 
     def initialMissionQuestIDsByOperationIDChainID(self, tileID, chainID):
-        return self.initialPotapovQuestIDsByTileIDChainID(tileID, chainID)
+        return self.initialpmQuestsIDsByTileIDChainID(tileID, chainID)
 
     def getPersonalMissionIDByUniqueID(self, uniqueQuestID):
-        return self.getPotapovQuestIDByUniqueID(uniqueQuestID)
+        return self.getPMQuestIDByUniqueID(uniqueQuestID)
 
-    def branchByMissionID(self, potapovQuestID):
-        return self.branchByPotapovQuestID(potapovQuestID)
+    def branchByMissionID(self, pmQuestID):
+        return self.branchByPMQuestID(pmQuestID)
 
 
-class PMStorage(potapov_quests.PQStorage):
+class PMStorage(pm_quests.PMStorage):
     pass

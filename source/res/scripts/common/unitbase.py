@@ -18,7 +18,7 @@ from unit_roster_config import SquadRoster, UnitRoster, SpecRoster, EventRoster,
 if TYPE_CHECKING:
     from typing import List as TList, Tuple as TTuple, Dict as TDict
 UnitVehicle = namedtuple('UnitVehicle', ('vehInvID', 'vehTypeCompDescr', 'vehLevel', 'vehClassIdx'))
-ProfileVehicle = namedtuple('ProfileVehicle', ('vehCompDescr', 'vehOutfitCD', 'seasonType', 'marksOnGun'))
+ProfileVehicle = namedtuple('ProfileVehicle', ('vehCompDescr', 'vehOutfitCD', 'seasonType', 'marksOnGun', 'statTrackFrags'))
 
 class UNIT_MGR_STATE:
     IDLE = 0
@@ -777,9 +777,9 @@ class UnitBase(OpsUnpacker):
     def _autoSelectProfileVehicle(self, accountDBID, vehicles):
         pass
 
-    def _setProfileVehicle(self, accountDBID, vehCompDescr, vehOutfitCD, seasonType, marksOnGun):
+    def _setProfileVehicle(self, accountDBID, vehCompDescr, vehOutfitCD, seasonType, marksOnGun, statTrackFrags):
         LOG_DEBUG('_setProfileVehicle: accountDBID={}'.format(accountDBID))
-        newProfileVehicle = ProfileVehicle(vehCompDescr, vehOutfitCD, seasonType, marksOnGun)
+        newProfileVehicle = ProfileVehicle(vehCompDescr, vehOutfitCD, seasonType, marksOnGun, statTrackFrags)
         if newProfileVehicle != self._playerProfileVehicles.get(accountDBID, None):
             self._playerProfileVehicles[accountDBID] = newProfileVehicle
             self._dirty = 1
@@ -864,7 +864,7 @@ class UnitBase(OpsUnpacker):
     _IDS = '<IBI'
     _VEHICLE_DICT_HEADER = '<Hq'
     _VEHICLE_DICT_ITEM = '<Ii'
-    _VEHICLE_PROFILE_HEADER = '<qBB'
+    _VEHICLE_PROFILE_HEADER = '<qBBi'
     _PLAYER_SEARCH_FLAGS_TUPLE = '<qH'
     _HEADER_SIZE = struct.calcsize(_HEADER)
     _SLOT_PLAYERS_SIZE = struct.calcsize(_SLOT_PLAYERS)
@@ -1553,17 +1553,17 @@ class UnitBase(OpsUnpacker):
         return (cPickle.loads(strDict), offset - initialOffset)
 
     def __packProfileVehicle(self, accountDBID, profileVehicle):
-        packed = struct.pack(self._VEHICLE_PROFILE_HEADER, accountDBID, profileVehicle.seasonType, profileVehicle.marksOnGun)
+        packed = struct.pack(self._VEHICLE_PROFILE_HEADER, accountDBID, profileVehicle.seasonType, profileVehicle.marksOnGun, profileVehicle.statTrackFrags)
         packed += packPascalString(profileVehicle.vehCompDescr)
         packed += packPascalString(profileVehicle.vehOutfitCD)
         return packed
 
     def __unpackProfileVehicle(self, packedData):
-        accountDBID, seasonType, marksOnGun = struct.unpack_from(self._VEHICLE_PROFILE_HEADER, packedData)
+        accountDBID, seasonType, marksOnGun, statTrackFrags = struct.unpack_from(self._VEHICLE_PROFILE_HEADER, packedData)
         offset = self._VEHICLE_PROFILE_HEADER_SIZE
         profileVehCD, lenString = unpackPascalString(packedData, offset)
         offset += lenString
         profileOutfitCD, lenString = unpackPascalString(packedData, offset)
         offset += lenString
-        self._setProfileVehicle(accountDBID, profileVehCD, profileOutfitCD, seasonType, marksOnGun)
+        self._setProfileVehicle(accountDBID, profileVehCD, profileOutfitCD, seasonType, marksOnGun, statTrackFrags)
         return offset

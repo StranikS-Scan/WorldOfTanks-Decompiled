@@ -310,7 +310,8 @@ class _ComponentsVisibilityManager(object):
         return self.__controllingOwnVehicle()
 
     def __perksPanelPredicate(self):
-        return self.__arenaPeriod >= ARENA_PERIOD.BATTLE and self.__isBattleLoaded and avatar_getter.getPlayerTeam() == BigWorld.player().arena.vehicles[self.__controllingVehicleID]['team']
+        vehicles = BigWorld.player().arena.vehicles
+        return self.__arenaPeriod >= ARENA_PERIOD.BATTLE and self.__isBattleLoaded and self.__controllingVehicleID in vehicles and avatar_getter.getPlayerTeam() == vehicles[self.__controllingVehicleID]['team']
 
     def __POINotificationsPredicate(self):
         return self.__arenaPeriod == ARENA_PERIOD.BATTLE and not self.__isFullStatsShown

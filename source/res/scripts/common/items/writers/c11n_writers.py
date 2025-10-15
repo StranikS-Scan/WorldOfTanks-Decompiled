@@ -495,8 +495,14 @@ class PaintXmlWriter(BaseCustomizationItemXmlWriter):
                 changed |= section.deleteSection('color')
             changed |= rewriteFloat(section, 'gloss', item, 'gloss', 0.0)
             changed |= rewriteFloat(section, 'metallic', item, 'metallic', 0.0)
+        else:
+            changed |= _xml.rewriteString(section, 'userString', self._encodeGroup(item.colorGroup))
         changed |= self.writeBaseGroup(item, section)
         return changed
+
+    @staticmethod
+    def _encodeGroup(group):
+        return '#vehicle_customization:repaint/{}'.format(group)
 
 
 class DecalXmlWriter(BaseCustomizationItemXmlWriter):
@@ -507,15 +513,20 @@ class DecalXmlWriter(BaseCustomizationItemXmlWriter):
         changed |= self.writeBaseGroup(item, section)
         if _needWrite(item, 'type'):
             if group:
-                if group.type != item.type:
-                    changed |= _xml.rewriteString(section, 'type', encodeEnum(DecalType, item.type))
-                else:
-                    changed |= section.deleteSection('type')
+                changed |= section.deleteSection('type')
             else:
                 changed |= _xml.rewriteString(section, 'type', encodeEnum(DecalType, item.type))
+                if item.type == 0:
+                    changed |= section.deleteSection('userString')
+                else:
+                    changed |= _xml.rewriteString(section, 'userString', self._encodeGroup(item.type, item.decalGroup))
         else:
             changed |= section.deleteSection('type')
         return changed
+
+    @staticmethod
+    def _encodeGroup(itemType, group):
+        return '#vehicle_customization:{}/{}'.format(encodeEnum(DecalType, itemType), group)
 
 
 class ProjectionDecalXmlWriter(BaseCustomizationItemXmlWriter):
@@ -527,7 +538,13 @@ class ProjectionDecalXmlWriter(BaseCustomizationItemXmlWriter):
         changed |= rewriteInt(section, 'scaleFactorId', item, 'scaleFactorId', DEFAULT_SCALE_FACTOR_ID)
         changed |= self.writeBaseGroup(item, section)
         changed |= rewriteEmissionSettings(section, item.emissionSettings)
+        if not group:
+            changed |= _xml.rewriteString(section, 'userString', self._encodeGroup(item.projectionDecalGroup))
         return changed
+
+    @staticmethod
+    def _encodeGroup(group):
+        return '#vehicle_customization:projection_decals/{}'.format(group)
 
 
 class CamouflageXmlWriter(BaseCustomizationItemXmlWriter):
@@ -712,6 +729,8 @@ class StyleXmlWriter(BaseCustomizationItemXmlWriter):
             changed |= self.__writeAlternateItems(item.alternateItems, section)
             changed |= self.__writeDependencies(item.dependencies, section)
             changed |= self.__write3dProgression(item.styleProgressions, section)
+        else:
+            changed |= _xml.rewriteString(section, 'userString', self._encodeGroup(item.styleGroup))
         changed |= self.writeBaseGroup(item, section)
         return changed
 
@@ -888,6 +907,10 @@ class StyleXmlWriter(BaseCustomizationItemXmlWriter):
 
             return changed
 
+    @staticmethod
+    def _encodeGroup(group):
+        return '#vehicle_customization:styles/{}'.format(group)
+
 
 class PersonalNumberXmlWriter(BaseCustomizationItemXmlWriter):
 
@@ -910,8 +933,14 @@ class InsigniaXmlWriter(BaseCustomizationItemXmlWriter):
             changed |= rewriteString(section, 'alphabet', item, 'alphabet', '')
             changed |= rewriteBool(section, 'canBeMirrored', item, 'canBeMirrored', False)
             changed |= rewriteEmissionSettings(section, item.emissionSettings)
+        else:
+            changed |= _xml.rewriteString(section, 'userString', self._encodeGroup(item.insigniaGroup))
         changed |= self.writeBaseGroup(item, section)
         return changed
+
+    @staticmethod
+    def _encodeGroup(group):
+        return '#vehicle_customization:insignias/{}'.format(group)
 
 
 class AttachmentXmlWriter(BaseCustomizationItemXmlWriter):

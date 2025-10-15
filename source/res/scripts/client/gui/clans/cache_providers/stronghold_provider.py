@@ -12,8 +12,8 @@ from gui.prb_control.entities.base.ctx import LeavePrbAction
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from gui.wgnc.actions import OpenInternalBrowser
-from gui.wgnc.proxy_data import ShowInBrowserItem
+from gui.notify_center.actions import OpenInternalBrowser
+from gui.notify_center.proxy_data import ShowInBrowserItem
 from helpers import dependency
 from skeletons.gui.game_control import IBrowserController
 from skeletons.gui.lobby_context import ILobbyContext

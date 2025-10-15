@@ -13,7 +13,7 @@ import Settings
 import constants
 import nations
 from account_helpers import gameplay_ctx
-from account_helpers.settings_core.settings_constants import AIM, BattleCommStorageKeys, CONTOUR, GAME, GuiSettingsBehavior, SOUND, SPGAim, ScorePanelStorageKeys, SETTINGS_GROUP, MARKERS, MARKER_SETTINGS, CONTROLS, GRAPHICS, BATTLE_EVENTS
+from account_helpers.settings_core.settings_constants import AIM, BattleCommStorageKeys, CONTOUR, GAME, GuiSettingsBehavior, SOUND, SPGAim, ScorePanelStorageKeys, SETTINGS_GROUP, MARKERS, MARKER_SETTINGS, CONTROLS, GRAPHICS
 from aih_constants import CTRL_MODE_NAME
 from constants import MAX_VEHICLE_LEVEL, VEHICLE_CLASSES
 from debug_utils import LOG_CURRENT_EXCEPTION
@@ -22,6 +22,7 @@ from gui.Scaleform.genConsts.PROFILE_CONSTANTS import PROFILE_CONSTANTS
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.collection.collections_constants import COLLECTIONS_UPDATED_ENTRY_SEEN, COLLECTION_RENEW_SEEN, COLLECTION_START_SEEN
 from gui.integrated_auction.constants import AUCTION_FINISH_STAGE_SEEN, AUCTION_STAGE_START_SEEN
+from gui.black_market.constants import BLACK_MARKET_VEHICLE_STAGE_START_SEEN, BLACK_MARKET_VEHICLE_FINISH_STAGE_SEEN, BLACK_MARKET_STAGE_START_SEEN, BLACK_MARKET_FINISH_STAGE_SEEN
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 from gui.shop_sales_event.constants import TRADING_CARAVAN_REFILL_SEEN
 from gui.custom_notifications.constants import CUSTOM_NOTIFICATIONS_SEEN
@@ -79,8 +80,7 @@ ORDERS_FILTER = 'ORDERS_FILTER'
 CURRENT_VEHICLE = 'current'
 ROYALE_VEHICLE = 'ROYALE_VEHICLE'
 BOOTCAMP_VEHICLE = 'BOOTCAMP_VEHICLE'
-EVENT_VEHICLE = 'EVENT_VEHICLE'
-EVENT_SAVED_VEHICLE = 'EVENT_SAVED_VEHICLE'
+PORTAL_VEHICLE = 'PORTAL_VEHICLE'
 LOBBY_MENU_MANUAL_TRIGGER_SHOWN = 'lobby_menu_manual_trigger_shown'
 LOBBY_MENU_BOOTCAMP_TRIGGER_SHOWN = 'lobby_menu_bootcamp_trigger_shown'
 MANUAL_NEW_CONTENT = 'manual_new_content'
@@ -233,6 +233,7 @@ RESOURCE_WELL_NOTIFICATIONS = 'resourceWellNotifications'
 MAPBOX_SURVEYS = 'mapbox_surveys'
 CLAN_NEWS_SEEN = 'clanNewsSeen'
 INTEGRATED_AUCTION_NOTIFICATIONS = 'integratedAuctionNotifications'
+BLACK_MARKET_AUCTION_NOTIFICATIONS = 'blackMarketAuctionNotifications'
 TRADING_CARAVAN_NOTIFICATIONS = 'tradingCaravanNotifications'
 CUSTOM_NOTIFICATIONS = 'customNotifications'
 SHOWN_PERSONAL_RESERVES_INTRO = 'shownPersonalReserves'
@@ -259,11 +260,6 @@ LOOT_BOXES_VIEWED_HAS_INFINITE = 'lootBoxesViewedHasInfinite'
 LOOT_BOXES_COUNT = 'lootBoxesCount'
 LOOT_BOXES_LAST_ADDED_ID = 'lootBoxesLastAdded'
 KEY_LOOTBOX_TRIGGER_HINT_SHOWN = 'keyLootboxTriggerHintShown'
-LOOT_BOXES = 'lootBoxes'
-EVENT_LOOT_BOXES = 'eventLootBoxes'
-LOOT_BOXES_WAS_STARTED = 'lootBoxesWasStarted'
-LOOT_BOXES_WAS_FINISHED = 'lootBoxesWasFinished'
-LOOT_BOXES_EVENT_UNIQUE_ID = 'lootBoxesEventUniqueID'
 COLLECTIONS_SECTION = 'collections'
 COLLECTIONS_INTRO_SHOWN = 'collectionsIntroShown'
 COLLECTION_SHOWN_NEW_REWARDS = 'collectionsNewRewards'
@@ -295,8 +291,6 @@ ACHIEVEMENTS_EDITING_ENABLED_STATUS = 'achievementsEditingEnabledStatus'
 ACHIEVEMENTS_MEDAL_ADDED_STATUS = 'achievementsMedalAddedStatus'
 ACHIEVEMENTS_RATING_CHANGED_STATUS = 'achievementsRatingChangedStatus'
 ACHIEVEMENTS_MEDAL_COUNT_INFO = 'achievementsMedalCountInfo'
-WT_BATTLES_DONE_HUNTER = 'wtBattlesDoneHunter'
-WT_BATTLES_DONE_BOSS = 'wtBattlesDoneBoss'
 NEW_YEAR = 'newYear'
 NY_DAILY_QUESTS_VISITED = 'NYDailyQuestsVisited'
 NY_BONUS_DAILY_QUEST_VISITED = 'NYBonusDailyQuestVisited'
@@ -315,10 +309,6 @@ NY_FIRST_VIDEO_SHUFFLE = 'NYFirstVideoShuffle'
 NY_ACTIVE_WIDGET_TRANSITION_SHOWN = 'NyActiveWidgetTransitionShown'
 NY_PET_SLOT_VISITED = 'NyPetSlotVisited'
 NY_GREETINGS_SEEN = 'NYGreetingsSeen'
-EVENT_LAST_LEVEL_SEEN = 'eventLastLevelSeen'
-EVENT_LAST_STAMPS_SEEN = 'eventLastStampsSeen'
-WT_PROGRESSION_QUESTS_TAB = 'wtProgressionQuestsTab'
-IS_LAUNCH_ANIMATED = 'isLaunchAnimated'
 PREMIUM_QUESTS_NOTIFICATION = 'PremiumPurchased'
 
 class BattleMatters(object):
@@ -405,6 +395,12 @@ class PlayStreak(object):
     PLAY_STREAK_LAST_LEVEL_FREEZE_SEEN = 'PlayStreakLastLevelFreezeSeen'
     PLAY_STREAK_LAST_LEVEL_FREEZE_SEEN_WIDGET = 'PlayStreakLastLevelFreezeSeenWidget'
     PLAY_STREAK_LAST_LEVEL_FREEZE_SEEN_TAB = 'PlayStreakLastLevelFreezeSeenTab'
+
+
+class BlackMarket(object):
+    BLACK_MARKET_SETTINGS = 'BlackMarketSettings'
+    BLACK_MARKET_ENTRY_CLICKED = 'BlackMarketEntryClicked'
+    BLACK_MARKET_LAST_PHASE_SEEN = 'BlackMarketLastPhaseSeen'
 
 
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
@@ -978,8 +974,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
  KEY_FAVORITES: {BOOTCAMP_VEHICLE: 0,
                  CURRENT_VEHICLE: 0,
                  ROYALE_VEHICLE: 0,
-                 EVENT_VEHICLE: 0,
-                 EVENT_SAVED_VEHICLE: None,
+                 PORTAL_VEHICLE: 0,
                  FALLOUT_VEHICLES: {}},
  KEY_MANUAL: {LOBBY_MENU_MANUAL_TRIGGER_SHOWN: False,
               LOBBY_MENU_BOOTCAMP_TRIGGER_SHOWN: False,
@@ -1244,7 +1239,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                                                        'progressViewType': True,
                                                                                        'progressViewConditions': True},
                                                             'feedbackDamageIndicator': {'damageIndicatorAllies': True},
-                                                            'feedbackBattleEvents': {BATTLE_EVENTS.CREW_PERKS: True},
                                                             'feedbackSixthSense': {'indicatorSize': 0,
                                                                                    'indicatorAlpha': 100}},
                                        'ControlsSettings': {'highlightLocation': True,
@@ -1343,10 +1337,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 RANKED_YEAR_POSITION: None,
                 TOP_OF_TREE_CONFIG: {},
                 BECOME_ELITE_VEHICLES_WATCHED: set(),
-                EVENT_LAST_STAMPS_SEEN: 0,
-                EVENT_LAST_LEVEL_SEEN: 0,
-                WT_PROGRESSION_QUESTS_TAB: 1,
-                IS_LAUNCH_ANIMATED: True,
                 GAME.GAMEPLAY_ONLY_10_MODE: False,
                 GAME.GAMEPLAY_DEV_MAPS: True,
                 MAPBOX_PROGRESSION: {'previous_battles_played': 0,
@@ -1378,13 +1368,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                         BattleMatters.REMINDER_LAST_DISPLAY_TIME: 0},
                 BR_PROGRESSION_POINTS_SEEN: 0,
                 ROYALE_INTRO_VIDEO_SHOWN: False,
-                LOOT_BOXES: {EVENT_LOOT_BOXES: {LOOT_BOXES_WAS_STARTED: False,
-                                                LOOT_BOXES_WAS_FINISHED: False,
-                                                LOOT_BOXES_OPEN_ANIMATION_ENABLED: True,
-                                                LOOT_BOXES_VIEWED_COUNT: 0,
-                                                LOOT_BOXES_EVENT_UNIQUE_ID: 0}},
-                WT_BATTLES_DONE_HUNTER: 0,
-                WT_BATTLES_DONE_BOSS: 0,
                 Winback.WINBACK_SETTINGS: {Winback.INTRO_LAST_TIME_SHOWN: 0,
                                            Winback.NEED_SHOW_INTRO: True,
                                            Winback.HAS_LEFT_VERSUS_AI_FROM_WINBACK: False,
@@ -1472,6 +1455,10 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                      ACHIEVEMENTS_VISITED: False,
                      INTEGRATED_AUCTION_NOTIFICATIONS: {AUCTION_STAGE_START_SEEN: set(),
                                                         AUCTION_FINISH_STAGE_SEEN: set()},
+                     BLACK_MARKET_AUCTION_NOTIFICATIONS: {BLACK_MARKET_VEHICLE_STAGE_START_SEEN: set(),
+                                                          BLACK_MARKET_VEHICLE_FINISH_STAGE_SEEN: set(),
+                                                          BLACK_MARKET_STAGE_START_SEEN: set(),
+                                                          BLACK_MARKET_FINISH_STAGE_SEEN: set()},
                      TRADING_CARAVAN_NOTIFICATIONS: {TRADING_CARAVAN_REFILL_SEEN: set()},
                      CUSTOM_NOTIFICATIONS: {CUSTOM_NOTIFICATIONS_SEEN: set()},
                      FUN_RANDOM_NOTIFICATIONS: {FUN_RANDOM_NOTIFICATIONS_FROZEN: set(),
@@ -1655,7 +1642,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                    PlayStreak.PLAY_STREAK_LAST_LEVEL_SEEN_TAB: 0,
                                    PlayStreak.PLAY_STREAK_LAST_LEVEL_FREEZE_SEEN: 0,
                                    PlayStreak.PLAY_STREAK_LAST_LEVEL_FREEZE_SEEN_WIDGET: 0,
-                                   PlayStreak.PLAY_STREAK_LAST_LEVEL_FREEZE_SEEN_TAB: 0}}
+                                   PlayStreak.PLAY_STREAK_LAST_LEVEL_FREEZE_SEEN_TAB: 0},
+ BlackMarket.BLACK_MARKET_SETTINGS: {BlackMarket.BLACK_MARKET_ENTRY_CLICKED: False,
+                                     BlackMarket.BLACK_MARKET_LAST_PHASE_SEEN: None}}
 
 def _filterAccountSection(dataSec):
     for key, section in dataSec.items()[:]:
@@ -2056,8 +2045,8 @@ class AccountSettings(object):
                     accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
                     if QUESTS in accSettings.keys():
                         quests = _unpack(accSettings[QUESTS].asString)
-                        if 'potapov' in quests:
-                            newVersion = quests.pop('potapov')
+                        if 'personalMissions' in quests:
+                            newVersion = quests.pop('personalMissions')
                             newVersion['operationsVisited'] = newVersion.pop('tilesVisited')
                             accSettings.write(QUESTS, _pack(quests))
 
@@ -2650,6 +2639,14 @@ class AccountSettings(object):
         AccountSettings._setValue(name, value, PlayStreak.PLAY_STREAK_SETTINGS, True)
 
     @staticmethod
+    def getBlackMarket(name):
+        return AccountSettings._getValue(name, BlackMarket.BLACK_MARKET_SETTINGS)
+
+    @staticmethod
+    def setBlackMarket(name, value):
+        AccountSettings._setValue(name, value, BlackMarket.BLACK_MARKET_SETTINGS)
+
+    @staticmethod
     def _getValue(name, setting, force=False):
         fds = AccountSettings._readSection(AccountSettings._readUserSection(), setting)
         try:
@@ -2725,4 +2722,4 @@ class AccountSettings(object):
     @classmethod
     def __getPlayerName(cls):
         playerName = getattr(BigWorld.player(), 'name', '')
-        return Settings.g_instance.userPrefs[Settings.KEY_LOGIN_INFO].readString('user', str(playerName)) if not playerName else playerName
+        return Settings.g_instance.userPrefs[Settings.KEY_LOGIN_INFO].readString('user', playerName) if not playerName else playerName

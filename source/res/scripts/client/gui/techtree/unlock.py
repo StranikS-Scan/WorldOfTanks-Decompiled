@@ -84,16 +84,22 @@ class UnlockItemValidator(proc_plugs.SyncValidator):
     def _validate(self):
         itemCD, itemTypeID, parentCD, unlockIdx = self.__unlockCtx[:]
         itemGetter = self.itemsCache.items.getItemByCD
+        xpCost = self.__costCtx['xpCost']
         vehicle = itemGetter(parentCD)
         item = itemGetter(itemCD)
-        xpCost = self.__costCtx['xpCost']
-        if vehicle.itemTypeID != GUI_ITEM_TYPE.VEHICLE:
+        if vehicle is None:
+            LOG_ERROR('Vehicle is invalid', self.__unlockCtx)
+            return proc_plugs.makeError('vehicle_invalid')
+        elif item is None:
+            LOG_ERROR('Item is invalid', self.__unlockCtx)
+            return proc_plugs.makeError('item_invalid')
+        elif vehicle.itemTypeID != GUI_ITEM_TYPE.VEHICLE:
             LOG_ERROR('Int compact descriptor is not for vehicle', parentCD)
             return proc_plugs.makeError('vehicle_invalid')
-        if not vehicle.isUnlocked:
+        elif not vehicle.isUnlocked:
             LOG_ERROR('Vehicle is not unlocked', itemCD, parentCD)
             return proc_plugs.makeError('vehicle_locked')
-        if item.isUnlocked:
+        elif item.isUnlocked:
             return proc_plugs.makeError('already_unlocked')
         stats = self.itemsCache.items.stats
         unlockStats = UnlockStats(stats.unlocks, stats.vehiclesXPs, stats.freeXP)
@@ -116,7 +122,8 @@ class UnlockItemValidator(proc_plugs.SyncValidator):
         if unlockStats.getVehTotalXP(parentCD) < xpCost:
             LOG_ERROR('XP not enough for unlock', self.__unlockCtx)
             return proc_plugs.makeError()
-        return proc_plugs.makeError('in_processing') if RequestState.inProcess('unlock') else proc_plugs.makeSuccess()
+        else:
+            return proc_plugs.makeError('in_processing') if RequestState.inProcess('unlock') else proc_plugs.makeSuccess()
 
 
 class UnlockItemProcessor(Processor):

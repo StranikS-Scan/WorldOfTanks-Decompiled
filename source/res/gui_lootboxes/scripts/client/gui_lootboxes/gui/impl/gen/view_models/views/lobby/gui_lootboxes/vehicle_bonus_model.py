@@ -14,7 +14,7 @@ class VehicleType(Enum):
 class VehicleBonusModel(ItemBonusModel):
     __slots__ = ()
 
-    def __init__(self, properties=20, commands=0):
+    def __init__(self, properties=21, commands=0):
         super(VehicleBonusModel, self).__init__(properties=properties, commands=commands)
 
     def getVehicleName(self):
@@ -71,17 +71,23 @@ class VehicleBonusModel(ItemBonusModel):
     def setRentBattles(self, value):
         self._setNumber(17, value)
 
+    def getIntCD(self):
+        return self._getNumber(18)
+
+    def setIntCD(self, value):
+        self._setNumber(18, value)
+
     def getInInventory(self):
-        return self._getBool(18)
-
-    def setInInventory(self, value):
-        self._setBool(18, value)
-
-    def getWasSold(self):
         return self._getBool(19)
 
-    def setWasSold(self, value):
+    def setInInventory(self, value):
         self._setBool(19, value)
+
+    def getWasSold(self):
+        return self._getBool(20)
+
+    def setWasSold(self, value):
+        self._setBool(20, value)
 
     def _initialize(self):
         super(VehicleBonusModel, self)._initialize()
@@ -94,5 +100,6 @@ class VehicleBonusModel(ItemBonusModel):
         self._addBoolProperty('isRent', False)
         self._addNumberProperty('rentDays', 0)
         self._addNumberProperty('rentBattles', 0)
+        self._addNumberProperty('intCD', 0)
         self._addBoolProperty('inInventory', False)
         self._addBoolProperty('wasSold', False)

@@ -83,13 +83,13 @@ _CTRLS_DESC_MAP = {_CTRL_MODE.ARCADE: (control_modes.ArcadeControlMode, 'arcadeM
  _CTRL_MODE.MAP_CASE_ARCADE: (MapCaseMode.ArcadeMapCaseControlMode, 'arcadeMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.MAP_CASE_EPIC: (MapCaseMode.EpicMapCaseControlMode, 'strategicMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.MAP_CASE_ARCADE_EPIC_MINEFIELD: (MapCaseMode.AracdeMinefieldControleMode, 'arcadeEpicMinefieldMode', _CTRL_TYPE.USUAL),
- _CTRL_MODE.MAP_CASE_HYPERION: (MapCaseMode.HyperionMapCaseControlMode, 'strategicMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.RESPAWN_DEATH: (RespawnDeathMode.RespawnDeathMode, 'postMortemMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.DEATH_FREE_CAM: (epic_battle_death_mode.DeathFreeCamMode, 'epicVideoMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.DUAL_GUN: (control_modes.DualGunControlMode, 'dualGunMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.VEHICLES_SELECTION: (VehiclesSelectionControlMode, _CTRL_MODE.VEHICLES_SELECTION, _CTRL_TYPE.USUAL),
  _CTRL_MODE.SPG_ONLY_ARTY_MODE: (control_modes.OnlyArtyControlMode, 'flamethrowerMode', _CTRL_TYPE.USUAL),
- _CTRL_MODE.ASSAULT_SPG: (control_modes.AssaultControlMode, 'assaultMode', _CTRL_TYPE.USUAL)}
+ _CTRL_MODE.ASSAULT_SPG: (control_modes.AssaultControlMode, 'assaultMode', _CTRL_TYPE.USUAL),
+ _CTRL_MODE.ATGM: (control_modes.ATGMCameraControlMode, 'atgmMode', _CTRL_TYPE.USUAL)}
 OVERWRITE_CTRLS_DESC_MAP = {constants.ARENA_BONUS_TYPE.EPIC_BATTLE: {_CTRL_MODE.POSTMORTEM: (epic_battle_death_mode.DeathTankFollowMode, 'postMortemMode', _CTRL_TYPE.USUAL)},
  constants.ARENA_BONUS_TYPE.EPIC_BATTLE_TRAINING: {_CTRL_MODE.POSTMORTEM: (epic_battle_death_mode.DeathTankFollowMode, 'postMortemMode', _CTRL_TYPE.USUAL)}}
 for royaleBonusCap in constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
@@ -921,6 +921,9 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
 
     def _onArenaStarted(self, period, *args):
         self.__isArenaStarted = period == ARENA_PERIOD.BATTLE
+        self.refreshGunMarkers()
+
+    def refreshGunMarkers(self):
         self.__curCtrl.setGunMarkerFlag(self.__isArenaStarted, _GUN_MARKER_FLAG.CONTROL_ENABLED)
         self.showServerGunMarker(gun_marker_ctrl.useServerGunMarker())
         self.showClientGunMarkers(gun_marker_ctrl.useClientGunMarker())
@@ -1036,7 +1039,7 @@ class _VertScreenshotCamera(object):
         if not doEnable:
             self.__isEnabled = False
             BigWorld.camera(self.__savedCamera)
-            BigWorld.wg_enableSuperShot(False, False)
+            BigWorld.enableSuperShot(False, False)
             for k, v in self.__savedWatchers.iteritems():
                 BigWorld.setWatcher(k, v)
 
@@ -1066,7 +1069,7 @@ class _VertScreenshotCamera(object):
         self.__cam = BigWorld.FreeCamera()
         self.__cam.set(camMatr)
         BigWorld.camera(self.__cam)
-        BigWorld.wg_enableSuperShot(True, False)
+        BigWorld.enableSuperShot(True, False)
         self.__savedWatchers = {}
         for name in self.__watcherNames:
             try:

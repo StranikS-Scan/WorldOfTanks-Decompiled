@@ -27,7 +27,7 @@ from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IServerStatsController
 from gui.Scaleform.locale.MENU import MENU
-from gui.Scaleform.daapi.view.battle.shared.premature_leave import showLeaverAliveWindow, showExitWindow, showLeaverReplayWindow, showComp7LeaverAliveWindow, showWhiteTigerLeaverAliveWindow
+from gui.Scaleform.daapi.view.battle.shared.premature_leave import showLeaverAliveWindow, showExitWindow, showLeaverReplayWindow, showComp7LeaverAliveWindow
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 
 class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
@@ -154,9 +154,7 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
     @staticmethod
     def _showLeaverAliveWindow(isPlayerIGR):
         arenaBonusType = BigWorld.player().arenaBonusType
-        if ARENA_BONUS_TYPE_CAPS.checkAny(arenaBonusType, ARENA_BONUS_TYPE_CAPS.COMP7):
-            return showComp7LeaverAliveWindow()
-        return showWhiteTigerLeaverAliveWindow() if ARENA_BONUS_TYPE_CAPS.checkAny(arenaBonusType, ARENA_BONUS_TYPE_CAPS.WHITE_TIGER) else showLeaverAliveWindow(isPlayerIGR)
+        return showComp7LeaverAliveWindow() if ARENA_BONUS_TYPE_CAPS.checkAny(arenaBonusType, ARENA_BONUS_TYPE_CAPS.COMP7) else showLeaverAliveWindow(isPlayerIGR)
 
     @staticmethod
     def __isPlayerIGR(playerInfo):

@@ -89,14 +89,15 @@ class FunRandomEntity(PreQueueEntity):
             squadEntryPoint.setExtData({FUN_EVENT_ID_KEY: self.__funRandomController.subModesHolder.getDesiredSubModeID()})
             return SelectResult(True, squadEntryPoint)
         elif action.actionName == PREBATTLE_ACTION_NAME.FUN_RANDOM:
-            self.__funRandomController.setDesiredSubModeID(action.extData.get(FUN_EVENT_ID_KEY, UNKNOWN_EVENT_ID))
+            currentDesiredSubModeID = self.__funRandomController.getDesiredSubModeID()
+            self.__funRandomController.setDesiredSubModeID(action.extData.get(FUN_EVENT_ID_KEY, currentDesiredSubModeID))
             g_eventDispatcher.loadHangar()
             return SelectResult(True, None)
         else:
             return super(FunRandomEntity, self).doSelectAction(action)
 
     def leave(self, ctx, callback=None):
-        if not ctx.hasFlags(FUNCTIONAL_FLAG.FUN_RANDOM):
+        if not (ctx.hasFlags(FUNCTIONAL_FLAG.FUN_RANDOM) or self.__funRandomController.isRelogin):
             self.__funRandomController.setDesiredSubModeID(UNKNOWN_EVENT_ID)
         super(FunRandomEntity, self).leave(ctx, callback)
 

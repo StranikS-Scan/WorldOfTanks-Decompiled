@@ -13,8 +13,8 @@ from gui.impl.gen import R
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.shared import IItemsCache
-_MAX_LENGTH_FULL_DESCRIPTION_NO_KPI = 410
-_MAX_LENGTH_FULL_DESCRIPTION_WITH_KPI = 290
+_MAX_LENGTH_FULL_DESCRIPTION_NO_KPI = 400
+_MAX_LENGTH_FULL_DESCRIPTION_WITH_KPI = 280
 
 class VehiclePreviewBrowseTab(VehiclePreviewBrowseTabMeta):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -78,6 +78,10 @@ class VehiclePreviewBrowseTab(VehiclePreviewBrowseTabMeta):
                         text = R.strings.vehicle_preview.infoPanel.premium.noCrewTransferPenaltyText()
                     bonuses.append({'iconSrc': backport.image(R.images.gui.maps.shop.kpi.crow_benefits()),
                      'labelStr': text_styles.concatStylesToMultiLine(text_styles.highTitle(backport.text(R.strings.vehicle_preview.infoPanel.premium.crewTransferTitle())), text_styles.main(backport.text(text)))})
+                if item.isPreferential:
+                    text = R.strings.vehicle_preview.infoPanel.preferentialText()
+                    bonuses.append({'iconSrc': backport.image(R.images.gui.maps.shop.kpi.preferential()),
+                     'labelStr': text_styles.concatStylesToMultiLine(text_styles.highTitle(backport.text(R.strings.vehicle_preview.infoPanel.preferentialTitle())), text_styles.main(backport.text(text)))})
                 builtInEquipmentIDs = item.getBuiltInEquipmentIDs()
                 builtInCount = len(builtInEquipmentIDs) if builtInEquipmentIDs else 0
                 if builtInCount > 0:

@@ -214,7 +214,6 @@
       <duration>	30	</duration>
       <additiveFactors>
         <gun-chargeTimeBonus>	1	</gun-chargeTimeBonus>
-        <gun-reloadLockTimeBonus>	0	</gun-reloadLockTimeBonus>
         <gun-loadShellIntoDualGunBonus>	6	</gun-loadShellIntoDualGunBonus>
         <vehicle-fwMaxSpeedBonus>	5	</vehicle-fwMaxSpeedBonus>
         <vehicle-bkMaxSpeedBonus>	5	</vehicle-bkMaxSpeedBonus>
@@ -240,30 +239,26 @@
         <name>	vehicleGunShotDispersionTurretRotation	</name>
         <value>	30	</value>
       </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionAfterShot	</name>
+        <value>	20	</value>
+      </mul>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	50	</value>
+      </mul>
       <add>
         <name>	chargeTimeBonus	</name>
         <value>	-1	</value>
       </add>
       <add>
-        <name>	penaltyAfterShotBonus	</name>
-        <value>	-0	</value>
-      </add>
-      <add>
         <name>	loadShellIntoDualGunBonus	</name>
         <value>	-6	</value>
       </add>
-      <mul>
-        <name>	vehicleGunShotDispersionAfterShot	</name>
-        <value>	20	</value>
-      </mul>
       <add>
         <name>	speedLimitsBonus	</name>
         <value>	5	</value>
       </add>
-      <mul>
-        <name>	vehicleEnginePower	</name>
-        <value>	50	</value>
-      </mul>
     </kpi>
   </recoil_recuperator>
 </ability_equipments.xml>

@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.common.missions.bonuses.item_bonus_model import It
 class BattleMattersEntryTooltipViewModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=10, commands=0):
+    def __init__(self, properties=11, commands=0):
         super(BattleMattersEntryTooltipViewModel, self).__init__(properties=properties, commands=commands)
 
     def getTitle(self):
@@ -58,17 +58,23 @@ class BattleMattersEntryTooltipViewModel(ViewModel):
     def setQuestsCount(self, value):
         self._setNumber(7, value)
 
-    def getEndDate(self):
+    def getUnobtainedRewardsCount(self):
         return self._getNumber(8)
 
-    def setEndDate(self, value):
+    def setUnobtainedRewardsCount(self, value):
         self._setNumber(8, value)
 
+    def getEndDate(self):
+        return self._getNumber(9)
+
+    def setEndDate(self, value):
+        self._setNumber(9, value)
+
     def getRewards(self):
-        return self._getArray(9)
+        return self._getArray(10)
 
     def setRewards(self, value):
-        self._setArray(9, value)
+        self._setArray(10, value)
 
     @staticmethod
     def getRewardsType():
@@ -84,5 +90,6 @@ class BattleMattersEntryTooltipViewModel(ViewModel):
         self._addNumberProperty('maxProgress', 0)
         self._addNumberProperty('currentQuest', 0)
         self._addNumberProperty('questsCount', 0)
+        self._addNumberProperty('unobtainedRewardsCount', 0)
         self._addNumberProperty('endDate', 0)
         self._addArrayProperty('rewards', Array())

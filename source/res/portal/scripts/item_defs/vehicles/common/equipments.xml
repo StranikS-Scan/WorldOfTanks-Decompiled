@@ -1,0 +1,414 @@
+<equipments.xml>
+  <super_boss_aoe_portal>
+    <id>	12001	</id>
+    <userString>	#artefacts:artillery/name	</userString>
+    <description>	#artefacts:artillery/descr	</description>
+    <icon>	artillery 0 0	</icon>
+    <code>	artillery	</code>
+    <price>	750	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger portal_ability	</tags>
+    <type>	battleAbilities	</type>
+    <script>	portal_common.items.portal_artefacts.PortalAOEEquipment	  <shortDescription>	#artefacts:artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:artillery/longDescr	</longDescription>
+      <delay>	3	</delay>
+      <duration>	3.0	</duration>
+      <shotsNumber>	5	</shotsNumber>
+      <areaRadius>	15	</areaRadius>
+      <explodeDestructible>	false	</explodeDestructible>
+      <areaVisual>	content/Interface/TargetPoint/TargetPoint_red.visual	</areaVisual>
+      <areaAccurateCollision>	false	</areaAccurateCollision>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	DEATH_ZONE	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <effects>
+        <start>
+          <areaColor>	0x3FFF0000	</areaColor>
+          <areaAccurateCollision>	false	</areaAccurateCollision>
+        </start>
+        <action>
+          <shotEffects>	epicArtilleryStrike	</shotEffects>
+          <offsetDeviation>	0	</offsetDeviation>
+          <repeatCount>	1	</repeatCount>
+          <repeatDelay>	0.3	</repeatDelay>
+          <repeatDelayDeviationPercent>	0	</repeatDelayDeviationPercent>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	team1	</applyTo>
+          <args>
+            <damage>	200	</damage>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </super_boss_aoe_portal>
+  <vehicle_change_shot_portal>
+    <id>	12002	</id>
+    <userString>	#portal.portal_artefacts:vehicle_change_shot/name	</userString>
+    <description>	#portal.portal_artefacts:vehicle_change_shot/descr	</description>
+    <icon>	vehicle_change_shot_portal 0 0	</icon>
+    <soundNotification>	vo_ev_portal_ability_enemy_possession_ready	</soundNotification>
+    <playerMessagesKey>	VEHICLE_CHANGE_SHOT_PORTAL	</playerMessagesKey>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	portal_ability abilityEquipment	</tags>
+    <usagePrefab>	content/CGFPrefabs/portal/vehicleChangeShotUsage.prefab	</usagePrefab>
+    <script>	portal_common.items.portal_artefacts.PortalVehicleChangeShot	  <cooldownSeconds>	90	</cooldownSeconds>
+      <duration>	30	</duration>
+      <reuseCount>	3	</reuseCount>
+      <shellCompactDescr>	10240010	</shellCompactDescr>
+      <selfVehiclePrefab>	content/CGFPrefabs/portal/vehicleChangeShotSelf.prefab	</selfVehiclePrefab>
+      <capturedVehiclePrefab>	content/CGFPrefabs/portal/vehicleChangeShotCaptured.prefab	</capturedVehiclePrefab>
+      <gunFirePrefab>	content/CGFPrefabs/portal/vehicleChangeShotGunFire.prefab	</gunFirePrefab>
+      <idx>	2	</idx>
+    </script>
+  </vehicle_change_shot_portal>
+  <guided_missile_portal>
+    <id>	12003	</id>
+    <userString>	#portal.portal_artefacts:guided_missile/name	</userString>
+    <description>	#portal.portal_artefacts:guided_missile/descr	</description>
+    <icon>	guided_missile_portal 0 0	</icon>
+    <soundNotification>	vo_ev_portal_ability_ptur_ready	</soundNotification>
+    <activationSound>	vo_ev_portal_ability_ptur	</activationSound>
+    <playerMessagesKey>	GUIDED_MISSILE_PORTAL	</playerMessagesKey>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	portal_ability abilityEquipment	</tags>
+    <usagePrefab>	content/CGFPrefabs/portal/guidedMissile.prefab	</usagePrefab>
+    <script>	portal_common.items.portal_artefacts.PortalGuidedMissile	  <cooldownSeconds>	90	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <idx>	2	</idx>
+    </script>
+  </guided_missile_portal>
+  <sentry_gun_portal>
+    <id>	12004	</id>
+    <userString>	#portal.portal_artefacts:sentry_gun/name	</userString>
+    <description>	#portal.portal_artefacts:sentry_gun/descr	</description>
+    <icon>	sentry_gun_portal 0 0	</icon>
+    <soundNotification>	vo_ev_portal_ability_bot_turret_ready	</soundNotification>
+    <activationSound>	vo_ev_portal_ability_bot_turret	</activationSound>
+    <playerMessagesKey>	SENTRY_GUN_PORTAL	</playerMessagesKey>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	portal_ability abilityEquipment	</tags>
+    <usagePrefab>	content/CGFPrefabs/portal/deployable_entity_turret.prefab	</usagePrefab>
+    <script>	portal_common.items.portal_artefacts.PortalSentryGun	  <clientSelector>	portal.avatar_input_handler.portal_map_case_mode.SentryGunPortalSelector	</clientSelector>
+      <cooldownSeconds>	90	</cooldownSeconds>
+      <duration>	30	</duration>
+      <reuseCount>	3	</reuseCount>
+      <sentryGunVehicle>	france:F14_AMX40_portal	</sentryGunVehicle>
+      <areaColor>	0xFF8FD0DC	</areaColor>
+      <areaLength>	8	</areaLength>
+      <areaWidth>	4	</areaWidth>
+      <deployEffectDuration>	5	</deployEffectDuration>
+      <areaVisual>	content/Interface/TargetPoint/rectangle_w_arrow_blue.visual	</areaVisual>
+      <minApplyRadius>	10	</minApplyRadius>
+      <maxApplyRadius>	30	</maxApplyRadius>
+      <arenaAimLimits>
+        <insetRadius>	5	</insetRadius>
+        <areaSwitch>	content/Interface/TargetPoint/rectangle_w_arrow_red.visual	</areaSwitch>
+        <areaColor>	0xFFBE1F00	</areaColor>
+      </arenaAimLimits>
+      <cameraPivotPosMin>	0 5 3	</cameraPivotPosMin>
+      <cameraPivotPosMax>	0 10 6	</cameraPivotPosMax>
+      <idx>	2	</idx>
+    </script>
+  </sentry_gun_portal>
+  <berserk_portal>
+    <id>	12005	</id>
+    <userString>	#portal.portal_artefacts:berserk_portal/name	</userString>
+    <description>	#portal.portal_artefacts:berserk_portal/descr	</description>
+    <icon>	berserk_portal 0 0	</icon>
+    <soundNotification>	vo_ev_portal_ability_berserk_ready	</soundNotification>
+    <activationSound>	vo_ev_portal_ability_berserk	</activationSound>
+    <playerMessagesKey>	BERSERK_PORTAL	</playerMessagesKey>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	portal_ability abilityEquipment	</tags>
+    <usagePrefab>	content/CGFPrefabs/portal/berserk.prefab	</usagePrefab>
+    <script>	portal_common.items.portal_artefacts.PortalBerserk	  <duration>	30	</duration>
+      <cooldownSeconds>	90	</cooldownSeconds>
+      <reuseCount>	1	</reuseCount>
+      <increaseFactors>
+        <damageFactor>	2.0	</damageFactor>
+        <receivedDamageFactor>	0.3	</receivedDamageFactor>
+        <vehicle-maxSpeed>	1.5	</vehicle-maxSpeed>
+        <engine-power>	2.0	</engine-power>
+        <chassis-terrainResistance>	2.2 2.2 2.2	</chassis-terrainResistance>
+      </increaseFactors>
+      <idx>	2	</idx>
+    </script>
+  </berserk_portal>
+  <minefield_portal>
+    <id>	12006	</id>
+    <userString>	#portal.portal_artefacts:minefield_portal/name	</userString>
+    <description>	#portal.portal_artefacts:minefield_portal/descr	</description>
+    <icon>	minefield_portal 0 0	</icon>
+    <soundNotification>	vo_ev_portal_ability_mines_ready	</soundNotification>
+    <activationSound>	vo_ev_portal_ability_mines	</activationSound>
+    <playerMessagesKey>	MINEFIELD_PORTAL	</playerMessagesKey>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	portal_ability abilityEquipment	</tags>
+    <usagePrefab>	content/CGFPrefabs/portal/minefieldMarker.prefab	</usagePrefab>
+    <script>	portal_common.items.portal_artefacts.PortalMinefield	  <shortDescription>	#portal.portal_artefacts:minefield_portal/short_descr	</shortDescription>
+      <longDescription>	#portal.portal_artefacts:minefield_portal/long_descr	</longDescription>
+      <reuseCount>	1	</reuseCount>
+      <clientSelector>	portal.avatar_input_handler.portal_map_case_mode.MinefieldPortalSelector	</clientSelector>
+      <tooltips>	cooldownTime mineParams/lifetime bombsNumber-minefield mineParams/shell	</tooltips>
+      <cooldownFactors></cooldownFactors>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <reserveUnlockFactor>	1	</reserveUnlockFactor>
+      <startCooldownTimeFactor>	1	</startCooldownTimeFactor>
+      <sharedCooldownTime>	50	</sharedCooldownTime>
+      <cooldownTime>	50	</cooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <bombsNumber>	26	</bombsNumber>
+      <bombsPattern>	-10	-30
+				-10	-22.5
+				-10	-15
+				-10	-7.5
+				-10	0
+				-10	7.5
+				-10	15
+				-10	22.5
+				-10	30
+				0	-35
+				0	-25
+				0	-15
+				0	-5
+				0	5
+				0	15
+				0	25
+				0	35
+				10	-30
+				10	-22.5
+				10	-15
+				10	-7.5
+				10	0
+				10	7.5
+				10	15
+				10	22.5
+				10	30	</bombsPattern>
+      <mineParams>
+        <activationDelay>	2	</activationDelay>
+        <triggerRadius>	6	</triggerRadius>
+        <triggerHeight>	5	</triggerHeight>
+        <triggerDepth>	1	</triggerDepth>
+        <influenceType>	2	</influenceType>
+        <lifetime>	45	</lifetime>
+        <damage>	0	</damage>
+        <shellCompactDescr>	85786	</shellCompactDescr>
+        <shellCompactDescrLowDamage>	86042	</shellCompactDescrLowDamage>
+        <destroyMyMinesOverlappingAlliedMines>	True	</destroyMyMinesOverlappingAlliedMines>
+        <resistAllyDamage>	True	</resistAllyDamage>
+        <directDetectionTypes>	RECON	</directDetectionTypes>
+      </mineParams>
+      <noOwner>	false	</noOwner>
+      <areaVisual>	content/Interface/TargetPoint/TargetPointMineFieldAim_32x32.visual	</areaVisual>
+      <areaLength>	15	</areaLength>
+      <areaWidth>	75	</areaWidth>
+      <arenaAimLimits>
+        <areaColor>	0xFFBE1F00	</areaColor>
+      </arenaAimLimits>
+      <minApplyRadius>	10	</minApplyRadius>
+      <maxApplyRadius>	100	</maxApplyRadius>
+      <cameraPivotPosMin>	0 5 3	</cameraPivotPosMin>
+      <cameraPivotPosMax>	0 5 3	</cameraPivotPosMax>
+      <idx>	1	</idx>
+    </script>
+  </minefield_portal>
+  <shield_portal>
+    <id>	12007	</id>
+    <userString>	#portal.portal_artefacts:shield_portal/name	</userString>
+    <description>	#portal.portal_artefacts:shield_portal/descr	</description>
+    <icon>	shield_portal 0 0	</icon>
+    <soundNotification>	vo_ev_portal_ability_shield_ready	</soundNotification>
+    <activationSound>	vo_ev_portal_ability_shield	</activationSound>
+    <playerMessagesKey>	SHIELD_PORTAL	</playerMessagesKey>
+    <price>	150	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	portal_ability abilityEquipment	</tags>
+    <usagePrefab>	content/CGFPrefabs/portal/Shield.prefab	</usagePrefab>
+    <script>	portal_common.items.portal_artefacts.PortalVehicleShield	  <duration>	5	</duration>
+      <cooldownSeconds>	50	</cooldownSeconds>
+      <reuseCount>	1	</reuseCount>
+      <idx>	1	</idx>
+    </script>
+  </shield_portal>
+  <fire_shot_portal>
+    <id>	12008	</id>
+    <userString>	#portal.portal_artefacts:fire_shot_portal/name	</userString>
+    <description>	#portal.portal_artefacts:fire_shot_portal/descr	</description>
+    <icon>	fire_shot_portal 0 0	</icon>
+    <soundNotification>	vo_ev_portal_ability_fiery_shot_ready	</soundNotification>
+    <playerMessagesKey>	FIRE_SHOT_PORTAL	</playerMessagesKey>
+    <price>	150	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	portal_ability abilityEquipment	</tags>
+    <script>	portal_common.items.portal_artefacts.VehicleFireShot	  <cooldownSeconds>	40	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <gunFirePrefab>	content/CGFPrefabs/portal/fireShotSelf.prefab	</gunFirePrefab>
+      <hitPrefab>	content/CGFPrefabs/portal/fireShotEnemy.prefab	</hitPrefab>
+      <idx>	0	</idx>
+    </script>
+  </fire_shot_portal>
+  <frozen_shot_portal>
+    <id>	12009	</id>
+    <userString>	#portal.portal_artefacts:frozen_shot_portal/name	</userString>
+    <description>	#portal.portal_artefacts:frozen_shot_portal/descr	</description>
+    <icon>	frozen_shot_portal 0 0	</icon>
+    <soundNotification>	vo_ev_portal_ability_cold_arrow_shot_ready	</soundNotification>
+    <playerMessagesKey>	FROZEN_SHOT_PORTAL	</playerMessagesKey>
+    <price>	150	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	portal_ability abilityEquipment	</tags>
+    <script>	portal_common.items.portal_artefacts.VehicleFrozenShot	  <cooldownSeconds>	40	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <debuffDuration>	5	</debuffDuration>
+      <debuffFactors>
+        <turret-rotationSpeed>	0.25	</turret-rotationSpeed>
+        <gun-reloadTime>	2	</gun-reloadTime>
+        <engine-power>	0.25	</engine-power>
+        <vehicle-maxSpeed>	0.25	</vehicle-maxSpeed>
+        <vehicle-rotationSpeed>	0.25	</vehicle-rotationSpeed>
+      </debuffFactors>
+      <gunFirePrefab>	content/CGFPrefabs/portal/frozenShotSelf.prefab	</gunFirePrefab>
+      <hitPrefab>	content/CGFPrefabs/portal/frozenShotEnemy.prefab	</hitPrefab>
+      <idx>	0	</idx>
+    </script>
+  </frozen_shot_portal>
+  <laugh_shot_portal>
+    <id>	12010	</id>
+    <userString>	#portal.portal_artefacts:laugh_shot_portal/name	</userString>
+    <description>	#portal.portal_artefacts:laugh_shot_portal/descr	</description>
+    <icon>	laugh_shot_portal 0 0	</icon>
+    <soundNotification>	vo_ev_portal_ability_benefit_shuta_ready	</soundNotification>
+    <playerMessagesKey>	LAUGH_SHOT_PORTAL	</playerMessagesKey>
+    <price>	150	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	portal_ability abilityEquipment	</tags>
+    <script>	portal_common.items.portal_artefacts.VehicleLaughShot	  <cooldownSeconds>	40	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <debuffDuration>	5	</debuffDuration>
+      <debuffFactors>
+        <engine-power>	10	</engine-power>
+        <vehicle-maxSpeed>	1	</vehicle-maxSpeed>
+        <gun-reloadTime>	0.5	</gun-reloadTime>
+        <gun-piercing>	0.1	</gun-piercing>
+        <turret-rotationSpeed>	10	</turret-rotationSpeed>
+        <gun-rotationSpeed>	10	</gun-rotationSpeed>
+        <gun-aimingTime>	0.1	</gun-aimingTime>
+      </debuffFactors>
+      <gunFirePrefab>	content/CGFPrefabs/portal/laughShotSelf.prefab	</gunFirePrefab>
+      <hitPrefab>	content/CGFPrefabs/portal/laughShotEnemy.prefab	</hitPrefab>
+      <idx>	0	</idx>
+    </script>
+  </laugh_shot_portal>
+  <curse_shot_portal>
+    <id>	12011	</id>
+    <userString>	#portal.portal_artefacts:curse_shot_portal/name	</userString>
+    <description>	#portal.portal_artefacts:curse_shot_portal/descr	</description>
+    <icon>	curse_shot_portal 0 0	</icon>
+    <soundNotification>	vo_ev_portal_ability_damn_touch_shot_ready	</soundNotification>
+    <playerMessagesKey>	CURSE_SHOT_PORTAL	</playerMessagesKey>
+    <price>	150	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	portal_ability abilityEquipment	</tags>
+    <script>	portal_common.items.portal_artefacts.VehicleCurseShot	  <cooldownSeconds>	40	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <damagedDevices>
+        <engineHealth>	1.0	</engineHealth>
+        <fuelTankHealth>	0.7	</fuelTankHealth>
+        <surveyingDeviceHealth>	1.0	</surveyingDeviceHealth>
+        <radioHealth>	1.0	</radioHealth>
+        <gunHealth>	1.0	</gunHealth>
+        <tracks>	10.0	</tracks>
+      </damagedDevices>
+      <gunFirePrefab>	content/CGFPrefabs/portal/curseShotSelf.prefab	</gunFirePrefab>
+      <hitPrefab>	content/CGFPrefabs/portal/curseShotEnemy.prefab	</hitPrefab>
+      <idx>	0	</idx>
+    </script>
+  </curse_shot_portal>
+  <reload_aura_portal>
+    <id>	12012	</id>
+    <userString>	#portal.portal_artefacts:reload_aura_portal/name	</userString>
+    <description>	#portal.portal_artefacts:reload_aura_portal/descr	</description>
+    <icon>	reload_aura_portal 0 0	</icon>
+    <soundNotification>	vo_ev_portal_ability_aura_reload_ready	</soundNotification>
+    <activationSound>	vo_ev_portal_ability_aura_reload	</activationSound>
+    <playerMessagesKey>	RELOAD_AURA_PORTAL	</playerMessagesKey>
+    <price>	150	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	portal_ability abilityEquipment	</tags>
+    <script>	portal_common.items.portal_artefacts.VehicleInfluenceZone	  <duration>	15	</duration>
+      <cooldownSeconds>	50	</cooldownSeconds>
+      <radius>	30	</radius>
+      <reuseCount>	-1	</reuseCount>
+      <usagePrefab>	content/CGFPrefabs/portal/vehicleInfluenceZone.prefab	</usagePrefab>
+      <increaseFactors>
+        <gun-reloadTime>	0.5	</gun-reloadTime>
+      </increaseFactors>
+      <idx>	1	</idx>
+    </script>
+  </reload_aura_portal>
+  <trap_portal>
+    <id>	12013	</id>
+    <userString>	#portal.portal_artefacts:trap_portal/name	</userString>
+    <description>	#portal.portal_artefacts:trap_portal/descr	</description>
+    <icon>	trap_portal 0 0	</icon>
+    <soundNotification>	vo_ev_portal_ability_trap_ready	</soundNotification>
+    <activationSound>	vo_ev_portal_ability_trap	</activationSound>
+    <price>	150	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	portal_ability abilityEquipment stopOutsideBattle	</tags>
+    <playerMessagesKey>	TRAP_PORTAL	</playerMessagesKey>
+    <script>	portal_common.items.portal_artefacts.VehicleTrap	  <reuseCount>	-1	</reuseCount>
+      <clientSelector>	portal.avatar_input_handler.portal_map_case_mode.PortalVehicleTrapSelector	</clientSelector>
+      <visualScript>
+        <client>
+          <plan>	portal_abilities/vehicle_trap_client	</plan>
+        </client>
+        <server>
+          <plan>	portal_abilities/vehicle_trap_server	</plan>
+        </server>
+      </visualScript>
+      <duration>	10	  <exports>	vse tooltip	</exports>
+      </duration>
+      <impulse>	25.0	  <exports>	vse tooltip	</exports>
+      </impulse>
+      <gravityFactor>	0.3	  <exports>	vse	</exports>
+      </gravityFactor>
+      <radius>	60.0	  <exports>	vse	</exports>
+      </radius>
+      <offsetY>	2.0	  <exports>	vse	</exports>
+      </offsetY>
+      <deploymentDelay>	3.0	  <exports>	vse	</exports>
+      </deploymentDelay>
+      <cooldownSeconds>	50	  <exports>	vse	</exports>
+      </cooldownSeconds>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	150	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFBE1F00	</areaColor>
+      </arenaAimLimits>
+      <areaLength>	20	</areaLength>
+      <areaWidth>	20	</areaWidth>
+      <areaRadius>	30	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_dot_cross_blue.visual	</areaVisual>
+      <areaColor>	0xFF8FD0DC	</areaColor>
+      <idx>	1	</idx>
+    </script>
+  </trap_portal>
+</equipments.xml>

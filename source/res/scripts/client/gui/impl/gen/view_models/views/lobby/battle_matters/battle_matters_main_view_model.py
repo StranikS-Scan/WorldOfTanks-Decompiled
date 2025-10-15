@@ -8,6 +8,7 @@ from gui.impl.gen.view_models.views.lobby.battle_matters.quest_view_model import
 class BattleMattersMainViewModel(ViewModel):
     __slots__ = ('onShowView', 'onRunBootcamp', 'onShowManual', 'onShowManualForQuest', 'onShowAnimForQuest', 'onShowMainReward', 'onSelectDelayedReward', 'onClose')
     ARG_QUEST_ID = 'questID'
+    ARG_TOKEN_ID = 'tokenID'
     NAME_VEHICLE_REWARD = 'vehicle'
     NAME_TOKEN_REWARD = 'token'
 

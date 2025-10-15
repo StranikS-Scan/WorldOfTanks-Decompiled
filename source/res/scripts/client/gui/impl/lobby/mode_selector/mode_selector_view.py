@@ -29,10 +29,6 @@ from gui.impl.lobby.mode_selector.mode_selector_data_provider import ModeSelecto
 from gui.impl.lobby.mode_selector.popovers.random_battle_popover import RandomBattlePopover
 from gui.impl.lobby.mode_selector.sound_constants import MODE_SELECTOR_SOUND_SPACE
 from gui.impl.lobby.mode_selector.tooltips.simply_format_tooltip import SimplyFormatTooltipView
-from white_tiger.gui.impl.lobby.tooltips.wt_event_header_widget_tooltip_view import WtEventHeaderWidgetTooltipView
-from white_tiger.gui.impl.lobby.tooltips.wt_event_stamp_tooltip_view import WtEventStampTooltipView
-from white_tiger.gui.impl.lobby.tooltips.wt_event_ticket_tooltip_view import WtEventTicketTooltipView
-from white_tiger.gui.impl.gen.view_models.views.common.wt_common_consts import WTVehicleType
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.tooltip_window import SimpleTooltipContent
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
@@ -68,17 +64,14 @@ _SIMPLE_TOOLTIP_IDS = [ModeSelectorTooltipsConstants.RANKED_CALENDAR_DAY_INFO_TO
  ModeSelectorTooltipsConstants.RANKED_BATTLES_BONUS_TOOLTIP,
  ModeSelectorTooltipsConstants.MAPBOX_CALENDAR_TOOLTIP,
  ModeSelectorTooltipsConstants.EPIC_BATTLE_CALENDAR_TOOLTIP,
- ModeSelectorTooltipsConstants.COMP7_CALENDAR_DAY_EXTENDED_INFO,
- ModeSelectorTooltipsConstants.EVENT_BATTLES_CALENDAR_TOOLTIP]
+ ModeSelectorTooltipsConstants.COMP7_CALENDAR_DAY_EXTENDED_INFO]
 
 def _getTooltipByContentIdMap():
     return {R.views.lobby.battle_pass.tooltips.BattlePassNotStartedTooltipView(): BattlePassNotStartedTooltipView,
      R.views.lobby.battle_pass.tooltips.BattlePassCompletedTooltipView(): BattlePassCompletedTooltipView,
      R.views.lobby.battle_pass.tooltips.BattlePassInProgressTooltipView(): partial(BattlePassInProgressTooltipView, battleType=QUEUE_TYPE.RANDOMS),
      R.views.lobby.comp7.tooltips.MainWidgetTooltip(): MainWidgetTooltip,
-     R.views.lobby.comp7.tooltips.RankInactivityTooltip(): RankInactivityTooltip,
-     R.views.white_tiger.lobby.tooltips.ProgressionEntryPointTooltip(): WtEventHeaderWidgetTooltipView,
-     R.views.white_tiger.lobby.tooltips.StampTooltipView(): WtEventStampTooltipView}
+     R.views.lobby.comp7.tooltips.RankInactivityTooltip(): RankInactivityTooltip}
 
 
 registerModeSelectorTooltips(_SIMPLE_TOOLTIP_IDS, _getTooltipByContentIdMap())
@@ -160,8 +153,6 @@ class ModeSelectorView(ViewImpl):
             if not header:
                 return
             return SimplyFormatTooltipView(header, body)
-        elif contentID == R.views.white_tiger.lobby.tooltips.TicketTooltipView():
-            return WtEventTicketTooltipView(event.getArgument('wtVehicleType', WTVehicleType.BOSS.value))
         else:
             tooltipClass = self.__tooltipConstants.get(_CONTENT_TOOLTIPS_KEY, {}).get(contentID)
             return tooltipClass() if tooltipClass else None

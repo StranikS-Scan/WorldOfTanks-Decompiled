@@ -13,36 +13,6 @@ from gui.shared.gui_items import Vehicle
 from gui.shared.gui_items.dossier import getAchievementFactory
 from items import vehicles as vehicles_core
 from shared_utils import findFirst
-from soft_exception import SoftException
-
-def _findAchievementInDossier(achievementID, dossierPopUps):
-    achievementData = findFirst(lambda e: e[0] == achievementID, dossierPopUps)
-    return achievementData[1]
-
-
-def makeAchievement(achievementID, results=None):
-    popUps = results.get('dossierPopUps', []) if results is not None else []
-    record = DB_ID_TO_RECORD[achievementID]
-    if record in layouts.IGNORED_BY_BATTLE_RESULTS or not layouts.isAchievementRegistered(record):
-        return
-    else:
-        factory = getAchievementFactory(record)
-        if factory is None:
-            return
-        popUpsValue = _findAchievementInDossier(achievementID, popUps) if popUps else 0
-        achievement = factory.create(value=popUpsValue)
-        if record == achievements.MARK_ON_GUN_RECORD:
-            if 'typeCompDescr' in results:
-                try:
-                    nationID = vehicles_core.parseIntCompactDescr(results['typeCompDescr'])[1]
-                    achievement.setVehicleNationID(nationID)
-                except SoftException:
-                    LOG_CURRENT_EXCEPTION()
-
-            if 'damageRating' in results:
-                achievement.setDamageRating(results['damageRating'])
-        return achievement
-
 
 def makeAchievementFromPersonal(results):
     popUps = results.get('dossierPopUps', [])

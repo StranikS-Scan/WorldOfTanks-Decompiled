@@ -1651,24 +1651,24 @@
       <price>	70000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	160	</armor_1>
-        <armor_2>	150	</armor_2>
-        <armor_3>	110	</armor_3>
-        <armor_4>	60	</armor_4>
-        <armor_5>	30	</armor_5>
-        <armor_6>	140	</armor_6>
-        <armor_7>	150	</armor_7>
+        <armor_1>	210	</armor_1>
+        <armor_2>	190	</armor_2>
+        <armor_3>	160	</armor_3>
+        <armor_4>	140	</armor_4>
+        <armor_5>	100	</armor_5>
+        <armor_6>	170	</armor_6>
+        <armor_7>	190	</armor_7>
         <armor_8>	0	</armor_8>
         <armor_10>	30	</armor_10>
-        <armor_11>	140	</armor_11>
-        <armor_12>	140	</armor_12>
-        <armor_13>	180	</armor_13>
+        <armor_11>	190	</armor_11>
+        <armor_12>	190	</armor_12>
+        <armor_13>	210	</armor_13>
         <armor_14>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
         </armor_14>
-        <armor_15>	50	</armor_15>
-        <armor_16>	105	</armor_16>
-        <armor_17>	105	</armor_17>
-        <armor_18>	100	</armor_18>
+        <armor_15>	100	</armor_15>
+        <armor_16>	150	</armor_16>
+        <armor_17>	130	</armor_17>
+        <armor_18>	140	</armor_18>
         <armor_19>	100	</armor_19>
         <armor_20>	110	</armor_20>
         <armor_21>	110	</armor_21>
@@ -1689,28 +1689,28 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_122mm_M62_168>	shared	  <armor>
-            <armor_1>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+        <_122mm_M62_168>	shared	  <maxAmmo>	60	</maxAmmo>
+          <armor>
+            <armor_1>	250	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <armor_6>	180	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_6>	250	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_6>
-            <armor_7>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_7>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_7>
             <gun>	60	</gun>
           </armor>
-          <maxAmmo>	50	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0.00000 7.50 0.16667 6.00 0.36111 3.00 0.38889 0.00 0.50000 -1.00 0.61111 0.00 0.63889 3.00 0.83333 6.00 1.00000 7.50	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <reloadTime>	9.8	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
+          <shotDispersionRadius>	0.32	</shotDispersionRadius>
+          <reloadTime>	9.0	</reloadTime>
+          <aimingTime>	2.0	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	4	</afterShot>
@@ -1741,8 +1741,8 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	0 0 3.17	</rayStart>
-              <rayEnd>	0 0 3.91	</rayEnd>
+              <rayStart>	0 0 1.61	</rayStart>
+              <rayEnd>	0 0 2.34	</rayEnd>
               <rayUp>	0.14 0 0	</rayUp>
               <size>	0.74	</size>
             </slot>

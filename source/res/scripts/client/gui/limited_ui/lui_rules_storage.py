@@ -47,6 +47,7 @@ class LuiRules(enum.Enum):
     STRONGHOLD_ENTRY_POINT = 'StrongholdEntryPoint'
     BR_ENTRY_POINT = 'BREntryPoint'
     ARMORY_YARD_ENTRY_POINT = 'ArmoryYardEntryPoint'
+    BLACK_MARKET_ENTRY_POINT = 'BlackMarketEntryPoint'
     FUN_RANDOM_ENTRY_POINT = 'FunRandomEntryPoint'
     FUN_RANDOM_NOTIFICATIONS = 'FunRandomNotifications'
     GUI_LOOTBOXES_ENTRY_POINT = 'LootBoxesEntryPoint'
@@ -58,11 +59,11 @@ class LuiRules(enum.Enum):
     PARAGONS_TREE_BRANCHES = 'ParagonsTreeBranches'
     PARAGONS_NOTIFICATION = 'ParagonsNotification'
     NEW_CAMPAIGN_HINT = 'NewCampaignHint'
-    GUI_WHITE_TIGER_ENTRY_POINT = 'WhiteTigerEntryPoint'
     TEASER = 'Teaser'
     C7N_BUBBLE = 'CustomizationBubble'
     COMMON_CHAT = 'CommonChat'
     CHANNELS = 'Channels'
+    PORTAL_ENTRY_POINT = 'PortalEntryPoint'
 
 
 class _LimitedUIRule(namedtuple('_LimitedUIRule', ('idx', 'expression', 'tokens', 'message'))):

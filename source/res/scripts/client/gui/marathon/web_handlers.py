@@ -21,6 +21,7 @@ from web.web_client_api.ui.missions import MissionsWebApiMixin
 from web.web_client_api.ui.profile import ProfileTabWebApiMixin
 from web.web_client_api.vehicles import VehiclesWebApi
 from web.web_client_api.ui.shop import ShopWebApiMixin
+from web.web_client_api.ui.black_market import BlackMarketWebApiMixin
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 _DEFAULT_MARATHON_WEB_API_COLLECTION = (SoundWebApi,
  SoundStateWebApi,
@@ -42,7 +43,7 @@ class _RequestWebApi(AccessTokenWebApiMixin, WgniTokenWebApiMixin, SpaIdWebApiMi
 
 
 @w2capi(name='open_tab', key='tab_id')
-class _OpenTabWebApi(HangarTabWebApiMixin, ProfileTabWebApiMixin, ShopWebApiMixin, VehiclePreviewWebApiMixin, MissionsWebApiMixin):
+class _OpenTabWebApi(HangarTabWebApiMixin, ProfileTabWebApiMixin, ShopWebApiMixin, VehiclePreviewWebApiMixin, MissionsWebApiMixin, BlackMarketWebApiMixin):
 
     def _getVehicleStylePreviewCallback(self, cmd):
         return partial(showStorage, defaultSection=STORAGE_CONSTANTS.CUSTOMIZATION) if cmd.back_btn_descr == 'storage' else showMissionsMarathon

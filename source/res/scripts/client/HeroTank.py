@@ -14,6 +14,7 @@ from gui.shared import events, EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency
 from items.components.c11n_constants import SeasonType
+import logging
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IHeroTankController, ILimitedUIController
 from skeletons.gui.shared.utils import IHangarSpace
@@ -23,6 +24,7 @@ from constants import IS_DEVELOPMENT
 if TYPE_CHECKING:
     from vehicle_outfit.outfit import Outfit as TOutfit
     from items.vehicles import VehicleDescrType
+_logger = logging.getLogger(__name__)
 
 class _HeroTankAppearance(HangarVehicleAppearance):
     _heroTankCtrl = dependency.descriptor(IHeroTankController)
@@ -109,6 +111,7 @@ class HeroTank(ClientSelectableCameraVehicle):
         if allowShowHeroTank and heroTankCD:
             self.__heroTankCD = heroTankCD
             self.recreateVehicle()
+            _logger.info('_updateHeroTank: vehicle(%s)', self.typeDescriptor.name)
         else:
             self.removeModelFromScene()
         return

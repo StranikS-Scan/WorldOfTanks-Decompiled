@@ -10,7 +10,7 @@ from gui.impl.gen.view_models.views.lobby.battle_matters.battle_matters_vehicle_
 from gui.impl.lobby.battle_matters.popovers.battle_matters_filter_popover_view import BattleMattersFilterPopoverView
 from gui.impl.pub import ViewImpl
 from gui.selectable_reward.common import BattleMattersSelectableRewardManager
-from gui.server_events.events_dispatcher import showBattleMatters, showBattleMattersMainView
+from gui.server_events.events_dispatcher import showBattleMattersMainView
 from gui.shared.event_dispatcher import showOfferGiftVehiclePreview, showDelayedReward, showBonusDelayedConfirmationDialog
 from gui.impl.lobby.battle_matters.battle_matters_bonus_packer import BattleMattersVehiclesBonusUIPacker
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER
@@ -60,17 +60,22 @@ def _sortVehicles(vehicles):
 
 
 class BattleMattersVehicleSelectionView(ViewImpl):
-    __slots__ = ('__selectableBonus', '__vehicles', '__savedCD', '__filters', '__filterPopover')
+    __slots__ = ('__selectableBonus', '__vehicles', '__savedCD', '__filters', '__filterPopover', '__delayedRewardToken')
     _battleMattersController = dependency.descriptor(IBattleMattersController)
     _comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
     _itemsCache = dependency.descriptor(IItemsCache)
     _selectableBonusManager = BattleMattersSelectableRewardManager
 
-    def __init__(self):
+    def __init__(self, delayedRewardToken=None):
         settings = ViewSettings(R.views.lobby.battle_matters.BattleMattersVehicleSelectionView())
         settings.flags = ViewFlags.VIEW
         settings.model = BattleMattersVehicleSelectionViewModel()
-        self.__selectableBonus = first(self._selectableBonusManager.getAvailableSelectableBonuses())
+
+        def delayedRewardPredicate(token):
+            return token == delayedRewardToken if delayedRewardToken is not None else True
+
+        self.__delayedRewardToken = delayedRewardToken
+        self.__selectableBonus = first(self._selectableBonusManager.getAvailableSelectableBonuses(delayedRewardPredicate))
         bonuses = self._selectableBonusManager.getBonusOptions(self.__selectableBonus)
         vehicles = {v['option'].displayedItem.intCD:{'vehicle': v['option'],
          'giftID': k} for k, v in bonuses.iteritems() if not (v['option'].displayedItem.isUnlocked or v['option'].displayedItem.isCollectible)}
@@ -100,8 +105,8 @@ class BattleMattersVehicleSelectionView(ViewImpl):
         vehCD = int(event.get(BattleMattersVehicleSelectionViewModel.ARG_VEHICLE_ID))
         self.__savedCD = vehCD
         giftID = self.__getIdByCD(vehCD)
-        onConfirm = partial(showBonusDelayedConfirmationDialog, self.__vehicles[self.__savedCD]['vehicle'].displayedItem, partial(_onDialogConfirm, bonus=self.__selectableBonus, giftID=giftID))
-        showOfferGiftVehiclePreview(self._selectableBonusManager.getBonusOffer(self.__selectableBonus).id, giftID, onConfirm, VEHICLE_PREVIEW.HEADER_BACKBTN_DESCRLABEL_BATTLEMATTERS, customCallbacks={'previewBackCb': showDelayedReward,
+        onConfirm = partial(showBonusDelayedConfirmationDialog, self.__vehicles[self.__savedCD]['vehicle'].displayedItem, self.__delayedRewardToken, partial(_onDialogConfirm, bonus=self.__selectableBonus, giftID=giftID))
+        showOfferGiftVehiclePreview(self._selectableBonusManager.getBonusOffer(self.__selectableBonus).id, giftID, onConfirm, VEHICLE_PREVIEW.HEADER_BACKBTN_DESCRLABEL_BATTLEMATTERS, customCallbacks={'previewBackCb': partial(showDelayedReward, self.__delayedRewardToken),
          'offerEndedCb': lambda : None})
 
     def onResetFilter(self):
@@ -125,11 +130,13 @@ class BattleMattersVehicleSelectionView(ViewImpl):
         return
 
     def _update(self):
-        expires = self._itemsCache.items.tokens.getTokenInfo(self._battleMattersController.getDelayedRewardCurrencyToken())[0]
+        expires = self._battleMattersController.getDelayedRewardExpirationTime()
         with self.viewModel.transaction() as tx:
             if self._battleMattersController.isFinished():
                 tx.setEndDate(expires)
             tx.setTotalVehiclesCount(len(self.__vehicles))
+            level = self._battleMattersController.getDelayedRewardVehiclesLevel(self.__delayedRewardToken)
+            tx.setLevel(level)
             vehiclesVM = tx.getVehicles()
             self._updateVehicles(vehiclesVM)
 
@@ -144,7 +151,7 @@ class BattleMattersVehicleSelectionView(ViewImpl):
         vm.invalidate()
 
     def _getEvents(self):
-        return ((self._battleMattersController.onStateChanged, showBattleMatters),
+        return ((self._battleMattersController.onStateChanged, showBattleMattersMainView),
          (self.viewModel.onGoBack, showBattleMattersMainView),
          (self.viewModel.onCompareVehicle, self.onCompareVehicle),
          (self.viewModel.onShowVehicle, self.onShowVehicle),

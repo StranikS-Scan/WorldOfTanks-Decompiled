@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class BattleMattersExchangeRewardsModel(ViewModel):
     __slots__ = ('onConfirm', 'onClose')
 
-    def __init__(self, properties=2, commands=2):
+    def __init__(self, properties=3, commands=2):
         super(BattleMattersExchangeRewardsModel, self).__init__(properties=properties, commands=commands)
 
     def getVehicleName(self):
@@ -20,9 +20,16 @@ class BattleMattersExchangeRewardsModel(ViewModel):
     def setVehicleUserName(self, value):
         self._setString(1, value)
 
+    def getLevel(self):
+        return self._getNumber(2)
+
+    def setLevel(self, value):
+        self._setNumber(2, value)
+
     def _initialize(self):
         super(BattleMattersExchangeRewardsModel, self)._initialize()
         self._addStringProperty('vehicleName', '')
         self._addStringProperty('vehicleUserName', '')
+        self._addNumberProperty('level', 0)
         self.onConfirm = self._addCommand('onConfirm')
         self.onClose = self._addCommand('onClose')

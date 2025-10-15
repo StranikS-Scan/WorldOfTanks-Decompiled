@@ -63,7 +63,7 @@ class BattleGameInputMgr(object):
             self.__keyHandlers.remove(handler)
 
     def handleKey(self, isDown, key, mods):
-        isEventBattle = self.guiSessionProvider.arenaVisitor.gui.isWhiteTigerBattle()
+        isEventBattle = self.guiSessionProvider.arenaVisitor.gui.isEventBattle()
         if key == Keys.KEY_ESCAPE:
             if self.__keyHandlers:
                 for handler in self.__keyHandlers[:]:

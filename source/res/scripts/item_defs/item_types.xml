@@ -83,13 +83,6 @@
       <private></private>
       <disabledInRoaming></disabledInRoaming>
       <event_battles></event_battles>
-      <wt_boss></wt_boss>
-      <wt_boss_2025></wt_boss_2025>
-      <wt_hunter></wt_hunter>
-      <special_wt_boss></special_wt_boss>
-      <squad_restricted></squad_restricted>
-      <random_only></random_only>
-      <wt_bot></wt_bot>
       <fallout></fallout>
       <epic_battles></epic_battles>
       <bob></bob>
@@ -106,6 +99,7 @@
       <pillbox></pillbox>
       <dog></dog>
       <excluded_from_sandbox></excluded_from_sandbox>
+      <calculate_bbox></calculate_bbox>
       <testTank></testTank>
       <inGame></inGame>
       <telecom></telecom>
@@ -169,24 +163,8 @@
       <rentEligible></rentEligible>
       <bot_hunter></bot_hunter>
       <debutBoxes></debutBoxes>
-      <noSortBuiltinEquipment></noSortBuiltinEquipment>
-      <builtinLargeMedkit_wt_user></builtinLargeMedkit_wt_user>
-      <builtinRepairkit_wt_user></builtinRepairkit_wt_user>
-      <builtinInstantStunShoot_wt_user></builtinInstantStunShoot_wt_user>
-      <builtinImpulse_wt_user></builtinImpulse_wt_user>
-      <builtinAfterburning_wt_user></builtinAfterburning_wt_user>
-      <builtinShield_wt_user></builtinShield_wt_user>
-      <builtinSelfRepair_wt_user></builtinSelfRepair_wt_user>
-      <builtinStronghold_wt_user></builtinStronghold_wt_user>
-      <builtinTeleport_wt_user></builtinTeleport_wt_user>
-      <builtinTeleport_wt_2025_user></builtinTeleport_wt_2025_user>
-      <builtinChargedShot_wt_user></builtinChargedShot_wt_user>
-      <builtinExplosiveShot_wt_user></builtinExplosiveShot_wt_user>
-      <builtinHyperion_wt_user></builtinHyperion_wt_user>
-      <builtinUnionStrength_wt_user></builtinUnionStrength_wt_user>
-      <builtinPlasmaExtractor_wt_user></builtinPlasmaExtractor_wt_user>
-      <builtinHyperion_wt_2025_user></builtinHyperion_wt_2025_user>
-      <builtinStunArea_wt_user></builtinStunArea_wt_user>
+      <portal></portal>
+      <preferential></preferential>
     </tags>
   </vehicle>
   <vehicleChassis>
@@ -277,6 +255,7 @@
       <minefield></minefield>
       <artillery></artillery>
       <bomber></bomber>
+      <GLUM></GLUM>
     </tags>
   </shell>
   <equipment>
@@ -309,9 +288,7 @@
       <firepower></firepower>
       <mobility></mobility>
       <premium_equipment></premium_equipment>
-      <eventShellOverride></eventShellOverride>
       <builtin></builtin>
-      <hideBuiltinInfo></hideBuiltinInfo>
       <trophyUpgraded></trophyUpgraded>
       <turbocharger></turbocharger>
       <healthReserve></healthReserve>
@@ -328,12 +305,9 @@
       <poiEquipment></poiEquipment>
       <visualScriptAbilityEquipment></visualScriptAbilityEquipment>
       <abilityEquipment></abilityEquipment>
+      <portal_ability></portal_ability>
       <public></public>
       <stopOutsideBattle></stopOutsideBattle>
-      <eventItem></eventItem>
-      <eventPassiveItem></eventPassiveItem>
-      <wtEquipmentItem></wtEquipmentItem>
-      <hidden></hidden>
     </tags>
   </equipment>
   <customizationItem>
@@ -386,6 +360,7 @@
       <onlyVerticalMirror></onlyVerticalMirror>
       <hideIfIncompatible></hideIfIncompatible>
       <styleSerialNumber></styleSerialNumber>
+      <styleStatTrackFrags></styleStatTrackFrags>
       <lockedOnVehicle></lockedOnVehicle>
       <paragons></paragons>
       <NY2018_style></NY2018_style>
@@ -402,7 +377,6 @@
       <offspringArenaMusic></offspringArenaMusic>
       <sabatonArenaMusic></sabatonArenaMusic>
       <ariaArenaMusic></ariaArenaMusic>
-      <WTEvent></WTEvent>
     </tags>
   </customizationItem>
   <crewSkin>

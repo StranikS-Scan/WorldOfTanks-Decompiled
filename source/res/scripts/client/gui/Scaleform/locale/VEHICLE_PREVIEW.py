@@ -102,6 +102,8 @@ class VEHICLE_PREVIEW(object):
     INFOPANEL_PREMIUM_BONSTEXT = '#vehicle_preview:infoPanel/premium/bonsText'
     INFOPANEL_PREMIUM_BUILTINEQUPMENTTITLE = '#vehicle_preview:infoPanel/premium/builtInEqupmentTitle'
     INFOPANEL_PREMIUM_BUILTINEQUPMENTTEXT = '#vehicle_preview:infoPanel/premium/builtInEqupmentText'
+    INFOPANEL_PREFERENTIALTITLE = '#vehicle_preview:infoPanel/preferentialTitle'
+    INFOPANEL_PREFERENTIALTEXT = '#vehicle_preview:infoPanel/preferentialText'
     INFOPANEL_COLLECTIBLE_TITLE = '#vehicle_preview:infoPanel/collectible/title'
     INFOPANEL_COLLECTIBLE_DESC = '#vehicle_preview:infoPanel/collectible/desc'
     BUYINGPANEL_FRONTLINEPACK_TITLELABEL_ACTIVE = '#vehicle_preview:buyingPanel/frontlinePack/titleLabel/active'
@@ -134,6 +136,12 @@ class VEHICLE_PREVIEW(object):
     SHOWCASESTYLEBUYING_ACTIONBTN_TOOLTIP_NOTENOUGHFUNDS = '#vehicle_preview:showcaseStyleBuying/actionBtn/tooltip/notEnoughFunds'
     SHOWCASESTYLEBUYING_ACTIONBTN_TOOLTIP_UNAVAILABLE = '#vehicle_preview:showcaseStyleBuying/actionBtn/tooltip/unavailable'
     SHOWCASESTYLEBUYING_ACTIONBTN_TOOLTIP_SERVICEUNAVAILABLE = '#vehicle_preview:showcaseStyleBuying/actionBtn/tooltip/serviceUnavailable'
+    STATTRACKERPANEL_LABEL = '#vehicle_preview:statTrackerPanel/label'
+    TOOLTIPS_STATTRACK_TITLE = '#vehicle_preview:tooltips/statTrack/title'
+    TOOLTIPS_STATTRACK_DESCRIPTION_FIRSTPART = '#vehicle_preview:tooltips/statTrack/description/firstPart'
+    TOOLTIPS_STATTRACK_DESCRIPTION_SECONDPART = '#vehicle_preview:tooltips/statTrack/description/secondPart'
+    TOOLTIPS_STATTRACK_DESCRIPTION_THIRDPART = '#vehicle_preview:tooltips/statTrack/description/thirdPart'
+    TOOLTIPS_STATTRACK_MOREINFO = '#vehicle_preview:tooltips/statTrack/moreInfo'
     HEADER_BACKBTN_DESCRLABEL_ENUM = (HEADER_BACKBTN_DESCRLABEL_RESEARCHTREE,
      HEADER_BACKBTN_DESCRLABEL_PERSONALAWARDS,
      HEADER_BACKBTN_DESCRLABEL_SHOP,

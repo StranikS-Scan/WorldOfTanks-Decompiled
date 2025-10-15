@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/battle_matters_controller.py
+import re
+from backports.functools_lru_cache import lru_cache
 import typing
 from enum import Enum
 import BigWorld
-from collections import OrderedDict
+from collections import OrderedDict, namedtuple
 from Event import Event, EventManager
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import BattleMatters
@@ -14,7 +16,7 @@ from gui.selectable_reward.constants import SELECTABLE_BONUS_NAME
 from gui.selectable_reward.common import BattleMattersSelectableRewardManager
 from gui.server_events.bonuses import VehiclesBonus
 from gui.server_events.events_constants import BATTLE_MATTERS_QUEST_ID, BATTLE_MATTERS_INTERMEDIATE_QUEST_ID, BATTLE_MATTERS_COMPENSATION_QUEST_ID
-from gui.server_events.events_helpers import isAllQuestsCompleted, getIdxFromQuest
+from gui.server_events.events_helpers import getIdxFromQuest
 from gui.shared.event_dispatcher import showBattleMattersReward
 from gui.impl.lobby.battle_matters.battle_matters_hints import BattleMattersHintsHelper
 from helpers import dependency, server_settings
@@ -28,6 +30,7 @@ from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from gui.server_events.bonuses import SelectableBonus
 _BATTLE_MATTERS_UNLOCK_TOKEN = 'battle_matters_unlock'
+_BATTLE_MATTERS_COMPLETE = 'battle_matters_complete'
 _CLIENT_REWARD_IDX = -1
 
 class _FinishState(Enum):
@@ -36,6 +39,12 @@ class _FinishState(Enum):
     IS_FINISHED = 2
 
 
+_AB_TEST_TOKEN_DELIMITER = ':'
+_AB_TEST_TOKEN_PREFIX = 'bm_test'
+_AB_TEST_ALTERNATIVE_CONF = 'ALT'
+_QuestIDDescr = namedtuple('_QuestIDDescr', 'type, number, abTestCohort')
+_QuestIDRePattern = re.compile('^(battle_matters|intermediate_battle_matters|compensation_battle_matters)(?:_(.+))?_(\\d+)$')
+
 class BattleMattersController(IBattleMattersController):
     __eventsCache = dependency.descriptor(IEventsCache)
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -43,7 +52,7 @@ class BattleMattersController(IBattleMattersController):
     __connMgr = dependency.descriptor(IConnectionManager)
     __battleMattersSelectableRewardMgr = BattleMattersSelectableRewardManager
     __bootcampController = dependency.descriptor(IBootcampController)
-    __slots__ = ('_em', 'onStateChanged', 'onFinish', '_isEnabled', '_prevFinishStateFlag', '_isPaused', '_isAvailable', '__delayedRewardOfferCurrencyToken', '__delayedRewardOfferVisibilityToken', '__isWaitingToken', '__savedRewards', '__hasDelayedRewards', '__finishState', '__hintHelper', '__progressWatcher')
+    __slots__ = ('_em', 'onStateChanged', 'onFinish', '_isEnabled', '_prevFinishStateFlag', '_isPaused', '_isAvailable', '__delayedRewardOfferCurrencyTokenPattern', '__delayedRewardOfferVisibilityTokenPattern', '__isWaitingToken', '__savedRewards', '__hasDelayedRewards', '__finishState', '__hintHelper', '__abTestCohort', '__isAbTestDefaultConf', '__progressWatcher')
 
     def __init__(self):
         super(BattleMattersController, self).__init__()
@@ -54,13 +63,15 @@ class BattleMattersController(IBattleMattersController):
         self._isPaused = False
         self._prevFinishStateFlag = False
         self._isAvailable = False
-        self.__delayedRewardOfferCurrencyToken = ''
-        self.__delayedRewardOfferVisibilityToken = ''
+        self.__delayedRewardOfferCurrencyTokenPattern = ''
+        self.__delayedRewardOfferVisibilityTokenPattern = ''
         self.__savedRewards = {}
         self.__hasDelayedRewards = False
         self.__finishState = _FinishState.NOT_INITED
         self.__hintHelper = None
         self.__isWaitingToken = False
+        self.__abTestCohort = None
+        self.__isAbTestDefaultConf = True
         self.__progressWatcher = None
         return
 
@@ -96,6 +107,17 @@ class BattleMattersController(IBattleMattersController):
     def isIntermediateBattleMattersQuestID(questID):
         return questID.startswith(BATTLE_MATTERS_INTERMEDIATE_QUEST_ID)
 
+    @lru_cache(maxsize=150)
+    def isBattleMattersQuestIDForThisPlayer(self, questID):
+        if not self.isBattleMattersQuestID(questID):
+            return False
+        else:
+            questIDDescr = self.__parseQuestID(questID)
+            return False if questIDDescr is None else self.__isAbTestDefaultConf and not questIDDescr.abTestCohort or questIDDescr.abTestCohort == self.__abTestCohort
+
+    def isBattleMattersQuestForThisPlayer(self, quest):
+        return self.isBattleMattersQuestIDForThisPlayer(quest.getID())
+
     def init(self):
         self.__connMgr.onConnected += self.__onConnected
         if self.__hintHelper is None:
@@ -108,8 +130,8 @@ class BattleMattersController(IBattleMattersController):
         self._em.clear()
         self._isEnabled = False
         self._isPaused = False
-        self.__delayedRewardOfferCurrencyToken = None
-        self.__delayedRewardOfferVisibilityToken = None
+        self.__delayedRewardOfferCurrencyTokenPattern = ''
+        self.__delayedRewardOfferVisibilityTokenPattern = ''
         self.__savedRewards = None
         if self.__hintHelper:
             self.__hintHelper.fini()
@@ -139,21 +161,24 @@ class BattleMattersController(IBattleMattersController):
         return self._isPaused
 
     def isFinished(self):
-        return isAllQuestsCompleted(self.getRegularBattleMattersQuests())
+        return self.__itemsCache.items.tokens.getToken(_BATTLE_MATTERS_COMPLETE) is not None
 
     def isActive(self):
-        return self.isEnabled() and not self.isPaused() and not self.isFinished()
+        return self.isEnabled() and not self.isPaused() and not self.isFinished() and self.isValidConfiguration()
+
+    def isValidConfiguration(self):
+        return self.getABTestConfiguration() is not None and len(self.getRegularBattleMattersQuests()) > 0
 
     @property
     def progressWatcher(self):
         return self.__progressWatcher
 
-    def hasDelayedRewards(self):
-        return self.__itemsCache.items.tokens.getTokenCount(self.__delayedRewardOfferCurrencyToken) > 0
+    def hasUnobtainedDelayedRewards(self):
+        return self.__isAnyTokensMatchPattern(self.__itemsCache.items.tokens.getTokens().iterkeys(), self.__delayedRewardOfferCurrencyTokenPattern)
 
     def hasDelayedRewardsInQuest(self, quest):
         for bonus in quest.getBonuses():
-            if bonus.getName() == SELECTABLE_BONUS_NAME and self.__delayedRewardOfferVisibilityToken in bonus.getValue():
+            if bonus.getName() == SELECTABLE_BONUS_NAME and self.__isAnyTokensMatchPattern(bonus.getValue(), self.__delayedRewardOfferVisibilityTokenPattern):
                 return True
 
         return False
@@ -194,12 +219,12 @@ class BattleMattersController(IBattleMattersController):
     def getQuestsWithDelayedReward(self):
 
         def filterFunc(quest):
-            return any((self.__delayedRewardOfferVisibilityToken in bonus.getTokens() for bonus in quest.getBonuses('tokens')))
+            return any((self.__isAnyTokensMatchPattern(bonus.getValue(), self.__delayedRewardOfferVisibilityTokenPattern) for bonus in quest.getBonuses('tokens')))
 
         return self.getBattleMattersQuests(filterFunc)
 
     def getBattleMattersQuests(self, filterFunc=None):
-        quests = self.__eventsCache.getHiddenQuests(BattleMattersController.isBattleMattersQuest).values()
+        quests = self.__eventsCache.getHiddenQuests(self.isBattleMattersQuestForThisPlayer).values()
         quests = sorted(quests, key=lambda q: q.getOrder())
         if filterFunc:
             return [ quest for quest in quests if filterFunc(quest) ]
@@ -227,11 +252,31 @@ class BattleMattersController(IBattleMattersController):
     def getCountBattleMattersQuests(self):
         return len(self.getRegularBattleMattersQuests())
 
-    def getDelayedRewardToken(self):
-        return self.__delayedRewardOfferVisibilityToken
+    def isDelayedRewardToken(self, token):
+        return self.__isTokenMatchPattern(token, self.__delayedRewardOfferVisibilityTokenPattern)
 
-    def getDelayedRewardCurrencyToken(self):
-        return self.__delayedRewardOfferCurrencyToken
+    def hasDelayedRewardToken(self, delayedRewardToken):
+        return False if not self.isDelayedRewardToken(delayedRewardToken) else self.__itemsCache.items.tokens.getToken(delayedRewardToken) is not None
+
+    def isDelayedRewardObtained(self, delayedRewardToken):
+        return False if not self.isDelayedRewardToken(delayedRewardToken) else self.hasDelayedRewardToken(delayedRewardToken) and not self.__battleMattersSelectableRewardMgr.isAvailableBonus(delayedRewardToken)
+
+    def getDelayedRewardProperties(self, delayedRewardToken):
+        if not self.isDelayedRewardToken(delayedRewardToken):
+            return False
+        properties = self.__battleMattersSelectableRewardMgr.getRewardProperties(delayedRewardToken)
+        return properties
+
+    def getDelayedRewardVehiclesLevel(self, delayedRewardToken):
+        properties = self.getDelayedRewardProperties(delayedRewardToken)
+        return properties.get('giftVehiclesLevel')
+
+    def getDelayedRewardCurrencyTokens(self):
+        return [ t for t in self.__itemsCache.items.tokens.getTokens() if self.__isTokenMatchPattern(t, self.__delayedRewardOfferCurrencyTokenPattern) ]
+
+    def getDelayedRewardExpirationTime(self):
+        expirationTimes = [ self.__itemsCache.items.tokens.getTokenExpiryTime(t) for t in self.getDelayedRewardCurrencyTokens() ]
+        return first(sorted(expirationTimes))
 
     def hasLinkedIntermediateQuest(self, quest):
         questIdx = getIdxFromQuest(quest)
@@ -274,19 +319,22 @@ class BattleMattersController(IBattleMattersController):
                     currentProgress = progressItems.get(progressID, 0) if progressID and progressData else currentProgress
         return (currentProgress, maxProgress)
 
-    def getSelectedVehicle(self):
+    def getSelectedVehicle(self, delayedRewardToken):
         vehicle = None
-        bonus = self.__getVehicleSelectableBonus()
+        bonus = self.__getSelectableBonus(delayedRewardToken)
         if bonus:
             options = self.__battleMattersSelectableRewardMgr.getBonusReceivedOptions(bonus)
-            for bonus, _ in options:
-                if bonus.getName() == VehiclesBonus.VEHICLES_BONUS:
-                    vehicle, _ = first(bonus.getVehicles())
+            for b, _ in options:
+                if b.getName() == VehiclesBonus.VEHICLES_BONUS:
+                    vehicle, _ = first(b.getVehicles())
 
         return vehicle
 
     def hasAccessToken(self):
         return self.__itemsCache.items.tokens.getToken(_BATTLE_MATTERS_UNLOCK_TOKEN) is not None
+
+    def getABTestConfiguration(self):
+        return 'default' if self.__isAbTestDefaultConf else self.__abTestCohort
 
     def _getIsEnabled(self):
         isEnabled = self.__getConfig().isEnabled and not self.__bootcampController.isInBootcamp()
@@ -303,16 +351,16 @@ class BattleMattersController(IBattleMattersController):
             self._prevFinishStateFlag = isFinished
             self.__progressWatcher.updateState(self.isActive())
 
-    def _onItemsCacheSync(self, *_):
+    def _onItemsCacheSync(self, *_, **__):
         previousIsAvailable = self._isAvailable
         self._isAvailable = self.hasAccessToken()
-        if previousIsAvailable != self._isAvailable or self.__hasDelayedRewards or self.hasDelayedRewards():
+        if previousIsAvailable != self._isAvailable or self.__hasDelayedRewards or self.hasUnobtainedDelayedRewards():
             if self._isAvailable and self.__isWaitingToken:
                 self.__isWaitingToken = False
                 self.__eventsCache.onSyncCompleted += self._onSyncCompleted
                 self.__lobbyContext.onServerSettingsChanged += self._onLobbyServerSettingChanged
                 self.__lobbyContext.getServerSettings().onServerSettingsChange += self._onServerSettingsChange
-            self.__update()
+        self.__update()
 
     def _onLobbyServerSettingChanged(self, newServerSettings):
         newServerSettings.onServerSettingsChange += self._onServerSettingsChange
@@ -328,12 +376,15 @@ class BattleMattersController(IBattleMattersController):
         isPausedFromConfig = config.isPaused
         delayedRewardOfferCurrencyToken = config.delayedRewardOfferCurrencyToken
         delayedRewardOfferVisibilityToken = config.delayedRewardOfferVisibilityToken
-        isChanged = isEnabled != self._isEnabled or self._isPaused != isPausedFromConfig or self.__delayedRewardOfferCurrencyToken != delayedRewardOfferCurrencyToken or self.__delayedRewardOfferVisibilityToken != delayedRewardOfferVisibilityToken
+        isAbTestDefaultConf, abTestCohort = self.__readABTestConf()
+        isChanged = isEnabled != self._isEnabled or self._isPaused != isPausedFromConfig or self.__delayedRewardOfferCurrencyTokenPattern != delayedRewardOfferCurrencyToken or self.__delayedRewardOfferVisibilityTokenPattern != delayedRewardOfferVisibilityToken or self.__abTestCohort != abTestCohort or self.__isAbTestDefaultConf != isAbTestDefaultConf
         if isChanged:
             self._isEnabled = isEnabled
             self._isPaused = isPausedFromConfig
-            self.__delayedRewardOfferCurrencyToken = delayedRewardOfferCurrencyToken
-            self.__delayedRewardOfferVisibilityToken = delayedRewardOfferVisibilityToken
+            self.__delayedRewardOfferCurrencyTokenPattern = delayedRewardOfferCurrencyToken
+            self.__delayedRewardOfferVisibilityTokenPattern = delayedRewardOfferVisibilityToken
+            self.__abTestCohort = abTestCohort
+            self.__isAbTestDefaultConf = isAbTestDefaultConf
             self.onStateChanged()
             self.__progressWatcher.updateState(self.isActive())
         return isChanged
@@ -357,9 +408,9 @@ class BattleMattersController(IBattleMattersController):
         return not self.__eventsCache.waitForSync and self.__itemsCache.isSynced()
 
     def __checkDelayedReward(self, eventIsNeeded):
-        hasDelayedRewards = self.hasDelayedRewards()
-        if hasDelayedRewards != self.__hasDelayedRewards:
-            self.__hasDelayedRewards = hasDelayedRewards
+        hasUnobtainedDelayedRewards = self.hasUnobtainedDelayedRewards()
+        if hasUnobtainedDelayedRewards != self.__hasDelayedRewards:
+            self.__hasDelayedRewards = hasUnobtainedDelayedRewards
             if eventIsNeeded:
                 self.onStateChanged()
 
@@ -385,8 +436,8 @@ class BattleMattersController(IBattleMattersController):
         self.__unsubscribe()
         self.__progressWatcher.onDisconnected()
 
-    def __getVehicleSelectableBonus(self):
-        return first(self.__battleMattersSelectableRewardMgr.getSelectableBonuses())
+    def __getSelectableBonus(self, delayedRewardToken):
+        return first(self.__battleMattersSelectableRewardMgr.getSelectableBonuses(lambda t: t == delayedRewardToken))
 
     @classmethod
     def __getConfig(cls):
@@ -428,6 +479,72 @@ class BattleMattersController(IBattleMattersController):
         if rewardPosition < 1:
             return SequenceNumber.FIRST
         return SequenceNumber.LAST if rewardPosition == questsCount - 1 else SequenceNumber.MIDDLE
+
+    @classmethod
+    def __isABTestToken(cls, token):
+        return token.startswith(_AB_TEST_TOKEN_PREFIX + _AB_TEST_TOKEN_DELIMITER)
+
+    @classmethod
+    def __parseABTestToken(cls, token):
+        if not cls.__isABTestToken(token):
+            return None
+        else:
+            cohort = token.split(_AB_TEST_TOKEN_DELIMITER)[1]
+            return cohort
+
+    def __parseQuestID(self, questID):
+        if not self.isBattleMattersQuestID(questID):
+            return
+        else:
+            match = _QuestIDRePattern.match(questID)
+            if not match:
+                return
+            type = match.group(1)
+            cohort = None
+            if len(match.groups()) <= 2:
+                number = match.group(2)
+            else:
+                cohort = match.group(2)
+                number = match.group(3)
+            return _QuestIDDescr(type, number, cohort)
+
+    def __getABTestTokens(self):
+        tokens = self.__itemsCache.items.tokens.getTokens()
+        abTestTokens = [ t for t in tokens if self.__isABTestToken(t) ]
+        return abTestTokens
+
+    def __readABTestConf(self):
+        isAbTestDefaultConf = True
+        abTestCohort = None
+        tokens = self.__getABTestTokens()
+        if tokens:
+            for token in tokens:
+                cohort = self.__parseABTestToken(token)
+                if cohort:
+                    if cohort == _AB_TEST_ALTERNATIVE_CONF:
+                        isAbTestDefaultConf = False
+                    else:
+                        abTestCohort = cohort
+
+        return (isAbTestDefaultConf, abTestCohort)
+
+    @staticmethod
+    @lru_cache(maxsize=50)
+    def __isTokenMatchPattern(token, pattern):
+        if not pattern:
+            return False
+        compiledRegex = BattleMattersController.__getCompiledRegexPattern(pattern)
+        return compiledRegex.match(token)
+
+    @staticmethod
+    @lru_cache(maxsize=2)
+    def __getCompiledRegexPattern(pattern):
+        compiledRegex = re.compile(pattern)
+        return compiledRegex
+
+    @staticmethod
+    def __isAnyTokensMatchPattern(tokens, pattern):
+        return any((BattleMattersController.__isTokenMatchPattern(v, pattern) for v in tokens))
 
 
 class _BattleMattersProgressWatcher(object):

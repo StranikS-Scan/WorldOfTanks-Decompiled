@@ -4,7 +4,7 @@ from frameworks.wulf import ViewFlags, ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_matters.battle_matters_paused_view_model import BattleMattersPausedViewModel
 from gui.impl.pub import ViewImpl
-from gui.server_events.events_dispatcher import showBattleMatters
+from gui.server_events.events_dispatcher import showBattleMattersMainView
 from gui.shared.event_dispatcher import showHangar
 from helpers import dependency
 from skeletons.gui.battle_matters import IBattleMattersController
@@ -33,6 +33,6 @@ class BattleMattersPausedView(ViewImpl):
     def __onStateChanged(self):
         if self.__battleMattersController.isEnabled():
             if not self.__battleMattersController.isPaused():
-                showBattleMatters()
+                showBattleMattersMainView()
         else:
             showHangar()

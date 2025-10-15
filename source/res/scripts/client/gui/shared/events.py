@@ -8,7 +8,7 @@ from shared_utils import CONST_CONTAINER
 if typing.TYPE_CHECKING:
     from gui.Scaleform.framework.managers.loaders import GuiImplViewLoadParams
     from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
-__all__ = ('ArgsEvent', 'ComponentEvent', 'LoadViewEvent', 'LoadGuiImplViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent', 'GameEvent', 'BootcampEvent', 'ViewEventType', 'OpenLinkEvent', 'ChannelManagementEvent', 'PreBattleChannelEvent', 'AmmunitionSetupViewEvent', 'HasCtxEvent', 'DogTagsEvent', 'FullscreenModeSelectorEvent', 'MarkersManagerEvent', 'ModeSelectorPopoverEvent', 'ModeSelectorLoadedEvent', 'ModeSubSelectorEvent', 'ArmoryYardEvent', 'HangarSimpleEvent')
+__all__ = ('ArgsEvent', 'ComponentEvent', 'LoadViewEvent', 'LoadGuiImplViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent', 'GameEvent', 'BootcampEvent', 'ViewEventType', 'OpenLinkEvent', 'ChannelManagementEvent', 'PreBattleChannelEvent', 'AmmunitionSetupViewEvent', 'HasCtxEvent', 'DogTagsEvent', 'FullscreenModeSelectorEvent', 'MarkersManagerEvent', 'ModeSelectorPopoverEvent', 'ModeSubSelectorEvent', 'ArmoryYardEvent')
 _logger = logging.getLogger(__name__)
 
 class HasCtxEvent(SharedEvent):
@@ -85,8 +85,6 @@ class GameEvent(HasCtxEvent):
     POINT_OF_INTEREST_ADDED = 'game/changeAmmunitionSetup'
     POINT_OF_INTEREST_REMOVED = 'game/changeAmmunitionSetup'
     PREBATTLE_INPUT_STATE_LOCKED = 'game/inputStateLocked'
-    SHOW_SPAWN_POINTS = 'game/showSpawnPoints'
-    HIDE_SPAWN_POINTS = 'game/hideSpawnPoints'
 
 
 class GUICommonEvent(SharedEvent):
@@ -593,12 +591,12 @@ class BubbleTooltipEvent(LobbySimpleEvent):
         return self.__duration
 
 
-class WGNCShowItemEvent(SharedEvent):
-    SHOW_BASIC_WINDOW = 'wgnc/basicWindow/show'
-    CLOSE_POLL_WINDOW = 'wgnc/pollWindow/close'
+class NotifyCenterShowItemEvent(SharedEvent):
+    SHOW_BASIC_WINDOW = 'notifycenter/basicWindow/show'
+    CLOSE_POLL_WINDOW = 'notifycenter/pollWindow/close'
 
     def __init__(self, notID, target, alias=None):
-        super(WGNCShowItemEvent, self).__init__(ViewEventType.LOAD_VIEW)
+        super(NotifyCenterShowItemEvent, self).__init__(ViewEventType.LOAD_VIEW)
         self.alias = alias
         self.__notID = notID
         self.__target = target
@@ -653,14 +651,6 @@ class HangarCustomizationEvent(HasCtxEvent):
 class SeniorityAwardsEvent(HasCtxEvent):
     ON_REWARD_VIEW_CLOSED = 'seniorityAwards/onRewardViewClosed'
     ON_ENTRY_VIEW_LOADED = 'seniorityAwards/onEntryViewLoaded'
-
-
-class WtEventPortalsEvent(HasCtxEvent):
-    ON_PORTAL_VIEW_CLOSED = 'wtEvent/onPortalViewClosed'
-    ON_PORTAL_AWARD_VIEW_CLOSED = 'wtEvent/onPortalAwardViewClosed'
-    ON_VEHICLE_AWARD_VIEW_CLOSED = 'wtEvent/onVehicleAwardViewClosed'
-    ON_ALL_PORTAL_VIEWS_CLOSED = 'wtEvent/onAllPortalViewClosed'
-    ON_BACK_TO_PORTAL = 'wtEvent/onBackToPortal'
 
 
 class ReferralProgramEvent(HasCtxEvent):
@@ -797,10 +787,6 @@ class ModeSelectorPopoverEvent(HasCtxEvent):
     NAME = 'ModeSelectorPopoverEvent'
 
 
-class ModeSelectorLoadedEvent(SharedEvent):
-    NAME = 'ModeSelectorLoadedEvent'
-
-
 class ModeSubSelectorEvent(HasCtxEvent):
     CHANGE_VISIBILITY = 'subSelectorViewEvent/changeVisibility'
     CLICK_PROCESSING = 'subSelectorViewEvent/clickProcessing'
@@ -870,17 +856,3 @@ class LobbyMarkersManagerEvent(HasCtxEvent):
     ON_MARKER_REMOVED = 'lobbyMarkersManager/removed'
     ON_MARKER_REQUEST = 'lobbyMarkersManager/request'
     ON_MARKER_RESPONSE = 'lobbyMarkersManager/response'
-
-
-class HangarSimpleEvent(HasCtxEvent):
-    HANGAR_LOADED = 'HangarSimpleEvent/hangarLoaded'
-    HANGAR_UNLOADED = 'HangarSimpleEvent/hangarUnLoaded'
-    VEHICLE_PREVIEW_LOADED = 'HangarSimpleEvent/vehiclePreviewLoaded'
-    VEHICLE_PREVIEW_UNLOADED = 'HangarSimpleEvent/vehiclePreviewUnLoaded'
-    EVENT_PORTAL_SELECTED = 'HangarSimpleEvent/eventPortalSelected'
-    EVENT_VEHICLE_SELECTED = 'HangarSimpleEvent/eventVehicleSelected'
-    SHOW_CONFIRM_DIALOG = 'HangarSimpleEvent/showConfirmDialog'
-    CLOSE_CONFIRM_DIALOG = 'HangarSimpleEvent/closeConfirmDialog'
-    DISPATCHER_ENTITY_WAS_UPDATED = 'HangarSimpleEvent/DispatcherEntityWasUpdated'
-    VEHICLE_PREVIEW_CLOSE = 'HangarSimpleEvent/VehiclePreviewClose'
-    UPDATE_CAROUSEL_VEHICLE_STATES = 'HangarSimpleEvent/UpdateCarouselVehicleStates'

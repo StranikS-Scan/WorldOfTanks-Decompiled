@@ -163,8 +163,11 @@ class PrimeTimeViewBase(LobbySubView, PrimeTimeMeta, Notifiable, IPreQueueListen
         self.__serversDP.setSelectedID(vo['id'])
         self.__updateSelectedServerData()
 
+    def _getSelectedDPID(self):
+        return self.__serversDP.getSelectedID()
+
     def apply(self):
-        selectedID = self.__serversDP.getSelectedID()
+        selectedID = self._getSelectedDPID()
         if selectedID == self._connectionMgr.peripheryID:
             self.__continue()
         else:

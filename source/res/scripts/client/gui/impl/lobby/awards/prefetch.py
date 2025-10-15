@@ -7,7 +7,7 @@ from gui.impl.lobby.awards import SupportedTokenTypes
 from helpers import dependency
 from WebBrowser import getWebCache
 from gui.impl.lobby.offers import getGfImagePath
-from gui.wgnc.image_notification_helper import WebImageHelper
+from gui.notify_center.image_notification_helper import WebImageHelper
 from skeletons.gui.platform.catalog_service_controller import IPurchaseCache
 _LOCAL_FOLDER_NAME = 'multiple_awards'
 _logger = logging.getLogger(__name__)

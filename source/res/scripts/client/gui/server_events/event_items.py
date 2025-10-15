@@ -18,8 +18,7 @@ from gui.ranked_battles.ranked_helpers import getQualificationBattlesCountFromID
 from gui.server_events import events_helpers, finders
 from gui.server_events.events_constants import BATTLE_MATTERS_QUEST_ID, BATTLE_MATTERS_INTERMEDIATE_QUEST_ID, BATTLE_MATTERS_COMPENSATION_QUEST_ID
 from gui.server_events.bonuses import compareBonuses, getBonuses
-from gui.server_events.events_constants import WT_BOSS_GROUP_ID, WT_QUEST_UNAVAILABLE_NOT_ENOUGH_TICKETS_REASON
-from gui.server_events.events_helpers import isDailyQuest, isPremium, getIdxFromQuestID, isWtQuest
+from gui.server_events.events_helpers import isDailyQuest, isPremium, getIdxFromQuestID
 from gui.server_events.formatters import getLinkedActionID
 from gui.server_events.modifiers import compareModifiers, getModifierObj
 from gui.server_events.parsers import AccountRequirements, BonusConditions, PostBattleConditions, PreBattleConditions, TokenQuestAccountRequirements, VehicleRequirements
@@ -34,16 +33,14 @@ from personal_missions_config import getQuestConfig
 from personal_missions_constants import DISPLAY_TYPE
 from shared_utils import findFirst, first
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.game_control import IWhiteTigerController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from gui.server_events.bonuses import SimpleBonus
-from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
 if typing.TYPE_CHECKING:
     from typing import Dict, Callable, List, Optional, Tuple, Union
     from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import EventPostBattleInfo
-    import potapov_quests
+    import pm_quests
 
 class DEFAULTS_GROUPS(object):
     FOR_CURRENT_VEHICLE = 'currentlyAvailable'
@@ -328,23 +325,6 @@ class Quest(ServerEventAbstract):
     @classmethod
     def showMissionAction(cls):
         return None
-
-    def getArenaTypes(self):
-        arenaTypes = None
-        battleCond = self.preBattleCond.getConditions()
-        if battleCond:
-            bonusTypes = battleCond.find('bonusTypes')
-            if bonusTypes:
-                arenaTypes = bonusTypes.getValue()
-        return arenaTypes
-
-    def isEventBattlesQuest(self):
-        arenaTypes = self.getArenaTypes()
-        return set(arenaTypes) == set(constants.ARENA_BONUS_TYPE.WT_BATTLES_RANGE) if arenaTypes else False
-
-    def isQuestForBattleRoyale(self):
-        arenaTypes = self.getArenaTypes()
-        return set(arenaTypes) == set(constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_REGULAR_RANGE) if arenaTypes else False
 
     def isCompensationPossible(self):
         return events_helpers.isMarathon(self.getGroupID()) and bool(self.getBonuses('tokens'))
@@ -1079,14 +1059,14 @@ class PMOperation(object):
 
 
 class PersonalMission(ServerEventAbstract):
-    __slots__ = ServerEventAbstract.__slots__ + ('__pmType', '__pqProgress', '__campaignID', '__hasRequiredVehicles', '__canBePawned', '__conditionsProgress', '__disabled', '__conditionsConfig')
+    __slots__ = ServerEventAbstract.__slots__ + ('__pmType', '__pmQuestsProgress', '__campaignID', '__hasRequiredVehicles', '__canBePawned', '__conditionsProgress', '__disabled', '__conditionsConfig')
     ONE_BATTLE_OPERATIONS_IDS = (1, 2, 3, 4, 6)
     _TankmanBonus = namedtuple('_TankmanBonus', ('tankman', 'isMain'))
 
     def __init__(self, qID, pmType, progress=None, campaignID=None):
         super(PersonalMission, self).__init__(qID, pmType.mainQuestInfo)
         self.__pmType = pmType
-        self.__pqProgress = progress
+        self.__pmQuestsProgress = progress
         self.__campaignID = campaignID
         self.__hasRequiredVehicles = False
         self.__canBePawned = False
@@ -1181,16 +1161,16 @@ class PersonalMission(ServerEventAbstract):
         return self.__disabled
 
     def isUnlocked(self):
-        return self.__pqProgress is not None and self.__pqProgress.unlocked
+        return self.__pmQuestsProgress is not None and self.__pmQuestsProgress.unlocked
 
     def isInProgress(self):
-        return self.__pqProgress is not None and self.__pqProgress.selected
+        return self.__pmQuestsProgress is not None and self.__pmQuestsProgress.selected
 
     def isAvailableToPerform(self):
-        return self.__pqProgress is not None and self.__pqProgress.unlocked and self.__pqProgress.state <= _PMS.UNLOCKED and not self.isDisabled()
+        return self.__pmQuestsProgress is not None and self.__pmQuestsProgress.unlocked and self.__pmQuestsProgress.state <= _PMS.UNLOCKED and not self.isDisabled()
 
     def hasProgress(self):
-        return self.__pqProgress.state > _PMS.NONE
+        return self.__pmQuestsProgress.state > _PMS.NONE
 
     def isInitial(self):
         return self.__pmType.isInitial
@@ -1235,7 +1215,7 @@ class PersonalMission(ServerEventAbstract):
         return self.isMainCompleted(isRewardReceived) or self.isFullCompleted(isRewardReceived)
 
     def areTokensPawned(self):
-        return self.isMainCompleted() and self.__pqProgress is not None and self.__pqProgress.pawned
+        return self.isMainCompleted() and self.__pmQuestsProgress is not None and self.__pmQuestsProgress.pawned
 
     def getPawnCost(self):
         if self.isFinal():
@@ -1266,14 +1246,14 @@ class PersonalMission(ServerEventAbstract):
         return self.__checkForStates(*_PMS.NEED_GET_REWARD)
 
     def updateProgress(self, questsProgress):
-        self.__pqProgress = questsProgress.getPersonalMissionProgress(self.__pmType, self._id)
+        self.__pmQuestsProgress = questsProgress.getPersonalMissionProgress(self.__pmType, self._id)
         self.__conditionsProgress = questsProgress.getConditionsProgress(self.__pmType.generalQuestID)
 
-    def updatePqStateInBattle(self, pqState):
-        if self.__pqProgress:
-            self.__pqProgress = PersonalMissionsProgressRequester.PersonalMissionProgress(state=pqState, flags=self.__pqProgress.flags, selected=self.__pqProgress.selected, unlocked=self.__pqProgress.unlocked, pawned=self.__pqProgress.pawned)
+    def updatePMQuestsStateInBattle(self, pmQuestsState):
+        if self.__pmQuestsProgress:
+            self.__pmQuestsProgress = PersonalMissionsProgressRequester.PersonalMissionProgress(state=pmQuestsState, flags=self.__pmQuestsProgress.flags, selected=self.__pmQuestsProgress.selected, unlocked=self.__pmQuestsProgress.unlocked, pawned=self.__pmQuestsProgress.pawned)
         else:
-            self.__pqProgress = PersonalMissionsProgressRequester.PersonalMissionProgress(state=pqState, flags=PM_FLAG.NONE, selected=(), unlocked=0, pawned=False)
+            self.__pmQuestsProgress = PersonalMissionsProgressRequester.PersonalMissionProgress(state=pmQuestsState, flags=PM_FLAG.NONE, selected=(), unlocked=0, pawned=False)
 
     def getBonuses(self, bonusName=None, filterFunc=None, isMain=None, returnAwardList=False, isDelayed=False, ctx=None):
         if isMain or isMain is None and not self.__pmType.withAdd:
@@ -1313,15 +1293,15 @@ class PersonalMission(ServerEventAbstract):
         return bonus.tankman and (quest.needToGetAddReward() and not bonus.isMain or quest.needToGetMainReward() and bonus.isMain)
 
     def __checkForStates(self, *statesToCheck):
-        return self.__pqProgress is not None and self.__pqProgress.state in statesToCheck
+        return self.__pmQuestsProgress is not None and self.__pmQuestsProgress.state in statesToCheck
 
     def __checkForFlags(self, flagsToCheck):
-        return self.__pqProgress is not None and self.__pqProgress.flags & flagsToCheck == flagsToCheck
+        return self.__pmQuestsProgress is not None and self.__pmQuestsProgress.flags & flagsToCheck == flagsToCheck
 
     def __repr__(self):
         return 'PQuest<id=%d; state=%s; flags=%s unlocked=%s>' % (self._id,
-         self.__pqProgress.state,
-         self.__pqProgress.flags,
+         self.__pmQuestsProgress.state,
+         self.__pmQuestsProgress.flags,
          self.isUnlocked())
 
 
@@ -1347,20 +1327,6 @@ class MotiveQuest(Quest):
 
     def getRequirementsStr(self):
         return getLocalizedData(self._data, 'requirements')
-
-
-class WtQuest(Quest):
-    gameEventController = dependency.descriptor(IWhiteTigerController)
-
-    @property
-    def isBossQuest(self):
-        return self.getGroupID().startswith(WT_BOSS_GROUP_ID)
-
-    def isAvailable(self):
-        return ValidationResult(False, WT_QUEST_UNAVAILABLE_NOT_ENOUGH_TICKETS_REASON) if self.isBossQuest and not self.gameEventController.hasEnoughTickets(VEHICLE_TAGS.WT_BOSS) and not self.gameEventController.hasSpecialBoss() else super(WtQuest, self).isAvailable()
-
-    def isHidden(self):
-        return super(WtQuest, self).isHidden() or not self._checkConditions()
 
 
 def _getTileIconPath(tileIconID, prefix, state):
@@ -1504,17 +1470,6 @@ class DailyQuestBuilder(IQuestBuilder):
         return DailyQuest(qID, data, progress)
 
 
-class WtQuestBuilder(IQuestBuilder):
-
-    @classmethod
-    def isSuitableQuest(cls, questType, qID):
-        return isWtQuest(qID)
-
-    @classmethod
-    def buildQuest(cls, questType, qID, data, progress=None, expiryTime=None):
-        return WtQuest(qID, data, progress)
-
-
 registerQuestBuilders((PersonalQuestBuilder,
  GroupQuestBuilder,
  MotiveQuestBuilder,
@@ -1524,8 +1479,7 @@ registerQuestBuilders((PersonalQuestBuilder,
  TokenQuestBuilder,
  BattleMattersQuestBuilder,
  PremiumQuestBuilder,
- DailyQuestBuilder,
- WtQuestBuilder))
+ DailyQuestBuilder))
 
 def createQuest(builders, questType, qID, data, progress=None, expiryTime=None):
     for builder in builders:

@@ -1,0 +1,34 @@
+<DynamicVehicleChangeComponent.def>
+  <Properties>
+    <originalVehicleID>
+      <Type>	OBJECT_ID	</Type>
+      <Flags>	OWN_CLIENT	</Flags>
+    </originalVehicleID>
+    <oldVehicleID>
+      <Type>	OBJECT_ID	</Type>
+      <Flags>	OWN_CLIENT	</Flags>
+    </oldVehicleID>
+    <newVehicleID>
+      <Type>	OBJECT_ID	</Type>
+      <Flags>	OWN_CLIENT	</Flags>
+    </newVehicleID>
+    <isControllingVehicle>
+      <Type>	BOOL	</Type>
+      <Flags>	OWN_CLIENT	</Flags>
+    </isControllingVehicle>
+    <isControlInterrupted>
+      <Type>	BOOL	</Type>
+      <Flags>	OWN_CLIENT	</Flags>
+    </isControlInterrupted>
+  </Properties>
+  <BaseMethods>
+    <onStartVehicleControl>
+      <Arg>	MAILBOX	</Arg>
+    </onStartVehicleControl>
+  </BaseMethods>
+  <CellMethods></CellMethods>
+  <ClientMethods></ClientMethods>
+  <ofEntity>
+    <Avatar></Avatar>
+  </ofEntity>
+</DynamicVehicleChangeComponent.def>

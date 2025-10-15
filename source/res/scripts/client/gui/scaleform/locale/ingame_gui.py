@@ -53,9 +53,6 @@ class INGAME_GUI(object):
     PLAYER_ERRORS_EQUIPMENT_EXTINGUISHER_DOESNOTACTIVATED = '#ingame_gui:player_errors/equipment/extinguisher/doesNotActivated'
     PLAYER_ERRORS_EQUIPMENT_ORDER_NOTREADY = '#ingame_gui:player_errors/equipment/order/notReady'
     PLAYER_ERRORS_EQUIPMENT_POI_UNAVAILABLE = '#ingame_gui:player_errors/equipment/poi/unavailable'
-    PLAYER_MESSAGES_EQUIPMENT_WTEVENT_HEALTHATFULLHP = '#ingame_gui:player_messages/equipment/wtEvent/healthAtFullHP'
-    PLAYER_MESSAGES_EQUIPMENT_WTEVENT_HUNTERABILITIESDISABLED = '#ingame_gui:player_messages/equipment/wtEvent/hunterAbilitiesDisabled'
-    PLAYER_MESSAGES_EQUIPMENT_WTEVENT_NOACTIVESHIELDONBOSS = '#ingame_gui:player_messages/equipment/wtEvent/noActiveShieldOnBoss'
     PLAYER_MESSAGES_DEVICE_CRITICAL_AT_SHOT = '#ingame_gui:player_messages/DEVICE_CRITICAL_AT_SHOT'
     PLAYER_MESSAGES_DEVICE_DESTROYED_AT_SHOT = '#ingame_gui:player_messages/DEVICE_DESTROYED_AT_SHOT'
     PLAYER_MESSAGES_DEVICE_STARTED_FIRE_AT_SHOT = '#ingame_gui:player_messages/DEVICE_STARTED_FIRE_AT_SHOT'
@@ -641,8 +638,6 @@ class INGAME_GUI(object):
     EFFICIENCYRIBBONS_CANNONDMG = '#ingame_gui:efficiencyRibbons/CannonDmg'
     EFFICIENCYRIBBONS_AIRSTRIKEDMG = '#ingame_gui:efficiencyRibbons/AirstrikeDmg'
     EFFICIENCYRIBBONS_ARTILLERYDMG = '#ingame_gui:efficiencyRibbons/ArtilleryDmg'
-    EFFICIENCYRIBBONS_HEALTHADDED = '#ingame_gui:efficiencyRibbons/healthAdded'
-    EFFICIENCYRIBBONS_WTRECEIVEDCIRCUITOVERLOAD = '#ingame_gui:efficiencyRibbons/wtReceivedCircuitOverload'
     DAMAGELOG_SHELLTYPE_ARMOR_PIERCING = '#ingame_gui:damageLog/shellType/ARMOR_PIERCING'
     DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE = '#ingame_gui:damageLog/shellType/HIGH_EXPLOSIVE'
     DAMAGELOG_SHELLTYPE_FLAME = '#ingame_gui:damageLog/shellType/FLAME'
@@ -1012,6 +1007,9 @@ class INGAME_GUI(object):
     PREBATTLEMARKER_PREBATTLEMARKER_49 = '#ingame_gui:prebattlemarker/prebattlemarker_49'
     PREBATTLEMARKER_PREBATTLEMARKER_50 = '#ingame_gui:prebattlemarker/prebattlemarker_50'
     PREBATTLEMARKER_PREBATTLEMARKER_51 = '#ingame_gui:prebattlemarker/prebattlemarker_51'
+    PREBATTLEMARKER_PREBATTLEMARKER_52 = '#ingame_gui:prebattlemarker/prebattlemarker_52'
+    PREBATTLEMARKER_PREBATTLEMARKER_53 = '#ingame_gui:prebattlemarker/prebattlemarker_53'
+    PREBATTLEMARKER_PREBATTLEMARKER_54 = '#ingame_gui:prebattlemarker/prebattlemarker_54'
     OPTDEVICERESURRECTION_ENGINE = '#ingame_gui:optDeviceResurrection/engine'
     OPTDEVICERESURRECTION_FUELTANK = '#ingame_gui:optDeviceResurrection/fuelTank'
     OPTDEVICERESURRECTION_AMMOBAY = '#ingame_gui:optDeviceResurrection/ammoBay'
@@ -1039,10 +1037,6 @@ class INGAME_GUI(object):
     PLAYER_ERRORS_THERMALVISION_COOLDOWN = '#ingame_gui:player_errors/thermalVision/cooldown'
     PLAYER_ERRORS_THERMALVISION_ALREADYACTIVATED = '#ingame_gui:player_errors/thermalVision/alreadyActivated'
     PLAYER_ERRORS_THERMALVISION_OVERTURNED = '#ingame_gui:player_errors/thermalVision/overturned'
-    WT_VEHICLE_MESSAGES_INCREASE_PLASMA_COUNT = '#ingame_gui:wt_vehicle_messages/INCREASE_PLASMA_COUNT'
-    WT_VEHICLE_MESSAGES_DECREASE_PLASMA_COUNT = '#ingame_gui:wt_vehicle_messages/DECREASE_PLASMA_COUNT'
-    WT_VEHICLE_MESSAGES_STUN_AREA_APPLIED = '#ingame_gui:wt_vehicle_messages/STUN_AREA_APPLIED'
-    WT_VEHICLE_MESSAGES_STUN_AREA_STOPPED = '#ingame_gui:wt_vehicle_messages/STUN_AREA_STOPPED'
     CHAT_SHORTCUTS_ENUM = (CHAT_SHORTCUTS_ATTENTION_TO_POSITION_GRIDINFO,
      CHAT_SHORTCUTS_ATTENTION_TO_POSITION,
      CHAT_SHORTCUTS_GOING_THERE_GRIDINFO,
@@ -1164,8 +1158,6 @@ class INGAME_GUI(object):
      EFFICIENCYRIBBONS_CANNONDMG,
      EFFICIENCYRIBBONS_AIRSTRIKEDMG,
      EFFICIENCYRIBBONS_ARTILLERYDMG,
-     EFFICIENCYRIBBONS_HEALTHADDED,
-     EFFICIENCYRIBBONS_WTRECEIVEDCIRCUITOVERLOAD,
      EFFICIENCYRIBBONS_ENEMYSECTORCAPTURED,
      EFFICIENCYRIBBONS_DESTRUCTIBLEDAMAGED,
      EFFICIENCYRIBBONS_DESTRUCTIBLEDESTROYED,

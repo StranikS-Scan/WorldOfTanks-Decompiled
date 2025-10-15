@@ -33,15 +33,13 @@ from gui.hangar_cameras.hangar_camera_common import CameraMovementStates
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from uilogging.performance.hangar.loggers import HangarMetricsLogger
 from cgf_components.hangar_camera_manager import HangarCameraManager
+import logging
 _Q_CHECK_DELAY = 0.0
+_logger = logging.getLogger(__name__)
 
 class _execute_after_hangar_space_inited(object):
     hangarSpace = dependency.descriptor(IHangarSpace)
     __slots__ = ('__queue',)
-
-    @property
-    def condition(self):
-        return self.__hangarsSpace.spaceInited and self.__hangarsSpace.space.getVehicleEntity()
 
     def __init__(self):
         self.__queue = Queue()
@@ -255,8 +253,6 @@ class HangarSpace(IHangarSpace):
 
     @uniprof.regionDecorator(label='hangar.space.loading', scope='enter')
     def init(self, isPremium):
-        if Waiting.getWaiting('loadHangarSpaceVehicle') is not None:
-            Waiting.hide('loadHangarSpaceVehicle')
         if self.__space is None:
             self.__space = ClientHangarSpace(BoundMethodWeakref(self._changeDone))
         self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.START_LOADING_SPACE)
@@ -332,6 +328,7 @@ class HangarSpace(IHangarSpace):
     @g_execute_after_hangar_space_inited
     @uniprof.regionDecorator(label='hangar.vehicle.loading', scope='enter')
     def updateVehicle(self, vehicle, outfit=None):
+        _logger.info('updateVehicle: vehicle(%s)', vehicle.name)
         if self.__inited:
             self.__isModelLoaded = False
             self.onVehicleChangeStarted()

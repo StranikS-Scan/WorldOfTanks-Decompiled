@@ -58,11 +58,6 @@ class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMet
         self.__isFaded = False
         return
 
-    def addPlugins(self, plugin):
-        if self.__plugins is not None:
-            self.__plugins.addPlugins(plugin)
-        return
-
     def getViewID(self):
         return self.__viewID
 

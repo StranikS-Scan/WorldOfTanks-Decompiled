@@ -1,0 +1,42 @@
+<h13_mt_portal_2025.xml>
+  <name>	#arenas:h13_mt_portal_2025/name	</name>
+  <description>	#arenas:h13_mt_portal_2025/description	</description>
+  <geometry>	spaces/h13_mt_portal_2025	</geometry>
+  <boundingBox>
+    <bottomLeft>	-100.000000 -100.000000	</bottomLeft>
+    <upperRight>	100.000000 100.000000	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/h13_mt_portal_2025/mmap.dds	</minimap>
+  <wwambientSound>	ev_portal_amb_hangar_wind	</wwambientSound>
+  <wwmusic>	ev_portal_hangar_silence	</wwmusic>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	ev_portal_hangar.bnk	</name>
+      </bank>
+    </loadBanks>
+    <events>
+      <event>
+        <name>	ambient_trees_without_foliage_bush_big_01	</name>
+        <mod>	ev_portal_hangar_silence	</mod>
+      </event>
+      <event>
+        <name>	ambient_trees_dry_comb_mid_01	</name>
+        <mod>	ev_portal_hangar_silence	</mod>
+      </event>
+      <event>
+        <name>	highlight	</name>
+        <mod>	ev_portal_gui_hangar_highlight	</mod>
+      </event>
+      <event>
+        <name>	play	</name>
+        <mod>	ev_portal_gui_hangar_play	</mod>
+      </event>
+      <event>
+        <name>	pr_reward_screen	</name>
+        <mod>	ev_portal_gui_hangar_simple_execution_screen	</mod>
+      </event>
+    </events>
+  </soundRemapping>
+  <mapActivities></mapActivities>
+</h13_mt_portal_2025.xml>

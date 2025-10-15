@@ -76,8 +76,8 @@ class QuestProgressController(IArenaPeriodController, IArenaVehiclesController):
                 for missionID in selectedMissionsIDs:
                     mission = missions.get(missionID)
                     if mission and not mission.isDisabled() and isPersonalMissionsEnabled(mission.getQuestBranch()):
-                        pqState = selectedMissionsInfo.get(missionID, (0, PM_STATE.NONE))[1]
-                        mission.updatePqStateInBattle(pqState)
+                        pmQuestsState = selectedMissionsInfo.get(missionID, (0, PM_STATE.NONE))[1]
+                        mission.updatePMQuestsStateInBattle(pmQuestsState)
                         self.__inProgressQuests[missionID] = mission
                         generalQuestID = mission.getGeneralQuestID()
                         if mission.getPMType().branch == lastSelectedBranch:

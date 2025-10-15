@@ -99,6 +99,7 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
             ctrl.onPostMortemSwitched += self.__onPostMortemSwitched
             ctrl.onVehicleStateUpdated += self._onVehicleStateUpdated
             ctrl.onRespawnBaseMoving += self.__onRespawnBaseMoving
+            ctrl.onVehiclePossessed += self.__onVehiclePossessed
         ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
             ctrl.onMinimapFeedbackReceived += self.__onMinimapFeedbackReceived
@@ -117,6 +118,7 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
             ctrl.onPostMortemSwitched -= self.__onPostMortemSwitched
             ctrl.onVehicleStateUpdated -= self._onVehicleStateUpdated
             ctrl.onRespawnBaseMoving -= self.__onRespawnBaseMoving
+            ctrl.onVehiclePossessed -= self.__onVehiclePossessed
         ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
             ctrl.onMinimapFeedbackReceived -= self.__onMinimapFeedbackReceived
@@ -158,6 +160,9 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
     @staticmethod
     def __getFlameDistance():
         return BigWorld.player().getVehicleDescriptor().shot.maxDistance
+
+    def __onVehiclePossessed(self):
+        self._invalidateMarkup(True)
 
     def initControlMode(self, mode, available):
         super(PersonalEntriesPlugin, self).initControlMode(mode, available)
@@ -1101,9 +1106,6 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
     def __onTeamChanged(self, teamID):
         self.invalidateArenaInfo()
 
-    def hideMinimapHP(self):
-        self.__showMinimapHP(False)
-
     def __handleShowExtendedInfo(self, event):
         if self._parentObj.isModalViewShown():
             return
@@ -1328,10 +1330,6 @@ class MinimapPingPlugin(SimpleMinimapPingPlugin):
         self._boundingBox = (Math.Vector2(0, 0), Math.Vector2(0, 0))
         AccountSettings.setSettings(MINIMAP_IBC_HINT_SECTION, self.__minimapSettings)
 
-    def hideHintPanel(self, instantHide=False):
-        self.__isHintPanelEnabled = False
-        self.parentObj.as_disableHintPanelS(instantHide)
-
     def __handleKeyDownEvent(self, event):
         if event.key not in (Keys.KEY_LCONTROL, Keys.KEY_RCONTROL):
             return
@@ -1346,9 +1344,10 @@ class MinimapPingPlugin(SimpleMinimapPingPlugin):
     def __handleKeyUpEvent(self, event):
         if event.key not in (Keys.KEY_LCONTROL, Keys.KEY_RCONTROL):
             return
-        if not self.__isHintPanelEnabled or self._parentObj.isModalViewShown():
+        if not self.__isHintPanelEnabled:
             return
-        self.hideHintPanel()
+        self.__isHintPanelEnabled = False
+        self.parentObj.as_disableHintPanelS()
 
     def updateControlMode(self, crtlMode, vehicleID):
         super(MinimapPingPlugin, self).updateControlMode(crtlMode, vehicleID)

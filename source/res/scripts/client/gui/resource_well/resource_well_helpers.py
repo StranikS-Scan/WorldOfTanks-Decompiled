@@ -25,6 +25,8 @@ def isEventEndingsSoon(resourceWell=None):
 
 @dependency.replace_none_kwargs(resourceWell=IResourceWellController)
 def getProgressionState(resourceWell=None):
+    if resourceWell.isNotStarted():
+        return ProgressionState.BEFORE_EVENT
     if isForbiddenAccount(resourceWell=resourceWell):
         return ProgressionState.FORBIDDEN
     if resourceWell.isRewardCountAvailable() and not resourceWell.getRewardLeftCount(True) and not resourceWell.getRewardLeftCount(False):

@@ -10,6 +10,7 @@ class VEHPREVIEW_CONSTANTS(object):
     BOTTOM_PANEL_STYLE_BUYING_LINKAGE = 'VehiclePreviewBottomPanelStyleBuyingUI'
     BOTTOM_PANEL_TRADE_IN_LINKAGE = 'VehiclePreviewBottomPanelTradeInUI'
     BOTTOM_PANEL_WOT_PLUS_LINKAGE = 'VehiclePreviewBottomPanelWotPlusUI'
+    BOTTOM_PANEL_STAT_TRACK_LINKAGE = 'VehiclePreviewBottomPanelStatTrackUI'
     BOTTOM_PANEL_OFFER_GIFT_LINKAGE = 'VehiclePreviewBottomPanelOfferGiftUI'
     BOTTOM_PANEL_WELL = 'VehiclePreviewBottomPanelWellUI'
     BOTTOM_PANEL_SHOWCASE_STYLE_BUYING_LINKAGE = 'VehiclePreviewBottomPanelShowcaseStyleBuyingUI'

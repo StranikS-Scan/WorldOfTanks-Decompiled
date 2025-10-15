@@ -17,7 +17,7 @@ from web.web_client_api.promo import PromoWebApi
 from web.web_client_api.request import RequestWebApi
 from web.web_client_api.survey import SurveyWebApi
 from th_async import th_await, th_async
-from gui.wgnc import g_wgncProvider
+from gui.notify_center import g_notifyCenterProvider
 
 class PollBrowserButtonHandler(object):
 
@@ -67,7 +67,7 @@ class PollBrowserButtonHandler(object):
                         result = yield th_await(dialogs.show(confirmationWindow))
                         if result.result == DialogButtons.CANCEL:
                             if onExitCustomAction and notID:
-                                g_wgncProvider.doAction(notID, onExitCustomAction, target)
+                                g_notifyCenterProvider.doAction(notID, onExitCustomAction, target)
                             super(PollBrowserView, self).onCloseView()
 
             layoutID = R.views.lobby.common.BrowserView()

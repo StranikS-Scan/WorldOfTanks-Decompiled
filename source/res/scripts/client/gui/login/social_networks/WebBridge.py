@@ -56,7 +56,7 @@ class WebBridge(object):
             url = baseUrl + '?' + urlencode(loginParams)
             if isRegistration and GUI_SETTINGS.registrationProxyURL:
                 url = GUI_SETTINGS.registrationProxyURL + '&lpurl=' + quote_plus(url)
-            if not BigWorld.wg_openWebBrowser(url):
+            if not BigWorld.openWebBrowser(url):
                 serverStatus = _STATUS.WEB_BROWSER_ERROR
         return serverStatus == _STATUS.OK
 

@@ -10,7 +10,7 @@ from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import DialogsInterface, SystemMessages, makeHtmlString
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs
-from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBattlePassPointsProductsUrl, getIntegratedAuctionUrl, getPlayerSeniorityAwardsUrl, getComp7ProductsUrl
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBattlePassPointsProductsUrl, getIntegratedAuctionUrl, getPlayerSeniorityAwardsUrl, getComp7ProductsUrl, getBlackMarketUrl
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
@@ -27,14 +27,14 @@ from gui.impl.lobby.poll.poll_browser_action import PollBrowserButtonHandler
 from gui.platform.base.statuses.constants import StatusTypes
 from gui.prb_control import prbDispatcherProperty, prbInvitesProperty
 from gui.ranked_battles import ranked_helpers
-from gui.server_events.events_dispatcher import showMissionsBattlePass, showMissionsMapboxProgression, showPersonalMission, showBattleMatters
+from gui.server_events.events_dispatcher import showMissionsBattlePass, showMissionsMapboxProgression, showPersonalMission, showBattleMattersMainView
 from gui.shared import EVENT_BUS_SCOPE, actions, event_dispatcher as shared_events, events, g_eventBus
 from gui.shared.event_dispatcher import hideWebBrowserOverlay, showBlueprintsSalePage, showCollectionAwardsWindow, showCollectionWindow, showDelayedReward, showEpicBattlesAfterBattleWindow, showPersonalReservesConversion, showProgressiveRewardWindow, showRankedYearAwardWindow, showResourceWellProgressionWindow, showShop, showSteamConfirmEmailOverlay, showWotPlusIntroView, showBarracks
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.system_factory import collectAllNotificationsActionsHandlers, registerNotificationsActionsHandlers
 from gui.shared.utils import decorators
 from gui.clientgw.clan import contexts as clan_ctxs
-from gui.wgnc import g_wgncProvider
+from gui.notify_center import g_notifyCenterProvider
 from helpers import dependency
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
@@ -58,8 +58,6 @@ from web.web_client_api import webApiCollection
 from web.web_client_api.sound import HangarSoundWebApi
 from th_async import th_async, th_await
 from gui.shared.event_dispatcher import showVehicleTechTreeView
-import logging
-_logger = logging.getLogger(__name__)
 if typing.TYPE_CHECKING:
     from typing import Tuple
     from notification.NotificationsModel import NotificationsModel
@@ -598,7 +596,7 @@ class CancelFriendshipHandler(ActionHandler):
         self.proto.contacts.cancelFriendship(entityID)
 
 
-class WGNCActionsHandler(ActionHandler):
+class NotifyCenterActionsHandler(ActionHandler):
 
     @prbDispatcherProperty
     def prbDispatcher(self):
@@ -606,17 +604,17 @@ class WGNCActionsHandler(ActionHandler):
 
     @classmethod
     def getNotType(cls):
-        return NOTIFICATION_TYPE.WGNC_POP_UP
+        return NOTIFICATION_TYPE.NOTIFY_CENTER_POP_UP
 
     def handleAction(self, model, entityID, action):
         if not self._canNavigate():
             return
-        notification = model.collection.getItem(NOTIFICATION_TYPE.WGNC_POP_UP, entityID)
+        notification = model.collection.getItem(NOTIFICATION_TYPE.NOTIFY_CENTER_POP_UP, entityID)
         if notification:
             actorName = notification.getSavedData()
         else:
             actorName = ''
-        g_wgncProvider.doAction(entityID, action, actorName)
+        g_notifyCenterProvider.doAction(entityID, action, actorName)
 
     def _canNavigate(self):
         prbDispatcher = self.prbDispatcher
@@ -989,7 +987,10 @@ class _OpenDelayedReward(NavigationDisabledActionHandler):
         pass
 
     def doAction(self, model, entityID, action):
-        showDelayedReward()
+        notification = model.getNotification(self.getNotType(), entityID)
+        savedData = notification.getSavedData()
+        rewardToken = savedData.get('rewardToken')
+        showDelayedReward(delayedRewardToken=rewardToken, forceCreate=True)
 
 
 class _OpenBattlePassPointsShop(NavigationDisabledActionHandler):
@@ -1122,6 +1123,42 @@ class _OpenIntegratedAuctionFinish(_OpenIntegratedAuction):
         pass
 
 
+class _OpenBlackMarket(NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        showShop(getBlackMarketUrl())
+
+
+class _OpenBlackMarketStart(_OpenBlackMarket):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.BLACK_MARKET_STAGE_START
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+
+class _OpenBlackMarketFinish(_OpenBlackMarket):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.BLACK_MARKET_STAGE_FINISH
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+
 class _OpenPersonalReservesConversion(NavigationDisabledActionHandler):
 
     @classmethod
@@ -1194,20 +1231,6 @@ class _OpenAchievementsScreen(NavigationDisabledActionHandler):
 
     def doAction(self, model, entityID, action):
         g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_PROFILE), ctx={'selectedAlias': VIEW_ALIAS.PROFILE_SUMMARY_PAGE}), scope=EVENT_BUS_SCOPE.LOBBY)
-
-
-class _OpenEventLootBoxesShopHandler(NavigationDisabledActionHandler):
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.MESSAGE
-
-    @classmethod
-    def getActions(cls):
-        pass
-
-    def doAction(self, model, entityID, action):
-        _logger.error('NEEDS IMPLEMENT DO ACTION!!')
 
 
 class _OpenReferralProgramMainViewHandler(NavigationDisabledActionHandler):
@@ -1515,7 +1538,21 @@ class _OpenBattleMattersHandler(NavigationDisabledActionHandler):
         pass
 
     def doAction(self, model, entityID, action):
-        showBattleMatters()
+        showBattleMattersMainView()
+
+
+class _BattleMattersTaskReminder(NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.BATTLE_MATTERS_TASK_REMINDER
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        showBattleMattersMainView()
 
 
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
@@ -1525,7 +1562,7 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  DeclinePrbInviteHandler,
  ApproveFriendshipHandler,
  CancelFriendshipHandler,
- WGNCActionsHandler,
+ NotifyCenterActionsHandler,
  SecurityLinkHandler,
  ClanRulesHandler,
  ShowRankedSeasonCompleteHandler,
@@ -1571,13 +1608,15 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenIntegratedAuction,
  _OpenIntegratedAuctionStart,
  _OpenIntegratedAuctionFinish,
+ _OpenBlackMarket,
+ _OpenBlackMarketStart,
+ _OpenBlackMarketFinish,
  _OpenPersonalReservesConversion,
  _OpenPersonalReservesHandler,
  _SeniorityAwardsTokensHandler,
  _OpenSeniorityAwards,
  _OpenMissingEventsHandler,
  _OpenReferralProgramMainViewHandler,
- _OpenEventLootBoxesShopHandler,
  _OpenCollectionHandler,
  _OpenCollectionRewardHandler,
  _OpenArmoryYardMain,
@@ -1594,7 +1633,8 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ParagonsCharaptersViewHandler,
  ShowParagonsResearchesViewHandler,
  ParagonsSelectRewardViewHandler,
- _OpenBattleMattersHandler)
+ _OpenBattleMattersHandler,
+ _BattleMattersTaskReminder)
 registerNotificationsActionsHandlers(_AVAILABLE_HANDLERS)
 
 class NotificationsActionsHandlers(object):

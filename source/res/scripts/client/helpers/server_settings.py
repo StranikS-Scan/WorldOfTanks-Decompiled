@@ -16,7 +16,7 @@ from battle_pass_common import BATTLE_PASS_CONFIG_NAME, BattlePassConfig
 from collections_common import CollectionsConfig
 from collector_vehicle import CollectorVehicleConsts
 from comp7_ranks_common import Comp7Division
-from constants import BATTLE_NOTIFIER_CONFIG, ClansConfig, Configs, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG, MAGNETIC_AUTO_AIM_CONFIG, MISC_GUI_SETTINGS, PremiumConfigs, RENEWABLE_SUBSCRIPTION_CONFIG, PLAYER_SUBSCRIPTIONS_CONFIG, TOURNAMENT_CONFIG, ARENA_BONUS_TYPE, ACTIVE_TEST_CONFIRMATION_CONFIG, OFFERS_ENABLED_KEY, SwitchState, PREM_BONUS_TYPES, PREMIUM_ENTITLEMENTS, ENTITLEMENT_TO_PREM_TYPE
+from constants import BATTLE_NOTIFIER_CONFIG, ClansConfig, Configs, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG, MAGNETIC_AUTO_AIM_CONFIG, MISC_GUI_SETTINGS, PremiumConfigs, RENEWABLE_SUBSCRIPTION_CONFIG, PLAYER_SUBSCRIPTIONS_CONFIG, TOURNAMENT_CONFIG, ARENA_BONUS_TYPE, ACTIVE_TEST_CONFIRMATION_CONFIG, OFFERS_ENABLED_KEY, SwitchState
 from debug_utils import LOG_DEBUG, LOG_NOTE
 from gifts.gifts_common import ClientReqStrategy, GiftEventID, GiftEventState
 from gui import GUI_SETTINGS, SystemMessages
@@ -670,11 +670,12 @@ class SeniorityAwardsConfig(typing.NamedTuple('SeniorityAwardsConfig', (('enable
  ('receivedRewardsToken', str),
  ('rewardEligibilityToken', str),
  ('claimRewardToken', str),
- ('rewardQuestsPrefix', str)))):
+ ('rewardQuestsPrefix', str),
+ ('offerCreditsCompensation', int)))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(enabled=False, endTime=0, reminders=[], clockOnNotification=0, showRewardNotification=False, receivedRewardsToken='', rewardEligibilityToken='', claimRewardToken='', rewardQuestsPrefix='')
+        defaults = dict(enabled=False, endTime=0, reminders=[], clockOnNotification=0, showRewardNotification=False, receivedRewardsToken='', rewardEligibilityToken='', claimRewardToken='', rewardQuestsPrefix='', offerCreditsCompensation=0)
         defaults.update(kwargs)
         return super(SeniorityAwardsConfig, cls).__new__(cls, **defaults)
 
@@ -1085,6 +1086,29 @@ class _PlayStreakConfig(namedtuple('_PlayStreakConfig', ('isEnabled',
         return cls()
 
 
+class _BlackMarketConfig(namedtuple('_BlackMarketConfig', ('isEnabled',
+ 'isPaused',
+ 'startTime',
+ 'finishTime',
+ 'lootboxSchedule',
+ 'offerLaunchSchedule'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(isEnabled=False, isPaused=False, startTime=None, finishTime=None, lootboxSchedule={}, offerLaunchSchedule=[])
+        defaults.update(kwargs)
+        return super(_BlackMarketConfig, cls).__new__(cls, **defaults)
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+
 class _IngameBrowserEventConfig(namedtuple('_IngameBrowserEventConfig', ('isEnabled',
  'startTime',
  'finishTime',
@@ -1342,30 +1366,6 @@ class _GuiLootBoxesConfig(object):
 
     def getShopCategoryUrl(self):
         return self.__shopCategoryUrl
-
-
-EVENT_LOOT_BOXES_CONFIG = 'event_loot_boxes_config'
-
-class _EventLootBoxesConfig(object):
-    __slots__ = ('__isEnabled', '__startDateInUTC', '__finishDateInUTC', '__lootBoxBuyDayLimit')
-
-    def __init__(self, **kwargs):
-        super(_EventLootBoxesConfig, self).__init__()
-        self.__isEnabled = kwargs.get('enabled', False)
-        self.__startDateInUTC = kwargs.get('startDateInUTC', 0)
-        self.__finishDateInUTC = kwargs.get('finishDateInUTC', 0)
-        self.__lootBoxBuyDayLimit = kwargs.get('lootBoxBuyDayLimit', 0)
-
-    @property
-    def isEnabled(self):
-        return self.__isEnabled
-
-    @property
-    def lootBoxBuyDayLimit(self):
-        return self.__lootBoxBuyDayLimit
-
-    def getEventActiveTime(self):
-        return (self.__startDateInUTC, self.__finishDateInUTC)
 
 
 class ArmoryYardConfig(namedtuple('ArmoryYardConfig', ('isEnabled',
@@ -1842,7 +1842,6 @@ class ServerSettings(object):
         self.__playLimitsConfig = PlayLimitsConfig()
         self.__preModerationConfig = PreModerationConfig()
         self.__guiLootBoxesConfig = _GuiLootBoxesConfig()
-        self.__eventLootBoxesConfig = _EventLootBoxesConfig()
         self.__collectionsConfig = CollectionsConfig()
         self.__winbackConfig = WinbackConfig()
         self.__limitedUIConfig = _LimitedUIConfig()
@@ -1856,6 +1855,7 @@ class ServerSettings(object):
         self.__modeSelectorConfig = ModeSelectorConfig()
         self.__paragonsConfig = ParagonsConfig.defaults()
         self.__playStreakConfig = _PlayStreakConfig()
+        self.__blackMarketConfig = _BlackMarketConfig()
         self.__ingameBrowserEventConfig = _IngameBrowserEventConfig()
         self.__schemaManager = getSchemaManager()
         self.set(serverSettings)
@@ -1937,7 +1937,6 @@ class ServerSettings(object):
             self.__crystalRewardsConfig = makeTupleByDict(_crystalRewardsConfig, self.__serverSettings[_crystalRewardsConfig.CONFIG_NAME])
         self.__updateReactiveCommunicationConfig(self.__serverSettings)
         self.__updateGuiLootBoxesConfig(self.__serverSettings)
-        self.__updateEventLootBoxesConfig(self.__serverSettings)
         if BonusCapsConst.CONFIG_NAME in self.__serverSettings:
             BONUS_CAPS.OVERRIDE_BONUS_CAPS = self.__serverSettings[BonusCapsConst.CONFIG_NAME]
         else:
@@ -1969,6 +1968,8 @@ class ServerSettings(object):
             self.__collectiveGoalEntryPointConfig = makeTupleByDict(_CollectiveGoalEntryPointConfig, self.__serverSettings[Configs.COLLECTIVE_GOAL_ENTRY_POINT_CONFIG.value])
         if Configs.PLAY_STREAK_CONFIG.value in self.__serverSettings:
             self.__playStreakConfig = makeTupleByDict(_PlayStreakConfig, self.__serverSettings[Configs.PLAY_STREAK_CONFIG.value])
+        if Configs.BLACK_MARKET_CONFIG.value in self.__serverSettings:
+            self.__blackMarketConfig = makeTupleByDict(_BlackMarketConfig, self.__serverSettings[Configs.BLACK_MARKET_CONFIG.value])
         if Configs.INGAME_BROWSER_EVENT_CONFIG.value in self.__serverSettings:
             self.__ingameBrowserEventConfig = makeTupleByDict(_IngameBrowserEventConfig, self.__serverSettings[Configs.INGAME_BROWSER_EVENT_CONFIG.value])
         if Configs.COLLECTIVE_GOAL_MARATHONS_CONFIG.value in self.__serverSettings:
@@ -2161,7 +2162,6 @@ class ServerSettings(object):
             self.__updateVersusAI(serverSettingsDiff)
         self.__updatePersonalReserves(serverSettingsDiff)
         self.__updateGuiLootBoxesConfig(serverSettingsDiff)
-        self.__updateEventLootBoxesConfig(serverSettingsDiff)
         if Configs.COLLECTIONS_CONFIG.value in serverSettingsDiff:
             self.__updateCollectionsConfig(serverSettingsDiff)
         self.__updateLimitedUIConfig(serverSettingsDiff)
@@ -2180,6 +2180,8 @@ class ServerSettings(object):
             self.__updateRandomBattlesConfig(serverSettingsDiff)
         if Configs.PLAY_STREAK_CONFIG.value in serverSettingsDiff:
             self.__updatePlayStreakConfig(serverSettingsDiff)
+        if Configs.BLACK_MARKET_CONFIG.value in serverSettingsDiff:
+            self.__updateBlackMarketConfig(serverSettingsDiff)
         if Configs.INGAME_BROWSER_EVENT_CONFIG.value in serverSettingsDiff:
             self.__updateIngameBrowserEventConfig(serverSettingsDiff)
         self.__schemaManager.update(serverSettingsDiff)
@@ -2345,6 +2347,10 @@ class ServerSettings(object):
     @property
     def playStreakConfig(self):
         return self.__playStreakConfig
+
+    @property
+    def blackMarketConfig(self):
+        return self.__blackMarketConfig
 
     @property
     def ingameBrowserEventConfig(self):
@@ -2623,18 +2629,6 @@ class ServerSettings(object):
     def getPreferredMapsConfig(self):
         return self.__getGlobalSetting(PremiumConfigs.PREFERRED_MAPS, {})
 
-    def getPremiumPlusXPBonus(self):
-        battleBonuses = self.__getGlobalSetting('prem_battle_bonuses', {})
-        return battleBonuses.get(PREM_BONUS_TYPES.XP, {}).get(ENTITLEMENT_TO_PREM_TYPE[PREMIUM_ENTITLEMENTS.PLUS], 0)
-
-    def getPremiumPlusCreditsBonus(self):
-        battleBonuses = self.__getGlobalSetting('prem_battle_bonuses', {})
-        return battleBonuses.get(PREM_BONUS_TYPES.CREDITS, {}).get(ENTITLEMENT_TO_PREM_TYPE[PREMIUM_ENTITLEMENTS.PLUS], 0)
-
-    def getPremiumPlusTmenXPBonus(self):
-        battleBonuses = self.__getGlobalSetting('prem_battle_bonuses', {})
-        return battleBonuses.get(PREM_BONUS_TYPES.TMEN_XP, {}).get(ENTITLEMENT_TO_PREM_TYPE[PREMIUM_ENTITLEMENTS.PLUS], 0)
-
     def isEpicRandomEnabled(self):
         return self.__getGlobalSetting('isEpicRandomEnabled', False)
 
@@ -2777,9 +2771,6 @@ class ServerSettings(object):
     def getGuiLootBoxesConfig(self):
         return self.__guiLootBoxesConfig
 
-    def getEventLootBoxesConfig(self):
-        return self.__eventLootBoxesConfig
-
     def getAchievements20GeneralConfig(self):
         return Achievements20GeneralConfig(self.__getGlobalSetting(Configs.ACHIEVEMENTS20_CONFIG.value, {}))
 
@@ -2788,6 +2779,9 @@ class ServerSettings(object):
 
     def getPlayStreakConfig(self):
         return self.__getGlobalSetting(Configs.PLAY_STREAK_CONFIG.value, {})
+
+    def getBlackMarketConfig(self):
+        return self.__getGlobalSetting(Configs.BLACK_MARKET_CONFIG.value, {})
 
     def getIngameBrowserEventConfig(self):
         return self.__getGlobalSetting(Configs.INGAME_BROWSER_EVENT_CONFIG.value, {})
@@ -2910,6 +2904,9 @@ class ServerSettings(object):
     def __updatePlayStreakConfig(self, diff):
         self.__playStreakConfig = self.__playStreakConfig.replace(diff[Configs.PLAY_STREAK_CONFIG.value])
 
+    def __updateBlackMarketConfig(self, diff):
+        self.__blackMarketConfig = self.__blackMarketConfig.replace(diff[Configs.BLACK_MARKET_CONFIG.value])
+
     def __updateIngameBrowserEventConfig(self, diff):
         self.__ingameBrowserEventConfig = self.__ingameBrowserEventConfig.replace(diff[Configs.INGAME_BROWSER_EVENT_CONFIG.value])
 
@@ -2940,18 +2937,6 @@ class ServerSettings(object):
             else:
                 _logger.error('Unexpected format of subscriptions service config: %r', config)
                 self.__guiLootBoxesConfig = _GuiLootBoxesConfig()
-        return
-
-    def __updateEventLootBoxesConfig(self, settings):
-        if EVENT_LOOT_BOXES_CONFIG in settings:
-            config = settings[EVENT_LOOT_BOXES_CONFIG]
-            if config is None:
-                self.__eventLootBoxesConfig = _EventLootBoxesConfig()
-            elif isinstance(config, dict):
-                self.__eventLootBoxesConfig = _EventLootBoxesConfig(**config)
-            else:
-                _logger.error('Unexpected format of subscriptions service config: %r', config)
-                self.__eventLootBoxesConfig = _EventLootBoxesConfig()
         return
 
     def __updateCollectionsConfig(self, diff):

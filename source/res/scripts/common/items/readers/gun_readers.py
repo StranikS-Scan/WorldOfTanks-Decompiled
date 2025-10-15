@@ -7,6 +7,7 @@ from items.components import component_constants
 from items.components import gun_components
 from items.components.component_constants import ZERO_FLOAT
 from items.readers import shared_readers
+from math_common import isAlmostEqual
 from constants import IS_EDITOR
 
 def readRecoilEffect(xmlCtx, section, cache):
@@ -37,7 +38,11 @@ def readShot(xmlCtx, section, nationID, projectileSpeedFactor, cache):
     if shellID is None:
         _xml.raiseWrongXml(xmlCtx, '', 'unknown shell type name')
     shellDescr = cache.shells(nationID)[shellID]
-    return gun_components.GunShot(shellDescr, ZERO_FLOAT if not section.has_key('defaultPortion') else _xml.readFraction(xmlCtx, section, 'defaultPortion'), _xml.readVector2(xmlCtx, section, 'piercingPower'), _xml.readPositiveFloat(xmlCtx, section, 'speed') * projectileSpeedFactor, _xml.readNonNegativeFloat(xmlCtx, section, 'gravity') * projectileSpeedFactor ** 2, _xml.readPositiveFloat(xmlCtx, section, 'maxDistance'), _xml.readFloat(xmlCtx, section, 'maxHeight', 1000000.0))
+    gravity = _xml.readNonNegativeFloat(xmlCtx, section, 'gravity') * projectileSpeedFactor ** 2
+    acceleration = _xml.readNonNegativeFloat(xmlCtx, section, 'acceleration', 0) * projectileSpeedFactor ** 2
+    if not isAlmostEqual(acceleration * gravity, 0.0):
+        _xml.raiseWrongXml(xmlCtx, 'acceleration', 'We dont allow acceleration with gravity')
+    return gun_components.GunShot(shellDescr, ZERO_FLOAT if not section.has_key('defaultPortion') else _xml.readFraction(xmlCtx, section, 'defaultPortion'), _xml.readVector2(xmlCtx, section, 'piercingPower'), _xml.readPositiveFloat(xmlCtx, section, 'speed') * projectileSpeedFactor, gravity, _xml.readPositiveFloat(xmlCtx, section, 'maxDistance'), _xml.readFloat(xmlCtx, section, 'maxHeight', 1000000.0), acceleration, _xml.readBool(xmlCtx, section, 'ignoreDispersion', False), _xml.readPositiveInt(xmlCtx, section, 'ammoWeight') if section.has_key('ammoWeight') else shellDescr.ammoWeight)
 
 
 def readSpinEffect(xmlCtx, section, cache):

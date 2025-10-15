@@ -31,12 +31,12 @@ def updateVehiclesDataProps(listID, **kwargs):
         _g_sortedVehs[listID] = (vehs, props._replace(**kwargs))
 
 
-PQ_TABS = (_QA.SEASON_VIEW_TAB_RANDOM,)
+PM_TABS = (_QA.SEASON_VIEW_TAB_RANDOM,)
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def getEnabledPQTabs(lobbyContext=None):
     if lobbyContext is not None:
-        tabs = list(PQ_TABS)
+        tabs = list(PM_TABS)
         if not lobbyContext.getServerSettings().isPersonalMissionsEnabled(branch=PM_BRANCH.REGULAR):
             tabs.remove(_QA.SEASON_VIEW_TAB_RANDOM)
     else:
@@ -80,27 +80,27 @@ class _NavigationInfo(object):
     def __init__(self):
         self.tabID = None
         self.random = PMInfo(None, None, None)
-        self.__selectedPQType = _QA.SEASON_VIEW_TAB_RANDOM
+        self.__selectedPMQuestType = _QA.SEASON_VIEW_TAB_RANDOM
         self._missionsTab = None
         self._marathonPrefix = None
         self._vehicleSelectorFilters = {}
         return
 
     @property
-    def selectedPQ(self):
+    def selectedPMQuest(self):
         return self.random
 
     @property
-    def selectedPQType(self):
-        if self.__selectedPQType not in getEnabledPQTabs():
-            self.__selectedPQType = first(getEnabledPQTabs(), None)
-        return self.__selectedPQType
+    def selectedPMQuestType(self):
+        if self.__selectedPMQuestType not in getEnabledPQTabs():
+            self.__selectedPMQuestType = first(getEnabledPQTabs(), None)
+        return self.__selectedPMQuestType
 
-    def setPQTypeByTabID(self, tabID):
-        if tabID in PQ_TABS:
-            self.__selectedPQType = tabID
+    def setPMQuestTypeByTabID(self, tabID):
+        if tabID in PM_TABS:
+            self.__selectedPMQuestType = tabID
         else:
-            LOG_ERROR('Wrong tabID to set as selected PQ type')
+            LOG_ERROR('Wrong tabID to set as selected Personal Mission Quest type')
 
     def selectTab(self, tabID, doResetNavInfo=False):
         if doResetNavInfo:
@@ -110,16 +110,16 @@ class _NavigationInfo(object):
 
     def selectPersonalMission(self, operationID, questID=None):
         self.tabID = _QA.TAB_PERSONAL_QUESTS
-        self.selectedPQ.update(operationID=operationID, questID=questID)
+        self.selectedPMQuest.update(operationID=operationID, questID=questID)
 
     def selectRandomQuest(self, operationID, questID=None):
         self.tabID = _QA.TAB_PERSONAL_QUESTS
-        self.__selectedPQType = _QA.SEASON_VIEW_TAB_RANDOM
+        self.__selectedPMQuestType = _QA.SEASON_VIEW_TAB_RANDOM
         self.random = self.random.update(operationID=operationID, questID=questID, filters=None)
         return
 
     def changePQFilters(self, *args):
-        self.selectedPQ.update(filters=args)
+        self.selectedPMQuest.update(filters=args)
 
     def getMissionsTab(self):
         return self._missionsTab

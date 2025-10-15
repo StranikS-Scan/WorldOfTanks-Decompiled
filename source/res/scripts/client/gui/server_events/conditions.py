@@ -19,11 +19,10 @@ from gui.shared.utils.requesters.ItemsRequester import RESEARCH_CRITERIA
 from helpers import i18n, dependency, getLocalizedData
 from items import vehicles
 from shared_utils import CONST_CONTAINER
-from skeletons.gui.game_control import IIGRController, IWotPlusController, IWinbackController, IWhiteTigerController
+from skeletons.gui.game_control import IIGRController, IWotPlusController, IWinbackController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
-from gui.wt_event.wt_event_helpers import getBossType
 if typing.TYPE_CHECKING:
     from typing import Any, Dict, Optional, List, Callable, Tuple
     from gui.shared.utils.requesters.ItemsRequester import RequestCriteria
@@ -78,8 +77,6 @@ def _handleRelation(relation, source, toCompare):
         return source < toCompare
     if relation == _RELATIONS.LSQ:
         return source <= toCompare
-    if relation == _RELATIONS.NEQ:
-        return source != toCompare
     LOG_WARNING('Unknown kind of values relation', relation, source, toCompare)
     return False
 
@@ -768,7 +765,7 @@ class XPMultipliedVehicle(_VehicleRequirement):
         self._needValue = self._data.get('value')
 
     def __repr__(self):
-        return '%s<value=%r>' % (self.__class__.__name__, self._needValue)
+        return 'XPMultipliedVehicle<value=%r>' % self._needValue
 
     def negate(self):
         self._needValue = not self._needValue
@@ -786,32 +783,6 @@ class XPMultipliedVehicle(_VehicleRequirement):
 
     def _isAvailable(self, vehicle):
         return (vehicle.dailyXPFactor == -1) == self._needValue
-
-
-class WtTicketRequired(_VehicleRequirement):
-    gameEventController = dependency.descriptor(IWhiteTigerController)
-
-    def __init__(self, path, data):
-        super(WtTicketRequired, self).__init__('wtTicketRequired', dict(data), path)
-        self._needValue = True
-
-    def __repr__(self):
-        return '%s<value=%r>' % (self.__class__.__name__, self._needValue)
-
-    def negate(self):
-        self._needValue = not self._needValue
-
-    def isAvailableReason(self, vehicle):
-        return (self._isAvailable(vehicle), 'ticketsShortage')
-
-    def getValue(self):
-        return self._needValue
-
-    def _isAvailable(self, vehicle):
-        if vehicle.isBoss and not vehicle.isSpecialBoss:
-            bossType = getBossType(vehicle.descriptor.type.tags)
-            return self.gameEventController.hasEnoughTickets(bossType) == self._needValue
-        return True
 
 
 class InstalledItemCondition(_VehicleRequirement):

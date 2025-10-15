@@ -399,8 +399,7 @@ class AppEntry(FlashComponentWrapper, ApplicationMeta):
         self.fireEvent(AppLifeCycleEvent(self.__ns, AppLifeCycleEvent.INITIALIZED))
 
     def updateScale(self):
-        index = self.settingsCore.getSetting(settings_constants.GRAPHICS.INTERFACE_SCALE)
-        self.settingsCore.options.getSetting('interfaceScale').setSystemValue(index)
+        self.settingsCore.options.getSetting(settings_constants.GRAPHICS.INTERFACE_SCALE).updateScale()
 
     def updateTooltip(self, tooltipData, linkage):
         if self._toolTip is not None:

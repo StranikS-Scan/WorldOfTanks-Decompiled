@@ -24,7 +24,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.notifications import NotificationGroup, NotificationGuiSettings, NotificationPriorityLevel
 from gui.shared.utils.functions import makeTooltip
 from gui.paragons.paragons_constants import ParagonsSystemMessages
-from gui.wgnc.settings import WGNC_DEFAULT_ICON, WGNC_POP_UP_BUTTON_WIDTH
+from gui.notify_center.settings import NOTIFY_CENTER_DEFAULT_ICON, NOTIFY_CENTER_POP_UP_BUTTON_WIDTH
 from helpers import dependency, time_utils
 from items import makeIntCompactDescrByID
 from items.components.c11n_constants import CustomizationType
@@ -39,7 +39,6 @@ from skeletons.gui.game_control import IBattlePassController, ICollectionsSystem
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
-from skeletons.gui.game_control import IWhiteTigerController
 if typing.TYPE_CHECKING:
     from gui.shared.events import LoadViewEvent
 
@@ -326,7 +325,6 @@ class LockButtonMessageDecorator(MessageDecorator):
 
 class C11nMessageDecorator(LockButtonMessageDecorator):
     itemsCache = dependency.descriptor(IItemsCache)
-    __gameEventCtrl = dependency.descriptor(IWhiteTigerController)
 
     def __init__(self, entityID, entity=None, settings=None, model=None):
         super(C11nMessageDecorator, self).__init__(entityID, entity, settings, model)
@@ -351,7 +349,7 @@ class C11nMessageDecorator(LockButtonMessageDecorator):
     def _getIsLocked(self):
         isLocked = True
         vehicle = self._getVehicle()
-        if not currentHangarIsBattleRoyale() and not self.__gameEventCtrl.isEventPrbActive() and vehicle is not None and vehicle.isCustomizationEnabled():
+        if not currentHangarIsBattleRoyale() and vehicle is not None and vehicle.isCustomizationEnabled():
             isLocked = self._entity.get('savedData', {}).get('toStyle', False) and not isVehicleCanBeCustomized(vehicle, GUI_ITEM_TYPE.STYLE)
         return isLocked
 
@@ -534,15 +532,15 @@ class FriendshipRequestDecorator(_NotificationDecorator):
          'auxData': []}
 
 
-class WGNCPopUpDecorator(_NotificationDecorator):
+class NotifyCenterPopUpDecorator(_NotificationDecorator):
     __slots__ = ('_itemName', '__receivedAt')
 
     def __init__(self, entityID, item, offset=0, receivedAt=None):
-        super(WGNCPopUpDecorator, self).__init__(entityID, item, NotificationGuiSettings(item.isNotify(), item.getPriority(), showAt=_makeShowTime() + offset))
+        super(NotifyCenterPopUpDecorator, self).__init__(entityID, item, NotificationGuiSettings(item.isNotify(), item.getPriority(), showAt=_makeShowTime() + offset))
         self.__receivedAt = receivedAt
 
     def getType(self):
-        return NOTIFICATION_TYPE.WGNC_POP_UP
+        return NOTIFICATION_TYPE.NOTIFY_CENTER_POP_UP
 
     def getGroup(self):
         return self.getEntity().getGroup()
@@ -555,7 +553,7 @@ class WGNCPopUpDecorator(_NotificationDecorator):
         return self._itemName
 
     def update(self, item):
-        super(WGNCPopUpDecorator, self).update(item)
+        super(NotifyCenterPopUpDecorator, self).update(item)
         self._make(item)
 
     def _make(self, item=None, settings=None):
@@ -571,9 +569,9 @@ class WGNCPopUpDecorator(_NotificationDecorator):
         if note:
             body += g_settings.htmlTemplates.format('notificationsCenterNote', ctx={'note': note})
         bgSource, (_, bgHeight) = item.getLocalBG()
-        message = g_settings.msgTemplates.format('wgncNotification_v2', ctx={'topic': topic,
+        message = g_settings.msgTemplates.format('notifyCenterNotification_v2', ctx={'topic': topic,
          'body': body}, data={'icon': makePathToIcon(item.getLocalIcon()),
-         'defaultIcon': makePathToIcon(WGNC_DEFAULT_ICON),
+         'defaultIcon': makePathToIcon(NOTIFY_CENTER_DEFAULT_ICON),
          'bgIcon': {None: makePathToIcon(bgSource)},
          'bgIconHeight': bgHeight,
          'buttonsLayout': layout,
@@ -597,7 +595,7 @@ class WGNCPopUpDecorator(_NotificationDecorator):
             layout.append({'label': button.label,
              'type': buttonType,
              'action': button.action,
-             'width': WGNC_POP_UP_BUTTON_WIDTH})
+             'width': NOTIFY_CENTER_POP_UP_BUTTON_WIDTH})
             if button.visible:
                 state = NOTIFICATION_BUTTON_STATE.ENABLED | NOTIFICATION_BUTTON_STATE.VISIBLE
             else:
@@ -1175,6 +1173,75 @@ class IntegratedAuctionStageFinishDecorator(IntegratedAuctionDecorator):
         title = backport.text(R.strings.messenger.serviceChannelMessages.integratedAuction.stageFinish.title())
         text = backport.text(R.strings.messenger.serviceChannelMessages.integratedAuction.stageFinish.text())
         return g_settings.msgTemplates.format('IntegratedAuctionStageFinish', ctx={'title': title,
+         'text': text})
+
+
+class BlackMarketAuctionDecorator(MessageDecorator):
+    __OVERLAYS = (WindowLayer.FULLSCREEN_WINDOW, WindowLayer.OVERLAY, WindowLayer.TOP_WINDOW)
+    __gui = dependency.descriptor(IGuiLoader)
+
+    def __init__(self, entityID):
+        super(BlackMarketAuctionDecorator, self).__init__(entityID, self._makeEntity(), self._makeSettings())
+
+    def getGroup(self):
+        return NotificationGroup.INFO
+
+    def _makeEntity(self):
+        raise NotImplementedError
+
+    def _makeSettings(self):
+        return NotificationGuiSettings(isNotify=True, priorityLevel=self.__getPriority())
+
+    def __getPriority(self):
+        windows = self.__gui.windowsManager.findWindows(lambda w: w.layer in self.__OVERLAYS)
+        return NotificationPriorityLevel.LOW if windows else NotificationPriorityLevel.MEDIUM
+
+
+class BlackMarketVehicleAuctionStageStartDecorator(BlackMarketAuctionDecorator):
+
+    def getType(self):
+        return NOTIFICATION_TYPE.BLACK_MARKET_STAGE_START
+
+    def _makeEntity(self):
+        title = backport.text(R.strings.messenger.serviceChannelMessages.integratedAuction.stageStart.title())
+        text = backport.text(R.strings.messenger.serviceChannelMessages.integratedAuction.stageStart.text())
+        return g_settings.msgTemplates.format('BlackMarketVehicleAuctionStageStart', ctx={'title': title,
+         'text': text})
+
+
+class BlackMarketVehicleAuctionStageFinishDecorator(BlackMarketAuctionDecorator):
+
+    def getType(self):
+        return NOTIFICATION_TYPE.BLACK_MARKET_STAGE_FINISH
+
+    def _makeEntity(self):
+        title = backport.text(R.strings.messenger.serviceChannelMessages.integratedAuction.stageFinish.title())
+        text = backport.text(R.strings.messenger.serviceChannelMessages.integratedAuction.stageFinish.text())
+        return g_settings.msgTemplates.format('BlackMarketVehicleAuctionStageFinish', ctx={'title': title,
+         'text': text})
+
+
+class BlackMarketAuctionStageStartDecorator(BlackMarketAuctionDecorator):
+
+    def getType(self):
+        return NOTIFICATION_TYPE.BLACK_MARKET_STAGE_START
+
+    def _makeEntity(self):
+        title = backport.text(R.strings.messenger.serviceChannelMessages.integratedAuction.stageStart.title())
+        text = backport.text(R.strings.messenger.serviceChannelMessages.integratedAuction.stageStart.text())
+        return g_settings.msgTemplates.format('BlackMarketAuctionStageStart', ctx={'title': title,
+         'text': text})
+
+
+class BlackMarketAuctionStageFinishDecorator(BlackMarketAuctionDecorator):
+
+    def getType(self):
+        return NOTIFICATION_TYPE.BLACK_MARKET_STAGE_FINISH
+
+    def _makeEntity(self):
+        title = backport.text(R.strings.messenger.serviceChannelMessages.integratedAuction.stageFinish.title())
+        text = backport.text(R.strings.messenger.serviceChannelMessages.integratedAuction.stageFinish.text())
+        return g_settings.msgTemplates.format('BlackMarketAuctionStageFinish', ctx={'title': title,
          'text': text})
 
 

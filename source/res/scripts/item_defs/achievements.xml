@@ -3707,7 +3707,7 @@
         </item>
         <item>	action	  <name>	section	</name>
         </item>
-        <item>	2.10	  <name>	weight	</name>
+        <item>	2.001	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	all	  <name>	mode	</name>
@@ -3722,7 +3722,7 @@
         </item>
         <item>	action	  <name>	section	</name>
         </item>
-        <item>	2.11	  <name>	weight	</name>
+        <item>	2.002	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	all	  <name>	mode	</name>
@@ -3738,6 +3738,21 @@
         <item>	action	  <name>	section	</name>
         </item>
         <item>	1.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	all	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:15YearsOfService	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	2.11	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	all	  <name>	mode	</name>
@@ -6760,6 +6775,21 @@
       </value>
     </achievement>
     <achievement>
+      <name>	singleAchievements:BirthdayPr_2025	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1446.43	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	all	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
       <name>	achievements:wt2024HunterWins	</name>
       <type>	dict	</type>
       <value>
@@ -6801,21 +6831,6 @@
           <type>	float	</type>
         </item>
         <item>	random	  <name>	mode	</name>
-        </item>
-      </value>
-    </achievement>
-    <achievement>
-      <name>	singleAchievements:BirthdayPr_2025	</name>
-      <type>	dict	</type>
-      <value>
-        <item>	single	  <name>	type	</name>
-        </item>
-        <item>	action	  <name>	section	</name>
-        </item>
-        <item>	1446.43	  <name>	weight	</name>
-          <type>	float	</type>
-        </item>
-        <item>	all	  <name>	mode	</name>
         </item>
       </value>
     </achievement>
@@ -7251,6 +7266,36 @@
           <type>	float	</type>
         </item>
         <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:portal2025Medal_1	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1456.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	all	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:portal2025Medal_2	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1456.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	all	  <name>	mode	</name>
         </item>
       </value>
     </achievement>

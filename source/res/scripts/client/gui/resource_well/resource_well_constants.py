@@ -12,6 +12,7 @@ class ProgressionState(IntEnum):
     NO_PROGRESS = 2
     NO_VEHICLES = 3
     FORBIDDEN = 4
+    BEFORE_EVENT = 5
 
 
 class ResourceType(Enum):

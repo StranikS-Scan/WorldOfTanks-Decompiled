@@ -227,3 +227,4 @@ class SCH_CLIENT_MSG_TYPE(object):
 
 class GFNotificationTemplates(CONST_CONTAINER):
     PLAY_STREAK_REWARDS = 'PlayStreakRewards'
+    SENIORITY_VEHICLE_OFFER = 'seniorityAwardsVehicleOffer'

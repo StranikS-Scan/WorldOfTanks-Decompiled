@@ -111,7 +111,7 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
         return (('inventory', self._onInventoryUpdate),
          ('inventory.1.crew', self._onCrewChanged),
          ('tokens', self._onCrewChanged),
-         ('potapovQuests', self._onCrewChanged))
+         ('personalMissionQuests', self._onCrewChanged))
 
     def _setWidgets(self, **kwargs):
         super(MemberChangeView, self)._setWidgets(**kwargs)

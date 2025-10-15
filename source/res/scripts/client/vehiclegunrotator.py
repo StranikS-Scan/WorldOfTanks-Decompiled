@@ -182,9 +182,7 @@ class VehicleGunRotator(object):
                         return
                     dirToTarget = predictedTargetPos - shotPos
                     dirToTarget.normalise()
-                    shotDir = Math.Vector3(shotVec)
-                    shotDir.normalise()
-                    if shotDir.dot(dirToTarget) > 0.0:
+                    if shotVec.dot(dirToTarget) > 0.0:
                         return
             markerPosition = self.__getGunMarkerPosition(shotPos, shotVec, self.__dispersionAngles)
             mPos, mDir, mSize, mIdealSize, dualAccSize, _, collData = markerPosition
@@ -228,9 +226,11 @@ class VehicleGunRotator(object):
             closestLimit = self.__isOutOfLimits(shotTurretYaw, turretYawLimits)
             if closestLimit is not None:
                 shotTurretYaw = closestLimit
-        pos, vel = self.__getShotPosition(shotTurretYaw, shotGunPitch, shotIdx=overrideShotIdx)
-        grav = Math.Vector3(0.0, -descr.getShot(shotIdx=overrideShotIdx).gravity, 0.0)
-        return (pos, vel, grav)
+        pos, direction = self.__getShotPosition(shotTurretYaw, shotGunPitch)
+        shotDescr = descr.getShot(shotIdx=overrideShotIdx)
+        velocity = direction.scale(shotDescr.speed)
+        acceleration = Math.Vector3(0.0, -shotDescr.gravity, 0.0)
+        return (pos, velocity, acceleration)
 
     def getCurShotPosition(self):
         return self.__getShotPosition(self.__turretYaw, self.__gunPitch)
@@ -562,12 +562,11 @@ class VehicleGunRotator(object):
             speedLimit = min(speedLimit, idealYawSpeed * timeDiff)
         return curAngle + min(shotDiff, speedLimit) if shotDiff > 0.0 else curAngle + max(shotDiff, -speedLimit)
 
-    def __getShotPosition(self, turretYaw, gunPitch, gunOffset=None, shotIdx=None):
+    def __getShotPosition(self, turretYaw, gunPitch, gunOffset=None):
         descr = self._avatar.getVehicleDescriptor()
         turretOffs = descr.hull.turretPositions[0] + descr.chassis.hullPosition
         if gunOffset is None:
             gunOffset = descr.activeGunShotPosition if self.__gunPosition is None else self.__gunPosition
-        shotSpeed = descr.getShot(shotIdx).speed
         turretWorldMatrix = Math.Matrix()
         turretWorldMatrix.setRotateY(turretYaw)
         turretWorldMatrix.translation = turretOffs
@@ -576,7 +575,7 @@ class VehicleGunRotator(object):
         gunWorldMatrix = Math.Matrix()
         gunWorldMatrix.setRotateX(gunPitch)
         gunWorldMatrix.postMultiply(turretWorldMatrix)
-        vector = gunWorldMatrix.applyVector(Math.Vector3(0, 0, shotSpeed))
+        vector = gunWorldMatrix.applyToAxis(2)
         return (position, vector)
 
     def getAttachedVehicleID(self):
@@ -584,11 +583,12 @@ class VehicleGunRotator(object):
 
     def __getGunMarkerPosition(self, shotPos, shotVec, dispersionAngles):
         shotDescr = self._avatar.getVehicleDescriptor().shot
-        gravity = Math.Vector3(0.0, -shotDescr.gravity, 0.0)
+        velocity = shotVec.scale(shotDescr.speed)
+        acceleration = Math.Vector3(0.0, -shotDescr.gravity, 0.0)
         testVehicleID = self.getAttachedVehicleID()
         collisionStrategy = AimingSystems.CollisionStrategy.COLLIDE_DYNAMIC_AND_STATIC
         minBounds, maxBounds = BigWorld.player().arena.getSpaceBB()
-        endPos, direction, collData, usedMaxDistance = AimingSystems.getCappedShotTargetInfos(shotPos, shotVec, gravity, shotDescr, testVehicleID, minBounds, maxBounds, collisionStrategy)
+        endPos, direction, collData, usedMaxDistance = AimingSystems.getCappedShotTargetInfos(shotPos, velocity, acceleration, shotDescr, testVehicleID, minBounds, maxBounds, collisionStrategy)
         distance = (endPos - shotPos).length
         usedMaxDistance = usedMaxDistance or distance > shotDescr.maxDistance
         if usedMaxDistance:
@@ -623,11 +623,12 @@ class VehicleGunRotator(object):
     def __getTargetedEnemyForGun(self, gunShotPosition, excludeTeam):
         shotPos, shotVec = self.__getShotPosition(self.__turretYaw, self.__gunPitch, gunShotPosition)
         shotDescr = self._avatar.getVehicleDescriptor().shot
-        gravity = Math.Vector3(0.0, -shotDescr.gravity, 0.0)
+        velocity = shotVec.scale(shotDescr.speed)
+        acceleration = Math.Vector3(0.0, -shotDescr.gravity, 0.0)
         testVehicleID = self.getAttachedVehicleID()
         collisionStrategy = AimingSystems.CollisionStrategy.COLLIDE_DYNAMIC_AND_STATIC
         minBounds, maxBounds = BigWorld.player().arena.getSpaceBB()
-        _, _, collision, _ = AimingSystems.getCappedShotTargetInfos(shotPos, shotVec, gravity, shotDescr, testVehicleID, minBounds, maxBounds, collisionStrategy)
+        _, _, collision, _ = AimingSystems.getCappedShotTargetInfos(shotPos, velocity, acceleration, shotDescr, testVehicleID, minBounds, maxBounds, collisionStrategy)
         if collision is not None:
             entity = collision.entity
             if entity is not None and entity.publicInfo and entity.publicInfo['team'] is not excludeTeam and entity.health > 0:

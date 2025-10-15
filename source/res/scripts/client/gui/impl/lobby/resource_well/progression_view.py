@@ -31,10 +31,11 @@ _FULL_PROGRESS = 100
 _PROGRESSION_STATE_MAPPING = {resource_well_constants.ProgressionState.ACTIVE: ProgressionState.ACTIVE,
  resource_well_constants.ProgressionState.NO_PROGRESS: ProgressionState.NOPROGRESS,
  resource_well_constants.ProgressionState.NO_VEHICLES: ProgressionState.NOVEHICLES,
- resource_well_constants.ProgressionState.FORBIDDEN: ProgressionState.FORBIDDEN}
+ resource_well_constants.ProgressionState.FORBIDDEN: ProgressionState.FORBIDDEN,
+ resource_well_constants.ProgressionState.BEFORE_EVENT: ProgressionState.BEFOREEVENT}
 
 class ProgressionView(ViewImpl):
-    __slots__ = ('__notifier', '__backCallback')
+    __slots__ = ('__notifier', '__stageNotifier', '__backCallback')
     _COMMON_SOUND_SPACE = RESOURCE_WELL_SOUND_SPACE
     __resourceWell = dependency.descriptor(IResourceWellController)
 
@@ -45,6 +46,7 @@ class ProgressionView(ViewImpl):
         self.__backCallback = backCallback
         super(ProgressionView, self).__init__(settings)
         self.__notifier = None
+        self.__stageNotifier = None
         return
 
     @property
@@ -62,10 +64,12 @@ class ProgressionView(ViewImpl):
         super(ProgressionView, self)._onLoading(*args, **kwargs)
         self.__resourceWell.startNumberRequesters()
         self.__notifier = SimpleNotifier(self.__getReminderTimeLeft, self.__updateEventTime)
+        self.__stageNotifier = SimpleNotifier(self.__getActiveStageTimeLeft, self.__updateModel)
         self.__updateModel()
 
     def _finalize(self):
         self.__notifier.stopNotification()
+        self.__stageNotifier.stopNotification()
         self.__resourceWell.stopNumberRequesters()
         super(ProgressionView, self)._finalize()
 
@@ -78,7 +82,8 @@ class ProgressionView(ViewImpl):
          (self.viewModel.onClose, self.__close),
          (g_playerEvents.onClientUpdated, self.__onClientUpdated),
          (self.__resourceWell.onNumberRequesterUpdated, self.__onNumberRequesterUpdated),
-         (self.__resourceWell.onEventUpdated, self.__onEventStateUpdated))
+         (self.__resourceWell.onEventUpdated, self.__onEventStateUpdated),
+         (self.__resourceWell.onEventStateChanged, self.__onEventStateChanged))
 
     def __updateModel(self):
         with self.viewModel.transaction() as model:
@@ -91,13 +96,17 @@ class ProgressionView(ViewImpl):
     @replaceNoneKwargsModel
     def __updateEventTime(self, model=None):
         model.setEndDate(round(time_utils.makeLocalServerTime(self.__resourceWell.getFinishTime()), -1))
+        model.setStartDate(round(time_utils.makeLocalServerTime(self.__resourceWell.getStartTime()), -1))
         isEventEnding = isEventEndingsSoon(resourceWell=self.__resourceWell)
         model.setIsEventEndingSoon(isEventEnding)
         model.setTimeLeft(self.__resourceWell.getFinishTime() - time_utils.getServerUTCTime())
+        model.setServerTimestamp(time_utils.getServerUTCTime())
         if isEventEnding:
             self.__notifier.stopNotification()
+            self.__stageNotifier.stopNotification()
         else:
             self.__notifier.startNotification()
+            self.__stageNotifier.startNotification()
 
     @replaceNoneKwargsModel
     def __fillEventInfo(self, model=None):
@@ -174,8 +183,14 @@ class ProgressionView(ViewImpl):
             return
         self.__updateModel()
 
+    def __onEventStateChanged(self):
+        self.__updateModel()
+
     def __getReminderTimeLeft(self):
         return max(0, self.__resourceWell.getReminderTime() - time_utils.getServerUTCTime())
+
+    def __getActiveStageTimeLeft(self):
+        return max(0, self.__resourceWell.getStartTime() - time_utils.getServerUTCTime())
 
     def __onClientUpdated(self, diff, _):
         if RESOURCE_WELL_PDATA_KEY in diff:

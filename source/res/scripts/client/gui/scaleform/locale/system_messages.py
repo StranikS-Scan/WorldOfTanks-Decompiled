@@ -802,6 +802,7 @@ class SYSTEM_MESSAGES(object):
     WALLET_NOT_AVAILABLE_GOLD = '#system_messages:wallet/not_available_gold'
     WALLET_NOT_AVAILABLE_FREEXP = '#system_messages:wallet/not_available_freexp'
     SENIORITY_AWARDS_CLAIM_REWARD_FAILED = '#system_messages:seniority_awards/claim_reward_failed'
+    SENIORITY_AWARDS_REWARDCHOICE_ERROR = '#system_messages:seniority_awards/rewardChoice/error'
     PERSONALMISSIONS_SELECT_SUCCESS = '#system_messages:personalMissions/select/success'
     PERSONALMISSIONS_SELECT_SERVER_ERROR = '#system_messages:personalMissions/select/server_error'
     PERSONALMISSIONS_SELECT_SERVER_ERROR_WRONG_ARGS_TYPE = '#system_messages:personalMissions/select/server_error/WRONG_ARGS_TYPE'
@@ -2317,6 +2318,7 @@ class SYSTEM_MESSAGES(object):
      WALLET_NOT_AVAILABLE_GOLD,
      WALLET_NOT_AVAILABLE_FREEXP,
      SENIORITY_AWARDS_CLAIM_REWARD_FAILED,
+     SENIORITY_AWARDS_REWARDCHOICE_ERROR,
      PERSONALMISSIONS_SELECT_SUCCESS,
      PERSONALMISSIONS_SELECT_SERVER_ERROR,
      PERSONALMISSIONS_SELECT_SERVER_ERROR_WRONG_ARGS_TYPE,

@@ -38,6 +38,8 @@ class ShellSetupSubView(DealBaseSetupSubView):
     def _updateSlots(self, fullUpdate=True, updateData=True):
         self._viewModel.setMaxCount(self._interactor.getItem().ammoMaxSize)
         self._viewModel.setInstalledCount(sum((shell.count for shell in self._interactor.getCurrentLayout())))
+        vehicle = self._interactor.getItem()
+        self._viewModel.setIsGoldShellLimit(any((shell.ammoWeight != 1 for shell in vehicle.shells.setupLayouts)))
         super(ShellSetupSubView, self)._updateSlots(fullUpdate, updateData)
 
     def __onItemsSyncCompleted(self, *_):

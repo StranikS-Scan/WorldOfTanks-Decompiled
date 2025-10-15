@@ -25,14 +25,14 @@ class QuestProgress(object):
     def synchronize(self, isFullSync, diff):
         if isFullSync:
             self.__cache.clear()
-        for item in ('quests', 'potapovQuests', 'questsRewards', 'pm_progress'):
+        for item in ('quests', 'personalMissionQuests', 'questsRewards', 'pm_progress'):
             itemDiff = diff.get(item, None)
             if itemDiff is not None:
                 synchronizeDicts(itemDiff, self.__cache.setdefault(item, {}))
 
         cache = diff.get('cache', {})
-        if 'pqStates' in cache:
-            synchronizeDicts(cache['pqStates'], self.__cache.setdefault('pqStates', {}))
+        if 'pmQuestsStates' in cache:
+            synchronizeDicts(cache['pmQuestsStates'], self.__cache.setdefault('pmQuestsStates', {}))
         return
 
     def getCache(self, callback=None):

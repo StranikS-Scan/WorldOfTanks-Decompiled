@@ -5,7 +5,7 @@ accountPersistentCacheDataScheme = {INCLUDE: {'economics',
            'inventory',
            'quests',
            'tokens',
-           'potapovQuests',
+           'personalMissionQuests',
            'intUserSettings'},
  'stats': {INCLUDE: {'dossier',
                      'eliteVehicles',
@@ -22,7 +22,7 @@ def accountDataGetDiffForPersistent(diff):
      'stats',
      'quests',
      'tokens',
-     'potapovQuests',
+     'personalMissionQuests',
      'intUserSettings'}
     mydiff = {}
     for k, v in diff.items():

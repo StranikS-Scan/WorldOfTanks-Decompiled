@@ -21,8 +21,8 @@ from gui.clientgw.settings import WebRequestDataType
 from gui.clientgw.states import UndefinedState
 from gui.clientgw.strongholds.contexts import StrongholdInfoCtx, StrongholdStatisticsCtx
 from gui.clientgw.subscriptions import WebListeners
-from gui.wgnc import g_wgncEvents
-from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
+from gui.notify_center import g_notifyCenterEvents
+from gui.notify_center.settings import NOTIFY_CENTER_DATA_PROXY_TYPE
 from helpers import dependency
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.lobby_context import ILobbyContext
@@ -47,15 +47,15 @@ class _CACHE_KEYS(CONST_CONTAINER):
     APPS = 2
 
 
-_CLAN_WGNC_NOTIFICATION_TYPES = (WGNC_DATA_PROXY_TYPE.CLAN_APP,
- WGNC_DATA_PROXY_TYPE.CLAN_INVITE,
- WGNC_DATA_PROXY_TYPE.CLAN_APP_DECLINED,
- WGNC_DATA_PROXY_TYPE.CLAN_APP_ACCEPTED,
- WGNC_DATA_PROXY_TYPE.CLAN_INVITE_ACCEPTED,
- WGNC_DATA_PROXY_TYPE.CLAN_INVITE_DECLINED,
- WGNC_DATA_PROXY_TYPE.CLAN_INVITES_CREATED,
- WGNC_DATA_PROXY_TYPE.CLAN_APP_DECLINED_FOR_MEMBERS,
- WGNC_DATA_PROXY_TYPE.CLAN_APP_ACCEPTED_FOR_MEMBERS)
+_CLAN_NOTIFY_CENTER_NOTIFICATION_TYPES = (NOTIFY_CENTER_DATA_PROXY_TYPE.CLAN_APP,
+ NOTIFY_CENTER_DATA_PROXY_TYPE.CLAN_INVITE,
+ NOTIFY_CENTER_DATA_PROXY_TYPE.CLAN_APP_DECLINED,
+ NOTIFY_CENTER_DATA_PROXY_TYPE.CLAN_APP_ACCEPTED,
+ NOTIFY_CENTER_DATA_PROXY_TYPE.CLAN_INVITE_ACCEPTED,
+ NOTIFY_CENTER_DATA_PROXY_TYPE.CLAN_INVITE_DECLINED,
+ NOTIFY_CENTER_DATA_PROXY_TYPE.CLAN_INVITES_CREATED,
+ NOTIFY_CENTER_DATA_PROXY_TYPE.CLAN_APP_DECLINED_FOR_MEMBERS,
+ NOTIFY_CENTER_DATA_PROXY_TYPE.CLAN_APP_ACCEPTED_FOR_MEMBERS)
 
 class _ClanDossier(object):
 
@@ -73,10 +73,10 @@ class _ClanDossier(object):
          (WebRequestDataType.CREATE_INVITES,): self.__createInvitesHandler,
          (WebRequestDataType.CLAN_INVITES,): self.__clanInvitesHandler,
          (WebRequestDataType.CLAN_APPLICATIONS,): self.__clanApplicationHandler}
-        self.__notificationHandlers = {(WGNC_DATA_PROXY_TYPE.CLAN_APP,): self.__clanAppNotificationHandler,
-         (WGNC_DATA_PROXY_TYPE.CLAN_APP_ACCEPTED_FOR_MEMBERS, WGNC_DATA_PROXY_TYPE.CLAN_APP_DECLINED_FOR_MEMBERS): self.__clanMembersNotificationHandler,
-         (WGNC_DATA_PROXY_TYPE.CLAN_INVITE_DECLINED, WGNC_DATA_PROXY_TYPE.CLAN_INVITE_ACCEPTED): self.__clanInviteNotificationHandler,
-         (WGNC_DATA_PROXY_TYPE.CLAN_INVITES_CREATED,): self.__clanInviteCreatedNotificationHandler}
+        self.__notificationHandlers = {(NOTIFY_CENTER_DATA_PROXY_TYPE.CLAN_APP,): self.__clanAppNotificationHandler,
+         (NOTIFY_CENTER_DATA_PROXY_TYPE.CLAN_APP_ACCEPTED_FOR_MEMBERS, NOTIFY_CENTER_DATA_PROXY_TYPE.CLAN_APP_DECLINED_FOR_MEMBERS): self.__clanMembersNotificationHandler,
+         (NOTIFY_CENTER_DATA_PROXY_TYPE.CLAN_INVITE_DECLINED, NOTIFY_CENTER_DATA_PROXY_TYPE.CLAN_INVITE_ACCEPTED): self.__clanInviteNotificationHandler,
+         (NOTIFY_CENTER_DATA_PROXY_TYPE.CLAN_INVITES_CREATED,): self.__clanInviteCreatedNotificationHandler}
 
     def fini(self):
         self._webCtrl = None
@@ -252,7 +252,7 @@ class _ClanDossier(object):
                 handler(ctx, response)
                 break
 
-    def processWgncNotification(self, notifID, item):
+    def processNotifyCenterNotification(self, notifID, item):
         itemType = item.getType()
         for types, handler in self.__notificationHandlers.items():
             if itemType in types:
@@ -438,7 +438,7 @@ class _ClanDossier(object):
         cached = self.__cache[_CACHE_KEYS.INVITES] or set()
         cached.discard(item.getAccountID())
         self.__cache[_CACHE_KEYS.INVITES] = cached
-        if itemType == WGNC_DATA_PROXY_TYPE.CLAN_INVITE_ACCEPTED:
+        if itemType == NOTIFY_CENTER_DATA_PROXY_TYPE.CLAN_INVITE_ACCEPTED:
             self.__syncState &= ~SYNC_KEYS.CLAN_INFO
             if WebRequestDataType.CLAN_INFO in self.__webCache:
                 del self.__webCache[WebRequestDataType.CLAN_INFO]
@@ -521,13 +521,13 @@ class WebController(WebListeners, IWebController):
         g_clientUpdateManager.addCallbacks({'stats.clanInfo': self.__onClanInfoChanged,
          'serverSettings.clientgw.isEnabled': self.__onServerSettingChanged,
          'serverSettings.clanProfile.isEnabled': self.__onClanEnableChanged})
-        g_wgncEvents.onProxyDataItemShowByDefault += self._onProxyDataItemShowByDefault
+        g_notifyCenterEvents.onProxyDataItemShowByDefault += self._onProxyDataItemShowByDefault
         g_playerEvents.onClanMembersListChanged += self._onClanMembersListChanged
         self.__started = True
 
     def stop(self, logout=True):
         g_playerEvents.onClanMembersListChanged -= self._onClanMembersListChanged
-        g_wgncEvents.onProxyDataItemShowByDefault -= self._onProxyDataItemShowByDefault
+        g_notifyCenterEvents.onProxyDataItemShowByDefault -= self._onProxyDataItemShowByDefault
         g_clientUpdateManager.removeObjectCallbacks(self)
         if self.__clanCache is not None:
             self.__clanCache.onRead -= self._onClanCacheRead
@@ -640,10 +640,10 @@ class WebController(WebListeners, IWebController):
         callback(result)
 
     def _onProxyDataItemShowByDefault(self, notifID, item):
-        if item.getType() in _CLAN_WGNC_NOTIFICATION_TYPES:
+        if item.getType() in _CLAN_NOTIFY_CENTER_NOTIFICATION_TYPES:
             if self.__profile is not None:
-                self.__profile.processWgncNotification(notifID, item)
-            self.notify('onWgncNotificationReceived', notifID, item)
+                self.__profile.processNotifyCenterNotification(notifID, item)
+            self.notify('onNotifyCenterNotificationReceived', notifID, item)
         return
 
     def _onClanMembersListChanged(self):

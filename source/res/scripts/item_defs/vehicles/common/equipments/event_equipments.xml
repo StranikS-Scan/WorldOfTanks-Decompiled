@@ -1,0 +1,21 @@
+<event_equipments.xml>
+  <exampleAbility>
+    <id>	900	</id>
+    <userString>	#artefacts:exampleAbility/name	</userString>
+    <description>	#artefacts:exampleAbility/descr	</description>
+    <icon>	ration_uk 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale trigger	</tags>
+    <type>	regular	</type>
+    <script>	VisualScriptEquipment	  <visualScript>
+        <client>
+          <plan>	abilities/exampleAbility_client	</plan>
+        </client>
+        <server>
+          <plan>	abilities/exampleAbility_server	</plan>
+        </server>
+      </visualScript>
+    </script>
+  </exampleAbility>
+</event_equipments.xml>

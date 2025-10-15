@@ -7,6 +7,7 @@ from gui.impl.lobby.tank_setup.array_providers.base import VehicleBaseArrayProvi
 from gui.impl.wrappers.user_compound_price_model import BuyPriceModelBuilder
 from gui.shared.items_parameters import params_helper
 from gui.shared.items_parameters.formatters import MEASURE_UNITS, formatParameter
+from items.components.component_constants import DEFAULT_GUN_CLIP, DEFAULT_GUN_BURST
 from post_progression_common import TankSetupGroupsId
 from helpers import dependency, i18n
 from skeletons.gui.shared import IItemsCache
@@ -69,6 +70,8 @@ class ShellProvider(VehicleBaseArrayProvider):
         model.setCount(item.count)
         shellsSetupLayouts = vehicle.shells.setupLayouts
         inTankCount = max(item.count, shellsSetupLayouts.ammoLoadedInOtherSetups(item.intCD))
+        model.setMaxCount(int(vehicle.gun.maxAmmo / item.ammoWeight))
+        model.setAvailableCount(self.getAvailableAmmoCountForItem(item))
         model.setItemsInStorage(max(boughtCount - inTankCount, 0))
         if vehicle.isSetupSwitchActive(TankSetupGroupsId.EQUIPMENT_AND_SHELLS):
             model.setItemsInVehicle(inTankCount)
@@ -78,6 +81,18 @@ class ShellProvider(VehicleBaseArrayProvider):
         BuyPriceModelBuilder.clearPriceModel(model.totalPrice)
         if buyCount:
             BuyPriceModelBuilder.fillPriceModelByItemPrice(model.totalPrice, buyPrice * buyCount, checkBalanceAvailability=True)
+
+    def getAvailableAmmoCountForItem(self, item):
+        vehicle = self._getVehicle()
+        numberLoadedShells = sum((shell.count * shell.ammoWeight for shell in self._getCurrentLayout() if shell != item))
+        currentAmmoRemainder = vehicle.gun.maxAmmo - numberLoadedShells
+        gun = vehicle.descriptor.gun
+        clip = gun.clip
+        burst = gun.burst
+        burstSize = burst[0] if burst != DEFAULT_GUN_BURST else 1
+        multiplicityIndex = clip[0] if clip != DEFAULT_GUN_CLIP else burstSize
+        availableAmmoCount = int(currentAmmoRemainder / item.ammoWeight)
+        return availableAmmoCount - availableAmmoCount % multiplicityIndex
 
     def _fillSpecification(self, model, item):
         specifications = model.getSpecifications()

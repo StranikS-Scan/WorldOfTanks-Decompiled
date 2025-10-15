@@ -8,7 +8,6 @@ from AvatarInputHandler.DynamicCameras.ArcadeCamera import ArcadeCamera
 from PlayerEvents import g_playerEvents
 from constants import ARENA_PERIOD
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG
-from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
 
 class PostmortemDelay(object):
     FADE_DELAY_TIME = 2.0
@@ -142,11 +141,7 @@ class PostmortemDelay(object):
         self.__cbIDWait = None
         if self.__killerVehicleID is None:
             self.__killerVehicleID = BigWorld.player().inputHandler.getKillerVehicleID()
-        if self.__killerVehicleID:
-            killerVehicle = BigWorld.entity(self.__killerVehicleID)
-        else:
-            killerVehicle = None
-        if not self.__enableKillerVision or not killerVehicle or self.__isDisabledForVehicle(killerVehicle):
+        if not self.__enableKillerVision or not self.__killerVehicleID or self.__killerVehicleID and not BigWorld.entity(self.__killerVehicleID):
             self.__mouseInputEnabled = True
             self.__cbIDWait = BigWorld.callback(self.KILLER_VISION_TIME, self.stop)
             return
@@ -191,6 +186,3 @@ class PostmortemDelay(object):
             BigWorld.cancelCallback(self.__cbIDWait)
             self.__cbIDWait = None
         return
-
-    def __isDisabledForVehicle(self, vehicle):
-        return VEHICLE_TAGS.WT_BOT in vehicle.typeDescriptor.type.tags

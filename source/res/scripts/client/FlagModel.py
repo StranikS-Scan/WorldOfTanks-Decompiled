@@ -27,7 +27,7 @@ class FlagModel(object):
         self.__spaceID = flagSettings.spaceID
         self.__flagCompoundModel = flagSettings.flagCompounModel
         self.__flagCompoundModel.position = position
-        self.__flagStaffFashion = BigWorld.WGAlphaFadeCompoundFashion()
+        self.__flagStaffFashion = BigWorld.AlphaFadeCompoundFashion()
         self.__flagFashion = BigWorld.FlagAlphaFadeFashion()
         self.__flagFashion.setColor(color)
         self.__flagFashion.setFlagBackgroundTexture(flagSettings.flagBackgroundTex)

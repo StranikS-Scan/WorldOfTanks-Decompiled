@@ -1,8 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: gui_lootboxes/scripts/client/gui_lootboxes/gui/impl/lobby/gui_lootboxes/bonus_probabilities_view.py
+from functools import partial
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
+from CurrentVehicle import g_currentVehicle
 from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer, Array
 from frameworks.wulf.view.array import fillFloatsArray
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.impl.gen import R
 from gui.impl.lobby.collection.tooltips.collection_item_tooltip_view import CollectionItemTooltipView
 from gui.impl.lobby.common.view_helpers import packBonusModelAndTooltipData
@@ -10,13 +13,16 @@ from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.impl.lobby.loot_box.loot_box_helper import aggregateSimilarBonuses, isAllVehiclesObtainedInSlot
 from gui.impl.pub import ViewImpl, WindowImpl
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
-from gui_lootboxes.gui.impl.lobby.gui_lootboxes import RegisteredTooltips
+from gui.shared.event_dispatcher import showVehiclePreview, showHangar
 from helpers import dependency
 from shared_utils import findFirst
+from skeletons.gui.impl import IGuiLoader
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IGuiLootBoxesController
+from gui_lootboxes.gui.impl.lobby.gui_lootboxes import RegisteredTooltips
 from gui_lootboxes.gui.bonuses.bonuses_packers import getLootboxesWithPossibleCompensationBonusPacker
 from gui_lootboxes.gui.bonuses.bonuses_sorter import sortBonuses
+from gui_lootboxes.gui.shared.event_dispatcher import showBonusProbabilitiesWindow, showStorageView
 from gui_lootboxes.gui.impl.gen.view_models.views.lobby.gui_lootboxes.bonus_probabilities_view_model import BonusProbabilitiesViewModel
 from gui_lootboxes.gui.impl.gen.view_models.views.lobby.gui_lootboxes.slot_view_model import SlotViewModel
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.sound import LOOT_BOXES_OVERLAY_SOUND_SPACE
@@ -66,6 +72,7 @@ class LootBoxSlot(object):
 
 class BonusProbabilitiesView(ViewImpl):
     __slots__ = ('__lootBox', '__tooltipData', '__uiLogger')
+    __guiLoader = dependency.descriptor(IGuiLoader)
     __guiLootBoxes = dependency.descriptor(IGuiLootBoxesController)
     __itemsCache = dependency.descriptor(IItemsCache)
     __settingsCore = dependency.descriptor(ISettingsCore)
@@ -136,12 +143,34 @@ class BonusProbabilitiesView(ViewImpl):
         super(BonusProbabilitiesView, self)._finalize()
 
     def _getEvents(self):
-        return ((self.__guiLootBoxes.onBoxInfoUpdated, self.__update), (self.viewModel.onClose, self._onClose))
+        return ((self.__guiLootBoxes.onBoxInfoUpdated, self.__update), (self.viewModel.onClose, self._onClose), (self.viewModel.onPreview, self._onPreview))
 
     def _onClose(self, args):
         self.__uiLogger.stopViewAction(args.get('closeMethod', None))
         self.destroyWindow()
         return
+
+    def _onPreview(self, args):
+        vehIntCD = int(args.get('vehIntCD'))
+        veh = self.__itemsCache.items.getItemByCD(vehIntCD)
+        self.__closeStorageView()
+        self.destroyWindow()
+        if veh.invID >= 0:
+            g_currentVehicle.selectVehicle(veh.invID)
+            showHangar()
+        else:
+            showVehiclePreview(veh.compactDescr, previewAlias=VIEW_ALIAS.STAT_TRACK_VEHICLE_PREVIEW, previewBackCb=partial(BonusProbabilitiesView._backToBonusPropabilitiesView, self.__lootBox))
+
+    @staticmethod
+    def _backToBonusPropabilitiesView(lootbox):
+        showHangar()
+        showStorageView()
+        showBonusProbabilitiesWindow(lootbox)
+
+    def __closeStorageView(self):
+        view = self.__guiLoader.windowsManager.getViewByLayoutID(R.views.gui_lootboxes.lobby.gui_lootboxes.StorageView())
+        if view:
+            view.destroy()
 
     @replaceNoneKwargsModel
     def __update(self, model=None):

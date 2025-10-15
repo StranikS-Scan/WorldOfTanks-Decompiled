@@ -339,7 +339,27 @@ class _DamageActionImgVOBuilder(_ActionImgVOBuilder):
             return self.__corrodingShotDmgIcon
         if info.isFireCircle():
             return self.__fireCircleDmgIcon
-        return self.__thunderStrikeIcon if info.isThunderStrike() else self.__ramIcon
+        if info.isThunderStrike():
+            return self.__thunderStrikeIcon
+        if info.isGuidedMissile():
+            damageIcon = _IMAGES.DAMAGELOG_CORRODING_SHOT_16X16
+            receivedIcon = _IMAGES.DAMAGELOG_CORRODING_SHOT_ENEMY_16X16
+            if info.getType() == _ETYPE.RECEIVED_DAMAGE:
+                return receivedIcon
+            return damageIcon
+        if info.isSuperBossAura():
+            damageIcon = _IMAGES.DAMAGELOG_FIRE_CIRCLE_16X16
+            receivedIcon = _IMAGES.DAMAGELOG_FIRE_CIRCLE_ENEMY_16X16
+            if info.getType() == _ETYPE.RECEIVED_DAMAGE:
+                return receivedIcon
+            return damageIcon
+        if info.isSentinelAttack():
+            damageIcon = _IMAGES.DAMAGE_LOG_SENTINEL_ENEMY_16X16
+            receivedIcon = _IMAGES.DAMAGE_LOG_SENTINEL_ENEMY_16X16
+            if info.getType() == _ETYPE.RECEIVED_DAMAGE:
+                return receivedIcon
+            return damageIcon
+        return self.__ramIcon
 
 
 class _AssistActionImgVOBuilder(_ActionImgVOBuilder):
@@ -466,8 +486,9 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
 
     def isSwitchToVehicle(self):
         observedVehID = self.__vehStateCtrl.getControllingVehicleID()
+        possessedVehID = self.__vehStateCtrl.getPossessedVehicleID()
         playerVehicleID = self.__arenaDP.getPlayerVehicleID()
-        return playerVehicleID == observedVehID
+        return possessedVehID == observedVehID if possessedVehID is not None else playerVehicleID == observedVehID
 
     def _populate(self):
         super(DamageLogPanel, self)._populate()

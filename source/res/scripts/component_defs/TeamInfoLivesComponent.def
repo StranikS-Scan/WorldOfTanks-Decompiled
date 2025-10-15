@@ -7,15 +7,9 @@
       </Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </teamLives>
-    <respawnInfo>
-      <Type>	ARRAY	  <of>	RESPAWN_TIME_INFO	</of>
-      </Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-    </respawnInfo>
   </Properties>
   <ofEntity>
     <TeamInfo></TeamInfo>
-    <ArenaInfo></ArenaInfo>
   </ofEntity>
   <DefaultKeyName>	teamLivesComponent	</DefaultKeyName>
 </TeamInfoLivesComponent.def>

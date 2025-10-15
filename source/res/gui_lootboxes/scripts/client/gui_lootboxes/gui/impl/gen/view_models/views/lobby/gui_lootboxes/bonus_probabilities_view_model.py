@@ -5,9 +5,9 @@ from frameworks.wulf import ViewModel
 from gui_lootboxes.gui.impl.gen.view_models.views.lobby.gui_lootboxes.slot_view_model import SlotViewModel
 
 class BonusProbabilitiesViewModel(ViewModel):
-    __slots__ = ('onClose',)
+    __slots__ = ('onClose', 'onPreview')
 
-    def __init__(self, properties=7, commands=1):
+    def __init__(self, properties=7, commands=2):
         super(BonusProbabilitiesViewModel, self).__init__(properties=properties, commands=commands)
 
     def getLootboxName(self):
@@ -70,3 +70,4 @@ class BonusProbabilitiesViewModel(ViewModel):
         self._addNumberProperty('rotationStage', 0)
         self._addArrayProperty('lootLists', Array())
         self.onClose = self._addCommand('onClose')
+        self.onPreview = self._addCommand('onPreview')

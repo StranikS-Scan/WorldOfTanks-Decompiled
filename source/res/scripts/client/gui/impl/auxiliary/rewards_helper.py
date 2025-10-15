@@ -6,6 +6,7 @@ import typing
 import itertools
 from collections import namedtuple
 from blueprints.BlueprintTypes import BlueprintTypes
+from constants import PERSONAL_MISSION_2_FREE_TOKEN_NAME, PERSONAL_MISSION_FREE_TOKEN_NAME, PERSONAL_MISSION_FREE_TOKEN_EXPIRE
 from frameworks.wulf import ViewFlags
 from battle_royale.gui.constants import ROYALE_POSTBATTLE_REWARDS_COUNT
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
@@ -36,7 +37,7 @@ from gui.impl.gen.view_models.views.loot_box_view.loot_renderer_types import Loo
 from gui.impl.gen.view_models.views.loot_box_view.loot_vehicle_renderer_model import LootVehicleRendererModel
 from gui.impl.lobby.awards.packers import getAdditionalAwardsBonusPacker
 from gui.server_events.awards_formatters import getPackRentVehiclesAwardPacker, getLootboxesAwardsPacker, getRoyaleAwardsPacker
-from gui.server_events.bonuses import getNonQuestBonuses, BlueprintsBonusSubtypes
+from gui.server_events.bonuses import getNonQuestBonuses, BlueprintsBonusSubtypes, SaCoinCompensationBonus, TokensBonus
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import Vehicle, GUI_ITEM_TYPE
@@ -54,6 +55,8 @@ VIDEO_TAGS = []
 _logger = logging.getLogger(__name__)
 _DEFAULT_ALIGN = 'center'
 _DEFAULT_DISPLAYED_AWARDS_COUNT = 6
+_PERSONAL_MISSION_FREE_TOKENS_MAP = {1: PERSONAL_MISSION_FREE_TOKEN_NAME,
+ 2: PERSONAL_MISSION_2_FREE_TOKEN_NAME}
 TMAN_TOKENS = 'tmanToken'
 
 class BlueprintBonusTypes(object):
@@ -588,12 +591,17 @@ def getRewardTooltipContent(event, storedTooltipData=None, itemsCache=None):
         return _COMPENSATION_TOOLTIP_CONTENT_CLASSES[tooltipType](**tooltipData)
 
 
+def _sortSaBonuses(bonus):
+    return bonus.getCampaignID() if isinstance(bonus, SaCoinCompensationBonus) else -1
+
+
 def getSeniorityAwardsRewardsAndBonuses(rewards, excluded=(), sortKey=None):
     preparationRewardsCurrency(rewards)
     packer = getAdditionalAwardsBonusPacker()
     bonuses = []
     vehicles = []
     currencies = {}
+    saCoinCompensationList = []
     if rewards:
         for rewardType, rewardValue in rewards.items():
             if rewardType in excluded:
@@ -602,9 +610,20 @@ def getSeniorityAwardsRewardsAndBonuses(rewards, excluded=(), sortKey=None):
                 vehicles = [ vehCD for vehiclesDict in rewardValue for vehCD in vehiclesDict if vehiclesDict[vehCD].get('compensatedNumber', 0) < 1 ]
             if rewardType == 'currencies':
                 currencies = {name:value['count'] for name, value in rewardValue.items()}
+            if rewardType == 'meta':
+                for key, value in rewardValue.items():
+                    bonus = SaCoinCompensationBonus(key, value, True, compensationReason=TokensBonus('tokens', {_PERSONAL_MISSION_FREE_TOKENS_MAP[value.get('bonus', {}).get('campaignID', 1)]: {'count': value.get('count', 1),
+                                                                                                      'limit': 0,
+                                                                                                      'expires': {'at': PERSONAL_MISSION_FREE_TOKEN_EXPIRE}}}))
+                    saCoinCompensationList.append(bonus)
+
             nonQuestBonuses = getNonQuestBonuses(rewardType, rewardValue)
             for bonus in nonQuestBonuses:
                 bonuses.extend(zip(packer.pack(bonus), packer.getToolTip(bonus)))
+
+    saCoinCompensationList.sort(key=_sortSaBonuses)
+    for bonus in saCoinCompensationList:
+        bonuses.extend(zip(packer.pack(bonus), packer.getToolTip(bonus)))
 
     if sortKey:
         bonuses = sorted(bonuses, key=sortKey)
@@ -710,14 +729,6 @@ def getLastCongratsIndex(bonuses, rewardType):
     return lastIndex
 
 
-def getCurrentStepState(probability, hasCompleted):
-    if hasCompleted:
-        return prConst.STATE_RECEIVED
-    if probability < _MIN_PROBABILITY:
-        return prConst.STATE_PROB_MIN
-    return prConst.STATE_PROB_MAX if probability >= _MAX_PROBABILITY else prConst.STATE_PROB_MED
-
-
 def _getProgressiveSteps(currentStep, probability, maxSteps, hasCompleted=False):
     steps = []
     for step in xrange(maxSteps):
@@ -728,7 +739,7 @@ def _getProgressiveSteps(currentStep, probability, maxSteps, hasCompleted=False)
         if currentStep > step:
             steps.append((prConst.STATE_OPENED, rewardType))
         if currentStep == step:
-            pState = getCurrentStepState(probability, hasCompleted)
+            pState = prConst.STATE_RECEIVED if hasCompleted else (prConst.STATE_PROB_MIN if probability < _MIN_PROBABILITY else (prConst.STATE_PROB_MAX if probability >= _MAX_PROBABILITY else prConst.STATE_PROB_MED))
             steps.append((pState, rewardType))
         steps.append((prConst.STATE_NOT_RECEIVED, rewardType))
 

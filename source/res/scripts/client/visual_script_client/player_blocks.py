@@ -65,7 +65,6 @@ class GetPlayerVehicleGun(Block, PlayerMeta):
         avatar = self._avatar
         if avatar:
             _, direction = avatar.gunRotator.getCurShotPosition()
-            direction.normalise()
             self._gunDirection.setValue(direction)
 
     def _isGunLocked(self):

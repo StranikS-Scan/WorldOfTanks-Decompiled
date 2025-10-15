@@ -224,18 +224,6 @@ class IDynamicControllersLocator(object):
     def rankedVOIPController(self):
         raise NotImplementedError
 
-    @property
-    def playersPanel(self):
-        raise NotImplementedError
-
-    @property
-    def bossPanel(self):
-        raise NotImplementedError
-
-    @property
-    def vehicleHitSound(self):
-        raise NotImplementedError
-
 
 class ISquadInvitationsHandler(object):
     __slots__ = ()

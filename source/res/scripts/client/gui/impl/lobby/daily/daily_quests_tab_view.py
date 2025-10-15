@@ -7,6 +7,7 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.daily.daily_quest_premium_tab_view_model import DailyQuestPremiumTabViewModel
 from gui.impl.gen.view_models.views.lobby.daily.daily_quest_regular_tab_view_model import DailyQuestRegularTabViewModel
 from gui.impl.lobby.daily import DailyTabs
+from gui.impl.lobby.daily.daily_helpers import isRegularQuestsStateChanged
 from gui.impl.lobby.daily.daily_quest_view_constants import QUESTS_TABS_IN_LEVEL
 from gui.impl.pub import ViewImpl
 from gui.server_events.events_helpers import dailyQuestsSortFunc, isPremiumQuestsEnable, isPremiumPlusAccount, isDailyRegularQuestsEnabled
@@ -66,8 +67,7 @@ class DailyQuestTabView(ViewImpl):
         cfName = self._getConfigName()
         if cfName in diff:
             dqDiff = diff[cfName]
-            stateChanged = 'enabled' in dqDiff and dqDiff['enabled'] is not self.viewModel.getIsEnabled()
-            if stateChanged:
+            if isRegularQuestsStateChanged(self.viewModel.getIsEnabled(), dqDiff):
                 self._updateModel()
 
     def _getCallbacks(self):

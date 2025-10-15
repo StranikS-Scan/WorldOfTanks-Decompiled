@@ -10,7 +10,7 @@ from gui.impl.gen.view_models.common.missions.event_model import EventStatus
 from gui.impl.gen.view_models.views.lobby.daily.daily_quests_premium_model import DailyQuestsPremiumModel
 from gui.impl.gen.view_models.views.lobby.daily.daily_quests_regular_model import DailyQuestsRegularModel
 from gui.impl.lobby.daily import DailyTabs
-from gui.impl.lobby.daily.daily_helpers import modifyPostbattleConditions
+from gui.impl.lobby.daily.daily_helpers import modifyPostbattleConditions, isRegularQuestsStateChanged
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.server_events import settings
 from gui.server_events.events_helpers import dailyQuestsSortFunc, isPremiumQuestsEnable, isDailyRegularQuestsEnabled, isRerollEnabled, isEpicQuestEnabled, EventInfoModel, getRerollTimeout, isPremiumPlusAccount
@@ -117,13 +117,12 @@ class DailyQuestsPresenterRegular(SubModelPresenter):
             dqDiff = diff[DAILY_QUESTS_CONFIG]
             rerollStateChanged = 'rerollEnabled' in dqDiff and dqDiff['rerollEnabled'] is not self.viewModel.getRerollEnabled()
             rerollTimeoutChanged = 'rerollTimeout' in dqDiff and dqDiff['rerollTimeout'] != getRerollTimeout()
-            stateChanged = 'enabled' in dqDiff and dqDiff['enabled'] is not self.viewModel.getIsEnabled()
             with self.viewModel.transaction() as model:
                 if rerollStateChanged:
                     self._updateRerollEnabledFlag(model)
                 if rerollTimeoutChanged:
                     self._updateCountdownUntilNextReroll(model)
-                if stateChanged:
+                if isRegularQuestsStateChanged(self.viewModel.getIsEnabled(), dqDiff):
                     self._updateModel(model=model)
 
     def _updateRerollEnabledFlag(self, model):
@@ -192,12 +191,13 @@ class DailyQuestsPresenterRegular(SubModelPresenter):
 
         _isComplited = all((quest.isCompleted() for quest in self.eventsCache.getDailyQuests(filterLevels=DailyQuestsLevels.DAILY_SIMPLE).itervalues()))
         bonusQuest = first(self.eventsCache.getDailyQuests(filterLevels=(DailyQuestsLevels.BONUS,)).values())
-        with settings.dailyQuestSettings() as dq:
-            if _isComplited and dq.lastBonusMissionVisited != bonusQuest.getID() and not bonusQuest.isCompleted():
-                self.viewModel.setFirstSeenNewBonusMissions(True)
-                dq.setLastBonusMissionVisited(bonusQuest.getID())
-            else:
-                self.viewModel.setFirstSeenNewBonusMissions(False)
+        if bonusQuest:
+            with settings.dailyQuestSettings() as dq:
+                if _isComplited and dq.lastBonusMissionVisited != bonusQuest.getID() and not bonusQuest.isCompleted():
+                    self.viewModel.setFirstSeenNewBonusMissions(True)
+                    dq.setLastBonusMissionVisited(bonusQuest.getID())
+                else:
+                    self.viewModel.setFirstSeenNewBonusMissions(False)
 
 
 class DailyQuestsPresenterPremium(DailyQuestsPresenterRegular):

@@ -283,7 +283,7 @@ class WarplaneActivity(BaseMapActivity):
         self.__possibility = self._settings.readFloat('possibility', 1.0)
         self.clampStartTime()
         self.__firstLaunch = True
-        self.__curve = BigWorld.WGActionCurve(self._settings)
+        self.__curve = BigWorld.ActionCurve(self._settings)
         self.__modelName = self.__curve.getChannelProperty(0, 'modelName').asString
         ds = self.__curve.getChannelProperty(0, 'wwsoundName')
         self.__soundName = ds.asString if ds is not None else ''
@@ -326,7 +326,7 @@ class WarplaneActivity(BaseMapActivity):
             if self.__firstLaunch is True:
                 BigWorld.player().addModel(self.__model)
                 self.__model.forceReflect = True
-                self.__motor = BigWorld.WGWarplaneMotor(self.__curve, 0)
+                self.__motor = BigWorld.WarplaneMotor(self.__curve, 0)
                 self.__model.addMotor(self.__motor)
                 self.__endTime = self.__motor.totalTime + self._startTime
                 if self.__endTime <= Timer.getTime():
@@ -459,7 +459,7 @@ class ExplosionActivity(BaseMapActivity):
         self._readInterval()
         self.__possibility = self._settings.readFloat('possibility', 1.0)
         self.__position = self._settings.readVector3('position', (0.0, 0.0, 0.0))
-        curveSettings = BigWorld.WGActionCurve(self._settings)
+        curveSettings = BigWorld.ActionCurve(self._settings)
         self.__soundName = None
         self.__soundName = curveSettings.getChannelProperty(0, 'wwsoundName')
         if self.__soundName is not None:

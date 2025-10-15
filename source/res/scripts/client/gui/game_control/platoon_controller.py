@@ -46,7 +46,6 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
-from skeletons.prebattle_vehicle import IPrebattleVehicle
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, PREBATTLE_TYPE, QUEUE_TYPE_TO_PREBATTLE_TYPE
 from gui.prb_control.entities.base.unit.permissions import UnitPermissions
 from gui.prb_control.entities.base.unit.entity import UnitEntity
@@ -150,7 +149,6 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
     __itemsCache = dependency.descriptor(IItemsCache)
     __settingsCore = dependency.descriptor(ISettingsCore)
     __hangarSpace = dependency.descriptor(IHangarSpace)
-    __prebattleVehicle = dependency.descriptor(IPrebattleVehicle)
 
     def __init__(self):
         super(PlatoonController, self).__init__()
@@ -296,21 +294,17 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
 
     @adisp_async
     @adisp_process
-    def togglePlayerReadyAction(self, callback):
+    def togglePlayerReadyAction(self, callback, checkAmmo=True):
         if self.__waitingReadyAccept:
             callback(False)
             return
-        if self.__prebattleVehicle.isPresent():
-            item = self.__prebattleVehicle.item
-        else:
-            item = g_currentVehicle.item
         changeStatePossible = True
         notReady = not self.prbEntity.getPlayerInfo().isReady
         self.__waitingReadyAccept = True
         if notReady:
             changeStatePossible = yield self.__lobbyContext.isHeaderNavigationPossible()
-        if changeStatePossible and notReady and not self.prbEntity.isCommander():
-            changeStatePossible = yield functions.checkAmmoLevel((item,))
+        if changeStatePossible and notReady and not self.prbEntity.isCommander() and checkAmmo:
+            changeStatePossible = yield functions.checkAmmoLevel((g_currentVehicle.item,))
         if changeStatePossible:
             self.prbEntity.togglePlayerReadyAction(True)
         self.__waitingReadyAccept = False
@@ -775,6 +769,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             unitMgr.onUnitJoined += self.__unitMgrOnUnitJoined
             unitMgr.onUnitLeft += self.__unitMgrOnUnitLeft
         self.startGlobalListening()
+        self.currentPlatoonLayouts = buildCurrentLayouts(self.getPrbEntityType())
         self.__settingsCore.onSettingsChanged += self.__onSettingsChanged
         self.__settingsCore.onSettingsApplied += self.__onSettingsApplied
         self.__hangarSpace.onSpaceCreate += self.__onHangarSpaceCreate
@@ -982,12 +977,11 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
             unitMgrID = entity.getID()
             for slot in entity.getSlotsIterator(*entity.getUnit(unitMgrID=unitMgrID)):
                 if slot.player is not None and not slot.player.isCurrentPlayer():
-                    isEvent = entity.getEntityType() == PREBATTLE_TYPE.WHITE_TIGER
-                    canDisplayModel = slot.player.isReady and not slot.player.isInArena() and not isEvent
+                    canDisplayModel = slot.player.isReady and not slot.player.isInArena()
                     profileVehicle = slot.profileVehicle
                     player = slot.player
                     if profileVehicle and player:
-                        tankInfo = PlatoonTankInfo(canDisplayModel, profileVehicle.vehCompDescr, profileVehicle.vehOutfitCD, profileVehicle.seasonType, profileVehicle.marksOnGun, player.clanDBID, player.getFullName())
+                        tankInfo = PlatoonTankInfo(canDisplayModel, profileVehicle.vehCompDescr, profileVehicle.vehOutfitCD, profileVehicle.seasonType, profileVehicle.marksOnGun, player.clanDBID, player.getFullName(), profileVehicle.statTrackFrags)
                     else:
                         tankInfo = None
                     displaySlotIndex = self.__tankDisplayPosition.get(player.accID, 0)

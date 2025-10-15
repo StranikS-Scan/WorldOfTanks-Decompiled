@@ -75,13 +75,13 @@ class UtilsManager(UtilsManagerMeta):
         return template.format(absoluteUrl, properties.width, properties.height, properties.vSpace, properties.hSpace)
 
     def getFirstDayOfWeek(self):
-        return BigWorld.wg_firstDayOfWeek() + 1
+        return BigWorld.firstDayOfWeek() + 1
 
     def getWeekDayNames(self, full, isUpper, isLower, useRegionSettings=True):
         source = list(MENU.DATETIME_WEEKDAYS_FULL_ENUM if full else MENU.DATETIME_WEEKDAYS_SHORT_ENUM)
         result = []
         if useRegionSettings:
-            firstDayOfWeek = BigWorld.wg_firstDayOfWeek()
+            firstDayOfWeek = BigWorld.firstDayOfWeek()
         else:
             firstDayOfWeek = 0
         for day in calendar.Calendar(firstweekday=firstDayOfWeek).iterweekdays():

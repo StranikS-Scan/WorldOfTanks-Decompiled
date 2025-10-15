@@ -155,29 +155,28 @@ class BattleMattersTokenBonusUIPacker(SelectableBonusPacker):
 
     @classmethod
     def _packSingleBonus(cls, bonus):
+        tokenID = first(bonus.getValue().iterkeys())
         model = IconBonusModel()
-        if cls.__isVehicleReceived():
-            vehicle = cls.__battleMattersController.getSelectedVehicle()
+        if cls.__battleMattersController.isDelayedRewardObtained(tokenID):
+            vehicle = cls.__battleMattersController.getSelectedVehicle(tokenID)
             if vehicle:
                 model.setIcon(getIconResourceName(vehicle.name))
                 model.setName(BattleMattersMainViewModel.NAME_VEHICLE_REWARD)
         else:
             model.setName(BattleMattersMainViewModel.NAME_TOKEN_REWARD)
-            model.setValue(str(bonus.getCount()))
+            model.setValue(tokenID)
+            level = cls.__battleMattersController.getDelayedRewardVehiclesLevel(tokenID)
+            model.setLabel(str(level))
         return model
 
     @classmethod
     def _getToolTip(cls, bonus):
-        if cls.__isVehicleReceived():
-            vehicle = cls.__battleMattersController.getSelectedVehicle()
+        tokenID = first(bonus.getValue().iterkeys())
+        if cls.__battleMattersController.isDelayedRewardObtained(tokenID):
+            vehicle = cls.__battleMattersController.getSelectedVehicle(tokenID)
             return [backport.createTooltipData(isSpecial=True, specialArgs=(vehicle.intCD,), specialAlias=TOOLTIPS_CONSTANTS.CAROUSEL_VEHICLE)]
         else:
             return [None]
-
-    @classmethod
-    def __isVehicleReceived(cls):
-        quest = first(cls.__battleMattersController.getQuestsWithDelayedReward())
-        return quest and quest.isCompleted() and not cls.__battleMattersController.hasDelayedRewards()
 
     @classmethod
     def _makeRewardItemModel(cls):

@@ -11,6 +11,7 @@ from AvatarInputHandler import gun_marker_ctrl, aih_global_binding
 from AvatarInputHandler.spg_marker_helpers.spg_marker_helpers import SPGShotResultEnum
 from PlayerEvents import g_playerEvents
 from ReplayEvents import g_replayEvents
+from Vehicle import Vehicle
 from account_helpers.settings_core.settings_constants import GRAPHICS, AIM, GAME, SPGAim, MARKERS
 from aih_constants import CHARGE_MARKER_STATE, CTRL_MODE_NAME as CTRL_MODE
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, DUALGUN_CHARGER_STATUS, SERVER_TICK_LENGTH, DUAL_GUN, ARENA_PERIOD
@@ -39,10 +40,15 @@ from gui.shared.events import GameEvent
 from gui.shared.utils.TimeInterval import TimeInterval
 from gui.shared.utils.plugins import IPlugin
 from helpers import dependency
+from helpers.CallbackDelayer import CallbackDelayer
+from helpers.events_handler import EventsHandler
 from helpers.time_utils import MS_IN_SECOND
+from math_common import isAlmostEqual
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
+from wotdecorators import noexceptReturn
+from helpers_common import computeDistanceFactor
 if typing.TYPE_CHECKING:
     from AvatarInputHandler.control_modes import _TrajectoryControlMode
 _logger = logging.getLogger(__name__)
@@ -82,7 +88,8 @@ def createPlugins():
      'spgShotResultIndicator': SPGShotResultIndicatorPlugin,
      'dualAccuracyMechanics': DualAccuracyGunPlugin,
      'temperatureMechanics': TemperatureGunPlugin,
-     'shotDistance': ShotDistancePlugin}
+     'shotDistance': ShotDistancePlugin,
+     DistanceFactorGunPlugin.__name__: DistanceFactorGunPlugin}
     return resultPlugins
 
 
@@ -1724,6 +1731,82 @@ class DualAccuracyGunPlugin(CrosshairPlugin):
             self.__dualAccGunCtrl = None
         self.__onSetDualAccuracyState()
         return
+
+
+class DistanceFactorGunPlugin(CrosshairPlugin, EventsHandler):
+    __slots__ = ('_callbackManager',)
+    TICK_TIME = 0.5
+    HIGH_FACTOR = 1.3
+    LOW_FACTOR = 1.0
+
+    def __init__(self, parentObj):
+        super(DistanceFactorGunPlugin, self).__init__(parentObj)
+        self._callbackManager = CallbackDelayer()
+
+    def start(self):
+        super(DistanceFactorGunPlugin, self).start()
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        if vStateCtrl:
+            self.__onVehicleControlling(vStateCtrl.getControllingVehicle())
+        self._subscribe()
+
+    def stop(self):
+        self._unsubscribe()
+        self._callbackManager.clearCallbacks()
+        super(DistanceFactorGunPlugin, self).stop()
+
+    def _getEvents(self):
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        return ((vStateCtrl.onVehicleControlling, self.__onVehicleControlling),) if vStateCtrl is not None else super(DistanceFactorGunPlugin, self)._getEvents()
+
+    def __onVehicleControlling(self, vehicle):
+        if not vehicle:
+            return
+        shot = vehicle.typeDescriptor.shot
+        isDistanceFactor = bool(shot.shell.distanceFactor)
+        isAcceleration = shot.acceleration > 0
+        self.parentObj.as_setShotDamageIndVisibilityS(isDistanceFactor)
+        self.parentObj.as_setShotFlyTimeIndVisibilityS(isAcceleration)
+        if isAcceleration or isDistanceFactor:
+            self._callbackManager.delayCallback(0, self.__update)
+        else:
+            self._callbackManager.clearCallbacks()
+
+    @noexceptReturn(TICK_TIME)
+    def __update(self):
+        target = BigWorld.target()
+        player = BigWorld.player()
+        vehicle = player.vehicle
+        if not isinstance(target, Vehicle) or target.health <= 0 or not target.isCrewActive or target.publicInfo['team'] == vehicle.publicInfo['team']:
+            self.parentObj.as_setShotFlyTimeIndValueS(0)
+            self.parentObj.as_setShotDamageIndValueS(0, CROSSHAIR_CONSTANTS.SHOT_DAMAGE_IND_LOW)
+            return self.TICK_TIME
+        shotDescr = vehicle.typeDescriptor.shot
+        distance = vehicle.position.distTo(target.position)
+        self.__updateFlyTime(shotDescr, distance)
+        self.__updateDamage(shotDescr, distance)
+        return self.TICK_TIME
+
+    def __updateFlyTime(self, shotDescr, distance):
+        a = shotDescr.acceleration
+        v0 = shotDescr.speed
+        if isAlmostEqual(a, 0):
+            return
+        time = (-v0 + math.sqrt(v0 * v0 + 2 * a * distance)) / a
+        self.parentObj.as_setShotFlyTimeIndValueS(time)
+
+    def __updateDamage(self, shotDescr, distance):
+        shellDescr = shotDescr.shell
+        if not shellDescr.distanceFactor:
+            return
+        factor = computeDistanceFactor(shellDescr, distance, 'damageFactor')
+        damage = int(factor * shellDescr.damage[0])
+        colorState = CROSSHAIR_CONSTANTS.SHOT_DAMAGE_IND_MEDIUM
+        if factor > self.HIGH_FACTOR:
+            colorState = CROSSHAIR_CONSTANTS.SHOT_DAMAGE_IND_HIGH
+        elif factor < self.LOW_FACTOR:
+            colorState = CROSSHAIR_CONSTANTS.SHOT_DAMAGE_IND_LOW
+        self.parentObj.as_setShotDamageIndValueS(damage, colorState)
 
 
 class TemperatureGunPlugin(CrosshairPlugin):

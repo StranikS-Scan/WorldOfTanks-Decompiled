@@ -409,7 +409,6 @@
       <id>	31155	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/battle/Pve_May_Emblem_01_2024_MT.dds	</texture>
       <priceGroup>	MT emblems 25g notInShop	</priceGroup>
-      <type>	emblem	</type>
       <userString>	#vehicle_customization:Pve_May_Emblem_01_2024_MT/name	</userString>
       <description>	#vehicle_customization:Pve_May_Emblem_01_2024_MT/description	</description>
     </decal>
@@ -419,8 +418,8 @@
       <texture>	gui/maps/vehicles/decals/player_stickers/battle/Pve_May_Emblem_02_2024_MT.dds	</texture>
       <userString>	#vehicle_customization:Pve_May_Emblem_02_2024_MT/name	</userString>
       <description>	#vehicle_customization:Pve_May_Emblem_02_2024_MT/description	</description>
-      <type>	emblem	</type>
     </decal>
+    <type>	emblem	</type>
   </itemGroup>
   <itemGroup>
     <name>	MayPvE_Emblem_2025	</name>
@@ -433,12 +432,12 @@
       <texture>	gui/maps/vehicles/decals/player_stickers/battle/MayPvE_Emblem_01_2025.dds	</texture>
       <userString>	#vehicle_customization:MayPvE_Emblem_01_2025/name	</userString>
       <description>	#vehicle_customization:MayPvE_Emblem_01_2025/description	</description>
-      <type>	emblem	</type>
       <vehicleFilter>
         <include>
           <nations>	ussr	</nations>
         </include>
       </vehicleFilter>
     </decal>
+    <type>	emblem	</type>
   </itemGroup>
 </emblems_battle.xml>

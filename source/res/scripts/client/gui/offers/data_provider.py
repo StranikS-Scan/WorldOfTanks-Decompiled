@@ -157,6 +157,15 @@ class OffersDataProvider(IOffersDataProvider):
 
         return None
 
+    @_ifFeatureDisabled(None)
+    @_ifNotSynced(None)
+    def getOfferByGiftToken(self, giftToken):
+        for offer in self._ioffers():
+            if offer.giftToken == giftToken:
+                return offer
+
+        return None
+
     @_ifFeatureDisabled(())
     @_ifNotSynced(())
     def iAvailableOffers(self, onlyVisible=True):

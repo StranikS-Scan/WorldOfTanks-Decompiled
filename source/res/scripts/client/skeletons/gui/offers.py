@@ -73,6 +73,9 @@ class IOffersDataProvider(object):
     def getOfferByToken(self, token):
         raise NotImplementedError
 
+    def getOfferByGiftToken(self, giftToken):
+        raise NotImplementedError
+
     def iAvailableOffers(self, onlyVisible=True):
         raise NotImplementedError
 

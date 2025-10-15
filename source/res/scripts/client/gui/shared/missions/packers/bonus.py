@@ -224,6 +224,7 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
     _BATTLE_BONUS_X5_TOKEN_SOURCE = 'bonus_battle_task'
     _CREW_BONUS_X3_TOKEN_SOURCE = 'crew_bonus_x3'
     _GOLD_MISSION_TOKEN_SOURCE = 'gold_mission'
+    _FREE_TOKENS_SOURCE = 'freeTokens'
 
     @classmethod
     def _pack(cls, bonus):
@@ -293,7 +294,9 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
          YEAR_POINTS_TOKEN: cls.__packRankedToken,
          GOLD_MISSION: cls.__packGoldMissionToken,
          constants.LOOTBOX_TOKEN_PREFIX: cls.__packLootboxToken,
-         constants.LOOTBOX_KEY_PREFIX: cls.__packLootBoxKeyToken}
+         constants.LOOTBOX_KEY_PREFIX: cls.__packLootBoxKeyToken,
+         constants.PERSONAL_MISSION_FREE_TOKEN_NAME: cls.__packPersonalMissionFreeToken,
+         constants.PERSONAL_MISSION_2_FREE_TOKEN_NAME: cls.__packPersonalMissionFreeToken}
 
     @classmethod
     def _packToken(cls, bonusPacker, bonus, *args):
@@ -315,7 +318,11 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
             return GOLD_MISSION
         if tokenID.startswith(constants.LOOTBOX_TOKEN_PREFIX):
             return constants.LOOTBOX_TOKEN_PREFIX
-        return constants.LOOTBOX_KEY_PREFIX if tokenID.startswith(constants.LOOTBOX_KEY_PREFIX) else ''
+        if tokenID.startswith(constants.LOOTBOX_KEY_PREFIX):
+            return constants.LOOTBOX_KEY_PREFIX
+        if tokenID == constants.PERSONAL_MISSION_FREE_TOKEN_NAME:
+            return constants.PERSONAL_MISSION_FREE_TOKEN_NAME
+        return constants.PERSONAL_MISSION_2_FREE_TOKEN_NAME if tokenID == constants.PERSONAL_MISSION_2_FREE_TOKEN_NAME else ''
 
     @classmethod
     def _getTooltipsPackers(cls):
@@ -325,7 +332,9 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
          YEAR_POINTS_TOKEN: cls.__getRankedPointToolTip,
          GOLD_MISSION: cls.__getGoldMissionTooltip,
          constants.LOOTBOX_TOKEN_PREFIX: cls.__packLootboxToolTip,
-         constants.LOOTBOX_KEY_PREFIX: cls.__packLootboxKeyToolTip}
+         constants.LOOTBOX_KEY_PREFIX: cls.__packLootboxKeyToolTip,
+         constants.PERSONAL_MISSION_FREE_TOKEN_NAME: cls.__packPersonalMissionFreeTokenToolTip,
+         constants.PERSONAL_MISSION_2_FREE_TOKEN_NAME: cls.__packPersonalMissionFreeTokenToolTip}
 
     @classmethod
     def __packComplexToken(cls, model, bonus, complexToken, token):
@@ -407,6 +416,19 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
             model.setIcon(name)
             return model
 
+    @classmethod
+    def __packPersonalMissionFreeToken(cls, model, bonus, complexToken, token):
+        if token.id.endswith('2'):
+            campaignID = 2
+        else:
+            campaignID = 0
+        name = '%s_%d' % (cls._FREE_TOKENS_SOURCE, campaignID)
+        model.setName(name)
+        model.setValue(str(bonus.getCount()))
+        model.setLabel(backport.text(R.strings.personal_missions.freeSheetPopover.title()))
+        model.setIcon(name)
+        return model
+
     @staticmethod
     def __getBonusFactorTooltip(name):
 
@@ -440,6 +462,14 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
     @classmethod
     def __packLootboxKeyToolTip(cls, complexToken, token):
         return {'lootBoxKeyID': int(getLootBoxKeyIDFromToken(token.id))}
+
+    @classmethod
+    def __packPersonalMissionFreeTokenToolTip(cls, complexToken, token):
+        if token.id.endswith('2'):
+            campaignID = 2
+        else:
+            campaignID = 1
+        return TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.FREE_SHEET, specialArgs=[campaignID])
 
 
 class ItemBonusUIPacker(BaseBonusUIPacker):
@@ -537,7 +567,7 @@ class GoodiesBonusUIPacker(BaseBonusUIPacker):
     def _getToolTip(cls, bonus):
         tooltipData = []
         for booster in sorted(bonus.getBoosters().iterkeys(), key=lambda b: b.boosterID):
-            cls._getBoostersToolTip(tooltipData, booster)
+            tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.SHOP_BOOSTER, specialArgs=[booster.boosterID]))
 
         for demountkit in sorted(bonus.getDemountKits().iterkeys()):
             tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.AWARD_DEMOUNT_KIT, specialArgs=[demountkit.intCD]))
@@ -560,11 +590,6 @@ class GoodiesBonusUIPacker(BaseBonusUIPacker):
             tooltipData.append(BACKPORT_TOOLTIP_CONTENT_ID)
 
         return tooltipData
-
-    @classmethod
-    def _getBoostersToolTip(cls, tooltipData, booster):
-        tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.SHOP_BOOSTER, specialArgs=[booster.boosterID]))
-        return
 
 
 class BlueprintBonusUIPacker(BaseBonusUIPacker):
@@ -967,7 +992,7 @@ class VehiclesBonusUIPacker(BaseBonusUIPacker):
         for vehicle, vehInfo in vehicles:
             compensation = bonus.compensation(vehicle, bonus)
             if compensation:
-                packer = cls._getCompensationPacker()
+                packer = SimpleBonusUIPacker()
                 for bonusComp in compensation:
                     packedVehicles.extend(packer.pack(bonusComp))
 
@@ -1004,10 +1029,6 @@ class VehiclesBonusUIPacker(BaseBonusUIPacker):
 
     @classmethod
     def _packTooltip(cls, bonus, vehicle, vehInfo):
-        return TooltipData(tooltip=None, isSpecial=True, specialAlias=cls._getTooltipAlias(), specialArgs=cls._getTooltipArgs(bonus, vehicle, vehInfo))
-
-    @classmethod
-    def _getTooltipArgs(cls, bonus, vehicle, vehInfo):
         tmanRoleLevel = bonus.getTmanRoleLevel(vehInfo)
         rentDays = bonus.getRentDays(vehInfo)
         rentBattles = bonus.getRentBattles(vehInfo)
@@ -1015,19 +1036,13 @@ class VehiclesBonusUIPacker(BaseBonusUIPacker):
         rentSeason = bonus.getRentSeason(vehInfo)
         rentCycle = bonus.getRentCycle(vehInfo)
         rentExpiryTime = cls._getRentExpiryTime(rentDays)
-        hasMultipleConditions = 'hasMultipleConditions' if 'rent' in vehInfo and 'hasMultipleConditions' in vehInfo['rent'] else ''
-        return [vehicle.intCD,
+        return TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.AWARD_VEHICLE, specialArgs=[vehicle.intCD,
          tmanRoleLevel,
          rentExpiryTime,
          rentBattles,
          rentWins,
          rentSeason,
-         rentCycle,
-         hasMultipleConditions]
-
-    @classmethod
-    def _getTooltipAlias(cls):
-        return TOOLTIPS_CONSTANTS.AWARD_VEHICLE
+         rentCycle])
 
     @staticmethod
     def _getRentExpiryTime(rentDays):
@@ -1053,10 +1068,6 @@ class VehiclesBonusUIPacker(BaseBonusUIPacker):
     @classmethod
     def _createUIName(cls, bonus, isRent):
         return bonus.getName() + VEHICLE_RENT_ICON_POSTFIX if isRent else bonus.getName()
-
-    @classmethod
-    def _getCompensationPacker(cls):
-        return SimpleBonusUIPacker()
 
     @classmethod
     def _getLabel(cls, vehicle):
@@ -1240,8 +1251,8 @@ def getDefaultBonusPacker():
     return BonusUIPacker(getDefaultBonusPackersMap())
 
 
-def packMissionsBonusModelAndTooltipData(bonuses, packer, model, tooltipData=None, sort=None, iterator=0):
-    bonusIndexTotal = iterator
+def packMissionsBonusModelAndTooltipData(bonuses, packer, model, tooltipData=None, sort=None):
+    bonusIndexTotal = 0
     if tooltipData is not None:
         bonusIndexTotal = len(tooltipData)
     bonusTooltipList = []
@@ -1271,4 +1282,4 @@ def packMissionsBonusModelAndTooltipData(bonuses, packer, model, tooltipData=Non
                     tooltipData[tooltipIdx] = bonusTooltipList[bonusIndex]
                 bonusIndexTotal += 1
 
-    return bonusIndexTotal
+    return

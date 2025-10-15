@@ -366,11 +366,14 @@ class _ShellsEquipment(_Equipment):
                 yield self._createItem(itemData)
 
     def _createItem(self, itemData):
-        intCD, count, isBoughtForAltPrice = itemData
-        return self.__itemsFactory.createShell(intCD, count, self._proxy, isBoughtForAltPrice)
+        intCD, count, isBoughtForAltPrice, weight = itemData
+        return self.__itemsFactory.createShell(intCD, count, self._proxy, isBoughtForAltPrice, weight)
 
     def _getItemData(self, item):
-        return (item.intCD, item.count, item.isBoughtForAltPrice)
+        return (item.intCD,
+         item.count,
+         item.isBoughtForAltPrice,
+         item.ammoWeight)
 
     def _getIntCD(self, itemData):
         return first(itemData)
@@ -454,7 +457,10 @@ class _ShellsCollector(_EquipmentCollector):
 
         result = []
         for intCD, count, isBoughtForCredits in LayoutIterator(shellsLayout):
-            result.append((intCD, count, isBoughtForCredits))
+            result.append((intCD,
+             count,
+             isBoughtForCredits,
+             vehicles.getShellWeightForGun(intCD, vehDescr.gun)))
 
         return self.__fixSize(result, capacity)
 
@@ -471,7 +477,10 @@ class _ShellsCollector(_EquipmentCollector):
             shellsLayout = self.__getDefaultShellsLayout(vehDescr)
         result = []
         for intCD, count, isBoughtForCredits in LayoutIterator(shellsLayout):
-            result.append((intCD, count, isBoughtForCredits))
+            result.append((intCD,
+             count,
+             isBoughtForCredits,
+             vehicles.getShellWeightForGun(intCD, vehDescr.gun)))
 
         return (self.__fixSize(result, capacity), shellsLayout)
 

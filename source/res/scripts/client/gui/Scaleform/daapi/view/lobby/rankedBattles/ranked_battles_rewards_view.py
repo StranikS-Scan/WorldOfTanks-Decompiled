@@ -310,7 +310,7 @@ class RankedBattlesRewardsLeaguesView(RankedBattlesRewardsLeaguesMeta, IResetabl
                 AccountSettings.setSettings(RANKED_STYLED_VEHICLES_POOL, vehiclesPool)
         styleDescr = self.__styleDescriptions.get(styleID, '')
         style = first(self.__itemsCache.items.getStyles(REQ_CRITERIA.CUSTOM(lambda item: item.id == styleID)).values())
-        showStylePreview(styledVehicleCD, style, styleDescr, self._backToLeaguesCallback)
+        showStylePreview(styledVehicleCD, style, styleDescr)
         return
 
 

@@ -1393,6 +1393,9 @@ class PostMortemControlMode(IControlMode, CallbackDelayer):
 
     def disable(self):
         self.clearCallbacks()
+        if self.guiSessionProvider.arenaVisitor.isEnableExternalRespawn() and not self.__isObserverMode and self.__curVehicleID != self.__previousPostmortemVehicleID:
+            self.guiSessionProvider.shared.feedback.showVehicleMarker(self.__previousPostmortemVehicleID)
+            self.guiSessionProvider.shared.feedback.hideVehicleMarker(self.__curVehicleID)
         specCtrl = self.guiSessionProvider.shared.spectator
         if specCtrl is not None:
             specCtrl.spectatorViewModeChanged(SPECTATOR_MODE.NONE)

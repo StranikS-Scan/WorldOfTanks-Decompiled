@@ -10,7 +10,7 @@ from gui.impl.backport import BackportTooltipWindow, createTooltipData
 from frameworks.wulf import Array, ViewSettings, ViewFlags
 from gui.marathon.marathon_event import MarathonEvent
 from gui.server_events.bonuses import splitBonuses
-from gui.shared.event_dispatcher import showStylePreview, showHangar, selectVehicleInHangar
+from gui.shared.event_dispatcher import showStylePreview, selectVehicleInHangar
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.money import Currency
@@ -146,7 +146,7 @@ class MarathonRewardWindowView(ViewImpl):
             self.c11n.showCustomization(self.__marathon.vehicle.invID)
         else:
             style = self.c11n.getItemByID(GUI_ITEM_TYPE.STYLE, self.__marathon.styleID)
-            showStylePreview(self.__marathon.vehicle.compactDescr, style, style.getDescription(), showHangar)
+            showStylePreview(self.__marathon.vehicle.compactDescr, style, style.getDescription())
 
     def _fillRewards(self, model):
         rewardsCount = len(self.__rewards)

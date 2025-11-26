@@ -88,9 +88,6 @@ class INotificationWindowController(IGameController):
     def postponedCount(self):
         raise NotImplementedError
 
-    def setFilterPredicate(self, predicate):
-        raise NotImplementedError
-
 
 class IFullscreenManager(object):
     __slots__ = ()

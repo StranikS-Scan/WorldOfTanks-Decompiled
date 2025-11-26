@@ -47,6 +47,8 @@
     <Volvo_TD_120V>	49	</Volvo_TD_120V>
     <_2_st_Scania_Vabis_1664_a>	50	</_2_st_Scania_Vabis_1664_a>
     <Motoraggregat_10>	51	</Motoraggregat_10>
+    <AOS_895_S>	53	</AOS_895_S>
+    <Maybach_DSO>	55	</Maybach_DSO>
     <Motoraggregat_3_FL>	501	</Motoraggregat_3_FL>
     <_2_st_Scania_DS14>	52	</_2_st_Scania_DS14>
     <Scania_Vabis_1664_Sav>	2000	</Scania_Vabis_1664_Sav>
@@ -159,6 +161,23 @@
       <rpm_min>	273	</rpm_min>
       <rpm_max>	2723	</rpm_max>
     </Scania_Vabis_1664_Sav>
+    <Maybach_DSO>
+      <userString>	#sweden_vehicles:Maybach_DSO	</userString>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	5000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	220	</power>
+      <weight>	485	</weight>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	487	</rpm_min>
+      <rpm_max>	2240	</rpm_max>
+    </Maybach_DSO>
     <Scania_Vabis_L_603>
       <userString>	#sweden_vehicles:Scania_Vabis_L_603	</userString>
       <tags>	gasoline	</tags>
@@ -564,6 +583,23 @@
       <rpm_min>	418	</rpm_min>
       <rpm_max>	2460	</rpm_max>
     </AOS_895>
+    <AOS_895_S>
+      <userString>	#sweden_vehicles:AOS_895_S	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	60000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	500	</power>
+      <weight>	500	</weight>
+      <maxHealth>	275	</maxHealth>
+      <maxRegenHealth>	138	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	312	</rpm_min>
+      <rpm_max>	2801	</rpm_max>
+    </AOS_895_S>
     <SFA_8_cyl_boxer>
       <userString>	#sweden_vehicles:SFA_8_cyl_boxer	</userString>
       <tags>	gasoline	</tags>
@@ -820,14 +856,14 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
       <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
-      <power>	900	</power>
+      <power>	950	</power>
       <weight>	744	</weight>
       <maxHealth>	247	</maxHealth>
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	488	</rpm_min>
-      <rpm_max>	2035	</rpm_max>
+      <rpm_min>	474	</rpm_min>
+      <rpm_max>	2080	</rpm_max>
     </Meteor_Mark_IVB>
     <AV_1790>
       <userString>	#sweden_vehicles:AV_1790	</userString>

@@ -19,6 +19,9 @@ class GlobalVarsMgrMeta(BaseDAAPIComponent):
     def isKorea(self):
         self._printOverrideError('isKorea')
 
+    def isAsia(self):
+        self._printOverrideError('isAsia')
+
     def isTutorialRunning(self, tutorialID):
         self._printOverrideError('isTutorialRunning')
 

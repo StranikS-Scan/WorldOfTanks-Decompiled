@@ -4,20 +4,21 @@ import copy
 import functools
 import logging
 import types
+import typing
 from collections import namedtuple
 from itertools import chain
-import typing
+from shared_utils import findFirst
 import constants
 import post_progression_common
 from BonusCaps import BonusCapsConst
 from Event import Event
 from UnitBase import PREBATTLE_TYPE_TO_UNIT_ASSEMBLER, UNIT_ASSEMBLER_IMPL_TO_CONFIG
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
-from battle_modifiers_common import BattleParams, BattleModifiers, ModifiersContext
+from battle_modifiers_common import BattleModifiers, BattleParams, ModifiersContext
 from battle_pass_common import BATTLE_PASS_CONFIG_NAME, BattlePassConfig
 from collections_common import CollectionsConfig
 from collector_vehicle import CollectorVehicleConsts
-from constants import BATTLE_NOTIFIER_CONFIG, ClansConfig, Configs, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG, MAGNETIC_AUTO_AIM_CONFIG, MISC_GUI_SETTINGS, PremiumConfigs, RENEWABLE_SUBSCRIPTION_CONFIG, PLAYER_SUBSCRIPTIONS_CONFIG, TOURNAMENT_CONFIG, OPTIONAL_DEVICES_USAGE_CONFIG
+from constants import BATTLE_NOTIFIER_CONFIG, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG, MAGNETIC_AUTO_AIM_CONFIG, MISC_GUI_SETTINGS, OPTIONAL_DEVICES_USAGE_CONFIG, PLAYER_SUBSCRIPTIONS_CONFIG, RENEWABLE_SUBSCRIPTION_CONFIG, TOURNAMENT_CONFIG, ClansConfig, Configs, PremiumConfigs
 from debug_utils import LOG_DEBUG, LOG_NOTE
 from gifts.gifts_common import ClientReqStrategy, GiftEventID, GiftEventState
 from gui import GUI_SETTINGS, SystemMessages
@@ -28,17 +29,26 @@ from gui.shared.utils.decorators import ReprInjector
 from helpers import time_utils
 from items import vehicles
 from personal_missions import PM_BRANCH
+from pet_system_common import pet_constants
+from pet_system_common.BonusConfig import BonusConfig as PetBonusConfig
+from pet_system_common.EventConfig import EventConfig as PetEventConfig
+from pet_system_common.GeneralConfig import GeneralConfig as PetGeneralConfig
+from pet_system_common.PetConfig import PetConfig
+from pet_system_common.PetPromoConfig import PetPromoConfig
+from pet_system_common.PetSynergyConfig import PetSynergyConfig
+from pet_system_common.pet_constants import PETS_SYSTEM_CONFIG
 from post_progression_common import FEATURE_BY_GROUP_ID, ROLESLOT_FEATURE
 from prestige_system.prestige_common import PrestigeConfig
 from prestige_system.prestige_milestones_common import PrestigeMilestonesConfig
 from ranked_common import SwitchState
-from renewable_subscription_common.settings_constants import GOLD_RESERVE_GAINS_SECTION, ADDITIONAL_BONUS_SECTION, ADDITIONAL_BONUS_APPLY_COUNT, ADDITIONAL_BONUS_ENABLED, ENABLE_BADGES
+from renewable_subscription_common.settings_constants import ADDITIONAL_BONUS_APPLY_COUNT, ADDITIONAL_BONUS_ENABLED, ADDITIONAL_BONUS_SECTION, ENABLE_BADGES, GOLD_RESERVE_GAINS_SECTION
 from schema_manager import getSchemaManager
 from shared_utils import makeTupleByDict, updateDict
 from soft_exception import SoftException
 from telecom_rentals_common import TELECOM_RENTALS_CONFIG
 from trade_in_common.constants_types import CONFIG_NAME as TRADE_IN_CONFIG_NAME
 from achievements20.Achievements20GeneralConfig import Achievements20GeneralConfig
+from helpers.ingame_tournament_helper import IngameTournamentState
 if typing.TYPE_CHECKING:
     from typing import Callable, Dict, List, Sequence, Set
     from dict2model.schemas import SchemaModelType
@@ -1308,6 +1318,85 @@ class _ExchangeRatesConfig(namedtuple('_ExchangeRatesConfig', ('isGoldExchangePe
         return self._replace(**dataToUpdate)
 
 
+class PetSystemServerSettings(object):
+
+    def __init__(self, config):
+        self.__config = config
+
+    def getPetGeneralConfig(self):
+        return PetGeneralConfig(self.__config.get(pet_constants.PetSystemGeneralConsts.CONFIG_NAME, {}))
+
+    def getPetsConfig(self):
+        return PetConfig(self.__config.get(pet_constants.PetsConsts.CONFIG_NAME, {}))
+
+    def getPetBonusConfig(self):
+        return PetBonusConfig(self.__config.get(pet_constants.PetBonusesConsts.CONFIG_NAME, {}))
+
+    def getPetEventConfig(self):
+        return PetEventConfig(self.__config.get(pet_constants.PetEventsConsts.CONFIG_NAME, {}))
+
+    def getPetPromoConfig(self):
+        return PetPromoConfig(self.__config.get(pet_constants.PetPromoConsts.CONFIG_NAME, {}))
+
+    def getPetSynergyConfig(self):
+        return PetSynergyConfig(self.__config.get(pet_constants.PetSynergyConsts.CONFIG_NAME, {}))
+
+
+class _IngameTournamentBannerConfig(settingsBlock('_IngameTournamentBannerConfig', ('state', 'startTime', 'endTime'))):
+
+    @classmethod
+    def defaults(cls):
+        return {'state': None,
+         'startTime': None,
+         'endTime': None}
+
+    @classmethod
+    def _preprocessData(cls, data):
+        state = data.get('state')
+        if state is not None:
+            data['state'] = findFirst(lambda tournamentState: tournamentState.value == state, IngameTournamentState)
+        return data
+
+
+class _IngameTournamentShopConfig(settingsBlock('_IngameTournamentShopConfig', ('realms', 'ingameShopRelativePath', 'shopUrl'))):
+
+    @classmethod
+    def defaults(cls):
+        return {'realms': [],
+         'ingameShopRelativePath': '',
+         'shopUrl': ''}
+
+    @classmethod
+    def _preprocessData(cls, data):
+        realms = data.get('realms')
+        if realms is not None:
+            data['realms'] = realms.split()
+        return data
+
+
+class _IngameTournamentConfig(settingsBlock('_IngameTournamentConfig', ('isEnabled', 'banners', 'shop'))):
+
+    @classmethod
+    def defaults(cls):
+        return {'isEnabled': False,
+         'banners': [],
+         'shop': []}
+
+    @classmethod
+    def _preprocessData(cls, data):
+        banners = []
+        for bannerConfig in data.get('banners', []):
+            banners.append(makeTupleByDict(_IngameTournamentBannerConfig, bannerConfig))
+
+        data['banners'] = banners
+        shopConfigs = []
+        for shopConfig in data.get('shop', []):
+            shopConfigs.append(makeTupleByDict(_IngameTournamentShopConfig, shopConfig))
+
+        data['shop'] = shopConfigs
+        return data
+
+
 class ServerSettings(object):
 
     def __init__(self, serverSettings):
@@ -1362,6 +1451,7 @@ class ServerSettings(object):
         self.__schemaManager = getSchemaManager()
         self.__exchangeRatesConfig = _ExchangeRatesConfig()
         self.__easyTankEquipConfig = EasyTankEquipConfig()
+        self.__ingameTournamentConfig = _IngameTournamentConfig()
         self.set(serverSettings)
 
     def set(self, serverSettings):
@@ -1521,6 +1611,10 @@ class ServerSettings(object):
             self.__liveOpsWebEventsConfig = makeTupleByDict(LiveOpsWebEventsConfig, self.__serverSettings[Configs.LIVE_OPS_EVENTS_CONFIG.value])
         else:
             self.__liveOpsWebEventsConfig = LiveOpsWebEventsConfig.defaults()
+        if Configs.INGAME_TOURNAMENT_CONFIG.value in self.__serverSettings:
+            self.__ingameTournamentConfig = makeTupleByDict(_IngameTournamentConfig, self.__serverSettings[Configs.INGAME_TOURNAMENT_CONFIG.value])
+        else:
+            self.__ingameTournamentConfig = _IngameTournamentConfig.defaults()
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -1639,6 +1733,10 @@ class ServerSettings(object):
             self.__updateReferralProgramConfig(serverSettingsDiff)
         if Configs.LIVE_OPS_EVENTS_CONFIG.value in serverSettingsDiff:
             self.__updateLiveOpsWebEventsConfig(serverSettingsDiff)
+        if PETS_SYSTEM_CONFIG in serverSettingsDiff:
+            self.__serverSettings[PETS_SYSTEM_CONFIG] = serverSettingsDiff[PETS_SYSTEM_CONFIG]
+        if Configs.INGAME_TOURNAMENT_CONFIG.value in serverSettingsDiff:
+            self.__updateIngameTournamentConfig(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
 
     def clear(self):
@@ -1825,6 +1923,10 @@ class ServerSettings(object):
     @property
     def advancedAchievementsConfig(self):
         return self.__advancedAchievementsConfig
+
+    @property
+    def ingameTournamentConfig(self):
+        return self.__ingameTournamentConfig
 
     def isEpicBattleEnabled(self):
         return self.epicBattles.isEnabled
@@ -2051,6 +2153,9 @@ class ServerSettings(object):
     def isAutoSellCheckBoxEnabled(self):
         return self.getMiscGUISettings().get('buyModuleDialog', {}).get('enableAutoSellCheckBox', False)
 
+    def isPhysicsSoundEnabled(self):
+        return self.getMiscGUISettings().get('soundSettings', {}).get('physicsSoundEnabled', True)
+
     def getMiscGUISettings(self):
         return self.__getGlobalSetting(MISC_GUI_SETTINGS, {})
 
@@ -2205,6 +2310,9 @@ class ServerSettings(object):
     def getLootBoxesTooltipConfig(self):
         return self.__getGlobalSetting(Configs.LOOTBOXES_TOOLTIP_CONFIG.value, {})
 
+    def getPetSystemConfig(self):
+        return PetSystemServerSettings(self.__getGlobalSetting(PETS_SYSTEM_CONFIG, {}))
+
     def __getGlobalSetting(self, settingsName, default=None):
         return self.__serverSettings.get(settingsName, default)
 
@@ -2354,6 +2462,9 @@ class ServerSettings(object):
 
     def __updateLiveOpsWebEventsConfig(self, serverSettingsDiff):
         self.__liveOpsWebEventsConfig = self.__liveOpsWebEventsConfig.replace(serverSettingsDiff[Configs.LIVE_OPS_EVENTS_CONFIG.value])
+
+    def __updateIngameTournamentConfig(self, serverSettingsDiff):
+        self.__ingameTournamentConfig = self.__ingameTournamentConfig.replace(serverSettingsDiff[Configs.INGAME_TOURNAMENT_CONFIG.value])
 
     def __updateAdvancedAchievementsConfig(self, serverSettingsDiff):
         if Configs.ADVANCED_ACHIEVEMENTS_CONFIG.value in serverSettingsDiff:

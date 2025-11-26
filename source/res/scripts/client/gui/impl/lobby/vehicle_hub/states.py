@@ -57,7 +57,8 @@ class _VehicleHubChildState(LobbyState, SubhangarStateGroupConfigProvider):
         lsm = self.getMachine()
         self.addNavigationTransition(lsm.getStateByCls(VehicleCompareState), record=True)
         self.addNavigationTransition(lsm.getStateByCls(BlueprintState), record=True)
-        self.addNavigationTransition(lsm.getStateByCls(_LoadingState), record=True)
+        loadingState = lsm.getStateByCls(_LoadingState)
+        self.addTransition(loadingState.makeTransition(TransitionType.INTERNAL, True), loadingState)
         from gui.Scaleform.daapi.view.lobby.profile.states import ServiceRecordState
         self.addNavigationTransition(lsm.getStateByCls(ServiceRecordState), record=True)
 
@@ -91,7 +92,12 @@ class VehicleHubState(SFViewLobbyState, SubhangarStateGroupConfigProvider):
     def __init__(self, flags=StateFlags.UNDEFINED):
         super(VehicleHubState, self).__init__(flags=flags | LobbyStateFlags.HANGAR)
         self.__cameraMover = None
+        self.__blur = None
         return
+
+    @property
+    def blur(self):
+        return self.__blur
 
     @property
     def cameraMover(self):
@@ -131,6 +137,7 @@ class VehicleHubState(SFViewLobbyState, SubhangarStateGroupConfigProvider):
 
     def _onEntered(self, event):
         super(VehicleHubState, self)._onEntered(event)
+        self.__blur = CachedBlur(enabled=False)
         self.__soundExtension.initSoundManager()
         self.__soundExtension.startSoundSpace()
         self.__setupTankTransformation()
@@ -150,6 +157,9 @@ class VehicleHubState(SFViewLobbyState, SubhangarStateGroupConfigProvider):
          'shadowYOffset': shadowYOffset}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _onExited(self):
+        if self.__blur is not None:
+            self.__blur.fini()
+            self.__blur = None
         self.__cameraMover = None
         self.getMachine().getRelatedView(self).stateExited()
         super(VehicleHubState, self)._onExited()
@@ -255,8 +265,10 @@ class VehSkillTreeInitialState(_VehSkillTreeSubStateBase):
 
     def _onEntered(self, event):
         super(VehSkillTreeInitialState, self)._onEntered(event)
-        view = self.getMachine().getRelatedView(self)
-        vhCtx = view.vehicleCtx
+        vhCtx = event.params.get('vhCtx')
+        if not vhCtx:
+            view = self.getMachine().getRelatedView(self)
+            vhCtx = view.vehicleCtx
         vehicle = self.__itemsCache.items.getItemByCD(vhCtx.intCD)
         if vehicle is not None and vehicle.postProgression.isVehSkillTree():
             if vehicle.postProgression.getCompletion() == PostProgressionCompletion.FULL:
@@ -290,6 +302,8 @@ class VehSkillTreePrestigeState(_VehSkillTreeSubStateBase):
         machine = self.getMachine()
         subScopeSubLayerState = machine.getStateByCls(SubScopeSubLayerState)
         subScopeSubLayerState.addNavigationTransition(self)
+        from gui.Scaleform.daapi.view.lobby.vehicle_preview.states import StylePreviewState
+        self.addNavigationTransition(machine.getStateByCls(StylePreviewState), record=True)
 
 
 @VehicleHubState.parentOf
@@ -300,19 +314,14 @@ class StatsState(_VehicleHubChildState):
 
     def __init__(self, flags=StateFlags.UNDEFINED):
         super(StatsState, self).__init__(flags=flags)
-        self.__blur = None
-        return
 
     def _onEntered(self, event):
         super(StatsState, self)._onEntered(event)
-        self.__blur = CachedBlur(enabled=True)
+        self.getParent().blur.enable()
 
     def _onExited(self):
+        self.getParent().blur.disable()
         super(StatsState, self)._onExited()
-        self.__blur.disable()
-        self.__blur.fini()
-        self.__blur = None
-        return
 
 
 @VehicleHubState.parentOf

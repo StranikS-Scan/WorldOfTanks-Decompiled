@@ -96,3 +96,19 @@ def isWitchesCrewCompleted(vehicleType, tankmenGroups):
     uniqueRoles = set([ role[0] for role in vehicleType.crewRoles ])
     actualGroupIDs = set([ unpackCrewParams(tGroup)[0] for tGroup in tankmenGroups ])
     return len(actualGroupIDs & requiredGroupIDs) == len(uniqueRoles)
+
+
+def isHW25Crew(vehicleType, tankmenGroups, tag):
+    _, _, isPremium = unpackCrewParams(tankmenGroups[0])
+    nationID, _ = vehicleType.id
+    requiredCrew = getTankmenWithTag(nationID, isPremium, tag)
+    actualCrew = {unpackCrewParams(tGroup)[0] for tGroup in tankmenGroups}
+    return len(requiredCrew - actualCrew) == 0
+
+
+def isHW25CrewCompleted(vehicleType, tankmenGroups):
+    return isHW25Crew(vehicleType, tankmenGroups, SPECIAL_CREW_TAG.HW25_CREW)
+
+
+def isHW25CrewCNCompleted(vehicleType, tankmenGroups):
+    return isHW25Crew(vehicleType, tankmenGroups, SPECIAL_CREW_TAG.HW25_CREW_CN)

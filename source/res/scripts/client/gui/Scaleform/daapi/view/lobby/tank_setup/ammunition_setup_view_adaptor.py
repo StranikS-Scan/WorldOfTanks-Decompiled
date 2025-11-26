@@ -14,7 +14,8 @@ class AmmunitionSetupViewAdaptor(InjectComponentAdaptor):
         self.__ctx = ctx
 
     def _makeInjectView(self):
-        ammunitionPanelSetupCls = collectAmmunitionSetupView(self.__hangarGuiCtrl.getAmmoSetupViewAlias())
+        currentPresetGetter = self.__hangarGuiCtrl.sfController.currentPresetGetter
+        ammunitionPanelSetupCls = collectAmmunitionSetupView(currentPresetGetter.getAmmoSetupViewAlias())
         injectViewCls = ammunitionPanelSetupCls if ammunitionPanelSetupCls else HangarAmmunitionSetupView
         injectView = injectViewCls(**self.__ctx)
         self.__ctx = None

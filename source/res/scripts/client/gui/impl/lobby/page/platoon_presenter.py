@@ -16,14 +16,13 @@ from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IPlatoonController, IBattleRoyaleController, IHangarGuiController
+from skeletons.gui.game_control import IPlatoonController, IHangarGuiController
 if t.TYPE_CHECKING:
     from frameworks.wulf import ViewEvent, Window
     from gui.impl.lobby.platoon.platoon_config import SquadInfo
 
 class PlatoonPresenter(ViewComponent[PlatoonModel], IGlobalListener):
     __platoonCtrl = dependency.descriptor(IPlatoonController)
-    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     __appLoader = dependency.descriptor(IAppLoader)
     __hangarGuiCtrl = dependency.descriptor(IHangarGuiController)
 
@@ -101,10 +100,6 @@ class PlatoonPresenter(ViewComponent[PlatoonModel], IGlobalListener):
         self._onUpdatePlatoon()
 
     def _onUpdatePlatoon(self):
-        isSquadControlEnabled = self.__battleRoyaleController.isSquadButtonEnabled()
-        self.setEnabled(isSquadControlEnabled)
-        if not isSquadControlEnabled:
-            return
         pFuncState = self.prbDispatcher.getFunctionalState()
         isInSquad = any((pFuncState.isInUnit(prbType) for prbType in PREBATTLE_TYPE.SQUAD_PREBATTLES))
         isSquadEnabled = isInSquad or self.__platoonCtrl.getPermissions().canCreateSquad()
@@ -120,6 +115,7 @@ class PlatoonPresenter(ViewComponent[PlatoonModel], IGlobalListener):
         self.viewModel.setCommanderIndex(extendedSquadInfoVo.commanderIndex)
         self.viewModel.setPlayerIndex(self.__getPlayerIndex())
         self.viewModel.setState(extendedSquadInfoVo.platoonState)
+        self.viewModel.setUseWelcomeLayout(self.__platoonCtrl.hasSearchSupport() or self.__platoonCtrl.canSelectSquadSize())
         members = self.viewModel.getMembers()
         members.clear()
         for state in extendedSquadInfoVo.squadManStates:
@@ -130,7 +126,7 @@ class PlatoonPresenter(ViewComponent[PlatoonModel], IGlobalListener):
         members.invalidate()
 
     def __getTooltip(self, extendedSquadInfoVo, isInSquad):
-        controlsHelper = self.__hangarGuiCtrl.getLobbyHeaderHelper()
+        controlsHelper = self.__hangarGuiCtrl.currentGuiProvider.getLobbyHeaderHelper()
         params = {}
         if extendedSquadInfoVo.platoonState == EPlatoonButtonState.SEARCHING_STATE.value:
             searching = R.strings.platoon.headerButton.tooltips.searching

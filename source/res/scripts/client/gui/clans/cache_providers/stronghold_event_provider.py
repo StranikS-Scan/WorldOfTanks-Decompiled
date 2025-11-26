@@ -5,16 +5,15 @@ import typing
 from constants import CLAN_ROLES
 from gui.Scaleform.daapi.view.lobby.clans.clan_helpers import getStrongholdEventEnabled
 from gui.clans.cache_providers.base_provider import BaseProvider, RequestSettings, UpdatePeriodType
-from gui.wgcg.clan.contexts import StrongholdEventSettingsCtx, StrongholdEventClanInfoCtx
+from gui.wgcg.clan.contexts import StrongholdEventSettingsCtx
 from helpers import time_utils
 from shared_utils import CONST_CONTAINER
 if typing.TYPE_CHECKING:
     from typing import Optional, Dict
-    from gui.clans.data_wrapper.stronghold_event import StrongholdEventClanInfoData, StrongholdEventSettingsData
+    from gui.clans.data_wrapper.stronghold_event import StrongholdEventSettingsData
 
 class _DataNames(CONST_CONTAINER):
     SETTINGS = 'SETTINGS'
-    PRIME_TIME = 'PRIME_TIME'
 
 
 class StrongholdEventProvider(BaseProvider):
@@ -30,15 +29,12 @@ class StrongholdEventProvider(BaseProvider):
     def getSettings(self):
         return self._getData(_DataNames.SETTINGS).data
 
-    def getClanPrimeTime(self):
-        return self._getData(_DataNames.PRIME_TIME).data
-
     def isRunning(self):
         settings = self.getSettings()
         if settings is None:
             return False
         else:
-            return settings.getVisibleStartDate() < time_utils.getServerUTCTime() < settings.getVisibleEndDate()
+            return settings.getStartDate() < time_utils.getServerUTCTime() < settings.getEndDate()
 
     def canUnfreezeVehicles(self):
         settings = self.getSettings()
@@ -58,10 +54,4 @@ class StrongholdEventProvider(BaseProvider):
         return getStrongholdEventEnabled()
 
     def _getSettings(self):
-        return {_DataNames.SETTINGS: RequestSettings(context=StrongholdEventSettingsCtx(), isCached=True, updatePeriodType=UpdatePeriodType.AFTER_BATTLE, updateKwargs=None),
-         _DataNames.PRIME_TIME: RequestSettings(context=StrongholdEventClanInfoCtx(), isCached=True, updatePeriodType=UpdatePeriodType.AFTER_BATTLE, updateKwargs=None)}
-
-    def _dataReceived(self, dataName, data):
-        if dataName == _DataNames.SETTINGS and self.isRunning() and self.__clanCache.isInClan:
-            self._requestData(_DataNames.PRIME_TIME)
-        self.onDataReceived(dataName, data)
+        return {_DataNames.SETTINGS: RequestSettings(context=StrongholdEventSettingsCtx(), isCached=True, updatePeriodType=UpdatePeriodType.AFTER_BATTLE, updateKwargs=None)}

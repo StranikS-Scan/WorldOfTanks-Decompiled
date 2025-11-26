@@ -53,8 +53,7 @@ class BuyPassPresenter(ViewComponent[BattlePassBuyViewModel]):
         self.__selectedPackage = None
         self.__tooltipItems = {}
         self.__tooltipWindow = None
-        self.__packageID = kwargs.get('packageID', None)
-        self.__selectedChapterID = self.__battlePass.getHolidayChapterID() if self.__battlePass.isHoliday() else kwargs.get('selectedChapterID')
+        self.__packageID = self.__battlePass.getHolidayChapterID() if self.__battlePass.isHoliday() else None
         self.updateInitialData(**kwargs)
         return
 
@@ -72,10 +71,20 @@ class BuyPassPresenter(ViewComponent[BattlePassBuyViewModel]):
         childStateID = kwargs.get('childStateID')
         if childStateID == R.aliases.battle_pass.BuyPassConfirm():
             self.__choosePackage(self.__packageID)
+            self.__showConfirm()
         elif childStateID == R.aliases.battle_pass.BuyPassRewards():
+            if self.__battlePass.isHoliday():
+                self.__choosePackage(self.__packageID)
+                self.__setConfirmModel()
             self.__showRewards()
         else:
             self.__showBuy()
+
+    def activate(self):
+        self._subscribe()
+
+    def deactivate(self):
+        self._unsubscribe()
 
     def onExtraChapterExpired(self):
         self.__update()
@@ -85,14 +94,10 @@ class BuyPassPresenter(ViewComponent[BattlePassBuyViewModel]):
         self.__packages = generatePackages(battlePass=self.__battlePass)
         self.__setGeneralFields()
         self.__setPackages()
-        if self.__packageID is not None:
-            self.__selectedPackage = self.__packages[self.__packageID]
-            self.__setConfirmModel()
-            self.__showConfirm()
-        elif g_BPBuyViewStates.chapterID != WINDOW_IS_NOT_OPENED:
+        if g_BPBuyViewStates.chapterID != WINDOW_IS_NOT_OPENED:
             self.__choosePackage(g_BPBuyViewStates.getPackageID())
+            self.__showConfirm()
         g_BPBuyViewStates.reset()
-        return
 
     def _finalize(self):
         self.__selectedPackage = None
@@ -175,7 +180,6 @@ class BuyPassPresenter(ViewComponent[BattlePassBuyViewModel]):
         self.__update()
         self.__selectedPackage = self.__packages[self.__packageID]
         self.__setPrevConfirmState()
-        self.__showConfirm()
 
     @replaceNoneKwargsModel
     def __setConfirmModel(self, model=None):

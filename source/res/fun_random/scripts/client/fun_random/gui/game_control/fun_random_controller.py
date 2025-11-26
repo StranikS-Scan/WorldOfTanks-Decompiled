@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/game_control/fun_random_controller.py
+from __future__ import absolute_import
 import typing
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import FUN_RANDOM_LAST_PRESET
@@ -189,6 +190,6 @@ class FunRandomController(IFunRandomController, IGlobalListener):
     def __storeFunRandomPreset(self):
         currPreset = self.__funRandomSettings.settingsKey
         lastPreset = AccountSettings.getSettings(FUN_RANDOM_LAST_PRESET)
-        if currPreset != DEFAULT_SETTINGS_KEY and lastPreset != currPreset:
+        if currPreset not in (DEFAULT_SETTINGS_KEY, lastPreset):
             AccountSettings.setSettings(FUN_RANDOM_LAST_PRESET, currPreset)
             setBattleTypeAsUnknown(SELECTOR_BATTLE_TYPES.FUN_RANDOM)

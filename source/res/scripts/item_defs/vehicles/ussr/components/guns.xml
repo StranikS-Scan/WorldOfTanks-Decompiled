@@ -208,6 +208,7 @@
     <_130mm_M_65B>	261	</_130mm_M_65B>
     <_57mm_ZiS_4_44>	262	</_57mm_ZiS_4_44>
     <_76mm_S_54A>	263	</_76mm_S_54A>
+    <_76mm_L_11_T>	264	</_76mm_L_11_T>
     <_122mm_M62_TS2>	265	</_122mm_M62_TS2>
     <_100mm_S34I>	266	</_100mm_S34I>
     <_136mm_D_79>	269	</_136mm_D_79>
@@ -2882,6 +2883,64 @@
         </_76mm_UOF-354>
       </shots>
     </_76mm_L-11>
+    <_76mm_L_11_T>
+      <userString>	#ussr_vehicles:_76mm_L_11_T	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	40000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.44	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.37	</amplitude>
+        <recoilEffect>	medium	</recoilEffect>
+      </recoil>
+      <effects>	shot_medium	</effects>
+      <reloadEffect>	reload50_75	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	39.375	</rotationSpeed>
+      <reloadTime>	4.89142857142857	</reloadTime>
+      <maxAmmo>	77	</maxAmmo>
+      <aimingTime>	2.85714285714286	</aimingTime>
+      <weight>	660	</weight>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.514285714285714	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_76mm_UBR_354A_T>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	780	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	125 115	</piercingPower>
+        </_76mm_UBR_354A_T>
+        <_76mm_BR_350_P_T>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	890	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	156 140	</piercingPower>
+        </_76mm_BR_350_P_T>
+        <_76mm_UOF_354_T>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	640	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	39 39	</piercingPower>
+        </_76mm_UOF_354_T>
+      </shots>
+    </_76mm_L_11_T>
     <_76mm_L_11>
       <userString>	#ussr_vehicles:_76mm_L-11	</userString>
       <tags></tags>
@@ -4658,14 +4717,14 @@
           <speed>	792	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	128 110	</piercingPower>
+          <piercingPower>	143 126	</piercingPower>
         </_76mm_AP_M79>
         <_76mm_HVAP_M93>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	990	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	177 158	</piercingPower>
+          <piercingPower>	185 164	</piercingPower>
         </_76mm_HVAP_M93>
         <_76mm_HE_M42A1>
           <defaultPortion>	0.05	</defaultPortion>
@@ -7713,7 +7772,7 @@
     <_100mm_LB-1_FL>
       <userString>	#ussr_vehicles:_100mm_LB_1	</userString>
       <tags></tags>
-      <level>	7	</level>
+      <level>	8	</level>
       <price>	130750	</price>
       <notInShop>	true	</notInShop>
       <impulse>	0.44	</impulse>
@@ -7808,14 +7867,14 @@
           <speed>	880	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	190 168	</piercingPower>
+          <piercingPower>	210 190	</piercingPower>
         </_100mm_UBR-412>
         <_100mm_UBR-412P>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	1100	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	247 218	</piercingPower>
+          <piercingPower>	253 230	</piercingPower>
         </_100mm_UBR-412P>
         <_100mm_UOF-412>
           <defaultPortion>	0.05	</defaultPortion>

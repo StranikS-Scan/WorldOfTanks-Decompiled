@@ -47,9 +47,19 @@ class EntryState(GuiImplViewLobbyState):
 
     def __init__(self, flags=StateFlags.UNDEFINED):
         super(EntryState, self).__init__(ModeSelectorView, flags=flags, scope=ScopeTemplates.LOBBY_SUB_SCOPE)
+        self.__isNavigationVisible = True
 
     def getNavigationDescription(self):
-        return LobbyStateDescription(title=backport.text(R.strings.pages.titles.mode_selector()))
+        title = backport.text(R.strings.pages.titles.mode_selector()) if self.__isNavigationVisible else u''
+        return LobbyStateDescription(title=title)
+
+    def getBackNavigationDescription(self, params):
+        return backport.text(R.strings.pages.titles.mode_selector())
+
+    def _onEntered(self, event):
+        self.__isNavigationVisible = event.params.get('subSelectorCallback') is None
+        super(EntryState, self)._onEntered(event)
+        return
 
 
 @ModeSelectorState.parentOf

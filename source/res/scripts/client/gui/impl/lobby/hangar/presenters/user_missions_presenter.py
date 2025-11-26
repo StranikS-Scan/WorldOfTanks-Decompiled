@@ -34,8 +34,11 @@ class UserMissionsPresenter(ViewComponent[UserMissionsWidgetModel]):
     def viewModel(self):
         return super(UserMissionsPresenter, self).getViewModel()
 
+    def _getBaseEvents(self):
+        return super(UserMissionsPresenter, self)._getEvents()
+
     def _getEvents(self):
-        baseEvents = super(UserMissionsPresenter, self)._getEvents()
+        baseEvents = self._getBaseEvents()
         return baseEvents + ((self.__battlePassService.onBattlePassChanged, self._onBattlePassEvent),
          (self.__eventsService.onEventsListChanged, self._onEventsEvent),
          (self.__missionsService.onMissionsChanged, self._onMissionsEvent),

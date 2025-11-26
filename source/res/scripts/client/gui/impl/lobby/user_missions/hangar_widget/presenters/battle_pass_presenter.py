@@ -8,7 +8,7 @@ from gui.battle_pass.battle_pass_constants import ChapterState
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.user_missions.widget.battle_pass_model import AppearAnimationState, BattlePassModel, WidgetState
 from gui.impl.lobby.battle_pass.battle_pass_entry_point_view import BaseBattlePassEntryPointView
-from gui.impl.lobby.battle_pass.common import isExtraChapterSeen, getExtraChapterID, isUmgExtraChapterSeen
+from gui.impl.lobby.battle_pass.common import getExtraChapterID, isExtraChapterSeen, isHolidayChapterSeen, isUmgExtraChapterSeen, setUmgExtraChapterSeen
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_completed_tooltip_view import BattlePassCompletedTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view import BattlePassInProgressTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_no_chapter_tooltip_view import BattlePassNoChapterTooltipView
@@ -93,6 +93,8 @@ class BattlePassPresenter(TooltipPositionerMixin, OverlapCtrlMixin, ViewComponen
 
     def _onClick(self):
         showBattlePass()
+        if self._needToRemindExtraChapter():
+            setUmgExtraChapterSeen()
 
     def _onPointsUpdated(self, *_):
         self._updateOptional()
@@ -161,7 +163,8 @@ class BattlePassPresenter(TooltipPositionerMixin, OverlapCtrlMixin, ViewComponen
     def _fillModel(self, tx, chapterID, points, limit, level, rewardsHash):
         extraChapterId = getExtraChapterID()
         isBattlePassExtraChapterSeen = isExtraChapterSeen()
-        tx.setWidgetState(self._getWidgetState(isBattlePassExtraChapterSeen))
+        isBattlePassHolidayChapterSeen = isHolidayChapterSeen()
+        tx.setWidgetState(self._getWidgetState(isBattlePassExtraChapterSeen, isBattlePassHolidayChapterSeen))
         tx.setLevel(level)
         tx.setTooltipID(self._getTooltip())
         tx.setChapterID(chapterID)
@@ -169,6 +172,7 @@ class BattlePassPresenter(TooltipPositionerMixin, OverlapCtrlMixin, ViewComponen
         tx.setIsBought(self.isBought)
         tx.setIsPaused(self.isPaused)
         tx.setIsExtraChapter(self.__battlePass.isExtraChapter(chapterID))
+        tx.setIsHoliday(self.isHoliday)
         tx.setRewardsHash(rewardsHash)
         tx.setHasExtraChapter(self._hasExtraChapter(extraChapterId))
         tx.setIsExtraChapterHighlighted(self._needToShowExtraIntro(isBattlePassExtraChapterSeen))
@@ -193,17 +197,20 @@ class BattlePassPresenter(TooltipPositionerMixin, OverlapCtrlMixin, ViewComponen
         self._savePresenterLastState(rewards=rewards, rewardsHash=rewardsHash)
 
     def _needToShowExtraIntro(self, isBattlePassExtraChapterSeen):
-        return self.hasExtra and (not isBattlePassExtraChapterSeen or self.isPostProgressionActive and not isUmgExtraChapterSeen())
+        return self.hasExtra and (not isBattlePassExtraChapterSeen or self._needToRemindExtraChapter())
+
+    def _needToRemindExtraChapter(self):
+        return self.hasExtra and self.isPostProgressionActive and not isUmgExtraChapterSeen() and not self.isAllExtraCompleted and not self.isAnyExtraActive
 
     def _getAppearAnimationState(self):
         if self._isIntroAnimationPlayed():
             return AppearAnimationState.PLAYED
         return AppearAnimationState.READY if not self.hasDeferModelUpdate and self._readyForAnimations else AppearAnimationState.WAITING
 
-    def _getWidgetState(self, isBattlePassExtraChapterSeen):
+    def _getWidgetState(self, isBattlePassExtraChapterSeen, isBattlePassHolidayChapterSeen):
         if self.isCompleted and not self.isPostProgressionActive:
             return WidgetState.COMPLETED
-        isIntro = not bool(self.chapterID) or self._needToShowExtraIntro(isBattlePassExtraChapterSeen)
+        isIntro = self.isHoliday and not isBattlePassHolidayChapterSeen or self._needToShowExtraIntro(isBattlePassExtraChapterSeen) or not self.isChapterChosen
         return WidgetState.INTRO if isIntro else WidgetState.PROGRESSION
 
     def _hasExtraChapter(self, chapterID):

@@ -4,15 +4,8 @@ from Event import Event
 from debug_utils import LOG_DEBUG
 from PlayerEvents import g_playerEvents
 from gui.server_events.events_helpers import isSuitableForPM
-from gui.shared.utils.requesters import ItemsRequester
-from gui.shared.utils.requesters import InventoryRequester
-from gui.shared.utils.requesters import StatsRequester
-from gui.shared.utils.requesters import DossierRequester
-from gui.shared.utils.requesters import GoodiesRequester
-from gui.shared.utils.requesters import ShopRequester
-from gui.shared.utils.requesters import RecycleBinRequester
-from gui.shared.utils.requesters import VehicleRotationRequester
-from gui.shared.utils.requesters import TokensRequester
+from gui.pet_system.requester import PetRequesterRequester
+from gui.shared.utils.requesters import DossierRequester, GoodiesRequester, InventoryRequester, ItemsRequester, RecycleBinRequester, ShopRequester, StatsRequester, TokensRequester, VehicleRotationRequester
 from gui.shared.utils.requesters.anonymizer_requester import AnonymizerRequester
 from gui.shared.utils.requesters.badges_requester import BadgesRequester
 from gui.shared.utils.requesters.RankedRequester import RankedRequester
@@ -42,7 +35,7 @@ class ItemsCache(IItemsCache):
         goodies = GoodiesRequester()
         self.__isForPMSync = False
         self.__needCommonSync = False
-        self.__items = ItemsRequester.ItemsRequester(InventoryRequester(), StatsRequester(), DossierRequester(), goodies, ShopRequester(goodies), RecycleBinRequester(), VehicleRotationRequester(), RankedRequester(), BattleRoyaleRequester(), BadgesRequester(), EpicMetaGameRequester(), TokensRequester(), dependency.instance(IFestivityFactory).getRequester(), BlueprintsRequester(), SessionStatsRequester(), AnonymizerRequester(), BattlePassRequester(), GiftSystemRequester(), GameRestrictionsRequester(), Achievements20Requester())
+        self.__items = ItemsRequester.ItemsRequester(InventoryRequester(), StatsRequester(), DossierRequester(), goodies, ShopRequester(goodies), RecycleBinRequester(), VehicleRotationRequester(), RankedRequester(), BattleRoyaleRequester(), BadgesRequester(), EpicMetaGameRequester(), TokensRequester(), dependency.instance(IFestivityFactory).getRequester(), BlueprintsRequester(), SessionStatsRequester(), AnonymizerRequester(), BattlePassRequester(), GiftSystemRequester(), GameRestrictionsRequester(), Achievements20Requester(), PetRequesterRequester())
         self.__compatVehiclesCache = CompatVehiclesCache()
         self.__waitForSync = False
         self.__syncFailed = False

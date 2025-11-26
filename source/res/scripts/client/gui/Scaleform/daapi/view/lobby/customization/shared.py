@@ -96,16 +96,19 @@ class CustomizationTabs(object):
                                             INSCRIPTIONS,
                                             MODIFICATIONS,
                                             STAT_TRACKERS)}
-    TAB_TO_MODE = {PAINTS: CustomizationModes.CUSTOM,
-     CAMOUFLAGES: CustomizationModes.CUSTOM,
-     PROJECTION_DECALS: CustomizationModes.CUSTOM,
-     EMBLEMS: CustomizationModes.CUSTOM,
-     INSCRIPTIONS: CustomizationModes.CUSTOM,
-     MODIFICATIONS: CustomizationModes.CUSTOM,
-     STYLES_2D: CustomizationModes.STYLE_2D,
-     STYLES_3D: CustomizationModes.STYLE_3D,
-     ATTACHMENTS: CustomizationModes.STYLE_2D,
-     STAT_TRACKERS: CustomizationModes.CUSTOM}
+    TAB_TO_MODE = {PAINTS: (CustomizationModes.CUSTOM, CustomizationModes.STYLE_2D_EDITABLE),
+     CAMOUFLAGES: (CustomizationModes.CUSTOM, CustomizationModes.STYLE_2D_EDITABLE),
+     PROJECTION_DECALS: (CustomizationModes.CUSTOM, CustomizationModes.STYLE_2D_EDITABLE),
+     EMBLEMS: (CustomizationModes.CUSTOM, CustomizationModes.STYLE_2D_EDITABLE),
+     INSCRIPTIONS: (CustomizationModes.CUSTOM, CustomizationModes.STYLE_2D_EDITABLE),
+     MODIFICATIONS: (CustomizationModes.CUSTOM, CustomizationModes.STYLE_2D_EDITABLE),
+     STYLES_2D: (CustomizationModes.STYLE_2D,),
+     STYLES_3D: (CustomizationModes.STYLE_3D,),
+     ATTACHMENTS: (CustomizationModes.STYLE_2D, CustomizationModes.CUSTOM),
+     STAT_TRACKERS: (CustomizationModes.STYLE_2D,
+                     CustomizationModes.STYLE_3D,
+                     CustomizationModes.CUSTOM,
+                     CustomizationModes.STYLE_2D_EDITABLE)}
     TAB_NAMES = {PAINTS: 'paint',
      CAMOUFLAGES: 'camouflage',
      PROJECTION_DECALS: 'projectionDecal',
@@ -513,10 +516,12 @@ def getEmptyRegions(outfit, slotType):
 
 def getCurrentVehicleAvailableRegionsMap():
     availableRegionsMap = {}
+    vehicleDescr = g_currentVehicle.item.descriptor
+    outfit = Outfit(vehicleCD=vehicleDescr.makeCompactDescr())
     for areaId in Area.ALL:
         availableRegionsMap[areaId] = {}
         for slotType in CustomizationTabs.SLOT_TYPES.itervalues():
-            regions = getAvailableRegions(areaId, slotType)
+            regions = getAvailableRegions(areaId, slotType, vehicleDescr=vehicleDescr, vehicleOutfit=outfit)
             availableRegionsMap[areaId][slotType] = regions
 
     return availableRegionsMap
@@ -525,8 +530,9 @@ def getCurrentVehicleAvailableRegionsMap():
 def checkSlotsFilling(outfit, slotType):
     availableCount = 0
     filledCount = 0
+    currentOutfit = Outfit(vehicleCD=g_currentVehicle.item.descriptor.makeCompactDescr())
     for areaId in Area.ALL:
-        regionsIndexes = getAvailableRegions(areaId, slotType)
+        regionsIndexes = getAvailableRegions(areaId, slotType, vehicleOutfit=currentOutfit)
         availableCount += len(regionsIndexes)
         for regionIdx in regionsIndexes:
             intCD = outfit.getContainer(areaId).slotFor(slotType).getItemCD(regionIdx)

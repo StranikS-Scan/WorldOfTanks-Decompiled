@@ -18,7 +18,6 @@ from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.battle_results import RequestResultsContext
 from gui.clans.clan_helpers import showAcceptClanInviteDialog
-from gui.collection.collections_helpers import loadHangarFromCollections
 from gui.customization.constants import CustomizationModeSource, CustomizationModes
 from gui.impl import backport
 from gui.impl.auxiliary.crew_books_helper import crewBooksViewedCache
@@ -32,7 +31,7 @@ from gui.prestige.prestige_helpers import showPrestigeOnboardingWindow, showPres
 from gui.ranked_battles import ranked_helpers
 from gui.server_events.events_dispatcher import showMissionsMapboxProgression, showPersonalMission, showBanWindow, showPenaltyWindow, showWarningWindow, showBattleMatters
 from gui.shared import EVENT_BUS_SCOPE, actions, event_dispatcher as shared_events, events, g_eventBus
-from gui.shared.event_dispatcher import hideWebBrowserOverlay, showBlueprintsSalePage, showCollectionAwardsWindow, showCollectionWindow, showCollectionsMainPage, showDelayedReward, showEpicBattlesAfterBattleWindow, showProgressiveRewardWindow, showRankedYearAwardWindow, showShop, showSteamConfirmEmailOverlay, showWinbackSelectRewardView, showBarracks, showSeniorityRewardVehiclesWindow, showAdvancedAchievementsView, showTrophiesView, showAdvancedAchievementsCatalogView, showExchangeGoldWindow, showExchangeFreeXPWindow, showCrewPostProgressionView, showPersonalMissionMainWindow
+from gui.shared.event_dispatcher import hideWebBrowserOverlay, showBattlePass, showBlueprintsSalePage, showCollectionAwardsWindow, showCollectionWindow, showCollectionsMainPage, showDelayedReward, showEpicBattlesAfterBattleWindow, showProgressiveRewardWindow, showRankedYearAwardWindow, showShop, showSteamConfirmEmailOverlay, showWinbackSelectRewardView, showBarracks, showSeniorityRewardVehiclesWindow, showAdvancedAchievementsView, showTrophiesView, showAdvancedAchievementsCatalogView, showExchangeGoldWindow, showExchangeFreeXPWindow, showCrewPostProgressionView, showPersonalMissionMainWindow, showPetStorageView
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors.common import ClaimRewardForPostProgression
 from gui.shared.notifications import NotificationPriorityLevel
@@ -961,12 +960,9 @@ class _OpenBattlePassProgressionView(NavigationDisabledActionHandler):
         hideWebBrowserOverlay()
         if savedData is not None:
             chapterID = savedData.get('chapterID')
-            if not isPostProgressionChapter(chapterID):
-                shared_events.showBattlePass(R.aliases.battle_pass.Progression(), chapterID)
-            else:
-                shared_events.showBattlePass(R.aliases.battle_pass.PostProgression())
+            showBattlePass(R.aliases.battle_pass.PostProgression() if isPostProgressionChapter(chapterID) else (R.aliases.battle_pass.Progression() if not self.__battlePass.isHoliday() else R.invalid()), chapterID)
         else:
-            shared_events.showBattlePass()
+            showBattlePass()
         return
 
 
@@ -1309,8 +1305,7 @@ class _OpenCollectionHandler(NavigationDisabledActionHandler):
     def doAction(self, model, entityID, action):
         collectionID = (model.getNotification(self.getNotType(), entityID).getSavedData() or {}).get('collectionId')
         if collectionID:
-            backText = backport.text(R.strings.menu.viewHeader.backBtn.descrLabel.hangar())
-            showCollectionWindow(collectionID, backCallback=loadHangarFromCollections, backBtnText=backText)
+            showCollectionWindow(collectionID)
         else:
             showCollectionsMainPage()
 
@@ -1521,6 +1516,20 @@ class _BattleMattersTaskReminder(NavigationDisabledActionHandler):
         showBattleMatters()
 
 
+class _PetSystemPetAddedNotification(NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        showPetStorageView()
+
+
 _AVAILABLE_HANDLERS = [ShowBattleResultsHandler,
  ShowFortBattleResultsHandler,
  OpenPollHandler,
@@ -1596,7 +1605,8 @@ _AVAILABLE_HANDLERS = [ShowBattleResultsHandler,
  _ClaimRewardPostProgression,
  _OpenPM3Operation,
  _AffirmativePM3Notification,
- _BattleMattersTaskReminder]
+ _BattleMattersTaskReminder,
+ _PetSystemPetAddedNotification]
 registerNotificationsActionsHandlers(_AVAILABLE_HANDLERS)
 
 class NotificationsActionsHandlers(object):

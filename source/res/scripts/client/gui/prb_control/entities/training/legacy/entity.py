@@ -6,7 +6,6 @@ import account_helpers
 from CurrentVehicle import g_currentVehicle
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.prb_control import prb_getters
 from gui.prb_control.entities.base import cooldown
@@ -24,8 +23,6 @@ from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME
 from gui.prb_control.settings import PREBATTLE_ROSTER, REQUEST_TYPE
 from gui.prb_control.settings import PREBATTLE_SETTING_NAME, PREBATTLE_RESTRICTION
 from gui.prb_control.storages import legacy_storage_getter
-from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.events import ViewEventType, LoadGuiImplViewEvent
 from gui.training_room_external_handlers import getTrainingRoomHandler
 from prebattle_shared import decodeRoster
 
@@ -115,16 +112,6 @@ class TrainingIntroEntity(LegacyIntroEntity):
 
 
 class TrainingEntity(LegacyEntity):
-    __loadEvents = (VIEW_ALIAS.LOBBY_HANGAR,
-     VIEW_ALIAS.LEGACY_LOBBY_HANGAR,
-     VIEW_ALIAS.LOBBY_STORE,
-     VIEW_ALIAS.LOBBY_STORAGE,
-     VIEW_ALIAS.LOBBY_TECHTREE,
-     VIEW_ALIAS.LOBBY_PROFILE,
-     VIEW_ALIAS.VEHICLE_COMPARE,
-     VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS,
-     VIEW_ALIAS.LOBBY_MISSIONS,
-     VIEW_ALIAS.LOBBY_STRONGHOLD)
 
     def __init__(self, settings):
         requests = {REQUEST_TYPE.ASSIGN: self.assign,
@@ -140,13 +127,12 @@ class TrainingEntity(LegacyEntity):
         super(TrainingEntity, self).__init__(FUNCTIONAL_FLAG.TRAINING, settings, permClass=TrainingPermissions, requestHandlers=requests)
         self.__settingRecords = []
         self.__watcher = None
+        self.__lsm = None
         self.storage = legacy_storage_getter(PREBATTLE_TYPE.TRAINING)()
         return
 
     def init(self, clientPrb=None, ctx=None):
         result = super(TrainingEntity, self).init(clientPrb=clientPrb, ctx=ctx)
-        g_eventBus.addListener(ViewEventType.LOAD_VIEW, self.__handleViewLoad, scope=EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.addListener(ViewEventType.LOAD_GUI_IMPL_VIEW, self.__handleViewLoad, scope=EVENT_BUS_SCOPE.LOBBY)
         if self.storage.arenaGuiType is None:
             self.storage.arenaGuiType = self.getSettings()['arenaGuiType']
         self.__enterTrainingRoom(isInitial=ctx.getInitCtx() is None)
@@ -159,8 +145,6 @@ class TrainingEntity(LegacyEntity):
 
     def fini(self, clientPrb=None, ctx=None, woEvents=False):
         result = super(TrainingEntity, self).fini(clientPrb=clientPrb, ctx=ctx, woEvents=woEvents)
-        g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self.__handleViewLoad, scope=EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.removeListener(ViewEventType.LOAD_GUI_IMPL_VIEW, self.__handleViewLoad, scope=EVENT_BUS_SCOPE.LOBBY)
         if not woEvents:
             aliasToLoad = [PREBATTLE_ALIASES.TRAINING_LIST_VIEW_PY, PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY]
             if not self.canSwitch(ctx) and g_eventDispatcher.needToLoadHangar(ctx, self.getModeFlags(), aliasToLoad):
@@ -398,10 +382,6 @@ class TrainingEntity(LegacyEntity):
             if not self.__settingRecords and callback is not None:
                 callback(True, '')
             return
-
-    def __handleViewLoad(self, event):
-        if isinstance(event, LoadGuiImplViewEvent) or event.alias in self.__loadEvents:
-            self.setPlayerState(SetPlayerStateCtx(False, waitingID='prebattle/player_not_ready'))
 
     def __validateStatus(self, resetResult):
         if resetResult:

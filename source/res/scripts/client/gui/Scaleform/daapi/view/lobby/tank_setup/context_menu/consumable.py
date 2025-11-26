@@ -3,7 +3,6 @@
 import SoundGroups
 from adisp import adisp_process, adisp_async
 from gui import shop
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.shared.cm_handlers import CMLabel, option
 from gui.Scaleform.daapi.view.lobby.tank_setup.context_menu.base import TankSetupCMLabel
 from gui.Scaleform.daapi.view.lobby.tank_setup.context_menu.base_equipment import BaseEquipmentItemContextMenu, BaseEquipmentSlotContextMenu, BaseHangarEquipmentSlotContextMenu
@@ -33,7 +32,7 @@ class ConsumableItemContextMenu(BaseEquipmentItemContextMenu):
 
     @option(_sqGen.next(), CMLabel.BUY_MORE)
     def buyMore(self):
-        shop.showBuyEquipmentOverlay(itemId=self._intCD, source=shop.Source.EXTERNAL, origin=shop.Origin.CONSUMABLES, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB)
+        shop.showBuyEquipment(itemId=self._intCD, source=shop.Source.EXTERNAL, origin=shop.Origin.CONSUMABLES)
 
     def _getCopyVehicle(self):
         copyVehicle = super(ConsumableItemContextMenu, self)._getCopyVehicle()
@@ -64,7 +63,7 @@ class ConsumableSlotContextMenu(BaseEquipmentSlotContextMenu):
 
     @option(_sqGen.next(), CMLabel.BUY_MORE)
     def buyMore(self):
-        shop.showBuyEquipmentOverlay(itemId=self._intCD, source=shop.Source.EXTERNAL, origin=shop.Origin.CONSUMABLES, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB)
+        shop.showBuyEquipment(itemId=self._intCD, source=shop.Source.EXTERNAL, origin=shop.Origin.CONSUMABLES)
 
     @option(_sqGen.next(), TankSetupCMLabel.UNLOAD)
     def unload(self):
@@ -91,7 +90,7 @@ class HangarConsumableSlotContextMenu(BaseHangarEquipmentSlotContextMenu):
 
     @option(_sqGen.next(), CMLabel.BUY_MORE)
     def buyMore(self):
-        shop.showBuyEquipmentOverlay(itemId=self._intCD, source=shop.Source.EXTERNAL, origin=shop.Origin.CONSUMABLES, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB)
+        shop.showBuyEquipment(itemId=self._intCD, source=shop.Source.EXTERNAL, origin=shop.Origin.CONSUMABLES)
 
     @option(_sqGen.next(), TankSetupCMLabel.UNLOAD)
     def unload(self):

@@ -29,9 +29,13 @@ class StorageState(SFViewLobbyState):
     def registerTransitions(self):
         from gui.impl.lobby.vehicle_hub import OverviewState
         from gui.Scaleform.daapi.view.lobby.techtree.states import BlueprintState
+        from gui.Scaleform.daapi.view.lobby.vehicle_preview.states import StylePreviewState
+        from gui.Scaleform.daapi.view.lobby.vehicle_preview.states import StyleProgressionPreviewState
         lsm = self.getMachine()
         self.addNavigationTransition(lsm.getStateByCls(BlueprintState), record=True)
         self.addNavigationTransition(lsm.getStateByCls(OverviewState), record=True)
+        self.addNavigationTransition(lsm.getStateByCls(StyleProgressionPreviewState), record=True)
+        self.addNavigationTransition(lsm.getStateByCls(StylePreviewState), record=True)
 
     def _getViewLoadCtx(self, event):
         return {'ctx': {'defaultSection': event.params.get('defaultSection', STORAGE_CONSTANTS.FOR_SELL),

@@ -4,11 +4,16 @@ from __future__ import absolute_import
 import logging
 import typing
 from comp7_light.gui.Scaleform.genConsts.COMP7_LIGHT_HANGAR_ALIASES import COMP7_LIGHT_HANGAR_ALIASES
+from account_helpers.AccountSettings import HANGAR_VIEW_SETTINGS, HANGAR_KEY_BINDINGS
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.lobby_entry import getLobbyStateMachine
+from gui.impl.gen.view_models.views.lobby.hangar.hangar_settings_model import HangarSettingsModel
+from gui.impl.gen.view_models.views.lobby.hangar.key_bindings_model import KeyBindingsModel
+from gui.impl.lobby.common.presenters.settings_presenter import SettingsPresenter
 from gui.impl.lobby.hangar.base.account_styles import AccountStyles
 from gui.lobby_state_machine.router import SubstateRouter
 from shared_utils import nextTick
+from gui.impl.lobby.hangar.base.blur import RandomHangarBlur
 from ClientSelectableCameraObject import ClientSelectableCameraObject
 from CurrentVehicle import g_currentPreviewVehicle, g_currentVehicle
 from PlayerEvents import g_playerEvents
@@ -81,12 +86,16 @@ class Comp7LightHangar(ViewComponent[RouterModel], IRoutableView):
         super(Comp7LightHangar, self).__init__(layoutId, model)
         self.__inputManager = None
         self.__routerObserver = None
-        self.__baseCriteria = _createComp7LightCriteria()
-        self.__vehicleFilter = VehiclesFilterComponent(self.__baseCriteria)
+        self.__vehicleFilter = VehiclesFilterComponent(_createComp7LightCriteria())
         self.__carouselFilter = Comp7LightCarouselFilter()
         self.__carouselFilter.setDisabledUpdateCriteries(True)
         self.__accountStyles = AccountStyles()
+        self.__blur = RandomHangarBlur()
         return
+
+    @property
+    def blur(self):
+        return self.__blur
 
     def getRouterModel(self):
         return self.getViewModel()
@@ -99,7 +108,7 @@ class Comp7LightHangar(ViewComponent[RouterModel], IRoutableView):
          hangar.Loadout(): Comp7LightLoadoutPresenter,
          hangar.Crew(): CrewPresenter,
          hangar.VehicleParams(): HangarVehicleParamsPresenter,
-         hangar.VehiclesInventory(): lambda : VehicleInventoryPresenter(self.__baseCriteria),
+         hangar.VehiclesInventory(): lambda : VehicleInventoryPresenter(self.__vehicleFilter),
          hangar.VehicleFilters(): lambda : Comp7CoreVehicleFiltersDataProvider(self.__carouselFilter),
          hangar.MainMenu(): lambda : MainMenuPresenter(getMenuItems()),
          hangar.VehicleMenu(): VehicleMenuPresenter,
@@ -107,6 +116,8 @@ class Comp7LightHangar(ViewComponent[RouterModel], IRoutableView):
          hangar.Teaser(): TeaserPresenter,
          hangar.HeroTank(): HeroTankPresenter,
          hangar.OptionalDevicesAssistant(): Comp7LightOptionalDevicesAssistantPresenter,
+         hangar.Settings(): lambda : SettingsPresenter(HangarSettingsModel, HANGAR_VIEW_SETTINGS),
+         hangar.KeyBindings(): lambda : SettingsPresenter(KeyBindingsModel, HANGAR_KEY_BINDINGS, readOnly=True),
          comp7LightHangar.AlertMessage(): AlertMessagePresenter,
          comp7LightHangar.SeasonModifier(): SeasonModifierPresenter,
          comp7LightHangar.RoleSkillSlot(): Comp7LightRoleSkillSlotPresenter,
@@ -124,6 +135,7 @@ class Comp7LightHangar(ViewComponent[RouterModel], IRoutableView):
         self.__inputManager = self.__app.gameInputManager
         self.__vehicleFilter.initialize()
         self.__accountStyles.initialize()
+        self.__blur.init()
         super(Comp7LightHangar, self)._onLoading(*args, **kwargs)
 
     def _onShown(self):
@@ -149,10 +161,11 @@ class Comp7LightHangar(ViewComponent[RouterModel], IRoutableView):
         self.__vehicleFilter.destroy()
         self.__vehicleFilter = None
         self.__carouselFilter = None
-        self.__baseCriteria = None
         self.__inputManager = None
         self.__accountStyles.destroy()
         self.__accountStyles = None
+        self.__blur.destroy()
+        self.__blur = None
         return
 
     @app_getter

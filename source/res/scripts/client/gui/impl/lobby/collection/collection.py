@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/collection/collection.py
 import logging
 import typing
-from frameworks.wulf import ViewFlags, ViewSettings
+from frameworks.wulf import WindowFlags
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.profile.sound_constants import ACHIEVEMENTS_SOUND_SPACE
@@ -20,34 +20,30 @@ from gui.impl.lobby.battle_pass.tooltips.battle_pass_coin_tooltip_view import Ba
 from gui.impl.lobby.collection.tooltips.collection_item_tooltip_view import CollectionItemTooltipView
 from gui.impl.lobby.common.view_helpers import packBonusModelAndTooltipData
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
-from gui.impl.pub import ViewImpl
+from gui.impl.pub import WindowImpl
+from gui.impl.pub.view_component import ViewComponent
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared.event_dispatcher import showCollectionItemPreviewWindow, showHangar
-from helpers import dependency, isPlayerAccount
+from helpers import dependency
 from skeletons.gui.game_control import ICollectionsSystemController
 _logger = logging.getLogger(__name__)
 _INITIAL_PAGE = -1
 if typing.TYPE_CHECKING:
     from typing import Dict
 
-class CollectionView(ViewImpl):
-    __slots__ = ('__backCallback', '__backBtnText', '__collection', '__page', '__pagesCount', '__rewardTooltips', '__content')
+class CollectionView(ViewComponent):
     _COMMON_SOUND_SPACE = ACHIEVEMENTS_SOUND_SPACE
     __collectionsSystem = dependency.descriptor(ICollectionsSystemController)
 
-    def __init__(self, layoutID, collectionId, backCallback, backBtnText, page):
-        settings = ViewSettings(layoutID)
-        settings.flags = ViewFlags.LOBBY_TOP_SUB_VIEW
-        settings.model = CollectionViewModel()
-        self.__backCallback = backCallback
-        self.__backBtnText = backBtnText
-        self.__collection = self.__collectionsSystem.getCollection(collectionId)
+    def __init__(self, ctx=None):
+        self.__collectionId = ctx.get('collectionId')
+        self.__collection = self.__collectionsSystem.getCollection(self.__collectionId)
         self.__rewardTooltips = {}
-        self.__page = page
+        self.__page = ctx.get('page')
         self.__pagesCount = 0
         self.__content = {}
-        super(CollectionView, self).__init__(settings)
+        super(CollectionView, self).__init__(R.views.lobby.collection.CollectionView(), CollectionViewModel)
 
     @property
     def viewModel(self):
@@ -73,11 +69,14 @@ class CollectionView(ViewImpl):
         tooltipId = event.getArgument('tooltipId')
         return None if tooltipId is None else self.__rewardTooltips.get(tooltipId)
 
+    def getContext(self):
+        return {'page': self.__page,
+         'collectionId': self.__collectionId}
+
     def _onLoaded(self, *args, **kwargs):
         setCollectionRenewSeen(self.__collection.collectionId)
 
     def _finalize(self):
-        self.__backCallback = None
         self.__rewardTooltips = None
         g_eventBus.handleEvent(events.CollectionsEvent(events.CollectionsEvent.COLLECTION_VIEW_CLOSED), scope=EVENT_BUS_SCOPE.LOBBY)
         super(CollectionView, self)._finalize()
@@ -101,7 +100,6 @@ class CollectionView(ViewImpl):
     def __onViewLoaded(self, args):
         self.__pagesCount = int(args.get('pagesCount'))
         with self.viewModel.transaction() as model:
-            model.setBackButtonText(self.__backBtnText)
             self.__fillTabs(model=model)
             self.__fillTabData(model=model)
             if self.__page is not None:
@@ -279,7 +277,9 @@ class CollectionView(ViewImpl):
         itemId = int(args.get('itemId'))
         page = int(args.get('currentPage'))
         collectionId = self.__collection.collectionId
-        showCollectionItemPreviewWindow(itemId, collectionId, page, self.__pagesCount, self.__backCallback, self.__backBtnText)
+        self.__page = page
+        self.__collectionId = collectionId
+        showCollectionItemPreviewWindow(itemId, collectionId, page, self.__pagesCount)
 
     def __onTabSelected(self, args):
         collectionName = args.get('collectionName')
@@ -303,11 +303,7 @@ class CollectionView(ViewImpl):
             self.destroyWindow()
 
     def __onClose(self):
-        if callable(self.__backCallback) and isPlayerAccount():
-            self.__backCallback()
-        self.__backCallback = None
         self.destroyWindow()
-        return
 
     def __getContent(self, group, sub, name):
         path = self.__content.get(group, {}).get(sub, {}).get(name, '')
@@ -319,3 +315,9 @@ class CollectionView(ViewImpl):
         if event.ctx.get('alias') in (VIEW_ALIAS.LOBBY_HANGAR, VIEW_ALIAS.LEGACY_LOBBY_HANGAR):
             setHangarState()
         self.destroyWindow()
+
+
+class CollectionWindow(WindowImpl):
+
+    def __init__(self, layer, ctx, **kwargs):
+        super(CollectionWindow, self).__init__(content=CollectionView(ctx=ctx), wndFlags=WindowFlags.WINDOW, layer=layer)

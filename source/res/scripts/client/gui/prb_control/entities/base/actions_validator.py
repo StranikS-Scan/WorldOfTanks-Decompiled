@@ -3,6 +3,7 @@
 import logging
 import weakref
 from CurrentVehicle import g_currentPreviewVehicle, g_currentVehicle
+from gui.lobby_state_machine.states import LobbyStateFlags
 from gui.prb_control.items import ValidationResult
 from gui.prb_control.settings import PREBATTLE_RESTRICTION
 from helpers import dependency
@@ -38,11 +39,21 @@ class BaseActionsValidator(IActionsValidator):
         return True
 
 
+class CurrentPreviewVehicleActionsValidator(BaseActionsValidator):
+
+    def _validate(self):
+        if not g_currentVehicle.isReadyToFight():
+            from gui.Scaleform.lobby_entry import getLobbyStateMachine
+            lsm = getLobbyStateMachine()
+            inPBS = any((s.getFlags() & LobbyStateFlags.POST_BATTLE_RESULTS for s in lsm.getNonEmptyEnteredStates(onlyLeaves=False)))
+            if g_currentPreviewVehicle.isPresent() and not inPBS:
+                return ValidationResult(False, PREBATTLE_RESTRICTION.PREVIEW_VEHICLE_IS_PRESENT)
+        return super(CurrentPreviewVehicleActionsValidator, self)._validate()
+
+
 class CurrentVehicleActionsValidator(BaseActionsValidator):
 
     def _validate(self):
-        if g_currentPreviewVehicle.isPresent():
-            return ValidationResult(False, PREBATTLE_RESTRICTION.PREVIEW_VEHICLE_IS_PRESENT)
         if not g_currentVehicle.isReadyToFight():
             if not g_currentVehicle.isPresent():
                 return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_NOT_PRESENT)

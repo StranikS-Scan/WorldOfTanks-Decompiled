@@ -38,8 +38,9 @@
       <invisibilityBonus>	0.06	</invisibilityBonus>
     </deluxeAdditionalInvisibilityDevice>
   </optDevsOverrides>
-  <repairCost>	7.92	</repairCost>
-  <crewXpFactor>	1.0	</crewXpFactor>
+  <repairCost>	5.0	</repairCost>
+  <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
+  <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.6	</priceFactor>
     <density>	1.06 1.06	</density>
@@ -787,7 +788,7 @@
       <userString>	#usa_vehicles:T84E3A_M	</userString>
       <tags></tags>
       <level>	8	</level>
-      <price>	38100	</price>
+      <price>	30000	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <leftTrack>	25	</leftTrack>
@@ -1835,8 +1836,8 @@
     <T119_M>
       <userString>	#usa_vehicles:T119_M	</userString>
       <tags></tags>
-      <level>	9	</level>
-      <price>	50500	</price>
+      <level>	8	</level>
+      <price>	30000	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	298	</armor_1>
@@ -1877,7 +1878,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.366894 10 0.430556 5 0.569444 5 0.633106 10 1 10	</maxPitch>
           </pitchLimits>
-          <reloadTime>	11	</reloadTime>
+          <reloadTime>	10.6	</reloadTime>
           <shotDispersionRadius>	0.33	</shotDispersionRadius>
           <shotDispersionFactors>
             <turretRotation>	0.06	</turretRotation>

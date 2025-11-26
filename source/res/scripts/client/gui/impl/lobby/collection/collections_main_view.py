@@ -3,14 +3,13 @@
 from frameworks.wulf import ViewFlags, ViewSettings, ViewStatus
 from gui.Scaleform.daapi.view.lobby.profile.sound_constants import ACHIEVEMENTS_SOUND_SPACE
 from gui.collection.account_settings import isCompletedCollectionShown, isIntroShown, isNewCollection, getLastShownCollectionBalance, resetCollectionsTabCounter, setCollectionsUpdatedEntrySeen, setLastShownCollectionBalance, setLastShownNewCollection, setShownCompletedCollection
-from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.collection.collection_model import CollectionModel
 from gui.impl.gen.view_models.views.lobby.collection.collections_main_view_model import CollectionsMainViewModel
 from gui.impl.pub import ViewImpl
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
-from gui.shared.event_dispatcher import showCollectionWindow, showCollectionsMainPage, showHangar
+from gui.shared.event_dispatcher import showCollectionWindow, showHangar
 from helpers import dependency
 from skeletons.gui.game_control import ICollectionsSystemController
 from skeletons.gui.impl import IGuiLoader
@@ -121,7 +120,7 @@ class CollectionsMainView(ViewImpl):
         self._unsubscribe()
         g_eventBus.addListener(events.CollectionsEvent.COLLECTION_VIEW_CLOSED, self.__onCollectionViewClosed, EVENT_BUS_SCOPE.LOBBY)
         collection = self.__collectionsSystem.getCollection(int(args.get('collectionId')))
-        showCollectionWindow(collection.collectionId, backBtnText=backport.text(R.strings.collections.main.backText()), backCallback=showCollectionsMainPage)
+        showCollectionWindow(collection.collectionId)
 
     def __setCompletionShown(self, args):
         setShownCompletedCollection(int(args.get('collectionId')))

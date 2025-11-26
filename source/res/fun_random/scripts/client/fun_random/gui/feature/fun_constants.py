@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/feature/fun_constants.py
+from __future__ import absolute_import
 from enum import unique, Enum
 from gui.periodic_battles.models import PeriodType
 FEP_MODE_ITEMS_QUEST_ID = 'FEP_mode_items'

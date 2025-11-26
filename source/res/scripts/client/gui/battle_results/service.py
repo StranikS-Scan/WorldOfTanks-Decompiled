@@ -13,6 +13,7 @@ from gui import SystemMessages
 from gui.battle_results import context, emblems, reusable, stored_sorting
 from gui.battle_results.pbs_helpers.common import pushNoBattleResultsDataMessage
 from gui.battle_results.composer import RegularStatsComposer
+from gui.battle_results.random_stats_ctrl import RandomBattleResultStatsCtrl
 from gui.battle_results.settings import PREMIUM_STATE
 from gui.shared import event_dispatcher, events, g_eventBus
 from gui.shared.gui_items.processors.common import BattleResultsGetter, PremiumBonusApplier
@@ -55,6 +56,11 @@ class _PostBattleFakeData(object):
                 result = self.__itemsCache.items.getVehicleCopyByCD(vehicleType.compactDescr)
             return result
 
+    def getStatsCtrl(self, battleResults):
+        statsCtrl = RegularStatsComposer(battleResults.reusable)
+        statsCtrl.setResults(battleResults.results, battleResults.reusable)
+        return statsCtrl
+
     def switchPBS(self):
         self.defaultPBS ^= True
 
@@ -76,12 +82,6 @@ class BattleResultsService(IBattleResultsService):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     wotPlusController = dependency.descriptor(IWotPlusController)
     appLoader = dependency.descriptor(IAppLoader)
-    GF_BONUS_TYPES = frozenset([ARENA_BONUS_TYPE.REGULAR,
-     ARENA_BONUS_TYPE.RANDOM_NP2,
-     ARENA_BONUS_TYPE.EPIC_RANDOM,
-     ARENA_BONUS_TYPE.TRAINING,
-     ARENA_BONUS_TYPE.TOURNAMENT_REGULAR,
-     ARENA_BONUS_TYPE.WINBACK])
     __slots__ = ('__battleResults', '__statsCtrls', '__buy', '__eventsManager', 'onResultPosted', '__appliedAddXPBonus', '__playerSatisfactionRatings')
 
     def __init__(self):
@@ -179,16 +179,13 @@ class BattleResultsService(IBattleResultsService):
         if arenaUniqueID in self.__statsCtrls:
             statsCtrl = self.__statsCtrls[arenaUniqueID]
             if self.__isSwitchEnabled(statsCtrl):
-                battleResults = statsCtrl.getResults()
-                regularComposer = RegularStatsComposer(battleResults.reusable)
-                regularComposer.setResults(battleResults.results, battleResults.reusable)
-                statsCtrl = regularComposer
+                statsCtrl = g_pbsFakeData.getStatsCtrl(statsCtrl.getResults())
             vo = statsCtrl.getVO()
         else:
             vo = None
         return vo
 
-    def getPresenter(self, arenaUniqueID):
+    def getStatsCtrl(self, arenaUniqueID):
         if arenaUniqueID not in self.__statsCtrls:
             _logger.error('Missing suitable battle results presenter.')
             return None
@@ -265,6 +262,9 @@ class BattleResultsService(IBattleResultsService):
         arenaInfo = self.__getAdditionalXPBattles().get(arenaUniqueID)
         return self.itemsCache.items.getItemByCD(arenaInfo.vehicleID) if arenaInfo is not None else None
 
+    def notifyBattleResultsPosted(self, arenaUniqueID, needToShowUI=False):
+        self.__notifyBattleResultsPosted(arenaUniqueID, needToShowUI)
+
     def __postStatistics(self, reusableInfo, result):
         playerAccount = BigWorld.player()
         if playerAccount is None or not isinstance(playerAccount, PlayerAccount):
@@ -282,24 +282,13 @@ class BattleResultsService(IBattleResultsService):
     def __showResults(self, ctx):
         yield self.requestResults(ctx)
 
-    def notifyBattleResultsPosted(self, arenaUniqueID, needToShowUI=False):
-        self.__notifyBattleResultsPosted(arenaUniqueID, needToShowUI)
-
     def __isSwitchEnabled(self, statsCtrl):
-        results = statsCtrl.getResults()
-        if results is None:
-            return False
-        else:
-            bonusType = results.reusable.bonusType
-            result = not g_pbsFakeData.defaultPBS and bonusType in self.GF_BONUS_TYPES
-            return result
+        return not g_pbsFakeData.defaultPBS and isinstance(statsCtrl, RandomBattleResultStatsCtrl)
 
     def __notifyBattleResultsPosted(self, arenaUniqueID, needToShowUI=False):
         statsCtrl = self.__statsCtrls[arenaUniqueID]
         if self.__isSwitchEnabled(statsCtrl):
-            battleResults = statsCtrl.getResults()
-            statsCtrl = RegularStatsComposer(battleResults.reusable)
-            statsCtrl.setResults(battleResults.results, battleResults.reusable)
+            statsCtrl = g_pbsFakeData.getStatsCtrl(statsCtrl.getResults())
         window = None
         if needToShowUI:
             window = statsCtrl.onShowResults(arenaUniqueID)

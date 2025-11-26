@@ -5,18 +5,12 @@ from gui.battle_results.settings import EMBLEM_TYPE
 from gui.clans.clan_cache import g_clanCache
 
 class EmblemFetcher(object):
-    __slots__ = ('_formationDBID', '_url', '_callback')
+    __slots__ = ('_formationDBID', '_url')
 
     def __init__(self, formationDBID):
         super(EmblemFetcher, self).__init__()
         self._formationDBID = formationDBID
         self._url = ''
-        self._callback = None
-        return
-
-    def clear(self):
-        self._callback = None
-        return
 
     def fetch(self, callback):
         callback(None)
@@ -27,7 +21,7 @@ class EmblemFetcher(object):
 
 
 class ClanEmblemFetcher(EmblemFetcher):
-    __slots__ = ('_url',)
+    __slots__ = ()
 
     def __init__(self, formationDBID, textureID):
         super(ClanEmblemFetcher, self).__init__(formationDBID)

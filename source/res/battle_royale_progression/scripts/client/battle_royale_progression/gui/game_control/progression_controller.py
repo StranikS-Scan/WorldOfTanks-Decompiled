@@ -5,7 +5,7 @@ import typing
 import Event
 from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import BR_PROGRESSION_POINTS_SEEN
+from account_helpers.AccountSettings import BR_PROGRESSION_POINTS_SEEN, BR_UI_SECTION
 from gui.server_events.bonuses import getNonQuestBonuses
 from helpers import dependency
 from battle_royale_progression.skeletons.game_controller import IBRProgressionOnTokensController
@@ -14,6 +14,7 @@ from skeletons.gui.server_events import IEventsCache
 _logger = logging.getLogger(__name__)
 
 class ProgressionOnTokensController(IBRProgressionOnTokensController):
+    STORAGE_SECTION_ACC_SETTINGS_KEY = 'exampleStorage'
     PREV_POINTS_ACC_SETTINGS_KEY = 'exampleLastPointsSeen'
     eventsCache = dependency.descriptor(IEventsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -32,13 +33,6 @@ class ProgressionOnTokensController(IBRProgressionOnTokensController):
         self.onProgressPointsUpdated.clear()
         self.onSettingsChanged.clear()
 
-    def __onTokensUpdate(self, diff, _):
-        tokens = diff.get('tokens', {})
-        if not tokens:
-            return
-        if self.progressionToken and self.progressionToken in tokens:
-            self.onProgressPointsUpdated()
-
     def saveCurPoints(self):
         self._cachePoints(self.getCurPoints())
 
@@ -49,26 +43,31 @@ class ProgressionOnTokensController(IBRProgressionOnTokensController):
         return self.eventsCache.questsProgress.getTokenCount(self.progressionToken)
 
     def getProgessionPointsData(self):
-        curPoings = self.getCurPoints()
-        prevPoint = self.getPrevPoints()
-        if curPoings < prevPoint:
-            prevPoint = 0
-        return {'curPoints': curPoings,
-         'pointsForLevel': self._getPointsForLevel(),
-         'prevPoints': prevPoint,
-         'progressionLevels': self.getProgressionLevelsData()}
+        curPoints = self.getCurPoints()
+        prevPoints = self.getPrevPoints()
+        if curPoints < prevPoints:
+            prevPoints = 0
+        return {'curPoints': curPoints,
+         'prevPoints': prevPoints}
 
-    def getProgressionData(self):
-        return self.getProgessionPointsData()
+    def _getProgressionLevels(self):
+        return []
 
     def _cachePoints(self, curPoints):
-        AccountSettings.setSettings(self.PREV_POINTS_ACC_SETTINGS_KEY, curPoints)
+        settings = AccountSettings.getUIFlag(self.STORAGE_SECTION_ACC_SETTINGS_KEY)
+        settings[self.PREV_POINTS_ACC_SETTINGS_KEY] = curPoints
+        AccountSettings.setUIFlag(self.STORAGE_SECTION_ACC_SETTINGS_KEY, settings)
 
     def _getCachedPoints(self):
-        return AccountSettings.getSettings(self.PREV_POINTS_ACC_SETTINGS_KEY)
+        settings = AccountSettings.getUIFlag(self.STORAGE_SECTION_ACC_SETTINGS_KEY)
+        return settings.get(self.PREV_POINTS_ACC_SETTINGS_KEY, 0)
 
-    def _getPointsForLevel(self):
-        raise NotImplementedError
+    def __onTokensUpdate(self, diff, _):
+        tokens = diff.get('tokens', {})
+        if not tokens:
+            return
+        if self.progressionToken and self.progressionToken in tokens:
+            self.onProgressPointsUpdated()
 
 
 class ProgressionOnConfig(ProgressionOnTokensController):
@@ -88,10 +87,7 @@ class ProgressionOnConfig(ProgressionOnTokensController):
 
     @property
     def isFinished(self):
-        return False if not self.isEnabled else self.getCurPoints() >= self._getPointsForLevel() * len(self._getStages())
-
-    def _getStages(self):
-        return sorted([ stage for stage in self.settings.get('awardList', []) if stage[0] is not None ], key=lambda stage: stage[0])
+        return False if not self.isEnabled else self.getCurPoints() >= self._getMaxPoints()
 
     def setSettings(self, settings):
         self.settings = settings
@@ -99,47 +95,64 @@ class ProgressionOnConfig(ProgressionOnTokensController):
             self.progressionToken = self.settings.get('token')
         self.onSettingsChanged()
 
-    def getCurrentStageData(self):
-        if not self.isEnabled:
-            return {}
+    def getProgessionPointsData(self):
         curPoints = self.getCurPoints()
+        prevPoints = self.getPrevPoints()
+        if curPoints < prevPoints:
+            prevPoints = 0
         curStage = 0
+        prevStage = 0
+        stageProgress = 0
+        prevStageProgress = 0
         stagePoints = 0
-        stageMaxPoints = 0
+        prevStagePoints = 0
         prevStageMaxPoints = 0
+        maxPoints = 0
         for stage, maxPoints in enumerate(zip(*self._getStages())[0], 1):
-            curStage = stage
-            stagePoints = curPoints - prevStageMaxPoints
-            stageMaxPoints = maxPoints - prevStageMaxPoints
+            if curPoints < maxPoints and curStage == 0:
+                curStage = stage
+                stageProgress = curPoints - prevStageMaxPoints
+                stagePoints = maxPoints - prevStageMaxPoints
+            if prevPoints < maxPoints and prevStage == 0:
+                prevStage = stage
+                prevStageProgress = prevPoints - prevStageMaxPoints
+                prevStagePoints = maxPoints - prevStageMaxPoints
             prevStageMaxPoints = maxPoints
-            if curPoints < maxPoints:
-                break
-        else:
-            stagePoints = min(stagePoints, stageMaxPoints)
 
-        results = {'currentStage': curStage,
+        return {'curPoints': curPoints,
+         'prevPoints': prevPoints,
+         'stage': curStage,
+         'prevStage': prevStage,
+         'stageProgress': stageProgress,
+         'prevStageProgress': prevStageProgress,
          'stagePoints': stagePoints,
-         'stageMaxPoints': stageMaxPoints}
-        return results
+         'prevStagePoints': prevStagePoints,
+         'totalPoints': maxPoints}
 
-    def _getPointsForLevel(self):
-        stages = self._getStages()
-        if len(self.settings) < 2:
-            _logger.error('ProgressionOnConfig cant find stages')
-            return 0
-        firstStageInfo, secondStageInfo = stages[:2]
-        return secondStageInfo[0] - firstStageInfo[0]
-
-    def getProgressionLevelsData(self):
-        result = []
+    def _getProgressionLevels(self):
+        progressionLevels = []
         for stageAwards in zip(*self._getStages())[1]:
             bonuses = []
             for key, value in stageAwards:
                 bonuses.extend(getNonQuestBonuses(key, value))
 
-            result.append({'rewards': bonuses})
+            progressionLevels.append({'rewards': bonuses})
 
-        return result
+        return progressionLevels
+
+    def getProgressionData(self):
+        return {'progressionLevels': self._getProgressionLevels()}
+
+    def _getStages(self):
+        return sorted([ stage for stage in self.settings.get('awardList', []) if stage[0] is not None ], key=lambda stage: stage[0])
+
+    def _getMaxPoints(self):
+        stages = self._getStages()
+        if len(self.settings) < 2:
+            _logger.error('ProgressionOnConfig cant find stages')
+            return 0
+        lastStage = stages[-1]
+        return lastStage[0]
 
 
 class _QuestInListContainer(object):
@@ -165,9 +178,6 @@ class BaseProgressionWithBattleQuests(ProgressionOnConfig):
         super(BaseProgressionWithBattleQuests, self).__init__()
         self.questContainer = self._getQuestContainer()
 
-    def _getQuestContainer(self):
-        return _QuestInListContainer()
-
     def setSettings(self, settings):
         questsIds = settings.get('questIds', ())
         self.questContainer.setQuestsIds(questsIds)
@@ -175,13 +185,16 @@ class BaseProgressionWithBattleQuests(ProgressionOnConfig):
         self.eventsCache.questsProgress.addFilterFunc(filterFunc, key=self.ProgressionFilterFuncKey)
         super(BaseProgressionWithBattleQuests, self).setSettings(settings)
 
-    def getBattleQuestData(self):
-        return {'battleQuests': self.questContainer.getQuests()}
-
     def getProgressionData(self):
-        result = self.getProgessionPointsData()
-        result.update(self.getBattleQuestData())
+        result = super(BaseProgressionWithBattleQuests, self).getProgressionData()
+        result.update(self.__getBattleQuestData())
         return result
+
+    def _getQuestContainer(self):
+        return _QuestInListContainer()
+
+    def __getBattleQuestData(self):
+        return {'battleQuests': self.questContainer.getQuests()}
 
 
 class BRQuests(_QuestInListContainer):
@@ -189,6 +202,7 @@ class BRQuests(_QuestInListContainer):
 
 
 class BRProgressionController(BaseProgressionWithBattleQuests):
+    STORAGE_SECTION_ACC_SETTINGS_KEY = BR_UI_SECTION
     PREV_POINTS_ACC_SETTINGS_KEY = BR_PROGRESSION_POINTS_SEEN
     progressionToken = 'img:battle_royale:progression'
     PROGRESSION_QUEST_PREFIX = 'battle_royale:ticket:progression:'

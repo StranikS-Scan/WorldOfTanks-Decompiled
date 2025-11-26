@@ -48,6 +48,7 @@
     <_40mm_auto_Boforsa_II>	59	</_40mm_auto_Boforsa_II>
     <_155mm_armata_wz_40_46>	60	</_155mm_armata_wz_40_46>
     <_115mm_armata_U_5TS>	62	</_115mm_armata_U_5TS>
+    <GG_85_175_mm_GC>	63	</GG_85_175_mm_GC>
     <_90mm_wz_39_90_40>	2000	</_90mm_wz_39_90_40>
     <_100mm_DAP_44>	2001	</_100mm_DAP_44>
     <GG_100_162_mm_58>	2002	</GG_100_162_mm_58>
@@ -2948,7 +2949,7 @@
       <userString>	#poland_vehicles:_152mm_J_2_CFE_A	</userString>
       <tags></tags>
       <level>	10	</level>
-      <price>	300000	</price>
+      <price>	340000	</price>
       <notInShop>	true	</notInShop>
       <impulse>	0.62	</impulse>
       <recoil>
@@ -2968,8 +2969,8 @@
       <maxAmmo>	20	</maxAmmo>
       <aimingTime>	4.04	</aimingTime>
       <weight>	4370	</weight>
-      <maxHealth>	220	</maxHealth>
-      <maxRegenHealth>	110	</maxRegenHealth>
+      <maxHealth>	252	</maxHealth>
+      <maxRegenHealth>	126	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.4	</shotDispersionRadius>
@@ -3467,6 +3468,65 @@
         </PW_GG_m85_175>
       </shots>
     </GG_85_175_mm_7x7>
+    <GG_85_175_mm_GC>
+      <userString>	#poland_vehicles:GG_85_175_mm_GC	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	300000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.44	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.0	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effectsCaliber>	175	</effectsCaliber>
+      <effects>	shot_huge	</effects>
+      <reloadEffect>	reload155_170	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+        <maxPitch>	0.0 5.0 1.0 5.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	24	</rotationSpeed>
+      <reloadTime>	16.5	</reloadTime>
+      <maxAmmo>	20	</maxAmmo>
+      <aimingTime>	4.04	</aimingTime>
+      <weight>	2000	</weight>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	110	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <PP_GG_m85_175_GC>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1500	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	263 239	</piercingPower>
+        </PP_GG_m85_175_GC>
+        <PPrz_GG_m85_175_GC>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1800	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	314 293	</piercingPower>
+        </PPrz_GG_m85_175_GC>
+        <PW_GG_m85_175_GC>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	900	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	85 85	</piercingPower>
+        </PW_GG_m85_175_GC>
+      </shots>
+    </GG_85_175_mm_GC>
     <_105mm_wz_22_24_G1_SH>
       <userString>	#poland_vehicles:_105mm_wz_22_24_G1_SH	</userString>
       <tags></tags>

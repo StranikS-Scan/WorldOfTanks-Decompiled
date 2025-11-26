@@ -11,7 +11,6 @@ from constants import ARENA_BONUS_TYPE, ARENA_GUI_TYPE
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
-from gui.Scaleform.daapi.view.lobby.tank_setup.ammunition_setup_vehicle import g_tankSetupVehicle
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from gui.Scaleform.daapi.view.lobby.veh_post_progression.veh_post_progression_vehicle import g_postProgressionVehicle
@@ -33,7 +32,7 @@ from helpers import dependency
 from personal_missions import PM_BRANCH
 from rent_common import RENT_TYPE_TO_DURATION
 from shared_utils import first
-from skeletons.gui.game_control import IRankedBattlesController, IBattlePassController, IHangarGuiController
+from skeletons.gui.game_control import IRankedBattlesController, IBattlePassController, IHangarGuiController, ILoadoutController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.server_events import IEventsCache
@@ -473,8 +472,9 @@ class HangarCarouselContext(CarouselContext):
 
     def getStatsConfiguration(self, item):
         value = super(HangarCarouselContext, self).getStatsConfiguration(item)
-        value.showEarnCrystals = self.__hangarGuiCtrl.checkCurrentCrystalRewards(default=value.showEarnCrystals)
-        value.dailyXP = self.__hangarGuiCtrl.checkCurrentBonusCaps(_CAPS.DAILY_MULTIPLIED_XP, default=value.dailyXP)
+        dynamicEconomics = self.__hangarGuiCtrl.dynamicEconomics
+        value.showEarnCrystals = dynamicEconomics.checkCurrentCrystalRewards(default=value.showEarnCrystals)
+        value.dailyXP = dynamicEconomics.checkCurrentBonusCaps(_CAPS.DAILY_MULTIPLIED_XP, default=value.dailyXP)
         return self.__applyRankedStatsConfiguration(item, value)
 
     def __applyRankedStatsConfiguration(self, item, value):
@@ -555,11 +555,11 @@ class HangarParamContext(BaseHangarParamContext):
         self.formatters = NO_BONUS_SIMPLIFIED_SCHEME
 
     def getComparator(self):
-        item = g_currentVehicle.item or g_currentPreviewVehicle.item
+        item = g_currentPreviewVehicle.defaultItem or g_currentVehicle.item
         return params_helper.similarCrewComparator(item)
 
     def buildItem(self, *args, **kwargs):
-        return g_currentVehicle.item or g_currentPreviewVehicle.item
+        return g_currentPreviewVehicle.defaultItem or g_currentVehicle.item
 
 
 class PreviewParamContext(HangarParamContext):
@@ -589,19 +589,23 @@ class CmpParamContext(HangarParamContext):
 
 
 class TankSetupParamContext(HangarParamContext):
+    __loadoutController = dependency.descriptor(ILoadoutController)
 
     def __init__(self):
         super(TankSetupParamContext, self).__init__()
         self.formatters = NO_BONUS_SIMPLIFIED_SCHEME
 
     def getComparator(self):
-        return params_helper.similarCrewComparator(g_tankSetupVehicle.item)
+        return params_helper.similarCrewComparator(self.__getItem())
 
     def buildItem(self, *args, **kwargs):
-        return g_tankSetupVehicle.item
+        return self.__getItem()
 
     def getBonusExtractor(self, vehicle, bonuses, paramName):
         return bonus_helper.TankSetupBonusExtractor(vehicle, bonuses, paramName)
+
+    def __getItem(self):
+        return self.__loadoutController.interactor.getVehicleAfterInstall() if self.__loadoutController.interactor is not None else g_currentVehicle.item
 
 
 class PostProgressionParamContext(TankSetupParamContext):

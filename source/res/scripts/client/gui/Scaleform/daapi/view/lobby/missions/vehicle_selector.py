@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/vehicle_selector.py
 from CurrentVehicle import g_currentVehicle
+from gui.filters.carousel_filter import BasicCriteriesGroup
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_data_provider import getVehicleDataVO, CarouselDataProvider, getStatusStrings
-from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import BasicCriteriesGroup
 from gui.Scaleform.daapi.view.meta.MissionsVehicleSelectorMeta import MissionsVehicleSelectorMeta
 from gui.Scaleform.daapi.view.meta.VehicleSelectorCarouselMeta import VehicleSelectorCarouselMeta
 from gui.Scaleform.locale.QUESTS import QUESTS

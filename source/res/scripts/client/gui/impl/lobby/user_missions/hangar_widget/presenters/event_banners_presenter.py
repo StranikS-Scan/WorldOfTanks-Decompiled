@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/user_missions/hangar_widget/presenters/event_banners_presenter.py
 import json
-from typing import TYPE_CHECKING
 import BigWorld
+from typing import TYPE_CHECKING
 from debug_utils import LOG_ERROR
 from gui.impl.gen.view_models.views.lobby.user_missions.widget.event_banner_model import EventBannerModel
 from gui.impl.gen.view_models.views.lobby.user_missions.widget.event_banners_list_model import EventBannersListModel
@@ -117,10 +117,15 @@ class EventBannersPresenter(TooltipPositionerMixin, OverlapCtrlMixin, ViewCompon
         model = EventBannerModel()
         model.setName(banner.NAME)
         model.setIsMode(banner.isMode)
+        model.setTitle(banner.title)
+        model.setHasRewards(banner.hasRewards)
         model.setIntroDescription(banner.introDescription)
         model.setInProgressDescription(banner.inProgressDescription)
         model.setBannerState(banner.bannerState)
+        model.setIconsPath(banner.iconsPath)
+        model.setVideosPath(banner.videosPath)
         model.setBorderColor(banner.borderColor)
+        model.setTimerText(banner.timerText)
         model.setTimerValue(banner.timerValue)
         model.setEventEndDate(banner.eventEndDate)
         model.setEventStartDate(banner.eventStartDate)

@@ -78,7 +78,7 @@ class BuyAndExchange(FullScreenDialogView, typing.Generic[TViewModel]):
         self.__stateMachine.transit(BuyAndExchangeEventEnum.START_EXCHANGE, condition=lambda : needExchange and skipNeedExchangeState)
         self.__stateMachine.transit(BuyAndExchangeEventEnum.CAN_BUY, condition=lambda : needItems == 0)
         self.__stateMachine.transit(BuyAndExchangeEventEnum.CAN_NOT_BUY, condition=lambda : needItems > 0 and not needExchange)
-        if self._exchangeContent is not None and self.__stateMachine.getCurrentContentType() == BuyAndExchangeBottomContentType.EXCHANGE_PANEL:
+        if self._exchangeContent is not None:
             self._exchangeContent.update(needItems)
         self.__setLacksMoney(self._stats.money.getShortage(self.__price), Currency.CREDITS)
         return

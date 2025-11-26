@@ -25,8 +25,8 @@ class _BattleMessageBuilder(object):
         self._ctx['messageColor'] = getter('battle/message').getHexStr('unknown')
         return self
 
-    def setName(self, avatarSessionID, pName=None, suffix=''):
-        name = self.sessionProvider.getCtx().getPlayerFullName(avatarSessionID=avatarSessionID, pName=pName)
+    def setName(self, avatarSessionID, pName=None, suffix='', vehID=None):
+        name = self.sessionProvider.getCtx().getPlayerFullName(avatarSessionID=avatarSessionID, pName=pName, vID=vehID)
         name = name + suffix
         if isinstance(name, str):
             name = unicode(name, 'utf-8')

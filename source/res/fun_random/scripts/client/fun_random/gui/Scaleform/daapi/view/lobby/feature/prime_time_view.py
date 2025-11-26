@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/Scaleform/daapi/view/lobby/feature/prime_time_view.py
+from __future__ import absolute_import
+from past.builtins import cmp
 from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin, FunSubModeHolder
 from fun_random.gui.feature.util.fun_wrappers import hasHoldingSubMode, filterHoldingSubModeUpdates
 from fun_random.gui.fun_gui_constants import PREBATTLE_ACTION_NAME
@@ -24,8 +26,8 @@ class FunRandomPrimeTimeView(RankedPrimeTimeMeta, FunAssetPacksMixin, FunSubMode
     _RES_ROOT = R.strings.fun_random.primeTimes
     _serverPresenterClass = FunRandomServerPresenter
 
-    def __init__(self, ctx):
-        super(FunRandomPrimeTimeView, self).__init__(ctx)
+    def __init__(self, ctx, **kwargs):
+        super(FunRandomPrimeTimeView, self).__init__(**kwargs)
         self.catchSubMode(ctx['subModeID'])
 
     def _dispose(self):

@@ -121,7 +121,6 @@ class UI_STORAGE_KEYS(CONST_CONTAINER):
     NEW_C11N_SECTION_HINT_ACTION_TAKEN = 'new_c11n_section_hint_action_taken'
     C11N_VEHICLE_LIST_HINT_ACTION_TAKEN = 'c11n_vehicle_list_hint_action_taken'
     VEHICLE_C11N_FILTER_HINT_ACTION_TAKEN = 'vehicle_c11n_filter_hint_action_taken'
-    ONE_TIME_GIFT_INTRO_SHOWN = 'one_time_gift_intro_shown'
 
 
 HINT_STORAGE_KEY_MAPPING = {OnceOnlyHints.NEW_C11N_SECTION_HINT: UI_STORAGE_KEYS.NEW_C11N_SECTION_HINT_ACTION_TAKEN,
@@ -155,7 +154,6 @@ class LIMITED_UI_SPAM_OFF(CONST_CONTAINER):
     LOBBY_HEADER_COUNTERS_PM_OPERATIONS = 'PersonalMissionOperations'
     REFERRAL_BTN_COUNTER = 'referralButtonCounter'
     AP_ZONE_HINT = 'AmmunitionPanelHintZoneHint'
-    AP_BATTLE_ABILITIES_HINT = 'AmmunitionPanelBattleAbilitiesHint'
     C11N_PROGRESSION_HINT = 'CustomizationProgressionViewHint'
     TECH_TREE_EVENTS = 'TechTreeEvent'
     DOG_TAG_HINT = 'DogTagHangarHint'
@@ -174,7 +172,6 @@ class LIMITED_UI_SPAM_OFF(CONST_CONTAINER):
      LOBBY_HEADER_COUNTERS_PM_OPERATIONS,
      REFERRAL_BTN_COUNTER,
      AP_ZONE_HINT,
-     AP_BATTLE_ABILITIES_HINT,
      C11N_PROGRESSION_HINT,
      TECH_TREE_EVENTS,
      DOG_TAG_HINT,
@@ -586,7 +583,6 @@ class ServerSettingsManager(object):
                                          OnceOnlyHints.HOLD_SHEET_HINT: 4,
                                          OnceOnlyHints.HAVE_NEW_BADGE_HINT: 5,
                                          OnceOnlyHints.EPIC_RESERVES_SLOT_HINT: 6,
-                                         OnceOnlyHints.SHOW_ABILITIES_BUTTON_HINT: 7,
                                          OnceOnlyHints.PAUSE_HINT: 8,
                                          OnceOnlyHints.HAVE_NEW_SUFFIX_BADGE_HINT: 9,
                                          OnceOnlyHints.BADGE_PAGE_NEW_SUFFIX_BADGE_HINT: 10,
@@ -620,7 +616,6 @@ class ServerSettingsManager(object):
                                            OnceOnlyHints.MODE_SELECTOR_WIDGETS_BTN_HINT: 6,
                                            OnceOnlyHints.HANGAR_MANUAL_HINT: 7,
                                            OnceOnlyHints.MAPS_TRAINING_NEWBIE_HINT: 8,
-                                           OnceOnlyHints.AMUNNITION_PANEL_EPIC_BATTLE_ABILITIES_HINT: 9,
                                            OnceOnlyHints.VEHICLE_PREVIEW_POST_PROGRESSION_BUTTON_HINT: 10,
                                            OnceOnlyHints.VEHICLE_POST_PROGRESSION_ENTRY_POINT_HINT: 11,
                                            OnceOnlyHints.HERO_VEHICLE_POST_PROGRESSION_ENTRY_POINT_HINT: 12,
@@ -635,7 +630,6 @@ class ServerSettingsManager(object):
                                            OnceOnlyHints.WOTPLUS_PROFILE_HINT: 21,
                                            OnceOnlyHints.HANGAR_HAVE_NEW_BADGE_HINT: 22,
                                            OnceOnlyHints.HANGAR_HAVE_NEW_SUFFIX_BADGE_HINT: 23,
-                                           OnceOnlyHints.APPLY_ABILITIES_TO_TYPE_CHECKBOX_HINT: 24,
                                            OnceOnlyHints.BATTLE_MATTERS_FIGHT_BUTTON_HINT: 25,
                                            OnceOnlyHints.BATTLE_MATTERS_ENTRY_POINT_BUTTON_HINT: 26,
                                            OnceOnlyHints.AMMUNITION_FILTER_HINT: 29,
@@ -708,8 +702,7 @@ class ServerSettingsManager(object):
                                       UI_STORAGE_KEYS.AUTO_SHOT_NPD_SHELLS_MARK_IS_SHOWN: 14,
                                       UI_STORAGE_KEYS.NEW_C11N_SECTION_HINT_ACTION_TAKEN: 18,
                                       UI_STORAGE_KEYS.C11N_VEHICLE_LIST_HINT_ACTION_TAKEN: 19,
-                                      UI_STORAGE_KEYS.VEHICLE_C11N_FILTER_HINT_ACTION_TAKEN: 20,
-                                      UI_STORAGE_KEYS.ONE_TIME_GIFT_INTRO_SHOWN: 21}, offsets={UI_STORAGE_KEYS.ROCKET_ACCELERATION_HIGHLIGHTS_COUNTER: Offset(1, 14),
+                                      UI_STORAGE_KEYS.VEHICLE_C11N_FILTER_HINT_ACTION_TAKEN: 20}, offsets={UI_STORAGE_KEYS.ROCKET_ACCELERATION_HIGHLIGHTS_COUNTER: Offset(1, 14),
                                       UI_STORAGE_KEYS.DUAL_ACCURACY_HIGHLIGHTS_COUNTER: Offset(5, 224),
                                       UI_STORAGE_KEYS.AUTO_SHOOT_HIGHLIGHTS_COUNTER: Offset(11, 14336),
                                       UI_STORAGE_KEYS.TWIN_GUN_HIGHLIGHTS_COUNTER: Offset(15, 229376)}),

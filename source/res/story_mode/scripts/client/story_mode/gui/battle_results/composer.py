@@ -30,10 +30,6 @@ class StoryModeStatsComposer(IBattleResultStatsCtrl):
     def getVO(self):
         return self._block.getVO()
 
-    @staticmethod
-    def onShowResults(arenaUniqueID):
-        pass
-
     def onResultsPosted(self, arenaUniqueID):
         resultVO = self._block.getVO()
         if resultVO['isForceOnboarding']:
@@ -47,6 +43,10 @@ class StoryModeStatsComposer(IBattleResultStatsCtrl):
                 showOutroVideo(resultVO['missionId'], arenaUniqueID)
             else:
                 showBattleResultWindow(arenaUniqueID)
+
+    @staticmethod
+    def onShowResults(arenaUniqueID):
+        pass
 
     def _processOnboardingResults(self, resultVO):
         missionId = resultVO['missionId']

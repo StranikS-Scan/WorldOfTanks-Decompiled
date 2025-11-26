@@ -3,7 +3,6 @@
 import SoundGroups
 from adisp import adisp_process, adisp_async
 from gui import shop
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.shared.cm_handlers import CMLabel, option
 from gui.Scaleform.daapi.view.lobby.tank_setup.context_menu.base import BaseItemContextMenu, BaseSlotContextMenu, TankSetupCMLabel
 from gui.Scaleform.daapi.view.lobby.tank_setup.context_menu.base_equipment import BaseHangarEquipmentSlotContextMenu
@@ -22,7 +21,7 @@ class BattleBoosterItemContextMenu(BaseItemContextMenu):
 
     @option(__sqGen.next(), CMLabel.BUY_MORE)
     def buyMore(self):
-        shop.showBattleBoosterOverlay(itemId=self._intCD, source=shop.Source.EXTERNAL, origin=shop.Origin.BATTLE_BOOSTERS, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB)
+        shop.showBattleBooster(itemId=self._intCD, source=shop.Source.EXTERNAL, origin=shop.Origin.BATTLE_BOOSTERS)
 
     def _isVisible(self, label):
         return not self._itemsCache.items.getItemByCD(self._intCD).isHidden if label == CMLabel.BUY_MORE else super(BattleBoosterItemContextMenu, self)._isVisible(label)
@@ -36,7 +35,7 @@ class BattleBoosterSlotContextMenu(BaseSlotContextMenu):
 
     @option(__sqGen.next(), CMLabel.BUY_MORE)
     def buyMore(self):
-        shop.showBattleBoosterOverlay(itemId=self._intCD, source=shop.Source.EXTERNAL, origin=shop.Origin.BATTLE_BOOSTERS, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB)
+        shop.showBattleBooster(itemId=self._intCD, source=shop.Source.EXTERNAL, origin=shop.Origin.BATTLE_BOOSTERS)
 
     @option(__sqGen.next(), TankSetupCMLabel.UNLOAD)
     def unload(self):
@@ -61,7 +60,7 @@ class HangarBattleBoosterSlotContextMenu(BaseHangarEquipmentSlotContextMenu):
 
     @option(_sqGen.next(), CMLabel.BUY_MORE)
     def buyMore(self):
-        shop.showBattleBoosterOverlay(itemId=self._intCD, source=shop.Source.EXTERNAL, origin=shop.Origin.BATTLE_BOOSTERS, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB)
+        shop.showBattleBooster(itemId=self._intCD, source=shop.Source.EXTERNAL, origin=shop.Origin.BATTLE_BOOSTERS)
 
     @option(_sqGen.next(), TankSetupCMLabel.UNLOAD)
     def unload(self):

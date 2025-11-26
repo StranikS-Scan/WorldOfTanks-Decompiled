@@ -166,7 +166,7 @@ class RentalInfoProvider(_RentalInfoProvider):
 
 
 class FittingItem(GUIItem):
-    __slots__ = ('_buyPrices', '_sellPrices', '_mayConsumeWalletResources', '_personalDiscountPrice', '_isHidden', '_inventoryCount', '_isUnlocked', '_isBoughtForAltPrice', '_rentInfo', '_restoreInfo', '_fullyConfigured', '_isInitiallyUnlocked', '_descriptor')
+    __slots__ = ('_buyPrices', '_sellPrices', '_mayConsumeWalletResources', '_isHidden', '_inventoryCount', '_isUnlocked', '_isBoughtForAltPrice', '_rentInfo', '_restoreInfo', '_fullyConfigured', '_isInitiallyUnlocked', '_descriptor')
 
     class TARGETS(object):
         CURRENT = 1
@@ -178,7 +178,6 @@ class FittingItem(GUIItem):
         self._isBoughtForAltPrice = isBoughtForAltPrice
         self._rentInfo = RentalInfoProvider(None, None, None, None, None, None)
         self._restoreInfo = None
-        self._personalDiscountPrice = None
         self._descriptor = self._getDescriptor()
         if proxy is not None and proxy.inventory.isSynced() and proxy.stats.isSynced() and proxy.shop.isSynced():
             self._mayConsumeWalletResources = proxy.stats.mayConsumeWalletResources

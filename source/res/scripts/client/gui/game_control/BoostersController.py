@@ -38,8 +38,8 @@ class BoostersController(IBoostersController, IGlobalListener):
     itemsCache = dependency.descriptor(IItemsCache)
     goodiesCache = dependency.descriptor(IGoodiesCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
-    __hangarGuiCtrl = dependency.descriptor(IHangarGuiController)
     systemMessages = dependency.descriptor(ISystemMessages)
+    __hangarGuiCtrl = dependency.descriptor(IHangarGuiController)
 
     def __init__(self):
         super(BoostersController, self).__init__()
@@ -71,11 +71,12 @@ class BoostersController(IBoostersController, IGlobalListener):
             enabledCategories = set()
             queueType = self.prbEntity.getQueueType()
             isDevTrainingBattle = isDevTraining()
+            checkCurrentBonusCaps = self.__hangarGuiCtrl.dynamicEconomics.checkCurrentBonusCaps
             for category in BoosterCategory:
                 enabledCategory = queueType in self.__supportedQueueTypes[category.name]
                 bonusCaps = BOOSTER_CATEGORY_TO_BONUS_CAPS.get(category)
                 if bonusCaps is not None:
-                    enabledCategory = self.__hangarGuiCtrl.checkCurrentBonusCaps(bonusCaps, default=enabledCategory)
+                    enabledCategory = checkCurrentBonusCaps(bonusCaps, default=enabledCategory)
                 if enabledCategory or isDevTrainingBattle:
                     enabledCategories.add(category)
 

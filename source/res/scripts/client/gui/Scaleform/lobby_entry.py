@@ -50,7 +50,7 @@ def getLobbyStateMachine():
     from skeletons.gui.app_loader import IAppLoader
     appLoader = dependency.instance(IAppLoader)
     app = appLoader.getApp()
-    return app.stateMachine if app else None
+    return getattr(app, 'stateMachine', None) if app else None
 
 
 _UntrackedStateForwardedParams = namedtuple('_UntrackedStateForwardedParams', ['loadParams', 'args', 'kwargs'])

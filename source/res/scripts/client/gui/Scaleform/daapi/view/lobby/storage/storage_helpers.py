@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/storage_helpers.py
 import logging
 import random
-from functools import partial
 from itertools import chain
 import typing
 import nations
@@ -20,7 +19,7 @@ from gui.Scaleform.locale.RES_SHOP import RES_SHOP
 from gui.Scaleform.locale.STORAGE import STORAGE
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.shared.event_dispatcher import showStorage, showStylePreview, showStyleProgressionPreview
+from gui.shared.event_dispatcher import showStylePreview, showStyleProgressionPreview
 from gui.shared.formatters import getItemPricesVO, getMoneyVO, icons, text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE, KPI, getKpiValueString
 from gui.shared.gui_items.Vehicle import Vehicle, getTypeUserName, getVehicleStateIcon, getShopVehicleIconPath
@@ -381,7 +380,7 @@ def customizationPreview(itemCD, itemsCache=None, vehicleCD=None):
     styleInfo = itemsCache.items.getItemByCD(itemCD)
     if vehicleCD is None:
         vehicleCD = getVehicleCDForStyle(styleInfo, itemsCache=itemsCache)
-    (showStyleProgressionPreview if styleInfo.isProgression else showStylePreview)(vehicleCD, styleInfo, styleInfo.getDescription(), partial(showStorage, defaultSection=STORAGE_CONSTANTS.CUSTOMIZATION), backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.storage()))
+    (showStyleProgressionPreview if styleInfo.isProgression else showStylePreview)(vehicleCD, styleInfo, styleInfo.getDescription())
     return
 
 

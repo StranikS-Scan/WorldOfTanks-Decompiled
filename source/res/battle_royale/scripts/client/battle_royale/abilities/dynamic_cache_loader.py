@@ -47,6 +47,7 @@ class DynamicObjectsCacheLoader(object):
         self.zonesPosition = zonesPosition
         self.team = team
         self.__influenceZoneType = None
+        self.__visual = None
         self.fireIDs = []
         return
 
@@ -87,6 +88,9 @@ class DynamicObjectsCacheLoader(object):
 
     def deactivate(self):
         self.guiSessionProvider.onUpdateObservedVehicleData -= self._onUpdateObservedVehicleData
+        if self.__visual is not None:
+            CGF.removeGameObject(self.__visual)
+            self.__visual = None
         if self.gameObject is not None:
             self.gameObject.destroy()
         self.gameObject = None
@@ -115,7 +119,7 @@ class DynamicObjectsCacheLoader(object):
             from battleground.components import SequenceComponent
             yShift = -zoneDepth
             position = position + Math.Vector3(0, yShift, 0)
-            g = CGF.GameObject(self.spaceID)
+            self.__visual = g = CGF.GameObject(self.spaceID)
             g.createComponent(GenericComponents.TransformComponent, position)
             g.createComponent(GenericComponents.HierarchyComponent, self.gameObject)
             sequenceComponent = g.createComponent(SequenceComponent, resourceRefs[effectP])

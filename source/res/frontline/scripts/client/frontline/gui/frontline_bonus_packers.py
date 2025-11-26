@@ -91,7 +91,7 @@ class FrontlineTokenBonusPacker(SimpleBonusUIPacker):
         model.setName(bonusType)
         model.setType(bonusType)
         model.setClaimState(ClaimState.CLAIMABLE if bonus.canClaim() else ClaimState.STATIC)
-        value = bonus.firstOfferCount()
+        value = bonus.firstOfferCount() * (bonus.getCount() or 1)
         model.setValue(str(value) if value > 1 else '')
         return model
 

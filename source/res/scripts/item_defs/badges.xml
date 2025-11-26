@@ -4800,7 +4800,7 @@
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
-        <item>	False	  <name>	achievable	</name>
+        <item>	True	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>
@@ -4827,7 +4827,7 @@
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
-        <item>	False	  <name>	achievable	</name>
+        <item>	True	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>
@@ -5194,6 +5194,114 @@
           <type>	int	</type>
         </item>
         <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	hw_2025_01	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	217	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	5.13	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	hw_2025_02	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	218	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	5.14	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	comp7_wci25_winner	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	219	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.25	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	14	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	comp7_wci25_competitor	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	220	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.25	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	14	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	comp7_wci25_supporter	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	221	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.25	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	14	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>

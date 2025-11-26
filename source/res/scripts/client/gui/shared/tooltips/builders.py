@@ -62,7 +62,7 @@ class AdvancedBuilder(TooltipBuilder):
 
 
 class DataBuilder(SimpleBuilder):
-    __slots__ = ('_provider',)
+    __slots__ = ()
 
     def __init__(self, tooltipType, linkage, provider):
         super(DataBuilder, self).__init__(tooltipType, linkage)
@@ -85,7 +85,7 @@ class TooltipWindowBuilder(DataBuilder):
 
 
 class AdvancedTooltipWindowBuilder(AdvancedBuilder):
-    __slots__ = ('_adProvider', '_condition', '_provider')
+    __slots__ = ('_adProvider', '_condition')
 
     def __init__(self, tooltipType, linkage, provider, adProvider, condition=None):
         super(AdvancedTooltipWindowBuilder, self).__init__(tooltipType, linkage)
@@ -102,7 +102,7 @@ class AdvancedTooltipWindowBuilder(AdvancedBuilder):
 
 
 class AdvancedDataBuilder(AdvancedBuilder):
-    __slots__ = ('_provider', '_adProvider', '_condition')
+    __slots__ = ('_adProvider', '_condition')
 
     def __init__(self, tooltipType, linkage, provider, adProvider, condition=None):
         super(AdvancedDataBuilder, self).__init__(tooltipType, linkage)

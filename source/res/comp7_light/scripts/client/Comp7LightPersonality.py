@@ -76,9 +76,9 @@ class ClientComp7LightBattleMode(Comp7LightBattleMode):
         return canSelectComp7LightPrbEntity
 
     @property
-    def _client_hangarPresetsGetter(self):
-        from comp7_light.gui.hangar_presets.hangar_presets_getters import Comp7LightPresetsGetter
-        return Comp7LightPresetsGetter
+    def _client_hangarDynamicGuiProvider(self):
+        from comp7_light.gui.hangar_presets.comp7_light_dynamic_gui_provider import Comp7LightHangarDynamicGuiProvider
+        return Comp7LightHangarDynamicGuiProvider
 
     @property
     def _client_providerBattleQueue(self):
@@ -119,7 +119,8 @@ class ClientComp7LightBattleMode(Comp7LightBattleMode):
     def _client_platoonLayouts(self):
         from gui.impl.gen import R
         from gui.impl.lobby.platoon.platoon_config import EPlatoonLayout, MembersWindow, PlatoonLayout
-        return [(EPlatoonLayout.MEMBER, PlatoonLayout(R.views.comp7_light.lobby.MembersWindow(), MembersWindow))]
+        from gui.impl.lobby.platoon.view.platoon_selection_view import SelectionWindow
+        return [(EPlatoonLayout.MEMBER, PlatoonLayout(R.views.comp7_light.lobby.MembersWindow(), MembersWindow)), (EPlatoonLayout.WELCOME, PlatoonLayout(R.views.comp7_light.lobby.PlatoonDropdown(), SelectionWindow))]
 
     @property
     def _client_platoonViewClass(self):
@@ -176,6 +177,11 @@ class ClientComp7LightBattleMode(Comp7LightBattleMode):
         return Comp7LightControllerRepository
 
     @property
+    def _client_prebattleCtrlMode(self):
+        from AvatarInputHandler import _CTRL_MODE
+        return (_CTRL_MODE.VEHICLES_SELECTION, _CTRL_MODE.POSTMORTEM)
+
+    @property
     def _client_battleRequiredLibraries(self):
         return ['comp7_light|comp7_light_battle.swf', 'comp7_core|minimapEntriesLibrary.swf']
 
@@ -210,6 +216,7 @@ def preInit():
     battleMode.registerDynamicObjectCache()
     battleMode.registerBattleControllersRepository()
     battleMode.registerScaleformRequiredLibraries()
+    battleMode.registerPrebattleCtrlMode()
     registerComp7LightScaleform()
     registerComp7LightLobby()
     registerComp7LightOthersPrbParams()

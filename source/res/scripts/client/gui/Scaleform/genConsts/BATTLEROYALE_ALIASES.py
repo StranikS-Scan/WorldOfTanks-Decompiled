@@ -3,17 +3,11 @@
 
 
 class BATTLEROYALE_ALIASES(object):
+    BR_HANGAR_VIEW = 'BattleRoyaleHangar'
+    BR_TOURNAMENT_BATTLE_QUEUE = 'BattleRoyaleTournamentQueue'
+    BR_PROGRESSION = 'BattleRoyaleProgression'
+    BR_BATTLE_RESULTS = 'BattleRoyaleBattleResults'
     VEH_MODULES_CONFIGURATOR_CMP = 'VehModulesConfiguratorComp'
-    LEVEL_UP = 'battleRoyaleLevelUpView'
     HANGAR_VEH_INFO_VIEW = 'HangarVehInfoView'
-    EVENT_PROGRESSION_VIEW = 'eventProgressionView'
-    TECH_PARAMETERS_COMPONENT = 'techParametersComponent'
-    COMMANDER_COMPONENT = 'commanderComponennt'
-    BOTTOM_PANEL_COMPONENT = 'bottomPanelComponent'
-    PROXY_CURRENCY_PANEL_COMPONENT = 'proxyCurrencyPanelComponent'
-    BATTLE_TYPE_SELECTOR = 'battleTypeSelector'
-    BATTLE_ROYALE_SUMMARY_RESULTS_CMP = 'BattleRoyaleSummaryResultsCmp'
-    BATTLE_ROYALE_SCORE_RESULTS_CMP = 'BattleRoyaleScoreResultsCmp'
     BATTLE_ROYALE_PRIME_TIME = 'BattleRoyalePrimeTimeView'
     BATTLE_ROYALE_BROWSER_VIEW = 'BattleRoyaleBrowserView'
-    LEVEL_UP_UI = 'battleRoyaleLevelUpView.swf'

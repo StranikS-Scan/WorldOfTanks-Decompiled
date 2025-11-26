@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/prb_control/storages/fun_random_storage.py
+from __future__ import absolute_import
 from fun_random_common.fun_constants import UNKNOWN_EVENT_ID
 from gui.prb_control.storages.local_storage import SessionStorage
 from helpers import dependency

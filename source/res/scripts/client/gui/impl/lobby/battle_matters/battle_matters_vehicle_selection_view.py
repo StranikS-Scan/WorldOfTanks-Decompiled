@@ -4,7 +4,6 @@ from collections import OrderedDict
 from functools import partial
 from frameworks.wulf import ViewFlags, ViewSettings, ViewStatus
 from gui import GUI_NATIONS_ORDER_INDEX, GUI_NATIONS
-from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_matters.battle_matters_vehicle_selection_view_model import BattleMattersVehicleSelectionViewModel
 from gui.impl.lobby.battle_matters.popovers.battle_matters_filter_popover_view import BattleMattersFilterPopoverView
@@ -101,7 +100,7 @@ class BattleMattersVehicleSelectionView(ViewImpl):
         self.__savedCD = vehCD
         giftID = self.__getIdByCD(vehCD)
         onConfirm = partial(showBonusDelayedConfirmationDialog, self.__vehicles[self.__savedCD]['vehicle'].displayedItem, partial(_onDialogConfirm, bonus=self.__selectableBonus, giftID=giftID))
-        showOfferGiftVehiclePreview(self._selectableBonusManager.getBonusOffer(self.__selectableBonus).id, giftID, onConfirm, VEHICLE_PREVIEW.HEADER_BACKBTN_DESCRLABEL_BATTLEMATTERS, customCallbacks={'previewBackCb': showDelayedReward,
+        showOfferGiftVehiclePreview(vehCD, self._selectableBonusManager.getBonusOffer(self.__selectableBonus).id, giftID, onConfirm, customCallbacks={'previewBackCb': showDelayedReward,
          'offerEndedCb': lambda : None})
 
     def onResetFilter(self):

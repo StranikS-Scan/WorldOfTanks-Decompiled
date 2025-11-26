@@ -11,7 +11,7 @@ class LevelReservesTooltip(ViewImpl):
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
 
     def __init__(self):
-        settings = ViewSettings(R.views.frontline.lobby.tooltips.LevelReservesTooltip(), ViewFlags.VIEW, LevelReservesTooltipModel())
+        settings = ViewSettings(R.views.frontline.mono.lobby.tooltips.level_reserves_tooltip(), ViewFlags.VIEW, LevelReservesTooltipModel())
         super(LevelReservesTooltip, self).__init__(settings)
 
     @property

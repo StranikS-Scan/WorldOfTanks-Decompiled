@@ -2237,13 +2237,19 @@
             <gun>	20	</gun>
           </armor>
           <reloadTime>	3.3	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <turretYawLimits>	-180 180	</turretYawLimits>
+          <shotDispersionFactors>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+            <afterShot>	3	</afterShot>
+            <turretRotation>	0.12	</turretRotation>
+          </shotDispersionFactors>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <models>
             <undamaged>	vehicles/russian/R140_M4_Loza/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R140_M4_Loza/crash/lod0/Gun_01.model	</destroyed>
@@ -2736,7 +2742,7 @@
     <detailed>
       <engines>
         <GMC_6046>
-          <smplEnginePower>	433.4853	</smplEnginePower>
+          <smplEnginePower>	500	</smplEnginePower>
           <smplFwMaxSpeed>	51.4	</smplFwMaxSpeed>
         </GMC_6046>
       </engines>

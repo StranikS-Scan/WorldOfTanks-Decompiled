@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/prb_control/entities/pre_queue/vehicles_watcher.py
+from __future__ import absolute_import
 from itertools import chain
 from fun_random_common.fun_constants import BATTLE_MODE_VEH_TAGS_EXCEPT_FUN
 from fun_random.gui.feature.util.fun_mixins import FunSubModesWatcher

@@ -331,6 +331,12 @@ class _EquipmentItem(object):
     def isLocked(self):
         return self._isLocked
 
+    def showMinimapMarker(self):
+        return True
+
+    def showMarker(self):
+        return True
+
 
 class _RefillEquipmentItem(object):
     _sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -1376,14 +1382,14 @@ class _ReplayItem(_EquipmentItem):
 
 
 class _ReplayMedKitItem(_ReplayItem):
-    __slots__ = ('__cooldownTime',)
+    __slots__ = ()
 
     def getEntitiesIterator(self, avatar=None):
         return vehicle_getter.TankmenStatesIterator(avatar_getter.getVehicleDeviceStates(avatar), avatar_getter.getVehicleTypeDescriptor(avatar))
 
 
 class _ReplayRepairKitItem(_ReplayItem):
-    __slots__ = ('__cooldownTime',)
+    __slots__ = ()
 
     def getEntitiesIterator(self, avatar=None):
         return vehicle_getter.VehicleDeviceStatesIterator(avatar_getter.getVehicleDeviceStates(avatar), avatar_getter.getVehicleTypeDescriptor(avatar))
@@ -1474,7 +1480,7 @@ class _ReplaySmokeItem(_ReplayOrderItem):
 
 
 class _ReplayAfterburningItem(_ReplayItem):
-    __slots__ = ('__totalDeployingTime', '__totalConsumingTime', '__totalRechargingTime', '__totalCooldownTime', '_prevTimeRemaining', '__fullyChargedSoundCbId', '__almostChargedSoundCbId', '__almostChargedSound', '__playingSoundObj', '_animationType', '_totalTime')
+    __slots__ = ('__totalDeployingTime', '__totalConsumingTime', '__totalRechargingTime', '__totalCooldownTime', '_prevTimeRemaining', '__fullyChargedSoundCbId', '__almostChargedSoundCbId', '__almostChargedSound', '__playingSoundObj')
     _FULL_CHARGE_DELAY_SOUND_TIME = 5.0
     _ALMOST_CHARGED_SOUND_ID = 'be_pre_replenishment'
     _EXAUSTED_SOUND_ID = 'be_nitro_empty'
@@ -1687,9 +1693,19 @@ class _ReplayPoiArtilleryItem(_ReplayItem, _PoiArtilleryItem):
         return _PoiArtilleryItem.canActivate(entityName, avatar)
 
 
+class _ReplayPoiRadarItem(_ReplayPoiEquipmentItemVS):
+
+    def update(self, quantity, stage, timeRemaining, totalTime):
+        _PoiEquipmentItemVS.update(self, quantity, stage, timeRemaining, totalTime)
+        _ReplayItem.update(self, quantity, stage, timeRemaining, totalTime)
+
+
 def _replayPoiItemFactory(descriptor, quantity, stage, timeRemaining, totalTime, tag=None):
-    if descriptor.name.startswith('poi_artillery_aoe'):
+    startswith = descriptor.name.startswith
+    if startswith('poi_artillery_aoe'):
         itemClass = _ReplayPoiArtilleryItem
+    elif startswith('poi_radar'):
+        itemClass = _ReplayPoiRadarItem
     else:
         itemClass = _ReplayPoiEquipmentItemVS
     return itemClass(descriptor, quantity, stage, timeRemaining, totalTime, tag)

@@ -155,9 +155,12 @@ def getTimeDeltaTillNow(t):
         return delta.days * ONE_DAY + delta.seconds
 
 
-def getTillTimeString(timeValue, keyNamespace='', isRoundUp=False, sourceStrGenerator=None, removeLeadingZeros=False):
+def getTillTimeString(timeValue, keyNamespace='', isMinutesRoundUp=False, sourceStrGenerator=None, removeLeadingZeros=False, isHoursRoundUp=False):
     gmtime = time.gmtime(timeValue)
-    if isRoundUp and gmtime.tm_sec > 0:
+    if isHoursRoundUp and gmtime.tm_min > 0 and gmtime.tm_hour > 0:
+        timeValue += ONE_HOUR
+        gmtime = time.gmtime(timeValue)
+    if isMinutesRoundUp and gmtime.tm_sec > 0:
         timeValue += ONE_MINUTE
         gmtime = time.gmtime(timeValue)
     if timeValue >= ONE_DAY:

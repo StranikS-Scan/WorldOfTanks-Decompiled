@@ -2658,7 +2658,7 @@
     <kind>	HIGH_EXPLOSIVE	</kind>
     <mechanics>	MODERN	</mechanics>
     <caliber>	152.4	</caliber>
-    <explosionRadius>	3.66	</explosionRadius>
+    <explosionRadius>	3.67	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	largeHighExplosive	</effects>
     <damage>
@@ -2666,7 +2666,7 @@
       <devices>	203	</devices>
     </damage>
     <armorSpalls>
-      <impactRadius>	3.66	</impactRadius>
+      <impactRadius>	3.67	</impactRadius>
       <coneAngle>	90	</coneAngle>
       <damage>
         <armor>	475	</armor>
@@ -2851,6 +2851,66 @@
       </damage>
     </armorSpalls>
   </PW_GG_m85_175_60>
+  <PP_GG_m85_175_GC>
+    <id>	160	</id>
+    <userString>	#poland_vehicles:PP_GG_m85_175_GC	</userString>
+    <icon>	ap_cr_tray	</icon>
+    <price>	1873	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	85	</caliber>
+    <isTracer>	true	</isTracer>
+    <effectsCaliber>	108	</effectsCaliber>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	800 400	</armor>
+      <devices>	203 76	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </PP_GG_m85_175_GC>
+  <PPrz_GG_m85_175_GC>
+    <id>	161	</id>
+    <userString>	#poland_vehicles:PPrz_GG_m85_175_GC	</userString>
+    <icon>	ap_cr_premium_tray	</icon>
+    <price>	7600	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	85	</caliber>
+    <isTracer>	true	</isTracer>
+    <effectsCaliber>	108	</effectsCaliber>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	800 400	</armor>
+      <devices>	203 76	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </PPrz_GG_m85_175_GC>
+  <PW_GG_m85_175_GC>
+    <id>	162	</id>
+    <userString>	#poland_vehicles:PW_GG_m85_175_GC	</userString>
+    <icon>	he_modern	</icon>
+    <price>	1360	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	85	</caliber>
+    <explosionRadius>	3.66	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effectsCaliber>	108	</effectsCaliber>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	800	</armor>
+      <devices>	203	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	3.66	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	400	</armor>
+        <devices>	100	</devices>
+      </damage>
+    </armorSpalls>
+  </PW_GG_m85_175_GC>
   <PP_GG_m100_162>
     <id>	103	</id>
     <userString>	#poland_vehicles:PP_GG_m100_162	</userString>

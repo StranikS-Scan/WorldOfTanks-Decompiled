@@ -130,10 +130,10 @@ class DailyQuestUIDataPacker(BattleQuestUIDataPacker):
         else:
             model = model if model is not None else DailyQuestModel()
             self._packModel(model)
-            self._resolveQuestIcon(model)
+            self.__resolveQuestIcon(model)
             return model
 
-    def _resolveQuestIcon(self, model):
+    def __resolveQuestIcon(self, model):
         iconId = self._event.getIconID()
         if iconId is not None and iconId > 0:
             prefetcher = self.eventsCache.prefetcher

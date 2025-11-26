@@ -9,6 +9,13 @@
     <upperRight>	500.0 500.0	</upperRight>
   </boundingBox>
   <minimap>	spaces/37_caucasus/mmap.dds	</minimap>
+  <minimapLayers>
+    <layer>
+      <layerId>	layer1	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/37_caucasus/mmap_bridge_destruction_01_destroyed.dds	</path>
+    </layer>
+  </minimapLayers>
   <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
   <batchingEnabled>	0	</batchingEnabled>
   <umbraEnabled>	1	</umbraEnabled>
@@ -23,6 +30,16 @@
     <wwmusicResultDefeat>	music_caucasus_result_defeat	</wwmusicResultDefeat>
   </wwmusicSetup>
   <wwambientSound>	ambient_wind_summer_01	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	destructible_objects.bnk	</name>
+      </bank>
+      <bank>
+        <name>	destructible_objects.pck	</name>
+      </bank>
+    </loadBanks>
+  </soundRemapping>
   <water>
     <texScale>	0	</texScale>
     <freqX>	0	</freqX>

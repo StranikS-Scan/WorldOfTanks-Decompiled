@@ -20,7 +20,6 @@ if TYPE_CHECKING:
     from gui.server_events.bonuses import SimpleBonus
 
 class HasBoxes(SubViewImpl):
-    __slots__ = ('__stats', '__isResetCompleted', '__eventName', '__boxOption', '__backCallback')
     __lootBoxes = dependency.descriptor(ILootBoxSystemController)
     __options = {}
 
@@ -30,7 +29,6 @@ class HasBoxes(SubViewImpl):
         self.__isResetCompleted = False
         self.__boxOption = None
         self.__eventName = ''
-        self.__backCallback = None
         return
 
     @property
@@ -48,7 +46,6 @@ class HasBoxes(SubViewImpl):
     def initialize(self, *args, **kwargs):
         super(HasBoxes, self).initialize(*args, **kwargs)
         self.__eventName = kwargs.get('eventName', '')
-        self.__backCallback = kwargs.get('backCallback')
         self.__boxOption = self.__lootBoxes.getSetting(self.__eventName, LOOT_BOXES_SELECTED_BOX)
         for event in self.__lootBoxes.getActiveEvents():
             self.__options.setdefault(event, {})
@@ -156,7 +153,7 @@ class HasBoxes(SubViewImpl):
         return {box.getCategory():box for box in self.__lootBoxes.getActiveBoxes(self.__eventName)}
 
     def __showInfo(self):
-        Views.load(ViewID.INFO, previousWindow=ViewID.MAIN, eventName=self.__eventName, backCallback=self.__backCallback)
+        Views.load(ViewID.INFO, eventName=self.__eventName)
 
     @replaceNoneKwargsModel
     def __openBoxes(self, ctx, model=None):
@@ -164,7 +161,7 @@ class HasBoxes(SubViewImpl):
 
         def processResult(bonuses):
             self.parentView.switchToSubView(isBackground=True, eventName=self.__eventName)
-            self.parentView.switchToSubView(SubViewID.MULTIPLE_BOXES_REWARDS if count > 1 else SubViewID.SINGLE_BOX_REWARDS, category=self.boxCategory, count=count, bonuses=bonuses, eventName=self.__eventName, backCallback=self.__backCallback)
+            Views.load(ViewID.MAIN, subViewID=SubViewID.MULTIPLE_BOXES_REWARDS if count > 1 else SubViewID.SINGLE_BOX_REWARDS, eventName=self.__eventName, category=self.boxCategory, count=count, bonuses=bonuses)
 
         model.setIsError(False)
         openBoxes(self.__eventName, self.boxCategory, count, processResult)
@@ -189,7 +186,7 @@ class HasBoxes(SubViewImpl):
     def __onStatusChanged(self):
         if self.__lootBoxes.isAvailable(self.__eventName) and self.__lootBoxes.getActiveBoxes(self.__eventName):
             if not self.__lootBoxes.getBoxesCount(self.__eventName):
-                Views.load(ViewID.MAIN, subViewID=SubViewID.NO_BOXES, eventName=self.__eventName, backCallback=self.__backCallback)
+                Views.load(ViewID.MAIN, subViewID=SubViewID.NO_BOXES, eventName=self.__eventName)
             else:
                 self.__updateData()
                 self.__updateStatistics()

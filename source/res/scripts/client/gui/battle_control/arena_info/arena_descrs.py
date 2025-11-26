@@ -38,6 +38,9 @@ class IArenaGuiDescription(object):
     def getTypeName(self, isInBattle=True):
         raise NotImplementedError
 
+    def getArenaBonusType(self):
+        raise NotImplementedError
+
     def getDescriptionString(self, isInBattle=True):
         raise NotImplementedError
 
@@ -119,6 +122,9 @@ class DefaultArenaGuiDescription(IArenaGuiDescription):
         if isInBattle:
             name = toUpper(name)
         return name
+
+    def getArenaBonusType(self):
+        return self._visitor.getArenaBonusType()
 
     def getDescriptionString(self, isInBattle=True):
         descriptionRes = R.strings.menu.loading.battleTypes.num(self._visitor.getArenaGuiType())
@@ -244,6 +250,9 @@ class ArenaWithL10nDescription(IArenaGuiDescription):
 
     def getTypeName(self, isInBattle=True):
         return self._decorated.getTypeName(isInBattle)
+
+    def getArenaBonusType(self):
+        return self._visitor.getArenaBonusType()
 
     def getDescriptionString(self, isInBattle=True):
         return self._l10nDescription

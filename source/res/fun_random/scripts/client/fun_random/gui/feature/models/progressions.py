@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/feature/models/progressions.py
+from __future__ import absolute_import
 import typing
 from fun_random.gui.feature.fun_constants import PROGRESSION_COUNTER_TEMPLATE, PROGRESSION_UNLIMITED_COUNTER_TEMPLATE
 from gui.impl import backport
@@ -13,7 +14,7 @@ if typing.TYPE_CHECKING:
     from gui.server_events.event_items import Quest
     from fun_random.gui.server_events.event_items import FunProgressionTriggerQuest
 
-@ReprInjector.simple(('text', 'text'), ('conditions', 'conditions'), ('resetTimer', 'resetTimer'), ('counterName', 'counterName'), ('counter', 'counter'), ('maximumCounter', 'maximumCounter'))
+@ReprInjector.simple('text', 'counterName', 'counter', 'maximumCounter')
 class FunProgressionConditions(object):
 
     def __init__(self, pConfig, counter, triggers):
@@ -50,7 +51,7 @@ class FunProgressionConditions(object):
         self.__counter = counter
 
 
-@ReprInjector.simple(('requiredCounter', 'requiredCounter'), ('bonuses', 'bonuses'))
+@ReprInjector.simple('requiredCounter', 'bonuses')
 class FunProgressionStage(object):
 
     def __init__(self, pConfig, index, executor):
@@ -81,7 +82,7 @@ class FunProgressionStage(object):
         return self.__stageIndex
 
 
-@ReprInjector.simple(('bonuses', 'bonuses'), ('unlimitedTrigger', 'unlimitedTrigger'), ('counterName', 'counterName'), ('counter', 'counter'), ('maximumCounter', 'maximumCounter'))
+@ReprInjector.simple('bonuses', 'unlimitedTrigger', 'counterName', 'counter', 'maximumCounter')
 class FunProgressionUnlimitedProgress(object):
 
     def __init__(self, pConfig, trigger, executor, counter):
@@ -119,7 +120,7 @@ class FunProgressionUnlimitedProgress(object):
         return self.__maximumCounter
 
 
-@ReprInjector.simple(('isCompleted', 'isCompleted'), ('isLastProgression', 'isLastProgression'), ('currentStageIndex', 'currentStageIndex'), ('maximumStageIndex', 'maximumStageIndex'))
+@ReprInjector.simple('isCompleted', 'isLastProgression', 'currentStageIndex', 'maximumStageIndex')
 class FunProgressionState(object):
 
     def __init__(self, pConfig, isFirst, isLast, condition, stages):
@@ -153,7 +154,7 @@ class FunProgressionState(object):
         self.__currentStageIndex = activeStage.stageIndex if activeStage else len(stages) - 1
 
 
-@ReprInjector.simple(('condition', 'condition'), ('state', 'state'), ('stages', 'stages'))
+@ReprInjector.simple('conditions', 'state', 'stages')
 class FunProgression(object):
 
     def __init__(self, pConfig, isFirst, isLast, counter, triggers, executors, unlimitedProgress):
@@ -194,8 +195,8 @@ class FunProgression(object):
         return [ bonus for stage in self.__stages for bonus in stage.bonuses ]
 
     def updateCounter(self, counter):
-        self.__condition.setCounter(counter)
-        self.__state.updateState(self.__condition, self.__stages)
+        self.__conditions.setCounter(counter)
+        self.__state.updateState(self.__conditions, self.__stages)
 
     @property
     def hasUnlimitedProgression(self):

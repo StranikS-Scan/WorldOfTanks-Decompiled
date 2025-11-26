@@ -181,7 +181,7 @@ class TankmenVoiceoverView(ViewImpl):
         return TankmanStates.UNAVAILABLE
 
     def __onBattlePassChange(self, *_):
-        if self.__battlePass.getSpecialVoiceChapters():
+        if self.__battlePass.getTankmenScreens():
             self.__battlePass.tankmenCacheUpdate()
         else:
             self.__close()

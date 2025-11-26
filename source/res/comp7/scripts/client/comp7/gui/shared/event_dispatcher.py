@@ -48,6 +48,11 @@ def showComp7IntroScreen():
     Comp7IntroState.goTo()
 
 
+def showComp7WCIScreen():
+    from comp7.gui.impl.lobby.hangar.states import Comp7WCIState
+    Comp7WCIState.goTo()
+
+
 @dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
 def showComp7WhatsNewScreen(notificationMgr=None):
     from comp7.gui.impl.lobby.whats_new_view import WhatsNewViewWindow
@@ -167,6 +172,16 @@ def showComp7InfoPage():
     from gui.impl.lobby.mode_selector.items.base_item import getInfoPageKey
     from gui.shared.event_dispatcher import showBrowserOverlayView
     url = GUI_SETTINGS.lookup(getInfoPageKey(SELECTOR_BATTLE_TYPES.COMP7))
+    showBrowserOverlayView(url, VIEW_ALIAS.WEB_VIEW_TRANSPARENT, hiddenLayers=(WindowLayer.MARKER, WindowLayer.VIEW, WindowLayer.WINDOW))
+
+
+def showWciInfoPage():
+    from frameworks.wulf import WindowLayer
+    from gui import GUI_SETTINGS
+    from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+    from gui.shared.event_dispatcher import showBrowserOverlayView
+    from comp7.gui.comp7_constants import INFO_PAGE_WCI
+    url = GUI_SETTINGS.lookup(INFO_PAGE_WCI)
     showBrowserOverlayView(url, VIEW_ALIAS.WEB_VIEW_TRANSPARENT, hiddenLayers=(WindowLayer.MARKER, WindowLayer.VIEW, WindowLayer.WINDOW))
 
 

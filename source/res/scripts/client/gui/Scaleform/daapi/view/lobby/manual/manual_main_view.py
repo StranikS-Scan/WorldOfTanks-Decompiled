@@ -38,8 +38,9 @@ class ManualMainView(ManualViewBase, ManualMainViewMeta):
         self.as_showBackBtnS(False)
         self.addListener(events.ManualEvent.CHAPTER_CLOSED, self.__onChapterClosed, EVENT_BUS_SCOPE.LOBBY)
         ctx = self._ctx
-        if ctx and 'chapterIndex' in ctx:
+        if ctx and ctx.get('chapterIndex', None) is not None:
             self.manualController.showChapterView(ctx['chapterIndex'], ctx['pageIndex'])
+        return
 
     def _dispose(self):
         super(ManualMainView, self)._dispose()

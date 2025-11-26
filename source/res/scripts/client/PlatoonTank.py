@@ -47,6 +47,7 @@ class _PlatoonTankAppearance(HangarVehicleAppearance):
             return self.itemsFactory.createOutfit()
         else:
             vehCompDescr = tankInfo.vehCompDescr
+            forceHistorical = False
             if tankInfo.vehOutfitCD:
                 if vDesc is None:
                     vDesc = vehicles.VehicleDescr(vehCompDescr)
@@ -58,7 +59,10 @@ class _PlatoonTankAppearance(HangarVehicleAppearance):
             else:
                 outfit = None
             if outfit is None:
-                outfit = self.customizationService.getEmptyOutfitWithNationalEmblems(vehicleCD=vehCompDescr)
+                if forceHistorical:
+                    outfit = self.customizationService.getEmptyOutfitWithNationalEmblems(vehicleCD=vehCompDescr)
+                else:
+                    outfit = self.customizationService.getEmptyOutfit(vehicleCD=vehCompDescr)
             return outfit
 
     def _requestClanDBIDForStickers(self, callback):

@@ -21,8 +21,6 @@ from preview_selectable_logic import PreviewSelectableLogic
 from skeletons.gui.game_control import IHeroTankController
 from skeletons.gui.shared.utils import IHangarSpace
 from uilogging.shop.loggers import ShopVehicleStylePreviewMetricsLogger, ShopVehicleStylePreviewFlowLogger
-_SHOW_CLOSE_BTN = False
-_SHOW_BACK_BTN = True
 _logger = logging.getLogger(__name__)
 
 class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
@@ -41,12 +39,8 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         self.__vehicleCD = ctx['itemCD']
         self.__styleDescr = (ctx.get('styleDescr') or self._style.getDescription()) % {'insertion_open': '',
          'insertion_close': ''}
-        self.__backCallback = ctx.get('backCallback', event_dispatcher.showHangar)
-        self.__backBtnDescrLabel = ctx.get('backBtnDescrLabel', backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.personalAwards()))
         self.__topPanelData = ctx.get('topPanelData') or {}
         self.__selectedVehicleEntityId = None
-        self.__showCloseButton = ctx.get('showCloseButton', _SHOW_CLOSE_BTN)
-        self.__showBackButton = ctx.get('showBackButton', _SHOW_BACK_BTN)
         g_currentPreviewVehicle.selectHeroTank(ctx.get('isHeroTank', False))
         self.__uiMetricsLogger = ShopVehicleStylePreviewMetricsLogger(self._style.intCD)
         self.__uiFlowLogger = ShopVehicleStylePreviewFlowLogger()
@@ -58,7 +52,7 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
     def onBackClick(self):
         if self.__backPreviewAlias and self.__backPreviewAlias == VIEW_ALIAS.LOBBY_STORE:
             self.__uiMetricsLogger.onViewClosed()
-        self.__backCallback()
+        self.destroy()
 
     def setTopPanel(self):
         self.as_setTopPanelS(self.__topPanelData.get('linkage', ''))
@@ -73,11 +67,6 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         self.__hangarSpace.onSpaceCreate += self.__onHangarCreateOrRefresh
         self.addListener(CameraRelatedEvents.VEHICLE_LOADING, self.__onVehicleLoading, EVENT_BUS_SCOPE.DEFAULT)
         self.__heroTanksControl.setInteractive(False)
-        self.as_setDataS({'closeBtnLabel': backport.text(R.strings.vehicle_preview.header.closeBtn.label()),
-         'backBtnLabel': backport.text(R.strings.vehicle_preview.header.backBtn.label()),
-         'backBtnDescrLabel': self.__backBtnDescrLabel,
-         'showCloseBtn': self.__showCloseButton,
-         'showBackButton': self.__showBackButton})
         self.as_setAdditionalInfoS(self._getAdditionalInfoVO())
         if self.__backPreviewAlias and self.__backPreviewAlias == VIEW_ALIAS.LOBBY_STORE:
             self.__uiFlowLogger.logOpenPreview()

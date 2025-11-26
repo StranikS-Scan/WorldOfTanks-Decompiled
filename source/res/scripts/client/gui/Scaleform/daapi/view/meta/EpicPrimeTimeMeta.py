@@ -9,3 +9,12 @@ class EpicPrimeTimeMeta(PrimeTimeViewBase):
 
     def as_setBackgroundSourceS(self, source):
         return self.flashObject.as_setBackgroundSource(source) if self._isDAAPIInited() else None
+
+    def as_setFullscreenModeSupportedS(self, isSupported):
+        return self.flashObject.as_setFullscreenModeSupported(isSupported) if self._isDAAPIInited() else None
+
+    def as_setCloseBtnVisibilityS(self, isVisible):
+        return self.flashObject.as_setCloseBtnVisibility(isVisible) if self._isDAAPIInited() else None
+
+    def as_setShadowVisibilityS(self, isVisible):
+        return self.flashObject.as_setShadowVisibility(isVisible) if self._isDAAPIInited() else None

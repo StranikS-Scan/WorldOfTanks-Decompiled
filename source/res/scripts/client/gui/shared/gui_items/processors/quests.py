@@ -61,7 +61,7 @@ class PMQuestSelect(_PMRequest):
         currentSelectedQuests = self.eventsCache.getPersonalMissions().getSelectedQuestsForBranch(branch).values()
         operationID = personalMission.getOperationID()
         operation = self.eventsCache.getPersonalMissions().getOperationsForBranch(branch).get(operationID)
-        if not operation.isStarted():
+        if not operation.isStarted() and not operation.getCompletedQuests():
             quests, oldQuest = self._removeFromSameChain(currentSelectedQuests, operation.getInitialQuests().values())
         else:
             quests, oldQuest = self._removeFromSameChain(currentSelectedQuests, [personalMission])

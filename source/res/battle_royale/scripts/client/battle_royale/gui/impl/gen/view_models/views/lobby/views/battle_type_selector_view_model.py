@@ -5,8 +5,8 @@ from frameworks.wulf import ViewModel
 
 class BattleType(Enum):
     SOLO = 'solo'
-    RANDOMPLATOON = 'randomPlatoon'
     PLATOON = 'platoon'
+    TEAM = 'team'
 
 
 class AnimationState(Enum):

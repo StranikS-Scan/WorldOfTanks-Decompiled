@@ -4,10 +4,11 @@ import logging
 import BigWorld
 import CGF
 import GenericComponents
+from helpers import dependency
+from shared_utils import nextTick
+from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
 from skeletons.gui.battle_session import IBattleSessionProvider
 from battle_royale.gui.battle_control.controllers.br_battle_sounds import BREvents
-from helpers import dependency
-from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
 _logger = logging.getLogger(__name__)
 _HEAL_OVER_TIME_ZONE_ = 0
 _DAMAGE_OVER_TIME_ZONE_ = 1
@@ -37,7 +38,7 @@ class AffectComponent(object):
     def activate(self):
         if self.__isPlayerVehicle:
             self._activateSoundEvent()
-        self._createParticles()
+        nextTick(self._createParticles)()
         self.__guiSessionProvider.onUpdateObservedVehicleData += self._onUpdateObservedVehicleData
         arenaSubscription = self.__guiSessionProvider.arenaVisitor.getArenaSubscription()
         if arenaSubscription is not None:

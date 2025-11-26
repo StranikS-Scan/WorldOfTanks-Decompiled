@@ -3,6 +3,9 @@
 from typing import TYPE_CHECKING
 import Windowing
 from frameworks.wulf import Array
+from gui.Scaleform.framework.entities.View import ViewKey
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.impl.gen.view_models.views.lobby.lootbox_system.main_view_model import SubViewID
 from gui.impl.gen.view_models.views.lobby.lootbox_system.submodels.multiple_boxes_rewards_view_model import MultipleBoxesRewardsViewModel
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
@@ -14,7 +17,7 @@ from gui.lootbox_system.base.common import ViewID, Views
 from gui.lootbox_system.base.decorators import createTooltipContentDecorator
 from gui.lootbox_system.base.sound import enterLootBoxesMultipleRewardState, exitLootBoxesMultipleRewardState, playVideoPauseSound, playVideoResumeSound
 from gui.lootbox_system.base.utils import isShopVisible, openBoxes
-from gui.lootbox_system.base.views_loaders import hideItemPreview, showItemPreview
+from gui.lootbox_system.base.views_loaders import showItemPreview
 from gui.shared import EVENT_BUS_SCOPE, events
 from helpers import dependency
 from skeletons.gui.game_control import ILootBoxSystemController
@@ -23,7 +26,6 @@ if TYPE_CHECKING:
     from gui.server_events.bonuses import SimpleBonus
 
 class MultipleBoxesRewards(SubViewImpl):
-    __slots__ = ('__isReopen', '__category', '__openCount', '__bonuses', '__tooltipItems', '__isVideoPlaying', '__eventName', '__backCallback')
     __lootBoxes = dependency.descriptor(ILootBoxSystemController)
 
     def __init__(self, viewModel, parentView):
@@ -35,7 +37,6 @@ class MultipleBoxesRewards(SubViewImpl):
         self.__tooltipItems = {}
         self.__isVideoPlaying = False
         self.__eventName = ''
-        self.__backCallback = None
         return
 
     @property
@@ -61,7 +62,6 @@ class MultipleBoxesRewards(SubViewImpl):
         self.__openCount = kwargs.get('count', 0)
         self.__bonuses = kwargs.get('bonuses', [])
         self.__eventName = kwargs.get('eventName', '')
-        self.__backCallback = kwargs.get('backCallback')
         with self.viewModel.transaction() as vmTx:
             self.__setWindowAccessible(model=vmTx)
             self.__updateData(model=vmTx)
@@ -145,9 +145,10 @@ class MultipleBoxesRewards(SubViewImpl):
                 self.__bonuses = bonuses
                 self.__updateBonuses()
                 self.__updateCounters()
+                self.__updateStateContext(self.__bonuses)
             else:
                 self.parentView.switchToSubView(isBackground=True, eventName=self.__eventName)
-                self.parentView.switchToSubView(SubViewID.SINGLE_BOX_REWARDS, category=self.__category, count=count, bonuses=bonuses, eventName=self.__eventName)
+                Views.load(ViewID.MAIN, subViewID=SubViewID.SINGLE_BOX_REWARDS, category=self.__category, count=count, bonuses=bonuses, eventName=self.__eventName)
 
         self.__isReopen = False
         self.viewModel.setIsAwaitingResponse(True)
@@ -156,18 +157,18 @@ class MultipleBoxesRewards(SubViewImpl):
         openBoxes(self.__eventName, self.__category, count or self.__openCount, processResult)
 
     def __goBack(self):
-        self.parentView.switchToSubView(eventName=self.__eventName)
+        Views.load(ViewID.MAIN, eventName=self.__eventName)
 
     def __onErrorBack(self, *_):
         self.viewModel.setIsAwaitingResponse(False)
-        self.parentView.switchToSubView(eventName=self.__eventName)
+        Views.load(ViewID.MAIN, eventName=self.__eventName)
 
     def __showPreview(self, ctx):
-        showItemPreview(str(ctx.get('bonusType')), int(ctx.get('bonusId')), int(ctx.get('styleID')), self.__eventName, self.__reopen)
+        showItemPreview(str(ctx.get('bonusType')), int(ctx.get('bonusId')), int(ctx.get('styleID')))
 
     def __openShop(self):
         Views.load(ViewID.SHOP, eventName=self.__eventName)
 
-    def __reopen(self):
-        hideItemPreview()
-        Views.load(ViewID.MAIN, subViewID=SubViewID.MULTIPLE_BOXES_REWARDS, isReopen=True, count=self.__openCount, category=self.__category, bonuses=self.__bonuses, eventName=self.__eventName, backCallback=self.__backCallback)
+    def __updateStateContext(self, bonuses):
+        lsm = getLobbyStateMachine()
+        lsm.getStateByViewKey(ViewKey(VIEW_ALIAS.LOOT_BOXES_MAIN_VIEW)).updateCachedCtx({'bonuses': bonuses})

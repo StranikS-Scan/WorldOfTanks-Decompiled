@@ -224,6 +224,8 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
             return
         else:
             vehicleIDToAnswer = self.sessionProvider.getArenaDP().getVehIDBySessionID(cmd.getSenderID())
+            if not vehicleIDToAnswer:
+                vehicleIDToAnswer = cmd.getSenderVehID()
             commandName = _ACTIONS.battleChatCommandFromActionID(cmd.getID()).name
             if self.__isActive is True and vehicleIDToAnswer == avatar_getter.getPlayerVehicleID() and self.__commandReceivedData is not None and self.__commandReceivedData.name is not None and commandName == _CALLOUT_COMMANDS_TO_REPLY_COMMANDS[self.__commandReceivedData.name]:
                 self.__executeHide(True, self.__commandReceivedData.name)

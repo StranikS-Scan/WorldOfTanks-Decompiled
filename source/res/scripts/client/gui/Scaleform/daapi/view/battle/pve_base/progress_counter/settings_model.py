@@ -5,7 +5,7 @@ from gui.Scaleform.daapi.view.battle.pve_base.base.settings_model import BaseWid
 from pve_battle_hud import ProgressCounterState
 
 class ProgressCounterServerModel(BaseWidgetSettingsModel):
-    __slots__ = ('state', 'params')
+    __slots__ = ('params',)
 
     def __init__(self, id, type, state, params):
         super(ProgressCounterServerModel, self).__init__(id, type, ProgressCounterState(state))

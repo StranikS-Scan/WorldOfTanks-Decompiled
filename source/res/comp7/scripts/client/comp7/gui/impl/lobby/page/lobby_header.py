@@ -4,6 +4,7 @@ from __future__ import absolute_import
 from comp7.gui.impl.lobby.page.comp7_fight_start import Comp7FightStartPresenter
 from comp7.gui.impl.lobby.page.comp7_prebattle_presenter import Comp7PrebattlePresenter
 from gui.impl.gen import R
+from gui.impl.lobby.common.presenters.vehicles_info_presenter import VehiclesInfoPresenter
 from gui.impl.lobby.page.header_state_presenter import HeaderStatePresenter
 from gui.impl.lobby.page.lobby_header import LobbyHeader
 from gui.impl.lobby.page.navigation_presenter import NavigationPresenter
@@ -26,4 +27,5 @@ class Comp7LobbyHeader(LobbyHeader):
          header.UserAccount(): UserAccountPresenter,
          header.HeaderState(): HeaderStatePresenter,
          header.ReservesEntryPoint(): ReservesEntryPointPresenter,
-         header.PremShop(): PremShopPresenter}
+         header.PremShop(): PremShopPresenter,
+         header.CurrentVehicle(): lambda : VehiclesInfoPresenter(self._currentVehicleFilter)}

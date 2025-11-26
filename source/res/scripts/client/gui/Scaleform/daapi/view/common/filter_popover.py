@@ -14,7 +14,7 @@ from gui.Scaleform import getNationsFilterAssetPath, getVehicleTypeAssetPath, ge
 from gui.Scaleform.daapi.view.common.common_constants import FILTER_POPOVER_SECTION
 from gui.Scaleform.daapi.view.common.shared import isVehicleFilterNew
 from gui.Scaleform.daapi.view.common.filter_contexts import FilterSetupContext, getFilterPopoverSetupContexts
-from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import FILTER_KEYS
+from gui.filters.carousel_filter import FILTER_KEYS
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.battle_pass import BattlePassFilterConsts
 from gui.Scaleform.daapi.view.meta.TankCarouselFilterPopoverMeta import TankCarouselFilterPopoverMeta
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -397,11 +397,12 @@ class HangarTankCarouselFilterPopover(TankCarouselFilterPopover):
     @classmethod
     def _getBaseSpecialsList(cls):
         specialsList = cls._BASE_SPECIALS_LIST[:]
+        dynamicEconomics = cls.__hangarGuiCtrl.dynamicEconomics
         hasDailyXP = FILTER_KEYS.BONUS in specialsList
-        if hasDailyXP and not cls.__hangarGuiCtrl.checkCurrentBonusCaps(_CAPS.DAILY_MULTIPLIED_XP, default=hasDailyXP):
+        if hasDailyXP and not dynamicEconomics.checkCurrentBonusCaps(_CAPS.DAILY_MULTIPLIED_XP, default=hasDailyXP):
             specialsList.remove(FILTER_KEYS.BONUS)
         hasCrystalRewards = FILTER_KEYS.CRYSTALS in specialsList
-        if hasCrystalRewards and not cls.__hangarGuiCtrl.checkCurrentCrystalRewards(default=hasCrystalRewards):
+        if hasCrystalRewards and not dynamicEconomics.checkCurrentCrystalRewards(default=hasCrystalRewards):
             specialsList.remove(FILTER_KEYS.CRYSTALS)
         return specialsList
 

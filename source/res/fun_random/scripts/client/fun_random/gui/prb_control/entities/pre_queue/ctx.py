@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/prb_control/entities/pre_queue/ctx.py
+from __future__ import absolute_import
 from constants import QUEUE_TYPE
 from gui.prb_control.entities.base.pre_queue.ctx import QueueCtx, JoinPreQueueModeCtx
 from gui.prb_control.settings import FUNCTIONAL_FLAG

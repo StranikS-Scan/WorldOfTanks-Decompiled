@@ -24,7 +24,6 @@ class RES_COMMON(object):
     MAPS_ICONS_CUSTOMIZATION_VEHICLES_SIDEBAR_BG = '../maps/icons/customization/vehicles_sidebar/bg.png'
     MAPS_ICONS_DEDICATION_BG = '../maps/icons/dedication/bg.png'
     MAPS_ICONS_DEMOUNTKIT_BG = '../maps/icons/demountKit/bg.png'
-    MAPS_ICONS_EPICBATTLES_ARROW_BG = '../maps/icons/epicBattles/arrow/bg.png'
     MAPS_ICONS_EPICBATTLES_SKILLS_INTRO_BG = '../maps/icons/epicBattles/skills/intro/bg.png'
     MAPS_ICONS_HANGAR_BUYVEHICLE_BG = '../maps/icons/hangar/buyVehicle/bg.png'
     MAPS_ICONS_MAPBOX_BG = '../maps/icons/mapbox/bg.png'

@@ -6,7 +6,7 @@ from gui.Scaleform.genConsts.BATTLEROYALE_ALIASES import BATTLEROYALE_ALIASES
 from gui.impl.gen import R
 from battle_royale.gui.impl.gen.view_models.views.lobby.views.info_page_model import InfoPageModel
 from battle_royale.gui.impl.gen.view_models.views.lobby.views.game_mode_model import GameModeModel
-from battle_royale.gui.Scaleform.daapi.view.lobby.respawn_ability import RespawnAbility
+from battle_royale.gui.impl.lobby.br_helpers.respawn_ability import RespawnAbility
 from gui.impl.gen.view_models.views.lobby.battle_pass.game_mode_rows_model import GameModeRowsModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.game_mode_cell_model import GameModeCellModel
 from gui.impl import backport
@@ -16,7 +16,6 @@ from battle_royale.gui.shared.tooltips.helper import fillProgressionPointsTableM
 from helpers import dependency
 from helpers.time_utils import ONE_MINUTE
 from skeletons.gui.game_control import IBattleRoyaleController
-from gui.shared.event_dispatcher import showBrowserOverlayView
 from constants import ARENA_BONUS_TYPE
 from skeletons.gui.game_control import IBattlePassController
 _rBattleRoyale = R.strings.battle_royale_infopage.battleTypes
@@ -24,12 +23,11 @@ _rBattleRoyale = R.strings.battle_royale_infopage.battleTypes
 class InfoPage(ViewImpl):
     __battleRoyaleCtrl = dependency.descriptor(IBattleRoyaleController)
     __battlePassCtrl = dependency.descriptor(IBattlePassController)
-    __slots__ = ('_webBridgeUrl', '_isModeSelector')
+    __slots__ = ('_isModeSelector',)
 
-    def __init__(self, isModeSelector):
-        settings = ViewSettings(R.views.battle_royale.lobby.views.InfoPage())
+    def __init__(self, layoutID, isModeSelector):
+        settings = ViewSettings(layoutID)
         settings.model = InfoPageModel()
-        self._webBridgeUrl = self.__battleRoyaleCtrl.getIntroVideoURL()
         self._isModeSelector = isModeSelector
         super(InfoPage, self).__init__(settings)
 
@@ -62,7 +60,7 @@ class InfoPage(ViewImpl):
         self.destroyWindow()
 
     def _onOpenVideo(self):
-        showBrowserOverlayView(self._webBridgeUrl, BATTLEROYALE_ALIASES.BATTLE_ROYALE_BROWSER_VIEW, forcedSkipEscape=True)
+        self.__battleRoyaleCtrl.showIntroVideo(BATTLEROYALE_ALIASES.BATTLE_ROYALE_BROWSER_VIEW, force=True)
 
     def __fillSeasonDateModel(self, viewModel):
         currentSeason = self.__battleRoyaleCtrl.getCurrentSeason() or self.__battleRoyaleCtrl.getNextSeason()
@@ -73,10 +71,9 @@ class InfoPage(ViewImpl):
 
     @staticmethod
     def __fillPlatoonTooltipData(viewModel):
-        respawnData = RespawnAbility()
-        platoonTimeToResurrect = respawnData.getPlatoonTimeToResurrect()
-        platoonRespawnPeriod = respawnData.getPlatoonRespawnPeriod() / ONE_MINUTE
-        soloRespawnPeriod = respawnData.getSoloRespawnPeriod() / ONE_MINUTE
+        platoonTimeToResurrect = RespawnAbility.getPlatoonTimeToResurrect()
+        platoonRespawnPeriod = RespawnAbility.getPlatoonRespawnPeriod() / ONE_MINUTE
+        soloRespawnPeriod = RespawnAbility.getSoloRespawnPeriod() / ONE_MINUTE
         viewModel.setPlatoonTimeToResurrect(platoonTimeToResurrect)
         viewModel.setPlatoonRespawnPeriod(platoonRespawnPeriod)
         viewModel.setSoloRespawnPeriod(soloRespawnPeriod)
@@ -146,6 +143,7 @@ class InfoPage(ViewImpl):
 
 
 class InfoPageWindow(LobbyWindow):
+    LAYOUT_ID = R.views.battle_royale.mono.lobby.info_page()
 
     def __init__(self, isModeSelector):
-        super(InfoPageWindow, self).__init__(wndFlags=WindowFlags.WINDOW_FULLSCREEN | WindowFlags.WINDOW, content=InfoPage(isModeSelector))
+        super(InfoPageWindow, self).__init__(wndFlags=WindowFlags.WINDOW_FULLSCREEN | WindowFlags.WINDOW, content=InfoPage(self.LAYOUT_ID, isModeSelector))

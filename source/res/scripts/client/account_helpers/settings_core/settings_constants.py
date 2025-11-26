@@ -176,6 +176,18 @@ class SOUND(CONST_CONTAINER):
     BASS_BOOST = 'bassBoost'
     NIGHT_MODE = 'nightMode'
     LOW_QUALITY = 'lowQualitySound'
+    PHYSICS_QUALITY = 'physicsQuality'
+
+
+class SoundPhysicsQuality(CONST_CONTAINER):
+    DISABLE = 'disabled'
+    LOW = 'low'
+    MEDIUM = 'medium'
+    HIGH = 'high'
+    ORDER = (HIGH,
+     MEDIUM,
+     LOW,
+     DISABLE)
 
 
 class CONTROLS(CONST_CONTAINER):
@@ -372,7 +384,6 @@ class OnceOnlyHints(CONST_CONTAINER):
     WOTPLUS_PROFILE_HINT = 'WotPlusProfileHint'
     MODE_SELECTOR_WIDGETS_BTN_HINT = 'ModeSelectorWidgetsBtnHint'
     MAPS_TRAINING_NEWBIE_HINT = 'MapsTrainingNewbieHint'
-    AMUNNITION_PANEL_EPIC_BATTLE_ABILITIES_HINT = 'AmmunitionPanelBattleAbilitiesHint'
     VEHICLE_PREVIEW_POST_PROGRESSION_BUTTON_HINT = 'VehiclePreviewPostProgressionButtonHint'
     VEHICLE_POST_PROGRESSION_ENTRY_POINT_HINT = 'VehiclePostProgressionEntryPointHint'
     RESEARCH_POST_PROGRESSION_ENTRY_POINT_HINT = 'ResearchPostProgressionEntryPointHint'
@@ -383,8 +394,6 @@ class OnceOnlyHints(CONST_CONTAINER):
     COMPARE_SPECIALIZATION_BUTTON_HINT = 'CompareSpecializationButtonHint'
     TRADE_IN_VEHICLE_POST_PROGRESSION_ENTRY_POINT_HINT = 'TradeInVehiclePreviewPostProgressionButtonHint'
     PERSONAL_TRADE_IN_VEHICLE_POST_PROGRESSION_ENTRY_POINT_HINT = 'PersonalTradeInVehiclePreviewPostProgressionButtonHint'
-    APPLY_ABILITIES_TO_TYPE_CHECKBOX_HINT = 'ApplyAbilitiesToTypeCheckboxHint'
-    SHOW_ABILITIES_BUTTON_HINT = 'ShowAbilitiesButtonHint'
     BATTLE_MATTERS_FIGHT_BUTTON_HINT = 'BattleMattersFightButtonHint'
     BATTLE_MATTERS_ENTRY_POINT_BUTTON_HINT = 'BattleMattersEntryPointHint'
     SUMMARY_CUSTOMIZATION_BUTTON_HINT = 'SummaryCustomizationButtonHint'

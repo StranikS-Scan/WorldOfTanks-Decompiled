@@ -105,7 +105,8 @@ class ClientComp7BattleMode(Comp7BattleMode):
     def _client_platoonLayouts(self):
         from gui.impl.gen import R
         from gui.impl.lobby.platoon.platoon_config import EPlatoonLayout, MembersWindow, PlatoonLayout
-        return [(EPlatoonLayout.MEMBER, PlatoonLayout(R.views.comp7.lobby.MembersWindow(), MembersWindow))]
+        from gui.impl.lobby.platoon.view.platoon_selection_view import SelectionWindow
+        return [(EPlatoonLayout.MEMBER, PlatoonLayout(R.views.comp7.lobby.MembersWindow(), MembersWindow)), (EPlatoonLayout.WELCOME, PlatoonLayout(R.views.comp7.lobby.PlatoonDropdown(), SelectionWindow))]
 
     @property
     def _client_platoonViewClass(self):
@@ -130,8 +131,7 @@ class ClientComp7BattleMode(Comp7BattleMode):
     @property
     def _client_gameControllers(self):
         from skeletons.gui.game_control import IComp7Controller
-        from comp7.skeletons.gui.game_control import IComp7ShopController
-        from comp7.skeletons.gui.game_control import IComp7WeeklyQuestsController
+        from comp7.skeletons.gui.game_control import IComp7ShopController, IComp7WeeklyQuestsController
         from comp7.gui.game_control.comp7_controller import Comp7Controller
         from comp7.gui.game_control.comp7_shop_controller import Comp7ShopController
         from comp7.gui.game_control.comp7_weekly_quests_controller import Comp7WeeklyQuestsController
@@ -172,9 +172,9 @@ class ClientComp7BattleMode(Comp7BattleMode):
         return ((USER.CREATE_COMP7_SQUAD, addComp7SquadInfo, createComp7Squad),)
 
     @property
-    def _client_hangarPresetsGetter(self):
-        from comp7.gui.hangar_presets.hangar_presets_getters import Comp7PresetsGetter
-        return Comp7PresetsGetter
+    def _client_hangarDynamicGuiProvider(self):
+        from comp7.gui.hangar_presets.comp7_dynamic_gui_provider import Comp7HangarDynamicGuiProvider
+        return Comp7HangarDynamicGuiProvider
 
     @property
     def _client_DynamicObjectCacheClass(self):
@@ -203,6 +203,11 @@ class ClientComp7BattleMode(Comp7BattleMode):
     def _client_viewsForMonitoring(self):
         from comp7.gui.Scaleform.genConsts.COMP7_HANGAR_ALIASES import COMP7_HANGAR_ALIASES
         return [COMP7_HANGAR_ALIASES.COMP7_LOBBY_HANGAR]
+
+    @property
+    def _client_prebattleCtrlMode(self):
+        from AvatarInputHandler import _CTRL_MODE
+        return (_CTRL_MODE.VEHICLES_SELECTION, _CTRL_MODE.POSTMORTEM)
 
     def registerAdditionalScaleformRequiredLibraries(self):
         from comp7_common.comp7_constants import ARENA_GUI_TYPE
@@ -244,12 +249,24 @@ class ClientComp7BattleMode(Comp7BattleMode):
             prb_utils.addArenaDescrs(guiType, self._client_arenaDescrClass, self._personality)
             addViewBattlePageAliasByArenaGUIType(guiType, self._CLIENT_BATTLE_PAGE, self._personality)
 
+    def registerTournamentEntryPointValidator(self):
+        from gui.prb_control import prb_utils
+        from comp7.gui.Scaleform.genConsts.COMP7_HANGAR_ALIASES import COMP7_HANGAR_ALIASES
+        from comp7.gui.impl.lobby.user_missions.hangar_widget.event_banners.comp7_tournament_banner import Comp7TournamentBanner
+        prb_utils.addBannerEntryPointValidatorMethod(COMP7_HANGAR_ALIASES.COMP7_TOURNAMENT_ENTRY_POINT, Comp7TournamentBanner.isTournamentEntryPointAvailable, self._personality)
+
     def registerTrainingRoomHandler(self):
         from comp7_common.comp7_constants import ARENA_GUI_TYPE
         from comp7.gui.training_room_external_handlers import Comp7TrainingRoomHandler
         from gui.shared.system_factory import registerTrainingRoomExternalHandler
         for guiType in (ARENA_GUI_TYPE.COMP7, ARENA_GUI_TYPE.TRAINING_COMP7):
             registerTrainingRoomExternalHandler(guiType, Comp7TrainingRoomHandler)
+
+    def registerAdditionalPrebattleCtrlMode(self):
+        from constants import ARENA_BONUS_TYPE
+        from gui.shared.system_factory import registerPrebattleCtrlMode
+        for bonusType in (ARENA_BONUS_TYPE.TOURNAMENT_COMP7, ARENA_BONUS_TYPE.TRAINING_COMP7):
+            registerPrebattleCtrlMode(bonusType, self._client_prebattleCtrlMode)
 
 
 def preInit():
@@ -265,6 +282,7 @@ def preInit():
     battleMode.registerClientSelector()
     battleMode.registerClientHangarPresets()
     battleMode.registerBannerEntryPointValidatorMethod()
+    battleMode.registerTournamentEntryPointValidator()
     battleMode.registerHangarEventBanner()
     battleMode.registerProviderBattleQueue()
     battleMode.registerClientBonusTokens()
@@ -297,6 +315,8 @@ def preInit():
     battleMode.registerClientSeasonType(comp7_common_constants)
     battleMode.registerTrainingRoomHandler()
     battleMode.registerPrbTypeForWotPlusAssistant(SupportedWotldaLoadoutType.ONSLAUGHT)
+    battleMode.registerPrebattleCtrlMode()
+    battleMode.registerAdditionalPrebattleCtrlMode()
     registerComp7Scaleform()
     registerComp7OthersPrbParams()
     registerComp7Lobby()

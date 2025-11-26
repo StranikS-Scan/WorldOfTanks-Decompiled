@@ -204,7 +204,7 @@ class _DependencyItem(object):
 
 
 class _RuntimeItem(_DependencyItem):
-    __slots__ = ('__isCreatorInvoked', '__creator', '_service', '_order')
+    __slots__ = ('__isCreatorInvoked', '__creator')
 
     def __init__(self, creator, finalizer=None):
         super(_RuntimeItem, self).__init__(finalizer=finalizer)

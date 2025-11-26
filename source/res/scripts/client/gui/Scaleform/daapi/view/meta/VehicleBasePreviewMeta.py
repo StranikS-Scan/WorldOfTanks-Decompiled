@@ -4,9 +4,6 @@ from gui.Scaleform.framework.entities.View import View
 
 class VehicleBasePreviewMeta(View):
 
-    def closeView(self):
-        self._printOverrideError('closeView')
-
     def onBackClick(self):
         self._printOverrideError('onBackClick')
 

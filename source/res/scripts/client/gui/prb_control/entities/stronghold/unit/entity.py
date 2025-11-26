@@ -165,7 +165,7 @@ class StrongholdBrowserEntity(UnitBrowserEntity):
         if self.__watcher is not None:
             self.__watcher.stop()
             self.__watcher = None
-        return super(StrongholdBrowserEntity, self).fini(ctx, woEvents)
+        return super(StrongholdBrowserEntity, self).fini(ctx=ctx, woEvents=woEvents)
 
     def canKeepMode(self):
         return False

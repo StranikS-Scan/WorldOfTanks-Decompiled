@@ -70,6 +70,8 @@ class VehiclesSidebarView(ComponentsPresenterView, FullScreenDialogBaseView):
         vehiclesModel = model.getVehiclesSelection()
         vehicles = self.__service.getVehiclesWithAttachmentSlot()
         for vehicle in vehicles:
+            if vehicle.isSecret:
+                continue
             vehicleModel = VehiclesSidebarItemModel()
             fillVehicleModel(vehicleModel, vehicle)
             vehicleModel.setInDepot(vehicle.isInInventory)

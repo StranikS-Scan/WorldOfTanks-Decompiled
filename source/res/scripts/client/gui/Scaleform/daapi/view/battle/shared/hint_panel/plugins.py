@@ -446,6 +446,9 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
         self._parentObj.removeBtnHint(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION)
 
     def __onHintTimeOut(self):
+        if self._shouldDelayHideTimeout(self._parentObj.getActiveHint(), CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION):
+            self.__callbackDelayer.delayCallback(_HINT_TIMEOUT, self.__onHintTimeOut)
+            return
         self._parentObj.removeBtnHint(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION)
         self.__isHintShown = False
 
@@ -1350,6 +1353,9 @@ class PillboxHelpPlugin(VehicleMechanicPlugin, ComponentListener, IMechanicState
 
     def _hide(self):
         if not self.__isVisible:
+            return
+        if self._shouldDelayHideTimeout(self._parentObj.getActiveHint(), self._CMD):
+            self.__callbackDelayer.delayCallback(_HINT_TIMEOUT, self._hide)
             return
         self.__isVisible = False
         self._parentObj.removeBtnHint(self._CMD)

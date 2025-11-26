@@ -5,7 +5,6 @@ from gui.battle_results.pbs_helpers.economics import hasAogasFine
 from gui.impl.gen.view_models.views.lobby.battle_results.reward_item_model import RewardItemModel
 
 class PersonalRewards(IBattleResultsPacker):
-    __slots__ = ()
     _AVAILABLE_REWARDS = []
     _ITEM_MODEL_CLS = RewardItemModel
     _REWARD_GETTERS = {}

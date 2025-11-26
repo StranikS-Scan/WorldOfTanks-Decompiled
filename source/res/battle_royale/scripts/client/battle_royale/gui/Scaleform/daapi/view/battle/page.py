@@ -125,22 +125,24 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
         return
 
     def showSpawnPoints(self):
-        visibleComponents = [BATTLE_VIEW_ALIASES.BR_SELECT_RESPAWN]
+        hiddenComponents = {BATTLE_VIEW_ALIASES.BATTLE_LOADING}
+        visibleComponents = {BATTLE_VIEW_ALIASES.BR_SELECT_RESPAWN}
         if BigWorld.player().hasBonusCap(ARENA_BONUS_TYPE_CAPS.SQUADS):
-            visibleComponents.extend([BATTLE_VIEW_ALIASES.BATTLE_TEAM_PANEL, BATTLE_VIEW_ALIASES.BATTLE_MESSENGER])
+            visibleComponents.update([BATTLE_VIEW_ALIASES.BATTLE_TEAM_PANEL, BATTLE_VIEW_ALIASES.BATTLE_MESSENGER])
         if not self.__selectSpawnToggling:
             self.__selectSpawnToggling.update(set(self.as_getComponentsVisibilityS()) - set(visibleComponents))
         self.__canShowHUD = False
-        self._setComponentsVisibility(visible=visibleComponents, hidden=self.__selectSpawnToggling)
+        self._setComponentsVisibility(visible=visibleComponents, hidden=hiddenComponents | self.__selectSpawnToggling)
         self.app.enterGuiControlMode(BATTLE_VIEW_ALIASES.BR_SELECT_RESPAWN, stopVehicle=True)
 
     def closeSpawnPoints(self):
+        hiddenComponents = {BATTLE_VIEW_ALIASES.BR_SELECT_RESPAWN, BATTLE_VIEW_ALIASES.BATTLE_LOADING}
         self.__isAllowToogleGuiVisible = True
         if self.__selectSpawnToggling or self.__hudComponents:
             self.__canShowHUD = True
             self.__selectSpawnToggling.update(self.__hudComponents)
             self.__hudComponents.clear()
-            self._setComponentsVisibility(visible=self.__selectSpawnToggling, hidden=[BATTLE_VIEW_ALIASES.BR_SELECT_RESPAWN])
+            self._setComponentsVisibility(visible=self.__selectSpawnToggling, hidden=hiddenComponents)
             self.__selectSpawnToggling.clear()
             self.app.leaveGuiControlMode(BATTLE_VIEW_ALIASES.BR_SELECT_RESPAWN)
 
@@ -281,6 +283,8 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
         arenaPeriod = self.sessionProvider.shared.arenaPeriod.getPeriod()
         self.__canShowHUD = arenaPeriod not in (ARENA_PERIOD.IDLE, ARENA_PERIOD.WAITING) or BigWorld.player().observerSeesAll()
         super(BattleRoyalePage, self)._onBattleLoadingFinish()
+        if not self.as_isComponentVisibleS(BATTLE_VIEW_ALIASES.BR_SELECT_RESPAWN) and arenaPeriod not in {ARENA_PERIOD.BATTLE, ARENA_PERIOD.AFTERBATTLE}:
+            self._setComponentsVisibility(visible={BATTLE_VIEW_ALIASES.BATTLE_LOADING})
         if not self.__canShowHUD and not BigWorld.player().observerSeesAll():
             self._setComponentsVisibility(visible={BATTLE_VIEW_ALIASES.BR_SELECT_RESPAWN})
         if BigWorld.player().isObserver() and arenaPeriod != ARENA_PERIOD.BATTLE:

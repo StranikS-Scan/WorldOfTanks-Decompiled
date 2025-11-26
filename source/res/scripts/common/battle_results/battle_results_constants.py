@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/battle_results/battle_results_constants.py
+import typing
 from chat_shared import SYS_MESSAGE_TYPE
 from constants import ARENA_BONUS_TYPE
+if typing.TYPE_CHECKING:
+    from typing import Dict
 PATH_TO_CONFIG = {ARENA_BONUS_TYPE.REGULAR: '.random',
  ARENA_BONUS_TYPE.EPIC_RANDOM: '.random',
  ARENA_BONUS_TYPE.EPIC_RANDOM_TRAINING: '.random',

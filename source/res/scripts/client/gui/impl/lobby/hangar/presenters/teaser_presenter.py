@@ -98,3 +98,5 @@ class TeaserPresenter(ViewComponent[TeaserModel]):
 
     def __onClick(self):
         self._promoController.showLastTeaserPromo()
+        if self.__closeCallback:
+            self.__closeCallback(True)

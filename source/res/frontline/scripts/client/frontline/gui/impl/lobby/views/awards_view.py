@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/impl/lobby/views/awards_view.py
+import SoundGroups
 from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator
 from gui.impl.gen import R
@@ -10,6 +11,7 @@ from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.server_events.bonuses import getNonQuestBonuses, mergeBonuses, splitBonuses
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.missions.packers.bonus import ItemBonusUIPacker, BonusUIPacker, getDefaultBonusPackersMap
+from gui.sounds.epic_sound_constants import EPIC_SOUND
 from helpers import dependency
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 MAIN_REWARDS_LIMIT = 4
@@ -59,6 +61,7 @@ class AwardsView(ViewImpl):
             vm.setSubTitle(locales.title())
             vm.setDefaultButtonTitle(locales.acceptButton())
         packBonusModelAndTooltipData(rewards, self.viewModel.mainRewards, self.viewModel.additionalRewards, self.__tooltipItems)
+        SoundGroups.g_instance.playSound2D(EPIC_SOUND.GUI_REWARD_SCREEN)
 
     def _getEvents(self):
         return ((self.viewModel.onAnimationEnded, self.__onAnimationEnded),)
@@ -67,6 +70,7 @@ class AwardsView(ViewImpl):
         if not self.__isAnimationEnded:
             self.__safeCall(self.__onAnimationEndedCallback)
             self.__isAnimationEnded = True
+            SoundGroups.g_instance.playSound2D(EPIC_SOUND.GUI_MAIN_AWARD)
 
     @staticmethod
     def __safeCall(callback, *args, **kwargs):

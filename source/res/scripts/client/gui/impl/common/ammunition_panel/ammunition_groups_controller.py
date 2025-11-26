@@ -11,7 +11,6 @@ GroupData = namedtuple('GroupData', 'groupID sections')
 GROUPS_MAP = {AmmunitionPanelConstants.OPTIONAL_DEVICES_AND_BOOSTERS: TankSetupGroupsId.OPTIONAL_DEVICES_AND_BOOSTERS,
  AmmunitionPanelConstants.EQUIPMENT_AND_SHELLS: TankSetupGroupsId.EQUIPMENT_AND_SHELLS}
 RANDOM_GROUPS = (GroupData(AmmunitionPanelConstants.OPTIONAL_DEVICES_AND_BOOSTERS, (TankSetupConstants.OPT_DEVICES, TankSetupConstants.BATTLE_BOOSTERS)), GroupData(AmmunitionPanelConstants.EQUIPMENT_AND_SHELLS, (TankSetupConstants.SHELLS, TankSetupConstants.CONSUMABLES)))
-FRONTLINE_GROUPS = RANDOM_GROUPS + (GroupData(AmmunitionPanelConstants.NO_GROUP, (TankSetupConstants.BATTLE_ABILITIES,)),)
 
 class AmmunitionGroupsController(object):
     __slots__ = ('_vehicle', '_controller', '_autoCreating')

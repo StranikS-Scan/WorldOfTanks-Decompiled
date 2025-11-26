@@ -11,6 +11,8 @@ import os
 import string
 import struct
 import typing
+from bwdebug import ERROR_MSG
+from cache import cached_property
 import persistent_data_cache_common as pdc
 from Math import Vector2, Vector3
 from backports.functools_lru_cache import lru_cache
@@ -209,15 +211,7 @@ VEHICLE_MISC_ATTRIBUTE_FACTOR_NAMES = ('fuelTankHealthFactor',
  'centerRotationFwdSpeedFactor',
  'hullMaxHealth',
  'turretMaxHealth',
- 'discreteDamageFactor',
- 'damageIncome/armor',
- 'damageIncome/armor/splash/blastWave',
- 'damageIncome/armor/splash/shellFragments',
- 'damageIncome/armor/splash/armorSpalls',
- 'damageIncome/device',
- 'damageIncome/device/splash/blastWave',
- 'damageIncome/device/splash/shellFragments',
- 'damageIncome/device/splash/armorSpalls')
+ 'discreteDamageFactor')
 VEHICLE_MISC_ATTRIBUTE_FACTOR_INDICES = {value:index for index, value in enumerate(VEHICLE_MISC_ATTRIBUTE_FACTOR_NAMES)}
 
 class EnhancementItem(object):
@@ -320,15 +314,7 @@ def vehicleAttributeFactors():
      'improvedRammingTrackDamageBonus/basicFactor': 1.0,
      'improvedRammingTrackDamageBonus/changeFactor': 1.0,
      'gun/extraReloadTime': 0.0,
-     'gun/isExtraFullGunReload': False,
-     'damageIncome/armor': 1.0,
-     'damageIncome/armor/splash/blastWave': 1.0,
-     'damageIncome/armor/splash/shellFragments': 1.0,
-     'damageIncome/armor/splash/armorSpalls': 1.0,
-     'damageIncome/device': 1.0,
-     'damageIncome/device/splash/blastWave': 1.0,
-     'damageIncome/device/splash/shellFragments': 1.0,
-     'damageIncome/device/splash/armorSpalls': 1.0}
+     'gun/isExtraFullGunReload': False}
     return factors
 
 
@@ -474,7 +460,7 @@ class VehicleDescriptor(object):
     __metaclass__ = ReflectionMetaclass
     __slots__ = ('enhancements', 'turret', 'gun', 'hull', 'engine', 'fuelTank', 'radio', 'chassis', 'turrets', 'optionalDevices', 'shot', 'supplySlots', 'camouflages', 'playerEmblems', 'playerInscriptions', 'type', 'name', 'level', 'extras', 'extrasDict', 'miscAttrs', 'physics', 'xphysics', 'visibilityCheckPoints', 'observerPosOnChassis', 'observerPosOnTurret', 'battleModifiers', 'gunInstallations', '_customRoleSlotTypeId', '_modifications', '_optDevSlotsMap', '_defaultMaxHealth', '_maxHealth', '__activeTurretPos', '__activeGunShotIdx', '__activeGunShotPosition', '__boundingRadius', 'mechanicsParams', 'descrModifyAttrsApplied')
 
-    def __init__(self, compactDescr=None, typeID=None, typeName=None, vehMode=VEHICLE_MODE.DEFAULT, xmlPath=None, extData=None):
+    def __init__(self, compactDescr=None, typeID=None, typeName=None, vehMode=VEHICLE_MODE.DEFAULT, xmlPath=None, extData=None, forceUpdateAttrs=False):
         extData = extData if extData is not None else {}
         battleModifiers = self.__getExtDataValue(extData, 'battleModifiers')
         self.battleModifiers = battleModifiers if battleModifiers is not None else BattleModifiers()
@@ -518,7 +504,7 @@ class VehicleDescriptor(object):
             compactDescr += struct.pack('<6HB', type.chassis[0].id[1], type.engines[0].id[1], type.fuelTanks[0].id[1], type.radios[0].id[1], turretDescr.id[1], turretDescr.guns[0].id[1], 0)
         self.__initFromCompactDescr(compactDescr, vehMode, vehType)
         self.__applyExternalData(extData)
-        self.__updateAttributes()
+        self.__updateAttributes(onAnyApp=forceUpdateAttrs)
         return
 
     @property
@@ -538,7 +524,8 @@ class VehicleDescriptor(object):
     @property
     def maxHealth(self):
         if IS_BASEAPP:
-            self.__updateAttributes(onAnyApp=True)
+            if not self.physics:
+                self.__updateAttributes(onAnyApp=True)
         return self._maxHealth
 
     @property
@@ -1321,29 +1308,7 @@ class VehicleDescriptor(object):
     def __selectBestHull(self, turrets, chassis):
         turretIDs = [ descr[0].id[1] for descr in turrets ]
         chassisID = chassis.id[1]
-        hulls = self.type.hulls
-        bestHull = hulls[0]
-        bestMatchWeight = 0
-        for hull in hulls[1:]:
-            match = hull.variantMatch
-            matchWeight = 0
-            if match[0] is not None:
-                if match[0] != chassisID:
-                    continue
-                matchWeight = 100
-            for turretID, turretToMatchID in zip(turretIDs, match[1:]):
-                if turretToMatchID is None:
-                    continue
-                if turretID == turretToMatchID:
-                    matchWeight += 1
-                matchWeight = -1
-                break
-
-            if bestMatchWeight < matchWeight:
-                bestMatchWeight = matchWeight
-                bestHull = hull
-
-        return bestHull
+        return selectBestHull(self.type.hulls, turretIDs, chassisID)
 
     def __selectTurretForGun(self, gunID, turretPositionIdx):
         hullDescr = self.hull
@@ -1575,7 +1540,8 @@ class VehicleDescriptor(object):
         self.miscAttrs = None
         self.physics = None
         self.mechanicsParams = {}
-        if updateDescrAttrs or not self.descrModifyAttrsApplied:
+        computeArenaGameplayParams = IS_CELLAPP or IS_CLIENT or IS_UE_EDITOR or IS_WEB or IS_BOT or onAnyApp
+        if computeArenaGameplayParams and (updateDescrAttrs or not self.descrModifyAttrsApplied):
             self.applyDescrModifyAttrs()
         type = self.type
         chassis = self.chassis
@@ -1638,31 +1604,23 @@ class VehicleDescriptor(object):
          'engineReduceFineFactor': 1.0,
          'hullMaxHealth': 0,
          'turretMaxHealth': 0,
-         'discreteDamageFactor': 1.0,
-         'damageIncome/armor': 1.0,
-         'damageIncome/armor/splash/blastWave': 1.0,
-         'damageIncome/armor/splash/shellFragments': 1.0,
-         'damageIncome/armor/splash/armorSpalls': 1.0,
-         'damageIncome/device': 1.0,
-         'damageIncome/device/splash/blastWave': 1.0,
-         'damageIncome/device/splash/shellFragments': 1.0,
-         'damageIncome/device/splash/armorSpalls': 1.0}
-        gunsMechanicsParams = {}
+         'discreteDamageFactor': 1.0}
+        for name, params in type.mechanicsParams.iteritems():
+            self.mechanicsParams[name] = params.createMechanicsParamsOrigin()
+
         for gunInstallation in self.gunInstallations:
             for name, params in gunInstallation.gun.mechanicsParams.iteritems():
-                gunsMechanicsParams[name] = gunParams = params.getMechanicsParamsClone()
+                if name in self.mechanicsParams:
+                    LOG_ERROR('Gun mechanics will be overridden', self.type.name, name)
+                self.mechanicsParams[name] = gunParams = params.createMechanicsParamsOrigin()
                 gunParams.setGunInstallationSlot(gunInstallation)
-
-        for mechanicsParams in (type.mechanicsParams, gunsMechanicsParams):
-            for name, params in mechanicsParams.iteritems():
-                self.mechanicsParams[name] = params.getMechanicsParamsClone()
 
         for name, params in self.mechanicsParams.items():
             if params.isActiveMechanics(self):
                 self.miscAttrs.update(params.getMechanicsMiscAttributes())
             self.mechanicsParams.pop(name, None)
 
-        if IS_CELLAPP or IS_CLIENT or IS_UE_EDITOR or IS_WEB or IS_BOT or onAnyApp:
+        if computeArenaGameplayParams:
             trackCenterOffset = chassis.topRightCarryingPoint[0]
             self.physics = {'weight': weight,
              'enginePower': self.engine.power,
@@ -1756,6 +1714,38 @@ class VehicleDescriptor(object):
             return None
 
 
+class VehicleComponents(object):
+
+    def __init__(self, compactDescr):
+        self.type, components = _splitVehicleCompactDescr(compactDescr, onlyComponents=True)
+        self.__componentIDs = struct.unpack('<6H', components[:12])
+
+    @cached_property
+    def chassis(self):
+        return _descrByID(self.type.chassis, self.__componentIDs[0])
+
+    @cached_property
+    def engine(self):
+        return _descrByID(self.type.engines, self.__componentIDs[1])
+
+    @cached_property
+    def fuelTank(self):
+        return _descrByID(self.type.fuelTanks, self.__componentIDs[2])
+
+    @cached_property
+    def turret(self):
+        return _descrByID(self.type.turrets[0], self.__componentIDs[4])
+
+    @cached_property
+    def gun(self):
+        return _descrByID(self.turret.guns, self.__componentIDs[5])
+
+    @cached_property
+    def hull(self):
+        hulls = self.type.hulls
+        return hulls[0] if len(hulls) == 1 else selectBestHull(self.type.hulls, [self.__componentIDs[4]], self.__componentIDs[0])
+
+
 class CompositeVehicleDescriptor(object):
     defaultVehicleDescr = property(lambda self: self.__vehicleDescr)
     siegeVehicleDescr = property(lambda self: self.__siegeDescr)
@@ -1821,11 +1811,11 @@ class CompositeVehicleDescriptor(object):
         return self.__vehicleDescr.__installGun(gunID, turretPositionIdx)
 
 
-def VehicleDescr(compactDescr=None, typeID=None, typeName=None, xmlPath=None, extData=None):
-    defaultDescriptor = VehicleDescriptor(compactDescr, typeID, typeName, xmlPath=xmlPath, extData=extData)
+def VehicleDescr(compactDescr=None, typeID=None, typeName=None, xmlPath=None, extData=None, forceUpdateAttrs=False):
+    defaultDescriptor = VehicleDescriptor(compactDescr, typeID, typeName, xmlPath=xmlPath, extData=extData, forceUpdateAttrs=forceUpdateAttrs)
     if not defaultDescriptor.hasSiegeMode:
         return defaultDescriptor
-    siegeDescriptor = VehicleDescriptor(compactDescr, typeID, typeName, VEHICLE_MODE.SIEGE, xmlPath=xmlPath, extData=extData)
+    siegeDescriptor = VehicleDescriptor(compactDescr, typeID, typeName, VEHICLE_MODE.SIEGE, xmlPath=xmlPath, extData=extData, forceUpdateAttrs=forceUpdateAttrs)
     return CompositeVehicleDescriptor(defaultDescriptor, siegeDescriptor)
 
 
@@ -2259,6 +2249,7 @@ class VehicleType(object):
                     sharedSections[componentId] = section
 
         materialData = tankArmor.TankArmorHelper().collectData()
+        _writeXPhysicsDetailed(self.xphysics['detailed'], mainSection['physics/detailed'])
         _writeHulls(self.hulls, mainSection, materialData.get('hull', None))
         _writeInstallableComponents(self.chassis, mainSection, 'chassis', _writeChassis, g_cache.chassisIDs(nationID), sharedSections, materialData=materialData)
         defHull = self.hulls[0]
@@ -2351,9 +2342,6 @@ class VehicleType(object):
 
     def getVehicleClass(self):
         return getVehicleClassFromVehicleType(self)
-
-    def getAllDevices(self):
-        return {d.compactDescr for d in self.chassis + self.engines + self.radios + self.fuelTanks + self.turrets[0] + tuple(self.getGuns())}
 
     def __getRoleFromTags(self):
         roles = g_cache.roles()
@@ -3498,6 +3486,13 @@ def _writeInstallableComponents(components, section, subsectionName, writer, cac
     return
 
 
+def _writeXPhysicsDetailed(xphysicsDetailed, xphysicsXml):
+    for key, chassis in xphysicsDetailed['chassis'].items():
+        chassisXml = xphysicsXml['chassis/{}'.format(key)]
+        _xml.rewriteTupleOfFloats(chassisXml, 'axleSteeringLockAngles', chassis.get('axleSteeringLockAngles'), createNew=False)
+        _xml.rewriteTupleOfFloats(chassisXml, 'axleSteeringAngles', chassis.get('axleSteeringAngles'), createNew=False)
+
+
 def _writeMultiGun(item, section):
     multiGunSection = section['multiGun']
     if multiGunSection is None or item.multiGun is None:
@@ -4456,6 +4451,14 @@ def _readXPhysicsEditor(xmlCtx, section, subsectionName, type):
         else:
             readFunc = _xphysicsParseChassisClient
         res['chassis'] = _parseSectionList(ctx, xsec, readFunc, 'detailed/chassis')
+        if type.isWheeledVehicle and hasattr(type, 'editorData'):
+            for i, name in enumerate(res['chassis']):
+                chassis = res['chassis'][name]
+                editorData = type.chassis[i].editorData
+                editorData.axleCount = len(chassis['axleSteeringAngles'])
+                editorData.axleSteeringAngles = list(chassis['axleSteeringAngles'])
+                editorData.axleSteeringLockAngles = list(chassis['axleSteeringLockAngles'])
+
         return res
 
 
@@ -4742,11 +4745,11 @@ def _readGun(xmlCtx, section, item, unlocksDescrs=None, _=None, multiGun=None):
     if not section.has_key('burst'):
         item.burst = component_constants.DEFAULT_GUN_BURST
     else:
-        item.burst = _readGunClipBurst(xmlCtx, section, 'burst')
+        item.burst = _readGunBurst(xmlCtx, section)
     if not section.has_key('clip'):
         item.clip = component_constants.DEFAULT_GUN_CLIP
     else:
-        item.clip = _readGunClipBurst(xmlCtx, section, 'clip')
+        item.clip = _readGunClip(xmlCtx, section)
     if not section.has_key('autoShoot'):
         item.autoShoot = component_constants.DEFAULT_GUN_AUTOSHOOT
     else:
@@ -4935,12 +4938,12 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
         burst = sharedItem.burst
     else:
         hasOverride = True
-        burst = _readGunClipBurst(xmlCtx, section, 'burst')
+        burst = _readGunBurst(xmlCtx, section)
     if not section.has_key('clip'):
         clip = sharedItem.clip
     else:
         hasOverride = True
-        clip = _readGunClipBurst(xmlCtx, section, 'clip')
+        clip = _readGunClip(xmlCtx, section)
     if not section.has_key('controllableReload'):
         controllableReload = sharedItem.controllableReload
     else:
@@ -5263,8 +5266,9 @@ def _writeGun(item, section, sharedSections, materialData, *args, **kwargs):
     _writeGunPitchLimits(item.pitchLimits, section['pitchLimits'])
     _writeDrivenJoints(item.drivenJoints, section, 'drivenJoints')
     _writeDualGun(item, section)
-    _writeSecondaryGunPrefabs(item, section)
-    _writeMechanics(item, section)
+    if isSG is True:
+        _writeSecondaryGunPrefabs(item, section)
+        _writeMechanics(item, section)
     return
 
 
@@ -5389,10 +5393,16 @@ def _readGunPitchConstraints(xmlCtx, section, type):
     return cachedFloatTuple(points)
 
 
-def _readGunClipBurst(xmlCtx, section, type):
+def _readGunClip(xmlCtx, section, type='clip'):
     count = _xml.readInt(xmlCtx, section, type + '/count', 1)
     interval = 60.0 / _xml.readPositiveFloat(xmlCtx, section, type + '/rate')
     return (count, interval if count > 1 else 0.0)
+
+
+def _readGunBurst(xmlCtx, section):
+    count, interval = _readGunClip(xmlCtx, section, 'burst')
+    syncReloading = _xml.readBool(xmlCtx, section, 'burst/syncReloading', False)
+    return (count, interval, syncReloading)
 
 
 def _readGunClipAutoShoot(xmlCtx, section):
@@ -5488,7 +5498,7 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
     if shell.isTracer:
         shell.isForceTracer = section.readBool('isForceTracer', False)
     if IS_CLIENT or IS_WEB:
-        shell.i18n = shared_components.I18nComponent(userStringKey=section.readString('userString'), descriptionKey=section.readString('description'), shortDescriptionSpecialKey=section.readString('shortDescriptionSpecial'), longDescriptionSpecialKey=section.readString('longDescriptionSpecial'))
+        shell.i18n = shared_components.I18nComponent(section.readString('userString'), section.readString('description'))
         v = _xml.readNonEmptyString(xmlCtx, section, 'icon')
         if icons.get(v) is None:
             _xml.raiseWrongXml(xmlCtx, 'icon', "unknown icon '%s'" % v)
@@ -6889,7 +6899,11 @@ def _readNationVehiclesByNames(xmlCtx, section, sectionName, defNationID):
             try:
                 vehTypeCompDescr = makeVehicleTypeCompDescrByName(vehName)
             except:
-                _xml.raiseWrongXml(xmlCtx, sectionName, "unknown vehicle name '%s'" % vehName)
+                if not IS_UE_EDITOR:
+                    _xml.raiseWrongXml(xmlCtx, sectionName, "unknown vehicle name '%s'" % vehName)
+                else:
+                    ERROR_MSG('Unknown vehicle name ' + vehName + '. The name was skipped.')
+                    continue
 
             res.add(vehTypeCompDescr)
 
@@ -6913,7 +6927,11 @@ def _vehicleValues(xmlCtx, section, sectionName, defNationID):
             try:
                 nationID, vehID = g_list.getIDsByName(vehName)
             except:
-                _xml.raiseWrongXml(xmlCtx, sectionName, "unknown vehicle name '%s'" % vehName)
+                if not IS_UE_EDITOR:
+                    _xml.raiseWrongXml(xmlCtx, sectionName, "unknown vehicle name '%s'" % vehName)
+                else:
+                    ERROR_MSG('Unknown vehicle name ' + vehName + '. The name was skipped.')
+                    continue
 
             yield VehicleValue(vehName, makeIntCompactDescrByID('vehicle', nationID, vehID), ctx, subsection)
 
@@ -7565,11 +7583,36 @@ def _selectCrewExtras(crewRoles, extrasDict):
     return tuple(res)
 
 
+def selectBestHull(hulls, turretIDs, chassisID):
+    bestHull = hulls[0]
+    bestMatchWeight = 0
+    for hull in hulls[1:]:
+        match = hull.variantMatch
+        matchWeight = 0
+        if match[0] is not None:
+            if match[0] != chassisID:
+                continue
+            matchWeight = 100
+        for turretID, turretToMatchID in zip(turretIDs, match[1:]):
+            if turretToMatchID is None:
+                continue
+            if turretID == turretToMatchID:
+                matchWeight += 1
+            matchWeight = -1
+            break
+
+        if bestMatchWeight < matchWeight:
+            bestMatchWeight = matchWeight
+            bestHull = hull
+
+    return bestHull
+
+
 def _summPriceDiff(price, priceAdd, priceSub):
     return (price[0] + priceAdd[0] - priceSub[0], price[1] + priceAdd[1] - priceSub[1])
 
 
-def _splitVehicleCompactDescr(compactDescr, vehMode=VEHICLE_MODE.DEFAULT, vehType=None):
+def _splitVehicleCompactDescr(compactDescr, vehMode=VEHICLE_MODE.DEFAULT, vehType=None, onlyComponents=False):
     header = unpackByte(compactDescr[0])
     vehTypeOffset = 0
     vehicleTypeID = unpackByte(compactDescr[1])
@@ -7583,59 +7626,62 @@ def _splitVehicleCompactDescr(compactDescr, vehMode=VEHICLE_MODE.DEFAULT, vehTyp
         type = vehType
     idx = 10 + vehTypeOffset + len(type.turrets) * 4
     components = compactDescr[2 + vehTypeOffset:idx]
-    flags = unpackByte(compactDescr[idx])
-    idx += 1
-    count = 0
-    optionalDeviceSlots = 0
-    for i in xrange(0, MAX_OPTIONAL_DEVICES_SLOTS):
-        if flags & 1 << i:
-            count += 1
-            optionalDeviceSlots |= 1 << i
-
-    optionalDevices = compactDescr[idx:idx + count * 2]
-    idx += count * 2
-    if flags & 16:
-        count = unpackByte(compactDescr[idx])
-        enhancements = compactDescr[idx:idx + 1 + count * 6]
-        idx += 1 + count * 6
+    if onlyComponents:
+        return (type, components)
     else:
-        enhancements = ''
-    if flags & 32:
-        emblemPositions = unpackByte(compactDescr[idx])
+        flags = unpackByte(compactDescr[idx])
         idx += 1
         count = 0
-        for i in _RANGE_4:
-            if emblemPositions & 1 << i:
+        optionalDeviceSlots = 0
+        for i in xrange(0, MAX_OPTIONAL_DEVICES_SLOTS):
+            if flags & 1 << i:
                 count += 1
+                optionalDeviceSlots |= 1 << i
 
-        emblems = compactDescr[idx:idx + count * 6]
-        idx += count * 6
-        count = 0
-        for i in _RANGE_4:
-            if emblemPositions & 1 << i + 4:
-                count += 1
+        optionalDevices = compactDescr[idx:idx + count * 2]
+        idx += count * 2
+        if flags & 16:
+            count = unpackByte(compactDescr[idx])
+            enhancements = compactDescr[idx:idx + 1 + count * 6]
+            idx += 1 + count * 6
+        else:
+            enhancements = ''
+        if flags & 32:
+            emblemPositions = unpackByte(compactDescr[idx])
+            idx += 1
+            count = 0
+            for i in _RANGE_4:
+                if emblemPositions & 1 << i:
+                    count += 1
 
-        inscriptions = compactDescr[idx:idx + count * 7]
-        idx += count * 7
-    else:
-        emblemPositions = 0
-        emblems = ''
-        inscriptions = ''
-    if flags & 64:
-        idx += 1
-    if flags & 128:
-        camouflages = compactDescr[idx:]
-    else:
-        camouflages = ''
-    return (type,
-     components,
-     optionalDeviceSlots,
-     optionalDevices,
-     enhancements,
-     emblemPositions,
-     emblems,
-     inscriptions,
-     camouflages)
+            emblems = compactDescr[idx:idx + count * 6]
+            idx += count * 6
+            count = 0
+            for i in _RANGE_4:
+                if emblemPositions & 1 << i + 4:
+                    count += 1
+
+            inscriptions = compactDescr[idx:idx + count * 7]
+            idx += count * 7
+        else:
+            emblemPositions = 0
+            emblems = ''
+            inscriptions = ''
+        if flags & 64:
+            idx += 1
+        if flags & 128:
+            camouflages = compactDescr[idx:]
+        else:
+            camouflages = ''
+        return (type,
+         components,
+         optionalDeviceSlots,
+         optionalDevices,
+         enhancements,
+         emblemPositions,
+         emblems,
+         inscriptions,
+         camouflages)
 
 
 def _combineVehicleCompactDescr(type, components, optionalDeviceSlots, optionalDevices, enhancements, emblemPositions, emblems, inscriptions, camouflages):

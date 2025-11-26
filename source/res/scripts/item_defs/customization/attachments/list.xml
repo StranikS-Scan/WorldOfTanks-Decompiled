@@ -700,10 +700,38 @@
       <attachmentLogic>	prefab	</attachmentLogic>
     </attachment>
     <attachment>
+      <id>	157	</id>
+      <name>	G177_E65_Zwilling_W25_3Dst	</name>
+      <modelName>	particles/Tank/customization/G177_E65_Zwilling_W25_3Dst/G177_E65_Zwilling_W25_3Dst.prefab	</modelName>
+      <hangarModelName>	particles/Tank/customization/G177_E65_Zwilling_W25_3Dst/G177_E65_Zwilling_W25_3Dst_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+    </attachment>
+    <attachment>
       <id>	158	</id>
       <name>	G42_Maus_SFV_3Dst	</name>
       <modelName>	particles/Tank/customization/G42_Maus_SFV_3Dst/G42_Maus_SFV_3Dst.prefab	</modelName>
       <hangarModelName>	particles/Tank/customization/G42_Maus_SFV_3Dst/G42_Maus_SFV_3Dst_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+    </attachment>
+    <attachment>
+      <id>	162	</id>
+      <name>	J42_Chi_Se_AS5_3Dst	</name>
+      <modelName>	particles/Tank/customization/J42_Chi_Se_AS5_3Dst/J42_Chi_Se_AS5_3Dst.prefab	</modelName>
+      <hangarModelName></hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+    </attachment>
+    <attachment>
+      <id>	163	</id>
+      <name>	G168_KJpz_T_III_AS5_3Dst	</name>
+      <modelName>	particles/Tank/customization/G168_KJpz_T_III_AS5_3Dst/G168_KJpz_T_III_AS5_3Dst.prefab	</modelName>
+      <hangarModelName></hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+    </attachment>
+    <attachment>
+      <id>	164	</id>
+      <name>	A166_H_3_WD_3Dst	</name>
+      <modelName>	particles/Tank/customization/A166_H_3_WD_3Dst/A166_H_3_WD_3Dst.prefab	</modelName>
+      <hangarModelName></hangarModelName>
       <attachmentLogic>	prefab	</attachmentLogic>
     </attachment>
   </itemGroup>
@@ -1489,6 +1517,141 @@
       <rarity>	rare	</rarity>
       <priceGroup>	attachments 500g notInShop	</priceGroup>
       <userString>	#vehicle_customization:attachment/field_operations/Cus_76_OTG_Canisters	</userString>
+    </attachment>
+  </itemGroup>
+  <itemGroup>
+    <name>	Tactical_Supplies	</name>
+    <userString>	#vehicle_customization:attachment/tactical_supplies	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <attachment>
+      <id>	1110	</id>
+      <name>	Cus_78_NationsA_Lamp	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_78_NationsA_Lamp/Cus_78_NationsA_Lamp.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_78_NationsA_Lamp/Cus_78_NationsA_Lamp.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	gunMantlet	</applyType>
+      <size>	medium	</size>
+      <rarity>	epic	</rarity>
+      <priceGroup>	attachments 700g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/tactical_supplies/Cus_78_NationsA_Lamp	</userString>
+    </attachment>
+    <attachment>
+      <id>	1111	</id>
+      <name>	Cus_79_NationsA_Gatling	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_79_NationsA_Gatling/Cus_79_NationsA_Gatling.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_79_NationsA_Gatling/Cus_79_NationsA_Gatling.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	turret	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/tactical_supplies/Cus_79_NationsA_Gatling	</userString>
+    </attachment>
+    <attachment>
+      <id>	1112	</id>
+      <name>	Cus_80_NationsA_Saddle	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_80_NationsA_Saddle/Cus_80_NationsA_Saddle.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_80_NationsA_Saddle/Cus_80_NationsA_Saddle.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/tactical_supplies/Cus_80_NationsA_Saddle	</userString>
+    </attachment>
+    <attachment>
+      <id>	1113	</id>
+      <name>	Cus_81_NationsA_Ammorifles	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_81_NationsA_Ammorifles/Cus_81_NationsA_Ammorifles.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_81_NationsA_Ammorifles/Cus_81_NationsA_Ammorifles.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 350g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/tactical_supplies/Cus_81_NationsA_Ammorifles	</userString>
+    </attachment>
+    <attachment>
+      <id>	1114	</id>
+      <name>	Cus_82_NationsA_Ammogun	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_82_NationsA_Ammogun/Cus_82_NationsA_Ammogun.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_82_NationsA_Ammogun/Cus_82_NationsA_Ammogun.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 350g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/tactical_supplies/Cus_82_NationsA_Ammogun	</userString>
+    </attachment>
+  </itemGroup>
+  <itemGroup>
+    <name>	The_Walking_Dead	</name>
+    <userString>	#vehicle_customization:attachment/the_walking_dead	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <attachment>
+      <id>	1120	</id>
+      <name>	Cus_136_BP18_Loudspeaker	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_136_BP18_Loudspeaker/Cus_136_BP18_Loudspeaker.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_136_BP18_Loudspeaker/Cus_136_BP18_Loudspeaker.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	gunMantlet	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 350g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/the_walking_dead/Cus_136_BP18_Loudspeaker	</userString>
+    </attachment>
+    <attachment>
+      <id>	1121	</id>
+      <name>	Cus_137_BP18_Machinegun	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_137_BP18_Machinegun/Cus_137_BP18_Machinegun.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_137_BP18_Machinegun/Cus_137_BP18_Machinegun_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	turret	</applyType>
+      <size>	medium	</size>
+      <rarity>	epic	</rarity>
+      <priceGroup>	attachments 1300g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/the_walking_dead/Cus_137_BP18_Machinegun	</userString>
+      <tags>	battleEffect	</tags>
+    </attachment>
+    <attachment>
+      <id>	1122	</id>
+      <name>	Cus_138_BP18_Locker	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_138_BP18_Locker/Cus_138_BP18_Locker.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_138_BP18_Locker/Cus_138_BP18_Locker_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	legendary	</rarity>
+      <priceGroup>	attachments 2795g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/the_walking_dead/Cus_138_BP18_Locker	</userString>
+      <description>	#vehicle_customization:attachment/the_walking_dead/Cus_138_BP18_Locker/description	</description>
+      <tags>	battleEffect	</tags>
+    </attachment>
+    <attachment>
+      <id>	1123	</id>
+      <name>	Cus_139_BP18_SaviorsGear	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_139_BP18_SaviorsGear/Cus_139_BP18_SaviorsGear.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_139_BP18_SaviorsGear/Cus_139_BP18_SaviorsGear.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 650g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/the_walking_dead/Cus_139_BP18_SaviorsGear	</userString>
+    </attachment>
+    <attachment>
+      <id>	1124	</id>
+      <name>	Cus_140_BP18_SurvivalsGear	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_140_BP18_SurvivalsGear/Cus_140_BP18_SurvivalsGear.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_140_BP18_SurvivalsGear/Cus_140_BP18_SurvivalsGear.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/the_walking_dead/Cus_140_BP18_SurvivalsGear	</userString>
     </attachment>
   </itemGroup>
   <itemGroup>

@@ -111,6 +111,16 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </slot>
       <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	10001	</slotId>
+        <compatibleModels>	Ch61_DZT_159_WCI_3Dst	</compatibleModels>
+        <rayStart>	-0.299189 0.275741 2.87588	</rayStart>
+        <rayEnd>	-0.299189 -0.070661 2.675885	</rayEnd>
+        <rayUp>	0 0.5 -0.866026	</rayUp>
+        <size>	0.31	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </slot>
+      <slot>
         <slotType>	paint	</slotType>
         <slotId>	11000	</slotId>
         <anchorPosition>	0.000003 0.480081 -2.459212	</anchorPosition>
@@ -1143,7 +1153,7 @@
             </wheel>
             <wheel>
               <name>	WD_L0	</name>
-              <radius>	0.3072	</radius>
+              <radius>	0.309	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
@@ -1348,7 +1358,7 @@
             </wheel>
             <wheel>
               <name>	WD_R0	</name>
-              <radius>	0.3072	</radius>
+              <radius>	0.309	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>

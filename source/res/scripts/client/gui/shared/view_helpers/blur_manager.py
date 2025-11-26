@@ -92,14 +92,15 @@ class BlurManager(object):
         if self._isBlurInCache(blur):
             isActiveBlur = blur is self._activeBlur()
             self._cache.remove(weakref.ref(blur))
+            prevBlur = self._activeBlur()
             if isActiveBlur:
-                for config in blur.config:
-                    config.BLUR_CLS.unregister(blur=blur, restoredBlur=self._activeBlur())
-
-                prevBlur = self._activeBlur()
                 if prevBlur is not None:
                     for config in prevBlur.config:
                         config.BLUR_CLS.apply(blur=prevBlur)
+
+            for config in blur.config:
+                if isActiveBlur or config.persistent:
+                    config.BLUR_CLS.unregister(blur=blur, restoredBlur=prevBlur if isActiveBlur else None)
 
         return
 
@@ -137,13 +138,13 @@ class Blur(object):
     def register(cls, prevBlur, blur):
         if prevBlur is not None:
             prevConfig = cls.getSpecificConfig(prevBlur.config)
-            if prevConfig is not None:
+            if prevConfig is not None and not prevConfig.persistent:
                 cls.disable(prevBlur)
         cls.apply(blur)
         return
 
     @classmethod
-    def unregister(cls, blur, restoredBlur):
+    def unregister(cls, blur, restoredBlur=None):
         specificConfig = cls.getSpecificConfig(blur.config)
         if specificConfig is not None:
             cls.disable(blur)
@@ -216,7 +217,7 @@ class SceneBlur(Blur):
     _rects = set()
 
     @classmethod
-    def unregister(cls, blur, restoredBlur):
+    def unregister(cls, blur, restoredBlur=None):
         specificConfig = cls.getSpecificConfig(blur.config)
         if specificConfig is not None:
             cls.disable(blur)
@@ -302,30 +303,33 @@ class UILayerBlur(Blur):
 class ImmediateSceneBlurConfig(object):
     BLUR_CLS = ImmediateSceneBlur
 
-    def __init__(self, enabled=False, spaceID=0, settings=None):
+    def __init__(self, enabled=False, spaceID=0, settings=None, persistent=False):
         self.enabled = enabled
         self.spaceID = spaceID
         self.settings = settings
+        self.persistent = persistent
 
 
 class SceneBlurConfig(object):
     BLUR_CLS = SceneBlur
 
-    def __init__(self, enabled=False, fadeTime=0, blurRadius=None, rects=None):
+    def __init__(self, enabled=False, fadeTime=0, blurRadius=None, rects=None, persistent=False):
         self.enabled = enabled
         self.fadeTime = fadeTime
         self.blurRadius = blurRadius
         self.rects = rects
+        self.persistent = persistent
 
 
 class UILayerBlurConfig(object):
     BLUR_CLS = UILayerBlur
 
-    def __init__(self, enabled=False, ownLayer=None, blurAnimRepeatCount=_DEFAULT_BLUR_ANIM_REPEAT_COUNT, uiBlurRadius=_DEFAULT_UI_BLUR_RADIUS):
+    def __init__(self, enabled=False, ownLayer=None, blurAnimRepeatCount=_DEFAULT_BLUR_ANIM_REPEAT_COUNT, uiBlurRadius=_DEFAULT_UI_BLUR_RADIUS, persistent=False):
         self.enabled = enabled
         self.ownLayer = ownLayer
         self.blurAnimRepeatCount = blurAnimRepeatCount
         self.uiBlurRadius = uiBlurRadius
+        self.persistent = persistent
 
 
 class CachedBlur(object):

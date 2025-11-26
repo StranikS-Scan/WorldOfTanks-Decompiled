@@ -14,10 +14,10 @@
     <backward>	15	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.061	</moving>
-    <still>	0.122	</still>
+    <moving>	0.06	</moving>
+    <still>	0.119	</still>
     <camouflageBonus>	0.02	</camouflageBonus>
-    <firePenalty>	0.183	</firePenalty>
+    <firePenalty>	0.179	</firePenalty>
   </invisibility>
   <optDevsOverrides>
     <camouflageNet>
@@ -391,12 +391,12 @@
     <Chassis_Cz30_TBT>
       <userString>	#czech_vehicles:Chassis_Cz30_TBT	</userString>
       <tags></tags>
-      <level>	8	</level>
+      <level>	9	</level>
       <price>	60000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <leftTrack>	30	</leftTrack>
-        <rightTrack>	30	</rightTrack>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	12000	</weight>
       <terrainResistance>	1 1.2 2	</terrainResistance>
@@ -1205,7 +1205,7 @@
     <Turret_1_Cz30_TBT>
       <userString>	#czech_vehicles:Turret_1_Cz30_TBT	</userString>
       <tags></tags>
-      <level>	8	</level>
+      <level>	9	</level>
       <price>	60000	</price>
       <notInShop>	true	</notInShop>
       <armor>
@@ -1310,7 +1310,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 7 0.42 7 0.44 1 0.56 1 0.58 7 1 7	</maxPitch>
           </pitchLimits>
-          <invisibilityFactorAtShot>	0.162	</invisibilityFactorAtShot>
+          <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.41	</shotDispersionRadius>
           <reloadTime>	34	</reloadTime>
           <aimingTime>	2.8	</aimingTime>
@@ -1865,13 +1865,13 @@
         <Chassis_Cz30_TBT>
           <grounds>
             <soft>
-              <rollingFriction>	0.18515	</rollingFriction>
+              <rollingFriction>	0.161	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1127	</rollingFriction>
+              <rollingFriction>	0.0966	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

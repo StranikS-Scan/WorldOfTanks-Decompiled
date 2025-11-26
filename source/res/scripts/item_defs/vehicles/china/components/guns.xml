@@ -80,6 +80,7 @@
     <_152_mm_64_152T_M>	87	</_152_mm_64_152T_M>
     <_122mm_57I>	88	</_122mm_57I>
     <_152_mm_ZPL_75>	89	</_152_mm_ZPL_75>
+    <_122mm_57I_CFE_A>	93	</_122mm_57I_CFE_A>
     <_130mm_59_130JG_FT_111>	2000	</_130mm_59_130JG_FT_111>
     <_152mm_59_152JG_FT_111>	2001	</_152mm_59_152JG_FT_111>
     <_100mm_59_100TG_FT_34_2G>	2002	</_100mm_59_100TG_FT_34_2G>
@@ -96,6 +97,7 @@
     <_122mm_D_25T_110>	2013	</_122mm_D_25T_110>
     <_100mm_44_100JT_IS_2>	2014	</_100mm_44_100JT_IS_2>
     <_47mm_Gun_Type_1_M5>	2015	</_47mm_Gun_Type_1_M5>
+    <_122mm_Type_61_DB>	90	</_122mm_Type_61_DB>
     <_130mm_59-130T_FL>	501	</_130mm_59-130T_FL>
     <_100mm_60-100TA_FL>	502	</_100mm_60-100TA_FL>
     <_130mm_59_130TA_7x7>	503	</_130mm_59_130TA_7x7>
@@ -2923,7 +2925,7 @@
     <_100mm_60-100TA_FL>
       <userString>	#china_vehicles:_100mm_60_100TA	</userString>
       <tags></tags>
-      <level>	9	</level>
+      <level>	8	</level>
       <price>	166000	</price>
       <notInShop>	true	</notInShop>
       <impulse>	0.44	</impulse>
@@ -4128,6 +4130,64 @@
         </_122mm_SB-57I>
       </shots>
     </_122mm_57I>
+    <_122mm_57I_CFE_A>
+      <userString>	#china_vehicles:_122mm_57I_CFE_A	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	300000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.62	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.4	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	11.7	</reloadTime>
+      <maxAmmo>	40	</maxAmmo>
+      <aimingTime>	2.7	</aimingTime>
+      <weight>	2600	</weight>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_122mm_CB-57I_CFE_A>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	1150	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	260 245	</piercingPower>
+        </_122mm_CB-57I_CFE_A>
+        <_122mm_PO-57I_CFE_A>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1000	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	310 310	</piercingPower>
+        </_122mm_PO-57I_CFE_A>
+        <_122mm_SB-57I_CFE_A>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	1150	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	68 68	</piercingPower>
+        </_122mm_SB-57I_CFE_A>
+      </shots>
+    </_122mm_57I_CFE_A>
     <_122-mm_60-122TP>
       <userString>	#china_vehicles:_122-mm_60-122TP	</userString>
       <tags></tags>
@@ -4475,6 +4535,64 @@
         </_122mm_SB-472T>
       </shots>
     </_122mm_Type_61>
+    <_122mm_Type_61_DB>
+      <userString>	#china_vehicles:_122mm_Type_61_DB	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	200000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.62	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.66	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	dualgun_reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	14.0	</reloadTime>
+      <maxAmmo>	34	</maxAmmo>
+      <aimingTime>	2.85714285714286	</aimingTime>
+      <weight>	5800	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.388571428571429	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_122mm_CB_472_Y>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	950	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	245 230	</piercingPower>
+        </_122mm_CB_472_Y>
+        <_122mm_PO_122_Y>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	950	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	300 300	</piercingPower>
+        </_122mm_PO_122_Y>
+        <_122mm_SB_472_Y>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	950	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	61 61	</piercingPower>
+        </_122mm_SB_472_Y>
+      </shots>
+    </_122mm_Type_61_DB>
     <_122mm_vz_60>
       <userString>	#china_vehicles:_122mm_vz_60	</userString>
       <tags></tags>
@@ -4824,7 +4942,7 @@
     <_130mm_59-130T_FL>
       <userString>	#china_vehicles:_130mm_59_130T	</userString>
       <tags></tags>
-      <level>	10	</level>
+      <level>	9	</level>
       <price>	330000	</price>
       <notInShop>	true	</notInShop>
       <impulse>	0.62	</impulse>
@@ -5839,7 +5957,7 @@
       <shots>
         <_180mm_Chuan_bei_572>
           <defaultPortion>	0.9	</defaultPortion>
-          <speed>	750	</speed>
+          <speed>	800	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
           <piercingPower>	256 238	</piercingPower>
@@ -5849,7 +5967,7 @@
           <speed>	600	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	320 320	</piercingPower>
+          <piercingPower>	330 330	</piercingPower>
         </_180mm_Po_572>
         <_180mm_Sha_bao_28>
           <defaultPortion>	0.1	</defaultPortion>

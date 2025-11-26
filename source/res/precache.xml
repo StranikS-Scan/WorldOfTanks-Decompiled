@@ -27,9 +27,9 @@
   <item>	particles/content_deferred/pfx/tank/customization/a174_t57_58_rush_ep1/a174_flame.vfx	</item>
   <item>	particles/content_forward/pfx/tank/customization/a174_t57_58_rush_ep1/a174_flame.vfx	</item>
   <item>	cs@shaders/3d_style_baking/3d_style_baking.fx	</item>
-  <item>	cs@shaders/auxiliary/bitonic_sort.fx	</item>
   <item>	cs@shaders/auxiliary/depth_pyramid_singlepass.fx	</item>
   <item>	cs@shaders/auxiliary/groupshared_sort.fx	</item>
+  <item>	cs@shaders/auxiliary/jump_flooding.fx	</item>
   <item>	cs@shaders/custom/armor_flashlight.fx	</item>
   <item>	cs@shaders/gpu_decals/gpu_decals_clusterization.fx	</item>
   <item>	cs@shaders/gpu_decals/gpu_decals_commands.fx	</item>
@@ -45,12 +45,10 @@
   <item>	cs@shaders/gpu_particles/environment/sensors_core.fx	</item>
   <item>	cs@shaders/gpu_particles/external_force_u.fx	</item>
   <item>	cs@shaders/gpu_particles/fly_to_mesh_um.fx	</item>
-  <item>	cs@shaders/gpu_particles/gather_cpu_particles.fx	</item>
-  <item>	cs@shaders/gpu_particles/gpu_particle_binning.fx	</item>
   <item>	cs@shaders/gpu_particles/gpu_particle_culling.fx	</item>
-  <item>	cs@shaders/gpu_particles/gpu_particle_renderer.fx	</item>
   <item>	cs@shaders/gpu_particles/hemisphere_s.fx	</item>
   <item>	cs@shaders/gpu_particles/hit_bidirectional_s.fx	</item>
+  <item>	cs@shaders/gpu_particles/initial_direction_property_u.fx	</item>
   <item>	cs@shaders/gpu_particles/kill_by_condition_u.fx	</item>
   <item>	cs@shaders/gpu_particles/line_s.fx	</item>
   <item>	cs@shaders/gpu_particles/noise_u.fx	</item>

@@ -873,53 +873,16 @@ class MineFieldSoundPlayer(BaseEfficiencySoundPlayer):
 
 class _HealingRepairSoundPlayer(VehicleStateSoundPlayer):
 
-    def __init__(self):
-        super(_HealingRepairSoundPlayer, self).__init__()
-        self.__lastHealingSenderKey = None
-        return
-
-    def destroy(self):
-        super(_HealingRepairSoundPlayer, self).destroy()
-        self.__lastHealingSenderKey = None
-        return
-
     def _onVehicleStateUpdated(self, state, value):
         if state in (VEHICLE_VIEW_STATE.HEALING, VEHICLE_VIEW_STATE.REPAIR_POINT):
-            self.__updateHealingEffect(value)
-
-    def __updateHealingEffect(self, value):
-        if not value['isSourceVehicle']:
+            isInactivation = value.get('isInactivation')
+            isDestroying = value.get('isDestroying')
             senderKey = value.get('senderKey')
-            if senderKey is not None:
-                self.__onHealingActivate(senderKey)
-            else:
-                self.__onHealingDeactivate()
-        return
-
-    def __onHealingActivate(self, senderKey):
-        if self.__lastHealingSenderKey is not None:
-            self.__healingDeactivatePlayEvent(self.__lastHealingSenderKey)
-        self.__lastHealingSenderKey = senderKey
-        self.__healingActivatePlayEvent(self.__lastHealingSenderKey)
-        return
-
-    def __onHealingDeactivate(self):
-        if self.__lastHealingSenderKey is not None:
-            self.__healingDeactivatePlayEvent(self.__lastHealingSenderKey)
-            self.__lastHealingSenderKey = None
-        return
-
-    def __healingActivatePlayEvent(self, senderKey):
-        if senderKey == 'healPoint':
-            eventName = BREvents.HEAL_POINT_ENTER
-            _logger.debug('[HEAL_POINT] on activate play sound %s', eventName)
-            BREvents.playSound(eventName)
-
-    def __healingDeactivatePlayEvent(self, senderKey):
-        if senderKey == 'healPoint':
-            eventName = BREvents.HEAL_POINT_EXIT
-            _logger.debug('[HEAL_POINT] on deactivate play sound %s', eventName)
-            BREvents.playSound(eventName)
+            if senderKey == BattleRoyaleEquipments.HEAL_POINT:
+                if isInactivation or isDestroying:
+                    BREvents.playSound(BREvents.HEAL_POINT_EXIT)
+                else:
+                    BREvents.playSound(BREvents.HEAL_POINT_ENTER)
 
 
 class _DamagingSmokeAreaSoundPlayer(VehicleStateSoundPlayer):

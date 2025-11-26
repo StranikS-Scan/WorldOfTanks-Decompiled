@@ -4,7 +4,7 @@ import BigWorld
 from frontline.gui.battle_control.controllers.frontline_respawn_ctrl import IFrontlineRespawnView
 from frontline.gui.impl.battle.battle_page.respawn_ammunition_panel_view import RespawnAmmunitionPanelView
 from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor, hasAliveInject
-from gui.battle_control.controllers.respawn_ctrl import IRespawnView
+from frontline.gui.battle_control.controllers.base_respawn_ctrl import IRespawnView
 from gui.battle_control.gui_vehicle_builder import VehicleBuilder
 from gui.shared.gui_items.artefacts import BattleAbility
 from gui.veh_post_progression.sounds import playSound, Sounds

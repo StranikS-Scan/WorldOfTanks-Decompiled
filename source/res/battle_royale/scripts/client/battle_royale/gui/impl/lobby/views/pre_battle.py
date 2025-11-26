@@ -11,28 +11,31 @@ from gui.Scaleform.Waiting import Waiting
 from helpers import dependency
 from wg_async import wg_async, wg_await
 from constants import IS_DEVELOPMENT
-from frameworks.wulf import ViewFlags, ViewSettings, Array
+from frameworks.wulf import ViewSettings, Array, WindowFlags
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.dialogs.builders import WarningDialogBuilder
 from gui.impl.pub.dialog_window import DialogButtons
 from gui.impl.dialogs import dialogs
 from gui.impl.gen.view_models.ui_kit.gf_drop_down_item import GfDropDownItem
-from gui.impl.pub import ViewImpl
-from gui.impl.lobby.common.view_mixins import LobbyHeaderVisibility
+from gui.impl.pub import ViewImpl, WindowImpl
 from gui.prb_control import prbEntityProperty
-from gui.Scaleform.daapi import LobbySubView
 from skeletons.gui.game_control import IBattleRoyaleController, IBattleRoyaleTournamentController
 from skeletons.gui.shared import IItemsCache
 
-class PreBattleView(ViewImpl, LobbySubView, LobbyHeaderVisibility):
+class BattleRoyalePreBattleWindow(WindowImpl):
+
+    def __init__(self, layer, **kwargs):
+        super(BattleRoyalePreBattleWindow, self).__init__(content=PreBattleView(R.views.battle_royale.lobby.views.PreBattleView()), wndFlags=WindowFlags.WINDOW, layer=layer)
+
+
+class PreBattleView(ViewImpl):
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     __battleRoyaleTournamentController = dependency.descriptor(IBattleRoyaleTournamentController)
     __itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, layoutID, wsFlags=ViewFlags.LOBBY_TOP_SUB_VIEW):
+    def __init__(self, layoutID):
         settings = ViewSettings(layoutID)
-        settings.flags = wsFlags
         settings.model = PreBattleViewModel()
         super(PreBattleView, self).__init__(settings)
         self.__isObserver = False
@@ -54,13 +57,11 @@ class PreBattleView(ViewImpl, LobbySubView, LobbyHeaderVisibility):
         self.viewModel.onClose += self.__onClose
         self.__battleRoyaleTournamentController.onUpdatedParticipants += self.__updateParticipants
         super(PreBattleView, self)._initialize(*args, **kwargs)
-        self.suspendLobbyHeader(self.uniqueID)
 
     def _finalize(self):
         self.viewModel.onBattleClick -= self.__onBattleClick
         self.viewModel.onClose -= self.__onClose
         self.__battleRoyaleTournamentController.onUpdatedParticipants -= self.__updateParticipants
-        self.resumeLobbyHeader(self.uniqueID)
         super(PreBattleView, self)._finalize()
 
     def _onLoading(self, *args, **kwargs):

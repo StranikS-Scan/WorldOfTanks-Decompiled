@@ -12,7 +12,8 @@ def registerComp7Lobby():
     from comp7.gui.Scaleform.daapi.view.lobby.hangar.header_helpers.flag_constants import QuestFlagTypes
     from comp7.gui.Scaleform.daapi.view.lobby.rally.action_button_state_vo import unitRestrictionsGetter
     from comp7.gui.game_control.award_controller import Comp7QuestRewardHandler, Comp7InvoiceRewardHandler, Comp7PunishWindowHandler
-    from comp7.gui.hangar_presets.hangar_presets_getters import Comp7PresetsGetter
+    from comp7.gui.hangar_presets.comp7_dynamic_gui_provider import getComp7BattleModifiers
+    from comp7.gui.impl.lobby.user_missions.hangar_widget.event_banners.comp7_tournament_banner import Comp7TournamentBanner
     from comp7.notification.actions_handlers import Comp7OpenPunishmentWindowHandler
     from comp7.notification.listeners import Comp7OfferTokenListener
     from comp7.web.web_client_api import Comp7WebApi, Comp7OpenWindowWebApi
@@ -21,9 +22,10 @@ def registerComp7Lobby():
     from gui.game_control.GameSessionController import GameSessionController
     from gui.game_control.platoon_controller import PlatoonController
     from gui.graphics_optimization_controller.utils import OptimizationSetting
-    from gui.hangar_presets.hangar_presets_getters import SpecBattlePresetsGetter
+    from gui.hangar_presets.obsolete.hangar_presets_getters import SpecBattlePresetsGetter
+    from gui.hangar_presets.providers.spec_battle_dynamic_gui_providers import SpecBattleGuiSettings, SpecBattleHangarDynamicGuiProvider
     from gui.Scaleform.daapi.view.lobby.header.helpers.controls_helpers import DefaultLobbyHeaderHelper
-    from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import _EXT_FIGHT_BUTTON_TOOLTIP_GETTERS
+    from gui.impl.lobby.missions.missions_helpers import DefaultMissionsGuiHelper
     from gui.Scaleform.daapi.view.lobby.store.browser.web_handlers import _SHOP_HANDLERS
     from gui.Scaleform.daapi.view.lobby.rally.action_button_state_vo import _EXT_INVALID_UNIT_MESSAGE_GETTERS
     from gui.Scaleform.daapi.view.lobby.trainings.TrainingSettingsWindow import CONFIG_KEYS_FOR_UPDATE
@@ -31,8 +33,10 @@ def registerComp7Lobby():
     from gui.Scaleform.daapi.view.lobby.formatters.tooltips import _MODENAME_TO_PO_FILE
     from gui.selectable_reward.constants import FEATURE_TO_PREFIX
     from gui.shared.system_factory import registerAwardControllerHandlers, registerNotificationsListeners, registerOptimizedViews, registerQuestFlag
+    from gui.impl.lobby.common.lobby_header_utils import registerFightButtonTooltipGetter
     from gui.impl.lobby.crew.widget.crew_widget import CrewWidget
     from gui.impl.gen.view_models.views.lobby.crew.common.crew_widget_model import SlotSizeMode
+    from gui.impl.lobby.user_missions.hangar_widget.event_banners.event_banners_container import EventBannersContainer
     from messenger.formatters.service_channel import AchievementFormatter
     from notification.actions_handlers import _AVAILABLE_HANDLERS, _OpenPunishmentWindowHandler
     from web.web_client_api.ui import OpenWindowWebApi
@@ -40,8 +44,10 @@ def registerComp7Lobby():
     registerNotificationsListeners((Comp7OfferTokenListener,))
     registerOptimizedViews({COMP7_HANGAR_ALIASES.COMP7_TANK_CAROUSEL: OptimizationSetting()})
     registerQuestFlag(QuestFlagTypes.COMP7, Comp7QuestsFlag)
-    SpecBattlePresetsGetter._GUI_TYPE_TO_SETTINGS.update({ARENA_GUI_TYPE.TOURNAMENT_COMP7: SpecBattlePresetsGetter._SpecGuiSettings(ARENA_BONUS_TYPE.TOURNAMENT_COMP7, Comp7PresetsGetter.getBattleModifiers, Comp7TournamentQuestFlagsGetter, DefaultLobbyHeaderHelper)})
-    _EXT_FIGHT_BUTTON_TOOLTIP_GETTERS.append(_fightButtonTooltipGetter)
+    tournamentGuiType = ARENA_GUI_TYPE.TOURNAMENT_COMP7
+    SpecBattlePresetsGetter.GUI_TYPE_TO_QUEST_FLAGS[tournamentGuiType] = Comp7TournamentQuestFlagsGetter
+    SpecBattleHangarDynamicGuiProvider.GUI_TYPE_TO_SPEC_SETTINGS[tournamentGuiType] = SpecBattleGuiSettings(ARENA_BONUS_TYPE.TOURNAMENT_COMP7, getComp7BattleModifiers, DefaultLobbyHeaderHelper, DefaultMissionsGuiHelper)
+    registerFightButtonTooltipGetter(_fightButtonTooltipGetter)
     _EXT_INVALID_UNIT_MESSAGE_GETTERS.append(unitRestrictionsGetter)
     _AVAILABLE_HANDLERS.remove(_OpenPunishmentWindowHandler)
     _AVAILABLE_HANDLERS.append(Comp7OpenPunishmentWindowHandler)
@@ -60,6 +66,7 @@ def registerComp7Lobby():
      'comp7_4_yearly_gold',
      'comp7_4_yearly_champion',
      'comp7_4_yearly_legend'})
+    EventBannersContainer().registerEventBanner(Comp7TournamentBanner)
 
 
 def _fightButtonTooltipGetter(pValidation):

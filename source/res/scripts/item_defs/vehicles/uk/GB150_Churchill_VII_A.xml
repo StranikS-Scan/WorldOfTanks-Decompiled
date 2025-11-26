@@ -14,7 +14,7 @@
     <backward>	14	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.065	</moving>
+    <moving>	0.066	</moving>
     <still>	0.131	</still>
     <camouflageBonus>	0.02	</camouflageBonus>
     <firePenalty>	0.197	</firePenalty>
@@ -66,7 +66,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	22050	</weight>
-    <maxHealth>	904	</maxHealth>
+    <maxHealth>	960	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	170	</maxHealth>
       <maxRegenHealth>	128	</maxRegenHealth>
@@ -160,7 +160,7 @@
       <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
       <brakeForce>	39000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	20	</rotationSpeed>
+      <rotationSpeed>	24	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.16	</vehicleMovement>
         <vehicleRotation>	0.16	</vehicleRotation>
@@ -1244,7 +1244,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	8000	</weight>
-      <maxHealth>	226	</maxHealth>
+      <maxHealth>	240	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	125	</maxHealth>
@@ -1260,8 +1260,8 @@
       <guns>
         <_75mm_Gun_Mk_V_G>	shared	  <maxAmmo>	84	</maxAmmo>
           <pitchLimits>
-            <minPitch>	0 -12 1 -12	</minPitch>
-            <maxPitch>	0 4 0.325226 4 0.388888 2 0.611112 2 0.674774 4 1 4	</maxPitch>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 8 0.02500 8 0.04167 4 0.09167 4 0.13333 8 0.32523 8 0.38889 3 0.61111 3 0.67477 8 0.86667 8 0.90833 4 0.95833 4 0.97500 8 1 8	</maxPitch>
           </pitchLimits>
           <armor>
             <gun>	20	</gun>
@@ -1429,7 +1429,7 @@
     <detailed>
       <engines>
         <Vauxhall_Bedford_Twin_Six_G>
-          <smplEnginePower>	370.0484	</smplEnginePower>
+          <smplEnginePower>	380	</smplEnginePower>
           <smplFwMaxSpeed>	25	</smplFwMaxSpeed>
         </Vauxhall_Bedford_Twin_Six_G>
       </engines>

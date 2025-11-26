@@ -38,6 +38,9 @@ class ManualState(ViewLobbyState):
     def getNavigationDescription(self):
         return LobbyStateDescription(title=backport.text(R.strings.menu.headerButtons.wiki()))
 
+    def _getViewLoadCtx(self, event):
+        return {'ctx': event.params}
+
 
 @SubScopeTopLayerState.parentOf
 class ManualChapterState(ViewLobbyState):

@@ -3,7 +3,7 @@
 import typing
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import VEHICLE_CAROUSEL_COUNTERS_SEEN
-from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import FILTER_KEYS
+from gui.filters.carousel_filter import FILTER_KEYS
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency

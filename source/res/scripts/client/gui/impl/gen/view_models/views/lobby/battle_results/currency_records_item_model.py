@@ -45,6 +45,7 @@ class CurrencyRecordsItemModel(ViewModel):
     SQUAD_BONUS_CREDITS = 'squadBonusCredits'
     ACHIEVEMENT_CREDITS = 'achievementCredits'
     BOOSTERS_CREDITS = 'boostersCredits'
+    PET_SYSTEM_BONUS_CREDITS = 'petSystemBonusCredits'
     BATTLE_PAYMENTS_CREDITS = 'battlePaymentsCredits'
     EVENT_PAYMENTS_CREDITS = 'eventPaymentsCredits'
     REFERRAL_BONUS_CREDITS = 'referralBonusCredits'

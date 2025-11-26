@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/impl/lobby/tooltips/fun_random_progression_tooltip_view.py
+from __future__ import absolute_import
 from frameworks.wulf import ViewSettings
 from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin, FunProgressionWatcher, FunSubModesWatcher
 from fun_random.gui.feature.util.fun_wrappers import hasActiveProgression
@@ -12,7 +13,7 @@ class FunRandomProgressionTooltipView(ViewImpl, FunAssetPacksMixin, FunProgressi
     __slots__ = ()
 
     def __init__(self):
-        settings = ViewSettings(layoutID=R.views.fun_random.lobby.tooltips.FunRandomProgressionTooltipView(), model=FunRandomProgressionTooltipViewModel())
+        settings = ViewSettings(layoutID=R.views.fun_random.mono.lobby.tooltips.progression_tooltip(), model=FunRandomProgressionTooltipViewModel())
         super(FunRandomProgressionTooltipView, self).__init__(settings)
 
     @property

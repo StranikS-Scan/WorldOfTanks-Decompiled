@@ -33,25 +33,31 @@ class VehPostProgressionEntryPointTooltip(ViewImpl):
     def _onLoading(self, intCD, parentScreen=None):
         items = self.__itemsCache.items
         self.__vehicle = items.getItemByCD(intCD)
-        eliteProgress = self.__vehicle.getEliteStatusProgress()
-        hasVehiclesToUnlock = any(filterIntCDsByItemType(eliteProgress.total, ITEM_TYPES.vehicle))
+        modulesExplored = 0
+        modulesTotal = 0
+        hasVehiclesToUnlock = True
         self.__parentScreen = parentScreen
         with self.viewModel.transaction() as model:
             model.setHeader(R.strings.veh_post_progression.tooltips.entry_point.header())
             model.setDescription(R.strings.veh_post_progression.tooltips.entry_point.description())
-            model.setStatus(self.__getStatus(eliteProgress))
-            model.setModulesExplored(len(eliteProgress.unlocked))
-            model.setModulesTotal(len(eliteProgress.total))
+            model.setStatus(self.__getStatus())
+            if not self.__vehicle.isElite:
+                eliteProgress = self.__vehicle.getEliteStatusProgress()
+                modulesExplored = len(eliteProgress.unlocked)
+                modulesTotal = len(eliteProgress.total)
+                hasVehiclesToUnlock = any(filterIntCDsByItemType(eliteProgress.total, ITEM_TYPES.vehicle))
+            model.setModulesExplored(modulesExplored)
+            model.setModulesTotal(modulesTotal)
             model.setHasVehiclesToUnlock(hasVehiclesToUnlock)
 
-    def __getStatus(self, eliteProgress):
+    def __getStatus(self):
         status = R.strings.veh_post_progression.tooltips.entry_point.status
         isPurchased = self.__vehicle.isPurchased
-        fullyUnlocked = not eliteProgress.toUnlock
+        isElite = self.__vehicle.isElite
         if self.__vehicle.postProgressionAvailability(unlockOnly=True):
             return R.invalid()
-        if not isPurchased and not fullyUnlocked:
+        if not isPurchased and not isElite:
             return status.notResearchedNotPurchased()
         if not isPurchased:
             return status.notPurchased()
-        return status.notResearched() if not fullyUnlocked else R.invalid()
+        return status.notResearched() if not isElite else R.invalid()

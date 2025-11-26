@@ -20,6 +20,8 @@ class ViewComponent(ViewImpl[TViewModel]):
     def __init__(self, layoutID=R.aliases.common.none(), model=ViewModel, enabled=True, *args, **kwargs):
         settings = ViewSettings(layoutID)
         settings.model = model()
+        settings.args = args
+        settings.kwargs = kwargs
         super(ViewComponent, self).__init__(settings, settings.flags, *args, **kwargs)
         self.__enabled = enabled
         self._childrenByUid = {}

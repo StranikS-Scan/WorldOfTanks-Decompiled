@@ -45,13 +45,18 @@ class NetworkEntity(BigWorld.Entity):
 
     @staticmethod
     def __processAddComponent(go, component):
-        existing = go.findComponentByType(type(component))
-        if existing is None:
-            go.addComponent(component)
-        return
+        if not go.isValid():
+            return
+        else:
+            existing = go.findComponentByType(type(component))
+            if existing is None:
+                go.addComponent(component)
+            return
 
     @staticmethod
     def __processRemoveComponent(go, component):
+        if not go.isValid():
+            return
         existing = go.findComponentByType(type(component))
         if existing is component:
             go.removeComponent(component)

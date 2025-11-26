@@ -18,7 +18,6 @@ EFFICIENCY_ITEMS_TO_PROPERTIES = {DetailedPersonalEfficiencyItemModel.KILLED: 't
  DetailedPersonalEfficiencyItemModel.NO_DAMAGE_DIRECT_HITS_RECIEVEVD: 'noDamageDirectHitsReceived'}
 
 class PersonalEfficiency(IBattleResultsPacker):
-    __slots__ = ()
     _PARAMETERS = {}
     _DEFAULT_PARAMS = ()
     _VALUE_EXTRACTORS = {}

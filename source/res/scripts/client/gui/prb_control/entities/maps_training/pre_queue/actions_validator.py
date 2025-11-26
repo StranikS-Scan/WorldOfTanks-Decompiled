@@ -14,7 +14,7 @@ class MapsTrainingValidator(BaseActionsValidator):
     def _validate(self):
         if not self.mapsTrainingController.isValid():
             return ValidationResult(False, PRE_QUEUE_RESTRICTION.MODE_NOT_AVAILABLE)
-        return ValidationResult(False, PREBATTLE_RESTRICTION.PREVIEW_VEHICLE_IS_PRESENT) if not g_currentPreviewVehicle.isPresent() or g_currentPreviewVehicle.intCD != self.mapsTrainingController.getSelectedVehicle() else super(MapsTrainingValidator, self)._validate()
+        return ValidationResult(False, PREBATTLE_RESTRICTION.PREVIEW_VEHICLE_IS_PRESENT) if not g_currentPreviewVehicle.isPresent() else super(MapsTrainingValidator, self)._validate()
 
 
 class MapsTrainingActionsValidator(PreQueueActionsValidator):
@@ -24,6 +24,9 @@ class MapsTrainingActionsValidator(PreQueueActionsValidator):
         return ActionsValidatorComposite(entity, [baseValidator, MapsTrainingValidator(entity)])
 
     def _createVehiclesValidator(self, entity):
+        return BaseActionsValidator(entity)
+
+    def _createPreviewVehiclesValidator(self, entity):
         return BaseActionsValidator(entity)
 
     def _createTutorialValidator(self, entity):

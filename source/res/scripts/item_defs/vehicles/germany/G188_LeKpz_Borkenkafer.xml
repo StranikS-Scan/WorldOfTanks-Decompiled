@@ -339,8 +339,8 @@
       <slot>
         <slotType>	attachment	</slotType>
         <slotId>	18000	</slotId>
-        <position>	-1.24332 0.596017 -1.22496	</position>
-        <rotation>	-0 0 1.570796	</rotation>
+        <position>	-1.24745 0.22248 -2.07449	</position>
+        <rotation>	0 0 1.377059	</rotation>
         <scale>	0.999999 0.999999 1	</scale>
         <applyType>	universal	</applyType>
         <size>	medium	</size>
@@ -348,17 +348,17 @@
       <slot>
         <slotType>	attachment	</slotType>
         <slotId>	18001	</slotId>
-        <position>	1.248094 0.596001 -1.224959	</position>
-        <rotation>	3.141593 0 -1.570796	</rotation>
-        <scale>	0.999999 0.999999 1	</scale>
+        <position>	1.247 0.222 -2.074	</position>
+        <rotation>	-0 3.141593 1.377065	</rotation>
+        <scale>	0.999998 0.999998 1	</scale>
         <applyType>	universal	</applyType>
         <size>	medium	</size>
       </slot>
       <slot>
         <slotType>	attachment	</slotType>
         <slotId>	18002	</slotId>
-        <position>	-0.000002 0.642 -2.76	</position>
-        <rotation>	-0 -1.570796 1.570796	</rotation>
+        <position>	-0.00001 0.1139 -2.789946	</position>
+        <rotation>	-0 -1.570801 1.2662	</rotation>
         <scale>	0.999999 0.999999 1	</scale>
         <applyType>	universal	</applyType>
         <size>	medium	</size>
@@ -424,7 +424,7 @@
           <trackPairIdx>	0	</trackPairIdx>
           <leftMaterial>	track_mat_L_skinned	</leftMaterial>
           <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-          <textureScale>	-1.1	</textureScale>
+          <textureScale>	-1.825	</textureScale>
           <trackDebris>
             <isLeft>	true	</isLeft>
             <destructionEffect></destructionEffect>
@@ -793,16 +793,16 @@
         <left>
           <trackPairIdx>	0	</trackPairIdx>
           <segmentsCount>	150	</segmentsCount>
-          <segmentsOuterThickness>	0.058578	</segmentsOuterThickness>
-          <segmentsInnerThickness>	0.000686	</segmentsInnerThickness>
+          <segmentsOuterThickness>	0.031512	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.027752	</segmentsInnerThickness>
           <segmentsPlaneOffset>	-1.025	</segmentsPlaneOffset>
           <mainSegment>
             <model>	vehicles/german/G188_LeKpz_Borkenkafer/track/segment_1.model	</model>
-            <length>	0.079755	</length>
+            <length>	0.083633	</length>
           </mainSegment>
           <secSegment>
             <model>	vehicles/german/G188_LeKpz_Borkenkafer/track/segment_2.model	</model>
-            <length>	0.079047	</length>
+            <length>	0.081294	</length>
           </secSegment>
           <springsLength>
             <backwardMovement>
@@ -813,7 +813,7 @@
             </backwardMovement>
             <forwardMovement>
               <back>	0.071959	</back>
-              <top>	0.076417	</top>
+              <top>	0.072	</top>
               <front>	0.07899	</front>
               <bottom>	0.06613	</bottom>
             </forwardMovement>
@@ -831,36 +831,36 @@
             <topFront>
               <wheelName>	WD_L0	</wheelName>
               <basePos>	2.417129 0.709995	</basePos>
-              <shiftVec>	0.250521 0.105549	</shiftVec>
-              <jointIdx>	17	</jointIdx>
+              <shiftVec>	0.258321 0.041826	</shiftVec>
+              <jointIdx>	16	</jointIdx>
             </topFront>
             <topBack>
               <wheelName>	WD_L5	</wheelName>
               <basePos>	-2.444868 0.645003	</basePos>
-              <shiftVec>	-0.340858 0.063088	</shiftVec>
-              <jointIdx>	89	</jointIdx>
+              <shiftVec>	-0.307555 0.111827	</shiftVec>
+              <jointIdx>	88	</jointIdx>
             </topBack>
             <bottomBack>
               <wheelName>	W_L4	</wheelName>
               <basePos>	-1.575869 0.350101	</basePos>
-              <shiftVec>	-0.010257 -0.29134	</shiftVec>
+              <shiftVec>	0.025916 -0.318587	</shiftVec>
               <jointIdx>	108	</jointIdx>
             </bottomBack>
             <bottomFront>
               <wheelName>	W_L0	</wheelName>
               <basePos>	1.675131 0.350099	</basePos>
-              <shiftVec>	0.030504 -0.28992	</shiftVec>
+              <shiftVec>	0.050446 -0.314567	</shiftVec>
               <jointIdx>	0	</jointIdx>
             </bottomFront>
           </snapWheels>
           <radiusOverrides>
             <wheel>
               <name>	WD_L5	</name>
-              <radius>	0.345189	</radius>
+              <radius>	0.325588	</radius>
             </wheel>
             <wheel>
               <name>	WD_L0	</name>
-              <radius>	0.269986	</radius>
+              <radius>	0.259598	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
@@ -868,12 +868,12 @@
             <segmentSyncPivotOffset>	0	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_L5	</name>
-              <startAngle>	2.919604	</startAngle>
+              <startAngle>	-2.920137	</startAngle>
               <teethCount>	10	</teethCount>
             </sync>
             <sync>
               <name>	WD_L0	</name>
-              <startAngle>	-0.284646	</startAngle>
+              <startAngle>	0.317983	</startAngle>
               <teethCount>	10	</teethCount>
             </sync>
           </teethSyncs>
@@ -1035,29 +1035,29 @@
         <right>
           <trackPairIdx>	0	</trackPairIdx>
           <segmentsCount>	150	</segmentsCount>
-          <segmentsOuterThickness>	0.058578	</segmentsOuterThickness>
-          <segmentsInnerThickness>	0.000686	</segmentsInnerThickness>
+          <segmentsOuterThickness>	0.034841	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.024423	</segmentsInnerThickness>
           <segmentsPlaneOffset>	1.025	</segmentsPlaneOffset>
           <mainSegment>
             <model>	vehicles/german/G188_LeKpz_Borkenkafer/track/segment_1.model	</model>
-            <length>	0.079755	</length>
+            <length>	0.083636	</length>
           </mainSegment>
           <secSegment>
             <model>	vehicles/german/G188_LeKpz_Borkenkafer/track/segment_2.model	</model>
-            <length>	0.079047	</length>
+            <length>	0.081311	</length>
           </secSegment>
           <springsLength>
             <backwardMovement>
-              <back>	0.078594	</back>
-              <top>	0.076	</top>
-              <front>	0.073516	</front>
-              <bottom>	0.066096	</bottom>
+              <back>	0.078166	</back>
+              <top>	0.077	</top>
+              <front>	0.073478	</front>
+              <bottom>	0.065869	</bottom>
             </backwardMovement>
             <forwardMovement>
-              <back>	0.073516	</back>
-              <top>	0.076	</top>
-              <front>	0.078594	</front>
-              <bottom>	0.066096	</bottom>
+              <back>	0.073478	</back>
+              <top>	0.072	</top>
+              <front>	0.078166	</front>
+              <bottom>	0.065869	</bottom>
             </forwardMovement>
           </springsLength>
           <bottomWheels>
@@ -1073,36 +1073,36 @@
             <topFront>
               <wheelName>	WD_R0	</wheelName>
               <basePos>	2.417129 0.709995	</basePos>
-              <shiftVec>	0.249539 0.10785	</shiftVec>
+              <shiftVec>	0.237116 0.10851	</shiftVec>
               <jointIdx>	18	</jointIdx>
             </topFront>
             <topBack>
               <wheelName>	WD_R5	</wheelName>
               <basePos>	-2.444868 0.645003	</basePos>
-              <shiftVec>	-0.340715 0.063857	</shiftVec>
+              <shiftVec>	-0.331807 0.05004	</shiftVec>
               <jointIdx>	90	</jointIdx>
             </topBack>
             <bottomBack>
               <wheelName>	W_R4	</wheelName>
               <basePos>	-1.675038 0.350101	</basePos>
-              <shiftVec>	0.004954 -0.291521	</shiftVec>
+              <shiftVec>	0.020681 -0.315258	</shiftVec>
               <jointIdx>	108	</jointIdx>
             </bottomBack>
             <bottomFront>
               <wheelName>	W_R0	</wheelName>
               <basePos>	1.575963 0.350099	</basePos>
-              <shiftVec>	0.043921 -0.288193	</shiftVec>
+              <shiftVec>	0.04832 -0.311533	</shiftVec>
               <jointIdx>	0	</jointIdx>
             </bottomFront>
           </snapWheels>
           <radiusOverrides>
             <wheel>
               <name>	WD_R5	</name>
-              <radius>	0.345189	</radius>
+              <radius>	0.333933	</radius>
             </wheel>
             <wheel>
               <name>	WD_R0	</name>
-              <radius>	0.269986	</radius>
+              <radius>	0.25867	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
@@ -1110,12 +1110,12 @@
             <segmentSyncPivotOffset>	0	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_R5	</name>
-              <startAngle>	2.919604	</startAngle>
+              <startAngle>	-2.91539	</startAngle>
               <teethCount>	10	</teethCount>
             </sync>
             <sync>
               <name>	WD_R0	</name>
-              <startAngle>	-0.284646	</startAngle>
+              <startAngle>	0.309795	</startAngle>
               <teethCount>	10	</teethCount>
             </sync>
           </teethSyncs>
@@ -1712,7 +1712,7 @@
       <cooldownTime>	25	</cooldownTime>
       <spottedMarkedTime>	10	</spottedMarkedTime>
       <unspottedMarkedTime>	7	</unspottedMarkedTime>
-      <damageIncome_armor>	1.1	</damageIncome_armor>
+      <damageIncomeFactor>	1.1	</damageIncomeFactor>
     </targetDesignator>
   </mechanics>
   <effects>

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/user_missions/hub/tabs/basic/weekly_missions.py
 import sys
+from datetime import datetime
 import typing
 from constants import Configs
 from gui.impl.gen.view_models.views.lobby.tooltips.additional_rewards_tooltip_model import AdditionalRewardsTooltipModel
@@ -45,7 +46,15 @@ class WeeklyMissions(ViewComponent[WeeklyMissionsModel]):
 
     @property
     def _firstWeekDay(self):
-        return time_utils.WEEK_START + self.lobbyContext.getServerSettings().regionals.getWeekStartingDay()
+        regionals = self.lobbyContext.getServerSettings().regionals
+        offset = regionals.getWeekStartingDay()
+        deltaInSeconds = int((datetime.now() - datetime.utcnow()).total_seconds())
+        dayStartingInLocalTimezone = regionals.getDayStartingTime() + deltaInSeconds
+        if dayStartingInLocalTimezone >= time_utils.ONE_DAY:
+            offset += 1
+        elif dayStartingInLocalTimezone < 0:
+            offset -= 1
+        return offset % time_utils.WEEK_END + time_utils.WEEK_START
 
     def createToolTip(self, event):
         if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():

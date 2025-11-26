@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/battle_results/tooltips/total_efficiency_tooltips.py
+from __future__ import absolute_import
 import typing
 from gui.battle_results.presenters.packers.tooltips.efficiency_tooltips import KillsParameter, StunParameter, SpottedParameter, DefencePointsParameter, DamageDealtParameter, DamageAssistedParameter, DamageBlockedByArmorParameter, CapturePointsParameter, EfficiencyTooltipsPacker
 from gui.impl.gen import R

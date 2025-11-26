@@ -2149,6 +2149,63 @@
     <normalizationAngle>	2	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_105mm_c_p_105_58_APCR>
+  <_120mm_c_g_120_59_HE_T>
+    <id>	86	</id>
+    <userString>	#italy_vehicles:_120mm_c_g_120_59_HE_T	</userString>
+    <icon>	he_modern	</icon>
+    <price>	575	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	120	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	520	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	260	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_120mm_c_g_120_59_HE_T>
+  <_120mm_c_p_120_59_AP_T>
+    <id>	87	</id>
+    <userString>	#italy_vehicles:_120mm_c_p_120_59_AP_T	</userString>
+    <icon>	ap	</icon>
+    <price>	984	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_120mm_c_p_120_59_AP_T>
+  <_120mm_c_p_120_59_HVAP_T>
+    <id>	88	</id>
+    <userString>	#italy_vehicles:_120mm_c_p_120_59_HVAP_T	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	5600	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_120mm_c_p_120_59_HVAP_T>
   <_105mm_58_HE_T>
     <id>	83	</id>
     <userString>	#italy_vehicles:_105mm_58_HE_T	</userString>
@@ -2719,6 +2776,63 @@
       </damage>
     </armorSpalls>
   </_127mm_a_e_127_51>
+  <_127mm_c_p_127_54_Mk_315>
+    <id>	92	</id>
+    <userString>	#italy_vehicles:_127mm_c_p_127_54_Mk_315	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1236	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	127	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	470	</armor>
+      <devices>	171	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_127mm_c_p_127_54_Mk_315>
+  <_127mm_c_c_127_54_Mk_410>
+    <id>	93	</id>
+    <userString>	#italy_vehicles:_127mm_c_c_127_54_Mk_410	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	6000	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	127	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	470	</armor>
+      <devices>	171	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_127mm_c_c_127_54_Mk_410>
+  <_127mm_a_e_127_54_Mk_115>
+    <id>	94	</id>
+    <userString>	#italy_vehicles:_127mm_a_e_127_54_Mk_115	</userString>
+    <icon>	he_modern	</icon>
+    <price>	756	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	127	</caliber>
+    <explosionRadius>	2.67	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	600	</armor>
+      <devices>	171	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.67	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	300	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
+  </_127mm_a_e_127_54_Mk_115>
   <_130mm_AP_Mark_46>
     <id>	69	</id>
     <userString>	#italy_vehicles:_130mm_AP_Mark_46	</userString>

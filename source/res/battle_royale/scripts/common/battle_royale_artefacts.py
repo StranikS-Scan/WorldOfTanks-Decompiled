@@ -486,7 +486,7 @@ class FireCircle(ZonesCircle, CountableConsumableConfigReader, BattleDescription
             self.battleDescription = self._prepareDescription(self.battleDescription)
 
     def _getDescription(self, descr):
-        localizeDescr = super(FireCircle, self)._getDescription(descr)
+        localizeDescr = super(ZonesCircle, self)._getDescription(descr)
         return self._prepareDescription(localizeDescr)
 
     def _prepareDescription(self, descr):

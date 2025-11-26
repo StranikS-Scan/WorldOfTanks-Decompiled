@@ -27,9 +27,11 @@ class ServiceRecordState(SFViewLobbyState):
 
     def registerTransitions(self):
         from gui.impl.lobby.vehicle_hub import OverviewState, ModulesState
+        from gui.impl.lobby.collection.states import CollectionState
         lsm = self.getMachine()
         self.addNavigationTransition(lsm.getStateByCls(OverviewState), record=True)
         self.addNavigationTransition(lsm.getStateByCls(ModulesState), record=True)
+        self.addNavigationTransition(lsm.getStateByCls(CollectionState), record=True)
 
     def serializeParams(self):
         view = self.getMachine().getRelatedView(self)

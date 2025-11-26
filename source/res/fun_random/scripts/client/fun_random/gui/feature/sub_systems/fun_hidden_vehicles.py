@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/feature/sub_systems/fun_hidden_vehicles.py
+from __future__ import absolute_import
+from future.utils import viewvalues
 import typing
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import CURRENT_VEHICLE
@@ -42,7 +44,7 @@ class FunHiddenVehicles(IFunRandomController.IFunHiddenVehicles, IPrbListener):
             AccountSettings.setFavorites(CURRENT_VEHICLE, 0)
             g_currentVehicle.selectNoVehicle()
         if isInFunRandom and (vehicle is None or desiredSubMode.isSuitableVehicle(vehicle) is not None):
-            suitableVehicles = sorted(desiredSubMode.getSuitableVehicles().itervalues(), key=getVehicleComparisonKey)
+            suitableVehicles = sorted(viewvalues(desiredSubMode.getSuitableVehicles()), key=getVehicleComparisonKey)
             g_currentVehicle.selectGuiVehicle(first(suitableVehicles))
         return
 

@@ -164,12 +164,15 @@ def chooseMode(itemTypeID, modeId, vehicle):
     return HighlightingMode.REPAINT_REGIONS_MERGED if itemTypeID == GUI_ITEM_TYPE.PAINT else HighlightingMode.WHOLE_VEHICLE
 
 
-def getAvailableRegions(areaId, slotType, vehicleDescr=None):
+def getAvailableRegions(areaId, slotType, vehicleDescr=None, vehicleOutfit=None):
     if vehicleDescr is None:
         if not g_currentVehicle.isPresent():
             return ()
         vehicleDescr = g_currentVehicle.item.descriptor
-    outfit = Outfit(vehicleCD=vehicleDescr.makeCompactDescr())
+    if vehicleOutfit is None:
+        outfit = Outfit(vehicleCD=vehicleDescr.makeCompactDescr())
+    else:
+        outfit = vehicleOutfit
     container = outfit.getContainer(areaId)
     if container is None:
         return ()

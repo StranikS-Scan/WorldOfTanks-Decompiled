@@ -443,6 +443,18 @@ class PersonalMissionsPage(LobbySubView, PersonalMissionsPageMeta, PersonalMissi
                 label = text_styles.stats(_ms(PERSONAL_MISSIONS.OPERATIONTITLE_LABEL_TOMASTER, count=count, total=total, infoIcon=infoIcon))
                 tooltip['tooltip'] = TOOLTIPS.PERSONALMISSIONS_OPERATIONTITLE_COMPLETESTATE
         elif chainState.questInProgress:
+            if not chainState.hasVehicle:
+                label = text_styles.stats(self.__getNoVehicleStatusLabel(True))
+                state = PERSONAL_MISSIONS_ALIASES.OPERATION_NO_VEHICLE_STATE
+            else:
+                if branch == PM_BRANCH.PERSONAL_MISSION_2:
+                    template = PERSONAL_MISSIONS.OPERATIONTITLE_LABEL_INPROGRESS_PM2
+                else:
+                    template = PERSONAL_MISSIONS.OPERATIONTITLE_LABEL_INPROGRESS_REGULAR
+                vehData = getChainVehRequirements(currentOperation, self.getChainID(), useIcons=True)
+                label = text_styles.stats(_ms(template, vehData=vehData))
+                state = PERSONAL_MISSIONS_ALIASES.OPERATION_CURRENT_STATE
+        elif not chainState.hasVehicle:
             if branch == PM_BRANCH.PERSONAL_MISSION_2:
                 template = PERSONAL_MISSIONS.OPERATIONTITLE_LABEL_INPROGRESS_PM2
             else:
@@ -450,9 +462,6 @@ class PersonalMissionsPage(LobbySubView, PersonalMissionsPageMeta, PersonalMissi
             vehData = getChainVehRequirements(currentOperation, self.getChainID(), useIcons=True)
             label = text_styles.stats(_ms(template, vehData=vehData))
             state = PERSONAL_MISSIONS_ALIASES.OPERATION_CURRENT_STATE
-        elif not chainState.hasVehicle:
-            label = text_styles.stats(self.__getNoVehicleStatusLabel(True))
-            state = PERSONAL_MISSIONS_ALIASES.OPERATION_NO_VEHICLE_STATE
         else:
             if branch == PM_BRANCH.PERSONAL_MISSION_2:
                 template = text_styles.stats(PERSONAL_MISSIONS.OPERATIONTITLE_LABEL_UNLOCKED_PM2)

@@ -192,7 +192,7 @@ class BattleRoyaleVehicleMarkerPlugin(VehicleMarkerPlugin):
                 entityName = self.sessionProvider.getCtx().getPlayerGuiProps(attackerID, attackerInfo.team)
                 if entityName == PLAYER_GUI_PROPS.ally and not isSpawnedBot(attackerInfo.vehicleType.tags):
                     return commonSettings.DamageType.FROM_SQUAD
-        super(BattleRoyaleVehicleMarkerPlugin, self)._getVehicleDamageType(attackerInfo, targetID)
+        return super(BattleRoyaleVehicleMarkerPlugin, self)._getVehicleDamageType(attackerInfo, targetID)
 
     def __statusInActive(self, vehicleID, statusID):
         for status, _ in self.__markersStatesExtended[vehicleID]:

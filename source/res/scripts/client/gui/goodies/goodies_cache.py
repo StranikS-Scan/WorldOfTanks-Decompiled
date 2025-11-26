@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from debug_utils import LOG_WARNING
 from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_STATE, GOODIE_TARGET_TYPE
 from goodies.goodie_helpers import CURRENCY_TO_RESOURCE_TYPE
-from gui.goodies.goodie_items import Booster, PersonalVehicleDiscount, ClanReservePresenter, DemountKit, RecertificationForm, MentoringLicense
+from gui.goodies.goodie_items import Booster, PersonalVehicleDiscount, ClanReservePresenter, DemountKit, RecertificationForm, MentoringLicense, PersonalPetDiscount
 from gui.shared.money import Money
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
@@ -47,7 +47,8 @@ _GOODIES_VARIETY_MAPPING = {GOODIE_VARIETY.BOOSTER: _createBooster,
  GOODIE_VARIETY.DEMOUNT_KIT: _createDemountKit,
  GOODIE_VARIETY.RECERTIFICATION_FORM: _createRecertificationForm,
  GOODIE_VARIETY.MENTORING_LICENSE: _createMentoringLicense}
-_DISCOUNT_TYPES_MAPPING = {GOODIE_TARGET_TYPE.ON_BUY_VEHICLE: PersonalVehicleDiscount}
+_DISCOUNT_TYPES_MAPPING = {GOODIE_TARGET_TYPE.ON_BUY_VEHICLE: PersonalVehicleDiscount,
+ GOODIE_TARGET_TYPE.ON_BUY_PET: PersonalPetDiscount}
 
 class GoodiesCache(IGoodiesCache):
     itemsCache = dependency.descriptor(IItemsCache)

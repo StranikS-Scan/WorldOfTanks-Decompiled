@@ -11,7 +11,7 @@ class BattleXP(BigWorld.DynamicScriptComponent):
         pass
 
     def set_battleXP(self, _=None):
-        if self.battleXP < 0 or not self.entity.isAlive():
+        if self.battleXP < 0:
             return
         else:
             ctrl = self.entity.guiSessionProvider.dynamic.progression

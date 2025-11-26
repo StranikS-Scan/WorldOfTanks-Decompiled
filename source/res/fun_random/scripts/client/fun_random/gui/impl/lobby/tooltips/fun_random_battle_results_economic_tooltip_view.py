@@ -1,17 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/impl/lobby/tooltips/fun_random_battle_results_economic_tooltip_view.py
+from __future__ import absolute_import
 from frameworks.wulf import ViewSettings
+from fun_random.gui.battle_results.tooltips.earned_currency_tooltips import FunEarnedCurrencyTooltipsPacker
 from fun_random.gui.impl.gen.view_models.views.lobby.tooltips.fun_random_economic_tooltip_view_model import FunRandomEconomicTooltipViewModel
-from fun_random.gui.shared.tooltips import TooltipType
-from gui.battle_results.presenters.wrappers import hasPresenter
-from gui.impl.pub import ViewImpl
 from gui.impl.gen import R
+from gui.impl.pub import ViewImpl
+from helpers import dependency
+from skeletons.gui.battle_results import IBattleResultsService
 
 class FunRandomBattleResultsEconomicTooltipView(ViewImpl):
-    __slots__ = ('__arenaUniqueID', '__currencyType')
+    __battleResults = dependency.descriptor(IBattleResultsService)
 
     def __init__(self, arenaUniqueID, currencyType):
-        settings = ViewSettings(layoutID=R.views.fun_random.lobby.tooltips.FunRandomBattleResultsEconomicTooltipView(), model=FunRandomEconomicTooltipViewModel())
+        settings = ViewSettings(layoutID=R.views.fun_random.mono.lobby.tooltips.battle_results_economic_tooltip(), model=FunRandomEconomicTooltipViewModel())
         super(FunRandomBattleResultsEconomicTooltipView, self).__init__(settings)
         self.__arenaUniqueID = arenaUniqueID
         self.__currencyType = currencyType
@@ -28,7 +30,7 @@ class FunRandomBattleResultsEconomicTooltipView(ViewImpl):
         super(FunRandomBattleResultsEconomicTooltipView, self)._onLoading(*args, **kwargs)
         self.__invalidateAll()
 
-    @hasPresenter()
-    def __invalidateAll(self, presenter=None):
+    def __invalidateAll(self):
+        statsCtrl = self.__battleResults.getStatsCtrl(self.arenaUniqueID)
         with self.viewModel.transaction() as model:
-            presenter.packTooltips(TooltipType.FUN_EARNED_CURRENCY, model, ctx={'currencyType': self.__currencyType})
+            FunEarnedCurrencyTooltipsPacker.packTooltip(model, statsCtrl.getResults(), ctx={'currencyType': self.__currencyType})

@@ -4,10 +4,10 @@ from constants import Configs, IS_KOREA, RENEWABLE_SUBSCRIPTION_CONFIG
 from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
 from account_helpers.settings_core import settings_constants
+from gui.filters.carousel_filter import CarouselFilter
 from gui.Scaleform import getButtonsAssetPath
 from gui.Scaleform.daapi.view.common.filter_contexts import FilterSetupContext
 from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_data_provider import CarouselDataProvider
-from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import CarouselFilter
 from gui.Scaleform.daapi.view.meta.CarouselEnvironmentMeta import CarouselEnvironmentMeta
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.listener import IGlobalListener

@@ -2,15 +2,14 @@
 # Embedded file name: scripts/client/gui/lootbox_system/base/views_loaders.py
 import logging
 from typing import TYPE_CHECKING
-from ClientSelectableCameraObject import ClientSelectableCameraObject
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.context.styled_mode import StyledMode
 from gui.customization.constants import CustomizationModes
-from gui.impl import backport
 from gui.impl.gen import R
-from gui.lootbox_system.base.common import ViewID, Views, getTextResource
+from gui.lootbox_system.base.common import ViewID, Views
 from gui.lootbox_system.base.utils import getIntroVideoUrl, getIsShowIntro, getShopOverlayUrl, getVehicleForStyle
-from gui.shared.event_dispatcher import hideVehiclePreview, selectVehicleInHangar, showBrowserOverlayView, showStylePreview, showVehiclePreviewWithoutBottomPanel
+from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsBattleRoyale
+from gui.shared.event_dispatcher import hideVehiclePreview, selectVehicleInHangar, showBrowserOverlayView, showStylePreview, showShop, showVehiclePreviewWithoutBottomPanel
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
@@ -28,36 +27,30 @@ def showIntro(eventName):
         showBrowserOverlayView(getIntroVideoUrl(eventName), VIEW_ALIAS.LOOT_BOXES_INTRO_BROWSER_VIEW)
 
 
-def showMain(eventName, subViewID=None, *args, **kwargs):
-    from gui.impl.lobby.lootbox_system.base.main_view import MainWindow
-    window = findActiveWindow(R.views.mono.lootbox.main())
-    if window is not None:
-        window.switchToSubView(subViewID, eventName=eventName, *args, **kwargs)
-        return
-    else:
-        window = MainWindow(subViewID, eventName=eventName, *args, **kwargs)
-        window.load()
-        return
+def showMain(eventName, subViewID=None, category='', count=0, bonuses=None, *args, **kwargs):
+    from gui.impl.lobby.lootbox_system.states import LootBoxMainState
+    LootBoxMainState.goTo({'subViewID': subViewID,
+     'eventName': eventName,
+     'count': count,
+     'category': category,
+     'bonuses': bonuses})
 
 
-def showInfo(eventName, previousWindow=None, category='', backCallback=None):
-    from gui.impl.lobby.lootbox_system.base.info_page import InfoPageWindow
-    window = findActiveWindow(R.views.lobby.lootbox_system.InfoPage())
-    if window is None:
-        window = InfoPageWindow(previousWindow=previousWindow, category=category, eventName=eventName, backCallback=backCallback)
-        window.load()
-    return
+def showInfo(eventName, category=''):
+    from gui.impl.lobby.lootbox_system.states import LootBoxInfoState
+    LootBoxInfoState.goTo({'category': category,
+     'eventName': eventName})
 
 
 def showAutoOpen(eventName, rewards, boxes):
-    from gui.impl.lobby.lootbox_system.base.auto_open_view import AutoOpenWindow
-    window = AutoOpenWindow(eventName, rewards, boxes)
-    window.load()
+    from gui.impl.lobby.lootbox_system.states import LootBoxAutoOpenState
+    LootBoxAutoOpenState.goTo({'eventName': eventName,
+     'rewards': rewards,
+     'boxes': boxes})
 
 
 @dependency.replace_none_kwargs(customization=ICustomizationService, itemsCache=IItemsCache)
-def showItemPreview(itemType, itemID, styleID, eventName, backCallback=None, customization=None, itemsCache=None):
-    backLabel = backport.text(getTextResource('preview/backLabel'.split('/'), eventName)())
+def showItemPreview(itemType, itemID, styleID, customization=None, itemsCache=None):
     if itemType == 'vehicles':
         vehicle = itemsCache.items.getItemByCD(itemID)
         if vehicle.isInInventory:
@@ -66,15 +59,14 @@ def showItemPreview(itemType, itemID, styleID, eventName, backCallback=None, cus
                 window.destroyWindow()
             selectVehicleInHangar(itemID, loadHangar=True)
         else:
-            ClientSelectableCameraObject.switchCamera()
             style = customization.getItemByID(GUI_ITEM_TYPE.STYLE, styleID) if styleID else None
-            showVehiclePreviewWithoutBottomPanel(itemID, backCallback=backCallback, backBtnLabel=backLabel, style=style)
+            showVehiclePreviewWithoutBottomPanel(itemID, style=style)
     elif itemType == 'customizations':
         style = customization.getItemByID(GUI_ITEM_TYPE.STYLE, itemID)
-        if style.is3D:
-            showCustomizationHangar(style, previewBackCb=backCallback, backBtnLabel=backLabel)
+        if style.is3D and not currentHangarIsBattleRoyale():
+            showCustomizationHangar(style)
         else:
-            showVehicleStylePreview(style, previewBackCb=backCallback, backBtnLabel=backLabel)
+            showVehicleStylePreview(style)
     else:
         _logger.error('Type "%s" is not supported for preview', itemType)
     return
@@ -85,7 +77,7 @@ def hideItemPreview():
 
 
 @dependency.replace_none_kwargs(customization=ICustomizationService, itemsCache=IItemsCache)
-def showCustomizationHangar(style, previewBackCb=None, backBtnLabel=None, itemsCache=None, customization=None):
+def showCustomizationHangar(style, itemsCache=None, customization=None):
 
     def _callback():
         if style is not None:
@@ -102,23 +94,19 @@ def showCustomizationHangar(style, previewBackCb=None, backBtnLabel=None, itemsC
     if style.isInInventory and vehicle is not None and vehicle.isInInventory and vehicle.isCustomizationEnabled():
         customization.showCustomization(vehicle.invID, callback=_callback)
     else:
-        showVehicleStylePreview(style, previewBackCb=previewBackCb, backBtnLabel=backBtnLabel)
+        showVehicleStylePreview(style)
     return
 
 
-def showVehicleStylePreview(style, previewBackCb=None, backBtnLabel=''):
-    ClientSelectableCameraObject.switchCamera()
+def showVehicleStylePreview(style):
     if style.isProgression:
         raise SoftException('Progression styles is not supported')
     vehicle = getVehicleForStyle(style)
-    showStylePreview(vehicle.intCD, style, backCallback=previewBackCb, backBtnDescrLabel=backBtnLabel)
+    showStylePreview(vehicle.intCD, style)
 
 
-def openShop(eventName, parent=None, executePreconditions=False):
-    showBrowserOverlayView(getShopOverlayUrl(eventName), VIEW_ALIAS.OVERLAY_WEB_STORE)
-    if not executePreconditions:
-        from gui.impl.lobby.lootbox_system.base.info_page import InfoPage
-        InfoPage.cleanBaseWindow()
+def openShop(eventName, parent=None):
+    showShop(getShopOverlayUrl(eventName))
 
 
 @dependency.replace_none_kwargs(uiLoader=IGuiLoader)

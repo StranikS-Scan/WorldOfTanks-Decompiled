@@ -33,10 +33,10 @@ class _FunRandomItem(SelectorItem, FunAssetPacksMixin, FunSubModesWatcher):
         return self.getModeUserName()
 
     def getLargerIcon(self):
-        return backport.image(self.getModeIconsResRoot().battle_type.c_64x64.dyn(self._data)())
+        return backport.image(self.getModeIconsResRoot().battleTypes.c_64x64.dyn(self._data)())
 
     def getSmallIcon(self):
-        return backport.image(self.getModeIconsResRoot().battle_type.c_40x40.dyn(self._data)())
+        return backport.image(self.getModeIconsResRoot().battleTypes.c_40x40.dyn(self._data)())
 
     def _update(self, state):
         self._isVisible, self._isDisabled = self.__getIsVisible(), state.hasLockedState
@@ -63,7 +63,7 @@ class _FunRandomSquadItem(SpecialSquadItem, FunAssetPacksMixin, FunSubModesWatch
         pass
 
     def getSmallIcon(self):
-        return backport.image(self.getModeIconsResRoot().battle_type.c_40x40.fun_random_squad())
+        return backport.image(self.getModeIconsResRoot().battleTypes.c_40x40.fun_random_squad())
 
     def _createTooltip(self):
         return makeTooltip(backport.text(self._RES_SHORTCUT.tooltips.funRandomSquad.header()), backport.text(self._RES_SHORTCUT.tooltips.funRandomSquad.body(), modeName=self.getModeUserName()))

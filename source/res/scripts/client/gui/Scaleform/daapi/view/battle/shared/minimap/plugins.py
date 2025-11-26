@@ -1095,15 +1095,17 @@ class EquipmentsPlugin(common.IntervalPlugin):
         return settings.EQ_MARKER_TO_SYMBOL.get(marker, None)
 
     def __onEquipmentMarkerShown(self, equipment, position, _, interval, team=None):
-        uniqueID = self.__generator.next()
-        arenaDP = self.sessionProvider.getArenaDP()
-        isAllyTeam = team is None or arenaDP is None or arenaDP.isAllyTeam(team)
-        marker = equipment.getMarker() if isAllyTeam else equipment.getEnemyMarker()
-        symbol = self._getSymbolFromMarker(marker)
-        if symbol is None:
-            LOG_ERROR('Symbol is not found for equipment', equipment)
+        if not equipment.showMinimapMarker():
             return
         else:
+            uniqueID = self.__generator.next()
+            arenaDP = self.sessionProvider.getArenaDP()
+            isAllyTeam = team is None or arenaDP is None or arenaDP.isAllyTeam(team)
+            marker = equipment.getMarker() if isAllyTeam else equipment.getEnemyMarker()
+            symbol = self._getSymbolFromMarker(marker)
+            if symbol is None:
+                LOG_ERROR('Symbol is not found for equipment', equipment)
+                return
             matrix = minimap_utils.makePositionMatrix(position)
             model = self._addEntryEx(uniqueID, symbol, _C_NAME.EQUIPMENTS, matrix=matrix, active=True)
             if model is not None:

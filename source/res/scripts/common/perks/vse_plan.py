@@ -51,7 +51,7 @@ class VsePlan(object):
         self._contextArgs = contextArgs
         self._isPlanStarted = False
         self._status = PlanStatus.DEFAULT
-        LOG_DEBUG('init plan', self._ownerId, self._planId)
+        LOG_DEBUG_DEV('init plan', self._ownerId, self._planId)
         return
 
     @property
@@ -132,7 +132,7 @@ class VsePlan(object):
         else:
             ownerId = self._owner.id if self._owner else -1
             LOG_WARNING('[PerksController] No plan for perkID:{0} vehicleID:{1} after destroy in applySelectedSetup '.format(self.perkId, ownerId))
-        LOG_DEBUG('destroy plan', self._ownerId, self._planId)
+        LOG_DEBUG_DEV('destroy plan', self._ownerId, self._planId)
         self._plan = None
         self._isPlanLoaded = False
         self._isPlanStarted = False
@@ -152,7 +152,7 @@ class VsePlan(object):
 
     def _onPlanPreLoaded(self, future=None):
         try:
-            LOG_DEBUG('_onPlanPreLoaded plan', self._ownerId, self._planId, self._plan)
+            LOG_DEBUG_DEV('_onPlanPreLoaded plan', self._ownerId, self._planId, self._plan)
             if self._owner is None or self._owner.isDestroyed:
                 return
             if IS_CELLAPP:

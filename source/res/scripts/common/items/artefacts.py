@@ -102,7 +102,7 @@ class VehicleFactorsXmlReader(CommonXmlSectionReader):
 
 
 class Artefact(BasicItem):
-    __slots__ = ('name', 'id', 'compactDescr', 'tags', 'i18n', 'icon', 'removable', 'price', 'showInShop', '_vehWeightFraction', '_weight', '_exportParams', '__archetype', '__vehicleFilter', '__artefactFilter', '__tooltipSection', 'isImproved', 'kpi', 'iconName', '_groupName', '__weakref__')
+    __slots__ = ('icon', 'removable', 'price', 'showInShop', '_vehWeightFraction', '_weight', '_exportParams', '__archetype', '__vehicleFilter', '__artefactFilter', '__tooltipSection', 'isImproved', 'kpi', 'iconName', '_groupName', '__weakref__')
 
     def __init__(self, typeID, itemID, itemName, compactDescr):
         super(Artefact, self).__init__(typeID, itemID, itemName, compactDescr)
@@ -1758,6 +1758,7 @@ class AreaOfEffectEquipment(Equipment, TooltipConfigReader, SharedCooldownConsum
             actionClass = importClass(actionType, 'actions.vehicle')
             return {'type': actionType,
              'applyTo': section.readString('applyTo', ''),
+             'applyToShotIDs': tuple(map(int, section.readString('applyToShotIDs').split())),
              'args': actionClass.parseXML(section['args'])}
 
 
@@ -2283,6 +2284,7 @@ class OPT_DEV_TYPE_TAG(object):
 
 class AoeEffects(object):
     START = 'start'
+    POSTSTART = 'poststart'
     ACTION = 'action'
 
 

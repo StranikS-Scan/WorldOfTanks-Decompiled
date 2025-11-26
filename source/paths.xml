@@ -1,7 +1,7 @@
 <root>
   <Paths>
-    <Path cacheSubdirs="true">./res_mods/2.0.0.0</Path>
-    <Path mask="*.wotmod" mode="recursive" root="res">./mods/2.0.0.0</Path>
+    <Path cacheSubdirs="true">./res_mods/2.1.0.0</Path>
+    <Path mask="*.wotmod" mode="recursive" root="res">./mods/2.1.0.0</Path>
     <Packages>
       <Package type="sd,hd">./res/packages/shared_content-part3.pkg</Package>
       <Package type="sd,hd">./res/packages/shared_content-part2.pkg</Package>
@@ -69,7 +69,6 @@
       <Package type="hd">./res/packages/14_siegfried_line_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/14_siegfried_line_nom.pkg</Package>
       <Package type="hd">./res/packages/14_siegfried_line_nom_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/14_siegfried_line_wt.pkg</Package>
       <Package type="sd,hd">./res/packages/17_munchen.pkg</Package>
       <Package type="hd">./res/packages/17_munchen_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/18_cliff.pkg</Package>
@@ -92,8 +91,6 @@
       <Package type="hd">./res/packages/250_br_battle_city2-1_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/251_br_battle_city3.pkg</Package>
       <Package type="hd">./res/packages/251_br_battle_city3_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/251_br_battle_city3_ls_2_0.pkg</Package>
-      <Package type="hd">./res/packages/251_br_battle_city3_ls_2_0_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/252_br_battle_city4.pkg</Package>
       <Package type="hd">./res/packages/252_br_battle_city4_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/28_desert.pkg</Package>
@@ -106,12 +103,8 @@
       <Package type="hd">./res/packages/33_fjord_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/34_redshire.pkg</Package>
       <Package type="hd">./res/packages/34_redshire_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/34_redshire_wt.pkg</Package>
-      <Package type="hd">./res/packages/34_redshire_wt_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/35_steppes.pkg</Package>
       <Package type="hd">./res/packages/35_steppes_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/35_steppes_wt.pkg</Package>
-      <Package type="hd">./res/packages/35_steppes_wt_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/36_fishing_bay.pkg</Package>
       <Package type="hd">./res/packages/36_fishing_bay_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/37_caucasus.pkg</Package>
@@ -140,6 +133,9 @@
       <Package type="hd">./res/packages/h33_comp7_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/hangar_v4.pkg</Package>
       <Package type="hd">./res/packages/hangar_v4_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/hangar_v4_advent.pkg</Package>
+      <Package type="hd">./res/packages/hangar_v4_advent_hd.pkg</Package>
+      <Package type="sandbox,sd,hd">./res/packages/advent_calendar.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/audioww-part2.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/audioww-part3.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/audioww-part1.pkg</Package>
@@ -158,11 +154,9 @@
       <Package type="sandbox,sd,hd">./res/packages/gui-part3.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/gui-part1.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/in_battle_achievements.pkg</Package>
-      <Package type="sandbox,sd,hd">./res/packages/last_stand.pkg</Package>
-      <Package type="hd">./res/packages/last_stand_hd.pkg</Package>
+      <Package type="sandbox,sd,hd">./res/packages/la_pinger.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/misc.pkg</Package>
       <Package type="hd">./res/packages/misc_hd.pkg</Package>
-      <Package type="sandbox,sd,hd">./res/packages/one_time_gift.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/particles.pkg</Package>
       <Package type="hd">./res/packages/particles_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/prime_gaming_content.pkg</Package>
@@ -201,15 +195,13 @@
       <Package type="hd">./res/packages/vehicles_level_09_hd-part2.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_09_hd-part1.pkg</Package>
       <Package type="sd,hd">./res/packages/vehicles_level_10-part1.pkg</Package>
-      <Package type="sd,hd">./res/packages/vehicles_level_10-part3.pkg</Package>
       <Package type="sd,hd">./res/packages/vehicles_level_10-part2.pkg</Package>
-      <Package type="hd">./res/packages/vehicles_level_10_hd-part1.pkg</Package>
+      <Package type="sd,hd">./res/packages/vehicles_level_10-part3.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_10_hd-part3.pkg</Package>
+      <Package type="hd">./res/packages/vehicles_level_10_hd-part1.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_10_hd-part2.pkg</Package>
       <Package type="sd,hd">./res/packages/vehicles_level_11.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_11_hd.pkg</Package>
-      <Package type="sandbox,sd,hd">./res/packages/white_tiger.pkg</Package>
-      <Package type="hd">./res/packages/white_tiger_hd.pkg</Package>
     </Packages>
     <Path>./res</Path>
   </Paths>

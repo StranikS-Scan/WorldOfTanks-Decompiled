@@ -76,7 +76,7 @@ class ChargeableBurstMechanicWidget(ChargeableBurstWidgetMeta, ComponentListener
         self.as_setModeS(state.isBurstActive, isInstantly)
 
     def __invalidateCharges(self, state, isInstantly=False):
-        self.as_setChargesS(state.charges, state.shoots, isInstantly)
+        self.as_setChargesS(state.charges, state.shots, isInstantly)
 
     def __invalidateShells(self):
         ammoCtrl = self.__sessionProvider.shared.ammo

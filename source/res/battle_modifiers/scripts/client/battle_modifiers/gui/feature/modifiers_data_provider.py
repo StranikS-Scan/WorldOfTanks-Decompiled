@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_modifiers/scripts/client/battle_modifiers/gui/feature/modifiers_data_provider.py
+from __future__ import absolute_import
 from typing import Tuple, Any, TYPE_CHECKING
 from battle_modifiers_ext.battle_modifiers import BattleModifiers
 from battle_modifiers_ext.constants_ext import GameplayImpact

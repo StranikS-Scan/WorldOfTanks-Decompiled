@@ -11,7 +11,6 @@ if typing.TYPE_CHECKING:
     from gui.battle_results.reusable.shared import VehicleSummarizeInfo
 
 class PersonalInfo(IBattleResultsPacker):
-    __slots__ = ()
 
     @classmethod
     def packModel(cls, model, battleResults):

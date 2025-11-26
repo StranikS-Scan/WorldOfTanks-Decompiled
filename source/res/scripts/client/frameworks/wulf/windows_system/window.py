@@ -344,7 +344,6 @@ class Window(PyObjectEntity):
         self.onSizeChanged(self.uniqueID, width, height)
 
     def _cPositionChanged(self, x, y):
-        _logger.debug('Position changed to %d %d for %r', x, y, self)
         self.onPositionChanged(self.uniqueID, x, y)
 
     def __attachToDecorator(self):

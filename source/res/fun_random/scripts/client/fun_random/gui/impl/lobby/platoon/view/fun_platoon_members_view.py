@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/impl/lobby/platoon/view/fun_platoon_members_view.py
-import logging
+from __future__ import absolute_import
 from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin, FunSubModesWatcher
 from fun_random.gui.feature.util.fun_wrappers import hasDesiredSubMode
 from gui.impl import backport
@@ -9,7 +9,6 @@ from gui.impl.gen.view_models.views.lobby.platoon.members_window_model import Pr
 from gui.impl.lobby.platoon.platoon_helpers import getPlatoonBonusState
 from gui.impl.lobby.platoon.view.platoon_members_view import SquadMembersView
 from gui.impl.lobby.platoon.view.subview.platoon_chat_subview import ChatSubview
-_logger = logging.getLogger(__name__)
 
 class FunRandomMembersView(SquadMembersView, FunAssetPacksMixin, FunSubModesWatcher):
     _prebattleType = PrebattleTypes.FUNRANDOM

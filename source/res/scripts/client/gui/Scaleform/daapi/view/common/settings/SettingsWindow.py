@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/common/settings/SettingsWindow.py
+import Sound
 import functools
 import BattleReplay
 import BigWorld
@@ -9,6 +10,7 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import COLOR_SETTINGS_TAB_IDX
 from account_helpers.settings_core.ServerSettingsManager import LIMITED_UI_KEY
 from account_helpers.settings_core.settings_constants import SETTINGS_GROUP
+from constants import MISC_GUI_SETTINGS
 from debug_utils import LOG_DEBUG, LOG_WARNING
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from account_helpers.counter_settings import getNewSettings, invalidateSettings
@@ -23,7 +25,7 @@ from gui.Scaleform.daapi.view.meta.SettingsWindowMeta import SettingsWindowMeta
 from gui.Scaleform.daapi.view.common.settings.SettingsParams import SettingsParams
 from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.options import APPLY_METHOD
-from helpers import dependency
+from helpers import dependency, server_settings
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from gui.Scaleform.genConsts.SETTINGS_DIALOGS import SETTINGS_DIALOGS
@@ -156,19 +158,19 @@ class SettingsWindow(SettingsWindowMeta):
         self._update()
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         self.anonymizerController.onStateChanged += self.__refreshSettings
+        self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         g_guiResetters.add(self.onRecreateDevice)
         BigWorld.wg_setAdapterOrdinalNotifyCallback(self.onRecreateDevice)
         self.__uiNewbieHintsTooltipLogger.initialize()
 
     def _update(self):
         self.as_setDataS(self.__getSettings())
-        newSettings = getNewSettings()
-        if newSettings:
-            self.as_setCountersDataS(newSettings)
+        self.__updateNewSettingsCounters()
         self.as_updateVideoSettingsS(self.params.getMonitorSettings())
         self.as_openTabS(_getLastTabIndex())
         self.__setColorGradingTechnique()
         self.__setLimitedUISettingVisibility()
+        self.__setPhysicsSoundVisibility()
 
     def _dispose(self):
         if self.__redefinedKeyModeEnabled:
@@ -180,6 +182,7 @@ class SettingsWindow(SettingsWindowMeta):
         self.stopArtyBulbPreview()
         self.anonymizerController.onStateChanged -= self.__refreshSettings
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         self.__uiNewbieHintsTooltipLogger.finalize()
         super(SettingsWindow, self)._dispose()
         return
@@ -195,8 +198,7 @@ class SettingsWindow(SettingsWindowMeta):
     def onCounterTargetVisited(self, tabName, subTabName, controlsIDs):
         isSettingsChanged = invalidateSettings(tabName, subTabName, controlsIDs)
         if isSettingsChanged:
-            newSettings = getNewSettings()
-            self.as_setCountersDataS(newSettings)
+            self.__updateNewSettingsCounters()
 
     def onSettingsChange(self, settingName, settingValue):
         settingValue = flashObject2Dict(settingValue)
@@ -254,6 +256,11 @@ class SettingsWindow(SettingsWindowMeta):
         option = self.settingsCore.options.getSetting(settings_constants.SOUND.SOUND_SPEAKERS)
         return option.getSystemPreset()
 
+    def autodetectPhysicsSoundQuality(self):
+        options = settings_constants.SoundPhysicsQuality.ORDER
+        recommendedPreset = Sound.getRecommendedPreset()
+        return recommendedPreset if recommendedPreset in options else settings_constants.SoundPhysicsQuality.DISABLE
+
     def canSelectAcousticType(self, index):
         index = int(index)
         option = self.settingsCore.options.getSetting(settings_constants.SOUND.SOUND_SPEAKERS)
@@ -264,7 +271,20 @@ class SettingsWindow(SettingsWindowMeta):
                     LOG_DEBUG('Player result', result)
                     self.as_onSoundSpeakersPresetApplyS(result)
 
-            DialogsInterface.showI18nConfirmDialog('soundSpeakersPresetDoesNotMatch', callback=_apply)
+            DialogsInterface.showI18nConfirmDialog('soundSpeakersPresetDoesNotMatch', _apply)
+            return False
+        return True
+
+    def canSelectPhysicsSoundQuality(self, optionIdx):
+        option = self.settingsCore.options.getSetting(settings_constants.SOUND.PHYSICS_QUALITY)
+        if not option.isPresetSupportedByIdx(optionIdx):
+
+            def _apply(result):
+                if not self.isDisposed():
+                    LOG_DEBUG('PhysicsSoundQuality: Player result', result)
+                    self.as_onPhysicsSoundQualityApplyS(result)
+
+            DialogsInterface.showI18nConfirmDialog('physicsSoundQualityDoesNotMatch', _apply)
             return False
         return True
 
@@ -366,6 +386,10 @@ class SettingsWindow(SettingsWindowMeta):
         self.__uiNewbieHintsLogger.onSettingsChanged(diff)
         return
 
+    @server_settings.serverSettingsChangeListener(MISC_GUI_SETTINGS)
+    def __onServerSettingChanged(self, diff):
+        self.__setPhysicsSoundVisibility()
+
     def __refreshSettings(self, **_):
         self._update()
 
@@ -403,3 +427,13 @@ class SettingsWindow(SettingsWindowMeta):
     def __applyLimitedUISetting(self):
         self.limitedUIController.completeAllRulesByTypes(LuiRuleTypes.NOVICE)
         LimitedUILogger().handleClickOnce(LimitedUILogItem.DISABLE_LIMITED_UI_BUTTON, LimitedUILogScreenParent.SETTINGS_WINDOW)
+
+    def __setPhysicsSoundVisibility(self):
+        isPhysicsSoundEnabled = self.lobbyContext.getServerSettings().isPhysicsSoundEnabled()
+        self.as_showPhysicsSoundSettingsS(isPhysicsSoundEnabled)
+        self.__updateNewSettingsCounters()
+
+    def __updateNewSettingsCounters(self):
+        newSettings = getNewSettings()
+        if newSettings:
+            self.as_setCountersDataS(newSettings)

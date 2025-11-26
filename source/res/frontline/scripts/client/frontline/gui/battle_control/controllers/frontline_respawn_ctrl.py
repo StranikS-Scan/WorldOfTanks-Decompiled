@@ -3,7 +3,7 @@
 import BigWorld
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.battle_control import avatar_getter
-from gui.battle_control.controllers.respawn_ctrl import RespawnsController, IRespawnView
+from frontline.gui.battle_control.controllers.base_respawn_ctrl import BaseRespawnsController, IRespawnView
 from gui.impl import backport
 from gui.impl.gen import R
 from helpers import dependency
@@ -26,7 +26,7 @@ class IFrontlineRespawnView(IRespawnView):
         pass
 
 
-class FrontlineRespawnsController(RespawnsController):
+class FrontlineRespawnsController(BaseRespawnsController):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def startControl(self):

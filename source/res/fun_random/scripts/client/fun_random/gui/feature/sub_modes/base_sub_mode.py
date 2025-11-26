@@ -1,13 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/feature/sub_modes/base_sub_mode.py
-from functools import partial
+from __future__ import absolute_import
 import typing
 from battle_modifiers.gui.feature.modifiers_data_provider import ModifiersDataProvider
 from Event import Event, EventManager
 from fun_random_common.fun_constants import BATTLE_MODE_VEH_TAGS_EXCEPT_FUN
 from fun_random.gui.feature.fun_constants import FunTimersShifts
-from fun_random.gui.feature.models.common import FunRandomAlertData, FunRandomSeason, FunPeriodInfo
-from fun_random.gui.shared.event_dispatcher import showFunRandomInfoPage, showFunRandomPrimeTimeWindow
+from fun_random.gui.feature.models.common import FunRandomSeason, FunPeriodInfo
 from fun_random.gui.feature.sub_systems.fun_performance_alert_info import PerformanceAlertInfo
 from fun_random.gui.shared.events import FunEventType
 from fun_random.helpers.server_settings import FunSubModeConfig
@@ -24,7 +23,6 @@ from season_common import CycleStatus
 from skeletons.gui.game_control import ISeasonProvider
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
-    from gui.periodic_battles.models import AlertData
     from gui.shared.utils.requesters import RequestCriteria
     from fun_random.gui.vehicle_view_states import FunRandomVehicleViewState
     from fun_random.gui.feature.sub_systems.fun_performance_analyzers import PerformanceGroup
@@ -58,9 +56,6 @@ class IFunSubMode(ISeasonProvider, Notifiable):
         raise NotImplementedError
 
     def hasSuitableVehicles(self):
-        raise NotImplementedError
-
-    def getAlertBlock(self):
         raise NotImplementedError
 
     def getAssetsPointer(self):
@@ -108,7 +103,6 @@ class IFunSubMode(ISeasonProvider, Notifiable):
 
 class FunBaseSubMode(IFunSubMode, SeasonProvider):
     __slots__ = ('_em', '_settings', '_modifiersDataProvider', '_performanceAlertInfo')
-    _ALERT_DATA_CLASS = FunRandomAlertData
     _PERIOD_INFO_CLASS = FunPeriodInfo
     __itemsCache = dependency.descriptor(IItemsCache)
 
@@ -157,23 +151,23 @@ class FunBaseSubMode(IFunSubMode, SeasonProvider):
         return self.isAvailable(now) and self.getCurrentSeason(now).hasActiveCycle(now)
 
     def isSuitableVehicle(self, vehicle, isSquad=False):
-        ctx, restriction = {}, ''
         settings = self._settings.filtration
-        state, _ = vehicle.getState()
         restrictions = UNIT_RESTRICTION if isSquad else PRE_QUEUE_RESTRICTION
-        if state == Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE or vehicle.compactDescr in settings.forbiddenVehTypes:
-            restriction = restrictions.LIMIT_VEHICLE_TYPE
-            ctx = {'forbiddenType': vehicle.shortUserName}
-        if vehicle.type in settings.forbiddenClassTags:
-            restriction = restrictions.LIMIT_VEHICLE_CLASS
-            ctx = {'forbiddenClass': vehicle.type}
-        if vehicle.level not in settings.levels:
-            restriction = restrictions.LIMIT_LEVEL
-            ctx = {'levels': settings.levels}
         if settings.allowedVehTypes and vehicle.compactDescr not in settings.allowedVehTypes:
             restriction = restrictions.LIMIT_VEHICLE_TYPE
             ctx = {'forbiddenType': vehicle.shortUserName}
-        return ValidationResult(False, restriction, ctx) if restriction else None
+        elif vehicle.level not in settings.levels:
+            restriction = restrictions.LIMIT_LEVEL
+            ctx = {'levels': settings.levels}
+        elif vehicle.type in settings.forbiddenClassTags:
+            restriction = restrictions.LIMIT_VEHICLE_CLASS
+            ctx = {'forbiddenClass': vehicle.type}
+        elif vehicle.getCustomState() == Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE or vehicle.compactDescr in settings.forbiddenVehTypes:
+            restriction = restrictions.LIMIT_VEHICLE_TYPE
+            ctx = {'forbiddenType': vehicle.shortUserName}
+        else:
+            return None
+        return ValidationResult(False, restriction, ctx)
 
     def isSuitableVehicleAvailable(self):
         criteria = self.__getSuitableVehiclesCriteria(REQ_CRITERIA.UNLOCKED)
@@ -184,15 +178,6 @@ class FunBaseSubMode(IFunSubMode, SeasonProvider):
     def hasSuitableVehicles(self):
         return len(self.getSuitableVehicles()) > 0
 
-    def getAlertBlock(self):
-        if self.hasSuitableVehicles():
-            alertData = self._getAlertBlockData()
-            buttonCallback = partial(showFunRandomPrimeTimeWindow, self.getSubModeID())
-        else:
-            alertData = self._ALERT_DATA_CLASS.constructNoVehicles()
-            buttonCallback = partial(showFunRandomInfoPage, self._settings.client.infoPageUrl)
-        return (alertData is not None, alertData, self._ALERT_DATA_CLASS.packCallbacks(buttonCallback))
-
     def getAssetsPointer(self):
         return self._settings.client.assetsPointer
 
@@ -200,8 +185,8 @@ class FunBaseSubMode(IFunSubMode, SeasonProvider):
         return None
 
     def getEventEndTimestamp(self):
-        currentSeason = self.getCurrentSeason()
-        return currentSeason.getEndDate() if currentSeason is not None else 0
+        actualSeason = self.getCurrentSeason()
+        return actualSeason.getEndDate() if actualSeason is not None else 0
 
     def getIconsResRoot(self):
         assetsPointer = self._settings.client.assetsPointer

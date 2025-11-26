@@ -318,6 +318,7 @@ class VehicleAdvancedParamsTooltipView(BaseVehicleAdvancedParamsTooltipView):
             scheme = situationalScheme if isSituational else extractedBonusScheme
             valueStr = param_formatter.formatParameterDelta(pInfo, scheme)
             if valueStr is not None:
+                hasSituational = hasSituational or isSituational
                 bonusCreationParams = BonusCreationParams(bnsType, bnsId, pInfo, scheme, isSituational, vehPostProgressionBonusLevels)
                 if isVehSkillTree and bnsType == constants.BonusTypes.BASE_MODIFICATION:
                     vehSkillTreeActiveBonusValues.append(pInfo.getParamDiff())

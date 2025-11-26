@@ -5,28 +5,28 @@ import logging
 import operator
 import time
 import types
+import typing
 from Queue import Queue
 from collections import OrderedDict, defaultdict, deque
 from copy import copy, deepcopy
 from itertools import islice
 import BigWorld
-import typing
-from adisp import adisp_async, adisp_process
-from shared_utils import BoundMethodWeakref, first
 import ArenaType
 import constants
 import nations
 import personal_missions
+from adisp import adisp_async, adisp_process
+from shared_utils import BoundMethodWeakref, first
 from achievements20.cache import ALLOWED_ACHIEVEMENT_TYPES
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
-from battle_pass_common import BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS, BATTLE_PASS_TOKEN_3D_STYLE, BattlePassRewardReason, FinalReward, isPostProgressionChapter, CurrencyBP
+from battle_pass_common import BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS, BATTLE_PASS_TOKEN_3D_STYLE, BattlePassRewardReason, CurrencyBP, FinalReward, isPostProgressionChapter
 from battle_royale_progression.skeletons.game_controller import IBRProgressionOnTokensController
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
 from cache import cached_property
-from chat_shared import MapRemovalReason, SYS_MESSAGE_TYPE, decompressSysMessage
+from chat_shared import SYS_MESSAGE_TYPE, MapRemovalReason, decompressSysMessage
 from constants import ARENA_GUI_TYPE, AUTO_MAINTENANCE_RESULT, AUTO_MAINTENANCE_TYPE, FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA, FINISH_REASON, INVOICE_ASSET, KICK_REASON, KICK_REASON_NAMES, NC_MESSAGE_PRIORITY, NC_MESSAGE_TYPE, OFFER_TOKEN_PREFIX, PREBATTLE_TYPE, PREMIUM_ENTITLEMENTS, PREMIUM_TYPE, RESTRICTION_TYPE, SCENARIO_RESULT, SYS_MESSAGE_CLAN_EVENT, SYS_MESSAGE_CLAN_EVENT_NAMES, SYS_MESSAGE_FORT_EVENT_NAMES, SwitchState
-from debug_utils import LOG_ERROR, LOG_DEBUG_DEV
+from debug_utils import LOG_DEBUG_DEV, LOG_ERROR
 from dog_tags_common.components_config import componentConfigAdapter
 from dog_tags_common.config.common import ComponentPurpose, ComponentViewType
 from dossiers2.custom.records import DB_ID_TO_RECORD
@@ -52,35 +52,37 @@ from gui.impl.gen import R
 from gui.impl.lobby.winback.winback_helpers import getDiscountFromBlueprint, getDiscountFromGoody, getLevelFromSelectableToken
 from gui.mapbox.mapbox_helpers import formatMapboxRewards
 from gui.prb_control.formatters import getPrebattleFullDescription
-from gui.prestige.prestige_helpers import getCurrentGrade, hasVehiclePrestige, mapGradeIDToUI, needShowPrestigeRewardWindow, prestigePointsToXP, needShowPrestigeMilestonesRewardWindow
+from gui.prestige.prestige_helpers import getCurrentGrade, hasVehiclePrestige, mapGradeIDToUI, needShowPrestigeMilestonesRewardWindow, needShowPrestigeRewardWindow, prestigePointsToXP
 from gui.ranked_battles.constants import YEAR_AWARD_SELECTABLE_OPT_DEVICE_PREFIX, YEAR_POINTS_TOKEN
 from gui.ranked_battles.ranked_helpers import getBonusBattlesIncome, getQualificationBattlesCountFromID, isQualificationQuestID
 from gui.ranked_battles.ranked_models import PostBattleRankInfo, RankChangeStates
-from gui.server_events.finders import isPM3Points
+from gui.server_events.finders import PERSONAL_MISSION_TOKEN, isPM3Points
 from gui.server_events.awards_formatters import BATTLE_BONUS_X5_TOKEN, CREW_BONUS_X3_TOKEN, CompletionTokensBonusFormatter
 from gui.server_events.bonuses import EntitlementBonus, MetaBonus, SelectableBonus, getMergedBonusesFromDicts
-from gui.server_events.finders import PERSONAL_MISSION_TOKEN
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared import formatters as shared_fmts
 from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.currency import applyAll, getBWFormatter, getStyle
 from gui.shared.formatters.time_formatters import RentDurationKeys, getTillTimeByResource, getTimeLeftInfo
 from gui.shared.gui_items import GUI_ITEM_TYPE, getItemTypeID
-from gui.shared.gui_items.Tankman import Tankman, BaseBookConvertingFormatter
+from gui.shared.gui_items.Tankman import BaseBookConvertingFormatter, Tankman
 from gui.shared.gui_items.Vehicle import getShortUserName, getUserName, getWotPlusExclusiveVehicleTypeUserName
 from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.gui_items.dossier.achievements.abstract.class_progress import ClassProgressAchievement
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.gui_items.fitting_item import RentalInfoProvider
-from gui.shared.money import Currency, MONEY_UNDEFINED, Money, ZERO_MONEY
-from gui.shared.notifications import NotificationGuiSettings, NotificationPriorityLevel, NotificationGroup
+from gui.shared.money import MONEY_UNDEFINED, ZERO_MONEY, Currency, Money
+from gui.shared.notifications import NotificationGroup, NotificationGuiSettings, NotificationPriorityLevel
 from gui.shared.system_factory import collectLootBoxAutoOpenSubFormatters, collectModeNameKwargsByBonusType, collectTokenQuestsSubFormatters
 from gui.shared.utils.requesters.ShopRequester import _NamedGoodieData
 from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID, getUniqueBlueprints
 from gui.shared.utils.transport import z_loads
 from helpers import dependency, getLocalizedData, html, i18n, int2roman, time_utils
-from items import ITEM_TYPES as I_T, ITEM_TYPE_NAMES, getTypeInfoByIndex, getTypeInfoByName, tankmen, vehicles as vehicles_core
-from items.components.c11n_constants import CustomizationType, CustomizationTypeNames, UNBOUND_VEH_KEY
+from items import ITEM_TYPE_NAMES
+from items import ITEM_TYPES as I_T
+from items import getTypeInfoByIndex, getTypeInfoByName, tankmen
+from items import vehicles as vehicles_core
+from items.components.c11n_constants import UNBOUND_VEH_KEY, CustomizationType, CustomizationTypeNames
 from items.components.crew_books_constants import CREW_BOOK_RARITY
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
@@ -93,6 +95,7 @@ from messenger.formatters.service_channel_helpers import EOL, MessageData, extra
 from messenger.proto.bw.wrappers import ServiceChannelMessage
 from nations import NAMES
 from skeletons.gui.battle_matters import IBattleMattersController
+from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, ICollectionsSystemController, IEpicBattleMetaGameController, IFunRandomController, ILootBoxSystemController, IMapboxController, IRankedBattlesController, IWinbackController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
@@ -954,9 +957,8 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
 
     def __makeBRCoinString(self, battleResults):
         value = battleResults.get(u'brcoin', 0) + self.__getBrCoinsQuestBonus(battleResults)
-        if value:
-            text = backport.text(R.strings.messenger.serviceChannelMessages.BRbattleResults.battleRoyaleBrCoin(), value=text_styles.neutral(value))
-            return g_settings.htmlTemplates.format(u'battleResultBrcoin', ctx={u'brcoin': text})
+        text = backport.text(R.strings.messenger.serviceChannelMessages.BRbattleResults.battleRoyaleBrCoin(), value=text_styles.neutral(value))
+        return g_settings.htmlTemplates.format(u'battleResultBrcoin', ctx={u'brcoin': text})
 
     def __getBrCoinsQuestBonus(self, battleResults):
         questBonus = 0
@@ -2688,6 +2690,7 @@ class QuestAchievesFormatter(object):
     __goodiesCache = dependency.descriptor(IGoodiesCache)
     __lootboxSystem = dependency.descriptor(ILootBoxSystemController)
     _itemsCache = dependency.descriptor(IItemsCache)
+    _c11nService = dependency.descriptor(ICustomizationService)
 
     @classmethod
     def formatQuestAchieves(cls, data, asBattleFormatter, processCustomizations=True, processTokens=True):
@@ -2797,7 +2800,10 @@ class QuestAchievesFormatter(object):
         personalExchangeDiscountsInfo = []
         if tokens:
             for tokenID, tokenData in tokens.iteritems():
-                count = backport.getIntegralFormat(tokenData.get(u'count', 1))
+                count = tokenData.get(u'count', 0)
+                if count <= 0:
+                    continue
+                count = backport.getIntegralFormat(count)
                 if tokenID.startswith(BATTLE_BONUS_X5_TOKEN):
                     itemsNames.append(backport.text(R.strings.messenger.serviceChannelMessages.battleResults.quests.items.name(), name=backport.text(R.strings.quests.bonusName.battle_bonus_x5()), count=count))
                 if tokenID.startswith(CREW_BONUS_X3_TOKEN):
@@ -2808,8 +2814,12 @@ class QuestAchievesFormatter(object):
                     lootboxStr = cls._processLootBoxToken(tokenID, count)
                     if lootboxStr:
                         itemsNames.append(lootboxStr)
-                if isPM3Points(tokenID) and tokenData.get(u'count', 0) >= 0:
+                if isPM3Points(tokenID):
                     itemsNames.insert(0, backport.text(R.strings.messenger.serviceChannelMessages.battleResults.quests.personal_missions_points(), count=count))
+                if tokenID.startswith(constants.CUSTOMIZATION_PROGRESS_PREFIX):
+                    styleID = int(tokenID.split(u'_')[2])
+                    style = cls._c11nService.getItemByID(GUI_ITEM_TYPE.STYLE, styleID)
+                    itemsNames.append(backport.text(R.strings.messenger.serviceChannelMessages.battleResults.quests.items.name(), name=style.userName, count=count))
 
         entitlementsList = [ (eID, eData.get(u'count', 0)) for eID, eData in data.get(u'entitlements', {}).iteritems() ]
         entitlementsStr = InvoiceReceivedFormatter.getEntitlementsString(entitlementsList)
@@ -2864,6 +2874,9 @@ class QuestAchievesFormatter(object):
                 exchangeDiscountStr = g_settings.htmlTemplates.format(u'personalExchangeRateReceived', {u'rate': rate})
                 result.append(exchangeDiscountStr)
 
+        petNames = cls.__extractPets(data)
+        if petNames:
+            result.append(cls.__makeQuestsAchieve(u'battleQuestsPets', pets=u', '.join(petNames)))
         return result
 
     @classmethod
@@ -2919,6 +2932,16 @@ class QuestAchievesFormatter(object):
                             addBadgesStrings.append(backport.text(R.strings.badge.dyn(u'badge_{}'.format(name))()))
 
         return (addBadgesStrings, removedBadgesStrings)
+
+    @staticmethod
+    def __extractPets(data):
+        result = []
+        pets = data.get(u'pets')
+        if pets:
+            from gui.pet_system.pet_item_helper import PetItem
+            petMsg = R.strings.pet_system
+            result = [ backport.text(petMsg.breedName.dyn(PetItem.getPetBreed(petID))()) for petID in pets ]
+        return result
 
     @classmethod
     def __makeQuestsAchieve(cls, key, **kwargs):
@@ -4816,7 +4839,7 @@ class TechTreeActionDiscountFormatter(ServiceChannelFormatter):
         if actionName is not None and timeLeft is not None:
             formatted = g_settings.msgTemplates.format(self.__template, {u'header': backport.text(R.strings.system_messages.techtree.action.header(), actionName=actionName),
              u'text': backport.text(textKey() if single else textKey.closest()),
-             u'timeLeft': getTillTimeByResource(timeLeft, R.strings.menu.Time.timeLeftShort, useRoundUp=True)})
+             u'timeLeft': getTillTimeByResource(timeLeft, R.strings.menu.Time.timeLeftShort, useMinutesRoundUp=True)})
             return [MessageData(formatted, self._getGuiSettings(message, self.__template))]
         else:
             return [MessageData(None, None)]
@@ -5841,3 +5864,68 @@ class PrestigeMilestoneErrorFormatter(ServiceChannelFormatter):
         text = backport.text(self.__MESSAGES.error())
         formatted = g_settings.msgTemplates.format(self.__TEMPLATE, ctx={u'text': text})
         return [MessageData(formatted, self._getGuiSettings(message, self.__TEMPLATE, messageType=message.type))]
+
+
+class PetSystemPetAddedFormatter(ServiceChannelFormatter):
+    __TEMPLATE = u'PetSystemPetAddedMessage'
+
+    def format(self, message, *args):
+        from gui.pet_system.pet_item_helper import PetItem
+        data = message.data
+        petID = data.get(u'petID')
+        petMsg = R.strings.pet_system
+        petAddedMsg = petMsg.message.petAdded
+        ctx = {u'header': backport.text(petAddedMsg.header(), petType=backport.text(petMsg.petType.dyn(PetItem.getPetType(petID))())),
+         u'text': backport.text(petAddedMsg.text(), petBreed=backport.text(petMsg.breedName.dyn(PetItem.getPetBreed(petID))()))}
+        formatted = g_settings.msgTemplates.format(self.__TEMPLATE, ctx, data={})
+        settings = self._getGuiSettings(message, self.__TEMPLATE, messageType=message.type)
+        return [MessageData(formatted, settings)]
+
+
+class PetSystemSynergyLevelUpFormatter(ServiceChannelFormatter):
+    __TEMPLATE = u'PetSystemSynergyLevelUpMessage'
+
+    def format(self, message, *args):
+        from gui.pet_system.pet_item_helper import PetItem
+        data = message.data
+        petID = data.get(u'petID')
+        petSynergyMsg = R.strings.pet_system.message.synergyLevelUp
+        ctx = {u'header': backport.text(petSynergyMsg.header(), petName=PetItem.getPetName(PetItem.getCurrentNameId(petID))),
+         u'text': backport.text(petSynergyMsg.text())}
+        formatted = g_settings.msgTemplates.format(self.__TEMPLATE, ctx)
+        settings = self._getGuiSettings(message, self.__TEMPLATE)
+        return [MessageData(formatted, settings)]
+
+
+class PetSystemSynergyMaxLevelFormatter(ServiceChannelFormatter):
+    __TEMPLATE = u'PetSystemSynergyMaxLevelMessage'
+
+    def format(self, message, *args):
+        from gui.pet_system.pet_item_helper import PetItem
+        data = message.data
+        petID = data.get(u'petID')
+        petSynergyMsg = R.strings.pet_system.message.synergyMaxLevel
+        petName = PetItem.getPetName(PetItem.getCurrentNameId(petID))
+        ctx = {u'header': backport.text(petSynergyMsg.header(), petName=petName),
+         u'text': backport.text(petSynergyMsg.text())}
+        formatted = g_settings.msgTemplates.format(self.__TEMPLATE, ctx)
+        settings = self._getGuiSettings(message, self.__TEMPLATE)
+        return [MessageData(formatted, settings)]
+
+
+class PetSystemPetPurchaseFormatter(ServiceChannelFormatter):
+    __TEMPLATE_GOLD = u'PurchaseForGoldSysMessage'
+    __TEMPLATE_CREDITS = u'PurchaseForCreditsSysMessage'
+
+    def format(self, message, *args):
+        data = message.data
+        petID = data.get(u'petID')
+        price = data.get(u'price', {})
+        template = self.__TEMPLATE_CREDITS if Currency.CREDITS in price else self.__TEMPLATE_GOLD
+        from gui.pet_system.pet_item_helper import PetItem
+        petName = PetItem.getPetName(PetItem.getDefaultNameId(petID))
+        msg = shared_fmts.formatPrice(price, useStyle=True)
+        ctx = {u'text': backport.text(R.strings.pet_system.message.petBuy.success(), petName=petName, price=msg)}
+        formatted = g_settings.msgTemplates.format(template, ctx)
+        settings = self._getGuiSettings(message, template)
+        return [MessageData(formatted, settings)]

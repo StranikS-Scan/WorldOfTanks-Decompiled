@@ -6,7 +6,7 @@ import SoundGroups
 from arena_bonus_type_caps import ARENA_BONUS_TYPE
 from battle_royale.gui.impl.lobby.tooltips.reward_currency_tooltip_view import RewardCurrencyTooltipView
 from battle_royale_progression.skeletons.game_controller import IBRProgressionOnTokensController
-from frameworks.wulf import ViewFlags, ViewSettings
+from frameworks.wulf import WindowFlags
 from gui.impl import backport
 from gui.impl.backport import BackportTooltipWindow, createTooltipData
 from gui.impl.gen import R
@@ -18,11 +18,10 @@ from gui.impl.gen.view_models.views.battle_royale.battle_results.personal.battle
 from battle_royale.gui.impl.gen.view_models.views.lobby.views.battle_result_view.place_model import PlaceModel
 from battle_royale.gui.impl.gen.view_models.views.lobby.views.battle_result_view.row_model import RowModel
 from battle_royale.gui.impl.gen.view_models.views.lobby.views.battle_result_view.battle_pass_progress import BattlePassProgress
-from gui.impl.pub import ViewImpl
-from gui.impl.lobby.common.view_mixins import LobbyHeaderVisibility
+from gui.impl.pub import WindowImpl
+from gui.impl.pub.view_component import ViewComponent
 from gui.shared import event_dispatcher, EVENT_BUS_SCOPE
 from gui.shared.events import BattleRoyalePlatoonEvent
-from gui.shared.lock_overlays import lockNotificationManager
 from gui.server_events.battle_royale_formatters import BRSections
 from gui.Scaleform.genConsts.HANGAR_HEADER_QUESTS import HANGAR_HEADER_QUESTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -37,7 +36,6 @@ from battle_royale.gui.battle_control.controllers.br_battle_sounds import BREven
 from battle_royale.gui.constants import BattleRoyaleSubMode
 from gui.impl.backport.backport_context_menu import BackportContextMenuWindow
 from gui.impl.backport.backport_context_menu import createContextMenuData
-from battle_royale.gui.impl.lobby.views.battle_result_view import BATTLE_ROYALE_LOCK_SOURCE_NAME
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from skeletons.connection_mgr import IConnectionManager
 from messenger.storage import storage_getter
@@ -59,7 +57,13 @@ _HIDDEN_BONUSES_WITH_ZERO_VALUES = frozenset([BattleRewardItemModel.CRYSTALS, Ba
 _TOURNAMENT_ARENA_BONUS_TYPES = (ARENA_BONUS_TYPE.BATTLE_ROYALE_TRN_SOLO, ARENA_BONUS_TYPE.BATTLE_ROYALE_TRN_SQUAD)
 _INVALID_PREBATTLE_ID = 0
 
-class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility, IPrbListener):
+class BattleRoyaleBattleResultsWindow(WindowImpl):
+
+    def __init__(self, layer, **kwargs):
+        super(BattleRoyaleBattleResultsWindow, self).__init__(content=BattleRoyaleBattleResultsView(**kwargs), wndFlags=WindowFlags.WINDOW, layer=layer)
+
+
+class BattleRoyaleBattleResultsView(ViewComponent[BattleResultViewModel], IPrbListener):
     __slots__ = ('__arenaUniqueID', '__tooltipsData', '__tooltipParametersCreator', '__data', '__isObserverResult', '__arenaBonusType', '__ally', '__squadCreatedByInvite')
     __battleResults = dependency.descriptor(IBattleResultsService)
     __brController = dependency.descriptor(IBattleRoyaleController)
@@ -70,13 +74,8 @@ class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility, IPrbListener):
     __sound_env__ = BattleResultsEnv
 
     def __init__(self, *args, **kwargs):
-        settings = ViewSettings(R.views.battle_royale.lobby.views.BattleResultView())
-        settings.flags = ViewFlags.LOBBY_TOP_SUB_VIEW
-        settings.model = BattleResultViewModel()
-        settings.args = args
-        settings.kwargs = kwargs
-        super(BrBattleResultsViewInLobby, self).__init__(settings)
-        self.__arenaUniqueID = kwargs.get('ctx', {}).get('arenaUniqueID')
+        super(BattleRoyaleBattleResultsView, self).__init__(R.views.battle_royale.lobby.views.BattleResultView(), BattleResultViewModel)
+        self.__arenaUniqueID = kwargs.get('arenaUniqueID')
         if self.__arenaUniqueID is None:
             raise SoftException('There is not arenaUniqueID in battleResults context')
         self.__data = self.__battleResults.getResultsVO(self.__arenaUniqueID)
@@ -96,7 +95,7 @@ class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility, IPrbListener):
 
     @property
     def viewModel(self):
-        return super(BrBattleResultsViewInLobby, self).getViewModel()
+        return super(BattleRoyaleBattleResultsView, self).getViewModel()
 
     @property
     def arenaUniqueID(self):
@@ -106,7 +105,7 @@ class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility, IPrbListener):
         if contentID == R.views.battle_royale.lobby.tooltips.RewardCurrencyTooltipView():
             currencyType = event.getArgument('currencyType')
             return RewardCurrencyTooltipView(currencyType)
-        return super(BrBattleResultsViewInLobby, self).createToolTipContent(event, contentID)
+        return super(BattleRoyaleBattleResultsView, self).createToolTipContent(event, contentID)
 
     def createToolTip(self, event):
         if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
@@ -119,14 +118,14 @@ class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility, IPrbListener):
             window.load()
             return window
         else:
-            return super(BrBattleResultsViewInLobby, self).createToolTip(event)
+            return super(BattleRoyaleBattleResultsView, self).createToolTip(event)
 
     def createContextMenu(self, event):
         if event.contentID == R.views.common.BackportContextMenu():
             contextMenuArgs = {}
             contextMenuArgs['databaseID'] = event.getArgument('databaseID')
             if self.__connectionMgr.databaseID == contextMenuArgs['databaseID']:
-                return super(BrBattleResultsViewInLobby, self).createContextMenu(event)
+                return super(BattleRoyaleBattleResultsView, self).createContextMenu(event)
             hiddenUserName = event.getArgument('hiddenUserName')
             contextMenuArgs['userName'] = hiddenUserName if hiddenUserName else event.getArgument('userName')
             contextMenuData = createContextMenuData(CONTEXT_MENU_HANDLER_TYPE.BR_BATTLE_RESULT_CONTEXT_MENU, contextMenuArgs)
@@ -136,16 +135,14 @@ class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility, IPrbListener):
                 window = BackportContextMenuWindow(contextMenuData, self.getParentWindow())
                 window.load()
                 return window
-        return super(BrBattleResultsViewInLobby, self).createContextMenu(event)
+        return super(BattleRoyaleBattleResultsView, self).createContextMenu(event)
 
     def _initialize(self, *args, **kwargs):
-        super(BrBattleResultsViewInLobby, self)._initialize(*args, **kwargs)
+        super(BattleRoyaleBattleResultsView, self)._initialize(*args, **kwargs)
         BREvents.playSound(BREvents.BATTLE_SUMMARY_SHOW)
-        self.suspendLobbyHeader(self.uniqueID)
         event_dispatcher.hideSquadWindow()
 
     def _finalize(self):
-        lockNotificationManager(False, source=BATTLE_ROYALE_LOCK_SOURCE_NAME)
         BREvents.playSound(BREvents.BR_RESULT_PROGRESS_BAR_STOP)
         SoundGroups.g_instance.playSound2D(backport.sound(R.sounds.bp_progress_bar_stop()))
         self.__tooltipsData = None
@@ -153,16 +150,12 @@ class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility, IPrbListener):
         self.__data = None
         self.__ally = None
         self.__squadCreatedByInvite = False
-        self.resumeLobbyHeader(self.uniqueID)
-        super(BrBattleResultsViewInLobby, self)._finalize()
+        super(BattleRoyaleBattleResultsView, self)._finalize()
         return
 
     def _onLoading(self, *args, **kwargs):
-        super(BrBattleResultsViewInLobby, self)._onLoading(*args, **kwargs)
-        with self.viewModel.transaction() as model:
-            self.__setPlayerBattleTypeStatus(model.playerBattleTypeStatus)
-            self.__setPersonalResult(model.personalResults)
-            self.__setLeaderboard(model.leaderboardLobbyModel)
+        super(BattleRoyaleBattleResultsView, self)._onLoading(*args, **kwargs)
+        self.__update()
 
     def _getEvents(self):
         return ((self.viewModel.personalResults.battlePassProgress.onSubmitClick, self.__onBattlePassClick),
@@ -176,6 +169,12 @@ class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility, IPrbListener):
     @storage_getter('users')
     def usersStorage(self):
         return None
+
+    def __update(self):
+        with self.viewModel.transaction() as model:
+            self.__setPlayerBattleTypeStatus(model.playerBattleTypeStatus)
+            self.__setPersonalResult(model.personalResults)
+            self.__setLeaderboard(model.leaderboardLobbyModel)
 
     def __onBattlePassClick(self):
         self.destroyWindow()
@@ -398,6 +397,7 @@ class BrBattleResultsViewInLobby(ViewImpl, LobbyHeaderVisibility, IPrbListener):
         model.setVehicleName(vehicleInfo['vehicleName'])
         model.setVehicleType(vehicleInfo['vehicleType'])
         model.setHasPremium(self.__hasPremium())
+        model.setIsObserver(vehicleInfo['isObserver'])
         return
 
     def __setMapName(self):

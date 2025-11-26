@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/ReloadEffect.py
+import typing
 import logging
 from copy import copy
 from math import fabs
@@ -10,6 +11,8 @@ from debug_utils import LOG_DEBUG
 import SoundGroups
 import BigWorld
 from skeletons.gui.battle_session import IBattleSessionProvider
+if typing.TYPE_CHECKING:
+    from ChargeableBurstComponent import ChargeableBurstModeState
 _logger = logging.getLogger(__name__)
 BARREL_DEBUG_ENABLED = False
 GUN_RAMMER_TIME = 1.5
@@ -89,7 +92,7 @@ class _SimpleReloadDesc(_ReloadDesc):
 
 
 class _DualGunReloadDesc(_SimpleReloadDesc):
-    __slots__ = ('ammoLowSound', 'soundEvent', 'runTimeDelta', 'runTimeDeltaAmmoLow', 'caliber')
+    __slots__ = ('ammoLowSound', 'runTimeDelta', 'runTimeDeltaAmmoLow', 'caliber')
 
     def __init__(self, dataSection, eType):
         super(_DualGunReloadDesc, self).__init__(dataSection, eType)
@@ -216,7 +219,7 @@ class _ExtraShotClipReloadDesc(_BarrelReloadDesc):
 
 
 class _ChargeableBurstReloadDesc(_SimpleReloadDesc):
-    __slots__ = ('burstOneShellOffset', 'burstOneShell', 'burstLastShellOffset', 'burstLastShell', 'burstReady')
+    __slots__ = ('burstOneShellOffset', 'burstOneShell', 'burstLastShellOffset', 'burstLastShell', 'burstReady', 'nextBurstShellLoadingOffset', 'nextBurstShellLoading', 'nextBurstShellLoadedOffset', 'nextBurstShellLoaded')
 
     def __init__(self, dataSection, eType):
         super(_ChargeableBurstReloadDesc, self).__init__(dataSection, eType)
@@ -225,6 +228,10 @@ class _ChargeableBurstReloadDesc(_SimpleReloadDesc):
         self.burstOneShell = dataSection.readString('burstOneShell', '')
         self.burstLastShellOffset = dataSection.readFloat('burstLastShellOffset', 0.0) / 1000.0
         self.burstLastShell = dataSection.readString('burstLastShell', '')
+        self.nextBurstShellLoadingOffset = dataSection.readFloat('nextBurstShellLoadingOffset', 0.0) / 1000.0
+        self.nextBurstShellLoading = dataSection.readString('nextBurstShellLoading', '')
+        self.nextBurstShellLoadedOffset = dataSection.readFloat('nextBurstShellLoadedOffset', 0.0) / 1000.0
+        self.nextBurstShellLoaded = dataSection.readString('nextBurstShellLoaded', '')
 
     def create(self):
         return ChargeableBurstReload(self)
@@ -858,62 +865,100 @@ class ChargeableBurstReload(SimpleReload):
         SimpleReload.__init__(self, effectDesc)
         self.__isBurstActive = False
         self.__isBurstTriggered = False
+        self.__isBetweenBurstShots = False
+        self.__isBurstShotTriggered = False
         self.__shellReloadTime = 0.0
         self.__reloadShellCount = 0
-        self._soundBurstReady = None
-        self._soundBurstOneShell = None
-        self._soundBurstLastShell = None
+        self.__soundBurstReady = None
+        self.__soundBurstOneShell = None
+        self.__soundBurstLastShell = None
+        self.__soundNextBurstShellLoading = None
+        self.__soundNextBurstShellLoaded = None
         return
 
     def __del__(self):
         self.stop()
         SimpleReload.__del__(self)
 
-    def start(self, shellReloadTime, alert, shellCount, reloadShellCount, shellID, reloadStart, clipCapacity, extraShotState=None):
+    def start(self, shellReloadTime, alert, shellCount, reloadShellCount, shellID, reloadStart, clipCapacity, mechanicState=None):
         if gEffectsDisabled():
             return
         self.__reloadShellCount = reloadShellCount
         hasCallback = self.hasDelayedCallback(self.__playOneShellSound) or self.hasDelayedCallback(self.__playLastShellSound)
-        self.stopCallback(self.__playOneShellSound)
-        self.stopCallback(self.__playLastShellSound)
+        hasBurstShotCallback = self.hasDelayedCallback(self.__playNextShellLoadingSound) or self.hasDelayedCallback(self.__playNextShellLoadedSound)
+        self.__stopCallbacks()
         self.__shellReloadTime = BigWorld.serverTime() + shellReloadTime
-        if self.__isBurstActive or self.__isBurstTriggered or hasCallback:
+        isBurstActive = self.__isBurstActive or self.__isBurstTriggered
+        if isBurstActive and (self.__isBetweenBurstShots or self.__isBurstShotTriggered or hasBurstShotCallback):
+            self.__playDelayedReloadBetweenBurstSounds()
+            self.__isBurstShotTriggered = False
+        elif isBurstActive or hasCallback:
             self.__playDelayedBurstSounds()
             self.__isBurstTriggered = False
         else:
-            SimpleReload.start(self, shellReloadTime, alert, shellCount, reloadShellCount, shellID, reloadStart, clipCapacity, extraShotState)
+            SimpleReload.start(self, shellReloadTime, alert, shellCount, reloadShellCount, shellID, reloadStart, clipCapacity, mechanicState)
 
     def stop(self):
         SimpleReload.stop(self)
-        for sound in (self._soundBurstReady, self._soundBurstOneShell, self._soundBurstLastShell):
+        for sound in (self.__soundBurstReady,
+         self.__soundBurstOneShell,
+         self.__soundBurstLastShell,
+         self.__soundNextBurstShellLoading,
+         self.__soundNextBurstShellLoaded):
             if sound is not None:
                 sound.stop()
 
-        self.__shellReloadTime = 0.0
-        self.stopCallback(self.__playOneShellSound)
-        self.stopCallback(self.__playLastShellSound)
+        self.__stopCallbacks()
         return
 
     def reloadEnd(self):
         SimpleReload.reloadEnd(self)
-        self.__shellReloadTime = 0.0
-        self.stopCallback(self.__playOneShellSound)
-        self.stopCallback(self.__playLastShellSound)
+        self.__stopCallbacks()
 
-    def setBurstActive(self, isActive):
+    def setChargeableBurstState(self, mechanicState):
+        self.__updateBurstActive(mechanicState.isBurstActive)
+        self.__updateBurstShoot(mechanicState.shots, mechanicState.burstCount)
+
+    def __updateBurstActive(self, isActive):
         if self.__isBurstActive != isActive:
             self.__isBurstActive = isActive
         else:
             return
         if not isActive:
             return
-        self._soundBurstReady = SoundGroups.g_instance.getSound2D(self._desc.burstReady)
-        self._soundBurstReady.play()
+        self.__soundBurstReady = SoundGroups.g_instance.getSound2D(self._desc.burstReady)
+        self.__soundBurstReady.play()
         if self.__shellReloadTime > BigWorld.serverTime():
             SimpleReload.stop(self)
             self.__playDelayedBurstSounds()
         else:
             self.__isBurstTriggered = True
+
+    def __updateBurstShoot(self, burstShots, burstCount):
+        isBetweenBurstShots = burstShots > 0 and burstShots < burstCount
+        if self.__isBetweenBurstShots != isBetweenBurstShots:
+            self.__isBetweenBurstShots = isBetweenBurstShots
+        else:
+            return
+        if not isBetweenBurstShots:
+            return
+        if self.__shellReloadTime > BigWorld.serverTime():
+            SimpleReload.stop(self)
+            self.__playDelayedReloadBetweenBurstSounds()
+        else:
+            self.__isBurstShotTriggered = True
+
+    def __playDelayedReloadBetweenBurstSounds(self):
+        if isReplayPlayingWithTimeWarp():
+            return
+        shellReloadTime = self.__shellReloadTime - BigWorld.serverTime()
+        if shellReloadTime > 0.0 and self.__reloadShellCount > 1:
+            nextShellLoadingTime = shellReloadTime - self._desc.nextBurstShellLoadingOffset
+            if nextShellLoadingTime > 0.0:
+                self.delayCallback(nextShellLoadingTime, self.__playNextShellLoadingSound)
+            nextShellLoadedTime = shellReloadTime - self._desc.nextBurstShellLoadedOffset
+            if nextShellLoadedTime > 0.0:
+                self.delayCallback(nextShellLoadedTime, self.__playNextShellLoadedSound)
 
     def __playDelayedBurstSounds(self):
         if isReplayPlayingWithTimeWarp():
@@ -929,12 +974,23 @@ class ChargeableBurstReload(SimpleReload):
                 self.delayCallback(oneShellReloadTime, self.__playOneShellSound)
 
     def __playOneShellSound(self):
-        self._soundBurstOneShell = SoundGroups.g_instance.getSound2D(self._desc.burstOneShell)
-        self._soundBurstOneShell.play()
+        playByName(self._desc.burstOneShell)
 
     def __playLastShellSound(self):
-        self._soundBurstLastShell = SoundGroups.g_instance.getSound2D(self._desc.burstLastShell)
-        self._soundBurstLastShell.play()
+        playByName(self._desc.burstLastShell)
+
+    def __playNextShellLoadingSound(self):
+        playByName(self._desc.nextBurstShellLoading)
+
+    def __playNextShellLoadedSound(self):
+        playByName(self._desc.nextBurstShellLoaded)
+
+    def __stopCallbacks(self):
+        self.__shellReloadTime = 0.0
+        self.stopCallback(self.__playOneShellSound)
+        self.stopCallback(self.__playLastShellSound)
+        self.stopCallback(self.__playNextShellLoadingSound)
+        self.stopCallback(self.__playNextShellLoadedSound)
 
 
 class StationaryReload(SimpleReload):
@@ -1066,9 +1122,9 @@ class ReloadEffectStrategy(object):
     def getGunReloadType(self):
         return self.__gunReloadEffect.getEffectType()
 
-    def setBurstActive(self, isActive):
+    def setChargeableBurstState(self, mechanicState):
         if self.getGunReloadType() == ReloadEffectsType.CHARGEABLEBURST_RELOAD:
-            self.__gunReloadEffect.setBurstActive(isActive)
+            self.__gunReloadEffect.setChargeableBurstState(mechanicState)
 
     def __reloadStartEffect(self, timeLeft, clipCapacity, reloadFromStart, directTrigger=False, shotsAmount=1, mechanicState=None):
         ammoCtrl = self.__sessionProvider.shared.ammo

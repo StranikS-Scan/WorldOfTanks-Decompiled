@@ -193,8 +193,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	44	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.19	</vehicleMovement>
-        <vehicleRotation>	0.19	</vehicleRotation>
+        <vehicleMovement>	0.16	</vehicleMovement>
+        <vehicleRotation>	0.16	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	120	</maxHealth>
@@ -1433,13 +1433,19 @@
             <gun>	20	</gun>
           </armor>
           <reloadTime>	3.3	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	1.8	</aimingTime>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <turretYawLimits>	-180 180	</turretYawLimits>
+          <shotDispersionFactors>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+            <afterShot>	3	</afterShot>
+            <turretRotation>	0.08	</turretRotation>
+          </shotDispersionFactors>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <models>
             <undamaged>	vehicles/american/A104_M4A3E8A/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A104_M4A3E8A/crash/lod0/Gun_01.model	</destroyed>

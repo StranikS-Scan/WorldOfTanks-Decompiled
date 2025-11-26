@@ -4,17 +4,17 @@ import logging
 import weakref
 import BigWorld
 import Event
-from account_helpers.AccountSettings import EPICBATTLE_CAROUSEL_FILTER_1, EPICBATTLE_CAROUSEL_FILTER_2
-from account_helpers.AccountSettings import EPICBATTLE_CAROUSEL_FILTER_CLIENT_1
+from account_helpers.AccountSettings import EPICBATTLE_CAROUSEL_FILTER_1, EPICBATTLE_CAROUSEL_FILTER_2, EPICBATTLE_CAROUSEL_FILTER_CLIENT_2
 from frontline.gui.Scaleform.daapi.view.battle.frontline_battle_carousel_filters import FLRentedCriteriaGroup, FL_RENT
 from frontline.gui.Scaleform.daapi.view.meta.BattleTankCarouselMeta import BattleTankCarouselMeta
 from frontline.gui.Scaleform.genConsts.FRONTLINE_BATTLE_VIEW_ALIASES import FRONTLINE_BATTLE_VIEW_ALIASES
 from gui import GUI_NATIONS_ORDER_INDEX
+from gui.filters.carousel_filter import CarouselFilter, FILTER_KEYS
 from gui.Scaleform import getButtonsAssetPath
 from gui.Scaleform.daapi.view.common.filter_contexts import getFilterSetupContexts
 from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_data_provider import CarouselDataProvider
-from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import CarouselFilter
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.prb_control.settings import VEHICLE_LEVELS
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER_INDICES
 from helpers import dependency
 import nations
@@ -23,32 +23,16 @@ from gui.Scaleform.daapi.view.battle.shared.respawn import respawn_utils
 from gui.shared.gui_items import ItemsCollection
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
-from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import FILTER_KEYS
 _logger = logging.getLogger(__name__)
 _CAROUSEL_FILTERS = (FILTER_KEYS.FAVORITE, FILTER_KEYS.PREMIUM)
 
 class BattleCarouselFilter(CarouselFilter):
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
-    FILTER_KEY_SEASON = 'epicBattleSeason'
 
     def __init__(self):
         super(BattleCarouselFilter, self).__init__()
         self._serverSections = (EPICBATTLE_CAROUSEL_FILTER_1, EPICBATTLE_CAROUSEL_FILTER_2)
-        self._clientSections = (EPICBATTLE_CAROUSEL_FILTER_CLIENT_1,)
-        self.__currentSeasonID = 0
-
-    def save(self):
-        self.__currentSeasonID = self.__epicController.getCurrentSeasonID()
-        self._filters[self.FILTER_KEY_SEASON] = self.__currentSeasonID
-        super(BattleCarouselFilter, self).save()
-
-    def load(self):
-        super(BattleCarouselFilter, self).load()
-        currentSeason = self.__epicController.getCurrentSeasonID()
-        lastSeason = self._filters.get(self.FILTER_KEY_SEASON, currentSeason)
-        if lastSeason != currentSeason:
-            self.reset(save=False)
-        self.__currentSeasonID = currentSeason
+        self._clientSections = (EPICBATTLE_CAROUSEL_FILTER_CLIENT_2,)
 
     def _setCriteriaGroups(self):
         self._criteriesGroups = (FLRentedCriteriaGroup(),)
@@ -117,7 +101,7 @@ class BattleCarouselDataProvider(CarouselDataProvider):
         isSeparatorsNeeded = self.__isVehicleLevelsFilterNeeded()
         currentVehicleInvID = self.__currentVehicle.invID if self.__currentVehicle is not None else None
         vehLevelsToScroll = self.__getVehLevelsUnlockInBattle()
-        visibleVehiclesIntCDs = [ vehicle.intCD for vehicle in self._getCurrentVehicles() ]
+        visibleVehiclesIntCDs = self.getVisibleVehiclesIntCDs(vehLevelsToScroll)
         sortedVehicleIndices = self._getSortedIndices()
         self.__filteredSeparators = []
         for idx in sortedVehicleIndices:
@@ -138,6 +122,21 @@ class BattleCarouselDataProvider(CarouselDataProvider):
         if needUpdate:
             self._filterByIndices()
         return
+
+    def getVisibleVehiclesIntCDs(self, vehLevelsToScroll):
+        filters = self._filter.getFilters()
+        switchedLevels = []
+        for level in VEHICLE_LEVELS:
+            levelStr = 'level_%d' % level
+            if filters[levelStr] and level not in vehLevelsToScroll:
+                self._filter.switch(levelStr, False)
+                switchedLevels.append(levelStr)
+
+        visibleVehiclesIntCDs = [ vehicle.intCD for vehicle in self._getCurrentVehicles() ]
+        for levelStr in switchedLevels:
+            self._filter.switch(levelStr, False)
+
+        return visibleVehiclesIntCDs
 
     def updateVehicleStates(self, slotsStatesData):
         updateIndices = []

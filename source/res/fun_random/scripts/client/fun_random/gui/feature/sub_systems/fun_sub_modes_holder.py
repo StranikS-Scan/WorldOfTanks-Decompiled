@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/feature/sub_systems/fun_sub_modes_holder.py
+from __future__ import absolute_import
 import operator
 import typing
+from future.utils import viewvalues
 from fun_random_common.fun_constants import FUN_EVENT_ID_KEY, UNKNOWN_EVENT_ID
 from fun_random.gui.feature.fun_constants import FunSubModeBroadcast
 from fun_random.gui.feature.util.fun_wrappers import skipNoSubModesAction
@@ -47,13 +49,13 @@ class FunSubModesHolder(IFunRandomController.IFunSubModesHolder):
         return self.__subModes.get(subModeID)
 
     def getSubModes(self, subModesIDs=None, isOrdered=False):
-        allSubModesIDs = self.__subModes.keys()
+        allSubModesIDs = list(self.__subModes.keys())
         subModesIDs = subModesIDs or allSubModesIDs
         subModes = [ self.__subModes.get(subModeID) for subModeID in subModesIDs if subModeID in allSubModesIDs ]
         return sorted(subModes, key=lambda sm: sm.getPriority()) if isOrdered else subModes
 
     def getSubModesIDs(self):
-        return self.__subModes.keys()
+        return list(self.__subModes.keys())
 
     def setDesiredSubModeID(self, subModeID, trustedSource=False):
         if subModeID == self.__desiredSubModeID:
@@ -87,11 +89,10 @@ class FunSubModesHolder(IFunRandomController.IFunSubModesHolder):
     def __onSubModeEvent(self, eventType, subModeID, ctx=None):
         self.__invokeSubModesEvent({subModeID}, eventType, ctx)
 
-    @skipNoSubModesAction
-    def __invokeSubModesMethod(self, method, subModes=None, *args):
-        caller = operator.methodcaller(method, *args)
-        subModes = self.__subModes.iterkeys() if subModes is None else subModes
-        return tuple((caller(self.__subModes[subModeID]) for subModeID in subModes))
+    def __invokeSubModesMethod(self, method):
+        caller = operator.methodcaller(method)
+        for subMode in viewvalues(self.__subModes):
+            caller(subMode)
 
     @skipNoSubModesAction
     def __invokeSubModesEvent(self, subModes, eventType, ctx=None):

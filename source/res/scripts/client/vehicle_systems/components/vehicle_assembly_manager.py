@@ -74,14 +74,7 @@ class TurretGunRotationAssembler(Assembler):
                 hasGunInclination = not appearance.damageState.isCurrentModelDamaged
             if hasGunInclination and slotName == veh_comp.VehicleSlots.GUN_INCLINATION.value:
                 return appearance.gunMatrix
-            if not hasGunInclination and slotName == veh_comp.VehicleSlots.GUN.value:
-                return appearance.gunMatrix
-            if appearance.renderMode == TankRenderMode.OVERLAY_COLLISION:
-                if slotName == veh_comp.VehicleSlots.TURRET_COLLISION.value:
-                    return appearance.turretMatrix
-                if slotName == veh_comp.VehicleSlots.GUN_COLLISION.value:
-                    return appearance.gunMatrix
-            return None
+            return appearance.gunMatrix if not hasGunInclination and slotName == veh_comp.VehicleSlots.GUN.value else None
 
 
 class RecoilAssembler(Assembler):

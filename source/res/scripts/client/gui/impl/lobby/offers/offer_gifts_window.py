@@ -202,7 +202,7 @@ class OfferGiftsWindow(ViewImpl):
             localization = ResMgr.openSection(self._offersProvider.getCdnResourcePath(gift.cdnLocFilePath, relative=False))
             onGiftConfirm = partial(self._onGiftConfirm, self._offerID, giftID, cdnTitle=localization.readString('name') if localization else '', cdnDescription=localization.readString('description') if localization else '', cdnIcon=getGfImagePath(self._offersProvider.getCdnResourcePath(gift.cdnIconPath)))
             if gift.isVehicle:
-                event_dispatcher.showOfferGiftVehiclePreview(offerID=self._offerID, giftID=giftID, confirmCallback=onGiftConfirm)
+                event_dispatcher.showOfferGiftVehiclePreview(gift.bonus.displayedItem.intCD, offerID=self._offerID, giftID=giftID, confirmCallback=onGiftConfirm)
                 self.destroyWindow()
             else:
                 onGiftConfirm()

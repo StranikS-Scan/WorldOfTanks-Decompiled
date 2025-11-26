@@ -127,3 +127,12 @@ def isFreeXpAvailable(battleResults):
 def isWotPlusBonusEnabled(_, lobbyContext=None):
     isWotPlusBattleBonusesEnabled = lobbyContext.getServerSettings().isWotPlusBattleBonusesEnabled()
     return ('isEnabled', isWotPlusBattleBonusesEnabled)
+
+
+def hasCreditsPetFactor(battleResults):
+    personalResults = battleResults.reusable.personal
+    baseCredits, _, _, _, _, _ = first(personalResults.getMoneyRecords())
+    petBonusFactor = 0
+    if baseCredits:
+        petBonusFactor = baseCredits.getFactor('petSystemCreditsFactor100')
+    return ('bonusFactor', max(int(petBonusFactor * 100), 0))

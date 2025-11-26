@@ -45,19 +45,21 @@ def _filterBaseTransition(child):
 
 
 class State(Node):
-    __slots__ = ('__stateID', '__flags', '__isEntered')
+    __slots__ = ('__stateID', '__flags', '__isEntered', '__descendantsCache')
 
     def __init__(self, stateID='', flags=StateFlags.UNDEFINED):
         super(State, self).__init__()
         self.__stateID = stateID
         self.__flags = flags
         self.__isEntered = False
+        self.__descendantsCache = []
 
     def __repr__(self):
         return '{}({})'.format(self.__class__.__name__, self.__stateID)
 
     def clear(self):
         self.__isEntered = False
+        self.__descendantsCache = []
         super(State, self).clear()
 
     def getStateID(self):
@@ -130,12 +132,15 @@ class State(Node):
         return self.getChildren(filter_=_filterState)
 
     def getRecursiveChildrenStates(self):
+        if self.__descendantsCache:
+            return self.__descendantsCache
         children = self.getChildrenStates()
         grandchildren = []
         for child in children:
             grandchildren.extend(child.getRecursiveChildrenStates())
 
-        return grandchildren + children
+        self.__descendantsCache = grandchildren + children
+        return self.__descendantsCache
 
     def getHistoryStates(self):
         return self.getChildren(filter_=_filterHistoryState)

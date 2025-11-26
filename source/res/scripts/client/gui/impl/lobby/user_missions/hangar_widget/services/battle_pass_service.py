@@ -1,21 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/user_missions/hangar_widget/services/battle_pass_service.py
-from PlayerEvents import g_playerEvents
 from gui.impl.lobby.user_missions.hangar_widget.services import IBattlePassService
 from gui.prb_control.dispatcher import g_prbLoader
-from gui.shared import g_eventBus, events
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.resource_well import IResourceWellController
+from gui.impl.lobby.user_missions.hangar_widget.services.service_events import ServiceEvents
 
-class BattlePassService(IBattlePassService):
+class BattlePassService(IBattlePassService, ServiceEvents):
     __battlePassController = dependency.descriptor(IBattlePassController)
     __resourceWell = dependency.descriptor(IResourceWellController)
 
     def __init__(self):
         super(BattlePassService, self).__init__()
-        g_eventBus.addListener(events.GUICommonEvent.LOBBY_VIEW_LOADED, self.__onLobbyInited)
-        g_playerEvents.onAccountBecomeNonPlayer += self.__onAccountBecomeNonPlayer
+        self.startServiceEvents()
 
     def onPrbEntitySwitched(self):
         self._onBattlePassEvent()
@@ -38,9 +36,8 @@ class BattlePassService(IBattlePassService):
         self.__resourceWell.onEventUpdated -= self._onBattlePassEvent
 
     def finalize(self):
-        g_eventBus.removeListener(events.GUICommonEvent.LOBBY_VIEW_LOADED, self.__onLobbyInited)
-        g_playerEvents.onAccountBecomeNonPlayer -= self.__onAccountBecomeNonPlayer
         self.stopListening()
+        self.stopServiceEvents()
 
     def _isValidBattleTypeForBattlePass(self):
         prbDispatcher = g_prbLoader.getDispatcher()
@@ -52,9 +49,3 @@ class BattlePassService(IBattlePassService):
 
     def _onBattlePassEvent(self, *_):
         self.onBattlePassChanged()
-
-    def __onLobbyInited(self, *_):
-        self.startListening()
-
-    def __onAccountBecomeNonPlayer(self):
-        self.stopListening()

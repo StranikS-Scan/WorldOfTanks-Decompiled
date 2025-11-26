@@ -17,7 +17,7 @@ from debug_utils import LOG_DEBUG
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.server_events import caches as quests_caches
 from gui.server_events.event_items import MotiveQuest, Quest, ServerEventAbstract, createAction, createQuest
-from gui.server_events.events_helpers import getEventsData, getRerollTimeout, isBattleRoyale, isDailyEpic, isBattleMattersQuestID, isMapsTraining, isMarathon, isPremium, isRankedDaily, isRankedPlatform, isFunRandomQuest, isSuitableForPM, getWeeklyRerollTimeout
+from gui.server_events.events_helpers import getEventsData, getRerollTimeout, isBattleRoyale, isDailyEpic, isBattleMattersQuestID, isMapsTraining, isMarathon, isPremium, isRankedDaily, isRankedPlatform, isSuitableForPM, getWeeklyRerollTimeout
 from gui.server_events.formatters import getLinkedActionID
 from gui.server_events.modifiers import ACTION_MODIFIER_TYPE, ACTION_SECTION_TYPE, clearModifiersCache
 from gui.server_events.personal_missions_cache import PersonalMissionsCache
@@ -30,7 +30,7 @@ from items import getTypeOfCompactDescr
 from personal_missions import PERSONAL_MISSIONS_XML_PATH, PM_BRANCH
 from quest_cache_helpers import readQuestsFromFile
 from shared_utils import first, findFirst
-from skeletons.gui.game_control import IBattleRoyaleController, IEpicBattleMetaGameController, IRankedBattlesController, IFunRandomController
+from skeletons.gui.game_control import IBattleRoyaleController, IEpicBattleMetaGameController, IRankedBattlesController
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -82,7 +82,7 @@ class DefaultQuestMaker(object):
 
     def __call__(self, qID, qData, progressRequester):
         self.__builders = self.__builders or collectQuestBuilders()
-        return createQuest(self.__builders, qData.get('type', 0), qID, qData, progressRequester.getQuestProgress(qID), progressRequester.getTokenExpiryTime(qData.get('requiredToken')))
+        return createQuest(self.__builders, qData.get('type', 0), qID, qData, progress=progressRequester.getQuestProgress(qID), expiryTime=progressRequester.getTokenExpiryTime(qData.get('requiredToken')))
 
 
 class EventsCache(IEventsCache):
@@ -96,7 +96,6 @@ class EventsCache(IEventsCache):
     rankedController = dependency.descriptor(IRankedBattlesController)
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
-    __funRandomController = dependency.descriptor(IFunRandomController)
 
     def __init__(self):
         self.__isForPMSync = True
@@ -277,7 +276,6 @@ class EventsCache(IEventsCache):
     def getAdvisableQuests(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
         isRankedSeasonOff = self.rankedController.getCurrentSeason() is None
-        isFunRandomOff = not self.__funRandomController.subModesInfo.isAvailable()
         isEpicBattleEnabled = self.__epicController.isEnabled()
 
         def userFilterFunc(q):
@@ -298,9 +296,7 @@ class EventsCache(IEventsCache):
                     return False
             if isMapsTraining(qGroup):
                 return q.shouldBeShown()
-            if isRankedSeasonOff and (isRankedDaily(qGroup) or isRankedPlatform(qGroup)):
-                return False
-            return False if isFunRandomOff and isFunRandomQuest(qID) else filterFunc(q)
+            return False if isRankedSeasonOff and (isRankedDaily(qGroup) or isRankedPlatform(qGroup)) else filterFunc(q)
 
         return self.getActiveQuests(userFilterFunc)
 
@@ -571,13 +567,14 @@ class EventsCache(IEventsCache):
         result = {}
         groups = {}
         filterFunc = filterFunc or (lambda a: True)
+        timeUTCNow = time_utils.getServerUTCTime()
         for qID, q in self.__getCommonQuestsIterator():
             if qID in self.__quests2actions:
                 q.linkedActions = self.__quests2actions[qID]
             if q.getType() == EVENT_TYPE.GROUP:
                 groups[qID] = q
                 continue
-            if q.getFinishTimeLeft() <= 0:
+            if q.getFinishTimeRawInUTC() - timeUTCNow <= 0:
                 continue
             if not filterFunc(q):
                 continue

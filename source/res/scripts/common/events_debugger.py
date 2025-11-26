@@ -27,4 +27,8 @@ class EventsDebugger(object):
         if self._shouldHandle(item):
             return lambda *args, **kwargs: LOG_DEBUG_DEV(self._buildDebugString(item), *args, **kwargs)
         else:
-            return lambda *args, **kwargs: None
+            return _silencedEventDebugSubscription
+
+
+def _silencedEventDebugSubscription(*args, **kwargs):
+    pass

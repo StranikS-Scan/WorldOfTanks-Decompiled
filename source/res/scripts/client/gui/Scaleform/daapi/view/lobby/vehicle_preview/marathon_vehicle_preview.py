@@ -6,8 +6,6 @@ from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
 from gui.server_events.events_dispatcher import showMissionsMarathon
 from helpers import dependency
 from skeletons.gui.game_control import IMarathonEventsController
-from gui.impl import backport
-from gui.impl.gen import R
 from web.web_client_api.common import ItemPackTypeGroup
 
 class MarathonVehiclePreview(VehiclePreview):
@@ -38,14 +36,3 @@ class MarathonVehiclePreview(VehiclePreview):
             super(MarathonVehiclePreview, self)._processBackClick(ctx)
         else:
             showMissionsMarathon(self.__marathonPrefix)
-
-    def _getBackBtnLabel(self):
-        if self.__backToHangar:
-            return backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.hangar())
-        else:
-            return backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.marathon()) if self.__marathon is None else backport.text(self.__marathon.backBtnLabel)
-
-    def _getExitEvent(self):
-        exitEvent = super(MarathonVehiclePreview, self)._getExitEvent()
-        exitEvent.ctx.update({'marathonPrefix': self.__marathonPrefix})
-        return exitEvent

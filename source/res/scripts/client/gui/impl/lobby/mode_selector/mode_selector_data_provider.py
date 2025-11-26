@@ -12,7 +12,6 @@ from gui.impl.lobby.mode_selector.items.mapbox_mode_selector_item import MapboxM
 from gui.impl.lobby.mode_selector.items.random_mode_selector_item import RandomModeSelectorItem
 from gui.impl.lobby.mode_selector.items.ranked_mode_selector_item import RankedModeSelectorItem
 from gui.impl.lobby.mode_selector.items.spec_mode_selector_item import SpecModeSelectorItem
-from gui.impl.lobby.mode_selector.items.battle_royale_mode_selector_item import BattleRoyaleModeSelectorItem
 from gui.impl.lobby.mode_selector.items.strongholds_mode_selector_item import StrongholdsModeSelectorItem
 from gui.impl.lobby.mode_selector.items.trainings_mode_selector_item import TrainingsModeSelectorItem
 from gui.impl.lobby.mode_selector.items.winback_mode_selector_item import WinbackModeSelectorItem
@@ -33,7 +32,6 @@ registerModeSelectorItem(PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST, SpecModeSelect
 registerModeSelectorItem(PREBATTLE_ACTION_NAME.TRAININGS_LIST, TrainingsModeSelectorItem)
 registerModeSelectorItem(PREBATTLE_ACTION_NAME.MAPBOX, MapboxModeSelectorItem)
 registerModeSelectorItem(PREBATTLE_ACTION_NAME.EPIC, EpicModeSelectorItem)
-registerModeSelectorItem(PREBATTLE_ACTION_NAME.BATTLE_ROYALE, BattleRoyaleModeSelectorItem)
 registerModeSelectorItem(PREBATTLE_ACTION_NAME.WINBACK, WinbackModeSelectorItem)
 
 class ModeSelectorDataProvider(IGlobalListener):

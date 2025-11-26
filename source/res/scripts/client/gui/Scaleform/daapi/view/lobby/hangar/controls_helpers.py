@@ -20,7 +20,7 @@ class IHangarControlsHelper(object):
         raise NotImplementedError
 
 
-class DefaultHangarHelper(IHangarControlsHelper):
+class DefaultHangarControlsHelper(IHangarControlsHelper):
     __slots__ = ()
 
     @classmethod
@@ -28,7 +28,7 @@ class DefaultHangarHelper(IHangarControlsHelper):
         return EasyTankEquipSetupData(False, False, '')
 
 
-class RandomHangarHelper(IHangarControlsHelper):
+class RandomHangarControlsHelper(IHangarControlsHelper):
     __slots__ = ()
     __limitedUIController = dependency.descriptor(ILimitedUIController)
     __easyTankEquipController = dependency.descriptor(IEasyTankEquipController)

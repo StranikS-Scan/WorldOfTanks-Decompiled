@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/messenger/formatters/token_quest_subformatters.py
+from __future__ import absolute_import
+from future.utils import viewkeys, viewvalues
 from typing import Dict, List
 from adisp import adisp_async, adisp_process
 from constants import LOOTBOX_TOKEN_PREFIX
@@ -115,7 +117,7 @@ class FunRandomLootBoxFormatter(QuestAchievesFormatter, FunAssetPacksMixin):
     @classmethod
     def getFormattedAchieves(cls, data, asBattleFormatter, processCustomizations=True, processTokens=True):
         result = super(FunRandomLootBoxFormatter, cls).getFormattedAchieves(data, asBattleFormatter, processCustomizations, processTokens)
-        battlePassPoints = sum((points for points in data.get('battlePassPoints', {}).get('vehicles', {}).itervalues()))
+        battlePassPoints = sum(viewvalues(data.get('battlePassPoints', {}).get('vehicles', {})))
         if battlePassPoints > 0:
             result.append(backport.text(R.strings.messenger.serviceChannelMessages.battleResults.quests.battlePassPoints(), value=text_styles.neutral(battlePassPoints)))
         return result
@@ -124,7 +126,7 @@ class FunRandomLootBoxFormatter(QuestAchievesFormatter, FunAssetPacksMixin):
     def _processTokens(cls, data):
         result = []
         tokensData = data.get('tokens', {})
-        sortedTokens = sorted(tokensData.keys(), key=cls._sortTokenFunc)
+        sortedTokens = sorted(viewkeys(tokensData), key=cls._sortTokenFunc)
         for token in sortedTokens:
             if token.startswith(LOOTBOX_TOKEN_PREFIX):
                 lootBox = cls._itemsCache.items.tokens.getLootBoxByTokenID(token)

@@ -15,9 +15,8 @@ from math_common import isAlmostEqual
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared.utils import IHangarSpace
 from GenericComponents import TransformComponent
-from cgf_script.component_meta_class import registerComponent
-from cgf_script.managers_registrator import tickGroup, onAddedQuery
-from CameraComponents import CameraComponent, CameraFlightComponent, OrbitComponent, DofComponent, IdleComponent, ParallaxComponent, FovComponent, ShiftComponent
+from cgf_script.managers_registrator import tickGroup, onAddedQuery, Rule, registerRule, registerManager
+from CameraComponents import CameraComponent, ActiveCameraComponent, CameraFlightComponent, OrbitComponent, DofComponent, IdleComponent, ParallaxComponent, FovComponent, ShiftComponent
 from constants import IS_CLIENT
 if IS_CLIENT:
     from AvatarInputHandler.cameras import FovExtended
@@ -86,14 +85,11 @@ class _DOFParams(object):
         self.farDist = farDist
 
 
-@registerComponent
-class CurrentCameraObject(object):
-    domain = CGF.DomainOption.DomainClient
-
-
 class HangarCameraManager(CGF.ComponentManager):
     _settingsCore = dependency.descriptor(ISettingsCore)
     _hangarSpace = dependency.descriptor(IHangarSpace)
+    _activeCameraQuery = CGF.QueryConfig(CGF.GameObject, ActiveCameraComponent)
+    _cameraQuery = CGF.QueryConfig(CGF.GameObject, CameraComponent)
 
     def __init__(self, *args):
         super(HangarCameraManager, self).__init__(*args)
@@ -155,9 +151,8 @@ class HangarCameraManager(CGF.ComponentManager):
             self.__customizationHelper = None
             g_eventBus.removeListener(CameraRelatedEvents.LOBBY_VIEW_MOUSE_MOVE, self.__handleLobbyViewMouseEvent)
             FovExtended.instance().onSetFovSettingEvent -= self.__onSetFovSetting
-            currentCameraQuery = CGF.Query(self.spaceID, (CGF.GameObject, CurrentCameraObject))
-            for gameObject, _ in currentCameraQuery:
-                gameObject.removeComponentByType(CurrentCameraObject)
+            for gameObject, _ in self._activeCameraQuery:
+                gameObject.removeComponentByType(ActiveCameraComponent)
 
             self.__deactivateCameraComponents()
             self.__cameraParallax.destroy()
@@ -181,8 +176,7 @@ class HangarCameraManager(CGF.ComponentManager):
             _logger.info('HangarCameraManager::onTankCameraAdded')
 
     def isCameraAdded(self, cameraName):
-        cameraQuery = CGF.Query(self._hangarSpace.spaceID, CameraComponent)
-        for cameraComponent in cameraQuery:
+        for cameraComponent in self._cameraQuery:
             if cameraComponent.name == cameraName:
                 return True
 
@@ -197,55 +191,49 @@ class HangarCameraManager(CGF.ComponentManager):
     def switchToTank(self, instantly=True, resetTransform=True):
         self.switchByCameraName(self.__cameraMode, instantly, resetTransform)
 
-    def clearCurrentCameraComponents(self):
-        cameraQuery = CGF.Query(self._hangarSpace.spaceID, (CGF.GameObject, CurrentCameraObject))
-        for go, _ in cameraQuery:
-            go.removeComponentByType(CurrentCameraObject)
-
     def cameraExists(self, cameraName):
-        cameraQuery = CGF.Query(self._hangarSpace.spaceID, (CGF.GameObject, CameraComponent))
-        for _, cameraComponent in cameraQuery:
+        for _, cameraComponent in self._cameraQuery:
             if cameraComponent.name == cameraName:
                 return True
 
         return False
 
     def findCameraGameObjectByName(self, name):
-        cameraQuery = CGF.Query(self._hangarSpace.spaceID, (CGF.GameObject, CameraComponent))
         gameObject = None
-        for go, cameraComponent in cameraQuery:
+        for go, cameraComponent in self._cameraQuery:
             if cameraComponent.name == name:
                 gameObject = go
                 break
 
         return gameObject
 
-    def switchByCameraName(self, name, instantly=True, resetTransform=True, forceUpdate=True):
-        cameraQuery = CGF.Query(self._hangarSpace.spaceID, (CGF.GameObject, CameraComponent))
+    def activateCamera(self, name):
         gameObject = None
         prevCameraName = None
-        for go, cameraComponent in cameraQuery:
-            if cameraComponent.name == name:
-                if go.findComponentByType(CurrentCameraObject) is None:
-                    go.createComponent(CurrentCameraObject)
-                    gameObject = go
-                elif self.isCameraSwitching():
-                    _logger.debug('Camera is already flying: %s', name)
-                    return
-                else:
-                    _logger.debug('Camera already installed: %s', name)
-                    self.__onCameraSwitched()
-                    return
-
-            if go.findComponentByType(CurrentCameraObject) is not None:
+        for go, cameraComponent in self._cameraQuery:
+            if go.findComponentByType(ActiveCameraComponent) is not None:
                 prevCameraName = cameraComponent.name
-                go.removeComponentByType(CurrentCameraObject)
+                if cameraComponent.name != name:
+                    go.removeComponentByType(ActiveCameraComponent)
+            if cameraComponent.name == name:
+                gameObject = go
+                if go.findComponentByType(ActiveCameraComponent) is None:
+                    go.createComponent(ActiveCameraComponent)
 
-        if gameObject is None:
-            _logger.warning("Can't find camera: %s", name)
+        if gameObject is not None:
+            self.__cameraName = name
+        return (gameObject, prevCameraName)
+
+    def switchByCameraName(self, name, instantly=True, resetTransform=True, forceUpdate=True):
+        if self.__cameraName == name:
+            _logger.debug('Camera is already installed: %s', name)
+            self.onCameraSwitched(self.__cameraName)
             return
         else:
-            self.__cameraName = name
+            gameObject, prevCameraName = self.activateCamera(name)
+            if gameObject is None:
+                _logger.warning("Can't find camera: %s", name)
+                return
             self.__cam.stop()
             if instantly:
                 self.__setupCamera(gameObject, resetTransform, forceUpdate)
@@ -266,9 +254,8 @@ class HangarCameraManager(CGF.ComponentManager):
         if BigWorld.camera() != self.__cam:
             return
         else:
-            currentCameraQuery = CGF.Query(self.spaceID, (CGF.GameObject, CurrentCameraObject))
             targetPos, yaw, pitch, distance, distConstraints = (None, None, None, None, None)
-            for gameObject, _ in currentCameraQuery:
+            for gameObject, _ in self._activeCameraQuery:
                 hierarchy = CGF.HierarchyManager(self._hangarSpace.spaceID)
                 parent = hierarchy.getParent(gameObject)
                 parentTransformComponent = parent.findComponentByType(TransformComponent)
@@ -627,3 +614,13 @@ class HangarCameraManager(CGF.ComponentManager):
             farDist = self.__prevDOFParams.farDist + progress * (self.__currentDOFParams.farDist - self.__prevDOFParams.farDist)
             self.__customizationHelper.setDOFenabled(True)
             self.__customizationHelper.setDOFparams(nearStart, nearDist, farStart, farDist)
+
+
+@registerRule
+class CameraRule(Rule):
+    category = 'Hangar rules'
+    domain = CGF.DomainOption.DomainClient
+
+    @registerManager(HangarCameraManager)
+    def reg1(self):
+        return None

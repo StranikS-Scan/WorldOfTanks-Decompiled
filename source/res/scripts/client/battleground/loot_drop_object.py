@@ -27,15 +27,22 @@ class DescendSimulator(Component):
 
     def __init__(self, yaw, dropPoint, endPoint, descendTime):
         self.__matrix = math_utils.createRotationMatrix((yaw, 0, 0))
-        self.easing = Easing.linearEasing(dropPoint, endPoint, descendTime)
+        if descendTime > 0.0:
+            self.easing = Easing.linearEasing(dropPoint, endPoint, descendTime)
+        else:
+            self.easing = None
+            self.__matrix.translation = endPoint
         self.prevTime = BigWorld.time()
         self.tick()
+        return
 
     def tick(self):
         curTime = BigWorld.time()
-        self.easing.update(curTime - self.prevTime)
+        if self.easing is not None:
+            self.easing.update(curTime - self.prevTime)
+            self.__matrix.translation = self.easing.value
         self.prevTime = curTime
-        self.__matrix.translation = self.easing.value
+        return
 
 
 class ParachuteCargo(ScriptGameObject, CallbackDelayer):
@@ -45,12 +52,13 @@ class ParachuteCargo(ScriptGameObject, CallbackDelayer):
     LANDING_TRIGGER = 'Landed'
     LANDING_ANIMATION_TRIGGER_OFFSET = -0.3
 
-    def __init__(self, yaw, dropPoint, landingPosition, descendTime):
+    def __init__(self, yaw, dropPoint, landingPosition, landingTime, landingDuration):
         ScriptGameObject.__init__(self, BigWorld.player().spaceID)
         CallbackDelayer.__init__(self)
-        self.descendSimulator = DescendSimulator(yaw, dropPoint, landingPosition, descendTime)
-        self.__descendTime = descendTime
-        self.__dropPoint = dropPoint
+        self.__descendTime = max(landingTime - BigWorld.time(), 0.0)
+        self.__timeCorrection = landingDuration - self.__descendTime
+        self.__dropPoint = math_utils.lerp(dropPoint, landingPosition, self.__timeCorrection / landingDuration)
+        self.descendSimulator = DescendSimulator(yaw, self.__dropPoint, landingPosition, self.__descendTime)
 
     def activate(self):
         ScriptGameObject.activate(self)
@@ -58,6 +66,7 @@ class ParachuteCargo(ScriptGameObject, CallbackDelayer):
         self.model.compoundModel.position = self.__dropPoint
         self.model.compoundModel.matrix = self.descendSimulator.matrix
         self.landingAnimation.bindToCompound(self.model.compoundModel)
+        self.landingAnimation.sequenceAnimator.reset(self.__timeCorrection)
         self.delayCallback(self.__descendTime + self.LANDING_ANIMATION_TRIGGER_OFFSET, self.__animateLanding)
 
     def deactivate(self):
@@ -150,7 +159,7 @@ class PlaneLootAirdrop(CallbackDelayer, ISelfAssembler):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
     FLY_TIME_BEFORE_DROP = DropPlane.FLY_TIME_BEFORE_DROP
     FLY_TIME_AFTER_DROP = DropPlane.FLY_TIME_AFTER_DROP
-    DESCEND_TIME = 7
+    DESCEND_TIME = 7.0
     DROP_ALTITUDE = 50
     POST_DELIVERY_CARGO_LIFETIME = 12.0
 
@@ -207,7 +216,7 @@ class PlaneLootAirdrop(CallbackDelayer, ISelfAssembler):
         crateYaw = 0
         if self.plane is not None:
             crateYaw = self.plane.flightYaw
-        self.inactiveCargo = parachuteCargo = ParachuteCargo(crateYaw, dropPoint, self.deliveryPosition, self.DESCEND_TIME)
+        self.inactiveCargo = parachuteCargo = ParachuteCargo(crateYaw, dropPoint, self.deliveryPosition, self.deliveryTime, self.DESCEND_TIME)
         loadComponentSystem(parachuteCargo, self.__onCargoLoad, {'model': Loader(modelAssembler),
          'landingAnimation': Loader(animationBuilder)})
         self.delayCallback(self.deliveryTime - BigWorld.time() + self.POST_DELIVERY_CARGO_LIFETIME, self.__killCargo)

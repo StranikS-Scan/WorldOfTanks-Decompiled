@@ -1,0 +1,11 @@
+<extension.xml>
+  <FeatureName>	advent_calendar	</FeatureName>
+  <IsEnabled>	true	</IsEnabled>
+  <Personality>	AdventCalendarPersonality	</Personality>
+  <Components>
+    <StaticComponents>
+      <AdventCalendarAccountComponent></AdventCalendarAccountComponent>
+    </StaticComponents>
+    <DynamicComponents></DynamicComponents>
+  </Components>
+</extension.xml>

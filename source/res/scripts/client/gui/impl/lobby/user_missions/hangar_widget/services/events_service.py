@@ -5,18 +5,19 @@ import logging
 from itertools import chain
 from typing import List
 from PlayerEvents import g_playerEvents
-from battle_royale.gui.impl.lobby.views.battle_royale_entry_point import isBattleRoyaleEntryPointAvailable
 from config_schemas.umg import umgEventsConfigSchema
 from constants import QUEUE_TYPE
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
+from gui.clans.clan_cache import g_clanCache
 from gui.game_control.craftmachine_controller import getCraftMachineEntryPointIsActive
 from gui.impl.lobby.mapbox.mapbox_entry_point_view import isMapboxEntryPointAvailable
 from gui.impl.lobby.marathon.marathon_entry_point import isMarathonEntryPointAvailable
 from gui.impl.lobby.ranked.ranked_entry_point import isRankedEntryPointAvailable
-from gui.impl.lobby.stronghold.stronghold_entry_point_view import isStrongholdEntryPointAvailable
+from gui.impl.lobby.stronghold_event.stronghold_event_banner import StrongholdEventBanner
+from gui.impl.lobby.stronghold_event.stronghold_event_helpers import isStrongholdEventBannerAvailable
+from gui.impl.lobby.user_missions.hangar_widget.event_banners.event_banners_container import EventBannersContainer
 from gui.impl.lobby.user_missions.hangar_widget.services import IEventsService
-from gui.shared import g_eventBus, events
 from gui.shared.system_factory import registerBannerEntryPointValidator, collectBannerEntryPointValidator
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
 from helpers import dependency
@@ -25,14 +26,15 @@ from helpers.time_utils import getTimestampByStrDate
 from skeletons.gui.game_control import IEventsNotificationsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from gui.impl.lobby.user_missions.hangar_widget.services.service_events import ServiceEvents
 _HANGAR_ENTRY_POINTS = 'hangarEntryPoints'
 _SECONDS_BEFORE_UPDATE = 2
+EventBannersContainer().registerEventBanner(StrongholdEventBanner)
 registerBannerEntryPointValidator(HANGAR_ALIASES.CRAFT_MACHINE_ENTRY_POINT, getCraftMachineEntryPointIsActive)
 registerBannerEntryPointValidator(RANKEDBATTLES_ALIASES.ENTRY_POINT, isRankedEntryPointAvailable)
 registerBannerEntryPointValidator(HANGAR_ALIASES.MAPBOX_ENTRY_POINT, isMapboxEntryPointAvailable)
 registerBannerEntryPointValidator(HANGAR_ALIASES.MARATHON_ENTRY_POINT, isMarathonEntryPointAvailable)
-registerBannerEntryPointValidator(HANGAR_ALIASES.STRONGHOLD_ENTRY_POINT, isStrongholdEntryPointAvailable)
-registerBannerEntryPointValidator(HANGAR_ALIASES.BR_ENTRY_POINT, isBattleRoyaleEntryPointAvailable)
+registerBannerEntryPointValidator(StrongholdEventBanner.NAME, isStrongholdEventBannerAvailable)
 _logger = logging.getLogger(__name__)
 
 class _EntryPointData(object):
@@ -93,7 +95,7 @@ class _EntryPointData(object):
         return configValidator() if configValidator is not None else True
 
 
-class EventsService(IEventsService, Notifiable):
+class EventsService(IEventsService, Notifiable, ServiceEvents):
     __notificationsCtrl = dependency.descriptor(IEventsNotificationsController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -104,8 +106,7 @@ class EventsService(IEventsService, Notifiable):
         self.__entries = {}
         self.__visibleEntries = []
         self.__serverSettings = None
-        g_eventBus.addListener(events.GUICommonEvent.LOBBY_VIEW_LOADED, self.__onLobbyInited)
-        g_playerEvents.onAccountBecomeNonPlayer += self.__onAccountBecomeNonPlayer
+        self.startServiceEvents()
         return
 
     @property
@@ -128,6 +129,7 @@ class EventsService(IEventsService, Notifiable):
         self.__lobbyContext.onServerSettingsChanged += self.__onServerSettingsChanged
         self.__itemsCache.onSyncCompleted += self.__onCacheResync
         g_playerEvents.onConfigModelUpdated += self.__onConfigModelUpdated
+        g_clanCache.strongholdEventProvider.onDataReceived += self.__onStrongholdEventUpdated
         self.startGlobalListening()
 
     def stopListening(self):
@@ -138,23 +140,16 @@ class EventsService(IEventsService, Notifiable):
         self.__lobbyContext.onServerSettingsChanged -= self.__onServerSettingsChanged
         self.__itemsCache.onSyncCompleted -= self.__onCacheResync
         g_playerEvents.onConfigModelUpdated -= self.__onConfigModelUpdated
+        g_clanCache.strongholdEventProvider.onDataReceived -= self.__onStrongholdEventUpdated
         if self.__serverSettings:
             self.__serverSettings.onServerSettingsChange -= self.__onUpdateSettings
 
     def finalize(self):
-        g_eventBus.removeListener(events.GUICommonEvent.LOBBY_VIEW_LOADED, self.__onLobbyInited)
-        g_playerEvents.onAccountBecomeNonPlayer -= self.__onAccountBecomeNonPlayer
-        self.stopListening()
+        self.stopServiceEvents()
 
     def _isQueueEnabled(self):
         enabledQueues = (QUEUE_TYPE.RANDOMS, QUEUE_TYPE.WINBACK)
         return any((self.__isQueueSelected(queueType) for queueType in enabledQueues))
-
-    def __onLobbyInited(self, *_):
-        self.startListening()
-
-    def __onAccountBecomeNonPlayer(self):
-        self.stopListening()
 
     def __isQueueSelected(self, queueType):
         return self.prbDispatcher.getFunctionalState().isQueueSelected(queueType) if self.prbDispatcher is not None else False
@@ -167,7 +162,7 @@ class EventsService(IEventsService, Notifiable):
         self.__updateEntries()
         return
 
-    def __onUpdateSettings(self, diff):
+    def __onUpdateSettings(self, _):
         self.__updateEntries()
 
     def __onEventNotification(self, added, removed):
@@ -177,6 +172,9 @@ class EventsService(IEventsService, Notifiable):
                 break
 
     def __onCacheResync(self, _, __):
+        self.__updateEntries()
+
+    def __onStrongholdEventUpdated(self, *_):
         self.__updateEntries()
 
     def __handleNotifications(self, notifications):

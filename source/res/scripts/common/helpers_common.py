@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/helpers_common.py
 import math
-from typing import TYPE_CHECKING, Sequence, Optional, Tuple, List, Union
 from soft_exception import SoftException
 from battle_modifiers_common import BattleModifiers
 from Math import Vector3
 from debug_utils import LOG_WARNING
+from wg_typing import *
 if TYPE_CHECKING:
     from battle_modifiers_common import BATTLE_MODIFIERS_TYPE
     from items.components.gun_components import GunShot
@@ -233,3 +233,7 @@ def decodeSegment(segment, bbox):
      int(segment & 255),
      segStart - offset,
      segEnd + offset)
+
+
+def reprSlots(self):
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(('%s=%s' % (name, getattr(self, name, 'NOT_FOUND')) for name in self.__slots__)))

@@ -62,7 +62,7 @@ def getRankedFightBtnTooltipData(result):
     return makeTooltip(header, body)
 
 
-def getEpicFightBtnTooltipData(result):
+def getCommonFightBtnTooltipData(result):
     state = result.restriction
     if state == PRE_QUEUE_RESTRICTION.MODE_NOT_AVAILABLE:
         header = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.battleRoyaleDisabled.header())
@@ -112,7 +112,7 @@ def getEpicFightBtnTooltipData(result):
     return makeTooltip(header, body)
 
 
-getRoyaleFightBtnTooltipData = getEpicFightBtnTooltipData
+getRoyaleFightBtnTooltipData = getCommonFightBtnTooltipData
 
 def getMapsTrainingTooltipData():
     header = backport.text(_TOOLTIP_PATH.hangar.startBtn.mapsTraining.notReady.header())

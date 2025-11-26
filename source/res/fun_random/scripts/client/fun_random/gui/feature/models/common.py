@@ -1,45 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/feature/models/common.py
+from __future__ import absolute_import
 from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.periodic_battles.models import AlertData, PeriodType, PeriodInfo
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.shared.formatters import text_styles
+from gui.periodic_battles.models import PeriodInfo
 from gui.shared.utils.decorators import ReprInjector
 from season_common import GameSeason
 
-@ReprInjector.simple('state', 'rightBorder', 'primeDelta')
+@ReprInjector.simple('state', 'rightBorder', 'primeDelta', 'endTime')
 class FunSubModesStatus(object):
-    __slots__ = ('state', 'rightBorder', 'primeDelta')
+    __slots__ = ('state', 'rightBorder', 'primeDelta', 'endTime')
 
-    def __init__(self, state, rightBorder=None, primeDelta=None):
+    def __init__(self, state, rightBorder=None, primeDelta=None, endTime=None):
         self.rightBorder = rightBorder if rightBorder is not None else -1
         self.primeDelta = primeDelta if primeDelta is not None else 0
+        self.endTime = endTime if endTime is not None else -1
         self.state = state
         return
-
-
-class FunRandomAlertData(AlertData):
-    _RES_ROOT = R.strings.fun_random.alertMessage
-    _PERIOD_TYPES_PRIME_ALERT = (PeriodType.AVAILABLE,
-     PeriodType.AFTER_CYCLE,
-     PeriodType.STANDALONE_NOT_SET,
-     PeriodType.NOT_SET,
-     PeriodType.ALL_NOT_SET,
-     PeriodType.STANDALONE_NOT_AVAILABLE,
-     PeriodType.NOT_AVAILABLE,
-     PeriodType.NOT_AVAILABLE_END,
-     PeriodType.ALL_NOT_AVAILABLE,
-     PeriodType.STANDALONE_NOT_AVAILABLE_END)
-
-    @classmethod
-    def constructNoVehicles(cls):
-        return cls(alertIcon=backport.image(R.images.gui.maps.icons.library.alertBigIcon()), buttonLabel=backport.text(cls._RES_ROOT.button.moreInfo()), buttonVisible=True, statusText=text_styles.vehicleStatusCriticalText(backport.text(cls._RES_ROOT.unsuitableVehicles())), shadowFilterVisible=True, tooltip='', isSimpleTooltip=True)
-
-    @classmethod
-    def _getTooltip(cls, _):
-        return TOOLTIPS_CONSTANTS.FUN_RANDOM_CALENDAR_DAY
 
 
 class FunRandomSeason(GameSeason):

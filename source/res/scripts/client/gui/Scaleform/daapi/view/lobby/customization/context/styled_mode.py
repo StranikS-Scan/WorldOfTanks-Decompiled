@@ -139,10 +139,9 @@ class StyledMode(CustomizationMode):
         if styleOutfitData:
             styledOutfitComponent = parseCompDescr(styleOutfitData)
             styleProgressionLevel = styledOutfitComponent.styleProgressionLevel
+        outfit = self._service.getEmptyOutfitWithNationalEmblems(vehicleCD)
         for season in SeasonType.COMMON_SEASONS:
-            if style is None:
-                outfit = self._service.getEmptyOutfitWithNationalEmblems(vehicleCD)
-            else:
+            if style:
                 diff = diffs.get(season)
                 outfit = style.getOutfit(season, vehicleCD=vehicleCD, diff=diff)
                 if self.__modifiedStyle and self.__modifiedStyle.isProgressionRewindEnabled:

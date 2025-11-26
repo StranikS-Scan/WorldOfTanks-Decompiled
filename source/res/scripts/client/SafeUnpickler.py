@@ -12,7 +12,8 @@ class SafeUnpickler(object):
                      'tuple']),
      'datetime': set(['datetime']),
      '_BWp': set(['Array', 'FixedDict']),
-     'Math': set(['Vector2', 'Vector3'])}
+     'Math': set(['Vector2', 'Vector3']),
+     'items.components.shared_components': None}
 
     @classmethod
     def find_class(cls, module, name):
@@ -21,7 +22,7 @@ class SafeUnpickler(object):
         __import__(module)
         mod = sys.modules[module]
         classesSet = cls.PICKLE_SAFE[module]
-        if name not in classesSet or classesSet is None:
+        if classesSet is not None and name not in classesSet:
             raise cPickle.UnpicklingError('Attempting to unpickle unsafe class %s' % name)
         klass = getattr(mod, name)
         return klass

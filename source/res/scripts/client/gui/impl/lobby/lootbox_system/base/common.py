@@ -2,36 +2,17 @@
 # Embedded file name: scripts/client/gui/impl/lobby/lootbox_system/base/common.py
 import weakref
 from typing import TYPE_CHECKING
-import BigWorld
-from frameworks.wulf import View, ViewEvent, Window, WindowLayer
-from gui.impl.pub import ViewImpl
-from helpers import dependency
+from frameworks.wulf import View, ViewEvent, Window
+from gui.impl.pub.view_component import ViewComponent
 from helpers.events_handler import EventsHandler
-from skeletons.gui.app_loader import IAppLoader
 if TYPE_CHECKING:
     from typing import Any, Callable, Dict, Optional
     from enum import IntEnum
-    from gui.Scaleform.framework.managers import ContainerManager
 
-class MainViewImpl(ViewImpl):
-    __appLoader = dependency.descriptor(IAppLoader)
-
-    def __init__(self, settings):
-        super(MainViewImpl, self).__init__(settings)
-        self.__previouslyVisibleLayers = None
-        self.__app = None
-        return
+class MainViewImpl(ViewComponent):
 
     def switchToSubView(self, subViewID=None, isBackground=False, *args, **kwargs):
         raise NotImplementedError
-
-    def _initialize(self, *args, **kwargs):
-        super(MainViewImpl, self)._initialize(*args, **kwargs)
-        self._hideBack()
-
-    def _finalize(self):
-        self._showBack()
-        super(MainViewImpl, self)._finalize()
 
     def _getPresentersMap(self):
         raise NotImplementedError
@@ -39,29 +20,8 @@ class MainViewImpl(ViewImpl):
     def _getDefaultSubViewID(self):
         raise NotImplementedError
 
-    def _getVisibleLayers(self):
-        return [WindowLayer.TOP_WINDOW,
-         WindowLayer.FULLSCREEN_WINDOW,
-         WindowLayer.TOOLTIP,
-         WindowLayer.OVERLAY]
-
-    def _hideBack(self):
-        if self.__app is not None:
-            containerManager = self.__app.containerManager
-            self.__previouslyVisibleLayers = containerManager.getVisibleLayers()
-            containerManager.setVisibleLayers(self._getVisibleLayers())
-        BigWorld.worldDrawEnabled(False)
-        return
-
-    def _showBack(self):
-        BigWorld.worldDrawEnabled(True)
-        if self.__app is not None:
-            self.__app.containerManager.setVisibleLayers(self.__previouslyVisibleLayers)
-        return
-
 
 class SubViewImpl(EventsHandler):
-    __slots__ = ('__viewModel', '__isLoaded', '__parentView')
 
     def __init__(self, viewModel, parentView):
         self.__viewModel = viewModel

@@ -110,8 +110,7 @@ class HangarVehicleInfo(BattleRoyaleVehicleInfoMeta, IGlobalListener):
         super(HangarVehicleInfo, self)._populate()
         self.__battleRoyaleController.onUpdated += self.__onBattleRoyaleEnabledChanged
         self.startGlobalListening()
-        self.as_setDataS({'btnCloseLabel': backport.text(R.strings.battle_royale.hangarVehicleInfo.closeBtn()),
-         'infoIconSource': backport.image(R.images.gui.maps.icons.library.info()),
+        self.as_setDataS({'infoIconSource': backport.image(R.images.gui.maps.icons.library.info()),
          'infoText': text_styles.highlightText(backport.text(R.strings.battle_royale.hangarVehicleInfo.moduleTreeTip(), key=text_styles.neutral(br_helpers.getHotKeyString(CommandMapping.CMD_UPGRADE_PANEL_SHOW)))),
          'vehTitle': text_styles.grandTitle(self.__vehicle.shortUserName),
          'vehTypeIcon': getTypeBigIconPath(self.__vehicle.type),

@@ -9,13 +9,12 @@ from gui.impl.gen import R
 from gui.impl.lobby.platoon.platoon_helpers import getPlatoonBonusState
 from gui.impl.lobby.platoon.view.platoon_welcome_view import WelcomeView
 from gui.impl.lobby.premacc.squad_bonus_tooltip_content import SquadBonusTooltipContent
-from gui.prb_control.entities.listener import IGlobalListener
 from helpers import dependency
 from skeletons.gui.game_control import IComp7Controller, IPlatoonController
 _logger = logging.getLogger(__name__)
 strButtons = R.strings.platoon.buttons
 
-class Comp7WelcomeView(WelcomeView, IGlobalListener):
+class Comp7WelcomeView(WelcomeView):
     __comp7Ctrl = dependency.descriptor(IComp7Controller)
     __platoonCtrl = dependency.descriptor(IPlatoonController)
 
@@ -24,9 +23,6 @@ class Comp7WelcomeView(WelcomeView, IGlobalListener):
 
     def createToolTipContent(self, event, contentID):
         return SquadBonusTooltipContent(battleType=SELECTOR_BATTLE_TYPES.COMP7, bonusState=getPlatoonBonusState(False)) if contentID == R.views.lobby.premacc.tooltips.SquadBonusTooltip() else super(Comp7WelcomeView, self).createToolTipContent(event=event, contentID=contentID)
-
-    def onPrbEntitySwitching(self):
-        self.getParentWindow().destroy()
 
     def _initButtons(self):
         super(Comp7WelcomeView, self)._initButtons()
@@ -45,14 +41,12 @@ class Comp7WelcomeView(WelcomeView, IGlobalListener):
             model.createPlatoonForTwo.onClick += self.__onCreateForTwo
             model.createPlatoonForSeven.onClick += self.__onCreateForSeven
             model.onOutsideClick += self._onOutsideClick
-        self.startGlobalListening()
 
     def _removeListeners(self):
         with self.viewModel.transaction() as model:
             model.createPlatoonForTwo.onClick -= self.__onCreateForTwo
             model.createPlatoonForSeven.onClick -= self.__onCreateForSeven
             model.onOutsideClick -= self._onOutsideClick
-        self.stopGlobalListening()
 
     def _setBattleTypeRelatedProps(self):
         queueType = self.__platoonCtrl.getQueueType()

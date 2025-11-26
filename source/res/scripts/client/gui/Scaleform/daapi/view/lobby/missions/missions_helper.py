@@ -28,7 +28,7 @@ from gui.server_events.cond_formatters.prebattle import MissionsPreBattleConditi
 from gui.server_events.cond_formatters.requirements import AccountRequirementsFormatter, TQAccountRequirementsFormatter
 from gui.server_events.conditions import GROUP_TYPE
 from gui.server_events.event_items import PersonalMission
-from gui.server_events.events_constants import BATTLE_ROYALE_GROUPS_ID, EPIC_BATTLE_GROUPS_ID, FUN_RANDOM_GROUP_ID
+from gui.server_events.events_constants import BATTLE_ROYALE_GROUPS_ID, EPIC_BATTLE_GROUPS_ID
 from gui.server_events.events_helpers import MISSIONS_STATES, QuestInfoModel, AWARDS_PER_SINGLE_PAGE, isMarathon, AwardSheetPresenter, isPremium
 from gui.server_events.formatters import DECORATION_SIZES
 from gui.server_events.personal_progress import formatters
@@ -813,10 +813,6 @@ class _BattleRoyaleDetailedMissionInfo(_EventDailyDetailedMissionInfo, _BattleRo
     pass
 
 
-class _FunRandomDetailedMissionInfo(_DetailedMissionInfo):
-    pass
-
-
 class _RankedDetailedMissionInfo(_DetailedMissionInfo):
     __rankedController = dependency.descriptor(IRankedBattlesController)
 
@@ -1359,8 +1355,6 @@ def getDetailedMissionData(event):
         return _BattleRoyaleDetailedMissionInfo(event)
     elif isRankedQuestID(event.getID()):
         return _RankedDetailedMissionInfo(event)
-    elif event.getGroupID() == FUN_RANDOM_GROUP_ID:
-        return _FunRandomDetailedMissionInfo(event)
     else:
         return _DetailedMissionInfo(event) if event.getType() in constants.EVENT_TYPE.LIKE_BATTLE_QUESTS else None
 
@@ -1407,7 +1401,7 @@ def getMapRegionTooltipData(state, quest):
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def getSuitableVehicles(itemsCache=None):
-    suitableVehs = itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS(list(range(PERSONAL_MISSION_REGULAR_MIN_LEVEL, constants.MAX_VEHICLE_LEVEL + 1))) | REQ_CRITERIA.IN_OWNERSHIP)
+    suitableVehs = itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS(list(range(PERSONAL_MISSION_REGULAR_MIN_LEVEL, constants.MAX_VEHICLE_LEVEL + 1))) | REQ_CRITERIA.IN_OWNERSHIP | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE)
     return suitableVehs
 
 

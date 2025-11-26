@@ -46,6 +46,14 @@ _StrongholdEventConfig.__new__.__defaults__ = ('',
 
 class StrongholdEventConfig(_StrongholdEventConfig, FieldsCheckerMixin):
 
+    @fmtUnavailableValue(fields=('visible_start_date',))
+    def getVisibleStartDate(self):
+        return self.visible_start_date
+
+    @fmtUnavailableValue(fields=('visible_end_date',))
+    def getVisibleEndDate(self):
+        return self.visible_end_date
+
     @fmtUnavailableValue(fields=('event_start_date',))
     def getStartDate(self):
         return self.event_start_date
@@ -68,8 +76,8 @@ class StrongholdEventSettingsData(_StrongholdEventSettingsData, FieldsCheckerMix
     def getEventConfig(self):
         return makeTupleByDict(StrongholdEventConfig, self.event_config)
 
-    def getVisibleStartDate(self):
+    def getStartDate(self):
         return self.getEventConfig().getStartDate()
 
-    def getVisibleEndDate(self):
+    def getEndDate(self):
         return self.getEventConfig().getEndDate()

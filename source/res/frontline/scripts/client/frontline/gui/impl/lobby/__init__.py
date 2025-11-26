@@ -1,3 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/impl/lobby/__init__.py
-pass
+
+
+def getStateMachineRegistrators():
+    from frontline.gui.impl.lobby.states import registerStates, registerTransitions
+    return (registerStates, registerTransitions)
+
+
+def getViewSettings():
+    pass
+
+
+def getBusinessHandlers():
+    pass
+
+
+def getContextMenuHandlers():
+    pass

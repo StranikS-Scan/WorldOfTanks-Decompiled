@@ -10,9 +10,8 @@ import WWISE
 import typing
 from adisp import adisp_async, adisp_process
 from builtins import object, str
-from enum import Enum
 from past.utils import old_div
-from shared_utils import CONST_CONTAINER, BitmaskHelper
+from shared_utils import CONST_CONTAINER
 import constants
 import wg_async as future_async
 from CurrentVehicle import g_currentPreviewVehicle, g_currentVehicle
@@ -53,6 +52,8 @@ from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
 from gui.impl import backport
 from gui.impl.auxiliary.junk_tankman_helper import JunkTankmanHelper
 from gui.impl.gen import R
+from gui.impl.lobby.common.main_menu_utils import TABS as _TABS
+from gui.impl.lobby.common.lobby_header_utils import HeaderMenuVisibilityState, HEADER_BUTTONS_COUNTERS_CHANGED_EVENT, findExtensionTooltip, LobbyHeaderVisibilityAction
 from gui.impl.lobby.exchange.exchange_rates_helper import isGoldExchangeRateDiscountViewed, isExperienceTranslationRateDiscountViewed, setDiscountViewed
 from gui.limited_ui.lui_rules_storage import LUI_RULES
 from gui.platform.base.statuses.constants import StatusTypes
@@ -107,9 +108,7 @@ _SHORT_VALUE_D = 10 ** _SHORT_VALUE_PRECISION
 _SHORT_VALUE_THRESHOLD_1 = 1000000
 _SHORT_VALUE_THRESHOLD_2 = 10000000
 _SHORT_VALUE_FMT_PATTERN = MENU.HANGAR_HEADER_MILLION
-HEADER_BUTTONS_COUNTERS_CHANGED_EVENT = 'lobbyHeaderButtonsCountersChanged'
 _DASHBOARD_SUPPRESSED_VIEWS = [VIEW_ALIAS.BADGES_PAGE]
-_EXT_FIGHT_BUTTON_TOOLTIP_GETTERS = []
 
 def _getShortCurrencyValue(value, formatter):
     if value >= _SHORT_VALUE_THRESHOLD_2:
@@ -133,19 +132,6 @@ def _predicateLobbyTopSubViews(view):
 def _isActiveShopNewCounters():
     newTabCounters = AccountSettings.getCounters(NEW_SHOP_TABS)
     return not all(newTabCounters.values())
-
-
-class HeaderMenuVisibilityState(BitmaskHelper):
-    NOTHING = 0
-    BG_OVERLAY = 1
-    BUTTON_BAR = 2
-    ONLINE_COUNTER = 4
-    ALL = BG_OVERLAY | BUTTON_BAR | ONLINE_COUNTER
-
-
-class LobbyHeaderVisibilityAction(Enum):
-    ENTER = 0
-    EXIT = 1
 
 
 LobbyHeaderTabInfo = namedtuple('LobbyHeaderTabInfo', ('wulfAlias',
@@ -242,22 +228,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
      BUTTONS.WOT_PLUS,
      BUTTONS.PERSONAL_RESERVES_WIDGET)
     RANKED_WELCOME_VIEW_DISABLE_CONTROLS = BUTTONS.ALL()
-
-    class TABS(CONST_CONTAINER):
-        HANGAR = VIEW_ALIAS.LOBBY_HANGAR
-        STORE = VIEW_ALIAS.LOBBY_STORE
-        STORAGE = VIEW_ALIAS.LOBBY_STORAGE
-        PROFILE = VIEW_ALIAS.LOBBY_PROFILE
-        TECHTREE = VIEW_ALIAS.LOBBY_TECHTREE
-        BARRACKS = VIEW_ALIAS.LOBBY_BARRACKS
-        BROWSER = VIEW_ALIAS.BROWSER
-        RESEARCH = VIEW_ALIAS.LOBBY_RESEARCH
-        PERSONAL_MISSIONS = VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS
-        MISSIONS = VIEW_ALIAS.LOBBY_MISSIONS
-        STRONGHOLD = VIEW_ALIAS.LOBBY_STRONGHOLD
-        PERSONAL_MISSIONS_PAGE = VIEW_ALIAS.PERSONAL_MISSIONS_PAGE
-        TOURNAMENTS = VIEW_ALIAS.LOBBY_TOURNAMENTS
-
+    TABS = _TABS
     ACCOUNT_SETTINGS_COUNTERS = (TABS.STORE,)
     DESELECT_TAB_ALIASES = (VIEW_ALIAS.WIKI_VIEW, R.views.lobby.maps_training.MapsTrainingPage())
     _WULF_TO_TAB = {R.views.lobby.crew.BarracksView(): TABS.BARRACKS,
@@ -505,8 +476,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             buttonsToExclude.append(self.BUTTONS.WOT_PLUS)
         if not self.__limitedUICtrl.isRuleCompleted(LUI_RULES.PersonalReservesHangarButton):
             buttonsToExclude.append(self.BUTTONS.PERSONAL_RESERVES_WIDGET)
-        if not self.__battleRoyaleController.isSquadButtonEnabled():
-            buttonsToExclude.append(self.BUTTONS.SQUAD)
         if buttonsToExclude != self.__buttonsToExcludeCached:
             self.__buttonsToExcludeCached = buttonsToExclude
             self.as_setHeaderButtonsS(self._getAvailableButtons(buttonsToExclude))
@@ -1108,7 +1077,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             prbEntity, prbDispatcher = self.prbEntity, self.prbDispatcher
             if prbDispatcher is None or prbEntity is None:
                 return
-            controlsHelper = self.__hangarGuiCtrl.getLobbyHeaderHelper()
+            controlsHelper = self.__hangarGuiCtrl.currentGuiProvider.getLobbyHeaderHelper()
             pFuncState = prbDispatcher.getFunctionalState()
             pValidation = prbEntity.canPlayerDoAction()
             isNavigationEnabled = not pFuncState.isNavigationDisabled()
@@ -1644,7 +1613,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             if g_currentVehicle.isOnlyForEpicBattles() and (g_currentVehicle.isUnsuitableToQueue() or g_currentVehicle.isDisabledInRent()):
                 tooltip = getEpicBattlesOnlyVehicleTooltipData(pValidation)
             else:
-                tooltip = self.__findExtensionTooltip(pValidation)
+                tooltip = findExtensionTooltip(pValidation)
             if tooltip is None and g_currentPreviewVehicle.isPresent():
                 tooltip = getPreviewTooltipData()
         if not tooltip and controlsHelper is not None:
@@ -1652,14 +1621,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.as_setFightBtnTooltipS(tooltip, isSpecial)
         self.as_setFightButtonS(selectedItem.getFightButtonLabel(pFuncState, pInfo))
         self.as_setFightButtonHighlightS(selectedItem.getFightButtonHighlight(isNewbie))
-        return
-
-    def __findExtensionTooltip(self, pValidation):
-        for getter in _EXT_FIGHT_BUTTON_TOOLTIP_GETTERS:
-            tooltip = getter(pValidation)
-            if tooltip is not None:
-                return tooltip
-
         return
 
 

@@ -19,12 +19,17 @@ class AccountStyles(IAccountStyles):
 
     def __init__(self):
         self.__styleCriteria = None
+        self.__vehiclesWith3Dstyles = set()
         self.onChanged = Event.Event()
         return
 
     @property
-    def critera(self):
+    def criteria(self):
         return self.__styleCriteria
+
+    @property
+    def vehiclesWith3DStyles(self):
+        return self.__vehiclesWith3Dstyles
 
     def initialize(self):
         self.__updateCriteria()
@@ -34,6 +39,7 @@ class AccountStyles(IAccountStyles):
         self.onChanged.clear()
         self._itemsCache.onSyncCompleted -= self.__onCacheResync
         self.__styleCriteria = None
+        self.__vehiclesWith3Dstyles = set()
         return
 
     def recalculate(self):
@@ -41,7 +47,14 @@ class AccountStyles(IAccountStyles):
         self.onChanged()
 
     def __updateCriteria(self):
-        self.__styleCriteria = REQ_CRITERIA.VEHICLE.CAN_INSTALL_C11N(GUI_ITEM_TYPE.STYLE, REQ_CRITERIA.CUSTOMIZATION.ON_ACCOUNT, items=take3DStyles(self._customizationService))
+        self.__vehiclesWith3Dstyles = set()
+        styles3D = take3DStyles(self._customizationService)
+        for style in styles3D:
+            if style.fullCount():
+                for vehFilter in style.descriptor.filter.include:
+                    self.__vehiclesWith3Dstyles.update(vehFilter.vehicles)
+
+        self.__styleCriteria = REQ_CRITERIA.VEHICLE.CAN_INSTALL_C11N(GUI_ITEM_TYPE.STYLE, REQ_CRITERIA.CUSTOMIZATION.ON_ACCOUNT, items=styles3D)
 
     def __onCacheResync(self, reason, diff):
         if reason in UPDATES and GUI_ITEM_TYPE.CUSTOMIZATION in diff:

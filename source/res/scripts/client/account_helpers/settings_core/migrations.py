@@ -1433,8 +1433,20 @@ def _migrateTo148(core, data, initialized):
 
 
 def _migrateTo149(core, data, initialized):
-    from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS, SETTINGS_SECTIONS
-    data[SETTINGS_SECTIONS.UI_STORAGE_2][UI_STORAGE_KEYS.ONE_TIME_GIFT_INTRO_SHOWN] = False
+    pass
+
+
+def _migrateTo150(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    clear = data['clear']
+    hintsToClear = {('onceOnlyHints', _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.ONCE_ONLY_HINTS, 0)): (7,),
+     ('onceOnlyHints2', _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.ONCE_ONLY_HINTS_2, 0)): (9, 24)}
+    for sectionData, hintsPositions in hintsToClear.items():
+        section, sectionValue = sectionData
+        for bitPosition in hintsPositions:
+            settingOffset = 1 << bitPosition
+            if sectionValue & settingOffset:
+                clear[section] = clear.get(section, 0) | settingOffset
 
 
 _versions = ((1,
@@ -2027,6 +2039,10 @@ _versions = ((1,
   False),
  (149,
   _migrateTo149,
+  False,
+  False),
+ (150,
+  _migrateTo150,
   False,
   False))
 

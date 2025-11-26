@@ -490,7 +490,7 @@ class MainView(ViewImpl):
             isInstalled = isVehDetailInstalled(self.__lastInstalledDetail, vehDetails[detailIndex][0])
             detailModel = operationModel.getDetailsType()()
             totalPoints = operationModel.getValue()
-            status, earnedPoints = self.__getDetailStatus(minDetailPoints, maxDetailPointRelativeProgression, totalPoints, isInstalled, operation)
+            status, earnedPoints = self.__getDetailStatus(minDetailPoints, maxDetailPointRelativeProgression, totalPoints, isInstalled, operation, detailIndex)
             detailModel.setMaxPoint(maxDetailPoints)
             detailModel.setStatus(status)
             detailModel.setEarnedPoint(earnedPoints)
@@ -644,13 +644,18 @@ class MainView(ViewImpl):
         mainModel.status.setCurrentOperationName(self.__operation.getUserName())
         mainModel.status.setOperationIdToPerform(nextOperationID)
 
-    def __getDetailStatus(self, minDetailPoints, maxDetailPoints, totalPoints, isInstalled, operation):
+    def __getDetailStatus(self, minDetailPoints, maxDetailPoints, totalPoints, isInstalled, operation, detailIndex):
         status = DetailStatus.DEFAULT
         earnedPoints = 0
         if totalPoints >= maxDetailPoints or operation.isCompleted():
-            status = DetailStatus.DONE if isInstalled or operation.isCompleted() else DetailStatus.NOT_RECEIVED
+            if detailIndex == MAX_DETAIL_ID - 1 and not operation.getPM3RewardQuest().isCompleted():
+                status = DetailStatus.IN_PROGRESS
+            elif (isInstalled or operation.isCompleted()) and not (detailIndex == MAX_DETAIL_ID - 1 and not operation.isCompleted() and isInstalled):
+                status = DetailStatus.DONE
+            else:
+                status = DetailStatus.NOT_RECEIVED
             earnedPoints = maxDetailPoints - minDetailPoints
-        elif totalPoints in range(minDetailPoints, maxDetailPoints):
+        elif minDetailPoints <= totalPoints < maxDetailPoints:
             status = DetailStatus.IN_PROGRESS
             earnedPoints = totalPoints - minDetailPoints
         return (status, earnedPoints)
@@ -670,6 +675,7 @@ class MainView(ViewImpl):
         operationIsPaused = self.__operation.isPaused()
         operationIsInProgress = self.__operation.isInProgress()
         isAnotherOperationActive = any((operation.isActive() for operation in notCurrentOperations))
+        selectedQuests = self.__eventsCache.getPersonalMissions().getSelectedQuestsForBranch(self.__operation.getBranch()).values()
         if all((operation.isFullCompleted() for operation in operations)):
             state = OperationStatus.CAMPAIGN_FINISHED
         elif unclaimedOperation is not None and unclaimedOperation.getID() < self.__operation.getID():
@@ -701,7 +707,7 @@ class MainView(ViewImpl):
                 nextOperationID = nextNotStartedOperation.getID()
             elif operationIsInProgress:
                 state = OperationStatus.ACTIVE
-        elif operationIsPaused or operationWasStarted and isAnotherOperationActive:
+        elif operationIsPaused or operationWasStarted and (isAnotherOperationActive or not selectedQuests):
             state = OperationStatus.PAUSED
         elif operationIsInProgress:
             state = OperationStatus.ACTIVE

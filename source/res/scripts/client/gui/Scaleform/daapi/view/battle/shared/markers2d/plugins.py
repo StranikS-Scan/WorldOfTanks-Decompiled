@@ -601,19 +601,24 @@ class EquipmentsMarkerPlugin(MarkerPlugin):
         return settings.MARKER_SYMBOL_NAME.EQUIPMENT_MARKER
 
     def __onEquipmentMarkerShown(self, item, position, _, delay, team=None):
-        markerID = self._createMarkerWithPosition(self._getMarkerLinkage(item), position + settings.MARKER_POSITION_ADJUSTMENT)
-        arenaDP = self.sessionProvider.getArenaDP()
-        if team is None or arenaDP is None or arenaDP.isAllyTeam(team):
-            marker = item.getMarker()
-            markerColor = item.getMarkerColor()
+        if not item.showMarker():
+            return
         else:
-            marker = item.getEnemyMarker()
-            markerColor = item.getEnemyMarkerColor()
-        self._invokeMarker(markerID, 'init', marker, _EQUIPMENT_DELAY_FORMAT.format(round(delay)), self.__defaultPostfix, markerColor)
-        self.__setCallback(item, markerID, BigWorld.serverTime() + delay)
-        return
+            markerID = self._createMarkerWithPosition(self._getMarkerLinkage(item), position + settings.MARKER_POSITION_ADJUSTMENT)
+            arenaDP = self.sessionProvider.getArenaDP()
+            if team is None or arenaDP is None or arenaDP.isAllyTeam(team):
+                marker = item.getMarker()
+                markerColor = item.getMarkerColor()
+            else:
+                marker = item.getEnemyMarker()
+                markerColor = item.getEnemyMarkerColor()
+            self._invokeMarker(markerID, 'init', marker, _EQUIPMENT_DELAY_FORMAT.format(round(delay)), self.__defaultPostfix, markerColor)
+            self.__setCallback(item, markerID, BigWorld.serverTime() + delay)
+            return
 
     def __onEquipmentMarkerHide(self, item):
+        if not item.showMarker():
+            return
         if item not in self.__callbackIDs:
             return
         markerID, _ = self.__callbackIDs[item]

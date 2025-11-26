@@ -3729,6 +3729,63 @@
       </damage>
     </armorSpalls>
   </_122mm_SB-57I>
+  <_122mm_CB-57I_CFE_A>
+    <id>	193	</id>
+    <userString>	#china_vehicles:_122mm_CB-57I_CFE_A	</userString>
+    <icon>	ap	</icon>
+    <price>	1215	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	122	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_122mm_CB-57I_CFE_A>
+  <_122mm_PO-57I_CFE_A>
+    <id>	194	</id>
+    <userString>	#china_vehicles:_122mm_PO-57I_CFE_A	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	5200	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	122	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_122mm_PO-57I_CFE_A>
+  <_122mm_SB-57I_CFE_A>
+    <id>	195	</id>
+    <userString>	#china_vehicles:_122mm_SB-57I_CFE_A	</userString>
+    <icon>	he_modern	</icon>
+    <price>	608	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	122	</caliber>
+    <explosionRadius>	2.49	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	530	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.49	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	265	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
+  </_122mm_SB-57I_CFE_A>
   <_122mm_CB-472T>
     <id>	181	</id>
     <userString>	#china_vehicles:_122mm_CB-472T	</userString>
@@ -4947,7 +5004,7 @@
     <id>	169	</id>
     <userString>	#china_vehicles:_180mm_Chuan_bei_572	</userString>
     <icon>	ap	</icon>
-    <price>	2278	</price>
+    <price>	2176	</price>
     <kind>	ARMOR_PIERCING	</kind>
     <caliber>	180	</caliber>
     <isTracer>	true	</isTracer>
@@ -5057,6 +5114,63 @@
       </damage>
     </armorSpalls>
   </_130mm_59_TP_A_OF_46>
+  <_122mm_CB_472_Y>
+    <id>	185	</id>
+    <userString>	#china_vehicles:_122mm_CB_472_Y	</userString>
+    <icon>	ap	</icon>
+    <price>	994	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	122	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_122mm_CB_472_Y>
+  <_122mm_PO_122_Y>
+    <id>	186	</id>
+    <userString>	#china_vehicles:_122mm_PO_122_Y	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	5600	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	122	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_122mm_PO_122_Y>
+  <_122mm_SB_472_Y>
+    <id>	180	</id>
+    <userString>	#china_vehicles:_122mm_SB_472_Y	</userString>
+    <icon>	he_modern	</icon>
+    <price>	596	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	122	</caliber>
+    <explosionRadius>	2.49	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	530	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.49	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	265	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
+  </_122mm_SB_472_Y>
   <Development_Shell>
     <id>	65000	</id>
     <userString>	Development_Shell	</userString>

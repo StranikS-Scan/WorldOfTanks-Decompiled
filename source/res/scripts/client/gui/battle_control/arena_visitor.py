@@ -342,9 +342,6 @@ class _ArenaBonusTypeVisitor(IArenaVisitor):
     def hasRage(self):
         return self.hasAnyBonusCap(_CAPS.RAGE_MECHANICS)
 
-    def hasRespawns(self):
-        return self.hasAnyBonusCap(_CAPS.RESPAWN)
-
     def isSquadSupported(self):
         return self.hasAnyBonusCap(_CAPS.SQUADS)
 
@@ -555,7 +552,7 @@ class _ClientArenaVisitor(IClientArenaVisitor):
         return self._bonus.hasRage()
 
     def hasRespawns(self):
-        return self._bonus.hasRespawns() or self.isEnableExternalRespawn()
+        return self.isEnableExternalRespawn()
 
     def isEnableExternalRespawn(self):
         ownVehicle = BigWorld.entities.get(BigWorld.player().playerVehicleID, None)

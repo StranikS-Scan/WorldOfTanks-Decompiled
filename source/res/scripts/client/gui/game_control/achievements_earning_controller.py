@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/achievements_earning_controller.py
-import logging
 import typing
 import BigWorld
 from constants import IS_DEVELOPMENT
@@ -28,7 +27,6 @@ from skeletons.gui.system_messages import ISystemMessages
 if typing.TYPE_CHECKING:
     from typing import Optional, Generator, List, Tuple
     from advanced_achievements_client.items import _BaseGuiAchievement
-_logger = logging.getLogger(__name__)
 
 class Achievements20EarningController(IAchievements20EarningController):
     __slots__ = ('__commandQueueManager', '__commandBuilder')
@@ -45,7 +43,6 @@ class Achievements20EarningController(IAchievements20EarningController):
         super(Achievements20EarningController, self).__init__()
         self.__commandQueueManager = CommandQueueManager()
         self.__commandBuilder = CommandBuilder()
-        self.__locks = set()
 
     def onLobbyInited(self, event):
         self.__addControllerListeners()
@@ -58,27 +55,9 @@ class Achievements20EarningController(IAchievements20EarningController):
     def onDisconnected(self):
         self.__stop()
 
-    def lock(self, key):
-        _logger.info('Achievement earning is locked, key = %s', key)
-        self.__locks.add(key)
-        self.pause()
-
-    def unlock(self, key):
-        _logger.info('Achievement earning is unlocked, key = %s', key)
-        if key not in self.__locks:
-            _logger.warning('Key %s is not present in locks')
-            return
-        self.__locks.remove(key)
-        if not self.__locks:
-            self.__tryProceed()
-
-    def hasLock(self, key):
-        return key in self.__locks
-
     def __stop(self):
         self.__removeFlowListeners()
         self.__clearQueue()
-        self.__locks.clear()
 
     def __clearQueue(self):
         if self.__commandQueueManager is not None:
@@ -101,15 +80,12 @@ class Achievements20EarningController(IAchievements20EarningController):
 
     def __onWindowStatusChanged(self, _, newStatus):
         if newStatus in (WindowStatus.LOADING, WindowStatus.LOADED, WindowStatus.DESTROYING):
-            self.__tryProceed()
-
-    def __tryProceed(self):
-        isEarningLockedByLayer = self.__isEarningLockedByLayer()
-        isEarningLockedByView = self.__isEarningLockedByViews()
-        if isEarningLockedByLayer or isEarningLockedByView or self.__locks:
-            self.pause()
-        else:
-            self.resume()
+            isEarningLockedByLayer = self.__isEarningLockedByLayer()
+            isEarningLockedByView = self.__isEarningLockedByViews()
+            if isEarningLockedByLayer or isEarningLockedByView:
+                self.pause()
+            else:
+                self.resume()
 
     def __isEarningLockedByLayer(self):
         windowsManager = self.__guiLoader.windowsManager
@@ -147,7 +123,6 @@ class Achievements20EarningController(IAchievements20EarningController):
         self.__removeControllerListeners()
         self.__commandBuilder = None
         self.__commandQueueManager = None
-        self.__locks = None
         return
 
     def pause(self):
@@ -300,9 +275,10 @@ class CommandBuilder(object):
             root.append(self._createEarningAnimationCommand(receiver, achievementsData))
         root.append(self._createTimeStampUpdateCommand(receiver, achievementsData))
         root.append(self._createNotificationCommand(receiver, achievementsData))
-        rewardScreenCommand = self._createRewardScreenCommand(receiver, achievementsData)
-        if rewardScreenCommand:
-            root.append(rewardScreenCommand)
+        if self.__limitedUICtrl.isRuleCompleted(LUI_RULES.AdvancedAchievements):
+            rewardScreenCommand = self._createRewardScreenCommand(receiver, achievementsData)
+            if rewardScreenCommand:
+                root.append(rewardScreenCommand)
         return root
 
 

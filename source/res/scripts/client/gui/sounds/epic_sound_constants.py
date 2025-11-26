@@ -26,6 +26,14 @@ class EPIC_METAGAME_WWISE_SOUND_EVENTS(object):
 
 
 class EPIC_SOUND(object):
+    HANGAR = 'frontline_hangar'
+    GAMEMODE_GROUP = 'STATE_gamemode'
+    GAMEMODE_STATE = 'STATE_gamemode_frontline'
+    GAMEMODE_DEFAULT = 'STATE_gamemode_default'
+    PROGRESS_PAGE_ENTER = 'eb_ambient_progress_page_enter'
+    PROGRESS_PAGE_EXIT = 'eb_ambient_progress_page_exit'
+    GUI_REWARD_SCREEN = 'gui_reward_screen_general'
+    GUI_MAIN_AWARD = 'gui_hangar_reward_main_icon'
     EPIC_MSG_SOUNDS_ENABLED = True
     BF_EB_EQUIPMENT_SOUND_LIST = ('INSPIRE', 'ARTILLERY', 'RECON', 'BOMBER')
     EB_READY_FOR_DEPLOYMENT = 'eb_ready_for_deployment'

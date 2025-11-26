@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/prb_control/entities/squad/ctx.py
+from __future__ import absolute_import
 from constants import PREBATTLE_TYPE
 from fun_random.gui.fun_gui_constants import REQUEST_TYPE, FUNCTIONAL_FLAG
 from gui.prb_control.entities.base.squad.ctx import SquadSettingsCtx

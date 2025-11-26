@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/Scaleform/daapi/view/lobby/battle_queue.py
+from __future__ import absolute_import
 from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin, FunSubModesWatcher
 from fun_random.gui.feature.util.fun_wrappers import hasDesiredSubMode
 from gui.Scaleform.daapi.view.lobby.battle_queue.battle_queue import RandomQueueProvider
@@ -8,7 +9,7 @@ from gui.impl import backport
 class FunRandomQueueProvider(RandomQueueProvider, FunAssetPacksMixin, FunSubModesWatcher):
 
     def getIconPath(self, iconlabel):
-        return backport.image(self.getModeIconsResRoot().battle_type.c_136x136.fun_random())
+        return backport.image(self.getModeIconsResRoot().battleTypes.c_136x136.fun_random())
 
     def getTitle(self, guiType):
         return self.__getTitle() or self.getModeUserName()

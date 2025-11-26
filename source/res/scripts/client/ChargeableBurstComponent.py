@@ -8,7 +8,7 @@ from vehicles.mechanics.mechanic_states import IMechanicState, IMechanicStatesCo
 if typing.TYPE_CHECKING:
     from items.vehicles import VehicleDescriptor
 
-class ChargeableBurstModeState(namedtuple('ChargeableBurstModeState', ('isBurstActive', 'charges', 'shoots', 'penetrationCount', 'burstCount')), IMechanicState):
+class ChargeableBurstModeState(namedtuple('ChargeableBurstModeState', ('isBurstActive', 'charges', 'shots', 'penetrationCount', 'burstCount')), IMechanicState):
 
     def isTransition(self, other):
         return self.isBurstActive != other.isBurstActive
@@ -28,7 +28,7 @@ class ChargeableBurstComponent(VehicleDynamicComponent, IMechanicStatesComponent
         return self.__statesEvents
 
     def getMechanicState(self):
-        return ChargeableBurstModeState(self.isBurstActive, self.charges, self.shoots, self.__penetrationCount, self.__burstCount)
+        return ChargeableBurstModeState(self.isBurstActive, self.charges, self.shots, self.__penetrationCount, self.__burstCount)
 
     def onDestroy(self):
         self.__statesEvents.destroy()
@@ -38,26 +38,21 @@ class ChargeableBurstComponent(VehicleDynamicComponent, IMechanicStatesComponent
         typeDescriptor = self.entity.typeDescriptor
         mechanicParams = typeDescriptor.mechanicsParams[ChargeableBurstParams.MECHANICS_NAME]
         self.__penetrationCount = mechanicParams.penetrationCount
-        self.__burstCount, _ = typeDescriptor.gun.burst
+        self.__burstCount, _, _ = typeDescriptor.gun.burst
         self.__statesEvents.processStatePrepared()
         super(ChargeableBurstComponent, self)._onAppearanceReady()
-
-    def _onComponentAvatarUpdate(self, player):
-        if self.entity.isDestroyed:
-            return
-        ammoCtrl = self.entity.guiSessionProvider.shared.ammo
-        ammoCtrl.setBurstActive(self.isBurstActive)
 
     def _onComponentAppearanceUpdate(self):
         mechanicState = self.getMechanicState()
         self.__statesEvents.updateMechanicState(mechanicState)
+        ammoCtrl = self.entity.guiSessionProvider.shared.ammo
+        ammoCtrl.setChargeableBurstState(mechanicState)
 
     def set_charges(self, prev):
         self._updateComponentAppearance()
 
-    def set_shoots(self, prev):
+    def set_shots(self, prev):
         self._updateComponentAppearance()
 
     def set_isBurstActive(self, prev):
-        self._updateComponentAvatar()
         self._updateComponentAppearance()

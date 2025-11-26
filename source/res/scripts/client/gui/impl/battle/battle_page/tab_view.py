@@ -8,6 +8,7 @@ import VOIP
 from PlayerEvents import g_playerEvents
 from account_helpers.settings_core import settings_constants
 from commendations_common.CommendationHelpers import CommendationsSource
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_WARNING
 from gui.battle_control import avatar_getter
 from gui.doc_loaders.badges_loader import getSelectedByLayout
 from gui.impl import backport
@@ -217,11 +218,18 @@ class TabView(ViewImpl):
     def _fillPlayerListModel(self, playerList, playerInfo):
         playerList.clear()
         playerList.reserve(len(playerInfo))
-        for index, player in enumerate(playerInfo):
-            playerList.addViewModel(player)
-            self.__playerIndexes[player.getVehicleId()] = index
+        try:
+            try:
+                for index, player in enumerate(playerInfo):
+                    playerList.addViewModel(player)
+                    self.__playerIndexes[player.getVehicleId()] = index
 
-        playerList.invalidate()
+            except AttributeError:
+                LOG_ERROR(self._addStateForLogging('Exception while filling player list model. len(playerInfo)=%s' % len(playerInfo)), stack=True)
+                LOG_CURRENT_EXCEPTION()
+
+        finally:
+            playerList.invalidate()
 
     def __setBattlePlayer(self, vehicleId, player):
         if vehicleId not in self.__playerIndexes:
@@ -252,6 +260,8 @@ class TabView(ViewImpl):
         for vehicleId, vehicleInfo in self._visitor.getArenaVehicles().iteritems():
             self._updateSquadFinder(vehicleId, vehicleInfo)
             player = self._fillPlayerModel(vehicleId, vehicleInfo)
+            if player is None:
+                continue
             if self._isAlly(vehicleInfo):
                 allies.append(player)
             enemies.append(player)
@@ -259,6 +269,7 @@ class TabView(ViewImpl):
         with self.viewModel.transaction() as model:
             self._fillPlayerListModel(model.playerList.getAllies(), sorted(allies, key=_playerCompositionKey))
             self._fillPlayerListModel(model.playerList.getEnemies(), sorted(enemies, key=_playerCompositionKey))
+        return
 
     def _onVehicleUpdated(self, vehicleId):
         if vehicleId not in self.__playerIndexes:
@@ -322,8 +333,11 @@ class TabView(ViewImpl):
         with self.viewModel.transaction():
             vehicleInfo = self._getVehicleInfo(vehicleId)
             player = self._fillPlayerModel(vehicleId, vehicleInfo)
+            if player is None:
+                return
             playerList = self._getPlayerList(vehicleInfo)
             self._resortPlayerList(playerList, [player])
+        return
 
     def _resortPlayerList(self, playerModelArray, playersToAdd=None):
         playerModelList = [ battlePlayer for battlePlayer in playerModelArray ]
@@ -335,25 +349,27 @@ class TabView(ViewImpl):
     def _fillPlayerModel(self, vehicleId, vehicleInfo):
         playerVehicleID = avatar_getter.getPlayerVehicleID()
         if not playerVehicleID:
-            return
-        player = BattlePlayer()
-        player.setVehicleId(vehicleId)
-        isCurrentPlayer = playerVehicleID == vehicleId
-        player.setIsCurrentPlayer(isCurrentPlayer)
-        self._invalidatePlatoonInfo(player)
-        self._invalidatePersonalInfo(player)
-        self._invalidateVehicleTypeInfo(player)
-        self._invalidateVehicleStatus(player)
-        self._invalidateDenunciationInfo(player, vehicleInfo['accountDBID'])
-        self._invalidateVehicleStats(player)
-        self._invalidateCommendationState(player)
-        isAnonymized = self.anonymizerController.isAnonymized
-        if isCurrentPlayer:
-            self.viewModel.playerList.setIsAnonymized(isAnonymized)
-            player.setIsFakeNameVisible(isAnonymized)
-            self.viewModel.playerList.setHasClan(bool(vehicleInfo['clanAbbrev']))
-            player.setAnonymizerTooltip(backport.text(self._getAnonymizerTooltipContent(player)(), fakeName=vehicleInfo['fakeName']))
-        return player
+            LOG_WARNING(self._addStateForLogging('Can not create model for vehicle=%s. Avatar not available.' % vehicleId), stack=True)
+            return None
+        else:
+            player = BattlePlayer()
+            player.setVehicleId(vehicleId)
+            isCurrentPlayer = playerVehicleID == vehicleId
+            player.setIsCurrentPlayer(isCurrentPlayer)
+            self._invalidatePlatoonInfo(player)
+            self._invalidatePersonalInfo(player)
+            self._invalidateVehicleTypeInfo(player)
+            self._invalidateVehicleStatus(player)
+            self._invalidateDenunciationInfo(player, vehicleInfo['accountDBID'])
+            self._invalidateVehicleStats(player)
+            self._invalidateCommendationState(player)
+            isAnonymized = self.anonymizerController.isAnonymized
+            if isCurrentPlayer:
+                self.viewModel.playerList.setIsAnonymized(isAnonymized)
+                player.setIsFakeNameVisible(isAnonymized)
+                self.viewModel.playerList.setHasClan(bool(vehicleInfo['clanAbbrev']))
+                player.setAnonymizerTooltip(backport.text(self._getAnonymizerTooltipContent(player)(), fakeName=vehicleInfo['fakeName']))
+            return player
 
     def _isSquadMember(self, memberVehID, prebattleId):
         vehInfo = self._getVehicleInfo(memberVehID)
@@ -780,3 +796,8 @@ class TabView(ViewImpl):
     def _timeTillNextPersonalReserveTick(self):
         expiringReserves = self._boostersStateProvider.getBoosters(REQ_CRITERIA.BOOSTER.LIMITED).values()
         return generatePersonalReserveTick(expiringReserves)
+
+    def _addStateForLogging(self, msg):
+        extMsg = ' [StateData]: playerIndexes: %s, battlePeriod: %s'
+        extMsg = extMsg % (self.__playerIndexes, getattr(self.arena, 'period', -1))
+        return msg + extMsg

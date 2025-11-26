@@ -1,0 +1,20 @@
+<LaPingerComponent.def>
+  <CellMethods></CellMethods>
+  <BaseMethods>
+    <tillICanGetMySatisfaction>
+      <Arg>	PYTHON	</Arg>
+    </tillICanGetMySatisfaction>
+  </BaseMethods>
+  <ClientMethods>
+    <pingMeAndThenJustTouchMe>
+      <Arg>	STRING	</Arg>
+      <Arg>	UINT16	</Arg>
+      <Arg>	DB_ID	</Arg>
+      <Arg>	UINT16	</Arg>
+      <Arg>	UINT32	</Arg>
+    </pingMeAndThenJustTouchMe>
+  </ClientMethods>
+  <ofEntity>
+    <Account></Account>
+  </ofEntity>
+</LaPingerComponent.def>

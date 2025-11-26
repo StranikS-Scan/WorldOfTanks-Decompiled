@@ -42,13 +42,12 @@ class StatsComposer(IBattleResultStatsCtrl):
     def getVO(self):
         return self._block.getVO()
 
+    def onResultsPosted(self, arenaUniqueID):
+        event_dispatcher.notifyBattleResultsPosted(arenaUniqueID)
+
     @staticmethod
     def onShowResults(arenaUniqueID):
         return event_dispatcher.showBattleResultsWindow(arenaUniqueID)
-
-    @staticmethod
-    def onResultsPosted(arenaUniqueID):
-        event_dispatcher.notifyBattleResultsPosted(arenaUniqueID)
 
     def _registerTabs(self, reusable):
         self._block.addNextComponent(templates.REGULAR_TABS_BLOCK.clone())
@@ -132,16 +131,15 @@ class MapsTrainingStatsComposer(IBattleResultStatsCtrl):
     def getVO(self):
         return self._block.getVO()
 
-    @staticmethod
-    def onShowResults(arenaUniqueID):
-        MapsTrainingStatsComposer._fromNotifications.add(arenaUniqueID)
-
-    @staticmethod
-    def onResultsPosted(arenaUniqueID):
+    def onResultsPosted(self, arenaUniqueID):
         isFromNotifications = arenaUniqueID in MapsTrainingStatsComposer._fromNotifications
         event_dispatcher.showMapsTrainingResultsWindow(arenaUniqueID, isFromNotifications)
         if isFromNotifications:
             MapsTrainingStatsComposer._fromNotifications.remove(arenaUniqueID)
+
+    @staticmethod
+    def onShowResults(arenaUniqueID):
+        MapsTrainingStatsComposer._fromNotifications.add(arenaUniqueID)
 
 
 registerBattleResultStatsCtrl(ARENA_BONUS_TYPE.EPIC_BATTLE, EpicStatsComposer)

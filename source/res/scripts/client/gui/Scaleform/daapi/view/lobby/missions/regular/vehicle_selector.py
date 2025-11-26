@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/regular/vehicle_selector.py
 from account_helpers.AccountSettings import MISSION_SELECTOR_FILTER, AccountSettings
+from gui.filters.carousel_filter import CarouselFilter, EventCriteriesGroup
 from gui.Scaleform import getButtonsAssetPath
 from gui.Scaleform.daapi.view.lobby.missions.vehicle_selector import MissionVehicleSelector, MissionVehicleSelectorCarousel, SelectorCriteriesGroup
-from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import CarouselFilter, EventCriteriesGroup
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.TANK_CAROUSEL_FILTER import TANK_CAROUSEL_FILTER

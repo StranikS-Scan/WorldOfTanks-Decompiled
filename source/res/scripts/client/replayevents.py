@@ -12,6 +12,10 @@ class _ReplayEvents(object):
     def isRecording(self):
         return self.__isRecording
 
+    @property
+    def isTimeWarp(self):
+        return self.__isTimeWarp
+
     def __init__(self):
         self.onTimeWarpStart = Event.Event()
         self.onTimeWarpFinish = Event.Event()
@@ -22,12 +26,21 @@ class _ReplayEvents(object):
         self.onReplayTerminated = Event.Event()
         self.__isPlaying = False
         self.__isRecording = False
+        self.__isTimeWarp = False
+        self.onTimeWarpStart += self.__onTimeWarpStart
+        self.onTimeWarpFinish += self.__onTimeWarpFinish
 
     def onRecording(self):
         self.__isRecording = True
 
     def onPlaying(self):
         self.__isPlaying = True
+
+    def __onTimeWarpStart(self):
+        self.__isTimeWarp = True
+
+    def __onTimeWarpFinish(self):
+        self.__isTimeWarp = False
 
 
 g_replayEvents = _ReplayEvents()

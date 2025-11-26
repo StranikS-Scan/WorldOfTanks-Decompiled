@@ -45,6 +45,8 @@
     <AVDS_1790_2D>	43	</AVDS_1790_2D>
     <AVDS_1790M>	44	</AVDS_1790M>
     <MB_837C>	45	</MB_837C>
+    <MB_833_Ka_500>	46	</MB_833_Ka_500>
+    <MB_838_CaM_500A>	48	</MB_838_CaM_500A>
     <V_2_34_modificato_ter>	2000	</V_2_34_modificato_ter>
     <SPA_15T_M41_S>	2001	</SPA_15T_M41_S>
     <SPA_15TB_M41_S>	2002	</SPA_15TB_M41_S>
@@ -803,6 +805,23 @@
       <rpm_min>	320	</rpm_min>
       <rpm_max>	2240	</rpm_max>
     </Mitsubishi_10ZF>
+    <MB_833_Ka_500>
+      <userString>	#italy_vehicles:MB_833_Ka_500	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	90000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_mtu_mb_838_PC	</wwsoundPC>
+      <wwsoundNPC>	eng_mtu_mb_838_NPC	</wwsoundNPC>
+      <power>	630	</power>
+      <weight>	1500	</weight>
+      <maxHealth>	310	</maxHealth>
+      <maxRegenHealth>	155	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	335	</rpm_min>
+      <rpm_max>	2195	</rpm_max>
+    </MB_833_Ka_500>
     <Daimler_Benz_Typ_MB_838>
       <userString>	#italy_vehicles:Daimler_Benz_Typ_MB_838	</userString>
       <tags>	diesel	</tags>
@@ -854,6 +873,23 @@
       <rpm_min>	235	</rpm_min>
       <rpm_max>	2495	</rpm_max>
     </MTU_MB_838_Ca_M_500>
+    <MB_838_CaM_500A>
+      <userString>	#italy_vehicles:MB_838_CaM_500A	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	120000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_mtu_mb_838_PC	</wwsoundPC>
+      <wwsoundNPC>	eng_mtu_mb_838_NPC	</wwsoundNPC>
+      <power>	950	</power>
+      <weight>	1700	</weight>
+      <maxHealth>	345	</maxHealth>
+      <maxRegenHealth>	173	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	200	</rpm_min>
+      <rpm_max>	2600	</rpm_max>
+    </MB_838_CaM_500A>
     <MTU_MB_837_Ba_500A>
       <userString>	#italy_vehicles:MTU_MB_837_Ba_500A	</userString>
       <tags>	diesel	</tags>

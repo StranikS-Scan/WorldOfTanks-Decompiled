@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/feature/util/fun_helpers.py
+from __future__ import absolute_import
 import typing
+from future.utils import viewitems
 from fun_random.gui.feature.fun_constants import FEP_PROGRESSION_TRIGGER_QUEST_ID, FEP_PROGRESSION_ALT_TRIGGER_QUEST_ID, FEP_PROGRESSION_UNLIMITED_TRIGGER_QUEST_ID, FEP_PROGRESSION_UNLIMITED_ALT_TRIGGER_QUEST_ID, FEP_PROGRESSION_COUNTER_ID, FEP_PROGRESSION_UNLIMITED_COUNTER_ID
 from gui import GUI_NATIONS_ORDER_INDEX
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER_INDICES
@@ -64,7 +66,7 @@ def mergeIntervals(allPrimeTimes):
         for serverShortName in serverPrimeTimes:
             primeTimes[serverShortName] = primeTimes.get(serverShortName, []) + serverPrimeTimes[serverShortName]
 
-    return {serverShortName:_normalizeIntervals(intervals) for serverShortName, intervals in primeTimes.iteritems()}
+    return {serverShortName:_normalizeIntervals(intervals) for serverShortName, intervals in viewitems(primeTimes)}
 
 
 def _normalizeIntervals(intervals):

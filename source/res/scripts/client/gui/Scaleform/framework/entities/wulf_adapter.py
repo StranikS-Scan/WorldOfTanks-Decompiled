@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/wulf_adapter.py
 import logging
-from functools import partial
 import typing
 import BigWorld
 from Event import Event, EventManager
@@ -49,7 +48,7 @@ class WulfPackageLayoutAdapter(object):
         self.__window = window
         if hasattr(window, '__background_alpha__'):
             self.__background_alpha__ = window.__background_alpha__
-        self.__window.onReady += partial(self.onWulfViewLoaded, self)
+        self.__window.onReady += self.__onViewLoaded
 
     def load(self):
         if self.__window.content is None and self.__window.decorator is None:
@@ -165,6 +164,11 @@ class WulfPackageLayoutAdapter(object):
         self.__loadID = None
         self.__window.load()
         return
+
+    def __onViewLoaded(self):
+        self.onWulfViewLoaded(self)
+        if self.__sfWindow:
+            self.__sfWindow.isReady = True
 
     def __onStatusChanged(self, newStatus):
         if newStatus == WindowStatus.DESTROYING and self.__window.windowStatus != WindowStatus.LOADED:

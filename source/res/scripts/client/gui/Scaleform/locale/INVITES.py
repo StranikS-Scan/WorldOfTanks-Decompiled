@@ -24,6 +24,7 @@ class INVITES(object):
     INVITES_PREBATTLE_ALREADYJOINED_SORTIE = '#invites:invites/prebattle/alreadyJoined/SORTIE'
     INVITES_PREBATTLE_ALREADYJOINED_MAPBOX = '#invites:invites/prebattle/alreadyJoined/MAPBOX'
     INVITES_PREBATTLE_ALREADYJOINED_TRAINING_COMP7 = '#invites:invites/prebattle/alreadyJoined/TRAINING_COMP7'
+    INVITES_PREBATTLE_ALREADYJOINED_BATTLE_ROYALE = '#invites:invites/prebattle/alreadyJoined/BATTLE_ROYALE'
     INVITES_TEXT_CREATORNAME = '#invites:invites/text/creatorName'
     INVITES_TEXT_SQUAD = '#invites:invites/text/SQUAD'
     INVITES_TEXT_EVENT = '#invites:invites/text/EVENT'

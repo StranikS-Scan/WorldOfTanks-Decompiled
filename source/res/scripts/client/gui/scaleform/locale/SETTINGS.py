@@ -350,6 +350,17 @@ class SETTINGS(object):
     SOUND_SOUNDMODES_U02 = '#settings:sound/soundModes/U02'
     SOUND_SOUNDMODES_U03 = '#settings:sound/soundModes/U03'
     SOUND_SOUNDMODES_U04 = '#settings:sound/soundModes/U04'
+    PHYSICSQUALITY = '#settings:physicsQuality'
+    SOUNDS_PHYSICSQUALITY_HEADER = '#settings:sounds/physicsQuality/header'
+    SOUNDS_PHYSICSQUALITY_BODY = '#settings:sounds/physicsQuality/body'
+    SOUNDS_PHYSICSQUALITY_ATTENTION = '#settings:sounds/physicsQuality/attention'
+    SOUNDS_PHYSICSQUALITY_OPTIONS_DISABLED = '#settings:sounds/physicsQuality/options/disabled'
+    SOUNDS_PHYSICSQUALITY_OPTIONS_LOW = '#settings:sounds/physicsQuality/options/low'
+    SOUNDS_PHYSICSQUALITY_OPTIONS_MEDIUM = '#settings:sounds/physicsQuality/options/medium'
+    SOUNDS_PHYSICSQUALITY_OPTIONS_HIGH = '#settings:sounds/physicsQuality/options/high'
+    SOUNDS_PHYSICSQUALITYRECOMMENDED = '#settings:sounds/physicsQualityRecommended'
+    SOUNDS_PHYSICSQUALITYRECOMMENDED_NAME = '#settings:sounds/physicsQualityRecommended/name'
+    SOUNDS_PHYSICSQUALITYRECOMMENDED_DESCRIPTION = '#settings:sounds/physicsQualityRecommended/description'
     VOICE_CHAT_FIELDSET_HEADER = '#settings:voice_chat/fieldset/header'
     VOICE_CHAT_MICROPHONE_FIELDSET_HEADER = '#settings:voice_chat/microphone/fieldset/header'
     VOICE_CHAT_HEADER_COMMON = '#settings:voice_chat/header/common'
@@ -829,6 +840,10 @@ class SETTINGS(object):
      SOUNDS_SOUNDDEVICE_LAPTOP,
      SOUNDS_SOUNDDEVICE_LAPTOP_HEADER,
      SOUNDS_SOUNDDEVICE_LAPTOP_BODY)
+    SOUNDS_PHYSICSQUALITY_OPTIONS_ENUM = (SOUNDS_PHYSICSQUALITY_OPTIONS_DISABLED,
+     SOUNDS_PHYSICSQUALITY_OPTIONS_LOW,
+     SOUNDS_PHYSICSQUALITY_OPTIONS_MEDIUM,
+     SOUNDS_PHYSICSQUALITY_OPTIONS_HIGH)
     GRAPHICSSETTINGSOPTIONS_ENUM = (GRAPHICSSETTINGSOPTIONS_DEFERRED,
      GRAPHICSSETTINGSOPTIONS_FORWARD,
      GRAPHICSSETTINGSOPTIONS_PIPELINE_STANDARD,
@@ -883,6 +898,15 @@ class SETTINGS(object):
     def sounds_sounddevice(cls, key0):
         outcome = '#settings:sounds/soundDevice/{}'.format(key0)
         if outcome not in cls.SOUNDS_SOUNDDEVICE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def sounds_physicsquality_options(cls, key0):
+        outcome = '#settings:sounds/physicsQuality/options/{}'.format(key0)
+        if outcome not in cls.SOUNDS_PHYSICSQUALITY_OPTIONS_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

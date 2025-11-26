@@ -45,7 +45,7 @@ class FragsCollectableStats(broker.CollectableStats):
 
 class DynamicVehicleStatsComponent(vehicle.VehicleStatsComponent):
     settingsCore = dependency.descriptor(ISettingsCore)
-    __slots__ = ('_frags', '_vehicleID', '_chatCommand', '_chatCommandFlags', '_spottedStatus')
+    __slots__ = ('_frags', '_chatCommand', '_chatCommandFlags', '_spottedStatus')
 
     def __init__(self):
         super(DynamicVehicleStatsComponent, self).__init__()

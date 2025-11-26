@@ -4,19 +4,19 @@ from __future__ import absolute_import
 from gui.impl.gen import R
 from gui.Scaleform.daapi.view.lobby.header.helpers.controls_helpers import DefaultLobbyHeaderHelper
 from gui.Scaleform.daapi.view.lobby.header.helpers.fight_btn_tooltips import getRoyaleFightBtnTooltipData
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from battle_royale.gui.Scaleform.daapi.view.lobby.footer.battle_royale_lobby_footer import BattleRoyaleLobbyFooter
 
 class BattleRoyaleLobbyHeaderHelper(DefaultLobbyHeaderHelper):
-    __slots__ = ()
+    _IN_SQUAD_TOOLTIP_KEY = 'battleRoyaleSquad'
     _OUT_SQUAD_TOOLTIP_KEY = 'battleRoyaleSquad'
-
-    @classmethod
-    def _getCommonFightTooltipData(cls, _, __):
-        return (TOOLTIPS_CONSTANTS.BATTLE_ROYALE_PERF_ADVANCED, True)
 
     @classmethod
     def _getDisabledFightTooltipData(cls, prbValidation, isInSquad):
         return (getRoyaleFightBtnTooltipData(prbValidation), False)
+
+    @classmethod
+    def getFooterType(cls):
+        return BattleRoyaleLobbyFooter
 
 
 class BRTournamentLobbyHeaderHelper(DefaultLobbyHeaderHelper):

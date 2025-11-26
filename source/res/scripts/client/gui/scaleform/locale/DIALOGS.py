@@ -815,6 +815,10 @@ class DIALOGS(object):
     SOUNDSPEAKERSPRESETRESET_MESSAGE = '#dialogs:soundSpeakersPresetReset/message'
     SOUNDSPEAKERSPRESETRESET_SUBMIT = '#dialogs:soundSpeakersPresetReset/submit'
     SOUNDSPEAKERSPRESETRESET_CANCEL = '#dialogs:soundSpeakersPresetReset/cancel'
+    PHYSICSSOUNDQUALITYDOESNOTMATCH_TITLE = '#dialogs:physicsSoundQualityDoesNotMatch/title'
+    PHYSICSSOUNDQUALITYDOESNOTMATCH_MESSAGE = '#dialogs:physicsSoundQualityDoesNotMatch/message'
+    PHYSICSSOUNDQUALITYDOESNOTMATCH_SUBMIT = '#dialogs:physicsSoundQualityDoesNotMatch/submit'
+    PHYSICSSOUNDQUALITYDOESNOTMATCH_CANCEL = '#dialogs:physicsSoundQualityDoesNotMatch/cancel'
     STRONGHOLD_LEAVE_TITLE = '#dialogs:stronghold/leave/title'
     STRONGHOLD_LEAVE_MESSAGE = '#dialogs:stronghold/leave/message'
     STRONGHOLD_LEAVEDEFEAT_TITLE = '#dialogs:stronghold/leaveDefeat/title'
@@ -1003,6 +1007,7 @@ class DIALOGS(object):
     RETRAIN_PRICECARD_CREDITS_DESCRIPTION = '#dialogs:retrain/priceCard/credits/description'
     RETRAIN_PRICECARD_GOLD_DESCRIPTION = '#dialogs:retrain/priceCard/gold/description'
     RETRAIN_TITLE_MASSIVE = '#dialogs:retrain/title/massive'
+    RETRAIN_TITLE_MASSIVEVEHICLETAG = '#dialogs:retrain/title/massiveVehicleTag'
     RETRAIN_MASSIVE_TANKMENCOUNT = '#dialogs:retrain/massive/tankmenCount'
     RETRAIN_CHANGEROLE = '#dialogs:retrain/changeRole'
     RETRAIN_PRICE = '#dialogs:retrain/price'
@@ -1868,6 +1873,10 @@ class DIALOGS(object):
      SOUNDSPEAKERSPRESETRESET_MESSAGE,
      SOUNDSPEAKERSPRESETRESET_SUBMIT,
      SOUNDSPEAKERSPRESETRESET_CANCEL,
+     PHYSICSSOUNDQUALITYDOESNOTMATCH_TITLE,
+     PHYSICSSOUNDQUALITYDOESNOTMATCH_MESSAGE,
+     PHYSICSSOUNDQUALITYDOESNOTMATCH_SUBMIT,
+     PHYSICSSOUNDQUALITYDOESNOTMATCH_CANCEL,
      STRONGHOLD_LEAVE_TITLE,
      STRONGHOLD_LEAVE_MESSAGE,
      STRONGHOLD_LEAVEDEFEAT_TITLE,
@@ -2056,6 +2065,7 @@ class DIALOGS(object):
      RETRAIN_PRICECARD_CREDITS_DESCRIPTION,
      RETRAIN_PRICECARD_GOLD_DESCRIPTION,
      RETRAIN_TITLE_MASSIVE,
+     RETRAIN_TITLE_MASSIVEVEHICLETAG,
      RETRAIN_MASSIVE_TANKMENCOUNT,
      RETRAIN_CHANGEROLE,
      RETRAIN_PRICE,

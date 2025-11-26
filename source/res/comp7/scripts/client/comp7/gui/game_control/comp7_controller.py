@@ -29,15 +29,15 @@ from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import LobbyHeaderMenuEvent
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.shared.utils.scheduled_notifications import Notifiable, TimerNotifier, SimpleNotifier, PeriodicNotifier
-from helpers import dependency, time_utils
+from gui.shared.utils.scheduled_notifications import Notifiable, TimerNotifier, SimpleNotifier
+from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
-from helpers.time_utils import ONE_SECOND, getTimeDeltaFromNow, getServerUTCTime, getCurrentTimestamp
+from helpers.time_utils import ONE_SECOND, getTimeDeltaFromNow, getServerUTCTime
 from items import vehicles
+from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.event_boards_controllers import IEventBoardController
 from skeletons.gui.game_control import IComp7Controller, IHangarSpaceSwitchController, IHangarLoadingController
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.battle_session import IBattleSessionProvider
 _logger = logging.getLogger(__name__)
 if typing.TYPE_CHECKING:
     from typing import Optional, Any
@@ -70,8 +70,6 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         self.__equipmentCacheOverrides = {}
         self.__entitlementsCache = EntitlementsCache()
         self.__leaderboardDataProvider = _LeaderboardDataProvider()
-        self.__isTournamentBannerEnabled = None
-        self.__isGrandTournamentBannerEnabled = None
         self.__isHangarLoadedAfterLogin = False
         self.__eventsManager = em = EventManager()
         self.onStatusUpdated = Event.Event(em)
@@ -88,9 +86,6 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         self.onNewMaxRank = Event.Event(em)
         self.onEntitlementsUpdated = Event.Event(em)
         self.onEntitlementsUpdateFailed = Event.Event(em)
-        self.onTournamentBannerStateChanged = Event.Event(em)
-        self.onGrandTournamentBannerAvailabilityChanged = Event.Event(em)
-        self.onGrandTournamentBannerUpdate = Event.Event(em)
         return
 
     @property
@@ -152,19 +147,9 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
 
     @property
     def qualificationState(self):
+        if self.__qualificationState is None:
+            self.__updateQualificationState()
         return self.__qualificationState
-
-    @property
-    def isTournamentBannerEnabled(self):
-        if self.__isTournamentBannerEnabled is None:
-            self.__isTournamentBannerEnabled = self.getTournamentBannerAvailability()
-        return self.__isTournamentBannerEnabled
-
-    @property
-    def isGrandTournamentBannerEnabled(self):
-        if self.__isGrandTournamentBannerEnabled is None:
-            self.__isGrandTournamentBannerEnabled = self.getGrandTournamentBannerAvailability()
-        return self.__isGrandTournamentBannerEnabled
 
     @property
     def remainingOfferTokensNotifications(self):
@@ -206,7 +191,6 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
             self.__comp7ServerSettings.onComp7SettingsChanged += self.__onServerSettingsChanged
             self.__comp7RanksConfig = self.__comp7ServerSettings.comp7RanksConfig
         self.__updateMainConfig()
-        self.__updateTournamentBannerState()
         self.__roleEquipmentsCache = None
         self.__clearEquipmentOverrides()
         return
@@ -220,7 +204,6 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
             self.__comp7ServerSettings.onComp7SettingsChanged += self.__onServerSettingsChanged
             self.__comp7RanksConfig = self.__comp7ServerSettings.comp7RanksConfig
             self.__updateMainConfig()
-            self.__updateTournamentBannerState()
             self.__roleEquipmentsCache = None
         self.__applyEquipmentOverrides()
         return
@@ -231,7 +214,6 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         self.__entitlementsCache.onCacheUpdated += self.__onEntitlementsCacheUpdated
         g_playerEvents.onPrbDispatcherCreated += self.__onPrbDispatcherCreated
         self.__hangarLoadingController.onHangarLoadedAfterLogin += self.__onHangarLoadedAfterLogin
-        self.addNotificator(PeriodicNotifier(lambda : time_utils.ONE_MINUTE, self.__updateTournamentBannerState, periods=(time_utils.ONE_MINUTE,)))
 
     def onDisconnected(self):
         self.stopNotification()
@@ -291,8 +273,8 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
     def hasActiveSeason(self, includePreannounced=False):
         return self.isAvailable() and bool(self.getCurrentSeason(includePreannounced=includePreannounced))
 
-    def getActualSeasonNumber(self):
-        season = self.getCurrentSeason() or self.getPreviousSeason()
+    def getActualSeasonNumber(self, includePreannounced=False):
+        season = self.getCurrentSeason(includePreannounced=includePreannounced) or self.getPreviousSeason()
         return season.getNumber() if season else None
 
     def getCurrentSeason(self, now=None, includePreannounced=False):
@@ -300,16 +282,16 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         return currentSeason or (self.getPreannouncedSeason() if includePreannounced else None)
 
     def isQualificationActive(self):
-        return Comp7QualificationState.isQualificationActive(self.__qualificationState)
+        return Comp7QualificationState.isQualificationActive(self.qualificationState)
 
     def isQualificationResultsProcessing(self):
-        return Comp7QualificationState.isResultsProcessing(self.__qualificationState)
+        return Comp7QualificationState.isResultsProcessing(self.qualificationState)
 
     def isQualificationCalculationRating(self):
-        return Comp7QualificationState.isCalculationQualificationRating(self.__qualificationState)
+        return Comp7QualificationState.isCalculationQualificationRating(self.qualificationState)
 
     def isQualificationSquadAllowed(self):
-        return Comp7QualificationState.isUnitAllowed(self.__qualificationState)
+        return Comp7QualificationState.isUnitAllowed(self.qualificationState)
 
     def preannounceSeasonId(self):
         if not self.__comp7Config:
@@ -433,49 +415,6 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         seasonNumber = seasonNumber or self.getActualSeasonNumber()
         return bool(self.__getEntitlementCount(eliteRankEntNameBySeasonNumber(str(seasonNumber))))
 
-    def getTournamentBannerAvailability(self):
-        isBannerEnabled = self.getModeSettings().tournaments.get('isBannerEnabled', False)
-        if not isBannerEnabled:
-            return False
-        else:
-            bannerData = self.getTournamentBannerData()
-            return bannerData is not None
-
-    def getTournamentBannerData(self):
-        banners = self.getModeSettings().tournaments.get('widgets')
-        if not banners:
-            return None
-        else:
-            currentTime = time.time()
-            for banner in banners:
-                startBannerTime = banner['startTime']
-                endBannerTime = banner['endTime']
-                if startBannerTime <= currentTime <= endBannerTime:
-                    return banner
-
-            return None
-
-    def getGrandTournamentBannerAvailability(self):
-        grandTournamentSection = self.getModeSettings().grandTournament
-        if not grandTournamentSection:
-            return False
-        else:
-            isBannedEnabled = grandTournamentSection['isBannerEnabled']
-            return isBannedEnabled and self.getGrandTournamentBannerData() is not None
-
-    def getGrandTournamentBannerData(self):
-        banners = self.getModeSettings().grandTournament.get('widgets')
-        if not banners:
-            return None
-        else:
-            currentTime = getCurrentTimestamp()
-            for banner in banners:
-                if banner['startTime'] <= currentTime <= banner['endTime']:
-                    return {'state': banner['state'],
-                     'timeLeft': banner['endTime'] - currentTime}
-
-            return None
-
     def isQualificationPassedInSeason(self, seasonNumber):
         qualificationToken = qualificationTokenBySeasonNumber(seasonNumber)
         return self.__itemsCache.items.tokens.getTokenCount(qualificationToken) > 0
@@ -548,7 +487,6 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
             self.__updateMainConfig()
             self.__roleEquipmentsCache = None
             self.__resetTimer()
-            self.__updateTournamentBannerState()
             self.onModeConfigChanged()
         if Configs.COMP7_REWARDS_CONFIG.value in diff:
             self.onComp7RewardsConfigChanged()
@@ -638,20 +576,6 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
             self.__isOffline = isOffline
             self.onOfflineStatusUpdated()
             self.__updatePrebattleControls()
-
-    def __updateTournamentBannerState(self):
-        if self.isRandomPrbActive():
-            bannerEnabled = self.getGrandTournamentBannerAvailability()
-            if self.__isGrandTournamentBannerEnabled != bannerEnabled:
-                self.__isGrandTournamentBannerEnabled = bannerEnabled
-                self.onGrandTournamentBannerAvailabilityChanged()
-            if self.__isGrandTournamentBannerEnabled:
-                self.onGrandTournamentBannerUpdate()
-        elif self.isModePrbActive():
-            bannerEnabled = self.getTournamentBannerAvailability()
-            if self.__isTournamentBannerEnabled != bannerEnabled:
-                self.__isTournamentBannerEnabled = bannerEnabled
-                self.onTournamentBannerStateChanged()
 
     def __onQualificationBattlesChanged(self, _):
         self.__updateQualificationBattles()

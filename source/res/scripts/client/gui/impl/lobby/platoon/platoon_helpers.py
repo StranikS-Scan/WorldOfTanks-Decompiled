@@ -103,7 +103,7 @@ class BonusState(BitmaskHelper):
 def getPlatoonBonusState(isPlatoonCreated, lobbyCtx=None, hangarGuiCtrl=None, platoonCtrl=None):
     bonusState = BonusState.NO_BONUS
     if lobbyCtx.getServerSettings().squadPremiumBonus.isEnabled:
-        if hangarGuiCtrl.checkCurrentBonusCaps(_CAPS.PREM_SQUAD_CREDITS):
+        if hangarGuiCtrl.dynamicEconomics.checkCurrentBonusCaps(_CAPS.PREM_SQUAD_CREDITS):
             if isPlatoonCreated:
                 playerInfo = platoonCtrl.getPlayerInfo()
                 if playerInfo and playerInfo.hasPremium:
@@ -113,6 +113,6 @@ def getPlatoonBonusState(isPlatoonCreated, lobbyCtx=None, hangarGuiCtrl=None, pl
             else:
                 bonusState = BonusState.addIfNot(bonusState, BonusState.PREM_CREDITS_BONUS)
                 bonusState = BonusState.addIfNot(bonusState, BonusState.SQUAD_CREDITS_BONUS)
-    if hangarGuiCtrl.checkCurrentBonusCaps(_CAPS.SQUAD_XP):
+    if hangarGuiCtrl.dynamicEconomics.checkCurrentBonusCaps(_CAPS.SQUAD_XP):
         bonusState = BonusState.addIfNot(bonusState, BonusState.XP_BONUS)
     return bonusState

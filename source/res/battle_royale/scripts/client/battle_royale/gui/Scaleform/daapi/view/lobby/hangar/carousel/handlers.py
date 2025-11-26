@@ -1,12 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/lobby/hangar/carousel/handlers.py
-from logging import getLogger
 from stats_params import BATTLE_ROYALE_STATS_ENABLED
 from gui.shared import event_dispatcher as shared_events
 from gui.Scaleform.locale.MENU import MENU
 from gui.prb_control import prbDispatcherProperty
 from gui.Scaleform.daapi.view.lobby.hangar.hangar_cm_handlers import SimpleVehicleCMHandler
-_logger = getLogger(__name__)
 
 class VEHICLE(object):
     STATS = 'showVehicleStatistics'
@@ -46,7 +44,11 @@ class BRVehicleContextMenuHandler(SimpleVehicleCMHandler):
             return options
         else:
             if BATTLE_ROYALE_STATS_ENABLED:
-                options.extend([self._makeItem(VEHICLE.STATS, MENU.contextmenu(VEHICLE.STATS), {'enabled': True})])
+                accountDossier = self.itemsCache.items.getAccountDossier()
+                statsSolo = accountDossier.getBattleRoyaleSoloStats().getVehicle(vehicle.intCD)
+                statsSquad = accountDossier.getBattleRoyaleSquadStats().getVehicle(vehicle.intCD)
+                battlesCount = statsSolo.getBattlesCount() + statsSquad.getBattlesCount()
+                options.extend([self._makeItem(VEHICLE.STATS, MENU.contextmenu(VEHICLE.STATS), {'enabled': battlesCount != 0})])
             return options
 
     def showVehicleStats(self):

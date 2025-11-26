@@ -10,7 +10,6 @@ from gui.Scaleform.daapi.view.lobby.vehicle_preview.vehicle_preview import Vehic
 from gui.Scaleform.framework.entities import BaseDAAPIComponent
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
-from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.impl.lobby.offers.offer_gift_dialog import RENT_VALUE_DESCR_BY_TYPE
 from gui.shared import event_dispatcher, formatters
 from helpers import dependency
@@ -101,9 +100,6 @@ class OfferGiftVehiclePreview(VehiclePreview):
         return {'title': formatters.text_styles.superPromoTitle(self._getPreviewDescription()),
          'buyButtonLabel': backport.text(self._getButtonLabel())}
 
-    def _getBackBtnLabel(self):
-        return self._backBtnLabel or VEHICLE_PREVIEW.HEADER_BACKBTN_DESCRLABEL_REFERRALPROGRAM
-
     def _populate(self):
         super(OfferGiftVehiclePreview, self)._populate()
         self.__offersProvider.onOffersUpdated += self.__onOffersUpdated
@@ -113,13 +109,6 @@ class OfferGiftVehiclePreview(VehiclePreview):
         super(OfferGiftVehiclePreview, self)._dispose()
         self.__offersProvider.onOffersUpdated -= self.__onOffersUpdated
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
-
-    def _getExitEvent(self):
-        exitEvent = super(OfferGiftVehiclePreview, self)._getExitEvent()
-        exitEvent.ctx.update({'confirmCallback': self._confirmCallback,
-         'offerID': self._offer.id,
-         'giftID': self._gift.id})
-        return exitEvent
 
     def _onInventoryChanged(self, *_):
         pass

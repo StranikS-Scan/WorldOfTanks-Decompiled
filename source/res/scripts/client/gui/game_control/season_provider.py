@@ -9,6 +9,7 @@ from skeletons.gui.game_control import ISeasonProvider
 from helpers import time_utils, dependency
 from shared_utils import collapseIntervals
 from season_common import GameSeason
+from gui.server_events.events_helpers import EventInfoModel
 from gui.periodic_battles.models import PrimeTime, PeriodType, PeriodInfo, AlertData, PERIOD_TO_STANDALONE, PrimeTimeStatus
 from predefined_hosts import g_preDefinedHosts, HOST_AVAILABILITY
 from skeletons.connection_mgr import IConnectionManager
@@ -57,15 +58,6 @@ class SeasonProvider(ISeasonProvider):
         primeTimes = self.getPrimeTimes()
         currentTime = time_utils.getCurrentLocalServerTimestamp()
         return findFirst(lambda primeTime: primeTime.getNextPeriodStart(currentTime, currentCycleEndTime), primeTimes.values(), default=False)
-
-    def hasPrimeTimesPassedForCurrentCycle(self):
-        _, isCycleActive = self.getCurrentCycleInfo()
-        if not isCycleActive:
-            return False
-        startDate = self.getCurrentSeason().getStartDate()
-        primeTimes = self.getPrimeTimes()
-        currentTime = time_utils.getCurrentLocalServerTimestamp()
-        return findFirst(lambda primeTime: bool(primeTime.getPeriodsBetween(startDate, currentTime, includeEnd=False)), primeTimes.values(), default=False)
 
     def getClosestStateChangeTime(self, now=None):
         now = now or self.__getNow()
@@ -334,6 +326,20 @@ class SeasonProvider(ISeasonProvider):
                 times.append(peripheryTime)
 
         return min(times) if times else 0
+
+    def getQuestsTimerLeft(self):
+        status, primeTimeLeft, _ = self.getPrimeTimeStatus()
+        if primeTimeLeft == 0 and status in (PrimeTimeStatus.NOT_AVAILABLE, PrimeTimeStatus.NOT_SET, PrimeTimeStatus.FROZEN):
+            return -1
+        dailyQuestProgressDelta = EventInfoModel.getDailyProgressResetTimeDelta()
+        currentCycleEndTime = self.getEndTime()
+        currServerTime = time_utils.getCurrentLocalServerTimestamp()
+        cycleTimeLeft = currentCycleEndTime - currServerTime
+        if cycleTimeLeft < time_utils.ONE_DAY and cycleTimeLeft < dailyQuestProgressDelta:
+            primeTime = self.getPrimeTimes().get(self.__connectionMgr.peripheryID)
+            lastPrimeTimeEnd = max([ period[1] for period in primeTime.getPeriodsBetween(int(currServerTime), currentCycleEndTime) ])
+            dailyQuestProgressDelta = time_utils.getTimeDeltaFromNow(lastPrimeTimeEnd)
+        return dailyQuestProgressDelta
 
     def _hasPrimeStatusServer(self, states, now=None):
         for peripheryID in self._getAllPeripheryIDs():

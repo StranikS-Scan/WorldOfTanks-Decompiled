@@ -3,7 +3,6 @@
 import logging
 from functools import partial
 import typing
-from comp7.gui.Scaleform.genConsts.COMP7_HANGAR_ALIASES import COMP7_HANGAR_ALIASES
 from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from shared_utils import first, findFirst
 from CurrentVehicle import g_currentPreviewVehicle, g_currentVehicle
@@ -339,18 +338,14 @@ class ShopPage(PageSubModelPresenter):
 
     def __goToPreview(self):
         itemType = getItemType(self.__currentItemCD)
-        backCallback = partial(comp7_events.showComp7MetaRootTab, self.pageId, productCD=self.__currentItemCD)
         if itemType == GUI_ITEM_TYPE.VEHICLE:
             params = {'resetAppearance': False,
              'heroInteractive': False,
-             'hiddenBlocks': (OptionalBlocks.CLOSE_BUTTON, OptionalBlocks.BUYING_PANEL),
-             'previewAlias': COMP7_HANGAR_ALIASES.COMP7_CONFIGURABLE_VEHICLE_PREVIEW,
-             'previewBackCb': backCallback}
+             'hiddenBlocks': (OptionalBlocks.BUYING_PANEL,)}
             comp7_events.showComp7VehiclePreview(self.__currentItemCD, **params)
         elif itemType == GUI_ITEM_TYPE.STYLE:
             vehCD, style = getVehicleCDAndStyle(self.__currentItemCD)
-            params = {'resetAppearance': False,
-             'backCallback': backCallback}
+            params = {'resetAppearance': False}
             comp7_events.showComp7StylePreview(vehCD, style, **params)
 
     def __goToVehicle(self):

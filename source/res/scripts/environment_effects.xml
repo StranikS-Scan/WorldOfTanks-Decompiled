@@ -26,6 +26,11 @@
       <wwsound>	ambient_burn_static_small	</wwsound>
     </model>
     <model>
+      <modelName>	particles/Environment/interior/101_dday_ground_fire.eff	</modelName>
+      <offset>	0 0 0	</offset>
+      <wwsound>	ambient_burn_static_small	</wwsound>
+    </model>
+    <model>
       <modelName>	particles/Environment/interior/101_dday_tree_fire_small.eff	</modelName>
       <offset>	0 0.2 0	</offset>
       <wwsound>	ambient_burn_static_small	</wwsound>
@@ -2203,27 +2208,47 @@
     <model>
       <modelName>	particles/Environment/halloween/251_oil_up.eff	</modelName>
       <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ev_halloween_2019_ambient_demolyty_drops	</wwsound>
+      <wwsound>	ev_hw_gp_silence_1sec	</wwsound>
     </model>
     <model>
       <modelName>	particles/Environment/halloween/251_oil_bulb_01.eff	</modelName>
       <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ev_halloween_2019_ambient_oil_bubbles	</wwsound>
+      <wwsound>	ev_hw_gp_silence_1sec	</wwsound>
     </model>
     <model>
       <modelName>	content/Halloween/Environment/hd_env_UNI_690_ElectricalCluster/normal/lod0/hd_env_UNI_690_ElectricalCluster_01.model	</modelName>
       <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ev_halloween_electric_cluster	</wwsound>
+      <wwsound>	ev_hw_space_obj_electric_cluster	</wwsound>
     </model>
     <model>
       <modelName>	content/Halloween/Environment/hd_env_UNI_690_ElectricalCluster/normal/lod0/hd_env_UNI_690_ElectricalCluster_04.model	</modelName>
       <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ev_halloween_electric_cluster	</wwsound>
+      <wwsound>	ev_hw_space_obj_electric_cluster	</wwsound>
     </model>
     <model>
       <modelName>	content/Halloween/Environment/hd_env_UNI_690_ElectricalCluster/normal/lod0/hd_env_UNI_690_ElectricalCluster_03.model	</modelName>
       <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	ev_halloween_electric_cluster	</wwsound>
+      <wwsound>	ev_hw_space_obj_electric_cluster	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Shrubs/Hedge_Dry/Hedge_Dry_01.srt	</modelName>
+      <offset>	0.000000 1.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_without_foliage_bush_big_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Shrubs/Hedge/Hedge_Grass_Bush_01.srt	</modelName>
+      <offset>	0.000000 1.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_green_bush_few_foliage_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Shrubs/Hedge/Hedge_Grass_Bush_02.srt	</modelName>
+      <offset>	0.000000 1.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_green_bush_few_foliage_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Shrubs/Hedge/Hedge_Grass_Bush_03.srt	</modelName>
+      <offset>	0.000000 1.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_green_bush_few_foliage_01	</wwsound>
     </model>
   </lightSounds>
   <birds>

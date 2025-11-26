@@ -29,6 +29,7 @@
     <gammaCorrectionInside>	1.0	</gammaCorrectionInside>
     <gammaCorrectionSpeed>	0.2	</gammaCorrectionSpeed>
     <maxFrameRate>	1000	</maxFrameRate>
+    <maxDetailDistance>	50	</maxDetailDistance>
     <reducedFrameRate>	60	</reducedFrameRate>
     <settings></settings>
     <useLatentOcclusionQueries>	true	</useLatentOcclusionQueries>
@@ -539,6 +540,9 @@
         <bank>
           <name>	hangar_personal_missions.bnk	</name>
         </bank>
+        <bank>
+          <name>	pet_system.bnk	</name>
+        </bank>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>
         <bank>
@@ -844,6 +848,44 @@
         <reverbs>	false	</reverbs>
       </soundRender>
     </WWISE_nil_profile>
+    <spatialAudio>
+      <presetMap>
+        <disabled>	low	</disabled>
+        <low>	medium high	</low>
+        <medium>	max	</medium>
+        <high>	ultra	</high>
+      </presetMap>
+      <presetConfigs>
+        <default>
+          <maxSoundPropagationDepth>	8	</maxSoundPropagationDepth>
+          <movementThreshold>	0.1	</movementThreshold>
+          <numberOfPrimaryRays>	0	</numberOfPrimaryRays>
+          <maxReflectionOrder>	1	</maxReflectionOrder>
+          <maxDiffractionOrder>	1	</maxDiffractionOrder>
+          <maxEmitterRoomAuxSends>	2	</maxEmitterRoomAuxSends>
+          <diffractionOnReflectionsOrder>	1	</diffractionOnReflectionsOrder>
+          <maxPathLength>	250	</maxPathLength>
+          <cpuLimitPercentage>	50	</cpuLimitPercentage>
+          <loadBalancingSpread>	2	</loadBalancingSpread>
+          <enableGeometricDiffractionAndTransmission>	true	</enableGeometricDiffractionAndTransmission>
+          <calcEmitterVirtualPosition>	true	</calcEmitterVirtualPosition>
+        </default>
+        <userPresets>
+          <disabled></disabled>
+          <low>
+            <numberOfPrimaryRays>	8	</numberOfPrimaryRays>
+          </low>
+          <medium>
+            <numberOfPrimaryRays>	8	</numberOfPrimaryRays>
+            <maxDiffractionOrder>	2	</maxDiffractionOrder>
+          </medium>
+          <high>
+            <numberOfPrimaryRays>	12	</numberOfPrimaryRays>
+            <maxDiffractionOrder>	3	</maxDiffractionOrder>
+          </high>
+        </userPresets>
+      </presetConfigs>
+    </spatialAudio>
   </soundMgr>
   <logging>
     <suppress>

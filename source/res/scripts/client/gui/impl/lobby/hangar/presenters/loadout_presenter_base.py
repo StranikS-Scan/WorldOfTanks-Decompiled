@@ -101,7 +101,7 @@ class LoadoutPresenterBase(ViewComponent[TViewModel], ITankSetupCMHandler):
         return self._sectionName
 
     def _getEvents(self):
-        return ((self.__loadoutController.onSlotSelected, self.__onSlotSelected),
+        return ((self.__loadoutController.onSlotSelected, self._onSlotSelected),
          (self.__loadoutController.onUpdateFromItem, self.__onUpdateFromItem),
          (self.__loadoutController.onResetItem, self.__onResetItem),
          (self.__loadoutController.onSpecializationSelect, self.__onSpecializationSelect),
@@ -235,6 +235,15 @@ class LoadoutPresenterBase(ViewComponent[TViewModel], ITankSetupCMHandler):
         self._interactor.updateFrom(item, self._interactor == self.__loadoutController.interactor)
         self.__update()
 
+    def _onSlotSelected(self, slotIndex, sectionName, sectionSwitched):
+        if sectionName == self._sectionName:
+            self._currentSlotIndex = slotIndex
+            if sectionSwitched:
+                self.__loadoutController.setInteractor(self._interactor)
+                self._provider.updateDataProviderItems()
+            self._updateDealPanel()
+            self._updateModel()
+
     def __onShowItemInfo(self, args):
         itemIntCD = int(args.get('intCD'))
         showModuleInfo(itemIntCD, self._interactor.getItem().descriptor)
@@ -299,15 +308,6 @@ class LoadoutPresenterBase(ViewComponent[TViewModel], ITankSetupCMHandler):
         newValue = args.get('value')
         self._interactor.getAutoRenewal().setLocalValue(newValue)
         self._getDealPanel().updateAutoRenewalState(self._interactor, self.getViewModel().dealPanel)
-
-    def __onSlotSelected(self, slotIndex, sectionName, sectionSwitched):
-        if sectionName == self._sectionName:
-            self._currentSlotIndex = slotIndex
-            if sectionSwitched:
-                self.__loadoutController.setInteractor(self._interactor)
-                self._provider.updateDataProviderItems()
-            self._updateDealPanel()
-            self._updateModel()
 
     def __onUpdateFromItem(self, item):
         self._updateInteractor(item)

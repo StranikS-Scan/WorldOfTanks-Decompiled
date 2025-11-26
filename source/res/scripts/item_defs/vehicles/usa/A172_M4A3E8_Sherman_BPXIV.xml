@@ -63,7 +63,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_3	</primaryArmor>
     <weight>	14600	</weight>
-    <maxHealth>	720	</maxHealth>
+    <maxHealth>	800	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	180	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -173,7 +173,7 @@
       <terrainResistance>	1 1.1 1.7	</terrainResistance>
       <brakeForce>	36500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	40	</rotationSpeed>
+      <rotationSpeed>	54	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.16	</vehicleMovement>
         <vehicleRotation>	0.16	</vehicleRotation>
@@ -1370,7 +1370,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4800	</weight>
-      <maxHealth>	180	</maxHealth>
+      <maxHealth>	200	</maxHealth>
       <rotationSpeed>	39	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -1405,6 +1405,13 @@
           <reloadTime>	3.3	</reloadTime>
           <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <afterShot>	3	</afterShot>
+            <turretRotation>	0.12	</turretRotation>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
             <undamaged>	vehicles/american/A06_M4A3E8_Sherman/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Gun_06.model	</destroyed>
@@ -1543,7 +1550,7 @@
     <detailed>
       <engines>
         <Ford_GAA_BPXIV>
-          <smplEnginePower>	549.7862	</smplEnginePower>
+          <smplEnginePower>	560	</smplEnginePower>
           <smplFwMaxSpeed>	48	</smplFwMaxSpeed>
         </Ford_GAA_BPXIV>
       </engines>

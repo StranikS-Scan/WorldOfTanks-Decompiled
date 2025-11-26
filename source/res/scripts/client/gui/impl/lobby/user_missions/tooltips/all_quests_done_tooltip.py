@@ -8,10 +8,12 @@ from gui.server_events.events_helpers import EventInfoModel
 
 class AllQuestsDoneTooltip(ViewImpl):
 
-    def __init__(self):
-        settings = ViewSettings(R.views.mono.user_missions.tooltips.all_quests_done_tooltip())
+    def __init__(self, layoutID=R.views.mono.user_missions.tooltips.all_quests_done_tooltip(), questTimerLeft=None):
+        settings = ViewSettings(layoutID)
         settings.model = AllQuestsDoneTooltipModel()
+        self.__questTimerLeft = questTimerLeft if questTimerLeft is not None else EventInfoModel.getDailyProgressResetTimeDelta()
         super(AllQuestsDoneTooltip, self).__init__(settings)
+        return
 
     @property
     def viewModel(self):
@@ -22,6 +24,5 @@ class AllQuestsDoneTooltip(ViewImpl):
         super(AllQuestsDoneTooltip, self)._onLoading()
 
     def _fillViewModel(self):
-        dailyResetTimeDelta = EventInfoModel.getDailyProgressResetTimeDelta()
         with self.viewModel.transaction() as vm:
-            vm.setCountdown(dailyResetTimeDelta)
+            vm.setCountdown(self.__questTimerLeft)

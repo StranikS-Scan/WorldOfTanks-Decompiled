@@ -155,6 +155,10 @@
       <type>	include	</type>
     </rule>
     <rule>
+      <pattern>	.*/server_xml/ai/params/formations/.*\.xml$	</pattern>
+      <type>	include	</type>
+    </rule>
+    <rule>
       <pattern>	.*/server_xml/event_notifications\.xml$	</pattern>
       <type>	include	</type>
     </rule>

@@ -8,20 +8,16 @@ from gui.impl.gen import R
 from gui.impl.lobby.platoon.platoon_helpers import getPlatoonBonusState
 from gui.impl.lobby.platoon.view.platoon_welcome_view import WelcomeView
 from gui.impl.lobby.premacc.squad_bonus_tooltip_content import SquadBonusTooltipContent
-from gui.prb_control.entities.listener import IGlobalListener
 from helpers import dependency
 from skeletons.gui.game_control import IComp7LightController, IPlatoonController
 
-class Comp7LightWelcomeView(WelcomeView, IGlobalListener):
+class Comp7LightWelcomeView(WelcomeView):
     _layoutID = R.views.comp7_light.lobby.PlatoonDropdown()
     __comp7LightController = dependency.descriptor(IComp7LightController)
     __platoonController = dependency.descriptor(IPlatoonController)
 
     def createToolTipContent(self, event, contentID):
         return SquadBonusTooltipContent(battleType=SELECTOR_BATTLE_TYPES.COMP7_LIGHT, bonusState=getPlatoonBonusState(False)) if contentID == R.views.lobby.premacc.tooltips.SquadBonusTooltip() else super(Comp7LightWelcomeView, self).createToolTipContent(event=event, contentID=contentID)
-
-    def onPrbEntitySwitching(self):
-        self.getParentWindow().destroy()
 
     def _initButtons(self):
         super(Comp7LightWelcomeView, self)._initButtons()
@@ -40,14 +36,12 @@ class Comp7LightWelcomeView(WelcomeView, IGlobalListener):
             model.createPlatoonForTwo.onClick += self.__onCreateForTwo
             model.createPlatoonForSeven.onClick += self.__onCreateForSeven
             model.onOutsideClick += self._onOutsideClick
-        self.startGlobalListening()
 
     def _removeListeners(self):
         with self.viewModel.transaction() as model:
             model.createPlatoonForTwo.onClick -= self.__onCreateForTwo
             model.createPlatoonForSeven.onClick -= self.__onCreateForSeven
             model.onOutsideClick -= self._onOutsideClick
-        self.stopGlobalListening()
 
     def _setBattleTypeRelatedProps(self):
         if self.__platoonController.getQueueType() == QUEUE_TYPE.COMP7_LIGHT:

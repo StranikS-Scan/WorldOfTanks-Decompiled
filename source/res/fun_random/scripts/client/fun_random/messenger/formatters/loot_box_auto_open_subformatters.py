@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/messenger/formatters/loot_box_auto_open_subformatters.py
+from __future__ import absolute_import
+from future.utils import listitems, viewitems
 from adisp import adisp_async, adisp_process
 from fun_random.gui.Scaleform.daapi.view.lobby.server_events.awards_formatters import getFunAwardsPacker
 from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin
@@ -73,7 +75,7 @@ class FunRandomMessageAwardsComposer(CurtailingAwardsComposer):
             specialArgs['iconBefore'] = backport.image(vehIcon) if vehIcon > 0 else ''
             bonusDict['isWulfTooltip'] = True
             bonusDict['tooltip'] = TOOLTIPS_CONSTANTS.VEHICLE_COMPENSATION
-            bonusDict['specialArgs'] = [specialArgs.items()]
+            bonusDict['specialArgs'] = [listitems(specialArgs)]
             bonusDict['overlayType'] = 'vehicleCompensation_%s' % size
             bonusDict['hasCompensation'] = False
 
@@ -106,7 +108,7 @@ class FunRandomLootboxAutoOpenFormatter(AsyncAutoLootBoxSubFormatter, FunAssetPa
     def _collectBonusesData(self, data):
         legendaryRewards = []
         otherRewards = []
-        for lootBoxID, lootBoxData in data.iteritems():
+        for lootBoxID, lootBoxData in viewitems(data):
             if self._isBoxOfThisGroup(lootBoxID):
                 lb = self._itemsCache.items.tokens.getLootBoxByID(lootBoxID)
                 awardList = legendaryRewards if lb.getType() == FunRandomLootBoxTypes.LEGENDARY else otherRewards
@@ -135,7 +137,7 @@ class FunRandomLootboxAutoOpenFormatter(AsyncAutoLootBoxSubFormatter, FunAssetPa
     def __getRawBonuses(self, rewards):
         mergedRewards = getMergedCompensatedBonuses(rewards)
         rawDataBonuses = []
-        for k, v in mergedRewards.iteritems():
+        for k, v in mergedRewards.items():
             rawDataBonuses.extend(getNonQuestBonuses(k, v))
 
         return [ b for b in rawDataBonuses if not isinstance(b, LootBoxTokensBonus) ]

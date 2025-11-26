@@ -55,6 +55,13 @@ class ModType(Enum):
     INVISIBILITY_FACTOR_AT_SHOT = 'invisibilityFactorAtShot'
     VEHICLE_AOI_RADIUS = 'vehicleAoIRadius'
     DEVICE_DAMAGE_FIRST = 'deviceDamageFirst'
+    AMMO_BAY_HEALTH = 'ammoBayHealth'
+    ENGINE_HEALTH = 'engineHealth'
+    FUEL_TANK_HEALTH = 'fuelTankHealth'
+    TURRET_ROTATOR_HEALTH = 'turretRotatorHealth'
+    SURVEYING_DEVICE_HEALTH = 'surveyingDeviceHealth'
+    CHASSIS_HEALTH = 'chassisHealth'
+    GUN_HEALTH = 'gunHealth'
 
 
 class ModPhysType(Enum):

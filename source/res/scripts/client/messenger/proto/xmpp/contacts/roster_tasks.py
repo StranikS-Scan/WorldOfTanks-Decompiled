@@ -153,14 +153,13 @@ class EmptyGroupsTask(RosterItemTask):
 
 
 class ChangeRosterItemGroupsTask(RosterItemTask):
-    __slots__ = ('_exclude', '_groups', '_result')
+    __slots__ = ('_exclude',)
 
     def __init__(self, jid, name='', groups=None, exclude=None):
         super(ChangeRosterItemGroupsTask, self).__init__(jid, name, groups)
         self._exclude = exclude or set()
 
     def clear(self):
-        self._groups = None
         self._exclude = None
         super(ChangeRosterItemGroupsTask, self).clear()
         return

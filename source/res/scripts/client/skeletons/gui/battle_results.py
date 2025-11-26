@@ -33,7 +33,7 @@ class IBattleResultsService(object):
     def getResultsVO(self, arenaUniqueID):
         raise NotImplementedError
 
-    def getPresenter(self, arenaUniqueID):
+    def getStatsCtrl(self, arenaUniqueID):
         raise NotImplementedError
 
     def saveStatsSorting(self, bonusType, iconType, sortDirection):
@@ -64,4 +64,7 @@ class IBattleResultsService(object):
         raise NotImplementedError
 
     def getVehicleForArena(self, arenaUniqueID):
+        raise NotImplementedError
+
+    def notifyBattleResultsPosted(self, arenaUniqueID, needToShowUI=False):
         raise NotImplementedError

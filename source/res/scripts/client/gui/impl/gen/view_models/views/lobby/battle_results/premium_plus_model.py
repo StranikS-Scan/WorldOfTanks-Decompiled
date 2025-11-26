@@ -3,9 +3,9 @@
 from gui.impl.gen.view_models.views.lobby.battle_results.additional_bonus_model import AdditionalBonusModel
 
 class PremiumPlusModel(AdditionalBonusModel):
-    __slots__ = ()
+    __slots__ = ('onNextBonusTimeUpdate',)
 
-    def __init__(self, properties=17, commands=3):
+    def __init__(self, properties=17, commands=4):
         super(PremiumPlusModel, self).__init__(properties=properties, commands=commands)
 
     def getIsUndefinedLeftBonusCount(self):
@@ -24,3 +24,4 @@ class PremiumPlusModel(AdditionalBonusModel):
         super(PremiumPlusModel, self)._initialize()
         self._addBoolProperty('isUndefinedLeftBonusCount', False)
         self._addRealProperty('nextBonusTime', -1)
+        self.onNextBonusTimeUpdate = self._addCommand('onNextBonusTimeUpdate')

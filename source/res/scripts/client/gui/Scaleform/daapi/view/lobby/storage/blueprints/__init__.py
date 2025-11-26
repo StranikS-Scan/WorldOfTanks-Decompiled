@@ -3,10 +3,8 @@
 import nations
 from account_helpers.AccountSettings import STORAGE_BLUEPRINTS_CAROUSEL_FILTER
 from gui import GUI_NATIONS_ORDER_INDEX
+from gui.filters.carousel_filter import BasicCriteriesGroup, CriteriesGroup, EventCriteriesGroup
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import BasicCriteriesGroup
-from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import CriteriesGroup
-from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import EventCriteriesGroup
 from gui.Scaleform.daapi.view.lobby.storage.inhangar import StorageCarouselDataProvider, StorageCarouselFilter
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getVehicleName
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
@@ -15,7 +13,6 @@ from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDL
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.locale.RES_SHOP import RES_SHOP
 from gui.Scaleform.locale.STORAGE import STORAGE
 from gui.impl import backport
 from gui.impl.gen import R
@@ -23,7 +20,7 @@ from gui.shared import events
 from gui.shared.formatters import text_styles, icons
 from gui.shared.gui_items.Vehicle import getShopVehicleIconPath
 from gui.shared.utils.requesters.ItemsRequester import RequestCriteria, PredicateCondition, REQ_CRITERIA
-from helpers import dependency, func_utils
+from helpers import dependency
 from helpers.i18n import makeString
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache

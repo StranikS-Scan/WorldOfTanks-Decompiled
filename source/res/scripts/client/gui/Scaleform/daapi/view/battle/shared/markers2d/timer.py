@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/markers2d/timer.py
+import math
 from gui.Scaleform.daapi.view.battle.shared.timers_common import PythonTimer
-import BigWorld
 
 class MarkerTimer(PythonTimer):
     __slots__ = ('__animated', '__statusID', '__vehicleID', '__showCountdown', '__isSourceVehicle')
@@ -31,5 +31,4 @@ class MarkerTimer(PythonTimer):
 
     def _setViewSnapshot(self, leftTime):
         if self.__showCountdown:
-            leftTime = self.finishTime - BigWorld.serverTime()
-            self._viewObject.updateMarkerTimer(self._typeID, leftTime, False, self.__statusID)
+            self._viewObject.updateMarkerTimer(self._typeID, math.ceil(leftTime), False, self.__statusID)

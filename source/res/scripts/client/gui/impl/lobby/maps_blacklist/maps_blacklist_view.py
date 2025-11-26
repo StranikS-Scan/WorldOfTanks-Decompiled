@@ -341,7 +341,7 @@ class MapsBlacklistView(ViewImpl, SoundViewMixin):
     @decorators.adisp_process('updating')
     def __sendMapChangingRequest(self, mapToSet, mapToChange):
         serverSettings = self.__lobbyContext.getServerSettings()
-        cooldown = time_utils.getTillTimeString(serverSettings.getPreferredMapsConfig()['slotCooldown'], MENU.MAPBLACKLIST_TIMELEFTSHORT, isRoundUp=True, removeLeadingZeros=True)
+        cooldown = time_utils.getTillTimeString(serverSettings.getPreferredMapsConfig()['slotCooldown'], MENU.MAPBLACKLIST_TIMELEFTSHORT, isMinutesRoundUp=True, removeLeadingZeros=True)
         dstMapID = self.__mapNameToID(mapToSet)
         if dstMapID is not None:
             dstMapName = i18n.makeString(ArenaType.g_cache[dstMapID].name)

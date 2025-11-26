@@ -33,8 +33,6 @@ class LegacyHangarState(SFViewLobbyState, IPrbListener):
      FUNCTIONAL_FLAG.EVENT,
      FUNCTIONAL_FLAG.RANKED,
      FUNCTIONAL_FLAG.TOURNAMENT,
-     FUNCTIONAL_FLAG.EPIC,
-     FUNCTIONAL_FLAG.BATTLE_ROYALE,
      FUNCTIONAL_FLAG.MAPBOX}
 
     def __init__(self, flags=StateFlags.UNDEFINED):

@@ -14,11 +14,11 @@ from account_shared import LayoutIterator
 from adisp import adisp_async, adisp_process
 from battle_pass_common import BATTLE_PASS_PDATA_KEY
 from constants import CustomizationInvData, SkinInvData
-from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_NOTE
+from debug_utils import LOG_DEBUG, LOG_NOTE, LOG_WARNING
 from dossiers2.ui.achievements import BADGES_BLOCK
 from goodies.goodie_constants import GOODIE_STATE
 from gui.game_loading.resources.consts import Milestones
-from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES, ItemsCollection, getVehicleSuitablesByType, checkForTags
+from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES, ItemsCollection, checkForTags, getVehicleSuitablesByType
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from gui.shared.utils.requesters import vehicle_items_getter
@@ -27,12 +27,12 @@ from helpers import dependency, isPlayerAvatar
 from items import getTypeOfCompactDescr, makeIntCompactDescrByID, tankmen, vehicles
 from items.components.c11n_constants import CustomizationDisplayType, SeasonType
 from items.components.crew_skins_constants import CrewSkinType
-from nation_change.nation_change_helpers import isMainInNationGroupSafe, iterVehTypeCDsInNationGroup, iterVehiclesWithNationGroupInOrder
+from nation_change.nation_change_helpers import isMainInNationGroupSafe, iterVehiclesWithNationGroupInOrder, iterVehTypeCDsInNationGroup
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
 from skeletons.gui.game_control import IVehiclePostProgressionController
 from skeletons.gui.shared import IItemsCache, IItemsRequester
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
-from gui.shared.system_factory import collectGuiItemsCacheInvalidators, GuiItemsCacheInvalidatorParams
+from gui.shared.system_factory import GuiItemsCacheInvalidatorParams, collectGuiItemsCacheInvalidators
 from wg_async import wg_async, wg_await, distributeLoopOverTicks
 if TYPE_CHECKING:
     from typing import Optional, Dict, List
@@ -329,7 +329,6 @@ class REQ_CRITERIA(object):
         DISCOUNT_RENT_OR_BUY = RequestCriteria(PredicateCondition(lambda item: (item.buyPrices.itemPrice.isActionPrice() or item.getRentPackageActionPrc() != 0) and not item.isRestoreAvailable()))
         HAS_TAGS = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: item.tags.issuperset(tags))))
         HAS_ANY_TAG = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: bool(item.tags & tags))))
-        HAS_NO_TAG = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: not bool(item.tags & tags))))
         FOR_ITEM = staticmethod(lambda style: RequestCriteria(PredicateCondition(style.mayInstall)))
         HAS_ROLE = staticmethod(lambda roleName: RequestCriteria(PredicateCondition(lambda item: roleName in {roles[0] for roles in item.descriptor.type.crewRoles})))
         HAS_ROLES = staticmethod(lambda tankmanRoles: RequestCriteria(PredicateCondition(lambda item: any((roles[0] in tankmanRoles for roles in item.descriptor.type.crewRoles)))))
@@ -462,7 +461,7 @@ class ItemsRequester(IItemsRequester):
      'layout',
      'layoutState'])
 
-    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, battleRoyale, badges, epicMetaGame, tokens, festivityRequester, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None, battlePassRequester=None, giftSystemRequester=None, gameRestrictionsRequester=None, achievements20Requester=None):
+    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, battleRoyale, badges, epicMetaGame, tokens, festivityRequester, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None, battlePassRequester=None, giftSystemRequester=None, gameRestrictionsRequester=None, achievements20Requester=None, petSystemRequester=None):
         self.__inventory = inventory
         self.__stats = stats
         self.__dossiers = dossiers
@@ -483,6 +482,7 @@ class ItemsRequester(IItemsRequester):
         self.__giftSystem = giftSystemRequester
         self.__gameRestrictions = gameRestrictionsRequester
         self.__achievements20 = achievements20Requester
+        self.__petSystem = petSystemRequester
         self.__itemsCache = defaultdict(dict)
         self.__brokenSyncAlreadyLoggedTypes = set()
         self.__fittingItemRequesters = {self.__inventory,
@@ -576,6 +576,10 @@ class ItemsRequester(IItemsRequester):
         return self.__achievements20
 
     @property
+    def petSystem(self):
+        return self.__petSystem
+
+    @property
     def tankmenStatsCache(self):
         return self.__tankmenStatsCache
 
@@ -619,6 +623,7 @@ class ItemsRequester(IItemsRequester):
         yield wg_await(self.__giftSystem.request())
         yield wg_await(self.__gameRestrictions.request())
         yield wg_await(self.__achievements20.request())
+        yield wg_await(self.__petSystem.request())
         Waiting.hide('download/common')
         self.__brokenSyncAlreadyLoggedTypes.clear()
 
@@ -890,6 +895,7 @@ class ItemsRequester(IItemsRequester):
 
     def getItems(self, itemTypeID=None, criteria=REQ_CRITERIA.EMPTY, nationID=None, onlyWithPrices=True, limit=None):
         result = ItemsCollection()
+        playerIsAvatar = isPlayerAvatar()
         if not isinstance(itemTypeID, tuple):
             itemTypeID = (itemTypeID,)
         for typeID in itemTypeID:
@@ -909,7 +915,7 @@ class ItemsRequester(IItemsRequester):
             for intCD in vehicle_items_getter.getItemsIterator(self.__shop.getItemsData(), nationID=nationID, itemTypeID=typeID, onlyWithPrices=onlyWithPrices):
                 if protector is not None and protector.isTriggered(intCD):
                     continue
-                item = itemGetter(intCD)
+                item = itemGetter(intCD, playerIsAvatar)
                 if criteria(item):
                     result[intCD] = item
                 if limit is not None and len(result) >= limit:
@@ -1034,8 +1040,13 @@ class ItemsRequester(IItemsRequester):
     def getBadgeByID(self, badgeID):
         return self.__makeBadge(badgeID)
 
-    def getItemByCD(self, typeCompDescr):
-        return self.__makeVehicle(typeCompDescr) if getTypeOfCompactDescr(typeCompDescr) == GUI_ITEM_TYPE.VEHICLE else self.__makeSimpleItem(typeCompDescr)
+    def getItemByCD(self, typeCompDescr, playerIsAvatar=None):
+        return self.__makeVehicle(typeCompDescr, playerIsAvatar=playerIsAvatar) if getTypeOfCompactDescr(typeCompDescr) == GUI_ITEM_TYPE.VEHICLE else self.__makeSimpleItem(typeCompDescr, playerIsAvatar=playerIsAvatar)
+
+    def getTypedItemsByCDs(self, itemType, itemCDs):
+        if itemType == GUI_ITEM_TYPE.VEHICLE:
+            return [ self.__makeVehicle(itemCD) for itemCD in itemCDs ]
+        return self.__makeSimpleItemsByType(itemType, itemCDs)
 
     def getItem(self, itemTypeID, nationID, innationID):
         typeCompDescr = vehicles.makeIntCompactDescrByID(GUI_ITEM_TYPE_NAMES[itemTypeID], nationID, innationID)
@@ -1198,12 +1209,13 @@ class ItemsRequester(IItemsRequester):
     def __getVehicleDossierDescr(self, vehTypeCompDescr):
         return dossiers2.getVehicleDossierDescr(self.__dossiers.getVehicleDossier(vehTypeCompDescr))
 
-    def __makeItem(self, itemTypeIdx, uid, *args, **kwargs):
+    def __makeItem(self, itemTypeIdx, uid, playerIsAvatar=None, *args, **kwargs):
         container = self.__itemsCache[itemTypeIdx]
         if uid in container:
             return container[uid]
         else:
-            if not isPlayerAvatar():
+            isAvatar = playerIsAvatar if playerIsAvatar is not None else isPlayerAvatar()
+            if not isAvatar:
                 self.__checkFittingItemsSync(itemTypeIdx)
             item = self.itemsFactory.createGuiItem(itemTypeIdx, *args, **kwargs)
             if item is not None:
@@ -1219,14 +1231,14 @@ class ItemsRequester(IItemsRequester):
                 del self.__vehCustomStateCache[uid]
         return
 
-    def __makeVehicle(self, typeCompDescr, vehInvData=None):
+    def __makeVehicle(self, typeCompDescr, vehInvData=None, playerIsAvatar=None):
         container = self.__itemsCache[GUI_ITEM_TYPE.VEHICLE]
         if typeCompDescr in container:
             return container[typeCompDescr]
         else:
             vehInvData = vehInvData or self.__inventory.getItemData(typeCompDescr)
             vehExtData = self.__inventory.getVehExtData(typeCompDescr)
-            return self.__makeItem(GUI_ITEM_TYPE.VEHICLE, typeCompDescr, strCompactDescr=vehInvData.compDescr, inventoryID=vehInvData.invID, typeCompDescr=typeCompDescr, proxy=self, extData=vehExtData) if vehInvData is not None else self.__makeItem(GUI_ITEM_TYPE.VEHICLE, typeCompDescr, typeCompDescr=typeCompDescr, proxy=self, extData=vehExtData)
+            return self.__makeItem(GUI_ITEM_TYPE.VEHICLE, typeCompDescr, strCompactDescr=vehInvData.compDescr, inventoryID=vehInvData.invID, typeCompDescr=typeCompDescr, proxy=self, extData=vehExtData, playerIsAvatar=playerIsAvatar) if vehInvData is not None else self.__makeItem(GUI_ITEM_TYPE.VEHICLE, typeCompDescr, typeCompDescr=typeCompDescr, proxy=self, extData=vehExtData, playerIsAvatar=playerIsAvatar)
 
     def __makeTankman(self, tmanInvID, tmanInvData=None):
         tmanInvData = tmanInvData or self.__inventory.getTankmanData(tmanInvID)
@@ -1242,8 +1254,24 @@ class ItemsRequester(IItemsRequester):
         strCD, dismissedAt = tmanData
         return self.__makeItem(GUI_ITEM_TYPE.TANKMAN, tmanID, strCompactDescr=strCD, inventoryID=tmanID, proxy=self, dismissedAt=dismissedAt)
 
-    def __makeSimpleItem(self, typeCompDescr):
-        return self.__makeItem(getTypeOfCompactDescr(typeCompDescr), typeCompDescr, intCompactDescr=typeCompDescr, proxy=self)
+    def __makeSimpleItem(self, typeCompDescr, playerIsAvatar=None):
+        return self.__makeItem(getTypeOfCompactDescr(typeCompDescr), typeCompDescr, intCompactDescr=typeCompDescr, proxy=self, playerIsAvatar=playerIsAvatar)
+
+    def __makeSimpleItemsByType(self, itemType, typeCompDescrs):
+        if not isPlayerAvatar():
+            self.__checkFittingItemsSync(itemType)
+        items = []
+        compDescrs = []
+        container = self.__itemsCache[itemType]
+        for compDescr in typeCompDescrs:
+            if compDescr in container:
+                items.append(container[compDescr])
+            compDescrs.append(compDescr)
+
+        createdItems = self.itemsFactory.createGuiItemsOfSameType(itemType, compDescrs, proxy=self)
+        container.update(dict(zip(compDescrs, createdItems)))
+        items.extend(createdItems)
+        return items
 
     def __makeBadge(self, badgeID, badgeData=None, receivedBadges=None):
         if badgeData is None:

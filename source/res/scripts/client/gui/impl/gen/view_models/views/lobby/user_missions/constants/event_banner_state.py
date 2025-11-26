@@ -8,6 +8,7 @@ class EventBannerState(ViewModel):
     INTRO = 'intro'
     IN_PROGRESS = 'inProgress'
     INACTIVE = 'inactive'
+    FINISHED = 'finished'
 
     def __init__(self, properties=0, commands=0):
         super(EventBannerState, self).__init__(properties=properties, commands=commands)

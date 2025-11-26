@@ -2,12 +2,10 @@
 # Embedded file name: scripts/client/gui/impl/lobby/vehicle_hub/sub_presenters/veh_skill_tree/prestige_presenter.py
 from __future__ import absolute_import
 from collections import OrderedDict
-from functools import partial
 import logging
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import VEH_SKILL_TREE_PRESTIGE_GLARE_SHOWN
 from frameworks.wulf.view.submodel_presenter import SubModelPresenter
-from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.common.view_helpers import packBonusModelAndTooltipData
 from gui.impl.lobby.vehicle_hub import VehicleHubCtx
@@ -115,7 +113,7 @@ class PrestigePresenter(SubModelPresenter, IPresenterLocationController):
                 showVehicleHubVehSkillTreePrestige(intCD=vehCD)
 
             g_eventBus.handleEvent(events.HangarCustomizationEvent(events.HangarCustomizationEvent.RESET_VEHICLE_MODEL_TRANSFORM), scope=EVENT_BUS_SCOPE.LOBBY)
-            showStylePreview(self.__vehCD, c11nItem, descr=c11nItem.getDescription(), backCallback=partial(__onRewardPreviewCallback, self.__vehCD), backBtnDescrLabel=backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.skillTreePrestige()))
+            showStylePreview(self.__vehCD, c11nItem, descr=c11nItem.getDescription())
             return
 
     def __dossierUpdate(self, *_):

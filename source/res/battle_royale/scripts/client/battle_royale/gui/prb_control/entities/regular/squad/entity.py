@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/prb_control/entities/regular/squad/entity.py
-from battle_royale.gui.constants import BattleRoyaleSubMode
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
+from battle_royale.gui.constants import BattleRoyaleSubMode
+from battle_royale.gui.impl.lobby.br_helpers.utils import isBattleResultsStateEntered
 from battle_royale.gui.prb_control.entities.regular.pre_queue.vehicles_watcher import BattleRoyaleVehiclesWatcher
 from battle_royale.gui.prb_control.entities.regular.scheduler import RoyaleScheduler
 from battle_royale.gui.prb_control.entities.regular.squad.actions_validator import BattleRoyaleSquadActionsValidator
@@ -50,7 +51,9 @@ class BattleRoyaleSquadEntity(SquadEntity):
         if self.__watcher is not None:
             self.__watcher.stop()
             self.__watcher = None
-        g_eventDispatcher.loadHangar()
+        if not woEvents:
+            if not self.canSwitch(ctx) and not isBattleResultsStateEntered:
+                g_eventDispatcher.loadHangar()
         return super(BattleRoyaleSquadEntity, self).fini(ctx, woEvents)
 
     def leave(self, ctx, callback=None):
@@ -71,6 +74,11 @@ class BattleRoyaleSquadEntity(SquadEntity):
     def isVehiclesReadyToBattle(self):
         result = self._actionsValidator.getVehiclesValidator().canPlayerDoAction()
         return result is None or result.isValid or result.restriction in self._VALID_RESTRICTIONS
+
+    def _goToHangar(self):
+        if isBattleResultsStateEntered():
+            return
+        super(BattleRoyaleSquadEntity, self)._goToHangar()
 
     @property
     def _showUnitActionNames(self):

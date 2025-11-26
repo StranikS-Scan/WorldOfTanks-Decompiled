@@ -92,7 +92,7 @@ class BaseQuestsWidgetComponent(object):
         self.__showOrHide()
 
     def __isQueueEnabled(self):
-        return self.__hangarGuiCtrl.checkCurrentBonusCaps(ARENA_BONUS_TYPE_CAPS.DAILY_QUESTS)
+        return self.__hangarGuiCtrl.dynamicEconomics.checkCurrentBonusCaps(ARENA_BONUS_TYPE_CAPS.DAILY_QUESTS)
 
     def __isQueueSelected(self, queueType):
         injector = self._injector

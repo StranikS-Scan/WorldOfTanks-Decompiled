@@ -46,12 +46,14 @@
     <_127mm_Cannone_Da_127_51>	47	</_127mm_Cannone_Da_127_51>
     <_105mm_Cannone_Da_105_57>	48	</_105mm_Cannone_Da_105_57>
     <_105mm_Cannone_da_105_58_Rh_V1>	49	</_105mm_Cannone_da_105_58_Rh_V1>
+    <_120mm_Cannone_binato_da_120_59>	50	</_120mm_Cannone_binato_da_120_59>
     <Cannone_da_90_42_ter>	2000	</Cannone_da_90_42_ter>
     <Cannone_da_90_53_ter>	2001	</Cannone_da_90_53_ter>
     <Cannone_da_37_40_3000>	2002	</Cannone_da_37_40_3000>
     <Cannone_da_37_40_M14>	2003	</Cannone_da_37_40_M14>
     <Cannone_da_47_32_M14>	2004	</Cannone_da_47_32_M14>
     <Cannone_da_75_50_Skoda_P43>	2005	</Cannone_da_75_50_Skoda_P43>
+    <Cannone_da_127_OTO_Melara_veloce>	52	</Cannone_da_127_OTO_Melara_veloce>
     <_130mm_Cannone_da_130_45_7x7>	501	</_130mm_Cannone_da_130_45_7x7>
   </ids>
   <shared>
@@ -2107,6 +2109,64 @@
         </_105mm_HE_M113>
       </shots>
     </_105mm_Cannone_da_105_58>
+    <_120mm_Cannone_binato_da_120_59>
+      <userString>	#italy_vehicles:_120mm_Cannone_binato_da_120_59	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	200000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.44	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.26	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	dualgun_reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
+        <maxPitch>	0.0 3.0 1.0 3.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	8.5	</reloadTime>
+      <maxAmmo>	24	</maxAmmo>
+      <aimingTime>	2.85	</aimingTime>
+      <weight>	1275	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.42	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_120mm_c_p_120_59_AP_T>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1050	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	254 241	</piercingPower>
+        </_120mm_c_p_120_59_AP_T>
+        <_120mm_c_p_120_59_HVAP_T>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1270	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	307 288	</piercingPower>
+        </_120mm_c_p_120_59_HVAP_T>
+        <_120mm_c_g_120_59_HE_T>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	1050	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	60 60	</piercingPower>
+        </_120mm_c_g_120_59_HE_T>
+      </shots>
+    </_120mm_Cannone_binato_da_120_59>
     <_105mm_Cannone_da_105_58_Rh_V1>
       <userString>	#italy_vehicles:_105mm_Cannone_da_105_58_Rh_V1	</userString>
       <tags></tags>
@@ -2873,6 +2933,64 @@
         </_127mm_Mark_116>
       </shots>
     </_127mm_OTO_Melara>
+    <Cannone_da_127_OTO_Melara_veloce>
+      <userString>	#italy_vehicles:Cannone_da_127_OTO_Melara_veloce	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	300000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.44	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_largeext	</effects>
+      <reloadEffect>	autoloader_reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	7.5	</reloadTime>
+      <maxAmmo>	60	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	2300	</weight>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	110	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_127mm_c_p_127_54_Mk_315>
+          <defaultPortion>	1	</defaultPortion>
+          <speed>	1310	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	263 240	</piercingPower>
+        </_127mm_c_p_127_54_Mk_315>
+        <_127mm_c_c_127_54_Mk_410>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	930	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	320 320	</piercingPower>
+        </_127mm_c_c_127_54_Mk_410>
+        <_127mm_a_e_127_54_Mk_115>
+          <defaultPortion>	0	</defaultPortion>
+          <speed>	780	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	63 63	</piercingPower>
+        </_127mm_a_e_127_54_Mk_115>
+      </shots>
+    </Cannone_da_127_OTO_Melara_veloce>
     <_127mm_Cannone_Da_127_58>
       <userString>	#italy_vehicles:_127mm_Cannone_Da_127_58	</userString>
       <tags></tags>

@@ -7,13 +7,14 @@ from battle_modifiers_ext.constants_ext import USE_VEHICLE_CACHE, MAX_VEHICLE_CA
 from battle_modifiers_ext.modification_cache.modification_cache import ModificationCache
 from constants import IS_CELLAPP, IS_CLIENT, SHELL_TYPES, SHELL_MECHANICS_TYPE, VEHICLE_MODE
 from math import tan, atan, cos, acos
+from items.components.chassis_components import TrackPair
 from items.components.component_constants import DEFAULT_GUN_CLIP, DEFAULT_GUN_BURST, DEFAULT_GUN_AUTORELOAD, DEFAULT_GUN_DUALGUN, KMH_TO_MS, MS_TO_KMH, DEFAULT_GUN_AUTOSHOOT, DynamicShotEffect, ZERO_FLOAT, DEFAULT_GUN_TWINGUN
 from typing import TYPE_CHECKING, Optional, Type, Dict, Tuple
 from Math import Vector2
 from debug_utils import LOG_DEBUG
 if TYPE_CHECKING:
     from items.vehicles import VehicleType
-    from items.vehicle_items import Chassis, Turret, Gun, Radio, Shell, Engine, Hull
+    from items.vehicle_items import Chassis, Turret, Gun, Radio, Shell, Engine, Hull, FuelTank
     from items.components.gun_components import GunShot
     from items.components.shell_components import ShellType
     from battle_modifiers_ext.battle_modifiers import BattleModifiers
@@ -54,6 +55,7 @@ class VehicleModifier(object):
             vehType.engines = tuple((cls.__modifyEngine(engine, modifiers) for engine in vehType.engines))
         if modifiers.haveDomain(ModifierDomain.HULL):
             vehType.hulls = tuple((cls.__modifyHull(hull, modifiers) for hull in vehType.hulls))
+            vehType.fuelTanks = tuple((cls.__modifyFuelTanks(fuelTank, modifiers) for fuelTank in vehType.fuelTanks))
         return vehType
 
     @classmethod
@@ -63,6 +65,23 @@ class VehicleModifier(object):
         chassis = copy.copy(chassis)
         dispFactors = chassis.shotDispersionFactors
         chassis.shotDispersionFactors = (modifiers(BattleParams.DISP_FACTOR_CHASSIS_MOVEMENT, dispFactors[0]), modifiers(BattleParams.DISP_FACTOR_CHASSIS_ROTATION, dispFactors[1]))
+        chassis.healthParams = copy.copy(chassis.healthParams)
+        chassis.healthParams.maxHealth = modifiers(BattleParams.CHASSIS_HEALTH, chassis.healthParams.maxHealth)
+        chassis.healthParams.maxRegenHealth = modifiers(BattleParams.CHASSIS_HEALTH, chassis.healthParams.maxRegenHealth)
+        if chassis.healthParams.hysteresisHealth is not None:
+            chassis.healthParams.hysteresisHealth = modifiers(BattleParams.CHASSIS_HEALTH, chassis.healthParams.hysteresisHealth)
+        chassis.healthParams.healthRegenPerSec = modifiers(BattleParams.CHASSIS_HEALTH, chassis.healthParams.healthRegenPerSec)
+        modifiedTrackPairs = list()
+        for trPair in chassis.trackPairs:
+            trackHealthParams = copy.copy(trPair.healthParams)
+            trackHealthParams.maxHealth = modifiers(BattleParams.CHASSIS_HEALTH, trPair.healthParams.maxHealth)
+            trackHealthParams.maxRegenHealth = modifiers(BattleParams.CHASSIS_HEALTH, trPair.healthParams.maxRegenHealth)
+            trackHealthParams.healthRegenPerSec = modifiers(BattleParams.CHASSIS_HEALTH, trPair.healthParams.healthRegenPerSec)
+            if trackHealthParams.hysteresisHealth is not None:
+                trackHealthParams.hysteresisHealth = modifiers(BattleParams.CHASSIS_HEALTH, trPair.healthParams.hysteresisHealth)
+            modifiedTrackPairs.append(TrackPair(hitTesterManager=trPair.hitTesterManager, materials=trPair.materials, healthParams=trackHealthParams, breakMode=trPair.breakMode))
+
+        chassis.trackPairs = tuple(modifiedTrackPairs)
         if IS_CLIENT:
             textureSet = modifiers(BattleParams.CHASSIS_DECALS, chassis.traces.textureSet)
             chassis.traces = chassis.traces._replace(textureSet=textureSet)
@@ -76,6 +95,20 @@ class VehicleModifier(object):
         if modifiers.haveDomain(ModifierDomain.TURRET):
             turret.rotationSpeed = modifiers(BattleParams.TURRET_ROTATION_SPEED, turret.rotationSpeed)
             turret.circularVisionRadius = modifiers(BattleParams.VISION_RADIUS, turret.circularVisionRadius)
+            turret.turretRotatorHealth = copy.copy(turret.turretRotatorHealth)
+            turret.turretRotatorHealth.maxHealth = modifiers(BattleParams.TURRET_ROTATOR_HEALTH, turret.turretRotatorHealth.maxHealth)
+            turret.turretRotatorHealth.maxRegenHealth = modifiers(BattleParams.TURRET_ROTATOR_HEALTH, turret.turretRotatorHealth.maxRegenHealth)
+            if turret.turretRotatorHealth.hysteresisHealth is not None:
+                turret.turretRotatorHealth.hysteresisHealth = modifiers(BattleParams.TURRET_ROTATOR_HEALTH, turret.turretRotatorHealth.hysteresisHealth)
+            turret.turretRotatorHealth.healthRegenPerSec = modifiers(BattleParams.TURRET_ROTATOR_HEALTH, turret.turretRotatorHealth.healthRegenPerSec)
+            turret.turretRotatorHealth.healthBurnPerSec = modifiers(BattleParams.TURRET_ROTATOR_HEALTH, turret.turretRotatorHealth.healthBurnPerSec)
+            turret.surveyingDeviceHealth = copy.copy(turret.surveyingDeviceHealth)
+            turret.surveyingDeviceHealth.maxHealth = modifiers(BattleParams.SURVEYING_DEVICE_HEALTH, turret.surveyingDeviceHealth.maxHealth)
+            turret.surveyingDeviceHealth.maxRegenHealth = modifiers(BattleParams.SURVEYING_DEVICE_HEALTH, turret.surveyingDeviceHealth.maxRegenHealth)
+            if turret.surveyingDeviceHealth.hysteresisHealth is not None:
+                turret.surveyingDeviceHealth.hysteresisHealth = modifiers(BattleParams.SURVEYING_DEVICE_HEALTH, turret.surveyingDeviceHealth.hysteresisHealth)
+            turret.surveyingDeviceHealth.healthRegenPerSec = modifiers(BattleParams.SURVEYING_DEVICE_HEALTH, turret.surveyingDeviceHealth.healthRegenPerSec)
+            turret.surveyingDeviceHealth.healthBurnPerSec = modifiers(BattleParams.SURVEYING_DEVICE_HEALTH, turret.surveyingDeviceHealth.healthBurnPerSec)
         if modifiers.haveDomain(ModifierDomain.GUN_COMPONENTS):
             turret.guns = tuple((cls.__modifyGun(gun, modifiers) for gun in turret.guns))
         return turret
@@ -93,8 +126,8 @@ class VehicleModifier(object):
                 clipCount, clipInterval = gun.clip
                 gun.clip = (clipCount, modifiers(BattleParams.CLIP_INTERVAL, clipInterval))
             if gun.burst != DEFAULT_GUN_BURST:
-                burstCount, burstInterval = gun.burst
-                gun.burst = (burstCount, modifiers(BattleParams.BURST_INTERVAL, burstInterval))
+                burstCount, burstInterval, syncReloading = gun.burst
+                gun.burst = (burstCount, modifiers(BattleParams.BURST_INTERVAL, burstInterval), syncReloading)
             if gun.autoreload != DEFAULT_GUN_AUTORELOAD:
                 modifiedReloadTime = [ modifiers(BattleParams.AUTORELOAD_TIME, reloadTime) for reloadTime in gun.autoreload.reloadTime ]
                 gun.autoreload = gun.autoreload._replace(reloadTime=tuple(modifiedReloadTime))
@@ -131,6 +164,12 @@ class VehicleModifier(object):
                 gun.forcedReloadTime = modifiers(BattleParams.FORCED_RELOAD_TIME, gun.forcedReloadTime)
             if gun.autoShoot != DEFAULT_GUN_AUTOSHOOT:
                 gun.autoShoot = gun.autoShoot._replace(shotDispersionPerSec=modifiers(BattleParams.AUTO_SHOOT_DISPERSION_PER_SEC, gun.autoShoot.shotDispersionPerSec), maxShotDispersion=modifiers(BattleParams.AUTO_SHOOT_MAX_SHOT_DISPERSION_FACTOR, gun.autoShoot.maxShotDispersion))
+            gun.healthParams = copy.copy(gun.healthParams)
+            gun.healthParams.maxHealth = modifiers(BattleParams.GUN_HEALTH, gun.healthParams.maxHealth)
+            gun.healthParams.maxRegenHealth = modifiers(BattleParams.GUN_HEALTH, gun.healthParams.maxRegenHealth)
+            if gun.healthParams.hysteresisHealth is not None:
+                gun.healthParams.hysteresisHealth = modifiers(BattleParams.GUN_HEALTH, gun.healthParams.hysteresisHealth)
+            gun.healthParams.healthRegenPerSec = modifiers(BattleParams.GUN_HEALTH, gun.healthParams.healthRegenPerSec)
         if modifiers.haveDomain(ModifierDomain.SHOT_COMPONENTS):
             gun.shots = tuple((cls.__modifyShot(shot, modifiers) for shot in gun.shots))
         return gun
@@ -223,6 +262,13 @@ class VehicleModifier(object):
             LOG_DEBUG("[BattleModifiers][Debug] Modify engine '{}'".format(engine.name))
         engine = copy.copy(engine)
         engine.fireStartingChance = modifiers(BattleParams.ENGINE_FIRE_FACTOR, engine.fireStartingChance)
+        engine.healthParams = copy.copy(engine.healthParams)
+        engine.healthParams.maxHealth = modifiers(BattleParams.ENGINE_HEALTH, engine.healthParams.maxHealth)
+        engine.healthParams.maxRegenHealth = modifiers(BattleParams.ENGINE_HEALTH, engine.healthParams.maxRegenHealth)
+        if engine.healthParams.hysteresisHealth is not None:
+            engine.healthParams.hysteresisHealth = modifiers(BattleParams.ENGINE_HEALTH, engine.healthParams.hysteresisHealth)
+        engine.healthParams.healthRegenPerSec = modifiers(BattleParams.ENGINE_HEALTH, engine.healthParams.healthRegenPerSec)
+        engine.healthParams.healthBurnPerSec = modifiers(BattleParams.ENGINE_HEALTH, engine.healthParams.healthBurnPerSec)
         if IS_CLIENT:
             engine.sounds = modifiers(BattleParams.ENGINE_SOUNDS, engine.sounds)
         return engine
@@ -232,12 +278,29 @@ class VehicleModifier(object):
         if DEBUG_MODIFIERS:
             LOG_DEBUG('[BattleModifiers][Debug] Modify hull')
         hull = copy.copy(hull)
+        hull.ammoBayHealth = copy.copy(hull.ammoBayHealth)
+        hull.ammoBayHealth.maxHealth = modifiers(BattleParams.AMMO_BAY_HEALTH, hull.ammoBayHealth.maxHealth)
+        hull.ammoBayHealth.maxRegenHealth = modifiers(BattleParams.AMMO_BAY_HEALTH, hull.ammoBayHealth.maxRegenHealth)
+        hull.ammoBayHealth.healthRegenPerSec = modifiers(BattleParams.AMMO_BAY_HEALTH, hull.ammoBayHealth.healthRegenPerSec)
+        hull.ammoBayHealth.healthBurnPerSec = modifiers(BattleParams.AMMO_BAY_HEALTH, hull.ammoBayHealth.healthBurnPerSec)
         if IS_CLIENT:
             for descr in hull.customEffects:
                 for tag, value in descr.descriptors.items():
                     descr.descriptors[tag] = modifiers(BattleParams.EXHAUST_EFFECT, value)
 
         return hull
+
+    @classmethod
+    def __modifyFuelTanks(cls, fuelTank, modifiers):
+        if DEBUG_MODIFIERS:
+            LOG_DEBUG('[BattleModifiers][Debug] Modify fuel tank')
+        fuelTank = copy.copy(fuelTank)
+        fuelTank.healthParams = copy.copy(fuelTank.healthParams)
+        fuelTank.healthParams.maxHealth = modifiers(BattleParams.FUEL_TANK_HEALTH, fuelTank.healthParams.maxHealth)
+        fuelTank.healthParams.maxRegenHealth = modifiers(BattleParams.FUEL_TANK_HEALTH, fuelTank.healthParams.maxRegenHealth)
+        fuelTank.healthParams.healthRegenPerSec = modifiers(BattleParams.FUEL_TANK_HEALTH, fuelTank.healthParams.healthRegenPerSec)
+        fuelTank.healthParams.healthBurnPerSec = modifiers(BattleParams.FUEL_TANK_HEALTH, fuelTank.healthParams.healthBurnPerSec)
+        return fuelTank
 
     @classmethod
     def __modifyPhysics(cls, physics, modifiers):

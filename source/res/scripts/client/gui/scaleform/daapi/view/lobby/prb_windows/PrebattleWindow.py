@@ -270,8 +270,8 @@ class PrebattleWindow(PrebattleWindowMeta, ILegacyListener):
         return
 
     @adisp_process
-    def _doLeave(self, isExit=True):
-        yield self.prbDispatcher.doLeaveAction(LeavePrbAction(isExit))
+    def _doLeave(self, isExit=True, parent=None):
+        yield self.prbDispatcher.doLeaveAction(LeavePrbAction(isExit=isExit, parent=parent))
 
     def __handlePrbChannelControllerInited(self, event):
         ctx = event.ctx

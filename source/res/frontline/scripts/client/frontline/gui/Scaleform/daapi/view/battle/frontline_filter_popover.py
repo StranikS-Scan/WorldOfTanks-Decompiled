@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/Scaleform/daapi/view/battle/frontline_filter_popover.py
+from gui.filters.carousel_filter import FILTER_KEYS
 from gui.Scaleform.daapi.view.common.common_constants import FILTER_POPOVER_SECTION
 from gui.Scaleform.daapi.view.common.filter_popover import TankCarouselFilterPopover
-from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import FILTER_KEYS
 
 class FrontlineBattleTankCarouselFilterPopover(TankCarouselFilterPopover):
     _BASE_SPECIALS_LIST = [FILTER_KEYS.FAVORITE, FILTER_KEYS.PREMIUM]

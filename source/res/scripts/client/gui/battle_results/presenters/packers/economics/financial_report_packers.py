@@ -70,6 +70,7 @@ class CreditsStatisticsPacker(DetailedCurrencyPacker):
      credits_records.SQUAD_BONUS_CREDITS,
      credits_records.ACHIEVEMENT_CREDITS,
      credits_records.BOOSTERS_CREDITS,
+     credits_records.PET_SYSTEM_BONUS_CREDITS,
      credits_records.BATTLE_PAYMENTS_CREDITS,
      credits_records.EVENT_PAYMENTS_CREDITS,
      credits_records.REFERRAL_BONUS_CREDITS,

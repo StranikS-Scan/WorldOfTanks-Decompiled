@@ -46,7 +46,9 @@
     <DG_TK_62>	48	</DG_TK_62>
     <Skoda_V8_diesel>	49	</Skoda_V8_diesel>
     <Skoda_V8_turbodiesel>	50	</Skoda_V8_turbodiesel>
+    <B_58_J>	51	</B_58_J>
     <_5_TD_DBV>	52	</_5_TD_DBV>
+    <Skoda_V8>	53	</Skoda_V8>
     <V12_TD>	55	</V12_TD>
     <Skoda_16_AH_145J>	56	</Skoda_16_AH_145J>
     <V_59T>	58	</V_59T>
@@ -267,6 +269,23 @@
       <rpm_min>	312	</rpm_min>
       <rpm_max>	2801	</rpm_max>
     </Skoda_V12_19_8_liter_druhy_model>
+    <Skoda_V8>
+      <userString>	#czech_vehicles:Skoda_V8	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	10000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	300	</power>
+      <weight>	600	</weight>
+      <maxHealth>	135	</maxHealth>
+      <maxRegenHealth>	68	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	437	</rpm_min>
+      <rpm_max>	2400	</rpm_max>
+    </Skoda_V8>
     <Skoda_V12_19_8_liter_24>
       <userString>	#czech_vehicles:Skoda_V12_19_8_liter_24	</userString>
       <tags>	gasoline	</tags>
@@ -793,6 +812,23 @@
       <rpm_min>	320	</rpm_min>
       <rpm_max>	2240	</rpm_max>
     </Skoda_V16_AHK_2>
+    <B_58_J>
+      <userString>	#czech_vehicles:B_58_J	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	60000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	750	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	275	</maxHealth>
+      <maxRegenHealth>	138	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	320	</rpm_min>
+      <rpm_max>	2240	</rpm_max>
+    </B_58_J>
     <_5_TD_DBV>
       <userString>	#czech_vehicles:_5_TD_DBV	</userString>
       <tags>	diesel	</tags>

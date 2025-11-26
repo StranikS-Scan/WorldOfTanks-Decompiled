@@ -73,6 +73,9 @@ items = globals().get('items')
 filter = globals().get('BattleResults')
 """:type: battle_result_filters"""
 
+MAX_VEHICLE_LEVEL = globals().get('MAX_VEHICLE_LEVEL')
+""":type: constants.MAX_VEHICLE_LEVEL"""
+
 MAIN_PROGRESS_ID = 'kills'
 ADD_PROGRESS_ID = 'damageInBattle'
 ADD_SERIES_PROGRESS_ID = 'damageInBattleSeries'
@@ -90,7 +93,7 @@ def onFinishBattle(eventType, eventData, quest, processor):
     questProgress.increaseUntilComplete(ADD_PROGRESS_ID, addCondition)
     if questProgress.isCompleted(ADD_PROGRESS_ID):
         questProgress.increaseUntilComplete(ADD_SERIES_PROGRESS_ID, 1)
-    mainCondition = len(brfilter.filterDamageTo(result=['killed'], level=range(brfilter.getMyLevel(), 11)))
+    mainCondition = len(brfilter.filterDamageTo(result=['killed'], level=range(brfilter.getMyLevel(), MAX_VEHICLE_LEVEL+1)))
     questProgress.increaseUntilComplete(MAIN_PROGRESS_ID, mainCondition)
 
     eventData['results'].update(processor.checkComplete(questProgress, quest.progressID, additionalProgressID=ADD_SERIES_PROGRESS_ID))

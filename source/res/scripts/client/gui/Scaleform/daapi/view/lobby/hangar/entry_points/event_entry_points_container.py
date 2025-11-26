@@ -4,7 +4,6 @@ import json
 import logging
 from operator import attrgetter
 from itertools import chain
-from battle_royale.gui.impl.lobby.views.battle_royale_entry_point import isBattleRoyaleEntryPointAvailable
 from constants import QUEUE_TYPE
 from gui.Scaleform.daapi.view.meta.EventEntryPointsContainerMeta import EventEntryPointsContainerMeta
 from gui.impl.lobby.mapbox.mapbox_entry_point_view import isMapboxEntryPointAvailable
@@ -13,7 +12,6 @@ from gui.impl.lobby.marathon.marathon_entry_point import isMarathonEntryPointAva
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.limited_ui.lui_rules_storage import LUI_RULES
-from gui.impl.lobby.stronghold.stronghold_entry_point_view import isStrongholdEntryPointAvailable
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared.system_factory import registerBannerEntryPointValidator, collectBannerEntryPointValidator, registerBannerEntryPointLUIRule, collectBannerEntryPointLUIRule
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
@@ -32,12 +30,8 @@ registerBannerEntryPointValidator(HANGAR_ALIASES.CRAFT_MACHINE_ENTRY_POINT, getC
 registerBannerEntryPointValidator(RANKEDBATTLES_ALIASES.ENTRY_POINT, isRankedEntryPointAvailable)
 registerBannerEntryPointValidator(HANGAR_ALIASES.MAPBOX_ENTRY_POINT, isMapboxEntryPointAvailable)
 registerBannerEntryPointValidator(HANGAR_ALIASES.MARATHON_ENTRY_POINT, isMarathonEntryPointAvailable)
-registerBannerEntryPointValidator(HANGAR_ALIASES.STRONGHOLD_ENTRY_POINT, isStrongholdEntryPointAvailable)
-registerBannerEntryPointValidator(HANGAR_ALIASES.BR_ENTRY_POINT, isBattleRoyaleEntryPointAvailable)
 registerBannerEntryPointLUIRule(HANGAR_ALIASES.CRAFT_MACHINE_ENTRY_POINT, LUI_RULES.CraftMachineEntryPoint)
 registerBannerEntryPointLUIRule(HANGAR_ALIASES.MAPBOX_ENTRY_POINT, LUI_RULES.MapboxEntryPoint)
-registerBannerEntryPointLUIRule(HANGAR_ALIASES.STRONGHOLD_ENTRY_POINT, LUI_RULES.StrongholdEntryPoint)
-registerBannerEntryPointLUIRule(HANGAR_ALIASES.BR_ENTRY_POINT, LUI_RULES.BREntryPoint)
 _logger = logging.getLogger(__name__)
 
 class _EntryPointData(object):

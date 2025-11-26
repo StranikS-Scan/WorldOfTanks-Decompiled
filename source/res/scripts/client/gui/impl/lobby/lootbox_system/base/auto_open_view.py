@@ -1,29 +1,26 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/lootbox_system/base/auto_open_view.py
 from constants import LOOTBOX_TOKEN_PREFIX
-from frameworks.wulf import ViewSettings, WindowLayer, WindowFlags
+from frameworks.wulf import ViewSettings, WindowFlags
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.lootbox_system.auto_open_view_model import AutoOpenViewModel
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
-from gui.impl.pub import ViewImpl
-from gui.impl.pub.lobby_window import LobbyWindow
+from gui.impl.pub import ViewImpl, WindowImpl
 from gui.lootbox_system.base.bonuses_helpers import REWARDS_GROUP_NAME_RES, RewardsGroup, getGoodiesFilter, getItemsFilter, getTankmenFilter, getVehiclesFilter, isBattleBooster, isCrewBook, noCompensation, isOptionalDevice, packBonusGroups
-from gui.lootbox_system.base.common import ViewID, Views, LOOTBOX_COMPENSATION_TOKEN_PREFIX
-from gui.lootbox_system.base.views_loaders import showItemPreview, hideItemPreview
-from gui.shared import event_dispatcher
+from gui.lootbox_system.base.common import LOOTBOX_COMPENSATION_TOKEN_PREFIX
+from gui.lootbox_system.base.views_loaders import showItemPreview
 from helpers import dependency
 from skeletons.gui.goodies import IGoodiesCache
 
 class AutoOpenView(ViewImpl):
-    __slots__ = ('__eventName', '__rewards', '__boxes', '__tooltips')
     __goodiesCache = dependency.descriptor(IGoodiesCache)
 
-    def __init__(self, eventName, rewards, boxes):
+    def __init__(self, ctx):
         settings = ViewSettings(R.views.mono.lootbox.auto_open(), model=AutoOpenViewModel())
         super(AutoOpenView, self).__init__(settings)
-        self.__eventName = eventName
-        self.__rewards = self.__filterRewards(rewards)
-        self.__boxes = boxes
+        self.__eventName = ctx.get('eventName')
+        self.__rewards = self.__filterRewards(ctx.get('rewards'))
+        self.__boxes = ctx.get('boxes')
         self.__tooltips = {}
 
     @property
@@ -63,12 +60,12 @@ class AutoOpenView(ViewImpl):
         return layout
 
     def __showPreview(self, ctx):
-        showItemPreview(str(ctx.get('bonusType')), int(ctx.get('bonusId')), int(ctx.get('styleID')), self.__eventName, self.__reopen)
-        self.destroyWindow()
+        showItemPreview(str(ctx.get('bonusType')), int(ctx.get('bonusId')), int(ctx.get('styleID')))
 
     def __onClose(self):
-        self.destroyWindow()
-        event_dispatcher.showHangar()
+        from gui.Scaleform.lobby_entry import getLobbyStateMachine
+        lsm = getLobbyStateMachine()
+        lsm.getStateFromView(self).goBack()
 
     def __filterRewards(self, rewards):
         for tokenName in rewards.get('tokens', {}).keys():
@@ -79,13 +76,8 @@ class AutoOpenView(ViewImpl):
             rewards.pop('tokens', None)
         return rewards
 
-    def __reopen(self):
-        hideItemPreview()
-        Views.load(ViewID.AUTOOPEN, eventName=self.__eventName, rewards=self.__rewards, boxes=self.__boxes)
 
+class AutoOpenWindow(WindowImpl):
 
-class AutoOpenWindow(LobbyWindow):
-    __slots__ = ()
-
-    def __init__(self, eventName, rewards, boxes):
-        super(AutoOpenWindow, self).__init__(WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=AutoOpenView(eventName, rewards, boxes), layer=WindowLayer.TOP_WINDOW)
+    def __init__(self, layer, ctx=None, *args, **kwargs):
+        super(AutoOpenWindow, self).__init__(WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=AutoOpenView(ctx), layer=layer)

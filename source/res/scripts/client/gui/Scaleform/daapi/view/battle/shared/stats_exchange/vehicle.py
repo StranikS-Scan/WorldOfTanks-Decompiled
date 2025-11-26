@@ -17,7 +17,7 @@ class ISortedIDsComposer(object):
 
 
 class VehiclesSortedIDsComposer(broker.SingleSideComposer, ISortedIDsComposer):
-    __slots__ = ('_items',)
+    __slots__ = ()
 
     def __init__(self, voField='vehiclesIDs', sortKey=vos_collections.VehicleInfoSortKey):
         super(VehiclesSortedIDsComposer, self).__init__(voField=voField, sortKey=sortKey)

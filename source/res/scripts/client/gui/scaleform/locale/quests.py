@@ -1718,6 +1718,7 @@ class QUESTS(object):
     GENERAL_COUNTDOWN_TIMER_SEC = '#quests:general/countdown/timer_sec'
     DAILYQUESTS_POSTBATTLE_GENERICAMPERSAND = '#quests:dailyQuests/postBattle/genericAmpersand'
     DAILYQUESTS_POSTBATTLE_CONDITIONTYPEAND = '#quests:dailyQuests/postBattle/conditionTypeAnd'
+    DAILYQUESTS_POSTBATTLE_CONDITIONTYPEOR = '#quests:dailyQuests/postBattle/conditionTypeOr'
     DAILYQUESTS_TAKEREWARDSBUTTON_TEXT = '#quests:dailyQuests/takeRewardsButton/text'
     DAILYQUESTS_TAKEREWARDSBUTTON_COUNTDOWN = '#quests:dailyQuests/takeRewardsButton/countdown'
     DAILYQUESTS_TAKEREWARDSBUTTON_TOOLTIP = '#quests:dailyQuests/takeRewardsButton/tooltip'

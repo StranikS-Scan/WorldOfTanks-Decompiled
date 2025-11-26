@@ -6,6 +6,7 @@ class ResearchPurchaseModel(ViewModel):
     __slots__ = ('onAction', 'onBlueprint')
     ACTION_RESEARCH = 'action_research'
     ACTION_PURCHASE = 'action_purchase'
+    ACTION_PURCHASE_CAN_VIEW_IN_GARAGE = 'action_purchase_can_view_in_garage'
     ACTION_PURCHASE_SHOP = 'action_purchase_shop'
     ACTION_RESTORE = 'action_restore'
     ACTION_IN_GARAGE = 'action_in_garage'
@@ -16,8 +17,9 @@ class ResearchPurchaseModel(ViewModel):
     ACTION_DESC_PARENT_MODULE_IS_LOCKED = 'parentModuleIsLocked'
     ACTION_DESC_WALLET_UNAVAILABLE = 'walletUnavailable'
     ACTION_DESC_RESTORE_REQUESTED = 'restoreRequested'
+    ACTION_READY_FOR_TRADE_IN = 'readyForTradeIn'
 
-    def __init__(self, properties=18, commands=2):
+    def __init__(self, properties=19, commands=2):
         super(ResearchPurchaseModel, self).__init__(properties=properties, commands=commands)
 
     def getAction(self):
@@ -116,17 +118,23 @@ class ResearchPurchaseModel(ViewModel):
     def setPromoFinishTime(self, value):
         self._setNumber(15, value)
 
-    def getPremium(self):
+    def getCanTradeIn(self):
         return self._getBool(16)
 
-    def setPremium(self, value):
+    def setCanTradeIn(self, value):
         self._setBool(16, value)
 
-    def getElite(self):
+    def getPremium(self):
         return self._getBool(17)
 
-    def setElite(self, value):
+    def setPremium(self, value):
         self._setBool(17, value)
+
+    def getElite(self):
+        return self._getBool(18)
+
+    def setElite(self, value):
+        self._setBool(18, value)
 
     def _initialize(self):
         super(ResearchPurchaseModel, self)._initialize()
@@ -146,6 +154,7 @@ class ResearchPurchaseModel(ViewModel):
         self._addBoolProperty('notInShopVehicle', False)
         self._addStringProperty('promoTitle', '')
         self._addNumberProperty('promoFinishTime', 0)
+        self._addBoolProperty('canTradeIn', False)
         self._addBoolProperty('premium', False)
         self._addBoolProperty('elite', False)
         self.onAction = self._addCommand('onAction')

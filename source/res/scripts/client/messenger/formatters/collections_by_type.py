@@ -167,3 +167,7 @@ def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.resourceWellOperation.index(), _sc.ResourceWellOperationFormatter())
     registerMessengerServerFormatter(_SM_TYPE.prestigeMilestoneReward.index(), _sc.PrestigeMilestoneRewardFormatter())
     registerMessengerServerFormatter(_SM_TYPE.prestigeMilestoneRewardError.index(), _sc.PrestigeMilestoneErrorFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.petBuy.index(), _sc.PetSystemPetPurchaseFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.petAdded.index(), _sc.PetSystemPetAddedFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.petSynergyUp.index(), _sc.PetSystemSynergyLevelUpFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.petSynergyMax.index(), _sc.PetSystemSynergyMaxLevelFormatter())

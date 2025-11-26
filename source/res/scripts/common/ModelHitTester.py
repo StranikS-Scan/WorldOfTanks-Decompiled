@@ -23,6 +23,7 @@ class HitTesterManager(object):
     CRASHED_MODEL_TAG = 'crashed'
     CLIENT_MODEL_TAG = 'collisionModelClient'
     SERVER_MODEL_TAG = 'collisionModelServer'
+    CLIENT_CAPSULE_TAG = 'capsuleScale'
 
     def __init__(self, dataSection=None):
         self.__hitTesters = {ModelStatus.NORMAL: None,
@@ -79,6 +80,10 @@ class HitTesterManager(object):
                 section.writeString(self.CRASHED_MODEL_TAG, self.edCrashBspModel)
             elif section.has_key(self.CRASHED_MODEL_TAG):
                 section.deleteSection(self.CRASHED_MODEL_TAG)
+            if not self.edExtendCapsuleScale.isZero():
+                section.writeVector3(self.CLIENT_CAPSULE_TAG, self.edExtendCapsuleScale)
+            elif section.has_key(self.CLIENT_CAPSULE_TAG):
+                section.deleteSection(self.CLIENT_CAPSULE_TAG)
 
     def __createHitTester(self, section, modelTag=None):
         if modelTag is None:
@@ -90,13 +95,16 @@ class HitTesterManager(object):
         bspModelNameDown = section.readString(modelTagDown)
         modelTagUp = modelTag + 'Up'
         bspModelNameUp = section.readString(modelTagUp)
-        return ModelHitTester(bspModelName, bspModelNameDown, bspModelNameUp)
+        capsuleScale = None
+        if (IS_CLIENT or IS_EDITOR) and section.has_key(self.CLIENT_CAPSULE_TAG):
+            capsuleScale = section.readVector3(self.CLIENT_CAPSULE_TAG)
+        return ModelHitTester(bspModelName, bspModelNameDown, bspModelNameUp, capsuleScale)
 
 
 class ModelHitTester(object):
-    __slots__ = ('__bspModel', '__bspModelName', '__bspModelDown', '__bspModelNameDown', '__bspModelUp', '__bspModelNameUp', 'bbox', 'bboxDown', 'bboxUp')
+    __slots__ = ('__bspModel', '__bspModelName', '__bspModelDown', '__bspModelNameDown', '__bspModelUp', '__bspModelNameUp', '__extraCapsuleScale', 'bbox', 'bboxDown', 'bboxUp')
 
-    def __init__(self, bspModelName=None, bspModelNameDown=None, bspModelNameUp=None):
+    def __init__(self, bspModelName=None, bspModelNameDown=None, bspModelNameUp=None, extraCapsuleScale=None):
         self.bbox = None
         self.__bspModel = None
         self.__bspModelName = bspModelName
@@ -104,6 +112,7 @@ class ModelHitTester(object):
         self.__bspModelNameDown = bspModelNameDown
         self.__bspModelUp = None
         self.__bspModelNameUp = bspModelNameUp
+        self.__extraCapsuleScale = extraCapsuleScale
         return
 
     @property
@@ -120,6 +129,10 @@ class ModelHitTester(object):
 
     def isBspModelLoaded(self):
         return self.__bspModel is not None
+
+    @property
+    def extraCapsuleScale(self):
+        return self.__extraCapsuleScale
 
     def loadBspModel(self):
         if self.__bspModel is not None:

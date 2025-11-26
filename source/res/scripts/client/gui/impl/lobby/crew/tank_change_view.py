@@ -93,11 +93,12 @@ class TankChangeView(BaseCrewView):
         self.__dataProvider.update()
 
     def _finalize(self):
+        isCrewEmpty = not any((True for data in self._getCrewBySlotIDX(NO_SLOT) if data[1] is not None))
         super(TankChangeView, self)._finalize()
         self._filterPanelWidget = None
         self.__filterState = None
         self.__dataProvider = None
-        if self.tankman and self.tankman.isInTank and (not self.vehicle or not self.vehicle.hasCrew):
+        if isCrewEmpty:
             self._destroySubViews()
         self._clear()
         return

@@ -20,6 +20,7 @@ from gui.server_events.finders import getBranchByOperationId, BRANCH_TO_OPERATIO
 from gui.shared.event_dispatcher import showPersonalMissionMainWindow, showPM30IntroWindow
 from helpers import dependency
 from personal_missions import PM_BRANCH
+from shared_utils import findFirst
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -122,16 +123,18 @@ class CampaignSelectorView(ViewImpl):
         if not res.success:
             Waiting.hide(waitingId)
             return
-        if self._isFirstTimeEntrance and campaignsState == CampaignSelectorViewState.THIRD.value:
-            firstCampaign3OperationID = BRANCH_TO_OPERATION_IDS[PM_BRANCH.PERSONAL_MISSION_3][0]
-            introKey = IntroKeys.OPERATION_INTRO_VIEW.value % firstCampaign3OperationID
-            isFirtOperationEntrance = True
-            if self._isFirstTimeEntrance and isIntroShown(introKey):
-                isFirtOperationEntrance = False
-            res = yield processPM3Operation(PM_BRANCH.PERSONAL_MISSION_3, firstCampaign3OperationID, isFirstTimeEntrance=isFirtOperationEntrance)
-            if res.success and self.viewStatus == ViewStatus.LOADED:
-                self._fillModel()
-                showPersonalMissionMainWindow(firstCampaign3OperationID)
+        needToProcessPM3Operation = campaignsState == CampaignSelectorViewState.THIRD.value and not self._personalMissions.getSelectedQuestsForBranch(campaignToActive).values()
+        if needToProcessPM3Operation:
+            unclaimedOperation = findFirst(lambda o: not o.isAwardAchieved(), self._operations.values())
+            unclaimedOperationID = unclaimedOperation.getID() if unclaimedOperation else BRANCH_TO_OPERATION_IDS[PM_BRANCH.PERSONAL_MISSION_3][0]
+            introKey = IntroKeys.OPERATION_INTRO_VIEW.value % unclaimedOperationID
+            isFirstTimeEntrance = self._isFirstTimeEntrance
+            isFirstOperationEntrance = True
+            if isFirstTimeEntrance and isIntroShown(introKey):
+                isFirstOperationEntrance = False
+            res = yield processPM3Operation(PM_BRANCH.PERSONAL_MISSION_3, unclaimedOperationID, isFirstTimeEntrance=isFirstOperationEntrance)
+            if res.success and isFirstTimeEntrance and self.viewStatus == ViewStatus.LOADED:
+                showPersonalMissionMainWindow(unclaimedOperationID)
         Waiting.hide(waitingId)
 
     def _fillModel(self):

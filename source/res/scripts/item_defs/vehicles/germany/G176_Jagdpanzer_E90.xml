@@ -15,10 +15,10 @@
     <backward>	12	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.046	</moving>
-    <still>	0.077	</still>
+    <moving>	0.041	</moving>
+    <still>	0.069	</still>
     <camouflageBonus>	0.04	</camouflageBonus>
-    <firePenalty>	0.116	</firePenalty>
+    <firePenalty>	0.104	</firePenalty>
   </invisibility>
   <optDevsOverrides>
     <camouflageNet>
@@ -52,31 +52,29 @@
     <armor>
       <armor_1>	180	</armor_1>
       <armor_2>	140	</armor_2>
-      <armor_3>	120	</armor_3>
+      <armor_3>	140	</armor_3>
       <armor_4>	100	</armor_4>
       <armor_5>	55	</armor_5>
       <armor_6>	40	</armor_6>
       <armor_7>	30	</armor_7>
       <armor_8>	0	</armor_8>
       <armor_9>	55	</armor_9>
-      <armor_10>	140	</armor_10>
-      <armor_11>	110	</armor_11>
+      <armor_10>	155	</armor_10>
+      <armor_11>	130	</armor_11>
       <armor_12>	250	</armor_12>
-      <armor_13>	100	</armor_13>
+      <armor_13>	85	</armor_13>
       <armor_14>	50	</armor_14>
-      <armor_15>	50	</armor_15>
-      <armor_16>	100	</armor_16>
+      <armor_15>	65	</armor_15>
       <armor_17>	95	</armor_17>
-      <armor_18>	80	</armor_18>
-      <armor_19>	70	</armor_19>
+      <armor_18>	40	</armor_18>
+      <armor_19>	75	</armor_19>
       <armor_20>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_20>
-      <armor_21>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+      <armor_21>	5	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_21>
-      <armor_22>	180	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+      <armor_22>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_22>
-      <armor_23>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-      </armor_23>
+      <armor_23>	105	</armor_23>
       <armor_24>	100	</armor_24>
       <armor_25>	240	</armor_25>
       <armor_26>	230	</armor_26>
@@ -88,7 +86,7 @@
       <armor_32>	60	</armor_32>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-    <weight>	72780	</weight>
+    <weight>	82780	</weight>
     <maxHealth>	1440	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	230	</maxHealth>
@@ -111,7 +109,7 @@
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.413157 1.24397 2.33843	</turret>
+      <turret>	0 1.24397 2.33843	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/german/G176_Jagdpanzer_E90/collision/Hull.model	</collisionModelServer>
@@ -2243,7 +2241,7 @@
         <collisionModelServer>	vehicles/german/G176_Jagdpanzer_E90/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/german/G176_Jagdpanzer_E90/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	-0.411627 -0.039661 -0.547968	</gunPosition>
+      <gunPosition>	0.00153 -0.039661 -0.547968	</gunPosition>
       <customization>
         <customizableVehicleAreas>
           <paint></paint>
@@ -2251,7 +2249,7 @@
         </customizableVehicleAreas>
       </customization>
       <wwturretRotatorSoundManual>	tur_man_trav_06	</wwturretRotatorSoundManual>
-      <physicsShape>	1.98 0.004 1.959 0 1.357 0 0.5 0.5 0.5 1 0 0.5 0.6 0.296 1	</physicsShape>
+      <physicsShape>	1 0 2 0 1.203 0 0.5 0.1 0.5 0.5 0.053 0.5 0 0.495 0.5	</physicsShape>
       <camouflage>
         <density>	96.925667 98.200058	</density>
         <aoTextureSize>	1024 1024	</aoTextureSize>
@@ -2272,7 +2270,7 @@
     <detailed>
       <engines>
         <Maybach_Neues_Projekt_90>
-          <smplEnginePower>	1200	</smplEnginePower>
+          <smplEnginePower>	1310	</smplEnginePower>
           <smplFwMaxSpeed>	28	</smplFwMaxSpeed>
         </Maybach_Neues_Projekt_90>
       </engines>

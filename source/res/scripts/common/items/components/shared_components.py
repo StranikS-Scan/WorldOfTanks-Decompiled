@@ -4,6 +4,7 @@ import copy
 from functools import partial
 import typing
 import Math
+import cPickle
 from collections import namedtuple
 from constants import IS_CLIENT, IS_WEB, IS_EDITOR, IS_BOT
 from debug_utils import LOG_WARNING
@@ -32,7 +33,7 @@ if typing.TYPE_CHECKING:
     from typing import Any, Dict, Tuple, List, Optional, Sequence
     from constants import VEHICLE_TTC_ASPECTS
     from items.vehicles import VehicleDescriptor
-__all__ = ('MaterialInfo', 'DEFAULT_MATERIAL_INFO', 'EmblemSlot', 'LodSettings', 'NodesAndGroups', 'Camouflage', 'DEFAULT_CAMOUFLAGE', 'SwingingSettings', 'I18nComponent', 'DeviceHealth', 'ModelStatesPaths', 'RocketAccelerationParams', 'ImpulseData', 'MechanicsParams', 'AccuracyStacksParams', 'BattleFuryParams', 'ConcentrationModeParams', 'ExtraShotClipParams', 'RechargeableNitroParams', 'OverheatStacksParams', 'ChargeShotParams', 'ChargeableBurstParams')
+__all__ = ('MaterialInfo', 'DEFAULT_MATERIAL_INFO', 'EmblemSlot', 'LodSettings', 'NodesAndGroups', 'Camouflage', 'DEFAULT_CAMOUFLAGE', 'SwingingSettings', 'I18nComponent', 'DeviceHealth', 'ModelStatesPaths', 'RocketAccelerationParams', 'ImpulseData', 'MechanicsParams', 'AccuracyStacksParams', 'BattleFuryParams', 'ConcentrationModeParams', 'ExtraShotClipParams', 'RechargeableNitroParams', 'OverheatStacksParams', 'ChargeShotParams', 'ChargeableBurstParams', 'TargetDesignatorParams')
 MaterialInfo = reflectedNamedTuple('MaterialInfo', ('kind', 'armor', 'extra', 'multipleExtra', 'vehicleDamageFactor', 'useArmorHomogenization', 'useHitAngle', 'useAntifragmentationLining', 'mayRicochet', 'collideOnceOnly', 'checkCaliberForRicochet', 'checkCaliberForHitAngleNorm', 'damageKind', 'chanceToHitByProjectile', 'chanceToHitByExplosion', 'continueTraceIfNoHit', 'tags'))
 DEFAULT_MATERIAL_INFO = MaterialInfo(0, 0, None, False, 0.0, False, False, False, False, False, False, False, 0, 0.0, 0.0, False, frozenset())
 EmblemSlot = reflectedNamedTuple('EmblemSlot', ('rayStart', 'rayEnd', 'rayUp', 'size', 'hideIfDamaged', 'type', 'isMirrored', 'isUVProportional', 'emblemId', 'slotId', 'applyToFabric', 'compatibleModels'))
@@ -331,12 +332,14 @@ class RocketAccelerationParams(object):
 
 
 class MechanicsParams(object):
-    __slots__ = ('__restrictEditing',)
+    __slots__ = ('__origin', 'modifiers')
     MECHANICS_NAME = None
     COMPONENT_TYPE_ID = None
 
-    def __init__(self):
-        self.__restrictEditing = True
+    def __init__(self, modifiers=None):
+        self.__origin = None
+        self.modifiers = modifiers
+        return
 
     @classmethod
     def getSubClasses(cls, uniqueParamNames=None):
@@ -355,15 +358,23 @@ class MechanicsParams(object):
     @classmethod
     def readMechanicsParams(cls, xmlCtx, section, readModifiers):
         if not cls.MECHANICS_NAME:
-            return None
+            return
         else:
             mechanicCtx, mechanicSection = _xml.getSubSectionWithContext(xmlCtx, section, cls.MECHANICS_NAME, throwIfMissing=False)
-            return None if mechanicSection is None else cls._readMechanicsParams(mechanicCtx, mechanicSection, readModifiers)
+            if mechanicSection is None:
+                return
+            params = cls._readMechanicsParams(mechanicCtx, mechanicSection, readModifiers)
+            return params
 
-    def getMechanicsParamsClone(self):
-        params = copy.deepcopy(self)
-        params.__restrictEditing = False
-        return params
+    def createMechanicsParamsOrigin(self):
+        origin = self.__origin
+        if origin:
+            params = cPickle.loads(origin)
+            params.__origin = origin
+            return params
+        else:
+            return None
+            return None
 
     def getMechanicsMiscAttributes(self):
         return self.getDefaultMechanicsMiscAttributes()
@@ -379,8 +390,17 @@ class MechanicsParams(object):
         for attr in self.getMechanicsMiscAttributes():
             self._applyMechanicsAttrs(attr, miscAttrs[attr])
 
-    def applyDynModifiersToMechanics(self, dynAttrs):
-        pass
+    def applyDynModifiersToMechanics(self, dynModifiers):
+        modifiers = self.modifiers
+        if not dynModifiers or self.modifiers is None:
+            return
+        else:
+            for modifier in dynModifiers:
+                modifierFilter = modifier[4]
+                if modifierFilter == self.MECHANICS_NAME:
+                    modifiers.append(modifier)
+
+            return
 
     def updateVehicleAttrFactorsForAspect(self, vehicleDescr, factors, aspect):
         pass
@@ -392,20 +412,19 @@ class MechanicsParams(object):
     def _applyMechanicsAttrs(self, attr, value):
         pass
 
-    def __checkRestriction(self):
-        if self.__restrictEditing:
-            raise SoftException('Cannot set modifier on a restricted MechanicsParams instance')
+    def _saveOrigin(self):
+        self.__origin = cPickle.dumps(self, -1)
 
     def __repr__(self):
         return '{}({})'.format(self.__class__.__name__, ', '.join(('{}={}'.format(slotName, getattr(self, slotName)) for slotName in self.__slots__ if not slotName.startswith('_'))))
 
 
 class GunMechanicsParams(MechanicsParams):
-    _GUN_SLOTS = ('gunInstallationSlot',)
+    __slots__ = ('gunInstallationSlot',)
     COMPONENT_TYPE_ID = ITEM_TYPES.vehicleGun
 
-    def __init__(self):
-        super(GunMechanicsParams, self).__init__()
+    def __init__(self, modifiers=None):
+        super(GunMechanicsParams, self).__init__(modifiers)
         self.gunInstallationSlot = None
         return
 
@@ -413,61 +432,75 @@ class GunMechanicsParams(MechanicsParams):
         self.gunInstallationSlot = gunInstallationSlot
 
 
-class MechanicsDynParams(MechanicsParams):
-    __slots__ = MechanicsParams.__slots__ + ('modifiers',)
-
-    def __init__(self, modifiers):
-        super(MechanicsDynParams, self).__init__()
-        self.modifiers = modifiers or []
-
-    def applyDynModifiersToMechanics(self, dynModifiers):
-        if not dynModifiers:
-            return
-        modifiers = self.modifiers
-        for modifier in dynModifiers:
-            modifierFilter = modifier[4]
-            if modifierFilter == self.MECHANICS_NAME:
-                modifiers.append(modifier)
-
-
-class RechargeableNitroParams(MechanicsDynParams):
-    __slots__ = MechanicsDynParams.__slots__ + ('deployTime', 'reloadTime', 'duration', 'threshold', 'cooldown', 'impulse', 'modifiers')
+class RechargeableNitroParams(MechanicsParams):
+    __slots__ = ('deployTime', 'reloadTime', 'duration', 'threshold', 'cooldown', 'addMaxSpeedForwardBonus', 'addRotationSpeedBonus', 'impulse')
     MECHANICS_NAME = 'rechargeableNitro'
 
-    def __init__(self, deployTime, reloadTime, duration, cooldown, impulse, modifiers, threshold=0):
+    def __init__(self, deployTime, reloadTime, duration, cooldown, addMaxSpeedForwardBonus, addRotationSpeedBonus, impulse, modifiers, threshold=0):
         super(RechargeableNitroParams, self).__init__(modifiers)
         self.deployTime = deployTime
         self.reloadTime = reloadTime
         self.duration = duration
         self.threshold = threshold
         self.cooldown = cooldown
+        self.addMaxSpeedForwardBonus = addMaxSpeedForwardBonus
+        self.addRotationSpeedBonus = addRotationSpeedBonus
         self.impulse = impulse
-        self.modifiers = modifiers
+        self._saveOrigin()
 
     @classmethod
     def _readMechanicsParams(cls, ctx, section, readModifiers):
         impulseCtx, impulseSection = _xml.getSubSectionWithContext(ctx, section, 'impulse')
         impulse = ImpulseData(magnitude=_xml.readNonNegativeFloat(impulseCtx, impulseSection, 'magnitude'), applyPoint=_xml.readVector3(impulseCtx, impulseSection, 'applyPoint', component_constants.ZERO_VECTOR3), duration=_xml.readNonNegativeFloat(impulseCtx, impulseSection, 'duration'))
         modifiers = readModifiers(ctx, _xml.getSubsection(ctx, section, 'modifiers'))
-        return cls(deployTime=_xml.readNonNegativeFloat(ctx, section, 'deployTime'), reloadTime=_xml.readPositiveFloat(ctx, section, 'reloadTime'), duration=_xml.readPositiveFloat(ctx, section, 'duration'), threshold=_xml.readPositiveFloat(ctx, section, 'threshold'), cooldown=_xml.readPositiveFloat(ctx, section, 'cooldown'), impulse=impulse, modifiers=modifiers)
+        return cls(deployTime=_xml.readNonNegativeFloat(ctx, section, 'deployTime'), reloadTime=_xml.readPositiveFloat(ctx, section, 'reloadTime'), duration=_xml.readPositiveFloat(ctx, section, 'duration'), threshold=_xml.readPositiveFloat(ctx, section, 'threshold'), cooldown=_xml.readPositiveFloat(ctx, section, 'cooldown'), addMaxSpeedForwardBonus=_xml.readFloat(ctx, section, 'addMaxSpeedForwardBonus'), addRotationSpeedBonus=_xml.readFloat(ctx, section, 'addRotationSpeedBonus'), impulse=impulse, modifiers=modifiers)
 
     @classmethod
     def getDefaultMechanicsMiscAttributes(cls):
         return {'rechargeableNitro/duration': 0.0,
-         'rechargeableNitro/reloadTime': 0.0}
+         'rechargeableNitro/reloadTime': 0.0,
+         'rechargeableNitro/addMaxSpeedForwardBonus': 0.0,
+         'rechargeableNitro/addRotationSpeedBonus': 0.0}
 
     def _applyMechanicsAttrs(self, attr, value):
         if attr == 'rechargeableNitro/duration':
             self.duration += value
         elif attr == 'rechargeableNitro/reloadTime':
             self.reloadTime += value
+        elif attr == 'rechargeableNitro/addMaxSpeedForwardBonus':
+            self.addMaxSpeedForwardBonus += value
+            if self.addMaxSpeedForwardBonus or value:
+                self.__applyMulModifier('dynAttrs/', 'vehicle/maxSpeed/forward', self.addMaxSpeedForwardBonus)
+        elif attr == 'rechargeableNitro/addRotationSpeedBonus':
+            self.addRotationSpeedBonus += value
+            if self.addRotationSpeedBonus or value:
+                self.__applyMulModifier('dynAttrs/', 'vehicle/rotationSpeed', self.addRotationSpeedBonus)
+
+    def __applyMulModifier(self, modifierType, modifierName, bonusValue):
+        mulValue = max(0.0, 1.0 + bonusValue)
+        newModifier = ('mul',
+         modifierType,
+         modifierName,
+         mulValue,
+         'rechargeableNitro')
+        foundIndex = None
+        for idx, (opCode, modType, modName, _, _) in enumerate(self.modifiers):
+            if opCode == 'mul' and modType == modifierType and modName == modifierName:
+                foundIndex = idx
+                break
+
+        if foundIndex is not None:
+            self.modifiers[foundIndex] = newModifier
+        else:
+            self.modifiers.append(newModifier)
+        return
 
     def __repr__(self):
-        return 'deployTime={}, reloadTime={}, duration={},threshold={}, impulse={}, cooldown={}, modifiers={}'.format(self.deployTime, self.reloadTime, self.duration, self.threshold, self.impulse, self.cooldown, self.modifiers)
+        return 'deployTime={}, reloadTime={}, duration={}, threshold={}, impulse={}, cooldown={}, addMaxSpeedForwardBonus={}, addRotationSpeedBonus={}, modifiers={}'.format(self.deployTime, self.reloadTime, self.duration, self.threshold, self.impulse, self.cooldown, self.addMaxSpeedForwardBonus, self.addRotationSpeedBonus, self.modifiers)
 
 
-class ConcentrationModeParams(MechanicsDynParams):
-    __slots__ = MechanicsDynParams.__slots__ + ('deployTime', 'reloadTime', 'duration')
+class ConcentrationModeParams(MechanicsParams):
+    __slots__ = ('deployTime', 'reloadTime', 'duration')
     MECHANICS_NAME = 'concentrationMode'
 
     def __init__(self, deployTime, reloadTime, duration, modifiers):
@@ -475,6 +508,7 @@ class ConcentrationModeParams(MechanicsDynParams):
         self.deployTime = deployTime
         self.reloadTime = reloadTime
         self.duration = duration
+        self._saveOrigin()
 
     @classmethod
     def getDefaultMechanicsMiscAttributes(cls):
@@ -496,8 +530,8 @@ class ConcentrationModeParams(MechanicsDynParams):
             self.duration += value
 
 
-class ImprovedRammingParams(MechanicsDynParams):
-    __slots__ = MechanicsDynParams.__slots__ + ('damageBonusStageSize', 'trackDamageBonusStageSize', 'reductionDamageBonusStageSize', 'damageValueToShowAnimation', 'effectSpeedThreshold')
+class ImprovedRammingParams(MechanicsParams):
+    __slots__ = ('damageBonusStageSize', 'trackDamageBonusStageSize', 'reductionDamageBonusStageSize', 'damageValueToShowAnimation', 'effectSpeedThreshold')
     MECHANICS_NAME = 'improvedRamming'
 
     def __init__(self, damageBonusStageSize, trackDamageBonusStageSize, reductionDamageBonusStageSize, damageValueToShowAnimation, effectSpeedThreshold, modifiers):
@@ -507,6 +541,7 @@ class ImprovedRammingParams(MechanicsDynParams):
         self.reductionDamageBonusStageSize = reductionDamageBonusStageSize
         self.damageValueToShowAnimation = damageValueToShowAnimation
         self.effectSpeedThreshold = effectSpeedThreshold
+        self._saveOrigin()
 
     @classmethod
     def getDefaultMechanicsMiscAttributes(cls):
@@ -545,6 +580,7 @@ class PowerModeParams(MechanicsParams):
         self.speedThreshold = speedThreshold
         self.gracePeriod = gracePeriod
         self.vehicleParams = dict(PowerModeParams.DEFAULT_VEHICLE_PARAMS, **vehicleParams)
+        self._saveOrigin()
 
     @classmethod
     def getDefaultMechanicsMiscAttributes(cls):
@@ -608,6 +644,7 @@ class BattleFuryParams(MechanicsParams):
         self.reloadSpdBonus = reloadSpdBonus
         self.gainPerHit = gainPerHit
         self.gainPerKill = gainPerKill
+        self._saveOrigin()
 
     @classmethod
     def getDefaultMechanicsMiscAttributes(cls):
@@ -633,8 +670,8 @@ class BattleFuryParams(MechanicsParams):
             self.reloadSpdBonus += value
 
 
-class PillboxSiegeModeParams(MechanicsDynParams):
-    __slots__ = MechanicsDynParams.__slots__ + ('switchDriveToPillboxTime', 'switchSiegeToPillboxTime', 'switchPillboxToSiegeTime', 'switchPillboxToDriveTime')
+class PillboxSiegeModeParams(MechanicsParams):
+    __slots__ = ('switchDriveToPillboxTime', 'switchSiegeToPillboxTime', 'switchPillboxToSiegeTime', 'switchPillboxToDriveTime')
     MECHANICS_NAME = 'pillboxSiegeMode'
 
     def __init__(self, switchDriveToPillboxTime, switchSiegeToPillboxTime, switchPillboxToSiegeTime, switchPillboxToDriveTime, modifiers):
@@ -644,6 +681,7 @@ class PillboxSiegeModeParams(MechanicsDynParams):
         self.switchPillboxToSiegeTime = switchPillboxToSiegeTime
         self.switchPillboxToDriveTime = switchPillboxToDriveTime
         self.modifiers = modifiers
+        self._saveOrigin()
 
     @classmethod
     def getDefaultMechanicsMiscAttributes(cls):
@@ -683,6 +721,7 @@ class StationaryReloadParams(GunMechanicsParams):
         self.preparingDelay = preparingDelay
         self.finishingDelay = finishingDelay
         self.fixAngles = fixAngles
+        self._saveOrigin()
 
     @classmethod
     def getDefaultMechanicsMiscAttributes(cls):
@@ -703,12 +742,13 @@ class StationaryReloadParams(GunMechanicsParams):
 
 
 class ExtraShotClipParams(GunMechanicsParams):
-    __slots__ = GunMechanicsParams._GUN_SLOTS + ('extraReloadTime',)
+    __slots__ = ('extraReloadTime',)
     MECHANICS_NAME = 'extraShotClip'
 
     def __init__(self, extraReloadTime):
         super(ExtraShotClipParams, self).__init__()
         self.extraReloadTime = extraReloadTime
+        self._saveOrigin()
 
     @classmethod
     def getDefaultMechanicsMiscAttributes(cls):
@@ -744,6 +784,7 @@ class AccuracyStacksParams(MechanicsParams):
         self.gainMaxSpd = gainMaxSpd
         self.gainTime = gainTime
         self.stabilizeBonus = stabilizeBonus
+        self._saveOrigin()
 
     @classmethod
     def getDefaultMechanicsMiscAttributes(cls):
@@ -776,7 +817,7 @@ class AccuracyStacksParams(MechanicsParams):
 
 
 class SecondaryGunParams(GunMechanicsParams):
-    __slots__ = GunMechanicsParams._GUN_SLOTS + ('initiationTime', 'dependentOnMainGun')
+    __slots__ = ('initiationTime', 'dependentOnMainGun')
     __metaclass__ = ReflectionMetaclass
     MECHANICS_NAME = 'secondaryGun'
 
@@ -784,6 +825,7 @@ class SecondaryGunParams(GunMechanicsParams):
         super(SecondaryGunParams, self).__init__()
         self.initiationTime = initiationTime
         self.dependentOnMainGun = dependentOnMainGun
+        self._saveOrigin()
 
     @classmethod
     def getDefaultMechanicsMiscAttributes(cls):
@@ -822,6 +864,10 @@ class SupportWeaponParams(MechanicsParams):
     __slots__ = ()
     MECHANICS_NAME = 'supportWeapon'
 
+    def __init__(self):
+        super(SupportWeaponParams, self).__init__()
+        self._saveOrigin()
+
     def isActiveMechanics(self, vehicleDescriptor):
         mechanicsParams = vehicleDescriptor.mechanicsParams
         return SecondaryGunParams.MECHANICS_NAME in mechanicsParams and mechanicsParams[SecondaryGunParams.MECHANICS_NAME].isActiveMechanics(vehicleDescriptor)
@@ -831,14 +877,15 @@ class SupportWeaponParams(MechanicsParams):
         return cls()
 
 
-class ChargeableBurstParams(MechanicsDynParams, GunMechanicsParams):
-    __slots__ = MechanicsDynParams.__slots__ + GunMechanicsParams._GUN_SLOTS + ('penetrationCount', 'burstDispersionFactor')
+class ChargeableBurstParams(GunMechanicsParams):
+    __slots__ = ('penetrationCount', 'burstDispersionFactor')
     MECHANICS_NAME = 'chargeableBurst'
 
     def __init__(self, penetrationCount, burstDispersionFactor, modifiers):
         super(ChargeableBurstParams, self).__init__(modifiers)
         self.penetrationCount = penetrationCount
         self.burstDispersionFactor = burstDispersionFactor
+        self._saveOrigin()
 
     @classmethod
     def _readMechanicsParams(cls, ctx, section, readModifiers):
@@ -872,17 +919,14 @@ class ChargeShotParams(MechanicsParams):
         self.damageFactorsPerLevel = damageFactorsPerLevel
         self.maxLevel = len(timePerLevel) - 1
         self.shotBlockTime = shotBlockTime
+        self._saveOrigin()
 
     @classmethod
-    def readMechanicsParams(cls, xmlCtx, section, readModifiers):
-        mechCtx, mechSection = _xml.getSubSectionWithContext(xmlCtx, section, cls.MECHANICS_NAME, throwIfMissing=False)
-        if mechSection is None:
-            return
-        else:
-            timePerLevel = list(_xml.readTupleOfNonNegativeFloats(mechCtx, mechSection, 'timePerLevel'))
-            damageFactorsPerLevel = list(_xml.readTupleOfNonNegativeFloats(mechCtx, mechSection, 'damageFactorsPerLevel'))
-            shotBlockTime = _xml.readNonNegativeFloat(mechCtx, mechSection, 'shotBlockTime')
-            return cls(timePerLevel, damageFactorsPerLevel, shotBlockTime)
+    def _readMechanicsParams(cls, mechCtx, mechSection, readModifiers):
+        timePerLevel = list(_xml.readTupleOfNonNegativeFloats(mechCtx, mechSection, 'timePerLevel'))
+        damageFactorsPerLevel = list(_xml.readTupleOfNonNegativeFloats(mechCtx, mechSection, 'damageFactorsPerLevel'))
+        shotBlockTime = _xml.readNonNegativeFloat(mechCtx, mechSection, 'shotBlockTime')
+        return cls(timePerLevel, damageFactorsPerLevel, shotBlockTime)
 
     @classmethod
     def getDefaultMechanicsMiscAttributes(cls):
@@ -920,6 +964,7 @@ class OverheatStacksParams(MechanicsParams):
         self.dmgBonus = dmgBonus
         self.aimBonus = aimBonus
         self.configure()
+        self._saveOrigin()
 
     def configure(self):
         self.levelInc = self.levelMax * self.gainTime / self.heatingTime
@@ -968,33 +1013,22 @@ class OverheatStacksParams(MechanicsParams):
 
 
 class TargetDesignatorParams(MechanicsParams):
-    __slots__ = ('__damageIncomeFactors', 'cooldownTime', 'deployTime', 'spottedMarkedTime', 'unspottedMarkedTime')
+    __slots__ = MechanicsParams.__slots__ + ('damageIncomeFactor', 'cooldownTime', 'deployTime', 'spottedMarkedTime', 'unspottedMarkedTime')
     MECHANICS_NAME = 'targetDesignator'
 
-    def __init__(self, damageIncomeFactors, cooldownTime, deployTime, spottedMarkedTime, unspottedMarkedTime):
+    def __init__(self, damageIncomeFactor, cooldownTime, deployTime, spottedMarkedTime, unspottedMarkedTime):
         super(TargetDesignatorParams, self).__init__()
-        self.__damageIncomeFactors = damageIncomeFactors
+        self.damageIncomeFactor = damageIncomeFactor
         self.cooldownTime = cooldownTime
         self.deployTime = deployTime
         self.spottedMarkedTime = spottedMarkedTime
         self.unspottedMarkedTime = unspottedMarkedTime
-
-    def copyDamageIncomeFactors(self):
-        return self.__damageIncomeFactors.copy()
+        self._saveOrigin()
 
     @classmethod
     def _readMechanicsParams(cls, mechCtx, mechSection, _):
         readFloat = partial(_xml.readNonNegativeFloat, mechCtx, mechSection)
-        damageIncomeFactors = {}
-        penDmg = readFloat('damageIncome_armor', 0.0)
-        if penDmg > 1.0:
-            damageIncomeFactors['damageIncome/armor'] = penDmg
-        splashDmg = readFloat('damageIncome_armor_splash', 0.0)
-        if splashDmg > 1.0:
-            damageIncomeFactors['damageIncome/armor/splash/blastWave'] = splashDmg
-            damageIncomeFactors['damageIncome/armor/splash/shellFragments'] = splashDmg
-            damageIncomeFactors['damageIncome/armor/splash/armorSpalls'] = splashDmg
-        return cls(damageIncomeFactors, readFloat('cooldownTime', 1.0), readFloat('deployTime', 0.0), readFloat('spottedMarkedTime', 1.0), readFloat('unspottedMarkedTime', 1.0))
+        return cls(readFloat('damageIncomeFactor', 1.0), readFloat('cooldownTime', 1.0), readFloat('deployTime', 0.0), readFloat('spottedMarkedTime', 1.0), readFloat('unspottedMarkedTime', 1.0))
 
     @classmethod
     def getDefaultMechanicsMiscAttributes(cls):
@@ -1011,16 +1045,11 @@ class TargetDesignatorParams(MechanicsParams):
         elif attr == 'targetDesignator/deployTime':
             self.deployTime = max(0.0, self.deployTime + value)
         elif attr == 'targetDesignator/damageIncome':
-            factors = self.__damageIncomeFactors
-            for name in factors:
-                factors[name] = max(0.0, factors[name] + value)
-
-    def __repr__(self):
-        return super(TargetDesignatorParams, self).__repr__()[:-1] + ', damageIncomeFactors=%s)' % self.__damageIncomeFactors
+            self.damageIncomeFactor = max(1.0, self.damageIncomeFactor + value)
 
 
 class StanceDanceParams(MechanicsParams):
-    __slots__ = ('timeSwitchStance', 'maxEnergy', 'gainFightEnergyPoints', 'gainTurboEnergyPoints', 'gainEnergyTime', 'gainTurboEnergyBonusPoints', 'gainTurboEnergySpdLimitKmh', 'passiveFightEnergyBonusPerHit', 'passiveTurboFwdSpdBonusKmh', 'passiveTurboBkwdSpdBonusKmh', 'passiveTurboEnginePowerBonus', 'passiveTurboAccuracyDebuff', 'passiveTurboAimSpeedDebuff', 'passiveTurboStabilizeDebuff', 'passiveTurboAfterShotDispersionDebuff', 'activeFightCost', 'activeFightDuration', 'activeFightAccuracyBonus', 'activeFightAimSpeedBonus', 'activeFightStabilizeBonus', 'activeFightAfterShotDispersionBonus', 'activeFightReloadSpdBonus', 'activeTurboCost', 'activeTurboDuration', 'activeTurboFwdSpdBonusKmh', 'activeTurboBkwdSpdBonusKmh', 'activeTurboEnginePowerBonus', 'activeTurboRotationSpeedDebuff', 'activeTurboRammingDmgBonus', 'impulse', 'modifiers')
+    __slots__ = ('timeSwitchStance', 'maxEnergy', 'gainFightEnergyPoints', 'gainTurboEnergyPoints', 'gainEnergyTime', 'gainTurboEnergyBonusPoints', 'gainTurboEnergySpdLimitKmh', 'passiveFightEnergyBonusPerHit', 'passiveTurboFwdSpdBonusKmh', 'passiveTurboBkwdSpdBonusKmh', 'passiveTurboEnginePowerBonus', 'passiveTurboAccuracyDebuff', 'passiveTurboAimSpeedDebuff', 'passiveTurboStabilizeDebuff', 'passiveTurboAfterShotDispersionDebuff', 'activeFightCost', 'activeFightDuration', 'activeFightAccuracyBonus', 'activeFightAimSpeedBonus', 'activeFightStabilizeBonus', 'activeFightAfterShotDispersionBonus', 'activeFightReloadSpdBonus', 'activeTurboCost', 'activeTurboDuration', 'activeTurboFwdSpdBonusKmh', 'activeTurboBkwdSpdBonusKmh', 'activeTurboEnginePowerBonus', 'activeTurboRotationSpeedDebuff', 'activeTurboRammingDmgBonus', 'impulse')
     MECHANICS_NAME = 'stanceDance'
 
     def __init__(self, timeSwitchStance, maxEnergy, gainFightEnergyPoints, gainTurboEnergyPoints, gainEnergyTime, gainTurboEnergyBonusPoints, gainTurboEnergySpdLimitKmh, passiveFightEnergyBonusPerHit, passiveTurboFwdSpdBonusKmh, passiveTurboBkwdSpdBonusKmh, passiveTurboEnginePowerBonus, passiveTurboAccuracyDebuff, passiveTurboAimSpeedDebuff, passiveTurboStabilizeDebuff, passiveTurboAfterShotDispersionDebuff, activeFightCost, activeFightDuration, activeFightAccuracyBonus, activeFightAimSpeedBonus, activeFightStabilizeBonus, activeFightAfterShotDispersionBonus, activeFightReloadSpdBonus, activeTurboCost, activeTurboDuration, activeTurboFwdSpdBonusKmh, activeTurboBkwdSpdBonusKmh, activeTurboEnginePowerBonus, activeTurboRotationSpeedDebuff, activeTurboRammingDmgBonus, impulse):
@@ -1056,45 +1085,42 @@ class StanceDanceParams(MechanicsParams):
         self.activeTurboRammingDmgBonus = activeTurboRammingDmgBonus
         self.impulse = impulse
         self.modifiers = {}
+        self._saveOrigin()
 
     @classmethod
-    def readMechanicsParams(cls, xmlCtx, section, readModifiers):
-        mechCtx, mechSection = _xml.getSubSectionWithContext(xmlCtx, section, cls.MECHANICS_NAME, throwIfMissing=False)
-        if mechSection is None:
-            return
-        else:
-            timeSwitchStance = _xml.readNonNegativeFloat(mechCtx, mechSection, 'timeSwitchStance')
-            maxEnergy = _xml.readNonNegativeFloat(mechCtx, mechSection, 'maxEnergy')
-            gainFightEnergyPoints = _xml.readNonNegativeFloat(mechCtx, mechSection, 'gainFightEnergyPoints')
-            gainTurboEnergyPoints = _xml.readNonNegativeFloat(mechCtx, mechSection, 'gainTurboEnergyPoints')
-            gainEnergyTime = _xml.readNonNegativeFloat(mechCtx, mechSection, 'gainEnergyTime')
-            gainTurboEnergyBonusPoints = _xml.readNonNegativeFloat(mechCtx, mechSection, 'gainTurboEnergyBonusPoints')
-            gainTurboEnergySpdLimitKmh = _xml.readNonNegativeFloat(mechCtx, mechSection, 'gainTurboEnergySpdLimitKmh')
-            passiveFightEnergyBonusPerHit = _xml.readNonNegativeFloat(mechCtx, mechSection, 'passiveFightEnergyBonusPerHit')
-            passiveTurboFwdSpdBonusKmh = _xml.readNonNegativeFloat(mechCtx, mechSection, 'passiveTurboFwdSpdBonusKmh')
-            passiveTurboBkwdSpdBonusKmh = _xml.readNonNegativeFloat(mechCtx, mechSection, 'passiveTurboBkwdSpdBonusKmh')
-            passiveTurboEnginePowerBonus = _xml.readNonNegativeFloat(mechCtx, mechSection, 'passiveTurboEnginePowerBonus')
-            passiveTurboAccuracyDebuff = _xml.readNonNegativeFloat(mechCtx, mechSection, 'passiveTurboAccuracyDebuff')
-            passiveTurboAimSpeedDebuff = _xml.readNonNegativeFloat(mechCtx, mechSection, 'passiveTurboAimSpeedDebuff')
-            passiveTurboStabilizeDebuff = _xml.readNonNegativeFloat(mechCtx, mechSection, 'passiveTurboStabilizeDebuff')
-            passiveTurboAfterShotDispersionDebuff = _xml.readNonNegativeFloat(mechCtx, mechSection, 'passiveTurboAfterShotDispersionDebuff')
-            activeFightCost = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeFightCost')
-            activeFightDuration = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeFightDuration')
-            activeFightAccuracyBonus = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeFightAccuracyBonus')
-            activeFightAimSpeedBonus = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeFightAimSpeedBonus')
-            activeFightStabilizeBonus = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeFightStabilizeBonus')
-            activeFightAfterShotDispersionBonus = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeFightAfterShotDispersionBonus')
-            activeFightReloadSpdBonus = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeFightReloadSpdBonus')
-            activeTurboCost = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeTurboCost')
-            activeTurboDuration = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeTurboDuration')
-            activeTurboFwdSpdBonusKmh = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeTurboFwdSpdBonusKmh')
-            activeTurboBkwdSpdBonusKmh = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeTurboBkwdSpdBonusKmh')
-            activeTurboEnginePowerBonus = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeTurboEnginePowerBonus')
-            activeTurboRotationSpeedDebuff = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeTurboRotationSpeedDebuff')
-            activeTurboRammingDmgBonus = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeTurboRammingDmgBonus')
-            impulseCtx, impulseSection = _xml.getSubSectionWithContext(mechCtx, mechSection, 'impulse')
-            impulse = ImpulseData(magnitude=_xml.readNonNegativeFloat(impulseCtx, impulseSection, 'magnitude'), applyPoint=_xml.readVector3(impulseCtx, impulseSection, 'applyPoint', component_constants.ZERO_VECTOR3), duration=_xml.readNonNegativeFloat(impulseCtx, impulseSection, 'duration'))
-            return cls(timeSwitchStance=timeSwitchStance, maxEnergy=maxEnergy, gainFightEnergyPoints=gainFightEnergyPoints, gainTurboEnergyPoints=gainTurboEnergyPoints, gainEnergyTime=gainEnergyTime, gainTurboEnergyBonusPoints=gainTurboEnergyBonusPoints, gainTurboEnergySpdLimitKmh=gainTurboEnergySpdLimitKmh, passiveFightEnergyBonusPerHit=passiveFightEnergyBonusPerHit, passiveTurboFwdSpdBonusKmh=passiveTurboFwdSpdBonusKmh, passiveTurboBkwdSpdBonusKmh=passiveTurboBkwdSpdBonusKmh, passiveTurboEnginePowerBonus=passiveTurboEnginePowerBonus, passiveTurboAccuracyDebuff=passiveTurboAccuracyDebuff, passiveTurboAimSpeedDebuff=passiveTurboAimSpeedDebuff, passiveTurboStabilizeDebuff=passiveTurboStabilizeDebuff, passiveTurboAfterShotDispersionDebuff=passiveTurboAfterShotDispersionDebuff, activeFightCost=activeFightCost, activeFightDuration=activeFightDuration, activeFightAccuracyBonus=activeFightAccuracyBonus, activeFightAimSpeedBonus=activeFightAimSpeedBonus, activeFightStabilizeBonus=activeFightStabilizeBonus, activeFightAfterShotDispersionBonus=activeFightAfterShotDispersionBonus, activeFightReloadSpdBonus=activeFightReloadSpdBonus, activeTurboCost=activeTurboCost, activeTurboDuration=activeTurboDuration, activeTurboFwdSpdBonusKmh=activeTurboFwdSpdBonusKmh, activeTurboBkwdSpdBonusKmh=activeTurboBkwdSpdBonusKmh, activeTurboEnginePowerBonus=activeTurboEnginePowerBonus, activeTurboRotationSpeedDebuff=activeTurboRotationSpeedDebuff, activeTurboRammingDmgBonus=activeTurboRammingDmgBonus, impulse=impulse)
+    def _readMechanicsParams(cls, mechCtx, mechSection, readModifiers):
+        timeSwitchStance = _xml.readNonNegativeFloat(mechCtx, mechSection, 'timeSwitchStance')
+        maxEnergy = _xml.readNonNegativeFloat(mechCtx, mechSection, 'maxEnergy')
+        gainFightEnergyPoints = _xml.readNonNegativeFloat(mechCtx, mechSection, 'gainFightEnergyPoints')
+        gainTurboEnergyPoints = _xml.readNonNegativeFloat(mechCtx, mechSection, 'gainTurboEnergyPoints')
+        gainEnergyTime = _xml.readNonNegativeFloat(mechCtx, mechSection, 'gainEnergyTime')
+        gainTurboEnergyBonusPoints = _xml.readNonNegativeFloat(mechCtx, mechSection, 'gainTurboEnergyBonusPoints')
+        gainTurboEnergySpdLimitKmh = _xml.readNonNegativeFloat(mechCtx, mechSection, 'gainTurboEnergySpdLimitKmh')
+        passiveFightEnergyBonusPerHit = _xml.readNonNegativeFloat(mechCtx, mechSection, 'passiveFightEnergyBonusPerHit')
+        passiveTurboFwdSpdBonusKmh = _xml.readNonNegativeFloat(mechCtx, mechSection, 'passiveTurboFwdSpdBonusKmh')
+        passiveTurboBkwdSpdBonusKmh = _xml.readNonNegativeFloat(mechCtx, mechSection, 'passiveTurboBkwdSpdBonusKmh')
+        passiveTurboEnginePowerBonus = _xml.readNonNegativeFloat(mechCtx, mechSection, 'passiveTurboEnginePowerBonus')
+        passiveTurboAccuracyDebuff = _xml.readNonNegativeFloat(mechCtx, mechSection, 'passiveTurboAccuracyDebuff')
+        passiveTurboAimSpeedDebuff = _xml.readNonNegativeFloat(mechCtx, mechSection, 'passiveTurboAimSpeedDebuff')
+        passiveTurboStabilizeDebuff = _xml.readNonNegativeFloat(mechCtx, mechSection, 'passiveTurboStabilizeDebuff')
+        passiveTurboAfterShotDispersionDebuff = _xml.readNonNegativeFloat(mechCtx, mechSection, 'passiveTurboAfterShotDispersionDebuff')
+        activeFightCost = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeFightCost')
+        activeFightDuration = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeFightDuration')
+        activeFightAccuracyBonus = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeFightAccuracyBonus')
+        activeFightAimSpeedBonus = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeFightAimSpeedBonus')
+        activeFightStabilizeBonus = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeFightStabilizeBonus')
+        activeFightAfterShotDispersionBonus = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeFightAfterShotDispersionBonus')
+        activeFightReloadSpdBonus = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeFightReloadSpdBonus')
+        activeTurboCost = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeTurboCost')
+        activeTurboDuration = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeTurboDuration')
+        activeTurboFwdSpdBonusKmh = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeTurboFwdSpdBonusKmh')
+        activeTurboBkwdSpdBonusKmh = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeTurboBkwdSpdBonusKmh')
+        activeTurboEnginePowerBonus = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeTurboEnginePowerBonus')
+        activeTurboRotationSpeedDebuff = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeTurboRotationSpeedDebuff')
+        activeTurboRammingDmgBonus = _xml.readNonNegativeFloat(mechCtx, mechSection, 'activeTurboRammingDmgBonus')
+        impulseCtx, impulseSection = _xml.getSubSectionWithContext(mechCtx, mechSection, 'impulse')
+        impulse = ImpulseData(magnitude=_xml.readNonNegativeFloat(impulseCtx, impulseSection, 'magnitude'), applyPoint=_xml.readVector3(impulseCtx, impulseSection, 'applyPoint', component_constants.ZERO_VECTOR3), duration=_xml.readNonNegativeFloat(impulseCtx, impulseSection, 'duration'))
+        return cls(timeSwitchStance=timeSwitchStance, maxEnergy=maxEnergy, gainFightEnergyPoints=gainFightEnergyPoints, gainTurboEnergyPoints=gainTurboEnergyPoints, gainEnergyTime=gainEnergyTime, gainTurboEnergyBonusPoints=gainTurboEnergyBonusPoints, gainTurboEnergySpdLimitKmh=gainTurboEnergySpdLimitKmh, passiveFightEnergyBonusPerHit=passiveFightEnergyBonusPerHit, passiveTurboFwdSpdBonusKmh=passiveTurboFwdSpdBonusKmh, passiveTurboBkwdSpdBonusKmh=passiveTurboBkwdSpdBonusKmh, passiveTurboEnginePowerBonus=passiveTurboEnginePowerBonus, passiveTurboAccuracyDebuff=passiveTurboAccuracyDebuff, passiveTurboAimSpeedDebuff=passiveTurboAimSpeedDebuff, passiveTurboStabilizeDebuff=passiveTurboStabilizeDebuff, passiveTurboAfterShotDispersionDebuff=passiveTurboAfterShotDispersionDebuff, activeFightCost=activeFightCost, activeFightDuration=activeFightDuration, activeFightAccuracyBonus=activeFightAccuracyBonus, activeFightAimSpeedBonus=activeFightAimSpeedBonus, activeFightStabilizeBonus=activeFightStabilizeBonus, activeFightAfterShotDispersionBonus=activeFightAfterShotDispersionBonus, activeFightReloadSpdBonus=activeFightReloadSpdBonus, activeTurboCost=activeTurboCost, activeTurboDuration=activeTurboDuration, activeTurboFwdSpdBonusKmh=activeTurboFwdSpdBonusKmh, activeTurboBkwdSpdBonusKmh=activeTurboBkwdSpdBonusKmh, activeTurboEnginePowerBonus=activeTurboEnginePowerBonus, activeTurboRotationSpeedDebuff=activeTurboRotationSpeedDebuff, activeTurboRammingDmgBonus=activeTurboRammingDmgBonus, impulse=impulse)
 
     @classmethod
     def getDefaultMechanicsMiscAttributes(cls):

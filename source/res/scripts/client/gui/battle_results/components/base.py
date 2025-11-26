@@ -81,7 +81,7 @@ class StatsItem(StatsComponent):
 
 
 class DirectStatsItem(StatsItem):
-    __slots__ = ('_value',)
+    __slots__ = ()
 
     def __init__(self, field, value=None):
         super(DirectStatsItem, self).__init__(field)

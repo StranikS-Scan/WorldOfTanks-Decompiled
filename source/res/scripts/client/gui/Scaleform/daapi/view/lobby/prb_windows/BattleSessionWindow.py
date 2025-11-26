@@ -48,7 +48,7 @@ class BattleSessionWindow(BattleSessionWindowMeta):
         return
 
     def requestToLeave(self):
-        self._doLeave(True)
+        self._doLeave(isExit=True, parent=self.getParentWindow())
 
     def startListening(self):
         super(BattleSessionWindow, self).startListening()

@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/inventory/inventory_cm_handlers.py
 from adisp import adisp_process
 from gui import shop
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.shared.cm_handlers import ContextMenu, option, CMLabel
 from gui.Scaleform.framework.managers.context_menu import CM_BUY_COLOR
 from gui.shared import event_dispatcher as shared_events
@@ -90,7 +89,7 @@ class EquipmentCMHandler(_ArmingCMHandler):
     def buy(self):
         typeID = self._itemsCache.items.getItemByCD(self._id).itemTypeID if self._id else UNDEFINED_ITEM_CD
         if typeID == GUI_ITEM_TYPE.EQUIPMENT:
-            shop.showBuyEquipmentOverlay(self._id, source=_SOURCE, origin=_ORIGIN, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB)
+            shop.showBuyEquipment(self._id, source=_SOURCE, origin=_ORIGIN)
         else:
             super(EquipmentCMHandler, self).buy()
 
@@ -113,7 +112,7 @@ class OptionalDeviceCMHandler(_ArmingCMHandler):
 
     @option(_ArmingCMHandler._sqGen.next(), CMLabel.BUY_MORE)
     def buy(self):
-        shop.showBuyOptionalDeviceOverlay(self._id, source=_SOURCE, origin=_ORIGIN, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB)
+        shop.showBuyOptionalDevice(self._id, source=_SOURCE, origin=_ORIGIN)
 
     @option(_ArmingCMHandler._sqGen.next(), CMLabel.UPGRADE)
     def upgrade(self):
@@ -171,7 +170,7 @@ class BattleBoostersCMHandler(ContextMenu):
 
     @option(__sqGen.next(), CMLabel.BUY_MORE)
     def buy(self):
-        shop.showBattleBoosterOverlay(self._id, source=_SOURCE, origin=_ORIGIN, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB)
+        shop.showBattleBooster(self._id, source=_SOURCE, origin=_ORIGIN)
 
     def _getOptionCustomData(self, label):
         optionData = super(BattleBoostersCMHandler, self)._getOptionCustomData(label)

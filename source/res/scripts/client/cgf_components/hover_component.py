@@ -5,6 +5,8 @@ import CGF
 import GUI
 import Event
 from GenericComponents import VSEComponent
+from Physics import CameraCollideComponent
+from cgf_common.cgf_helpers import getParentGameObjectByComponent
 from cgf_script.managers_registrator import tickGroup, onAddedQuery, onRemovedQuery
 from cgf_script.component_meta_class import registerComponent, ComponentProperty, CGFMetaTypes
 from constants import IS_CLIENT, CollisionFlags
@@ -31,8 +33,34 @@ class IsHoveredComponent(object):
     domain = CGF.DomainOption.DomainClient
 
 
+@registerComponent
+class HoverGroupTrackerComponent(object):
+    domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
+    editorTitle = 'Hover group tracker'
+    category = 'Common'
+
+    def __init__(self):
+        super(HoverGroupTrackerComponent, self).__init__()
+        self.__hoveredGOs = set()
+
+    def addHoveredGO(self, gameObject):
+        self.__hoveredGOs.add(gameObject.id)
+        root = getParentGameObjectByComponent(gameObject, HoverGroupTrackerComponent)
+        if root and not root.findComponentByType(IsHoveredComponent):
+            root.createComponent(IsHoveredComponent)
+
+    def removeHoveredGO(self, gameObject):
+        self.__hoveredGOs.discard(gameObject.id)
+        if self.__hoveredGOs:
+            return
+        root = getParentGameObjectByComponent(gameObject, HoverGroupTrackerComponent)
+        if root and root.findComponentByType(IsHoveredComponent):
+            root.removeComponentByType(IsHoveredComponent)
+
+
 class HoverManager(CGF.ComponentManager):
     _hangarSpace = dependency.descriptor(IHangarSpace)
+    _hoveredQuery = CGF.QueryConfig(CGF.GameObject, IsHoveredComponent, CGF.No(HoverGroupTrackerComponent))
 
     @onAddedQuery(VSEComponent, IsHoveredComponent)
     def onIsHoveredAdded(self, vseComponent, *args):
@@ -49,23 +77,17 @@ class HoverManager(CGF.ComponentManager):
 
     @tickGroup(groupName='Simulation')
     def tick(self):
-        gameObjectID = None
+        hoveredGameObject = None
         if GUI.mcursor().inWindow and GUI.mcursor().inFocus and self._hangarSpace.isSelectionEnabled and self._hangarSpace.isCursorOver3DScene:
-            gameObjectID = self.__getGameObjectUnderCursor()
-        hoveredGameObject = CGF.Query(self.spaceID, (CGF.GameObject, IsHoveredComponent))
-        for gameObject, _ in hoveredGameObject:
-            if gameObject.id != gameObjectID:
-                gameObject.removeComponentByType(IsHoveredComponent)
-            return
-
-        if gameObjectID == 0:
+            hoveredGameObject = self.__getGameObjectUnderCursor()
+        if hoveredGameObject and hoveredGameObject.findComponentByType(IsHoveredComponent):
             return
         else:
-            hoverableGameObjects = CGF.Query(self.spaceID, (CGF.GameObject, SelectionComponent))
-            for gameObject, _ in hoverableGameObjects:
-                if gameObject.id == gameObjectID:
-                    gameObject.createComponent(IsHoveredComponent)
+            for gameObject, _ in self._hoveredQuery:
+                gameObject.removeComponentByType(IsHoveredComponent)
 
+            if hoveredGameObject and hoveredGameObject.findComponentByType(SelectionComponent):
+                hoveredGameObject.createComponent(IsHoveredComponent)
             return
 
     def __getGameObjectUnderCursor(self):
@@ -73,4 +95,11 @@ class HoverManager(CGF.ComponentManager):
         ray, wpoint = cameras.getWorldRayAndPoint(cursorPosition.x, cursorPosition.y)
         skipFlags = CollisionFlags.TRIANGLE_PROJECTILENOCOLLIDE | CollisionFlags.TRIANGLE_NOCOLLIDE
         res = BigWorld.wg_collideDynamicStatic(self.spaceID, wpoint, wpoint + ray * 1500, skipFlags, -1, -1, ColliderTypes.HANGAR_FLAG)
-        return res[5] if res is not None else None
+        if res is not None and res[5] and res[5].isValid():
+            gameObject = res[5]
+            cameraCollideComponent = gameObject.findComponentByType(CameraCollideComponent)
+            if cameraCollideComponent and cameraCollideComponent.isColliding:
+                return
+            return gameObject
+        else:
+            return

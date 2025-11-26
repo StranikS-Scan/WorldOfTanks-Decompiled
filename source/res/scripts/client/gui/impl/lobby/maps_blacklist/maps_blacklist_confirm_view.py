@@ -62,7 +62,7 @@ class MapsBlacklistDialog(DialogTemplateView):
         self.setSubView(Placeholder.TITLE, SimpleTextTitle(title))
 
     def _setContentMessage(self, mapAmount, mapName):
-        timeLeft = time_formatters.getTillTimeByResource(self.cooldown, R.strings.premacc.piggyBankCard.timeLeft, removeLeadingZeros=True)
+        timeLeft = time_formatters.getTillTimeByResource(self.cooldown, R.strings.premacc.piggyBankCard.timeLeft, removeLeadingZeros=True, useMinutesRoundUp=True, useHoursRoundUp=True)
         if mapAmount == 0:
             text = backport.text(R.strings.premacc.mapsBlacklistConfim.message(), cooldownTimeStr=timeLeft)
         elif mapAmount == 1:

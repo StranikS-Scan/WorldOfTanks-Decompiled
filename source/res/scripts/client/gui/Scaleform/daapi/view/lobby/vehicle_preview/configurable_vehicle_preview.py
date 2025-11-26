@@ -14,20 +14,9 @@ class ConfigurableVehiclePreview(VehiclePreview):
     def __init__(self, ctx):
         super(ConfigurableVehiclePreview, self).__init__(ctx)
         self.__hiddenBlocks = ctx.get('hiddenBlocks')
-        self.__showCloseBtn = OptionalBlocks.CLOSE_BUTTON not in self.__hiddenBlocks
 
     def setBottomPanel(self):
         if OptionalBlocks.BUYING_PANEL in self.__hiddenBlocks:
             self.as_setBottomPanelS('')
         else:
             super(ConfigurableVehiclePreview, self).setBottomPanel()
-
-    def _getData(self):
-        result = super(ConfigurableVehiclePreview, self)._getData()
-        result.update({'showCloseBtn': self.__showCloseBtn})
-        return result
-
-    def _getExitEvent(self):
-        exitEvent = super(ConfigurableVehiclePreview, self)._getExitEvent()
-        exitEvent.ctx.update({'hiddenBlocks': self.__hiddenBlocks})
-        return exitEvent

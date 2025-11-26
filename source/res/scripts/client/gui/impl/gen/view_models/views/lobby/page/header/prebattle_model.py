@@ -30,7 +30,7 @@ class PrebattleModel(ViewModel):
     MAPS_TRAINING = 'MAPS_TRAINING'
     BATTLE_ROYALE_TOURNAMENT = 'BATTLE_ROYALE_TOURNAMENT'
 
-    def __init__(self, properties=5, commands=1):
+    def __init__(self, properties=7, commands=1):
         super(PrebattleModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -57,23 +57,37 @@ class PrebattleModel(ViewModel):
     def setCurrentMode(self, value):
         self._setString(2, value)
 
-    def getQueueType(self):
+    def getCurrentModeId(self):
         return self._getString(3)
 
-    def setQueueType(self, value):
+    def setCurrentModeId(self, value):
         self._setString(3, value)
 
-    def getBattleStatus(self):
+    def getQueueType(self):
         return self._getString(4)
 
-    def setBattleStatus(self, value):
+    def setQueueType(self, value):
         self._setString(4, value)
+
+    def getBattleStatus(self):
+        return self._getString(5)
+
+    def setBattleStatus(self, value):
+        self._setString(5, value)
+
+    def getBattleButtonAlwaysOn(self):
+        return self._getBool(6)
+
+    def setBattleButtonAlwaysOn(self, value):
+        self._setBool(6, value)
 
     def _initialize(self):
         super(PrebattleModel, self)._initialize()
         self._addViewModelProperty('battleVehicle', VehicleModel())
         self._addMapProperty('states', Map(unicode, bool))
         self._addStringProperty('currentMode', '')
+        self._addStringProperty('currentModeId', '')
         self._addStringProperty('queueType', '')
         self._addStringProperty('battleStatus', '')
+        self._addBoolProperty('battleButtonAlwaysOn', False)
         self.onAction = self._addCommand('onAction')

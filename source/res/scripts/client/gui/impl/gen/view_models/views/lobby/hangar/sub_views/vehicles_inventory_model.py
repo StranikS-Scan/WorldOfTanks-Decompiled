@@ -3,13 +3,15 @@
 from frameworks.wulf import ViewModel
 
 class VehiclesInventoryModel(ViewModel):
-    __slots__ = ('onBuySlot', 'onGoBuyVehicle', 'onGoRecoverVehicle', 'onSelect')
+    __slots__ = ('onSelect', 'onBuySlot', 'onGoBuyVehicle', 'onGoRecoverVehicle', 'onSelectTelecomRentalVehicle')
     NO_VEHICLE_ID = -1
     ENABLED = 'enabled'
     DISABLED = 'disabled'
     PAUSED = 'paused'
+    READY_TO_SELECT = 'readyToSelect'
+    PENDING = 'pending'
 
-    def __init__(self, properties=10, commands=4):
+    def __init__(self, properties=11, commands=5):
         super(VehiclesInventoryModel, self).__init__(properties=properties, commands=commands)
 
     def getCurrentVehicleIntCD(self):
@@ -72,6 +74,12 @@ class VehiclesInventoryModel(ViewModel):
     def setHasDiscont(self, value):
         self._setBool(9, value)
 
+    def getTelecomRentStatus(self):
+        return self._getString(10)
+
+    def setTelecomRentStatus(self, value):
+        self._setString(10, value)
+
     def _initialize(self):
         super(VehiclesInventoryModel, self)._initialize()
         self._addNumberProperty('currentVehicleIntCD', -1)
@@ -84,7 +92,9 @@ class VehiclesInventoryModel(ViewModel):
         self._addStringProperty('bpStatus', '')
         self._addStringProperty('slotPriceCurrency', '')
         self._addBoolProperty('hasDiscont', False)
+        self._addStringProperty('telecomRentStatus', '')
+        self.onSelect = self._addCommand('onSelect')
         self.onBuySlot = self._addCommand('onBuySlot')
         self.onGoBuyVehicle = self._addCommand('onGoBuyVehicle')
         self.onGoRecoverVehicle = self._addCommand('onGoRecoverVehicle')
-        self.onSelect = self._addCommand('onSelect')
+        self.onSelectTelecomRentalVehicle = self._addCommand('onSelectTelecomRentalVehicle')

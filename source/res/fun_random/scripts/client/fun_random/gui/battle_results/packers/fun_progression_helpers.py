@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/battle_results/packers/fun_progression_helpers.py
-from collections import namedtuple
-import math_utils
+from __future__ import absolute_import
 import typing
+from collections import namedtuple
+from future.utils import listvalues, viewitems, viewvalues
+import math_utils
 from fun_random.gui.feature.fun_constants import FEP_PROGRESSION_BASE_TEMPLATE, FEP_PROGRESSION_TRIGGER_QUEST_ID, FEP_PROGRESSION_ALT_TRIGGER_QUEST_ID, FEP_PROGRESSION_UNLIMITED_TRIGGER_QUEST_ID, FEP_PROGRESSION_UNLIMITED_ALT_TRIGGER_QUEST_ID, FEP_PROGRESSION_EXECUTOR_QUEST_ID, FEP_PROGRESSION_UNLIMITED_EXECUTOR_QUEST_ID, FEP_PROGRESSION_COUNTER_ID, FEP_PROGRESSION_UNLIMITED_COUNTER_ID
 from shared_utils import first, findFirst
 if typing.TYPE_CHECKING:
@@ -34,7 +36,7 @@ class _PostbattleProgressionHelper(object):
         return []
 
     def _getPoints(self):
-        return (sum([ data.get('diff', 0) for data in self._countersProgress.values() ]), sum([ data.get('total', 0) for data in self._countersProgress.values() ]))
+        return (sum((data.get('diff', 0) for data in viewvalues(self._countersProgress))), sum((data.get('total', 0) for data in viewvalues(self._countersProgress))))
 
     def _hasProgress(self):
         return bool(self._countersProgress and (self._triggers or self._altTriggers))
@@ -45,7 +47,7 @@ class _PostbattleProgressionHelper(object):
         altTriggerQuestID = FEP_PROGRESSION_BASE_TEMPLATE.format(self._ALT_TRIGGER_QUEST_ID, name)
         executorQuestID = FEP_PROGRESSION_BASE_TEMPLATE.format(self._EXECUTOR_QUEST_ID, name)
         counterID = FEP_PROGRESSION_BASE_TEMPLATE.format(self._COUNTER_ID, name)
-        for qID, pr in questsProgress.items():
+        for qID, pr in viewitems(questsProgress):
             if qID.startswith(triggerQuestID):
                 self._triggers[qID] = pr
             if qID.startswith(altTriggerQuestID):
@@ -53,7 +55,7 @@ class _PostbattleProgressionHelper(object):
             if qID.startswith(executorQuestID):
                 self._executors[qID] = pr
 
-        self._countersProgress = {tID:progress for tID, progress in questsTokens.items() if tID.startswith(counterID)}
+        self._countersProgress = {tID:progress for tID, progress in viewitems(questsTokens) if tID.startswith(counterID)}
 
 
 class FunPbsProgressionHelper(_PostbattleProgressionHelper):
@@ -76,7 +78,7 @@ class FunPbsProgressionHelper(_PostbattleProgressionHelper):
         currentStageIdx = math_utils.clamp(0, len(progression.stages), currentStage.stageIndex + 1)
         previousStageIdx = findFirst(lambda s: previousPoints < s.requiredCounter, progression.stages, progression.stages[0]).stageIndex
         previousStage = progression.stages[previousStageIdx]
-        descr = first(activeTriggers.values()).getDescription() if len(activeTriggers) == 1 else conditions.text
+        descr = first(listvalues(activeTriggers)).getDescription() if len(activeTriggers) == 1 else conditions.text
         requiredCounters = [ stage.requiredCounter for stage in progression.stages ]
         return _PbsProgress(isUnlimitedProgression=False, description=descr, previousStage=previousStageIdx + 1, currentStage=currentStageIdx, maximumStage=progression.state.maximumStageIndex + 1, previousPoints=previousPoints - previousStage.prevRequiredCounter, currentPoints=currentPoints - currentStage.prevRequiredCounter, earnedPoints=earnedPoints, maximumPoints=currentStage.requiredCounter - currentStage.prevRequiredCounter, stageRequiredCounters=requiredCounters, bonuses=self._getBonuses(progression))
 

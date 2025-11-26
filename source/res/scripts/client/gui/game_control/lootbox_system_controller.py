@@ -286,12 +286,13 @@ class LootBoxSystemController(ILootBoxSystemController, EventsHandler):
                         break
 
     def __onBoxesUpdate(self, diff):
-        for boxID, _ in diff.get('history', {}).iteritems():
-            if boxID in self.__boxesInfo:
-                guaranteedBonusLimit = self.__boxesInfo[boxID].get('limit', 0)
+        for historyName in diff.get('history', {}).iterkeys():
+            for boxID in self.__boxesInfo.iterkeys():
                 lootBox = self.__itemsCache.items.tokens.getLootBoxByID(boxID)
-                opened = self.__itemsCache.items.tokens.getAttemptsAfterGuaranteedRewards(lootBox)
-                self.__boxesInfo[boxID]['boxCountToGuaranteedBonus'] = max(guaranteedBonusLimit - opened, 0)
+                if lootBox.getHistoryName() == historyName:
+                    guaranteedBonusLimit = self.__boxesInfo[boxID].get('limit', 0)
+                    opened = self.__itemsCache.items.tokens.getAttemptsAfterGuaranteedRewards(lootBox)
+                    self.__boxesInfo[boxID]['boxCountToGuaranteedBonus'] = max(guaranteedBonusLimit - opened, 0)
 
         self.onBoxesUpdated()
 

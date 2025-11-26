@@ -79,6 +79,13 @@
       <undamaged>	vehicles/american/A166_H_3/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/american/A166_H_3/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/american/A166_H_3/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <A166_H_3_WD_3Dst>
+          <undamaged>	vehicles/american/A166_H_3/_skins/A166_H_3_WD_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/american/A166_H_3/_skins/A166_H_3_WD_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/american/A166_H_3/_skins/A166_H_3_WD_3Dst/crash/lod0/Hull.model	</exploded>
+        </A166_H_3_WD_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -105,6 +112,15 @@
         <rayEnd>	0.460224 0.111472 3.411036	</rayEnd>
         <rayUp>	-0 0.156426 -0.98769	</rayUp>
         <size>	0.28	</size>
+      </slot>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	10001	</slotId>
+        <compatibleModels>	A166_H_3_WD_3Dst	</compatibleModels>
+        <rayStart>	-0.890617 0.225731 3.67604	</rayStart>
+        <rayEnd>	-0.890617 0.18622 3.669783	</rayEnd>
+        <rayUp>	0 0.156413 -0.987692	</rayUp>
+        <size>	0.26	</size>
       </slot>
       <slot>
         <slotType>	paint	</slotType>
@@ -507,6 +523,14 @@
         <applyType>	universal	</applyType>
         <size>	medium	</size>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18003	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <hiddenForUser>	true	</hiddenForUser>
+        <scale>	1 1 1	</scale>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -548,6 +572,13 @@
         <undamaged>	vehicles/american/A166_H_3/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/american/A166_H_3/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/american/A166_H_3/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <A166_H_3_WD_3Dst>
+            <undamaged>	vehicles/american/A166_H_3/_skins/A166_H_3_WD_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A166_H_3/_skins/A166_H_3_WD_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A166_H_3/_skins/A166_H_3_WD_3Dst/crash/lod0/Chassis.model	</exploded>
+          </A166_H_3_WD_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -647,6 +678,45 @@
                   <row3>	-0.000006 0.818972 2.496721	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	A166_H_3_WD_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	2.255725 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.676678 0.000000	</row1>
+                  <row2>	0.000000 0.000000 8.478000	</row2>
+                  <row3>	-0.000031 1.202220 0.702000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.074000 -0.000001 0.000002	</row0>
+                  <row1>	0.000000 0.547568 -0.018838	</row1>
+                  <row2>	-0.000003 0.153353 4.457535	</row2>
+                  <row3>	-0.000001 1.689805 1.943535	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.293194 0.000001 0.000002	</row0>
+                  <row1>	0.000000 0.685807 -0.078111	</row1>
+                  <row2>	-0.000003 0.550820 4.836134	</row2>
+                  <row3>	0.000000 1.503837 -1.236909	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.757370 0.000000 0.000002	</row0>
+                  <row1>	0.000000 0.414498 -0.358296	</row1>
+                  <row2>	0.000000 0.403617 0.466928	</row2>
+                  <row3>	0.000001 0.976192 -3.020297	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.736000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.274000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.385058	</row2>
+                  <row3>	-2.167000 0.830000 0.518731	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.597124 -0.000030 0.000050	</row0>
+                  <row1>	0.000004 0.618569 0.054849	</row1>
+                  <row2>	-0.000020 -0.120890 1.363343	</row2>
+                  <row3>	-0.000006 0.818972 2.496721	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -726,6 +796,45 @@
                   <row1>	0.000000 0.835642 -0.079780	</row1>
                   <row2>	0.000000 0.701873 7.351646	</row2>
                   <row3>	1.898733 1.091285 0.391228	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.597120 -0.000030 0.000050	</row0>
+                  <row1>	0.000004 0.618569 0.054849	</row1>
+                  <row2>	-0.000020 -0.120890 1.363340	</row2>
+                  <row3>	-0.000006 0.818972 2.496720	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	A166_H_3_WD_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	2.255720 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.676680 0.000000	</row1>
+                  <row2>	0.000000 0.000000 8.478000	</row2>
+                  <row3>	-0.000031 1.202220 0.702000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.074000 -0.000001 0.000002	</row0>
+                  <row1>	0.000000 0.547568 -0.018838	</row1>
+                  <row2>	-0.000003 0.153353 4.457530	</row2>
+                  <row3>	-0.000001 1.689800 1.943540	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.293190 0.000001 0.000002	</row0>
+                  <row1>	0.000000 0.685807 -0.078111	</row1>
+                  <row2>	-0.000003 0.550820 4.836130	</row2>
+                  <row3>	0.000000 1.503840 -1.236910	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.757370 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.414498 -0.358296	</row1>
+                  <row2>	0.000000 0.403617 0.466928	</row2>
+                  <row3>	-0.000001 0.976192 -3.020297	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.379000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.317735 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.345001	</row2>
+                  <row3>	1.987000 0.845000 0.468000	</row3>
                 </boxCollider>
                 <boxCollider>
                   <row0>	3.597120 -0.000030 0.000050	</row0>
@@ -962,12 +1071,18 @@
           <segmentModelRight>	vehicles/american/A166_H_3/track/segment.model	</segmentModelRight>
           <left>	vehicles/american/A166_H_3/track/left.track	</left>
           <right>	vehicles/american/A166_H_3/track/right.track	</right>
-          <segmentLength>	0.165	</segmentLength>
-          <segmentOffset>	0.125	</segmentOffset>
+          <segmentLength>	0.181	</segmentLength>
+          <segmentOffset>	0.15	</segmentOffset>
           <atlas>
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
           </atlas>
+          <modelSets>
+            <A166_H_3_WD_3Dst>
+              <segmentModelLeft>	vehicles/american/A166_H_3/_skins/A166_H_3_WD_3Dst/track/segment.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/american/A166_H_3/_skins/A166_H_3_WD_3Dst/track/segment.model	</segmentModelRight>
+            </A166_H_3_WD_3Dst>
+          </modelSets>
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
@@ -976,12 +1091,17 @@
           <trackPairIdx>	0	</trackPairIdx>
           <segmentsCount>	90	</segmentsCount>
           <segmentsOuterThickness>	0.069246	</segmentsOuterThickness>
-          <segmentsInnerThickness>	-0.020699	</segmentsInnerThickness>
+          <segmentsInnerThickness>	-0.005	</segmentsInnerThickness>
           <segmentsPlaneOffset>	-1.438	</segmentsPlaneOffset>
           <mainSegment>
             <model>	vehicles/american/A166_H_3/track/segment.model	</model>
-            <length>	0.164515	</length>
+            <length>	0.175	</length>
           </mainSegment>
+          <modelSets>
+            <A166_H_3_WD_3Dst>
+              <mainSegmentModel>	vehicles/american/A166_H_3/_skins/A166_H_3_WD_3Dst/track/segment.model	</mainSegmentModel>
+            </A166_H_3_WD_3Dst>
+          </modelSets>
           <springsLength>
             <backwardMovement>
               <back>	0.136634	</back>
@@ -1010,14 +1130,14 @@
             <topFront>
               <wheelName>	WD_L0	</wheelName>
               <basePos>	3.6136 1.0684	</basePos>
-              <shiftVec>	0.346593 0.099034	</shiftVec>
-              <jointIdx>	12	</jointIdx>
+              <shiftVec>	0.35 0.099034	</shiftVec>
+              <jointIdx>	11	</jointIdx>
             </topFront>
             <topBack>
               <wheelName>	WD_L3	</wheelName>
               <basePos>	-2.481209 0.398854	</basePos>
               <shiftVec>	-0.301138 0.164624	</shiftVec>
-              <jointIdx>	55	</jointIdx>
+              <jointIdx>	54	</jointIdx>
             </topBack>
             <bottomBack>
               <wheelName>	W_L5	</wheelName>
@@ -1039,7 +1159,7 @@
             </wheel>
             <wheel>
               <name>	WD_L0	</name>
-              <radius>	0.358959	</radius>
+              <radius>	0.367	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
@@ -1047,7 +1167,7 @@
             <segmentSyncPivotOffset>	0	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_L0	</name>
-              <startAngle>	-6.290871	</startAngle>
+              <startAngle>	0.034907	</startAngle>
               <teethCount>	13	</teethCount>
             </sync>
           </teethSyncs>
@@ -1156,12 +1276,17 @@
           <trackPairIdx>	0	</trackPairIdx>
           <segmentsCount>	90	</segmentsCount>
           <segmentsOuterThickness>	0.069246	</segmentsOuterThickness>
-          <segmentsInnerThickness>	-0.020702	</segmentsInnerThickness>
+          <segmentsInnerThickness>	-0.005	</segmentsInnerThickness>
           <segmentsPlaneOffset>	1.438	</segmentsPlaneOffset>
           <mainSegment>
             <model>	vehicles/american/A166_H_3/track/segment.model	</model>
-            <length>	0.164515	</length>
+            <length>	0.175	</length>
           </mainSegment>
+          <modelSets>
+            <A166_H_3_WD_3Dst>
+              <mainSegmentModel>	vehicles/american/A166_H_3/_skins/A166_H_3_WD_3Dst/track/segment.model	</mainSegmentModel>
+            </A166_H_3_WD_3Dst>
+          </modelSets>
           <springsLength>
             <backwardMovement>
               <back>	0.136634	</back>
@@ -1191,13 +1316,13 @@
               <wheelName>	WD_R0	</wheelName>
               <basePos>	3.6136 1.0684	</basePos>
               <shiftVec>	0.346592 0.099037	</shiftVec>
-              <jointIdx>	12	</jointIdx>
+              <jointIdx>	11	</jointIdx>
             </topFront>
             <topBack>
               <wheelName>	WD_R3	</wheelName>
               <basePos>	-2.48121 0.398851	</basePos>
-              <shiftVec>	-0.301138 0.164622	</shiftVec>
-              <jointIdx>	55	</jointIdx>
+              <shiftVec>	-0.35 0.164622	</shiftVec>
+              <jointIdx>	54	</jointIdx>
             </topBack>
             <bottomBack>
               <wheelName>	W_R5	</wheelName>
@@ -1219,7 +1344,7 @@
             </wheel>
             <wheel>
               <name>	WD_R0	</name>
-              <radius>	0.358959	</radius>
+              <radius>	0.367	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
@@ -1227,7 +1352,7 @@
             <segmentSyncPivotOffset>	0	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_R0	</name>
-              <startAngle>	-6.290871	</startAngle>
+              <startAngle>	0.034907	</startAngle>
               <teethCount>	13	</teethCount>
             </sync>
           </teethSyncs>
@@ -1339,7 +1464,7 @@
   <turrets0>
     <Turret_1_A166_H_3>
       <userString>	#usa_vehicles:Turret_1_A166_H_3	</userString>
-      <tags></tags>
+      <tags>	oscillating	</tags>
       <level>	9	</level>
       <price>	60000	</price>
       <notInShop>	true	</notInShop>
@@ -1433,7 +1558,7 @@
           </armor>
           <clip>
             <count>	5	</count>
-            <rate>	10	</rate>
+            <rate>	12	</rate>
           </clip>
           <shotDispersionRadius>	0.33	</shotDispersionRadius>
           <reloadTime>	28	</reloadTime>
@@ -1701,6 +1826,16 @@
               <rayUp>	0.16 0 0	</rayUp>
               <size>	0.72	</size>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <compatibleModels>	A166_H_3_WD_3Dst	</compatibleModels>
+              <rayStart>	0 0 2.98	</rayStart>
+              <rayEnd>	0 0 3.66	</rayEnd>
+              <rayUp>	0.15 0 0	</rayUp>
+              <size>	0.68	</size>
+              <isUVProportional>	false	</isUVProportional>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -1712,6 +1847,13 @@
             <undamaged>	vehicles/american/A166_H_3/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A166_H_3/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/american/A166_H_3/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <A166_H_3_WD_3Dst>
+                <undamaged>	vehicles/american/A166_H_3/_skins/A166_H_3_WD_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/american/A166_H_3/_skins/A166_H_3_WD_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/american/A166_H_3/_skins/A166_H_3_WD_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </A166_H_3_WD_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A166_H_3/collision/Gun_01.model	</collisionModelServer>
@@ -1728,6 +1870,13 @@
         <undamaged>	vehicles/american/A166_H_3/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/american/A166_H_3/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/american/A166_H_3/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <A166_H_3_WD_3Dst>
+            <undamaged>	vehicles/american/A166_H_3/_skins/A166_H_3_WD_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/american/A166_H_3/_skins/A166_H_3_WD_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/american/A166_H_3/_skins/A166_H_3_WD_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </A166_H_3_WD_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/american/A166_H_3/collision/Turret_01.model	</collisionModelServer>

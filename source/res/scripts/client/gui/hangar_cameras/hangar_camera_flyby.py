@@ -108,8 +108,8 @@ class HangarCameraFlyby(object):
             return
 
     def __findFlybyComponent(self):
-        from cgf_components.hangar_camera_manager import CurrentCameraObject
-        currentCameraQuery = CGF.Query(self.__hangarSpace.spaceID, (CGF.GameObject, CurrentCameraObject))
+        from CameraComponents import ActiveCameraComponent
+        currentCameraQuery = CGF.Query(self.__hangarSpace.spaceID, (CGF.GameObject, ActiveCameraComponent))
         if not currentCameraQuery.empty():
             gameObject, _ = first(currentCameraQuery)
             return gameObject.findComponentByType(FlyByComponent)

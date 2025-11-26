@@ -2,7 +2,23 @@
 # Embedded file name: scripts/common/chat_commands_consts.py
 import Math
 from enum import Enum, unique
-from constants import ARENA_BONUS_TYPE
+
+class GENERIC_MESSENGER_ARGS(Enum):
+    INT32_ARG_1 = 'int32Arg1'
+    INT64_ARG_1 = 'int64Arg1'
+    FLOAT_ARG_1 = 'floatArg1'
+    STR_ARG_1 = 'strArg1'
+    STR_ARG_2 = 'strArg2'
+    INT8_ARG_1 = 'int8Arg1'
+
+
+GENERIC_MESSANGER_ARG_DEFAULTS = {GENERIC_MESSENGER_ARGS.INT32_ARG_1.value: 0,
+ GENERIC_MESSENGER_ARGS.INT64_ARG_1.value: 0,
+ GENERIC_MESSENGER_ARGS.FLOAT_ARG_1.value: 0,
+ GENERIC_MESSENGER_ARGS.STR_ARG_1.value: '',
+ GENERIC_MESSENGER_ARGS.STR_ARG_2.value: '',
+ GENERIC_MESSENGER_ARGS.INT8_ARG_1.value: 0}
+GENERIC_MESSENGER_ARG_NAMES = {n.value for n in GENERIC_MESSENGER_ARGS}
 
 class BATTLE_CHAT_COMMAND_NAMES(object):
     SOS = 'HELPME'

@@ -4,12 +4,11 @@ from __future__ import absolute_import
 import json
 import typing
 import BigWorld
-from account_helpers.AccountSettings import CAROUSEL_FILTER_1, CAROUSEL_FILTER_2, CAROUSEL_FILTER_3, CAROUSEL_FILTER_CLIENT_1, AccountSettings
 from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.options import CarouselTypeSetting
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
 from gui import GUI_NATIONS
-from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import FILTER_KEYS
+from gui.filters.carousel_filter import FILTER_KEYS
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.battle_pass import BattlePassFilterConsts
 from gui.impl.gen.view_models.views.lobby.hangar.sub_views.vehicle_filter_model import VehicleFilterModel, FilterSection, RoleSection
 from gui.impl.pub.view_component import ViewComponent
@@ -19,22 +18,17 @@ from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 if typing.TYPE_CHECKING:
     from typing import List, Dict
-    from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import CarouselFilter
+    from gui.filters.carousel_filter import CarouselFilter
 _VEHICLE_LEVEL_FILTERS = [ 'level_{}'.format(level) for level in VEHICLE_LEVELS ]
 _CAROUSEL_ROW_COUNT_TYPE = {1: CarouselTypeSetting.CAROUSEL_TYPES.index(CarouselTypeSetting.OPTIONS.SINGLE),
  2: CarouselTypeSetting.CAROUSEL_TYPES.index(CarouselTypeSetting.OPTIONS.DOUBLE)}
-DEFAULT_FILTER = AccountSettings.getFilterDefaults((CAROUSEL_FILTER_1,
- CAROUSEL_FILTER_2,
- CAROUSEL_FILTER_3,
- CAROUSEL_FILTER_CLIENT_1))
 
 class VehicleFiltersDataProvider(ViewComponent[VehicleFilterModel]):
     __settingsCore = dependency.descriptor(ISettingsCore)
 
-    def __init__(self, carouselFilter, defaultFilter=DEFAULT_FILTER):
+    def __init__(self, carouselFilter):
         self.__filter = carouselFilter
         self.__rowCount = None
-        self.__defaultFilter = defaultFilter
         super(VehicleFiltersDataProvider, self).__init__(model=VehicleFilterModel)
         return
 
@@ -47,7 +41,7 @@ class VehicleFiltersDataProvider(ViewComponent[VehicleFilterModel]):
         self._generateMappings()
         self.__filter.load()
         self.__updateCarousel()
-        self.viewModel.setDefaultFilters(json.dumps(self.__convertToModel(self.__defaultFilter)))
+        self.viewModel.setDefaultFilters(json.dumps(self.__convertToModel(self.__filter.filterDefaults)))
         self.__updateModel()
 
     def _getEvents(self):

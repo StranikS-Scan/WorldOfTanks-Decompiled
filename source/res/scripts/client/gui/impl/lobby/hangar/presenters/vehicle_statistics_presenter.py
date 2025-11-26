@@ -77,6 +77,12 @@ class VehiclesStatisticsPresenter(ViewComponent[VehicleStatisticsModel]):
     def __onPlatoonMembersUpdate(self):
         self.__updateVehicles(self._vehiclesComponent.vehicles)
 
+    def _getMaxBpScore(self, vehicle):
+        return self.__battlePass.getVehicleProgression(vehicle.intCD)
+
+    def _getDailyXPFactor(self, vehicle):
+        return vehicle.dailyXPFactor
+
     def __onUpdateVehicles(self, diff):
         with self.viewModel.transaction() as model:
             statistics = model.getStatistics()
@@ -98,13 +104,13 @@ class VehiclesStatisticsPresenter(ViewComponent[VehicleStatisticsModel]):
         vehicleRandomStats = accountRandomStats.getVehicles() if accountRandomStats is not None else {}
         if vehicle.intCD in vehicleRandomStats:
             battlesCount, winsCount, _ = vehicleRandomStats.get(vehicle.intCD)
-        bpProgress, bpCap = self.__battlePass.getVehicleProgression(vehicle.intCD)
+        bpProgress, bpCap = self._getMaxBpScore(vehicle)
         model = VehicleStatisticModel()
         model.setId(str(vehicle.intCD))
         model.setIntCD(vehicle.intCD)
         model.setInventoryId(vehicle.invID)
         model.setXp(vehicle.xp)
-        model.setBonusMultiplier(vehicle.dailyXPFactor)
+        model.setBonusMultiplier(self._getDailyXPFactor(vehicle))
         model.setElite(vehicle.isElite)
         model.setStatus(vState)
         model.setStateLevel(vStateLvl)
@@ -118,7 +124,7 @@ class VehiclesStatisticsPresenter(ViewComponent[VehicleStatisticsModel]):
         model.setBpSpecial(self.__battlePass.isSpecialVehicle(vehicle.intCD))
         model.setMaxBpScore(bpCap)
         model.setBpProgress(bpProgress)
-        model.setOwn3DStyle(self.__accountStyles.critera(vehicle))
+        model.setOwn3DStyle(vehicle.intCD in self.__accountStyles.vehiclesWith3DStyles and not vehicle.isOutfitLocked)
         if vehicle.isEarnCrystals:
             numberOfCrystalEarned = model.getNumberOfCrystalEarned()
             for numberOfCrystals in vehicle.getCrystalsEarnedInfo():

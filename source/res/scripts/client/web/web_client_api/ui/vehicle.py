@@ -452,7 +452,7 @@ class VehiclePreviewWebApiMixin(object):
             showPreviewFunc = event_dispatcher.showVehiclePreview
         vehicleID = cmd.vehicle_id
         if self.__validVehiclePreview(vehicleID):
-            showPreviewFunc(vehTypeCompDescr=vehicleID, previewAlias=self._getVehiclePreviewReturnAlias(cmd), previewBackCb=self._getVehiclePreviewReturnCallback(cmd))
+            showPreviewFunc(vehTypeCompDescr=vehicleID, previewAlias=self._getVehiclePreviewReturnAlias(cmd))
         else:
             _pushInvalidPreviewMessage()
         return
@@ -460,7 +460,7 @@ class VehiclePreviewWebApiMixin(object):
     @w2c(_VehicleOffersPreviewSchema, 'vehicle_offers_preview')
     def openVehicleOffersPreview(self, cmd):
         offers = _parseOffers(cmd.offers)
-        event_dispatcher.showVehiclePreview(vehTypeCompDescr=int(cmd.vehicle_id), offers=offers, title=getattr(cmd, 'title', ''), price=MONEY_UNDEFINED, oldPrice=MONEY_UNDEFINED, previewAlias=self._getVehiclePreviewReturnAlias(cmd), previewBackCb=self._getVehiclePreviewReturnCallback(cmd))
+        event_dispatcher.showVehiclePreview(vehTypeCompDescr=int(cmd.vehicle_id), offers=offers, title=getattr(cmd, 'title', ''), price=MONEY_UNDEFINED, oldPrice=MONEY_UNDEFINED, previewAlias=self._getVehiclePreviewReturnAlias(cmd))
 
     @w2c(_MarathonVehiclePackPreviewSchema, 'marathon_vehicle_pack_preview')
     def openMarathonVehiclePackPreview(self, cmd):
@@ -480,7 +480,7 @@ class VehiclePreviewWebApiMixin(object):
             localEndTime = None
             if cmd.end_date:
                 localEndTime = self.__getLocalEndTime(cmd.end_date)
-            event_dispatcher.showVehiclePreview(vehTypeCompDescr=vehiclesIDs[0], itemsPack=items, price=price, oldPrice=oldPrice, title=cmd.title, endTime=localEndTime, previewAlias=self._getVehiclePreviewReturnAlias(cmd), previewBackCb=self._getVehiclePreviewReturnCallback(cmd), buyParams=cmd.buy_params, obtainingMethod=cmd.obtaining_method)
+            event_dispatcher.showVehiclePreview(vehTypeCompDescr=vehiclesIDs[0], itemsPack=items, price=price, oldPrice=oldPrice, title=cmd.title, endTime=localEndTime, previewAlias=self._getVehiclePreviewReturnAlias(cmd), buyParams=cmd.buy_params, obtainingMethod=cmd.obtaining_method)
         else:
             _pushInvalidPreviewMessage()
         return
@@ -621,9 +621,8 @@ class VehiclePreviewWebApiMixin(object):
             outfit = styleInfo.getAlteredOutfit(CustomizationNamesToTypes[alternateItemTypeName.upper()], alternateItemID, vehicle.descriptor.makeCompactDescr())
         if vehicle is not None and not vehicle.isOutfitLocked and styleInfo.mayInstall(vehicle):
             showStyleFunc = showStyleFunc or _getStylePreviewShowFunc(styleInfo, cmd.price)
-            descrLabelResPath = R.strings.vehicle_preview.header.backBtn.descrLabel
             ClientSelectableCameraObject.switchCamera()
-            showStyleFunc(vehicleCD, styleInfo, styleInfo.getDescription(), self._getVehicleStylePreviewCallback(cmd), backport.text(descrLabelResPath.dyn(cmd.back_btn_descr or 'hangar')()), styleLevel=cmd.level, price=cmd.price, buyParams=cmd.buy_params, outfit=outfit, backPreviewAlias=self._getVehiclePreviewReturnAlias(cmd), **additionalStyleFuncKwargs)
+            showStyleFunc(vehicleCD, styleInfo, styleInfo.getDescription(), styleLevel=cmd.level, price=cmd.price, buyParams=cmd.buy_params, outfit=outfit, backPreviewAlias=self._getVehiclePreviewReturnAlias(cmd), **additionalStyleFuncKwargs)
             return True
         else:
             return False

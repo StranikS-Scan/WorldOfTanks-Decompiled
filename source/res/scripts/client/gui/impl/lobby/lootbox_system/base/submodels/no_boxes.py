@@ -15,7 +15,6 @@ from shared_utils import findFirst
 from skeletons.gui.game_control import ILootBoxSystemController
 
 class NoBoxes(SubViewImpl):
-    __slots__ = ('__category', '__stats', '__isResetCompleted', '__eventName', '__backCallback')
     __lootBoxes = dependency.descriptor(ILootBoxSystemController)
 
     def __init__(self, viewModel, parentView):
@@ -24,8 +23,6 @@ class NoBoxes(SubViewImpl):
         self.__stats = Statistics()
         self.__isResetCompleted = False
         self.__eventName = ''
-        self.__backCallback = None
-        return
 
     @property
     def viewModel(self):
@@ -38,7 +35,6 @@ class NoBoxes(SubViewImpl):
     def initialize(self, *args, **kwargs):
         super(NoBoxes, self).initialize(*args, **kwargs)
         self.__eventName = kwargs.get('eventName', '')
-        self.__backCallback = kwargs.get('backCallback')
         self.__category = getPreferredBox(self.__eventName, kwargs.get('category')).getCategory()
         with self.viewModel.transaction() as vmTx:
             self.__updateData(model=vmTx)
@@ -74,7 +70,7 @@ class NoBoxes(SubViewImpl):
     def __onCountChanged(self):
         box = getPreferredBox(self.__eventName)
         if box.isEnabled() and box.getInventoryCount():
-            Views.load(ViewID.MAIN, subViewID=SubViewID.HAS_BOXES, category=box.getCategory(), eventName=self.__eventName, backCallback=self.__backCallback)
+            Views.load(ViewID.MAIN, subViewID=SubViewID.HAS_BOXES, category=box.getCategory(), eventName=self.__eventName)
 
     def __onUpdateResetState(self):
         self.__isResetCompleted = False
@@ -90,13 +86,13 @@ class NoBoxes(SubViewImpl):
         if self.__lootBoxes.isAvailable(self.__eventName) and self.__lootBoxes.getActiveBoxes(self.__eventName):
             box = getPreferredBox(self.__eventName)
             if box.isEnabled() and box.getInventoryCount():
-                Views.load(ViewID.MAIN, subViewID=SubViewID.HAS_BOXES, category=box.getCategory(), eventName=self.__eventName, backCallback=self.__backCallback)
+                Views.load(ViewID.MAIN, subViewID=SubViewID.HAS_BOXES, category=box.getCategory(), eventName=self.__eventName)
             else:
                 self.__updateData()
                 self.__updateStatistics()
 
     def __showInfo(self):
-        Views.load(ViewID.INFO, previousWindow=ViewID.MAIN, eventName=self.__eventName, backCallback=self.__backCallback)
+        Views.load(ViewID.INFO, eventName=self.__eventName)
 
     def __openShop(self):
         Views.load(ViewID.SHOP, eventName=self.__eventName)

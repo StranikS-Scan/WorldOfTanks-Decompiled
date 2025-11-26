@@ -1899,6 +1899,8 @@
       <duration>	10	</duration>
       <threshold>	0.3	</threshold>
       <cooldown>	5	</cooldown>
+      <addMaxSpeedForwardBonus>	0.4	</addMaxSpeedForwardBonus>
+      <addRotationSpeedBonus>	-0.8	</addRotationSpeedBonus>
       <impulse>
         <magnitude>	50	</magnitude>
         <applyPoint>	-0.062 -1.743 -2.12	</applyPoint>
@@ -1910,30 +1912,14 @@
           <value>	2.5	</value>
         </mul>
         <mul>
-          <name>	dynAttrs/vehicle/maxSpeed/forward	</name>
-          <value>	1.4	</value>
-        </mul>
-        <mul>
           <name>	dynAttrs/vehicle/maxSpeed/backward	</name>
           <value>	0.1	</value>
-        </mul>
-        <mul>
-          <name>	dynAttrs/vehicle/rotationSpeed	</name>
-          <value>	0.2	</value>
         </mul>
       </modifiers>
       <kpi>
         <mul>
           <name>	vehicleEnginePower	</name>
           <value>	2.5	</value>
-        </mul>
-        <mul>
-          <name>	vehicleForwardMaxSpeed	</name>
-          <value>	1.4	</value>
-        </mul>
-        <mul>
-          <name>	vehicleBackwardMaxSpeed	</name>
-          <value>	0.1	</value>
         </mul>
         <mul>
           <name>	vehicleAllGroundRotationSpeed	</name>

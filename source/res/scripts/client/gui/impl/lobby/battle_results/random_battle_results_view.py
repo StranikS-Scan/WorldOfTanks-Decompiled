@@ -94,7 +94,7 @@ class RandomBattleResultsView(ViewImpl, IRoutableView):
         self.__router = SubstateRouter(lsm, self, lsm.getStateFromView(self))
         self.__router.init()
         super(RandomBattleResultsView, self)._onLoading(*args, **kwargs)
-        statsController = self.__battleResults.getPresenter(self.__arenaUniqueID)
+        statsController = self.__battleResults.getStatsCtrl(self.__arenaUniqueID)
         battleResults = statsController.getResults()
         self.__createFlagWindow()
         with self.viewModel.transaction():
@@ -106,7 +106,7 @@ class RandomBattleResultsView(ViewImpl, IRoutableView):
     def __createFlagWindow(self):
         self.__flagWindow = FlagWindow()
         self.__flagWindow.load()
-        statsController = self.__battleResults.getPresenter(self.__arenaUniqueID)
+        statsController = self.__battleResults.getStatsCtrl(self.__arenaUniqueID)
         battleResults = statsController.getResults()
         reusable = battleResults.reusable
         self.__flagWindow.content.viewModel.setWinStatus(reusable.getPersonalTeamResult())

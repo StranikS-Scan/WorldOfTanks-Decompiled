@@ -45,7 +45,7 @@
   <hull>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	16130	</weight>
-    <maxHealth>	1320	</maxHealth>
+    <maxHealth>	1360	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
@@ -71,6 +71,13 @@
       <undamaged>	vehicles/german/G168_KJpz_T_III/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/german/G168_KJpz_T_III/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/german/G168_KJpz_T_III/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <G168_KJpz_T_III_AS5_3Dst>
+          <undamaged>	vehicles/german/G168_KJpz_T_III/_skins/G168_KJpz_T_III_AS5_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/german/G168_KJpz_T_III/_skins/G168_KJpz_T_III_AS5_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/german/G168_KJpz_T_III/_skins/G168_KJpz_T_III_AS5_3Dst/crash/lod0/Hull.model	</exploded>
+        </G168_KJpz_T_III_AS5_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -97,6 +104,15 @@
         <rayEnd>	-0.951634 0.329955 1.295963	</rayEnd>
         <rayUp>	-0 0.139245 -0.990258	</rayUp>
         <size>	0.32	</size>
+      </slot>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	10001	</slotId>
+        <compatibleModels>	G168_KJpz_T_III_AS5_3Dst	</compatibleModels>
+        <rayStart>	-1.154742 0.689079 1.614663	</rayStart>
+        <rayEnd>	-1.154763 0.292983 1.558966	</rayEnd>
+        <rayUp>	0 0.139245 -0.990258	</rayUp>
+        <size>	0.3	</size>
       </slot>
       <slot>
         <slotType>	paint	</slotType>
@@ -432,6 +448,50 @@
         <clipAngle>	0.896092	</clipAngle>
         <anchorShift>	0.1	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15029	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G168_KJpz_T_III_AS5_3Dst	</compatibleModels>
+        <position>	0.872245 1.45514 2.1441	</position>
+        <rotation>	0.136333 -0.001746 3.14158	</rotation>
+        <scale>	0.583297 0.099535 0.583292	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.896092	</clipAngle>
+        <anchorShift>	0.07	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15030	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G168_KJpz_T_III_AS5_3Dst	</compatibleModels>
+        <position>	-1.56549 1.43281 -0.031552	</position>
+        <rotation>	0.945585 -1.56477 3.11679	</rotation>
+        <scale>	0.420854 0.332127 0.420849	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.896092	</clipAngle>
+        <anchorShift>	0.1	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15031	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G168_KJpz_T_III_AS5_3Dst	</compatibleModels>
+        <position>	1.56552 1.43278 -0.031551	</position>
+        <rotation>	0.945605 1.56469 -3.11681	</rotation>
+        <scale>	0.420854 0.332127 0.420849	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.896092	</clipAngle>
+        <anchorShift>	0.1	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <scale>	1 1 1	</scale>
+        <hiddenForUser>	true	</hiddenForUser>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -458,8 +518,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	40	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.3	</vehicleMovement>
-        <vehicleRotation>	0.3	</vehicleRotation>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	220	</maxHealth>
@@ -473,6 +533,13 @@
         <undamaged>	vehicles/german/G168_KJpz_T_III/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/german/G168_KJpz_T_III/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/german/G168_KJpz_T_III/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <G168_KJpz_T_III_AS5_3Dst>
+            <undamaged>	vehicles/german/G168_KJpz_T_III/_skins/G168_KJpz_T_III_AS5_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G168_KJpz_T_III/_skins/G168_KJpz_T_III_AS5_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G168_KJpz_T_III/_skins/G168_KJpz_T_III_AS5_3Dst/crash/lod0/Chassis.model	</exploded>
+          </G168_KJpz_T_III_AS5_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -563,6 +630,39 @@
                   <row3>	-1.886508 0.958939 -0.127337	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	G168_KJpz_T_III_AS5_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	2.198728 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.638023 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.530000	</row2>
+                  <row3>	0.000000 1.231138 -0.067000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.660974 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.654448 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.428100	</row2>
+                  <row3>	0.000000 1.577627 -0.091660	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.656000 -0.000001 -0.000001	</row0>
+                  <row1>	0.000000 0.191579 -0.230863	</row1>
+                  <row2>	0.000000 0.392764 0.325930	</row2>
+                  <row3>	0.000000 1.145024 -3.826887	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.657000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.178617 0.241031	</row1>
+                  <row2>	0.000000 -0.441900 0.327471	</row2>
+                  <row3>	0.000000 1.286525 3.572052	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.689000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.747000	</row2>
+                  <row3>	-1.886508 1.095952 0.192000	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -639,6 +739,39 @@
                   <row1>	0.000000 1.000000 0.000000	</row1>
                   <row2>	0.000000 0.000000 7.446138	</row2>
                   <row3>	1.886508 0.958939 -0.127337	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	G168_KJpz_T_III_AS5_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	2.198730 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.638020 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.530000	</row2>
+                  <row3>	0.000000 1.231140 -0.067000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.660974 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.654448 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.428100	</row2>
+                  <row3>	0.000000 1.577627 -0.091660	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.656000 -0.000001 -0.000001	</row0>
+                  <row1>	0.000000 0.191579 -0.230863	</row1>
+                  <row2>	0.000000 0.392764 0.325930	</row2>
+                  <row3>	0.000000 1.145020 -3.826890	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.657000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.178617 0.241031	</row1>
+                  <row2>	0.000000 -0.441900 0.327471	</row2>
+                  <row3>	0.000000 1.286520 3.572050	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.689000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.747000	</row2>
+                  <row3>	1.887000 1.095950 0.192000	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -863,6 +996,14 @@
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
           </atlas>
+          <modelSets>
+            <G168_KJpz_T_III_AS5_3Dst>
+              <segmentModelLeft>	vehicles/german/G168_KJpz_T_III/_skins/G168_KJpz_T_III_AS5_3Dst/track/segment_01.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/german/G168_KJpz_T_III/_skins/G168_KJpz_T_III_AS5_3Dst/track/segment_01.model	</segmentModelRight>
+              <segment2ModelLeft>	vehicles/german/G168_KJpz_T_III/_skins/G168_KJpz_T_III_AS5_3Dst/track/segment_02.model	</segment2ModelLeft>
+              <segment2ModelRight>	vehicles/german/G168_KJpz_T_III/_skins/G168_KJpz_T_III_AS5_3Dst/track/segment_02.model	</segment2ModelRight>
+            </G168_KJpz_T_III_AS5_3Dst>
+          </modelSets>
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
@@ -880,6 +1021,12 @@
             <model>	vehicles/german/G168_KJpz_T_III/track/segment_02.model	</model>
             <length>	0.099929	</length>
           </secSegment>
+          <modelSets>
+            <G168_KJpz_T_III_AS5_3Dst>
+              <mainSegmentModel>	vehicles/german/G168_KJpz_T_III/_skins/G168_KJpz_T_III_AS5_3Dst/track/segment_01.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/german/G168_KJpz_T_III/_skins/G168_KJpz_T_III_AS5_3Dst/track/segment_02.model	</secSegmentModel>
+            </G168_KJpz_T_III_AS5_3Dst>
+          </modelSets>
           <springsLength>
             <backwardMovement>
               <back>	0.097418	</back>
@@ -1129,6 +1276,12 @@
             <model>	vehicles/german/G168_KJpz_T_III/track/segment_02.model	</model>
             <length>	0.100141	</length>
           </secSegment>
+          <modelSets>
+            <G168_KJpz_T_III_AS5_3Dst>
+              <mainSegmentModel>	vehicles/german/G168_KJpz_T_III/_skins/G168_KJpz_T_III_AS5_3Dst/track/segment_01.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/german/G168_KJpz_T_III/_skins/G168_KJpz_T_III_AS5_3Dst/track/segment_02.model	</secSegmentModel>
+            </G168_KJpz_T_III_AS5_3Dst>
+          </modelSets>
           <springsLength>
             <backwardMovement>
               <back>	0.097805	</back>
@@ -1378,7 +1531,7 @@
       <notInShop>	true	</notInShop>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	10000	</weight>
-      <maxHealth>	330	</maxHealth>
+      <maxHealth>	340	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1395,14 +1548,19 @@
         <armor_6>	20	</armor_6>
         <armor_7>	10	</armor_7>
         <armor_8>	0	</armor_8>
-        <armor_9>	40	</armor_9>
-        <armor_10>	40	</armor_10>
+        <armor_9>	40	  <tags>	gunMask	</tags>
+        </armor_9>
+        <armor_10>	40	  <tags>	gunMask	</tags>
+        </armor_10>
         <armor_11>	40	</armor_11>
         <armor_12>	40	</armor_12>
         <armor_13>	40	</armor_13>
-        <armor_14>	40	</armor_14>
-        <armor_15>	40	</armor_15>
-        <armor_16>	40	</armor_16>
+        <armor_14>	40	  <tags>	gunMask	</tags>
+        </armor_14>
+        <armor_15>	40	  <tags>	gunMask	</tags>
+        </armor_15>
+        <armor_16>	40	  <tags>	gunMask	</tags>
+        </armor_16>
       </armor>
       <surveyingDeviceHealth>
         <maxHealth>	110	</maxHealth>
@@ -1411,7 +1569,7 @@
       </surveyingDeviceHealth>
       <guns>
         <_120mm_Versuchskanone_L65>	shared	  <maxAmmo>	44	</maxAmmo>
-          <reloadTime>	10.7	</reloadTime>
+          <reloadTime>	10	</reloadTime>
           <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.06	</turretRotation>
@@ -1448,7 +1606,8 @@
             </armor_15>
             <armor_16>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_16>
-            <armor_17>	40	</armor_17>
+            <armor_17>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_17>
             <gun>	20	</gun>
           </armor>
           <customizationSlots>
@@ -1585,6 +1744,13 @@
             <undamaged>	vehicles/german/G168_KJpz_T_III/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G168_KJpz_T_III/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/german/G168_KJpz_T_III/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <G168_KJpz_T_III_AS5_3Dst>
+                <undamaged>	vehicles/german/G168_KJpz_T_III/_skins/G168_KJpz_T_III_AS5_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/german/G168_KJpz_T_III/_skins/G168_KJpz_T_III_AS5_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/german/G168_KJpz_T_III/_skins/G168_KJpz_T_III_AS5_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </G168_KJpz_T_III_AS5_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G168_KJpz_T_III/collision/Gun_01.model	</collisionModelServer>
@@ -1601,6 +1767,13 @@
         <undamaged>	vehicles/german/G168_KJpz_T_III/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/german/G168_KJpz_T_III/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/german/G168_KJpz_T_III/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <G168_KJpz_T_III_AS5_3Dst>
+            <undamaged>	vehicles/german/G168_KJpz_T_III/_skins/G168_KJpz_T_III_AS5_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/german/G168_KJpz_T_III/_skins/G168_KJpz_T_III_AS5_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/german/G168_KJpz_T_III/_skins/G168_KJpz_T_III_AS5_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </G168_KJpz_T_III_AS5_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/german/G168_KJpz_T_III/collision/Turret_01.model	</collisionModelServer>
@@ -1851,6 +2024,50 @@
           <clipAngle>	0.896092	</clipAngle>
           <anchorShift>	0.04	</anchorShift>
         </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35017	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G168_KJpz_T_III_AS5_3Dst	</compatibleModels>
+          <position>	-1.21247 2.07866 -1.5478	</position>
+          <rotation>	1.61064 0.87579 -0.248695	</rotation>
+          <scale>	0.374843 0.144883 0.374839	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.42584	</clipAngle>
+          <anchorShift>	0.1	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35018	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G168_KJpz_T_III_AS5_3Dst	</compatibleModels>
+          <position>	1.21252 2.07864 -1.5478	</position>
+          <rotation>	1.61064 -0.87548 0.249034	</rotation>
+          <scale>	0.374843 0.144883 0.374839	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.42584	</clipAngle>
+          <anchorShift>	0.1	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35019	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G168_KJpz_T_III_AS5_3Dst	</compatibleModels>
+          <position>	0.86063 2.16094 -0.409223	</position>
+          <rotation>	0.681411 0.09487 2.92769	</rotation>
+          <scale>	0.457908 0.176989 0.457902	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.42584	</clipAngle>
+          <anchorShift>	0.06	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	0 0 0	</position>
+          <rotation>	0 0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <hiddenForUser>	true	</hiddenForUser>
+        </slot>
       </customizationSlots>
       <customization>
         <customizableVehicleAreas>
@@ -1880,7 +2097,7 @@
     <detailed>
       <engines>
         <MTU803>
-          <smplEnginePower>	850	</smplEnginePower>
+          <smplEnginePower>	900	</smplEnginePower>
           <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </MTU803>
       </engines>

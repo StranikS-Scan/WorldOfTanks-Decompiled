@@ -49,5 +49,6 @@ class RandomTeamEfficiency(TeamStats):
         bonusType = reusable.common.arenaBonusType
         sortingKey = collectBattleResultsStatsSorting().get(bonusType)
         column, sortingOrder = stored_sorting.readStatsSorting(sortingKey)
-        model.setSortingColumn(RandomColumnType(column))
+        randomColumnValues = {item.value for item in RandomColumnType}
         model.setSortingOrder(SortingOrder(sortingOrder))
+        model.setSortingColumn(RandomColumnType(column) if column in randomColumnValues else RandomColumnType.VEHICLE)

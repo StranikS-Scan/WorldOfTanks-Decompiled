@@ -4,7 +4,6 @@
 
 def registerComp7LightBattle():
     from arena_component_system.assembler_helper import ARENA_BONUS_TYPE_CAP_COMPONENTS
-    from AvatarInputHandler import _INITIAL_MODE_BY_BONUS_TYPE, _CTRL_MODE
     from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
     from comp7_core.gui.battle_control.controllers.consumables import comp7_equipment_ctrl
     from comp7_light.gui.battle_control.arena_info.arena_vos import Comp7LightKeys
@@ -22,7 +21,6 @@ def registerComp7LightBattle():
     extendEquipmentController({ARENA_BONUS_TYPE.COMP7_LIGHT: comp7_equipment_ctrl.Comp7EquipmentController}, {ARENA_BONUS_TYPE.COMP7_LIGHT: comp7_equipment_ctrl.Comp7ReplayEquipmentController})
     registerGameModeArenaInfoKeys(ARENA_GUI_TYPE.COMP7_LIGHT, Comp7LightKeys)
     ARENA_BONUS_TYPE_CAP_COMPONENTS.update({'comp7LightEquipmentComponent': (ARENA_BONUS_TYPE_CAPS.COMP7_LIGHT, Comp7LightEquipmentComponent)})
-    _INITIAL_MODE_BY_BONUS_TYPE.update({ARENA_BONUS_TYPE.COMP7_LIGHT: _CTRL_MODE.VEHICLES_SELECTION})
     callout_ctrl._CONSUMERS_LOCKS += (VIEW_ALIAS.COMP7_LIGHT_BATTLE_PAGE,)
     _extendEquipmentProperties()
     _extendEquipmentSounds()

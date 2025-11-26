@@ -55,6 +55,12 @@ class SettingsWindowMeta(AbstractWindowView):
     def restartNewbieBattleHints(self):
         self._printOverrideError('restartNewbieBattleHints')
 
+    def autodetectPhysicsSoundQuality(self):
+        self._printOverrideError('autodetectPhysicsSoundQuality')
+
+    def canSelectPhysicsSoundQuality(self, optionIdx):
+        self._printOverrideError('canSelectPhysicsSoundQuality')
+
     def as_setDataS(self, settingsData):
         return self.flashObject.as_setData(settingsData) if self._isDAAPIInited() else None
 
@@ -69,6 +75,9 @@ class SettingsWindowMeta(AbstractWindowView):
 
     def as_showLimitedUISettingS(self, isVisible):
         return self.flashObject.as_showLimitedUISetting(isVisible) if self._isDAAPIInited() else None
+
+    def as_showPhysicsSoundSettingsS(self, isVisible):
+        return self.flashObject.as_showPhysicsSoundSettings(isVisible) if self._isDAAPIInited() else None
 
     def as_ConfirmationOfApplicationS(self, isApplied):
         return self.flashObject.as_ConfirmationOfApplication(isApplied) if self._isDAAPIInited() else None
@@ -99,3 +108,6 @@ class SettingsWindowMeta(AbstractWindowView):
 
     def as_setDisabledTabsOverlayS(self, tabIndexes, text):
         return self.flashObject.as_setDisabledTabsOverlay(tabIndexes, text) if self._isDAAPIInited() else None
+
+    def as_onPhysicsSoundQualityApplyS(self, isApply):
+        return self.flashObject.as_onPhysicsSoundQualityApply(isApply) if self._isDAAPIInited() else None

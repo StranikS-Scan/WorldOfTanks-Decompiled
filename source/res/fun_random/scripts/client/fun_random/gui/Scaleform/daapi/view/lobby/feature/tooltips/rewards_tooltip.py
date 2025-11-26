@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/Scaleform/daapi/view/lobby/feature/tooltips/rewards_tooltip.py
+from __future__ import absolute_import
 from fun_random.gui.Scaleform.daapi.view.lobby.server_events.awards_formatters import FunCurtailingAwardsComposer, getFunAwardsPacker
 from fun_random.gui.feature.util.fun_mixins import FunProgressionWatcher
 from fun_random.gui.feature.util.fun_wrappers import hasActiveProgression

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_modifiers/scripts/client/battle_modifiers/gui/impl/lobby/tooltips/modifiers_domain_tooltip_view.py
+from __future__ import absolute_import
 import typing
 from battle_modifiers.gui.impl.lobby.feature.helpers import packModifierModel
 from battle_modifiers.gui.impl.gen.view_models.views.lobby.tooltips.modifiers_domain_tooltip_view_model import ModifiersDomainTooltipViewModel
@@ -19,22 +20,23 @@ class ModifiersDomainTooltipView(ViewImpl):
 
     @property
     def viewModel(self):
-        return super(ModifiersDomainTooltipView, self).getViewModel()
+        return self.getViewModel()
 
     def getModifiersDataProvider(self):
         raise NotImplementedError
 
     def _onLoading(self, *args, **kwargs):
         super(ModifiersDomainTooltipView, self)._onLoading(*args, **kwargs)
-        with self.getViewModel().transaction() as model:
+        with self.viewModel.transaction() as model:
             model.setModifiersDomain(self.__modifiersDomain)
             self.__invalidateModifiers(model.getModifiers())
 
     def __invalidateModifiers(self, modifiers):
         modifiers.clear()
         modifiersProvider = self.getModifiersDataProvider()
-        rawModifiers = modifiersProvider.getDomainModifiers(self.__modifiersDomain) if modifiersProvider else ()
+        rawModifiers = () if modifiersProvider is None else modifiersProvider.getDomainModifiers(self.__modifiersDomain)
         for modifier in rawModifiers:
             modifiers.addViewModel(packModifierModel(modifier))
 
         modifiers.invalidate()
+        return

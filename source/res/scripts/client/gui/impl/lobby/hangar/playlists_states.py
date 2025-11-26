@@ -14,9 +14,11 @@ from gui.impl.lobby.hangar.random.sound_manager import PLAY_LISTS_SOUND_SPACE
 from gui.impl.lobby.hangar.states import HangarState, AllVehiclesState
 from gui.lobby_state_machine.states import LobbyState, SubScopeSubLayerState, TopScopeTopLayerState, LobbyStateDescription
 from gui.shared import events, EVENT_BUS_SCOPE
+from gui.shared.view_helpers.blur_manager import ImmediateSceneBlurConfig
 from helpers import dependency
 from helpers.events_handler import EventsHandler
-from skeletons.gui.game_control import IVehiclePlaylistsController
+from skeletons.gui.game_control import IVehiclePlaylistsController, IBlurController
+from skeletons.gui.shared.utils import IHangarSpace
 from sound_gui_manager import ViewSoundExtension
 from wg_async import wg_async, BrokenPromiseError, AsyncEvent
 from gui.shared.events import NavigationEvent
@@ -99,6 +101,9 @@ class SaveVehiclePlaylistConfirmState(LobbyState):
 @HangarState.parentOf
 class EditVehiclePlaylistsState(LobbyState, EventsHandler):
     STATE_ID = 'editVehiclePlaylists'
+    _VEHICLE_PLAYLISTS_BLUR_SETTINGS_KEY = 'maximum'
+    __blurCtrl = dependency.descriptor(IBlurController)
+    __hangarSpace = dependency.descriptor(IHangarSpace)
     __vehiclePlaylistsCtrl = dependency.descriptor(IVehiclePlaylistsController)
     __soundExtension = ViewSoundExtension(PLAY_LISTS_SOUND_SPACE)
     __RESTRICTED_EVENTS = [events.PrbInvitesEvent.ACCEPT, events.PrbActionEvent.SELECT, events.PrbActionEvent.LEAVE]
@@ -107,6 +112,7 @@ class EditVehiclePlaylistsState(LobbyState, EventsHandler):
         super(EditVehiclePlaylistsState, self).__init__()
         self.__params = None
         self.__goOutForced = False
+        self.__blur = None
         return
 
     def getNavigationDescription(self):
@@ -139,11 +145,15 @@ class EditVehiclePlaylistsState(LobbyState, EventsHandler):
             self.__vehiclePlaylistsCtrl.setInitialModifiedPlaylist(playlistId, playlistData)
         self.__soundExtension.initSoundManager()
         self.__soundExtension.startSoundSpace()
+        self.__blur = self.__blurCtrl.createBlur((ImmediateSceneBlurConfig(spaceID=self.__hangarSpace.spaceID, settings=self.__blurCtrl.getSettingsByAlias(self._VEHICLE_PLAYLISTS_BLUR_SETTINGS_KEY), enabled=True, persistent=True),))
 
     def _onExited(self):
         self._unsubscribe()
         self.__soundExtension.destroySoundManager()
         self.__params = None
+        self.__blur.disable()
+        self.__blur.fini()
+        self.__blur = None
         super(EditVehiclePlaylistsState, self)._onExited()
         return
 

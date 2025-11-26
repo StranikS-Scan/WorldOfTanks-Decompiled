@@ -508,22 +508,6 @@
         <global-active>	_CollectibleVehiclePreviewEnabled	</global-active>
       </condition>
     </hint>
-    <hint>	AmmunitionPanelBattleAbilitiesHint	  <item-id>	AmmunitionPanelBattleAbilities	</item-id>
-      <text>	_(#tank_setup:hints/ammunitionPanel/reserves/changed)	</text>
-      <arrow>
-        <direction>	T	</direction>
-        <loop>	True	</loop>
-      </arrow>
-      <checked-ui-state>
-        <simple-state>
-          <state>	visible	</state>
-          <value>	True	</value>
-        </simple-state>
-      </checked-ui-state>
-      <update-runtime>	True	</update-runtime>
-      <hide-immediately>	True	</hide-immediately>
-      <ignore-outside-click>	True	</ignore-outside-click>
-    </hint>
     <hint>	FilterHintZoneHint	  <item-id>	FilterTutorialHintZone	</item-id>
       <text>	_(#tank_setup:hints/filters/specialization)	</text>
       <arrow>
@@ -557,38 +541,6 @@
           <arguments>	ModernizedSetupTabHint	</arguments>
         </class-condition>
       </condition>
-      <update-runtime>	True	</update-runtime>
-      <hide-immediately>	True	</hide-immediately>
-      <ignore-outside-click>	True	</ignore-outside-click>
-    </hint>
-    <hint>	ShowAbilitiesButtonHint	  <item-id>	ShowAbilitiesButton	</item-id>
-      <text>	_(#tank_setup:hints/ammunition/reserves/control)	</text>
-      <arrow>
-        <direction>	T	</direction>
-        <loop>	True	</loop>
-      </arrow>
-      <checked-ui-state>
-        <simple-state>
-          <state>	visible	</state>
-          <value>	True	</value>
-        </simple-state>
-      </checked-ui-state>
-      <update-runtime>	True	</update-runtime>
-      <hide-immediately>	True	</hide-immediately>
-      <ignore-outside-click>	True	</ignore-outside-click>
-    </hint>
-    <hint>	ApplyAbilitiesToTypeCheckboxHint	  <item-id>	ApplyAbilitiesToTypeCheckbox	</item-id>
-      <text>	_(#tank_setup:hints/ammunition/reserves/applyToTypeCheckbox)	</text>
-      <arrow>
-        <direction>	T	</direction>
-        <loop>	True	</loop>
-      </arrow>
-      <checked-ui-state>
-        <simple-state>
-          <state>	visible	</state>
-          <value>	True	</value>
-        </simple-state>
-      </checked-ui-state>
       <update-runtime>	True	</update-runtime>
       <hide-immediately>	True	</hide-immediately>
       <ignore-outside-click>	True	</ignore-outside-click>
@@ -789,50 +741,6 @@
         <direction>	R	</direction>
         <loop>	True	</loop>
       </arrow>
-      <update-runtime>	True	</update-runtime>
-      <hide-immediately>	True	</hide-immediately>
-      <ignore-outside-click>	True	</ignore-outside-click>
-    </hint>
-    <hint>	FrontlineScenariosHint	  <item-id>	FrontlineScenariosInfoBtn	</item-id>
-      <text>	_(#epic_battle:ammunitionSetup/btn/info/hint)	</text>
-      <arrow>
-        <direction>	B	</direction>
-        <loop>	True	</loop>
-      </arrow>
-      <update-runtime>	True	</update-runtime>
-      <ignore-outside-click>	True	</ignore-outside-click>
-      <condition>
-        <class-condition>	FLScenarioInfoBtnHintChecker	  <path>	gui.impl.lobby.tank_setup.sub_views.frontline_setup	</path>
-          <arguments>	FrontlineScenariosHintSmallSizes	</arguments>
-        </class-condition>
-      </condition>
-    </hint>
-    <hint>	FrontlineScenariosHintSmallSizes	  <item-id>	FrontlineScenariosInfoBtnSmall	</item-id>
-      <text>	_(#epic_battle:ammunitionSetup/btn/info/hint)	</text>
-      <arrow>
-        <direction>	R	</direction>
-        <loop>	True	</loop>
-      </arrow>
-      <update-runtime>	True	</update-runtime>
-      <ignore-outside-click>	True	</ignore-outside-click>
-      <condition>
-        <class-condition>	FLScenarioInfoBtnHintChecker	  <path>	gui.impl.lobby.tank_setup.sub_views.frontline_setup	</path>
-          <arguments>	FrontlineScenariosHint	</arguments>
-        </class-condition>
-      </condition>
-    </hint>
-    <hint>	BattleRoyaleDynamicPlatoonSubModeHint	  <item-id>	BattleRoyaleDynamicPlatoonHint	</item-id>
-      <text>	_(#battle_royale:battleTypeSelector/tab/hint)	</text>
-      <arrow>
-        <direction>	R	</direction>
-        <loop>	True	</loop>
-      </arrow>
-      <checked-ui-state>
-        <simple-state>
-          <state>	visible	</state>
-          <value>	True	</value>
-        </simple-state>
-      </checked-ui-state>
       <update-runtime>	True	</update-runtime>
       <hide-immediately>	True	</hide-immediately>
       <ignore-outside-click>	True	</ignore-outside-click>

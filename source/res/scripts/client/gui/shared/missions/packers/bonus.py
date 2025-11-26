@@ -968,16 +968,12 @@ class GroupsBonusUIPacker(BaseBonusUIPacker):
     def _pack(cls, bonus):
         model = IconBonusModel()
         cls._packCommon(bonus, model)
-        model.setIcon(cls._getIcon(bonus))
+        model.setIcon('default')
         return [model]
 
     @classmethod
     def _getToolTip(cls, bonus):
         return [createTooltipData(makeTooltip(TOOLTIPS.getAwardHeader(bonus.getName()), TOOLTIPS.getAwardBody(bonus.getName())))]
-
-    @classmethod
-    def _getIcon(cls, bonus):
-        pass
 
 
 class BattlePassPointsBonusPacker(SimpleBonusUIPacker):

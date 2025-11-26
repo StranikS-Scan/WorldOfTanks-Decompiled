@@ -9,7 +9,9 @@ from time import time as timestamp
 from collections import namedtuple
 from itertools import izip, chain
 from Math import Vector3, Vector2
+from wg_typing import *
 from realm import CURRENT_REALM
+from functools import reduce
 try:
     import BigWorld
 except ImportError:
@@ -124,6 +126,33 @@ HAS_DEV_RESOURCES = IS_DEVELOPMENT and not IS_CLIENT_BUILD
 IS_DEVELOPMENT_BUILD = IS_DEVELOPMENT and IS_CLIENT_BUILD
 MODULE_NAME_SEPARATOR = ', '
 MAX_LOG_EXT_INFO_LEN = 255
+INT_POWERS_OF_2 = (1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576, 2097152, 4194304, 8388608, 16777216, 33554432, 67108864, 134217728, 268435456, 536870912, 1073741824)
+
+class BIN_FLAGS_META(type):
+
+    def __init__(cls, name, bases, dct):
+        super(BIN_FLAGS_META, cls).__init__(name, bases, dct)
+        clsAttrsNamesByVals = {v:k for k, v in dct.iteritems()}
+        cls._binFlagNamesByVals = []
+        append = cls._binFlagNamesByVals.append
+        if 0 in clsAttrsNamesByVals:
+            append((0, clsAttrsNamesByVals[0]))
+        for pow2 in INT_POWERS_OF_2:
+            if pow2 not in clsAttrsNamesByVals:
+                break
+            append((pow2, clsAttrsNamesByVals[pow2]))
+
+
+class BIN_FLAGS(object):
+    __metaclass__ = BIN_FLAGS_META
+
+    @classmethod
+    def getBinFlagNames(cls, binFlags, force=IS_DEVELOPMENT):
+        if force:
+            return [ name for flag, name in cls._binFlagNamesByVals if flag & binFlags ] or (None,)
+        else:
+            return (binFlags,)
+
 
 class SPT_MATKIND:
     SOLID = 71
@@ -474,6 +503,7 @@ class KICK_REASON:
     PLAYERKICK = 10
     TIMEOUT = 11
     MODE_DISABLED = 12
+    SERVER_SHUT_DOWN = 13
 
 
 KICK_REASON_NAMES = dict([ (v, k) for k, v in KICK_REASON.__dict__.iteritems() if not k.startswith('_') ])
@@ -952,6 +982,7 @@ class Configs(enum.Enum):
     WTR_CONFIG = 'wtr_config'
     WEEKLY_QUESTS_CONFIG = 'weekly_quests_config'
     WEEKLY_QUESTS_CONFIGS = 'weekly_quests_configs'
+    INGAME_TOURNAMENT_CONFIG = 'ingame_tournament_config'
 
 
 INBATTLE_CONFIGS = ['spgRedesignFeatures',
@@ -1386,7 +1417,10 @@ BATTLE_FEEDBACK_REASONS_AFTER_DEATH = frozenset((ATTACK_REASON.SHOT,
  ATTACK_REASON.RAM,
  ATTACK_REASON.WORLD_COLLISION,
  ATTACK_REASON.DROWNING,
- ATTACK_REASON.OVERTURN))
+ ATTACK_REASON.OVERTURN,
+ ATTACK_REASON.SPAWNED_BOT_EXPLOSION,
+ ATTACK_REASON.BRANDER_RAM,
+ ATTACK_REASON.CLING_BRANDER_RAM))
 DEATH_REASON_ALIVE = -1
 
 class REPAIR_TYPE:
@@ -1410,7 +1444,7 @@ class VEHICLE_HIT_EFFECT:
      ARMOR_PIERCED_DEVICE_DAMAGED)
 
 
-class VEHICLE_HIT_FLAGS:
+class VEHICLE_HIT_FLAGS(BIN_FLAGS):
     VEHICLE_KILLED = 1
     VEHICLE_WAS_DEAD_BEFORE_ATTACK = 2
     FIRE_STARTED = 4
@@ -1441,6 +1475,7 @@ class VEHICLE_HIT_FLAGS:
     IS_ANY_PIERCING_MASK = MATERIAL_WITH_POSITIVE_DF_PIERCED_BY_PROJECTILE | MATERIAL_WITH_POSITIVE_DF_PIERCED_BY_EXPLOSION | DEVICE_PIERCED_BY_PROJECTILE | DEVICE_PIERCED_BY_EXPLOSION | ARMOR_WITH_ZERO_DF_PIERCED_BY_PROJECTILE | ARMOR_WITH_ZERO_DF_PIERCED_BY_EXPLOSION
     IS_ANY_IMPACT_MASK = IS_ANY_DAMAGE_MASK | IS_ANY_PIERCING_MASK
     IS_ANY_PIERCING_BY_PROJECTILE_MASK = MATERIAL_WITH_POSITIVE_DF_PIERCED_BY_PROJECTILE | DEVICE_PIERCED_BY_PROJECTILE | ARMOR_WITH_ZERO_DF_PIERCED_BY_PROJECTILE
+    IS_SHELL_HIT_TO_VEHICLE_MASK = ATTACK_IS_DIRECT_PROJECTILE | ATTACK_IS_EXTERNAL_EXPLOSION
 
 
 VEHICLE_HIT_FLAGS_BY_NAME = dict([ (k, v) for k, v in VEHICLE_HIT_FLAGS.__dict__.iteritems() if not k.startswith('_') ])
@@ -2033,6 +2068,13 @@ class REQUEST_COOLDOWN:
     FILL_ALL_TANKMEN_SKILLS = 60.0
     CMD_EASY_TANK_EQUIP_APPLY = 1.0
     CMD_SELLING = 3.0
+    CMD_PET_SYSTEM_BUY_PET = 1.0
+    CMD_PET_SYSTEM_SELECT_ACTIVE_PET = 1.0
+    CMD_PET_SYSTEM_INTERACT_WITH_EVENT = 0.5
+    CMD_PET_SYSTEM_SELECT_PET_STATE_BEHAVIOR = 1.0
+    CMD_PET_SYSTEM_SELECT_PET_NAME = 1.0
+    CMD_PET_SYSTEM_SELECT_ACTIVE_PET_BONUS = 0.5
+    CMD_PET_SYSTEM_ADD_SYNERGY = 1.0
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -2798,15 +2840,6 @@ class FALLOUT_ARENA_TYPE:
         return None
 
 
-class RESPAWN_TYPES:
-    NONE = 0
-    INFINITE = 1
-    SHARED = 2
-    LIMITED = 3
-    EPIC = 4
-    SAFE = 5
-
-
 class RespawnState(object):
     VEHICLE_ALIVE = 0
     VEHICLE_DEAD = 1
@@ -3550,10 +3583,11 @@ class GroupSkillProcessorArgs(object):
 class ReloadRestriction(object):
     CYCLE_RELOAD = 1.0
     OTHER_RELOAD = 2.5
+    NON_CYCLIC_TAGS = frozenset(('clip', 'autoreload', 'autoShoot', 'twinGun', 'dualGun'))
 
-    @staticmethod
-    def getBy(vehTypeDescr):
-        return ReloadRestriction.OTHER_RELOAD if vehTypeDescr.gun.tags else ReloadRestriction.CYCLE_RELOAD
+    @classmethod
+    def getBy(cls, vehTypeDescr):
+        return cls.CYCLE_RELOAD if vehTypeDescr.gun.tags.isdisjoint(cls.NON_CYCLIC_TAGS) else cls.OTHER_RELOAD
 
 
 class MapsTrainingParameters(enum.IntEnum):
@@ -3597,6 +3631,12 @@ class DeviceRepairMode(enum.IntEnum):
     NORMAL = 0
     SLOWED = 1
     SUSPENDED = 2
+
+
+class LoadoutParams(object):
+    groupIndex = 'groupIndex'
+    sectionIndex = 'sectionIndex'
+    slotIndex = 'slotIndex'
 
 
 BATTLE_MODE_VEHICLE_TAGS = {'event_battles',
@@ -4112,7 +4152,7 @@ class OVERHEAT_GAIN_STATE(enum.IntEnum):
     DT_PROGRESS_ZERO = STACK_LOOSE | CHARGE_MIN | NO_SHELL_IN_CHAMBER | NULL_STATE
 
 
-class CHARGE_SHOT_FLAGS:
+class CHARGE_SHOT_FLAGS(BIN_FLAGS):
     CHARGING = 1
     SHOT_BLOCK = 2
     UNDER_WATER = 4
@@ -4127,6 +4167,7 @@ class CHARGE_SHOT_FLAGS:
     MUST_CANCEL_MASK = LAST_SHELL_FIRED | GUN_DESTROYED | RELOADING | SHOT_BLOCK
     CANT_START_MASK = MUST_CANCEL_MASK | UNDER_PRESSURE | OVERTURN | GUN_DIVING | UNDER_WATER | CHARGING
     RESPAWN_MASK = UNDER_PRESSURE | OVERTURN | GUN_DIVING | UNDER_WATER | SHOT_BLOCK | CHARGING
+    LOG_AS_DISABLED = GUN_DESTROYED | UNDER_PRESSURE | OVERTURN | GUN_DIVING | UNDER_WATER | SHOT_BLOCK
 
 
 class RECHARGEABLE_NITRO_STATE:
@@ -4213,3 +4254,6 @@ class TARGET_DESIGNATOR_STATE:
     ACTIVE = 1
     COOLDOWN = 2
     PRE_BATTLE = 3
+
+
+VEHICLE_MIN_ABS_INITIAL_SPEED = 0.1

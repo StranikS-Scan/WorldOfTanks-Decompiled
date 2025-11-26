@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/feature/models/notifications.py
+from __future__ import absolute_import
+from future.utils import viewvalues
 import typing
 from account_helpers.AccountSettings import FUN_RANDOM_NOTIFICATIONS_FROZEN, FUN_RANDOM_NOTIFICATIONS_SUB_MODES, FUN_RANDOM_NOTIFICATIONS_PROGRESSIONS
 from fun_random.gui.feature.fun_constants import FunNotificationSubModeState, FunNotificationType
@@ -85,7 +87,7 @@ class FunStopSubModesNotification(FunNotification):
         finishSubModesIDs = tuple((sID for sID, pState, nState in ctx.transactions if pState == FunNotificationSubModeState.AVAILABLE and nState in cls._FINISH_STATES))
         if finishSubModesIDs:
             notificationType = FunNotificationType.STOP_SUB_MODES
-            if all((state == FunNotificationSubModeState.AFTER_SEASON for state in ctx.newStates.itervalues())):
+            if all((state == FunNotificationSubModeState.AFTER_SEASON for state in viewvalues(ctx.newStates))):
                 notificationType = FunNotificationType.STOP_ALL_SUB_MODES
             notifications.append(cls(notificationType, finishSubModesIDs, cls._isNewProgression(ctx)))
             cls._markProgressionAsSeen(ctx.progression, ctx.settings)

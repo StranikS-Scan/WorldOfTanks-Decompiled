@@ -4,10 +4,10 @@ import typing
 from Event import Event, EventManager
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.battle_control.event_dispatcher import showIngameMenu
-from gui.impl.battle.battle_page.ammunition_panel.ammunition_panel import RespawnAmmunitionPanel
 from gui.impl.common.ammunition_panel.ammunition_groups_controller import GROUPS_MAP
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.battle.battle_page.respawn_ammunition_panel_view_model import RespawnAmmunitionPanelViewModel
+from frontline.gui.impl.battle.battle_page.ammunition_panel.ammunition_panel import FLRespawnAmmunitionPanel
 from gui.impl.pub import ViewImpl
 
 class RespawnAmmunitionPanelView(ViewImpl):
@@ -50,7 +50,7 @@ class RespawnAmmunitionPanelView(ViewImpl):
 
     def _onLoading(self, *args, **kwargs):
         super(RespawnAmmunitionPanelView, self)._onLoading(*args, **kwargs)
-        self.__ammunitionPanel = RespawnAmmunitionPanel(self.viewModel.ammunitionPanel, self.__vehicle)
+        self.__ammunitionPanel = FLRespawnAmmunitionPanel(self.viewModel.ammunitionPanel, self.__vehicle)
         self.__ammunitionPanel.onLoading()
         self.updateViewVehicle(self.__vehicle, fullUpdate=False)
 

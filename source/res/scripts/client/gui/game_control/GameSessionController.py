@@ -445,5 +445,5 @@ class GameSessionController(IGameSessionController, IGlobalListener, Notifiable)
                     timeKey = constants.ARENA_BONUS_TYPE_IDS[constants.ARENA_BONUS_TYPE.FORT_BATTLE_2]
             else:
                 timeKey = self._QUEUE_TYPE_TO_CONFIG_TIME_KEY.get(queueType, self._DEFAULT_TIME_KEY)
-        battleModifiers = self.__hangarGuiCtrl.getBattleModifiers()
+        battleModifiers = self.__hangarGuiCtrl.currentGuiProvider.getBattleModifiers()
         return battleModifiers(BattleParams.BATTLE_LENGTH, config.get(timeKey, self.PLAY_TIME_LEFT_NOTIFY))

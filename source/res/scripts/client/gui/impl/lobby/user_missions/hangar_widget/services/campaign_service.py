@@ -3,18 +3,12 @@
 import logging
 from typing import List
 from account_helpers.settings_core.settings_constants import PersonalMission3
-from constants import QUEUE_TYPE
 from shared_utils import first
 from personal_missions import PM_BRANCH
 from PlayerEvents import g_playerEvents
 from helpers import dependency
 from config_schemas.umg_config import umgConfigSchema
-from gui.prb_control.dispatcher import g_prbLoader
 from gui.shared import g_eventBus, events
-from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.battle_session import IBattleSessionProvider
-from skeletons.gui.server_events import IEventsCache
-from skeletons.gui.shared import IItemsCache
 from gui.impl.lobby.user_missions.hangar_widget.services.events_service import _EntryPointData
 from gui.impl.lobby.user_missions.hangar_widget.services import ICampaignService
 from gui.impl.lobby.personal_missions_30.views_helpers import isOperationAvailableByVehicles, getSortedPm3Operations
@@ -22,8 +16,12 @@ from gui.impl.lobby.user_missions.hangar_widget.event_banners.pm3_event_banner i
 from gui.impl.lobby.personal_missions_30.personal_mission_constants import OperationIDs
 from gui.impl.lobby.user_missions.hangar_widget.event_banners.event_banners_container import EventBannersContainer
 from gui.impl.lobby.personal_missions_30.views_helpers import markBannerAnimationShown
+from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.game_control import IHangarGuiController
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
-QUEUE_TYPES_TO_SHOW_BANNER = (QUEUE_TYPE.RANDOMS, QUEUE_TYPE.EPIC, QUEUE_TYPE.RANDOM_NP2)
 BANNER_TEASER_ID = 'teaser'
 BANNER_OPERATION_ONE_ID = str(OperationIDs.OPERATION_FIRST.value)
 BANNER_OPERATION_TWO_ID = str(OperationIDs.OPERATION_SECOND.value)
@@ -34,6 +32,7 @@ class CampaignService(ICampaignService):
     __eventsCache = dependency.descriptor(IEventsCache)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __itemsCache = dependency.descriptor(IItemsCache)
+    __hangarGuiCtrl = dependency.descriptor(IHangarGuiController)
     pm3bannerMap = {BANNER_TEASER_ID: PM3EventBannerTeaser.NAME,
      BANNER_OPERATION_ONE_ID: PM3EventBannerOperation1.NAME,
      BANNER_OPERATION_TWO_ID: PM3EventBannerOperation2.NAME,
@@ -105,8 +104,7 @@ class CampaignService(ICampaignService):
             serverSettings = self.__lobbyContext.getServerSettings()
             if not serverSettings.isPersonalMissionsEnabled(PM_BRANCH.PERSONAL_MISSION_3):
                 return False
-            isValidBattleMode = self.__getPrbEntityType() in QUEUE_TYPES_TO_SHOW_BANNER
-            if not isValidBattleMode:
+            if not self.__hangarGuiCtrl.currentGuiProvider.getMissionsHelper().isPM3MissionsSupported():
                 return False
             operationsPM3 = getSortedPm3Operations()
             pm3ActiveOperations = self.__getActiveOperationsForPM3()
@@ -116,14 +114,6 @@ class CampaignService(ICampaignService):
             isAnyPM3Active = len(pm3ActiveOperations) > 0
             isPM3FullyCompleted = all((operation.isFullCompleted() for operation in operationsPM3.values()))
             return not isPM3FullyCompleted and (isPM3Available or isAnyPM3Active) and not currentOperation.isDisabled()
-
-    def __getPrbEntityType(self):
-        prbDispatcher = g_prbLoader.getDispatcher()
-        if prbDispatcher is None:
-            return QUEUE_TYPE.UNKNOWN
-        else:
-            entity = prbDispatcher.getEntity()
-            return entity.getQueueType() if entity is not None else QUEUE_TYPE.UNKNOWN
 
     def __getActiveOperationsForPM3(self):
         return self.__eventsCache.getPersonalMissions().getActiveOperations(PM_BRANCH.V2_BRANCHES)

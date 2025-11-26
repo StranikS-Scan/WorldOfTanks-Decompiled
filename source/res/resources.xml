@@ -38,6 +38,7 @@
     <terrain2>	system/data/terrain2.xml	</terrain2>
     <lightOnlyEffect>	shaders/std_effects/lightonly.fx	</lightOnlyEffect>
     <defaultFloorTexture>	helpers/maps/system/default.dds	</defaultFloorTexture>
+    <defaultTankDetailAtlas>	vehicles/russian/Tank_detail/Detail_T2DA.dds	</defaultTankDetailAtlas>
     <decalEffect>	shaders/decal/decal.fx	</decalEffect>
     <textureDetailLevels>	system/data/texture_detail_levels.xml	</textureDetailLevels>
     <bloom>
@@ -231,6 +232,8 @@
       <module>	client.DeathComponent	</module>
       <module>	client.SequenceNetworkSync	</module>
       <module>	client.ShotsReceiver	</module>
+      <module>	client.gui.pet_system.cgf_components.pet_place_component	</module>
+      <module>	client.gui.pet_system.cgf_components.storage_state_component	</module>
       <module>	cell.cgf_cell.cgf_replication_hash	</module>
       <module>	client.cgf_components.armor_inspector_component	</module>
       <module>	cell.cgf_cell.vehicle_mechanics.stationary_reload_sequence_params	</module>
@@ -302,6 +305,7 @@
       <path>	particles/Tank/rocket_accelerator/Ch61_DZT_159_Rocket.prefab	</path>
       <path>	particles/Tank/customization/Ch62_BZ_75_M/Ch62_BZ_75_M_Rocket.prefab	</path>
       <path>	particles/Tank/rocket_accelerator/G186_Schwertwal_Rocket.prefab	</path>
+      <path>	particles/Tank/rocket_accelerator/Ch63_Yong_Bing_Rocket.prefab	</path>
       <path>	particles/Tank/customization/Ch62_BZ_75_M/Ch62_BZ_75_M_Rocket.prefab	</path>
       <path>	content/CGFPrefabs/Vehicle/mechanic_effects/concentration_mode_vfx.prefab	</path>
       <path>	content/CGFPrefabs/Vehicle/mechanic_effects/battle_fury.prefab	</path>
@@ -339,6 +343,7 @@
       <path>	particles/Tank/customization/Cz17_Vz_55_NY2025_3Dst/Cz17_Vz_55_NY2025_3Dst_Gun_01.prefab	</path>
       <path>	particles/Tank/customization/Cz17_Vz_55_NY2025_3Dst/Cz17_Vz_55_NY2025_3Dst_Gun_02.prefab	</path>
       <path>	content/CGFPrefabs/Frontline/fullDestruction.prefab	</path>
+      <path>	content/HangarPrefabs/PetSystem/PetSystem_dog.prefab	</path>
     </prefabs>
   </cgf>
 </resources.xml>

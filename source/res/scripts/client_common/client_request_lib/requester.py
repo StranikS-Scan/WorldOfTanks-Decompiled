@@ -445,6 +445,12 @@ class LoadoutsAssistantAccessor(BaseAccessor):
         return self._data_source.get_loadouts(callback, client_cache_updated_at, loadout_types)
 
 
+class IngameTournamentsAccessor(BaseAccessor):
+
+    def get_ingame_tournament(self, callback, *args, **kwargs):
+        return self._data_source.get_ingame_tournaments(callback, *args, **kwargs)
+
+
 class Requester(object):
     available_data_sources = {'stagings': StagingDataAccessor,
      'fake': FakeDataAccessor,
@@ -470,6 +476,7 @@ class Requester(object):
     clan_supply = RequestDescriptor(ClanSupplyAccessor)
     server_replays = RequestDescriptor(ServerReplaysAccessor)
     loadouts_assistant = RequestDescriptor(LoadoutsAssistantAccessor)
+    tournaments = RequestDescriptor(IngameTournamentsAccessor)
 
     @classmethod
     def create_requester(cls, url_fetcher, config, client_lang=None, user_agent=None):

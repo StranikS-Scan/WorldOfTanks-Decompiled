@@ -18,7 +18,7 @@ class AppearAnimationState(Enum):
 class BattlePassModel(BaseBattlePassModel):
     __slots__ = ('onOpenBattlePass', 'onIntroAnimationPlayed')
 
-    def __init__(self, properties=16, commands=2):
+    def __init__(self, properties=17, commands=2):
         super(BattlePassModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -71,35 +71,41 @@ class BattlePassModel(BaseBattlePassModel):
     def setIsExtraChapter(self, value):
         self._setBool(10, value)
 
-    def getIsPaused(self):
+    def getIsHoliday(self):
         return self._getBool(11)
 
-    def setIsPaused(self, value):
+    def setIsHoliday(self, value):
         self._setBool(11, value)
 
-    def getHasExtraChapter(self):
+    def getIsPaused(self):
         return self._getBool(12)
 
-    def setHasExtraChapter(self, value):
+    def setIsPaused(self, value):
         self._setBool(12, value)
 
-    def getIsExtraChapterHighlighted(self):
+    def getHasExtraChapter(self):
         return self._getBool(13)
 
-    def setIsExtraChapterHighlighted(self, value):
+    def setHasExtraChapter(self, value):
         self._setBool(13, value)
 
+    def getIsExtraChapterHighlighted(self):
+        return self._getBool(14)
+
+    def setIsExtraChapterHighlighted(self, value):
+        self._setBool(14, value)
+
     def getAppearAnimationState(self):
-        return AppearAnimationState(self._getString(14))
+        return AppearAnimationState(self._getString(15))
 
     def setAppearAnimationState(self, value):
-        self._setString(14, value.value)
+        self._setString(15, value.value)
 
     def getTimeLeft(self):
-        return self._getNumber(15)
+        return self._getNumber(16)
 
     def setTimeLeft(self, value):
-        self._setNumber(15, value)
+        self._setNumber(16, value)
 
     def _initialize(self):
         super(BattlePassModel, self)._initialize()
@@ -111,6 +117,7 @@ class BattlePassModel(BaseBattlePassModel):
         self._addNumberProperty('season', 0)
         self._addBoolProperty('isBought', False)
         self._addBoolProperty('isExtraChapter', False)
+        self._addBoolProperty('isHoliday', False)
         self._addBoolProperty('isPaused', False)
         self._addBoolProperty('hasExtraChapter', False)
         self._addBoolProperty('isExtraChapterHighlighted', False)

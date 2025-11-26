@@ -10,8 +10,9 @@ if typing.TYPE_CHECKING:
     from gui.impl.lobby.gf_notifications.constants import GFNotificationTemplates
 
 @dependency.replace_none_kwargs(systemMessages=ISystemMessages)
-def pushGFNotification(gfTemplate, data, systemMessages=None):
+def pushGFNotification(gfTemplate, data, notificationGuiSettings=None, systemMessages=None):
     gfDataID = str(uuid.uuid4())
     getCache().setPayload(gfDataID, data)
     systemMessages.proto.serviceChannel.pushClientMessage({'data': {'gfDataID': gfDataID},
-     'template': gfTemplate}, msgType=SCH_CLIENT_MSG_TYPE.GF_SM_TYPE)
+     'template': gfTemplate,
+     'notificationGuiSettings': notificationGuiSettings if notificationGuiSettings else dict()}, msgType=SCH_CLIENT_MSG_TYPE.GF_SM_TYPE)

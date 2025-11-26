@@ -47,12 +47,7 @@ class BattleHintPanel(BattleHintPanelMeta, IAbstractPeriodView):
         return
 
     def getActiveHint(self):
-        hintData = self.__getActiveHintData()
-        if hintData:
-            _, hint = hintData
-            return hint
-        else:
-            return None
+        return self.__getActiveHintData()
 
     def onPlaySound(self, soundType):
         SoundGroups.g_instance.playSound2D(soundType)

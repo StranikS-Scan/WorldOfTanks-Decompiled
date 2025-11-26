@@ -135,6 +135,9 @@ class ServerEventAbstract(object):
     def getFinishTimeRaw(self):
         return self._data['finishTime'] if 'finishTime' in self._data else time.time()
 
+    def getFinishTimeRawInUTC(self):
+        return self._data['finishTime'] if 'finishTime' in self._data else time_utils.getServerUTCTime()
+
     def getStartTime(self):
         return time_utils.makeLocalServerTime(self._data['startTime']) if 'startTime' in self._data else time.time()
 
@@ -286,20 +289,6 @@ class Group(ServerEventAbstract):
 
             LOG_ERROR('There is no main token quest in the marathon', self.getID())
             return None
-
-    def withManyTokenSources(self, svrEvents):
-        uniqueTokens = set()
-        uniqueChildren = set()
-        for qID in self.getGroupEvents():
-            quest = svrEvents.get(qID)
-            if quest is not None:
-                children = quest.getChildren()
-                if children:
-                    for key, value in children.iteritems():
-                        uniqueChildren |= set(value)
-                        uniqueTokens.add(key)
-
-        return len(uniqueTokens) == 1 and len(uniqueChildren) > 1
 
     def getUserName(self):
         return backport.text(R.strings.static_quests.mt_battle_quests.dyn(self.getID()).name()) if self.isMapsTrainingQuest() else getLocalizedData(self._data, 'name')
@@ -609,6 +598,10 @@ class PersonalQuest(Quest):
     def __init__(self, qID, data, progress=None, expiryTime=None):
         super(PersonalQuest, self).__init__(qID, data, progress)
         self.expiryTime = expiryTime
+
+    def getFinishTimeRawInUTC(self):
+        finishTime = super(PersonalQuest, self).getFinishTimeRawInUTC()
+        return min(finishTime, self.expiryTime) if self.expiryTime is not None else finishTime
 
     def getFinishTime(self):
         return min(super(PersonalQuest, self).getFinishTime(), self.expiryTime) if self.expiryTime is not None else super(PersonalQuest, self).getFinishTime()

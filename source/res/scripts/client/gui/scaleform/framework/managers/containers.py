@@ -3,10 +3,12 @@
 import logging
 import weakref
 from collections import OrderedDict
+from functools import partial
 import typing
 from Event import Event
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.genConsts.LAYER_NAMES import LAYER_NAMES
+from gui.shared.utils.callable_delayer import CallableDelayer, delayUntilParentWindowReady
 from shared_utils import CONST_CONTAINER
 from gui.Scaleform.framework.ScopeControllers import GlobalScopeController
 from gui.Scaleform.framework.entities.abstract.ContainerManagerMeta import ContainerManagerMeta
@@ -317,6 +319,11 @@ class SingleViewContainer(ViewContainer):
 
     def __init__(self, layer, manager=None):
         super(SingleViewContainer, self).__init__(layer, manager)
+        self.__callableDelayer = CallableDelayer()
+
+    def clear(self):
+        self.__callableDelayer.clear()
+        super(SingleViewContainer, self).clear()
 
     def getView(self, criteria=None):
         view = None
@@ -346,7 +353,7 @@ class SingleViewContainer(ViewContainer):
     def _setMainView(self, pyView):
         for v in self._views.values():
             if v != pyView:
-                self.removeView(v)
+                delayUntilParentWindowReady(self.__callableDelayer, pyView, partial(self.removeView, v))
 
 
 class DefaultContainer(SingleViewContainer):

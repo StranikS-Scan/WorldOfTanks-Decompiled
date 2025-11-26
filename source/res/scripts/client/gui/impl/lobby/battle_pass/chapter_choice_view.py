@@ -7,12 +7,11 @@ from frameworks.wulf import Array
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getVehicleCDForStyle
 from gui.battle_pass.battle_pass_constants import ChapterState
-from gui.battle_pass.battle_pass_helpers import getAllFinalRewards, getDataByTankman, getFinalTankmen, getInfoPageURL, getStyleForChapter, getVehicleInfoForChapter, isSeasonWithAdditionalBackground
+from gui.battle_pass.battle_pass_helpers import getAllFinalRewards, getDataByTankman, getFinalTankmen, getInfoPageURL, getStyleForChapter, getVehicleInfoForChapter, isSeasonWithAdditionalBackground, showFinalRewardPreviewBattlePassState
 from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.chapter_choice_view_model import ChapterChoiceViewModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.chapter_model import ChapterModel, ChapterStates, FinalRewardTypes
-from gui.impl.lobby.battle_pass.states import FinalRewardPreviewBattlePassState
 from gui.impl.pub.view_component import ViewComponent
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.shared.event_dispatcher import showBattlePass, showBattlePassHowToEarnPointsView, showBrowserOverlayView
@@ -165,7 +164,7 @@ class ChapterChoicePresenter(ViewComponent[ChapterChoiceViewModel]):
         if chapterID is None:
             return
         else:
-            FinalRewardPreviewBattlePassState.goTo(chapterID=chapterID, origin=self.layoutID)
+            showFinalRewardPreviewBattlePassState(chapterID=chapterID)
             return
 
     @staticmethod

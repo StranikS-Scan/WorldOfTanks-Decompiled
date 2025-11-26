@@ -8,6 +8,12 @@ class CameraMover(object):
         cameraManager.switchByCameraName(cameraName)
 
 
+class SmoothCameraMover(object):
+
+    def moveCamera(self, cameraManager, cameraName):
+        cameraManager.switchByCameraName(cameraName, False)
+
+
 class SubhangarStateGroupConfig(object):
 
     def __init__(self, stateGroups=(), cameraMover=CameraMover()):
@@ -25,6 +31,7 @@ class SubhangarStateGroups(Enum):
     Customization = 'CustomizationStates'
     PersonalMissions = 'PersonalMissionsStates'
     VehicleHub = 'VehicleHubStates'
+    PetDenStorage = 'PetDenStorage'
     VehicleHubOverviewLargeTank = 'VehicleHubOverviewLargeTankStates'
     VehicleHubModulesLargeTank = 'VehicleHubModulesLargeTankStates'
     VehicleHubUpgradesLargeTank = 'VehicleHubUpgradesLargeTankStates'

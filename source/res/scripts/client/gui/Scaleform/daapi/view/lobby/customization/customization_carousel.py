@@ -9,7 +9,7 @@ from cache import cached_property
 from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs, TYPES_ORDER, isStatTrackerTabEnabled, isItemLimitReached, isItemUsedUp, vehicleHasSlot
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.customization.constants import CustomizationModes
-from gui.customization.shared import getBaseStyleItems, createCustomizationBaseRequestCriteria, C11N_ITEM_TYPE_MAP, getInheritors, getAncestors, getGroupHelper
+from gui.customization.shared import getBaseStyleItems, C11N_ITEM_TYPE_MAP, getInheritors, getAncestors, getGroupHelper
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -188,36 +188,65 @@ class CarouselCache(object):
 
     def __initItemsData(self):
         self.__itemsData.clear()
-        requirement = createCustomizationBaseRequestCriteria(g_currentVehicle.item, self.__eventsCache.questsProgress)
-        requirement |= REQ_CRITERIA.CUSTOM(lambda item: not item.isHiddenInUI())
-        itemTypes = []
+        currentVehicle = g_currentVehicle.item
+        curVehIntCD = g_currentVehicle.item.intCD
+        progress = self.__eventsCache.questsProgress
+        requirement = lambda item: item.mayInstall(currentVehicle) and (item.buyCount > 0 or item.fullInventoryCount(curVehIntCD) > 0 or item.installedCount(curVehIntCD) > 0 or item.installedCount() > 0 and not item.isVehicleBound or item.showDisabled) and (not item.requiredToken or progress.getTokenCount(item.requiredToken) > 0) and (not item.isProgressive or item.getLatestOpenedProgressionLevel(currentVehicle) > 0) and not item.isHiddenInUI()
+        guiItemTypes = []
+        decalGuiItems = []
+        custGuiItemBuckets = dict()
+        customizationCache = vehicles.g_cache.customization20().itemTypes
+        decalTypes = (GUI_ITEM_TYPE.EMBLEM, GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.DECAL)
         for tabId, slotType in CustomizationTabs.SLOT_TYPES.iteritems():
             if vehicleHasSlot(slotType):
-                itemTypes.extend(CustomizationTabs.ITEM_TYPES[tabId])
+                guiItems = CustomizationTabs.ITEM_TYPES[tabId]
+                encodedGuiTypes = tuple((item << 8 | tabId for item in guiItems))
+                custGuiItemBuckets[tabId] = []
+                guiItemTypes.extend(encodedGuiTypes)
 
-        allItems = []
-        customizationCache = vehicles.g_cache.customization20().itemTypes
-        cTypes = set((C11N_ITEM_TYPE_MAP[iType] for iType in itemTypes if iType in C11N_ITEM_TYPE_MAP))
-        for cType in cTypes:
-            for itemID in customizationCache[cType]:
-                if itemID == EMPTY_ITEM_ID:
+        for encodedGuiType in guiItemTypes:
+            itemType = encodedGuiType >> 8 & 1048575
+            tabId = encodedGuiType & 255
+            compactDescrs = []
+            isItemCachedForDecals = itemType in decalTypes
+            custType = C11N_ITEM_TYPE_MAP[itemType]
+            for i in customizationCache[custType]:
+                if i == EMPTY_ITEM_ID:
                     continue
-                intCD = vehicles.makeIntCompactDescrByID('customizationItem', cType, itemID)
-                item = self.__service.getItemByCD(intCD)
-                if requirement(item):
-                    allItems.append(item)
+                if isItemCachedForDecals and decalGuiItems:
+                    continue
+                compactDescr = vehicles.makeIntCompactDescrByID('customizationItem', custType, i)
+                compactDescrs.append(compactDescr)
 
-        sortedItems = sorted(allItems, key=comparisonKey)
-        for item in sortedItems:
-            for modeId, tabs in CustomizationTabs.MODES.iteritems():
-                for tabId in tabs:
-                    if item.itemTypeID not in CustomizationTabs.ITEM_TYPES[tabId]:
-                        continue
-                    if item.itemTypeID == GUI_ITEM_TYPE.STYLE and item.is3D != (tabId == CustomizationTabs.STYLES_3D):
-                        continue
-                    for season in SeasonType.COMMON_SEASONS:
-                        if not item.season & season:
+            if isItemCachedForDecals:
+                if not decalGuiItems:
+                    decalGuiItems = self.__service.getTypedItemsByCDs(GUI_ITEM_TYPE.CUSTOMIZATION, compactDescrs)
+                for item in decalGuiItems:
+                    if requirement(item):
+                        if item.itemTypeID not in CustomizationTabs.ITEM_TYPES[tabId]:
                             continue
+                        custGuiItemBuckets[tabId].append(item)
+
+                custGuiItemBuckets[tabId].sort(key=comparisonKey)
+            if not isItemCachedForDecals:
+                items = self.__service.getTypedItemsByCDs(GUI_ITEM_TYPE.CUSTOMIZATION, compactDescrs)
+                for item in items:
+                    if requirement(item):
+                        if item.itemTypeID == GUI_ITEM_TYPE.STYLE and item.is3D != (tabId == CustomizationTabs.STYLES_3D):
+                            continue
+                        if item.itemTypeID not in CustomizationTabs.ITEM_TYPES[tabId]:
+                            continue
+                        custGuiItemBuckets[tabId].append(item)
+
+                custGuiItemBuckets[tabId].sort(key=comparisonKey)
+
+        for tabId, guiItems in custGuiItemBuckets.iteritems():
+            modes = CustomizationTabs.TAB_TO_MODE[tabId]
+            for item in guiItems:
+                for season in SeasonType.COMMON_SEASONS:
+                    if not item.season & season:
+                        continue
+                    for modeId in modes:
                         itemsDataStorage = self.__itemsData[modeId][season]
                         if not itemsDataStorage or tabId != itemsDataStorage.keys()[-1]:
                             itemsDataStorage[tabId] = ItemsData()

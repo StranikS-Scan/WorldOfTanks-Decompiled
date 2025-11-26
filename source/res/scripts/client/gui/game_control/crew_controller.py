@@ -15,7 +15,7 @@ class CrewController(ICrewController):
     def setWidgetData(self, viewKey):
         uiLoader = dependency.instance(IGuiLoader)
         view = uiLoader.windowsManager.getViewByLayoutID(viewKey)
-        if view:
+        if view and view.crewWidget:
             currentSlotIdx, _, currentTankman = view.crewWidget.getWidgetData()
             self.__widgetSlotIdx = currentSlotIdx
             self.__widgetTankmanID = currentTankman.invID if currentTankman else NO_TANKMAN

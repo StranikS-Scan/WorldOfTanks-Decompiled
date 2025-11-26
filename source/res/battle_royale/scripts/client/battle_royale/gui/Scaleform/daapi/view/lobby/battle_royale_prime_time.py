@@ -29,6 +29,15 @@ class BattleRoyalePrimeTimeView(EpicBattlesPrimeTimeView):
     def _setBackground(self):
         self.as_setBackgroundSourceS(backport.image(R.images.gui.maps.icons.battleRoyale.primeTime.prime_time_back_default()))
 
+    def _setFullscreenModeSupported(self):
+        self.as_setFullscreenModeSupportedS(True)
+
+    def _setCloseBtnVisibility(self):
+        self.as_setCloseBtnVisibilityS(False)
+
+    def _setShadowVisibility(self):
+        self.as_setShadowVisibilityS(False)
+
     def _getTimeText(self, serverInfo):
         if serverInfo:
             serverName = serverInfo.getName()

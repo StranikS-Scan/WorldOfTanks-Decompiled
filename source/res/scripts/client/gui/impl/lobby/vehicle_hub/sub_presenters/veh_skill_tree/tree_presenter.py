@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/vehicle_hub/sub_presenters/veh_skill_tree/tree_presenter.py
-from __future__ import absolute_import
+from __future__ import absolute_import, division
 import logging
 import typing
 from gui.shared.lock_overlays import lockNotificationManager
@@ -28,8 +28,10 @@ from PlayerEvents import g_playerEvents
 from post_progression_common import ROLESLOT_FEATURE, SETUPS_FEATURES
 from helpers import dependency
 from helpers.algorithms import shortestPath
+from skeletons.gui.game_control import IExchangeRatesWithDiscountsProvider
 from skeletons.gui.shared import IItemsCache
 from uilogging.veh_skill_tree.logger import SkillTreeUILogger
+from gui.impl.lobby.exchange.exchange_rates_helper import calculateMaxPossibleFreeXp
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.vehicle_hub.views.sub_models.veh_skill_tree.tree_view_model import TreeViewModel, ResearchAvailability
 from gui.impl.gen.view_models.views.lobby.vehicle_hub.views.sub_models.veh_skill_tree.path_model import PathModel, LineType
@@ -59,6 +61,7 @@ _STEP_TYPE_TO_TOOLTIP = {Type.MAJOR: MajorPerkTooltipView,
  Type.SPECIAL: SpecialPerkTooltipView}
 
 class TreePresenter(SubModelPresenter, IPresenterLocationController):
+    __exchangeRates = dependency.descriptor(IExchangeRatesWithDiscountsProvider)
     __itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, viewModel, parentView):
@@ -67,6 +70,7 @@ class TreePresenter(SubModelPresenter, IPresenterLocationController):
         self.__selectedNodeIDs = None
         self.__researchedNodeIDs = None
         self.__lastSelectedNodeID = None
+        self.__shouldReleasePostponed = False
         self.__uiLogger = SkillTreeUILogger()
         return
 
@@ -83,7 +87,8 @@ class TreePresenter(SubModelPresenter, IPresenterLocationController):
         self.__update()
 
     def finalize(self):
-        lockNotificationManager(False, source=VehSkillTreeProgressionState.STATE_ID)
+        lockNotificationManager(False, source=VehSkillTreeProgressionState.STATE_ID, releasePostponed=self.__shouldReleasePostponed)
+        self.__shouldReleasePostponed = False
         self._finalizeLocation()
         super(TreePresenter, self).finalize()
 
@@ -124,6 +129,7 @@ class TreePresenter(SubModelPresenter, IPresenterLocationController):
          (self.viewModel.onShowNodeConfigurationWindow, self.__onShowNodeConfigurationWindow),
          (self.viewModel.onSelectNode, self.__onSelectNode),
          (self.viewModel.onFinalNodeResearchAnimationFinished, self.__onFinalNodeResearchAnimationFinished),
+         (self.__exchangeRates.freeXpTranslation.onUpdated, self.__onXPStatsChanged),
          (self.__itemsCache.onSyncCompleted, self.__onCacheResync),
          (g_playerEvents.onDisconnected, self.__onDisconnected))
 
@@ -147,6 +153,7 @@ class TreePresenter(SubModelPresenter, IPresenterLocationController):
                 if Type(node.getType()) == Type.SPECIAL:
                     yield self.__showTreeNodeDialog(node.action, nodeID)
             if Type(progression.getStep(self.__researchedNodeIDs[-1]).getType()) == Type.FINAL:
+                self.__shouldReleasePostponed = True
                 lockNotificationManager(True, source=VehSkillTreeProgressionState.STATE_ID)
             self.__update()
             self.__researchedNodeIDs = []
@@ -162,6 +169,7 @@ class TreePresenter(SubModelPresenter, IPresenterLocationController):
             self.__update()
 
     def __onFinalNodeResearchAnimationFinished(self):
+        self.__shouldReleasePostponed = False
         lockNotificationManager(False, source=VehSkillTreeProgressionState.STATE_ID)
 
     @args2params(int)
@@ -296,13 +304,17 @@ class TreePresenter(SubModelPresenter, IPresenterLocationController):
             return Status.RESEARCHED
         return Status.SELECTED if step.stepID in self.__selectedNodeIDs else Status.DEFAULT
 
-    def __getResearchState(self):
+    def __notEnoughXp(self):
         progression = self.__vehicle.postProgression
-        _, reason = self.__vehicle.postProgressionAvailability()
-        researchCost = sum([ progression.getStep(nodeID).getPrice().xp for nodeID in self.__selectedNodeIDs ])
         freeXP = self.__itemsCache.items.stats.freeXP
         eliteXP = getEliteExpirience(exclude=(self.__vehicle.intCD,))
-        return ResearchAvailability.NOT_ENOUGH_EXP if reason == PostProgressionAvailability.AVAILABLE and researchCost > self.__vehicle.xp + freeXP + eliteXP else _AVAILABILITY_MAP.get(reason, ResearchAvailability.AVAILABLE)
+        exchangeableEliteXp = calculateMaxPossibleFreeXp(eliteXP, validateGold=False)
+        researchCost = sum([ progression.getStep(nodeID).getPrice().xp for nodeID in self.__selectedNodeIDs ])
+        return researchCost > self.__vehicle.xp + exchangeableEliteXp + freeXP
+
+    def __getResearchState(self):
+        _, reason = self.__vehicle.postProgressionAvailability()
+        return ResearchAvailability.NOT_ENOUGH_EXP if reason == PostProgressionAvailability.AVAILABLE and self.__notEnoughXp() else _AVAILABILITY_MAP.get(reason, ResearchAvailability.AVAILABLE)
 
     @adisp_async
     @wg_async

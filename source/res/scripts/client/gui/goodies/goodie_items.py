@@ -297,6 +297,13 @@ class PersonalVehicleDiscount(_PersonalDiscount):
         return getActionPrc(discountCreditPrice, defaultCreditPrice)
 
 
+class PersonalPetDiscount(_PersonalDiscount):
+
+    @property
+    def description(self):
+        return backport.text(R.strings.menu.discount.description.pet(), effectValue=self.getFormattedValue())
+
+
 class BoosterUICommon(_Goodie):
 
     @property

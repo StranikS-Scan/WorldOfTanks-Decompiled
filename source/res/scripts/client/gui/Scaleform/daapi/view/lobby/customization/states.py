@@ -175,7 +175,10 @@ class _MainState(SFViewLobbyState, EventsHandler):
     __CAMERA_NAME = 'Customization'
     __GUN_PITCH_ANGLE = 0.0
     __TURRET_YAW_ANGLE = 0.0
-    __RESTRICTED_EVENTS = [events.PrbInvitesEvent.ACCEPT, events.PrbActionEvent.SELECT, events.PrbActionEvent.LEAVE]
+    __RESTRICTED_EVENTS = [events.PrbInvitesEvent.ACCEPT,
+     events.PrbActionEvent.SELECT,
+     events.PrbActionEvent.LEAVE,
+     events.TrainingEvent.RETURN_TO_TRAINING_ROOM]
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __hangarSpace = dependency.descriptor(IHangarSpace)
     __c11n = dependency.descriptor(ICustomizationService)
@@ -239,6 +242,7 @@ class _MainState(SFViewLobbyState, EventsHandler):
     def __cleanup(self, _=None):
         if self.__c11n.getCtx():
             _logger.debug('Destroying c11n context')
+            self.__c11n.saveLastWrittenDataFromCtx()
             self.__c11n.destroyCtx()
 
     def __setupTankTransformation(self):

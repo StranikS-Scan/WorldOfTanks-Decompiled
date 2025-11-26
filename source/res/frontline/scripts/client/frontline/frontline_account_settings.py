@@ -30,3 +30,19 @@ def isWelcomeScreenViewed(seasonId):
 
 def setWelcomeScreenViewed(seasonId):
     return setSettings(AccountSettingsKeys.WELCOME_SCREEN_VIEWED, {seasonId: True})
+
+
+def isRentBannerClicked():
+    return getSettings(AccountSettingsKeys.RENT_BANNER_CLICKED)
+
+
+def setRentBannerClicked():
+    return setSettings(AccountSettingsKeys.RENT_BANNER_CLICKED, True)
+
+
+def getReceivedRewardTokens():
+    return getSettings(AccountSettingsKeys.REWARD_TOKENS_RECEIVED)
+
+
+def setReceivedRewardTokens(tokens):
+    setSettings(AccountSettingsKeys.REWARD_TOKENS_RECEIVED, tokens)

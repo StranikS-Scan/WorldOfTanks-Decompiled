@@ -2,25 +2,23 @@
 # Embedded file name: scripts/client/gui/impl/lobby/user_missions/hangar_widget/services/missions_service.py
 from PlayerEvents import g_playerEvents
 from config_schemas.umg_config import umgConfigSchema
-from constants import QUEUE_TYPE
 from gui.impl.lobby.user_missions.hangar_widget.services import IMissionsService
-from gui.prb_control.dispatcher import g_prbLoader
-from gui.shared import g_eventBus, events
+from gui.impl.lobby.user_missions.hangar_widget.services.service_events import ServiceEvents
+from helpers import dependency
+from skeletons.gui.game_control import IHangarGuiController
 
-class MissionsService(IMissionsService):
+class MissionsService(IMissionsService, ServiceEvents):
+    __hangarGuiCtrl = dependency.descriptor(IHangarGuiController)
 
     def __init__(self):
         super(MissionsService, self).__init__()
-        g_eventBus.addListener(events.GUICommonEvent.LOBBY_VIEW_LOADED, self.__onLobbyInited)
-        g_playerEvents.onAccountBecomeNonPlayer += self.__onAccountBecomeNonPlayer
+        self.startServiceEvents()
 
     def onPrbEntitySwitched(self):
         self._onMissionsChangedEvent()
 
     def isVisible(self):
-        isVisible = umgConfigSchema.getModel().enableAllDaily
-        isVisible &= self.__isValidBattleType()
-        return isVisible
+        return umgConfigSchema.getModel().enableAllDaily and self.__hangarGuiCtrl.currentGuiProvider.getMissionsHelper().isDailyMissionsSupported()
 
     def startListening(self):
         self.startGlobalListening()
@@ -31,31 +29,13 @@ class MissionsService(IMissionsService):
         g_playerEvents.onConfigModelUpdated -= self.__onConfigModelUpdated
 
     def finalize(self):
-        g_eventBus.removeListener(events.GUICommonEvent.LOBBY_VIEW_LOADED, self.__onLobbyInited)
-        g_playerEvents.onAccountBecomeNonPlayer -= self.__onAccountBecomeNonPlayer
         self.stopListening()
-
-    def __onLobbyInited(self, *_):
-        self.startListening()
-
-    def __onAccountBecomeNonPlayer(self):
+        self.stopServiceEvents()
         self.stopListening()
 
     def __onConfigModelUpdated(self, gpKey):
         if umgConfigSchema.gpKey == gpKey:
             self._onMissionsChangedEvent()
-
-    def __isValidBattleType(self):
-        prbDispatcher = g_prbLoader.getDispatcher()
-        if prbDispatcher is None:
-            return False
-        else:
-            prbEntity = prbDispatcher.getEntity()
-            return False if prbEntity is None else prbEntity.getQueueType() in (QUEUE_TYPE.RANDOMS,
-             QUEUE_TYPE.MAPBOX,
-             QUEUE_TYPE.WINBACK,
-             QUEUE_TYPE.COMP7,
-             QUEUE_TYPE.COMP7_LIGHT)
 
     def _onMissionsChangedEvent(self, *_):
         self.onMissionsChanged()

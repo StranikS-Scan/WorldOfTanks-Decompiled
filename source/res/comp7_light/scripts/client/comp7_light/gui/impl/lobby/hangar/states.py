@@ -93,10 +93,20 @@ class Comp7LightRootHangarState(LobbyState):
     def __init__(self, flags=StateFlags.UNDEFINED):
         super(Comp7LightRootHangarState, self).__init__(flags=flags | LobbyStateFlags.HANGAR)
 
+    def _onEntered(self, event):
+        super(Comp7LightRootHangarState, self)._onEntered(event)
+        lsm = self.getMachine()
+        lsm.getRelatedView(self).blur.disable()
+
 
 @Comp7LightHangarState.parentOf
 class Comp7LightAllVehiclesState(LobbyState):
     STATE_ID = 'allVehicles'
+
+    def _onEntered(self, event):
+        super(Comp7LightAllVehiclesState, self)._onEntered(event)
+        lsm = self.getMachine()
+        lsm.getRelatedView(self).blur.enable()
 
     def getNavigationDescription(self):
         return LobbyStateDescription(title=backport.text(R.strings.pages.titles.allVehicles()))

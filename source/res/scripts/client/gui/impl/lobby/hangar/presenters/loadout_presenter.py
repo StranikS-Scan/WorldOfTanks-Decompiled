@@ -6,9 +6,10 @@ import logging
 import typing
 import Event
 import adisp
+from PlayerEvents import g_playerEvents
 from CurrentVehicle import g_currentVehicle
+from constants import LoadoutParams
 from frameworks.state_machine import BaseStateObserver, visitor
-from gui.Scaleform.daapi.view.lobby.tank_setup.ammunition_setup_vehicle import g_tankSetupVehicle
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.game_control.loadout_controller import updateInteractor
@@ -26,12 +27,13 @@ from gui.impl.lobby.tank_setup.backports.tooltips import getSlotSpecTooltipData,
 from gui.impl.lobby.tank_setup.interactors.base import InteractingItem
 from gui.impl.pub.view_component import ViewComponent
 from gui.prb_control import prbDispatcherProperty
+from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.items_actions import factory as ActionsFactory
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from helpers import dependency
 from post_progression_common import TankSetupGroupsId
-from skeletons.gui.game_control import ILoadoutController
+from skeletons.gui.game_control import ILoadoutController, IPlatoonController
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 from wg_async import wg_async
@@ -78,9 +80,9 @@ class _LoadoutStatesObserver(BaseStateObserver):
             return
 
     def onEnterState(self, state, event):
-        groupIndex = event.params.get('groupIndex')
-        sectionIndex = event.params.get('sectionIndex')
-        slotIndex = event.params.get('slotIndex')
+        groupIndex = event.params.get(LoadoutParams.groupIndex)
+        sectionIndex = event.params.get(LoadoutParams.sectionIndex)
+        slotIndex = event.params.get(LoadoutParams.slotIndex)
         sectionName = self._GROUP_SECTIONS_NAMES[groupIndex][sectionIndex]
         self.onPanelSlotSelect(sectionName, groupIndex, slotIndex)
 
@@ -95,6 +97,7 @@ class LoadoutPresenter(ViewComponent[AmmunitionPanelModel]):
     _STATES_OBSERVER = _LoadoutStatesObserver
     __itemsCache = dependency.descriptor(IItemsCache)
     __loadoutController = dependency.descriptor(ILoadoutController)
+    __platoonCtrl = dependency.descriptor(IPlatoonController)
 
     def __init__(self):
         super(LoadoutPresenter, self).__init__(model=self._VIEW_MODEL)
@@ -105,6 +108,9 @@ class LoadoutPresenter(ViewComponent[AmmunitionPanelModel]):
         self.__currentSlotIndex = AmmunitionPanelModel.NO_SLOT_SELECTED
         self.__slotSelectionObserver = self._STATES_OBSERVER()
         return
+
+    def getSlotSelectionObserver(self):
+        return self.__slotSelectionObserver
 
     def createToolTip(self, event):
         backportTooltipContentID = R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent()
@@ -131,13 +137,19 @@ class LoadoutPresenter(ViewComponent[AmmunitionPanelModel]):
     def _getEvents(self):
         model = self.getViewModel()
         return super(LoadoutPresenter, self)._getEvents() + ((g_currentVehicle.onChanged, self.__onVehicleChanged),
+         (self.__platoonCtrl.onMembersUpdate, self.__onMembersUpdate),
          (self.__slotSelectionObserver.onPanelSlotSelect, self.__onPanelSlotSelect),
          (self.__itemsCache.onSyncCompleted, self.__onCacheResync),
          (model.onChangeSetupIndex, self.__onChangeSetupIndex),
          (model.onOpenSlotSpecDialog, self.__onSpecializationSelect),
          (self._vehInteractingItem.onItemUpdated, self.__onItemUpdated),
          (self._vehInteractingItem.onAcceptComplete, self.__onAcceptComplete),
-         (self._vehInteractingItem.onRevert, self.__onRevert))
+         (self._vehInteractingItem.onRevert, self.__onRevert),
+         (g_playerEvents.onKickedFromPrebattle, self.__onKickedFromPrebattle),
+         (g_playerEvents.onPrebattleLeft, self.__onPrebattleLeft))
+
+    def _getListeners(self):
+        return ((events.PrbActionEvent.LEAVE, self.__onDoLeaveAction, EVENT_BUS_SCOPE.LOBBY),)
 
     def _onLoading(self, *args, **kwargs):
         lsm = getLobbyStateMachine()
@@ -229,6 +241,18 @@ class LoadoutPresenter(ViewComponent[AmmunitionPanelModel]):
             self.__updateAmmunitionGroupsController(needToRecreate)
             return
 
+    def __onDoLeaveAction(self, _):
+        self.getViewModel().setIsDisabled(self.__isAmmunitionPanelDisabled())
+
+    def __onKickedFromPrebattle(self, _):
+        self.getViewModel().setIsDisabled(self.__isAmmunitionPanelDisabled())
+
+    def __onPrebattleLeft(self):
+        self.getViewModel().setIsDisabled(self.__isAmmunitionPanelDisabled())
+
+    def __onMembersUpdate(self):
+        self.getViewModel().setIsDisabled(not self.__canChangeVehicle() or self.__isAmmunitionPanelDisabled())
+
     def _recreateVehicleSetups(self):
         vehicle = self._vehInteractingItem.getItem()
         currentVehicle = g_currentVehicle.item
@@ -262,9 +286,6 @@ class LoadoutPresenter(ViewComponent[AmmunitionPanelModel]):
             self.__ammunitionGroupsController.updateVehicle(self.__getVehicle())
         else:
             self.__ammunitionGroupsController = HangarAmmunitionGroupsController(self.__getVehicle())
-        if self.__loadoutController.interactor:
-            vehicle = self.__loadoutController.interactor.getVehicleAfterInstall()
-            g_tankSetupVehicle.setVehicle(vehicle)
         self.__updateModel(recreate, sectionName)
 
     @staticmethod

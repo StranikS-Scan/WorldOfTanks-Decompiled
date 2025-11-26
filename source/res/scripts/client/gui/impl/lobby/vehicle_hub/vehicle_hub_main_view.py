@@ -27,9 +27,11 @@ from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui.Scaleform.lobby_entry import getLobbyStateMachine
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.gen.view_models.views.lobby.vehicle_hub.views.vehicle_hub_view_model import VehicleHubViewModel
 from gui.impl.pub import WindowImpl
 from gui.impl.gen import R
+from gui.impl.backport import createTooltipData, BackportTooltipWindow
 from gui.impl.pub.view_component import ViewComponent
 from gui.lobby_state_machine.router import SubstateRouter
 from gui.lobby_state_machine.routable_view import IRoutableView
@@ -126,6 +128,11 @@ class VehicleHubMainView(ViewComponent, IRoutableView):
         return self.currentPresenter.createToolTipContent(event, contentID)
 
     def createToolTip(self, event):
+        tooltipId = event.getArgument('tooltipId')
+        if tooltipId == TOOLTIPS_CONSTANTS.TRADE_IN_INFO:
+            window = BackportTooltipWindow(createTooltipData(isSpecial=True, specialAlias=tooltipId), self.getWindow())
+            window.load()
+            return window
         return self.currentPresenter.createToolTip(event) or super(VehicleHubMainView, self).createToolTip(event)
 
     def stateExited(self):

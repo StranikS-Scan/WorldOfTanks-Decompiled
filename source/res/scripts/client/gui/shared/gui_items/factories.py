@@ -26,11 +26,32 @@ if typing.TYPE_CHECKING:
     from vehicles.mechanics.mechanic_constants import VehicleMechanic
 _logger = logging.getLogger(__name__)
 _NONE_GUI_ITEM_TYPE = 0
+_CUSTOMIZATION_TYPE_TO_CLS = {CustomizationType.CAMOUFLAGE: Camouflage,
+ CustomizationType.PAINT: Paint,
+ CustomizationType.MODIFICATION: Modification,
+ CustomizationType.STYLE: Style,
+ CustomizationType.PERSONAL_NUMBER: PersonalNumber,
+ CustomizationType.PROJECTION_DECAL: ProjectionDecal,
+ CustomizationType.INSIGNIA: Insignia,
+ CustomizationType.SEQUENCE: Sequence,
+ CustomizationType.ATTACHMENT: Attachment,
+ CustomizationType.STAT_TRACKER: StatTracker}
+_DECAL_TYPE_TO_CLS = {DecalType.EMBLEM: Emblem,
+ DecalType.INSCRIPTION: Inscription}
 
 class GuiItemFactory(IGuiItemsFactory):
 
     def clear(self):
         pass
+
+    def createGuiItemsOfSameType(self, itemTypeIdx, compactDecrs, proxy, *args, **kwargs):
+        if not compactDecrs:
+            return []
+        if itemTypeIdx not in _ITEM_TYPES_MAPPING:
+            _logger.warning('Could not create GUI items with idx %r. There is no class associated with this idx.', itemTypeIdx)
+            return []
+        mappingFn = _ITEM_TYPES_MAPPING[itemTypeIdx]
+        return [ mappingFn(self, compactDescr, proxy, *args, **kwargs) for compactDescr in compactDecrs ]
 
     def createGuiItem(self, itemTypeIdx, *args, **kwargs):
         item = None
@@ -105,40 +126,22 @@ class GuiItemFactory(IGuiItemsFactory):
     def createLootBox(self, lootBoxID, lootBoxConfig, count):
         return LootBox(lootBoxID, lootBoxConfig, count)
 
+    def getCustomizationCls(self, descriptor):
+        itemType = descriptor.itemType
+        if itemType in _CUSTOMIZATION_TYPE_TO_CLS:
+            return _CUSTOMIZATION_TYPE_TO_CLS[itemType]
+        if itemType == CustomizationType.DECAL:
+            subType = descriptor.type
+            if subType in _DECAL_TYPE_TO_CLS:
+                return _DECAL_TYPE_TO_CLS[subType]
+            _logger.warning('Unknown decal type %r', subType)
+            return Decal
+        _logger.warning('Unknown customization type %r', itemType)
+        return Customization
+
     def createCustomization(self, intCompactDescr, proxy=None):
         descriptor = vehicles.getItemByCompactDescr(intCompactDescr)
-        if descriptor.itemType == CustomizationType.CAMOUFLAGE:
-            cls = Camouflage
-        elif descriptor.itemType == CustomizationType.PAINT:
-            cls = Paint
-        elif descriptor.itemType == CustomizationType.MODIFICATION:
-            cls = Modification
-        elif descriptor.itemType == CustomizationType.STYLE:
-            cls = Style
-        elif descriptor.itemType == CustomizationType.DECAL:
-            if descriptor.type == DecalType.EMBLEM:
-                cls = Emblem
-            elif descriptor.type == DecalType.INSCRIPTION:
-                cls = Inscription
-            else:
-                LOG_WARNING('Unknown decal type', descriptor.type)
-                cls = Decal
-        elif descriptor.itemType == CustomizationType.PERSONAL_NUMBER:
-            cls = PersonalNumber
-        elif descriptor.itemType == CustomizationType.PROJECTION_DECAL:
-            cls = ProjectionDecal
-        elif descriptor.itemType == CustomizationType.INSIGNIA:
-            cls = Insignia
-        elif descriptor.itemType == CustomizationType.SEQUENCE:
-            cls = Sequence
-        elif descriptor.itemType == CustomizationType.ATTACHMENT:
-            cls = Attachment
-        elif descriptor.itemType == CustomizationType.STAT_TRACKER:
-            cls = StatTracker
-        else:
-            LOG_WARNING('Unknown customization type', descriptor.itemType)
-            cls = Customization
-        return cls(intCompactDescr, proxy)
+        return self.getCustomizationCls(descriptor)(intCompactDescr, proxy)
 
     def createOutfit(self, strCompactDescr=None, component=None, vehicleCD=''):
         if strCompactDescr is not None and component is not None:

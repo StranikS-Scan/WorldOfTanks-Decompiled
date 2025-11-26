@@ -18,6 +18,72 @@ if typing.TYPE_CHECKING:
 __all__ = ('needToUpdateQuestsInModel',)
 NUM_OF_COMMON_DAILY_QUESTS = 3
 
+class IMissionsGuiHelper(object):
+
+    @classmethod
+    def isDailyMissionsSupported(cls):
+        raise NotImplementedError
+
+    @classmethod
+    def isPM3MissionsSupported(cls):
+        raise NotImplementedError
+
+
+class DefaultMissionsGuiHelper(IMissionsGuiHelper):
+
+    @classmethod
+    def isDailyMissionsSupported(cls):
+        return False
+
+    @classmethod
+    def isPM3MissionsSupported(cls):
+        return False
+
+
+class RandomMissionsGuiHelper(IMissionsGuiHelper):
+
+    @classmethod
+    def isDailyMissionsSupported(cls):
+        return True
+
+    @classmethod
+    def isPM3MissionsSupported(cls):
+        return True
+
+
+class RandomNP2MissionsGuiHelper(IMissionsGuiHelper):
+
+    @classmethod
+    def isDailyMissionsSupported(cls):
+        return False
+
+    @classmethod
+    def isPM3MissionsSupported(cls):
+        return True
+
+
+class WinbackMissionsGuiHelper(IMissionsGuiHelper):
+
+    @classmethod
+    def isDailyMissionsSupported(cls):
+        return True
+
+    @classmethod
+    def isPM3MissionsSupported(cls):
+        return False
+
+
+class MapboxMissionsGuiHelper(IMissionsGuiHelper):
+
+    @classmethod
+    def isDailyMissionsSupported(cls):
+        return True
+
+    @classmethod
+    def isPM3MissionsSupported(cls):
+        return False
+
+
 def areCommonQuestsCompleted(quests):
     numCompletedQuests = len([ q for q in quests if q.isCompleted() ])
     return numCompletedQuests >= NUM_OF_COMMON_DAILY_QUESTS

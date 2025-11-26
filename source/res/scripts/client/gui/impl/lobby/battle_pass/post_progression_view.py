@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/post_progression_view.py
-from functools import partial
 from enum import IntEnum, unique
 from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
@@ -20,7 +19,7 @@ from gui.impl.gen.view_models.views.lobby.battle_pass.post_progression_view_mode
 from gui.impl.pub.view_component import ViewComponent
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.lootbox_system.base.common import ViewID, Views
-from gui.shared.event_dispatcher import showBattlePass, showBattlePassHowToEarnPointsView, showBattlePassTankmenVoiceover, showBrowserOverlayView, showHangar, showShop
+from gui.shared.event_dispatcher import showBattlePassHowToEarnPointsView, showBattlePassTankmenVoiceover, showBrowserOverlayView, showShop
 from helpers import dependency, time_utils
 from shared_utils import first
 from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController, ILootBoxSystemController
@@ -73,7 +72,7 @@ class PostProgressionPresenter(ViewComponent[PostProgressionViewModel]):
         self.__fillModel()
 
     def onExtraChapterExpired(self):
-        self.__checkBattlePassState()
+        self.__fillModel()
 
     def _onLoading(self, *args, **kwargs):
         super(PostProgressionPresenter, self)._onLoading(*args, **kwargs)
@@ -233,10 +232,8 @@ class PostProgressionPresenter(ViewComponent[PostProgressionViewModel]):
         return False
 
     def __checkBattlePassState(self, *_):
-        if self.__battlePass.isPaused():
-            showBattlePass()
-            return
-        self.__fillModel()
+        if not self.__battlePass.isPaused():
+            self.__fillModel()
 
     @staticmethod
     def __showInfoPage():
@@ -250,8 +247,7 @@ class PostProgressionPresenter(ViewComponent[PostProgressionViewModel]):
         showShop(getBattlePassCoinProductsUrl())
 
     def __showTickets(self):
-        showHangar()
-        Views.load(ViewID.MAIN, eventName=BATTLE_PASS_TICKETS_EVENT, backCallback=partial(showBattlePass, R.aliases.battle_pass.PostProgression()))
+        Views.load(ViewID.MAIN, eventName=BATTLE_PASS_TICKETS_EVENT)
 
     def __showTankmen(self):
         showBattlePassTankmenVoiceover(self.__tankmenScreen)
@@ -263,7 +259,7 @@ class PostProgressionPresenter(ViewComponent[PostProgressionViewModel]):
         if not AccountSettings.getSettings(IS_BATTLE_PASS_COLLECTION_SEEN):
             AccountSettings.setSettings(IS_BATTLE_PASS_COLLECTION_SEEN, True)
             self.__updateCollections()
-        loadCollectionsFromBattlePass(self.layoutID, battlePass=self.__battlePass)
+        loadCollectionsFromBattlePass(battlePass=self.__battlePass)
 
     @staticmethod
     def __showTalers():

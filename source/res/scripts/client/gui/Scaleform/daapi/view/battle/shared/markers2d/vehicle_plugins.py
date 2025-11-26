@@ -415,7 +415,10 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
             return
 
     def _updateVehicleHealth(self, vehicleID, handle, newHealth, aInfo, attackReasonID):
-        if newHealth < 0 and not constants.SPECIAL_VEHICLE_HEALTH.IS_AMMO_BAY_DESTROYED(newHealth):
+        isAmmoBayDestroyed = constants.SPECIAL_VEHICLE_HEALTH.IS_AMMO_BAY_DESTROYED(newHealth)
+        if newHealth < 0 and not isAmmoBayDestroyed:
+            newHealth = 0
+        if self.sessionProvider.shared.vehicleState.isInPostmortem and newHealth < 0 and isAmmoBayDestroyed and not aInfo:
             newHealth = 0
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:

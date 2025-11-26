@@ -55,6 +55,8 @@ def getLocalAimPoint(vehicleDescriptor):
         return Math.Vector3(0.0, 0.0, 0.0)
     else:
         hullBox = vehicleDescriptor.hull.hitTester.bbox
+        if hullBox is None:
+            return Math.Vector3(0.0, 0.0, 0.0)
         hullPosition = vehicleDescriptor.chassis.hullPosition
         middleX = (hullBox[0].x + hullBox[1].x) * 0.5 + hullPosition.x
         middleZ = (hullBox[0].z + hullBox[1].z) * 0.5 + hullPosition.z

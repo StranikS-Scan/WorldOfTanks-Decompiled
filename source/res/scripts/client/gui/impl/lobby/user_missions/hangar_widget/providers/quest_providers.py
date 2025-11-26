@@ -35,7 +35,7 @@ class QuestProviderBase(object):
         raise NotImplementedError
 
     def _checkBonusCaps(self, bonusCaps):
-        return self.__hangarGuiCtrl.checkCurrentBonusCaps(bonusCaps)
+        return self.__hangarGuiCtrl.dynamicEconomics.checkCurrentBonusCaps(bonusCaps)
 
     def _setCompletedState(self, item, raw):
         item.isCompleted = raw.isCompleted()

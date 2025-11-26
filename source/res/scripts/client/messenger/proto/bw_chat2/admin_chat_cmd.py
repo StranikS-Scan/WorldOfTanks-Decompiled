@@ -37,7 +37,7 @@ class _ParsingResult(object):
 
 
 class _ParsingError(_ParsingResult):
-    __slots__ = ('id', 'i18nKey')
+    __slots__ = ('i18nKey',)
 
     def __init__(self, errorID, args=None, i18nKey=None):
         super(_ParsingError, self).__init__(args)

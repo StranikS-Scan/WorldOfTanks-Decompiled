@@ -257,7 +257,7 @@ class BaseVehicleParametersTooltipData(ToolTipBaseData):
 
     def getDisplayableData(self, paramName, *args, **kwargs):
         tooltipView = self.getTooltipView()
-        return DecoratedTooltipWindow(tooltipView(paramName, self.context, self.readyForAdvanced(paramName)), useDecorator=False)
+        return DecoratedTooltipWindow(tooltipView(paramName, self.context, self.readyForAdvanced(paramName)), useDecorator=False, parent=kwargs.get('parent'))
 
     @staticmethod
     def readyForAdvanced(*args, **_):
@@ -466,7 +466,7 @@ class CrystalBlockConstructor(VehicleTooltipBlockConstructor):
         elif current >= limit:
             daysLeft = time_utils.getServerRegionalDaysLeftInGameWeek() * time_utils.ONE_DAY
             timeLeft = daysLeft + time_utils.getDayTimeLeft()
-            timeLeftStr = time_utils.getTillTimeString(timeLeft, MENU.TIME_TIMEVALUESHORT, isRoundUp=True, removeLeadingZeros=True)
+            timeLeftStr = time_utils.getTillTimeString(timeLeft, MENU.TIME_TIMEVALUESHORT, isMinutesRoundUp=True, removeLeadingZeros=True)
             limitStatus = backport.text(R.strings.tooltips.vehicleCrystal.limitStatus.limitReached.description(), timeLeft=text_styles.neutral(timeLeftStr))
             icon = backport.image(R.images.gui.maps.icons.library.time_icon())
             linkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILD_BLOCK_GRAY_LINKAGE

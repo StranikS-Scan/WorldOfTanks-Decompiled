@@ -7,7 +7,7 @@ from account_helpers.AccountSettings import MAPBOX_CAROUSEL_FILTER_1, MAPBOX_CAR
 import BigWorld
 import constants
 from adisp import adisp_async, adisp_process
-from debug_utils import LOG_ERROR
+from debug_utils import LOG_WARNING
 from gui.shared.utils import code2str
 _logger = logging.getLogger(__name__)
 
@@ -17,7 +17,7 @@ def requireSync(func):
     def wrapper(*args, **kwargs):
         instance = args[0]
         if not instance.isSynced():
-            LOG_ERROR('Calling %s require for IntSettingsRequester to be synced.' % func.__name__, stack=True)
+            LOG_WARNING('Calling %s require for IntSettingsRequester to be synced.' % func.__name__, stack=True if constants.IS_DEVELOPMENT else False)
         return func(*args, **kwargs)
 
     return wrapper

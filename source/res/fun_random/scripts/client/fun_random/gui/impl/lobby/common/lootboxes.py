@@ -1,6 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/impl/lobby/common/lootboxes.py
+from __future__ import absolute_import
 import typing
+from builtins import round
+from future.utils import iteritems, viewvalues
 from constants import LOOTBOX_TOKEN_PREFIX
 from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin
 from fun_random.gui.impl.gen.view_models.views.lobby.common.fun_random_lootbox import FunRandomLootbox
@@ -48,7 +51,7 @@ class FunRandomLootBoxTokenBonusPacker(TokenBonusUIPacker, FunAssetPacksMixin):
     @classmethod
     def _pack(cls, bonus):
         result = super(FunRandomLootBoxTokenBonusPacker, cls)._pack(bonus)
-        for token in sorted(bonus.getTokens().itervalues(), key=sortTokenFunc):
+        for token in sorted(viewvalues(bonus.getTokens()), key=sortTokenFunc):
             if cls.__isSuitable(token.id, token):
                 model = TokenBonusModel()
                 cls._packCommon(bonus, model)
@@ -60,7 +63,7 @@ class FunRandomLootBoxTokenBonusPacker(TokenBonusUIPacker, FunAssetPacksMixin):
     @classmethod
     def _getToolTip(cls, bonus):
         result = super(FunRandomLootBoxTokenBonusPacker, cls)._getToolTip(bonus)
-        for token in sorted(bonus.getTokens().itervalues(), key=sortTokenFunc):
+        for token in sorted(viewvalues(bonus.getTokens()), key=sortTokenFunc):
             if cls.__isSuitable(token.id, token):
                 result.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=None, specialArgs=[token.id]))
 
@@ -69,9 +72,9 @@ class FunRandomLootBoxTokenBonusPacker(TokenBonusUIPacker, FunAssetPacksMixin):
     @classmethod
     def _getContentId(cls, bonus):
         result = super(FunRandomLootBoxTokenBonusPacker, cls)._getContentId(bonus)
-        for token in sorted(bonus.getTokens().itervalues(), key=sortTokenFunc):
+        for token in sorted(viewvalues(bonus.getTokens()), key=sortTokenFunc):
             if cls.__isSuitable(token.id, token):
-                result.append(R.views.fun_random.lobby.tooltips.FunRandomLootBoxTooltipView())
+                result.append(R.views.fun_random.mono.lobby.tooltips.loot_box_tooltip())
 
         return result
 
@@ -195,7 +198,7 @@ def parseBonusesWithProbabilities(data):
                     probabilities, _, _, rawData = item
                     if rawData:
                         rawDataBonuses = []
-                        for k, v in rawData.iteritems():
+                        for k, v in iteritems(rawData):
                             rawDataBonuses.extend(getNonQuestBonuses(k, v))
 
                         bonuses.append({'probabilities': probabilities,

@@ -49,6 +49,9 @@ class _DamageEfficiencyInfo(_FeedbackEventEfficiencyInfo):
     def getAttackReasonID(self):
         return self.__damage.getAttackReasonID()
 
+    def getSecondaryAttackReasonID(self):
+        return self.__damage.getSecondaryAttackReasonID()
+
     def isSpawnedBotExplosion(self, primary=True):
         return self.__damage.isSpawnedBotExplosion(primary=primary)
 

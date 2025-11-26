@@ -25,7 +25,7 @@ from gui.battle_results.service import g_pbsFakeData
 from gui.battle_results.settings import PLAYER_TEAM_RESULT
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.lobby_state_machine.states import SFViewLobbyState, LobbyState, SubScopeSubLayerState, LobbyStateDescription, UntrackedState
+from gui.lobby_state_machine.states import SFViewLobbyState, LobbyState, SubScopeSubLayerState, LobbyStateDescription, UntrackedState, LobbyStateFlags
 from gui.Scaleform.daapi.view.lobby.trainings.states import TrainingRoomState
 from gui.lobby_state_machine.transitions import HijackTransition
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
@@ -80,7 +80,7 @@ class PostBattleResultsEntryState(LobbyState, SubhangarStateGroupConfigProvider)
 
     def getSubhangarStateGroupConfig(self):
         arenaUniqueID = self.__cachedParams.get('arenaUniqueID', None)
-        statsController = self.__battleResults.getPresenter(arenaUniqueID)
+        statsController = self.__battleResults.getStatsCtrl(arenaUniqueID)
         teamResultType = SubhangarStateGroups.PostBattleDefeat
         _, reusable = statsController.getResults()
         if reusable:
@@ -132,7 +132,7 @@ class PostBattleResultsEntryState(LobbyState, SubhangarStateGroupConfigProvider)
             g_currentPreviewVehicle.selectVehicle()
             return
         else:
-            _, reusable = self.__battleResults.getPresenter(arenaUniqueID).getResults()
+            _, reusable = self.__battleResults.getStatsCtrl(arenaUniqueID).getResults()
             mapKind = reusable.common.arenaType.getVehicleCamouflageKind()
             mapSeason = SeasonType.fromArenaKind(mapKind)
             from vehicle_systems import camouflages
@@ -244,13 +244,13 @@ class PostBattleResultsState(SFViewLobbyState, SubhangarStateGroupConfigProvider
     __battleResults = dependency.descriptor(IBattleResultsService)
 
     def __init__(self, flags=StateFlags.UNDEFINED):
-        super(PostBattleResultsState, self).__init__(flags=flags)
+        super(PostBattleResultsState, self).__init__(flags=flags | LobbyStateFlags.POST_BATTLE_RESULTS)
         self.__blur = None
         self.__cachedParams = {}
         return
 
     def getSubhangarStateGroupConfig(self):
-        _, reusable = self.__battleResults.getPresenter(self.__cachedParams.get('arenaUniqueID', None)).getResults()
+        _, reusable = self.__battleResults.getStatsCtrl(self.__cachedParams.get('arenaUniqueID', None)).getResults()
         geometryName = reusable.common.arenaType.getGeometryName()
         mapImageName = getArenaImage(geometryName, 'screen')
         mapImageName = mapImageName.replace('img://', '')
@@ -275,6 +275,7 @@ class PostBattleResultsState(SFViewLobbyState, SubhangarStateGroupConfigProvider
 
     def __preventNavigationOutside(self, event):
         from gui.Scaleform.daapi.view.lobby.battle_queue.states import BattleQueueContainerState
+        from battle_royale.gui.impl.lobby.views.states import BattleRoyaleModeState
         prbDispatcher = self.prbDispatcher
         if prbDispatcher is None or not prbDispatcher.getFunctionalState().isNavigationDisabled():
             return False
@@ -284,7 +285,8 @@ class PostBattleResultsState(SFViewLobbyState, SubhangarStateGroupConfigProvider
             target = lsm.getStateByID(targetID)
             parentDescendants = self.getParent().getRecursiveChildrenStates()
             battleQueueDescendants = lsm.getStateByCls(BattleQueueContainerState).getRecursiveChildrenStates()
-            eventTargetingOutside = target != self.getParent() and target not in parentDescendants and target not in battleQueueDescendants
+            battleRoyaleQueueDescendants = lsm.getStateByCls(BattleRoyaleModeState).getRecursiveChildrenStates()
+            eventTargetingOutside = target != self.getParent() and target not in parentDescendants and target not in battleQueueDescendants and target not in battleRoyaleQueueDescendants
             if eventTargetingOutside:
                 SystemMessages.pushI18nMessage('#system_messages:queue/isInQueue', type=SystemMessages.SM_TYPE.Error, priority='high')
             return eventTargetingOutside
@@ -313,7 +315,7 @@ class PostBattleResultsState(SFViewLobbyState, SubhangarStateGroupConfigProvider
         self.__cachedParams = dict(event.params)
         super(PostBattleResultsState, self)._onEntered(event)
         lockNotificationManager(False, source=self.STATE_ID, releasePostponed=True)
-        self.__blur = self.__blurCtrl.createBlur((ImmediateSceneBlurConfig(spaceID=self.__hangarSpace.spaceID, settings=self.__blurCtrl.getSettingsByAlias(self._POST_BATTLE_BLUR_SETTINGS_KEY)),))
+        self.__blur = self.__blurCtrl.createBlur((ImmediateSceneBlurConfig(spaceID=self.__hangarSpace.spaceID, settings=self.__blurCtrl.getSettingsByAlias(self._POST_BATTLE_BLUR_SETTINGS_KEY), persistent=True),))
 
     def _onExited(self):
         self.__blur.disable()
@@ -402,7 +404,7 @@ class _PBSSceneSetup(CameraMover):
 
 
 def _getVehicleCDAndOutfit(battleResultsService, arenaUniqueID):
-    statsController = battleResultsService.getPresenter(arenaUniqueID)
+    statsController = battleResultsService.getStatsCtrl(arenaUniqueID)
     battleResults, reusable = statsController.getResults()
     for vehicleCD, vehicle in reusable.personal.getVehicleCDsIterator(battleResults['personal']):
         return (vehicleCD, vehicle['outfit'])

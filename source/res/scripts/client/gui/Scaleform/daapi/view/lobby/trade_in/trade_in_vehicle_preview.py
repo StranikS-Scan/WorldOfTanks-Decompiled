@@ -12,4 +12,3 @@ class TradeInVehiclePreview(VehiclePreview):
         super(TradeInVehiclePreview, self)._onRegisterFlashComponent(viewPy, alias)
         if alias == VEHPREVIEW_CONSTANTS.BOTTOM_PANEL_TRADE_IN_PY_ALIAS:
             viewPy.setBackAlias(self._backAlias)
-            viewPy.setBackCallback(self._previewBackCb)

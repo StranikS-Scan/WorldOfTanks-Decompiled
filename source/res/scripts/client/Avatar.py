@@ -13,7 +13,6 @@ import Math
 import ResMgr
 import WWISE
 import WoT
-import CGF
 import Account
 import AccountCommands
 import AreaDestructibles
@@ -56,7 +55,6 @@ from avatar_components.VehiclesSpawnListStorage import VehiclesSpawnListStorage
 from avatar_components.avatar_chat_key_handling import AvatarChatKeyHandling
 from avatar_components.avatar_epic_data import AvatarEpicData
 from avatar_components.avatar_recovery_mechanic import AvatarRecoveryMechanic
-from avatar_components.avatar_respawn_mechanic import AvatarRespawnMechanic
 from avatar_components.team_healthbar_mechanic import TeamHealthbarMechanic
 from avatar_components.triggers_controller import TriggersController
 from avatar_components.vehicle_health_broadcast_listener_component import VehicleHealthBroadcastListenerComponent
@@ -167,7 +165,6 @@ AVATAR_COMPONENTS = {CombatEquipmentManager,
  TeamHealthbarMechanic,
  AvatarEpicData,
  AvatarRecoveryMechanic,
- AvatarRespawnMechanic,
  VehiclesSpawnListStorage,
  VehicleRemovalController,
  VehicleHealthBroadcastListenerComponent,
@@ -182,7 +179,7 @@ class VehicleDeinitFailureException(SoftException):
         super(VehicleDeinitFailureException, self).__init__('Exception during vehicle deinit has been detected, thus leading to unstable state of it. Please, check the first exception happened in this function call instead of analyzing c++ crash.')
 
 
-class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarObserver, TeamHealthbarMechanic, AvatarEpicData, AvatarRecoveryMechanic, AvatarRespawnMechanic, VehiclesSpawnListStorage, VehicleRemovalController, VehicleHealthBroadcastListenerComponent, AvatarChatKeyHandling, TriggersController, VisualScriptController, AvatarPostmortemComponent):
+class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarObserver, TeamHealthbarMechanic, AvatarEpicData, AvatarRecoveryMechanic, VehiclesSpawnListStorage, VehicleRemovalController, VehicleHealthBroadcastListenerComponent, AvatarChatKeyHandling, TriggersController, VisualScriptController, AvatarPostmortemComponent):
     __onStreamCompletePredef = {STREAM_ID_AVATAR_BATTLE_RESULS: 'receiveBattleResults'}
     isOnArena = property(lambda self: self.__isOnArena)
     isVehicleAlive = property(lambda self: self.__isVehicleAlive)
@@ -733,7 +730,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                         if mods == 0:
                             self.base.setDevelopmentFeature(0, 'pickup', 0, 'straight')
                         elif mods == 1:
-                            if CGF.hotReload(self.spaceID, None):
+                            if BigWorld.spaceReload(self.spaceID):
                                 self.base.setDevelopmentFeature(0, 'hot_reload', 0, '')
                         return True
                     if key == Keys.KEY_T:
@@ -1074,7 +1071,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def enemySPGShotSound(self, shooterPosition, targetPosition):
         self.complexSoundNotifications.notifyEnemySPGShotSound((self.getOwnVehiclePosition() - targetPosition).length, shooterPosition)
 
-    def __waitVehilceInfoForStartVisual(self, vehicle, resetControllers):
+    def __waitVehicleInfoForStartVisual(self, vehicle, resetControllers):
         if vehicle.id in self.arena.vehicles:
             if vehicle.id in self.__vehiclesWaitedInfo:
                 del self.__vehiclesWaitedInfo[vehicle.id]
@@ -1082,13 +1079,23 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.__vehiclesWaitedInfo[vehicle.id] = (weakref.proxy(vehicle), resetControllers)
         return True
 
+    def __onVehiclesListUpdatedForStartVisual(self):
+        for vehID in self.arena.vehicles:
+            self.__onVehicleInfoAddedForStartVisual(vehID)
+            if vehID == self.playerVehicleID and self.initCompleted:
+                vehicle = BigWorld.entities.get(vehID)
+                if vehicle is not None:
+                    vehicle.cell.sendStateToOwnClient()
+
+        return
+
     def __onVehicleInfoAddedForStartVisual(self, vehID):
         if vehID in self.__vehiclesWaitedInfo:
             params = self.__vehiclesWaitedInfo.pop(vehID)
             self.__startVehicleVisual(*params)
 
     def __startVehicleVisual(self, vehicle, resetControllers=False):
-        if self.__waitVehilceInfoForStartVisual(vehicle, resetControllers):
+        if self.__waitVehicleInfoForStartVisual(vehicle, resetControllers):
             return
         elif vehicle.isDestroyed or not hasattr(vehicle, 'isHidden'):
             return
@@ -1283,7 +1290,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             if not isAlive and wasAlive or not isAlive and wasRespawnAvailable and not isRespawn:
                 vehicle = BigWorld.entities.get(self.playerVehicleID)
                 isManualRespawnEnabled = self.hasBonusCap(_CAPS.BATTLEROYALE)
-                noRespawnPossible = not (self.respawnEnabled or bool(vehicle.enableExternalRespawn) or isManualRespawnEnabled)
+                noRespawnPossible = not (bool(vehicle.enableExternalRespawn) or isManualRespawnEnabled)
                 self.guiSessionProvider.switchToPostmortem(noRespawnPossible, isRespawn)
             return
 
@@ -2589,12 +2596,14 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.inputHandler.start()
         self.arena.onVehicleKilled += self.__onArenaVehicleKilled
         self.arena.onVehicleAdded += self.__onVehicleInfoAddedForStartVisual
+        self.arena.onNewVehicleListReceived += self.__onVehiclesListUpdatedForStartVisual
         MessengerEntry.g_instance.onAvatarInitGUI()
         self.soundNotifications.start()
 
     def __destroyGUI(self):
         self.arena.onVehicleKilled -= self.__onArenaVehicleKilled
         self.arena.onVehicleAdded -= self.__onVehicleInfoAddedForStartVisual
+        self.arena.onNewVehicleListReceived -= self.__onVehiclesListUpdatedForStartVisual
         self.soundNotifications.destroy()
         self.soundNotifications = None
         self.complexSoundNotifications.destroy()

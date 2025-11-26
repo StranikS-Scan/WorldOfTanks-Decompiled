@@ -820,8 +820,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	34	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.27	</vehicleMovement>
-        <vehicleRotation>	0.27	</vehicleRotation>
+        <vehicleMovement>	0.24	</vehicleMovement>
+        <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	140	</maxHealth>
@@ -1721,6 +1721,12 @@
           <reloadTime>	7	</reloadTime>
           <aimingTime>	2.5	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
+          <shotDispersionFactors>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+            <afterShot>	4.0	</afterShot>
+            <turretRotation>	0.14	</turretRotation>
+          </shotDispersionFactors>
+          <turretYawLimits>	-180 180	</turretYawLimits>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -2308,7 +2314,7 @@
     <detailed>
       <engines>
         <V_2K_P>
-          <smplEnginePower>	500	</smplEnginePower>
+          <smplEnginePower>	600	</smplEnginePower>
           <smplFwMaxSpeed>	43	</smplFwMaxSpeed>
         </V_2K_P>
       </engines>

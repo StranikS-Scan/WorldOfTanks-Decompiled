@@ -4,6 +4,7 @@ from __future__ import absolute_import, division
 import math
 from collections import OrderedDict
 from future.builtins import round
+from future.utils import listvalues
 import typing
 import BigWorld
 import GUI
@@ -29,6 +30,7 @@ MIN_HIT_ANGLE_COS = 1e-05
 COLLISION_RAY_LENGTH = 1500
 RAD_TO_DEG = 180.0 / math.pi
 SPACED_ARMOR_DAMAGE_FACTOR = 0.0
+AP_SHELLS_NORMALIZATION = 5 / RAD_TO_DEG
 LEFT_TRACK = 'leftTrack'
 RIGHT_TRACK = 'rightTrack'
 SURVEYING_DEVICE = 'surveyingDevice'
@@ -149,7 +151,8 @@ def getMaterialsAtCursor(vehicleEntity, spaceID):
                 viewAngle = round(math.acos(hitAngleCos) * RAD_TO_DEG, 1)
                 currentMaterial = MaterialUIData(partName=partName, nominalArmor=nominalArmor, viewAngle=viewAngle, isSpacedArmor=isSpacedArmor)
                 if matInfo.useHitAngle:
-                    hitAngleCos = max(MIN_HIT_ANGLE_COS, hitAngleCos)
+                    hitAngleCos = min(max(hitAngleCos, MIN_HIT_ANGLE_COS), 1)
+                    hitAngleCos = math.cos(max(math.acos(hitAngleCos) - AP_SHELLS_NORMALIZATION, 0.0))
                     currentMaterial.resArmor = round(matInfo.armor / hitAngleCos, 1)
                 if matInfo.collideOnceOnly:
                     ignoredMaterials.add((partID, matInfo.kind))
@@ -228,7 +231,7 @@ def stackMaterials(materials, tier):
         fraction = (math_utils.clamp(minimum, maximum, nominalArmor) - minimum) / (maximum - minimum)
         consolidatedMap[key] = MaterialUIData(partName=partName, nominalArmor=nominalArmor, viewAngle=material.viewAngle, resArmor=material.resArmor, isSpacedArmor=isSpacedArmor, color=_colorInt2Str(armor_inspector.getColor(fraction, isSpacedArmor)))
 
-    return list(consolidatedMap.values())
+    return listvalues(consolidatedMap)
 
 
 def getMaxArmor(typeDescriptor):

@@ -524,6 +524,63 @@
       </damage>
     </armorSpalls>
   </_37mm_OE_mle_1932_FCM>
+  <_37mm_Odr_mle__1935A>
+    <id>	217	</id>
+    <userString>	#france_vehicles:_37mm_Odr_mle__1935A	</userString>
+    <icon>	ap	</icon>
+    <price>	6	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	37	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallArmorPiercing	</effects>
+    <damage>
+      <armor>	30	</armor>
+      <devices>	50	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_37mm_Odr_mle__1935A>
+  <_37mm_FrtPrf1935A>
+    <id>	218	</id>
+    <userString>	#france_vehicles:_37mm_FrtPrf1935A	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	37	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallAPCR	</effects>
+    <damage>
+      <armor>	30	</armor>
+      <devices>	50	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_37mm_FrtPrf1935A>
+  <_37mm_OE_mle__1916A>
+    <id>	219	</id>
+    <userString>	#france_vehicles:_37mm_OE_mle__1916A	</userString>
+    <icon>	he_modern	</icon>
+    <price>	7	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	37	</caliber>
+    <explosionRadius>	0.31	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	smallHighExplosive	</effects>
+    <damage>
+      <armor>	36	</armor>
+      <devices>	50	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0.31	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	20	</armor>
+        <devices>	25	</devices>
+      </damage>
+    </armorSpalls>
+  </_37mm_OE_mle__1916A>
   <_47mm_Odr_mle._1892>
     <id>	6	</id>
     <userString>	#france_vehicles:_47mm_Odr_mle._1892	</userString>

@@ -9,6 +9,7 @@ from gui.prb_control.entities.base.pre_queue.ctx import JoinPreQueueModeCtx
 from skeletons.gui.game_control import IBattleRoyaleController
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.base.pre_queue.entity import PreQueueEntity, PreQueueEntryPoint, PreQueueSubscriber
+from battle_royale.gui.impl.lobby.br_helpers.utils import isBattleResultsStateEntered
 from battle_royale.gui.prb_control.entities.regular.pre_queue.actions_validator import BattleRoyaleActionsValidator
 from battle_royale.gui.prb_control.entities.regular.pre_queue.vehicles_watcher import BattleRoyaleVehiclesWatcher
 from battle_royale.gui.prb_control.entities.regular.pre_queue.permissions import BattleRoyalePermissions
@@ -101,7 +102,9 @@ class BattleRoyaleEntity(PreQueueEntity):
             self.__watcher.stop()
             self.__watcher = None
         self.storage.suspend()
-        g_eventDispatcher.loadHangar()
+        if not woEvents:
+            if not self.canSwitch(ctx) and not isBattleResultsStateEntered:
+                g_eventDispatcher.loadHangar()
         return super(BattleRoyaleEntity, self).fini(ctx, woEvents)
 
     def resetPlayerState(self):
@@ -137,6 +140,11 @@ class BattleRoyaleEntity(PreQueueEntity):
     def _doDequeue(self, ctx):
         BigWorld.player().AccountBattleRoyaleComponent.dequeueBattleRoyale()
         _logger.debug('Sends request on dequeuing from the Battle Royale')
+
+    def _goToHangar(self):
+        if isBattleResultsStateEntered():
+            return
+        super(BattleRoyaleEntity, self)._goToHangar()
 
     def _goToQueueUI(self):
         g_eventDispatcher.loadBattleQueue()

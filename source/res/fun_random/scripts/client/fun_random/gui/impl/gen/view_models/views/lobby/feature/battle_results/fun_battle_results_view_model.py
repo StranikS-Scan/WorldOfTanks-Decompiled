@@ -17,9 +17,9 @@ class Tab(IntEnum):
 
 
 class FunBattleResultsViewModel(ViewModel):
-    __slots__ = ('onClose', 'onTabChanged')
+    __slots__ = ('onClose',)
 
-    def __init__(self, properties=8, commands=2):
+    def __init__(self, properties=8, commands=1):
         super(FunBattleResultsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -101,4 +101,3 @@ class FunBattleResultsViewModel(ViewModel):
         self._addArrayProperty('efficiency', Array())
         self._addArrayProperty('rewards', Array())
         self.onClose = self._addCommand('onClose')
-        self.onTabChanged = self._addCommand('onTabChanged')

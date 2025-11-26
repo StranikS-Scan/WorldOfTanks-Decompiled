@@ -135,20 +135,24 @@ class HangarCameraIdle(HangarCameraSettingsListener, CallbackDelayer, TimeDeltaM
         dt = min(self.measureDeltaTime(), self.MAX_DT)
         if dt == 0:
             return 0.0
-        self.__currentIdleTime += dt
-        cameraMatrix = Math.Matrix(self.__camera.source)
-        if self.__yawPeriod > 0:
-            yawDelta = 2.0 * math.pi * dt / self.__yawPeriod
-            yawDelta *= 1.0 if self.__currentIdleTime > self.__easingInTime else self.__currentIdleTime / self.__easingInTime
         else:
-            yawDelta = 0
-        self.__yawSpeed = yawDelta / dt
-        yaw = cameraMatrix.yaw + yawDelta
-        pitch = self.__updateValue(self.__pitchParams)
-        dist = self.__updateValue(self.__distParams)
-        self.__pitchParams.speed = (pitch - cameraMatrix.pitch) / dt
-        self.__distParams.speed = (dist - self.__camera.pivotMaxDist) / dt
-        self.__setCameraParams(yaw, pitch, dist)
+            self.__currentIdleTime += dt
+            if self.__camera is None:
+                return
+            cameraMatrix = Math.Matrix(self.__camera.source)
+            if self.__yawPeriod > 0:
+                yawDelta = 2.0 * math.pi * dt / self.__yawPeriod
+                yawDelta *= 1.0 if self.__currentIdleTime > self.__easingInTime else self.__currentIdleTime / self.__easingInTime
+            else:
+                yawDelta = 0
+            self.__yawSpeed = yawDelta / dt
+            yaw = cameraMatrix.yaw + yawDelta
+            pitch = self.__updateValue(self.__pitchParams)
+            dist = self.__updateValue(self.__distParams)
+            self.__pitchParams.speed = (pitch - cameraMatrix.pitch) / dt
+            self.__distParams.speed = (dist - self.__camera.pivotMaxDist) / dt
+            self.__setCameraParams(yaw, pitch, dist)
+            return 0.0
 
     def __updateValue(self, params):
         if params.period <= 0:
@@ -172,14 +176,18 @@ class HangarCameraIdle(HangarCameraSettingsListener, CallbackDelayer, TimeDeltaM
     def __updateEasingOut(self):
         dt = min(self.measureDeltaTime(), self.MAX_DT)
         self.__currentIdleTime += dt
-        cameraMatrix = Math.Matrix(self.__camera.source)
-        yaw = self.__easeOutValue(self.__yawSpeed, cameraMatrix.yaw, dt)
-        pitch = self.__easeOutValue(self.__pitchParams.speed, cameraMatrix.pitch, dt)
-        dist = self.__easeOutValue(self.__distParams.speed, self.__camera.pivotMaxDist, dt)
-        self.__setCameraParams(yaw, pitch, dist)
-        if self.__currentIdleTime < self.TIME_OUT:
-            return 0.0
-        g_eventBus.handleEvent(CameraRelatedEvents(CameraRelatedEvents.IDLE_CAMERA, ctx={'started': False}), scope=EVENT_BUS_SCOPE.DEFAULT)
+        if self.__camera is None:
+            return
+        else:
+            cameraMatrix = Math.Matrix(self.__camera.source)
+            yaw = self.__easeOutValue(self.__yawSpeed, cameraMatrix.yaw, dt)
+            pitch = self.__easeOutValue(self.__pitchParams.speed, cameraMatrix.pitch, dt)
+            dist = self.__easeOutValue(self.__distParams.speed, self.__camera.pivotMaxDist, dt)
+            self.__setCameraParams(yaw, pitch, dist)
+            if self.__currentIdleTime < self.TIME_OUT:
+                return 0.0
+            g_eventBus.handleEvent(CameraRelatedEvents(CameraRelatedEvents.IDLE_CAMERA, ctx={'started': False}), scope=EVENT_BUS_SCOPE.DEFAULT)
+            return
 
     def __easeOutValue(self, startSpeed, prevValue, dt):
         a = -startSpeed / self.TIME_OUT

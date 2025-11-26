@@ -232,6 +232,7 @@ class SettingsCore(ISettingsCore):
          (SOUND.ALT_VOICES, options.AltVoicesSetting(SOUND.ALT_VOICES, storage=SOUND_SETTINGS_STORAGE)),
          (SOUND.DETECTION_ALERT_SOUND, options.DetectionAlertSound(SOUND.DETECTION_ALERT_SOUND)),
          (SOUND.ARTY_SHOT_ALERT_SOUND, options.ArtyShotAlertSound(SOUND.ARTY_SHOT_ALERT_SOUND)),
+         (SOUND.PHYSICS_QUALITY, options.PhysicsQualitySoundSettings()),
          (SOUND.GAME_EVENT_AMBIENT, options.SoundSetting('ev_ambient')),
          (SOUND.GAME_EVENT_EFFECTS, options.SoundSetting('ev_effects')),
          (SOUND.GAME_EVENT_GUI, options.SoundSetting('ev_gui')),

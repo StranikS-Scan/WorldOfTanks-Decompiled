@@ -28,6 +28,10 @@ class ClientEpicMetaGame(object):
     def onAccountBecomeNonPlayer(self):
         self.__ignore = True
 
+    @property
+    def becomeNonPlayerState(self):
+        return self.__ignore
+
     def setAccount(self, account):
         self.__account = account
 

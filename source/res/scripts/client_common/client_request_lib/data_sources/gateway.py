@@ -742,5 +742,9 @@ class GatewayDataAccessor(base.BaseDataAccessor):
          'loadout_types': loadout_types}
         return self._request_data(callback, url, get_data=get_params, method='GET')
 
+    def get_ingame_tournaments(self, callback):
+        url = 'tmsis-wot/api/v2/tournaments/ingame_tournament/'
+        return self._request_data(callback, url, method='GET')
+
     def _get_formatted_language_code(self):
         return self.client_lang.replace('_', '-')

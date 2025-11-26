@@ -75,12 +75,12 @@ def getTimeDurationStr(seconds, useRoundUp=False):
     return time_utils.getTillTimeString(seconds, MENU.TIME_TIMEVALUE, useRoundUp)
 
 
-def getTillTimeByResource(seconds, resource, useRoundUp=False, removeLeadingZeros=False):
+def getTillTimeByResource(seconds, resource, useMinutesRoundUp=False, removeLeadingZeros=False, useHoursRoundUp=False):
 
     def stringGen(key, **kwargs):
         return backport.text(resource.dyn(key)(), **kwargs)
 
-    return time_utils.getTillTimeString(seconds, isRoundUp=useRoundUp, sourceStrGenerator=stringGen, removeLeadingZeros=removeLeadingZeros)
+    return time_utils.getTillTimeString(seconds, isMinutesRoundUp=useMinutesRoundUp, sourceStrGenerator=stringGen, removeLeadingZeros=removeLeadingZeros, isHoursRoundUp=useHoursRoundUp)
 
 
 class RentLeftFormatter(object):

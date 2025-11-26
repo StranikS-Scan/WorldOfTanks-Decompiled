@@ -15,9 +15,6 @@ class FrontlineAmmunitionSetupView(HangarAmmunitionSetupView):
         if contentID == R.views.frontline.lobby.tooltips.LevelReservesTooltip():
             from frontline.gui.impl.lobby.tooltips.level_reserves_tooltip import LevelReservesTooltip
             return LevelReservesTooltip()
-        if contentID == R.views.frontline.lobby.tooltips.NotEnoughPointsTooltip():
-            from frontline.gui.impl.lobby.tooltips.not_enough_points_tooltip import NotEnoughPointsTooltip
-            return NotEnoughPointsTooltip(event.getArgument('points'))
         return super(FrontlineAmmunitionSetupView, self).createToolTipContent(event, contentID)
 
     def _addListeners(self):

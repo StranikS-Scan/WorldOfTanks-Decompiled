@@ -19,7 +19,8 @@ def getTillTimeStringByRClass(timeValue, stringRClass, isRoundUp=False, removeLe
     else:
         fmtKey = 'lessMin'
     tm = time.struct_time(gmtime)
-    fmtValues = {'day': str(tm.tm_yday),
+    otherYearsdays = (tm.tm_year - 1970) * time_utils.DAYS_IN_YEAR
+    fmtValues = {'day': str(tm.tm_yday + otherYearsdays),
      'hour': time.strftime('%H', gmtime) if not removeLeadingZeros else str(tm.tm_hour),
      'min': time.strftime('%M', gmtime) if not removeLeadingZeros else str(tm.tm_min),
      'sec': time.strftime('%S', gmtime)}

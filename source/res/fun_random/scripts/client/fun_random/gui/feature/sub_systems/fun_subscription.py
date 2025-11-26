@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/feature/sub_systems/fun_subscription.py
+from __future__ import absolute_import
 import typing
 from Event import SuspendedEventManager, SuspendedEvent
 from fun_random.gui.shared import g_funEventBus
@@ -16,45 +17,18 @@ class FunSubscription(IFunRandomController.IFunSubscription):
         self.__em = SuspendedEventManager()
         self.__handleEvent = SuspendedEvent(self.__em)
         self.__handleEvent += g_funEventBus.handleEvent
-        self.__eventsBridges = ((events.AmmunitionInjectEvent(events.AmmunitionInjectEvent.INVALIDATE_INJECT_VIEW),
+        self.__eventsBridges = ((events.BoostersControllerEvent(events.BoostersControllerEvent.UPDATE_GAMEMODE_STATUS),
           EVENT_BUS_SCOPE.LOBBY,
           self.__addSubModesListener,
           (True,),
-          {}),
-         (events.BoostersControllerEvent(events.BoostersControllerEvent.UPDATE_GAMEMODE_STATUS),
+          {}), (events.GameSessionEvent(events.GameSessionEvent.UPDATE_KICK_NOTIFICATION),
           EVENT_BUS_SCOPE.LOBBY,
           self.__addSubModesListener,
           (True,),
-          {}),
-         (events.GameSessionEvent(events.GameSessionEvent.UPDATE_KICK_NOTIFICATION),
+          {}), (events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.UPDATE_PREBATTLE_CONTROLS),
           EVENT_BUS_SCOPE.LOBBY,
           self.__addSubModesListener,
           (True,),
-          {}),
-         (events.DailyQuestWidgetEvent(events.DailyQuestWidgetEvent.UPDATE_QUESTS_VISIBILITY),
-          EVENT_BUS_SCOPE.LOBBY,
-          self.__addSubModesListener,
-          (True,),
-          {}),
-         (events.HangarEvent(events.HangarEvent.UPDATE_ALERT_MESSAGE),
-          EVENT_BUS_SCOPE.LOBBY,
-          self.__addSubModesListener,
-          (True, True),
-          {}),
-         (events.HangarEvent(events.HangarEvent.UPDATE_PREBATTLE_ENTITY),
-          EVENT_BUS_SCOPE.LOBBY,
-          self.__addSubModesListener,
-          (True,),
-          {}),
-         (events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.UPDATE_PREBATTLE_CONTROLS),
-          EVENT_BUS_SCOPE.LOBBY,
-          self.__addSubModesListener,
-          (True,),
-          {}),
-         (events.MissionsViewEvent(events.MissionsViewEvent.EVENTS_FULL_UPDATE),
-          EVENT_BUS_SCOPE.LOBBY,
-          self.__addSubModesListener,
-          (),
           {}))
 
     def fini(self):

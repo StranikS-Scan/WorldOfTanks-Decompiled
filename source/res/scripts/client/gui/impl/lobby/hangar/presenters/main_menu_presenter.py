@@ -5,6 +5,7 @@ import logging
 import typing
 from constants import GF_RES_PROTOCOL, PremiumConfigs, DAILY_QUESTS_CONFIG
 from PlayerEvents import g_playerEvents
+from frameworks.wulf import ViewStatus
 from gui.clans.clan_cache import g_clanCache
 from gui.impl.gen.view_models.views.lobby.hangar.main_menu_model import MainMenuModel
 from gui.impl.lobby.hangar.presenters.utils import fillMenuItems
@@ -34,6 +35,8 @@ class MainMenuPresenter(ViewComponent[MainMenuModel], ClanEmblemsHelper, IGlobal
         return super(MainMenuPresenter, self).getViewModel()
 
     def onClanEmblem32x32Received(self, clanDbID, emblem):
+        if self.viewStatus in [ViewStatus.DESTROYED, ViewStatus.DESTROYING]:
+            return
         self.__removeClanIconFromMemory()
         if emblem:
             self.__clanIconID = self.getMemoryTexturePath(emblem, temp=False)

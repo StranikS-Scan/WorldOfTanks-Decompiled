@@ -23,6 +23,7 @@
     <R_123M>	25	</R_123M>
     <R_123_OSP3>	26	</R_123_OSP3>
     <RT10_26P_W>	27	</RT10_26P_W>
+    <R_113_GC>	30	</R_113_GC>
     <R_123S>	29	</R_123S>
     <R_113_CFE_A>	28	</R_113_CFE_A>
     <R_123_7x7>	502	</R_123_7x7>
@@ -224,12 +225,12 @@
       <userString>	#poland_vehicles:R_113_CFE_A	</userString>
       <tags></tags>
       <level>	10	</level>
-      <price>	55000	</price>
+      <price>	52000	</price>
       <notInShop>	true	</notInShop>
       <weight>	110	</weight>
       <distance>	730	</distance>
-      <maxHealth>	230	</maxHealth>
-      <maxRegenHealth>	115	</maxRegenHealth>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </R_113_CFE_A>
     <R_123>
@@ -338,6 +339,18 @@
       <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	1.5	</repairCost>
     </_9RM_O>
+    <R_113_GC>
+      <userString>	#poland_vehicles:R_113_GC	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	55000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	230	</maxHealth>
+      <maxRegenHealth>	115	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </R_113_GC>
     <Development_Radio>
       <userString>	Development Radio	</userString>
       <tags></tags>

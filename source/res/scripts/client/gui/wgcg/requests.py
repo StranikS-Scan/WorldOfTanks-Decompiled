@@ -10,23 +10,24 @@ from gui.shared.rq_cooldown import RequestCooldownManager, REQUEST_SCOPE
 from gui.shared.utils.requesters.RequestsController import RequestsController
 from gui.shared.utils.requesters.abstract import Response, ClientRequestsByIDProcessor
 from gui.wgcg.advent_calendar.handlers import AdventCalendarRequestHandlers
+from gui.wgcg.agate.handlers import AgateRequestHandlers
 from gui.wgcg.base.handlers import BaseRequestHandlers
 from gui.wgcg.clan.handlers import ClanRequestHandlers
 from gui.wgcg.clan_supply.handlers import ClanSupplyRequestHandlers
+from gui.wgcg.craftmachine.handlers import CraftmachineRequestHandlers
 from gui.wgcg.elen.handlers import ElenRequestHandlers
-from gui.wgcg.agate.handlers import AgateRequestHandlers
-from gui.wgcg.utils.handlers import UtilsRequestHandlers
+from gui.wgcg.external_battle_handlers import BaseExternalBattleUnitRequestHandlers
+from gui.wgcg.gift_system.handlers import GiftSystemRequestHandlers
 from gui.wgcg.hof.handlers import HofRequestHandlers
+from gui.wgcg.ingame_tournaments.handlers import IngameTournamentHandlers
+from gui.wgcg.loadouts_assistant.handlers import LoadoutsAssistantRequestHandlers
 from gui.wgcg.mapbox.handlers import MapboxRequestHandlers
 from gui.wgcg.promo_screens.handlers import PromoScreensRequestHandlers
 from gui.wgcg.rank.handlers import RankRequestHandlers
 from gui.wgcg.settings import WebRequestDataType
-from gui.wgcg.external_battle_handlers import BaseExternalBattleUnitRequestHandlers
-from gui.wgcg.craftmachine.handlers import CraftmachineRequestHandlers
-from gui.wgcg.gift_system.handlers import GiftSystemRequestHandlers
 from gui.wgcg.uilogging.handlers import UILoggingRequestHandlers
+from gui.wgcg.utils.handlers import UtilsRequestHandlers
 from gui.wgcg.wot_shop.handlers import WotShopRequestHandlers
-from gui.wgcg.loadouts_assistant.handlers import LoadoutsAssistantRequestHandlers
 
 class WgcgRequestResponse(Response):
 
@@ -117,6 +118,7 @@ class WgcgRequestsController(RequestsController):
         self.__handlers.update(WotShopRequestHandlers(requester).get())
         self.__handlers.update(ClanSupplyRequestHandlers(requester).get())
         self.__handlers.update(LoadoutsAssistantRequestHandlers(requester).get())
+        self.__handlers.update(IngameTournamentHandlers(requester).get())
 
     def fini(self):
         super(WgcgRequestsController, self).fini()

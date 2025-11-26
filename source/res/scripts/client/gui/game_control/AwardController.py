@@ -11,6 +11,7 @@ from itertools import chain, ifilter
 import BigWorld
 import typing
 from adisp import adisp_process
+from battle_results import ARENA_BONUS_TYPE_TO_SM_TYPE_BATTLE_RESULT
 from gui.impl.lobby.personal_missions_30.personal_mission_constants import REWARDS_VIEW_TYPES
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from items.components.c11n_constants import Rarity
@@ -99,7 +100,7 @@ from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.gui.sounds import ISoundsController
 from skeletons.gui.system_messages import ISystemMessages
 if typing.TYPE_CHECKING:
-    from typing import Tuple, Union, Dict, Literal, Optional
+    from typing import Tuple, Union, Dict, Literal, Optional, Container
     from messenger.proto.bw.wrappers import _ServiceChannelData
     from gui.platform.catalog_service.controller import _PurchaseDescriptor
 _logger = logging.getLogger(__name__)
@@ -340,7 +341,7 @@ class MultiTypeServiceChannelHandler(ServiceChannelHandler):
 
     def _needToShowAward(self, ctx):
         _, message = ctx
-        return message is not None and message.type in self.__types and message.data is not None
+        return message is not None and message.data is not None and message.type in self.__types
 
     def _showAward(self, ctx):
         pass
@@ -1854,7 +1855,9 @@ class DailyQuestHandlerBase(MultiTypeServiceChannelHandler):
     winbackController = dependency.descriptor(IWinbackController)
 
     def __init__(self, awardCtrl):
-        super(DailyQuestHandlerBase, self).__init__((SYS_MESSAGE_TYPE.tokenQuests.index(), SYS_MESSAGE_TYPE.battleResults.index()), awardCtrl)
+        handledTypes = ARENA_BONUS_TYPE_TO_SM_TYPE_BATTLE_RESULT.values()
+        handledTypes.append(SYS_MESSAGE_TYPE.tokenQuests.index())
+        super(DailyQuestHandlerBase, self).__init__(handledTypes, awardCtrl)
         self.quests = OrderedDict()
         self.messages = []
 
@@ -2075,10 +2078,10 @@ class EmailConfirmationQuestHandler(ServiceChannelHandler):
         return
 
 
-class PersonalMission3OperationAwardHandler(ServiceChannelHandler):
+class PersonalMission3OperationAwardHandler(MultiTypeServiceChannelHandler):
 
     def __init__(self, awardCtrl):
-        super(PersonalMission3OperationAwardHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
+        super(PersonalMission3OperationAwardHandler, self).__init__((SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index()), awardCtrl)
 
     def _showAward(self, ctx, clientCtx=None):
         _, message = ctx

@@ -35,17 +35,15 @@ class PersonalDeathZonesGUIController(IBattleController):
 
     def onPlayerEntered(self, deathZone):
         self._deathZones[deathZone.id] = weakref.proxy(deathZone)
-        self._updateWarningNotification()
+        self._updateWarningNotification(deathZone, True)
         self.onPlayerEnteredDeathZone(deathZone)
 
     def onPlayerLeft(self, deathZone):
         if self._deathZones.pop(deathZone.id, None):
-            self._updateWarningNotification()
+            self._updateWarningNotification(deathZone, False)
             self.onPlayerLeftDeathZone(deathZone)
         return
 
-    def _updateWarningNotification(self):
-        zone = min(self._deathZones.itervalues(), key=lambda d: d.adjustedDelay) if self._deathZones else None
-        zoneViewStateParams = (zone is not None, zone.delay if zone else 0, zone.launchTime if zone else 0)
+    def _updateWarningNotification(self, zone, visible):
+        zoneViewStateParams = (visible, zone.delay if visible else 0, zone.launchTime if visible else 0)
         BigWorld.player().updatePersonalDeathZoneWarningNotification(*zoneViewStateParams)
-        return

@@ -188,6 +188,8 @@ class LobbyMenu(LobbyMenuMeta):
             self.__updateManualBtn()
         if 'isFieldPostEnabled' in diff:
             self.__updatePostButton()
+        if constants.MISC_GUI_SETTINGS in diff:
+            self.__updateNewSettingsCount()
 
     def __updatePostButton(self):
         isVisible = self.promo.isActive() and not self.__isInQueue()

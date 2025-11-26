@@ -48,7 +48,7 @@ class BuyLevelsPresenter(ViewComponent[BattlePassBuyLevelViewModel]):
     def updateInitialData(self, **kwargs):
         self.__backCallback = kwargs.get('backCallback')
         newChapterID = kwargs.get('chapterID')
-        if newChapterID is not None and (newChapterID != self.__chapterID or kwargs.get('reset', False)):
+        if newChapterID is not None and newChapterID != self.__chapterID:
             self.__chapterID = newChapterID
             self.__package = PackageAnyLevels(self.__chapterID)
         self.viewModel.setIsWalletAvailable(self.__wallet.isAvailable)
@@ -61,11 +61,15 @@ class BuyLevelsPresenter(ViewComponent[BattlePassBuyLevelViewModel]):
         return
 
     def activate(self):
-        self.__battlePass.onLevelUp += self.__onLevelUp
+        self._subscribe()
 
     def deactivate(self):
-        self.__battlePass.onLevelUp -= self.__onLevelUp
+        self.__chapterID = None
+        self.__package = None
+        self.__clearTooltips()
+        self._unsubscribe()
         g_eventBus.removeListener(events.BattlePassEvent.AWARD_VIEW_CLOSE, self.__onAwardViewClose, EVENT_BUS_SCOPE.LOBBY)
+        return
 
     def onExtraChapterExpired(self):
         if self.__battlePass.isExtraChapter(self.__chapterID):
@@ -125,7 +129,11 @@ class BuyLevelsPresenter(ViewComponent[BattlePassBuyLevelViewModel]):
         self.__battlePass.onLevelUp += self.__onLevelUp
 
     def __onAwardViewClose(self, _):
-        showBattlePass(R.aliases.battle_pass.ChapterChoice() if self.__battlePass.isChapterCompleted(self.__chapterID) else R.invalid())
+        if self.__battlePass.isChapterCompleted(self.__chapterID):
+            if not self.__battlePass.isHoliday():
+                showBattlePass(R.aliases.battle_pass.ChapterChoice())
+        else:
+            showBattlePass(R.invalid())
 
     def __onChangeSelectedLevels(self, args):
         self.__updateConfirmAnyNumberModel(args.get('count'))
@@ -148,9 +156,9 @@ class BuyLevelsPresenter(ViewComponent[BattlePassBuyLevelViewModel]):
         model = self.viewModel
         if model.getState() == model.CONFIRM_ANY_NUMBER_STATE:
             levelsDelta = self.__package.getCurrentLevel() - model.confirmAnyNumber.getLevelsPassed()
-            packageLevelsCount = self.__package.getLevelsCount()
-            if levelsDelta and packageLevelsCount > 1:
-                self.__package.setLevels(packageLevelsCount - levelsDelta)
+            dynamicLevelsCount = self.__package.getDynamicLevelsCount()
+            if levelsDelta and dynamicLevelsCount > 1:
+                self.__package.setLevels(dynamicLevelsCount - levelsDelta)
             with model.confirmAnyNumber.transaction() as tx:
                 self.__setConfirmAnyNumberModel(tx)
         elif model.getState() == model.REWARDS_STATE:

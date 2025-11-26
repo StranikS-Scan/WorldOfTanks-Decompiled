@@ -32,13 +32,8 @@ _AVAILABLE_GUI_TYPES_LABELS = {constants.ARENA_BONUS_TYPE.REGULAR: constants.ARE
  constants.ARENA_BONUS_TYPE.TOURNAMENT_REGULAR: constants.ARENA_GUI_TYPE.TRAINING}
 _AVAILABLE_BONUS_TYPES_LABELS = {constants.ARENA_BONUS_TYPE.CYBERSPORT: 'team7x7'}
 _RELATIONS = formatters.RELATIONS
+_ALL_RELATIONS = _RELATIONS.ALL()
 _RELATIONS_SCHEME = formatters.RELATIONS_SCHEME
-_RELATIONS_HANDLERS = {_RELATIONS.LS: lambda source, toCompare: source < toCompare,
- _RELATIONS.LSQ: lambda source, toCompare: source <= toCompare,
- _RELATIONS.EQ: lambda source, toCompare: source == toCompare,
- _RELATIONS.NEQ: lambda source, toCompare: source != toCompare,
- _RELATIONS.GT: lambda source, toCompare: source > toCompare,
- _RELATIONS.GTQ: lambda source, toCompare: source >= toCompare}
 _ET = constants.EVENT_TYPE
 _TOKEN_REQUIREMENT_QUESTS = set(_ET.LIKE_BATTLE_QUESTS + _ET.LIKE_TOKEN_QUESTS)
 
@@ -68,20 +63,31 @@ class GROUP_TYPE(CONST_CONTAINER):
     AND = 'and'
 
 
+class CLASS_TYPE(CONST_CONTAINER):
+    CONDITION = 'Condition'
+    CONDITION_GROUP = 'ConditionsGroup'
+
+
 _SORT_ORDER = ('igrType', 'premiumPlusAccount', 'premiumAccount', 'inClan', 'GR', 'accountDossier', 'vehiclesUnlocked', 'vehiclesOwned', 'token', 'hasReceivedMultipliedXP', 'vehicleDossier', 'vehicleDescr', 'customization', 'bonusTypes', 'isSquad', 'mapCamouflageKind', 'geometryNames', 'win', 'isAlive', 'achievements', 'results', 'unitResults', 'vehicleKills', 'vehicleDamage', 'vehicleStun', 'clanKills', 'multiStunEvent', 'firstBloodcumulative', 'cumulativeExt', 'cumulativeSum', 'vehicleKillsCumulative', 'vehicleDamageCumulative', 'vehicleStunCumulative')
 _SORT_ORDER_INDICES = dict(((name, idx) for idx, name in enumerate(_SORT_ORDER)))
 
 def _handleRelation(relation, source, toCompare):
-    handler = _RELATIONS_HANDLERS.get(relation, None)
-    if handler:
-        return handler(source, toCompare)
-    else:
-        LOG_WARNING('Unknown kind of values relation', relation, source, toCompare)
-        return False
+    if relation == _RELATIONS.EQ:
+        return source == toCompare
+    if relation == _RELATIONS.GT:
+        return source > toCompare
+    if relation == _RELATIONS.GTQ:
+        return source >= toCompare
+    if relation == _RELATIONS.LS:
+        return source < toCompare
+    if relation == _RELATIONS.LSQ:
+        return source <= toCompare
+    LOG_WARNING('Unknown kind of values relation', relation, source, toCompare)
+    return False
 
 
 def _findRelation(condDataKeys):
-    res = set(_RELATIONS.ALL()) & set(condDataKeys)
+    res = set(_ALL_RELATIONS) & set(condDataKeys)
     return res.pop() if res else None
 
 
@@ -168,7 +174,7 @@ class _Condition(_Typeable):
 
     @property
     def classType(self):
-        pass
+        return CLASS_TYPE.CONDITION
 
     def getName(self):
         return self._name
@@ -228,7 +234,7 @@ class _ConditionsGroup(_AvailabilityCheckable, _Negatable, _Typeable):
 
     @property
     def classType(self):
-        pass
+        return CLASS_TYPE.CONDITION_GROUP
 
     def getName(self):
         return self.type

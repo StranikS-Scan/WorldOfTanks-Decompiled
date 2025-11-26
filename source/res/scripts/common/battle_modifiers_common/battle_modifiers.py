@@ -100,6 +100,13 @@ class BattleParams(object):
     AUTO_SHOOT_DISPERSION_PER_SEC = 'autoShootDispersionPerSec'
     AUTO_SHOOT_MAX_SHOT_DISPERSION_FACTOR = 'autoShootMaxShotDispersionFactor'
     GUN_MAIN_PREFAB = 'gunMainPrefab'
+    AMMO_BAY_HEALTH = 'ammoBayHealth'
+    ENGINE_HEALTH = 'engineHealth'
+    FUEL_TANK_HEALTH = 'fuelTankHealth'
+    TURRET_ROTATOR_HEALTH = 'turretRotatorHealth'
+    SURVEYING_DEVICE_HEALTH = 'surveyingDeviceHealth'
+    CHASSIS_HEALTH = 'chassisHealth'
+    GUN_HEALTH = 'gunHealth'
     FAKE_MODIFIER = 'fakeModifier'
     VSE_MODIFIER = 'vseModifier'
     DYNAMIC = {FAKE_MODIFIER, VSE_MODIFIER}

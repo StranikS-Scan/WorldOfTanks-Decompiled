@@ -69,6 +69,9 @@ class _ServiceItemShopMixin(object):
         intCD = makeIntCompactDescrByID('customizationItem', C11N_ITEM_TYPE_MAP.get(itemTypeID), itemID)
         return self.itemsCache.items.getItemByCD(intCD)
 
+    def getTypedItemsByCDs(self, itemTypeID, itemCDs):
+        return self.itemsCache.items.getTypedItemsByCDs(itemTypeID, itemCDs)
+
     def getItemByCD(self, itemCD):
         return self.itemsCache.items.getItemByCD(itemCD)
 
@@ -177,11 +180,16 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
     def isOver3dScene(self):
         return self._isOver3dScene
 
+    @property
+    def lastAppliedSeason(self):
+        return self._lastAppliedSeason
+
     def __init__(self):
         super(CustomizationService, self).__init__()
         self._helper = None
         self._mode = HighlightingMode.PAINT_REGIONS
         self._eventsManager = Event.EventManager()
+        self._lastAppliedSeason = SeasonType.SUMMER
         self._needHelperRestart = False
         self._isOver3dScene = False
         self.onRegionHighlighted = Event.Event(self._eventsManager)
@@ -259,6 +267,10 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
             if modeId is not None:
                 self.__customizationCtx.changeMode(modeId, tabId, source)
         return
+
+    def saveLastWrittenDataFromCtx(self):
+        if self.__customizationCtx:
+            self._lastAppliedSeason = self.__customizationCtx.season
 
     def destroyCtx(self):
         if self.__customizationCtx is not None:

@@ -43,6 +43,9 @@ class BattlePassPackage(object):
     def getLevelsCount(self):
         pass
 
+    def getDynamicLevelsCount(self):
+        pass
+
     def getCurrentLevel(self):
         return self.__battlePass.getLevelInChapter(chapterID=self.__chapterID)
 
@@ -144,6 +147,9 @@ class PackageAnyLevels(BattlePassPackage):
     def getLevelsCount(self):
         maxLevelCount = max(self._getMaxLevel() - self.getCurrentLevel(), 0)
         return min(maxLevelCount, self.__dynamicLevelsCount)
+
+    def getDynamicLevelsCount(self):
+        return self.__dynamicLevelsCount
 
     def isLocked(self):
         chapterID = self.getChapterID()

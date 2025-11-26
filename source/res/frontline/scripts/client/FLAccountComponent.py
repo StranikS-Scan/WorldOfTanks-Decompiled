@@ -44,6 +44,10 @@ class FLAccountComponent(BaseAccountExtensionComponent):
     def resetEpicMetaGame(self, metaLevel=0, abilityPoints=0, callback=skipResponse):
         self.entity._doCmdInt2(frontline_account_commands.CMD_RESET_EPIC_META_GAME, metaLevel, abilityPoints, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
 
+    def addFamePoints(self, famePoints):
+        self.entity._doCmdInt(frontline_account_commands.CMD_FRONTLINE_ADD_FAME_POINTS, famePoints, None)
+        return
+
     def flGameModeSetup(self, mode):
         self.entity._doCmdInt(frontline_account_commands.CMD_FL_GAME_MODE_SETUP, mode, None)
         return

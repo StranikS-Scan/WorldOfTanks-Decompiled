@@ -87,6 +87,9 @@ class ViewImplAdaptor(DisposableEntity, ViewInterface):
     def setCurrentScope(self, scope):
         self.__scope = scope
 
+    def getParentWindow(self):
+        return self.__window
+
     def isLoaded(self):
         return False if self.__window is None else self.__window.windowStatus == WindowStatus.LOADED
 

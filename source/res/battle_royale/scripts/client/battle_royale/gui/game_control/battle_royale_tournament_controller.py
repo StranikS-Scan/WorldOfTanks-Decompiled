@@ -32,7 +32,6 @@ class BattleRoyaleTournamentController(IBattleRoyaleTournamentController):
 
     def __init__(self):
         self.__isAvailable = False
-        self.__prbType = PREBATTLE_TYPE.BATTLE_ROYALE
         self.__tokens = {}
         self.__currentToken = None
         self.__participants = None

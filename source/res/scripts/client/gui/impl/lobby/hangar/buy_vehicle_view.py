@@ -576,11 +576,14 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
             if not self.__isPurchaseCurrencyAvailable(currency):
                 isEnabled &= totalPriceMoney.get(currency) <= statsMoney.get(currency)
 
-        if self.__isTradeIn and self.__tradeInVehicleToSell is not None:
-            isValidTradeOff = self.__isValidTradeOffSelected() and self.__tradeInVehicleToSell.isReadyToTradeOff
-            if not isValidTradeOff:
+        if self.__isTradeIn:
+            if self.__tradeInVehicleToSell is not None:
+                isValidTradeOff = self.__isValidTradeOffSelected() and self.__tradeInVehicleToSell.isReadyToTradeOff
+                if not isValidTradeOff:
+                    isEnabled = False
+                    self.viewModel.buyButtonTooltip.setTooltipId(BuyVehicleViewModel.TRADE_IN_STATE_NOT_AVAILABLE_TOOLTIP)
+            elif self.__vehicle.isHidden:
                 isEnabled = False
-                self.viewModel.buyButtonTooltip.setTooltipId(BuyVehicleViewModel.TRADE_IN_STATE_NOT_AVAILABLE_TOOLTIP)
         slotIsOptional = self.__isTradeIn and self.__tradeInVehicleToSell is not None or self.__selectedRentID > 0
         if not self.__hasFreeSlots() and not self.isWithSlot and not slotIsOptional:
             isEnabled = False

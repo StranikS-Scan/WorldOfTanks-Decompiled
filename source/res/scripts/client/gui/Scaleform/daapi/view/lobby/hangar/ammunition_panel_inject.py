@@ -63,7 +63,8 @@ class AmmunitionPanelInject(AmmunitionPanelInjectMeta, IGlobalListener):
         self.as_clearHelpLayoutS()
 
     def __getInjectViewClass(self):
-        ammunitionPanelViewCls = collectAmmunitionPanelView(self.__hangarGuiCtrl.getAmmoInjectViewAlias())
+        currentPresetGetter = self.__hangarGuiCtrl.sfController.currentPresetGetter
+        ammunitionPanelViewCls = collectAmmunitionPanelView(currentPresetGetter.getAmmoInjectViewAlias())
         return ammunitionPanelViewCls if ammunitionPanelViewCls is not None else HangarAmmunitionPanelView
 
     def __invalidateInjectView(self, *_):

@@ -126,6 +126,9 @@ class _FunSubModesInfo(IFunRandomController.IFunSubModesInfo):
     def isEntryPointAvailable(self):
         return False
 
+    def getEventEndDate(self, now=None, subModesIDs=None):
+        pass
+
     def getLeftTimeToPrimeTimesEnd(self, now=None, subModes=None):
         pass
 

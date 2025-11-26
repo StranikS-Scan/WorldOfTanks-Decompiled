@@ -6,6 +6,7 @@ from gui.prb_control import settings
 from messenger import m_constants
 COMP7_HANGAR_ALIAS = COMP7_HANGAR_ALIASES.COMP7_LOBBY_HANGAR
 COMP7_ENTRY_POINT_ALIAS = 'Comp7EntryPoint'
+INFO_PAGE_WCI = 'infoPageWci'
 
 class FUNCTIONAL_FLAG(settings.FUNCTIONAL_FLAG, ConstInjector):
     COMP7 = 536870912

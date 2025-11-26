@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/VehicleHealingComponent.py
-import BigWorld
 from gui.Scaleform.genConsts.BATTLE_MARKER_STATES import BATTLE_MARKER_STATES
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from VehicleAbilityBaseComponent import VehicleAbilityBaseComponent
@@ -18,16 +17,22 @@ class VehicleHealingComponent(VehicleAbilityBaseComponent):
         self._updateVisuals()
 
     def _updateTimer(self, data):
-        data.update({'isInactivation': self.isInactivation,
-         'isSourceVehicle': self.getIsSourceVehicle()})
+        data.update(self._getHealingArgs())
         super(VehicleHealingComponent, self)._updateTimer(data)
 
     def _updateMarker(self, data, isHide=False):
-        data.update({'isSourceVehicle': self.getIsSourceVehicle()})
+        data.update({'isSourceVehicle': self.isSourceVehicle})
         super(VehicleHealingComponent, self)._updateMarker(data, isHide)
 
-    def getIsSourceVehicle(self):
-        return self.entity.id == BigWorld.player().getObservedVehicleID()
+    def _destroy(self):
+        self._isDestroying = True
+        super(VehicleHealingComponent, self)._destroy()
 
     def _getDuration(self):
         return self._getEquipment(BattleRoyaleEquipments.HEAL_POINT).duration
+
+    def _getHealingArgs(self):
+        return {'isInactivation': self.isInactivation,
+         'isSourceVehicle': self.isSourceVehicle,
+         'isDestroying': self._isDestroying,
+         'senderKey': BattleRoyaleEquipments.HEAL_POINT}

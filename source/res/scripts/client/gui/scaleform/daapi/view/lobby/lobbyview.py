@@ -25,7 +25,7 @@ from gui.impl.pub.view_component import ViewComponent
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import EVENT_BUS_SCOPE, events
-from gui.shared.system_factory import collectViewsForMonitoring
+from gui.shared.system_factory import registerLifecycleHandledSubViews, collectLifecycleHandledSubViews, collectViewsForMonitoring
 from helpers import dependency, i18n, uniprof
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
@@ -34,40 +34,40 @@ from skeletons.gui.game_control import IIGRController, IMapsTrainingController, 
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
+registerLifecycleHandledSubViews([VIEW_ALIAS.LOBBY_HANGAR,
+ VIEW_ALIAS.LEGACY_LOBBY_HANGAR,
+ VIEW_ALIAS.LOBBY_STORE,
+ VIEW_ALIAS.LOBBY_STORAGE,
+ VIEW_ALIAS.LOBBY_PROFILE,
+ PREBATTLE_ALIASES.TRAINING_LIST_VIEW_PY,
+ PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY,
+ VIEW_ALIAS.LOBBY_CUSTOMIZATION,
+ VIEW_ALIAS.IMAGE_VIEW,
+ VIEW_ALIAS.VEHICLE_PREVIEW,
+ VIEW_ALIAS.STYLE_PREVIEW,
+ VIEW_ALIAS.VEHICLE_COMPARE,
+ VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS,
+ PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS,
+ PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_AWARD_VIEW_ALIAS,
+ PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_VIEW_ALIAS,
+ PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS,
+ PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATION_AWARDS_SCREEN_ALIAS,
+ VIEW_ALIAS.VEHICLE_COMPARE_MAIN_CONFIGURATOR,
+ VIEW_ALIAS.LOBBY_RESEARCH,
+ VIEW_ALIAS.LOBBY_TECHTREE,
+ VIEW_ALIAS.BATTLE_QUEUE,
+ VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE,
+ RANKEDBATTLES_ALIASES.RANKED_BATTLES_VIEW_ALIAS,
+ VIEW_ALIAS.VEHICLE_HUB,
+ VIEW_ALIAS.POST_BATTLE_RESULTS,
+ VIEW_ALIAS.USER_MISSIONS_HUB_CONTAINER])
 
 class _LobbySubViewsLifecycleHandler(IViewLifecycleHandler):
     __WAITING_LBL = 'loadPage'
-    __SUB_VIEWS = (VIEW_ALIAS.LOBBY_HANGAR,
-     VIEW_ALIAS.LEGACY_LOBBY_HANGAR,
-     VIEW_ALIAS.LOBBY_STORE,
-     VIEW_ALIAS.LOBBY_STORAGE,
-     VIEW_ALIAS.LOBBY_PROFILE,
-     PREBATTLE_ALIASES.TRAINING_LIST_VIEW_PY,
-     PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY,
-     VIEW_ALIAS.LOBBY_CUSTOMIZATION,
-     VIEW_ALIAS.IMAGE_VIEW,
-     VIEW_ALIAS.VEHICLE_PREVIEW,
-     VIEW_ALIAS.STYLE_PREVIEW,
-     VIEW_ALIAS.VEHICLE_COMPARE,
-     VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS,
-     PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS,
-     PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_AWARD_VIEW_ALIAS,
-     PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_VIEW_ALIAS,
-     PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS,
-     PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATION_AWARDS_SCREEN_ALIAS,
-     VIEW_ALIAS.VEHICLE_COMPARE_MAIN_CONFIGURATOR,
-     VIEW_ALIAS.LOBBY_RESEARCH,
-     VIEW_ALIAS.LOBBY_TECHTREE,
-     VIEW_ALIAS.BATTLE_QUEUE,
-     VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE,
-     RANKEDBATTLES_ALIASES.RANKED_BATTLES_VIEW_ALIAS,
-     VIEW_ALIAS.VEHICLE_HUB,
-     VIEW_ALIAS.POST_BATTLE_RESULTS,
-     VIEW_ALIAS.USER_MISSIONS_HUB_CONTAINER)
     __DYNAMIC_VIEWS = (R.views.lobby.dog_tags.AnimatedDogTagsView(),)
 
     def __init__(self):
-        super(_LobbySubViewsLifecycleHandler, self).__init__([ ViewKey(alias) for alias in self.__SUB_VIEWS + tuple(collectViewsForMonitoring()) ] + [ ViewKeyDynamic(alias) for alias in self.__DYNAMIC_VIEWS ])
+        super(_LobbySubViewsLifecycleHandler, self).__init__([ ViewKey(alias) for alias in collectLifecycleHandledSubViews() + collectViewsForMonitoring() ] + [ ViewKeyDynamic(alias) for alias in self.__DYNAMIC_VIEWS ])
         self.__loadingSubViews = set()
         self.__isWaitingVisible = False
 
@@ -130,14 +130,14 @@ class LobbyHeaderInject(LobbyPanelInjector):
     _hangarGuiCtrl = dependency.descriptor(IHangarGuiController)
 
     def _getViewType(self):
-        return self._hangarGuiCtrl.getLobbyHeaderHelper().getHeaderType()
+        return self._hangarGuiCtrl.currentGuiProvider.getLobbyHeaderHelper().getHeaderType()
 
 
 class LobbyFooterInject(LobbyPanelInjector):
     _hangarGuiCtrl = dependency.descriptor(IHangarGuiController)
 
     def _getViewType(self):
-        return self._hangarGuiCtrl.getLobbyHeaderHelper().getFooterType()
+        return self._hangarGuiCtrl.currentGuiProvider.getLobbyHeaderHelper().getFooterType()
 
 
 class LobbyView(LobbyPageMeta, IWaitingWidget, IGlobalListener):

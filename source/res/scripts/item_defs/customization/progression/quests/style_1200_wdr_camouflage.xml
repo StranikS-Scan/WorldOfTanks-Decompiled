@@ -1,0 +1,141 @@
+<style_1200_wdr_camouflage.xml>
+  <quests>
+    <tokenQuest>
+      <progressExpiryTime>	28.01.2100 00:01	</progressExpiryTime>
+      <enabled>	true	</enabled>
+      <id>	wdr:style_1200:claim_stage_1	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	wdr:claim_1200_stage_1	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	1	</consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_1200_1	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	1	</limit>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <progressExpiryTime>	28.01.2100 00:01	</progressExpiryTime>
+      <enabled>	true	</enabled>
+      <id>	wdr:style_1200:claim_stage_2	</id>
+      <hidden>	true	</hidden>
+      <description>
+        <key>	#vehicle_customization:customization/tooltip/quests/wdr_style_1200_1_stage_2/condition	</key>
+      </description>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	wdr:claim_1200_stage_2	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	1	</consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_1200_1	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	2	</count>
+          <limit>	2	</limit>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <progressExpiryTime>	28.01.2100 00:01	</progressExpiryTime>
+      <enabled>	true	</enabled>
+      <id>	wdr:style_1200:claim_stage_3	</id>
+      <hidden>	true	</hidden>
+      <description>
+        <key>	#vehicle_customization:customization/tooltip/quests/wdr_style_1200_1_stage_3/condition	</key>
+      </description>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	wdr:claim_1200_stage_3	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	1	</consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_1200_1	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	3	</count>
+          <limit>	3	</limit>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <progressExpiryTime>	28.01.2100 00:01	</progressExpiryTime>
+      <enabled>	true	</enabled>
+      <id>	wdr:style_1200:claim_stage_4	</id>
+      <hidden>	true	</hidden>
+      <description>
+        <key>	#vehicle_customization:customization/tooltip/quests/wdr_style_1200_1_stage_4/condition	</key>
+      </description>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	wdr:claim_1200_stage_4	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	1	</consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_1200_1	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	4	</count>
+          <limit>	4	</limit>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <progressExpiryTime>	28.01.2100 00:01	</progressExpiryTime>
+      <enabled>	true	</enabled>
+      <id>	wdr:style_1200:claim_stage_5	</id>
+      <hidden>	true	</hidden>
+      <description>
+        <key>	#vehicle_customization:customization/tooltip/quests/wdr_style_1200_1_stage_5/condition	</key>
+      </description>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	wdr:claim_1200_stage_5	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	1	</consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_1200_1	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	5	</count>
+          <limit>	5	</limit>
+        </token>
+      </bonus>
+    </tokenQuest>
+  </quests>
+</style_1200_wdr_camouflage.xml>

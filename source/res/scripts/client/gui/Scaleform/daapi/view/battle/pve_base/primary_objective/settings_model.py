@@ -5,7 +5,7 @@ from gui.Scaleform.daapi.view.battle.pve_base.base.settings_model import BaseWid
 from pve_battle_hud import PrimaryObjectiveState
 
 class PrimaryObjectiveServerModel(BaseWidgetSettingsModel):
-    __slots__ = ('state', 'timer', 'finishTime', 'progresses', 'params')
+    __slots__ = ('timer', 'finishTime', 'progresses', 'params')
 
     def __init__(self, id, type, state, timer, finishTime, progresses, params):
         super(PrimaryObjectiveServerModel, self).__init__(id, type, PrimaryObjectiveState(state))

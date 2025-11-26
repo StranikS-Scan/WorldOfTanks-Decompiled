@@ -8,11 +8,12 @@ import weakref
 from abc import ABCMeta
 from collections import defaultdict
 from functools import partial
+from typing import TYPE_CHECKING
 import WWISE
-from account_helpers.AccountSettings import BattleMatters, INTEGRATED_AUCTION_NOTIFICATIONS, IS_BATTLE_PASS_EXTRA_START_NOTIFICATION_SEEN, IS_BATTLE_PASS_START_NOTIFICATION_SEEN, LOOT_BOXES_WAS_FINISHED, LOOT_BOXES_WAS_STARTED, PROGRESSIVE_REWARD_VISITED, RECRUITS_NOTIFICATIONS, SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP, VEH_SKILL_TREE_POPUP_SHOWN, VEH_SKILL_TREE_RECORDED_NOFITICATION_NODE
+from account_helpers.AccountSettings import INTEGRATED_AUCTION_NOTIFICATIONS, IS_BATTLE_PASS_EXTRA_START_NOTIFICATION_SEEN, IS_BATTLE_PASS_START_NOTIFICATION_SEEN, LOOT_BOXES_WAS_FINISHED, LOOT_BOXES_WAS_STARTED, PROGRESSIVE_REWARD_VISITED, RECRUITS_NOTIFICATIONS, SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP, VEH_SKILL_TREE_POPUP_SHOWN, VEH_SKILL_TREE_RECORDED_NOFITICATION_NODE, BattleMatters
 from account_helpers.settings_core.settings_constants import SeniorityAwardsStorageKeys
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
-from gui.server_events.finders import PM_SWITCHER_CAMPAIGN, PM_CAMPAIGNS_IDS
+from gui.server_events.finders import PM_CAMPAIGNS_IDS, PM_SWITCHER_CAMPAIGN
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.impl.lobby.gf_notifications import GFNotificationTemplates
@@ -20,7 +21,6 @@ from gui.impl.lobby.gf_notifications.cache import getCache
 from gui.impl.lobby.vehicle_hub.sub_presenters.veh_skill_tree.utils import getCheapestAvailablePerk
 from helpers.events_handler import EventsHandler
 from helpers.time_utils import getTimestampByStrDate
-from typing import TYPE_CHECKING
 from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
 from adisp import adisp_process
@@ -38,7 +38,7 @@ from gui.clans.clan_account_profile import SYNC_KEYS
 from gui.clans.clan_helpers import ClanListener, isInClanEnterCooldown
 from gui.clans.settings import CLAN_APPLICATION_STATES
 from gui.collection.account_settings import isCollectionRenewSeen, isCollectionStartedSeen, isCollectionsUpdatedEntrySeen, setCollectionStartedSeen
-from gui.collection.collections_constants import COLLECTIONS_RENEW_EVENT_TYPE, COLLECTIONS_UPDATED_ENTRY_EVENT_TYPE, COLLECTION_START_EVENT_TYPE
+from gui.collection.collections_constants import COLLECTION_START_EVENT_TYPE, COLLECTIONS_RENEW_EVENT_TYPE, COLLECTIONS_UPDATED_ENTRY_EVENT_TYPE
 from gui.game_control.seniority_awards_controller import WDR_CURRENCY
 from gui.impl import backport
 from gui.impl.gen import R
@@ -71,7 +71,7 @@ from messenger.m_constants import PROTO_TYPE, SCH_CLIENT_MSG_TYPE, USER_ACTION_I
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
-from notification.decorators import BattleMattersReminderDecorator, BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C11nProgressiveItemDecorator, C2DProgressionStyleDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionCustomMessageDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, ExchangeRateDiscountDecorator, FriendshipRequestDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, LootBoxSystemDecorator, LowPriorityDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PostProgressionDecorator, PrbInviteDecorator, PrestigeFirstEntryDecorator, PrestigeLvlUpDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, SeniorityAwardsDecorator, WGNCPopUpDecorator, WinbackSelectableRewardReminderDecorator, PersonalMission3QuestDecorator, VehSkillTreePerkAvailableDecorator
+from notification.decorators import BattleMattersReminderDecorator, BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C2DProgressionStyleDecorator, C11nMessageDecorator, C11nProgressiveItemDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionCustomMessageDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, ExchangeRateDiscountDecorator, FriendshipRequestDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, LootBoxSystemDecorator, LowPriorityDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PersonalMission3QuestDecorator, PetSystemDecorator, PostProgressionDecorator, PrbInviteDecorator, PrestigeFirstEntryDecorator, PrestigeLvlUpDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, SeniorityAwardsDecorator, VehSkillTreePerkAvailableDecorator, WGNCPopUpDecorator, WinbackSelectableRewardReminderDecorator
 from notification.settings import NOTIFICATION_TYPE, NotificationData
 from personal_missions import PM_BRANCH
 from shared_utils import first
@@ -294,8 +294,10 @@ class ServiceChannelListener(_NotificationListener):
             return CollectionsLockButtonDecorator
         elif messageType == SYS_MESSAGE_TYPE.personalMission3Quest.index():
             return PersonalMission3QuestDecorator
+        elif self.__needToLowerPriority(messageType):
+            return LowPriorityDecorator
         else:
-            return LowPriorityDecorator if self.__needToLowerPriority(messageType) else MessageDecorator
+            return PetSystemDecorator if messageType == SYS_MESSAGE_TYPE.petAdded.index() else MessageDecorator
 
 
 class BaseReminderListener(_NotificationListener):
@@ -1981,7 +1983,7 @@ class BattleMattersTaskReminderListener(BaseReminderListener, EventsHandler):
 
     def _createNotificationData(self, priority, **ctx):
         currentQuest = self.__bmCtrl.getCurrentQuest()
-        data = {'questIndex': currentQuest.getOrder()}
+        data = {'questIndex': currentQuest.getOrder() if currentQuest else len(self.__bmCtrl.getCompletedBattleMattersQuests())}
         return NotificationData(self._getNotificationId(), data, priority, None)
 
     def _createDecorator(self, data):
@@ -1997,14 +1999,13 @@ class BattleMattersTaskReminderListener(BaseReminderListener, EventsHandler):
         self.__tryNotify()
 
     def __tryNotify(self):
-        isAdding = self.__bmCtrl.isActive() and self.__bmCtrl.getCurrentQuest() is not None
+        isAdding = self.__bmCtrl.isActive() or self.__bmCtrl.hasDelayedRewards()
         needToPopUp = self.__bmCtrl.progressWatcher.isJustBackFromBattle(reset=True) and (self.__isLongTimeWithoutProgress() or not self.__isShowedToday())
         priority = NotificationPriorityLevel.LOW
         if isAdding and needToPopUp:
             priority = NotificationPriorityLevel.MEDIUM
             AccountSettings.setBattleMattersSetting(BattleMatters.REMINDER_LAST_DISPLAY_TIME, time_utils.getServerUTCTime())
         self._notifyOrRemove(isAdding, priority=priority)
-        return
 
     def __isLongTimeWithoutProgress(self):
         battlesWithoutProgress = self.__bmCtrl.progressWatcher.getBattlesCountWithoutProgress()

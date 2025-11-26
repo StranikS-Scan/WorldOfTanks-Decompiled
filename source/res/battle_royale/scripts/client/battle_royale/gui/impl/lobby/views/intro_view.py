@@ -5,28 +5,24 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsBattleRoyale
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_intro_view_model import BattlePassIntroViewModel
 from gui.impl.gen.view_models.views.lobby.common.intro_slide_model import IntroSlideModel
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
 from gui.prb_control.entities.listener import IGlobalListener
-from gui.shared.event_dispatcher import showBrowserOverlayView
 from helpers import dependency
-from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBattleRoyaleController, IHangarSpaceSwitchController
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import ViewEventType
+from battle_royale.gui.impl.gen.view_models.views.lobby.views.intro_view_model import IntroViewModel
 
 class IntroView(ViewImpl, IGlobalListener):
-    __settingsCore = dependency.descriptor(ISettingsCore)
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     __spaceSwitchController = dependency.descriptor(IHangarSpaceSwitchController)
 
     def __init__(self):
         settings = ViewSettings(R.views.battle_royale.lobby.views.IntroView())
         settings.flags = ViewFlags.LOBBY_SUB_VIEW
-        settings.model = BattlePassIntroViewModel()
-        self.__urlIntroVideo = self.__battleRoyaleController.getIntroVideoURL()
+        settings.model = IntroViewModel()
         self.__isPageWasShow = False
         super(IntroView, self).__init__(settings)
 
@@ -66,7 +62,7 @@ class IntroView(ViewImpl, IGlobalListener):
         self.destroyWindow()
 
     def __onVideo(self):
-        showBrowserOverlayView(self.__urlIntroVideo, VIEW_ALIAS.BROWSER_OVERLAY)
+        self.__battleRoyaleController.showIntroVideo(VIEW_ALIAS.BROWSER_OVERLAY, force=True)
 
     def __onSpaceUpdated(self):
         if not self.__isPageWasShow:

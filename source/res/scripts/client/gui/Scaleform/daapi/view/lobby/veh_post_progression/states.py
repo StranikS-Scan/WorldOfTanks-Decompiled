@@ -52,7 +52,7 @@ class VehiclePostProgressionState(ViewLobbyState):
 
     def _getViewLoadCtx(self, event):
         return {'ctx': {'intCD': event.params['intCD'],
-                 'overrideVehiclePreviewEvent': event.params.get('overrideVehiclePreviewEvent', None),
+                 'overrideVehiclePreviewEvent': event.params.get('overrideVehiclePreviewEvent', False),
                  'goToVehicleAllowed': event.params.get('goToVehicleAllowed', False)}}
 
 

@@ -10,7 +10,7 @@ from shared_utils import CONST_CONTAINER
 if typing.TYPE_CHECKING:
     from gui.Scaleform.framework.managers.loaders import GuiImplViewLoadParams
     from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
-__all__ = ('ArgsEvent', 'ComponentEvent', 'LoadViewEvent', 'LoadGuiImplViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent', 'GameEvent', 'ViewEventType', 'OpenLinkEvent', 'ChannelManagementEvent', 'PreBattleChannelEvent', 'AmmunitionSetupViewEvent', 'HasCtxEvent', 'DogTagsEvent', 'DeathCamEvent', 'FullscreenModeSelectorEvent', 'ModeSelectorPopoverEvent', 'ModeSubSelectorEvent', 'NavigationEvent', 'BackNavigationEvent', 'PersonalMissionsEvent', 'UserMissionsEvent', 'GUICommonEvent')
+__all__ = ('ArgsEvent', 'ComponentEvent', 'LoadViewEvent', 'LoadGuiImplViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent', 'GameEvent', 'ViewEventType', 'OpenLinkEvent', 'ChannelManagementEvent', 'PreBattleChannelEvent', 'AmmunitionSetupViewEvent', 'HasCtxEvent', 'DogTagsEvent', 'DeathCamEvent', 'FullscreenModeSelectorEvent', 'ModeSelectorPopoverEvent', 'ModeSubSelectorEvent', 'NavigationEvent', 'BackNavigationEvent', 'PersonalMissionsEvent', 'UserMissionsEvent', 'GUICommonEvent', 'PetObjectHoverEvent', 'PetSystemEvent')
 _logger = logging.getLogger(__name__)
 
 class HasCtxEvent(SharedEvent):
@@ -562,6 +562,7 @@ class OpenLinkEvent(SharedEvent):
     STEAM_SUBSCRIPTION_MANAGEMENT = 'steamSubscriptionManagementURL'
     LOOT_BOXES_LIST = 'lootBoxesList'
     REPORT_CONTENT = 'reportContent'
+    OPEN_BUNDLE_STEPS = 'openBundleSteps'
 
     def __init__(self, eventType, url='', title='', params=None):
         super(OpenLinkEvent, self).__init__(eventType)
@@ -924,3 +925,16 @@ class UserMissionsEvent(SharedEvent):
         self.showMissionDetails = showMissionDetails
         self.y = y
         self.height = height
+
+
+class PetObjectHoverEvent(HasCtxEvent):
+    HOVER_IN = 'petObject/hoverIn'
+    HOVER_OUT = 'petObject/hoverOut'
+
+
+class PetSystemEvent(HasCtxEvent):
+    MEDAL_ANIMATION_SHOW = 'medalAnimation'
+    SEEN_IN_STORAGE_PET_IDS_UPDATED = 'seenInStoragePetIDsUpdated'
+    LAST_SEEN_SYNERGY_LEVEL_UPDATED = 'lastSeenSynergyLevelUpdated'
+    PET_OBJECT_PRESENTER_LOADING = 'petObjectPresenterLoading'
+    PET_OBJECT_PRESENTER_CLOSING = 'petObjectPresenterClosing'

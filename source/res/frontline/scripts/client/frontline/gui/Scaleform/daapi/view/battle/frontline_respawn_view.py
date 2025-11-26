@@ -111,7 +111,7 @@ class FrontlineRespawnView(FrontlineRespawnViewMeta, IFrontlineRespawnView):
             isVehicleChanged = vehicle.intCD != respawnInfo.vehicleID
         return isVehicleChanged
 
-    def updateTimer(self, timeLeft, vehs, cooldowns, limits=0):
+    def updateTimer(self, timeLeft, vehs, cooldowns, limits=None):
         mainTimer = i18n.makeString(EPIC_BATTLE.RESPAWNSCREEN_SECONDSTIMERTEXT, seconds=int(round(timeLeft[0])))
         secondsLeft = int(math.ceil(timeLeft[0]))
         if secondsLeft <= 0 and not self.__timeOver:
@@ -220,16 +220,15 @@ class FrontlineRespawnView(FrontlineRespawnViewMeta, IFrontlineRespawnView):
             soundNotifications.play(eventName)
 
     def __updateSlotData(self, vehs, cooldowns, limits):
-        if not isinstance(limits, dict):
-            return
         vehLimits = self.__getVehicleLimits(limits)
         slotsStatesData = respawn_utils.getSlotsStatesData(vehs, cooldowns, self.__disabled, vehLimits)
         self.__carousel.updateVehicleStates(slotsStatesData)
 
     def __getVehicleLimits(self, limits):
         result = []
-        for vehCD in next(limits.itervalues()):
-            if all([ vehCD in cdList for cdList in limits.itervalues() ]):
-                result.append(vehCD)
+        if limits:
+            for vehCD in next(limits.itervalues()):
+                if all([ vehCD in cdList for cdList in limits.itervalues() ]):
+                    result.append(vehCD)
 
         return result

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/notification/actions_handlers.py
+from __future__ import absolute_import
 from adisp import adisp_process
 from fun_random.gui.feature.util.fun_mixins import FunSubModesWatcher, FunProgressionWatcher
 from fun_random.gui.feature.util.fun_wrappers import hasMultipleSubModes

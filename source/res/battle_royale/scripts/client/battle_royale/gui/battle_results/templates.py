@@ -4,19 +4,10 @@ from gui.battle_results.components import base
 from battle_royale.gui.battle_results import components
 from gui.battle_results.settings import BATTLE_RESULTS_RECORD as _RECORD
 from gui.impl.gen import R
-from gui.Scaleform.genConsts.BATTLEROYALE_ALIASES import BATTLEROYALE_ALIASES
 BR_TOTAL_VO_META = base.DictMeta({'tabInfo': [],
  'personal': {},
  'common': {},
  'leaderboard': []})
-_BR_TABS_VO_META = base.ListMeta([{'id': BATTLEROYALE_ALIASES.BATTLE_ROYALE_SUMMARY_RESULTS_CMP,
-  'label': '',
-  'selected': True,
-  'enabled': True}, {'id': BATTLEROYALE_ALIASES.BATTLE_ROYALE_SCORE_RESULTS_CMP,
-  'label': '',
-  'selected': False,
-  'enabled': True}])
-BR_TABS_BLOCK = base.StatsBlock(_BR_TABS_VO_META, 'tabInfo')
 _COMMON_VO_META = base.DictMeta({'arenaStr': '',
  'userName': '',
  'clanAbbrev': '',

@@ -8,8 +8,11 @@ if typing.TYPE_CHECKING:
     from gui.shared.gui_items import Vehicle
 
 class IVehicleFilter(object):
-    onChanged = None
     onDiff = None
+
+    @property
+    def criteria(self):
+        raise NotImplementedError
 
     @property
     def vehicles(self):
@@ -26,7 +29,7 @@ class IAccountStyles(object):
     onChanged = None
 
     @property
-    def critera(self):
+    def criteria(self):
         raise NotImplementedError
 
     def initialize(self):

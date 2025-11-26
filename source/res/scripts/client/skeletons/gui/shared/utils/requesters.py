@@ -13,6 +13,12 @@ if typing.TYPE_CHECKING:
     from gui.veh_post_progression.models.ext_money import ExtendedMoney
     from post_progression_common import VehicleState
     from items.vehicles import VehicleType
+    PetID = int
+    PetEventID = int
+    PetNameID = int
+    PetBonusID = int
+    PetSynergy = int
+    PetSynergyLevel = int
 
 class IRequester(object):
 
@@ -1205,4 +1211,43 @@ class IAchievements20Requester(IRequester):
         raise NotImplementedError
 
     def getLayoutLength(self):
+        raise NotImplementedError
+
+
+class IPetSystemRequester(IRequester):
+
+    def isPetUnlocked(self, petId):
+        raise NotImplementedError
+
+    def getActivePetID(self):
+        raise NotImplementedError
+
+    def getActiveEventID(self):
+        raise NotImplementedError
+
+    def getUnlockedPetIDs(self):
+        raise NotImplementedError
+
+    def getStateBehavior(self):
+        raise NotImplementedError
+
+    def getSelectedName(self, petID):
+        raise NotImplementedError
+
+    def getBonuses(self):
+        raise NotImplementedError
+
+    def getActiveBonus(self):
+        raise NotImplementedError
+
+    def getAppliedBonusCount(self):
+        raise NotImplementedError
+
+    def getSynergyPoints(self, petID):
+        raise NotImplementedError
+
+    def getSynergyLevel(self, petID):
+        raise NotImplementedError
+
+    def getFirstClickedSynergyPets(self):
         raise NotImplementedError

@@ -3,7 +3,7 @@
 from collections import namedtuple
 from string import Template
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
-from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES, CHAT_COMMANDS_THAT_IGNORE_COOLDOWNS
+from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES, CHAT_COMMANDS_THAT_IGNORE_COOLDOWNS, GENERIC_MESSENGER_ARGS
 from constants import IS_CLIENT, IS_CHINA, ARENA_BONUS_TYPE
 _g_id = None
 
@@ -30,12 +30,12 @@ _TIMEFRAME_FOR_ATTENTION_TO_STORAGE = 5
 _MAX_ATTENTION_TO_PER_TEAM = 3
 
 def messageArgs(int32Arg1=0, int64Arg1=0, floatArg1=0, strArg1='', strArg2='', int8Arg1=0):
-    return {'int32Arg1': int32Arg1,
-     'int64Arg1': int64Arg1,
-     'floatArg1': floatArg1,
-     'strArg1': strArg1,
-     'strArg2': strArg2,
-     'int8Arg1': int8Arg1}
+    return {GENERIC_MESSENGER_ARGS.INT32_ARG_1.value: int32Arg1,
+     GENERIC_MESSENGER_ARGS.INT64_ARG_1.value: int64Arg1,
+     GENERIC_MESSENGER_ARGS.FLOAT_ARG_1.value: floatArg1,
+     GENERIC_MESSENGER_ARGS.STR_ARG_1.value: strArg1,
+     GENERIC_MESSENGER_ARGS.STR_ARG_2.value: strArg2,
+     GENERIC_MESSENGER_ARGS.INT8_ARG_1.value: int8Arg1}
 
 
 EMPTY_ARGS = messageArgs()

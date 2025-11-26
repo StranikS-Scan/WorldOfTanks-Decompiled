@@ -30,7 +30,7 @@ class InvitationsExchangeBlock(broker.ExchangeBlock):
 
 
 class UserTagsItemData(broker.VehicleComponent):
-    __slots__ = ('_ctx', '_avatarSessionID', '_igrType', '_tags')
+    __slots__ = ('_avatarSessionID', '_igrType', '_tags')
 
     def __init__(self, ctx):
         super(UserTagsItemData, self).__init__()

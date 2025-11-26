@@ -30,6 +30,15 @@ class SPECIAL_VOICE_TAG(object):
     SKILL_4_LTU = 'skill4ltuSpecialVoice'
     ALICE = 'aliceSpecialVoice'
     DARJEELING = 'darjeelingSpecialVoice'
+    KEI = 'keiSpecialVoice'
+    HW25_QUICKYBABY = 'hw25_Quickybaby_SpecialVoice'
+    HW25_MAILAND = 'hw25_Mailand_SpecialVoice'
+    HW25_MOUZ_AKROBAT = 'hw25_MouzAkrobat_SpecialVoice'
+    HW25_SKILL4LTU = 'hw25_Skill4ltu_SpecialVoice'
+    HW25_LU_JUN_CN = 'hw25_LuJun_CN_SpecialVoice'
+    HW25_TITI_CN = 'hw25_Titi_CN_SpecialVoice'
+    HW25_DA_KUN_CN = 'hw25_DaKun_CN_SpecialVoice'
+    HW25_PANCHEZHANG_CN = 'hw25_Panchezhang_CN_SpecialVoice'
     BATTLE_OF_BLOGGERS = ('ru1_LebwaSpecialVoice', 'ru2_YushaSpecialVoice', 'ru3_Amway921SpecialVoice', 'ru4_KorbenDallasSpecialVoice', 'eu1_MailandSpecialVoice', 'eu2_Skill4ltuSpecialVoice', 'eu3_DezgamezSpecialVoice', 'eu4_AwesomeEpicGuysSpecialVoice')
     BATTLE_OF_BLOGGERS_2021 = ('bb21_ru1_Yusha_specialVoice', 'bb21_ru1_Vspishka_specialVoice', 'bb21_ru2_Amway921_specialVoice', 'bb21_ru2_Korbendailas_specialVoice', 'bb21_ru3_Lebwa_specialVoice', 'bb21_ru3_Inspirer_specialVoice', 'bb21_ru4_Evilgranny_specialVoice', 'bb21_ru4_Nearyou_specialVoice', 'bb21_eu1_Circon_specialVoice', 'bb21_eu2_Dakillzor_specialVoice', 'bb21_eu3_Newmulti2k_specialVoice', 'bb21_eu4_Orzanel_specialVoice', 'bb21_na1_Cabbagemechanic_specialVoice', 'bb21_na2_Tragicloss_specialVoice', 'bb21_na3_Cmdraf_specialVoice', 'bb21_asia1_Mastertortoise_specialVoice', 'bb21_asia2_Summertiger_specialVoice', 'bb21_asia3_Maharlika_specialVoice')
     G_I_JOE_TWITCH_2021 = ('duke_specialVoice', 'cobra_specialVoice')
@@ -54,6 +63,8 @@ class SPECIAL_VOICE_TAG(object):
     BP_H4 = ('tankmen_bp1004_1', 'tankmen_bp1004_2', 'tankmen_bp1004_3', 'tankmen_bp1004_4', 'tankmen_bp1004_5')
     BP_16_M = ('tankmen_bp16_5', 'tankmen_bp16_6', 'tankmen_bp16_7', 'tankmen_bp16_8', 'tankmen_bp16_9')
     BP_17_DC_M = ('tankmen_bp17_5', 'tankmen_bp17_8')
+    BP_18_M = ('tankmen_bp18_5', 'tankmen_bp18_6', 'tankmen_bp18_7', 'tankmen_bp18_8', 'tankmen_bp18_9')
+    BP_18_NM = ('tankmen_bp18_10', 'tankmen_bp18_11', 'tankmen_bp18_12', 'tankmen_bp18_13', 'tankmen_bp18_14')
     ALL = (BUFFON,
      SABATON,
      OFFSPRING,
@@ -81,7 +92,16 @@ class SPECIAL_VOICE_TAG(object):
      MIKA,
      MARTY_VOLE,
      MT_LB_1,
-     CELEBRITY_2025) + BATTLE_OF_BLOGGERS + BATTLE_OF_BLOGGERS_2021 + G_I_JOE_TWITCH_2021 + WHITE_TIGER_EVENT_2021 + G_I_JOE_2022 + WHITE_TIGER_EVENT_2022 + BPH_2022 + WHITE_TIGER_EVENT_2023 + BP_12_M + BP_H2 + BP_13 + CTM_24 + BP_14_M + WHITE_TIGER_EVENT_2024 + BP_15_M + BP_H4 + BP_16_M + BP_17_DC_M
+     CELEBRITY_2025,
+     KEI,
+     HW25_QUICKYBABY,
+     HW25_MAILAND,
+     HW25_MOUZ_AKROBAT,
+     HW25_SKILL4LTU,
+     HW25_LU_JUN_CN,
+     HW25_TITI_CN,
+     HW25_DA_KUN_CN,
+     HW25_PANCHEZHANG_CN) + BATTLE_OF_BLOGGERS + BATTLE_OF_BLOGGERS_2021 + G_I_JOE_TWITCH_2021 + WHITE_TIGER_EVENT_2021 + G_I_JOE_2022 + WHITE_TIGER_EVENT_2022 + BPH_2022 + WHITE_TIGER_EVENT_2023 + BP_12_M + BP_H2 + BP_13 + CTM_24 + BP_14_M + WHITE_TIGER_EVENT_2024 + BP_15_M + BP_H4 + BP_16_M + BP_17_DC_M + BP_18_M + BP_18_NM
 
 
 class SPECIAL_CREW_TAG(object):
@@ -92,13 +112,17 @@ class SPECIAL_CREW_TAG(object):
     WITCHES_CREW = 'witchesCrew'
     MIKA_CREW = 'mikaCrew'
     DARJEELING_CREW = 'darjeelingCrew'
+    HW25_CREW = 'hw25_Crew'
+    HW25_CREW_CN = 'hw25_Crew_CN'
     ALL = (SABATON,
      OFFSPRING,
      MIHO,
      YHA,
      WITCHES_CREW,
      MIKA_CREW,
-     DARJEELING_CREW)
+     DARJEELING_CREW,
+     HW25_CREW,
+     HW25_CREW_CN)
 
 
 class GROUP_TAG(object):

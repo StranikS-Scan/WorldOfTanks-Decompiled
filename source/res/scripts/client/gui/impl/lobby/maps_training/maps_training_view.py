@@ -423,7 +423,7 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
                 self.viewModel.vehicleMarker.setTop(pos.y)
 
     def worldToScreenPos(self, worldPos):
-        screenWidth, screenHeight = self.getParentWindow().size
+        screenWidth, screenHeight = BigWorld.windowSize()
         viewProjMatrix = getViewProjectionMatrix()
         clipPos = viewProjMatrix.applyV4Point(Math.Vector4(worldPos.x, worldPos.y, worldPos.z, 1.0))
         if clipPos.w <= 0.0:
@@ -438,6 +438,7 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
             halfScreenHeight = screenHeight / 2.0
             screenPosX = halfScreenWidth * (ndcPos.x + 1.0)
             screenPosY = halfScreenHeight * (1.0 - ndcPos.y)
+            screenPosY -= min(screenHeight - self.getParentWindow().size[1], screenPosY)
             return Math.Vector2(screenPosX, screenPosY)
 
     def __tick(self):

@@ -113,7 +113,7 @@ _SUB_TO_TAGS = {(_SUB.OFF, _SUB.OFF): {_TAG.SUB_NONE},
  (_SUB.PENDING, _SUB.PENDING): {_TAG.SUB_PENDING_IN, _TAG.SUB_PENDING_OUT}}
 
 class RosterItem(ContactItem):
-    __slots__ = ('_groups', '_sub')
+    __slots__ = ('_groups',)
 
     def __init__(self, jid, groups=None, sub=None, resources=None, trusted=True):
         super(RosterItem, self).__init__(jid, trusted=trusted, tags={_TAG.FRIEND}, resources=resources)

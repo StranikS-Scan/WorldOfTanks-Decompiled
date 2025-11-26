@@ -637,7 +637,7 @@ class _BaseSoundEvent(_EffectDesc):
 
 
 class _ShotSoundEffectDesc(_BaseSoundEvent):
-    __slots__ = ('_soundName',)
+    __slots__ = ()
     TYPE = '_ShotSoundEffectDesc'
 
     def __init__(self, dataSection):
@@ -661,7 +661,7 @@ class _ShotSoundEffectDesc(_BaseSoundEvent):
 class _NodeSoundEffectDesc(_BaseSoundEvent):
     TYPE = '_NodeSoundEffectDesc'
     effectUniqId = 0
-    __slots__ = ('_soundName', '_dopplerEffect')
+    __slots__ = ('_dopplerEffect',)
 
     def __init__(self, dataSection):
         super(_NodeSoundEffectDesc, self).__init__(dataSection)
@@ -709,7 +709,7 @@ class _NodeSoundEffectDesc(_BaseSoundEvent):
 
 
 class _TracerSoundEffectDesc(_NodeSoundEffectDesc):
-    __slots__ = ('_parameters', '__stopSoundEventName', '__tracerDelaySound')
+    __slots__ = ('__stopSoundEventName', '__tracerDelaySound')
     TYPE = '_TracerSoundEffectDesc'
     shellTypesMap = {'AP': 0,
      'HE': 1,
@@ -779,7 +779,7 @@ class _AutoShootTracerSoundEffectDesc(_TracerSoundEffectDesc):
 
 
 class _CollisionSoundEffectDesc(_BaseSoundEvent):
-    __slots__ = ('_soundName',)
+    __slots__ = ()
     TYPE = '_CollisionSoundEffectDesc'
 
     def __init__(self, dataSection):
@@ -863,7 +863,7 @@ class _CollisionDamageSoundEffectDesc(_BaseSoundEvent):
 
 class _DestructionSoundEffectDesc(_BaseSoundEvent):
     TYPE = '_DestructionSoundEffectDesc'
-    __slots__ = ('_soundName', '_parameters')
+    __slots__ = ()
 
     def __init__(self, dataSection):
         super(_DestructionSoundEffectDesc, self).__init__(dataSection)

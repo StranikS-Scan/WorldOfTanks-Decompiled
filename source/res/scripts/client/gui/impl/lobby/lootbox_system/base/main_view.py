@@ -3,16 +3,15 @@
 from collections import deque
 from typing import TYPE_CHECKING
 from account_helpers.AccountSettings import LOOT_BOXES_INTRO_VIDEO_SHOWN
-from frameworks.wulf import ViewSettings, WindowFlags
+from frameworks.wulf import WindowFlags
 from gui.Scaleform.Waiting import Waiting
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.lootbox_system.main_view_model import MainViewModel, SubViewID
 from gui.impl.lobby.lootbox_system.base.common import MainViewImpl, PresentersMap
-from gui.impl.pub.lobby_window import LobbyWindow
+from gui.impl.pub import WindowImpl
 from gui.lootbox_system.base.common import ViewID, Views
 from gui.lootbox_system.base.sound import enterLootBoxesSoundState, exitLootBoxesSoundState
 from helpers import dependency
-from shared_utils import safeCall
 from skeletons.gui.game_control import ILootBoxSystemController
 if TYPE_CHECKING:
     from typing import Any, Dict, Deque, Optional, Tuple
@@ -45,17 +44,14 @@ class _Presenters(PresentersMap):
 class MainView(MainViewImpl):
     __lootBoxes = dependency.descriptor(ILootBoxSystemController)
 
-    def __init__(self, subViewID=None, *args, **kwargs):
-        settings = ViewSettings(R.views.mono.lootbox.main())
-        settings.model = MainViewModel()
-        settings.args = (subViewID,) + args
-        settings.kwargs = kwargs
-        super(MainView, self).__init__(settings)
+    def __init__(self, ctx=None, *args, **kwargs):
         self.__subviews = None
         self.__subviewID = None
         self.__pendingSubviews = deque()
-        self.__eventName = kwargs['eventName']
-        self.__backCallback = kwargs.get('backCallback')
+        self.__eventName = ctx.get('eventName')
+        kwargs.update(ctx)
+        args = (ctx.get('subViewID'),) + args
+        super(MainView, self).__init__(R.views.mono.lootbox.main(), MainViewModel, *args, **kwargs)
         return
 
     @property
@@ -93,11 +89,10 @@ class MainView(MainViewImpl):
         exitLootBoxesSoundState(self.__eventName)
         self.__pendingSubviews = deque()
         self.__subviews.clear()
-        safeCall(self.__backCallback)
         super(MainView, self)._finalize()
 
     def _getEvents(self):
-        return ((self.viewModel.onResourcesLoadCompleted, self.__onResourcesLoadCompleted), (self.__lootBoxes.onStatusChanged, self.__onStatusChanged), (self.__lootBoxes.onBoxesAvailabilityChanged, self.__onStatusChanged))
+        return ((self.viewModel.onResourcesLoadCompleted, self.__onResourcesLoadCompleted),)
 
     def _getPresentersMap(self):
         return _Presenters(self)
@@ -133,12 +128,8 @@ class MainView(MainViewImpl):
             Views.load(ViewID.INTRO, eventName=self.__eventName)
             self.__lootBoxes.setSetting(self.__eventName, LOOT_BOXES_INTRO_VIDEO_SHOWN, True)
 
-    def __onStatusChanged(self):
-        if not (self.__lootBoxes.isAvailable(self.__eventName) and self.__lootBoxes.getActiveBoxes(self.__eventName)):
-            self.destroy()
 
+class MainWindow(WindowImpl):
 
-class MainWindow(LobbyWindow):
-
-    def __init__(self, subViewID=None, *args, **kwargs):
-        super(MainWindow, self).__init__(wndFlags=WindowFlags.SERVICE_WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=MainView(subViewID, *args, **kwargs))
+    def __init__(self, layer, ctx=None, *args, **kwargs):
+        super(MainWindow, self).__init__(WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=MainView(ctx, *args, **kwargs), layer=layer)

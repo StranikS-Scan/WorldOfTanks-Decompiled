@@ -3,6 +3,7 @@
 from debug_utils import LOG_WARNING
 
 class QUESTSPROGRESS(object):
+    QP_DOT = 'qp_dot'
     C_183X63_OPERATION_1 = '183x63_operation_1'
     C_183X63_OPERATION_10 = '183x63_operation_10'
     C_183X63_OPERATION_2 = '183x63_operation_2'
@@ -17,23 +18,22 @@ class QUESTSPROGRESS(object):
     FAILED = 'failed'
     IN_PROGRESS = 'in_progress'
     LOCKED = 'locked'
-    ORANGE_AT_SPG = 'orange_AT-SPG'
-    ORANGE_HEAVY_TANK = 'orange_heavyTank'
-    ORANGE_LIGHT_TANK = 'orange_lightTank'
-    ORANGE_MEDIUM_TANK = 'orange_mediumTank'
-    ORANGE_SPG = 'orange_SPG'
-    QP_DOT = 'qp_dot'
     QUEST_DONE = 'quest_done'
     QUEST_DONE_PERFECTLY = 'quest_done_perfectly'
     QUEST_IN_PROGRESS = 'quest_in_progress'
     QUEST_NOT_AVAILABLE = 'quest_not_available'
     QUEST_ON_PAUSE = 'quest_on_pause'
+    WARNING = 'warning'
+    ORANGE_AT_SPG = 'orange_AT-SPG'
+    ORANGE_HEAVY_TANK = 'orange_heavyTank'
+    ORANGE_LIGHT_TANK = 'orange_lightTank'
+    ORANGE_MEDIUM_TANK = 'orange_mediumTank'
+    ORANGE_SPG = 'orange_SPG'
     SILVER_AT_SPG = 'silver_AT-SPG'
     SILVER_HEAVY_TANK = 'silver_heavyTank'
     SILVER_LIGHT_TANK = 'silver_lightTank'
     SILVER_MEDIUM_TANK = 'silver_mediumTank'
     SILVER_SPG = 'silver_SPG'
-    WARNING = 'warning'
     SILVER_ENUM = (SILVER_AT_SPG,
      SILVER_HEAVY_TANK,
      SILVER_LIGHT_TANK,

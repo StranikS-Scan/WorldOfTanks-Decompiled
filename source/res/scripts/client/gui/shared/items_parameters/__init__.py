@@ -141,7 +141,7 @@ def calcGunParams(gunDescr, descriptors):
         result[DUAL_GUN_CHARGE_TIME] = chargeTime
         result[RELOAD_TIME_SECS_PROP_NAME] = reloadTimeSecs
         if isBurstGun(descr) and VehicleMechanic.CHARGEABLE_BURST.value not in descr.mechanicsParams:
-            burstSize, burstInterval = descr.burst
+            burstSize, burstInterval, _ = descr.burst
             result[BURST_FIRE_RATE].extend([burstInterval, burstSize])
 
     for shot in gunDescr.shots:

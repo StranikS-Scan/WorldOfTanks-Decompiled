@@ -83,6 +83,8 @@ def _mapStateToHighlight(state):
 
 
 def formatParameterValue(parameterName, paramValue, applyFormatting=True, parameterState=None, formatSettings=None, allowSmartRound=True, showZeroDiff=False, isColorize=True, nDigits=_NUMBER_DIGITS):
+    if KPI.Name.hasValue(parameterName) and isinstance(paramValue, float):
+        paramValue = round(paramValue, 3)
     if applyFormatting:
         _listFormat = {'rounder': lambda v: backport.getIntegralFormat(int(v)),
          'separator': '/'}
@@ -92,7 +94,7 @@ def formatParameterValue(parameterName, paramValue, applyFormatting=True, parame
         preprocessor = settings.get('preprocessor')
         if KPI.Name.hasValue(parameterName):
             formatter = KPI_FORMATTERS.get(parameterName, kpiFormatValue)
-            values, separator = formatter(parameterName, round(paramValue, 2)), None
+            values, separator = formatter(parameterName, paramValue), None
         elif preprocessor:
             values, separator, parameterState = preprocessor(paramValue, parameterState)
         else:

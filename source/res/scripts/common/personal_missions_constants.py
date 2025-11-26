@@ -193,6 +193,7 @@ class PROCESSOR_PARAMETERS:
     MARK_OF_MASTERY = 'markOfMastery'
     CRIT_TYPES = 'critTypes'
     HITS = 'hits'
+    TARGET_IS_MOVING = 'targetIsMoving'
 
 
 class CONFIG_KEYS:

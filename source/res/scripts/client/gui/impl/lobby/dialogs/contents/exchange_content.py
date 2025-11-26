@@ -53,6 +53,7 @@ class ExchangeContent(ExchangeDiscountView):
         if self.__needItem > 0:
             fromItemCount, toItemCount = self.__exchanger.calculateFromItemCount(self.__needItem)
         self.__fillItemsModel(fromItemCount, toItemCount)
+        self._updateDiscountInfo()
 
     @adisp_async
     @adisp_process

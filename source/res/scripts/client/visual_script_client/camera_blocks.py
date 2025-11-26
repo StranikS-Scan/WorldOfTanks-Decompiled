@@ -4,7 +4,7 @@ from visual_script import ASPECT
 from visual_script.block import Block, Meta
 from visual_script.dependency import dependencyImporter
 from visual_script.slot_types import SLOT_TYPE
-utils, dependency, cameras, hangar_camera_manager, CGF = dependencyImporter('skeletons.gui.shared.utils', 'helpers.dependency', 'AvatarInputHandler.cameras', 'cgf_components.hangar_camera_manager', 'CGF')
+utils, dependency, cameras, hangar_camera_manager, CGF, game_control, lock_overlays, InputHandler, Keys = dependencyImporter('skeletons.gui.shared.utils', 'helpers.dependency', 'AvatarInputHandler.cameras', 'cgf_components.hangar_camera_manager', 'CGF', 'skeletons.gui.game_control', 'gui.shared.lock_overlays', 'gui.InputHandler', 'Keys')
 
 class CameraMeta(Meta):
 
@@ -59,6 +59,65 @@ class SwitchCamera(Block, CameraMeta):
         cameraManager = CGF.getManager(spaceId, hangar_camera_manager.HangarCameraManager)
         if cameraManager:
             cameraManager.switchByCameraName(cameraName, self._instantly.getValue())
+        self._out.call()
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.HANGAR]
+
+
+class ActivateCameraWithOverlay(Block, CameraMeta):
+    overlay = dependency.descriptor(game_control.IOverlayController)
+
+    def __init__(self, *args, **kwargs):
+        super(ActivateCameraWithOverlay, self).__init__(*args, **kwargs)
+        self._in = self._makeEventInputSlot('in', self._execute)
+        self._cameraName = self._makeDataInputSlot('cameraName', SLOT_TYPE.STR)
+        self._spaceId = self._makeDataInputSlot('spaceId', SLOT_TYPE.INT)
+        self._out = self._makeEventOutputSlot('out')
+        self._onCancel = self._makeEventOutputSlot('onCancel')
+
+    def onStartScript(self):
+        InputHandler.g_instance.onKeyDown += self._handleKeyEvent
+
+    def onFinishScript(self):
+        InputHandler.g_instance.onKeyDown -= self._handleKeyEvent
+
+    def _handleKeyEvent(self, event):
+        if event.key == Keys.KEY_ESCAPE:
+            self._onCancel.call()
+
+    def _execute(self):
+        cameraName = self._cameraName.getValue()
+        spaceId = self._spaceId.getValue()
+        cameraManager = CGF.getManager(spaceId, hangar_camera_manager.HangarCameraManager)
+        if cameraManager:
+            cameraManager.activateCamera(cameraName)
+        self.overlay.setOverlayState(True)
+        lock_overlays.lockNotificationManager(lock=True)
+        self._out.call()
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.HANGAR]
+
+
+class DeactivateCameraWithOverlay(Block, CameraMeta):
+    overlay = dependency.descriptor(game_control.IOverlayController)
+
+    def __init__(self, *args, **kwargs):
+        super(DeactivateCameraWithOverlay, self).__init__(*args, **kwargs)
+        self._in = self._makeEventInputSlot('in', self._execute)
+        self._spaceId = self._makeDataInputSlot('spaceId', SLOT_TYPE.INT)
+        self._out = self._makeEventOutputSlot('out')
+
+    def _execute(self):
+        spaceId = self._spaceId.getValue()
+        cameraManager = CGF.getManager(spaceId, hangar_camera_manager.HangarCameraManager)
+        if cameraManager:
+            cameraManager.switchToTank()
+        self.overlay.setOverlayState(False)
+        lock_overlays.lockNotificationManager(lock=False)
         self._out.call()
 
     @classmethod

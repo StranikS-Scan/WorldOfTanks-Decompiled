@@ -51,7 +51,7 @@ class BattleResultsSubPresenter(SubModelPresenter):
         self._subPresenters.remove(subPacker)
 
     def getBattleResults(self):
-        statsController = self._battleResults.getPresenter(self.parentView.arenaUniqueID)
+        statsController = self._battleResults.getStatsCtrl(self.parentView.arenaUniqueID)
         return statsController.getResults()
 
     def packBattleResults(self, battleResults):

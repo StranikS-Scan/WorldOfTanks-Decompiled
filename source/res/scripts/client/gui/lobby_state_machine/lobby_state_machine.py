@@ -53,6 +53,7 @@ class LobbyStateMachine(StateMachine, EventsHandler):
         self.__currentlyProcessedEvent = None
         self.__navigationQueue = []
         self.__viewAliasesToStates = {}
+        self.__stateIDtoState = {}
         self.__scopeToLayerToStateMap = {}
         self.__stateConfigurators = []
         self.__transitionConfigurators = []
@@ -91,14 +92,18 @@ class LobbyStateMachine(StateMachine, EventsHandler):
         return self.getStateByID(cls.STATE_ID)
 
     def getStateByID(self, stateID):
-        stack = deque(self.getChildrenStates())
-        while stack:
-            child = stack.popleft()
-            if child.getStateID() == stateID:
-                return child
-            stack.extend(child.getChildrenStates())
+        if stateID in self.__stateIDtoState:
+            return self.__stateIDtoState[stateID]
+        else:
+            stack = deque(self.getChildrenStates())
+            while stack:
+                child = stack.popleft()
+                if child.getStateID() == stateID:
+                    self.__stateIDtoState[stateID] = child
+                    return child
+                stack.extend(child.getChildrenStates())
 
-        return None
+            return None
 
     def getUntrackedStateFor(self, scope, layer):
         state = self.__scopeToLayerToStateMap.get(scope, {}).get(layer, None)
@@ -257,6 +262,7 @@ class LobbyStateMachine(StateMachine, EventsHandler):
             self.__recordedStates.clear()
             self.__eventManager.clear()
             self.__viewAliasesToStates = {}
+            self.__stateIDtoState = {}
             self.__scopeToLayerToStateMap = {}
             self.__removableStateSelectors = []
             self.__visibleRouteInfo = VisibleRouteInfo()

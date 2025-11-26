@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/impl/lobby/mode_selector/items/fun_random_mode_selector_item.py
+from __future__ import absolute_import
 import typing
 import math_utils
 from fun_random.gui.feature.fun_constants import FunSubModesState
@@ -86,7 +87,7 @@ class FunRandomSelectorItem(ModeSelectorLegacyItem, FunAssetPacksMixin, FunSubMo
         return backport.text(R.strings.fun_random.modeSelector.notStarted()) if status.state in FunSubModesState.BEFORE_STATES else ''
 
     def __getTimeLeftText(self, status):
-        return getFormattedTimeLeft(time_utils.getTimeDeltaFromNowInLocal(status.rightBorder)) if status.state in FunSubModesState.INNER_STATES else ''
+        return getFormattedTimeLeft(time_utils.getTimeDeltaFromNowInLocal(status.endTime)) if status.state in FunSubModesState.INNER_STATES else ''
 
     def __addListeners(self):
         self.startSubSettingsListening(self.__invalidateAll)
@@ -102,7 +103,7 @@ class FunRandomSelectorItem(ModeSelectorLegacyItem, FunAssetPacksMixin, FunSubMo
         self.stopSubSettingsListening(self.__invalidateAll)
 
     @avoidSubModesStates(states=FunSubModesState.HIDDEN_SELECTOR_STATES, abortAction='onCardChange')
-    def __invalidateAll(self, status=None, *_):
+    def __invalidateAll(self, status, *_):
         self.__reloadModeHelper()
         with self.viewModel.transaction() as model:
             self.__fillCardModel(model, status)
@@ -165,7 +166,7 @@ class FunRandomSelectorItem(ModeSelectorLegacyItem, FunAssetPacksMixin, FunSubMo
     def __fillProgressionReward(self):
         progression = self.getActiveProgression()
         rewardID = ModeSelectorRewardID.OTHER
-        if progression.isInUnlimitedProgression and all([ isinstance(b, LootBoxTokensBonus) for b in progression.unlimitedProgression.bonuses ]):
+        if progression.isInUnlimitedProgression and all((isinstance(b, LootBoxTokensBonus) for b in progression.unlimitedProgression.bonuses)):
             rewardID = ModeSelectorRewardID.RANDOM
         self._addReward(rewardID, tooltipID=ModeSelectorTooltipsConstants.FUN_RANDOM_REWARDS)
 

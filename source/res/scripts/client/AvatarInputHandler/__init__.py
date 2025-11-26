@@ -55,6 +55,7 @@ from debug_utils import LOG_CURRENT_EXCEPTION
 from gui import g_guiResetters, GUI_CTRL_MODE_FLAG, GUI_SETTINGS
 from gui.app_loader import settings
 from gui.battle_control import event_dispatcher as gui_event_dispatcher
+from gui.shared.system_factory import collectPrebattleCtrlMode
 from helpers import dependency
 from player_notifications.siege_mode.notifier import SiegeModeNotifier
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -73,7 +74,6 @@ _GUN_MARKER_FLAG = aih_constants.GUN_MARKER_FLAG
 _BINDING_ID = aih_global_binding.BINDING_ID
 _CTRL_MODES = aih_constants.CTRL_MODES
 _CTRLS_FIRST = _CTRL_MODE.DEFAULT
-_INITIAL_MODE_BY_BONUS_TYPE = {}
 _CONTROL_MODE_SWITCH_COOLDOWN = 1.0
 _CTRLS_DESC_MAP = {_CTRL_MODE.ARCADE: (control_modes.ArcadeControlMode, 'arcadeMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.STRATEGIC: (control_modes.StrategicControlMode, 'strategicMode', _CTRL_TYPE.USUAL),
@@ -464,7 +464,8 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         battleReplayInProgress = BattleReplay.g_replayCtrl.isTimeWarpInProgress
         nextCtrlMode = avatar.getNextControlMode()
         if battleReplayInProgress or avatar.isObserver() or nextCtrlMode == _CTRL_MODE.POSTMORTEM:
-            self.onControlModeChanged(_CTRL_MODE.POSTMORTEM, postmortemParams=params, bPostmortemDelay=True, newVehicleID=BigWorld.player().playerVehicleID)
+            if self.__ctrlModeName != _CTRL_MODE.POSTMORTEM:
+                self.onControlModeChanged(_CTRL_MODE.POSTMORTEM, postmortemParams=params, bPostmortemDelay=True, newVehicleID=BigWorld.player().playerVehicleID)
         elif nextCtrlMode in _CTRL_MODE.KILL_CAM_MODES:
             self.onControlModeChanged(nextCtrlMode, postmortemParams=params, bPostmortemDelay=True)
         else:
@@ -960,9 +961,11 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         return not player.positionControl.isSwitching and not player.isFPVModeSwitching
 
     def __setInitialControlMode(self):
-        if BigWorld.player().arena.period < ARENA_PERIOD.BATTLE:
-            arenaBonusType = BigWorld.player().arenaBonusType
-            initialControlMode = _INITIAL_MODE_BY_BONUS_TYPE.get(arenaBonusType, _CTRLS_FIRST)
+        avatar = BigWorld.player()
+        if avatar.arena.period < ARENA_PERIOD.BATTLE:
+            arenaBonusType = avatar.arenaBonusType
+            playerMode, observerMode = collectPrebattleCtrlMode().get(arenaBonusType, (_CTRLS_FIRST, _CTRLS_FIRST))
+            initialControlMode = observerMode if avatar.isObserver() else playerMode
         else:
             initialControlMode = _CTRLS_FIRST
         self.__curCtrl = self.__ctrls[initialControlMode]

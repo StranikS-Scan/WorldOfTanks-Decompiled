@@ -4,7 +4,6 @@
 
 def registerComp7Battle():
     from arena_component_system.assembler_helper import ARENA_BONUS_TYPE_CAP_COMPONENTS
-    from AvatarInputHandler import _INITIAL_MODE_BY_BONUS_TYPE, _CTRL_MODE
     from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
     from comp7.gui.battle_control.arena_info.arena_vos import Comp7Keys, TournamentComp7Keys
     from comp7.gui.ingame_help.detailed_help_pages import Comp7PagesBuilder
@@ -30,9 +29,6 @@ def registerComp7Battle():
     registerGameModeArenaInfoKeys(ARENA_GUI_TYPE.TOURNAMENT_COMP7, TournamentComp7Keys)
     registerGameModeArenaInfoKeys(ARENA_GUI_TYPE.TRAINING_COMP7, Comp7Keys)
     ARENA_BONUS_TYPE_CAP_COMPONENTS.update({'comp7EquipmentComponent': (ARENA_BONUS_TYPE_CAPS.COMP7, Comp7EquipmentComponent)})
-    _INITIAL_MODE_BY_BONUS_TYPE.update({ARENA_BONUS_TYPE.COMP7: _CTRL_MODE.VEHICLES_SELECTION,
-     ARENA_BONUS_TYPE.TOURNAMENT_COMP7: _CTRL_MODE.VEHICLES_SELECTION,
-     ARENA_BONUS_TYPE.TRAINING_COMP7: _CTRL_MODE.VEHICLES_SELECTION})
     callout_ctrl._CONSUMERS_LOCKS += (VIEW_ALIAS.COMP7_BATTLE_PAGE,)
     _extendEquipmentProperties()
     _extendEquipmentSounds()

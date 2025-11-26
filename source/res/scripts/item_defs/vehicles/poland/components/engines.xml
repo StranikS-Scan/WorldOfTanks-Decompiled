@@ -53,6 +53,7 @@
     <W_53M2>	55	</W_53M2>
     <MT_50_TM_CFE_A>	56	</MT_50_TM_CFE_A>
     <SGT_4CzM>	57	</SGT_4CzM>
+    <W_2_64_GC>	58	</W_2_64_GC>
     <SGT_3Cz_M_7x7>	502	</SGT_3Cz_M_7x7>
     <GTD_2T6x2_7x7>	503	</GTD_2T6x2_7x7>
     <Development_Engine>	65000	</Development_Engine>
@@ -103,14 +104,14 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
-      <power>	700	</power>
+      <power>	800	</power>
       <weight>	1400	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	129	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	564	</rpm_min>
-      <rpm_max>	2508	</rpm_max>
+      <rpm_min>	429	</rpm_min>
+      <rpm_max>	2817	</rpm_max>
     </Maybach_HL_230P30A>
     <W_12_5>
       <userString>	#poland_vehicles:W_12_5	</userString>
@@ -825,8 +826,8 @@
       <maxRegenHealth>	190	</maxRegenHealth>
       <repairCost>	11	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	483	</rpm_min>
-      <rpm_max>	2694	</rpm_max>
+      <rpm_min>	362	</rpm_min>
+      <rpm_max>	2972	</rpm_max>
     </SGT_4CzM>
     <GTD_1_WSK_x2>
       <userString>	#poland_vehicles:GTD_1_WSK_x2	</userString>
@@ -934,32 +935,49 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_v2k_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v2k_npc	</wwsoundNPC>
-      <power>	500	</power>
+      <power>	560	</power>
       <weight>	750	</weight>
       <maxHealth>	145	</maxHealth>
       <maxRegenHealth>	72	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	386	</rpm_min>
-      <rpm_max>	2040	</rpm_max>
+      <rpm_min>	370	</rpm_min>
+      <rpm_max>	2088	</rpm_max>
     </V-2-34_B>
     <MT_50_TM_CFE_A>
       <userString>	#poland_vehicles:MT_50_TM_CFE_A	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	130000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	780	</power>
+      <weight>	2100	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	312	</rpm_min>
+      <rpm_max>	2264	</rpm_max>
+    </MT_50_TM_CFE_A>
+    <W_2_64_GC>
+      <userString>	#poland_vehicles:W_2_64_GC	</userString>
       <tags>	diesel	</tags>
       <level>	10	</level>
       <price>	120000	</price>
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	780	</power>
-      <weight>	2100	</weight>
+      <power>	800	</power>
+      <weight>	500	</weight>
       <maxHealth>	345	</maxHealth>
       <maxRegenHealth>	173	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	312	</rpm_min>
-      <rpm_max>	2264	</rpm_max>
-    </MT_50_TM_CFE_A>
+      <rpm_min>	306	</rpm_min>
+      <rpm_max>	2280	</rpm_max>
+    </W_2_64_GC>
     <Development_Engine>
       <userString>	Development Engine	</userString>
       <tags>	diesel	</tags>

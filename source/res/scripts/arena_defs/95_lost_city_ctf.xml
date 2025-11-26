@@ -9,6 +9,18 @@
     <upperRight>	500.000000 500.000000	</upperRight>
   </boundingBox>
   <minimap>	spaces/95_lost_city_ctf/mmap.dds	</minimap>
+  <minimapLayers>
+    <layer>
+      <layerId>	layer1	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/95_lost_city_ctf/mmap_city_bombing_01_zone.dds	</path>
+    </layer>
+    <layer>
+      <layerId>	layer2	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/95_lost_city_ctf/mmap_city_bombing_01_destroyed.dds	</path>
+    </layer>
+  </minimapLayers>
   <vehicleCamouflageKind>	desert	</vehicleCamouflageKind>
   <umbraEnabled>	1	</umbraEnabled>
   <wwmusicSetup>
@@ -22,6 +34,14 @@
     <wwmusicResultDefeat>	music_lost_city_result_defeat	</wwmusicResultDefeat>
   </wwmusicSetup>
   <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	destructible_objects.bnk	</name>
+      </bank>
+      <bank>
+        <name>	destructible_objects.pck	</name>
+      </bank>
+    </loadBanks>
     <events>
       <event>
         <name>	ev_battle_royale_2020_amb_fueltank	</name>

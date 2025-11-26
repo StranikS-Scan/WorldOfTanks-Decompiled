@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/impl/lobby/tooltips/fun_random_loot_box_tooltip_view.py
+from __future__ import absolute_import
 from frameworks.wulf import ViewSettings
 from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin
 from fun_random.gui.impl.gen.view_models.views.lobby.tooltips.fun_random_loot_box_tooltip_view_model import FunRandomLootBoxTooltipViewModel
@@ -18,7 +19,7 @@ class FunRandomLootBoxTooltipView(ViewImpl, FunAssetPacksMixin):
     __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, *args, **kwargs):
-        settings = ViewSettings(R.views.fun_random.lobby.tooltips.FunRandomLootBoxTooltipView(), model=FunRandomLootBoxTooltipViewModel(), args=args, kwargs=kwargs)
+        settings = ViewSettings(R.views.fun_random.mono.lobby.tooltips.loot_box_tooltip(), model=FunRandomLootBoxTooltipViewModel(), args=args, kwargs=kwargs)
         super(FunRandomLootBoxTooltipView, self).__init__(settings)
 
     @property

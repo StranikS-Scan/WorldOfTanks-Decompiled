@@ -4,8 +4,8 @@
   <geometry>	spaces/101_dday	</geometry>
   <estimatedLoad>	0.3	</estimatedLoad>
   <boundingBox>
-    <bottomLeft>	-400.0 -500.0	</bottomLeft>
-    <upperRight>	600.0 500.0	</upperRight>
+    <bottomLeft>	-500.000000 -500.000000	</bottomLeft>
+    <upperRight>	500.000000 500.000000	</upperRight>
   </boundingBox>
   <roundLength>	900	</roundLength>
   <minimap>	spaces/101_dday/mmap.dds	</minimap>
@@ -33,10 +33,10 @@
     <ctf>
       <teamBasePositions>
         <team1>
-          <position1>	146.445557 -398.866028	</position1>
+          <position1>	-153.554443 -398.866028	</position1>
         </team1>
         <team2>
-          <position1>	150.791245 398.076263	</position1>
+          <position1>	-149.208755 398.076263	</position1>
         </team2>
       </teamBasePositions>
     </ctf>
@@ -61,23 +61,23 @@
       <minimap>	spaces/101_dday/mmap_comp7.dds	</minimap>
       <pointsOfInterestUDO>
         <point>
-          <position>	494.511597 9.126625	</position>
+          <position>	193.543335 5.823074	</position>
           <type>	1	</type>
         </point>
         <point>
-          <position>	-93.619400 12.601630	</position>
+          <position>	-395.306702 12.400545	</position>
           <type>	1	</type>
         </point>
         <point>
-          <position>	24.678478 17.908194	</position>
+          <position>	-276.373810 16.339945	</position>
           <type>	1	</type>
         </point>
         <point>
-          <position>	289.751038 -113.673027	</position>
+          <position>	-9.394409 -111.870407	</position>
           <type>	2	</type>
         </point>
         <point>
-          <position>	223.217316 105.846367	</position>
+          <position>	-56.572021 93.414497	</position>
           <type>	2	</type>
         </point>
       </pointsOfInterestUDO>
@@ -89,32 +89,8 @@
           <position>	199.924133 325.335052	</position>
         </team2>
       </teamSpawnPoints>
-      <controlPoint>	194.311554 17.213253	</controlPoint>
+      <controlPoint>	-39.719181 -3.844971	</controlPoint>
     </comp7>
   </gameplayTypes>
-  <mapActivities>
-    <scenario>
-      <startTime>	15.000000 30.000000	</startTime>
-      <possibility>	95.000000	</possibility>
-      <interval>	180.000000	</interval>
-      <arenaPeriod>	3	</arenaPeriod>
-      <name>	Dday_paratrooper	</name>
-      <trajectories>
-        <warplane>
-          <preset>	Dday_paratrooper_airplane	</preset>
-          <position>	0.000000 0.000000 0.000000	</position>
-          <yaw>	0.000000	</yaw>
-          <possibility>	1.000000	</possibility>
-          <startTime>	0.000000 0.000000	</startTime>
-        </warplane>
-        <warplane>
-          <preset>	Dday_air_defence	</preset>
-          <position>	0.000000 0.000000 0.000000	</position>
-          <yaw>	0.000000	</yaw>
-          <possibility>	1.000000	</possibility>
-          <startTime>	23.700001 23.700001	</startTime>
-        </warplane>
-      </trajectories>
-    </scenario>
-  </mapActivities>
+  <mapActivities></mapActivities>
 </101_dday.xml>

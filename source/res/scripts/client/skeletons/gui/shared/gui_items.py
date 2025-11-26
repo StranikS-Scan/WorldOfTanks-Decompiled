@@ -16,6 +16,9 @@ class IGuiItemsFactory(object):
     def clear(self):
         raise NotImplementedError
 
+    def createGuiItemsOfSameType(self, itemTypeIdx, compactDecrs, proxy, *args, **kwargs):
+        raise NotImplementedError
+
     def createGuiItem(self, itemTypeIdx, *args, **kwargs):
         raise NotImplementedError
 

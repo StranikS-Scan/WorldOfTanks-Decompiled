@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/shared/events.py
+from __future__ import absolute_import
 from enum import unique, IntEnum
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.events import HasCtxEvent

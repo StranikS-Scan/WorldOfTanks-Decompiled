@@ -9,7 +9,6 @@ from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getVehicleCDForStyle
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.View import ViewKey
-from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gui_decorators import args2params
 from gui.impl.pub import ViewImpl, WindowImpl
@@ -179,7 +178,7 @@ class CatalogView(ViewImpl):
     def __onStylePreview(self, args):
         style = self.__customizationService.getItemByID(GUI_ITEM_TYPE.STYLE, int(args['id']))
         styledVehicleCD = getVehicleCDForStyle(style)
-        showStylePreview(styledVehicleCD, style, backCallback=_getPreviewCallback(self.__appLoader, self.__breadcrumbAchievementIDs, self.__achievementCategory, self.__closeCallback, AdvancedAchievementViewKey.CATALOG), backBtnDescrLabel=backport.text(R.strings.achievements_page.stylePreview.backBtnDescr()))
+        showStylePreview(styledVehicleCD, style, backCallback=_getPreviewCallback(self.__appLoader, self.__breadcrumbAchievementIDs, self.__achievementCategory, self.__closeCallback, AdvancedAchievementViewKey.CATALOG))
         self.destroyWindow()
 
     @args2params(int)

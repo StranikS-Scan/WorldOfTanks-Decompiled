@@ -9,7 +9,6 @@ class BaseEventBanner(object):
     NAME = ''
 
     def __init__(self):
-        super(BaseEventBanner, self).__init__()
         self._isVisible = False
 
     @property
@@ -21,7 +20,23 @@ class BaseEventBanner(object):
         return False
 
     @property
+    def hasRewards(self):
+        return False
+
+    @property
     def borderColor(self):
+        pass
+
+    @property
+    def title(self):
+        pass
+
+    @property
+    def iconsPath(self):
+        pass
+
+    @property
+    def videosPath(self):
         pass
 
     @property
@@ -30,6 +45,10 @@ class BaseEventBanner(object):
 
     @property
     def inProgressDescription(self):
+        pass
+
+    @property
+    def timerText(self):
         pass
 
     @property
@@ -52,6 +71,10 @@ class BaseEventBanner(object):
     def showTimerBeforeEventEnd(self):
         hoursBeforeEnd = 72
         return hoursBeforeEnd * time_utils.ONE_HOUR
+
+    @property
+    def isVisible(self):
+        return self._isVisible
 
     def createToolTipContent(self, event):
         return None

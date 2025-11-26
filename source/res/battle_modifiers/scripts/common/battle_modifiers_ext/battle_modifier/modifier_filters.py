@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_modifiers/scripts/common/battle_modifiers_ext/battle_modifier/modifier_filters.py
+from __future__ import absolute_import
+from future.utils import viewitems, viewvalues
 from typing import TYPE_CHECKING, Optional, Any, Tuple, Union, List, Dict
 from battle_modifiers_ext.battle_params import BattleParam
 from battle_modifiers_ext.battle_modifier import modifier_readers
@@ -116,7 +118,7 @@ class ModificationNode(Serializable):
             raise SoftException(ERROR_TEMPLATE.format('Global max limit is violated by local max limit', config.name))
         resValidators = param.validators.copy()
         resValidators.update(localValidators)
-        for validator in resValidators.itervalues():
+        for validator in viewvalues(resValidators):
             validator(self)
 
         if self.useType != UseType.VAL:
@@ -180,9 +182,9 @@ class ModificationTree(Serializable):
 
     def __makeId(self):
         ids = []
-        for key, value in self.nodes.iteritems():
+        for key, value in viewitems(self.nodes):
             if isinstance(value, dict):
-                for subKey, subValue in value.iteritems():
+                for subKey, subValue in viewitems(value):
                     ids.append(hash((key + subKey, subValue)))
 
             ids.append(hash((key, value)))

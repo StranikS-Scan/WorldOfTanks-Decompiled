@@ -42,7 +42,6 @@ class BattleMattersController(IBattleMattersController):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __connMgr = dependency.descriptor(IConnectionManager)
     __battleMattersSelectableRewardMgr = BattleMattersSelectableRewardManager
-    __slots__ = ('_em', 'onStateChanged', 'onFinish', '_isEnabled', '_prevFinishStateFlag', '_isPaused', '_isAvailable', '__delayedRewardOfferCurrencyToken', '__delayedRewardOfferVisibilityToken', '__isWaitingToken', '__savedRewards', '__hasDelayedRewards', '__finishState', '__hintHelper', '__progressWatcher')
 
     def __init__(self):
         super(BattleMattersController, self).__init__()
@@ -56,6 +55,7 @@ class BattleMattersController(IBattleMattersController):
         self.__delayedRewardOfferCurrencyToken = ''
         self.__delayedRewardOfferVisibilityToken = ''
         self.__savedRewards = {}
+        self.__battleMattersQuests = []
         self.__hasDelayedRewards = False
         self.__finishState = _FinishState.NOT_INITED
         self.__hintHelper = None
@@ -110,6 +110,7 @@ class BattleMattersController(IBattleMattersController):
         self.__delayedRewardOfferCurrencyToken = None
         self.__delayedRewardOfferVisibilityToken = None
         self.__savedRewards = None
+        self.__battleMattersQuests = []
         if self.__hintHelper:
             self.__hintHelper.fini()
             self.__hintHelper = None
@@ -198,11 +199,9 @@ class BattleMattersController(IBattleMattersController):
         return self.getBattleMattersQuests(filterFunc)
 
     def getBattleMattersQuests(self, filterFunc=None):
-        quests = self.__eventsCache.getHiddenQuests(BattleMattersController.isBattleMattersQuest, makeRelations=False).values()
-        quests = sorted(quests, key=lambda q: q.getOrder())
         if filterFunc:
-            return [ quest for quest in quests if filterFunc(quest) ]
-        return quests
+            return [ quest for quest in self.__battleMattersQuests if filterFunc(quest) ]
+        return self.__battleMattersQuests
 
     def getRegularBattleMattersQuests(self, filterFunc=None):
 
@@ -292,6 +291,7 @@ class BattleMattersController(IBattleMattersController):
         return isEnabled and (self._isAvailable or self.__eventsCache.waitForSync or not self.__itemsCache.isSynced())
 
     def _onSyncCompleted(self):
+        self._updateBattleMattersQuests()
         self.__update()
         currentQuest = self.getCurrentQuest()
         if currentQuest:
@@ -341,6 +341,10 @@ class BattleMattersController(IBattleMattersController):
     def _showAward(rewardsDict):
         showBattleMattersReward(rewardsDict)
 
+    def _updateBattleMattersQuests(self):
+        self.__battleMattersQuests = self.__eventsCache.getHiddenQuests(BattleMattersController.isBattleMattersQuest, makeRelations=False).values()
+        self.__battleMattersQuests = sorted(self.__battleMattersQuests, key=lambda q: q.getOrder())
+
     def __update(self):
         if self.__cachesAreReady():
             eventSent = self._checkIsBattleMattersStateChanged()
@@ -372,6 +376,7 @@ class BattleMattersController(IBattleMattersController):
     def __onConnected(self):
         self._isAvailable = False
         self.__savedRewards = OrderedDict()
+        self.__battleMattersQuests = []
         self.__hasDelayedRewards = False
         self.__finishState = _FinishState.NOT_INITED
         self.__isWaitingToken = False

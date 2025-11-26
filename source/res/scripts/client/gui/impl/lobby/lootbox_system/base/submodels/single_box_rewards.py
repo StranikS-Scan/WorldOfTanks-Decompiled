@@ -3,7 +3,9 @@
 import logging
 from typing import TYPE_CHECKING
 import Windowing
-from gui.impl.gen.view_models.views.lobby.lootbox_system.main_view_model import SubViewID
+from gui.Scaleform.framework.entities.View import ViewKey
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.impl.gen.view_models.views.lobby.lootbox_system.submodels.single_box_rewards_view_model import SingleBoxRewardsViewModel
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.impl.lobby.lootbox_system.base.common import SubViewImpl
@@ -14,7 +16,7 @@ from gui.lootbox_system.base.common import ViewID, Views
 from gui.lootbox_system.base.decorators import createTooltipContentDecorator
 from gui.lootbox_system.base.sound import playVideoPauseSound, playVideoResumeSound
 from gui.lootbox_system.base.utils import isShopVisible, openBoxes
-from gui.lootbox_system.base.views_loaders import hideItemPreview, showItemPreview
+from gui.lootbox_system.base.views_loaders import showItemPreview
 from gui.server_events.bonuses import SimpleBonus
 from gui.shared import EVENT_BUS_SCOPE, events
 from helpers import dependency
@@ -26,7 +28,6 @@ _logger = logging.getLogger(__name__)
 _EXTRA_BONUSES_NAMES = ('slots',)
 
 class SingleBoxRewards(SubViewImpl):
-    __slots__ = ('__isReopen', '__category', '__openCount', '__bonuses', '__extraBonuses', '__tooltipItems', '__isVideoPlaying', '__eventName', '__backCallback')
     __lootBoxes = dependency.descriptor(ILootBoxSystemController)
 
     def __init__(self, viewModel, parentView):
@@ -39,8 +40,6 @@ class SingleBoxRewards(SubViewImpl):
         self.__tooltipItems = {}
         self.__isVideoPlaying = False
         self.__eventName = ''
-        self.__backCallback = None
-        return
 
     @property
     def viewModel(self):
@@ -64,7 +63,6 @@ class SingleBoxRewards(SubViewImpl):
         self.__openCount = kwargs.get('count', 0)
         self.__updateBonusesData(first(kwargs.get('bonuses', []), []))
         self.__eventName = kwargs.get('eventName', '')
-        self.__backCallback = kwargs.get('backCallback')
         with self.viewModel.transaction() as vmTx:
             self.__setWindowAccessible(model=vmTx)
             self.__updateData(model=vmTx)
@@ -143,6 +141,7 @@ class SingleBoxRewards(SubViewImpl):
             self.__updateCounters()
             self.__updateBonusesData(first(bonuses))
             self.__updateBonuses()
+            self.__updateStateContext(bonuses)
 
         self.__isReopen = False
         self.viewModel.setIsAwaitingResponse(True)
@@ -152,21 +151,17 @@ class SingleBoxRewards(SubViewImpl):
         return
 
     def __goBack(self):
-        self.parentView.switchToSubView(eventName=self.__eventName)
+        Views.load(ViewID.MAIN, eventName=self.__eventName)
 
     def __onErrorBack(self, *_):
         self.viewModel.setIsAwaitingResponse(False)
-        self.parentView.switchToSubView(eventName=self.__eventName)
+        Views.load(ViewID.MAIN, eventName=self.__eventName)
 
     def __showPreview(self, ctx):
-        showItemPreview(str(ctx.get('bonusType')), int(ctx.get('bonusId')), int(ctx.get('styleID')), self.__eventName, self.__reopen)
+        showItemPreview(str(ctx.get('bonusType')), int(ctx.get('bonusId')), int(ctx.get('styleID')))
 
     def __openShop(self):
         Views.load(ViewID.SHOP, eventName=self.__eventName)
-
-    def __reopen(self):
-        hideItemPreview()
-        Views.load(ViewID.MAIN, subViewID=SubViewID.SINGLE_BOX_REWARDS, isReopen=True, count=self.__openCount, category=self.__category, bonuses=[self.__bonuses + self.__extraBonuses], eventName=self.__eventName, backCallback=self.__backCallback)
 
     def __updateBonusesData(self, bonuses):
         self.__extraBonuses = []
@@ -178,3 +173,7 @@ class SingleBoxRewards(SubViewImpl):
             if bonus.getName() in _EXTRA_BONUSES_NAMES:
                 self.__extraBonuses.append(bonus)
             self.__bonuses.append(bonus)
+
+    def __updateStateContext(self, bonuses):
+        lsm = getLobbyStateMachine()
+        lsm.getStateByViewKey(ViewKey(VIEW_ALIAS.LOOT_BOXES_MAIN_VIEW)).updateCachedCtx({'bonuses': bonuses})

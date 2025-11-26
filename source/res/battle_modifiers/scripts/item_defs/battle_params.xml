@@ -891,4 +891,95 @@
       <min>	0.0	</min>
     </restrictions>
   </visionMaxRadius>
+  <ammoBayHealth>
+    <scope>	cell hangar	</scope>
+    <dataType>	int	</dataType>
+    <domain>	hull	</domain>
+    <client>
+      <domain>	vitality	</domain>
+      <physicalType>	hitPoints	</physicalType>
+      <useTypes>	mul	</useTypes>
+    </client>
+    <restrictions>
+      <min>	1	</min>
+    </restrictions>
+  </ammoBayHealth>
+  <engineHealth>
+    <scope>	cell hangar	</scope>
+    <dataType>	int	</dataType>
+    <domain>	engine	</domain>
+    <client>
+      <domain>	vitality	</domain>
+      <physicalType>	hitPoints	</physicalType>
+      <useTypes>	mul	</useTypes>
+    </client>
+    <restrictions>
+      <min>	1	</min>
+    </restrictions>
+  </engineHealth>
+  <fuelTankHealth>
+    <scope>	cell hangar	</scope>
+    <dataType>	int	</dataType>
+    <domain>	hull	</domain>
+    <client>
+      <domain>	vitality	</domain>
+      <physicalType>	hitPoints	</physicalType>
+      <useTypes>	mul	</useTypes>
+    </client>
+    <restrictions>
+      <min>	1	</min>
+    </restrictions>
+  </fuelTankHealth>
+  <turretRotatorHealth>
+    <scope>	cell hangar	</scope>
+    <dataType>	int	</dataType>
+    <domain>	turret	</domain>
+    <client>
+      <domain>	vitality	</domain>
+      <physicalType>	hitPoints	</physicalType>
+      <useTypes>	mul	</useTypes>
+    </client>
+    <restrictions>
+      <min>	1	</min>
+    </restrictions>
+  </turretRotatorHealth>
+  <surveyingDeviceHealth>
+    <scope>	cell hangar	</scope>
+    <dataType>	int	</dataType>
+    <domain>	turret	</domain>
+    <client>
+      <domain>	vitality	</domain>
+      <physicalType>	hitPoints	</physicalType>
+      <useTypes>	mul	</useTypes>
+    </client>
+    <restrictions>
+      <min>	1	</min>
+    </restrictions>
+  </surveyingDeviceHealth>
+  <chassisHealth>
+    <scope>	cell hangar	</scope>
+    <dataType>	int	</dataType>
+    <domain>	chassis	</domain>
+    <client>
+      <domain>	vitality	</domain>
+      <physicalType>	hitPoints	</physicalType>
+      <useTypes>	mul	</useTypes>
+    </client>
+    <restrictions>
+      <min>	1	</min>
+    </restrictions>
+  </chassisHealth>
+  <gunHealth>
+    <scope>	cell hangar	</scope>
+    <dataType>	int	</dataType>
+    <domain>	gun	</domain>
+    <client>
+      <domain>	vitality	</domain>
+      <physicalType>	hitPoints	</physicalType>
+      <useTypes>	mul	</useTypes>
+    </client>
+    <restrictions>
+      <min>	1	</min>
+    </restrictions>
+  </gunHealth>
 </battle_params.xml>

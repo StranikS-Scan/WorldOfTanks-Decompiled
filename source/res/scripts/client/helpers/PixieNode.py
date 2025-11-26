@@ -24,7 +24,7 @@ class BaseNodeEffect(object):
 
 
 class PixieEffect(BaseNodeEffect):
-    __slots__ = ('__effectName', '__pixieRef', '__ttl', '__node', '__ttlCallback', '_enabled')
+    __slots__ = ('__effectName', '__pixieRef', '__ttl', '__node', '__ttlCallback')
 
     def __init__(self, name, node, ttl):
         super(PixieEffect, self).__init__()

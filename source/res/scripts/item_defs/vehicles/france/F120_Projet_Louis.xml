@@ -45,7 +45,7 @@
   <hull>
     <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
     <weight>	8175	</weight>
-    <maxHealth>	1040	</maxHealth>
+    <maxHealth>	1120	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	230	</maxHealth>
       <maxRegenHealth>	173	</maxRegenHealth>
@@ -2463,7 +2463,7 @@
       <price>	60000	</price>
       <notInShop>	true	</notInShop>
       <weight>	4000	</weight>
-      <maxHealth>	260	</maxHealth>
+      <maxHealth>	280	</maxHealth>
       <rotationSpeed>	46	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
@@ -2484,11 +2484,12 @@
         <armor_4>	25	</armor_4>
         <armor_5>	10	</armor_5>
         <armor_6>	20	</armor_6>
-        <armor_7>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-        </armor_7>
+        <armor_7>	50	</armor_7>
         <armor_8>	0	</armor_8>
         <armor_9>	30	</armor_9>
         <armor_10>	40	</armor_10>
+        <armor_11>	10	  <tags>	gun	</tags>
+        </armor_11>
       </armor>
       <guns>
         <Canon_de_75_mm_Mle_55_70>	shared	  <maxAmmo>	80	</maxAmmo>
@@ -2506,11 +2507,14 @@
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
+            <armor_5>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+              <tags>	screen	</tags>
+            </armor_5>
             <armor_6>	10	</armor_6>
             <gun>	20	</gun>
           </armor>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	21	</reloadTime>
+          <reloadTime>	18	</reloadTime>
           <aimingTime>	1.6	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>

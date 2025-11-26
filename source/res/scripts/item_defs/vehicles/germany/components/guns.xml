@@ -134,6 +134,7 @@
     <Gun_Env_Artillery>	248	</Gun_Env_Artillery>
     <_20mm_Flak_38_L112B>	251	</_20mm_Flak_38_L112B>
     <_88mm_KwK_43_L71_T>	252	</_88mm_KwK_43_L71_T>
+    <_75mm_KwK_36_L21>	253	</_75mm_KwK_36_L21>
     <Gun_PzIV>	255	</Gun_PzIV>
     <Gun_VK4502P>	256	</Gun_VK4502P>
     <Gun_Auf_Panther>	257	</Gun_Auf_Panther>
@@ -3060,6 +3061,64 @@
         </_75mm_Sprg.18>
       </shots>
     </_75mm_KwK_37_L24A>
+    <_75mm_KwK_36_L21>
+      <userString>	#germany_vehicles:_75mm_KwK_36_L21	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	10000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.38	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.16	</amplitude>
+        <recoilEffect>	medium	</recoilEffect>
+      </recoil>
+      <effects>	shot_medium	</effects>
+      <reloadEffect>	reload50_75	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	41.125	</rotationSpeed>
+      <reloadTime>	4	</reloadTime>
+      <maxAmmo>	80	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	780	</weight>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.15	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_75mm_K_Gr_rot_Pz_C>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	385	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	47 40	</piercingPower>
+        </_75mm_K_Gr_rot_Pz_C>
+        <_75mm_Gr_38_HL_C>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	308	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	90 90	</piercingPower>
+        </_75mm_Gr_38_HL_C>
+        <_75mm_Sprg_34_C>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	385	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	38 38	</piercingPower>
+        </_75mm_Sprg_34_C>
+      </shots>
+    </_75mm_KwK_36_L21>
     <Gun_PzIV>
       <userString>	#germany_vehicles:Gun_PzIV	</userString>
       <tags></tags>
@@ -6428,7 +6487,7 @@
       <impulse>	0.38	</impulse>
       <recoil>
         <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.48	</amplitude>
+        <amplitude>	0.125	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
       <effects>	shot_main_mb	</effects>
@@ -9168,7 +9227,7 @@
       <impulse>	0.38	</impulse>
       <recoil>
         <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.65	</amplitude>
+        <amplitude>	0.37	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
       <effects>	shot_large	</effects>
@@ -9797,7 +9856,7 @@
     <_105mm_KwK46_L68_N_FL>
       <userString>	#germany_vehicles:_105mm_KwK46_L68_N	</userString>
       <tags></tags>
-      <level>	9	</level>
+      <level>	8	</level>
       <price>	178500	</price>
       <notInShop>	true	</notInShop>
       <impulse>	0.38	</impulse>
@@ -11472,7 +11531,7 @@
     <_128mm_PaK44_2_L61_FL>
       <userString>	#germany_vehicles:_128mm_PaK44_2_L61	</userString>
       <tags></tags>
-      <level>	10	</level>
+      <level>	9	</level>
       <price>	339000	</price>
       <notInShop>	true	</notInShop>
       <impulse>	0.56	</impulse>
@@ -11874,7 +11933,7 @@
     <_12_8_cm_Pak_44_L_55_F_FL>
       <userString>	#germany_vehicles:_12_8_cm_Pak_44_L_55_F	</userString>
       <tags></tags>
-      <level>	10	</level>
+      <level>	8	</level>
       <price>	310000	</price>
       <notInShop>	true	</notInShop>
       <impulse>	0.56	</impulse>
@@ -13018,14 +13077,14 @@
           <speed>	800	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	252 240	</piercingPower>
+          <piercingPower>	259 242	</piercingPower>
         </_150mm_Pzgr_m_Hb>
         <_150mm_Gr_Hl_A>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	700	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	320 320	</piercingPower>
+          <piercingPower>	325 325	</piercingPower>
         </_150mm_Gr_Hl_A>
         <_150mm_Sprgr_Kz_m_Hb>
           <defaultPortion>	0.05	</defaultPortion>

@@ -3,19 +3,17 @@
 from account_helpers.AccountSettings import AccountSettings, FRONTLINE_BANNER_FIRST_APPEARANCE_TIMESTAMP, FRONTLINE_BANNER_INTRO_CLICK_TIMESTAMP
 from frontline.gui.frontline_helpers import isHangarAvailable, geFrontlineState
 from frontline.gui.impl.gen.view_models.views.lobby.views.frontline_const import FrontlineState
-from frontline.gui.impl.lobby.tooltips.level_reserves_tooltip import LevelReservesTooltip
-from frontline.gui.Scaleform.daapi.view.lobby.hangar.entry_point import isEpicBattlesEntryPointAvailable
+from frontline.gui.impl.lobby.tooltips.banner_tooltip import BannerTooltipView
 from gui.impl.gen.view_models.views.lobby.user_missions.constants.event_banner_state import EventBannerState
 from gui.impl.lobby.user_missions.hangar_widget.event_banners.base_event_banner import BaseEventBanner
 from gui.impl.lobby.user_missions.hangar_widget.event_banners.event_banners_container import EventBannersContainer
 from gui.impl.lobby.user_missions.hangar_widget.services import IEventsService
 from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
+from gui.periodic_battles.models import PrimeTimeStatus
+from gui.shared.event_dispatcher import showEpicRewardsSelectionWindow
 from helpers import dependency
 from skeletons.gui.game_control import IEpicBattleMetaGameController
-STATES_MAP = {FrontlineState.ANNOUNCE: EventBannerState.ANNOUNCE,
- FrontlineState.ACTIVE: EventBannerState.IN_PROGRESS,
- FrontlineState.FROZEN: EventBannerState.INACTIVE,
- FrontlineState.FINISHED: EventBannerState.INACTIVE}
+from frontline.constants.common import STATES_MAP
 
 class FrontlineEventBanner(BaseEventBanner):
     NAME = EPICBATTLES_ALIASES.EPIC_BATTLES_ENTRY_POINT
@@ -33,6 +31,10 @@ class FrontlineEventBanner(BaseEventBanner):
     @property
     def isMode(self):
         return True
+
+    @property
+    def hasRewards(self):
+        return self.__epicController.getNotChosenRewardCount()
 
     @property
     def borderColor(self):
@@ -59,12 +61,16 @@ class FrontlineEventBanner(BaseEventBanner):
         return self._playAppearAnim
 
     def createToolTipContent(self, event):
-        return LevelReservesTooltip()
+        return BannerTooltipView()
 
     def onClick(self):
+        from frontline.gui.impl.lobby.states import ProgressionScreenState
         if isHangarAvailable():
             self.__epicController.selectEpicBattle()
-        self.__epicController.showProgressionDuringSomeStates()
+        elif self.hasRewards:
+            showEpicRewardsSelectionWindow()
+        else:
+            ProgressionScreenState.goTo()
         if self._state == EventBannerState.INTRO:
             currentSeasonStartDate = self.__epicController.getCurrentSeason().getStartDate()
             AccountSettings.setSettings(FRONTLINE_BANNER_INTRO_CLICK_TIMESTAMP, currentSeasonStartDate)
@@ -110,3 +116,11 @@ class FrontlineEventBanner(BaseEventBanner):
             EventBannersContainer().onBannerUpdate(self)
         else:
             self.__eventsService.updateEntries()
+
+
+@dependency.replace_none_kwargs(epicController=IEpicBattleMetaGameController)
+def isEpicBattlesEntryPointAvailable(epicController=None):
+    state, _, _ = geFrontlineState()
+    primeTimeStatus, _, _ = epicController.getPrimeTimeStatus()
+    hasUnclaimedRewards = epicController.getNotChosenRewardCount()
+    return not (not epicController.isEnabled() or not epicController.getCurrentSeasonID() or primeTimeStatus in [PrimeTimeStatus.NOT_SET, PrimeTimeStatus.FROZEN] or state == FrontlineState.FINISHED and not hasUnclaimedRewards)

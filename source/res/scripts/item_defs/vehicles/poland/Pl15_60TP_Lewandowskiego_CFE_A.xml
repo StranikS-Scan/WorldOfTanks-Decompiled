@@ -19,7 +19,7 @@
     <backward>	14	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.052	</moving>
+    <moving>	0.053	</moving>
     <still>	0.105	</still>
     <camouflageBonus>	0.02	</camouflageBonus>
     <firePenalty>	0.158	</firePenalty>
@@ -41,7 +41,7 @@
       <invisibilityBonus>	0.06	</invisibilityBonus>
     </deluxeAdditionalInvisibilityDevice>
   </optDevsOverrides>
-  <repairCost>	12	</repairCost>
+  <repairCost>	11.0	</repairCost>
   <premiumVehicleXPFactor>	0.05	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
@@ -72,9 +72,9 @@
     <weight>	27250	</weight>
     <maxHealth>	2000	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	250	</maxHealth>
-      <maxRegenHealth>	188	</maxRegenHealth>
-      <repairCost>	10	</repairCost>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	140	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
     </ammoBayHealth>
     <models>
       <undamaged>	vehicles/poland/Pl15_60TP_Lewandowskiego_CFE_A/normal/lod0/Hull.model	</undamaged>
@@ -202,7 +202,7 @@
       <userString>	#poland_vehicles:Chassis_Pl15_60TP_Lewandowskiego_CFE_A	</userString>
       <tags></tags>
       <level>	10	</level>
-      <price>	80000	</price>
+      <price>	82500	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <leftTrack>	20	</leftTrack>
@@ -219,8 +219,8 @@
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	250	</maxHealth>
-      <maxRegenHealth>	188	</maxRegenHealth>
-      <repairCost>	7.5	</repairCost>
+      <maxRegenHealth>	190	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/poland/Pl15_60TP_Lewandowskiego_CFE_A/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/poland/Pl15_60TP_Lewandowskiego_CFE_A/crash/lod0/Chassis.model	</destroyed>
@@ -1400,7 +1400,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	6.71999979	</repairTime>
+      <repairTime>	6.85714293	</repairTime>
     </Chassis_Pl15_60TP_Lewandowskiego_CFE_A>
   </chassis>
   <turrets0>
@@ -1408,7 +1408,7 @@
       <userString>	#poland_vehicles:Turret_1_Pl15_60TP_Lewandowskiego_CFE_A	</userString>
       <tags></tags>
       <level>	10	</level>
-      <price>	80000	</price>
+      <price>	66000	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	260	</armor_1>
@@ -1433,15 +1433,15 @@
       <maxHealth>	500	</maxHealth>
       <rotationSpeed>	24	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	185	</maxHealth>
-        <maxRegenHealth>	93	</maxRegenHealth>
-        <repairCost>	10	</repairCost>
+        <maxHealth>	170	</maxHealth>
+        <maxRegenHealth>	85	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	120	</maxHealth>
         <maxRegenHealth>	60	</maxRegenHealth>
-        <repairCost>	2	</repairCost>
+        <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
         <_152mm_J_2_CFE_A>	shared	  <maxAmmo>	30	</maxAmmo>

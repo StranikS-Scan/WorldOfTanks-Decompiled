@@ -1,0 +1,53 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
+# Embedded file name: scripts/client/gui/hangar_presets/obsolete/hangar_gui_helpers.py
+import operator
+from functools import wraps
+from helpers import dependency
+from skeletons.gui.game_control import IHangarGuiController
+
+def ifComponentAvailable(componentType=None):
+
+    def decorator(method):
+
+        @wraps(method)
+        def wrapper(hangar, *args, **kwargs):
+            hangarGuiCtrl = dependency.instance(IHangarGuiController)
+            return method(hangar, *args, **kwargs) if hangarGuiCtrl.sfController.isComponentAvailable(componentType) else None
+
+        return wrapper
+
+    return decorator
+
+
+def ifComponentInPreset(componentType=None, defReturn=None, abortAction=None):
+
+    def decorator(method):
+
+        @wraps(method)
+        def wrapper(presetGetter, *args, **kwargs):
+            preset = presetGetter.getPreset()
+            if preset is not None and componentType in preset.visibleComponents:
+                return method(presetGetter, preset, *args, **kwargs)
+            else:
+                return operator.methodcaller(abortAction)(presetGetter) if abortAction is not None else defReturn
+
+        return wrapper
+
+    return decorator
+
+
+def hasCurrentPreset(defReturn=None, abortAction=None):
+
+    def decorator(method):
+
+        @wraps(method)
+        def wrapper(hangarGuiSfCtrl, *args, **kwargs):
+            currentPreset = hangarGuiSfCtrl.getCurrentPreset()
+            if currentPreset is not None:
+                return method(hangarGuiSfCtrl, currentPreset, *args, **kwargs)
+            else:
+                return operator.methodcaller(abortAction)(hangarGuiSfCtrl) if abortAction is not None else defReturn
+
+        return wrapper
+
+    return decorator

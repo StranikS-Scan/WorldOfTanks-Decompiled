@@ -97,7 +97,7 @@ class PythonTimer(TimerComponent):
 
 
 class PrecisePythonTimer(PythonTimer):
-    __slots__ = ('__short1stPeriodCbId', '__interval', '_timeInterval', '_startTime')
+    __slots__ = ('__short1stPeriodCbId', '__interval')
 
     def __init__(self, viewObject, typeID, viewID, totalTime, finishTime, startTime=None, interval=1.0, secondInRow=False, **kwargs):
         super(PrecisePythonTimer, self).__init__(viewObject, typeID, viewID, totalTime, finishTime, startTime, interval, secondInRow, **kwargs)

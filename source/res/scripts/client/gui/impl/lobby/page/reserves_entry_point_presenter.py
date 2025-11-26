@@ -18,9 +18,6 @@ from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.web import IWebController
 if typing.TYPE_CHECKING:
     from frameworks.wulf.view.array import Array
-    from gui.goodies.goodies_cache import GoodiesCache
-    from gui.game_control.BoostersController import BoostersController
-    from gui.wgcg.web_controller import WebController
     from frameworks.wulf.view.view import View, ViewEvent
 _logger = logging.getLogger(__name__)
 
@@ -36,6 +33,9 @@ class ReservesEntryPointPresenter(ViewComponent[ReservesEntryPointModel]):
     def viewModel(self):
         return super(ReservesEntryPointPresenter, self).getViewModel()
 
+    def createToolTipContent(self, event, contentID):
+        return PersonalReservesTooltipView() if contentID == R.views.lobby.personal_reserves.PersonalReservesTooltip() else super(ReservesEntryPointPresenter, self).createToolTipContent(event, contentID)
+
     def _onLoading(self, *args, **kwargs):
         super(ReservesEntryPointPresenter, self)._onLoading(*args, **kwargs)
         self.__updateModel()
@@ -50,16 +50,13 @@ class ReservesEntryPointPresenter(ViewComponent[ReservesEntryPointModel]):
     def __updateClanReserves(self):
         self.__updateModel()
 
-    def createToolTipContent(self, event, contentID):
-        return PersonalReservesTooltipView() if contentID == R.views.lobby.personal_reserves.PersonalReservesTooltip() else super(ReservesEntryPointPresenter, self).createToolTipContent(event, contentID)
-
     def __updateModel(self):
         self._hasActiveBoosters = False
         with self.viewModel.transaction() as model:
-            reservesArray = model.getReserves()
-            reservesArray.clear()
             activeBoosters = getActiveBoosters(goodiesCache=self.__goodiesCache, webController=self.__webCtrl)
             self._hasActiveBoosters = active = bool(activeBoosters)
+            reservesArray = model.getReserves()
+            reservesArray.clear()
             if active:
                 for category in BoosterCategory:
                     addToReserveArrayByCategory(reservesArray, activeBoosters, category, self.__goodiesCache)

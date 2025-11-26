@@ -463,16 +463,16 @@
             <isLeft>	true	</isLeft>
             <destructionEffect></destructionEffect>
             <physicalParams>
-              <renderModelOffset>	-0.022101	</renderModelOffset>
-              <interpolationsCount>	2	</interpolationsCount>
-              <lengthwiseSpringLength>	0.064809	</lengthwiseSpringLength>
+              <renderModelOffset>	-0.018806	</renderModelOffset>
+              <interpolationsCount>	1	</interpolationsCount>
+              <lengthwiseSpringLength>	0.073797	</lengthwiseSpringLength>
               <widthwiseSpringLength>	0.452991	</widthwiseSpringLength>
-              <hingeJointStiffness>	750.955994	</hingeJointStiffness>
-              <torsionStiffnessStep>	6	</torsionStiffnessStep>
+              <hingeJointStiffness>	1934.896729	</hingeJointStiffness>
+              <torsionStiffnessStep>	8	</torsionStiffnessStep>
               <wheelGroups>
                 <wheelGroup>
                   <wheelName>	WD_L5	</wheelName>
-                  <groupRadius>	0.248783	</groupRadius>
+                  <groupRadius>	0.277651	</groupRadius>
                   <groupInnerOffset>	0.375	</groupInnerOffset>
                   <groupOuterOffset>	-0.275	</groupOuterOffset>
                 </wheelGroup>
@@ -493,13 +493,13 @@
                   <wheelName>	WD_L3	</wheelName>
                   <wheelName>	WD_L2	</wheelName>
                   <wheelName>	WD_L1	</wheelName>
-                  <groupRadius>	0.114654	</groupRadius>
+                  <groupRadius>	0.114073	</groupRadius>
                   <groupInnerOffset>	0.375	</groupInnerOffset>
                   <groupOuterOffset>	-0.275	</groupOuterOffset>
                 </wheelGroup>
                 <wheelGroup>
                   <wheelName>	WD_L0	</wheelName>
-                  <groupRadius>	0.336749	</groupRadius>
+                  <groupRadius>	0.331981	</groupRadius>
                   <groupInnerOffset>	0.375	</groupInnerOffset>
                   <groupOuterOffset>	-0.275	</groupOuterOffset>
                 </wheelGroup>
@@ -542,16 +542,16 @@
             <isLeft>	false	</isLeft>
             <destructionEffect></destructionEffect>
             <physicalParams>
-              <renderModelOffset>	-0.022101	</renderModelOffset>
-              <interpolationsCount>	2	</interpolationsCount>
-              <lengthwiseSpringLength>	0.064843	</lengthwiseSpringLength>
-              <widthwiseSpringLength>	0.452991	</widthwiseSpringLength>
-              <hingeJointStiffness>	748.956848	</hingeJointStiffness>
-              <torsionStiffnessStep>	6	</torsionStiffnessStep>
+              <renderModelOffset>	-0.01777	</renderModelOffset>
+              <interpolationsCount>	1	</interpolationsCount>
+              <lengthwiseSpringLength>	0.073825	</lengthwiseSpringLength>
+              <widthwiseSpringLength>	0.452216	</widthwiseSpringLength>
+              <hingeJointStiffness>	1934.01416	</hingeJointStiffness>
+              <torsionStiffnessStep>	8	</torsionStiffnessStep>
               <wheelGroups>
                 <wheelGroup>
                   <wheelName>	WD_R5	</wheelName>
-                  <groupRadius>	0.248751	</groupRadius>
+                  <groupRadius>	0.276138	</groupRadius>
                   <groupInnerOffset>	-0.375	</groupInnerOffset>
                   <groupOuterOffset>	0.275	</groupOuterOffset>
                 </wheelGroup>
@@ -572,13 +572,13 @@
                   <wheelName>	WD_R3	</wheelName>
                   <wheelName>	WD_R2	</wheelName>
                   <wheelName>	WD_R1	</wheelName>
-                  <groupRadius>	0.114592	</groupRadius>
+                  <groupRadius>	0.114021	</groupRadius>
                   <groupInnerOffset>	-0.375	</groupInnerOffset>
                   <groupOuterOffset>	0.275	</groupOuterOffset>
                 </wheelGroup>
                 <wheelGroup>
                   <wheelName>	WD_R0	</wheelName>
-                  <groupRadius>	0.336725	</groupRadius>
+                  <groupRadius>	0.330301	</groupRadius>
                   <groupInnerOffset>	-0.375	</groupInnerOffset>
                   <groupOuterOffset>	0.275	</groupOuterOffset>
                 </wheelGroup>
@@ -859,8 +859,8 @@
           <segment2ModelRight>	vehicles/german/G185_Leopard_120_Verbessert/track/segment2.model	</segment2ModelRight>
           <left>	vehicles/german/G185_Leopard_120_Verbessert/track/left.track	</left>
           <right>	vehicles/german/G185_Leopard_120_Verbessert/track/right.track	</right>
-          <segmentLength>	0.132	</segmentLength>
-          <segmentOffset>	0.385	</segmentOffset>
+          <segmentLength>	0.151	</segmentLength>
+          <segmentOffset>	0.438	</segmentOffset>
           <segment2Offset>	0.078	</segment2Offset>
           <atlas>
             <UTiles>	1	</UTiles>
@@ -872,30 +872,30 @@
       <physicalTracks>
         <left>
           <trackPairIdx>	0	</trackPairIdx>
-          <segmentsCount>	206	</segmentsCount>
-          <segmentsOuterThickness>	0.070605	</segmentsOuterThickness>
-          <segmentsInnerThickness>	0.026404	</segmentsInnerThickness>
+          <segmentsCount>	182	</segmentsCount>
+          <segmentsOuterThickness>	0.067311	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.029698	</segmentsInnerThickness>
           <segmentsPlaneOffset>	-1.351	</segmentsPlaneOffset>
           <mainSegment>
             <model>	vehicles/german/G185_Leopard_120_Verbessert/track/segment1.model	</model>
-            <length>	0.067	</length>
+            <length>	0.076992	</length>
           </mainSegment>
           <secSegment>
             <model>	vehicles/german/G185_Leopard_120_Verbessert/track/segment2.model	</model>
-            <length>	0.067	</length>
+            <length>	0.078488	</length>
           </secSegment>
           <springsLength>
             <backwardMovement>
-              <back>	0.064814	</back>
-              <top>	0.059368	</top>
-              <front>	0.060126	</front>
-              <bottom>	0.036455	</bottom>
+              <back>	0.074	</back>
+              <top>	0.072	</top>
+              <front>	0.07	</front>
+              <bottom>	0.046	</bottom>
             </backwardMovement>
             <forwardMovement>
-              <back>	0.060426	</back>
+              <back>	0.07	</back>
               <top>	0.06236	</top>
-              <front>	0.065504	</front>
-              <bottom>	0.043959	</bottom>
+              <front>	0.074	</front>
+              <bottom>	0.053	</bottom>
             </forwardMovement>
           </springsLength>
           <bottomWheels>
@@ -913,36 +913,36 @@
             <topFront>
               <wheelName>	WD_L0	</wheelName>
               <basePos>	2.826936 0.788442	</basePos>
-              <shiftVec>	0.356781 0.067728	</shiftVec>
-              <jointIdx>	21	</jointIdx>
+              <shiftVec>	0.348594 0.096408	</shiftVec>
+              <jointIdx>	19	</jointIdx>
             </topFront>
             <topBack>
               <wheelName>	WD_L5	</wheelName>
               <basePos>	-2.757182 0.765004	</basePos>
-              <shiftVec>	-0.260751 0.08796	</shiftVec>
-              <jointIdx>	120	</jointIdx>
+              <shiftVec>	-0.290996 0.098919	</shiftVec>
+              <jointIdx>	106	</jointIdx>
             </topBack>
             <bottomBack>
               <wheelName>	W_L6	</wheelName>
               <basePos>	-2.04662 0.423	</basePos>
-              <shiftVec>	0.017656 -0.352395	</shiftVec>
-              <jointIdx>	141	</jointIdx>
+              <shiftVec>	0.013394 -0.355689	</shiftVec>
+              <jointIdx>	125	</jointIdx>
             </bottomBack>
             <bottomFront>
               <wheelName>	W_L0	</wheelName>
               <basePos>	2.166285 0.423001	</basePos>
-              <shiftVec>	0.01734 -0.351968	</shiftVec>
+              <shiftVec>	0.00692 -0.355622	</shiftVec>
               <jointIdx>	0	</jointIdx>
             </bottomFront>
           </snapWheels>
           <radiusOverrides>
             <wheel>
               <name>	WD_L5	</name>
-              <radius>	0.273166	</radius>
+              <radius>	0.305772	</radius>
             </wheel>
             <wheel>
               <name>	WD_L0	</name>
-              <radius>	0.361624	</radius>
+              <radius>	0.36034	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
@@ -950,12 +950,12 @@
             <segmentSyncPivotOffset>	0	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_L5	</name>
-              <startAngle>	3.076248	</startAngle>
+              <startAngle>	3.066536	</startAngle>
               <teethCount>	12	</teethCount>
             </sync>
             <sync>
               <name>	WD_L0	</name>
-              <startAngle>	0.12135	</startAngle>
+              <startAngle>	-0.114903	</startAngle>
               <teethCount>	12	</teethCount>
             </sync>
           </teethSyncs>
@@ -1130,30 +1130,30 @@
         </left>
         <right>
           <trackPairIdx>	0	</trackPairIdx>
-          <segmentsCount>	206	</segmentsCount>
-          <segmentsOuterThickness>	0.070605	</segmentsOuterThickness>
-          <segmentsInnerThickness>	0.026404	</segmentsInnerThickness>
+          <segmentsCount>	182	</segmentsCount>
+          <segmentsOuterThickness>	0.066662	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.031122	</segmentsInnerThickness>
           <segmentsPlaneOffset>	1.351	</segmentsPlaneOffset>
           <mainSegment>
             <model>	vehicles/german/G185_Leopard_120_Verbessert/track/segment1.model	</model>
-            <length>	0.067	</length>
+            <length>	0.077297	</length>
           </mainSegment>
           <secSegment>
             <model>	vehicles/german/G185_Leopard_120_Verbessert/track/segment2.model	</model>
-            <length>	0.067	</length>
+            <length>	0.077736	</length>
           </secSegment>
           <springsLength>
             <backwardMovement>
-              <back>	0.064814	</back>
-              <top>	0.059368	</top>
-              <front>	0.060126	</front>
-              <bottom>	0.036455	</bottom>
+              <back>	0.074	</back>
+              <top>	0.072	</top>
+              <front>	0.07	</front>
+              <bottom>	0.046	</bottom>
             </backwardMovement>
             <forwardMovement>
-              <back>	0.060426	</back>
+              <back>	0.07	</back>
               <top>	0.06236	</top>
-              <front>	0.065504	</front>
-              <bottom>	0.043959	</bottom>
+              <front>	0.074	</front>
+              <bottom>	0.053	</bottom>
             </forwardMovement>
           </springsLength>
           <bottomWheels>
@@ -1171,36 +1171,36 @@
             <topFront>
               <wheelName>	WD_R0	</wheelName>
               <basePos>	2.826937 0.788442	</basePos>
-              <shiftVec>	0.357072 0.065334	</shiftVec>
-              <jointIdx>	22	</jointIdx>
+              <shiftVec>	0.349007 0.093922	</shiftVec>
+              <jointIdx>	20	</jointIdx>
             </topFront>
             <topBack>
               <wheelName>	WD_R5	</wheelName>
               <basePos>	-2.757182 0.765004	</basePos>
-              <shiftVec>	-0.260929 0.086754	</shiftVec>
-              <jointIdx>	121	</jointIdx>
+              <shiftVec>	-0.291031 0.098536	</shiftVec>
+              <jointIdx>	107	</jointIdx>
             </topBack>
             <bottomBack>
               <wheelName>	W_R6	</wheelName>
               <basePos>	-2.16662 0.423	</basePos>
-              <shiftVec>	-0.010369 -0.352139	</shiftVec>
-              <jointIdx>	140	</jointIdx>
+              <shiftVec>	-0.031765 -0.354919	</shiftVec>
+              <jointIdx>	124	</jointIdx>
             </bottomBack>
             <bottomFront>
               <wheelName>	W_R0	</wheelName>
               <basePos>	2.046284 0.423	</basePos>
-              <shiftVec>	0.056164 -0.347786	</shiftVec>
+              <shiftVec>	0.037108 -0.354401	</shiftVec>
               <jointIdx>	0	</jointIdx>
             </bottomFront>
           </snapWheels>
           <radiusOverrides>
             <wheel>
               <name>	WD_R5	</name>
-              <radius>	0.273166	</radius>
+              <radius>	0.305691	</radius>
             </wheel>
             <wheel>
               <name>	WD_R0	</name>
-              <radius>	0.361624	</radius>
+              <radius>	0.360091	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
@@ -1208,12 +1208,12 @@
             <segmentSyncPivotOffset>	0	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_R5	</name>
-              <startAngle>	3.076247	</startAngle>
+              <startAngle>	3.081468	</startAngle>
               <teethCount>	12	</teethCount>
             </sync>
             <sync>
               <name>	WD_R0	</name>
-              <startAngle>	0.12135	</startAngle>
+              <startAngle>	-0.113786	</startAngle>
               <teethCount>	12	</teethCount>
             </sync>
           </teethSyncs>
@@ -2051,7 +2051,7 @@
         <slot>
           <slotType>	attachment	</slotType>
           <slotId>	38000	</slotId>
-          <position>	-0.529733 0.990193 -2.30938	</position>
+          <position>	-0.529733 0.990193 -2.283808	</position>
           <rotation>	-0 0 0	</rotation>
           <scale>	1 1 1	</scale>
           <applyType>	turret	</applyType>

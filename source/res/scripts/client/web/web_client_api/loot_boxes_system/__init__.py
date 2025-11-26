@@ -1,14 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/loot_boxes_system/__init__.py
-import BigWorld
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.lootbox_system.base.bonuses_packers import mergeNeededBonuses, processCompensationsWithLootbox
 from gui.lootbox_system.base.common import ViewID, Views
 from gui.server_events.awards_formatters import AWARDS_SIZES
-from gui.shared.event_dispatcher import showHangar, showShop
 from helpers import dependency
-from shared_utils import first
 from skeletons.gui.game_control import ILootBoxSystemController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
@@ -68,20 +64,16 @@ class LootBoxSystemWebApi(object):
         category = box.getCategory()
         eventName = box.getType()
         if cmd.view_id == ViewsIDs.OVERLAY:
-            self.__closeExistingShopOverlay()
             Views.load(ViewID.MAIN, subViewID=None, category=category, eventName=eventName)
         elif cmd.view_id == ViewsIDs.SHOP:
-            showHangar()
-            Views.load(ViewID.MAIN, subViewID=None, category=category, eventName=eventName, backCallback=showShop)
+            Views.load(ViewID.MAIN, subViewID=None, category=category, eventName=eventName)
         return
 
     @w2c(_ShowInfoSchema, 'show_info_page')
     def showInfoPage(self, cmd):
         box = self.__itemsCache.items.tokens.getLootBoxByID(cmd.box_id)
         eventName = box.getType()
-        Views.load(ViewID.INFO, previousWindow=cmd.view_id, eventName=eventName)
-        if cmd.view_id == ViewsIDs.OVERLAY:
-            BigWorld.callback(0.5, self.__closeExistingShopOverlay)
+        Views.load(ViewID.INFO, eventName=eventName)
 
     def __addBonusesInfo(self, slotsInfo, eventName, fullInfo):
         result = {}
@@ -111,9 +103,3 @@ class LootBoxSystemWebApi(object):
                 bonusEntry['icon'][size] = RES_ICONS.getVehicleAwardIcon(size)
 
         return bonusEntry['type'] in (b['type'] for b in bonuses)
-
-    def __closeExistingShopOverlay(self):
-        window = first(self.__guiLoader.windowsManager.findWindows(lambda w: w.content is not None and getattr(w.content, 'alias', None) == VIEW_ALIAS.OVERLAY_WEB_STORE))
-        if window is not None:
-            window.destroy()
-        return

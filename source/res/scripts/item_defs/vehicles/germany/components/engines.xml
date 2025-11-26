@@ -154,6 +154,7 @@
     <M_17T_nestejaahdytteinen_bensiinimoottori>	160	</M_17T_nestejaahdytteinen_bensiinimoottori>
     <G04>	161	</G04>
     <Maybach_Neues_Projekt_90>	162	</Maybach_Neues_Projekt_90>
+    <Maybach_HL_100TR_BW>	163	</Maybach_HL_100TR_BW>
     <Mercedes_Benz_MB_507>	263	</Mercedes_Benz_MB_507>
     <_2x_Hanomag_Boxer>	264	</_2x_Hanomag_Boxer>
     <Maybach_HL_230P30D>	265	</Maybach_HL_230P30D>
@@ -405,6 +406,23 @@
       <rpm_min>	424	</rpm_min>
       <rpm_max>	2440	</rpm_max>
     </Maybach_HL_108TR>
+    <Maybach_HL_100TR_BW>
+      <userString>	#germany_vehicles:Maybach_HL_100TR_BW	</userString>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	5000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	300	</power>
+      <weight>	500	</weight>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	437	</rpm_min>
+      <rpm_max>	2400	</rpm_max>
+    </Maybach_HL_100TR_BW>
     <Maybach_HL_108TR_T>
       <userString>	#germany_vehicles:Maybach_HL_108TR	</userString>
       <tags>	gasoline	</tags>
@@ -606,19 +624,19 @@
     <Maybach_HL_120_TRM_A>
       <userString>	#germany_vehicles:Maybach_HL_120_TRM	</userString>
       <tags>	gasoline	</tags>
-      <level>	4	</level>
+      <level>	5	</level>
       <notInShop>	true	</notInShop>
       <price>	19900	</price>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	440	</power>
+      <power>	480	</power>
       <weight>	510	</weight>
-      <maxHealth>	86	</maxHealth>
-      <maxRegenHealth>	42	</maxRegenHealth>
-      <repairCost>	4	</repairCost>
+      <maxHealth>	170	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	349	</rpm_min>
-      <rpm_max>	2681	</rpm_max>
+      <rpm_min>	324	</rpm_min>
+      <rpm_max>	2761	</rpm_max>
     </Maybach_HL_120_TRM_A>
     <Maybach_HL_120_TRM_C>
       <userString>	#germany_vehicles:Maybach_HL_120_TRM_C	</userString>
@@ -1260,8 +1278,8 @@
       <maxRegenHealth>	190	</maxRegenHealth>
       <repairCost>	11	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	250	</rpm_min>
-      <rpm_max>	2800	</rpm_max>
+      <rpm_min>	350	</rpm_min>
+      <rpm_max>	2480	</rpm_max>
     </MB_517_Spezialausfuehrung>
     <DB_603_A1>
       <userString>	#germany_vehicles:DB_603_A1	</userString>
@@ -1453,14 +1471,14 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
       <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
-      <power>	1200	</power>
+      <power>	1310	</power>
       <weight>	750	</weight>
       <maxHealth>	310	</maxHealth>
       <maxRegenHealth>	155	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	404	</rpm_min>
-      <rpm_max>	2305	</rpm_max>
+      <rpm_min>	373	</rpm_min>
+      <rpm_max>	2404	</rpm_max>
     </Maybach_Neues_Projekt_90>
     <Maybach_HL_234>
       <userString>	#germany_vehicles:Maybach_HL_234	</userString>
@@ -2080,14 +2098,14 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_mtu_mb_838_PC	</wwsoundPC>
       <wwsoundNPC>	eng_mtu_mb_838_NPC	</wwsoundNPC>
-      <power>	850	</power>
+      <power>	900	</power>
       <weight>	2000	</weight>
       <maxHealth>	255	</maxHealth>
       <maxRegenHealth>	127	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	225	</rpm_min>
-      <rpm_max>	2525	</rpm_max>
+      <rpm_min>	200	</rpm_min>
+      <rpm_max>	2600	</rpm_max>
     </MTU803>
     <Engine_VK4502P>
       <userString>	#germany_vehicles:Engine_VK4502P	</userString>
@@ -2433,14 +2451,14 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	1000	</power>
+      <power>	1080	</power>
       <weight>	2000	</weight>
       <maxHealth>	345	</maxHealth>
       <maxRegenHealth>	173	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	253	</rpm_min>
-      <rpm_max>	2440	</rpm_max>
+      <rpm_min>	232	</rpm_min>
+      <rpm_max>	2504	</rpm_max>
     </Simmering_Graz_Pauker_SLa_16>
     <MB-503>
       <userString>	#germany_vehicles:MB-503	</userString>
@@ -4162,8 +4180,8 @@
       <maxRegenHealth>	190	</maxRegenHealth>
       <repairCost>	11	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	210	</rpm_min>
-      <rpm_max>	2570	</rpm_max>
+      <rpm_min>	235	</rpm_min>
+      <rpm_max>	2495	</rpm_max>
     </MTU_MB_838_CaM_500H>
     <Maybach_HL_210P30_Ausf_A_IGR>
       <userString>	#igr_vehicles:Maybach_HL_210P30_Ausf_A_IGR	</userString>

@@ -1516,6 +1516,7 @@
           <burst>
             <count>	2	</count>
             <rate>	40	</rate>
+            <syncReloading>	true	</syncReloading>
           </burst>
           <mechanics>
             <chargeableBurst>
@@ -1612,6 +1613,7 @@
       <hitTester>
         <collisionModelServer>	vehicles/american/A179_Black_Rock/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/american/A179_Black_Rock/collision_client/Turret_01.model	</collisionModelClient>
+        <capsuleScale>	0.1 2.0 0.2	</capsuleScale>
       </hitTester>
       <gunPosition>	-1e-06 0.406999 1.415	</gunPosition>
       <customizationSlots>

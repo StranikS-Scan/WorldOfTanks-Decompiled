@@ -92,4 +92,8 @@ class XpTransfer(GoodieTarget):
     pass
 
 
+class BuyPet(GoodieTarget):
+    pass
+
+
 GoodieTargetType = TypeVar('GoodieTargetType', bound=GoodieTarget)

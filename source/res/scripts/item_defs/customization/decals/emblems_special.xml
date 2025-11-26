@@ -5969,7 +5969,7 @@
     <priceGroup>	emblems 150g notInShop	</priceGroup>
     <vehicleFilter>
       <exclude>
-        <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+        <vehicles>	poland:Pl15_60TP_Lewandowskiego_CFE_A usa:A174_T57_58_Rush_Ep1	</vehicles>
       </exclude>
     </vehicleFilter>
     <decal>
@@ -5986,5 +5986,114 @@
       <mirror>	false	</mirror>
       <tags>	hiddenInUI	</tags>
     </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Battle Pass 2025	</name>
+    <type>	EMBLEM	</type>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	emblems 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	poland:Pl15_60TP_Lewandowskiego_CFE_A usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <decal>
+      <id>	1182	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_872.dds	</texture>
+      <userString>	#vehicle_customization:special_style/bp_2025_sch	</userString>
+      <mirror>	false	</mirror>
+      <tags>	hiddenInUI	</tags>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	emblems 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	poland:Pl15_60TP_Lewandowskiego_CFE_A usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
+      <include>
+        <levels>	8 9 10 11	</levels>
+      </include>
+    </vehicleFilter>
+    <decal>
+      <id>	1186	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_873.dds	</texture>
+      <userString>	#vehicle_customization:special_style/clans_2d_2025_2	</userString>
+      <tags>	hiddenInUI	</tags>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1187	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_874.dds	</texture>
+      <userString>	#vehicle_customization:special_style/clans_2d_2025_3	</userString>
+      <tags>	hiddenInUI	</tags>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1188	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_875.dds	</texture>
+      <userString>	#vehicle_customization:special_style/clans_2d_2025_4	</userString>
+      <tags>	hiddenInUI	</tags>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Clans 2D 2025	</name>
+    <type>	EMBLEM	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	emblems 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	poland:Pl15_60TP_Lewandowskiego_CFE_A usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <decal>
+      <id>	1189	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_876.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_876	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1190	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_877.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_877	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Win back with CCs	</name>
+    <type>	EMBLEM	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	emblems 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	poland:Pl15_60TP_Lewandowskiego_CFE_A usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <decal>
+      <id>	1216	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_664.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_664	</userString>
+      <tags>	hiddenInUI	</tags>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1225	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_665.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_665	</userString>
+      <tags>	hiddenInUI	</tags>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Advent Calendar 2025	</name>
+    <type>	EMBLEM	</type>
   </itemGroup>
 </emblems_special.xml>

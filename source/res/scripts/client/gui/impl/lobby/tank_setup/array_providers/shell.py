@@ -18,7 +18,7 @@ _SHELLS_INFO_PARAMS = ('avgDamage',
  'stunDurationList')
 
 class ShellProvider(VehicleBaseArrayProvider):
-    __slots__ = ('_interactor',)
+    __slots__ = ()
     _itemsCache = dependency.descriptor(IItemsCache)
 
     def updateItems(self):

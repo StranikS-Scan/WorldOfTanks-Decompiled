@@ -74,6 +74,13 @@
       <undamaged>	vehicles/german/G177_E65_Zwilling/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/german/G177_E65_Zwilling/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/german/G177_E65_Zwilling/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <G177_E65_Zwilling_W25_3Dst>
+          <undamaged>	vehicles/german/G177_E65_Zwilling/_skins/G177_E65_Zwilling_W25_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/german/G177_E65_Zwilling/_skins/G177_E65_Zwilling_W25_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/german/G177_E65_Zwilling/_skins/G177_E65_Zwilling_W25_3Dst/crash/lod0/Hull.model	</exploded>
+        </G177_E65_Zwilling_W25_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -96,9 +103,9 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.468459 0.215865 2.889023	</rayStart>
-        <rayEnd>	-0.468459 0.052035 2.774308	</rayEnd>
-        <rayUp>	0 0.573577 -0.819152	</rayUp>
+        <rayStart>	-0.468459 0.215865 2.876412	</rayStart>
+        <rayEnd>	-0.468459 0.052035 2.761697	</rayEnd>
+        <rayUp>	-0 0.573577 -0.819152	</rayUp>
         <size>	0.28	</size>
         <isUVProportional>	false	</isUVProportional>
       </slot>
@@ -673,6 +680,13 @@
         <applyType>	universal	</applyType>
         <size>	medium	</size>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <hiddenForUser>	true	</hiddenForUser>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -714,6 +728,13 @@
         <undamaged>	vehicles/german/G177_E65_Zwilling/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/german/G177_E65_Zwilling/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/german/G177_E65_Zwilling/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <G177_E65_Zwilling_W25_3Dst>
+            <undamaged>	vehicles/german/G177_E65_Zwilling/_skins/G177_E65_Zwilling_W25_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G177_E65_Zwilling/_skins/G177_E65_Zwilling_W25_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G177_E65_Zwilling/_skins/G177_E65_Zwilling_W25_3Dst/crash/lod0/Chassis.model	</exploded>
+          </G177_E65_Zwilling_W25_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1226,13 +1247,19 @@
           <segmentModelRight>	vehicles/german/G177_E65_Zwilling/track/segment.model	</segmentModelRight>
           <left>	vehicles/german/G177_E65_Zwilling/track/left.track	</left>
           <right>	vehicles/german/G177_E65_Zwilling/track/right.track	</right>
-          <segmentLength>	0.135	</segmentLength>
-          <segmentOffset>	0.1	</segmentOffset>
+          <segmentLength>	0.124	</segmentLength>
+          <segmentOffset>	0.085	</segmentOffset>
           <segment2Offset>	0.01	</segment2Offset>
           <atlas>
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
           </atlas>
+          <modelSets>
+            <G177_E65_Zwilling_W25_3Dst>
+              <segmentModelLeft>	vehicles/german/G177_E65_Zwilling/_skins/G177_E65_Zwilling_W25_3Dst/track/segment.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/german/G177_E65_Zwilling/_skins/G177_E65_Zwilling_W25_3Dst/track/segment.model	</segmentModelRight>
+            </G177_E65_Zwilling_W25_3Dst>
+          </modelSets>
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
@@ -1247,6 +1274,11 @@
             <model>	vehicles/german/G177_E65_Zwilling/track/segment.model	</model>
             <length>	0.137791	</length>
           </mainSegment>
+          <modelSets>
+            <G177_E65_Zwilling_W25_3Dst>
+              <mainSegmentModel>	vehicles/german/G177_E65_Zwilling/_skins/G177_E65_Zwilling_W25_3Dst/track/segment.model	</mainSegmentModel>
+            </G177_E65_Zwilling_W25_3Dst>
+          </modelSets>
           <springsLength>
             <backwardMovement>
               <back>	0.133785	</back>
@@ -1300,7 +1332,7 @@
           <radiusOverrides>
             <wheel>
               <name>	WD_L1	</name>
-              <radius>	0.397993	</radius>
+              <radius>	0.411	</radius>
             </wheel>
             <wheel>
               <name>	WD_L0	</name>
@@ -1312,7 +1344,7 @@
             <segmentSyncPivotOffset>	0	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_L1	</name>
-              <startAngle>	3.106686	</startAngle>
+              <startAngle>	2.827433	</startAngle>
               <teethCount>	20	</teethCount>
             </sync>
             <sync>
@@ -1449,6 +1481,11 @@
             <model>	vehicles/german/G177_E65_Zwilling/track/segment.model	</model>
             <length>	0.137794	</length>
           </mainSegment>
+          <modelSets>
+            <G177_E65_Zwilling_W25_3Dst>
+              <mainSegmentModel>	vehicles/german/G177_E65_Zwilling/_skins/G177_E65_Zwilling_W25_3Dst/track/segment.model	</mainSegmentModel>
+            </G177_E65_Zwilling_W25_3Dst>
+          </modelSets>
           <springsLength>
             <backwardMovement>
               <back>	0.133785	</back>
@@ -1502,7 +1539,7 @@
           <radiusOverrides>
             <wheel>
               <name>	WD_R1	</name>
-              <radius>	0.397993	</radius>
+              <radius>	0.411	</radius>
             </wheel>
             <wheel>
               <name>	WD_R0	</name>
@@ -1514,7 +1551,7 @@
             <segmentSyncPivotOffset>	0	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_R1	</name>
-              <startAngle>	3.106686	</startAngle>
+              <startAngle>	2.827433	</startAngle>
               <teethCount>	20	</teethCount>
             </sync>
             <sync>
@@ -1642,7 +1679,6 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
-      <camouflage></camouflage>
       <repairTime>	6.66666651	</repairTime>
     </Chassis_G177_E65_Zwilling>
   </chassis>
@@ -1788,6 +1824,27 @@
               <rayUp>	0.09 0 0	</rayUp>
               <size>	0.5	</size>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49002	</slotId>
+              <rayStart>	-0.21 0.003 4	</rayStart>
+              <rayEnd>	-0.21 0.003 4.5	</rayEnd>
+              <rayUp>	0.16 0 0	</rayUp>
+              <applyToFabric>	false	</applyToFabric>
+              <compatibleModels>	G177_E65_Zwilling_W25_3Dst	</compatibleModels>
+              <size>	0.5	</size>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49003	</slotId>
+              <isMirrored>	false	</isMirrored>
+              <rayStart>	0.21 0.003 4	</rayStart>
+              <rayEnd>	0.21 0.003 4.5	</rayEnd>
+              <rayUp>	0.16 0 0	</rayUp>
+              <applyToFabric>	false	</applyToFabric>
+              <compatibleModels>	G177_E65_Zwilling_W25_3Dst	</compatibleModels>
+              <size>	0.5	</size>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -1799,6 +1856,13 @@
             <undamaged>	vehicles/german/G177_E65_Zwilling/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G177_E65_Zwilling/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/german/G177_E65_Zwilling/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <G177_E65_Zwilling_W25_3Dst>
+                <undamaged>	vehicles/german/G177_E65_Zwilling/_skins/G177_E65_Zwilling_W25_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/german/G177_E65_Zwilling/_skins/G177_E65_Zwilling_W25_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/german/G177_E65_Zwilling/_skins/G177_E65_Zwilling_W25_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </G177_E65_Zwilling_W25_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G177_E65_Zwilling/collision/Gun_01.model	</collisionModelServer>
@@ -1815,6 +1879,13 @@
         <undamaged>	vehicles/german/G177_E65_Zwilling/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/german/G177_E65_Zwilling/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/german/G177_E65_Zwilling/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <G177_E65_Zwilling_W25_3Dst>
+            <undamaged>	vehicles/german/G177_E65_Zwilling/_skins/G177_E65_Zwilling_W25_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/german/G177_E65_Zwilling/_skins/G177_E65_Zwilling_W25_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/german/G177_E65_Zwilling/_skins/G177_E65_Zwilling_W25_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </G177_E65_Zwilling_W25_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/german/G177_E65_Zwilling/collision/Turret_01.model	</collisionModelServer>

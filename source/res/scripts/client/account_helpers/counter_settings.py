@@ -11,7 +11,8 @@ _NEW_SETTING_COUNTER_VISIBILITY_VALIDATORS = {settings_constants.GAME.ANONYMIZER
  settings_constants.GAME.GAMEPLAY_DEV_MAPS: lambda : dependency.instance(ILobbyContext).getServerSettings().isMapsInDevelopmentEnabled(),
  settings_constants.GAME.SWITCH_SETUPS_IN_LOADING: lambda : dependency.instance(IVehiclePostProgressionController).isSwitchSetupFeatureEnabled(),
  settings_constants.GAME.LIMITED_UI_ACTIVE: lambda : dependency.instance(ILimitedUIController).isUserSettingsMayShow,
- settings_constants.BattleCommStorageKeys.ENABLE_COMMENDATIONS_FEEDBACK: lambda : dependency.instance(ICommendationsController).isCommendationsEnabled}
+ settings_constants.BattleCommStorageKeys.ENABLE_COMMENDATIONS_FEEDBACK: lambda : dependency.instance(ICommendationsController).isCommendationsEnabled,
+ settings_constants.SOUND.PHYSICS_QUALITY: lambda : dependency.instance(ILobbyContext).getServerSettings().isPhysicsSoundEnabled()}
 
 def isNewSettingCounterVisible(settingKey):
     return _NEW_SETTING_COUNTER_VISIBILITY_VALIDATORS.get(settingKey, lambda : True)()

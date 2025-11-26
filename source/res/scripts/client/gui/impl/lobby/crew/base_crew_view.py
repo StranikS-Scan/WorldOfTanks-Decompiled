@@ -5,7 +5,6 @@ from AccountCommands import LOCK_REASON
 from PlayerEvents import g_playerEvents
 from crew_sounds import CREW_SOUND_SPACE, CREW_SOUND_OVERLAY_SPACE
 from frameworks.wulf import WindowLayer
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crew.common.base_crew_view_model import BaseCrewViewModel
@@ -34,8 +33,7 @@ class BaseCrewWidgetView(BaseCrewSoundView, LobbyHeaderVisibility, IGlobalListen
     __slots__ = ('_isHangar', '_crewWidget', '_currentViewID', '_previousViewID')
 
     def __init__(self, settings, **kwargs):
-        hangarViewAliases = (VIEW_ALIAS.LOBBY_HANGAR, VIEW_ALIAS.LEGACY_LOBBY_HANGAR)
-        self._isHangar = bool(self.gui.windowsManager.findWindows(lambda window: getattr(window.content, 'alias', None) in hangarViewAliases))
+        self._isHangar = not bool(self.gui.windowsManager.findWindows(lambda window: getattr(window.content, 'layoutID', None) == R.views.lobby.crew.BarracksView()))
         self._crewWidget = None
         self._currentViewID = settings.kwargs.get('currentViewID', settings.layoutID)
         self._previousViewID = settings.kwargs.get('previousViewID')
@@ -162,9 +160,6 @@ class BaseCrewWidgetView(BaseCrewSoundView, LobbyHeaderVisibility, IGlobalListen
             if tankman and not tankman.isDismissed:
                 return (tankman.invID, index)
 
-        _, __, tankman = self._crewWidget.getWidgetData()
-        if crew or tankmanID == NO_TANKMAN or tankman and tankman.isDismissed:
-            slotIDX = NO_SLOT
         return (tankmanID, slotIDX)
 
     def _onTankmanSlotAutoSelect(self, tankmanInvID, slotIdx):

@@ -106,6 +106,7 @@
     <_105mm_SK_L_70>	127	</_105mm_SK_L_70>
     <_118mm_D_1507AS>	128	</_118mm_D_1507AS>
     <_120mm_SA46_67>	129	</_120mm_SA46_67>
+    <_37mm_APX_SA18A>	131	</_37mm_APX_SA18A>
     <_105mm_court_mle_1934_S_105_AM>	2000	</_105mm_court_mle_1934_S_105_AM>
     <_105mm_obusier_mle_1950_105_AM>	2001	</_105mm_obusier_mle_1950_105_AM>
     <Canon_de_155mm_de_33_calibres_F3_AM>	2002	</Canon_de_155mm_de_33_calibres_F3_AM>
@@ -717,6 +718,64 @@
         </_37mm_OE_mle_1916_FT>
       </shots>
     </_37mm_APX_SA18_FT>
+    <_37mm_APX_SA18A>
+      <userString>	#france_vehicles:_37mm_APX_SA18A	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	3000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.26	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.1	</amplitude>
+        <recoilEffect>	small	</recoilEffect>
+      </recoil>
+      <effects>	shot_small	</effects>
+      <reloadEffect>	reload20_45	</reloadEffect>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <pitchLimits>
+        <minPitch>	0.0 -35.0 1.0 -35.0	</minPitch>
+        <maxPitch>	0.0 20.0 1.0 20.0	</maxPitch>
+      </pitchLimits>
+      <rotationSpeed>	43.75	</rotationSpeed>
+      <reloadTime>	2.5	</reloadTime>
+      <maxAmmo>	237	</maxAmmo>
+      <aimingTime>	2.5	</aimingTime>
+      <weight>	100	</weight>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	30	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.53	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_37mm_Odr_mle__1935A>
+          <defaultPortion>	1	</defaultPortion>
+          <speed>	600	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	38 31	</piercingPower>
+        </_37mm_Odr_mle__1935A>
+        <_37mm_FrtPrf1935A>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	750	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	54 42	</piercingPower>
+        </_37mm_FrtPrf1935A>
+        <_37mm_OE_mle__1916A>
+          <defaultPortion>	0	</defaultPortion>
+          <speed>	600	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	20 20	</piercingPower>
+        </_37mm_OE_mle__1916A>
+      </shots>
+    </_37mm_APX_SA18A>
     <_37mm_SA38>
       <userString>	#france_vehicles:_37mm_SA38	</userString>
       <tags></tags>
@@ -2393,7 +2452,7 @@
           <speed>	1000	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	194 181	</piercingPower>
+          <piercingPower>	204 190	</piercingPower>
         </_75mm_Prf1930B>
         <_75mm_FrtPrf1944B>
           <defaultPortion>	0.0	</defaultPortion>
@@ -4472,7 +4531,7 @@
     <_90mm_canon_DCA_45_BPXIV>
       <userString>	#france_vehicles:_90mm_canon_DCA_45_BPXIV	</userString>
       <tags></tags>
-      <level>	8	</level>
+      <level>	6	</level>
       <price>	121250	</price>
       <notInShop>	true	</notInShop>
       <impulse>	0.46	</impulse>
@@ -7269,7 +7328,7 @@
     <_120mm_SA_46_AC_FL>
       <userString>	#france_vehicles:_120mm_SA_46_AC	</userString>
       <tags></tags>
-      <level>	10	</level>
+      <level>	8	</level>
       <price>	339000	</price>
       <notInShop>	true	</notInShop>
       <impulse>	0.64	</impulse>
@@ -7557,7 +7616,7 @@
     <_120mm_D_1203_A_FL>
       <userString>	#france_vehicles:_120mm_D_1203_A	</userString>
       <tags></tags>
-      <level>	10	</level>
+      <level>	8	</level>
       <price>	330000	</price>
       <notInShop>	true	</notInShop>
       <impulse>	0.64	</impulse>

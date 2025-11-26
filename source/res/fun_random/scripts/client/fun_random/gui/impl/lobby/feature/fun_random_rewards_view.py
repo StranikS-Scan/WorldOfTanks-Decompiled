@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/impl/lobby/feature/fun_random_rewards_view.py
+from __future__ import absolute_import
+from future.utils import viewitems
 from frameworks.wulf import ViewSettings
 from frameworks.wulf import WindowLayer
 from fun_random.gui.feature.fun_sounds import FUN_REWARD_SCREEN_SOUND_SPACE
@@ -21,7 +23,7 @@ class FunRandomLootBoxAwardView(ViewImpl, FunAssetPacksMixin):
     _COMMON_SOUND_SPACE = FUN_REWARD_SCREEN_SOUND_SPACE
 
     def __init__(self, *args, **kwargs):
-        settings = ViewSettings(R.views.fun_random.lobby.feature.FunRandomRewardsView(), model=FunRandomRewardsViewModel(), args=args, kwargs=kwargs)
+        settings = ViewSettings(R.views.fun_random.mono.lobby.rewards(), model=FunRandomRewardsViewModel(), args=args, kwargs=kwargs)
         super(FunRandomLootBoxAwardView, self).__init__(settings)
         self.__tooltips = {}
 
@@ -76,7 +78,7 @@ class FunRandomLootBoxAwardView(ViewImpl, FunAssetPacksMixin):
     def __packRewards(self, rewardsModel, rewards, packer):
         rewardsModel.clear()
         rawDataBonuses = []
-        for k, v in rewards.iteritems():
+        for k, v in viewitems(rewards):
             rawDataBonuses.extend(getNonQuestBonuses(k, v))
 
         packBonusModelAndTooltipData([ b for b in rawDataBonuses if not isinstance(b, LootBoxTokensBonus) ], rewardsModel, tooltipData=self.__tooltips, packer=packer)

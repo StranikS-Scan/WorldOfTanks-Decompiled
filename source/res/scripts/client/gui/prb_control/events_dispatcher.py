@@ -30,7 +30,6 @@ from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IGameSessionController
 from skeletons.gui.game_control import IPlatoonController
-from skeletons.gui.impl import IGuiLoader
 TOOLTIP_PRB_DATA = namedtuple('TOOLTIP_PRB_DATA', ('tooltipId', 'label'))
 _CarouselItemCtx = namedtuple('_CarouselItemCtx', ['label',
  'canClose',
@@ -268,12 +267,7 @@ class EventDispatcher(object):
 
     def showStrongholdsWindow(self):
         from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
-        guiLoader = dependency.instance(IGuiLoader)
-        if hasattr(R.views, 'one_time_gift') and guiLoader.windowsManager.getViewByLayoutID(R.views.one_time_gift.mono.lobby.one_time_gift_view()) is not None:
-            return
-        else:
-            self.__fireShowEvent(FORTIFICATION_ALIASES.STRONGHOLD_BATTLE_ROOM_WINDOW_ALIAS)
-            return
+        self.__fireShowEvent(FORTIFICATION_ALIASES.STRONGHOLD_BATTLE_ROOM_WINDOW_ALIAS)
 
     def showTournamentWindow(self):
         pass

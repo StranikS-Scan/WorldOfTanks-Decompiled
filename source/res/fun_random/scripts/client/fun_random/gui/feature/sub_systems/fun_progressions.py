@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/feature/sub_systems/fun_progressions.py
+from __future__ import absolute_import
 import typing
+from future.utils import viewitems
 from fun_random.gui.feature.fun_constants import PROGRESSION_COUNTER_TEMPLATE, PROGRESSION_TRIGGER_TEMPLATE, PROGRESSION_EXECUTOR_TEMPLATE, FEP_PROGRESSION_EXECUTOR_QUEST_ID, FunTimersShifts, PROGRESSION_UNLIMITED_TRIGGER_TEMPLATE, PROGRESSION_UNLIMITED_EXECUTOR_TEMPLATE, PROGRESSION_UNLIMITED_COUNTER_TEMPLATE
 from fun_random.gui.feature.models.progressions import FunProgression
 from fun_random.gui.shared.events import FunEventType
@@ -103,7 +105,7 @@ class FunProgressions(IFunRandomController.IFunProgressions, Notifiable):
 
     def __buildActiveProgression(self, quests):
         tokens, now = self.__itemsCache.items.tokens, time_utils.getCurrentTimestamp()
-        quests = {qID:quest for qID, quest in quests.iteritems() if quest.isRawAvailable(now)}
+        quests = {qID:quest for qID, quest in viewitems(quests) if quest.isRawAvailable(now)}
         firstName, lastName = self.__settings.progressions[0].name, self.__settings.progressions[-1].name
         return first((self.__buildProgression(pConfig, pConfig.name == firstName, pConfig.name == lastName, quests, tokens) for pConfig in self.__settings.progressions))
 

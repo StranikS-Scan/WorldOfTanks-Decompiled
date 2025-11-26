@@ -10,10 +10,10 @@ from comp7_core.gui.Scaleform.daapi.view.battle.common import getSavedRowCountVa
 from comp7_core.gui.Scaleform.daapi.view.meta.Comp7BattleTankCarouselMeta import Comp7BattleTankCarouselMeta
 from constants import REQUEST_COOLDOWN, ARENA_PERIOD
 from gui import GUI_NATIONS_ORDER_INDEX
+from gui.filters.carousel_filter import CarouselFilter, RoleCriteriesGroup
 from gui.Scaleform import getButtonsAssetPath
 from gui.Scaleform.daapi.view.common.filter_contexts import getFilterSetupContexts, FilterSetupContext
 from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_data_provider import CarouselDataProvider
-from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import CarouselFilter, RoleCriteriesGroup
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
 from gui.battle_control.gui_vehicle_builder import VehicleBuilder

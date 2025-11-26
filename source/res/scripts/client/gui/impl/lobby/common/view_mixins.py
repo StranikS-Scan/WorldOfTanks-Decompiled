@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/common/view_mixins.py
+from __future__ import absolute_import
 from collections import namedtuple
-from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState, LobbyHeaderVisibilityAction
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
+from .lobby_header_utils import HeaderMenuVisibilityState, LobbyHeaderVisibilityAction
 LobbyHeaderState = namedtuple('LobbyHeaderState', ('view', 'state', 'action'))
 
 class LobbyHeaderVisibility(object):

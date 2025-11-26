@@ -3,10 +3,10 @@
 from __future__ import absolute_import
 from adisp import adisp_process
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.Scaleform.daapi.view.lobby.veh_post_progression.veh_post_progression_vehicle import g_postProgressionVehicle
 from gui.Scaleform.daapi.view.meta.VehiclePostProgressionViewMeta import VehiclePostProgressionViewMeta
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
-from gui.shared import EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.event_dispatcher import showVehicleHubModules, showVehicleHubOverview, selectVehicleInHangar
 from gui.shared.gui_items.items_actions import factory as ActionsFactory
 from gui.veh_post_progression.sounds import PP_VIEW_SOUND_SPACE
@@ -27,8 +27,7 @@ class VehiclePostProgressionCfgView(VehiclePostProgressionViewMeta):
         super(VehiclePostProgressionCfgView, self).__init__(ctx)
         self._intCD = ctx['intCD']
         self._goToVehicleAllowed = ctx.get('goToVehicleAllowed', False)
-        self._overrideVehiclePreviewEvent = ctx.get('overrideVehiclePreviewEvent', None)
-        return
+        self._overrideVehiclePreviewEvent = ctx.get('overrideVehiclePreviewEvent', False)
 
     def compareVehicle(self):
         self.__cmpBasket.addVehicle(self._intCD)
@@ -44,7 +43,8 @@ class VehiclePostProgressionCfgView(VehiclePostProgressionViewMeta):
         if self._vehicle.isInInventory:
             selectVehicleInHangar(self._intCD)
         elif self._overrideVehiclePreviewEvent:
-            g_eventBus.handleEvent(self._overrideVehiclePreviewEvent, scope=EVENT_BUS_SCOPE.LOBBY)
+            lsm = getLobbyStateMachine()
+            lsm.getStateFromView(self).goBack()
         else:
             showVehicleHubOverview(self._intCD)
 

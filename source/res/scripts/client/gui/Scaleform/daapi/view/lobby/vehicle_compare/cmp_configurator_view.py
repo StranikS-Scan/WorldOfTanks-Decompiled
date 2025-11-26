@@ -29,6 +29,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE, vehicle_adjusters, GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import CrewTypes
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.processors.module import ModuleProcessor
+from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items import vehicles
@@ -317,8 +318,7 @@ class VehicleCompareConfiguratorView(VehicleCompareConfiguratorViewMeta):
     def _init(self):
         super(VehicleCompareConfiguratorView, self)._init()
         currentVehicle = self._container.getCurrentVehicle()
-        topModulesFromStock = self._container.isTopModulesFromStock()
-        enableTopModules = not (currentVehicle.isPremium or topModulesFromStock)
+        hasOptions = self.__isChoiceOfModulesAvailable()
         self.as_setInitDataS({'title': _ms(VEH_COMPARE.VEHCONF_HEADER, vehName=currentVehicle.userName),
          'resetBtnLabel': VEH_COMPARE.VEHCONF_RESETBTNLABEL,
          'cancelBtnLabel': VEH_COMPARE.VEHCONF_CANCELBTNLABEL,
@@ -326,13 +326,12 @@ class VehicleCompareConfiguratorView(VehicleCompareConfiguratorViewMeta):
          'resetBtnTooltip': VEH_COMPARE.VEHCONF_RESETBTNLABEL_TOOLTIP,
          'cancelBtnTooltip': VEH_COMPARE.VEHCONF_CANCELBTNLABEL_TOOLTIP,
          'applyBtnTooltip': VEH_COMPARE.VEHCONF_COMPAREBTNLABEL_TOOLTIP,
-         'enableTopModules': enableTopModules})
+         'enableTopModules': hasOptions})
         self.as_setIsPostProgressionEnabledS(currentVehicle.isPostProgressionExists)
         if currentVehicle.descriptor.type.hasCustomDefaultCamouflage:
             self.as_disableCamoS()
         self.__updateControlBtns()
-        topModulesSelected = topModulesFromStock or self._container.isTopModulesSelected()
-        self.as_setTopModulesSelectedS(topModulesSelected)
+        self.as_setTopModulesSelectedS(not hasOptions or self._container.isTopModulesSelected())
         self.__updateSkillsData()
         self.__updateSlotsData(VEHICLE_FITTING_SLOTS)
         initialVehicle, _ = self._container.getInitialVehicleData()
@@ -373,6 +372,13 @@ class VehicleCompareConfiguratorView(VehicleCompareConfiguratorViewMeta):
 
     def __updateShellSlots(self):
         self.__ammoInject.updateShells()
+
+    def __isChoiceOfModulesAvailable(self):
+        currentVehicle = self._container.getCurrentVehicle()
+        if currentVehicle.isPremium:
+            return False
+        criteria = ~REQ_CRITERIA.HIDDEN | REQ_CRITERIA.VEHICLE.SUITABLE([currentVehicle])
+        return any((len(self.itemsCache.items.getItems(module, criteria, limit=2)) > 1 for module in GUI_ITEM_TYPE.VEHICLE_MODULES))
 
 
 class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMainMeta):
@@ -464,11 +470,6 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
 
     def getCurrentShellIndex(self):
         return self.__selectedShellIndex
-
-    def isTopModulesFromStock(self):
-        topModules = self.__getTopModules()
-        stockModules = self.__getStockModules()
-        return all((bool(item in stockModules) for item in topModules))
 
     def isTopModulesSelected(self):
         topModules = self.__getTopModules()

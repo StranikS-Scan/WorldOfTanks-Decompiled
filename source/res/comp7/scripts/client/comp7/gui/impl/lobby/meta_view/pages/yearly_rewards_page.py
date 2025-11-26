@@ -215,7 +215,7 @@ class YearlyRewardsPage(PageSubModelPresenter):
         self.__setLegendData(model)
 
     def __areActualSeasonPointsReceived(self):
-        actualSeason = self.__comp7Controller.getActualSeasonNumber()
+        actualSeason = self.__comp7Controller.getActualSeasonNumber(includePreannounced=True)
         if actualSeason is None:
             return False
         else:
@@ -223,7 +223,7 @@ class YearlyRewardsPage(PageSubModelPresenter):
             return self.__comp7Controller.getReceivedSeasonPoints().get(actualSeasonPointsEntitlement, 0) > 0
 
     def __setSeasonData(self, model):
-        actualSeason = self.__comp7Controller.getActualSeasonNumber()
+        actualSeason = self.__comp7Controller.getActualSeasonNumber(includePreannounced=True)
         if actualSeason is None:
             return
         else:
@@ -351,7 +351,7 @@ class _SeasonPointsGenerator(object):
         for seasonName, count in achievedPoints:
             result += [(SeasonPointState.ACHIEVED, seasonName)] * count
 
-        if self.__comp7Controller.getActualSeasonNumber() is None:
+        if self.__comp7Controller.getActualSeasonNumber(includePreannounced=True) is None:
             return result
         else:
             if not self.__comp7Controller.isQualificationActive() and not areActualSeasonPointsReceived:

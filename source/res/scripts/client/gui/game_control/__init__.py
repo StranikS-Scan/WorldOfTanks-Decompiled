@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/__init__.py
-from shared_utils import CONST_CONTAINER
 from typing import TYPE_CHECKING
+import skeletons.gui.pet_system
 import constants
 import skeletons.gui.resource_well
+from shared_utils import CONST_CONTAINER
 from gui.graphics_optimization_controller.optimization_controller import GraphicsOptimizationController
 from gui.shared.system_factory import collectGameControllers
 from skeletons.festivity_factory import IFestivityFactory
@@ -97,6 +98,8 @@ def getGameControllersConfig(manager):
     from gui.game_control.commendations_controller import CommendationsController
     from gui.game_control.vehicle_playlists_controller import VehiclePlaylistsController
     from gui.game_control.crew_controller import CrewController
+    from gui.pet_system.pet_controller import PetSystemController
+    from gui.game_control.ingame_tournament_controller import IngameTournamentController
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -189,4 +192,6 @@ def getGameControllersConfig(manager):
     _config(_interface.ICommendationsController, CommendationsController())
     _config(_interface.IVehiclePlaylistsController, VehiclePlaylistsController())
     _config(_interface.ICrewController, CrewController())
+    _config(_interface.IIngameTournamentController, IngameTournamentController())
+    _config(skeletons.gui.pet_system.IPetSystemController, PetSystemController())
     collectGameControllers(_config)

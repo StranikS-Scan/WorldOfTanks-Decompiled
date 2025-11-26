@@ -327,8 +327,6 @@ class _CurrentVehicle(_CachedVehicle):
         if vehicle is None:
             vehiclesCriteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.MODE_HIDDEN | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
             invVehs = self.itemsCache.items.getVehicles(criteria=vehiclesCriteria)
-            if not invVehs:
-                invVehs = self.itemsCache.items.getVehicles(criteria=REQ_CRITERIA.VEHICLE.EVENT_BATTLE)
             if invVehs:
                 vehInvID = min(invVehs.itervalues()).invID
             else:

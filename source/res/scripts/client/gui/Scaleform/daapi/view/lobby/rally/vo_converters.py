@@ -90,14 +90,11 @@ def makeVehicleBasicVO(vehicle, levelsRange=None, vehicleTypes=None):
     if vehicle is None:
         return
     else:
-        isBattleRoyaleVehicle = vehicle.isOnlyForBattleRoyaleBattles
         enabled, tooltip = True, None
         if levelsRange is not None and vehicle.level not in levelsRange:
             enabled, tooltip = False, TOOLTIPS.VEHICLESELECTOR_OVERFLOWLEVEL
         elif vehicleTypes is not None and vehicle.type not in vehicleTypes:
             enabled, tooltip = False, TOOLTIPS.VEHICLESELECTOR_INCOMPATIBLETYPE
-        elif isBattleRoyaleVehicle:
-            enabled, tooltip = True, TOOLTIPS_CONSTANTS.BATTLE_ROYALE_VEHICLE
         iconPath = backport.image(R.images.gui.maps.icons.vehicle.small.dyn(getIconResourceName(vehicle.name))())
         return {'intCD': vehicle.intCD,
          'nationID': vehicle.nationID,
@@ -112,7 +109,7 @@ def makeVehicleBasicVO(vehicle, levelsRange=None, vehicleTypes=None):
          'enabled': enabled,
          'tooltip': tooltip,
          'state': '',
-         'isEventVehicle': isBattleRoyaleVehicle}
+         'isEventVehicle': False}
 
 
 def makeVehicleVO(vehicle, levelsRange=None, vehicleTypes=None, isCurrentPlayer=True):

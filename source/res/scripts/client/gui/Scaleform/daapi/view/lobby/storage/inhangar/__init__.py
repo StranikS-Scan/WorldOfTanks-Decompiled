@@ -5,8 +5,8 @@ import nations
 from account_helpers.AccountSettings import AccountSettings
 from account_helpers.AccountSettings import STORAGE_VEHICLES_CAROUSEL_FILTER_1
 from gui import GUI_NATIONS_ORDER_INDEX
+from gui.filters.carousel_filter import SessionCarouselFilter, EventCriteriesGroup, CriteriesGroup
 from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_data_provider import CarouselDataProvider
-from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import SessionCarouselFilter, EventCriteriesGroup, CriteriesGroup
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getStorageVehicleVo, isStorageSessionTimeout
 from gui.prb_control.settings import VEHICLE_LEVELS
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER_INDICES

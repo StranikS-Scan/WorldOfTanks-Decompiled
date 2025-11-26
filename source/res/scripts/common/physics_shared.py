@@ -541,8 +541,6 @@ def configureModelShapePhysics(cfg, typeDesc):
 
 
 def updatePhysics(physics, typeDesc, isSoftUpdate=False, gravityMultiplier=1.0):
-    baseCfg = typeDesc.type.xphysics['detailed']
-    gravityFactor = baseCfg['gravityFactor'] * gravityMultiplier
     updateSiegeModeFromCfg = False
     vehiclePhysicsType = typeDesc.type.xphysics['detailed'].get('vehiclePhysicsType', VEHICLE_PHYSICS_TYPE.TANK)
     isTank = vehiclePhysicsType == VEHICLE_PHYSICS_TYPE.TANK
@@ -552,6 +550,8 @@ def updatePhysics(physics, typeDesc, isSoftUpdate=False, gravityMultiplier=1.0):
         siegeVehicleDescr = typeDesc.siegeVehicleDescr
     else:
         defaultVehicleDescr = typeDesc
+    baseCfg = defaultVehicleDescr.type.xphysics['detailed']
+    gravityFactor = baseCfg['gravityFactor'] * gravityMultiplier
     try:
         cfg['fakegearbox'] = typeDesc.type.xphysics['detailed']['fakegearbox']
     except:

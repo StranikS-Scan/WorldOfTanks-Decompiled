@@ -22,6 +22,7 @@ from helpers.events_handler import EventsHandler
 from skeletons.gui.game_control import ILoadoutController
 from skeletons.gui.lobby_context import ILobbyContext
 from sound_gui_manager import ViewSoundExtension
+from gui.lobby_state_machine.lobby_state_machine import LobbyStateMachine
 from wg_async import await_callback, wg_async, BrokenPromiseError, wg_await
 _logger = logging.getLogger(__name__)
 
@@ -34,6 +35,11 @@ class _DefaultHangarStatePrototype(LobbyState):
     def getNavigationDescription(self):
         return LobbyStateDescription(title=backport.text(R.strings.pages.titles.hangar()))
 
+    def _onEntered(self, event):
+        super(_DefaultHangarStatePrototype, self)._onEntered(event)
+        lsm = self.getMachine()
+        lsm.getRelatedView(self).blur.disable()
+
 
 class _AllVehiclesStatePrototype(LobbyState):
     __soundExtension = ViewSoundExtension(ALL_VEHICLES_SOUND_SPACE)
@@ -42,6 +48,8 @@ class _AllVehiclesStatePrototype(LobbyState):
         super(_AllVehiclesStatePrototype, self)._onEntered(event)
         self.__soundExtension.initSoundManager()
         self.__soundExtension.startSoundSpace()
+        lsm = self.getMachine()
+        lsm.getRelatedView(self).blur.enable()
 
     def _onExited(self):
         self.__soundExtension.destroySoundManager()
@@ -60,6 +68,8 @@ class _LoadoutStatePrototype(LobbyState):
     def _onEntered(self, event):
         super(_LoadoutStatePrototype, self)._onEntered(event)
         playEnterTankSetupView()
+        lsm = self.getMachine()
+        lsm.getRelatedView(self).blur.enable()
 
     @wg_async
     def _onExited(self):
@@ -69,7 +79,7 @@ class _LoadoutStatePrototype(LobbyState):
 
 
 class _LoadoutConfirmStatePrototype(LobbyState):
-    __loadoutController = dependency.instance(ILoadoutController)
+    __loadoutController = dependency.descriptor(ILoadoutController)
 
     def __init__(self, flags=StateFlags.UNDEFINED):
         super(_LoadoutConfirmStatePrototype, self).__init__(flags)
@@ -89,7 +99,7 @@ class _LoadoutConfirmStatePrototype(LobbyState):
         super(_LoadoutConfirmStatePrototype, self)._onEntered(event)
         interactor = self.__loadoutController.interactor
         self.__dialog = interactor.showExitConfirmDialog
-        if event.targetStateID != self.getStateID():
+        if self.__dialog and event.targetStateID != self.getStateID():
             try:
                 result = yield self.__dialog()
                 if not result.result:

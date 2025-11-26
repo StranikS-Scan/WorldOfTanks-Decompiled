@@ -29,10 +29,9 @@ class IBattleResultStatsCtrl(object):
     def getVO(self):
         raise NotImplementedError
 
-    @staticmethod
-    def onShowResults(arenaUniqueID):
+    def onResultsPosted(self, arenaUniqueID):
         raise NotImplementedError
 
     @staticmethod
-    def onResultsPosted(arenaUniqueID):
+    def onShowResults(arenaUniqueID):
         raise NotImplementedError

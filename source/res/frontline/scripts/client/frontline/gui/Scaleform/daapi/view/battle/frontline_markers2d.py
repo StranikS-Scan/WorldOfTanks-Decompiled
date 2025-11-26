@@ -120,7 +120,7 @@ class FrontlineMissionsPlugin(plugins.MarkerPlugin):
 class SectorBasesPlugin(FrontlineMissionsPlugin, ChatCommunicationComponent):
     _AUTO_COMMIT_STATE_TO_STATE = {BATTLE_CHAT_COMMAND_NAMES.DEFENDING_BASE: BATTLE_CHAT_COMMAND_NAMES.DEFEND_BASE,
      BATTLE_CHAT_COMMAND_NAMES.ATTACKING_BASE: BATTLE_CHAT_COMMAND_NAMES.ATTACK_BASE}
-    __slots__ = ('_markers', '__highlightedBaseID', '_isInFreeSpectatorMode', '__basesToBeActive', '__capturedBases', '__insideCircle', '__clazz')
+    __slots__ = ('_markers', '__highlightedBaseID', '__basesToBeActive', '__capturedBases', '__insideCircle', '__clazz')
 
     def __init__(self, parentObj, clazz=markers.BaseMarker):
         super(SectorBasesPlugin, self).__init__(parentObj)
@@ -415,7 +415,7 @@ class SectorBasesPlugin(FrontlineMissionsPlugin, ChatCommunicationComponent):
 
 
 class HeadquartersPlugin(FrontlineMissionsPlugin, ChatCommunicationComponent):
-    __slots__ = ('_markers', '__isHQBattle', '__visibleHQ', '_isInFreeSpectatorMode', '__hqMissionActive', '__clazz', '__entitiesDamageType')
+    __slots__ = ('_markers', '__isHQBattle', '__visibleHQ', '__hqMissionActive', '__clazz', '__entitiesDamageType')
 
     def __init__(self, parentObj, clazz=BaseMarker):
         super(HeadquartersPlugin, self).__init__(parentObj)

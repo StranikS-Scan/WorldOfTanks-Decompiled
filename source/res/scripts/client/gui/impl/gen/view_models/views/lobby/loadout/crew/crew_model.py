@@ -12,7 +12,7 @@ class CrewModel(ViewModel):
     OFF_TRAINING_STATE = 'off'
     DISABLED_TRAINING_STATE = 'disabled'
 
-    def __init__(self, properties=8, commands=5):
+    def __init__(self, properties=10, commands=5):
         super(CrewModel, self).__init__(properties=properties, commands=commands)
 
     def getHasDog(self):
@@ -71,6 +71,18 @@ class CrewModel(ViewModel):
     def setVehicleNation(self, value):
         self._setString(7, value)
 
+    def getVehicleType(self):
+        return self._getString(8)
+
+    def setVehicleType(self, value):
+        self._setString(8, value)
+
+    def getVehicleName(self):
+        return self._getString(9)
+
+    def setVehicleName(self, value):
+        self._setString(9, value)
+
     def _initialize(self):
         super(CrewModel, self)._initialize()
         self._addBoolProperty('hasDog', False)
@@ -81,6 +93,8 @@ class CrewModel(ViewModel):
         self._addStringProperty('acceleratedTraining', '')
         self._addStringProperty('intensiveTraining', '')
         self._addStringProperty('vehicleNation', '')
+        self._addStringProperty('vehicleType', '')
+        self._addStringProperty('vehicleName', '')
         self.onOpenCrew = self._addCommand('onOpenCrew')
         self.onOpenBarracks = self._addCommand('onOpenBarracks')
         self.onToggleAcceleratedTraining = self._addCommand('onToggleAcceleratedTraining')

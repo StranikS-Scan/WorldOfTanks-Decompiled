@@ -436,7 +436,9 @@ class VehicleParams(_ParameterBase):
 
     @property
     def avgDamage(self):
-        return int(round(sum(self.damage) / 2.0))
+        shell = self._itemDescr.shot.shell
+        damage = self.__calculateDamageOrPiercingRandom(shell.armorDamage[0], shell.damageRandomization, isNeedToRound=False)
+        return int(round(sum(damage) / 2.0))
 
     @property
     def avgDamagePerSecond(self):
@@ -572,10 +574,11 @@ class VehicleParams(_ParameterBase):
         if _DO_TTC_LOG:
             LOG_DEBUG('TTC of aimingTimeSituational: baseAimingTimeVal:%f * gunner_quickAimingFactor:%f * commander_coordinationFactor:%f' % (baseAimingTimeVal, gunnerQuickAimingFactor, commanderCoordinationReloadFactor))
         aimingTimeVal = self.__calcParamWithSkillFactorAmp(baseAimingTimeVal, (gunnerQuickAimingFactor, commanderCoordinationReloadFactor))
-        if self._itemDescr.hasTurboshaftEngine:
+        if self._itemDescr.hasTurboshaftEngine or self.__hasTwinGun():
             baseSiegeAimingTimeVal = items_utils.getGunAimingTime(self._itemDescr.siegeVehicleDescr, self.__factors)
             siegeAimingTimeVal = self.__calcParamWithSkillFactorAmp(baseSiegeAimingTimeVal, (gunnerQuickAimingFactor, commanderCoordinationReloadFactor))
-            return (aimingTimeVal, siegeAimingTimeVal)
+            if aimingTimeVal != siegeAimingTimeVal:
+                return (aimingTimeVal, siegeAimingTimeVal)
         return (aimingTimeVal,)
 
     def __shotDispersionAngle(self, isSituational=False):
@@ -796,7 +799,7 @@ class VehicleParams(_ParameterBase):
     def burstFireRate(self):
         if self.__hasBurst() and not hasVehicleMechanic(self.__vehicle.descriptor, VehicleMechanic.CHARGEABLE_BURST):
             gun = self._itemDescr.gun
-            burstCountLeft, burstInterval = gun.burst
+            burstCountLeft, burstInterval, _ = gun.burst
             return (burstInterval, gun.clip[0] / burstCountLeft, burstCountLeft)
         else:
             return None
@@ -805,7 +808,7 @@ class VehicleParams(_ParameterBase):
     def turboshaftBurstFireRate(self):
         if self.__hasUnsupportedSwitchMode():
             gun = self._itemDescr.siegeVehicleDescr.gun
-            burstCountLeft, burstInterval = gun.burst
+            burstCountLeft, burstInterval, _ = gun.burst
             return (burstInterval, gun.clip[0] / burstCountLeft, burstCountLeft)
         else:
             return None
@@ -1092,7 +1095,7 @@ class VehicleParams(_ParameterBase):
     def _getVehicleDescriptor(self, vehicle):
         return vehicle.descriptor
 
-    def __calculateDamageOrPiercingRandom(self, avgParam, randomization):
+    def __calculateDamageOrPiercingRandom(self, avgParam, randomization, isNeedToRound=True):
         lowerRandomizationFactor = self.damageAndPiercingDistributionLowerBound / 100.0
         upperRandomizationFactor = self.damageAndPiercingDistributionUpperBound / 100.0
         lowerBoundRandomization = randomization - lowerRandomizationFactor
@@ -1104,7 +1107,9 @@ class VehicleParams(_ParameterBase):
              avgParam,
              avgParam,
              upperBoundRandomization))
-        return (int(floor(avgParam - avgParam * lowerBoundRandomization)), int(ceil(avgParam + avgParam * upperBoundRandomization)))
+        lowerVal = avgParam - avgParam * lowerBoundRandomization
+        upperVal = avgParam + avgParam * upperBoundRandomization
+        return (int(ceil(lowerVal)), int(floor(upperVal))) if isNeedToRound else (lowerVal, upperVal)
 
     def __calcRealChassisRepairTime(self, chassisRepairTime):
         skillName = 'repair'
@@ -1256,7 +1261,7 @@ class VehicleParams(_ParameterBase):
         if _DO_TTC_LOG:
             LOG_DEBUG('baseReloadTime:%f * loader_meleeFactor:%f * loader_desperadoFactor:%f' % (baseReloadTime, loaderMeleeReloadFactor, loaderDesperadoReloadFactor))
         reloadTime = self.__calcParamWithSkillFactorAmp(baseReloadTime, (loaderMeleeReloadFactor, loaderDesperadoReloadFactor))
-        reloadTime = reloadTime * loaderMeleeReloadFactor * loaderDesperadoReloadFactor + self.mechanicsReloadDelay
+        reloadTime = reloadTime + self.mechanicsReloadDelay
         return (getShotsPerMinute(self._itemDescr.gun, reloadTime, hasAutoReload),)
 
     def __calcClipFireRate(self):

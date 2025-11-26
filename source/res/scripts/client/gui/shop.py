@@ -96,38 +96,38 @@ def canBuyGoldForVehicleThroughWeb(vehicle, itemsCache=None, tradeIn=None):
 
 
 def showBuyPersonalReservesOverlay(itemId, source=None, origin=None):
-    showBuyItemWebView(helpers.getBuyPersonalReservesUrl(), itemId, source, origin)
+    showBuyItemOverlayWebView(helpers.getBuyPersonalReservesUrl(), itemId, source, origin)
 
 
-def showBuyCreditsBattleBoosterOverlay(itemId, source=None, origin=None, alias=VIEW_ALIAS.OVERLAY_WEB_STORE):
-    showBuyItemWebView(helpers.getBuyCreditsBattleBoostersUrl(), itemId, source, origin, alias)
+def showBuyCreditsBattleBooster(itemId, source=None, origin=None):
+    showBuyItemWebView(helpers.getBuyCreditsBattleBoostersUrl(), itemId, source, origin)
 
 
-def showBuyBonBattleBoosterOverlay(itemId, source=None, origin=None, alias=VIEW_ALIAS.OVERLAY_WEB_STORE):
-    showBuyItemWebView(helpers.getBuyBonBattleBoostersUrl(), itemId, source, origin, alias)
-
-
-@dependency.replace_none_kwargs(itemsCache=IItemsCache)
-def showBattleBoosterOverlay(itemId, source=None, origin=None, alias=VIEW_ALIAS.OVERLAY_WEB_STORE, itemsCache=None):
-    item = itemsCache.items.getItemByCD(itemId)
-    if item.getBuyPrice().price.isCurrencyDefined(Currency.CRYSTAL):
-        showBuyMethod = showBuyBonBattleBoosterOverlay
-    else:
-        showBuyMethod = showBuyCreditsBattleBoosterOverlay
-    showBuyMethod(itemId, source, origin, alias)
-
-
-def showBuyEquipmentOverlay(itemId, source=None, origin=None, alias=VIEW_ALIAS.OVERLAY_WEB_STORE):
-    showBuyItemWebView(helpers.getBuyEquipmentUrl(), itemId, source, origin, alias)
+def showBuyBonBattleBooster(itemId, source=None, origin=None):
+    showBuyItemWebView(helpers.getBuyBonBattleBoostersUrl(), itemId, source, origin)
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
-def showBuyOptionalDeviceOverlay(itemId, source=None, origin=None, alias=VIEW_ALIAS.OVERLAY_WEB_STORE, itemsCache=None):
+def showBattleBooster(itemId, source=None, origin=None, itemsCache=None):
     item = itemsCache.items.getItemByCD(itemId)
     if item.getBuyPrice().price.isCurrencyDefined(Currency.CRYSTAL):
-        showBuyItemWebView(helpers.getBonsDevicesUrl(), itemId, source, origin, alias)
+        showBuyMethod = showBuyBonBattleBooster
     else:
-        showBuyItemWebView(helpers.getBuyOptionalDevicesUrl(), itemId, source, origin, alias)
+        showBuyMethod = showBuyCreditsBattleBooster
+    showBuyMethod(itemId, source, origin)
+
+
+def showBuyEquipment(itemId, source=None, origin=None):
+    showBuyItemWebView(helpers.getBuyEquipmentUrl(), itemId, source, origin)
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def showBuyOptionalDevice(itemId, source=None, origin=None, itemsCache=None):
+    item = itemsCache.items.getItemByCD(itemId)
+    if item.getBuyPrice().price.isCurrencyDefined(Currency.CRYSTAL):
+        showBuyItemWebView(helpers.getBonsDevicesUrl(), itemId, source, origin)
+    else:
+        showBuyItemWebView(helpers.getBuyOptionalDevicesUrl(), itemId, source, origin)
 
 
 def showTradeOffOverlay(parent=None):
@@ -201,7 +201,20 @@ def _showBlurredWebOverlay(url, params=None, parent=None, isClientCloseControl=F
 
 
 @adisp_process
-def showBuyItemWebView(url, itemId, source=None, origin=None, alias=VIEW_ALIAS.OVERLAY_WEB_STORE):
+def showBuyItemWebView(url, itemId, source=None, origin=None):
+    from gui.Scaleform.daapi.view.lobby.shared.states import BrowserLobbyTopState
+    url = yield URLMacros().parse(url)
+    params = {}
+    if source:
+        params['source'] = source
+    if origin:
+        params['origin'] = origin
+    url = yield URLMacros().parse(url=_makeBuyItemUrl(url, itemId), params=params)
+    BrowserLobbyTopState.goTo(ctx={'url': url})
+
+
+@adisp_process
+def showBuyItemOverlayWebView(url, itemId, source=None, origin=None, alias=VIEW_ALIAS.OVERLAY_WEB_STORE):
     url = yield URLMacros().parse(url)
     params = {}
     if source:

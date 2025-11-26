@@ -43,6 +43,9 @@ class EpicBattlesPrimeTimeView(EpicPrimeTimeMeta):
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self._onServerSettingsChange
         self._setHeaderText()
         self._setBackground()
+        self._setFullscreenModeSupported()
+        self._setCloseBtnVisibility()
+        self._setShadowVisibility()
 
     def _dispose(self):
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self._onServerSettingsChange
@@ -124,3 +127,12 @@ class EpicBattlesPrimeTimeView(EpicPrimeTimeMeta):
 
     def _setBackground(self):
         self.as_setBackgroundSourceS(backport.image(R.images.gui.maps.icons.epicBattles.primeTime.prime_time_back_default()))
+
+    def _setFullscreenModeSupported(self):
+        self.as_setFullscreenModeSupportedS(False)
+
+    def _setCloseBtnVisibility(self):
+        self.as_setCloseBtnVisibilityS(True)
+
+    def _setShadowVisibility(self):
+        self.as_setShadowVisibilityS(True)

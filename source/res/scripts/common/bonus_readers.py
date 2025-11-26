@@ -908,6 +908,15 @@ def __readBonus_optionalData(config, bonusReaders, section, eventType):
         properties['probabilityStageDependence'] = section['probabilityStageDependence'].asBool
     if section.has_key('dropInGroup'):
         properties['dropInGroup'] = section['dropInGroup'].asBool
+    if section.has_key('trackedByNameLimit'):
+        trackedByNameLimit = section.readInt('trackedByNameLimit', 0)
+        if trackedByNameLimit <= 0:
+            raise SoftException('Incorrect trackedByNameLimit value for <optional> with name={}'.format(name))
+        if not name:
+            raise SoftException('name is mandatory for <optional> with "trackedByNameLimit" option used')
+        if properties.get('dropInGroup'):
+            raise SoftException('dropInGroup and trackedByName flags should not be used in the same <optional> (name={}).'.format(name))
+        properties['trackedByNameLimit'] = trackedByNameLimit
     if properties:
         bonus['properties'] = properties
     return (limitIDs,
@@ -1056,6 +1065,13 @@ def __readBonus_freePremiumCrew(bonus, _name, section, eventType, checkLimit):
     freePremiumCrewBonus[vehLevel] = count
 
 
+def __readBonus_pets(bonus, name, section, eventType, checkLimit):
+    pets = map(int, section.asString.strip().split())
+    if any((pID <= 0 for pID in pets)):
+        raise SoftException('pet id in pets bonus section less or equal zero')
+    bonus[name] = set(pets)
+
+
 def __readBonus_group(config, bonusReaders, bonus, section, eventType):
     limitIDs, subBonus = __readBonusSubSection(config, bonusReaders, section, eventType)
     bonus.setdefault('groups', []).append(subBonus)
@@ -1119,7 +1135,8 @@ __BONUS_READERS = {'meta': __readMetaSection,
  'blueprint': __readBonus_blueprint,
  'blueprintAny': __readBonus_blueprintAny,
  'currency': __readBonus_currency,
- 'freePremiumCrew': __readBonus_freePremiumCrew}
+ 'freePremiumCrew': __readBonus_freePremiumCrew,
+ 'pets': __readBonus_pets}
 __PROBABILITY_READERS = {'optional': __readBonus_optional,
  'oneof': __readBonus_oneof,
  'group': __readBonus_group}
@@ -1133,7 +1150,8 @@ _RESERVED_NAMES = frozenset(['config',
  'probabilityStageDependence',
  'bonusProbability',
  'depthLevel',
- 'dropInGroup'])
+ 'dropInGroup',
+ 'trackedByNameLimit'])
 SUPPORTED_BONUSES = frozenset(__BONUS_READERS.iterkeys())
 __SORTED_BONUSES = sorted(SUPPORTED_BONUSES)
 SUPPORTED_BONUSES_IDS = dict(((n, i) for i, n in enumerate(__SORTED_BONUSES)))

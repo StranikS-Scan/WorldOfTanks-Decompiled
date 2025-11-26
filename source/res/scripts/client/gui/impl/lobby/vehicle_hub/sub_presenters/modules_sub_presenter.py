@@ -7,7 +7,6 @@ from CurrentVehicle import g_currentPreviewVehicle
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import BECOME_ELITE_VEHICLES_WATCHED
 from frameworks.wulf.view.array import fillIntsArray
-from items.components.c11n_constants import SeasonType
 from gui.shared import events
 from gui.shared.event_dispatcher import showVehPostProgressionView, showVehicleHubModules
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -30,6 +29,7 @@ from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.shared.utils.module_upd_available_helper import updateViewedItems
 from gui.veh_post_progression.helpers import needToShowCounter
+from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
 from helpers import dependency
 if typing.TYPE_CHECKING:
@@ -80,6 +80,7 @@ class _ModulesTreeViewDumper(dumpers.ResearchItemsObjDumper):
 _GUINode = namedtuple('_GUINode', ('id', 'state', 'unlockProps'))
 
 class ModulesSubPresenter(SubPresenterBase):
+    _c11nService = dependency.descriptor(ICustomizationService)
 
     def __init__(self, model, parentView):
         super(ModulesSubPresenter, self).__init__(model, parentView)
@@ -190,7 +191,7 @@ class ModulesSubPresenter(SubPresenterBase):
         installedResult = self._data.invalidateInstalled()
         for installedItem in installedResult:
             if NODE_STATE.isInstalled(installedItem[1]):
-                g_currentPreviewVehicle.selectVehicle(self.vehicle.intCD, vehicleStrCD=self.vehicle.strCD, outfit=self.vehicle.getOutfit(SeasonType.SUMMER))
+                g_currentPreviewVehicle.selectVehicle(self.vehicle.intCD, vehicleStrCD=self.vehicle.strCD, outfit=self.vehicle.getOutfit(self._c11nService.lastAppliedSeason))
 
         self.redraw()
 

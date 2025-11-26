@@ -6,7 +6,6 @@ from operator import itemgetter
 import typing
 import BigWorld
 import Event
-import WWISE
 import adisp
 import nations
 from CurrentVehicle import g_currentVehicle
@@ -27,7 +26,7 @@ from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, SEL
 from gui.Scaleform.daapi.view.lobby.epicBattle import epic_helpers
 from gui.server_events.events_helpers import isDailyEpic
 from gui.shared import event_dispatcher
-from gui.shared.event_dispatcher import showFrontlineContainerWindow, showEpicBattlesPrimeTimeWindow
+from gui.shared.event_dispatcher import showEpicBattlesPrimeTimeWindow
 from gui.shared.event_dispatcher import showFrontlineWelcomeWindow, showFrontlineInfoWindow
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.graphics import getGraphicsEngineValue
@@ -109,23 +108,6 @@ class EpicMetaGameSkill(object):
         return self.levels.get(1)
 
 
-class _FrontLineSounds(object):
-    __SELECT_EVENT = 'gui_eb_mode_enter'
-    __DESELECT_EVENT = 'gui_eb_mode_exit'
-    __STATE_GROUP = 'STATE_gamemode'
-    __STATE_SELECTED = 'STATE_gamemode_frontline'
-    __STATE_DESELECTED = 'STATE_gamemode_default'
-
-    @staticmethod
-    def onChange(isSelected):
-        if isSelected:
-            WWISE.WW_eventGlobal(_FrontLineSounds.__SELECT_EVENT)
-            WWISE.WW_setState(_FrontLineSounds.__STATE_GROUP, _FrontLineSounds.__STATE_SELECTED)
-        else:
-            WWISE.WW_eventGlobal(_FrontLineSounds.__DESELECT_EVENT)
-            WWISE.WW_setState(_FrontLineSounds.__STATE_GROUP, _FrontLineSounds.__STATE_DESELECTED)
-
-
 class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGameController, IGlobalListener):
     __itemsCache = dependency.descriptor(IItemsCache)
     __eventsCache = dependency.descriptor(IEventsCache)
@@ -145,6 +127,7 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         self.onPrimeTimeStatusUpdated = Event.Event()
         self.onEventEnded = Event.Event()
         self.onGameModeStatusTick = Event.Event()
+        self.onBattleAbilitiesUpdated = Event.Event()
         self.__skillData = {}
         self.__playerMaxLevel = 0
         self.__levelProgress = tuple()
@@ -186,10 +169,6 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         if self.getPerformanceGroup() == EPIC_PERF_GROUP.HIGH_RISK:
             self.__lobbyContext.addFightButtonConfirmator(self.__confirmFightButtonPressEnabled)
         self.__isEpicSoundMode = False
-        if self.prbEntity is not None:
-            enableSound = bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.EPIC)
-            self.__updateSounds(enableSound)
-        return
 
     def onDisconnected(self):
         self.__clear()
@@ -198,15 +177,6 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         if not SelectorBattleTypesUtils.isKnownBattleType(SELECTOR_BATTLE_TYPES.EPIC):
             SelectorBattleTypesUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.EPIC)
 
-    def onPrbEntitySwitching(self):
-        if self.prbEntity is None:
-            return
-        else:
-            switchedFromEpic = bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.EPIC)
-            if switchedFromEpic:
-                self.__updateSounds(False)
-            return
-
     def onPrbEntitySwitched(self):
         self.__invalidateBattleAbilities()
         entityType = self.prbEntity.getEntityType()
@@ -214,7 +184,6 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
             return
         else:
             if entityType in _VALID_PREBATTLE_TYPES or self.prbEntity.getQueueType() == QUEUE_TYPE.EPIC:
-                self.__updateSounds(True)
                 if entityType != PREBATTLE_TYPE.EPIC_TRAINING:
                     self.setBattleTypeAsKnown()
                     self.showWelcomeScreenIfNeed()
@@ -264,6 +233,9 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         currrentLevel, _ = self.getPlayerLevelInfo()
         return currrentLevel >= self.getMaxPlayerLevel()
 
+    def isMaxLevel(self):
+        return self.getCurrentLevel() == self.getMaxPlayerLevel()
+
     def isDailyQuestsRefreshAvailable(self):
         if self.hasPrimeTimesLeftForCurrentCycle():
             return True
@@ -299,8 +271,17 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
     def getMaxPlayerLevel(self):
         return self.__playerMaxLevel
 
+    def getCurrentLevel(self):
+        return self.getPlayerLevelInfo()[0]
+
+    def getCurrentProgress(self):
+        return self.getPlayerLevelInfo()[1]
+
     def getStageLimit(self):
         return self.__stageLimit
+
+    def getNextLevelXP(self):
+        return self.getPointsProgressForLevel(self.getCurrentLevel())
 
     def getAbilityPointsForLevel(self):
         return self.__abilityPointsForLevel
@@ -389,10 +370,23 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
 
         return selected
 
-    def hasSuitableVehicles(self):
-        requiredLevel = self.getModeSettings().validVehicleLevels
-        v = self.__itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS(requiredLevel))
+    def hasSuitableVehicles(self, additionalCriteria=None):
+        resCriteria = self.__getVehCriteria(additionalCriteria)
+        v = self.__itemsCache.items.getVehicles(resCriteria)
         return len(v) > 0
+
+    def isCurVehicleSuitable(self, additionalCriteria=None, excludetBaseCriteria=False):
+        resCriteria = self.__getVehCriteria(additionalCriteria, excludetBaseCriteria)
+        return g_currentVehicle.item and resCriteria(g_currentVehicle.item)
+
+    def getBaseEpicCriteria(self):
+        requiredLevel = self.getValidVehicleLevels()
+        criteria = REQ_CRITERIA.INVENTORY
+        criteria |= REQ_CRITERIA.VEHICLE.LEVELS(requiredLevel)
+        criteria |= ~REQ_CRITERIA.VEHICLE.MODE_HIDDEN
+        criteria |= ~REQ_CRITERIA.SECRET
+        criteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
+        return criteria
 
     def hasVehiclesToRent(self):
         notRentedVehicles = self.__itemsCache.items.getVehicles(REQ_CRITERIA.VEHICLE.SPECIFIC_BY_NAME(self.getModeSettings().rentVehicles) | ~REQ_CRITERIA.INVENTORY)
@@ -530,15 +524,22 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
 
         return False
 
-    def getNotChosenRewardCount(self):
-        count = 0
+    def getNotChosenRewardTokens(self):
+        tokens = []
         for token in self.__itemsCache.items.tokens.getTokens().iterkeys():
             if not token.startswith(EPIC_CHOICE_REWARD_OFFER_GIFT_TOKENS):
                 continue
             if not self.__offersProvider.getOfferByToken(token.replace('_gift', '')):
                 continue
             if self.__itemsCache.items.tokens.isTokenAvailable(token):
-                count += self.__itemsCache.items.tokens.getTokenCount(token)
+                tokens.append(token)
+
+        return tokens
+
+    def getNotChosenRewardCount(self):
+        count = 0
+        for token in self.getNotChosenRewardTokens():
+            count += self.__itemsCache.items.tokens.getTokenCount(token)
 
         return count
 
@@ -567,10 +568,10 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         return data.get('name')
 
     def showProgressionDuringSomeStates(self, showDefaultTab=False):
-        from frontline.gui.frontline_helpers import isHangarAvailable, getProperTabWhileHangarUnavailable
+        from frontline.gui.frontline_helpers import isHangarAvailable
+        from frontline.gui.impl.lobby.states import ProgressionScreenState
         if not isHangarAvailable():
-            showFrontlineContainerWindow(getProperTabWhileHangarUnavailable() if not showDefaultTab else None)
-        return
+            ProgressionScreenState.goTo()
 
     @adisp.adisp_process
     def selectEpicBattle(self):
@@ -722,6 +723,12 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         self.__eventEndedNotifier.stopNotification()
         self.__eventEndedNotifier.clear()
 
+    def __getVehCriteria(self, additionalCriteria=None, excludetBaseCriteria=False):
+        resCriteria = self.getBaseEpicCriteria() if not excludetBaseCriteria else REQ_CRITERIA.EMPTY
+        if additionalCriteria:
+            resCriteria |= additionalCriteria
+        return resCriteria
+
     def __showBattleResults(self, reusableInfo, _, resultsWindow):
         if reusableInfo.common.arenaBonusType == ARENA_BONUS_TYPE.EPIC_BATTLE:
             arenaUniqueID = reusableInfo.arenaUniqueID
@@ -778,6 +785,7 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
 
             vehicle.battleAbilities.setLayout(*selectedItems)
             vehicle.battleAbilities.setInstalled(*selectedItems)
+            self.onBattleAbilitiesUpdated()
             return
 
     def __analyzeClientSystem(self):
@@ -809,11 +817,6 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         items = {GUI_ITEM_TYPE.VEHICLE, GUI_ITEM_TYPE.BATTLE_ABILITY, GUI_ITEM_TYPE.CUSTOMIZATION}
         if items.intersection(invDiff):
             self.__invalidateBattleAbilities()
-
-    def __updateSounds(self, isEpicSoundMode):
-        if isEpicSoundMode != self.__isEpicSoundMode:
-            _FrontLineSounds.onChange(isEpicSoundMode)
-            self.__isEpicSoundMode = isEpicSoundMode
 
     @adisp_async
     @adisp_process

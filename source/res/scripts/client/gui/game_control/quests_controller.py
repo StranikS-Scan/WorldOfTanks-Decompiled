@@ -12,7 +12,7 @@ from skeletons.gui.game_control import IQuestsController, IBattleRoyaleControlle
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from gui.server_events.events_helpers import isBattleMattersQuestID, isPremium, isBattleRoyale, isDailyEpic, isDailyQuest, isFunRandomQuest
+from gui.server_events.events_helpers import isBattleMattersQuestID, isPremium, isBattleRoyale, isDailyEpic, isDailyQuest
 from gui.ranked_battles.ranked_helpers import isRankedQuestID
 if typing.TYPE_CHECKING:
     from Vehicle import Vehicle
@@ -20,7 +20,7 @@ if typing.TYPE_CHECKING:
 _MAX_LVL_FOR_TUTORIAL = 3
 
 def _isAvailableForMode(q):
-    return not isDailyEpic(q.getGroupID()) and not isDailyQuest(q.getID()) and not isPremium(q.getID()) and not isRankedQuestID(q.getID()) and not isBattleRoyale(q.getGroupID()) and not isFunRandomQuest(q.getID())
+    return not isDailyEpic(q.getGroupID()) and not isDailyQuest(q.getID()) and not isPremium(q.getID()) and not isRankedQuestID(q.getID()) and not isBattleRoyale(q.getGroupID())
 
 
 class _QuestCache(object):

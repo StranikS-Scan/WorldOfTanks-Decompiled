@@ -48,12 +48,12 @@ class PersonalDeathZone(AreaOfEffect, TriggersManager.ITriggerListener):
         if vehicle is None or not vehicle.isAlive():
             return
         else:
-            if self.__isOwnTrigger(args) and self._guiController:
+            if self._isOwnTrigger(args) and self._guiController:
                 self._guiController.onPlayerEntered(self)
             return
 
     def onTriggerDeactivated(self, args):
-        if self.__isOwnTrigger(args) and self._guiController:
+        if self._isOwnTrigger(args) and self._guiController:
             self._guiController.onPlayerLeft(self)
 
     @property
@@ -84,5 +84,5 @@ class PersonalDeathZone(AreaOfEffect, TriggersManager.ITriggerListener):
         if self._guiController and BigWorld.player().vehicle and BigWorld.player().vehicle.id == victimID:
             self._guiController.onPlayerLeft(self)
 
-    def __isOwnTrigger(self, args):
+    def _isOwnTrigger(self, args):
         return args['type'] == self._TRIGGER_TYPE and args['name'] == self._triggerName

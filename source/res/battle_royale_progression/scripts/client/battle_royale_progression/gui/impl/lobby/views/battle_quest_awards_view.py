@@ -24,7 +24,7 @@ class BattleQuestAwardsView(ViewImpl):
     __slots__ = ('__tooltipData', '_stage')
 
     def __init__(self, stage):
-        settings = ViewSettings(R.views.battle_royale_progression.BattleQuestAwardsView())
+        settings = ViewSettings(R.views.battle_royale_progression.mono.lobby.battle_quest_awards_view())
         settings.model = BattleQuestAwardsModel()
         self.__tooltipData = {}
         self._stage = stage

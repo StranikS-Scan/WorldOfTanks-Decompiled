@@ -61,6 +61,13 @@ class HintPanelPlugin(IPlugin):
         return None
 
     @staticmethod
+    def _shouldDelayHideTimeout(activeHint, btnID):
+        if activeHint:
+            activeBtnID, _ = activeHint
+            return activeBtnID != btnID
+        return False
+
+    @staticmethod
     def _updateCounterOnUsed(settings):
         if settings:
             settings[LAST_DISPLAY_DAY] = datetime.now().timetuple().tm_yday

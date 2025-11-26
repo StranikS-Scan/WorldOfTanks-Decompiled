@@ -8,6 +8,7 @@ class TankSetupConstants(ViewModel):
     SHELLS = 'shells'
     CONSUMABLES = 'consumables'
     BATTLE_BOOSTERS = 'battleBoosters'
+    CREW_BOOSTERS = 'crewBoosters'
     BATTLE_ABILITIES = 'battleAbilities'
     TOGGLE_SHELLS = 'toggleShells'
     TOGGLE_CAMOUFLAGE = 'toggleCamouflage'

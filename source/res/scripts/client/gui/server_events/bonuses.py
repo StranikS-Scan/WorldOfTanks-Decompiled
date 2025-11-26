@@ -3117,15 +3117,7 @@ def getBonuses(quest, name, value, isCompensation=False, ctx=None):
     questType = quest.getType()
     key = [name, questType]
     ctx = ctx or {}
-    if questType in (_ET.BATTLE_QUEST, _ET.TOKEN_QUEST, _ET.PERSONAL_QUEST) and name == 'tokens':
-        parentsName = quest.getParentsName()
-        for n, v in value.iteritems():
-            if n in parentsName:
-                questNames = parentsName[n]
-                if questNames:
-                    v.update({'questNames': questNames})
-
-    elif questType == _ET.PERSONAL_MISSION:
+    if questType == _ET.PERSONAL_MISSION:
         ctx.update({'operationID': quest.getOperationID(),
          'chainID': quest.getChainID(),
          'campaignID': quest.getCampaignID(),

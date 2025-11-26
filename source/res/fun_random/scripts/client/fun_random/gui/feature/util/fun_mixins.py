@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/feature/util/fun_mixins.py
+from __future__ import absolute_import
 import logging
 import typing
 from adisp import adisp_async, adisp_process
@@ -50,7 +51,7 @@ class FunAssetPacksMixin(object):
 
     @classmethod
     def getPrebattleConditionIcon(cls):
-        return backport.image(cls.getModeIconsResRoot().battle_type.c_32x32.fun_random())
+        return backport.image(cls.getModeIconsResRoot().battleTypes.c_32x32.fun_random())
 
 
 class FunProgressionWatcher(object):
@@ -100,6 +101,22 @@ class FunSubModesWatcher(object):
     @classmethod
     def getSubModesStatus(cls, subModesIDs=None):
         return cls._funRandomCtrl.subModesInfo.getSubModesStatus(subModesIDs)
+
+    @classmethod
+    @hasAnySubMode()
+    def showCommonInfoPage(cls):
+        selectorUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.FUN_RANDOM)
+        showFunRandomInfoPage(cls._funRandomCtrl.getSettings().infoPageUrl)
+
+    @hasSpecifiedSubMode()
+    def showSubModeInfoPage(self, subModeID):
+        selectorUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.FUN_RANDOM)
+        showFunRandomInfoPage(self.getSubMode(subModeID).getSettings().client.infoPageUrl)
+
+    @hasSingleSubMode(abortAction='showCommonInfoPage')
+    def showSubModesInfoPage(self):
+        selectorUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.FUN_RANDOM)
+        showFunRandomInfoPage(first(self.getSubModes()).getSettings().client.infoPageUrl)
 
     def startSubSelectionListening(self, method):
         self._funRandomCtrl.subscription.addListener(FunEventType.SUB_SELECTION, method)
@@ -153,21 +170,6 @@ class FunSubModesWatcher(object):
             return
         result = yield self._funRandomCtrl.selectFunRandomBattle(subModeID)
         notifyCaller(callback, result)
-
-    @hasAnySubMode()
-    def showCommonInfoPage(self):
-        selectorUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.FUN_RANDOM)
-        showFunRandomInfoPage(self._funRandomCtrl.getSettings().infoPageUrl)
-
-    @hasSpecifiedSubMode()
-    def showSubModeInfoPage(self, subModeID):
-        selectorUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.FUN_RANDOM)
-        showFunRandomInfoPage(self.getSubMode(subModeID).getSettings().client.infoPageUrl)
-
-    @hasSingleSubMode(abortAction='showCommonInfoPage')
-    def showSubModesInfoPage(self):
-        selectorUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.FUN_RANDOM)
-        showFunRandomInfoPage(first(self.getSubModes()).getSettings().client.infoPageUrl)
 
 
 class FunSubModeHolder(FunSubModesWatcher):

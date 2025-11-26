@@ -151,7 +151,7 @@ class TeamBasesInfo(object):
 
 
 class _VehicleInfo(object):
-    __slots__ = ('_vehicleID', '_vehicle', '_player', '_deathReason')
+    __slots__ = ('_vehicleID', '_player', '_deathReason')
 
     def __init__(self, vehicleID, player, deathReason=DEATH_REASON_ALIVE):
         super(_VehicleInfo, self).__init__()

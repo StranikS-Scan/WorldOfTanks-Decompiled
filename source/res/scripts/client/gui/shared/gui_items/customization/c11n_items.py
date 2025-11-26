@@ -694,7 +694,7 @@ class Paint(Customization):
 
 
 class Camouflage(Customization):
-    __slots__ = ('_bonus',)
+    __slots__ = ()
 
     def __init__(self, *args, **kwargs):
         super(Camouflage, self).__init__(*args, **kwargs)

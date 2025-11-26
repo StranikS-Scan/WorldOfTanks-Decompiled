@@ -3,9 +3,9 @@
 from enum import IntEnum
 from frameworks.wulf import Array
 from gui.impl.gen import R
+from gui.impl.gen.view_models.views.lobby.common.mode_performance_model import ModePerformanceModel
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_base_widget_model import ModeSelectorBaseWidgetModel
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_card_model import ModeSelectorCardModel
-from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_performance_model import ModeSelectorPerformanceModel
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_reward_model import ModeSelectorRewardModel
 
 class BattlePassState(IntEnum):
@@ -34,7 +34,7 @@ class ModeSelectorNormalCardModel(ModeSelectorCardModel):
 
     @staticmethod
     def getPerformanceType():
-        return ModeSelectorPerformanceModel
+        return ModePerformanceModel
 
     def getName(self):
         return self._getString(12)
@@ -103,7 +103,7 @@ class ModeSelectorNormalCardModel(ModeSelectorCardModel):
     def _initialize(self):
         super(ModeSelectorNormalCardModel, self)._initialize()
         self._addViewModelProperty('widget', ModeSelectorBaseWidgetModel())
-        self._addViewModelProperty('performance', ModeSelectorPerformanceModel())
+        self._addViewModelProperty('performance', ModePerformanceModel())
         self._addStringProperty('name', '')
         self._addStringProperty('eventName', '')
         self._addStringProperty('statusNotActive', '')

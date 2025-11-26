@@ -45,65 +45,19 @@
       <winnerIfTimeout>	1	</winnerIfTimeout>
       <teamSpawnPoints>
         <team1>
-          <position>	-87.503 404.509	</position>
+          <position>	-274.424744 -260.790710	</position>
         </team1>
         <team2>
-          <position>	76.002 -373.689	</position>
-          <position>	-105.753 -373.689	</position>
+          <position>	299.056366 362.670563	</position>
         </team2>
       </teamSpawnPoints>
       <teamBasePositions>
         <team1>
-          <position1>	81.471542 440.415863	</position1>
+          <position1>	-99.231010 -3.168648	</position1>
         </team1>
         <team2></team2>
       </teamBasePositions>
     </assault>
   </gameplayTypes>
-  <mapActivities>
-    <scenario>
-      <startTime>	0.000000 0.000000	</startTime>
-      <possibility>	100.000000	</possibility>
-      <interval>	0	</interval>
-      <arenaPeriod>	3	</arenaPeriod>
-      <name>	erlenberg_airplane	</name>
-      <trajectories>
-        <warplane>
-          <preset>	erlenberg_airplane_fly	</preset>
-          <position>	0.000000 0.000000 0.000000	</position>
-          <yaw>	0.000000	</yaw>
-          <possibility>	1.000000	</possibility>
-          <startTime>	0.000000 0.000000	</startTime>
-        </warplane>
-        <warplane>
-          <preset>	erlenberg_airplane_explosion	</preset>
-          <position>	0.000000 0.000000 0.000000	</position>
-          <yaw>	0.000000	</yaw>
-          <possibility>	1.000000	</possibility>
-          <startTime>	47.65 47.65	</startTime>
-        </warplane>
-        <warplane>
-          <preset>	erlenberg_attack_airplane	</preset>
-          <position>	0.000000 0.000000 0.000000	</position>
-          <yaw>	0.000000	</yaw>
-          <possibility>	1.000000	</possibility>
-          <startTime>	35.000000 35.000000	</startTime>
-        </warplane>
-        <warplane>
-          <preset>	erlenberg_attack_airplane2	</preset>
-          <position>	0.000000 0.000000 0.000000	</position>
-          <yaw>	0.000000	</yaw>
-          <possibility>	1.000000	</possibility>
-          <startTime>	30.000000 30.000000	</startTime>
-        </warplane>
-        <warplane>
-          <preset>	erlenberg_attack_airplane3	</preset>
-          <position>	0.000000 0.000000 0.000000	</position>
-          <yaw>	0.000000	</yaw>
-          <possibility>	1.000000	</possibility>
-          <startTime>	32.500000 32.500000	</startTime>
-        </warplane>
-      </trajectories>
-    </scenario>
-  </mapActivities>
+  <mapActivities></mapActivities>
 </13_erlenberg.xml>

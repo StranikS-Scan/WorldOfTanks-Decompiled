@@ -98,7 +98,7 @@ class InstallableItem(VehicleItem):
         self.hitTesterManager = None
         self.modelsSets = None
         self.models = None
-        self.camouflage = shared_components.EMPTY_CAMOUFLAGE
+        self.camouflage = shared_components.Camouflage(None, None, None, None)
         self.sounds = None
         self.emblemSlots = component_constants.EMPTY_TUPLE
         self.slotsAnchors = component_constants.EMPTY_TUPLE
@@ -381,7 +381,7 @@ class Hull(BasicItem):
         self.swinging = None
         self.customEffects = component_constants.EMPTY_TUPLE
         self.AODecals = component_constants.EMPTY_TUPLE
-        self.camouflage = shared_components.EMPTY_CAMOUFLAGE
+        self.camouflage = shared_components.Camouflage(None, None, None, None)
         self.hangarShadowTexture = component_constants.EMPTY_STRING
         self.customizableVehicleAreas = None
         self.burnoutAnimation = None
@@ -399,7 +399,7 @@ class Hull(BasicItem):
 
 
 class Shell(BasicItem):
-    __slots__ = ('caliber', 'isTracer', 'isForceTracer', 'armorDamage', 'deviceDamage', 'damageRandomization', 'damageRandomizationType', 'piercingPowerRandomization', 'piercingPowerRandomizationType', 'icon', 'iconName', 'isGold', 'type', 'stun', 'effectsCaliber', 'effectsIndex', 'prefabEffectsIndex', 'tags', 'secondaryAttackReason', 'isDamageMutable', 'maxDistance', 'dynamicEffectsIndexes', 'obstaclesDamage', 'obstaclesPowerReduction')
+    __slots__ = ('caliber', 'isTracer', 'isForceTracer', 'armorDamage', 'deviceDamage', 'damageRandomization', 'damageRandomizationType', 'piercingPowerRandomization', 'piercingPowerRandomizationType', 'icon', 'iconName', 'isGold', 'type', 'stun', 'effectsCaliber', 'effectsIndex', 'prefabEffectsIndex', 'secondaryAttackReason', 'isDamageMutable', 'maxDistance', 'dynamicEffectsIndexes', 'obstaclesDamage', 'obstaclesPowerReduction')
 
     def __init__(self, typeID, componentID, componentName, compactDescr):
         super(Shell, self).__init__(typeID, componentID, componentName, compactDescr)

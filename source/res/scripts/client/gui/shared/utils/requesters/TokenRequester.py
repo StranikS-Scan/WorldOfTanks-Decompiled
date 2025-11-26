@@ -101,7 +101,7 @@ class TokenRequester(object):
                 _logger.debug('Delaying request for <%s> sec.', delay)
                 yield wait(delay)
             if requester != self._getRequester():
-                _logger.warning('Request cancelled because requester has been changed.')
+                _logger.info('Request cancelled because requester has been changed. Player is %s', BigWorld.player())
                 if callback:
                     callback(None)
                 return

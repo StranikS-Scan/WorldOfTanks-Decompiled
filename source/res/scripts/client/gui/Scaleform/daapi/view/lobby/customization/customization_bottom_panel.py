@@ -142,7 +142,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
 
     def showGroupFromTab(self, tabIndex):
         if tabIndex not in CustomizationTabs.MODES[self.__ctx.modeId]:
-            self.__changeMode(CustomizationTabs.TAB_TO_MODE[tabIndex], tabIndex)
+            self.__changeMode(CustomizationTabs.TAB_TO_MODE[tabIndex][0], tabIndex)
         else:
             self.__ctx.mode.changeTab(tabIndex)
         visitedSet = AccountSettings.getSettings(CUSTOMIZATION_TABS_VISITED)

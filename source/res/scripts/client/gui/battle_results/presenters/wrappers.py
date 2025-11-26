@@ -11,7 +11,7 @@ def ifPresenterAvailable(defReturn=None):
 
         @wraps(method)
         def wrapper(view, *args, **kwargs):
-            presenter = dependency.instance(IBattleResultsService).getPresenter(view.arenaUniqueID)
+            presenter = dependency.instance(IBattleResultsService).getStatsCtrl(view.arenaUniqueID)
             return method(view, *args, **kwargs) if presenter is not None else defReturn
 
         return wrapper
@@ -26,7 +26,7 @@ def hasPresenter(defReturn=None, abortAction=None):
 
         @wraps(method)
         def wrapper(view, *args, **kwargs):
-            presenter = battleResults.getPresenter(view.arenaUniqueID)
+            presenter = battleResults.getStatsCtrl(view.arenaUniqueID)
             if presenter is not None:
                 return method(view, presenter=presenter, *args, **kwargs)
             else:

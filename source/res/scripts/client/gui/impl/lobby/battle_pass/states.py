@@ -1,29 +1,22 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/states.py
 from typing import TYPE_CHECKING
-from ClientSelectableCameraObject import ClientSelectableCameraObject
-from battle_pass_common import BattlePassConsts, FinalReward
 from frameworks.state_machine import StateFlags
 from frameworks.state_machine.transitions import TransitionType
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getVehicleCDForStyle
 from gui.Scaleform.framework.entities.View import ViewKey
-from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
-from gui.battle_pass.battle_pass_helpers import getAllFinalRewards, getExtraVideoURL, getIntroVideoURL, getStyleForChapter, getVehicleInfoForChapter
+from gui.battle_pass.battle_pass_helpers import getExtraVideoURL, getIntroVideoURL
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.vehicle_preview.top_panel.top_panel_tabs_model import TabID
 from gui.impl.lobby.battle_pass.common import isExtraChapterSeen, isExtraVideoShown, isIntroShown, isIntroVideoShown, setExtraChapterSeen, setExtraVideoShown, setIntroVideoShown, showOverlayVideo
 from gui.lobby_state_machine.states import LobbyState, LobbyStateDescription, SubScopeSubLayerState, ViewLobbyState
 from gui.lobby_state_machine.transitions import HijackTransition
-from gui.shared.event_dispatcher import showBattlePass, showBattlePassStyleProgressionPreview, showStylePreview, showVehiclePreviewWithoutBottomPanel
+from gui.shared.event_dispatcher import showBattlePass
 from helpers import dependency
 from shared_utils import nextTick
 from skeletons.gui.game_control import IBattlePassController
-from skeletons.gui.shared import IItemsCache
-from web.web_client_api.common import ItemPackEntry, ItemPackType
 if TYPE_CHECKING:
-    from typing import Dict, Union
+    from typing import Union
     from frameworks.state_machine import State
 _BP = R.aliases.battle_pass
 
@@ -51,13 +44,14 @@ class BattlePassState(ViewLobbyState):
     def registerTransitions(self):
         lsm = self.getMachine()
         for state in self.getChildrenStates():
-            if state.VIEW_KEY.alias not in (_BP.IntroVideo(), _BP.ExtraVideo()):
-                lsm.addNavigationTransitionFromParent(state)
+            lsm.addNavigationTransitionFromParent(state)
 
         introVideoState = lsm.getStateByCls(IntroVideoBattlePassState)
-        self.addTransition(HijackTransition(IntroBattlePassState, _shallNavigateToIntroVideo), introVideoState)
+        self.addTransition(HijackTransition(IntroBattlePassState, _shouldNavigateToIntroVideo), introVideoState)
         extraVideoState = lsm.getStateByCls(ExtraVideoBattlePassState)
-        self.addTransition(HijackTransition(IntroBattlePassState, _shallNavigateToExtraVideo), extraVideoState)
+        self.addTransition(HijackTransition(IntroBattlePassState, _shouldNavigateToExtraVideo), extraVideoState)
+        progressionState = lsm.getStateByCls(ProgressionBattlePassState)
+        self.addTransition(HijackTransition(ChapterChoiceBattlePassState, _isHoliday), progressionState)
 
     def _onEntered(self, event):
         super(BattlePassState, self)._onEntered(event)
@@ -161,11 +155,17 @@ class ChapterChoiceBattlePassState(_BattlePassPresenterState):
     __battlePass = dependency.descriptor(IBattlePassController)
 
     def registerTransitions(self):
+        from gui.Scaleform.daapi.view.lobby.vehicle_preview.states import StylePreviewState
+        from gui.Scaleform.daapi.view.lobby.vehicle_preview.states import ConfigurableVehiclePreviewState
+        from gui.Scaleform.daapi.view.lobby.vehicle_preview.states import StyleProgressionPreviewState
         lsm = self.getMachine()
         progressionState = lsm.getStateByCls(ProgressionBattlePassState)
         postProgressionState = lsm.getStateByCls(PostProgressionBattlePassState)
         self.addNavigationTransition(progressionState)
         self.addNavigationTransition(postProgressionState)
+        self.addNavigationTransition(lsm.getStateByCls(StylePreviewState))
+        self.addNavigationTransition(lsm.getStateByCls(ConfigurableVehiclePreviewState))
+        self.addNavigationTransition(lsm.getStateByCls(StyleProgressionPreviewState))
 
     def _getNavigationDescriptionArgs(self):
         return {'seasonNum': self.__battlePass.getSeasonNum()}
@@ -177,13 +177,22 @@ class ProgressionBattlePassState(_BattlePassPresenterState):
     VIEW_KEY = ViewKey(_BP.Progression())
 
     def registerTransitions(self):
+        from gui.Scaleform.daapi.view.lobby.vehicle_preview.states import StylePreviewState
+        from gui.Scaleform.daapi.view.lobby.vehicle_preview.states import ConfigurableVehiclePreviewState
+        from gui.Scaleform.daapi.view.lobby.vehicle_preview.states import StyleProgressionPreviewState
+        from gui.impl.lobby.lootbox_system.states import LootBoxMainState
         lsm = self.getMachine()
         buyPassState = lsm.getStateByCls(BuyPassBattlePassState)
+        buyPassConfirmState = lsm.getStateByCls(BuyPassConfirmBattlePassState)
         buyLevelsState = lsm.getStateByCls(BuyLevelsBattlePassState)
-        finalRewardPreviewState = lsm.getStateByCls(FinalRewardPreviewBattlePassState)
+        lootBoxMainState = lsm.getStateByCls(LootBoxMainState)
         self.addNavigationTransition(buyPassState)
+        self.addNavigationTransition(buyPassConfirmState)
         self.addNavigationTransition(buyLevelsState)
-        self.addNavigationTransition(finalRewardPreviewState)
+        self.addNavigationTransition(lsm.getStateByCls(StylePreviewState))
+        self.addNavigationTransition(lsm.getStateByCls(ConfigurableVehiclePreviewState))
+        self.addNavigationTransition(lsm.getStateByCls(StyleProgressionPreviewState))
+        self.addNavigationTransition(lootBoxMainState, record=True)
 
 
 @BattlePassState.parentOf
@@ -192,13 +201,16 @@ class PostProgressionBattlePassState(_BattlePassPresenterState):
     VIEW_KEY = ViewKey(_BP.PostProgression())
 
     def registerTransitions(self):
+        from gui.impl.lobby.lootbox_system.states import LootBoxMainState
         lsm = self.getMachine()
         progressionState = lsm.getStateByCls(ProgressionBattlePassState)
         buyPassState = lsm.getStateByCls(BuyPassBattlePassState)
         buyPassConfirmState = lsm.getStateByCls(BuyPassConfirmBattlePassState)
+        lootBoxMainState = lsm.getStateByCls(LootBoxMainState)
         self.addNavigationTransition(progressionState)
         self.addNavigationTransition(buyPassState)
         self.addNavigationTransition(buyPassConfirmState)
+        self.addNavigationTransition(lootBoxMainState, record=True)
 
 
 @BattlePassState.parentOf
@@ -251,66 +263,18 @@ class HolidayFinalBattlePassState(_BattlePassPresenterState):
     STATE_ID = 'holidayFinal'
     VIEW_KEY = ViewKey(_BP.HolidayFinal())
 
-
-@BattlePassState.parentOf
-class FinalRewardPreviewBattlePassState(LobbyState):
-    STATE_ID = 'finalRewardPreview'
-    VIEW_KEY = ViewKey(_BP.FinalRewardPreview())
-    __itemsCache = dependency.descriptor(IItemsCache)
-    __battlePass = dependency.descriptor(IBattlePassController)
-
-    def __init__(self, flags=StateFlags.UNDEFINED):
-        super(FinalRewardPreviewBattlePassState, self).__init__(flags=flags)
-        self.__cachedParams = {}
-
-    def serializeParams(self):
-        return self.__cachedParams
-
-    def _onEntered(self, event):
-        self.__cachedParams = event.params
-        super(FinalRewardPreviewBattlePassState, self)._onEntered(event)
-        ClientSelectableCameraObject.switchCamera()
-        params = event.params
-        chapterID = params['chapterID']
-        origin = params['origin']
-        bonusID = params.get('bonusID')
-        level = params.get('level')
-        styleInfo = getStyleForChapter(chapterID) if bonusID is None else self.__itemsCache.items.getItemByCD(bonusID)
-        vehicleCD = getVehicleCDForStyle(styleInfo)
-        if level is not None:
-            showBattlePassStyleProgressionPreview(vehicleCD, styleInfo, styleInfo.getDescription(), chapterId=chapterID, styleLevel=int(level), backCallback=self.__getPreviewCallback(chapterID, origin))
-            return
-        else:
-            allRewardTypes = getAllFinalRewards(chapterID)
-            if FinalReward.VEHICLE in allRewardTypes:
-                vehicle, style = getVehicleInfoForChapter(chapterID, awardSource=BattlePassConsts.REWARD_BOTH)
-                if styleInfo is not None:
-                    showStylePreview(vehicle.intCD, style=styleInfo, topPanelData={'linkage': VEHPREVIEW_CONSTANTS.TOP_PANEL_TABS_LINKAGE,
-                     'tabIDs': (TabID.VEHICLE, TabID.STYLE),
-                     'currentTabID': TabID.STYLE,
-                     'style': styleInfo}, itemsPack=self.__getPreviewItemPack(), backCallback=self.__getPreviewCallback(chapterID, origin))
-                else:
-                    showVehiclePreviewWithoutBottomPanel(vehicle.intCD, itemsPack=self.__getPreviewItemPack(), style=style, backCallback=self.__getPreviewCallback(chapterID, origin))
-            elif FinalReward.STYLE in allRewardTypes or bonusID:
-                showStylePreview(vehicleCD, style=styleInfo, itemsPack=self.__getPreviewItemPack(), backCallback=self.__getPreviewCallback(chapterID, origin))
-            return
-
-    def _onExited(self):
-        super(FinalRewardPreviewBattlePassState, self)._onExited()
-        self.__cachedParams = {}
-
-    def __getPreviewItemPack(self):
-        return (ItemPackEntry(type=ItemPackType.CREW_100, groupID=1),)
-
-    def __getPreviewCallback(self, chapterID, origin):
-
-        def callback():
-            if origin == R.aliases.battle_pass.Progression() and not self.__battlePass.isChapterExists(chapterID):
-                showBattlePass(R.aliases.battle_pass.ChapterChoice())
-            else:
-                showBattlePass(origin, chapterID)
-
-        return callback
+    def registerTransitions(self):
+        from gui.Scaleform.daapi.view.lobby.vehicle_preview.states import StylePreviewState
+        from gui.Scaleform.daapi.view.lobby.vehicle_preview.states import ConfigurableVehiclePreviewState
+        from gui.Scaleform.daapi.view.lobby.vehicle_preview.states import StyleProgressionPreviewState
+        lsm = self.getMachine()
+        confirmState = lsm.getStateByCls(BuyPassConfirmBattlePassState)
+        rewardsState = lsm.getStateByCls(BuyPassRewardsBattlePassState)
+        self.addNavigationTransition(confirmState)
+        self.addNavigationTransition(rewardsState)
+        self.addNavigationTransition(lsm.getStateByCls(StylePreviewState))
+        self.addNavigationTransition(lsm.getStateByCls(ConfigurableVehiclePreviewState))
+        self.addNavigationTransition(lsm.getStateByCls(StyleProgressionPreviewState))
 
 
 STATES = {_BP.IntroVideo(): IntroVideoBattlePassState,
@@ -324,14 +288,17 @@ STATES = {_BP.IntroVideo(): IntroVideoBattlePassState,
  _BP.BuyPassRewards(): BuyPassRewardsBattlePassState,
  _BP.BuyLevels(): BuyLevelsBattlePassState,
  _BP.BuyLevelsRewards(): BuyLevelsRewardsBattlePassState,
- _BP.HolidayFinal(): HolidayFinalBattlePassState,
- _BP.FinalRewardPreview(): FinalRewardPreviewBattlePassState}
+ _BP.HolidayFinal(): HolidayFinalBattlePassState}
 _INITIAL_STATE_ID = _BP.Intro()
 
-def _shallNavigateToIntroVideo(event):
+def _shouldNavigateToIntroVideo(event):
     return not isIntroVideoShown()
 
 
-@dependency.replace_none_kwargs(battlePass=IBattlePassController)
-def _shallNavigateToExtraVideo(event, battlePass=None):
+def _shouldNavigateToExtraVideo(event):
     return isIntroVideoShown() and not isExtraVideoShown()
+
+
+@dependency.replace_none_kwargs(battlePass=IBattlePassController)
+def _isHoliday(event, battlePass=None):
+    return battlePass.isHoliday()

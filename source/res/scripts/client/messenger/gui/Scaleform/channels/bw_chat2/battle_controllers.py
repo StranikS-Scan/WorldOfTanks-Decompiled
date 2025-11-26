@@ -112,8 +112,9 @@ class TeamChannelController(_ChannelController):
         isCurrent = False
         if command.getCommandType() == MESSENGER_COMMAND_TYPE.BATTLE:
             avatarSessionID = command.getSenderID()
+            senderVehID = command.getSenderVehID()
             isCurrent = command.isSender()
-            text = self._mBuilder.setColors(avatarSessionID).setName(avatarSessionID).setText(command.getCommandText()).build()
+            text = self._mBuilder.setColors(avatarSessionID).setName(avatarSessionID, vehID=senderVehID).setText(command.getCommandText()).build()
         else:
             text = command.getCommandText()
         return (isCurrent, text)
@@ -169,9 +170,10 @@ class EpicTeamChannelController(TeamChannelController):
         isCurrent = False
         if command.getCommandType() == MESSENGER_COMMAND_TYPE.BATTLE:
             avatarSessionID = command.getSenderID()
+            senderVehID = command.getSenderVehID()
             isCurrent = command.isSender()
             suffix = self.__getNameSuffix(avatarSessionID)
-            text = self._mBuilder.setColors(avatarSessionID).setName(avatarSessionID, suffix=suffix).setText(command.getCommandText()).build()
+            text = self._mBuilder.setColors(avatarSessionID).setName(avatarSessionID, suffix=suffix, vehId=senderVehID).setText(command.getCommandText()).build()
         else:
             text = command.getCommandText()
         return (isCurrent, text)

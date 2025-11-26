@@ -293,7 +293,7 @@ class PersonalMissionsCache(object):
         processDisabledFlag(self.getAllQuests(PM_BRANCH.ALL), self.__lobbyContext.getServerSettings().getDisabledPersonalMissions())
 
     def update(self, eventsCache, diff=None):
-        hiddenQuests = eventsCache.getHiddenQuests()
+        hiddenQuests = eventsCache.getHiddenQuests(makeRelations=False)
         for branch, questsData in self.__questsData.iteritems():
             qp = questsData.questsProgress
             quests = questsData.quests

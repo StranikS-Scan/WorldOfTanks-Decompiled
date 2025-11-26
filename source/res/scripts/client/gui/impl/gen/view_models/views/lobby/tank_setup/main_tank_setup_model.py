@@ -3,14 +3,13 @@
 from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.battle_boosters_setup_model import BattleBoostersSetupModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.consumables_setup_model import ConsumablesSetupModel
-from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.frontline_setup_model import FrontlineSetupModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.opt_devices_setup_model import OptDevicesSetupModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.shells_setup_model import ShellsSetupModel
 
 class MainTankSetupModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=6, commands=0):
+    def __init__(self, properties=5, commands=0):
         super(MainTankSetupModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -45,19 +44,11 @@ class MainTankSetupModel(ViewModel):
     def getOptDevicesSetupType():
         return OptDevicesSetupModel
 
-    @property
-    def frontlineSetup(self):
-        return self._getViewModel(4)
-
-    @staticmethod
-    def getFrontlineSetupType():
-        return FrontlineSetupModel
-
     def getSelectedSetup(self):
-        return self._getString(5)
+        return self._getString(4)
 
     def setSelectedSetup(self, value):
-        self._setString(5, value)
+        self._setString(4, value)
 
     def _initialize(self):
         super(MainTankSetupModel, self)._initialize()
@@ -65,5 +56,4 @@ class MainTankSetupModel(ViewModel):
         self._addViewModelProperty('shellsSetup', ShellsSetupModel())
         self._addViewModelProperty('battleBoostersSetup', BattleBoostersSetupModel())
         self._addViewModelProperty('optDevicesSetup', OptDevicesSetupModel())
-        self._addViewModelProperty('frontlineSetup', FrontlineSetupModel())
         self._addStringProperty('selectedSetup', '')

@@ -18,8 +18,9 @@ def groupComponent(**specs):
 
         def config(self):
             parts = self.keyName.split('__')
-            if len(parts) == 2:
-                groupName, idx = parts
+            if len(parts) == 2 or len(parts) == 3:
+                groupName = parts[0]
+                idx = parts[-1]
                 return DynComponentsGroupsRepo.getGroup(groupName)[int(idx)][1]
             else:
                 return None

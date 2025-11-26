@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_modifiers/scripts/client/battle_modifiers/gui/impl/lobby/feature/constants.py
+from __future__ import absolute_import
 from battle_modifiers_common.battle_modifiers import BattleParams
 from battle_modifiers_ext.constants_ext import UseType, PhysicalType, GameplayImpact
 from battle_modifiers.gui.impl.gen.view_models.views.lobby.feature.modifier_model import ModType, ModPhysType, ModUseType, ModGameplayImpact
@@ -52,7 +53,14 @@ MOD_TYPE_MAP = {BattleParams.FAKE_MODIFIER: ModType.FAKE_MODIFIER,
  BattleParams.EQUIPMENT_COOLDOWN: ModType.EQUIPMENT_COOLDOWN,
  BattleParams.INVISIBILITY_FACTOR_AT_SHOT: ModType.INVISIBILITY_FACTOR_AT_SHOT,
  BattleParams.VEHICLE_AOI_RADIUS: ModType.VEHICLE_AOI_RADIUS,
- BattleParams.DEVICE_DAMAGE_FIRST: ModType.DEVICE_DAMAGE_FIRST}
+ BattleParams.DEVICE_DAMAGE_FIRST: ModType.DEVICE_DAMAGE_FIRST,
+ BattleParams.TURRET_ROTATOR_HEALTH: ModType.TURRET_ROTATOR_HEALTH,
+ BattleParams.AMMO_BAY_HEALTH: ModType.AMMO_BAY_HEALTH,
+ BattleParams.ENGINE_HEALTH: ModType.ENGINE_HEALTH,
+ BattleParams.FUEL_TANK_HEALTH: ModType.FUEL_TANK_HEALTH,
+ BattleParams.SURVEYING_DEVICE_HEALTH: ModType.SURVEYING_DEVICE_HEALTH,
+ BattleParams.CHASSIS_HEALTH: ModType.CHASSIS_HEALTH,
+ BattleParams.GUN_HEALTH: ModType.GUN_HEALTH}
 PHYS_TYPE_MAP = {PhysicalType.UNDEFINED: ModPhysType.UNDEFINED,
  PhysicalType.SECONDS: ModPhysType.SECONDS,
  PhysicalType.MINUTES: ModPhysType.MINUTES,
